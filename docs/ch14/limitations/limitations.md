@@ -140,7 +140,7 @@ CLT는 자료 자체가 정규가 아니어도 큰 표본에서 정규 기반 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 "모든 모형은 틀렸지만 어떤 것은 쓸모 있다"라는 말을 정규성 검정의 맥락에서 설명하라.
 
 </div>
@@ -152,7 +152,7 @@ CLT는 자료 자체가 정규가 아니어도 큰 표본에서 정규 기반 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 시각적 점검 없이 형식적 정규성 검정에만 의존할 때의 함정을 세 가지 들어라.
 
 </div>
@@ -165,7 +165,7 @@ CLT는 자료 자체가 정규가 아니어도 큰 표본에서 정규 기반 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 한 연구자가 회귀모형 잔차의 정규성을 검정하여 $p = 0.48$을 얻고 "잔차가 정규분포를 따른다"라고 썼다. 이 서술을 비판하라.
 
 </div>
@@ -177,7 +177,7 @@ CLT는 자료 자체가 정규가 아니어도 큰 표본에서 정규 기반 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 서로 다른 회귀모형 20개의 잔차에 대해 동시에 정규성을 검정할 때의 다중검정 문제를 논하라.
 
 </div>

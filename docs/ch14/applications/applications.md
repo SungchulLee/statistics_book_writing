@@ -152,7 +152,7 @@ ANOVA test: p-value=0.039981492411499175
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 연구자가 관측값 $n = 15$개에 일표본 t 검정을 수행하여 $t = 2.35$를 얻었다. 결과를 해석하기 전에 정규성을 확인해야 한다. 그 이유를 설명하고, 자료가 심하게 치우쳐 있다면 무엇이 잘못될 수 있는지 기술하라.
 
 </div>
@@ -164,7 +164,7 @@ ANOVA test: p-value=0.039981492411499175
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정규성 가정에 기대는 통계 방법 세 가지를 들고 각각이 비정규성에 얼마나 로버스트한지 서술하라.
 
 </div>
@@ -179,7 +179,7 @@ ANOVA test: p-value=0.039981492411499175
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 통계검정을 수행하기 전에 정규성을 확인하는 실용적 절차를 설명하라.
 
 </div>
@@ -199,7 +199,7 @@ ANOVA test: p-value=0.039981492411499175
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 큰 표본($n = 5000$)에서 Shapiro-Wilk 검정이 $p < 0.001$로 정규성을 기각했지만 Q-Q 그림은 거의 선형으로 보인다. 어떻게 진행해야 하는가?
 
 </div>

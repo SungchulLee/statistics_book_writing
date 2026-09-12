@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 구간 폭의 선택이 히스토그램의 모습에 어떤 영향을 주는지 설명하라. 구간이 너무 적으면 어떻게 되는가? 너무 많으면?
 
 </div>
@@ -155,7 +155,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 히스토그램과 커널밀도추정(KDE)의 차이는 무엇인가? 각각의 장점을 하나씩 말하라.
 
 </div>
@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 정규성 평가를 위해 히스토그램에 정규 밀도 곡선을 겹칠 때 히스토그램의 $y$축에 대해 무엇을 확인해야 하는가?
 
 </div>
@@ -183,7 +183,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 관측값 500개인 자료에 KDE를 겹친 히스토그램을 만드는 Python 코드를 작성하라.
 
 </div>

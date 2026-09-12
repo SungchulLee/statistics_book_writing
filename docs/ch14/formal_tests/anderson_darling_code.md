@@ -87,7 +87,7 @@ AD 검정이 기각하는데 KS 검정이 기각하지 않는 경우는 흔히 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규 관측값 $n = 300$개를 생성하라. Anderson-Darling 검정을 수행하고 $A^2$이 15% 임계값보다 작음을 확인하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규 관측값 $n = 300$개를 생성하라. Anderson-Darling 검정을 수행하고 $A^2$이 15% 임계값보다 작음을 확인하라.
 
 </div>
 
@@ -120,7 +120,7 @@ AD 검정이 기각하는데 KS 검정이 기각하지 않는 경우는 흔히 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $t_4$ 분포에서 관측값 $n = 300$개를 생성하라. AD 검정과 ($\mathcal{N}(0,1)$에 대한) KS 검정을 수행하라. 어느 검정이 더 강하게 기각하는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> $t_4$ 분포에서 관측값 $n = 300$개를 생성하라. AD 검정과 ($\mathcal{N}(0,1)$에 대한) KS 검정을 수행하라. 어느 검정이 더 강하게 기각하는가?
 
 </div>
 
@@ -175,7 +175,7 @@ AD 검정이 기각하는데 KS 검정이 기각하지 않는 경우는 흔히 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** AD 통계량이 제곱 EDF 차의 가중적분으로 쓰일 수 있음을 보여라. 정의에서 출발하여 적분 형태를 유도하라.
+**연습문제 3.** <span class="diff hard" title="어려움"></span> AD 통계량이 제곱 EDF 차의 가중적분으로 쓰일 수 있음을 보여라. 정의에서 출발하여 적분 형태를 유도하라.
 
 </div>
 
@@ -207,7 +207,7 @@ AD 검정이 기각하는데 KS 검정이 기각하지 않는 경우는 흔히 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** SciPy의 AD 검정은 지수분포와 로지스틱분포에 대해서도 검정할 수 있다. 같은 자료를 세 분포 모두에 대해 검정하고 결과를 비교하는 코드를 작성하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> SciPy의 AD 검정은 지수분포와 로지스틱분포에 대해서도 검정할 수 있다. 같은 자료를 세 분포 모두에 대해 검정하고 결과를 비교하는 코드를 작성하라.
 
 </div>
 
@@ -265,7 +265,7 @@ AD 검정이 기각하는데 KS 검정이 기각하지 않는 경우는 흔히 �
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** SciPy가 Anderson-Darling 검정에 정확한 $p$값을 제공하지 않는 이유를 설명하고, 모의실험으로 $p$값을 얻는 방법을 기술하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> SciPy가 Anderson-Darling 검정에 정확한 $p$값을 제공하지 않는 이유를 설명하고, 모의실험으로 $p$값을 얻는 방법을 기술하라.
 
 </div>
 

@@ -84,7 +84,7 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $\mathcal{N}(0,1)$에서 관측값 $n = 300$개를 생성하라. $\mathcal{N}(0,1)$과 $\mathcal{N}(0.5, 1)$에 대해 각각 KS 검정을 수행하라. $p$값을 비교하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> $\mathcal{N}(0,1)$에서 관측값 $n = 300$개를 생성하라. $\mathcal{N}(0,1)$과 $\mathcal{N}(0.5, 1)$에 대해 각각 KS 검정을 수행하라. $p$값을 비교하라.
 
 </div>
 
@@ -119,7 +119,7 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** Lilliefors 문제를 시연하라. $\mathcal{N}(0,1)$에서 관측값 $n = 200$개를 생성하고 $\hat{\mu}$, $\hat{\sigma}$를 추정한 뒤 $\mathcal{N}(\hat{\mu}, \hat{\sigma}^2)$에 대해 KS 검정을 수행하라. $p$값을 믿을 수 있는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> Lilliefors 문제를 시연하라. $\mathcal{N}(0,1)$에서 관측값 $n = 200$개를 생성하고 $\hat{\mu}$, $\hat{\sigma}$를 추정한 뒤 $\mathcal{N}(\hat{\mu}, \hat{\sigma}^2)$에 대해 KS 검정을 수행하라. $p$값을 믿을 수 있는가?
 
 </div>
 
@@ -160,7 +160,7 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 순서통계량으로부터 $D_n$을 계산하는 공식을 유도하라. $n$개의 값 $X_{(1)}, \ldots, X_{(n)}$만 확인하면 충분함을 보여라.
+**연습문제 3.** <span class="diff hard" title="어려움"></span> 순서통계량으로부터 $D_n$을 계산하는 공식을 유도하라. $n$개의 값 $X_{(1)}, \ldots, X_{(n)}$만 확인하면 충분함을 보여라.
 
 </div>
 
@@ -181,7 +181,7 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $n = 200$이고 대립가설이 $t_5$일 때($\mathcal{N}(0,1)$에 대해 검정) $\alpha = 0.05$에서 KS 검정의 검정력을 추정하는 몬테카를로 모의실험을 수행하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $n = 200$이고 대립가설이 $t_5$일 때($\mathcal{N}(0,1)$에 대해 검정) $\alpha = 0.05$에서 KS 검정의 검정력을 추정하는 몬테카를로 모의실험을 수행하라.
 
 </div>
 
@@ -242,7 +242,7 @@ KS 검정은 *일치성*(consistent)을 갖는 검정이다. $n \to \infty$이�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 일차원의 경우에 대해 Glivenko-Cantelli 정리를 서술하고 증명하라(증명의 개요면 충분하다).
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 일차원의 경우에 대해 Glivenko-Cantelli 정리를 서술하고 증명하라(증명의 개요면 충분하다).
 
 </div>
 

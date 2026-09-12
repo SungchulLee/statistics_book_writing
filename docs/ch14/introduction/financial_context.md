@@ -134,7 +134,7 @@ P(|R - mean| > 3 std):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 효율적 시장 가설(EMH)이 왜 주식 수익률이 근사적으로 정규분포를 따를 것이라고 시사하는지, 그리고 이 예측이 경험적으로 왜 실패하는지 설명하라.
 
 </div>
@@ -146,7 +146,7 @@ P(|R - mean| > 3 std):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 수익률이 실제로는 꼬리가 두꺼운데 정규성을 가정하여 위험가치(VaR)를 계산하면 어떤 실질적 결과가 따르는가?
 
 </div>
@@ -158,7 +158,7 @@ P(|R - mean| > 3 std):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 수익률 대신 주가에 대수정규분포를 흔히 쓴다. 대수정규 가격과 정규분포 로그수익률의 관계를 설명하라.
 
 </div>
@@ -172,7 +172,7 @@ P(|R - mean| > 3 std):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 개별 주식 수익률보다 포트폴리오 수익률에서 정규성이 더 합리적인 가정인 이유를 설명하라.
 
 </div>

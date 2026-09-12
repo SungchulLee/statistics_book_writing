@@ -57,7 +57,7 @@ Reject H_0: Significant difference between the groups.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 비모수 검정 세 가지를 들고 각각이 대체하는 모수적 검정을 서술하라. 어떤 가정이 완화되는가?
 
 </div>
@@ -73,7 +73,7 @@ Reject H_0: Significant difference between the groups.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 점근적 상대효율(ARE)의 개념을 설명하라. 정규성 아래에서 Wilcoxon 검정의 t 검정 대비 ARE가 $3/\pi \approx 0.955$라면 이는 무엇을 뜻하는가?
 
 </div>
@@ -85,7 +85,7 @@ Reject H_0: Significant difference between the groups.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 자료가 $\{1, 2, 3, 100\}$이다. 순위에 기초한 비모수 검정이 t 검정보다 적절한 이유를 설명하라.
 
 </div>
@@ -97,7 +97,7 @@ Reject H_0: Significant difference between the groups.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 정규성이 의심스러워도 비모수 검정이 권장되지 않는 경우는 언제인가?
 
 </div>

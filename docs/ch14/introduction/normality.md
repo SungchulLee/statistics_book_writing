@@ -63,7 +63,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 정규분포 $N(\mu, \sigma^2)$의 확률밀도함수를 쓰고 두 모수의 역할을 밝혀라.
 
 </div>
@@ -81,7 +81,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 정규분포의 68-95-99.7 법칙을 서술하고 표준정규 누적분포함수로 95% 값을 확인하라.
 
 </div>
@@ -99,7 +99,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $X \sim N(70, 100)$(평균 70, 분산 100)일 때 $P(X > 85)$를 구하라.
 
 </div>
@@ -115,7 +115,7 @@ $X \sim N(70, 100)$(평균 70, 분산 100)일 때 $P(X > 85)$를 구하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 정규분포가 실무에서 그토록 자주 나타나는 이유를 중심극한정리를 들어 설명하라.
 
 </div>

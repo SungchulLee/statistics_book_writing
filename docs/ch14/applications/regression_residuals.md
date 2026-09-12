@@ -167,7 +167,7 @@ Residual diagnostics:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 선형회귀를 적합한 뒤 잔차의 Q-Q 그림을 그렸더니 오른쪽 꼬리의 점들은 기준선 위로, 왼쪽 꼬리의 점들은 기준선 아래로 벗어나 S자 모양을 이룬다. 이는 잔차 분포에 대해 무엇을 시사하는가?
 
 </div>
@@ -181,7 +181,7 @@ Residual diagnostics:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 선형회귀에서 정규성을 평가하는 잔차 그림 두 가지와 등분산성을 평가하는 그림 한 가지를 기술하라.
 
 </div>
@@ -198,7 +198,7 @@ Residual diagnostics:
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $n = 40$인 회귀 잔차에 대한 Shapiro-Wilk 검정이 $p = 0.12$를 준다. 오차가 정규분포를 따른다고 결론지을 수 있는가?
 
 </div>
@@ -210,7 +210,7 @@ $n = 40$인 회귀 잔차에 대한 Shapiro-Wilk 검정이 $p = 0.12$를 준다.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 회귀 잔차가 정규성 검정을 통과하지 못했을 때 문제를 해결하는 접근 세 가지를 선호 순서대로 들어라.
 
 </div>

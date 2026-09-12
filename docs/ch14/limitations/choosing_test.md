@@ -145,7 +145,7 @@ Jarque-Bera:       JB = 5365.9041, p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 연구자가 $n = 25$인 표본의 정규성을 검정해야 한다. 검정을 추천하고 이유를 설명하라.
 
 </div>
@@ -159,7 +159,7 @@ Jarque-Bera:       JB = 5365.9041, p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 큰 자료($n = 10{,}000$)에서 형식적 정규성 검정이 도움이 되지 않을 수 있는 이유와 더 나은 접근을 설명하라.
 
 </div>
@@ -171,7 +171,7 @@ Jarque-Bera:       JB = 5365.9041, p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 표본크기와 의심되는 이탈 유형에 따라 정규성 검정을 고르는 판단 흐름도를 만들어라.
 
 </div>
@@ -188,7 +188,7 @@ Jarque-Bera:       JB = 5365.9041, p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 두 검정이 엇갈린다. Shapiro-Wilk는 정규성을 기각하고($p = 0.03$) Anderson-Darling은 기각하지 않는다($p = 0.08$). 어떻게 진행해야 하는가?
 
 </div>

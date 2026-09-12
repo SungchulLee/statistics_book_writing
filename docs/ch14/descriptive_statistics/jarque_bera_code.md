@@ -91,7 +91,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규 관측값 $n = 500$개를 생성하라. JB 통계량과 $p$값을 계산하라. $\alpha = 0.05$에서 기각하지 않음을 확인하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규 관측값 $n = 500$개를 생성하라. JB 통계량과 $p$값을 계산하라. $\alpha = 0.05$에서 기각하지 않음을 확인하라.
 
 </div>
 
@@ -120,7 +120,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $\frac{n}{6}(g_1^2 + g_2^2/4)$를 손으로 계산하여 `stats.jarque_bera`의 출력과 비교함으로써 JB 공식을 확인하라.
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> $\frac{n}{6}(g_1^2 + g_2^2/4)$를 손으로 계산하여 `stats.jarque_bera`의 출력과 비교함으로써 JB 공식을 확인하라.
 
 </div>
 
@@ -161,7 +161,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Jarque-Bera 검정이 작은 표본(예: $n = 30$)에서 크기 조절이 나쁜 이유를 설명하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> Jarque-Bera 검정이 작은 표본(예: $n = 30$)에서 크기 조절이 나쁜 이유를 설명하라.
 
 </div>
 
@@ -177,7 +177,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** JB 공식에서 $g_2^2$에 붙은 가중치 $1/4$이 점근 분산의 비율 $\text{Var}(g_2)/\text{Var}(g_1) \to 4$에서 나옴을 보여라.
+**연습문제 4.** <span class="diff hard" title="어려움"></span> JB 공식에서 $g_2^2$에 붙은 가중치 $1/4$이 점근 분산의 비율 $\text{Var}(g_2)/\text{Var}(g_1) \to 4$에서 나옴을 보여라.
 
 </div>
 
@@ -201,7 +201,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $n \in \{30, 100, 500, 2000\}$에 대해 $\alpha = 0.05$에서 JB 검정의 경험적 크기를 추정하는 10,000회 반복 몬테카를로 연구를 수행하라. 결과를 그림으로 그리고 경험적 크기가 0.05 근처에서 안정되는 표본크기를 찾아라.
+**연습문제 5.** <span class="diff med" title="중간"></span> $n \in \{30, 100, 500, 2000\}$에 대해 $\alpha = 0.05$에서 JB 검정의 경험적 크기를 추정하는 10,000회 반복 몬테카를로 연구를 수행하라. 결과를 그림으로 그리고 경험적 크기가 0.05 근처에서 안정되는 표본크기를 찾아라.
 
 </div>
 

@@ -88,7 +88,7 @@ $W = 0.9986$이 1에 매우 가깝고 $p = 0.591$이므로 정규성을 기각�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Shapiro-Wilk 검정통계량 $W$는 0과 1 사이의 값을 갖는다. 1에 가까운 값과 1에서 먼 값이 각각 무엇을 나타내는지 설명하라.
 
 </div>
@@ -100,7 +100,7 @@ Shapiro-Wilk 검정통계량 $W$는 0과 1 사이의 값을 갖는다. 1에 가�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 관측값 $n = 25$개에 대한 Shapiro-Wilk 검정에서 $W = 0.94$, $p = 0.15$를 얻었다. 이 결과를 해석하라.
 
 </div>
@@ -114,7 +114,7 @@ Shapiro-Wilk 검정통계량 $W$는 0과 1 사이의 값을 갖는다. 1에 가�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Shapiro-Wilk 검정이 작거나 중간 크기의 표본에서 가장 강력한 정규성 검정으로 평가되는 이유는 무엇인가?
 
 </div>
@@ -130,7 +130,7 @@ Shapiro-Wilk 검정이 작거나 중간 크기의 표본에서 가장 강력한 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Shapiro-Wilk 검정이 서로 다른 유형의 비정규성(치우침 대 두꺼운 꼬리)을 구별할 수 있는가? 이탈의 성격은 어떻게 판단하는가?
 
 </div>

@@ -164,7 +164,7 @@ D'Agostino의 $K^2$ 검정은 왜도와 첨도를 함께 반영하여 자료의 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 D'Agostino의 $K^2$ 검정은 왜도 검정과 첨도 검정을 결합한다. 귀무가설과 검정통계량의 공식을 서술하라.
 
 </div>
@@ -184,7 +184,7 @@ D'Agostino의 $K^2$ 검정은 왜도 검정과 첨도 검정을 결합한다. �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $n = 100$인 표본의 왜도가 $0.8$, 초과첨도가 $1.5$이다. 정확한 검정통계량을 계산하지 않고 D'Agostino 검정이 정규성을 기각할 가능성이 높은지 정성적으로 설명하라.
 
 </div>
@@ -196,7 +196,7 @@ $n = 100$인 표본의 왜도가 $0.8$, 초과첨도가 $1.5$이다. 정확한 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 D'Agostino 검정을 Shapiro-Wilk 검정과 비교하라. 각각의 상대적 강점은 무엇인가?
 
 </div>
@@ -214,7 +214,7 @@ D'Agostino 검정을 Shapiro-Wilk 검정과 비교하라. 각각의 상대적 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 D'Agostino 검정이 왜 "적률 기반" 정규성 검정이라 불리는지, 그리고 이것이 Jarque-Bera 검정과 어떻게 이어지는지 설명하라.
 
 </div>

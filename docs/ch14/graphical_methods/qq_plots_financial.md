@@ -214,7 +214,7 @@ VaR 대신 기대손실(CVaR)을 쓴다. 정규가 아닌 분포에서 꼬리 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 일간 주식 수익률을 정규 Q-Q 그림에 그렸더니 중앙에서는 직선을 따르지만 양극단에서 급격히 벗어난다. 이 패턴을 해석하라.
 
 </div>
@@ -226,7 +226,7 @@ VaR 대신 기대손실(CVaR)을 쓴다. 정규가 아닌 분포에서 꼬리 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 금융 수익률을 자유도 5인 $t$ 분포의 분위수에 대해 그렸더니 Q-Q 그림이 선형으로 보인다. 이는 수익률 분포에 대해 무엇을 시사하는가?
 
 </div>
@@ -238,7 +238,7 @@ VaR 대신 기대손실(CVaR)을 쓴다. 정규가 아닌 분포에서 꼬리 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Q-Q 그림으로 위험 모형을 보정하는 방법을 설명하라. 꼬리 영역이 왜 가장 중요한가?
 
 </div>
@@ -252,7 +252,7 @@ Q-Q 그림으로 위험 모형을 보정하는 방법을 설명하라. 꼬리 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 일간 수익률과 월간 수익률의 정규 Q-Q 그림을 비교하라. 어느 쪽이 선형에 가까울 가능성이 높으며 그 이유는 무엇인가?
 
 </div>

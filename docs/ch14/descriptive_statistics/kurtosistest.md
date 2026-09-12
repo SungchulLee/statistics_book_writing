@@ -75,7 +75,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규 관측값 $n = 300$개를 생성하라. $g_2$와 첨도 검정 $p$값을 계산하라. $g_2$가 0에 가깝고 검정이 기각하지 않음을 확인하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규 관측값 $n = 300$개를 생성하라. $g_2$와 첨도 검정 $p$값을 계산하라. $g_2$가 0에 가깝고 검정이 기각하지 않음을 확인하라.
 
 </div>
 
@@ -108,7 +108,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $\text{Uniform}(0,1)$ 분포에서 관측값 $n = 300$개를 생성하라. $g_2$를 계산하고 첨도 검정을 수행하라. 균등분포는 대칭이지만 저첨이다($\gamma_2 = -1.2$). 검정이 이를 탐지하는가?
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> $\text{Uniform}(0,1)$ 분포에서 관측값 $n = 300$개를 생성하라. $g_2$를 계산하고 첨도 검정을 수행하라. 균등분포는 대칭이지만 저첨이다($\gamma_2 = -1.2$). 검정이 이를 탐지하는가?
 
 </div>
 
@@ -141,7 +141,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 정확한 공식에서 출발하여 $n \to \infty$일 때 $\text{Var}(g_2) \to 24/n$임을 유도하라.
+**연습문제 3.** <span class="diff hard" title="어려움"></span> 정확한 공식에서 출발하여 $n \to \infty$일 때 $\text{Var}(g_2) \to 24/n$임을 유도하라.
 
 </div>
 
@@ -165,7 +165,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 바탕 분포가 정규이더라도 이상점이 많은 자료가 $g_2 > 0$을 만들어 내는 이유를 설명하고, 첨도 검정에 대한 함의를 논하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 바탕 분포가 정규이더라도 이상점이 많은 자료가 $g_2 > 0$을 만들어 내는 이유를 설명하고, 첨도 검정에 대한 함의를 논하라.
 
 </div>
 
@@ -179,7 +179,7 @@ D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 5,000회 반복의 몬테카를로 모의실험으로 $t_5$ 분포에서 뽑은 관측값 $n = 100$개에 대해 $\alpha = 0.05$에서 첨도 검정의 검정력을 추정하라. $t_{10}$에 대한 검정력과 비교하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 5,000회 반복의 몬테카를로 모의실험으로 $t_5$ 분포에서 뽑은 관측값 $n = 100$개에 대해 $\alpha = 0.05$에서 첨도 검정의 검정력을 추정하라. $t_{10}$에 대한 검정력과 비교하라.
 
 </div>
 

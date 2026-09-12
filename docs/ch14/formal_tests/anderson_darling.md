@@ -178,7 +178,7 @@ Fail to reject H_0: The data is normally distributed.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Anderson-Darling 검정은 Kolmogorov-Smirnov 검정보다 분포의 꼬리에 더 큰 가중치를 준다. 가중함수가 어떻게 이를 달성하는지 설명하라.
 
 </div>
@@ -196,7 +196,7 @@ Anderson-Darling 검정은 Kolmogorov-Smirnov 검정보다 분포의 꼬리에 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 관측값 50개에 대한 Anderson-Darling 검정에서 $A^2 = 0.85$를 얻었다. 임계값이 $0.631$(10%), $0.752$(5%), $1.035$(1%)일 때 $\alpha = 0.05$에서의 결론을 정하라.
 
 </div>
@@ -208,7 +208,7 @@ Anderson-Darling 검정은 Kolmogorov-Smirnov 검정보다 분포의 꼬리에 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 정규성 이탈 탐지에서 Anderson-Darling, Shapiro-Wilk, Kolmogorov-Smirnov 검정의 검정력을 비교하라.
 
 </div>
@@ -224,7 +224,7 @@ Anderson-Darling 검정은 Kolmogorov-Smirnov 검정보다 분포의 꼬리에 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Anderson-Darling 검정은 정규분포가 아닌 분포(지수, Weibull 등)에도 적용할 수 있다. 일반 원리를 설명하라.
 
 </div>

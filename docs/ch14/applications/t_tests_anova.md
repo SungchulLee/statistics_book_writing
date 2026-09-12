@@ -162,7 +162,7 @@ $t$ 검정이나 분산분석 상황에서 진단이 비정규성을 드러내�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 연구자가 중간 정도로 오른쪽으로 치우친 관측값 $n = 12$개에 t 검정을 적용한다. 정규성 가정을 걱정해야 하는가?
 
 </div>
@@ -174,7 +174,7 @@ $t$ 검정이나 분산분석 상황에서 진단이 비정규성을 드러내�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 분산분석은 흔히 "비정규성에 로버스트하다"고 기술된다. 이 서술을 한정하라. 분산분석은 언제 로버스트하고 언제 그렇지 않은가?
 
 </div>
@@ -186,7 +186,7 @@ $t$ 검정이나 분산분석 상황에서 진단이 비정규성을 드러내�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 정규성이 의심스러울 때의 대안으로 Welch t 검정과 Mann-Whitney U 검정을 비교하라. 각각은 언제 선호되는가?
 
 </div>
@@ -200,7 +200,7 @@ $t$ 검정이나 분산분석 상황에서 진단이 비정규성을 드러내�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 집단이 $k = 4$개이고 집단당 $n_j = 8$인 일원배치 분산분석이 $H_0$을 기각했다($p = 0.02$). 잔차에 대한 Shapiro-Wilk 검정은 $p = 0.04$를 준다. 분산분석 결과를 믿어야 하는가?
 
 </div>

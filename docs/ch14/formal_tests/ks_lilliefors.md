@@ -181,7 +181,7 @@ Fail to reject H_0: The data is normally distributed.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Kolmogorov-Smirnov 검정과 Lilliefors 검정의 차이를 설명하라. KS 대신 Lilliefors를 반드시 써야 하는 경우는 언제인가?
 
 </div>
@@ -195,7 +195,7 @@ Kolmogorov-Smirnov 검정과 Lilliefors 검정의 차이를 설명하라. KS 대
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 KS 검정통계량은 $D_n = \sup_x |F_n(x) - F_0(x)|$이다. 이것이 기하학적으로 무엇을 재는지 설명하라.
 
 </div>
@@ -207,7 +207,7 @@ KS 검정통계량은 $D_n = \sup_x |F_n(x) - F_0(x)|$이다. 이것이 기하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 비정규성 탐지에서 KS/Lilliefors 검정이 Shapiro-Wilk나 Anderson-Darling 검정보다 대체로 검정력이 낮은 이유는 무엇인가?
 
 </div>
@@ -223,7 +223,7 @@ KS 검정통계량은 $D_n = \sup_x |F_n(x) - F_0(x)|$이다. 이것이 기하�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 관측값 $n = 30$개에 대한 Lilliefors 검정에서 $D_n = 0.14$를 얻었다. $\alpha = 0.05$의 임계값은 $0.161$이다. 결론은 무엇인가?
 
 </div>

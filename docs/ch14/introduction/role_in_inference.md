@@ -138,7 +138,7 @@ Nominal alpha:                         0.0500
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정규분포에 의존하는 통계학의 기본 결과 세 가지를 들어라. 각각에 대해 정규성이 정확히 필요한지 근사적으로만 필요한지 서술하라.
 
 </div>
@@ -153,7 +153,7 @@ Nominal alpha:                         0.0500
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 중심극한정리가 추론을 위한 "근사적 정규성"을 어떻게 제공하며 그 한계는 무엇인지 설명하라.
 
 </div>
@@ -165,7 +165,7 @@ Nominal alpha:                         0.0500
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 통계학자가 "CLT가 구해 줄 것"이므로 정규성 검정이 불필요하다고 주장한다. 이 주장은 어떤 조건에서 타당하고 언제 실패하는가?
 
 </div>
@@ -177,7 +177,7 @@ Nominal alpha:                         0.0500
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 예측구간이 평균의 신뢰구간보다 더 강한 정규성 가정을 요구하는 이유를 설명하라.
 
 </div>

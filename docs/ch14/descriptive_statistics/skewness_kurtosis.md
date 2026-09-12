@@ -98,7 +98,7 @@ Kurtosis: 6.476
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료 $\{1, 2, 2, 3, 3, 3, 4, 4, 5, 100\}$의 표본왜도와 초과첨도를 계산하라. 결과는 무엇을 말해 주는가?
 
 </div>
@@ -132,7 +132,7 @@ Kurtosis: 6.476
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 표준정규분포의 왜도와 (보통의 것과 초과의) 첨도의 이론값을 서술하라. 초과첨도를 더 자주 쓰는 이유는 무엇인가?
 
 </div>
@@ -144,7 +144,7 @@ Kurtosis: 6.476
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 균등분포의 초과첨도는 $-1.2$이다. 정규분포와 비교한 꼬리 거동의 관점에서 이것이 무엇을 뜻하는지 설명하라.
 
 </div>
@@ -156,7 +156,7 @@ Kurtosis: 6.476
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 한 금융 분석가가 일간 주식 수익률의 초과첨도가 5라고 보고했다. 위험 관리의 맥락에서 이를 해석하라.
 
 </div>

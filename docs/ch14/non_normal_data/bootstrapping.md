@@ -55,7 +55,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 소형주 펀드 수익률. 소형주 펀드의 연간 수익률(%) 관측값 12개를 생각하자.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 소형주 펀드 수익률. 소형주 펀드의 연간 수익률(%) 관측값 12개를 생각하자.
 
 $$
 \mathbf{x} = \{-8.2,\; 3.1,\; 15.7,\; 2.4,\; -1.5,\; 22.3,\; 6.8,\; -3.4,\; 11.2,\; 1.9,\; 18.6,\; 7.5\}
@@ -155,7 +155,7 @@ Bootstrap SE: 2.50%
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정규성을 가정하지 않고 모평균의 신뢰구간을 구성하는 비모수 붓스트랩 절차를 기술하라.
 
 </div>
@@ -173,7 +173,7 @@ Bootstrap SE: 2.50%
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 붓스트랩이 실패하거나 성능이 나쁜 경우는 언제인가? 두 조건을 들어라.
 
 </div>
@@ -188,7 +188,7 @@ Bootstrap SE: 2.50%
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 자료가 오른쪽으로 치우쳤을 때 평균의 붓스트랩 신뢰구간과 t 구간을 비교하라. 어느 쪽의 포함확률이 더 나을 것으로 기대되는가?
 
 </div>
@@ -202,7 +202,7 @@ Bootstrap SE: 2.50%
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 자료의 중앙값에 대한 95% 붓스트랩 신뢰구간을 계산하는 Python 코드를 작성하라.
 
 </div>

@@ -96,7 +96,7 @@ Anderson-Darling: A^2 = 0.4494
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규 관측값 $n = 200$개를 생성하고 Shapiro-Wilk, D'Agostino $K^2$, Jarque-Bera 검정을 수행하라. $p$값을 보고하라. $\alpha = 0.05$에서 기각하는 검정이 있는가?
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규 관측값 $n = 200$개를 생성하고 Shapiro-Wilk, D'Agostino $K^2$, Jarque-Bera 검정을 수행하라. $p$값을 보고하라. $\alpha = 0.05$에서 기각하는 검정이 있는가?
 
 </div>
 
@@ -130,7 +130,7 @@ Anderson-Darling: A^2 = 0.4494
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 연습문제 1을 $\text{Lognormal}(0, 0.5)$ 분포에서 뽑아 반복하라. $p$값을 비교하고 오른쪽 치우침에 가장 민감한 검정이 무엇인지 설명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 연습문제 1을 $\text{Lognormal}(0, 0.5)$ 분포에서 뽑아 반복하라. $p$값을 비교하고 오른쪽 치우침에 가장 민감한 검정이 무엇인지 설명하라.
 
 </div>
 
@@ -168,7 +168,7 @@ Anderson-Darling: A^2 = 0.4494
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Kolmogorov-Smirnov 검정이 귀무가설의 모수를 완전히 지정하도록 요구하는 이유를 설명하라. $\mu$와 $\sigma$를 자료에서 추정해 꽂아 넣으면 $p$값에 무슨 일이 일어나는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> Kolmogorov-Smirnov 검정이 귀무가설의 모수를 완전히 지정하도록 요구하는 이유를 설명하라. $\mu$와 $\sigma$를 자료에서 추정해 꽂아 넣으면 $p$값에 무슨 일이 일어나는가?
 
 </div>
 
@@ -178,7 +178,7 @@ Anderson-Darling: A^2 = 0.4494
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 어떤 동료가 Shapiro-Wilk 검정이 기각하지 못했으니 자료가 "정규임이 증명되었다"고 주장한다. 제2종 오류와 검정력의 개념을 써서 짧게 반박하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 어떤 동료가 Shapiro-Wilk 검정이 기각하지 못했으니 자료가 "정규임이 증명되었다"고 주장한다. 제2종 오류와 검정력의 개념을 써서 짧게 반박하라.
 
 </div>
 
@@ -188,7 +188,7 @@ Anderson-Darling: A^2 = 0.4494
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $\alpha = 0.05$에서 Shapiro-Wilk 검정의 경험적 크기를 추정하는 몬테카를로 실험을 설계하라. $\mathcal{N}(0,1)$에서 크기 $n = 50$인 표본 10,000개를 뽑아 검정을 적용하고 기각률을 보고하라. 0.05에 얼마나 가까운가?
+**연습문제 5.** <span class="diff med" title="중간"></span> $\alpha = 0.05$에서 Shapiro-Wilk 검정의 경험적 크기를 추정하는 몬테카를로 실험을 설계하라. $\mathcal{N}(0,1)$에서 크기 $n = 50$인 표본 10,000개를 뽑아 검정을 적용하고 기각률을 보고하라. 0.05에 얼마나 가까운가?
 
 </div>
 

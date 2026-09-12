@@ -178,7 +178,7 @@ Normality tests:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 주식의 일간 수익률이 표본왜도 $-0.3$, 표본 초과첨도 $4.2$를 보인다. 이 기술통계에 근거할 때 정규 Q-Q 그림이 선형일 것으로 기대하는가? 설명하라.
 
 </div>
@@ -190,7 +190,7 @@ Normality tests:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정규분포가 일간 주식 수익률의 나쁜 모형인 이유를 설명하라. 금융 수익률의 어떤 정형화된 사실이 정규성을 위배하는가?
 
 </div>
@@ -207,7 +207,7 @@ Normality tests:
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 자유도 $\nu$인 $t$ 분포를 수익률 모형화에서 정규분포의 대안으로 쓰기도 한다. 두꺼운 꼬리를 더 잘 포착하는 이유는 무엇인가?
 
 </div>
@@ -221,7 +221,7 @@ Normality tests:
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 위험 관리자가 일간 수익률 252개에 Jarque-Bera 검정을 수행하여 $p < 0.001$을 얻었다. 무엇을 결론짓고 어떤 조치를 취해야 하는가?
 
 </div>

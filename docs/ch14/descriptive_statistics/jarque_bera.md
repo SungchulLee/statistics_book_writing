@@ -171,7 +171,7 @@ Jarque-Bera 검정은 D'Agostino의 $K^2$ 검정을 근사하는 것이 아니�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 Jarque-Bera 검정으로 자료의 정규성을 검정하는 통계량 $JB$는 다음과 같이 정의된다.
 
 $$

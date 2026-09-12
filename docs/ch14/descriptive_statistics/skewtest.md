@@ -78,7 +78,7 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규분포에서 관측값 $n = 300$개를 생성하라. $g_1$과 왜도 검정 $p$값을 계산하라. $\alpha = 0.05$에서 기각할 것으로 기대하는가?
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규분포에서 관측값 $n = 300$개를 생성하라. $g_1$과 왜도 검정 $p$값을 계산하라. $\alpha = 0.05$에서 기각할 것으로 기대하는가?
 
 </div>
 
@@ -122,7 +122,7 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $\text{Uniform}(0, 1)$ 분포에서 뽑은 관측값 $n = 200$개에 대해 표본왜도를 계산하고 왜도 검정을 수행하라. 균등분포는 대칭이지만 정규가 아니다. 검정이 기각하는가?
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> $\text{Uniform}(0, 1)$ 분포에서 뽑은 관측값 $n = 200$개에 대해 표본왜도를 계산하고 왜도 검정을 수행하라. 균등분포는 대칭이지만 정규가 아니다. 검정이 기각하는가?
 
 </div>
 
@@ -154,7 +154,7 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $\text{Lognormal}(\mu, \sigma^2)$ 분포의 모집단 왜도가 $(e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$임을 보여라. $\sigma = 0.6$에 대한 값을 계산하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> $\text{Lognormal}(\mu, \sigma^2)$ 분포의 모집단 왜도가 $(e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$임을 보여라. $\sigma = 0.6$에 대한 값을 계산하라.
 
 </div>
 
@@ -178,7 +178,7 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $\text{Lognormal}(0, 0.4)$에서 뽑은 관측값 $n = 100$개에 대해 $\alpha = 0.05$에서 왜도 검정의 검정력을 추정하는 모의실험을 5,000회 반복으로 수행하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $\text{Lognormal}(0, 0.4)$에서 뽑은 관측값 $n = 100$개에 대해 $\alpha = 0.05$에서 왜도 검정의 검정력을 추정하는 모의실험을 5,000회 반복으로 수행하라.
 
 </div>
 
@@ -220,7 +220,7 @@ D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 정확한 공식 $\text{Var}(g_1) = 6(n-2)/[(n+1)(n+3)]$에서 출발하여 큰 $n$에 대해 $\text{Var}(g_1) \approx 6/n$임을 증명하라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 정확한 공식 $\text{Var}(g_1) = 6(n-2)/[(n+1)(n+3)]$에서 출발하여 큰 $n$에 대해 $\text{Var}(g_1) \approx 6/n$임을 증명하라.
 
 </div>
 

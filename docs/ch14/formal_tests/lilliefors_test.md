@@ -102,7 +102,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규 관측값 $n = 200$개를 생성하라. 순진한 KS 검정($\hat{\mu}, \hat{\sigma}$ 추정)과 Lilliefors 붓스트랩 검정을 모두 수행하라. 두 $p$값을 비교하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 표준정규 관측값 $n = 200$개를 생성하라. 순진한 KS 검정($\hat{\mu}, \hat{\sigma}$ 추정)과 Lilliefors 붓스트랩 검정을 모두 수행하라. 두 $p$값을 비교하라.
 
 </div>
 
@@ -147,7 +147,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $n = 100$에 대해 $\alpha = 0.05$에서 Lilliefors 붓스트랩 검정($B = 500$)의 경험적 크기를 추정하는 몬테카를로 실험을 5,000회 반복으로 수행하라. 순진한 KS 검정과 비교하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> $n = 100$에 대해 $\alpha = 0.05$에서 Lilliefors 붓스트랩 검정($B = 500$)의 경험적 크기를 추정하는 몬테카를로 실험을 5,000회 반복으로 수행하라. 순진한 KS 검정과 비교하라.
 
 </div>
 
@@ -199,7 +199,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Lilliefors $p$값의 해상도가 $1/B$인 이유를 설명하라. $p = 0.04$와 $p = 0.06$을 안정적으로 구별하려면 $B$가 얼마나 커야 하는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> Lilliefors $p$값의 해상도가 $1/B$인 이유를 설명하라. $p = 0.04$와 $p = 0.06$을 안정적으로 구별하려면 $B$가 얼마나 커야 하는가?
 
 </div>
 
@@ -217,7 +217,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 정규성 대신 지수성을 검정하도록 Lilliefors 붓스트랩을 수정하라. 알고리즘에 필요한 변경을 개략적으로 서술하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 정규성 대신 지수성을 검정하도록 Lilliefors 붓스트랩을 수정하라. 알고리즘에 필요한 변경을 개략적으로 서술하라.
 
 </div>
 
@@ -236,7 +236,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 고정된 자료에 대해 $B \to \infty$일 때 붓스트랩 $p$값 $\hat{p}_B$가 참 $p$값으로 수렴함을 증명하라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 고정된 자료에 대해 $B \to \infty$일 때 붓스트랩 $p$값 $\hat{p}_B$가 참 $p$값으로 수렴함을 증명하라.
 
 </div>
 

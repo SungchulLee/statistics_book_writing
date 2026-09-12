@@ -102,7 +102,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규 관측값 $n = 200$개를 생성하라. Q-Q 그림을 만들고 세 검정을 모두 수행하라. 점들이 적합선 위에 놓이고 모든 $p$값이 0.05를 넘는지 확인하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규 관측값 $n = 200$개를 생성하라. Q-Q 그림을 만들고 세 검정을 모두 수행하라. 점들이 적합선 위에 놓이고 모든 $p$값이 0.05를 넘는지 확인하라.
 
 </div>
 
@@ -145,7 +145,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 연습문제 1을 $\text{Exponential}(1)$에서 뽑은 관측값 $n = 200$개로 반복하라. Q-Q 그림의 모양을 기술하고 $p$값들을 비교하라.
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 연습문제 1을 $\text{Exponential}(1)$에서 뽑은 관측값 $n = 200$개로 반복하라. Q-Q 그림의 모양을 기술하고 $p$값들을 비교하라.
 
 </div>
 
@@ -186,7 +186,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Q-Q 그림 적합선의 기울기·절편과 정규분포의 모수 $\mu$, $\sigma$ 사이의 관계를 설명하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> Q-Q 그림 적합선의 기울기·절편과 정규분포의 모수 $\mu$, $\sigma$ 사이의 관계를 설명하라.
 
 </div>
 
@@ -198,7 +198,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** SciPy의 Anderson-Darling 검정은 $p$값을 내놓지 않고 임계값을 반환한다. $H_0$이 기각되는 가장 작은 유의수준을 찾아내는 코드를 작성하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> SciPy의 Anderson-Darling 검정은 $p$값을 내놓지 않고 임계값을 반환한다. $H_0$이 기각되는 가장 작은 유의수준을 찾아내는 코드를 작성하라.
 
 </div>
 
@@ -238,7 +238,7 @@ Shapiro-Wilk와 D'Agostino $K^2$는 강하게 기각하지만 Anderson-Darling�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 자료가 정확히 표준정규일 때 $n \to \infty$에 따라 Q-Q 그림의 기울기가 1로, 절편이 0으로 수렴함을 보여라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 자료가 정확히 표준정규일 때 $n \to \infty$에 따라 Q-Q 그림의 기울기가 1로, 절편이 0으로 수렴함을 보여라.
 
 </div>
 

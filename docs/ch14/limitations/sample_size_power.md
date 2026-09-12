@@ -138,7 +138,7 @@ Power of Shapiro-Wilk test vs. t(5) distribution
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 가볍게 치우친 자료의 관측값 $n = 500$개에 대한 Shapiro-Wilk 검정에서 $p = 0.001$을 얻었다. 같은 분포의 관측값 $n = 20$개에서는 $p = 0.35$였다. 이 차이를 설명하라.
 
 </div>
@@ -150,7 +150,7 @@ Power of Shapiro-Wilk test vs. t(5) distribution
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $t_5$ 대립가설에 대한 Shapiro-Wilk 검정의 검정력을 $n$의 함수로 그려라. 곡선의 전반적 모양을 기술하라.
 
 </div>
@@ -170,7 +170,7 @@ $t_5$ 대립가설에 대한 Shapiro-Wilk 검정의 검정력을 $n$의 함수�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 "정규성 검정을 위한 검정력 분석"의 개념을 설명하라. 실무에서 흔히 수행되는가?
 
 </div>
@@ -184,7 +184,7 @@ $t_5$ 대립가설에 대한 Shapiro-Wilk 검정의 검정력을 $n$의 함수�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 비정규성의 정도가 고정되어 있을 때 정규성 검정의 p값은 표본크기 $n$에 따라 어떻게 변하는가? 근사적 관계를 제시하라.
 
 </div>

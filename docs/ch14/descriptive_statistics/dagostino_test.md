@@ -89,7 +89,7 @@ p-value = 1.502e-05
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 표준정규 관측값 $n = 500$개를 생성하라. D'Agostino $K^2$ 검정을 수행하고 $p > 0.05$임을 확인하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 표준정규 관측값 $n = 500$개를 생성하라. D'Agostino $K^2$ 검정을 수행하고 $p > 0.05$임을 확인하라.
 
 </div>
 
@@ -120,7 +120,7 @@ p-value = 1.502e-05
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $\text{Uniform}(0,1)$ 분포에서 관측값 $n = 300$개를 생성하라. $K^2$ 검정을 수행하라. 기각의 주된 원인은 어느 성분($Z_1$ 또는 $Z_2$)인가?
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> $\text{Uniform}(0,1)$ 분포에서 관측값 $n = 300$개를 생성하라. $K^2$ 검정을 수행하라. 기각의 주된 원인은 어느 성분($Z_1$ 또는 $Z_2$)인가?
 
 </div>
 
@@ -162,7 +162,7 @@ p-value = 1.502e-05
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $H_0$ 아래에서 $K^2$이 $\chi^2_2$ 분포를 따르는 이유를 설명하고, 이 근사가 성립하는 데 필요한 조건을 서술하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> $H_0$ 아래에서 $K^2$이 $\chi^2_2$ 분포를 따르는 이유를 설명하고, 이 근사가 성립하는 데 필요한 조건을 서술하라.
 
 </div>
 
@@ -179,7 +179,7 @@ p-value = 1.502e-05
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 10,000회 반복의 몬테카를로 모의실험으로 $n = 50$일 때 $\alpha = 0.05$에서 $K^2$ 검정의 경험적 크기가 근사적으로 0.05인지 확인하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 10,000회 반복의 몬테카를로 모의실험으로 $n = 50$일 때 $\alpha = 0.05$에서 $K^2$ 검정의 경험적 크기가 근사적으로 0.05인지 확인하라.
 
 </div>
 
@@ -229,7 +229,7 @@ p-value = 1.502e-05
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $Z_1$과 $Z_2$가 독립인 $\mathcal{N}(0,1)$ 확률변수이면 $K^2 = Z_1^2 + Z_2^2$의 CDF가 $k \geq 0$에 대해 $F_{K^2}(k) = 1 - e^{-k/2}$임을 증명하라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> $Z_1$과 $Z_2$가 독립인 $\mathcal{N}(0,1)$ 확률변수이면 $K^2 = Z_1^2 + Z_2^2$의 CDF가 $k \geq 0$에 대해 $F_{K^2}(k) = 1 - e^{-k/2}$임을 증명하라.
 
 </div>
 
