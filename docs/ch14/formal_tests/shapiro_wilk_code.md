@@ -32,17 +32,23 @@ $$
 
 $W$가 작으면(동등하게 $p$값이 작으면) $H_0$을 기각한다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 검정과 요약통계를 함께 읽기
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 정규 240개에 로그정규 60개를 섞은 자료다.
 rng = np.random.default_rng(0)
 x = np.concatenate([rng.normal(0, 1, size=240),
                     rng.lognormal(0, 0.6, size=60)])
 
 W, p = stats.shapiro(x)
+
+# 검정은 "정규가 아니다"까지만 말한다. 무엇이 문제인지는 왜도와 첨도가
+# 알려 준다. 그래서 검정 결과와 늘 함께 본다.
 g1 = stats.skew(x, bias=False)
 g2 = stats.kurtosis(x, fisher=True, bias=False)
 
@@ -63,6 +69,8 @@ Shapiro-Wilk: W = 0.9750, p-value = 4.27e-05
 Skewness g1 = 0.3707, Excess kurtosis g2 = 1.8565
 => Reject normality at alpha = 0.05.
 ```
+
+</div>
 
 ## 강점과 한계
 

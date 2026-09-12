@@ -22,7 +22,9 @@ $$
 
 히스토그램 막대가 $\hat{f}$와 가깝게 맞으면 자료가 정규성과 일관된다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 히스토그램에 정규곡선 겹치기
 
 ```python
 import numpy as np
@@ -34,6 +36,9 @@ np.random.seed(42)
 n = 100
 data = np.random.normal(loc=0, scale=1, size=n)
 
+# 히스토그램에 적합한 정규곡선을 겹친다. 위치와 척도를 자료에서 뽑아 썼으므로
+# 남는 차이는 모양뿐이다. 다만 계급 수에 따라 인상이 달라지므로, 이 그림만으로
+# 판단하지 말고 Q-Q 그림과 함께 본다.
 fig, ax = plt.subplots(figsize=(7, 4))
 ax.hist(data, bins=15, density=True, alpha=0.6, edgecolor="black")
 x_grid = np.linspace(data.min() - 0.5, data.max() + 0.5, 200)
@@ -46,6 +51,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![히스토그램과 적합된 정규밀도](./img/graphical_checks_27.png)
 

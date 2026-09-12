@@ -21,17 +21,21 @@ $$
 
 왜도가 0에 가까우면 모집단 분포가 대칭일 가능성이 높아 정규성을 시사한다. 0에서 크게 벗어나면 비정규성을 시사한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 정규자료의 왜도
+
 ```python
 import numpy as np
 from scipy import stats
 
 np.random.seed(0)
 
-# Generate a sample dataset
+# 정규분포는 좌우대칭이므로 왜도가 0 근처로 나온다. 표준편차를 3 으로
+# 키워도 마찬가지다 — 왜도는 척도에 휘둘리지 않는 값이다.
 data = np.random.normal(0, 3, 1000)
 # data = np.random.exponential(1, 1000)
 
-# Calculate skewness
 skewness_value = stats.skew(data)
 print(f"Skewness: {skewness_value:.4f}")
 ```
@@ -41,6 +45,8 @@ print(f"Skewness: {skewness_value:.4f}")
 ```
 Skewness: 0.0339
 ```
+
+</div>
 
 정규분포에서 뽑은 1,000개 표본의 왜도가 0.034다. 참값 0에 가깝지만 정확히 0은 아니다. 표본왜도 자체가 표집오차를 갖기 때문이며, $n = 1000$에서 그 표준오차는 대략 $\sqrt{6/n} \approx 0.077$이다.
 
@@ -66,21 +72,25 @@ $$
 
 (`scipy.stats.kurtosis`로 계산한) 첨도 값이 0에 가까우면 정규분포를 시사한다. 값이 크면 꼬리가 두껍고, 작으면 정규보다 꼬리가 얇다는 뜻이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 지수자료의 왜도와 첨도
+
 ```python
 import numpy as np
 from scipy import stats
 
 np.random.seed(0)
 
-# Generate a sample dataset
+# 이번에는 지수분포다. 오른쪽으로 길게 늘어졌으므로 왜도가 양으로 크게 나온다.
 # data = np.random.normal(0, 1, 1000)
 data = np.random.exponential(1, 1000)
 
-# Calculate skewness
 skewness_value = stats.skew(data)
 print(f"Skewness: {skewness_value:.4f}")
 
-# Calculate kurtosis
+# scipy 의 kurtosis 는 기본이 초과첨도다(정규가 0). 다른 책에서 3 을 더한
+# 값을 쓰는 일이 많으니 견줄 때 주의해야 한다.
 kurtosis_value = stats.kurtosis(data)
 print(f"Kurtosis: {kurtosis_value:.4}")
 ```
@@ -91,6 +101,8 @@ print(f"Kurtosis: {kurtosis_value:.4}")
 Skewness: 2.0526
 Kurtosis: 6.476
 ```
+
+</div>
 
 지수분포의 이론값은 왜도 2, 초과첨도 6이며, 표본값이 그에 가깝다.
 

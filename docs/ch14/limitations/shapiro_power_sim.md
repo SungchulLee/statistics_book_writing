@@ -32,7 +32,9 @@ $$
 \widehat{\text{Power}}(n) = \frac{\text{기각 횟수}}{M}.
 $$
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** Shapiro-Wilk 검정력 곡선
 
 ```python
 import numpy as np
@@ -40,6 +42,11 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 def power_for_n(n, sims=500, sigma_ln=0.6, alpha=0.05, seed=0):
+    """주어진 표본크기에서 Shapiro-Wilk 검정의 검정력을 모의실험으로 잰다.
+
+    대립가설 쪽 모집단은 로그정규로 고정한다. 정규에서 벗어난 정도는
+    내내 같으므로, 검정력의 변화는 오직 표본크기 때문이다.
+    """
     rng = np.random.default_rng(seed)
     rejections = 0
     for _ in range(sims):
@@ -49,6 +56,8 @@ def power_for_n(n, sims=500, sigma_ln=0.6, alpha=0.05, seed=0):
             rejections += 1
     return rejections / sims
 
+# n 을 키워 가며 검정력 곡선을 그린다. 같은 이탈인데도 n=20 에서는
+# 절반도 잡아내지 못하고 n=300 에서는 거의 놓치지 않는다.
 ns = [20, 30, 50, 80, 120, 200, 300]
 powers = [power_for_n(n, sims=400, sigma_ln=0.6, alpha=0.05,
                       seed=42 + n) for n in ns]
@@ -77,6 +86,8 @@ n = 120: power = 1.000
 n = 200: power = 1.000
 n = 300: power = 1.000
 ```
+
+</div>
 
 ![표본크기에 따른 검정력](./img/shapiro_power_sim_37.png)
 

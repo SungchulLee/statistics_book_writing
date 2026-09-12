@@ -103,33 +103,38 @@ $$
 3. **Anderson-Darling 검정**: 꼬리 이탈에 특히 민감하여 금융 자료에 잘 맞는다.
 4. **Q-Q 그림**: 오른쪽 꼬리가 위로, 왼쪽 꼬리가 아래로 휘는 모습으로 두꺼운 꼬리를 시각적으로 드러낸다.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 수익률의 정규성과 VaR
 
 ```python
 import numpy as np
 from scipy import stats
 
 # ===================================================================
-# Test normality of simulated financial returns
+# 모의 수익률로 정규성 검정 — 그리고 그것이 위험 측정에 미치는 영향
 # ===================================================================
 
 np.random.seed(42)
 
-# Simulate daily returns from a t-distribution (realistic fat tails)
+# 자유도 5 인 t 로 일별 수익률을 만든다. 실제 수익률처럼 꼬리가 두껍다.
 n_days = 1000
 df = 5
 daily_returns = stats.t.rvs(df=df, size=n_days) * 0.01
 
-# Descriptive statistics
+# 먼저 요약통계로 훑는다. 정규라면 왜도 0, 초과첨도 0 이어야 한다.
 skew = stats.skew(daily_returns)
 kurt = stats.kurtosis(daily_returns)  # excess kurtosis
 
-# Normality tests
+# 세 검정을 함께 돌린다. 셋의 결론이 갈리는 일은 드물지만, 무엇에
+# 민감한지가 서로 달라 함께 보면 이탈의 성격을 짐작할 수 있다.
 sw_stat, sw_p = stats.shapiro(daily_returns)
 jb_stat, jb_p = stats.jarque_bera(daily_returns)
 ad_result = stats.anderson(daily_returns, dist="norm")
 
-# VaR comparison: normal vs empirical
+# 정규성이 깨졌을 때 실무에서 치르는 대가를 숫자로 본다. 정규를 가정한
+# VaR 은 꼬리 쪽 손실을 실제보다 작게 잡는다. 아래 비가 1 보다 크면
+# 정규 가정이 위험을 그만큼 과소평가하고 있다는 뜻이다.
 alpha = 0.01
 var_normal = -(np.mean(daily_returns)
                + stats.norm.ppf(alpha) * np.std(daily_returns, ddof=1))
@@ -166,6 +171,8 @@ Normality tests:
   Empirical VaR: 0.030613
   Ratio:         1.02
 ```
+
+</div>
 
 세 정규성 검정이 모두 압도적으로 기각한다(초과첨도가 17.3에 이른다).
 

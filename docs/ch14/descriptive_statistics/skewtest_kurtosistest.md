@@ -29,21 +29,26 @@
 
 왜도 검정은 대칭성을 가정하는 모수적 통계 방법(특정 형태의 $t$ 검정이나 분산분석 등)으로 자료를 분석할 수 있는지 평가할 때 실용적이다. 자료가 치우쳤다고 결론지으면 자료를 변환하거나(예: 로그나 Box-Cox 변환) 대칭성을 가정하지 않는 비모수 방법을 써야 할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 왜도 검정
+
 ```python
 import numpy as np
 from scipy import stats
 
 np.random.seed(0)
 
-# Generate a sample dataset with skewness
+# 지금은 정규자료다. 위 주석을 바꿔 감마분포로 돌리면 검정이 기각되는 것을
+# 볼 수 있다. 두 경우를 견주는 것이 이 코드의 쓰임이다.
 # data = np.random.gamma(2, 2, 1000)
 data = np.random.normal(2, 2, 1000)
 
-# Calculate skewness
 skewness_value = stats.skew(data)
 print(f"Skewness: {skewness_value:.4f}")
 
-# Perform skewness test
+# 귀무가설은 "모집단의 왜도가 0" 이다. 이 검정은 치우침만 보므로,
+# 대칭이면서 꼬리만 두꺼운 분포는 잡아내지 못한다.
 stat, p_value = stats.skewtest(data)
 print(f"Skewness Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
 
@@ -62,6 +67,8 @@ Skewness: 0.0339
 Skewness Test: Statistic=0.4402, p-value=0.6598
 Fail to reject H_0: The data is symmetrically distributed (no significant skewness).
 ```
+
+</div>
 
 정규 자료이므로 왜도가 $0.0339$로 0에 가깝고 $p = 0.66$으로 기각하지 못한다. 기대한 대로이다.
 
@@ -96,21 +103,24 @@ Fail to reject H_0: The data is symmetrically distributed (no significant skewne
 
 정규 첨도를 가정하는 모수적 방법($t$ 검정, 분산분석 등)이 적절한지 평가할 때 첨도 검정을 쓴다. 첨도 검정이 자료의 꼬리가 유의하게 두껍거나 얇다고 나타내면 변환(로그나 Box-Cox 변환)이나 비모수 방법이 필요할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 첨도 검정
+
 ```python
 import numpy as np
 from scipy import stats
 
 np.random.seed(0)
 
-# Generate a sample dataset
 # data = np.random.gamma(2, 2, 1000)
 data = np.random.normal(2, 2, 1000)
 
-# Calculate kurtosis
 kurtosis_value = stats.kurtosis(data)
 print(f"Kurtosis: {kurtosis_value:.4f}")
 
-# Perform kurtosis test
+# 귀무가설은 "모집단의 초과첨도가 0" 이다. 앞의 왜도 검정과 짝을 이루며,
+# 둘을 합친 것이 D'Agostino 의 K^2 이다.
 stat, p_value = stats.kurtosistest(data)
 print(f"Kurtosis Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
 
@@ -129,6 +139,8 @@ Kurtosis: -0.0468
 Kurtosis Test: Statistic=-0.1980, p-value=0.8431
 Fail to reject H_0: The data has normal kurtosis.
 ```
+
+</div>
 
 ## 연습문제
 

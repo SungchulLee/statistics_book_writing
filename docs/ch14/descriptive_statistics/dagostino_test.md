@@ -32,16 +32,22 @@ $$
 
 $p < \alpha$일 때 $H_0$을 기각한다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 섞인 자료에 K-제곱 검정
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 정규 240개에 로그정규 60개를 섞었다. 겉보기에는 정규 같지만 오른쪽이
+# 조금 늘어난 자료다. 검정이 이것을 잡아내는지 본다.
 rng = np.random.default_rng(0)
 x = np.concatenate([rng.normal(0, 1, size=240),
                     rng.lognormal(0, 0.6, size=60)])
 
+# K^2 과 그것을 이루는 두 성분을 함께 구한다. 어느 쪽이 큰지를 보면
+# 정규에서 벗어난 까닭이 치우침인지 꼬리인지 알 수 있다.
 K2, p = stats.normaltest(x)
 z1, _ = stats.skewtest(x)
 z2, _ = stats.kurtosistest(x)
@@ -65,6 +71,8 @@ D'Agostino's K^2 statistic = 22.2123
 p-value = 1.502e-05
 => Reject normality at alpha = 0.05.
 ```
+
+</div>
 
 분해가 정확히 맞아떨어진다. $2.5915^2 + 3.9365^2 = 6.716 + 15.496 = 22.212$.
 

@@ -42,7 +42,9 @@ $$
 P(\sqrt{n}\, D_n \leq t) \to 1 - 2\sum_{k=1}^{\infty} (-1)^{k-1} e^{-2k^2 t^2}.
 $$
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 모수를 못박은 KS 검정
 
 ```python
 import numpy as np
@@ -51,7 +53,10 @@ from scipy import stats
 rng = np.random.default_rng(0)
 x = rng.normal(0.0, 1.0, size=250)
 
-# Fully specified H0: Normal(0, 1)
+# 귀무가설이 N(0,1) 로 완전히 못박혀 있는 경우다. args 로 모수를 직접
+# 넘겨 주었고 자료에서 추정하지 않았으므로, 이 p-값은 그대로 믿을 수 있다.
+# 모수를 자료에서 뽑아 쓰면 Lilliefors 로 가야 한다.
+# D 는 경험분포함수와 이론분포함수의 최대 세로 거리다.
 D, p = stats.kstest(x, 'norm', args=(0.0, 1.0))
 
 print(f"n = {x.size}")
@@ -69,6 +74,8 @@ n = 250
 KS one-sample vs N(0,1): D = 0.0354, p = 0.9013
 => Fail to reject H0 at alpha = 0.05.
 ```
+
+</div>
 
 ## Lilliefors 문제
 

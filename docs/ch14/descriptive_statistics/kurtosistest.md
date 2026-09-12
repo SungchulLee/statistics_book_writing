@@ -32,16 +32,22 @@ $$
 
 양측 $p$값은 $p = 2\,\Phi(-|Z_2|)$이다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 꼬리만 두꺼운 자료의 첨도 검정
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 정규에 자유도 4 짜리 t 를 섞었다. 중심은 그대로이고 꼬리만 두꺼워진다.
+# 왜도 검정으로는 잡히지 않고 첨도 검정에만 걸리는 자료다.
 rng = np.random.default_rng(0)
 x = np.concatenate([rng.normal(0, 1, size=220),
                     rng.standard_t(df=4, size=80)])
 
+# 표본첨도를 바로 쓰지 않고 Z 로 바꾸는 까닭은, 첨도의 표집분포가 표본이
+# 상당히 클 때까지도 크게 치우쳐 있기 때문이다. 이 검정은 n>=20 부터 쓸 만하다.
 g2 = stats.kurtosis(x, fisher=True, bias=False)
 z, p = stats.kurtosistest(x)
 
@@ -62,6 +68,8 @@ Sample excess kurtosis (Fisher) g2 = 1.0493
 D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 => Evidence of non-normal kurtosis (departing from normality).
 ```
+
+</div>
 
 ## 해석
 

@@ -8,7 +8,9 @@
 - **Kruskal-Wallis 검정**: 셋 이상의 집단을 비교하는 분산분석의 비모수 대안.
 - **Wilcoxon 부호순위 검정**: 대응하는 두 표본을 비교하는 비모수 검정.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** Mann-Whitney U 검정
 
 ```python
 import numpy as np
@@ -16,11 +18,13 @@ from scipy.stats import mannwhitneyu
 
 np.random.seed(0)
 
-# Generate two non-normal datasets
+# 두 지수분포. 정규와는 거리가 멀다.
 group1 = np.random.exponential(scale=2, size=100)
 group2 = np.random.exponential(scale=3, size=100)
 
-# Perform Mann-Whitney U test
+# Mann-Whitney U 는 t 검정의 비모수 대응이다. 값 대신 순위만 쓰므로
+# 정규성을 요구하지 않는다. 다만 귀무가설이 "두 평균이 같다"가 아니라
+# "두 분포의 위치가 같다"이므로, 결론을 말할 때 표현에 주의해야 한다.
 stat, p_value = mannwhitneyu(group1, group2)
 print(f"Mann-Whitney U Test: Statistic={stat}, p-value={p_value}")
 
@@ -38,6 +42,8 @@ else:
 Mann-Whitney U Test: Statistic=3411.0, p-value=0.00010388964489703351
 Reject H_0: Significant difference between the groups.
 ```
+
+</div>
 
 두 집단의 표본중앙값이 각각 $1.26$과 $2.57$로 뚜렷이 다르며, 두 자료 모두 강하게 치우친 지수분포에서 왔는데도 순위 기반 검정이 이 차이를 확실히 탐지한다.
 

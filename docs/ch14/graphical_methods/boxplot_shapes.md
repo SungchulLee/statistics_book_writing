@@ -39,12 +39,17 @@ $\text{Lognormal}(0, 0.7)$처럼 오른쪽으로 치우친 분포에서 자료�
 - 위 수염이 아래 수염보다 훨씬 길며,
 - 위 수염 위쪽에 이상점이 많이 나타난다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 치우친 자료의 상자그림
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 치우친 자료에서는 중앙값이 상자 가운데가 아니라 한쪽으로 쏠리고,
+# 한쪽 수염만 길어진다. showmeans=True 로 평균을 함께 찍으면, 평균이
+# 중앙값보다 긴 꼬리 쪽으로 끌려간 것도 눈에 보인다.
 rng = np.random.default_rng(3)
 x_skew = rng.lognormal(0.0, 0.7, size=400)
 
@@ -55,6 +60,8 @@ ax.set_ylabel("Values")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![치우친 분포(대수정규)의 상자그림](./img/boxplot_shapes_44.png)
 
@@ -67,12 +74,16 @@ plt.show()
 - 상자는 대략 대칭이지만(중앙값이 가운데에 있다),
 - 이상점이 **양쪽**에 나타나며, 정규성 아래에서 기대되는 $\approx 0.7\%$보다 훨씬 많다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 2.** 꼬리가 두꺼운 자료의 상자그림
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 꼬리가 두꺼운 자료는 대칭이므로 상자는 반듯하다. 대신 수염 밖의 점이
+# 유난히 많아진다. 정규자료라면 400개 중 서너 개가 보통이다.
 rng = np.random.default_rng(3)
 x_t = rng.standard_t(df=3, size=400)
 
@@ -83,6 +94,8 @@ ax.set_ylabel("Values")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![두꺼운 꼬리 분포($t_3$)의 상자그림](./img/boxplot_shapes_70.png)
 

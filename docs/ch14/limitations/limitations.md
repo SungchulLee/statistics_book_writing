@@ -9,18 +9,24 @@
 - **작은 표본**: 실제 정규성 이탈을 탐지하지 못할 수 있다.
 - **큰 표본**: 실질적으로 유의하지 않은 사소한 이탈까지 탐지할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 표본크기에 따라 달라지는 결론
+
 ```python
 import numpy as np
 from scipy.stats import shapiro
 
 np.random.seed(0)
 
-# Small sample size
+# 두 자료 모두 참으로 정규다. 그런데 표본크기만 다르게 두면 검정의
+# 성질이 달라진다. 작은 표본에서는 웬만한 이탈도 잡아내지 못하고,
+# 큰 표본에서는 무시할 만한 이탈에도 기각한다.
 small_sample = np.random.normal(0, 1, 20)
 stat_small, p_value_small = shapiro(small_sample)
 print(f"Shapiro-Wilk Test (small sample): p-value={p_value_small}")
 
-# Large sample size
+# 표본이 커지면 검정력이 올라가는데, 그것이 늘 좋은 일은 아니다.
 large_sample = np.random.normal(0, 1, 10000)
 stat_large, p_value_large = shapiro(large_sample)
 print(f"Shapiro-Wilk Test (large sample): p-value={p_value_large}")
@@ -32,6 +38,8 @@ print(f"Shapiro-Wilk Test (large sample): p-value={p_value_large}")
 Shapiro-Wilk Test (small sample): p-value=0.7136380887419513
 Shapiro-Wilk Test (large sample): p-value=0.7506816458200554
 ```
+
+</div>
 
 !!! warning "이 예제만으로는 '큰 표본이 기각한다'가 드러나지 않는다"
     두 표본 모두 **정확히 정규분포**에서 생성했으므로 $n = 10{,}000$이어도 기각하지 않는 것이 옳다($p = 0.75$). 큰 표본의 과잉 검정력을 보이려면 자료가 정규에서 **조금이라도** 벗어나 있어야 한다. 예를 들어 $t_{30}$ 분포(초과첨도 0.23)에서 뽑으면
@@ -50,16 +58,22 @@ Shapiro-Wilk Test (large sample): p-value=0.7506816458200554
 
 자료가 조금 치우쳤거나 첨도가 어긋나 있어도, 특히 표본이 작으면 검정이 그 이탈을 탐지할 검정력을 갖지 못하는 경우가 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 치우침을 숫자로 재기
+
 ```python
 import numpy as np
 from scipy.stats import skew, kurtosis, shapiro
 
 np.random.seed(0)
 
-# Generate a sample with slight skewness and kurtosis
+# 감마분포는 오른쪽으로 치우쳐 있다. n=1000 이면 검정력이 충분해
+# 이 정도 치우침도 확실하게 기각한다.
 skewed_data = np.random.gamma(2, 2, 1000)
 
-# Check skewness and kurtosis
+# 검정이 기각했을 때 "얼마나" 벗어났는지는 이 값들이 말해 준다.
+# 실무에서는 p-값보다 이쪽이 더 쓸모 있다.
 print(f"Skewness: {skew(skewed_data)}, Kurtosis: {kurtosis(skewed_data)}")
 
 # Perform Shapiro-Wilk test
@@ -74,6 +88,8 @@ Skewness: 1.358332294792333, Kurtosis: 2.4079180806130145
 Shapiro-Wilk Test: p-value=7.094914686692259e-25
 ```
 
+</div>
+
 감마(2, 2) 분포는 왜도 1.36, 초과첨도 2.41로 이탈이 상당히 크므로 $n = 1000$에서 압도적으로 기각된다.
 
 ## 치우친 분포 다루기
@@ -82,13 +98,19 @@ Shapiro-Wilk Test: p-value=7.094914686692259e-25
 
 금융 자료, 생물학적 측정값, 소득 분포는 흔히 긴 꼬리나 치우침을 보여 정규성 가정을 엄밀히 따르지 않지만, 많은 모수적 기법을 합리적인 신뢰 아래 여전히 적용할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 소득 자료처럼 늘 기각되는 경우
+
 ```python
 import numpy as np
 from scipy.stats import shapiro
 
 np.random.seed(0)
 
-# Generate a sample with positive skew
+# 소득처럼 오른쪽으로 크게 치우친 자료는 정규성 검정이 언제나 기각한다.
+# 검정을 돌리기 전에 이미 알 수 있는 일이므로, 이럴 때는 검정이 아니라
+# 변환이나 비모수 방법으로 바로 넘어가는 편이 낫다.
 income_data = np.random.exponential(scale=50000, size=1000)
 
 # Perform Shapiro-Wilk test
@@ -102,25 +124,32 @@ print(f"Shapiro-Wilk Test on Skewed Data: p-value={p_value}")
 Shapiro-Wilk Test on Skewed Data: p-value=4.8578866080562626e-33
 ```
 
+</div>
+
 자료가 치우쳐 있어도 많은 통계검정은 여전히 로버스트하고 믿을 만하다. 정규성 검정에만 기대면 불필요한 자료 변환이나 타당한 방법의 배제로 이어질 수 있다.
 
 ## 실제 자료에서의 실용적 고려
 
 실무에서 현실 자료가 완벽한 정규분포를 따르는 일은 거의 없다. 형식적 검정은 지나치게 엄격할 수 있으며, 정규성에서의 작은 이탈이 언제나 모수적 방법의 사용을 무효화하지는 않는다. **중심극한정리(CLT)** 같은 통계적 결과는 자료 자체가 정규가 아니어도 큰 표본에서 평균의 표집분포가 근사적으로 정규임을 보장하여 정규성에 대한 우려를 덜어 준다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 중심극한정리가 지켜 주는 것
+
 ```python
 import numpy as np
 
 np.random.seed(0)
 
-# Generate a highly skewed dataset
+# 자료 자체는 크게 치우쳐 있다.
 skewed_data = np.random.gamma(2, 2, 100)
 
-# Mean and standard error of the sample mean
 mean_sample = np.mean(skewed_data)
 std_error = np.std(skewed_data) / np.sqrt(len(skewed_data))
 
-# Central Limit Theorem ensures that the distribution of the sample mean approaches normality
+# 그런데 t 검정이 정규성을 요구하는 대상은 자료가 아니라 표본평균의
+# 표집분포다. 중심극한정리 덕분에 n=100 이면 그쪽은 이미 정규에 가깝다.
+# 자료의 정규성 검정이 기각되었다고 t 검정을 못 쓰는 것이 아닌 까닭이다.
 print(f"Sample mean: {mean_sample}, Standard error: {std_error}")
 ```
 
@@ -129,6 +158,8 @@ print(f"Sample mean: {mean_sample}, Standard error: {std_error}")
 ```text
 Sample mean: 4.097224928182177, Standard error: 0.2886128975105421
 ```
+
+</div>
 
 CLT는 자료 자체가 정규가 아니어도 큰 표본에서 정규 기반 방법을 쓰는 것을 정당화한다. 따라서 정규성 검정에 엄격히 기대기 전에 맥락과 분석의 목적을 고려하는 것이 중요하다.
 

@@ -22,13 +22,17 @@ $$
 
 $X \sim \text{Lognormal}(\mu, \sigma^2)$이면 $Y \sim \mathcal{N}(\mu, \sigma^2)$가 정확히 성립한다. 분포가 정확히 대수정규가 아니더라도 로그 변환은 왜도를 크게 줄이는 경우가 많다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 로그 변환 전후의 왜도
 
 ```python
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
+# 로그정규는 로그를 씌우면 정확히 정규가 되는 분포다. 변환이 왜 듣는지를
+# 보이기에 가장 깨끗한 예다.
 rng = np.random.default_rng(42)
 x = rng.lognormal(mean=0.0, sigma=0.8, size=300)
 y = np.log(x)
@@ -51,6 +55,8 @@ print(f"After:  skewness = {stats.skew(y, bias=False):.4f}")
 Before: skewness = 3.5432
 After:  skewness = 0.2933
 ```
+
+</div>
 
 ![로그 변환 전후의 히스토그램](./img/transformations_code_27.png)
 
@@ -83,7 +89,9 @@ $$
 
 최적 $\lambda$는 최대가능도로 고른다. SciPy의 `stats.boxcox`는 변환된 자료와 적합된 $\lambda$를 반환한다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 2.** Box-Cox가 고르는 lambda
 
 ```python
 import numpy as np
@@ -92,10 +100,12 @@ from scipy import stats
 rng = np.random.default_rng(42)
 x = rng.lognormal(mean=0.0, sigma=0.8, size=300)
 
+# Box-Cox 가 고른 lambda 가 0 근처로 나오면 "로그를 씌우라"는 뜻이다.
+# 자료가 로그정규이므로 실제로 그렇게 나온다.
 y_bc, lam = stats.boxcox(x)
 print(f"Optimal lambda: {lam:.4f}")
 
-# Compare skewness
+# 변환 전후의 왜도를 견준다.
 print(f"Before Box-Cox: skewness = {stats.skew(x, bias=False):.4f}")
 print(f"After  Box-Cox: skewness = {stats.skew(y_bc, bias=False):.4f}")
 ```
@@ -107,6 +117,8 @@ Optimal lambda: -0.1258
 Before Box-Cox: skewness = 3.5432
 After  Box-Cox: skewness = -0.0018
 ```
+
+</div>
 
 자료가 대수정규이므로 참 최적값은 $\lambda = 0$(로그 변환)이고, 최대가능도 추정값 $-0.126$은 표집변동 범위 안에서 이를 잘 회복한다. $\hat{\lambda} \approx 0$이면 Box-Cox는 로그로, $\hat{\lambda} \approx 0.5$이면 제곱근으로 환원된다.
 

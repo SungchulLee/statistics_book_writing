@@ -24,7 +24,9 @@ $$
 X' = \frac{X^\lambda - 1}{\lambda}, \quad \lambda \neq 0
 $$
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 로그 변환과 Box-Cox 변환
 
 ```python
 import numpy as np
@@ -33,16 +35,18 @@ from scipy.stats import boxcox
 
 np.random.seed(0)
 
-# Generate positively skewed data
+# 오른쪽으로 치우친 자료
 skewed_data = np.random.exponential(scale=2, size=1000)
 
-# Log transformation
-log_transformed_data = np.log(skewed_data + 1)  # Adding 1 to avoid log(0)
+# 로그 변환. 1 을 더하는 것은 0 에 가까운 값에서 로그가 발산하는 것을
+# 막기 위해서다. 이 자료는 양수이지만 0 에 아주 가까운 값이 섞여 있다.
+log_transformed_data = np.log(skewed_data + 1)
 
-# Box-Cox transformation
+# Box-Cox 는 로그를 포함하는 변환들의 한 묶음이고, 그중 자료를 가장
+# 정규에 가깝게 만드는 lambda 를 스스로 고른다. lambda=0 이 곧 로그다.
 boxcox_transformed_data, best_lambda = boxcox(skewed_data + 1)
 
-# Plot the original and transformed data
+# 셋을 나란히 놓고 어느 쪽이 더 대칭에 가까운지 본다.
 fig, axs = plt.subplots(1, 3, figsize=(15, 4))
 axs[0].hist(skewed_data, bins=30)
 axs[0].set_title('Original Data')
@@ -55,6 +59,8 @@ axs[2].set_title(f'Box-Cox Transformed Data (λ={best_lambda:.2f})')
 
 plt.show()
 ```
+
+</div>
 
 ![원자료와 두 변환의 히스토그램](./img/transformations_29.png)
 

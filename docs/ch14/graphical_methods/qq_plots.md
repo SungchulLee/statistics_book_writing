@@ -6,24 +6,27 @@
 
 ## 정규분포와의 Q-Q 그림
 
+<div class="codebox" markdown>
+
+**예제 1.** 정규분포와의 Q-Q 그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
-    """
-    Generates a Q-Q plot to assess if the data follows the specified distribution.
-    Adjusts the spines for a cleaner visual appearance.
+    """Q-Q 그림을 그린다.
 
-    Parameters:
-    - data (array-like): The input dataset to plot.
-    - dist (str): The theoretical distribution to compare against (default: "norm").
-    - sparams (tuple): Shape parameters for the specified distribution.
-    - figsize (tuple): The size of the plot (width, height).
+    자료의 분위수를 이론분포의 분위수와 짝지어 찍는다. 자료가 그 분포에서
+    나왔다면 점들이 직선에 놓인다.
 
-    Returns:
-    - None: Displays the Q-Q plot.
+    매개변수
+    --------
+    data : 그릴 자료
+    dist : 견줄 이론분포 이름 (기본값 "norm")
+    sparams : 그 분포의 모양모수. 카이제곱의 자유도 같은 것이다.
+    figsize : 그림 크기 (가로, 세로)
     """
     fig, ax = plt.subplots(figsize=figsize)
     stats.probplot(data, dist=dist, sparams=sparams, plot=ax)
@@ -35,10 +38,13 @@ def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
     plt.show()
 
 if __name__ == "__main__":
+    # 자료와 이론분포가 맞으므로 점들이 직선에 놓인다.
     np.random.seed(0)
     sample_data = np.random.normal(loc=0, scale=1, size=1000)
     plot_qq_with_custom_spines(sample_data, dist="norm")
 ```
+
+</div>
 
 ![정규 자료의 Q-Q 그림](./img/qq_plots_9.png)
 
@@ -46,14 +52,21 @@ if __name__ == "__main__":
 
 ## 지수분포와의 Q-Q 그림
 
+<div class="codebox" markdown>
+
+**예제 2.** 지수분포와의 Q-Q 그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
-    """
-    Generates a Q-Q plot to assess if the data follows the specified distribution.
+    """Q-Q 그림을 그린다.
+
+    자료의 분위수를 이론분포의 분위수와 짝지어 찍는다. 자료가 그 분포에서
+    나왔다면 점들이 직선에 놓인다. 어느 자리에서 벗어나는지까지 보여 준다는
+    점에서 히스토그램보다 낫다.
     """
     fig, ax = plt.subplots(figsize=figsize)
     stats.probplot(data, dist=dist, sparams=sparams, plot=ax)
@@ -65,10 +78,14 @@ def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
     plt.show()
 
 if __name__ == "__main__":
+    # 이번에는 지수자료를 지수분포와 견준다. 맞는 분포끼리 견주면 역시
+    # 직선이 된다. Q-Q 그림이 정규 전용이 아님을 보이는 대목이다.
     np.random.seed(0)
     sample_data = np.random.exponential(scale=1, size=1000)
     plot_qq_with_custom_spines(sample_data, dist="expon")
 ```
+
+</div>
 
 ![지수분포 자료의 Q-Q 그림 (지수분포 기준)](./img/qq_plots_47.png)
 
@@ -76,14 +93,21 @@ if __name__ == "__main__":
 
 ## 카이제곱분포와의 Q-Q 그림
 
+<div class="codebox" markdown>
+
+**예제 3.** 카이제곱분포와의 Q-Q 그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
-    """
-    Generates a Q-Q plot to assess if the data follows the specified distribution.
+    """Q-Q 그림을 그린다.
+
+    자료의 분위수를 이론분포의 분위수와 짝지어 찍는다. 자료가 그 분포에서
+    나왔다면 점들이 직선에 놓인다. 어느 자리에서 벗어나는지까지 보여 준다는
+    점에서 히스토그램보다 낫다.
     """
     fig, ax = plt.subplots(figsize=figsize)
     stats.probplot(data, dist=dist, sparams=sparams, plot=ax)
@@ -95,10 +119,14 @@ def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
     plt.show()
 
 if __name__ == "__main__":
+    # 카이제곱은 모양모수가 있으므로 sparams 로 자유도를 넘겨 주어야 한다.
+    # 이 값을 빠뜨리면 엉뚱한 분포와 견주게 된다.
     np.random.seed(0)
     sample_data = np.random.chisquare(df=10, size=1000)
     plot_qq_with_custom_spines(sample_data, dist="chi2", sparams=(10,))
 ```
+
+</div>
 
 ![카이제곱 자료의 Q-Q 그림 (카이제곱 기준)](./img/qq_plots_75.png)
 

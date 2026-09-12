@@ -36,15 +36,21 @@ $$
 
 양측 $p$값은 $p = 2\,\Phi(-|Z_1|)$이며 $\Phi$는 표준정규 CDF이다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 로그정규 자료의 왜도 검정
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 로그정규는 오른쪽으로 길게 늘어진 대표적인 분포다.
 rng = np.random.default_rng(0)
 x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
 
+# 표본왜도를 그대로 쓰지 않고 Z 로 바꾼다. 왜도의 표집분포가 정규에서
+# 멀어, 값 자체로는 얼마나 큰 것인지 판단할 수 없기 때문이다.
+# 이 변환은 n>=8 부터 쓸 수 있다.
 g1 = stats.skew(x, bias=False)
 z, p = stats.skewtest(x)
 
@@ -65,6 +71,8 @@ Sample skewness (Fisher's g1) = 2.2452
 D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
 => Evidence of non-zero skewness (departing from normality).
 ```
+
+</div>
 
 ## 해석
 

@@ -8,6 +8,10 @@
 
 ## 정규분포의 상자그림
 
+<div class="codebox" markdown>
+
+**예제 1.** 정규분포의 상자그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,16 +19,16 @@ import seaborn as sns
 import warnings
 
 def plot_horizontal_boxplot(data, figsize=(12, 1)):
-    """
-    Generates a horizontal boxplot for the given data and customizes the appearance
-    by removing unnecessary spines.
+    """가로로 누운 상자그림을 그린다.
 
-    Parameters:
-    - data (array-like): The input dataset to plot.
-    - figsize (tuple): The size of the plot (width, height).
+    상자그림은 다섯 수치 요약을 그린 것이므로, 정규성을 보려면 두 가지만
+    보면 된다. 중앙값이 상자 가운데에 있는가(대칭), 수염 밖의 점이
+    얼마나 많은가(꼬리 두께).
 
-    Returns:
-    - None: Displays the horizontal boxplot.
+    매개변수
+    --------
+    data : 그릴 자료
+    figsize : 그림 크기 (가로, 세로)
     """
     warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -39,10 +43,13 @@ def plot_horizontal_boxplot(data, figsize=(12, 1)):
     plt.show()
 
 if __name__ == "__main__":
+    # 정규자료: 중앙값이 가운데 있고 수염이 좌우로 고르다.
     np.random.seed(0)
     sample_data = np.random.normal(loc=0, scale=1, size=1000)
     plot_horizontal_boxplot(sample_data)
 ```
+
+</div>
 
 ![정규 자료의 가로 상자그림](./img/boxplots_11.png)
 
@@ -50,6 +57,10 @@ if __name__ == "__main__":
 
 ## 지수분포의 상자그림
 
+<div class="codebox" markdown>
+
+**예제 2.** 지수분포의 상자그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -57,8 +68,11 @@ import seaborn as sns
 import warnings
 
 def plot_horizontal_boxplot(data, figsize=(12, 1)):
-    """
-    Generates a horizontal boxplot for the given data.
+    """가로로 누운 상자그림을 그린다.
+
+    상자그림은 다섯 수치 요약을 그린 것이므로, 정규성을 보려면 두 가지만
+    보면 된다. 중앙값이 상자 가운데에 있는가(대칭), 수염 밖의 점이
+    얼마나 많은가(꼬리 두께).
     """
     warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -73,10 +87,14 @@ def plot_horizontal_boxplot(data, figsize=(12, 1)):
     plt.show()
 
 if __name__ == "__main__":
+    # 지수자료: 오른쪽으로 치우쳐 중앙값이 상자 왼쪽에 붙고, 오른쪽
+    # 수염만 길며 그 밖의 점도 한쪽에만 몰린다.
     np.random.seed(0)
     sample_data = np.random.exponential(scale=1, size=1000)
     plot_horizontal_boxplot(sample_data)
 ```
+
+</div>
 
 ![지수분포 자료의 가로 상자그림](./img/boxplots_51.png)
 
@@ -84,6 +102,10 @@ if __name__ == "__main__":
 
 ## 카이제곱분포의 상자그림
 
+<div class="codebox" markdown>
+
+**예제 3.** 카이제곱분포의 상자그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -91,8 +113,11 @@ import seaborn as sns
 import warnings
 
 def plot_horizontal_boxplot(data, figsize=(12, 1)):
-    """
-    Generates a horizontal boxplot for the given data.
+    """가로로 누운 상자그림을 그린다.
+
+    상자그림은 다섯 수치 요약을 그린 것이므로, 정규성을 보려면 두 가지만
+    보면 된다. 중앙값이 상자 가운데에 있는가(대칭), 수염 밖의 점이
+    얼마나 많은가(꼬리 두께).
     """
     warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -107,10 +132,14 @@ def plot_horizontal_boxplot(data, figsize=(12, 1)):
     plt.show()
 
 if __name__ == "__main__":
+    # 자유도 10 인 카이제곱: 지수보다는 덜하지만 여전히 오른쪽으로 치우쳐
+    # 있다. 자유도를 키우면 정규에 가까워진다.
     np.random.seed(0)
     sample_data = np.random.chisquare(df=10, size=1000)
     plot_horizontal_boxplot(sample_data)
 ```
+
+</div>
 
 ![카이제곱 자료의 가로 상자그림](./img/boxplots_83.png)
 

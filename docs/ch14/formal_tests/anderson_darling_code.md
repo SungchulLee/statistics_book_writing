@@ -38,16 +38,21 @@ $$
 
 SciPy의 `stats.anderson`은 통계량 $A^2$과 함께 유의수준 15%, 10%, 5%, 2.5%, 1%에서의 임계값을 반환한다. $A^2$이 해당 임계값을 넘으면 수준 $\alpha$에서 $H_0$을 기각한다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 섞인 자료에 Anderson-Darling 검정
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 정규 230개에 로그정규 70개를 섞은 자료다.
 rng = np.random.default_rng(0)
 x = np.concatenate([rng.normal(0, 1, size=230),
                     rng.lognormal(0, 0.6, size=70)])
 
+# A^2 은 경험분포와 이론분포의 차이를 제곱해 적분한 값인데, 꼬리 쪽에
+# 더 큰 무게를 싣는다. 그래서 KS 보다 꼬리 이탈을 잘 잡는다.
 res = stats.anderson(x, dist="norm")
 print(f"Sample size n = {x.size}")
 print(f"Anderson-Darling A^2 = {res.statistic:.4f}")
@@ -74,6 +79,8 @@ Critical values vs significance levels:
   1.0% -> 1.0780
 Decision at 5%: Reject normality
 ```
+
+</div>
 
 ## 해석
 

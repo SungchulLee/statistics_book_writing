@@ -8,28 +8,29 @@
 
 ## 정규 표본에 정규 확률밀도함수 겹치기
 
+<div class="codebox" markdown>
+
+**예제 1.** 정규 표본에 정규 곡선 겹치기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
 def plot_histogram_with_density(data, figsize=(12, 3)):
-    """
-    The histogram will show the frequency of data points,
-    while the **kernel density estimate (KDE)** line will smooth the histogram
-    to give a clearer idea of the data distribution.
+    """히스토그램에 적합한 정규 확률밀도함수를 겹쳐 그린다.
 
-    Parameters:
-    - data (array-like): The input dataset to plot.
-    - figsize (tuple): The size of the plot (width, height).
+    자료의 평균과 표준편차로 만든 곡선이므로 위치와 척도는 이미 맞아 있다.
+    남는 차이는 오직 모양이다.
 
-    Returns:
-    - None: Displays the plot.
+    매개변수
+    --------
+    data : 그릴 자료
+    figsize : 그림 크기 (가로, 세로)
     """
-    # Create the figure and axis
     fig, ax = plt.subplots(figsize=figsize)
 
-    # Plot the histogram with the density curve (KDE)
+    # density=True 로 넓이의 합을 1 로 맞춰야 확률밀도함수와 겹칠 수 있다.
     _, bins, _ = ax.hist(data, bins=20, density=True, alpha=0.5, label="Data Histogram")
 
     mu = data.mean()
@@ -38,11 +39,9 @@ def plot_histogram_with_density(data, figsize=(12, 3)):
 
     ax.plot(bins, pdf, "--r", label="Normal PDF")
 
-    # Customize the appearance: remove top and right spines
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
-    # Set plot title and labels
     ax.set_title('Histogram with Density Plot')
     ax.set_xlabel('Value')
     ax.set_ylabel('Density')
@@ -51,10 +50,13 @@ def plot_histogram_with_density(data, figsize=(12, 3)):
     plt.show()
 
 if __name__ == "__main__":
+    # 정규자료: 곡선이 히스토그램에 잘 얹힌다.
     np.random.seed(0)
     sample_data = np.random.normal(loc=0, scale=1, size=1000)
     plot_histogram_with_density(sample_data)
 ```
+
+</div>
 
 ![정규 자료의 히스토그램과 밀도곡선](./img/histogram_density_11.png)
 
@@ -65,14 +67,20 @@ if __name__ == "__main__":
 
 ## 지수 표본에 정규 확률밀도함수 겹치기
 
+<div class="codebox" markdown>
+
+**예제 2.** 지수 표본에 정규 곡선 겹치기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
 def plot_histogram_with_density(data, figsize=(12, 3)):
-    """
-    Plot histogram with a fitted normal PDF overlay.
+    """히스토그램에 적합한 정규 확률밀도함수를 겹쳐 그린다.
+
+    자료의 평균과 표준편차로 만든 곡선이므로, 위치와 척도는 이미 맞아
+    있다. 남는 차이는 오직 모양이다.
     """
     fig, ax = plt.subplots(figsize=figsize)
     _, bins, _ = ax.hist(data, bins=20, density=True, alpha=0.5, label="Data Histogram")
@@ -91,10 +99,14 @@ def plot_histogram_with_density(data, figsize=(12, 3)):
     plt.show()
 
 if __name__ == "__main__":
+    # 지수자료: 곡선이 왼쪽에서 음수 구간까지 뻗어 나가고 봉우리 자리도
+    # 어긋난다. 정규로 볼 수 없다는 것이 한눈에 보인다.
     np.random.seed(0)
     sample_data = np.random.exponential(scale=1, size=1000)
     plot_histogram_with_density(sample_data)
 ```
+
+</div>
 
 ![지수분포 자료의 히스토그램과 정규밀도](./img/histogram_density_66.png)
 
@@ -102,14 +114,20 @@ if __name__ == "__main__":
 
 ## 카이제곱 표본에 정규 확률밀도함수 겹치기
 
+<div class="codebox" markdown>
+
+**예제 3.** 카이제곱 표본에 정규 곡선 겹치기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
 def plot_histogram_with_density(data, figsize=(12, 3)):
-    """
-    Plot histogram with a fitted normal PDF overlay.
+    """히스토그램에 적합한 정규 확률밀도함수를 겹쳐 그린다.
+
+    자료의 평균과 표준편차로 만든 곡선이므로, 위치와 척도는 이미 맞아
+    있다. 남는 차이는 오직 모양이다.
     """
     fig, ax = plt.subplots(figsize=figsize)
     _, bins, _ = ax.hist(data, bins=20, density=True, alpha=0.5, label="Data Histogram")
@@ -128,10 +146,13 @@ def plot_histogram_with_density(data, figsize=(12, 3)):
     plt.show()
 
 if __name__ == "__main__":
+    # 카이제곱(자유도 10): 지수보다 훨씬 가깝지만 왼쪽 어깨가 조금 어긋난다.
     np.random.seed(0)
     sample_data = np.random.chisquare(df=10, size=1000)
     plot_histogram_with_density(sample_data)
 ```
+
+</div>
 
 ![카이제곱 자료의 히스토그램과 정규밀도](./img/histogram_density_101.png)
 

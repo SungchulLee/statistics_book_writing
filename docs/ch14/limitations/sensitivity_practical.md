@@ -60,22 +60,30 @@ $$
 
 **4단계: 크기를 평가한다.** 초과첨도가 1 미만이고 왜도의 절댓값이 0.5 미만이면 대체로 가벼운 것으로 본다. 초과첨도가 3을 넘거나 왜도의 절댓값이 1을 넘으면 더 살펴볼 필요가 있다.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 평균 검정과 분산 검정의 견딤새
 
 ```python
 import numpy as np
 from scipy import stats
 
 # ===================================================================
-# Compare actual vs nominal Type I error rates under non-normality
-# for the t-test (robust) and the chi-squared variance test (fragile)
+# 정규성이 깨졌을 때 두 검정이 얼마나 다르게 버티는가
+#
+# 같은 자료에 평균에 대한 t 검정과 분산에 대한 카이제곱 검정을 함께
+# 돌린다. 둘 다 귀무가설이 참인데, t 검정의 오류율은 0.05 근처에
+# 머물고 분산 검정의 오류율은 크게 벗어난다.
+#
+# 평균은 중심극한정리의 보호를 받지만 분산은 그렇지 않기 때문이다.
+# "정규성이 필요하다"는 말의 무게가 검정마다 다르다는 뜻이다.
 # ===================================================================
 
 np.random.seed(42)
 n = 30
 alpha = 0.05
 n_simulations = 10_000
-df_true = 5  # t-distribution with heavy tails
+df_true = 5  # 꼬리가 두꺼운 t 분포
 
 rejections_t = 0
 rejections_chi2 = 0
@@ -83,12 +91,13 @@ rejections_chi2 = 0
 for _ in range(n_simulations):
     sample = stats.t.rvs(df=df_true, size=n)
 
-    # t-test for mean = 0 (true mean is 0)
+    # 평균이 0 인지 검정한다. t 분포의 평균은 참으로 0 이므로 귀무가설이 참이다.
     _, p_t = stats.ttest_1samp(sample, popmean=0)
     if p_t < alpha:
         rejections_t += 1
 
-    # Chi-squared test for variance = df/(df-2) (true variance)
+    # 분산이 df/(df-2) 인지 검정한다. 이것이 t 분포의 참 분산이므로
+    # 이쪽도 귀무가설이 참이다. 조건을 똑같이 맞춘 것이다.
     true_var = df_true / (df_true - 2)
     chi2_stat = (n - 1) * np.var(sample, ddof=1) / true_var
     p_chi2 = 2 * min(
@@ -115,6 +124,8 @@ Nominal alpha: 0.05
 Actual Type I error (t-test):          0.0487
 Actual Type I error (chi-squared test): 0.1713
 ```
+
+</div>
 
 모의실험은 꼬리가 두꺼운 $t(5)$ 자료에서도 $t$ 검정의 제1종 오류율이 $0.0487$로 $\alpha = 0.05$에 거의 정확히 머무는 반면, 같은 조건에서 분산의 카이제곱 검정은 $0.1713$으로 명목값의 **3.4배**로 부풀려짐을 보여준다. 같은 자료, 같은 비정규성인데 한 절차는 멀쩡하고 다른 절차는 완전히 망가진다.
 

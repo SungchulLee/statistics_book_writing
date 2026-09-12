@@ -49,22 +49,29 @@ Anderson-Darling 검정통계량 $A^2$은 다음 단계로 계산한다.
 
 ## `stats.anderson`을 이용한 Python 구현
 
+<div class="codebox" markdown>
+
+**예제 1.** 기각값 표로 판정하기
+
 ```python
 import numpy as np
 from scipy import stats
 
 np.random.seed(0)
 
-# Generate a sample dataset
+# 평균과 표준편차를 바꿔도 결론은 같아야 한다. 정규성 검정은 위치와
+# 척도가 아니라 모양을 묻기 때문이다.
 # data = np.random.normal(0, 1, 1000)
 data = np.random.normal(1, 10, 1000)
 
-# Perform Anderson-Darling test
+# scipy 의 anderson 은 p-값 대신 유의수준별 기각값을 돌려준다.
+# 통계량이 기각값보다 크면 기각이다.
 result = stats.anderson(data)
 statistic = result.statistic
 print(f"Anderson-Darling Test: Statistic={statistic}")
 
-# Display critical values
+# 기각값은 유의수준이 낮아질수록 커진다. 통계량 하나로 여러 수준의
+# 판정을 한꺼번에 읽을 수 있다.
 for significance_level, critical_value in zip(result.significance_level, result.critical_values):
     if statistic >= critical_value:
         print(f"At {significance_level}% significance level: Reject H_0. The data is not normally distributed.")
@@ -82,6 +89,8 @@ At 5.0% significance level: Fail to reject H_0. The data is normally distributed
 At 2.5% significance level: Fail to reject H_0. The data is normally distributed.
 At 1.0% significance level: Fail to reject H_0. The data is normally distributed.
 ```
+
+</div>
 
 임계값은 $[0.574, 0.653, 0.784, 0.914, 1.088]$이며 $A^2 = 0.243$은 그 가운데 가장 작은 값보다도 작다. 어떤 유의수준에서도 정규성을 기각하지 않는다.
 
@@ -103,6 +112,10 @@ Anderson-Darling 검정은 각 유의수준(정규분포의 경우 15%, 10%, 5%,
 
 `statsmodels` 라이브러리가 근사 $p$값을 함께 제공하는 구현을 제공한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** p-값으로 판정하기
+
 ```python
 import numpy as np
 from statsmodels.stats.diagnostic import normal_ad
@@ -110,6 +123,8 @@ from statsmodels.stats.diagnostic import normal_ad
 np.random.seed(0)
 data = np.random.normal(0, 1, 1000)
 
+# statsmodels 의 normal_ad 는 같은 통계량에 p-값까지 붙여 준다.
+# 기각값 표를 읽는 대신 p-값으로 바로 판단하고 싶을 때 쓴다.
 statistic, p_value = normal_ad(data)
 print(f"Anderson-Darling Test: Statistic={statistic}, p-value={p_value}")
 ```
@@ -119,6 +134,8 @@ print(f"Anderson-Darling Test: Statistic={statistic}, p-value={p_value}")
 ```
 Anderson-Darling Test: Statistic=0.2432179174634257, p-value=0.7659878263029309
 ```
+
+</div>
 
 `scipy.stats.anderson`이 준 통계량 $0.2432$와 같은 값에 근사 $p$값 $0.766$이 붙었다. 앞의 임계값 비교에서 1% 수준까지 모두 기각하지 못한 결과와 일치한다.
 
@@ -131,17 +148,21 @@ Anderson-Darling Test: Statistic=0.2432179174634257, p-value=0.7659878263029309
 
 ### `normal_ad`를 이용한 Python 구현
 
+<div class="codebox" markdown>
+
+**예제 3.** 치우친 자료에 적용
+
 ```python
 import numpy as np
 from statsmodels.stats.diagnostic import normal_ad
 
 np.random.seed(0)
 
-# Generate a sample dataset
 # data = np.random.normal(0, 1, 1000)
 data = np.random.normal(1, 10, 1000)
 
-# Perform Anderson-Darling test for normality with p-value
+# Anderson-Darling 은 꼬리 쪽 이탈에 특히 민감하다. 꼬리가 문제가 되는
+# 금융 자료에서 이 검정을 즐겨 쓰는 까닭이다.
 statistic, p_value = normal_ad(data)
 print(f"Anderson-Darling Test: Statistic={statistic}, p-value={p_value}")
 
@@ -159,6 +180,8 @@ else:
 Anderson-Darling Test: Statistic=0.243217917463312, p-value=0.7659878263032931
 Fail to reject H_0: The data is normally distributed.
 ```
+
+</div>
 
 통계량은 `stats.anderson`과 정확히 같고, 여기에 근사 $p$값 $0.766$이 더해진다.
 

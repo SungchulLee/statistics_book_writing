@@ -18,19 +18,22 @@ Q-Q 그림은 자산 수익률이 정규성에서 벗어나는 정도를 진단�
 
 Netflix 주식은 정규가 아닌 금융 수익률의 훌륭한 사례이다. 다음 예제는 종가로 계산한 일간 로그수익률을 쓴다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 넷플릭스 수익률의 Q-Q 그림
+
 ```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# Simulate NFLX-like log-returns (or load real data)
+# 넷플릭스 일별 로그수익률을 흉내 낸 자료다. 자유도 8 인 t 를 썼는데,
+# 실제 수익률은 이보다도 꼬리가 두껍다.
 np.random.seed(42)
-# Use a distribution with slightly heavier tails than normal
-# (Actual NFLX returns are even heavier-tailed)
 returns = np.random.standard_t(df=8, size=1000) * 0.02
 
-# Create Q-Q plot against normal distribution
+# 정규분포와 견주는 Q-Q 그림
 fig, ax = plt.subplots(figsize=(8, 6))
 stats.probplot(returns, dist="norm", plot=ax)
 
@@ -38,13 +41,14 @@ ax.set_title("Q-Q Plot: Daily Log-Returns vs Normal Distribution", fontsize=12)
 ax.set_xlabel("Theoretical Normal Quantiles", fontsize=11)
 ax.set_ylabel("Sample Quantiles (Observed Returns)", fontsize=11)
 
-# Enhance aesthetics
 ax.spines[["top", "right"]].set_visible(False)
 ax.grid(True, alpha=0.3, linestyle='--')
 
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![일간 로그수익률의 Q-Q 그림](./img/qq_plots_financial_21.png)
 
@@ -60,20 +64,26 @@ plt.show()
 
 **시각적 특징:** Q-Q 그림이 오른쪽 꼬리에서 "위로 휘고" 왼쪽 꼬리에서 "아래로 휜다". 그래서 S자 패턴이 만들어진다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 히스토그램과 Q-Q 그림 견주기
+
 ```python
-# Simulate heavy-tailed returns (e.g., using Student's t distribution)
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
 
+# 히스토그램과 Q-Q 그림을 나란히 놓아, 같은 자료에서 둘이 무엇을 보여
+# 주는지 견준다. 히스토그램은 가운데를, Q-Q 그림은 꼬리를 말한다.
 np.random.seed(42)
-df = 5  # degrees of freedom; lower = heavier tails
+df = 5  # 자유도가 작을수록 꼬리가 두껍다
 heavy_tailed_returns = stats.t.rvs(df=df, scale=0.02, size=2000)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-# Left: Histogram with normal overlay
+# 왼쪽: 히스토그램. 가운데가 정규보다 뾰족하지만, 꼬리의 차이는
+# 자료가 드물어 거의 보이지 않는다.
 ax1.hist(heavy_tailed_returns, bins=50, density=True, alpha=0.6, label='Observed Returns')
 x = np.linspace(heavy_tailed_returns.min(), heavy_tailed_returns.max(), 100)
 ax1.plot(x, stats.norm.pdf(x, loc=heavy_tailed_returns.mean(),
@@ -85,7 +95,8 @@ ax1.set_title('Distribution Shape: Heavy Tails vs Normal', fontsize=12)
 ax1.legend()
 ax1.spines[["top", "right"]].set_visible(False)
 
-# Right: Q-Q plot
+# 오른쪽: Q-Q 그림. 히스토그램이 감춘 꼬리의 차이가 양끝의 휘어짐으로
+# 또렷하게 드러난다.
 stats.probplot(heavy_tailed_returns, dist="norm", plot=ax2)
 ax2.set_title("Q-Q Plot: Revealing Heavy Tails", fontsize=12)
 ax2.set_xlabel('Theoretical Normal Quantiles', fontsize=11)
@@ -96,6 +107,8 @@ ax2.grid(True, alpha=0.3, linestyle='--')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![두꺼운 꼬리의 분포 모양과 Q-Q 그림](./img/qq_plots_financial_61.png)
 
@@ -115,17 +128,21 @@ plt.show()
 
 ## 실전 절차: 수익률 분포 진단하기
 
+<div class="codebox" markdown>
+
+**예제 3.** 수익률 진단 네 단계
+
 ```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
 
-# Step 1: Load or simulate returns
+# 1단계: 자료를 읽거나 만든다.
 np.random.seed(42)
 returns = np.random.standard_t(df=6, size=1500) * 0.025
 
-# Step 2: Compute summary statistics
+# 2단계: 요약통계. 왜도와 초과첨도가 정규에서 얼마나 벗어났는지 먼저 본다.
 mean_ret = returns.mean()
 std_ret = returns.std()
 skewness = stats.skew(returns)
@@ -136,7 +153,8 @@ print(f"Std Dev:  {std_ret:.4f}")
 print(f"Skewness: {skewness:.4f}")
 print(f"Ex. Kurtosis: {kurtosis:.4f}")
 
-# Step 3: Normality tests
+# 3단계: 검정 셋. KS 는 모수를 자료에서 추정해 넘겼으므로 p-값이
+# 실제보다 크게 나온다는 점을 감안해 읽어야 한다.
 _, p_ks = stats.kstest(returns, 'norm', args=(mean_ret, std_ret))
 _, p_jb = stats.jarque_bera(returns)
 
@@ -148,7 +166,7 @@ print(f"Jarque-Bera test p-value: {p_jb:.4g}")
 print(f"Anderson-Darling statistic: {ad_result.statistic:.4f}")
 print(f"  critical values (15/10/5/2.5/1%): {ad_result.critical_values}")
 
-# Step 4: Q-Q plot
+# 4단계: 그림으로 마무리. 검정이 기각했다면 어디가 어긋났는지를 여기서 본다.
 fig, ax = plt.subplots(figsize=(8, 6))
 stats.probplot(returns, dist="norm", plot=ax)
 ax.set_title("Diagnostics: Are Returns Normal?", fontsize=12)
@@ -170,6 +188,8 @@ Anderson-Darling statistic: 3.6529
   critical values (15/10/5/2.5/1%): [0.574 0.654 0.785 0.916 1.089]
 ```
 
+</div>
+
 ![수익률의 정규성 진단 패널](./img/qq_plots_financial_114.png)
 
 !!! warning "`stats.anderson`은 p값을 돌려주지 않는다"
@@ -186,10 +206,15 @@ Anderson-Darling statistic: 3.6529
 
 정규분포 대신 Student $t$ 분포나 일반화 쌍곡분포를 적합한다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 대안 분포 적합하기
+
 ```python
 from scipy.stats import t as student_t
 
-# Fit Student's t distribution
+# 정규가 아니라면 대안 분포를 찾는 것이 다음 걸음이다. t 를 적합하면
+# 자유도가 꼬리 두께를 재는 값이 된다. 작을수록 두껍다.
 df, loc, scale = student_t.fit(returns)
 print(f"Fitted df: {df:.2f} (lower df → heavier tails)")
 ```
@@ -199,6 +224,8 @@ print(f"Fitted df: {df:.2f} (lower df → heavier tails)")
 ```
 Fitted df: 6.68 (lower df → heavier tails)
 ```
+
+</div>
 
 위 자료에 적용하면 추정된 자유도가 $6.68$로, 자료를 생성한 참값 6에 가깝다.
 

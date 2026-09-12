@@ -71,14 +71,20 @@ $$
 
 이 수치들이 말하는 바는 분명하다. 초과첨도가 6이나 되는 뚜렷한 이탈조차 $n = 50$에서 탐지 확률이 35%에 지나지 않고, 80% 검정력에 이르려면 $n \approx 200$이 필요하다. 반면 초과첨도 0.23인 가벼운 이탈은 $n = 5000$에서도 검정력이 63%에 머문다. "표본이 크면 무조건 기각한다"는 말은 점근적으로는 옳지만, 그 "충분히 큰" $n$이 이탈의 크기에 따라 극적으로 달라진다는 점을 함께 기억해야 한다.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 표본크기에 따른 검정력
 
 ```python
 import numpy as np
 from scipy import stats
 
 # ===================================================================
-# Demonstrate how the power of the Shapiro-Wilk test changes with n
+# 표본크기가 커지면 정규성 검정의 검정력이 어떻게 되는가
+#
+# 모집단은 자유도 5 인 t 로 고정해 두고 n 만 바꾼다. 정규에서 벗어난
+# 정도는 내내 같은데, n 이 커지면 검정력이 1 로 다가간다.
+# 큰 표본에서 정규성 검정이 거의 늘 기각하는 까닭이 이것이다.
 # ===================================================================
 
 np.random.seed(42)
@@ -96,7 +102,7 @@ if __name__ == "__main__":
         rejections = 0
         for _ in range(n_simulations):
             sample = stats.t.rvs(df=5, size=n)
-            # Shapiro-Wilk limited to n <= 5000 in scipy
+            # scipy 의 shapiro 는 n<=5000 까지만 정확하다.
             if n <= 5000:
                 _, p = stats.shapiro(sample)
                 if p < alpha:
@@ -119,6 +125,8 @@ Power of Shapiro-Wilk test vs. t(5) distribution
    500     0.990
   1000     1.000
 ```
+
+</div>
 
 모의실험 결과가 위 표의 이론값과 잘 맞는다. $n = 50$에서 0.36, $n = 200$에서 0.81이다.
 

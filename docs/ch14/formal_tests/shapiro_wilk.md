@@ -49,7 +49,9 @@ Shapiro-Wilk 검정통계량 $W$는 다음 단계로 계산한다.
 - $p$값 $\leq \alpha$이면 $H_0$을 기각한다(자료가 정규분포를 따르지 않는다).
 - $p$값 $> \alpha$이면 $H_0$을 기각하지 못한다(자료가 정규분포를 따를 수 있다).
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** Shapiro-Wilk 검정
 
 ```python
 import numpy as np
@@ -57,11 +59,12 @@ from scipy import stats
 
 np.random.seed(0)
 
-# Generate a sample dataset
+# 위치와 척도를 바꿔도 결론은 같다. 검정이 묻는 것은 모양이다.
 # data = np.random.normal(0, 1, 1000)
 data = np.random.normal(1, 10, 1000)
 
-# Perform Shapiro-Wilk test
+# W 는 1 에 가까울수록 정규에 가깝다. 순서통계량과 정규분포의 기대
+# 순서통계량이 얼마나 잘 맞는지를 재므로, Q-Q 그림을 숫자로 옮긴 셈이다.
 stat, p_value = stats.shapiro(data)
 print(f"Shapiro-Wilk Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
 
@@ -79,6 +82,8 @@ else:
 Shapiro-Wilk Test: Statistic=0.9986, p-value=0.5912
 Fail to reject H_0: The data is normally distributed.
 ```
+
+</div>
 
 $W = 0.9986$이 1에 매우 가깝고 $p = 0.591$이므로 정규성을 기각하지 못한다. 자료를 실제로 정규분포에서 생성했으므로 기대한 결과이다.
 

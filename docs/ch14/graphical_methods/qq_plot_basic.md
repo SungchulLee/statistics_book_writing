@@ -30,18 +30,23 @@ $$
 | D'Agostino $K^2$ | $K^2 = Z_1^2 + Z_2^2$ (왜도 + 첨도) | $\chi^2_2$ (점근적) |
 | Anderson-Darling | $A^2 = -n - \sum \frac{2i-1}{n}[\ln F_0(X_{(i)}) + \ln(1-F_0(X_{(n+1-i)}))]$ | 표로 정리된 임계값 |
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** Q-Q 그림과 검정을 함께
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
+# 정규 150개에 자유도 3 인 t 를 50개 섞었다. 가운데는 정규 같지만
+# 꼬리만 두꺼운 자료다.
 rng = np.random.default_rng(0)
 x = np.concatenate([rng.normal(0, 1, size=150),
                     rng.standard_t(df=3, size=50)])
 
-# Q-Q plot with fitted line
+# fit=False 로 두면 probplot 이 그림을 그리지 않고 좌표만 돌려준다.
+# 그 좌표로 직접 그려야 점과 직선의 모양을 마음대로 손볼 수 있다.
 osm, osr = stats.probplot(x, dist="norm", sparams=(), fit=False)
 b, a = np.polyfit(osm, osr, 1)
 
@@ -55,7 +60,8 @@ ax.set_ylabel("Ordered data")
 plt.tight_layout()
 plt.show()
 
-# Normality tests
+# 그림에서 본 것을 검정으로 확인한다. 그림과 검정은 서로를 보완한다 —
+# 검정은 "정규가 아니다"까지만 말하고, 어디가 어긋났는지는 그림이 말한다.
 W, p_sw = stats.shapiro(x)
 K2, p_k2 = stats.normaltest(x)
 ad = stats.anderson(x, dist="norm")
@@ -79,6 +85,8 @@ Anderson-Darling: A^2 = 0.6894
   Critical 2%: 0.9010 -> reject if A^2 > crit
   Critical 1%: 1.0710 -> reject if A^2 > crit
 ```
+
+</div>
 
 ![자료의 Q-Q 그림](./img/qq_plot_basic_35.png)
 

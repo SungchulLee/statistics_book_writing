@@ -77,30 +77,35 @@ $$
 
 이고 $\gamma$는 왜도, $\kappa$는 수익률 분포의 첨도이다.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 정규분포가 꼬리를 얼마나 과소평가하는가
 
 ```python
 import numpy as np
 from scipy import stats
 
 # ===================================================================
-# Compare normal and actual tail behavior of financial returns
+# 수익률의 꼬리가 정규분포의 꼬리와 얼마나 다른가
+#
+# 정규분포를 가정하면 큰 손실이 일어날 확률을 실제보다 훨씬 작게 잡는다.
+# 그 차이를 숫자 하나로 보이는 것이 이 코드의 목적이다.
 # ===================================================================
 
 np.random.seed(42)
 
-# Simulate returns from a t-distribution (fat tails) with df = 5
+# 자유도 5 인 t 로 수익률을 만든다. 실제 수익률과 비슷하게 꼬리가 두껍다.
 n = 2000
 df = 5
 returns = stats.t.rvs(df=df, size=n) * 0.01  # scale to ~1% daily vol
 
-# Compute descriptive statistics
 mean_r = np.mean(returns)
 std_r = np.std(returns, ddof=1)
 skew_r = stats.skew(returns)
 kurt_r = stats.kurtosis(returns)  # excess kurtosis
 
-# Compare tail probabilities
+# 평균에서 3 표준편차 밖으로 나갈 확률을 견준다. 정규라면 0.0027,
+# 곧 1000일에 세 번이다. 실제 자료에서는 이보다 몇 배 잦게 일어난다.
 threshold = 3 * std_r
 empirical_tail = np.mean(np.abs(returns - mean_r) > threshold)
 normal_tail = 2 * (1 - stats.norm.cdf(3))
@@ -127,6 +132,8 @@ P(|R - mean| > 3 std):
   Empirical:  0.0090
   Normal:     0.0027
 ```
+
+</div>
 
 경험적 꼬리 확률 $0.0090$이 정규분포의 예측 $0.0027$의 3.3배로, 금융 수익률의 두꺼운 꼬리와 일관된다. 초과첨도 $10.42$도 정규분포의 0에서 크게 벗어나 있다.
 

@@ -82,7 +82,9 @@ Jarque-Bera 검정통계량 $JB$는 귀무가설 아래에서 자유도 2인 카
 - **$JB$ 통계량이 크면** 자료의 왜도나 첨도(또는 둘 다)가 정규분포에서 유의하게 벗어났다는 뜻이다.
 - **$JB$ 통계량이 작으면** 표본자료의 왜도와 첨도가 정규분포와 일관된다는 뜻이다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** JB 통계량을 정의대로 구하기
 
 ```python
 import numpy as np
@@ -92,20 +94,22 @@ np.random.seed(0)
 
 n = 1000
 
-# Generate a sample dataset
+# 주석을 바꿔 가며 정규와 지수를 견주어 볼 수 있다.
 data = np.random.normal(0, 1, n)
 # data = np.random.exponential(1, n)
 
+# JB 통계량을 정의대로 구한다. 왜도의 제곱과 초과첨도의 제곱을 더하되
+# 첨도 쪽에 1/4 을 곱한다. 정규라면 둘 다 0 이므로 JB 도 0 에 가깝다.
 skewness_value = stats.skew(data)
 kurtosis_value = stats.kurtosis(data)
 JB = n / 6 * (skewness_value**2 + kurtosis_value**2 / 4)
 print(f"{JB = }")
 
-# Perform Jarque-Bera test
+# scipy 의 결과와 맞는지 확인한다. JB 는 자유도 2 인 카이제곱을 따르지만,
+# 그 근사는 표본이 아주 클 때라야 쓸 만하다.
 stat, p_value = stats.jarque_bera(data)
 print(f"Jarque-Bera Test: Statistic={stat}, p-value={p_value}")
 
-# Interpretation
 alpha = 0.05
 if p_value <= alpha:
     print("Reject H_0: The data is not normally distributed.")
@@ -120,6 +124,8 @@ JB = 0.28220016508625234
 Jarque-Bera Test: Statistic=0.28220016508625234, p-value=0.8684023954281485
 Fail to reject H_0: The data is normally distributed.
 ```
+
+</div>
 
 손으로 계산한 값이 `scipy.stats.jarque_bera`와 정확히 일치한다. `stats.kurtosis`가 이미 **초과**첨도 $K-3$을 돌려주므로 코드에서 `kurtosis_value**2 / 4`가 공식의 $(K-3)^2/4$에 해당한다는 점에 유의하라.
 

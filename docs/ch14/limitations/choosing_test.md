@@ -95,37 +95,43 @@ $$
 ??? tip "언제나 시각적 방법으로 보완하라"
     어떤 정규성 검정도 시각적 평가를 대체하지 못한다. Q-Q 그림은 이탈의 유형과 위치(꼬리, 중앙, 치우침)를 드러내고 히스토그램은 전반적 모양을 보여준다. 형식적 검정과 Q-Q 그림의 조합이 가장 유익한 평가를 제공한다.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 같은 자료에 네 검정 돌려 보기
 
 ```python
 import numpy as np
 from scipy import stats
 
 # ===================================================================
-# Run multiple normality tests on the same dataset and compare results
+# 같은 자료에 네 검정을 모두 돌려 결론을 견준다
+#
+# 검정마다 무엇에 민감한지가 달라, 같은 자료에서도 p-값이 꽤 갈린다.
+# 하나만 골라 돌리고 끝낼 일이 아니라는 것이 요점이다.
 # ===================================================================
 
 np.random.seed(42)
 n = 100
 
-# Generate data from a t-distribution (heavy tails)
+# 자유도 5 인 t. 대칭이지만 꼬리가 두꺼운 자료다.
 data = stats.t.rvs(df=5, size=n)
 
 if __name__ == "__main__":
-    # Shapiro-Wilk
+    # Shapiro-Wilk — 두루 쓰기 좋고 작은 표본에서 검정력이 높다.
     sw_stat, sw_p = stats.shapiro(data)
     print(f"Shapiro-Wilk:      W = {sw_stat:.4f}, p = {sw_p:.4f}")
 
-    # Anderson-Darling
+    # Anderson-Darling — 꼬리에 무게를 싣는다. 이 자료에 가장 민감할 것이다.
     ad_result = stats.anderson(data, dist="norm")
     print(f"Anderson-Darling:  A2 = {ad_result.statistic:.4f}, "
           f"critical (5%) = {ad_result.critical_values[2]:.4f}")
 
-    # Kolmogorov-Smirnov (Lilliefors via kstest with estimated params)
+    # KS — 모수를 자료에서 추정해 넘겼으므로 p-값이 실제보다 크게 나온다.
+    # 제대로 하려면 Lilliefors 기각값을 써야 한다.
     ks_stat, ks_p = stats.kstest(data, "norm", args=(np.mean(data), np.std(data)))
     print(f"KS (estimated):    D = {ks_stat:.4f}, p = {ks_p:.4f}")
 
-    # Jarque-Bera
+    # Jarque-Bera — 왜도와 첨도만 본다. 큰 표본에서 쓸 만하다.
     jb_stat, jb_p = stats.jarque_bera(data)
     print(f"Jarque-Bera:       JB = {jb_stat:.4f}, p = {jb_p:.4f}")
 ```
@@ -138,6 +144,8 @@ Anderson-Darling:  A2 = 6.0914, critical (5%) = 0.7590
 KS (estimated):    D = 0.1783, p = 0.0030
 Jarque-Bera:       JB = 5365.9041, p = 0.0000
 ```
+
+</div>
 
 이 표본은 왜도 $4.83$, 초과첨도 $34.56$으로 매우 극단적인 값이 섞여 있어 네 검정이 모두 기각한다. 다만 **증거의 강도가 크게 다르다**. Shapiro-Wilk와 Jarque-Bera의 $p$값은 사실상 0이고 Anderson-Darling 통계량 $6.09$는 5% 임계값 $0.759$의 여덟 배인 반면, KS 검정의 $p$값은 $0.003$으로 상대적으로 가장 약한 증거를 준다. 같은 자료에서도 KS가 가장 둔감함을 보여준다.
 

@@ -88,35 +88,42 @@ $n$이 크면 사소한 이탈로도 기각할 수 있으므로 그런 경우에
 
 **예측구간.** 예측구간은 $\hat{\beta}_j$의 신뢰구간보다 비정규성에 더 민감하다. 예측오차가 오차항 $\varepsilon_{\text{new}}$ 전체를 포함하며 그 분포가 구간에 직접 들어오기 때문이다.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 회귀 잔차의 정규성 확인
 
 ```python
 import numpy as np
 from scipy import stats
 
 # ===================================================================
-# Check normality of regression residuals
+# 회귀 잔차의 정규성 확인
+#
+# 회귀에서 정규성은 반응변수가 아니라 오차항에 요구되는 가정이다.
+# 게다가 계수 추정의 불편성에는 필요 없고, 작은 표본에서 t 검정과
+# 신뢰구간을 쓰기 위해 필요하다.
 # ===================================================================
 
 np.random.seed(42)
 n = 100
 
-# Generate data with normal errors
+# 오차를 정규분포에서 만든다. 그러므로 잔차도 정규로 나와야 한다.
 X = np.random.uniform(0, 10, size=n)
 beta_0, beta_1 = 2.0, 3.0
 epsilon = np.random.normal(0, 2, size=n)
 Y = beta_0 + beta_1 * X + epsilon
 
-# Fit OLS regression (manually via normal equations)
+# 정규방정식을 직접 풀어 적합한다. 첫 열의 1 이 절편에 대응한다.
 X_design = np.column_stack([np.ones(n), X])
 beta_hat = np.linalg.lstsq(X_design, Y, rcond=None)[0]
 Y_hat = X_design @ beta_hat
 residuals = Y - Y_hat
 
-# Normality test on residuals
+# 잔차에 대한 정규성 검정
 sw_stat, sw_p = stats.shapiro(residuals)
 
-# Skewness and kurtosis of residuals
+# 검정이 기각되었을 때 무엇이 문제인지는 이 둘이 알려 준다.
+# 왜도가 크면 치우침, 초과첨도가 크면 두꺼운 꼬리다.
 skew_r = stats.skew(residuals)
 kurt_r = stats.kurtosis(residuals)  # excess kurtosis
 
@@ -146,6 +153,8 @@ Residual diagnostics:
 
   Residuals are consistent with normality.
 ```
+
+</div>
 
 잔차의 왜도 $0.217$과 초과첨도 $-0.071$이 모두 0에 가깝고 Shapiro-Wilk $p = 0.298$로 기각하지 못한다. 정규 오차로 자료를 생성했으므로 기대한 결과이다. 추정된 계수 $(2.430, 2.908)$이 참값 $(2.0, 3.0)$과 정확히 일치하지 않는 것은 $n = 100$에서의 표집변동일 뿐이다.
 

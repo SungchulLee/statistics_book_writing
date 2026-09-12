@@ -14,7 +14,9 @@ $$
 
 여기서 $\mu$는 기대 일별 수익률, $\sigma$는 일별 변동성, $\varepsilon_t$는 표준화된 혁신항이다. 정규 모형에서는 $\varepsilon_t \sim \mathcal{N}(0,1)$이다. 두꺼운 꼬리 모형에서는 자유도 $\nu$인 $\varepsilon_t \sim t_\nu$이다. 주식 수익률에 대한 실증연구는 대체로 $\nu$를 3~8 범위에서 찾으며, 이는 정규분포보다 상당히 두꺼운 꼬리를 뜻한다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 두 수익률의 요약통계
 
 ```python
 import numpy as np
@@ -23,10 +25,11 @@ from scipy import stats
 np.random.seed(42)
 n = 2000
 
-# Normal returns: daily mean ~0.05%, volatility ~1.5%
+# 정규 수익률: 일평균 0.05%, 변동성 1.5%
 normal_returns = np.random.normal(loc=0.0005, scale=0.015, size=n)
 
-# Heavy-tailed returns: Student's t with df=6
+# 꼬리가 두꺼운 수익률: 자유도 6 인 t. 평균과 척도는 위와 같게 맞췄으므로
+# 달라지는 것은 꼬리뿐이다. 요약통계에서 초과첨도만 크게 벌어진다.
 heavy_returns = stats.t.rvs(df=6, loc=0.0005, scale=0.015, size=n)
 
 for name, r in [("Normal", normal_returns), ("Heavy-tailed", heavy_returns)]:
@@ -43,6 +46,8 @@ for name, r in [("Normal", normal_returns), ("Heavy-tailed", heavy_returns)]:
 Normal: mean=0.001176, std=0.014823, skew=0.0329, excess_kurt=0.0513, JB p=0.7486
 Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB p=6.062e-115
 ```
+
+</div>
 
 !!! warning "`scale` 모수는 표준편차가 아니다"
     두 계열의 표준편차가 $0.0148$과 $0.0186$으로 25% 차이가 난다. 둘 다 `scale=0.015`로 생성했는데도 그렇다.
@@ -61,6 +66,10 @@ Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB 
 
 두 수익률 계열을 비교하면 Q-Q 그림의 진단력이 분명해진다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 두 수익률의 Q-Q 그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -70,6 +79,8 @@ np.random.seed(42)
 normal_returns = np.random.normal(0.0005, 0.015, 2000)
 heavy_returns = stats.t.rvs(df=6, loc=0.0005, scale=0.015, size=2000)
 
+# 왼쪽은 직선에 붙고, 오른쪽은 양끝이 S 자로 휘어 오른다.
+# 이 휘어짐이 두꺼운 꼬리의 눈에 보이는 모습이다.
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
 stats.probplot(normal_returns, dist="norm", plot=axes[0])
@@ -83,6 +94,8 @@ axes[1].grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![정규 자료와 두꺼운 꼬리 자료의 Q-Q 비교](./img/qq_plot_financial_returns_64.png)
 

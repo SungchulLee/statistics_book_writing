@@ -26,17 +26,24 @@ $$
 
 $p$값은 $p = P(\chi^2_2 \geq \text{JB}_{\text{obs}})$이며 $p < \alpha$일 때 $H_0$을 기각한다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 섞인 자료에 Jarque-Bera 검정
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 정규 240개에 로그정규 60개를 섞은 자료다.
 rng = np.random.default_rng(0)
 x = np.concatenate([rng.normal(0, 1, size=240),
                     rng.lognormal(0, 0.6, size=60)])
 
 jb_stat, p = stats.jarque_bera(x)
+
+# bias=False 는 유한표본 보정을 적용한다는 뜻이다. fisher=True 는 첨도에서
+# 3 을 빼 정규를 0 으로 맞춘 초과첨도를 준다. 둘 다 scipy 의 기본값과 다르니
+# 다른 책의 숫자와 견줄 때 확인해야 할 대목이다.
 g1 = stats.skew(x, bias=False)
 g2 = stats.kurtosis(x, fisher=True, bias=False)
 
@@ -59,6 +66,8 @@ Excess kurtosis g2 = 1.8565
 Jarque-Bera: JB = 47.5606, p-value = 4.703e-11
 => Reject normality at alpha = 0.05.
 ```
+
+</div>
 
 ## D'Agostino K제곱과의 비교
 

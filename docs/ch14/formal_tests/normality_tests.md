@@ -31,32 +31,38 @@ $$
 | Anderson-Darling | 꼬리 | 표로 정리된 임계값 | `stats.anderson` |
 | Lilliefors | 모양(추정된 모수) | 모수 추정 시 KS를 보정 | 붓스트랩 또는 `lilliefors` |
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 다섯 검정을 한자리에서
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 참으로 정규인 자료에 다섯 검정을 모두 돌려 견준다. 모두 기각하지
+# 않아야 정상이다. 검정마다 무엇에 민감한지가 달라, 정규에서 벗어난
+# 자료로 바꿔 돌려 보면 차이가 드러난다.
 rng = np.random.default_rng(0)
 data = rng.normal(0, 1, size=100)
 
-# Shapiro-Wilk
+# Shapiro-Wilk — 작은 표본에서 검정력이 가장 좋다. 두루 쓰기 좋은 기본값이다.
 W, p_sw = stats.shapiro(data)
 print(f"Shapiro-Wilk:     W = {W:.4f}, p = {p_sw:.4g}")
 
-# D'Agostino K^2
+# D'Agostino K^2 — 왜도와 첨도만 본다. 왜 기각되었는지 알기 쉽다.
 K2, p_k2 = stats.normaltest(data)
 print(f"D'Agostino K^2:   K2 = {K2:.4f}, p = {p_k2:.4g}")
 
-# Jarque-Bera
+# Jarque-Bera — K^2 과 비슷하지만 표본이 아주 클 때라야 근사가 맞는다.
 JB, p_jb = stats.jarque_bera(data)
 print(f"Jarque-Bera:      JB = {JB:.4f}, p = {p_jb:.4g}")
 
-# Kolmogorov-Smirnov (fully specified N(0,1))
+# KS — 모수를 못박은 경우에만 이 p-값이 맞다. 자료에서 추정했다면
+# Lilliefors 로 가야 한다.
 D, p_ks = stats.kstest(data, 'norm', args=(0, 1))
 print(f"KS (vs N(0,1)):   D = {D:.4f}, p = {p_ks:.4g}")
 
-# Anderson-Darling
+# Anderson-Darling — 꼬리 쪽 이탈에 민감하다. p-값 대신 기각값 표를 준다.
 ad = stats.anderson(data, dist="norm")
 print(f"Anderson-Darling: A^2 = {ad.statistic:.4f}")
 for cv, sl in zip(ad.critical_values, ad.significance_level):
@@ -77,6 +83,8 @@ Anderson-Darling: A^2 = 0.4494
   2% critical value: 0.8850
   1% critical value: 1.0530
 ```
+
+</div>
 
 자료를 실제로 $N(0,1)$에서 생성했으므로 다섯 검정 모두 정규성을 기각하지 않는다. Anderson-Darling 통계량 $0.449$도 가장 느슨한 15% 임계값 $0.555$보다 작다.
 

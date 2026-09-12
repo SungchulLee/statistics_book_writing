@@ -93,34 +93,40 @@ $t$ 검정은 원자료(또는 각 집단의 자료)의 정규성을 가정하�
 
 불균형 설계와 비정규성이 겹치면 더 문제가 된다. 그런 경우 (등분산을 가정하지 않는) Welch 분산분석과 더 큰 표본크기가 더 나은 보호를 제공한다.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 분산분석 잔차의 정규성 확인
 
 ```python
 import numpy as np
 from scipy import stats
 
 # ===================================================================
-# Check normality of ANOVA residuals
+# 분산분석 잔차의 정규성 확인
+#
+# 집단마다 평균이 다르므로 자료 전체를 한 번에 검정하면 안 된다.
+# 각 관측값에서 제 집단의 평균을 뺀 것이 잔차이고, 정규성은 여기에 요구된다.
 # ===================================================================
 
 np.random.seed(42)
 
-# Three groups with slightly different means
+# 평균이 조금씩 다른 세 집단. 분산은 모두 같다.
 group1 = np.random.normal(loc=5.0, scale=1.5, size=30)
 group2 = np.random.normal(loc=5.5, scale=1.5, size=30)
 group3 = np.random.normal(loc=6.0, scale=1.5, size=30)
 
-# Compute residuals (observations minus group means)
+# 집단별 평균을 빼면 세 집단이 같은 중심으로 모인다. 이렇게 모은 뒤라야
+# 하나의 검정으로 정규성을 물을 수 있다.
 residuals = np.concatenate([
     group1 - np.mean(group1),
     group2 - np.mean(group2),
     group3 - np.mean(group3),
 ])
 
-# Shapiro-Wilk test on residuals
+# 잔차에 대한 Shapiro-Wilk 검정
 sw_stat, sw_p = stats.shapiro(residuals)
 
-# One-way ANOVA
+# 가정을 확인했으니 본 검정으로 넘어간다.
 f_stat, f_p = stats.f_oneway(group1, group2, group3)
 
 if __name__ == "__main__":
@@ -146,6 +152,8 @@ One-way ANOVA:
 
   Residuals are consistent with normality (p > 0.05).
 ```
+
+</div>
 
 잔차가 정규성과 잘 맞고($p = 0.895$) 분산분석은 집단 평균의 차이를 유의하게 탐지한다($p = 0.0026$, 표본평균은 각각 4.72, 5.32, 6.02). 정규성 진단은 통과하고 관심 있는 검정은 기각하는, 이상적인 상황이다.
 

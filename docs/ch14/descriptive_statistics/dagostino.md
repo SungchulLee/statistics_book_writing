@@ -107,7 +107,9 @@ $$
 
     $n = 30$에서 첨도 z 점수는 2배 이상 차이가 난다. 따라서 위 공식은 원리를 이해하는 용도로만 쓰고 실제 계산에는 `scipy.stats.normaltest`를 써야 한다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** K-제곱이 두 검정의 합임을 확인하기
 
 ```python
 import numpy as np
@@ -115,19 +117,20 @@ from scipy import stats
 
 np.random.seed(0)
 
-# Generate a sample dataset
 data = np.random.normal(0, 1, 1000)
 
+# D'Agostino 의 K^2 은 왜도 검정과 첨도 검정을 하나로 묶은 것이다.
+# 각 검정의 Z 를 제곱해 더하면 정확히 K^2 이 된다는 것을 아래에서 확인한다.
+# 두 Z 가 대략 독립인 표준정규이므로 그 합이 자유도 2 인 카이제곱을 따른다.
 Z_skewtest, p_value = stats.skewtest(data)
 Z_kurtosistest, p_value = stats.kurtosistest(data)
 print(f"{Z_skewtest**2 + Z_kurtosistest**2 = }")
 
-# Perform D'Agostino's K-squared test
+# scipy 에서는 normaltest 가 곧 D'Agostino 의 K^2 검정이다.
 stat, p_value = stats.normaltest(data)
 
 print(f"D'Agostino's K-squared Test: Statistic={stat}, p-value={p_value}")
 
-# Interpretation
 alpha = 0.05
 if p_value > alpha:
     print("Fail to reject H_0: The data is normally distributed.")
@@ -142,6 +145,8 @@ Z_skewtest**2 + Z_kurtosistest**2 = 0.2329889638562599
 D'Agostino's K-squared Test: Statistic=0.2329889638562599, p-value=0.8900350082402695
 Fail to reject H_0: The data is normally distributed.
 ```
+
+</div>
 
 `normaltest`의 통계량이 두 z 점수의 제곱합과 정확히 일치함을 확인할 수 있다. 이것이 $K^2 = Z_{\text{skewness}}^2 + Z_{\text{kurtosis}}^2$의 정의이다.
 

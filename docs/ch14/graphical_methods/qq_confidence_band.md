@@ -30,7 +30,9 @@
 
 6. **그린다.** $(q_i, x_{(i)})$를 산점으로, 적합선 $y = \hat{\mu} + \hat{\sigma}\, q$를, 음영 영역 $[L_i, U_i]$를 표시한다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** Q-Q 그림에 95% 띠 얹기
 
 ```python
 import numpy as np
@@ -38,18 +40,25 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 def qq_with_band(x, B=800, seed=42):
+    """Q-Q 그림에 모의실험으로 만든 95% 띠를 얹는다.
+
+    Q-Q 그림의 점들은 웬만큼 흔들리기 마련이라, 직선에서 조금 벗어난 것이
+    문제인지 아닌지 눈으로는 알기 어렵다. 적합한 정규분포에서 같은 크기의
+    표본을 B 번 뽑아 각 자리의 2.5·97.5 백분위점을 구하면, "정규라면 이
+    정도까지는 흔들린다"는 범위를 그릴 수 있다.
+    """
     x = np.asarray(x, dtype=float)
     n = x.size
     mu, sd = x.mean(), x.std(ddof=1)
 
-    # Theoretical quantiles
+    # 이론 분위수. 0.5 를 빼는 것은 i/n 이 마지막 점에서 1 이 되어
+    # ppf 가 무한이 되는 것을 피하기 위한 흔한 보정이다.
     p = (np.arange(1, n + 1) - 0.5) / n
     q_theor = stats.norm.ppf(p)
 
-    # Observed order statistics
     x_sorted = np.sort(x)
 
-    # Simulate under fitted normal
+    # 적합된 정규분포에서 B 번 표본을 뽑아 각 순서통계량의 분포를 얻는다.
     rng = np.random.default_rng(seed)
     sims = np.sort(rng.normal(mu, sd, size=(B, n)), axis=1)
     lo = np.percentile(sims, 2.5, axis=0)
@@ -71,6 +80,8 @@ rng = np.random.default_rng(123)
 x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
 qq_with_band(x, B=600, seed=7)
 ```
+
+</div>
 
 ![신뢰띠를 포함한 Q-Q 그림](./img/qq_confidence_band_35.png)
 

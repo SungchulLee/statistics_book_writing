@@ -17,22 +17,27 @@
 
 이표본 $t$ 검정은 각 표본 안의 자료가 정규분포를 따른다고 가정한다. $t$ 검정을 수행하기 전에 두 집단의 정규성을 확인하는 것이 필수적이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** t 검정 전에 정규성 확인하기
+
 ```python
 import numpy as np
 from scipy.stats import ttest_ind, shapiro
 
 np.random.seed(0)
 
-# Generate two sample datasets
+# 두 집단 모두 실제로 정규분포에서 나왔다.
 group1 = np.random.normal(0, 1, 50)
 group2 = np.random.normal(0.5, 1, 50)
 
-# Perform Shapiro-Wilk test for normality on both groups
+# 집단마다 따로 검정한다. t 검정이 요구하는 것은 각 집단의 정규성이다.
 _, p_value_group1 = shapiro(group1)
 _, p_value_group2 = shapiro(group2)
 
+# 검정 결과에 따라 다음 절차를 고르는 흐름이다. 다만 이렇게 자료를 보고
+# 검정을 고르면 최종 p-값이 명목수준보다 커진다는 점은 알고 있어야 한다.
 if p_value_group1 > 0.05 and p_value_group2 > 0.05:
-    # If both groups pass the normality test, perform a t-test
     stat, p_value = ttest_ind(group1, group2)
     print(f"Two-sample t-test: p-value={p_value}")
 else:
@@ -45,6 +50,8 @@ else:
 Two-sample t-test: p-value=0.09856078338184512
 ```
 
+</div>
+
 두 집단의 Shapiro-Wilk $p$값은 각각 $0.877$과 $0.837$로 정규성 확인을 통과하며, 이어진 $t$ 검정의 $p$값은 $0.0986$이다. 참 평균 차이가 0.5인데도 집단당 50개로는 5% 수준에서 기각하지 못한다는 점이 흥미롭다. 검정력의 문제이다.
 
 한 집단이라도 정규성 검정을 통과하지 못하면 **Mann-Whitney U 검정** 같은 비모수 대안을 써야 한다.
@@ -56,32 +63,32 @@ Two-sample t-test: p-value=0.09856078338184512
 
 선형회귀에서는 잔차(관측값과 예측값의 차이)가 정규분포를 따른다고 가정한다. 잔차에 정규성 검정을 적용하여 이 가정이 성립하는지 확인할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 회귀 잔차의 정규성
+
 ```python
 import numpy as np
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 from scipy.stats import shapiro
 
-# Generate example data
+# 오차를 정규분포에서 만들었으므로 잔차도 정규여야 한다.
 np.random.seed(0)
 X = np.random.normal(0, 1, 100)
 y = 2 * X + np.random.normal(0, 1, 100)
 
-# Add a constant to X for the intercept
 X = sm.add_constant(X)
-
-# Fit the linear model
 model = sm.OLS(y, X).fit()
 
-# Get the residuals
+# 회귀에서 정규성을 요구받는 것은 반응변수 y 가 아니라 잔차다.
+# y 자체는 X 에 따라 중심이 옮겨 다니므로 정규일 까닭이 없다.
 residuals = model.resid
-
-# Perform a Shapiro-Wilk test on the residuals
 _, p_value = shapiro(residuals)
 
 print(f"Shapiro-Wilk Test on Residuals: p-value={p_value}")
 
-# Plot residuals
+# 검정과 그림을 함께 본다.
 plt.hist(residuals, bins=20)
 plt.title('Residuals Histogram')
 plt.show()
@@ -99,6 +106,8 @@ Shapiro-Wilk Test on Residuals: p-value=0.11418410564039025
 Residuals are normally distributed.
 ```
 
+</div>
+
 ![잔차의 히스토그램](./img/applications_59.png)
 
 (엄밀히 말하면 "잔차가 정규분포를 따른다"가 아니라 "잔차가 정규성과 일관된다"가 옳은 표현이다. 기각하지 못한 것이 정규성을 증명하지는 않는다.)
@@ -109,18 +118,23 @@ Residuals are normally distributed.
 
 **분산분석**은 집단들에 걸친 자료의 잔차가 정규분포를 따른다고 가정한다. 이 가정이 위배되면 분산분석의 결과가 오도할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 분산분석의 정규성
+
 ```python
 import numpy as np
 from scipy.stats import f_oneway, shapiro
 
 np.random.seed(0)
 
-# Generate sample data for three groups
+# 세 집단의 평균은 다르지만 분산은 같다.
 group1 = np.random.normal(0, 1, 30)
 group2 = np.random.normal(0.5, 1, 30)
 group3 = np.random.normal(1, 1, 30)
 
-# Perform Shapiro-Wilk test on the residuals
+# 분산분석에서도 정규성은 잔차에 요구된다. 집단마다 평균을 뺀 값이
+# 곧 잔차이므로, 집단별로 검정하는 것이 그 일을 대신한다.
 _, p_value_group1 = shapiro(group1)
 _, p_value_group2 = shapiro(group2)
 _, p_value_group3 = shapiro(group3)
@@ -139,6 +153,8 @@ else:
 ```text
 ANOVA test: p-value=0.039981492411499175
 ```
+
+</div>
 
 세 집단의 Shapiro-Wilk $p$값은 각각 $0.525$, $0.909$, $0.720$으로 모두 정규성 확인을 통과하고, 분산분석은 $p = 0.040$으로 5% 수준에서 집단 평균의 차이를 탐지한다.
 

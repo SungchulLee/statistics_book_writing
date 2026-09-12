@@ -51,7 +51,9 @@ Kolmogorov-Smirnov 검정통계량 $D$는 표본의 경험적 CDF와 기준분�
 
 K-S 검정은 분포의 중심위치와 모양의 차이를 탐지하는 데 효과적이다. 다만 Anderson-Darling 검정 같은 방법에 비해 꼬리에서의 이탈에는 덜 민감하다.
 
-### Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** KS 검정의 함정
 
 ```python
 import numpy as np
@@ -63,13 +65,15 @@ np.random.seed(0)
 # data = np.random.normal(0, 1, 1000)
 data = np.random.normal(1, 10, 1000)
 
+# kstest 는 모수를 미리 알고 있다고 전제한다. 그래서 표준화해 N(0,1) 과
+# 견주는데, 그 평균과 표준편차를 자료에서 뽑아 썼다는 것이 함정이다.
+# 이러면 검정이 지나치게 너그러워져 p-값이 실제보다 크게 나온다.
+# 아래 Lilliefors 가 바로 이 문제를 고친 검정이다.
 data_ks = (data - data.mean()) / data.std()
 
-# Perform Kolmogorov-Smirnov test
 stat, p_value = stats.kstest(data_ks, 'norm')
 print(f"Kolmogorov-Smirnov Test: Statistic={stat}, p-value={p_value}")
 
-# Interpretation
 alpha = 0.05
 if p_value <= alpha:
     print("Reject H_0: The data is not normally distributed.")
@@ -83,6 +87,8 @@ else:
 Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.8547733408587939
 Fail to reject H_0: The data is normally distributed.
 ```
+
+</div>
 
 !!! warning "이 코드는 사실 타당한 K-S 검정이 아니다"
     위 코드는 **자료에서 추정한** 평균과 표준편차로 자료를 표준화한 뒤 표준 K-S 임계값을 쓴다. 표준화가 경험적 CDF를 이론적 CDF 쪽으로 인위적으로 끌어당기므로 $D$가 작아지고 $p$값이 지나치게 커진다. 곧 검정이 보수적이 되어 검정력을 잃는다. 이것이 바로 다음 절의 Lilliefors 검정이 필요한 이유이다.
@@ -114,7 +120,9 @@ SciPy의 `stats.kstest` 함수는 **Kolmogorov-Smirnov(K-S) 검정**을 수행�
 | **모수 추정** | 추정된 모수를 위해 설계되지 않음 | 추정된 모수에 맞게 조정됨 |
 | **SciPy 구현** | 있음 (`stats.kstest`) | SciPy에는 직접 구현 없음 |
 
-### Python 구현
+<div class="codebox" markdown>
+
+**예제 2.** KS와 Lilliefors 견주기
 
 ```python
 import numpy as np
@@ -129,10 +137,12 @@ data = np.random.normal(1, 10, 1000)
 
 data_ks = (data - data.mean()) / data.std()
 
-# Perform Kolmogorov-Smirnov test
+# 같은 자료에 두 검정을 나란히 돌린다. 통계량은 거의 같은데 p-값이 갈린다.
 stat, p_value = stats.kstest(data_ks, 'norm')
 print(f"Kolmogorov-Smirnov Test: Statistic={stat}, p-value={p_value}")
 
+# Lilliefors 는 모수를 자료에서 추정했다는 사실을 셈에 넣은 기각값을 쓴다.
+# 그래서 같은 통계량에도 더 작은 p-값을 준다. 모수를 추정했다면 이쪽이 맞다.
 stat, p_value = lilliefors(data)
 print(f"Lilliefors Test: Statistic={stat}, p-value={p_value}")
 
@@ -151,6 +161,8 @@ Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.85477334085879
 Lilliefors Test: Statistic=0.019125294462402076, p-value=0.5818164701330186
 Fail to reject H_0: The data is normally distributed.
 ```
+
+</div>
 
 두 검정통계량은 거의 같지만($0.01903$ 대 $0.01913$) **$p$값이 다르다**($0.855$ 대 $0.582$). Lilliefors가 모수 추정을 반영한 다른 귀무분포를 쓰기 때문이다. 여기서는 자료가 실제로 정규이므로 두 검정 모두 기각하지 않지만, 자료가 정규가 아니라면 Lilliefors 쪽이 훨씬 먼저 이를 잡아낸다.
 

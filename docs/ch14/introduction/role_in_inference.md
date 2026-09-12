@@ -85,14 +85,19 @@ $$
 2. **중간 표본($30 \leq n \leq 100$)**: 평균 기반 추론에는 CLT가 어느 정도 보호를 제공하지만 분산 기반 추론에는 여전히 근사적 정규성이 필요하다. 시각적 진단으로 빠르게 확인하라.
 3. **큰 표본($n > 100$)**: 평균 기반 추론은 대체로 로버스트하다. 다만 형식적 정규성 검정의 검정력이 매우 커져 사소한 이탈에도 정규성을 기각할 수 있다. 통계적 유의성보다 그 이탈이 실질적으로 의미 있는지에 집중하라.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 정규성이 깨질 때의 제1종 오류율
 
 ```python
 import numpy as np
 from scipy import stats
 
 # ===================================================================
-# Demonstrate how non-normality affects the t-test's Type I error rate
+# 정규성이 깨지면 t 검정의 제1종 오류율이 어떻게 되는가
+#
+# 귀무가설이 참인 자료에서 검정을 되풀이해, 5%로 약속한 오류율이 실제로
+# 지켜지는지 센다. 모집단만 바꾸고 나머지는 모두 같게 두었다.
 # ===================================================================
 
 np.random.seed(42)
@@ -100,7 +105,7 @@ n = 15
 alpha = 0.05
 n_simulations = 10_000
 
-# --- Normal population: Type I error should be close to alpha ---
+# 정규모집단: 오류율이 0.05 에 붙어야 한다. 이것이 기준선이다.
 rejections_normal = 0
 for _ in range(n_simulations):
     sample = np.random.normal(loc=0, scale=1, size=n)
@@ -108,7 +113,9 @@ for _ in range(n_simulations):
     if p < alpha:
         rejections_normal += 1
 
-# --- Exponential population (skewed): actual Type I error may differ ---
+# 지수모집단: 평균을 0 으로 맞췄으므로 귀무가설은 여전히 참이다.
+# 달라진 것은 모양뿐인데, n=15 로 작아 중심극한정리가 아직 듣지 않는다.
+# 그래서 오류율이 0.05 에서 벗어난다.
 rejections_exp = 0
 for _ in range(n_simulations):
     sample = np.random.exponential(scale=1, size=n) - 1  # mean = 0
@@ -131,6 +138,8 @@ Type I error rate (normal data):      0.0527
 Type I error rate (exponential data):  0.0900
 Nominal alpha:                         0.0500
 ```
+
+</div>
 
 위 모의실험은 $n$이 작고 모집단이 치우쳐 있을 때 $t$ 검정의 실제 제1종 오류율이 명목 $\alpha = 0.05$에서 눈에 띄게 벗어날 수 있음을 보여준다. 지수분포 자료에서 실제 기각률은 $0.090$으로 명목값의 거의 두 배이다. 정규분포 자료에서는 기대대로 경험적 기각률이 $0.053$으로 0.05에 가깝다.
 
