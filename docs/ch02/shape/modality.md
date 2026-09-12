@@ -16,6 +16,10 @@
 
 **예:** 한 학급의 시험 점수는 한 무리의 학생은 열심히 공부하고 다른 무리는 그렇지 않았다면 이봉이 될 수 있다. 높은 점수와 낮은 점수에 봉우리가 생기고 그 사이에 골이 생긴다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 봉우리가 둘인 분포 만들기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,18 +27,23 @@ from scipy import stats
 
 np.random.seed(0)
 
-# Two normal distributions centered at different locations
+# 중심이 0 과 6 으로 떨어진 정규분포 둘에서 각각 1000개씩 뽑는다.
 data_normal_1 = stats.norm().rvs(1_000)
 data_normal_2 = stats.norm(loc=6).rvs(1_000)
+
+# 둘을 한 자료로 섞는다. 어느 값이 어느 쪽에서 왔는지는 지워진다.
 combined_data = np.concatenate((data_normal_1, data_normal_2))
 
+# 그래도 히스토그램에는 봉우리가 둘로 남는다. 섞인 흔적이 모양에 드러난 것이다.
 fig, ax = plt.subplots(figsize=(12, 3))
 ax.hist(combined_data, bins=30, color='skyblue', edgecolor='black')
-ax.set_title("Histogram of Bimodal Distribution")
+ax.set_title("이봉 분포의 히스토그램")
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 plt.show()
 ```
+
+</div>
 
 ![Histogram of Bimodal Distribution](./img/modality_19.png)
 

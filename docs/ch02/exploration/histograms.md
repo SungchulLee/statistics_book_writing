@@ -14,6 +14,10 @@ $$
 
 다음 예제는 정규분포에서 표본 10,000개를 뽑아 `density=True`로 히스토그램을 그리고 적합된 정규 확률밀도함수를 겹쳐 그린다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 밀도를 겹쳐 그린 히스토그램
+
 ```python
 import matplotlib.pyplot as plt
 import scipy.stats as stats
@@ -53,6 +57,8 @@ print(f"표본표준편차 {x_std:.3f}  (참값 10)")
 표본표준편차 9.876  (참값 10)
 ```
 
+</div>
+
 ![히스토그램과 밀도 그림](./img/histograms_17.png)
 
 **핵심 사항:**
@@ -64,6 +70,10 @@ print(f"표본표준편차 {x_std:.3f}  (참값 10)")
 ## 실제 자료의 히스토그램: 소득 분포
 
 소득 자료는 히스토그램의 모양이 중요한 해석적 의미를 담는 오른쪽으로 치우친 분포의 고전적인 예다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 소득 분포에 정규곡선 겹쳐 보기
 
 ```python
 import matplotlib.pyplot as plt
@@ -118,6 +128,8 @@ if __name__ == "__main__":
 왜도   1.049  (0이면 대칭)
 ```
 
+</div>
+
 ![Loan Income Distribution with Normal Fit](./img/histograms_46.png)
 
 히스토그램과 정규곡선이 어긋나는 모습이 오른쪽 치우침을 드러낸다. 고소득자의 긴 꼬리가 적합된 정규분포를 오른쪽으로 끌어당긴다.
@@ -126,6 +138,10 @@ if __name__ == "__main__":
 
 자료에 수치형 특성이 많을 때는 히스토그램을 격자로 배열하면 모든 변수를 한꺼번에 빠르게 훑어볼 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 주택 자료 아홉 변수를 한꺼번에
+
 ```python
 import matplotlib.pyplot as plt
 import os
@@ -133,11 +149,13 @@ import pandas as pd
 import tarfile
 import urllib.request
 
+# 캘리포니아 주택 자료. 구역마다 소득·집값·방 수 등 아홉 개 변수가 들어 있다.
 DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
 HOUSING_PATH = os.path.join("datasets", "housing")
 HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
 
 def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
+    """압축 파일을 내려받아 풀어 둔다. 이미 받아 두었으면 다시 받지 않는다."""
     if not os.path.isdir(housing_path):
         os.makedirs(housing_path)
     tgz_path = os.path.join(housing_path, "housing.tgz")
@@ -146,15 +164,19 @@ def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
         housing_tgz.extractall(path=housing_path)
 
 def load_housing_data(housing_path=HOUSING_PATH):
+    """풀어 둔 csv 를 자료틀로 읽는다."""
     csv_path = os.path.join(housing_path, "housing.csv")
     return pd.read_csv(csv_path)
 
 fetch_housing_data()
 df = load_housing_data()
 
+# 3×3 격자에 아홉 변수를 한꺼번에 그린다. 자료를 처음 만났을 때
+# 어느 변수가 치우쳤는지, 어디가 잘렸는지 한눈에 훑는 방법이다.
 fig, axes = plt.subplots(3, 3, figsize=(12, 9))
 df.hist(bins=50, ax=axes)
 
+# 격자를 1차원으로 펴서 아홉 축을 차례로 다듬는다.
 for ax in axes.reshape((-1,)):
     ax.grid(False)
     ax.spines[["top", "right"]].set_visible(False)
@@ -163,11 +185,17 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![히스토그램과 밀도 그림](./img/histograms_83.png)
 
 ## 범주형에 가까운 자료의 히스토그램: 타이타닉
 
 범주형 변수와 수치형 변수가 섞인 자료에서도 히스토그램은 각 열의 분포를 시각화하는 데 도움이 된다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 타이타닉 자료의 히스토그램
 
 ```python
 import matplotlib.pyplot as plt
@@ -208,6 +236,8 @@ Pclass        int64
 dtype: object
 ```
 
+</div>
+
 ## 사용자화한 히스토그램: 도수분포표에서 밀도 히스토그램으로
 
 자료가 구간 너비가 서로 다른 도수분포표로 주어질 때는, 각 막대의 높이가 아니라 **넓이**가 백분율을 나타내도록 막대 높이를 조정해야 한다.
@@ -230,10 +260,19 @@ $$
 | 15,000 – 25,000 | 26 |
 | 25,000 – 50,000 | 8 |
 
+<div class="codebox" markdown>
+
+**예제 5.** 폭이 다른 계급의 밀도 히스토그램
+
 ```python
 import matplotlib.pyplot as plt
 
 def compute_bins_widths_heights():
+    """계급의 폭이 제각각인 도수분포표에서 막대의 높이를 구한다.
+
+    폭이 다르면 도수를 그대로 높이로 쓸 수 없다. 넓이가 비율을 나타내야
+    하므로 높이는 비율을 폭으로 나눈 값, 곧 밀도가 된다.
+    """
     bins = [0, 1_000, 2_000, 3_000, 4_000, 5_000,
             6_000, 7_000, 10_000, 15_000, 25_000, 50_000]
     widths = [right - left for left, right in zip(bins[:-1], bins[1:])]
@@ -242,15 +281,18 @@ def compute_bins_widths_heights():
     return bins, widths, heights
 
 def draw_line(start, end, ax):
+    """두 점을 잇는 검은 선분 하나."""
     ax.plot([start[0], end[0]], [start[1], end[1]], '-k')
 
 def draw_box(x_left, x_right, height, ax):
+    """막대 하나를 네 선분으로 직접 그린다."""
     draw_line([x_left, 0], [x_right, 0], ax)
     draw_line([x_right, 0], [x_right, height], ax)
     draw_line([x_right, height], [x_left, height], ax)
     draw_line([x_left, height], [x_left, 0], ax)
 
 def main():
+    """계급마다 폭과 높이가 다른 막대를 이어 붙여 히스토그램을 만든다."""
     bins, widths, heights = compute_bins_widths_heights()
     fig, ax = plt.subplots(figsize=(12, 3))
     for x_left, x_right, height in zip(bins[:-1], bins[1:], heights):
@@ -263,6 +305,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+</div>
 
 ![히스토그램과 밀도 그림](./img/histograms_164.png)
 

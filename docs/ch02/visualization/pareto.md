@@ -10,6 +10,10 @@
 
 두 가지를 겹친다. 값이 큰 순으로 정렬한 막대와, 왼쪽부터 누적한 비율을 나타내는 선이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 파레토 그림 그리기
+
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -59,6 +63,8 @@ Crack        97.2
 Other       100.0
 dtype: float64
 ```
+
+</div>
 
 ![파레토 그림](./img/pareto.png)
 

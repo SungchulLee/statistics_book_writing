@@ -10,6 +10,10 @@
 
 값마다 점을 하나씩 찍되, 같은 값이면 위로 쌓는다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 점그림 그리기
+
 ```python
 import matplotlib.pyplot as plt
 
@@ -46,6 +50,8 @@ print(dict(sorted(age_freq.items())))
 {5: 2, 6: 1, 7: 4, 9: 4, 10: 1, 12: 2}
 ```
 
+</div>
+
 ![점그림](./img/gc_dotplot.png)
 
 7세가 네 명, 9세가 네 명으로 가장 많고 나머지는 한둘씩이다. 8세와 11세는 한 명도 없다.
@@ -63,6 +69,10 @@ print(dict(sorted(age_freq.items())))
 점그림이 값 하나를 점 하나로 나타냈다면, 줄기잎그림은 값 하나를 **숫자 하나**로 나타낸다. 각 값을 **줄기**(윗자리)와 **잎**(아랫자리)으로 쪼개어, 같은 줄기끼리 한 줄에 모은다.
 
 직접 만들어 보면 원리가 분명해진다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 줄기잎그림 직접 만들기
 
 ```python
 from collections import defaultdict
@@ -106,6 +116,8 @@ print(stem_leaf(scores))
 
 줄기 단위 = 10   (줄기 6, 잎 5  ->  65)
 ```
+
+</div>
 
 옆으로 누운 히스토그램처럼 읽으면 된다. 70대가 다섯 명으로 가장 많고, 50대는 한 명도 없다.
 

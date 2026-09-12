@@ -32,10 +32,16 @@ $$
 s^2 \ (\text{또는 } \sigma^2) = \frac{1}{n}\sum_{i=1}^{n} (x_i - \bar{x})^2
 $$
 
+<div class="codebox" markdown>
+
+**예제 1.** 편차에서 분산까지
+
 ```python
 import numpy as np
 
 x = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+
+# 편차는 각 값이 평균에서 얼마나 떨어졌는지다. 부호가 남아 있다.
 dev = x - x.mean()
 
 print("편차          :", dev)
@@ -54,6 +60,8 @@ print("표준편차       :", np.sqrt((dev ** 2).mean()))
 분산(모집단)   : 4.0
 표준편차       : 2.0
 ```
+
+</div>
 
 편차의 합이 정확히 $0$이다. 절댓값이나 제곱을 거친 뒤에야 뜻이 있는 수가 나온다.
 
@@ -113,26 +121,32 @@ $$
 
 ### 파이썬에서 분산 계산하기
 
+<div class="codebox" markdown>
+
+**예제 2.** 분산 구하기 — ddof 의 뜻
+
 ```python
 import numpy as np
 
 sample_data = np.array([1.5, 2.5, 4, 2, 1, 1])
 
-# Population variance (ddof=0, the default)
+# ddof 는 "자유도에서 빼는 수"다. 기본값 0 이면 n 으로 나눈 모분산이 된다.
 population_variance = sample_data.var()
-print(f"Population Variance (ddof=0): {population_variance}")
+print(f"모분산 (ddof=0): {population_variance}")
 
-# Sample variance (ddof=1)
+# ddof=1 이면 n-1 로 나눈다. 표본에서 모분산을 추정할 때 쓰는 값이다.
 sample_variance = sample_data.var(ddof=1)
-print(f"Sample Variance (ddof=1): {sample_variance}")
+print(f"표본분산 (ddof=1): {sample_variance}")
 ```
 
 출력:
 
 ```
-Population Variance (ddof=0): 1.0833333333333333
-Sample Variance (ddof=1): 1.3
+모분산 (ddof=0): 1.0833333333333333
+표본분산 (ddof=1): 1.3
 ```
+
+</div>
 
 ### 해석
 
@@ -172,26 +186,32 @@ $$
 
 ### 파이썬에서 표준편차 계산하기
 
+<div class="codebox" markdown>
+
+**예제 3.** 표준편차 구하기
+
 ```python
 import numpy as np
 
 sample_data = np.array([1.5, 2.5, 4, 2, 1, 1])
 
-# Population standard deviation (ddof=0)
+# 표준편차는 분산의 제곱근이므로 ddof 규칙도 그대로 따라간다.
 population_std = sample_data.std()
-print(f"Population Standard Deviation (ddof=0): {population_std}")
+print(f"모표준편차 (ddof=0): {population_std}")
 
-# Sample standard deviation (ddof=1)
+# n-1 로 나눈 표본분산의 제곱근이다.
 sample_std = sample_data.std(ddof=1)
-print(f"Sample Standard Deviation (ddof=1): {sample_std}")
+print(f"표본표준편차 (ddof=1): {sample_std}")
 ```
 
 출력:
 
 ```
-Population Standard Deviation (ddof=0): 1.0408329997330663
-Sample Standard Deviation (ddof=1): 1.140175425099138
+모표준편차 (ddof=0): 1.0408329997330663
+표본표준편차 (ddof=1): 1.140175425099138
 ```
+
+</div>
 
 ### 응용
 
@@ -224,9 +244,16 @@ $$
 Z = \frac{x - \mu}{\sigma}
 $$
 
+<div class="codebox" markdown>
+
+**예제 4.** Z-점수로 다른 시험 견주기
+
 ```python
+# 두 시험은 평균도 표준편차도 다르다. 원점수만으로는 견줄 수 없다.
 midterm = {"score": 70, "mu": 60, "sigma": 10}
 final = {"score": 95, "mu": 80, "sigma": 20}
+
+# Z-점수는 "평균에서 표준편차 몇 개만큼 떨어졌나"를 재므로 단위가 사라진다.
 
 for name, e in [("중간고사", midterm), ("기말고사", final)]:
     z = (e["score"] - e["mu"]) / e["sigma"]
@@ -239,6 +266,8 @@ for name, e in [("중간고사", midterm), ("기말고사", final)]:
 중간고사: 원점수 70, Z = +1.00
 기말고사: 원점수 95, Z = +0.75
 ```
+
+</div>
 
 중간고사의 $70$점이 기말의 $95$점보다 상대적으로 더 좋은 성적이다. 원점수는 $25$점이나 낮지만, 중간은 평균보다 $1$ 표준편차 위에 있고 기말은 $0.75$ 표준편차 위에 있기 때문이다.
 

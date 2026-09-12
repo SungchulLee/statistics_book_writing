@@ -8,6 +8,10 @@
 
 같은 자료를 상자그림만, 스트립 그림만, 상자+스웜으로 그려 비교한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 스트립·스웜·상자그림 견주기
+
 ```python
 import numpy as np
 import pandas as pd
@@ -59,6 +63,8 @@ A      5.12    5.37  0.70
 B      7.01    6.90  1.47
 C      6.63    6.80  0.82
 ```
+
+</div>
 
 ![스트립 그림과 스웜 그림](./img/strip_swarm.png)
 

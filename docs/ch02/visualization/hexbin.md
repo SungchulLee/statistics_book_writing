@@ -6,6 +6,10 @@
 
 ## 1. 두 방식을 나란히
 
+<div class="codebox" markdown>
+
+**예제 1.** 산점도와 육각구간그림 견주기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,6 +42,8 @@ for ax in axes:
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![hexbin과 hist2d의 비교](./img/hexbin_vs_hist2d.png)
 

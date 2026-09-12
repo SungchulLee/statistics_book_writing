@@ -47,38 +47,44 @@ $0.6745 = \Phi^{-1}(0.75)$는 표준정규분포의 75번째 백분위수다. �
 
 주별 인구 자료로 MAD를 계산하고 표준편차와 비교한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 주 인구 자료에서 표준편차와 MAD
+
 ```python
 import pandas as pd
 from statsmodels import robust
 
-# Load state data
 # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
 url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
 state = pd.read_csv(url)
 
-# Standard deviation (sensitive to outliers)
+# 표준편차는 제곱을 쓰므로 멀리 떨어진 값 하나에 크게 흔들린다.
 std_dev = state['Population'].std()
-print(f"Standard Deviation: {std_dev:,.0f}")
+print(f"표준편차     : {std_dev:,.0f}")
 
-# MAD using statsmodels
+# statsmodels 의 mad 는 정규분포에서 표준편차와 눈금이 맞도록 이미 보정해 준다.
 mad = robust.scale.mad(state['Population'])
-print(f"MAD (standardized): {mad:,.0f}")
+print(f"MAD (보정)   : {mad:,.0f}")
 
-# Manual calculation
+# 정의대로 직접 구해 본다. 중앙값에서의 절대편차, 그 중앙값이다.
 median_pop = state['Population'].median()
 abs_deviations = abs(state['Population'] - median_pop)
 mad_manual = abs_deviations.median()
+# 0.6745 는 표준정규의 0.75 분위점이다. 이 값으로 나누면 위 mad 와 눈금이 맞는다.
 mad_standardized = mad_manual / 0.6744897501960817
-print(f"MAD (manual calc): {mad_standardized:,.0f}")
+print(f"MAD (직접)   : {mad_standardized:,.0f}")
 ```
 
 출력:
 
 ```
-Standard Deviation: 6,848,235
-MAD (standardized): 3,849,876
-MAD (manual calc): 3,849,876
+표준편차     : 6,848,235
+MAD (보정)   : 3,849,876
+MAD (직접)   : 3,849,876
 ```
+
+</div>
 
 **출력:**
 ```
@@ -95,39 +101,45 @@ MAD (manual calc): 3,849,876
 
 이 두 측도에 이상치가 미치는 영향을 살펴보자.
 
+<div class="codebox" markdown>
+
+**예제 2.** 이상치를 넣으면 어떻게 달라지는가
+
 ```python
 import pandas as pd
 import numpy as np
 from statsmodels import robust
 
-# Original state population data
-# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+# 먼저 원래 자료에서 두 척도를 재 둔다.
 url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
 state = pd.read_csv(url)
 original_std = state['Population'].std()
 original_mad = robust.scale.mad(state['Population'])
 
-# Introduce extreme outliers
+# 여기에 있을 수 없을 만큼 큰 가상의 주 둘을 끼워 넣는다.
 population_with_outliers = pd.concat([
     state['Population'],
-    pd.Series([100_000_000, 150_000_000])  # Two fictional giant states
+    pd.Series([100_000_000, 150_000_000])
 ])
 
 outlier_std = population_with_outliers.std()
 outlier_mad = robust.scale.mad(population_with_outliers)
 
-print("Impact of Outliers:")
-print(f"  Std Dev: {original_std:,.0f} → {outlier_std:,.0f} ({100 * (outlier_std - original_std) / original_std:.1f}% increase)")
-print(f"  MAD:     {original_mad:,.0f} → {outlier_mad:,.0f} ({100 * (outlier_mad - original_mad) / original_mad:.1f}% increase)")
+# 자료 52개 중 둘만 바뀌었는데 두 척도가 받는 충격은 전혀 다르다.
+print("이상치의 영향:")
+print(f"  표준편차: {original_std:,.0f} → {outlier_std:,.0f} ({100 * (outlier_std - original_std) / original_std:.1f}% 증가)")
+print(f"  MAD     : {original_mad:,.0f} → {outlier_mad:,.0f} ({100 * (outlier_mad - original_mad) / original_mad:.1f}% 증가)")
 ```
 
 출력:
 
 ```
-Impact of Outliers:
-  Std Dev: 6,848,235 → 24,537,372 (258.3% increase)
-  MAD:     3,849,876 → 4,273,462 (11.0% increase)
+이상치의 영향:
+  표준편차: 6,848,235 → 24,537,372 (258.3% 증가)
+  MAD     : 3,849,876 → 4,273,462 (11.0% 증가)
 ```
+
+</div>
 
 극단적인 이상치 두 개를 추가하면 표준편차는 극적으로 커지지만 MAD는 거의 변하지 않는다. 이것이 MAD의 강건성을 보여준다.
 
@@ -169,26 +181,32 @@ MAD는 다음과 같은 성질을 갖는 **강건한** 통계량이다.
 
 주식시장 분석에서 MAD가 표준편차보다 대표성이 클 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 금융 수익률에서의 MAD
+
 ```python
 import pandas as pd
 from statsmodels import robust
 
-# Hypothetical daily stock returns
+# 어느 주식의 일별 수익률이라고 하자. 마지막 하루가 폭락일(-50%)이다.
 returns = pd.Series([0.01, 0.02, -0.01, 0.015, -0.005, 0.03, -0.02,
-                      0.01, -0.01, 0.005, -0.015, 0.02, -0.50])  # One crash day
+                      0.01, -0.01, 0.005, -0.015, 0.02, -0.50])
 
-print(f"Standard Deviation: {returns.std():.4f}")
-print(f"MAD (standardized): {robust.scale.mad(returns):.4f}")
+print(f"표준편차   : {returns.std():.4f}")
+print(f"MAD (보정) : {robust.scale.mad(returns):.4f}")
 
-# The crash day (-0.50) inflates std dev much more than MAD
+# 폭락일 하루가 표준편차는 크게 부풀리지만 MAD 는 거의 건드리지 못한다.
 ```
 
 출력:
 
 ```
-Standard Deviation: 0.1407
-MAD (standardized): 0.0222
+표준편차   : 0.1407
+MAD (보정) : 0.0222
 ```
+
+</div>
 
 폭락한 하루(-0.50)가 표준편차를 크게 키워 전형적인 일간 변동성을 과장할 수 있다. MAD는 일상적인 변동에 대해 더 선명한 그림을 준다.
 
@@ -198,11 +216,16 @@ MAD (standardized): 0.0222
 
 ### statsmodels 사용 (권장)
 
+<div class="codebox" markdown>
+
+**예제 4.** statsmodels 로 MAD 구하기
+
 ```python
 from statsmodels import robust
 import pandas as pd
 
-data = pd.Series([1, 2, 3, 4, 5, 100])  # Last value is an outlier
+# 마지막 100 이 이상치다. 나머지 다섯 값은 1부터 5까지 고르게 놓여 있다.
+data = pd.Series([1, 2, 3, 4, 5, 100])
 mad = robust.scale.mad(data)
 print(f"MAD: {mad:.2f}")
 ```
@@ -213,25 +236,37 @@ print(f"MAD: {mad:.2f}")
 MAD: 2.22
 ```
 
+</div>
+
 ### 직접 계산
+
+<div class="codebox" markdown>
+
+**예제 5.** MAD 를 정의대로 직접 구하기
 
 ```python
 import pandas as pd
 import numpy as np
 
 data = pd.Series([1, 2, 3, 4, 5, 100])
+
+# 정의를 세 줄로 그대로 옮긴 것이다: 중앙값 → 절대편차 → 그 중앙값.
 median = data.median()
 abs_dev = abs(data - median)
 mad = abs_dev.median()
-mad_standardized = mad / 0.6744897501960817  # Standardize for normal data
-print(f"MAD (standardized): {mad_standardized:.2f}")
+
+# 정규분포에서 표준편차와 눈금을 맞추기 위한 보정상수다.
+mad_standardized = mad / 0.6744897501960817
+print(f"MAD (보정): {mad_standardized:.2f}")
 ```
 
 출력:
 
 ```
-MAD (standardized): 2.22
+MAD (보정): 2.22
 ```
+
+</div>
 
 ---
 

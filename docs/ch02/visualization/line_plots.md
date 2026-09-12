@@ -8,6 +8,10 @@
 
 ## 1. 시계열 예제
 
+<div class="codebox" markdown>
+
+**예제 1.** 시계열 꺾은선그림
+
 ```python
 import numpy as np
 import pandas as pd
@@ -55,6 +59,8 @@ plt.show()
 시작가 20,130  종료가 17,330
 최저 16,117  최고 22,786
 ```
+
+</div>
 
 ![모의생성한 일별 종가 선그림](./img/gc_lineplot_timeseries.png)
 

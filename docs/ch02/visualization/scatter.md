@@ -6,6 +6,10 @@
 
 Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
 
+<div class="codebox" markdown>
+
+**예제 1.** plot 과 scatter 의 차이
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -43,6 +47,8 @@ for ax in (ax_plot, ax_scatter):
 plt.show()
 ```
 
+</div>
+
 ![ax.plot과 ax.scatter의 비교](./img/gc_plot_vs_scatter.png)
 
 **핵심 차이.** `ax.plot`은 마커의 크기와 색이 일정하여 단순한 점 표시에 이상적이고 빠르다. `ax.scatter`는 각 점마다 크기와 색을 달리할 수 있어 자료의 차원을 추가로 시각화할 수 있다.
@@ -59,6 +65,10 @@ plt.show()
 ## 2. 과밀 문제
 
 점이 많아지면 산점도는 검은 덩어리가 된다. 이것을 **과밀(overplotting)** 이라 한다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 점이 뭉칠 때
 
 ```python
 import numpy as np
@@ -95,6 +105,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![산점도의 과밀 문제와 해결](./img/scatter_overplotting.png)
 
 **왼쪽.** 20,000개를 그대로 찍으니 가운데가 단색 덩어리다. 자료의 대부분이 있는 곳에서 아무것도 읽을 수 없다. **바깥 테두리의 모양만 보이고, 그 테두리는 이상치가 결정한다.** 즉 이 그림은 자료의 1%에 대해서만 정보를 준다.
@@ -106,6 +118,10 @@ plt.show()
 ## 3. 이산값과 지터
 
 또 다른 과밀은 값이 **이산**일 때 생긴다. 5점 척도 설문처럼 값이 몇 가지뿐이면 점이 정확히 같은 자리에 겹친다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 이산값과 지터
 
 ```python
 import numpy as np
@@ -137,6 +153,8 @@ for ax in (a, b):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![이산 자료의 지터](./img/scatter_jitter.png)
 

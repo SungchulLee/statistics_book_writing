@@ -16,6 +16,10 @@
 
 상자그림이 무엇을 놓치는지 보려면, **요약통계량은 거의 같은데 모양은 전혀 다른** 두 자료를 나란히 놓으면 된다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 기본 바이올린 그림
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -65,6 +69,8 @@ data_1 (이봉): 평균 2.45, 중앙값 2.40, 표준편차 2.67, IQR [-0.05, 4.9
 data_2 (단봉): 평균 2.53, 중앙값 2.55, 표준편차 1.94, IQR [1.19, 3.75]
 ```
 
+</div>
+
 ![바이올린 그림과 상자그림의 비교](./img/violin_vs_box_bimodal.png)
 
 **중앙값이 2.40과 2.55로 거의 같다.** 상자그림(오른쪽)만 보면 두 자료가 비슷한 분포처럼 보인다. 그런데 바이올린 그림(왼쪽)을 보면 왼쪽 자료가 **가운데가 잘록한 두 덩어리**임이 한눈에 드러난다.
@@ -74,6 +80,10 @@ data_2 (단봉): 평균 2.53, 중앙값 2.55, 표준편차 1.94, IQR [1.19, 3.75
 ## Seaborn으로 그리는 바이올린 그림
 
 Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을 제공한다.
+
+<div class="codebox" markdown>
+
+**예제 2.** Seaborn 으로 그리는 바이올린 그림
 
 ```python
 import seaborn as sns
@@ -113,6 +123,8 @@ Pclass Sex
 3      female    102    21.5  21.8
        male      253    25.0  26.5
 ```
+
+</div>
 
 ![객실 등급과 성별에 따른 나이 분포](./img/violin_titanic_split.png)
 

@@ -15,6 +15,10 @@
 
 ## 기본 상자그림: 타이타닉 승객의 나이
 
+<div class="codebox" markdown>
+
+**예제 1.** 타이타닉 승객 나이의 상자그림
+
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -50,6 +54,8 @@ max    80.00
 Name: Age, dtype: float64
 ```
 
+</div>
+
 ![Horizontal_Boxplot_of_Passenger_Ages_on_Titanic](./img/Horizontal_Boxplot_of_Passenger_Ages_on_Titanic.png)
 
 ## 상자그림에서 왜도 알아보기
@@ -69,6 +75,10 @@ $$
 ## 히스토그램과 상자그림을 함께 보기
 
 히스토그램을 상자그림과 나란히 놓으면 모양과 요약통계량의 연결이 분명해진다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 히스토그램과 상자그림을 함께 보기
 
 ```python
 import matplotlib.pyplot as plt
@@ -116,11 +126,17 @@ print(f"Q2-Q1 = {q2-q1:.3f}   Q3-Q2 = {q3-q2:.3f}  (오른쪽이 길다)")
 Q2-Q1 = 0.794   Q3-Q2 = 1.098  (오른쪽이 길다)
 ```
 
+</div>
+
 ![Right_Skewed_Data](./img/Right_Skewed_Data.png)
 
 ## 비교 상자그림
 
 상자그림은 집단 간 분포를 비교할 때 가장 강력하다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 집단별 비교 상자그림
 
 ```python
 import numpy as np
@@ -168,6 +184,8 @@ for name, d in [("10^4", data_a), ("5*10^4", data_b), ("10^5", data_c)]:
  5*10^4: 중앙값   0.50  IQR 1.00
    10^5: 중앙값   0.25  IQR 0.50
 ```
+
+</div>
 
 ![Comparative_Box_Plots](./img/Comparative_Box_Plots.png)
 

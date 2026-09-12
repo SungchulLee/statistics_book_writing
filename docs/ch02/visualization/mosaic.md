@@ -10,6 +10,10 @@
 
 두 범주형 변수의 조합마다 개수를 센 표다. **분할표(contingency table)** 라고도 한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 이원 도수분포표 만들기
+
 ```python
 import pandas as pd
 
@@ -38,13 +42,21 @@ yes        97   28    125
 TOTAL     201   63    264
 ```
 
+</div>
+
 행과 열의 이름이 알파벳 순으로 정렬되어 `no`가 먼저 온다는 점에 주의하라. 오른쪽 아래 264는 전체 인원이다.
 
 ### 상대도수분포표
 
 모든 칸을 전체로 나누면 비율이 된다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 상대도수분포표
+
 ```python
+# 모든 칸을 전체 합으로 나누면 상대도수분포표가 된다.
+# 모자이크 그림은 바로 이 비율을 넓이로 옮겨 그린 것이다.
 dh = dg / dg.loc['TOTAL', 'TOTAL']
 print(dh)
 ```
@@ -58,6 +70,8 @@ no        0.393939  0.132576  0.526515
 yes       0.367424  0.106061  0.473485
 TOTAL     0.761364  0.238636  1.000000
 ```
+
+</div>
 
 ### 표에서 세 가지 확률을 읽는다
 
@@ -81,6 +95,10 @@ $$
 
 표의 각 칸을 도수에 비례하는 넓이의 사각형으로 그린다. **전체 넓이가 전체 도수**이고, 각 사각형의 넓이가 그 칸의 도수다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 모자이크 그림 그리기
+
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -102,6 +120,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![SUV와 사고의 모자이크 그림](./img/mosaic_suv.png)
 
 읽는 법이 그림의 구조에 그대로 담겨 있다.
@@ -115,6 +135,10 @@ plt.show()
 ## 3. 독립이면 분할선이 나란해진다
 
 모자이크 그림의 가장 큰 쓸모는 여기에 있다. 두 변수가 독립인지가 **한눈에** 보인다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 독립이면 분할선이 나란해진다
 
 ```python
 import numpy as np
@@ -171,6 +195,8 @@ yes   61  145
 P(Y=yes | X=no) = 0.082
 P(Y=yes | X=yes)= 0.704
 ```
+
+</div>
 
 ![독립과 종속의 모자이크 비교](./img/mosaic_indep_vs_dep.png)
 

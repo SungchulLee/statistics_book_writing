@@ -30,6 +30,10 @@
 
 한 범주형 변수의 도수를 그린다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 기본 막대그림
+
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -57,11 +61,17 @@ ax.spines['top'].set_visible(False)
 plt.show()
 ```
 
+</div>
+
 ![단일 집단 막대그림](./img/gc_bar_simple.png)
 
 ### 순서가 없는 범주는 정렬하라
 
 과목 사이에는 자연스러운 순서가 없다. 이런 경우 **값이 큰 순서로 정렬**하면 읽기가 훨씬 쉬워진다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 순서가 없는 범주는 정렬한다
 
 ```python
 import matplotlib.pyplot as plt
@@ -89,6 +99,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![정렬 전후 비교](./img/bar_sorted.png)
 
 왼쪽에서 "두 번째로 많은 과목이 무엇인가"를 답하려면 막대 높이를 하나씩 견주어야 한다. 오른쪽에서는 두 번째 막대를 보면 끝이다.
@@ -98,6 +110,10 @@ plt.show()
 ### 이름이 길면 가로 막대
 
 범주 이름이 길면 가로축에서 글자가 겹치거나 기울어진다. 막대를 눕히면 이름을 가로로 편하게 읽을 수 있다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 이름이 길면 가로 막대
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 3))
@@ -113,11 +129,17 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![가로 막대그림](./img/bar_horizontal.png)
 
 ## 2. 묶음 막대그림
 
 집단마다 여러 값을 비교할 때 쓴다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 묶음 막대그림
 
 ```python
 import matplotlib.pyplot as plt
@@ -152,6 +174,8 @@ ax.spines['top'].set_visible(False)
 plt.show()
 ```
 
+</div>
+
 ![묶음 막대그림](./img/gc_bar_grouped.png)
 
 **묶음 막대는 개별 값을 비교할 때** 쓴다. 학생별로 중간고사와 기말고사를 나란히 놓아, Vanessa가 60에서 90으로 크게 올랐다는 사실이 곧바로 보인다.
@@ -161,6 +185,10 @@ plt.show()
 ## 3. 분할(누적) 막대그림
 
 각 범주가 무엇으로 구성되어 있는지 보여 준다.
+
+<div class="codebox" markdown>
+
+**예제 5.** 분할 막대그림
 
 ```python
 import matplotlib.pyplot as plt
@@ -190,6 +218,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![분할(누적) 막대그림](./img/gc_bar_stacked.png)
 
 **누적 막대는 구성비를 볼 때** 쓴다. 세 집단 모두 전체 높이가 100으로 같아, 영아 집단만 항체 보유 비율이 40%로 낮다는 점이 바로 드러난다.
@@ -205,26 +235,35 @@ plt.show()
 
 막대그림은 길이로 크기를 나타내므로, **세로축이 반드시 0에서 시작해야 한다.** 축을 잘라 내면 길이의 비율이 값의 비율과 달라진다.
 
+<div class="codebox" markdown>
+
+**예제 6.** y축을 자르면 생기는 일
+
 ```python
 import matplotlib.pyplot as plt
 
+# 같은 자료를 y축만 달리해 두 번 그린다. 숫자는 하나도 건드리지 않는다.
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 3.5))
+
+# 최대와 최소의 차이가 6%쯤 되는, 사실상 고만고만한 네 값이다.
 vals = [102, 105, 103, 108]
 names = ['A', 'B', 'C', 'D']
 
 ax1.bar(names, vals, color='indianred')
 ax1.set_ylim(0, 120)                      # 0에서 시작 — 정직한 그림
-ax1.set_title("y-axis starts at 0 (honest)")
+ax1.set_title("y축이 0에서 시작 — 정직한 그림")
 
 ax2.bar(names, vals, color='indianred')
 ax2.set_ylim(100, 110)                    # 축을 잘라 냄 — 차이가 과장된다
-ax2.set_title("y-axis truncated (misleading)")
+ax2.set_title("y축을 잘라 냄 — 차이가 과장된다")
 
 for ax in (ax1, ax2):
     ax.spines[['top', 'right']].set_visible(False)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![축을 자르면 생기는 왜곡](./img/bar_axis_truncation.png)
 

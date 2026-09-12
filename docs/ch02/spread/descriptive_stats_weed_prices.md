@@ -12,11 +12,17 @@
 
 캘리포니아(CA)와 뉴욕(NY)의 고품질 대마에 대한 48개월치 월별 가격 관측값을 다룬다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 캘리포니아와 뉴욕의 가격 자료
+
 ```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# 캘리포니아와 뉴욕의 상품 대마 가격을 날짜순으로 적은 것이다.
+# 두 열의 i번째 값이 같은 날에 대응하므로 나중에 상관을 구할 수 있다.
 CA_PRICES = np.array([
     248.75, 248.59, 248.63, 248.37, 248.02, 247.68, 247.36,
     246.85, 246.44, 246.06, 245.81, 245.48, 245.18, 244.87,
@@ -38,6 +44,8 @@ NY_PRICES = np.array([
 ])
 ```
 
+</div>
+
 두 계열 모두 48개월에 걸쳐 꾸준한 하락 추세를 보이며, 뉴욕 가격이 캘리포니아 가격보다 일관되게 높다.
 
 ---
@@ -49,6 +57,10 @@ NY_PRICES = np.array([
 $$
 \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
 $$
+
+<div class="codebox" markdown>
+
+**예제 2.** 평균 직접 구현하기
 
 ```python
 def mean_from_scratch(data):
@@ -69,6 +81,8 @@ print(f"pandas   : {pd.Series(CA_PRICES).mean():.4f}")
 pandas   : 242.3102
 ```
 
+</div>
+
 ---
 
 ## 3. 중앙값
@@ -82,6 +96,10 @@ x_{(m+1)} & \text{if } n = 2m + 1 \\[4pt]
 \dfrac{x_{(m)} + x_{(m+1)}}{2} & \text{if } n = 2m
 \end{cases}
 $$
+
+<div class="codebox" markdown>
+
+**예제 3.** 중앙값 직접 구현하기
 
 ```python
 def median_from_scratch(data):
@@ -105,11 +123,17 @@ print(f"pandas   : {pd.Series(CA_PRICES).median():.4f}")
 pandas   : 242.0150
 ```
 
+</div>
+
 ---
 
 ## 4. 최빈값
 
 최빈값은 가장 자주 나타나는 값이다. 연속 자료에서는 먼저 값을 정해진 정밀도로 반올림한다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 최빈값 직접 구현하기
 
 ```python
 def mode_from_scratch(data, decimals=1):
@@ -132,6 +156,8 @@ decimals=1: 최빈값 = 248.6
 decimals=2: 최빈값 = 236.56
 ```
 
+</div>
+
 !!! note "연속 자료의 최빈값"
     연속 자료에는 정확히 같은 값이 반복되는 일이 드물다. 최빈값을 계산하기 전에 반올림이나 구간화가 필요하며, 그 결과는 선택한 반올림 정밀도에 따라 달라진다.
 
@@ -150,6 +176,10 @@ $$
 $$
 s = \sqrt{s^2}
 $$
+
+<div class="codebox" markdown>
+
+**예제 5.** 분산과 표준편차 직접 구현하기
 
 ```python
 def variance_from_scratch(data):
@@ -184,6 +214,8 @@ numpy 기본(ddof=0): 13.4693  <- 다르다
 numpy ddof=1      : 13.7559
 ```
 
+</div>
+
 ---
 
 ## 6. 공분산과 상관
@@ -199,6 +231,10 @@ $$
 $$
 r = \frac{\text{Cov}(X, Y)}{s_X \, s_Y}
 $$
+
+<div class="codebox" markdown>
+
+**예제 6.** 공분산과 상관 직접 구현하기
 
 ```python
 def covariance_from_scratch(x, y):
@@ -233,11 +269,17 @@ print(f"Cov(CA, CA) = {covariance_from_scratch(CA_PRICES, CA_PRICES):.4f}"
 Cov(CA, CA) = 13.7559  =  Var(CA) = 13.7559
 ```
 
+</div>
+
 ---
 
 ## 7. 결과와 확인
 
 직접 구현한 함수를 캘리포니아 자료에 실행하고 pandas로 확인한다.
+
+<div class="codebox" markdown>
+
+**예제 7.** 직접 구현과 numpy 결과 맞춰 보기
 
 ```python
 data = CA_PRICES
@@ -282,6 +324,8 @@ std           3.708895      3.708895   -8.88e-16
 상관   = 0.9970
 ```
 
+</div>
+
 `diff` 열이 전부 $10^{-15}$ 이하다. 직접 구현한 정의가 pandas와 같은 답을 낸다는 뜻이다. 정확히 0이 아닌 것은 덧셈의 순서가 달라 생기는 부동소수점 반올림이며, 이 정도 크기는 정상이다.
 
 상관이 $r = 0.9970$으로 1에 매우 가깝다. 두 계열이 같은 기간에 비슷하게 꾸준한 하락 추세를 따랐기 때문이다.
@@ -293,31 +337,37 @@ std           3.708895      3.708895   -8.88e-16
 
 ## 8. 시각화
 
+<div class="codebox" markdown>
+
+**예제 8.** 세 그림으로 요약하기
+
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
-# Histogram with mean and median
+# 왼쪽: 히스토그램에 평균과 중앙값을 세로선으로 얹는다.
 axes[0].hist(data, bins=15, edgecolor="white", alpha=0.7)
 axes[0].axvline(m, color="red", linestyle="--", label=f"Mean {m:.1f}")
 axes[0].axvline(med, color="blue", linestyle=":", label=f"Median {med:.1f}")
-axes[0].set_title("CA HighQ Price Distribution")
-axes[0].set_xlabel("Price (\$)")
+axes[0].set_title("캘리포니아 가격 분포")
+axes[0].set_xlabel("가격 (\$)")
 axes[0].legend(fontsize=8)
 
-# Boxplot
+# 가운데: 같은 자료의 상자그림. 다섯 수치 요약을 한 눈에 보여 준다.
 axes[1].boxplot(data, vert=True)
-axes[1].set_title("Box Plot — CA HighQ")
-axes[1].set_ylabel("Price (\$)")
+axes[1].set_title("상자그림 — 캘리포니아")
+axes[1].set_ylabel("가격 (\$)")
 
-# Scatter: CA vs NY
+# 오른쪽: 두 주의 가격을 짝지어 찍는다. 점이 직선에 가까울수록 상관이 크다.
 axes[2].scatter(CA_PRICES, NY_PRICES, alpha=0.6)
-axes[2].set_xlabel("CA HighQ (\$)")
-axes[2].set_ylabel("NY HighQ (\$)")
-axes[2].set_title(f"CA vs NY  (r = {corr:.3f})")
+axes[2].set_xlabel("캘리포니아 (\$)")
+axes[2].set_ylabel("뉴욕 (\$)")
+axes[2].set_title(f"캘리포니아 대 뉴욕  (r = {corr:.3f})")
 
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![CA HighQ Price Distribution](./img/descriptive_stats_weed_prices_180.png)
 

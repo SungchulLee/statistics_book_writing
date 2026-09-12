@@ -6,6 +6,10 @@
 
 ## 1. 타이타닉 자료로 그려 본다
 
+<div class="codebox" markdown>
+
+**예제 1.** 타이타닉 자료의 쌍그림
+
 ```python
 import seaborn as sns
 import pandas as pd
@@ -22,6 +26,8 @@ df['Sex_int'] = df['Sex'].apply(lambda x: 1 if x == 'male' else 0)
 # 결측이 있는 행(Age가 비어 있는 177명)은 자동으로 빠진다.
 sns.pairplot(df[["Survived", "Age", "Sex_int"]])
 ```
+
+</div>
 
 ![쌍그림](./img/gc_pairplot.png)
 
@@ -40,6 +46,10 @@ $k$개 변수를 주면 $k \times k$ 격자가 만들어진다.
 - **위쪽 삼각형과 아래쪽 삼각형은 같은 정보**다. 축만 뒤바뀌어 있다.
 
 중복이 있다는 것은 곧 **한쪽을 다른 용도로 쓸 수 있다**는 뜻이다. seaborn의 `PairGrid`를 쓰면 아래는 산점도, 위는 상관계수 숫자, 대각선은 밀도곡선으로 채우는 식의 구성이 가능하다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 격자의 구조 들여다보기
 
 ```python
 import seaborn as sns
@@ -61,16 +71,27 @@ def corr_text(x, y, **kwargs):
 g.map_upper(corr_text)
 ```
 
+</div>
+
 ![PairGrid로 삼각형마다 다른 그림 채우기](./img/pair_plots_44.png)
 
 ## 3. 집단별로 색을 입힌다
 
 `hue` 인자를 주면 범주형 변수에 따라 점의 색이 갈린다. 쌍그림의 가장 유용한 쓰임이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 집단별로 색 입히기
+
 ```python
+# hue 에 범주형 열을 주면 집단마다 색이 갈린다. 변수 쌍마다 두 집단이
+# 겹치는지 갈리는지를 한 장에서 훑을 수 있다.
+# diag_kind="kde" 는 대각선의 히스토그램을 매끄러운 밀도곡선으로 바꾼다.
 sns.pairplot(df[["Survived", "Age", "Fare", "Sex"]], hue="Sex",
              diag_kind="kde", plot_kws={"s": 12, "alpha": .5})
 ```
+
+</div>
 
 ![성별로 색을 입힌 쌍그림](./img/pair_plots_68.png)
 

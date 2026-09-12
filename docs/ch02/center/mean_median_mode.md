@@ -41,6 +41,10 @@ $$
 
 ### 평균: 소득 예제
 
+<div class="codebox" markdown>
+
+**예제 1.** 소득 자료의 평균
+
 ```python
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -67,6 +71,8 @@ ax.spines['right'].set_visible(False)
 plt.show()
 ```
 
+</div>
+
 ![Histogram of Income Data with Mean Indicator](./img/mean_median_mode_44.png)
 
 ---
@@ -88,6 +94,10 @@ plt.show()
 자료 70, 85, 90, 95(짝수 개)에 대해 중앙값 $= (85 + 90)/2 = 87.5$이다.
 
 ### 중앙값 대 평균: 소득 자료
+
+<div class="codebox" markdown>
+
+**예제 2.** 소득 자료에서 중앙값과 평균 견주기
 
 ```python
 import pandas as pd
@@ -130,11 +140,17 @@ print(f"차이   {mean_income - median_income:>9,.0f}  (양수 = 오른쪽 치�
 차이       6,761  (양수 = 오른쪽 치우침)
 ```
 
+</div>
+
 ![Histogram of Income Data with Mean and Median](./img/mean_median_mode_87.png)
 
 ### 중앙값은 이상치에 강건하다
 
 중앙값은 평균보다 극단값의 영향을 훨씬 덜 받는다. 소득 자료에 이상치를 추가해 보면 이를 확인할 수 있다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 이상치가 평균과 중앙값에 미치는 영향
 
 ```python
 import pandas as pd
@@ -212,6 +228,8 @@ print(f"{'중앙값':10}{median_income:>14,.0f}{median_outliers:>18,.0f}"
 중앙값               62,000            62,000     0.0%
 ```
 
+</div>
+
 ![Original Income Data](./img/mean_median_mode_117_0.png)
 
 ![Original Income Data](./img/mean_median_mode_117_1.png)
@@ -250,35 +268,40 @@ $$
 
 미국 주별 인구 자료로 평균, 10% 절단평균, 중앙값을 비교한다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 절사평균과 중앙값 — 주 인구 자료
+
 ```python
 import pandas as pd
 from scipy.stats import trim_mean
 
-# Load state data
 # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
 url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
 state = pd.read_csv(url)
 
-# Regular mean (sensitive to outliers like California)
+# 보통의 평균. 캘리포니아 같은 큰 주 하나에 끌려 올라간다.
 mean_pop = state['Population'].mean()
-print(f"Mean Population: {mean_pop:,.0f}")
+print(f"평균       : {mean_pop:,.0f}")
 
-# 10% trimmed mean (removes 5% from each tail)
+# 절사평균. 0.1 은 양끝에서 5%씩 잘라내고 나머지로 평균을 낸다는 뜻이다.
 trimmed_mean_pop = trim_mean(state['Population'], 0.1)
-print(f"10% Trimmed Mean: {trimmed_mean_pop:,.0f}")
+print(f"10% 절사평균: {trimmed_mean_pop:,.0f}")
 
-# Median (completely robust)
+# 중앙값은 순서만 보므로 꼬리가 아무리 길어도 흔들리지 않는다.
 median_pop = state['Population'].median()
-print(f"Median Population: {median_pop:,.0f}")
+print(f"중앙값     : {median_pop:,.0f}")
 ```
 
 출력:
 
 ```
-Mean Population: 6,162,876
-10% Trimmed Mean: 4,783,697
-Median Population: 4,436,370
+평균       : 6,162,876
+10% 절사평균: 4,783,697
+중앙값     : 4,436,370
 ```
+
+</div>
 
 **출력:**
 ```
@@ -315,6 +338,10 @@ $$
 
 전국 살인율을 계산할 때 인구가 많은 주가 평균에 더 크게 반영되어야 한다. 주의 인구를 가중치로 쓴다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 주 인구로 가중한 살인율
+
 ```python
 import pandas as pd
 import numpy as np
@@ -323,21 +350,24 @@ import numpy as np
 url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
 state = pd.read_csv(url)
 
-# Unweighted mean murder rate
+# 가중하지 않은 평균은 주 50개를 똑같이 한 표씩 센다.
+# 인구 60만의 와이오밍과 인구 3900만의 캘리포니아가 같은 무게를 갖는다.
 unweighted_mean = state['Murder.Rate'].mean()
-print(f"Unweighted Mean Murder Rate: {unweighted_mean:.3f}")
+print(f"단순평균 살인율: {unweighted_mean:.3f}")
 
-# Weighted mean (weighted by population)
+# 인구로 가중하면 사람 한 명이 한 표가 된다. "미국 사람이 겪는 평균"에 가깝다.
 weighted_mean = np.average(state['Murder.Rate'], weights=state['Population'])
-print(f"Weighted Mean Murder Rate: {weighted_mean:.3f}")
+print(f"가중평균 살인율: {weighted_mean:.3f}")
 ```
 
 출력:
 
 ```
-Unweighted Mean Murder Rate: 4.066
-Weighted Mean Murder Rate: 4.446
+단순평균 살인율: 4.066
+가중평균 살인율: 4.446
 ```
+
+</div>
 
 **출력:**
 ```
@@ -350,6 +380,10 @@ Weighted Mean Murder Rate: 4.446
 ### 가중중앙값
 
 **가중중앙값**은 누적 가중치가 전체 가중치의 50%에 도달하는 값이다. 가중평균과 달리 전용 함수가 필요하다.
+
+<div class="codebox" markdown>
+
+**예제 6.** 가중중앙값 구하기
 
 ```python
 import pandas as pd
@@ -386,6 +420,8 @@ Unweighted Median: 4.0
 Weighted Median: 4.4
 ```
 
+</div>
+
 ### 가중 통계량을 쓸 때
 
 **금융 자료:** 포트폴리오 수익률은 자산 가치로 가중한다.
@@ -404,9 +440,14 @@ Weighted Median: 4.4
 
 ### 파이썬에서 최빈값 계산하기
 
+<div class="codebox" markdown>
+
+**예제 7.** 최빈값 구하기
+
 ```python
 import statistics
 
+# 최빈값은 가장 자주 나온 값이다. 여기서는 2 만 두 번 나온다.
 data = [4, 1, 2, 2, 3, 5]
 mode = statistics.mode(data)
 print(f"{mode = }")  # mode = 2
@@ -418,17 +459,27 @@ print(f"{mode = }")  # mode = 2
 mode = 2
 ```
 
+</div>
+
 최빈값이 여럿인 자료의 경우:
+
+<div class="codebox" markdown>
+
+**예제 8.** 최빈값이 둘일 때
 
 ```python
 import statistics
 
+# 이번에는 2 와 3 이 나란히 두 번씩 나온다. 최빈값이 둘인 자료다.
 data = [4, 1, 2, 2, 3, 3, 5]
-mode = statistics.mode(data)
-print(f"{mode = }")  # Returns the first mode encountered
 
+# mode 는 그중 먼저 나온 것 하나만 돌려준다. 나머지 하나가 조용히 감춰진다.
+mode = statistics.mode(data)
+print(f"{mode = }")
+
+# 그래서 최빈값이 여럿일 수 있는 자료에는 multimode 를 쓴다.
 modes = statistics.multimode(data)
-print(f"{modes = }")  # Returns all modes: [2, 3]
+print(f"{modes = }")  # [2, 3]
 ```
 
 출력:
@@ -437,6 +488,8 @@ print(f"{modes = }")  # Returns all modes: [2, 3]
 mode = 2
 modes = [2, 3]
 ```
+
+</div>
 
 ---
 

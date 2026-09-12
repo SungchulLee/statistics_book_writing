@@ -6,10 +6,15 @@
 
 ## 1. 기본 원그래프
 
+<div class="codebox" markdown>
+
+**예제 1.** 기본 원그래프
+
 ```python
 import matplotlib.pyplot as plt
 
-labels = 'Apples', 'Bananas', 'Cherries', 'Dates'
+# 과일 바구니의 구성. 원그래프는 "전체를 이루는 부분"에만 쓸 수 있다.
+labels = '사과', '바나나', '체리', '대추야자'
 sizes = [215, 130, 245, 210]     # 개수. 합이 800이며 자동으로 백분율로 환산된다
 colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue']
 explode = (0.1, 0, 0, 0)         # 첫 조각만 0.1만큼 바깥으로 밀어 강조
@@ -25,9 +30,11 @@ ax.pie(sizes,
        radius=1.5,
        counterclock=True)        # 반시계 방향으로 배치
 ax.axis('equal')                 # 가로세로 비를 맞춰 원이 찌그러지지 않게 한다
-ax.set_title('Fruit Distribution in Basket')
+ax.set_title('바구니 속 과일의 구성')
 plt.show()
 ```
+
+</div>
 
 ![원그래프](./img/gc_pie.png)
 
@@ -38,6 +45,10 @@ plt.show()
 ## 2. 왜 막대그림이 나은가
 
 같은 자료를 두 방식으로 그려 놓고 물어보자.
+
+<div class="codebox" markdown>
+
+**예제 2.** 원그래프와 막대그림 견주기
 
 ```python
 import matplotlib.pyplot as plt
@@ -64,6 +75,8 @@ ax2.spines[['top', 'right']].set_visible(False)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![원그래프와 막대그림의 비교](./img/pie_vs_bar.png)
 
@@ -99,19 +112,27 @@ plt.show()
 
 가운데를 비운 형태다. 빈 공간에 총계나 핵심 숫자를 넣을 수 있다는 실용적 이점이 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 도넛 그래프
+
 ```python
 import matplotlib.pyplot as plt
 
 sizes = [215, 130, 245, 210]
-labels = ['Apples', 'Bananas', 'Cherries', 'Dates']
+labels = ['사과', '바나나', '체리', '대추야자']
 
+# 도넛은 원그래프에서 가운데를 비운 것이다. 넓이 대신 호의 길이로 읽게 되어
+# 조각 크기를 견주기가 오히려 조금 낫다.
 fig, ax = plt.subplots(figsize=(5, 4))
 ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140,
        colors=['gold', 'yellowgreen', 'lightcoral', 'lightskyblue'],
        wedgeprops=dict(width=0.45))   # 조각의 두께. 원 반지름보다 작으면 도넛이 된다
-ax.set_title("Donut Chart")
+ax.set_title("도넛 그래프")
 plt.show()
 ```
+
+</div>
 
 ![도넛 그래프](./img/pie_donut.png)
 

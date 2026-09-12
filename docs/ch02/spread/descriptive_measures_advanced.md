@@ -33,6 +33,10 @@
 
 ### 코드
 
+<div class="codebox" markdown>
+
+**예제 1.** 산술평균과 기하평균
+
 ```python
 import numpy as np
 from scipy import stats
@@ -63,6 +67,8 @@ Geometric  mean: -0.0143  (-1.43%)
 Compound value of 1 USD: 0.9173
 Using geo mean:          0.9173
 ```
+
+</div>
 
 ### 해석
 
@@ -106,27 +112,35 @@ $$
 
 ### 코드
 
+<div class="codebox" markdown>
+
+**예제 2.** 체비쇼프 부등식 그리기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
 def chebyshev(k):
+    """평균에서 k 표준편차 안에 들어가는 자료의 최소 비율."""
     return 1 - 1 / k**2
 
+# k=1 에서는 1 - 1 = 0 이라 아무 말도 하지 못한다. 그래서 1.1 부터 그린다.
 z_vals = np.arange(1.1, 10, 0.1)
 cheb_vals = [chebyshev(z) for z in z_vals]
 
 fig, ax = plt.subplots(figsize=(7, 4))
 ax.plot(z_vals, cheb_vals, lw=2, color="seagreen")
-ax.set_xlabel("k (standard deviations)")
-ax.set_ylabel("Minimum fraction")
-ax.set_title("Chebyshev's Inequality: 1 - 1/k²")
+ax.set_xlabel("k (표준편차의 배수)")
+ax.set_ylabel("최소 비율")
+ax.set_title("체비쇼프 부등식: 1 - 1/k²")
 ax.axhline(0.75, color="grey", linestyle=":", alpha=0.5)
 ax.annotate("k=2: ≥ 75%", (2, 0.75), fontsize=9,
             xytext=(4, 0.6), arrowprops=dict(arrowstyle="->"))
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Chebyshev](./img/descriptive_measures_advanced_97.png)
 
@@ -156,11 +170,17 @@ $$
 
 모집단에서 크기 100인 표본을 10,000번 뽑아 각 추정량의 평균을 참 분산과 비교하여 불편성을 확인한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 표본분산의 편향 모의실험
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
 np.random.seed(42)
+
+# 모집단을 직접 만들어 두었으므로 참 분산을 우리는 알고 있다.
 population = np.random.normal(170, 10, 1000)
 pop_var = np.var(population)
 
@@ -170,38 +190,50 @@ sample_size = 100
 biased_vars = np.empty(n_samples)
 unbiased_vars = np.empty(n_samples)
 
+# 같은 표본에서 n 으로 나눈 값과 n-1 로 나눈 값을 나란히 기록한다.
 for i in range(n_samples):
     sample = np.random.choice(population, size=sample_size, replace=False)
     biased_vars[i] = np.var(sample, ddof=0)
     unbiased_vars[i] = np.var(sample, ddof=1)
 
-print(f"Population variance:          {pop_var:.4f}")
-print(f"Mean of biased (ddof=0):      {biased_vars.mean():.4f}")
-print(f"Mean of unbiased (ddof=1):    {unbiased_vars.mean():.4f}")
+# 1만 번의 평균을 참값과 견준다. ddof=0 쪽만 아래로 치우쳐 있다.
+print(f"모분산            : {pop_var:.4f}")
+print(f"편향 추정 평균 (ddof=0): {biased_vars.mean():.4f}")
+print(f"불편 추정 평균 (ddof=1): {unbiased_vars.mean():.4f}")
 ```
 
 출력:
 
 ```
-Population variance:          95.7905
-Mean of biased (ddof=0):      94.9057
-Mean of unbiased (ddof=1):    95.8643
+모분산            : 95.7905
+편향 추정 평균 (ddof=0): 94.9057
+불편 추정 평균 (ddof=1): 95.8643
 ```
+
+</div>
 
 ### 시각화
 
+<div class="codebox" markdown>
+
+**예제 4.** 두 추정량의 분포 겹쳐 보기
+
 ```python
+# 두 추정값의 분포를 겹쳐 그리고 참값 자리에 세로선을 긋는다.
+# 두 분포의 모양은 같고 위치만 조금 다르다. 그 차이가 편향이다.
 fig, ax = plt.subplots(figsize=(8, 4))
-ax.hist(biased_vars, bins=40, alpha=0.5, label="Biased (ddof=0)", density=True)
-ax.hist(unbiased_vars, bins=40, alpha=0.5, label="Unbiased (ddof=1)", density=True)
+ax.hist(biased_vars, bins=40, alpha=0.5, label="편향 (ddof=0)", density=True)
+ax.hist(unbiased_vars, bins=40, alpha=0.5, label="불편 (ddof=1)", density=True)
 ax.axvline(pop_var, color="red", linestyle="--", lw=2,
-           label=f"True σ² = {pop_var:.1f}")
-ax.set_xlabel("Variance estimate")
-ax.set_title("Population vs Sample Variance")
+           label=f"참값 σ² = {pop_var:.1f}")
+ax.set_xlabel("분산 추정값")
+ax.set_title("모분산과 표본분산")
 ax.legend(fontsize=8)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Population vs Sample Variance](./img/descriptive_measures_advanced_179.png)
 

@@ -68,56 +68,77 @@ $$
 \text{Min} \quad Q_1 \quad \text{Median} \quad Q_3 \quad \text{Max}
 $$
 
+<div class="codebox" markdown>
+
+**예제 1.** 다섯 수치 요약과 상자그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 마지막 8 이 나머지에서 멀리 떨어져 있다.
 data = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
 
-quantiles = {"Min": 0, "Q1": 0.25, "Median": 0.5, "Q3": 0.75, "Max": 1}
+# 다섯 수치 요약은 분위수 다섯 개다. 0과 1이 각각 최솟값과 최댓값이 된다.
+quantiles = {"최솟값": 0, "제1사분위수": 0.25, "중앙값": 0.5,
+             "제3사분위수": 0.75, "최댓값": 1}
 
 for label, q in quantiles.items():
-    print(f"{label:6} : {np.quantile(data, q)}")
+    print(f"{label} : {np.quantile(data, q)}")
 
+# 상자그림은 이 다섯 수치를 그대로 그린 것이다. 상자의 위아래가 Q3와 Q1,
+# 가운데 선이 중앙값이고, 수염 밖의 점이 이상치로 찍힌다.
 fig, ax = plt.subplots(figsize=(2, 3))
 ax.boxplot(data)
-ax.set_title("Boxplot of Data")
+ax.set_title("상자그림")
 plt.show()
 ```
 
 출력:
 
 ```
-Min    : -2
-Q1     : 0.0
-Median : 1.0
-Q3     : 2.0
-Max    : 8
+최솟값 : -2
+제1사분위수 : 0.0
+중앙값 : 1.0
+제3사분위수 : 2.0
+최댓값 : 8
 ```
+
+</div>
 
 ### 비교 상자그림
 
 상자그림은 집단이나 조건에 걸쳐 분포를 비교할 때 특히 효과적이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 상자그림을 나란히 놓고 견주기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 표본크기를 키워 가며 잰 오차라고 하자. 셋 다 참값 1 근처를 겨냥한다.
 data_a = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
 data_b = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, -8]) * 0.5
 data_c = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 10, -7]) * 0.25
 
+# 상자그림 여럿을 한 축에 늘어놓으면 퍼짐이 어떻게 줄어드는지 한눈에 보인다.
 fig, ax = plt.subplots()
 ax.boxplot([data_a, data_b, data_c],
            labels=["$10^4$", "$5 \\cdot 10^4$", "$10^5$"])
+
+# 참값 1 을 가로선으로 그어 두면 상자가 어디로 모이는지 읽기 쉽다.
 ax.plot([0, 1, 2, 3, 4], [1, 1, 1, 1, 1],
-        label="FIM Delta", linestyle="--", color="r", alpha=0.7)
+        label="참값", linestyle="--", color="r", alpha=0.7)
 ax.legend()
 ax.set_ylim(-10.0, 10.0)
-ax.set_xlabel('Number of Samples')
-ax.set_ylabel('MC Delta')
+ax.set_xlabel("표본크기")
+ax.set_ylabel("추정오차")
 plt.show()
 ```
+
+</div>
 
 ![이상치와 지렛대점](./img/outliers_102.png)
 

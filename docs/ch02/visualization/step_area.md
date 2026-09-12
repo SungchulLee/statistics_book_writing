@@ -9,6 +9,10 @@
 
 기준금리는 통화정책회의 날에 바뀌고, 그날부터 다음 회의까지는 정확히 같은 값이다. 이 자료를 직선으로 이으면 **없던 변화를 만들어 낸다.**
 
+<div class="codebox" markdown>
+
+**예제 1.** 계단 그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -53,6 +57,8 @@ for ax in (a, b):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![계단 그림과 누적 면적 그림](./img/step_area.png)
 
@@ -105,6 +111,10 @@ plt.show()
 
 각 시점에서 전체를 100%로 정규화하면 **구성비의 변화**만 남는다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 100% 누적 면적 그림
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -135,6 +145,8 @@ print("C의 점유율:", (pct[2]).round(1))
 A의 점유율: [28.6 32.4 35.  37.5 42.9 46.5 47.8 52.1 52.9 55.6]
 C의 점유율: [57.1 51.4 45.  40.  35.7 30.2 26.1 20.8 17.6 14.8]
 ```
+
+</div>
 
 A의 점유율이 28.6%에서 55.6%로 두 배 가까이 오르고, C는 57.1%에서 14.8%로 떨어졌다. **누적 면적 그림에서는 잘 보이지 않던 C의 몰락이 여기서는 뚜렷하다.**
 

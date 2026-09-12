@@ -8,6 +8,10 @@
 
 ## 1. 같은 자료, 세 가지 오차막대
 
+<div class="codebox" markdown>
+
+**예제 1.** 같은 자료, 세 가지 오차막대
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -52,6 +56,8 @@ for g, m, s, e, c, nn in zip(gs, means, sds, ses, cis, ns):
   C: n=100  mean=10.82  SD=2.60  SE=0.26  95%CI=±0.51
   D: n=300  mean=12.94  SD=3.00  SE=0.17  95%CI=±0.34
 ```
+
+</div>
 
 ![세 가지 오차막대의 비교](./img/error_bars.png)
 

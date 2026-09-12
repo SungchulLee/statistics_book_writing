@@ -26,6 +26,10 @@ $$
 
 ### 범위 계산하기
 
+<div class="codebox" markdown>
+
+**예제 1.** 범위 구하기
+
 ```python
 import pandas as pd
 
@@ -48,6 +52,8 @@ data_range = 195000
 최솟값 4,000  최댓값 199,000
 관측값 50,000개 중 단 2개가 이 값을 정한다
 ```
+
+</div>
 
 ### 한계
 
@@ -74,6 +80,10 @@ $$
 자료 1, 3, 4, 6, 7, 9, 11에 대해 $Q_1 = 3$, $Q_3 = 9$이므로 $\text{IQR} = 9 - 3 = 6$이다.
 
 ### IQR과 표준편차: 소득 자료
+
+<div class="codebox" markdown>
+
+**예제 2.** IQR 과 표준편차 견주기
 
 ```python
 import pandas as pd
@@ -138,9 +148,15 @@ print(f"평균 - 표준편차 = {mean_income - std_dev:>9,.0f}   "
 평균 - 표준편차 =    35,888   (최솟값 4,000보다 큰가? 예)
 ```
 
+</div>
+
 ![Mean and Std Dev](./img/robust_63.png)
 
 ### 사분위수 계산하기
+
+<div class="codebox" markdown>
+
+**예제 3.** 사분위수 구하기
 
 ```python
 import pandas as pd
@@ -169,6 +185,8 @@ q2 = 62000.0
 q3 = 85000.0
 IQR = 40,000
 ```
+
+</div>
 
 ---
 
