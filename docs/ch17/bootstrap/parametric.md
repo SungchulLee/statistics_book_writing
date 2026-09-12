@@ -88,15 +88,16 @@ print("비모수 :", round(npb.std(ddof=1), 4))              # 0.8708
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 지수모형. 대기시간을 $x_1, \ldots, x_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$로 모형화하고 평균 $\mu = 1/\lambda$의 신뢰구간을 구하려 한다.
 
-**모수적 붓스트랩 절차:**
-
-1. 최대가능도추정값 $\hat{\lambda} = 1/\bar{x}$를 계산한다.
-2. $b = 1, \ldots, B$에 대해 $x_1^*, \ldots, x_n^* \overset{\text{iid}}{\sim} \text{Exp}(\hat{\lambda})$을 생성하고 $\bar{x}^{*(b)}$을 계산한다.
-3. $\{\bar{x}^{*(1)}, \ldots, \bar{x}^{*(B)}\}$의 분위수로 $\mu$의 신뢰구간을 만든다.
-
-지수분포가 오른쪽으로 치우쳐 있으므로 중간 정도의 $n$에서 $\bar{x}$의 표본분포도 치우친다. 모수적 붓스트랩은 이 치우침을 포착하여, $\mu$가 양수라는 사실을 존중하는 비대칭 신뢰구간을 만든다.
-
 </div>
+
+??? success "풀이"
+    **모수적 붓스트랩 절차:**
+
+    1. 최대가능도추정값 $\hat{\lambda} = 1/\bar{x}$를 계산한다.
+    2. $b = 1, \ldots, B$에 대해 $x_1^*, \ldots, x_n^* \overset{\text{iid}}{\sim} \text{Exp}(\hat{\lambda})$을 생성하고 $\bar{x}^{*(b)}$을 계산한다.
+    3. $\{\bar{x}^{*(1)}, \ldots, \bar{x}^{*(B)}\}$의 분위수로 $\mu$의 신뢰구간을 만든다.
+
+    지수분포가 오른쪽으로 치우쳐 있으므로 중간 정도의 $n$에서 $\bar{x}$의 표본분포도 치우친다. 모수적 붓스트랩은 이 치우침을 포착하여, $\mu$가 양수라는 사실을 존중하는 비대칭 신뢰구간을 만든다.
 
 ## 가능도비 검정을 위한 모수적 붓스트랩
 

@@ -99,38 +99,38 @@ $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } 
 
 **보기 2.** <span class="diff med" title="중간"></span> 소박한 분산추정량의 평균제곱오차. 소박한 분산추정량은 $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$이다.
 
-정규모집단에 대해:
-
 </div>
 
-**편향:** $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$이므로 $\text{Bias}(\tilde{S}^2) = -\sigma^2/n$.
+??? success "풀이"
+    정규모집단에 대해:
 
-**분산:** $\text{Var}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4$.
+    **편향:** $E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2$이므로 $\text{Bias}(\tilde{S}^2) = -\sigma^2/n$.
 
-**MSE:**
+    **분산:** $\text{Var}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4$.
 
-$$\text{MSE}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4 + \frac{\sigma^4}{n^2} = \frac{2n-1}{n^2}\sigma^4$$
+    **MSE:**
 
+    $$\text{MSE}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4 + \frac{\sigma^4}{n^2} = \frac{2n-1}{n^2}\sigma^4$$
 <div class="exbox" markdown>
 
 **보기 3.** <span class="diff med" title="중간"></span> 편향 분산추정량과 불편 분산추정량의 비교. Bessel 수정된 추정량은 $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$이다.
 
-정규모집단에 대해:
-
 </div>
 
-**불편 $S^2$의 MSE:** $\text{MSE}(S^2) = \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$
+??? success "풀이"
+    정규모집단에 대해:
 
-**편향 $\tilde{S}^2$의 MSE:** $\text{MSE}(\tilde{S}^2) = \frac{(2n-1)\sigma^4}{n^2}$
+    **불편 $S^2$의 MSE:** $\text{MSE}(S^2) = \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$
 
-비교하면 $\frac{2n-1}{n^2}$ 대 $\frac{2}{n-1}$이다.
+    **편향 $\tilde{S}^2$의 MSE:** $\text{MSE}(\tilde{S}^2) = \frac{(2n-1)\sigma^4}{n^2}$
 
-교차곱하면 $(2n-1)(n-1)$ 대 $2n^2$, 즉 $2n^2 - 3n + 1$ 대 $2n^2$이다.
+    비교하면 $\frac{2n-1}{n^2}$ 대 $\frac{2}{n-1}$이다.
 
-$n > 0$에서 $-3n + 1 < 0$이므로 $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$이다.
+    교차곱하면 $(2n-1)(n-1)$ 대 $2n^2$, 즉 $2n^2 - 3n + 1$ 대 $2n^2$이다.
 
-**편향추정량이 불편추정량보다 평균제곱오차가 작다!** 편향–분산 맞바꿈을 구체적으로 보여 주는 예이다. ($c \cdot \sum(X_i - \bar{X})^2$ 형태의 추정량 중에서) 평균제곱오차를 최소화하는 최적 추정량은 $n$이나 $n-1$이 아니라 $n+1$로 나눈다.
+    $n > 0$에서 $-3n + 1 < 0$이므로 $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$이다.
 
+    **편향추정량이 불편추정량보다 평균제곱오차가 작다!** 편향–분산 맞바꿈을 구체적으로 보여 주는 예이다. ($c \cdot \sum(X_i - \bar{X})^2$ 형태의 추정량 중에서) 평균제곱오차를 최소화하는 최적 추정량은 $n$이나 $n-1$이 아니라 $n+1$로 나눈다.
 <div class="exbox" markdown>
 
 **보기 4.** <span class="diff med" title="중간"></span> 평균제곱오차 최적 분산추정량. 상수 $c > 0$에 대해 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$을 생각하자.

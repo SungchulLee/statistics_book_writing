@@ -125,59 +125,59 @@ $$
 
 평균 차이에 대한 95% 신뢰구간을 구성하고 해석하라.
 
+
 </div>
 
-**풀이.**
+??? success "풀이"
 
-$$
-\bar{d} = \frac{9+5+8+6+6}{5} = 6.8
-$$
+    $$
+    \bar{d} = \frac{9+5+8+6+6}{5} = 6.8
+    $$
 
-$$
-s_d \approx 1.643, \qquad n = 5, \qquad df = 4, \qquad t_{0.025,4} \approx 2.776
-$$
+    $$
+    s_d \approx 1.643, \qquad n = 5, \qquad df = 4, \qquad t_{0.025,4} \approx 2.776
+    $$
 
-$$
-\text{SE} = \frac{1.643}{\sqrt{5}} \approx 0.735, \qquad \text{ME} = 2.776 \times 0.735 \approx 2.04
-$$
+    $$
+    \text{SE} = \frac{1.643}{\sqrt{5}} \approx 0.735, \qquad \text{ME} = 2.776 \times 0.735 \approx 2.04
+    $$
 
-$$
-\boxed{(4.76,\ 8.84)}
-$$
+    $$
+    \boxed{(4.76,\ 8.84)}
+    $$
 
-주로 쓰는 손과 그렇지 않은 손의 튕긴 횟수의 참 평균 차이가 $(4.76, 8.84)$ 안에 있다고 95% 신뢰한다.
+    주로 쓰는 손과 그렇지 않은 손의 튕긴 횟수의 참 평균 차이가 $(4.76, 8.84)$ 안에 있다고 95% 신뢰한다.
 
-```python
-import numpy as np
-from scipy import stats
+    ```python
+    import numpy as np
+    from scipy import stats
 
-differences = np.array([9, 5, 8, 6, 6])
-n = len(differences)
-mean_diff = np.mean(differences)
-std_diff = differences.std(ddof=1)
-standard_error = std_diff / np.sqrt(n)
+    differences = np.array([9, 5, 8, 6, 6])
+    n = len(differences)
+    mean_diff = np.mean(differences)
+    std_diff = differences.std(ddof=1)
+    standard_error = std_diff / np.sqrt(n)
 
-df = n - 1
-confidence_level = 0.95
-alpha = 1 - confidence_level
-t_critical = stats.t(df).ppf(1 - alpha / 2)
-margin_of_error = t_critical * standard_error
+    df = n - 1
+    confidence_level = 0.95
+    alpha = 1 - confidence_level
+    t_critical = stats.t(df).ppf(1 - alpha / 2)
+    margin_of_error = t_critical * standard_error
 
-# 같은 구간을 두 가지 방식으로 적었다.
-# 양끝을 적는 쪽은 결론을 읽기 좋고, 중심 ± 오차한계는 정밀도를 읽기 좋다.
-print(f"95% CI: ({mean_diff - margin_of_error:.2f}, {mean_diff + margin_of_error:.2f})")
-print(f"95% CI: {mean_diff:.2f} ± {margin_of_error:.2f}")
-```
+    # 같은 구간을 두 가지 방식으로 적었다.
+    # 양끝을 적는 쪽은 결론을 읽기 좋고, 중심 ± 오차한계는 정밀도를 읽기 좋다.
+    print(f"95% CI: ({mean_diff - margin_of_error:.2f}, {mean_diff + margin_of_error:.2f})")
+    print(f"95% CI: {mean_diff:.2f} ± {margin_of_error:.2f}")
+    ```
 
-출력:
+    출력:
 
-```
-95% CI: (4.76, 8.84)
-95% CI: 6.80 ± 2.04
-```
+    ```
+    95% CI: (4.76, 8.84)
+    95% CI: 6.80 ± 2.04
+    ```
 
-참가자가 다섯 명뿐인데도 구간이 0에서 멀찍이 떨어져 있다. 사람마다 손가락 튕기는 속도 자체는 크게 다르지만(37회에서 44회) **같은 사람 안에서의 차이**는 5에서 9로 훨씬 고르기 때문이다. 대응설계가 버는 것이 바로 이 부분이다.
-
+    참가자가 다섯 명뿐인데도 구간이 0에서 멀찍이 떨어져 있다. 사람마다 손가락 튕기는 속도 자체는 크게 다르지만(37회에서 44회) **같은 사람 안에서의 차이**는 5에서 9로 훨씬 고르기 때문이다. 대응설계가 버는 것이 바로 이 부분이다.
 <div class="exbox" markdown>
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 두 시계 (네 단계). 한 러닝 잡지가 GPS로 거리를 재는 시계 A와 B를 비교했다. 러너 다섯 명이 각각 두 시계를 동시에 차고 10 km 코스를 달렸다.
@@ -192,46 +192,47 @@ print(f"95% CI: {mean_diff:.2f} ± {margin_of_error:.2f}")
 
 평균 차이에 대한 95% 신뢰구간을 구성하고 해석하라.
 
+
 </div>
 
-**1단계: 차이 계산.** $d = [-0.3, -0.2, -0.1, 0.2, 0.1]$.
+??? success "풀이"
+    **1단계: 차이 계산.** $d = [-0.3, -0.2, -0.1, 0.2, 0.1]$.
 
-**2단계: 조건 확인.**
+    **2단계: 조건 확인.**
 
-- **단순확률표본:** 만족(잡지가 구독자를 무작위로 선정했다).
-- **독립성:** 만족(모집단에 구독자가 적어도 50명 있다).
-- **정규모집단:** $n = 5$로 작으므로 확인이 필요하다. 차이가 대칭이고 이상점이 없으므로 진행해도 안전하다.
+    - **단순확률표본:** 만족(잡지가 구독자를 무작위로 선정했다).
+    - **독립성:** 만족(모집단에 구독자가 적어도 50명 있다).
+    - **정규모집단:** $n = 5$로 작으므로 확인이 필요하다. 차이가 대칭이고 이상점이 없으므로 진행해도 안전하다.
 
-**3단계: 구간 구성.**
+    **3단계: 구간 구성.**
 
-```python
-import numpy as np
-from scipy import stats
+    ```python
+    import numpy as np
+    from scipy import stats
 
-watch_A = np.array([9.8, 9.8, 10.1, 10.1, 10.2])
-watch_B = np.array([10.1, 10, 10.2, 9.9, 10.1])
-d = watch_A - watch_B
+    watch_A = np.array([9.8, 9.8, 10.1, 10.1, 10.2])
+    watch_B = np.array([10.1, 10, 10.2, 9.9, 10.1])
+    d = watch_A - watch_B
 
-d_bar = d.mean()
-s = d.std(ddof=1)
-n = d.shape[0]
-df = n - 1
+    d_bar = d.mean()
+    s = d.std(ddof=1)
+    n = d.shape[0]
+    df = n - 1
 
-confidence_level = 0.95
-alpha = 1 - confidence_level
-t_star = stats.t(df).ppf(1 - alpha / 2)
-margin_of_error = t_star * s / np.sqrt(n)
-print(f"{confidence_level:.0%} CI: {d_bar:.4f} ± {margin_of_error:.4f}")
-```
+    confidence_level = 0.95
+    alpha = 1 - confidence_level
+    t_star = stats.t(df).ppf(1 - alpha / 2)
+    margin_of_error = t_star * s / np.sqrt(n)
+    print(f"{confidence_level:.0%} CI: {d_bar:.4f} ± {margin_of_error:.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-95% CI: -0.0600 ± 0.2575
-```
+    ```
+    95% CI: -0.0600 ± 0.2575
+    ```
 
-**4단계: 구간 해석.** 95% 신뢰수준에서 두 시계가 보고한 거리의 평균 차이는 구간 $(-0.32, 0.20)$ km 안에 있을 것으로 본다. 구간이 0을 포함하므로 시계 A와 B가 보고한 거리 사이에 유의한 차이는 없다.
-
+    **4단계: 구간 해석.** 95% 신뢰수준에서 두 시계가 보고한 거리의 평균 차이는 구간 $(-0.32, 0.20)$ km 안에 있을 것으로 본다. 구간이 0을 포함하므로 시계 A와 B가 보고한 거리 사이에 유의한 차이는 없다.
 ---
 
 ## 모의실험: 대응 평균 신뢰구간의 포함확률

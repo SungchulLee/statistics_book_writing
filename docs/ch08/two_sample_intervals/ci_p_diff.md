@@ -113,38 +113,38 @@ confidence_interval = (-0.011897024279429055, 0.171897024279429)
 
 $p_N - p_S$의 90% 신뢰구간을 구성하라.
 
+
 </div>
 
-**풀이.**
+??? success "풀이"
 
-```python
-import numpy as np
-from scipy import stats
+    ```python
+    import numpy as np
+    from scipy import stats
 
-n_1 = 120  # north
-n_2 = 140  # south
-p_1_hat = 54 / n_1
-p_2_hat = 77 / n_2
+    n_1 = 120  # north
+    n_2 = 140  # south
+    p_1_hat = 54 / n_1
+    p_2_hat = 77 / n_2
 
-confidence_level = 0.90
-alpha = 1 - confidence_level
-# 앞에서는 ppf(1 - alpha/2)를 썼고 여기서는 -ppf(alpha/2)를 썼다.
-# 표준정규가 0을 중심으로 대칭이라 두 값이 같다.
-z_star = -stats.norm().ppf(alpha / 2)
-margin_of_error = z_star * np.sqrt(
-    p_1_hat * (1 - p_1_hat) / n_1 + p_2_hat * (1 - p_2_hat) / n_2
-)
-print(f"90% CI: {p_1_hat - p_2_hat:.4f} ± {margin_of_error:.4f}")
-```
+    confidence_level = 0.90
+    alpha = 1 - confidence_level
+    # 앞에서는 ppf(1 - alpha/2)를 썼고 여기서는 -ppf(alpha/2)를 썼다.
+    # 표준정규가 0을 중심으로 대칭이라 두 값이 같다.
+    z_star = -stats.norm().ppf(alpha / 2)
+    margin_of_error = z_star * np.sqrt(
+        p_1_hat * (1 - p_1_hat) / n_1 + p_2_hat * (1 - p_2_hat) / n_2
+    )
+    print(f"90% CI: {p_1_hat - p_2_hat:.4f} ± {margin_of_error:.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-90% CI: -0.1000 ± 0.1018
-```
+    ```
+    90% CI: -0.1000 ± 0.1018
+    ```
 
-$\hat p_N = 0.450$, $\hat p_S = 0.550$으로 차이가 정확히 $-0.10$이다. 90% 구간은 $(-0.202, 0.002)$로 0을 아슬아슬하게 담는다. 표본 260개로는 10%p 차이도 잡아내기 어렵다는 뜻이다. 비율의 차이는 평균의 차이보다 훨씬 큰 표본을 요구한다.
-
+    $\hat p_N = 0.450$, $\hat p_S = 0.550$으로 차이가 정확히 $-0.10$이다. 90% 구간은 $(-0.202, 0.002)$로 0을 아슬아슬하게 담는다. 표본 260개로는 10%p 차이도 잡아내기 어렵다는 뜻이다. 비율의 차이는 평균의 차이보다 훨씬 큰 표본을 요구한다.
 ---
 
 ## 모의실험: 두 비율 차이 신뢰구간의 포함확률
