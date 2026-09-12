@@ -36,179 +36,200 @@
 }
 
 /* ===================================================================
-   블록 상자 체계 — 정의 · 정리 · 증명 · 보기 · 문제 · 연습문제
-   고등학교 수학 교재와 같은 규칙을 쓴다.
-     회색 상자(.defn)   정의
-     보라 상자(.thmbox) 정리, 바로 아래 ??? proof "증명" 이 붙는다
-     초록 상자          보기(.exbox) · 문제(.probox) · 연습문제(.drillbox)
-                        와 거기 딸린 ??? success "풀이"
+   블록 상자 체계 — 정의 · 정리 · 예제 · 보기 · 문제 · 연습문제
+
+     회색 상자(.defn)    정의
+     보라 상자(.thmbox)  정리, 바로 아래 ??? proof "증명" 이 붙는다
+     파랑 상자(.codebox) 예제 — 돌려 보는 코드 시연
+     초록 상자           보기(.exbox) · 문제(.probox) · 연습문제(.drillbox)
+                         와 거기 딸린 ??? success "풀이"
+
+   ── 값을 바꾸려면 아래 :root 한 곳만 고치면 된다 ──────────────────
+   상자 규칙은 색을 `--box-accent` 로 받는 틀 하나뿐이고, 각 상자는 자기
+   색만 그 틀에 넘긴다. 그래서 색·두께·여백을 바꾸면 여섯 상자가 한꺼번에
+   따라 바뀐다. 본문 마크다운은 건드릴 필요가 없다.
+
+   색을 `#rrggbb` 가 아니라 `R, G, B` 세 값으로 적어 둔 이유는, 같은 색을
+   테두리(진하게)와 바탕(아주 옅게)에 서로 다른 투명도로 써야 하기 때문이다.
+     rgb(var(--box-accent))              → 그 색 그대로
+     rgba(var(--box-accent), 0.025)      → 같은 색의 옅은 바탕
    =================================================================== */
 
-/* 증명 전용 admonition — 풀이(success)와 구별되는 보라색 */
 :root {
+    /* ── 블록 색 (R, G, B) ── */
+    --box-defn: 122, 122, 140;      /* 정의   회색 */
+    --box-thm: 112, 72, 196;        /* 정리   보라 */
+    --box-code: 43, 108, 176;       /* 예제   파랑 */
+    --box-work: 46, 158, 79;        /* 보기·문제·연습문제 초록 */
+
+    /* ── 상자 모양 ── */
+    --box-margin: 1.6em;            /* 위아래 바깥 여백 */
+    --box-pad: 0.1rem 0.8rem;       /* 안쪽 여백 (세로 가로) */
+    --box-rule: 0.2rem;             /* 왼쪽 굵은 띠의 두께 */
+    --box-hair: 0.05rem;            /* 나머지 세 면의 두께 */
+    --box-round: 0 0.1rem 0.1rem 0; /* 모서리 (왼쪽은 띠라서 각지게) */
+    --box-edge: 0.45;               /* 테두리 진하기 */
+    --box-fill: 0.025;              /* 바탕 진하기 */
+    --box-inner: 0.6rem;            /* 상자 안 첫·끝 요소의 여백 */
+    --box-gap: 0.8em;               /* 상자와 바로 아래 증명/풀이 사이 */
+
+    /* ── 난이도 점 ── */
+    --diff-size: 0.62em;            /* 점의 지름 */
+    --diff-round: 50%;              /* 50% 동그라미 · 0 네모 */
+    --diff-lead: 0.3em;             /* 도입어와 점 사이 */
+    --diff-trail: 0.15em;           /* 점과 본문 사이 */
+    --diff-easy: 46, 158, 79;       /* 쉬움   초록 */
+    --diff-med: 227, 160, 8;        /* 중간   노랑 */
+    --diff-hard: 217, 59, 43;       /* 어려움 빨강 */
+
+    /* ── 상자 안 제목(정리·예제)의 글자 ── */
+    --boxhead-size: 1em;
+    --boxhead-weight: 700;
+
     --md-admonition-icon--proof: url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"%3E%3Cpath d="M6 6h12v12H6z"/%3E%3C/svg%3E');
 }
 
-.md-typeset .admonition.proof,
+/* 어두운 화면에서는 점이 묻히지 않도록 한 단계 밝은 값을 쓴다.
+   (팔레트 토글을 넣으면 이 블록을 [data-md-color-scheme="slate"] 로 바꾼다.) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --diff-easy: 76, 194, 110;
+        --diff-med: 240, 180, 41;
+        --diff-hard: 239, 106, 92;
+    }
+}
+
+/* ── 상자 틀 하나 ──────────────────────────────────────────────────
+   여섯 상자가 이 규칙 하나를 함께 쓰고, 색만 --box-accent 로 받는다. */
+.md-typeset .defn,
+.md-typeset .thmbox,
+.md-typeset .codebox,
+.md-typeset .exbox,
+.md-typeset .probox,
+.md-typeset .drillbox {
+    margin: var(--box-margin) 0;
+    padding: var(--box-pad);
+    border: var(--box-hair) solid rgba(var(--box-accent), var(--box-edge));
+    border-left: var(--box-rule) solid rgb(var(--box-accent));
+    border-radius: var(--box-round);
+    background-color: rgba(var(--box-accent), var(--box-fill));
+}
+
+.md-typeset .defn > :first-child,
+.md-typeset .thmbox > :first-child,
+.md-typeset .codebox > :first-child,
+.md-typeset .exbox > :first-child,
+.md-typeset .probox > :first-child,
+.md-typeset .drillbox > :first-child {
+    margin-top: var(--box-inner);
+}
+
+.md-typeset .defn > :last-child,
+.md-typeset .thmbox > :last-child,
+.md-typeset .codebox > :last-child,
+.md-typeset .exbox > :last-child,
+.md-typeset .probox > :last-child,
+.md-typeset .drillbox > :last-child {
+    margin-bottom: var(--box-inner);
+}
+
+/* ── 각 상자가 틀에 넘기는 것은 색 하나뿐이다 ── */
+.md-typeset .defn {
+    --box-accent: var(--box-defn);
+}
+
+.md-typeset .thmbox {
+    --box-accent: var(--box-thm);
+}
+
+.md-typeset .codebox {
+    --box-accent: var(--box-code);
+}
+
+.md-typeset .exbox,
+.md-typeset .probox,
+.md-typeset .drillbox {
+    --box-accent: var(--box-work);
+}
+
+/* 문항·정리 바로 아래 붙는 풀이/증명을 한 덩어리로 읽히게 간격을 좁힌다 */
+.md-typeset .thmbox + details,
+.md-typeset .exbox + details,
+.md-typeset .probox + details,
+.md-typeset .drillbox + details,
 .md-typeset details.proof {
-    border-color: #7048c4;
+    margin-top: var(--box-gap);
 }
 
-.md-typeset .proof > .admonition-title,
-.md-typeset .proof > summary {
-    background-color: rgba(112, 72, 196, 0.025);
-}
-
-.md-typeset .proof > .admonition-title::before,
-.md-typeset .proof > summary::before {
-    background-color: #7048c4;
-    -webkit-mask-image: var(--md-admonition-icon--proof);
-    mask-image: var(--md-admonition-icon--proof);
-}
-
-/* 난이도 표시 — 색 점 하나로만 나타낸다 (초록 쉬움 · 노랑 중간 · 빨강 어려움) */
+/* ── 난이도 점 — 색 점 하나로만 나타낸다 ── */
 .md-typeset .diff {
     display: inline-block;
-    width: 0.62em;
-    height: 0.62em;
-    margin: 0 0.15em 0 0.3em;
-    border-radius: 50%;
+    width: var(--diff-size);
+    height: var(--diff-size);
+    margin: 0 var(--diff-trail) 0 var(--diff-lead);
+    border-radius: var(--diff-round);
     vertical-align: 0.08em;
+    background-color: rgb(var(--diff-accent));
 }
 
-.md-typeset .diff.easy { background-color: #2e9e4f; }
-.md-typeset .diff.med  { background-color: #e3a008; }
-.md-typeset .diff.hard { background-color: #d93b2b; }
-
-@media (prefers-color-scheme: dark) {
-    .md-typeset .diff.easy { background-color: #4cc26e; }
-    .md-typeset .diff.med  { background-color: #f0b429; }
-    .md-typeset .diff.hard { background-color: #ef6a5c; }
+.md-typeset .diff.easy {
+    --diff-accent: var(--diff-easy);
 }
 
-/* 정리와 예제는 오른쪽 목차에서 바로 갈 수 있도록 제목(h3)으로 적되, 본문에서는
-   다른 블록과 같은 크기의 굵은 도입어처럼 보이게 한다. 제목과 주장은
-   .thmbox / .codebox 상자가 감싸고, 증명은 상자 밖에 붙는다.
+.md-typeset .diff.med {
+    --diff-accent: var(--diff-med);
+}
+
+.md-typeset .diff.hard {
+    --diff-accent: var(--diff-hard);
+}
+
+/* ── 상자 안 제목 ──────────────────────────────────────────────────
+   정리와 예제는 오른쪽 목차에서 바로 갈 수 있도록 제목(h3)으로 적되,
+   본문에서는 다른 블록과 같은 크기의 굵은 도입어처럼 보이게 한다.
    헤딩이므로 제목에 LaTeX 를 쓰지 않는다 — MathJax 가 목차를 처리하지 않아
    `\(n\)` 같은 날글자가 그대로 보인다.
    보기·문제·연습문제는 레퍼런스와 같이 굵은 도입어로 적는다(헤딩이 아니다). */
 .md-typeset h3.thm,
 .md-typeset h3.eg {
-    font-size: 1em;
-    font-weight: 700;
+    font-size: var(--boxhead-size);
+    font-weight: var(--boxhead-weight);
     line-height: 1.6;
     letter-spacing: normal;
-    margin: 0.6rem 0;
+    margin: var(--box-inner) 0;
     color: inherit;
 }
 
-/* 정리의 주장을 두르는 상자 — 정의 상자와 같은 모양에 색만 보라이다.
-   바로 아래 붙는 ??? proof "증명" 과 한 덩어리로 읽히도록 간격을 좁힌다. */
-.md-typeset .thmbox {
-    margin: 1.6em 0;
-    padding: 0.1rem 0.8rem;
-    border: 0.05rem solid rgba(112, 72, 196, 0.45);
-    border-left: 0.2rem solid #7048c4;
-    border-radius: 0 0.1rem 0.1rem 0;
-    background-color: rgba(112, 72, 196, 0.025);
-}
-
-.md-typeset .thmbox > :first-child {
-    margin-top: 0.6rem;
-}
-
-.md-typeset .thmbox > :last-child {
-    margin-bottom: 0.6rem;
-}
-
+/* ── 딸린 admonition 의 색을 상자와 맞춘다 ──────────────────────────
+   증명(proof)은 정리와 같은 보라, 풀이(success)는 문항과 같은 초록이다. */
+.md-typeset .admonition.proof,
 .md-typeset details.proof {
-    margin-top: 0.8em;
+    border-color: rgb(var(--box-thm));
 }
 
-/* 예제 — 돌려 보는 코드 시연을 담는다. 읽고 푸는 자리(보기·문제·연습문제, 초록)
-   와도, 읽고 받아들이는 자리(정의 회색 · 정리 보라)와도 구별되도록 파랑을 쓴다.
-   코드블록과 그 출력이 통째로 들어가므로 상자가 길어질 수 있다. */
-.md-typeset .codebox {
-    margin: 1.6em 0;
-    padding: 0.1rem 0.8rem;
-    border: 0.05rem solid rgba(43, 108, 176, 0.45);
-    border-left: 0.2rem solid #2b6cb0;
-    border-radius: 0 0.1rem 0.1rem 0;
-    background-color: rgba(43, 108, 176, 0.025);
+.md-typeset .proof > .admonition-title,
+.md-typeset .proof > summary {
+    background-color: rgba(var(--box-thm), var(--box-fill));
 }
 
-.md-typeset .codebox > :first-child {
-    margin-top: 0.6rem;
+.md-typeset .proof > .admonition-title::before,
+.md-typeset .proof > summary::before {
+    background-color: rgb(var(--box-thm));
+    -webkit-mask-image: var(--md-admonition-icon--proof);
+    mask-image: var(--md-admonition-icon--proof);
 }
 
-.md-typeset .codebox > :last-child {
-    margin-bottom: 0.6rem;
-}
-
-/* 정의는 증명이 딸리지 않아 아래를 닫아 줄 블록이 없으므로, 띠가 아니라
-   네 면을 두른 상자로 적어 기호를 세우는 자리가 한눈에 보이게 한다.
-   정리(보라)와 구별되도록 색은 한 단계 여린 회색을 쓴다. */
-.md-typeset .defn {
-    margin: 1.6em 0;
-    padding: 0.1rem 0.8rem;
-    border: 0.05rem solid rgba(122, 122, 140, 0.5);
-    border-left: 0.2rem solid #7a7a8c;
-    border-radius: 0 0.1rem 0.1rem 0;
-    background-color: rgba(122, 122, 140, 0.025);
-}
-
-.md-typeset .defn > :first-child {
-    margin-top: 0.6rem;
-}
-
-.md-typeset .defn > :last-child {
-    margin-bottom: 0.6rem;
-}
-
-/* 보기·문제·연습문제 — 셋 다 같은 초록 상자에 담고, 딸린 풀이도 같은 초록으로
-   맞춘다. 「초록이면 독자가 손을 대는 자리」 라는 한 갈래로 읽히게 한다. */
-.md-typeset .exbox,
-.md-typeset .probox,
-.md-typeset .drillbox {
-    margin: 1.6em 0;
-    padding: 0.1rem 0.8rem;
-    border: 0.05rem solid rgba(46, 158, 79, 0.45);
-    border-left: 0.2rem solid #2e9e4f;
-    border-radius: 0 0.1rem 0.1rem 0;
-    background-color: rgba(46, 158, 79, 0.025);
-}
-
-.md-typeset .exbox > :first-child,
-.md-typeset .probox > :first-child,
-.md-typeset .drillbox > :first-child {
-    margin-top: 0.6rem;
-}
-
-.md-typeset .exbox > :last-child,
-.md-typeset .probox > :last-child,
-.md-typeset .drillbox > :last-child {
-    margin-bottom: 0.6rem;
-}
-
-/* 문항 바로 아래 붙는 풀이를 한 덩어리로 읽히게 간격을 좁힌다 */
-.md-typeset .exbox + details,
-.md-typeset .probox + details,
-.md-typeset .drillbox + details {
-    margin-top: 0.8em;
-}
-
-/* 풀이(??? success)의 초록을 상자와 같은 값으로 맞춘다 */
 .md-typeset .admonition.success,
 .md-typeset details.success {
-    border-color: #2e9e4f;
+    border-color: rgb(var(--box-work));
 }
 
 .md-typeset .success > .admonition-title,
 .md-typeset .success > summary {
-    background-color: rgba(46, 158, 79, 0.025);
+    background-color: rgba(var(--box-work), var(--box-fill));
 }
 
 .md-typeset .success > .admonition-title::before,
 .md-typeset .success > summary::before {
-    background-color: #2e9e4f;
+    background-color: rgb(var(--box-work));
 }
