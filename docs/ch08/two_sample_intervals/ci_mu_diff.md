@@ -53,7 +53,9 @@ $$
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
 $$
 
-### Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 두 평균 차이의 신뢰구간 계산
 
 ```python
 import numpy as np
@@ -90,6 +92,8 @@ print(f"{confidence_interval = }")
 ```
 confidence_interval = (0.22892977648461788, 19.77107022351538)
 ```
+
+</div>
 
 구간이 0을 아슬아슬하게 벗어난다. 점추정값은 차이가 10이라고 말하지만, 구간은 0.23만큼 작을 수도 19.77만큼 클 수도 있다고 말한다. "차이가 있다"까지는 말할 수 있어도 "얼마나 있다"는 거의 말하지 못하는 자료다.
 
@@ -130,10 +134,16 @@ confidence_interval = (0.22892977648461788, 19.77107022351538)
 
 ## 모의실험: 이표본 평균 신뢰구간의 포함확률
 
+<div class="codebox" markdown>
+
+**예제 2.** 네 방법의 포함확률 비교
+
 ```python
 #!/usr/bin/env python3
-"""
-Two-sample mean CI simulation: Welch, pooled, z_known, z_plugin.
+"""두 평균의 차이에 대한 신뢰구간을 네 방법으로 만들어 포함확률을 비교한다.
+
+Welch 는 두 분산이 다를 수 있다고 보고, 합동(pooled)은 같다고 본다.
+분산이 실제로 다를 때 합동 방법의 포함확률이 어떻게 무너지는지가 요점이다.
 """
 
 import numpy as np
@@ -211,6 +221,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+</div>
 
 ![100 Two-Sample Mean CIs (welch) | n1=12, n2=10, CL=95%](./img/ci_mu_diff_123.png)
 

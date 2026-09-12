@@ -174,10 +174,16 @@ $$
 
 ### 평균 신뢰구간 모의실험
 
+<div class="codebox" markdown>
+
+**예제 1.** 평균 신뢰구간의 포함확률 모의실험
+
 ```python
 #!/usr/bin/env python3
-"""
-Mean CI simulation: Z (known σ), Z (plug-in s), and t (σ unknown).
+"""평균 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+
+sigma 를 아는 z, sigma 자리에 s 를 꽂아 넣은 z, 그리고 t 세 가지다.
+가운데 방법이 왜 명목수준에 못 미치는지가 이 모의실험의 요점이다.
 
 Usage:
     python mean_ci_simulation.py --method t --n-sim 100 --n 10 --alpha 0.05
@@ -278,6 +284,8 @@ if __name__ == "__main__":
     main()
 ```
 
+</div>
+
 ![100 t CIs | n=10, CL=95%](./img/coverage_177.png)
 
 가로선 하나가 표본 하나에서 얻은 신뢰구간이고, 세로 점선이 참 평균이다. 참값을 놓친 구간만 빨간색이다. 기본 설정($t$-구간, $n = 10$, 100회)에서 실패는 4개, 즉 포함확률 96%로 명목 95%에 가깝다.
@@ -286,10 +294,16 @@ if __name__ == "__main__":
 
 ### 비율 신뢰구간 모의실험
 
+<div class="codebox" markdown>
+
+**예제 2.** 비율 신뢰구간의 포함확률 모의실험
+
 ```python
 #!/usr/bin/env python3
-"""
-Proportion CI simulation: Wald, Wilson, Agresti-Coull, Clopper-Pearson.
+"""비율 신뢰구간을 네 방법으로 만들어 포함확률을 비교한다.
+
+Wald 는 교과서에 가장 먼저 나오지만 실제 포함확률이 가장 나쁘다.
+Wilson 과 Agresti-Coull 이 그 대안이고, Clopper-Pearson 은 보수적이다.
 
 Usage:
     python proportion_ci_simulation.py  # defaults to Wald
@@ -362,6 +376,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+</div>
 
 ![100 WALD Proportion CIs | n=20, p=0.200, CL=95%](./img/coverage_283.png)
 

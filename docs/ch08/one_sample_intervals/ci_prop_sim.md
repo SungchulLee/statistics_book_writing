@@ -52,7 +52,9 @@ $$
 
 보수적이다: 실제 포함확률이 적어도 $(1-\alpha)100\%$이지만 구간이 넓어지는 경향이 있다.
 
-## Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 비율 신뢰구간 모의실험
 
 ```python
 import numpy as np
@@ -109,11 +111,20 @@ print(f"{method} coverage: {coverage_pct:.1f}%")
 wilson coverage: 96.0%
 ```
 
+</div>
+
 같은 자료(같은 시드)에 `method`만 바꿔 세어 보면 Wald 91.0%, Agresti–Coull 96.0%, Clopper–Pearson 99.0%가 된다. Wald만 명목값 아래로 내려가고, Clopper–Pearson은 보수적인 만큼 위로 넘친다.
 
 ### 구간의 시각화
 
+<div class="codebox" markdown>
+
+**예제 2.** 구간 100개를 한 그림에
+
 ```python
+# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
 fig, ax = plt.subplots(figsize=(12, 12))
 for i in range(n_simulations):
     color = "k" if covered[i] else "r"
@@ -127,6 +138,8 @@ ax.set_xlabel("Proportion value")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![100 WILSON CIs | n=20, p=0.2, CL=95%](./img/ci_prop_sim_108.png)
 

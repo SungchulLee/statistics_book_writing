@@ -52,7 +52,9 @@ $$
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \cdot \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
 $$
 
-## Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 두 평균 차이 구간 모의실험
 
 ```python
 import numpy as np
@@ -115,11 +117,20 @@ print(f"{method} coverage: {coverage_pct:.1f}%")
 welch coverage: 97.0%
 ```
 
+</div>
+
 같은 자료에 `method`만 바꾸면 합동 $t$ 95%, $z$-known 94%, $z$-plugin 93%가 나온다. 다만 100회짜리 모의실험의 표준오차가 2.2%p나 되므로 이 차이를 방법의 우열로 읽으면 안 된다. 방법 사이의 진짜 차이를 보려면 아래 연습문제 3처럼 10,000회가 필요하다.
 
 ### 구간의 시각화
 
+<div class="codebox" markdown>
+
+**예제 2.** 구간 100개를 한 그림에
+
 ```python
+# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
 fig, ax = plt.subplots(figsize=(12, 12))
 for i in range(n_simulations):
     color = "k" if covered[i] else "r"
@@ -134,6 +145,8 @@ ax.set_xlabel("Difference of means")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![100 welch CIs | n1=12, n2=10, CL=95%](./img/ci_diff_means_sim_114.png)
 

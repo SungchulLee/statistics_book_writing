@@ -42,7 +42,9 @@ $$
 \bar{x}_d \pm z_{\alpha/2}\frac{s_d}{\sqrt{n}} \quad (s_d \text{를 대입, } n \text{이 큰 경우})
 $$
 
-### Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 대응표본 평균 차이의 신뢰구간
 
 ```python
 import numpy as np
@@ -71,6 +73,8 @@ print(f"{confidence_interval = }")
 ```
 confidence_interval = (0.5163777394551403, 4.28362226054486)
 ```
+
+</div>
 
 구간이 0을 담지 않으므로 치료 전후에 차이가 있다는 증거가 된다.
 
@@ -237,10 +241,16 @@ $$
 
 ## 모의실험: 대응 평균 신뢰구간의 포함확률
 
+<div class="codebox" markdown>
+
+**예제 2.** 대응표본 신뢰구간의 포함확률
+
 ```python
 #!/usr/bin/env python3
-"""
-Paired-sample mean CI simulation: t, z_known, z_plugin.
+"""대응표본 평균 차이의 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+
+짝마다 차이를 먼저 구하고 나면 일표본 문제가 된다. 짝지음이 없애 주는
+개체 간 변동이 구간을 얼마나 좁히는지 함께 본다.
 """
 
 import numpy as np
@@ -320,6 +330,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+</div>
 
 ![100 Paired t CIs for μ_D | n=12, ρ=0.60, CL=95%](./img/ci_mu_paired_232.png)
 

@@ -44,7 +44,9 @@ $$
 
 $n \le 0.10 N$이면 이 수정은 무시할 만하다.
 
-## Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 세 방법으로 만든 평균 신뢰구간
 
 ```python
 import numpy as np
@@ -103,11 +105,20 @@ print(f"t-interval coverage: {coverage_pct:.1f}%")
 t-interval coverage: 96.0%
 ```
 
+</div>
+
 100회만 돌렸으므로 이 값 자체의 표준오차가 $\sqrt{0.95 \times 0.05/100} \approx 2.2$%p다. 96.0%는 95%와 구별되지 않는다.
 
 ### 구간의 시각화
 
+<div class="codebox" markdown>
+
+**예제 2.** 구간 100개를 한 그림에
+
 ```python
+# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
 fig, ax = plt.subplots(figsize=(12, 12))
 for i in range(n_sim):
     color = "k" if covered[i] else "r"
@@ -122,6 +133,8 @@ ax.set_xlabel("Mean value")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![100 t CIs | n=10, CL=95%](./img/ci_mean_sim_95.png)
 

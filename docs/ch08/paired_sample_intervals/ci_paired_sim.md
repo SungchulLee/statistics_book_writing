@@ -46,7 +46,9 @@ $$
 
 $\rho > 0$(양의 짝 내 상관)이면 $D$의 분산이 $\sigma_X^2 + \sigma_Y^2$보다 **줄어든다**. 이것이 짝짓기의 통계적 이점이다: 피험자 간 변동성의 상당 부분이 상쇄되어 신뢰구간이 좁아진다.
 
-## Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 대응표본 구간 모의실험
 
 ```python
 import numpy as np
@@ -113,9 +115,18 @@ print(f"Paired {method} coverage: {coverage_pct:.1f}%")
 Paired t coverage: 95.0%
 ```
 
+</div>
+
 ### 구간의 시각화
 
+<div class="codebox" markdown>
+
+**예제 2.** 구간 100개를 한 그림에
+
 ```python
+# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
 fig, ax = plt.subplots(figsize=(12, 12))
 for i in range(n_simulations):
     color = "k" if covered[i] else "r"
@@ -130,6 +141,8 @@ ax.set_xlabel("Mean difference")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![100 Paired t CIs | n=12, rho=0.6, CL=95%](./img/ci_paired_sim_110.png)
 

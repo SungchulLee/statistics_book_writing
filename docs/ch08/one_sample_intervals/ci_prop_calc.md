@@ -54,9 +54,11 @@ $$
 
 $k = 0$이면 하한을 0으로, $k = n$이면 상한을 1로 두는 관례를 따른다. 이 구간은 모든 $p$에서 적어도 $(1-\alpha)100\%$의 포함확률을 보장하지만 (필요보다 넓게) 보수적이다.
 
-## Python 코드
-
 ### CSV에서 자료 읽기
+
+<div class="codebox" markdown>
+
+**예제 1.** CSV에서 자료 읽기
 
 ```python
 import csv
@@ -99,7 +101,13 @@ print(f"n = {len(y)}, k = {int(y.sum())}, p_hat = {y.mean()}")
 n = 10, k = 3, p_hat = 0.3
 ```
 
+</div>
+
 ### 신뢰구간의 계산
+
+<div class="codebox" markdown>
+
+**예제 2.** 비율 신뢰구간 계산기 — 네 방법
 
 ```python
 import math
@@ -162,6 +170,8 @@ print(f"99% Clopper-Pearson CI: ({lo:.4f}, {hi:.4f})")
 95% Wilson CI: (0.1430, 0.3741)
 99% Clopper-Pearson CI: (0.1056, 0.4255)
 ```
+
+</div>
 
 두 구간의 신뢰수준이 다르므로 너비를 곧바로 비교할 수는 없다. 같은 95%로 맞추면 Wilson이 $(0.1430, 0.3741)$, Clopper–Pearson이 $(0.1306, 0.3817)$로 후자가 약 9% 넓다. 이것이 "모든 $p$에서 95% 아래로 내려가지 않는다"는 보장의 값이다.
 

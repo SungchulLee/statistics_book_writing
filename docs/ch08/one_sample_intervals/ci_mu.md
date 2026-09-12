@@ -45,7 +45,9 @@ n \le 0.1N \text{ (i.i.d.)}
 \end{cases}
 $$
 
-### Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 일표본 z 신뢰구간 계산
 
 ```python
 import scipy.stats as stats
@@ -74,6 +76,8 @@ print(f"{confidence_interval = }")
 ```
 confidence_interval = (81.28122980617263, 88.71877019382737)
 ```
+
+</div>
 
 ---
 
@@ -110,7 +114,9 @@ n \le 0.1N \text{ (i.i.d.)}
 \end{cases}
 $$
 
-### Python 코드
+<div class="codebox" markdown>
+
+**예제 2.** 일표본 t 신뢰구간 계산
 
 ```python
 import scipy.stats as stats
@@ -139,6 +145,8 @@ print(f"{confidence_interval = }")
 ```
 confidence_interval = (46.697762301395166, 53.302237698604834)
 ```
+
+</div>
 
 $t_{0.025,\,24} = 2.0639$로 $z_{0.025} = 1.9600$보다 5.3% 크다. 같은 $\bar x$와 같은 산포에서 구간이 그만큼 넓어지며, 이것이 $\sigma$를 모른다는 사실의 값이다.
 

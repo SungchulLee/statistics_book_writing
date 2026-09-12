@@ -34,7 +34,9 @@ $$
 
 비율의 표본분포가 근사적으로 정규가 되도록 표본크기 $n$이 충분히 커야 한다.
 
-### Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 비율의 신뢰구간 계산
 
 ```python
 import numpy as np
@@ -61,6 +63,8 @@ print(f"{confidence_interval = }")
 ```
 confidence_interval = (0.5321048559554297, 0.6678951440445703)
 ```
+
+</div>
 
 타당성 조건 $n\hat p = 120 \ge 10$과 $n(1-\hat p) = 80 \ge 10$을 넉넉히 만족하므로 Wald 구간을 써도 되는 경우다.
 

@@ -20,6 +20,10 @@ $$P\left(\bar{X} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \bar{X} + z
 
 ### 모의실험을 통한 확인
 
+<div class="codebox" markdown>
+
+**예제 1.** 신뢰수준의 뜻을 모의실험으로 확인하기
+
 ```python
 import numpy as np
 np.random.seed(42)
@@ -49,6 +53,8 @@ print(f"Coverage: {covers}/{n_simulations} = {covers/n_simulations:.3f}")
 ```
 Coverage: 951/1000 = 0.951
 ```
+
+</div>
 
 1000번 중 951번이 참값 $\mu = 50$을 담았다. 어느 한 구간을 놓고 "$\mu$가 여기 있을 확률"을 말한 것이 아니라, **같은 절차를 반복했을 때의 성공 비율**을 센 것이다. 이것이 신뢰수준의 뜻이다.
 

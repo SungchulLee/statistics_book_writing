@@ -38,7 +38,9 @@ $$
 
 이 구간은 **자료가 정규분포를 따를 때에만 정확하다**. (중심극한정리의 도움을 받는) 평균의 신뢰구간과 달리, 카이제곱 분산 구간은 $n$이 커져도 비정규성에 로버스트해지지 않는다. 치우치거나 꼬리가 두꺼운 자료에는 $\sigma^2$에 대한 붓스트랩 신뢰구간을 고려하라.
 
-## Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 분산 신뢰구간 모의실험
 
 ```python
 import numpy as np
@@ -82,11 +84,20 @@ print(f"Coverage: {coverage_pct:.1f}%, Failures: {n_fail}")
 Coverage: 95.0%, Failures: 5
 ```
 
+</div>
+
 $n = 12$밖에 안 되지만 포함확률이 명목값과 정확히 맞는다. 근사가 아니라 정확한 분포 결과이기 때문이다. 단, 이것은 자료가 **정규**일 때의 이야기다(연습문제 3 참조).
 
 ### 구간의 시각화
 
+<div class="codebox" markdown>
+
+**예제 2.** 구간 100개를 한 그림에
+
 ```python
+# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
 fig, ax = plt.subplots(figsize=(12, 12))
 for i in range(n_simulations):
     color = "k" if covered[i] else "r"
@@ -100,6 +111,8 @@ ax.set_xlabel("Variance")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![100 Chi-square Variance CIs | n=12, CL=95%](./img/ci_var_sim_81.png)
 

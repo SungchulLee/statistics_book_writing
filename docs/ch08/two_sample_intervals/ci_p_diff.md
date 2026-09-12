@@ -42,7 +42,9 @@ $$
 
 이다. 여기서 **제곱합**을 쓰는 것이 핵심이다. $[L_1 - U_2,\; U_1 - L_2]$처럼 양끝을 그대로 빼면 두 집단이 동시에 최악으로 어긋나는 상황을 가정하는 셈이 되어 구간이 지나치게 넓어진다. 두 표본이 독립이므로 오차는 함께 커지는 것이 아니라 피타고라스식으로 합쳐진다.
 
-### Python 코드
+<div class="codebox" markdown>
+
+**예제 1.** 두 비율 차이의 신뢰구간 계산
 
 ```python
 import numpy as np
@@ -71,6 +73,8 @@ print(f"{confidence_interval = }")
 ```
 confidence_interval = (-0.011897024279429055, 0.171897024279429)
 ```
+
+</div>
 
 ---
 
@@ -149,10 +153,16 @@ $p_N - p_S$의 90% 신뢰구간을 구성하라.
 
 ## 모의실험: 두 비율 차이 신뢰구간의 포함확률
 
+<div class="codebox" markdown>
+
+**예제 2.** 세 방법의 포함확률 비교
+
 ```python
 #!/usr/bin/env python3
-"""
-Difference of two proportions CI simulation: Newcombe, Wald, Clopper-Pearson.
+"""두 비율 차이의 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+
+Wald 는 식이 가장 간단하지만 비율이 0 이나 1 에 가까우면 포함확률이
+명목수준에 한참 못 미친다. Newcombe 는 그 약점을 고친 방법이다.
 """
 
 import numpy as np
@@ -235,6 +245,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+</div>
 
 ![100 Δ=p1−p2 CIs (Newcombe) | n1=50, n2=40, CL=95%](./img/ci_p_diff_149.png)
 
