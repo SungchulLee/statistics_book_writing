@@ -56,7 +56,7 @@ $$Z = \frac{W^+ - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
 <div class="exbox" markdown>
 
-**보기 1.** 교수법 개선. **상황**: 한 연구자가 새 교수법이 시험 점수를 높이는지 검정하려 한다. 학생 10명이 새 방법을 쓰기 전과 후에 시험을 본다. 점수가 유의하게 향상되었는지 검정하라.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 교수법 개선. **상황**: 한 연구자가 새 교수법이 시험 점수를 높이는지 검정하려 한다. 학생 10명이 새 방법을 쓰기 전과 후에 시험을 본다. 점수가 유의하게 향상되었는지 검정하라.
 
 **자료:**
 
@@ -225,7 +225,7 @@ P-value: 0.001953
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 교수법 예제 자료에서 네 가지 검정(대응 $t$, Wilcoxon 정확·근사, 부호검정)의 $p$값을 모두 계산하고, 왜 부호검정이 Wilcoxon과 같은 값을 내는지 설명하라.
 
 </div>
@@ -270,7 +270,7 @@ P-value: 0.001953
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지 정확 귀무분포를 열거하여 확인하라. 이 임계값의 실제 유의수준은 얼마인가?
 
 </div>
@@ -314,7 +314,7 @@ $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 `p_value = 2 * binom.cdf(W, n, 0.5)`가 언제 1을 넘는가? $n = 10$에서 $W = 0, 1, \ldots, 5$에 대해 계산하고, 올바른 처리 방법을 제시하라.
 
 </div>
@@ -362,7 +362,7 @@ $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 교수법 예제에서 모든 차이가 양수인 것은 우연이 아닐 수 있다. 이 자료가 실제로 정규 차이에서 나왔다면 $n = 10$에서 모두 같은 부호일 확률은 얼마인가? 관측된 차이의 분포는 무엇을 시사하는가?
 
 </div>

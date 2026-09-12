@@ -90,7 +90,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 주식의 일별 수익률 비교. 한 투자자가 두 주식의 일별 수익률(%)을 각각 7거래일과 6거래일에 걸쳐 비교한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 주식의 일별 수익률 비교. 한 투자자가 두 주식의 일별 수익률(%)을 각각 7거래일과 6거래일에 걸쳐 비교한다.
 
 **주식 A** ($n_1 = 7$): 1.2, 0.5, $-0.3$, 2.1, 0.8, 1.5, 0.1
 
@@ -190,7 +190,7 @@ $0.5$에 가까우면 효과가 없다는 뜻이고, $0$이나 $1$에 가까우�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 한 연구자가 독립인 두 집단의 반응시간(밀리초)을 비교한다.
 
 - **집단 A** (카페인): 210, 230, 215, 240, 225
@@ -278,7 +278,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $U_1 = W_A - n_A(n_A+1)/2$가 왜 $X_i > Y_j$인 쌍의 개수와 같은지 증명하라.
 
 </div>
@@ -308,7 +308,7 @@ $U_1 = W_A - n_A(n_A+1)/2$가 왜 $X_i > Y_j$인 쌍의 개수와 같은지 증�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\hat{P}(X > Y) = U_1/(n_1 n_2)$를 효과크기로 쓸 때의 장점과 함정을 논하라. Cohen의 $d$와 비교하라.
 
 </div>
@@ -355,7 +355,7 @@ $\hat{P}(X > Y) = U_1/(n_1 n_2)$를 효과크기로 쓸 때의 장점과 함정�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Mann-Whitney 검정을 역전시켜 위치이동 모수 $\Delta$의 신뢰구간을 만들 수 있다(Hodges-Lehmann 구간). 예제의 주식 자료로 95% 신뢰구간을 구하라.
 
 </div>

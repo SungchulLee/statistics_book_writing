@@ -215,7 +215,7 @@ p-value = 0.1261
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 두 학생 집단이 서로 다른 시험지를 풀었다. 집단 A의 점수는
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 두 학생 집단이 서로 다른 시험지를 풀었다. 집단 A의 점수는
 $(72, 78, 81, 85, 90)$, 집단 B의 점수는 $(68, 74, 77, 83, 88, 92)$이다.
 Wilcoxon 순위합검정을 손으로 수행하라. 합치고 순위를 매긴 뒤 집단 A의 $W$와
 $Z$ 통계량을 구하라.
@@ -266,7 +266,7 @@ $Z$ 통계량을 구하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 세 처리를 독립인 집단에 적용하여 다음 결과를 얻었다.
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 세 처리를 독립인 집단에 적용하여 다음 결과를 얻었다.
 
 - 처리 1: $14, 18, 22, 25$
 - 처리 2: $19, 23, 27, 30, 35$
@@ -323,7 +323,7 @@ Kruskal--Wallis $H$ 통계량을 손으로 계산하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Mood 중앙값검정은 각 관측값을 이진 지시값(전체 중앙값 위/아래)으로
+**연습문제 3.** <span class="diff med" title="중간"></span> Mood 중앙값검정은 각 관측값을 이진 지시값(전체 중앙값 위/아래)으로
 바꾼다. 이 접근이 Kruskal--Wallis보다 검정력이 낮지만 극단 이상치에 더 로버스트한
 이유를 설명하라.
 
@@ -356,7 +356,7 @@ Kruskal--Wallis $H$ 통계량을 손으로 계산하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 위 코드 예제의 Mann--Whitney 자료로 $U = W - m(m+1)/2$를 손으로
+**연습문제 4.** <span class="diff easy" title="쉬움"></span> 위 코드 예제의 Mann--Whitney 자료로 $U = W - m(m+1)/2$를 손으로
 확인하라. $W$는 `data0`의 순위합이고 $m = 16$이다.
 
 </div>
@@ -404,7 +404,7 @@ Kruskal--Wallis $H$ 통계량을 손으로 계산하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $k = 2$일 때 Kruskal--Wallis $H$ 통계량이 순위합 $Z$ 통계량의
+**연습문제 5.** <span class="diff hard" title="어려움"></span> $k = 2$일 때 Kruskal--Wallis $H$ 통계량이 순위합 $Z$ 통계량의
 제곱으로 환원됨을 증명하라.
 
 </div>

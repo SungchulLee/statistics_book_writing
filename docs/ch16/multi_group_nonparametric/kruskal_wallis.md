@@ -164,7 +164,7 @@ Kruskal-Wallis 결과가 유의하다는 것은 적어도 한 집단이 다르�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 세 비료를 식물 생장(4주 후 키, cm)에 대해 시험했다.
 
 - **비료 A**: 15, 18, 20, 17
@@ -260,7 +260,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $k = 3$이고 $n_i = 4$인 이 예제에서 $\chi^2$ 근사가 얼마나 믿을 만한가? 정확 순열분포를 열거하여 확인하라.
 
 </div>
@@ -311,7 +311,7 @@ $k = 3$이고 $n_i = 4$인 이 예제에서 $\chi^2$ 근사가 얼마나 믿을 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Kruskal-Wallis 검정은 분포의 **모양이 같다**고 가정한다. 모양이 다르면 어떻게 되는가? 중앙값이 모두 같지만 왜도가 다른 세 집단을 만들어 제1종 오류율을 확인하라.
 
 </div>
@@ -364,7 +364,7 @@ Kruskal-Wallis 검정은 분포의 **모양이 같다**고 가정한다. 모양�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 Kruskal-Wallis $H$의 두 표현
 
 $$

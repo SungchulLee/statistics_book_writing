@@ -149,7 +149,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 한 교사가 학생 8명을 수학 시험과 영어 시험 성적으로 각각 순위를 매겼다.
 
 | 학생 | 수학 순위 | 영어 순위 |
@@ -236,7 +236,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $n = 8$에서 $r_s$의 정확 귀무분포를 열거로 구하고, $t$ 근사가 얼마나 정확한지 확인하라.
 
 </div>
@@ -287,7 +287,7 @@ $n = 8$에서 $r_s$의 정확 귀무분포를 열거로 구하고, $t$ 근사가
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Spearman $r_s$가 이상치에 로버스트하다고 하지만, 어떤 종류의 이상치에는 여전히 취약하다. Pearson $r$과 $r_s$가 이상치 하나에 어떻게 반응하는지 비교하라.
 
 </div>
@@ -341,7 +341,7 @@ Spearman $r_s$가 이상치에 로버스트하다고 하지만, 어떤 종류의
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Spearman $r_s$와 Pearson $r$이 완전히 다른 결론을 주는 상황을 만들어라. 어느 쪽이 옳은가?
 
 </div>

@@ -161,7 +161,7 @@ Rank-sum test:      Z = 1.4725, p = 0.1409
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 한 연구자가 대응 관측값 12개를 갖고 있는데 차이가 대칭인지 확신할 수
+**연습문제 1.** <span class="diff med" title="중간"></span> 한 연구자가 대응 관측값 12개를 갖고 있는데 차이가 대칭인지 확신할 수
 없다. 부호검정과 Wilcoxon 부호순위검정 중 무엇을 써야 하는가? 근거와 맞교환을 설명하라.
 
 </div>
@@ -183,7 +183,7 @@ Rank-sum test:      Z = 1.4725, p = 0.1409
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 정규성 아래에서 부호검정의 일표본 $t$ 검정 대비 점근상대효율이
+**연습문제 2.** <span class="diff hard" title="어려움"></span> 정규성 아래에서 부호검정의 일표본 $t$ 검정 대비 점근상대효율이
 $2/\pi \approx 0.637$임을 보여라.
 
 </div>
@@ -247,7 +247,7 @@ $2/\pi \approx 0.637$임을 보여라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 독립인 세 집단이 다음 자료를 냈다.
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 독립인 세 집단이 다음 자료를 냈다.
 
 - 집단 A: $5, 8, 12, 15$
 - 집단 B: $7, 11, 14, 18, 20$
@@ -310,7 +310,7 @@ Kruskal--Wallis 검정과 Mood 중앙값검정을 파이썬으로 수행하고 $
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** Kruskal--Wallis가 단순한 중앙값 검정이 아닌 이유를 설명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> Kruskal--Wallis가 단순한 중앙값 검정이 아닌 이유를 설명하라.
 실제로 무엇을 검정하며, 어떤 추가 가정 아래에서 위치이동 검정이 되는가?
 
 </div>
@@ -335,7 +335,7 @@ Kruskal--Wallis 검정과 Mood 중앙값검정을 파이썬으로 수행하고 $
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Kruskal--Wallis 결과가 유의한 뒤 어느 쌍이 다른지 알고 싶다.
+**연습문제 5.** <span class="diff med" title="중간"></span> Kruskal--Wallis 결과가 유의한 뒤 어느 쌍이 다른지 알고 싶다.
 Dunn 검정을 기술하고 다중비교 보정이 왜 필요한지 설명하라.
 
 </div>

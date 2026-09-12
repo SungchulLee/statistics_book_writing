@@ -157,7 +157,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 평가자 4명이 커피 세 브랜드를 1--10 척도로 평가했다.
 
 | 평가자 | 브랜드 A | 브랜드 B | 브랜드 C |
@@ -253,7 +253,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 같은 자료를 Friedman 검정과 Kruskal-Wallis 검정으로 각각 분석하면 어떻게 다른가? 본문의 진통제 자료로 확인하고, 왜 차이가 나는지 설명하라.
 
 </div>
@@ -294,7 +294,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Friedman 검정은 각 블록 안에서 **순위만** 쓴다. 이것이 어떤 정보를 버리는가? 처리 효과의 **크기**가 블록마다 크게 다른 자료를 만들어 확인하라.
 
 </div>
@@ -337,7 +337,7 @@ Friedman 검정은 각 블록 안에서 **순위만** 쓴다. 이것이 어떤 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 블록 안에 동점이 있으면 어떻게 하는가? 중간순위를 쓸 때 $\chi^2_F$의 귀무분포가 어떻게 달라지는지 설명하고, 보정된 통계량을 유도하라.
 
 </div>

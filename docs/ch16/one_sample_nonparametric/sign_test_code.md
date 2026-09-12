@@ -80,7 +80,7 @@ def sign_test(paired_data, test_type="two-sided"):
 
 <div class="exbox" markdown>
 
-**보기 1.** 학생의 처치 전후 점수. 학생 15명을 처치 프로그램 전후에 측정했다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 학생의 처치 전후 점수. 학생 15명을 처치 프로그램 전후에 측정했다.
 
 </div>
 
@@ -130,7 +130,7 @@ $Z \approx 2.309$, 양측 $p$값은 약 $0.021$이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 피험자 8명을 식단 전후에 측정했다. 체중 변화(후 $-$ 전, kg)는
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 피험자 8명을 식단 전후에 측정했다. 체중 변화(후 $-$ 전, kg)는
 $-3, +1, -2, 0, -4, -1, +2, -5$이다. 정확 이항분포로 $\alpha = 0.05$에서
 부호검정을 수행하라.
 
@@ -153,7 +153,7 @@ $-3, +1, -2, 0, -4, -1, +2, -5$이다. 정확 이항분포로 $\alpha = 0.05$에
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 학생 자료 예제에서 $H_1{:}\; \text{median}(D) > 0$(처치가 점수를
+**연습문제 2.** <span class="diff med" title="중간"></span> 학생 자료 예제에서 $H_1{:}\; \text{median}(D) > 0$(처치가 점수를
 높인다)인 단측검정으로 부호검정을 다시 수행하라. $\alpha = 0.05$에서 결론을 밝혀라.
 
 </div>
@@ -188,7 +188,7 @@ $-3, +1, -2, 0, -4, -1, +2, -5$이다. 정확 이항분포로 $\alpha = 0.05$에
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 부호검정 통계량 $Z$를 다음과 같이 쓸 수 있음을 보여라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 부호검정 통계량 $Z$를 다음과 같이 쓸 수 있음을 보여라.
 
 $$
 Z = \frac{2\,n_+ - n}{\sqrt{n}}.
@@ -222,7 +222,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 차이의 분포가 심하게 치우쳐 있어도 부호검정이 타당한 이유를
+**연습문제 4.** <span class="diff med" title="중간"></span> 차이의 분포가 심하게 치우쳐 있어도 부호검정이 타당한 이유를
 설명하고, Wilcoxon 부호순위검정은 부적절하지만 부호검정은 적절한 상황을 하나 들어라.
 
 </div>
@@ -245,7 +245,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 정규근사가 아니라 정확 이항분포를 쓰는 부호검정 함수를 작성하고
+**연습문제 5.** <span class="diff med" title="중간"></span> 정규근사가 아니라 정확 이항분포를 쓰는 부호검정 함수를 작성하고
 학생 자료로 검정하라.
 
 </div>
@@ -314,7 +314,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.** 부호검정과 Wilcoxon 부호순위검정, 대응 $t$ 검정을 학생 자료에
+**연습문제 6.** <span class="diff med" title="중간"></span> 부호검정과 Wilcoxon 부호순위검정, 대응 $t$ 검정을 학생 자료에
 모두 적용하여 $p$값을 비교하고, 순서가 왜 그렇게 나오는지 설명하라.
 
 </div>

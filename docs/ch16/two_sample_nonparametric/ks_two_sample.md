@@ -130,7 +130,7 @@ $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 두 공정의 지름 분�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 두 집단의 학생이 서로 다른 준비 과정을 수강했고 시험 점수는 다음과 같다.
 
 - **과정 1**: 72, 78, 85, 90, 65
@@ -200,7 +200,7 @@ $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 두 공정의 지름 분�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 KS 검정과 Mann-Whitney 검정의 검정력을 **위치이동**과 **척도 차이** 두 상황에서 모의실험으로 비교하라.
 
 </div>
@@ -264,7 +264,7 @@ KS 검정과 Mann-Whitney 검정의 검정력을 **위치이동**과 **척도 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 KS 검정이 분포무관인 이유를 설명하라. 즉 $D$의 귀무분포가 왜 공통분포 $F$에 의존하지 않는가?
 
 </div>
@@ -317,7 +317,7 @@ KS 검정이 분포무관인 이유를 설명하라. 즉 $D$의 귀무분포가 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 KS 통계량이 최댓값을 갖는 위치 $x^*$는 무엇을 알려 주는가? 두 분포가 다른 방식으로 다를 때 $x^*$가 어디에 나타나는지 확인하라.
 
 </div>

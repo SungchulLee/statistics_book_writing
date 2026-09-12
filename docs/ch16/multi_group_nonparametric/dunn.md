@@ -53,7 +53,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 비료 자료의 Dunn 사후검정. [Kruskal-Wallis](kruskal_wallis.md) 절의 비료 예제를 이어 보자. Kruskal-Wallis 검정이 $H = 11.816$, $p = 0.0027$로 $H_0$을 기각했다. 세 집단은 다음과 같았다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비료 자료의 Dunn 사후검정. [Kruskal-Wallis](kruskal_wallis.md) 절의 비료 예제를 이어 보자. Kruskal-Wallis 검정이 $H = 11.816$, $p = 0.0027$로 $H_0$을 기각했다. 세 집단은 다음과 같았다.
 
 - 비료 A: $n_1 = 5$, $\bar{R}_A = 7.7$
 - 비료 B: $n_2 = 5$, $\bar{R}_B = 13.0$
@@ -106,7 +106,7 @@ Kruskal-Wallis의 기각은 주로 비료 B와 비료 C의 큰 차이가 이끌�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 비료 예제에서 Bonferroni 보정 대신 Holm 보정과 Benjamini-Hochberg 보정을 적용하면 결과가 어떻게 달라지는가? 세 보정을 모두 계산하고 비교하라.
 
 </div>
@@ -164,7 +164,7 @@ Kruskal-Wallis의 기각은 주로 비료 B와 비료 C의 큰 차이가 이끌�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Dunn 검정과 쌍별 Mann-Whitney 검정(Bonferroni 보정)의 결과를 비료 자료에서 비교하라. 왜 다른 값이 나오는가?
 
 </div>
@@ -216,7 +216,7 @@ Dunn 검정과 쌍별 Mann-Whitney 검정(Bonferroni 보정)의 결과를 비료
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 "전체검정이 유의할 때에만 사후검정을 하라"는 규칙이 정말로 FWER을 통제하는가? $k$가 커질수록 이 두 단계 절차의 실제 오류율이 어떻게 되는지 모의실험으로 확인하라.
 
 </div>
@@ -280,7 +280,7 @@ Dunn 검정과 쌍별 Mann-Whitney 검정(Bonferroni 보정)의 결과를 비료
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 Dunn 검정의 표준오차 공식 $\sigma_{ij} = \sqrt{\frac{N(N+1)}{12}(\frac{1}{n_i} + \frac{1}{n_j})}$을 유도하라.
 
 </div>

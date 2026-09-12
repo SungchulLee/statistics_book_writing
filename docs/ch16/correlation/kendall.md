@@ -95,7 +95,7 @@ $n$이 작으면 순열분포에서 정확 $p$값을 계산할 수 있다.
 
 <div class="exbox" markdown>
 
-**보기 1.** 심사위원 두 명의 순위 일치도. 발표 품질에 대해 심사위원 두 명이 학생 6명의 순위를 매겼다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 심사위원 두 명의 순위 일치도. 발표 품질에 대해 심사위원 두 명이 학생 6명의 순위를 매겼다.
 
 | 학생 | 심사위원 1 순위 ($R_i$) | 심사위원 2 순위 ($S_i$) |
 |:-------:|:------:|:------:|
@@ -185,7 +185,7 @@ $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 관측값이 6개뿐이�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 [Spearman 순위상관](spearman.md) 연습문제 1의 자료(수학 순위 $1, \ldots, 8$과 영어 순위 $3, 1, 2, 5, 4, 8, 6, 7$)로 Kendall tau를 계산하라.
 
 **(a)** $i < j$인 각 학생 쌍에 대해 부합인지 비부합인지 판정하라. 수학 순위와 영어 순위가 같은 방향으로 정렬되어 있으면 부합이다.
@@ -259,7 +259,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\tau$와 $r_s$가 **다른 순서**로 자료를 평가하는 경우가 있는가? 즉 자료 A에서 $\tau_A > \tau_B$인데 $r_{s,A} < r_{s,B}$인 두 자료가 존재하는가?
 
 </div>
@@ -315,7 +315,7 @@ $\tau$와 $r_s$가 **다른 순서**로 자료를 평가하는 경우가 있는�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 동점이 많은 순서형 자료에서 tau-a, tau-b, tau-c와 Spearman $r_s$를 비교하라. 왜 tau-a를 쓰면 안 되는가?
 
 </div>
@@ -388,7 +388,7 @@ $\tau$와 $r_s$가 **다른 순서**로 자료를 평가하는 경우가 있는�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $\text{Var}(S) = n(n-1)(2n+5)/18$을 $n = 6$에서 열거로 확인하고, 이 공식이 어디서 오는지 설명하라.
 
 </div>

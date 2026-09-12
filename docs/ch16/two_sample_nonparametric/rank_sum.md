@@ -73,7 +73,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 교수법의 시험 점수 비교. 두 교수법을 독립인 두 집단의 시험 점수로 비교한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 교수법의 시험 점수 비교. 두 교수법을 독립인 두 집단의 시험 점수로 비교한다.
 
 **집단 A** ($n_1 = 6$): 78, 64, 85, 72, 91, 80
 
@@ -161,7 +161,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 집단 A $= \{3, 5, 7, 9\}$, 집단 B $= \{6, 8, 10, 12, 14\}$에 Wilcoxon 순위합검정을 적용하여 검정통계량 $W$를 계산하라.
 
 </div>
@@ -183,7 +183,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Wilcoxon 순위합검정과 Mann-Whitney U 검정의 관계를 설명하라. 두 검정은 동치인가?
 
 </div>
@@ -223,7 +223,7 @@ Wilcoxon 순위합검정과 Mann-Whitney U 검정의 관계를 설명하라. 두
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Wilcoxon 순위합검정이 실제로 검정하는 것은 무엇인가? 중앙값이 같은지를 검정하는 것인가?
 
 </div>
@@ -258,7 +258,7 @@ Wilcoxon 순위합검정이 실제로 검정하는 것은 무엇인가? 중앙�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 대표본에서 순위합검정은 정규근사를 쓴다. $z$ 통계량의 공식을 쓰고, 연속성 보정의 효과를 예제 자료로 확인하라.
 
 </div>

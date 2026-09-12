@@ -139,7 +139,7 @@ $\alpha = 0.05$에서 $H_0$을 기각한다. 식단들의 중앙값 체중 감�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 본문의 식단 자료에 Kruskal-Wallis 검정을 적용하여 Mood 중앙값검정과 비교하라. 어느 쪽이 더 작은 $p$값을 주는가?
 
 </div>
@@ -181,7 +181,7 @@ $\alpha = 0.05$에서 $H_0$을 기각한다. 식단들의 중앙값 체중 감�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Mood 중앙값검정의 정규분포 아래 ARE는 얼마인가? 검정력을 모의실험으로 확인하고 Kruskal-Wallis와 비교하라.
 
 </div>
@@ -236,7 +236,7 @@ Mood 중앙값검정의 정규분포 아래 ARE는 얼마인가? 검정력을 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 전체 중앙값과 **정확히 같은** 관측값을 어떻게 처리하느냐가 결과를 바꿀 수 있다. `scipy.stats.median_test`의 `ties` 인자가 제공하는 세 가지 방식을 이산자료로 비교하라.
 
 </div>
@@ -302,7 +302,7 @@ Mood 중앙값검정의 정규분포 아래 ARE는 얼마인가? 검정력을 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 중앙값이 모두 같지만 산포가 크게 다른 세 집단에서 Mood 중앙값검정과 Kruskal-Wallis 검정의 제1종 오류율을 확인하라. 두 검정이 정말로 명목수준을 지키는가?
 
 </div>

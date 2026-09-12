@@ -177,7 +177,7 @@ $$\chi^2 = \sum \frac{(O - E)^2}{E}$$
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 집단 중앙값 비교. **상황**: 두 학생 집단의 중앙값 시험점수를 비교한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 집단 중앙값 비교. **상황**: 두 학생 집단의 중앙값 시험점수를 비교한다.
 
 - 집단 A: $[50, 55, 60, 65, 70]$
 - 집단 B: $[45, 50, 55, 60, 65]$
@@ -345,7 +345,7 @@ Kruskal-Wallis 검정이 유의하면, 쌍별 Mann-Whitney U 검정에 다중비
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 결과가 어떻게 다른가? 본문의 집단 A $= [50, 55, 60, 65, 70]$, 집단 B $= [45, 50, 55, 60, 65]$로 확인하고, 두 검정이 버리는 정보를 각각 설명하라.
 
 </div>
@@ -385,7 +385,7 @@ Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 본문의 Mood 중앙값검정 구현은 전체 중앙값과 **정확히 같은** 관측값을 버린다. 이것이 문제가 되는 상황을 만들고, SciPy `median_test`의 `ties` 인자와 비교하라.
 
 </div>
@@ -435,7 +435,7 @@ Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을 확인하라. $H$와 $Z$ 사이에 어떤 관계가 있는가?
 
 </div>
@@ -486,7 +486,7 @@ Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 본문의 Mann-Whitney 예제에서 SciPy의 기본 $p$값($0.000440$)과 정확 $p$값($7.58 \times 10^{-5}$)이 6배 가까이 차이 난다. 왜 이렇게 큰가?
 
 </div>

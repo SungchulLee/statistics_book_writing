@@ -425,7 +425,7 @@ p_value   = 0.0086
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 위 학생 자료에서 세 검정(런 검정은 제외)의 $p$값을 모두 구하고 비교하라. 부호검정, Wilcoxon(Pratt), Wilcoxon(wilcox), 대응 $t$ 검정을 각각 계산하라.
 
 </div>
@@ -470,7 +470,7 @@ p_value   = 0.0086
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 예제 2의 수열 $(1,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0)$은 "잘 섞인" 것처럼 보이지만 런 검정이 기각한다. 사람이 만든 무작위 수열이 왜 이런 특징을 보이는지 설명하고, 진짜 무작위 수열에서 가장 긴 런의 기대 길이를 모의실험으로 확인하라.
 
 </div>
@@ -516,7 +516,7 @@ p_value   = 0.0086
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 `runs_test` 구현에서 $R = (N_+ + N_- + 1 - \sum_i x_i x_{i+1})/2$가 왜 런의 개수와 같은지 증명하라.
 
 </div>
@@ -546,7 +546,7 @@ p_value   = 0.0086
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 `zero_method`의 세 선택지(`wilcox`, `pratt`, `zsplit`)는 언제 갈라지는가? 0이 아닌 차이는 그대로 두고 0의 개수만 늘려 가며 세 방법의 $p$값을 비교하라.
 
 </div>

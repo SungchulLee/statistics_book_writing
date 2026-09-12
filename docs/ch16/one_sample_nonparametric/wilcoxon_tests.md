@@ -151,7 +151,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 피험자 6명의 대응차이가
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 피험자 6명의 대응차이가
 $D = (4, -1, 7, 3, -2, 5)$이다. 부호순위통계량 $W^+$를 손으로 계산하라.
 
 </div>
@@ -217,7 +217,7 @@ $D = (4, -1, 7, 3, -2, 5)$이다. 부호순위통계량 $W^+$를 손으로 계�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $H_0$ 아래에서 $\operatorname{E}[W^+] = n'(n'+1)/4$임을 보여라.
+**연습문제 2.** <span class="diff med" title="중간"></span> $H_0$ 아래에서 $\operatorname{E}[W^+] = n'(n'+1)/4$임을 보여라.
 
 </div>
 
@@ -243,7 +243,7 @@ $D = (4, -1, 7, 3, -2, 5)$이다. 부호순위통계량 $W^+$를 손으로 계�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 독립인 두 집단의 값이 다음과 같다.
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 독립인 두 집단의 값이 다음과 같다.
 
 - 집단 A: $12, 15, 18, 22, 25$
 - 집단 B: $8, 10, 14, 19, 21, 24$
@@ -291,7 +291,7 @@ $\alpha = 0.05$에서 Wilcoxon 순위합검정을 파이썬으로 수행하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** Wilcoxon 부호순위검정은 차이의 분포가 대칭이라는 가정을 요구하는데
+**연습문제 4.** <span class="diff med" title="중간"></span> Wilcoxon 부호순위검정은 차이의 분포가 대칭이라는 가정을 요구하는데
 부호검정은 그렇지 않은 이유를 설명하라. 이 구별이 중요해지는 분포의 예를 들어라.
 
 </div>
@@ -319,7 +319,7 @@ $\alpha = 0.05$에서 Wilcoxon 순위합검정을 파이썬으로 수행하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Mann--Whitney $U$ 통계량과 Wilcoxon 순위합 $W$ 사이의 관계
+**연습문제 5.** <span class="diff med" title="중간"></span> Mann--Whitney $U$ 통계량과 Wilcoxon 순위합 $W$ 사이의 관계
 $U = W - m(m+1)/2$를 유도하라.
 
 </div>
@@ -357,7 +357,7 @@ $U = W - m(m+1)/2$를 유도하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 6.** `stats.wilcoxon`이 반환하는 `statistic`이 $W^+$가 아니라
+**연습문제 6.** <span class="diff med" title="중간"></span> `stats.wilcoxon`이 반환하는 `statistic`이 $W^+$가 아니라
 $\min(W^+, W^-)$임을 확인하고, `alternative`를 바꾸면 무엇이 달라지는지 조사하라.
 
 </div>

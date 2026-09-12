@@ -69,7 +69,7 @@ def runs_test(data):
 
 <div class="exbox" markdown>
 
-**보기 1.** 뭉친 수열. 뭉침이 심한 수열은 런이 매우 적다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 뭉친 수열. 뭉침이 심한 수열은 런이 매우 적다.
 
 </div>
 
@@ -82,7 +82,7 @@ z, p = runs_test(data * 2 - 1)
 
 <div class="exbox" markdown>
 
-**보기 2.** 지나치게 교대하는 수열. 빈번한 교대 역시 무작위성으로부터의 이탈이다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지나치게 교대하는 수열. 빈번한 교대 역시 무작위성으로부터의 이탈이다.
 
 </div>
 
@@ -116,7 +116,7 @@ z, p = runs_test(data * 2 - 1)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 동전을 20번 던져 수열
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 동전을 20번 던져 수열
 HHHHTTTTHHHHTTTTTTHH를 얻었다. 각 H를 $+1$, 각 T를 $-1$로 부호화하고 런의 개수
 $R$을 센 뒤 $\mu_R$과 $\sigma_R$을 손으로 계산하라.
 
@@ -142,7 +142,7 @@ $R$을 센 뒤 $\mu_R$과 $\sigma_R$을 손으로 계산하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 각 $x_i \in \{-1, +1\}$일 때
+**연습문제 2.** <span class="diff hard" title="어려움"></span> 각 $x_i \in \{-1, +1\}$일 때
 $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하라.
 
 </div>
@@ -165,7 +165,7 @@ $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 위 "지나치게 교대하는 수열" 예제의 자료로 런 검정 통계량과 $p$값을
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 위 "지나치게 교대하는 수열" 예제의 자료로 런 검정 통계량과 $p$값을
 파이썬에서 계산하라. $\alpha = 0.05$에서 귀무가설이 기각되는지 확인하라.
 
 </div>
@@ -204,7 +204,7 @@ $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 수열이 이진이 아니면 왜 런 검정이 부적절한지 설명하라. 연속 수열을
+**연습문제 4.** <span class="diff med" title="중간"></span> 수열이 이진이 아니면 왜 런 검정이 부적절한지 설명하라. 연속 수열을
 검정에 적합한 이진 수열로 바꾸는 흔한 방법 하나를 기술하라.
 
 </div>
@@ -222,7 +222,7 @@ $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 수열의 모든 순열에 걸친 세기 논증으로
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 수열의 모든 순열에 걸친 세기 논증으로
 $\operatorname{E}[R] = \mu_R = \dfrac{2\,N_+\,N_-}{N} + 1$임을 보여라.
 
 </div>
@@ -263,7 +263,7 @@ $\operatorname{E}[R] = \mu_R = \dfrac{2\,N_+\,N_-}{N} + 1$임을 보여라.
 
 <div class="drillbox" markdown>
 
-**연습문제 6.** 런 검정의 실제 제1종 오류율을 확인하라. $N$이 작을 때 정규근사가
+**연습문제 6.** <span class="diff med" title="중간"></span> 런 검정의 실제 제1종 오류율을 확인하라. $N$이 작을 때 정규근사가
 얼마나 정확한가?
 
 </div>
