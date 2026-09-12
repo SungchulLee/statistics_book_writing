@@ -64,6 +64,10 @@ $\sqrt n$이라는 배율이 정확히 맞는 것도 우연이 아니다. 3.4절
 
 **실무적 함의:** 정밀도는 $1/\sqrt n$로 좋아진다. 오차를 절반으로 줄이려면 자료를 **네 배** 모아야 한다. 8장의 표본크기 계산이 전부 이 관계에서 나온다.
 
+<div class="codebox" markdown>
+
+**예제 .** 모집단이 달라도 표본평균은 정규로 간다
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -101,6 +105,8 @@ def demonstrate_clt(distribution_type, sample_size, n_simulations=10_000):
 demonstrate_clt('uniform', sample_size=5)
 demonstrate_clt('exponential', sample_size=5)
 ```
+
+</div>
 
 ![중심극한정리](./img/clt_59_0.png)
 

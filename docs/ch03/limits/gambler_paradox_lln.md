@@ -32,6 +32,10 @@ $$
 
 수열 100개를 각각 최대 10,000라운드까지 진행하며 표본평균을 추적해 보자.
 
+<div class="codebox" markdown>
+
+**예제 .** 상트페테르부르크 게임의 표본평균
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -76,6 +80,8 @@ n =    396: 표본평균 100개의 중앙값     10.2, 최댓값     1340.6
 n = 10,000: 표본평균 100개의 중앙값     16.9, 최댓값      223.0
 ```
 
+</div>
+
 ## 2. 상한 하나가 모든 것을 바꾼다
 
 꼬리를 잘라 내면 기댓값이 유한해지고, 그 순간 큰수의 법칙이 되살아난다. 두 게임의 차이는 극단적으로 드문 사건뿐인데 결과는 정반대다.
@@ -93,6 +99,10 @@ $$
 이다. 평균과 분산이 모두 유한하므로 큰수의 법칙이 성립한다.
 
 </div>
+
+<div class="codebox" markdown>
+
+**예제 .** 상금에 상한을 두면 평균이 안정된다
 
 ```python
 def bounded_game_sample_means(n_max=10_000, tries=100, n_grid=200):
@@ -129,7 +139,13 @@ n =    396: 표본평균 100개의 중앙값   10.50, 표준편차    2.61
 n = 10,000: 표본평균 100개의 중앙값   11.01, 표준편차    0.59
 ```
 
+</div>
+
 두 게임을 나란히 그리면 차이가 분명하다.
+
+<div class="codebox" markdown>
+
+**예제 .** 절단 전후의 표본평균 비교
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -165,6 +181,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![도박사의 역설: 큰수의 법칙이 실패할 때](./img/gambler_paradox_lln_82.png)
 

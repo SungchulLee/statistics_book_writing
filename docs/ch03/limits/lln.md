@@ -70,6 +70,10 @@ $$
 
 정리 1에서 분산을 가정했지만, 실제로는 **평균만 유한하면** 약한 큰수의 법칙이 성립한다(분산이 무한해도 된다). 증명은 더 정교한 도구가 필요하다.
 
+<div class="codebox" markdown>
+
+**예제 .** 표본평균이 참 평균으로 수렴하는 모습
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -96,6 +100,8 @@ ax.legend()
 ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
+
+</div>
 
 ![Law of Large Numbers: Fair Die](./img/lln_61.png)
 

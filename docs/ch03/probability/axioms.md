@@ -56,11 +56,15 @@ $$
 
     두 해석은 같은 공리를 쓰므로 계산 규칙이 완전히 같다. 갈리는 것은 계산이 아니라 **무엇에 확률을 붙일 수 있는가**이다.
 
+<div class="codebox" markdown>
+
+**예제 .** 콜모고로프 공리를 수치로 확인하기
+
 ```python
 import numpy as np
 
 def verify_axioms(probabilities):
-    """Verify Kolmogorov's axioms for a discrete probability distribution."""
+    """이산 확률분포가 콜모고로프의 세 공리를 만족하는지 확인한다."""
     # Axiom 1: Non-negativity
     assert all(p >= 0 for p in probabilities), "Non-negativity violated"
 
@@ -95,6 +99,8 @@ All axioms satisfied!
   Min probability:   0.1000
   Max probability:   0.5000
 ```
+
+</div>
 
 찌그러진 주사위도 공리를 만족한다는 점에 주목하라. 공리는 확률이 **공정할 것**을 요구하지 않는다.
 

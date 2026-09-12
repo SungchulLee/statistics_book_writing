@@ -64,6 +64,10 @@ $$
 
 </div>
 
+<div class="codebox" markdown>
+
+**예제 .** 확률밀도함수와 누적분포함수의 관계
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -99,6 +103,8 @@ for ax in (ax_pdf, ax_cdf):
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![PDF](./img/pmf_pdf_cdf_59.png)
 
@@ -152,6 +158,10 @@ $$
 
 이 함수가 통계학 전체에서 쓰이는 곳이 신뢰구간과 임계값이다.
 
+<div class="codebox" markdown>
+
+**예제 .** 분위수함수는 누적분포함수의 역함수
+
 ```python
 import scipy.stats as stats
 
@@ -169,7 +179,13 @@ print(f"97.5th percentile of N(0,1): {z_975:.4f}")
 97.5th percentile of N(0,1): 1.9600
 ```
 
+</div>
+
 $1.96$이라는 익숙한 수가 여기서 나온다. 8장의 95% 신뢰구간에 등장하는 그 값이다.
+
+<div class="codebox" markdown>
+
+**예제 .** 분위수함수를 그림으로 보기
 
 ```python
 import matplotlib.pyplot as plt
@@ -205,6 +221,8 @@ ax.legend(fontsize=14)
 plt.show()
 ```
 
+</div>
+
 ![확률질량함수, 확률밀도함수, 누적분포함수](./img/pmf_pdf_cdf_138.png)
 
 세로축에서 출발해 곡선을 만나 가로축으로 내려오는 것이 분위수함수, 그 반대가 누적분포함수다.
@@ -221,6 +239,10 @@ plt.show()
     증명은 한 줄이다. $P(X \le x) = P(F^{-1}(U) \le x) = P(U \le F(x)) = F(x)$. 마지막 등식은 $U$가 $[0,1]$ 균등분포이기 때문이다.
 
     이것이 **역변환 표집**이며, 난수 생성기의 기본 원리다. 4장에서 다시 다룬다.
+
+<div class="codebox" markdown>
+
+**예제 .** 같은 점을 두 그림에서 확인하기
 
 ```python
 import scipy.stats as stats
@@ -243,9 +265,15 @@ plt.legend()
 plt.show()
 ```
 
+</div>
+
 ![확률질량함수, 확률밀도함수, 누적분포함수](./img/pmf_pdf_cdf_184.png)
 
 **자료에서 추정하기.** 실무에서는 참 분포를 모르므로 자료에서 추정한다. 히스토그램이 확률밀도함수의 추정값이고, 경험적 누적분포함수가 누적분포함수의 추정값이다. 2장의 탐색적 자료분석에서 다시 만난다.
+
+<div class="codebox" markdown>
+
+**예제 .** 역변환 표집으로 정규 표본 만들기
 
 ```python
 import matplotlib.pyplot as plt
@@ -273,6 +301,8 @@ ax.legend()
 ax.spines[['right', 'top']].set_visible(False)
 plt.show()
 ```
+
+</div>
 
 **`scipy.stats` 메서드 대응표.** 이 절의 네 함수가 그대로 메서드 이름이 된다.
 

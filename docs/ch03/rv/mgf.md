@@ -87,6 +87,10 @@ $$
 | 지수분포 Exp$(\lambda)$ | $\dfrac{\lambda}{\lambda - t}$ | $t < \lambda$ |
 | 정규분포 N$(\mu, \sigma^2)$ | $\exp\!\left(\mu t + \dfrac{\sigma^2 t^2}{2}\right)$ | |
 
+<div class="codebox" markdown>
+
+**예제 .** 정규분포의 적률생성함수로 적률 구하기
+
 ```python
 import numpy as np
 
@@ -134,6 +138,8 @@ E[X] = 3.0000 (theoretical: 3.0)
 E[X²] = 13.0000 (theoretical: 13.0)
 Var(X) = 4.0000 (theoretical: 4.0)
 ```
+
+</div>
 
 ## 2. 적률생성함수가 같으면 분포가 같다
 
@@ -223,6 +229,10 @@ $$
 
     증명의 세 재료가 모두 이 절에 있다. **합을 곱으로 바꾸고**(정리 3), **테일러 전개로 앞 두 적률만 남기고**(정리 1), **극한을 분포로 되돌린다**(정리 2). 3.5절에서 이 정리를 정면으로 다룬다.
 
+<div class="codebox" markdown>
+
+**예제 .** 네 분포의 적률생성함수 비교
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -267,9 +277,15 @@ def plot_mgf_comparison():
 plot_mgf_comparison()
 ```
 
+</div>
+
 ![Moment Generating Functions](./img/mgf_174.png)
 
 모든 곡선이 $t = 0$에서 값 1을 지난다는 점에 주목하라. $M_X(0) = E[e^0] = 1$이므로 언제나 그렇다. 그 점에서의 기울기가 평균이다.
+
+<div class="codebox" markdown>
+
+**예제 .** 독립인 정규분포의 합
 
 ```python
 import numpy as np
@@ -304,6 +320,8 @@ verify_sum_of_normals()
 E[X1+X2] = 7.0068 (theoretical: 7)
 Var(X1+X2) = 25.1339 (theoretical: 25)
 ```
+
+</div>
 
 ## 연습문제
 

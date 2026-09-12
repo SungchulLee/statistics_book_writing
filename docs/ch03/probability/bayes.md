@@ -141,6 +141,10 @@ $$
 
 유병률이 달라지면 사후확률이 어떻게 움직이는지 그려 보자.
 
+<div class="codebox" markdown>
+
+**예제 .** 베이즈 정리로 사후확률 구하기
+
 ```python
 import numpy as np
 
@@ -176,6 +180,12 @@ print(f"Despite a 95% sensitive test, only {posterior*100:.1f}% of positives tru
 P(disease | positive) = 0.0876
 Despite a 95% sensitive test, only 8.8% of positives truly have the disease.
 ```
+
+</div>
+
+<div class="codebox" markdown>
+
+**예제 .** 유병률이 사후확률을 지배한다
 
 ```python
 import numpy as np
@@ -214,6 +224,8 @@ def bayes_update_visualization():
 
 bayes_update_visualization()
 ```
+
+</div>
 
 ![Bayes](./img/bayes_136.png)
 

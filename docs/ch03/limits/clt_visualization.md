@@ -32,6 +32,10 @@
 
 각 분포와 각 $n \in \{2, 10, 100\}$에 대해 표본을 $B = 2000$개 뽑는다.
 
+<div class="codebox" markdown>
+
+**예제 .** 표본평균을 모아 표본분포 만들기
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -73,6 +77,8 @@ n =  10: 평균 0.5022  표준편차 0.0911  (이론 0.0913)
 n = 100: 평균 0.5002  표준편차 0.0288  (이론 0.0289)
 ```
 
+</div>
+
 `results[n]`의 각 항목이 $\bar X_n$의 한 실현값이다. 2000개를 그리면 표본분포의 근사가 된다.
 
 ## 2. 모양이 정규분포로 모여든다
@@ -86,6 +92,10 @@ n = 100: 평균 0.5002  표준편차 0.0288  (이론 0.0289)
 $n$이 커질수록 $\bar X_n$의 표본분포는 모집단의 모양(평평함, 왼쪽 치우침, 오른쪽 치우침)을 잃고 대칭인 종 모양으로 간다.
 
 </div>
+
+<div class="codebox" markdown>
+
+**예제 .** 표본 크기를 키우며 모양의 수렴 보기
 
 ```python
 sample_sizes = [2, 10, 100]
@@ -151,6 +161,8 @@ plt.suptitle("Central Limit Theorem: Sampling Distribution of x̄",
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Central Limit Theorem: Sampling Distribution of x̄](./img/clt_visualization_58.png)
 

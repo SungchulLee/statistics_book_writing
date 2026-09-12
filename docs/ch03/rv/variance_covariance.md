@@ -150,6 +150,10 @@ $$
 
     12장의 상관과 인과에서 이 함정을 다시 다룬다. **상관계수가 0이라고 "관계가 없다"고 말해서는 안 된다.** 반드시 그림을 그려 보아야 한다.
 
+<div class="codebox" markdown>
+
+**예제 .** 무상관이 독립을 뜻하지 않는다
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -192,6 +196,8 @@ Cov(X, X²) = -0.0023 (theoretically 0)
 Corr(X, X²) = -0.0016
 Yet X and X² are clearly dependent!
 ```
+
+</div>
 
 ![분산과 공분산](./img/variance_covariance_118.png)
 

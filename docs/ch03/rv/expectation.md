@@ -163,6 +163,10 @@ $$
 
     이다. $n = 50$이면 약 225번 사야 한다. 단계들의 길이는 서로 종속이지만 선형성은 개의치 않는다.
 
+<div class="codebox" markdown>
+
+**예제 .** 쿠폰 수집가 문제
+
 ```python
 import numpy as np
 
@@ -204,7 +208,13 @@ Simulated E[T] = 225.5
 Theoretical E[T] = n·Hₙ = 225.0
 ```
 
+</div>
+
 종속인 변수에서도 선형성이 성립함을 직접 확인해 보자. $Y = X^2$은 $X$에 완전히 종속이다.
+
+<div class="codebox" markdown>
+
+**예제 .** 종속이어도 기댓값은 더해진다
 
 ```python
 import numpy as np
@@ -243,6 +253,8 @@ E[Y] = 0.3326 (theoretical: 0.3333)
 E[X + Y] = 0.8321
 E[X] + E[Y] = 0.8321
 ```
+
+</div>
 
 ## 연습문제
 

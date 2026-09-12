@@ -140,6 +140,10 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 
     다만 이 상한은 **보수적**이다. 실제 오차는 대개 훨씬 작다. 아래 시뮬레이션이 그 여유를 보여 준다.
 
+<div class="codebox" markdown>
+
+**예제 .** 실제 오차와 베리-에센 상계 비교
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -198,9 +202,15 @@ berry_esseen_visualization(
 )
 ```
 
+</div>
+
 ![베리–에센 정리](./img/berry_esseen_101.png)
 
 세 분포의 상한을 $n$의 함수로 겹쳐 그리면 순서가 분명해진다.
+
+<div class="codebox" markdown>
+
+**예제 .** 분포별 정규근사의 수렴 속도
 
 ```python
 import numpy as np
@@ -239,6 +249,8 @@ def convergence_rate_comparison():
 
 convergence_rate_comparison()
 ```
+
+</div>
 
 ![Convergence Rate to Normal: Berry–Esseen Bounds](./img/berry_esseen_187.png)
 

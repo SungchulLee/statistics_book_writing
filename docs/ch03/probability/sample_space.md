@@ -84,6 +84,10 @@ $$
 
 이다. 동전 세 개에서 $P(\text{앞면 2개}) = 3/8$이 이 식이다.
 
+<div class="codebox" markdown>
+
+**예제 .** 표본공간을 나열해 사건의 확률 세기
+
 ```python
 from itertools import product
 
@@ -107,6 +111,8 @@ Sample space: [('H', 'H', 'H'), ('H', 'H', 'T'), ('H', 'T', 'H'), ('H', 'T', 'T'
 Event (2 heads): [('H', 'H', 'T'), ('H', 'T', 'H'), ('T', 'H', 'H')]
 P(2 heads) = 3/8 = 0.3750
 ```
+
+</div>
 
 코드가 하는 일이 정확히 정리 2다. 표본공간을 만들고, 사건에 해당하는 결과를 고르고, 개수를 센다.
 

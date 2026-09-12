@@ -50,6 +50,10 @@ $B$에 배정된 전체 확률 가운데 $A$에도 속하는 부분의 비율이
 
 모의실험으로 확인해 보자.
 
+<div class="codebox" markdown>
+
+**예제 .** 주사위로 조건부확률 확인하기
+
 ```python
 import numpy as np
 
@@ -86,6 +90,8 @@ conditional_probability_simulation()
 Simulated P(sum=8 | die1=3) = 0.1705
 Theoretical P(sum=8 | die1=3) = 0.1667
 ```
+
+</div>
 
 코드가 하는 일이 정의 그대로임에 주목하라. `mask_B`로 표본공간을 좁히고, 그 안에서 $A$가 일어난 비율을 센다.
 
@@ -178,6 +184,10 @@ $$
 
     "양성이면 병일 확률은 얼마인가"라는 반대 방향의 물음에 답하려면 다음 절의 **베이즈 정리**가 필요하다. 여기서 계산한 $P(\text{양성}) = 0.1085$가 그 식의 분모가 된다.
 
+<div class="codebox" markdown>
+
+**예제 .** 전확률의 법칙 모의실험
+
 ```python
 import numpy as np
 
@@ -218,6 +228,8 @@ medical_test_simulation()
 Simulated P(positive) = 0.1085
 Theoretical P(positive) = 0.1085
 ```
+
+</div>
 
 ## 연습문제
 
