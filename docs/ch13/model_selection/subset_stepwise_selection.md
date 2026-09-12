@@ -123,7 +123,7 @@ def backward_stepwise(X, y):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 세 방법을 모두 실행하고 (검증 RSS로 정한) 최적 $k$에서 선택된 특성을 비교하라. 모두 참 설명변수 4개를 찾아내는가?
+**연습문제 1.** <span class="diff med" title="중간"></span> 세 방법을 모두 실행하고 (검증 RSS로 정한) 최적 $k$에서 선택된 특성을 비교하라. 모두 참 설명변수 4개를 찾아내는가?
 
 </div>
 
@@ -169,7 +169,7 @@ def backward_stepwise(X, y):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 참 설명변수 4개는 그대로 두고 $p$를 8에서 20으로 늘려라. 최량 부분집합을 여전히 계산할 수 있는가? 전진 선택은 어떻게 작동하는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 참 설명변수 4개는 그대로 두고 $p$를 8에서 20으로 늘려라. 최량 부분집합을 여전히 계산할 수 있는가? 전진 선택은 어떻게 작동하는가?
 
 </div>
 
@@ -179,7 +179,7 @@ def backward_stepwise(X, y):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 같은 $k$에서 전진과 후진 단계적 선택이 서로 다른 특성을 고르는 예를 구성하라. 자료의 어떤 성질이 이 차이를 만드는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> 같은 $k$에서 전진과 후진 단계적 선택이 서로 다른 특성을 고르는 예를 구성하라. 자료의 어떤 성질이 이 차이를 만드는가?
 
 </div>
 
@@ -189,7 +189,7 @@ def backward_stepwise(X, y):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 설명변수가 $k$개일 때 최량 부분집합 선택의 훈련 RSS가 전진 단계적 선택의 것보다 작거나 같음을 증명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 설명변수가 $k$개일 때 최량 부분집합 선택의 훈련 RSS가 전진 단계적 선택의 것보다 작거나 같음을 증명하라.
 
 </div>
 
@@ -205,7 +205,7 @@ def backward_stepwise(X, y):
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 검증 RSS 대신 AIC로 모형선택을 구현하라. AIC로 최적 $k$를 정하고 검증 방식과 비교하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 검증 RSS 대신 AIC로 모형선택을 구현하라. AIC로 최적 $k$를 정하고 검증 방식과 비교하라.
 
 </div>
 

@@ -54,7 +54,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 한 연구자가 관측값 $n = 15$개로 회귀모형을 적합했다. 잔차의 Q-Q 그림에서 오른쪽으로 상당히 치우친 모습이 보인다. 왜 이 상황에서 $n = 500$일 때보다 정규성이 더 중요한지 설명하라.
 
 </div>
@@ -66,7 +66,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\hat{\beta}$의 불편추정에는 정규성이 필요하지 않지만 계수의 $t$ 검정이 정확히 타당하려면 정규성이 필요한 이유를 설명하라.
 
 </div>

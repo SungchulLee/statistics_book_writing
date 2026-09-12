@@ -55,7 +55,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 회귀 잔차에 대한 독립성 가정의 수학적 정의를 서술하라. 이 가정이 위배될 가능성이 높은 자료의 예를 하나 들어라.
 
 </div>
@@ -71,7 +71,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 독립성 가정의 위배가 정규성이나 등분산성의 위배보다 더 심각하다고 여겨지는 이유를 설명하라. 왜 고치기가 더 어려운가?
 
 </div>

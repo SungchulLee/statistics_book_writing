@@ -130,7 +130,7 @@ AIC와 BIC 모두 모형 B를 최선으로 고른다. 다만 BIC는 모형 C에 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 설명변수가 $p = 3$개이고 관측값이 $n = 100$개인 선형회귀의 최대화된 로그가능도가 $\ell_1 = -150$이다. 이 모형을 포함하는 $p = 5$개짜리 모형은 $\ell_2 = -145$이다. 두 모형의 BIC를 계산하고 어느 쪽이 선호되는지 판정하라.
 
 </div>
@@ -154,7 +154,7 @@ AIC와 BIC 모두 모형 B를 최선으로 고른다. 다만 BIC는 모형 C에 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 AIC의 벌점항 $2k$와 BIC의 벌점항 $k\ln n$을 비교하라. 표본크기가 얼마일 때 BIC가 AIC보다 복잡도에 더 무거운 벌점을 주는가?
 
 </div>
@@ -168,7 +168,7 @@ AIC의 벌점항 $2k$와 BIC의 벌점항 $k\ln n$을 비교하라. 표본크기
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 BIC의 Bayes적 정당화를 설명하라. BIC는 어떤 의미에서 Bayes 모형비교를 근사하는가?
 
 </div>
@@ -186,7 +186,7 @@ BIC의 Bayes적 정당화를 설명하라. BIC는 어떤 의미에서 Bayes 모�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 모형선택에서 AIC를 BIC보다 선호할 때는 언제이며, 반대의 경우는 언제인가?
 
 </div>

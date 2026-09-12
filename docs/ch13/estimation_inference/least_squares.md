@@ -307,7 +307,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2$을 최소화하여 단순선형회귀의 OLS 추정량 $\hat{\beta}_1 = \sum(x_i - \bar{x})(y_i - \bar{y}) / \sum(x_i - \bar{x})^2$을 유도하라.
 
 </div>
@@ -343,7 +343,7 @@ $\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2$을 최소화하여 단순선형�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 OLS 잔차의 합이 0임을 보여라. 곧 $e_i = y_i - \hat{y}_i$일 때 $\sum_{i=1}^n e_i = 0$이다.
 
 </div>
@@ -361,7 +361,7 @@ OLS 잔차의 합이 0임을 보여라. 곧 $e_i = y_i - \hat{y}_i$일 때 $\sum
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 최소제곱 해가 설계행렬 $X$의 열공간에서 무엇을 뜻하는지 기하학적으로 설명하라. 적합값 $\hat{Y}$와 잔차 $e$의 관계는 무엇인가?
 
 </div>

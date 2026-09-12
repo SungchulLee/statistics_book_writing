@@ -156,7 +156,7 @@ Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** California Housing의 완전모형(8개 특성 전부)에서 각 설명변수의 VIF를 계산하라. 어느 설명변수가 높은 다중공선성을 보이는지 찾아라.
+**연습문제 1.** <span class="diff med" title="중간"></span> California Housing의 완전모형(8개 특성 전부)에서 각 설명변수의 VIF를 계산하라. 어느 설명변수가 높은 다중공선성을 보이는지 찾아라.
 
 </div>
 
@@ -193,7 +193,7 @@ Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 반응변수를 로그 변환한 $\ln(\text{PRICE})$로 모형을 적합하라. 잔차의 Q-Q 그림을 변환하지 않은 모형과 비교하고 어느 쪽이 정규성 가정을 더 잘 만족하는지 논하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 반응변수를 로그 변환한 $\ln(\text{PRICE})$로 모형을 적합하라. 잔차의 Q-Q 그림을 변환하지 않은 모형과 비교하고 어느 쪽이 정규성 가정을 더 잘 만족하는지 논하라.
 
 </div>
 
@@ -222,7 +222,7 @@ Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 문턱값 $4/n$의 Cook 거리를 써서 설명변수 3개 모형에서 모든 영향점을 제거하라. $R^2$와 계수 추정값의 변화를 보고하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 문턱값 $4/n$의 Cook 거리를 써서 설명변수 3개 모형에서 모든 영향점을 제거하라. $R^2$와 계수 추정값의 변화를 보고하라.
 
 </div>
 
@@ -264,7 +264,7 @@ Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 정규 가능도에서 AIC 공식 $n\ln(\mathrm{RSS}/n) + 2k$가 왜 $-2\ln L + 2k$와 (상수를 빼면) 동등한지 설명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 정규 가능도에서 AIC 공식 $n\ln(\mathrm{RSS}/n) + 2k$가 왜 $-2\ln L + 2k$와 (상수를 빼면) 동등한지 설명하라.
 
 </div>
 
@@ -286,7 +286,7 @@ Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 모형에 교호작용 항 $\text{MedInc} \times \text{AveRooms}$와 이차항 $\text{MedInc}^2$을 추가하라. AIC로 이 추가가 모형을 개선하는지 판정하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 모형에 교호작용 항 $\text{MedInc} \times \text{AveRooms}$와 이차항 $\text{MedInc}^2$을 추가하라. AIC로 이 추가가 모형을 개선하는지 판정하라.
 
 </div>
 

@@ -125,7 +125,7 @@ $O(p^2)$이므로 최량 부분집합의 $2^p$보다 훨씬 작다. $p = 20$이�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 전진 선택, 후진 소거, 최량 부분집합 선택의 차이를 기술하라. 계산 비용이 가장 큰 것은 무엇인가?
 
 </div>
@@ -141,7 +141,7 @@ $O(p^2)$이므로 최량 부분집합의 $2^p$보다 훨씬 작다. $p = 20$이�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 p값을 조정하지 않으면 단계적 선택이 왜 제1종 오류율을 부풀리고 과대적합된 모형을 만들어 내는지 설명하라.
 
 </div>
@@ -155,7 +155,7 @@ p값을 조정하지 않으면 단계적 선택이 왜 제1종 오류율을 부�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 설명변수가 $p = 5$개일 때 최량 부분집합 선택은 몇 개의 모형을 평가해야 하는가? 가능한 모형 크기를 모두 나열하라.
 
 </div>
@@ -176,7 +176,7 @@ p값을 조정하지 않으면 단계적 선택이 왜 제1종 오류율을 부�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 LASSO의 변수선택과 단계적 선택을 비교하라. 현대 실무에서 LASSO가 일반적으로 선호되는 이유는 무엇인가?
 
 </div>

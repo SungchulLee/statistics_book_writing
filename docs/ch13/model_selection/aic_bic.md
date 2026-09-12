@@ -76,7 +76,7 @@ AIC와 BIC 모두 교호작용 모형을 선호하는 데 의견이 일치하며
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 AIC와 BIC를 수학적으로 정의하고 벌점항의 핵심 차이를 설명하라.
 
 </div>
@@ -96,7 +96,7 @@ AIC와 BIC를 수학적으로 정의하고 벌점항의 핵심 차이를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 후보 모형 셋의 AIC 값이 245.3, 243.1, 248.7이다. 어느 모형이 선호되는가? 최선과 차선 모형의 AIC 차이가 0.5뿐이라면 어떤 결론을 내리겠는가?
 
 </div>
@@ -108,7 +108,7 @@ AIC와 BIC를 수학적으로 정의하고 벌점항의 핵심 차이를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 BIC는 일치성을 가지지만($n \to \infty$일 때 참 모형을 고른다) AIC는 그렇지 않은 이유를 설명하라. 실무에서 AIC를 BIC보다 선호할 상황은 언제인가?
 
 </div>

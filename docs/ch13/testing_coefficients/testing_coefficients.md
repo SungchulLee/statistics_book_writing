@@ -30,7 +30,7 @@ $p < \alpha$이면, 동등하게 $|t_j| > t^*_{n-k,\,\alpha/2}$이면, 동등하
 
 <div class="exbox" markdown>
 
-**보기 1.** 설명변수 두 개.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 설명변수 두 개.
 
 </div>
 
@@ -92,7 +92,7 @@ Notes:
 
 <div class="exbox" markdown>
 
-**보기 2.** p값과 신뢰구간 뽑아내기.
+**보기 2.** <span class="diff easy" title="쉬움"></span> p값과 신뢰구간 뽑아내기.
 
 </div>
 
@@ -124,7 +124,7 @@ P-values: [2.09535133e-01 1.62497167e-09]
 
 <div class="exbox" markdown>
 
-**보기 3.** 여러 설명변수의 해석.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 여러 설명변수의 해석.
 
 </div>
 
@@ -170,7 +170,7 @@ Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 보기 1에서 계수와 그 표준오차로부터 $\hat{\beta}_1$의 $t$ 통계량을 직접 계산하라. `results.tvalues[1]`의 값과 일치하는지 확인하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 보기 1에서 계수와 그 표준오차로부터 $\hat{\beta}_1$의 $t$ 통계량을 직접 계산하라. `results.tvalues[1]`의 값과 일치하는지 확인하라.
 
 </div>
 
@@ -198,7 +198,7 @@ Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 보기 2에서 잡음 표준편차를 1에서 5로 키우도록 고쳐라. 기울기의 $p$값과 신뢰구간은 어떻게 달라지는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 보기 2에서 잡음 표준편차를 1에서 5로 키우도록 고쳐라. 기울기의 $p$값과 신뢰구간은 어떻게 달라지는가?
 
 </div>
 
@@ -247,7 +247,7 @@ Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 보기 3에 시험 점수와 무관한 세 번째 설명변수 `caffeine = np.random.rand(100) * 5`를 추가하라. 그 $p$값에 대해 무엇을 기대하며 그 이유는 무엇인가?
+**연습문제 3.** <span class="diff med" title="중간"></span> 보기 3에 시험 점수와 무관한 세 번째 설명변수 `caffeine = np.random.rand(100) * 5`를 추가하라. 그 $p$값에 대해 무엇을 기대하며 그 이유는 무엇인가?
 
 </div>
 
@@ -257,7 +257,7 @@ Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 전체 모형 유의성의 $F$ 검정과 개별 $t$ 검정의 관계를 설명하라. 둘이 다른 결론을 줄 수 있는 경우는 언제인가?
+**연습문제 4.** <span class="diff med" title="중간"></span> 전체 모형 유의성의 $F$ 검정과 개별 $t$ 검정의 관계를 설명하라. 둘이 다른 결론을 줄 수 있는 경우는 언제인가?
 
 </div>
 
@@ -267,7 +267,7 @@ Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 설명변수가 하나인 단순선형회귀에서 $t_1^2 = F$임을 증명하라. 이 동등성이 깨지는 조건은 무엇인가?
+**연습문제 5.** <span class="diff med" title="중간"></span> 설명변수가 하나인 단순선형회귀에서 $t_1^2 = F$임을 증명하라. 이 동등성이 깨지는 조건은 무엇인가?
 
 </div>
 

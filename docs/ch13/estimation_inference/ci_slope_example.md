@@ -86,7 +86,7 @@ Margin of error: 0.1198
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 같은 기울기 추정값에 대해 99% 신뢰구간을 계산하라. 95% 구간과 폭을 비교하면 어떠한가?
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 같은 기울기 추정값에 대해 99% 신뢰구간을 계산하라. 95% 구간과 폭을 비교하면 어떠한가?
 
 </div>
 
@@ -117,7 +117,7 @@ Margin of error: 0.1198
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 표본크기가 $n = 20$이 아니라 $n = 50$이라면($\hat{\beta}_1$과 SE는 그대로) 95% 신뢰구간은 어떻게 달라지는가? 이유를 설명하라.
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 표본크기가 $n = 20$이 아니라 $n = 50$이라면($\hat{\beta}_1$과 SE는 그대로) 95% 신뢰구간은 어떻게 달라지는가? 이유를 설명하라.
 
 </div>
 
@@ -127,7 +127,7 @@ Margin of error: 0.1198
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 신뢰구간을 이용해 $\alpha = 0.05$에서 $H_0\colon \beta_1 = 0$의 양측 가설검정을 수행하라. 판정을 서술하고 신뢰구간과 가설검정의 쌍대성을 설명하라.
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 신뢰구간을 이용해 $\alpha = 0.05$에서 $H_0\colon \beta_1 = 0$의 양측 가설검정을 수행하라. 판정을 서술하고 신뢰구간과 가설검정의 쌍대성을 설명하라.
 
 </div>
 
@@ -137,7 +137,7 @@ Margin of error: 0.1198
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $w_i = (x_i - \bar{x}) / \sum_{j=1}^n (x_j - \bar{x})^2$일 때 $\hat{\beta}_1 = \sum_{i=1}^n w_i y_i$에서 출발하여 $\mathrm{SE}(\hat{\beta}_1)$의 공식을 유도하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $w_i = (x_i - \bar{x}) / \sum_{j=1}^n (x_j - \bar{x})^2$일 때 $\hat{\beta}_1 = \sum_{i=1}^n w_i y_i$에서 출발하여 $\mathrm{SE}(\hat{\beta}_1)$의 공식을 유도하라.
 
 </div>
 
@@ -153,7 +153,7 @@ Margin of error: 0.1198
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $n \to \infty$일 때 $t$ 기반 신뢰구간이 $z$ 기반 구간으로 수렴함을 증명하라. 실무에서 이 구분이 중요해지는 조건은 무엇인가?
+**연습문제 5.** <span class="diff med" title="중간"></span> $n \to \infty$일 때 $t$ 기반 신뢰구간이 $z$ 기반 구간으로 수렴함을 증명하라. 실무에서 이 구분이 중요해지는 조건은 무엇인가?
 
 </div>
 

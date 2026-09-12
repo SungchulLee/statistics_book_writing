@@ -824,7 +824,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 집단에서 뽑은 남성 100명의 키와 몸무게에 대한 통계 정보:
 
 - **키**: 평균 = 173 cm, 표준편차 = 6 cm
@@ -901,7 +901,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 주택 자료를 써서 다음을 하라.
 
 **(a)** $x = \text{df.median\_income}$, $y = \text{df.median\_house\_value}$로 회귀직선을 그려라.

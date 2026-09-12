@@ -152,7 +152,7 @@ MASE가 0.175라는 것은 모형의 평균오차가 소박한 기준 모형 오
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 실제값 $y = (100, 200, 50, 300)$과 예측값 $\hat{y} = (110, 180, 55, 290)$에 대해 평균절대백분율오차(MAPE)를 계산하라.
 
 </div>
@@ -172,7 +172,7 @@ MASE가 0.175라는 것은 모형의 평균오차가 소박한 기준 모형 오
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 실제값이 0이거나 0에 가까울 때 MAPE가 왜 정의되지 않거나 문제가 되는지 설명하라. 어떤 대안 척도를 쓸 수 있는가?
 
 </div>
@@ -188,7 +188,7 @@ MASE가 0.175라는 것은 모형의 평균오차가 소박한 기준 모형 오
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 MAPE는 백분율의 관점에서 과대예측과 과소예측을 비대칭적으로 다룬다. 예를 들어 이를 보여라.
 
 </div>
@@ -210,7 +210,7 @@ MAPE는 백분율의 관점에서 과대예측과 과소예측을 비대칭적�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 예측 모형을 평가할 때 MAPE가 좋은 선택이 되는 경우는 언제인가? 절대오차보다 상대오차가 더 의미 있는 응용 분야 두 가지를 들어라.
 
 </div>

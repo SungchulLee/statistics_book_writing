@@ -128,7 +128,7 @@ RMSE($2.93$)가 MAE($2.2$)보다 상당히 크다는 점에 주목하라. 이 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 실제값 $y = (3, 5, 2, 8)$과 예측값 $\hat{y} = (2.5, 5.5, 1.5, 7)$에 대해 MAE, MSE, RMSE를 계산하라.
 
 </div>
@@ -150,7 +150,7 @@ RMSE($2.93$)가 MAE($2.2$)보다 상당히 크다는 점에 주목하라. 이 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 MSE가 MAE보다 큰 오차에 더 무거운 벌점을 주는 이유를 설명하라. MAE가 선호되는 실제 상황을 하나 들어라.
 
 </div>
@@ -162,7 +162,7 @@ MSE가 MAE보다 큰 오차에 더 무거운 벌점을 주는 이유를 설명�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\sum(y_i - c)^2$을 최소화하는 $c$가 평균 $\bar{y}$이고, $\sum|y_i - c|$를 최소화하는 값이 중앙값임을 보여라.
 
 </div>
@@ -180,7 +180,7 @@ $\sum(y_i - c)^2$을 최소화하는 $c$가 평균 $\bar{y}$이고, $\sum|y_i - 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 모형 성능을 보고할 때 MSE보다 RMSE가 선호되는 이유는 무엇인가? RMSE의 단위는 무엇인가?
 
 </div>

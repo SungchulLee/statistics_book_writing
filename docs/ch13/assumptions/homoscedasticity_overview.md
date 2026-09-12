@@ -58,7 +58,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 연봉을 경력 연수에 회귀시킨 단순선형회귀에서 잔차의 분산이 경력 수준에 따라 커진다. 이분산 아래에서 OLS 추정량이 왜 여전히 불편이지만 더 이상 효율적이지 않은지 설명하라.
 
 </div>
@@ -70,7 +70,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 이분산의 수학적 정의를 쓰고 등분산성과 어떻게 다른지 설명하라.
 
 </div>

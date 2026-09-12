@@ -92,7 +92,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 관측값이 $n = 100{,}000$개인 회귀에서 어떤 설명변수가 $\hat{\beta} = 0.002$, $p < 0.001$이다. 이 결과는 실질적으로 유의한가? 통계적 유의성과 실질적 유의성의 차이를 설명하라.
 
 </div>
@@ -104,7 +104,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 유의하지 않은 p값($p = 0.15$)이 계수가 0임을 증명하지 않는 이유를 설명하라. 실제로는 무엇을 뜻하는가?
 
 </div>
@@ -116,7 +116,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 설명변수가 다섯 개인 모형에서 개별 $t$ 검정은 모두 유의하지 않은데($p > 0.05$) 전체 $F$ 검정은 유의하다($p = 0.01$). 모순처럼 보이는 이 결과를 해석하라.
 
 </div>

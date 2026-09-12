@@ -130,7 +130,7 @@ for step in range(p_total):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 각 단계에서 다음 설명변수를 정할 때 AIC 대신 BIC를 써서 전진 선택 절차를 수행하라. 선택되는 설명변수의 순서가 달라지는가?
+**연습문제 1.** <span class="diff med" title="중간"></span> 각 단계에서 다음 설명변수를 정할 때 AIC 대신 BIC를 써서 전진 선택 절차를 수행하라. 선택되는 설명변수의 순서가 달라지는가?
 
 </div>
 
@@ -142,7 +142,7 @@ for step in range(p_total):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 잡음 수준을 $\sigma = 2$에서 $\sigma = 5$로 키워라. 각 기준이 고르는 최적 모형 크기는 어떻게 달라지는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 잡음 수준을 $\sigma = 2$에서 $\sigma = 5$로 키워라. 각 기준이 고르는 최적 모형 크기는 어떻게 달라지는가?
 
 </div>
 
@@ -152,7 +152,7 @@ for step in range(p_total):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 10-겹 교차검증을 구현하여 5-겹과 비교하라. $K$의 선택에서 편향-분산 절충을 논하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 10-겹 교차검증을 구현하여 5-겹과 비교하라. $K$의 선택에서 편향-분산 절충을 논하라.
 
 </div>
 
@@ -169,7 +169,7 @@ for step in range(p_total):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** Bayes 모형비교의 관점에서 BIC 벌점 $k\ln(n)$을 유도하라. 왜 벌점이 $n$에 의존하는가?
+**연습문제 4.** <span class="diff hard" title="어려움"></span> Bayes 모형비교의 관점에서 BIC 벌점 $k\ln(n)$을 유도하라. 왜 벌점이 $n$에 의존하는가?
 
 </div>
 
@@ -185,7 +185,7 @@ for step in range(p_total):
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 참 모형에 관련 설명변수가 3개 있다고 하자. $n \to \infty$일 때 $P(\text{BIC가 참 모형을 고른다}) \to 1$이지만 AIC는 그렇지 않음을 증명하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 참 모형에 관련 설명변수가 3개 있다고 하자. $n \to \infty$일 때 $P(\text{BIC가 참 모형을 고른다}) \to 1$이지만 AIC는 그렇지 않음을 증명하라.
 
 </div>
 

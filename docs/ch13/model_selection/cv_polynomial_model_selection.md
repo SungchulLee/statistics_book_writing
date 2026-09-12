@@ -145,7 +145,7 @@ for i, degree in enumerate(degrees):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 모자행렬 지름길로 $n$개 모형을 다시 적합하지 않고 2차 다항회귀의 LOOCV MSE를 계산하라. 무차별 계산 결과와 일치하는지 확인하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 모자행렬 지름길로 $n$개 모형을 다시 적합하지 않고 2차 다항회귀의 LOOCV MSE를 계산하라. 무차별 계산 결과와 일치하는지 확인하라.
 
 </div>
 
@@ -178,7 +178,7 @@ for i, degree in enumerate(degrees):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $n$을 200에서 1000으로 늘려라. 검증집합 방법의 변동성과 LOOCV·10-겹 사이의 격차는 어떻게 달라지는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> $n$을 200에서 1000으로 늘려라. 검증집합 방법의 변동성과 LOOCV·10-겹 사이의 격차는 어떻게 달라지는가?
 
 </div>
 
@@ -188,7 +188,7 @@ for i, degree in enumerate(degrees):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** (10-겹 교차검증으로 얻은) 검정 MSE와 함께 훈련 MSE를 다항 차수의 함수로 그려라. 그림에 드러나는 편향-분산 절충을 설명하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> (10-겹 교차검증으로 얻은) 검정 MSE와 함께 훈련 MSE를 다항 차수의 함수로 그려라. 그림에 드러나는 편향-분산 절충을 설명하라.
 
 </div>
 
@@ -207,7 +207,7 @@ for i, degree in enumerate(degrees):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 계수 1의 갱신에 대한 Sherman-Morrison-Woodbury 공식에서 $\mathrm{CV}_{(n)} = \frac{1}{n}\sum_i \left(\frac{e_i}{1 - h_{ii}}\right)^2$을 유도하라.
+**연습문제 4.** <span class="diff hard" title="어려움"></span> 계수 1의 갱신에 대한 Sherman-Morrison-Woodbury 공식에서 $\mathrm{CV}_{(n)} = \frac{1}{n}\sum_i \left(\frac{e_i}{1 - h_{ii}}\right)^2$을 유도하라.
 
 </div>
 
@@ -223,7 +223,7 @@ for i, degree in enumerate(degrees):
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $K$-겹 교차검증에서 $K$의 선택에 편향-분산 절충이 있는 이유를 설명하라. 극단인 $K = 2$와 $K = n$의 경우는 어떠한가?
+**연습문제 5.** <span class="diff med" title="중간"></span> $K$-겹 교차검증에서 $K$의 선택에 편향-분산 절충이 있는 이유를 설명하라. 극단인 $K = 2$와 $K = n$의 경우는 어떠한가?
 
 </div>
 

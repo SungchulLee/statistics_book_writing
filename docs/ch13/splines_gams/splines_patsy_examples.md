@@ -136,7 +136,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** df를 3에서 8까지 바꿔 가며 B-스플라인을 적합하고 그 결과 곡선을 그려라. 어느 df에서 과대적합의 징후가 나타나기 시작하는가?
+**연습문제 1.** <span class="diff med" title="중간"></span> df를 3에서 8까지 바꿔 가며 B-스플라인을 적합하고 그 결과 곡선을 그려라. 어느 df에서 과대적합의 징후가 나타나기 시작하는가?
 
 </div>
 
@@ -172,7 +172,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 매듭이 $K$개인 자연 삼차 스플라인의 자유도가 (제약 없는 삼차 스플라인의 $K + 4$가 아니라) $K$인 이유를 설명하라. "잃어버린" 4개의 자유도는 어디로 가는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 매듭이 $K$개인 자연 삼차 스플라인의 자유도가 (제약 없는 삼차 스플라인의 $K + 4$가 아니라) $K$인 이유를 설명하라. "잃어버린" 4개의 자유도는 어디로 가는가?
 
 </div>
 
@@ -199,7 +199,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 자료 범위 바깥(예: age = 150이나 age = 0)에서 B-스플라인 모형과 자연 스플라인 모형의 예측을 비교하라. 어느 쪽이 더 합리적으로 외삽하는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> 자료 범위 바깥(예: age = 150이나 age = 0)에서 B-스플라인 모형과 자연 스플라인 모형의 예측을 비교하라. 어느 쪽이 더 합리적으로 외삽하는가?
 
 </div>
 
@@ -243,7 +243,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 적합 목적함수에 릿지 형태의 항 $\lambda \|\boldsymbol{\gamma}\|^2$을 더해 B-스플라인에 거칢 벌점을 구현하라. 이것은 평활 스플라인과 어떤 관계인가?
+**연습문제 4.** <span class="diff med" title="중간"></span> 적합 목적함수에 릿지 형태의 항 $\lambda \|\boldsymbol{\gamma}\|^2$을 더해 B-스플라인에 거칢 벌점을 구현하라. 이것은 평활 스플라인과 어떤 관계인가?
 
 </div>
 
@@ -261,7 +261,7 @@ cs_pred = cs_model.predict(np.asarray(cs_grid))
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 매듭이 자료점에 놓인 자연 삼차 스플라인에 대해, 평활 스플라인 추정량이 두 번 미분 가능한 모든 함수 가운데 $\sum(y_i - f(x_i))^2 + \lambda\int[f''(t)]^2\,dt$를 최소화함을 증명하라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 매듭이 자료점에 놓인 자연 삼차 스플라인에 대해, 평활 스플라인 추정량이 두 번 미분 가능한 모든 함수 가운데 $\sum(y_i - f(x_i))^2 + \lambda\int[f''(t)]^2\,dt$를 최소화함을 증명하라.
 
 </div>
 

@@ -231,7 +231,7 @@ Pipeline R-squared (test): 0.9858
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계산하며, $R^2$ 점수를 출력하는 Python 코드를 작성하라.
 
 </div>
@@ -268,7 +268,7 @@ scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 `model.score()`와 예측값에서 $R^2$를 직접 계산하는 것의 차이를 설명하라. 둘은 동등한가?
 
 </div>
@@ -295,7 +295,7 @@ scikit-learn으로 인공자료에 선형회귀를 적합하고, 예측을 계�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제공하지 않는 이유는 무엇인가? 어떻게 얻을 수 있는가?
 
 </div>
@@ -312,7 +312,7 @@ scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 `sklearn.model_selection.cross_val_score`로 선형회귀 모형의 일반화 성능을 추정하는 방법을 기술하라.
 
 </div>

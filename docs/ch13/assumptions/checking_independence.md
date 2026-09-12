@@ -263,7 +263,7 @@ Breusch-Godfrey 검정도 $p = 0.45$로 자기상관의 증거를 찾지 못한�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 분기별 매출 자료에 대한 회귀모형에서 Durbin-Watson 통계량 $d = 0.95$를 얻었다. 이 결과를 해석하고 적절한 대책을 제안하라.
 
 </div>
@@ -279,7 +279,7 @@ Breusch-Godfrey 검정도 $p = 0.45$로 자기상관의 증거를 찾지 못한�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 독립성 가정을 자료만 보고 검증할 수 없고 연구 설계로 확보해야 하는 이유를 설명하라. 독립성을 보장하는 연구 설계의 예를 두 가지 들어라.
 
 </div>
@@ -294,7 +294,7 @@ Breusch-Godfrey 검정도 $p = 0.45$로 자기상관의 증거를 찾지 못한�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 학급 안에 중첩된 학생 자료는 독립성 가정을 위배한다. 회귀 추론에 미치는 구체적인 영향을 설명하고 이 문제를 다루는 모형화 접근을 말하라.
 
 </div>

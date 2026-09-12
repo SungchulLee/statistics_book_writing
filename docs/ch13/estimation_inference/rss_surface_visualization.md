@@ -108,7 +108,7 @@ $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $\partial \mathrm{RSS}/\partial \beta_0$과 $\partial \mathrm{RSS}/\partial \beta_1$을 계산해 0으로 두어, OLS 해에서 RSS의 기울기가 0임을 해석적으로 확인하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> $\partial \mathrm{RSS}/\partial \beta_0$과 $\partial \mathrm{RSS}/\partial \beta_1$을 계산해 0으로 두어, OLS 해에서 RSS의 기울기가 0임을 해석적으로 확인하라.
 
 </div>
 
@@ -126,7 +126,7 @@ $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $x_i$가 모두 같지 않을 때 헤세 행렬 $\mathbf{H} = 2\mathbf{X}^\top\mathbf{X}$가 양의 정부호임을 보여라. 모두 같으면 어떻게 되는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> $x_i$가 모두 같지 않을 때 헤세 행렬 $\mathbf{H} = 2\mathbf{X}^\top\mathbf{X}$가 양의 정부호임을 보여라. 모두 같으면 어떻게 되는가?
 
 </div>
 
@@ -136,7 +136,7 @@ $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 잡음 수준을 높인($\sigma = 10$) 자료를 생성해 곡면을 다시 그려라. $\sigma = 2$일 때와 모양이 어떻게 달라지는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> 잡음 수준을 높인($\sigma = 10$) 자료를 생성해 곡면을 다시 그려라. $\sigma = 2$일 때와 모양이 어떻게 달라지는가?
 
 </div>
 
@@ -146,7 +146,7 @@ $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 경사하강법을 구현하여 RSS 곡면의 최솟값을 찾아라. 학습률에 따라 필요한 반복 횟수를 비교하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 경사하강법을 구현하여 RSS 곡면의 최솟값을 찾아라. 학습률에 따라 필요한 반복 횟수를 비교하라.
 
 </div>
 
@@ -200,7 +200,7 @@ $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $\bar{x} = 0$(중심화된 설명변수)일 때 등고선 타원이 좌표축과 나란하고 $\bar{x} \neq 0$일 때 기울어지는 이유를 설명하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> $\bar{x} = 0$(중심화된 설명변수)일 때 등고선 타원이 좌표축과 나란하고 $\bar{x} \neq 0$일 때 기울어지는 이유를 설명하라.
 
 </div>
 

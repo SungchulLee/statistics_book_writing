@@ -129,7 +129,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 선형, 다항, GAM 모형의 $R^2$와 RMSE를 비교하라. 어느 모형이 가장 좋으며 그 개선은 실질적인가?
+**연습문제 1.** <span class="diff med" title="중간"></span> 선형, 다항, GAM 모형의 $R^2$와 RMSE를 비교하라. 어느 모형이 가장 좋으며 그 개선은 실질적인가?
 
 </div>
 
@@ -167,7 +167,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** pyGAM 설정을 바꾸어 모든 설명변수에 선형항 대신 매끄러운 스플라인을 쓰도록 하라. 적합이 개선되는가? 과대적합의 위험을 논하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> pyGAM 설정을 바꾸어 모든 설명변수에 선형항 대신 매끄러운 스플라인을 쓰도록 하라. 적합이 개선되는가? 과대적합의 위험을 논하라.
 
 </div>
 
@@ -186,7 +186,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** GAM이 왜 "가법"이라 불리는지 설명하라. 가법 구조는 어떤 가정을 부과하며 언제 위배될 수 있는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> GAM이 왜 "가법"이라 불리는지 설명하라. 가법 구조는 어떤 가정을 부과하며 언제 위배될 수 있는가?
 
 </div>
 
@@ -196,7 +196,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 평활 모수 $\lambda$는 편향-분산 절충을 조절한다. $\lambda \to 0$과 $\lambda \to \infty$일 때 어떻게 되는지 설명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 평활 모수 $\lambda$는 편향-분산 절충을 조절한다. $\lambda \to 0$과 $\lambda \to \infty$일 때 어떻게 되는지 설명하라.
 
 </div>
 
@@ -206,7 +206,7 @@ gam_py.gridsearch(X_gam, y_gam)
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** B-스플라인 기저를 쓰는 단변량 GAM의 벌점최소제곱 문제를 행렬로 표현하라. $\mathbf{B}$가 기저행렬이고 $\mathbf{D}$가 벌점행렬일 때 해가 $(B^\top B + \lambda D)^{-1} B^\top y$임을 보여라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span> B-스플라인 기저를 쓰는 단변량 GAM의 벌점최소제곱 문제를 행렬로 표현하라. $\mathbf{B}$가 기저행렬이고 $\mathbf{D}$가 벌점행렬일 때 해가 $(B^\top B + \lambda D)^{-1} B^\top y$임을 보여라.
 
 </div>
 

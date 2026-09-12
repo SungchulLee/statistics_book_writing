@@ -299,7 +299,7 @@ Breusch-Pagan과 Jarque-Bera 모두 기각하지 못하고 VIF도 1.00이다. �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음은 `statsmodels` 패키지로 선형회귀 분석을 수행한 결과이다. **TV**, **라디오**, **신문** 매체에 배정한 광고비로 **매출**을 예측한다.
 
 ```text

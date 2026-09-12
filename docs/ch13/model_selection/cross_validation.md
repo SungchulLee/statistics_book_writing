@@ -129,7 +129,7 @@ Stone(1977)은 선형회귀에서 AIC에 의한 모형선택이 LOOCV와 점근�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 k-겹 교차검증과 하나 빼기 교차검증(LOOCV)의 차이를 설명하라. 추정된 검정오차의 편향과 분산에는 어떤 절충이 있는가?
 
 </div>
@@ -148,7 +148,7 @@ k-겹 교차검증과 하나 빼기 교차검증(LOOCV)의 차이를 설명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 한 데이터 과학자가 다항회귀를 적합하고 훈련자료로 훈련오차를 최소화하는 차수를 골랐다. 그 결과 15차가 최선이라고 나왔다. 무엇이 문제이며 교차검증은 어떻게 도움이 되는가?
 
 </div>
@@ -166,7 +166,7 @@ k-겹 교차검증과 하나 빼기 교차검증(LOOCV)의 차이를 설명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 층화 k-겹 교차검증에서 층화의 기준은 무엇이며 언제 중요한가?
 
 </div>
@@ -184,7 +184,7 @@ k-겹 교차검증과 하나 빼기 교차검증(LOOCV)의 차이를 설명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 교차검증을 이용한 모형선택에서 "1 표준오차 규칙"과 그 근거를 설명하라.
 
 </div>

@@ -204,7 +204,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 고전적 가정 아래에서 단순선형회귀의 $\hat{\beta}_1$의 표집분포를 서술하라. 이 분포는 어떤 모수에 의존하는가?
 
 </div>
@@ -220,7 +220,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 단순선형회귀에서 $\hat{\sigma}^2 = \text{SSE}/(n-2)$가 $\sigma^2$의 불편추정량인 반면 $\text{SSE}/n$은 편향되는 이유를 설명하라.
 
 </div>
@@ -236,7 +236,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 연구자가 기울기를 높은 정밀도로 추정하려 한다. $\text{Var}(\hat{\beta}_1)$의 공식에 근거하여 표준오차를 줄이는 실용적인 전략 두 가지를 제시하라.
 
 </div>

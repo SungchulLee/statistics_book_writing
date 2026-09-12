@@ -134,7 +134,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 같은 자료에 **모형 A**와 **모형 B**라는 두 선형회귀 모형을 적합했다. 결과는 다음과 같다.
 
 - 모형 A의 $R^2$가 더 높다.

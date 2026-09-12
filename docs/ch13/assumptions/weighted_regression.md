@@ -104,7 +104,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 반대 패턴, 곧 분산이 $x$에 따라 줄어드는 자료를 생성하라(예: $\sigma_i = 10 - 0.8x_i$). OLS와 WLS를 적합하라. 계수 정확도의 관점에서 WLS가 여전히 OLS보다 나은가?
+**연습문제 1.** <span class="diff med" title="중간"></span> 반대 패턴, 곧 분산이 $x$에 따라 줄어드는 자료를 생성하라(예: $\sigma_i = 10 - 0.8x_i$). OLS와 WLS를 적합하라. 계수 정확도의 관점에서 WLS가 여전히 OLS보다 나은가?
 
 </div>
 
@@ -122,7 +122,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 모든 $i$에 대해 가중치가 같으면($w_i = c$) WLS가 OLS로 환원됨을 보여라. 이는 두 방법의 관계에 대해 무엇을 말해 주는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 모든 $i$에 대해 가중치가 같으면($w_i = c$) WLS가 OLS로 환원됨을 보여라. 이는 두 방법의 관계에 대해 무엇을 말해 주는가?
 
 </div>
 
@@ -138,7 +138,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 실제로는 $\sigma_i^2$을 모른다. 먼저 OLS를 적합하고, $\ln(e_i^2)$을 $x_i$에 회귀시켜 분산함수를 추정한 뒤, 추정된 가중치로 WLS를 적용하는 실행가능 WLS를 구현하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 실제로는 $\sigma_i^2$을 모른다. 먼저 OLS를 적합하고, $\ln(e_i^2)$을 $x_i$에 회귀시켜 분산함수를 추정한 뒤, 추정된 가중치로 WLS를 적용하는 실행가능 WLS를 구현하라.
 
 </div>
 
@@ -157,7 +157,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 공분산 구조 $\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1^2, \ldots, \sigma_n^2)$을 알 때 $\hat{\boldsymbol{\beta}}_{\text{WLS}}$가 BLUE임을 증명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 공분산 구조 $\boldsymbol{\Sigma} = \mathrm{diag}(\sigma_1^2, \ldots, \sigma_n^2)$을 알 때 $\hat{\boldsymbol{\beta}}_{\text{WLS}}$가 BLUE임을 증명하라.
 
 </div>
 
@@ -173,7 +173,7 @@ WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** WLS를 OLS + 이분산 일치(HC) 표준오차(White의 로버스트 표준오차)와 비교하라. 절충 관계는 무엇인가?
+**연습문제 5.** <span class="diff med" title="중간"></span> WLS를 OLS + 이분산 일치(HC) 표준오차(White의 로버스트 표준오차)와 비교하라. 절충 관계는 무엇인가?
 
 </div>
 

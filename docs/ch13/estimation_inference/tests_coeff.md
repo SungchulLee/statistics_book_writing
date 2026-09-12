@@ -209,7 +209,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제 1.**
+**문제 1.** <span class="diff easy" title="쉬움"></span>
 
 Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} + \text{Newspaper}$의 주요 회귀 출력 — 계수, 표준오차, $t$ 통계량, $p$값, 신뢰구간 — 을 밑바닥부터 계산해 재현하라.
 
@@ -325,7 +325,7 @@ $p$값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 설명변수가 $p = 4$개이고 $n = 50$인 다중회귀에서 개별 계수의 $t$ 검정과 전체 유의성 $F$ 검정의 자유도를 유도하라.
 
 </div>
@@ -338,7 +338,7 @@ $p$값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 회귀 출력에서 설명변수 $X_3$이 $\hat{\beta}_3 = 2.1$, $p = 0.04$였는데, 모형에 $X_4$를 넣으니 $\hat{\beta}_3$이 $0.3$으로 바뀌고 $p = 0.72$가 되었다. 이 현상을 설명하라.
 
 </div>
@@ -354,7 +354,7 @@ $p$값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 전체 모형의 $F$ 검정이 유의하더라도 어떤 개별 설명변수의 $t$ 검정이 유의하리라는 보장은 없다. 그 이유를 설명하고 개념적인 예를 구성하라.
 
 </div>

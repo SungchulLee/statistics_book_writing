@@ -168,7 +168,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 분위수 기반 구간($K = 5$)으로 계단함수를 적합하고 등간격 구간의 구간 평균과 비교하라. 어느 방식이 더 균일한 예측 품질을 주는가?
+**연습문제 1.** <span class="diff med" title="중간"></span> 분위수 기반 구간($K = 5$)으로 계단함수를 적합하고 등간격 구간의 구간 평균과 비교하라. 어느 방식이 더 균일한 예측 품질을 주는가?
 
 </div>
 
@@ -188,7 +188,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 구간 개수를 늘리면 훈련 $R^2$가 항상 커지거나(적어도 줄지 않고) 검정오차는 커질 수 있는 이유를 설명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 구간 개수를 늘리면 훈련 $R^2$가 항상 커지거나(적어도 줄지 않고) 검정오차는 커질 수 있는 이유를 설명하라.
 
 </div>
 
@@ -198,7 +198,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** `pd.cut` 대신 `np.digitize`로 계단함수를 구현하라. 결과가 일치하는지 확인하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> `pd.cut` 대신 `np.digitize`로 계단함수를 구현하라. 결과가 일치하는지 확인하라.
 
 </div>
 
@@ -219,7 +219,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** (모든 지시변수를 넣고 절편은 없는) 계단함수 모형에서 각 구간 계수의 OLS 추정값이 그 구간 반응변수의 표본평균과 같음을 수학적으로 보여라.
+**연습문제 4.** <span class="diff med" title="중간"></span> (모든 지시변수를 넣고 절편은 없는) 계단함수 모형에서 각 구간 계수의 OLS 추정값이 그 구간 반응변수의 표본평균과 같음을 수학적으로 보여라.
 
 </div>
 
@@ -235,7 +235,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** "비싼" 주택을 예측하는 계단함수 로지스틱 회귀를, 연속형 age를 쓰는 로지스틱 회귀와 비교하라. 어느 쪽의 분류 정확도가 높으며 그 이유는 무엇인가?
+**연습문제 5.** <span class="diff med" title="중간"></span> "비싼" 주택을 예측하는 계단함수 로지스틱 회귀를, 연속형 age를 쓰는 로지스틱 회귀와 비교하라. 어느 쪽의 분류 정확도가 높으며 그 이유는 무엇인가?
 
 </div>
 

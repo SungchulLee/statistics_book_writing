@@ -124,7 +124,7 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 특정한 $\mathbf{X}$ 실현값에 대해 $\mathbf{P}$와 $\mathbf{M}$이 멱등이고 대칭임을 수치적으로 확인하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 특정한 $\mathbf{X}$ 실현값에 대해 $\mathbf{P}$와 $\mathbf{M}$이 멱등이고 대칭임을 수치적으로 확인하라.
 
 </div>
 
@@ -159,7 +159,7 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 95% 신뢰구간 $\hat{\beta}_j \pm t^*_{n-k,0.025} \cdot \mathrm{SE}(\hat{\beta}_j)$의 포함확률을 추정하도록 몬테카를로를 고쳐라. 95%에 가까운가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 95% 신뢰구간 $\hat{\beta}_j \pm t^*_{n-k,0.025} \cdot \mathrm{SE}(\hat{\beta}_j)$의 포함확률을 추정하도록 몬테카를로를 고쳐라. 95%에 가까운가?
 
 </div>
 
@@ -196,7 +196,7 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $\mathbf{P}\mathbf{M} = \mathbf{0}$임을 보이고 기하학적으로 해석하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> $\mathbf{P}\mathbf{M} = \mathbf{0}$임을 보이고 기하학적으로 해석하라.
 
 </div>
 
@@ -212,7 +212,7 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $n = 200$을 유지한 채 $\sigma$를 2에서 10으로 키워라. 몬테카를로 표준편차와 $R^2$의 분포는 어떻게 달라지는가?
+**연습문제 4.** <span class="diff med" title="중간"></span> $n = 200$을 유지한 채 $\sigma$를 2에서 10으로 키워라. 몬테카를로 표준편차와 $R^2$의 분포는 어떻게 달라지는가?
 
 </div>
 
@@ -229,7 +229,7 @@ $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $\mathbf{M}$의 대각합을 이용해 $E[s^2] = \sigma^2$임을 증명하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> $\mathbf{M}$의 대각합을 이용해 $E[s^2] = \sigma^2$임을 증명하라.
 
 </div>
 

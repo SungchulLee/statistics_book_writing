@@ -100,7 +100,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $n = 100$, $\sigma = 3$인 인공자료에서 $E[y \mid x_0 = 0]$의 90% 신뢰구간을 계산하고 95% 구간과 비교하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> $n = 100$, $\sigma = 3$인 인공자료에서 $E[y \mid x_0 = 0]$의 90% 신뢰구간을 계산하고 95% 구간과 비교하라.
 
 </div>
 
@@ -135,7 +135,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 어떤 $x_0$에서든 예측구간이 신뢰구간보다 항상 넓은 이유를 대수적으로 설명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 어떤 $x_0$에서든 예측구간이 신뢰구간보다 항상 넓은 이유를 대수적으로 설명하라.
 
 </div>
 
@@ -157,7 +157,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $n = 30$, $\sigma = 1$인 모형의 띠를 그리도록 코드를 고쳐라. 원래의 $n = 100$, $\sigma = 3$인 경우와 띠의 폭을 비교하면 어떠한가?
+**연습문제 3.** <span class="diff med" title="중간"></span> $n = 30$, $\sigma = 1$인 모형의 띠를 그리도록 코드를 고쳐라. 원래의 $n = 100$, $\sigma = 3$인 경우와 띠의 폭을 비교하면 어떠한가?
 
 </div>
 
@@ -173,7 +173,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $y_{\text{new}} = \beta_0 + \beta_1 x_0 + \varepsilon_{\text{new}}$이고 $\varepsilon_{\text{new}}$이 훈련자료와 독립일 때, 예측오차 $\hat{y}_0 - y_{\text{new}}$의 분산을 유도하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $y_{\text{new}} = \beta_0 + \beta_1 x_0 + \varepsilon_{\text{new}}$이고 $\varepsilon_{\text{new}}$이 훈련자료와 독립일 때, 예측오차 $\hat{y}_0 - y_{\text{new}}$의 분산을 유도하라.
 
 </div>
 
@@ -195,7 +195,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $x_0 = \bar{x}$에서 평균의 신뢰구간이 $\bar{y} \pm t^*_{n-2} \cdot s / \sqrt{n}$으로 간단해짐을 보여라. 입문 통계학에서 배우는 모평균의 신뢰구간과 비교하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> $x_0 = \bar{x}$에서 평균의 신뢰구간이 $\bar{y} \pm t^*_{n-2} \cdot s / \sqrt{n}$으로 간단해짐을 보여라. 입문 통계학에서 배우는 모평균의 신뢰구간과 비교하라.
 
 </div>
 

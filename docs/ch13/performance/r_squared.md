@@ -182,7 +182,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 모형의 SSE $= 200$, SST $= 1000$이다. $R^2$를 계산하라. 쓸모없는 설명변수(무작위 잡음)를 넣으면 $R^2$는 어떻게 되며, 왜 수정 $R^2$가 필요한가?
 
 </div>
@@ -204,7 +204,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $R^2$가 음수가 될 수 있는가? 어떤 상황에서 그런가?
 
 </div>
@@ -220,7 +220,7 @@ $R^2$가 음수가 될 수 있는가? 어떤 상황에서 그런가?
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 단순선형회귀에서 $R^2$와 $y$·$\hat{y}$ 사이의 Pearson 상관 $r$의 관계를 유도하라.
 
 </div>
@@ -242,7 +242,7 @@ $R^2$가 음수가 될 수 있는가? 어떤 상황에서 그런가?
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 모형이 훈련자료에서 $R^2 = 0.95$, 검정자료에서 $R^2 = 0.60$이다. 문제를 진단하고 대책을 제안하라.
 
 </div>

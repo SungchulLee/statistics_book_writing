@@ -348,7 +348,7 @@ Jarque-Bera도 $p = 0.45$로 기각하지 못한다. 왜도 $-0.05$는 0에 가�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 회귀 잔차의 Q-Q 그림에서 점들이 중앙에서는 기준선을 따르지만 오른쪽 꼬리에서는 위로, 왼쪽 꼬리에서는 아래로 벗어난다. 이것이 나타내는 분포적 이탈의 유형과 회귀 추론에 미칠 영향을 기술하라.
 
 </div>
@@ -360,7 +360,7 @@ Jarque-Bera도 $p = 0.45$로 기각하지 못한다. 왜도 $-0.05$는 0에 가�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 관측값이 $n = 500$개인 회귀에서 Shapiro-Wilk 검정이 정규성을 기각했지만($p < 0.001$) Q-Q 그림에는 꼬리에서 미미한 이탈만 보인다. 연구자가 걱정해야 하는가? 설명하라.
 
 </div>
@@ -372,7 +372,7 @@ Jarque-Bera도 $p = 0.45$로 기각하지 못한다. 왜도 $-0.05$는 0에 가�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 잔차의 정규성에 대한 형식적 검정 네 가지를 들고 각각의 장점 하나와 단점 하나를 설명하라.
 
 </div>

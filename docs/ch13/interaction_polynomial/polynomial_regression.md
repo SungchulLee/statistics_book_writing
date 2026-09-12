@@ -51,7 +51,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 나이와 소득. 나이와 소득의 관계를 연구할 때 선형모형은 소득이 어느 시점까지는 나이와 함께 늘다가 이후 정체하거나 (은퇴 후처럼) 줄어드는 현실을 놓칠 수 있다. 이차 모형이 이를 포착한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 나이와 소득. 나이와 소득의 관계를 연구할 때 선형모형은 소득이 어느 시점까지는 나이와 함께 늘다가 이후 정체하거나 (은퇴 후처럼) 줄어드는 현실을 놓칠 수 있다. 이차 모형이 이를 포착한다.
 
 $$
 \text{Income} = \beta_0 + \beta_1 \cdot \text{Age} + \beta_2 \cdot \text{Age}^2 + \epsilon
@@ -89,7 +89,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 연구자가 $Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon$을 적합하여 $\hat{\beta}_2 = -0.03$, $p = 0.01$을 얻었다. $\hat{\beta}_2$의 부호와 유의성을 해석하라.
 
 </div>
@@ -101,7 +101,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 다항회귀를 적합하기 전에 설명변수 $X$를 중심화하는($X$를 $X - \bar{X}$로 바꾸는) 것이 왜 권장되는지 설명하라. 어떤 문제를 해결하는가?
 
 </div>
@@ -113,7 +113,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 관측값이 $n = 50$개인 자료에 차수가 높은 다항식(예: 8차)을 적합할 때의 위험은 무엇인가? 편향-분산 절충과 연결지어 답하라.
 
 </div>
