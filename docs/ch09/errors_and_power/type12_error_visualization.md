@@ -41,9 +41,11 @@ $$
 \text{Power} = 1 - \beta = 1 - \mathcal{N}\!\left(z_{1-\alpha} - (\mu_1 - \mu_0)\right).
 $$
 
-## 코드
-
 ### 두 분포 그리기
+
+<div class="codebox" markdown>
+
+**예제 1.** 두 오류를 한 그림에
 
 ```python
 import numpy as np
@@ -84,6 +86,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![제1종 오류와 제2종 오류](./img/type12_error_visualization_44.png)
 
 같은 세로 점선(임계값 1.645)이 두 곡선을 각각 자른다. 파란 곡선에서 오른쪽으로 잘린 조각이 $\alpha$, 빨간 곡선에서 왼쪽으로 잘린 조각이 $\beta$다.
@@ -91,6 +95,10 @@ plt.show()
 점선을 오른쪽으로 옮기면 파란 조각이 줄고 빨간 조각이 는다. 하나를 줄이면 다른 하나가 커지는 이 맞바꿈은 임계값 하나로 두 오류를 동시에 통제할 수 없다는 뜻이다. 둘 다 줄이는 방법은 하나뿐이다. 표본을 키워 두 곡선을 좁게 만드는 것이다.
 
 ### 분리 정도에 따른 검정력 계산
+
+<div class="codebox" markdown>
+
+**예제 2.** 분리 정도에 따른 검정력
 
 ```python
 for sep in [1, 2, 3, 4, 5]:
@@ -111,6 +119,8 @@ Separation = 3: beta = 0.0877, Power = 0.9123
 Separation = 4: beta = 0.0093, Power = 0.9907
 Separation = 5: beta = 0.0004, Power = 0.9996
 ```
+
+</div>
 
 검정력이 선형으로 오르지 않는다. 분리가 1에서 2로 갈 때 0.26에서 0.64로 크게 뛰지만, 4에서 5로 갈 때는 0.991에서 0.9996으로 거의 움직이지 않는다. 정규분포의 꼬리가 지수적으로 얇아지기 때문이다.
 

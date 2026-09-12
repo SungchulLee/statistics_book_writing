@@ -24,13 +24,18 @@ $$
 
 **판정 규칙:** $|t| > t_{\alpha/2,\, n-1}$이면 $H_0$을 기각한다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 키 자료로 하는 일표본 검정
 
 ```python
 import numpy as np
 from scipy import stats
 
 np.random.seed(42)
+
+# 참 평균이 170 인 모집단에서 250명을 뽑았다. 우리는 이 사실을 모른다고 하고,
+# "평균 키가 172 인가"를 자료만으로 판단해 본다.
 data = stats.norm.rvs(loc=170, scale=8, size=250)
 
 mu0 = 172
@@ -57,6 +62,8 @@ t = -4.1314, p = 0.0000, t_crit = 1.9695
 Reject H0
 ```
 
+</div>
+
 자료를 평균 170에서 만들었으니 $H_0\colon \mu = 172$는 실제로 거짓이고, 검정이 그것을 잡아냈다.
 
 여기서 표준오차가 0.49 cm라는 점이 중요하다. $n = 250$이라 개인의 산포 7.73 cm가 표본평균 수준에서는 0.49 cm로 줄어든다. 그래서 2 cm 차이가 표준오차의 네 배가 넘는 큰 차이가 된다.
@@ -71,7 +78,9 @@ $$
 
 여기서 $D_0$은 가설의 차이(보통 0)이다. $H_0\colon \mu_x - \mu_y = D_0$ 아래에서 $z \sim N(0,1)$이다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 2.** 남녀 키의 이표본 검정
 
 ```python
 male = stats.norm.rvs(loc=170, scale=8, size=250)
@@ -94,11 +103,19 @@ print(f"z = {z:.4f}, p = {p:.6f}")
 z = 8.3297, p = 0.000000
 ```
 
+</div>
+
 $z = 8.33$은 표준정규분포에서 사실상 불가능한 값이다. p-값이 $10^{-16}$ 수준이라 출력에서 0으로 찍힌다.
 
 모분산을 모르면 Welch $t$-검정이 알려진 $\sigma$ 대신 표본추정값을 쓰고 자유도를 조정한다:
 
+<div class="codebox" markdown>
+
+**예제 3.** Welch 검정
+
 ```python
+# equal_var=False 가 Welch 검정이다. 두 분산이 같다고 보지 않으므로
+# 자유도가 정수가 아닌 값으로 나온다.
 t_w, p_w = stats.ttest_ind(male, female, equal_var=False)
 print(f"Welch t = {t_w:.4f}, p = {p_w:.6f}")
 ```
@@ -108,6 +125,8 @@ print(f"Welch t = {t_w:.4f}, p = {p_w:.6f}")
 ```
 Welch t = 8.3773, p = 0.000000
 ```
+
+</div>
 
 $z = 8.33$과 Welch $t = 8.38$이 거의 같다. 집단당 250개면 $s$가 $\sigma$를 아주 잘 추정하므로 "$\sigma$를 안다"는 정보가 사실상 아무 값도 갖지 못한다. 이 정보가 값을 갖는 것은 표본이 작을 때뿐이다.
 
@@ -119,7 +138,9 @@ $$
 \hat{p} = \frac{k_1 + k_2}{n_1 + n_2}, \qquad z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1-\hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}.
 $$
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 4.** 거절률 비교 — 두 비율 검정
 
 ```python
 k1, n1 = 59, 649     # 여성: 649명 중 59명 거절
@@ -142,6 +163,8 @@ print(f"z = {z:.4f}, p (one-sided) = {p:.4f}")
 p_women = 0.0909, p_men = 0.0514
 z = 3.7868, p (one-sided) = 0.0001
 ```
+
+</div>
 
 거절률이 9.1% 대 5.1%로 $p = 0.0001$이다. 다만 이 결론이 말하는 것은 "두 비율이 우연히 이만큼 다를 가능성은 낮다"까지다. 왜 다른지는 말해 주지 않는다. 소득이나 신용 이력 같은 변수가 성별과 얽혀 있다면 그쪽이 원인일 수 있다. 12장의 교란변수 논의가 바로 이 문제를 다룬다.
 

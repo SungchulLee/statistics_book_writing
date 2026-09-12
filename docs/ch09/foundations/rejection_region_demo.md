@@ -18,7 +18,9 @@ $$
 \bar{x} < \mu_0 - t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}} \quad \text{or} \quad \bar{x} > \mu_0 + t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}.
 $$
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 기각역과 검정통계량
 
 ```python
 import numpy as np
@@ -55,6 +57,8 @@ t-stat = -4.1314, t-crit = +/-1.9695
 Rejection boundaries: 171.04 and 172.96
 ```
 
+</div>
+
 자료를 평균 170에서 만들었으니 $H_0\colon \mu = 172$는 실제로 거짓이고, 검정이 그것을 잡아냈다($|t| = 4.13 > 1.97$).
 
 주목할 것은 기각역의 좁기다. $n = 250$이라 표준오차가 0.49 cm밖에 안 되고, 그래서 표본평균이 172에서 1 cm만 벗어나도 기각된다. 표본이 크면 실질적으로 사소한 차이도 통계적으로 유의해진다.
@@ -63,7 +67,13 @@ Rejection boundaries: 171.04 and 172.96
 
 위쪽 그림은 $H_0$ 아래 $\bar{X}$의 표본분포를 센티미터 단위로 보여주며 꼬리의 기각역을 색칠한다. 아래쪽 그림은 같은 검정을 $t$-통계량 척도로 보여주며 기각역은 단순히 $|t| > t_{\text{crit}}$이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 기각역 그리기
+
 ```python
+# 기각역은 자료를 보기 전에 정해지는 영역이다. 관측된 통계량이 칠해진
+# 구역 안에 떨어지면 기각한다. p-값 방식과 결론은 언제나 같다.
 x_t = np.linspace(-5, 5, 300)
 y_t = stats.t.pdf(x_t, df)
 
@@ -80,6 +90,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![기각역과 검정통계량](./img/rejection_region_demo_51.png)
 
@@ -105,7 +117,9 @@ $$
 t > t_{\alpha,\, n-1}.
 $$
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 3.** 기각값 구하기
 
 ```python
 df = 100
@@ -127,6 +141,8 @@ print(f"Right-tailed critical value: {t_hi:.4f}")
 Left-tailed critical value: -1.6602
 Right-tailed critical value: 1.6602
 ```
+
+</div>
 
 $t$-분포의 대칭성에 의해 $t_{\alpha,\,\text{df}} = -t_{1-\alpha,\,\text{df}}$이다.
 

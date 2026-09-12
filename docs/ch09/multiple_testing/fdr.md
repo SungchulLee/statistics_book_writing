@@ -139,7 +139,9 @@ $$
 
 FDR 통제는 후속 조사를 할 유망한 후보 집합을 찾는 것이 목표이고 잘못된 단서가 조금 섞여도 괜찮은 고차원 선별 문제의 표준 접근이다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 벤자미니-호크버그 절차 구현
 
 ```python
 import numpy as np
@@ -166,17 +168,17 @@ def benjamini_hochberg(p_values, alpha=0.05):
     order = np.argsort(p)
     sorted_p = p[order]
 
-    # BH thresholds
+    # BH 문턱값: k번째로 작은 p-값을 k/m*alpha 와 견준다.
     thresholds = np.arange(1, m + 1) / m * alpha
 
-    # Find largest k where p_(k) <= k/m * alpha
+    # 조건을 만족하는 가장 큰 k 를 찾는다. 그 아래는 모두 기각한다.
     below = sorted_p <= thresholds
     if not below.any():
         k = 0
     else:
         k = np.max(np.where(below)[0]) + 1
 
-    # Rejection decisions
+    # 기각 여부를 표시한다.
     rejected = np.zeros(m, dtype=bool)
     rejected[order[:k]] = True
 
@@ -211,6 +213,8 @@ rejected: [ True  True  True  True False False]
 adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
 statsmodels adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
 ```
+
+</div>
 
 앞의 네 개가 기각된다. Bonferroni였다면 문턱이 $0.10/6 = 0.0167$이라 처음 두 개만 기각되었을 것이다.
 

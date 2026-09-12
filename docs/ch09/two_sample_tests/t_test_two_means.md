@@ -125,11 +125,11 @@ print(f"Page B: mean = {page_b.mean():.2f}, std = {page_b.std(ddof=1):.2f}")
 print(f"t-statistic: {t_stat:.4f}")
 print(f"p-value (two-sided): {p_value:.4f}")
 
-# One-sided test: H_a: μ_B > μ_A
+# 단측검정. 대립가설은 B 쪽 평균이 더 크다는 것이다.
 p_one_sided = p_value / 2 if page_b.mean() > page_a.mean() else 1 - p_value / 2
 print(f"p-value (one-sided): {p_one_sided:.4f}")
 
-# Effect size (Cohen's d)
+# 효과크기 Cohen 의 d — 평균 차이를 표준편차 단위로 잰 값
 pooled_std = np.sqrt(((len(page_a) - 1) * page_a.std(ddof=1)**2 +
                        (len(page_b) - 1) * page_b.std(ddof=1)**2) /
                       (len(page_a) + len(page_b) - 2))
@@ -156,9 +156,11 @@ $p = 0.32$로 기각하지 못하지만 Cohen의 $d = 0.46$은 "작은~중간" �
 
 </div>
 
-## Python 구현
-
 ### scipy.stats 사용
+
+<div class="codebox" markdown>
+
+**예제 2.** scipy 로 이표본 t-검정
 
 ```python
 from scipy import stats
@@ -190,6 +192,8 @@ Pooled: t = -1.0350, p = 0.3144
 one-sided (H1: mu1 > mu2): p = 0.8398
 ```
 
+</div>
+
 $n_1 = n_2$이면 두 방법의 **통계량이 정확히 같다**. 표본크기가 같을 때 합동 표준오차와 Welch 표준오차가 대수적으로 일치하기 때문이다. 달라지는 것은 자유도뿐이고(18 대 12.42), 그래서 p-값만 조금 다르다.
 
 단측 p-값이 0.84로 나온 것도 읽어 둘 만하다. $t$가 음수인데 $H_1$을 $\mu_1 > \mu_2$로 잡았으니 자료가 대립가설과 반대 방향이고, 그럴 때 단측 p-값은 0.5보다 커진다.
@@ -197,6 +201,10 @@ $n_1 = n_2$이면 두 방법의 **통계량이 정확히 같다**. 표본크기�
 분산이 이렇게 다른데도 두 검정이 비슷한 답을 주는 것은 표본크기가 같기 때문이다. $n$까지 달랐다면 합동 검정이 크게 어긋났을 것이다.
 
 ### statsmodels 사용
+
+<div class="codebox" markdown>
+
+**예제 3.** statsmodels 로 이표본 t-검정
 
 ```python
 import statsmodels.api as sm
@@ -214,6 +222,8 @@ print(f"t = {t_stat:.4f}, p = {p_value:.4f}, df = {df:.4f}")
 ```
 t = -1.0350, p = 0.3204, df = 12.4246
 ```
+
+</div>
 
 Welch 자유도가 12.42다. $n_1 + n_2 - 2 = 18$보다 눈에 띄게 작다. 한쪽 분산이 다른 쪽의 다섯 배라 실효 정보량이 그만큼 줄어든 것이다.
 

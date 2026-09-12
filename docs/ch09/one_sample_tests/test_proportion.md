@@ -21,7 +21,9 @@ $$
 
 **정확한 이항검정:** 정규근사 없이 이항분포 $\text{Bin}(n, p_0)$에서 p-값을 직접 계산한다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 일표본 비율 검정 계산기
 
 ```python
 from scipy.stats import norm, binomtest
@@ -53,9 +55,11 @@ def test_prop_one_sample(k, n, p0=0.5, method="wald",
     return z, p, (p < alpha), "wald z-test"
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 일표본 비율 검정 { .eg }
+### 예제 2. 일표본 비율 검정 { .eg }
 
 ```python
 stat, p, reject, label = test_prop_one_sample(

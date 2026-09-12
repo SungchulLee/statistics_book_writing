@@ -16,9 +16,11 @@ $$
 
 이를 해석적으로 계산하는 대신 모의실험으로 추정한다.
 
-## 코드
-
 ### 단일 실험
+
+<div class="codebox" markdown>
+
+**예제 1.** 동전 던지기 한 번의 실험
 
 ```python
 import numpy as np
@@ -45,9 +47,15 @@ print([single_experiment() for _ in range(10)])
 [14, 20, 17, 16, 12, 12, 11, 18, 16, 17]
 ```
 
+</div>
+
 공정한 동전에서 앞면은 15 언저리를 오간다. 관측된 24가 이 범위에서 얼마나 떨어져 있는지가 이 검정의 전부다.
 
 ### 반복 모의실험
+
+<div class="codebox" markdown>
+
+**예제 2.** 모의실험 되풀이하기
 
 ```python
 def simulate_coin_tosses(n_simulations=NUM_SIMULATIONS,
@@ -74,9 +82,15 @@ Times with >= 24 heads: 71
 Percentage: 0.0710%
 ```
 
+</div>
+
 10만 번 중 71번이다. 모의실험 p-값은 0.00071이 된다.
 
 ### 정확한 값과의 비교
+
+<div class="codebox" markdown>
+
+**예제 3.** 정확한 값과 견주기
 
 ```python
 from scipy.stats import binom
@@ -93,17 +107,25 @@ print(f"Exact binomial P(X >= {OBSERVED_HEADS}): {p_exact:.6f}")
 Exact binomial P(X >= 24): 0.000715
 ```
 
+</div>
+
 모의실험의 0.00071과 정확한 값 0.000715가 소수점 넷째 자리까지 맞는다. 모의실험 p-값의 표준오차가 $\sqrt{0.0007 \times 0.9993/100000} \approx 0.000084$이므로 이 정도 일치는 기대할 만하다(연습문제 3).
 
 ### 시각화
 
+<div class="codebox" markdown>
+
+**예제 4.** 결과를 히스토그램으로
+
 ```python
 import matplotlib.pyplot as plt
 
+# 앞면 수가 정수이므로 계급 경계를 반 칸씩 밀어 막대 하나가 값 하나를 담게 한다.
 fig, ax = plt.subplots(figsize=(8, 5))
 bins = np.arange(0, TOTAL_TOSSES + 2) - 0.5
 ax.hist(head_counts, bins=bins, edgecolor="white", alpha=0.7,
         label="Simulated head counts")
+# 관측값 자리에 세로선을 긋는다. 그 오른쪽 막대들의 넓이 비율이 곧 p-값이다.
 ax.axvline(OBSERVED_HEADS, color="red", linestyle="--", linewidth=2,
            label=f"Observed = {OBSERVED_HEADS}")
 ax.set_xlabel("Number of heads")
@@ -113,6 +135,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Coin Toss Simulation (100,000 runs)](./img/coin_toss_simulation_100.png)
 

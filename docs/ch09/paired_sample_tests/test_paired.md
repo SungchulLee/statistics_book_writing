@@ -19,7 +19,9 @@ $$
 T = \frac{\bar{D} - \mu_{D_0}}{S_D / \sqrt{n}} \sim t_{n-1}.
 $$
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 대응표본 평균 검정 계산기
 
 ```python
 import math
@@ -44,9 +46,11 @@ def test_paired_mean(n, dbar, sd_d, mu_d0=0.0,
     return t, p, (p < alpha)
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 대응 평균 검정 { .eg }
+### 예제 2. 대응 평균 검정 { .eg }
 
 ```python
 t_stat, p, reject = test_paired_mean(

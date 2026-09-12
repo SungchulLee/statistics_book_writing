@@ -26,9 +26,11 @@ $$
 n = \frac{\left(z_{\alpha/2}\sqrt{2\bar{p}(1-\bar{p})} + z_\beta\sqrt{p_1(1-p_1)+p_2(1-p_2)}\right)^2}{(p_1 - p_2)^2}.
 $$
 
-## 코드
-
 ### 이표본 t-검정의 검정력
+
+<div class="codebox" markdown>
+
+**예제 1.** 이표본 t-검정의 검정력 함수
 
 ```python
 import numpy as np
@@ -58,9 +60,15 @@ n=  50 per group: power = 0.7054
 n= 100 per group: power = 0.9424
 ```
 
+</div>
+
 $d = 0.5$에서 집단당 20명이면 검정력이 0.35에 불과하다. 실제로 효과가 있어도 세 번 중 두 번은 놓친다. 이 값이 정규근사라 $t$-분포를 쓰는 statsmodels의 결과보다 조금 낙관적이라는 점도 염두에 두라. 실제 검정력은 이보다 약간 낮다.
 
 ### 필요한 표본크기
+
+<div class="codebox" markdown>
+
+**예제 2.** 필요한 표본크기 함수
 
 ```python
 def sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80):
@@ -86,7 +94,13 @@ def sample_size_proportion(p1, p2, alpha=0.05, power=0.80):
     return int(np.ceil(n))
 ```
 
+</div>
+
 ### 계산 예시
+
+<div class="codebox" markdown>
+
+**예제 3.** 계산 예
 
 ```python
 # 이표본 t-검정: 중간 크기 효과 (Cohen's d = 0.5)
@@ -107,13 +121,21 @@ Required n per group: 63
 Required n per group: 148,111
 ```
 
+</div>
+
 두 줄의 차이가 2,000배가 넘는다. 비율 쪽이 이렇게 커지는 이유는 두 가지가 겹쳐서다. 절대차가 0.0011로 아주 작고, 기저율 1.1%가 낮아 신호 대비 잡음이 나쁘다. 전환율을 10% 상대 개선하는 실험을 하려면 집단당 15만 명, 합쳐서 30만 명의 방문자가 필요하다는 뜻이다.
 
 ### 검정력 곡선
 
+<div class="codebox" markdown>
+
+**예제 4.** 검정력 곡선
+
 ```python
 import matplotlib.pyplot as plt
 
+# 효과가 작을수록 같은 검정력에 필요한 표본이 가파르게 늘어난다.
+# d=0.2 곡선이 0.8 에 닿는 자리를 d=0.8 곡선의 그것과 견주어 보면 된다.
 ns = np.arange(10, 500)
 fig, ax = plt.subplots(figsize=(10, 5))
 for d, ls in [(0.2, '--'), (0.5, '-'), (0.8, ':')]:
@@ -128,6 +150,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Power Curves for Two-Sample t-Test](./img/power_analysis_114.png)
 

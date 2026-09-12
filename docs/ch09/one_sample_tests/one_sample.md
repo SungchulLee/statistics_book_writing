@@ -64,6 +64,10 @@ $$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu\neq50$$
 
 주어진 값: $n = 500$, $\bar{x} = 48$, $s = 20.3$.
 
+<div class="codebox" markdown>
+
+**예제 1.** 일표본 z 검정 — 양측
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -133,6 +137,8 @@ P-value  : 0.0276
 Reject H0 (Choose H1)
 ```
 
+</div>
+
 ![양측검정의 p-값](./img/one_sample_67.png)
 
 $\bar x = 48$은 가설값 50에서 2만큼 떨어져 있을 뿐이지만 $n = 500$이라 표준오차가 0.91로 작아 $z = -2.20$이 된다. 표본이 크면 작은 차이도 유의해진다.
@@ -144,6 +150,10 @@ $\bar x = 48$은 가설값 50에서 2만큼 떨어져 있을 뿐이지만 $n = 5
 $$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu<50$$
 
 주어진 값: $n = 500$, $\bar{x} = 48$, $s = 20.3$.
+
+<div class="codebox" markdown>
+
+**예제 2.** 일표본 z 검정 — 작음
 
 ```python
 mu = 50
@@ -177,6 +187,8 @@ P-value   : 0.0138
 We choose H1, or using statistician's jargon, reject H0
 ```
 
+</div>
+
 ![좌측검정의 p-값](./img/one_sample_127.png)
 
 같은 자료, 같은 통계량인데 p-값이 양측의 0.0276에서 정확히 절반인 0.0138이 되었다. 그림에서도 오른쪽 꼬리의 칠이 사라졌다.
@@ -188,6 +200,10 @@ We choose H1, or using statistician's jargon, reject H0
 $$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu>50$$
 
 주어진 값: $n = 500$, $\bar{x} = 52$, $s = 20.3$.
+
+<div class="codebox" markdown>
+
+**예제 3.** 일표본 z 검정 — 큼
 
 ```python
 mu = 50
@@ -220,6 +236,8 @@ Statistic : 2.2030
 P-value   : 0.0138
 We choose H1, or using statistician's jargon, reject H0
 ```
+
+</div>
 
 ![우측검정의 p-값](./img/one_sample_156.png)
 
@@ -268,12 +286,21 @@ $$ t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}} $$
 
 Rory는 자기 학군의 교사들이 평균적으로 경력 5년 미만이라고 의심한다. $H_0: \mu = 5$ 대 $H_1: \mu < 5$를 검정한다. 교사 25명을 표본으로 모아 $\bar{x} = 4$년, $s = 2$년을 얻었다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 교사 경력에 대한 t 통계량
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
 def plot_t_statistic(statistic, df, ax, alternative='two-sided'):
+    """t 분포를 그리고 p-값에 해당하는 꼬리를 칠한다.
+
+    대립가설의 방향에 따라 칠하는 쪽이 달라진다. 양측이면 양쪽을 모두
+    칠하므로 넓이가 두 배가 되고, 그래서 양측 p-값이 단측의 두 배다.
+    """
     x = np.linspace(-4, 4, 100)
     y = stats.t(df).pdf(x)
     ax.plot(x, y, '-k')
@@ -300,6 +327,7 @@ def plot_t_statistic(statistic, df, ax, alternative='two-sided'):
     ax.spines['bottom'].set_position("zero")
     ax.set_yticks(())
 
+# sigma 를 모르므로 s 를 쓴다. 그래서 z 가 아니라 t 로 간다.
 mu_0 = 5
 x_bar = 4
 s = 2
@@ -324,6 +352,8 @@ T-statistic: -2.5000
 P-value    : 0.0098
 ```
 
+</div>
+
 ![교사 경력에 대한 t 통계량](./img/one_sample_222.png)
 
 $p = 0.0098$로 1% 수준에서도 기각된다. Rory의 의심을 자료가 강하게 뒷받침한다.
@@ -331,6 +361,10 @@ $p = 0.0098$로 1% 수준에서도 기각된다. Rory의 의심을 자료가 강
 #### 예제: Miriam의 검정에서 p-값
 
 Miriam은 $H_0: \mu = 18$ 대 $H_1: \mu < 18$을 검정했다. 관측값 $n = 7$개를 써서 $t = -1.9$를 얻었다.
+
+<div class="codebox" markdown>
+
+**예제 5.** Miriam의 검정에서 p-값
 
 ```python
 n = 7
@@ -354,6 +388,8 @@ statistic = -1.9000
 p_value = 0.0531
 ```
 
+</div>
+
 ![Miriam의 검정에서 p-값](./img/one_sample_275.png)
 
 $p = 0.0531$로 0.05를 아슬아슬하게 넘어 기각하지 못한다. 같은 $t = -1.9$라도 자유도가 크면 이야기가 달라진다. $\text{df} = 30$이면 $p = 0.0335$로 기각된다. 자유도가 6밖에 안 되어 꼬리가 두꺼운 것이 여기서 결론을 가른다.
@@ -361,6 +397,10 @@ $p = 0.0531$로 0.05를 아슬아슬하게 넘어 기각하지 못한다. 같은
 #### 예제: Caterina의 검정에서 p-값
 
 Caterina는 $H_0: \mu = 0$ 대 $H_1: \mu \neq 0$을 검정했다. 관측값 $n = 6$개를 써서 $t = 2.75$를 얻었다.
+
+<div class="codebox" markdown>
+
+**예제 6.** Caterina의 검정에서 p-값
 
 ```python
 n = 6
@@ -383,6 +423,8 @@ statistic = 2.7500
 p_value = 0.0403
 ```
 
+</div>
+
 ![Caterina의 검정에서 p-값](./img/one_sample_292.png)
 
 양측인데도 $p = 0.0403 < 0.05$로 기각된다. 만약 Caterina가 단측으로 검정했다면 $p = 0.0201$이었을 것이다.
@@ -394,6 +436,10 @@ Jude는 음료 $n = 20$개로 $H_0: \mu = 530$ 대 $H_1: \mu \neq 530$을 검정
 #### 예제: 일표본 t 검정 — 간단한 예
 
 $$H_0 : \mu = 70 \quad\text{vs}\quad H_1: \mu > 70$$
+
+<div class="codebox" markdown>
+
+**예제 7.** 일표본 t 검정 — 간단한 예
 
 ```python
 samples = np.array([78, 83, 68, 72, 88])
@@ -434,6 +480,8 @@ p-value                 : 0.0484
 Reject H_0: Sufficient evidence to support the alternative hypothesis.
 ```
 
+</div>
+
 ![일표본 t 검정 — 간단한 예](./img/one_sample_313.png)
 
 $p = 0.0484$로 0.05를 겨우 밑돌아 기각된다. 이 예제는 단측과 양측의 차이가 결론을 가르는 경우다. 양측으로 계산하면 $p = 0.0969$가 되어 기각하지 못한다. 대립가설의 방향을 세워 두었으면 p-값도 그 방향으로 계산해야 한다.
@@ -444,7 +492,12 @@ $\bar x = 77.8$로 가설값 70보다 한참 크지만 $n = 5$에 $s = 8.07$이�
 
 어떤 공장의 우유 용기에 128온스라고 표시되어 있다. 용기 12개의 표본에서 $\bar{x} = 127.2$ oz, $s = 2.1$ oz를 얻었다. $H_0: \mu = 128$ 대 $H_1: \mu < 128$을 검정하라.
 
+<div class="codebox" markdown>
+
+**예제 8.** 우유 표시량 검정
+
 ```python
+# 표시량 128 에 못 미치는지를 묻는 단측검정이다. 그래서 아래에서 cdf 를 쓴다.
 mu_0 = 128
 x_bar = 127.2
 s = 2.1
@@ -474,6 +527,8 @@ statistic = -1.3197
 p_value = 0.1069
 Fail to reject H_0
 ```
+
+</div>
 
 ![우유 용기 검정](./img/one_sample_345.png)
 
@@ -534,6 +589,10 @@ $$H_0: p = 0.90 \quad \text{vs} \quad H_1: p > 0.90$$
 
 시장이 주민 200명의 표본에서 22명이 실업 상태인 것을 보고 $H_0: p = 0.08$ 대 $H_1: p \neq 0.08$을 검정한다.
 
+<div class="codebox" markdown>
+
+**예제 9.** 실업률 — 검정통계량
+
 ```python
 p_hat = 22 / 200
 p = 0.08
@@ -555,13 +614,21 @@ Statistic: 1.5639
 P-value : 0.1179
 ```
 
+</div>
+
 관측된 실업률 11%가 가설값 8%보다 눈에 띄게 높지만 $n = 200$으로는 기각하지 못한다.
 
 #### 예제: 여러 언어를 쓰는 사람
 
 Fay는 $H_0: p = 0.26$ 대 $H_1: p > 0.26$을 검정한다. 120명 중 40명이 두 가지 이상의 언어를 쓸 수 있었다.
 
+<div class="codebox" markdown>
+
+**예제 10.** 여러 언어를 쓰는 사람
+
 ```python
+# 비율의 검정에서 표준오차는 관측된 p_hat 이 아니라 귀무가설의 p 로 만든다.
+# 귀무가설이 참이라는 전제 아래에서의 흩어짐을 재야 하기 때문이다.
 p_hat = 40 / 120
 p = 0.26
 n = 120
@@ -580,11 +647,17 @@ Statistic: 1.8314
 P-value: 0.0335
 ```
 
+</div>
+
 $p = 0.0335 < 0.05$로 기각된다. 같은 통계량을 양측으로 계산했다면 $p = 0.067$이 되어 기각하지 못했을 것이다.
 
 #### 예제: 공립학교 재정을 위한 증세
 
 연구자들이 200명 중 113명이 지지하는 자료로 $H_0: p = 0.50$ 대 $H_1: p > 0.50$을 검정한다.
+
+<div class="codebox" markdown>
+
+**예제 11.** 공립학교 재정을 위한 증세
 
 ```python
 k = 113
@@ -611,6 +684,8 @@ Approximate Statistic: 1.8385
 Approximate P-value: 0.0330
 ```
 
+</div>
+
 두 값이 0.0384와 0.0330으로 다르다. 근사 쪽이 작게 나오는 것은 우연이 아니다. 이산인 이항분포를 연속인 정규분포로 바꾸면서 막대의 절반이 넘어가기 때문이며, 연속성 보정($k$ 대신 $k - 0.5$를 쓰는 것)으로 대부분 메울 수 있다.
 
 여기서는 둘 다 0.05를 밑돌아 결론이 같다. 그러나 p-값이 0.04 언저리일 때 근사와 정확 사이의 이 정도 차이는 결론을 가를 수 있다.
@@ -619,7 +694,13 @@ Approximate P-value: 0.0330
 
 학생들이 $H_0: p = 0.20$ 대 $H_1: p < 0.20$을 검정한다. 상자 65개에서 대여권 11장을 찾았다.
 
+<div class="codebox" markdown>
+
+**예제 12.** 무료 비디오 대여권
+
 ```python
+# n*p_0 = 13 으로 작은 편이라 정규근사가 미덥지 않다.
+# 그래서 이항분포로 정확히 구한 값과 근사값을 나란히 놓고 견준다.
 k = 11
 n = 65
 p_0 = 0.2
@@ -641,6 +722,8 @@ Exact P-value: 0.3301
 Approximate Statistic: -0.6202
 Approximate P-value: 0.2676
 ```
+
+</div>
 
 이번에는 차이가 더 크다. 0.3301과 0.2676으로 20% 넘게 벌어진다. $n p_0 = 13$으로 경험칙은 만족하지만 $k = 11$이 작아 이산성의 영향이 크게 남는다. 어느 쪽이든 기각하지 못하므로 결론은 같다.
 
@@ -673,6 +756,10 @@ Approximate P-value: 0.2676
 
 $$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
+<div class="codebox" markdown>
+
+**예제 13.** Wilcoxon 부호순위 검정
+
 ```python
 import numpy as np
 from scipy.stats import wilcoxon
@@ -703,11 +790,17 @@ P-value: 0.28702974430361805
 Fail to reject the null hypothesis: No significant difference.
 ```
 
+</div>
+
 자료의 중앙값이 15.5로 가설값 15에 가깝고, 관측값 10개 중 2개는 차이가 정확히 0이라 버려진다. 실질적으로 8개로 검정하는 셈이라 검정력이 낮다.
 
 ### B. 부호검정
 
 부호검정은 하나의 표본의 중앙값이 지정된 값과 같은지 평가한다. 차이의 크기는 무시하고 방향(양수인지 음수인지)만 본다.
+
+<div class="codebox" markdown>
+
+**예제 14.** 부호검정
 
 ```python
 from scipy.stats import binom
@@ -739,11 +832,17 @@ print(f"P-value: {p_value}, n+: {n_plus}, n-: {n_minus}, Ties: {ties}")
 P-value: 1.0, n+: 7, n-: 6, Ties: 2
 ```
 
+</div>
+
 양수 7개와 음수 6개로 거의 반반이니 $p = 1.0$이 나온다. 부호검정이 얼마나 많은 정보를 버리는지도 여기서 드러난다. 10.5든 10.01이든 똑같이 "양수 하나"로 셀 뿐이다. 그래서 로버스트하지만 검정력이 낮다.
 
 ### C. 붓스트랩 방법
 
 붓스트랩 방법은 관측된 자료에서 복원추출로 재표본을 반복해 뽑아 통계량의 분포를 추정한다. 모수적 방법과 달리 바탕 분포에 대한 가정을 하지 않는다.
+
+<div class="codebox" markdown>
+
+**예제 15.** 붓스트랩 검정
 
 ```python
 import numpy as np
@@ -775,11 +874,17 @@ print(f"95% CI for the Mean: ({lower:.2f}, {upper:.2f})")
 95% CI for the Mean: (6.60, 12.80)
 ```
 
+</div>
+
 관측값 다섯 개의 평균은 9.6이다. 같은 자료에 $t$-구간을 쓰면 $(4.66, 14.54)$로 붓스트랩 구간보다 훨씬 넓다. 표본이 다섯 개뿐일 때 백분위수 붓스트랩은 구간을 좁게 잡는 경향이 있다. 재표본이 원자료의 다섯 값 안에서만 나오므로 원자료가 담지 못한 꼬리를 만들어 낼 수 없기 때문이다.
 
 ### D. 순열검정
 
 순열검정은 관측된 검정통계량을, 자료를 가능한 모든 방식으로 재배열하여 만든 분포와 견주어 귀무가설과 부합하는지 평가한다.
+
+<div class="codebox" markdown>
+
+**예제 16.** 순열검정
 
 ```python
 import numpy as np
@@ -817,6 +922,8 @@ print(f"Observed Difference: {observed_diff:.2f}, P-value: {p_value:.4f}")
 Observed Difference: 3.00, P-value: 0.0407
 ```
 
+</div>
+
 집단당 다섯 개씩이라 가능한 배치가 $\binom{10}{5} = 252$가지뿐이다. 10,000번을 뽑아도 서로 다른 배치는 252개를 넘지 못하므로, 이 경우에는 모든 배치를 다 나열하는 완전 순열검정이 더 낫다. 완전 열거로 계산하면 $p = 0.0397$이다.
 
 #### 붓스트랩과 순열검정의 비교
@@ -832,6 +939,10 @@ Observed Difference: 3.00, P-value: 0.0407
 ### E. Mood 중앙값 검정
 
 Mood 중앙값 검정은 둘 이상 집단의 중앙값을 비교하는 비모수 검정으로, 자료에 이상점이 있을 때 특히 유용하다.
+
+<div class="codebox" markdown>
+
+**예제 17.** Mood 중앙값 검정
 
 ```python
 import numpy as np
@@ -866,6 +977,8 @@ Chi-Square: 0.0000, P-value: 1.0000
 [[3 2]
  [2 3]]
 ```
+
+</div>
 
 전체 중앙값은 57.5이고, 그보다 큰 값이 group_a에 3개, group_b에 2개다(표의 첫 행). 표만 보면 완전한 균형은 아닌데 통계량이 정확히 0으로 나왔다.
 

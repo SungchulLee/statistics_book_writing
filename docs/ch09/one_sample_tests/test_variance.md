@@ -25,7 +25,9 @@ $$
 \chi^2 < \chi^2_{\alpha/2,\,n-1} \quad \text{or} \quad \chi^2 > \chi^2_{1-\alpha/2,\,n-1}.
 $$
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 일표본 분산 검정 계산기
 
 ```python
 from scipy.stats import chi2
@@ -51,9 +53,11 @@ def test_variance_one_sample(n, s2, sigma0, alt="two-sided", alpha=0.05):
     return chi2_stat, p, (p < alpha)
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 일표본 분산 검정 { .eg }
+### 예제 2. 일표본 분산 검정 { .eg }
 
 ```python
 stat, p, reject = test_variance_one_sample(

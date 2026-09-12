@@ -34,6 +34,10 @@ $$ z = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
 
 ### E. 예제
 
+<div class="codebox" markdown>
+
+**예제 1.** 두 비율의 차이 — 간단한 예
+
 ```python
 import numpy as np
 from scipy import stats
@@ -56,6 +60,8 @@ print(f"p value   : {p_value:.4f}")
 statistic : 1.1305
 p value   : 0.2583
 ```
+
+</div>
 
 출생아 수 평균이 1.85와 1.65로 0.2 차이지만 개인차(표준편차 1.3, 1.2)가 커서 기각하지 못한다.
 
@@ -107,6 +113,10 @@ $$H_0 : \mu_{\text{men}} = \mu_{\text{women}} \quad\text{vs}\quad H_1: \mu_{\tex
 
 $$H_0 : \mu_A = \mu_B \quad\text{vs}\quad H_1: \mu_A \neq \mu_B$$
 
+<div class="codebox" markdown>
+
+**예제 2.** 서로 다른 두 밭의 토마토
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -147,6 +157,8 @@ p_value   = 0.0201
 Reject H_0
 ```
 
+</div>
+
 자유도가 33.79로 정수가 아니다. Welch 자유도는 근사값이라 정수일 이유가 없다. 합동 검정이었다면 $n_1 + n_2 - 2 = 44$였을 것이고, 분산이 달라 정보량을 보수적으로 잡은 결과가 이 차이다.
 
 #### 예제: 출생아 수 (France 대 Switzerland)
@@ -158,6 +170,10 @@ Reject H_0
 | n | 100 | 100 |
 
 합동분산을 쓰면:
+
+<div class="codebox" markdown>
+
+**예제 3.** 출생아 수 — 프랑스와 스위스
 
 ```python
 X_1_bar, X_2_bar = 1.85, 1.65
@@ -183,6 +199,8 @@ df = 198.0000
 statistic = 1.1305
 p_value   = 0.2596
 ```
+
+</div>
 
 같은 자료의 앞선 $z$-검정과 통계량이 1.1305로 정확히 같고 p-값만 0.2583에서 0.2596으로 바뀌었다. 자유도 198이면 $t$가 정규분포와 거의 구별되지 않기 때문이다.
 
@@ -216,7 +234,9 @@ $$df = \frac{\left( \frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} \right)^2}{\frac{\left
 - 두 집단의 표본크기가 크게 다를 때.
 - 모분산을 모를 때.
 
-### Python 구현
+<div class="codebox" markdown>
+
+**예제 4.** 합동 t-검정 구현
 
 ```python
 import numpy as np
@@ -245,6 +265,8 @@ Test Statistic: -9.4407
 P-value: 0.0000
 Reject H0: The means are significantly different.
 ```
+
+</div>
 
 두 팀의 평균이 121.4와 135.0으로 13.6 차이인데 팀 안의 산포는 표준편차 4 남짓이라 $t$가 $-9.44$까지 간다. 집단 간 차이가 집단 안 산포보다 훨씬 크면 표본이 작아도 분명하게 갈린다.
 
@@ -291,6 +313,10 @@ $$z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}_{\text{pool}} (1 - \hat{p}_{\te
 
 $$H_0 : p_A = p_B \quad\text{vs}\quad H_1: p_A \neq p_B$$
 
+<div class="codebox" markdown>
+
+**예제 5.** 새 법률에 대한 지지
+
 ```python
 import numpy as np
 from scipy import stats
@@ -323,6 +349,8 @@ p_value = 0.3938
 Fail to reject H_0
 ```
 
+</div>
+
 지지율이 58%와 52%로 6%p 차이인데도 기각하지 못한다. 지구당 100명으로는 이 정도 차이를 가려낼 수 없다. 비율의 차이를 검정하려면 평균의 차이보다 훨씬 큰 표본이 필요하다.
 
 #### 예제: Derrick의 지지율
@@ -342,6 +370,10 @@ $$H_0 : p_{\text{Dime}} = p_{\text{Nickel}} \quad\text{vs}\quad H_1: p_{\text{Di
 연구자들이 2000년에서 2015년 사이에 근시 유병률이 높아졌는지 검정한다. 2000년: 400명 중 132명. 2015년: 600명 중 228명.
 
 $$H_0 : p_{2000} = p_{2015} \quad\text{vs}\quad H_1: p_{2000} < p_{2015}$$
+
+<div class="codebox" markdown>
+
+**예제 6.** 근시 비율의 변화
 
 ```python
 n_2000, n_2015 = 400, 600
@@ -371,6 +403,8 @@ p_value = 0.0533
 Fail to reject H_0
 ```
 
+</div>
+
 $p = 0.0533$으로 0.05를 아슬아슬하게 넘겨 기각하지 못한다. 유병률이 33%에서 38%로 5%p 늘었지만 표본 1,000명으로는 부족하다.
 
 이런 경계 사례를 "효과가 없다"로 읽으면 안 된다. 0.0533과 0.0467 사이에 실질적인 차이는 없다. 기각 여부라는 이분법 대신 신뢰구간과 효과크기를 함께 보고하는 편이 낫다.
@@ -379,7 +413,13 @@ $p = 0.0533$으로 0.05를 아슬아슬하게 넘겨 기각하지 못한다. 유
 
 수의사들이 수컷 고양이 259마리 중 24마리, 암컷 241마리 중 14마리가 이환된 자료로 $H_0: p_{\text{male}} = p_{\text{female}}$ 대 $H_1: p_{\text{male}} > p_{\text{female}}$을 검정한다.
 
+<div class="codebox" markdown>
+
+**예제 7.** 고양이 질병 — 암수 비교
+
 ```python
+# 두 비율이 같다는 귀무가설 아래에서는 둘을 합쳐 하나의 비율로 보는 것이
+# 맞다. 아래 p_pooled 가 그것이며, 표준오차를 이 값으로 만든다.
 positive_male, positive_female = 24, 14
 n_male, n_female = 259, 241
 p_hat_male, p_hat_female = positive_male / n_male, positive_female / n_female
@@ -398,6 +438,8 @@ print(f"{p_value = :.4f}")
 statistic = 1.4577
 p_value = 0.0725
 ```
+
+</div>
 
 이환율이 9.3%와 5.8%로 수컷 쪽이 1.6배 높지만 $p = 0.0725$로 기각하지 못한다. 이환된 개체가 24마리와 14마리뿐이라, 500마리를 조사했어도 비교의 정밀도를 좌우하는 것은 전체 개체 수가 아니라 이 사건 수다.
 

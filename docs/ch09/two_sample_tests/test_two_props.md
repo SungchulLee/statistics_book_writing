@@ -28,7 +28,9 @@ $$
 Z = \frac{(\hat{p}_1 - \hat{p}_2) - \delta_0}{SE} \;\dot\sim\; N(0,1).
 $$
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 두 비율 차이 검정 계산기
 
 ```python
 import math
@@ -65,9 +67,11 @@ def test_diff_two_props(k1, n1, k2, n2, delta0=0.0,
     return z, p, (p < alpha), label
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 이표본 비율 검정 { .eg }
+### 예제 2. 이표본 비율 검정 { .eg }
 
 ```python
 z, p, reject, label = test_diff_two_props(

@@ -70,7 +70,9 @@ $\alpha = 0.05$에서 $H_0: p_{\text{in\_person}} = p_{\text{online}}$을 검정
 - **상한 신뢰한계**: 신뢰수준 $1 - \alpha$에서 $\theta < U$는 검정 $H_0: \theta \geq \theta_0$ 대 $H_a: \theta < \theta_0$에 대응한다.
 - **하한 신뢰한계**: 신뢰수준 $1 - \alpha$에서 $\theta > L$은 검정 $H_0: \theta \leq \theta_0$ 대 $H_a: \theta > \theta_0$에 대응한다.
 
-## Python 예시
+<div class="codebox" markdown>
+
+**예제 1.** 신뢰구간과 검정이 같은 답을 준다
 
 ```python
 import numpy as np
@@ -106,6 +108,8 @@ Test: z = 1.0000, p-value = 0.3173, Reject = False
 CI: (48.0801, 55.9199), mu_0 outside CI = False
 Both methods agree: True
 ```
+
+</div>
 
 두 접근이 같은 결론에 이른다. $z = 1$은 임계값 1.96에 못 미치고, 같은 이유로 $\mu_0 = 50$이 구간 $(48.08, 55.92)$ 안에 있다.
 

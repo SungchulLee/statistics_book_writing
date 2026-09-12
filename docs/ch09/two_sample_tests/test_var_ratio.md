@@ -21,7 +21,9 @@ $$
 
 이다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 분산비 검정 계산기
 
 ```python
 from scipy.stats import f
@@ -50,9 +52,11 @@ def test_ratio_two_variances(n1, s1, n2, s2, theta0=1.0,
     return F_stat, p, (p < alpha)
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 두 분산에 대한 F-검정 { .eg }
+### 예제 2. 두 분산에 대한 F-검정 { .eg }
 
 ```python
 F_stat, p, reject = test_ratio_two_variances(

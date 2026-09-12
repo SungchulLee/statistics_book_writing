@@ -23,7 +23,9 @@ $$
 T = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} \sim t_{n-1}.
 $$
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 일표본 평균 검정 계산기
 
 ```python
 import math
@@ -64,9 +66,11 @@ def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
     return t, p, (p < alpha), f"t-test (df={df})"
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 일표본 평균 검정 { .eg }
+### 예제 2. 일표본 평균 검정 { .eg }
 
 ```python
 stat, p, reject, label = test_mean_one_sample(

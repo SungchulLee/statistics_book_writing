@@ -46,7 +46,9 @@ $$
 
 가설 $H_{0,(1)}, \dots, H_{0,(k)}$를 모두 기각한다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 효과가 없어도 유의한 결과는 나온다
 
 ```python
 import numpy as np
@@ -54,6 +56,8 @@ from scipy import stats
 
 np.random.seed(42)
 
+# 평균이 참으로 0 인 모집단에서 뽑은 자료다. 뒤이어 이 자료로 검정을
+# 여러 번 되풀이하면서, 아무 효과가 없어도 유의한 결과가 나오는 것을 본다.
 n = 100
 data = np.random.normal(loc=0, scale=1, size=n)
 
@@ -70,9 +74,15 @@ Sample mean: -0.1038
 Sample std:  0.9082
 ```
 
+</div>
+
 아래 예제에서 쓸 시드를 여기서 고정한다.
 
 ### `statsmodels`로 보정 적용하기
+
+<div class="codebox" markdown>
+
+**예제 2.** statsmodels 로 보정하기
 
 ```python
 from statsmodels.stats.multitest import multipletests
@@ -84,13 +94,13 @@ p_values = np.random.uniform(0, 1, m)
 # 앞의 5개는 진짜 신호로 바꾼다. 즉 참 상황은 "45개는 귀무, 5개는 대립"이다.
 p_values[:5] = np.random.uniform(0, 0.005, 5)
 
-# Bonferroni
+# 본페로니: alpha 를 검정 수로 나눈다. 가장 보수적이다.
 _, p_bonf, _, _ = multipletests(p_values, method="bonferroni")
 
-# Holm
+# 홈: 순서대로 문턱을 조금씩 느슨하게 한다. 본페로니보다 항상 낫다.
 _, p_holm, _, _ = multipletests(p_values, method="holm")
 
-# Benjamini-Hochberg
+# 벤자미니-호크버그: FWER 대신 FDR 을 통제한다. 가장 덜 보수적이다.
 _, p_bh, _, _ = multipletests(p_values, method="fdr_bh")
 
 # multipletests는 문턱을 낮추는 대신 **p-값을 키워** 돌려준다.
@@ -110,6 +120,8 @@ Rejections (Bonferroni):  1
 Rejections (Holm):        1
 Rejections (BH):          5
 ```
+
+</div>
 
 참 신호가 5개인 상황에서 각 방법이 어떻게 다른지 한눈에 보인다.
 

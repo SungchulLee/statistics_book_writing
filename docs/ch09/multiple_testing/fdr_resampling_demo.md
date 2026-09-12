@@ -46,13 +46,18 @@ $$
 
 $H_{(1)}, \ldots, H_{(k)}$를 모두 기각한다. 독립일 때 이 절차는 FDR을 수준 $\alpha$로 통제한다.
 
-## 코드
-
 ### FWER 증가 곡선
+
+<div class="codebox" markdown>
+
+**예제 1.** 검정 수에 따른 FWER
 
 ```python
 import numpy as np
 
+# 검정 m 개가 모두 참 귀무가설이고 서로 독립이라면, 하나도 잘못 기각하지
+# 않을 확률이 (1-a)^m 이다. 적어도 하나를 잘못 기각할 확률이 그 나머지다.
+# m=100, a=0.05 면 0.994 — 거의 확실하게 거짓 양성이 하나는 나온다.
 m_vals = np.arange(1, 501)
 alphas = [0.05, 0.01, 0.001]
 for a in alphas:
@@ -68,9 +73,15 @@ alpha=0.01, m=100: FWER=0.6340
 alpha=0.001, m=100: FWER=0.0952
 ```
 
+</div>
+
 검정 100개를 $\alpha = 0.05$로 하면 거짓 양성이 하나도 없을 확률이 0.6%에 불과하다. $\alpha$를 0.001까지 낮춰야 FWER이 10% 아래로 내려온다. 이것이 Bonferroni가 하는 일이고, 동시에 Bonferroni가 검정력을 잃는 이유이기도 하다.
 
 ### 보정을 적용한 다중검정 모의실험
+
+<div class="codebox" markdown>
+
+**예제 2.** 보정을 적용한 다중검정
 
 ```python
 from scipy import stats
@@ -94,7 +105,7 @@ for i in range(n_tests):
     data = np.random.normal(mu, 1.0, n_obs)
     _, p_values[i] = stats.ttest_1samp(data, 0)
 
-# Apply corrections
+# 세 보정 방법을 같은 p-값 묶음에 적용한다.
 _, p_bonf, _, _ = multipletests(p_values, method="bonferroni")
 _, p_holm, _, _ = multipletests(p_values, method="holm")
 _, p_bh, _, _   = multipletests(p_values, method="fdr_bh")
@@ -117,6 +128,8 @@ Holm        : TP=28, FP=1, FDR=0.034, Power=0.140
 BH          : TP=133, FP=9, FDR=0.063, Power=0.665
 ```
 
+</div>
+
 BH가 참 신호 200개 중 133개를 찾아내는 동안 Bonferroni는 28개만 찾는다. 검정력이 0.14 대 0.67로 다섯 배 가까이 차이가 난다.
 
 그 대가는 거짓 양성 9개다. 기각한 142개 중 6.3%가 헛것이라는 뜻이며, 목표로 삼은 $\alpha = 0.05$ 근처다(BH는 FDR의 **기댓값**을 통제하므로 한 번의 실현에서는 이보다 크거나 작을 수 있다).
@@ -127,19 +140,23 @@ Holm이 Bonferroni와 결과가 같다는 점도 눈에 띈다. Holm은 이론�
 
 ### 재표본추출 기반 FDR 추정
 
+<div class="codebox" markdown>
+
+**예제 3.** 재표본으로 FDR 추정하기
+
 ```python
 def resampling_fdr(X_group1, X_group2, n_permutations=500):
     n1, n2 = X_group1.shape[0], X_group2.shape[0]
     n_features = X_group1.shape[1]
     X_combined = np.vstack([X_group1, X_group2])
 
-    # Observed test statistics
+    # 관측된 검정통계량
     t_obs = np.array([
         stats.ttest_ind(X_group1[:, j], X_group2[:, j]).statistic
         for j in range(n_features)
     ])
 
-    # Permutation null distribution
+    # 집단 이름을 뒤섞어 만든 귀무분포. 모형을 가정하지 않는다.
     t_perm = np.zeros((n_permutations, n_features))
     for b in range(n_permutations):
         idx = np.random.permutation(n1 + n2)
@@ -160,6 +177,8 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
         FDRs.append(V / max(R, 1))
     return np.array(Rs), np.array(FDRs)
 ```
+
+</div>
 
 t-분포도 정규성 가정도 쓰지 않는다는 것이 이 방법의 요점이다. 귀무분포를 자료 자체에서 만들어 내므로, 검정통계량의 분포를 모르거나 특징이 서로 상관되어 있을 때도 쓸 수 있다.
 

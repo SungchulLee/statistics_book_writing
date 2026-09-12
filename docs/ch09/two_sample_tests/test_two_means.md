@@ -31,7 +31,9 @@ $$
 S_p^2 = \frac{(n_1-1)S_1^2 + (n_2-1)S_2^2}{n_1+n_2-2}, \qquad T = \frac{(\bar{X}_1 - \bar{X}_2) - \delta_0}{S_p\sqrt{1/n_1 + 1/n_2}} \sim t_{n_1+n_2-2}.
 $$
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 두 평균 차이 검정 계산기
 
 ```python
 import math
@@ -70,9 +72,11 @@ def test_diff_two_means(n1, m1, s1, n2, m2, s2, method="welch",
     return t, df, p, (p < alpha)
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 이표본 평균 검정 { .eg }
+### 예제 2. 이표본 평균 검정 { .eg }
 
 ```python
 t, df, p, reject = test_diff_two_means(

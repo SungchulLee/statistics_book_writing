@@ -36,6 +36,10 @@ $\alpha$를 키우면(예: 0.01에서 0.05로) $H_0$을 기각하기 쉬워져 �
 
 연구를 수행하기 전에, 예상되는 효과크기를 원하는 검정력과 유의수준으로 탐지하는 데 필요한 최소 표본크기를 검정력 분석으로 정한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 필요한 표본크기 구하기
+
 ```python
 from scipy import stats
 import numpy as np
@@ -65,6 +69,8 @@ print(f"Required sample size: {n}")
 Required sample size: 32
 ```
 
+</div>
+
 $(1.96 + 0.8416)^2 / 0.5^2 = 31.4$를 올림한 값이다. 효과크기가 분모에서 제곱되므로 효과가 절반이면 표본은 네 배가 된다.
 
 ### 사후 검정력 분석
@@ -74,6 +80,10 @@ $(1.96 + 0.8416)^2 / 0.5^2 = 31.4$를 올림한 값이다. 효과크기가 분�
 ## 검정력의 시각화
 
 $H_0$과 $H_a$ 아래의 분포를 함께 그리면 검정력을 이해할 수 있다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 검정력을 그림으로 보기
 
 ```python
 import numpy as np
@@ -88,20 +98,20 @@ def plot_power(mu_0, mu_a, sigma, n, alpha=0.05):
 
     x = np.linspace(mu_0 - 4*se, mu_a + 4*se, 300)
 
-    # Distribution under H0
+    # 귀무가설이 참일 때의 분포
     y_h0 = stats.norm(mu_0, se).pdf(x)
-    # Distribution under Ha
+    # 대립가설이 참일 때의 분포. 중심만 오른쪽으로 옮겨 간다.
     y_ha = stats.norm(mu_a, se).pdf(x)
 
     fig, ax = plt.subplots(figsize=(12, 4))
     ax.plot(x, y_h0, 'b-', label=f'$H_0$: $\\mu = {mu_0}$')
     ax.plot(x, y_ha, 'r-', label=f'$H_a$: $\\mu = {mu_a}$')
 
-    # Shade rejection region under H0 (alpha)
+    # 귀무 분포에서 기각역에 해당하는 꼬리. 그 넓이가 유의수준 alpha 다.
     x_reject = x[x >= x_crit]
     ax.fill_between(x_reject, stats.norm(mu_0, se).pdf(x_reject), alpha=0.3, color='blue', label=f'$\\alpha$ = {alpha}')
 
-    # Shade power under Ha
+    # 대립 분포에서 같은 기각역의 넓이. 그것이 검정력이다.
     ax.fill_between(x_reject, stats.norm(mu_a, se).pdf(x_reject), alpha=0.3, color='red', label=f'Power = {1 - stats.norm(mu_a, se).cdf(x_crit):.3f}')
 
     ax.axvline(x_crit, color='k', linestyle='--', label=f'Critical value = {x_crit:.2f}')
@@ -113,6 +123,8 @@ def plot_power(mu_0, mu_a, sigma, n, alpha=0.05):
 
 plot_power(mu_0=50, mu_a=52, sigma=10, n=25)
 ```
+
+</div>
 
 ![Power of a Hypothesis Test](./img/power_66.png)
 
@@ -135,6 +147,10 @@ plot_power(mu_0=50, mu_a=52, sigma=10, n=25)
 Statsmodels는 여러 검정 유형에 대한 검정력 분석 함수를 폭넓게 제공한다.
 
 ### 일표본 t-검정
+
+<div class="codebox" markdown>
+
+**예제 3.** 일표본 t-검정의 검정력
 
 ```python
 from statsmodels.stats.power import TTestPower
@@ -168,18 +184,24 @@ One-sample t-test:
   Power with n=50: 0.637
 ```
 
+</div>
+
 73명이 필요한데 50명만 모으면 검정력이 0.80에서 0.64로 떨어진다. 표본을 32% 줄였을 뿐인데 효과를 놓칠 확률은 20%에서 36%로 거의 두 배가 된다.
 
 ### 이표본 t-검정 (독립표본)
 
+<div class="codebox" markdown>
+
+**예제 4.** 이표본 t-검정의 검정력
+
 ```python
 from statsmodels.stats.power import TTestIndPower
 
-# Power analysis for two-sample t-test
+# 두 집단을 견주는 t-검정의 검정력 분석
 analysis = TTestIndPower()
 
-# Scenario: Two-group comparison (equal sample sizes)
-# Effect size: Cohen's d = 0.5 (medium effect)
+# 두 집단의 크기를 같게 두는 설계다. 같은 총인원이면 이때 검정력이 가장 높다.
+# 효과크기 Cohen 의 d = 0.5. 두 평균이 표준편차의 절반만큼 떨어진 경우다.
 effect_size = 0.5
 
 n_per_group = analysis.solve_power(effect_size=effect_size, alpha=0.05,
@@ -220,23 +242,29 @@ Two-sample t-test (2:1 ratio):
   Total sample size: 144
 ```
 
+</div>
+
 배분이 균등에서 멀어질수록 **총** 표본이 늘어난다. 같은 검정력에 1:1은 128명, 1:2는 144명이 든다. 한쪽 집단을 모으기 쉽다고 해서 그쪽만 키우면 전체 비용이 오히려 커질 수 있다. 작은 쪽 집단이 병목이기 때문이다.
 
 ### 비율에 대한 검정 (A/B 검정)
+
+<div class="codebox" markdown>
+
+**예제 5.** 비율 검정의 검정력 — A/B 검정
 
 ```python
 import numpy as np
 import statsmodels.stats.api as sms
 from statsmodels.stats.power import NormalIndPower
 
-# Example: A/B test for conversion rates
-# Control: 1.1% conversion rate
-# Treatment: 1.65% conversion rate
+# 전환율을 견주는 A/B 검정
+# 대조군 전환율 1.1%
+# 실험군 전환율 1.65%. 상대적으로는 50% 개선이지만 절대차는 0.55%p 다.
 p0 = 0.011   # Control baseline
 p1 = 0.0165  # Treatment goal
 
 # 비율에서는 두 값의 차이 대신 arcsin 변환 후의 차이를 효과크기로 쓴다.
-#   h = 2*arcsin(sqrt(p1)) - 2*arcsin(sqrt(p0))
+#   h = 2*arcsin(sqrt(p1)) - 2*arcsin(sqrt(p0)) — 비율을 각도로 바꿔 재는 효과크기다.
 # 이렇게 하면 분산이 p에 의존하는 문제가 사라져 하나의 공식으로 처리된다.
 # 0.011 대 0.0165는 절대차로 0.55%p뿐이지만 상대적으로는 50% 증가다.
 effect_size = sms.proportion_effectsize(p1, p0)
@@ -264,19 +292,25 @@ A/B Test (Proportions):
   Sample size per group for 80% power: 5488
 ```
 
+</div>
+
 집단당 5,488명, 합쳐서 약 11,000명이 필요하다. 전환율이 낮으면 표본이 이렇게 커진다. 1.1%의 기저율에서는 집단당 5,488명이라도 전환이 60건 남짓에 불과하기 때문이다. 웹 실험이 몇 주씩 걸리는 이유가 여기 있다.
 
 ### 일원분산분석
 
+<div class="codebox" markdown>
+
+**예제 6.** 일원분산분석의 검정력
+
 ```python
 from statsmodels.stats.power import FTestAnovaPower
 
-# Power analysis for one-way ANOVA
+# 분산분석의 효과크기는 Cohen 의 f 다. t-검정의 d 와는 눈금이 다르므로
+# 0.25 를 d 로 읽으면 안 된다. f 는 0.10 작음, 0.25 중간, 0.40 큼으로 본다.
 analysis = FTestAnovaPower()
 
-# Scenario: 4 groups, medium effect size (f = 0.25)
-effect_size = 0.25  # Medium effect in ANOVA
-k_groups = 4
+effect_size = 0.25   # 중간 크기 효과
+k_groups = 4         # 비교할 집단 수
 
 n_per_group = analysis.solve_power(effect_size=effect_size, alpha=0.05,
                                    power=0.80, k_groups=k_groups)
@@ -296,14 +330,22 @@ One-way ANOVA (4 groups):
   Total sample size: 716
 ```
 
+</div>
+
 주의할 점은 Cohen의 $f$와 $d$가 다른 척도라는 것이다. $f = 0.25$는 ANOVA에서 "중간"이지만 $d = 0.5$와 같은 뜻이 아니다. 두 집단만 있을 때 $f = d/2$이므로 $f = 0.25$는 $d = 0.5$에 대응한다. 그런데도 집단당 179명이 필요한 것은 집단이 넷이라 비교해야 할 것이 많아졌기 때문이다.
 
 ### 검정력 곡선: 표본크기와 검정력의 관계
 
+<div class="codebox" markdown>
+
+**예제 7.** 표본크기와 검정력의 곡선
+
 ```python
 import matplotlib.pyplot as plt
 
-# Create power curves for different effect sizes
+# 효과크기를 세 가지로 두고 표본크기에 따른 검정력을 그린다.
+# 세 곡선이 모두 위로 볼록하다는 점이 중요하다. 표본을 늘릴수록 얻는 것이
+# 줄어들므로, 검정력 0.8 을 0.9 로 올리는 비용이 0.5 를 0.8 로 올리는 비용보다 크다.
 fig, ax = plt.subplots(figsize=(10, 6))
 
 analysis = TTestPower()
@@ -314,7 +356,7 @@ for d in [0.2, 0.5, 0.8]:
                     for n in sample_sizes]
     ax.plot(sample_sizes, power_values, linewidth=2, label=f"d = {d:.1f}")
 
-# Add reference lines
+# 관례로 쓰는 두 기준선. 0.80 이 가장 흔하다.
 ax.axhline(0.80, color='red', linestyle='--', linewidth=1, label='Power = 0.80')
 ax.axhline(0.90, color='orange', linestyle='--', linewidth=1, label='Power = 0.90')
 
@@ -329,6 +371,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![Power Curves: Sample Size vs. Power](./img/power_224.png)
 
 세 곡선 모두 처음에는 가파르게 오르다가 위로 갈수록 평평해진다. 이 평평해지는 구간이 실무에서 중요하다. $d = 0.5$에서 검정력 0.8에는 34명이면 되지만 0.9에는 44명이 필요하다. 30% 더 모아서 10%p를 얻는 셈이고, 0.95를 원하면 54명으로 더 늘어난다. 마지막 몇 %p가 가장 비싸다.
@@ -336,6 +380,10 @@ plt.show()
 세 곡선의 간격도 눈여겨보라. $d = 0.8$은 15명이면 되고 $d = 0.5$는 34명, $d = 0.2$는 199명이다. 효과크기가 4분의 1로 줄면 표본은 열세 배가 된다. 작은 효과를 탐지하는 일은 표본이 곧 예산이다.
 
 ### 검정력 분석의 작업 흐름
+
+<div class="codebox" markdown>
+
+**예제 8.** 연구 설계 작업 흐름
 
 ```python
 def design_study(test_type, effect_size, alpha=0.05, power=0.80,
@@ -378,7 +426,7 @@ def design_study(test_type, effect_size, alpha=0.05, power=0.80,
 
     return results
 
-# Example usage
+# 사용 예
 print("\n" + "="*60)
 print("STUDY DESIGN: Two-Sample Comparison")
 print("="*60)
@@ -400,6 +448,8 @@ power......................... 0.8
 sample_size_per_group......... 64
 total_sample_size............. 128
 ```
+
+</div>
 
 이런 표를 연구계획서에 그대로 옮겨 적을 수 있다. 검정력 분석에서 정작 어려운 부분은 계산이 아니라 `effect_size`에 넣을 값을 정하는 일이다. 선행 연구, 예비조사, 또는 "이보다 작으면 실무적으로 의미가 없다"는 기준 중 하나를 근거로 삼아야 하며, 그 근거를 함께 적어 두는 것이 좋다.
 

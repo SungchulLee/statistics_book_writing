@@ -12,7 +12,9 @@ $$
 P(p \leq t \mid H_0) = t \quad \text{for } t \in [0,1].
 $$
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 1.** 표본을 몰래 늘려 가며 보기
 
 ```python
 import numpy as np
@@ -41,6 +43,8 @@ print(f"False positive rate: {false_pos_rate:.4f}  (expected: 0.05)")
 False positive rate: 0.0508  (expected: 0.05)
 ```
 
+</div>
+
 10,000번 중 508번이 "유의하다"고 나왔다. 정직하게 한 번만 검정하면 거짓 양성은 정확히 명목 수준에 머문다. 아래에서 무너지는 것은 이 전제다.
 
 p-값의 히스토그램은 사실상 평평하여 $H_0$ 아래의 균등성을 확인해 준다.
@@ -61,7 +65,9 @@ $$
 
 거짓 양성 비율이 5%에서 64%로 뛴다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 2.** 결과변수를 여러 개 재기
 
 ```python
 n_outcomes = 20
@@ -87,6 +93,8 @@ print(f"Cherry-pick rate: {phack_rate:.4f}  (theoretical: 0.6415)")
 Cherry-pick rate: 0.6580  (theoretical: 0.6415)
 ```
 
+</div>
+
 거짓 양성 비율이 5%에서 66%로 뛴다. 실제로 아무 효과도 없는데 세 번에 두 번은 "유의한 결과"를 손에 쥔다는 뜻이다.
 
 모의실험이 1,000회뿐이라 표준오차가 1.5%p 정도이므로 0.658은 이론값 0.6415와 어긋나지 않는다.
@@ -97,7 +105,9 @@ Cherry-pick rate: 0.6580  (theoretical: 0.6415)
 
 또 다른 형태의 p-해킹은 자료를 모으는 동안 반복해서 들여다보다가 $p < 0.05$가 되는 즉시 멈추는 것이다. 각각의 들여다보기가 타당한 검정을 쓰더라도 순차적인 엿보기가 전체 거짓 양성 비율을 부풀린다.
 
-### 코드
+<div class="codebox" markdown>
+
+**예제 3.** p-해킹의 결과 모으기
 
 ```python
 n_experiments = 1000
@@ -128,6 +138,8 @@ print(f"Optional stopping rate: {stop_rate:.4f}")
 ```
 Optional stopping rate: 0.2380
 ```
+
+</div>
 
 역시 두 집단이 같은 분포에서 나온 자료인데 24%가 "유의하다"고 나온다. 각각의 검정은 완전히 정당했고 어떤 자료도 버리지 않았다는 점이 이 예제를 불편하게 만든다. 문제는 오직 **언제 멈출지를 자료를 보고 정했다**는 데 있다.
 
