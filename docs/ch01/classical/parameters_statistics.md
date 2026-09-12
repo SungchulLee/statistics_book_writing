@@ -143,7 +143,7 @@ Observed SE:           2.097
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 양을 **모수**인지 **통계량**인지 분류하라.
 
 **(a)** 어떤 나라 모든 성인의 평균 키.
@@ -165,7 +165,7 @@ Observed SE:           2.097
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 베셀 보정을 적용한 표본분산이 불편임을 보여라. 즉 $s^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar X)^2$이고 $X_1, \dots, X_n$이 평균 $\mu$, 분산 $\sigma^2$의 i.i.d.일 때 $\mathbb{E}[s^2] = \sigma^2$임을 보여라.
 
 </div>
@@ -189,7 +189,7 @@ Observed SE:           2.097
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 분산이 $\sigma^2 = 100$인 모집단에서 크기 $n$인 i.i.d. 표본을 뽑을 때 $n = 4, 25, 100, 400$에 대해 $\bar X$의 표준오차를 계산하라. $n$이 네 배가 되면 표준오차는 어떻게 변하는가?
 
 </div>
@@ -208,7 +208,7 @@ Observed SE:           2.097
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 조사에서 응답자 $n = 100$명으로부터 $\hat p = 0.40$을 얻었다. $\hat p$가 근사적으로 $N(p, p(1-p)/n)$을 따른다고 볼 때, "모수 $p$가 $(0.30, 0.50)$ 안에 있을 확률이 95%다"라는 진술이 빈도주의적 의미에서 올바른 해석인지 설명하라.
 
 </div>
@@ -222,7 +222,7 @@ Observed SE:           2.097
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표본비율은 $\hat p = (1/n)\sum X_i$이다. $\mathbb{E}[\hat p] = p$이고 $\mathrm{Var}(\hat p) = p(1-p)/n$임을 보여라. 분산은 ($p$에 대해) 어디에서 최대가 되며, 이것이 표본 크기 계획에서 왜 중요한가?
 
 </div>
@@ -236,7 +236,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **평균제곱오차**는 $\mathrm{MSE}(\hat \theta) = \mathrm{Var}(\hat \theta) + [\mathrm{bias}(\hat \theta)]^2$로 분해된다. 불편추정량보다 MSE가 작은 편향추정량의 예를 들고, 이런 일이 왜 가능한지 설명하라.
 
 </div>
@@ -266,7 +266,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 연습문제 6에서 $n$으로 나누는 쪽이 $n-1$로 나누는 쪽보다 MSE가 작음을 보았다. 그렇다면 **최적의 분모**는 무엇인가? $\hat\sigma^2_c = c\sum(X_i-\bar X)^2$의 MSE를 최소화하는 $c$를 구하고 모의실험으로 확인하라.
 
 </div>
@@ -335,7 +335,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 중심극한정리는 **표본평균**에 대한 정리다. 다른 통계량의 표본분포는 어떻게 생겼는가? $\bar{X}$, $s^2$, 표본최댓값의 표본분포를 $n$을 키워 가며 비교하라.
 
 </div>
@@ -397,7 +397,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 **불편성과 일치성은 별개의 성질이다.** (a) 불편이지만 일치성이 없는 추정량과 (b) 편향되어 있지만 일치성이 있는 추정량을 각각 제시하고 모의실험으로 확인하라.
 
 </div>
@@ -463,7 +463,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 모수의 함수를 추정할 때 **대입추정량**의 함정을 보여라. $\mathbb{E}[1/\bar{X}] \ne 1/\mu$임을 확인하고, 델타 방법으로 편향의 크기를 근사하라.
 
 </div>

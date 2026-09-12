@@ -284,7 +284,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 제약회사가 신약을 시험하기 위해 신청한 자원자 100명에게 약을 투여한다. 신청하지 않은 별도의 100명이 대조군 역할을 한다. 이 실험 설계의 핵심 결함을 지적하라.
 
 </div>
@@ -294,7 +294,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 무작위 대조시험(RCT)과 자연실험의 차이를 설명하라. 각각의 예를 하나씩 들어라.
 
 </div>
@@ -308,7 +308,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 연구에서 개인지도 수업에 참석한 학생이 그렇지 않은 학생보다 시험에서 15점 높은 점수를 받았다. 학교는 개인지도가 15점의 향상을 유발한다고 결론지었다. 개인지도의 인과효과가 없더라도 이 결과를 설명할 수 있는 교란요인으로 무엇이 있을까?
 
 </div>
@@ -326,7 +326,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 통제실험의 맥락에서 **내적 타당도**와 **외적 타당도**를 정의하라. 내적 타당도는 높지만 외적 타당도는 낮은 실험이 있을 수 있는가?
 
 </div>
@@ -340,7 +340,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어떤 요인실험이 두 개의 이항 요인(A: 낮음 / 높음, B: 낮음 / 높음)을 변화시켜 총 4개의 처리 조합을 만들고, 조합마다 25명씩 배정한다. 이 설계에서 추정할 수 있으나 두 개의 별도 단일요인 실험으로는 얻을 수 없는 양 두 가지를 제시하라.
 
 </div>
@@ -356,7 +356,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 어떤 임상시험이 새 진통제가 기존 진통제보다 나은지를 검증한다.
 
 **(a)** 이 시험에서 무작위 배정의 목적을 설명하라.
@@ -374,7 +374,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 어떤 시험이 환자 200명을 무작위화하여 100명을 처리군에, 100명을 대조군에 배정했다. 우연히 처리군의 평균 나이는 65세, 대조군은 55세가 되었다. 이 시험은 무효인가? 올바른 대응은 무엇인가?
 
 </div>
@@ -392,7 +392,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 기관마다 환자 구성이 다른 다기관 시험에서 **블록(층화) 무작위화**가 **단순 무작위화**보다 선호되는 이유를 설명하라.
 
 </div>
@@ -404,7 +404,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 어떤 수술 시험에서는 집도의를 눈가림할 수 없다. 이로 인해 생기는 타당도 위협과 최선의 부분적 완화책을 논하라.
 
 </div>
@@ -423,7 +423,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 어떤 약물 시험이 환자는 눈가림했지만 임상의는 눈가림하지 않았다. 처리군 환자는 위약군에는 없는 흔한 부작용(구강건조, 가벼운 메스꺼움)을 겪는다. 이것이 왜 눈가림의 무결성을 위협하며, 그 결과는 무엇인가?
 
 </div>
@@ -441,7 +441,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 11.**
+**연습문제 11.** <span class="diff med" title="중간"></span>
 **배정대로 분석(ITT, intention-to-treat)** 은 임상시험 보고의 관례다. 실제로 처치를 받았는지와 무관하게 각 대상자를 무작위 배정된 집단으로 분석하는 것이다. 추정되는 처리효과를 희석하는 것처럼 보이는데도 ITT가 (비순응자를 제외하는) **프로토콜 준수 분석**보다 선호되는 이유를 설명하라.
 
 </div>
@@ -455,7 +455,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 12.**
+**연습문제 12.** <span class="diff med" title="중간"></span>
 (*설계*의 특징인) **무작위화**와 (*분석*의 특징인) **부트스트랩 재표집**을 구분하라. 인과추론에 전자는 필요하지만 후자는 그렇지 않은 이유는 무엇인가?
 
 </div>
@@ -469,7 +469,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 13.**
+**연습문제 13.** <span class="diff hard" title="어려움"></span>
 어떤 제약사가 규제기관에 이렇게 제안한다. "확증시험을 두 건 수행하는 것은 비용과 시간이 너무 많이 듭니다. 대신 시험을 **한 건**만 하되 유의수준을 $\alpha = 0.000625$(단측)로 훨씬 엄격하게 적용하겠습니다. 1종오류 확률이 같으니 증거의 강도도 같습니다."
 
 **(a)** 이 주장의 산술적 근거는 무엇인가?
@@ -496,7 +496,7 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 
 <div class="drillbox" markdown>
 
-**연습문제 14.**
+**연습문제 14.** <span class="diff hard" title="어려움"></span>
 어떤 약이 3상 시험에서 총 3,000명에게 투여되었고 중대한 간독성은 한 건도 관찰되지 않았다. 허가 후 200만 명이 이 약을 복용한다.
 
 **(a)** "3의 법칙"을 써서 3상 자료가 배제할 수 있는 간독성 발생률의 범위를 말하라.

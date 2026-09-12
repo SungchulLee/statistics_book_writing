@@ -132,7 +132,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 연구 질문에서 주된 목표가 **예측**인지 **추론**인지 밝히고, 방법 선택에 어떤 함의가 있는지 설명하라.
 
 **(a)** 능력과 가정 배경을 통제할 때 대학 학위가 평생 소득을 높이는 원인이 되는가?
@@ -152,7 +152,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 팀이 관찰적 건강 자료로 XGBoost 모형을 학습시킨 뒤, "변수 중요도"에서 혈압이 뇌졸중의 가장 강한 예측변수로 나타났다고 보고한다. 이것이 왜 혈압을 낮추면 인과적으로 뇌졸중 위험이 줄어든다는 뜻이 *아닌지* 설명하라.
 
 </div>
@@ -168,7 +168,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 같은 훈련 자료로 두 모형을 만들었다. 하나는 $R^2_{\text{train}} = 0.45$인 선형회귀이고, 다른 하나는 $R^2_{\text{train}} = 0.95$인 랜덤 포레스트다. 왜 $R^2_{\text{train}}$으로 둘을 비교하는 것이 부적절한가? 적절한 비교는 무엇인가?
 
 </div>
@@ -182,7 +182,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 회귀계수에 대한 95% 신뢰구간이 명시적 가정(옳은 함수 형태, 누락된 교란요인 없음, 옳은 오차 구조) 아래에서만 의미를 갖는 반면, 95% 컨포멀 예측구간은 사실상 아무 가정도 요구하지 않는 이유를 설명하라. 이 가정 차이의 대가는 무엇인가?
 
 </div>
@@ -198,7 +198,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어떤 소매업체가 추천 알고리즘을 A/B 테스트해 사용자당 매출이 2% 상승함을 확인했다. 이제 (a) 전면 도입 시 추가 매출이 얼마나 될지, (b) 새 알고리즘이 왜 더 잘 작동하는지 알고 싶어 한다. 어느 질문이 예측이고 어느 것이 추론인지, 각각 어떤 분석이 필요한지 논하라.
 
 </div>
@@ -210,7 +210,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **자료생성 과정에 대한 가정**이 추론에서는 핵심이지만 예측에서는 부차적인 이유는 무엇인가? 이를 이용해, 복잡하고 유연한 모형이 예측에서는 성공하면서도 추론 상황에서는 흔히 *실패하는* 실무적 역설을 설명하라.
 
 </div>
@@ -226,7 +226,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 연습문제 4의 **컨포멀 예측**을 구현하라. 오차 분포가 정규가 아닐 때 모수적 예측구간과 어떻게 달라지는지 비교하라.
 
 </div>
@@ -296,7 +296,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 본문의 "서로 다른 복잡도의 최적점"을 수치로 보여라. **능형회귀**가 예측을 개선하면서 동시에 계수를 편향시키는 것을 확인하라.
 
 </div>
@@ -354,7 +354,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 "한쪽을 다른 쪽인 척하기"의 가장 흔한 형태를 수치로 보여라. **모형을 고른 뒤 같은 자료로 $p$ 값을 보고하면** 1종 오류가 어떻게 되는가?
 
 </div>
@@ -407,7 +407,7 @@ Prediction: test MSE = 0.942
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 연습문제 2가 "예측력이 높다고 인과효과가 아니다"를 다루었다면, 반대 방향도 성립한다. **아주 유의한 변수가 예측에는 거의 쓸모없을 수 있음**을 보여라.
 
 </div>

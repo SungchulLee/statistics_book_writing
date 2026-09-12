@@ -134,7 +134,7 @@ Coefficients:         [-3.6561 -0.0273  6.0932]
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 과제를 지도학습, 비지도학습, 강화학습으로 분류하고, 지도학습이라면 회귀인지 분류인지 밝혀라.
 
 **(a)** 과거 가격과 거래량 자료로 내일의 주식 종가를 예측하기.
@@ -156,7 +156,7 @@ Coefficients:         [-3.6561 -0.0273  6.0932]
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $L(y, \hat{y}) = (y - \hat{y})^2$을 제곱오차 손실이라 하자. 모든 가측 함수 $f$ 위에서 위험 $R(f) = \mathbb{E}[L(Y, f(\mathbf{X}))]$을 최소화하는 함수 $f^*$가 $f^*(\mathbf{x}) = \mathbb{E}[Y \mid \mathbf{X} = \mathbf{x}]$임을 보여라.
 
 </div>
@@ -172,7 +172,7 @@ $L(y, \hat{y}) = (y - \hat{y})^2$을 제곱오차 손실이라 하자. 모든 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mathbf{x}) = \arg\max_k P(Y = k \mid \mathbf{X} = \mathbf{x})$가 기대 오분류율을 최소화함을 보여라.
 
 </div>
@@ -188,7 +188,7 @@ $K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 은행이 2015–2019년 신청자 자료로 신용평가 모형을 학습시켜 떼어놓은 2019년 표본에서 92%의 시험 정확도를 얻었다. 2024년에 배포하자 정확도가 71%에 그쳤다. 이 하락을 설명할 수 있는 서로 다른 기제 세 가지와 각각에 대한 진단 방법을 제시하라.
 
 </div>
@@ -202,7 +202,7 @@ $K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
 같은 자료에 두 회귀 모형을 적합했다.
 - 모형 A: 선형회귀, 훈련 MSE $= 12$, 시험 MSE $= 15$.
 - 모형 B: 심층 신경망, 훈련 MSE $= 2$, 시험 MSE $= 25$.
@@ -220,7 +220,7 @@ $K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 모형을 자신의 훈련 자료로 평가하면 왜 위험을 지나치게 낙관적으로 추정하게 되는가? $\hat{f}$가 $\hat{R}_n$을 최소화하도록 선택되었을 때 $\hat{R}_n(\hat{f})$와 $R(\hat{f})$의 관계로 답을 형식화하라.
 
 </div>
@@ -236,7 +236,7 @@ $K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 본문의 **편향–분산 분해**를 모의실험으로 확인하라. 세 모형에 대해 편향², 분산, 잡음을 각각 추정하고 그 합이 실제 예측오차와 맞는지 보라.
 
 </div>
@@ -312,7 +312,7 @@ $K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 연습문제 6의 낙관적 편향은 **교차검증에도 적용된다.** 초매개변수를 고르는 데 쓴 교차검증 점수를 성능 추정값으로 보고하면 어떻게 되는가?
 
 </div>
@@ -366,7 +366,7 @@ $K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 양성 비율이 $1\%$인 문제에서 **정확도가 왜 무의미한지** 보이고, 어떤 지표를 대신 써야 하는지 논하라.
 
 </div>
@@ -440,7 +440,7 @@ $K$-클래스 분류에서 0–1 손실에 대해, 베이즈 분류기 $f^*(\mat
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 2를 일반화하라. **손실함수를 바꾸면 최적 예측이 어떻게 달라지는가?** 제곱오차, 절대오차, 핀볼 손실에 대해 답하고 수치로 확인하라.
 
 </div>

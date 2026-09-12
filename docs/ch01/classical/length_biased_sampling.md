@@ -198,7 +198,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 통신사가 "고객 대기시간 평균 3분"이라고 광고한다. 소비자단체가 무작위로 고른 시각에 전화를 건 조사원들의 실제 대기시간을 재어 평균 7분이라고 반박했다. 양쪽 모두 정직하게 측정했다면 이 차이는 왜 생기는가?
 
 </div>
@@ -216,7 +216,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 지역의 병원 세 곳의 입원 기간이 다음과 같다. 병원 A: 2일짜리 입원 900건. 병원 B: 30일짜리 입원 100건.
 
 **(a)** 입원 건당 평균 재원일수를 구하라.
@@ -246,7 +246,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 암 검진 프로그램의 홍보 자료가 이렇게 말한다. "검진으로 발견된 환자의 5년 생존율은 88%인 반면, 증상이 나타난 뒤 진단된 환자는 51%입니다." 이 수치만으로 검진이 생명을 구한다고 결론지을 수 없는 이유를 세 가지 기제로 나누어 설명하라.
 
 </div>
@@ -266,7 +266,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **우정의 역설**: 무작위로 고른 사람의 친구들은 평균적으로 그 사람보다 친구가 많다. 이것이 길이 편향의 한 사례임을 설명하고, 소셜미디어 이용자가 자신의 인기를 과소평가하기 쉬운 이유와 연결하라.
 
 </div>
@@ -290,7 +290,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어떤 조사가 무작위로 고른 성인에게 형제자매 수를 물어 평균 자녀 수를 추정하려 한다.
 
 **(a)** 이 추정이 왜 편향되는지 설명하라.
@@ -324,7 +324,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 길이 편향은 이 절의 다른 편향들 — 무응답 편향, 생존자 편향, 출판 편향 — 과 한 가지 점에서 두드러지게 다르다. 무엇이 다른지 밝히고, 그 차이가 왜 길이 편향을 알아채기 어렵게 만드는지 논하라.
 
 </div>
@@ -348,7 +348,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 본문의 "가중치로 되돌린다"를 실제로 해 보라. 길이 편향된 표본만 가지고 모집단 평균을 복원하고, 왜 $1/x$ 가중이 옳은지 보여라.
 
 </div>
@@ -406,7 +406,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 본문은 **평균** 대기시간만 다루었다. 대기시간의 **분포** 전체는 어떻게 되는가? 간격 분포가 서로 다른 세 경우를 비교하라.
 
 </div>
@@ -472,7 +472,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 본문의 리드타임 편향을 모의실험으로 확인하라. **검진이 사망 시점을 전혀 바꾸지 않는** 세계를 만들고, 그럼에도 5년 생존율이 얼마나 뛰는지 보여라.
 
 </div>
@@ -532,7 +532,7 @@ Exponential gaps (Poisson buses)
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 4의 **우정의 역설**을 정량화하라. 친구 수 분포에 따라 역설이 얼마나 강해지는지 계산하고, 소셜미디어에서 왜 특히 심한지 설명하라.
 
 </div>

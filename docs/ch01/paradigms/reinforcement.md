@@ -45,7 +45,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제 1.**
+**문제 1.** <span class="diff med" title="중간"></span>
 
 청소기를 방에 놓으면 방 전체를 빠짐없이 돌아야 한다. 그런데 청소기가 가진 센서 — 라이다, 적외선, 범퍼 — 의 유효 거리는 짧다. **매 순간 청소기가 아는 것은 자기 주변 몇십 센티미터뿐이다.** 방의 전체 도면은 어디에도 주어지지 않는다.
 
@@ -396,7 +396,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 에이전트가 $\epsilon = 0.1$인 엡실론-탐욕 전략을 쓰며, 4개짜리 슬롯머신에 대해 추정된 행동가치가 $Q = [2.0, 3.5, 1.0, 4.0]$이다. 다음 단계에서 에이전트가 4번 팔(탐욕적 선택)을 고를 확률은 얼마인가? 2번 팔을 고를 확률은?
 
 </div>
@@ -418,7 +418,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 음식점 추천 시스템의 맥락에서 탐색–활용 절충을 설명하라. 순수한 활용이 실패하는 구체적 상황 하나와 순수한 탐색이 낭비인 상황 하나를 제시하라.
 
 </div>
@@ -434,7 +434,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 할인 보상 정식화에서 에이전트는 $\sum_{t=0}^{\infty} \gamma^t r_t$를 최대화한다. 할인율이 $\gamma = 0.9$이고 에이전트가 매 시점 일정한 보상 $r = 1$을 받는다면 총 할인 수익은 얼마인가? $\gamma \to 1$이면 어떻게 되는가?
 
 </div>
@@ -450,7 +450,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 강화학습, 지도학습, 비지도학습을 다음 차원에서 비교하라. (a) 사용할 수 있는 피드백의 유형, (b) 자료에서 시간 순서의 역할, (c) 학습 알고리즘의 목표.
 
 </div>
@@ -475,7 +475,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **다중 슬롯머신**은 상태가 결코 변하지 않는 강화학습의 특수한 경우다. 각 팔을 한 번씩만 당겨 본 뒤 경험적으로 가장 좋은 팔을 계속 고르는(더 이상 탐색하지 않는) 알고리즘의 후회를 진술하라. 이 방법은 언제 실패하는가?
 
 </div>
@@ -487,7 +487,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 어떤 트레이딩 에이전트가 강화학습으로 과거 시장 자료에서 훈련되었다. 백테스트에서 성과가 좋았더라도 실제 배포 시 실패할 수 있는 서로 다른 경로 세 가지를 제시하라.
 
 </div>
@@ -503,7 +503,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 로봇 청소기가 왼쪽 방 한가운데와 오른쪽 방 한가운데에서 **완전히 동일한 레이더 관측**을 얻는다. 사방이 트인 마룻바닥이다.
 
 **(a)** 관측을 그대로 상태로 쓰면 왜 최적 정책을 배울 수 없는지 설명하라.
@@ -531,7 +531,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 어떤 청소기 제조사가 강화학습으로 청소 정책을 학습시키면서 보상을 **"흡입한 먼지의 무게"** 로 정의했다.
 
 **(a)** 이 보상 아래에서 최적 정책이 어떤 모습이 될 수 있는지 설명하라.
@@ -565,7 +565,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 청소기가 왼쪽 방에 있다. 왼쪽 방에는 더러운 칸이 **2개** 남았고 바로 옆에 있다. 오른쪽 방에는 더러운 칸이 **40개** 있는데, 문을 지나 첫 더러운 칸에 닿기까지 **15걸음**이 걸린다. 보상은 새로 깨끗해진 칸당 $+1$이다.
 
 **(a)** 왼쪽 방만 치우는 정책과 곧장 오른쪽 방으로 가는 정책의 할인 수익을 $\gamma$의 식으로 각각 근사하라.
@@ -616,7 +616,7 @@ Best arm chosen:  2 (pulled 903 times)
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 1, 2, 5를 종합하라. 다중 슬롯머신에서 **순수 활용**, **엡실론-탐욕**, **UCB**, **톰프슨 표집**의 누적 후회를 비교하고, 왜 그런 순서가 나오는지 설명하라.
 
 </div>

@@ -126,7 +126,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어느 대학이 학생 만족도를 조사하려 한다. 각 상황에서 표집 방법을 식별하라.
 
 **(a)** 학적과가 전체 학생 20,000명의 명단을 만들고 난수 발생기로 500명을 선택한다.
@@ -146,7 +146,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 비례 배분 아래에서 **층화 평균**의 분산을 유도하고, 그것이 SRS 분산 이하임을 보여라. 총분산의 법칙을 이용해 이득이 언제 가장 큰지 밝혀라.
 
 </div>
@@ -174,7 +174,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 건강조사가 학교를 집락으로 하는 집락표집을 사용하며, 학교당 학생은 $m = 30$명이고 결과 변수의 집락 내 상관은 $\rho = 0.10$이다. 학교 50곳을 표집할 때 설계효과와 유효 표본 크기를 계산하라.
 
 </div>
@@ -192,7 +192,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 전화번호부에서 뽑은 240만 명의 표본(1936년 《Literary Digest》 여론조사)이 5만 명의 확률표본(같은 해 갤럽 조사)보다 투표 의향을 더 나쁘게 추정한 이유를 설명하라.
 
 </div>
@@ -206,7 +206,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **무응답**은 모든 실제 조사를 괴롭힌다. 어떤 전화 조사의 응답률이 25%인데, 응답자는 모집단보다 나이가 조금 더 많고 교육 수준이 더 높다. 그 결과 생기는 편향에 대응하는 서로 다른 두 전략 — 하나는 설계 측면, 하나는 분석 측면 — 을 제시하라.
 
 </div>
@@ -231,7 +231,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 비율이 $p$인 이항 결과를 조사할 때 오차한계(95% 신뢰구간의 반폭)를 $0.03$ 이하로 하고자 한다. $p$에 대한 사전 지식을 전혀 쓰지 않을 때 SRS에서 필요한 최소 표본 크기는 얼마인가? 이 공식은 어디서 나오는가?
 
 </div>
@@ -255,7 +255,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 본문에 언급된 **네이만 배분** $n_h \propto N_h\sigma_h$을 유도하고, 층별 분산이 크게 다른 모집단에서 비례 배분과 비교하라.
 
 </div>
@@ -340,7 +340,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 계통표집이 **주기성** 때문에 무너지는 경우를 모의실험하라. 요일 효과가 있는 자료에서 $k = 7$과 $k = 8$을 비교하라.
 
 </div>
@@ -402,7 +402,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 **사후층화 가중**을 직접 구현하라. 응답률이 연령대에 따라 다른 조사를 모의실험하고, 알려진 모집단 연령 분포로 보정했을 때 편향이 얼마나 줄어드는지 측정하라.
 
 </div>
@@ -464,7 +464,7 @@ Stratified est.:  $48,375
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 확률표본의 정의는 선택 확률이 "알려진 $0$이 아닌" 값이라는 것이지 **같은** 값이라는 것이 아니다. 선택 확률이 서로 다를 때 쓰는 **호비츠–톰프슨 추정량**을 구현하고, 규모비례확률(PPS) 표집이 언제 이득이고 언제 손해인지 보여라.
 
 </div>

@@ -231,7 +231,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 상황에서 **편향의 유형**(표집, 무응답, 응답, 선택/생존자)을 식별하라.
 
 **(a)** 어떤 잡지가 구독자에게 정치 여론조사를 우편으로 보낸다. 15%만 응답했고, 응답자는 무응답자보다 의견이 더 강하다.
@@ -251,7 +251,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 진료소가 환자에게 통증을 조사한다. 설문은 "오늘 통증이 0–10점 척도에서 얼마나 심한가요?"라고 묻는다. 환자의 40%가 응답하지 않는다. 진료소는 응답자들의 평균 통증 점수 4.3을 계산해 이를 환자 모집단의 평균 통증으로 보고한다. 추가 정보 *없이* 편향의 방향에 대해 무엇을 말할 수 있는가?
 
 </div>
@@ -269,7 +269,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **편향**과 **분산**을 구분하라. 같은 편향된 표집틀에서 유권자 50명을 조사한 것과 50,000명을 조사한 것은 정밀도가 크게 다른 추정값을 준다. 어느 쪽이 "더 정확한가"?
 
 </div>
@@ -283,7 +283,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **사후층화**는 가중된 인구학적 구성이 (인구총조사 등에서 얻은) 알려진 모집단 주변분포와 일치하도록 응답자에게 다시 가중치를 주는 방법이다. 사후층화가 편향을 줄이는 경우와 줄이지 못하는 경우를 설명하라.
 
 </div>
@@ -297,7 +297,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **2016년 미국 대통령 선거 여론조사**는 트럼프 지지를 체계적으로 과소평가했으며, 특히 러스트벨트 경합주에서 그랬다. 여기에 기여한 서로 다른 두 기제를 밝히고, 선거 전에 왜 포착되지 않았는지 설명하라.
 
 </div>
@@ -311,7 +311,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 어떤 제약 연구가 12주 요법을 완료한 환자에게서 증상이 30% 호전되었다고 보고한다. 등록된 환자의 약 40%가 12주 전에 중도 탈락했다. 이 결론이 왜 오도할 수 있으며, **배정대로 분석(ITT)** 은 이를 어떻게 다루는가?
 
 </div>
@@ -325,7 +325,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 결측 자료는 세 가지 기제로 나뉜다. **MCAR**(완전 무작위 결측), **MAR**(관측값을 조건부로 한 무작위 결측), **MNAR**(비무작위 결측). 세 경우를 모의실험하고, 사후층화가 어느 것을 고칠 수 있는지 보여라.
 
 </div>
@@ -395,7 +395,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 **아무 가정도 하지 않으면** 무응답이 있을 때 무엇을 말할 수 있는가? 이진 결과에 대한 **만스키 경계**를 유도하고 응답률에 따라 어떻게 넓어지는지 보여라.
 
 </div>
@@ -461,7 +461,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 연습문제 6의 ITT를 정량화하라. 순응하지 않는 환자가 있을 때 **ITT**, **프로토콜 준수 분석**, **CACE**가 각각 무엇을 추정하는지 모의실험으로 보여라.
 
 </div>
@@ -527,7 +527,7 @@ Response rate:           45.7%
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 본문의 응답(측정) 편향을 **설계로** 해결하는 방법이 있다. 민감한 질문에 대한 **무작위 응답 기법**을 구현하고, 무엇을 대가로 치르는지 보여라.
 
 </div>

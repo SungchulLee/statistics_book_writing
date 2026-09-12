@@ -166,7 +166,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 연구를 **관찰연구**(횡단, 코호트, 환자대조)인지 **실험연구**인지 분류하라.
 
 **(a)** 연구자들이 흡연자 5,000명과 비흡연자 5,000명을 20년간 추적하여 폐암 발생률을 비교한다.
@@ -186,7 +186,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 연구에서 적포도주를 적당히 마시는 사람의 심장질환 발생률이 더 낮다는 결과가 나왔다. 적포도주에 인과효과가 없더라도 이런 연관성을 만들어낼 수 있는 그럴듯한 교란요인 세 가지를 들고, 이를 부분적으로나마 다룰 수 있는 식별 전략 하나를 제안하라.
 
 </div>
@@ -202,7 +202,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 **코호트연구**와 **환자대조연구**의 차이를 설명하라. 희귀질환에는 왜 보통 환자대조연구를 쓰는가?
 
 </div>
@@ -214,7 +214,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 개인지도 수업에 참석한 학생이 그렇지 않은 학생보다 15점 높은 점수를 받았다고 보고한 관찰연구를 생각하자. 학교는 개인지도가 15점의 향상을 유발한다고 결론지었다. 교란요인 세 가지를 찾되 두 개는 **측정 가능**하고 하나는 **측정 불가능**한 것으로 제시하고, 후자가 왜 근본적인 한계인지 설명하라.
 
 </div>
@@ -233,7 +233,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **생태학적 오류**는 집단 수준 자료에서 개인 수준의 연관성을 추론하는 오류다. 집단 수준 상관과 개인 수준 상관의 부호가 반대가 되는 작은 인공 예를 만들어라.
 
 </div>
@@ -258,7 +258,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 어떤 연구자가 공변량 열 개를 통제한 $Y$의 $T$에 대한 **다변량 회귀**로 $T$의 인과효과를 확립했다고 주장한다. 이 주장에 필요한 추가 식별 가정을 진술하고, 그것을 검증하지는 못해도 탐색해 볼 수 있는 진단 방법 하나를 설명하라.
 
 </div>
@@ -275,7 +275,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 "공변량은 많이 넣을수록 좋다"는 흔한 오해다. **교란요인**을 보정하면 편향이 줄지만 **충돌부(collider)** 를 보정하면 없던 편향이 생긴다. 두 경우를 모의실험으로 대비하라.
 
 </div>
@@ -338,7 +338,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 **이중차분법(DiD)** 을 구현하라. 처리군이 원래부터 결과 수준이 높은 상황에서 (a) 사후 단순비교, (b) 처리군 전후비교, (c) 이중차분이 각각 무엇을 주는지 비교하고, 평행추세 가정이 깨지면 어떻게 되는지 보여라.
 
 </div>
@@ -402,7 +402,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 **회귀 불연속(RDD)** 을 구현하라. 점수 $50$점 이상에게 장학금을 주는 제도를 모의실험하고, 대역폭을 좁혀 가며 추정값과 표준오차가 어떻게 변하는지 보여라.
 
 </div>
@@ -467,7 +467,7 @@ Partial correlation (controlling age): r = -0.086
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 **도구변수**를 구현하라. 미측정 교란이 있을 때 최소제곱이 편향되고 2단계 최소제곱(2SLS)이 참값을 회복함을 보인 뒤, **약한 도구**가 왜 위험한지 보여라.
 
 </div>

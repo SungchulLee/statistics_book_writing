@@ -138,7 +138,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 재무 상담사가 자신이 추천하는 뮤추얼펀드들이 지난 10년간 연평균 12%의 수익률을 냈다고 보여준다. 생존자 편향이 이 수치를 어떻게 부풀릴 수 있는지 설명하라.
 
 </div>
@@ -150,7 +150,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 제2차 세계대전 중 아브라함 발드는 어디에 장갑을 덧댈지 결정하기 위해 귀환한 항공기의 총알 구멍을 연구했다. 총알 구멍이 가장 많은 부위를 보강하는 것이 왜 생존자 편향 때문에 잘못된 판단인지 설명하라.
 
 </div>
@@ -164,7 +164,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 성공한 창업가를 연구한 결과 70%가 대학을 중퇴했다고 한다. 중퇴가 창업 성공 확률을 높인다고 결론지어야 하는가? 그 이유는?
 
 </div>
@@ -180,7 +180,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 스타트업을 5년간 추적하는 종단연구에서 생존자 편향을 완화할 구체적인 전략을 제안하라.
 
 </div>
@@ -196,7 +196,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 장기 투자에 관한 어떤 교과서가 1928–2023년 미국 S&P 500을 근거로 "주식은 연평균 10%의 수익을 낸다"고 보고한다. 이 수치가 *지수* 수준과 *국가* 수준에서 생존자 편향으로 부풀려질 수 있는 서로 다른 두 경로를 논하라.
 
 </div>
@@ -210,7 +210,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 어떤 의학 학술지가 $p < 0.05$인 연구만 게재한다. 이 **출판 편향**이 *연구* 수준의 생존자 편향인 이유를 설명하라. 메타분석에 미치는 결과 하나와 흔히 쓰는 보정책 하나를 제시하라.
 
 </div>
@@ -224,7 +224,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 위 예제의 편향은 $+0.039$로 크지 않았다. 편향의 크기는 무엇이 정하는가? 청산 기준을 바꿔 가며 생존자 편향이 어떻게 커지는지 보여라.
 
 </div>
@@ -278,7 +278,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 발드가 실제로 푼 문제를 풀어라. 생존기의 부위별 피탄 분포로부터 **부위별 격추 확률**을 추정하라.
 
 </div>
@@ -353,7 +353,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 생존자 편향의 크기를 정확히 계산하라. $X \sim N(\mu, \sigma^2)$이고 $X > c$인 것만 관측될 때 $\mathbb{E}[X \mid X > c]$를 구하고 수치로 확인하라.
 
 </div>
@@ -416,7 +416,7 @@ Survivorship bias: +0.039
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 연습문제 3의 "성공한 창업가의 $70\%$가 중퇴자"를 수치로 따져 보라. **기저율**을 알면 무엇이 달라지는가?
 
 </div>

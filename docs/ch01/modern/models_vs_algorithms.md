@@ -73,7 +73,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 선형회귀 모형은 $\varepsilon \sim N(0, \sigma^2)$인 $Y = \beta_0 + \beta_1 X + \varepsilon$을 가정한다. 랜덤 포레스트는 그런 분포 가정을 두지 않는다. 각 접근의 장점을 하나씩 설명하라.
 
 </div>
@@ -85,7 +85,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 단순한 모수적 모형과 복잡한 알고리즘적 모형 중에서 고르는 맥락에서 편향–분산 절충을 설명하라. 편향이 더 큰데도 단순한 모형을 선호하게 되는 경우는 언제인가?
 
 </div>
@@ -102,7 +102,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 어떤 데이터 과학자가 만든 신경망이 훈련 자료에서 98%의 정확도를 내지만 시험 자료에서는 72%에 그친다. 이 현상을 설명하고 두 가지 해결책을 제안하라.
 
 </div>
@@ -119,7 +119,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 *추론*과 *예측*의 구분을 이용해 통계 모형과 기계학습 알고리즘의 목표를 비교하라. 각 목표가 우선인 구체적 상황을 제시하라.
 
 </div>
@@ -135,7 +135,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **브레이먼의 "두 문화"**(2001)는 통계학자와 기계학습 연구자가 같은 자료를 서로 다른 심적 모형으로 대한다고 주장했다. 두 문화를 요약하고, 그 논문이 나온 이후 경계가 좁아졌는지 논하라.
 
 </div>
@@ -152,7 +152,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 어떤 팀이 고객 신용위험을 예측하는 랜덤 포레스트를 만들었다. 표본 밖 정확도가 95%지만, 은행 감독기관은 모형이 **설명 가능**해야 한다고 요구한다. 불리한 신용 결정에는 구체적인 사유가 따라야 한다는 것이다. 랜덤 포레스트를 포기하지 않고 이 요건을 충족할 현실적 전략 두 가지를 논하라.
 
 </div>
@@ -166,7 +166,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff med" title="중간"></span>
 연습문제 1과 2를 수치로 확인하라. 가정이 **맞을 때**와 **틀릴 때** 선형모형과 랜덤 포레스트의 성적이 어떻게 뒤바뀌는가? 표본 크기의 역할도 함께 보라.
 
 </div>
@@ -239,7 +239,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff med" title="중간"></span>
 잘 **순위를 매기는** 모형과 잘 **보정된** 모형은 다르다. 두 성질을 분리해서 측정하고, 어느 쪽이 언제 중요한지 논하라.
 
 </div>
@@ -322,7 +322,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 연습문제 5의 브레이먼이 지적한 **라쇼몽 효과**를 재현하라. 성능이 거의 같은 여러 모형이 서로 전혀 다른 "설명"을 내놓는 것을 보여라.
 
 </div>
@@ -387,7 +387,7 @@ True: y = 3 + 2x - 0.1x^2 + noise
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 6의 규제 요건을 실제로 다루어 보라. 블랙박스 모형에 **대리 모형**과 **개별 사유 코드**를 붙이는 두 전략을 구현하고 한계를 밝혀라.
 
 </div>

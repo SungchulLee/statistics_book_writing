@@ -196,7 +196,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 신문이 아이스크림 트럭이 많은 도시일수록 범죄율이 높다고 보도하며, 아이스크림 트럭이 범죄를 유발한다고 결론지었다.
 
 **(a)** 이 연관성을 설명할 수 있는 그럴듯한 **교란변수**를 제시하라.
@@ -216,7 +216,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **교란변수**, **매개변수**, **충돌변수**를 구분하라. $X$가 $Y$에 미치는 효과를 회귀분석할 때 각각을 "보정"하면 어떤 결과가 생기는지 진술하라.
 
 </div>
@@ -232,7 +232,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 구체적인 표로 보는 **심슨의 역설**. 어떤 약을 두 병원에서 시험하여 다음과 같은 결과를 얻었다.
 
 | | 병원 A — 회복 | A — 전체 | 병원 B — 회복 | B — 전체 |
@@ -255,7 +255,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **뒷문 기준**(Pearl 1995)은 어떤 변수들이 보정 통제변수로 충분한지를 판별하는 그래프적 규칙을 준다. 이 기준을 비형식적으로 진술하고, *잘못된 집합*을 보정하면 뒷문을 닫기는커녕 여는 작은 DAG 예를 제시하라.
 
 </div>
@@ -269,7 +269,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어느 의학 연구자가 커피를 마시는 사람의 심근경색 위험이 30% 낮아진다고 주장한다. 보도자료는 이를 "커피가 심근경색을 예방한다"로 요약한다. 교란요인 두 가지를 제시한 뒤, 이 주장을 인과적 결론으로 격상하려면 어떤 종류의 연구가 필요한지 설명하라.
 
 </div>
@@ -284,7 +284,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **평균처리효과(ATE)** 와 **처리군에 대한 평균처리효과(ATT)** 를 구분하라. 관찰자료로 ATE를 식별할 수 있는 것은 언제이고 ATT만 식별되는 것은 언제이며, 이것이 정책에서 왜 중요한가?
 
 </div>
@@ -303,7 +303,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 본문의 "교란요인은 양쪽 방향으로 다 밀 수 있다"를 수치로 확인하라. 참된 인과효과가 **양수**인데 관측된 연관성이 $0$이거나 **음수**가 되도록 교란요인을 설계하고, 보정이 이를 되살리는지 보여라.
 
 </div>
@@ -369,7 +369,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 **성향점수**를 이용한 역확률가중(IPW)을 구현해 ATE를 회복하라. 그런 다음 **중첩(positivity)** 이 깨지면 무슨 일이 일어나는지 보여라.
 
 </div>
@@ -454,7 +454,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 "처리 이전에 측정된 변수는 보정해도 안전하다"는 말은 널리 퍼져 있지만 **틀렸다.** 처리보다 앞서 측정되었고 교란요인도 아닌 변수를 보정해 편향이 생기는 **M-편향**의 예를 만들어라.
 
 </div>
@@ -509,7 +509,7 @@ Overall correlation (hours, grade): -0.349
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 연습문제 6(관찰연구)에서 언급한 **민감도 분석**을 정량화하라. 관측된 위험비 $\mathrm{RR}$을 미측정 교란만으로 설명해 없애려면 그 교란이 얼마나 강해야 하는가? **E-value**를 계산하고 그 의미를 논하라.
 
 </div>

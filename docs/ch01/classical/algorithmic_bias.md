@@ -215,7 +215,7 @@ exploration = 20%
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 회사가 채용 모형에서 **성별 변수를 제거**하고 "이제 성중립적"이라고 발표했다. 이 주장의 결함을 설명하고, 성별 정보가 여전히 모형에 남아 있을 수 있는 경로를 세 가지 제시하라.
 
 </div>
@@ -235,7 +235,7 @@ exploration = 20%
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 위의 예제 코드에서 두 지역의 참 범죄율은 동일하다. 그런데도 순찰 배분이 한쪽으로 고착된다.
 
 **(a)** 이 루프를 끊으려면 무엇이 필요한가? 예제의 출력을 근거로 답하라.
@@ -265,7 +265,7 @@ exploration = 20%
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 보험사가 의료비 지출액을 예측하는 모형으로 "집중 관리가 필요한 고위험 환자"를 선별한다. 이 설계에 어떤 구조적 문제가 있는지, 목표변수의 관점에서 설명하라.
 
 </div>
@@ -289,7 +289,7 @@ exploration = 20%
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 COMPAS 논쟁에서 ProPublica와 개발사는 서로 다른 공정성 기준을 사용했다.
 
 **(a)** 두 기준을 각각 정의하라.
@@ -315,7 +315,7 @@ COMPAS 논쟁에서 ProPublica와 개발사는 서로 다른 공정성 기준을
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어떤 추천 알고리즘이 이용자가 클릭할 확률이 높은 콘텐츠를 상단에 배치한다. 배포 6개월 뒤 클릭률이 크게 올랐다. 이 성과 지표만으로 알고리즘이 좋다고 결론지을 수 없는 이유를 피드백 루프의 관점에서 설명하라.
 
 </div>
@@ -333,7 +333,7 @@ COMPAS 논쟁에서 ProPublica와 개발사는 서로 다른 공정성 기준을
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 이 절의 다른 편향들(무응답, 생존자, 출판, 길이 편향)과 알고리즘 피드백 루프의 가장 근본적인 차이를 밝히고, 그 차이가 진단을 왜 어렵게 만드는지 논하라.
 
 </div>
@@ -355,7 +355,7 @@ COMPAS 논쟁에서 ProPublica와 개발사는 서로 다른 공정성 기준을
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
 본문의 **공정성 불가능성**을 수치로 확인하라. 완벽하게 보정된 점수가 어떻게 집단 간에 전혀 다른 오류율을 낳는지 보이고, 오류율을 억지로 맞추면 무엇이 깨지는지도 보여라.
 
 </div>
@@ -452,7 +452,7 @@ COMPAS 논쟁에서 ProPublica와 개발사는 서로 다른 공정성 기준을
 
 <div class="drillbox" markdown>
 
-**연습문제 8.**
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 연습문제 1의 "성별 변수를 제거하면 성중립"이라는 주장을 수치로 반박하라. 보호 속성을 뺀 뒤에도 남은 특징들로 그것을 얼마나 복원할 수 있는지, 그리고 결과 격차가 남는지 측정하라.
 
 </div>
@@ -502,7 +502,7 @@ COMPAS 논쟁에서 ProPublica와 개발사는 서로 다른 공정성 기준을
 
 <div class="drillbox" markdown>
 
-**연습문제 9.**
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 3의 의료비 선별 모형을 모의실험하라. 두 집단의 **건강 필요가 완전히 같은데도** 접근성 차이만으로 선별 결과가 얼마나 갈라지는지 측정하라.
 
 </div>
@@ -576,7 +576,7 @@ COMPAS 논쟁에서 ProPublica와 개발사는 서로 다른 공정성 기준을
 
 <div class="drillbox" markdown>
 
-**연습문제 10.**
+**연습문제 10.** <span class="diff med" title="중간"></span>
 전체 정확도가 높은 모형이 특정 하위집단에서는 쓸모없을 수 있다. 이를 모의실험하고, 왜 전체 지표만 보면 문제가 보이지 않는지 설명하라.
 
 </div>
