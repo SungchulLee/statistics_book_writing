@@ -32,61 +32,62 @@ $p < \alpha$이면, 동등하게 $|t_j| > t^*_{n-k,\,\alpha/2}$이면, 동등하
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 설명변수 두 개.
 
-```python
-import numpy as np
-import statsmodels.api as sm
-
-def print_summary(res):
-    """summary()에서 실행 날짜와 시각만 지우고 인쇄한다(재현 가능한 출력을 위해)."""
-    lines = []
-    for line in str(res.summary()).split("\n"):
-        if line.startswith(("Date:", "Time:")):
-            lines.append(line[:19].ljust(38) + line[38:])
-        else:
-            lines.append(line)
-    print("\n".join(lines))
-
-np.random.seed(0)
-X = np.random.rand(100, 2)
-y = 3 * X[:, 0] + 5 * X[:, 1] + np.random.randn(100)
-
-X_const = sm.add_constant(X)
-results = sm.OLS(y, X_const).fit()
-print_summary(results)
-```
-
-출력:
-
-```
-                            OLS Regression Results                            
-==============================================================================
-Dep. Variable:                      y   R-squared:                       0.743
-Model:                            OLS   Adj. R-squared:                  0.738
-Method:                 Least Squares   F-statistic:                     140.3
-Date:                                   Prob (F-statistic):           2.39e-29
-Time:                                   Log-Likelihood:                -133.53
-No. Observations:                 100   AIC:                             273.1
-Df Residuals:                      97   BIC:                             280.9
-Df Model:                           2                                         
-Covariance Type:            nonrobust                                         
-==============================================================================
-                 coef    std err          t      P>|t|      [0.025      0.975]
-------------------------------------------------------------------------------
-const          0.1145      0.259      0.442      0.659      -0.400       0.629
-x1             2.5737      0.332      7.742      0.000       1.914       3.233
-x2             5.0296      0.328     15.346      0.000       4.379       5.680
-==============================================================================
-Omnibus:                        0.410   Durbin-Watson:                   2.045
-Prob(Omnibus):                  0.815   Jarque-Bera (JB):                0.502
-Skew:                           0.144   Prob(JB):                        0.778
-Kurtosis:                       2.807   Cond. No.                         5.58
-==============================================================================
-
-Notes:
-[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import statsmodels.api as sm
+
+    def print_summary(res):
+        """summary()에서 실행 날짜와 시각만 지우고 인쇄한다(재현 가능한 출력을 위해)."""
+        lines = []
+        for line in str(res.summary()).split("\n"):
+            if line.startswith(("Date:", "Time:")):
+                lines.append(line[:19].ljust(38) + line[38:])
+            else:
+                lines.append(line)
+        print("\n".join(lines))
+
+    np.random.seed(0)
+    X = np.random.rand(100, 2)
+    y = 3 * X[:, 0] + 5 * X[:, 1] + np.random.randn(100)
+
+    X_const = sm.add_constant(X)
+    results = sm.OLS(y, X_const).fit()
+    print_summary(results)
+    ```
+
+    출력:
+
+    ```
+                                OLS Regression Results                            
+    ==============================================================================
+    Dep. Variable:                      y   R-squared:                       0.743
+    Model:                            OLS   Adj. R-squared:                  0.738
+    Method:                 Least Squares   F-statistic:                     140.3
+    Date:                                   Prob (F-statistic):           2.39e-29
+    Time:                                   Log-Likelihood:                -133.53
+    No. Observations:                 100   AIC:                             273.1
+    Df Residuals:                      97   BIC:                             280.9
+    Df Model:                           2                                         
+    Covariance Type:            nonrobust                                         
+    ==============================================================================
+                     coef    std err          t      P>|t|      [0.025      0.975]
+    ------------------------------------------------------------------------------
+    const          0.1145      0.259      0.442      0.659      -0.400       0.629
+    x1             2.5737      0.332      7.742      0.000       1.914       3.233
+    x2             5.0296      0.328     15.346      0.000       4.379       5.680
+    ==============================================================================
+    Omnibus:                        0.410   Durbin-Watson:                   2.045
+    Prob(Omnibus):                  0.815   Jarque-Bera (JB):                0.502
+    Skew:                           0.144   Prob(JB):                        0.778
+    Kurtosis:                       2.807   Cond. No.                         5.58
+    ==============================================================================
+
+    Notes:
+    [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+    ```
 
 요약표의 `P>|t|` 열이 각 계수에 대한 $H_0\colon \beta_j = 0$의 양측 p-값이다. 그 옆의 `[0.025 0.975]`가 95% 신뢰구간이고, 둘은 같은 정보를 다르게 표현한 것이다.
 
@@ -94,31 +95,32 @@ Notes:
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> p값과 신뢰구간 뽑아내기.
 
-```python
-np.random.seed(42)
-X = np.random.rand(100, 1)
-y = 2.5 * X[:, 0] + np.random.randn(100)
-
-X_const = sm.add_constant(X)
-results = sm.OLS(y, X_const).fit()
-
-p_values = results.pvalues
-confidence_intervals = results.conf_int()
-
-print("P-values:", p_values)
-print("95% CI:\n", confidence_intervals)
-```
-
-출력:
-
-```
-P-values: [2.09535133e-01 1.62497167e-09]
-95% CI:
- [[-0.12283207  0.55302438]
- [ 1.43199824  2.6484553 ]]
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    np.random.seed(42)
+    X = np.random.rand(100, 1)
+    y = 2.5 * X[:, 0] + np.random.randn(100)
+
+    X_const = sm.add_constant(X)
+    results = sm.OLS(y, X_const).fit()
+
+    p_values = results.pvalues
+    confidence_intervals = results.conf_int()
+
+    print("P-values:", p_values)
+    print("95% CI:\n", confidence_intervals)
+    ```
+
+    출력:
+
+    ```
+    P-values: [2.09535133e-01 1.62497167e-09]
+    95% CI:
+     [[-0.12283207  0.55302438]
+     [ 1.43199824  2.6484553 ]]
+    ```
 
 `pvalues`와 `conf_int()`로 요약표의 값을 배열로 꺼낸다. 절편의 p-값은 0.21로 유의하지 않고 기울기는 $1.6 \times 10^{-9}$로 강하게 유의하다.
 
@@ -126,35 +128,36 @@ P-values: [2.09535133e-01 1.62497167e-09]
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 여러 설명변수의 해석.
 
-```python
-np.random.seed(42)
-study_hours = np.random.rand(100) * 10
-sleep_hours = np.random.rand(100) * 8
-exam_scores = 5 + 2.5 * study_hours - 1.5 * sleep_hours + np.random.randn(100) * 2
-
-X = np.column_stack((study_hours, sleep_hours))
-X_const = sm.add_constant(X)
-results = sm.OLS(exam_scores, X_const).fit()
-
-conf = results.conf_int()   # ndarray when the input is a NumPy array
-for i, name in enumerate(["Intercept", "Study Hours", "Sleep Hours"]):
-    pval = results.pvalues[i]
-    ci = conf[i]
-    status = "Significant" if pval < 0.05 else "Not Significant"
-    print(f"{name}: coef={results.params[i]:.4f}, "
-          f"p={pval:.4g} ({status}), "
-          f"95% CI=({ci[0]:.4f}, {ci[1]:.4f})")
-```
-
-출력:
-
-```text
-Intercept: coef=4.8212, p=1.754e-15 (Significant), 95% CI=(3.8122, 5.8303)
-Study Hours: coef=2.4317, p=2.171e-58 (Significant), 95% CI=(2.2992, 2.5641)
-Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    np.random.seed(42)
+    study_hours = np.random.rand(100) * 10
+    sleep_hours = np.random.rand(100) * 8
+    exam_scores = 5 + 2.5 * study_hours - 1.5 * sleep_hours + np.random.randn(100) * 2
+
+    X = np.column_stack((study_hours, sleep_hours))
+    X_const = sm.add_constant(X)
+    results = sm.OLS(exam_scores, X_const).fit()
+
+    conf = results.conf_int()   # ndarray when the input is a NumPy array
+    for i, name in enumerate(["Intercept", "Study Hours", "Sleep Hours"]):
+        pval = results.pvalues[i]
+        ci = conf[i]
+        status = "Significant" if pval < 0.05 else "Not Significant"
+        print(f"{name}: coef={results.params[i]:.4f}, "
+              f"p={pval:.4g} ({status}), "
+              f"95% CI=({ci[0]:.4f}, {ci[1]:.4f})")
+    ```
+
+    출력:
+
+    ```text
+    Intercept: coef=4.8212, p=1.754e-15 (Significant), 95% CI=(3.8122, 5.8303)
+    Study Hours: coef=2.4317, p=2.171e-58 (Significant), 95% CI=(2.2992, 2.5641)
+    Sleep Hours: coef=-1.3202, p=3.633e-28 (Significant), 95% CI=(-1.4883, -1.1521)
+    ```
 
 !!! warning "`conf_int()`의 반환 형식은 입력에 따라 달라진다"
     `sm.OLS`에 NumPy 배열을 넘기면 `conf_int()`가 `ndarray`를 돌려주므로 `conf[i]`로 색인해야 한다. pandas `Series`/`DataFrame`을 넘겼을 때에만 `DataFrame`이 반환되어 `.iloc[i]`를 쓸 수 있다. 배열 입력에 `.iloc`를 쓰면 `AttributeError`가 난다.

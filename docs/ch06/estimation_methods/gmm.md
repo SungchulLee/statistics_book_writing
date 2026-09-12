@@ -112,22 +112,23 @@ $$
 
 **보기 1.** <span class="diff med" title="중간"></span> 적률 세 개를 쓴 정규분포. $X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자:
 
-$$
-g(X, \theta) = \begin{pmatrix} X - \mu \\ X^2 - (\mu^2 + \sigma^2) \\ X^3 - \mu^3 - 3\mu\sigma^2 \end{pmatrix}
-$$
-
-이는 처음 세 개의 모집단 적률을 대응하는 표본 적률과 같다고 두는 것에 해당한다. 모수가 $p = 2$개이고 조건이 $r = 3$개이므로 모형은 1만큼 과대식별되어 있다.
-
-**1단계** ($\mathbf{W} = \mathbf{I}_3$): $\bar{g}_n(\theta)^\top \bar{g}_n(\theta)$를 최소화하여 $\hat{\theta}_1 = (\hat{\mu}_1, \hat{\sigma}^2_1)^\top$을 얻는다.
-
-**2단계**: $\hat{\theta}_1$에서의 잔차로 $\hat{\mathbf{S}}$를 추정하고 $\mathbf{W}_2 = \hat{\mathbf{S}}^{-1}$로 두어 다시 최소화한다.
-
-세 번째 적률 조건은 추정량을 제약하는 추가 방정식을 제공한다. 정규분포처럼 대칭인 분포에서는 3차 중심적률이 0이므로 세 번째 조건은 본질적으로 $E[X^3] = \mu^3 + 3\mu\sigma^2$이다. J 검정은 이 대칭성 제약이 자료와 일관되는지를 확인하며, J 통계량이 유의하면 자료가 정규분포를 따르지 않음을 시사한다.
-
-??? example "정확식별일 때 GMM은 적률법으로 환원된다"
-    $r = p$이면 적률 조건 $\bar{g}_n(\theta) = \mathbf{0}$을 대개 정확히 풀 수 있고 가중행렬 $\mathbf{W}$는 무의미해진다(양의 정부호인 어떤 $\mathbf{W}$도 같은 해를 준다). 이 경우 GMM은 표준 적률법으로 환원된다. 예를 들어 두 조건 $E[X - \mu] = 0$과 $E[(X - \mu)^2 - \sigma^2] = 0$으로 $(\mu, \sigma^2)$을 추정하면 $\mathbf{W}$와 무관하게 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$을 얻는다.
-
 </div>
+
+??? success "풀이"
+    $$
+    g(X, \theta) = \begin{pmatrix} X - \mu \\ X^2 - (\mu^2 + \sigma^2) \\ X^3 - \mu^3 - 3\mu\sigma^2 \end{pmatrix}
+    $$
+
+    이는 처음 세 개의 모집단 적률을 대응하는 표본 적률과 같다고 두는 것에 해당한다. 모수가 $p = 2$개이고 조건이 $r = 3$개이므로 모형은 1만큼 과대식별되어 있다.
+
+    **1단계** ($\mathbf{W} = \mathbf{I}_3$): $\bar{g}_n(\theta)^\top \bar{g}_n(\theta)$를 최소화하여 $\hat{\theta}_1 = (\hat{\mu}_1, \hat{\sigma}^2_1)^\top$을 얻는다.
+
+    **2단계**: $\hat{\theta}_1$에서의 잔차로 $\hat{\mathbf{S}}$를 추정하고 $\mathbf{W}_2 = \hat{\mathbf{S}}^{-1}$로 두어 다시 최소화한다.
+
+    세 번째 적률 조건은 추정량을 제약하는 추가 방정식을 제공한다. 정규분포처럼 대칭인 분포에서는 3차 중심적률이 0이므로 세 번째 조건은 본질적으로 $E[X^3] = \mu^3 + 3\mu\sigma^2$이다. J 검정은 이 대칭성 제약이 자료와 일관되는지를 확인하며, J 통계량이 유의하면 자료가 정규분포를 따르지 않음을 시사한다.
+
+    ??? example "정확식별일 때 GMM은 적률법으로 환원된다"
+        $r = p$이면 적률 조건 $\bar{g}_n(\theta) = \mathbf{0}$을 대개 정확히 풀 수 있고 가중행렬 $\mathbf{W}$는 무의미해진다(양의 정부호인 어떤 $\mathbf{W}$도 같은 해를 준다). 이 경우 GMM은 표준 적률법으로 환원된다. 예를 들어 두 조건 $E[X - \mu] = 0$과 $E[(X - \mu)^2 - \sigma^2] = 0$으로 $(\mu, \sigma^2)$을 추정하면 $\mathbf{W}$와 무관하게 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$을 얻는다.
 
 ## 다른 추정 방법과의 연결
 

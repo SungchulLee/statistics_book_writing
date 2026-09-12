@@ -43,13 +43,14 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포. 가장 널리 쓰이는 연속분포는 평균 $\mu$, 분산 $\sigma^2$인 **정규분포**이며 밀도는 다음과 같다.
 
-$$
-f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
-$$
-
-두 값 사이의 곡선 아래 넓이가 $X$가 그 범위에 들어갈 확률이다.
-
 </div>
+
+??? success "풀이"
+    $$
+    f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
+    $$
+
+    두 값 사이의 곡선 아래 넓이가 $X$가 그 범위에 들어갈 확률이다.
 
 ## 2. 한 점의 확률은 0이다
 
@@ -83,44 +84,45 @@ $$
 
 넓이가 0.1이 되는 지점을 찾는 문제, 즉 10번째 백분위수를 구하는 문제다.
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
-
-mu = 185       # 평균 대기시간(초)
-sigma = 11     # 표준편차
-
-# ppf(0.1)은 "아래쪽 10%의 경계"를 돌려준다. CDF의 역함수다.
-# 즉 P(X <= max_wait) = 0.1 이 되는 지점이다.
-max_wait = stats.norm(loc=mu, scale=sigma).ppf(0.1)
-print(f"Maximum average wait time: {max_wait:.2f} seconds")
-
-# 시각화: 평균에서 좌우 3 표준편차 구간을 그린다
-x = np.linspace(mu - 3*sigma, mu + 3*sigma, 200)
-pdf = stats.norm(loc=mu, scale=sigma).pdf(x)
-
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(x, pdf)
-
-# 하위 10%에 해당하는 영역을 칠한다.
-# 연속확률변수에서 "확률 = 곡선 아래 넓이"라는 사실을 눈으로 보여 준다.
-x_fill = np.linspace(mu - 3*sigma, max_wait, 100)
-ax.fill_between(x_fill, stats.norm(loc=mu, scale=sigma).pdf(x_fill),
-                alpha=0.3, color='r', label=f'Bottom 10% (≤ {max_wait:.1f}s)')
-ax.spines[['right', 'top']].set_visible(False)
-ax.spines['bottom'].set_position('zero')
-ax.legend()
-plt.show()
-```
-
-출력:
-
-```
-Maximum average wait time: 170.90 seconds
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    mu = 185       # 평균 대기시간(초)
+    sigma = 11     # 표준편차
+
+    # ppf(0.1)은 "아래쪽 10%의 경계"를 돌려준다. CDF의 역함수다.
+    # 즉 P(X <= max_wait) = 0.1 이 되는 지점이다.
+    max_wait = stats.norm(loc=mu, scale=sigma).ppf(0.1)
+    print(f"Maximum average wait time: {max_wait:.2f} seconds")
+
+    # 시각화: 평균에서 좌우 3 표준편차 구간을 그린다
+    x = np.linspace(mu - 3*sigma, mu + 3*sigma, 200)
+    pdf = stats.norm(loc=mu, scale=sigma).pdf(x)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.plot(x, pdf)
+
+    # 하위 10%에 해당하는 영역을 칠한다.
+    # 연속확률변수에서 "확률 = 곡선 아래 넓이"라는 사실을 눈으로 보여 준다.
+    x_fill = np.linspace(mu - 3*sigma, max_wait, 100)
+    ax.fill_between(x_fill, stats.norm(loc=mu, scale=sigma).pdf(x_fill),
+                    alpha=0.3, color='r', label=f'Bottom 10% (≤ {max_wait:.1f}s)')
+    ax.spines[['right', 'top']].set_visible(False)
+    ax.spines['bottom'].set_position('zero')
+    ax.legend()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Maximum average wait time: 170.90 seconds
+    ```
 
 ![연속확률변수](./img/continuous_72.png)
 

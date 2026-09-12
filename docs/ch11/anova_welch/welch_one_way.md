@@ -80,31 +80,32 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 분산이 다른 경우의 Welch 분산분석.
 
-```python
-import pingouin as pg
-import pandas as pd
-
-# Sample data
-data = {
-    "Group": ["A", "A", "A", "B", "B", "B", "C", "C", "C", "C"],
-    "Values": [12, 14, 13, 22, 23, 19, 31, 33, 29, 35],
-}
-df = pd.DataFrame(data)
-
-# Welch 분산분석 수행. scipy에는 없고 pingouin에 있다.
-anova_results = pg.welch_anova(dv="Values", between="Group", data=df)
-
-print(anova_results)
-```
-
-출력:
-
-```
-  Source  ddof1     ddof2          F     p_unc       np2
-0  Group      2  4.142737  84.415503  0.000439  0.953739
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    import pingouin as pg
+    import pandas as pd
+
+    # Sample data
+    data = {
+        "Group": ["A", "A", "A", "B", "B", "B", "C", "C", "C", "C"],
+        "Values": [12, 14, 13, 22, 23, 19, 31, 33, 29, 35],
+    }
+    df = pd.DataFrame(data)
+
+    # Welch 분산분석 수행. scipy에는 없고 pingouin에 있다.
+    anova_results = pg.welch_anova(dv="Values", between="Group", data=df)
+
+    print(anova_results)
+    ```
+
+    출력:
+
+    ```
+      Source  ddof1     ddof2          F     p_unc       np2
+    0  Group      2  4.142737  84.415503  0.000439  0.953739
+    ```
 
 - $F$: 검정통계량.
 - $p$(`p_unc`): $H_0$을 기각할지 판단하는 p-값. pingouin 0.6부터 열 이름이 `p-unc`에서 `p_unc`로 바뀌었다.

@@ -58,76 +58,78 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 공정한 동전. $X_i \sim \text{Bernoulli}(0.5)$이면 $\mu = 0.5$, $\sigma^2 = 0.25$, $\rho = 0.125$이므로
 
-$$
-\text{상한} = \frac{0.4748 \times 0.125}{0.25^{3/2}\sqrt n} = \frac{0.4748}{\sqrt n}
-$$
-
-$n = 100$에서 약 $0.0475$다. 누적분포함수가 어느 점에서도 정규분포와 4.75% 이상 차이 나지 않는다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \text{상한} = \frac{0.4748 \times 0.125}{0.25^{3/2}\sqrt n} = \frac{0.4748}{\sqrt n}
+    $$
+
+    $n = 100$에서 약 $0.0475$다. 누적분포함수가 어느 점에서도 정규분포와 4.75% 이상 차이 나지 않는다.
 
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포. $X_i \sim \text{Exponential}(1)$이면 $\mu = 1$, $\sigma^2 = 1$, $\rho = 2 + e^{-1} \approx 2.368$이므로
 
-$$
-\text{상한} = \frac{0.4748 \times 2.368}{\sqrt n} \approx \frac{1.124}{\sqrt n}
-$$
-
-$n = 100$에서 약 $0.112$다. 대칭인 베르누이보다 **두 배 이상** 크다. 지수분포가 오른쪽으로 치우쳐 있기 때문이다.
-
-```python
-import numpy as np
-from scipy import stats
-
-def berry_esseen_bound(sigma, rho, n, C=0.4748):
-    """베리-에센 상계를 계산한다.
-
-        |F_n(x) - Phi(x)|  <=  C * rho / (sigma^3 * sqrt(n))
-
-    이 값은 **모든 x에 대해 한꺼번에** 성립하는 오차 상한이다.
-    중심극한정리가 "n이 크면 정규분포에 가까워진다"고만 말하는 데 비해,
-    베리-에센은 "얼마나 가까운가"를 수치로 준다.
-    """
-    return C * rho / (sigma**3 * np.sqrt(n))
-
-# 베르누이(0.5): 대칭이라 정규근사가 빠르다
-sigma_b = np.sqrt(0.25)     # 표준편차 0.5
-rho_b = 0.125               # E|X - mu|^3 = 0.5^3 = 0.125
-print("=== Bernoulli(0.5) ===")
-for n in [10, 30, 100, 1000]:
-    bound = berry_esseen_bound(sigma_b, rho_b, n)
-    print(f"n = {n:5d}: Berry–Esseen bound = {bound:.4f}")
-
-print()
-
-# 지수분포(1): 오른쪽으로 크게 치우쳐 정규근사가 훨씬 느리다.
-# rho/sigma^3 이 2.368 대 0.125 로 19배쯤 크므로 상계도 그만큼 커진다.
-sigma_e = 1.0
-rho_e = 2.368
-print("=== Exponential(1) ===")
-for n in [10, 30, 100, 1000]:
-    bound = berry_esseen_bound(sigma_e, rho_e, n)
-    print(f"n = {n:5d}: Berry–Esseen bound = {bound:.4f}")
-```
-
-출력:
-
-```
-=== Bernoulli(0.5) ===
-n =    10: Berry–Esseen bound = 0.1501
-n =    30: Berry–Esseen bound = 0.0867
-n =   100: Berry–Esseen bound = 0.0475
-n =  1000: Berry–Esseen bound = 0.0150
-
-=== Exponential(1) ===
-n =    10: Berry–Esseen bound = 0.3555
-n =    30: Berry–Esseen bound = 0.2053
-n =   100: Berry–Esseen bound = 0.1124
-n =  1000: Berry–Esseen bound = 0.0356
-```
-
 </div>
+
+??? success "풀이"
+    $$
+    \text{상한} = \frac{0.4748 \times 2.368}{\sqrt n} \approx \frac{1.124}{\sqrt n}
+    $$
+
+    $n = 100$에서 약 $0.112$다. 대칭인 베르누이보다 **두 배 이상** 크다. 지수분포가 오른쪽으로 치우쳐 있기 때문이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def berry_esseen_bound(sigma, rho, n, C=0.4748):
+        """베리-에센 상계를 계산한다.
+
+            |F_n(x) - Phi(x)|  <=  C * rho / (sigma^3 * sqrt(n))
+
+        이 값은 **모든 x에 대해 한꺼번에** 성립하는 오차 상한이다.
+        중심극한정리가 "n이 크면 정규분포에 가까워진다"고만 말하는 데 비해,
+        베리-에센은 "얼마나 가까운가"를 수치로 준다.
+        """
+        return C * rho / (sigma**3 * np.sqrt(n))
+
+    # 베르누이(0.5): 대칭이라 정규근사가 빠르다
+    sigma_b = np.sqrt(0.25)     # 표준편차 0.5
+    rho_b = 0.125               # E|X - mu|^3 = 0.5^3 = 0.125
+    print("=== Bernoulli(0.5) ===")
+    for n in [10, 30, 100, 1000]:
+        bound = berry_esseen_bound(sigma_b, rho_b, n)
+        print(f"n = {n:5d}: Berry–Esseen bound = {bound:.4f}")
+
+    print()
+
+    # 지수분포(1): 오른쪽으로 크게 치우쳐 정규근사가 훨씬 느리다.
+    # rho/sigma^3 이 2.368 대 0.125 로 19배쯤 크므로 상계도 그만큼 커진다.
+    sigma_e = 1.0
+    rho_e = 2.368
+    print("=== Exponential(1) ===")
+    for n in [10, 30, 100, 1000]:
+        bound = berry_esseen_bound(sigma_e, rho_e, n)
+        print(f"n = {n:5d}: Berry–Esseen bound = {bound:.4f}")
+    ```
+
+    출력:
+
+    ```
+    === Bernoulli(0.5) ===
+    n =    10: Berry–Esseen bound = 0.1501
+    n =    30: Berry–Esseen bound = 0.0867
+    n =   100: Berry–Esseen bound = 0.0475
+    n =  1000: Berry–Esseen bound = 0.0150
+
+    === Exponential(1) ===
+    n =    10: Berry–Esseen bound = 0.3555
+    n =    30: Berry–Esseen bound = 0.2053
+    n =   100: Berry–Esseen bound = 0.1124
+    n =  1000: Berry–Esseen bound = 0.0356
+    ```
 
 !!! note "$n \ge 30$ 관례의 정체"
     지수분포에서 $n = 30$이면 상한이 $1.124/\sqrt{30} \approx 0.205$다. **누적분포함수 오차가 20%까지 허용된다**는 뜻이며, 신뢰구간을 만들기에는 전혀 안심할 수 없는 수준이다.

@@ -46,17 +46,18 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 고객 대기 시간. 고객 도착 사이의 대기 시간(분)을 다섯 번 관측하여 $x_1 = 2.1$, $x_2 = 0.8$, $x_3 = 1.5$, $x_4 = 3.2$, $x_5 = 1.4$를 얻었다고 하자. 표본평균은
 
-$$
-\bar{x} = \frac{2.1 + 0.8 + 1.5 + 3.2 + 1.4}{5} = 1.8 \text{ minutes}
-$$
-
-따라서 비율 모수의 MLE는
-
-$$
-\hat{\lambda} = \frac{1}{\bar{x}} = \frac{1}{1.8} \approx 0.556 \text{ arrivals per minute}
-$$
-
 </div>
+
+??? success "풀이"
+    $$
+    \bar{x} = \frac{2.1 + 0.8 + 1.5 + 3.2 + 1.4}{5} = 1.8 \text{ minutes}
+    $$
+
+    따라서 비율 모수의 MLE는
+
+    $$
+    \hat{\lambda} = \frac{1}{\bar{x}} = \frac{1}{1.8} \approx 0.556 \text{ arrivals per minute}
+    $$
 
 ## 성질
 

@@ -56,13 +56,14 @@ $\beta_3$의 부호와 크기가 교호작용의 성격을 정한다.
 
 공부 시간과 수면의 교호작용 항은 수면이 부족할 때 공부 시간 추가의 이득이 **줄어든다**는 사실을 드러낼 수 있다. 형식적으로 쓰면
 
-$$
-\text{Score} = \beta_0 + \beta_1 \cdot \text{StudyHours} + \beta_2 \cdot \text{Sleep} + \beta_3 \cdot (\text{StudyHours} \times \text{Sleep}) + \epsilon
-$$
-
-$\beta_3 > 0$이면 잠을 더 잘수록 공부의 이득이 커진다. $\beta_3 < 0$이면 적게 자는 학생에게는 공부를 더 해도 수익체감이 나타난다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \text{Score} = \beta_0 + \beta_1 \cdot \text{StudyHours} + \beta_2 \cdot \text{Sleep} + \beta_3 \cdot (\text{StudyHours} \times \text{Sleep}) + \epsilon
+    $$
+
+    $\beta_3 > 0$이면 잠을 더 잘수록 공부의 이득이 커진다. $\beta_3 < 0$이면 적게 자는 학생에게는 공부를 더 해도 수익체감이 나타난다.
 
 <div class="codebox" markdown>
 

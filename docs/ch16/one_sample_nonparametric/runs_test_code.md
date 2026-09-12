@@ -71,27 +71,29 @@ def runs_test(data):
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 뭉친 수열. 뭉침이 심한 수열은 런이 매우 적다.
 
-```python
-data = np.array([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-z, p = runs_test(data * 2 - 1)
-# R = 2, mu = 8.76, sigma = 1.81
-# z = -3.7335, p = 0.0002 → 무작위성 기각
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    data = np.array([1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    z, p = runs_test(data * 2 - 1)
+    # R = 2, mu = 8.76, sigma = 1.81
+    # z = -3.7335, p = 0.0002 → 무작위성 기각
+    ```
 
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 지나치게 교대하는 수열. 빈번한 교대 역시 무작위성으로부터의 이탈이다.
 
-```python
-data = np.array([1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0])
-z, p = runs_test(data * 2 - 1)
-# R = 14, mu = 9.47, sigma = 1.99
-# z = +2.2775, p = 0.0228 → 무작위성 기각
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    data = np.array([1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0])
+    z, p = runs_test(data * 2 - 1)
+    # R = 14, mu = 9.47, sigma = 1.99
+    # z = +2.2775, p = 0.0228 → 무작위성 기각
+    ```
 
 !!! warning "'잘 섞여 보임'은 무작위성의 증거가 아니다"
     두 번째 수열은 언뜻 잘 섞인 듯 보이지만 $17$개 원소에서 런이 $14$개로, 기댓값 $9.47$을

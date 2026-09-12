@@ -49,71 +49,74 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> Bernoulli 분포. $X \sim \text{Bernoulli}(p)$이면 $x \in \{0, 1\}$에서 $f(x; p) = p^x (1-p)^{1-x}$이다. 관측값 하나에 대한 로그가능도는
 
-$$
-\log f(x; p) = x \log p + (1-x) \log(1-p)
-$$
-
-2계도함수를 취하면:
-
-$$
-\frac{\partial^2}{\partial p^2} \log f(x; p) = -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}
-$$
-
-$E[X] = p$이므로:
-
-$$
-I(p) = -E\left[-\frac{X}{p^2} - \frac{1-X}{(1-p)^2}\right] = \frac{p}{p^2} + \frac{1-p}{(1-p)^2} = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}
-$$
-
-Fisher 정보량은 $p$가 0이나 1에 가까울 때 가장 크고(그때 관측값 하나가 $p$에 관해 가장 많은 정보를 준다) $p = 1/2$에서 가장 작다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \log f(x; p) = x \log p + (1-x) \log(1-p)
+    $$
+
+    2계도함수를 취하면:
+
+    $$
+    \frac{\partial^2}{\partial p^2} \log f(x; p) = -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}
+    $$
+
+    $E[X] = p$이므로:
+
+    $$
+    I(p) = -E\left[-\frac{X}{p^2} - \frac{1-X}{(1-p)^2}\right] = \frac{p}{p^2} + \frac{1-p}{(1-p)^2} = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}
+    $$
+
+    Fisher 정보량은 $p$가 0이나 1에 가까울 때 가장 크고(그때 관측값 하나가 $p$에 관해 가장 많은 정보를 준다) $p = 1/2$에서 가장 작다.
 
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> Normal 분포 (평균). $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$이라 하자. 관측값 하나에 대한 로그가능도는
 
-$$
-\log f(x; \mu) = -\frac{1}{2}\log(2\pi\sigma^2) - \frac{(x - \mu)^2}{2\sigma^2}
-$$
-
-$\mu$에 대한 2계도함수는
-
-$$
-\frac{\partial^2}{\partial \mu^2} \log f(x; \mu) = -\frac{1}{\sigma^2}
-$$
-
-이는 ($x$에 의존하지 않는) 상수이므로
-
-$$
-I(\mu) = \frac{1}{\sigma^2}
-$$
-
-잡음 $\sigma^2$이 작아질수록 Fisher 정보량이 커지며, 이는 직관과 맞아떨어진다. 잡음이 적은 자료가 평균에 관해 더 많은 정보를 담는다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \log f(x; \mu) = -\frac{1}{2}\log(2\pi\sigma^2) - \frac{(x - \mu)^2}{2\sigma^2}
+    $$
+
+    $\mu$에 대한 2계도함수는
+
+    $$
+    \frac{\partial^2}{\partial \mu^2} \log f(x; \mu) = -\frac{1}{\sigma^2}
+    $$
+
+    이는 ($x$에 의존하지 않는) 상수이므로
+
+    $$
+    I(\mu) = \frac{1}{\sigma^2}
+    $$
+
+    잡음 $\sigma^2$이 작아질수록 Fisher 정보량이 커지며, 이는 직관과 맞아떨어진다. 잡음이 적은 자료가 평균에 관해 더 많은 정보를 담는다.
 
 <div class="exbox" markdown>
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> Poisson 분포. $X \sim \text{Poisson}(\lambda)$이면 $f(x; \lambda) = e^{-\lambda}\lambda^x / x!$이다. 로그가능도는
 
-$$
-\log f(x; \lambda) = -\lambda + x \log \lambda - \log(x!)
-$$
-
-2계도함수는
-
-$$
-\frac{\partial^2}{\partial \lambda^2} \log f(x; \lambda) = -\frac{x}{\lambda^2}
-$$
-
-$E[X] = \lambda$이므로:
-
-$$
-I(\lambda) = \frac{1}{\lambda}
-$$
-
 </div>
+
+??? success "풀이"
+    $$
+    \log f(x; \lambda) = -\lambda + x \log \lambda - \log(x!)
+    $$
+
+    2계도함수는
+
+    $$
+    \frac{\partial^2}{\partial \lambda^2} \log f(x; \lambda) = -\frac{x}{\lambda^2}
+    $$
+
+    $E[X] = \lambda$이므로:
+
+    $$
+    I(\lambda) = \frac{1}{\lambda}
+    $$
 
 ## Fisher 정보량으로부터의 표준오차
 

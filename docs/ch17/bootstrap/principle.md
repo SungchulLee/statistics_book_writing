@@ -73,15 +73,16 @@ $$
 2. $b = 1, \ldots, B$에 대해 자료에서 복원추출로 20개를 뽑아 중앙값 $\hat{\theta}^{*(b)}$을 계산한다.
 3. $B$개 붓스트랩 중앙값의 표준편차로 표준오차를 추정한다.
 
-$$
-\widehat{\text{SE}}_{\text{boot}} = \sqrt{\frac{1}{B-1} \sum_{b=1}^{B} \left(\hat{\theta}^{*(b)} - \bar{\hat{\theta}}^*\right)^2}
-$$
-
-여기서 $\bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^{B} \hat{\theta}^{*(b)}$이다.
-
-이 절차는 $\hat{\theta}$가 중앙값이든 상관계수든 회귀계수든 다른 어떤 통계량이든 똑같이 작동한다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \widehat{\text{SE}}_{\text{boot}} = \sqrt{\frac{1}{B-1} \sum_{b=1}^{B} \left(\hat{\theta}^{*(b)} - \bar{\hat{\theta}}^*\right)^2}
+    $$
+
+    여기서 $\bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^{B} \hat{\theta}^{*(b)}$이다.
+
+    이 절차는 $\hat{\theta}$가 중앙값이든 상관계수든 회귀계수든 다른 어떤 통계량이든 똑같이 작동한다.
 
 ## 붓스트랩 표본의 성질
 

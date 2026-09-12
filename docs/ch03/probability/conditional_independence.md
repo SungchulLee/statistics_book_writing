@@ -40,13 +40,14 @@ $$
 
 시험 난이도를 알고 나면 $A$의 합격 여부는 $B$에 대해 거의 아무것도 말해 주지 않는다. 둘의 실력은 별개이기 때문이다. 그러나 난이도를 **모르는** 상태라면 $A$가 합격했다는 소식은 시험이 쉬웠을 가능성을 높이고, 따라서 $B$의 합격 가능성도 높인다.
 
-$$
-A_{\text{합격}} \perp\!\!\!\perp B_{\text{합격}} \mid C
-\qquad\text{이지만}\qquad
-A_{\text{합격}} \not\perp\!\!\!\perp B_{\text{합격}}
-$$
-
 </div>
+
+??? success "풀이"
+    $$
+    A_{\text{합격}} \perp\!\!\!\perp B_{\text{합격}} \mid C
+    \qquad\text{이지만}\qquad
+    A_{\text{합격}} \not\perp\!\!\!\perp B_{\text{합격}}
+    $$
 
 ## 2. 독립이던 것이 조건을 걸면 종속이 된다
 
@@ -72,74 +73,75 @@ $$
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 화재경보기. 경보($C$)는 화재($A$) 때문에 울릴 수도 있고 탄 토스트($B$) 때문에 울릴 수도 있다. 두 원인은 서로 무관하다.
 
-$$
-P(A \cap B) = P(A)\,P(B)
-$$
-
-그런데 경보가 울렸다는 사실을 알고 나면 사정이 달라진다. 원인 중 하나가 아니라는 것을 알면 다른 하나일 가능성이 올라간다.
-
-$$
-P(B \mid A^c \cap C) > P(B \mid C)
-$$
-
-화재가 아니라는 말을 듣는 순간 토스트 쪽으로 무게가 쏠린다. 한 원인이 결과를 "해명해 버리면" 다른 원인이 필요 없어지는 것이다.
-
-```python
-import numpy as np
-
-def berkson_paradox_simulation(n_simulations=200_000):
-    """Demonstrate Berkson's paradox: independent events become
-    dependent after conditioning on a shared effect."""
-    np.random.seed(42)
-
-    # 두 원인과 하나의 공통 결과.
-    #   fire  = 화재 (드묾)
-    #   toast = 토스트 태움 (흔함)
-    #   alarm = 경보기 울림 (둘 중 하나만 일어나도 울린다)
-    p_fire = 0.01
-    p_toast = 0.10
-
-    # 두 원인을 서로 **완전히 독립으로** 생성한다는 점이 중요하다.
-    # 각자 따로 난수를 뽑으므로 설계상 아무 관계가 없다.
-    fire = np.random.rand(n_simulations) < p_fire
-    toast = np.random.rand(n_simulations) < p_toast
-    alarm = fire | toast      # 공통 결과(충돌부, collider)
-
-    # 조건 없이 보면 정말 독립이다.
-    # fire[toast] 는 "토스트를 태운 시행들만" 골라 낸 것이고,
-    # 그 안에서의 화재 비율이 전체 화재 비율과 같아야 한다.
-    p_fire_given_toast = fire[toast].mean()
-    print(f"P(fire) = {fire.mean():.4f}")
-    print(f"P(fire | toast) = {p_fire_given_toast:.4f}")
-    print(f"Unconditionally independent: {abs(fire.mean() - p_fire_given_toast) < 0.005}\n")
-
-    # 그런데 공통 결과인 alarm 으로 조건을 걸면 둘이 얽힌다.
-    # 경보가 울렸는데 토스트를 태우지 않았다면, 남은 설명은 화재뿐이다.
-    # 한 원인을 배제하면 다른 원인의 확률이 치솟는 이 현상을
-    # "설명해 없애기(explaining away)" 또는 버크슨의 역설이라 한다.
-    p_fire_given_alarm = fire[alarm].mean()
-    p_fire_given_alarm_no_toast = fire[alarm & ~toast].mean()
-    print(f"P(fire | alarm) = {p_fire_given_alarm:.4f}")
-    print(f"P(fire | alarm, no toast) = {p_fire_given_alarm_no_toast:.4f}")
-    print(f"Conditionally dependent (explaining away): "
-          f"{abs(p_fire_given_alarm - p_fire_given_alarm_no_toast) > 0.01}")
-
-berkson_paradox_simulation()
-```
-
-출력:
-
-```
-P(fire) = 0.0098
-P(fire | toast) = 0.0101
-Unconditionally independent: True
-
-P(fire | alarm) = 0.0899
-P(fire | alarm, no toast) = 1.0000
-Conditionally dependent (explaining away): True
-```
-
 </div>
+
+??? success "풀이"
+    $$
+    P(A \cap B) = P(A)\,P(B)
+    $$
+
+    그런데 경보가 울렸다는 사실을 알고 나면 사정이 달라진다. 원인 중 하나가 아니라는 것을 알면 다른 하나일 가능성이 올라간다.
+
+    $$
+    P(B \mid A^c \cap C) > P(B \mid C)
+    $$
+
+    화재가 아니라는 말을 듣는 순간 토스트 쪽으로 무게가 쏠린다. 한 원인이 결과를 "해명해 버리면" 다른 원인이 필요 없어지는 것이다.
+
+    ```python
+    import numpy as np
+
+    def berkson_paradox_simulation(n_simulations=200_000):
+        """Demonstrate Berkson's paradox: independent events become
+        dependent after conditioning on a shared effect."""
+        np.random.seed(42)
+
+        # 두 원인과 하나의 공통 결과.
+        #   fire  = 화재 (드묾)
+        #   toast = 토스트 태움 (흔함)
+        #   alarm = 경보기 울림 (둘 중 하나만 일어나도 울린다)
+        p_fire = 0.01
+        p_toast = 0.10
+
+        # 두 원인을 서로 **완전히 독립으로** 생성한다는 점이 중요하다.
+        # 각자 따로 난수를 뽑으므로 설계상 아무 관계가 없다.
+        fire = np.random.rand(n_simulations) < p_fire
+        toast = np.random.rand(n_simulations) < p_toast
+        alarm = fire | toast      # 공통 결과(충돌부, collider)
+
+        # 조건 없이 보면 정말 독립이다.
+        # fire[toast] 는 "토스트를 태운 시행들만" 골라 낸 것이고,
+        # 그 안에서의 화재 비율이 전체 화재 비율과 같아야 한다.
+        p_fire_given_toast = fire[toast].mean()
+        print(f"P(fire) = {fire.mean():.4f}")
+        print(f"P(fire | toast) = {p_fire_given_toast:.4f}")
+        print(f"Unconditionally independent: {abs(fire.mean() - p_fire_given_toast) < 0.005}\n")
+
+        # 그런데 공통 결과인 alarm 으로 조건을 걸면 둘이 얽힌다.
+        # 경보가 울렸는데 토스트를 태우지 않았다면, 남은 설명은 화재뿐이다.
+        # 한 원인을 배제하면 다른 원인의 확률이 치솟는 이 현상을
+        # "설명해 없애기(explaining away)" 또는 버크슨의 역설이라 한다.
+        p_fire_given_alarm = fire[alarm].mean()
+        p_fire_given_alarm_no_toast = fire[alarm & ~toast].mean()
+        print(f"P(fire | alarm) = {p_fire_given_alarm:.4f}")
+        print(f"P(fire | alarm, no toast) = {p_fire_given_alarm_no_toast:.4f}")
+        print(f"Conditionally dependent (explaining away): "
+              f"{abs(p_fire_given_alarm - p_fire_given_alarm_no_toast) > 0.01}")
+
+    berkson_paradox_simulation()
+    ```
+
+    출력:
+
+    ```
+    P(fire) = 0.0098
+    P(fire | toast) = 0.0101
+    Unconditionally independent: True
+
+    P(fire | alarm) = 0.0899
+    P(fire | alarm, no toast) = 1.0000
+    Conditionally dependent (explaining away): True
+    ```
 
 !!! warning "이것이 1장의 길이 편향·충돌변수와 같은 구조다"
     해명 효과는 확률의 퍼즐로 끝나지 않는다. 12장에서 **충돌변수(collider)** 라 부르는 것이 정확히 이 구조이며, 회귀에 변수를 무분별하게 넣으면 추정이 나아지기는커녕 나빠지는 이유가 여기에 있다.
@@ -152,13 +154,14 @@ Conditionally dependent (explaining away): True
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 합이 알려진 주사위. 극단적인 경우도 있다. 공정한 주사위 두 개에서 $A$ = "1번이 4", $B$ = "2번이 3"이라 하면 이 둘은 독립이다. 그런데 $C$ = "합이 7"로 조건을 걸면
 
-$$
-P(A \mid C) = \tfrac{1}{6}, \quad P(B \mid C) = \tfrac{1}{6}, \quad P(A \cap B \mid C) = \tfrac{1}{6}
-$$
-
-이고 $\tfrac{1}{6} \neq \tfrac{1}{36}$이다. 합이 7인 세계에서는 1번이 4이면 2번이 3임이 **확정된다**. 독립이 완전한 종속으로 뒤집혔다.
-
 </div>
+
+??? success "풀이"
+    $$
+    P(A \mid C) = \tfrac{1}{6}, \quad P(B \mid C) = \tfrac{1}{6}, \quad P(A \cap B \mid C) = \tfrac{1}{6}
+    $$
+
+    이고 $\tfrac{1}{6} \neq \tfrac{1}{36}$이다. 합이 7인 세계에서는 1번이 4이면 2번이 3임이 **확정된다**. 독립이 완전한 종속으로 뒤집혔다.
 
 ## 3. 종속이던 것이 조건을 걸면 독립이 된다
 
@@ -184,72 +187,73 @@ $$
 
 동전이 정해지고 나면 두 던지기는 명백히 독립이다.
 
-$$
-P(A \cap B \mid C) = P(A \mid C)\,P(B \mid C)
-$$
-
-그러나 어느 동전인지 모르면 두 던지기는 **종속이다**. 첫 던지기가 앞면이면 앞면이 잘 나오는 동전일 가능성이 높아지고, 그러면 두 번째도 앞면일 확률이 올라간다. 첫 던지기가 두 번째에 대해 정보를 주는 것이다.
-
-```python
-import numpy as np
-
-def mixture_coin_simulation(n_simulations=200_000):
-    """혼합모형에서 조건부독립을 보인다.
-
-    앞 절의 버크슨 역설과 정확히 반대 방향의 예다.
-      버크슨: 독립이던 것이 조건을 걸면 종속이 된다 (공통 결과로 조건)
-      여기  : 종속이던 것이 조건을 걸면 독립이 된다 (공통 원인으로 조건)
-    """
-    np.random.seed(42)
-
-    # 숨은 공통 원인: 어느 동전을 골랐는가.
-    #   동전 0은 앞면 확률 0.3, 동전 1은 0.7.
-    # 관측자는 이 값을 볼 수 없고 던진 결과만 본다.
-    coin = np.random.randint(0, 2, size=n_simulations)
-    p_heads = np.where(coin == 0, 0.3, 0.7)
-
-    # 같은 동전을 두 번 던진다. 두 번의 던짐은 동전이 정해지면 서로 무관하다.
-    flip1 = np.random.rand(n_simulations) < p_heads
-    flip2 = np.random.rand(n_simulations) < p_heads
-
-    # 조건 없이 보면 종속이다.
-    # 첫 번째가 앞면이면 "0.7짜리 동전일 가능성"이 커지고,
-    # 그 정보가 두 번째 던짐의 예측을 바꾸기 때문이다.
-    p_f2 = flip2.mean()
-    p_f2_given_f1 = flip2[flip1].mean()
-    print("=== Unconditional (marginal) ===")
-    print(f"P(flip2=H) = {p_f2:.4f}")
-    print(f"P(flip2=H | flip1=H) = {p_f2_given_f1:.4f}")
-    print(f"Not independent: {abs(p_f2 - p_f2_given_f1) > 0.01}\n")
-
-    # 그런데 동전이 무엇인지 알고 나면(= 공통 원인으로 조건을 걸면)
-    # 첫 번째 결과가 더 알려 줄 것이 없어져 두 던짐이 독립이 된다.
-    mask_c0 = coin == 0
-    p_f2_c0 = flip2[mask_c0].mean()
-    p_f2_given_f1_c0 = flip2[mask_c0 & flip1].mean()
-    print("=== Conditional on coin 0 (P(H)=0.3) ===")
-    print(f"P(flip2=H | coin=0) = {p_f2_c0:.4f}")
-    print(f"P(flip2=H | flip1=H, coin=0) = {p_f2_given_f1_c0:.4f}")
-    print(f"Conditionally independent: {abs(p_f2_c0 - p_f2_given_f1_c0) < 0.02}")
-
-mixture_coin_simulation()
-```
-
-출력:
-
-```
-=== Unconditional (marginal) ===
-P(flip2=H) = 0.5008
-P(flip2=H | flip1=H) = 0.5809
-Not independent: True
-
-=== Conditional on coin 0 (P(H)=0.3) ===
-P(flip2=H | coin=0) = 0.3007
-P(flip2=H | flip1=H, coin=0) = 0.3004
-Conditionally independent: True
-```
-
 </div>
+
+??? success "풀이"
+    $$
+    P(A \cap B \mid C) = P(A \mid C)\,P(B \mid C)
+    $$
+
+    그러나 어느 동전인지 모르면 두 던지기는 **종속이다**. 첫 던지기가 앞면이면 앞면이 잘 나오는 동전일 가능성이 높아지고, 그러면 두 번째도 앞면일 확률이 올라간다. 첫 던지기가 두 번째에 대해 정보를 주는 것이다.
+
+    ```python
+    import numpy as np
+
+    def mixture_coin_simulation(n_simulations=200_000):
+        """혼합모형에서 조건부독립을 보인다.
+
+        앞 절의 버크슨 역설과 정확히 반대 방향의 예다.
+          버크슨: 독립이던 것이 조건을 걸면 종속이 된다 (공통 결과로 조건)
+          여기  : 종속이던 것이 조건을 걸면 독립이 된다 (공통 원인으로 조건)
+        """
+        np.random.seed(42)
+
+        # 숨은 공통 원인: 어느 동전을 골랐는가.
+        #   동전 0은 앞면 확률 0.3, 동전 1은 0.7.
+        # 관측자는 이 값을 볼 수 없고 던진 결과만 본다.
+        coin = np.random.randint(0, 2, size=n_simulations)
+        p_heads = np.where(coin == 0, 0.3, 0.7)
+
+        # 같은 동전을 두 번 던진다. 두 번의 던짐은 동전이 정해지면 서로 무관하다.
+        flip1 = np.random.rand(n_simulations) < p_heads
+        flip2 = np.random.rand(n_simulations) < p_heads
+
+        # 조건 없이 보면 종속이다.
+        # 첫 번째가 앞면이면 "0.7짜리 동전일 가능성"이 커지고,
+        # 그 정보가 두 번째 던짐의 예측을 바꾸기 때문이다.
+        p_f2 = flip2.mean()
+        p_f2_given_f1 = flip2[flip1].mean()
+        print("=== Unconditional (marginal) ===")
+        print(f"P(flip2=H) = {p_f2:.4f}")
+        print(f"P(flip2=H | flip1=H) = {p_f2_given_f1:.4f}")
+        print(f"Not independent: {abs(p_f2 - p_f2_given_f1) > 0.01}\n")
+
+        # 그런데 동전이 무엇인지 알고 나면(= 공통 원인으로 조건을 걸면)
+        # 첫 번째 결과가 더 알려 줄 것이 없어져 두 던짐이 독립이 된다.
+        mask_c0 = coin == 0
+        p_f2_c0 = flip2[mask_c0].mean()
+        p_f2_given_f1_c0 = flip2[mask_c0 & flip1].mean()
+        print("=== Conditional on coin 0 (P(H)=0.3) ===")
+        print(f"P(flip2=H | coin=0) = {p_f2_c0:.4f}")
+        print(f"P(flip2=H | flip1=H, coin=0) = {p_f2_given_f1_c0:.4f}")
+        print(f"Conditionally independent: {abs(p_f2_c0 - p_f2_given_f1_c0) < 0.02}")
+
+    mixture_coin_simulation()
+    ```
+
+    출력:
+
+    ```
+    === Unconditional (marginal) ===
+    P(flip2=H) = 0.5008
+    P(flip2=H | flip1=H) = 0.5809
+    Not independent: True
+
+    === Conditional on coin 0 (P(H)=0.3) ===
+    P(flip2=H | coin=0) = 0.3007
+    P(flip2=H | flip1=H, coin=0) = 0.3004
+    Conditionally independent: True
+    ```
 
 이 구조가 통계 모형의 표준 골격이다. **"모수 $\theta$가 주어지면 관측들은 i.i.d.이다"** 라는 문장이 바로 $X_i \perp\!\!\!\perp X_j \mid \theta$를 말하고 있다. $\theta$를 모르는 우리에게 관측들은 종속으로 보이며, 그 종속성이 바로 자료가 $\theta$에 대해 알려 주는 정보다.
 

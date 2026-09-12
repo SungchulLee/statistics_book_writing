@@ -45,59 +45,61 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 공정한 주사위.
 
-$$
-E[X] = 3.5, \qquad E[X^2] = \frac{1^2 + 2^2 + \cdots + 6^2}{6} = \frac{91}{6}
-$$
-
-$$
-\text{Var}(X) = \frac{91}{6} - 3.5^2 = \frac{35}{12} \approx 2.917
-$$
-
-```python
-import numpy as np
-
-# 공정한 주사위의 분산
-values = np.arange(1, 7)          # 나올 수 있는 값 1~6
-probs = np.ones(6) / 6            # 각각 확률 1/6
-
-# 기댓값은 "값 x 확률"의 합이다
-E_X = np.sum(values * probs)
-
-# E[X^2]은 값을 제곱해서 같은 확률로 가중합한 것.
-# 주의: E[X^2] 와 (E[X])^2 은 다르다. 그 차이가 곧 분산이다.
-E_X2 = np.sum(values**2 * probs)
-
-# 계산에 편한 공식: Var(X) = E[X^2] - (E[X])^2
-# 정의식 E[(X - mu)^2] 를 전개하면 이 형태가 나온다.
-var_X = E_X2 - E_X**2
-print(f"E[X] = {E_X:.4f}")
-print(f"E[X²] = {E_X2:.4f}")
-print(f"Var(X) = {var_X:.4f}")
-print(f"SD(X) = {np.sqrt(var_X):.4f}")
-```
-
-출력:
-
-```
-E[X] = 3.5000
-E[X²] = 15.1667
-Var(X) = 2.9167
-SD(X) = 1.7078
-```
-
 </div>
+
+??? success "풀이"
+    $$
+    E[X] = 3.5, \qquad E[X^2] = \frac{1^2 + 2^2 + \cdots + 6^2}{6} = \frac{91}{6}
+    $$
+
+    $$
+    \text{Var}(X) = \frac{91}{6} - 3.5^2 = \frac{35}{12} \approx 2.917
+    $$
+
+    ```python
+    import numpy as np
+
+    # 공정한 주사위의 분산
+    values = np.arange(1, 7)          # 나올 수 있는 값 1~6
+    probs = np.ones(6) / 6            # 각각 확률 1/6
+
+    # 기댓값은 "값 x 확률"의 합이다
+    E_X = np.sum(values * probs)
+
+    # E[X^2]은 값을 제곱해서 같은 확률로 가중합한 것.
+    # 주의: E[X^2] 와 (E[X])^2 은 다르다. 그 차이가 곧 분산이다.
+    E_X2 = np.sum(values**2 * probs)
+
+    # 계산에 편한 공식: Var(X) = E[X^2] - (E[X])^2
+    # 정의식 E[(X - mu)^2] 를 전개하면 이 형태가 나온다.
+    var_X = E_X2 - E_X**2
+    print(f"E[X] = {E_X:.4f}")
+    print(f"E[X²] = {E_X2:.4f}")
+    print(f"Var(X) = {var_X:.4f}")
+    print(f"SD(X) = {np.sqrt(var_X):.4f}")
+    ```
+
+    출력:
+
+    ```
+    E[X] = 3.5000
+    E[X²] = 15.1667
+    Var(X) = 2.9167
+    SD(X) = 1.7078
+    ```
 
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 베르누이. $X \sim \text{Bernoulli}(p)$이면 $X^2 = X$이므로 $E[X^2] = E[X] = p$이고
 
-$$
-\text{Var}(X) = p - p^2 = p(1-p)
-$$
-
-이다. $p = 0.5$에서 최대(가장 불확실)이고 $p = 0$이나 $1$에서 0(확실)이다. 직관과 정확히 맞는다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \text{Var}(X) = p - p^2 = p(1-p)
+    $$
+
+    이다. $p = 0.5$에서 최대(가장 불확실)이고 $p = 0$이나 $1$에서 0(확실)이다. 직관과 정확히 맞는다.
 
 ## 2. 두 변수가 함께 움직이는 정도
 
@@ -231,51 +233,52 @@ $$
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 포트폴리오 분산. 수익률 $R_1, R_2$인 두 자산에 가중치 $w_1, w_2$($w_1 + w_2 = 1$)로 투자하면
 
-$$
-\text{Var}(R_p) = w_1^2\sigma_1^2 + w_2^2\sigma_2^2 + 2w_1 w_2 \,\text{Cov}(R_1, R_2)
-$$
-
-이다. $\rho < 1$이면 교차항이 충분히 작아 포트폴리오의 분산이 개별 분산의 가중평균보다 **낮아진다**. 이것이 분산투자의 수학적 근거이며, 상관이 낮은 자산을 섞을수록 효과가 크다.
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-def portfolio_variance_demo():
-    """분산투자의 이득이 상관계수에 어떻게 달려 있는지 보인다."""
-    sigma1, sigma2 = 0.20, 0.30      # 두 자산의 변동성 20%, 30%
-    correlations = [-0.5, 0.0, 0.5, 1.0]
-
-    fig, ax = plt.subplots(figsize=(12, 4))
-    weights = np.linspace(0, 1, 100)     # 자산1의 비중을 0에서 1까지
-
-    for rho in correlations:
-        # 공분산 = 상관계수 x 두 표준편차
-        cov_12 = rho * sigma1 * sigma2
-
-        # 포트폴리오 분산: Var(aX + bY) = a^2 Var(X) + b^2 Var(Y) + 2ab Cov(X,Y)
-        # 마지막 교차항이 분산투자의 정체다. rho가 작을수록 이 항이 작아지고,
-        # 음수이면 아예 위험을 깎아 낸다.
-        port_var = (weights**2 * sigma1**2
-                    + (1 - weights)**2 * sigma2**2
-                    + 2 * weights * (1 - weights) * cov_12)
-        port_sd = np.sqrt(port_var)
-
-        # rho = 1 이면 곡선이 직선이 된다. 완전상관이면 섞어도 위험이 줄지 않는다.
-        ax.plot(weights, port_sd, label=f'ρ = {rho}')
-
-    ax.set_xlabel('Weight in Asset 1')
-    ax.set_ylabel('Portfolio Std Dev')
-    ax.set_title('Diversification: Portfolio Risk vs. Allocation')
-    ax.legend()
-    ax.spines[['top', 'right']].set_visible(False)
-    plt.tight_layout()
-    plt.show()
-
-portfolio_variance_demo()
-```
-
 </div>
+
+??? success "풀이"
+    $$
+    \text{Var}(R_p) = w_1^2\sigma_1^2 + w_2^2\sigma_2^2 + 2w_1 w_2 \,\text{Cov}(R_1, R_2)
+    $$
+
+    이다. $\rho < 1$이면 교차항이 충분히 작아 포트폴리오의 분산이 개별 분산의 가중평균보다 **낮아진다**. 이것이 분산투자의 수학적 근거이며, 상관이 낮은 자산을 섞을수록 효과가 크다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def portfolio_variance_demo():
+        """분산투자의 이득이 상관계수에 어떻게 달려 있는지 보인다."""
+        sigma1, sigma2 = 0.20, 0.30      # 두 자산의 변동성 20%, 30%
+        correlations = [-0.5, 0.0, 0.5, 1.0]
+
+        fig, ax = plt.subplots(figsize=(12, 4))
+        weights = np.linspace(0, 1, 100)     # 자산1의 비중을 0에서 1까지
+
+        for rho in correlations:
+            # 공분산 = 상관계수 x 두 표준편차
+            cov_12 = rho * sigma1 * sigma2
+
+            # 포트폴리오 분산: Var(aX + bY) = a^2 Var(X) + b^2 Var(Y) + 2ab Cov(X,Y)
+            # 마지막 교차항이 분산투자의 정체다. rho가 작을수록 이 항이 작아지고,
+            # 음수이면 아예 위험을 깎아 낸다.
+            port_var = (weights**2 * sigma1**2
+                        + (1 - weights)**2 * sigma2**2
+                        + 2 * weights * (1 - weights) * cov_12)
+            port_sd = np.sqrt(port_var)
+
+            # rho = 1 이면 곡선이 직선이 된다. 완전상관이면 섞어도 위험이 줄지 않는다.
+            ax.plot(weights, port_sd, label=f'ρ = {rho}')
+
+        ax.set_xlabel('Weight in Asset 1')
+        ax.set_ylabel('Portfolio Std Dev')
+        ax.set_title('Diversification: Portfolio Risk vs. Allocation')
+        ax.legend()
+        ax.spines[['top', 'right']].set_visible(False)
+        plt.tight_layout()
+        plt.show()
+
+    portfolio_variance_demo()
+    ```
 
 ![Diversification: Portfolio Risk vs. Allocation](./img/variance_covariance_187.png)
 

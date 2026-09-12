@@ -53,13 +53,14 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 나이와 소득. 나이와 소득의 관계를 연구할 때 선형모형은 소득이 어느 시점까지는 나이와 함께 늘다가 이후 정체하거나 (은퇴 후처럼) 줄어드는 현실을 놓칠 수 있다. 이차 모형이 이를 포착한다.
 
-$$
-\text{Income} = \beta_0 + \beta_1 \cdot \text{Age} + \beta_2 \cdot \text{Age}^2 + \epsilon
-$$
-
-$\beta_1 > 0$이고 $\beta_2 < 0$이면 모형은 소득이 나이와 함께 오르다가 정점에 이른 뒤 떨어지는, 곧 뒤집힌 U자 관계를 기술한다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \text{Income} = \beta_0 + \beta_1 \cdot \text{Age} + \beta_2 \cdot \text{Age}^2 + \epsilon
+    $$
+
+    $\beta_1 > 0$이고 $\beta_2 < 0$이면 모형은 소득이 나이와 함께 오르다가 정점에 이른 뒤 떨어지는, 곧 뒤집힌 U자 관계를 기술한다.
 
 ## 다항 항과 교호작용 항 결합하기
 

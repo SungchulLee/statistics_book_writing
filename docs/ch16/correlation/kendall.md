@@ -112,49 +112,50 @@ $i < j$인 각 쌍에 대해 $(R_i - R_j)$와 $(S_i - S_j)$의 부호가 같은�
 
 쌍은 $\binom{6}{2} = 15$개이다. 열거하면 부합 $C = 12$, 비부합 $D = 3$이다(비부합은 인접한 세 쌍 A--B, C--D, E--F이다).
 
-$$
-S = C - D = 12 - 3 = 9
-$$
-
-$$
-\tau_a = \frac{9}{15} = 0.600
-$$
-
-**검정:**
-
-$$
-\text{Var}(S) = \frac{6 \times 5 \times 17}{18} = \frac{510}{18} \approx 28.33
-$$
-
-$$
-Z = \frac{9}{\sqrt{28.33}} \approx \frac{9}{5.323} \approx 1.691
-$$
-
-$$
-p = 2\,\Phi(-1.691) \approx 0.091
-$$
-
-$\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 관측값이 6개뿐이라 중간 정도의 일치도를 탐지할 검정력이 부족하다.
-
-!!! warning "$n = 6$에서 정규근사는 크게 빗나간다"
-    SciPy는 $n$이 작을 때 정확 $p$값을 계산한다. 결과는 $p = 0.1361$로 정규근사값 $0.0909$의 **1.5배**이다.
-
-    ```python
-    from scipy import stats
-    R = [1, 2, 3, 4, 5, 6]; S = [2, 1, 4, 3, 6, 5]
-    print(stats.kendalltau(R, S))
-    # SignificanceResult(statistic=0.6, pvalue=0.13611)
-    ```
-
-    출력:
-
-    ```
-    SignificanceResult(statistic=0.6, pvalue=0.1361111111111111)
-    ```
-
-    $n = 6$에서 $S$가 가질 수 있는 값이 $-15, -13, \ldots, 13, 15$의 16가지뿐이라 귀무분포가 매우 성기다. 결론은 어느 쪽이든 같지만, 근사값을 그대로 보고하면 유의성을 과장하게 된다.
-
 </div>
+
+??? success "풀이"
+    $$
+    S = C - D = 12 - 3 = 9
+    $$
+
+    $$
+    \tau_a = \frac{9}{15} = 0.600
+    $$
+
+    **검정:**
+
+    $$
+    \text{Var}(S) = \frac{6 \times 5 \times 17}{18} = \frac{510}{18} \approx 28.33
+    $$
+
+    $$
+    Z = \frac{9}{\sqrt{28.33}} \approx \frac{9}{5.323} \approx 1.691
+    $$
+
+    $$
+    p = 2\,\Phi(-1.691) \approx 0.091
+    $$
+
+    $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 관측값이 6개뿐이라 중간 정도의 일치도를 탐지할 검정력이 부족하다.
+
+    !!! warning "$n = 6$에서 정규근사는 크게 빗나간다"
+        SciPy는 $n$이 작을 때 정확 $p$값을 계산한다. 결과는 $p = 0.1361$로 정규근사값 $0.0909$의 **1.5배**이다.
+
+        ```python
+        from scipy import stats
+        R = [1, 2, 3, 4, 5, 6]; S = [2, 1, 4, 3, 6, 5]
+        print(stats.kendalltau(R, S))
+        # SignificanceResult(statistic=0.6, pvalue=0.13611)
+        ```
+
+        출력:
+
+        ```
+        SignificanceResult(statistic=0.6, pvalue=0.1361111111111111)
+        ```
+
+        $n = 6$에서 $S$가 가질 수 있는 값이 $-15, -13, \ldots, 13, 15$의 16가지뿐이라 귀무분포가 매우 성기다. 결론은 어느 쪽이든 같지만, 근사값을 그대로 보고하면 유의성을 과장하게 된다.
 
 ## Spearman 상관과의 비교
 

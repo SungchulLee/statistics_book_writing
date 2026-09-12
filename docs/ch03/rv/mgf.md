@@ -58,22 +58,23 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포. $X \sim N(\mu, \sigma^2)$의 적률생성함수는
 
-$$
-M_X(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
-$$
-
-이다. 두 번 미분해 보면
-
-$$
-\begin{aligned}
-M_X'(t) &= (\mu + \sigma^2 t)\,M_X(t), &\quad M_X'(0) &= \mu = E[X] \\[4pt]
-M_X''(t) &= \big(\sigma^2 + (\mu + \sigma^2 t)^2\big)M_X(t), &\quad M_X''(0) &= \sigma^2 + \mu^2 = E[X^2]
-\end{aligned}
-$$
-
-이고 $\text{Var}(X) = (\sigma^2 + \mu^2) - \mu^2 = \sigma^2$이다. 적분 한 번 하지 않고 평균과 분산을 얻었다.
-
 </div>
+
+??? success "풀이"
+    $$
+    M_X(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
+    $$
+
+    이다. 두 번 미분해 보면
+
+    $$
+    \begin{aligned}
+    M_X'(t) &= (\mu + \sigma^2 t)\,M_X(t), &\quad M_X'(0) &= \mu = E[X] \\[4pt]
+    M_X''(t) &= \big(\sigma^2 + (\mu + \sigma^2 t)^2\big)M_X(t), &\quad M_X''(0) &= \sigma^2 + \mu^2 = E[X^2]
+    \end{aligned}
+    $$
+
+    이고 $\text{Var}(X) = (\sigma^2 + \mu^2) - \mu^2 = \sigma^2$이다. 적분 한 번 하지 않고 평균과 분산을 얻었다.
 
 주요 분포의 적률생성함수를 모아 두면 계산이 빨라진다.
 
@@ -190,17 +191,18 @@ $$
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 독립인 정규분포의 합. $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립이면
 
-$$
-M_{X_1+X_2}(t) = \exp\!\left((\mu_1+\mu_2)t + \frac{(\sigma_1^2+\sigma_2^2)t^2}{2}\right)
-$$
-
-이다. 이것은 $N(\mu_1+\mu_2,\ \sigma_1^2+\sigma_2^2)$의 적률생성함수이므로, 유일성(정리 2)에 의해
-
-$$
-X_1 + X_2 \sim N(\mu_1 + \mu_2,\ \sigma_1^2 + \sigma_2^2)
-$$
-
 </div>
+
+??? success "풀이"
+    $$
+    M_{X_1+X_2}(t) = \exp\!\left((\mu_1+\mu_2)t + \frac{(\sigma_1^2+\sigma_2^2)t^2}{2}\right)
+    $$
+
+    이다. 이것은 $N(\mu_1+\mu_2,\ \sigma_1^2+\sigma_2^2)$의 적률생성함수이므로, 유일성(정리 2)에 의해
+
+    $$
+    X_1 + X_2 \sim N(\mu_1 + \mu_2,\ \sigma_1^2 + \sigma_2^2)
+    $$
 
 이다. **정규분포의 합이 다시 정규분포**라는 중요한 사실이 세 줄로 증명된다. 밀도로 직접 하려면 합성곱 적분을 계산해야 한다.
 

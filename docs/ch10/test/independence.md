@@ -632,40 +632,41 @@ $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. �
 
 **관측 자료:**
 
-```python
-import numpy as np
-import pandas as pd
-import random
-from scipy import stats
-
-# Click rates for three headlines
-headlines = pd.DataFrame({
-    'Click': [14, 8, 12],
-    'No-click': [986, 992, 988],
-    'Headline': ['Headline A', 'Headline B', 'Headline C']
-})
-
-# 결과를 행, 헤드라인을 열로 놓은 분할표를 만든다.
-click_rate = headlines.copy()
-clicks = click_rate.set_index('Headline')[['Click', 'No-click']].T
-
-print("Observed Contingency Table:")
-print(clicks)
-print(f"\nTotal: {clicks.values.sum()}")
-```
-
-출력:
-
-```
-Observed Contingency Table:
-Headline  Headline A  Headline B  Headline C
-Click             14           8          12
-No-click         986         992         988
-
-Total: 3000
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import pandas as pd
+    import random
+    from scipy import stats
+
+    # Click rates for three headlines
+    headlines = pd.DataFrame({
+        'Click': [14, 8, 12],
+        'No-click': [986, 992, 988],
+        'Headline': ['Headline A', 'Headline B', 'Headline C']
+    })
+
+    # 결과를 행, 헤드라인을 열로 놓은 분할표를 만든다.
+    click_rate = headlines.copy()
+    clicks = click_rate.set_index('Headline')[['Click', 'No-click']].T
+
+    print("Observed Contingency Table:")
+    print(clicks)
+    print(f"\nTotal: {clicks.values.sum()}")
+    ```
+
+    출력:
+
+    ```
+    Observed Contingency Table:
+    Headline  Headline A  Headline B  Headline C
+    Click             14           8          12
+    No-click         986         992         988
+
+    Total: 3000
+    ```
 
 클릭률이 1.4%, 0.8%, 1.2%다. 헤드라인마다 1,000명씩 보았으므로 집단 크기는 같다. 클릭 수가 한 자릿수에 가까워 이런 상황에서 카이제곱 근사가 잘 통하는지 자체가 물음이 된다. 재표본추출로 확인하려는 이유다.
 

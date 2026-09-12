@@ -82,30 +82,31 @@ def sign_test(paired_data, test_type="two-sided"):
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 학생의 처치 전후 점수. 학생 15명을 처치 프로그램 전후에 측정했다.
 
-```python
-paired_data = np.array([
-    [93, 76], [70, 72], [81, 75], [65, 68], [79, 65],
-    [54, 54], [94, 88], [91, 81], [77, 65], [65, 57],
-    [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]
-])
-
-diffs = paired_data[:, 0] - paired_data[:, 1]
-print(diffs)
-# [17 -2  6 -3 14  0  6 10 12  8  9  2  0  3  0]
-
-z, p_value = sign_test(paired_data, test_type="two-sided")
-print(f"Z = {z:.4f}, p = {p_value:.4f}")
-# Z = 2.3094, p = 0.0209
-```
-
-출력:
-
-```
-[17 -2  6 -3 14  0  6 10 12  8  9  2  0  3  0]
-Z = 2.3094, p = 0.0209
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    paired_data = np.array([
+        [93, 76], [70, 72], [81, 75], [65, 68], [79, 65],
+        [54, 54], [94, 88], [91, 81], [77, 65], [65, 57],
+        [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]
+    ])
+
+    diffs = paired_data[:, 0] - paired_data[:, 1]
+    print(diffs)
+    # [17 -2  6 -3 14  0  6 10 12  8  9  2  0  3  0]
+
+    z, p_value = sign_test(paired_data, test_type="two-sided")
+    print(f"Z = {z:.4f}, p = {p_value:.4f}")
+    # Z = 2.3094, p = 0.0209
+    ```
+
+    출력:
+
+    ```
+    [17 -2  6 -3 14  0  6 10 12  8  9  2  0  3  0]
+    Z = 2.3094, p = 0.0209
+    ```
 
 15쌍 중 **세 쌍**이 동점($D_i = 0$)이라 제외되어 $n = 12$가 남는다. 그중
 $n_+ = 10$, $n_- = 2$이므로 $\hat{p} = 10/12 \approx 0.833$이고

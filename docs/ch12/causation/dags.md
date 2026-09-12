@@ -99,27 +99,28 @@ Pearl이 도입한 $\text{do}(\cdot)$ 표기는 개입 분포($X$를 어떤 값�
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 뒷문 기준의 적용. 다음 DAG를 생각하자:
 
-$$
-Z \rightarrow X \rightarrow Y, \quad Z \rightarrow Y
-$$
-
-여기서 $Z$는 교란요인이다(뒷문 경로 $X \leftarrow Z \rightarrow Y$가 있다). $X$가 $Y$에 미치는 인과효과를 추정하려면:
-
-- **$Z$를 통제한다**: $Z$가 $X$의 후손이 아니고 뒷문 경로를 막으므로 $S = \{Z\}$가 뒷문 기준을 만족한다.
-- **아무것도 통제하지 않으면 안 된다**: $S = \emptyset$은 뒷문 경로 $X \leftarrow Z \rightarrow Y$가 열린 채로 남아 실패한다.
-
-이제 다음을 보자:
-
-$$
-X \rightarrow M \rightarrow Y, \quad X \rightarrow Y
-$$
-
-여기서 $M$은 매개자이다. $X$가 $Y$에 미치는 **총** 인과효과를 추정하려면:
-
-- **$M$을 통제하지 않는다**: ($X$로 들어오는 화살표가 없어) 뒷문 경로가 없으므로 $S = \emptyset$으로 충분하다.
-- **$M$을 통제하면** 간접 경로가 막혀 총효과가 아니라 직접효과만 추정하게 된다.
-
 </div>
+
+??? success "풀이"
+    $$
+    Z \rightarrow X \rightarrow Y, \quad Z \rightarrow Y
+    $$
+
+    여기서 $Z$는 교란요인이다(뒷문 경로 $X \leftarrow Z \rightarrow Y$가 있다). $X$가 $Y$에 미치는 인과효과를 추정하려면:
+
+    - **$Z$를 통제한다**: $Z$가 $X$의 후손이 아니고 뒷문 경로를 막으므로 $S = \{Z\}$가 뒷문 기준을 만족한다.
+    - **아무것도 통제하지 않으면 안 된다**: $S = \emptyset$은 뒷문 경로 $X \leftarrow Z \rightarrow Y$가 열린 채로 남아 실패한다.
+
+    이제 다음을 보자:
+
+    $$
+    X \rightarrow M \rightarrow Y, \quad X \rightarrow Y
+    $$
+
+    여기서 $M$은 매개자이다. $X$가 $Y$에 미치는 **총** 인과효과를 추정하려면:
+
+    - **$M$을 통제하지 않는다**: ($X$로 들어오는 화살표가 없어) 뒷문 경로가 없으므로 $S = \emptyset$으로 충분하다.
+    - **$M$을 통제하면** 간접 경로가 막혀 총효과가 아니라 직접효과만 추정하게 된다.
 
 ## DAG를 쓰는 실무 절차
 

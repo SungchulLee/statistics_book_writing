@@ -46,13 +46,14 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 회로기판의 결함 수. 품질검사원이 회로기판 6개의 결함 수를 세어 $x_1 = 3$, $x_2 = 1$, $x_3 = 4$, $x_4 = 0$, $x_5 = 2$, $x_6 = 2$를 관측했다고 하자. 표본평균은
 
-$$
-\bar{x} = \frac{3 + 1 + 4 + 0 + 2 + 2}{6} = 2.0 \text{ defects per board}
-$$
-
-따라서 비율 모수의 MLE는 기판당 $\hat{\lambda} = 2.0$개의 결함이다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \bar{x} = \frac{3 + 1 + 4 + 0 + 2 + 2}{6} = 2.0 \text{ defects per board}
+    $$
+
+    따라서 비율 모수의 MLE는 기판당 $\hat{\lambda} = 2.0$개의 결함이다.
 
 ## 성질
 

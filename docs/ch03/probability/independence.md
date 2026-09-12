@@ -42,84 +42,86 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 동전 두 번. $A$ = "첫 번째가 앞면", $B$ = "두 번째가 앞면"이라 하면
 
-$$
-P(A) = \tfrac{1}{2}, \quad P(B) = \tfrac{1}{2}, \quad P(A \cap B) = \tfrac{1}{4} = P(A)\,P(B)
-$$
-
-이므로 독립이다.
-
 </div>
+
+??? success "풀이"
+    $$
+    P(A) = \tfrac{1}{2}, \quad P(B) = \tfrac{1}{2}, \quad P(A \cap B) = \tfrac{1}{4} = P(A)\,P(B)
+    $$
+
+    이므로 독립이다.
 
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 주사위 한 번. $A$ = "짝수" = $\{2,4,6\}$, $B$ = "3 이하" = $\{1,2,3\}$이라 하면
 
-$$
-P(A) = \tfrac{1}{2}, \quad P(B) = \tfrac{1}{2}, \quad P(A \cap B) = P(\{2\}) = \tfrac{1}{6}
-$$
-
-이고 $\tfrac{1}{6} \neq \tfrac{1}{4}$이므로 **독립이 아니다**. 같은 주사위 한 번에서 나온 두 사건이라 서로 정보를 준다.
-
-```python
-import numpy as np
-from itertools import product
-
-def check_independence(sample_space, prob, event_A, event_B, labels=("A", "B")):
-    """두 사건이 독립인지 정의대로 확인한다.
-
-    prob 는 {결과: 확률} 사전이고, 사건은 결과들의 집합이다.
-    사건의 확률 = 그 사건에 속한 결과들의 확률의 합.
-    """
-    p_A = sum(prob[s] for s in event_A)
-    p_B = sum(prob[s] for s in event_B)
-    # event_A & event_B 는 집합의 교집합, 즉 두 사건이 동시에 일어난 결과들이다
-    p_AB = sum(prob[s] for s in event_A & event_B)
-
-    # 독립의 정의: P(A ∩ B) = P(A)P(B).
-    # 부동소수점 비교이므로 == 대신 isclose 를 쓴다.
-    independent = np.isclose(p_AB, p_A * p_B)
-
-    print(f"P({labels[0]}) = {p_A:.4f}")
-    print(f"P({labels[1]}) = {p_B:.4f}")
-    print(f"P({labels[0]} ∩ {labels[1]}) = {p_AB:.4f}")
-    print(f"P({labels[0]}) × P({labels[1]}) = {p_A * p_B:.4f}")
-    print(f"Independent: {independent}\n")
-
-# 예 1: 주사위 한 번. "짝수"와 "3 이하"는 독립인가?
-# 얼핏 무관해 보이지만 확인해 봐야 안다.
-#   P(짝수) = 3/6, P(3 이하) = 3/6, P(둘 다) = P({2}) = 1/6
-#   1/6 vs (1/2)(1/2) = 1/4  ->  다르므로 종속이다.
-outcomes = {i: 1/6 for i in range(1, 7)}
-A = {2, 4, 6}       # 짝수
-B = {1, 2, 3}       # 3 이하
-check_independence(outcomes, outcomes, A, B, ("Even", "≤3"))
-
-# 예 2: 동전 두 번. 첫 번째가 앞면인 사건과 두 번째가 앞면인 사건.
-# product로 표본공간 HH, HT, TH, TT 를 만들고 각각 확률 1/4을 준다.
-flips = list(product(['H', 'T'], repeat=2))
-prob = {f: 0.25 for f in flips}
-A = {f for f in flips if f[0] == 'H'}
-B = {f for f in flips if f[1] == 'H'}
-check_independence(flips, prob, A, B, ("1st=H", "2nd=H"))
-```
-
-출력:
-
-```
-P(Even) = 0.5000
-P(≤3) = 0.5000
-P(Even ∩ ≤3) = 0.1667
-P(Even) × P(≤3) = 0.2500
-Independent: False
-
-P(1st=H) = 0.5000
-P(2nd=H) = 0.5000
-P(1st=H ∩ 2nd=H) = 0.2500
-P(1st=H) × P(2nd=H) = 0.2500
-Independent: True
-```
-
 </div>
+
+??? success "풀이"
+    $$
+    P(A) = \tfrac{1}{2}, \quad P(B) = \tfrac{1}{2}, \quad P(A \cap B) = P(\{2\}) = \tfrac{1}{6}
+    $$
+
+    이고 $\tfrac{1}{6} \neq \tfrac{1}{4}$이므로 **독립이 아니다**. 같은 주사위 한 번에서 나온 두 사건이라 서로 정보를 준다.
+
+    ```python
+    import numpy as np
+    from itertools import product
+
+    def check_independence(sample_space, prob, event_A, event_B, labels=("A", "B")):
+        """두 사건이 독립인지 정의대로 확인한다.
+
+        prob 는 {결과: 확률} 사전이고, 사건은 결과들의 집합이다.
+        사건의 확률 = 그 사건에 속한 결과들의 확률의 합.
+        """
+        p_A = sum(prob[s] for s in event_A)
+        p_B = sum(prob[s] for s in event_B)
+        # event_A & event_B 는 집합의 교집합, 즉 두 사건이 동시에 일어난 결과들이다
+        p_AB = sum(prob[s] for s in event_A & event_B)
+
+        # 독립의 정의: P(A ∩ B) = P(A)P(B).
+        # 부동소수점 비교이므로 == 대신 isclose 를 쓴다.
+        independent = np.isclose(p_AB, p_A * p_B)
+
+        print(f"P({labels[0]}) = {p_A:.4f}")
+        print(f"P({labels[1]}) = {p_B:.4f}")
+        print(f"P({labels[0]} ∩ {labels[1]}) = {p_AB:.4f}")
+        print(f"P({labels[0]}) × P({labels[1]}) = {p_A * p_B:.4f}")
+        print(f"Independent: {independent}\n")
+
+    # 예 1: 주사위 한 번. "짝수"와 "3 이하"는 독립인가?
+    # 얼핏 무관해 보이지만 확인해 봐야 안다.
+    #   P(짝수) = 3/6, P(3 이하) = 3/6, P(둘 다) = P({2}) = 1/6
+    #   1/6 vs (1/2)(1/2) = 1/4  ->  다르므로 종속이다.
+    outcomes = {i: 1/6 for i in range(1, 7)}
+    A = {2, 4, 6}       # 짝수
+    B = {1, 2, 3}       # 3 이하
+    check_independence(outcomes, outcomes, A, B, ("Even", "≤3"))
+
+    # 예 2: 동전 두 번. 첫 번째가 앞면인 사건과 두 번째가 앞면인 사건.
+    # product로 표본공간 HH, HT, TH, TT 를 만들고 각각 확률 1/4을 준다.
+    flips = list(product(['H', 'T'], repeat=2))
+    prob = {f: 0.25 for f in flips}
+    A = {f for f in flips if f[0] == 'H'}
+    B = {f for f in flips if f[1] == 'H'}
+    check_independence(flips, prob, A, B, ("1st=H", "2nd=H"))
+    ```
+
+    출력:
+
+    ```
+    P(Even) = 0.5000
+    P(≤3) = 0.5000
+    P(Even ∩ ≤3) = 0.1667
+    P(Even) × P(≤3) = 0.2500
+    Independent: False
+
+    P(1st=H) = 0.5000
+    P(2nd=H) = 0.5000
+    P(1st=H ∩ 2nd=H) = 0.2500
+    P(1st=H) × P(2nd=H) = 0.2500
+    Independent: True
+    ```
 
 ## 2. 독립과 배반은 정반대다
 
@@ -173,13 +175,14 @@ $$
 
 이라 하자. 세 쌍이 모두 독립이다. $P(A \cap B) = P(A \cap C) = P(B \cap C) = \tfrac{1}{4}$이고 각각 곱과 일치한다. 그러나
 
-$$
-P(A \cap B \cap C) = P(\{HH\}) = \tfrac{1}{4} \neq P(A)\,P(B)\,P(C) = \tfrac{1}{8}
-$$
-
-이다. 쌍별로는 독립인데 셋을 함께 보면 독립이 아니다.
-
 </div>
+
+??? success "풀이"
+    $$
+    P(A \cap B \cap C) = P(\{HH\}) = \tfrac{1}{4} \neq P(A)\,P(B)\,P(C) = \tfrac{1}{8}
+    $$
+
+    이다. 쌍별로는 독립인데 셋을 함께 보면 독립이 아니다.
 
 !!! warning "$C$는 $A$와 $B$를 알면 결정된다"
     반례가 작동하는 이유는 명확하다. $A$와 $B$를 둘 다 알면 $C$가 **완전히 결정된다**. 두 동전의 면을 알면 같은지 다른지는 볼 것도 없다.

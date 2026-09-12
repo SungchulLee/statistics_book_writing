@@ -59,73 +59,74 @@
 - $H_0$: 두 집단의 평균이 같다.
 - $H_1$: 두 집단의 평균이 다르다.
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-def permutation_test(group_a, group_b, n_permutations=10000, seed=0):
-    """
-    Permutation test for a difference in means.
-
-    Parameters
-    ----------
-    group_a, group_b : array-like
-        Data for each group.
-    n_permutations : int
-        Number of random permutations.
-
-    Returns
-    -------
-    p_value : float
-        Two-sided p-value with the +1 correction.
-    observed_diff : float
-        The observed difference in means.
-    perm_differences : ndarray
-        The permutation distribution.
-    """
-    rng = np.random.default_rng(seed)
-    combined = np.concatenate([group_a, group_b])
-    observed_diff = np.mean(group_a) - np.mean(group_b)
-    na = len(group_a)
-
-    perm_differences = np.empty(n_permutations)
-    for i in range(n_permutations):
-        p = rng.permutation(combined)
-        perm_differences[i] = p[:na].mean() - p[na:].mean()
-
-    p_value = ((np.abs(perm_differences) >= abs(observed_diff)).sum() + 1) \
-              / (n_permutations + 1)
-    return p_value, observed_diff, perm_differences
-
-group_a = np.array([8, 7, 9, 10, 6])
-group_b = np.array([5, 6, 4, 3, 7])
-
-p_value, observed_diff, perm_dist = permutation_test(group_a, group_b)
-
-print(f"Observed Difference in Means: {observed_diff:.2f}")
-print(f"P-value: {p_value:.4f}")
-
-fig, ax = plt.subplots(figsize=(10, 4))
-ax.hist(perm_dist, bins=50, edgecolor='black', alpha=0.7,
-        label='Permutation Distribution')
-ax.axvline(observed_diff, color='red', linestyle='--', linewidth=2,
-           label=f'Observed = {observed_diff:.2f}')
-ax.axvline(-observed_diff, color='red', linestyle='--', linewidth=2)
-ax.legend()
-ax.set_xlabel('Difference in Means')
-ax.set_ylabel('Frequency')
-ax.set_title('Permutation Test Distribution')
-plt.show()
-```
-
-출력:
-
-```
-Observed Difference in Means: 3.00
-P-value: 0.0418
-```
-
 </div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def permutation_test(group_a, group_b, n_permutations=10000, seed=0):
+        """
+        Permutation test for a difference in means.
+
+        Parameters
+        ----------
+        group_a, group_b : array-like
+            Data for each group.
+        n_permutations : int
+            Number of random permutations.
+
+        Returns
+        -------
+        p_value : float
+            Two-sided p-value with the +1 correction.
+        observed_diff : float
+            The observed difference in means.
+        perm_differences : ndarray
+            The permutation distribution.
+        """
+        rng = np.random.default_rng(seed)
+        combined = np.concatenate([group_a, group_b])
+        observed_diff = np.mean(group_a) - np.mean(group_b)
+        na = len(group_a)
+
+        perm_differences = np.empty(n_permutations)
+        for i in range(n_permutations):
+            p = rng.permutation(combined)
+            perm_differences[i] = p[:na].mean() - p[na:].mean()
+
+        p_value = ((np.abs(perm_differences) >= abs(observed_diff)).sum() + 1) \
+                  / (n_permutations + 1)
+        return p_value, observed_diff, perm_differences
+
+    group_a = np.array([8, 7, 9, 10, 6])
+    group_b = np.array([5, 6, 4, 3, 7])
+
+    p_value, observed_diff, perm_dist = permutation_test(group_a, group_b)
+
+    print(f"Observed Difference in Means: {observed_diff:.2f}")
+    print(f"P-value: {p_value:.4f}")
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.hist(perm_dist, bins=50, edgecolor='black', alpha=0.7,
+            label='Permutation Distribution')
+    ax.axvline(observed_diff, color='red', linestyle='--', linewidth=2,
+               label=f'Observed = {observed_diff:.2f}')
+    ax.axvline(-observed_diff, color='red', linestyle='--', linewidth=2)
+    ax.legend()
+    ax.set_xlabel('Difference in Means')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Permutation Test Distribution')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Observed Difference in Means: 3.00
+    P-value: 0.0418
+    ```
 
 ![순열검정의 귀무분포](./img/permutation_62.png)
 

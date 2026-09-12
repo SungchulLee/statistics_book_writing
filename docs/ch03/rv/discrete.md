@@ -79,40 +79,43 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 공정한 주사위. $X$를 눈의 수라 하면
 
-$$
-P(X = x) = \tfrac{1}{6}, \qquad x = 1, 2, 3, 4, 5, 6
-$$
-
 </div>
+
+??? success "풀이"
+    $$
+    P(X = x) = \tfrac{1}{6}, \qquad x = 1, 2, 3, 4, 5, 6
+    $$
 
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 동전 세 번에서 앞면의 개수. 가능한 값은 $\{0,1,2,3\}$이고
 
-$$
-P(X=0) = \tfrac{1}{8}, \quad P(X=1) = \tfrac{3}{8}, \quad P(X=2) = \tfrac{3}{8}, \quad P(X=3) = \tfrac{1}{8}
-$$
-
-이다. 벽돌 여덟 개가 네 위치에 $1:3:3:1$로 쌓인 모양이다.
-
 </div>
+
+??? success "풀이"
+    $$
+    P(X=0) = \tfrac{1}{8}, \quad P(X=1) = \tfrac{3}{8}, \quad P(X=2) = \tfrac{3}{8}, \quad P(X=3) = \tfrac{1}{8}
+    $$
+
+    이다. 벽돌 여덟 개가 네 위치에 $1:3:3:1$로 쌓인 모양이다.
 
 <div class="exbox" markdown>
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 야구 카드. 휴고는 좋아하는 선수의 카드가 나올 때까지 팩을 사되 최대 네 팩까지만 산다. 각 팩에 그 카드가 있을 확률은 0.2다. $X$를 산 팩의 수라 하면
 
-$$
-\begin{aligned}
-P(X=1) &= 0.2 \\
-P(X=2) &= 0.8 \times 0.2 = 0.16 \\
-P(X=3) &= 0.8^2 \times 0.2 = 0.128 \\
-P(X=4) &= 1 - 0.2 - 0.16 - 0.128 = 0.512
-\end{aligned}
-$$
-
-이다. 앞의 세 값은 곱셈 규칙(3.1절 정리 2)을 그대로 쓴 것이다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \begin{aligned}
+    P(X=1) &= 0.2 \\
+    P(X=2) &= 0.8 \times 0.2 = 0.16 \\
+    P(X=3) &= 0.8^2 \times 0.2 = 0.128 \\
+    P(X=4) &= 1 - 0.2 - 0.16 - 0.128 = 0.512
+    \end{aligned}
+    $$
+
+    이다. 앞의 세 값은 곱셈 규칙(3.1절 정리 2)을 그대로 쓴 것이다.
 
 !!! note "$P(X=4)$가 유독 큰 이유"
     $0.512$에는 두 가지가 섞여 있다. 네 번째 팩에서 카드를 찾는 경우와, **끝내 못 찾는 경우**다. 어느 쪽이든 휴고는 네 팩에서 멈추므로 $X = 4$다.
@@ -129,56 +132,57 @@ $$
 | **2** | 1 | 0 | 1 |
 | **3** | 2 | 1 | 0 |
 
-$$
-P(D=0) = \tfrac{3}{9}, \qquad P(D=1) = \tfrac{4}{9}, \qquad P(D=2) = \tfrac{2}{9}
-$$
-
-표의 대각선에 벽돌 3개, 그 양옆에 4개, 모서리에 2개가 쌓인다.
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-def plot_pmf(values, probabilities, title="PMF"):
-    """확률질량함수를 막대그림으로 그린다.
-
-    이산확률변수에서는 각 값에 확률이 "덩어리"로 붙어 있으므로
-    막대의 높이가 곧 그 값이 나올 확률이다.
-    (연속확률변수의 밀도함수와 달리 높이를 그대로 확률로 읽을 수 있다.)
-    """
-    fig, ax = plt.subplots(figsize=(12, 3))
-    # width=0.4 로 막대 사이를 띄운다. 값 사이에 아무것도 없음을 나타내기 위함이다.
-    ax.bar(values, probabilities, width=0.4, alpha=0.7, edgecolor='black')
-    ax.set_xlabel('x')
-    ax.set_ylabel('P(X = x)')
-    ax.set_title(title)
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    plt.tight_layout()
-    plt.show()
-
-# 예 1: 공정한 주사위. 여섯 값의 확률이 모두 같은 균등 PMF다.
-values = [1, 2, 3, 4, 5, 6]
-probs = [1/6] * 6
-plot_pmf(values, probs, "PMF of a Fair Die")
-
-# 예 2: 동전 3번 던져 앞면의 개수. 이항분포 B(3, 0.5)다.
-# P(X=k) = C(3,k) * 0.5^k * 0.5^(3-k). 가운데(1, 2)가 높은 대칭 모양이 된다.
-from math import comb
-n = 3
-values = list(range(n + 1))
-probs = [comb(n, k) * (0.5**k) * (0.5**(n-k)) for k in values]
-plot_pmf(values, probs, "PMF: Number of Heads in 3 Coin Flips")
-
-# 예 3: 원하는 카드가 나올 때까지 산 팩 수. 균등하지도 대칭이지도 않다.
-# 확률의 합이 0.2+0.16+0.128+0.512 = 1 이 되는지 확인해 보라.
-# PMF가 되려면 (i) 모든 값이 0 이상, (ii) 합이 정확히 1 이어야 한다.
-values = [1, 2, 3, 4]
-probs = [0.2, 0.16, 0.128, 0.512]
-plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
-```
-
 </div>
+
+??? success "풀이"
+    $$
+    P(D=0) = \tfrac{3}{9}, \qquad P(D=1) = \tfrac{4}{9}, \qquad P(D=2) = \tfrac{2}{9}
+    $$
+
+    표의 대각선에 벽돌 3개, 그 양옆에 4개, 모서리에 2개가 쌓인다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def plot_pmf(values, probabilities, title="PMF"):
+        """확률질량함수를 막대그림으로 그린다.
+
+        이산확률변수에서는 각 값에 확률이 "덩어리"로 붙어 있으므로
+        막대의 높이가 곧 그 값이 나올 확률이다.
+        (연속확률변수의 밀도함수와 달리 높이를 그대로 확률로 읽을 수 있다.)
+        """
+        fig, ax = plt.subplots(figsize=(12, 3))
+        # width=0.4 로 막대 사이를 띄운다. 값 사이에 아무것도 없음을 나타내기 위함이다.
+        ax.bar(values, probabilities, width=0.4, alpha=0.7, edgecolor='black')
+        ax.set_xlabel('x')
+        ax.set_ylabel('P(X = x)')
+        ax.set_title(title)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        plt.tight_layout()
+        plt.show()
+
+    # 예 1: 공정한 주사위. 여섯 값의 확률이 모두 같은 균등 PMF다.
+    values = [1, 2, 3, 4, 5, 6]
+    probs = [1/6] * 6
+    plot_pmf(values, probs, "PMF of a Fair Die")
+
+    # 예 2: 동전 3번 던져 앞면의 개수. 이항분포 B(3, 0.5)다.
+    # P(X=k) = C(3,k) * 0.5^k * 0.5^(3-k). 가운데(1, 2)가 높은 대칭 모양이 된다.
+    from math import comb
+    n = 3
+    values = list(range(n + 1))
+    probs = [comb(n, k) * (0.5**k) * (0.5**(n-k)) for k in values]
+    plot_pmf(values, probs, "PMF: Number of Heads in 3 Coin Flips")
+
+    # 예 3: 원하는 카드가 나올 때까지 산 팩 수. 균등하지도 대칭이지도 않다.
+    # 확률의 합이 0.2+0.16+0.128+0.512 = 1 이 되는지 확인해 보라.
+    # PMF가 되려면 (i) 모든 값이 0 이상, (ii) 합이 정확히 1 이어야 한다.
+    values = [1, 2, 3, 4]
+    probs = [0.2, 0.16, 0.128, 0.512]
+    plot_pmf(values, probs, "PMF: Baseball Card Packs Purchased")
+    ```
 
 ![이산확률변수](./img/discrete_112_0.png)
 
