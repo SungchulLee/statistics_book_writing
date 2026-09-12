@@ -155,7 +155,7 @@ print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 일대다 대 소프트맥스
 
 4범주 문제에서 일대다(OvR)는 이항 분류기 4개를 학습시키고, 소프트맥스 모형은 고유하게
@@ -219,7 +219,7 @@ $\hat{\mathbf{p}} = (0.45, 0.30, 0.10, 0.15)^\top$을 냈다. 이 확률들은 O
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $C$개의 균형 잡힌 범주가 있을 때, OvR 각 이항 문제의 양성 비율은 얼마인가? $C = 100$이면
 어떤 문제가 생기는가?
 
@@ -251,7 +251,7 @@ $C$개의 균형 잡힌 범주가 있을 때, OvR 각 이항 문제의 양성 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 OvR 점수를 합으로 나누어 정규화하는 것이 왜 "임시방편"인지 구체적으로 설명하라. 어떤 상황에서
 잘못된 결과를 낳는가?
 

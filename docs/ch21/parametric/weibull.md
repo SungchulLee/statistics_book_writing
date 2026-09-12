@@ -123,7 +123,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 기계 고장의 와이불 모형 해석. 어떤 연구가 기계 고장 50건을 관측했다. 와이불 모형을 적합하니 $\hat{k} = 1.8$,
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기계 고장의 와이불 모형 해석. 어떤 연구가 기계 고장 50건을 관측했다. 와이불 모형을 적합하니 $\hat{k} = 1.8$,
 $\hat{\lambda} = 500$시간이 나왔다.
 
 **해석:** $\hat{k} = 1.8 > 1$이므로 위험이 증가한다. 기계가 시간이 지나며 마모되고 있다.
@@ -174,7 +174,7 @@ $H_0$을 기각하면 위험이 일정하지 않으며 와이불 모형이 지�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 와이불 형상모수
 
 부도까지의 시간 자료에 와이불 모형을 적합하여 $\hat{k} = 0.75$, $\hat{\lambda} = 36$개월을
@@ -214,7 +214,7 @@ $H_0$을 기각하면 위험이 일정하지 않으며 와이불 모형이 지�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 와이불의 평균 $E[T] = \lambda\,\Gamma(1 + 1/k)$를 유도하라. $k = 0.75$, $\lambda = 36$인
 위 자료에서 평균과 중앙값을 비교하라.
 
@@ -255,7 +255,7 @@ $H_0$을 기각하면 위험이 일정하지 않으며 와이불 모형이 지�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\ln(-\ln \hat S_{\text{KM}}(t))$ 대 $\ln t$ 그림에서 회귀직선의 기울기와 절편으로
 $k$와 $\lambda$를 추정하는 절차를 구현하고, 참값이 알려진 모의자료에서 확인하라.
 
@@ -313,7 +313,7 @@ $k$와 $\lambda$를 추정하는 절차를 구현하고, 참값이 알려진 모
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $H_0: k = 1$의 가능도비 검정을 수행하는 절차를 서술하라. 왈드 검정 대신 가능도비 검정을
 권하는 이유는?
 

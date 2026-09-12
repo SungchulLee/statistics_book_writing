@@ -145,7 +145,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 콕스 모형의 해석
 
 직원 이직에 대한 콕스 모형이 공변량 세 개를 포함한다. 추정된 계수와 표준오차는 다음과 같다.

@@ -83,7 +83,7 @@ def softmax(z):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 소프트맥스 함수 계산
 
 로짓 벡터가 $\mathbf{z} = (2, 1, -1)^\top$인 3범주 분류 문제를 생각하자.
@@ -141,7 +141,7 @@ $\text{softmax}(\mathbf{z} + c\mathbf{1}) = \text{softmax}(\mathbf{z})$임을 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 소프트맥스 회귀의 가중행렬
 
 범주 $C = 3$개, 입력 특성 $d = 2$개(그리고 편향)인 소프트맥스 회귀에서 모형은

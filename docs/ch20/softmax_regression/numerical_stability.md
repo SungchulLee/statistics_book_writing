@@ -127,7 +127,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 수치적 안정성과 로그-합-지수
 
 로짓 $\mathbf{z} = (1000, 1001, 999)^\top$을 생각하자.
@@ -193,7 +193,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 $\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf{z})$임을 보여라.
 이 사실이 왜 유용한가?
 
@@ -228,7 +228,7 @@ $\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두 경우로 나누어
 증명하라. $z = 1000$에서 두 식을 각각 계산해 비교하라.
 
@@ -261,7 +261,7 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 로짓이 $\mathbf{z} = (-1000, -1001, -999)$처럼 **모두 매우 작은** 경우에도 최댓값을 빼는 것이
 올바르게 작동하는지 확인하라. 최솟값을 빼면 어떻게 되는가?
 
@@ -286,7 +286,7 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어떤 구현이 `p = softmax(z)`를 계산한 뒤 `loss = -np.log(p[y])`로 손실을 구한다. 이 구현이
 실패하는 구체적인 상황을 제시하고, 왜 융합 연산이 필요한지 설명하라.
 

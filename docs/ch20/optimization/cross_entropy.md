@@ -84,7 +84,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 교차엔트로피 손실
 
 참 범주 이름표가 $y = 2$($C = 4$개 범주 중)이고 예측확률 벡터가
@@ -143,7 +143,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 교차엔트로피의 기울기
 
 범주 $C$개인 소프트맥스 회귀를 생각하자. 범주 $k$의 예측확률은

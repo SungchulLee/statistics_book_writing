@@ -212,7 +212,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 지수 모형의 MLE
 
 어떤 연구가 대상 25명을 추적한다. 관측된 사건이 16건($d = 16$)이고 총 인시는
@@ -238,7 +238,7 @@ $\sum t_i = 3{,}200$시간이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 와이불 형상모수의 해석
 
 장비 고장 자료에 적합한 와이불 모형이 $\hat{k} = 2.3$, $\hat{\lambda} = 800$시간을 주었다.
@@ -285,7 +285,7 @@ $\sum t_i = 3{,}200$시간이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 로그정규 위험의 모양
 
 **(a)** 로그정규 위험함수가 왜 비단조인지 설명하라.
@@ -314,7 +314,7 @@ $\sum t_i = 3{,}200$시간이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 모형 비교
 
 어떤 분석자가 대상 100명의 같은 자료에 모형 세 개를 적합했다. 결과는 다음과 같다.
@@ -362,7 +362,7 @@ $\sum t_i = 3{,}200$시간이다.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 절단이 있는 가능도
 
 밀도가 $f(t)$이고 생존함수가 $S(t)$인 모수적 생존 모형에서, 시점 $t_i$에 절단된 관측치의

@@ -126,7 +126,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 전구 20개의 지수 생존모형. 어떤 신뢰성 연구가 전구 20개를 관찰한다. 연구가 끝날 때까지 12개가 끊어졌고(사건) 8개는
+**보기 1.** <span class="diff easy" title="쉬움"></span> 전구 20개의 지수 생존모형. 어떤 신뢰성 연구가 전구 20개를 관찰한다. 연구가 끝날 때까지 12개가 끊어졌고(사건) 8개는
 여전히 작동 중이다(절단). 전구 20개 전체의 관측 시간 합계는 $\sum t_i = 5{,}000$시간이다.
 
 **MLE:**
@@ -177,7 +177,7 @@ $\text{Exp}(\lambda)$ 사건시간을 가지면, 위험에 있는 $n$명 가운�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 지수 모형의 MLE
 
 어떤 신뢰성 연구가 부품 30개를 추적한다. 연구 종료 시점에 18개가 고장 났고 12개는 여전히
@@ -209,7 +209,7 @@ $\text{Exp}(\lambda)$ 사건시간을 가지면, 위험에 있는 $n$명 가운�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 지수분포가 무기억성을 갖는 유일한 연속분포임을 증명하라.
 
 </div>
@@ -247,7 +247,7 @@ $\text{Exp}(\lambda)$ 사건시간을 가지면, 위험에 있는 $n$명 가운�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 절단이 전혀 없는 자료($\delta_i = 1$ for all $i$)에서 $\hat\lambda = n/\sum t_i$가 되어
 평균의 역수임을 확인하라. 절단이 있으면 왜 이 단순한 관계가 깨지는가?
 
@@ -282,7 +282,7 @@ $\text{Exp}(\lambda)$ 사건시간을 가지면, 위험에 있는 $n$명 가운�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 지수 모형의 적합도를 점검하는 두 그림(누적위험 그림, KM 대 적합값)을 구현하고, 실제로는
 와이불($k = 2$)에서 나온 자료에 지수 모형을 적합하면 각 그림이 어떻게 보이는지 확인하라.
 

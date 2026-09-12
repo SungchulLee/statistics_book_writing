@@ -154,7 +154,7 @@ OvO, OvR, 고유 소프트맥스 회귀 중 무엇을 고를지는
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $C = 3, 10, 26, 100, 1000$에 대해 OvO 분류기의 개수를 계산하고 OvR의 $C$개와 비교하라.
 전체 학습에 처리되는 사례의 총 개수도 두 방식에 대해 각각 구하라.
 
@@ -191,7 +191,7 @@ $C = 3, 10, 26, 100, 1000$에 대해 OvO 분류기의 개수를 계산하고 OvR
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 위 예제의 투표 결과를 쌍별 승패 관계로 정리하라. 일관된 순위가 존재하는가?
 
 </div>
@@ -231,7 +231,7 @@ $C = 3, 10, 26, 100, 1000$에 대해 OvO 분류기의 개수를 계산하고 OvR
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 균형 잡힌 범주에서 OvO 각 부분문제의 표본 크기가 $2n/C$임을 보여라. 범주가 불균형하면 어떻게
 되는가?
 
@@ -264,7 +264,7 @@ $C = 3, 10, 26, 100, 1000$에 대해 OvO 분류기의 개수를 계산하고 OvR
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 예측 시점의 계산 비용을 OvR, OvO, 소프트맥스에 대해 비교하라. $C = 1000$, $p = 512$일 때
 각각 몇 번의 곱셈이 필요한가?
 
@@ -302,7 +302,7 @@ $C = 3, 10, 26, 100, 1000$에 대해 OvO 분류기의 개수를 계산하고 OvR
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 OvO에서 확률 추정을 얻으려면 어떻게 해야 하는가? 쌍별 확률 $r_{cc'} = P(y = c \mid y \in \{c,c'\}, \mathbf{x})$
 로부터 $p_c = P(y = c \mid \mathbf{x})$를 복원하는 문제를 논하라.
 

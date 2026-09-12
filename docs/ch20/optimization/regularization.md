@@ -137,7 +137,7 @@ L1은 가중행렬에 **희소성**을 유도하며, 어떤 특성이 모든 범
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 정칙화 소프트맥스 회귀
 
 가중행렬 $\mathbf{W}$와 L2 정칙화를 갖는 소프트맥스 회귀를 생각하자. 정칙화 손실은
@@ -209,7 +209,7 @@ $\mathbb{R}^{p \times C}$와는 전치 관계일 뿐 내용은 같다.)
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 가중치 감쇠 인자 $(1-\eta\lambda)$가 유효하려면 어떤 조건이 필요한가? $\eta\lambda > 1$이면
 무슨 일이 일어나는가?
 
@@ -243,7 +243,7 @@ $\mathbb{R}^{p \times C}$와는 전치 관계일 뿐 내용은 같다.)
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 이름표 평활이 왜 암묵적 정칙화로 작동하는지 설명하라. $\epsilon$이 주어졌을 때 최적 로짓 간격
 $z_y - z_k$의 상한을 구하라.
 
@@ -288,7 +288,7 @@ $z_y - z_k$의 상한을 구하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $\lambda$를 교차검증으로 고를 때 정확도 대신 로그손실을 기준으로 쓰면 어떤 차이가 있는가?
 위 예제 표를 근거로 답하라.
 

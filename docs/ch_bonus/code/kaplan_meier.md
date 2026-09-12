@@ -240,7 +240,7 @@ Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 손으로 하는 카플란-마이어 계산
 
 대상 8명의 자료가 다음과 같다.
@@ -280,7 +280,7 @@ Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 로그순위 검정 계산
 
 두 집단이 있다.
@@ -321,7 +321,7 @@ Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 절단 부호화 관례
 
 위 구현에서 `censored = 1`은 절단, `censored = 0`은 사건 관측을 뜻한다. 많은 생존분석
@@ -386,7 +386,7 @@ Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 카플란-마이어 추정량의 성질
 
 **(a)** $\hat{S}(t)$를 왜 "곱-극한" 추정량이라 부르는가?
@@ -421,7 +421,7 @@ $\hat{S}(t) = (t_i > t \text{인 개수}) / n$으로 환원됨을 보여라.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 카플란-마이어 추정량의 분산
 
 그린우드 공식이 $\hat{S}(t)$의 분산을 준다.

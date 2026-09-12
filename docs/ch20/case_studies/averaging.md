@@ -165,7 +165,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 거시·미시·가중 평균
 
 크기가 심하게 불균형한 3범주 검정자료를 생각하자.
@@ -223,7 +223,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 표에 $\sum_c \text{FP}_c = 80$, $\sum_c \text{FN}_c = 120$이라 적혀 있다. 이 표가
 단일 이름표 다범주 혼동행렬에서 나올 수 있는가?
 
@@ -257,7 +257,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 거시 F1이 거시 정밀도와 거시 재현율의 조화평균과 **같지 않음**을 예제로 보여라. 어느 쪽을
 보고해야 하는가?
 

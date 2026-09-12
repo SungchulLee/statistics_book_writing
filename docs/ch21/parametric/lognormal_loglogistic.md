@@ -153,7 +153,7 @@ AFT 해석에서 공변량은 시간 척도를 **가속하거나 감속한다.**
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 로그로지스틱 위험이 $k > 1$일 때 봉우리형임을 보이고, 정점의 위치를 구하라. $k \le 1$일 때는
 왜 단조 감소인가?
 
@@ -201,7 +201,7 @@ AFT 해석에서 공변량은 시간 척도를 **가속하거나 감속한다.**
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 로그정규 모형에서 $\hat\mu = 3.2$, $\hat\sigma = 0.8$일 때 다음을 계산하라.
 
 **(a)** 중앙 생존시간과 평균 생존시간.
@@ -243,7 +243,7 @@ AFT 해석에서 공변량은 시간 척도를 **가속하거나 감속한다.**
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 로그정규와 로그로지스틱은 위험 모양이 비슷한데도 꼬리 거동이 다르다. 이 차이가 실무적으로 어떤
 결과를 낳는지 설명하라.
 
@@ -275,7 +275,7 @@ AFT 해석에서 공변량은 시간 척도를 **가속하거나 감속한다.**
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 본문의 두 그림 점검(로그정규는 $\Phi^{-1}(1-\hat S)$ 대 $\ln t$, 로그로지스틱은
 $\ln[\hat S^{-1}-1]$ 대 $\ln t$)이 왜 직선이 되는지 각각 유도하라.
 

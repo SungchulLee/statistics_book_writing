@@ -160,7 +160,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 콕스 비례위험 모형의 부분가능도를 쓰고 왜 "부분"이라 불리는지 설명하라.
 
 </div>
@@ -187,7 +187,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 콕스 모형에서 처리 지시자의 계수가 $\hat{\beta} = 0.5$다. 이를 위험비로 해석하라.
 
 </div>
@@ -210,7 +210,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 비례위험 가정을 설명하라. 수학적으로 어떻게 표현되는가?
 
 </div>
@@ -228,7 +228,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 콕스 모형은 왜 절단된 관측치를 다룰 수 있는가? 절단된 대상이 부분가능도에 어떻게 들어가는지
 설명하라.
 

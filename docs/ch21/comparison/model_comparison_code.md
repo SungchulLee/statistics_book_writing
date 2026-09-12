@@ -165,7 +165,7 @@ cox_snell_diagnostic(rng.exponential(1.0, 200))
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 패러다임 선택
 
 각 상황에서 어느 모형화 패러다임(비모수, 모수, 준모수)이 가장 적절한지 밝히고 이유를 설명하라.
@@ -202,7 +202,7 @@ cox_snell_diagnostic(rng.exponential(1.0, 200))
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 AIC 비교
 
 관측치 150개에 모수 모형 세 개를 적합했다.
@@ -247,7 +247,7 @@ AIC 비교
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 콕스-스넬 잔차
 
 콕스-스넬 잔차가 어떻게 정의되고 전체 모형 적합도를 평가하는 데 어떻게 쓰이는지 설명하라.
@@ -280,7 +280,7 @@ AIC 비교
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 효율 비교
 
 **(a)** 생존 모형 비교의 맥락에서 "통계적 효율"이 무엇을 뜻하는지 설명하라.
@@ -315,7 +315,7 @@ AIC 비교
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 패러다임 결합하기
 
 어떤 임상시험이 신약이 전체 생존에 미치는 효과를 조사한다. 세 패러다임을 모두 쓰는 완전한 분석

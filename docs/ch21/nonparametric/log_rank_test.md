@@ -81,7 +81,7 @@ p-값은 $P(\chi^2_1 \geq \chi^2_{\text{LR}})$이다.
 
 <div class="exbox" markdown>
 
-**보기 1.** 두 집단의 로그순위검정. 진단 후 두 집단의 환자를 추적했다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 집단의 로그순위검정. 진단 후 두 집단의 환자를 추적했다.
 
 **집단 A**(처리): 2, 4+, 6, 8+, 10 (+는 절단을 뜻한다).
 
@@ -179,7 +179,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 로그순위 검정
 
 두 집단의 환자(A: 신약, B: 표준 치료)가 다음 생존자료를 보였다.
@@ -234,7 +234,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 로그순위 검정이 시간의 단조증가 변환에 불변임을 보여라. 이것이 장점인가 단점인가?
 
 </div>
@@ -266,7 +266,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 두 집단의 생존곡선이 교차할 때 로그순위 검정이 실패하는 이유를 설명하고, 구체적인 상황을
 구성하라.
 
@@ -301,7 +301,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $V_1$의 공식에 등장하는 $n_j - 1$이 어디에서 오는지 설명하라. $n_j = 1$일 때 왜 기여가
 0인가?
 

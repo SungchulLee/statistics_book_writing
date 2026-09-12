@@ -122,7 +122,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 지수분포의 생존함수와 위험함수. 비율모수가 $\lambda > 0$인 지수분포를 생각하자. 밀도는 $t \geq 0$에서
+**보기 1.** <span class="diff easy" title="쉬움"></span> 지수분포의 생존함수와 위험함수. 비율모수가 $\lambda > 0$인 지수분포를 생각하자. 밀도는 $t \geq 0$에서
 $f(t) = \lambda e^{-\lambda t}$다.
 
 **생존함수:**
@@ -160,7 +160,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 생존함수와 위험함수의 관계
 
 연속확률변수 $T$의 위험함수가 모든 $t \geq 0$에 대해 $h(t) = 0.05$다.
@@ -196,7 +196,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $H(t) = -\ln S(t)$를 유도하라. 이 항등식이 넬슨-알렌 추정량의 바탕이 되는 이유를 설명하라.
 
 </div>
@@ -232,7 +232,7 @@ $H(t) = -\ln S(t)$를 유도하라. 이 항등식이 넬슨-알렌 추정량의 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 와이불 분포의 위험함수가 $h(t) = \frac{k}{\lambda}\left(\frac{t}{\lambda}\right)^{k-1}$임을
 보이고, 형상모수 $k$의 값에 따라 위험의 모양이 어떻게 달라지는지 서술하라.
 
@@ -277,7 +277,7 @@ $H(t) = -\ln S(t)$를 유도하라. 이 항등식이 넬슨-알렌 추정량의 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $h(t)$가 확률이 아니라 비율이며 1을 넘을 수 있음을 구체적인 예로 보여라. 그럼에도
 $\int_0^\infty h(u)\,du = \infty$가 성립해야 하는 이유는 무엇인가?
 

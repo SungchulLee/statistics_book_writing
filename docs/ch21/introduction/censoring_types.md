@@ -114,7 +114,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음 각 상황을 우측절단, 좌측절단, 구간절단, 좌측 절단(truncation) 중 하나로 분류하라.
 
 **(a)** 연금 수급자 사망 자료에서 65세 이후 생존한 사람만 명부에 오른다.
@@ -148,7 +148,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 좌측 절단을 무시하고 표준적인 생존분석을 수행하면 어떤 방향의 편향이 생기는지 모의실험으로
 확인하라.
 
@@ -195,7 +195,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 구간절단 자료의 가능도가 $S(L_i) - S(R_i)$를 기여함을 보여라. 구간 폭이 0으로 가면 어떻게
 되는가?
 

@@ -74,7 +74,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 넬슨-알렌 누적위험 계산. 카플란-마이어 절과 같은 자료를 쓴다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 넬슨-알렌 누적위험 계산. 카플란-마이어 절과 같은 자료를 쓴다.
 
 | $t_{(j)}$ | $n_j$ | $d_j$ | $d_j / n_j$ | $\hat{H}(t_{(j)})$ |
 |:----------:|:-----:|:-----:|:------------:|:-------------------:|
@@ -124,7 +124,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 넬슨-알렌 추정량
 
 [카플란-마이어 절](kaplan_meier.md)의 연습문제 1에 나온 환자 10명 자료를 이용해 각
@@ -153,7 +153,7 @@ $\hat{S}_{\text{KM}}(12)$와 비교하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 모든 $x \geq 0$에 대해 $\exp(-x) \geq 1 - x$임을 이용하여
 $\hat{S}_{\text{NA}}(t) \geq \hat{S}_{\text{KM}}(t)$가 항상 성립함을 증명하라.
 
@@ -184,7 +184,7 @@ $\hat{S}_{\text{NA}}(t) \geq \hat{S}_{\text{KM}}(t)$가 항상 성립함을 증�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 누적위험 그림으로 지수 모형과 와이불 모형을 구별하는 방법을 설명하라. 왜
 $\ln \hat H(t)$ 대 $\ln t$ 그림이 와이불 진단에 쓰이는가?
 
@@ -221,7 +221,7 @@ $\ln \hat H(t)$ 대 $\ln t$ 그림이 와이불 진단에 쓰이는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 넬슨-알렌 분산 공식 $\sum_j d_j/n_j^2$을 유도하라. 이 공식이 어떤 근사에 의존하는가?
 
 </div>

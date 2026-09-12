@@ -160,7 +160,7 @@ $\gamma_k = 0$이면 표준 콕스 모형으로 돌아간다. 따라서 $\gamma_
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 비례위험 가정
 
 공변량 두 개(나이와 처리)를 갖는 콕스 모형의 쇤펠트 검정 결과다.

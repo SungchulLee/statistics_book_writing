@@ -179,7 +179,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 쇤펠트 잔차가 사건마다 하나씩만 생기고 절단된 대상은 만들지 않는 이유를 부분가능도의
 점수함수로부터 설명하라.
 
@@ -211,7 +211,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 마팅게일 잔차가 위로는 1로 유계이면서 아래로는 무계인 이유를 설명하고, 이 비대칭이 이탈도
 잔차로 어떻게 교정되는지 설명하라.
 
@@ -246,7 +246,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 비선형성 점검에서 왜 문제의 공변량 $x_k$를 **뺀** 모형의 잔차를 쓰는가? $x_k$를 넣은 모형의
 잔차를 쓰면 무엇이 잘못되는가?
 
@@ -313,7 +313,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 대상의 dfbeta가 유난히 크게 나왔다. 이 대상을 제거할지 판단하는 절차를 서술하라.
 
 </div>

@@ -174,7 +174,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 로그가능도 $\ell = \sum_i [\delta_i \ln h(t_i) - H(t_i)]$를 원래 형태
 $\prod_i f(t_i)^{\delta_i} S(t_i)^{1-\delta_i}$에서 유도하라. 절단된 관측치가 왜
 $-H(t_i)$ 항만 기여하는지 설명하라.
@@ -212,7 +212,7 @@ $-H(t_i)$ 항만 기여하는지 설명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 와이불 로그가능도를 직접 구현하고 절단자료에서 $(\hat k, \hat\lambda)$를 수치적으로 구하라.
 $k = 1$로 고정한 지수 모형과 가능도비 검정으로 비교하라.
 
@@ -276,7 +276,7 @@ $k = 1$로 고정한 지수 모형과 가능도비 검정으로 비교하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 절단율이 매우 높으면 왜 가능도 곡면이 평평해지는지 설명하라. 사건이 하나도 없으면 어떤 일이
 일어나는가?
 
@@ -314,7 +314,7 @@ $k = 1$로 고정한 지수 모형과 가능도비 검정으로 비교하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 구간절단 자료에 대한 가능도 $\prod_i [S(L_i) - S(R_i)]$를 최대화할 때, 우측절단 자료보다
 계산이 어려운 이유를 설명하라.
 

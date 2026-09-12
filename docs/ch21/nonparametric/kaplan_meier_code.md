@@ -233,7 +233,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 카플란-마이어 계산
 
 환자 6명의 생존자료가 다음과 같다.
@@ -266,7 +266,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 로그순위 검정의 설정
 
 두 집단을 관측했다.
@@ -298,7 +298,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 절단의 효과
 
 대상 10명이 모두 비율 $\lambda = 0.1$인 같은 지수분포를 따른다고 하자. 시나리오 A에서는 아무도
@@ -329,7 +329,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 로그순위 검정의 해석
 
 처리군과 대조군을 비교한 로그순위 검정이 $\chi^2_{\text{LR}} = 5.23$, $p = 0.022$를 냈다.
@@ -361,7 +361,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 로그순위 통계량의 분산 유도
 
 영가설 아래에서 $d_{1j}$(시점 $t_{(j)}$의 집단 1 사건 수)가 초기하분포를 따름을 보이고 다음

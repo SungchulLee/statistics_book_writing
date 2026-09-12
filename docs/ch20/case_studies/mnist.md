@@ -321,7 +321,7 @@ print("적재한 모형이 원본과 동일한가:", same)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 MNIST 방식의 분류
 
 숫자 범주 $C = 10$개, 입력 특성 $d = 784$개(28 × 28 화소 이미지)인 소프트맥스 분류기를 MNIST로
@@ -394,7 +394,7 @@ MNIST 방식의 분류
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 표의 세 모형 중 CNN이 이층 신경망보다 모수가 적으면서도 더 정확한 이유를 설명하라.
 "모수가 많을수록 표현력이 크다"는 통념은 왜 틀렸는가?
 
@@ -426,7 +426,7 @@ MNIST 방식의 분류
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 `compute_accuracy` 함수에서 어떤 범주의 검정 사례가 하나도 없으면 어떤 일이 생기는가?
 어떻게 고쳐야 하는가?
 

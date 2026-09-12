@@ -192,7 +192,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 부분가능도 구성
 
 대상 세 명의 자료가 다음과 같다.
@@ -232,7 +232,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 위험비의 해석
 
 부도까지의 시간에 대한 콕스 모형이 공변량 세 개를 포함한다.
@@ -279,7 +279,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 비례위험 점검
 
 어떤 분석자가 처리 지시자($x = 1$이면 처리, $x = 0$이면 대조)를 갖는 콕스 모형을 적합했다.
@@ -316,7 +316,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 브레슬로 추정량
 
 부분가능도 추정치 $\hat{\beta} = 0.4$와 다음 자료가 주어졌다.
@@ -354,7 +354,7 @@ def partial_log_likelihood(beta, X, times, events):
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 기저위험이 소거되는 이유
 
 부분가능도를 구성하는 조건부확률에서 기저위험 $h_0(t)$가 소거됨을 증명하라. 구체적으로 다음을

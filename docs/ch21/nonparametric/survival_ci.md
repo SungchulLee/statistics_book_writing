@@ -117,7 +117,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 그린우드 공식에 의한 신뢰구간. 카플란-마이어 절의 예제를 이어서 $t = 3$에서 계산한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 그린우드 공식에 의한 신뢰구간. 카플란-마이어 절의 예제를 이어서 $t = 3$에서 계산한다.
 
 - $\hat{S}(3) = 0.729$
 - 그린우드 합: $\frac{1}{8 \cdot 7} + \frac{1}{6 \cdot 5} = 0.01786 + 0.03333 = 0.05119$
@@ -187,7 +187,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 그린우드 공식
 
 [카플란-마이어 절](kaplan_meier.md)의 연습문제 1에 나온 환자 10명 자료를 이용해 그린우드
@@ -228,7 +228,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 그린우드 공식의 합 $\sum_j d_j/[n_j(n_j-d_j)]$을 델타법으로 유도하라. 넬슨-알렌의 분산 공식
 $\sum_j d_j/n_j^2$과 어떻게 다른가?
 
@@ -275,7 +275,7 @@ $\sum_j d_j/n_j^2$과 어떻게 다른가?
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 왜 로그-로그 변환이 로그 변환보다 나은 포함확률을 주는지 설명하라.
 
 </div>

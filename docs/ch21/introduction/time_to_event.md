@@ -125,7 +125,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 위 예제 표에서 $n$, $d$, 절단율을 구하라. 대상 2와 대상 4의 절단은 각각 어떤 유형에
 해당하는가?
 
@@ -147,7 +147,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 참 생존시간이 평균 10인 지수분포이고 절단시간도 독립인 평균 10의 지수분포라 하자. 다음 세
 방식으로 추정한 평균 생존시간을 모의실험으로 비교하라. (a) 절단시간을 사건시간으로 취급,
 (b) 절단된 대상을 버림, (c) 카플란-마이어 곡선 아래 면적.
@@ -204,7 +204,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 가능도에서 절단된 관측치가 밀도 $f(t_i)$가 아니라 생존확률 $S(t_i)$를 기여하는 이유를
 유도하라. 전체 가능도를 $f$와 $S$로 쓰라.
 
@@ -263,7 +263,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 독립 절단이 깨지는 구체적인 상황을 하나 만들고, 추정된 생존곡선의 편향 방향을 모의실험으로
 확인하라.
 

@@ -162,7 +162,7 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 혼동행렬과 범주별 지표
 
 3범주 분류기가 검정 표본 100개에서 다음 혼동행렬을 냈다.
@@ -241,7 +241,7 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정밀도가 **열** 합으로, 재현율이 **행** 합으로 계산되는 이유를 혼동행렬의 정의로부터
 설명하라. 두 방향을 혼동하면 어떤 오류가 생기는가?
 
@@ -268,7 +268,7 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 `load_digits` 예제에서 로지스틱 회귀가 $97.2\%$의 정확도를 낸다. 같은 모형을 MNIST에 적용하면
 왜 정확도가 더 낮게 나오는가? 두 결과를 비교할 수 있는가?
 

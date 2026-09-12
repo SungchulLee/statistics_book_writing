@@ -164,7 +164,7 @@ IBS가 낮을수록 전체 예측 성능이 좋다.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 모형 선택
 
 대상 200명, 사건 120건인 같은 자료에 모수 모형 세 개를 적합했다.
