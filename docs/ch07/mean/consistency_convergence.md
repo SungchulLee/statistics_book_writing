@@ -12,11 +12,20 @@ $$\bar{X}_n \xrightarrow{\text{a.s.}} \mu \quad (n \to \infty)$$
 
 즉 확률 1로 누적평균이 $\mu$로 수렴한다. 다음 모의실험은 네 가지 분포에서 독립적인 20개 수열의 누적평균을 그린다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 여러 경로로 보는 강대수의 법칙
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
 def consistency_visualization(seed=42):
+    """표본크기를 키워 가며 표본평균이 참 평균으로 수렴하는 경로를 그린다.
+
+    네 모집단은 모양이 저마다 다르지만 강대수의 법칙은 유한한 평균만
+    요구하므로 넷 다 같은 결론에 이른다.
+    """
     rng = np.random.default_rng(seed)
     N = 10_000
     n_runs = 20
@@ -53,6 +62,8 @@ def consistency_visualization(seed=42):
 consistency_visualization()
 ```
 
+</div>
+
 ![일치성과 수렴](./img/consistency_convergence_15.png)
 
 !!! tip "그림에서 보이는 양상"
@@ -66,10 +77,19 @@ $$\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)$$
 
 동등하게, 큰 $n$에 대해 $\bar{X}_n \approx N(\mu, \sigma^2/n)$이다. 분산이 유한한 **모든** 모집단 분포에서 성립한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 모집단 넷으로 보는 중심극한정리
+
 ```python
 from scipy import stats
 
 def clt_demonstration(seed=42):
+    """모집단 넷과 표본크기 셋을 격자로 놓고 중심극한정리를 확인한다.
+
+    대수의 법칙이 X-bar 가 어디로 가는지를 말한다면, 중심극한정리는 그
+    주변에서 어떤 모양으로 흩어지는지를 말한다.
+    """
     rng = np.random.default_rng(seed)
     n_sim = 20_000
 
@@ -108,6 +128,8 @@ def clt_demonstration(seed=42):
 clt_demonstration()
 ```
 
+</div>
+
 ![Central Limit Theorem](./img/consistency_convergence_60.png)
 
 !!! note "정규성으로의 수렴 속도"
@@ -121,15 +143,24 @@ $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \text{에 대해}$$
 
 Cauchy 관측값을 더 많이 평균해도 전혀 나아지지 않는다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 코시분포에서 무너지는 수렴
+
 ```python
 def cauchy_failure(seed=42):
+    """평균이 없는 분포에서는 대수의 법칙이 무너짐을 보인다.
+
+    코시분포는 E[|X|] 가 무한이라 법칙의 전제부터 성립하지 않는다.
+    표본을 아무리 늘려도 표본평균은 자리를 잡지 못한다.
+    """
     rng = np.random.default_rng(seed)
     N = 10_000
     n_runs = 10
 
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-    # Normal — converges
+    # 왼쪽: 정규분포. 경로들이 빠르게 0 으로 모여 붙는다.
     ax = axes[0]
     for _ in range(n_runs):
         data = rng.standard_normal(N)
@@ -139,7 +170,8 @@ def cauchy_failure(seed=42):
     ax.set_ylim(-2, 2)
     ax.set_title('Normal: Converges')
 
-    # Cauchy — does NOT converge
+    # 오른쪽: 코시분포. 잠잠하다가도 큰 값 하나가 나오면 평균이 통째로 튄다.
+    # 이미 쌓인 n 개의 평균을 관측값 하나가 끌고 갈 만큼 꼬리가 두껍다.
     ax = axes[1]
     for _ in range(n_runs):
         data = rng.standard_cauchy(N)
@@ -154,6 +186,8 @@ def cauchy_failure(seed=42):
 cauchy_failure()
 ```
 
+</div>
+
 ![Normal: Converges](./img/consistency_convergence_106.png)
 
 !!! warning "대수의법칙에는 유한한 평균이 필요하다"
@@ -167,22 +201,36 @@ $$\text{Var}(\bar{X}) \approx \frac{\sigma^2}{n} \cdot \frac{1 + \rho}{1 - \rho}
 
 양의 자기상관은 분산을 **부풀리고**, 음의 자기상관은 **줄인다**.
 
+<div class="codebox" markdown>
+
+**예제 4.** 자기상관이 표준오차에 미치는 영향
+
 ```python
 def autocorrelation_effect(n=100, n_sim=30_000, seed=42):
+    """관측값이 서로 독립이 아니면 sigma^2/n 공식이 얼마나 빗나가는지 본다.
+
+    시계열 자료는 이웃한 값끼리 닮아 있다. 그 정도를 rho 로 조절해 가며
+    표본평균의 실제 분산을 독립일 때의 값과 견준다.
+    """
     rng = np.random.default_rng(seed)
     sigma = 1.0
     rho_values = [-0.5, -0.2, 0.0, 0.2, 0.5, 0.8, 0.95]
 
     for rho in rho_values:
         x_bars = []
+        # 잡음의 크기를 이렇게 잡아야 x 의 주변분산이 rho 와 무관하게 sigma^2 로
+        # 유지된다. 그래야 달라진 것이 오직 상관뿐이라고 말할 수 있다.
         innov_sig = sigma * np.sqrt(max(1 - rho**2, 0.01))
         for _ in range(n_sim):
+            # AR(1) 과정: 오늘 값은 어제 값의 rho 배에 새 잡음을 더한 것이다.
             x = np.zeros(n)
             x[0] = rng.normal(0, sigma)
             for t in range(1, n):
                 x[t] = rho * x[t - 1] + rng.normal(0, innov_sig)
             x_bars.append(x.mean())
 
+        # 비가 1 보다 크면 독립을 가정한 표준오차가 실제보다 작다는 뜻이다.
+        # 곧 신뢰구간이 실제보다 좁게, 검정이 실제보다 후하게 나온다.
         var_emp = np.var(x_bars)
         var_iid = sigma**2 / n
         ratio = var_emp / var_iid
@@ -202,6 +250,8 @@ autocorrelation_effect()
 ρ= 0.95  Var(X̄)=0.311792  σ²/n=0.010000  Ratio=31.18
 ```
 
+</div>
+
 !!! danger "금융 시계열"
     금융 수익률은 변동성에 양의 자기상관을 보이는 경우가 많다(수익률 자체에도 약한 자기상관이 있을 때가 있다). 이 종속성을 무시하면 표본평균의 불확실성을 낮춰 잡게 되어 신뢰구간이 너무 좁아지고 가설검정이 너무 관대해진다.
 
@@ -211,12 +261,23 @@ autocorrelation_effect()
 
 $$P(\bar{X}_T > r_f) = \mathcal{N}\left(\frac{\mu - r_f}{\sigma / \sqrt{T}}\right)$$
 
+<div class="codebox" markdown>
+
+**예제 5.** 초과수익을 확인하는 데 필요한 기간
+
 ```python
 def estimation_horizon_analysis(seed=42):
-    mu_annual = 0.06    # 6% expected return
-    sigma_annual = 0.20  # 20% volatility
-    rf = 0.03            # risk-free rate
+    """주식이 무위험자산보다 낫다는 것을 확인하려면 몇 년치 자료가 필요한가.
 
+    수익률의 표준오차는 sigma/sqrt(T) 로 줄지만 sigma 가 워낙 커서 잘 줄지
+    않는다. 그래서 "장기적으로 주식이 낫다"는 말은 한 사람의 투자 기간
+    안에서는 확인하기 어려운 주장이다.
+    """
+    mu_annual = 0.06     # 기대수익률 연 6%
+    sigma_annual = 0.20  # 변동성 연 20%
+    rf = 0.03            # 무위험이자율 연 3%
+
+    # T 년치를 모았을 때 초과수익이 양수로 관측될 확률. 검정력에 해당한다.
     years = np.arange(1, 101)
     prob_detect = [stats.norm.cdf((mu_annual - rf) / (sigma_annual / np.sqrt(T)))
                    for T in years]
@@ -234,6 +295,8 @@ estimation_horizon_analysis()
   90% power: ~73 years of data needed
   95% power: ~1 years of data needed
 ```
+
+</div>
 
 ## 해석
 

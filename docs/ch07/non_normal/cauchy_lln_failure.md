@@ -24,6 +24,10 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
 
 누적평균 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$은 정규 자료와 Cauchy 자료에서 놀랄 만큼 다른 거동을 보인다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 코시와 정규의 표본평균 경로
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -78,6 +82,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![Cauchy: Sample Mean Trajectories](./img/cauchy_lln_failure_27.png)
 
 !!! note "수렴과 비수렴"
@@ -87,10 +93,19 @@ plt.show()
 
 정규분포에서는 $n$이 커질수록 $\bar{X}_n$의 표본분포가 좁아진다(중심극한정리에 의해 표준편차가 $1/\sqrt{n}$이다). Cauchy에서는 $\bar{X}_n$의 분포가 전혀 좁아지지 **않는다**.
 
+<div class="codebox" markdown>
+
+**예제 2.** 표본크기를 키워도 좁아지지 않는 분포
+
 ```python
 from scipy import stats
 
 def sample_mean_distributions(dist, n_vals, n_reps=10_000):
+    """표본크기별로 표본평균의 분포를 만든다.
+
+    앞 그림이 한 경로가 시간에 따라 어떻게 움직이는지를 보였다면, 여기서는
+    같은 크기의 표본을 만 번 뽑아 표본평균이 어디에 흩어지는지를 본다.
+    """
     results = {}
     for n in n_vals:
         if dist == "cauchy":
@@ -100,6 +115,9 @@ def sample_mean_distributions(dist, n_vals, n_reps=10_000):
         results[n] = data.mean(axis=1)
     return results
 
+# n 을 100 배로 키워도 코시 쪽 히스토그램은 좁아지지 않는다.
+# 코시 표본평균의 분포가 원래 분포와 똑같은 코시이기 때문이다.
+# 표본을 늘리는 일이 아무 보탬이 되지 않는 드문 경우다.
 n_vals = [100, 1000, 10_000]
 cauchy_dists = sample_mean_distributions("cauchy", n_vals)
 normal_dists = sample_mean_distributions("normal", n_vals)
@@ -119,6 +137,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![Cauchy에서 대수의법칙의 실패](./img/cauchy_lln_failure_80.png)
 
 !!! warning "Cauchy 분포는 집중되지 않는다"
@@ -128,7 +148,14 @@ plt.show()
 
 Cauchy 분위수를 정규 분위수와 비교하는 **Q-Q 그림**은 Cauchy 꼬리가 얼마나 극단적으로 두꺼운지 드러낸다.
 
+<div class="codebox" markdown>
+
+**예제 3.** Q-Q 그림으로 보는 두꺼운 꼬리
+
 ```python
+# Q-Q 그림은 자료의 분위수를 정규분포의 분위수와 짝지어 찍는다.
+# 정규자료라면 점들이 직선에 놓인다. 코시 자료는 양끝이 위아래로 크게
+# 휘어 올라가는데, 그 휘어짐이 곧 두꺼운 꼬리의 눈에 보이는 모습이다.
 cauchy_sample = np.random.standard_cauchy(1000)
 fig, ax = plt.subplots(figsize=(6, 6))
 stats.probplot(cauchy_sample, dist="norm", plot=ax)
@@ -136,6 +163,8 @@ ax.set_title("Cauchy vs Normal Q-Q Plot")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![Cauchy vs Normal Q-Q Plot](./img/cauchy_lln_failure_119.png)
 

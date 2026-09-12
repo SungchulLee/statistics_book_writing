@@ -12,15 +12,24 @@ $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
 
 전형적인 주식 모수($\mu = 8\%$, $\sigma = 20\%$)에서는 추정 대상에 비해 표준오차가 크다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 기대수익률의 정밀도
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 
 def expected_return_precision(seed=42):
+    """기대수익률을 몇 %까지 좁힐 수 있는지 자료 기간별로 계산한다.
+
+    변동성 20%에 자료 10년이면 표준오차만 6%가 넘는다. 추정하려는 값이 8%인데
+    오차가 그만큼이니, 자료를 한 사람의 평생만큼 모아도 답은 흐릿하다.
+    """
     rng = np.random.default_rng(seed)
-    mu_annual = 0.08
-    sigma_annual = 0.20
+    mu_annual = 0.08      # 참 기대수익률 연 8%
+    sigma_annual = 0.20   # 변동성 연 20%
 
     years = [5, 10, 20, 30, 50, 100]
     for T in years:
@@ -43,19 +52,32 @@ T=  50 years  SE=2.83%  95% CI=[2.46%, 13.54%]  Width=11.09%
 T= 100 years  SE=2.00%  95% CI=[4.08%, 11.92%]  Width=7.84%
 ```
 
+</div>
+
 !!! danger "근본적인 문제"
     자료가 10년치이면 평균 수익률의 95% 신뢰구간이 대략 $[-4.4\%, 20.4\%]$로, 0을 포함할 만큼 넓다. 50년치 자료에서도 표준오차가 2.8%로, 기대수익률을 0과 구분하기에 겨우 충분한 정도이다.
 
 다음 모의실험은 10년치와 50년치 월별 자료로 추정한 연간 수익률의 분포를 보여준다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 추정값의 분포 — 10년과 50년
+
 ```python
 def return_precision_simulation(seed=42):
+    """앞 표의 숫자를 그림으로 옮긴다. 10년과 50년을 나란히 놓았다.
+
+    10년 쪽 히스토그램은 0 을 한참 넘어 왼쪽까지 퍼져 있다. 참 수익률이
+    양수여도 10년을 관측한 결과가 음수로 나오는 일이 드물지 않다는 뜻이다.
+    """
     rng = np.random.default_rng(seed)
     mu_annual, sigma_annual = 0.08, 0.20
     n_sim = 20_000
 
     fig, axes = plt.subplots(1, 2, figsize=(13, 5))
     for ax, T, title in [(axes[0], 10, '10 Years'), (axes[1], 50, '50 Years')]:
+        # 월별 자료로 바꾼다. 평균은 12 로 나누고 변동성은 sqrt(12) 로 나눈다.
+        # 평균은 기간에 비례해 쌓이고 표준편차는 그 제곱근으로만 쌓이기 때문이다.
         n_m = T * 12
         mu_m = mu_annual / 12
         sig_m = sigma_annual / np.sqrt(12)
@@ -73,6 +95,8 @@ def return_precision_simulation(seed=42):
 return_precision_simulation()
 ```
 
+</div>
+
 ![Distribution of Expected Return Estimates](./img/return_estimation_40.png)
 
 ## Sharpe 비율의 불확실성
@@ -83,11 +107,21 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 
 여기서 $T$는 기간의 수이다. 연간 Sharpe 비율이 0.5 근처이면 $t$-통계량 2를 얻는 데 대략 18년이 필요하다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 샤프비율의 불확실성
+
 ```python
 def sharpe_ratio_uncertainty(seed=42):
+    """샤프비율 추정값이 얼마나 흔들리는지, 음수로 나올 확률은 얼마인지 본다.
+
+    샤프비율이 참으로 0.5 인 좋은 전략이라도, 3년치 성과만 보면 음수로
+    보일 확률이 제법 된다. 짧은 성과 기록으로 운용자를 고르기 어려운 이유다.
+    """
     rng = np.random.default_rng(seed)
     true_sr = 0.5
     mu_annual = 0.08
+    # 샤프비율 = 평균/변동성 이므로 변동성은 이렇게 거꾸로 정해진다.
     sigma_annual = mu_annual / true_sr
     n_sim = 30_000
 
@@ -115,6 +149,8 @@ T= 20 years  E[SR]=0.501  SD(SR)=0.226  P(SR<0)=1.2%
 T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
 ```
 
+</div>
+
 !!! note "펀드 평가에 대한 함의"
     자료가 3년치뿐이면 참 Sharpe 비율이 0.5인 펀드도 추정 Sharpe 비율이 *음수*로 나올 확률이 약 20%이다. 10년치라도 참값 주위의 표준편차가 약 0.3이다. 실력 있는 운용자와 그렇지 않은 운용자를 믿을 만하게 구분하려면 수십 년치 자료가 필요하다.
 
@@ -125,12 +161,22 @@ T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
 - **짧은 구간** (5–21일): 최근 변화에 민감하지만 잡음이 많다
 - **긴 구간** (126–252일): 매끄럽지만 뒤늦다
 
+<div class="codebox" markdown>
+
+**예제 4.** 실현변동성과 창의 길이
+
 ```python
 def realized_volatility_windows(seed=42):
+    """변동성을 재는 창의 길이가 바꾸는 것 — 민감도와 잡음의 맞바꿈.
+
+    짧은 창은 변동성의 변화를 빨리 따라가지만 들쭉날쭉하고, 긴 창은
+    매끄럽지만 뒤늦게 반응한다. 어느 쪽도 공짜가 아니다.
+    """
     rng = np.random.default_rng(seed)
 
-    # Simulate GARCH(1,1) returns
-    T = 756  # 3 years daily
+    # GARCH(1,1): 오늘의 변동성이 어제의 충격과 어제의 변동성에 함께 기댄다.
+    # 실제 수익률처럼 변동성이 뭉쳐 다니는 자료를 만들기 위한 모형이다.
+    T = 756  # 3년치 거래일
     omega, alpha, beta = 0.00001, 0.08, 0.90
     sigma2 = np.zeros(T)
     returns = np.zeros(T)
@@ -145,6 +191,7 @@ def realized_volatility_windows(seed=42):
     true_vol = np.sqrt(sigma2 * 252) * 100
     ax.plot(true_vol, 'k-', alpha=0.3, lw=0.8, label='True vol (GARCH)')
 
+    # 창 길이를 한 달·한 분기·한 해로 두고 같은 자료에 굴린다.
     for w, color in zip([21, 63, 252], ['blue', 'red', 'green']):
         rv = np.array([np.std(returns[max(0,t-w):t], ddof=1) * np.sqrt(252) * 100
                        for t in range(w, T)])
@@ -158,6 +205,8 @@ def realized_volatility_windows(seed=42):
     plt.show()
 realized_volatility_windows()
 ```
+
+</div>
 
 ![Realized Volatility: Window Size Comparison](./img/return_estimation_128.png)
 
@@ -173,10 +222,19 @@ realized_volatility_windows()
 | 일별 → 연간 | $\mu_a = \mu_d \times 252$ | $\sigma_a = \sigma_d \times \sqrt{252}$ | $\text{SR}_a = \text{SR}_d \times \sqrt{252}$ |
 | 월별 → 연간 | $\mu_a = \mu_m \times 12$ | $\sigma_a = \sigma_m \times \sqrt{12}$ | $\text{SR}_a = \text{SR}_m \times \sqrt{12}$ |
 
+<div class="codebox" markdown>
+
+**예제 5.** 연율화 관례
+
 ```python
 def annualization_conventions():
-    mu_d = 0.0003     # Daily mean return
-    sigma_d = 0.012   # Daily volatility
+    """일별 값을 연 단위로 옮기는 관례를 한자리에 모은다.
+
+    평균은 252 를 곱하고 변동성은 sqrt(252) 를 곱한다. 서로 다른 수를 쓰는
+    까닭에 샤프비율에는 sqrt(252) 가 남는다.
+    """
+    mu_d = 0.0003     # 일별 평균 수익률
+    sigma_d = 0.012   # 일별 변동성
 
     print(f"Daily: mu = {mu_d*100:.4f}%, sigma = {sigma_d*100:.4f}%")
     print(f"Annualized (252 trading days):")
@@ -195,6 +253,8 @@ Annualized (252 trading days):
   sigma_annual = 19.05%
   SR_annual   = 0.397
 ```
+
+</div>
 
 !!! warning "i.i.d. 가정"
     연율화 공식은 수익률이 i.i.d.라고 가정한다. 수익률의 자기상관(모멘텀이나 평균회귀)과 변동성 군집(GARCH 효과)은 단순한 $\sqrt{T}$ 축척 규칙을 무너뜨린다. 실무에서는 유용한 근사이지만 그 한계를 인식하고 써야 한다.

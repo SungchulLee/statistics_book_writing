@@ -14,12 +14,22 @@ $$E[\bar{X}] = \mu$$
 
 다음 모의실험은 100,000번의 반복에서 $\bar{X}$를 계산하고 그 평균이 참 평균에 가까운지 확인하여 여섯 가지 분포에서 이를 검증한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 분포를 바꿔 가며 확인하는 불편성
+
 ```python
 import numpy as np
 
 def verify_unbiasedness(mu=10.0, sigma=3.0, n=20, n_sim=100_000, seed=42):
+    """표본평균이 모집단 모양과 무관하게 불편임을 모의실험으로 확인한다.
+
+    E[X-bar] = mu 는 정규성을 쓰지 않고 기댓값의 선형성만으로 나오는 결과다.
+    그래서 치우친 분포든 이산분포든 똑같이 성립해야 한다.
+    """
     rng = np.random.default_rng(seed)
 
+    # 모양이 제각각인 여섯 모집단. 값은 (표본을 뽑는 함수, 참 평균) 짝이다.
     distributions = {
         f'Normal({mu}, {sigma}²)': (lambda: rng.normal(mu, sigma, n), mu),
         'Exp(λ=0.5)':             (lambda: rng.exponential(2, n), 2.0),
@@ -30,7 +40,9 @@ def verify_unbiasedness(mu=10.0, sigma=3.0, n=20, n_sim=100_000, seed=42):
     }
 
     for name, (sampler, true_mu) in distributions.items():
+        # 크기 n 인 표본을 10만 번 뽑아 그때마다 표본평균을 기록한다.
         estimates = np.array([sampler().mean() for _ in range(n_sim)])
+        # 그 10만 개의 평균이 참 평균에 얼마나 가까운지가 편향이다.
         bias = estimates.mean() - true_mu
         print(f"{name:<22} True μ={true_mu:.4f}  E[X̄]={estimates.mean():.4f}  Bias={bias:.6f}")
 verify_unbiasedness()
@@ -47,6 +59,8 @@ Bernoulli(0.4)         True μ=0.4000  E[X̄]=0.4009  Bias=0.000895
 Chi²(df=5)             True μ=5.0000  E[X̄]=5.0006  Bias=0.000617
 ```
 
+</div>
+
 !!! tip "핵심"
     모든 편향이 (몬테카를로 잡음 범위 안에서) 무시할 만큼 작아, 시험한 모든 분포에서 $E[\bar{X}] = \mu$임이 확인된다.
 
@@ -60,12 +74,23 @@ $\bar{X}$가 불편이므로 평균제곱오차는 분산과 같다:
 
 $$\text{MSE}(\bar{X}) = \text{Bias}^2 + \text{Var}(\bar{X}) = 0 + \frac{\sigma^2}{n} = \frac{\sigma^2}{n}$$
 
+<div class="codebox" markdown>
+
+**예제 2.** 분산과 평균제곱오차
+
 ```python
 def verify_variance_and_mse(mu=10.0, sigma=3.0, n_sim=100_000, seed=42):
+    """Var(X-bar) = sigma^2/n 을 표본크기를 바꿔 가며 확인한다.
+
+    불편추정량이므로 MSE 와 분산이 같아야 한다. 표에서 두 값이 같은 자리에
+    오는지 보면 된다.
+    """
     rng = np.random.default_rng(seed)
     sample_sizes = [5, 10, 25, 50, 100, 500]
 
     for n in sample_sizes:
+        # (n_sim, n) 배열이므로 행 하나가 표본 하나다. axis=1 로 접으면
+        # 표본마다 평균이 하나씩 나온다. 반복문 없이 한 번에 끝난다.
         samples = rng.normal(mu, sigma, (n_sim, n))
         x_bars = samples.mean(axis=1)
 
@@ -91,6 +116,8 @@ n= 100  Var(X̄)=0.090037  σ²/n=0.090000  MSE=0.090038  SE=0.300062  σ/√n=0
 n= 500  Var(X̄)=0.018063  σ²/n=0.018000  MSE=0.018063  SE=0.134397  σ/√n=0.134164
 ```
 
+</div>
+
 ## 효율 비교
 
 표본평균은 정규 자료에서 가장 효율적인 위치추정량이지만 꼬리가 두꺼운 분포에서는 그렇지 않다. $\bar{X}$ 대비 추정량 $T$의 **상대효율**은:
@@ -99,12 +126,24 @@ $$\text{RE}(T, \bar{X}) = \frac{\text{MSE}(\bar{X})}{\text{MSE}(T)}$$
 
 $\text{RE} > 1$이면 대안 $T$가 *더* 효율적이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 모집단에 따라 뒤바뀌는 효율
+
 ```python
 from scipy import stats
 
 def efficiency_comparison(n=30, n_sim=50_000, seed=42):
+    """중심을 재는 네 추정량의 효율을 모집단별로 견준다.
+
+    정규모집단에서는 표본평균이 가장 좋지만, 꼬리가 두꺼워지거나 자료가
+    오염되면 순위가 뒤집힌다. 어느 추정량이 낫냐는 물음에는 모집단을 함께
+    말해야 답이 된다.
+    """
     rng = np.random.default_rng(seed)
 
+    # 셋째는 오염 정규분포다. 10%는 표준편차 10짜리 정규에서 나오므로
+    # 겉보기에는 정규 같지만 이따금 아주 먼 값이 섞인다.
     distributions = {
         'Normal(0,1)':           lambda: rng.standard_normal(n),
         't(df=3)':               lambda: rng.standard_t(3, n),
@@ -123,6 +162,8 @@ def efficiency_comparison(n=30, n_sim=50_000, seed=42):
             est['Trim10%'].append(stats.trim_mean(s, 0.1))
             est['Trim20%'].append(stats.trim_mean(s, 0.2))
 
+        # 참 중심이 0 이므로 추정값의 제곱평균이 곧 MSE 다.
+        # 표본평균의 MSE 를 기준으로 삼아 상대효율을 낸다.
         mse_mean = np.mean(np.array(est['Mean'])**2)
         print(f"\n{dist_name}:")
         for name, vals in est.items():
@@ -155,6 +196,8 @@ Contaminated Normal:
   Trim20%      MSE=0.049119  Rel.Eff.=7.4065
 ```
 
+</div>
+
 !!! note "평균이 지는 경우"
     $t(3)$이나 오염된 정규처럼 꼬리가 두꺼운 분포에서는 절사평균과 중앙값이 표본평균보다 평균제곱오차가 작다. 이상점에 민감한 평균은 이런 상황에서 비효율적이다.
 
@@ -166,11 +209,24 @@ $$w_i = \frac{1/\sigma_i^2}{\sum_{j=1}^k 1/\sigma_j^2}, \qquad \bar{X}_w = \sum_
 
 이 가중치는 기댓값이 참 평균이 되는 모든 가중평균 중에서 $\text{Var}(\bar{X}_w)$를 최소화한다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 역분산 가중평균
+
 ```python
 def weighted_mean_demo(mu=5.0, n_sim=50_000, seed=42):
+    """정밀도가 다른 관측값 다섯 개를 어떻게 합칠지 견준다.
+
+    같은 양을 서로 다른 기계 다섯 대로 잰 상황이다. 정밀도가 다른데도
+    똑같이 더해 나누면 가장 엉성한 기계에 끌려간다.
+    """
     rng = np.random.default_rng(seed)
+
+    # 다섯 관측값의 표준편차. 마지막 하나가 가장 정밀하고 넷째가 가장 엉성하다.
     sigmas = np.array([1.0, 2.0, 5.0, 10.0, 0.5])
 
+    # 분산의 역수를 가중값으로 쓰면 합의 분산이 가장 작아진다.
+    # 합이 1 이 되도록 고르면 가중평균이 여전히 불편추정량으로 남는다.
     optimal_weights = 1 / sigmas**2
     optimal_weights /= optimal_weights.sum()
 
@@ -197,14 +253,25 @@ IV-Weighted: Var=0.190153  MSE=0.190153
 Variance reduction: 96.3%
 ```
 
+</div>
+
 ## 표준오차의 수렴 속도
 
 로그-로그 그래프에서 표준오차 $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$은 기울기 $-1/2$인 직선으로 나타나며, $O(1/\sqrt{n})$ 수렴 속도를 확인해 준다.
+
+<div class="codebox" markdown>
+
+**예제 5.** 표준오차의 수렴 속도
 
 ```python
 import matplotlib.pyplot as plt
 
 def convergence_rate_plot(mu=5.0, sigma=3.0, n_sim=50_000, seed=42):
+    """표준오차가 1/sqrt(n) 으로 줄어듦을 양로그 축에서 직선으로 확인한다.
+
+    SE = sigma * n^(-1/2) 의 양변에 로그를 씌우면 기울기 -1/2 인 직선이 된다.
+    양로그 축을 쓰는 이유가 이것이다.
+    """
     rng = np.random.default_rng(seed)
     sample_sizes = [5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000]
 
@@ -227,6 +294,8 @@ def convergence_rate_plot(mu=5.0, sigma=3.0, n_sim=50_000, seed=42):
     plt.show()
 convergence_rate_plot()
 ```
+
+</div>
 
 ![Convergence Rate of Sample Mean](./img/sample_mean_properties_151.png)
 

@@ -64,6 +64,10 @@ $$\text{초과첨도} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$
 
 ## 시각적 비교
 
+<div class="codebox" markdown>
+
+**예제 1.** 정규와 두꺼운 꼬리를 네 그림으로
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -71,13 +75,14 @@ from scipy import stats
 
 np.random.seed(42)
 
-# Generate samples
+# 두 자료는 중심도 척도모수도 같다. 다른 것은 꼬리의 두께뿐이다.
 normal_returns = np.random.normal(loc=0, scale=0.02, size=5000)
 heavy_tailed_returns = stats.t.rvs(df=6, scale=0.02, size=5000)
 
 fig, axes = plt.subplots(2, 2, figsize=(12, 10))
 
-# Row 1: Histograms
+# 윗줄: 히스토그램. 가운데만 보면 두 분포는 거의 구별되지 않는다.
+# 차이는 그림의 양끝, 자료가 드문 자리에 숨어 있다.
 ax = axes[0, 0]
 ax.hist(normal_returns, bins=50, alpha=0.6, label='Normal', color='blue', density=True)
 x = np.linspace(-0.08, 0.08, 200)
@@ -98,7 +103,8 @@ ax.set_ylabel('Density')
 ax.legend()
 ax.spines[['top', 'right']].set_visible(False)
 
-# Row 2: Q-Q plots
+# 아랫줄: Q-Q 그림. 히스토그램이 감추는 꼬리를 드러내려고 쓴다.
+# 두꺼운 꼬리는 양끝이 직선에서 S 자로 벌어지는 모습으로 나타난다.
 ax = axes[1, 0]
 stats.probplot(normal_returns, dist="norm", plot=ax)
 ax.set_title('Q-Q Plot: Normal Data', fontsize=12, fontweight='bold')
@@ -112,7 +118,8 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.tight_layout()
 plt.show()
 
-# Print statistics
+# 초과첨도는 정규분포를 0 으로 두고 잰 꼬리의 두께다. 자유도 6 인 t 는
+# 이론값이 3 이고, 정규 쪽은 표본 흔들림만큼만 0 에서 벗어난다.
 print("Normal Distribution:")
 print(f"  Excess Kurtosis: {stats.kurtosis(normal_returns):.2f}")
 print()
@@ -130,6 +137,8 @@ Heavy-Tailed (t) Distribution:
   Excess Kurtosis: 1.78
 ```
 
+</div>
+
 ![Normal Distribution](./img/heavy_tails_67.png)
 
 ## 평균의 로버스트한 대안
@@ -141,6 +150,10 @@ Heavy-Tailed (t) Distribution:
 - **효율**: 정규 자료에서는 평균보다 효율이 낮지만, 꼬리가 두꺼운 자료에서는 비슷하다
 - **추론**: 표준오차와 신뢰구간에는 붓스트랩을 쓴다
 
+<div class="codebox" markdown>
+
+**예제 2.** 중앙값의 표준오차를 붓스트랩으로
+
 ```python
 import numpy as np
 from sklearn.utils import resample
@@ -148,7 +161,9 @@ from sklearn.utils import resample
 data = stats.t.rvs(df=5, size=100)
 original_median = np.median(data)
 
-# Bootstrap standard error
+# 중앙값에는 표본평균의 sigma/sqrt(n) 같은 간단한 표준오차 공식이 없다.
+# 대신 자료에서 복원추출로 재표본을 1000번 만들어 그때마다 중앙값을 구한다.
+# 그 1000개의 표준편차가 곧 중앙값의 표준오차 추정값이다.
 bootstrap_medians = [np.median(resample(data)) for _ in range(1000)]
 se_median = np.std(bootstrap_medians)
 print(f"Median: {original_median:.4f} ± {se_median:.4f}")
@@ -160,12 +175,18 @@ print(f"Median: {original_median:.4f} ± {se_median:.4f}")
 Median: 0.2379 ± 0.1549
 ```
 
+</div>
+
 ### 2. 절사평균
 평균을 계산하기 전에 양쪽 꼬리에서 일정 비율을 제거한다:
 
 $$\bar{X}_{\text{trim}, \alpha} = \frac{1}{n(1-2\alpha)} \sum_{i=\lceil n\alpha \rceil}^{\lfloor n(1-\alpha) \rfloor} X_{(i)}$$
 
 여기서 $X_{(i)}$는 순서통계량이고 $\alpha$는 절사비율이다(예: 10%이면 0.1).
+
+<div class="codebox" markdown>
+
+**예제 3.** 절사평균
 
 ```python
 import numpy as np
@@ -189,8 +210,14 @@ print(f"10% 절단평균 {mean_trim10:7.4f}")
 10% 절단평균 -0.1366
 ```
 
+</div>
+
 ### 3. 윈저화 평균
 극단값을 버리는 대신 $\alpha$-분위수로 대체한다:
+
+<div class="codebox" markdown>
+
+**예제 4.** 윈저화 평균
 
 ```python
 import numpy as np
@@ -221,8 +248,14 @@ print(f"윈저화 평균    {winsorize_mean(data, alpha=0.1):7.4f}")
 윈저화 평균    -0.1292
 ```
 
+</div>
+
 ### 4. M-추정량 (Huber 추정량)
 작은 오차에서는 이차식, 큰 오차에서는 절댓값으로 넘어가는 손실함수를 써서 극단값의 가중치를 매끄럽게 낮춘다:
+
+<div class="codebox" markdown>
+
+**예제 5.** Huber M-추정량
 
 ```python
 import numpy as np
@@ -248,7 +281,13 @@ Huber 위치추정: -0.1366
 Huber 척도추정: 1.0812
 ```
 
+</div>
+
 ## 추정량의 비교
+
+<div class="codebox" markdown>
+
+**예제 6.** 다섯 추정량 견주기
 
 ```python
 import numpy as np
@@ -281,6 +320,8 @@ Estimator Comparison (Population mean = 0):
   Winsorized mean:     -0.0318
   Huber's estimator:   -0.0369
 ```
+
+</div>
 
 ## 연습문제
 

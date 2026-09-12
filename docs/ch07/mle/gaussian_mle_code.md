@@ -18,21 +18,32 @@ $$\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
 유의: 분산의 MLE는 $n-1$이 아니라 $n$으로 나눈다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 해석적 MLE와 수치적 MLE
+
 ```python
 import numpy as np
 from scipy import optimize
 
 def mle_analytical_vs_numerical(seed=42):
+    """정규분포 MLE 를 공식으로 구한 값과 수치 최적화로 구한 값을 견준다.
+
+    공식이 있는 경우에 둘을 맞춰 보는 것은, 공식이 없는 모형으로 넘어가기
+    전에 수치 절차가 제대로 돌고 있는지 확인하는 표준적인 방법이다.
+    """
     rng = np.random.default_rng(seed)
     mu_true, sigma_true = 5.0, 2.0
     n = 50
     data = rng.normal(mu_true, sigma_true, n)
 
-    # Analytical MLE
+    # 공식으로 구한 MLE. 평균은 표본평균, 분산은 n 으로 나눈 표본분산이다.
     mu_mle = data.mean()
     sigma2_mle = np.mean((data - mu_mle)**2)
 
-    # Numerical MLE (parameterize log(sigma^2) for unconstrained optimization)
+    # 수치 최적화. 분산은 양수여야 하는데 최적화기는 그런 제약을 모른다.
+    # 그래서 log(sigma^2) 를 모수로 삼는다. 이러면 어떤 실수를 넣어도
+    # exp 를 거치며 양수가 되므로 제약 없는 문제가 된다.
     def neg_ll(params):
         mu, ls2 = params
         s2 = np.exp(ls2)
@@ -53,6 +64,8 @@ Analytical: mu=5.182422, sigma²=2.313780
 Numerical:  mu=5.182447, sigma²=2.313763
 ```
 
+</div>
+
 !!! tip "일치"
     해석적 해와 수치해가 소수점 아래 여러 자리까지 일치하여 닫힌 형태 유도가 확인된다.
 
@@ -60,11 +73,20 @@ Numerical:  mu=5.182447, sigma²=2.313763
 
 로그가능도는 $(\hat{\mu}, \hat{\sigma}^2)$에서 유일한 최댓값을 갖는 매끄러운 오목 곡면을 이룬다. 프로파일 가능도를 쓰면 각 모수를 따로 시각화할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 로그가능도 곡면과 단면
+
 ```python
 import matplotlib.pyplot as plt
 from scipy import stats
 
 def loglikelihood_surface(seed=42):
+    """로그가능도를 등고선과 두 단면으로 그려 최댓값의 자리를 눈으로 본다.
+
+    등고선이 가파를수록 그 방향의 모수를 정확히 추정하고 있다는 뜻이다.
+    이 곡률이 곧 피셔 정보량이다.
+    """
     rng = np.random.default_rng(seed)
     n = 30
     mu_true, sigma_true = 5.0, 2.0
@@ -77,6 +99,7 @@ def loglikelihood_surface(seed=42):
     s2_r = np.linspace(s2_mle * 0.3, s2_mle * 3, 200)
     MU, S2 = np.meshgrid(mu_r, s2_r)
 
+    # 격자 위의 모든 (mu, sigma^2) 짝에서 로그가능도를 계산한다.
     LL = np.zeros_like(MU)
     for i in range(LL.shape[0]):
         for j in range(LL.shape[1]):
@@ -85,21 +108,22 @@ def loglikelihood_surface(seed=42):
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
-    # Contour plot
+    # 왼쪽: 등고선. 붉은 별이 두 모수를 함께 최대로 만드는 자리다.
     axes[0].contour(MU, S2, LL, levels=30, cmap='viridis')
     axes[0].plot(mu_mle, s2_mle, 'r*', ms=15, label='MLE')
     axes[0].set_xlabel('mu'); axes[0].set_ylabel('sigma²')
     axes[0].set_title('Log-Likelihood Contours')
     axes[0].legend()
 
-    # Profile for mu
+    # 가운데: sigma^2 를 MLE 에 고정하고 mu 만 움직인 단면.
     prof_mu = [-np.sum((data-m)**2)/(2*s2_mle) for m in mu_r]
     prof_mu = np.array(prof_mu) - max(prof_mu)
     axes[1].plot(mu_r, prof_mu, 'b-', lw=2)
     axes[1].axvline(mu_mle, color='red', ls='--')
     axes[1].set_xlabel('mu'); axes[1].set_title('Profile for mu')
 
-    # Profile for sigma²
+    # 오른쪽: mu 를 MLE 에 고정하고 sigma^2 만 움직인 단면.
+    # 봉우리가 mu 쪽보다 비대칭이다. 분산의 추정이 더 어렵다는 뜻이다.
     prof_s = [-n/2*np.log(s)-np.sum((data-mu_mle)**2)/(2*s) for s in s2_r]
     prof_s = np.array(prof_s) - max(prof_s)
     axes[2].plot(s2_r, prof_s, 'b-', lw=2)
@@ -111,6 +135,8 @@ def loglikelihood_surface(seed=42):
 loglikelihood_surface()
 ```
 
+</div>
+
 ![Log-Likelihood Contours](./img/gaussian_mle_code_56.png)
 
 ## 유한표본 편향
@@ -121,8 +147,17 @@ $$E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$$
 
 편향은 $-\sigma^2/n$으로 $n \to \infty$일 때 사라진다(따라서 MLE는 점근적으로 불편이다).
 
+<div class="codebox" markdown>
+
+**예제 3.** 유한표본에서의 편향
+
 ```python
 def finite_sample_bias(n_sim=200_000, seed=42):
+    """분산의 MLE 가 유한표본에서 아래로 치우치고 n 이 커지면 사라짐을 본다.
+
+    MLE 는 평균 대신 표본평균을 쓰느라 편차를 실제보다 작게 잡는다.
+    그 정도가 정확히 (n-1)/n 배이므로 표본이 작을수록 두드러진다.
+    """
     rng = np.random.default_rng(seed)
     mu_true, sigma_true = 5.0, 3.0
     sigma2 = sigma_true**2
@@ -130,6 +165,7 @@ def finite_sample_bias(n_sim=200_000, seed=42):
 
     for n in sample_sizes:
         samp = rng.normal(mu_true, sigma_true, (n_sim, n))
+        # 같은 표본에서 두 값을 함께 구한다. 차이는 나누는 수뿐이다.
         s2_mle = np.var(samp, axis=1, ddof=0)
         s2_ub  = np.var(samp, axis=1, ddof=1)
         print(f"n={n:>4}  E[sigma²_MLE]={s2_mle.mean():.4f}  "
@@ -149,6 +185,8 @@ n= 100  E[sigma²_MLE]=8.9087  E[S²]=8.9987  Bias(MLE)=-0.0913
 n= 500  E[sigma²_MLE]=8.9833  E[S²]=9.0013  Bias(MLE)=-0.0167
 ```
 
+</div>
+
 ## Fisher 정보량과 Cramer-Rao 하한
 
 $N(\mu, \sigma^2)$의 **Fisher 정보행렬**은:
@@ -161,8 +199,17 @@ $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \qquad \text{Var}(\hat{\sigma}^
 
 평균의 MLE는 CRLB를 정확히 달성한다. 분산의 MLE는 점근적으로 도달한다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 피셔 정보량과 크라메르-라오 하한
+
 ```python
 def fisher_information_crlb(sigma=3.0, n_sim=100_000, seed=42):
+    """두 MLE 의 분산이 크라메르-라오 하한에 닿는지 확인한다.
+
+    비가 1 에 가까우면 그 추정량보다 나은 불편추정량은 없다는 뜻이다.
+    mu 는 어떤 n 에서도 1 이지만 sigma^2 는 n 이 커져야 1 로 다가간다.
+    """
     rng = np.random.default_rng(seed)
     sample_sizes = [10, 25, 50, 100, 500]
 
@@ -198,6 +245,8 @@ For sigma²: CRLB = 2*sigma⁴/n
   n= 500  Var(sigma²_hat)=0.321909  CRLB=0.324000  Ratio=0.9935
 ```
 
+</div>
+
 !!! info "효율성"
     비 $\text{Var}/\text{CRLB}$는 $\hat{\mu}$에서 정확히 1이고(모든 표본크기에서 효율적이다), $\hat{\sigma}^2$에서는 $n \to \infty$일 때 1로 수렴한다(점근적으로 효율적이다).
 
@@ -211,8 +260,17 @@ Gaussian 모형에서는 세 종류의 신뢰구간이 나온다:
 | $\mu$ | $\sigma$를 모름 | $t$-구간 | $\frac{\bar{X}-\mu}{S/\sqrt{n}} \sim t_{n-1}$ |
 | $\sigma^2$ | $\mu$를 모름 | $\chi^2$-구간 | $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ |
 
+<div class="codebox" markdown>
+
+**예제 5.** 신뢰구간의 포함확률
+
 ```python
 def confidence_interval_coverage(seed=42):
+    """95% 신뢰구간이 정말로 95%를 담는지 세어 확인한다.
+
+    구간을 5만 번 만들어 참값이 들어간 횟수를 센다. 신뢰수준이란 바로 이
+    비율에 대한 약속이지, 한 번 만든 구간에 대한 확률이 아니다.
+    """
     rng = np.random.default_rng(seed)
     mu_true, sigma_true = 10.0, 3.0
     n, alpha, n_sim = 25, 0.05, 50_000
@@ -222,17 +280,18 @@ def confidence_interval_coverage(seed=42):
         d = rng.normal(mu_true, sigma_true, n)
         xb, s, s2 = d.mean(), d.std(ddof=1), d.var(ddof=1)
 
-        # z-interval (sigma known)
+        # sigma 를 안다고 치고 만든 z 구간. 현실에서는 쓸 수 없는 기준선이다.
         z_c = stats.norm.ppf(1 - alpha/2)
         if xb - z_c*sigma_true/np.sqrt(n) <= mu_true <= xb + z_c*sigma_true/np.sqrt(n):
             z_ok += 1
 
-        # t-interval (sigma unknown)
+        # sigma 를 표본에서 추정해 쓰는 t 구간. 그만큼 구간이 넓어진다.
         t_c = stats.t.ppf(1 - alpha/2, n-1)
         if xb - t_c*s/np.sqrt(n) <= mu_true <= xb + t_c*s/np.sqrt(n):
             t_ok += 1
 
-        # chi-squared interval for sigma²
+        # sigma^2 의 구간. (n-1)S^2/sigma^2 가 카이제곱을 따른다는 사실을 쓴다.
+        # 좌우가 대칭이 아니어서 두 기각값을 서로 반대쪽에 나누어 쓴다.
         lo = (n-1)*s2 / stats.chi2.ppf(1-alpha/2, n-1)
         hi = (n-1)*s2 / stats.chi2.ppf(alpha/2, n-1)
         if lo <= sigma_true**2 <= hi:
@@ -252,6 +311,8 @@ t-interval (mu, sigma unknown): 95.1% (target: 95.0%)
 chi²-interval (sigma²):        95.0% (target: 95.0%)
 ```
 
+</div>
+
 !!! success "포함확률이 맞는다"
     세 구간 모두 명목 95% 포함확률을 달성하여 이론적 유도가 확인된다.
 
@@ -263,21 +324,34 @@ $$\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$$
 
 여기서 $z_\alpha = \mathcal{N}^{-1}(\alpha)$는 정규분위수이다.
 
+<div class="codebox" markdown>
+
+**예제 6.** 금융 응용 — VaR 추정
+
 ```python
 def var_estimation_finance(seed=42):
+    """정규성을 가정한 VaR 과 자료를 그대로 쓴 VaR 을 견준다.
+
+    수익률의 꼬리는 정규보다 두껍다. 그런데도 정규를 가정하면 꼬리 쪽 손실을
+    실제보다 작게 잡는다. 알파가 작을수록 그 차이가 벌어진다.
+    """
     rng = np.random.default_rng(seed)
-    mu_d = 0.08/252
-    sig_d = 0.20/np.sqrt(252)
-    n = 504
+    mu_d = 0.08/252            # 일별 기대수익률
+    sig_d = 0.20/np.sqrt(252)  # 일별 변동성
+    n = 504                    # 2년치 거래일
     df = 5
 
-    # Simulate t-distributed returns (heavier tails than normal)
+    # 자유도 5 인 t 로 수익률을 만든다. 정규보다 꼬리가 두껍다.
+    # sqrt(df/(df-2)) 로 나누는 것은 t 의 분산을 1 로 맞춰, 달라진 것이
+    # 오직 꼬리 두께뿐이 되도록 하기 위함이다.
     returns = mu_d + sig_d * rng.standard_t(df, n) / np.sqrt(df/(df-2))
     mu_hat = returns.mean()
     sig_hat = np.sqrt(np.mean((returns - mu_hat)**2))
 
     for alpha in [0.01, 0.025, 0.05, 0.10]:
+        # 모수적 VaR: 정규분포의 알파 분위점을 쓴다.
         v_p = -(mu_hat + stats.norm.ppf(alpha) * sig_hat)
+        # 역사적 VaR: 실제 수익률의 알파 백분위점을 그대로 쓴다.
         v_h = -np.percentile(returns, alpha * 100)
         print(f"alpha={alpha:.3f}  Parametric VaR={v_p*100:.3f}%  "
               f"Historical VaR={v_h*100:.3f}%  Ratio={v_h/v_p:.3f}")
@@ -292,6 +366,8 @@ alpha=0.025  Parametric VaR=2.557%  Historical VaR=3.182%  Ratio=1.244
 alpha=0.050  Parametric VaR=2.143%  Historical VaR=2.186%  Ratio=1.020
 alpha=0.100  Parametric VaR=1.665%  Historical VaR=1.536%  Ratio=0.923
 ```
+
+</div>
 
 !!! warning "모형 위험"
     참 수익률 분포의 꼬리가 (금융에서 흔하듯) 정규보다 두꺼우면 Gaussian VaR는 꼬리 위험을 **과소평가**한다. 1% 수준의 역사적 VaR가 대개 모수적 VaR보다 크며, 이는 참 분포의 두꺼운 꼬리를 반영한다.

@@ -10,9 +10,8 @@
 
 pandas, SciPy, scikit-learn, statsmodels, Matplotlib 등 모든 과학용 파이썬 라이브러리가 `ndarray`를 자료 교환 형식으로 삼아 그 위에 세워져 있다. 따라서 NumPy를 익히는 것이 나머지 생태계를 쓰기 위한 선수 조건이다.
 
-```python
-import numpy as np
-```
+아래 예제는 모두 `import numpy as np` 를 마쳤다고 보고 적는다. `np` 라는 이름은
+NumPy 문서와 거의 모든 코드가 따르는 관례이므로 그대로 쓰는 편이 좋다.
 
 ## 배열 만들기
 

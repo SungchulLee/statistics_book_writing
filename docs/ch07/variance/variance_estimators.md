@@ -24,6 +24,10 @@ $$\text{SS} = \sum_{i=1}^n (X_i - \bar{X})^2$$
 
 $$E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2 \implies \text{Bias} = -\frac{\sigma^2}{n}$$
 
+<div class="codebox" markdown>
+
+**예제 1.** 편향이 정확히 얼마인지 확인하기
+
 ```python
 import numpy as np
 
@@ -58,6 +62,8 @@ n= 100  E[S̃²]=8.9087  (n-1)/n·σ²=8.9100  Bias=-0.0913  -σ²/n=-0.0900
 n= 500  E[S̃²]=8.9833  (n-1)/n·σ²=8.9820  Bias=-0.0167  -σ²/n=-0.0180
 ```
 
+</div>
+
 !!! note "편향은 n이 커지면 줄어든다"
     $n = 3$에서 편향은 $-\sigma^2/3 = -3.0$으로 참 분산의 33%이다. $n = 500$이면 편향이 $-0.018$로 무시할 만하다. 편향은 작은 표본에서 가장 중요하다.
 
@@ -65,10 +71,15 @@ n= 500  E[S̃²]=8.9833  (n-1)/n·σ²=8.9820  Bias=-0.0167  -σ²/n=-0.0180
 
 불편추정량($1/(n-1)$)은 평균제곱오차를 최소화하지 **않는다**. 정규성 아래에서 평균제곱오차가 최적인 추정량은 $1/(n+1)$을 쓰며, 작은 편향을 대가로 더 큰 분산 감소를 얻는다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 세 추정량의 MSE
+
 ```python
 import matplotlib.pyplot as plt
 
 def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
+    """나누는 수만 다른 세 추정량의 MSE 를 표본크기의 함수로 그린다."""
     rng = np.random.default_rng(seed)
     sigma2, sigma4 = sigma**2, sigma**4
 
@@ -93,6 +104,8 @@ def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
 three_estimators_mse()
 ```
 
+</div>
+
 ![MSE of Variance Estimators (Normal Population)](./img/variance_estimators_51.png)
 
 !!! info "편향–분산 맞바꿈"
@@ -105,6 +118,10 @@ $n$개의 편차 $d_i = X_i - \bar{X}$는 다음 제약을 만족한다:
 $$\sum_{i=1}^n (X_i - \bar{X}) = 0$$
 
 이 편차들 가운데 $n - 1$개만이 독립적으로 자유롭게 변할 수 있다. 자유도로 나누는 것은 $\bar{X}$가 $\mu$보다 자료에 가까워 제곱합이 체계적으로 작아진다는 사실을 보정한다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 자유도가 n-1인 이유
 
 ```python
 def degrees_of_freedom_intuition(seed=42):
@@ -154,6 +171,8 @@ degrees_of_freedom_intuition()
   Difference = n·(X̄−μ)² = 0.792
 ```
 
+</div>
+
 두 제곱합을 잇는 핵심 항등식은:
 
 $$\sum_{i=1}^n (X_i - \mu)^2 = \sum_{i=1}^n (X_i - \bar{X})^2 + n(\bar{X} - \mu)^2$$
@@ -168,8 +187,17 @@ $$\hat{\sigma}^2_{\text{known}} = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2$$
 
 이 추정량은 불편이며 $\mu$를 추정하느라 자유도를 잃지 않으므로 $S^2$보다 **분산이 작다**.
 
+<div class="codebox" markdown>
+
+**예제 4.** 평균을 알 때와 모를 때
+
 ```python
 def known_vs_unknown_mean(sigma=3.0, n_sim=100_000, seed=42):
+    """평균을 아는 경우와 모르는 경우의 분산 추정을 견준다.
+
+    n-1 로 나누는 까닭은 평균을 몰라서 표본평균으로 대신했기 때문이다.
+    평균을 알면 그 대가를 치를 일이 없다는 것을 숫자로 확인한다.
+    """
     rng = np.random.default_rng(seed)
     mu, sigma2 = 5.0, sigma**2
     sample_sizes = [5, 10, 25, 50, 100]
@@ -198,12 +226,19 @@ n=  50  MSE(known μ)=3.2328  MSE(unknown)=3.2001  Ratio=0.990
 n= 100  MSE(known μ)=1.6033  MSE(unknown)=1.5968  Ratio=0.996
 ```
 
+</div>
+
 ## 금융 응용: 변동성 추정
 
 금융에서 변동성은 보통 수익률의 연율화된 표준편차로 추정한다. 분모의 선택($n$이냐 $n-1$이냐)은 추정 구간이 짧을수록 중요해진다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 금융 응용 — 변동성 추정
+
 ```python
 def volatility_estimation_finance(seed=42):
+    """관측 창이 짧을 때 ddof 선택이 변동성 추정에 남기는 차이를 본다."""
     rng = np.random.default_rng(seed)
     annual_vol = 0.20
     daily_vol = annual_vol / np.sqrt(252)
@@ -240,6 +275,8 @@ Window=  63  Vol(1/n)=19.75%  Vol(1/(n-1))=19.91%  Diff=0.80%
 Window= 126  Vol(1/n)=19.87%  Vol(1/(n-1))=19.95%  Diff=0.40%
 Window= 252  Vol(1/n)=19.94%  Vol(1/(n-1))=19.98%  Diff=0.20%
 ```
+
+</div>
 
 !!! warning "짧은 구간은 차이를 키운다"
     5일 구간에서는 Bessel 수정 변동성이 소박한 추정값보다 대략 12% 높다. 분기(63일) 이상의 구간에서는 차이가 무시할 만하다. 실무에서는 많은 금융 응용이 기본적으로 $n-1$을 쓴다.

@@ -10,10 +10,15 @@ Bessel 수정 표본분산 $S^2 = \frac{1}{n-1}\sum_{i=1}^n(X_i - \bar{X})^2$은
 
 $$E[S^2] = \sigma^2$$
 
+<div class="codebox" markdown>
+
+**예제 1.** 네 분포에서 확인하는 불편성
+
 ```python
 import numpy as np
 
 def unbiasedness_across_distributions(n_sim=200_000, seed=42):
+    """베셀 보정의 불편성이 모집단 모양과 무관함을 네 분포에서 확인한다."""
     rng = np.random.default_rng(seed)
     sigma = 4.0
     sigma2 = sigma**2
@@ -49,6 +54,8 @@ Uniform                   True σ²=16.00  E[S²]=16.0088  Bias=0.0088
 Chi²(df=16)               True σ²=32.00  E[S²]=32.0208  Bias=0.0208
 ```
 
+</div>
+
 !!! tip "분포와 무관한 결과"
     $E[S^2] = \sigma^2$의 증명은 항등식 $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X} - \mu)^2$과 기댓값의 선형성만 쓴다. 분산이 유한하다는 것 외에 분포에 대한 가정은 필요 없다.
 
@@ -60,11 +67,20 @@ $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$$
 
 이 정확한 분포 결과가 $\sigma^2$에 대한 카이제곱 검정과 신뢰구간의 토대이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 카이제곱분포 확인
+
 ```python
 import matplotlib.pyplot as plt
 from scipy import stats
 
 def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
+    """정규모집단에서 (n-1)S^2/sigma^2 이 카이제곱을 따름을 확인한다.
+
+    앞 예제와 달리 여기서는 정규성이 꼭 필요하다. 불편성은 모든 분포에서
+    성립하지만, 분포의 모양까지 알려면 모집단이 정규여야 한다.
+    """
     rng = np.random.default_rng(seed)
     sample_sizes = [5, 10, 25, 50]
 
@@ -89,6 +105,8 @@ def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
 chi_squared_verification()
 ```
 
+</div>
+
 ![(n-1)S²/σ² ~ chi²(n-1) for Normal Data](./img/bessels_correction_47.png)
 
 카이제곱분포로부터 곧바로 다음을 얻는다:
@@ -99,18 +117,27 @@ $$E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
 
 **Cochran 정리**는 정규 자료에서 $\bar{X}$와 $S^2$이 독립임을 말한다. 정규가 아닌 분포에서는 성립하지 **않는** 놀라운 성질이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 표본평균과 표본분산의 독립성
+
 ```python
 def independence_xbar_s2(sigma=3.0, n_sim=100_000, seed=42):
+    """X-bar 와 S^2 의 독립이 정규분포만의 성질임을 보인다.
+
+    t 통계량은 분자에 X-bar, 분모에 S 를 둔다. 둘이 독립이라야 그 비의
+    분포를 t 로 말할 수 있다. 정규모집단이 아니면 이 전제가 깨진다.
+    """
     rng = np.random.default_rng(seed)
     n = 20
 
-    # Normal
+    # 정규모집단: 상관이 0 이다. 게다가 정규에서는 무상관이 곧 독립이다.
     samp_n = rng.normal(5, sigma, (n_sim, n))
     xbar_n = samp_n.mean(axis=1)
     s2_n   = np.var(samp_n, axis=1, ddof=1)
     corr_n = np.corrcoef(xbar_n, s2_n)[0, 1]
 
-    # Exponential
+    # 지수모집단: 상관이 0 이 아니다. 평균이 큰 표본일수록 퍼짐도 크다.
     samp_e = rng.exponential(sigma, (n_sim, n))
     xbar_e = samp_e.mean(axis=1)
     s2_e   = np.var(samp_e, axis=1, ddof=1)
@@ -128,6 +155,8 @@ Normal:      Corr(X̄, S²) = 0.005076  (≈ 0)
 Exponential: Corr(X̄, S²) = 0.700128  (≠ 0)
 ```
 
+</div>
+
 !!! note "왜 중요한가"
     $\bar{X}$와 $S^2$의 독립성이 $t$-분포의 유도를 가능하게 한다. $t$-통계량 $T = \frac{\bar{X} - \mu}{S/\sqrt{n}}$은 (정규와 관련된) $\bar{X} - \mu$와 (카이제곱과 관련된) $S$의 비이다. 독립성이 이 비가 $t$-분포를 따르도록 보장한다.
 
@@ -143,10 +172,15 @@ $$c_4(n) = \sqrt{\frac{2}{n-1}} \cdot \frac{\Gamma(n/2)}{\Gamma((n-1)/2)}$$
 
 이때 $\sigma$의 불편추정량은 $S/c_4$이다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 표준편차의 편향과 보정상수
+
 ```python
 from scipy.special import gamma as gamma_func
 
 def std_deviation_bias(sigma=3.0, n_sim=200_000, seed=42):
+    """S^2 은 불편인데 S 는 왜 불편이 아닌지, 보정상수 c4 까지 확인한다."""
     rng = np.random.default_rng(seed)
     sample_sizes = [3, 5, 10, 20, 50, 100, 500]
 
@@ -175,6 +209,8 @@ n= 100  E[S]=2.9922  σ=3.0000  Bias=-0.0078  c₄=0.9975  E[S/c₄]=2.9998
 n= 500  E[S]=2.9987  σ=3.0000  Bias=-0.0013  c₄=nan  E[S/c₄]=nan
 ```
 
+</div>
+
 !!! warning "편향은 작은 표본에서 가장 크다"
     $n = 3$이면 $c_4 \approx 0.886$이므로 $E[S] \approx 0.886\sigma$ — 표준편차를 약 11% 과소추정한다. $n = 50$이면 편향이 0.5% 미만이다.
 
@@ -182,9 +218,16 @@ n= 500  E[S]=2.9987  σ=3.0000  Bias=-0.0013  c₄=nan  E[S/c₄]=nan
 
 소프트웨어 패키지마다 분산의 분모 기본값이 다르다:
 
+<div class="codebox" markdown>
+
+**예제 5.** 소프트웨어 기본값의 함정
+
 ```python
 import numpy as np
 
+# numpy 와 pandas 의 기본값이 서로 다르다는 것이 여기서 걸리는 지점이다.
+# np.var 는 ddof=0 (n으로 나눔), pandas 의 .var() 는 ddof=1 이 기본이다.
+# 같은 자료를 두 도구로 요약하면 다른 숫자가 나오는 흔한 함정이다.
 data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
 n = len(data)
 
@@ -199,6 +242,8 @@ np.var(data)          = 4.0000  <- divides by n=8  (BIASED)
 np.var(data, ddof=1)  = 4.5714  <- divides by n-1=7  (UNBIASED)
 ```
 
+</div>
+
 !!! danger "분모를 항상 확인하라"
     NumPy의 기본값은 `ddof=0`(편향)인 반면 R과 pandas의 기본값은 `ddof=1`(불편)이다. NumPy로 표본분산을 계산할 때는 항상 `ddof=1`을 명시하라.
 
@@ -206,10 +251,20 @@ np.var(data, ddof=1)  = 4.5714  <- divides by n-1=7  (UNBIASED)
 
 **추적오차**는 포트폴리오가 벤치마크를 얼마나 가깝게 따라가는지를 재며, 초과수익률(포트폴리오 수익률 - 벤치마크 수익률)의 표준편차로 정의된다. 짧은 이력으로 추적오차를 추정할 때 Bessel 수정이 중요해진다.
 
+<div class="codebox" markdown>
+
+**예제 6.** 금융 응용 — 추적오차
+
 ```python
 def tracking_error_estimation(seed=42):
+    """추적오차 추정에서 ddof 선택이 실제로 얼마나 차이를 내는지 본다.
+
+    추적오차는 펀드 수익률과 지수 수익률의 차이가 갖는 표준편차다. 3년치
+    월별 자료면 n=36 이라 두 분모의 차이가 눈에 띄는 크기로 남는다.
+    편향이 작은 쪽과 RMSE 가 작은 쪽이 갈리는 점도 함께 본다.
+    """
     rng = np.random.default_rng(seed)
-    n_months = 36
+    n_months = 36            # 3년치 월별 자료
     te_true_monthly = 0.01
     te_true_annual = te_true_monthly * np.sqrt(12)
     n_sim = 50_000
@@ -236,6 +291,8 @@ ddof=0     Mean=3.392%  Bias=-0.072%  RMSE=0.413%
 ddof=1     Mean=3.440%  Bias=-0.024%  RMSE=0.413%
 True TE: 3.464%
 ```
+
+</div>
 
 ## 해석
 
