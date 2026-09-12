@@ -20,9 +20,15 @@ N(0.35,\; 0.25^2) & \text{if } y_i = 0
 \end{cases}
 $$
 
+<div class="codebox" markdown>
+
+**예제 1.** 자료 만들기
+
 ```python
 import numpy as np
 
+# 양성 120, 음성 180 인 자료를 만든다. 두 집단의 점수 분포가 겹치므로
+# 어느 문턱값을 잡아도 오류가 생긴다 — 측도들이 갈리는 자리다.
 np.random.seed(42)
 n = 300
 y_true = np.concatenate([np.ones(120), np.zeros(180)])
@@ -32,6 +38,8 @@ scores = np.concatenate([
 ])
 scores = np.clip(scores, 0, 1)
 ```
+
+</div>
 
 ## 혼동행렬
 
@@ -43,9 +51,16 @@ scores = np.clip(scores, 0, 1)
 | **실제 음성** | TN | FP |
 | **실제 양성** | FN | TP |
 
+<div class="codebox" markdown>
+
+**예제 2.** 혼동행렬
+
 ```python
 def confusion_matrix(y_true, y_pred):
-    """Compute 2x2 confusion matrix [TN, FP; FN, TP]."""
+    """2x2 혼동행렬 [TN, FP; FN, TP] 을 구한다.
+
+    행이 실제, 열이 예측이다. 아래의 모든 측도가 이 네 칸에서 나온다.
+    """
     tp = np.sum((y_true == 1) & (y_pred == 1))
     tn = np.sum((y_true == 0) & (y_pred == 0))
     fp = np.sum((y_true == 0) & (y_pred == 1))
@@ -55,6 +70,8 @@ def confusion_matrix(y_true, y_pred):
 y_pred = (scores >= 0.5).astype(int)
 cm = confusion_matrix(y_true, y_pred)
 ```
+
+</div>
 
 $\tau = 0.5$에서 TN $= 129$, FP $= 51$, FN $= 30$, TP $= 90$이다.
 
@@ -77,9 +94,18 @@ $$
 \text{Accuracy} = \frac{\text{TP} + \text{TN}}{n}
 $$
 
+<div class="codebox" markdown>
+
+**예제 3.** 정밀도·재현율·F1
+
 ```python
 def precision_recall_f1(y_true, y_pred):
-    """Compute precision, recall, and F1 score."""
+    """정밀도, 재현율, F1 을 구한다.
+
+    정밀도는 "양성이라 한 것 중 맞은 비율", 재현율은 "실제 양성 중 잡아낸
+    비율"이다. 둘은 서로 맞바꿈 관계라, 문턱을 낮추면 재현율이 오르고
+    정밀도가 내린다. F1 은 그 둘의 조화평균이다.
+    """
     cm = confusion_matrix(y_true, y_pred)
     tn, fp, fn, tp = cm[0, 0], cm[0, 1], cm[1, 0], cm[1, 1]
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
@@ -91,6 +117,8 @@ def precision_recall_f1(y_true, y_pred):
 prec, rec, f1 = precision_recall_f1(y_true, y_pred)
 accuracy = np.mean(y_true == y_pred)
 ```
+
+</div>
 
 결과는 정확도 $0.7300$, 정밀도 $0.6383$, 재현율 $0.7500$, $F_1 = 0.6897$이다. 재현율이
 정밀도보다 높은 것은 문턱 $0.5$가 음성 분포의 중심($0.35$)보다 양성 분포의 중심($0.65$)에서
@@ -105,9 +133,17 @@ $$
 \text{FPR}(\tau) = \frac{\text{FP}(\tau)}{\text{FP}(\tau) + \text{TN}(\tau)}
 $$
 
+<div class="codebox" markdown>
+
+**예제 4.** ROC 곡선
+
 ```python
 def roc_curve(y_true, scores):
-    """Compute ROC curve (FPR, TPR) for varying thresholds."""
+    """문턱값을 바꿔 가며 ROC 곡선을 그린다.
+
+    문턱을 하나 정하는 대신 모든 문턱에서의 성적을 한 곡선에 담는다.
+    그래서 ROC 는 문턱 선택과 무관하게 모형의 순위 매기는 능력만 잰다.
+    """
     thresholds = np.sort(np.unique(scores))[::-1]
     fpr_list, tpr_list = [0.0], [0.0]
     n_pos = np.sum(y_true == 1)
@@ -124,6 +160,8 @@ def roc_curve(y_true, scores):
 
 fpr, tpr, thresholds = roc_curve(y_true, scores)
 ```
+
+</div>
 
 !!! warning "반환되는 배열의 길이가 다르다"
     `fpr_list`와 `tpr_list`는 $(0,0)$으로 시작하므로 `thresholds`보다 원소가 하나 많다. 이
@@ -150,9 +188,17 @@ $$
   \bigl(\text{FPR}_i - \text{FPR}_{i-1}\bigr)
 $$
 
+<div class="codebox" markdown>
+
+**예제 5.** AUC 계산
+
 ```python
 def auc_trapezoid(fpr, tpr):
-    """Compute AUC via the trapezoidal rule."""
+    """사다리꼴 공식으로 곡선 아래 넓이를 구한다.
+
+    AUC 는 "무작위로 고른 양성의 점수가 무작위로 고른 음성의 점수보다
+    높을 확률"과 정확히 같다. 0.5 면 동전 던지기, 1 이면 완벽하다.
+    """
     order = np.argsort(fpr)
     fpr_sorted = fpr[order]
     tpr_sorted = tpr[order]
@@ -167,6 +213,8 @@ print(f"AUC = {area:.4f}")
 ```
 AUC = 0.7935
 ```
+
+</div>
 
 이 구현은 AUC $= 0.7935$를 주는데, `sklearn.metrics.roc_auc_score`는 $0.7931$을 준다.
 
@@ -186,12 +234,16 @@ AUC = 0.7935
 2. 양성과 음성 범주의 **점수 분포**와 세로선으로 표시한 문턱
 3. AUC를 표기한 **ROC 곡선**
 
+<div class="codebox" markdown>
+
+**예제 6.** 세 그림으로 보기
+
 ```python
 import matplotlib.pyplot as plt
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
 
-# Confusion matrix heatmap
+# 왼쪽: 혼동행렬
 im = axes[0].imshow(cm, cmap='Blues', aspect='equal')
 axes[0].set_xticks([0, 1]); axes[0].set_yticks([0, 1])
 axes[0].set_xticklabels(['Neg', 'Pos'])
@@ -199,7 +251,8 @@ axes[0].set_yticklabels(['Neg', 'Pos'])
 axes[0].set_xlabel('Predicted'); axes[0].set_ylabel('Actual')
 axes[0].set_title('Confusion Matrix')
 
-# Score distributions
+# 가운데: 두 집단의 점수 분포. 겹치는 만큼이 오류가 되고, 붉은 세로선을
+# 좌우로 옮기는 것이 곧 문턱을 바꾸는 일이다.
 axes[1].hist(scores[y_true == 0], bins=25, alpha=0.6,
              label='Negative', edgecolor='k')
 axes[1].hist(scores[y_true == 1], bins=25, alpha=0.6,
@@ -208,7 +261,7 @@ axes[1].axvline(0.5, color='red', linestyle='--', label='Threshold')
 axes[1].set_xlabel('Predicted score'); axes[1].set_ylabel('Frequency')
 axes[1].set_title('Score Distributions'); axes[1].legend(fontsize=8)
 
-# ROC curve
+# 오른쪽: ROC 곡선. 왼쪽 위 모서리에 가까울수록 좋다.
 axes[2].plot(fpr, tpr, linewidth=2, label=f'AUC = {area:.3f}')
 axes[2].plot([0, 1], [0, 1], 'k--', alpha=0.4, label='Random')
 axes[2].set_xlabel('False Positive Rate')
@@ -218,6 +271,8 @@ axes[2].set_title('ROC Curve'); axes[2].legend(fontsize=9)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![혼동행렬·점수분포·ROC 곡선](./img/evaluation_metrics_183.png)
 

@@ -24,6 +24,10 @@
 아래 코드는 모두 같은 자료를 쓴다. 연체율이 약 19%인 대출자료를 만들고
 훈련·검증·검정으로 나눈다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 불균형 자료 만들기
+
 ```python
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -59,6 +63,8 @@ n = 4000, 연체율 = 0.191
 train 2250, val 750, test 1000
 ```
 
+</div>
+
 ## 전략 1: 가중을 통한 조정
 
 한 가지 접근은 학습 시 **소수 범주 오류의 비용(가중치)을 키우는** 것이다.
@@ -92,17 +98,21 @@ $$
 가중이 양성 예측 비율을 얼마나 끌어올리는지는 자료마다 다르지만 방향은 같다.
 아래 코드는 위 **설정**의 자료(연체율 19.1%)로 같은 현상을 확인한다.
 
-### 구현
-
 scikit-learn에서는 다음과 같다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 범주 가중값 주기
 
 ```python
 from sklearn.linear_model import LogisticRegression
 
-# Option 1: Automatic balance
+# 방법 1: 'balanced' 는 각 범주의 빈도에 반비례해 가중값을 자동으로 정한다.
 model = LogisticRegression(class_weight='balanced')
 
-# Option 2: Custom weights (1 = 연체이므로 소수 범주에 5.3배 가중)
+# 방법 2: 직접 정한다. 5.3 은 위 자동값과 비슷하게 맞춘 것이다.
+# 가중을 주면 모형이 소수 범주를 더 자주 예측하게 되는데, 이는 실은
+# 문턱값을 옮기는 것과 비슷한 일을 하는 셈이다.
 weights = [5.3 if yi == 1 else 1.0 for yi in y_train]
 model.fit(X_train, y_train, sample_weight=weights)
 
@@ -117,6 +127,8 @@ print("가중 적용 예측 연체율:", model.predict(X_val).mean().round(4))
 가중 없음 예측 연체율: 0.096
 가중 적용 예측 연체율: 0.776
 ```
+
+</div>
 
 **장점:**
 
@@ -185,11 +197,18 @@ Oversampled: 81,105 paid off + 81,105 default (via replication)
 
 ### 예: SMOTE를 적용한 대출 자료
 
+<div class="codebox" markdown>
+
+**예제 3.** SMOTE 로 늘리기
+
 ```python
 from imblearn.over_sampling import SMOTE
 
+# SMOTE 는 소수 범주의 관측값 사이를 이어 새 점을 만들어 채운다. 단순
+# 복제와 달리 같은 점이 겹치지 않는다는 것이 장점이다. 다만 만들어 낸
+# 점은 실제 관측이 아니므로, 반드시 훈련자료에만 적용해야 한다.
+# 검증·시험자료에 쓰면 성능이 부풀려진다.
 X_resampled, y_resampled = SMOTE(random_state=0).fit_resample(X_train, y_train)
-# Result: 50-50 split of defaults and paid-offs (synthetic defaults added)
 
 model = LogisticRegression()
 model.fit(X_resampled, y_resampled)
@@ -204,6 +223,8 @@ print(f"SMOTE 후: n = {len(y_resampled)}, 연체율 = {y_resampled.mean():.3f}"
 원자료:   n = 2250, 연체율 = 0.191
 SMOTE 후: n = 3642, 연체율 = 0.500
 ```
+
+</div>
 
 **장점:**
 
@@ -225,13 +246,18 @@ SMOTE 후: n = 3642, 연체율 = 0.500
 - **ADASYN:** 학습하기 어려운 소수 범주 사례에 더 많은 표본을 만든다
 - **SVMSMOTE:** SVM 결정경계를 이용해 합성 표본 생성을 유도한다
 
+<div class="codebox" markdown>
+
+**예제 4.** BorderlineSMOTE 와 ADASYN
+
 ```python
 from imblearn.over_sampling import BorderlineSMOTE, ADASYN
 
-# BorderlineSMOTE
+# BorderlineSMOTE 는 두 범주의 경계 가까이에 있는 점만 골라 늘린다.
+# 경계에서 먼 점은 어차피 쉽게 맞히므로 늘려도 보탬이 적다는 생각이다.
 X_bl, y_bl = BorderlineSMOTE(random_state=0).fit_resample(X_train, y_train)
 
-# ADASYN
+# ADASYN 은 분류하기 어려운 점일수록 더 많이 늘린다.
 X_ad, y_ad = ADASYN(random_state=0).fit_resample(X_train, y_train)
 
 print(f"BorderlineSMOTE: n = {len(y_bl)}, 연체율 = {y_bl.mean():.3f}")
@@ -244,6 +270,8 @@ print(f"ADASYN:          n = {len(y_ad)}, 연체율 = {y_ad.mean():.3f}")
 BorderlineSMOTE: n = 3642, 연체율 = 0.500
 ADASYN:          n = 3635, 연체율 = 0.499
 ```
+
+</div>
 
 ## 전략 4: 문턱 조정
 
@@ -293,23 +321,32 @@ ADASYN:          n = 3635, 연체율 = 0.499
    재표집을 고려한다. 그 경우에도 예측확률을 쓰기 전에 절편을 보정한다.
 5. **원래 불균형을 유지한 검정자료에서** 정밀도-재현율 곡선과 ROC 곡선으로 평가한다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 권장 절차 — 확률 추정과 비용 문턱
+
 ```python
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score, brier_score_loss, roc_curve
 
-# Step 1: fit on the original, imbalanced data
+# 여기부터가 이 절의 결론에 해당하는 절차다. 재표집이나 가중 없이
+# 원자료 그대로 적합한다. 불균형 자체는 확률 추정을 망가뜨리지 않는다.
 model = LogisticRegression().fit(X_train, y_train)
 
-# Step 2: check ranking and calibration on a validation set
+# 2단계: 순위 매기는 능력(AUC)과 확률의 보정 상태(Brier)를 따로 본다.
+# 불균형 자료에서 정확도는 뜻이 없다 — 전부 음성이라 해도 81%가 나온다.
 p_val = model.predict_proba(X_val)[:, 1]
 print("AUC  :", roc_auc_score(y_val, p_val))
 print("Brier:", brier_score_loss(y_val, p_val))
 
-# Step 3: choose the operating point from costs
+# 3단계: 문턱값은 통계가 아니라 비용이 정한다. 거짓양성 50, 거짓음성
+# 1000 이면 최적 문턱은 50/(50+1000) = 0.048 이다. 0.5 를 쓰는 관행에는
+# 두 오류의 비용이 같다는 가정이 숨어 있다.
 c_fp, c_fn = 50.0, 1000.0
 threshold = c_fp / (c_fp + c_fn)
 
-# Step 4: evaluate once on the test set
+# 4단계: 시험자료는 마지막에 딱 한 번만 쓴다. 여기서 결과를 보고 다시
+# 손대면 시험자료가 사실상 검증자료가 되어 버린다.
 y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
 ```
 
@@ -319,6 +356,8 @@ y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
 AUC  : 0.8369258418681812
 Brier: 0.111258445223284
 ```
+
+</div>
 
 ## 연습문제
 

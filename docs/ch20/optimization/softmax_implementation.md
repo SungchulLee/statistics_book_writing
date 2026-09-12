@@ -20,30 +20,36 @@ $$
 순진한 구현은 `np.exp(z)`를 그대로 계산하지만 로짓이 크면 넘친다. **로그-합-지수 기법**은
 소프트맥스의 평행이동 불변성을 이용해 지수화 전에 $\max_k z_k$를 뺀다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 수치적으로 안정한 소프트맥스
+
 ```python
 import numpy as np
 
 def softmax(z):
-    """Numerically stable softmax.
+    """수치적으로 안정한 소프트맥스.
 
-    Parameters
-    ----------
-    z : ndarray, shape (n, C)
-        Logit matrix — one row per observation.
-
-    Returns
-    -------
-    ndarray, shape (n, C)
-        Probability matrix with rows summing to 1.
+    가장 큰 값을 빼고 나서 exp 를 씌운다. 지수가 커지면 exp 가 넘쳐
+    inf 가 되는데, 모든 항에서 같은 값을 빼면 분자와 분모에서 약분되어
+    결과는 그대로이면서 넘침만 막을 수 있다.
     """
     z_shifted = z - np.max(z, axis=1, keepdims=True)
     exp_z = np.exp(z_shifted)
     return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 ```
 
+</div>
+
 로짓 벡터 $\mathbf{z} = (2, 1, -1)^\top$로 구현을 확인할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 로짓에서 확률로
+
 ```python
+# 로짓의 차이가 확률의 비를 정한다. 2 와 1 의 차이가 1 이므로 첫 확률이
+# 둘째의 e 배쯤 된다.
 z = np.array([[2.0, 1.0, -1.0]])
 print(softmax(z))
 # [[0.7054  0.2595  0.0351]]
@@ -54,6 +60,8 @@ print(softmax(z))
 ```
 [[0.70538451 0.25949646 0.03511903]]
 ```
+
+</div>
 
 ---
 
@@ -69,25 +77,28 @@ $$
 이다. $\mathbf{Y}$의 각 행이 원-핫이므로 참 범주에 해당하는 항만 살아남는다. 작은 상수
 $\varepsilon$이 $\log(0)$을 막는다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 교차엔트로피 손실
+
 ```python
 def cross_entropy_loss(Y, Y_hat, eps=1e-12):
-    """Average cross-entropy loss.
+    """평균 교차엔트로피 손실.
 
-    Parameters
-    ----------
-    Y : ndarray, shape (n, C)
-        One-hot label matrix.
-    Y_hat : ndarray, shape (n, C)
-        Predicted probability matrix.
+    원-핫 이름표를 곱하므로 실제로는 "참 범주에 준 확률의 로그"만 더해진다.
+    참 범주에 0 에 가까운 확률을 주면 손실이 무한대로 치솟는다.
+    eps 는 로그가 발산하는 것을 막는 안전장치다.
 
-    Returns
-    -------
-    float
-        Scalar loss value.
+    매개변수
+    --------
+    Y : (n, C) 원-핫 이름표 행렬
+    Y_hat : (n, C) 예측확률 행렬
     """
     n = Y.shape[0]
     return -np.sum(Y * np.log(Y_hat + eps)) / n
 ```
+
+</div>
 
 !!! warning "$\varepsilon$ 보정은 손실값만 보호한다"
     이 $\varepsilon$ 기법은 `nan`을 막아 주지만 목적함수를 미세하게 바꾼다. 확신에 찬 오답의
@@ -116,20 +127,17 @@ $$
 \frac{\partial J}{\partial \mathbf{b}} = \frac{1}{n} \sum_{i=1}^{n} (\hat{\mathbf{y}}_i - \mathbf{y}_i)
 $$
 
+<div class="codebox" markdown>
+
+**예제 4.** 기울기 계산
+
 ```python
 def compute_gradients(X, Y, Y_hat):
-    """Compute gradients of cross-entropy w.r.t. W and b.
+    """교차엔트로피의 W, b 에 대한 기울기.
 
-    Parameters
-    ----------
-    X : ndarray, shape (n, d)
-    Y : ndarray, shape (n, C)
-    Y_hat : ndarray, shape (n, C)
-
-    Returns
-    -------
-    dW : ndarray, shape (d, C)
-    db : ndarray, shape (C,)
+    소프트맥스와 교차엔트로피를 함께 쓰면 미분이 Y_hat - Y 라는 아주
+    간단한 꼴로 떨어진다. 로지스틱 회귀의 기울기와 같은 모양이며,
+    일반화선형모형 전체에서 되풀이되는 구조다.
     """
     n = X.shape[0]
     error = Y_hat - Y                   # (n, C)
@@ -138,6 +146,8 @@ def compute_gradients(X, Y, Y_hat):
     return dW, db
 ```
 
+</div>
+
 ---
 
 ## 원-핫 부호화
@@ -145,20 +155,16 @@ def compute_gradients(X, Y, Y_hat):
 훈련 이름표 $y_i \in \{0, 1, \ldots, C-1\}$을 원-핫 벡터로 바꿔야 한다. 이름표가 $y_i = k$이면
 원-핫 벡터는 위치 $k$에 1, 나머지에 0을 갖는다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 원-핫 변환
+
 ```python
 def one_hot(y, C):
-    """Convert integer labels to a one-hot matrix.
+    """정수 이름표를 원-핫 행렬로 바꾼다.
 
-    Parameters
-    ----------
-    y : ndarray, shape (n,)
-        Integer class labels in {0, ..., C-1}.
-    C : int
-        Number of classes.
-
-    Returns
-    -------
-    ndarray, shape (n, C)
+    범주에 매긴 번호를 그대로 쓰면 "2가 1보다 크다" 같은 뜻이 없는 순서가
+    생긴다. 원-핫은 그 순서를 지운다.
     """
     n = y.shape[0]
     Y = np.zeros((n, C))
@@ -166,18 +172,24 @@ def one_hot(y, C):
     return Y
 ```
 
+</div>
+
 ---
 
 ## 전부 합치기 --- 학습 루프
 
 이제 구성요소들을 모아 완전한 경사하강 학습 루프를 만든다.
 
+<div class="codebox" markdown>
+
+**예제 6.** 붓꽃 자료로 학습하기
+
 ```python
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-# --- Load and prepare data ---
+# --- 자료 준비 ---
 iris = load_iris()
 X, y = iris.data, iris.target
 C = len(np.unique(y))
@@ -185,6 +197,8 @@ C = len(np.unique(y))
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=42)
 
+# 표준화는 훈련자료로만 적합하고 시험자료에는 변환만 적용한다. 시험자료의
+# 평균과 표준편차까지 보고 맞추면 정보가 새어 들어간다.
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
@@ -192,20 +206,22 @@ X_test = scaler.transform(X_test)
 Y_train = one_hot(y_train, C)
 Y_test = one_hot(y_test, C)
 
-# --- Initialize parameters ---
+# --- 모수 초기화 ---
 d = X_train.shape[1]
 np.random.seed(0)
 W = np.random.randn(d, C) * 0.01
 b = np.zeros(C)
 
-# --- Training ---
+# --- 학습 ---
+# 전체 자료로 한 번에 기울기를 구하는 순수 경사하강법이다. 자료가 105건뿐이라
+# 묶음으로 나눌 까닭이 없다.
 lr = 0.5
 epochs = 200
 loss_history = []
 
 for epoch in range(epochs):
-    Z = X_train @ W + b                # logits: (n, C)
-    Y_hat = softmax(Z)                  # probabilities: (n, C)
+    Z = X_train @ W + b                 # 로짓 (n, C)
+    Y_hat = softmax(Z)                  # 확률 (n, C)
     loss = cross_entropy_loss(Y_train, Y_hat)
     loss_history.append(loss)
     dW, db = compute_gradients(X_train, Y_train, Y_hat)
@@ -221,6 +237,8 @@ print(f"Final training loss: {loss_history[-1]:.4f}")
 Final training loss: 0.1326
 ```
 
+</div>
+
 최종 훈련 손실은 $0.1326$이다.
 
 ---
@@ -229,7 +247,12 @@ Final training loss: 0.1326
 
 학습 후 검정자료에 대한 예측을 계산하고 정확도를 보고한다.
 
+<div class="codebox" markdown>
+
+**예제 7.** 시험 정확도
+
 ```python
+# 시험자료에서의 정확도. 가장 큰 확률을 가진 범주를 고른다.
 Z_test = X_test @ W + b
 Y_hat_test = softmax(Z_test)
 y_pred = np.argmax(Y_hat_test, axis=1)
@@ -243,6 +266,8 @@ print(f"Test accuracy: {accuracy:.4f}")
 Test accuracy: 1.0000
 ```
 
+</div>
+
 이 분할에서 검정 정확도는 $1.0000$이다. 검정자료가 45개뿐이고 붓꽃 자료의 세 품종이 잘
 분리되어 있어 완벽한 분류가 드물지 않다. 다만 45개에서의 $100\%$는 참 정확도가 $100\%$라는
 뜻이 아니다. 95% 신뢰구간(윌슨 구간)은 대략 $[92\%,\ 100\%]$로 여전히 넓다.
@@ -254,9 +279,14 @@ Test accuracy: 1.0000
 직접 만든 구현을 scikit-learn의 `LogisticRegression`(다범주 문제에서 소프트맥스를 사용)과
 비교하면 유용한 검산이 된다.
 
+<div class="codebox" markdown>
+
+**예제 8.** sklearn 과 맞춰 보기
+
 ```python
 from sklearn.linear_model import LogisticRegression
 
+# sklearn 과 맞춰 본다. 직접 구현한 것과 비슷하게 나오면 제대로 짠 것이다.
 clf = LogisticRegression(solver='lbfgs', max_iter=1000)
 clf.fit(X_train, y_train)
 print(f"scikit-learn accuracy: {clf.score(X_test, y_test):.4f}")
@@ -267,6 +297,8 @@ print(f"scikit-learn accuracy: {clf.score(X_test, y_test):.4f}")
 ```
 scikit-learn accuracy: 1.0000
 ```
+
+</div>
 
 scikit-learn도 $1.0000$을 내어 두 구현이 일치한다.
 

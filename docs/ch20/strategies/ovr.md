@@ -114,6 +114,10 @@ $$
 
 `sklearn.multiclass.OneVsRestClassifier` 래퍼는 어떤 이항 분류기에든 OvR을 적용한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 일대다 전략
+
 ```python
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
@@ -124,7 +128,9 @@ X, y = load_iris(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=0, stratify=y)
 
-# Explicit OVR with logistic regression
+# 일대다(OvR)는 범주마다 "이 범주인가 아닌가" 분류기를 하나씩 둔다.
+# 분류기가 C 개뿐이라 단순하지만, 각 분류기가 불균형 자료를 보게 되고
+# 서로 다른 분류기의 점수를 견줄 근거도 약하다는 점이 걸린다.
 model = OneVsRestClassifier(LogisticRegression(max_iter=1000))
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
@@ -139,6 +145,8 @@ print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
 이항 분류기 개수: 3
 검정 정확도: 0.9333
 ```
+
+</div>
 
 !!! warning "`LogisticRegression`의 기본값은 OvR이 아니다"
     `LogisticRegression`이 기본으로 OvR을 쓴다는 서술을 자주 보게 되지만, 이는 오래된

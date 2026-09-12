@@ -89,13 +89,24 @@ $$
 
 ### 모형 함수
 
+<div class="codebox" markdown>
+
+**예제 1.** 순전파와 역전파 구현
+
 ```python
 import numpy as np
 
+# 은닉층에는 로지스틱, 출력층에는 소프트맥스를 쓴다. 이범주의 로지스틱을
+# 여러 범주로 넓힌 것이 소프트맥스다.
 logistic = lambda z: 1 / (1 + np.exp(-z))
 softmax  = lambda z: np.exp(z) / np.sum(np.exp(z), axis=1, keepdims=True)
 
 def initialize_weights():
+    """784 → 100 → 10 구조의 가중값을 무작위로 초기화한다.
+
+    모두 0 으로 두면 안 된다. 같은 층의 뉴런들이 완전히 똑같이 움직여
+    서로 다른 것을 배울 수 없기 때문이다.
+    """
     w_h = np.random.randn(784, 100)
     b_h = np.random.randn(1, 100)
     w_o = np.random.randn(100, 10)
@@ -103,6 +114,7 @@ def initialize_weights():
     return w_h, b_h, w_o, b_o
 
 def feed_forward(x, y, y_cls, w_h, b_h, w_o, b_o):
+    """순전파. 입력에서 출력까지 한 번 흘려 손실과 정확도를 구한다."""
     z_h = x @ w_h + b_h
     h = logistic(z_h)
     z_o = h @ w_o + b_o
@@ -113,6 +125,12 @@ def feed_forward(x, y, y_cls, w_h, b_h, w_o, b_o):
     return h, y_hat, y_hat_cls, loss, accuracy
 
 def back_propagation(x, y, h, y_hat, w_o):
+    """역전파. 연쇄법칙을 출력에서 입력 쪽으로 거슬러 적용한다.
+
+    첫 줄의 y_hat - y 가 이 계산 전체의 출발점이다. 소프트맥스와
+    교차엔트로피를 함께 쓰면 미분이 이렇게 간단한 꼴로 떨어진다.
+    로지스틱 회귀의 기울기와 같은 모양이라는 점도 눈여겨볼 만하다.
+    """
     loss_grad = y_hat - y                           # n × 10
     w_o_grad  = h.T @ loss_grad                     # 100 × 10
     b_o_grad  = np.sum(loss_grad, axis=0, keepdims=True)  # 1 × 10
@@ -121,6 +139,8 @@ def back_propagation(x, y, h, y_hat, w_o):
     b_h_grad  = np.sum(h_grad, axis=0, keepdims=True)     # 1 × 100
     return w_h_grad, b_h_grad, w_o_grad, b_o_grad
 ```
+
+</div>
 
 !!! danger "이 코드에는 교육적 목적의 결함이 세 가지 있다"
     위 구현은 기울기 유도를 그대로 옮긴 것이라 읽기 쉽지만, 그대로 돌리기에는 문제가 있다.
@@ -135,10 +155,20 @@ def back_propagation(x, y, h, y_hat, w_o):
 
 ### 미니배치 학습 루프
 
+<div class="codebox" markdown>
+
+**예제 2.** 학습 반복문
+
 ```python
 def run_train_loop(x_train, y_train, y_train_cls,
                    w_h, b_h, w_o, b_o,
                    lr=1e-2, epochs=50, batch_size=100):
+    """묶음 경사하강법으로 학습한다.
+
+    세대마다 자료를 섞은 뒤 100개씩 잘라 기울기를 계산한다. 전체를 한 번에
+    쓰면 정확하지만 느리고, 하나씩 쓰면 빠르지만 요동친다. 묶음은 그 사이의
+    절충이다.
+    """
     loss_trace, accuracy_trace = [], []
     for epoch in range(epochs):
         idx = np.arange(x_train.shape[0])
@@ -170,13 +200,24 @@ def run_train_loop(x_train, y_train, y_train_cls,
     return w_h, b_h, w_o, b_o, loss_trace, accuracy_trace
 ```
 
+</div>
+
 ### 자료 적재
+
+<div class="codebox" markdown>
+
+**예제 3.** MNIST 자료 읽기
 
 ```python
 import numpy as np
 import torchvision
 
 def load_data():
+    """MNIST 를 (n, 784) 실수 배열과 원-핫 이름표로 돌려준다.
+
+    255 로 나눠 화소값을 0~1 로 맞춘다. 이 눈금 맞추기를 빠뜨리면 로지스틱의
+    입력이 너무 커져 기울기가 거의 0 이 되고, 학습이 멈춘다.
+    """
     """MNIST를 (n, 784) 실수 배열과 원-핫 이름표로 돌려준다."""
     tr = torchvision.datasets.MNIST(root='./data', train=True, download=True)
     te = torchvision.datasets.MNIST(root='./data', train=False, download=True)
@@ -202,13 +243,23 @@ print(x_train.shape, y_train.shape, x_test.shape)
 (60000, 784) (60000, 10) (10000, 784)
 ```
 
+</div>
+
 ## 경사하강의 시각화
 
 $L(x)=x^2$에 대한 경사하강을 간단히 시각화하면 다음과 같다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 경사하강법을 가장 단순한 함수에서
+
 ```python
 import matplotlib.pyplot as plt
 
+# 경사하강법이 무엇을 하는지 가장 단순한 함수에서 본다. L(x) = x^2 의
+# 기울기는 2x 이므로, 갱신식은 x ← x - lr*2x = (1 - 2*lr)x 가 된다.
+# lr 이 0.5 보다 크면 이 비가 -1 보다 작아져 발산한다 — 학습률이 크면
+# 왜 터지는지가 이 한 줄에 들어 있다.
 lr, x, steps = 0.1, 5.0, 20
 xs, losses = [x], [x * x]
 
@@ -227,6 +278,8 @@ plt.title('Gradient Descent on L(x) = x²')
 plt.grid(True)
 plt.show()
 ```
+
+</div>
 
 ![경사하강의 자취](./img/optimization_203.png)
 

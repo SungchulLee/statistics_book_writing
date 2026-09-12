@@ -67,15 +67,26 @@ $\tau\to\infty$이면 균등분포에 가까워진다. 온도 척도화는 모�
 
 ## NumPy 구현
 
+<div class="codebox" markdown>
+
+**예제 1.** 소프트맥스 구현
+
 ```python
 import numpy as np
 
 def softmax(z):
-    """Numerically stable softmax."""
+    """수치적으로 안정한 소프트맥스.
+
+    가장 큰 값을 빼고 나서 exp 를 씌운다. 지수가 커지면 exp 가 넘쳐
+    inf 가 되는데, 모든 항에서 같은 값을 빼면 분자와 분모에서 약분되어
+    결과는 그대로이면서 넘침만 막을 수 있다.
+    """
     z_shifted = z - np.max(z, axis=1, keepdims=True)
     exp_z = np.exp(z_shifted)
     return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 ```
+
+</div>
 
 `np.max`를 빼는 것은 평행이동 불변성 덕분에 결과를 바꾸지 않으면서 `np.exp`의 오버플로를 막는다.
 

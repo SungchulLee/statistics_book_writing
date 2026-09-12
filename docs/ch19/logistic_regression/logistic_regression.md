@@ -20,9 +20,15 @@ $$
 
 여기서 $x_i$는 $[1,10]$에서 균등하게 뽑은 공부 시간이고 $\varepsilon_i \sim N(0,1)$이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 자료 만들기
+
 ```python
 import numpy as np
 
+# 공부 시간이 합격 여부에 미치는 영향. 참 계수가 0.7 이므로, 한 시간마다
+# 로그오즈가 0.7 씩 오른다.
 np.random.seed(42)
 n = 300
 hours_studied = np.random.uniform(1, 10, n)
@@ -34,6 +40,8 @@ passed = np.random.binomial(1, prob)
 X = hours_studied.reshape(-1, 1)
 y = passed
 ```
+
+</div>
 
 !!! note "이 자료는 로지스틱 모형을 정확히 따르지 않는다"
     선형예측자에 $0.3\varepsilon_i$가 더해져 있으므로, $x$만 관측하는 분석자의 관점에서
@@ -50,6 +58,10 @@ $$
 \log\frac{P(Y=1\mid x)}{1-P(Y=1\mid x)} = \hat\beta_0 + \hat\beta_1\,x
 $$
 
+<div class="codebox" markdown>
+
+**예제 2.** sklearn 으로 적합
+
 ```python
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -58,6 +70,9 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=42
 )
 
+# sklearn 의 LogisticRegression 은 기본으로 L2 벌점이 걸려 있다(C=1.0).
+# 벌점 없는 순수 MLE 를 원하면 penalty=None 을 주어야 한다. 아래
+# statsmodels 결과와 계수가 조금 다른 까닭이 이것이다.
 model = LogisticRegression(random_state=42)
 model.fit(X_train, y_train)
 
@@ -79,6 +94,8 @@ Train accuracy: 0.805
 Test accuracy:  0.833
 ```
 
+</div>
+
 출력은 절편 $-2.9986$, 기울기 $0.7099$, 훈련 정확도 $0.805$, 검정 정확도 $0.833$이다.
 
 ## statsmodels로 추론하기
@@ -86,10 +103,15 @@ Test accuracy:  0.833
 statsmodels는 최대가능도 추정을 통해 표준오차, 왈드 검정, 신뢰구간을 제공한다(기본적으로 벌점을
 주지 않는다).
 
+<div class="codebox" markdown>
+
+**예제 3.** statsmodels 로 추론까지
+
 ```python
 import statsmodels.api as sm
 from scipy import stats
 
+# 추론이 목적이면 statsmodels 쪽이다. 표준오차·z 값·신뢰구간이 함께 나온다.
 X_sm = sm.add_constant(hours_studied)
 logit_model = sm.Logit(y, X_sm)
 result = logit_model.fit(disp=0)
@@ -127,6 +149,8 @@ x1             0.7572      0.083      9.130      0.000       0.595       0.920
 ==============================================================================
 ```
 
+</div>
+
 !!! warning "두 결과를 나란히 비교하기 전에"
     위 statsmodels 코드는 **전체 자료 300건**에 적합하지만 scikit-learn 코드는 **훈련자료
     210건**에만 적합했다. 계수가 다르게 나오는 것($-3.2519$ 대 $-2.9986$)은 알고리즘 차이가
@@ -151,9 +175,15 @@ $$
 
 공부 시간이 한 단위 늘면 합격 오즈에 $e^{\hat\beta_1}$이 곱해진다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 오즈비와 신뢰구간
+
 ```python
 import numpy as np
 
+# 계수에 exp 를 씌우면 오즈비가 된다. 로그오즈는 해석하기 어렵지만
+# 오즈비는 "한 단위 늘 때 오즈가 몇 배"로 읽을 수 있다.
 print("Odds Ratios:")
 print(np.exp(result.params))
 
@@ -171,6 +201,8 @@ Odds Ratios:
  [1.81241582 2.50870736]]
 ```
 
+</div>
+
 전체 자료 적합에서 $\hat\beta_1 = 0.7572$이므로 오즈비는 $e^{0.7572} = 2.1323$이고 95%
 신뢰구간은 $(1.8124,\ 2.5087)$이다. 즉 공부 시간 한 시간마다 합격 오즈가 약 두 배가 된다.
 구간이 1을 포함하지 않으므로 효과는 유의하다.
@@ -184,7 +216,12 @@ $$
 \;\sim\; \chi^2_1
 $$
 
+<div class="codebox" markdown>
+
+**예제 5.** 가능도비 검정
+
 ```python
+# 절편만 있는 모형과 견준다. 선형회귀의 F 검정에 해당하는 자리다.
 null_model = sm.Logit(y, sm.add_constant(np.ones(n))).fit(disp=0)
 lr_stat = -2 * (null_model.llf - result.llf)
 lr_pvalue = stats.chi2.sf(lr_stat, df=1)
@@ -196,6 +233,8 @@ print(f"Likelihood Ratio Test: chi2 = {lr_stat:.4f}, p = {lr_pvalue:.6f}")
 ```
 Likelihood Ratio Test: chi2 = 152.5683, p = 0.000000
 ```
+
+</div>
 
 결과는 $\Lambda = 152.57$, $p = 4.8 \times 10^{-35}$로 영가설을 압도적으로 기각한다.
 
@@ -219,11 +258,17 @@ $$
 F_1 = \frac{2\,\text{Precision}\cdot\text{Recall}}{\text{Precision}+\text{Recall}}
 $$
 
+<div class="codebox" markdown>
+
+**예제 6.** 혼동행렬과 네 측도
+
 ```python
 from sklearn.metrics import (confusion_matrix, classification_report,
                               accuracy_score, precision_score,
                               recall_score, f1_score)
 
+# 여기서부터는 문턱값 0.5 를 전제한 측도들이다. 문턱을 바꾸면 이 숫자들이
+# 모두 달라진다는 점을 아래 표에서 확인한다.
 cm = confusion_matrix(y_test, y_pred)
 print("Confusion Matrix:")
 print(cm)
@@ -256,6 +301,8 @@ F1 Score:  0.857
 weighted avg       0.83      0.83      0.83        90
 ```
 
+</div>
+
 검정자료 90건에서 TN $= 30$, FP $= 7$, FN $= 8$, TP $= 45$이고, 정확도 $0.833$,
 정밀도 $0.865$, 재현율 $0.849$, $F_1 = 0.857$이다.
 
@@ -267,9 +314,14 @@ $$
 \text{AUC} = \int_0^1 \text{TPR}\bigl(\text{FPR}\bigr)\,d(\text{FPR})
 $$
 
+<div class="codebox" markdown>
+
+**예제 7.** ROC 와 AUC
+
 ```python
 from sklearn.metrics import roc_curve, roc_auc_score
 
+# ROC 와 AUC 는 문턱값에 매이지 않는 측도다. 그래서 모형끼리 견줄 때 쓴다.
 fpr, tpr, thresholds = roc_curve(y_test, y_prob)
 auc = roc_auc_score(y_test, y_prob)
 print(f"AUC = {auc:.4f}")
@@ -280,6 +332,8 @@ print(f"AUC = {auc:.4f}")
 ```
 AUC = 0.9001
 ```
+
+</div>
 
 AUC $= 0.9001$로, 설명변수가 단 하나인 모형치고는 매우 좋은 판별력이다.
 
@@ -292,9 +346,16 @@ $$
 \text{AP} = \sum_{k} (R_k - R_{k-1})\,P_k
 $$
 
+<div class="codebox" markdown>
+
+**예제 8.** 정밀도-재현율 곡선
+
 ```python
 from sklearn.metrics import precision_recall_curve, average_precision_score
 
+# 정밀도-재현율 곡선은 양성이 드문 자료에서 ROC 보다 낫다. ROC 의 FPR 은
+# 분모가 음성 수라, 음성이 압도적으로 많으면 거짓양성이 늘어도 거의
+# 움직이지 않기 때문이다.
 precision, recall, pr_thresholds = precision_recall_curve(y_test, y_prob)
 ap = average_precision_score(y_test, y_prob)
 print(f"Average Precision = {ap:.4f}")
@@ -306,6 +367,8 @@ print(f"Average Precision = {ap:.4f}")
 Average Precision = 0.9272
 ```
 
+</div>
+
 AP $= 0.9272$이다. 이 자료는 검정자료의 양성 비율이 $53/90 = 0.589$로 오히려 양성이 다수이므로,
 AP의 무작위 기준선도 $0.589$로 높다는 점을 함께 보아야 한다.
 
@@ -314,7 +377,12 @@ AP의 무작위 기준선도 $0.589$로 높다는 점을 함께 보아야 한다
 기본 문턱 $\tau = 0.5$가 항상 최적인 것은 아니다. **유든의 J 통계량**은
 $J = \text{TPR} - \text{FPR}$를 최대화하는 문턱을 고른다.
 
+<div class="codebox" markdown>
+
+**예제 9.** Youden의 J로 문턱 고르기
+
 ```python
+# Youden 의 J 로 문턱을 고른다. 두 오류의 비용이 같다고 볼 때의 선택이다.
 j_scores = tpr - fpr
 optimal_idx = np.argmax(j_scores)
 optimal_threshold = thresholds[optimal_idx]
@@ -329,11 +397,19 @@ Optimal threshold (Youden's J): 0.716
   TPR = 0.811, FPR = 0.054
 ```
 
+</div>
+
 유든의 J가 고른 문턱은 $0.716$이고 그때 TPR $= 0.811$, FPR $= 0.054$다.
 
 아래 코드는 문턱에 따라 정확도, 정밀도, 재현율, $F_1$이 어떻게 변하는지 보여준다.
 
+<div class="codebox" markdown>
+
+**예제 10.** 문턱값에 따른 측도 변화
+
 ```python
+# 문턱을 바꿔 가며 네 측도가 어떻게 움직이는지 한 표로 본다.
+# 정확도는 거의 그대로인데 정밀도와 재현율이 반대로 움직인다.
 for threshold in [0.3, 0.4, 0.5, 0.6, 0.7]:
     y_pred_t = (y_prob >= threshold).astype(int)
     acc = accuracy_score(y_test, y_pred_t)
@@ -353,6 +429,8 @@ tau=0.5  Acc=0.833  Prec=0.865  Rec=0.849  F1=0.857
 tau=0.6  Acc=0.844  Prec=0.898  Rec=0.830  F1=0.863
 tau=0.7  Acc=0.856  Prec=0.935  Rec=0.811  F1=0.869
 ```
+
+</div>
 
 | $\tau$ | 정확도 | 정밀도 | 재현율 | $F_1$ |
 |---|---|---|---|---|

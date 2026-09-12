@@ -91,6 +91,10 @@ $$
 
 ## 파이썬 예제
 
+<div class="codebox" markdown>
+
+**예제 1.** Wald 검정과 가능도비 검정
+
 ```python
 import numpy as np
 import statsmodels.api as sm
@@ -103,7 +107,7 @@ X = rng.normal(0, 1, size=(n, 3))
 logit = -0.5 + 1.2 * X[:, 0] - 0.8 * X[:, 1] + 0.0 * X[:, 2]
 y = (rng.random(n) < 1 / (1 + np.exp(-logit))).astype(int)
 
-# Fit full model
+# 전체 모형을 적합한다. 세 번째 계수는 참으로 0 이다.
 X_full = sm.add_constant(X)
 model_full = sm.Logit(y, X_full).fit(disp=0)
 
@@ -119,13 +123,19 @@ def print_summary(res):
     print("\n".join(lines))
 
 
-print_summary(model_full)  # Wald z-statistics shown by default
+# statsmodels 의 출력표는 기본으로 Wald 검정을 보여 준다. 계수를 그
+# 표준오차로 나눈 값이다.
+print_summary(model_full)
 
-# LRT: compare full vs restricted (drop last feature)
+# 가능도비 검정은 변수를 뺀 모형과 넣은 모형의 로그가능도를 견준다.
+# Wald 는 한 모형만 적합하면 되지만, 가능도비는 두 번 적합해야 한다.
+# 대신 표본이 작거나 계수가 클 때 가능도비 쪽이 더 믿을 만하다.
 model_restricted = sm.Logit(y, X_full[:, :-1]).fit(disp=0)
 lr_stat = -2 * (model_restricted.llf - model_full.llf)
 p_value = stats.chi2.sf(lr_stat, df=1)
 
+# z^2 과 가능도비 통계량이 비슷하게 나오는지 본다. 표본이 크면 둘이
+# 같은 값으로 다가간다(점근적으로 동등하다).
 wald_z = model_full.tvalues[-1]
 print(f"Wald z = {wald_z:.4f}, z^2 = {wald_z**2:.4f}, p = {model_full.pvalues[-1]:.4f}")
 print(f"LRT  = {lr_stat:.4f}, p = {p_value:.4f}")
@@ -154,6 +164,8 @@ x3            -0.1287      0.103     -1.249      0.212      -0.331       0.073
 Wald z = -1.2493, z^2 = 1.5608, p = 0.2115
 LRT  = 1.5719, p = 0.2099
 ```
+
+</div>
 
 
 ## 연습문제

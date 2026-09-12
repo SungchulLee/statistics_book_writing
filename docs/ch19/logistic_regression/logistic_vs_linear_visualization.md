@@ -17,10 +17,15 @@ $$
 P(\text{Default} = 1 \mid \text{Balance}) = \frac{1}{1 + \exp\!\bigl(-({\text{Balance}} - 1250)/300\bigr)}
 $$
 
+<div class="codebox" markdown>
+
+**예제 1.** 자료 만들기
+
 ```python
 import numpy as np
 from sklearn.linear_model import LinearRegression, LogisticRegression
 
+# 카드 잔액이 커질수록 연체 확률이 오르는 자료. 참 관계가 S 자 곡선이다.
 np.random.seed(42)
 n_samples = 300
 balance = np.random.uniform(0, 2500, n_samples)
@@ -32,6 +37,8 @@ X = balance.reshape(-1, 1)
 y = default
 X_test = np.linspace(balance.min(), balance.max(), 300).reshape(-1, 1)
 ```
+
+</div>
 
 참 계수는 기울기 $1/300 = 0.003333$, 절편 $-1250/300 = -4.1667$이다.
 
@@ -46,7 +53,13 @@ $$
 를 최소제곱으로 적합한다. 직선은 무한히 뻗어 나가므로, Balance가 충분히 크거나 작으면 예측값이
 필연적으로 $[0,1]$ 밖으로 나간다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 선형회귀로 맞추면
+
 ```python
+# 0/1 반응에 선형회귀를 씌우면 예측값이 0 아래나 1 위로 나간다.
+# 확률이라 부를 수 없는 값이 나오는 것이다.
 linear_model = LinearRegression()
 linear_model.fit(X, y)
 y_pred_linear = linear_model.predict(X_test)
@@ -60,6 +73,8 @@ print(f"Linear predictions range: "
 ```
 Linear predictions range: [-0.102, 1.107]
 ```
+
+</div>
 
 적합 결과는 $\hat{y} = -0.1079 + 0.000491 \cdot \text{Balance}$이고, 예측 범위는
 $[-0.102,\ 1.107]$이다. 즉 관측된 잔액 범위 안에서도 예측값이 음수가 되거나 1을 넘는다.
@@ -75,7 +90,12 @@ $$
 
 이렇게 하면 어떤 입력에 대해서도 $\hat{p} \in (0,1)$이 보장된다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 로지스틱으로 맞추면
+
 ```python
+# 로지스틱은 시그모이드를 거치므로 예측값이 언제나 (0, 1) 안에 머문다.
 logistic_model = LogisticRegression(solver='lbfgs')
 logistic_model.fit(X, y)
 y_pred_logistic = logistic_model.predict_proba(X_test)[:, 1]
@@ -90,6 +110,8 @@ print(f"Logistic predictions range: "
 Logistic predictions range: [0.019, 0.981]
 ```
 
+</div>
+
 적합 결과는 $\hat\beta_0 = -3.9790$, $\hat\beta_1 = 0.003212$로 참값
 $(-4.1667,\ 0.003333)$에 가깝고, 예측 범위는 $[0.019,\ 0.981]$로 안전하게 $(0,1)$ 안에 있다.
 
@@ -102,12 +124,16 @@ $(-4.1667,\ 0.003333)$에 가깝고, 예측 범위는 $[0.019,\ 0.981]$로 안�
 
 ## 나란히 시각화하기
 
+<div class="codebox" markdown>
+
+**예제 4.** 두 결과를 나란히 그리기
+
 ```python
 import matplotlib.pyplot as plt
 
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-# Left panel: Linear regression
+# 왼쪽: 선형회귀. 직선이 0 과 1 을 그은 점선을 넘어가는 것을 본다.
 axes[0].scatter(X[y == 0], y[y == 0], alpha=0.6, s=30,
                 color='steelblue', label='No Default (y=0)')
 axes[0].scatter(X[y == 1], y[y == 1], alpha=0.6, s=30,
@@ -121,7 +147,8 @@ axes[0].set_ylabel('Predicted Probability')
 axes[0].set_title('Linear Regression on Binary Data')
 axes[0].legend(); axes[0].set_ylim(-0.5, 1.5)
 
-# Right panel: Logistic regression
+# 오른쪽: 로지스틱. 곡선이 0 과 1 사이에 갇혀 있고, 자료가 만들어진
+# 참 관계와도 모양이 맞는다.
 axes[1].scatter(X[y == 0], y[y == 0], alpha=0.6, s=30,
                 color='steelblue', label='No Default (y=0)')
 axes[1].scatter(X[y == 1], y[y == 1], alpha=0.6, s=30,
@@ -139,6 +166,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![이항 자료에 대한 선형회귀와 로지스틱 회귀](./img/logistic_vs_linear_visualization_93.png)
 
 ## 오즈비 해석
@@ -150,7 +179,13 @@ $$
 \text{Odds Ratio} = e^{\hat\beta_1}
 $$
 
+<div class="codebox" markdown>
+
+**예제 5.** 오즈비로 읽기
+
 ```python
+# 계수가 아주 작으므로 1 달러당 오즈비는 1 에 가깝다. 이럴 때는 단위를
+# 바꿔 100 달러당으로 읽는 편이 뜻이 잘 통한다.
 odds_ratio = np.exp(logistic_model.coef_[0][0])
 print(f"Odds ratio per $1 increase: {odds_ratio:.4f}")
 print(f"Percentage increase in odds per $100: "
@@ -163,6 +198,8 @@ print(f"Percentage increase in odds per $100: "
 Odds ratio per $1 increase: 1.0032
 Percentage increase in odds per $100: 37.88%
 ```
+
+</div>
 
 \$1당 오즈비는 $1.0032$로 거의 1에 가까워 실감이 나지 않는다. \$100 단위로 보면 오즈가
 $37.88\%$ 증가한다. **오즈비는 설명변수의 단위에 의존하므로, 의미 있는 크기의 단위로 바꾸어

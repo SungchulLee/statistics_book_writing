@@ -81,13 +81,21 @@ $$
 **시나리오 B(다른 공분산):** 범주 0은 $\boldsymbol\Sigma_0 = \begin{pmatrix} 1 & 0 \\ 0 & 0.3 \end{pmatrix}$,
 범주 1은 $\boldsymbol\Sigma_1 = \begin{pmatrix} 0.3 & 0 \\ 0 & 2 \end{pmatrix}$를 갖는다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 두 가지 자료 만들기
+
 ```python
 import numpy as np
 
 np.random.seed(42)
 
 def generate_shared_cov(n_per_class=200):
-    """Two classes with the SAME covariance."""
+    """공분산이 같은 두 범주.
+
+    LDA 의 가정이 정확히 맞는 상황이다. 이때는 LDA 가 QDA 보다 낫다 —
+    추정할 모수가 적어 분산이 작기 때문이다.
+    """
     cov = [[1.0, 0.5], [0.5, 1.0]]
     X0 = np.random.multivariate_normal([0, 0], cov, n_per_class)
     X1 = np.random.multivariate_normal([2, 1.5], cov, n_per_class)
@@ -96,7 +104,11 @@ def generate_shared_cov(n_per_class=200):
     return X, y
 
 def generate_diff_cov(n_per_class=200):
-    """Two classes with DIFFERENT covariances."""
+    """공분산이 다른 두 범주.
+
+    LDA 의 가정이 깨진다. 경계가 직선이어야 할 까닭이 없으므로, 곡선
+    경계를 그릴 수 있는 QDA 가 유리해진다.
+    """
     cov0 = [[1.0, 0.0], [0.0, 0.3]]
     cov1 = [[0.3, 0.0], [0.0, 2.0]]
     X0 = np.random.multivariate_normal([0, 0], cov0, n_per_class)
@@ -105,6 +117,8 @@ def generate_diff_cov(n_per_class=200):
     y = np.array([0] * n_per_class + [1] * n_per_class)
     return X, y
 ```
+
+</div>
 
 !!! warning "난수 씨앗이 함수 밖에 있다"
     `np.random.seed(42)`는 모듈 수준에서 한 번만 호출되고 생성 함수 안에는 없다. 따라서 두
@@ -115,6 +129,10 @@ def generate_diff_cov(n_per_class=200):
 
 ## 분류기 적합과 비교
 
+<div class="codebox" markdown>
+
+**예제 2.** 네 분류기의 교차검증 정확도
+
 ```python
 from sklearn.discriminant_analysis import (
     LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis,
@@ -123,6 +141,9 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
+# 네 분류기를 같은 자료에 돌린다. 앞의 셋은 생성모형(각 범주의 분포를
+# 모형화한 뒤 베이즈 정리로 뒤집는다)이고, 로지스틱 회귀만 판별모형
+# (경계를 바로 추정한다)이다.
 classifiers = {
     "LDA": LinearDiscriminantAnalysis(),
     "QDA": QuadraticDiscriminantAnalysis(),
@@ -158,6 +179,8 @@ for scenario_name, (X, y) in [
   Logistic Reg   : 10-fold CV accuracy = 0.8600
 ```
 
+</div>
+
 실행 결과는 다음과 같다.
 
 | 분류기 | 시나리오 A(공유 공분산) | 시나리오 B(다른 공분산) |
@@ -169,12 +192,20 @@ for scenario_name, (X, y) in [
 
 ## 결정경계 시각화
 
+<div class="codebox" markdown>
+
+**예제 3.** 결정경계 그리기
+
 ```python
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
 def plot_decision_boundary(ax, clf, X, y, title):
-    """Plot 2D decision boundary with scatter overlay."""
+    """결정경계를 격자로 칠하고 그 위에 자료를 흩뿌린다.
+
+    LDA 는 직선, QDA 는 곡선 경계를 그린다. 나이브 베이즈는 변수 사이의
+    상관을 아예 없다고 보므로 축에 나란한 모양이 나온다.
+    """
     h = 0.05
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
@@ -211,6 +242,8 @@ plt.suptitle("Generative Classifiers: Decision Boundaries", fontsize=13)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![생성적 분류기의 결정경계](./img/lda_qda_classification_156.png)
 

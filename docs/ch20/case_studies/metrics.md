@@ -40,12 +40,17 @@ $C\times C$ 혼동행렬 $M$의 원소 $M_{jk}$는 참 범주가 $j$이고 예�
 
 ## scikit-learn으로 구현하기
 
+<div class="codebox" markdown>
+
+**예제 1.** 손글씨 숫자 분류와 혼동행렬
+
 ```python
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, classification_report
 
+# 8x8 손글씨 숫자 자료. 범주가 열 개인 다범주 분류 문제다.
 digits = load_digits()
 x_train, x_test, y_train, y_test = train_test_split(
     digits.data, digits.target, test_size=0.2, random_state=1)
@@ -55,6 +60,8 @@ model.fit(x_train, y_train)
 print(f"Test accuracy: {model.score(x_test, y_test):.4f}")
 
 y_pred = model.predict(x_test)
+# 열 범주이므로 혼동행렬이 10x10 이 된다. 대각선이 맞힌 것이고, 대각선을
+# 벗어난 칸이 어느 숫자를 어느 숫자로 헷갈렸는지 말해 준다.
 cm = confusion_matrix(y_test, y_pred)
 print(cm)
 print(classification_report(y_test, y_pred))
@@ -92,6 +99,8 @@ Test accuracy: 0.9722
 weighted avg       0.97      0.97      0.97       360
 ```
 
+</div>
+
 검정 정확도는 $0.9722$다. 혼동행렬을 보면 오류가 매우 드물게 흩어져 있고, 가장 흔한 오류는
 8을 5로 예측한 2건, 그다음이 각각 1건인 $0 \to 4$, $1 \to 4$, $3 \to 8$, $5 \to 1$ 등이다.
 
@@ -105,6 +114,10 @@ weighted avg       0.97      0.97      0.97       360
 
 잘못 분류된 이미지를 살펴보면 모형의 한계를 이해하고 특성공학이나 구조 개선의 방향을 잡을 수
 있다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 틀린 예측 들여다보기
 
 ```python
 import numpy as np
@@ -134,6 +147,8 @@ draw_10_wrong_preds(x_test, y_test, y_pred, shape=(8, 8))
 틀린 예측 10건 / 360건
 ```
 
+</div>
+
 ![잘못 분류된 숫자 이미지](./img/metrics_109.png)
 
 !!! warning "이 함수는 MNIST 전용이며 두 가지 결함이 있다"
@@ -147,8 +162,17 @@ draw_10_wrong_preds(x_test, y_test, y_pred, shape=(8, 8))
 
 ## 학습 곡선 그리기
 
+<div class="codebox" markdown>
+
+**예제 3.** 손실과 정확도 곡선
+
 ```python
 def draw_loss_and_accuracy(loss_trace, accuracy_trace):
+    """세대마다의 손실과 정확도를 나란히 그린다.
+
+    손실은 내려가고 정확도는 올라가야 한다. 손실이 내려가는데 정확도가
+    따라 오르지 않으면 자료가 한쪽으로 치우쳤는지 살펴볼 일이다.
+    """
     _, (ax0, ax1) = plt.subplots(1, 2, figsize=(12, 3))
     for ax, trace, title in zip(
             (ax0, ax1), (loss_trace, accuracy_trace), ("Loss", "Accuracy")):
@@ -157,6 +181,8 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
     plt.tight_layout()
     plt.show()
 ```
+
+</div>
 
 ## 연습문제
 

@@ -120,11 +120,20 @@ IRLS는 보통 적은 반복으로 수렴하며, 많은 고전적 로지스틱 �
 
 ### 자료 적재
 
+<div class="codebox" markdown>
+
+**예제 1.** 자료 읽기
+
 ```python
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 def load_data(seed=1):
+    """보험 가입 여부 자료를 읽어 훈련·시험으로 나눈다.
+
+    설명변수는 나이 하나, 반응은 가입 여부(0/1)다. 자료가 27건뿐이라
+    절반씩 나눈다.
+    """
     url = ('https://raw.githubusercontent.com/codebasics/py/'
            'master/ML/7_logistic_reg/insurance_data.csv')
     df = pd.read_csv(url)
@@ -135,12 +144,24 @@ def load_data(seed=1):
     return x_train, x_test, y_train, y_test
 ```
 
+</div>
+
 ### 모형 클래스
+
+<div class="codebox" markdown>
+
+**예제 2.** 로지스틱 회귀 직접 구현
 
 ```python
 import numpy as np
 
 class LogisticRegression:
+    """경사하강법으로 로지스틱 회귀를 직접 구현한다.
+
+    최대가능도 추정이 무엇을 하는 일인지 보이려고 풀어 쓴 것이다. 선형회귀와
+    달리 닫힌 해가 없어 수치적으로 찾아야 한다.
+    """
+
     def __init__(self, x, y, lr=2e-4, epochs=100_000, theta=None):
         self.x = x
         self.y = y
@@ -151,11 +172,13 @@ class LogisticRegression:
 
     @staticmethod
     def design_matrix(x):
+        """1 로 채운 열을 앞에 붙여 절편을 만든다."""
         ones = np.ones((x.shape[0], 1))
         return np.concatenate((ones, x), axis=1)
 
     @staticmethod
     def sigmoid(z):
+        """실수 전체를 (0, 1) 로 눌러 담는다. 확률로 읽을 수 있게 하는 장치다."""
         return 1 / (1 + np.exp(-z))
 
     def predict_proba(self, x):
@@ -168,12 +191,22 @@ class LogisticRegression:
         return (p > 0.5).astype(float)
 
     def loss(self):
+        """음의 로그가능도(교차엔트로피). 이것을 최소화하는 것이 곧 MLE 다.
+
+        eps 를 더하는 것은 p 가 정확히 0 이나 1 이 될 때 로그가 발산하는 것을
+        막기 위함이다.
+        """
         p = self.predict_proba(self.x)
         eps = 1e-6
         return -np.mean(
             self.y * np.log(p + eps) + (1 - self.y) * np.log(1 - p + eps))
 
     def gradient(self):
+        """기울기. 놀랍게도 선형회귀와 똑같은 꼴인 X'(p - y) 로 나온다.
+
+        시그모이드의 미분과 로그가능도의 미분이 서로 약분되면서 이렇게 된다.
+        일반화선형모형 전체에서 되풀이되는 구조다.
+        """
         A = self.design_matrix(self.x)
         p = self.predict_proba(self.x).reshape((-1, 1))
         y = self.y.reshape((-1, 1))
@@ -184,9 +217,16 @@ class LogisticRegression:
             self.theta -= self.lr * self.gradient()
 ```
 
+</div>
+
 ### 학습
 
+<div class="codebox" markdown>
+
+**예제 3.** 직접 구현으로 적합하기
+
 ```python
+# 직접 구현한 모형으로 적합한다. 학습률이 작고 반복이 10만 번이라 시간이 걸린다.
 x_train, x_test, y_train, y_test = load_data()
 
 model = LogisticRegression(x_train, y_train)
@@ -196,11 +236,19 @@ y_pred = model.predict(x_test)
 y_prob = model.predict_proba(x_test)
 ```
 
+</div>
+
 ## 구현: scikit-learn으로 하는 로지스틱 회귀
 
 비교를 위해 같은 작업을 `sklearn`으로 하면 다음과 같다.
 
+<div class="codebox" markdown>
+
+**예제 4.** sklearn 으로 같은 일 하기
+
 ```python
+# 같은 일을 sklearn 으로 하면 세 줄이면 된다. lbfgs 는 기울기뿐 아니라
+# 곡률까지 어림해 쓰므로 경사하강법보다 훨씬 빨리 수렴한다.
 from sklearn.linear_model import LogisticRegression
 
 model = LogisticRegression(solver='lbfgs')
@@ -209,6 +257,8 @@ model.fit(x_train, y_train)
 y_pred = model.predict(x_test)
 y_prob = model.predict_proba(x_test)[:, 1]
 ```
+
+</div>
 
 scikit-learn의 `LogisticRegression`은 기본적으로 L-BFGS(준뉴턴법)를 쓰는데, 헤세행렬을 명시적으로
 만들거나 역행렬을 구하지 않고 근사한다. 자료가 작을 때는 `solver='newton-cg'` 옵션이 정확한

@@ -39,10 +39,16 @@ $$
 
 이다. L2 벌점은 모든 계수를 0 쪽으로 축소하지만 어느 것도 정확히 0으로 만들지 않는다.
 
+<div class="codebox" markdown>
+
+**예제 1.** L2 벌점 로지스틱
+
 ```python
 from sklearn.linear_model import LogisticRegression
 import numpy as np
 
+# 변수 20개 중 참으로 쓰이는 것은 앞의 다섯뿐이다. 세 벌점이 이 다섯을
+# 어떻게 다루는지 견준다.
 np.random.seed(42)
 n, p = 200, 20
 X = np.random.randn(n, p)
@@ -52,6 +58,8 @@ logit = X @ true_beta
 prob = 1 / (1 + np.exp(-logit))
 y = np.random.binomial(1, prob)
 
+# sklearn 에서 C 는 벌점의 역수다. C 가 작을수록 벌점이 세다 —
+# 다른 책의 lambda 와 방향이 반대이니 헷갈리기 쉽다.
 ridge_model = LogisticRegression(penalty='l2', C=1.0, solver='lbfgs',
                                   max_iter=1000)
 ridge_model.fit(X, y)
@@ -64,6 +72,8 @@ print("Ridge coefficients:", np.round(ridge_model.coef_[0], 3))
 Ridge coefficients: [ 1.346 -1.162  0.955 -0.593 -0.031 -0.187 -0.009 -0.243  0.359  0.041
  -0.176  0.021  0.069  0.145  0.398  0.04   0.047  0.095 -0.046 -0.166]
 ```
+
+</div>
 
 앞 다섯 개 계수는 $(1.346,\ -1.162,\ 0.955,\ -0.593,\ -0.031)$이다. 참값
 $(1.5, -1.0, 0.8, -0.5, 0.3)$과 비교하면 강한 신호 네 개는 잘 잡아냈지만 가장 약한 신호
@@ -82,7 +92,13 @@ $$
 L1 벌점은 **희소성**을 유도한다. 충분히 작은 계수는 정확히 0으로 밀려나 자동으로 변수선택이
 이루어진다.
 
+<div class="codebox" markdown>
+
+**예제 2.** L1 벌점 로지스틱
+
 ```python
+# L1 벌점은 lbfgs 로 풀 수 없다. 0 에서 미분이 되지 않기 때문이며,
+# 그래서 saga 같은 다른 풀이기를 써야 한다.
 lasso_model = LogisticRegression(penalty='l1', C=1.0, solver='saga',
                                   max_iter=5000)
 lasso_model.fit(X, y)
@@ -97,6 +113,8 @@ Lasso coefficients: [ 1.34  -1.146  0.94  -0.579  0.    -0.158  0.    -0.211  0.
  -0.134  0.     0.023  0.092  0.37   0.006  0.007  0.055 -0.003 -0.127]
 Non-zero coefficients: 17 / 20
 ```
+
+</div>
 
 앞 다섯 개는 $(1.340,\ -1.146,\ 0.940,\ -0.579,\ 0)$으로, 가장 약한 신호가 정확히 0이 되었다.
 전체로는 20개 중 **17개**가 0이 아니다. 즉 $C = 1.0$에서는 아직 벌점이 약해 잡음변수 대부분이
@@ -115,7 +133,12 @@ $\alpha = 0$이면 능형, $\alpha = 1$이면 라쏘가 된다. 상관된 특성
 단독이라면 각 집단에서 하나만 고르지만, L2 성분이 상관된 설명변수들끼리 가중치를 나누어 갖도록
 유도하기 때문이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 엘라스틱넷 로지스틱
+
 ```python
+# 엘라스틱넷은 l1_ratio 로 두 벌점의 배합비를 정한다. 0.5 면 절반씩이다.
 enet_model = LogisticRegression(penalty='elasticnet', C=1.0,
                                  solver='saga', l1_ratio=0.5,
                                  max_iter=5000)
@@ -130,6 +153,8 @@ Elastic Net coefficients: [ 1.342 -1.153  0.947 -0.585 -0.012 -0.172  0.    -0.2
  -0.154  0.006  0.046  0.118  0.385  0.022  0.027  0.074 -0.026 -0.146]
 ```
 
+</div>
+
 앞 다섯 개는 $(1.342,\ -1.153,\ 0.947,\ -0.585,\ -0.012)$이고 0이 아닌 계수는 19개다. 예상대로
 능형(20개)과 라쏘(17개) 사이에 놓인다.
 
@@ -138,9 +163,15 @@ Elastic Net coefficients: [ 1.342 -1.153  0.947 -0.585 -0.012 -0.172  0.    -0.2
 $C$가 커지면(정칙화가 약해지면) 추정치가 벌점 없는 MLE에 가까워지고, $C$가 작아지면
 (정칙화가 강해지면) 계수가 0 쪽으로 축소된다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 계수 경로 그리기
+
 ```python
 import matplotlib.pyplot as plt
 
+# C 를 키우며 계수 경로를 그린다. 참으로 쓰인 다섯 변수는 굵게, 나머지는
+# 흐리게 그려 어느 쪽이 먼저 살아나는지 보이게 한다.
 C_values = np.logspace(-3, 3, 50)
 coefs = []
 
@@ -165,15 +196,23 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![릿지 로지스틱 회귀의 계수 경로](./img/regularized_logistic_119.png)
 
 ## 교차검증으로 C 조율하기
 
 scikit-learn은 $C$ 격자 위에서 교차검증을 수행하는 `LogisticRegressionCV`를 제공한다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 교차검증으로 C 고르기
+
 ```python
 from sklearn.linear_model import LogisticRegressionCV
 
+# C 는 교차검증으로 고른다. Cs=20 은 격자 점의 개수이며, sklearn 이
+# 알아서 로그 눈금으로 펼친다.
 model_cv = LogisticRegressionCV(
     Cs=20, penalty='l2', cv=5, scoring='accuracy',
     solver='lbfgs', max_iter=2000
@@ -189,6 +228,8 @@ print(f"Best CV accuracy: {model_cv.scores_[1].mean(axis=0).max():.4f}")
 Best C: 1.6238
 Best CV accuracy: 0.7450
 ```
+
+</div>
 
 결과는 최적 $C = 1.6238$, 교차검증 정확도 $0.7450$이다.
 

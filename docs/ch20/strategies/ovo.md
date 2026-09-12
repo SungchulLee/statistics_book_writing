@@ -118,6 +118,10 @@ libsvm과 scikit-learn의 `SVC` 같은 여러 라이브러리에서 SVM의 기�
 
 scikit-learn은 `OneVsOneClassifier` 래퍼를 제공한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 일대일 전략
+
 ```python
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsOneClassifier
@@ -128,6 +132,9 @@ X, y = load_iris(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=0, stratify=y)
 
+# 일대일(OvO)은 범주 쌍마다 이항 분류기를 하나씩 둔다. 분류기 수가
+# C(C-1)/2 로 늘지만, 각 분류기가 쓰는 자료는 두 범주 것뿐이라 오히려
+# 학습이 빠를 수 있다. 예측은 다수결로 정한다.
 model = OneVsOneClassifier(LogisticRegression(max_iter=1000))
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
@@ -143,6 +150,8 @@ print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
 이항 분류기 개수: 3
 검정 정확도: 1.0000
 ```
+
+</div>
 
 SVM에서는 OvO가 `SVC`의 기본 동작이므로 별도의 래퍼가 필요 없다.
 

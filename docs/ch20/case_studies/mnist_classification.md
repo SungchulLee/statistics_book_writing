@@ -15,12 +15,17 @@ MNIST는 손글씨 숫자(0--9)의 회색조 이미지로 훈련 60,000장과 �
 각 이미지는 $28 \times 28$ 화소다. 과제는 $C = 10$인 다범주 분류이고, 정규화 후 각 화소값은
 $[0, 1]$에 있다.
 
+<div class="codebox" markdown>
+
+**예제 1.** MNIST 자료 읽기
+
 ```python
 import torch
 import torchvision
 from torchvision import transforms
 import matplotlib.pyplot as plt
 
+# ToTensor 가 화소값을 0~1 로 눌러 준다. 눈금을 맞추지 않으면 학습이 더디다.
 transform = transforms.ToTensor()
 
 train_dataset = torchvision.datasets.MNIST(
@@ -30,6 +35,8 @@ test_dataset = torchvision.datasets.MNIST(
 
 train_loader = torch.utils.data.DataLoader(
     train_dataset, batch_size=64, shuffle=True)
+# 시험자료는 섞지 않는다. 순서가 고정되어야 예측을 원래 이름표와
+# 짝지어 견줄 수 있다.
 test_loader = torch.utils.data.DataLoader(
     test_dataset, batch_size=64, shuffle=False)
 
@@ -46,13 +53,21 @@ Test samples:     10000
 Image shape:      torch.Size([1, 28, 28])
 ```
 
+</div>
+
 ---
 
 ## 표본 이미지 시각화
 
 모형화에 앞서 자료를 살펴보는 일이 필수적이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 자료 눈으로 보기
+
 ```python
+# 모형을 세우기 전에 자료를 눈으로 본다. 어떤 자료인지도 모르고 학습부터
+# 돌리는 것은 통계에서든 기계학습에서든 좋지 않은 습관이다.
 images, labels = next(iter(test_loader))
 img_grid = torchvision.utils.make_grid(images[:32], nrow=8, padding=2)
 
@@ -62,6 +77,8 @@ plt.axis('off')
 plt.title("Sample MNIST Images")
 plt.show()
 ```
+
+</div>
 
 ![MNIST 표본 이미지](./img/mnist_classification_47.png)
 
@@ -78,11 +95,20 @@ $$
 
 여기서 $\mathbf{W} \in \mathbb{R}^{10 \times 784}$이고 $\mathbf{b} \in \mathbb{R}^{10}$이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 소프트맥스 회귀 모형
+
 ```python
 import torch.nn as nn
 import torch.optim as optim
 
 class SoftmaxRegression(nn.Module):
+    """선형층 하나. 이름 그대로 소프트맥스 회귀이며, 신경망의 가장 단순한 꼴이다.
+
+    CrossEntropyLoss 가 소프트맥스를 안에서 씌우므로 여기서는 로짓만 낸다.
+    """
+
     def __init__(self):
         super().__init__()
         self.fc = nn.Linear(28 * 28, 10)
@@ -90,6 +116,8 @@ class SoftmaxRegression(nn.Module):
     def forward(self, x):
         return self.fc(x.view(x.size(0), -1))
 ```
+
+</div>
 
 PyTorch의 `nn.CrossEntropyLoss`는 log-softmax와 음의 로그가능도를 수치적으로 안정한 하나의
 연산으로 결합한다. 따라서 모형의 `forward`는 확률이 아니라 **로짓**을 반환해야 한다.
@@ -100,9 +128,17 @@ PyTorch의 `nn.CrossEntropyLoss`는 log-softmax와 음의 로그가능도를 수
 
 학습 루프는 세 모형이 공유한다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 학습 함수
+
 ```python
 def train_model(model, train_loader, epochs=5, lr=0.1):
-    """Train a model with SGD and cross-entropy loss."""
+    """확률적 경사하강법과 교차엔트로피로 모형을 학습한다.
+
+    세 모형에 모두 이 함수를 쓴다. 학습 절차를 똑같이 맞춰야 모형 구조의
+    차이만 견줄 수 있다.
+    """
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=lr)
     loss_history = []
@@ -123,9 +159,16 @@ def train_model(model, train_loader, epochs=5, lr=0.1):
     return loss_history
 ```
 
+</div>
+
 소프트맥스 회귀 모형을 학습시킨다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 선형 모형 학습
+
 ```python
+# 1번: 선형 모형. 아래 두 모형과 견줄 기준선이다.
 model_linear = SoftmaxRegression()
 loss_linear = train_model(model_linear, train_loader, epochs=5, lr=0.1)
 ```
@@ -140,13 +183,23 @@ Epoch 4/5, Loss: 0.3025
 Epoch 5/5, Loss: 0.2948
 ```
 
+</div>
+
 ---
 
 ## 평가
 
+<div class="codebox" markdown>
+
+**예제 6.** 평가 함수
+
 ```python
 def evaluate(model, test_loader):
-    """Compute test accuracy and per-class accuracy."""
+    """전체 정확도와 숫자별 정확도를 함께 구한다.
+
+    MNIST 에서는 보통 8 과 9, 4 와 9 처럼 모양이 닮은 숫자의 정확도가 낮다.
+    전체 정확도 하나만으로는 그것을 알 수 없다.
+    """
     model.eval()
     correct = total = 0
     class_correct = [0] * 10
@@ -188,6 +241,8 @@ Overall accuracy: 92.15%
   Digit 9: 90.2%
 ```
 
+</div>
+
 **전형적인 결과: 검정 정확도 약 92%.**
 
 ---
@@ -200,8 +255,18 @@ $$
 \mathbf{h} = \operatorname{ReLU}(\mathbf{W}_1 \mathbf{x} + \mathbf{b}_1), \qquad \mathbf{z} = \mathbf{W}_2 \mathbf{h} + \mathbf{b}_2
 $$
 
+<div class="codebox" markdown>
+
+**예제 7.** 은닉층 하나짜리 신경망
+
 ```python
 class TwoLayerNet(nn.Module):
+    """은닉층 하나를 끼운 신경망.
+
+    ReLU 같은 비선형 함수가 층 사이에 있어야 층을 쌓는 뜻이 있다. 없으면
+    선형변환을 두 번 한 것이라 결국 하나의 선형변환과 같아진다.
+    """
+
     def __init__(self, hidden_size=256):
         super().__init__()
         self.fc1 = nn.Linear(28 * 28, hidden_size)
@@ -238,6 +303,8 @@ Overall accuracy: 96.86%
   Digit 9: 94.4%
 ```
 
+</div>
+
 **전형적인 결과: 검정 정확도 약 97%.** 은닉층이 원시 화소값보다 판별력이 높은 획의 양상과
 곡선을 학습한다.
 
@@ -247,10 +314,21 @@ Overall accuracy: 96.86%
 
 CNN은 국소 수용영역과 가중치 공유를 통해 이미지의 공간 구조를 활용한다.
 
+<div class="codebox" markdown>
+
+**예제 8.** 합성곱 신경망
+
 ```python
 import torch.nn.functional as F
 
 class SimpleCNN(nn.Module):
+    """합성곱 두 층짜리 신경망.
+
+    앞의 두 모형은 화소를 한 줄로 펴 버려 이웃 관계를 잃는다. 합성곱은
+    작은 창을 미끄러뜨리며 그 구조를 살리고, 가중값을 온 이미지에
+    되쓰므로 모수도 오히려 적다.
+    """
+
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 16, kernel_size=3, padding=1)   # -> 16 x 28 x 28
@@ -262,6 +340,7 @@ class SimpleCNN(nn.Module):
         x = F.max_pool2d(F.relu(self.conv2(x)), 2)    # 14 -> 7
         return self.fc(x.view(x.size(0), -1))
 
+# 학습률을 0.01 로 낮췄다. 합성곱망은 기울기가 커서 0.1 로는 발산하기 쉽다.
 model_cnn = SimpleCNN()
 loss_cnn = train_model(model_cnn, train_loader, epochs=5, lr=0.01)
 acc_cnn = evaluate(model_cnn, test_loader)
@@ -287,6 +366,8 @@ Overall accuracy: 96.80%
   Digit 8: 91.3%
   Digit 9: 94.3%
 ```
+
+</div>
 
 **전형적인 결과: 검정 정확도 약 98--99%.** 합성곱층은 위치와 무관하게 국소 양상(모서리, 꼭짓점,
 고리)을 검출하므로 이미지 자료에 매우 효과적이다.
@@ -316,7 +397,13 @@ CNN의 모수 개수가 이층 신경망보다 훨씬 적은데도 정확도는 
 
 세 모형의 손실 곡선을 함께 그리면 수렴 양상을 볼 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 9.** 세 모형의 학습 곡선
+
 ```python
+# 세 모형의 학습 곡선을 겹쳐 그린다. 구조가 복잡할수록 같은 세대에서
+# 손실이 더 낮게 내려간다.
 fig, ax = plt.subplots(figsize=(8, 4))
 ax.plot(loss_linear, marker='o', label='Softmax Regression')
 ax.plot(loss_twolayer, marker='s', label='Two-Layer Net')
@@ -329,6 +416,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![훈련 손실 비교](./img/mnist_classification_241.png)
 
 ---
@@ -337,11 +426,15 @@ plt.show()
 
 CNN의 혼동행렬은 모형이 여전히 헷갈려 하는 숫자 쌍을 드러낸다.
 
+<div class="codebox" markdown>
+
+**예제 10.** 혼동행렬 그리기
+
 ```python
 import numpy as np
 
 def get_predictions(model, loader):
-    """Collect all true labels and predictions."""
+    """자료 전체의 참 이름표와 예측을 모은다. 혼동행렬을 만들기 위함이다."""
     model.eval()
     all_true, all_pred = [], []
     with torch.no_grad():
@@ -366,6 +459,8 @@ ax.set_title("CNN Confusion Matrix on MNIST")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![CNN의 혼동행렬](./img/mnist_classification_260.png)
 

@@ -11,18 +11,26 @@
 
 ## 1  자료 시각화
 
+<div class="codebox" markdown>
+
+**예제 1.** MNIST 자료 읽기
+
 ```python
 import torch
 import torchvision
 from torchvision import transforms
 import matplotlib.pyplot as plt
 
+# ToTensor 는 PIL 이미지를 텐서로 바꾸면서 화소값을 0~255 에서 0~1 로
+# 나눠 준다. 이 눈금 맞추기를 빠뜨리면 학습이 잘 되지 않는다.
 transform = transforms.ToTensor()
 train_dataset = torchvision.datasets.MNIST(
     root='./data', train=True, download=True, transform=transform)
 test_dataset = torchvision.datasets.MNIST(
     root='./data', train=False, download=True, transform=transform)
 
+# DataLoader 가 자료를 묶음으로 잘라 넘겨준다. shuffle=True 는 세대마다
+# 순서를 섞는다는 뜻이고, 이래야 묶음 사이의 기울기가 서로 닮지 않는다.
 train_loader = torch.utils.data.DataLoader(
     train_dataset, batch_size=64, shuffle=True)
 test_loader = torch.utils.data.DataLoader(
@@ -45,6 +53,8 @@ plt.show()
 train 60000, test 10000
 ```
 
+</div>
+
 ![MNIST 표본 이미지](./img/mnist_14.png)
 
 ---
@@ -54,11 +64,21 @@ train 60000, test 10000
 가장 단순한 모형이다. 이미지를 펼친 뒤 선형변환 하나를 적용하고 소프트맥스를 씌운다
 (`CrossEntropyLoss`가 소프트맥스를 내부에서 처리한다).
 
+<div class="codebox" markdown>
+
+**예제 2.** 선형 모형 학습
+
 ```python
 import torch.nn as nn
 import torch.optim as optim
 
 class SimpleMNIST(nn.Module):
+    """28x28 화소를 곧바로 열 범주로 보내는 선형층 하나짜리 모형.
+
+    사실상 소프트맥스 회귀다. 신경망이라 부르기도 민망한 구조인데도
+    MNIST 에서 92% 가까이 나온다 — 자료가 그만큼 쉽다는 뜻이기도 하다.
+    """
+
     def __init__(self):
         super().__init__()
         self.fc = nn.Linear(28 * 28, 10)
@@ -68,6 +88,8 @@ class SimpleMNIST(nn.Module):
 
 torch.manual_seed(0)
 model = SimpleMNIST()
+# CrossEntropyLoss 는 소프트맥스와 교차엔트로피를 한꺼번에 한다. 그래서
+# 모형의 마지막에 소프트맥스를 또 씌우면 안 된다. 흔한 실수다.
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.1)
 
@@ -79,14 +101,19 @@ model_untrained = copy.deepcopy(model)
 for epoch in range(1, 6):
     model.train()
     for images, labels in train_loader:
+        # 기울기를 0 으로 되돌린다. 파이토치는 기울기를 누적하므로
+        # 이 줄을 빠뜨리면 앞 묶음의 기울기가 계속 더해진다.
         optimizer.zero_grad()
         loss = criterion(model(images), labels)
-        loss.backward()
-        optimizer.step()
+        loss.backward()          # 역전파로 기울기 계산
+        optimizer.step()         # 계산된 기울기로 모수 갱신
     print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
 
 model_trained = model
 
+# eval() 과 no_grad() 는 다른 일을 한다. 앞은 드롭아웃·배치정규화 같은
+# 층을 평가 모드로 바꾸고, 뒤는 기울기 계산을 꺼 메모리와 시간을 아낀다.
+# 평가할 때는 둘 다 필요하다.
 model.eval()
 correct = total = 0
 with torch.no_grad():
@@ -108,6 +135,8 @@ Epoch 5, Loss: 0.3032
 Test accuracy: 92.03%
 ```
 
+</div>
+
 **전형적인 검정 정확도: 약 92%.**
 
 !!! note "`forward`가 로짓을 반환한다"
@@ -126,6 +155,10 @@ Test accuracy: 92.03%
 
 같은 이미지 묶음에 대한 예측을 학습 전후로 시각화하면, 모형이 무작위 추측에서 의미 있는 분류로
 옮겨 가는 과정을 볼 수 있다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 학습 전후 예측 비교
 
 ```python
 def show_images(images, true_labels, pred_labels, title):
@@ -150,6 +183,8 @@ with torch.no_grad():
 show_images(fixed_images, fixed_labels, preds, "After Training")
 ```
 
+</div>
+
 ![학습 전 예측](./img/mnist_111_0.png)
 
 ![학습 후 예측](./img/mnist_111_1.png)
@@ -162,10 +197,21 @@ show_images(fixed_images, fixed_labels, preds, "After Training")
 
 합성곱층 두 개를 추가하면 정확도가 크게 개선된다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 합성곱 신경망
+
 ```python
 import torch.nn.functional as F
 
 class SimpleCNN(nn.Module):
+    """합성곱 두 층짜리 신경망.
+
+    선형층은 화소를 한 줄로 펴 버려 "이웃한 화소끼리 관계가 있다"는 것을
+    모른다. 합성곱은 작은 창을 이미지 위로 미끄러뜨리므로 그 구조를 살린다.
+    같은 가중값을 온 이미지에 되쓰기 때문에 모수도 훨씬 적다.
+    """
+
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)  # → 16×28×28
@@ -173,6 +219,8 @@ class SimpleCNN(nn.Module):
         self.fc = nn.Linear(32 * 7 * 7, 10)
 
     def forward(self, x):
+        # 최대풀링이 크기를 절반으로 줄인다. 자잘한 위치 차이에 덜 흔들리게
+        # 만들면서 계산량도 줄이는 두 가지 일을 함께 한다.
         x = F.max_pool2d(F.relu(self.conv1(x)), 2)   # 28→14
         x = F.max_pool2d(F.relu(self.conv2(x)), 2)   # 14→7
         return self.fc(x.view(x.size(0), -1))
@@ -200,6 +248,8 @@ Epoch 4, Loss: 0.1759
 Epoch 5, Loss: 0.0320
 ```
 
+</div>
+
 **전형적인 검정 정확도: 약 98--99%.**
 
 ---
@@ -210,8 +260,14 @@ Epoch 5, Loss: 0.0320
 
 ### 모형
 
+<div class="codebox" markdown>
+
+**예제 5.** 되쓰기 좋게 만든 모형
+
 ```python
 class Net(nn.Module):
+    """입력 크기와 범주 수를 인자로 받는 선형 모형. 되쓰기 좋게 일반화했다."""
+
     def __init__(self, input_size=784, num_classes=10):
         super().__init__()
         self.layer = nn.Linear(input_size, num_classes)
@@ -220,10 +276,17 @@ class Net(nn.Module):
         return self.layer(torch.flatten(x, 1))
 ```
 
+</div>
+
 ### 학습
+
+<div class="codebox" markdown>
+
+**예제 6.** 학습 반복문 함수
 
 ```python
 def train(model, loader, criterion, optimizer, epochs=2, device='cpu'):
+    """학습 반복문을 함수로 묶는다. 모형을 바꿔 가며 되쓸 수 있다."""
     model.train()
     for epoch in range(epochs):
         running_loss = 0.0
@@ -240,10 +303,21 @@ def train(model, loader, criterion, optimizer, epochs=2, device='cpu'):
                 running_loss = 0.0
 ```
 
+</div>
+
 ### 평가
+
+<div class="codebox" markdown>
+
+**예제 7.** 정확도 계산 함수
 
 ```python
 def compute_accuracy(model, loader, classes, device='cpu'):
+    """전체 정확도와 범주별 정확도를 함께 구한다.
+
+    전체 정확도 하나만 보면 특정 범주에서만 크게 틀리는 것을 놓친다.
+    범주가 여럿일 때는 반드시 쪼개어 보아야 한다.
+    """
     model.eval()
     correct = total = 0
     class_correct = {c: 0 for c in classes}
@@ -265,7 +339,13 @@ def compute_accuracy(model, loader, classes, device='cpu'):
         print(f'  {c}: {100 * class_correct[c] / class_total[c]:.1f}%')
 ```
 
+</div>
+
 ### 저장과 적재
+
+<div class="codebox" markdown>
+
+**예제 8.** 모형 저장과 적재
 
 ```python
 from pathlib import Path
@@ -289,6 +369,8 @@ print("적재한 모형이 원본과 동일한가:", same)
 ```
 적재한 모형이 원본과 동일한가: True
 ```
+
+</div>
 
 ---
 

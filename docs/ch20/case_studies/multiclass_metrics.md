@@ -14,25 +14,29 @@
 $C \times C$ 혼동행렬 $\mathbf{M}$의 원소 $M_{jk}$는 참 범주가 $j$이고 예측 범주가 $k$인 관측치의
 수다. 완벽한 분류기는 대각행렬을 만든다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 혼동행렬 구현
+
 ```python
 import numpy as np
 
 def confusion_matrix(y_true, y_pred, C):
-    """Build a C x C confusion matrix.
+    """C x C 혼동행렬을 만든다.
 
-    Parameters
+    이범주에서는 2x2 표 하나로 끝났지만, 범주가 C 개면 C x C 가 된다.
+    대각선이 맞힌 것이고, 벗어난 칸은 어느 범주를 어느 범주로 헷갈렸는지를
+    말해 준다. 아래의 모든 측도가 이 행렬 하나에서 나온다.
+
+    매개변수
+    --------
+    y_true : 참 범주 이름표 {0, ..., C-1}
+    y_pred : 예측한 범주 이름표
+    C : 범주 수
+
+    돌려주는 값
     ----------
-    y_true : ndarray, shape (n,)
-        True class labels in {0, ..., C-1}.
-    y_pred : ndarray, shape (n,)
-        Predicted class labels in {0, ..., C-1}.
-    C : int
-        Number of classes.
-
-    Returns
-    -------
-    ndarray, shape (C, C)
-        M[j, k] = number of samples with true class j and predicted class k.
+    M[j, k] = 참으로 j 인데 k 로 예측한 사례 수
     """
     M = np.zeros((C, C), dtype=int)
     for t, p in zip(y_true, y_pred):
@@ -40,9 +44,17 @@ def confusion_matrix(y_true, y_pred, C):
     return M
 ```
 
+</div>
+
 작은 3범주 문제로 예를 들면 다음과 같다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 작은 예로 확인
+
 ```python
+# 범주마다 셋씩, 그중 둘을 맞힌 자료다. 아래 측도들을 손으로 따라가며
+# 확인하기 좋도록 작게 잡았다.
 y_true = np.array([0, 0, 0, 1, 1, 1, 2, 2, 2])
 y_pred = np.array([0, 0, 1, 1, 1, 2, 2, 2, 0])
 
@@ -61,6 +73,8 @@ print(M)
  [1 0 2]]
 ```
 
+</div>
+
 ---
 
 ## 전체 정확도
@@ -71,9 +85,13 @@ $$
 \text{Accuracy} = \frac{\operatorname{tr}(\mathbf{M})}{n} = \frac{\sum_{c=0}^{C-1} M_{cc}}{\sum_{j,k} M_{jk}}
 $$
 
+<div class="codebox" markdown>
+
+**예제 3.** 전체 정확도
+
 ```python
 def accuracy(M):
-    """Overall accuracy from a confusion matrix."""
+    """혼동행렬에서 전체 정확도를 구한다. 대각선의 합을 전체로 나눈 것이다."""
     return np.trace(M) / np.sum(M)
 
 print(f"Accuracy: {accuracy(M):.4f}")
@@ -85,6 +103,8 @@ print(f"Accuracy: {accuracy(M):.4f}")
 ```
 Accuracy: 0.6667
 ```
+
+</div>
 
 ---
 
@@ -106,15 +126,17 @@ $$
 정밀도는 범주 $c$로 예측한 것 중 옳은 비율(열 방향)이고, 재현율은 실제 범주 $c$인 관측치 중
 옳게 식별한 비율(행 방향)이다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 범주별 정밀도·재현율·F1
+
 ```python
 def per_class_metrics(M):
-    """Compute precision, recall, and F1 for each class.
+    """범주마다 정밀도·재현율·F1 을 구한다.
 
-    Returns
-    -------
-    precisions : ndarray, shape (C,)
-    recalls    : ndarray, shape (C,)
-    f1s        : ndarray, shape (C,)
+    다범주에서는 범주 하나를 양성으로, 나머지 전부를 음성으로 보고 이범주
+    측도를 그대로 쓴다. 정밀도는 열 합으로, 재현율은 행 합으로 나눈다 —
+    어느 쪽으로 나누느냐가 둘을 가르는 전부다.
     """
     C = M.shape[0]
     precisions = np.zeros(C)
@@ -146,6 +168,8 @@ Class 1: Prec=0.667  Rec=0.667  F1=0.667
 Class 2: Prec=0.667  Rec=0.667  F1=0.667
 ```
 
+</div>
+
 ---
 
 ## 거시평균과 미시평균
@@ -165,14 +189,26 @@ $$
 
 단일 이름표 문제에서는 미시평균 정밀도와 미시평균 재현율이 같고 그 값이 정확도와 같다(연습문제 2).
 
+<div class="codebox" markdown>
+
+**예제 5.** 거시평균과 미시평균 F1
+
 ```python
 def macro_f1(M):
-    """Macro-averaged F1-score."""
+    """거시평균 F1. 범주마다의 F1 을 그냥 평균한다.
+
+    범주 크기를 무시하므로 작은 범주도 큰 범주와 같은 무게를 갖는다.
+    희귀 범주의 성능이 중요할 때 이쪽을 본다.
+    """
     _, _, f1s = per_class_metrics(M)
     return np.mean(f1s)
 
 def micro_f1(M):
-    """Micro-averaged F1-score."""
+    """미시평균 F1. 범주를 가리지 않고 TP·FP·FN 을 모두 더한 뒤 계산한다.
+
+    사례마다 같은 무게를 주므로 큰 범주가 결과를 좌우한다. 단일 이름표
+    분류에서는 미시평균 F1 이 전체 정확도와 정확히 같아진다.
+    """
     C = M.shape[0]
     tp_total = fp_total = fn_total = 0
     for c in range(C):
@@ -199,12 +235,18 @@ Macro F1: 0.6667
 Micro F1: 0.6667
 ```
 
+</div>
+
 ---
 
 ## scikit-learn과의 검증
 
 붓꽃 자료에 소프트맥스 회귀 모형을 학습시키고, 직접 만든 지표를 scikit-learn의
 `classification_report`와 비교한다.
+
+<div class="codebox" markdown>
+
+**예제 6.** 붓꽃 자료로 sklearn 과 맞춰 보기
 
 ```python
 from sklearn.datasets import load_iris
@@ -213,6 +255,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
+# 직접 구현한 것이 sklearn 과 맞는지 실제 자료에서 확인한다.
 iris = load_iris()
 X_train, X_test, y_train, y_test = train_test_split(
     iris.data, iris.target, test_size=0.3, random_state=42)
@@ -263,6 +306,8 @@ Our Macro F1:  1.0000
 Our Micro F1:  1.0000
 ```
 
+</div>
+
 실행하면 이 분할에서는 검정자료 45개를 모두 옳게 분류하여 혼동행렬이 완전한 대각행렬
 $\operatorname{diag}(19, 13, 13)$이 되고, 거시 F1과 미시 F1이 모두 $1.0000$이다. 두 구현의
 출력이 일치하여 구현의 정확성이 확인된다.
@@ -282,11 +327,19 @@ $\operatorname{diag}(19, 13, 13)$이 되고, 거시 F1과 미시 F1이 모두 $1
 
 열지도로 그리면 체계적인 오분류 양상을 쉽게 찾을 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 7.** 혼동행렬 열지도
+
 ```python
 import matplotlib.pyplot as plt
 
 def plot_confusion_matrix(M, class_names=None):
-    """Display confusion matrix as a heatmap."""
+    """혼동행렬을 열지도로 그린다.
+
+    범주가 많으면 숫자표만으로는 어디가 문제인지 눈에 들어오지 않는다.
+    색으로 칠하면 대각선을 벗어난 짙은 칸이 바로 보인다.
+    """
     C = M.shape[0]
     if class_names is None:
         class_names = [str(i) for i in range(C)]
@@ -312,6 +365,8 @@ def plot_confusion_matrix(M, class_names=None):
 
 plot_confusion_matrix(M_ours, class_names=iris.target_names)
 ```
+
+</div>
 
 ![혼동행렬](./img/multiclass_metrics_228.png)
 
