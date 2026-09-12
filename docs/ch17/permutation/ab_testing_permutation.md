@@ -18,14 +18,24 @@ $$
 p = \frac{\#\bigl\{b : |T^{(\pi_b)}| \ge |T_{\text{obs}}|\bigr\} + 1}{B + 1}
 $$
 
+<div class="codebox" markdown>
+
+**예제 1.** 체류시간 순열검정
+
 ```python
 import numpy as np
 
-times = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167,   # Page A
-                  173, 181, 182, 170, 169, 177, 168, 183, 169, 164])  # Page B
+# 앞 10개가 A 페이지, 뒤 10개가 B 페이지의 체류시간이다.
+times = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167,   # A 페이지
+                  173, 181, 182, 170, 169, 177, 168, 183, 169, 164])  # B 페이지
 
 def perm_test_two_sample_means(data, nA, n_perms=9999, rng=None):
-    """Permutation test for a difference of means between two groups."""
+    """두 집단의 평균 차이에 대한 순열검정.
+
+    귀무가설이 참이라면 어느 값이 A 에서 나왔고 어느 값이 B 에서 나왔는지가
+    아무 뜻이 없다. 그래서 이름표를 마구 섞어 가며 차이를 다시 계산하면,
+    "차이가 없을 때 이 정도 차이가 얼마나 흔한가"를 직접 셀 수 있다.
+    """
     rng = rng or np.random.default_rng(0)
     obs_diff = data[:nA].mean() - data[nA:].mean()
     perm_diffs = np.empty(n_perms)
@@ -35,6 +45,8 @@ def perm_test_two_sample_means(data, nA, n_perms=9999, rng=None):
     p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perms + 1)
     return p_value, perm_diffs, obs_diff
 ```
+
+</div>
 
 페이지 A의 평균은 $168.2$초, 페이지 B는 $173.6$초로 차이는 $-5.4$초이다. 순열검정은 $p = 0.327$을 준다.
 
@@ -63,10 +75,18 @@ $$
 
 순열 접근은 길이 $n_0 + n_1$의 이진 벡터에 $c_0 + c_1$개의 $1$을 넣고 섞는다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 전환율 순열검정
+
 ```python
 def perm_test_proportion(n_control, conv_control, n_treatment, conv_treatment,
                          n_perms=9999, rng=None):
-    """Permutation test for a difference in conversion rates."""
+    """전환율 차이에 대한 순열검정.
+
+    이진 자료도 다를 것이 없다. 전체 전환 수만큼 1 을 채운 배열을 만들고
+    그것을 섞으면, "전환이 두 집단에 무작위로 흩어진" 상태가 된다.
+    """
     rng = rng or np.random.default_rng(0)
     binary = np.zeros(n_control + n_treatment)
     binary[:conv_control + conv_treatment] = 1
@@ -80,6 +100,8 @@ def perm_test_proportion(n_control, conv_control, n_treatment, conv_treatment,
     p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perms + 1)
     return p_value, perm_diffs, obs_diff
 ```
+
+</div>
 
 비교 대상은 $2 \times 2$ 분할표에 대한 독립성 카이제곱 검정이다.
 

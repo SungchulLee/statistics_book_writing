@@ -38,12 +38,21 @@ $$
 \alpha_j = \Phi\!\left(z_0 + \frac{z_0 + z_{\alpha_j}}{1 - a(z_0 + z_{\alpha_j})}\right)
 $$
 
+<div class="codebox" markdown>
+
+**예제 1.** 세 가지 붓스트랩 신뢰구간
+
 ```python
 import numpy as np
 from scipy import stats
 
 def bootstrap_ci_demo(data, B=10_000, alpha=0.05, rng=None):
-    """Compute the normal, percentile, and basic bootstrap CIs for the mean."""
+    """평균에 대한 세 가지 붓스트랩 신뢰구간을 함께 구한다.
+
+    정규법은 붓스트랩으로 표준오차만 얻고 구간은 정규분포로 만든다.
+    백분위수법은 붓스트랩 분포의 분위점을 그대로 쓴다. 기본법은 그
+    분위점을 추정값 둘레로 되비춘다. 분포가 대칭이면 셋이 거의 같다.
+    """
     rng = rng or np.random.default_rng(0)
     n = len(data)
     theta_hat = data.mean()
@@ -59,6 +68,8 @@ def bootstrap_ci_demo(data, B=10_000, alpha=0.05, rng=None):
         "basic":      (2*theta_hat - hi_q, 2*theta_hat - lo_q),
     }
 ```
+
+</div>
 
 ## 붓스트랩 포함확률 모의실험
 
@@ -92,9 +103,17 @@ $\text{Exp}(3)$에서 $n = 30$을 뽑은 결과($M = 3{,}000$, $B = 2{,}000$):
 
 순열검정은 두 표본을 합치고 라벨을 섞어 각 순열에서 검정통계량을 계산한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 이표본 순열검정
+
 ```python
 def permutation_test_two_sample(x, y, B=9999, stat_func=None, rng=None):
-    """Two-sample permutation test; stat_func may be any two-sample statistic."""
+    """이표본 순열검정. 통계량 함수를 바꿔 끼울 수 있다.
+
+    평균 차이든 중앙값 차이든 절사평균 차이든, 귀무가설 아래에서 이름표가
+    무의미하다는 논리는 그대로다. 순열검정이 통계량에 매이지 않는 까닭이다.
+    """
     rng = rng or np.random.default_rng(0)
     if stat_func is None:
         stat_func = lambda a, b: a.mean() - b.mean()
@@ -109,6 +128,8 @@ def permutation_test_two_sample(x, y, B=9999, stat_func=None, rng=None):
     return t_obs, (count + 1) / (B + 1)
 ```
 
+</div>
+
 처치군 대 대조군 자료에 적용하면 순열 $p$값이 대개 Welch $t$ 검정의 $p$값과 가깝다. **다만 분산이 다르고 표본이 불균형하면 그렇지 않다**(연습문제 2).
 
 ## 상관에 대한 순열검정
@@ -119,9 +140,17 @@ $$
 p = \frac{\#\bigl\{b : |r^{(\pi_b)}| \ge |r_{\text{obs}}|\bigr\} + 1}{B + 1}
 $$
 
+<div class="codebox" markdown>
+
+**예제 3.** 상관에 대한 순열검정
+
 ```python
 def permutation_test_correlation(x, y, B=9999, rng=None):
-    """Permutation test for the Pearson correlation."""
+    """상관계수에 대한 순열검정.
+
+    한쪽만 섞는다. 그러면 두 변수의 짝은 부서지되 각각의 주변분포는
+    그대로 남으므로, "관계가 없다"는 상태를 정확히 흉내 낼 수 있다.
+    """
     rng = rng or np.random.default_rng(0)
     r_obs = np.corrcoef(x, y)[0, 1]
     count = 0
@@ -129,6 +158,8 @@ def permutation_test_correlation(x, y, B=9999, rng=None):
         count += abs(np.corrcoef(x, rng.permutation(y))[0, 1]) >= abs(r_obs)
     return r_obs, (count + 1) / (B + 1)
 ```
+
+</div>
 
 ## 대응 순열검정 (부호 뒤집기)
 
@@ -138,9 +169,18 @@ $$
 T^{(\pi)} = \frac{1}{n}\sum_{i=1}^{n} s_i\,d_i, \qquad s_i \in \{-1, +1\} \text{ 균등}
 $$
 
+<div class="codebox" markdown>
+
+**예제 4.** 대응 순열검정
+
 ```python
 def paired_permutation_test(x, y, B=9999, rng=None):
-    """Paired permutation test by sign-flipping the differences."""
+    """차이의 부호를 뒤집는 대응 순열검정.
+
+    대응자료에서는 이름표를 섞으면 안 된다. 짝 자체가 자료의 구조이기
+    때문이다. 대신 귀무가설 아래에서 각 차이의 분포가 0 을 중심으로
+    대칭이므로, 부호를 아무렇게나 뒤집어도 똑같이 그럴듯하다.
+    """
     rng = rng or np.random.default_rng(0)
     d = np.asarray(x) - np.asarray(y)
     t_obs = d.mean()
@@ -148,6 +188,8 @@ def paired_permutation_test(x, y, B=9999, rng=None):
     t_perm = (signs * d).mean(axis=1)
     return t_obs, ((np.abs(t_perm) >= abs(t_obs)).sum() + 1) / (B + 1)
 ```
+
+</div>
 
 ## 붓스트랩과 순열: 나란히
 
@@ -162,9 +204,17 @@ def paired_permutation_test(x, y, B=9999, rng=None):
 
 같은 이표본 비교에 둘 다 적용했을 때, $0$을 제외하는 붓스트랩 신뢰구간과 같은 $\alpha$에서 기각하는 순열검정은 **대개** 일치한다. 어긋나는 경우는 연습문제 4에서 다룬다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 붓스트랩과 순열 나란히
+
 ```python
 def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
-    """Compare a bootstrap CI for the difference with a permutation p-value."""
+    """붓스트랩 신뢰구간과 순열 p-값을 나란히 놓는다.
+
+    둘은 경쟁 관계가 아니다. 순열검정은 "차이가 있는가"에, 붓스트랩은
+    "차이가 얼마나 되는가"에 답한다. 보고할 때는 둘 다 싣는 편이 낫다.
+    """
     rng = rng or np.random.default_rng(0)
     diff_obs = x.mean() - y.mean()
 
@@ -177,6 +227,8 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
     _, p_perm = permutation_test_two_sample(x, y, B=B, rng=rng)
     return diff_obs, ci, p_perm
 ```
+
+</div>
 
 ## 해석
 

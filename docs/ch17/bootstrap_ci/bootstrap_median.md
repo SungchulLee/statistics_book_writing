@@ -34,15 +34,25 @@ $$
 
 이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 중앙값의 붓스트랩 분포
+
 ```python
 import numpy as np
 
 def bootstrap_median(data, n_bootstrap=10_000, rng=None):
-    """Bootstrap distribution of the median (vectorized)."""
+    """중앙값의 붓스트랩 분포.
+
+    중앙값에는 평균의 sigma/sqrt(n) 같은 표준오차 공식이 없다. 붓스트랩이
+    특히 쓸모 있는 자리가 바로 이런 통계량이다.
+    """
     rng = rng or np.random.default_rng(0)
     n = len(data)
     return np.median(data[rng.integers(0, n, (n_bootstrap, n))], axis=1)
 ```
+
+</div>
 
 ## 중앙값과 평균의 비교
 
@@ -68,13 +78,19 @@ $\text{LogNormal}(10.5, 0.8^2)$에서 $n = 200$을 뽑은 예:
 
     소득·의료비·보험금처럼 치우친 자료에서는 중앙값이 **로버스트하면서 동시에 더 정밀하다**. 절충이 아니라 순수한 이득이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 평균과 견주기
+
 ```python
 def bootstrap_mean(data, n_bootstrap=10_000, rng=None):
-    """Bootstrap distribution of the mean, for comparison."""
+    """견주기 위한 평균의 붓스트랩 분포."""
     rng = rng or np.random.default_rng(0)
     n = len(data)
     return data[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
 ```
+
+</div>
 
 ## 이상값에 대한 로버스트성
 
@@ -95,15 +111,25 @@ $$
 
 반면 평균의 영향함수는 $\text{IF}(x; \bar F, F) = x - \mu$로 유계가 아니다. 이상값 하나가 평균을 임의로 멀리 옮길 수 있지만 중앙값은 최대 $1/(2f(m))$만큼만 움직인다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 이상치 하나가 바꾸는 것
+
 ```python
 def robustness_comparison(data, outlier=1_000_000):
-    """Show how one outlier moves the mean versus the median."""
+    """이상치 하나가 평균과 중앙값을 각각 얼마나 움직이는지 보인다.
+
+    100만짜리 값 하나를 덧붙인다. 평균은 크게 끌려가고 중앙값은 한 칸
+    옆으로 옮겨 갈 뿐이다.
+    """
     with_out = np.append(data, outlier)
     print(f"Mean change:   "
           f"{(with_out.mean() - data.mean()) / data.mean() * 100:.2f}%")
     print(f"Median change: "
           f"{(np.median(with_out) - np.median(data)) / np.median(data) * 100:.2f}%")
 ```
+
+</div>
 
 ## 중앙값의 붓스트랩 신뢰구간
 
@@ -113,14 +139,24 @@ $$
 \text{CI}_{1-\alpha} = \bigl[\tilde x^*_{\alpha/2},\;\tilde x^*_{1-\alpha/2}\bigr]
 $$
 
+<div class="codebox" markdown>
+
+**예제 4.** 여러 신뢰수준의 구간
+
 ```python
 def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
-    """Percentile bootstrap CIs at several confidence levels."""
+    """여러 신뢰수준에서의 백분위수 붓스트랩 신뢰구간.
+
+    중앙값의 붓스트랩 분포는 계단 모양이 된다. 재표본의 중앙값이 원래
+    자료에 있던 값 중 하나(또는 두 값의 평균)일 수밖에 없기 때문이다.
+    """
     for cl in confidence_levels:
         alpha = (100 - cl) / 2
         lower, upper = np.percentile(bootstrap_dist, [alpha, 100 - alpha])
         print(f"{cl}% CI: [{lower:,.0f}, {upper:,.0f}]  Width: {upper-lower:,.0f}")
 ```
+
+</div>
 
 신뢰수준이 높을수록 구간이 넓어져 신뢰도와 정밀도의 절충을 반영한다.
 

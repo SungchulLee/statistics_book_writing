@@ -35,7 +35,9 @@ $$
 | $H_1{:}\; \text{median}(D) > 0$ | $1 - \Phi(Z)$ |
 | $H_1{:}\; \text{median}(D) < 0$ | $\Phi(Z)$ |
 
-## 구현
+<div class="codebox" markdown>
+
+**예제 1.** 부호검정 구현
 
 ```python
 import numpy as np
@@ -43,27 +45,27 @@ import scipy.stats as stats
 
 
 def sign_test(paired_data, test_type="two-sided"):
-    """
-    Sign test for paired observations.
+    """대응표본에 대한 부호검정.
 
-    Parameters
+    차이의 크기는 버리고 부호만 센다. 그래서 자료가 순서척도이기만 하면
+    쓸 수 있고 이상치에도 끄떡없다. 대신 크기 정보를 버린 만큼 검정력이
+    낮다 — 그 중간이 부호순위검정이다.
+
+    매개변수
+    --------
+    paired_data : 모양 (n, 2) 인 배열. 0열이 처리 후, 1열이 처리 전이다.
+    test_type : "less", "two-sided", "greater" 중 하나
+
+    돌려주는 값
     ----------
-    paired_data : ndarray of shape (n, 2)
-        Column 0 is post-treatment, column 1 is pre-treatment.
-    test_type : str
-        One of "less", "two-sided", "greater".
-
-    Returns
-    -------
-    z : float
-        The Z test statistic.
-    p_value : float
+    z : Z 통계량
+    p_value : p-값
     """
     p_0, q_0 = 0.5, 0.5
 
     n_plus = np.sum(paired_data[:, 0] > paired_data[:, 1])
     n_minus = np.sum(paired_data[:, 0] < paired_data[:, 1])
-    n = n_plus + n_minus  # ties excluded
+    n = n_plus + n_minus  # 동점은 세지 않는다
     p_hat = n_plus / n
 
     z = (p_hat - p_0) / np.sqrt(p_0 * q_0 / n)
@@ -77,6 +79,8 @@ def sign_test(paired_data, test_type="two-sided"):
 
     return z, p_value
 ```
+
+</div>
 
 <div class="exbox" markdown>
 

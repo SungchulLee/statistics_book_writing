@@ -150,13 +150,20 @@ plt.show()
 
 주어진 표본 하나에 대해서는 참 모수가 구간 안에 있거나 없거나 둘 중 하나이다. 확률은 **절차**에 있는 것이지 특정 구간에 있는 것이 아니다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 포함확률을 직접 세어 보기
+
 ```python
-# Simulation to demonstrate long-run coverage
+# "95% 신뢰"는 한 번 만든 구간에 대한 확률이 아니라, 같은 절차를 되풀이할
+# 때 참값을 담는 비율에 대한 약속이다. 그 비율을 직접 세어 본다.
 np.random.seed(42)
 
 true_pop = np.random.exponential(scale=50000, size=10000) + 20000
 true_mean = true_pop.mean()
 
+# 치우친 모집단에서 n=20 만 뽑으므로 실제 포함확률이 95%에 못 미친다.
+# 붓스트랩이 만능이 아니라는 것을 보여 주는 대목이다.
 n_simulations = 2000
 ci_covers = []
 
@@ -176,6 +183,8 @@ print(f"Coverage across {n_simulations} simulations: {100*np.mean(ci_covers):.1f
 ```
 Coverage across 2000 simulations: 90.9%
 ```
+
+</div>
 
 !!! warning "$n = 20$에서 실제 포함확률은 95%가 아니다"
     모의실험 결과가 $90.6\%$이다. 명목값 $95\%$보다 $4.4$%p 낮다.
@@ -202,11 +211,17 @@ Coverage across 2000 simulations: 90.9%
 
 **백분위수법**(분위수를 직접 쓰는 것)은 단순하지만 치우친 분포에서 편향될 수 있다. 성능을 높이려면
 
+<div class="codebox" markdown>
+
+**예제 3.** 백분위수법과 BCa
+
 ```python
-# Percentile method (simplest, shown above)
+# 백분위수법 — 가장 간단하고 앞에서 쓴 방법이다.
 ci_percentile = (bootstrap_means.quantile(0.025), bootstrap_means.quantile(0.975))
 
-# BCa (Bias-Corrected and Accelerated) method - more advanced
+# BCa — 편향과 가속을 보정한다. scipy 가 이미 구현해 두었으므로
+# 직접 짤 필요가 없다. vectorized=True 는 통계량 함수가 축 인자를
+# 받는다는 뜻이고, 그래야 속도가 난다.
 from scipy.stats import bootstrap
 
 def statistic(x, axis=-1):
@@ -216,6 +231,8 @@ result = bootstrap((original_sample,), statistic, n_resamples=5000,
                    method='bca', vectorized=True)
 ci_bca = result.confidence_interval
 ```
+
+</div>
 
 !!! note "`scipy.stats.bootstrap`의 인자"
     `scipy.stats.bootstrap`은 기본적으로 `vectorized=True`를 가정하고 통계량 함수에 `axis` 인자를 넘긴다. `np.mean`처럼 `axis`를 받는 함수는 그대로 쓸 수 있지만, 직접 정의한 함수라면 `axis` 인자를 처리하거나 `vectorized=False`를 명시해야 한다.

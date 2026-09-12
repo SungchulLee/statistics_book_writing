@@ -56,13 +56,21 @@
 2. 각 붓스트랩 표본에서 평균차를 계산한다.
 3. 평균차의 **신뢰구간**을 추정한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 붓스트랩으로 구간 구하기
+
 ```python
 import numpy as np
+# 같은 자료에 붓스트랩과 순열검정을 각각 적용해 무엇이 다른지 본다.
+# 붓스트랩은 "차이가 얼마인가"에, 순열검정은 "차이가 있는가"에 답한다.
 rng = np.random.default_rng(55)
 
 group_a = np.array([8, 7, 9, 10, 6])
 group_b = np.array([5, 6, 4, 3, 7])
 
+# 붓스트랩은 집단마다 따로 복원추출한다. 집단 구분을 그대로 둔 채
+# 차이의 분포를 얻으므로 신뢰구간이 나온다.
 n_resamples = 100_000
 A = group_a[rng.integers(0, 5, (n_resamples, 5))]
 B = group_b[rng.integers(0, 5, (n_resamples, 5))]
@@ -79,6 +87,8 @@ print(f"Bootstrap 95% CI for mean difference: ({ci[0]:.2f}, {ci[1]:.2f})")
 Bootstrap 95% CI for mean difference: (1.20, 4.80)
 ```
 
+</div>
+
 ### 순열 접근
 
 1. 두 집단을 하나의 자료로 합친다.
@@ -86,11 +96,17 @@ Bootstrap 95% CI for mean difference: (1.20, 4.80)
 3. 각 순열에서 평균차를 계산한다.
 4. 관측 평균차를 순열된 차이들의 분포와 비교하여 **$p$값**을 구한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 순열로 p-값 구하기
+
 ```python
 import numpy as np, itertools
 
 group_a = np.array([8, 7, 9, 10, 6])
 group_b = np.array([5, 6, 4, 3, 7])
+# 순열검정은 반대로 집단 이름표를 섞는다. 귀무가설이 참이라면 이름표가
+# 아무 뜻이 없다는 데서 나온 발상이라, p-값이 나온다.
 combined = np.concatenate([group_a, group_b])
 observed_diff = group_a.mean() - group_b.mean()
 
@@ -108,6 +124,8 @@ print(f"Exact permutation p-value: {p_value:.4f}")   # 0.0397
 ```
 Exact permutation p-value: 0.0397
 ```
+
+</div>
 
 !!! danger "이 예제에서 두 방법이 심각하게 어긋난다"
     | 방법 | 결과 |

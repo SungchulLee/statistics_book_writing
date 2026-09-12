@@ -40,18 +40,24 @@ $$
 
 은 $n'$이 중간 이상이면 근사적으로 표준정규를 따른다.
 
-### 구현
+<div class="codebox" markdown>
+
+**예제 1.** 부호순위검정 — 대응표본
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 같은 사람을 두 번 잰 대응자료다. 짝지어져 있다는 것이 핵심이라,
+# 두 열을 따로 떼어 독립표본 검정을 쓰면 안 된다.
 paired_data = np.array([
     [93, 76], [70, 72], [81, 75], [65, 68], [79, 65],
     [54, 54], [94, 88], [91, 81], [77, 65], [65, 57],
     [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]
 ])
 
+# zero_method="pratt" 는 차이가 0 인 쌍을 순위 매기기에는 넣되 통계량에서는
+# 뺀다. "wilcox"(기본값)는 아예 버린다. 동점이 여럿일 때 결과가 갈린다.
 statistic, p_value = stats.wilcoxon(
     paired_data[:, 0], paired_data[:, 1],
     alternative="two-sided",
@@ -67,6 +73,8 @@ print(f"W = {statistic}, p = {p_value:.4f}")
 ```
 W = 11.0, p = 0.0086
 ```
+
+</div>
 
 !!! warning "`mode=`가 아니라 `method=`이다"
     SciPy 1.9에서 `wilcoxon`의 `mode` 인자가 `method`로 이름이 바뀌었고 옛 이름은
@@ -96,15 +104,20 @@ $$
 
 은 점근적으로 표준정규를 따른다.
 
-### 구현
+<div class="codebox" markdown>
+
+**예제 2.** 순위합검정 — 독립표본
 
 ```python
 from scipy import stats
 
-# 서로 다른 두 집단에서 독립적으로 얻은 관측값이어야 한다
+# 서로 다른 두 집단에서 독립적으로 얻은 관측값이어야 한다.
+# 크기가 달라도 되는 것이 대응표본 검정과의 큰 차이다.
 a = [12, 15, 18, 22, 25]
 b = [8, 10, 14, 19, 21, 24]
 
+# ranksums 는 순위합 검정이다. Mann-Whitney U 와 수학적으로 같은 검정이지만
+# 정규근사만 쓰고 동점 보정을 하지 않는다. 표본이 작으면 mannwhitneyu 쪽이 낫다.
 statistic, p_value = stats.ranksums(a, b, alternative="two-sided")
 print(f"Z = {statistic:.4f}, p = {p_value:.4f}")
 # Z = 0.7303, p = 0.4652
@@ -115,6 +128,8 @@ print(f"Z = {statistic:.4f}, p = {p_value:.4f}")
 ```
 Z = 0.7303, p = 0.4652
 ```
+
+</div>
 
 !!! danger "대응자료에 순위합검정을 쓰지 말 것"
     부호순위검정 예제의 학생 자료를 두 열로 쪼개어 `ranksums`에 넣으면

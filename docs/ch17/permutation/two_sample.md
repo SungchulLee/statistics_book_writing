@@ -219,9 +219,16 @@ A/B test p-value: 0.6785
 
 ### 결과 비교
 
+<div class="codebox" markdown>
+
+**예제 3.** 순열검정과 t 검정 견주기
+
 ```python
 from scipy import stats
 
+# 앞의 순열검정 결과를 Welch t 검정과 견준다. 자료가 정규에 가깝고
+# 표본이 넉넉하면 두 p-값이 거의 같게 나온다. 순열검정이 t 검정을
+# 대신하는 것이 아니라, 가정이 미덥지 않을 때 기댈 곳이 된다는 뜻이다.
 t_stat, p_ttest = stats.ttest_ind(page_a, page_b, equal_var=False)
 print(f"Welch's t-test p-value: {p_ttest:.4f}")
 print(f"Permutation test p-value: {p_val:.4f}")
@@ -233,6 +240,8 @@ print(f"Permutation test p-value: {p_val:.4f}")
 Welch's t-test p-value: 0.3204
 Permutation test p-value: 0.3307
 ```
+
+</div>
 
 ## 장점
 

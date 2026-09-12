@@ -26,9 +26,15 @@ $$
 
 이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 판매량 자료
+
 ```python
 import numpy as np
 
+# 판촉 전후 12주치 신발 판매량. 평균이 2.25 올랐는데, 이것이 판촉의
+# 효과인지 그저 주마다의 들쭉날쭉인지를 아래에서 가린다.
 BEFORE = np.array([23, 21, 19, 24, 35, 17, 18, 24, 33, 27, 21, 23])
 AFTER  = np.array([31, 28, 19, 24, 32, 27, 16, 28, 29, 26, 25, 27])
 
@@ -44,6 +50,8 @@ Before mean: 23.75
 After  mean: 26.00
 Difference:  2.25
 ```
+
+</div>
 
 !!! warning "이 자료는 사실 대응자료이다"
     같은 $12$주를 전후로 측정했으므로 주별로 짝지어져 있다. 아래의 비대응 순열검정은 이 구조를 무시한다.
@@ -69,9 +77,17 @@ $$
 
 최적화가 판매를 늘릴 것으로(줄이는 것이 아니라) 기대하므로 단측검정이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 순열검정
+
 ```python
 def permutation_test(before, after, n_perm=199_999, rng=None):
-    """One-sided permutation test for an increase in the mean."""
+    """평균이 올랐는지에 대한 단측 순열검정.
+
+    "올랐는가"만 묻는 것이므로 오른쪽 꼬리만 본다. 양측으로 하면 p-값이
+    두 배가 되는데, 어느 쪽으로 할지는 자료를 보기 전에 정해야 한다.
+    """
     rng = rng or np.random.default_rng(42)
     observed_diff = after.mean() - before.mean()
     combined = np.concatenate([before, after])
@@ -82,6 +98,8 @@ def permutation_test(before, after, n_perm=199_999, rng=None):
     p_value = ((perm_diffs >= observed_diff - 1e-12).sum() + 1) / (n_perm + 1)
     return observed_diff, perm_diffs, p_value
 ```
+
+</div>
 
 | 검정 | $p$값 |
 |:---|---:|
@@ -127,9 +145,17 @@ $$
 \text{CI}_{1-\alpha} = \left[q_{\alpha/2},\;\; q_{1-\alpha/2}\right]
 $$
 
+<div class="codebox" markdown>
+
+**예제 3.** 붓스트랩 신뢰구간
+
 ```python
 def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
-    """Percentile bootstrap CI for the difference of means."""
+    """평균 차이에 대한 백분위수 붓스트랩 신뢰구간.
+
+    검정은 "효과가 있다/없다"까지만 말한다. 판촉에 돈을 쓸지 정하려면
+    효과가 얼마나 되는지를 알아야 하고, 그것은 구간이 말해 준다.
+    """
     rng = rng or np.random.default_rng(42)
     b = before[rng.integers(0, len(before), (n_boot, len(before)))].mean(axis=1)
     a = after[rng.integers(0, len(after), (n_boot, len(after)))].mean(axis=1)
@@ -137,6 +163,8 @@ def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
     lo = (100 - ci) / 2
     return diffs, np.percentile(diffs, [lo, 100 - lo])
 ```
+
+</div>
 
 | 신뢰수준 | 구간 | 폭 |
 |:---|:---|---:|

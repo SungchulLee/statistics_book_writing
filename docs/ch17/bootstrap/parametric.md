@@ -58,15 +58,24 @@ $x_1, \ldots, x_n$이 정규분포에서 온 것으로 보이고 표본분산 $s
 
 정규모형 아래에서 $s^2$의 정확한 표준오차는 $\sigma^2\sqrt{2/(n-1)}$이다. 모수적 붓스트랩은 이 알려진 결과를 가깝게 근사해야 하며, 이는 절차를 점검하는 유용한 검산이 된다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 모수적 붓스트랩과 비모수적 붓스트랩
+
 ```python
 import numpy as np
+# 모수적 붓스트랩과 비모수적 붓스트랩을 견준다. 앞은 적합한 모형에서
+# 새 표본을 만들고, 뒤는 자료에서 복원추출한다. 모형이 맞으면 앞이 조금
+# 낫지만, 틀리면 앞이 그 잘못을 그대로 물려받는다.
 rng = np.random.default_rng(0)
 n = 25
 x = rng.normal(10, 2, n)
 s2 = x.var(ddof=1)                       # 3.0470
 
+# 모수적: 표본의 평균과 분산으로 정규분포를 만들고 거기서 다시 뽑는다.
 B = 20000
 par = np.array([rng.normal(x.mean(), np.sqrt(s2), n).var(ddof=1) for _ in range(B)])
+# 비모수적: 자료 자체를 모집단으로 삼아 복원추출한다.
 npb = np.array([rng.choice(x, n, replace=True).var(ddof=1) for _ in range(B)])
 
 print("이론값 :", round(s2 * np.sqrt(2 / (n - 1)), 4))   # 0.8796
@@ -81,6 +90,8 @@ print("비모수 :", round(npb.std(ddof=1), 4))              # 0.8708
 모수적 : 0.8765
 비모수 : 0.8708
 ```
+
+</div>
 
 세 값이 잘 일치한다. 자료가 실제로 정규이므로 두 붓스트랩이 모두 옳게 작동한다.
 

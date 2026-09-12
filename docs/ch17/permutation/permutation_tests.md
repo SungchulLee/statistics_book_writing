@@ -23,11 +23,19 @@ $$
 p = \frac{\#\bigl\{b : |T^{(\pi_b)}| \ge |T_{\text{obs}}|\bigr\} + 1}{B + 1}
 $$
 
+<div class="codebox" markdown>
+
+**예제 1.** 이표본 순열검정
+
 ```python
 import numpy as np
 
 def perm_test_two_sample(x, y, n_perm=9999, rng=None):
-    """Two-sample permutation test for a difference of means."""
+    """평균 차이에 대한 이표본 순열검정.
+
+    두 집단을 합친 뒤 이름표를 섞어 차이를 다시 계산하는 일을 되풀이한다.
+    분포를 가정하지 않으므로 정규성도 등분산도 필요 없다.
+    """
     rng = rng or np.random.default_rng(0)
     obs_diff = x.mean() - y.mean()
     pooled = np.concatenate([x, y])
@@ -37,6 +45,8 @@ def perm_test_two_sample(x, y, n_perm=9999, rng=None):
     p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perm + 1)
     return obs_diff, p_value, perm_diffs
 ```
+
+</div>
 
 ## 다집단 순열검정
 
@@ -52,9 +62,18 @@ $$
 p = \frac{\#\bigl\{b : T^{(\pi_b)} \ge T_{\text{obs}}\bigr\} + 1}{B + 1}
 $$
 
+<div class="codebox" markdown>
+
+**예제 2.** 다집단 순열검정
+
 ```python
 def perm_test_multi_group(groups, n_perm=9999, rng=None):
-    """Multi-group permutation test using the variance of group means."""
+    """집단평균의 분산을 통계량으로 쓰는 다집단 순열검정.
+
+    분산분석의 F 대신 집단평균들의 분산을 쓴다. 순열검정에서는 통계량이
+    어떤 분포를 따라야 할 까닭이 없으므로, 뜻만 통하면 무엇이든 쓸 수 있다.
+    집단 차이가 클수록 이 값이 커지므로 오른쪽 꼬리만 본다.
+    """
     rng = rng or np.random.default_rng(0)
     pooled = np.concatenate(groups)
     sizes = [len(g) for g in groups]
@@ -73,6 +92,8 @@ def perm_test_multi_group(groups, n_perm=9999, rng=None):
     return obs_var, p_value, perm_vars
 ```
 
+</div>
+
 ## 비율에 대한 순열검정
 
 이진 결과(전환 여부)를 갖는 A/B 검정에서, 집단 A는 $n_A$명 중 $c_A$명이 전환하고 집단 B는 $n_B$명 중 $c_B$명이 전환했다. 관측된 전환율 차이는
@@ -83,9 +104,18 @@ $$
 
 이다. 길이 $n_A + n_B$의 이진 벡터에 $c_A + c_B$개의 $1$(총 전환 수)을 넣고 섞은 뒤 나눈다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 비율에 대한 순열검정
+
 ```python
 def perm_test_proportion(n_a, conv_a, n_b, conv_b, n_perm=9999, rng=None):
-    """Permutation test for two proportions (A/B test)."""
+    """두 비율에 대한 순열검정. A/B 검정에 그대로 쓴다.
+
+    전체 전환 수만큼 1 로 채운 배열을 섞으면, 전환이 두 집단에 무작위로
+    흩어진 상태가 된다. 표본이 크거나 전환율이 아주 낮아 정규근사가
+    미덥지 않을 때 쓸모가 있다.
+    """
     rng = rng or np.random.default_rng(0)
     obs_diff = conv_a / n_a - conv_b / n_b
     pooled = np.zeros(n_a + n_b)
@@ -100,18 +130,33 @@ def perm_test_proportion(n_a, conv_a, n_b, conv_b, n_perm=9999, rng=None):
     return obs_diff, p_value, perm_diffs
 ```
 
+</div>
+
 ## 실행 예제
 
+<div class="codebox" markdown>
+
+**예제 4.** 난수 준비
+
 ```python
+# 자료를 만드는 난수와 순열에 쓰는 난수를 따로 둔다. 이래야 자료를 그대로
+# 두고 순열 횟수만 바꿔 보는 식의 실험이 가능하다.
 rng_data = np.random.default_rng(11)
 rng = np.random.default_rng(3)
 ```
+
+</div>
 
 ### 이표본: 페이지 체류시간
 
 두 웹페이지를 비교한다. 페이지 A는 $N(120, 30^2)$에서 $n = 36$개, 페이지 B는 $N(135, 30^2)$에서 $n = 40$개이다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 체류시간 비교
+
 ```python
+# 두 페이지의 체류시간. 참 평균이 15 만큼 다르다.
 page_a = rng_data.normal(120, 30, size=36)
 page_b = rng_data.normal(135, 30, size=40)
 diff, p, perms = perm_test_two_sample(page_a, page_b, rng=rng)
@@ -125,13 +170,20 @@ print(page_a.mean(), page_b.mean(), diff, p)
 116.80039289004895 139.1365870469421 -22.336194156893157 0.0006
 ```
 
+</div>
+
 Welch $t$ 검정은 $p = 0.0003$을 준다. 두 방법 모두 $15$단위 이동을 확실히 탐지한다.
 
 ### 다집단: 네 개의 처치군
 
 각 $30$개 관측을 갖는 네 집단을 평균 $160, 170, 155, 180$, 표준편차 $25$인 정규분포에서 생성한다.
 
+<div class="codebox" markdown>
+
+**예제 6.** 네 처치군 비교
+
 ```python
+# 네 처치군. 참 평균이 모두 다르다.
 groups = [rng_data.normal(mu, 25, 30) for mu in [160, 170, 155, 180]]
 var_obs, p_multi, perm_vars = perm_test_multi_group(groups, rng=rng)
 print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
@@ -144,13 +196,21 @@ print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
 [159.29, 172.22, 160.02, 175.48] 51.75863218978212 0.014
 ```
 
+</div>
+
 일원분산분석은 $F = 3.715$, $p = 0.0135$를 준다. 순열검정의 $0.0140$과 사실상 같다.
 
 ### 비율: 전환율
 
 대조군은 $23{,}739$명 중 $200$명 전환, 처치군은 $22{,}588$명 중 $182$명 전환이다.
 
+<div class="codebox" markdown>
+
+**예제 7.** 전환율 비교
+
 ```python
+# 전환율 A/B 검정. 표본이 2만 이상인데 전환은 200 안팎이라 전환율이
+# 1% 아래다. 이런 자료에서 순열검정이 쓸모 있다.
 diff_ab, p_ab, perms_ab = perm_test_proportion(23739, 200, 22588, 182, rng=rng)
 print(diff_ab)      # 0.000368
 ```
@@ -160,6 +220,8 @@ print(diff_ab)      # 0.000368
 ```
 0.0003675791182059275
 ```
+
+</div>
 
 전환율 차이 $0.0368$%p는 유의하지 않다. Fisher 정확검정이 $p = 0.6811$, 카이제곱 검정이 $p = 0.6996$을 준다.
 

@@ -28,6 +28,10 @@ $$
 
 을 표준정규분포와 비교한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 순위합검정
+
 ```python
 from scipy import stats
 
@@ -35,6 +39,7 @@ from scipy import stats
 group_a = [12, 15, 18, 22, 25]
 group_b = [8, 10, 14, 19, 21, 24]
 
+# 순위합 검정. 동점 보정을 하지 않으므로 동점이 많으면 mannwhitneyu 를 쓴다.
 stat, p = stats.ranksums(group_a, group_b, alternative="two-sided")
 print(f"Z = {stat:.4f}, p = {p:.2%}")
 # Z = 0.7303, p = 46.52%
@@ -45,6 +50,8 @@ print(f"Z = {stat:.4f}, p = {p:.2%}")
 ```
 Z = 0.7303, p = 46.52%
 ```
+
+</div>
 
 ## Wilcoxon 부호순위검정
 
@@ -60,6 +67,10 @@ $$
 
 이며 $n'$은 0이 아닌 차이의 개수이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 부호순위검정
+
 ```python
 from scipy import stats
 import numpy as np
@@ -70,6 +81,8 @@ paired_data = np.array([
     [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]
 ])
 
+# 대응표본에는 부호순위검정을 쓴다. 짝을 무시하고 독립표본 검정을 쓰면
+# 개체 간 변동이 그대로 남아 검정력을 크게 잃는다.
 stat, p = stats.wilcoxon(
     paired_data[:, 0], paired_data[:, 1],
     alternative="two-sided", method="approx", zero_method="pratt"
@@ -83,6 +96,8 @@ print(f"W = {stat}, p = {p:.4f}")
 ```
 W = 11.0, p = 0.0086
 ```
+
+</div>
 
 !!! danger "같은 자료에 두 검정을 섞어 쓰지 말 것"
     위 대응자료를 두 열로 쪼개어 `ranksums`에 넣으면 $Z = 1.472$, $p = 0.141$이 나온다.
@@ -103,12 +118,17 @@ $$
 순위합과는 $U = W - m(m+1)/2$로 연결되므로 두 검정은 동치이다.
 SciPy 구현은 **동점**을 동점 보정 분산과 연속성 보정 정규근사로 처리한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** Mann-Whitney U 검정
+
 ```python
 from scipy import stats
 
 data0 = [10, 14, 14, 18, 20, 22, 24, 25, 31, 31, 32, 39, 43, 43, 48, 49]
 data1 = [28, 30, 31, 33, 34, 35, 36, 40, 44, 55, 57, 61, 91, 92, 99]
 
+# 크기가 다른 두 집단이어도 상관없다. 순위만 쓰기 때문이다.
 stat, p = stats.mannwhitneyu(data0, data1)
 print(f"U = {stat}, p = {p:.2%}")
 # U = 49.0, p = 0.53%
@@ -119,6 +139,8 @@ print(f"U = {stat}, p = {p:.2%}")
 ```
 U = 49.0, p = 0.53%
 ```
+
+</div>
 
 ## Kruskal--Wallis H 검정
 
@@ -132,6 +154,10 @@ $$
 을 계산한다. $R_j$는 집단 $j$의 순위합, $n_j$는 집단 크기이다. $H_0$(모든 집단이 같은
 모집단에서 왔다) 아래에서 $H$는 근사적으로 $\chi^2_{k-1}$을 따른다.
 
+<div class="codebox" markdown>
+
+**예제 4.** Kruskal-Wallis 검정
+
 ```python
 from scipy import stats
 
@@ -139,6 +165,8 @@ data0 = [10, 14, 14, 18, 20, 22, 24, 25, 31, 31, 32, 39, 43, 43, 48, 49]
 data1 = [28, 30, 31, 33, 34, 35, 36, 40, 44, 55, 57, 61, 91, 92, 99]
 data2 = [0, 3, 9, 22, 23, 25, 25, 33, 34, 34, 40, 45, 46, 48, 62, 67, 84]
 
+# 집단이 셋이 되면 Kruskal-Wallis 로 간다. 유의하다는 결론이 나면 어느 쌍이
+# 다른지는 따로 사후비교를 해야 한다.
 stat, p = stats.kruskal(data0, data1, data2)
 print(f"H = {stat:.4f}, p = {p:.2%}")
 # H = 7.6480, p = 2.18%
@@ -150,11 +178,17 @@ print(f"H = {stat:.4f}, p = {p:.2%}")
 H = 7.6480, p = 2.18%
 ```
 
+</div>
+
 ## Mood 중앙값검정
 
 Mood 중앙값검정은 Kruskal--Wallis의 더 간단한 대안이다. 모든 관측값의 **전체 중앙값**을
 계산하고, 각 관측값을 그 중앙값보다 위인지 아래인지로 분류하여 $2 \times k$ 분할표를
 만든다. 이 표에 카이제곱 검정을 적용하여 집단들의 중앙값이 같은지 판정한다.
+
+<div class="codebox" markdown>
+
+**예제 5.** 중앙값 검정
 
 ```python
 from scipy import stats
@@ -163,6 +197,9 @@ data0 = [10, 14, 14, 18, 20, 22, 24, 25, 31, 31, 32, 39, 43, 43, 48, 49]
 data1 = [28, 30, 31, 33, 34, 35, 36, 40, 44, 55, 57, 61, 91, 92, 99]
 data2 = [0, 3, 9, 22, 23, 25, 25, 33, 34, 34, 40, 45, 46, 48, 62, 67, 84]
 
+# 중앙값 검정은 전체 중앙값을 기준으로 위아래 개수만 센다. 정보를 많이
+# 버리므로 위 Kruskal-Wallis 보다 p-값이 크게 나온다. 같은 자료에서
+# 한쪽은 유의하고 한쪽은 그렇지 않은 것이 그 차이다.
 result = stats.median_test(data0, data1, data2)
 print(f"Grand median = {result.median}")
 print(f"Contingency table:\n{result.table}")
@@ -183,6 +220,8 @@ Contingency table:
  [11  5 10]]
 p-value = 0.1261
 ```
+
+</div>
 
 !!! note "같은 자료에서 두 검정의 결론이 갈린다"
     Kruskal--Wallis는 $p = 0.0218$로 기각하지만 Mood 중앙값검정은 $p = 0.1261$로

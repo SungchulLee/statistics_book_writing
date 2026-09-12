@@ -18,9 +18,17 @@ $$
 
 이다. 여기서 $\hat\theta^*_q$는 붓스트랩 분포의 $q$번째 분위수이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 백분위수법
+
 ```python
 def bootstrap_percentile_ci(data, statistic, n_boot=10_000, alpha=0.05, rng=None):
-    """Percentile bootstrap CI."""
+    """백분위수 붓스트랩 신뢰구간.
+
+    붓스트랩 분포의 2.5·97.5 백분위점을 그대로 쓴다. 가장 간단하고
+    직관적이지만, 통계량이 치우쳐 있거나 편향이 있으면 어긋난다.
+    """
     rng = rng or np.random.default_rng(0)
     n = len(data)
     boot_stats = np.array([
@@ -32,6 +40,8 @@ def bootstrap_percentile_ci(data, statistic, n_boot=10_000, alpha=0.05, rng=None
     return lo, hi, boot_stats
 ```
 
+</div>
+
 단순하고 직관적이지만 붓스트랩 분포가 편향되거나 치우쳐 있으면 포함확률이 명목값에 못 미칠 수 있다.
 
 ## 기본(역백분위수)법
@@ -42,14 +52,26 @@ $$
 \text{CI}_{\text{basic}} = \bigl[2\hat\theta - \hat\theta^*_{1 - \alpha/2},\;2\hat\theta - \hat\theta^*_{\alpha/2}\bigr]
 $$
 
+<div class="codebox" markdown>
+
+**예제 2.** 기본(역백분위수)법
+
 ```python
 def bootstrap_basic_ci(data, statistic, boot_stats, alpha=0.05):
-    """Basic (reverse-percentile) bootstrap CI."""
+    """기본(역백분위수) 붓스트랩 신뢰구간.
+
+    백분위점을 추정값 둘레로 되비춘다. 붓스트랩 분포가 오른쪽으로 치우쳐
+    있으면 구간은 왼쪽으로 늘어나는데, 이는 "추정값이 참값보다 크게 나오는
+    경향이 있다면 구간을 아래쪽으로 넓혀야 한다"는 셈법에서 나온다.
+    백분위수법과 정반대 방향으로 움직이는 것이 처음에는 어리둥절하다.
+    """
     theta_hat = statistic(data)
     lo = 2 * theta_hat - np.percentile(boot_stats, 100 * (1 - alpha / 2))
     hi = 2 * theta_hat - np.percentile(boot_stats, 100 * alpha / 2)
     return lo, hi
 ```
+
+</div>
 
 핵심 착상은 붓스트랩이 $\hat\theta$를 과대추정한다면 분위수를 $\hat\theta$에 대해 반사시켜 보정한다는 것이다.
 
@@ -78,23 +100,35 @@ $$
 
 이다. $\hat\theta_{(i)}$는 관측 $i$를 뺀 잭나이프 반복값이고 $\bar\theta_{(\cdot)}$는 잭나이프 반복값들의 평균이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** BCa법
+
 ```python
 def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
-    """BCa (bias-corrected and accelerated) bootstrap CI."""
+    """BCa(편향보정 가속) 붓스트랩 신뢰구간.
+
+    백분위점을 두 가지로 조정한다. z0 은 붓스트랩 분포가 추정값을 중심으로
+    치우친 정도(편향)를, a 는 통계량의 분산이 참값에 따라 달라지는 정도
+    (가속)를 잡는다. 셋 중 가장 정확하지만 계산이 가장 무겁다.
+    """
     n = len(data)
     theta_hat = statistic(data)
 
-    # Bias correction factor z0
+    # 편향보정 z0: 붓스트랩 값 중 관측된 추정값보다 작은 것의 비율을
+    # 정규 분위점으로 옮긴다. 치우침이 없으면 절반이라 z0 이 0 이 된다.
     z0 = stats.norm.ppf(np.mean(boot_stats < theta_hat))
 
-    # Acceleration factor a -- jackknife estimate
+    # 가속 a: 잭나이프로 구한다. 관측값을 하나씩 빼 가며 통계량을 계산해,
+    # 그 값들의 왜도에서 얻는다.
     jack = np.array([statistic(np.delete(data, i)) for i in range(n)])
     jack_mean = jack.mean()
     a_num = np.sum((jack_mean - jack) ** 3)
     a_den = 6 * np.sum((jack_mean - jack) ** 2) ** 1.5
     a = a_num / a_den if a_den != 0 else 0.0
 
-    # Adjusted percentiles
+    # 두 보정을 반영해 백분위점을 옮긴다. z0=0, a=0 이면 원래 백분위수법과
+    # 정확히 같아진다.
     z_alpha = stats.norm.ppf(alpha / 2)
     z_1alpha = stats.norm.ppf(1 - alpha / 2)
 
@@ -106,14 +140,22 @@ def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
     return lo, hi, z0, a
 ```
 
+</div>
+
 ## Poisson 자료에 적용하기
 
 참 비율 $\lambda = 3.5$인 Poisson 분포에서 $n = 80$개를 뽑는다. Poisson 분포는 이산이고 오른쪽으로 치우쳐 있어 붓스트랩 방법의 좋은 시험대이다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 세 방법을 포아송 자료에
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 포아송 자료에 세 방법을 모두 적용해 구간을 견준다. 자료가 치우쳐
+# 있으므로 세 구간이 조금씩 어긋난다.
 rng = np.random.default_rng(0)
 data = stats.poisson.rvs(3.5, size=80, random_state=42)
 print(data.mean())          # 3.425
@@ -137,6 +179,8 @@ for name, (lo, hi) in [("백분위수", (lo_p, hi_p)), ("기본", (lo_b, hi_b)),
    기본: [3.0250, 3.8125]  폭 0.7875
   BCa: [3.0375, 3.8250]  폭 0.7875
 ```
+
+</div>
 
 | 방법 | 하한 | 상한 | 폭 |
 |---|---|---|---|

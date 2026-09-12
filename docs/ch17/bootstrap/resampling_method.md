@@ -192,8 +192,14 @@ $$\text{Bias} = E[\text{추정량}] - \text{참 모수} \approx \text{mean}(\tex
 
 극단 분위수(예: 99번째 백분위수)에는 $B \geq 5000$.
 
+<div class="codebox" markdown>
+
+**예제 2.** 반복 횟수 B가 주는 차이
+
 ```python
-# Standard error with different B values
+# 붓스트랩 반복 횟수 B 를 늘리면 추정이 안정된다. 다만 B 는 붓스트랩
+# 자체의 몬테카를로 오차만 줄일 뿐, 표본크기 n 이 주는 한계를 넘지는 못한다.
+# 표준오차 추정에는 수백 번이면 족하고, 신뢰구간에는 수천 번이 필요하다.
 np.random.seed(1)
 income = loans_income.values
 
@@ -217,6 +223,8 @@ B =   500: SE = $   760.6
 B =  1000: SE = $   741.7
 B =  5000: SE = $   759.5
 ```
+
+</div>
 
 $B = 100$과 $B = 5000$의 차이가 8%에 불과하다. 표준오차만 필요하다면 $B$를 크게 할 이유가 별로 없다.
 
@@ -242,9 +250,19 @@ $B = 100$과 $B = 5000$의 차이가 8%에 불과하다. 표준오차만 필요�
 
 시계열이나 군집자료에 쓴다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 블록 붓스트랩
+
 ```python
 def block_bootstrap(data, block_size, n_bootstrap, rng=None):
-    """Moving-block bootstrap for dependent data."""
+    """이동블록 붓스트랩. 서로 독립이 아닌 자료에 쓴다.
+
+    보통의 붓스트랩은 관측값을 하나씩 뽑으므로 시간 순서의 구조가 모두
+    부서진다. 시계열처럼 이웃한 값끼리 얽혀 있는 자료에서는 표준오차를
+    크게 낮잡게 된다. 그래서 낱값이 아니라 길이 block_size 짜리 덩어리를
+    통째로 뽑아, 덩어리 안의 상관은 그대로 남긴다.
+    """
     rng = np.random.default_rng() if rng is None else rng
     n = len(data)
     n_blocks = int(np.ceil(n / block_size))
@@ -256,6 +274,8 @@ def block_bootstrap(data, block_size, n_bootstrap, rng=None):
     return np.array(samples)
 ```
 
+</div>
+
 !!! note "고정 블록 대 이동 블록"
     위 구현은 **이동 블록**(moving-block) 붓스트랩으로, 블록의 시작점을 임의의 위치에서 뽑는다. 자료를 겹치지 않는 고정 블록으로 미리 자르고 그 블록들을 재표집하는 방식도 있지만, 마지막 블록의 길이가 다를 수 있고 블록 경계가 고정되어 정보를 잃는다. 이동 블록이 대체로 낫다.
 
@@ -263,11 +283,16 @@ def block_bootstrap(data, block_size, n_bootstrap, rng=None):
 
 일부 통계량에서 더 정확한 신뢰구간을 준다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 백분위수-t 붓스트랩
+
 ```python
 import numpy as np
 
 rng = np.random.default_rng(0)
-data = rng.exponential(2.0, 40)          # 치우친 자료
+# 치우친 자료. 백분위수법이 어긋나기 쉬운 경우라 백분위수-t 를 쓴다.
+data = rng.exponential(2.0, 40)
 n, B = len(data), 2000
 
 original_statistic = data.mean()
@@ -279,8 +304,11 @@ resamples = data[idx]
 bootstrap_statistics = resamples.mean(axis=1)
 bootstrap_ses = resamples.std(axis=1, ddof=1) / np.sqrt(n)
 
-# Compute t-statistics and use t-quantiles instead of percentile quantiles
+# 백분위수-t 는 통계량 자체가 아니라 스튜던트화한 값의 분포를 쓴다.
+# 이러면 치우침이 보정되어 포함확률이 명목수준에 더 가까워진다.
+# 대신 붓스트랩 표본마다 표준오차를 또 계산해야 해 비용이 든다.
 bootstrap_t_stats = (bootstrap_statistics - original_statistic) / bootstrap_ses
+# 위아래가 뒤집혀 들어간다. t 분포의 위쪽 분위점이 구간의 아래끝을 만든다.
 ci_lower = original_statistic - np.percentile(bootstrap_t_stats, 97.5) * original_se
 ci_upper = original_statistic - np.percentile(bootstrap_t_stats, 2.5) * original_se
 
@@ -297,6 +325,8 @@ theta_hat = 2.3157
 bootstrap-t CI = (1.6976, 3.3636)
 percentile  CI = (1.6498, 3.0813)
 ```
+
+</div>
 
 분위수의 순서가 뒤바뀐 것처럼 보이는데 이는 실수가 아니다. $t^* = (\hat\theta^* - \hat\theta)/\widehat{\text{SE}}^*$의 **상위** 분위수가 신뢰구간의 **하한**에 대응한다. 자세한 내용은 [붓스트랩-t 방법](../bootstrap_ci/bootstrap_t.md)에서 다룬다.
 

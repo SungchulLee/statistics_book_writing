@@ -16,6 +16,10 @@ $$
 
 모형선택을 위해 차수 $d = 1, 2, \ldots, 10$인 다항회귀 모형을 적합하고 각 교차검증 방법이 추정한 검정 MSE를 비교한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 모의자료와 다항 파이프라인
+
 ```python
 import numpy as np
 from sklearn.preprocessing import PolynomialFeatures
@@ -23,12 +27,18 @@ from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 
 def generate_data(n=200, seed=42):
+    """sin 곡선에 선형 추세와 잡음을 얹은 자료를 만든다.
+
+    참 관계가 다항식이 아니므로 "옳은 차수"가 따로 없다. 세 교차검증
+    방법이 어느 차수를 고르는지 견주는 것이 목적이다.
+    """
     rng = np.random.default_rng(seed)
     x = rng.uniform(-3, 3, n)
     y = np.sin(x) + 0.3 * x + rng.normal(0, 0.5, n)
     return x.reshape(-1, 1), y
 
 def poly_pipeline(degree):
+    """주어진 차수의 다항회귀 파이프라인."""
     return Pipeline([
         ("poly", PolynomialFeatures(degree=degree, include_bias=False)),
         ("lr", LinearRegression()),
@@ -37,6 +47,8 @@ def poly_pipeline(degree):
 X, y = generate_data(n=200)
 degrees = range(1, 11)
 ```
+
+</div>
 
 ---
 
@@ -52,8 +64,18 @@ $$
 
 **단점**: 어떤 관측이 훈련집합과 검정집합에 들어가는지에 따라 결과가 달라지므로 추정값의 분산이 크다. 다른 무작위 분할로 반복하면 다른 답이 나온다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 검증집합 방법
+
 ```python
 def validation_set_mse(X, y, degrees, n_splits=10, rng=None):
+    """검증집합 방법. 자료를 절반으로 갈라 한쪽으로 훈련하고 한쪽으로 잰다.
+
+    가장 간단하지만 두 가지 약점이 있다. 어떻게 가르느냐에 따라 결과가
+    들쭉날쭉하고(그래서 여기서는 10번 다르게 갈라 본다), 훈련에 절반밖에
+    쓰지 못해 성능을 실제보다 나쁘게 잡는다.
+    """
     rng = rng or np.random.default_rng(7)
     n = len(y); n_train = n // 2
     all_mses = {d: [] for d in degrees}
@@ -65,6 +87,8 @@ def validation_set_mse(X, y, degrees, n_splits=10, rng=None):
             all_mses[d].append(np.mean((y[te] - model.predict(X[te])) ** 2))
     return all_mses
 ```
+
+</div>
 
 $10$번의 분할에서 **각 분할이 고른 최적 차수**는
 
@@ -90,10 +114,16 @@ $$
 
 **단점**: 계산이 비싸다($n$번의 모형 적합). 다만 선형모형에는 지름길 공식이 있다(연습문제 1).
 
+<div class="codebox" markdown>
+
+**예제 3.** 하나빼기 교차검증
+
 ```python
 from sklearn.model_selection import cross_val_score, LeaveOneOut
 import time
 
+# 하나빼기 교차검증(LOOCV). 관측값 하나씩만 남기므로 훈련자료를 거의
+# 다 쓰고, 어떻게 가르느냐에 따른 흔들림도 없다. 대신 n 번 적합해야 한다.
 t0 = time.time()
 loocv_mses = [-cross_val_score(poly_pipeline(d), X, y, cv=LeaveOneOut(),
                                scoring="neg_mean_squared_error").mean()
@@ -108,6 +138,8 @@ print(f"Best degree (LOOCV): {int(np.argmin(loocv_mses)) + 1}")
 ```
 Best degree (LOOCV): 6
 ```
+
+</div>
 
 !!! note "소요 시간을 출력에 싣지 않은 이유"
     LOOCV의 요점 가운데 하나는 **비싸다**는 것이므로 시간을 재는 것 자체는
@@ -136,9 +168,16 @@ $$
 
 **편향-분산 절충**: $k$가 작으면 편향이 크지만(겹당 훈련자료가 적다) 분산이 작다. $k$가 크면 편향이 작지만 훈련집합끼리 많이 겹쳐 분산이 커진다.
 
+<div class="codebox" markdown>
+
+**예제 4.** k겹 교차검증
+
 ```python
 from sklearn.model_selection import KFold
 
+# k겹 교차검증. 앞 두 방법의 절충이다. k 번만 적합하면 되고, 겹마다의
+# 훈련자료가 조금씩 겹쳐 LOOCV 보다 추정의 분산이 오히려 작다.
+# 실무에서 5 나 10 을 쓰는 까닭이 이것이다.
 for k in (5, 10):
     kf = KFold(n_splits=k, shuffle=True, random_state=42)
     mses = [-cross_val_score(poly_pipeline(d), X, y, cv=kf,
@@ -153,6 +192,8 @@ for k in (5, 10):
 Best degree (5-fold): 6
 Best degree (10-fold): 6
 ```
+
+</div>
 
 ---
 

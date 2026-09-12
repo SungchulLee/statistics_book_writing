@@ -117,15 +117,21 @@ $$Z = \frac{W^+ - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
 ### 파이썬 구현
 
+<div class="codebox" markdown>
+
+**예제 1.** 부호순위검정
+
 ```python
 import numpy as np
 from scipy.stats import wilcoxon
 
-# Data: before and after scores
+# 훈련 전후의 점수. 같은 사람을 두 번 잰 대응자료다.
 before = np.array([70, 68, 75, 80, 72, 74, 69, 77, 73, 76])
 after = np.array([72, 69, 78, 85, 75, 76, 70, 79, 74, 80])
 
-# Perform Wilcoxon Signed-Rank Test
+# 부호순위검정은 대응 t 검정의 비모수 대응이다. 차이의 부호와 크기 순위만
+# 쓰므로 정규성을 요구하지 않는다. 열 쌍 모두 점수가 올랐으므로 통계량이
+# 0 이 되고, 그때 나올 수 있는 가장 작은 p-값이 (1/2)^10 의 두 배다.
 stat, p_value = wilcoxon(after, before)
 
 print(f"Test Statistic: {stat}")     # 0.0
@@ -147,6 +153,8 @@ P-value: 0.001953125
 Reject the null hypothesis: Significant improvement in scores.
 ```
 
+</div>
+
 ---
 
 ## 대응 부호검정
@@ -160,6 +168,10 @@ Wilcoxon 부호순위검정의 대칭성 가정이 깨질 때는 **대응 부호
 3. $H_0$ 아래에서 각 차이가 양수일 확률과 음수일 확률이 같으므로 $n_+ \sim \text{Binomial}(n, 0.5)$이다.
 4. 이항분포로 $p$값을 계산한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 같은 자료에 부호검정
+
 ```python
 from scipy.stats import binom
 import numpy as np
@@ -167,13 +179,16 @@ import numpy as np
 before = np.array([70, 68, 75, 80, 72, 74, 69, 77, 73, 76])
 after = np.array([72, 69, 78, 85, 75, 76, 70, 79, 74, 80])
 
+# 같은 자료에 부호검정을 돌린다. 크기는 버리고 부호만 세므로 계산이 더 쉽다.
 differences = after - before
 n_plus = np.sum(differences > 0)
 n_minus = np.sum(differences < 0)
 n = n_plus + n_minus
 W = min(n_plus, n_minus)
 
-p_value = min(1.0, 2 * binom.cdf(W, n, 0.5))  # Two-tailed
+# 귀무가설 아래에서 부호가 +일 확률이 0.5 이므로, 통계량이 이항분포를 따른다.
+# 표본이 작을 때는 정규근사 대신 이렇게 정확분포를 쓰는 편이 낫다.
+p_value = min(1.0, 2 * binom.cdf(W, n, 0.5))  # 양측
 
 print(f"n+ = {n_plus}, n- = {n_minus}")   # n+ = 10, n- = 0
 print(f"P-value: {p_value:.6f}")          # 0.001953
@@ -185,6 +200,8 @@ print(f"P-value: {p_value:.6f}")          # 0.001953
 n+ = 10, n- = 0
 P-value: 0.001953
 ```
+
+</div>
 
 !!! warning "$2 \times$ 규칙은 1을 넘을 수 있다"
     $2 \times P(S \le W)$는 $W$가 $n/2$에 가까우면 1을 넘는다. 예를 들어 $n = 10$, $W = 5$이면 $2 \times 0.6230 = 1.246$이다. 반드시 1로 자르거나 `scipy.stats.binomtest`를 쓰는 편이 안전하다.

@@ -63,24 +63,30 @@ $$U = \min(U_1, U_2)$$
 
 ### 파이썬 구현
 
+<div class="codebox" markdown>
+
+**예제 1.** Mann-Whitney U 검정
+
 ```python
 import numpy as np
 from scipy.stats import mannwhitneyu, rankdata
 
-# Example: comparing test scores of two teaching methods
+# 두 교수법의 시험 점수를 견준다.
 group_a = np.array([85, 78, 92, 88, 76, 95, 89, 82, 91, 87])
 group_b = np.array([72, 68, 81, 75, 70, 77, 74, 69, 73, 71])
 
-# Perform Mann-Whitney U test
+# Mann-Whitney U 는 이표본 t 검정의 비모수 대응이다. 귀무가설이 "두 평균이
+# 같다"가 아니라 "무작위로 뽑은 A 가 B 보다 클 확률이 1/2"이라는 점에 주의한다.
 stat, p_value = mannwhitneyu(group_a, group_b, alternative='two-sided')
 
 print(f"U statistic: {stat}")        # 97.0
 print(f"P-value: {p_value:.6f}")     # 0.000440  (asymptotic)
 
-# Exact p-value
+# 표본이 작고 동점이 없으면 정확분포를 쓸 수 있다. 근사값과 꽤 갈린다.
 print(mannwhitneyu(group_a, group_b, method='exact').pvalue)   # 7.58e-05
 
-# Mean ranks -- use rankdata, not argsort, so that ties get midranks
+# 유의하다는 결론이 났을 때 어느 쪽이 큰지는 평균순위로 말한다.
+# 동점에 중간순위를 주려면 argsort 가 아니라 rankdata 를 써야 한다.
 combined = np.concatenate([group_a, group_b])
 ranks = rankdata(combined)
 mean_rank_a = ranks[:len(group_a)].mean()
@@ -110,6 +116,8 @@ Mean rank Group B: 5.8
 Reject H0: Significant difference between groups.
 Group A tends to have larger values.
 ```
+
+</div>
 
 !!! warning "`argsort(argsort(x))`는 동점을 처리하지 못한다"
     순위를 구할 때 `np.argsort(np.argsort(x)) + 1`을 쓰는 코드를 흔히 본다. 동점이 없으면 맞지만, 동점이 있으면 **중간순위 대신 임의의 순서**를 배정한다.
@@ -186,28 +194,38 @@ $$\chi^2 = \sum \frac{(O - E)^2}{E}$$
 
 ### 파이썬 구현
 
+<div class="codebox" markdown>
+
+**예제 2.** Mood의 중앙값 검정
+
 ```python
 import numpy as np
 from scipy.stats import chi2_contingency
 
 def moods_median_test(*groups, correction=True):
-    """
-    Perform Mood's Median Test to compare medians of multiple groups.
+    """Mood 의 중앙값 검정. 여러 집단의 중앙값을 견준다.
 
-    Parameters:
-    - groups: Variable number of arrays representing the groups.
-    - correction: apply Yates' continuity correction (2x2 tables only).
+    자료 전체의 중앙값을 구한 뒤, 집단마다 그보다 큰 값과 작은 값의 개수를
+    세어 분할표를 만들고 카이제곱 검정을 돌린다. 값을 "위/아래" 둘로만
+    나누므로 순위검정보다도 정보를 더 버리고, 그만큼 검정력이 낮다.
+    대신 가정이 거의 없어 아주 거친 자료에도 쓸 수 있다.
 
-    Returns:
-    - chi2_stat: The chi-square statistic.
-    - p_value: The p-value for the test.
-    - contingency_table: The contingency table used.
+    매개변수
+    --------
+    groups : 집단을 나타내는 배열 여럿
+    correction : Yates 연속성 보정 여부 (2x2 표에서만 뜻이 있다)
+
+    돌려주는 값
+    ----------
+    chi2_stat, p_value, contingency_table
     """
+    # 전체 중앙값을 기준선으로 삼는다.
     combined_data = np.concatenate(groups)
     overall_median = np.median(combined_data)
 
     contingency_table = []
     for group in groups:
+        # 중앙값과 정확히 같은 값은 어느 쪽에도 넣지 않는다.
         above_median = np.sum(group > overall_median)
         below_median = np.sum(group < overall_median)
         contingency_table.append([above_median, below_median])
@@ -222,6 +240,7 @@ def moods_median_test(*groups, correction=True):
 group_a = np.array([50, 55, 60, 65, 70])
 group_b = np.array([45, 50, 55, 60, 65])
 
+# 보정 여부에 따라 p-값이 꽤 갈린다. 2x2 표에서 표본이 작을 때 그렇다.
 for corr in (True, False):
     chi2_stat, p_value, table = moods_median_test(group_a, group_b,
                                                   correction=corr)
@@ -238,6 +257,8 @@ Contingency Table:
 [[3 2]
  [2 3]]
 ```
+
+</div>
 
 **출력:**
 
@@ -290,6 +311,10 @@ $H_0$ 아래에서 $H$는 근사적으로 자유도 $k - 1$인 $\chi^2$ 분포�
 
 ### 파이썬 구현
 
+<div class="codebox" markdown>
+
+**예제 3.** Kruskal-Wallis 검정
+
 ```python
 from scipy.stats import kruskal
 
@@ -297,6 +322,8 @@ group_a = [85, 78, 92, 88, 76]
 group_b = [72, 68, 81, 75, 70]
 group_c = [90, 95, 88, 92, 87]
 
+# Kruskal-Wallis 는 일원배치 분산분석의 비모수 대응이다. 집단이 셋 이상일
+# 때 쓰며, Mann-Whitney U 를 여러 집단으로 넓힌 것이라고 보면 된다.
 stat, p_value = kruskal(group_a, group_b, group_c)
 
 print(f"H statistic: {stat:.4f}")   # 9.4136
@@ -316,6 +343,8 @@ H statistic: 9.4136
 P-value: 0.0090
 Reject H0: At least one group differs significantly.
 ```
+
+</div>
 
 ### 사후검정
 

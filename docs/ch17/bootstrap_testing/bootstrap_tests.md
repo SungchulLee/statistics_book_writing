@@ -18,20 +18,35 @@ $$
 
 중심화 단계가 결정적이다. 재표집된 자료의 평균이 평균적으로 $\mu_0$이 되게 하여 붓스트랩 세계에서 귀무가설을 강제한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 일표본 붓스트랩 검정
+
 ```python
 import numpy as np
 
 def bootstrap_mean_test(data, mu_0=0, n_boot=10_000, rng=None):
-    """Bootstrap test for H0: mean = mu_0. Returns the two-sided p-value."""
+    """H0: 평균 = mu_0 에 대한 붓스트랩 검정. 양측 p-값을 돌려준다.
+
+    검정을 하려면 귀무가설이 참인 상태에서 뽑아야 한다. 그래서 자료의
+    중심을 mu_0 으로 옮긴 뒤 재표집한다. 이 중심 이동 한 줄이 신뢰구간을
+    만들 때와 검정을 할 때를 가르는 핵심이다.
+    """
     rng = rng or np.random.default_rng(0)
     n = len(data)
+    # 자료를 통째로 옮겨 평균이 정확히 mu_0 이 되게 한다. 퍼짐과 모양은
+    # 그대로 남으므로, 귀무가설만 참인 세계를 흉내 낸 셈이다.
     centered = data - data.mean() + mu_0
     boot_means = centered[rng.integers(0, n, (n_boot, n))].mean(axis=1)
     obs_mean = data.mean()
+    # 분자와 분모에 1 을 더한다. 이래야 p-값이 0 이 되는 일을 막을 수 있다.
+    # 관측된 자료 자체도 하나의 가능한 재표본으로 세는 셈이다.
     p_value = ((np.abs(boot_means - mu_0) >= abs(obs_mean - mu_0)).sum() + 1) \
               / (n_boot + 1)
     return obs_mean, p_value, boot_means
 ```
+
+</div>
 
 !!! note "$+1$ 보정"
     분자와 분모의 $+1$은 관측된 자료 자신을 하나의 재표본으로 세는 것이다. 이 보정이 없으면 $p$값이 정확히 $0$이 될 수 있고, 검정의 크기가 명목수준을 미세하게 넘는다([대응 순열검정](../permutation/paired.md) 연습문제 3 참조).
@@ -45,9 +60,17 @@ $H_0\colon \mu_x = \mu_y$를 검정하기 위해 두 표본을 합치고 합친 
 3. 각 반복에서 평균차 $\bar x^{*(b)} - \bar y^{*(b)}$를 **계산한다**.
 4. 관측 차이만큼 극단적인 붓스트랩 차이의 비율이 **$p$값**이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 이표본 붓스트랩 검정
+
 ```python
 def bootstrap_two_sample(x, y, n_boot=10_000, rng=None):
-    """Bootstrap test for H0: mean(x) = mean(y), pooling under the null."""
+    """H0: 두 평균이 같다에 대한 붓스트랩 검정.
+
+    귀무가설이 참이면 두 집단이 같은 모집단에서 나온 것이다. 그래서 둘을
+    합쳐 하나의 웅덩이로 만들고 거기서 다시 뽑는다.
+    """
     rng = rng or np.random.default_rng(0)
     obs_diff = x.mean() - y.mean()
     pooled = np.concatenate([x, y])
@@ -57,6 +80,8 @@ def bootstrap_two_sample(x, y, n_boot=10_000, rng=None):
     p_value = ((np.abs(boot_diffs) >= abs(obs_diff)).sum() + 1) / (n_boot + 1)
     return obs_diff, p_value, boot_diffs
 ```
+
+</div>
 
 !!! warning "합치기는 등분산도 가정한다"
     합쳐진 자료에서 재표집하면 두 집단이 같은 분산을 갖게 된다. 두 집단의 분산이 실제로 다르고 표본크기가 불균형하면 이 검정의 제1종 오류율이 무너진다. 그때는 각 집단을 자기 평균으로 중심화한 뒤 **따로** 재표집해야 한다([두 평균에 대한 붓스트랩 검정](./two_means.md) 참조).
@@ -77,9 +102,17 @@ $$
 
 이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 중앙값의 표준오차와 편향
+
 ```python
 def bootstrap_se_median(data, n_boot=10_000, rng=None):
-    """Estimate the standard error and bias of the median via bootstrap."""
+    """중앙값의 표준오차와 편향을 붓스트랩으로 추정한다.
+
+    편향은 붓스트랩 값들의 평균에서 원래 추정값을 뺀 것이다. 0 에서 멀면
+    그 통계량이 참값을 체계적으로 빗나간다는 뜻이다.
+    """
     rng = rng or np.random.default_rng(0)
     n = len(data)
     boot_medians = np.median(data[rng.integers(0, n, (n_boot, n))], axis=1)
@@ -88,9 +121,15 @@ def bootstrap_se_median(data, n_boot=10_000, rng=None):
     return se, bias, boot_medians
 ```
 
+</div>
+
 ## 시연
 
 세 방법을 모의자료에 적용한다.
+
+<div class="codebox" markdown>
+
+**예제 4.** 세 검정 실행
 
 ```python
 import numpy as np
@@ -123,6 +162,8 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 4.150721066684774 0.051794820517948204
 31508.06500959787 1912.1800372703474 269.241019752415
 ```
+
+</div>
 
 | 검정 | 결과 | 비교 대상 |
 |:---|:---|:---|

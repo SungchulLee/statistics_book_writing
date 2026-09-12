@@ -42,9 +42,11 @@ $$
 R = \frac{N_+ + N_- + 1 - \displaystyle\sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}.
 $$
 
-## 구현
-
 다음 파이썬 함수는 정규근사를 이용한 런 검정을 구현한다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 런 검정 구현
 
 ```python
 import numpy as np
@@ -52,20 +54,29 @@ import scipy.stats as stats
 
 
 def runs_test(data):
-    """Wald-Wolfowitz runs test for a +1/-1 sequence."""
+    """+1/-1 수열에 대한 Wald-Wolfowitz 런 검정.
+
+    같은 부호가 이어지는 덩어리를 런이라 한다. 런이 너무 적으면 뭉쳐
+    있다는 뜻이고 너무 많으면 번갈아 난다는 뜻이며, 둘 다 무작위가 아니다.
+    """
     data = np.asarray(data)
     N = data.shape[0]
     N_plus = (data == 1).sum()
     N_minus = N - N_plus
 
+    # 무작위라는 가정 아래에서 런 개수의 평균과 표준편차
     mu = 2 * N_plus * N_minus / N + 1
     sigma = np.sqrt((mu - 1) * (mu - 2) / (N - 1))
+    # 이웃한 원소의 곱은 부호가 바뀌는 자리에서만 -1 이다. 그 개수를 세면
+    # 런의 경계 수가 나온다.
     R = (N_plus + N_minus + 1 - np.sum(data[1:] * data[:-1])) / 2
 
     statistic = (R - mu) / sigma
     p_value = 2 * stats.norm.cdf(-abs(statistic))
     return statistic, p_value
 ```
+
+</div>
 
 <div class="exbox" markdown>
 

@@ -16,17 +16,27 @@ $$
 
 이다. $c = 20{,}000$, $\lambda^{-1} = 50{,}000$(척도모수)이면 참 평균이 약 \$70,000이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 치우친 소득 모집단 만들기
+
 ```python
 import numpy as np
 
 def simulate_income_data(n=5000, seed=3):
-    """Create synthetic right-skewed income data."""
+    """오른쪽으로 치우친 소득 자료를 만든다.
+
+    모집단을 우리가 만들었으므로 참 평균을 알고 있다. 뒤에서 신뢰구간이
+    그 값을 정말 95% 담는지 세어 볼 수 있다.
+    """
     rng = np.random.default_rng(seed)
     return rng.exponential(scale=50_000, size=n) + 20_000
 
 population = simulate_income_data()
 print(population.mean(), np.median(population))    # 69526  54542
 
+# 표본은 20개뿐이다. 치우친 모집단에서 이만큼만 뽑으면 붓스트랩 구간의
+# 실제 포함확률이 95%에 못 미친다 — 아래 모의실험에서 확인한다.
 rng = np.random.default_rng(303)
 sample = rng.choice(population, size=20, replace=False)
 ```
@@ -36,6 +46,8 @@ sample = rng.choice(population, size=20, replace=False)
 ```
 69525.69401218835 54541.90941528454
 ```
+
+</div>
 
 ## 붓스트랩 표집분포
 
@@ -47,13 +59,24 @@ $$
 
 집합 $\{\bar x^{*(1)}, \ldots, \bar x^{*(B)}\}$이 $\bar x$의 표집분포를 근사한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 붓스트랩 표집분포
+
 ```python
 def bootstrap_sampling_distribution(sample, n_bootstrap=20_000, rng=None):
-    """Bootstrap sampling distribution of the mean (vectorized)."""
+    """표본평균의 붓스트랩 표집분포. 반복문 없이 한 번에 계산한다.
+
+    (n_bootstrap, n) 모양의 색인 배열을 만들어 한꺼번에 뽑으면 파이썬
+    반복문이 사라진다. 붓스트랩처럼 같은 일을 만 번 되풀이하는 계산에서
+    속도가 크게 달라진다.
+    """
     rng = rng or np.random.default_rng(0)
     n = len(sample)
     return sample[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
 ```
+
+</div>
 
 ## 여러 신뢰수준에서의 신뢰구간
 
@@ -71,15 +94,25 @@ $$
 | 95% | 2.5번째 | 97.5번째 |
 | 99% | 0.5번째 | 99.5번째 |
 
+<div class="codebox" markdown>
+
+**예제 3.** 여러 신뢰수준의 구간
+
 ```python
 def compute_confidence_intervals(bootstrap_dist):
-    """Percentile CIs at several confidence levels."""
+    """여러 신뢰수준에서의 백분위수 신뢰구간.
+
+    신뢰수준을 올리면 구간이 넓어진다. 확신을 더 얻는 대가로 말해 주는
+    범위가 흐려지는 맞바꿈이다.
+    """
     return {
         '90%': np.percentile(bootstrap_dist, [5, 95]),
         '95%': np.percentile(bootstrap_dist, [2.5, 97.5]),
         '99%': np.percentile(bootstrap_dist, [0.5, 99.5]),
     }
 ```
+
+</div>
 
 표본평균이 \$67,895인 한 표본($n = 20$)에서:
 
@@ -117,9 +150,17 @@ $$
 \widehat{\text{coverage}} = \frac{1}{N}\sum_{i=1}^{N}\mathbf{1}\!\bigl(\mu \in \text{CI}_i\bigr)
 $$
 
+<div class="codebox" markdown>
+
+**예제 4.** 포함확률 모의실험
+
 ```python
 def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
-    """Empirical coverage of the percentile bootstrap CI."""
+    """백분위수 붓스트랩 구간의 실제 포함확률을 센다.
+
+    모집단에서 표본을 새로 뽑는 일을 N 번 되풀이하며, 그때마다 만든 구간이
+    참 평균을 담는지 센다. 95%로 약속한 구간의 실제 성적표다.
+    """
     rng = rng or np.random.default_rng(303)
     hits = 0
     for _ in range(N):
@@ -129,6 +170,8 @@ def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
         hits += lo <= true_mean <= hi
     return hits / N
 ```
+
+</div>
 
 지수 소득 자료에 $n = 20$을 쓰면 백분위수 $95$% 구간의 실제 포함확률이 **$0.900$**으로 명목값에 크게 못 미친다. 분포의 왜도 때문이다. 표본크기를 늘리거나 BCa 보정을 쓰면 개선되지만, 연습문제 2에서 보듯 $n = 20$에서는 BCa도 큰 도움이 되지 않는다.
 

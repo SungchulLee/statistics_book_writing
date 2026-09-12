@@ -152,15 +152,19 @@ $5$% 수준에서는 유의하지 않다. 각 집단이 $5$개뿐이므로 가�
 
 두 변수 사이의 관측된 상관이 유의한지 검정한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 상관에 대한 순열검정
+
 ```python
 import numpy as np
 
 def permutation_correlation_test(x, y, n_permutations=10000, seed=0):
-    """
-    Permutation test for the significance of a correlation.
+    """상관계수의 유의성에 대한 순열검정.
 
-    Only y is shuffled; x stays fixed. This breaks any association
-    between the two variables while keeping both marginals intact.
+    y 만 섞고 x 는 그대로 둔다. 이러면 두 변수의 짝만 부서지고 각각의
+    주변분포는 온전히 남으므로, "관계가 없다"는 상태를 정확히 흉내 낼 수
+    있다. 둘 다 섞으면 헛일이 되고, x 를 섞어도 결과는 같다.
     """
     rng = np.random.default_rng(seed)
     observed_corr = np.corrcoef(x, y)[0, 1]
@@ -188,6 +192,8 @@ Observed Correlation: 0.9524
 Permutation P-value: 0.0013
 ```
 
+</div>
+
 $n = 8$이므로 $8! = 40{,}320$가지 순열을 모두 열거할 수 있고, 정확 $p$값은 $0.001141$이다.
 
 ---
@@ -196,15 +202,19 @@ $n = 8$이므로 $8! = 40{,}320$가지 순열을 모두 열거할 수 있고, �
 
 대응자료에서는 집단 라벨을 섞는 대신 차이의 **부호**를 섞는다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 대응자료의 부호 뒤집기 검정
+
 ```python
 import numpy as np
 
 def paired_permutation_test(before, after, n_permutations=10000, seed=0):
-    """
-    Sign-flip permutation test for paired data.
+    """대응자료에 대한 부호 뒤집기 순열검정.
 
-    Under H0 the distribution of each difference is symmetric about 0,
-    so flipping the sign of any subset of differences is equally likely.
+    귀무가설 아래에서는 각 차이의 분포가 0 을 중심으로 대칭이다. 그러므로
+    어느 차이들의 부호를 뒤집든 똑같이 그럴듯하다. 대응자료에서 이름표를
+    섞으면 안 되는 대신 이 방법을 쓴다.
     """
     rng = np.random.default_rng(seed)
     differences = np.asarray(after) - np.asarray(before)
@@ -231,6 +241,8 @@ print(f"P-value: {p_value:.4f}")                     # 0.002
 Observed Mean Difference: 2.40
 P-value: 0.0020
 ```
+
+</div>
 
 $2^{10} = 1{,}024$가지 부호 배정을 모두 열거하면 정확 $p$값은 $2/1024 = 0.001953$이다. 이는 이 자료에서 가능한 **최소 $p$값**이다. 열 개의 차이가 모두 양수이므로, 관측된 배정과 그 전부를 뒤집은 배정만이 $|\bar{d}^*| \ge 2.4$를 만족한다.
 

@@ -63,37 +63,41 @@ $$
 p = 2 \, \Phi(-|Z|)
 $$
 
-### 구현
+<div class="codebox" markdown>
+
+**예제 1.** 런 검정 구현
 
 ```python
 import numpy as np
 import scipy.stats as stats
 
 def runs_test(data):
-    """
-    Wald-Wolfowitz runs test for randomness.
+    """Wald-Wolfowitz 런 검정. 관측 순서가 무작위인지 본다.
 
-    Parameters
+    +1 과 -1 이 늘어선 수열에서 같은 부호가 이어지는 덩어리를 런이라 한다.
+    런이 너무 적으면 같은 값끼리 뭉쳐 있다는 뜻이고, 너무 많으면 번갈아
+    나온다는 뜻이다. 둘 다 무작위가 아니다.
+
+    매개변수
+    --------
+    data : +1 과 -1 로 이루어진 수열
+
+    돌려주는 값
     ----------
-    data : array-like
-        A sequence of +1 and -1 values.
-
-    Returns
-    -------
-    statistic : float
-        The Z test statistic.
-    p_value : float
-        Two-sided p-value.
+    statistic : Z 통계량
+    p_value : 양측 p-값
     """
     data = np.asarray(data)
     N = data.shape[0]
     N_plus = (data == 1).sum()
     N_minus = N - N_plus
 
+    # 무작위라면 런의 개수가 이 평균과 표준편차를 갖는다.
     mu = 2 * N_plus * N_minus / N + 1
     sigma = np.sqrt((mu - 1) * (mu - 2) / (N - 1))
 
-    # Count runs using adjacent-element products
+    # 런의 개수를 이웃한 원소의 곱으로 센다. 부호가 바뀌는 자리에서만
+    # 곱이 -1 이 되므로, 그 개수가 런의 경계 수다. 반복문 없이 끝난다.
     R = (N_plus + N_minus + 1 - np.sum(data[1:] * data[:-1])) / 2
 
     statistic = (R - mu) / sigma
@@ -102,9 +106,11 @@ def runs_test(data):
     return statistic, p_value
 ```
 
+</div>
+
 <div class="codebox" markdown>
 
-### 예제 1. 일표본 비모수 검정 { .eg }
+### 예제 2. 일표본 비모수 검정 { .eg }
 
 **예제 1 --- 뭉친 자료 (무작위가 아님):**
 
@@ -246,32 +252,35 @@ $$
 
 이다.
 
-### 구현
+<div class="codebox" markdown>
+
+**예제 3.** 부호검정 구현
 
 ```python
 import numpy as np
 import scipy.stats as stats
 
 def sign_test(paired_data, test_type="two-sided"):
-    """
-    Sign test for paired observations.
+    """대응표본에 대한 부호검정.
 
-    Parameters
+    차이의 크기는 버리고 부호만 센다. 그래서 자료가 순서척도이기만 하면
+    쓸 수 있고 이상치에도 끄떡없다. 대신 크기 정보를 버린 만큼 검정력이
+    낮다 — 그 중간이 부호순위검정이다.
+
+    매개변수
+    --------
+    paired_data : 모양 (n, 2) 인 배열. 0열이 처리 후, 1열이 처리 전이다.
+    test_type : "less", "two-sided", "greater" 중 하나
+
+    돌려주는 값
     ----------
-    paired_data : ndarray of shape (n, 2)
-        Column 0 is post-treatment, column 1 is pre-treatment.
-    test_type : str
-        One of "less", "two-sided", "greater".
-
-    Returns
-    -------
-    z : float
-        The Z test statistic.
-    p_value : float
+    z : Z 통계량
+    p_value : p-값
     """
     p_0, q_0 = 0.5, 0.5
 
-    # Ties are not counted
+    # 동점(차이가 0)은 아예 세지 않는다. 그래서 실제로 쓰이는 n 이
+    # 원래 표본크기보다 작아진다.
     n_plus = np.sum(paired_data[:, 0] > paired_data[:, 1])
     n_minus = np.sum(paired_data[:, 0] < paired_data[:, 1])
     n = n_plus + n_minus
@@ -289,8 +298,15 @@ def sign_test(paired_data, test_type="two-sided"):
     return z, p_value
 ```
 
+</div>
+
+<div class="codebox" markdown>
+
+**예제 4.** 부호검정 실행
+
 ```python
-# Usage
+# 처리 전후 점수 15쌍. 아래 부호검정과 부호순위검정을 같은 자료에 돌려
+# p-값을 견줄 수 있다.
 data = np.array([
     [93, 76], [70, 72], [81, 75], [65, 68], [79, 65],
     [54, 54], [94, 88], [91, 81], [77, 65], [65, 57],
@@ -307,6 +323,8 @@ print(f"{p_value = :.4f}")   # 0.0209
 z       = 2.3094
 p_value = 0.0209
 ```
+
+</div>
 
 ### 언제 쓰는가
 
@@ -376,6 +394,10 @@ $$
 
 ### SciPy 구현
 
+<div class="codebox" markdown>
+
+**예제 5.** 부호순위검정과 견주기
+
 ```python
 import numpy as np
 import scipy.stats as stats
@@ -386,6 +408,8 @@ data = np.array([
     [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]
 ])
 
+# 부호순위검정은 부호뿐 아니라 차이의 크기 순위까지 쓴다. 그래서 같은
+# 자료에서 부호검정보다 작은 p-값이 나온다.
 statistic, p_value = stats.wilcoxon(
     data[:, 0], data[:, 1],
     alternative="two-sided",
@@ -402,6 +426,8 @@ print(f"{p_value   = :.4f}")   # 0.0086
 statistic = 11.0
 p_value   = 0.0086
 ```
+
+</div>
 
 !!! warning "`mode=` 는 더 이상 쓰이지 않는다"
     옛 SciPy 코드는 `mode="approx"`를 썼지만 이 인자는 `method=`로 바뀌었다. 옛 이름은 SciPy 1.9에서 폐기되었고 이후 제거되었다.
