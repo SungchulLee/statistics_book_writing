@@ -50,17 +50,25 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 
 ## 사용자화의 핵심
 
+<div class="codebox" markdown>
+
+**예제 1.** Axes 사용자화와 저장
+
 ```python
+# 그림을 손보는 일은 거의 전부 Axes 객체의 메서드로 이루어진다.
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 ax.set_title("Title")
-ax.set_xlim(0, 10)
+ax.set_xlim(0, 10)              # 보이는 범위를 직접 정한다
 ax.set_ylim(-1, 1)
-ax.grid(True, alpha=0.3)
+ax.grid(True, alpha=0.3)        # 격자는 옅게. 자료보다 튀면 안 된다
 ax.legend(loc="best", frameon=False)
-fig.tight_layout()
+fig.tight_layout()              # 축 이름표가 잘리지 않도록 여백을 맞춘다
+# bbox_inches="tight" 를 주어야 저장본에서도 이름표가 잘리지 않는다.
 fig.savefig("figure.png", dpi=150, bbox_inches="tight")
 ```
+
+</div>
 
 `tight_layout`은 여러 패널이 있는 그림에서 축 이름표가 잘리거나 겹치는 것을 막는다. `dpi=150`이면 화면과 대부분의 인쇄 용도에 충분하고, `dpi=300`은 최종 출판용이 아니라면 과하다.
 
@@ -68,7 +76,12 @@ fig.savefig("figure.png", dpi=150, bbox_inches="tight")
 
 DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** pandas 그림 메서드로 세 패널 그리기
+
 ```python
+"""DataFrame 이 자체로 갖고 있는 그림 메서드로 세 패널을 한 번에 그린다."""
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -77,8 +90,11 @@ rng = np.random.default_rng(0)
 df = pd.DataFrame({"x": rng.normal(0, 1, 200),
                    "y": rng.normal(0, 1, 200),
                    "group": rng.choice(["A", "B"], 200)})
+# x 와 상관되도록 value 를 만든다. 상자그림에서 집단 차이를 보기 위해서다.
 df["value"] = df["x"] * 2 + rng.normal(0, 1, 200)
 
+# ax= 로 그릴 자리를 지정하면 pandas 가 그 Axes 위에 그린다.
+# 이렇게 해야 여러 패널을 한 그림에 모을 수 있다.
 fig, axes = plt.subplots(1, 3, figsize=(13, 3.5))
 df["x"].plot.hist(bins=30, ax=axes[0], title="hist")
 df.plot.scatter(x="x", y="y", ax=axes[1], title="scatter")
@@ -88,13 +104,15 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![pandas의 그림 메서드 세 가지](./img/matplotlib_basics_68.png)
 
 빠르게 탐색할 때 편리하다. 최종 그림에서는 Matplotlib을 직접 호출하는 편이 더 세밀하게 제어할 수 있다.
 
 <div class="codebox" markdown>
 
-## 예제 1. Matplotlib으로 기본 시각화하기 { .eg }
+## 예제 3. Matplotlib으로 기본 시각화하기 { .eg }
 
 ```python
 import numpy as np

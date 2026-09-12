@@ -43,8 +43,13 @@ conda env export > environment.yml
 
 리스트 컴프리헨션은 "어떤 모임의 각 $x$에 대해 $f(x)$를 계산하되 필요하면 조건으로 걸러낸다"는 패턴을 한 줄로 표현한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 리스트 컴프리헨션
+
 ```python
 data = [-2, 3, 0, 5, -1, 4]
+# for 와 if 를 한 줄에 적는다. 걸러내기와 변환이 한 번에 일어난다.
 squares = [x**2 for x in data if x > 0]
 print(squares)
 ```
@@ -55,15 +60,23 @@ print(squares)
 [9, 25, 16]
 ```
 
+</div>
+
 사전(`{k: f(k) for k in keys}`), 집합(`{f(x) for x in xs}`), 제너레이터(`(f(x) for x in xs)`)에도 같은 형태가 있다. 제너레이터는 게으르게 값을 내놓으므로 열이 크거나 무한할 때 중요하다.
 
 ## 함수와 독스트링
 
+<div class="codebox" markdown>
+
+**예제 2.** 함수와 독스트링
+
 ```python
 def sample_mean(data):
-    """Return the arithmetic mean of an iterable of numbers."""
+    """수들의 산술평균을 돌려준다."""
     return sum(data) / len(data)
 ```
+
+</div>
 
 독스트링은 함수의 계약이다. 무엇을 계산하고, 무엇을 기대하며, 무엇을 반환하는지 밝힌다. `def` 줄 바로 뒤의 삼중 따옴표 문자열은 `help(fn)`으로 볼 수 있고 자동 문서화의 근거가 된다.
 
@@ -73,17 +86,22 @@ def sample_mean(data):
 
 모든 파이썬 파일은 모듈이다. 어떤 파일을 안전하게 **임포트 가능**(다른 곳에서 함수를 재사용)하면서 동시에 **실행 가능**(직접 호출하면 시연을 수행)하게 만들려면 다음 형태를 쓴다.
 
-```python
-"""Module docstring describing what this script does."""
+<div class="codebox" markdown>
 
-# === Imports ===
+**예제 3.** 모듈 구조와 __main__ 가드
+
+```python
+"""이 스크립트가 무엇을 하는지 적는 모듈 독스트링."""
+
+# === 임포트 ===
 import numpy as np
 
-# === Function definitions ===
+# === 함수 정의 ===
 def my_function(x):
     return x + 1
 
-# === Demonstration / entry point ===
+# === 시연 / 진입점 ===
+# 이 가드가 없으면 다른 파일에서 import 하는 순간 아래 코드까지 실행된다.
 if __name__ == "__main__":
     print(my_function(3))
 ```
@@ -94,18 +112,27 @@ if __name__ == "__main__":
 4
 ```
 
+</div>
+
 `if __name__ == "__main__":` 가드는 시연 블록이 직접 호출(`python my_script.py`)할 때만 실행되고, 다른 모듈이 `import my_script`할 때는 실행되지 않도록 보장한다. 이 책의 모든 `.py` 파일이 따르는 교육용 방식이다.
 
 ## 표준 임포트 별칭
 
 거의 모든 노트북의 첫 셀은 다음과 같다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 표준 임포트 별칭
+
 ```python
+# 이 별칭들은 사실상 표준이다. 다르게 쓰면 남이 읽기 어려워진다.
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
 ```
+
+</div>
 
 이 별칭들(`np`, `pd`, `plt`, `stats`)은 사실상의 표준이며 가독성을 높인다.
 
@@ -122,7 +149,7 @@ from scipy import stats
 
 <div class="codebox" markdown>
 
-## 예제 1. 파이썬과 주피터 기초 { .eg }
+## 예제 5. 파이썬과 주피터 기초 { .eg }
 
 ```python
 """Demonstrate core Python idioms used in statistics."""

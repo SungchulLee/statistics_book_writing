@@ -15,7 +15,12 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 
 ## 불러오기와 살펴보기
 
+<div class="codebox" markdown>
+
+**예제 1.** 자료를 불러와 훑어보기
+
 ```python
+"""표를 만들어 크기·자료형·요약통계를 훑어보는 첫 단계를 보인다."""
 import numpy as np
 import pandas as pd
 
@@ -30,10 +35,10 @@ demo = pd.DataFrame({
 })
 demo.loc[[2, 7], "x"] = np.nan        # 결측값 두 개를 일부러 넣는다
 
-print(demo.head())        # first 5 rows
-print(demo.shape)         # (n_rows, n_cols)
-print(demo.dtypes)        # type of each column
-print(demo.describe().round(2))   # count, mean, std, min, quartiles, max
+print(demo.head())        # 앞 다섯 행
+print(demo.shape)         # (행 수, 열 수)
+print(demo.dtypes)        # 열마다의 자료형
+print(demo.describe().round(2))   # 개수·평균·표준편차·최솟값·사분위수·최댓값
 ```
 
 출력:
@@ -61,6 +66,8 @@ min     5.35    42.60
 max    12.61    60.90
 ```
 
+</div>
+
 `read_csv`는 `parse_dates`, `dtype`, `na_values`, `usecols`, `chunksize`를 받는다. 자료 품질 문제는 대부분 나중이 아니라 불러오는 시점에 처리하는 것이 가장 좋다.
 
 ## 행과 열 선택하기
@@ -78,12 +85,18 @@ max    12.61    60.90
 
 ## 결측값 정제
 
-```python
-print(demo.isna().sum())              # count of missing per column
-print(len(demo.dropna()))             # drop rows with any NaN
-print(len(demo.dropna(subset=["x"]))) # drop rows with NaN in 'x' only
+<div class="codebox" markdown>
 
-filled = demo.fillna(demo.median(numeric_only=True))   # impute with median
+**예제 2.** 결측값 세고 메우기
+
+```python
+print(demo.isna().sum())              # 열마다 결측이 몇 개인지
+print(len(demo.dropna()))             # 결측이 하나라도 있는 행을 버린다
+print(len(demo.dropna(subset=["x"]))) # x 의 결측만 기준으로 버린다
+
+# 중앙값으로 메우면 평균보다 이상치에 덜 흔들린다. 다만 메운 값에는
+# 불확실성이 없는 것처럼 되므로 이후 표준오차가 과소추정된다.
+filled = demo.fillna(demo.median(numeric_only=True))
 print(filled["x"].isna().sum(), filled["x"].median())
 ```
 
@@ -99,13 +112,20 @@ dtype: int64
 0 8.83
 ```
 
+</div>
+
 "옳은" 대체 전략이란 없다. 무엇을 고를지(삭제, 평균, 중앙값, 모형 기반, 다중대체)는 결측 기제에 달려 있다. pandas는 도구를 줄 뿐 결정은 사용자에게 맡긴다.
 
 ## 그룹화: 분할–적용–결합
 
 pandas에서 가장 강력한 하나의 패턴이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 집단별 요약 — 분할·적용·결합
+
 ```python
+# 분할(treatment 로 나누고) — 적용(집계 함수를 걸고) — 결합(하나의 표로 모은다)
 print(demo.groupby("treatment")["outcome"].agg(["count", "mean", "std"]).round(2))
 ```
 
@@ -117,6 +137,8 @@ treatment
 control        6  51.75  6.69
 drug           6  50.22  5.52
 ```
+
+</div>
 
 `groupby`는 `"treatment"`의 서로 다른 값에 따라 자료를 분할하고, 각 그룹 안에서 `"outcome"`에 지정된 집계를 적용한 뒤, 결과를 깔끔한 DataFrame으로 결합한다. 탐색적 분석과 확증적 분석의 일꾼이다. 여러 키(`groupby(["a", "b"])`)와 사용자 정의 집계(`agg(my_func)`)로 이 패턴을 일반화할 수 있다.
 
@@ -135,7 +157,7 @@ drug           6  50.22  5.52
 
 <div class="codebox" markdown>
 
-## 예제 1. pandas로 자료 다루기 { .eg }
+## 예제 4. pandas로 자료 다루기 { .eg }
 
 ```python
 import numpy as np
