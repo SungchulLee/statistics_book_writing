@@ -67,7 +67,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 조건 A에서 식물의 키: $[15, 20, 25]$, 조건 B: $[10, 15, 35]$. 카이제곱 검정에 적합한가?
 
 </div>
@@ -81,7 +81,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **기대 칸 도수 규칙.** 표준 규칙을 진술하고 어긋나면 어떻게 되는지 설명하라.
 
 </div>
@@ -102,7 +102,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 **$2 \times 2$ 표.** $\{\{10, 15\}, \{20, 25\}\}$. 기대도수를 계산하고 $\alpha = 0.05$에서 독립성을 검정하라.
 
 </div>
@@ -120,7 +120,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $2 \times 2$ 표에 대한 **Yates 연속성 보정**. 언제 적용하는가?
 
 </div>
@@ -136,7 +136,7 @@ $2 \times 2$ 표에 대한 **Yates 연속성 보정**. 언제 적용하는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 카이제곱 독립성 검정의 **표본크기 결정**.
 
 </div>
@@ -159,7 +159,7 @@ $2 \times 2$ 표에 대한 **Yates 연속성 보정**. 언제 적용하는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 카이제곱 검정의 **흔한 오용**.
 
 </div>

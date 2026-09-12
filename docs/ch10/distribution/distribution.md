@@ -145,7 +145,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 공정한 주사위를 120번 굴려 다음 도수를 얻었다: 1 (18), 2 (22), 3 (17), 4 (25), 5 (19), 6 (19). 카이제곱 검정통계량을 계산하라. 자유도 5에서 $\alpha = 0.05$의 임계값은 11.07이다. 주사위가 공정하지 않다는 증거가 있는가?
 
 </div>
@@ -165,7 +165,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 카이제곱 통계량이 분모에 $O_i$가 아니라 $E_i$를 쓰는 이유를 설명하라.
 
 </div>
@@ -181,7 +181,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 카이제곱 검정통계량은 근사로 유도된다. 근사 $\sqrt{np_i(1-p_i)} \approx \sqrt{np_i} = \sqrt{E_i}$가 타당하려면 어떤 가정이 필요한가?
 
 </div>
@@ -193,7 +193,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 Pearson의 카이제곱 검정은 1900년에 발표되었지만 올바른 자유도는 1922–1924년 Fisher의 연구에 이르러서야 확립되었다. 범주가 $k$개인 적합도 검정의 자유도가 $k$가 아니라 $k - 1$인 이유를 직관적으로 설명하라.
 
 </div>

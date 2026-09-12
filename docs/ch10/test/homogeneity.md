@@ -83,7 +83,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제 1.**
+**문제 1.** <span class="diff easy" title="쉬움"></span>
 
 각 나라에서 사람들이 병원의 질을 별 다섯에서 별 하나까지 어떻게 평가하는지 물었다. 자료는 다음과 같다.
 
@@ -416,7 +416,7 @@ Expected frequencies:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 약 A: 100명 중 60명 성공. B: 100명 중 55명 성공. (a) 교란변수를 어떻게 통제하는가? (b) $z$-검정. (c) $\chi^2$ 검정. 두 검정이 동치임을 보여라.
 
 </div>
@@ -434,7 +434,7 @@ Expected frequencies:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **동질성 검정**과 독립성 검정. 차이는 무엇인가?
 
 </div>
@@ -452,7 +452,7 @@ Expected frequencies:
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 **여러 모집단의 동질성.** 세 약을 비교한다: A (60/100), B (55/100), C (45/100). 세 약의 성공률이 모두 같은지 검정하라.
 
 </div>
@@ -476,7 +476,7 @@ Expected frequencies:
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 동질성을 기각한 뒤의 **사후분석**. 무엇이 권장되는가?
 
 </div>
@@ -494,7 +494,7 @@ Expected frequencies:
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 대응/짝지은 이진 자료에 대한 **McNemar 검정**. 정의하고 카이제곱과 대비하라.
 
 </div>
@@ -519,7 +519,7 @@ Expected frequencies:
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 카이제곱 동질성 검정의 **검정력 분석**.
 
 </div>

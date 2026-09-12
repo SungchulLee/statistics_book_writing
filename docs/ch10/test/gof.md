@@ -299,7 +299,7 @@ p_value = 0.07243975703425146
 
 <div class="probox" markdown>
 
-**문제 1.**
+**문제 1.** <span class="diff easy" title="쉬움"></span>
 
 주사위가 하나 있다. 조작되었는지 검정하려고 60번 굴렸더니 다음 결과를 얻었다. 이 주사위가 조작되었는지 판정하라.
 
@@ -561,7 +561,7 @@ p_value    = 6.47%
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 정규성에 대한 적합도 검정, 구간 4개. 관측 $[10, 30, 50, 10]$, 기대 $[20, 25, 40, 15]$. $\alpha = 0.05$에서 검정하라.
 
 </div>
@@ -580,7 +580,7 @@ p_value    = 6.47%
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **추정한 모수에 대한 자유도 조정.** 모수를 자료에서 추정하면 왜 자유도가 줄어드는가?
 
 </div>
@@ -596,7 +596,7 @@ p_value    = 6.47%
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 **공정한 주사위 검정.** 60번 굴려 $(8, 12, 9, 11, 10, 10)$을 얻었다. 공정한지 검정하라.
 
 </div>
@@ -611,7 +611,7 @@ p_value    = 6.47%
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **표본크기의 효과.** 연습문제 3을 $n = 6000$, 관측 $(800, 1200, 900, 1100, 1000, 1000)$으로 반복하라. 모양은 같고 규모만 100배이다.
 
 </div>
@@ -630,7 +630,7 @@ p_value    = 6.47%
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 카이제곱 적합도 검정의 대안으로서 **Kolmogorov-Smirnov 검정**. 언제 쓰는가?
 
 </div>
@@ -652,7 +652,7 @@ p_value    = 6.47%
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 정규성 검정을 위한 **Shapiro-Wilk 검정**. 정규성 검정에서 카이제곱보다 선호되는 이유는?
 
 </div>

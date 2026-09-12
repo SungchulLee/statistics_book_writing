@@ -88,7 +88,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 분할표가 4행 3열이다. 카이제곱 독립성 검정의 자유도는 얼마인가? 공식을 설명하라.
 
 </div>
@@ -104,7 +104,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 Normal 분포에 대한 적합도 검정에서 구간을 8개 쓰고 두 모수($\mu$와 $\sigma$)를 자료로부터 추정했다. 자유도는 얼마인가?
 
 </div>
@@ -120,7 +120,7 @@ Normal 분포에 대한 적합도 검정에서 구간을 8개 쓰고 두 모수(
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 어떤 카이제곱 검정에서 관측값이 $n = 50$개이고 범주가 10개이며 기대도수가 모두 같다. 경험 법칙 조건(모든 기대도수가 적어도 5)이 만족되는지 확인하라.
 
 </div>
@@ -136,7 +136,7 @@ Normal 분포에 대한 적합도 검정에서 구간을 8개 쓰고 두 모수(
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 연습문제 3의 10개 범주 중 하나의 기대도수가 2뿐이라면 어떤 보완 조치를 취할 수 있는가?
 
 </div>

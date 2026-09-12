@@ -101,7 +101,7 @@ $n = 2237$이라 아주 약한 연관도 통계적으로는 또렷하게 잡히�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $n = 500$인 $3 \times 2$ 표에 대한 카이제곱 독립성 검정에서 $\chi^2 = 12.5$를 얻었다. Cramér의 V를 계산하고 효과크기를 분류하라.
 
 </div>
@@ -117,7 +117,7 @@ $n = 500$인 $3 \times 2$ 표에 대한 카이제곱 독립성 검정에서 $\ch
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 두 연구가 성별과 투표 성향의 연관에 대해 같은 가설을 검정했다. 연구 A($n = 100$)는 $\chi^2 = 4.0$ ($p = 0.046$)을, 연구 B($n = 10{,}000$)도 $\chi^2 = 4.0$ ($p = 0.046$)을 얻었다. 두 연구의 Cramér의 V를 계산하라. 무엇을 알 수 있는가?
 
 </div>
@@ -133,7 +133,7 @@ $n = 500$인 $3 \times 2$ 표에 대한 카이제곱 독립성 검정에서 $\ch
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 서로 다른 연구 사이에서 연관의 강도를 비교할 때 원래의 카이제곱 통계량보다 Cramér의 V가 선호되는 이유를 설명하라.
 
 </div>
@@ -145,7 +145,7 @@ $n = 500$인 $3 \times 2$ 표에 대한 카이제곱 독립성 검정에서 $\ch
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $2 \times 2$ 표에서 Cramér의 V가 파이 계수의 절댓값 $|\phi|$와 같음을 보여라.
 
 </div>
