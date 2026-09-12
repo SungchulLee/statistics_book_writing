@@ -148,7 +148,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 환자 10명의 혈압을 투약 전후로 측정했다. 차이 $D_i$(투약 전 빼기 투약 후)는 5, 3, 8, 2, 6, 4, 7, 1, 5, 3이다. $\mu_D$의 95% $t$-구간을 구성하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 환자 10명의 혈압을 투약 전후로 측정했다. 차이 $D_i$(투약 전 빼기 투약 후)는 5, 3, 8, 2, 6, 4, 7, 1, 5, 3이다. $\mu_D$의 95% $t$-구간을 구성하라.
 
 </div>
 
@@ -174,7 +174,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 대응 관측값에 대해 공식 $\sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y$를 유도하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 대응 관측값에 대해 공식 $\sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y$를 유도하라.
 
 </div>
 
@@ -196,7 +196,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $\sigma_X = \sigma_Y = \sigma$이고 $\rho = 0.8$이라 하자. $n$쌍인 대응 설계에서 $\bar{D}$의 표준오차와, 집단당 관측값이 $n$개인 독립 이표본 설계에서 $\bar{X} - \bar{Y}$의 표준오차를 비교하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> $\sigma_X = \sigma_Y = \sigma$이고 $\rho = 0.8$이라 하자. $n$쌍인 대응 설계에서 $\bar{D}$의 표준오차와, 집단당 관측값이 $n$개인 독립 이표본 설계에서 $\bar{X} - \bar{Y}$의 표준오차를 비교하라.
 
 </div>
 
@@ -218,7 +218,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 어떤 $\rho$ 값에서 대응 설계가 독립 설계보다 나을 것이 없어지는가? $\rho < 0$이면 어떻게 되는가?
+**연습문제 4.** <span class="diff med" title="중간"></span> 어떤 $\rho$ 값에서 대응 설계가 독립 설계보다 나을 것이 없어지는가? $\rho < 0$이면 어떻게 되는가?
 
 </div>
 
@@ -236,7 +236,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 어떤 연구가 대응 관측값 $n = 15$쌍을 쓴다. 표본 평균 차이는 $\bar{D} = 2.3$, $S_D = 4.1$이다. 95% 신뢰구간에 0이 들어 있는지 확인하여 5% 수준에서 $\mu_D = 0$을 검정하라.
+**연습문제 5.** <span class="diff easy" title="쉬움"></span> 어떤 연구가 대응 관측값 $n = 15$쌍을 쓴다. 표본 평균 차이는 $\bar{D} = 2.3$, $S_D = 4.1$이다. 95% 신뢰구간에 0이 들어 있는지 확인하여 5% 수준에서 $\mu_D = 0$을 검정하라.
 
 </div>
 

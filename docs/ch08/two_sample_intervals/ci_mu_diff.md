@@ -99,7 +99,7 @@ confidence_interval = (0.22892977648461788, 19.77107022351538)
 
 <div class="exbox" markdown>
 
-**보기 1.** 평균 차이의 95% 신뢰구간 (Welch). 독립인 두 표본: 표본 1은 $n_1 = 30$, $\bar{X}_1 = 100$, $s_1 = 15$이고, 표본 2는 $n_2 = 25$, $\bar{X}_2 = 90$, $s_2 = 20$이다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 평균 차이의 95% 신뢰구간 (Welch). 독립인 두 표본: 표본 1은 $n_1 = 30$, $\bar{X}_1 = 100$, $s_1 = 15$이고, 표본 2는 $n_2 = 25$, $\bar{X}_2 = 90$, $s_2 = 20$이다.
 
 </div>
 
@@ -232,7 +232,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 독립인 두 표본: $\sigma_A = 15, n_A = 36$; $\sigma_B = 20, n_B = 49$. $\mathrm{SE}(\bar X_A - \bar X_B)$를 계산하라.
 
 </div>
@@ -242,7 +242,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 표본 1: $\bar X_1 = 55, s_1 = 8, n_1 = 30$. 표본 2: $\bar X_2 = 50, s_2 = 10, n_2 = 35$. $\mu_1 - \mu_2$의 95% 신뢰구간을 구하라.
 
 </div>
@@ -254,7 +254,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 두 교수법에 대한 Welch 신뢰구간: A ($n = 30, \bar X = 78, s = 8$), B ($n = 35, \bar X = 82, s = 10$). $\mu_A - \mu_B$의 95% 신뢰구간을 구하라.
 
 </div>
@@ -270,7 +270,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **합동 대 Welch.** 각각 언제 쓰며, 둘을 가르는 가정은 무엇인가?
 
 </div>
@@ -288,7 +288,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **대응 대 독립.** 피험자 $n = 50$명을 치료 전후로 측정했다. 이 연습문제의 이표본 신뢰구간을 적용해야 하는가?
 
 </div>
@@ -304,7 +304,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **효과크기.** $\mu_1 - \mu_2$의 신뢰구간과 함께 **Cohen의 $d$** = (효과)/(합동 표준편차)를 보고하라. 해석하라.
 
 </div>

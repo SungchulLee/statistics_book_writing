@@ -140,7 +140,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $n = 5$, $n_{\text{sim}} = 10{,}000$으로 모의실험을 돌려라. 95% 신뢰수준에서 세 방법 각각의 경험적 포함확률을 보고하라. 어느 방법(들)이 명목 수준을 달성하는가?
+**연습문제 1.** <span class="diff med" title="중간"></span> $n = 5$, $n_{\text{sim}} = 10{,}000$으로 모의실험을 돌려라. 95% 신뢰수준에서 세 방법 각각의 경험적 포함확률을 보고하라. 어느 방법(들)이 명목 수준을 달성하는가?
 
 </div>
 
@@ -179,7 +179,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 작은 $n$에서 대입한 $z$-구간의 포함확률이 부족한 이유를 수학적으로 설명하라. 구체적으로, $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$일 때 추축량 $(\bar{X} - \mu)/(s/\sqrt{n})$이 $N(0,1)$을 따르지 않음을 보여라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 작은 $n$에서 대입한 $z$-구간의 포함확률이 부족한 이유를 수학적으로 설명하라. 구체적으로, $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$일 때 추축량 $(\bar{X} - \mu)/(s/\sqrt{n})$이 $N(0,1)$을 따르지 않음을 보여라.
 
 </div>
 
@@ -196,7 +196,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $n$을 고정하고 $N \to \infty$일 때 유한모집단 수정 인자가 $\text{FPC} \to 1$을 만족함을 보여라.
+**연습문제 3.** <span class="diff med" title="중간"></span> $n$을 고정하고 $N \to \infty$일 때 유한모집단 수정 인자가 $\text{FPC} \to 1$을 만족함을 보여라.
 
 </div>
 
@@ -216,7 +216,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 참 모집단이 정규가 아니라 비율 $\lambda = 1$인 지수분포(따라서 $\mu = 1$, $\sigma = 1$)라고 하자. $n = 10$, $n_{\text{sim}} = 10{,}000$으로 모의실험을 설계하여 $t$-구간이 여전히 약 95%의 포함확률을 달성하는지 확인하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 참 모집단이 정규가 아니라 비율 $\lambda = 1$인 지수분포(따라서 $\mu = 1$, $\sigma = 1$)라고 하자. $n = 10$, $n_{\text{sim}} = 10{,}000$으로 모의실험을 설계하여 $t$-구간이 여전히 약 95%의 포함확률을 달성하는지 확인하라.
 
 </div>
 
@@ -251,7 +251,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 한 품질검사자가 $N = 400$개 생산분에서 부품 $n = 50$개를 뽑는다. FPC 인자를 계산하고 평균 부품 무게에 대한 신뢰구간 너비에 미치는 실질적 영향을 설명하라.
+**연습문제 5.** <span class="diff easy" title="쉬움"></span> 한 품질검사자가 $N = 400$개 생산분에서 부품 $n = 50$개를 뽑는다. FPC 인자를 계산하고 평균 부품 무게에 대한 신뢰구간 너비에 미치는 실질적 영향을 설명하라.
 
 </div>
 

@@ -191,7 +191,7 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 품질관리 표본에서 200개 중 8개가 불량이다. 불량률 $p$의 95% Wald와 Wilson 신뢰구간을 계산하라. 차이를 논하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 품질관리 표본에서 200개 중 8개가 불량이다. 불량률 $p$의 95% Wald와 Wilson 신뢰구간을 계산하라. 차이를 논하라.
 
 </div>
 
@@ -207,7 +207,7 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $\hat{p} = 0$이거나 $\hat{p} = 1$일 때 Wald 구간의 너비가 0임을 보이고 왜 문제인지 설명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> $\hat{p} = 0$이거나 $\hat{p} = 1$일 때 Wald 구간의 너비가 0임을 보이고 왜 문제인지 설명하라.
 
 </div>
 
@@ -225,7 +225,7 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 어떤 조사에서 응답자 1000명 중 540명이 어떤 정책을 지지한다. 네 가지 방법(Wald, Wilson, Agresti–Coull, Clopper–Pearson)으로 95% 신뢰구간을 계산하고 너비를 비교하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 어떤 조사에서 응답자 1000명 중 540명이 어떤 정책을 지지한다. 네 가지 방법(Wald, Wilson, Agresti–Coull, Clopper–Pearson)으로 95% 신뢰구간을 계산하고 너비를 비교하라.
 
 </div>
 
@@ -245,7 +245,7 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 어떤 임상시험에서 환자 30명 중 중대한 이상반응이 0건이다. Clopper–Pearson 방법으로 $p$의 단측 95% 상한을 계산하고 "3의 법칙" 근사를 진술하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 어떤 임상시험에서 환자 30명 중 중대한 이상반응이 0건이다. Clopper–Pearson 방법으로 $p$의 단측 95% 상한을 계산하고 "3의 법칙" 근사를 진술하라.
 
 </div>
 
@@ -269,7 +269,7 @@ python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 95% 수준에서 $k = 7$, $n = 25$일 때 Wilson과 Agresti–Coull 구간이 거의 같음을 수치로 확인하고, 왜 가깝지만 정확히 같지는 않은지 대수적으로 설명하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 95% 수준에서 $k = 7$, $n = 25$일 때 Wilson과 Agresti–Coull 구간이 거의 같음을 수치로 확인하고, 왜 가깝지만 정확히 같지는 않은지 대수적으로 설명하라.
 
 </div>
 

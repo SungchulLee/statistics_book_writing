@@ -115,7 +115,7 @@ $$n = \left(\frac{1.96 \times 10}{2}\right)^2 = 96.04 \implies n = 97$$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 콜레스테롤에 대한 95% 신뢰구간이 $(188.3, 205.7)$이다. (a) 다음 중 올바른 해석은? (i) 참 평균이 188.3과 205.7 사이에 있을 확률이 95%이다. (ii) 이 연구를 여러 번 반복하면 그 결과 구간들 중 약 95%가 참 평균을 담는다. (iii) 콜레스테롤 수치의 95%가 188.3과 205.7 사이에 있다. (b) 점추정값과 오차한계는?
 
 </div>
@@ -131,7 +131,7 @@ $$n = \left(\frac{1.96 \times 10}{2}\right)^2 = 96.04 \implies n = 97$$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **모수에 95% 확률이 없는 이유.** 빈도주의 신뢰구간이 $\mu$에 대한 확률 진술을 허용하지 않는 이유를 설명하라.
 
 </div>
@@ -145,7 +145,7 @@ $$n = \left(\frac{1.96 \times 10}{2}\right)^2 = 96.04 \implies n = 97$$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **포함확률.** 포함확률을 정의하고, 95% 신뢰구간의 실제 포함확률이 95%보다 낮을 수 있는 이유를 설명하라.
 
 </div>
@@ -164,7 +164,7 @@ $$n = \left(\frac{1.96 \times 10}{2}\right)^2 = 96.04 \implies n = 97$$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **너비와 신뢰수준.** (a) 신뢰수준이 높아질 때, (b) 표본크기가 커질 때, (c) 모분산이 커질 때 신뢰구간의 너비는 어떻게 변하는가?
 
 </div>
@@ -182,7 +182,7 @@ $$n = \left(\frac{1.96 \times 10}{2}\right)^2 = 96.04 \implies n = 97$$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **단측 신뢰구간.** 단측 신뢰구간은 언제 적절한가? 예를 하나 들라.
 
 </div>
@@ -202,7 +202,7 @@ $$n = \left(\frac{1.96 \times 10}{2}\right)^2 = 96.04 \implies n = 97$$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **베이즈 신용구간.** 베이즈 95% 신용구간이란 무엇이며 빈도주의 신뢰구간과 어떻게 다른가?
 
 </div>

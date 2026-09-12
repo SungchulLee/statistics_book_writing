@@ -108,7 +108,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 연구가 환자 30명의 혈압을 투약 전후로 측정한다. 짝 내 상관은 $\rho = 0.85$이다. 이 경우 대응 설계가 독립표본 설계보다 검정력이 높은 이유를 설명하라.
 
 </div>
@@ -124,7 +124,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 다음 각 상황에서 대응 설계와 독립 설계 중 무엇이 더 적절한지 판단하라: (a) 과외 프로그램 전후 학생들의 시험 점수 비교, (b) 무작위로 뽑은 남성과 여성의 평균 키 비교.
 
 </div>
@@ -136,7 +136,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 연구자가 대응 자료를 실수로 독립표본으로 분석했다. 참 짝 내 상관이 $\rho = 0.7$이고 두 집단 모두 $\sigma = 10$일 때, $n = 25$쌍에서 두 분석의 차이에 대한 표준오차를 비교하라.
 
 </div>
@@ -150,7 +150,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 반복측정이 가능한데도 이월 효과 때문에 대응(교차) 설계가 부적절해지는 상황을 기술하라.
 
 </div>

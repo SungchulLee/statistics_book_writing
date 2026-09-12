@@ -109,7 +109,7 @@ McNemar 신뢰구간은 다음 조건에 의존한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 새 약을 쓰기 전후로 검사한 환자 150명의 연구에서 결과는 다음과 같다: $a = 60$(두 번 모두 양성), $b = 25$(양성 후 음성), $c = 15$(음성 후 양성), $d = 50$(두 번 모두 음성). 주변비율 차이 $p_1 - p_2$의 95% 신뢰구간을 구성하라.
 
 </div>
@@ -137,7 +137,7 @@ McNemar 신뢰구간은 다음 조건에 의존한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 연습문제 1의 자료에서 대표본 조건($b + c \geq 10$)이 만족되는지 확인하라.
 
 </div>
@@ -147,7 +147,7 @@ McNemar 신뢰구간은 다음 조건에 의존한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 McNemar 신뢰구간에 불일치 짝($b$와 $c$)만 관련되고 일치 짝($a$와 $d$)은 주변비율 차이에 대해 아무 정보도 주지 않는 이유를 설명하라.
 
 </div>
@@ -159,7 +159,7 @@ McNemar 신뢰구간에 불일치 짝($b$와 $c$)만 관련되고 일치 짝($a$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 피험자 $n = 100$명의 연구에서 $b = 3$, $c = 2$라면 Wald 형태의 McNemar 신뢰구간을 쓰지 말아야 하는 이유를 설명하라. 어떤 대안을 권하겠는가?
 
 </div>

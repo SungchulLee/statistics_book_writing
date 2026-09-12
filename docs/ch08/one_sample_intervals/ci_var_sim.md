@@ -116,7 +116,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 정규모집단에서 뽑은 크기 $n = 20$인 표본에서 $s^2 = 16$을 얻었다. $\sigma^2$과 $\sigma$의 95% 신뢰구간을 구성하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 정규모집단에서 뽑은 크기 $n = 20$인 표본에서 $s^2 = 16$을 얻었다. $\sigma^2$과 $\sigma$의 95% 신뢰구간을 구성하라.
 
 </div>
 
@@ -144,7 +144,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$일 때 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$임을 증명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$일 때 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$임을 증명하라.
 
 </div>
 
@@ -178,7 +178,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 모의실험을 고쳐서 $\lambda = 1$인 지수분포(따라서 $\sigma^2 = 1$)와 $n = 20$으로 자료를 뽑아라. 경험적 포함확률을 보고하라. 카이제곱 구간이 실패하는 이유는?
+**연습문제 3.** <span class="diff med" title="중간"></span> 모의실험을 고쳐서 $\lambda = 1$인 지수분포(따라서 $\sigma^2 = 1$)와 $n = 20$으로 자료를 뽑아라. 경험적 포함확률을 보고하라. 카이제곱 구간이 실패하는 이유는?
 
 </div>
 
@@ -222,7 +222,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $\sigma^2$의 카이제곱 신뢰구간이 $S^2$을 중심으로 대칭이 아님을 보이고, 그 이유를 기하적으로 설명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $\sigma^2$의 카이제곱 신뢰구간이 $S^2$을 중심으로 대칭이 아님을 보이고, 그 이유를 기하적으로 설명하라.
 
 </div>
 
@@ -238,7 +238,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $\sigma^2$의 95% 신뢰구간이 $(9.25, 34.13)$이라면 모표준편차가 6보다 작다고 주장할 수 있는가? 답을 정당화하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> $\sigma^2$의 95% 신뢰구간이 $(9.25, 34.13)$이라면 모표준편차가 6보다 작다고 주장할 수 있는가? 답을 정당화하라.
 
 </div>
 

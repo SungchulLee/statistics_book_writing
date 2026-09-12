@@ -133,7 +133,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 유권자 지지율의 95% 신뢰구간. 유권자 200명의 확률표본에서 120명이 특정 후보를 지지한다고 답했다. 참 비율의 95% 신뢰구간을 구성하라.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 유권자 지지율의 95% 신뢰구간. 유권자 200명의 확률표본에서 120명이 특정 후보를 지지한다고 답했다. 참 비율의 95% 신뢰구간을 구성하라.
 
 </div>
 
@@ -161,7 +161,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 학교 재정 조사를 위한 표본크기. Della는 비율에 대해 95% 신뢰수준에서 오차한계를 $\pm 2\%$보다 작게 하려 한다. 필요한 최소 표본크기는?
+**보기 2.** <span class="diff easy" title="쉬움"></span> 학교 재정 조사를 위한 표본크기. Della는 비율에 대해 95% 신뢰수준에서 오차한계를 $\pm 2\%$보다 작게 하려 한다. 필요한 최소 표본크기는?
 
 </div>
 
@@ -198,7 +198,7 @@ n = 2401
 
 <div class="exbox" markdown>
 
-**보기 3.** 여성 아티스트의 노래 (99% 신뢰구간). Della는 노래를 500곡 넘게 가지고 있다. 무작위로 50곡을 골랐더니 20곡이 여성 아티스트의 노래였다. 99% 신뢰구간을 구성하라.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 여성 아티스트의 노래 (99% 신뢰구간). Della는 노래를 500곡 넘게 가지고 있다. 무작위로 50곡을 골랐더니 20곡이 여성 아티스트의 노래였다. 99% 신뢰구간을 구성하라.
 
 </div>
 
@@ -234,7 +234,7 @@ print(f"{p_hat} ± {margin_of_error:.3f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 차량 100대 중 74대가 검사를 통과했다. $p$의 95% 신뢰구간을 구하라.
 
 </div>
@@ -246,7 +246,7 @@ print(f"{p_hat} ± {margin_of_error:.3f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 200명 중 120명이 A를 선호한다. $p$의 90% 신뢰구간을 구하라.
 
 </div>
@@ -258,7 +258,7 @@ print(f"{p_hat} ± {margin_of_error:.3f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 유권자 500명 중 280명이 지지한다. (a) Wald 95% 신뢰구간. (b) Wilson 95% 신뢰구간. (c) $p > 0.5$라는 증거가 있는가?
 
 </div>
@@ -272,7 +272,7 @@ print(f"{p_hat} ± {margin_of_error:.3f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **경계 근처에서의 Wilson 구간.** $n = 20$, $X = 2$(즉 $\hat p = 0.1$)에 대해 Wald와 Wilson 신뢰구간을 비교하라.
 
 </div>
@@ -286,7 +286,7 @@ print(f"{p_hat} ± {margin_of_error:.3f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
 **비율 신뢰구간을 위한 표본크기.** $\hat p$와 무관하게 95% 신뢰구간의 오차한계가 $0.03$ 이하가 되도록 하는 $n$을 구하라.
 
 </div>
@@ -304,7 +304,7 @@ print(f"{p_hat} ± {margin_of_error:.3f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **연속성 보정.** 언제 신뢰구간을 개선하는가? 연습문제 1에 적용해 보라.
 
 </div>

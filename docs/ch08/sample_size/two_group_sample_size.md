@@ -114,7 +114,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 어떤 연구자가 $\sigma = 10$인 두 집단에서 $\alpha = 0.05$(양측), 검정력 $= 0.80$으로 차이 $\delta = 5$ 단위를 탐지하려 한다. 집단당 필요한 표본크기를 계산하라.
 
 </div>
@@ -130,7 +130,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 효과크기 표현을 써서 $\alpha = 0.05$, 검정력 80%로 "중간" 효과($d = 0.5$)를 탐지하는 데 필요한 집단당 표본크기를 계산하라.
 
 </div>
@@ -144,7 +144,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 표본크기가 집단당 $n = 30$으로 고정되어 있고 $\sigma = 10$, $\alpha = 0.05$일 때 검정력 80%에서 탐지 가능한 최소 차이 $\delta$는 얼마인가?
 
 </div>
@@ -160,7 +160,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 표본크기를 두 배로 해도 탐지 가능한 효과크기가 두 배로 좋아지지 않는 이유를 직관적으로 설명하라. $n$과 $\delta$의 정확한 관계는 무엇인가?
 
 </div>

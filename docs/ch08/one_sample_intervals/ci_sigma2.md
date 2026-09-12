@@ -183,7 +183,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 볼베어링에서 $n = 15$, $s^2 = 0.0025$ mm²이다. (a) $\sigma^2$의 95% 신뢰구간. (b) $\sigma$의 95% 신뢰구간.
 
 </div>
@@ -199,7 +199,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **추축량.** 정규성 아래에서 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이 추축량임을 보여라.
 
 </div>
@@ -217,7 +217,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **비대칭 신뢰구간.** $\sigma^2$의 신뢰구간이 $S^2$을 중심으로 비대칭인 이유는?
 
 </div>
@@ -235,7 +235,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **분산 신뢰구간을 위한 표본크기.** $\sigma$의 신뢰구간의 반너비가 $\sigma$의 $10\%$ 이하가 되려면 $n$은 얼마여야 하는가?
 
 </div>
@@ -251,7 +251,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **정규가 아닌 자료와 $\sigma^2$의 신뢰구간.** 카이제곱 기반 신뢰구간이 비정규성에 취약한 이유는?
 
 </div>
@@ -273,7 +273,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **$\sigma$의 신뢰구간과 $\sigma^2$의 신뢰구간.** $\sigma = \sqrt{\sigma^2}$인데도 두 구간이 다른 이유는?
 
 </div>

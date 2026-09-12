@@ -54,7 +54,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 조사자가 95% 신뢰수준에서 오차한계 3 퍼센트포인트로 모비율을 추정하려 한다. 보수적인 추정값 $p = 0.5$를 써서 필요한 표본크기를 구하라.
 
 </div>
@@ -76,7 +76,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 연구자가 99% 신뢰수준에서 오차한계 $E = 2$ 단위로 모평균을 추정하려 한다. 예비조사에서 $\sigma \approx 10$으로 나타났다. 필요한 표본크기를 구하라.
 
 </div>
@@ -98,7 +98,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 오차한계를 절반으로 줄이려면 왜 표본크기가 네 배 필요한지 설명하라. 오차한계 공식에서 이 관계를 유도하라.
 
 </div>
@@ -116,7 +116,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 회사가 조사 $n = 400$건의 예산을 가지고 있다. 95% 신뢰수준에서 모비율에 대해 달성 가능한 최선의 오차한계는 얼마인가? 예산이 두 배가 되어 $n = 800$이 되면 오차한계는 얼마나 줄어드는가?
 
 </div>

@@ -78,7 +78,7 @@ confidence_interval = (-0.011897024279429055, 0.171897024279429)
 
 <div class="exbox" markdown>
 
-**보기 1.** 비율 차이의 95% 신뢰구간. 표본 1: $n_1 = 200$, 성공 $x_1 = 120$회. 표본 2: $n_2 = 250$, 성공 $x_2 = 130$회.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비율 차이의 95% 신뢰구간. 표본 1: $n_1 = 200$, 성공 $x_1 = 120$회. 표본 2: $n_2 = 250$, 성공 $x_2 = 130$회.
 
 </div>
 
@@ -104,7 +104,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** 새 고등학교 건립. Duncan은 도시의 북부와 남부에서 새 고등학교에 대한 지지를 비교한다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 새 고등학교 건립. Duncan은 도시의 북부와 남부에서 새 고등학교에 대한 지지를 비교한다.
 
 | 지지하는가? | 북부 | 남부 |
 |---|---|---|
@@ -260,7 +260,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 독립인 두 표본에서 표본 1은 200명 중 150명이, 표본 2는 180명 중 120명이 같은 브랜드를 선호한다. 비율 차이의 95% 신뢰구간을 구성하라.
 
 </div>
@@ -286,7 +286,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 연습문제 1의 자료에서 정규근사의 타당성 조건이 만족되는지 확인하라.
 
 </div>
@@ -301,7 +301,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 비율 차이의 신뢰구간에서 Wald 방법보다 Newcombe(Wilson 기반) 방법을 권하는 이유를 설명하라.
 
 </div>
@@ -313,7 +313,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 $p_1 - p_2$의 신뢰구간이 $(0.03, 0.15)$이라면 이 결과를 맥락에 맞게 해석하고 유의한 차이의 증거가 있는지 말하라.
 
 </div>

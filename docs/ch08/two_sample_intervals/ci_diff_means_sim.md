@@ -153,7 +153,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 두 집단의 요약통계량이 다음과 같다: $n_1 = 15$, $\bar{x}_1 = 78$, $s_1 = 10$; $n_2 = 20$, $\bar{x}_2 = 72$, $s_2 = 12$. $\mu_1 - \mu_2$의 95% Welch 신뢰구간을 구성하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 두 집단의 요약통계량이 다음과 같다: $n_1 = 15$, $\bar{x}_1 = 78$, $s_1 = 10$; $n_2 = 20$, $\bar{x}_2 = 72$, $s_2 = 12$. $\mu_1 - \mu_2$의 95% Welch 신뢰구간을 구성하라.
 
 </div>
 
@@ -181,7 +181,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 근사적인 $t$ 추축량의 처음 두 적률을 $t_\nu$ 분포의 적률에 맞추어 Satterthwaite 자유도를 유도하라.
+**연습문제 2.** <span class="diff hard" title="어려움"></span> 근사적인 $t$ 추축량의 처음 두 적률을 $t_\nu$ 분포의 적률에 맞추어 Satterthwaite 자유도를 유도하라.
 
 </div>
 
@@ -212,7 +212,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $\sigma_1^2 = \sigma_2^2 = \sigma^2$이고 $n_1 = n_2 = n$일 때 Satterthwaite 자유도가 합동 자유도 $n_1 + n_2 - 2$로 간단해짐을 보여라. 분산이 같더라도 표본크기가 다르면 어떻게 되는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> $\sigma_1^2 = \sigma_2^2 = \sigma^2$이고 $n_1 = n_2 = n$일 때 Satterthwaite 자유도가 합동 자유도 $n_1 + n_2 - 2$로 간단해짐을 보여라. 분산이 같더라도 표본크기가 다르면 어떻게 되는가?
 
 </div>
 
@@ -243,7 +243,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $\sigma_1 = 1$, $\sigma_2 = 3$, $n_1 = n_2 = 10$일 때 Welch 구간과 합동 구간의 포함확률을 비교하는 모의실험을 설계하라. 10,000회 반복하고 결과를 보고하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $\sigma_1 = 1$, $\sigma_2 = 3$, $n_1 = n_2 = 10$일 때 Welch 구간과 합동 구간의 포함확률을 비교하는 모의실험을 설계하라. 10,000회 반복하고 결과를 보고하라.
 
 </div>
 
@@ -295,7 +295,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 표본크기와 분산의 관계에 따라 합동 $t$-구간이 관대해지기도 하고 보수적이 되기도 하는 이유를 설명하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 표본크기와 분산의 관계에 따라 합동 $t$-구간이 관대해지기도 하고 보수적이 되기도 하는 이유를 설명하라.
 
 </div>
 
