@@ -86,13 +86,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** S-squared의 기댓값과 분산.
+**보기 1.** <span class="diff easy" title="쉬움"></span> S-squared의 기댓값과 분산.
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $E[S^2]$과 $\text{Var}(S^2)$을 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $E[S^2]$과 $\text{Var}(S^2)$을 구하라.
 
 </div>
 
@@ -112,13 +112,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** S-squared에 관한 확률 (정규모집단).
+**보기 2.** <span class="diff easy" title="쉬움"></span> S-squared에 관한 확률 (정규모집단).
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $P(S^2 > 30)$을 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $P(S^2 > 30)$을 구하라.
 
 </div>
 
@@ -148,13 +148,13 @@ P(S^2 > 30) = 0.2897
 
 <div class="exbox" markdown>
 
-**보기 3.** 정규성 가정 없이.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정규성 가정 없이.
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 분산이 25인 모집단에서 $n = 10$인 표본을 뽑는다(정규성은 가정하지 않는다). $P(S^2 > 30)$에 관해 무엇을 말할 수 있는가?
+**문제.** <span class="diff med" title="중간"></span> 분산이 25인 모집단에서 $n = 10$인 표본을 뽑는다(정규성은 가정하지 않는다). $P(S^2 > 30)$에 관해 무엇을 말할 수 있는가?
 
 </div>
 
@@ -269,7 +269,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 **$S^2$의 평균과 분산.** $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. (a) $\mathbb{E}[S^2]$, (b) $\mathrm{Var}(S^2)$을 계산하라.
 
 </div>
@@ -287,7 +287,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 **$P(S^2 > 30)$.** 같은 설정으로 $n = 10$, $\sigma^2 = 25$, 정규모집단이다.
 
 </div>
@@ -301,7 +301,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **정규성 없이.** 모집단의 정규성을 가정하지 않으면 $P(S^2 > 30)$에 관해 무엇을 말할 수 있는가?
 
 </div>
@@ -317,7 +317,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 정규성 아래에서 **$S^2$의 카이제곱 분포를 증명하라.** 구체적으로 $X_1, \ldots, X_n$이 i.i.d. $N(\mu, \sigma^2)$이면 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$임을 보여라.
 
 </div>
@@ -345,7 +345,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
 **$\sigma^2$의 신뢰구간.** 정규모집단에서 $n = 10$, $s^2 = 16$을 얻었다. $\sigma^2$에 대한 95% 신뢰구간을 구성하라.
 
 </div>
@@ -371,7 +371,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **$S^2$과 $\sigma^2_{\text{MLE}}$.** $\sigma^2$의 MLE는 분모가 $n - 1$이 아니라 $n$이다. 편향, 분산, 평균제곱오차를 비교하라.
 
 </div>

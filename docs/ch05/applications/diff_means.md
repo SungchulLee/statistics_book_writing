@@ -115,7 +115,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제.** 어떤 제과점에 두 교대조가 있다. A 교대조: $\mu_A = 130$g, $\sigma_A = 4$g. B 교대조: $\mu_B = 125$g, $\sigma_B = 3$g. $n_A = n_B = 40$일 때 $P(|\bar{X}_A - \bar{X}_B| > 6)$을 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 어떤 제과점에 두 교대조가 있다. A 교대조: $\mu_A = 130$g, $\sigma_A = 4$g. B 교대조: $\mu_B = 125$g, $\sigma_B = 3$g. $n_A = n_B = 40$일 때 $P(|\bar{X}_A - \bar{X}_B| > 6)$을 구하라.
 
 </div>
 
@@ -168,7 +168,7 @@ P(|X_bar_A - X_bar_B| > 6) = 0.1030
 
 <div class="probox" markdown>
 
-**문제.** 모집단 A: $\mu_A = 100$, $\sigma_A = 15$, $n_A = 36$. 모집단 B: $\mu_B = 110$, $\sigma_B = 20$, $n_B = 49$. $\text{SE}(\bar{X}_A - \bar{X}_B)$를 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 모집단 A: $\mu_A = 100$, $\sigma_A = 15$, $n_A = 36$. 모집단 B: $\mu_B = 110$, $\sigma_B = 20$, $n_B = 49$. $\text{SE}(\bar{X}_A - \bar{X}_B)$를 구하라.
 
 </div>
 
@@ -182,7 +182,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 모집단 A: $\sigma_A = 15$, $n_A = 36$. 모집단 B: $\sigma_B = 20$, $n_B = 49$. $\mathrm{SE}(\bar X_A - \bar X_B)$를 계산하라.
 
 </div>
@@ -198,7 +198,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **차의 분포.** $\bar X_A, \bar X_B$가 독립이고 (근사적으로) 정규일 때 $\bar X_A - \bar X_B$의 분포를 유도하라.
 
 </div>
@@ -216,7 +216,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **가설검정.** 표본 A: $\bar x_A = 45$, $s_A = 10$, $n_A = 50$. 표본 B: $\bar x_B = 40$, $s_B = 12$, $n_B = 50$. $\alpha = 0.05$에서 $H_0: \mu_A = \mu_B$ 대 $H_1: \mu_A \ne \mu_B$를 검정하라.
 
 </div>
@@ -236,7 +236,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **신뢰구간.** 연습문제 3에 이어 $\mu_A - \mu_B$에 대한 95% 신뢰구간을 구성하라.
 
 </div>
@@ -252,7 +252,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **대응표본과 독립표본.** 두 표본 $t$ 검정은 표본의 독립성을 가정한다. 자료가 **대응**되어 있을 때(예: 같은 대상의 사전/사후 측정) 적절한 검정을 서술하고 대응 분석이 왜 검정력이 더 높은지 설명하라.
 
 </div>
@@ -274,7 +274,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 **동등성 검정.** 두 평균이 허용범위 $\delta = 2$ 안에서 실질적으로 **동등한지** 검정한다. **TOST 절차**(두 개의 단측검정)의 귀무가설과 대립가설을 쓰라.
 
 </div>

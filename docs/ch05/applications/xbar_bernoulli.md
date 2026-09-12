@@ -123,7 +123,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $\text{Var}(X_i) = p(1-p)$에서 출발하여 정의로부터 $\hat{p}$의 분산을 유도하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> $\text{Var}(X_i) = p(1-p)$에서 출발하여 정의로부터 $\hat{p}$의 분산을 유도하라.
 
 </div>
 
@@ -138,7 +138,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 어떤 여론조사가 유권자 $n = 400$명을 조사했다. 특정 후보를 지지하는 표본비율이 $\hat{p} = 0.53$이다. 참 비율 $p$에 대한 95% 신뢰구간을 구성하라.
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 어떤 여론조사가 유권자 $n = 400$명을 조사했다. 특정 후보를 지지하는 표본비율이 $\hat{p} = 0.53$이다. 참 비율 $p$에 대한 95% 신뢰구간을 구성하라.
 
 </div>
 
@@ -165,7 +165,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $p(1-p)$가 $p = 0.5$에서 최대이고 그 값이 $1/4$임을 보여라. 이것이 $\hat{p}$의 "최악의 경우" 표준오차가 $1/(2\sqrt{n})$임을 뜻하는 이유를 설명하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> $p(1-p)$가 $p = 0.5$에서 최대이고 그 값이 $1/4$임을 보여라. 이것이 $\hat{p}$의 "최악의 경우" 표준오차가 $1/(2\sqrt{n})$임을 뜻하는 이유를 설명하라.
 
 </div>
 
@@ -192,7 +192,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 참 $p$가 무엇이든 $\hat{p}$의 95% 오차한계가 최대 0.02가 되려면 $n$이 얼마나 커야 하는가?
+**연습문제 4.** <span class="diff easy" title="쉬움"></span> 참 $p$가 무엇이든 $\hat{p}$의 95% 오차한계가 최대 0.02가 되려면 $n$이 얼마나 커야 하는가?
 
 </div>
 
@@ -215,7 +215,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $p = 0.01$이고 $n = 100$일 때 $np$와 $n(1-p)$를 계산하라. 정규근사가 경험 법칙을 충족하는가? 이런 상황에 대한 대안을 제시하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> $p = 0.01$이고 $n = 100$일 때 $np$와 $n(1-p)$를 계산하라. 정규근사가 경험 법칙을 충족하는가? 이런 상황에 대한 대안을 제시하라.
 
 </div>
 

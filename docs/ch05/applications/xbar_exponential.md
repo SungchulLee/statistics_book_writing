@@ -99,7 +99,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $t < \lambda$에서 적률생성함수가 $M_X(t) = \lambda / (\lambda - t)$임을 사용하여 $X \sim \text{Exp}(\lambda)$의 평균과 분산을 유도하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> $t < \lambda$에서 적률생성함수가 $M_X(t) = \lambda / (\lambda - t)$임을 사용하여 $X \sim \text{Exp}(\lambda)$의 평균과 분산을 유도하라.
 
 </div>
 
@@ -128,7 +128,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$이면 $S_n = \sum_{i=1}^n X_i \sim \text{Gamma}(n, \lambda)$임을 보여라.
+**연습문제 2.** <span class="diff med" title="중간"></span> $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$이면 $S_n = \sum_{i=1}^n X_i \sim \text{Gamma}(n, \lambda)$임을 보여라.
 
 </div>
 
@@ -145,7 +145,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $n = 5$, $\lambda = 1$일 때 감마분포를 사용하여 정확한 확률 $P(\bar{X} > 2)$를 계산하고 정규근사와 비교하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> $n = 5$, $\lambda = 1$일 때 감마분포를 사용하여 정확한 확률 $P(\bar{X} > 2)$를 계산하고 정규근사와 비교하라.
 
 </div>
 
@@ -175,7 +175,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** Exponential 분포의 왜도는 $\gamma_1 = 2$이다. $\bar{X}$의 왜도가 $\gamma_1(\bar{X}) = 2/\sqrt{n}$임을 보여라. 표본크기가 얼마일 때 $\bar{X}$의 왜도가 0.5 아래로 떨어지는가?
+**연습문제 4.** <span class="diff med" title="중간"></span> Exponential 분포의 왜도는 $\gamma_1 = 2$이다. $\bar{X}$의 왜도가 $\gamma_1(\bar{X}) = 2/\sqrt{n}$임을 보여라. 표본크기가 얼마일 때 $\bar{X}$의 왜도가 0.5 아래로 떨어지는가?
 
 </div>
 
@@ -204,7 +204,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 모의실험을 $n = 5$ 대신 $n = 50$으로 반복하라. 표본평균의 히스토그램 위에 정규 밀도 $N(1, 1/50)$을 겹쳐 그리고 적합 정도를 정성적으로 서술하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 모의실험을 $n = 5$ 대신 $n = 50$으로 반복하라. 표본평균의 히스토그램 위에 정규 밀도 $N(1, 1/50)$을 겹쳐 그리고 적합 정도를 정성적으로 서술하라.
 
 </div>
 

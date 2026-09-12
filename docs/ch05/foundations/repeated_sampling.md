@@ -257,7 +257,7 @@ if __name__ == "__main__":
 
 <div class="probox" markdown>
 
-**문제.** 항아리에 1, 2, 3번이 매겨진 공 세 개가 있다. 모평균은 $\mu = 2$이다. 복원추출로 공 두 개를 뽑아 평균을 구한다. 이 표본평균의 분포, 즉 $\bar{X}$의 표본분포를 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 항아리에 1, 2, 3번이 매겨진 공 세 개가 있다. 모평균은 $\mu = 2$이다. 복원추출로 공 두 개를 뽑아 평균을 구한다. 이 표본평균의 분포, 즉 $\bar{X}$의 표본분포를 구하라.
 
 </div>
 
@@ -319,7 +319,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 모집단의 평균이 100이고 표준편차가 20이다. 표본크기 $n$이 커질 때 (a) $\bar X$의 표본분포의 평균, (b) 표준오차, (c) 하나의 표본평균 $\bar x$는 각각 어떻게 되는가?
 
 </div>
@@ -333,7 +333,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **표준오차와 표준편차.** 예를 들어 그 구별을 설명하라. 표준오차는 왜 $\sigma$가 아니라 항상 $\sigma / \sqrt n$인가?
 
 </div>
@@ -349,7 +349,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **비복원추출.** 평균이 $\mu$, 분산이 $\sigma^2$인 크기 $N$의 유한모집단에서 $n$개를 *비복원*으로 뽑을 때 $\bar X$의 분산을 유도하라.
 
 </div>
@@ -367,7 +367,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 **점근분포와 정확한 분포.** $\mathrm{Uniform}(0, 1)$에서 크기 $n = 5$인 표본을 뽑을 때 $\bar X$의 정확한 분포는 알려져 있다(척도조정된 Irwin-Hall 분포). 그 모양을 그려 보고 중심극한정리가 예측하는 정규근사와 비교하라.
 
 </div>
@@ -383,7 +383,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 중심극한정리에서의 **수렴은 각 점에서의 수렴이 아니라 분포수렴이다.** 분포수렴을 정의하고 왜 이것이 중심극한정리에 알맞은 개념인지 설명하라.
 
 </div>
@@ -399,7 +399,7 @@ if __name__ == "__main__":
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **모의실험.** 임의의 모집단에서 $\bar X$의 표본분포를 *시각화*하는 방법을 서술하라. $n = 5, 30, 100$에 대해 어떤 그림 세 개를 그리겠는가?
 
 </div>

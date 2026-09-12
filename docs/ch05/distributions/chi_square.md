@@ -279,7 +279,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $X \sim \chi^2_5$와 $Y \sim \chi^2_8$이 독립일 때 $X + Y$의 분포는 무엇인가? $E[X+Y]$와 $\text{Var}(X+Y)$를 계산하라.
 
 </div>
@@ -297,7 +297,7 @@ $X \sim \chi^2_5$와 $Y \sim \chi^2_8$이 독립일 때 $X + Y$의 분포는 무
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $N(\mu, 9)$ 모집단에서 크기 $n = 20$인 확률표본을 뽑는다. $\frac{(n-1)S^2}{\sigma^2}$의 정확한 분포는 무엇인가? ($\sigma^2 = 9$일 때) $S^2 > 15$일 확률을 구하라.
 
 </div>
@@ -315,7 +315,7 @@ $N(\mu, 9)$ 모집단에서 크기 $n = 20$인 확률표본을 뽑는다. $\frac
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 카이제곱 분포가 자유도가 작을 때는 오른쪽으로 치우치지만 자유도가 크면 근사적으로 대칭이 되는 이유를 설명하라.
 
 </div>
@@ -327,7 +327,7 @@ $N(\mu, 9)$ 모집단에서 크기 $n = 20$인 확률표본을 뽑는다. $\frac
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 연구자가 지수 모집단에서 $n = 10$인 표본을 뽑아 $\frac{(n-1)S^2}{\sigma^2}$을 계산하고 이것이 $\chi^2_9$ 분포를 따른다고 가정한다. 타당한가? 무엇이 잘못되는지 설명하라.
 
 </div>

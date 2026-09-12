@@ -201,7 +201,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 독립 모형과 의존 모형 각각에 대해 $E[D]$와 $\text{Var}(D)$를 계산하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 독립 모형과 의존 모형 각각에 대해 $E[D]$와 $\text{Var}(D)$를 계산하라.
 
 </div>
 
@@ -242,7 +242,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $\theta \sim \text{Beta}(2, 1)$에 대해 주변 PMF $P(D = d) = 2(d+1) / [(n+1)(n+2)]$를 유도하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> $\theta \sim \text{Beta}(2, 1)$에 대해 주변 PMF $P(D = d) = 2(d+1) / [(n+1)(n+2)]$를 유도하라.
 
 </div>
 
@@ -269,7 +269,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 임의의 두 차입자의 부도 사이의 주변 공분산이 $i \ne j$에 대해 $\text{Cov}(X_i, X_j) = \text{Var}(\theta)$임을 보여라. $\theta \sim \text{Beta}(2, 1)$에 대해 이를 계산하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 임의의 두 차입자의 부도 사이의 주변 공분산이 $i \ne j$에 대해 $\text{Cov}(X_i, X_j) = \text{Var}(\theta)$임을 보여라. $\theta \sim \text{Beta}(2, 1)$에 대해 이를 계산하라.
 
 </div>
 
@@ -302,7 +302,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 대신 $\theta \sim \text{Beta}(20, 10)$이라면(여전히 $E[\theta] = 2/3$이지만 변동성이 훨씬 작다) $\text{Var}(\theta)$와 $\text{Var}(D)$를 다시 계산하라. 공통 위험 요인의 변동성을 줄이면 꼬리 위험은 어떻게 되는가?
+**연습문제 4.** <span class="diff med" title="중간"></span> 대신 $\theta \sim \text{Beta}(20, 10)$이라면(여전히 $E[\theta] = 2/3$이지만 변동성이 훨씬 작다) $\text{Var}(\theta)$와 $\text{Var}(D)$를 다시 계산하라. 공통 위험 요인의 변동성을 줄이면 꼬리 위험은 어떻게 되는가?
 
 </div>
 
@@ -331,7 +331,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 2008년 이전 신용평가사들이 사용한 Gaussian 코퓰러 모형이 왜 실패했는지 쉬운 말로 설명하라. 어떤 가정이 가장 결정적으로 위배되었는가?
+**연습문제 5.** <span class="diff med" title="중간"></span> 2008년 이전 신용평가사들이 사용한 Gaussian 코퓰러 모형이 왜 실패했는지 쉬운 말로 설명하라. 어떤 가정이 가장 결정적으로 위배되었는가?
 
 </div>
 

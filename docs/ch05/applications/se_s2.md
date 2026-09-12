@@ -128,7 +128,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $n = 10$인 $N(0, 1)$ 모집단에 대해 이론적 $E[S^2]$과 $\text{SE}(S^2)$을 계산하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> $n = 10$인 $N(0, 1)$ 모집단에 대해 이론적 $E[S^2]$과 $\text{SE}(S^2)$을 계산하라.
 
 </div>
 
@@ -147,7 +147,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 카이제곱 결과 $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$을 사용하여 정규모집단에서 $\text{Var}(S^2) = 2\sigma^4 / (n-1)$을 유도하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 카이제곱 결과 $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$을 사용하여 정규모집단에서 $\text{Var}(S^2) = 2\sigma^4 / (n-1)$을 유도하라.
 
 </div>
 
@@ -170,7 +170,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Uniform(0, 1)의 4차 중심적률이 $\mu_4 = 1/80$임을 보여라.
+**연습문제 3.** <span class="diff med" title="중간"></span> Uniform(0, 1)의 4차 중심적률이 $\mu_4 = 1/80$임을 보여라.
 
 </div>
 
@@ -191,7 +191,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $n$이 작을 때 $S^2$의 표본분포가 오른쪽으로 치우치는 이유와 $n$이 커질수록 더 대칭이 되는 이유를 설명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $n$이 작을 때 $S^2$의 표본분포가 오른쪽으로 치우치는 이유와 $n$이 커질수록 더 대칭이 되는 이유를 설명하라.
 
 </div>
 
@@ -207,7 +207,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Exponential(1) 모집단으로 모의실험을 반복하라. $\text{Exp}(1)$에서 $\sigma^2 = 1$, $\mu_4 = 9$임에 유의하여 $S^2$의 경험적 표준오차를 이론값과 비교하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> Exponential(1) 모집단으로 모의실험을 반복하라. $\text{Exp}(1)$에서 $\sigma^2 = 1$, $\mu_4 = 9$임에 유의하여 $S^2$의 경험적 표준오차를 이론값과 비교하라.
 
 </div>
 

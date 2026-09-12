@@ -133,7 +133,7 @@ $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \s
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $X_1, \ldots, X_{25} \overset{\text{iid}}{\sim} N(100, 16)$일 때 $P(\bar{X} > 102)$를 구하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> $X_1, \ldots, X_{25} \overset{\text{iid}}{\sim} N(100, 16)$일 때 $P(\bar{X} > 102)$를 구하라.
 
 </div>
 
@@ -158,7 +158,7 @@ $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \s
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $X \sim N(\mu_X, \sigma_X^2)$와 $Y \sim N(\mu_Y, \sigma_Y^2)$가 독립이면 $aX + bY \sim N(a\mu_X + b\mu_Y,\; a^2\sigma_X^2 + b^2\sigma_Y^2)$임을 증명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> $X \sim N(\mu_X, \sigma_X^2)$와 $Y \sim N(\mu_Y, \sigma_Y^2)$가 독립이면 $aX + bY \sim N(a\mu_X + b\mu_Y,\; a^2\sigma_X^2 + b^2\sigma_Y^2)$임을 증명하라.
 
 </div>
 
@@ -183,7 +183,7 @@ $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \s
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 어떤 기계가 병에 평균 500 ml, 표준편차 4 ml로 내용물을 채우며 충전량은 정규분포를 따른다. 품질관리에서 병 16개를 표본으로 뽑는다. 표본평균이 목표치에서 2 ml 이내일 확률은?
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 어떤 기계가 병에 평균 500 ml, 표준편차 4 ml로 내용물을 채우며 충전량은 정규분포를 따른다. 품질관리에서 병 16개를 표본으로 뽑는다. 표본평균이 목표치에서 2 ml 이내일 확률은?
 
 </div>
 
@@ -204,7 +204,7 @@ $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \s
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 모집단이 정규일 때는 중심극한정리가 필요 없지만 모집단이 Exponential이나 Uniform일 때는 필수적인 이유를 설명하라. 정규가 아닌 경우 $n$이 커지면 표본분포에서 무엇이 달라지는가?
+**연습문제 4.** <span class="diff med" title="중간"></span> 모집단이 정규일 때는 중심극한정리가 필요 없지만 모집단이 Exponential이나 Uniform일 때는 필수적인 이유를 설명하라. 정규가 아닌 경우 $n$이 커지면 표본분포에서 무엇이 달라지는가?
 
 </div>
 
@@ -223,7 +223,7 @@ $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \s
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 위의 모의실험 코드에서 $n$을 5에서 100으로 늘려라. 히스토그램 위에 이론적 밀도 $N(0, 1/100)$을 겹쳐 그리고, 10,000개 표본평균의 경험적 표준편차가 $1/\sqrt{100} = 0.1$에 가까운지 확인하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 위의 모의실험 코드에서 $n$을 5에서 100으로 늘려라. 히스토그램 위에 이론적 밀도 $N(0, 1/100)$을 겹쳐 그리고, 10,000개 표본평균의 경험적 표준편차가 $1/\sqrt{100} = 0.1$에 가까운지 확인하라.
 
 </div>
 

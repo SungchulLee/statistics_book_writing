@@ -189,7 +189,7 @@ F_0.95(5, 20) = 2.7109
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 공통 $\sigma^2$을 갖는 독립인 두 정규 표본에서 $n_1 = 15$, $n_2 = 10$이다. $P(S_1^2/S_2^2 > 1.5)$를 계산하라.
 
 </div>
@@ -205,7 +205,7 @@ F_0.95(5, 20) = 2.7109
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 **구성.** 독립인 $U \sim \chi^2_{d_1}$과 $V \sim \chi^2_{d_2}$에 대해 $F = (U/d_1)/(V/d_2)$를 유도하라. 평균을 구하고 그것이 무엇을 말해 주는지 설명하라.
 
 </div>
@@ -229,7 +229,7 @@ F_0.95(5, 20) = 2.7109
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **분산분석의 $F$ 검정.** 일원배치 분산분석에서 $k$개 집단 평균의 동일성을 검정하는 F 통계량을 쓰라. 자유도는 무엇인가?
 
 </div>
@@ -253,7 +253,7 @@ F_0.95(5, 20) = 2.7109
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **$F$와 $t$.** $k = 2$개 집단일 때 $F_{1, n-2}$가 $t_{n-2}$의 제곱과 같은 분포를 가짐을 보여라.
 
 </div>
@@ -273,7 +273,7 @@ F_0.95(5, 20) = 2.7109
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **역수 관계.** $F_{d_1, d_2}$와 $1/F_{d_2, d_1}$이 같은 분포를 가짐을 보여라.
 
 </div>
@@ -291,7 +291,7 @@ F_0.95(5, 20) = 2.7109
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **정규성 위반에 대한 로버스트성.** $F$ 검정은 밑바탕 모집단의 정규성을 가정한다. 가정 위반의 영향을 논하고 대안을 제시하라.
 
 </div>

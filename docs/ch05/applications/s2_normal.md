@@ -142,7 +142,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $X_1, \ldots, X_{10} \overset{\text{iid}}{\sim} N(0, 4)$일 때 $P(S^2 > 6)$을 구하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> $X_1, \ldots, X_{10} \overset{\text{iid}}{\sim} N(0, 4)$일 때 $P(S^2 > 6)$을 구하라.
 
 </div>
 
@@ -173,7 +173,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** (정규분포뿐 아니라) 임의의 모집단에 대해 $E[S^2] = \sigma^2$임을 증명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> (정규분포뿐 아니라) 임의의 모집단에 대해 $E[S^2] = \sigma^2$임을 증명하라.
 
 </div>
 
@@ -216,7 +216,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $\text{Var}(\chi^2(k)) = 2k$라는 사실을 사용하여 모집단이 정규일 때 $\text{Var}(S^2) = 2\sigma^4/(n-1)$임을 보여라.
+**연습문제 3.** <span class="diff med" title="중간"></span> $\text{Var}(\chi^2(k)) = 2k$라는 사실을 사용하여 모집단이 정규일 때 $\text{Var}(S^2) = 2\sigma^4/(n-1)$임을 보여라.
 
 </div>
 
@@ -233,7 +233,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $\lambda = 1$인 Exponential 모집단의 첨도는 $\kappa = 9$이다. $n = 100$에서 이론적 $\text{Var}(S^2)$을 계산하고 (정규이론 값인) $2\sigma^4/(n-1)$과 비교하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $\lambda = 1$인 Exponential 모집단의 첨도는 $\kappa = 9$이다. $n = 100$에서 이론적 $\text{Var}(S^2)$을 계산하고 (정규이론 값인) $2\sigma^4/(n-1)$과 비교하라.
 
 </div>
 
@@ -262,7 +262,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 카이제곱 분포를 사용하여 $\sigma^2$에 대한 95% 신뢰구간을 구성하라. 정규모집단에서 $n = 25$개의 관측값으로 $S^2 = 12$를 얻었다고 하자.
+**연습문제 5.** <span class="diff easy" title="쉬움"></span> 카이제곱 분포를 사용하여 $\sigma^2$에 대한 95% 신뢰구간을 구성하라. 정규모집단에서 $n = 25$개의 관측값으로 $S^2 = 12$를 얻었다고 하자.
 
 </div>
 

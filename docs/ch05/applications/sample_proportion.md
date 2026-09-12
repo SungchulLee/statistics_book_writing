@@ -58,7 +58,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제.** 참 비율이 $p = 0.4$이고 표본크기가 $n = 100$이다.
+**문제.** <span class="diff easy" title="쉬움"></span> 참 비율이 $p = 0.4$이고 표본크기가 $n = 100$이다.
 
 $$
 \text{SE}(\hat{p}) = \sqrt{\frac{0.4 \times 0.6}{100}} = \sqrt{0.0024} \approx 0.049
@@ -72,13 +72,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 브랜드 선호.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 브랜드 선호.
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 어떤 모집단에서 60%가 브랜드 A를 선호한다. $n = 100$일 때 $P(\hat{p} > 0.65)$를 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 어떤 모집단에서 60%가 브랜드 A를 선호한다. $n = 100$일 때 $P(\hat{p} > 0.65)$를 구하라.
 
 </div>
 
@@ -109,13 +109,13 @@ P(p_hat > 0.65) = 0.1539
 
 <div class="exbox" markdown>
 
-**보기 2.** 소표본 — 정확값과 근사값.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 소표본 — 정확값과 근사값.
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 어떤 도시에서 30%가 대중교통을 선호한다. $n = 10$일 때 $P(\hat{p} > 0.35)$를 구하라.
+**문제.** <span class="diff med" title="중간"></span> 어떤 도시에서 30%가 대중교통을 선호한다. $n = 10$일 때 $P(\hat{p} > 0.35)$를 구하라.
 
 </div>
 
@@ -237,7 +237,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 모집단의 $p = 0.60$이고 표본 $n = 100$이다. $P(\hat p > 0.65)$를 계산하라.
 
 </div>
@@ -251,7 +251,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **소표본의 문제.** 모집단의 $p = 0.30$이고 표본 $n = 10$이다. $P(\hat p > 0.35)$를 정확한 방법과 정규근사로 각각 계산하라. 여기서 정규근사가 통하는지 아니면 실패하는지 이유를 설명하라.
 
 </div>
@@ -267,7 +267,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **$\hat p$의 불편성을 증명하고 표준오차를 구하라.** $\mathbb{E}[\hat p] = p$이고 $\mathrm{Var}(\hat p) = p(1-p)/n$임을 보여라.
 
 </div>
@@ -287,7 +287,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **표본크기 설계.** $p$를 모를 때 95% 신뢰수준에서 오차한계 $\pm 3$퍼센트포인트로 $p$를 추정하려면 표본크기가 얼마여야 하는가?
 
 </div>
@@ -303,7 +303,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 **Wilson 점수 구간.** 이항 비율에서 표준적인 Wald 신뢰구간 $\hat p \pm z \sqrt{\hat p(1-\hat p)/n}$보다 **Wilson 점수** 신뢰구간이 선호되는 이유는 무엇인가?
 
 </div>
@@ -327,7 +327,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **비율의 차.** 독립인 두 표본에서 $n_1$로부터 $\hat p_1$을, $n_2$로부터 $\hat p_2$를 얻었다. $\hat p_1 - \hat p_2$의 표준오차를 유도하라.
 
 </div>

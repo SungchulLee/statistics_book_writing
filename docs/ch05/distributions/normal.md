@@ -135,7 +135,7 @@ Confidence 99%: z* = 2.576
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $X_1, \ldots, X_n$을 i.i.d. $N(\mu, \sigma^2)$이라 하고 $\sigma$를 안다고 하자. $\bar{X}$의 분포와 표준화된 통계량 $Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$의 분포를 유도하라.
 
 </div>
@@ -157,7 +157,7 @@ $X_1, \ldots, X_n$을 i.i.d. $N(\mu, \sigma^2)$이라 하고 $\sigma$를 안다�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 기계가 병에 평균 500 mL, 알려진 표준편차 5 mL로 내용물을 채운다(정규분포). $n = 25$개 표본의 표본평균이 498 mL이었다. 표본평균이 498 mL 이하일 확률을 구하라.
 
 </div>
@@ -177,7 +177,7 @@ $X_1, \ldots, X_n$을 i.i.d. $N(\mu, \sigma^2)$이라 하고 $\sigma$를 안다�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $Z_1, Z_2, Z_3$이 독립인 표준정규확률변수일 때 $Z_1^2 + Z_2^2 + Z_3^2$의 분포는 무엇인가? 이 분포의 평균과 분산은?
 
 </div>
@@ -197,7 +197,7 @@ $Z_1, Z_2, Z_3$이 독립인 표준정규확률변수일 때 $Z_1^2 + Z_2^2 + Z_
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 모집단이 정규가 아닐 때조차 정규분포가 표본이론에서 중심적인 역할을 하는 이유를 설명하라. 어떤 정리가 이를 정당화하며 그 한계는 무엇인가?
 
 </div>

@@ -63,7 +63,7 @@ $\sigma^2 < \infty$이기만 하면 모집단의 모양과 무관하게 성립�
 
 <div class="probox" markdown>
 
-**문제.** 모집단이 $\mu = 100$, $\sigma = 4$이다. $n = 25$일 때:
+**문제.** <span class="diff easy" title="쉬움"></span> 모집단이 $\mu = 100$, $\sigma = 4$이다. $n = 25$일 때:
 
 $$
 \text{SE}(\bar{X}) = \frac{4}{\sqrt{25}} = 0.8
@@ -77,13 +77,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 사과 무게.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 사과 무게.
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 사과 무게가 $N(150, 20^2)$이다. $n = 25$일 때 $P(\bar{X} > 155)$를 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 사과 무게가 $N(150, 20^2)$이다. $n = 25$일 때 $P(\bar{X} > 155)$를 구하라.
 
 </div>
 
@@ -111,13 +111,13 @@ P(X_bar > 155) = 0.1056
 
 <div class="exbox" markdown>
 
-**보기 2.** 수면 시간.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 수면 시간.
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 평균 수면 시간이 7시간이고 $\sigma = 1.5$이다. $n = 49$일 때 $P(6.8 < \bar{X} < 7.2)$를 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 평균 수면 시간이 7시간이고 $\sigma = 1.5$이다. $n = 49$일 때 $P(6.8 < \bar{X} < 7.2)$를 구하라.
 
 </div>
 
@@ -149,13 +149,13 @@ P(6.8 < X_bar < 7.2) = 0.6476
 
 <div class="exbox" markdown>
 
-**보기 3.** 체중 (소표본, 정규모집단).
+**보기 3.** <span class="diff easy" title="쉬움"></span> 체중 (소표본, 정규모집단).
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 체중이 $N(70, 10^2)$이다. $n = 5$일 때 $P(\bar{X} > 72)$를 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 체중이 $N(70, 10^2)$이다. $n = 5$일 때 $P(\bar{X} > 72)$를 구하라.
 
 </div>
 
@@ -183,13 +183,13 @@ P(X_bar > 72) = 0.3274
 
 <div class="exbox" markdown>
 
-**보기 4.** 물 부족.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 물 부족.
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 평균 물 소비량이 2 L이고 $\sigma = 0.7$ L이다. 50명이 물 110 L를 가지고 여행할 때 물이 떨어질 확률을 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 평균 물 소비량이 2 L이고 $\sigma = 0.7$ L이다. 50명이 물 110 L를 가지고 여행할 때 물이 떨어질 확률을 구하라.
 
 </div>
 
@@ -206,13 +206,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 5.** 전구 (정규성 가정 없이).
+**보기 5.** <span class="diff easy" title="쉬움"></span> 전구 (정규성 가정 없이).
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 전구 수명이 $\mu = 800$, $\sigma = 100$이다. $n = 5$일 때 정규성을 가정하지 않고 $P(\bar{X} > 810)$을 구하라.
+**문제.** <span class="diff med" title="중간"></span> 전구 수명이 $\mu = 800$, $\sigma = 100$이다. $n = 5$일 때 정규성을 가정하지 않고 $P(\bar{X} > 810)$을 구하라.
 
 </div>
 
@@ -220,13 +220,13 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 6.** 치우친 매출 (대표본).
+**보기 6.** <span class="diff easy" title="쉬움"></span> 치우친 매출 (대표본).
 
 </div>
 
 <div class="probox" markdown>
 
-**문제.** 일간 매출이 오른쪽으로 치우쳐 있고 $\mu = 2000$, $\sigma = 500$이다. $n = 100$일 때 $P(\bar{X} > 2100)$을 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> 일간 매출이 오른쪽으로 치우쳐 있고 $\mu = 2000$, $\sigma = 500$이다. $n = 100$일 때 $P(\bar{X} > 2100)$을 구하라.
 
 </div>
 
@@ -264,7 +264,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제.** A 교대조: $\mu_A = 130$g, $\sigma_A = 4$g. B 교대조: $\mu_B = 125$g, $\sigma_B = 3$g. $n_A = n_B = 40$일 때 $P(|\bar{X}_A - \bar{X}_B| > 6)$을 구하라.
+**문제.** <span class="diff easy" title="쉬움"></span> A 교대조: $\mu_A = 130$g, $\sigma_A = 4$g. B 교대조: $\mu_B = 125$g, $\sigma_B = 3$g. $n_A = n_B = 40$일 때 $P(|\bar{X}_A - \bar{X}_B| > 6)$을 구하라.
 
 </div>
 
@@ -368,7 +368,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 **표본평균의 평균과 표준오차.** $\mu = 75$, $\sigma = 18$인 모집단에서 $n = 9$인 표본을 뽑는다. (a) $\mathbb{E}[\bar X]$, (b) $\mathrm{SE}(\bar X)$를 계산하라.
 
 </div>
@@ -380,7 +380,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 사과 무게가 $\mu = 150$ g, $\sigma = 20$ g인 정규분포를 따른다. $n = 25$인 표본에 대해 $P(\bar X > 155)$를 계산하라.
 
 </div>
@@ -394,7 +394,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 학생들의 수면 시간이 $\mu = 7$시간, $\sigma = 1.5$시간이다. $n = 49$인 표본에 대해 $P(6.8 < \bar X < 7.2)$를 계산하라.
 
 </div>
@@ -410,7 +410,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **소표본, 정규모집단.** 체중이 $X \sim N(70, 100)$ kg이다. $n = 5$인 표본에 대해 $P(\bar X > 72)$를 계산하라. $n$이 작은데도 왜 타당한가?
 
 </div>
@@ -426,7 +426,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **정규성 없는 전구.** 수명이 $\mu = 800$시간, $\sigma = 100$시간이고 분포는 알려져 있지 않다. $n = 5$인 표본에 대해 $P(\bar X > 810)$에 관해 무엇을 말할 수 있는가?
 
 </div>
@@ -442,7 +442,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff easy" title="쉬움"></span>
 **치우친 모집단 + 큰 $n$.** 일간 매출이 오른쪽으로 치우쳐 있고 $\mu = \$2000$, $\sigma = \$500$이다. $n = 100$인 표본에 대해 $P(\bar X > \$2100)$을 계산하라.
 
 </div>
@@ -458,7 +458,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff easy" title="쉬움"></span>
 **표본평균이 48과 52 사이일 확률.**
 평균 50, 표준편차 12인 모집단에서 크기 36인 표본을 뽑을 때 표본평균이 48과 52 사이일 확률은?
 

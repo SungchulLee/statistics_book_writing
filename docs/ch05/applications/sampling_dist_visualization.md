@@ -209,7 +209,7 @@ IQR                  $            29,850 $            14,907
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 모집단이 치우쳐 있고 $\mu = 50$, $\sigma = 10$이다. 표본 $n = 100$일 때 (a) $\bar X$의 표본분포의 대략적인 모양은? (b) 그 평균과 표준오차는?
 
 </div>
@@ -223,7 +223,7 @@ IQR                  $            29,850 $            14,907
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **표본크기와 수렴 속도.** 지수 모집단(왜도 2)에서 $\bar X$의 표본분포는 어느 $n$에서 "근사적으로 정규"가 되는가? Berry-Esseen을 사용하여 정당화하라.
 
 </div>
@@ -241,7 +241,7 @@ IQR                  $            29,850 $            14,907
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **대안으로서의 붓스트랩.** 모집단 모양을 모르고 $n$이 중간 정도일 때 붓스트랩은 표본분포를 비모수적으로 추정해 준다. 그 절차를 서술하라.
 
 </div>
@@ -261,7 +261,7 @@ IQR                  $            29,850 $            14,907
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **중심극한정리 시각화.** $n = 1, 5, 30, 100$인 지수 표본에 대해 중심극한정리를 보여 주는 일련의 그림을 서술하라.
 
 </div>
@@ -282,7 +282,7 @@ IQR                  $            29,850 $            14,907
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **모분산의 효과.** $\mu = 50$인 모집단에 대해 $\sigma = 5, 10, 50$일 때 $n = 100$에서 $\bar X$의 표본분포를 비교하라.
 
 </div>
@@ -300,7 +300,7 @@ IQR                  $            29,850 $            14,907
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **중앙값의 표본분포.** 평균의 표본분포와 모양, 표준오차 공식, 로버스트성을 간단히 대비하라.
 
 </div>
@@ -326,7 +326,7 @@ IQR                  $            29,850 $            14,907
 
 <div class="drillbox" markdown>
 
-**연습문제 7.**
+**연습문제 7.** <span class="diff easy" title="쉬움"></span>
 **치우친 모집단에서 표집분포의 모양.**
 평균 50, 표준편차 10인 치우친 분포를 갖는 모집단에서 크기 100인 표본을 뽑으면 표본평균의 표집분포는 대략 어떤 모양인가?
 

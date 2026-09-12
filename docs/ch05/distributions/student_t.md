@@ -221,7 +221,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 급여가 $\mu = \$40{,}000$인 정규분포를 따른다. 표본 $n = 9$, $s = \$8{,}000$일 때 $P(\bar X \ge \$45{,}000)$을 계산하라.
 
 </div>
@@ -235,7 +235,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 **$t$ 분포 유도.** $Z \sim N(0, 1)$과 $V \sim \chi^2_\nu$가 독립이면 $T = Z/\sqrt{V/\nu} \sim t_\nu$임을 보여라.
 
 </div>
@@ -259,7 +259,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **$t$는 정규분포에 가까워진다.** $\nu \to \infty$일 때 $t_\nu \to N(0, 1)$임을 보여라.
 
 </div>
@@ -273,7 +273,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **$z$ 대신 $t$를 쓰는 이유.** 어떤 통계학자가 $z = (\bar X - \mu_0)/(\sigma/\sqrt n)$을 계산하려다 $\sigma$를 모른다는 것을 깨닫고 $s$로 대체했다. 그 결과 $t = (\bar X - \mu_0)/(s/\sqrt n) \sim t_{n-1}$임을 보여라.
 
 </div>
@@ -297,7 +297,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
 **$t$의 두꺼운 꼬리.** $t_3$에 대해 $P(|T| > 2)$와 $P(|T| > 4)$를 계산하고 정규분포와 비교하라.
 
 </div>
@@ -315,7 +315,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 **Welch의 $t$ 검정.** 분산이 다른 독립인 두 표본에 대해 Welch 검정은 $t = (\bar X_1 - \bar X_2)/\sqrt{s_1^2/n_1 + s_2^2/n_2}$를 사용하고 자유도는 Welch–Satterthwaite 공식으로 근사한다. 이 공식을 쓰고 왜 정수가 아닌지 설명하라.
 
 </div>

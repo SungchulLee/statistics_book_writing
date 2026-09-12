@@ -122,7 +122,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 어떤 모집단의 $\sigma = 10$이다. $n = 25$, $n = 100$, $n = 400$에서 $\bar{X}$의 표준오차를 계산하고 "네 배 규칙"을 확인하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 어떤 모집단의 $\sigma = 10$이다. $n = 25$, $n = 100$, $n = 400$에서 $\bar{X}$의 표준오차를 계산하고 "네 배 규칙"을 확인하라.
 
 </div>
 
@@ -143,7 +143,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 어떤 연구자가 $\bar{X}$의 표준오차를 최대 0.5로 만들고자 한다. 모표준편차는 $\sigma \approx 8$로 추정된다. 최소 표본크기는 얼마인가?
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 어떤 연구자가 $\bar{X}$의 표준오차를 최대 0.5로 만들고자 한다. 모표준편차는 $\sigma \approx 8$로 추정된다. 최소 표본크기는 얼마인가?
 
 </div>
 
@@ -158,7 +158,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $n \ge 1$에서 $\text{SE}(\bar{X})$가 $n$의 감소함수이자 볼록함수임을 증명하라. 볼록성은 표본크기를 늘릴 때의 한계 이득에 관해 무엇을 함의하는가?
+**연습문제 3.** <span class="diff med" title="중간"></span> $n \ge 1$에서 $\text{SE}(\bar{X})$가 $n$의 감소함수이자 볼록함수임을 증명하라. 볼록성은 표본크기를 늘릴 때의 한계 이득에 관해 무엇을 함의하는가?
 
 </div>
 
@@ -183,7 +183,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 추정 표준오차 $\widehat{\text{SE}} = s / \sqrt{n}$를 사용할 때, 모집단이 정규이면 $(\bar{X} - \mu) / \widehat{\text{SE}}$가 자유도 $n - 1$인 $t$ 분포를 따름을 보여라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 추정 표준오차 $\widehat{\text{SE}} = s / \sqrt{n}$를 사용할 때, 모집단이 정규이면 $(\bar{X} - \mu) / \widehat{\text{SE}}$가 자유도 $n - 1$인 $t$ 분포를 따름을 보여라.
 
 </div>
 
@@ -204,7 +204,7 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 모의실험을 Uniform(0, 1) 대신 Exponential(1) 모집단으로 바꾸어라. 이론적 표준오차 $(\sigma/\sqrt{n} = 1/\sqrt{5})$와 경험적 표준오차를 비교하라. 공식 $\text{SE} = \sigma/\sqrt{n}$은 정규가 아닌 모집단에서도 여전히 타당한가?
+**연습문제 5.** <span class="diff med" title="중간"></span> 모의실험을 Uniform(0, 1) 대신 Exponential(1) 모집단으로 바꾸어라. 이론적 표준오차 $(\sigma/\sqrt{n} = 1/\sqrt{5})$와 경험적 표준오차를 비교하라. 공식 $\text{SE} = \sigma/\sqrt{n}$은 정규가 아닌 모집단에서도 여전히 타당한가?
 
 </div>
 
