@@ -110,7 +110,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 적률 세 개를 쓴 정규분포. $X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자:
+**보기 1.** <span class="diff med" title="중간"></span> 적률 세 개를 쓴 정규분포. $X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자:
 
 $$
 g(X, \theta) = \begin{pmatrix} X - \mu \\ X^2 - (\mu^2 + \sigma^2) \\ X^3 - \mu^3 - 3\mu\sigma^2 \end{pmatrix}
@@ -144,7 +144,7 @@ GMM은 추정의 지형에서 중심적인 위치를 차지한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 일반화 적률법에서 적률 조건의 개수 $q$가 모수의 개수 $p$ 이상이어야 하는 이유는 무엇인가? $q > p$이면 어떻게 되는가?
 
 </div>
@@ -158,7 +158,7 @@ GMM은 추정의 지형에서 중심적인 위치를 차지한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 평균이 $\mu$이고 분산이 $\sigma^2$인 분포에서 얻은 i.i.d. 표본에 대해 적률 조건 $E[X_i - \mu] = 0$과 $E[(X_i - \mu)^2 - \sigma^2] = 0$이 GMM 추정량을 정의한다. 이 두 조건을 쓴 GMM 추정량이 적률법 추정량과 같음을 보여라.
 
 </div>
@@ -184,7 +184,7 @@ GMM은 추정의 지형에서 중심적인 위치를 차지한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 과대식별된 GMM에서 가중행렬 $\mathbf{W}$의 역할을 설명하라. 최적 가중행렬은 무엇이며 왜 최적인가?
 
 </div>
@@ -198,7 +198,7 @@ GMM은 추정의 지형에서 중심적인 위치를 차지한다:
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 Hansen J 검정(과대식별 검정)의 검정통계량은 모든 적률 조건이 타당하다는 귀무가설 아래에서 $J = n\,\mathbf{g}_n(\hat{\theta})^T \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$이다. 이 검정의 직관을 설명하라.
 
 </div>

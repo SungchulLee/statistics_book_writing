@@ -44,7 +44,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 고객 대기 시간. 고객 도착 사이의 대기 시간(분)을 다섯 번 관측하여 $x_1 = 2.1$, $x_2 = 0.8$, $x_3 = 1.5$, $x_4 = 3.2$, $x_5 = 1.4$를 얻었다고 하자. 표본평균은
+**보기 1.** <span class="diff easy" title="쉬움"></span> 고객 대기 시간. 고객 도착 사이의 대기 시간(분)을 다섯 번 관측하여 $x_1 = 2.1$, $x_2 = 0.8$, $x_3 = 1.5$, $x_4 = 3.2$, $x_5 = 1.4$를 얻었다고 하자. 표본평균은
 
 $$
 \bar{x} = \frac{2.1 + 0.8 + 1.5 + 3.2 + 1.4}{5} = 1.8 \text{ minutes}
@@ -90,7 +90,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 ($x > 0$에서 밀도가 $f(x;\lambda) = \lambda e^{-\lambda x}$인) $\text{Exp}(\lambda)$에서 얻은 i.i.d. 표본 $x_1, \dots, x_n$에 대해 $\lambda$의 MLE를 유도하라.
 
 </div>
@@ -112,7 +112,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 콜센터에 걸려 오는 전화의 도착 간 시간이 지수분포를 따른다. 도착 간 시간 50개의 표본에서 $\bar{x} = 4.2$분이었다. 비율 $\lambda$의 MLE를 구하고 점근정규성을 이용해 근사적인 95% 신뢰구간을 구성하라.
 
 </div>
@@ -132,7 +132,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 MLE $\hat{\lambda} = 1/\bar{X}$가 유한표본에서 $\lambda$에 대해 편향되어 있음을 보여라. $n = 2$일 때의 정확한 편향을 계산하라.
 
 </div>
@@ -156,7 +156,7 @@ MLE $\hat{\lambda} = 1/\bar{X}$가 유한표본에서 $\lambda$에 대해 편향
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 MLE $\hat{\lambda} = 1/\bar{X}$를 $\lambda$의 적률법 추정량과 비교하라. 둘은 같은가?
 
 </div>

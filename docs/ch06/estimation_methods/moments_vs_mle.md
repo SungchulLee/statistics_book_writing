@@ -91,7 +91,7 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 로그가능도. (b) $\hat p_{\text{MLE}}$. (c) 적률법. (d) 둘이 같은가?
 
 </div>
@@ -109,7 +109,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **Gamma 모의실험: MLE와 적률법.** $n = 5, 10, 30, 100, 500$에서 Gamma$(2, 3)$을 모의실험하여 평균제곱오차를 비교하라.
 
 </div>
@@ -148,7 +148,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **MLE가 일반적으로 적률법보다 나은 이유.** 점근 상대효율(ARE) 결과와 그 직관을 서술하라.
 
 </div>
@@ -170,7 +170,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **적률법을 선호하는 경우.** MLE 대신 적률법을 고를 만한 구체적인 사례를 두 가지 들라.
 
 </div>
@@ -186,7 +186,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 **Pareto의 적률법과 MLE.** $x \ge 1$에서 $X \sim \mathrm{Pareto}(\alpha)$일 때 둘을 유도하고 점근 상대효율을 논하라.
 
 </div>
@@ -208,7 +208,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **MLE의 출발값으로서의 적률법.** 반복적인 MLE 최적화의 초기값으로 $\hat\theta_{\text{MoM}}$을 쓰는 것이 왜 좋은 생각인가?
 
 </div>

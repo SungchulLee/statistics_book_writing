@@ -98,7 +98,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 로그가능도를 $\mu$에 대해 미분하여 $\mu$의 MLE를 유도하라.
 
 </div>
@@ -126,7 +126,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음을 보이고 $E[\hat{\sigma}^2]$을 계산하라.
 
 </div>
@@ -142,7 +142,7 @@ MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 정규 로그가능도를 $\mu$에 대해 최대화하는 것과 잔차제곱합을 최소화하는 것 사이의 연결을 설명하라. 정규가 아닌 분포에서는 이 연결이 왜 깨지는가?
 
 </div>
@@ -160,7 +160,7 @@ MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 정규분포에서 얻은 관측값 5개가 3, 5, 7, 9, 11이다. $\mu$와 $\sigma^2$의 MLE를 모두 계산하라.
 
 </div>

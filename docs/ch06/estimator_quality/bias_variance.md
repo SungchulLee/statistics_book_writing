@@ -176,7 +176,7 @@ $|\mu|$가 $\sigma/\sqrt{n}$에 비해 작으면 최적의 $\lambda^*$가 1보�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실하게 $\hat\theta = \theta$임을 증명하라.
 
 </div>
@@ -192,7 +192,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **MSE의 편향–분산 분해.** $\mathrm{MSE}(\hat\theta) = \mathrm{Var}(\hat\theta) + [\mathrm{Bias}(\hat\theta)]^2$을 증명하라.
 
 </div>
@@ -216,7 +216,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **평균제곱오차가 더 작은 편향추정량.** $N(\mu, \sigma^2)$ 자료에 대해 $\hat\sigma^2_{\mathrm{MLE}} = (1/n)\sum(X_i - \bar X)^2$과 $s^2 = (1/(n-1))\sum(X_i - \bar X)^2$을 비교하라. 각각의 평균제곱오차를 계산하라.
 
 </div>
@@ -236,7 +236,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **점근적 불편성.** 점근적으로는 불편이지만 유한표본에서는 편향된 추정량을 정의하고 예를 들라.
 
 </div>
@@ -252,7 +252,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **편향 보정.** $X \sim N(\mu, \sigma^2)$에서 $\sigma$(표준편차)의 MLE는 $\hat\sigma_{\mathrm{MLE}} = \sqrt{(1/n)\sum(X_i - \bar X)^2}$이다. $\mathbb{E}[\hat\sigma_{\mathrm{MLE}}] < \sigma$임을 보이고 편향 보정을 제시하라.
 
 </div>
@@ -272,7 +272,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 **분산과 일치성.** 편향이 0이지만 분산이 무한한 추정량의 예와, 분산은 유한하지만 일치하지 않는 추정량의 예를 각각 들라.
 
 </div>

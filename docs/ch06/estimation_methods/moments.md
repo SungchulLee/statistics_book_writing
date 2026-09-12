@@ -80,7 +80,7 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
 
 <div class="exbox" markdown>
 
-**보기 1.** Normal 분포. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. 미지 모수가 둘이므로 적률방정식도 둘이 필요하다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> Normal 분포. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. 미지 모수가 둘이므로 적률방정식도 둘이 필요하다.
 
 </div>
 
@@ -105,7 +105,7 @@ $\hat{\sigma}^2_{\text{MoM}}$이 MLE와 마찬가지로 $n$으로 나누므로(�
 
 <div class="exbox" markdown>
 
-**보기 2.** Exponential 분포. $E[X] = 1/\lambda$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자. 모수가 하나이므로 적률방정식도 하나면 된다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> Exponential 분포. $E[X] = 1/\lambda$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자. 모수가 하나이므로 적률방정식도 하나면 된다.
 
 </div>
 
@@ -121,7 +121,7 @@ $$\hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}$$
 
 <div class="exbox" markdown>
 
-**보기 3.** Gamma 분포. 밀도가 $f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}$인 $X_1, \ldots, X_n \sim \text{Gamma}(\alpha, \beta)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> Gamma 분포. 밀도가 $f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}$인 $X_1, \ldots, X_n \sim \text{Gamma}(\alpha, \beta)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
 </div>
 
@@ -144,7 +144,7 @@ $$\hat{\beta}_{\text{MoM}} = \frac{\bar{X}}{m_2}, \qquad \hat{\alpha}_{\text{MoM
 
 <div class="exbox" markdown>
 
-**보기 4.** Uniform 분포. $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
+**보기 4.** <span class="diff easy" title="쉬움"></span> Uniform 분포. $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
 </div>
 
@@ -165,7 +165,7 @@ $$\hat{a}_{\text{MoM}} = \bar{X} - \sqrt{3 m_2}, \qquad \hat{b}_{\text{MoM}} = \
 
 <div class="exbox" markdown>
 
-**보기 5.** Beta 분포. $X_1, \ldots, X_n \sim \text{Beta}(\alpha, \beta)$라 하자.
+**보기 5.** <span class="diff easy" title="쉬움"></span> Beta 분포. $X_1, \ldots, X_n \sim \text{Beta}(\alpha, \beta)$라 하자.
 
 </div>
 
@@ -317,7 +317,7 @@ SMM은 가능도를 다루기 어려운 복잡한 금융 모형(예: 행위자 �
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 Uniform$(0, \theta)$ 분포에서 얻은 확률표본의 표본평균이 $\bar{x} = 3.5$이다. 적률법 추정량 $\hat{\theta}$를 구하라.
 
 </div>
@@ -337,7 +337,7 @@ Uniform$(0, \theta)$ 분포에서 얻은 확률표본의 표본평균이 $\bar{x
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 평균이 $\alpha\beta$이고 분산이 $\alpha\beta^2$인 Gamma$(\alpha, \beta)$ 분포에 대해 $\bar{x}$와 $s^2$으로 $\alpha$와 $\beta$의 적률법 추정량을 유도하라.
 
 </div>
@@ -363,7 +363,7 @@ Uniform$(0, \theta)$ 분포에서 얻은 확률표본의 표본평균이 $\bar{x
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 정규분포 분산의 적률법 추정량은 $\hat{\sigma}^2_{\text{MoM}} = \frac{1}{n}\sum(X_i - \bar{X})^2$이고 불편추정량은 $n-1$로 나눈다. 적률법 추정량이 편향되어 있음을 보이고 그 편향을 계산하라.
 
 </div>
@@ -385,7 +385,7 @@ Uniform$(0, \theta)$ 분포에서 얻은 확률표본의 표본평균이 $\bar{x
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 적률법과 최대가능도추정을 비교하라. 어떤 상황에서 MLE보다 적률법을 선호하겠는가?
 
 </div>

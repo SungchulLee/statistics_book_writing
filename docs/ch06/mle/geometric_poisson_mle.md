@@ -246,7 +246,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 적률법의 관점에서 Geometric 분포의 MLE를 직접 유도하라. 이 분포에서 MLE와 적률법 추정량이 일치함을 보여라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 적률법의 관점에서 Geometric 분포의 MLE를 직접 유도하라. 이 분포에서 MLE와 적률법 추정량이 일치함을 보여라.
 
 </div>
 
@@ -271,7 +271,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** Poisson의 MLE에서 $\hat{\lambda} = \bar{x}$가 임계점일 뿐 아니라 전역 최댓값임을 2계도함수 조건으로 확인하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> Poisson의 MLE에서 $\hat{\lambda} = \bar{x}$가 임계점일 뿐 아니라 전역 최댓값임을 2계도함수 조건으로 확인하라.
 
 </div>
 
@@ -300,7 +300,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Poisson 분포에서 i.i.d.로 $n = 500$개를 관측했고 표본평균이 $\bar{x} = 3.2$이다. Fisher 정보량을 사용하여 $\lambda$에 대한 근사적인 95% 신뢰구간을 구성하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> Poisson 분포에서 i.i.d.로 $n = 500$개를 관측했고 표본평균이 $\bar{x} = 3.2$이다. Fisher 정보량을 사용하여 $\lambda$에 대한 근사적인 95% 신뢰구간을 구성하라.
 
 </div>
 
@@ -333,7 +333,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 모형이 올바르게 설정되었을 때 비모수적 (경험 PMF) 추정량이 불편인데도 모수적 MLE보다 검정 자료의 RMSE가 큰 이유를 설명하라. 편향–분산 맞바꿈은 어떤 역할을 하는가?
+**연습문제 4.** <span class="diff med" title="중간"></span> 모형이 올바르게 설정되었을 때 비모수적 (경험 PMF) 추정량이 불편인데도 모수적 MLE보다 검정 자료의 RMSE가 큰 이유를 설명하라. 편향–분산 맞바꿈은 어떤 역할을 하는가?
 
 </div>
 
@@ -358,7 +358,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Geometric 분포에서 나왔다고 믿는 다음 자료를 관측했다고 하자: $x = (0, 2, 1, 0, 3, 1, 0, 0, 1, 2)$. MLE $\hat{p}$를 계산하라. 그다음 $\hat{p}$, $p = 0.3$, $p = 0.7$에서 로그가능도를 계산하여 MLE가 가장 높은 로그가능도를 주는지 확인하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> Geometric 분포에서 나왔다고 믿는 다음 자료를 관측했다고 하자: $x = (0, 2, 1, 0, 3, 1, 0, 0, 1, 2)$. MLE $\hat{p}$를 계산하라. 그다음 $\hat{p}$, $p = 0.3$, $p = 0.7$에서 로그가능도를 계산하여 MLE가 가장 높은 로그가능도를 주는지 확인하라.
 
 </div>
 

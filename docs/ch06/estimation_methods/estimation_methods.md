@@ -312,7 +312,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$에 대해 $\lambda$의 적률법 추정량과 MLE를 유도하라. 둘은 같은가?
+**연습문제 1.** <span class="diff med" title="중간"></span> $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$에 대해 $\lambda$의 적률법 추정량과 MLE를 유도하라. 둘은 같은가?
 
 </div>
 
@@ -325,7 +325,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 정규모집단에서 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$ 계열 중 평균제곱오차가 최적인 추정량이 $c^* = n+1$임을 보여라.
+**연습문제 2.** <span class="diff hard" title="어려움"></span> 정규모집단에서 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$ 계열 중 평균제곱오차가 최적인 추정량이 $c^* = n+1$임을 보여라.
 
 </div>
 
@@ -348,7 +348,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** $\alpha = 2, \beta = 5$인 Beta 분포 $\text{Beta}(\alpha, \beta)$에서 표본크기 $n = 50$으로 MLE와 적률법을 비교하는 Monte Carlo 모의실험을 수행하라. $\alpha$를 추정할 때 어느 방법의 평균제곱오차가 더 작은가?
+**연습문제 3.** <span class="diff med" title="중간"></span> $\alpha = 2, \beta = 5$인 Beta 분포 $\text{Beta}(\alpha, \beta)$에서 표본크기 $n = 50$으로 MLE와 적률법을 비교하는 Monte Carlo 모의실험을 수행하라. $\alpha$를 추정할 때 어느 방법의 평균제곱오차가 더 작은가?
 
 </div>
 
@@ -396,7 +396,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** MLE가 재모수화에 불변임을 증명하라. 즉 $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE임을 보여라.
+**연습문제 4.** <span class="diff med" title="중간"></span> MLE가 재모수화에 불변임을 증명하라. 즉 $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE임을 보여라.
 
 </div>
 
@@ -413,7 +413,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Bernoulli 모수 $p$의 Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. $p = 0.3$, $n = 100$일 때 표본비율 $\hat{p} = \bar{X}$의 분산이 Cramér-Rao 한계 $1/[nI(p)]$를 달성함을 수치적으로 확인하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> Bernoulli 모수 $p$의 Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. $p = 0.3$, $n = 100$일 때 표본비율 $\hat{p} = \bar{X}$의 분산이 Cramér-Rao 한계 $1/[nI(p)]$를 달성함을 수치적으로 확인하라.
 
 </div>
 

@@ -69,7 +69,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 Beta 분포는 Binomial 가능도의 켤레 사전분포이다. 사전분포가 $\text{Beta}(2, 5)$이고 10번의 시행에서 3번 성공을 관측했을 때 사후분포와 사후평균을 구하라.
 
 </div>
@@ -93,7 +93,7 @@ Beta 분포는 Binomial 가능도의 켤레 사전분포이다. 사전분포가 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Gamma 분포가 Poisson 가능도의 켤레 사전분포임을 보여라. $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$이고 $\lambda \sim \text{Gamma}(\alpha, \beta)$일 때 $\lambda$의 사후분포를 유도하라.
 
 </div>
@@ -121,7 +121,7 @@ Gamma 분포가 Poisson 가능도의 켤레 사전분포임을 보여라. $X_1, 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 사전분포가 "무정보"이거나 "약한 정보"라는 것이 무슨 뜻인지 설명하라. $\sigma^2$이 알려진 정규분포의 평균 $\mu$에 대해 약한 정보의 켤레 사전분포 예를 들라.
 
 </div>
@@ -135,7 +135,7 @@ Gamma 분포가 Poisson 가능도의 켤레 사전분포임을 보여라. $X_1, 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 켤레 Normal-Gamma 사전분포를 쓰면 정규분포의 평균과 정밀도 $(\mu, \tau)$에 대한 사후분포도 Normal-Gamma이다. 켤레 사전분포가 계산상 편리한 이유를 직관적으로 서술하고 한계를 하나 들라.
 
 </div>

@@ -44,7 +44,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 회로기판의 결함 수. 품질검사원이 회로기판 6개의 결함 수를 세어 $x_1 = 3$, $x_2 = 1$, $x_3 = 4$, $x_4 = 0$, $x_5 = 2$, $x_6 = 2$를 관측했다고 하자. 표본평균은
+**보기 1.** <span class="diff easy" title="쉬움"></span> 회로기판의 결함 수. 품질검사원이 회로기판 6개의 결함 수를 세어 $x_1 = 3$, $x_2 = 1$, $x_3 = 4$, $x_4 = 0$, $x_5 = 2$, $x_6 = 2$를 관측했다고 하자. 표본평균은
 
 $$
 \bar{x} = \frac{3 + 1 + 4 + 0 + 2 + 2}{6} = 2.0 \text{ defects per board}
@@ -80,7 +80,7 @@ $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 확률표본 $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$에 대해 $\lambda$의 MLE를 유도하라.
 
 </div>
@@ -102,7 +102,7 @@ $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 병원 응급실이 24시간 동안 시간당 도착 환자 수를 기록했고 총합이 168명이다. 시간당 도착률 $\lambda$의 MLE를 구하고 근사적인 95% 신뢰구간을 구성하라.
 
 </div>
@@ -130,7 +130,7 @@ $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 계산하라.
 
 </div>
@@ -154,7 +154,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 Poisson의 MLE $\hat{\lambda} = \bar{X}$는 (척도를 제외하면) 충분통계량이기도 하다. Rao-Blackwell 정리를 사용하여 다른 어떤 불편추정량도 더 작은 분산을 가질 수 없는 이유를 설명하라.
 
 </div>

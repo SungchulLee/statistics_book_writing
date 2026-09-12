@@ -148,7 +148,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\text{Uniform}(0, \theta)$에서 얻은 표본에 대해 $\theta$의 적률법 추정량을 유도하라.
 
 </div>
@@ -170,7 +170,7 @@ $\text{Uniform}(0, \theta)$에서 얻은 표본에 대해 $\theta$의 적률법 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\alpha, \beta)$에서 얻은 표본에 대해 처음 두 적률을 사용하여 $\alpha$와 $\beta$의 적률법 추정량을 유도하라.
 
 </div>
@@ -196,7 +196,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Bernoulli 분포의 모수 $p$에 대해 적률법 추정량과 MLE를 비교하라. 둘은 같은가? 그 이유를 설명하라.
 
 </div>
@@ -212,7 +212,7 @@ Bernoulli 분포의 모수 $p$에 대해 적률법 추정량과 MLE를 비교하
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 적률법 추정량이 일치하지 않는 예를 들라. 적률방정식에 어떤 조건이 있어야 일치성이 보장되는가?
 
 </div>

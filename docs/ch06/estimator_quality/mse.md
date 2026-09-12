@@ -85,7 +85,7 @@ $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } 
 
 <div class="exbox" markdown>
 
-**보기 1.** 표본평균의 평균제곱오차. $X_1, \ldots, X_n$을 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 확률변수라 하자. 표본평균은 $\bar{X} = \frac{1}{n}\sum X_i$이다.
+**보기 1.** <span class="diff med" title="중간"></span> 표본평균의 평균제곱오차. $X_1, \ldots, X_n$을 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 확률변수라 하자. 표본평균은 $\bar{X} = \frac{1}{n}\sum X_i$이다.
 
 </div>
 
@@ -97,7 +97,7 @@ $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } 
 
 <div class="exbox" markdown>
 
-**보기 2.** 소박한 분산추정량의 평균제곱오차. 소박한 분산추정량은 $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$이다.
+**보기 2.** <span class="diff med" title="중간"></span> 소박한 분산추정량의 평균제곱오차. 소박한 분산추정량은 $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$이다.
 
 정규모집단에 대해:
 
@@ -113,7 +113,7 @@ $$\text{MSE}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4 + \frac{\sigma^4}{n^2} = 
 
 <div class="exbox" markdown>
 
-**보기 3.** 편향 분산추정량과 불편 분산추정량의 비교. Bessel 수정된 추정량은 $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$이다.
+**보기 3.** <span class="diff med" title="중간"></span> 편향 분산추정량과 불편 분산추정량의 비교. Bessel 수정된 추정량은 $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$이다.
 
 정규모집단에 대해:
 
@@ -133,7 +133,7 @@ $n > 0$에서 $-3n + 1 < 0$이므로 $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$
 
 <div class="exbox" markdown>
 
-**보기 4.** 평균제곱오차 최적 분산추정량. 상수 $c > 0$에 대해 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$을 생각하자.
+**보기 4.** <span class="diff med" title="중간"></span> 평균제곱오차 최적 분산추정량. 상수 $c > 0$에 대해 $\hat{\sigma}^2_c = \frac{1}{c}\sum_{i=1}^n(X_i - \bar{X})^2$을 생각하자.
 
 </div>
 
@@ -200,7 +200,7 @@ $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\theta_1 = 2\bar X$와 $\hat\theta_2 = ((n+1)/n) X_{(n)}$을 생각하자. (a) 둘 다 불편인가? (b) 분산은? (c) 어느 쪽이 평균제곱오차가 더 작은가?
 
 </div>
@@ -222,7 +222,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **$S^2$의 평균제곱오차 최적 척도.** $X_i \sim N(\mu, \sigma^2)$에서 $c \sum(X_i - \bar X)^2$ 형태의 $\sigma^2$ 추정량 중 평균제곱오차를 최소화하는 $c$를 구하라.
 
 </div>
@@ -246,7 +246,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **편향추정량의 평균제곱오차.** $\hat\theta$가 편향되어 있고 $\mathbb{E}[\hat\theta] = \theta + b/n$, $\mathrm{Var}(\hat\theta) = v/n$이다. 평균제곱오차와 그 점근 거동을 구하라.
 
 </div>
@@ -264,7 +264,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **Cramér-Rao와 평균제곱오차.** 불편추정량에서는 MSE = 분산이고 CRLB가 분산 $\ge 1/(n I(\theta))$를 준다. 편향추정량에 대응하는 결과를 서술하라.
 
 </div>
@@ -288,7 +288,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **실용적인 축소 예제.** $n$명을 조사한 여론조사에서 $\hat p = X/n$을 얻었다. 어떤 목표값 $p_0$(예: 0.5)에 대해 축소추정량 $\hat p_{\text{shr}} = w \hat p + (1 - w) p_0$을 생각하자. (참 $p$가 $p_0$과 같다고 가정하고) 최적의 $w$를 구하라.
 
 </div>
@@ -308,7 +308,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **모집단 분포에 따른 $\bar X$의 평균제곱오차.** 다음 각 경우에 $\mu$의 추정량으로서 $\bar X$의 평균제곱오차를 계산하라: (a) $N(\mu, \sigma^2)$; (b) $\mathrm{Exp}(1/\mu)$; (c) 2차 적률이 무한한 모집단.
 
 </div>

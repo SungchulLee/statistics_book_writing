@@ -205,7 +205,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$에 대해 음의 로그가능도를 쓰고 MLE를 해석적으로 구하라. $\lambda \in [0.1, 5]$에서 격자탐색을 구현하여 답을 확인하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$에 대해 음의 로그가능도를 쓰고 MLE를 해석적으로 구하라. $\lambda \in [0.1, 5]$에서 격자탐색을 구현하여 답을 확인하라.
 
 </div>
 
@@ -242,7 +242,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 수치적 MLE에서 $\sigma^2$을 직접 최적화하는 대신 $\phi = \log(\sigma^2)$을 최적화하는 편이 나은 이유를 설명하라. 이 변환의 어떤 성질이 최적화기가 $\sigma^2 \leq 0$에서 평가하지 않도록 보장하는가?
+**연습문제 2.** <span class="diff med" title="중간"></span> 수치적 MLE에서 $\sigma^2$을 직접 최적화하는 대신 $\phi = \log(\sigma^2)$을 최적화하는 편이 나은 이유를 설명하라. 이 변환의 어떤 성질이 최적화기가 $\sigma^2 \leq 0$에서 평가하지 않도록 보장하는가?
 
 </div>
 
@@ -251,7 +251,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 관측값 $x$ 하나가 주어졌을 때 $\text{Binomial}(n, p)$의 $p$를 추정하는 Newton-Raphson 갱신식을 유도하라. $p^{(0)} = 0.5$에서 시작하여 $n = 20, x = 14$일 때 처음 두 번의 반복값을 계산하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 관측값 $x$ 하나가 주어졌을 때 $\text{Binomial}(n, p)$의 $p$를 추정하는 Newton-Raphson 갱신식을 유도하라. $p^{(0)} = 0.5$에서 시작하여 $n = 20, x = 14$일 때 처음 두 번의 반복값을 계산하라.
 
 </div>
 
@@ -282,7 +282,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 성분이 둘인 Gaussian 혼합에서 로그가능도가 위로 유계가 아님을 보여라(힌트: 한 성분의 분산을 어떤 자료점 주위에서 0으로 보내라). 실무에서 이것이 MLE를 무효화하지 않는 이유는 무엇인가?
+**연습문제 4.** <span class="diff hard" title="어려움"></span> 성분이 둘인 Gaussian 혼합에서 로그가능도가 위로 유계가 아님을 보여라(힌트: 한 성분의 분산을 어떤 자료점 주위에서 0으로 보내라). 실무에서 이것이 MLE를 무효화하지 않는 이유는 무엇인가?
 
 </div>
 
@@ -298,7 +298,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Bernoulli 분포의 모수 $p$를 추정하는 Fisher 점수법 알고리즘을 구현하라. Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. 참 $p = 0.3$인 $n = 50$개의 관측값에서 Newton-Raphson과 수렴 속도를 비교하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> Bernoulli 분포의 모수 $p$를 추정하는 Fisher 점수법 알고리즘을 구현하라. Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. 참 $p = 0.3$인 $n = 50$개의 관측값에서 Newton-Raphson과 수렴 속도를 비교하라.
 
 </div>
 

@@ -51,7 +51,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 자료 $\mathbf{x}$가 주어졌을 때 모수 $\theta$에 대한 베이즈 정리를 서술하라. 각 구성 요소(사전분포, 가능도, 사후분포, 주변가능도)를 찾아 이름을 붙여라.
 
 </div>
@@ -70,7 +70,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 동전의 앞면 확률에 대한 사전분포가 $p \sim \text{Uniform}(0, 1)$이라 하자. 동전을 한 번 던져 앞면을 관측했다. 사후분포 $\pi(p \mid H)$를 계산하라.
 
 </div>
@@ -88,7 +88,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 사후최빈값(MAP 추정값)과 MLE의 관계를 설명하라. 어떤 조건에서 MAP 추정값이 MLE와 같아지는가?
 
 </div>
@@ -106,7 +106,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 사전분포 $\pi(\theta)$가 $\theta = 0$에 확률 0.7을, $\theta = 1$에 0.3을 부여한다. 가능도는 $P(X = 1 \mid \theta = 0) = 0.2$, $P(X = 1 \mid \theta = 1) = 0.9$를 만족한다. $X = 1$을 관측한 뒤 사후확률 $P(\theta = 0 \mid X = 1)$과 $P(\theta = 1 \mid X = 1)$을 계산하라.
 
 </div>

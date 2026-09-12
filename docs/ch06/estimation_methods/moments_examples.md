@@ -192,7 +192,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 감마분포를 따르는 청구액 자료: 2.1, 0.8, 3.5, 1.2, 5.7, 0.4, 2.8, 1.9, 4.3, 0.6. (a) $\alpha, \beta$의 적률법 추정값. (b) scipy를 이용한 MLE. (c) 시각적 비교.
 
 </div>
@@ -210,7 +210,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **Uniform$(a, b)$의 적률법.** $\mathbb{E}[X], \mathbb{E}[X^2]$을 사용하여 적률법 추정량을 유도하라.
 
 </div>
@@ -230,7 +230,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **Beta$(\alpha, \beta)$의 적률법.** $\mathbb{E}[X], \mathrm{Var}(X)$로부터 유도하라.
 
 </div>
@@ -246,7 +246,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **로그정규분포의 적률법.** $Y \sim N(\mu, \sigma^2)$일 때 $X = e^Y$가 주어졌을 때 $\mu, \sigma$의 적률법 추정량을 유도하라.
 
 </div>
@@ -264,7 +264,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **적률법이 비효율적일 수 있는 이유.** Uniform$(0, \theta)$에서 적률법과 MLE를 비교하라.
 
 </div>
@@ -284,7 +284,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
 **일반화 적률법 (GMM).** 모수보다 적률 조건이 많을 때 이들을 결합하는 가중 방식을 제안하라.
 
 </div>

@@ -190,7 +190,7 @@ Log-likelihood at p=0.7: -63.6283
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $k = 14$번 성공한 $n = 20$번의 Bernoulli 시행에 대해 $p = 0.5, 0.6, 0.7, 0.8$에서 로그가능도를 계산하라. 어느 값의 로그가능도가 가장 높은가? MLE와 어떻게 비교되는가?
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> $k = 14$번 성공한 $n = 20$번의 Bernoulli 시행에 대해 $p = 0.5, 0.6, 0.7, 0.8$에서 로그가능도를 계산하라. 어느 값의 로그가능도가 가장 높은가? MLE와 어떻게 비교되는가?
 
 </div>
 
@@ -206,7 +206,7 @@ Log-likelihood at p=0.7: -63.6283
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** Bernoulli 모형의 로그가능도가 $p$에 대해 오목함을 보여라. 오목성이 임의의 임계점이 전역 최댓값임을 보장하는 이유는 무엇인가?
+**연습문제 2.** <span class="diff med" title="중간"></span> Bernoulli 모형의 로그가능도가 $p$에 대해 오목함을 보여라. 오목성이 임의의 임계점이 전역 최댓값임을 보장하는 이유는 무엇인가?
 
 </div>
 
@@ -223,7 +223,7 @@ Log-likelihood at p=0.7: -63.6283
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 수치 계산에서 $L(\theta)$ 대신 $\log L(\theta)$를 쓰는 것이 왜 필수적인지 설명하라. 컴퓨터에서 $L(\theta)$가 0으로 언더플로되는 구체적인 예를 들라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 수치 계산에서 $L(\theta)$ 대신 $\log L(\theta)$를 쓰는 것이 왜 필수적인지 설명하라. 컴퓨터에서 $L(\theta)$가 0으로 언더플로되는 구체적인 예를 들라.
 
 </div>
 
@@ -240,7 +240,7 @@ Log-likelihood at p=0.7: -63.6283
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** $n$개의 관측값을 갖는 Poisson 분포에 대해 로그가능도 $\ell(\lambda)$를 쓰고 MLE를 유도하라. $\ell''(\hat{\lambda}) < 0$임을 확인하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> $n$개의 관측값을 갖는 Poisson 분포에 대해 로그가능도 $\ell(\lambda)$를 쓰고 MLE를 유도하라. $\ell''(\hat{\lambda}) < 0$임을 확인하라.
 
 </div>
 
@@ -261,7 +261,7 @@ Log-likelihood at p=0.7: -63.6283
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 관측 Fisher 정보량은 $\hat{I}(\theta) = -\ell''(\hat{\theta})$이다. Bernoulli 모형에서 MLE에서의 관측 정보량이 $n/[\hat{p}(1-\hat{p})]$과 같음을 보여라. 이를 사용하여 $n = 100$, $k = 72$일 때 $p$에 대한 근사적인 95% 신뢰구간을 구성하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 관측 Fisher 정보량은 $\hat{I}(\theta) = -\ell''(\hat{\theta})$이다. Bernoulli 모형에서 MLE에서의 관측 정보량이 $n/[\hat{p}(1-\hat{p})]$과 같음을 보여라. 이를 사용하여 $n = 100$, $k = 72$일 때 $p$에 대한 근사적인 95% 신뢰구간을 구성하라.
 
 </div>
 

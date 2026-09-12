@@ -76,7 +76,7 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
 
 <div class="exbox" markdown>
 
-**보기 1.** Normal 분포 — 평균이 미지. $\sigma^2$이 알려진 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. $\mu$의 MLE를 구한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> Normal 분포 — 평균이 미지. $\sigma^2$이 알려진 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. $\mu$의 MLE를 구한다.
 
 </div>
 
@@ -100,7 +100,7 @@ $$\hat{\mu}_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n x_i = \bar{x}$$
 
 <div class="exbox" markdown>
 
-**보기 2.** Normal 분포 — 두 모수 모두 미지. $\mu$와 $\sigma^2$이 모두 미지인 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자.
+**보기 2.** <span class="diff easy" title="쉬움"></span> Normal 분포 — 두 모수 모두 미지. $\mu$와 $\sigma^2$이 모두 미지인 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자.
 
 </div>
 
@@ -118,7 +118,7 @@ $$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\si
 
 <div class="exbox" markdown>
 
-**보기 3.** Bernoulli 분포. $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$라 하자.
+**보기 3.** <span class="diff easy" title="쉬움"></span> Bernoulli 분포. $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$라 하자.
 
 </div>
 
@@ -140,7 +140,7 @@ MLE는 표본비율이며 직관적으로 자연스럽고 불편이다.
 
 <div class="exbox" markdown>
 
-**보기 4.** Exponential 분포. $x > 0$에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자.
+**보기 4.** <span class="diff easy" title="쉬움"></span> Exponential 분포. $x > 0$에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자.
 
 </div>
 
@@ -158,7 +158,7 @@ $$\hat{\lambda}_{\text{MLE}} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{x}}$$
 
 <div class="exbox" markdown>
 
-**보기 5.** Poisson 분포. $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$라 하자.
+**보기 5.** <span class="diff easy" title="쉬움"></span> Poisson 분포. $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$라 하자.
 
 </div>
 
@@ -314,7 +314,7 @@ MLE는 강력하지만 중요한 한계가 있다:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 PDF가 $f(x;\lambda) = \lambda e^{-\lambda x}$인 Exponential$(\lambda)$ 분포에서 얻은 확률표본 $x_1, \ldots, x_n$에 대해 로그가능도함수를 쓰고 MLE $\hat{\lambda}$를 구하라.
 
 </div>
@@ -342,7 +342,7 @@ PDF가 $f(x;\lambda) = \lambda e^{-\lambda x}$인 Exponential$(\lambda)$ 분포�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 MLE의 불변성을 사용하여, Exponential$(\lambda)$ 분포에서 $\hat{\lambda} = 1/\bar{x}$가 MLE일 때 평균 $\mu = 1/\lambda$의 MLE는 무엇인가?
 
 </div>
@@ -358,7 +358,7 @@ MLE의 불변성을 사용하여, Exponential$(\lambda)$ 분포에서 $\hat{\lam
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Exponential$(\lambda)$ 분포의 관측값 하나에 대한 Fisher 정보량 $I(\lambda)$를 계산하라. MLE $\hat{\lambda}$의 점근분산은 무엇인가?
 
 </div>
@@ -384,7 +384,7 @@ Exponential$(\lambda)$ 분포의 관측값 하나에 대한 Fisher 정보량 $I(
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 정규분포의 분산추정량을 예로 들어 MLE가 유한표본에서 편향될 수 있는 이유를 설명하라.
 
 </div>

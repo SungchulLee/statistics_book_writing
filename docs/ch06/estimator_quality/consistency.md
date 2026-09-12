@@ -56,7 +56,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\text{Var}(X) = \sigma^2 < \infty$를 가정하고 Chebyshev 부등식을 사용하여 표본평균 $\bar{X}_n$이 $\mu = E[X]$의 일치추정량임을 증명하라.
 
 </div>
@@ -78,7 +78,7 @@ $\text{Var}(X) = \sigma^2 < \infty$를 가정하고 Chebyshev 부등식을 사�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 대칭분포에서는 표본중앙값도 모평균의 일치추정량이다. 왜 $\mu$로 수렴하는지 직관적으로 설명하고, 표본평균에 비해 표본중앙값이 갖는 장점을 하나 서술하라.
 
 </div>
@@ -90,7 +90,7 @@ $\text{Var}(X) = \sigma^2 < \infty$를 가정하고 Chebyshev 부등식을 사�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 $g(\hat{\theta}_n)$이 $g(\theta)$의 일치추정량임을 보여라. 어떤 정리를 사용하는지 밝혀라.
 
 </div>
@@ -108,7 +108,7 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 추정량 $\hat{\theta}_n$의 점근정규성을 정의하라. $\hat{\theta}_n$이 MLE이고 정칙 조건이 성립할 때 $\sqrt{n}(\hat{\theta}_n - \theta_0)$의 점근분포를 서술하라.
 
 </div>

@@ -191,7 +191,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $\text{Beta}(1, 1)$(균등) 사전분포로 $n = 10$번의 Bernoulli 시행에서 $k = 7$번 성공을 관측했다고 하자. 사후분포, 사후평균, MAP 추정값, 95% 신용구간을 계산하라.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> $\text{Beta}(1, 1)$(균등) 사전분포로 $n = 10$번의 Bernoulli 시행에서 $k = 7$번 성공을 관측했다고 하자. 사후분포, 사후평균, MAP 추정값, 95% 신용구간을 계산하라.
 
 </div>
 
@@ -220,7 +220,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** Normal-Normal 모형에서 $\tau_0 \to \infty$(막연한 사전분포)일 때 사후평균이 표본평균으로, 사후분산이 $\sigma^2/n$으로 수렴함을 보여라.
+**연습문제 2.** <span class="diff med" title="중간"></span> Normal-Normal 모형에서 $\tau_0 \to \infty$(막연한 사전분포)일 때 사후평균이 표본평균으로, 사후분산이 $\sigma^2/n$으로 수렴함을 보여라.
 
 </div>
 
@@ -249,7 +249,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** Beta-Binomial 모형의 사후평균을 사전평균과 MLE의 볼록결합으로 쓸 수 있음을 증명하라. 가중을 찾아 해석하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> Beta-Binomial 모형의 사후평균을 사전평균과 MLE의 볼록결합으로 쓸 수 있음을 증명하라. 가중을 찾아 해석하라.
 
 </div>
 
@@ -276,7 +276,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 유병률이 약 1%인 희귀질환의 확률을 추정한다고 하자. 동료가 $\text{Beta}(1, 99)$ 사전분포를 제안한다. $n = 500$명을 검사하여 $k = 8$명이 양성이었을 때 사후평균과 MLE를 비교하라. 사전분포의 선택이 적절한가?
+**연습문제 4.** <span class="diff med" title="중간"></span> 유병률이 약 1%인 희귀질환의 확률을 추정한다고 하자. 동료가 $\text{Beta}(1, 99)$ 사전분포를 제안한다. $n = 500$명을 검사하여 $k = 8$명이 양성이었을 때 사후평균과 MLE를 비교하라. 사전분포의 선택이 적절한가?
 
 </div>
 
@@ -293,7 +293,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** Poisson-Gamma 켤레 모형에서 $\lambda$의 사후분포를 유도하라. $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$이고 사전분포는 (형상–비율 모수화의) $\lambda \sim \text{Gamma}(\alpha_0, \beta_0)$이다. 사후평균은 무엇인가?
+**연습문제 5.** <span class="diff med" title="중간"></span> Poisson-Gamma 켤레 모형에서 $\lambda$의 사후분포를 유도하라. $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$이고 사전분포는 (형상–비율 모수화의) $\lambda \sim \text{Gamma}(\alpha_0, \beta_0)$이다. 사후평균은 무엇인가?
 
 </div>
 

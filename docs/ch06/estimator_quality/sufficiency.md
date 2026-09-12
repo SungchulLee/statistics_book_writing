@@ -49,7 +49,7 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 인수분해 정리를 사용하여 $\text{Poisson}(\theta)$에서 뽑은 확률표본 $X_1, \dots, X_n$에 대해 $\theta$의 충분통계량을 구하라.
 
 </div>
@@ -71,7 +71,7 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff hard" title="어려움"></span>
 순서통계량 $(X_{(1)}, X_{(2)}, \dots, X_{(n)})$이 분포족과 무관하게 언제나 임의의 모수에 대해 충분함을 증명하라. 이것이 왜 "자명하게" 충분한 통계량인가?
 
 </div>
@@ -89,7 +89,7 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 두 모수가 모두 미지인 $N(\mu, \sigma^2)$에서 뽑은 확률표본에 대해 $(\sum X_i, \sum X_i^2)$이 $(\mu, \sigma^2)$에 대해 결합충분임을 보여라.
 
 </div>
@@ -117,7 +117,7 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 Rao-Blackwell 정리를 서술하고 그 실용적 의의를 설명하라. $\hat{\theta}$가 불편추정량이고 $T$가 충분통계량일 때 $\tilde{\theta} = E[\hat{\theta} \mid T]$는 $\hat{\theta}$와 어떻게 비교되는가?
 
 </div>
