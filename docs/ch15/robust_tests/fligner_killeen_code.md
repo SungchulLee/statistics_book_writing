@@ -42,14 +42,17 @@ $$
 
 ---
 
-## 코드
-
 SciPy는 `scipy.stats.fligner`로 직접 구현을 제공한다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 세 집단에 적용하기
 
 ```python
 import numpy as np
 from scipy.stats import fligner
 
+# 평균은 다르지만 퍼짐은 비슷한 세 집단. 기각되지 않아야 한다.
 g1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
 g2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
 g3 = np.array([32, 35, 34, 30, 33, 34, 32, 31], dtype=float)
@@ -63,6 +66,8 @@ print(f"Fligner-Killeen X2 = {X2:.6f}, p-value = {p:.6f}")
 ```text
 Fligner-Killeen X2 = 2.550715, p-value = 0.279331
 ```
+
+</div>
 
 ---
 

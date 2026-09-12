@@ -101,24 +101,28 @@ $$
 
     $\chi^2_{0.95, 1} = 3.841$과 비교하면 $3.252 < 3.841$이므로 기각하지 못한다($p = 0.0714$).
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** Fligner-Killeen 검정
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Group data
+# 2번 집단의 퍼짐이 훨씬 크다.
 group1 = [10, 12, 11, 13, 10]
 group2 = [8, 25, 15, 30, 12]
 
 print("variances:", round(np.var(group1, ddof=1), 2),
       round(np.var(group2, ddof=1), 2))
 
-# Fligner-Killeen test
+# Fligner-Killeen 은 값을 순위로 바꾼 뒤 정규점수를 매겨 계산한다.
+# 원래 값의 크기가 아예 셈에 들어가지 않으므로 이상치가 통계량을
+# 끌고 갈 수 없다. 세 검정 중 가장 로버스트한 까닭이다.
 stat, p_value = stats.fligner(group1, group2)
 print(f"Fligner-Killeen: {stat:.4f}, p = {p_value:.4f}")
 
-# Comparison
+# 다른 두 검정과 견준다.
 s_bf, p_bf = stats.levene(group1, group2, center='median')
 s_b, p_b = stats.bartlett(group1, group2)
 print(f"Brown-Forsythe:  {s_bf:.4f}, p = {p_bf:.4f}")
@@ -133,6 +137,8 @@ Fligner-Killeen: 3.2515, p = 0.0714
 Brown-Forsythe:  5.1429, p = 0.0531
 Bartlett:        9.1010, p = 0.0026
 ```
+
+</div>
 
 세 검정의 $p$값이 로버스트성의 순서와 정확히 반대이다. Bartlett($0.0026$) < Brown-Forsythe($0.0531$) < Fligner-Killeen($0.0714$). 로버스트할수록 이 자료에서 보수적이다.
 

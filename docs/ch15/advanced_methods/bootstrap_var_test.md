@@ -47,15 +47,23 @@ $$
 
 ---
 
-## 구현
+<div class="codebox" markdown>
+
+**예제 1.** 분산비의 붓스트랩 구간
 
 ```python
 import numpy as np
 
 def variance_ratio(x1, x2):
+    """두 표본분산의 비."""
     return np.var(x1, ddof=1) / np.var(x2, ddof=1)
 
 def bootstrap_varratio(x1, x2, B=2000, seed=None):
+    """분산비의 붓스트랩 신뢰구간과 양측 p-값을 구한다.
+
+    F 검정과 달리 정규성을 가정하지 않는다. 각 표본에서 따로 복원추출해
+    비를 다시 구하는 일을 B 번 되풀이한다.
+    """
     rng = np.random.default_rng(seed)
     x1 = np.asarray(x1, dtype=float)
     x2 = np.asarray(x2, dtype=float)
@@ -68,23 +76,26 @@ def bootstrap_varratio(x1, x2, B=2000, seed=None):
         b2 = rng.choice(x2, size=n2, replace=True)
         boots[b] = np.log(variance_ratio(b1, b2))
 
-    # Percentile CI on log scale, then exponentiate
+    # 비는 아래로 0, 위로 무한이라 분포가 치우친다. 로그를 씌우면 그 눈금이
+    # 대칭에 가까워지므로 구간을 로그 눈금에서 만든 뒤 되돌린다.
     lo, hi = np.percentile(boots, [2.5, 97.5])
     ci = (float(np.exp(lo)), float(np.exp(hi)))
 
-    # Two-sided p-value: compare the bootstrap distribution to the
-    # NULL value log(1) = 0, not to the observed statistic
+    # p-값은 붓스트랩 분포를 관측값이 아니라 귀무값 log(1)=0 과 견주어
+    # 만든다. 관측값과 견주면 언제나 0.5 근처가 나와 뜻이 없다.
     p_two = 2 * min(np.mean(boots <= 0.0), np.mean(boots >= 0.0))
     p_two = float(min(p_two, 1.0))
 
     return float(stat_obs), ci, p_two
 ```
 
+</div>
+
 ---
 
 <div class="codebox" markdown>
 
-### 예제 1. 붓스트랩 분산 검정 { .eg }
+### 예제 2. 붓스트랩 분산 검정 { .eg }
 
 ```python
 x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)

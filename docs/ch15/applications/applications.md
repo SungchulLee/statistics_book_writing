@@ -45,22 +45,25 @@ Breusch-Pagan 검정은 잔차의 분산이 모형의 독립변수와 관련되�
 
 **Python 구현:**
 
+<div class="codebox" markdown>
+
+**예제 1.** 회귀에서의 등분산 검정
+
 ```python
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from statsmodels.stats.diagnostic import het_breuschpagan
 import pandas as pd
 
-# Sample data
 data = pd.DataFrame({
     'X': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     'Y': [2, 4, 6, 8, 10, 9, 15, 16, 18, 20]
 })
 
-# Fit regression model
 model = smf.ols('Y ~ X', data=data).fit()
 
-# Perform Breusch-Pagan test
+# 회귀에서 등분산성은 잔차의 퍼짐이 적합값에 따라 달라지지 않는다는 가정이다.
+# Breusch-Pagan 은 잔차의 제곱을 설명변수에 회귀해 그 관계를 찾는다.
 lm_stat, lm_p, f_stat, f_p = het_breuschpagan(model.resid, model.model.exog)
 
 print(f"Breusch-Pagan LM = {lm_stat:.4f}, p = {lm_p:.4f}")
@@ -73,6 +76,8 @@ print(f"Breusch-Pagan F  = {f_stat:.4f}, p = {f_p:.4f}")
 Breusch-Pagan LM = 0.0803, p = 0.7769
 Breusch-Pagan F  = 0.0648, p = 0.8055
 ```
+
+</div>
 
 **해석:**
 
@@ -118,18 +123,25 @@ Levene 검정은 분산분석의 등분산 가정을 확인하는 데 자주 쓰
 
 **Python 구현:**
 
+<div class="codebox" markdown>
+
+**예제 2.** 평균이 달라도 분산이 같으면
+
 ```python
 import numpy as np
 from scipy.stats import levene
 
-# Group data (note: all three have the SAME variance)
+# 세 집단의 평균은 크게 다르지만 분산은 똑같다. 등분산 검정이 평균 차이에
+# 휘둘리지 않는다는 것을 보이는 자료다.
 group1 = [10, 12, 14, 16, 18]
 group2 = [22, 24, 26, 28, 30]
 group3 = [32, 34, 36, 38, 40]
 
 print("variances:", [np.var(g, ddof=1) for g in (group1, group2, group3)])
 
-# Perform Levene's test
+# Levene 은 각 값에서 제 집단의 중심을 뺀 절대편차에 분산분석을 돌린다.
+# 중심을 빼는 단계가 평균 차이를 걷어 내므로, 평균이 아무리 달라도
+# 분산만 같으면 기각되지 않는다.
 test_stat, p_value = levene(group1, group2, group3)
 print(f"Levene's test statistic: {test_stat}")
 print(f"P-value: {p_value}")
@@ -142,6 +154,8 @@ variances: [10.0, 10.0, 10.0]
 Levene's test statistic: 0.0
 P-value: 1.0
 ```
+
+</div>
 
 !!! note "이 예제 자료는 퇴화되어 있다"
     세 집단이 모두 등차수열 $\{a, a+2, a+4, a+6, a+8\}$의 형태이므로 **표본분산이 정확히 10으로 동일**하다. 중앙값으로부터의 절대편차도 세 집단 모두 $\{4, 2, 0, 2, 4\}$로 같다.
@@ -201,12 +215,16 @@ Levene 검정이 이분산을 시사하면 집단 간 등분산을 가정하지 
 
 **Welch 분산분석의 Python 구현:**
 
+<div class="codebox" markdown>
+
+**예제 3.** Welch 분산분석
+
 ```python
 import numpy as np
 from scipy import stats
 
 def welch_anova(groups):
-    """Welch's one-way ANOVA. Returns (F, df1, df2, p)."""
+    """Welch 의 일원배치 분산분석. 등분산을 가정하지 않는다."""
     k = len(groups)
     n = np.array([len(g) for g in groups])
     m = np.array([np.mean(g) for g in groups])
@@ -223,7 +241,7 @@ groups = [[10, 12, 14], [22, 24, 26], [32, 34, 36]]
 F, df1, df2, p = welch_anova(groups)
 print(f"Welch ANOVA: F = {F:.4f}, df = ({df1}, {df2:.2f}), p = {p:.6f}")
 
-# Classical one-way ANOVA for comparison
+# 고전적 분산분석과 견준다. 분산이 크게 다르면 두 p-값이 갈린다.
 print(f"Classical ANOVA: {stats.f_oneway(*groups)}")
 ```
 
@@ -233,6 +251,8 @@ print(f"Classical ANOVA: {stats.f_oneway(*groups)}")
 Welch ANOVA: F = 78.0000, df = (2, 4.00), p = 0.000625
 Classical ANOVA: F_onewayResult(statistic=91.0, pvalue=3.2507247912312294e-05)
 ```
+
+</div>
 
 이 자료에서는 세 집단의 표본분산이 모두 4로 같아 Welch $F = 78.0$, 고전적 $F = 91.0$이다. 등분산일 때도 두 값이 다른 것은 Welch가 분모 자유도를 $4.00$으로 줄이기 때문이다. 표본이 작을수록 이 보정의 대가가 크다.
 

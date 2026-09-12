@@ -142,26 +142,30 @@ Bartlett 검정이 올바른 기준분포를 쓴다는 것이 확인된다.
 
     **5단계.** $\chi^2_{0.95, 1} = 3.841$과 비교한다. $0.733 < 3.841$이므로 $H_0$을 기각하지 못한다($p = 0.392$).
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 가능도비 검정과 Bartlett 보정
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Group statistics
+# 원자료 없이 집단별 크기와 표본분산만으로 계산할 수 있다.
 n = np.array([15, 18])
 s2 = np.array([22.4, 35.1])
 k = len(n)
 nu = n - 1
 N = n.sum()
 
-# Pooled variance
+# 귀무가설(분산이 모두 같다) 아래에서의 공통 분산 추정값
 s2_pooled = np.sum(nu * s2) / np.sum(nu)
 
-# LRT statistic (uncorrected)
+# 가능도비 검정통계량. 제약 있는 최대가능도와 없는 것의 비에 로그를 씌운
+# 값이며, 각 집단의 분산이 공통값에서 얼마나 벗어났는지를 재는 셈이다.
 lrt = np.sum(nu * np.log(s2_pooled / s2))
 
-# Bartlett correction
+# 그대로 두면 카이제곱 근사가 작은 표본에서 어긋난다. Bartlett 보정은
+# 통계량을 이 인자로 나눠 근사를 개선한다.
 C = 1 + (1 / (3 * (k - 1))) * (np.sum(1 / nu) - 1 / np.sum(nu))
 
 # Corrected statistic
@@ -186,6 +190,8 @@ Correction factor: 1.0327
 Bartlett statistic (corrected): 0.7332
 P-value: 0.3919
 ```
+
+</div>
 
 
 ## 연습문제

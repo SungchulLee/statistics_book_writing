@@ -54,9 +54,11 @@ $$
 
 여기서 $F_{\chi^2}$은 $\chi^2(n-1)$의 CDF이다.
 
-## 코드
-
 아래 함수는 분산에 대한 일표본 카이제곱 검정을 구현한다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 분산에 대한 카이제곱 검정 구현
 
 ```python
 import numpy as np
@@ -64,11 +66,13 @@ import scipy.stats as stats
 
 
 def chi2_test_for_variance(data, sigma2_0=1.0):
-    """
-    One-sample chi-squared test for variance.
+    """모분산이 sigma2_0 인지 검정하는 일표본 카이제곱 검정.
 
     H0: sigma^2 = sigma2_0
     H1: sigma^2 != sigma2_0
+
+    카이제곱 분포는 좌우가 대칭이 아니므로, 양측 p-값은 두 꼬리 넓이 중
+    작은 쪽을 두 배 해서 만든다.
     """
     n = len(data)
     s2 = np.var(data, ddof=1)
@@ -80,11 +84,18 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
     return statistic, p_value
 ```
 
+</div>
+
 전형적인 사용법은 참 표준편차를 바꿔가며 자료를 생성하고 검정이 $\sigma_0^2 = 1$로부터의 이탈을 탐지하는지 확인하는 것이다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 분산을 키워 가며 검정하기
 
 ```python
 import matplotlib.pyplot as plt
 
+# 참 표준편차를 1 에서 1.2 까지 올려 가며 검정이 언제부터 잡아내는지 본다.
 size, seed = 100, 0
 
 for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
@@ -103,6 +114,8 @@ sigma=1.10  s=1.1143  T=122.92  p=0.104
 sigma=1.15  s=1.1649  T=134.34  p=0.021
 sigma=1.20  s=1.2156  T=146.28  p=0.003
 ```
+
+</div>
 
 ## 해석
 

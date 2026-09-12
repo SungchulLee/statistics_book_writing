@@ -128,43 +128,50 @@ $$
 
     사후평균은 $\beta_n / (\alpha_n - 1) = 145.36 / 8.51 = 17.08$로 표본분산 15.3보다 크다. 이 차이는 사전분포의 영향이 아니라(사전분포는 거의 무정보이다) **역감마분포가 오른쪽으로 치우쳐 있어서 평균이 최빈값보다 크기** 때문이다. 최빈값은 $\beta_n/(\alpha_n+1) = 145.36/10.51 = 13.83$이고 중앙값은 $15.84$이다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 분산의 사후분포와 신용구간
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Data
+# 자료 요약값만 있으면 된다.
 n = 20
 s_squared = 15.3
 
-# Weakly informative prior
+# 거의 정보를 주지 않는 사전분포. 값이 작을수록 사후분포가 자료에 맡겨진다.
 alpha_0, beta_0 = 0.01, 0.01
 
-# Posterior parameters (mu unknown)
+# 역감마는 정규분포 분산의 켤레사전분포이므로 사후분포도 역감마다.
+# 평균을 모르는 경우라 자유도가 n-1 로 들어간다.
 alpha_n = alpha_0 + (n - 1) / 2
 beta_n = beta_0 + (n - 1) * s_squared / 2
 
-# Posterior summaries
+# 역감마는 오른쪽으로 치우쳐 있어 평균·최빈값·중앙값이 모두 다르다.
+# 어느 것을 점추정값으로 쓸지는 손실함수에 달렸다.
 print(f"Posterior: Inv-Gamma({alpha_n}, {beta_n:.2f})")
 print(f"Posterior mean:   {beta_n / (alpha_n - 1):.4f}")
 print(f"Posterior mode:   {beta_n / (alpha_n + 1):.4f}")
 print(f"Posterior median: {stats.invgamma.median(a=alpha_n, scale=beta_n):.4f}")
 
-# 95% credible interval using inverse-gamma quantiles
+# 95% 신용구간: 사후분포의 2.5·97.5 백분위점
 ci_lower = stats.invgamma.ppf(0.025, a=alpha_n, scale=beta_n)
 ci_upper = stats.invgamma.ppf(0.975, a=alpha_n, scale=beta_n)
 print(f"95% credible interval: ({ci_lower:.4f}, {ci_upper:.4f})")
 
-# Frequentist interval for comparison
+# 빈도주의 신뢰구간과 견준다. 사전분포가 거의 무정보이므로 두 구간이
+# 거의 겹친다. 다만 읽는 법이 다르다 — 신용구간은 "모수가 이 안에 있을
+# 확률이 95%"라고 그대로 말할 수 있다.
 fl = (n - 1) * s_squared / stats.chi2.ppf(0.975, n - 1)
 fu = (n - 1) * s_squared / stats.chi2.ppf(0.025, n - 1)
 print(f"95% confidence interval: ({fl:.4f}, {fu:.4f})")
 
-# Monte Carlo comparison of two variances
+# 두 분산을 견주는 일은 베이즈 쪽에서 특히 간단하다. 두 사후분포에서
+# 뽑아 나누기만 하면 비의 사후분포가 나온다.
 rng = np.random.default_rng(42)
-alpha_n1, beta_n1 = 9.51, 145.36   # Group 1 posterior
-alpha_n2, beta_n2 = 12.01, 120.10  # Group 2 posterior
+alpha_n1, beta_n1 = 9.51, 145.36   # 집단 1 의 사후 모수
+alpha_n2, beta_n2 = 12.01, 120.10  # 집단 2 의 사후 모수
 
 sigma1_samples = stats.invgamma.rvs(a=alpha_n1, scale=beta_n1,
                                     size=10000, random_state=rng)
@@ -189,6 +196,8 @@ Posterior median: 15.8365
 P(sigma1^2 > sigma2^2 | data) = 0.835
 95% credible interval for ratio: (0.644, 3.674)
 ```
+
+</div>
 
 두 구간이 사실상 일치한다($8.842$ 대 $8.849$, $32.59$ 대 $32.64$). 확산 사전분포에서 Bayes 신용구간과 빈도주의 신뢰구간이 수렴한다는 사실을 보여준다.
 

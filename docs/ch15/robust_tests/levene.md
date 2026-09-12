@@ -88,22 +88,26 @@ $W > F_{1-\alpha,\, k-1,\, N-k}$이면 $H_0$을 기각한다.
 
     **5단계.** $W$를 임계값 $F_{0.95,\, 2,\, 12} = 3.885$와 비교한다. 집단 2의 편차가 다른 집단보다 훨씬 크므로 큰 $W$ 값이 나올 것이고 $H_0$을 기각할 가능성이 높다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** Levene 검정 — 중심의 선택
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Group data
+# 2번 집단만 퍼짐이 크다.
 group1 = [10, 12, 14, 11, 13]
 group2 = [20, 28, 22, 35, 25]
 group3 = [15, 16, 14, 17, 15]
 
-# Levene's test using the mean (original Levene)
+# Levene 의 원래 형태는 평균을 중심으로 쓴다. 각 값에서 제 집단의 평균을
+# 뺀 절대편차에 분산분석을 돌리는 것이다.
 stat, p_value = stats.levene(group1, group2, group3, center='mean')
 print(f"Levene's W statistic (mean-centered):   {stat:.4f}, p = {p_value:.4f}")
 
-# Brown-Forsythe: SciPy's default
+# 중앙값을 중심으로 쓰면 Brown-Forsythe 가 되고, 이것이 scipy 의 기본값이다.
+# 이름이 levene 이라 평균 중심이 기본이라고 오해하기 쉽다.
 stat_m, p_m = stats.levene(group1, group2, group3, center='median')
 print(f"Brown-Forsythe (median-centered):       {stat_m:.4f}, p = {p_m:.4f}")
 
@@ -121,6 +125,8 @@ Levene's W statistic (mean-centered):   5.0152, p = 0.0261
 Brown-Forsythe (median-centered):       3.4305, p = 0.0663
 Levene (mean): reject H0 - variances differ.
 ```
+
+</div>
 
 !!! warning "중심의 선택이 결론을 바꾼다"
     같은 자료에서 평균 중심 Levene은 $p = 0.026$으로 기각하고 중앙값 중심 Brown-Forsythe는 $p = 0.066$으로 기각하지 못한다. 5% 문턱을 사이에 두고 결론이 갈린다.

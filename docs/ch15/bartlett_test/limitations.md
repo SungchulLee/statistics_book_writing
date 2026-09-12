@@ -43,14 +43,22 @@ $$
 
 ### 재현 코드
 
+<div class="codebox" markdown>
+
+**예제 1.** 모집단 모양에 따른 오류율
+
 ```python
 import numpy as np
 from scipy import stats
 
+# 모집단마다 세 집단을 같은 분포에서 뽑으므로 분산은 언제나 참으로 같다.
+# 그러니 아래 비율은 모두 0.05 여야 옳다. 실제로는 분포의 꼬리가 두꺼울수록
+# 훨씬 커진다 — Bartlett 검정이 정규성에 얼마나 매여 있는지를 보여 준다.
 rng = np.random.default_rng(2)
 n, k, R, alpha = 20, 3, 20000, 0.05
 
 def contaminated(m):
+    """90%는 N(0,1), 10%는 N(0,9) 에서 나오는 오염 정규분포."""
     u = rng.random(m)
     return np.where(u < 0.9, rng.normal(0, 1, m), rng.normal(0, 3, m))
 
@@ -81,6 +89,8 @@ for name, gen in cases:
   Contaminated N: 0.3331
          Uniform: 0.0022
 ```
+
+</div>
 
 위 표의 수치가 그대로 재현된다. 지수분포 $0.379$, 균등분포 $0.002$로 양방향의 왜곡이 모두 극심하다.
 

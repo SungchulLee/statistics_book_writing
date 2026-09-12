@@ -119,7 +119,9 @@ $$
 
 3. **분산안정화 변환.** $\ln Y$나 $\sqrt{Y}$ 같은 변환이 분산을 안정시킬 때가 있다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 이분산 진단과 로버스트 표준오차
 
 ```python
 import numpy as np
@@ -127,27 +129,30 @@ from scipy import stats
 import statsmodels.api as sm
 from statsmodels.stats.diagnostic import het_breuschpagan, het_white
 
-# Generate data with heteroscedasticity
 rng = np.random.default_rng(42)
 n = 100
 X = rng.uniform(1, 10, size=n)
-epsilon = rng.normal(0, 1, size=n) * X  # variance increases with X
+
+# 잡음에 X 를 곱해 분산이 X 에 비례해 커지도록 만든다. 전형적인 이분산이다.
+epsilon = rng.normal(0, 1, size=n) * X
 Y = 3 + 2 * X + epsilon
 
-# Fit OLS regression
 X_with_const = sm.add_constant(X)
 model = sm.OLS(Y, X_with_const).fit()
 residuals = model.resid
 
-# Breusch-Pagan test
+# Breusch-Pagan 은 분산이 설명변수의 선형함수로 커지는 경우를 잘 잡는다.
 bp_stat, bp_p, bp_f, bp_fp = het_breuschpagan(residuals, X_with_const)
 print(f"Breusch-Pagan: LM = {bp_stat:.4f}, p = {bp_p:.6f}")
 
-# White's test
+# White 는 제곱항과 교차항까지 넣어 비선형 형태의 이분산도 잡는다.
 w_stat, w_p, w_f, w_fp = het_white(residuals, X_with_const)
 print(f"White:         LM = {w_stat:.4f}, p = {w_p:.6f}")
 
-# Robust standard errors
+# 이분산이 있어도 계수 추정값 자체는 여전히 불편이다. 망가지는 것은
+# 표준오차다. HC3 로버스트 표준오차는 이분산을 셈에 넣어 계산하므로,
+# 모형을 바꾸지 않고도 추론을 바로잡을 수 있다.
+# 아래 출력에서 계수는 그대로이고 표준오차와 t 값만 달라지는 것을 본다.
 robust_model = model.get_robustcov_results(cov_type='HC3')
 print(f"\ncoefficients:      {np.round(model.params, 4)}")
 print(f"OLS std errors:    {np.round(model.bse, 4)}")
@@ -168,6 +173,8 @@ Robust std errors: [1.0664 0.2719]
 OLS t-values:      [2.1   7.746]
 Robust t-values:   [2.956 7.235]
 ```
+
+</div>
 
 두 검정 모두 이분산을 강하게 탐지한다. 자료를 $\operatorname{Var}(\varepsilon_i) \propto X_i^2$이 되도록 생성했으므로 당연한 결과이다.
 

@@ -121,24 +121,29 @@ $$
 
 ## Python 검증
 
+<div class="codebox" markdown>
+
+**예제 1.** 요약값만으로 통계량 만들기
+
 ```python
 import numpy as np
 from scipy import stats
 
-# Group data
+# 원자료 없이 집단 크기와 표본분산만으로 통계량을 만들 수 있다.
 n = np.array([10, 12, 8])
 s2 = np.array([5.2, 8.1, 4.7])
 k = len(n)
 nu = n - 1
 N = n.sum()
 
-# Pooled variance
+# 귀무가설 아래의 공통 분산 추정값
 s2_pooled = np.sum(nu * s2) / np.sum(nu)
 
-# Numerator
+# 분자는 합동분산의 로그와 각 분산 로그의 가중평균의 차이다.
+# 분산들이 고를수록 0 에 가까워진다.
 numerator = np.sum(nu) * np.log(s2_pooled) - np.sum(nu * np.log(s2))
 
-# Correction factor
+# 보정인자. 표본이 작을수록 1 보다 눈에 띄게 커져 통계량을 낮춘다.
 C = 1 + (1 / (3 * (k - 1))) * (np.sum(1 / nu) - 1 / np.sum(nu))
 
 # Test statistic
@@ -163,6 +168,8 @@ Correction factor C: 1.0513
 Test statistic T: 0.7670
 P-value: 0.6815
 ```
+
+</div>
 
 
 ## 연습문제

@@ -48,15 +48,22 @@ $$
 
 ---
 
-## 구현
-
 다음 코드는 사후 모수를 계산하고 $\sigma^2$의 사후분포에서 표본을 뽑는다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 사후분포에서 분산 뽑는 함수
 
 ```python
 import numpy as np
 from scipy.stats import invgamma
 
 def posterior_params(x, m0=0.0, k0=1e-6, a0=1e-2, b0=1e-2):
+    """정규-역감마 켤레모형의 사후 모수를 구한다.
+
+    기본값은 거의 정보를 주지 않는 사전분포다(k0, a0, b0 가 모두 작다).
+    이러면 사후분포가 자료에 거의 전적으로 맡겨진다.
+    """
     x = np.asarray(x, dtype=float)
     n = x.size
     xbar = x.mean()
@@ -68,12 +75,19 @@ def posterior_params(x, m0=0.0, k0=1e-6, a0=1e-2, b0=1e-2):
     return m_n, k_n, a_n, b_n
 
 def draw_posterior_sigma2(x, n_draws=10000, rng=None):
+    """분산의 사후분포에서 표본을 뽑는다.
+
+    평균을 적분해 없앤 sigma^2 의 주변 사후분포가 역감마가 된다.
+    그래서 MCMC 없이 바로 뽑을 수 있다.
+    """
     if rng is None:
         rng = np.random.default_rng()
     m_n, k_n, a_n, b_n = posterior_params(x)
     sig2 = invgamma(a=a_n, scale=b_n).rvs(size=n_draws, random_state=rng)
     return sig2
 ```
+
+</div>
 
 ---
 
@@ -87,10 +101,17 @@ $$
 
 $\rho$의 95% 신용구간이 1을 제외하면 분산이 다르다는 증거가 된다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 두 분산비의 사후분포
+
 ```python
 x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
 x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
 
+# 두 집단의 사후표본을 각각 뽑아 나눈다. 이 비의 분포가 곧 분산비의
+# 사후분포다. 빈도주의 F 검정이 p-값 하나를 주는 자리에서, 베이즈 쪽은
+# "비가 1 보다 클 확률"을 그대로 셈할 수 있다.
 rng = np.random.default_rng(0)
 s1 = draw_posterior_sigma2(x1, n_draws=20000, rng=rng)
 s2 = draw_posterior_sigma2(x2, n_draws=20000, rng=rng)
@@ -116,6 +137,8 @@ Posterior mean of ratio:    0.634
 95% credible interval:      (0.106, 2.074)
 P(sigma1^2 > sigma2^2):     0.1573
 ```
+
+</div>
 
 신용구간 $(0.106, 2.074)$가 1을 포함하므로 등분산과 일관된다. $P(\sigma_1^2 > \sigma_2^2 \mid \text{자료}) = 0.157$이므로 집단 1의 분산이 더 작을 가능성이 84%이지만 확정하기에는 부족하다.
 

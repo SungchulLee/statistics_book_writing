@@ -27,14 +27,18 @@ $$
 
 여기서 $c_i$는 집단평균(Levene), 중앙값(Brown-Forsythe), 또는 순위 기반 중심(Fligner-Killeen)이다. Bartlett 검정은 대신 로그가능도비에 직접 작동한다.
 
-## 코드
-
 다음 모의실험은 집단분산이 모두 같은 치우친(대수정규) 분포에서 네 검정의 거짓 양성률을 비교한다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 네 검정의 거짓 양성률
 
 ```python
 import numpy as np
 from scipy import stats
 
+# 1부: 제1종 오류율. 세 집단을 모두 같은 로그정규에서 뽑으므로 분산은
+# 참으로 같다. 기각 비율이 0.05 를 크게 넘는 검정은 정규성에 매여 있다는 뜻이다.
 rng = np.random.default_rng(42)
 n_sims, n, alpha = 2000, 30, 0.05
 results = {"Bartlett": 0, "Levene (mean)": 0,
@@ -74,9 +78,18 @@ Brown-Forsythe      : false-positive rate = 0.0295
 Fligner-Killeen     : false-positive rate = 0.1140
 ```
 
+</div>
+
 분산이 실제로 다른 정규 자료에서의 검정력 비교는 다음과 같다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 네 검정의 검정력
+
 ```python
+# 2부: 검정력. 이번에는 정규모집단이고 표준편차를 1, 1.5, 2 로 실제로
+# 다르게 두었다. 오류율만 보고 검정을 고를 수 없는 까닭이 여기 있다 —
+# 보수적인 검정은 오류율은 낮지만 차이도 잘 못 잡는다.
 results_power = {"Bartlett": 0, "Levene (mean)": 0,
                  "Brown-Forsythe": 0, "Fligner-Killeen": 0}
 
@@ -113,6 +126,8 @@ Levene (mean)       : power = 0.8490
 Brown-Forsythe      : power = 0.8155
 Fligner-Killeen     : power = 0.7810
 ```
+
+</div>
 
 ## 해석
 

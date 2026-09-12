@@ -102,25 +102,34 @@ $k > 2$개 집단에 대해 붓스트랩 접근은 자연스럽게 일반화된�
 - **아주 작은 표본.** $n < 10$이면 경험분포가 모집단의 나쁜 근사이므로 붓스트랩 결과를 믿기 어렵다.
 - **치우친 자료.** 위 경고에서 보듯 강한 치우침에서는 크기가 다소 부풀려진다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 붓스트랩 등분산 검정
 
 ```python
 import numpy as np
 
 def bootstrap_variance_test(x, y, B=10000, seed=42):
-    """Bootstrap test for equal variances in two samples."""
+    """두 분산이 같은지를 붓스트랩으로 검정한다.
+
+    귀무가설 아래에서의 분포를 얻으려면 두 집단이 같은 분포에서 나온
+    상태를 만들어야 한다. 집단마다 중심을 맞춘 뒤 하나로 합치는 것이
+    그 방법이다.
+    """
     rng = np.random.default_rng(seed)
     n1, n2 = len(x), len(y)
 
-    # Observed statistic
+    # 관측된 분산비
     f_obs = np.var(x, ddof=1) / np.var(y, ddof=1)
 
-    # Center and pool
+    # 중심만 맞추고 퍼짐은 그대로 둔다. 이렇게 합쳐야 "분산이 같다"는
+    # 상태를 흉내 낼 수 있다.
     x_centered = x - np.mean(x)
     y_centered = y - np.mean(y)
     pool = np.concatenate([x_centered, y_centered])
 
-    # Bootstrap
+    # 비의 로그를 쓰는 까닭은 대칭을 얻기 위해서다. F 와 1/F 이 같은 크기의
+    # 이탈로 세어져야 양측검정이 제대로 된다.
     count = 0
     for _ in range(B):
         boot1 = rng.choice(pool, size=n1, replace=True)
@@ -132,7 +141,7 @@ def bootstrap_variance_test(x, y, B=10000, seed=42):
     p_value = count / B
     return f_obs, p_value
 
-# Example
+# 보기
 x = np.array([10, 12, 14, 11, 13, 15, 12, 10])
 y = np.array([20, 28, 22, 35, 25, 18, 30, 22])
 
@@ -149,6 +158,8 @@ Sample variances: 3.268, 32.286
 Variance ratio: 0.1012
 Bootstrap p-value: 0.0206
 ```
+
+</div>
 
 같은 자료에 다른 검정을 적용하면 F 검정은 $p = 0.0073$, Brown-Forsythe는 $p = 0.0272$이다. 세 검정 모두 5% 수준에서 기각하지만 $p$값이 네 배 차이 난다. 붓스트랩 결과가 두 값 사이에 놓인다는 점이 시사적이다. F 검정만큼 낙관적이지도, Brown-Forsythe만큼 보수적이지도 않다.
 

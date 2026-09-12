@@ -116,7 +116,9 @@ $r_t^2$의 자기상관은 이 장의 모든 분산 검정이 요구하는 독�
 
 금융 변동성은 한 시점에서 급격히 바뀌기보다 시간에 걸쳐 점진적으로 변하는 경우가 많다. 두 기간을 각각 일정한 분산을 갖는 것처럼 검정하는 것은 지나친 단순화일 수 있다. 형식적 변화점 탐지 방법이나 이동창 추정이 더 미묘한 그림을 제공한다.
 
-## Python 예제
+<div class="codebox" markdown>
+
+**예제 1.** 변동성 변화 검정하기
 
 ```python
 import numpy as np
@@ -124,27 +126,29 @@ from scipy import stats
 
 rng = np.random.default_rng(42)
 
-# t(5) has sd = sqrt(5/3), so divide by it to hit the target volatility
+# t(5) 의 표준편차는 sqrt(5/3) 이다. 목표 변동성을 정확히 맞추려면
+# 이 값으로 나눠야 한다. 이러면 달라지는 것은 꼬리 두께뿐이다.
 scale_correction = np.sqrt(5 / 3)
 
-# Period 1: lower volatility (daily sd ~ 1.8%)
+# 1구간: 일변동성 1.8%
 returns_before = rng.standard_t(df=5, size=60) * 0.018 / scale_correction
 
-# Period 2: higher volatility (daily sd ~ 2.4%)
+# 2구간: 일변동성 2.4%. 실제로 분산이 달라진 자료다.
 returns_after = rng.standard_t(df=5, size=60) * 0.024 / scale_correction
 
 print(f"sample sd: {returns_before.std(ddof=1):.5f}, "
       f"{returns_after.std(ddof=1):.5f}")
 
-# Brown-Forsythe test (robust to heavy tails)
+# 중앙값을 중심으로 쓰므로 꼬리가 두꺼운 자료에서도 버틴다.
 bf_stat, bf_p = stats.levene(returns_before, returns_after, center='median')
 print(f"Brown-Forsythe:  W = {bf_stat:.4f}, p = {bf_p:.4f}")
 
-# Fligner-Killeen test (most robust)
+# 순위만 쓰는 검정이라 셋 중 가장 로버스트하다.
 fk_stat, fk_p = stats.fligner(returns_before, returns_after)
 print(f"Fligner-Killeen: H = {fk_stat:.4f}, p = {fk_p:.4f}")
 
-# For comparison: F-test (not recommended for financial data)
+# F 검정은 정규성에 매우 민감하다. 수익률처럼 꼬리가 두꺼운 자료에서는
+# 분산이 같아도 자주 기각해 버리므로 쓰지 않는 편이 낫다.
 f_stat = np.var(returns_before, ddof=1) / np.var(returns_after, ddof=1)
 f_p = 2 * min(stats.f.cdf(f_stat, 59, 59), stats.f.sf(f_stat, 59, 59))
 print(f"F-test:          F = {f_stat:.4f}, p = {f_p:.4g} "
@@ -159,6 +163,8 @@ Brown-Forsythe:  W = 5.4046, p = 0.0218
 Fligner-Killeen: H = 3.2325, p = 0.0722
 F-test:          F = 0.3317, p = 3.791e-05 (unreliable for heavy-tailed data)
 ```
+
+</div>
 
 !!! warning "`standard_t(df)*scale`의 표준편차는 `scale`이 아니다"
     원래 코드는 `rng.standard_t(df=5, size=60) * 0.018`로 "일별 변동성 1.8%"를 만들려 했지만, $t_5$의 표준편차가 $\sqrt{5/3} = 1.291$이므로 실제 표준편차는 $0.018 \times 1.291 = 0.0232$, 곧 **2.3%**이다.

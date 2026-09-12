@@ -32,14 +32,19 @@ $$
 
 $H_0$과 정규성 아래에서 근사적으로 $T \sim \chi^2(k-1)$이다.
 
-## 코드
-
 SciPy는 `scipy.stats.bartlett`을 직접 제공한다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 분산 차이를 키워 가며
 
 ```python
 import numpy as np
 import scipy.stats as stats
 
+# 한쪽의 표준편차를 1 로 두고 다른 쪽을 조금씩 키워 가며 검정한다.
+# 5% 차이는 잡아내지 못하고 20% 쯤 되어야 걸린다. 등분산 검정의 검정력이
+# 생각보다 낮다는 것을 보여 주는 대목이다.
 size, seed = 100, 1
 x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
 
@@ -58,6 +63,8 @@ sigma_y=1.10  chi2=0.8934  p=0.345
 sigma_y=1.15  chi2=1.9179  p=0.166
 sigma_y=1.20  chi2=3.2564  p=0.071
 ```
+
+</div>
 
 !!! note "$p$값이 F 검정과 정확히 같다"
     이 표의 $p$값 $(1.000, 0.628, 0.345, 0.166, 0.071)$은 [분산 동일성에 대한 F 검정](../f_test/f_test_variances.md) 페이지의 같은 자료에 대한 $p$값과 **소수 셋째 자리까지 동일**하다.

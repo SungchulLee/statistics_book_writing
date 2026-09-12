@@ -24,7 +24,9 @@ $p$값이 작으면 비정규성을 시사하며, 그 경우 F 검정의 로버�
 
 Brown-Forsythe 검정은 집단평균을 집단중앙값으로 바꾸어 치우침에 더 로버스트하다. Fligner-Killeen 검정은 순위 기반 접근을 써서 대칭인 두꺼운 꼬리에 가장 로버스트하다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 정규성 확인 뒤 로버스트 대안으로
 
 ```python
 import numpy as np
@@ -33,13 +35,15 @@ from scipy.stats import levene, fligner, shapiro
 x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
 x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
 
-# Step 1: Check normality with Shapiro-Wilk
+# 1단계: F 검정은 정규성에 매우 민감하므로 먼저 그것부터 확인한다.
+# 다만 n=8 로 작아 검정력이 낮다 — 기각되지 않았다고 정규라는 뜻은 아니다.
 W1, p1 = shapiro(x1)
 W2, p2 = shapiro(x2)
 print(f"Shapiro-Wilk x1: W={W1:.4f}, p={p1:.4f}")
 print(f"Shapiro-Wilk x2: W={W2:.4f}, p={p2:.4f}")
 
-# Step 2: Apply robust alternatives
+# 2단계: 로버스트 대안 셋을 돌린다. 평균 중심 Levene, 중앙값 중심
+# Brown-Forsythe, 순위를 쓰는 Fligner-Killeen 순으로 더 로버스트해진다.
 Wm, pm = levene(x1, x2, center='mean')
 print(f"Levene (mean-centered):           W={Wm:.4f}, p={pm:.6f}")
 
@@ -59,6 +63,8 @@ Levene (mean-centered):           W=1.4831, p=0.243425
 Brown-Forsythe (median-centered): W=1.4706, p=0.245320
 Fligner-Killeen:                  X2=1.6063, p=0.205015
 ```
+
+</div>
 
 ## 해석
 

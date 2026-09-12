@@ -15,7 +15,9 @@
 
 검정이 잘 보정되어 있다면 분포와 무관하게 기각률이 0.05에 가까워야 한다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 모집단 모양에 따른 제1종 오류율
 
 ```python
 import numpy as np
@@ -24,7 +26,11 @@ from scipy.stats import levene
 rng = np.random.default_rng(0)
 
 def simulate_once(n=20, dist="normal"):
-    """Generate 3 groups from the specified distribution."""
+    """주어진 분포에서 세 집단을 만들어 검정하고 p-값을 돌려준다.
+
+    셋 다 같은 모수를 쓰므로 분산은 참으로 같다. 그러니 기각 비율이
+    0.05 근처로 나와야 옳다.
+    """
     if dist == "normal":
         g1 = rng.normal(0, 1.0, size=n)
         g2 = rng.normal(0, 1.0, size=n)
@@ -36,6 +42,8 @@ def simulate_once(n=20, dist="normal"):
     _, p = levene(g1, g2, g3, center='median')
     return p
 
+# 정규와 로그정규에서 각각 돌려 본다. Bartlett 이라면 로그정규에서
+# 오류율이 크게 부풀지만, 중앙값 중심 방법은 0.05 근처를 지킨다.
 alpha = 0.05
 n_sims = 5000
 
@@ -51,6 +59,8 @@ for dist in ["normal", "lognormal"]:
 Type I error (median-centered) under normal: 0.0370
 Type I error (median-centered) under lognormal: 0.0374
 ```
+
+</div>
 
 ## 해석
 

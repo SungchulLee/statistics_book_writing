@@ -112,27 +112,31 @@ $n \to \infty$이면 이 비가 1로 가고 구간이 점추정값 $S^2$으로 �
 
 $\sigma^2$의 신뢰구간과 카이제곱 검정은 쌍대 절차이다. 값 $\sigma_0^2$이 $100(1-\alpha)\%$ 신뢰구간 밖에 있을 필요충분조건은 카이제곱 검정이 유의수준 $\alpha$에서 $H_0\colon \sigma^2 = \sigma_0^2$을 기각하는 것이다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 분산과 표준편차의 신뢰구간
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Sample data
 n = 25
 s_squared = 120
 alpha = 0.05
 df = n - 1
 
-# Chi-square critical values
+# 카이제곱은 좌우가 대칭이 아니므로 두 기각값을 따로 구한다.
 chi2_lower = stats.chi2.ppf(alpha / 2, df)
 chi2_upper = stats.chi2.ppf(1 - alpha / 2, df)
 
-# Confidence interval for variance
+# 위아래가 뒤집혀 들어간다. (n-1)S^2/sigma^2 이 카이제곱을 따르므로
+# sigma^2 로 풀면 분모에 기각값이 오고, 큰 기각값이 구간의 아래끝을 만든다.
+# 부호를 헷갈리기 쉬운 대목이다.
 ci_lower = df * s_squared / chi2_upper
 ci_upper = df * s_squared / chi2_lower
 
-# Confidence interval for standard deviation
+# 표준편차의 구간은 분산 구간에 제곱근을 씌우면 된다. 제곱근이 단조함수라
+# 순서가 그대로 보존되기 때문이다.
 ci_sd_lower = np.sqrt(ci_lower)
 ci_sd_upper = np.sqrt(ci_upper)
 
@@ -146,6 +150,8 @@ print(f"95% CI for std dev:  ({ci_sd_lower:.2f}, {ci_sd_upper:.2f})")
 95% CI for variance: (73.16, 232.24)
 95% CI for std dev:  (8.55, 15.24)
 ```
+
+</div>
 
 
 ## 연습문제

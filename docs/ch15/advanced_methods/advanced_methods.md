@@ -35,25 +35,29 @@ $$
 H_1: \sigma_i^2 \neq \sigma_j^2 \quad \text{(적어도 한 쌍의)} \quad i \neq j
 $$
 
-### Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 붓스트랩으로 분산 비교하기
 
 ```python
 import numpy as np
 
 rng = np.random.default_rng(0)
 
-# Original data samples from two groups
+# 두 집단의 원자료
 sample1 = np.array([10, 12, 14, 16, 18])
 sample2 = np.array([22, 24, 26, 30, 40])
 
-# Observed difference in variances
+# 관측된 분산의 차이
 observed_diff = np.var(sample1, ddof=1) - np.var(sample2, ddof=1)
 
-# Build the null pool: centre each group, then combine
+# 귀무가설은 "두 분산이 같다"이다. 그 상태를 흉내 내려면 집단마다 평균을
+# 빼 중심을 맞춘 뒤 하나로 합친다. 이 웅덩이에서 다시 뽑으면 두 집단이
+# 같은 분포에서 나온 셈이 된다.
 pool = np.concatenate([sample1 - sample1.mean(),
                        sample2 - sample2.mean()])
 
-# Bootstrap under H0
+# 귀무가설 아래에서의 통계량 분포를 붓스트랩으로 얻는다.
 B = 10000
 boot_diffs = np.empty(B)
 for b in range(B):
@@ -76,6 +80,8 @@ Sample variances: 10.00, 50.80
 Observed difference in variances: -40.80
 Bootstrap p-value: 0.1339
 ```
+
+</div>
 
 원래의 예제 자료 `sample1 = [10,12,14,16,18]`, `sample2 = [22,24,26,28,30]`은 두 집단의 표본분산이 **정확히 10으로 같아서** 검정을 시연할 수 없다. 위 코드에서는 집단 2를 `[22,24,26,30,40]`으로 바꾸어 분산 차이를 만들었다.
 
@@ -145,9 +151,11 @@ $$
 
 Bayes 인자가 1보다 크면 귀무가설을, 1보다 작으면 대립가설을 지지한다.
 
-### Python 구현
-
 Bayes 추론에는 `pymc` 패키지를 쓴다(과거의 `pymc3`는 더 이상 유지보수되지 않으며 `pymc` 4.x 이상으로 대체되었다).
+
+<div class="codebox" markdown>
+
+**예제 2.** PyMC로 베이즈 분산 비교
 
 ```python
 import numpy as np
@@ -158,25 +166,30 @@ sample1 = np.array([10, 12, 14, 16, 18])
 sample2 = np.array([22, 24, 26, 30, 40])
 
 with pm.Model() as model:
-    # Priors for the group means (do NOT fix mu = 0)
+    # 평균에도 사전분포를 준다. 관심사가 분산이라고 평균을 0 으로 못박으면
+    # 그 잘못이 분산 추정으로 흘러들어 간다.
     mu1 = pm.Normal('mu1', mu=0, sigma=100)
     mu2 = pm.Normal('mu2', mu=0, sigma=100)
 
-    # Priors for the VARIANCES (inverse-gamma), then convert to sd
+    # 역감마는 정규분포 분산의 켤레사전분포다. 사후분포도 역감마로 남는다.
     var1 = pm.InverseGamma('var1', alpha=2, beta=1)
     var2 = pm.InverseGamma('var2', alpha=2, beta=1)
 
-    # Likelihood: pm.Normal takes the standard deviation, not the variance
+    # pm.Normal 은 분산이 아니라 표준편차를 받는다. 여기서 제곱근을
+    # 빠뜨리는 것이 아주 흔한 실수다.
     pm.Normal('obs1', mu=mu1, sigma=pm.math.sqrt(var1), observed=sample1)
     pm.Normal('obs2', mu=mu2, sigma=pm.math.sqrt(var2), observed=sample2)
 
-    # Derived quantity: the variance ratio
+    # 비를 유도량으로 두면 사후표본에서 그대로 분포를 얻는다. "분산비가
+    # 1 보다 클 확률"처럼 빈도주의 검정으로는 말할 수 없는 것을 말할 수 있다.
     pm.Deterministic('ratio', var1 / var2)
 
     trace = pm.sample(2000, tune=1000, random_seed=42)
 
 print(pm.summary(trace, var_names=['var1', 'var2', 'ratio']))
 ```
+
+</div>
 
 !!! note "이 블록은 별도 설치가 필요하고 실행할 때마다 결과가 조금씩 달라진다"
     `pymc`는 이 책의 다른 예제에 쓰이지 않으므로 기본 환경에 들어 있지 않다. `pip install pymc`로 설치해야 한다(설치하면 `numpy`·`scipy`가 함께 올라가므로 별도 가상환경을 권한다).

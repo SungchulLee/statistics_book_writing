@@ -42,20 +42,25 @@ $$
 
 ---
 
-## 코드
-
 SciPy에서는 함수 호출 한 번으로 끝난다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 중앙값 중심과 평균 중심
 
 ```python
 import numpy as np
 from scipy.stats import levene
 
+# 세 집단의 평균은 크게 다르지만 퍼짐은 거의 같다.
 g1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
 g2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
 g3 = np.array([32, 35, 34, 30, 33, 34, 32, 31], dtype=float)
 
 print("variances:", [round(np.var(g, ddof=1), 4) for g in (g1, g2, g3)])
 
+# scipy 에는 brown_forsythe 라는 함수가 따로 없다. levene 에
+# center='median' 을 주는 것이 곧 Brown-Forsythe 이고, 이것이 기본값이다.
 W, p = levene(g1, g2, g3, center='median')
 print(f"Brown-Forsythe W = {W:.6f}, p-value = {p:.6f}")
 
@@ -70,6 +75,8 @@ variances: [2.8393, 6.0, 2.8393]
 Brown-Forsythe W = 1.107595, p-value = 0.348894
 Levene (mean)  W = 1.121795, p-value = 0.344444
 ```
+
+</div>
 
 ---
 

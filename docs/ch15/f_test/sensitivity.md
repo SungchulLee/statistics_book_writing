@@ -45,10 +45,17 @@ $$
 
 ### 재현 코드
 
+<div class="codebox" markdown>
+
+**예제 1.** 모집단 모양에 따른 오류율
+
 ```python
 import numpy as np
 from scipy import stats
 
+# 두 표본을 늘 같은 분포에서 뽑으므로 분산은 참으로 같다. 그러니 아래
+# 비율은 모두 0.05 여야 옳다. 실제로는 정규에서 벗어날수록 크게 어긋난다.
+# 꼬리가 두꺼운 t(5)·지수에서는 부풀고, 꼬리가 얇은 균등에서는 오히려 줄어든다.
 rng = np.random.default_rng(1)
 n, R, alpha = 20, 20000, 0.05
 
@@ -81,6 +88,8 @@ for name, gen in cases:
      Uniform: 0.0053
      Laplace: 0.1842
 ```
+
+</div>
 
 위 표의 값이 재현된다. 정규 $0.053$은 명목값에 맞지만 지수분포는 $0.267$, 균등분포는 $0.005$로 크게 벗어난다.
 

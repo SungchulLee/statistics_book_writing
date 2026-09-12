@@ -20,9 +20,11 @@ $p$값은 대립가설에 따라 달라진다.
 - **왼쪽 꼬리** ($H_1: \sigma_1^2 < \sigma_2^2$): $p = P(F \le F_{\text{obs}})$.
 - **양측** ($H_1: \sigma_1^2 \neq \sigma_2^2$): $p = 2\min\!\bigl(P(F \le F_{\text{obs}}),\; P(F \ge F_{\text{obs}})\bigr)$.
 
-## 코드
-
 다음 코드는 두 표본에서 F 통계량을 계산하고 $F(d_1, d_2)$ 밀도와 양쪽 꼬리 영역을 그린다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 관측된 F를 그림에 얹기
 
 ```python
 import numpy as np
@@ -32,6 +34,7 @@ from scipy.stats import f
 sample1 = [12, 15, 14, 10, 13, 14, 12, 11]
 sample2 = [22, 25, 20, 18, 24, 23, 19, 21]
 
+# 두 집단의 분산비가 F 분포의 어디에 떨어지는지 그림으로 본다.
 x1 = np.asarray(sample1, dtype=float)
 x2 = np.asarray(sample2, dtype=float)
 df1, df2 = x1.size - 1, x2.size - 1
@@ -44,11 +47,11 @@ pdf = f(df1, df2).pdf(xs)
 fig, ax = plt.subplots(figsize=(10, 4))
 ax.plot(xs, pdf, linewidth=2, label="F({},{}) PDF".format(df1, df2))
 
-# Left-tail shading
+# 왼쪽 꼬리를 칠한다. 분산비가 1 보다 작은 쪽의 이탈에 해당한다.
 mask_left = xs <= F_obs
 ax.fill_between(xs[mask_left], pdf[mask_left], 0, alpha=0.15, label="Left tail")
 
-# Right-tail shading
+# 오른쪽 꼬리. 양측검정이므로 두 꼬리를 모두 본다.
 mask_right = xs >= F_obs
 ax.fill_between(xs[mask_right], pdf[mask_right], 0, alpha=0.15, label="Right tail")
 
@@ -61,11 +64,19 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![F 분포와 양쪽 꼬리](./img/f_test_tail_plot_27.png)
 
 $p$값을 명시적으로 계산하려면
 
+<div class="codebox" markdown>
+
+**예제 2.** 양측 p-값 계산
+
 ```python
+# 두 꼬리 중 작은 쪽을 두 배 해 양측 p-값을 만든다. F 분포가 대칭이
+# 아니라서 두 꼬리 넓이를 그냥 더하면 안 된다.
 p_left = f(df1, df2).cdf(F_obs)
 p_right = f(df1, df2).sf(F_obs)
 p_two = 2 * min(p_left, p_right)
@@ -86,6 +97,8 @@ Left-tail  p-value: 0.1724
 Right-tail p-value: 0.8276
 Two-sided  p-value: 0.3448
 ```
+
+</div>
 
 ## 해석
 

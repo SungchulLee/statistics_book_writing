@@ -105,25 +105,28 @@ F 분포는 여러 다른 분포와 연결된다.
 
     이 통계량은 귀무가설 아래에서 $F_{15, 20}$을 따른다. $F_{15,20}$의 평균은 $20/18 \approx 1.111$이다. 관측값 1.607은 평균보다 크지만 임계값 $F_{0.975}(15, 20) = 2.573$($\alpha = 0.05$ 양측)과 비교해야 한다. $1.607 < 2.573$이므로 $H_0$을 기각하지 못한다($p = 0.318$).
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** F 분포의 성질과 기각값
 
 ```python
 from scipy import stats
 
-# Degrees of freedom
+# 분자와 분모의 자유도
 d1, d2 = 15, 20
 
-# F-distribution properties
+# F 분포의 평균은 d2/(d2-2) 로 1 보다 조금 크다. 분산비의 분포이므로
+# 아래로는 0 에서 막히고 위로는 열려 있어 오른쪽으로 치우친 탓이다.
 print(f"Mean: {stats.f.mean(d1, d2):.4f}")
 print(f"Variance: {stats.f.var(d1, d2):.4f}")
 
-# Critical values for two-tailed test at alpha = 0.05
 alpha = 0.05
 f_lower = stats.f.ppf(alpha / 2, d1, d2)
 f_upper = stats.f.ppf(1 - alpha / 2, d1, d2)
 print(f"Critical values: [{f_lower:.3f}, {f_upper:.3f}]")
 
-# Test statistic and p-value
+# 두 표본분산의 비. 큰 쪽을 분자에 두면 오른쪽 꼬리만 보면 되지만,
+# 여기서는 순서를 정해 놓고 양측으로 계산한다.
 f_stat = 45 / 28
 p_value = 2 * min(stats.f.cdf(f_stat, d1, d2), stats.f.sf(f_stat, d1, d2))
 print(f"F-statistic: {f_stat:.3f}")
@@ -139,6 +142,8 @@ Critical values: [0.363, 2.573]
 F-statistic: 1.607
 P-value: 0.3184
 ```
+
+</div>
 
 
 ## 연습문제

@@ -133,28 +133,29 @@ $F = 1.5625$가 임계값 사이에 있으므로($0.3496 < 1.5625 < 2.6469$) 귀
 
 </div>
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 2.** 두 분산의 F 검정
 
 ```python
 import numpy as np
 from scipy.stats import f
 
-# Example data: Two sample datasets
 sample1 = [12, 15, 14, 10, 13, 14, 12, 11]
 sample2 = [22, 25, 20, 18, 24, 23, 19, 21]
 
-# Calculate sample variances
+# ddof=1 로 표본분산을 쓴다. F 검정의 이론이 그렇게 세워져 있다.
 var1 = np.var(sample1, ddof=1)
 var2 = np.var(sample2, ddof=1)
 
-# Calculate the F-statistic
+# 두 표본분산의 비. 귀무가설이 참이면 이 값이 1 근처에 놓인다.
 f_statistic = var1 / var2
 
 # Degrees of freedom
 df1 = len(sample1) - 1
 df2 = len(sample2) - 1
 
-# Two-sided p-value
+# F 분포는 대칭이 아니므로 작은 쪽 꼬리를 두 배 한다.
 p_value = 2 * min(f.cdf(f_statistic, df1, df2),
                   f.sf(f_statistic, df1, df2))
 
@@ -180,6 +181,8 @@ Degrees of freedom: 7, 7
 Two-sided p-value: 0.3448
 Fail to reject H0: no significant difference in variances.
 ```
+
+</div>
 
 !!! warning "단측 $p$값과 양측 판정을 섞지 말라"
     이 구현에서 $F = 0.4732 < 1$이다. 여기서 `f.cdf(f_statistic, df1, df2)`만 계산하면 하단 단측 $p$값 $0.1724$를 얻는데, 이는 $H_1: \sigma_1^2 < \sigma_2^2$에 대한 값이지 "분산이 다르다"에 대한 값이 아니다.

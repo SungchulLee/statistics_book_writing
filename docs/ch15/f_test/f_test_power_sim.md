@@ -36,7 +36,9 @@ $$
 
 $\hat{\beta}$의 표준오차는 $\sqrt{\hat{\beta}(1-\hat{\beta})/B}$이다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** F 검정의 검정력 모의실험
 
 ```python
 import numpy as np
@@ -46,7 +48,7 @@ rng = np.random.default_rng(0)
 
 
 def f_test_two_sided(x1, x2, alpha=0.05):
-    """Return True if the two-sided F-test rejects H0."""
+    """양측 F 검정이 기각하면 True 를 돌려준다."""
     n1, n2 = x1.size, x2.size
     df1, df2 = n1 - 1, n2 - 1
     F_obs = x1.var(ddof=1) / x2.var(ddof=1)
@@ -58,7 +60,11 @@ def f_test_two_sided(x1, x2, alpha=0.05):
 
 def estimate_power(n1=12, n2=12, sigma1=1.0, sigma2=1.5,
                    n_sims=2000, alpha=0.05):
-    """Estimate power of the two-sided F-test via simulation."""
+    """모의실험으로 양측 F 검정의 검정력을 추정한다.
+
+    두 모집단의 표준편차를 실제로 다르게 두고, 검정이 그 차이를 몇 번이나
+    잡아내는지 센다.
+    """
     hits = 0
     for _ in range(n_sims):
         x1 = rng.normal(0, sigma1, size=n1)
@@ -68,7 +74,9 @@ def estimate_power(n1=12, n2=12, sigma1=1.0, sigma2=1.5,
     return hits / n_sims
 
 
-# Example: sigma1/sigma2 = 1/2, n1 = n2 = 10
+# 표준편차가 두 배나 차이 나는데도 n=10 이면 검정력이 절반에 못 미친다.
+# 분산에 대한 검정이 평균에 대한 검정보다 훨씬 무딘 까닭은, 분산의
+# 표집분포가 그만큼 넓게 퍼져 있기 때문이다.
 power = estimate_power(n1=10, n2=10, sigma1=1.0, sigma2=2.0,
                        n_sims=5000, alpha=0.05)
 se = np.sqrt(power * (1 - power) / 5000)
@@ -81,9 +89,17 @@ print(f"Estimated power: {power:.3f} (SE: {se:.3f})")
 Estimated power: 0.506 (SE: 0.007)
 ```
 
+</div>
+
 검정력이 표본크기에 따라 어떻게 변하는지 살펴보려면
 
+<div class="codebox" markdown>
+
+**예제 2.** 표본크기에 따른 검정력
+
 ```python
+# 이번에는 차이를 1.5 배로 줄이고 n 을 키워 간다. 쓸 만한 검정력을 얻으려면
+# 표본이 얼마나 필요한지가 드러난다.
 for n in [10, 20, 30, 50, 100]:
     pw = estimate_power(n1=n, n2=n, sigma1=1.0, sigma2=1.5, n_sims=3000)
     print(f"n1=n2={n:3d}: power = {pw:.3f}")
@@ -98,6 +114,8 @@ n1=n2= 30: power = 0.573
 n1=n2= 50: power = 0.809
 n1=n2=100: power = 0.977
 ```
+
+</div>
 
 ## 해석
 

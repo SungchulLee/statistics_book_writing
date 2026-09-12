@@ -59,20 +59,23 @@ $k = 3$이고 $\alpha = 0.05$이면 $\chi^2_{0.95, 2} = 5.991$이다.
 
 Bartlett 검정은 정규성 가정의 위반에 로버스트하지 않다. 자료가 정규분포를 따르지 않으면 Levene 검정이나 Brown-Forsythe 검정 같은 대안을 고려해야 한다. 얼마나 심각한지는 15.4절의 [비정규성 아래의 한계](limitations.md)에서 수치로 다룬다.
 
-## Python 구현
-
 ### SciPy 이용
+
+<div class="codebox" markdown>
+
+**예제 1.** Bartlett 검정
 
 ```python
 import numpy as np
 from scipy.stats import bartlett
 
-# Example data
+# 평균은 크게 다르지만 퍼짐은 비슷한 세 집단이다.
 group1 = [12, 15, 14, 10, 13, 14, 12, 11]
 group2 = [22, 25, 20, 18, 24, 23, 19, 21]
 group3 = [32, 35, 34, 30, 33, 34, 32, 31]
 
-# Perform Bartlett's test
+# Bartlett 검정은 가능도비 검정에서 나온 것이라 정규모집단에서 검정력이
+# 가장 높다. 대신 정규성이 깨지면 오류율이 크게 부풀어 오른다.
 statistic, p_value = bartlett(group1, group2, group3)
 
 # Output the results
@@ -95,9 +98,15 @@ P-value: 0.5202
 Fail to reject H0: no significant difference in variances.
 ```
 
+</div>
+
 세 집단의 표본분산은 $2.839$, $6.000$, $2.839$이다. 최대·최소 비가 $2.1$로 꽤 크지만 각 집단 $n = 8$로는 유의하지 않다.
 
 ### 직접 계산
+
+<div class="codebox" markdown>
+
+**예제 2.** 통계량을 정의대로 구하기
 
 ```python
 import numpy as np
@@ -108,7 +117,8 @@ group1 = np.array([12, 15, 14, 10, 13, 14, 12, 11])
 group2 = np.array([22, 25, 20, 18, 24, 23, 19, 21])
 group3 = np.array([32, 35, 34, 30, 33, 34, 32, 31])
 
-# Step 1: Calculate variances for each group
+# 아래는 위 한 줄을 정의대로 풀어 쓴 것이다. 통계량이 어떻게 만들어지는지
+# 보이려는 것이지, 실제로 이렇게 쓰라는 뜻은 아니다.
 variance_group1 = group1.var(ddof=1)
 variance_group2 = group2.var(ddof=1)
 variance_group3 = group3.var(ddof=1)
@@ -118,7 +128,7 @@ sample_size1 = group1.size
 sample_size2 = group2.size
 sample_size3 = group3.size
 
-# Step 3: Calculate pooled variance
+# 귀무가설 아래에서의 공통 분산. 자유도로 가중한 평균이다.
 total_sample_size = sample_size1 + sample_size2 + sample_size3
 number_of_groups = 3
 degrees_of_freedom_pooled = total_sample_size - number_of_groups
@@ -129,7 +139,9 @@ pooled_variance = (
     ((sample_size3 - 1) * variance_group3)
 ) / degrees_of_freedom_pooled
 
-# Step 4: Calculate the numerator (logarithmic terms)
+# 분자는 "합동분산의 로그"와 "각 분산 로그의 가중평균"의 차이다.
+# 산술평균과 기하평균의 차이인 셈이라, 분산이 고르면 0 에 가깝고
+# 들쭉날쭉하면 커진다.
 numerator = (
     (total_sample_size - number_of_groups) * np.log(pooled_variance) -
     ((sample_size1 - 1) * np.log(variance_group1) +
@@ -137,7 +149,7 @@ numerator = (
      (sample_size3 - 1) * np.log(variance_group3))
 )
 
-# Step 5: Calculate the denominator (correction term)
+# 분모는 작은 표본에서 카이제곱 근사를 바로잡는 보정항이다.
 correction_term = (
     (1 / (sample_size1 - 1)) +
     (1 / (sample_size2 - 1)) +
@@ -168,6 +180,8 @@ Numerator: 1.3900, Correction denominator: 1.0635
 Bartlett's Test Statistic (T): 1.3070
 P-value: 0.5202
 ```
+
+</div>
 
 SciPy 결과와 정확히 일치한다. 보정인자가 $1.0635$로 통계량을 약 6% 줄인다는 점도 확인할 수 있다.
 

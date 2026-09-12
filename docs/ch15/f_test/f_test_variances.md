@@ -40,7 +40,9 @@ $$
 
 여기서 $F_{F\text{-dist}}$는 $F(n_1-1, n_2-1)$의 CDF이다. $p < \alpha$이면 $H_0$을 기각한다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** F 검정 구현
 
 ```python
 import numpy as np
@@ -48,11 +50,13 @@ import scipy.stats as stats
 
 
 def f_test(data_0, data_1):
-    """
-    Two-sample F-test for equality of variances.
+    """두 분산이 같은지 검정하는 이표본 F 검정.
 
     H0: sigma_1^2 = sigma_2^2
     H1: sigma_1^2 != sigma_2^2
+
+    두 표본분산의 비가 F 분포를 따른다는 사실을 쓴다. 이 사실 자체가
+    정규성에서 나오므로, 정규가 아니면 검정 전체가 무너진다.
     """
     statistic = data_0.var(ddof=1) / data_1.var(ddof=1)
     df1 = data_0.shape[0] - 1
@@ -64,9 +68,17 @@ def f_test(data_0, data_1):
     return statistic, p_value
 ```
 
+</div>
+
 다음 예제는 두 번째 표본의 표준편차를 점점 키우면서 F 검정을 적용한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 분산 차이를 키워 가며
+
 ```python
+# 표준편차 차이를 키워 가며 검정력을 눈으로 본다. 앞의 Bartlett·Levene 과
+# 같은 설정이므로 세 검정의 p-값을 견줄 수 있다.
 size, seed = 100, 1
 x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
 
@@ -85,6 +97,8 @@ sigma_y=1.10  F=0.8264  p=0.345
 sigma_y=1.15  F=0.7561  p=0.166
 sigma_y=1.20  F=0.6944  p=0.071
 ```
+
+</div>
 
 !!! warning "이 예제는 표집변동을 완전히 제거한다"
     `x`와 `y`가 **같은 `random_state=seed`**를 쓰므로 두 표본이 독립이 아니다. $y = 1 + \text{scale} \times z$이고 $x = z$인 동일한 표준정규 추출값 $z$를 공유한다.

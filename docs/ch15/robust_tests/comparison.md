@@ -109,24 +109,28 @@ Bartlett의 겉보기 높은 기각률은 오도적이다. 제1종 오류율이 
 
 네 검정 모두 Python의 SciPy에서 쓸 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 네 검정을 한자리에서
+
 ```python
 from scipy import stats
 
-# Example groups
+# 2번 집단만 퍼짐이 크다. 네 검정이 이것을 어떻게 보는지 견준다.
 g1 = [10, 12, 14, 11, 13, 15, 12, 10]
 g2 = [20, 28, 22, 35, 25, 18, 30, 22]
 g3 = [15, 16, 14, 17, 15, 16, 13, 14]
 
-# Bartlett's test
+# Bartlett — 정규모집단에서 검정력이 가장 높고, 벗어나면 가장 취약하다.
 stat_b, p_b = stats.bartlett(g1, g2, g3)
 
-# Levene's test (mean)
+# Levene(평균 중심) — 원래 형태. 어느 정도 로버스트하다.
 stat_l, p_l = stats.levene(g1, g2, g3, center='mean')
 
-# Brown-Forsythe test (median)
+# Brown-Forsythe(중앙값 중심) — 실무에서 가장 두루 권하는 선택이다.
 stat_bf, p_bf = stats.levene(g1, g2, g3, center='median')
 
-# Fligner-Killeen test
+# Fligner-Killeen — 순위만 쓰므로 가장 로버스트하지만 검정력은 조금 낮다.
 stat_fk, p_fk = stats.fligner(g1, g2, g3)
 
 print(f"Bartlett:        stat={stat_b:.3f}, p={p_b:.4f}")
@@ -143,6 +147,8 @@ Levene (mean):   stat=8.202, p=0.0023
 Brown-Forsythe:  stat=6.609, p=0.0059
 Fligner-Killeen: stat=9.563, p=0.0084
 ```
+
+</div>
 
 네 검정 모두 강하게 기각한다. 표본분산이 $3.27$, $32.29$, $1.71$로 집단 2가 집단 3의 19배이기 때문이다. 이탈이 뚜렷하면 검정 선택이 결론을 바꾸지 않는다. **선택이 중요해지는 것은 경계선상의 사례에서다.**
 

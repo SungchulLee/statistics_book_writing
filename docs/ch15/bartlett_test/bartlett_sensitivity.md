@@ -22,7 +22,9 @@ $$
 
 올바르게 보정되어 있다면 모든 검정이 약 5%로 기각해야 한다.
 
-## 코드
+<div class="codebox" markdown>
+
+**예제 1.** 치우친 자료에서의 거짓 양성률
 
 ```python
 import numpy as np
@@ -32,7 +34,11 @@ rng = np.random.default_rng(0)
 
 
 def simulate_once(n=20, sigmas=(1.0, 1.0, 1.0), skew=True):
-    """Generate k groups from lognormal (skewed) or normal."""
+    """치우친 로그정규 또는 정규에서 k 개 집단을 만든다.
+
+    셋 다 같은 sigma 를 주므로 분산은 참으로 같다. 그런데도 자료가
+    치우쳐 있으면 검정이 기각해 버리는지를 보려는 것이다.
+    """
     if skew:
         groups = [rng.lognormal(mean=0.0, sigma=s, size=n) for s in sigmas]
     else:
@@ -41,7 +47,7 @@ def simulate_once(n=20, sigmas=(1.0, 1.0, 1.0), skew=True):
 
 
 def trial(n=20, sigmas=(1.0, 1.0, 1.0), skew=True):
-    """Run all three tests on one simulated dataset."""
+    """한 벌의 모의자료에 세 검정을 모두 돌린다."""
     g1, g2, g3 = simulate_once(n=n, sigmas=sigmas, skew=skew)
     _, p_bartlett = bartlett(g1, g2, g3)
     _, p_levene = levene(g1, g2, g3, center='mean')
@@ -49,7 +55,8 @@ def trial(n=20, sigmas=(1.0, 1.0, 1.0), skew=True):
     return p_bartlett, p_levene, p_fligner
 
 
-# Run simulation
+# 분산이 참으로 같으므로, 아래 비율은 모두 0.05 근처여야 옳다.
+# Bartlett 만 크게 벗어난다면 그것이 이 검정의 약점이다.
 n_sims, alpha = 5000, 0.05
 ps_b, ps_lv, ps_fl = [], [], []
 
@@ -77,6 +84,8 @@ False-positive rates under skewed (lognormal) data:
   Levene (mean)  : 0.2470
   Fligner-Killeen: 0.1028
 ```
+
+</div>
 
 ## 해석
 

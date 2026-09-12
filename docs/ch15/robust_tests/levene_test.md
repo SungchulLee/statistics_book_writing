@@ -41,14 +41,17 @@ $$
 
     **SciPy의 `stats.levene`은 기본값이 `center='median'`, 곧 Brown-Forsythe이다.** 원래의 Levene 검정을 쓰려면 `center='mean'`을 명시해야 한다.
 
-## 코드
-
 SciPy는 `scipy.stats.levene`을 직접 제공한다.
+
+<div class="codebox" markdown>
+
+**예제 1.** 분산 차이를 키워 가며
 
 ```python
 import numpy as np
 import scipy.stats as stats
 
+# 앞의 Bartlett·F 검정과 같은 설정이다. 세 검정의 p-값을 견줄 수 있다.
 size, seed = 100, 1
 x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
 
@@ -68,15 +71,23 @@ sigma_y=1.15  W=1.6657  p=0.198
 sigma_y=1.20  W=2.8187  p=0.095
 ```
 
+</div>
+
 `center` 인자가 중심화 방식을 조절한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 두 판본의 차이
+
 ```python
-# Brown-Forsythe variant (median-centred) -- SciPy's DEFAULT
+# 중앙값 중심 — Brown-Forsythe 이며 scipy 의 기본값이다.
 stat, pval = stats.levene(x, y, center='median')
 
-# Original Levene (mean-centred)
+# 평균 중심 — Levene 의 원래 형태. center 를 명시해야 이쪽이 된다.
 stat, pval = stats.levene(x, y, center='mean')
 ```
+
+</div>
 
 !!! danger "`center='trimmed'`는 권하지 않는다"
     SciPy는 10% 절사평균 중심화도 제공하지만, 15.5절 [Brown-Forsythe 검정](./brown_forsythe.md)에서 측정했듯 **완전한 정규 자료에서도 제1종 오류율이 0.12~0.19까지 부풀려진다.**

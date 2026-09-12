@@ -89,13 +89,16 @@ $$
 
     **5단계.** 이 편차들에 분산분석 공식을 적용해 $W^*$를 계산하고 $F_{0.95,\, 2,\, 12} = 3.885$와 비교한다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** Brown-Forsythe 검정과 세 방법 비교
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Group data
+# 2번 집단만 유난히 퍼져 있다. 5 와 30 처럼 멀리 떨어진 값이 섞여 있어
+# 평균 중심 방법이 흔들리기 좋은 자료다.
 group1 = [8, 10, 12, 9, 11]
 group2 = [5, 30, 18, 22, 15]
 group3 = [14, 16, 15, 17, 14]
@@ -103,15 +106,17 @@ group3 = [14, 16, 15, 17, 14]
 print("variances:", [round(np.var(g, ddof=1), 2)
                      for g in (group1, group2, group3)])
 
-# Brown-Forsythe test (Levene's test with center='median')
+# Brown-Forsythe 는 각 값에서 제 집단의 중앙값을 뺀 절대편차에 분산분석을
+# 돌린다. 중심을 평균이 아니라 중앙값으로 잡는 것이 전부인데, 그 한 가지
+# 차이로 치우친 자료와 이상치에 훨씬 잘 버틴다.
 stat, p_value = stats.levene(group1, group2, group3, center='median')
 print(f"Brown-Forsythe W*:      {stat:.4f}, p = {p_value:.4f}")
 
-# Original Levene for comparison
+# 원래 Levene 은 평균을 중심으로 쓴다. 이상치에 끌려간다.
 s_m, p_m = stats.levene(group1, group2, group3, center='mean')
 print(f"Levene (mean-centered): {s_m:.4f}, p = {p_m:.4f}")
 
-# Bartlett for comparison
+# Bartlett 은 정규성을 전제하므로 이런 자료에서 가장 많이 어긋난다.
 s_b, p_b = stats.bartlett(group1, group2, group3)
 print(f"Bartlett:               {s_b:.4f}, p = {p_b:.6f}")
 ```
@@ -124,6 +129,8 @@ Brown-Forsythe W*:      4.0754, p = 0.0446
 Levene (mean-centered): 4.0610, p = 0.0450
 Bartlett:               15.3946, p = 0.000454
 ```
+
+</div>
 
 !!! note "이 예제에서는 중앙값과 평균의 차이가 없다"
     집단 2의 중앙값과 평균이 모두 **18**로 우연히 일치한다($\{5,15,18,22,30\}$의 평균 = $90/5$ = 18). 그래서 Brown-Forsythe($4.0754$)와 Levene($4.0610$)의 결과가 사실상 같다. 이 자료는 중앙값 중심화의 이점을 보여주지 못한다. 이점이 실제로 드러나는 상황은 연습문제 2에서 다룬다.

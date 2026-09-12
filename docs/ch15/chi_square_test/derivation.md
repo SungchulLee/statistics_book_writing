@@ -106,27 +106,30 @@ $$
 
     유의수준 5%에서 모분산이 15와 다르다고 결론지을 만한 증거가 충분하지 않다($p = 0.429$).
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 요약값으로 하는 분산 검정
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Sample data
 n = 21
 s_squared = 18.5
 sigma_0_squared = 15
 alpha = 0.05
 
-# Test statistic
+# (n-1)S^2/sigma_0^2 은 귀무가설이 참일 때 자유도 n-1 인 카이제곱을 따른다.
+# 이 검정은 정규성에 매우 민감하다 — 평균에 대한 t 검정과 달리 중심극한정리의
+# 보호를 받지 못하기 때문이다.
 chi2_stat = (n - 1) * s_squared / sigma_0_squared
 
-# Critical values (two-tailed)
+# 좌우가 대칭이 아니므로 양쪽 기각값을 따로 구한다.
 df = n - 1
 chi2_lower = stats.chi2.ppf(alpha / 2, df)
 chi2_upper = stats.chi2.ppf(1 - alpha / 2, df)
 
-# p-value (two-tailed)
+# 양측 p-값은 두 꼬리 넓이 중 작은 쪽을 두 배 한다.
 p_value = 2 * min(stats.chi2.cdf(chi2_stat, df), stats.chi2.sf(chi2_stat, df))
 
 print(f"Test statistic: {chi2_stat:.3f}")
@@ -147,6 +150,8 @@ Critical values: [9.591, 34.170]
 P-value: 0.4290
 Fail to reject H0: insufficient evidence of a difference.
 ```
+
+</div>
 
 
 ## 연습문제

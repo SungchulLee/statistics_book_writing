@@ -95,14 +95,20 @@
 
     **3단계.** Brown-Forsythe 검정이 기각하지 못하면($p > 0.05$) 표준 일원분산분석을, 기각하면($p \le 0.05$) Welch 분산분석을 수행한다.
 
-## Python 구현
+<div class="codebox" markdown>
+
+**예제 1.** 사전검정을 거치는 절차의 문제
 
 ```python
 import numpy as np
 from scipy import stats
 
 def welch_anova(groups):
-    """Welch's one-way ANOVA. Returns (F, df1, df2, p)."""
+    """Welch 의 일원배치 분산분석. (F, df1, df2, p) 를 돌려준다.
+
+    등분산을 가정하지 않는다. 집단마다 분산의 역수로 가중해 평균을 내고,
+    분모 자유도를 실수로 조정한다.
+    """
     k = len(groups)
     n = np.array([len(g) for g in groups])
     m = np.array([g.mean() for g in groups])
@@ -115,7 +121,7 @@ def welch_anova(groups):
     df2 = 1 / (3 * lam)
     return F, k - 1, df2, stats.f.sf(F, k - 1, df2)
 
-# Simulated group data
+# 네 집단 모두 표준편차가 5 로 같다. 곧 등분산이 참인 자료다.
 rng = np.random.default_rng(42)
 g1 = rng.normal(50, 5, size=15)
 g2 = rng.normal(55, 5, size=15)
@@ -123,11 +129,14 @@ g3 = rng.normal(52, 5, size=15)
 g4 = rng.normal(48, 5, size=15)
 groups = [g1, g2, g3, g4]
 
-# Step 1: Brown-Forsythe pre-test
+# 1단계: 등분산 사전검정. 그런데 이 절차 자체가 문제를 안고 있다.
+# 자료를 보고 다음 검정을 고르면, 최종 결과의 제1종 오류율이 명목수준을
+# 넘어선다. 사전검정 없이 처음부터 Welch 를 쓰라는 권고가 나오는 까닭이다.
 bf_stat, bf_p = stats.levene(*groups, center='median')
 print(f"Brown-Forsythe: W = {bf_stat:.4f}, p = {bf_p:.4f}")
 
-# Step 2: both ANOVAs, for comparison
+# 2단계: 두 분산분석을 모두 돌려 견준다. 등분산이 참인 자료에서는
+# Welch 가 잃는 것이 거의 없다. 그래서 그냥 Welch 를 쓰면 된다.
 f_std, p_std = stats.f_oneway(*groups)
 f_w, df1, df2, p_w = welch_anova(groups)
 print(f"Standard ANOVA: F = {f_std:.4f}, p = {p_std:.6f}")
@@ -142,6 +151,8 @@ Brown-Forsythe: W = 0.4728, p = 0.7025
 Standard ANOVA: F = 8.1365, p = 0.000138
 Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
 ```
+
+</div>
 
 자료를 등분산으로 생성했으므로 Brown-Forsythe가 기각하지 않고($p = 0.70$) 두 분산분석의 결과도 사실상 같다($p = 0.000138$ 대 $0.000112$). Welch의 분모 자유도가 $44$에서 $30.81$로 줄었는데도 결론이 바뀌지 않는다.
 

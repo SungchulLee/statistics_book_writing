@@ -41,15 +41,19 @@ $$
 - **표본분산과의 관계**: $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$이다.
 - **중심극한정리 근사**: $d$가 크면 $\chi^2(d) \approx N(d, 2d)$이다.
 
-## 코드
-
 ### PDF와 CDF
+
+<div class="codebox" markdown>
+
+**예제 1.** 카이제곱 분포의 밀도와 분포함수
 
 ```python
 import numpy as np
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 
+# 자유도 5 인 카이제곱의 밀도와 분포함수. 0 이상에서만 정의되고
+# 오른쪽으로 길게 늘어져 있다.
 df = 5
 x = np.linspace(0, 30, 300)
 
@@ -62,23 +66,31 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![자유도 5인 카이제곱 분포의 PDF와 CDF](./img/chi_square_distribution_44.png)
 
 ### 표집과 정규분포로부터의 구성
 
 다음 코드는 $\chi^2(d)$에서 직접 표집한 결과와 표준정규 제곱 $d$개의 합을 비교하여 정의를 확인한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 정규 제곱합으로 만들어 보기
+
 ```python
 df, seed = 5, 1
 
-# Direct sampling
+# 방법 1: scipy 의 생성기를 그대로 쓴다.
 data_direct = stats.chi2(df=df).rvs(10_000, random_state=seed)
 
-# Construction: sum of d squared standard normals
+# 방법 2: 정의를 그대로 실행한다. 표준정규 d 개를 제곱해 더하면
+# 자유도 d 인 카이제곱이 된다. 표본분산의 분포가 카이제곱이 되는 까닭도
+# 결국 이 구성에 있다.
 z = stats.norm().rvs(size=(df, 10_000), random_state=seed)
 data_constructed = np.sum(z ** 2, axis=0)
 
-# Both histograms should match the theoretical PDF
+# 두 히스토그램이 같은 이론 곡선에 얹히는지 확인한다.
 bins = np.linspace(0, 25, 80)
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 3))
 for ax, data, title in [
@@ -91,6 +103,8 @@ for ax, data, title in [
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![직접 표집과 $Z^2$ 합 구성의 비교](./img/chi_square_distribution_65.png)
 
