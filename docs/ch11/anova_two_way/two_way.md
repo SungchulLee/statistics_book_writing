@@ -209,7 +209,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 두 요인: 교육 방식(온라인 대 대면) × 경력(주니어 대 시니어), 칸당 $n = 4$. 칸 평균: 12.5, 18.5, 15.0, 22.5. (a)–(d) 이원배치 분산분석을 수행하라.
 
 </div>
@@ -235,7 +235,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **교호작용의 해석.** 교호작용이 유의하면 주변 효과에 어떤 의미가 있는가?
 
 </div>
@@ -258,7 +258,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **교차 설계와 내포 설계.**
 
 </div>
@@ -274,7 +274,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **고차 교호작용.** 삼원 분산분석에는 주효과, 2원 교호작용, 3원 교호작용이 있다. 3원 교호작용은 무엇을 뜻하는가?
 
 </div>
@@ -293,7 +293,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 불균형 설계의 **제I·II·III형 제곱합**.
 
 </div>
@@ -311,7 +311,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **이원배치와 일원배치 두 번의 비교.** 두 요인을 함께 연구할 때 이원배치가 선호되는 이유는?
 
 </div>

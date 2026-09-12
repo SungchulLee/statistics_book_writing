@@ -287,7 +287,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
 <div class="probox" markdown>
 
-**문제 1.**
+**문제 1.** <span class="diff easy" title="쉬움"></span>
 
 서로 다른 음료를 마신 뒤의 반응시간(밀리초)을 측정한 세 집단이 있다고 하자: **물**, **에너지 드링크**, **커피**. 이 집단들 사이에 반응시간의 통계적으로 유의한 차이가 있는지 판정하려 한다.
 
@@ -754,7 +754,7 @@ p-value: 0.3673
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 세 집단의 시험 점수: 오전 $\bar Y = 88.6$, 오후 $79.4$, 저녁 $94.2$ (각 5명). 전체 평균 87.4. (a)–(e): $\alpha = 0.05$에서 분산분석을 수행하라.
 
 </div>
@@ -776,7 +776,7 @@ p-value: 0.3673
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **왜 쌍별 $t$-검정이 아니라 분산분석인가?**
 
 </div>
@@ -795,7 +795,7 @@ p-value: 0.3673
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **분산분석의 가정.** 나열하고 로버스트성을 논하라.
 
 </div>
@@ -815,7 +815,7 @@ p-value: 0.3673
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 **분산분석의 효과크기.** 연습문제 1에 대해 $\eta^2$과 $\omega^2$을 계산하라.
 
 </div>
@@ -837,7 +837,7 @@ p-value: 0.3673
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **일원배치와 이원배치 분산분석**의 직관.
 
 </div>
@@ -857,7 +857,7 @@ p-value: 0.3673
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 일원배치 분산분석의 **검정력 분석**.
 
 </div>

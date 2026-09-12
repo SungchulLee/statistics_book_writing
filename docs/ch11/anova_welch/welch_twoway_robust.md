@@ -115,7 +115,7 @@ Residual                      25.000000  9.0    NaN       NaN
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 표준오차가 틀리게 되는데도 이분산 아래에서 OLS 계수 추정값이 여전히 불편인 이유를 설명하라. OLS의 어떤 성질이 쓰이는가?
 
 </div>
@@ -131,7 +131,7 @@ Residual                      25.000000  9.0    NaN       NaN
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 수준이 High, Low, Medium(Low가 기준)인 모형에서 Temperature의 주효과를 검정하기 위한 제약행렬 $R$을 써라. $R$의 행은 몇 개인가?
 
 </div>
@@ -153,7 +153,7 @@ Residual                      25.000000  9.0    NaN       NaN
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 HC3는 $(1 - h_{ii})^2$으로 나누고 HC2는 $(1 - h_{ii})$로 나눈다. $(1 - h_{ii})^2$ 보정의 직관과 그것이 소표본 성능을 개선하는 이유를 설명하라.
 
 </div>
@@ -169,7 +169,7 @@ HC3는 $(1 - h_{ii})^2$으로 나누고 HC2는 $(1 - h_{ii})$로 나눈다. $(1 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 예제 코드의 설계는 칸당 관측값이 $n = 1$뿐이다($3 \times 3$ 설계에 관측값 9개, 모수 9개). 이 경우 HC3 추정량이 왜 문제가 되는지 설명하고 믿을 만한 추론을 위한 최소 칸 크기를 제안하라.
 
 </div>
@@ -183,7 +183,7 @@ HC3는 $(1 - h_{ii})^2$으로 나누고 HC2는 $(1 - h_{ii})$로 나눈다. $(1 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 이분산 아래에서 HC3 샌드위치 추정량이 $\text{Var}(\hat{\boldsymbol{\beta}})$에 대해 일치성을 가짐을, 즉 $n \to \infty$일 때 OLS 추정량의 참 분산으로 수렴함을 증명하라.
 
 </div>

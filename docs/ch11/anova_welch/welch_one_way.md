@@ -78,7 +78,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 분산이 다른 경우의 Welch 분산분석.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산이 다른 경우의 Welch 분산분석.
 
 </div>
 
@@ -153,7 +153,7 @@ Welch 분산분석은 등분산 가정이 어긋날 때 평균을 비교하도�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 세 가지 투자 전략을 월 수익률(%)로 비교한다. 자료는 다음과 같다:
 
 | 전략 | $n$ | $\bar{Y}$ | $s^2$ |

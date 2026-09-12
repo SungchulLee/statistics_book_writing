@@ -100,7 +100,7 @@ Scheffé 방법은 더 넓은 대비의 족에 대해 오류를 통제하므로 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 집단 $k = 4$개, 집단당 $n_i = 15$인 일원배치 분산분석에서 $MSW = 12.3$을 얻었다. $\alpha = 0.05$의 스튜던트화 범위 임계값은 $q_{0.05,4,56} = 3.74$이다. Tukey HSD 문턱을 계산하고 평균 차이 $\bar{y}_1 - \bar{y}_3 = 3.5$가 유의한지 판정하라.
 
 </div>
@@ -116,7 +116,7 @@ Scheffé 방법은 더 넓은 대비의 족에 대해 오류를 통제하므로 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 연구자가 ($k = 4$개 집단에서 나오는) $m = 6$개의 쌍별 비교를 가족단위 $\alpha = 0.05$의 Bonferroni 방법으로 수행하려 한다. 보정 전 $p$-값은 $0.003, 0.012, 0.041, 0.078, 0.210, 0.530$이다. Bonferroni에서 유의한 비교는 무엇인가? Holm-Bonferroni 단계적 하강 절차에서는 어떤 비교가 추가로 유의해지는가?
 
 </div>
@@ -144,7 +144,7 @@ Scheffé 방법은 더 넓은 대비의 족에 대해 오류를 통제하므로 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $k = 2$일 때 Tukey HSD 검정이 이표본 $t$-검정과 동치임을 보여라. 구체적으로 $\nu = N - 2$일 때 $q_{\alpha,2,\nu}^2 = 2\, F_{\alpha,1,\nu}$임을 증명하라.
 
 </div>
@@ -166,7 +166,7 @@ $k = 2$일 때 Tukey HSD 검정이 이표본 $t$-검정과 동치임을 보여�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 쌍별 비교에서 Scheffé 방법이 Tukey의 HSD보다 보수적이면서도 Tukey가 탐지할 수 없는 효과를 탐지할 수 있는 이유를 설명하라. Scheffé로는 검정할 수 있고 Tukey로는 할 수 없는 대비의 구체적인 예를 들어라.
 
 </div>
@@ -184,7 +184,7 @@ $k = 2$일 때 Tukey HSD 검정이 이표본 $t$-검정과 동치임을 보여�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 Bonferroni 보정이 가족단위 오류율을 수준 $\alpha$로 통제함을 증명하라. 즉 $m$개의 검정을 각각 수준 $\alpha/m$에서 수행하면 $P(H_0 \text{ 아래에서 거짓 기각이 적어도 하나}) \le \alpha$임을 보여라.
 
 </div>

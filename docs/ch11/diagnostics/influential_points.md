@@ -208,7 +208,7 @@ max    5.000000e-02   0.505775   1.736734       7.570250
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 집단이 셋이고 각각 $n = 10$인 일원배치 분산분석에서 어떤 관측값의 Cook의 거리가 $D_i = 1.2$이다. 흔히 쓰는 문턱은 $D_i > 4/N$이다. 이 점이 영향점인지 판정하고 Cook의 거리가 무엇을 재는지 설명하라.
 
 </div>
@@ -220,7 +220,7 @@ max    5.000000e-02   0.505775   1.736734       7.570250
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 분산분석의 맥락에서 이상점, 지렛점, 영향점을 구별하라. 지렛값은 크지만 영향점이 아닌 예를 들어라.
 
 </div>
@@ -235,7 +235,7 @@ max    5.000000e-02   0.505775   1.736734       7.570250
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 집단 B의 어떤 관측값에서 DFFITS 값이 $2\sqrt{p/n}$을 넘었다. DFFITS가 무엇을 재는지, Cook의 거리와 어떻게 다른지 설명하라.
 
 </div>

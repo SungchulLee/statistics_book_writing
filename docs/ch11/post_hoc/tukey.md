@@ -508,7 +508,7 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 운동: HIIT $\bar Y = 8.8$, 근력 $6.4$, 요가 $4.4$, 각 $n = 5$, $\mathrm{MSW} = 1.43$. (a) 전체 분산분석. (b) Tukey HSD. (c) 해석.
 
 </div>
@@ -528,7 +528,7 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **Bonferroni 쌍별 t-검정 대신 Tukey HSD를 쓰는 이유는?**
 
 </div>
@@ -547,7 +547,7 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **다른 사후검정들.** Bonferroni, Scheffé, Dunnett을 간략히 설명하라.
 
 </div>
@@ -569,7 +569,7 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **가족단위 오류와 비교단위 오류.**
 
 </div>
@@ -585,7 +585,7 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **스튜던트화 범위 분포.** 간단히 소개하라.
 
 </div>
@@ -604,7 +604,7 @@ group1 group2 meandiff p-adj  lower   upper  reject
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **불균형 설계**와 Tukey.
 
 </div>

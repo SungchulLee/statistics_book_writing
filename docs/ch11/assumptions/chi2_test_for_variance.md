@@ -113,7 +113,7 @@ p-값이 단조롭지 않다는 점이 눈에 띈다. $\sigma_Y$가 1.00일 때 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $n = 25$개의 측정에서 $S^2 = 12.5$를 얻었다. $\alpha = 0.05$에서 $H_0: \sigma^2 = 10$을 검정하라. 검정통계량을 계산하고 결론을 진술하라.
 
 </div>
@@ -129,7 +129,7 @@ $n = 25$개의 측정에서 $S^2 = 12.5$를 얻었다. $\alpha = 0.05$에서 $H_
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 추축량 $T = (n-1)S^2 / \sigma^2$을 써서 $\sigma^2$에 대한 $(1 - \alpha)$ 신뢰구간을 유도하라.
 
 </div>
@@ -151,7 +151,7 @@ $n = 25$개의 측정에서 $S^2 = 12.5$를 얻었다. $\alpha = 0.05$에서 $H_
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 양측 p-값이 단순히 $2 \cdot P(\chi^2_{n-1} \ge T)$가 아니라 $2\min(\cdot, \cdot)$을 쓰는 이유를 설명하라.
 
 </div>
@@ -163,7 +163,7 @@ $n = 25$개의 측정에서 $S^2 = 12.5$를 얻었다. $\alpha = 0.05$에서 $H_
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 어떤 공장이 목표 분산 $\sigma_0^2 = 0.04 \text{ mm}^2$으로 볼트를 생산한다. 볼트 $n = 50$개의 표본에서 $S^2 = 0.06 \text{ mm}^2$을 얻었다. 공장은 기계를 재보정해야 하는가? $\alpha = 0.01$을 쓰라.
 
 </div>
@@ -179,7 +179,7 @@ $n = 25$개의 측정에서 $S^2 = 12.5$를 얻었다. $\alpha = 0.05$에서 $H_
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 이 검정은 정규성을 가정한다. 바탕 분포의 초과 첨도가 $\kappa > 0$일 때 제1종 오류율이 어떻게 되는지 기술하고 대안을 제시하라.
 
 </div>

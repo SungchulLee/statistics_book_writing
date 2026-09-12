@@ -50,7 +50,7 @@ F-검정통계량이 귀무가설 아래에서 정확히 $F$-분포를 따르는
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 일원배치 분산분석의 표준적인 세 가정을 나열하고, 각각이 어긋나면 F-검정에 무슨 일이 생기는지 설명하라.
 
 </div>
@@ -66,7 +66,7 @@ F-검정통계량이 귀무가설 아래에서 정확히 $F$-분포를 따르는
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 분산의 동질성에 대한 Levene 검정이 p-값 0.02를 주었다. 표준 분산분석을 그대로 진행해야 하는가? 대안을 제시하라.
 
 </div>
@@ -82,7 +82,7 @@ F-검정통계량이 귀무가설 아래에서 정확히 $F$-분포를 따르는
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 표본이 크고 균형 잡혀 있을 때 분산분석이 정규성 가정의 완만한 위반에 로버스트하다고 보는 이유를 설명하라.
 
 </div>
@@ -98,7 +98,7 @@ F-검정통계량이 귀무가설 아래에서 정확히 $F$-분포를 따르는
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 분산분석 모형을 적합한 뒤 잔차 그림으로 정규성과 등분산성 가정을 평가하는 방법을 기술하라.
 
 </div>

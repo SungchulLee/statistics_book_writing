@@ -85,7 +85,7 @@ sigma_y=1.20: chi2=3.26, p=0.071
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 $n_1 = n_2 = 50$인 두 집단에서 $S_1^2 = 4.0$, $S_2^2 = 6.0$일 때 합동분산 $S_p^2$을 계산하라.
 
 </div>
@@ -101,7 +101,7 @@ $n_1 = n_2 = 50$인 두 집단에서 $S_1^2 = 4.0$, $S_2^2 = 6.0$일 때 합동�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Bartlett 검정이 비정규성에 민감한 이유를 설명하라. 로그 분산의 어떤 성질이 검정을 취약하게 만드는가?
 
 </div>
@@ -111,7 +111,7 @@ Bartlett 검정이 비정규성에 민감한 이유를 설명하라. 로그 분�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 집단이 $k = 3$개일 때 $H_0$ 아래 Bartlett 검정통계량의 자유도를 진술하고 $\alpha = 0.05$의 임계값을 구하라.
 
 </div>
@@ -127,7 +127,7 @@ Bartlett 검정이 비정규성에 민감한 이유를 설명하라. 로그 분�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 동료가 (오른쪽으로 심하게 치우친) 소득 자료 세 집단에 Bartlett 검정을 적용해 $p = 0.02$를 얻고 집단 분산이 다르다고 결론지었다. 이 분석을 비평하라.
 
 </div>
@@ -137,7 +137,7 @@ Bartlett 검정이 비정규성에 민감한 이유를 설명하라. 로그 분�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 Bartlett 통계량 분모의 보정 인자 $C = 1 + \frac{1}{3(k-1)}\!\left(\sum_{i=1}^{k}\frac{1}{\nu_i} - \frac{1}{\sum \nu_i}\right)$를 유도하라. 이 보정이 왜 필요한가?
 
 </div>

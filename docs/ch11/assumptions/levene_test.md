@@ -117,7 +117,7 @@ Levene 검정은 고전적 분산분석을 수행하기 전의 표준적인 사�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $n_1 = n_2 = 50$인 두 집단에서 Levene 검정통계량 $W$가 사실상 변환된 자료 $Z_{ij}$에 적용한 일원배치 분산분석 F-통계량인 이유를 직관적으로 설명하라.
 
 </div>
@@ -129,7 +129,7 @@ $n_1 = n_2 = 50$인 두 집단에서 Levene 검정통계량 $W$가 사실상 변
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 자료에 표본크기 $(15, 15, 15)$인 세 집단이 있고 자료가 근사적으로 정규이다. Levene 검정과 Bartlett 검정 중 무엇을 권하겠는가? 표본크기가 $(15, 15, 200)$이라면?
 
 </div>
@@ -141,7 +141,7 @@ $n_1 = n_2 = 50$인 두 집단에서 Levene 검정통계량 $W$가 사실상 변
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 모든 집단의 모든 관측값이 같은 값을 가지면(즉 집단 내 분산이 0이면) $W = 0$임을 증명하라.
 
 </div>
@@ -163,7 +163,7 @@ $n_1 = n_2 = 50$인 두 집단에서 Levene 검정통계량 $W$가 사실상 변
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 세 집단 비교에서 Levene 검정이 $p = 0.03$을 주었다. 연구자는 고전적 일원배치 분산분석을 진행하여 집단 평균에 대해 $p = 0.04$를 얻었다. 이 접근을 비평하고 대안을 제시하라.
 
 </div>
@@ -175,7 +175,7 @@ $n_1 = n_2 = 50$인 두 집단에서 Levene 검정통계량 $W$가 사실상 변
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 $Z_{ij}$ 값에 적용한 일원배치 분산분석 F-통계량의 성질로부터 $H_0$ 아래 $W$의 근사 분포를 유도하라.
 
 </div>

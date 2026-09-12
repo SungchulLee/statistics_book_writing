@@ -135,7 +135,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 집단이 $k = 3$개, 집단당 $n = 8$인 일원배치 분산분석에서 잔차에 대한 Shapiro-Wilk 검정이 $p = 0.02$를 주었다. 연구자는 분산분석을 포기해야 하는가? 근거를 설명하라.
 
 </div>
@@ -147,7 +147,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 분산분석 잔차의 Q-Q 그림에서 가운데는 기준선을 따르지만 양 꼬리에서 위로 휘는 점들이 보인다. 이 패턴은 잔차 분포에 대해 무엇을 뜻하며 분산분석의 추론에 어떤 영향을 줄 수 있는가?
 
 </div>
@@ -159,7 +159,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 표본이 클 때(예: 집단당 $n \geq 30$) 정규성 가정이 작은 표본에서보다 덜 결정적인 이유를 설명하라. 분산분석의 어떤 결과가 정규성 없이도 유효하고, 어떤 결과가 그렇지 않은가?
 
 </div>

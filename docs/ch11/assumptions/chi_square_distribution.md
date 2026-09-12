@@ -126,7 +126,7 @@ print(f"{'이론값':<12} mean={df:.4f}  var={2*df:.4f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 위 성질 표를 써서 $Q \sim \chi^2(10)$의 $E[Q]$와 $\text{Var}(Q)$를 계산하고, $Z \sim N(0,1)$에 대한 $E[Z^2]$과 $\text{Var}(Z^2)$으로 확인하라.
 
 </div>
@@ -144,7 +144,7 @@ print(f"{'이론값':<12} mean={df:.4f}  var={2*df:.4f}")
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $Z \sim N(0,1)$에 대한 $Z^2$의 적률생성함수에서 시작하여 $\chi^2(d)$의 적률생성함수가 $t < 1/2$에서 $M_Q(t) = (1 - 2t)^{-d/2}$임을 보여라.
 
 </div>
@@ -168,7 +168,7 @@ $Z \sim N(0,1)$에 대한 $Z^2$의 적률생성함수에서 시작하여 $\chi^2
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $Q_1 \sim \chi^2(3)$과 $Q_2 \sim \chi^2(7)$이 독립일 때 $Q_1 + Q_2$의 분포를 구하고 $P(Q_1 + Q_2 > 18.31)$을 계산하라.
 
 </div>
@@ -186,7 +186,7 @@ $Q_1 \sim \chi^2(3)$과 $Q_2 \sim \chi^2(7)$이 독립일 때 $Q_1 + Q_2$의 분
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 자유도 $d = 2$인 카이제곱 분포가 지수분포인 이유를 설명하라. 비율 모수를 밝혀라.
 
 </div>
@@ -202,7 +202,7 @@ $Q_1 \sim \chi^2(3)$과 $Q_2 \sim \chi^2(7)$이 독립일 때 $Q_1 + Q_2$의 분
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어떤 연구자가 정규근사 $(Q - d)/\sqrt{2d} \approx N(0,1)$을 써서 $\chi^2(50)$의 상위 5% 임계값을 구하려 한다. 근사 임계값을 계산하고 정확한 값 67.50과 비교하라.
 
 </div>

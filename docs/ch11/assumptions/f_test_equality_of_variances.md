@@ -117,7 +117,7 @@ p-값이 앞의 Bartlett 검정과 소수점 셋째 자리까지 같다. 우연�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 크기가 $n_1 = 20$, $n_2 = 25$인 두 표본에서 표본분산 $S_1^2 = 15.3$, $S_2^2 = 8.7$을 얻었다. F-통계량을 계산하고 자유도를 진술하라.
 
 </div>
@@ -133,7 +133,7 @@ p-값이 앞의 Bartlett 검정과 소수점 셋째 자리까지 같다. 우연�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $F \sim F(d_1, d_2)$이면 $1/F \sim F(d_2, d_1)$임을 보여라. 이 성질이 양측검정에서 왜 중요한가?
 
 </div>
@@ -155,7 +155,7 @@ $F \sim F(d_1, d_2)$이면 $1/F \sim F(d_2, d_1)$임을 보여라. 이 성질이
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 등분산 F-검정이 평균에 대한 이표본 $t$-검정보다 비정규성에 더 민감한 이유를 설명하라.
 
 </div>
@@ -165,7 +165,7 @@ $F \sim F(d_1, d_2)$이면 $1/F \sim F(d_2, d_1)$임을 보여라. 이 성질이
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 $n_1 = n_2 = 50$, $\alpha = 0.05$에서 근사 임계값 $F_{0.025}(49, 49)$와 $F_{0.975}(49, 49)$를 구하라. 역수 관계로 하나를 다른 하나로 표현하라.
 
 </div>
@@ -181,7 +181,7 @@ $n_1 = n_2 = 50$, $\alpha = 0.05$에서 근사 임계값 $F_{0.025}(49, 49)$와 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
 어떤 품질 기술자가 두 공장에서 공정의 분산을 측정하여 $n_1 = 30$에서 $S_1^2 = 2.1$을, $n_2 = 30$에서 $S_2^2 = 3.8$을 얻었다. 자료는 완만하게 오른쪽으로 치우쳐 있다. F-검정을 써야 하는가? 더 나은 대안을 제시하고 이유를 설명하라.
 
 </div>

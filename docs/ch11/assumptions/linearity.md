@@ -119,7 +119,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 순수하게 범주형인 요인만 있고 연속형 공변량이 없는 일원배치 분산분석에서 선형성 가정이 자동으로 만족되는 이유를 설명하라.
 
 </div>
@@ -129,7 +129,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 어떤 공분산분석 모형이 집단 지시변수와 함께 연속형 공변량(사전 점수)을 포함한다. 잔차 대 적합값 그림에 뚜렷한 U자 패턴이 보인다. 무엇을 뜻하는지 설명하고 두 가지 처방을 제시하라.
 
 </div>
@@ -145,7 +145,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $Y$ 대 $X$의 산점도로 비선형성을 탐지하는 것과 잔차 그림으로 탐지하는 것의 차이를 설명하라. 한 방법은 성공하고 다른 방법은 실패하는 상황은 어떤 경우인가?
 
 </div>

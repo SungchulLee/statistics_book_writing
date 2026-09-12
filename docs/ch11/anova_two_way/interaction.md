@@ -227,7 +227,7 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 <div class="probox" markdown>
 
-**문제 1.**
+**문제 1.** <span class="diff easy" title="쉬움"></span>
 
 시험 점수에 영향을 주는 두 요인: 전통식과 온라인 수준을 갖는 **요인 A(교수법)**, 1시간과 2시간 수준을 갖는 **요인 B(학습시간)**.
 
@@ -341,7 +341,7 @@ R 출력은 Df, Sum Sq, Mean Sq, F value, Pr(>F) 열을 가진 동일한 분산�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 이원배치 분산분석 모형 $Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}$에서 교호작용 항 $(\alpha\beta)_{ij}$가 무엇을 나타내는지 말로 설명하라. 교육 맥락에서 유의한 교호작용이 예상되는 구체적인 예를 들어라.
 
 </div>
@@ -353,7 +353,7 @@ R 출력은 Df, Sum Sq, Mean Sq, F value, Pr(>F) 열을 가진 동일한 분산�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 칸당 반복 $c = 4$인 $2 \times 3$ 요인실험에서 $\text{SSA} = 30$, $\text{SSB} = 80$, $\text{SSAB} = 24$, $\text{SSE} = 60$을 얻었다. 전체 분산분석표를 작성하고 $\alpha = 0.05$에서 세 효과를 모두 검정하라.
 
 </div>
@@ -377,7 +377,7 @@ R 출력은 Df, Sum Sq, Mean Sq, F value, Pr(>F) 열을 가진 동일한 분산�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 치아 성장 자료(보충제 종류 OJ 대 VC, 용량 0.5, 1.0, 2.0)에서 교호작용 그림은 낮은 용량에서 OJ가 VC보다 긴 치아 길이를 낳지만 용량 2.0에서는 둘이 수렴함을 보여준다. 유의한 교호작용을 함께 고려하지 않고 보충제 종류의 주효과만 해석해서는 안 되는 이유를 설명하라.
 
 </div>
@@ -387,7 +387,7 @@ R 출력은 Df, Sum Sq, Mean Sq, F value, Pr(>F) 열을 가진 동일한 분산�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 반복 없는 이원배치 분산분석과 반복 있는 경우의 차이를 설명하라. 반복이 없을 때 교호작용 제곱합이 오차항과 교란되는 이유는 무엇인가?
 
 </div>

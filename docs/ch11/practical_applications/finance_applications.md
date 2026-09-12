@@ -67,7 +67,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** 세 펀드의 수익률 비교.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 펀드의 수익률 비교.
 
 !!! example "펀드 비교를 위한 일원배치 분산분석"
     어떤 분석가가 뮤추얼 펀드 세 개에 대해 월 수익률(%)을 네 개씩, 모두 12개 수집했다:
@@ -113,7 +113,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 분석가가 세 투자 전략의 평균 월 수익률을 60개월에 걸쳐 비교했다. 분산분석의 F-통계량은 $df_1 = 2$, $df_2 = 177$에서 4.21이다. $\alpha = 0.05$에서 전략들 사이에 유의한 차이가 있는가?
 
 </div>
@@ -127,7 +127,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 금융 수익률 자료가 분산분석의 가정을 자주 위반하는 이유를 설명하라. 가장 흔히 위반되는 가정이 무엇인지 밝히고 처방을 제시하라.
 
 </div>
@@ -150,7 +150,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 포트폴리오 매니저가 자기 펀드의 평균 수익률이 두 벤치마크 지수와 다르다고 주장한다. 일원배치 분산분석을 써야 하는가, Dunnett 검정을 써야 하는가? 설명하라.
 
 </div>
@@ -164,7 +164,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 달력의 월에 따라 평균 주식 수익률이 다른지("1월 효과"와 다른 계절 이상현상) 검정하는 데 분산분석을 어떻게 쓰는지 기술하라.
 
 </div>

@@ -168,7 +168,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 분산분석 잔차: A $s^2 \approx 1.37$, B $s^2 \approx 13.46$, C $s^2 \approx 0.10$. (a) 분산이 대략 같은가? (b) Levene 검정의 결과는? (c) 대안 검정은? (d) 분산이 작은 집단의 $n$도 작을 때의 영향은?
 
 </div>
@@ -186,7 +186,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **등분산 검정들.** Bartlett, Levene, Brown-Forsythe를 비교하라.
 
 </div>
@@ -202,7 +202,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **분산 안정화 변환.** 로그와 제곱근 변환을 논하라.
 
 </div>
@@ -220,7 +220,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **Welch 분산분석.** 간략히 설명하고 표준 분산분석과 대비하라.
 
 </div>
@@ -240,7 +240,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 등분산성 진단으로서의 **잔차 그림**.
 
 </div>
@@ -260,7 +260,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 6.**
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **표본크기 불균형**과 이분산. 균형 설계가 선호되는 이유는?
 
 </div>

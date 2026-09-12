@@ -114,7 +114,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 Monte Carlo 반복이 $B = 300$이고 참 제1종 오류율이 $\alpha = 0.05$일 때 추정된 제1종 오류율의 95% 신뢰구간을 계산하라. 이 구간의 폭을 절반으로 줄이려면 반복이 몇 번 필요한가?
 
 </div>
@@ -132,7 +132,7 @@ Monte Carlo 반복이 $B = 300$이고 참 제1종 오류율이 $\alpha = 0.05$�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 가장 작은 집단의 분산이 가장 클 때 고전적 분산분석 $F$-검정의 제1종 오류가 부풀려지는 이유를 설명하라. 가장 작은 집단의 분산이 가장 작으면 어떻게 되는가?
 
 </div>
@@ -144,7 +144,7 @@ Monte Carlo 반복이 $B = 300$이고 참 제1종 오류율이 $\alpha = 0.05$�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $G_3$의 이동을 탐지하는 신호 대 잡음 비는 $\Delta/\sigma_3 = 2/6 \approx 0.33$이다. 이 세 집단 설계의 Cohen의 $f$를 계산하고 그 크기를 해석하라.
 
 </div>
@@ -180,7 +180,7 @@ $G_3$의 이동을 탐지하는 신호 대 잡음 비는 $\Delta/\sigma_3 = 2/6 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 세 집단의 분산을 모두 같게($\sigma_i = 3$) 하되 표본크기는 $n = (10, 18, 7)$로 불균형하게 유지하도록 모의실험 설계를 고쳐라. 고전적 분산분석과 Welch 분산분석 중 어느 쪽의 검정력이 높을지 예측하고 이유를 설명하라.
 
 </div>
@@ -192,7 +192,7 @@ $G_3$의 이동을 탐지하는 신호 대 잡음 비는 $\Delta/\sigma_3 = 2/6 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 등분산이고 표본크기가 같은 $H_0$ 아래에서 Welch의 $F_W$ 통계량이 고전적 분산분석 $F$-통계량으로 환원됨을 증명하라.
 
 </div>

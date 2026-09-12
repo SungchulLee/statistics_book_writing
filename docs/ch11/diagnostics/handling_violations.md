@@ -283,7 +283,7 @@ Permutation test p-value: 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 집단이 넷인 일원배치 분산분석에서 F-검정이 유의하게 나왔지만($p = 0.008$), Levene 검정이 등분산 귀무가설을 기각하고($p = 0.003$) 잔차에 대한 Shapiro-Wilk 검정은 유의하지 않다($p = 0.34$). 타당한 추론을 얻기 위한 단계별 계획을 제시하라.
 
 </div>
@@ -300,7 +300,7 @@ Permutation test p-value: 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 크기가 $n = 12, 15, 10$인 세 집단의 자료에서 정규성과 등분산성이 모두 어긋났다. 분석 전략을 권하고 각 선택의 근거를 밝혀라.
 
 </div>
@@ -318,7 +318,7 @@ Permutation test p-value: 0.0000
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 Cook의 거리로 탐지한 이상점을 그냥 제거하는 것이 분산분석 진단에서 언제나 최선의 전략은 아닌 이유를 설명하라. 연구자는 대신 무엇을 해야 하는가?
 
 </div>

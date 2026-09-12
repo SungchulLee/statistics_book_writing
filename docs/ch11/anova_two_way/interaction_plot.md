@@ -84,7 +84,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 다음은 $2 \times 3$ 요인 설계의 칸 평균이다. 교호작용 그림을 그려 보고 교호작용이 순서형인지 비순서형인지 판정하라.
 
 | | $B_1$ | $B_2$ | $B_3$ |
@@ -104,7 +104,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $2 \times 2$ 요인 설계에서 교호작용의 자유도가 정확히 1임을 증명하라. 교호작용 제곱합을 네 칸 평균으로 표현하라.
 
 </div>
@@ -128,7 +128,7 @@ $2 \times 2$ 요인 설계에서 교호작용의 자유도가 정확히 1임을 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 유의한 비순서형 교호작용이 있을 때 주효과를 해석하는 것이 왜 오도할 수 있는지 설명하라. ToothGrowth 예로 예시하라.
 
 </div>
@@ -140,7 +140,7 @@ $2 \times 2$ 요인 설계에서 교호작용의 자유도가 정확히 1임을 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 연구자가 교호작용 그림에서 평행하지 않은 선을 관측했지만 분산분석의 교호작용 $F$-검정은 $p = 0.23$을 준다. 어떻게 이런 일이 생기며 연구자는 무엇을 결론지어야 하는가?
 
 </div>
@@ -152,7 +152,7 @@ $2 \times 2$ 요인 설계에서 교호작용의 자유도가 정확히 1임을 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 $2 \times 2$ 교호작용 그림에서 선이 정확히 평행할 조건을 유도하라. 칸 평균 $\mu_{11}, \mu_{12}, \mu_{21}, \mu_{22}$에서 시작하여 대수적 조건을 보여라.
 
 </div>

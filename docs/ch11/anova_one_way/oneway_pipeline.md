@@ -148,7 +148,7 @@ trt1의 상자가 가장 낮고 넓으며, trt2가 가장 높고 좁다. 두 상
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 PlantGrowth 자료에는 ctrl, trt1, trt2 세 집단이 있고 각각 관측값이 10개이다. 분산분석에서 $F = 4.85$, $p = 0.016$을 얻었다. 쌍별 비교는 몇 개가 필요하며 각 검정의 Bonferroni 조정 유의수준은 얼마인가?
 
 </div>
@@ -164,7 +164,7 @@ PlantGrowth 자료에는 ctrl, trt1, trt2 세 집단이 있고 각각 관측값�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 집단 분산이 다를 수 있을 때 분산분석 뒤의 쌍별 비교에서 합동(Student) $t$-검정보다 Welch $t$-검정이 선호되는 이유를 설명하라. 분산이 실제로 같으면 Welch 검정은 어떻게 되는가?
 
 </div>
@@ -182,7 +182,7 @@ PlantGrowth 자료에는 ctrl, trt1, trt2 세 집단이 있고 각각 관측값�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 집단이 넷인 일원배치 분산분석에서 자유도 $N - k = 76$의 $MSW = 8.5$를 얻었다. Tukey 임계값은 $q_{0.05,4,76} = 3.70$이고 모든 집단의 $n = 20$이다. 유의해지는 데 필요한 최소 평균 차이를 계산하라.
 
 </div>
@@ -198,7 +198,7 @@ PlantGrowth 자료에는 ctrl, trt1, trt2 세 집단이 있고 각각 관측값�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 위 파이프라인에서 Tukey HSD와 Bonferroni 보정 Welch $t$-검정이 같은 집단 쌍에 대해 다른 결론을 줄 수 있다. 어떤 조건에서 어느 쪽을 더 신뢰하겠는가? 가정과 검정력의 관점에서 논하라.
 
 </div>
@@ -212,7 +212,7 @@ PlantGrowth 자료에는 ctrl, trt1, trt2 세 집단이 있고 각각 관측값�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 균형 잡힌 일원배치 분산분석($n_1 = n_2 = \cdots = n_k = n$)에서 $F$-통계량이
 
 $$
