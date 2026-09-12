@@ -135,6 +135,10 @@ $t = 120$의 지도에서 문을 통과하는 순간을 생각해 보자. 그 �
 - **에이전트 A** ($s_t = o_t$): 기억이 없다. 지금 레이더에 더러운 칸이 보이면 그쪽으로, 안 보이면 무작위로 움직인다.
 - **에이전트 B** ($x_t = $ 누적 지도): 본 것을 지도에 쌓고, 가장 가까운 "더럽다고 아는 칸 또는 미지의 칸"으로 최단 경로를 따라간다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 관측만 쓰는 청소기와 지도를 쌓는 청소기
+
 ```python
 """관측은 상태가 아니다: 근거리 레이더를 단 로봇 청소기."""
 
@@ -275,6 +279,8 @@ s = o  (radar only) : finished  27% of runs | median steps    342 | mean coverag
 x = accumulated map : finished 100% of runs | median steps    171 | mean coverage 100.0%
 ```
 
+</div>
+
 난수 시드 30개에 대한 결과다.
 
 | 상태로 쓰는 것 | 청소를 마친 시행 | 완료까지 걸음 수(중앙값) | 평균 청소율 |
@@ -350,31 +356,37 @@ $$
 
 ## 간단한 예: 다중 슬롯머신
 
+<div class="codebox" markdown>
+
+**예제 2.** 엡실론-탐욕으로 다중 슬롯머신 풀기
+
 ```python
+"""엡실론-탐욕 전략으로 다중 슬롯머신을 1000번 당겨 본다."""
 import numpy as np
 
 np.random.seed(42)
 
-# 5-armed bandit: each arm has a different true mean reward
+# 팔 5개. 참 평균은 우리만 알고 에이전트는 모른다.
 true_means = [1.0, 1.5, 2.0, 1.2, 0.8]
 n_arms = len(true_means)
 n_steps = 1000
-epsilon = 0.1  # exploration rate
+epsilon = 0.1  # 10%는 무작위로 탐색하고, 90%는 지금까지 가장 나은 팔을 쓴다
 
-# Epsilon-greedy strategy
-Q = np.zeros(n_arms)       # estimated value of each arm
-N = np.zeros(n_arms)       # number of times each arm was pulled
+Q = np.zeros(n_arms)       # 각 팔의 가치 추정값
+N = np.zeros(n_arms)       # 각 팔을 당긴 횟수
 rewards = []
 
 for t in range(n_steps):
     if np.random.rand() < epsilon:
-        action = np.random.randint(n_arms)  # explore
+        action = np.random.randint(n_arms)  # 탐색: 아무 팔이나
     else:
-        action = np.argmax(Q)               # exploit
+        action = np.argmax(Q)               # 활용: 추정값이 가장 큰 팔
 
     reward = np.random.normal(true_means[action], 1.0)
     N[action] += 1
-    Q[action] += (reward - Q[action]) / N[action]  # incremental mean update
+    # 지난 보상을 다 들고 있다가 평균을 다시 내지 않고 한 걸음씩 고쳐 나간다.
+    # Q + (보상 - Q)/N 은 지금까지 받은 보상의 평균과 정확히 같다.
+    Q[action] += (reward - Q[action]) / N[action]
     rewards.append(reward)
 
 print("Estimated values:", np.round(Q, 2))
@@ -391,6 +403,8 @@ True means:       [1.0, 1.5, 2.0, 1.2, 0.8]
 Average reward:   1.93
 Best arm chosen:  2 (pulled 903 times)
 ```
+
+</div>
 
 ## 연습문제
 

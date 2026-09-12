@@ -73,7 +73,10 @@ $$
 
 중심극한정리에 따르면 $n$이 클 때 $\bar{x}$의 표본분포는 모집단의 모양과 무관하게 근사적으로 $N(\mu, \sigma^2/n)$이다. 이 하나의 사실이 대부분의 대표본 신뢰구간을 뒷받침한다.
 
-## 파이썬 예제
+
+<div class="codebox" markdown>
+
+**예제 1.** 표본평균의 표집분포
 
 ```python
 """표본평균의 표집분포를 눈으로 확인한다."""
@@ -129,6 +132,8 @@ Mean of sample means:  99.969
 Theoretical SE:        2.121
 Observed SE:           2.097
 ```
+
+</div>
 
 ![표본평균의 표집분포](./img/sampling_distribution_mean.png)
 
