@@ -76,6 +76,10 @@ F-통계량을 F-분포표의 임계값과 비교하거나 p-값을 쓴다.
 
 ### statsmodels: 교호작용 그림과 분산분석
 
+<div class="codebox" markdown>
+
+**예제 1.** 교호작용 그림과 이원배치 분산분석
+
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -84,11 +88,17 @@ from statsmodels.stats.anova import anova_lm
 from statsmodels.graphics.factorplots import interaction_plot
 
 def load_data():
+    """ToothGrowth 자료를 읽는다. 보충제 종류와 투여량, 그리고 치아 길이다."""
     url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3])
     return df
 
 def plot_interaction(df):
+    """교호작용 그림. 두 선이 나란하면 교호작용이 없다는 뜻이다.
+
+    선이 벌어지거나 엇갈리면 한 요인의 효과가 다른 요인의 수준에 따라
+    달라진다는 것이고, 그때는 주효과만 말해서는 안 된다.
+    """
     fig, ax = plt.subplots(figsize=(12, 3))
     interaction_plot(df.dose, df.supp, df.len,
                      colors=['red', 'blue'],
@@ -102,6 +112,7 @@ def plot_interaction(df):
     plt.show()
 
 def perform_two_way_anova(df):
+    """이원배치 분산분석. 그림에서 본 것이 통계적으로도 유의한지 확인한다."""
     model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
     anova_results = anova_lm(model)
     print("\nTwo-Way ANOVA Results:")
@@ -124,6 +135,8 @@ C(supp):C(dose)   2.0   108.319000    54.159500   4.106991  2.186027e-02
 Residual         54.0   712.106000    13.187148        NaN           NaN
 ```
 
+</div>
+
 ![교호작용 그림](./img/interaction_79.png)
 
 ### 출력 해석
@@ -143,17 +156,21 @@ Residual         54.0   712.106000    13.187148        NaN           NaN
 
 ### Tukey의 HSD를 이용한 사후검정
 
+<div class="codebox" markdown>
+
+**예제 2.** Tukey HSD로 하는 사후검정
+
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
-# Step 1: Two-Way ANOVA
+# 1단계: 이원배치 분산분석
 url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
 df = pd.read_csv(url, usecols=[1, 2, 3])
 model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
 anova_results = anova_lm(model)
 print(anova_results, end="\n\n")
 
-# Step 2: Tukey's HSD for Main Effects
+# 2단계: 주효과에 대한 Tukey HSD
 tukey_dose = pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05)
 print(tukey_dose, end="\n\n")
 
@@ -215,6 +232,8 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 ------------------------------------------------------
 ```
 
+</div>
+
 세 표를 함께 읽어야 한다.
 
 - **용량**의 주효과: 세 수준이 서로 모두 유의하게 다르다. 용량이 오를수록 치아가 길어진다.
@@ -275,13 +294,18 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
     - **요인 B(학습시간)**: $F_B = 72.25$, $p = 0.0011$로 0.01에서 유의하다. 학습시간이 시험 점수에 유의한 효과를 갖는다.
     - **교호작용 (A × B)**: $F_{AB} = 0.25$, $p = 0.6433$으로 유의하지 않다. 교수법과 학습시간 사이에 유의한 교호작용이 없다.
 
-### Python 구현
+<div class="codebox" markdown>
+
+**예제 3.** 2x2 설계의 이원배치 분산분석
 
 ```python
 import pandas as pd
 from statsmodels.formula.api import ols
 from statsmodels.stats.anova import anova_lm
 
+# 교수법 둘과 학습시간 둘, 칸마다 두 명씩인 2x2 설계다.
+# 칸당 반복이 둘뿐이라 자유도가 매우 적다. 교호작용을 재려면 칸마다
+# 반복이 적어도 둘은 있어야 한다는 요구를 겨우 맞춘 셈이다.
 data = {
     'Teaching_Method': ['Traditional', 'Traditional', 'Traditional', 'Traditional',
                         'Online', 'Online', 'Online', 'Online'],
@@ -308,12 +332,14 @@ C(Teaching_Method):C(Study_Time)  1.0     0.5      0.5   0.25  0.643330
 Residual                          4.0     8.0      2.0    NaN       NaN
 ```
 
+</div>
+
 손계산한 표와 정확히 일치한다. 잔차 자유도가 4밖에 안 된다는 점은 눈여겨볼 만하다. 관측값 8개로 모수 4개(전체평균, 두 주효과, 교호작용)를 추정했기 때문이다. 이렇게 자유도가 작으면 F-검정의 검정력이 매우 낮아, 교호작용의 $p = 0.64$를 "교호작용이 없다"는 증거로 읽으면 안 된다.
 
 ### R 코드
 
 ```r
-# Load necessary libraries
+# 필요한 라이브러리
 library(dplyr)
 library(stats)
 

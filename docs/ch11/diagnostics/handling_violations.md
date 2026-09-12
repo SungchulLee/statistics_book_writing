@@ -6,6 +6,10 @@
 
 ## 설정
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -48,6 +52,8 @@ C         20  12.513  2.077
 F = 16.1314, p = 0.0000
 ```
 
+</div>
+
 이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
 
 ## 단계별 접근
@@ -63,9 +69,15 @@ F = 16.1314, p = 0.0000
 
 정규성 가정이 어긋날 때 Kruskal-Wallis 검정은 일원배치 분산분석의 비모수 대안이 된다. 집단 사이에서 평균 대신 중앙값(더 정확히는 평균 순위)을 비교하며 잔차의 정규성을 가정하지 않는다.
 
+<div class="codebox" markdown>
+
+**예제 2.** Kruskal-Wallis 검정
+
 ```python
 from scipy.stats import kruskal
 
+# 값 대신 순위로 계산하므로 정규성을 요구하지 않는다. 그 대신 정규자료에서는
+# 분산분석보다 검정력이 조금 낮고, 견주는 대상이 평균이 아니라 분포의 위치다.
 stat, p_value = kruskal(group1, group2, group3)
 print(f"Kruskal-Wallis: H = {stat:.4f}, p-value = {p_value:.4f}")
 ```
@@ -75,6 +87,8 @@ print(f"Kruskal-Wallis: H = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 Kruskal-Wallis: H = 26.0698, p-value = 0.0000
 ```
+
+</div>
 
 이상점이 있는 자료인데도 강하게 기각한다. Kruskal-Wallis는 값 자체가 아니라 **순위**를 쓰므로, 20.0이라는 이상점이 "가장 큰 값"이라는 정보로만 쓰이고 그 크기는 결과에 영향을 주지 않는다.
 
@@ -92,9 +106,16 @@ $$
 Y' = \log(Y) \quad \text{or} \quad Y' = \log(Y + c) \text{ if } Y \text{ contains zeros}
 $$
 
+<div class="codebox" markdown>
+
+**예제 3.** 로그 변환
+
 ```python
 import numpy as np
 
+# 로그 변환은 오른쪽으로 늘어진 자료를 펴 준다. 퍼짐이 평균에 비례해 커지는
+# 자료라면 변환 뒤 등분산과 정규성이 함께 좋아지는 일이 흔하다.
+# 다만 결과의 해석이 원래 단위가 아니게 된다는 대가가 따른다.
 data['log_response'] = np.log(data['response'])
 print(data.groupby('group').log_response.agg(['mean', 'std']).round(4))
 ```
@@ -109,6 +130,8 @@ B      2.3886  0.0918
 C      2.5159  0.1460
 ```
 
+</div>
+
 로그를 취하니 집단별 표준편차가 0.090, 0.092, 0.146으로 좁혀졌다. 원래 척도에서는 0.87, 1.03, 2.08이었다. 분산이 평균과 함께 커지는 자료에서 로그 변환이 등분산성을 회복시키는 전형적인 모습이다.
 
 ### 제곱근 변환
@@ -119,7 +142,13 @@ $$
 Y' = \sqrt{Y}
 $$
 
+<div class="codebox" markdown>
+
+**예제 4.** 제곱근 변환
+
 ```python
+# 제곱근 변환은 로그보다 약하게 편다. 도수 자료처럼 분산이 평균에 비례하는
+# 경우에 알맞다.
 data['sqrt_response'] = np.sqrt(data['response'])
 print(data.groupby('group').sqrt_response.agg(['mean', 'std']).round(4))
 ```
@@ -134,6 +163,8 @@ B      3.3045  0.1538
 C      3.5274  0.2735
 ```
 
+</div>
+
 제곱근 변환은 로그보다 약하게 작용한다. 표준편차가 0.140, 0.154, 0.274로 여전히 두 배 가까이 벌어져 있다. 변환의 세기는 로그 > 제곱근 순이며, 자료의 치우침 정도에 맞춰 골라야 한다.
 
 ### Box-Cox 변환
@@ -143,6 +174,10 @@ $\lambda$로 모수화된 거듭제곱 변환의 족으로, 정규성에 가장 
 $$
 Y'(\lambda) = \begin{cases} \frac{Y^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\ \log(Y) & \text{if } \lambda = 0 \end{cases}
 $$
+
+<div class="codebox" markdown>
+
+**예제 5.** Box-Cox 변환
 
 ```python
 from scipy.stats import boxcox
@@ -158,6 +193,8 @@ print(f"Optimal lambda = {best_lambda:.4f}")
 Optimal lambda = -1.5414
 ```
 
+</div>
+
 $\lambda = -1.54$는 로그 변환($\lambda = 0$)보다도 훨씬 강한 변환을 뜻한다. 이상점 하나를 끌어내리기 위해 Box-Cox가 이렇게 극단적인 $\lambda$를 고른 것이다.
 
 이 값을 그대로 받아들이기 전에 멈춰야 한다. $\lambda = -1.54$로 변환한 값은 $-1/Y^{1.54}$에 가까워 해석이 거의 불가능하다. **변환이 이상점 하나에 끌려가고 있다면, 그 이상점을 먼저 조사하는 것이 순서다.**
@@ -171,9 +208,14 @@ $\lambda = -1.54$는 로그 변환($\lambda = 0$)보다도 훨씬 강한 변환�
 
 Welch 분산분석은 집단 사이의 등분산을 가정하지 않는다. Welch-Satterthwaite 근사로 F-검정의 자유도를 조정한다:
 
+<div class="codebox" markdown>
+
+**예제 6.** Welch 분산분석
+
 ```python
 from scipy.stats import f_oneway
-# Or use pingouin for Welch's ANOVA directly
+# Welch 분산분석은 등분산을 가정하지 않는다. 자료를 바꾸지 않고 검정만
+# 바꾸는 방법이라 결과를 원래 단위로 읽을 수 있다.
 import pingouin as pg
 
 welch_result = pg.welch_anova(dv='response', between='group', data=data)
@@ -187,6 +229,8 @@ print(welch_result)
 0  group      2  35.386613  14.579033  0.000024  0.361436
 ```
 
+</div>
+
 표준 분산분석의 $F = 16.13$과 견주면 Welch는 14.58로 조금 작고, 분모 자유도도 57에서 35.4로 줄었다. 집단 C의 분산이 크다는 사실을 반영해 정보량을 보수적으로 잡은 결과다.
 
 전체 논의는 [Welch의 일원배치 분산분석](../anova_welch/welch_one_way.md)을 보라.
@@ -194,6 +238,10 @@ print(welch_result)
 ### 로버스트 추정량
 
 Huber나 M-추정량 같은 방법은 이상점에 덜 민감한 분산분석 유사 결과를 준다:
+
+<div class="codebox" markdown>
+
+**예제 7.** 로버스트 추정량
 
 ```python
 import statsmodels.api as sm
@@ -220,6 +268,8 @@ group[T.C]    0.3206
 dtype: float64
 ```
 
+</div>
+
 OLS로 적합하면 집단 C의 계수가 2.546인데 로버스트 추정은 2.237을 준다. Huber 손실이 이상점의 가중치를 낮춰 집단 C의 평균이 그 한 점에 덜 끌려간 것이다.
 
 표준오차도 눈여겨보라. 로버스트 추정의 0.321은 OLS의 0.452보다 작다. 이상점을 통제하면 추정이 오히려 정밀해진다.
@@ -233,14 +283,19 @@ OLS로 적합하면 집단 C의 계수가 2.546인데 로버스트 추정은 2.2
 3. 각 순열마다 F-통계량을 다시 계산한다.
 4. 관측된 F-통계량을 순열분포와 비교한다.
 
+<div class="codebox" markdown>
+
+**예제 8.** 순열검정
+
 ```python
 import numpy as np
 from scipy.stats import f_oneway
 
-# Observed F-statistic
+# 자료에서 실제로 관측된 F 값
 observed_f, _ = f_oneway(group1, group2, group3)
 
-# Permutation test
+# 귀무가설이 참이라면 집단 이름표는 아무 뜻이 없다. 그래서 이름표를 뒤섞어
+# 가며 F 를 다시 구하면, 어떤 분포도 가정하지 않고 귀무분포를 얻을 수 있다.
 all_data = np.concatenate([group1, group2, group3])
 group_sizes = [len(group1), len(group2), len(group3)]
 n_permutations = 10000
@@ -255,6 +310,7 @@ for _ in range(n_permutations):
     f_stat, _ = f_oneway(g1, g2, g3)
     perm_f_stats.append(f_stat)
 
+# 뒤섞어 만든 F 중 관측값 이상인 비율이 곧 p-값이다.
 p_value = np.mean(np.array(perm_f_stats) >= observed_f)
 print(f"Permutation test p-value: {p_value:.4f}")
 ```
@@ -264,6 +320,8 @@ print(f"Permutation test p-value: {p_value:.4f}")
 ```
 Permutation test p-value: 0.0000
 ```
+
+</div>
 
 10,000번의 순열 중 관측된 $F$ 이상이 나온 경우가 한 번도 없었다. 이때 p-값을 0으로 보고하면 안 된다. 순열검정으로 말할 수 있는 것은 $p < 1/10000$까지이며, 보수적으로는 $(0 + 1)/(10000 + 1) \approx 0.0001$로 보고하는 관례를 쓴다.
 

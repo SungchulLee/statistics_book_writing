@@ -52,15 +52,23 @@ $$
 
 이며, 이것이 $F(n_1 - 1, n_2 - 1)$ 분포의 정의 형태이다.
 
-## 구현
-
 다음 함수는 양측 F-검정을 구현한다:
+
+<div class="codebox" markdown>
+
+**예제 1.** 등분산 F 검정 구현
 
 ```python
 import numpy as np
 import scipy.stats as stats
 
 def f_test(data_0, data_1):
+    """두 분산이 같은지 F 검정한다.
+
+    두 표본분산의 비가 F 분포를 따른다는 사실을 쓴다. 카이제곱과 마찬가지로
+    좌우가 대칭이 아니므로 작은 쪽 꼬리를 두 배 해 양측 p-값을 만든다.
+    이 검정은 정규성에 매우 민감하다 — 그래서 실제로는 Levene 을 더 쓴다.
+    """
     statistic = data_0.var(ddof=1) / data_1.var(ddof=1)
     df1 = data_0.shape[0] - 1
     df2 = data_1.shape[0] - 1
@@ -71,9 +79,16 @@ def f_test(data_0, data_1):
     return statistic, p_value
 ```
 
+</div>
+
 예제는 $X \sim N(0, 1)$과 여러 $\sigma_Y$ 값에 대한 $Y \sim N(1, \sigma_Y)$을 생성한다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 검정 실행
+
 ```python
+# Bartlett 검정과 같은 설정으로 돌려 두 검정의 p-값을 견주어 볼 수 있다.
 seed, size = 1, 100
 x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
 
@@ -92,6 +107,8 @@ sigma_y=1.10: F=0.83, p=0.345
 sigma_y=1.15: F=0.76, p=0.166
 sigma_y=1.20: F=0.69, p=0.071
 ```
+
+</div>
 
 p-값이 앞의 Bartlett 검정과 소수점 셋째 자리까지 같다. 우연이 아니다. 집단이 둘이고 자료가 정규일 때 Bartlett 검정은 등분산 $F$-검정과 동등하다.
 

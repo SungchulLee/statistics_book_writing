@@ -60,11 +60,15 @@ $$ w_{ij} = \frac{n_{ij}}{s_{ij}^2} $$
 
 두 요인(예: **온도**와 **비료 종류**)이 식물 성장에 미치는 효과를 알아보는 실험을 생각하자:
 
+<div class="codebox" markdown>
+
+**예제 1.** 이원배치 Welch 검정
+
 ```python
 import pingouin as pg
 import pandas as pd
 
-# Sample data
+# 예시 자료
 data = {
     "Temperature": ["High", "High", "High", "Low", "Low", "Low", "Medium", "Medium", "Medium"],
     "Fertilizer": ["A", "B", "C", "A", "B", "C", "A", "B", "C"],
@@ -87,6 +91,8 @@ print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
 0  Fertilizer      2  3.915497  1.466347  0.334719  0.333333
 ```
 
+</div>
+
 **해석:**
 
 - **온도**: $F = 5.17$, $p = 0.082$로 $\alpha = 0.05$에서 유의하지 않다. 다만 칸당 관측값이 하나뿐이어서 검정력이 매우 낮다.
@@ -101,6 +107,10 @@ print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
 ### 사후검정
 
 주효과가 유의하면 어느 수준이 다른지 찾기 위해 **Games-Howell** 같은 사후검정을 쓴다:
+
+<div class="codebox" markdown>
+
+**예제 2.** Games-Howell 사후검정
 
 ```python
 # Temperature에 대한 Games-Howell 사후검정
@@ -124,6 +134,8 @@ A B 12.0000 14.6667 -2.6667 1.4530 -1.8353 3.7409 0.2767 -1.1988
 A C 12.0000 13.3333 -1.3333 1.6667 -0.8000 3.9936 0.7230 -0.5226
 B C 14.6667 13.3333  1.3333 1.4907  0.8944 3.6697 0.6740  0.5842
 ```
+
+</div>
 
 어느 쌍도 유의하지 않다. 주효과 검정이 애초에 유의하지 않았으니 당연한 결과다.
 

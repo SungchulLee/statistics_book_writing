@@ -30,7 +30,9 @@ $$
 
 이며 $q$는 제약의 수($R$의 행 수)이다. $H_0$ 아래에서 $F_W$는 근사적으로 $F_{q, \nu}$를 따르고 $\nu$는 조정된 분모 자유도이다.
 
-## 코드 예제
+<div class="codebox" markdown>
+
+**예제 1.** 로버스트 이원배치 분산분석
 
 ```python
 import pandas as pd
@@ -77,15 +79,23 @@ Interaction: Temperature x Fertilizer
 <F test: F=0.15370680044593157, p=0.956506962060376, df_denom=9, df_num=4>
 ```
 
+</div>
+
 주효과는 유의하고($p = 0.0099$) 교호작용은 아니다($p = 0.957$). 분자 자유도가 각각 2와 4로, 수준 수에서 계산한 $a - 1 = 2$와 $(a-1)(b-1) = 4$에 맞는다. 이 자유도를 확인하는 것이 제약을 제대로 걸었는지 점검하는 가장 쉬운 방법이다.
 
 ## 표준 분산분석과의 비교
 
 참고를 위해 (로버스트하지 않은) 표준 분산분석표를 얻을 수 있다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 표준 분산분석과의 비교
+
 ```python
 import statsmodels.api as sm
 
+# 같은 자료를 보통의 분산분석으로 돌려 견준다. 등분산이 깨진 설계에서
+# 두 방법의 p-값이 얼마나 갈리는지가 요점이다.
 print(sm.stats.anova_lm(model, typ=2))
 ```
 
@@ -98,6 +108,8 @@ C(Fertilizer)                 36.777778  2.0   6.62  0.017060
 C(Temperature):C(Fertilizer)   2.555556  4.0   0.23  0.914666
 Residual                      25.000000  9.0    NaN       NaN
 ```
+
+</div>
 
 표준 분산분석은 Temperature의 $F$를 14.66으로, HC3 Wald 검정은 8.06으로 준다. 두 값이 이만큼 다른 것은 분산이 칸마다 다르다는 신호다. 실제로 이 자료에서 B 비료의 칸들이 다른 칸보다 흩어져 있다.
 

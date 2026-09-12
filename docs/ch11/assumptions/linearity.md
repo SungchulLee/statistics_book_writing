@@ -14,6 +14,10 @@ $$
 
 ## 설정
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -57,6 +61,8 @@ F = 35.4445, p = 0.0000
 covariate 계수 = 0.3275
 ```
 
+</div>
+
 공변량을 더한 만큼 집단평균이 위로 올라갔고 산포도 커졌다. 공변량의 계수 추정값 0.3275는 참값 0.4를 향하지만 관측값 60개로는 이 정도 오차가 남는다.
 
 ## 확인 방법
@@ -65,14 +71,23 @@ covariate 계수 = 0.3275
 
 (공분산분석처럼) 연속형 공변량이 있으면 종속변수를 각 공변량에 대해 집단별 색으로 그린다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 집단별 산점도
+
 ```python
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# 집단마다 색을 달리해 흩뿌린다. 각 색의 점들이 직선을 이루는지,
+# 그리고 그 직선들의 기울기가 서로 비슷한지를 본다. 기울기가 다르면
+# 공변량과 집단 사이에 교호작용이 있는 것이라 공분산분석의 전제가 깨진다.
 sns.scatterplot(data=data, x='covariate', y='response', hue='group', alpha=0.6)
 plt.title("Response vs. Covariate by Group")
 plt.show()
 ```
+
+</div>
 
 ![집단별 반응 대 공변량](./img/linearity_67.png)
 
@@ -89,9 +104,16 @@ plt.show()
 
 잔차를 독립변수(또는 적합값)에 대해 그린 그림에는 체계적인 패턴이 없어야 한다. 0 주위의 무작위한 흩어짐이 선형성을 확인해 준다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 잔차 대 적합값 그림
+
 ```python
 import matplotlib.pyplot as plt
 
+# 잔차 대 적합값 그림은 진단의 출발점이다. 점들이 0 선 둘레에 폭을 일정하게
+# 유지하며 흩어져 있으면 좋다. 깔때기 모양이면 등분산이 깨진 것이고, 굽은
+# 모양이면 모형이 놓친 구조가 남아 있다는 뜻이다.
 plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
 plt.axhline(y=0, color='r', linestyle='--')
 plt.xlabel("Fitted Values")
@@ -99,6 +121,8 @@ plt.ylabel("Residuals")
 plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
+
+</div>
 
 ![잔차 대 적합값](./img/linearity_85.png)
 

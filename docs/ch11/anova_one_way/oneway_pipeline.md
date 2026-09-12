@@ -14,6 +14,10 @@ $$
 
 을 $H_A$(적어도 하나의 $\mu_i$가 다르다)에 대해 검정한다. statsmodels의 수식 인터페이스에서는 요인을 `C()`로 감싸 범주형 변수임을 나타낸다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 1단계 — 모형 적합
+
 ```python
 import pandas as pd
 from statsmodels.formula.api import ols
@@ -39,6 +43,8 @@ C(group)   2.0   3.76634  1.883170  4.846088  0.01591
 Residual  27.0  10.49209  0.388596       NaN      NaN
 ```
 
+</div>
+
 분산분석표는 집단 간 제곱합($SSB$), 집단 내 제곱합($SSW$), $F$-통계량, $p$-값을 보고한다. $p < \alpha$이면 $H_0$을 기각한다.
 
 ## 2단계: Tukey HSD 사후검정
@@ -51,9 +57,15 @@ $$
 
 이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 2단계 — Tukey HSD
+
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
+# 분산분석이 유의했으니 이제 어느 쌍이 다른지를 본다. reject 열이 True 인
+# 쌍이 유의한 쌍이고, 신뢰구간이 0 을 품지 않는 쌍과 정확히 일치한다.
 tukey = pairwise_tukeyhsd(endog=df['weight'], groups=df['group'], alpha=0.05)
 print(tukey)
 ```
@@ -71,6 +83,8 @@ group1 group2 meandiff p-adj   lower  upper  reject
 ---------------------------------------------------
 ```
 
+</div>
+
 세 비교 중 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어서, 서로 간의 차이(0.865)가 각각과 대조군의 차이(0.371, 0.494)보다 크기 때문이다.
 
 `reject` 열은 신뢰구간이 0을 담는지와 정확히 맞물린다. trt1 대 trt2의 구간 $(0.174, 1.556)$만 0을 담지 않는다.
@@ -82,6 +96,10 @@ group1 group2 meandiff p-adj   lower  upper  reject
 $$
 p_{\text{adj}} = \min\!\bigl(m \cdot p_{\text{raw}},\; 1\bigr)
 $$
+
+<div class="codebox" markdown>
+
+**예제 3.** 3단계 — 본페로니 보정 쌍별 비교
 
 ```python
 from itertools import combinations
@@ -112,6 +130,8 @@ ctrl vs trt2  p = 0.0479   p_bonf = 0.1437
 trt1 vs trt2  p = 0.0093   p_bonf = 0.0279
 ```
 
+</div>
+
 Tukey와 결론은 같지만(trt1 대 trt2만 유의) 보정 p-값은 0.0279로 Tukey의 0.012보다 크다. Bonferroni가 더 보수적이기 때문이다.
 
 ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 후 0.1437이 된다. 비교를 세 번 한다는 사실이 이만큼의 대가를 요구한다.
@@ -120,9 +140,15 @@ ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 �
 
 상자그림은 집단 분포를 빠르게 시각적으로 비교하게 해 준다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 4단계 — 상자그림
+
 ```python
 import matplotlib.pyplot as plt
 
+# 상자그림으로 마무리한다. 검정 결과와 그림이 같은 이야기를 하는지 확인하는
+# 것이 마지막 단계다. 순서를 못박아 두어야 그림이 자료 순서에 휘둘리지 않는다.
 order = ['ctrl', 'trt1', 'trt2']
 data = [df.loc[df['group'] == g, 'weight'].values for g in order]
 plt.boxplot(data, labels=order)
@@ -132,6 +158,8 @@ plt.title('PlantGrowth weights by group')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![집단별 상자그림](./img/oneway_pipeline_83.png)
 

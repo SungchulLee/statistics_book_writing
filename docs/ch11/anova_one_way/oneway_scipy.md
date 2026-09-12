@@ -14,6 +14,10 @@ $$
 
 이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 자료와 자유도
+
 ```python
 import pandas as pd
 from scipy import stats
@@ -41,6 +45,8 @@ trt1      10  4.661  0.7937
 trt2      10  5.526  0.4426
 ```
 
+</div>
+
 집단당 10개씩 균형 설계다. 표본표준편차가 0.44에서 0.79까지 1.8배 차이 나는데, 이 정도는 등분산 가정을 크게 흔들지 않는다(자세한 확인은 Levene 검정 페이지 참조).
 
 ## 분산분석 수행
@@ -51,7 +57,13 @@ $$
 F = \frac{MSB}{MSW} = \frac{SSB / (k-1)}{SSW / (N-k)}
 $$
 
+<div class="codebox" markdown>
+
+**예제 2.** 분산분석 수행
+
 ```python
+# F 는 집단 사이의 분산을 집단 안의 분산으로 나눈 값이다. 1 에 가까우면
+# 집단을 나눈 것이 아무 설명도 하지 못한다는 뜻이다.
 F, p = stats.f_oneway(ctrl, trt1, trt2)
 print(f"F = {F:.4f}, p = {p:.4f}")
 ```
@@ -62,15 +74,23 @@ print(f"F = {F:.4f}, p = {p:.4f}")
 F = 4.8461, p = 0.0159
 ```
 
+</div>
+
 $H_0: \mu_{\text{ctrl}} = \mu_{\text{trt1}} = \mu_{\text{trt2}}$ 아래에서 통계량은 $F \sim F_{2,27}$이다.
 
 ## 시각화: 상자그림
 
 상자그림은 각 집단의 중앙값, 사분위범위, 이상점을 보여주어 집단의 중심과 흩어짐이 다른지 즉시 감을 준다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 상자그림으로 보기
+
 ```python
 import matplotlib.pyplot as plt
 
+# 검정을 하기 전이든 뒤든 그림을 본다. 상자가 겹치는 정도가 F 값과
+# 어떻게 맞물리는지 눈에 익혀 두면 좋다.
 fig, ax = plt.subplots(figsize=(6, 4))
 ax.boxplot([ctrl, trt1, trt2], labels=['ctrl', 'trt1', 'trt2'])
 ax.set_xlabel('Group')
@@ -80,6 +100,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![집단별 상자그림](./img/oneway_scipy_49.png)
 
 세 상자가 서로 겹친다. trt2가 가장 높고 trt1이 가장 낮지만 상자들이 나란히 놓일 만큼 가깝다. $p = 0.016$이 "압도적"이 아니라 "그럭저럭 유의한" 정도인 이유가 그림에 그대로 나타난다.
@@ -88,9 +110,15 @@ plt.show()
 
 $F_{2,27}$의 밀도함수를 그리고 관측된 $F$-통계량 너머의 넓이를 색칠하면 $p$-값을 기하적으로 해석할 수 있다. 그 넓이는 $H_0$ 아래에서 그만큼 또는 그보다 극단적인 $F$ 값을 관측할 확률이다.
 
+<div class="codebox" markdown>
+
+**예제 4.** F 분포와 관측된 꼬리
+
 ```python
 import numpy as np
 
+# 자유도는 (집단 수 - 1, 전체 수 - 집단 수) = (2, 27) 이다.
+# 칠해진 오른쪽 꼬리의 넓이가 곧 p-값이다.
 x = np.linspace(0, 8, 400)
 pdf = stats.f(2, 27).pdf(x)
 
@@ -103,6 +131,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![F-분포와 관측된 꼬리](./img/oneway_scipy_65.png)
 

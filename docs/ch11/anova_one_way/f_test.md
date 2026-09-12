@@ -129,6 +129,10 @@ $$
 
 #### scipy.stats.f_oneway
 
+<div class="codebox" markdown>
+
+**예제 1.** scipy로 하는 일원배치 분산분석
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -186,7 +190,7 @@ def plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value):
                     arrowprops=dict(color='k', width=0.2, headwidth=8), fontsize=12)
     plt.tight_layout()
     plt.show()
-# Load data, perform ANOVA, and plot results
+# 자료 읽기 → 분산분석 → 그림 순으로 돌린다
 _, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
 statistic, p_value = perform_anova(data_ctrl, data_trt1, data_trt2)
 plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
@@ -201,6 +205,8 @@ F-Statistic = 4.8461
 P-Value = 0.0159
 ```
 
+</div>
+
 ![상자그림과 F-분포](./img/f_test_132.png)
 
 왼쪽 상자그림에서 세 집단이 서로 겹치고, 오른쪽 F-분포에서 관측값 4.85 오른쪽의 붉은 넓이가 p-값 1.59%다.
@@ -208,6 +214,10 @@ P-Value = 0.0159
 ### B. Statsmodels
 
 #### statsmodels.formula.api.ols와 statsmodels.stats.anova.anova_lm
+
+<div class="codebox" markdown>
+
+**예제 2.** statsmodels로 하는 일원배치 분산분석
 
 ```python
 import matplotlib.pyplot as plt
@@ -263,7 +273,7 @@ def plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value):
                     arrowprops=dict(color='k', width=0.2, headwidth=8), fontsize=12)
     plt.tight_layout()
     plt.show()
-# Load data, perform ANOVA, and plot results
+# 자료 읽기 → 분산분석 → 그림 순으로 돌린다
 df, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
 statistic, p_value = perform_anova(df)
 plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
@@ -278,6 +288,8 @@ ANOVA Results:
 C(group)   2.0   3.76634  1.883170  4.846088  0.01591
 Residual  27.0  10.49209  0.388596       NaN      NaN
 ```
+
+</div>
 
 ![상자그림과 F-분포](./img/f_test_199.png)
 
@@ -443,13 +455,13 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
     ```python
     import scipy.stats as stats
-    # Data for the three groups
+    # 세 집단의 자료
     water_group = [19, 18, 17, 18, 20]
     energy_drink_group = [20, 22, 19, 21, 20]
     coffee_group = [18, 17, 16, 19, 20]
-    # Perform One-Way ANOVA
+    # 일원배치 분산분석
     f_statistic, p_value = stats.f_oneway(water_group, energy_drink_group, coffee_group)
-    # Print results
+    # 결과 출력
     print(f"F-statistic: {f_statistic:.2f}")
     print(f"P-value: {p_value:.4f}")
     ```
@@ -467,38 +479,38 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
     import numpy as np
     import matplotlib.pyplot as plt
     import scipy.stats as stats
-    # Given F-statistic and degrees of freedom
+    # 주어진 F 값과 자유도
     df_between = 3 - 1
     df_within = 15 - 3
     f_statistic = 4.88
-    # Calculate p-value
+    # p-값은 F 분포의 오른쪽 꼬리 넓이다
     p_value = stats.f.sf(f_statistic, df_between, df_within)
     print(f"{f_statistic = :.04f}")
     print(f"{p_value = :.04f}")
-    # Create the figure and axis using OOP style
+    # 그림과 축을 만든다
     fig, ax = plt.subplots(figsize=(12, 4))
-    # Generate F-distribution values for the left of the statistic
+    # 통계량 왼쪽 구간
     x = np.linspace(0, f_statistic, 500)
     y = stats.f.pdf(x, df_between, df_within)
     ax.plot(x, y, color='blue', linewidth=3)
-    # Fill the left region under the curve
+    # 왼쪽을 칠한다 — 기각하지 않는 쪽
     x = np.concatenate([[0], x, [f_statistic], [0]])
     y = np.concatenate([[0], y, [0], [0]])
     ax.fill(x, y, color='blue', alpha=0.1)
-    # Generate F-distribution values for the right of the statistic
+    # 통계량 오른쪽 꼬리
     x = np.linspace(f_statistic, 20, 500)
     y = stats.f.pdf(x, df_between, df_within)
     ax.plot(x, y, color='red', linewidth=3)
-    # Fill the right region under the curve (p-value region)
+    # 오른쪽을 칠한다 — 이 넓이가 p-값이다
     x = np.concatenate([[f_statistic], x, [20], [f_statistic]])
     y = np.concatenate([[0], y, [0], [0]])
     ax.fill(x, y, color='red', alpha=0.1)
-    # Annotate the p-value region
+    # p-값을 화살표로 가리킨다
     xy = ((f_statistic + 15.0) / 2, 0.01)
     xytext = (f_statistic + 3, 0.5)
     arrowprops = dict(color='black', width=0.2, headwidth=8)
     ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
-    # Customize plot appearance
+    # 축과 테두리를 다듬는다
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
     ax.spines['bottom'].set_position('zero')
@@ -553,20 +565,24 @@ $$
 
 네 웹페이지의 체류시간을 검정한다고 하자:
 
+<div class="codebox" markdown>
+
+**예제 3.** 네 웹페이지의 체류시간
+
 ```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-# Session time data for four pages
+# 웹페이지 네 개의 체류시간 자료
 four_sessions = pd.DataFrame({
     'Time': [164, 178, 175, 155, 172, 182, 180, 179, 165, 166,
              172, 161, 171, 173, 158, 161, 179, 159, 167, 162],
     'Page': ['Page 1']*5 + ['Page 2']*5 + ['Page 3']*5 + ['Page 4']*5
 })
-# Observed variance of group means
+# 관측된 집단평균들의 분산. 이 값이 클수록 집단 차이가 크다는 뜻이다.
 obs_variance = four_sessions.groupby('Page')['Time'].mean().var()
 print(f"Observed variance of means: {obs_variance:.2f}")
-# Permutation test
+# 순열검정: 집단 이름표를 뒤섞어 귀무분포를 만든다
 def perm_test_anova(df, group_col='Page', value_col='Time', n_perms=3000):
     """
     Permutation test for ANOVA using variance of group means.
@@ -592,20 +608,20 @@ def perm_test_anova(df, group_col='Page', value_col='Time', n_perms=3000):
     obs_var = df.groupby(group_col)[value_col].mean().var()
     perm_vars = np.zeros(n_perms)
     for i in range(n_perms):
-        # Shuffle values and reassign to groups
+        # 값을 뒤섞어 같은 크기의 집단으로 다시 나눈다
         shuffled_values = np.random.permutation(df[value_col].values)
         perm_df = df.copy()
         perm_df[value_col] = shuffled_values
-        # Calculate variance of group means
+        # 뒤섞은 자료에서 집단평균들의 분산을 구한다
         perm_vars[i] = perm_df.groupby(group_col)[value_col].mean().var()
     p_value = np.mean(perm_vars >= obs_var)
     return p_value, perm_vars, obs_var
-# Run permutation test
+# 순열검정 실행
 np.random.seed(42)
 p_val, perm_vars, obs_var = perm_test_anova(four_sessions)
 print(f"Permutation test p-value: {p_val:.4f}")
 print(f"Conclusion: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
-# Visualization
+# 귀무분포에 관측값을 얹어 본다
 fig, ax = plt.subplots(figsize=(10, 6))
 ax.hist(perm_vars, bins=30, alpha=0.7, color='steelblue', edgecolor='black')
 ax.axvline(obs_var, color='red', linewidth=2, label=f'Observed = {obs_var:.2f}')
@@ -626,6 +642,8 @@ Observed variance of means: 14.92
 Permutation test p-value: 0.3673
 Conclusion: Fail to reject H0
 ```
+
+</div>
 
 ![순열분포](./img/f_test_504.png)
 
@@ -658,6 +676,10 @@ $$
 
 #### 예제: F-통계량 기반 검정
 
+<div class="codebox" markdown>
+
+**예제 4.** 집단평균 분산을 통계량으로 쓴 순열검정
+
 ```python
 from scipy import stats
 def perm_test_anova_f(df, group_col='Page', value_col='Time', n_perms=3000):
@@ -666,23 +688,23 @@ def perm_test_anova_f(df, group_col='Page', value_col='Time', n_perms=3000):
     """
     groups = df[group_col].unique()
     group_sizes = {g: (df[group_col] == g).sum() for g in groups}
-    # Observed F-statistic
+    # 관측된 F 값
     model = smf.ols(f'{value_col} ~ C({group_col})', data=df).fit()
     anova_table = sm.stats.anova_lm(model)
     f_obs = anova_table['F'].iloc[0]
     perm_f_stats = np.zeros(n_perms)
     for i in range(n_perms):
-        # Shuffle values
+        # 값을 뒤섞는다
         shuffled_values = np.random.permutation(df[value_col].values)
         perm_df = df.copy()
         perm_df[value_col] = shuffled_values
-        # Calculate F-statistic
+        # 뒤섞은 자료의 F 값
         perm_model = smf.ols(f'{value_col} ~ C({group_col})', data=perm_df).fit()
         perm_anova = sm.stats.anova_lm(perm_model)
         perm_f_stats[i] = perm_anova['F'].iloc[0]
     p_value = np.mean(perm_f_stats >= f_obs)
     return p_value, perm_f_stats, f_obs
-# Run F-based permutation test
+# F 를 통계량으로 쓴 순열검정
 import statsmodels.formula.api as smf
 import statsmodels.api as sm
 p_val_f, perm_f, obs_f = perm_test_anova_f(four_sessions)
@@ -700,14 +722,20 @@ Observed F: 1.1161
 p-value: 0.3550
 ```
 
+</div>
+
 앞의 분산 기반 순열검정이 준 0.3673과 가깝다. 두 검정통계량이 다르지만 같은 정보를 다르게 요약할 뿐이기 때문이다. 실제로 집단 크기가 모두 같으면 집단평균의 분산과 $F$는 단조 관계라 순위가 같고, 순열 p-값도 모의실험 오차 범위에서 일치한다.
 
 ### 비교: 순열검정 대 모수적 분산분석
 
 모수적 가정이 성립하면 두 접근이 비슷한 결과를 준다:
 
+<div class="codebox" markdown>
+
+**예제 5.** 순열검정과 모수적 분산분석의 비교
+
 ```python
-# Parametric ANOVA
+# 모수적 분산분석. 순열검정 결과와 견준다.
 f_stat, p_param = stats.f_oneway(
     four_sessions[four_sessions.Page == 'Page 1']['Time'],
     four_sessions[four_sessions.Page == 'Page 2']['Time'],
@@ -732,6 +760,8 @@ p-value: 0.3718
 Permutation ANOVA (variance-based):
 p-value: 0.3673
 ```
+
+</div>
 
 모수적 분산분석의 0.3718과 순열검정의 0.3673이 거의 같다. 자료가 정규성에서 크게 벗어나지 않으면 두 방법이 같은 답을 준다는 뜻이다.
 

@@ -8,6 +8,10 @@
 
 ## 설정
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -44,6 +48,8 @@ C         20  12.191  1.145
 F = 23.7708, p = 0.0000
 ```
 
+</div>
+
 표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
 
 ## 확인 방법
@@ -56,6 +62,10 @@ Q-Q 그림은 관측된 잔차의 분위수를 정규분포의 이론적 분위�
 - 체계적인 **S자** 곡선은 치우침을 시사한다.
 - 양 극단의 몇몇 점이 벗어나는 것은 자연스러운 표집 변동을 반영한 것일 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** Q-Q 그림
+
 ```python
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
@@ -66,6 +76,8 @@ sm.qqplot(model.resid, line='s')
 plt.title("Q-Q Plot of Residuals")
 plt.show()
 ```
+
+</div>
 
 ![잔차의 Q-Q 그림](./img/normality_59.png)
 
@@ -80,6 +92,10 @@ W = \frac{\left(\sum_{i=1}^n a_i x_{(i)}\right)^2}{\sum_{i=1}^n (x_i - \bar{x})^
 $$
 
 여기서 $x_{(i)}$는 정렬된 표본값이고, $a_i$는 정규분포에서 크기 $n$인 표본의 순서통계량의 평균, 분산, 공분산으로부터 만들어지는 상수이다.
+
+<div class="codebox" markdown>
+
+**예제 3.** Shapiro-Wilk 검정
 
 ```python
 from scipy.stats import shapiro
@@ -96,6 +112,8 @@ print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
 Shapiro-Wilk Test: W = 0.9870, p-value = 0.7711
 ```
 
+</div>
+
 $p = 0.77$로 정규성에 반하는 증거가 없다. 자료를 실제로 정규분포에서 만들었으니 당연한 결과이며, 검정이 제대로 작동한다는 확인이기도 하다.
 
 !!! warning "표본크기에 대한 민감성"
@@ -105,15 +123,23 @@ $p = 0.77$로 정규성에 반하는 증거가 없다. 자료를 실제로 정�
 
 잔차를 히스토그램으로 그리면 분포의 모양을 빠르게 시각적으로 평가할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 잔차의 히스토그램
+
 ```python
 import matplotlib.pyplot as plt
 
+# 히스토그램은 Q-Q 그림보다 거칠지만 치우침과 봉우리 수를 한눈에 보여 준다.
+# 계급 수에 따라 모양이 달라지므로 단독으로 판단하지 말고 Q-Q 그림과 함께 본다.
 plt.hist(model.resid, bins=20, density=True, alpha=0.7, edgecolor='black')
 plt.xlabel("Residuals")
 plt.ylabel("Density")
 plt.title("Histogram of Residuals")
 plt.show()
 ```
+
+</div>
 
 ![잔차의 히스토그램](./img/normality_92.png)
 

@@ -12,6 +12,10 @@
 
 ## 설정
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -48,6 +52,8 @@ C         20  12.191  1.145
 F = 23.7708, p = 0.0000
 ```
 
+</div>
+
 표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
 
 ## 확인 방법
@@ -80,6 +86,10 @@ $$
 - $d < 2$: 양의 자기상관(인접한 잔차가 비슷한 경향).
 - $d > 2$: 음의 자기상관(인접한 잔차의 부호가 번갈아 나타나는 경향).
 
+<div class="codebox" markdown>
+
+**예제 2.** Durbin-Watson 검정
+
 ```python
 from statsmodels.stats.stattools import durbin_watson
 
@@ -96,15 +106,23 @@ print(f"Durbin-Watson Statistic: {dw_stat:.4f}")
 Durbin-Watson Statistic: 2.1101
 ```
 
+</div>
+
 $d = 2.11$로 2에 가까워 자기상관의 증거가 없다. 자료를 서로 독립으로 생성했으니 기대한 결과다.
 
 ### 순서에 대한 잔차 그림
 
 자료에 자연스러운 순서(예: 수집 시각)가 있으면 그 순서에 대해 잔차를 그려 의존을 시사하는 패턴을 찾을 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 순서에 대한 잔차 그림
+
 ```python
 import matplotlib.pyplot as plt
 
+# 잔차를 관측 순서대로 찍는다. 이웃한 점들이 같은 쪽으로 몰려 다니면
+# 독립이 아니라는 신호다. 순서가 뜻을 갖는 자료(시간·공간)에서만 쓸 수 있다.
 plt.scatter(range(len(model.resid)), model.resid, alpha=0.6)
 plt.axhline(y=0, color='r', linestyle='--')
 plt.xlabel("Observation Order")
@@ -112,6 +130,8 @@ plt.ylabel("Residuals")
 plt.title("Residuals vs. Observation Order")
 plt.show()
 ```
+
+</div>
 
 ![순서에 대한 잔차](./img/independence_94.png)
 

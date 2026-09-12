@@ -87,7 +87,7 @@ $$
     import pingouin as pg
     import pandas as pd
 
-    # Sample data
+    # 예시 자료
     data = {
         "Group": ["A", "A", "A", "B", "B", "B", "C", "C", "C", "C"],
         "Values": [12, 14, 13, 22, 23, 19, 31, 33, 29, 35],
@@ -115,6 +115,10 @@ $$
 
 Welch 분산분석이 유의한 차이를 찾으면, 등분산이나 동일 표본크기를 가정하지 않는 **Games-Howell 검정** 같은 사후검정을 쓴다:
 
+<div class="codebox" markdown>
+
+**예제 1.** Games-Howell 사후검정
+
 ```python
 # Games-Howell 사후검정. Tukey HSD와 달리 쌍마다 자유도를 따로 계산한다.
 post_hoc = pg.pairwise_gameshowell(dv="Values", between="Group", data=df)
@@ -129,6 +133,8 @@ A B 13.0000 21.3333  -8.3333 1.3333  -6.2500 2.8764 0.0188 -4.0825
 A C 13.0000 32.0000 -19.0000 1.4142 -13.4350 4.0755 0.0004 -7.6277
 B C 21.3333 32.0000 -10.6667 1.7638  -6.0474 4.9154 0.0044 -3.7514
 ```
+
+</div>
 
 세 쌍이 모두 유의하다. `df` 열이 쌍마다 2.88, 4.08, 4.92로 다르다는 점이 Games-Howell의 특징이다. Tukey HSD라면 세 비교 모두 같은 자유도 $N - k = 7$을 썼을 것이다.
 

@@ -12,6 +12,10 @@ $$
 
 ## 설정
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -54,15 +58,24 @@ C         20  12.513  2.077
 F = 16.1314, p = 0.0000
 ```
 
+</div>
+
 이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
 
 ## 잔차 대 적합값 그림
 
 가장 유익한 진단 그림은 잔차를 적합값에 대해 그린 것이다. 일원배치 분산분석에서 적합값은 곧 집단 평균이므로, 각 집단 평균 위치에 잔차가 수직 띠로 나타난다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 잔차 대 적합값 그림
+
 ```python
 import matplotlib.pyplot as plt
 
+# 잔차 대 적합값 그림은 진단의 출발점이다. 점들이 0 선 둘레에 폭을 일정하게
+# 유지하며 흩어져 있으면 좋다. 깔때기 모양이면 등분산이 깨진 것이고, 굽은
+# 모양이면 모형이 놓친 구조가 남아 있다는 뜻이다.
 plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
 plt.axhline(y=0, color='r', linestyle='--')
 plt.xlabel("Fitted Values")
@@ -70,6 +83,8 @@ plt.ylabel("Residuals")
 plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
+
+</div>
 
 ![잔차 대 적합값](./img/residual_analysis_63.png)
 
@@ -103,9 +118,15 @@ $$
 
 여기서 $\hat{\sigma}$는 추정된 표준편차이고 $h_{ii}$는 관측값 $i$의 지렛값이다. 모형 가정 아래에서 표준화 잔차는 근사적으로 표준정규분포를 따라야 한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 표준화 잔차
+
 ```python
 import numpy as np
 
+# 표준화 잔차는 잔차를 그 표준오차로 나눈 것이다. 단위가 사라지므로
+# 어느 자료에서든 ±2 를 같은 뜻으로 읽을 수 있다.
 influence = model.get_influence()
 standardized_resid = influence.resid_studentized_internal
 
@@ -119,6 +140,8 @@ plt.title("Standardized Residuals vs. Fitted Values")
 plt.show()
 ```
 
+</div>
+
 ![표준화 잔차](./img/residual_analysis_100.png)
 
 세로축이 표준편차 단위로 바뀌어 회색 기준선($\pm 2$)과 곧바로 비교할 수 있다. 이상점 하나가 4를 훌쩍 넘고, 나머지는 대부분 $\pm 2$ 안에 있다.
@@ -131,13 +154,21 @@ $|r_i| > 2$인 관측값은 자세히 살펴볼 만하고, $|r_i| > 3$인 관측
 
 척도-위치 그림은 $\sqrt{|r_i|}$를 적합값에 대해 그린 것으로 등분산성을 평가하는 데 유용하다. 추세선이 수평이고 점들이 고르게 퍼져 있으면 분산이 일정함을 나타낸다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 척도-위치 그림
+
 ```python
+# 척도-위치 그림은 부호를 없애고 크기만 본다. 제곱근을 씌우는 것은 큰 값이
+# 그림을 독차지하지 않게 하려는 것이다. 추세선이 평평하면 등분산이다.
 plt.scatter(model.fittedvalues, np.sqrt(np.abs(standardized_resid)), alpha=0.6)
 plt.xlabel("Fitted Values")
 plt.ylabel(r"$\sqrt{|\mathrm{Standardized\ Residuals}|}$")
 plt.title("Scale-Location Plot")
 plt.show()
 ```
+
+</div>
 
 ![척도-위치 그림](./img/residual_analysis_122.png)
 

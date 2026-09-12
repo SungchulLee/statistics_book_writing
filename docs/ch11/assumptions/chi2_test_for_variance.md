@@ -42,15 +42,22 @@ $$
 
 이다.
 
-## 구현
-
 다음 함수는 이 검정을 처음부터 구현한다:
+
+<div class="codebox" markdown>
+
+**예제 1.** 분산에 대한 카이제곱 검정 구현
 
 ```python
 import numpy as np
 import scipy.stats as stats
 
 def chi2_test_for_variance(data, sigma2_0=1.0):
+    """모분산이 sigma2_0 인지 검정한다.
+
+    카이제곱 분포는 좌우가 대칭이 아니다. 그래서 양측 p-값을 만들 때
+    한쪽 꼬리 넓이의 두 배를 쓰되, 둘 중 작은 쪽을 골라 두 배 한다.
+    """
     n = len(data)
     s2 = np.var(data, ddof=1)
     statistic = (n - 1) * s2 / sigma2_0
@@ -61,7 +68,13 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
     return statistic, p_value
 ```
 
+</div>
+
 예제는 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$에 대해 $N(1, \sigma_Y^2)$에서 표본을 생성하고 $H_0: \sigma^2 = 1$을 검정한다:
+
+<div class="codebox" markdown>
+
+**예제 2.** 검정 실행
 
 ```python
 seed = 1
@@ -84,6 +97,8 @@ sigma=1.10: s2=0.958 T=94.80 p=0.799
 sigma=1.15: s2=1.047 T=103.62 p=0.711
 sigma=1.20: s2=1.140 T=112.82 p=0.324
 ```
+
+</div>
 
 p-값이 단조롭지 않다는 점이 눈에 띈다. $\sigma_Y$가 1.00일 때 $p = 0.125$로 가장 작고, 1.10에서 0.799로 가장 크다.
 

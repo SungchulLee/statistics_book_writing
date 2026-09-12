@@ -25,6 +25,10 @@ $$
 
 ## 1단계: 모형 적합
 
+<div class="codebox" markdown>
+
+**예제 1.** 1단계 — 모형 적합
+
 ```python
 import pandas as pd
 from statsmodels.formula.api import ols
@@ -52,6 +56,8 @@ C(supp):C(dose)   108.319000   2.0   4.106991  2.186027e-02
 Residual          712.106000  54.0        NaN           NaN
 ```
 
+</div>
+
 용량의 효과가 압도적이고($F = 92$), 보충제의 효과와 교호작용도 유의하다. 교호작용이 유의하다는 것은 주효과를 따로 해석하기 전에 조심해야 한다는 신호다. "OJ가 VC보다 낫다"는 말이 용량마다 다르게 성립하기 때문이다.
 
 제II형 제곱합은 각 주효과를 다른 주효과로 조정하되 교호작용은 무시하고 검정한다. 설계가 균형이거나 거의 균형일 때 권장된다.
@@ -60,9 +66,14 @@ Residual          712.106000  54.0        NaN           NaN
 
 사후검정은 한 요인의 어느 수준이 다른지 찾아낸다. 각 주효과에 대해 Tukey HSD를 따로 수행한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 2단계 — 주효과 사후검정
+
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
+# 두 요인의 주효과를 각각 사후비교한다. 다른 요인은 잠시 무시하는 셈이다.
 print(pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05))
 print(pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05))
 ```
@@ -86,6 +97,8 @@ group1 group2 meandiff p-adj  lower  upper reject
 -------------------------------------------------
 ```
 
+</div>
+
 용량은 세 수준이 서로 모두 다르다. 반면 보충제는 $p = 0.060$으로 유의하지 않게 나오는데, 분산분석표의 $p = 0.00023$과 어긋나 보인다.
 
 모순이 아니다. 분산분석은 용량을 모형에 넣은 채 보충제 효과를 보지만, 이 Tukey는 용량을 무시하고 OJ 30개와 VC 30개를 통째로 비교한다. 용량이 만드는 큰 변동이 잡음으로 남아 보충제의 차이를 덮는 것이다. **주효과의 사후검정은 다른 요인을 무시한다**는 점을 잊으면 이런 표를 잘못 읽게 된다.
@@ -94,7 +107,13 @@ group1 group2 meandiff p-adj  lower  upper reject
 
 $a \times b$개의 칸 평균을 모두 비교하려면 결합 집단 변수를 만들어 교호작용 칸에 Tukey HSD를 수행한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 3단계 — 교호작용 사후검정
+
 ```python
+# 교호작용이 유의하면 주효과만으로는 부족하다. 두 요인을 붙여 만든 여섯 칸을
+# 서로 견주어야 "어느 조합이 어느 조합과 다른가"를 말할 수 있다.
 df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
 print(pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05))
 ```
@@ -124,6 +143,8 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 ------------------------------------------------------
 ```
 
+</div>
+
 교호작용의 정체가 여기서 드러난다. 같은 용량끼리 비교한 세 줄을 뽑아 보면
 
 | 용량 | OJ − VC | p-adj |
@@ -140,10 +161,16 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 교호작용 그림은 한 요인을 가로축에 두고 다른 요인의 각 수준을 별도의 선으로 그려 칸 평균을 보여준다. 선이 평행하지 않으면 교호작용을 시사한다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 4단계 — 교호작용 그림
+
 ```python
 import matplotlib.pyplot as plt
 from statsmodels.graphics.factorplots import interaction_plot
 
+# 마지막으로 그림을 다시 본다. 사후비교로 갈린 쌍이 그림에서 어디인지
+# 짚어 보면 결과가 몸에 붙는다.
 fig, ax = plt.subplots(figsize=(8, 4))
 interaction_plot(df['dose'], df['supp'], df['len'], ax=ax,
                  markers=['o', 's'], linestyles=['--', '-.'])
@@ -153,6 +180,8 @@ ax.set_ylabel("len")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![교호작용 그림](./img/twoway_pipeline_70.png)
 

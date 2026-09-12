@@ -10,14 +10,20 @@
 
 ### 1단계: 자료 적재와 모형 적합
 
+<div class="codebox" markdown>
+
+**예제 1.** 사례 1 — 자료와 모형
+
 ```python
 import pandas as pd
 import seaborn as sns
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 
+# 붓꽃 자료에서 두 품종만 남긴다. 집단이 둘이면 분산분석과 이표본 t-검정이
+# 같은 결론을 주며, F = t^2 이라는 관계도 확인할 수 있다.
 data = sns.load_dataset("iris")
-data = data[data["species"] != "setosa"]  # Two species for simplicity
+data = data[data["species"] != "setosa"]
 
 model = ols('sepal_length ~ species', data=data).fit()
 anova_table = sm.stats.anova_lm(model, typ=2)
@@ -32,20 +38,26 @@ species   10.6276   1.0  31.687502  1.724856e-07
 Residual  32.8680  98.0        NaN           NaN
 ```
 
+</div>
+
 $F = 31.7$, $p = 1.7 \times 10^{-7}$로 두 종의 꽃받침 길이가 다르다는 결론이 압도적이다. 집단당 50개씩이라 검정력이 넉넉하다.
 
 ### 2단계: 정규성 확인
+
+<div class="codebox" markdown>
+
+**예제 2.** 사례 1 — 정규성 확인
 
 ```python
 import matplotlib.pyplot as plt
 from scipy.stats import shapiro
 
-# Q-Q Plot
+# 정규성은 자료가 아니라 잔차에 요구된다.
 sm.qqplot(model.resid, line='s')
 plt.title("Q-Q Plot of Residuals")
 plt.show()
 
-# Shapiro-Wilk Test
+# 표본이 크면 사소한 이탈에도 유의하게 나오므로 그림과 함께 읽는다.
 stat, p_value = shapiro(model.resid)
 print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
 ```
@@ -56,15 +68,22 @@ print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
 Shapiro-Wilk Test: W = 0.9831, p-value = 0.2285
 ```
 
+</div>
+
 ![잔차의 Q-Q 그림](./img/case_studies_29.png)
 
 $p = 0.23$으로 정규성에 반하는 증거가 없고, Q-Q 그림의 점들도 기준선을 잘 따른다.
 
 ### 3단계: 등분산성 확인
 
+<div class="codebox" markdown>
+
+**예제 3.** 사례 1 — 등분산성 확인
+
 ```python
 from scipy.stats import levene
 
+# Levene 검정으로 두 집단의 분산이 같다고 볼 수 있는지 확인한다.
 group1 = data[data['species'] == 'versicolor']['sepal_length']
 group2 = data[data['species'] == 'virginica']['sepal_length']
 stat, p_value = levene(group1, group2)
@@ -77,11 +96,19 @@ print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
 Levene's Test: F = 1.0245, p-value = 0.3139
 ```
 
+</div>
+
 $p = 0.31$로 등분산도 기각되지 않는다. 두 가정이 모두 무난하므로 표준 분산분석 결과를 그대로 쓸 수 있다.
 
 ### 4단계: 독립성 확인 (잔차 그림)
 
+<div class="codebox" markdown>
+
+**예제 4.** 사례 1 — 잔차 그림
+
 ```python
+# 일원배치에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
+# 각 줄의 퍼짐이 비슷한지를 본다.
 plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
 plt.axhline(y=0, color='r', linestyle='--')
 plt.xlabel('Fitted Values')
@@ -89,6 +116,8 @@ plt.ylabel('Residuals')
 plt.title('Residuals vs. Fitted Values')
 plt.show()
 ```
+
+</div>
 
 ![잔차 대 적합값](./img/case_studies_56.png)
 
@@ -108,11 +137,16 @@ plt.show()
 
 ### 1단계: 자료 적재와 모형 적합
 
+<div class="codebox" markdown>
+
+**예제 5.** 사례 2 — 자료와 모형
+
 ```python
 import pandas as pd
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 
+# 근무 형태 세 가지에 따른 생산성. 집단마다 다섯 명씩이다.
 data = pd.DataFrame({
     'productivity': [68, 75, 80, 65, 85, 78, 70, 82, 90, 88, 72, 95, 67, 85, 79],
     'environment': ['remote']*5 + ['office']*5 + ['hybrid']*5
@@ -131,17 +165,23 @@ environment   130.0   2.0  0.768019  0.485443
 Residual     1015.6  12.0       NaN       NaN
 ```
 
+</div>
+
 $F = 0.77$, $p = 0.49$로 기각하지 못한다. 세 형태의 생산성 평균이 다르다는 증거가 없다.
 
 다만 집단당 5명뿐이라 검정력이 거의 없다시피 하다는 점을 함께 보아야 한다. 잔차 자유도가 12에 불과하므로 이 결과를 "차이가 없다"로 읽으면 안 된다.
 
 ### 2단계: 가정 확인
 
+<div class="codebox" markdown>
+
+**예제 6.** 사례 2 — 가정 확인
+
 ```python
 import matplotlib.pyplot as plt
 from scipy.stats import shapiro, levene
 
-# Normality
+# 정규성 — 잔차의 Q-Q 그림과 Shapiro-Wilk 검정
 sm.qqplot(model.resid, line='s')
 plt.title("Q-Q Plot of Residuals")
 plt.show()
@@ -149,14 +189,14 @@ plt.show()
 stat, p_value = shapiro(model.resid)
 print(f"Shapiro-Wilk Test: p-value = {p_value:.4f}")
 
-# Homoscedasticity
+# 등분산성 — Levene 검정
 group1 = data[data['environment'] == 'remote']['productivity']
 group2 = data[data['environment'] == 'office']['productivity']
 group3 = data[data['environment'] == 'hybrid']['productivity']
 stat, p_value = levene(group1, group2, group3)
 print(f"Levene's Test: p-value = {p_value:.4f}")
 
-# Independence
+# 독립성 — 잔차 대 적합값 그림
 plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
 plt.axhline(y=0, color='r', linestyle='--')
 plt.xlabel('Fitted Values')
@@ -171,6 +211,8 @@ plt.show()
 Shapiro-Wilk Test: p-value = 0.7449
 Levene's Test: p-value = 0.7631
 ```
+
+</div>
 
 ![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_96.png)
 
@@ -190,11 +232,16 @@ Levene's Test: p-value = 0.7631
 
 ### 1단계: 자료 적재와 모형 적합
 
+<div class="codebox" markdown>
+
+**예제 7.** 사례 3 — 자료와 모형
+
 ```python
 import pandas as pd
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 
+# 지점 네 곳의 고객만족도. 지점마다 다섯 건씩이다.
 data = pd.DataFrame({
     'satisfaction': [4.5, 3.8, 4.7, 4.2, 4.9, 4.1, 3.5, 4.3, 4.8, 3.9,
                      4.4, 4.0, 3.7, 4.2, 4.6, 4.8, 3.6, 4.3, 4.1, 4.7],
@@ -214,15 +261,21 @@ location  0.2655   3.0  0.456186  0.716615
 Residual  3.1040  16.0       NaN       NaN
 ```
 
+</div>
+
 $F = 0.46$, $p = 0.72$로 네 매장의 만족도에 차이가 없다. 집단 간 제곱합 0.27이 잔차 제곱합 3.10에 비해 아주 작다.
 
 ### 2단계: 가정 확인
+
+<div class="codebox" markdown>
+
+**예제 8.** 사례 3 — 가정 확인
 
 ```python
 import matplotlib.pyplot as plt
 from scipy.stats import shapiro, levene
 
-# Normality
+# 정규성 — 잔차의 Q-Q 그림과 Shapiro-Wilk 검정
 sm.qqplot(model.resid, line='s')
 plt.title("Q-Q Plot of Residuals")
 plt.show()
@@ -230,12 +283,12 @@ plt.show()
 stat, p_value = shapiro(model.resid)
 print(f"Shapiro-Wilk Test: p-value = {p_value:.4f}")
 
-# Homoscedasticity
+# 등분산성 — Levene 검정
 groups = [data[data['location'] == loc]['satisfaction'] for loc in ['A', 'B', 'C', 'D']]
 stat, p_value = levene(*groups)
 print(f"Levene's Test: p-value = {p_value:.4f}")
 
-# Independence
+# 독립성 — 잔차 대 적합값 그림
 plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
 plt.axhline(y=0, color='r', linestyle='--')
 plt.xlabel('Fitted Values')
@@ -251,6 +304,8 @@ Shapiro-Wilk Test: p-value = 0.5488
 Levene's Test: p-value = 0.9343
 ```
 
+</div>
+
 ![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_156.png)
 
 가정 위반의 증거가 없다.
@@ -259,9 +314,14 @@ Levene's Test: p-value = 0.9343
 
 분산분석이 유의한 차이를 드러내고 가정도 충족되면 사후 쌍별 비교를 수행한다:
 
+<div class="codebox" markdown>
+
+**예제 9.** 사례 3 — 사후분석
+
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
+# 분산분석이 유의했으므로 어느 지점 쌍이 다른지 사후비교로 좁힌다.
 tukey = pairwise_tukeyhsd(data['satisfaction'], data['location'], alpha=0.05)
 print(tukey)
 ```
@@ -281,6 +341,8 @@ group1 group2 meandiff p-adj  lower  upper reject
      C      D     0.12 0.9723 -0.677 0.917  False
 -------------------------------------------------
 ```
+
+</div>
 
 여섯 비교 중 유의한 것이 하나도 없다. 전역 분산분석이 기각하지 못했으니 당연한 결과다.
 

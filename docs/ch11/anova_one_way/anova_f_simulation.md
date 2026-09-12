@@ -40,6 +40,10 @@ $$
 
 `simulate_f` 함수는 각 정규분포에서 집단을 뽑고 반복마다 분산분석 F-통계량을 계산한다:
 
+<div class="codebox" markdown>
+
+**예제 1.** F 통계량의 귀무분포 모의실험
+
 ```python
 import numpy as np
 from scipy import stats
@@ -59,7 +63,13 @@ def simulate_f(mu, sigma, sizes, n_sim=1000):
     return np.array(F_vals), np.array(p_vals)
 ```
 
+</div>
+
 각 시나리오마다 임계값과 경험적 기각률을 계산한다:
+
+<div class="codebox" markdown>
+
+**예제 2.** 집단 차이를 키워 가며 보기
 
 ```python
 scenarios = [
@@ -91,6 +101,8 @@ for name, mu, sigma, sizes in scenarios:
 중간 분리, 큰 분산, n=5000          2.996   100.0%
 분리 없음, 등분산                   3.159     4.8%
 ```
+
+</div>
 
 평균이 모두 같은 마지막 시나리오에서 기각률 4.8%는 명목 5%와 어긋나지 않는다(모의실험 오차 0.7%p). 검정이 올바르게 보정되어 있다는 뜻이다.
 

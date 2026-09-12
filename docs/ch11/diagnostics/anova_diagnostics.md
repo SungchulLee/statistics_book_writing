@@ -6,6 +6,10 @@
 
 ## 설정
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -48,6 +52,8 @@ C         20  12.513  2.077
 F = 16.1314, p = 0.0000
 ```
 
+</div>
+
 이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
 
 ## 진단 작업 흐름
@@ -71,10 +77,16 @@ $$
 
 을 그렇지 않다는 대립가설에 대해 평가한다. Q-Q 그림은 표본 분위수가 이론적 정규 분위수와 맞는지 보여주어 검정을 보완한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 1단계 — 정규성
+
 ```python
 from scipy.stats import shapiro
 import statsmodels.api as sm
 
+# 정규성은 자료가 아니라 잔차에 요구되는 가정이다. 집단마다 평균이 다르므로
+# 자료 전체를 한 번에 검정하면 안 된다.
 resid = model.resid
 stat, p_value = shapiro(resid)
 print(f"Shapiro-Wilk: W = {stat:.4f}, p = {p_value:.4f}")
@@ -86,6 +98,8 @@ sm.qqplot(resid, line='s')
 ```
 Shapiro-Wilk: W = 0.8116, p = 0.0000
 ```
+
+</div>
 
 ![잔차의 Q-Q 그림](./img/anova_diagnostics_74.png)
 
@@ -107,9 +121,15 @@ $$
 
 이며 $Z_{ij} = |y_{ij} - \tilde{y}_{i}|$이고 $\tilde{y}_i$는 집단 중앙값이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 2단계 — 등분산성
+
 ```python
 from scipy.stats import levene, bartlett
 
+# 두 검정을 함께 돌려 결론이 갈리는지 본다. 갈린다면 정규성이 의심스럽다는
+# 뜻이므로, 정규성을 덜 타는 Levene 쪽을 믿는다.
 groups = [data[data['group'] == g]['response'].values for g in data['group'].unique()]
 stat_lev, p_lev = levene(*groups)
 stat_bart, p_bart = bartlett(*groups)
@@ -123,6 +143,8 @@ print(f"Bartlett: chi2 = {stat_bart:.4f}, p = {p_bart:.4f}")
 Levene:   W = 1.1666, p = 0.3188
 Bartlett: chi2 = 16.6837, p = 0.0002
 ```
+
+</div>
 
 두 검정의 결론이 갈린다. Bartlett은 $p = 0.0002$로 등분산을 강하게 기각하고, Levene은 $p = 0.32$로 기각하지 못한다.
 
@@ -140,9 +162,15 @@ $$
 
 2에 가까운 값은 자기상관이 없음을, 0에 가까우면 양의 자기상관을, 4에 가까우면 음의 자기상관을 시사한다. 흔한 경험 법칙은 $d \in (1.5, 2.5)$이면 받아들일 만하다는 것이다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 3단계 — 독립성
+
 ```python
 from statsmodels.stats.stattools import durbin_watson
 
+# 통계량은 0 에서 4 사이이고 2 가 무상관에 해당한다. 2 보다 뚜렷이 작으면
+# 양의 자기상관, 크면 음의 자기상관이다.
 dw = durbin_watson(model.resid)
 print(f"Durbin-Watson: {dw:.4f}")
 ```
@@ -152,6 +180,8 @@ print(f"Durbin-Watson: {dw:.4f}")
 ```
 Durbin-Watson: 1.7586
 ```
+
+</div>
 
 1.76으로 경험칙의 범위 $(1.5, 2.5)$ 안에 있어 자기상관의 증거가 없다. 다만 여기서 "순서"는 자료프레임의 행 번호일 뿐이므로, 이 값이 의미를 가지려면 자료가 실제 수집 순서대로 정렬되어 있어야 한다.
 
@@ -167,9 +197,18 @@ $$
 
 이며 $n$은 전체 관측 수이다. 이 문턱을 넘는 관측값은 자료 입력 오류인지 아니면 정말로 특이한 조건인지 조사해야 한다.
 
+<div class="codebox" markdown>
+
+**예제 5.** 4단계 — 영향점
+
 ```python
+# Cook 의 거리는 그 관측값 하나를 뺐을 때 적합값 전체가 얼마나 움직이는지를
+# 잰다. 크다는 것은 결론이 그 한 점에 기대고 있다는 뜻이다.
 influence = model.get_influence()
 cooks_d = influence.cooks_distance[0]
+
+# 4/n 은 널리 쓰이는 어림 기준일 뿐 검정이 아니다. 넘는 점은 지울 대상이
+# 아니라 들여다볼 대상이다.
 threshold = 4 / len(cooks_d)
 flagged = np.where(cooks_d > threshold)[0]
 print(f"threshold = {threshold:.4f}")
@@ -185,6 +224,8 @@ flagged observations = [52 59]
 max Cook's D = 0.5058 (obs 59)
 ```
 
+</div>
+
 문턱을 넘는 관측값이 둘이고, 그중 압도적인 것이 마지막 관측값(59번)이다. Cook 거리 0.506은 문턱 0.067의 여덟 배에 가깝고 두 번째로 큰 값과도 크게 벌어져 있다. 설정에서 20.0으로 바꿔 심어 둔 바로 그 점이다.
 
 Cook의 거리는 정규성 검정이나 등분산 검정과 달리 **어느 관측값이** 문제인지 짚어 준다. 진단의 순서를 이렇게 잡으면 좋다. 먼저 영향점을 찾고, 그것을 제거했을 때 결론이 바뀌는지 확인한 뒤, 남은 문제를 분포 가정의 문제로 다룬다.
@@ -193,26 +234,35 @@ Cook의 거리는 정규성 검정이나 등분산 검정과 달리 **어느 관
 
 다음 함수는 어떤 일원배치 분산분석 설계에도 전체 파이프라인을 실행하고 2×2 진단 패널(Q-Q 그림, 잔차 히스토그램, 잔차 대 적합값, Cook의 거리)을 만든다.
 
+<div class="codebox" markdown>
+
+**예제 6.** 네 진단을 한꺼번에
+
 ```python
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
 
 def run_full_diagnostics(data, response_col, group_col):
+    """앞의 진단 넷을 한 번에 돌려 2x2 격자로 보여 준다.
+
+    실제 분석에서는 이 네 그림을 늘 함께 본다. 하나만 보고 판단하면
+    다른 쪽에서 드러날 문제를 놓치기 쉽다.
+    """
     formula = f'{response_col} ~ {group_col}'
     model = ols(formula, data=data).fit()
     anova_table = sm.stats.anova_lm(model, typ=2)
     print(anova_table)
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 8))
-    # Q-Q plot
+    # 왼쪽 위: Q-Q 그림 — 정규성
     sm.qqplot(model.resid, line='s', ax=axes[0, 0])
-    # Histogram
+    # 오른쪽 위: 잔차 히스토그램 — 치우침과 봉우리
     axes[0, 1].hist(model.resid, bins=15, density=True, alpha=0.7, edgecolor='black')
-    # Residuals vs Fitted
+    # 왼쪽 아래: 잔차 대 적합값 — 등분산성과 남은 구조
     axes[1, 0].scatter(model.fittedvalues, model.resid, alpha=0.6)
     axes[1, 0].axhline(y=0, color='r', linestyle='--')
-    # Cook's distance
+    # 오른쪽 아래: Cook 의 거리 — 영향점
     cooks_d = model.get_influence().cooks_distance[0]
     axes[1, 1].stem(range(len(cooks_d)), cooks_d, markerfmt=",")
     axes[1, 1].axhline(y=4 / len(cooks_d), color='r', linestyle='--')
@@ -229,6 +279,8 @@ run_full_diagnostics(data, "response", "C(group)")
 C(group)   66.024886   2.0  16.131362  0.000003
 Residual  116.649122  57.0        NaN       NaN
 ```
+
+</div>
 
 ![분산분석 진단 패널](./img/anova_diagnostics_196.png)
 

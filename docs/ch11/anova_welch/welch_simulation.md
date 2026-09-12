@@ -26,6 +26,10 @@ $$
 
 귀무가설 아래에서는 모든 평균이 같다. 대립가설 아래에서는 집단 $G_3$이 2만큼 위로 이동한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 모의실험 설계
+
 ```python
 import numpy as np
 import pandas as pd
@@ -60,12 +64,23 @@ print(f"single run p-value (null) = {simulate_once(null=True):.4f}")
 single run p-value (null) = 0.4545
 ```
 
+</div>
+
 ## 모의실험 실행
 
 각 시나리오(귀무와 대립)마다 많은 반복을 생성하여 $\alpha = 0.05$에서의 기각률을 추정한다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 제1종 오류율과 검정력 재기
+
 ```python
 def run(n_sims=500, alpha=0.05):
+    """귀무가 참인 경우와 거짓인 경우를 함께 돌려 제1종 오류율과 검정력을 잰다.
+
+    분산이 다른 설계에서 보통의 분산분석은 제1종 오류율이 명목수준을 넘는다.
+    Welch 는 그것을 0.05 근처로 지켜 준다.
+    """
     pvals_null = [simulate_once(null=True) for _ in range(n_sims)]
     pvals_alt  = [simulate_once(null=False) for _ in range(n_sims)]
     type1 = np.mean(np.array(pvals_null) < alpha)
@@ -83,6 +98,8 @@ print(f"Estimated Power:        {power:.3f}")
 Estimated Type I error: 0.047
 Estimated Power:        0.100
 ```
+
+</div>
 
 제1종 오류가 0.047로 명목 0.05와 어긋나지 않는다(모의실험 표준오차 0.013). 분산비가 6배나 되고 표본크기도 10, 18, 7로 제각각인데도 Welch가 오류율을 지켜 낸다.
 

@@ -6,6 +6,10 @@
 
 ## 설정
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -48,6 +52,8 @@ C         20  12.513  2.077
 F = 16.1314, p = 0.0000
 ```
 
+</div>
+
 이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
 
 ## Cook의 거리
@@ -60,10 +66,15 @@ $$
 
 여기서 $r_i$는 표준화 잔차, $h_{ii}$는 지렛값, $p$는 모형의 모수 개수(일원배치 분산분석에서는 집단의 수)이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** Cook의 거리
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
+# 관측값마다 Cook 의 거리를 막대로 세운다. 유독 솟은 막대가 있는지를 본다.
 influence = model.get_influence()
 cooks_d = influence.cooks_distance[0]
 
@@ -87,6 +98,8 @@ threshold = 0.0667
 max Cook's D = 0.5058 at obs 59
 flagged = [52 59]
 ```
+
+</div>
 
 ![Cook의 거리](./img/influential_points_63.png)
 
@@ -112,7 +125,14 @@ $$
 
 지렛값이 큰 점이 반드시 영향점인 것은 아니다. 잔차가 클 때에만 영향점이 된다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 지렛값
+
 ```python
+# 지렛값은 설명변수 쪽에서 그 점이 얼마나 외따로 있는지를 잰다.
+# 지렛값이 크고 잔차도 큰 점이 가장 위험하다. 그 둘을 곱해 놓은 것이
+# 앞의 Cook 거리라고 보면 된다.
 leverage = influence.hat_matrix_diag
 
 plt.scatter(leverage, influence.resid_studentized_internal, alpha=0.6)
@@ -130,6 +150,8 @@ print(f"leverage: min = {leverage.min():.4f}, max = {leverage.max():.4f}")
 ```
 leverage: min = 0.0500, max = 0.0500
 ```
+
+</div>
 
 ![지렛값 대 스튜던트화 잔차](./img/influential_points_97.png)
 
@@ -168,7 +190,7 @@ $$
 
 <div class="codebox" markdown>
 
-### 예제 1. 완전한 영향 진단 { .eg }
+### 예제 4. 완전한 영향 진단 { .eg }
 
 ```python
 import statsmodels.api as sm

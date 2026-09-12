@@ -42,6 +42,10 @@ $$
 
 `scipy.stats.levene`에서는 `center` 인자로 이를 정한다. 기본값은 Brown-Forsythe 변형인 `'median'`이다:
 
+<div class="codebox" markdown>
+
+**예제 1.** 중심을 무엇으로 잡을 것인가
+
 ```python
 import scipy.stats as stats
 from scipy.stats import levene
@@ -60,11 +64,13 @@ print(f"F = {stat:.4f}, p = {pval:.4f}")
 F = 2.8007, p = 0.0974
 ```
 
+</div>
+
 표준편차가 1.5배 차이 나는데도 집단당 50개로는 5% 수준에서 기각하지 못한다. 등분산 검정의 검정력은 대체로 낮다.
 
 <div class="codebox" markdown>
 
-### 예제 1. Levene 검정 { .eg }
+### 예제 2. Levene 검정 { .eg }
 
 함께 제공되는 스크립트는 $X \sim N(0, 1)$과 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$인 $Y \sim N(1, \sigma_Y)$을 생성하고 각 쌍에 Levene 검정을 적용한다:
 

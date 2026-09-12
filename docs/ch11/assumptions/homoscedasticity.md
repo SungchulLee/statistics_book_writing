@@ -10,6 +10,10 @@
 
 ## 설정
 
+<div class="codebox" markdown>
+
+**예제 1.** 진단에 쓸 모형 준비
+
 ```python
 import numpy as np
 import pandas as pd
@@ -46,6 +50,8 @@ C         20  12.191  1.145
 F = 23.7708, p = 0.0000
 ```
 
+</div>
+
 표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
 
 ## 확인 방법
@@ -55,6 +61,10 @@ F = 23.7708, p = 0.0000
 Levene 검정은 모분산이 집단 사이에서 같다는 귀무가설을 평가한다. Bartlett 검정보다 정규성 이탈에 로버스트하여 실무에서 선호된다.
 
 집단 중앙값(또는 평균)으로부터의 절대편차를 계산한 뒤 그 편차에 일원배치 분산분석을 수행하는 방식으로 작동한다.
+
+<div class="codebox" markdown>
+
+**예제 2.** Levene 검정
 
 ```python
 from scipy.stats import levene
@@ -75,6 +85,8 @@ print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
 Levene's Test: F = 0.4091, p-value = 0.6662
 ```
 
+</div>
+
 $p = 0.67$로 등분산을 기각하지 못한다. 그런데 이 자료는 표준편차를 1.0, 1.3, 1.6으로 **실제로 다르게** 만든 것이다.
 
 검정이 틀린 것이 아니라 검정력이 부족한 것이다. 집단당 20개로는 1.6배의 표준편차 차이도 잡아내지 못한다. 등분산 검정이 기각하지 않았다는 사실을 "분산이 같다"는 근거로 삼으면 안 되는 이유가 여기 있다.
@@ -85,9 +97,15 @@ $p = 0.67$로 등분산을 기각하지 못한다. 그런데 이 자료는 표�
 
 Bartlett 검정은 분산의 동질성에 대한 또 다른 검정이다. 자료가 정말로 정규일 때 균일최강력 검정이지만 정규성 이탈에 매우 민감하여 실제 자료에서는 Levene 검정보다 덜 실용적이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** Bartlett 검정
+
 ```python
 from scipy.stats import bartlett
 
+# Bartlett 검정은 Levene 보다 검정력이 높지만 정규성을 전제한다.
+# 자료가 정규에서 조금만 벗어나도 등분산을 지나치게 자주 기각한다.
 stat, p_value = bartlett(group1, group2, group3)
 print(f"Bartlett's Test: chi2 = {stat:.4f}, p-value = {p_value:.4f}")
 ```
@@ -97,6 +115,8 @@ print(f"Bartlett's Test: chi2 = {stat:.4f}, p-value = {p_value:.4f}")
 ```
 Bartlett's Test: chi2 = 1.3880, p-value = 0.4996
 ```
+
+</div>
 
 Bartlett도 기각하지 못한다. 자료가 정규분포에서 나왔으므로 Bartlett이 Levene보다 유리한 상황인데도 그렇다. 표본크기가 문제다.
 
@@ -133,6 +153,10 @@ $$
 
 시각적 진단으로 잔차를 적합값(예측된 집단 평균)에 대해 그린다. 등분산성이 성립하면 모든 적합값에서 잔차의 흩어짐이 대체로 일정해야 한다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 잔차 대 적합값 그림
+
 ```python
 import matplotlib.pyplot as plt
 
@@ -145,6 +169,8 @@ plt.ylabel("Residuals")
 plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
+
+</div>
 
 ![잔차 대 적합값](./img/homoscedasticity_116.png)
 

@@ -28,6 +28,10 @@ $$
 - **세로축:** 반응의 칸 평균(예: 평균 치아 길이).
 - **별도의 선:** 두 번째 요인의 각 수준마다 하나씩(예: 보충제 종류).
 
+<div class="codebox" markdown>
+
+**예제 1.** 교호작용 그림 그리기
+
 ```python
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -37,6 +41,8 @@ url = ('https://raw.githubusercontent.com/vincentarelbundock/'
        'Rdatasets/master/csv/datasets/ToothGrowth.csv')
 df = pd.read_csv(url, usecols=[1, 2, 3])
 
+# 가로축이 한 요인, 선의 색이 다른 요인, 세로축이 반응의 평균이다.
+# 두 선이 평행이면 교호작용이 없고, 벌어지거나 엇갈리면 있는 것이다.
 fig, ax = plt.subplots(figsize=(10, 4))
 interaction_plot(df['dose'], df['supp'], df['len'],
                  ax=ax, markers=['o', 's'], linestyles=['--', '-.'])
@@ -46,6 +52,8 @@ ax.set_ylabel("len")
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![교호작용 그림](./img/interaction_plot_31.png)
 

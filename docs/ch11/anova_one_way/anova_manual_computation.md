@@ -24,6 +24,10 @@ $$
 
 다음 함수는 분산분석의 모든 양을 처음부터 계산한다:
 
+<div class="codebox" markdown>
+
+**예제 1.** 분산분석표 직접 계산하기
+
 ```python
 import numpy as np
 from scipy import stats
@@ -70,11 +74,19 @@ MST = 1.8832, MSE = 0.3886
 F   = 4.8461, p = 0.0159
 ```
 
+</div>
+
 SSE가 SST의 세 배 가까이 크지만 자유도로 나누고 나면(2 대 27) MST가 MSE의 다섯 배가 된다. 분산분석에서 제곱합 자체가 아니라 **자유도로 나눈 평균제곱**을 비교하는 이유다.
 
 scipy로 확인하는 것은 한 줄이면 된다:
 
+<div class="codebox" markdown>
+
+**예제 2.** scipy 결과와 맞춰 보기
+
 ```python
+# 손으로 구한 값과 맞는지 확인한다. 한 줄이면 되는 계산을 굳이 풀어 쓴 까닭은
+# 제곱합이 어떻게 갈라지는지를 보이기 위해서다.
 F_scipy, p_scipy = stats.f_oneway(*groups.values())
 print(f"scipy: F = {F_scipy:.4f}, p = {p_scipy:.4f}")
 ```
@@ -84,6 +96,8 @@ print(f"scipy: F = {F_scipy:.4f}, p = {p_scipy:.4f}")
 ```
 scipy: F = 4.8461, p = 0.0159
 ```
+
+</div>
 
 두 방식이 동일한 $F$와 $p$-값을 주어 수동 계산이 맞음을 확인해 준다.
 
@@ -97,10 +111,20 @@ $$
 
 이다. $|\bar{y}_i - \bar{y}_j| > \text{LSD}$이면 그 쌍을 수준 $\alpha$에서 유의하게 다르다고 선언한다.
 
+<div class="codebox" markdown>
+
+**예제 3.** Fisher LSD 사후비교
+
 ```python
 from itertools import combinations
 
 def fisher_lsd(groups, MSE, alpha=0.05):
+    """Fisher 의 최소유의차로 쌍별 비교를 한다.
+
+    쌍마다 t-검정을 하되 표준오차를 그 두 집단이 아니라 전체 MSE 로 만든다.
+    모든 집단의 정보를 쓰므로 자유도가 커지는 것이 이점이다.
+    다만 다중비교를 보정하지 않으므로, 분산분석이 유의할 때만 쓴다.
+    """
     names = list(groups.keys())
     N_total = sum(len(g) for g in groups.values())
     k = len(groups)
@@ -127,6 +151,8 @@ ctrl vs trt1   diff = 0.3710  LSD = 0.5720  False
 ctrl vs trt2   diff = 0.4940  LSD = 0.5720  False
 trt1 vs trt2   diff = 0.8650  LSD = 0.5720  True
 ```
+
+</div>
 
 전역 검정은 $p = 0.0159$로 기각했는데 쌍별로 보면 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어, 서로 간의 차이가 각각과 대조군의 차이보다 큰 것이다.
 

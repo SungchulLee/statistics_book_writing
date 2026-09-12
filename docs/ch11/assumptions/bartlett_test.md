@@ -30,14 +30,19 @@ $$
 
 이다. $H_0$과 정규성 아래에서 $\chi^2_B$는 근사적으로 $\chi^2(k-1)$을 따른다. $\chi^2_B > \chi^2_{1-\alpha}(k-1)$이면 $H_0$을 기각한다.
 
-## Python 예제
-
 함께 제공되는 스크립트는 기준 표본 $X \sim N(0, 1)$을 생성하고 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$인 표본 $Y \sim N(1, \sigma_Y)$과 비교한다:
+
+<div class="codebox" markdown>
+
+**예제 1.** 분산 차이를 키워 가며 보는 Bartlett 검정
 
 ```python
 import numpy as np
 import scipy.stats as stats
 
+# 한쪽 표준편차를 1 로 고정하고 다른 쪽을 조금씩 키워 가며 검정해 본다.
+# 5% 차이까지는 잡아내지 못하고 20% 쯤 되어야 걸린다. 검정력이 무엇에
+# 좌우되는지를 눈으로 보는 대목이다.
 seed, size = 1, 100
 x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
 
@@ -56,6 +61,8 @@ sigma_y=1.10: chi2=0.89, p=0.345
 sigma_y=1.15: chi2=1.92, p=0.166
 sigma_y=1.20: chi2=3.26, p=0.071
 ```
+
+</div>
 
 첫 줄의 $\chi^2 = -0.00$은 오류가 아니다. `random_state`를 같게 두었으므로 $\sigma_Y = 1.00$일 때 두 표본의 분산이 완전히 같고 통계량이 정확히 0이 되는데, 부동소수점 계산에서 $-10^{-15}$ 수준의 값이 나와 반올림하면 $-0.00$으로 찍힌다.
 

@@ -24,11 +24,18 @@ $$
 
 일 때 집단 $i$와 $j$가 유의하게 다르다고 선언한다. 여기서 $q_{\alpha,k,N-k}$는 스튜던트화 범위 분포의 임계값, $MSW$는 집단 내 평균제곱, $n$은 (균형 설계에서) 공통 집단 크기이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** Tukey HSD로 세 집단 견주기
+
 ```python
 import numpy as np
 import pandas as pd
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
+# 세 집단의 참 평균을 10, 12, 15 로 두고 표준편차는 모두 3.5 로 맞췄다.
+# A와 B의 차이는 표준편차보다 작고 A와 C의 차이는 그보다 크다.
+# Tukey 가 어느 쌍을 갈라내고 어느 쌍을 갈라내지 못하는지 보게 된다.
 rng = np.random.default_rng(42)
 n = 15
 df = pd.DataFrame({
@@ -40,6 +47,8 @@ df = pd.DataFrame({
     "group": ["A"] * n + ["B"] * n + ["C"] * n,
 })
 
+# Tukey HSD 는 쌍 세 개를 한꺼번에 견주면서 전체 오류율을 0.05 로 묶는다.
+# 쌍마다 t-검정을 따로 하면 이 통제가 무너진다.
 print(pairwise_tukeyhsd(endog=df["response"], groups=df["group"], alpha=0.05))
 ```
 
@@ -55,6 +64,8 @@ group1 group2 meandiff p-adj   lower  upper  reject
      B      C   3.3392 0.0069  0.8163 5.8621   True
 ---------------------------------------------------
 ```
+
+</div>
 
 참 평균이 10, 12, 15이고 표준편차가 3.5인 자료다. A와 C의 차이(참값 5)와 B와 C의 차이(참값 3)는 잡아내지만, A와 B의 차이(참값 2)는 $p = 0.11$로 놓친다. 집단당 15개로는 표준편차 3.5 대비 2의 차이를 가려내기 어렵다.
 

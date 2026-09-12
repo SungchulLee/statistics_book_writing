@@ -58,11 +58,17 @@ $$
 
 다음 코드는 주어진 자유도에 대해 확률밀도함수와 누적분포함수를 그린다:
 
+<div class="codebox" markdown>
+
+**예제 1.** 카이제곱 분포의 밀도와 분포함수
+
 ```python
 import numpy as np
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 
+# 자유도 5 인 카이제곱의 밀도함수와 분포함수를 겹쳐 그린다.
+# 값이 0 이상에서만 정의되고 오른쪽으로 길게 늘어진 모양임을 확인한다.
 df = 5
 x = np.linspace(0, 30, 100)
 pdf = stats.chi2(df=df).pdf(x)
@@ -76,6 +82,8 @@ ax.set_title(f"PDF and CDF of chi-squared({df})")
 plt.show()
 ```
 
+</div>
+
 ![카이제곱 분포의 pdf와 cdf](./img/chi_square_distribution_57.png)
 
 자유도 5에서 확률밀도함수의 최빈값이 $d - 2 = 3$에 있고 오른쪽으로 길게 늘어져 있다. 누적분포함수는 15 근처에서 이미 1에 가까워진다.
@@ -88,6 +96,10 @@ $d$가 작으면 확률밀도함수가 오른쪽으로 치우치고 최빈값이
 
 1. **직접 표집:** $\chi^2(d)$에서 10,000개를 뽑는다.
 2. **구성:** $N(0,1)$ 값으로 $d \times 10{,}000$ 행렬을 만들고 각 성분을 제곱한 뒤 열 방향으로 합한다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 정규 제곱합으로 만들어 보기
 
 ```python
 df, seed = 5, 1
@@ -111,6 +123,8 @@ print(f"{'이론값':<12} mean={df:.4f}  var={2*df:.4f}")
 제곱합 구성       mean=5.0068  var=9.9999
 이론값          mean=5.0000  var=10.0000
 ```
+
+</div>
 
 두 방식 모두 이론값 $E[\chi^2_d] = d = 5$와 $\text{Var}(\chi^2_d) = 2d = 10$을 재현한다. 정의 $\sum Z_i^2 \sim \chi^2(d)$가 수치로 확인된 셈이다.
 

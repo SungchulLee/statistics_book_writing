@@ -26,16 +26,20 @@
 
 셋 이상의 집단이 있는 자료에서 평균 사이에 유의한 차이가 있는지 검정한다고 하자.
 
+<div class="codebox" markdown>
+
+**예제 1.** 1단계 — 일원배치 분산분석
+
 ```python
 import pandas as pd
 from statsmodels.formula.api import ols
 from statsmodels.stats.anova import anova_lm
 
-# Load sample data
+# R 의 PlantGrowth 자료. 대조군과 처리군 둘, 모두 세 집단이다.
 url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
 df = pd.read_csv(url, usecols=[1, 2])
 
-# Perform one-way ANOVA
+# 분산분석이 먼저다. 여기서 유의하지 않으면 사후비교로 넘어갈 까닭이 없다.
 model = ols('weight ~ C(group)', data=df).fit()
 anova_results = anova_lm(model)
 print("One-Way ANOVA Results:")
@@ -51,16 +55,22 @@ C(group)   2.0   3.76634  1.883170  4.846088  0.01591
 Residual  27.0  10.49209  0.388596       NaN      NaN
 ```
 
+</div>
+
 전역 검정이 $p = 0.0159$로 기각한다. 이제 어느 쌍이 다른지 찾을 차례다.
 
 #### 2단계: Tukey의 HSD를 이용한 사후검정
 
 일원배치 분산분석이 유의하면 Tukey의 HSD로 어느 집단 쌍이 유의하게 다른지 찾을 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 2단계 — Tukey HSD
+
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
-# Perform Tukey's HSD test
+# 분산분석은 "어딘가 다르다"까지만 말한다. 어느 쌍이 다른지는 사후비교의 몫이다.
 tukey_result = pairwise_tukeyhsd(endog=df['weight'], groups=df['group'], alpha=0.05)
 print("Tukey's HSD Test Results:")
 print(tukey_result)
@@ -80,6 +90,8 @@ group1 group2 meandiff p-adj   lower  upper  reject
 ---------------------------------------------------
 ```
 
+</div>
+
 세 비교 중 trt1 대 trt2 하나만 유의하다. `p-adj` 열은 이미 다중비교 보정을 마친 값이므로 그대로 0.05와 비교하면 된다.
 
 이 출력은 각 집단 쌍의 비교 결과를 보여주며 다음을 포함한다:
@@ -92,15 +104,19 @@ group1 group2 meandiff p-adj   lower  upper  reject
 
 더 보수적인 접근으로, 유의수준을 비교 횟수로 나누는 Bonferroni 보정을 쓸 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 3단계 — 본페로니 보정과의 비교
+
 ```python
 from statsmodels.stats.multitest import multipletests
 from itertools import combinations
 from scipy.stats import ttest_ind
 
-# Define groups
+# 같은 일을 본페로니로 해 본다. 쌍마다 t-검정을 하고 p-값에 비교 횟수를 곱한다.
 groups = df['group'].unique()
 
-# Perform pairwise t-tests and apply Bonferroni correction
+# 쌍 세 개를 모두 돌며 보정 전 p-값을 모은다.
 p_values = []
 comparisons = []
 
@@ -111,10 +127,11 @@ for group1, group2 in combinations(groups, 2):
     p_values.append(p_val)
     comparisons.append(f"{group1} vs {group2}")
 
-# Apply Bonferroni correction
+# 본페로니는 Tukey 보다 보수적이다. 분산분석의 구조를 쓰지 않고
+# 검정 수만으로 문턱을 낮추기 때문이다.
 _, p_values_corrected, _, _ = multipletests(p_values, alpha=0.05, method='bonferroni')
 
-# Display Bonferroni-corrected results
+# 보정 전과 뒤를 나란히 찍어 무엇이 달라지는지 본다.
 print("Bonferroni-Corrected Pairwise Comparisons:")
 for comparison, p_val, p_val_corr in zip(comparisons, p_values, p_values_corrected):
     print(f"{comparison}: p-value = {p_val:.4f}, Bonferroni-corrected p-value = {p_val_corr:.4f}")
@@ -129,6 +146,8 @@ ctrl vs trt2: p-value = 0.0469, Bonferroni-corrected p-value = 0.1406
 trt1 vs trt2: p-value = 0.0075, Bonferroni-corrected p-value = 0.0226
 ```
 
+</div>
+
 Tukey와 결론은 같지만 보정 p-값이 다르다. trt1 대 trt2가 Tukey에서 0.012, Bonferroni에서 0.0226이다. Bonferroni가 더 보수적이기 때문이며, 비교 수가 늘수록 차이가 벌어진다.
 
 보정 전 p-값이 Tukey의 `p-adj`와도 다르다는 점에 주의하라. 여기서는 쌍마다 두 집단의 자료만으로 $t$-검정을 하지만, Tukey는 세 집단 전체에서 얻은 합동 MSE를 쓴다. 자유도가 18 대 27로 달라진다.
@@ -139,6 +158,10 @@ Scheffé 검정은 쌍별이 아닌 비교나 대비를 검정하는 데 적합�
 
 ## 2. scipy.stats.tukey_hsd
 
+<div class="codebox" markdown>
+
+**예제 4.** scipy의 tukey_hsd 로 신뢰구간까지
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -146,9 +169,7 @@ import scipy.stats as stats
 import pandas as pd
 
 def load_data():
-    """
-    Load and preprocess plant growth data for ANOVA and posthoc testing.
-    """
+    """PlantGrowth 자료를 읽어 집단별로 나누고 자유도까지 함께 돌려준다."""
     url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2])
 
@@ -166,9 +187,7 @@ def load_data():
     return df, data, df1, df2
 
 def perform_anova(data_ctrl, data_trt1, data_trt2):
-    """
-    Perform one-way ANOVA on the data groups.
-    """
+    """세 집단에 일원배치 분산분석을 수행한다."""
     statistic, p_value = stats.f_oneway(data_ctrl, data_trt1, data_trt2)
     print("\nOne-way ANOVA Results:")
     print(f"F-statistic = {statistic:.4f}")
@@ -176,8 +195,10 @@ def perform_anova(data_ctrl, data_trt1, data_trt2):
     return statistic, p_value
 
 def perform_tukey_hsd(data_ctrl, data_trt1, data_trt2, confidence_level=0.95):
-    """
-    Perform Tukey's HSD posthoc test and display confidence intervals.
+    """Tukey HSD 사후비교를 수행하고 쌍별 신뢰구간을 보여 준다.
+
+    구간이 0 을 품으면 그 쌍은 유의하지 않다고 읽는다. 신뢰수준을 높이면
+    구간이 넓어지므로 유의하다고 판정되는 쌍이 줄어든다.
     """
     result = stats.tukey_hsd(data_ctrl, data_trt1, data_trt2)
     print(result)
@@ -191,16 +212,16 @@ def perform_tukey_hsd(data_ctrl, data_trt1, data_trt2, confidence_level=0.95):
             print(f" ({i} - {j})   {low:>10.3f}   {high:>9.3f}")
     print()
 
-# Load data, perform ANOVA, and conduct Tukey's HSD posthoc tests
+# 자료 읽기 → 분산분석 → 사후비교 순으로 돌린다.
 df, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
 
-# Conduct one-way ANOVA
+# 먼저 분산분석.
 statistic, p_value = perform_anova(data_ctrl, data_trt1, data_trt2)
 
-# Conduct Tukey's HSD posthoc tests at default 95% confidence level
+# 기본 95% 신뢰수준으로 사후비교.
 perform_tukey_hsd(data_ctrl, data_trt1, data_trt2)
 
-# Conduct Tukey's HSD posthoc tests at a 99% confidence level
+# 같은 자료를 99% 로 다시 본다. 구간이 넓어지는 만큼 결론이 보수적이 된다.
 perform_tukey_hsd(data_ctrl, data_trt1, data_trt2, confidence_level=0.99)
 ```
 
@@ -243,6 +264,8 @@ Comparison    Lower CI   Upper CI
  (0 - 2)       -1.380       0.392
  (1 - 2)       -1.751       0.021
 ```
+
+</div>
 
 `scipy.stats.tukey_hsd`는 statsmodels와 달리 대칭인 쌍을 모두 인쇄한다. `(0 - 1)`과 `(1 - 0)`이 부호만 반대인 같은 비교다.
 
@@ -329,16 +352,20 @@ Tukey의 HSD 결과는 95% 신뢰수준에서 집단 1과 집단 2 사이에 통
 
 #### 1단계: 이원배치 분산분석 수행
 
+<div class="codebox" markdown>
+
+**예제 5.** 1단계 — 이원배치 분산분석
+
 ```python
 import pandas as pd
 from statsmodels.formula.api import ols
 from statsmodels.stats.anova import anova_lm
 
-# Load the dataset
+# ToothGrowth 자료. 보충제 종류(supp)와 투여량(dose) 두 요인이 있다.
 url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
 df = pd.read_csv(url, usecols=[1, 2, 3])
 
-# Define and fit the two-way ANOVA model
+# 콜론이 교호작용 항이다. 두 요인의 효과가 서로 독립인지를 이 항이 묻는다.
 model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
 anova_results = anova_lm(model)
 print(anova_results)
@@ -354,19 +381,26 @@ C(supp):C(dose)   2.0   108.319000    54.159500   4.106991  2.186027e-02
 Residual         54.0   712.106000    13.187148        NaN           NaN
 ```
 
+</div>
+
 두 주효과와 교호작용이 모두 유의하다. 교호작용이 유의하다는 것은 주효과를 단독으로 해석하기 전에 조심하라는 신호다.
 
 #### 2단계: 주효과에 대한 사후검정
 
+<div class="codebox" markdown>
+
+**예제 6.** 2단계 — 주효과 사후검정
+
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
-# Tukey's HSD for the main effect of dose
+# 주효과에 대한 사후비교. 교호작용이 유의하면 주효과를 이렇게 읽는 것이
+# 오해를 부를 수 있어, 아래 단순효과 분석으로 넘어가는 편이 낫다.
 tukey_dose = pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05)
 print("Post-Hoc Test for Dose:")
 print(tukey_dose)
 
-# Tukey's HSD for the main effect of supplement
+# 보충제 종류에 대한 주효과 사후비교.
 tukey_supp = pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05)
 print("Post-Hoc Test for Supplement:")
 print(tukey_supp)
@@ -393,15 +427,21 @@ group1 group2 meandiff p-adj  lower  upper reject
 -------------------------------------------------
 ```
 
+</div>
+
 용량은 세 수준이 서로 모두 다르지만, 보충제는 $p = 0.060$으로 유의하지 않다. 분산분석표에서 `C(supp)`가 $p = 0.00023$이었던 것과 어긋나 보이는데, 이 Tukey가 용량을 무시하고 OJ 30개와 VC 30개를 통째로 비교하기 때문이다. 용량이 만드는 큰 변동이 잡음으로 남아 보충제의 차이를 덮는다.
 
 #### 3단계: 교호작용 효과에 대한 사후검정
 
+<div class="codebox" markdown>
+
+**예제 7.** 3단계 — 교호작용 사후검정
+
 ```python
-# Create a combined factor for interaction analysis
+# 두 요인을 붙여 하나의 요인으로 만든다. 이러면 여섯 칸을 서로 견줄 수 있다.
 df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
 
-# Perform Tukey's HSD on the interaction between supplement and dose
+# 칸 여섯 개의 모든 쌍을 견주므로 비교 횟수가 15 로 늘어난다. 그만큼 보수적이 된다.
 tukey_interaction = pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05)
 print("Post-Hoc Test for Interaction (Supplement x Dose):")
 print(tukey_interaction)
@@ -433,29 +473,36 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 ------------------------------------------------------
 ```
 
+</div>
+
 같은 용량끼리 비교한 세 줄(`OJ_0.5 VC_0.5`, `OJ_1.0 VC_1.0`, `OJ_2.0 VC_2.0`)을 보면 차이가 각각 $-5.25$($p = 0.024$), $-5.93$($p = 0.007$), $-0.08$($p = 1.000$)이다. 낮은 용량에서는 OJ가 앞서지만 용량 2.0에서는 차이가 사라진다. 이것이 교호작용의 내용이다.
 
 #### 4단계: 단순 효과 분석 (교호작용 사후검정의 대안)
 
 교호작용 효과가 유의하면 **단순 효과 분석**으로 다른 요인의 각 수준에서 한 요인의 효과를 살펴 자세히 나눠 볼 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 8.** 4단계 — 단순효과 분석
+
 ```python
-# Separate data by supplement type
+# 단순효과 분석: 보충제를 하나로 고정해 두고 투여량 효과만 본다.
+# 교호작용이 있을 때 결과를 말이 되게 읽는 방법이다.
 oj_data = df[df['supp'] == 'OJ']
 vc_data = df[df['supp'] == 'VC']
 
-# Perform one-way ANOVA on dose within each supplement type
+# 보충제별로 따로 일원배치 분산분석을 돌린다.
 oj_model = ols('len ~ C(dose)', data=oj_data).fit()
 vc_model = ols('len ~ C(dose)', data=vc_data).fit()
 
-# Print ANOVA results for each supplement type
+# 두 결과를 견주면 교호작용이 무엇을 뜻하는지 드러난다.
 print("ANOVA for Dose within Supplement OJ:")
 print(anova_lm(oj_model))
 
 print("ANOVA for Dose within Supplement VC:")
 print(anova_lm(vc_model))
 
-# Tukey's HSD for dose within each supplement type
+# 보충제별 사후비교.
 print("Tukey HSD for Dose within Supplement OJ:")
 print(pairwise_tukeyhsd(endog=oj_data['len'], groups=oj_data['dose'], alpha=0.05))
 
@@ -493,6 +540,8 @@ group1 group2 meandiff p-adj  lower   upper  reject
    1.0    2.0     9.37   0.0  5.4818 13.2582   True
 ---------------------------------------------------
 ```
+
+</div>
 
 단순 효과 분석이 교호작용을 가장 또렷하게 보여준다. OJ 안에서는 용량 1.0과 2.0의 차이가 $p = 0.131$로 유의하지 않은 반면, VC 안에서는 같은 비교가 $p < 0.001$로 강하게 유의하다.
 
