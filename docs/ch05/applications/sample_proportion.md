@@ -60,13 +60,14 @@ $$
 
 **문제.** <span class="diff easy" title="쉬움"></span> 참 비율이 $p = 0.4$이고 표본크기가 $n = 100$이다.
 
-$$
-\text{SE}(\hat{p}) = \sqrt{\frac{0.4 \times 0.6}{100}} = \sqrt{0.0024} \approx 0.049
-$$
-
-크기 100인 표본을 반복해서 뽑으면 $\hat{p}$는 참값 $p = 0.4$ 주위로 대체로 0.049 정도 달라진다.
-
 </div>
+
+??? success "풀이"
+    $$
+    \text{SE}(\hat{p}) = \sqrt{\frac{0.4 \times 0.6}{100}} = \sqrt{0.0024} \approx 0.049
+    $$
+
+    크기 100인 표본을 반복해서 뽑으면 $\hat{p}$는 참값 $p = 0.4$ 주위로 대체로 0.049 정도 달라진다.
 
 ## 보기
 
@@ -106,59 +107,59 @@ $$
 
 </div>
 
-**정확한 Binomial 계산.** $\hat{p} > 0.35$는 $X \geq 4$를 뜻하며 여기서 $X \sim \text{Binomial}(10, 0.3)$이다:
+??? success "풀이"
+    **정확한 Binomial 계산.** $\hat{p} > 0.35$는 $X \geq 4$를 뜻하며 여기서 $X \sim \text{Binomial}(10, 0.3)$이다:
 
-$$
-P(X \geq 4) = 1 - P(X \leq 3)
-$$
+    $$
+    P(X \geq 4) = 1 - P(X \leq 3)
+    $$
 
-$$
-P(X = 0) = 0.0282, \quad P(X = 1) = 0.1211, \quad P(X = 2) = 0.2335, \quad P(X = 3) = 0.2668
-$$
+    $$
+    P(X = 0) = 0.0282, \quad P(X = 1) = 0.1211, \quad P(X = 2) = 0.2335, \quad P(X = 3) = 0.2668
+    $$
 
-$$
-P(X \geq 4) = 1 - 0.6496 = 0.3504
-$$
+    $$
+    P(X \geq 4) = 1 - 0.6496 = 0.3504
+    $$
 
-**정규근사.** 조건을 확인하면 $np = 3 < 5$이므로 정규근사가 미덥지 않다.
+    **정규근사.** 조건을 확인하면 $np = 3 < 5$이므로 정규근사가 미덥지 않다.
 
-$$
-\text{SE} = \sqrt{\frac{0.3 \times 0.7}{10}} \approx 0.1449, \qquad
-Z = \frac{0.35 - 0.30}{0.1449} \approx 0.345
-$$
+    $$
+    \text{SE} = \sqrt{\frac{0.3 \times 0.7}{10}} \approx 0.1449, \qquad
+    Z = \frac{0.35 - 0.30}{0.1449} \approx 0.345
+    $$
 
-$$
-P(\hat{p} > 0.35) \approx P(Z > 0.345) \approx 0.365
-$$
+    $$
+    P(\hat{p} > 0.35) \approx P(Z > 0.345) \approx 0.365
+    $$
 
-**비교:**
+    **비교:**
 
-| 방법 | 결과 |
-|--------|--------|
-| 정확한 binomial | 0.3504 |
-| 정규근사 | 0.3650 |
+    | 방법 | 결과 |
+    |--------|--------|
+    | 정확한 binomial | 0.3504 |
+    | 정규근사 | 0.3650 |
 
-표본이 작은데도 근사가 꽤 가깝지만, $np < 5$일 때는 정확한 binomial 계산이 낫다.
+    표본이 작은데도 근사가 꽤 가깝지만, $np < 5$일 때는 정확한 binomial 계산이 낫다.
 
-```python
-from scipy import stats
+    ```python
+    from scipy import stats
 
-# Exact
-exact = 1 - stats.binom(n=10, p=0.3).cdf(3)
-print(f"Exact: {exact:.4f}")
+    # Exact
+    exact = 1 - stats.binom(n=10, p=0.3).cdf(3)
+    print(f"Exact: {exact:.4f}")
 
-# Normal approximation
-approx = stats.norm.sf(0.345)
-print(f"Normal approx: {approx:.4f}")
-```
+    # Normal approximation
+    approx = stats.norm.sf(0.345)
+    print(f"Normal approx: {approx:.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-Exact: 0.3504
-Normal approx: 0.3650
-```
-
+    ```
+    Exact: 0.3504
+    Normal approx: 0.3650
+    ```
 ## 두 비율의 차
 
 비율이 $p_1$과 $p_2$인 두 모집단에서 독립인 표본을 뽑으면:

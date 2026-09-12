@@ -89,20 +89,21 @@ $$
 
 **관측:**
 
-$$
-\begin{array}{cccc}
-\text{병원의 질} & \text{US} & \text{Canada} & \text{Mexico} \\ \hline
-\text{별 5개} & 541 & 75 & 231 \\
-\text{별 4개} & 498 & 71 & 213 \\
-\text{별 3개} & 779 & 96 & 321 \\
-\text{별 2개} & 282 & 50 & 345 \\
-\text{별 1개} & 65 & 19 & 120
-\end{array}
-$$
-
-병원 만족도 분포가 나라들 사이에서 동질적인가, 아니면 다른 나라가 있는가?
-
 </div>
+
+??? success "풀이"
+    $$
+    \begin{array}{cccc}
+    \text{병원의 질} & \text{US} & \text{Canada} & \text{Mexico} \\ \hline
+    \text{별 5개} & 541 & 75 & 231 \\
+    \text{별 4개} & 498 & 71 & 213 \\
+    \text{별 3개} & 779 & 96 & 321 \\
+    \text{별 2개} & 282 & 50 & 345 \\
+    \text{별 1개} & 65 & 19 & 120
+    \end{array}
+    $$
+
+    병원 만족도 분포가 나라들 사이에서 동질적인가, 아니면 다른 나라가 있는가?
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 없이)
 
