@@ -150,12 +150,12 @@ $$
 
 </div>
 
-**풀이:** 완전제곱식으로 만든다: $-x^2 - 2x = -(x+1)^2 + 1$. 그러면:
+??? success "풀이"
+    완전제곱식으로 만든다: $-x^2 - 2x = -(x+1)^2 + 1$. 그러면:
 
-$$
-\int_{-\infty}^{\infty} e^{-x^2-2x}\,dx = e \int_{-\infty}^{\infty} e^{-(x+1)^2}\,dx = e\sqrt{2\pi \cdot \tfrac{1}{2}} \cdot \underbrace{\int \frac{1}{\sqrt{\pi}} e^{-(x+1)^2}\,dx}_{=1 \text{ (PDF of } N(-1, 1/2))} = e\sqrt{\pi}
-$$
-
+    $$
+    \int_{-\infty}^{\infty} e^{-x^2-2x}\,dx = e \int_{-\infty}^{\infty} e^{-(x+1)^2}\,dx = e\sqrt{2\pi \cdot \tfrac{1}{2}} \cdot \underbrace{\int \frac{1}{\sqrt{\pi}} e^{-(x+1)^2}\,dx}_{=1 \text{ (PDF of } N(-1, 1/2))} = e\sqrt{\pi}
+    $$
 ---
 
 ## Python: PDF, CDF 그리기와 표본추출

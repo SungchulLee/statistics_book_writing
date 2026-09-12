@@ -261,60 +261,60 @@ if __name__ == "__main__":
 
 </div>
 
-**풀이.** 동일한 확률을 갖는 $3^2 = 9$가지 결과가 있다:
+??? success "풀이"
+    동일한 확률을 갖는 $3^2 = 9$가지 결과가 있다:
 
-```python
-import itertools as it
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+    ```python
+    import itertools as it
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
 
-def main():
-    sample_space = np.array([1, 2, 3])
+    def main():
+        sample_space = np.array([1, 2, 3])
 
-    # 표본이 아주 작아 **가능한 모든 경우를 다 적을 수 있다.**
-    # product(..., repeat=2) 가 복원추출로 두 개를 뽑는 3^2 = 9가지를 만든다.
-    # 모의실험이 아니라 완전열거이므로 여기서 얻는 표집분포는 근사가 아니라 정확하다.
-    columns = ["first", "second", "average"]
-    df = pd.DataFrame(columns=columns)
-    for first, second in it.product(sample_space, repeat=2):
-        dg = pd.DataFrame([[first, second, (first + second) / 2]], columns=columns)
-        df = pd.concat([df, dg], ignore_index=True)
-    print(df, end="\n\n")
+        # 표본이 아주 작아 **가능한 모든 경우를 다 적을 수 있다.**
+        # product(..., repeat=2) 가 복원추출로 두 개를 뽑는 3^2 = 9가지를 만든다.
+        # 모의실험이 아니라 완전열거이므로 여기서 얻는 표집분포는 근사가 아니라 정확하다.
+        columns = ["first", "second", "average"]
+        df = pd.DataFrame(columns=columns)
+        for first, second in it.product(sample_space, repeat=2):
+            dg = pd.DataFrame([[first, second, (first + second) / 2]], columns=columns)
+            df = pd.concat([df, dg], ignore_index=True)
+        print(df, end="\n\n")
 
-    fig, ax = plt.subplots(figsize=(12, 3))
-    # 표본평균이 1, 1.5, 2, 2.5, 3 다섯 값만 가지므로 구간 경계를
-    # 값에서 0.25씩 왼쪽으로 밀어 각 값이 자기 막대 가운데에 오게 한다.
-    bins = np.array([1.0, 1.5, 2.0, 2.5, 3.0, 3.5]) - 0.25
-    ax.hist(df.average, bins=bins, density=True, alpha=0.7)
-    ax.set_title(r"Sampling Distribution of $\bar{X}$")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    plt.show()
+        fig, ax = plt.subplots(figsize=(12, 3))
+        # 표본평균이 1, 1.5, 2, 2.5, 3 다섯 값만 가지므로 구간 경계를
+        # 값에서 0.25씩 왼쪽으로 밀어 각 값이 자기 막대 가운데에 오게 한다.
+        bins = np.array([1.0, 1.5, 2.0, 2.5, 3.0, 3.5]) - 0.25
+        ax.hist(df.average, bins=bins, density=True, alpha=0.7)
+        ax.set_title(r"Sampling Distribution of $\bar{X}$")
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        plt.show()
 
-if __name__ == "__main__":
-    main()
-```
+    if __name__ == "__main__":
+        main()
+    ```
 
-출력:
+    출력:
 
-```
-  first second  average
-0     1      1      1.0
-1     1      2      1.5
-2     1      3      2.0
-3     2      1      1.5
-4     2      2      2.0
-5     2      3      2.5
-6     3      1      2.0
-7     3      2      2.5
-8     3      3      3.0
-```
+    ```
+      first second  average
+    0     1      1      1.0
+    1     1      2      1.5
+    2     1      3      2.0
+    3     2      1      1.5
+    4     2      2      2.0
+    5     2      3      2.5
+    6     3      1      2.0
+    7     3      2      2.5
+    8     3      3      3.0
+    ```
 
-![반복추출 개념](./img/repeated_sampling_256.png)
+    ![반복추출 개념](./img/repeated_sampling_256.png)
 
-표본분포가 가질 수 있는 값은 $\{1.0, 1.5, 2.0, 2.5, 3.0\}$이고 확률은 $\{1/9, 2/9, 3/9, 2/9, 1/9\}$이다. 평균은 $E[\bar{X}] = 2 = \mu$이며, $\bar{X}$가 불편임을 확인해 준다.
-
+    표본분포가 가질 수 있는 값은 $\{1.0, 1.5, 2.0, 2.5, 3.0\}$이고 확률은 $\{1/9, 2/9, 3/9, 2/9, 1/9\}$이다. 평균은 $E[\bar{X}] = 2 = \mu$이며, $\bar{X}$가 불편임을 확인해 준다.
 ## 연습문제
 
 <div class="drillbox" markdown>

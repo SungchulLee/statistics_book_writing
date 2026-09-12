@@ -119,51 +119,51 @@ $$
 
 </div>
 
-**풀이.** $\sigma_A, \sigma_B$를 알고 있으므로 경우 A이다:
+??? success "풀이"
+    $\sigma_A, \sigma_B$를 알고 있으므로 경우 A이다:
 
-$$
-\text{SE} = \sqrt{\frac{4^2}{40} + \frac{3^2}{40}} = \sqrt{\frac{16 + 9}{40}} = \sqrt{0.625} \approx 0.7906
-$$
+    $$
+    \text{SE} = \sqrt{\frac{4^2}{40} + \frac{3^2}{40}} = \sqrt{\frac{16 + 9}{40}} = \sqrt{0.625} \approx 0.7906
+    $$
 
-**상단꼬리:**
+    **상단꼬리:**
 
-$$
-Z = \frac{6 - (130 - 125)}{0.7906} = \frac{1}{0.7906} \approx 1.265
-$$
+    $$
+    Z = \frac{6 - (130 - 125)}{0.7906} = \frac{1}{0.7906} \approx 1.265
+    $$
 
-$$
-P(\bar{X}_A - \bar{X}_B > 6) = P(Z > 1.265) \approx 0.1030
-$$
+    $$
+    P(\bar{X}_A - \bar{X}_B > 6) = P(Z > 1.265) \approx 0.1030
+    $$
 
-**하단꼬리:**
+    **하단꼬리:**
 
-$$
-Z = \frac{-6 - (130 - 125)}{0.7906} = \frac{-11}{0.7906} \approx -13.91
-$$
+    $$
+    Z = \frac{-6 - (130 - 125)}{0.7906} = \frac{-11}{0.7906} \approx -13.91
+    $$
 
-$$
-P(\bar{X}_A - \bar{X}_B < -6) \approx 0.0000
-$$
+    $$
+    P(\bar{X}_A - \bar{X}_B < -6) \approx 0.0000
+    $$
 
-**답:** $P(|\bar{X}_A - \bar{X}_B| > 6) \approx 0.1030$.
+    **답:** $P(|\bar{X}_A - \bar{X}_B| > 6) \approx 0.1030$.
 
-```python
-import numpy as np
-from scipy import stats
+    ```python
+    import numpy as np
+    from scipy import stats
 
-se = np.sqrt(16/40 + 9/40)
-z_upper = (6 - 5) / se
-z_lower = (-6 - 5) / se
-prob = stats.norm.sf(z_upper) + stats.norm.cdf(z_lower)
-print(f"P(|X_bar_A - X_bar_B| > 6) = {prob:.4f}")
-```
+    se = np.sqrt(16/40 + 9/40)
+    z_upper = (6 - 5) / se
+    z_lower = (-6 - 5) / se
+    prob = stats.norm.sf(z_upper) + stats.norm.cdf(z_lower)
+    print(f"P(|X_bar_A - X_bar_B| > 6) = {prob:.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-P(|X_bar_A - X_bar_B| > 6) = 0.1030
-```
-
+    ```
+    P(|X_bar_A - X_bar_B| > 6) = 0.1030
+    ```
 ## 예: 차의 표준오차
 
 <div class="probox" markdown>
@@ -172,12 +172,11 @@ P(|X_bar_A - X_bar_B| > 6) = 0.1030
 
 </div>
 
-**풀이.**
+??? success "풀이"
 
-$$
-\text{SE} = \sqrt{\frac{15^2}{36} + \frac{20^2}{49}} = \sqrt{6.25 + 8.16} = \sqrt{14.41} \approx 3.80
-$$
-
+    $$
+    \text{SE} = \sqrt{\frac{15^2}{36} + \frac{20^2}{49}} = \sqrt{6.25 + 8.16} = \sqrt{14.41} \approx 3.80
+    $$
 ## 연습문제
 
 <div class="drillbox" markdown>

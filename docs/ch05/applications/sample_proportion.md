@@ -72,50 +72,37 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 브랜드 선호.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 브랜드 선호. 어떤 모집단에서 60%가 브랜드 A를 선호한다. $n = 100$일 때 $P(\hat{p} > 0.65)$를 구하라.
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
 
-**문제.** <span class="diff easy" title="쉬움"></span> 어떤 모집단에서 60%가 브랜드 A를 선호한다. $n = 100$일 때 $P(\hat{p} > 0.65)$를 구하라.
+    $$
+    \text{SE} = \sqrt{\frac{0.60 \times 0.40}{100}} \approx 0.049
+    $$
 
-</div>
+    $$
+    Z = \frac{0.65 - 0.60}{0.049} \approx 1.02
+    $$
 
-**풀이.**
+    $$
+    P(\hat{p} > 0.65) = P(Z > 1.02) \approx 0.154
+    $$
 
-$$
-\text{SE} = \sqrt{\frac{0.60 \times 0.40}{100}} \approx 0.049
-$$
+    ```python
+    from scipy import stats
+    print(f"P(p_hat > 0.65) = {stats.norm.sf(1.02):.4f}")
+    ```
 
-$$
-Z = \frac{0.65 - 0.60}{0.049} \approx 1.02
-$$
+    출력:
 
-$$
-P(\hat{p} > 0.65) = P(Z > 1.02) \approx 0.154
-$$
-
-```python
-from scipy import stats
-print(f"P(p_hat > 0.65) = {stats.norm.sf(1.02):.4f}")
-```
-
-출력:
-
-```
-P(p_hat > 0.65) = 0.1539
-```
-
+    ```
+    P(p_hat > 0.65) = 0.1539
+    ```
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 소표본 — 정확값과 근사값.
-
-</div>
-
-<div class="probox" markdown>
-
-**문제.** <span class="diff med" title="중간"></span> 어떤 도시에서 30%가 대중교통을 선호한다. $n = 10$일 때 $P(\hat{p} > 0.35)$를 구하라.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 소표본 — 정확값과 근사값. 어떤 도시에서 30%가 대중교통을 선호한다. $n = 10$일 때 $P(\hat{p} > 0.35)$를 구하라.
 
 </div>
 

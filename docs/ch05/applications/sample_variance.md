@@ -86,82 +86,63 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> S-squared의 기댓값과 분산.
+**보기 1.** <span class="diff easy" title="쉬움"></span> S-squared의 기댓값과 분산. $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $E[S^2]$과 $\text{Var}(S^2)$을 구하라.
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
+    $Y \sim \chi^2_{n-1}$에 대해 $EY = n-1$이고 $\text{Var}(Y) = 2(n-1)$이다.
 
-**문제.** <span class="diff easy" title="쉬움"></span> $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $E[S^2]$과 $\text{Var}(S^2)$을 구하라.
+    $$
+    E\!\left[\frac{(n-1)S^2}{\sigma^2}\right] = n - 1
+    \;\;\Longrightarrow\;\;
+    E[S^2] = \sigma^2 = 25
+    $$
 
-</div>
-
-**풀이.** $Y \sim \chi^2_{n-1}$에 대해 $EY = n-1$이고 $\text{Var}(Y) = 2(n-1)$이다.
-
-$$
-E\!\left[\frac{(n-1)S^2}{\sigma^2}\right] = n - 1
-\;\;\Longrightarrow\;\;
-E[S^2] = \sigma^2 = 25
-$$
-
-$$
-\text{Var}\!\left(\frac{(n-1)S^2}{\sigma^2}\right) = 2(n-1)
-\;\;\Longrightarrow\;\;
-\text{Var}(S^2) = \frac{2\sigma^4}{n-1} = \frac{2(25^2)}{9} = \frac{1250}{9} \approx 138.89
-$$
-
+    $$
+    \text{Var}\!\left(\frac{(n-1)S^2}{\sigma^2}\right) = 2(n-1)
+    \;\;\Longrightarrow\;\;
+    \text{Var}(S^2) = \frac{2\sigma^4}{n-1} = \frac{2(25^2)}{9} = \frac{1250}{9} \approx 138.89
+    $$
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> S-squared에 관한 확률 (정규모집단).
+**보기 2.** <span class="diff easy" title="쉬움"></span> S-squared에 관한 확률 (정규모집단). $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $P(S^2 > 30)$을 구하라.
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
 
-**문제.** <span class="diff easy" title="쉬움"></span> $N(\mu, 25)$에서 $n = 10$인 표본을 뽑는다. $P(S^2 > 30)$을 구하라.
+    $$
+    \frac{(n-1)S^2}{\sigma^2} = \frac{9 \times 30}{25} = 10.8
+    $$
 
-</div>
+    $$
+    P(S^2 > 30) = P(\chi^2_9 > 10.8) \approx 0.2897
+    $$
 
-**풀이.**
+    ```python
+    from scipy import stats
 
-$$
-\frac{(n-1)S^2}{\sigma^2} = \frac{9 \times 30}{25} = 10.8
-$$
+    chi2_stat = 9 * 30 / 25
+    p_value = stats.chi2(df=9).sf(chi2_stat)
+    print(f"P(S^2 > 30) = {p_value:.4f}")
+    ```
 
-$$
-P(S^2 > 30) = P(\chi^2_9 > 10.8) \approx 0.2897
-$$
+    출력:
 
-```python
-from scipy import stats
-
-chi2_stat = 9 * 30 / 25
-p_value = stats.chi2(df=9).sf(chi2_stat)
-print(f"P(S^2 > 30) = {p_value:.4f}")
-```
-
-출력:
-
-```
-P(S^2 > 30) = 0.2897
-```
-
+    ```
+    P(S^2 > 30) = 0.2897
+    ```
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 정규성 가정 없이.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정규성 가정 없이. 분산이 25인 모집단에서 $n = 10$인 표본을 뽑는다(정규성은 가정하지 않는다). $P(S^2 > 30)$에 관해 무엇을 말할 수 있는가?
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
+    정규성이 없으면 $\frac{(n-1)S^2}{\sigma^2}$은 카이제곱 분포를 따르지 **않는다**. $E[S^2] = 25$임은 알지만, 모집단 모양에 관한 추가 정보 없이는 $P(S^2 > 30)$을 구할 수 없다.
 
-**문제.** <span class="diff med" title="중간"></span> 분산이 25인 모집단에서 $n = 10$인 표본을 뽑는다(정규성은 가정하지 않는다). $P(S^2 > 30)$에 관해 무엇을 말할 수 있는가?
-
-</div>
-
-**풀이.** 정규성이 없으면 $\frac{(n-1)S^2}{\sigma^2}$은 카이제곱 분포를 따르지 **않는다**. $E[S^2] = 25$임은 알지만, 모집단 모양에 관한 추가 정보 없이는 $P(S^2 > 30)$을 구할 수 없다.
-
-$\text{Var}(S^2)$을 안다면 Chebyshev 부등식으로 한계를 줄 수 있겠지만, 그 값은 정규가 아닌 모집단의 고차 적률에 의존하며 우리는 그것을 알지 못한다.
-
+    $\text{Var}(S^2)$을 안다면 Chebyshev 부등식으로 한계를 줄 수 있겠지만, 그 값은 정규가 아닌 모집단의 고차 적률에 의존하며 우리는 그것을 알지 못한다.
 ## sigma-squared에 대한 신뢰구간
 
 (정규성 아래에서) 카이제곱 추축량을 사용하면:

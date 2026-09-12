@@ -86,23 +86,23 @@ $$
 
 </div>
 
-**풀이.** $X_i$를 $i$번째 사람의 물 소비량이라 하자. 독립을 가정하면 중심극한정리에 의해 표본평균 $\bar{X}$는 근사적으로 평균 2, 표준편차 $0.7/\sqrt{50} \approx 0.0990$인 정규분포를 따른다.
+??? success "풀이"
+    $X_i$를 $i$번째 사람의 물 소비량이라 하자. 독립을 가정하면 중심극한정리에 의해 표본평균 $\bar{X}$는 근사적으로 평균 2, 표준편차 $0.7/\sqrt{50} \approx 0.0990$인 정규분포를 따른다.
 
-$$
-\begin{array}{lll}
-\displaystyle
-P\!\left(\bar{X} > \frac{110}{50}\right)
-&=&
-\displaystyle
-P\!\left(\frac{\bar{X} - 2}{0.0990} > \frac{2.2 - 2}{0.0990}\right) \\[12pt]
-&\approx&
-\displaystyle
-P(Z > 2.020) \\[8pt]
-&\approx&
-0.0217
-\end{array}
-$$
-
+    $$
+    \begin{array}{lll}
+    \displaystyle
+    P\!\left(\bar{X} > \frac{110}{50}\right)
+    &=&
+    \displaystyle
+    P\!\left(\frac{\bar{X} - 2}{0.0990} > \frac{2.2 - 2}{0.0990}\right) \\[12pt]
+    &\approx&
+    \displaystyle
+    P(Z > 2.020) \\[8pt]
+    &\approx&
+    0.0217
+    \end{array}
+    $$
 ## Python: X-bar의 표준오차
 
 ### 단일 파일 버전

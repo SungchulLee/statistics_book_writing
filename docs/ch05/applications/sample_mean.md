@@ -77,181 +77,143 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 사과 무게.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 사과 무게. 사과 무게가 $N(150, 20^2)$이다. $n = 25$일 때 $P(\bar{X} > 155)$를 구하라.
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
 
-**문제.** <span class="diff easy" title="쉬움"></span> 사과 무게가 $N(150, 20^2)$이다. $n = 25$일 때 $P(\bar{X} > 155)$를 구하라.
+    $$
+    \text{SE} = \frac{20}{\sqrt{25}} = 4, \qquad
+    Z = \frac{155 - 150}{4} = 1.25
+    $$
 
-</div>
+    $$
+    P(\bar{X} > 155) = P(Z > 1.25) = 1 - \mathcal{N}(1.25) \approx 0.1056
+    $$
 
-**풀이.**
+    ```python
+    from scipy import stats
+    print(f"P(X_bar > 155) = {stats.norm.sf(1.25):.4f}")
+    ```
 
-$$
-\text{SE} = \frac{20}{\sqrt{25}} = 4, \qquad
-Z = \frac{155 - 150}{4} = 1.25
-$$
+    출력:
 
-$$
-P(\bar{X} > 155) = P(Z > 1.25) = 1 - \mathcal{N}(1.25) \approx 0.1056
-$$
-
-```python
-from scipy import stats
-print(f"P(X_bar > 155) = {stats.norm.sf(1.25):.4f}")
-```
-
-출력:
-
-```
-P(X_bar > 155) = 0.1056
-```
-
+    ```
+    P(X_bar > 155) = 0.1056
+    ```
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 수면 시간.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 수면 시간. 평균 수면 시간이 7시간이고 $\sigma = 1.5$이다. $n = 49$일 때 $P(6.8 < \bar{X} < 7.2)$를 구하라.
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
 
-**문제.** <span class="diff easy" title="쉬움"></span> 평균 수면 시간이 7시간이고 $\sigma = 1.5$이다. $n = 49$일 때 $P(6.8 < \bar{X} < 7.2)$를 구하라.
+    $$
+    \text{SE} = \frac{1.5}{\sqrt{49}} = 0.2143
+    $$
 
-</div>
+    $$
+    Z_1 = \frac{6.8 - 7}{0.2143} \approx -0.93, \qquad
+    Z_2 = \frac{7.2 - 7}{0.2143} \approx 0.93
+    $$
 
-**풀이.**
+    $$
+    P(6.8 < \bar{X} < 7.2) = \mathcal{N}(0.93) - \mathcal{N}(-0.93) \approx 0.6476
+    $$
 
-$$
-\text{SE} = \frac{1.5}{\sqrt{49}} = 0.2143
-$$
+    ```python
+    from scipy import stats
+    print(f"P(6.8 < X_bar < 7.2) = {stats.norm.cdf(0.93) - stats.norm.cdf(-0.93):.4f}")
+    ```
 
-$$
-Z_1 = \frac{6.8 - 7}{0.2143} \approx -0.93, \qquad
-Z_2 = \frac{7.2 - 7}{0.2143} \approx 0.93
-$$
+    출력:
 
-$$
-P(6.8 < \bar{X} < 7.2) = \mathcal{N}(0.93) - \mathcal{N}(-0.93) \approx 0.6476
-$$
-
-```python
-from scipy import stats
-print(f"P(6.8 < X_bar < 7.2) = {stats.norm.cdf(0.93) - stats.norm.cdf(-0.93):.4f}")
-```
-
-출력:
-
-```
-P(6.8 < X_bar < 7.2) = 0.6476
-```
-
+    ```
+    P(6.8 < X_bar < 7.2) = 0.6476
+    ```
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 체중 (소표본, 정규모집단).
+**보기 3.** <span class="diff easy" title="쉬움"></span> 체중 (소표본, 정규모집단). 체중이 $N(70, 10^2)$이다. $n = 5$일 때 $P(\bar{X} > 72)$를 구하라.
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
+    모집단이 정규이므로 $n = 5$에서도 결과가 정확하다:
 
-**문제.** <span class="diff easy" title="쉬움"></span> 체중이 $N(70, 10^2)$이다. $n = 5$일 때 $P(\bar{X} > 72)$를 구하라.
+    $$
+    \text{SE} = \frac{10}{\sqrt{5}} \approx 4.47, \qquad
+    Z = \frac{72 - 70}{4.47} \approx 0.447
+    $$
 
-</div>
+    $$
+    P(\bar{X} > 72) \approx 0.3274
+    $$
 
-**풀이.** 모집단이 정규이므로 $n = 5$에서도 결과가 정확하다:
+    ```python
+    from scipy import stats
+    print(f"P(X_bar > 72) = {stats.norm.sf(0.447):.4f}")
+    ```
 
-$$
-\text{SE} = \frac{10}{\sqrt{5}} \approx 4.47, \qquad
-Z = \frac{72 - 70}{4.47} \approx 0.447
-$$
+    출력:
 
-$$
-P(\bar{X} > 72) \approx 0.3274
-$$
-
-```python
-from scipy import stats
-print(f"P(X_bar > 72) = {stats.norm.sf(0.447):.4f}")
-```
-
-출력:
-
-```
-P(X_bar > 72) = 0.3274
-```
-
+    ```
+    P(X_bar > 72) = 0.3274
+    ```
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 물 부족.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 물 부족. 평균 물 소비량이 2 L이고 $\sigma = 0.7$ L이다. 50명이 물 110 L를 가지고 여행할 때 물이 떨어질 확률을 구하라.
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
+    물이 떨어진다는 것은 $\bar{X} > 110/50 = 2.2$를 뜻한다:
 
-**문제.** <span class="diff easy" title="쉬움"></span> 평균 물 소비량이 2 L이고 $\sigma = 0.7$ L이다. 50명이 물 110 L를 가지고 여행할 때 물이 떨어질 확률을 구하라.
+    $$
+    \text{SE} = \frac{0.7}{\sqrt{50}} \approx 0.0990, \qquad
+    Z = \frac{2.2 - 2}{0.0990} \approx 2.020
+    $$
 
-</div>
-
-**풀이.** 물이 떨어진다는 것은 $\bar{X} > 110/50 = 2.2$를 뜻한다:
-
-$$
-\text{SE} = \frac{0.7}{\sqrt{50}} \approx 0.0990, \qquad
-Z = \frac{2.2 - 2}{0.0990} \approx 2.020
-$$
-
-$$
-P(\bar{X} > 2.2) = P(Z > 2.020) \approx 0.0217
-$$
-
+    $$
+    P(\bar{X} > 2.2) = P(Z > 2.020) \approx 0.0217
+    $$
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 전구 (정규성 가정 없이).
+**보기 5.** <span class="diff easy" title="쉬움"></span> 전구 (정규성 가정 없이). 전구 수명이 $\mu = 800$, $\sigma = 100$이다. $n = 5$일 때 정규성을 가정하지 않고 $P(\bar{X} > 810)$을 구하라.
 
 </div>
 
-<div class="probox" markdown>
-
-**문제.** <span class="diff med" title="중간"></span> 전구 수명이 $\mu = 800$, $\sigma = 100$이다. $n = 5$일 때 정규성을 가정하지 않고 $P(\bar{X} > 810)$을 구하라.
-
-</div>
-
-**풀이.** $n = 5$이고 정규성 가정이 없으면 중심극한정리를 믿고 적용할 수 없다. 모집단 모양에 관한 추가 정보 없이는 이 확률을 **구할 수 없다**.
-
+??? success "풀이"
+    $n = 5$이고 정규성 가정이 없으면 중심극한정리를 믿고 적용할 수 없다. 모집단 모양에 관한 추가 정보 없이는 이 확률을 **구할 수 없다**.
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 치우친 매출 (대표본).
+**보기 6.** <span class="diff easy" title="쉬움"></span> 치우친 매출 (대표본). 일간 매출이 오른쪽으로 치우쳐 있고 $\mu = 2000$, $\sigma = 500$이다. $n = 100$일 때 $P(\bar{X} > 2100)$을 구하라.
 
 </div>
 
-<div class="probox" markdown>
+??? success "풀이"
+    모집단이 치우쳐 있지만 $n = 100$이면 중심극한정리를 쓰기에 충분히 크다:
 
-**문제.** <span class="diff easy" title="쉬움"></span> 일간 매출이 오른쪽으로 치우쳐 있고 $\mu = 2000$, $\sigma = 500$이다. $n = 100$일 때 $P(\bar{X} > 2100)$을 구하라.
+    $$
+    \text{SE} = \frac{500}{\sqrt{100}} = 50, \qquad
+    Z = \frac{2100 - 2000}{50} = 2
+    $$
 
-</div>
+    $$
+    P(\bar{X} > 2100) = P(Z > 2) \approx 0.0228
+    $$
 
-**풀이.** 모집단이 치우쳐 있지만 $n = 100$이면 중심극한정리를 쓰기에 충분히 크다:
+    ```python
+    from scipy import stats
+    print(f"P(X_bar > 2100) = {stats.norm.sf(2):.4f}")
+    ```
 
-$$
-\text{SE} = \frac{500}{\sqrt{100}} = 50, \qquad
-Z = \frac{2100 - 2000}{50} = 2
-$$
+    출력:
 
-$$
-P(\bar{X} > 2100) = P(Z > 2) \approx 0.0228
-$$
-
-```python
-from scipy import stats
-print(f"P(X_bar > 2100) = {stats.norm.sf(2):.4f}")
-```
-
-출력:
-
-```
-P(X_bar > 2100) = 0.0228
-```
-
+    ```
+    P(X_bar > 2100) = 0.0228
+    ```
 ## 두 평균의 표본분포
 
 ### 분산을 알거나 표본이 큰 경우
@@ -268,41 +230,40 @@ $$
 
 </div>
 
-**풀이.**
+??? success "풀이"
 
-$$
-\text{SE} = \sqrt{\frac{16}{40} + \frac{9}{40}} = \sqrt{0.625} \approx 0.7906
-$$
+    $$
+    \text{SE} = \sqrt{\frac{16}{40} + \frac{9}{40}} = \sqrt{0.625} \approx 0.7906
+    $$
 
-$$
-P(\bar{X}_A - \bar{X}_B > 6): \quad Z = \frac{6 - 5}{0.7906} \approx 1.265, \quad P = 0.1030
-$$
+    $$
+    P(\bar{X}_A - \bar{X}_B > 6): \quad Z = \frac{6 - 5}{0.7906} \approx 1.265, \quad P = 0.1030
+    $$
 
-$$
-P(\bar{X}_A - \bar{X}_B < -6): \quad Z = \frac{-6 - 5}{0.7906} \approx -13.91, \quad P \approx 0
-$$
+    $$
+    P(\bar{X}_A - \bar{X}_B < -6): \quad Z = \frac{-6 - 5}{0.7906} \approx -13.91, \quad P \approx 0
+    $$
 
-$$
-P(|\bar{X}_A - \bar{X}_B| > 6) \approx 0.1030
-$$
+    $$
+    P(|\bar{X}_A - \bar{X}_B| > 6) \approx 0.1030
+    $$
 
-```python
-import numpy as np
-from scipy import stats
+    ```python
+    import numpy as np
+    from scipy import stats
 
-se = np.sqrt(16/40 + 9/40)
-z_upper = (6 - 5) / se
-z_lower = (-6 - 5) / se
-prob = stats.norm.sf(z_upper) + stats.norm.cdf(z_lower)
-print(f"P(|X_bar_A - X_bar_B| > 6) = {prob:.4f}")
-```
+    se = np.sqrt(16/40 + 9/40)
+    z_upper = (6 - 5) / se
+    z_lower = (-6 - 5) / se
+    prob = stats.norm.sf(z_upper) + stats.norm.cdf(z_lower)
+    print(f"P(|X_bar_A - X_bar_B| > 6) = {prob:.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-P(|X_bar_A - X_bar_B| > 6) = 0.1030
-```
-
+    ```
+    P(|X_bar_A - X_bar_B| > 6) = 0.1030
+    ```
 ## 표본크기가 표준오차에 미치는 영향
 
 | $n$ | SE ($\sigma = 50$일 때) |

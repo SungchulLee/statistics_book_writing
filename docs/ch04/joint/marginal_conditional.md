@@ -115,16 +115,15 @@ $P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
 
 </div>
 
-**풀이:**
+??? success "풀이"
 
-$$
-P(Y = 1 \mid X = 1) = \frac{p_{X,Y}(1,1)}{p_X(1)} = \frac{0.25}{0.45} = \frac{5}{9} \approx 0.556
-$$
+    $$
+    P(Y = 1 \mid X = 1) = \frac{p_{X,Y}(1,1)}{p_X(1)} = \frac{0.25}{0.45} = \frac{5}{9} \approx 0.556
+    $$
 
-$$
-E[Y \mid X = 1] = 0 \cdot \frac{0.10}{0.45} + 1 \cdot \frac{0.25}{0.45} + 2 \cdot \frac{0.10}{0.45} = \frac{0.45}{0.45} = 1.0
-$$
-
+    $$
+    E[Y \mid X = 1] = 0 \cdot \frac{0.10}{0.45} + 1 \cdot \frac{0.25}{0.45} + 2 \cdot \frac{0.10}{0.45} = \frac{0.45}{0.45} = 1.0
+    $$
 ---
 
 ## 문제: 연속형
@@ -135,34 +134,33 @@ $$
 
 </div>
 
-**풀이:**
+??? success "풀이"
 
-**$X$의 주변분포:**
+    **$X$의 주변분포:**
 
-$$
-f_X(x) = \int_x^1 2\,dy = 2(1 - x), \quad 0 \leq x \leq 1
-$$
+    $$
+    f_X(x) = \int_x^1 2\,dy = 2(1 - x), \quad 0 \leq x \leq 1
+    $$
 
-**$X = x$가 주어졌을 때 $Y$의 조건부 PDF:**
+    **$X = x$가 주어졌을 때 $Y$의 조건부 PDF:**
 
-$$
-f_{Y|X}(y \mid x) = \frac{f_{X,Y}(x,y)}{f_X(x)} = \frac{2}{2(1-x)} = \frac{1}{1-x}, \quad x \leq y \leq 1
-$$
+    $$
+    f_{Y|X}(y \mid x) = \frac{f_{X,Y}(x,y)}{f_X(x)} = \frac{2}{2(1-x)} = \frac{1}{1-x}, \quad x \leq y \leq 1
+    $$
 
-이는 $\text{Uniform}(x, 1)$이다.
+    이는 $\text{Uniform}(x, 1)$이다.
 
-**조건부 기댓값:**
+    **조건부 기댓값:**
 
-$$
-E[Y \mid X = x] = \frac{x + 1}{2}
-$$
+    $$
+    E[Y \mid X = x] = \frac{x + 1}{2}
+    $$
 
-**전체 기댓값의 법칙으로 확인:**
+    **전체 기댓값의 법칙으로 확인:**
 
-$$
-E[Y] = \int_0^1 \frac{x+1}{2} \cdot 2(1-x)\,dx = \int_0^1 (x+1)(1-x)\,dx = \int_0^1 (1 - x^2)\,dx = \frac{2}{3}
-$$
-
+    $$
+    E[Y] = \int_0^1 \frac{x+1}{2} \cdot 2(1-x)\,dx = \int_0^1 (x+1)(1-x)\,dx = \int_0^1 (1 - x^2)\,dx = \frac{2}{3}
+    $$
 ---
 
 ## Python: 주변분포와 조건부분포

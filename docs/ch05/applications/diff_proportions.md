@@ -90,58 +90,57 @@ $$
 
 </div>
 
-**풀이.**
+??? success "풀이"
 
-$$
-\hat{p}_1 - \hat{p}_2 = 0.60 - 0.45 = 0.15
-$$
+    $$
+    \hat{p}_1 - \hat{p}_2 = 0.60 - 0.45 = 0.15
+    $$
 
-$$
-\text{SE} = \sqrt{\frac{0.60 \times 0.40}{200} + \frac{0.45 \times 0.55}{200}}
-= \sqrt{\frac{0.24}{200} + \frac{0.2475}{200}}
-= \sqrt{0.0012 + 0.001238}
-\approx 0.0494
-$$
+    $$
+    \text{SE} = \sqrt{\frac{0.60 \times 0.40}{200} + \frac{0.45 \times 0.55}{200}}
+    = \sqrt{\frac{0.24}{200} + \frac{0.2475}{200}}
+    = \sqrt{0.0012 + 0.001238}
+    \approx 0.0494
+    $$
 
-$$
-\text{CI} = 0.15 \pm 1.96 \times 0.0494 = 0.15 \pm 0.097 = (0.053, \; 0.247)
-$$
+    $$
+    \text{CI} = 0.15 \pm 1.96 \times 0.0494 = 0.15 \pm 0.097 = (0.053, \; 0.247)
+    $$
 
-```python
-import numpy as np
-from scipy import stats
+    ```python
+    import numpy as np
+    from scipy import stats
 
-p1_hat, p2_hat = 0.60, 0.45      # 두 집단의 표본비율
-n1, n2 = 200, 200
+    p1_hat, p2_hat = 0.60, 0.45      # 두 집단의 표본비율
+    n1, n2 = 200, 200
 
-diff = p1_hat - p2_hat
+    diff = p1_hat - p2_hat
 
-# 두 비율 차이의 표준오차.
-# 두 표본이 **독립**이므로 분산이 더해진다: Var(A - B) = Var(A) + Var(B).
-# 뺄셈인데도 더하는 이유가 이것이다. 부호는 분산에 영향을 주지 않는다.
-# (표준오차는 더하면 안 된다. 분산을 더한 뒤 제곱근을 취해야 한다.)
-se = np.sqrt(p1_hat * (1 - p1_hat) / n1 + p2_hat * (1 - p2_hat) / n2)
+    # 두 비율 차이의 표준오차.
+    # 두 표본이 **독립**이므로 분산이 더해진다: Var(A - B) = Var(A) + Var(B).
+    # 뺄셈인데도 더하는 이유가 이것이다. 부호는 분산에 영향을 주지 않는다.
+    # (표준오차는 더하면 안 된다. 분산을 더한 뒤 제곱근을 취해야 한다.)
+    se = np.sqrt(p1_hat * (1 - p1_hat) / n1 + p2_hat * (1 - p2_hat) / n2)
 
-# 95% 신뢰구간의 임계값. 양쪽에 2.5%씩 남기므로 ppf(0.975) = 1.96 이다.
-z_star = stats.norm.ppf(0.975)
+    # 95% 신뢰구간의 임계값. 양쪽에 2.5%씩 남기므로 ppf(0.975) = 1.96 이다.
+    z_star = stats.norm.ppf(0.975)
 
-ci_lower = diff - z_star * se
-ci_upper = diff + z_star * se
-print(f"Difference: {diff:.2f}")
-print(f"SE: {se:.4f}")
-print(f"95% CI: ({ci_lower:.3f}, {ci_upper:.3f})")
-```
+    ci_lower = diff - z_star * se
+    ci_upper = diff + z_star * se
+    print(f"Difference: {diff:.2f}")
+    print(f"SE: {se:.4f}")
+    print(f"95% CI: ({ci_lower:.3f}, {ci_upper:.3f})")
+    ```
 
-출력:
+    출력:
 
-```
-Difference: 0.15
-SE: 0.0494
-95% CI: (0.053, 0.247)
-```
+    ```
+    Difference: 0.15
+    SE: 0.0494
+    95% CI: (0.053, 0.247)
+    ```
 
-신뢰구간이 0을 포함하지 않으므로 두 군의 치료 반응률이 다르다는 통계적으로 유의한 증거가 있다.
-
+    신뢰구간이 0을 포함하지 않으므로 두 군의 치료 반응률이 다르다는 통계적으로 유의한 증거가 있다.
 ## 연습문제
 
 <div class="drillbox" markdown>
