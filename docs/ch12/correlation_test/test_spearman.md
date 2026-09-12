@@ -100,22 +100,24 @@ Spearman의 $r_s$ 검정은 다음을 요구한다:
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** Spearman 상관 검정과 손계산
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Sample data
 x = np.array([3, 1, 6, 4, 8, 2, 7, 5, 10, 9, 11, 12])
 y = np.array([5, 2, 8, 3, 11, 1, 9, 6, 12, 7, 10, 4])
 
-# Spearman test
+# 순위만 쓰므로 정규성이 필요 없고 이상치에도 강하다.
 r_s, p_value = stats.spearmanr(x, y)
 print(f"Spearman r_s = {r_s:.4f}")
 print(f"p-value      = {p_value:.4f}")
 
-# Manual t-statistic for verification
+# 피어슨과 같은 꼴의 t 통계량으로 손계산해 확인한다. 순위에 피어슨을
+# 적용한 것이 스피어만이므로 검정 방식도 그대로 따라온다.
 n = len(x)
 t_stat = r_s * np.sqrt((n - 2) / (1 - r_s**2))
 p_manual = 2 * (1 - stats.t.cdf(abs(t_stat), df=n - 2))
@@ -131,6 +133,8 @@ p-value      = 0.0202
 t-statistic  = 2.7584
 Manual p     = 0.0202
 ```
+
+</div>
 
 scipy의 p-값과 $t$ 근사로 손계산한 값이 소수점 넷째 자리까지 같다. Spearman 검정의 p-값이 자유도 $n-2$인 $t$-분포에서 나온다는 것을 확인해 준다.
 

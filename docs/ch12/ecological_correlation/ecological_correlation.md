@@ -45,6 +45,10 @@ David Justice는 1995년과 1996년 **각각** Derek Jeter보다 타율이 높�
 | E | 191 | **28%** | 393 | 24% |
 | F | 373 | 6% | 341 | **7%** |
 
+<div class="codebox" markdown>
+
+**예제 1.** UC 버클리 입학 자료의 생태학적 오류
+
 ```python
 import pandas as pd
 
@@ -79,6 +83,8 @@ if __name__ == "__main__":
 Overall male admission rate:   44.52%
 Overall female admission rate: 30.33%
 ```
+
+</div>
 
 전체로 보면 남성 44.5%, 여성 30.3%로 14%p 차이다. 그런데 위 표를 학과별로 보면 여섯 학과 중 네 곳에서 **여성의 합격률이 더 높다**.
 

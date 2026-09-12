@@ -126,7 +126,9 @@ Kendall 검정과 Spearman 검정은 모두 단조 연관에 대한 비모수 �
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** Kendall 타우 검정과 손계산
 
 ```python
 import numpy as np
@@ -135,18 +137,21 @@ from scipy import stats
 x = np.array([1, 2, 3, 4, 5])
 y = np.array([3, 5, 4, 2, 1])
 
-# Kendall's tau test
+# 귀무가설은 "두 변수가 독립"이다. 표본이 작으면 scipy 가 정확분포를 쓴다.
 tau, p_value = stats.kendalltau(x, y)
 print(f"Kendall tau = {tau:.4f}")
 print(f"p-value     = {p_value:.4f}")
 
-# Manual computation for verification
+# 정의대로 손으로 구해 확인한다. 모든 쌍을 돌며 같은 방향이면 +1,
+# 반대 방향이면 -1 을 더한다. 그 합이 S 다.
 n = len(x)
 S = 0
 for i in range(n):
     for j in range(i + 1, n):
         S += np.sign(x[j] - x[i]) * np.sign(y[j] - y[i])
 
+# 귀무가설 아래에서 S 의 분산은 이 공식으로 주어진다. 표본이 크면
+# S 가 정규에 가까워지므로 z 검정을 쓸 수 있다.
 var_S = n * (n - 1) * (2 * n + 5) / 18
 Z = S / np.sqrt(var_S)
 p_manual = 2 * (1 - stats.norm.cdf(abs(Z)))
@@ -160,6 +165,8 @@ Kendall tau = -0.6000
 p-value     = 0.2333
 S = -6, Z = -1.4697, Manual p = 0.1416
 ```
+
+</div>
 
 scipy의 $p = 0.233$과 손으로 계산한 정규근사의 $p = 0.142$가 꽤 다르다.
 

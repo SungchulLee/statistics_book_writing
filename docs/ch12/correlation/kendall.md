@@ -131,20 +131,25 @@ $$
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** Kendall의 타우 구하기
 
 ```python
 import numpy as np
 from scipy import stats
 
+# x 는 오름차순인데 y 는 올랐다 내려간다. 일치쌍과 불일치쌍이 섞인 자료다.
 x = np.array([1, 2, 3, 4, 5])
 y = np.array([3, 5, 4, 2, 1])
 
-# Kendall's tau-b (default in SciPy)
+# 타우는 (일치쌍 - 불일치쌍) / 전체 쌍이다. "무작위로 두 점을 골랐을 때
+# 같은 방향으로 움직일 확률에서 반대 방향일 확률을 뺀 값"으로 읽을 수 있다.
 tau, p_value = stats.kendalltau(x, y)
 print(f"Kendall tau-b = {tau:.4f}, p-value = {p_value:.4f}")
 
-# Compare with Spearman
+# 스피어만과 견준다. 둘 다 순위만 쓰지만 눈금이 달라 타우 쪽이 늘 더 작다.
+# 표본이 작거나 이상치가 있을 때는 타우가 더 안정적이다.
 r_s, p_s = stats.spearmanr(x, y)
 print(f"Spearman r_s  = {r_s:.4f}, p-value = {p_s:.4f}")
 ```
@@ -155,6 +160,8 @@ print(f"Spearman r_s  = {r_s:.4f}, p-value = {p_s:.4f}")
 Kendall tau-b = -0.6000, p-value = 0.2333
 Spearman r_s  = -0.7000, p-value = 0.1881
 ```
+
+</div>
 
 Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우연이 아니라 일반적인 경향이다. 두 계수는 대체로 $\tau \approx \frac{2}{\pi}\arcsin(r_s)$ 관계에 있어 $|\tau| \le |r_s|$가 된다. 두 값을 직접 비교하면 안 되고, 각자의 척도에서 읽어야 한다.
 

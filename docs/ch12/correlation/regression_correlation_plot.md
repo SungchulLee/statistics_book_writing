@@ -33,31 +33,41 @@ $$
 
 기울기와 오차 척도를 달리한 여덟 가지 설정에서 자료를 생성한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 기울기와 잡음을 바꿔 가며
+
 ```python
 import numpy as np
 
 np.random.seed(42)
 DATA_SIZE = 100
 
+# 앞 넷은 기울기를 바꾸고 잡음을 고정했다. 뒤 넷은 기울기를 3 으로 고정하고
+# 잡음만 키웠다. 이렇게 나눠 놓으면 r 이 기울기가 아니라 "직선 둘레에
+# 얼마나 몰려 있는가"를 재는 값임이 드러난다.
 CONFIGS = [
-    # (beta1, beta2, error_scale)
-    (2, 0.05, 1),    # tiny slope, low noise
-    (2, -0.6, 1),    # moderate negative slope
-    (2, 1.0,  1),    # unit slope
-    (2, 3.0,  1),    # steep slope, low noise
-    (2, 3.0,  3),    # steep slope, moderate noise
-    (2, 3.0, 10),    # steep slope, high noise
-    (2, 3.0, 20),    # steep slope, very high noise
-    (2, 3.0, 50),    # steep slope, extreme noise
+    # (절편, 기울기, 잡음 크기)
+    (2, 0.05, 1),    # 아주 완만한 기울기, 잡음 작음
+    (2, -0.6, 1),    # 중간 크기 음의 기울기
+    (2, 1.0,  1),    # 기울기 1
+    (2, 3.0,  1),    # 가파른 기울기, 잡음 작음
+    (2, 3.0,  3),    # 같은 기울기, 잡음 중간
+    (2, 3.0, 10),    # 같은 기울기, 잡음 큼
+    (2, 3.0, 20),    # 같은 기울기, 잡음 매우 큼
+    (2, 3.0, 50),    # 같은 기울기, 잡음 극심
 ]
 
 
 def generate(beta1, beta2, error_scale, n=DATA_SIZE):
+    """주어진 기울기와 잡음으로 자료를 만들고 상관계수까지 돌려준다."""
     x = np.random.randint(1, n, n).astype(float)
     y = beta1 + beta2 * x + error_scale * np.random.randn(n)
     r = np.corrcoef(x, y)[0, 1]
     return x, y, r
 ```
+
+</div>
 
 앞의 네 설정은 $\sigma = 1$로 고정하고 기울기를 바꾸며, 뒤의 네 설정은 $\beta_2 = 3$으로 고정하고 잡음을 키운다.
 
@@ -68,9 +78,15 @@ def generate(beta1, beta2, error_scale, n=DATA_SIZE):
 
 ## 패널 그림 그리기
 
+<div class="codebox" markdown>
+
+**예제 2.** 여덟 칸을 한눈에
+
 ```python
 import matplotlib.pyplot as plt
 
+# 여덟 칸을 한 화면에 놓고 r 값을 각 칸에 적어 둔다. 윗줄에서는 기울기가
+# 아무리 달라도 r 이 비슷하고, 아랫줄에서는 기울기가 같은데 r 이 줄어든다.
 fig, axes = plt.subplots(2, 4, figsize=(20, 9))
 
 for idx, (b1, b2, es) in enumerate(CONFIGS):
@@ -91,6 +107,8 @@ fig.suptitle("How Slope and Noise Affect Pearson Correlation",
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![산점도와 회귀직선](./img/regression_correlation_plot_71.png)
 

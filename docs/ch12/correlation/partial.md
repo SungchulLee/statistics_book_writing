@@ -95,25 +95,30 @@ $$
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** 아이스크림과 익사 사고 — 부분상관
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Simulated data
 np.random.seed(42)
 n = 100
-z = np.random.normal(0, 1, n)       # temperature (confounder)
-x = 2 * z + np.random.normal(0, 1, n)  # ice cream sales
-y = 1.5 * z + np.random.normal(0, 1, n)  # drowning incidents
 
-# Pairwise correlations
+# 기온이 아이스크림 판매와 익사 사고를 함께 끌어올린다. 둘 사이에 직접
+# 연결은 없다. 그런데도 상관은 크게 나온다.
+z = np.random.normal(0, 1, n)          # 기온 — 교란변수
+x = 2 * z + np.random.normal(0, 1, n)  # 아이스크림 판매량
+y = 1.5 * z + np.random.normal(0, 1, n)  # 익사 사고 건수
+
+# 먼저 쌍마다의 상관을 구한다.
 r_xy = stats.pearsonr(x, y)[0]
 r_xz = stats.pearsonr(x, z)[0]
 r_yz = stats.pearsonr(y, z)[0]
 
-# Partial correlation using the formula
+# 부분상관 공식. Z 로 설명되는 몫을 걷어 낸 뒤 남는 상관이다.
+# 위 자료에서는 거의 0 으로 떨어져야 한다.
 r_xy_z = (r_xy - r_xz * r_yz) / (
     np.sqrt(1 - r_xz**2) * np.sqrt(1 - r_yz**2)
 )
@@ -128,6 +133,8 @@ print(f"Partial r(X,Y | Z)  = {r_xy_z:.4f}")
 Marginal r(X,Y)     = 0.7190
 Partial r(X,Y | Z)  = -0.0109
 ```
+
+</div>
 
 $X$(아이스크림 판매)와 $Y$(익사 사고)의 상관이 0.719인데, $Z$(기온)를 통제하면 $-0.011$로 사라진다.
 

@@ -22,6 +22,10 @@
 
 다음 코드는 양의 상관계수를 점점 키우며 이변량 정규 표본의 산점도를 그려, $\rho$가 커질수록 점구름이 직선 주위로 좁아지는 모습을 보인다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 양의 상관 시각화
+
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
@@ -30,17 +34,13 @@ from scipy import stats
 np.random.seed(0)
 
 def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
-    """
-    Generates samples from a bivariate normal distribution.
+    """이변량 정규분포에서 표본을 뽑는다.
 
-    Parameters:
-        mu_1, mu_2: Means of the two variables.
-        sigma_1, sigma_2: Standard deviations.
-        rho: Correlation coefficient.
-        n: Number of samples.
+    상관계수 rho 는 공분산행렬의 비대각 원소로 들어간다.
+    공분산 = rho * sigma_1 * sigma_2 이므로, 표준편차를 1 로 두면
+    공분산이 곧 상관계수가 된다.
 
-    Returns:
-        np.ndarray of shape (n, 2).
+    돌려주는 것은 모양 (n, 2) 인 배열이다.
     """
     covariance_matrix = [
         [sigma_1**2, rho * sigma_1 * sigma_2],
@@ -49,6 +49,11 @@ def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
     return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
 
 def plot_correlations():
+    """rho 를 0 에서 0.95 까지 키우며 점구름이 어떻게 좁아지는지 본다.
+
+    0.4 와 0.6 의 그림 차이가 생각보다 작다는 점을 눈여겨볼 만하다.
+    상관계수는 눈에 보이는 것보다 느리게 움직인다.
+    """
     fig, axes = plt.subplots(1, 6, figsize=(15, 4))
     correlation_coefficients = (0.00, 0.40, 0.60, 0.80, 0.90, 0.95)
 
@@ -66,6 +71,8 @@ if __name__ == "__main__":
     plot_correlations()
 ```
 
+</div>
+
 ![양의 상관](./img/understanding_25.png)
 
 두 변수가 함께 커진다. 점들이 왼쪽 아래에서 오른쪽 위로 향하는 띠를 이룬다.
@@ -75,6 +82,10 @@ if __name__ == "__main__":
 ## 음의 상관 시각화
 
 마찬가지로 음의 상관계수는 아래로 기우는 점구름을 만든다.
+
+<div class="codebox" markdown>
+
+**예제 2.** 음의 상관 시각화
 
 ```python
 import matplotlib.pyplot as plt
@@ -91,6 +102,7 @@ def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
     return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
 
 def plot_negative_correlations():
+    """같은 일을 음의 상관에서 되풀이한다. 모양은 같고 기울기만 뒤집힌다."""
     fig, axes = plt.subplots(1, 6, figsize=(15, 4))
     correlation_coefficients = (0.00, -0.40, -0.60, -0.80, -0.90, -0.95)
 
@@ -108,6 +120,8 @@ if __name__ == "__main__":
     plot_negative_correlations()
 ```
 
+</div>
+
 ![음의 상관](./img/understanding_75.png)
 
 한 변수가 커지면 다른 변수가 작아진다. 띠의 방향만 반대일 뿐 구조는 같다.
@@ -117,6 +131,10 @@ if __name__ == "__main__":
 ## 전체 스펙트럼: 강한 음에서 강한 양까지
 
 모든 상관값을 한 행에 놓으면 전체 연속체가 드러난다.
+
+<div class="codebox" markdown>
+
+**예제 3.** 강한 음에서 강한 양까지
 
 ```python
 import matplotlib.pyplot as plt
@@ -133,6 +151,7 @@ def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
     return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
 
 def plot_all_correlations():
+    """-0.95 부터 0.95 까지 열한 칸에 늘어놓아 한눈에 견준다."""
     fig, axes = plt.subplots(1, 11, figsize=(20, 2))
     rhos = (-0.95, -0.90, -0.80, -0.60, -0.40,
              0.00,  0.40,  0.60,  0.80,  0.90, 0.95)
@@ -150,6 +169,8 @@ def plot_all_correlations():
 if __name__ == "__main__":
     plot_all_correlations()
 ```
+
+</div>
 
 ![상관의 전체 스펙트럼](./img/understanding_113.png)
 
@@ -223,7 +244,7 @@ $$
 
 <div class="codebox" markdown>
 
-### 예제 1. 키와 몸무게 { .eg }
+### 예제 4. 키와 몸무게 { .eg }
 
 실제 자료에서 볼 수 있는 고전적인 양의 상관이다.
 

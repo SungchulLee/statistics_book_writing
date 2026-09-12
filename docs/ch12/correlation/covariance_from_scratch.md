@@ -39,6 +39,10 @@ $$
 
 ## 단계별 구현
 
+<div class="codebox" markdown>
+
+**예제 1.** 공분산과 상관을 단계별로 구현
+
 ```python
 import numpy as np
 
@@ -64,6 +68,8 @@ def pearson_r_step_by_step(x, y):
     return cov / (sx * sy)
 ```
 
+</div>
+
 ---
 
 ## 자료 생성
@@ -77,18 +83,30 @@ $$
 
 여기서 $\text{trend}_t$는 48주에 걸쳐 0에서 $-12$까지 선형으로 감소하고, $\varepsilon_t^{(\text{CA})} \sim \mathcal{N}(0, 0.5^2)$, $\varepsilon_t^{(\text{NY})} \sim \mathcal{N}(0, 0.6^2)$이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 가격 자료 만들기
+
 ```python
 np.random.seed(42)
 WEEKS = 48
+
+# 두 주의 가격에 공통으로 실릴 하락 추세. 공분산이 커지는 까닭이 바로 이것이다.
 trend = np.linspace(0, -12, WEEKS)
 
 CA = 248.0 + trend + np.random.normal(0, 0.5, WEEKS)
 NY = 350.0 + trend * 0.8 + np.random.normal(0, 0.6, WEEKS)
 ```
 
+</div>
+
 ---
 
 ## 계산과 검증
+
+<div class="codebox" markdown>
+
+**예제 3.** 라이브러리 결과와 맞춰 보기
 
 ```python
 import pandas as pd
@@ -101,7 +119,8 @@ print(f"NY mean     = {NY.mean():.4f}")
 print(f"Covariance  = {cov:.4f}")
 print(f"Pearson r   = {r:.4f}")
 
-# Verify against library functions
+# 직접 구한 값이 라이브러리와 맞는지 확인한다. pandas 의 cov 는 ddof=1 이므로
+# 위 구현도 n-1 로 나눠야 값이 맞는다.
 df = pd.DataFrame({"CA": CA, "NY": NY})
 print(f"pandas cov  = {df['CA'].cov(df['NY']):.4f}")
 print(f"pandas corr = {df['CA'].corr(df['NY']):.4f}")
@@ -120,6 +139,8 @@ pandas corr = 0.9753
 numpy corr  = 0.9753
 ```
 
+</div>
+
 세 방법이 모두 같은 값을 내놓으므로 밑바닥부터 만든 구현이 옳음을 확인할 수 있다.
 
 ---
@@ -128,12 +149,16 @@ numpy corr  = 0.9753
 
 세 개의 패널이 이야기 전체를 들려준다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 세 그림으로 이해하기
+
 ```python
 import matplotlib.pyplot as plt
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
 
-# Panel 1: Scatter plot with regression line
+# 왼쪽: 산점도와 회귀직선
 axes[0].scatter(CA, NY, alpha=0.6, edgecolors="grey")
 z = np.polyfit(CA, NY, 1)
 axes[0].plot(np.sort(CA), np.polyval(z, np.sort(CA)),
@@ -142,7 +167,8 @@ axes[0].set_xlabel("CA Price (\\$)")
 axes[0].set_ylabel("NY Price (\\$)")
 axes[0].set_title(f"Scatter (r = {r:.3f})")
 
-# Panel 2: Deviation products
+# 가운데: 주마다의 편차곱. 공분산은 이 막대들의 평균이다.
+# 파란 막대(양)가 빨간 막대(음)를 압도하면 공분산이 양이 된다.
 products = x_dev * y_dev
 colours = ["steelblue" if p > 0 else "salmon" for p in products]
 axes[1].bar(range(WEEKS), products, color=colours, edgecolor="white")
@@ -151,7 +177,7 @@ axes[1].set_xlabel("Week")
 axes[1].set_ylabel("$(x - \\bar{x})(y - \\bar{y})$")
 axes[1].set_title("Deviation Products")
 
-# Panel 3: Time series
+# 오른쪽: 두 시계열. 함께 내려가는 모습이 위 편차곱의 부호를 설명한다.
 weeks = np.arange(WEEKS)
 axes[2].plot(weeks, CA, label="CA", marker="o", markersize=3)
 axes[2].plot(weeks, NY, label="NY", marker="s", markersize=3)
@@ -163,6 +189,8 @@ axes[2].legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![공분산의 시각적 분해](./img/covariance_from_scratch_129.png)
 

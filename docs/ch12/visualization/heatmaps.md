@@ -12,27 +12,31 @@
 
 상장지수펀드(ETF)는 넓은 시장 구간을 추종한다. 섹터 ETF 사이의 상관을 살펴보면 보유 자산이 독립적으로 움직이는지 함께 움직이는지, 즉 분산투자 정도를 평가할 수 있다.
 
+<div class="codebox" markdown>
+
+**예제 1.** S&P 500 ETF 상관 열지도
+
 ```python
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Load S&P 500 data with ETF symbols
 # 자료는 "Practical Statistics for Data Scientists" 저장소에서 바로 읽는다.
 SP500 = ("https://raw.githubusercontent.com/gedeck/"
          "practical-statistics-for-data-scientists/master/data/")
 sp500_sym = pd.read_csv(SP500 + 'sp500_sectors.csv')
 sp500_px = pd.read_csv(SP500 + 'sp500_data.csv.gz', index_col=0)
 
-# Filter for ETFs only (major exchanges), from July 2012 onward
+# ETF 만 골라 2012년 7월 이후 구간을 쓴다.
 etfs = sp500_px.loc[sp500_px.index > '2012-07-01',
                     sp500_sym[sp500_sym['sector'] == 'etf']['symbol']]
 
-# Compute correlation matrix
+# 열이 종목, 행이 날짜이므로 corr() 이 종목 사이의 상관행렬을 준다.
 corr_matrix = etfs.corr()
 
-# Create heatmap
+# vmin/vmax 를 -1 과 1 로 못박아야 색의 뜻이 그림마다 달라지지 않는다.
+# 발산형 색지도라 0 이 가운데 색에 놓인다.
 fig, ax = plt.subplots(figsize=(8, 6))
 sns.heatmap(corr_matrix,
             vmin=-1, vmax=1,
@@ -44,6 +48,8 @@ ax.set_title('Correlation Heatmap: S&P 500 ETFs (2012-2015)')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![S&P 500 ETF 상관 열지도](./img/heatmaps_15.png)
 
@@ -70,12 +76,16 @@ plt.show()
 
 열지도 칸에 수치를 넣으면 해석에 도움이 된다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 값을 표시한 열지도
+
 ```python
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Load and filter data (same as above)
+# 앞과 같은 자료다.
 # 자료는 "Practical Statistics for Data Scientists" 저장소에서 바로 읽는다.
 SP500 = ("https://raw.githubusercontent.com/gedeck/"
          "practical-statistics-for-data-scientists/master/data/")
@@ -90,16 +100,18 @@ fig, ax = plt.subplots(figsize=(10, 8))
 sns.heatmap(corr_matrix,
             vmin=-1, vmax=1,
             cmap=sns.diverging_palette(20, 220, as_cmap=True),
-            annot=True,  # Show correlation values
-            fmt='.2f',   # Format to 2 decimal places
+            annot=True,  # 칸마다 숫자를 적는다
+            fmt='.2f',   # 소수점 두 자리
             ax=ax,
             square=True,
             cbar_kws={'label': 'Correlation'},
-            cbar=False)  # Optional: remove colorbar if space is tight
+            cbar=False)  # 숫자를 적었으므로 색막대는 없어도 된다
 ax.set_title('Annotated Correlation Heatmap: S&P 500 ETFs')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![값을 표시한 열지도](./img/heatmaps_67.png)
 
@@ -120,13 +132,18 @@ plt.show()
 
 계층적 군집화로 비슷한 변수를 묶는다:
 
+<div class="codebox" markdown>
+
+**예제 3.** 군집화로 순서 다시 매기기
+
 ```python
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 
-# Compute and cluster
+# 상관이 비슷한 종목끼리 이웃하도록 순서를 다시 매긴다. 1 - r 을 거리로
+# 삼으면 상관이 높을수록 가까운 것이 되어 군집화에 바로 쓸 수 있다.
 corr_matrix = etfs.corr()
 linkage_matrix = linkage(1 - corr_matrix, method='ward')
 
@@ -141,6 +158,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![군집화한 열지도](./img/heatmaps_113.png)
 
 행과 열을 상관 구조에 따라 재정렬하면 함께 움직이는 변수들이 대각선 근처에 블록으로 모인다. 같은 자료인데도 구조가 훨씬 잘 보인다.
@@ -151,8 +170,12 @@ plt.show()
 
 관심 있는 변수의 부분집합만 고른다:
 
+<div class="codebox" markdown>
+
+**예제 4.** 부분집합만 보기
+
 ```python
-# Focus on sector funds only (exclude single-asset ETFs)
+# 종목이 많으면 열지도가 읽히지 않는다. 업종 펀드만 열 개로 좁힌다.
 sector_etfs = ['XLI', 'QQQ', 'XLE', 'XLY', 'XLU', 'XLB', 'XLV', 'XLP', 'XLF', 'XLK']
 subset_corr = corr_matrix.loc[sector_etfs, sector_etfs]
 
@@ -162,6 +185,8 @@ ax.set_title('Sector ETF Correlations')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![부분집합 열지도](./img/heatmaps_140.png)
 
@@ -173,6 +198,10 @@ plt.show()
 
 흑백으로 출판하거나 인쇄 제약이 있을 때에는 회색조 색상표를 쓰고 시각적 단서를 더한다:
 
+<div class="codebox" markdown>
+
+**예제 5.** 회색조 열지도
+
 ```python
 import pandas as pd
 import seaborn as sns
@@ -182,7 +211,7 @@ corr_matrix = etfs.corr()
 
 fig, ax = plt.subplots(figsize=(8, 6))
 sns.heatmap(corr_matrix,
-            cmap='gray',  # Grayscale colormap
+            cmap='gray',  # 인쇄를 염두에 둔 회색조. 다만 부호를 읽기 어려워진다.
             vmin=-1, vmax=1,
             ax=ax,
             square=True,
@@ -191,6 +220,8 @@ ax.set_title('Correlation Heatmap (Grayscale)')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![회색조 열지도](./img/heatmaps_158.png)
 

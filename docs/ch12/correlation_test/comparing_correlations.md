@@ -100,18 +100,23 @@ $$
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** 독립인 두 상관의 비교
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Comparing two independent correlations
+# 서로 다른 두 표본에서 얻은 상관계수를 견준다. 표본이 겹치지 않아야
+# 이 방법을 쓸 수 있다. 같은 사람에게서 잰 두 상관이라면 다른 검정이 필요하다.
 r1, n1 = 0.65, 50
 r2, n2 = 0.40, 60
 
+# 두 r 을 각각 z 로 옮긴다. z 는 거의 정규이고 분산이 표본크기로만 정해진다.
 z1 = np.arctanh(r1)
 z2 = np.arctanh(r2)
+# 두 z 가 독립이므로 차이의 분산은 각 분산의 합이다.
 se = np.sqrt(1 / (n1 - 3) + 1 / (n2 - 3))
 Z_stat = (z1 - z2) / se
 p_value = 2 * (1 - stats.norm.cdf(abs(Z_stat)))
@@ -128,6 +133,8 @@ z1 = 0.7753, z2 = 0.4236
 Z statistic = 1.7848
 Two-sided p-value = 0.0743
 ```
+
+</div>
 
 상관 0.65와 0.40의 차이가 $p = 0.074$로 5% 수준에서는 유의하지 않다. 상관계수를 비교하려면 상관을 추정할 때보다 훨씬 큰 표본이 필요하다.
 

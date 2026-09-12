@@ -42,17 +42,24 @@ $$
 
 여기서 $x_i \sim \text{Uniform}(10, 60)$이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 이변량 자료 만들기
+
 ```python
 import numpy as np
 from scipy import stats
 
 np.random.seed(42)
 
+# 기울기 0.8 의 선형 관계에 표준편차 8 짜리 잡음을 얹는다.
 n = 120
 x = np.random.uniform(10, 60, n)
 noise = np.random.normal(0, 8, n)
 y = 0.8 * x + 5 + noise
 ```
+
+</div>
 
 ---
 
@@ -60,7 +67,13 @@ y = 0.8 * x + 5 + noise
 
 SciPy는 각 측도에 대한 함수를 제공하며 계수와 함께 연관이 없다는 귀무가설 아래의 p-값을 돌려준다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 세 상관계수 구하기
+
 ```python
+# 세 측도를 함께 구한다. 관계가 선형이고 이상치가 없으면 셋이 비슷하게 나온다.
+# 값이 크게 갈린다면 관계가 곡선이거나 이상치가 있다는 신호다.
 r_pearson, p_pearson = stats.pearsonr(x, y)
 r_spearman, p_spearman = stats.spearmanr(x, y)
 r_kendall, p_kendall = stats.kendalltau(x, y)
@@ -78,6 +91,8 @@ Spearman rho = 0.8363  (p = 1.38e-32)
 Kendall  tau = 0.6420  (p = 2.54e-25)
 ```
 
+</div>
+
 세 계수가 0.82, 0.84, 0.64로 다르다. Kendall이 유독 작은 것은 척도가 달라서이며, 강도가 약하다는 뜻이 아니다.
 
 ---
@@ -86,7 +101,12 @@ Kendall  tau = 0.6420  (p = 2.54e-25)
 
 유용한 항등식: Spearman의 $\rho_s$는 순위 변환된 자료로 계산한 Pearson $r$과 같다. 수치로 확인해 보자:
 
+<div class="codebox" markdown>
+
+**예제 3.** 순위에 대한 피어슨이 스피어만이다
+
 ```python
+# Spearman 은 "순위에 대한 Pearson"이라는 정의를 그대로 확인한다.
 r_rank = stats.pearsonr(stats.rankdata(x), stats.rankdata(y))[0]
 print(f"Pearson r on ranks = {r_rank:.4f}")
 print(f"Spearman rho       = {r_spearman:.4f}")
@@ -100,6 +120,8 @@ Pearson r on ranks = 0.8363
 Spearman rho       = 0.8363
 ```
 
+</div>
+
 순위로 바꾼 뒤 계산한 Pearson 상관이 Spearman과 정확히 같다. Spearman은 별개의 공식이 아니라 **순위에 적용한 Pearson**이라는 정의를 수치로 확인한 것이다.
 
 ---
@@ -108,9 +130,14 @@ Spearman rho       = 0.8363
 
 산점도에 보통최소제곱(OLS) 회귀직선을 겹쳐 그리면 선형모형이 적절한지 시각적으로 확인할 수 있다:
 
+<div class="codebox" markdown>
+
+**예제 4.** 회귀직선을 얹은 산점도
+
 ```python
 import matplotlib.pyplot as plt
 
+# 상관계수는 숫자 하나일 뿐이므로 반드시 그림과 함께 본다.
 slope, intercept, _, _, _ = stats.linregress(x, y)
 
 fig, ax = plt.subplots(figsize=(8, 5))
@@ -125,6 +152,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![세 상관계수의 비교](./img/correlation_analysis_92.png)
 

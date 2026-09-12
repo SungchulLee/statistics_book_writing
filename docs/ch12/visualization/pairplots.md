@@ -34,18 +34,24 @@
 
 `seaborn` 라이브러리의 `pairplot` 함수는 최소한의 코드로 출판 수준의 쌍 그림을 만들어 준다.
 
+<div class="codebox" markdown>
+
+**예제 1.** Seaborn 기본 쌍그림
+
 ```python
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Load example dataset
 df = sns.load_dataset("iris")
 
-# Basic pair plot
+# 쌍그림은 수치형 열을 모두 짝지어 격자로 그린다. hue 로 품종을 나누면
+# 어느 변수 짝에서 품종이 갈리는지 한눈에 보인다.
 sns.pairplot(df, hue="species", diag_kind="kde")
 plt.suptitle("Iris Dataset: Pairwise Relationships by Species", y=1.02)
 plt.show()
 ```
+
+</div>
 
 ![기본 쌍 그림](./img/pairplots_37.png)
 
@@ -65,13 +71,17 @@ plt.show()
 
 열이 많은 자료에서 모든 쌍을 그리면 격자가 지나치게 복잡해진다. 변수의 부분집합을 고른다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 볼 변수만 고르기
+
 ```python
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 df = sns.load_dataset("iris")
 
-# Select specific variables
+# 변수가 많으면 격자가 커져 읽기 어렵다. vars 로 볼 것만 고른다.
 sns.pairplot(
     df,
     vars=["sepal_length", "sepal_width", "petal_length"],
@@ -82,6 +92,8 @@ sns.pairplot(
 plt.show()
 ```
 
+</div>
+
 ![변수를 추린 쌍 그림](./img/pairplots_64.png)
 
 변수가 많으면 쌍 그림이 $p^2$개의 칸으로 늘어나 읽을 수 없게 된다. 관심 있는 변수를 먼저 추리는 것이 실용적이다.
@@ -89,6 +101,10 @@ plt.show()
 ### 그림에 상관계수 표시하기
 
 각 패널에 상관 수치를 넣으면 산점도가 시각적으로 보여주는 것을 수치로 확인할 수 있다:
+
+<div class="codebox" markdown>
+
+**예제 3.** 칸마다 상관계수 적기
 
 ```python
 import seaborn as sns
@@ -98,11 +114,14 @@ import numpy as np
 df = sns.load_dataset("iris")
 numeric_cols = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
 
+# PairGrid 는 칸마다 무엇을 그릴지 직접 고를 수 있다. 아래쪽 삼각형에는
+# 산점도, 대각선에는 분포, 위쪽 삼각형에는 상관계수를 적는다.
 g = sns.PairGrid(df[numeric_cols])
 g.map_lower(sns.scatterplot)
 g.map_diag(sns.histplot, kde=True)
 
 def annotate_corr(x, y, **kwargs):
+    """칸 가운데에 상관계수를 적는다. map_upper 가 칸마다 불러 준다."""
     r = np.corrcoef(x, y)[0, 1]
     ax = plt.gca()
     ax.annotate(f"r = {r:.2f}", xy=(0.5, 0.5),
@@ -112,6 +131,8 @@ def annotate_corr(x, y, **kwargs):
 g.map_upper(annotate_corr)
 plt.show()
 ```
+
+</div>
 
 ![상관계수를 표시한 쌍 그림](./img/pairplots_85.png)
 

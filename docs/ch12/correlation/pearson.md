@@ -118,7 +118,9 @@ Pearson 상관은 평균과 표준편차에 기반하는데, 이들 자체가 �
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** Pearson 상관계수 구하기
 
 ```python
 import numpy as np
@@ -150,6 +152,8 @@ NumPy r = 0.9996
 SciPy r = 0.9996, p-value = 0.000000
 이상점 추가 후 r = 0.4180
 ```
+
+</div>
 
 `np.corrcoef`와 `stats.pearsonr`가 같은 $r$을 준다. 앞의 것은 상관행렬을, 뒤의 것은 p-값을 함께 준다는 차이뿐이다.
 

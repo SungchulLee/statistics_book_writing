@@ -16,6 +16,10 @@
 
 관계가 선형이면 셋이 모두 일치한다. 단조이지만 비선형이면 Spearman과 Kendall이 Pearson보다 낫다. 이상점이 있으면 순위 기반 측도가 더 로버스트하다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 관계의 모양에 따른 세 측도
+
 ```python
 import numpy as np
 from scipy import stats
@@ -23,15 +27,16 @@ from scipy import stats
 np.random.seed(42)
 n = 100
 
-# Linear relationship
+# 선형 관계. 세 측도가 모두 크게 나온다.
 x_lin = np.random.normal(0, 1, n)
 y_lin = 2 * x_lin + np.random.normal(0, 1, n)
 
-# Monotonic nonlinear (exponential)
+# 단조이지만 곡선인 관계. Pearson 은 떨어지지만 순위를 쓰는 두 측도는 버틴다.
 x_mono = np.random.uniform(0, 3, n)
 y_mono = np.exp(x_mono) + np.random.normal(0, 2, n)
 
-# Quadratic — r close to 0 but strong relationship
+# 이차함수 관계. 관계는 아주 강한데 세 측도 모두 0 근처로 나온다.
+# 상관계수가 0 이라는 말이 "관계가 없다"는 뜻이 아님을 보여 주는 자리다.
 x_quad = np.random.normal(0, 2, n)
 y_quad = x_quad**2 + np.random.normal(0, 1, n)
 
@@ -55,6 +60,8 @@ Linear                    r=0.8724  rho_s=0.8686  tau=0.6853
 Monotonic Nonlinear       r=0.8676  rho_s=0.9032  tau=0.7402
 Quadratic (r ~ 0)         r=0.1014  rho_s=-0.0229  tau=-0.0376
 ```
+
+</div>
 
 선형 관계에서는 Pearson이 가장 크고, 단조 비선형(지수) 관계에서는 Spearman과 Kendall이 Pearson을 앞선다(0.903 대 0.868). 이차 관계에서는 $y$가 사실상 $x$의 결정론적 함수인데도 Pearson의 $r$가 0에 가깝다. Pearson 상관이 낮다고 해서 "관계가 없다"는 뜻이 아님을 보여준다.
 
@@ -80,8 +87,18 @@ $$
 \left(\tanh\!\bigl(z - z_{\alpha/2}\,\text{SE}\bigr),\;\; \tanh\!\bigl(z + z_{\alpha/2}\,\text{SE}\bigr)\right), \qquad \text{SE} = \frac{1}{\sqrt{n-3}}
 $$
 
+<div class="codebox" markdown>
+
+**예제 2.** Fisher z 신뢰구간
+
 ```python
 def fisher_z_ci(x, y, alpha=0.05):
+    """Fisher z 변환으로 상관계수의 신뢰구간을 구한다.
+
+    r 은 -1 과 1 사이에 갇혀 있어 분포가 치우친다. arctanh 를 씌우면
+    그 눈금이 실수 전체로 펴지며 분포가 거의 정규가 되고, 표준오차도
+    1/sqrt(n-3) 로 간단해진다. 구간을 만든 뒤 tanh 로 되돌린다.
+    """
     n = len(x)
     r, p_val = stats.pearsonr(x, y)
     z = np.arctanh(r)
@@ -104,6 +121,8 @@ fisher_z_ci(x, y)
 r = 0.6110, 95% CI for rho: (0.4519, 0.7324)
 ```
 
+</div>
+
 구간이 $\tanh$ 변환 때문에 점추정값 $0.611$을 중심으로 대칭이 아니라는 점에 주목하라. 위쪽 폭($0.121$)이 아래쪽 폭($0.159$)보다 좁다.
 
 ---
@@ -118,9 +137,14 @@ $$
 
 이는 잠복변수 $Z$가 $X$와 $Y$ 모두와 양의 연관을 가질 때 일어난다. 집단 내 관계는 음수인데도 전체적으로는 허위의 양의 상관이 생긴다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 심슨의 역설
+
 ```python
 np.random.seed(42)
-# Baseline rises with the group's x-mean: this is the confounding
+# 집단마다 x 의 평균이 커질수록 y 의 기준선도 함께 올라간다. 이것이 교란이다.
+# 집단 안의 기울기는 셋 다 -0.5 로 음인데, 합쳐 놓으면 양이 된다.
 groups = {"Group A": (50, 0.2, 2, -0.5),
           "Group B": (50, 0.5, 5, -0.5),
           "Group C": (50, 0.8, 8, -0.5)}
@@ -149,6 +173,8 @@ Within-group slope: -0.5 (negative)
 Overall r = 0.8593
 ```
 
+</div>
+
 !!! warning "역설이 성립하려면 절편이 함께 움직여야 한다"
     핵심은 집단의 $x$ 평균이 커질수록 기준선 `yb`도 함께 커진다는 데 있다($0.2 \to 2$, $0.5 \to 5$, $0.8 \to 8$). 만약 기준선이 반대로 감소한다면($8, 5, 2$) 전체 기울기는 $-7.38$로 오히려 더 가파른 음수가 되어 역설이 일어나지 않는다. 집단 간 이동 방향이 집단 내 기울기와 **반대**일 때만 부호가 뒤집힌다.
 
@@ -166,10 +192,15 @@ $$
 
 동등하게, $X$를 $Z$에, $Y$를 $Z$에 회귀시킨 뒤 두 잔차의 Pearson 상관을 계산해도 된다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 부분상관
+
 ```python
 n = 200
 np.random.seed(42)
 
+# 앞과 같은 구조다. Z 가 X 와 Y 를 함께 끌어 상관을 만든다.
 Z = np.random.normal(0, 1, n)
 X = 0.7 * Z + np.random.normal(0, 0.5, n)
 Y = 0.6 * Z + np.random.normal(0, 0.5, n)
@@ -191,6 +222,8 @@ r(X, Y)    = 0.5699  (appears significant)
 r(X,Y | Z) = -0.0201  (nearly vanishes)
 ```
 
+</div>
+
 $r(X, Y) = 0.570$은 $p \approx 1.3 \times 10^{-18}$로 압도적으로 유의하지만, 부분상관 $r_{XY \cdot Z} = -0.020$은 0에 가깝다. 겉보기 연관이 전적으로 교란변수 $Z$에서 비롯되었음이 드러난다.
 
 ---
@@ -203,8 +236,17 @@ $$
 E[\text{거짓양성}] = \alpha \binom{p}{2}
 $$
 
+<div class="codebox" markdown>
+
+**예제 5.** 다중검정이 만드는 허위상관
+
 ```python
 def spurious_correlations_demo(n_vars=100, n_obs=30):
+    """서로 완전히 무관한 변수 100개에서 유의한 상관이 몇 쌍이나 나오는지 센다.
+
+    쌍이 4950개이므로 유의수준 5%에서 247쌍쯤은 그냥 나온다. 자료를 훑다가
+    찾아낸 상관 하나를 그대로 보고하면 안 되는 까닭이 여기 있다.
+    """
     np.random.seed(42)
     data = np.random.normal(0, 1, (n_obs, n_vars))
     n_pairs = n_vars * (n_vars - 1) // 2
@@ -230,6 +272,8 @@ Significant at 0.05: 240 (4.8%)
 Expected false positives: 248
 ```
 
+</div>
+
 100개 변수가 모두 독립인데도 약 5%의 쌍이 유의하게 나타난다. 이것이 다중검정 문제이며, Bonferroni나 Benjamini--Hochberg 같은 보정이 필요하다.
 
 ---
@@ -244,8 +288,17 @@ $$
 
 $H_0$ 아래에서 $z$는 근사적으로 표준정규분포를 따른다.
 
+<div class="codebox" markdown>
+
+**예제 6.** 두 상관의 비교
+
 ```python
 def compare_two_correlations(r1, n1, r2, n2, alpha=0.05):
+    """서로 독립인 두 표본의 상관계수가 다른지 검정한다.
+
+    각각을 z 로 옮기면 차이의 분포가 정규가 되므로 z 검정을 쓸 수 있다.
+    두 표본이 겹치지 않을 때만 이 방법이 맞다.
+    """
     z1, z2 = np.arctanh(r1), np.arctanh(r2)
     se = np.sqrt(1/(n1 - 3) + 1/(n2 - 3))
     z_stat = (z1 - z2) / se
@@ -262,6 +315,8 @@ compare_two_correlations(r1=0.72, n1=100, r2=0.65, n2=120)
 r1=0.7200 (n=100), r2=0.6500 (n=120)
 z = 0.9638, p = 0.3351
 ```
+
+</div>
 
 $p = 0.335$이므로 두 상관이 다르다는 증거가 없다. $0.72$와 $0.65$라는 차이는 이 정도 표본크기에서 우연히 생길 만하다.
 

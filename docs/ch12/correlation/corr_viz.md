@@ -16,11 +16,18 @@ $$
 
 여기서 $\varepsilon$과 $\varepsilon'$은 독립인 표준정규이다. 구성상 $x_1$과 $x_2$는 강한 양의 상관을, $x_1$과 $x_3$은 약한 음의 상관을 가지며 $x_4$는 나머지와 독립이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 상관 구조를 가진 자료 만들기
+
 ```python
 import numpy as np
 
 np.random.seed(7)
 n = 200
+
+# 공통 요인 z1 을 섞는 정도를 달리해 상관 구조를 만든다.
+# X2 는 X1 과 강한 양, X3 은 X1 과 중간 음, X4 는 어느 것과도 무관하다.
 z1 = np.random.randn(n)
 z2 = np.random.randn(n)
 
@@ -32,6 +39,8 @@ x4 = np.random.randn(n)
 data = np.column_stack([x1, x2, x3, x4])
 labels = ['X1', 'X2', 'X3', 'X4']
 ```
+
+</div>
 
 ---
 
@@ -45,9 +54,17 @@ $$
 
 대각 성분은 언제나 $R_{ii} = 1$이고 이 행렬은 양반정치이다.
 
+<div class="codebox" markdown>
+
+**예제 2.** 상관행렬
+
 ```python
+# rowvar=False 는 "행이 관측, 열이 변수"라는 뜻이다. 기본값은 그 반대이므로
+# 자료행렬을 그대로 넣으면 엉뚱한 행렬이 나온다.
 corr_matrix = np.corrcoef(data, rowvar=False)
 ```
+
+</div>
 
 ---
 
@@ -55,9 +72,15 @@ corr_matrix = np.corrcoef(data, rowvar=False)
 
 열지도는 $\mathbf{R}$의 각 성분을 발산형 색 척도로 부호화한다. 보통 파랑이 음의 상관, 빨강이 양의 상관, 0 근처가 흰색이다.
 
+<div class="codebox" markdown>
+
+**예제 3.** 상관 열지도
+
 ```python
 import matplotlib.pyplot as plt
 
+# 발산형 색지도를 쓰고 vmin/vmax 를 -1 과 1 로 못박는다. 이래야 흰색이
+# 정확히 0 에 놓여, 색만 보고도 부호와 세기를 읽을 수 있다.
 k = data.shape[1]
 fig, ax = plt.subplots(figsize=(6, 5))
 im = ax.imshow(corr_matrix, cmap='RdBu_r', vmin=-1, vmax=1)
@@ -78,6 +101,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+</div>
+
 ![산점도 행렬](./img/corr_viz_58.png)
 
 변수 쌍마다 산점도를 그려 놓으면 상관행렬의 숫자가 어떤 모양에서 나왔는지 확인할 수 있다.
@@ -90,7 +115,14 @@ plt.show()
 
 산점도 행렬은 모든 쌍별 산점도를 격자에 표시하고 대각선에는 일변량 히스토그램을 둔다. 주변분포와 이변량 관계를 완전하게 시각 요약해 준다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 산점도 행렬
+
 ```python
+# 열지도는 숫자 하나로 요약하지만 산점도 행렬은 관계의 모양을 보여 준다.
+# 상관계수가 같아도 모양이 다를 수 있으므로 둘을 함께 본다.
+# 대각선에는 그 변수 자신의 분포를 그린다.
 fig, axes = plt.subplots(k, k, figsize=(10, 10))
 for i in range(k):
     for j in range(k):
@@ -112,6 +144,8 @@ fig.suptitle('Scatter Matrix (Pair Plot)', fontsize=14, y=1.01)
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![여러 상관 수준의 산점도](./img/corr_viz_89.png)
 

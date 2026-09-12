@@ -32,6 +32,10 @@
 
 여기서 $\delta$는 수치 안정성을 위한 작은 상수이다. 너비와 높이의 비가 이심률을 정하고, 회전각이 양의 상관과 음의 상관을 구별한다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 타원으로 상관행렬 그리기
+
 ```python
 import numpy as np
 import pandas as pd
@@ -41,6 +45,12 @@ from matplotlib.colors import Normalize
 
 
 def plot_corr_ellipses(data, figsize=None, **kwargs):
+    """상관행렬을 타원 격자로 그린다.
+
+    칸마다 타원 하나를 놓는다. 타원이 납작할수록 상관이 강하고, 원에
+    가까울수록 약하다. 기울기의 방향이 부호를 나타낸다. 색과 모양이
+    같은 정보를 두 번 실어 주므로 흑백으로 인쇄해도 읽힌다.
+    """
     M = np.array(data)
     fig, ax = plt.subplots(1, 1, figsize=figsize,
                            subplot_kw={'aspect': 'equal'})
@@ -48,7 +58,11 @@ def plot_corr_ellipses(data, figsize=None, **kwargs):
     ax.set_ylim(-0.5, M.shape[0] - 0.5)
     ax.invert_yaxis()
 
+    # 칸의 중심 좌표. [::-1] 로 (행, 열)을 (x, y) 순서로 뒤집는다.
     xy = np.indices(M.shape)[::-1].reshape(2, -1).T
+
+    # 너비는 고정하고 높이만 |r| 에 따라 줄인다. r=1 이면 선분처럼 납작해지고
+    # r=0 이면 원이 된다. 기울기는 부호를 따라 ±45도로 놓는다.
 
     w = np.ones_like(M).ravel() + 0.01
     h = 1 - np.abs(M).ravel() - 0.01
@@ -73,15 +87,23 @@ def plot_corr_ellipses(data, figsize=None, **kwargs):
     return ec, ax
 ```
 
+</div>
+
 ---
 
 ## 모의 자료 예제
 
 상관된 변수 다섯 개를 만들어 타원 그림으로 상관 구조를 시각화한다:
 
+<div class="codebox" markdown>
+
+**예제 2.** 업종 수익률 자료로 그려 보기
+
 ```python
 np.random.seed(42)
 n = 200
+
+# 업종별 수익률을 흉내 낸 자료다. 공통 요인 z1 을 섞는 비율로 상관을 만든다.
 z1 = np.random.randn(n)
 z2 = np.random.randn(n)
 
@@ -104,6 +126,8 @@ ax.set_title('Correlation Matrix: Ellipse Visualization')
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![이변량 정규분포의 등고선](./img/correlation_ellipses_82.png)
 

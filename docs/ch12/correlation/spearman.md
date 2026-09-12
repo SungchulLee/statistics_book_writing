@@ -120,20 +120,24 @@ Pearson을 쓸 때:
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** 단조 곡선에서의 Spearman
 
 ```python
 import numpy as np
 from scipy import stats
 
+# y 는 x 의 지수함수다. 곡선이지만 x 가 커지면 y 도 반드시 커지는 단조 관계다.
 x = np.array([1, 2, 3, 4, 5, 6, 7, 8])
 y = np.exp(x)
 
-# Spearman correlation
+# 스피어만은 값 대신 순위만 보므로 단조이기만 하면 정확히 1 이 된다.
 r_s, p_value = stats.spearmanr(x, y)
 print(f"Spearman r_s = {r_s:.4f}, p-value = {p_value:.6f}")
 
-# Compare with Pearson
+# 피어슨은 직선에서 얼마나 벗어났는지를 재므로 1 에 못 미친다.
+# 관계가 곡선일 때 두 측도가 갈리는 전형적인 모습이다.
 r_p, p_p = stats.pearsonr(x, y)
 print(f"Pearson  r   = {r_p:.4f}, p-value = {p_p:.6f}")
 ```
@@ -144,6 +148,8 @@ print(f"Pearson  r   = {r_p:.4f}, p-value = {p_p:.6f}")
 Spearman r_s = 1.0000, p-value = 0.000000
 Pearson  r   = 0.7758, p-value = 0.023636
 ```
+
+</div>
 
 $y = e^x$은 완전한 **단조** 관계지만 선형은 아니다. Spearman은 순위만 보므로 정확히 1.0을 주고, Pearson은 곡률 때문에 0.776에 그친다.
 

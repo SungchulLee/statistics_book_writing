@@ -151,24 +151,27 @@ $H_0\!: \phi = 0$을 검정하는 것은 $2 \times 2$ 표의 카이제곱 독립
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** 점이연상관과 파이계수
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Point-biserial example
+# 점이연상관: 한쪽이 이분변수(0/1), 다른 쪽이 연속변수인 경우다.
 group = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 scores = np.array([65, 70, 68, 72, 66, 78, 82, 85, 80, 76])
 
 r_pb, p_val = stats.pointbiserialr(group, scores)
 print(f"Point-biserial r = {r_pb:.4f}, p-value = {p_val:.4f}")
 
-# This equals Pearson r on the same data
+# 사실 점이연상관은 0/1 에 그대로 피어슨을 쓴 것과 같다. 이름만 다를 뿐이다.
 r_pearson, _ = stats.pearsonr(group, scores)
 print(f"Pearson r        = {r_pearson:.4f}")
 
-# Phi coefficient via chi-square
+# 파이계수: 양쪽이 모두 이분변수인 경우다. 2x2 표에서 카이제곱을 전체
+# 도수로 나눈 뒤 제곱근을 취하면 나온다. 이 또한 0/1 에 대한 피어슨과 같다.
 table = np.array([[60, 30], [40, 70]])
 chi2, p, dof, expected = stats.chi2_contingency(table, correction=False)
 phi = np.sqrt(chi2 / table.sum())
@@ -182,6 +185,8 @@ Point-biserial r = 0.9029, p-value = 0.0003
 Pearson r        = 0.9029
 Phi coefficient  = 0.3015
 ```
+
+</div>
 
 점이연 상관과 Pearson 상관이 **정확히 같다**. 점이연 상관은 별개의 공식이 아니라, 한 변수가 0/1일 때의 Pearson 상관에 붙인 이름일 뿐이다.
 

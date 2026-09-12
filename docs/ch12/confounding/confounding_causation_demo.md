@@ -20,6 +20,10 @@ $$
 
 $Y$는 오직 $C$에만 의존하므로 $T$가 $Y$에 미치는 참 인과효과는 0이다.
 
+<div class="codebox" markdown>
+
+**예제 1.** 교란된 자료 만들기
+
 ```python
 import numpy as np
 from scipy import stats
@@ -50,6 +54,8 @@ corr(T, C) = 0.7908
 corr(T, Y) = 0.5282   (참 인과효과는 0)
 ```
 
+</div>
+
 $T$와 $Y$의 상관이 0.53이나 되지만 $T$는 $Y$에 아무 영향도 주지 않는다. 오직 $C$를 공유할 뿐이다.
 
 ### 짧은 회귀와 긴 회귀
@@ -66,12 +72,21 @@ $$
 Y = \alpha + \beta_T^{\text{long}} T + \beta_C C + u
 $$
 
+<div class="codebox" markdown>
+
+**예제 2.** 짧은 회귀와 긴 회귀
+
 ```python
 def compute_regressions(t, c, y):
-    # Short regression
+    """교란변수를 빼고 넣은 두 회귀를 나란히 돌린다.
+
+    짧은 회귀는 T 만 넣고, 긴 회귀는 C 까지 넣는다. 참 효과가 0 인데도
+    짧은 회귀의 계수가 크게 나오는 것이 누락변수 편향이다.
+    """
+    # 짧은 회귀: Y ~ T
     slope_short, _, r_short, p_short, _ = stats.linregress(t, y)
 
-    # Long regression via OLS
+    # 긴 회귀: Y ~ T + C. 절편을 위해 1 로 된 열을 앞에 붙인다.
     X = np.column_stack([np.ones(len(t)), t, c])
     beta = np.linalg.lstsq(X, y, rcond=None)[0]
 
@@ -97,6 +112,8 @@ long_beta_T  =  -0.1000
 long_beta_C  =   1.0915
 ```
 
+</div>
+
 $T$에 아무런 인과효과가 없는데도 짧은 회귀는 $\beta_T^{\text{short}} = 0.777$이라는 압도적으로 유의한 기울기를 내놓는다. 긴 회귀는 $\beta_T^{\text{long}} \approx 0$을 올바르게 추정한다.
 
 ### 부분회귀(Frisch-Waugh-Lovell)
@@ -111,7 +128,14 @@ $$
 \beta_T^{\text{long}} = \frac{\text{Cov}(e_T, e_Y)}{\text{Var}(e_T)}
 $$
 
+<div class="codebox" markdown>
+
+**예제 3.** 부분회귀로 같은 값 얻기
+
 ```python
+# Frisch-Waugh-Lovell 정리: T 와 Y 에서 각각 C 로 설명되는 몫을 걷어 낸 뒤
+# 남은 잔차끼리 회귀하면, 긴 회귀의 T 계수와 똑같은 값이 나온다.
+# "C 를 통제한다"는 말이 실제로 무엇을 하는 일인지 보여 주는 계산이다.
 t_resid = t - stats.linregress(c, t).slope * c
 y_resid = y - stats.linregress(c, y).slope * c
 slope_partial = stats.linregress(t_resid, y_resid).slope
@@ -123,6 +147,8 @@ print(f"slope_partial = {slope_partial:.4f}")
 ```
 slope_partial = -0.1000
 ```
+
+</div>
 
 이렇게 얻은 `slope_partial`은 $-0.1000$으로 긴 회귀의 $\beta_T^{\text{long}}$과 소수점 넷째 자리까지 일치한다. **Frisch-Waugh-Lovell 정리**가 작동하는 모습이다. 긴 회귀에서 $T$의 계수는 $e_Y$를 $e_T$에 회귀시킨 기울기와 같다.
 
@@ -146,8 +172,18 @@ $$
 
 참 처치효과는 $+5$이지만, 중증 환자는 전반적으로 결과가 나쁘다.
 
+<div class="codebox" markdown>
+
+**예제 4.** 심슨의 역설과 층화
+
 ```python
 def simpson_paradox_demo(n=1000):
+    """중증도가 치료 배정과 결과를 함께 좌우할 때 생기는 역설을 보인다.
+
+    중증 환자가 치료를 더 많이 받고(0.7 대 0.3), 중증 자체가 결과를 크게
+    낮춘다. 그래서 치료가 실제로는 결과를 5 만큼 올리는데도, 층을 나누지
+    않고 보면 치료군의 결과가 더 나빠 보인다.
+    """
     severity = np.random.binomial(1, 0.5, n)
     p_treat = np.where(severity == 1, 0.7, 0.3)
     treatment = np.random.binomial(1, p_treat)
@@ -155,10 +191,10 @@ def simpson_paradox_demo(n=1000):
     y = (50 - 20 * severity + 5 * treatment
          + np.random.normal(0, 5, n))
 
-    # Naive ATE
+    # 층을 나누지 않은 순진한 평균처치효과
     ate_naive = y[treatment == 1].mean() - y[treatment == 0].mean()
 
-    # Adjusted ATE (stratified)
+    # 중증도로 층을 나눠 각 층에서 효과를 구한 뒤, 층의 크기로 가중해 합친다.
     ate_mild = (y[(treatment == 1) & (severity == 0)].mean()
                 - y[(treatment == 0) & (severity == 0)].mean())
     ate_severe = (y[(treatment == 1) & (severity == 1)].mean()
@@ -168,6 +204,8 @@ def simpson_paradox_demo(n=1000):
 
     return ate_naive, ate_mild, ate_severe, ate_adjusted
 ```
+
+</div>
 
 ### 역설
 

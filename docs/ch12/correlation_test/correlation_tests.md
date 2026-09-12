@@ -10,6 +10,10 @@
 
 ### `global_name_space.py`
 
+<div class="codebox" markdown>
+
+**예제 1.** 설정 모듈
+
 ```python
 import argparse
 import numpy as np
@@ -26,7 +30,13 @@ np.random.seed(ARGS.seed)
 ARGS.size = 1000
 ```
 
+</div>
+
 ### `load_data.py`
+
+<div class="codebox" markdown>
+
+**예제 2.** 자료 적재 모듈
 
 ```python
 import numpy as np
@@ -55,6 +65,8 @@ def load_data(data_type=0):
     return data_dict
 ```
 
+</div>
+
 세 자료가 나타내는 것:
 
 - **자료 0**: 관계 없음 — 무작위 산포. Pearson과 순위 기반 상관 모두 0에 가까워야 한다.
@@ -68,6 +80,10 @@ def load_data(data_type=0):
 [문서: `scipy.stats.pearsonr`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html)
 
 Pearson의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설 $H_0: \rho = 0$ 아래에서 검정통계량은 자유도 $n-2$인 $t$-분포를 따른다.
+
+<div class="codebox" markdown>
+
+**예제 3.** Pearson 상관 검정
 
 ```python
 import matplotlib.pyplot as plt
@@ -91,6 +107,8 @@ if __name__ == "__main__":
     main()
 ```
 
+</div>
+
 ![Pearson 상관: 세 자료](./img/correlation_tests_72.png)
 
 왼쪽부터 무관계, 단조 관계, 사인 관계다. Pearson은 가운데에서만 큰 값을 준다. 오른쪽 사인 자료는 눈으로는 뚜렷한 구조가 있지만 $r$이 0 근처다.
@@ -105,6 +123,10 @@ if __name__ == "__main__":
 [문서: `scipy.stats.spearmanr`](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.spearmanr.html)
 
 Spearman의 $\rho_s$는 두 변수 사이의 **단조** 관계를 잰다. 원자료 값이 아니라 순위에 Pearson의 $r$을 적용하여 계산한다. 그래서 이상점에 로버스트하고 비선형이지만 단조인 관계에도 적용할 수 있다.
+
+<div class="codebox" markdown>
+
+**예제 4.** Spearman 순위상관 검정
 
 ```python
 import matplotlib.pyplot as plt
@@ -128,6 +150,8 @@ if __name__ == "__main__":
     main()
 ```
 
+</div>
+
 ![Spearman 순위상관: 세 자료](./img/correlation_tests_105.png)
 
 단조 자료에서 Spearman이 Pearson보다 높은 값을 준다. 사인 자료에서는 둘 다 0 근처인데, 관계가 단조가 아니어서 순위로 바꾸는 것도 도움이 되지 않기 때문이다.
@@ -147,6 +171,10 @@ Kendall의 $\tau$도 **단조** 관계의 강도를 재지만 순위가 아니�
 $$
 \tau = \frac{(\text{number of concordant pairs}) - (\text{number of discordant pairs})}{\binom{n}{2}}
 $$
+
+<div class="codebox" markdown>
+
+**예제 5.** Kendall의 타우 검정
 
 ```python
 import matplotlib.pyplot as plt
@@ -169,6 +197,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+</div>
 
 ![Kendall의 타우: 세 자료](./img/correlation_tests_143.png)
 
@@ -193,7 +223,7 @@ Kendall의 $\tau$는 세 자료 모두에서 Spearman과 같은 방향을 가리
 
 <div class="codebox" markdown>
 
-### 예제 1. 나이와 소득 { .eg }
+### 예제 6. 나이와 소득 { .eg }
 
 **문제**: $\alpha = 0.05$에서 나이와 소득이 관련되어 있는지 검정하라.
 

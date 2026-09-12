@@ -20,16 +20,25 @@ $$
 
 $Z$가 참 공통원인인 자료를 생성한다:
 
+<div class="codebox" markdown>
+
+**예제 1.** 교란변수가 만드는 가짜 상관
+
 ```python
 import numpy as np
 from scipy import stats
 
 np.random.seed(21)
 n = 300
+
+# Z 가 X 와 Y 를 함께 움직인다. X 와 Y 사이에는 직접 연결이 전혀 없다.
+# 그런데도 둘은 상관을 보인다 — 교란변수가 만드는 가짜 상관이다.
 Z = np.random.randn(n)
 X = 0.6 * Z + np.random.randn(n) * 0.5
 Y = 0.8 * Z + np.random.randn(n) * 0.5
 ```
+
+</div>
 
 여기서 $Y$는 $X$가 아니라 $Z$에만 의존하지만, 둘 다 $Z$에 이끌리므로 $X$와 $Y$는 상관된 것처럼 보인다.
 
@@ -41,7 +50,13 @@ $$
 r_{XY \cdot Z} = \frac{r_{XY} - r_{XZ}\, r_{YZ}}{\sqrt{(1 - r_{XZ}^2)(1 - r_{YZ}^2)}}
 $$
 
+<div class="codebox" markdown>
+
+**예제 2.** 부분상관으로 걷어 내기
+
 ```python
+# 부분상관은 Z 로 설명되는 몫을 X 와 Y 에서 걷어 낸 뒤의 상관이다.
+# 위 자료에서는 걷어 내고 나면 거의 0 만 남아야 한다.
 r_xy, _ = stats.pearsonr(X, Y)
 r_xz, _ = stats.pearsonr(X, Z)
 r_yz, _ = stats.pearsonr(Y, Z)
@@ -58,6 +73,8 @@ print(f"Partial r(X, Y | Z)   = {r_partial:.3f}")
 Pearson r(X, Y)       = 0.651
 Partial r(X, Y | Z)   = 0.052
 ```
+
+</div>
 
 $Z$를 통제하면 $r$이 0.651에서 0.052로 떨어진다. 관측된 상관이 거의 전부 교란에서 온 것이었다는 뜻이다.
 
@@ -79,9 +96,15 @@ $$
 
 기준 수준이 다른 두 하위집단을 만든다:
 
+<div class="codebox" markdown>
+
+**예제 3.** 심슨의 역설 — 자료 만들기
+
 ```python
 rng = np.random.default_rng(42)
 
+# 두 집단 모두 안에서는 기울기가 -0.4 로 음이다. 그런데 B 집단이 x 도 크고
+# y 의 기준선도 높아, 둘을 합쳐 놓으면 전체 기울기가 양으로 뒤집힌다.
 n_a, n_b = 100, 100
 x_a = rng.uniform(10, 30, n_a)
 y_a = -0.4 * x_a + 30 + rng.normal(0, 2, n_a)
@@ -90,9 +113,16 @@ x_b = rng.uniform(25, 50, n_b)
 y_b = -0.4 * x_b + 45 + rng.normal(0, 2, n_b)
 ```
 
+</div>
+
 각 하위집단 안에서는 $X$가 커질수록 $Y$가 작아진다(기울기 $= -0.4$). 그러나 집단 B는 절편도 크고 $X$ 값도 크므로 자료를 합치면 전체 추세가 양이 된다:
 
+<div class="codebox" markdown>
+
+**예제 4.** 합친 상관과 집단별 상관
+
 ```python
+# 합친 상관과 집단별 상관의 부호가 갈리는 것을 확인한다. 이것이 심슨의 역설이다.
 x_all = np.concatenate([x_a, x_b])
 y_all = np.concatenate([y_a, y_b])
 
@@ -113,13 +143,21 @@ Subgroup A r = -0.737
 Subgroup B r = -0.825
 ```
 
+</div>
+
 전체로 보면 $r = +0.32$인데 두 부분집단 안에서는 각각 $-0.74$와 $-0.83$이다. 부호가 뒤집히는 것이 Simpson 역설의 정의적 특징이다.
 
 ### 시각화
 
+<div class="codebox" markdown>
+
+**예제 5.** 역설을 그림으로
+
 ```python
 import matplotlib.pyplot as plt
 
+# 점을 집단별로 다른 표식으로 찍고, 그 위에 합친 자료의 회귀직선을 얹는다.
+# 직선의 기울기가 각 무리의 기울기와 반대 방향인 것이 한눈에 보인다.
 fig, ax = plt.subplots(figsize=(8, 5))
 ax.scatter(x_a, y_a, label='Group A', alpha=0.6)
 ax.scatter(x_b, y_b, label='Group B', alpha=0.6, marker='s')
@@ -135,6 +173,8 @@ ax.legend()
 plt.tight_layout()
 plt.show()
 ```
+
+</div>
 
 ![교란과 부분집단](./img/causal_simulations_101.png)
 

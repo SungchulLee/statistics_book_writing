@@ -134,30 +134,34 @@ $H_0$ 아래에서 $Z$는 근사적으로 표준정규분포를 따른다.
 
 ---
 
-## Python으로 계산하기
+<div class="codebox" markdown>
+
+**예제 1.** Pearson 상관 검정과 신뢰구간
 
 ```python
 import numpy as np
 from scipy import stats
 
-# Sample data
 np.random.seed(42)
 n = 25
 x = np.random.normal(5, 2, n)
 y = 0.5 * x + np.random.normal(0, 1, n)
 
-# Test H0: rho = 0
+# 귀무가설은 rho = 0 이다. 유의하다는 말은 "상관이 0 은 아니다"까지일 뿐,
+# 상관이 크다는 뜻도 인과가 있다는 뜻도 아니다.
 r, p_value = stats.pearsonr(x, y)
 print(f"r = {r:.4f}")
 print(f"p-value = {p_value:.4f}")
 
-# Manual t-statistic
+# 정의대로 손으로 구해 본다. 이 통계량은 자유도 n-2 인 t 를 따른다.
+# 회귀에서 기울기를 검정할 때 쓰는 t 값과 정확히 같은 값이다.
 t_stat = r * np.sqrt(n - 2) / np.sqrt(1 - r**2)
 p_manual = 2 * (1 - stats.t.cdf(abs(t_stat), df=n - 2))
 print(f"t-statistic = {t_stat:.4f}")
 print(f"Manual p-value = {p_manual:.4f}")
 
-# Fisher z confidence interval
+# 검정은 rho = 0 만 다루지만 신뢰구간은 rho 가 놓일 범위를 말해 준다.
+# 그래서 검정보다 구간 쪽이 대개 더 쓸모 있다.
 z = np.arctanh(r)
 se_z = 1 / np.sqrt(n - 3)
 ci_z = (z - 1.96 * se_z, z + 1.96 * se_z)
@@ -174,6 +178,8 @@ t-statistic = 6.5638
 Manual p-value = 0.0000
 95% CI for rho: (0.605, 0.912)
 ```
+
+</div>
 
 scipy의 p-값과 $t = r\sqrt{(n-2)/(1-r^2)}$로 손계산한 값이 일치한다.
 
