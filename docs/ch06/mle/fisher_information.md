@@ -47,9 +47,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. Bernoulli 분포 { .ex }
-
-$X \sim \text{Bernoulli}(p)$이면 $x \in \{0, 1\}$에서 $f(x; p) = p^x (1-p)^{1-x}$이다. 관측값 하나에 대한 로그가능도는
+**보기 1.** Bernoulli 분포. $X \sim \text{Bernoulli}(p)$이면 $x \in \{0, 1\}$에서 $f(x; p) = p^x (1-p)^{1-x}$이다. 관측값 하나에 대한 로그가능도는
 
 $$
 \log f(x; p) = x \log p + (1-x) \log(1-p)
@@ -73,9 +71,7 @@ Fisher 정보량은 $p$가 0이나 1에 가까울 때 가장 크고(그때 관�
 
 <div class="exbox" markdown>
 
-### 보기 2. Normal 분포 (평균) { .ex }
-
-$\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$이라 하자. 관측값 하나에 대한 로그가능도는
+**보기 2.** Normal 분포 (평균). $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$이라 하자. 관측값 하나에 대한 로그가능도는
 
 $$
 \log f(x; \mu) = -\frac{1}{2}\log(2\pi\sigma^2) - \frac{(x - \mu)^2}{2\sigma^2}
@@ -99,9 +95,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 3. Poisson 분포 { .ex }
-
-$X \sim \text{Poisson}(\lambda)$이면 $f(x; \lambda) = e^{-\lambda}\lambda^x / x!$이다. 로그가능도는
+**보기 3.** Poisson 분포. $X \sim \text{Poisson}(\lambda)$이면 $f(x; \lambda) = e^{-\lambda}\lambda^x / x!$이다. 로그가능도는
 
 $$
 \log f(x; \lambda) = -\lambda + x \log \lambda - \log(x!)

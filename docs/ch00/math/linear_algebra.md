@@ -100,7 +100,9 @@ $$
 
 이다. 이 하나의 공식과 그 뒤에 있는 사영 해석이 제13장 회귀 내용 전체의 바탕이 된다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 선형대수 표기와 관례 { .eg }
 
 ```python
 import numpy as np
@@ -142,6 +144,8 @@ Eigenvalues: [20.34 38.64 51.  ]
 Condition number: 2.51
 Spectral reconstruction matches X'X: True
 ```
+
+</div>
 
 ## 연습문제
 

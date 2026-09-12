@@ -88,7 +88,7 @@ $$
 
 ---
 
-## 예제 A: 성별과 주로 쓰는 손
+## 문제 A: 성별과 주로 쓰는 손
 
 <div class="probox" markdown>
 
@@ -310,7 +310,9 @@ expected_counts
 
 ---
 
-## 예제 B: 더 긴 손과 더 긴 발
+<div class="codebox" markdown>
+
+### 예제 1. 더 긴 손과 더 긴 발 { .eg }
 
 > **출처**: [Khan Academy — Chi-Square Test Association Independence](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-association-independence)
 
@@ -324,7 +326,7 @@ expected_counts
 | 왼손이 더 김  | 2                 | 9                | 14             |
 | 양손이 같음   | 12                | 13               | 28             |
 
-### 풀이
+#### 풀이
 
 **1단계: 가설**
 
@@ -381,7 +383,7 @@ $\text{df} = 4$에서 $\chi^2 = 11.94$의 p-값은 약 **0.018**이다.
 
 **결론**: p-값(0.018)이 통상적인 유의수준 0.05보다 작으므로 귀무가설을 기각한다. 발 길이와 손 길이 사이에 연관이 있다는 증거가 있음을 시사한다.
 
-### Python 구현
+#### Python 구현
 
 ```python
 import matplotlib.pyplot as plt
@@ -442,9 +444,11 @@ p_value   = 1.78%
 
 기대도수 중 가장 작은 값이 5.5로 경험칙 $E_{ij} \ge 5$를 겨우 만족한다는 점은 짚어 두어야 한다. 관측값이 100개뿐이고 칸이 9개라 칸당 평균 11개에 불과하다. 이보다 표가 크거나 자료가 적으면 카이제곱 근사 대신 Fisher의 정확검정이나 몬테카를로 방법을 고려해야 한다.
 
----
+</div>
 
-## 예제 C: 기대도수 계산의 상세
+<div class="codebox" markdown>
+
+### 예제 2. 기대도수 계산의 상세 { .eg }
 
 이 예제는 더 큰 분할표에 대해 기대도수 계산을 처음부터 끝까지 단계별로 보여준다.
 
@@ -606,7 +610,7 @@ We do not have enough evidence to reject the null hypothesis that X and Y are in
 
 $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. 자유도가 8이라 통계량 14.98이 그리 크지 않은 것으로 취급된다는 점도 눈여겨보라. 자유도가 2였다면 같은 통계량의 p-값이 0.0006이었을 것이다. **칸이 많은 표는 그만큼 우연한 어긋남도 많아진다.**
 
----
+</div>
 
 ## 4. 재표본추출 기반 카이제곱 검정
 
@@ -624,9 +628,7 @@ $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. �
 
 <div class="exbox" markdown>
 
-### 보기 1. 헤드라인 클릭률 (A/B 검정) { .ex }
-
-헤드라인 세 개를 사용자에게 보여주고 클릭 여부를 측정한다. 디지털 마케팅의 A/B 검정에서 흔한 상황이다.
+**보기 1.** 헤드라인 클릭률 (A/B 검정). 헤드라인 세 개를 사용자에게 보여주고 클릭 여부를 측정한다. 디지털 마케팅의 A/B 검정에서 흔한 상황이다.
 
 **관측 자료:**
 

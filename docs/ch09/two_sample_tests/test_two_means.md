@@ -70,7 +70,9 @@ def test_diff_two_means(n1, m1, s1, n2, m2, s2, method="welch",
     return t, df, p, (p < alpha)
 ```
 
-**보기 1.**
+<div class="codebox" markdown>
+
+### 예제 1. 이표본 평균 검정 { .eg }
 
 ```python
 t, df, p, reject = test_diff_two_means(
@@ -97,6 +99,8 @@ t: -0.9341987329938274 df: 20 p: 0.8193278973550725 reject: False
 Welch 자유도가 15.20으로 합동의 20보다 작다. 분산이 1.0과 1.5로 다르고 표본크기도 12와 10으로 달라서 생기는 차이다. 정보량을 더 보수적으로 잡는 쪽이 Welch다.
 
 p-값이 0.81로 1에 가깝다는 점도 읽어 두라. 자료가 대립가설과 **반대** 방향이기 때문이다. 단측검정에서 이런 p-값이 나오면 "증거가 약하다"가 아니라 "방향이 반대다"라는 뜻이다.
+
+</div>
 
 ### 해석
 

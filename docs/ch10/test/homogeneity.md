@@ -79,7 +79,7 @@ $$
 
 ---
 
-## 예제 A: 병원의 질
+## 문제 A: 병원의 질
 
 <div class="probox" markdown>
 
@@ -322,7 +322,9 @@ $p = 0.0195$로 여전히 5% 수준에서는 기각하지만, 1% 수준에서는
 
 ---
 
-## 예제 B: 좋아하는 과목과 주로 쓰는 손
+<div class="codebox" markdown>
+
+### 예제 1. 좋아하는 과목과 주로 쓰는 손 { .eg }
 
 > **출처**: [Khan Academy — Chi-Square Test Homogeneity](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-homogeneity)
 
@@ -340,7 +342,7 @@ $p = 0.0195$로 여전히 5% 수준에서는 기각하지만, 1% 수준에서는
 | 같음      | 15    | 5    | **20**  |
 | 합계      | **60**| **40** | **100** |
 
-### Python 구현
+#### Python 구현
 
 ```python
 import matplotlib.pyplot as plt
@@ -407,6 +409,8 @@ Expected frequencies:
 관측값이 100개뿐인데도 강하게 기각된다. STEM에서 오른손잡이가 기대 24에 대해 30, 인문학에서 왼손잡이가 기대 16에 대해 25로 어긋남이 크기 때문이다.
 
 기대도수가 모두 정수로 딱 떨어진 것은 우연이 아니다. 행 합계가 40, 40, 20이고 열 합계가 60, 40이며 총합이 100이라 $R_i C_j / n$이 언제나 정수가 된다.
+
+</div>
 
 ## 연습문제
 

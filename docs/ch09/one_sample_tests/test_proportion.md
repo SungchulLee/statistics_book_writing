@@ -53,7 +53,9 @@ def test_prop_one_sample(k, n, p0=0.5, method="wald",
     return z, p, (p < alpha), "wald z-test"
 ```
 
-**보기 1.**
+<div class="codebox" markdown>
+
+### 예제 1. 일표본 비율 검정 { .eg }
 
 ```python
 stat, p, reject, label = test_prop_one_sample(
@@ -78,6 +80,8 @@ exact binomial stat: None p: 0.47974220659401984 reject: False
 두 p-값이 0.4795와 0.4797로 거의 같다. $n p_0 = 10$과 $n(1-p_0) = 40$으로 정규근사의 경험칙을 만족하기 때문이다.
 
 이 일치를 일반적인 것으로 받아들이면 곤란하다. $k = 2$, $n = 10$, $p_0 = 0.5$처럼 표본이 작고 비율이 극단적인 경우로 바꿔 보면 Wald가 0.0578, 정확검정이 0.1094로 두 배 가까이 벌어진다. 5% 기준을 놓고 결론이 갈리는 자리다. 이항분포를 직접 쓸 수 있을 때는 정확검정 쪽이 안전하다.
+
+</div>
 
 ### 해석
 

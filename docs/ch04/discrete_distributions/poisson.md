@@ -108,7 +108,7 @@ Poisson 분포는 **Poisson 과정**과 밀접하게 연결되어 있다. 사건
 
 ---
 
-## 예제
+## 문제
 
 <div class="probox" markdown>
 

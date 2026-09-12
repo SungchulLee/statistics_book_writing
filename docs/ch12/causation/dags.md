@@ -97,9 +97,7 @@ Pearl이 도입한 $\text{do}(\cdot)$ 표기는 개입 분포($X$를 어떤 값�
 
 <div class="exbox" markdown>
 
-### 보기 1. 뒷문 기준의 적용 { .ex }
-
-다음 DAG를 생각하자:
+**보기 1.** 뒷문 기준의 적용. 다음 DAG를 생각하자:
 
 $$
 Z \rightarrow X \rightarrow Y, \quad Z \rightarrow Y

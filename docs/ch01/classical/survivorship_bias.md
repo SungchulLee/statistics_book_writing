@@ -83,7 +83,9 @@
 
 생존자 편향을 피하려면 모든 사례(성공과 실패 모두)를 포함하고, 기저율을 고려하며(스타트업의 90%가 실패한다면 생존자들의 공통 특성은 우연일 수 있다), 선택 기제를 명시적으로 살펴야 한다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 생존자 편향 { .eg }
 
 ```python
 import numpy as np
@@ -129,6 +131,8 @@ Mean final value (all funds):      1.618
 Mean final value (survivors only): 1.657
 Survivorship bias: +0.039
 ```
+
+</div>
 
 ## 연습문제
 

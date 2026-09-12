@@ -36,9 +36,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. 공정한 주사위의 기댓값 { .ex }
-
-공정한 주사위의 눈 $X$에 대해
+**보기 1.** 공정한 주사위의 기댓값. 공정한 주사위의 눈 $X$에 대해
 
 $$
 E[X] = \sum_{x=1}^{6} x \cdot \tfrac{1}{6} = \frac{1+2+3+4+5+6}{6} = 3.5
@@ -50,9 +48,7 @@ $3.5$는 주사위가 결코 낼 수 없는 값이다. 기댓값은 "기대되�
 
 <div class="exbox" markdown>
 
-### 보기 2. 지수분포의 기댓값 { .ex }
-
-$x \ge 0$에서 $f(x) = \lambda e^{-\lambda x}$인 $X \sim \text{Exponential}(\lambda)$에 대해
+**보기 2.** 지수분포의 기댓값. $x \ge 0$에서 $f(x) = \lambda e^{-\lambda x}$인 $X \sim \text{Exponential}(\lambda)$에 대해
 
 $$
 E[X] = \int_0^{\infty} x \, \lambda e^{-\lambda x}\,dx = \frac{1}{\lambda}

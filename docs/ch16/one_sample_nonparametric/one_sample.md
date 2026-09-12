@@ -102,7 +102,9 @@ def runs_test(data):
     return statistic, p_value
 ```
 
-**보기 1.**
+<div class="codebox" markdown>
+
+### 예제 1. 일표본 비모수 검정 { .eg }
 
 **예제 1 --- 뭉친 자료 (무작위가 아님):**
 
@@ -159,6 +161,8 @@ p_value   = 0.1837
 ```
 
 이 자료는 진짜로 독립이므로 기각하지 않는 것이 옳다.
+
+</div>
 
 ### 해석
 

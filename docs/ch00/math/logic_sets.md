@@ -106,7 +106,9 @@ $$
 !!! note "공허한 참"
     $P$가 거짓이면 $Q$가 무엇이든 $P \Rightarrow Q$는 참이다. 확률이 0인 사건에 조건을 걸 때 이 점이 중요하다. 영집합 위에서는 어떤 진술이든 "참"이므로, 확률에 관한 진술은 거의 확실하게 성립하는 것으로 해석해야 한다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 집합, 함수, 논리 { .eg }
 
 ```python
 import numpy as np
@@ -146,6 +148,8 @@ Equal: True
 P(A) estimate: 0.506 (true 1/2 since |A|=5 of 10)
 [0, 1, -1, 2, -2, 3, -3, 4, -4, 5]
 ```
+
+</div>
 
 ## 연습문제
 

@@ -56,9 +56,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. 정규분포 { .ex }
-
-$X \sim N(\mu, \sigma^2)$의 적률생성함수는
+**보기 1.** 정규분포. $X \sim N(\mu, \sigma^2)$의 적률생성함수는
 
 $$
 M_X(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
@@ -190,9 +188,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 2. 독립인 정규분포의 합 { .ex }
-
-$X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립이면
+**보기 2.** 독립인 정규분포의 합. $X_1 \sim N(\mu_1, \sigma_1^2)$, $X_2 \sim N(\mu_2, \sigma_2^2)$이 독립이면
 
 $$
 M_{X_1+X_2}(t) = \exp\!\left((\mu_1+\mu_2)t + \frac{(\sigma_1^2+\sigma_2^2)t^2}{2}\right)

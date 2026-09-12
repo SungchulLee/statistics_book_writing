@@ -67,9 +67,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. 두 집단의 Fligner-Killeen 검정 { .ex }
-
-두 집단을 생각하자.
+**보기 1.** 두 집단의 Fligner-Killeen 검정. 두 집단을 생각하자.
 
 | 집단 1 | 집단 2 |
 |---|---|

@@ -110,7 +110,7 @@ $X \perp Y$이면 $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$이다.
 
 ---
 
-## 예제: 이산 결합분포
+## 문제: 이산 결합분포
 
 <div class="probox" markdown>
 
@@ -138,7 +138,7 @@ $$
 
 ---
 
-## 예제: 연속 결합분포
+## 문제: 연속 결합분포
 
 <div class="probox" markdown>
 

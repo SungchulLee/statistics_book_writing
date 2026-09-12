@@ -82,7 +82,9 @@ def bootstrap_varratio(x1, x2, B=2000, seed=None):
 
 ---
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 붓스트랩 분산 검정 { .eg }
 
 ```python
 x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
@@ -106,7 +108,7 @@ Bootstrap p-value: 0.1892
 
 (같은 자료에 대한 F 검정의 $p$값은 $0.3448$이다. 붓스트랩이 F 검정보다 작은 $p$값을 냈지만 둘 다 기각하지 않는다.)
 
----
+</div>
 
 ## 해석
 

@@ -92,7 +92,9 @@ $$
 
 위계는 (1) $\Rightarrow$ (2) $\Rightarrow$ (3)이고 (4) $\Rightarrow$ (2)이다. 역방향 함의는 일반적으로 어느 것도 성립하지 않는다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 수열, 극한, 점근 { .eg }
 
 ```python
 import math
@@ -142,6 +144,8 @@ order 6: 1.34985876, exact: 1.34985881
 log(n) / n   (o(1)? yes): 0.07942490404307401
 sin(n) / n^2 (O(1/n^2)): -0.00039723142555579834
 ```
+
+</div>
 
 ## 연습문제
 

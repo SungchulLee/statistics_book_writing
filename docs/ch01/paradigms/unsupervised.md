@@ -20,7 +20,9 @@
 
 금융에서의 응용: 분산투자를 위해 수익률 패턴으로 종목을 묶기, 상관된 위험 지표에서 주성분 요인 추출하기, 부정 거래 탐지하기.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 비지도학습 { .eg }
 
 ```python
 import numpy as np
@@ -77,6 +79,8 @@ Cluster 1: n=95, center=(50.6, 30.5)
 Cluster 2: n=104, center=(79.2, 14.9)
 Converged in 8 iterations
 ```
+
+</div>
 
 ## 연습문제
 

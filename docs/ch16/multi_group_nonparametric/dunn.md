@@ -53,9 +53,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. 비료 자료의 Dunn 사후검정 { .ex }
-
-[Kruskal-Wallis](kruskal_wallis.md) 절의 비료 예제를 이어 보자. Kruskal-Wallis 검정이 $H = 11.816$, $p = 0.0027$로 $H_0$을 기각했다. 세 집단은 다음과 같았다.
+**보기 1.** 비료 자료의 Dunn 사후검정. [Kruskal-Wallis](kruskal_wallis.md) 절의 비료 예제를 이어 보자. Kruskal-Wallis 검정이 $H = 11.816$, $p = 0.0027$로 $H_0$을 기각했다. 세 집단은 다음과 같았다.
 
 - 비료 A: $n_1 = 5$, $\bar{R}_A = 7.7$
 - 비료 B: $n_2 = 5$, $\bar{R}_B = 13.0$

@@ -144,7 +144,7 @@ $\mathbf{R}$의 대각 성분은 모두 1이다.
 
 ---
 
-## 예제
+## 문제
 
 <div class="probox" markdown>
 

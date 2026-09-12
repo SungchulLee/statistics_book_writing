@@ -98,7 +98,7 @@ $$
 
 ---
 
-## 예제: 이산형
+## 문제: 이산형
 
 <div class="probox" markdown>
 
@@ -127,7 +127,7 @@ $$
 
 ---
 
-## 예제: 연속형
+## 문제: 연속형
 
 <div class="probox" markdown>
 

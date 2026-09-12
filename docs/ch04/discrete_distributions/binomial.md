@@ -112,7 +112,7 @@ $$
 
 ---
 
-## 예제
+## 문제
 
 <div class="probox" markdown>
 

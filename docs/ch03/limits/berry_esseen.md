@@ -56,9 +56,7 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 
 <div class="exbox" markdown>
 
-### 보기 1. 공정한 동전 { .ex }
-
-$X_i \sim \text{Bernoulli}(0.5)$이면 $\mu = 0.5$, $\sigma^2 = 0.25$, $\rho = 0.125$이므로
+**보기 1.** 공정한 동전. $X_i \sim \text{Bernoulli}(0.5)$이면 $\mu = 0.5$, $\sigma^2 = 0.25$, $\rho = 0.125$이므로
 
 $$
 \text{상한} = \frac{0.4748 \times 0.125}{0.25^{3/2}\sqrt n} = \frac{0.4748}{\sqrt n}
@@ -70,9 +68,7 @@ $n = 100$에서 약 $0.0475$다. 누적분포함수가 어느 점에서도 정�
 
 <div class="exbox" markdown>
 
-### 보기 2. 지수분포 { .ex }
-
-$X_i \sim \text{Exponential}(1)$이면 $\mu = 1$, $\sigma^2 = 1$, $\rho = 2 + e^{-1} \approx 2.368$이므로
+**보기 2.** 지수분포. $X_i \sim \text{Exponential}(1)$이면 $\mu = 1$, $\sigma^2 = 1$, $\rho = 2 + e^{-1} \approx 2.368$이므로
 
 $$
 \text{상한} = \frac{0.4748 \times 2.368}{\sqrt n} \approx \frac{1.124}{\sqrt n}

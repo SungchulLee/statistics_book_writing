@@ -24,7 +24,9 @@
 
 선택은 목표에 달려 있다. **왜 그런지 이해해야** 한다면 해석 가능한 모형을 택하고, **무엇이 될지 예측해야** 한다면 알고리즘이 흔히 앞선다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 통계 모형 대 학습 알고리즘 { .eg }
 
 ```python
 import numpy as np
@@ -64,6 +66,8 @@ Linear model MSE:     4.069  (coeffs: [4.81  0.991])
 Polynomial model MSE: 3.718  (coeffs: [ 3.504  1.802 -0.082])
 True: y = 3 + 2x - 0.1x^2 + noise
 ```
+
+</div>
 
 ## 연습문제
 

@@ -102,7 +102,9 @@
 - **역인과** — "결과"가 실제로는 "노출"을 유발할 수 있다(아파서 운동을 덜 하는 것이지 그 반대가 아니다).
 - 자기보고 변수의 **측정오차**.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 관찰연구 { .eg }
 
 ```python
 """관찰연구에서 나이가 교란요인으로 작동하는 모습."""
@@ -157,6 +159,8 @@ Naive correlation (exercise, BP): r = -0.705
 Partial correlation (controlling age): r = -0.086
   (correct negative sign emerges)
 ```
+
+</div>
 
 ## 연습문제
 

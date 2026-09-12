@@ -121,7 +121,9 @@ from scipy import stats
 
 마크다운 셀은 `$...$`(인라인)과 `$$...$$`(디스플레이) 사이의 LaTeX를 지원하므로, 노트북은 통계적 논증을 전개하기에 자연스러운 자리가 된다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 파이썬과 주피터 기초 { .eg }
 
 ```python
 """Demonstrate core Python idioms used in statistics."""
@@ -163,6 +165,8 @@ Mean = 7.000, Var = 18.500, n = 5
 NumPy mean:       7.000
 NumPy var (n-1):  18.500
 ```
+
+</div>
 
 ## 연습문제
 

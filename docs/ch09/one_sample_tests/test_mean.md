@@ -64,7 +64,9 @@ def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
     return t, p, (p < alpha), f"t-test (df={df})"
 ```
 
-**보기 1.**
+<div class="codebox" markdown>
+
+### 예제 1. 일표본 평균 검정 { .eg }
 
 ```python
 stat, p, reject, label = test_mean_one_sample(
@@ -87,6 +89,8 @@ z-test stat: 0.9090909090909097 p: 0.18165107044344886 reject: False
 ```
 
 통계량은 같고 p-값만 다르다. 산포로 넣은 숫자가 1.1로 같으니 분자와 분모가 같을 수밖에 없고, 달라지는 것은 그 통계량을 어느 분포에 견주느냐뿐이다. $t_{24}$가 정규분포보다 꼬리가 두꺼워 같은 통계량에 더 큰 p-값을 준다. $\sigma$를 모른다는 사실의 값이 여기서는 0.0045만큼이다.
+
+</div>
 
 ### 해석
 

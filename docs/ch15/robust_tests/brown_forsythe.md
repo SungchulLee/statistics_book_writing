@@ -62,9 +62,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. 세 집단의 Brown-Forsythe 검정 { .ex }
-
-세 집단을 생각하자.
+**보기 1.** 세 집단의 Brown-Forsythe 검정. 세 집단을 생각하자.
 
 | 집단 1 | 집단 2 | 집단 3 |
 |---|---|---|

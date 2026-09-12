@@ -140,7 +140,9 @@ $$
 
 ---
 
-## 예제 A: 가위바위보
+<div class="codebox" markdown>
+
+### 예제 1. 가위바위보 { .eg }
 
 > **출처**: [Khan Academy — Goodness of Fit Example](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-goodness-fit/v/goodness-of-fit-example)
 
@@ -152,7 +154,7 @@ Kenny는 가위바위보를 자주 하는데 이기고 비기고 지는 빈도�
 
 Kenny는 이 기록으로 $\chi^2$ 적합도 검정을 수행하여 자신의 결과 분포가 균등분포에서 벗어나는지 알아보려 한다. 검정통계량과 p-값은 얼마인가?
 
-### 풀이
+#### 풀이
 
 **1단계: 가설 설정**
 
@@ -194,7 +196,7 @@ $$
 
 **결론**: p-값이 약 0.0725이므로 Kenny가 유의수준 0.05에서 검정한다면 귀무가설을 기각하지 못한다. 결과의 분포가 균등분포에서 유의하게 벗어난다는 강한 증거는 없다는 뜻이다.
 
-### Python 구현 (`scipy.stats.chisquare` 없이)
+#### Python 구현 (`scipy.stats.chisquare` 없이)
 
 ```python
 import matplotlib.pyplot as plt
@@ -262,7 +264,7 @@ p-value = 0.0724
 
 ![카이제곱 분포와 p-값](./img/gof_199.png)
 
-### Python 구현 (`scipy.stats.chisquare` 사용)
+#### Python 구현 (`scipy.stats.chisquare` 사용)
 
 ```python
 from scipy import stats
@@ -291,9 +293,9 @@ p_value = 0.07243975703425146
 
 수동 계산과 정확히 같다.
 
----
+</div>
 
-## 예제 B: 조작된 주사위?
+## 문제 B: 조작된 주사위?
 
 <div class="probox" markdown>
 

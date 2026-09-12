@@ -51,7 +51,9 @@ def test_variance_one_sample(n, s2, sigma0, alt="two-sided", alpha=0.05):
     return chi2_stat, p, (p < alpha)
 ```
 
-**보기 1.**
+<div class="codebox" markdown>
+
+### 예제 1. 일표본 분산 검정 { .eg }
 
 ```python
 stat, p, reject = test_variance_one_sample(
@@ -75,6 +77,8 @@ n= 200: chi2=  219.40  p=0.1532  reject=False
 ```
 
 표준편차가 2.0이 아니라 2.1이라는 같은 증거를 놓고도 $n = 12$에서는 $p = 0.35$, $n = 200$에서도 $p = 0.15$다. 분산에서 5% 차이를 잡아내려면 이보다도 훨씬 큰 표본이 필요하다. 분산은 평균보다 추정하기 어렵고, 그래서 검정하기도 어렵다.
+
+</div>
 
 ### 해석
 

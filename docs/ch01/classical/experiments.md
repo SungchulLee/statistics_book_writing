@@ -186,7 +186,9 @@ $$
 
     규제 세부는 개정된다. 한국의 **재심사 제도는 2025년 2월 폐지되어 위해성관리계획(RMP)으로 일원화**되었다. 반면 이 절이 말하는 통계적 논리 — 단계마다 질문이 다르다, 확증에는 반복이 필요하다, 표본크기가 볼 수 있는 위해의 한계를 정한다 — 는 규정 개정과 무관하게 유지된다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 통제실험 { .eg }
 
 무작위 실험의 기본형. 처리효과를 알고 있는 상태에서 자료를 만들고 되찾아 본다.
 
@@ -275,6 +277,8 @@ print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
 [Randomized] estimated effect = +3.40 (true = 3.0), p = 0.0000
 [Confounded] estimated effect = -5.06  (severity confounds)
 ```
+
+</div>
 
 ## 연습문제
 

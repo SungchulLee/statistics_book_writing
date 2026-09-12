@@ -43,7 +43,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. 공정한 주사위 { .ex }
+**보기 1.** 공정한 주사위.
 
 $$
 E[X] = 3.5, \qquad E[X^2] = \frac{1^2 + 2^2 + \cdots + 6^2}{6} = \frac{91}{6}
@@ -57,9 +57,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 2. 베르누이 { .ex }
-
-$X \sim \text{Bernoulli}(p)$이면 $X^2 = X$이므로 $E[X^2] = E[X] = p$이고
+**보기 2.** 베르누이. $X \sim \text{Bernoulli}(p)$이면 $X^2 = X$이므로 $E[X^2] = E[X] = p$이고
 
 $$
 \text{Var}(X) = p - p^2 = p(1-p)
@@ -231,9 +229,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 3. 포트폴리오 분산 { .ex }
-
-수익률 $R_1, R_2$인 두 자산에 가중치 $w_1, w_2$($w_1 + w_2 = 1$)로 투자하면
+**보기 3.** 포트폴리오 분산. 수익률 $R_1, R_2$인 두 자산에 가중치 $w_1, w_2$($w_1 + w_2 = 1$)로 투자하면
 
 $$
 \text{Var}(R_p) = w_1^2\sigma_1^2 + w_2^2\sigma_2^2 + 2w_1 w_2 \,\text{Cov}(R_1, R_2)

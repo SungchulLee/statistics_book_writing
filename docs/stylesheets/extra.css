@@ -86,13 +86,14 @@
     .md-typeset .diff.hard { background-color: #ef6a5c; }
 }
 
-/* 정리와 보기는 오른쪽 목차에서 바로 갈 수 있도록 제목(h3)으로 적되, 본문에서는
+/* 정리와 예제는 오른쪽 목차에서 바로 갈 수 있도록 제목(h3)으로 적되, 본문에서는
    다른 블록과 같은 크기의 굵은 도입어처럼 보이게 한다. 제목과 주장은
-   .thmbox / .exbox 상자가 감싸고, 증명은 상자 밖에 붙는다.
+   .thmbox / .codebox 상자가 감싸고, 증명은 상자 밖에 붙는다.
    헤딩이므로 제목에 LaTeX 를 쓰지 않는다 — MathJax 가 목차를 처리하지 않아
-   `\(n\)` 같은 날글자가 그대로 보인다. */
+   `\(n\)` 같은 날글자가 그대로 보인다.
+   보기·문제·연습문제는 레퍼런스와 같이 굵은 도입어로 적는다(헤딩이 아니다). */
 .md-typeset h3.thm,
-.md-typeset h3.ex {
+.md-typeset h3.eg {
     font-size: 1em;
     font-weight: 700;
     line-height: 1.6;
@@ -122,6 +123,26 @@
 
 .md-typeset details.proof {
     margin-top: 0.8em;
+}
+
+/* 예제 — 돌려 보는 코드 시연을 담는다. 읽고 푸는 자리(보기·문제·연습문제, 초록)
+   와도, 읽고 받아들이는 자리(정의 회색 · 정리 보라)와도 구별되도록 파랑을 쓴다.
+   코드블록과 그 출력이 통째로 들어가므로 상자가 길어질 수 있다. */
+.md-typeset .codebox {
+    margin: 1.6em 0;
+    padding: 0.1rem 0.8rem;
+    border: 0.05rem solid rgba(43, 108, 176, 0.45);
+    border-left: 0.2rem solid #2b6cb0;
+    border-radius: 0 0.1rem 0.1rem 0;
+    background-color: rgba(43, 108, 176, 0.025);
+}
+
+.md-typeset .codebox > :first-child {
+    margin-top: 0.6rem;
+}
+
+.md-typeset .codebox > :last-child {
+    margin-bottom: 0.6rem;
 }
 
 /* 정의는 증명이 딸리지 않아 아래를 닫아 줄 블록이 없으므로, 띠가 아니라

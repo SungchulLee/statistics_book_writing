@@ -95,9 +95,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. Kendall 타우의 검정 { .ex }
-
-[Kendall의 타우](../correlation/kendall.md) 절에서 $n = 5$일 때 $S = C - D = 3 - 7 = -4$를 계산했던 다섯 관측값을 생각하자.
+**보기 1.** Kendall 타우의 검정. [Kendall의 타우](../correlation/kendall.md) 절에서 $n = 5$일 때 $S = C - D = 3 - 7 = -4$를 계산했던 다섯 관측값을 생각하자.
 
 정규근사를 쓰면
 

@@ -110,9 +110,7 @@ $$
 
 <div class="exbox" markdown>
 
-### 보기 1. 적률 세 개를 쓴 정규분포 { .ex }
-
-$X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자:
+**보기 1.** 적률 세 개를 쓴 정규분포. $X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자:
 
 $$
 g(X, \theta) = \begin{pmatrix} X - \mu \\ X^2 - (\mu^2 + \sigma^2) \\ X^3 - \mu^3 - 3\mu\sigma^2 \end{pmatrix}

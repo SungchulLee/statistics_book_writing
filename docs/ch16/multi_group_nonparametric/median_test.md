@@ -50,7 +50,9 @@ $$
 
 을 따른다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. Mood 중앙값검정 { .eg }
 
 세 가지 식단을 8주간의 체중 감량(kg)으로 비교한다.
 
@@ -112,6 +114,8 @@ $\alpha = 0.05$에서 $H_0$을 기각한다. 식단들의 중앙값 체중 감�
     Yates 연속성 보정은 $2 \times 2$ 표에만 적용된다. 여기서는 $k = 3$이라 $2 \times 3$ 표이므로 보정 없이 계산하며, `scipy.stats.median_test`도 보정을 적용하지 않는다.
 
     $k = 2$일 때는 [이표본 비모수 검정](../two_sample_nonparametric/two_sample.md)에서 보았듯 보정 여부가 결과를 크게 바꿀 수 있으므로 주의해야 한다.
+
+</div>
 
 ## 장점과 한계
 

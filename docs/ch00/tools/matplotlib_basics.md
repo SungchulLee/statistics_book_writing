@@ -93,7 +93,9 @@ plt.show()
 
 빠르게 탐색할 때 편리하다. 최종 그림에서는 Matplotlib을 직접 호출하는 편이 더 세밀하게 제어할 수 있다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. Matplotlib으로 기본 시각화하기 { .eg }
 
 ```python
 import numpy as np
@@ -127,6 +129,8 @@ plt.show()
 ![히스토그램과 Q-Q 그림](./img/matplotlib_basics_92.png)
 
 히스토그램은 적합도를 눈으로 확인하게 해주고, Q-Q 그림은 직선에서 벗어나는 정도를 보여줌으로써 분석적으로 확인하게 해준다. 통계적인 그림은 이 둘 중 하나 없이는 완성되는 일이 드물다.
+
+</div>
 
 ## 연습문제
 

@@ -134,7 +134,9 @@ drug           6  50.22  5.52
 
 기본값이 `ddof=0`인 NumPy와 다르다는 점에 유의하라. pandas와 NumPy의 결과가 $(n-1)/n$배만큼 어긋난다면 이유는 바로 이것이다.
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. pandas로 자료 다루기 { .eg }
 
 ```python
 import numpy as np
@@ -189,6 +191,8 @@ A        55.4  50.1  48.6  46.9
 B        50.5  53.6  48.0  48.0
 C        48.8  48.0  50.1  50.0
 ```
+
+</div>
 
 ## 연습문제
 

@@ -101,7 +101,9 @@ MLE of N: 33
 Lincoln-Petersen estimate: 33
 ```
 
-## 예제
+<div class="codebox" markdown>
+
+### 예제 1. 포획–재포획 최대가능도 { .eg }
 
 어떤 야생동물 생물학자가 새 $c = 5$마리를 잡아 표지하고 놓아 준 뒤, 나중에 $r = 6$마리를 재포획했더니 그중 $t = 2$마리가 표지되어 있었다고 하자.
 
@@ -122,6 +124,8 @@ Lincoln-Petersen: 15
 Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이다.
 
 가능도함수는 $N = 15$에서 뚜렷한 봉우리를 보이며, $N$이 그보다 작거나 크면 확률이 줄어든다.
+
+</div>
 
 ## 추정량의 성질
 
