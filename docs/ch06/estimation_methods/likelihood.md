@@ -80,98 +80,98 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
 
 </div>
 
-**가능도:**
+??? success "풀이"
+    **가능도:**
 
-$$L(\mu) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)$$
+    $$L(\mu) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)$$
 
-**로그가능도:**
+    **로그가능도:**
 
-$$\ell(\mu) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2$$
+    $$\ell(\mu) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2$$
 
-**점수방정식:**
+    **점수방정식:**
 
-$$\frac{d\ell}{d\mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0$$
+    $$\frac{d\ell}{d\mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0$$
 
-$$\sum_{i=1}^n x_i - n\mu = 0$$
+    $$\sum_{i=1}^n x_i - n\mu = 0$$
 
-$$\hat{\mu}_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n x_i = \bar{x}$$
+    $$\hat{\mu}_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n x_i = \bar{x}$$
 
-평균의 MLE는 표본평균이며 불편이고 효율적이다.
-
+    평균의 MLE는 표본평균이며 불편이고 효율적이다.
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> Normal 분포 — 두 모수 모두 미지. $\mu$와 $\sigma^2$이 모두 미지인 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자.
 
 </div>
 
-**로그가능도:**
+??? success "풀이"
+    **로그가능도:**
 
-$$\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2$$
+    $$\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2$$
 
-**점수방정식:**
+    **점수방정식:**
 
-$$\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0 \implies \hat{\mu} = \bar{x}$$
+    $$\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0 \implies \hat{\mu} = \bar{x}$$
 
-$$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n (x_i - \mu)^2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (x_i - \bar{x})^2$$
+    $$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n (x_i - \mu)^2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (x_i - \bar{x})^2$$
 
-**참고:** $\sigma^2$의 MLE는 $n-1$이 아니라 $n$으로 나눈다. 편향되어 있다: $E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$. MLE가 언제나 불편인 것은 아님을 보여 준다.
-
+    **참고:** $\sigma^2$의 MLE는 $n-1$이 아니라 $n$으로 나눈다. 편향되어 있다: $E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$. MLE가 언제나 불편인 것은 아님을 보여 준다.
 <div class="exbox" markdown>
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> Bernoulli 분포. $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$라 하자.
 
 </div>
 
-**로그가능도:**
+??? success "풀이"
+    **로그가능도:**
 
-$$\ell(p) = \sum_{i=1}^n \left[x_i \log p + (1 - x_i)\log(1 - p)\right]$$
+    $$\ell(p) = \sum_{i=1}^n \left[x_i \log p + (1 - x_i)\log(1 - p)\right]$$
 
-$$= k \log p + (n - k)\log(1 - p)$$
+    $$= k \log p + (n - k)\log(1 - p)$$
 
-여기서 $k = \sum_{i=1}^n x_i$는 성공 횟수이다.
+    여기서 $k = \sum_{i=1}^n x_i$는 성공 횟수이다.
 
-**점수방정식:**
+    **점수방정식:**
 
-$$\frac{d\ell}{dp} = \frac{k}{p} - \frac{n-k}{1-p} = 0$$
+    $$\frac{d\ell}{dp} = \frac{k}{p} - \frac{n-k}{1-p} = 0$$
 
-$$\hat{p}_{\text{MLE}} = \frac{k}{n} = \bar{x}$$
+    $$\hat{p}_{\text{MLE}} = \frac{k}{n} = \bar{x}$$
 
-MLE는 표본비율이며 직관적으로 자연스럽고 불편이다.
-
+    MLE는 표본비율이며 직관적으로 자연스럽고 불편이다.
 <div class="exbox" markdown>
 
 **보기 4.** <span class="diff easy" title="쉬움"></span> Exponential 분포. $x > 0$에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자.
 
 </div>
 
-**로그가능도:**
+??? success "풀이"
+    **로그가능도:**
 
-$$\ell(\lambda) = n\log\lambda - \lambda \sum_{i=1}^n x_i$$
+    $$\ell(\lambda) = n\log\lambda - \lambda \sum_{i=1}^n x_i$$
 
-**점수방정식:**
+    **점수방정식:**
 
-$$\frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0$$
+    $$\frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0$$
 
-$$\hat{\lambda}_{\text{MLE}} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{x}}$$
+    $$\hat{\lambda}_{\text{MLE}} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{x}}$$
 
-**2계도함수 확인:** $\frac{d^2\ell}{d\lambda^2} = -n/\lambda^2 < 0$이므로 최댓값이다.
-
+    **2계도함수 확인:** $\frac{d^2\ell}{d\lambda^2} = -n/\lambda^2 < 0$이므로 최댓값이다.
 <div class="exbox" markdown>
 
 **보기 5.** <span class="diff easy" title="쉬움"></span> Poisson 분포. $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$라 하자.
 
 </div>
 
-**로그가능도:**
+??? success "풀이"
+    **로그가능도:**
 
-$$\ell(\lambda) = \sum_{i=1}^n \left[x_i \log\lambda - \lambda - \log(x_i!)\right] = \left(\sum x_i\right)\log\lambda - n\lambda - \sum\log(x_i!)$$
+    $$\ell(\lambda) = \sum_{i=1}^n \left[x_i \log\lambda - \lambda - \log(x_i!)\right] = \left(\sum x_i\right)\log\lambda - n\lambda - \sum\log(x_i!)$$
 
-**점수방정식:**
+    **점수방정식:**
 
-$$\frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0$$
+    $$\frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0$$
 
-$$\hat{\lambda}_{\text{MLE}} = \bar{x}$$
-
+    $$\hat{\lambda}_{\text{MLE}} = \bar{x}$$
 ## MLE의 성질
 
 ### 점근적 성질

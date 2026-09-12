@@ -89,12 +89,12 @@ $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } 
 
 </div>
 
-**편향:** $E[\bar{X}] = \mu$이므로 $\text{Bias}(\bar{X}) = 0$ (불편).
+??? success "풀이"
+    **편향:** $E[\bar{X}] = \mu$이므로 $\text{Bias}(\bar{X}) = 0$ (불편).
 
-**분산:** $\text{Var}(\bar{X}) = \sigma^2/n$.
+    **분산:** $\text{Var}(\bar{X}) = \sigma^2/n$.
 
-**MSE:** $\text{MSE}(\bar{X}) = 0 + \sigma^2/n = \sigma^2/n$.
-
+    **MSE:** $\text{MSE}(\bar{X}) = 0 + \sigma^2/n = \sigma^2/n$.
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff med" title="중간"></span> 소박한 분산추정량의 평균제곱오차. 소박한 분산추정량은 $\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$이다.
@@ -137,20 +137,20 @@ $n > 0$에서 $-3n + 1 < 0$이므로 $\text{MSE}(\tilde{S}^2) < \text{MSE}(S^2)$
 
 </div>
 
-정규모집단에 대해:
+??? success "풀이"
+    정규모집단에 대해:
 
-$$\text{MSE}(\hat{\sigma}^2_c) = \left(\frac{n-1}{c} - 1\right)^2 \sigma^4 + \frac{2(n-1)}{c^2}\sigma^4$$
+    $$\text{MSE}(\hat{\sigma}^2_c) = \left(\frac{n-1}{c} - 1\right)^2 \sigma^4 + \frac{2(n-1)}{c^2}\sigma^4$$
 
-$c$에 대해 미분하여 0으로 두면:
+    $c$에 대해 미분하여 0으로 두면:
 
-$$c^* = n + 1$$
+    $$c^* = n + 1$$
 
-따라서 평균제곱오차가 최적인 추정량은 $n+1$로 나눈다:
+    따라서 평균제곱오차가 최적인 추정량은 $n+1$로 나눈다:
 
-$$\hat{\sigma}^2_{n+1} = \frac{1}{n+1}\sum_{i=1}^n (X_i - \bar{X})^2$$
+    $$\hat{\sigma}^2_{n+1} = \frac{1}{n+1}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
-이는 편향되어 있지만($\sigma^2$을 과소추정한다) $\tilde{S}^2$($n$으로 나눔)과 $S^2$($n-1$로 나눔) 둘 다보다 평균제곱오차가 작다.
-
+    이는 편향되어 있지만($\sigma^2$을 과소추정한다) $\tilde{S}^2$($n$으로 나눔)과 $S^2$($n-1$로 나눔) 둘 다보다 평균제곱오차가 작다.
 ## 다른 손실함수와의 연결
 
 ### 평균절대오차 (MAE)

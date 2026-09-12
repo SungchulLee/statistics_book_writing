@@ -152,134 +152,133 @@ $t_{0.025,\,24} = 2.0639$로 $z_{0.025} = 1.9600$보다 5.3% 크다. 같은 $\ba
 
 </div>
 
-**풀이.** 95% 신뢰수준에서 임계값 $z_{\alpha/2}$는 약 1.96이다. 대입하면:
+??? success "풀이"
+    95% 신뢰수준에서 임계값 $z_{\alpha/2}$는 약 1.96이다. 대입하면:
 
-$$
-85 \pm 1.96 \times \frac{12}{\sqrt{40}}
-$$
+    $$
+    85 \pm 1.96 \times \frac{12}{\sqrt{40}}
+    $$
 
-표준오차: $\text{SE} = 12 / \sqrt{40} \approx 1.8974$. 오차한계: $1.96 \times 1.8974 \approx 3.717$.
+    표준오차: $\text{SE} = 12 / \sqrt{40} \approx 1.8974$. 오차한계: $1.96 \times 1.8974 \approx 3.717$.
 
-$$
-\boxed{(81.283,\ 88.717)}
-$$
+    $$
+    \boxed{(81.283,\ 88.717)}
+    $$
 
-참 모평균 $\mu$가 $(81.283, 88.717)$ 안에 있다고 95% 신뢰한다.
-
+    참 모평균 $\mu$가 $(81.283, 88.717)$ 안에 있다고 95% 신뢰한다.
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 모평균의 95% 신뢰구간 (큰 표본). 성인 남성 100명의 확률표본에서 평균 키 175 cm, 표준편차 6 cm를 얻었다. 모평균 키의 95% 신뢰구간을 계산하라.
 
 </div>
 
-**풀이.** $n = 100 \ge 30$이므로 표본표준편차와 함께 표준정규분포를 쓴다.
+??? success "풀이"
+    $n = 100 \ge 30$이므로 표본표준편차와 함께 표준정규분포를 쓴다.
 
-$$
-\text{SE} = \frac{6}{\sqrt{100}} = 0.6, \qquad \text{ME} = 1.96 \times 0.6 = 1.176
-$$
+    $$
+    \text{SE} = \frac{6}{\sqrt{100}} = 0.6, \qquad \text{ME} = 1.96 \times 0.6 = 1.176
+    $$
 
-$$
-\boxed{(173.82,\ 176.18) \text{ cm}}
-$$
+    $$
+    \boxed{(173.82,\ 176.18) \text{ cm}}
+    $$
 
-```python
-import numpy as np
-import scipy.stats as stats
+    ```python
+    import numpy as np
+    import scipy.stats as stats
 
-n = 100
-x_bar = 175
-s = 6
-confidence_level = 0.95
-alpha = 1 - confidence_level
+    n = 100
+    x_bar = 175
+    s = 6
+    confidence_level = 0.95
+    alpha = 1 - confidence_level
 
-# n = 100 >= 30 이므로 s를 sigma처럼 쓰고 z를 쓴다.
-# 이 표본크기에서 t를 써도 임계값이 1.984로 1.960과 1% 남짓 차이다.
-z_star = stats.norm().ppf(1 - alpha / 2)
-standard_error = s / np.sqrt(n)
-margin_of_error = z_star * standard_error
+    # n = 100 >= 30 이므로 s를 sigma처럼 쓰고 z를 쓴다.
+    # 이 표본크기에서 t를 써도 임계값이 1.984로 1.960과 1% 남짓 차이다.
+    z_star = stats.norm().ppf(1 - alpha / 2)
+    standard_error = s / np.sqrt(n)
+    margin_of_error = z_star * standard_error
 
-print(f"{confidence_level:.0%} confidence interval: {x_bar} ± {margin_of_error:.2f}")
-```
+    print(f"{confidence_level:.0%} confidence interval: {x_bar} ± {margin_of_error:.2f}")
+    ```
 
-출력:
+    출력:
 
-```
-95% confidence interval: 175 ± 1.18
-```
-
+    ```
+    95% confidence interval: 175 ± 1.18
+    ```
 <div class="exbox" markdown>
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 표본크기의 결정 (천문학자). 한 천문학자가 멀리 있는 별까지의 거리를 측정한다. 측정값은 i.i.d.이고 평균이 $d$(실제 거리), 분산이 4 광년이다. 추정값이 95% 신뢰수준에서 $\pm 0.5$ 광년 이내로 정확하려면 측정을 몇 번 해야 하는가?
 
 </div>
 
-**풀이.** 다음이 필요하다.
+??? success "풀이"
+    다음이 필요하다.
 
-$$
-1.96 \sqrt{\frac{4}{n}} \leq 0.5
-$$
+    $$
+    1.96 \sqrt{\frac{4}{n}} \leq 0.5
+    $$
 
-$n$에 대해 풀면:
+    $n$에 대해 풀면:
 
-$$
-n \geq \frac{4 \times 1.96^2}{0.5^2} = 61.4656
-$$
+    $$
+    n \geq \frac{4 \times 1.96^2}{0.5^2} = 61.4656
+    $$
 
-$n$은 정수여야 하므로 적어도 **62번의 측정**이 필요하다.
-
+    $n$은 정수여야 하므로 적어도 **62번의 측정**이 필요하다.
 <div class="exbox" markdown>
 
 **보기 4.** <span class="diff easy" title="쉬움"></span> 모평균의 95% 신뢰구간 (분산을 모르는 작은 표본). 크기 $n = 25$인 확률표본에서 $\bar{X} = 50$, $s = 8$을 얻었다. $\mu$의 95% 신뢰구간을 구성하라.
 
 </div>
 
-**풀이.** 자유도 $df = 24$, 95% 신뢰수준에서 $t_{\alpha/2, 24} \approx 2.064$이다.
+??? success "풀이"
+    자유도 $df = 24$, 95% 신뢰수준에서 $t_{\alpha/2, 24} \approx 2.064$이다.
 
-$$
-\text{SE} = \frac{8}{\sqrt{25}} = 1.6, \qquad \text{ME} = 2.064 \times 1.6 \approx 3.302
-$$
+    $$
+    \text{SE} = \frac{8}{\sqrt{25}} = 1.6, \qquad \text{ME} = 2.064 \times 1.6 \approx 3.302
+    $$
 
-$$
-\boxed{(46.698,\ 53.302)}
-$$
-
+    $$
+    \boxed{(46.698,\ 53.302)}
+    $$
 <div class="exbox" markdown>
 
 **보기 5.** <span class="diff easy" title="쉬움"></span> t*의 계산. 관측값이 $n = 15$개일 때 98% 신뢰구간의 임계값 $t_*$는 얼마인가?
 
 </div>
 
-**풀이.**
+??? success "풀이"
 
-```python
-import scipy.stats as stats
+    ```python
+    import scipy.stats as stats
 
-confidence_level = 0.98
-alpha = 1 - confidence_level
-n = 15
-df = n - 1
+    confidence_level = 0.98
+    alpha = 1 - confidence_level
+    n = 15
+    df = n - 1
 
-# 98% 구간이므로 한쪽 꼬리에 1%씩 남긴다. 즉 왼쪽 누적확률 0.99 지점.
-t_star = stats.t(df=df).ppf(1 - alpha / 2)
-print(f"{t_star = :.4f}")
-```
+    # 98% 구간이므로 한쪽 꼬리에 1%씩 남긴다. 즉 왼쪽 누적확률 0.99 지점.
+    t_star = stats.t(df=df).ppf(1 - alpha / 2)
+    print(f"{t_star = :.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-t_star = 2.6245
-```
+    ```
+    t_star = 2.6245
+    ```
 
-같은 98%라도 정규분포라면 $z = 2.3263$이다. 자유도가 14밖에 안 되어 꼬리가 두껍기 때문에 임계값이 13% 커졌다.
-
+    같은 98%라도 정규분포라면 $z = 2.3263$이다. 자유도가 14밖에 안 되어 꼬리가 두껍기 때문에 임계값이 13% 커졌다.
 <div class="exbox" markdown>
 
 **보기 6.** <span class="diff easy" title="쉬움"></span> 도장 두께. Felix는 자동차 부품에서 무작위로 50개 지점을 골라 도막 두께를 측정했다. 표본에서 $\bar{x} = 148$ 마이크론, $s = 3.3$ 마이크론을 얻었고 95% 신뢰구간 $(147.1, 148.9)$ 마이크론을 구성했다. 평균 두께가 목표값 150 마이크론과 일치한다고 보는 것이 그럴듯한가?
 
 </div>
 
-**풀이.** 아니다. 신뢰구간 $(147.1, 148.9)$가 목표 두께 150 마이크론을 포함하지 않기 때문이다. 자료는 평균 두께가 목표에서 유의하게 벗어난다는 증거를 준다.
-
+??? success "풀이"
+    아니다. 신뢰구간 $(147.1, 148.9)$가 목표 두께 150 마이크론을 포함하지 않기 때문이다. 자료는 평균 두께가 목표에서 유의하게 벗어난다는 증거를 준다.
 ---
 
 ## 연습문제

@@ -84,102 +84,102 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
 
 </div>
 
-**모집단 적률:**
+??? success "풀이"
+    **모집단 적률:**
 
-- $\mu_1' = E[X] = \mu$
-- $\mu_2' = E[X^2] = \sigma^2 + \mu^2$
+    - $\mu_1' = E[X] = \mu$
+    - $\mu_2' = E[X^2] = \sigma^2 + \mu^2$
 
-**적률방정식:**
+    **적률방정식:**
 
-$$\mu = m_1' = \bar{X}$$
+    $$\mu = m_1' = \bar{X}$$
 
-$$\sigma^2 + \mu^2 = m_2' = \frac{1}{n}\sum X_i^2$$
+    $$\sigma^2 + \mu^2 = m_2' = \frac{1}{n}\sum X_i^2$$
 
-**해:**
+    **해:**
 
-$$\hat{\mu}_{\text{MoM}} = \bar{X}$$
+    $$\hat{\mu}_{\text{MoM}} = \bar{X}$$
 
-$$\hat{\sigma}^2_{\text{MoM}} = m_2' - (m_1')^2 = \frac{1}{n}\sum X_i^2 - \bar{X}^2 = \frac{1}{n}\sum (X_i - \bar{X})^2$$
+    $$\hat{\sigma}^2_{\text{MoM}} = m_2' - (m_1')^2 = \frac{1}{n}\sum X_i^2 - \bar{X}^2 = \frac{1}{n}\sum (X_i - \bar{X})^2$$
 
-$\hat{\sigma}^2_{\text{MoM}}$이 MLE와 마찬가지로 $n$으로 나누므로(편향) 이 경우 적률법과 MLE가 같은 추정량을 준다.
-
+    $\hat{\sigma}^2_{\text{MoM}}$이 MLE와 마찬가지로 $n$으로 나누므로(편향) 이 경우 적률법과 MLE가 같은 추정량을 준다.
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> Exponential 분포. $E[X] = 1/\lambda$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자. 모수가 하나이므로 적률방정식도 하나면 된다.
 
 </div>
 
-**적률방정식:**
+??? success "풀이"
+    **적률방정식:**
 
-$$\frac{1}{\lambda} = \bar{X}$$
+    $$\frac{1}{\lambda} = \bar{X}$$
 
-**해:**
+    **해:**
 
-$$\hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}$$
+    $$\hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}$$
 
-이는 MLE와 일치한다.
-
+    이는 MLE와 일치한다.
 <div class="exbox" markdown>
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> Gamma 분포. 밀도가 $f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}$인 $X_1, \ldots, X_n \sim \text{Gamma}(\alpha, \beta)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
 </div>
 
-**모집단 적률:**
+??? success "풀이"
+    **모집단 적률:**
 
-- $E[X] = \alpha/\beta$
-- $\text{Var}(X) = \alpha/\beta^2$
+    - $E[X] = \alpha/\beta$
+    - $\text{Var}(X) = \alpha/\beta^2$
 
-**적률방정식:**
+    **적률방정식:**
 
-$$\frac{\alpha}{\beta} = \bar{X}, \qquad \frac{\alpha}{\beta^2} = \frac{1}{n}\sum (X_i - \bar{X})^2$$
+    $$\frac{\alpha}{\beta} = \bar{X}, \qquad \frac{\alpha}{\beta^2} = \frac{1}{n}\sum (X_i - \bar{X})^2$$
 
-**해:** 비 $\text{Var}(X)/E[X] = 1/\beta$로부터:
+    **해:** 비 $\text{Var}(X)/E[X] = 1/\beta$로부터:
 
-$$\hat{\beta}_{\text{MoM}} = \frac{\bar{X}}{m_2}, \qquad \hat{\alpha}_{\text{MoM}} = \frac{\bar{X}^2}{m_2}$$
+    $$\hat{\beta}_{\text{MoM}} = \frac{\bar{X}}{m_2}, \qquad \hat{\alpha}_{\text{MoM}} = \frac{\bar{X}^2}{m_2}$$
 
-여기서 $m_2 = \frac{1}{n}\sum(X_i - \bar{X})^2$이다.
+    여기서 $m_2 = \frac{1}{n}\sum(X_i - \bar{X})^2$이다.
 
-적률법 추정량은 닫힌 형태로 주어지는 반면 Gamma 분포의 MLE는 수치 최적화가 필요하다. 이것이 실무적으로 중요한 장점이다.
-
+    적률법 추정량은 닫힌 형태로 주어지는 반면 Gamma 분포의 MLE는 수치 최적화가 필요하다. 이것이 실무적으로 중요한 장점이다.
 <div class="exbox" markdown>
 
 **보기 4.** <span class="diff easy" title="쉬움"></span> Uniform 분포. $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
 </div>
 
-**모집단 적률:**
+??? success "풀이"
+    **모집단 적률:**
 
-- $E[X] = (a + b)/2$
-- $\text{Var}(X) = (b - a)^2/12$
+    - $E[X] = (a + b)/2$
+    - $\text{Var}(X) = (b - a)^2/12$
 
-**적률방정식:**
+    **적률방정식:**
 
-$$\frac{a + b}{2} = \bar{X}, \qquad \frac{(b-a)^2}{12} = m_2$$
+    $$\frac{a + b}{2} = \bar{X}, \qquad \frac{(b-a)^2}{12} = m_2$$
 
-**해:**
+    **해:**
 
-$$\hat{a}_{\text{MoM}} = \bar{X} - \sqrt{3 m_2}, \qquad \hat{b}_{\text{MoM}} = \bar{X} + \sqrt{3 m_2}$$
+    $$\hat{a}_{\text{MoM}} = \bar{X} - \sqrt{3 m_2}, \qquad \hat{b}_{\text{MoM}} = \bar{X} + \sqrt{3 m_2}$$
 
-**참고:** 이 추정값들이 자료의 범위 안쪽으로 들어올 수 있다(즉 $\hat{a} > \min(X_i)$이거나 $\hat{b} < \max(X_i)$일 수 있다). 이는 논리적으로 모순이다. 적률법이 분포의 지지집합 제약을 언제나 지키지는 않는다는 알려진 한계이다. MLE($\hat{a} = \min(X_i)$, $\hat{b} = \max(X_i)$)에는 이런 문제가 없다.
-
+    **참고:** 이 추정값들이 자료의 범위 안쪽으로 들어올 수 있다(즉 $\hat{a} > \min(X_i)$이거나 $\hat{b} < \max(X_i)$일 수 있다). 이는 논리적으로 모순이다. 적률법이 분포의 지지집합 제약을 언제나 지키지는 않는다는 알려진 한계이다. MLE($\hat{a} = \min(X_i)$, $\hat{b} = \max(X_i)$)에는 이런 문제가 없다.
 <div class="exbox" markdown>
 
 **보기 5.** <span class="diff easy" title="쉬움"></span> Beta 분포. $X_1, \ldots, X_n \sim \text{Beta}(\alpha, \beta)$라 하자.
 
 </div>
 
-**모집단 적률:**
+??? success "풀이"
+    **모집단 적률:**
 
-- $E[X] = \frac{\alpha}{\alpha + \beta}$
-- $\text{Var}(X) = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$
+    - $E[X] = \frac{\alpha}{\alpha + \beta}$
+    - $\text{Var}(X) = \frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}$
 
-$\bar{x} = m_1'$과 $s^2 = m_2$를 표본평균과 표본분산이라 하고 풀면:
+    $\bar{x} = m_1'$과 $s^2 = m_2$를 표본평균과 표본분산이라 하고 풀면:
 
-$$\hat{\alpha}_{\text{MoM}} = \bar{x}\left(\frac{\bar{x}(1-\bar{x})}{s^2} - 1\right), \qquad \hat{\beta}_{\text{MoM}} = (1 - \bar{x})\left(\frac{\bar{x}(1-\bar{x})}{s^2} - 1\right)$$
+    $$\hat{\alpha}_{\text{MoM}} = \bar{x}\left(\frac{\bar{x}(1-\bar{x})}{s^2} - 1\right), \qquad \hat{\beta}_{\text{MoM}} = (1 - \bar{x})\left(\frac{\bar{x}(1-\bar{x})}{s^2} - 1\right)$$
 
-$s^2 < \bar{x}(1 - \bar{x})$가 필요하며, 웬만한 자료에서는 성립한다.
-
+    $s^2 < \bar{x}(1 - \bar{x})$가 필요하며, 웬만한 자료에서는 성립한다.
 ## 적률법 추정량의 성질
 
 ### 일치성

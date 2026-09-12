@@ -51,10 +51,10 @@ $$ t = \frac{\bar{d}}{s_d / \sqrt{n}} $$
 
 </div>
 
-**검정**: 대응표본 t 검정
+??? success "풀이"
+    **검정**: 대응표본 t 검정
 
-$$H_0 : \mu_{\text{Harpo}-\text{Zeppo}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{Harpo}-\text{Zeppo}} < 0$$
-
+    $$H_0 : \mu_{\text{Harpo}-\text{Zeppo}} = 0 \quad\text{vs}\quad H_1: \mu_{\text{Harpo}-\text{Zeppo}} < 0$$
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 사전/사후 시험 점수.
