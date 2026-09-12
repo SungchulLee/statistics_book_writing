@@ -215,111 +215,112 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
 
 </div>
 
+??? success "풀이"
+    #### 구현
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    # Load the Advertising dataset
+    dataset_url = (
+        'https://raw.githubusercontent.com/justmarkham/'
+        'scikit-learn-videos/master/data/Advertising.csv'
+    )
+    advertising_data = pd.read_csv(dataset_url, usecols=[1, 2, 3, 4])
+
+    # Train/test split (70/30)
+    total_observations = advertising_data.shape[0]
+    test_set_ratio = 0.3
+    train_count = int(total_observations * (1 - test_set_ratio))
+    training_data = advertising_data.iloc[:train_count]
+
+    # Response vector y and design matrix X (with intercept column)
+    y = np.array(training_data.Sales).reshape(-1, 1)
+    n = y.shape[0]
+    X = np.concatenate(
+        (np.ones((n, 1)), np.array(training_data.iloc[:, :-1])),
+        axis=1
+    )
+    p_plus_1 = X.shape[1]  # number of parameters (including intercept)
+
+    # OLS coefficients: β̂ = (X'X)⁻¹X'y
+    beta_hat = np.linalg.inv(X.T @ X) @ X.T @ y
+
+    # Predicted values and residual standard error
+    y_hat = X @ beta_hat
+    s = np.sqrt(np.sum((y - y_hat) ** 2) / (n - p_plus_1))
+
+    # Variance-covariance matrix: (X'X)⁻¹
+    cov_matrix = np.linalg.inv(X.T @ X)
+
+    # Print regression table
+    print("=" * 100)
+    print("\t\t    coef    std err \t     t      P>|t|"
+          "     [0.025      0.975] ")
+    print("-" * 100)
+
+    variable_names = ["Intercept", "TV", "Radio", "Newspaper"]
+
+    for name, j in zip(variable_names, range(p_plus_1)):
+        coef = beta_hat[j, 0]
+        v_j = cov_matrix[j, j]
+        se = s * np.sqrt(v_j)
+        t_stat = coef / se
+        p_val = 2 * stats.t(n - p_plus_1).sf(np.abs(t_stat))
+        ci_lower = coef - stats.t(n - p_plus_1).ppf(0.975) * se
+        ci_upper = coef + stats.t(n - p_plus_1).ppf(0.975) * se
+        print(f"{name:10}    {coef:10.4f} {se:10.3f} "
+              f"{t_stat:10.3f} {p_val:10.3f} "
+              f"{ci_lower:10.3f} {ci_upper:10.3f}")
+
+    print("=" * 100)
+    ```
+
+    출력:
+
+    ```
+    ====================================================================================================
+    		    coef    std err 	     t      P>|t|     [0.025      0.975] 
+    ----------------------------------------------------------------------------------------------------
+    Intercept         3.0451      0.391      7.782      0.000      2.271      3.819
+    TV                0.0470      0.002     27.653      0.000      0.044      0.050
+    Radio             0.1797      0.011     16.665      0.000      0.158      0.201
+    Newspaper        -0.0030      0.007     -0.428      0.669     -0.017      0.011
+    ====================================================================================================
+    ```
+
+    계수마다 추정값, 표준오차, $t$, p-값을 나란히 놓은 표다. $t = \hat\beta / \text{SE}(\hat\beta)$라는 정의를 표에서 직접 확인할 수 있다.
+
+    출력(훈련자료 140개 관측값):
+
+    ```text
+                    coef    std err        t      P>|t|     [0.025      0.975]
+    Intercept     3.0451      0.391      7.782      0.000      2.271      3.819
+    TV            0.0470      0.002     27.653      0.000      0.044      0.050
+    Radio         0.1797      0.011     16.665      0.000      0.158      0.201
+    Newspaper    -0.0030      0.007     -0.428      0.669     -0.017      0.011
+    ```
+
+    이 값들은 `statsmodels`의 `sm.ols('Sales ~ TV + Radio + Newspaper', train_data).fit().summary()`가 내놓는 표와 정확히 일치한다.
+
+    #### 출력 읽기
+
+    회귀표의 각 행은 다음을 담고 있다.
+
+    - **coef**: OLS 추정값 $\hat{\beta}_j$.
+    - **std err**: 표준오차 $s\sqrt{v_j}$. 여기서 $v_j = ((\mathbf{X}^T\mathbf{X})^{-1})_{jj}$이다.
+    - **t**: $t$ 통계량 $t_j = \hat{\beta}_j / (s\sqrt{v_j})$.
+    - **P>|t|**: $t_{N-p-1}$에서 얻은 양측 $p$값.
+    - **[0.025, 0.975]**: 95% 신뢰구간 $\hat{\beta}_j \pm t_{N-p-1}(0.975) \cdot s\sqrt{v_j}$.
+
+    $p$값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지 않으면 그 설명변수는 유의수준 5%에서 통계적으로 유의하다. 위 표에서 Newspaper는 $p = 0.669$이고 신뢰구간 $(-0.017, 0.011)$이 0을 포함하므로 유의하지 않다.
+
 !!! info "참고"
 
     - [Khan Academy: Using Least-Squares Regression Output](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/least-squares-regression/v/using-least-squares-regression-output)
     - [Khan Academy: Interpreting Computer Regression Data](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/interpreting-computer-regression-data)
-
-### 구현
-
-```python
-import numpy as np
-import pandas as pd
-from scipy import stats
-
-# Load the Advertising dataset
-dataset_url = (
-    'https://raw.githubusercontent.com/justmarkham/'
-    'scikit-learn-videos/master/data/Advertising.csv'
-)
-advertising_data = pd.read_csv(dataset_url, usecols=[1, 2, 3, 4])
-
-# Train/test split (70/30)
-total_observations = advertising_data.shape[0]
-test_set_ratio = 0.3
-train_count = int(total_observations * (1 - test_set_ratio))
-training_data = advertising_data.iloc[:train_count]
-
-# Response vector y and design matrix X (with intercept column)
-y = np.array(training_data.Sales).reshape(-1, 1)
-n = y.shape[0]
-X = np.concatenate(
-    (np.ones((n, 1)), np.array(training_data.iloc[:, :-1])),
-    axis=1
-)
-p_plus_1 = X.shape[1]  # number of parameters (including intercept)
-
-# OLS coefficients: β̂ = (X'X)⁻¹X'y
-beta_hat = np.linalg.inv(X.T @ X) @ X.T @ y
-
-# Predicted values and residual standard error
-y_hat = X @ beta_hat
-s = np.sqrt(np.sum((y - y_hat) ** 2) / (n - p_plus_1))
-
-# Variance-covariance matrix: (X'X)⁻¹
-cov_matrix = np.linalg.inv(X.T @ X)
-
-# Print regression table
-print("=" * 100)
-print("\t\t    coef    std err \t     t      P>|t|"
-      "     [0.025      0.975] ")
-print("-" * 100)
-
-variable_names = ["Intercept", "TV", "Radio", "Newspaper"]
-
-for name, j in zip(variable_names, range(p_plus_1)):
-    coef = beta_hat[j, 0]
-    v_j = cov_matrix[j, j]
-    se = s * np.sqrt(v_j)
-    t_stat = coef / se
-    p_val = 2 * stats.t(n - p_plus_1).sf(np.abs(t_stat))
-    ci_lower = coef - stats.t(n - p_plus_1).ppf(0.975) * se
-    ci_upper = coef + stats.t(n - p_plus_1).ppf(0.975) * se
-    print(f"{name:10}    {coef:10.4f} {se:10.3f} "
-          f"{t_stat:10.3f} {p_val:10.3f} "
-          f"{ci_lower:10.3f} {ci_upper:10.3f}")
-
-print("=" * 100)
-```
-
-출력:
-
-```
-====================================================================================================
-		    coef    std err 	     t      P>|t|     [0.025      0.975] 
-----------------------------------------------------------------------------------------------------
-Intercept         3.0451      0.391      7.782      0.000      2.271      3.819
-TV                0.0470      0.002     27.653      0.000      0.044      0.050
-Radio             0.1797      0.011     16.665      0.000      0.158      0.201
-Newspaper        -0.0030      0.007     -0.428      0.669     -0.017      0.011
-====================================================================================================
-```
-
-계수마다 추정값, 표준오차, $t$, p-값을 나란히 놓은 표다. $t = \hat\beta / \text{SE}(\hat\beta)$라는 정의를 표에서 직접 확인할 수 있다.
-
-출력(훈련자료 140개 관측값):
-
-```text
-                coef    std err        t      P>|t|     [0.025      0.975]
-Intercept     3.0451      0.391      7.782      0.000      2.271      3.819
-TV            0.0470      0.002     27.653      0.000      0.044      0.050
-Radio         0.1797      0.011     16.665      0.000      0.158      0.201
-Newspaper    -0.0030      0.007     -0.428      0.669     -0.017      0.011
-```
-
-이 값들은 `statsmodels`의 `sm.ols('Sales ~ TV + Radio + Newspaper', train_data).fit().summary()`가 내놓는 표와 정확히 일치한다.
-
-### 출력 읽기
-
-회귀표의 각 행은 다음을 담고 있다.
-
-- **coef**: OLS 추정값 $\hat{\beta}_j$.
-- **std err**: 표준오차 $s\sqrt{v_j}$. 여기서 $v_j = ((\mathbf{X}^T\mathbf{X})^{-1})_{jj}$이다.
-- **t**: $t$ 통계량 $t_j = \hat{\beta}_j / (s\sqrt{v_j})$.
-- **P>|t|**: $t_{N-p-1}$에서 얻은 양측 $p$값.
-- **[0.025, 0.975]**: 95% 신뢰구간 $\hat{\beta}_j \pm t_{N-p-1}(0.975) \cdot s\sqrt{v_j}$.
-
-$p$값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지 않으면 그 설명변수는 유의수준 5%에서 통계적으로 유의하다. 위 표에서 Newspaper는 $p = 0.669$이고 신뢰구간 $(-0.017, 0.011)$이 0을 포함하므로 유의하지 않다.
 
 ## 연습문제
 

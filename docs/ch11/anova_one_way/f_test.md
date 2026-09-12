@@ -301,225 +301,226 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
 </div>
 
-### 1단계: 가설 세우기
+??? success "풀이"
+    #### 1단계: 가설 세우기
 
-**귀무가설 ($H_0$)**: 세 집단의 평균 반응시간이 같다.
+    **귀무가설 ($H_0$)**: 세 집단의 평균 반응시간이 같다.
 
-**대립가설 ($H_a$)**: 적어도 한 집단의 평균 반응시간이 다르다.
+    **대립가설 ($H_a$)**: 적어도 한 집단의 평균 반응시간이 다르다.
 
-### 2단계: 전체 평균과 집단 평균 계산
+    #### 2단계: 전체 평균과 집단 평균 계산
 
-1. **전체 평균 ($\bar{X}$)**:
+    1. **전체 평균 ($\bar{X}$)**:
 
-$$
-\bar{X} = \frac{19 + 18 + 17 + 18 + 20 + 20 + 22 + 19 + 21 + 20 + 18 + 17 + 16 + 19 + 20}{15} = 19.0
-$$
+    $$
+    \bar{X} = \frac{19 + 18 + 17 + 18 + 20 + 20 + 22 + 19 + 21 + 20 + 18 + 17 + 16 + 19 + 20}{15} = 19.0
+    $$
 
-2. **집단 평균**:
-   - **물 집단**: $(19 + 18 + 17 + 18 + 20) / 5 = 18.4$
-   - **에너지 드링크 집단**: $(20 + 22 + 19 + 21 + 20) / 5 = 20.4$
-   - **커피 집단**: $(18 + 17 + 16 + 19 + 20) / 5 = 18.0$
+    2. **집단 평균**:
+       - **물 집단**: $(19 + 18 + 17 + 18 + 20) / 5 = 18.4$
+       - **에너지 드링크 집단**: $(20 + 22 + 19 + 21 + 20) / 5 = 20.4$
+       - **커피 집단**: $(18 + 17 + 16 + 19 + 20) / 5 = 18.0$
 
-### 3단계: 전체 변동(총제곱합) SST 계산
+    #### 3단계: 전체 변동(총제곱합) SST 계산
 
-총제곱합(SST)은 전체 평균에 대한 자료의 전체 변동을 잰다.
+    총제곱합(SST)은 전체 평균에 대한 자료의 전체 변동을 잰다.
 
-$$
-SST = \sum_{i=1}^{k}\sum_{j=1}^{n_i} (X_{ij} - \bar{X}_{\cdot\cdot})^2
-$$
+    $$
+    SST = \sum_{i=1}^{k}\sum_{j=1}^{n_i} (X_{ij} - \bar{X}_{\cdot\cdot})^2
+    $$
 
-자료의 각 값에 대해:
+    자료의 각 값에 대해:
 
-**물 집단**: $(19 - 19)^2 = 0$, $(18 - 19)^2 = 1$, $(17 - 19)^2 = 4$, $(18 - 19)^2 = 1$, $(20 - 19)^2 = 1$
+    **물 집단**: $(19 - 19)^2 = 0$, $(18 - 19)^2 = 1$, $(17 - 19)^2 = 4$, $(18 - 19)^2 = 1$, $(20 - 19)^2 = 1$
 
-**에너지 드링크 집단**: $(20 - 19)^2 = 1$, $(22 - 19)^2 = 9$, $(19 - 19)^2 = 0$, $(21 - 19)^2 = 4$, $(20 - 19)^2 = 1$
+    **에너지 드링크 집단**: $(20 - 19)^2 = 1$, $(22 - 19)^2 = 9$, $(19 - 19)^2 = 0$, $(21 - 19)^2 = 4$, $(20 - 19)^2 = 1$
 
-**커피 집단**: $(18 - 19)^2 = 1$, $(17 - 19)^2 = 4$, $(16 - 19)^2 = 9$, $(19 - 19)^2 = 0$, $(20 - 19)^2 = 1$
+    **커피 집단**: $(18 - 19)^2 = 1$, $(17 - 19)^2 = 4$, $(16 - 19)^2 = 9$, $(19 - 19)^2 = 0$, $(20 - 19)^2 = 1$
 
-**모두 더하면**:
+    **모두 더하면**:
 
-$$
-SST = 0 + 1 + 4 + 1 + 1 + 1 + 9 + 0 + 4 + 1 + 1 + 4 + 9 + 0 + 1 = 37
-$$
+    $$
+    SST = 0 + 1 + 4 + 1 + 1 + 1 + 9 + 0 + 4 + 1 + 1 + 4 + 9 + 0 + 1 = 37
+    $$
 
-### 4단계: 집단 내 변동 SSW 계산
+    #### 4단계: 집단 내 변동 SSW 계산
 
-집단 내 제곱합(SSW)은 각 집단 안의 변동을 잰다.
+    집단 내 제곱합(SSW)은 각 집단 안의 변동을 잰다.
 
-$$
-SSW = \sum_{i=1}^{k} \sum_{j=1}^{n_i} (X_{ij} - \bar{X}_{i\cdot})^2
-$$
+    $$
+    SSW = \sum_{i=1}^{k} \sum_{j=1}^{n_i} (X_{ij} - \bar{X}_{i\cdot})^2
+    $$
 
-**물 집단**:
+    **물 집단**:
 
-$$
-SSW_{\text{Water}} = 0.36 + 0.16 + 1.96 + 0.16 + 2.56 = 5.20
-$$
+    $$
+    SSW_{\text{Water}} = 0.36 + 0.16 + 1.96 + 0.16 + 2.56 = 5.20
+    $$
 
-**에너지 드링크 집단**:
+    **에너지 드링크 집단**:
 
-$$
-SSW_{\text{Energy Drink}} = 0.16 + 2.56 + 1.96 + 0.36 + 0.16 = 5.20
-$$
+    $$
+    SSW_{\text{Energy Drink}} = 0.16 + 2.56 + 1.96 + 0.36 + 0.16 = 5.20
+    $$
 
-**커피 집단**:
+    **커피 집단**:
 
-$$
-SSW_{\text{Coffee}} = 0 + 1 + 4 + 1 + 4 = 10.00
-$$
+    $$
+    SSW_{\text{Coffee}} = 0 + 1 + 4 + 1 + 4 = 10.00
+    $$
 
-**이들을 더하면**:
+    **이들을 더하면**:
 
-$$
-SSW = 5.20 + 5.20 + 10.00 = 20.40
-$$
+    $$
+    SSW = 5.20 + 5.20 + 10.00 = 20.40
+    $$
 
-### 5단계: 집단 간 변동 SSB 계산
+    #### 5단계: 집단 간 변동 SSB 계산
 
-집단 간 제곱합(SSB)은 집단 평균과 전체 평균 사이의 변동을 잰다.
+    집단 간 제곱합(SSB)은 집단 평균과 전체 평균 사이의 변동을 잰다.
 
-$$
-SSB = \sum_{i=1}^{k} n_i (\bar{X}_{i\cdot} - \bar{X}_{\cdot\cdot})^2
-$$
+    $$
+    SSB = \sum_{i=1}^{k} n_i (\bar{X}_{i\cdot} - \bar{X}_{\cdot\cdot})^2
+    $$
 
-**물 집단**: $SSB_{\text{Water}} = 5 \times (18.4 - 19)^2 = 5 \times 0.36 = 1.8$
+    **물 집단**: $SSB_{\text{Water}} = 5 \times (18.4 - 19)^2 = 5 \times 0.36 = 1.8$
 
-**에너지 드링크 집단**: $SSB_{\text{Energy Drink}} = 5 \times (20.4 - 19)^2 = 5 \times 1.96 = 9.8$
+    **에너지 드링크 집단**: $SSB_{\text{Energy Drink}} = 5 \times (20.4 - 19)^2 = 5 \times 1.96 = 9.8$
 
-**커피 집단**: $SSB_{\text{Coffee}} = 5 \times (18.0 - 19)^2 = 5 \times 1.0 = 5.0$
+    **커피 집단**: $SSB_{\text{Coffee}} = 5 \times (18.0 - 19)^2 = 5 \times 1.0 = 5.0$
 
-**이들을 더하면**:
+    **이들을 더하면**:
 
-$$
-SSB = 1.8 + 9.8 + 5.0 = 16.6
-$$
+    $$
+    SSB = 1.8 + 9.8 + 5.0 = 16.6
+    $$
 
-### 6단계: 전체 변동의 분해 확인
+    #### 6단계: 전체 변동의 분해 확인
 
-이제 다음이 성립하는지 확인하자:
+    이제 다음이 성립하는지 확인하자:
 
-$$
-SST = SSB + SSW
-$$
+    $$
+    SST = SSB + SSW
+    $$
 
-- **SST** = 37
-- **SSB + SSW** = 16.6 + 20.40 = 37
+    - **SST** = 37
+    - **SSB + SSW** = 16.6 + 20.40 = 37
 
-값이 일치하므로 계산이 일관됨을 확인할 수 있다.
+    값이 일치하므로 계산이 일관됨을 확인할 수 있다.
 
-### 7단계: F-통계량 계산
+    #### 7단계: F-통계량 계산
 
-**F-통계량**은 다음으로 계산한다:
+    **F-통계량**은 다음으로 계산한다:
 
-$$
-F = \frac{MSB}{MSW}
-$$
+    $$
+    F = \frac{MSB}{MSW}
+    $$
 
-여기서
+    여기서
 
-- **집단 간 평균제곱(MSB)**: $MSB = \frac{SSB}{k - 1} = \frac{16.6}{3 - 1} = 8.3$
-- **집단 내 평균제곱(MSW)**: $MSW = \frac{SSW}{N - k} = \frac{20.40}{15 - 3} = 1.70$
+    - **집단 간 평균제곱(MSB)**: $MSB = \frac{SSB}{k - 1} = \frac{16.6}{3 - 1} = 8.3$
+    - **집단 내 평균제곱(MSW)**: $MSW = \frac{SSW}{N - k} = \frac{20.40}{15 - 3} = 1.70$
 
-따라서
+    따라서
 
-$$
-F = \frac{8.3}{1.70} = 4.88
-$$
+    $$
+    F = \frac{8.3}{1.70} = 4.88
+    $$
 
-### 8단계: 임계값 또는 p-값 구하기
+    #### 8단계: 임계값 또는 p-값 구하기
 
-p-값을 구하기 위해 F-통계량을 $df_1 = 2$(집단 간), $df_2 = 12$(집단 내)인 F-분포의 임계값과 비교한다.
+    p-값을 구하기 위해 F-통계량을 $df_1 = 2$(집단 간), $df_2 = 12$(집단 내)인 F-분포의 임계값과 비교한다.
 
-이 자유도에서 **$F = 4.88$의 p-값**은 약 **0.03**이다.
+    이 자유도에서 **$F = 4.88$의 p-값**은 약 **0.03**이다.
 
-### 9단계: 판정
+    #### 9단계: 판정
 
-p-값이 **0.03**으로 **통상적인 유의수준 $\alpha = 0.05$보다 작으므로** **귀무가설을 기각한다**. 세 집단의 평균 사이에 유의한 차이가 있다는 뜻이다.
+    p-값이 **0.03**으로 **통상적인 유의수준 $\alpha = 0.05$보다 작으므로** **귀무가설을 기각한다**. 세 집단의 평균 사이에 유의한 차이가 있다는 뜻이다.
 
-### 10단계: 사후검정
+    #### 10단계: 사후검정
 
-결과가 유의성 경계에 가까웠다면 표본크기를 늘리거나 다른 유의수준을 써서 가설을 더 검토할 수 있다. 아니면 **사후**검정을 수행하여 집단 사이의 좀 더 미세한 차이를 이해할 수 있다.
+    결과가 유의성 경계에 가까웠다면 표본크기를 늘리거나 다른 유의수준을 써서 가설을 더 검토할 수 있다. 아니면 **사후**검정을 수행하여 집단 사이의 좀 더 미세한 차이를 이해할 수 있다.
 
-```python
-import scipy.stats as stats
-# Data for the three groups
-water_group = [19, 18, 17, 18, 20]
-energy_drink_group = [20, 22, 19, 21, 20]
-coffee_group = [18, 17, 16, 19, 20]
-# Perform One-Way ANOVA
-f_statistic, p_value = stats.f_oneway(water_group, energy_drink_group, coffee_group)
-# Print results
-print(f"F-statistic: {f_statistic:.2f}")
-print(f"P-value: {p_value:.4f}")
-```
+    ```python
+    import scipy.stats as stats
+    # Data for the three groups
+    water_group = [19, 18, 17, 18, 20]
+    energy_drink_group = [20, 22, 19, 21, 20]
+    coffee_group = [18, 17, 16, 19, 20]
+    # Perform One-Way ANOVA
+    f_statistic, p_value = stats.f_oneway(water_group, energy_drink_group, coffee_group)
+    # Print results
+    print(f"F-statistic: {f_statistic:.2f}")
+    print(f"P-value: {p_value:.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-F-statistic: 4.86
-P-value: 0.0284
-```
+    ```
+    F-statistic: 4.86
+    P-value: 0.0284
+    ```
 
-손계산의 4.88과 미세하게 다른 것은 위에서 중간값을 반올림했기 때문이다. 정확한 값은 4.86이다.
+    손계산의 4.88과 미세하게 다른 것은 위에서 중간값을 반올림했기 때문이다. 정확한 값은 4.86이다.
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-import scipy.stats as stats
-# Given F-statistic and degrees of freedom
-df_between = 3 - 1
-df_within = 15 - 3
-f_statistic = 4.88
-# Calculate p-value
-p_value = stats.f.sf(f_statistic, df_between, df_within)
-print(f"{f_statistic = :.04f}")
-print(f"{p_value = :.04f}")
-# Create the figure and axis using OOP style
-fig, ax = plt.subplots(figsize=(12, 4))
-# Generate F-distribution values for the left of the statistic
-x = np.linspace(0, f_statistic, 500)
-y = stats.f.pdf(x, df_between, df_within)
-ax.plot(x, y, color='blue', linewidth=3)
-# Fill the left region under the curve
-x = np.concatenate([[0], x, [f_statistic], [0]])
-y = np.concatenate([[0], y, [0], [0]])
-ax.fill(x, y, color='blue', alpha=0.1)
-# Generate F-distribution values for the right of the statistic
-x = np.linspace(f_statistic, 20, 500)
-y = stats.f.pdf(x, df_between, df_within)
-ax.plot(x, y, color='red', linewidth=3)
-# Fill the right region under the curve (p-value region)
-x = np.concatenate([[f_statistic], x, [20], [f_statistic]])
-y = np.concatenate([[0], y, [0], [0]])
-ax.fill(x, y, color='red', alpha=0.1)
-# Annotate the p-value region
-xy = ((f_statistic + 15.0) / 2, 0.01)
-xytext = (f_statistic + 3, 0.5)
-arrowprops = dict(color='black', width=0.2, headwidth=8)
-ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
-# Customize plot appearance
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.spines['bottom'].set_position('zero')
-ax.spines['left'].set_position('zero')
-ax.set_xlabel('F-value')
-ax.set_ylabel('Probability Density')
-ax.set_title('F-distribution with Highlighted p-value Region')
-plt.show()
-```
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+    # Given F-statistic and degrees of freedom
+    df_between = 3 - 1
+    df_within = 15 - 3
+    f_statistic = 4.88
+    # Calculate p-value
+    p_value = stats.f.sf(f_statistic, df_between, df_within)
+    print(f"{f_statistic = :.04f}")
+    print(f"{p_value = :.04f}")
+    # Create the figure and axis using OOP style
+    fig, ax = plt.subplots(figsize=(12, 4))
+    # Generate F-distribution values for the left of the statistic
+    x = np.linspace(0, f_statistic, 500)
+    y = stats.f.pdf(x, df_between, df_within)
+    ax.plot(x, y, color='blue', linewidth=3)
+    # Fill the left region under the curve
+    x = np.concatenate([[0], x, [f_statistic], [0]])
+    y = np.concatenate([[0], y, [0], [0]])
+    ax.fill(x, y, color='blue', alpha=0.1)
+    # Generate F-distribution values for the right of the statistic
+    x = np.linspace(f_statistic, 20, 500)
+    y = stats.f.pdf(x, df_between, df_within)
+    ax.plot(x, y, color='red', linewidth=3)
+    # Fill the right region under the curve (p-value region)
+    x = np.concatenate([[f_statistic], x, [20], [f_statistic]])
+    y = np.concatenate([[0], y, [0], [0]])
+    ax.fill(x, y, color='red', alpha=0.1)
+    # Annotate the p-value region
+    xy = ((f_statistic + 15.0) / 2, 0.01)
+    xytext = (f_statistic + 3, 0.5)
+    arrowprops = dict(color='black', width=0.2, headwidth=8)
+    ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+    # Customize plot appearance
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['bottom'].set_position('zero')
+    ax.spines['left'].set_position('zero')
+    ax.set_xlabel('F-value')
+    ax.set_ylabel('Probability Density')
+    ax.set_title('F-distribution with Highlighted p-value Region')
+    plt.show()
+    ```
 
-출력:
+    출력:
 
-```
-f_statistic = 4.8800
-p_value = 0.0281
-```
+    ```
+    f_statistic = 4.8800
+    p_value = 0.0281
+    ```
 
-![F-분포와 p-값 영역](./img/f_test_425.png)
+    ![F-분포와 p-값 영역](./img/f_test_425.png)
 
-붉게 칠한 오른쪽 꼬리가 p-값 2.81%다. 반올림한 4.88을 넣었으므로 앞의 정확한 계산이 준 0.0284와 미세하게 다르다.
+    붉게 칠한 오른쪽 꼬리가 p-값 2.81%다. 반올림한 4.88을 넣었으므로 앞의 정확한 계산이 준 0.0284와 미세하게 다르다.
 
----
+    ---
 
 ## 4. 순열 기반 일원배치 분산분석
 
