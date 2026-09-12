@@ -130,7 +130,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
     mu_hat, sd_hat = x.mean(), x.std(ddof=1)
     D_naive, p_naive = stats.kstest(x, 'norm', args=(mu_hat, sd_hat))
 
-    # Bootstrap Lilliefors
+    # 붓스트랩으로 구한 Lilliefors 기각값
     B = 2000
     D_obs = D_naive
     D_star = np.empty(B)

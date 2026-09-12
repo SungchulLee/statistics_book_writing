@@ -248,7 +248,7 @@ $Z \sim \mathcal{N}(0, 1)$, $X = 0.9Z + \varepsilon_X$, $Y = 0.3Z + \varepsilon_
 
     np.random.seed(42)
     groups = [(100, 0, 50), (100, 10, 30), (100, 20, 10)]
-    # (n, x_center, y_intercept) with positive slope within each group
+    # (크기, x 중심, y 절편). 집단 안에서는 기울기가 양이다
 
     fig, ax = plt.subplots()
     all_x, all_y = [], []

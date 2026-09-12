@@ -141,8 +141,8 @@ $$
 ```python
 import statsmodels.formula.api as smf
 
-# Using formula syntax (R-like)
-# The * operator includes main effects and the interaction
+# 수식 문법. R 의 것을 그대로 따른다
+# 별표는 주효과와 교호작용을 한꺼번에 넣는다는 뜻이다
 model = smf.ols('Sales ~ TV * Radio', data=advertising).fit()
 # summary()는 실행 날짜와 시각을 함께 찍으므로 계수 표만 인쇄한다.
 print(model.summary().tables[1])
@@ -195,8 +195,8 @@ $$
 이런 교호작용은 서로 다른 집단이 같은 설명변수에 다르게 반응하는지를 드러내며, 세분화와 표적 분석에 결정적인 통찰을 준다.
 
 ```python
-# Example with categorical variable
-# statsmodels automatically encodes categorical variables
+# 범주형 변수가 든 예
+# statsmodels 는 범주형을 알아서 가변수로 바꾼다
 model = smf.ols('Balance ~ Income + C(Student) + Income:C(Student)',
                 data=credit).fit()
 print(model.summary().tables[1])

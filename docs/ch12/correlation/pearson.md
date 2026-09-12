@@ -126,11 +126,11 @@ Pearson 상관은 평균과 표준편차에 기반하는데, 이들 자체가 �
 import numpy as np
 from scipy import stats
 
-# Sample data
+# 예시 자료
 x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 y = np.array([2.1, 3.9, 6.2, 7.8, 10.1, 12.3, 13.8, 16.1, 18.0, 20.2])
 
-# Method 1: NumPy correlation matrix
+# 방법 1: NumPy 의 상관행렬
 corr_matrix = np.corrcoef(x, y)
 r_numpy = corr_matrix[0, 1]
 print(f"NumPy r = {r_numpy:.4f}")

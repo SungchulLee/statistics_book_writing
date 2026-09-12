@@ -47,7 +47,10 @@ $$
 import numpy as np
 
 def covariance_step_by_step(x, y):
-    """Compute sample covariance and return intermediate deviations."""
+    """표본공분산을 구하고, 중간 계산인 편차까지 함께 돌려준다.
+
+        편차를 돌려주는 까닭은 뒤에서 편차곱을 막대로 그려 보이기 위함이다.
+        """
     n = len(x)
     x_mean = x.mean()
     y_mean = y.mean()
@@ -59,7 +62,11 @@ def covariance_step_by_step(x, y):
     return cov, x_dev, y_dev
 
 def pearson_r_step_by_step(x, y):
-    """Compute Pearson r from first principles."""
+    """피어슨 상관계수를 정의대로 구한다.
+
+        공분산을 두 표준편차의 곱으로 나눈다. 이 나눗셈이 단위를 없애므로
+        r 은 -1 과 1 사이에 갇힌 값이 된다.
+        """
     cov, _, _ = covariance_step_by_step(x, y)
     # ddof=1로 맞춰야 한다. 공분산이 n-1로 나눈 값이므로
     # 표준편차도 같은 규약을 써야 두 n-1이 약분되어 r이 척도와 무관해진다.

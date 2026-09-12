@@ -91,12 +91,12 @@ $$
 ```python
 from itertools import product
 
-# Sample space for three coin flips
+# 동전 세 번 던지기의 표본공간
 sample_space = list(product(['H', 'T'], repeat=3))
 print(f"Sample space size: {len(sample_space)}")
 print(f"Sample space: {sample_space}")
 
-# Event: exactly 2 heads
+# 사건: 앞면이 정확히 두 번
 event_2_heads = [s for s in sample_space if s.count('H') == 2]
 print(f"\nEvent (2 heads): {event_2_heads}")
 print(f"P(2 heads) = {len(event_2_heads)}/{len(sample_space)} = {len(event_2_heads)/len(sample_space):.4f}")

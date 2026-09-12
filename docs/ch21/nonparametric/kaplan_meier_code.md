@@ -209,7 +209,7 @@ censored_2 = (np.random.rand(n2) < 0.2).astype(int)
 t1, s1 = kaplan_meier(times_1, censored_1)
 t2, s2 = kaplan_meier(times_2, censored_2)
 
-# Plot
+# 그림으로 확인
 fig, ax = plt.subplots(figsize=(10, 5))
 # where="post" 가 계단을 오른쪽으로 뻗게 한다. 생존함수는 사건이 일어난
 # 그 순간에 떨어지고 다음 사건까지 평평하므로, 이 설정이라야 맞다.

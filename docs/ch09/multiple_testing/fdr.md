@@ -147,7 +147,11 @@ FDR 통제는 후속 조사를 할 유망한 후보 집합을 찾는 것이 목�
 import numpy as np
 
 def benjamini_hochberg(p_values, alpha=0.05):
-    """Apply the Benjamini-Hochberg procedure.
+    """벤자미니-호크버그 절차를 적용한다.
+
+        p-값을 작은 것부터 늘어놓고 k번째를 k/m*alpha 와 견준다. 조건을 만족하는
+        가장 큰 k 를 찾아 그 아래를 모두 기각한다. FWER 대신 FDR 을 통제하므로
+        본페로니보다 훨씬 덜 보수적이다.
 
     Parameters
     ----------

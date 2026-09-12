@@ -52,7 +52,7 @@ print(f"Skewness: {skewness_value:.4f}")
 stat, p_value = stats.skewtest(data)
 print(f"Skewness Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value <= alpha:
     print("Reject H_0: The data is not symmetrically distributed (significant skewness).")
@@ -124,7 +124,7 @@ print(f"Kurtosis: {kurtosis_value:.4f}")
 stat, p_value = stats.kurtosistest(data)
 print(f"Kurtosis Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value <= alpha:
     print("Reject H_0: The data does not have normal kurtosis.")

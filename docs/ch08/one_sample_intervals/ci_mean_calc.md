@@ -138,13 +138,13 @@ print(f"95% z-interval: ({lo:.4f}, {hi:.4f})")
 함께 제공되는 스크립트 `ci_mean_calc.py`는 명령줄 인자를 지원한다:
 
 ```bash
-# t-interval from a CSV file
+# CSV 파일로부터 t 구간
 python ci_mean_calc.py --csv data.csv
 
-# z-interval from summary statistics
+# 요약통계로부터 z 구간
 python ci_mean_calc.py --n 25 --mean 3.2 --sd 1.1 --known-sigma 1.0 --method z
 
-# 99% confidence level
+# 신뢰수준 99%
 python ci_mean_calc.py --csv data.csv --cl 0.99
 ```
 

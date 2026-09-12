@@ -180,13 +180,13 @@ print(f"99% Clopper-Pearson CI: ({lo:.4f}, {hi:.4f})")
 함께 제공되는 스크립트 `ci_prop_calc.py`는 명령줄 인자를 지원한다:
 
 ```bash
-# Wilson interval from counts
+# 도수로부터 Wilson 구간
 python ci_prop_calc.py --k 12 --n 50 --method wilson
 
-# Clopper-Pearson interval from a CSV of 0/1 values
+# 0/1 값이 든 CSV 로부터 Clopper-Pearson 구간
 python ci_prop_calc.py --csv bernoulli.csv --method cp
 
-# 99% confidence level
+# 신뢰수준 99%
 python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
 ```
 

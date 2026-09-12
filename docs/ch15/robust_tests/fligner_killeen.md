@@ -235,7 +235,7 @@ Fligner-Killeen 검정은 오염이 심하다고 의심되거나 자료의 정�
     n, R, alpha = 30, 5000, 0.05
 
     def contaminated(scale):
-        """90% N(0, scale^2) + 10% N(0, (5*scale)^2)"""
+        """오염 정규분포. 90%는 N(0, scale^2), 10%는 표준편차가 다섯 배인 쪽에서 나온다."""
         u = rng.random(n)
         return np.where(u < 0.9, rng.normal(0, scale, n),
                         rng.normal(0, 5 * scale, n))

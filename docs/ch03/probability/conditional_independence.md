@@ -92,8 +92,11 @@ $$
     import numpy as np
 
     def berkson_paradox_simulation(n_simulations=200_000):
-        """Demonstrate Berkson's paradox: independent events become
-        dependent after conditioning on a shared effect."""
+        """버크슨의 역설: 독립인 두 사건이 조건을 걸면 종속이 된다.
+
+        공통의 결과를 조건으로 삼으면, 원인 하나가 일어났다는 사실이
+        나머지 원인의 확률을 낮춘다. 한쪽이 이미 설명해 버리기 때문이다.
+        """
         np.random.seed(42)
 
         # 두 원인과 하나의 공통 결과.

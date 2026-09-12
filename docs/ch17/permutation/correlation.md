@@ -271,11 +271,11 @@ $$
         for _ in range(M):
             x = rng.normal(0, 1, n)
             y = x**2 + rng.normal(0, 0.5, n)
-            # (1) Pearson
+            # (1) 피어슨 상관
             r = np.corrcoef(x, y)[0, 1]
             Y = np.array([rng.permutation(y) for _ in range(B)])
             cp += ((np.abs(rows_corr(np.tile(x, (B,1)), Y)) >= abs(r)).sum()+1)/(B+1) < 0.05
-            # (2) Spearman
+            # (2) 스피어만 상관
             rs = stats.spearmanr(x, y).statistic
             rr = np.array([stats.spearmanr(x, rng.permutation(y)).statistic
                            for _ in range(B)])

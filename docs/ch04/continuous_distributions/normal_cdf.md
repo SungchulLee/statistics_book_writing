@@ -51,7 +51,7 @@ for xv in [mu - sigma, mu, mu + sigma]:
     ax_cdf.text(xv, yv + 0.05, f"P(X≤{xv:.0f})={yv:.3f}",
                 ha='center', fontsize=9)
 
-# PDF on right axis
+# 오른쪽 축에 밀도함수
 ax_pdf = ax_cdf.twinx()
 ax_pdf.plot(x, y_pdf, lw=2, color='tab:red', label="PDF (density)")
 ax_pdf.set_ylabel("Density", color='tab:red')

@@ -236,7 +236,10 @@ $t_5$ 수익률에서 F 검정, Brown-Forsythe, Fligner-Killeen의 경험적 크
     from scipy import stats
 
     def garch11(n, rng, omega=1e-5, alpha=0.1, beta=0.85):
-        """Simulate GARCH(1,1) returns; unconditional var = omega/(1-alpha-beta)."""
+        """GARCH(1,1) 수익률을 만든다. 무조건분산은 omega/(1-alpha-beta) 다.
+
+            변동성이 뭉쳐 다니는 실제 수익률의 성질을 흉내 내기 위한 모형이다.
+            """
         h = omega / (1 - alpha - beta)
         r = np.zeros(n)
         for t in range(n):

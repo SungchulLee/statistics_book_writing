@@ -48,7 +48,7 @@ import pandas as pd
 import numpy as np
 import random
 
-# Sample data (from Practical Statistics for Data Scientists)
+# 예시 자료. "Practical Statistics for Data Scientists" 에서 가져왔다
 session_times = pd.DataFrame({
     'Time': [185, 188, 142, 160, 161, 157, 182, 181, 159, 167,
              173, 181, 182, 170, 169, 177, 168, 183, 169, 164],

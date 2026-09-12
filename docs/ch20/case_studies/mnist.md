@@ -172,12 +172,12 @@ def show_images(images, true_labels, pred_labels, title):
     plt.tight_layout()
     plt.show()
 
-# Before training
+# 학습 전
 with torch.no_grad():
     _, preds = torch.max(model_untrained(fixed_images), 1)
 show_images(fixed_images, fixed_labels, preds, "Before Training")
 
-# After training
+# 학습 뒤
 with torch.no_grad():
     _, preds = torch.max(model_trained(fixed_images), 1)
 show_images(fixed_images, fixed_labels, preds, "After Training")

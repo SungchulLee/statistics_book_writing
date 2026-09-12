@@ -76,7 +76,7 @@ skewed_data = np.random.gamma(2, 2, 1000)
 # 실무에서는 p-값보다 이쪽이 더 쓸모 있다.
 print(f"Skewness: {skew(skewed_data)}, Kurtosis: {kurtosis(skewed_data)}")
 
-# Perform Shapiro-Wilk test
+# Shapiro-Wilk 검정
 stat, p_value = shapiro(skewed_data)
 print(f"Shapiro-Wilk Test: p-value={p_value}")
 ```
@@ -113,7 +113,7 @@ np.random.seed(0)
 # 변환이나 비모수 방법으로 바로 넘어가는 편이 낫다.
 income_data = np.random.exponential(scale=50000, size=1000)
 
-# Perform Shapiro-Wilk test
+# Shapiro-Wilk 검정
 stat, p_value = shapiro(income_data)
 print(f"Shapiro-Wilk Test on Skewed Data: p-value={p_value}")
 ```

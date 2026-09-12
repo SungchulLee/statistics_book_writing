@@ -41,27 +41,27 @@ $n$개 관측값의 표본이 주어졌을 때:
 import numpy as np
 import pandas as pd
 
-# Set random seed
+# 난수 씨앗 고정
 np.random.seed(seed=1)
 
-# Simulate income data (realistic for illustrating robustness of median)
+# 소득 자료를 흉내 낸다. 중앙값의 강건함을 보이기에 알맞은 모양이다
 loans_income = pd.Series(np.random.exponential(scale=50000, size=5000) + 20000)
 
-# Compute original sample median
+# 원래 표본의 중앙값
 original_median = loans_income.median()
 print(f"Original sample median: ${original_median:,.0f}")
 # Original sample median: $54,971
 
-# Bootstrap procedure: resample 1000 times
+# 붓스트랩: 1000번 재표집한다
 bootstrap_medians = []
 for nrepeat in range(1000):
-    # Resample with replacement, same size as the original sample
+    # 원래 표본과 같은 크기로 복원추출한다
     bootstrap_sample = loans_income.sample(frac=1, replace=True)
     bootstrap_medians.append(bootstrap_sample.median())
 
 bootstrap_medians = pd.Series(bootstrap_medians)
 
-# Compute bootstrap statistics
+# 재표본마다 통계량을 구한다
 bootstrap_mean = bootstrap_medians.mean()
 bootstrap_std = bootstrap_medians.std()
 bias = bootstrap_mean - original_median

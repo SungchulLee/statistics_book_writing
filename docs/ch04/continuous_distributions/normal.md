@@ -278,7 +278,7 @@ import numpy as np
 import scipy.stats as stats
 
 def shade_area(z_bounds, side='left', ax=None):
-    """Shade a region under the standard normal curve."""
+    """표준정규곡선 아래의 한 구간을 칠한다."""
     x = np.linspace(-4, 4, 200)
     ax.plot(x, stats.norm().pdf(x), color='k', alpha=0.9)
 
@@ -294,15 +294,15 @@ def shade_area(z_bounds, side='left', ax=None):
     ax.spines['bottom'].set_position('zero')
     ax.set_yticks([])
 
-# Left area
+# 왼쪽 넓이
 z = -1.2
 print(f"P(Z ≤ {z}) = {stats.norm().cdf(z):.4f}")
 
-# Right area
+# 오른쪽 넓이
 z = 1.2
 print(f"P(Z ≥ {z}) = {stats.norm().sf(z):.4f}")
 
-# Center area
+# 가운데 넓이
 z1, z2 = -2.1, 1.2
 print(f"P({z1} ≤ Z ≤ {z2}) = {stats.norm().cdf(z2) - stats.norm().cdf(z1):.4f}")
 ```

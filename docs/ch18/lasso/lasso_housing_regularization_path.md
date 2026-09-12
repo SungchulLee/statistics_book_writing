@@ -285,9 +285,9 @@ OLS, 능형회귀, 라쏘의 RMSE와 $R^2$ 막대그림에서 다음을 볼 수 
     from sklearn.preprocessing import StandardScaler
 
     np.random.seed(42)
-    # Assume X_scaled and y are already defined from the housing data
+    # 앞에서 만든 주택 자료의 X_scaled 와 y 를 그대로 쓴다
 
-    # Add 50 noise features
+    # 잡음 변수 50개를 덧붙인다
     noise = np.random.randn(len(y), 50)
     noise_cols = [f'noise_{i}' for i in range(50)]
     X_aug = pd.concat([X_scaled.reset_index(drop=True),

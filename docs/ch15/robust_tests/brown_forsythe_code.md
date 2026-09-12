@@ -279,12 +279,12 @@ Levene (mean)  W = 1.121795, p-value = 0.344444
         g2 = rng.standard_t(3, 30)
         g3 = rng.standard_t(3, 30)
 
-        # Median centering (Brown-Forsythe)
+        # 중앙값 중심 — Brown-Forsythe
         _, p_med = levene(g1, g2, g3, center='median')
         if p_med < 0.05:
             rej_med += 1
 
-        # Trimmed-mean centering: deviations of the FULL sample
+        # 절사평균 중심. 편차는 잘라 내지 않은 전체 표본에서 잰다
         # from the trimmed mean (data are NOT discarded)
         z_groups = [np.abs(g - trim_mean(g, 0.1)) for g in (g1, g2, g3)]
         _, p_trim = f_oneway(*z_groups)

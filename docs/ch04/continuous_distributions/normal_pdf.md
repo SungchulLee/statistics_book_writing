@@ -31,7 +31,7 @@ sigma = 2    # standard deviation
 # 평균에서 좌우 3 표준편차까지. 확률의 99.7%가 이 안에 있다.
 x = np.linspace(mu - 3 * sigma, mu + 3 * sigma, 100)
 
-# Evaluate PDF
+# 밀도함수 계산
 y = stats.norm(loc=mu, scale=sigma).pdf(x)
 
 fig, ax = plt.subplots(figsize=(12, 3))

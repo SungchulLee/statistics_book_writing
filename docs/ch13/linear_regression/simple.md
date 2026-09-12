@@ -38,7 +38,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-# Load dataset from URL
+# 인터넷에서 자료를 읽는다
 # openintro의 bdims 자료: 성인 507명의 신체 치수.
 # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
 data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
@@ -46,21 +46,21 @@ data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
 dataframe = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
 dataframe["Gender"] = dataframe["sex"].map({1: "Male", 0: "Female"})
 
-# Filter for male entries and select only the first 300 rows
+# 남성 자료만 골라 앞의 300행만 쓴다
 male_height_weight_data = dataframe[dataframe.Gender == "Male"].loc[:300, ["Height", "Weight"]]
 
-# Calculate means of height and weight
+# 키와 몸무게의 평균
 mean_height = male_height_weight_data.Height.mean()
 mean_weight = male_height_weight_data.Weight.mean()
 
-# Calculate standard deviations of height and weight
+# 키와 몸무게의 표준편차
 std_height = male_height_weight_data.Height.std()
 std_weight = male_height_weight_data.Weight.std()
 
-# Calculate correlation between height and weight
+# 키와 몸무게의 상관
 height_weight_corr = male_height_weight_data.corr().loc["Height", "Weight"]
 
-# Plot scatter plot of height vs. weight
+# 키와 몸무게의 산점도
 fig, ax = plt.subplots(figsize=(6, 6))
 ax.plot(male_height_weight_data.Height, male_height_weight_data.Weight, '.k', label='Data Points')
 
@@ -140,7 +140,7 @@ import numpy as np
 import pandas as pd
 
 def add_vertical_reference_line(axis, x_position, y_min, y_max, line_style, line_color='k', line_label=None):
-    """Draws a vertical reference line on the given axis."""
+    """주어진 축에 세로 기준선을 긋는다."""
     axis.plot([x_position, x_position], [y_min, y_max], linestyle=line_style, color=line_color, label=line_label)
 
 # openintro의 bdims 자료: 성인 507명의 신체 치수.
@@ -195,7 +195,7 @@ import numpy as np
 import pandas as pd
 
 def add_horizontal_reference_line(axis, y_position, x_min, x_max, line_style, line_color='k', line_label=None):
-    """Draws a horizontal reference line on the given axis."""
+    """주어진 축에 가로 기준선을 긋는다."""
     axis.plot([x_min, x_max], [y_position, y_position], linestyle=line_style, color=line_color, label=line_label)
 
 # openintro의 bdims 자료: 성인 507명의 신체 치수.
@@ -272,14 +272,14 @@ fig, axis = plt.subplots(figsize=(8, 8))
 axis.plot(male_height_weight_data.Height, male_height_weight_data.Weight, '.k', label="Data Points")
 axis.plot([mean_height], [mean_weight], 'ro', markersize=15, label="Point of Averages")
 
-# Positive SD Line spanning ±3 SD
+# 양의 SD 직선. 평균에서 ±3 표준편차까지 그린다
 axis.plot(
     [mean_height - 3 * std_dev_height, mean_height + 3 * std_dev_height],
     [mean_weight - 3 * std_dev_weight, mean_weight + 3 * std_dev_weight],
     linestyle="--", color='k', label="Positive SD Line"
 )
 
-# Annotate the SD triangle
+# SD 삼각형을 표시한다
 axis.plot([mean_height, mean_height + std_dev_height], [mean_weight, mean_weight], '-r')
 axis.plot([mean_height + std_dev_height, mean_height + std_dev_height],
           [mean_weight, mean_weight + std_dev_weight], '-r')
@@ -337,7 +337,7 @@ fig, axis = plt.subplots(figsize=(8, 8))
 axis.plot(male_height_weight_data.Height, male_height_weight_data.Weight, '.k', label="Data Points")
 axis.plot([mean_height], [mean_weight], 'ro', markersize=15, label="Point of Averages")
 
-# Negative SD Line spanning ±3 SD
+# 음의 SD 직선
 axis.plot(
     [mean_height - 3 * std_dev_height, mean_height + 3 * std_dev_height],
     [mean_weight + 3 * std_dev_weight, mean_weight - 3 * std_dev_weight],
@@ -399,7 +399,7 @@ std_dev_height = male_data.Height.std()
 std_dev_weight = male_data.Weight.std()
 correlation_coefficient = male_data[["Height", "Weight"]].corr().loc["Height", "Weight"]
 
-# Regression predictions
+# 회귀 예측값
 x_values = np.array(male_data.Height)
 y_pred = mean_weight + correlation_coefficient * (std_dev_weight / std_dev_height) * (x_values - mean_height)
 
@@ -408,7 +408,7 @@ axis.plot(male_data.Height, male_data.Weight, '.k', label="Data Points")
 axis.plot([mean_height], [mean_weight], 'ro', markersize=15, label="Point of Averages")
 axis.plot(x_values, y_pred, 'b', label="Regression Line")
 
-# Annotate the regression triangle
+# 회귀 삼각형을 표시한다. SD 직선보다 기울기가 완만하다
 axis.plot([mean_height, mean_height + std_dev_height], [mean_weight, mean_weight], '-b')
 axis.plot([mean_height + std_dev_height, mean_height + std_dev_height],
           [mean_weight, mean_weight + correlation_coefficient * std_dev_weight], '-b')
@@ -473,11 +473,11 @@ std_dev_height = male_height_weight_data.Height.std()
 std_dev_weight = male_height_weight_data.Weight.std()
 correlation_coefficient = male_height_weight_data.corr().loc["Height", "Weight"]
 
-# Regression of Y on X
+# Y 를 X 에 회귀
 heights = np.array(male_height_weight_data.Height)
 predicted_weights = mean_weight + correlation_coefficient * (std_dev_weight / std_dev_height) * (heights - mean_height)
 
-# Regression of X on Y
+# X 를 Y 에 회귀. 두 직선은 서로 다르다
 weights = np.array(male_height_weight_data.Weight)
 predicted_heights = mean_height + correlation_coefficient * (std_dev_height / std_dev_weight) * (weights - mean_weight)
 
@@ -485,7 +485,7 @@ fig, axis = plt.subplots(figsize=(8, 8))
 axis.plot([mean_height], [mean_weight], 'ro', markersize=15, label="Point of Averages")
 axis.plot(male_height_weight_data.Height, male_height_weight_data.Weight, '.k', label="Data Points")
 
-# Y on X regression line (blue)
+# Y 의 X 에 대한 회귀직선(파랑)
 axis.plot(heights, predicted_weights, '-b', label="y = alpha + beta * x")
 axis.plot([mean_height, mean_height + std_dev_height], [mean_weight, mean_weight], '-b')
 axis.plot([mean_height + std_dev_height, mean_height + std_dev_height],
@@ -500,7 +500,7 @@ axis.annotate("$r\\ \\sigma_y$",
     [mean_height + 1.1 * std_dev_height, mean_weight + 0.3 * std_dev_weight],
     fontsize=35, color="b")
 
-# X on Y regression line (red)
+# X 의 Y 에 대한 회귀직선(빨강)
 axis.plot(predicted_heights, weights, '-r', label="x = alpha + beta * y")
 axis.plot([mean_height, mean_height], [mean_weight, mean_weight + std_dev_weight], '-r')
 axis.plot([mean_height, mean_height + correlation_coefficient * std_dev_height],
@@ -565,7 +565,7 @@ y_pred = mean_weight + correlation_coefficient * (std_dev_weight / std_dev_heigh
 fig, axis = plt.subplots(figsize=(8, 8))
 axis.plot(male_data.Height, male_data.Weight, '.k', label="Data Points")
 
-# Vertical strip at mean + ~1 SD
+# 평균에서 1 표준편차쯤 떨어진 자리의 세로 띠
 axis.plot(
     [mean_height + 0.9 * std_dev_height, mean_height + 0.9 * std_dev_height],
     [male_data.Weight.min(), male_data.Weight.max()], '--b')
@@ -640,7 +640,7 @@ fig, axis = plt.subplots(figsize=(8, 8))
 axis.plot([mean_height], [mean_weight], 'ro', markersize=15, label="Point of Averages")
 axis.plot(male_height_weight_data.Height, male_height_weight_data.Weight, '.k', label="Data Points")
 
-# Horizontal strip at mean + ~1 SD weight
+# 몸무게가 평균보다 1 표준편차쯤 큰 자리의 가로 띠
 axis.plot(
     [male_height_weight_data.Height.min(), male_height_weight_data.Height.max()],
     [mean_weight + 0.9 * std_dev_weight, mean_weight + 0.9 * std_dev_weight], '--r')
@@ -775,7 +775,7 @@ aapl_data[tickers[1]] = aapl_data['Close'].pct_change()
 daily_returns = pd.merge(spy_data[[tickers[0]]], aapl_data[[tickers[1]]],
                          left_index=True, right_index=True).dropna()
 
-# Train/test split
+# 훈련·시험 나누기
 x_train = daily_returns.iloc[-200:-100, 0:1].values
 y_train = daily_returns.iloc[-200:-100, 1].values
 x_test = daily_returns.iloc[-100:, 0:1].values
@@ -857,7 +857,7 @@ regression_line = model.predict(spy_returns)
 
 fig, axes = plt.subplots(2, 2, figsize=(8, 8))
 
-# SPY histogram
+# SPY 수익률 히스토그램
 axes[0, 0].hist(spy_returns, density=True, bins=50, color='skyblue', edgecolor='black')
 axes[0, 0].set_xlim(-0.2, 0.2)
 axes[0, 0].set_xticks([-0.2, -0.1, 0, 0.1, 0.2])
@@ -865,7 +865,7 @@ axes[0, 0].set_title(f"{ticker_spy} Daily Returns Histogram")
 
 axes[0, 1].axis('off')
 
-# Scatter + regression
+# 산점도와 회귀직선
 axes[1, 0].plot(spy_returns, wmt_returns, '.', color='purple', label='Data Points')
 axes[1, 0].plot(spy_returns, regression_line, 'r-', label='Regression Line')
 axes[1, 0].set_xlabel(f"{ticker_spy} Daily Returns")
@@ -876,7 +876,7 @@ axes[1, 0].set_xticks([-0.2, -0.1, 0, 0.1, 0.2])
 axes[1, 0].set_yticks([-0.2, -0.1, 0, 0.1, 0.2])
 axes[1, 0].legend()
 
-# WMT histogram (horizontal)
+# WMT 수익률 히스토그램(가로)
 axes[1, 1].hist(wmt_returns, density=True, bins=50, orientation='horizontal',
                 color='lightgreen', edgecolor='black')
 axes[1, 1].set_ylim(-0.2, 0.2)

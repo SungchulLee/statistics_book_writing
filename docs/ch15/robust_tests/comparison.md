@@ -202,12 +202,13 @@ Bartlett 검정의 기각률이 정규 자료(0.692)와 $t_5$ 자료(0.693)에�
     n, k, R = 20, 3, 5000
     gen = lambda s: s * rng.standard_t(5, n)
 
-    # Step 1-2: null distribution -> empirical critical values
+    # 1-2단계: 귀무분포를 모의실험으로 얻어 경험적 기각값을 만든다
     null_b = np.array([stats.bartlett(*[gen(1) for _ in range(k)])[0]
                        for _ in range(R)])
     crit_b = np.quantile(null_b, 0.95)
 
-    # Step 3: size-adjusted power
+    # 3단계: 크기를 맞춘 검정력. 검정마다 실제 오류율이 달라, 그것을 0.05 로
+    # 맞춰 놓고 견주어야 검정력 비교가 공정해진다
     alt_b = np.array([stats.bartlett(*[gen(s) for s in (1, 1, 3**0.5)])[0]
                       for _ in range(R)])
     print(f"Bartlett empirical critical value: {crit_b:.4f} "

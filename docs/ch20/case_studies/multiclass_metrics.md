@@ -524,7 +524,11 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 ??? success "풀이"
     ```python
     def weighted_f1(M):
-        """Weighted-average F1-score."""
+        """가중평균 F1. 범주별 F1 을 그 범주의 크기로 가중해 평균한다.
+
+            거시평균과 미시평균의 사이에 놓인다. 범주 크기를 반영하되 범주별
+            성능을 따로 셈에 넣고 싶을 때 쓴다.
+            """
         _, _, f1s = per_class_metrics(M)
         supports = M.sum(axis=1)          # row sums = class sizes
         total = supports.sum()

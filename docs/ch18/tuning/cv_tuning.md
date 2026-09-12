@@ -192,7 +192,7 @@ $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여�
         sigma = X_train.std(axis=0)
         X_train_s = (X_train - mu) / sigma
         X_val_s = (X_val - mu) / sigma
-        # fit on X_train_s, evaluate on X_val_s
+        # 훈련자료로 적합하고 검증자료에서 잰다
         if k == 0:
             print("훈련 겹 평균:", np.round(X_train_s.mean(axis=0), 4))
             print("검증 겹 평균:", np.round(X_val_s.mean(axis=0), 4))
@@ -225,7 +225,7 @@ CV MSE 평균과 표준오차)가 주어졌을 때 $\hat{\lambda}_{1\text{SE}}$�
         best_idx = np.argmin(cv_mean)
         threshold = cv_mean[best_idx] + cv_se[best_idx]
 
-        # Among lambdas with CV error <= threshold, pick the largest
+        # 교차검증 오차가 문턱 이하인 lambda 중 가장 큰 것을 고른다
         candidates = np.where(cv_mean <= threshold)[0]
         best_1se_idx = candidates[np.argmax(lambdas[candidates])]
         return lambdas[best_1se_idx]

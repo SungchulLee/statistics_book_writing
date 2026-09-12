@@ -205,9 +205,9 @@ def main():
     t2, s2 = kaplan_meier(times_2, censored_2)
 
     fig, ax = plt.subplots(figsize=(10, 5))
-    # where="post" 가 계단을 오른쪽으로 뻗게 한다. 생존함수는 사건이 일어난
-# 그 순간에 떨어지고 다음 사건까지 평평하므로, 이 설정이라야 맞다.
-ax.step(t1, s1, where="post", linewidth=2, label="Group 1 (slow)")
+    # where="post" 가 계단을 오른쪽으로 뻗게 한다. 생존함수는 사건이
+    # 일어난 순간에 떨어지고 다음 사건까지 평평하므로 이 설정이라야 맞다.
+    ax.step(t1, s1, where="post", linewidth=2, label="Group 1 (slow)")
     ax.step(t2, s2, where="post", linewidth=2, label="Group 2 (fast)")
     ax.set_xlabel("Time")
     ax.set_ylabel("Survival Probability")

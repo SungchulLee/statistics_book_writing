@@ -31,20 +31,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.utils import resample
 
-# Set random seed
+# 난수 씨앗 고정
 np.random.seed(seed=3)
 
-# Simulate income data (or load real loan income data)
+# 소득 자료를 흉내 낸다. 실제 대출 소득 자료를 읽어 써도 된다
 loans_income = np.random.exponential(scale=50000, size=5000) + 20000
 
-# Draw a single sample of n=20 from the population
+# 모집단에서 크기 20 짜리 표본 하나를 뽑는다
 original_sample = resample(loans_income, n_samples=20, replace=False)
 original_mean = original_sample.mean()
 
 print(f"Original sample size: {len(original_sample)}")   # 20
 print(f"Original sample mean: ${original_mean:,.0f}")    # $67,846
 
-# Bootstrap procedure: resample from the sample 500 times
+# 붓스트랩: 그 표본에서 500번 재표집한다
 bootstrap_means = []
 for _ in range(500):
     bootstrap_sample = resample(original_sample)  # with replacement
@@ -52,7 +52,7 @@ for _ in range(500):
 
 bootstrap_means = pd.Series(bootstrap_means)
 
-# Compute confidence intervals
+# 신뢰구간 계산
 ci_90_lower, ci_90_upper = bootstrap_means.quantile([0.05, 0.95])
 ci_95_lower, ci_95_upper = bootstrap_means.quantile([0.025, 0.975])
 
@@ -80,7 +80,7 @@ Mean of bootstrap means: $68,444
 ```python
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-# Plot 1: 90% Confidence Interval
+# 첫째 그림: 90% 신뢰구간
 ax1.hist(bootstrap_means, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
 ax1.axvline(ci_90_lower, color='darkred', linestyle='--', linewidth=2.5, label='90% CI limits')
 ax1.axvline(ci_90_upper, color='darkred', linestyle='--', linewidth=2.5)
@@ -100,7 +100,7 @@ ax1.legend(loc='upper left', fontsize=9)
 ax1.spines[['top', 'right']].set_visible(False)
 ax1.grid(True, alpha=0.3, axis='y')
 
-# Plot 2: 95% Confidence Interval
+# 둘째 그림: 95% 신뢰구간
 ax2.hist(bootstrap_means, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
 ax2.axvline(ci_95_lower, color='darkblue', linestyle='--', linewidth=2.5, label='95% CI limits')
 ax2.axvline(ci_95_upper, color='darkblue', linestyle='--', linewidth=2.5)

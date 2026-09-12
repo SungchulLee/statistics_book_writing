@@ -137,7 +137,7 @@ stat, p_value = wilcoxon(after, before)
 print(f"Test Statistic: {stat}")     # 0.0
 print(f"P-value: {p_value}")         # 0.001953125
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value < alpha:
     print("Reject the null hypothesis: Significant improvement in scores.")

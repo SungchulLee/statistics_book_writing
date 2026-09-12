@@ -139,9 +139,9 @@ _, p_value_group1 = shapiro(group1)
 _, p_value_group2 = shapiro(group2)
 _, p_value_group3 = shapiro(group3)
 
-# Check if the data is normally distributed
+# 자료가 정규인지 확인한다
 if p_value_group1 > 0.05 and p_value_group2 > 0.05 and p_value_group3 > 0.05:
-    # Perform ANOVA
+    # 분산분석 수행
     stat, p_value = f_oneway(group1, group2, group3)
     print(f"ANOVA test: p-value={p_value}")
 else:

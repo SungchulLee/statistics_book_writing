@@ -158,7 +158,7 @@ print(f"Ex. Kurtosis: {kurtosis:.4f}")
 _, p_ks = stats.kstest(returns, 'norm', args=(mean_ret, std_ret))
 _, p_jb = stats.jarque_bera(returns)
 
-# anderson() returns (statistic, critical_values, significance_level) -- no p-value
+# anderson() 은 (통계량, 기각값, 유의수준) 을 돌려준다. p-값은 주지 않는다
 ad_result = stats.anderson(returns, dist='norm')
 
 print(f"\nKolmogorov-Smirnov test p-value: {p_ks:.4f}")

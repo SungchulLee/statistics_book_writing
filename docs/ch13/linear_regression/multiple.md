@@ -148,11 +148,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-# Load data
+# 자료 읽기
 url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
 df = pd.read_csv(url, usecols=[1, 2, 3, 4])
 
-# Add interaction term
+# 교호작용 항을 더한다
 df['TV:Radio'] = df['TV'] * df['Radio']
 
 # 앞에서는 무작위로 나눴지만 여기서는 앞 70%, 뒤 30% 로 자른다.
@@ -170,7 +170,7 @@ y_train = train_data['Sales']
 x_test = test_data[['TV', 'Radio', 'TV:Radio']]
 y_test = test_data['Sales']
 
-# Fit model
+# 모형 적합
 model = LinearRegression()
 model.fit(x_train, y_train)
 
@@ -180,7 +180,7 @@ y_test_pred = model.predict(x_test)
 print(f"Model Intercept: {model.intercept_:.4f}")
 print(f"Model Coefficients: {np.round(model.coef_, 4)}\n")
 
-# Visualize
+# 그림으로 확인
 fig, axes = plt.subplots(1, 2, figsize=(12, 3))
 
 for ax, title, y_actual, y_pred in zip(axes, ("Train Set", "Test Set"), (y_train, y_test), (y_train_pred, y_test_pred)):

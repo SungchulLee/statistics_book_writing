@@ -199,11 +199,11 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
 ??? success "풀이"
 
     ```python
-    # Quantile bins
+    # 분위수로 나눈 구간 — 구간마다 개수가 고르다
     df['q_bin'] = pd.qcut(df['age'], q=5)
     q_means = df.groupby('q_bin')['price'].agg(['mean', 'count'])
 
-    # Equal-width bins
+    # 폭이 같은 구간 — 구간마다 개수가 들쭉날쭉하다
     df['w_bin'] = pd.cut(df['age'], bins=5)
     w_means = df.groupby('w_bin')['price'].agg(['mean', 'count'])
     ```
@@ -231,7 +231,7 @@ poly_model = LinearRegression().fit(X_poly, df['price'])
     ```python
     bin_edges = [0, 20, 40, 60, 80, 150]
     bin_indices = np.digitize(df['age'], bin_edges)
-    # Create dummy matrix
+    # 가변수 행렬을 만든다
     K = len(bin_edges) - 1
     X_digit = np.zeros((len(df), K))
     for k in range(K):

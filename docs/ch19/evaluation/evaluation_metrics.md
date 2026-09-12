@@ -390,7 +390,11 @@ ROC 곡선 위의 네 점 $(0, 0)$, $(0.2, 0.7)$, $(0.5, 0.9)$, $(1, 1)$이 주�
 
     ```python
     def pr_curve(y_true, scores):
-        """Compute precision-recall curve for varying thresholds."""
+        """문턱값을 바꿔 가며 정밀도-재현율 곡선을 구한다.
+
+            양성이 드문 자료에서는 ROC 보다 이 곡선이 낫다. ROC 의 FPR 은 분모가
+            음성 수라, 음성이 압도적으로 많으면 거의 움직이지 않기 때문이다.
+            """
         thresholds = np.sort(np.unique(scores))[::-1]
         precisions, recalls = [1.0], [0.0]
         n_pos = np.sum(y_true == 1)

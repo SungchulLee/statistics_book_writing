@@ -41,7 +41,7 @@ from scipy.stats import t as tdist
 
 def test_diff_two_means(n1, m1, s1, n2, m2, s2, method="welch",
                         delta0=0.0, alt="two-sided", alpha=0.05):
-    """H0: mu1 - mu2 = delta0.
+    """귀무가설 H0: mu1 - mu2 = delta0.
 
     delta0을 0이 아닌 값으로 둘 수 있게 해 두었다.
     "차이가 있는가"가 아니라 "차이가 5 이상인가"를 묻는 동등성·비열등성

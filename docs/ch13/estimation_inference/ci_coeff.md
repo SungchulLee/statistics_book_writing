@@ -323,12 +323,12 @@ s_square, s = calculate_residual_variance(y, y_hat, n)
 print(f"True σ²: {sigma**2}")
 print(f"Estimated s²: {s_square:.4f}")
 
-# Compute intervals
+# 구간 계산
 x0, lower, upper, lower2, upper2 = confidence_intervals(
     x, y_hat, beta_hat, x_bar, y_bar, n, s
 )
 
-# Plot
+# 그림으로 확인
 plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2)
 ```
 

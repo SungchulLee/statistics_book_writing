@@ -290,7 +290,7 @@ for ax, data, title in zip(axes,
 plt.tight_layout()
 plt.show()
 
-# Verify independence for uncorrelated normals
+# 정규분포에서는 무상관이 곧 독립임을 확인한다
 p_joint = np.mean((indep_data[:, 0] > 1) & (indep_data[:, 1] > 1))
 p_prod = np.mean(indep_data[:, 0] > 1) * np.mean(indep_data[:, 1] > 1)
 print(f"Jointly normal, ρ=0:")

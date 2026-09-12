@@ -360,7 +360,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
         print("naive softmax     :", naive)
         print("naive loss        :", -(y * np.log(naive)).sum())
 
-    # in feed_forward: compute the loss from logits, not from probabilities
+    # feed_forward 에서는 확률이 아니라 로짓으로부터 손실을 계산한다
     loss = -(y * log_softmax(z_o)).sum()
     y_hat = softmax(z_o)          # still needed for the gradient
     print("stable softmax    :", y_hat)
@@ -464,7 +464,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 
     loss_sum = -(y * log_softmax(z_o)).sum()
     loss = -(y * log_softmax(z_o)).sum() / x.shape[0]
-    # and divide every gradient by x.shape[0] as well
+    # 기울기도 모두 x.shape[0] 으로 나눈다
     print(f"합 기준 손실: {loss_sum:.4f},  평균 기준 손실: {loss:.4f}")
     ```
 

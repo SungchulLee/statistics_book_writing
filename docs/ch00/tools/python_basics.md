@@ -152,7 +152,7 @@ from scipy import stats
 ## 예제 5. 파이썬과 주피터 기초 { .eg }
 
 ```python
-"""Demonstrate core Python idioms used in statistics."""
+"""통계에 자주 쓰이는 파이썬 관용구를 모아 보인다."""
 
 # === Compute a summary without NumPy ===
 def summarize(data):

@@ -124,7 +124,7 @@ data = rng.normal(loc=50, scale=10, size=500)
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-# Left: histogram with theoretical density overlay
+# 왼쪽: 히스토그램에 이론 밀도함수를 겹친다
 axes[0].hist(data, bins=30, density=True, alpha=0.5,
              edgecolor="black", label="Sample")
 x = np.linspace(data.min(), data.max(), 200)
@@ -134,7 +134,7 @@ axes[0].set_xlabel("value"); axes[0].set_ylabel("density")
 axes[0].set_title("Histogram with density overlay")
 axes[0].legend()
 
-# Right: Q-Q plot
+# 오른쪽: Q-Q 그림
 from scipy.stats import probplot
 probplot(data, dist="norm", plot=axes[1])
 axes[1].set_title("Q-Q plot vs. Normal")

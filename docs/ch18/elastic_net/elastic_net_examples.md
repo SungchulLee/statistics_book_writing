@@ -229,7 +229,7 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
     np.random.seed(42)
     n, p = 200, 50
 
-    # Correlated block in first 10 features
+    # 앞의 열 변수는 서로 상관된 덩어리를 이룬다
     Sigma = np.eye(p)
     for i in range(10):
         for j in range(10):

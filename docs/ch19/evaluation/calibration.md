@@ -158,7 +158,7 @@ $\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
     n_g = np.full(10, 100.0)
     n = n_g.sum()
 
-    # Brier score, assuming every prediction in bin g equals p_bar[g]
+    # Brier 점수. 구간 g 안의 예측을 모두 그 구간의 평균확률 p_bar[g] 로 본 값이다
     BS = np.sum(n_g * (y_bar * (1 - p_bar)**2 + (1 - y_bar) * p_bar**2)) / n
 
     y_all = np.sum(n_g * y_bar) / n

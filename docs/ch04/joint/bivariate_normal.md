@@ -63,12 +63,12 @@ for i, cfg in enumerate(configs):
     rv = multivariate_normal(mean=cfg["mu"], cov=cfg["cov"])
     Z = rv.pdf(pos)      # 각 격자점에서의 밀도. (200, 200) 모양
 
-    # 3D surface
+    # 3차원 곡면
     ax = fig.add_subplot(2, 4, i + 1, projection="3d")
     ax.plot_surface(X, Y, Z, cmap="viridis", alpha=0.85, edgecolor="none")
     ax.set_title(cfg["label"], fontsize=9)
 
-    # Contour
+    # 등고선
     ax2 = fig.add_subplot(2, 4, i + 5)
     ax2.contourf(X, Y, Z, levels=20, cmap="viridis")
     ax2.contour(X, Y, Z, levels=8, colors="white", linewidths=0.5)

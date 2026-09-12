@@ -193,7 +193,7 @@ def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
     plt.tight_layout()
     plt.show()
 
-# Exponential(1): skewed distribution
+# Exp(1): 오른쪽으로 치우친 분포
 berry_esseen_visualization(
     'Exponential(1)',
     lambda size: np.random.exponential(1, size),

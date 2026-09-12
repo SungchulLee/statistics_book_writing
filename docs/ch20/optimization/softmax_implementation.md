@@ -439,15 +439,15 @@ NumPy 실험을 작성하라.
     ```python
     z = np.array([[1000.0, 1001.0, 999.0]])
 
-    # Naive softmax (no shift)
+    # 순진한 소프트맥스. 최댓값을 빼지 않았다
     exp_z_naive = np.exp(z)
     softmax_naive = exp_z_naive / np.sum(exp_z_naive, axis=1, keepdims=True)
     print("Naive:", softmax_naive)
-    # Output: [[nan nan nan]]  (because np.exp(1001) = inf)
+    # 출력: [[nan nan nan]] — np.exp(1001) 이 inf 가 되기 때문이다
 
-    # Stable softmax (max subtraction)
+    # 안정한 소프트맥스. 최댓값을 빼고 계산한다
     print("Stable:", softmax(z))
-    # Output: [[0.2447  0.6652  0.0900]]
+    # 출력: [[0.2447  0.6652  0.0900]]
     ```
 
     출력:
@@ -532,7 +532,7 @@ $\eta_0 = 1.0$으로 붓꽃 자료에서 500 에포크 학습하고, 훈련 손�
     loss_sched, loss_const = [], []
 
     for epoch in range(total_epochs):
-        # Scheduled learning rate
+        # 학습률을 세대에 따라 줄여 간다
         lr_t = eta0 * (gamma ** (epoch // 50))
 
         # --- Scheduled ---

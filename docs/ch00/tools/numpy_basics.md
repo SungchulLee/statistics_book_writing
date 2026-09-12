@@ -515,8 +515,8 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
 ??? success "풀이"
     ```python
     def pairwise_distances(X):
-        # X has shape (n, p). diff has shape (n, n, p) after broadcasting:
-        # X[:, None, :] is (n, 1, p), X[None, :, :] is (1, n, p)
+        # X 의 모양은 (n, p) 다. 브로드캐스팅을 거치면 diff 는 (n, n, p) 가 된다:
+        # X[:, None, :] 가 (n, 1, p), X[None, :, :] 가 (1, n, p) 이기 때문이다
         diff = X[:, None, :] - X[None, :, :]
         return np.sqrt((diff ** 2).sum(axis=-1))
 

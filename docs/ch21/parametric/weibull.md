@@ -274,7 +274,7 @@ $k$와 $\lambda$를 추정하는 절차를 구현하고, 참값이 알려진 모
     C = rng.exponential(60.0, n)
     t = np.minimum(T, C); d = (T <= C).astype(int)
 
-    # Kaplan-Meier
+    # 카플란-마이어 추정값
     times = np.unique(t[d == 1])
     S, KM = 1.0, []
     for u in times:

@@ -71,7 +71,7 @@ for i, rho in enumerate(rho_vals):
     mu_cond = rho * cond_val
     sigma_cond = np.sqrt(1 - rho**2)
 
-    # Joint contour with slice
+    # 결합분포 등고선에 자른 면을 표시
     ax = axes[i, 0]
     ax.contourf(X, Y, Z, levels=20, cmap="Blues", alpha=0.4)
     ax.axvline(cond_val, color="red", linestyle="--", lw=2, label=f"a = {cond_val}")
@@ -81,7 +81,7 @@ for i, rho in enumerate(rho_vals):
     ax.legend(fontsize=8)
     ax.set_aspect("equal")
 
-    # Conditional PDF
+    # 조건부 밀도함수
     ax = axes[i, 1]
     cond_y = conditional_pdf(cond_val, y, rho)
     ax.plot(y, cond_y, "b-", lw=2)

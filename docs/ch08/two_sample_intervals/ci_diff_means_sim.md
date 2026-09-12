@@ -277,7 +277,7 @@ plt.show()
         y = np.random.normal(mu2, sigma2, n2)
         s1, s2 = x.std(ddof=1), y.std(ddof=1)
         diff = x.mean() - y.mean()
-        # Welch
+        # Welch 방법 — 두 분산이 다를 수 있다고 본다
         se_w = np.sqrt(s1**2/n1 + s2**2/n2)
         num = (s1**2/n1 + s2**2/n2)**2
         den = (s1**2/n1)**2/9 + (s2**2/n2)**2/9
@@ -285,7 +285,7 @@ plt.show()
         crit_w = t_dist.ppf(0.975, df_w)
         if diff - crit_w*se_w <= delta <= diff + crit_w*se_w:
             welch_cov += 1
-        # Pooled
+        # 합동 방법 — 두 분산이 같다고 본다
         sp2 = (9*s1**2 + 9*s2**2)/18
         se_p = np.sqrt(sp2*(1/10+1/10))
         crit_p = t_dist.ppf(0.975, 18)

@@ -151,7 +151,7 @@ var2 = np.var(sample2, ddof=1)
 # 두 표본분산의 비. 귀무가설이 참이면 이 값이 1 근처에 놓인다.
 f_statistic = var1 / var2
 
-# Degrees of freedom
+# 자유도
 df1 = len(sample1) - 1
 df2 = len(sample2) - 1
 
@@ -164,7 +164,7 @@ print(f"F-statistic: {f_statistic:.4f}")
 print(f"Degrees of freedom: {df1}, {df2}")
 print(f"Two-sided p-value: {p_value:.4f}")
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value < alpha:
     print("Reject H0: variances are significantly different.")

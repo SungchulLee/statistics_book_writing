@@ -141,7 +141,7 @@ from scipy import stats
 
 def two_sample_z_test(x_bar, y_bar, sigma1, sigma2, n1, n2,
                       delta0=0, alternative="two-sided"):
-    """Two-sample z-test for the difference of means.
+    """두 평균의 차이에 대한 이표본 z 검정.
 
     Parameters
     ----------

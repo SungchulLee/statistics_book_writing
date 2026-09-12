@@ -236,7 +236,7 @@ def moods_median_test(*groups, correction=True):
 
     return chi2_stat, p_value, contingency_table
 
-# Example Data
+# 예시 자료
 group_a = np.array([50, 55, 60, 65, 70])
 group_b = np.array([45, 50, 55, 60, 65])
 

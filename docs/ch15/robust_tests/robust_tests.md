@@ -296,11 +296,11 @@ $H = \sum_i n_i(\bar{R}_i - \bar{R})^2$ 형태의 통계량이 왜 카이제곱�
     import numpy as np
     from scipy import stats
 
-    # Original: spread concentrated in one observation per group
+    # 원자료: 퍼짐이 집단마다 관측값 하나에 몰려 있다
     orig = ([65, 70, 75, 80, 85], [60, 65, 70, 75, 90], [55, 60, 65, 70, 95])
 
-    # Restructured: same variance ratio, spread distributed evenly
-    # sd ratios 1 : sqrt(2.12) : sqrt(3.88)  (matching 62.5 : 132.5 : 242.5)
+    # 다시 짠 자료: 분산비는 같되 퍼짐이 고르게 나뉘어 있다
+    # 표준편차의 비는 1 : sqrt(2.12) : sqrt(3.88) 로, 분산 62.5 : 132.5 : 242.5 에 해당한다
     base = np.array([-2, -1, 0, 1, 2])
     new = tuple((75 + base * s).tolist()
                 for s in (np.sqrt(62.5 / 2.5), np.sqrt(132.5 / 2.5),

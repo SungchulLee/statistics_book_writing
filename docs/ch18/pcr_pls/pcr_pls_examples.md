@@ -301,10 +301,10 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
     beta_true = np.array([3, -1, 2, 0, 0])
     y = X @ beta_true + np.random.randn(n) * 0.5
 
-    # Standardize
+    # 표준화. 벌점회귀에서는 필수다
     X_s = StandardScaler().fit_transform(X)
 
-    # Manual PCR via SVD
+    # 특이값분해로 직접 구현한 주성분회귀
     U, D, Vt = np.linalg.svd(X_s, full_matrices=False)
     M = 3  # number of components
     Z = U[:, :M] * D[:M]  # first M principal components
@@ -313,7 +313,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
     beta_pcr_manual = Vt[:M].T @ gamma
     y_pred_manual = X_s @ beta_pcr_manual + y_bar
 
-    # Scikit-learn PCR
+    # sklearn 으로 같은 일 하기
     pca = PCA(n_components=M)
     Z_sk = pca.fit_transform(X_s)
     reg = LinearRegression().fit(Z_sk, y)

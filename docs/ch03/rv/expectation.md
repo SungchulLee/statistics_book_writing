@@ -50,13 +50,13 @@ $$
     ```python
     import numpy as np
 
-    # Expected value of a fair die
+    # 공정한 주사위의 기댓값
     values = np.arange(1, 7)
     probs = np.ones(6) / 6
     expected = np.sum(values * probs)
     print(f"E[fair die] = {expected:.4f}")
 
-    # Simulation
+    # 모의실험
     np.random.seed(42)
     rolls = np.random.randint(1, 7, size=100_000)
     print(f"Simulated mean = {rolls.mean():.4f}")

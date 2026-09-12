@@ -45,7 +45,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Session times for Page A and Page B
+# A 페이지와 B 페이지의 체류시간
 page_a = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167])
 page_b = np.array([173, 181, 182, 170, 169, 177, 168, 183, 169, 164])
 
@@ -156,8 +156,8 @@ plt.show()
 import numpy as np
 rng = np.random.default_rng(0)
 
-# Control:   200 conversions out of 23,739 users
-# Treatment: 182 conversions out of 22,588 users
+# 대조군: 23,739명 중 200명 전환
+# 실험군: 22,588명 중 182명 전환
 n_control, conv_control = 23739, 200
 n_treatment, conv_treat = 22588, 182
 
@@ -169,7 +169,7 @@ print(f"Control conversion rate:   {rate_control:.4f}")     # 0.0084
 print(f"Treatment conversion rate: {rate_treatment:.4f}")   # 0.0081
 print(f"Observed difference: {obs_diff_rates:.6f}")         # -0.000368
 
-# Binary response vector: the first (conv_control + conv_treat) entries are 1
+# 이진 반응벡터. 앞의 (대조군 전환 + 실험군 전환) 개가 1 이다
 binary_response = np.zeros(n_control + n_treatment)
 binary_response[:conv_control + conv_treat] = 1
 

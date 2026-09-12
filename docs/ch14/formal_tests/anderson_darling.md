@@ -166,7 +166,7 @@ data = np.random.normal(1, 10, 1000)
 statistic, p_value = normal_ad(data)
 print(f"Anderson-Darling Test: Statistic={statistic}, p-value={p_value}")
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value <= alpha:
     print("Reject H_0: The data is not normally distributed.")

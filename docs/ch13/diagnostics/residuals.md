@@ -224,10 +224,10 @@ model_quad = sm.OLS(y, X_quad).fit()
 residuals_quad = model_quad.resid
 y_pred_quad = model_quad.fittedvalues
 
-# Plot residuals with LOWESS smoothing
+# 잔차에 평활선을 얹어 그린다
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-# Linear model residuals
+# 선형 모형의 잔차
 ax1.scatter(y_pred_linear, residuals_linear, alpha=0.6)
 ax1.axhline(y=0, color='r', linestyle='--', linewidth=2)
 
@@ -246,7 +246,7 @@ ax1.grid(True, alpha=0.3)
 ax2.scatter(y_pred_quad, residuals_quad, alpha=0.6)
 ax2.axhline(y=0, color='r', linestyle='--', linewidth=2)
 
-# Add LOWESS smooth
+# 평활선을 얹는다
 lowess_result_quad = lowess(residuals_quad, y_pred_quad, frac=0.3)
 ax2.plot(lowess_result_quad[:, 0], lowess_result_quad[:, 1], 'b-', linewidth=2.5,
          label='LOWESS Trend')
@@ -260,7 +260,7 @@ ax2.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 
-# Summary comparison
+# 요약 비교
 print("Model Comparison:")
 print(f"Linear Model R²:    {model_linear.rsquared:.4f}")
 print(f"Quadratic Model R²: {model_quad.rsquared:.4f}")
@@ -353,7 +353,7 @@ data['Sqrt Abs Standardized Residuals'] = np.sqrt(np.abs(data['Standardized Resi
 
 fig, (ax0, ax1, ax2) = plt.subplots(1, 3, figsize=(18, 5))
 
-# Regression Plot
+# 회귀 그림
 ax0.scatter(data['X'], data['y'], alpha=0.7, label='Data Points')
 ax0.plot(data['X'], data['Fitted'], color='orange', label='Regression Line')
 ax0.set_title('Regression Plot')
@@ -361,7 +361,7 @@ ax0.set_xlabel('Predictor (X)')
 ax0.set_ylabel('Response (y)')
 ax0.legend()
 
-# Residuals vs. Fitted Values
+# 잔차 대 적합값
 ax1.scatter(data['Fitted'], data['Residuals'], alpha=0.7)
 ax1.axhline(y=0, color='r', linestyle='--')
 ax1.set_title('Residuals vs. Fitted Values Plot')

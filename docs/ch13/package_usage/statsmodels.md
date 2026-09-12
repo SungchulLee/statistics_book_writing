@@ -224,23 +224,23 @@ Notes:
 # 적합 결과에서 꺼낼 수 있는 것들을 한자리에 모았다.
 print("Coefficients:", results.params)
 
-# Standard errors
+# 표준오차
 print("Standard errors:", results.bse)
 
-# P-values
+# p-값
 print("P-values:", results.pvalues)
 
-# Confidence intervals
+# 신뢰구간
 print("95% CI:\n", results.conf_int(alpha=0.05))
 
-# R-squared and adjusted R-squared
+# 결정계수와 수정결정계수
 print("R-squared:", results.rsquared)
 print("Adjusted R-squared:", results.rsquared_adj)
 
-# Residuals
+# 잔차
 residuals = results.resid
 
-# Fitted values
+# 적합값
 fitted = results.fittedvalues
 
 # AIC and BIC

@@ -427,19 +427,19 @@ $p = 0.335$이므로 두 상관이 다르다는 증거가 없다. $0.72$와 $0.6
     import numpy as np
 
     np.random.seed(0)
-    # Group 1: low baseline, low x
+    # 1집단: 기준선도 낮고 x 도 작다
     x1 = np.random.normal(1, 0.3, 60)
     y1 = 2 - 1.0 * x1 + np.random.normal(0, 0.5, 60)
 
-    # Group 2: high baseline, high x
+    # 2집단: 기준선도 높고 x 도 크다
     x2 = np.random.normal(4, 0.3, 60)
     y2 = 10 - 1.0 * x2 + np.random.normal(0, 0.5, 60)
 
-    # Within-group slopes
+    # 집단 안에서의 기울기
     m1, _ = np.polyfit(x1, y1, 1)
     m2, _ = np.polyfit(x2, y2, 1)
 
-    # Overall slope
+    # 합쳐 놓았을 때의 기울기 — 부호가 뒤집힌다
     x_all = np.concatenate([x1, x2])
     y_all = np.concatenate([y1, y2])
     m_all, _ = np.polyfit(x_all, y_all, 1)

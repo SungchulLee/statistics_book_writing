@@ -689,7 +689,7 @@ $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. �
 
 ```python
 def chi2_stat(observed, expected):
-    """Calculate chi-square statistic."""
+    """카이제곱 통계량을 구한다. 칸마다 (관측-기대)^2/기대 를 더한 값이다."""
     pearson_residuals = []
     for row, expect in zip(observed, expected):
         pearson_residuals.append([(observe - expect) ** 2 / expect

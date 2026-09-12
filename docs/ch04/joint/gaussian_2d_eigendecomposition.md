@@ -88,13 +88,13 @@ for i, cfg in enumerate(configs):
     eigenvalues = eigenvalues[idx]
     eigenvectors = eigenvectors[:, idx]
 
-    # 3D surface
+    # 3차원 곡면
     axes[i, 0].remove()
     ax3d = fig.add_subplot(len(configs), 2, 2*i + 1, projection="3d")
     ax3d.plot_surface(X, Y, Z, cmap="viridis", alpha=0.85, edgecolor="none")
     ax3d.set_title(cfg["label"], fontsize=10)
 
-    # Contour with eigenvectors
+    # 등고선에 고유벡터를 얹는다
     ax = axes[i, 1]
     ax.contourf(X, Y, Z, levels=20, cmap="Blues", alpha=0.5)
     colors_ev = ["red", "darkgreen"]

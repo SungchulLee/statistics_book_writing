@@ -226,7 +226,7 @@ Brown-Forsythe 검정의 크기가 여러 분포에서 안정적인지 모의실
     import numpy as np
     from scipy import stats
 
-    # Group 2 has one extreme outlier pulling the mean far from the bulk
+    # 2집단에는 극단값이 하나 있어 평균이 나머지 무리에서 멀리 끌려간다
     g1 = [10, 11, 12, 13, 14, 11, 12]
     g2 = [10, 11, 12, 13, 14, 11, 60]   # 60 is the outlier
     g3 = [10, 11, 12, 13, 14, 11, 12]

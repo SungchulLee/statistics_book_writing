@@ -279,13 +279,14 @@ $$
 
     rng = np.random.default_rng(7)
     n = 200_000
-    # shared frailty: subjects with high Z fail early AND drop out early
+    # 공유 프레일티: Z 가 큰 개체는 사건도 일찍 겪고 관찰에서도 일찍 빠진다.
+    # 중도절단이 사건과 얽히는 경우라, 보통의 방법이 편향된 답을 준다
     Z = rng.exponential(1.0, n)
     T = rng.exponential(10.0, n) / Z      # high Z -> short T
     C = rng.exponential(10.0, n) / Z      # high Z -> short C  (dependent!)
     t = np.minimum(T, C); d = (T <= C).astype(int)
 
-    # Kaplan-Meier area (restricted to the observed range)
+    # 카플란-마이어 곡선 아래 넓이. 관측된 구간까지만 잰다
     def km_area(t, d, tmax):
         order = np.argsort(t); ts, ds = t[order], d[order]
         S, prev, area = 1.0, 0.0, 0.0

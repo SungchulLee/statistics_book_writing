@@ -226,7 +226,7 @@ $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
     np.random.seed(42)
     n, p = 200, 10
 
-    # Correlated design
+    # 상관된 설계행렬
     rho = 0.9
     Sigma = rho * np.ones((p, p)) + (1 - rho) * np.eye(p)
     L = np.linalg.cholesky(Sigma)
@@ -244,7 +244,7 @@ $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
     )
     ols_rmse = np.sqrt(-ols_scores.mean())
 
-    # Ridge grid search
+    # 능형회귀의 격자탐색
     best_rmse, best_lam = np.inf, None
     for exp in range(-3, 4):
         lam = 10.0 ** exp

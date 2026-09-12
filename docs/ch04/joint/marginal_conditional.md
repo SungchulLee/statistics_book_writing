@@ -230,12 +230,12 @@ from scipy import integrate
 def joint_pdf(x, y):
     return 2.0 if 0 <= x <= y <= 1 else 0.0
 
-# Marginal f_X(x) = integral of f(x,y) dy from x to 1
+# 주변밀도 f_X(x) 는 f(x,y) 를 y 에 대해 x 에서 1 까지 적분한 것이다
 def marginal_X(x):
     result, _ = integrate.quad(lambda y: joint_pdf(x, y), x, 1)
     return result
 
-# E[Y | X=x] via conditional
+# 조건부분포로 구한 E[Y | X=x]
 def E_Y_given_X(x):
     fx = marginal_X(x)
     if fx == 0:
@@ -243,7 +243,7 @@ def E_Y_given_X(x):
     result, _ = integrate.quad(lambda y: y * joint_pdf(x, y) / fx, x, 1)
     return result
 
-# Verify Law of Total Expectation
+# 전체기댓값의 법칙 확인
 E_Y, _ = integrate.quad(lambda x: E_Y_given_X(x) * marginal_X(x), 0, 1)
 print(f"E[Y] via Law of Total Expectation: {E_Y:.4f}")  # Should be 2/3
 ```

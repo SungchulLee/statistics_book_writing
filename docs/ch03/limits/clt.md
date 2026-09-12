@@ -101,7 +101,7 @@ def demonstrate_clt(distribution_type, sample_size, n_simulations=10_000):
     plt.tight_layout()
     plt.show()
 
-# Demonstrate with both distributions
+# 두 분포에 모두 적용해 본다
 demonstrate_clt('uniform', sample_size=5)
 demonstrate_clt('exponential', sample_size=5)
 ```

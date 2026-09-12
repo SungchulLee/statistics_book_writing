@@ -188,7 +188,7 @@ $$
     def normality_panel(data):
         fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-        # Histogram with normal overlay
+        # 히스토그램에 정규곡선을 겹친다
         ax = axes[0]
         ax.hist(data, bins=30, density=True, alpha=0.6, edgecolor="black")
         x_grid = np.linspace(data.min() - 1, data.max() + 1, 300)
@@ -200,7 +200,7 @@ $$
         ax.set_ylabel("Density")
         ax.legend()
 
-        # Q-Q plot
+        # Q-Q 그림
         ax = axes[1]
         stats.probplot(data, dist="norm", plot=ax)
         ax.set_title("Q-Q Plot vs Normal")

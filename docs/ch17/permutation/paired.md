@@ -364,7 +364,7 @@ $p$값 공식의 $+1$ 보정이 실제로 필요한지 확인하라. $n = 12$의
     import numpy as np
     from scipy import stats
     rng = np.random.default_rng(21)
-    # (signflip_p as in Exercise 2, with stat = mean)
+    # signflip_p 는 연습문제 2 의 것과 같고, 통계량으로 평균을 쓴다
 
     def size(gen, n, M=3000):
         a = b = 0

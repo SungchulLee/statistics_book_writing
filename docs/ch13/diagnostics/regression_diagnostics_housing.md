@@ -157,7 +157,7 @@ X_filtered = X[mask_keep]
 y_filtered = y[mask_keep]
 results_filtered = sm.OLS(y_filtered, X_filtered).fit()
 
-# Compare coefficients
+# 계수를 견준다
 comparison = pd.DataFrame({
     'Original': results.params,
     'Filtered': results_filtered.params,

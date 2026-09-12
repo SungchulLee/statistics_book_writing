@@ -282,9 +282,9 @@ sigma_y=1.20  F=0.6944  p=0.071
     import scipy.stats as stats
 
     def f_test_variances(data_0, data_1, alternative='two-sided'):
-        """F-test for equality of variances.
+        """두 분산이 같은지 검정하는 F 검정.
 
-        alternative: 'two-sided', 'greater' (sigma_0 > sigma_1), or 'less'
+        alternative 는 'two-sided', 'greater'(sigma_0 > sigma_1), 'less' 중 하나다.
         """
         F = np.var(data_0, ddof=1) / np.var(data_1, ddof=1)
         df1, df2 = len(data_0) - 1, len(data_1) - 1

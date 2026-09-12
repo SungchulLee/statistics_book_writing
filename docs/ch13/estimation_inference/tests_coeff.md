@@ -223,20 +223,20 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
     import pandas as pd
     from scipy import stats
 
-    # Load the Advertising dataset
+    # 광고비와 매출 자료를 읽는다
     dataset_url = (
         'https://raw.githubusercontent.com/justmarkham/'
         'scikit-learn-videos/master/data/Advertising.csv'
     )
     advertising_data = pd.read_csv(dataset_url, usecols=[1, 2, 3, 4])
 
-    # Train/test split (70/30)
+    # 훈련 70%, 시험 30% 로 나눈다
     total_observations = advertising_data.shape[0]
     test_set_ratio = 0.3
     train_count = int(total_observations * (1 - test_set_ratio))
     training_data = advertising_data.iloc[:train_count]
 
-    # Response vector y and design matrix X (with intercept column)
+    # 반응벡터 y 와 설계행렬 X. 첫 열의 1 이 절편에 대응한다
     y = np.array(training_data.Sales).reshape(-1, 1)
     n = y.shape[0]
     X = np.concatenate(
@@ -245,17 +245,17 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
     )
     p_plus_1 = X.shape[1]  # number of parameters (including intercept)
 
-    # OLS coefficients: β̂ = (X'X)⁻¹X'y
+    # 최소제곱해: beta_hat = (X'X)^-1 X'y
     beta_hat = np.linalg.inv(X.T @ X) @ X.T @ y
 
-    # Predicted values and residual standard error
+    # 적합값과 잔차 표준오차
     y_hat = X @ beta_hat
     s = np.sqrt(np.sum((y - y_hat) ** 2) / (n - p_plus_1))
 
-    # Variance-covariance matrix: (X'X)⁻¹
+    # 분산-공분산 행렬 (X'X)^-1. 계수의 표준오차가 여기 대각선에서 나온다
     cov_matrix = np.linalg.inv(X.T @ X)
 
-    # Print regression table
+    # 회귀 출력표를 찍는다
     print("=" * 100)
     print("\t\t    coef    std err \t     t      P>|t|"
           "     [0.025      0.975] ")

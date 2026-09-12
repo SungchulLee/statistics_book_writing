@@ -78,11 +78,11 @@ group3 = [32, 35, 34, 30, 33, 34, 32, 31]
 # 가장 높다. 대신 정규성이 깨지면 오류율이 크게 부풀어 오른다.
 statistic, p_value = bartlett(group1, group2, group3)
 
-# Output the results
+# 결과 출력
 print(f"Bartlett's test statistic: {statistic:.4f}")
 print(f"P-value: {p_value:.4f}")
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value < alpha:
     print("Reject H0: variances are significantly different.")
@@ -112,7 +112,7 @@ Fail to reject H0: no significant difference in variances.
 import numpy as np
 from scipy import stats
 
-# Example data
+# 예시 자료
 group1 = np.array([12, 15, 14, 10, 13, 14, 12, 11])
 group2 = np.array([22, 25, 20, 18, 24, 23, 19, 21])
 group3 = np.array([32, 35, 34, 30, 33, 34, 32, 31])
@@ -123,7 +123,7 @@ variance_group1 = group1.var(ddof=1)
 variance_group2 = group2.var(ddof=1)
 variance_group3 = group3.var(ddof=1)
 
-# Step 2: Calculate sample sizes
+# 2단계: 표본크기
 sample_size1 = group1.size
 sample_size2 = group2.size
 sample_size3 = group3.size
@@ -158,14 +158,14 @@ correction_term = (
 )
 denominator = 1 + correction_term / (3 * (number_of_groups - 1))
 
-# Step 6: Calculate Bartlett's test statistic
+# 6단계: Bartlett 검정통계량
 bartlett_statistic = numerator / denominator
 
-# Step 7: Calculate p-value using chi-square distribution
+# 7단계: 카이제곱 분포로 p-값을 구한다
 degrees_of_freedom = number_of_groups - 1
 p_value = stats.chi2.sf(bartlett_statistic, degrees_of_freedom)
 
-# Display results
+# 결과 출력
 print(f"Pooled variance: {pooled_variance:.4f}")
 print(f"Numerator: {numerator:.4f}, Correction denominator: {denominator:.4f}")
 print(f"Bartlett's Test Statistic (T): {bartlett_statistic:.4f}")

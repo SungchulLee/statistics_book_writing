@@ -68,7 +68,7 @@ data = np.random.normal(1, 10, 1000)
 stat, p_value = stats.shapiro(data)
 print(f"Shapiro-Wilk Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value <= alpha:
     print("Reject H_0: The data is not normally distributed.")

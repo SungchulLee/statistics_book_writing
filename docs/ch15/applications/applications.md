@@ -188,7 +188,7 @@ Levene 검정이 이분산을 시사하면 집단 간 등분산을 가정하지 
         "Group": np.repeat(["A", "B", "C"], 20),
     })
 
-    # NOT Welch's ANOVA
+    # Welch 분산분석이 아니다 — 등분산을 가정한 보통의 분산분석이다
     model = sm.formula.ols('Score ~ Group', data=data).fit()
     print(sm.stats.anova_lm(model, typ=2, robust='hc3'))
     ```

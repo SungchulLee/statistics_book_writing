@@ -161,7 +161,7 @@ Bayes 추론에는 `pymc` 패키지를 쓴다(과거의 `pymc3`는 더 이상 �
 import numpy as np
 import pymc as pm
 
-# Data for two groups
+# 두 집단의 자료
 sample1 = np.array([10, 12, 14, 16, 18])
 sample2 = np.array([22, 24, 26, 30, 40])
 

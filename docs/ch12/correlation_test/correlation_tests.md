@@ -50,15 +50,15 @@ def load_data(data_type=0):
     x = np.random.rand(ARGS.size) * 20
     eps = np.random.rand(ARGS.size) * 10
 
-    # Dataset 0: No relationship (random scatter)
+    # 자료 0: 관계 없음
     y = np.random.rand(ARGS.size) * 20
     data_dict[0] = (x, y)
 
-    # Dataset 1: Monotonic nonlinear relationship (cubic)
+    # 자료 1: 단조이지만 곡선인 관계(삼차)
     y = (x + eps) ** 3
     data_dict[1] = (x, y)
 
-    # Dataset 2: Non-monotonic relationship (sine)
+    # 자료 2: 단조가 아닌 관계(사인)
     y = np.sin(x + eps)
     data_dict[2] = (x, y)
 

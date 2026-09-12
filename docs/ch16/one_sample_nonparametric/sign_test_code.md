@@ -262,13 +262,17 @@ $$
     from scipy.stats import binom
 
     def sign_test_exact(paired_data):
-        """Exact two-sided sign test for paired observations."""
+        """대응관측에 대한 정확 양측 부호검정.
+
+            정규근사 대신 이항분포로 p-값을 정확히 구한다. 표본이 작을 때는
+            이쪽이 맞다.
+            """
         diffs = paired_data[:, 0] - paired_data[:, 1]
         nonzero = diffs[diffs != 0]
         n = len(nonzero)
         n_plus = (nonzero > 0).sum()
 
-        # Two-sided p-value: 2 * min(P(X <= n_+), P(X >= n_+))
+        # 양측 p-값: 2 * min(P(X <= n_+), P(X >= n_+))
         p_left = binom.cdf(n_plus, n, 0.5)
         p_right = binom.sf(n_plus - 1, n, 0.5)  # P(X >= n_+)
         p_value = 2 * min(p_left, p_right)

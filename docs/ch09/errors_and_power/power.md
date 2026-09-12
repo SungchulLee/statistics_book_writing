@@ -91,7 +91,11 @@ import matplotlib.pyplot as plt
 from scipy import stats
 
 def plot_power(mu_0, mu_a, sigma, n, alpha=0.05):
-    """Visualize the power of a one-sided z-test."""
+    """단측 z 검정의 검정력을 그림으로 보인다.
+
+        귀무분포와 대립분포를 겹쳐 그리고, 기각역에 해당하는 두 넓이를 칠한다.
+        귀무 쪽 넓이가 alpha, 대립 쪽 넓이가 검정력이다.
+        """
     se = sigma / np.sqrt(n)
     z_crit = stats.norm.ppf(1 - alpha)
     x_crit = mu_0 + z_crit * se

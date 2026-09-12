@@ -146,10 +146,10 @@ numerator = np.sum(nu) * np.log(s2_pooled) - np.sum(nu * np.log(s2))
 # 보정인자. 표본이 작을수록 1 보다 눈에 띄게 커져 통계량을 낮춘다.
 C = 1 + (1 / (3 * (k - 1))) * (np.sum(1 / nu) - 1 / np.sum(nu))
 
-# Test statistic
+# 검정통계량
 T = numerator / C
 
-# p-value
+# p-값
 p_value = stats.chi2.sf(T, k - 1)
 
 print(f"Pooled variance: {s2_pooled:.4f}")

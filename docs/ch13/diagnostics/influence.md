@@ -92,7 +92,7 @@ n = len(data)
 threshold = 4 / n
 outliers = np.where(cooks_d > threshold)[0]
 
-# Plot: with and without outliers
+# 이상치가 있을 때와 없을 때를 나란히 그린다
 fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
 # 윗줄: 이상치가 든 자료. 회귀선과 잔차 그림을 나란히 본다.

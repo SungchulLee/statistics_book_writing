@@ -168,10 +168,10 @@ lrt = np.sum(nu * np.log(s2_pooled / s2))
 # 통계량을 이 인자로 나눠 근사를 개선한다.
 C = 1 + (1 / (3 * (k - 1))) * (np.sum(1 / nu) - 1 / np.sum(nu))
 
-# Corrected statistic
+# 보정한 통계량
 T = lrt / C
 
-# p-value
+# p-값
 p_value = stats.chi2.sf(T, k - 1)
 
 print(f"Pooled variance: {s2_pooled:.4f}")

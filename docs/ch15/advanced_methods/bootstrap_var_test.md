@@ -261,7 +261,7 @@ Bootstrap p-value: 0.1892
         return np.var(x1, ddof=1) / np.var(x2, ddof=1)
 
     def bootstrap_pvalue(x1, x2, B, rng):
-        """Two-sided bootstrap p-value: compare to the NULL value 1."""
+        """양측 붓스트랩 p-값. 관측값이 아니라 귀무값 1 과 견주어 만든다."""
         n1, n2 = len(x1), len(x2)
         i1 = rng.integers(0, n1, (B, n1))
         i2 = rng.integers(0, n2, (B, n2))
@@ -327,13 +327,13 @@ Bootstrap p-value: 0.1892
         rng.choice(x1, n1, replace=True),
         rng.choice(x2, n2, replace=True))) for _ in range(B)])
 
-    # Percentile
+    # 백분위수법
     lo_p, hi_p = np.percentile(boots, [2.5, 97.5])
 
-    # BCa: bias correction
+    # BCa: 편향보정 항
     z0 = sp_stats.norm.ppf(np.mean(boots < log_obs))
 
-    # Acceleration (jackknife on group 1)
+    # 가속 항. 1집단에 잭나이프를 적용해 구한다
     jk = np.empty(n1)
     for i in range(n1):
         x1_jk = np.delete(x1, i)

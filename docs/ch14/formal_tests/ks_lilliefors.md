@@ -61,7 +61,7 @@ from scipy import stats
 
 np.random.seed(0)
 
-# Generate a sample dataset
+# 예시 자료를 만든다
 # data = np.random.normal(0, 1, 1000)
 data = np.random.normal(1, 10, 1000)
 
@@ -131,7 +131,7 @@ from statsmodels.stats.diagnostic import lilliefors
 
 np.random.seed(0)
 
-# Generate a sample dataset
+# 예시 자료를 만든다
 # data = np.random.normal(0, 1, 1000)
 data = np.random.normal(1, 10, 1000)
 
@@ -146,7 +146,7 @@ print(f"Kolmogorov-Smirnov Test: Statistic={stat}, p-value={p_value}")
 stat, p_value = lilliefors(data)
 print(f"Lilliefors Test: Statistic={stat}, p-value={p_value}")
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value <= alpha:
     print("Reject H_0: The data is not normally distributed.")

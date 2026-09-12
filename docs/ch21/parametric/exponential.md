@@ -297,16 +297,16 @@ $\text{Exp}(\lambda)$ 사건시간을 가지면, 위험에 있는 $n$명 가운�
 
     rng = np.random.default_rng(5)
     n = 300
-    # Weibull with shape k=2, scale=10  (increasing hazard)
+    # 와이불. 모양모수 k=2 이므로 위험이 시간에 따라 커진다
     T = 10.0 * rng.weibull(2.0, n)
     C = rng.exponential(15.0, n)
     t = np.minimum(T, C); d = (T <= C).astype(int)
 
-    # exponential MLE
+    # 지수모형의 최대가능도추정값
     lam = d.sum() / t.sum()
     print(f"lambda_hat = {lam:.5f},  mean = {1/lam:.2f}")
 
-    # Nelson-Aalen cumulative hazard
+    # Nelson-Aalen 누적위험함수
     times = np.unique(t[d == 1])
     H, Hs = 0.0, []
     for u in times:

@@ -298,7 +298,7 @@ $n = 100$에서 표준편차가 15%만 커져도($\sigma = 1.15$) 5% 수준에�
     import scipy.stats as stats
 
     def chi2_test_variance(data, sigma2_0=1.0, alternative='two-sided'):
-        """One-sample chi-squared test for variance.
+        """모분산에 대한 일표본 카이제곱 검정.
 
         alternative: 'two-sided', 'greater', or 'less'
         """

@@ -98,7 +98,7 @@ paired_data = np.array([
 
 post, pre = paired_data[:, 0], paired_data[:, 1]
 
-# Sign test (normal approximation)
+# 부호검정(정규근사)
 diffs = post - pre
 nonzero = diffs[diffs != 0]
 n_plus = (nonzero > 0).sum()
@@ -108,13 +108,13 @@ p_sign = 2 * stats.norm.cdf(-abs(z_sign))
 print(f"Sign test:          Z = {z_sign:.4f}, p = {p_sign:.4f}")
 # Sign test:          Z = 2.3094, p = 0.0209
 
-# Wilcoxon signed-rank test
+# Wilcoxon 부호순위검정
 stat_sr, p_sr = stats.wilcoxon(post, pre, alternative="two-sided",
                                 method="approx", zero_method="pratt")
 print(f"Signed-rank test:   W = {stat_sr}, p = {p_sr:.4f}")
 # Signed-rank test:   W = 11.0, p = 0.0086
 
-# Wilcoxon rank-sum test -- WRONG for this data, shown for contrast only
+# Wilcoxon 순위합검정 — 이 대응자료에는 맞지 않는다. 견주어 보려고 싣는다
 stat_rs, p_rs = stats.ranksums(post, pre)
 print(f"Rank-sum test:      Z = {stat_rs:.4f}, p = {p_rs:.4f}")
 # Rank-sum test:      Z = 1.4725, p = 0.1409

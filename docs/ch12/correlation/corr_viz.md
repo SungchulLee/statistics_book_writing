@@ -237,7 +237,7 @@ $|r|$이 커질수록 점구름이 좁은 타원으로 조여든다.
         plt.tight_layout()
         plt.show()
 
-    # Example usage
+    # 사용 예
     np.random.seed(7)
     data = np.random.randn(200, 4)
     corr = np.corrcoef(data, rowvar=False)
@@ -296,9 +296,9 @@ $|r|$이 커질수록 점구름이 좁은 타원으로 조여든다.
 
     np.random.seed(42)
     n = 100
-    # Cluster 1: centered at (2, 2)
+    # 1번 무리: (2, 2) 둘레
     c1 = np.random.normal(loc=[2, 2], scale=0.5, size=(n, 2))
-    # Cluster 2: centered at (-2, 2)
+    # 2번 무리: (-2, 2) 둘레
     c2 = np.random.normal(loc=[-2, 2], scale=0.5, size=(n, 2))
     data = np.vstack([c1, c2])
 

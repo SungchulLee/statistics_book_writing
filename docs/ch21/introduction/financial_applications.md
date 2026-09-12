@@ -177,15 +177,16 @@ $\hat{S}(36) = 0.90$이 주어졌다.
 
     rng = np.random.default_rng(11)
     n = 200_000
-    # true default times: exponential with 12-month default prob = 0.10
+    # 참 부도 시점은 지수분포를 따르며, 12개월 부도확률이 0.10 이 되도록 잡았다
     lam = -np.log(0.90) / 12
     T = rng.exponential(1 / lam, n)
 
-    # half the loans have 12 months of follow-up, half only 6
+    # 대출의 절반은 12개월, 나머지 절반은 6개월만 관찰한다
     followup = np.where(rng.random(n) < 0.5, 12.0, 6.0)
 
     true_p12 = 1 - np.exp(-lam * 12)
-    # naive: label 1 if defaulted within the available follow-up, else 0
+    # 순진한 방법: 관찰 기간 안에 부도가 나면 1, 아니면 0 으로 이름표를 붙인다.
+    # 관찰이 짧은 대출의 부도가 통째로 0 으로 묻힌다는 것이 이 방법의 문제다
     naive_y = (T <= followup).astype(int)
 
     print(f"true 12-month default prob : {true_p12:.4f}")

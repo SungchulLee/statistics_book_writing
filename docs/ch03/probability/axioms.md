@@ -65,24 +65,24 @@ import numpy as np
 
 def verify_axioms(probabilities):
     """이산 확률분포가 콜모고로프의 세 공리를 만족하는지 확인한다."""
-    # Axiom 1: Non-negativity
+    # 공리 1: 확률은 음수가 아니다
     assert all(p >= 0 for p in probabilities), "Non-negativity violated"
 
-    # Axiom 2: Normalization
+    # 공리 2: 전체 확률이 1 이다
     total = sum(probabilities)
     assert np.isclose(total, 1.0), f"Normalization violated: total = {total}"
 
-    # Axiom 3: Additivity (verified by construction for disjoint events)
+    # 공리 3: 서로소 사건의 확률은 더해진다(만드는 방식으로 이미 보장된다)
     print("All axioms satisfied!")
     print(f"  Total probability: {total:.4f}")
     print(f"  Min probability:   {min(probabilities):.4f}")
     print(f"  Max probability:   {max(probabilities):.4f}")
 
-# Fair die
+# 공정한 주사위
 fair_die = [1/6] * 6
 verify_axioms(fair_die)
 
-# Loaded die
+# 한쪽으로 기운 주사위
 loaded_die = [0.1, 0.1, 0.1, 0.1, 0.1, 0.5]
 verify_axioms(loaded_die)
 ```

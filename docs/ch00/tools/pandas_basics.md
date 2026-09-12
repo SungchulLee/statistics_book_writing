@@ -165,25 +165,25 @@ import pandas as pd
 
 rng = np.random.default_rng(42)
 
-# Build a DataFrame mixing categorical and numeric data
+# 범주형과 수치형을 섞은 자료틀을 만든다
 df = pd.DataFrame({
     "group": rng.choice(["A", "B", "C"], size=200),
     "value": rng.normal(50, 10, size=200),
     "score": rng.integers(0, 100, size=200),
 })
 
-# Per-group summary
+# 집단별 요약
 summary = df.groupby("group")["value"].agg(["count", "mean", "std"]).round(2)
 print(summary)
 
-# Boolean filtering
+# 불리언으로 걸러내기
 high = df[df["value"] > 60]
 print(f"\nValues > 60: {len(high)} / {len(df)}")
 
-# Correlation between numeric columns
+# 수치형 열 사이의 상관
 print("\nCorrelation:\n", df.corr(numeric_only=True).round(3))
 
-# Pivot: mean value by group × score quartile
+# 피벗: 집단과 점수 사분위별 평균
 df["score_q"] = pd.qcut(df["score"], 4, labels=["Q1", "Q2", "Q3", "Q4"])
 print("\nPivot:\n", df.pivot_table(values="value", index="group",
                                    columns="score_q", aggfunc="mean").round(1))

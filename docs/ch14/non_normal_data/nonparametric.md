@@ -28,7 +28,7 @@ group2 = np.random.exponential(scale=3, size=100)
 stat, p_value = mannwhitneyu(group1, group2)
 print(f"Mann-Whitney U Test: Statistic={stat}, p-value={p_value}")
 
-# Interpretation
+# 결과 해석
 alpha = 0.05
 if p_value > alpha:
     print("Fail to reject H_0: No significant difference between the groups.")

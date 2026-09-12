@@ -198,7 +198,11 @@ from scipy.stats import norm, t
 
 
 def finite_population_correction(n: int, N: int | None) -> float:
-    """Return FPC factor sqrt((N−n)/(N−1)) if N is provided; else 1.0."""
+    """유한모집단 수정 인자 sqrt((N-n)/(N-1)). N 을 주지 않으면 1.0 을 돌려준다.
+
+        표본이 모집단의 상당 부분을 차지하면 표준오차가 공식보다 작아진다.
+        그 몫을 되돌리는 인자다.
+        """
     if N is None:
         return 1.0
     if N <= 1 or n >= N:
@@ -207,7 +211,7 @@ def finite_population_correction(n: int, N: int | None) -> float:
 
 
 def simulate_data(n_sim: int, n: int, mu: float, sigma: float, rng) -> np.ndarray:
-    """Return X with shape (n_sim, n): each row ~ N(mu, sigma^2)."""
+    """모양 (n_sim, n) 인 배열을 돌려준다. 행 하나가 표본 하나다."""
     return rng.normal(loc=mu, scale=sigma, size=(n_sim, n))
 
 

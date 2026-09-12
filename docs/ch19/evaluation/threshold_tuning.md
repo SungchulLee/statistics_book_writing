@@ -280,7 +280,7 @@ Threshold 0.8: Precision=0.900, Recall=0.050, F1=0.094
 import numpy as np
 from sklearn.metrics import roc_curve, roc_auc_score
 
-# Compute ROC curve
+# ROC 곡선 계산
 fpr, tpr, thresholds = roc_curve(y_test, y_prob)
 
 # Youden 의 J 는 TPR - FPR 을 최대로 만드는 점을 고른다. ROC 곡선에서

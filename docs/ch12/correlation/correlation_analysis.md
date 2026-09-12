@@ -110,7 +110,7 @@ Kendall  tau = 0.6420  (p = 2.54e-25)
 r_rank = stats.pearsonr(stats.rankdata(x), stats.rankdata(y))[0]
 print(f"Pearson r on ranks = {r_rank:.4f}")
 print(f"Spearman rho       = {r_spearman:.4f}")
-# These two values should match.
+# 두 값이 같아야 한다.
 ```
 
 출력:
@@ -305,17 +305,17 @@ $$
     np.random.seed(42)
     n = 100
 
-    # (a) Strong linear
+    # (가) 강한 선형 관계
     x_a = np.random.normal(0, 1, n)
     y_a = 2 * x_a + np.random.normal(0, 0.5, n)
     print("Linear:", all_correlations(x_a, y_a))
 
-    # (b) Weak nonlinear
+    # (나) 약한 비선형 관계
     x_b = np.random.uniform(-3, 3, n)
     y_b = x_b ** 2 + np.random.normal(0, 1, n)
     print("Quadratic:", all_correlations(x_b, y_b))
 
-    # (c) With outliers
+    # (다) 이상치가 섞인 경우
     x_c = np.random.normal(0, 1, n)
     y_c = 0.8 * x_c + np.random.normal(0, 0.3, n)
     x_c[:3] = [6, -6, 7]

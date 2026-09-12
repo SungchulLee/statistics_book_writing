@@ -176,7 +176,7 @@ def backward_stepwise(X, y):
     fwd = forward_stepwise(X_tr, y_tr)
     bwd = backward_stepwise(X_tr, y_tr)
 
-    # Find optimal k by validation RSS for each method
+    # 방법마다 검증 RSS 가 가장 작은 k 를 찾는다
     for method_name, res in [("Best", best), ("Fwd", fwd), ("Bwd", bwd)]:
         val_rss = [np.sum((y_val - LinearRegression().fit(X_tr[:, res[k]["features"]],
                    y_tr).predict(X_val[:, res[k]["features"]])) ** 2)

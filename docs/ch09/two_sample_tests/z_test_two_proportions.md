@@ -162,7 +162,7 @@ import numpy as np
 from scipy import stats
 
 def two_proportion_z_test(x1, n1, x2, n2, alternative="two-sided"):
-    """Two-sample z-test for the difference of proportions.
+    """두 비율의 차이에 대한 이표본 z 검정.
 
     Parameters
     ----------

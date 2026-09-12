@@ -145,7 +145,7 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.datasets import fetch_california_housing
 
-# Load data
+# 자료 읽기
 housing = fetch_california_housing()
 df = pd.DataFrame(housing.data, columns=housing.feature_names)
 
@@ -163,7 +163,7 @@ for j, target_feature in enumerate(features):
     X_j = X[target_feature].values.reshape(-1, 1)
     X_others = X[other_features].values
 
-    # Fit model: target_feature ~ other_features
+    # 관심 변수를 나머지 변수들로 회귀한다
     model = LinearRegression()
     model.fit(X_others, X_j.ravel())
 
@@ -305,7 +305,7 @@ from sklearn.decomposition import PCA
 pca = PCA(n_components=3)
 X_pca = pca.fit_transform(X)
 
-# Fit model with principal components
+# 주성분으로 모형을 적합한다
 model_pca = LinearRegression()
 model_pca.fit(X_pca, y)
 print(f"Explained variance ratio: {pca.explained_variance_ratio_}")

@@ -254,7 +254,7 @@ $r_{12} = 0.9$, $r_{13} = -0.7$, $r_{14} = 0$, $r_{23} = -0.5$, $r_{24} = 0.3$, 
         )
         ax.add_collection(ec)
 
-        # Add text annotations
+        # 칸마다 숫자를 적는다
         for i in range(M.shape[0]):
             for j in range(M.shape[1]):
                 ax.text(j, i, f'{M[i, j]:.2f}',
@@ -268,7 +268,7 @@ $r_{12} = 0.9$, $r_{13} = -0.7$, $r_{14} = 0$, $r_{23} = -0.5$, $r_{24} = 0.3$, 
 
         return ec, ax
 
-    # Test
+    # 확인
     np.random.seed(42)
     data = np.random.randn(200, 5)
     df = pd.DataFrame(data, columns=[f'V{i}' for i in range(1, 6)])
@@ -336,7 +336,7 @@ $2 \times 2$ 상관행렬 $\mathbf{R} = \begin{pmatrix} 1 & r \\ r & 1 \end{pmat
         ax.set_ylim(-0.5, k - 0.5)
         ax.invert_yaxis()
 
-        # Only lower triangle
+        # 아래쪽 삼각형만 — 상관행렬은 대칭이라 위쪽은 되풀이다
         for i in range(k):
             for j in range(i):
                 r = M[i, j]

@@ -140,14 +140,14 @@ AD 검정이 기각하는데 KS 검정이 기각하지 않는 경우는 흔히 �
     rng = np.random.default_rng(0)
     x = rng.standard_t(df=4, size=300)
 
-    # Anderson-Darling
+    # Anderson-Darling 검정 — 꼬리에 민감하다
     ad = stats.anderson(x, dist="norm")
     print(f"A^2 = {ad.statistic:.4f}")
     for cv, sl in zip(ad.critical_values, ad.significance_level):
         flag = " *" if ad.statistic > cv else ""
         print(f"  {sl:.1f}%: {cv:.4f}{flag}")
 
-    # KS test
+    # KS 검정
     D, p_ks = stats.kstest(x, 'norm', args=(0, 1))
     print(f"\nKS: D = {D:.4f}, p = {p_ks:.4f}")
     print(f"Sample variance = {x.var(ddof=1):.4f}")

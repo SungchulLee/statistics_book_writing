@@ -38,7 +38,7 @@ from scipy.stats import norm
 
 def test_diff_two_props(k1, n1, k2, n2, delta0=0.0,
                         method="pooled", alt="two-sided", alpha=0.05):
-    """H0: p1 - p2 = delta0.
+    """귀무가설 H0: p1 - p2 = delta0.
 
     delta0=0이고 method='pooled'이면 합동 표준오차를 쓴다.
     돌려주는 값은 (z, p, 기각 여부, 이름).

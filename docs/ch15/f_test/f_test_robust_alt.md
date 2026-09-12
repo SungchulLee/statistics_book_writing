@@ -137,12 +137,12 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
     print(f"sample variances: {np.var(x1, ddof=1):.3f}, "
           f"{np.var(x2, ddof=1):.3f} (true: 6, 10)")
 
-    # F-test
+    # F 검정 — 정규성에 민감하다
     F = np.var(x1, ddof=1) / np.var(x2, ddof=1)
     p_f = 2 * min(fdist(49, 49).cdf(F), fdist(49, 49).sf(F))
     print(f"F-test:          F={F:.3f}, p={p_f:.4g}")
 
-    # Levene / Brown-Forsythe / Fligner-Killeen
+    # Levene / Brown-Forsythe / Fligner-Killeen — 로버스트한 대안들
     W, p_l = levene(x1, x2, center='mean')
     print(f"Levene (mean):   W={W:.3f}, p={p_l:.4g}")
     W, p_bf = levene(x1, x2, center='median')
@@ -247,7 +247,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
         Workflow for checking equality of variances.
         Returns a dict with test results and recommendation.
         """
-        # Step 1: Check normality of each group
+        # 1단계: 집단마다 정규성 확인
         normality_ok = True
         shapiro_results = []
         for g in groups:
@@ -256,7 +256,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
             if p < alpha:
                 normality_ok = False
 
-        # Step 2: Select appropriate test
+        # 2단계: 그에 맞는 검정 고르기
         if normality_ok:
             test_name = "Levene (mean-centered)"
             stat, pval = levene(*groups, center='mean')
@@ -264,7 +264,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
             test_name = "Brown-Forsythe (median-centered)"
             stat, pval = levene(*groups, center='median')
 
-        # Step 3: Also run Fligner-Killeen as backup
+        # 3단계: 확인 삼아 Fligner-Killeen 도 돌려 본다
         fk_stat, fk_p = fligner(*groups)
 
         return {
@@ -277,7 +277,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
             "equal_variances": pval >= alpha,
         }
 
-    # Example usage
+    # 사용 예
     rng = np.random.default_rng(0)
     g1 = rng.normal(0, 1, 30)
     g2 = rng.normal(0, 1.5, 30)
@@ -312,7 +312,12 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
         ```python
         def describe_variances(*groups):
-            """Report, don't decide."""
+            """판정하지 말고 보고하라.
+
+                정규성 검정 결과에 따라 다음 검정을 자동으로 고르면 최종 오류율이
+                명목수준을 넘는다. 그래서 여기서는 여러 검정의 결과를 나란히 내놓기만
+                하고, 판단은 사람에게 맡긴다.
+                """
             import numpy as np
             from scipy.stats import levene, fligner
             return {
