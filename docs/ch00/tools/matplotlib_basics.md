@@ -27,9 +27,8 @@ ax = axes[0, 1]    # row 0, column 1
 
 </div>
 
-## 설명
 
-### 두 가지 API
+## 두 가지 API
 
 Matplotlib에는 두 개의 인터페이스가 있다.
 
@@ -38,7 +37,7 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 
 이 책은 객체지향 형태만 쓴다. pyplot 형태는 `plt.subplots`, `plt.show`, `plt.savefig`에만 남겨 둔다.
 
-### 통계를 위한 핵심 그림 유형
+## 통계를 위한 핵심 그림 유형
 
 | 그림 | 메서드 | 쓰임새 |
 |---|---|---|
@@ -49,7 +48,7 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 | 막대 | `ax.bar(categories, heights)` | 범주 간 비교 |
 | Q-Q 그림 | `scipy.stats.probplot(x, plot=ax)` | 정규성 진단 |
 
-### 사용자화의 핵심
+## 사용자화의 핵심
 
 ```python
 ax.set_xlabel("x")
@@ -65,7 +64,7 @@ fig.savefig("figure.png", dpi=150, bbox_inches="tight")
 
 `tight_layout`은 여러 패널이 있는 그림에서 축 이름표가 잘리거나 겹치는 것을 막는다. `dpi=150`이면 화면과 대부분의 인쇄 용도에 충분하고, `dpi=300`은 최종 출판용이 아니라면 과하다.
 
-### pandas와의 연동
+## pandas와의 연동
 
 DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 

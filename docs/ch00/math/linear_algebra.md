@@ -48,9 +48,8 @@ $\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해:
 
 </div>
 
-## 설명
 
-### 이 책에서 끊임없이 쓰이는 항등식
+## 이 책에서 끊임없이 쓰이는 항등식
 
 - $(\mathbf{A}\mathbf{B})^T = \mathbf{B}^T \mathbf{A}^T$
 - $(\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1} \mathbf{A}^{-1}$
@@ -59,7 +58,7 @@ $\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해:
 - $\mathbf{X}$가 확률벡터일 때 $\mathrm{Cov}(\mathbf{A} \mathbf{X}) = \mathbf{A}\, \mathrm{Cov}(\mathbf{X})\, \mathbf{A}^T$
 - $\mathbb{E}[\mathbf{X}^T \mathbf{A} \mathbf{X}] = \mathrm{tr}(\mathbf{A}\, \mathrm{Cov}(\mathbf{X})) + \boldsymbol{\mu}^T \mathbf{A} \boldsymbol{\mu}$ (이차형식의 기댓값)
 
-### 고윳값과 스펙트럼 정리
+## 고윳값과 스펙트럼 정리
 
 $\mathbf{A} \in \mathbb{R}^{n \times n}$에 대해 $\mathbf{A}\mathbf{v} = \lambda \mathbf{v}$가 고윳값–고유벡터 쌍을 정의한다. **대칭** $\mathbf{A}$(모든 공분산행렬, 모든 $\mathbf{X}^T \mathbf{X}$, 모든 모자 행렬이 여기 해당한다)에 대해 **스펙트럼 정리**는
 
@@ -69,11 +68,11 @@ $$
 
 을 보장한다. 여기서 $\mathbf{Q}$는 직교행렬($\mathbf{Q}^T \mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda}$는 실수 고윳값으로 이루어진 대각행렬이다. 이것이 주성분분석, 다변량 정규 이론, 이차형식의 카이제곱분포를 떠받치는 원동력이다.
 
-### 양(반)정치성
+## 양(반)정치성
 
 모든 $\mathbf{x}$에 대해 $\mathbf{x}^T \mathbf{A} \mathbf{x} \ge 0$이면 $\mathbf{A}$가 **양반정치(positive semidefinite)** 라 하고($\mathbf{A} \succeq 0$), 이는 모든 고윳값이 $\ge 0$인 것과 동치다. **양정치(positive definite)** ($\mathbf{A} \succ 0$)는 두 부등식을 모두 엄격 부등식으로 바꾼 것이다. 공분산행렬은 언제나 양반정치이며, 어떤 변수도 다른 변수들의 결정론적 선형결합이 아닐 때 양정치가 된다. 양정치성은 $(\mathbf{X}^T \mathbf{X})^{-1}$이 존재하고 최소제곱해가 유일하게 정해지기 위해 필요한 바로 그 조건이다.
 
-### 사영과 모자 행렬
+## 사영과 모자 행렬
 
 **최소제곱의 모자 행렬(hat matrix)**
 
@@ -90,7 +89,7 @@ $$
 
 여집합 사영자 $\mathbf{M} = \mathbf{I} - \mathbf{H}$는 잔차공간 위로 사영하며 $\mathrm{tr}(\mathbf{M}) = n - p$이다. 이것이 모든 $t$-검정과 $F$-검정에 등장하는 잔차 자유도다.
 
-### 최소제곱을 위한 행렬 미적분
+## 최소제곱을 위한 행렬 미적분
 
 $\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$을 최소화하기 위해 기울기를 0으로 두면 정규방정식 $\mathbf{X}^T \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^T \mathbf{y}$를 얻고, 따라서
 
