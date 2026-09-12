@@ -107,7 +107,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 "PLS가 PCR보다 적은 성분으로 충분하다"는 주장을 수치로 확인하라. 잠재요인 3개가 $p = 30$개 변수를 만들지만 그중 반응변수와 관련된 것은 2개뿐인 자료를 만들어 비교하라.
 
 </div>
@@ -171,7 +171,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 PCR이 PLS보다 나을 수 있는 상황을 구성하라.
 
 </div>

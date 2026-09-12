@@ -176,7 +176,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $M = p$개 성분을 쓰는 PCR이 OLS와 동치임을 보여라.
+**연습문제 1.** <span class="diff med" title="중간"></span> $M = p$개 성분을 쓰는 PCR이 OLS와 동치임을 보여라.
 
 </div>
 
@@ -206,7 +206,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 설명변수의 표준화가 PCR에는 필수적이지만 OLS에는 반드시 필요하지 않은 이유를
+**연습문제 2.** <span class="diff med" title="중간"></span> 설명변수의 표준화가 PCR에는 필수적이지만 OLS에는 반드시 필요하지 않은 이유를
 설명하라. 표준화하지 않으면 PCR에서 무엇이 잘못되는가?
 
 </div>
@@ -227,7 +227,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 주택 예제에서 최적 PCR이 $p = 9$개 중 $M = 7$개 성분을 쓴다고 하자. 이는 자료에
+**연습문제 3.** <span class="diff med" title="중간"></span> 주택 예제에서 최적 PCR이 $p = 9$개 중 $M = 7$개 성분을 쓴다고 하자. 이는 자료에
 대해 무엇을 말해 주는가? PLS는 더 많은 성분을 필요로 할까, 더 적은 성분을 필요로 할까?
 
 </div>
@@ -246,7 +246,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** scikit-learn의 PCA를 쓰지 않고, 중심화·척도화한 계획행렬의 SVD를 이용해 PCR을
+**연습문제 4.** <span class="diff med" title="중간"></span> scikit-learn의 PCA를 쓰지 않고, 중심화·척도화한 계획행렬의 SVD를 이용해 PCR을
 직접 구현하라. 작은 시험자료에서 구현 결과가 scikit-learn과 일치함을 확인하라.
 
 </div>
@@ -309,7 +309,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 첫 PLS 방향 $w_1$이 $\|w\| = 1$ 아래에서 $\text{Cov}(Xw, y)^2$을 최대화함을
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 첫 PLS 방향 $w_1$이 $\|w\| = 1$ 아래에서 $\text{Cov}(Xw, y)^2$을 최대화함을
 증명하고, 이것이 $w_1 \propto X^\top y$와 동치임을 보여라.
 
 </div>

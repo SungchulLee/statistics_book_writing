@@ -307,7 +307,7 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 위 대출 예제에서 세 문턱 각각의 F1 점수와 유든의 J를 계산하라. 어느 문턱이 각 기준에서
 최적인가?
 
@@ -329,7 +329,7 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 놓친 연체의 비용이 \$1,000, 허위경보의 비용이 \$50이라 하자. 세 문턱의 총비용을 계산하고
 최적 문턱 $t^*$와 비교하라.
 
@@ -357,7 +357,7 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 문턱을 조율해도 AUC가 변하지 않는 이유를 설명하라. 그렇다면 문턱 조율은 무엇을 개선하는가?
 
 </div>
@@ -384,7 +384,7 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 분석가가 검정자료에서 $F_1$을 최대화하는 문턱을 찾은 뒤, 같은 검정자료에서 그 $F_1$을
 모형 성능으로 보고했다. 무엇이 잘못되었는가?
 
@@ -411,7 +411,7 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 문턱을 낮추는 것과 학습 시 양성 범주에 가중치를 주는 것(`class_weight`)은 어떻게 다른가?
 
 </div>

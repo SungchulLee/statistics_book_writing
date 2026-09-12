@@ -93,7 +93,7 @@ $\hat{\sigma}^2$은 오차분산의 추정값이다($p < n$이면 전체 OLS 모
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 라쏘 경로를 따라 AIC와 BIC를 계산하여 각각이 고르는 모형을 비교하라. 참 변수 5개, 잡음변수 15개, $n = 100$인 자료를 쓴다.
 
 </div>
@@ -135,7 +135,7 @@ $\hat{\sigma}^2$은 오차분산의 추정값이다($p < n$이면 전체 OLS 모
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 "AIC는 LOOCV와 점근적으로 동등하다"는 주장의 의미를 정확히 서술하고, 유한표본에서 두 방법이 갈릴 수 있는 이유를 설명하라.
 
 </div>

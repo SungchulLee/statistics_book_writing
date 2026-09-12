@@ -93,7 +93,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 교차엔트로피 손실의 기울기가
 $\nabla_{\boldsymbol{\theta}}\,\ell = A^\top(\boldsymbol{\sigma} - \mathbf{y})$
 임을 유도하라. 여기서 $\boldsymbol{\sigma} = (\sigma^{(1)}, \dots, \sigma^{(n)})^\top$이다.
@@ -132,7 +132,7 @@ $\nabla_{\boldsymbol{\theta}}\,\ell = A^\top(\boldsymbol{\sigma} - \mathbf{y})$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}(1-\sigma^{(i)}))$)
 임을 보이고, 이로부터 $\ell$이 볼록임을 결론지어라. 언제 강볼록이 되는가?
 
@@ -159,7 +159,7 @@ $\ell$의 헤세행렬이 $H = A^\top W A$($W = \operatorname{diag}(\sigma^{(i)}
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 절편만 있는 모형($z^{(i)} = \theta_0$)을 생각하자. MLE가 $\hat\sigma = \bar{y}$임을 보여라.
 $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로피 손실을 계산하라.
 
@@ -195,7 +195,7 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 위의 $\varepsilon$ 보정이 왜 편향을 만드는지 수치로 보이고, softplus 방식이 왜 더 나은지
 설명하라.
 
@@ -229,7 +229,7 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 자료가 **완전히 분리 가능**하다고 하자. 즉 모든 $i$에 대해
 $y^{(i)}(2 A[i,:]\boldsymbol{\theta}^* ) > 0$이 되는 $\boldsymbol{\theta}^*$가 존재한다고 하자
 (양성과 음성을 오차 없이 가르는 초평면이 있다는 뜻이다). 이때 MLE가 존재하지 않음을 보여라.

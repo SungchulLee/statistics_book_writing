@@ -142,7 +142,7 @@ $\lambda$가 줄어들면서 각 계수가 곡선을 그린다. L2 경로는 매
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 L2 벌점이 정규 사전분포 $\theta_j \sim \mathcal{N}(0, 1/\lambda)$의 MAP 추정에 대응함을
 유도하라. L1 벌점의 경우 라플라스 척도모수는 얼마인가?
 
@@ -186,7 +186,7 @@ L2 벌점이 정규 사전분포 $\theta_j \sim \mathcal{N}(0, 1/\lambda)$의 MA
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 왜 절편에는 벌점을 주지 않는가? 절편에도 벌점을 주면 무슨 일이 일어나는가?
 
 </div>
@@ -224,7 +224,7 @@ L2 벌점이 정규 사전분포 $\theta_j \sim \mathcal{N}(0, 1/\lambda)$의 MA
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 scikit-learn의 $C$와 이 절의 $\lambda$ 사이의 관계를 유도하라. $n$이 커지면 같은 $C$가
 정칙화의 강도 면에서 어떻게 달라지는가?
 
@@ -263,7 +263,7 @@ scikit-learn의 $C$와 이 절의 $\lambda$ 사이의 관계를 유도하라. $n
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 L2 벌점 로지스틱 회귀에서는 자료가 완전히 분리 가능해도 해가 존재하고 유일함을 보여라.
 
 </div>
@@ -296,7 +296,7 @@ L2 벌점 로지스틱 회귀에서는 자료가 완전히 분리 가능해도 �
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 로지스틱 라쏘 경로가 조각별 선형이 **아님**을 수치로 확인하라. 활성집합이 변하지 않는
 $\lambda$ 구간에서 계수의 증분이 일정한지 살펴보라.
 

@@ -102,7 +102,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $\lambda_{\min}$과 $\lambda_{1\text{SE}}$가 고르는 모형의 복잡도를 비교하고, 참 모형과 견주어 보라. 참 변수 5개와 잡음변수 15개가 있는 자료($n = 100$)에서 라쏘로 10-겹 교차검증을 하라.
 
 </div>
@@ -148,7 +148,7 @@ $\lambda_{\min}$과 $\lambda_{1\text{SE}}$가 고르는 모형의 복잡도를 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 자료 누설이 CV 오차를 얼마나 낙관적으로 만드는지 확인하라. 반응변수가 설명변수와 **아무 관계도 없는** 순수 잡음 자료($n = 60$, $p = 500$)에서, 변수선택을 (a) 전체 자료로 미리 하는 경우와 (b) 각 겹 안에서 하는 경우를 비교하라.
 
 </div>

@@ -94,7 +94,7 @@ Actual Pos  [ 8335] [14336]
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 모형 평가
 
 어떤 스팸 분류기가 전자우편 1000건의 검정자료에서 다음 혼동행렬을 냈다.

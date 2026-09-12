@@ -142,7 +142,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 위 예제의 표로 브라이어 점수 분해를 수치로 확인하라. 세 성분을 각각 계산하고
 $\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
 
@@ -202,7 +202,7 @@ $\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 언제나 상수 $\hat p_i = \bar y$를 예측하는 모형의 브라이어 점수를 구하라. 분해의 관점에서
 이 결과를 설명하라.
 
@@ -236,7 +236,7 @@ $\text{BS} = \text{REL} - \text{RES} + \text{UNC}$가 성립함을 보여라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 모형의 모든 예측확률을 절반으로 줄였다고 하자($\hat p_i \to \hat p_i / 2$).
 AUC, 브라이어 점수, 신뢰도 성분은 각각 어떻게 변하는가?
 
@@ -265,7 +265,7 @@ AUC, 브라이어 점수, 신뢰도 성분은 각각 어떻게 변하는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 위 예제 표에 호스머-레메쇼 검정을 적용하라. 결론은 무엇인가?
 
 </div>
@@ -302,7 +302,7 @@ AUC, 브라이어 점수, 신뢰도 성분은 각각 어떻게 변하는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 플랫 척도화와 등위회귀를 비교하라. 각각 언제 실패하는가?
 
 </div>

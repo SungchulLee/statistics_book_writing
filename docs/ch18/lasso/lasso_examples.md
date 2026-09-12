@@ -179,7 +179,7 @@ Min CV MSE:               4.774
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** $S(\rho, \lambda)$가 $\lambda |\cdot|$의 근접 연산자임을 손으로 확인하라. 즉
+**연습문제 1.** <span class="diff med" title="중간"></span> $S(\rho, \lambda)$가 $\lambda |\cdot|$의 근접 연산자임을 손으로 확인하라. 즉
 $S(\rho, \lambda) = \arg\min_{z} \left\{ \frac{1}{2}(z - \rho)^2 + \lambda |z| \right\}$
 임을 보여라.
 
@@ -205,7 +205,7 @@ $S(\rho, \lambda) = \arg\min_{z} \left\{ \frac{1}{2}(z - \rho)^2 + \lambda |z| \
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 좌표하강 알고리즘에서 $\beta_j$를 갱신하기 전에 부분잔차
+**연습문제 2.** <span class="diff med" title="중간"></span> 좌표하강 알고리즘에서 $\beta_j$를 갱신하기 전에 부분잔차
 $r_j = y - X\beta + X_j \beta_j$를 계산해야 하는 이유를 설명하라. 대신 전체 잔차
 $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 
@@ -224,7 +224,7 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** `lasso_cd` 함수가 온기 시작(즉 항상 0에서 출발하는 대신 초기값 $\beta^{(0)}$을
+**연습문제 3.** <span class="diff med" title="중간"></span> `lasso_cd` 함수가 온기 시작(즉 항상 0에서 출발하는 대신 초기값 $\beta^{(0)}$을
 받도록)을 지원하도록 수정하라. 온기 시작이 정칙화 경로 계산을 왜 빠르게 하는지 설명하라.
 
 </div>
@@ -252,7 +252,7 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 관측치보다 설명변수가 많은 자료($n = 100$, $p = 200$)에서 계수 5개만 0이 아니게
+**연습문제 4.** <span class="diff med" title="중간"></span> 관측치보다 설명변수가 많은 자료($n = 100$, $p = 200$)에서 계수 5개만 0이 아니게
 생성하라. 교차검증으로 고른 $\lambda$에서 라쏘를 적합하고, 선택된 변수 중 참양성과 위양성의
 개수를 보고하라.
 
@@ -301,7 +301,7 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** $X$의 열이 완전계수(full column rank)이면 라쏘 해가 유일하지만, $X$의 열이
+**연습문제 5.** <span class="diff med" title="중간"></span> $X$의 열이 완전계수(full column rank)이면 라쏘 해가 유일하지만, $X$의 열이
 일차종속이면 유일하지 않을 수 있음을 증명하라.
 
 </div>

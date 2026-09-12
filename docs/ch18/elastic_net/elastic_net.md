@@ -82,7 +82,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 이 페이지의 목적함수와 [정식화 페이지](formulation.md)의 목적함수가 어떻게 다른지 비교하고, 배율의 차이가 실무에서 왜 문제가 되는지 설명하라.
 
 </div>
@@ -110,7 +110,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 보이고, 후자가 실무에서 선호되는 이유를 설명하라.
 
 </div>

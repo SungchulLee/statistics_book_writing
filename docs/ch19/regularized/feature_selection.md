@@ -122,7 +122,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 위 예제에서 CV 이탈도의 최소점($\log\lambda = -0.5$)이 아니라 1-표준오차 규칙의 선택
 ($\log\lambda = 0.0$)이 더 나은 이유를 설명하라. 두 선택의 이탈도 차이는 얼마인가?
 
@@ -149,7 +149,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 안정성 선택에서 부분표본 크기를 왜 하필 $\lfloor n/2 \rfloor$로 잡는가? 붓스트랩(복원추출,
 크기 $n$)을 쓰지 않는 이유는?
 
@@ -180,7 +180,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 안정성 선택을 구현하고, 참 신호 5개와 잡음 45개가 있는 자료에서 선택 확률을 계산하라.
 단일 라쏘 적합과 결과를 비교하라.
 
@@ -257,7 +257,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 라쏘로 변수를 고른 뒤, 선택된 변수만으로 **벌점 없는** 로지스틱 회귀를 다시 적합하는 절차를
 사후 라쏘(post-lasso)라 한다. 이렇게 하는 이유와 주의점을 설명하라.
 
@@ -290,7 +290,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 설명변수 두 개 $x_1$과 $x_2$의 상관이 $0.98$이고 둘 다 실제로 반응변수와 연관되어 있다.
 L1 변수선택은 어떻게 행동하는가? 엘라스틱넷은 어떻게 다른가?
 

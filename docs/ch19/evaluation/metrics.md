@@ -149,7 +149,7 @@ $$R^2_{\text{McFadden}} = 1 - \frac{\ell(\hat{\boldsymbol{\beta}})}{\ell(\hat{\b
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 이상거래 탐지 모형이 검정자료 10,000건(이상거래 100건)에서 다음 결과를 냈다.
 TP $= 60$, FP $= 40$, FN $= 40$, TN $= 9{,}860$.
 정확도, 정밀도, 재현율, 특이도, F1을 계산하고, "아무것도 잡지 않는" 분류기와 비교하라.
@@ -184,7 +184,7 @@ TP $= 60$, FP $= 40$, FN $= 40$, TN $= 9{,}860$.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정확도가 문턱 $c$의 함수로서 최대가 되는 지점은 어디인가? 비용이 동일할 때 $c = 0.5$가
 최적임을 보이고, $c_{FP} \ne c_{FN}$일 때의 최적 문턱을 유도하라.
 
@@ -227,7 +227,7 @@ TP $= 60$, FP $= 40$, FN $= 40$, TN $= 9{,}860$.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 AUC가 만-휘트니 U 통계량과 같음을 보여라. 즉 양성 $m$개와 음성 $n$개의 점수에 대해
 
 $$
@@ -269,7 +269,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 같은 모형을 두고 정확도, F1, AUC가 서로 다른 순위를 매기는 상황을 구성하라. 이것이 지표 선택에
 대해 무엇을 말해 주는가?
 

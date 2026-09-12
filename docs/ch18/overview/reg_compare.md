@@ -213,7 +213,7 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 정규직교 계획($X^\top X = I_p$)에서 세 축소 공식(능형, 라쏘, 경성 문턱)을
+**연습문제 1.** <span class="diff hard" title="어려움"></span> 정규직교 계획($X^\top X = I_p$)에서 세 축소 공식(능형, 라쏘, 경성 문턱)을
 유도하고 하나의 그림에 함께 그려라.
 
 </div>
@@ -247,7 +247,7 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** $p = 20$, $\rho = 0.9$이고 참 계수 5개가 0이 아닌 자료를 생성하라. 세 방법을
+**연습문제 2.** <span class="diff med" title="중간"></span> $p = 20$, $\rho = 0.9$이고 참 계수 5개가 0이 아닌 자료를 생성하라. 세 방법을
 모두 교차검증으로 적합하고 각각 선택한 0이 아닌 계수의 개수를 비교하라.
 
 </div>
@@ -290,7 +290,7 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 정칙화를 적용하기 전에 설명변수를 표준화하는 것이 왜 중요한지 설명하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 정칙화를 적용하기 전에 설명변수를 표준화하는 것이 왜 중요한지 설명하라.
 표준화하지 않으면 오도된 결과가 나오는 구체적인 수치 예를 들어라.
 
 </div>
@@ -311,7 +311,7 @@ $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 위 코드의 편향-분산 모의실험 틀을 이용해 능형회귀와 라쏘의 MSE가 각각 어느
+**연습문제 4.** <span class="diff med" title="중간"></span> 위 코드의 편향-분산 모의실험 틀을 이용해 능형회귀와 라쏘의 MSE가 각각 어느
 $\lambda$에서 최소가 되는지 구하라. 이 (희소하고 상관된) 상황에서 어느 방법이 더 낮은 최소
 MSE를 달성하는가?
 
@@ -370,7 +370,7 @@ MSE를 달성하는가?
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 제약형 문제
+**연습문제 5.** <span class="diff med" title="중간"></span> 제약형 문제
 $\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^2 \le t$
 에서 제약영역이 모든 $\alpha \in [0,1]$에 대해 볼록임을 증명하라.
 

@@ -90,7 +90,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 "라쏘의 희소성은 MAP의 성질이지 사후분포의 성질이 아니다"라는 주장을 확인하라. 라플라스 사전분포 아래에서 사후평균이 정확히 0이 될 수 있는가?
 
 </div>
@@ -119,7 +119,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\lambda = \sigma^2/(nb)$ 관계를 유도하고, 이것이 $\lambda$의 해석에 무엇을 뜻하는지 설명하라.
 
 </div>

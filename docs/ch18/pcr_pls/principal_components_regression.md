@@ -124,7 +124,7 @@ $$\hat{\beta}_{\text{PCR}} = V_M \hat{\gamma}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 "PCR은 능형의 축소인자를 계단함수로 근사한 것"이라는 관점을 확인하라. 두 방법의 SVD 축소인자를 비교하라.
 
 </div>
@@ -161,7 +161,7 @@ $$\hat{\beta}_{\text{PCR}} = V_M \hat{\gamma}$$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 PCA를 전체 자료에 적합한 뒤 교차검증하는 것과, 겹 안에서 적합하는 것의 차이를 확인하라.
 
 </div>

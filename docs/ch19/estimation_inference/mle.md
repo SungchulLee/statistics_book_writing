@@ -218,7 +218,7 @@ scikit-learn의 `LogisticRegression`은 기본적으로 L-BFGS(준뉴턴법)를 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 로지스틱 회귀의 MLE
 
 관측치 4개 $(x_1, y_1) = (1, 0)$, $(x_2, y_2) = (2, 0)$, $(x_3, y_3) = (3, 1)$,
@@ -287,7 +287,7 @@ $(x_4, y_4) = (4, 1)$과 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$가 주
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 기울기 $\nabla\ell = A^T(\boldsymbol{\sigma}-\mathbf{y})$의 첫 성분(절편에 대응)을 0으로 놓으면
 무엇을 얻는가? 이 항등식이 로지스틱 회귀의 보정에 대해 무엇을 말해 주는지 설명하라.
 
@@ -317,7 +317,7 @@ $(x_4, y_4) = (4, 1)$과 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$가 주
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 경사하강의 학습률 상한을 헤세행렬로부터 유도하라. 위 코드가 `lr=2e-4`라는 작은 값을 쓰는
 이유를 설명하라.
 
@@ -353,7 +353,7 @@ $(x_4, y_4) = (4, 1)$과 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$가 주
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 `loss` 메서드는 $\varepsilon = 10^{-6}$을 로그 안에 더하지만 `gradient` 메서드는 그런 보정을
 하지 않는다. 이 불일치가 문제를 일으키는가? 답을 정당화하라.
 

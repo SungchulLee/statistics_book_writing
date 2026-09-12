@@ -191,7 +191,7 @@ Multivariate Model (Balance + Student):
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 대출 연체($Y = 1$)에 대한 로지스틱 회귀 모형이 다음과 같다.
 $\log\frac{p}{1-p} = -2.5 + 0.8\,\text{DTI} - 0.03\,\text{Credit Score}$
 

@@ -188,7 +188,7 @@ CV 오차를 $\log_{10}\lambda$에 대해 그리고 $\lambda_{\min}$과 $\lambda
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 "한 번 활성화된 변수는 계속 활성이다"라는 단조성 주장의 반례를 찾아라.
 
 </div>
@@ -309,7 +309,7 @@ CV 오차를 $\log_{10}\lambda$에 대해 그리고 $\lambda_{\min}$과 $\lambda
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\lambda_{\max}$에서 시작하는 로그 격자를 쓰는 이유는 무엇인가? 선형 격자를 쓰면 어떤 문제가 생기는가?
 
 </div>

@@ -212,7 +212,7 @@ Best CV accuracy: 0.7450
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $n = 200$, $p = 50$이고 처음 5개 특성만 참 계수가 0이 아닌 자료를 생성하라.
 $C \in \{0.01, 0.1, 1.0, 10.0\}$에 대해 L1 정칙화 로지스틱 회귀를 적합하고, 각 $C$에서 0이
 아닌 추정 계수의 개수를 보고하라.
@@ -269,7 +269,7 @@ $C \in \{0.01, 0.1, 1.0, 10.0\}$에 대해 L1 정칙화 로지스틱 회귀를 �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 능형 벌점 $\|\boldsymbol\beta\|_2^2$이 베이즈 로지스틱 회귀에서 각 $\beta_j$에 독립인
 $N(0, \sigma^2)$ 사전분포를 두는 것과 동등함을 보여라($\sigma^2 = C$).
 
@@ -304,7 +304,7 @@ $N(0, \sigma^2)$ 사전분포를 두는 것과 동등함을 보여라($\sigma^2 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 L1 벌점은 희소한 해를 만드는데 L2 벌점은 그렇지 않은 이유를 기하학적으로 설명하라.
 
 </div>
@@ -330,7 +330,7 @@ L1 벌점은 희소한 해를 만드는데 L2 벌점은 그렇지 않은 이유�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 연습문제 1의 자료에 `LogisticRegressionCV`를 `penalty='l1'`, `solver='saga'`, 5-겹
 교차검증으로 적용해 최적 $C$를 찾아라. 선택된 $C$와 그때의 교차검증 정확도를 보고하라.
 
@@ -378,7 +378,7 @@ L1 벌점은 희소한 해를 만드는데 L2 벌점은 그렇지 않은 이유�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 엘라스틱넷 벌점
 
 $$

@@ -156,7 +156,7 @@ OLS, 능형회귀, 라쏘의 RMSE와 $R^2$ 막대그림에서 다음을 볼 수 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 라쏘의 정칙화 경로는 왜 ($\lambda$의 함수로서) 조각별 선형인 반면 능형회귀의
+**연습문제 1.** <span class="diff med" title="중간"></span> 라쏘의 정칙화 경로는 왜 ($\lambda$의 함수로서) 조각별 선형인 반면 능형회귀의
 경로는 매끄러운지 설명하라. 힌트: 각 방법의 KKT 조건을 생각해 보라.
 
 </div>
@@ -182,7 +182,7 @@ OLS, 능형회귀, 라쏘의 RMSE와 $R^2$ 막대그림에서 다음을 볼 수 
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 주택 자료에서 `BldgGrade`와 `SqFtTotLiving`은 상관되어 있을 가능성이 크다. 이런
+**연습문제 2.** <span class="diff med" title="중간"></span> 주택 자료에서 `BldgGrade`와 `SqFtTotLiving`은 상관되어 있을 가능성이 크다. 이런
 상관이 있을 때 변수선택에 라쏘를 쓰는 경우와 엘라스틱넷을 쓰는 경우가 어떻게 다른지 논하라.
 
 </div>
@@ -203,7 +203,7 @@ OLS, 능형회귀, 라쏘의 RMSE와 $R^2$ 막대그림에서 다음을 볼 수 
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 위 스크립트는 모형 비교에 표본 내 $R^2$와 RMSE를 쓴다. 이것이 왜 오도할 수
+**연습문제 3.** <span class="diff med" title="중간"></span> 위 스크립트는 모형 비교에 표본 내 $R^2$와 RMSE를 쓴다. 이것이 왜 오도할 수
 있는지 설명하고 더 나은 평가 전략을 제안하라.
 
 </div>
@@ -228,7 +228,7 @@ OLS, 능형회귀, 라쏘의 RMSE와 $R^2$ 막대그림에서 다음을 볼 수 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 주택 자료에 $N(0,1)$에서 뽑은, 반응변수와 아무 관계 없는 잡음 특성 50개를
+**연습문제 4.** <span class="diff med" title="중간"></span> 주택 자료에 $N(0,1)$에서 뽑은, 반응변수와 아무 관계 없는 잡음 특성 50개를
 추가한다고 하자. 라쏘의 최적 $\lambda$와 선택되는 특성 개수는 어떻게 바뀔 것으로 예상되는가?
 실험을 수행하고 결과를 보고하라.
 
@@ -278,7 +278,7 @@ OLS, 능형회귀, 라쏘의 RMSE와 $R^2$ 막대그림에서 다음을 볼 수 
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 라그랑주 모수 $\lambda$와, 동치인 제약형
+**연습문제 5.** <span class="diff med" title="중간"></span> 라그랑주 모수 $\lambda$와, 동치인 제약형
 $\min \|y - X\beta\|_2^2$ subject to $\|\beta\|_1 \le t$의 제약 경계 $t$ 사이의 관계를
 유도하라. 구체적으로 $\lambda > 0$과 $t \in (0, \|\hat{\beta}^{\text{OLS}}\|_1)$ 사이에 일대일
 감소 대응이 있음을 보여라.

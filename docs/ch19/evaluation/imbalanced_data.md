@@ -324,7 +324,7 @@ Brier: 0.111258445223284
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff hard" title="어려움"></span>
 훈련표본의 양성 비율이 $\tau$이고 모집단의 실제 유병률이 $\pi$일 때, 로지스틱 회귀에서
 **기울기 계수는 편향되지 않고 절편만 이동함**을 설명하라. 절편 보정식을 유도하라.
 
@@ -364,7 +364,7 @@ Brier: 0.111258445223284
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 `class_weight='balanced'`가 절편 이동과 (모형이 옳게 지정되었을 때) 동등함을 설명하라.
 따라서 AUC에는 어떤 영향을 주는가?
 
@@ -390,7 +390,7 @@ Brier: 0.111258445223284
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 유병률이 약 10%인 자료를 만들어, 조정 없는 적합·`balanced` 가중·과소표집·절편 보정의 네 가지에
 대해 AUC와 브라이어 점수를 비교하라.
 
@@ -474,7 +474,7 @@ Brier: 0.111258445223284
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 훈련·검정 분할 **전에** SMOTE를 적용하면 왜 자료 누설이 되는지 설명하라.
 
 </div>
@@ -503,7 +503,7 @@ Brier: 0.111258445223284
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 불균형 자료를 만나면 어떤 순서로 대응해야 하는가? "SMOTE로 균형을 맞추고 나서 학습한다"가
 좋은 기본값이 **아닌** 이유를 설명하라.
 

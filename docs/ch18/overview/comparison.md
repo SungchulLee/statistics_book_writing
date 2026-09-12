@@ -90,7 +90,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 직교 설계($\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$)에서 능형과 라쏘의 닫힌 형태 해를 유도하라. 라쏘는 정확한 0을 만들고 능형은 만들지 못하는 이유를 기하적으로 설명하라.
 
 </div>
@@ -121,7 +121,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 100$개를 생성하고 잡음변수 17개($x_4, \ldots, x_{20}$)를 더하라.
 
 **(a)** OLS, 능형, 라쏘, 엘라스틱넷을 적합하고 계수 추정값을 비교하라.
@@ -186,7 +186,7 @@ $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 1
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **금융 응용.** Fama-French 요인과 거시경제 변수로 월별 주식수익률을 예측하는 상황을 생각하자. 예측변수 $p = 50$개, 월별 관측 $n = 120$개인 자료를 모의생성한다.
 
 **(a)** 이 상황에서 정칙화가 필수적인 이유는 무엇인가?

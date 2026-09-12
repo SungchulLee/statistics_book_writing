@@ -233,7 +233,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 분류기가 문턱 0.5에서 다음 혼동행렬을 냈다.
 
 $$
@@ -269,7 +269,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 ROC 곡선 위의 네 점 $(0, 0)$, $(0.2, 0.7)$, $(0.5, 0.9)$, $(1, 1)$이 주어졌을 때 사다리꼴
 공식으로 AUC를 계산하라.
 
@@ -299,7 +299,7 @@ ROC 곡선 위의 네 점 $(0, 0)$, $(0.2, 0.7)$, $(0.5, 0.9)$, $(1, 1)$이 주�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 무작위 분류기(점수가 이름표와 독립)의 기대 AUC가 0.5임을 증명하라.
 
 </div>
@@ -325,7 +325,7 @@ ROC 곡선 위의 네 점 $(0, 0)$, $(0.2, 0.7)$, $(0.5, 0.9)$, $(1, 1)$이 주�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 위 `roc_curve` 함수와 같은 방식으로 문턱을 훑으며 (재현율, 정밀도) 쌍을 기록하는
 **정밀도-재현율 곡선** 함수를 구현하라.
 
@@ -369,7 +369,7 @@ ROC 곡선 위의 네 점 $(0, 0)$, $(0.2, 0.7)$, $(0.5, 0.9)$, $(1, 1)$이 주�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 자료가 $n$개인 이항 분류기에서 정확도를 혼동행렬로
 
 $$

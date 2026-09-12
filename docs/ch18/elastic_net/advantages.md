@@ -80,7 +80,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 "$p > n$일 때 라쏘는 최대 $n$개"라는 한계와 엘라스틱넷이 그것을 넘는다는 주장을 수치로 확인하라.
 
 </div>
@@ -100,7 +100,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 sklearn이 보정 엘라스틱넷을 적용하는지 직접 확인하라.
 
 </div>

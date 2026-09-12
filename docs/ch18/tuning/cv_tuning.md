@@ -106,7 +106,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** 라쏘에 대해 $\lambda_{\max} = \frac{1}{n}\|X^\top y\|_\infty$를 유도하라. 즉
+**연습문제 1.** <span class="diff hard" title="어려움"></span> 라쏘에 대해 $\lambda_{\max} = \frac{1}{n}\|X^\top y\|_\infty$를 유도하라. 즉
 $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여라.
 
 </div>
@@ -127,7 +127,7 @@ $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** 교차검증 전에 전체 자료로 설명변수를 표준화하면 왜 자료 누설이 생기는지
+**연습문제 2.** <span class="diff med" title="중간"></span> 교차검증 전에 전체 자료로 설명변수를 표준화하면 왜 자료 누설이 생기는지
 설명하고, 올바른 절차를 서술하라.
 
 </div>
@@ -172,7 +172,7 @@ $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** 1-표준오차 규칙을 구현하라. 배열 `lambdas`, `cv_mean`, `cv_se`(각 $\lambda$의
+**연습문제 3.** <span class="diff med" title="중간"></span> 1-표준오차 규칙을 구현하라. 배열 `lambdas`, `cv_mean`, `cv_se`(각 $\lambda$의
 CV MSE 평균과 표준오차)가 주어졌을 때 $\hat{\lambda}_{1\text{SE}}$를 반환하는 함수를 작성하라.
 
 </div>
@@ -207,7 +207,7 @@ CV MSE 평균과 표준오차)가 주어졌을 때 $\hat{\lambda}_{1\text{SE}}$�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** 인공자료($n = 200$, $p = 30$, 참 계수 중 5개만 0이 아님)에 대해 로그 등간격
+**연습문제 4.** <span class="diff med" title="중간"></span> 인공자료($n = 200$, $p = 30$, 참 계수 중 5개만 0이 아님)에 대해 로그 등간격
 $\lambda$ 50개 위에서 라쏘의 5-겹 교차검증을 수행하라. 오차막대($\pm 1$ SE)를 포함한 CV 곡선을
 그리고 $\hat{\lambda}_{\min}$과 $\hat{\lambda}_{1\text{SE}}$를 모두 표시하라.
 
@@ -270,7 +270,7 @@ $\lambda$ 50개 위에서 라쏘의 5-겹 교차검증을 수행하라. 오차�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** 능형회귀의 하나 남기기 교차검증(LOOCV)이 닫힌 형태
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 능형회귀의 하나 남기기 교차검증(LOOCV)이 닫힌 형태
 $\text{CV}_{\text{LOO}} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i - \hat{y}_i}{1 - h_{ii}}\right)^2$
 로 계산됨을 증명하라. 여기서 $H = X(X^\top X + \lambda I)^{-1}X^\top$는 능형 모자행렬이고
 $h_{ii}$는 그 $i$번째 대각원소다.

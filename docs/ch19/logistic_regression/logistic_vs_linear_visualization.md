@@ -199,7 +199,7 @@ $37.88\%$ 증가한다. **오즈비는 설명변수의 단위에 의존하므로
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 로지스틱 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$에서 $x = -\beta_0/\beta_1$일 때
 예측확률이 정확히 0.5임을 보여라.
 
@@ -221,7 +221,7 @@ $37.88\%$ 증가한다. **오즈비는 설명변수의 단위에 의존하므로
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 이항 자료에 적합한 선형회귀가 어떤 관측치에 대해 $\hat{y} = -0.1$을 내놓았다. 왜 문제인지
 설명하고 두 가지 해결책을 제시하라.
 
@@ -246,7 +246,7 @@ $37.88\%$ 증가한다. **오즈비는 설명변수의 단위에 의존하므로
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 $\log\frac{p}{1-p} = z$를 $p$에 대해 풀어 시그모이드 함수를 유도하라.
 
 </div>
@@ -280,7 +280,7 @@ $\log\frac{p}{1-p} = z$를 $p$에 대해 풀어 시그모이드 함수를 유도
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 이항 자료에 대한 선형회귀가 $\hat{y} = 0.2 + 0.0003 \cdot \text{Balance}$를 주었다.
 어느 Balance에서 예측값이 1을 넘는가? 어느 Balance에서 음수가 되는가?
 
@@ -312,7 +312,7 @@ $\log\frac{p}{1-p} = z$를 $p$에 대해 풀어 시그모이드 함수를 유도
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
 로지스틱 회귀의 교차엔트로피 손실이 모수 $\boldsymbol\beta$에 대해 볼록임을 증명하라.
 
 </div>

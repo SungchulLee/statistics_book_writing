@@ -91,7 +91,7 @@
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 California Housing 자료를 사용하라.
 
 **(a)** 세 정칙화 모형과 OLS를 모두 적합하고 검정 MSE를 비교하라.
@@ -146,7 +146,7 @@ California Housing 자료를 사용하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 "흔한 함정" 다섯 가지 중 결과를 가장 심각하게 왜곡하는 것은 무엇인가? 근거를 들어 순위를 매겨라.
 
 </div>

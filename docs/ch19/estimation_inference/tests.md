@@ -160,7 +160,7 @@ LRT  = 1.5719, p = 0.2099
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff hard" title="어려움"></span>
 $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. 두 값이 실제로는 왜 다를 수
 있는지 설명하라.
 
@@ -192,7 +192,7 @@ $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. �
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 **하우크-도너 효과.** 참 계수 $\beta_1$이 커질수록 왈드 통계량이 오히려 **작아질 수 있음**을
 모의실험으로 확인하라. $n = 100$, $x \sim N(0,1)$, $P(Y=1) = \sigma(c\,x)$에서 $c = 1, 3, 6$에
 대해 왈드 검정과 LRT를 비교하라.
@@ -247,7 +247,7 @@ $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. �
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 어떤 로지스틱 회귀에서 절편만 있는 모형의 이탈도가 $D_0 = 120.5$(자유도 99), 설명변수 두 개를
 넣은 모형의 이탈도가 $D = 85.3$(자유도 97)이다. LRT를 수행하라.
 
@@ -271,7 +271,7 @@ $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. �
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 오즈비의 95% 신뢰구간을 만드는 두 가지 방법, 즉 왈드 구간과 프로파일 가능도 구간을 설명하라.
 어느 쪽을 선호해야 하는가?
 
@@ -305,7 +305,7 @@ $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. �
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 왈드 검정과 LRT 외에 **점수 검정**(라오 검정)이 있다. 세 검정이 각각 로그가능도의 어느 부분을
 쓰는지 설명하고, 점수 검정이 특히 유용한 상황을 하나 들어라.
 

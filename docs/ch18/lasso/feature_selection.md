@@ -96,7 +96,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 라쏘 계수의 편향이 정확히 얼마인지, 사후 라쏘 OLS가 그것을 없애는지 모의실험으로 확인하라.
 
 </div>
@@ -174,7 +174,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 비대표 조건이 깨지는 자료를 구성하고, 표본을 늘려도 라쏘가 참 변수를 복원하지 못함을 확인하라.
 
 </div>

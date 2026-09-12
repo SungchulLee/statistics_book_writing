@@ -116,7 +116,7 @@ m = 1..M 에 대해:
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 PLS의 첫 가중벡터가 $X^\top y$에 비례한다는 사실을 확인하고, 그것이 무엇을 뜻하는지 설명하라.
 
 </div>
@@ -159,7 +159,7 @@ PLS의 첫 가중벡터가 $X^\top y$에 비례한다는 사실을 확인하고,
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 PLS의 성분 수를 늘릴 때 PCR보다 빨리 과적합하는 현상을 확인하고 그 이유를 설명하라.
 
 </div>

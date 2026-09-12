@@ -99,7 +99,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 좌표하강을 직접 구현하고 `sklearn.linear_model.Lasso`와 일치하는지, 몇 번의 순회로 수렴하는지 확인하라.
 
 </div>
@@ -150,7 +150,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\|\mathbf{x}_j\|^2 = n$이라는 표준화 가정을 빼면 갱신식이 어떻게 바뀌는가?
 
 </div>

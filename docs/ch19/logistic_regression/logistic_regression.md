@@ -375,7 +375,7 @@ tau=0.7  Acc=0.856  Prec=0.935  Rec=0.811  F1=0.869
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $n = 500$이고 특성이 두 개인 인공자료를 참 모형
 $\log\frac{p}{1-p} = -1 + 0.5\,x_1 - 0.3\,x_2$로부터 생성하라. scikit-learn으로 로지스틱
 회귀를 적합해 추정된 계수를 참값과 비교하라.
@@ -436,7 +436,7 @@ $\log\frac{p}{1-p} = -1 + 0.5\,x_1 - 0.3\,x_2$로부터 생성하라. scikit-lea
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 유든의 $J = \text{TPR} - \text{FPR}$를 최대화하는 것이 ROC 곡선에서 대각선까지의 수직거리가
 가장 큰 지점을 찾는 것과 같음을 대수적으로 보여라.
 
@@ -463,7 +463,7 @@ $\log\frac{p}{1-p} = -1 + 0.5\,x_1 - 0.3\,x_2$로부터 생성하라. scikit-lea
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 어떤 로지스틱 회귀가 한 환자에게 $\hat{p} = 0.72$를 출력했다. 문턱 0.5에서의 혼동행렬은
 $\text{TP}=80$, $\text{FP}=15$, $\text{FN}=20$, $\text{TN}=85$였다. 정확도, 정밀도, 재현율,
 $F_1$을 계산하라.
@@ -493,7 +493,7 @@ $F_1$을 계산하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $F_1$ 점수가 정밀도와 재현율의 조화평균임을 증명하라.
 
 </div>
@@ -517,7 +517,7 @@ $F_1$ 점수가 정밀도와 재현율의 조화평균임을 증명하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 가능도비 통계량 $\Lambda = -2[\ell_0 - \ell_1]$은 $H_0$ 아래에서 $\chi^2_p$를 따르며, $p$는
 전체 모형이 추가로 갖는 모수의 개수다. 영모형의 로그가능도가 $-180$, 설명변수 3개를 가진
 전체 모형의 로그가능도가 $-160$이라 하자. $\Lambda$를 계산하고 $\alpha = 0.01$에서 $H_0$을

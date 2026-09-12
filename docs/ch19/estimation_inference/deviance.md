@@ -135,7 +135,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $D = \sum_{i=1}^n d_i^2$임을 확인하라. 이탈도 잔차 앞의 부호함수가 왜 필요한지 설명하라.
 
 </div>
@@ -167,7 +167,7 @@ $D = \sum_{i=1}^n d_i^2$임을 확인하라. 이탈도 잔차 앞의 부호함�
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $n = 100$이고 그중 30건이 사건인 자료의 영이탈도 $D_0$을 계산하라. 이 값이
 [가능도 절 연습문제 3](../logistic_regression/likelihood.md)의 결과와 어떻게 연결되는가?
 
@@ -198,7 +198,7 @@ $n = 100$이고 그중 30건이 사건인 자료의 영이탈도 $D_0$을 계산
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 묶이지 않은 이항 자료에서 $D \dot\sim \chi^2_{n-p}$ 근사가 실패함을 모의실험으로 보여라.
 **옳은** 모형을 반복해서 적합하고 잔차이탈도의 분포를 $\chi^2_{n-p}$와 비교하라.
 
@@ -259,7 +259,7 @@ $n = 100$이고 그중 30건이 사건인 자료의 영이탈도 $D_0$을 계산
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 맥패든 유사 $R^2$가 잘 맞는 모형에서도 왜 선형회귀의 $R^2$보다 훨씬 작게 나오는지 설명하라.
 0.29라는 값을 어떻게 읽어야 하는가?
 
@@ -289,7 +289,7 @@ $n = 100$이고 그중 30건이 사건인 자료의 영이탈도 $D_0$을 계산
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 이탈도가 최소제곱의 잔차제곱합에 대응한다고 했다. 정규 선형모형에서 이탈도를 정의하면 실제로
 RSS가 됨을 보여라.
 

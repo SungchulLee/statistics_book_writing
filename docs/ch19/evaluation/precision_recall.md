@@ -128,7 +128,7 @@ $F_1 = 2 \cdot \frac{0.6376 \cdot 0.6323}{0.6376 + 0.6323} \approx 0.6349$이다
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 조화평균 정의로부터 $F_1 = \dfrac{2\,TP}{2\,TP + FP + FN}$를 유도하라.
 
 </div>
@@ -159,7 +159,7 @@ $F_1 = 2 \cdot \frac{0.6376 \cdot 0.6323}{0.6376 + 0.6323} \approx 0.6349$이다
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 정밀도와 재현율의 요약에 산술평균이 아니라 조화평균을 쓰는 이유를 설명하라.
 $P = 0.99$, $R = 0.01$인 경우로 예를 들라.
 
@@ -190,7 +190,7 @@ $P = 0.99$, $R = 0.01$인 경우로 예를 들라.
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 문턱을 낮추면 재현율은 결코 감소하지 않지만 정밀도는 **단조가 아니다.** 다음 자료로 이를
 확인하라.
 
@@ -225,7 +225,7 @@ $P = 0.99$, $R = 0.01$인 경우로 예를 들라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $F_\beta$ 점수는
 $F_\beta = (1+\beta^2)\dfrac{P \cdot R}{\beta^2 P + R}$
 로 정의된다. $\beta$의 의미를 설명하고, 위음성이 위양성보다 3배 비쌀 때 어떤 $\beta$를 써야
@@ -255,7 +255,7 @@ $F_\beta = (1+\beta^2)\dfrac{P \cdot R}{\beta^2 P + R}$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.**
+**연습문제 5.** <span class="diff med" title="중간"></span>
 어떤 이상거래 탐지 모형의 AUC가 $0.95$인데 평균정밀도는 $0.12$다. 유병률은 1%다. 두 값이
 모순되는가?
 

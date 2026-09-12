@@ -127,7 +127,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 직교 설계에서 라쏘와 능형의 축소 규칙이 각각 "평행이동"과 "비례"임을 수치로 확인하고, 작은 계수에 미치는 영향이 왜 크게 다른지 설명하라.
 
 </div>
@@ -148,7 +148,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff med" title="중간"></span>
 라쏘의 세 가지 한계(집단 선택, $p > n$, 편향) 중 엘라스틱넷이 해결하는 것과 해결하지 못하는 것을 구분하라.
 
 </div>

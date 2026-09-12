@@ -119,7 +119,7 @@ ROC 곡선은 배치할 최적 문턱을 고르는 데 도움이 된다. 흔한 
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff med" title="중간"></span>
 ROC와 AUC
 
 **(a)** 웬만한 분류기의 ROC 곡선이 왜 대각선 위에 놓이는지 설명하라.

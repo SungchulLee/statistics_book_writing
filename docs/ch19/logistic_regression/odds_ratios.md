@@ -100,7 +100,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 1.**
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 로지스틱 회귀에서 이항 설명변수의 계수가 $\hat{\beta}_1 = 0.693$이다. 오즈비를 계산하고
 해석하라.
 
@@ -117,7 +117,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.**
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 심장질환에 대한 로지스틱 회귀에 연속형 변수인 나이가 들어 있고
 $\hat{\beta}_{\text{age}} = 0.05$이다. 이 계수를 오즈비로 해석하라.
 
@@ -135,7 +135,7 @@ $\hat{\beta}_{\text{age}} = 0.05$이다. 이 계수를 오즈비로 해석하라
 
 <div class="drillbox" markdown>
 
-**연습문제 3.**
+**연습문제 3.** <span class="diff med" title="중간"></span>
 오즈비와 상대위험도의 차이를 설명하라. 둘은 언제 거의 같아지는가?
 
 </div>
@@ -157,7 +157,7 @@ $\hat{\beta}_{\text{age}} = 0.05$이다. 이 계수를 오즈비로 해석하라
 
 <div class="drillbox" markdown>
 
-**연습문제 4.**
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 어떤 오즈비의 95% 신뢰구간이 $(0.85, 1.42)$이다. 이 설명변수의 통계적 유의성에 대해 무엇을
 알 수 있는가?
 
