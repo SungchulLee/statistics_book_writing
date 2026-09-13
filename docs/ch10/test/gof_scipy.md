@@ -125,7 +125,12 @@ stat = 1.3889, pval = 0.4994
 
 ## 연습문제
 
-**1.** `stats.chisquare`를 `f_obs=[10, 20, 30]`만 주고(`f_exp` 없이) 실행하라. SciPy는 어떤 기대도수를 가정하며, 통계량과 p-값은 얼마인가?
+<div class="drillbox" markdown>
+
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
+`stats.chisquare`를 `f_obs=[10, 20, 30]`만 주고(`f_exp` 없이) 실행하라. SciPy는 어떤 기대도수를 가정하며, 통계량과 p-값은 얼마인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -137,31 +142,40 @@ stat = 1.3889, pval = 0.4994
 
     이다. $\text{df} = 2$에서 p-값은 $P(\chi^2_2 \ge 10) \approx 0.0067$이므로 $\alpha = 0.05$에서 $H_0$을 기각한다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**2.** 어떤 연구자가 자료에 포아송 모형을 적합하고 표본으로부터 모수 $\lambda$를 추정했다. 자료의 범주는 5개이다. `ddof` 인자에 어떤 값을 넘겨야 하며 이유는 무엇인가?
+**연습문제 2.** <span class="diff med" title="중간"></span>
+어떤 연구자가 자료에 포아송 모형을 적합하고 표본으로부터 모수 $\lambda$를 추정했다. 자료의 범주는 5개이다. `ddof` 인자에 어떤 값을 넘겨야 하며 이유는 무엇인가?
+
+</div>
 
 ??? success "풀이"
 
     모수 하나($\lambda$)를 자료로부터 추정했으므로 자유도를 하나 더 잃는다. `ddof=1`을 넘기면 $\text{df} = k - 1 - \text{ddof} = 5 - 1 - 1 = 3$이 된다. `ddof` 인자는 자료로부터 추정한 모수가 표준 기준선 $k-1$보다 자유도를 더 줄이는 것을 반영한다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**3.** `f_exp`의 합이 `f_obs`의 합과 같지 않으면 어떻게 되는가? `stats.chisquare(f_obs=[10, 20], f_exp=[5, 5])`로 시험해 보고 결과를 설명하라.
+**연습문제 3.** <span class="diff med" title="중간"></span>
+`f_exp`의 합이 `f_obs`의 합과 같지 않으면 어떻게 되는가? `stats.chisquare(f_obs=[10, 20], f_exp=[5, 5])`로 시험해 보고 결과를 설명하라.
+
+</div>
 
 ??? success "풀이"
 
     기대도수의 합(10)이 관측도수의 합(30)과 맞지 않으므로 SciPy는 오류를 내거나 오도하는 결과를 준다. 구체적으로 `stats.chisquare`는 `f_exp`를 자동으로 다시 축척하지 **않는다**. 검정이 의미를 가지려면 기대도수의 합이 관측도수의 합과 같아야 한다. 올바른 호출은 `f_exp=[15, 15]`처럼 다시 축척하거나, 비율에 관측 총합을 곱해서 쓰는 것이다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**4.** 카이제곱 통계량이 다음과 같이 다시 쓰일 수 있음을 대수적으로 보여라:
+**연습문제 4.** <span class="diff med" title="중간"></span>
+카이제곱 통계량이 다음과 같이 다시 쓰일 수 있음을 대수적으로 보여라:
 
 $$
 \chi^2 = \sum_{i=1}^{k} \frac{O_i^2}{E_i} - n
 $$
 
 여기서 $n = \sum_{i=1}^{k} O_i = \sum_{i=1}^{k} E_i$이다.
+
+</div>
 
 ??? success "풀이"
 
@@ -183,9 +197,12 @@ $$
 
     으로 단순해진다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**5.** 어떤 주머니에 빨강 50%, 파랑 30%, 초록 20%의 구슬이 들어 있다고 한다. 구슬 200개를 (복원으로) 뽑아 $[90, 70, 40]$을 관측했다. `stats.chisquare`로 $\alpha = 0.01$에서 이 주장을 검정하고 결론을 서술하라.
+**연습문제 5.** <span class="diff med" title="중간"></span>
+어떤 주머니에 빨강 50%, 파랑 30%, 초록 20%의 구슬이 들어 있다고 한다. 구슬 200개를 (복원으로) 뽑아 $[90, 70, 40]$을 관측했다. `stats.chisquare`로 $\alpha = 0.01$에서 이 주장을 검정하고 결론을 서술하라.
+
+</div>
 
 ??? success "풀이"
 

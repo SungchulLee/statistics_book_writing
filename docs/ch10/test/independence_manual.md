@@ -171,13 +171,18 @@ plt.show()
 
 ## 연습문제
 
-**1.** $2 \times 2$ 표
+<div class="drillbox" markdown>
+
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
+$2 \times 2$ 표
 
 $$
 \begin{pmatrix} 20 & 30 \\ 40 & 10 \end{pmatrix}
 $$
 
 에 대해 공식 $E_{ij} = R_i C_j / n$을 써서 기대도수 행렬을 손으로 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -199,9 +204,12 @@ $$
 
     이다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**2.** 연습문제 1의 기대도수를 써서 카이제곱 통계량과 자유도를 계산하라. $\alpha = 0.05$에서 $H_0$을 기각하겠는가?
+**연습문제 2.** <span class="diff med" title="중간"></span>
+연습문제 1의 기대도수를 써서 카이제곱 통계량과 자유도를 계산하라. $\alpha = 0.05$에서 $H_0$을 기각하겠는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -217,9 +225,12 @@ $$
 
     임계값은 $\chi^2_{0.05, 1} = 3.841$이다. $16.667 > 3.841$이므로 $H_0$을 **기각한다**. 두 변수는 유의하게 연관되어 있다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**3.** `compute_expected` 함수에서 `keepdims=True`가 필요한 이유를 설명하라. 없으면 어떤 문제가 생기는가?
+**연습문제 3.** <span class="diff med" title="중간"></span>
+`compute_expected` 함수에서 `keepdims=True`가 필요한 이유를 설명하라. 없으면 어떤 문제가 생기는가?
+
+</div>
 
 ??? success "풀이"
 
@@ -227,9 +238,12 @@ $$
 
     `keepdims=True`를 쓰면 모양이 각각 $(r, 1)$과 $(1, c)$가 된다. $(r, 1)$ 행렬과 $(1, c)$ 행렬의 곱은 $(r, c)$ 행렬이며, 이것이 기대도수에 필요한 외적이다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**4.** 어떤 분할표에서든 기대도수의 합이 관측도수의 합과 같음, 즉 $\sum_{i,j} E_{ij} = n$임을 보여라.
+**연습문제 4.** <span class="diff med" title="중간"></span>
+어떤 분할표에서든 기대도수의 합이 관측도수의 합과 같음, 즉 $\sum_{i,j} E_{ij} = n$임을 보여라.
+
+</div>
 
 ??? success "풀이"
 
@@ -241,9 +255,12 @@ $$
 
     이다. 두 번째 단계는 $R_i$가 $j$에 의존하지 않아 안쪽 합에서 빼낼 수 있다는 사실을, 마지막 단계는 $\sum_i R_i = \sum_j C_j = n$을 이용한다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**5.** 기대도수 표에서 자유로운 모수의 개수를 세어 카이제곱 독립성 검정의 자유도가 $(r-1)(c-1)$임을 증명하라.
+**연습문제 5.** <span class="diff med" title="중간"></span>
+기대도수 표에서 자유로운 모수의 개수를 세어 카이제곱 독립성 검정의 자유도가 $(r-1)(c-1)$임을 증명하라.
+
+</div>
 
 ??? success "풀이"
 

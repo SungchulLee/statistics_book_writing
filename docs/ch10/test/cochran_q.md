@@ -129,7 +129,12 @@ Q에 대한 카이제곱 근사는 대체로 다음일 때 적절하다:
 
 ## 연습문제
 
-**1.** 위 예제 자료에서 열 합계 $T_1 = 4$, $T_2 = 9$, $T_3 = 2$를 확인하고 총합 $T$를 계산하라.
+<div class="drillbox" markdown>
+
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
+위 예제 자료에서 열 합계 $T_1 = 4$, $T_2 = 9$, $T_3 = 2$를 확인하고 총합 $T$를 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -141,9 +146,12 @@ Q에 대한 카이제곱 근사는 대체로 다음일 때 적절하다:
 
     총합: $T = 4 + 9 + 2 = 15$. $\square$
 
----
+<div class="drillbox" markdown>
 
-**2.** 연습문제 1의 값을 써서 12명 모두의 행 합계 $L_i$를 구하고 $\sum_{i=1}^{12} L_i^2$을 계산하라.
+**연습문제 2.** <span class="diff med" title="중간"></span>
+연습문제 1의 값을 써서 12명 모두의 행 합계 $L_i$를 구하고 $\sum_{i=1}^{12} L_i^2$을 계산하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -155,9 +163,12 @@ Q에 대한 카이제곱 근사는 대체로 다음일 때 적절하다:
 
     $\square$
 
----
+<div class="drillbox" markdown>
 
-**3.** 연습문제 1과 2의 값을 Cochran의 Q 공식에 대입하여 검정통계량을 확인하라.
+**연습문제 3.** <span class="diff med" title="중간"></span>
+연습문제 1과 2의 값을 Cochran의 Q 공식에 대입하여 검정통계량을 확인하라.
+
+</div>
 
 ??? success "풀이"
 
@@ -181,9 +192,12 @@ Q에 대한 카이제곱 근사는 대체로 다음일 때 적절하다:
 
     $\text{df} = k - 1 = 2$에서 $p = P(\chi^2_2 \ge 8.667) \approx 0.013$이다. $p < 0.05$이므로 $H_0$을 기각하고 세 과제의 성공률이 유의하게 다르다고 결론짓는다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**4.** Cochran의 Q로 $H_0$을 기각한 뒤, 어느 조건이 다른지 알아내려고 $\binom{k}{2}$개의 쌍별 McNemar 검정을 모두 수행한다고 하자. 조건이 $k = 4$개이면 쌍별 검정은 몇 개이며, 전체 $\alpha = 0.05$일 때 Bonferroni 조정 유의수준은 얼마인가?
+**연습문제 4.** <span class="diff med" title="중간"></span>
+Cochran의 Q로 $H_0$을 기각한 뒤, 어느 조건이 다른지 알아내려고 $\binom{k}{2}$개의 쌍별 McNemar 검정을 모두 수행한다고 하자. 조건이 $k = 4$개이면 쌍별 검정은 몇 개이며, 전체 $\alpha = 0.05$일 때 Bonferroni 조정 유의수준은 얼마인가?
+
+</div>
 
 ??? success "풀이"
 
@@ -201,9 +215,12 @@ Q에 대한 카이제곱 근사는 대체로 다음일 때 적절하다:
 
     이다. 쌍별 McNemar 검정은 p-값이 $0.00833$보다 작을 때에만 유의하다. 이렇게 하면 가족단위 오류율이 $0.05$로 통제된다. $\square$
 
----
+<div class="drillbox" markdown>
 
-**5.** $k = 2$일 때 Cochran의 Q 통계량이 보정하지 않은 McNemar 통계량 $(b - c)^2 / (b + c)$로 환원됨을 보여라.
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+$k = 2$일 때 Cochran의 Q 통계량이 보정하지 않은 McNemar 통계량 $(b - c)^2 / (b + c)$로 환원됨을 보여라.
+
+</div>
 
 ??? success "풀이"
 
