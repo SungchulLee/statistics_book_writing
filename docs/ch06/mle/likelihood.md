@@ -28,7 +28,7 @@ $$
 
 이 곱의 구조는 i.i.d. 상황에 특유한 것이다. 의존하는 자료(예: 시계열)에서는 가능도가 다른 형태를 취하지만 밑바탕의 착상은 같다.
 
-!!! example "Bernoulli 가능도"
+!!! example "베르누이 가능도"
 
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$이고 $n$번의 시행에서 성공 $k$번을 관측했다고 하자. 가능도함수는
 
@@ -48,9 +48,9 @@ $$
 
 로그가 순증가함수이므로 $\ell$을 최대화하는 것은 $L$을 최대화하는 것과 동등하다. 실무에서는 로그가능도가 표준적인 작업 도구이다.
 
-!!! example "Bernoulli 로그가능도"
+!!! example "베르누이 로그가능도"
 
-    Bernoulli 예를 이어가면:
+    베르누이 예를 이어가면:
 
     $$
     \ell(p; \mathbf{x}) = k \log p + (n - k) \log(1-p)
@@ -132,7 +132,7 @@ $\text{Poisson}(\lambda)$ 분포에서 얻은 크기 $n = 3$인 표본에서 관
 </div>
 
 ??? success "풀이"
-    Poisson 가능도는 $L(\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}$이다.
+    포아송 가능도는 $L(\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}$이다.
 
     $\lambda = 3$일 때: $L(3) = \frac{3^2 e^{-3}}{2!} \cdot \frac{3^5 e^{-3}}{5!} \cdot \frac{3^3 e^{-3}}{3!} = \frac{3^{10} e^{-9}}{2! \cdot 5! \cdot 3!}$
 

@@ -26,9 +26,9 @@ $$
 
 ---
 
-## Exponential 분포
+## 지수분포
 
-Exponential 분포의 CDF는 $F(x) = 1 - e^{-\lambda x}$이다. 역함수를 구하면:
+지수분포의 CDF는 $F(x) = 1 - e^{-\lambda x}$이다. 역함수를 구하면:
 
 $$
 F^{-1}(u) = -\frac{\ln(1 - u)}{\lambda}
@@ -89,9 +89,9 @@ plt.show()
 
 ---
 
-## Cauchy 분포
+## 코시분포
 
-표준 Cauchy 분포의 CDF는 $F(x) = \frac{1}{2} + \frac{1}{\pi}\arctan(x)$이다. 역함수를 구하면:
+표준 코시분포의 CDF는 $F(x) = \frac{1}{2} + \frac{1}{\pi}\arctan(x)$이다. 역함수를 구하면:
 
 $$
 F^{-1}(u) = \tan\!\left(\pi\!\left(u - \frac{1}{2}\right)\right)
@@ -127,7 +127,7 @@ plt.show()
 
 ![Cauchy via Inverse Transform](./img/inverse_transform_sampling_94.png)
 
-Cauchy 예는 역변환 표본추출이 유한한 평균조차 없는 두꺼운 꼬리 분포에서도 작동함을 보여 준다.
+코시 예는 역변환 표본추출이 유한한 평균조차 없는 두꺼운 꼬리 분포에서도 작동함을 보여 준다.
 
 </div>
 
@@ -199,7 +199,7 @@ $\text{Uniform}(a, b)$ 분포의 역 CDF를 유도하고 역변환 공식을 쓰
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-Rayleigh 분포는 $x \ge 0$에 대해 CDF가 $F(x) = 1 - e^{-x^2/(2\sigma^2)}$이다. 역 CDF를 유도하고 역변환 표본추출로 Rayleigh 표본을 생성하는 코드를 작성하라.
+레일리분포는 $x \ge 0$에 대해 CDF가 $F(x) = 1 - e^{-x^2/(2\sigma^2)}$이다. 역 CDF를 유도하고 역변환 표본추출로 레일리 표본을 생성하는 코드를 작성하라.
 
 </div>
 
@@ -235,7 +235,7 @@ Rayleigh 분포는 $x \ge 0$에 대해 CDF가 $F(x) = 1 - e^{-x^2/(2\sigma^2)}$�
     표본분산 0.4306  (이론 0.4292)
     ```
 
-    이는 Box-Muller 변환의 한 성분과 밀접하게 관련된다. $R = \sqrt{-2\ln U}$가 Rayleigh 분포를 따른다.
+    이는 Box-Muller 변환의 한 성분과 밀접하게 관련된다. $R = \sqrt{-2\ln U}$가 레일리분포를 따른다.
 
 <div class="drillbox" markdown>
 
@@ -247,7 +247,7 @@ Rayleigh 분포는 $x \ge 0$에 대해 CDF가 $F(x) = 1 - e^{-x^2/(2\sigma^2)}$�
 ??? success "풀이"
     $U \sim \text{Uniform}(0,1)$이면 $1 - U$도 $\text{Uniform}(0,1)$이다(균등분포는 0.5를 중심으로 대칭이다). 따라서 $F^{-1}(U)$에서 $U$를 $1 - U$로 바꾸어도 같은 분포가 나온다.
 
-    이는 공식을 간단하게 만들어 주므로 유용하다. Exponential 분포에서는 $-\ln(1-U)/\lambda$를 $-\ln(U)/\lambda$로 바꿀 수 있어 뺄셈 한 번을 아낀다. 실무에서는 $\ln(0) = -\infty$를 주는 $U = 0$이라는 경계 사례도 피하게 되는데, $1 - U = 0$이 될 확률은 0이기 때문이다.
+    이는 공식을 간단하게 만들어 주므로 유용하다. 지수분포에서는 $-\ln(1-U)/\lambda$를 $-\ln(U)/\lambda$로 바꿀 수 있어 뺄셈 한 번을 아낀다. 실무에서는 $\ln(0) = -\infty$를 주는 $U = 0$이라는 경계 사례도 피하게 되는데, $1 - U = 0$이 될 확률은 0이기 때문이다.
 
 ---
 

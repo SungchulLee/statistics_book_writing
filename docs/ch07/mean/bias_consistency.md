@@ -115,7 +115,7 @@ $$\text{MSE}(\bar{X}_n) = \underbrace{[\text{Bias}(\bar{X}_n)]^2}_{= 0} + \under
 3. **약종속 시계열**: 자기상관이 충분히 빨리 감쇠하면(예: $\sum_{k=0}^\infty |\rho_k| < \infty$) $\bar{X}_n$은 일치한다.
 
 ### X-bar가 일치하지 않는 경우
-1. **무한한 분산** (예: 자유도 2인 Student-t): $\text{Var}(X)$가 존재하지 않더라도 $E[|X|] < \infty$이면 (Khintchine의 WLLN에 의해) $\bar{X}_n$은 여전히 일치한다.
+1. **무한한 분산** (예: 자유도 2인 스튜던트-t): $\text{Var}(X)$가 존재하지 않더라도 $E[|X|] < \infty$이면 (Khintchine의 WLLN에 의해) $\bar{X}_n$은 여전히 일치한다.
 
 2. **무한한 평균** (예: Cauchy): $E[X]$가 존재하지 않으므로 $\bar{X}$가 수렴할 $\mu$ 자체가 없다. 표본평균은 심하게 요동치며 수렴하지 않는다.
 

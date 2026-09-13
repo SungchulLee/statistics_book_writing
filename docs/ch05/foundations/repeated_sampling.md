@@ -199,7 +199,7 @@ if __name__ == "__main__":
 
 </div>
 
-## 모의실험 3: Bernoulli 모집단
+## 모의실험 3: 베르누이 모집단
 
 <div class="codebox" markdown>
 

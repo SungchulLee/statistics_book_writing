@@ -1,4 +1,4 @@
-# 2차원 Gaussian 조건부분포
+# 2차원 정규 조건부분포
 
 ## 개요
 
@@ -97,7 +97,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-![2차원 Gaussian 조건부분포](./img/gaussian_2d_conditionals_30.png)
+![2차원 정규조건부분포](./img/gaussian_2d_conditionals_30.png)
 
 </div>
 

@@ -142,9 +142,9 @@ def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
 
 </div>
 
-## Poisson 자료에 적용하기
+## 포아송 자료에 적용하기
 
-참 비율 $\lambda = 3.5$인 Poisson 분포에서 $n = 80$개를 뽑는다. Poisson 분포는 이산이고 오른쪽으로 치우쳐 있어 붓스트랩 방법의 좋은 시험대이다.
+참 비율 $\lambda = 3.5$인 포아송분포에서 $n = 80$개를 뽑는다. 포아송분포는 이산이고 오른쪽으로 치우쳐 있어 붓스트랩 방법의 좋은 시험대이다.
 
 <div class="codebox" markdown>
 
@@ -283,7 +283,7 @@ for name, (lo, hi) in [("백분위수", (lo_p, hi_p)), ("기본", (lo_b, hi_b)),
 
     $\square$
 
-    Poisson 예제가 이 성질의 근사적 확인이다. $z_0 = -0.027$, $a = 0.013$으로 둘 다 $0$에 가까워 BCa 구간이 백분위수 구간과 소수 넷째 자리까지 일치했다.
+    포아송 예제가 이 성질의 근사적 확인이다. $z_0 = -0.027$, $a = 0.013$으로 둘 다 $0$에 가까워 BCa 구간이 백분위수 구간과 소수 넷째 자리까지 일치했다.
 
 <div class="drillbox" markdown>
 

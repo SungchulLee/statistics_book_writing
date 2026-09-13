@@ -49,7 +49,7 @@ $$
 
 로그 사전분포 항 $\log \pi(\theta)$는 특정 모수값을 억제하는 벌점 역할을 한다. 사전분포족이 다르면 벌점의 구조도 달라진다.
 
-**Gaussian 사전분포와 L2 정칙화.** $\theta_j \overset{iid}{\sim} N(0, \sigma_0^2)$이면 로그 사전분포는
+**정규 사전분포와 L2 정칙화.** $\theta_j \overset{iid}{\sim} N(0, \sigma_0^2)$이면 로그 사전분포는
 
 $$
 \log \pi(\theta) = \text{const} - \frac{1}{2\sigma_0^2}\sum_j \theta_j^2
@@ -57,7 +57,7 @@ $$
 
 따라서 $\log f(\mathbf{x} \mid \theta) + \log \pi(\theta)$를 최대화하는 것은 음의 로그가능도에 $\lambda = 1/(2\sigma_0^2)$인 L2 벌점 $\lambda \|\theta\|_2^2$을 더해 최소화하는 것과 동등하다. 이것이 정확히 능형회귀이다.
 
-**Laplace 사전분포와 L1 정칙화.** $\theta_j \overset{iid}{\sim} \text{Laplace}(0, b)$이면 로그 사전분포는
+**라플라스 사전분포와 L1 정칙화.** $\theta_j \overset{iid}{\sim} \text{Laplace}(0, b)$이면 로그 사전분포는
 
 $$
 \log \pi(\theta) = \text{const} - \frac{1}{b}\sum_j |\theta_j|
@@ -77,7 +77,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-Bernoulli에 대한 베이즈적 추정량 $\hat\theta_B = (\sum X_i + a)/(n + a + b)$를 생각하자. (a) 편향과 분산. (b) $a = b = \sqrt n/2$일 때 편향되어 있지만 일치함을 보여라. (c) $\theta = 0.5, n = 10$에서 MLE와 평균제곱오차를 비교하라.
+베르누이에 대한 베이즈적 추정량 $\hat\theta_B = (\sum X_i + a)/(n + a + b)$를 생각하자. (a) 편향과 분산. (b) $a = b = \sqrt n/2$일 때 편향되어 있지만 일치함을 보여라. (c) $\theta = 0.5, n = 10$에서 MLE와 평균제곱오차를 비교하라.
 
 </div>
 
@@ -137,7 +137,7 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**켤레 사전분포.** 켤레 사전분포가 계산상 편리한 이유는 무엇인가? Beta-Bernoulli 외의 예를 하나 들라.
+**켤레 사전분포.** 켤레 사전분포가 계산상 편리한 이유는 무엇인가? 베타-베르누이 외의 예를 하나 들라.
 
 </div>
 
@@ -204,7 +204,7 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 
     - 위치모수에 대한 $\pi(\mu) = 1$ ($\mathbb{R}$ 위의 Lebesgue 측도).
     - 분산/척도 모수에 대한 $\pi(\sigma) = 1/\sigma$ (척도에 대한 Jeffreys).
-    - Bernoulli에 대한 $\pi(p) \propto 1/\sqrt{p(1-p)}$ (Bernoulli에 대한 Jeffreys).
+    - 베르누이에 대한 $\pi(p) \propto 1/\sqrt{p(1-p)}$ (베르누이에 대한 Jeffreys).
 
     **비정상 사전분포의 문제:**
 

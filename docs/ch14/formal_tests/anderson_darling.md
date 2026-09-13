@@ -248,14 +248,14 @@ Anderson-Darling 검정은 Kolmogorov-Smirnov 검정보다 분포의 꼬리에 �
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-Anderson-Darling 검정은 정규분포가 아닌 분포(지수, Weibull 등)에도 적용할 수 있다. 일반 원리를 설명하라.
+Anderson-Darling 검정은 정규분포가 아닌 분포(지수, 와이불 등)에도 적용할 수 있다. 일반 원리를 설명하라.
 
 </div>
 
 ??? success "풀이"
     Anderson-Darling 검정은 일반적인 적합도 검정이다. 경험적 CDF를 임의로 지정한 이론적 CDF $F_0(x)$와 비교한다. 정규성 검정에서는 추정된 모수로 $F_0 = \Phi((x-\hat{\mu})/\hat{\sigma})$를 쓴다.
 
-    자료가 지수분포를 따르는지 검정하려면 $F_0(x) = 1 - e^{-x/\hat{\lambda}}$를 쓴다. Weibull이라면 추정된 모양·척도 모수를 가진 Weibull CDF를 쓴다.
+    자료가 지수분포를 따르는지 검정하려면 $F_0(x) = 1 - e^{-x/\hat{\lambda}}$를 쓴다. 와이불이라면 추정된 모양·척도 모수를 가진 Weibull CDF를 쓴다.
 
     검정통계량 공식은 모든 경우에 같고 $F_0$만 바뀐다. 임계값은 분포족마다 다른데, $A^2$의 귀무분포가 추정한 모수의 개수와 기준분포의 모양에 의존하기 때문이다. 각 분포족에 대해 전용 임계값 표나 모의실험 기반 p값을 쓴다.
 

@@ -1,12 +1,12 @@
-# Exponential 분포의 MLE
+# 지수분포의 MLE
 
 ## 동기
 
-Exponential 분포는 Poisson 과정에서 연속한 사건 사이의 대기 시간을 모형화한다. 예를 들어 고객 도착 사이의 시간, 부품 고장 사이의 시간, 방사성 붕괴 사이의 시간이 그렇다. 관측된 대기 시간으로부터 비율 모수 $\lambda$를 추정하는 것은 기본적인 응용 문제이다. Exponential의 경우 깔끔한 닫힌 형태의 MLE가 나오며, 동시에 비선형 변환이 추정량에 어떻게 편향을 들여오는지도 보여 준다.
+지수분포는 포아송 과정에서 연속한 사건 사이의 대기 시간을 모형화한다. 예를 들어 고객 도착 사이의 시간, 부품 고장 사이의 시간, 방사성 붕괴 사이의 시간이 그렇다. 관측된 대기 시간으로부터 비율 모수 $\lambda$를 추정하는 것은 기본적인 응용 문제이다. 지수의 경우 깔끔한 닫힌 형태의 MLE가 나오며, 동시에 비선형 변환이 추정량에 어떻게 편향을 들여오는지도 보여 준다.
 
 ## 설정
 
-비율 모수가 $\lambda > 0$인 Exponential 분포에서 독립적으로 뽑은 확률표본 $X_1, X_2, \ldots, X_n$을 생각하자. 각 관측값의 밀도는
+비율 모수가 $\lambda > 0$인 지수분포에서 독립적으로 뽑은 확률표본 $X_1, X_2, \ldots, X_n$을 생각하자. 각 관측값의 밀도는
 
 $$
 f(x; \lambda) = \lambda e^{-\lambda x}, \quad x > 0
@@ -163,9 +163,9 @@ MLE $\hat{\lambda} = 1/\bar{X}$를 $\lambda$의 적률법 추정량과 비교하
 </div>
 
 ??? success "풀이"
-    Exponential 분포에서 $E[X] = 1/\lambda$이다. 적률법은 $\bar{X} = 1/\hat{\lambda}$로 두므로 $\hat{\lambda}_{\text{MOM}} = 1/\bar{X}$를 준다.
+    지수분포에서 $E[X] = 1/\lambda$이다. 적률법은 $\bar{X} = 1/\hat{\lambda}$로 두므로 $\hat{\lambda}_{\text{MOM}} = 1/\bar{X}$를 준다.
 
-    이는 MLE와 동일하다. Exponential 분포가 단일모수 지수족이기 때문에 생기는 일치이다. 그런 족에서는 점수방정식 $\partial\ell/\partial\lambda = 0$과 1차 적률방정식 $\bar{X} = E_\lambda[X]$가 같은 추정량을 준다.
+    이는 MLE와 동일하다. 지수분포가 단일모수 지수족이기 때문에 생기는 일치이다. 그런 족에서는 점수방정식 $\partial\ell/\partial\lambda = 0$과 1차 적률방정식 $\bar{X} = E_\lambda[X]$가 같은 추정량을 준다.
 
     두 추정량 모두 유한표본 편향 $\lambda/(n-1)$과 점근분산 $\lambda^2/n$을 공유한다.
 

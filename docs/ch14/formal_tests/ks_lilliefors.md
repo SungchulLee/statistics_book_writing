@@ -186,7 +186,7 @@ Fail to reject H_0: The data is normally distributed.
 
 ### 권장 사항
 
-- **일반적인 분포 검정**(예: 모수가 고정된 지수분포나 Weibull 분포에 자료가 맞는지 확인)에는 **`stats.kstest`**가 낫다.
+- **일반적인 분포 검정**(예: 모수가 고정된 지수분포나 와이불분포에 자료가 맞는지 확인)에는 **`stats.kstest`**가 낫다.
 - **모수가 미지인 정규성 검정**에는 모수 추정 과정을 반영하여 더 정확하게 평가하는 **`statsmodels`의 `lilliefors`**가 선호된다.
 
 ## 연습문제

@@ -79,7 +79,7 @@ Wald 구간은 이런 형태의 구간을 정규근사로 형식화한 [Abraham 
 | **Wald (z)** | $\hat{p} \pm z\sqrt{\hat{p}(1-\hat{p})/n}$ | 예 | $n$이 큰 경우 | 단순하지만 작은 표본에서 부정확 |
 | **Wilson score** | z-검정을 뒤집어 유도 | 예 | 작은 $n$부터 큰 $n$까지 | 포함확률이 훨씬 좋음 |
 | **Agresti–Coull** | 보정된 Wald(가상 관측값 추가) | 예 | 작은~중간 $n$ | 손쉬운 보완, Wilson에 근접한 성능 |
-| **Clopper–Pearson** | Binomial에 기반 | 아니오 | 작은 $n$ | 보수적이지만 정확 |
+| **Clopper–Pearson** | 이항에 기반 | 아니오 | 작은 $n$ | 보수적이지만 정확 |
 
 ### Wilson score 구간
 

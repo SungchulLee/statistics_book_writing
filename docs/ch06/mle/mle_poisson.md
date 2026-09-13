@@ -1,12 +1,12 @@
-# Poisson 분포의 MLE
+# 포아송분포의 MLE
 
 ## 동기
 
-Poisson 분포는 계수 자료의 표준 모형이다. 시간당 받는 이메일 수, 제품 하나당 결함 수, 교차로에서 연간 발생하는 사고 수 등이 그렇다. 관측된 계수로부터 비율 모수 $\lambda$를 추정하는 것은 가장 흔한 통계 작업 중 하나이다. Poisson의 MLE는 표본평균으로 밝혀지며, 모든 불편추정량 중에서 가능한 최선의 정밀도를 달성한다.
+포아송분포는 계수 자료의 표준 모형이다. 시간당 받는 이메일 수, 제품 하나당 결함 수, 교차로에서 연간 발생하는 사고 수 등이 그렇다. 관측된 계수로부터 비율 모수 $\lambda$를 추정하는 것은 가장 흔한 통계 작업 중 하나이다. 포아송의 MLE는 표본평균으로 밝혀지며, 모든 불편추정량 중에서 가능한 최선의 정밀도를 달성한다.
 
 ## 설정
 
-비율 모수가 $\lambda > 0$인 Poisson 분포에서 독립적으로 뽑은 확률표본 $X_1, X_2, \ldots, X_n$을 생각하자. 각 관측값은 다음 확률질량함수를 가지고 $\{0, 1, 2, \ldots\}$의 값을 취한다:
+비율 모수가 $\lambda > 0$인 포아송분포에서 독립적으로 뽑은 확률표본 $X_1, X_2, \ldots, X_n$을 생각하자. 각 관측값은 다음 확률질량함수를 가지고 $\{0, 1, 2, \ldots\}$의 값을 취한다:
 
 $$
 P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}, \quad k = 0, 1, 2, \ldots
@@ -59,7 +59,7 @@ $$
 
 MLE를 구했으니 이제 그 통계적 특성을 살펴보자. 불편인지, 얼마나 정밀한지, 다른 불편추정량이 더 나을 수 있는지를 본다.
 
-**불편성.** Exponential 분포의 MLE와 달리 Poisson의 MLE는 불편이다. $E[\bar{X}] = E[X_1] = \lambda$이므로 표본크기와 무관하게 평균적으로 참 모수를 맞힌다.
+**불편성.** 지수분포의 MLE와 달리 포아송의 MLE는 불편이다. $E[\bar{X}] = E[X_1] = \lambda$이므로 표본크기와 무관하게 평균적으로 참 모수를 맞힌다.
 
 **Fisher 정보량.** 관측값 하나당 Fisher 정보량은
 
@@ -75,7 +75,7 @@ $$
 \text{Var}(\hat{\lambda}) \geq \frac{1}{I_n(\lambda)} = \frac{\lambda}{n}
 $$
 
-$\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계를 정확히 달성한다. $\lambda$의 어떤 불편추정량도 이보다 작은 분산을 가질 수 없으며, 따라서 $\bar{X}$는 Poisson 비율에 대한 일률최소분산불편추정량(UMVUE)이다.
+$\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계를 정확히 달성한다. $\lambda$의 어떤 불편추정량도 이보다 작은 분산을 가질 수 없으며, 따라서 $\bar{X}$는 포아송 비율에 대한 일률최소분산불편추정량(UMVUE)이다.
 
 ## 연습문제
 
@@ -115,7 +115,7 @@ $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계
     \hat{\lambda} = \frac{168}{24} = 7.0 \text{ arrivals per hour}
     $$
 
-    Poisson 관측값 하나에 대한 Fisher 정보량이 $I(\lambda) = 1/\lambda$이므로 점근분산은:
+    포아송 관측값 하나에 대한 Fisher 정보량이 $I(\lambda) = 1/\lambda$이므로 점근분산은:
 
     $$
     \text{Var}(\hat{\lambda}) \approx \frac{1}{nI(\lambda)} = \frac{\lambda}{n} \approx \frac{7.0}{24} = 0.2917
@@ -145,7 +145,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
     따라서 $\hat{\lambda}$는 불편이다.
 
-    Poisson 분포에서 $\text{Var}(X_i) = \lambda$이고 $X_i$들이 독립이므로:
+    포아송분포에서 $\text{Var}(X_i) = \lambda$이고 $X_i$들이 독립이므로:
 
     $$
     \text{Var}(\hat{\lambda}) = \text{Var}(\bar{X}) = \frac{\lambda}{n}
@@ -156,7 +156,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff hard" title="어려움"></span>
-Poisson의 MLE $\hat{\lambda} = \bar{X}$는 (척도를 제외하면) 충분통계량이기도 하다. Rao-Blackwell 정리를 사용하여 다른 어떤 불편추정량도 더 작은 분산을 가질 수 없는 이유를 설명하라.
+포아송의 MLE $\hat{\lambda} = \bar{X}$는 (척도를 제외하면) 충분통계량이기도 하다. Rao-Blackwell 정리를 사용하여 다른 어떤 불편추정량도 더 작은 분산을 가질 수 없는 이유를 설명하라.
 
 </div>
 
@@ -165,7 +165,7 @@ Poisson의 MLE $\hat{\lambda} = \bar{X}$는 (척도를 제외하면) 충분통�
 
     Rao-Blackwell 정리에 의해 $T$로 조건화한 임의의 불편추정량은 원래보다 분산이 크지 않다. $\hat{\lambda}$가 이미 $T$의 함수이므로, 다른 어떤 불편추정량을 $T$로 조건화해도 $\hat{\lambda}$보다 나아질 수 없다.
 
-    나아가 Poisson 족은 완비 지수족이므로 Lehmann-Scheffé 정리가 $\hat{\lambda} = T/n$이 유일한 UMVUE임을 보장한다. 그 분산 $\lambda/n$이 Cramér-Rao 하한과 같으므로 (선형추정량뿐 아니라) 어떤 불편추정량도 이보다 나을 수 없음이 확인된다.
+    나아가 포아송 족은 완비 지수족이므로 Lehmann-Scheffé 정리가 $\hat{\lambda} = T/n$이 유일한 UMVUE임을 보장한다. 그 분산 $\lambda/n$이 Cramér-Rao 하한과 같으므로 (선형추정량뿐 아니라) 어떤 불편추정량도 이보다 나을 수 없음이 확인된다.
 
 ---
 

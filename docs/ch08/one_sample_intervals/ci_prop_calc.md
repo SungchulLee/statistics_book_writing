@@ -6,7 +6,7 @@
 
 ## Wald 구간
 
-독립인 Bernoulli 시행 $n$번에서 성공이 $k$번이면 표본비율은 $\hat{p} = k/n$이다. Wald $(1-\alpha)100\%$ 신뢰구간은
+독립인 베르누이 시행 $n$번에서 성공이 $k$번이면 표본비율은 $\hat{p} = k/n$이다. Wald $(1-\alpha)100\%$ 신뢰구간은
 
 $$
 \hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
@@ -45,7 +45,7 @@ $$
 
 ## Clopper–Pearson (정확) 구간
 
-Clopper–Pearson 구간은 Beta 분위수로 두 개의 단측 이항검정을 뒤집는다:
+Clopper–Pearson 구간은 베타 분위수로 두 개의 단측 이항검정을 뒤집는다:
 
 $$
 \left(\text{Beta}\!\left(\frac{\alpha}{2};\; k,\; n-k+1\right),\;\;

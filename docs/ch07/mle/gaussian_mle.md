@@ -129,7 +129,7 @@ $$\bar{X} \pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$$
 
 $$\bar{X} \pm t_{n-1, \alpha/2}\frac{S}{\sqrt{n}}$$
 
-여기서 $S = \sqrt{S^2}$이고 $t_{n-1}$은 자유도 $n-1$인 Student $t$-분포이다.
+여기서 $S = \sqrt{S^2}$이고 $t_{n-1}$은 자유도 $n-1$인 스튜던트 $t$-분포이다.
 
 ### sigma-squared에 대해
 

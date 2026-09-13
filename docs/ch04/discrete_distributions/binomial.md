@@ -1,18 +1,18 @@
-# Bernoulli 분포와 Binomial 분포
+# 베르누이분포와 이항분포
 
 ## 개요
 
-**Bernoulli 분포**는 두 가지 결과(성공/실패)를 갖는 단일 시행을 모형화하고, **Binomial 분포**는 이를 확장하여 $n$번의 독립 시행에서 성공 횟수를 센다. 이 둘은 이산확률모형의 기초를 이룬다.
+**베르누이분포**는 두 가지 결과(성공/실패)를 갖는 단일 시행을 모형화하고, **이항분포**는 이를 확장하여 $n$번의 독립 시행에서 성공 횟수를 센다. 이 둘은 이산확률모형의 기초를 이룬다.
 
 ---
 
-## Bernoulli 분포
+## 베르누이분포
 
 <div class="defn" markdown>
 
-### 정의 1. Bernoulli 분포 { .dfn }
+### 정의 1. 베르누이분포 { .dfn }
 
-확률변수 $X$가 확률 $p$로 값 1(성공)을, 확률 $1 - p$로 값 0(실패)을 가지면 $X$는 Bernoulli 분포를 따른다:
+확률변수 $X$가 확률 $p$로 값 1(성공)을, 확률 $1 - p$로 값 0(실패)을 가지면 $X$는 베르누이분포를 따른다:
 
 $$
 X \sim \text{Bernoulli}(p), \qquad P(X = x) = p^x (1 - p)^{1-x}, \quad x \in \{0, 1\}
@@ -42,13 +42,13 @@ $$
 
 ---
 
-## Binomial 분포
+## 이항분포
 
 <div class="defn" markdown>
 
-### 정의 2. Binomial 분포 { .dfn }
+### 정의 2. 이항분포 { .dfn }
 
-$X_1, X_2, \ldots, X_n$이 독립인 $\text{Bernoulli}(p)$ 확률변수이면, $Y = \sum_{i=1}^n X_i$는 **Binomial 분포**를 따른다:
+$X_1, X_2, \ldots, X_n$이 독립인 $\text{Bernoulli}(p)$ 확률변수이면, $Y = \sum_{i=1}^n X_i$는 **이항분포**를 따른다:
 
 $$
 Y \sim \text{Binomial}(n, p), \qquad P(Y = k) = \binom{n}{k} p^k (1 - p)^{n-k}, \quad k = 0, 1, \ldots, n
@@ -94,7 +94,7 @@ $$
 
 ## 이항계수 항등식
 
-Binomial 분포를 다룰 때 유용한 항등식이 여럿 있다:
+이항분포를 다룰 때 유용한 항등식이 여럿 있다:
 
 $$
 \begin{aligned}
@@ -159,7 +159,7 @@ ax.legend()
 plt.show()
 ```
 
-![Bernoulli 분포와 Binomial 분포](./img/binomial_125.png)
+![베르누이분포와 이항분포](./img/binomial_125.png)
 
 </div>
 
@@ -190,7 +190,7 @@ ax.legend()
 plt.show()
 ```
 
-![Bernoulli 분포와 Binomial 분포](./img/binomial_151.png)
+![베르누이분포와 이항분포](./img/binomial_151.png)
 
 </div>
 
@@ -223,9 +223,9 @@ Theoretical var:  2.4000,  Sample var:  2.3861
 
 ---
 
-## Binomial 분포의 정규근사
+## 이항분포의 정규근사
 
-$n$이 크면 Binomial 분포는 정규분포로 잘 근사된다:
+$n$이 크면 이항분포는 정규분포로 잘 근사된다:
 
 $$
 Y \sim \text{Binomial}(n, p) \approx N(np, \, np(1-p)) \quad \text{when } np \geq 5 \text{ and } n(1-p) \geq 5
@@ -258,7 +258,7 @@ ax.legend()
 plt.show()
 ```
 
-![Bernoulli 분포와 Binomial 분포](./img/binomial_186.png)
+![베르누이분포와 이항분포](./img/binomial_186.png)
 
 </div>
 
@@ -307,23 +307,23 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-**독립인 두 Binomial 확률변수의 합.** $X \sim \mathrm{Binomial}(n_1, p)$와 $Y \sim \mathrm{Binomial}(n_2, p)$가 독립이라 하자. $X + Y \sim \mathrm{Binomial}(n_1 + n_2, p)$임을 보여라.
+**독립인 두 이항 확률변수의 합.** $X \sim \mathrm{Binomial}(n_1, p)$와 $Y \sim \mathrm{Binomial}(n_2, p)$가 독립이라 하자. $X + Y \sim \mathrm{Binomial}(n_1 + n_2, p)$임을 보여라.
 
 </div>
 
 ??? success "풀이"
-    각 Binomial 확률변수는 그 자체가 i.i.d. Bernoulli($p$) 시행의 합이다. $X$는 $n_1$개의 Bernoulli($p$)의 합이고, $Y$는 $n_2$개의 합이다. $X$와 $Y$가 독립이라는 것은 두 그룹에 속한 Bernoulli 확률변수들이 서로 독립임을 뜻한다.
+    각 이항 확률변수는 그 자체가 i.i.d. Bernoulli($p$) 시행의 합이다. $X$는 $n_1$개의 Bernoulli($p$)의 합이고, $Y$는 $n_2$개의 합이다. $X$와 $Y$가 독립이라는 것은 두 그룹에 속한 베르누이 확률변수들이 서로 독립임을 뜻한다.
 
     따라서 $X + Y$는 $n_1 + n_2$개의 i.i.d. Bernoulli($p$) 시행의 합이므로 Binomial$(n_1 + n_2, p)$이다. $\square$
 
     **MGF를 통한 확인:** $M_{X+Y}(t) = M_X(t) M_Y(t) = (1 - p + pe^t)^{n_1}(1 - p + pe^t)^{n_2} = (1 - p + pe^t)^{n_1 + n_2}$이며, 이는 Binomial$(n_1 + n_2, p)$의 MGF이다.
 
-    **주의:** *$p$가 공통이라는 점*이 본질적이다. $p$가 다르면 합은 Binomial이 아니다(Poisson-binomial 분포를 따른다).
+    **주의:** *$p$가 공통이라는 점*이 본질적이다. $p$가 다르면 합은 이항이 아니다(Poisson-binomial 분포를 따른다).
 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**연속성 수정을 적용한 정규근사.** Binomial(100, 0.4)에 대해 연속성 수정을 적용한 경우와 적용하지 않은 경우 각각 정규근사로 $P(35 \le Y \le 45)$를 구하라. 정확한 Binomial 값(0.7287)과 비교하라.
+**연속성 수정을 적용한 정규근사.** Binomial(100, 0.4)에 대해 연속성 수정을 적용한 경우와 적용하지 않은 경우 각각 정규근사로 $P(35 \le Y \le 45)$를 구하라. 정확한 이항 값(0.7287)과 비교하라.
 
 </div>
 
@@ -351,7 +351,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-**Bernoulli 분산은 $p = 1/2$에서 최대가 된다.** 이를 해석적으로 증명하고 신뢰구간 계산에서 갖는 실용적 의미를 설명하라.
+**베르누이 분산은 $p = 1/2$에서 최대가 된다.** 이를 해석적으로 증명하고 신뢰구간 계산에서 갖는 실용적 의미를 설명하라.
 
 </div>
 
@@ -400,7 +400,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
 ## 정리하며
 
-- Bernoulli 분포는 단일 이항 시행을 모형화하고, Binomial 분포는 $n$번의 독립 시행에서 성공 횟수를 센다.
+- 베르누이분포는 단일 이항 시행을 모형화하고, 이항분포는 $n$번의 독립 시행에서 성공 횟수를 센다.
 - Binomial PMF는 성공이 나타날 수 있는 모든 순서를 반영하기 위해 이항계수를 사용한다.
-- 평균 $np$와 분산 $np(1-p)$는 독립 Bernoulli 확률변수의 합이라는 표현에서 곧바로 따라 나온다.
-- $n$이 크면 Binomial 분포는 정규분포로 잘 근사되어 이산확률과 연속확률을 이어 준다.
+- 평균 $np$와 분산 $np(1-p)$는 독립 베르누이 확률변수의 합이라는 표현에서 곧바로 따라 나온다.
+- $n$이 크면 이항분포는 정규분포로 잘 근사되어 이산확률과 연속확률을 이어 준다.

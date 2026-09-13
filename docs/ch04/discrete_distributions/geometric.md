@@ -1,18 +1,18 @@
-# Geometric 분포와 Negative Binomial 분포
+# 기하분포와 음이항분포
 
 ## 개요
 
-**Geometric 분포**는 첫 성공까지의 시행 횟수를 모형화하고, **Negative Binomial 분포**는 이를 일반화하여 $r$번째 성공까지의 시행 횟수를 다룬다. 두 분포 모두 독립 Bernoulli 시행을 순차적으로 반복하는 실험에서 자연스럽게 나타난다.
+**기하분포**는 첫 성공까지의 시행 횟수를 모형화하고, **음이항분포**는 이를 일반화하여 $r$번째 성공까지의 시행 횟수를 다룬다. 두 분포 모두 독립 베르누이 시행을 순차적으로 반복하는 실험에서 자연스럽게 나타난다.
 
 ---
 
-## Geometric 분포
+## 기하분포
 
 <div class="defn" markdown>
 
-### 정의 1. Geometric 분포 { .dfn }
+### 정의 1. 기하분포 { .dfn }
 
-성공확률이 $p$인 독립 Bernoulli 시행을 첫 성공이 나올 때까지 반복할 때, 시행 횟수 $X$는 Geometric 분포를 따른다:
+성공확률이 $p$인 독립 베르누이 시행을 첫 성공이 나올 때까지 반복할 때, 시행 횟수 $X$는 기하분포를 따른다:
 
 $$
 X \sim \text{Geometric}(p), \qquad P(X = k) = (1 - p)^{k-1} p, \quad k = 1, 2, 3, \ldots
@@ -63,7 +63,7 @@ $$
 
 ## 무기억성
 
-Geometric 분포는 무기억성을 갖는 **유일한** 이산분포이다:
+기하분포는 무기억성을 갖는 **유일한** 이산분포이다:
 
 $$
 P(X > s + t \mid X > s) = P(X > t) \quad \text{for all } s, t \geq 0
@@ -80,13 +80,13 @@ $$
 
     ---
 
-## Negative Binomial 분포
+## 음이항분포
 
 <div class="defn" markdown>
 
-### 정의 2. Negative Binomial 분포 { .dfn }
+### 정의 2. 음이항분포 { .dfn }
 
-독립 Bernoulli 시행에서 $r$번의 성공을 얻는 데 필요한 시행 횟수 $Y$는 **Negative Binomial 분포**를 따른다:
+독립 베르누이 시행에서 $r$번의 성공을 얻는 데 필요한 시행 횟수 $Y$는 **음이항분포**를 따른다:
 
 $$
 Y \sim \text{NegBin}(r, p), \qquad P(Y = k) = \binom{k-1}{r-1} p^r (1-p)^{k-r}, \quad k = r, r+1, r+2, \ldots
@@ -94,7 +94,7 @@ $$
 
 이항계수 $\binom{k-1}{r-1}$은 처음 $k-1$번의 시행 중에 $r-1$번의 성공을 배치하는 경우의 수를 센다($k$번째 시행은 반드시 성공이어야 한다).
 
-**참고:** $r = 1$이면 Negative Binomial 분포는 Geometric 분포로 환원된다.
+**참고:** $r = 1$이면 음이항분포는 기하분포로 환원된다.
 
 </div>
 
@@ -107,7 +107,7 @@ E[Y] &= \frac{r}{p} \\[4pt]
 \end{aligned}
 $$
 
-### Geometric 확률변수의 합을 통한 유도
+### 기하 확률변수의 합을 통한 유도
 
 $X_1, X_2, \ldots, X_r$이 독립인 $\text{Geometric}(p)$ 확률변수이면 $Y = \sum_{i=1}^r X_i \sim \text{NegBin}(r, p)$이다. 따라서:
 
@@ -138,7 +138,7 @@ $$
 
 ## Python: PMF, CDF, 표본추출
 
-### Geometric 분포
+### 기하분포
 
 <div class="codebox" markdown>
 
@@ -167,11 +167,11 @@ ax.legend()
 plt.show()
 ```
 
-![Geometric 분포와 Negative Binomial 분포](./img/geometric_131.png)
+![기하분포와 Negative 이항분포](./img/geometric_131.png)
 
 </div>
 
-### Negative Binomial 분포
+### 음이항분포
 
 <div class="codebox" markdown>
 
@@ -199,7 +199,7 @@ ax.legend()
 plt.show()
 ```
 
-![Geometric 분포와 Negative Binomial 분포](./img/geometric_151.png)
+![기하분포와 Negative 이항분포](./img/geometric_151.png)
 
 </div>
 
@@ -262,7 +262,7 @@ ax.legend()
 plt.show()
 ```
 
-![Geometric 분포와 Negative Binomial 분포](./img/geometric_188.png)
+![기하분포와 Negative 이항분포](./img/geometric_188.png)
 
 </div>
 
@@ -301,7 +301,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증명하라.
+기하분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증명하라.
 
 </div>
 
@@ -314,12 +314,12 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
     $\square$
 
-    Geometric 분포는 무기억성을 갖는 **유일한** 이산분포이다. 무기억성을 갖는 유일한 연속분포인 Exponential 분포와 함께, 이 두 분포는 "완전히 무작위한" 대기 시간을 모형화한다.
+    기하분포는 무기억성을 갖는 **유일한** 이산분포이다. 무기억성을 갖는 유일한 연속분포인 지수분포와 함께, 이 두 분포는 "완전히 무작위한" 대기 시간을 모형화한다.
 
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-**Negative Binomial 분포.** i.i.d. Bernoulli($p$) 시행에서 $r$번째 성공까지의 시행 횟수를 $Z$라 하자. PMF, $\mathbb{E}[Z]$, $\mathrm{Var}(Z)$를 유도하라.
+**음이항분포.** i.i.d. Bernoulli($p$) 시행에서 $r$번째 성공까지의 시행 횟수를 $Z$라 하자. PMF, $\mathbb{E}[Z]$, $\mathrm{Var}(Z)$를 유도하라.
 
 </div>
 
@@ -330,13 +330,13 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
     P(Z = k) = \binom{k-1}{r-1} p^r (1-p)^{k-r}, \quad k = r, r+1, \ldots
     $$
 
-    $Z$는 독립인 Geometric 확률변수 $Y_1, \ldots, Y_r$(각 성공까지의 대기 시간)의 합으로 쓸 수 있다. 따라서:
+    $Z$는 독립인 기하 확률변수 $Y_1, \ldots, Y_r$(각 성공까지의 대기 시간)의 합으로 쓸 수 있다. 따라서:
 
     $$
     \mathbb{E}[Z] = r/p, \qquad \mathrm{Var}(Z) = r(1-p)/p^2
     $$
 
-    $r = 1$이면 Geometric 분포로 환원된다. Negative Binomial 분포는 Geometric 분포를 여러 번의 성공으로 일반화하며, 과대산포된 계수 자료의 모형에 바탕이 된다.
+    $r = 1$이면 기하분포로 환원된다. 음이항분포는 기하분포를 여러 번의 성공으로 일반화하며, 과대산포된 계수 자료의 모형에 바탕이 된다.
 
 <div class="drillbox" markdown>
 
@@ -346,7 +346,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 </div>
 
 ??? success "풀이"
-    분해해서 생각하자. $T_i$를 $i - 1$가지를 이미 모은 상태에서 $i$번째 *새로운* 쿠폰 종류를 얻기까지의 추출 횟수라 하자. 각 $T_i$는 성공확률 $(n - i + 1)/n$인 Geometric 분포를 따른다. $i - 1$가지를 모았다면 남은 $n - i + 1$가지 중 어느 것을 뽑아도 성공이기 때문이다.
+    분해해서 생각하자. $T_i$를 $i - 1$가지를 이미 모은 상태에서 $i$번째 *새로운* 쿠폰 종류를 얻기까지의 추출 횟수라 하자. 각 $T_i$는 성공확률 $(n - i + 1)/n$인 기하분포를 따른다. $i - 1$가지를 모았다면 남은 $n - i + 1$가지 중 어느 것을 뽑아도 성공이기 때문이다.
 
     따라서 $\mathbb{E}[T_i] = n/(n - i + 1)$이다.
 
@@ -358,35 +358,35 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
     여기서 $\gamma \approx 0.5772$는 Euler 상수이다. $n = 365$(서로 다른 생일 날짜)이면 $\mathbb{E}[T] \approx 365 \cdot 6.49 \approx 2370$번 추출해야 한다.
 
-    Geometric 분포는 이 고전적 문제와 이와 유사한 여러 순차 탐색 문제의 기본 구성요소이다.
+    기하분포는 이 고전적 문제와 이와 유사한 여러 순차 탐색 문제의 기본 구성요소이다.
 
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-**이산화된 Exponential 분포로서의 Geometric 분포.** $\Delta t$가 작을 때 $p$가 $\lambda \Delta t$에 대응하는 방식으로, Geometric 분포가 Exponential 분포의 이산시간 대응물로 나타남을 보여라.
+**이산화된 지수분포로서의 기하분포.** $\Delta t$가 작을 때 $p$가 $\lambda \Delta t$에 대응하는 방식으로, 기하분포가 지수분포의 이산시간 대응물로 나타남을 보여라.
 
 </div>
 
 ??? success "풀이"
-    비율 $\lambda$인 Poisson 과정을 시각 $\Delta t, 2\Delta t, 3\Delta t, \ldots$에서 관측한다고 하자. 각 구간 $[(k-1)\Delta t, k\Delta t]$에서 사건이 일어날 확률은 $p = 1 - e^{-\lambda \Delta t} \approx \lambda \Delta t$이며, 마지막 근사는 $\Delta t$가 작을 때 성립한다.
+    비율 $\lambda$인 포아송 과정을 시각 $\Delta t, 2\Delta t, 3\Delta t, \ldots$에서 관측한다고 하자. 각 구간 $[(k-1)\Delta t, k\Delta t]$에서 사건이 일어날 확률은 $p = 1 - e^{-\lambda \Delta t} \approx \lambda \Delta t$이며, 마지막 근사는 $\Delta t$가 작을 때 성립한다.
 
     $K$를 사건이 처음 일어난 구간의 번호라 하자. 그러면 $p = 1 - e^{-\lambda \Delta t}$인 $K \sim \mathrm{Geometric}(p)$이고, 대기 시간은 $T_{\text{disc}} = K \cdot \Delta t$이다.
 
     $\Delta t \to 0$일 때:
 
-    $\mathbb{E}[T_{\text{disc}}] = \Delta t / p = \Delta t / (1 - e^{-\lambda \Delta t}) \to 1/\lambda$이며, 이는 Exponential 분포의 평균과 일치한다.
+    $\mathbb{E}[T_{\text{disc}}] = \Delta t / p = \Delta t / (1 - e^{-\lambda \Delta t}) \to 1/\lambda$이며, 이는 지수분포의 평균과 일치한다.
 
-    연속 극한에서 Exponential 분포가 복원된다. Geometric 분포는 이산시간 도착 과정이고, Exponential 분포는 그 연속시간 대응물이다.
+    연속 극한에서 지수분포가 복원된다. 기하분포는 이산시간 도착 과정이고, 지수분포는 그 연속시간 대응물이다.
 
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-**Geometric 분포의 역변환 표본추출.** $U \sim \mathrm{Uniform}(0, 1)$이 주어졌을 때 $X \sim \mathrm{Geometric}(p)$를 생성하는 공식을 유도하라.
+**기하분포의 역변환 표본추출.** $U \sim \mathrm{Uniform}(0, 1)$이 주어졌을 때 $X \sim \mathrm{Geometric}(p)$를 생성하는 공식을 유도하라.
 
 </div>
 
 ??? success "풀이"
-    Geometric 분포의 CDF는 $k = 1, 2, \ldots$에 대해 $F(k) = 1 - (1 - p)^k$이다.
+    기하분포의 CDF는 $k = 1, 2, \ldots$에 대해 $F(k) = 1 - (1 - p)^k$이다.
 
     역 CDF: $F(k) \ge u$일 필요충분조건은 $(1 - p)^k \le 1 - u$이고, 이는 다시 $k \ge \ln(1 - u)/\ln(1 - p)$와 동치이다.
 
@@ -402,7 +402,7 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
     X = \lceil \ln(U)/\ln(1 - p) \rceil
     $$
 
-    이 방법은 닫힌 형태로 효율적이며, 첫 성공까지 개별 Bernoulli 시행을 하나씩 모사하는 방식을 대체한다. 후자는 $p$가 작을 때 느려질 수 있다.
+    이 방법은 닫힌 형태로 효율적이며, 첫 성공까지 개별 베르누이 시행을 하나씩 모사하는 방식을 대체한다. 후자는 $p$가 작을 때 느려질 수 있다.
 
     **Python:** `np.ceil(np.log(np.random.rand()) / np.log(1 - p)).astype(int)`.
 
@@ -410,8 +410,8 @@ Geometric 분포의 **무기억성** $P(Y > m + n \mid Y > m) = P(Y > n)$을 증
 
 ## 정리하며
 
-- Geometric 분포는 첫 성공까지의 대기 시간을 모형화하며, 무기억성을 갖는 유일한 이산분포이다.
-- Negative Binomial 분포는 Geometric 분포를 일반화하여 $r$번째 성공까지의 시행 횟수를 센다.
-- 두 분포 모두 독립 Bernoulli 시행의 열에서 나온다.
-- Geometric 분포의 평균 $1/p$는 직관적으로 해석된다. 성공확률이 낮을수록 기대 대기 시간이 길어진다.
-- Geometric 분포는 Exponential 분포의 이산형 대응물로, 무기억성을 공유한다.
+- 기하분포는 첫 성공까지의 대기 시간을 모형화하며, 무기억성을 갖는 유일한 이산분포이다.
+- 음이항분포는 기하분포를 일반화하여 $r$번째 성공까지의 시행 횟수를 센다.
+- 두 분포 모두 독립 베르누이 시행의 열에서 나온다.
+- 기하분포의 평균 $1/p$는 직관적으로 해석된다. 성공확률이 낮을수록 기대 대기 시간이 길어진다.
+- 기하분포는 지수분포의 이산형 대응물로, 무기억성을 공유한다.

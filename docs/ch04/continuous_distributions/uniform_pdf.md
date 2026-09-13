@@ -130,7 +130,7 @@ $X \sim \text{Uniform}(0, 1)$일 때 $Y = -\ln(X)$의 분포를 구하고 어떤
     P(Y \le y) = P(-\ln X \le y) = P(X \ge e^{-y}) = 1 - e^{-y}
     $$
 
-    이는 $\text{Exponential}(\lambda = 1)$의 CDF이다. 따라서 $Y = -\ln(U) \sim \text{Exp}(1)$이며, 이것이 Exponential 분포에 대한 역변환 표본추출의 근거이다.
+    이는 $\text{Exponential}(\lambda = 1)$의 CDF이다. 따라서 $Y = -\ln(U) \sim \text{Exp}(1)$이며, 이것이 지수분포에 대한 역변환 표본추출의 근거이다.
 
 ---
 

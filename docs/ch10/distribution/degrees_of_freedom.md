@@ -105,7 +105,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff easy" title="쉬움"></span>
-Normal 분포에 대한 적합도 검정에서 구간을 8개 쓰고 두 모수($\mu$와 $\sigma$)를 자료로부터 추정했다. 자유도는 얼마인가?
+정규분포에 대한 적합도 검정에서 구간을 8개 쓰고 두 모수($\mu$와 $\sigma$)를 자료로부터 추정했다. 자유도는 얼마인가?
 
 </div>
 

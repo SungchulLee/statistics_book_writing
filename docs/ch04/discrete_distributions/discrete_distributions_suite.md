@@ -6,9 +6,9 @@
 
 ---
 
-## 1. Binomial 분포
+## 1. 이항분포
 
-각각 성공확률이 $p$인 독립 Bernoulli 시행 $n$번에서의 성공 횟수:
+각각 성공확률이 $p$인 독립 베르누이 시행 $n$번에서의 성공 횟수:
 
 $$
 P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \qquad k = 0, 1, \ldots, n
@@ -49,7 +49,7 @@ E[X] = 15.0, Var(X) = 10.50
 
 ---
 
-## 2. Poisson 분포
+## 2. 포아송분포
 
 평균 비율이 $\lambda$일 때 고정된 구간에서 일어나는 희귀 사건의 수:
 
@@ -80,9 +80,9 @@ P(X > 2) = 0.1205
 
 ---
 
-## 3. Geometric 분포
+## 3. 기하분포
 
-독립 Bernoulli 시행에서 첫 성공 이전의 실패 횟수:
+독립 베르누이 시행에서 첫 성공 이전의 실패 횟수:
 
 $$
 P(X = k) = (1-p)^k \, p, \qquad k = 0, 1, 2, \ldots
@@ -111,7 +111,7 @@ E[failures] = 2.33
 
 ---
 
-## 4. Hypergeometric 분포
+## 4. 초기하분포
 
 성공이 $K$개 들어 있는 크기 $N$의 모집단에서 **비복원**으로 $n$개를 뽑을 때의 성공 개수:
 
@@ -205,7 +205,7 @@ plt.show()
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-$np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포가 Binomial 분포의 극한임을 보여라.
+$np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 포아송분포가 이항분포의 극한임을 보여라.
 
 </div>
 
@@ -227,7 +227,7 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포�
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-품질 검사원이 100개(불량 20개)로 이루어진 한 배치에서 5개를 뽑는다. Hypergeometric 분포(정확)와 Binomial 분포(근사)로 $P(X = 2)$를 각각 구해 비교하라. Binomial 근사는 언제 좋은가?
+품질 검사원이 100개(불량 20개)로 이루어진 한 배치에서 5개를 뽑는다. 초기하분포(정확)와 이항분포(근사)로 $P(X = 2)$를 각각 구해 비교하라. 이항 근사는 언제 좋은가?
 
 </div>
 
@@ -236,12 +236,12 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 Poisson 분포�
 
     **Binomial** ($n=5$, $p=0.2$): $P(X=2) = \binom{5}{2}(0.2)^2(0.8)^3 = 10 \times 0.04 \times 0.512 = 0.2048$.
 
-    $n/N = 5/100 = 5\%$로 작기 때문에 근사가 가깝다. 경험 법칙으로, 표본이 모집단의 5–10%보다 작으면 Binomial 분포가 Hypergeometric 분포를 잘 근사한다.
+    $n/N = 5/100 = 5\%$로 작기 때문에 근사가 가깝다. 경험 법칙으로, 표본이 모집단의 5–10%보다 작으면 이항분포가 초기하분포를 잘 근사한다.
 
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-Geometric 분포가 무기억성을 가짐을 증명하라: $P(X > s + t \mid X > s) = P(X > t)$.
+기하분포가 무기억성을 가짐을 증명하라: $P(X > s + t \mid X > s) = P(X > t)$.
 
 </div>
 
@@ -257,7 +257,7 @@ Geometric 분포가 무기억성을 가짐을 증명하라: $P(X > s + t \mid X 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-Hypergeometric 분포의 기댓값은 $E[X] = nK/N$이다. 이 결과를 유도하라.
+초기하분포의 기댓값은 $E[X] = nK/N$이다. 이 결과를 유도하라.
 
 </div>
 

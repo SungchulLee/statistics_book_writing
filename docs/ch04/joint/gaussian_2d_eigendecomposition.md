@@ -1,8 +1,8 @@
-# 2차원 Gaussian 고유분해
+# 2차원 정규 고유분해
 
 ## 개요
 
-이변량 Gaussian의 공분산행렬 $\boldsymbol{\Sigma}$는 다음과 같이 분해할 수 있다:
+이변량 정규의 공분산행렬 $\boldsymbol{\Sigma}$는 다음과 같이 분해할 수 있다:
 
 $$
 \boldsymbol{\Sigma} = \mathbf{U}\mathbf{D}\mathbf{U}^\top

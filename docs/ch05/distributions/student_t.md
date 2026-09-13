@@ -1,14 +1,14 @@
-# Student t 분포
+# 스튜던트 t 분포
 
 ## 개요
 
-Student $t$ 분포는 알려진 모표준편차 $\sigma$ 대신 **표본표준편차** $S$를 사용하여 정규모집단의 평균을 추정할 때 나타난다. $\sigma$를 추정하면서 생기는 추가적인 불확실성을 반영한다.
+스튜던트 $t$ 분포는 알려진 모표준편차 $\sigma$ 대신 **표본표준편차** $S$를 사용하여 정규모집단의 평균을 추정할 때 나타난다. $\sigma$를 추정하면서 생기는 추가적인 불확실성을 반영한다.
 
 ---
 
 <div class="defn" markdown>
 
-### 정의 1. Student t 분포 { .dfn }
+### 정의 1. 스튜던트 t 분포 { .dfn }
 
 $Z \sim N(0,1)$과 $V \sim \chi^2_d$가 독립이라 하자. 그러면 다음 비:
 
@@ -16,7 +16,7 @@ $$
 T = \frac{Z}{\sqrt{V/d}} \sim t_d
 $$
 
-는 자유도 $d$인 Student $t$ 분포를 따른다.
+는 자유도 $d$인 스튜던트 $t$ 분포를 따른다.
 
 ---
 
@@ -176,7 +176,7 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
-![Student t 분포](./img/student_t_118.png)
+![스튜던트 t 분포](./img/student_t_118.png)
 
 </div>
 
@@ -235,7 +235,7 @@ ax.legend()
 plt.show()
 ```
 
-![Student t 분포](./img/student_t_169.png)
+![스튜던트 t 분포](./img/student_t_169.png)
 
 </div>
 
@@ -357,7 +357,7 @@ plt.show()
 
     구현: $\nu_{WS}$를 내림한(보수적인) 값으로 $t_{\nu_{WS}}$ 임계값을 쓰거나, 정수가 아닌 자유도를 받아들이는 소프트웨어에서는 그대로 사용한다.
 
-    Welch 검정은 R(`t.test`)과 SciPy(`scipy.stats.ttest_ind(equal_var=False)`)에서 **기본 두 표본 $t$ 검정**이다. 원래의 Student $t$ 검정이 요구하는 등분산 가정을 필요로 하지 않기 때문이다.
+    Welch 검정은 R(`t.test`)과 SciPy(`scipy.stats.ttest_ind(equal_var=False)`)에서 **기본 두 표본 $t$ 검정**이다. 원래의 스튜던트 $t$ 검정이 요구하는 등분산 가정을 필요로 하지 않기 때문이다.
 
 ---
 

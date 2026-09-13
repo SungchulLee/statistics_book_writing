@@ -69,7 +69,7 @@ $$
 
 오른쪽으로 치우친 양수 자료에 가장 단순한 접근은 **로그 변환**이다: 각 관측값 $x_i$를 $\log x_i$로 바꾼다. $X$가 log-normal 분포를 따르면 $\log X$는 정확히 정규이므로 변환된 자료에 표준적인 방법을 그대로 적용할 수 있다.
 
-!!! example "Log-Normal 자료"
+!!! example "Log-정규 자료"
 
     $X \sim \text{LogNormal}(\mu, \sigma^2)$이면 $\gamma_1 = (e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$로 매우 커질 수 있다. 로그 변환 후에는 $Y = \log X \sim N(\mu, \sigma^2)$이고 $\gamma_1 = 0$이다.
 

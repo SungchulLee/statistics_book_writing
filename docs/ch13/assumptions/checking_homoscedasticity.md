@@ -324,7 +324,7 @@ $\sqrt{|표준화 잔차|}$를 적합값에 대해 그린 것이다. 오른쪽�
 
     이므로 $\text{Var}(Y) \propto \mu^2$일 때 $\text{Var}(\log Y)$가 상수가 된다. 이것이 분산을 안정화하여 잔차를 근사적으로 등분산으로 만든다. 변동계수가 일정한 자료(예: 소득, 매출)에서 흔히 나타나는 상황이다.
 
-    반면 **분산이 평균에 비례**하는 경우($\text{Var}(Y) \propto \mu$, 예: Poisson 계수 자료)에는 로그가 아니라 **제곱근 변환**이 적절하다. 델타 방법에서 $\text{Var}(\sqrt{Y}) \approx \text{Var}(Y)/(4\mu)$이므로 $\text{Var}(Y) \propto \mu$일 때 상수가 된다.
+    반면 **분산이 평균에 비례**하는 경우($\text{Var}(Y) \propto \mu$, 예: 포아송 계수 자료)에는 로그가 아니라 **제곱근 변환**이 적절하다. 델타 방법에서 $\text{Var}(\sqrt{Y}) \approx \text{Var}(Y)/(4\mu)$이므로 $\text{Var}(Y) \propto \mu$일 때 상수가 된다.
 
 <div class="drillbox" markdown>
 

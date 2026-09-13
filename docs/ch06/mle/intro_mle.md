@@ -86,7 +86,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-**Bernoulli/Binomial의 MLE.** 표본이 $X \sim \mathrm{Binomial}(n, p)$이다. $\hat p_{\text{MLE}}$를 유도하라.
+**Bernoulli/이항의 MLE.** 표본이 $X \sim \mathrm{Binomial}(n, p)$이다. $\hat p_{\text{MLE}}$를 유도하라.
 
 </div>
 
@@ -120,7 +120,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-**MLE의 점근정규성.** 그 결과를 서술하고 Bernoulli의 경우에 확인하라.
+**MLE의 점근정규성.** 그 결과를 서술하고 베르누이의 경우에 확인하라.
 
 </div>
 
@@ -133,7 +133,7 @@ $$
 
     여기서 $I(\theta) = -\mathbb{E}[\partial^2 \log f/\partial\theta^2]$는 관측값 하나당 Fisher 정보량이다.
 
-    **Bernoulli에서의 확인:** $\log f = x\log p + (1-x)\log(1-p)$. 2계도함수는 $-x/p^2 - (1-x)/(1-p)^2$이다. 기댓값을 취하면 $-p/p^2 - (1-p)/(1-p)^2 = -1/p - 1/(1-p) = -1/[p(1-p)]$.
+    **베르누이에서의 확인:** $\log f = x\log p + (1-x)\log(1-p)$. 2계도함수는 $-x/p^2 - (1-x)/(1-p)^2$이다. 기댓값을 취하면 $-p/p^2 - (1-p)/(1-p)^2 = -1/p - 1/(1-p) = -1/[p(1-p)]$.
 
     따라서 $I(p) = 1/[p(1-p)]$이고 $\mathrm{Var}(\hat p) = p(1-p)/n$이다. 표본비율에 대한 중심극한정리와 곧바로 일치한다.
 

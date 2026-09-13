@@ -80,7 +80,7 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Normal 분포. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. 미지 모수가 둘이므로 적률방정식도 둘이 필요하다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. 미지 모수가 둘이므로 적률방정식도 둘이 필요하다.
 
 </div>
 
@@ -105,7 +105,7 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
     $\hat{\sigma}^2_{\text{MoM}}$이 MLE와 마찬가지로 $n$으로 나누므로(편향) 이 경우 적률법과 MLE가 같은 추정량을 준다.
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Exponential 분포. $E[X] = 1/\lambda$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자. 모수가 하나이므로 적률방정식도 하나면 된다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포. $E[X] = 1/\lambda$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자. 모수가 하나이므로 적률방정식도 하나면 된다.
 
 </div>
 
@@ -121,7 +121,7 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
     이는 MLE와 일치한다.
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Gamma 분포. 밀도가 $f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}$인 $X_1, \ldots, X_n \sim \text{Gamma}(\alpha, \beta)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 감마분포. 밀도가 $f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha-1} e^{-\beta x}$인 $X_1, \ldots, X_n \sim \text{Gamma}(\alpha, \beta)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
 </div>
 
@@ -141,10 +141,10 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
 
     여기서 $m_2 = \frac{1}{n}\sum(X_i - \bar{X})^2$이다.
 
-    적률법 추정량은 닫힌 형태로 주어지는 반면 Gamma 분포의 MLE는 수치 최적화가 필요하다. 이것이 실무적으로 중요한 장점이다.
+    적률법 추정량은 닫힌 형태로 주어지는 반면 감마분포의 MLE는 수치 최적화가 필요하다. 이것이 실무적으로 중요한 장점이다.
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> Uniform 분포. $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 균등분포. $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
 
 </div>
 
@@ -165,7 +165,7 @@ $$\mu_k'(\theta) = m_k', \quad k = 1, 2, \ldots, p$$
     **참고:** 이 추정값들이 자료의 범위 안쪽으로 들어올 수 있다(즉 $\hat{a} > \min(X_i)$이거나 $\hat{b} < \max(X_i)$일 수 있다). 이는 논리적으로 모순이다. 적률법이 분포의 지지집합 제약을 언제나 지키지는 않는다는 알려진 한계이다. MLE($\hat{a} = \min(X_i)$, $\hat{b} = \max(X_i)$)에는 이런 문제가 없다.
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> Beta 분포. $X_1, \ldots, X_n \sim \text{Beta}(\alpha, \beta)$라 하자.
+**보기 5.** <span class="diff easy" title="쉬움"></span> 베타분포. $X_1, \ldots, X_n \sim \text{Beta}(\alpha, \beta)$라 하자.
 
 </div>
 
@@ -265,7 +265,7 @@ J 통계량이 크면 모형의 적률 조건이 자료와 양립하지 않음�
 
 - **자산가격결정**: GMM은 자산가격결정 모형(CAPM, Fama-French)을 추정하고 검정하는 표준 방법이다. $m_t$가 확률적 할인요인일 때 Euler 방정식 조건 $E[m_t R_t - 1] = 0$이 적률 조건을 제공한다.
 - **GARCH 추정**: 준최대가능도가 표준이지만, 적률법은 무조건분산과 제곱수익률의 자기상관을 맞추어 $(\omega, \alpha, \beta)$의 닫힌 형태 초기 추정값을 준다.
-- **분포 적합**: 수익률 자료에 꼬리가 두꺼운 분포(Student-$t$, 안정분포)를 맞출 때, 가능도가 복잡하거나 평가가 느리면 적률법이 빠른 추정값을 준다.
+- **분포 적합**: 수익률 자료에 꼬리가 두꺼운 분포(스튜던트-$t$, 안정분포)를 맞출 때, 가능도가 복잡하거나 평가가 느리면 적률법이 빠른 추정값을 준다.
 - **수익률곡선 모형화**: 수익률 수준이나 변화의 적률을 사용한 아핀 기간구조 모형의 GMM 추정.
 - **실현변동성**: 고빈도 수익률 적률에 기반한 적률법 추정량이 적분변동성과 그 성질을 추정하는 데 쓰인다.
 - **포트폴리오 이론**: 표본 적률로 기대수익률과 공분산을 추정하는 것이 포트폴리오 최적화에 대한 가장 단순한 적률법 접근이다.

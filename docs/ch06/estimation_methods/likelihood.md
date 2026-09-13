@@ -76,7 +76,7 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Normal 분포 — 평균이 미지. $\sigma^2$이 알려진 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. $\mu$의 MLE를 구한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포 — 평균이 미지. $\sigma^2$이 알려진 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. $\mu$의 MLE를 구한다.
 
 </div>
 
@@ -100,7 +100,7 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
     평균의 MLE는 표본평균이며 불편이고 효율적이다.
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Normal 분포 — 두 모수 모두 미지. $\mu$와 $\sigma^2$이 모두 미지인 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규분포 — 두 모수 모두 미지. $\mu$와 $\sigma^2$이 모두 미지인 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자.
 
 </div>
 
@@ -118,7 +118,7 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
     **참고:** $\sigma^2$의 MLE는 $n-1$이 아니라 $n$으로 나눈다. 편향되어 있다: $E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$. MLE가 언제나 불편인 것은 아님을 보여 준다.
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Bernoulli 분포. $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$라 하자.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 베르누이분포. $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$라 하자.
 
 </div>
 
@@ -140,7 +140,7 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
     MLE는 표본비율이며 직관적으로 자연스럽고 불편이다.
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> Exponential 분포. $x > 0$에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 지수분포. $x > 0$에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자.
 
 </div>
 
@@ -158,7 +158,7 @@ $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
     **2계도함수 확인:** $\frac{d^2\ell}{d\lambda^2} = -n/\lambda^2 < 0$이므로 최댓값이다.
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> Poisson 분포. $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$라 하자.
+**보기 5.** <span class="diff easy" title="쉬움"></span> 포아송분포. $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$라 하자.
 
 </div>
 
@@ -277,10 +277,10 @@ EM 알고리즘은 매 단계마다 가능도가 단조 증가함을 보장하�
 
 가능도함수와 MLE는 계량금융 전반에 스며 있다:
 
-- **GARCH 모형**: 보통 정규 또는 Student-$t$ 혁신항을 가정하고 수익률의 조건부 로그가능도를 최대화하여 모수 $(\omega, \alpha, \beta)$를 추정한다.
+- **GARCH 모형**: 보통 정규 또는 스튜던트-$t$ 혁신항을 가정하고 수익률의 조건부 로그가능도를 최대화하여 모수 $(\omega, \alpha, \beta)$를 추정한다.
 - **옵션 가격결정**: Black-Scholes 내재변동성은 모형이 가정한 동학 아래에서 관측된 옵션 가격이 주어졌을 때 변동성의 MLE이다.
 - **국면전환 모형**: Hamilton의 국면전환 모형은 전이확률과 국면별 모수에 대해 가능도를 최대화하는 데 EM 알고리즘을 사용한다.
-- **위험 모형화**: Value-at-Risk와 기대손실 추정을 위해 손실 자료에 꼬리가 두꺼운 분포(Student-$t$, 일반화 Pareto)를 MLE로 적합한다.
+- **위험 모형화**: Value-at-Risk와 기대손실 추정을 위해 손실 자료에 꼬리가 두꺼운 분포(스튜던트-$t$, 일반화 Pareto)를 MLE로 적합한다.
 - **기간구조 모형**: Vasicek, CIR, 아핀 기간구조 모형의 모수는 관측된 수익률곡선의 가능도를 최대화하여 보정한다.
 - **코퓰러 모형**: 코퓰러 기반 포트폴리오 위험 모형의 의존성 모수는 유사최대가능도로 추정한다.
 

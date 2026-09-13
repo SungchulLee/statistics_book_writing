@@ -145,7 +145,7 @@ Fligner-Killeen     : power = 0.7810
 !!! warning "Fligner-Killeen이 언제나 가장 로버스트한 것은 아니다"
     표에서 Fligner-Killeen의 대수정규 크기가 **0.114**로 명목값의 두 배가 넘는다. Brown-Forsythe의 $0.030$보다 나쁘다.
 
-    "Fligner-Killeen이 가장 로버스트하다"는 서술은 **대칭인 두꺼운 꼬리**에 대해서는 맞다. 15.8절 [Fligner-Killeen 검정](fligner_killeen.md) 연습문제 2에서 Cauchy 자료에 대해 FK가 $0.044$로 BF의 $0.022$보다 명목값에 가까웠다.
+    "Fligner-Killeen이 가장 로버스트하다"는 서술은 **대칭인 두꺼운 꼬리**에 대해서는 맞다. 15.8절 [Fligner-Killeen 검정](fligner_killeen.md) 연습문제 2에서 코시 자료에 대해 FK가 $0.044$로 BF의 $0.022$보다 명목값에 가까웠다.
 
     그러나 **강한 치우침**에서는 반대이다. $\text{Lognormal}(0,1)$은 왜도 $6.18$, 초과첨도 $110.9$로 극단적으로 치우쳐 있는데, 이때 FK의 순위 변환이 오히려 부족하다. 편차 $|x - \tilde{x}|$ 자체가 강하게 치우쳐 있어 정규점수의 집단평균이 표본마다 크게 흔들리기 때문이다.
 

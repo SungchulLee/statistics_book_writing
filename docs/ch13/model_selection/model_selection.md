@@ -207,7 +207,7 @@ for step in range(p_total):
 
 ??? success "풀이"
 
-    Bayes 모형선택에서는 모수공간에 대해 적분하여 주변가능도 $p(\mathbf{y} \mid M)$을 계산한다. 이 적분에 Laplace 근사를 쓰면
+    Bayes 모형선택에서는 모수공간에 대해 적분하여 주변가능도 $p(\mathbf{y} \mid M)$을 계산한다. 이 적분에 라플라스 근사를 쓰면
 
     $$
     \ln p(\mathbf{y} \mid M) \approx \ln p(\mathbf{y} \mid \hat{\boldsymbol{\theta}}, M) - \frac{k}{2}\ln(n) + O(1).

@@ -265,7 +265,7 @@ n1=n2=100: power = 0.977
 
 ??? success "풀이"
 
-    각 반복은 성공확률 $\beta$(참 검정력)인 Bernoulli 시행이다. 추정량 $\hat{\beta} = \sum_{i=1}^B I_i / B$는 표본비율이므로
+    각 반복은 성공확률 $\beta$(참 검정력)인 베르누이 시행이다. 추정량 $\hat{\beta} = \sum_{i=1}^B I_i / B$는 표본비율이므로
 
     $$
     \operatorname{Var}(\hat{\beta}) = \frac{\beta(1-\beta)}{B}, \quad \text{SE}(\hat{\beta}) = \sqrt{\frac{\hat{\beta}(1-\hat{\beta})}{B}}.

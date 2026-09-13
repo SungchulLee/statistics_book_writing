@@ -1,18 +1,18 @@
-# Poisson 분포
+# 포아송분포
 
 ## 개요
 
-**Poisson 분포**는 평균 발생률이 알려져 있을 때 고정된 시간 또는 공간 구간에서 발생하는 사건의 수를 모형화한다. 금융(체결 도착, 부도 건수), 보험(청구 빈도), 대기행렬 이론에서 널리 쓰인다.
+**포아송분포**는 평균 발생률이 알려져 있을 때 고정된 시간 또는 공간 구간에서 발생하는 사건의 수를 모형화한다. 금융(체결 도착, 부도 건수), 보험(청구 빈도), 대기행렬 이론에서 널리 쓰인다.
 
 ---
 
-## Poisson 분포와 PMF
+## 포아송분포와 PMF
 
 <div class="defn" markdown>
 
-### 정의 1. Poisson 분포 { .dfn }
+### 정의 1. 포아송분포 { .dfn }
 
-확률변수 $X$가 비율 모수 $\lambda > 0$인 Poisson 분포를 따른다는 것은 다음을 뜻한다:
+확률변수 $X$가 비율 모수 $\lambda > 0$인 포아송분포를 따른다는 것은 다음을 뜻한다:
 
 $$
 X \sim \text{Poisson}(\lambda), \qquad P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}, \quad k = 0, 1, 2, \ldots
@@ -42,7 +42,7 @@ E[X] &= \lambda \\
 \end{aligned}
 $$
 
-평균과 분산이 같다는 것은 Poisson 분포를 규정하는 특징이며, 진단 점검에 자주 쓰인다.
+평균과 분산이 같다는 것은 포아송분포를 규정하는 특징이며, 진단 점검에 자주 쓰인다.
 
 ### 평균의 유도
 
@@ -66,9 +66,9 @@ $$
 
 ---
 
-## Binomial 분포의 극한으로서의 Poisson 분포
+## 이항분포의 극한으로서의 포아송분포
 
-Poisson 분포는 $n$이 크고 $p$가 작으며 $\lambda = np$가 일정하게 유지될 때 Binomial 분포의 극한으로 나타난다:
+포아송분포는 $n$이 크고 $p$가 작으며 $\lambda = np$가 일정하게 유지될 때 이항분포의 극한으로 나타난다:
 
 $$
 \lim_{n \to \infty} \binom{n}{k} p^k (1-p)^{n-k} = \frac{e^{-\lambda}\lambda^k}{k!} \qquad \text{where } p = \frac{\lambda}{n}
@@ -86,7 +86,7 @@ $$
 
     $n \to \infty$일 때 $\frac{n!}{(n-k)! \, n^k} \to 1$, $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$, $\left(1 - \frac{\lambda}{n}\right)^{-k} \to 1$이다.
 
-    **경험 법칙:** $n \geq 20$이고 $p \leq 0.05$일 때(더 보수적으로는 $n \geq 100$이고 $np \leq 10$일 때) Poisson 근사를 사용한다.
+    **경험 법칙:** $n \geq 20$이고 $p \leq 0.05$일 때(더 보수적으로는 $n \geq 100$이고 $np \leq 10$일 때) 포아송 근사를 사용한다.
 
     ---
 
@@ -98,13 +98,13 @@ $$
 X_1 + X_2 \sim \text{Poisson}(\lambda_1 + \lambda_2)
 $$
 
-이는 독립인 Poisson 확률변수의 임의의 유한 합으로 확장된다.
+이는 독립인 포아송 확률변수의 임의의 유한 합으로 확장된다.
 
 ---
 
-## Poisson 과정과의 연결
+## 포아송 과정과의 연결
 
-Poisson 분포는 **Poisson 과정**과 밀접하게 연결되어 있다. 사건이 단위시간당 일정한 비율 $\lambda$로 도착하고 도착들이 서로 독립이면, 길이 $t$인 구간에서의 사건 수는 $\text{Poisson}(\lambda t)$를 따르고, 연속한 사건 사이의 시간은 $\text{Exponential}(\lambda)$를 따른다.
+포아송분포는 **포아송 과정**과 밀접하게 연결되어 있다. 사건이 단위시간당 일정한 비율 $\lambda$로 도착하고 도착들이 서로 독립이면, 길이 $t$인 구간에서의 사건 수는 $\text{Poisson}(\lambda t)$를 따르고, 연속한 사건 사이의 시간은 $\text{Exponential}(\lambda)$를 따른다.
 
 ---
 
@@ -155,7 +155,7 @@ ax.legend()
 plt.show()
 ```
 
-![Poisson 분포](./img/poisson_124.png)
+![포아송분포](./img/poisson_124.png)
 
 </div>
 
@@ -184,11 +184,11 @@ ax.legend()
 plt.show()
 ```
 
-![Poisson 분포](./img/poisson_144.png)
+![포아송분포](./img/poisson_144.png)
 
 </div>
 
-### Binomial 극한으로서의 Poisson 분포
+### 이항 극한으로서의 포아송분포
 
 <div class="codebox" markdown>
 
@@ -219,7 +219,7 @@ ax.legend()
 plt.show()
 ```
 
-![Poisson 분포](./img/poisson_161.png)
+![포아송분포](./img/poisson_161.png)
 
 </div>
 
@@ -279,23 +279,23 @@ Mean ≈ Var: True
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004$로 오탈자를 포함한다. (a) 정확한 분포는? (b) Poisson 근사의 모수는? (c) Poisson 근사로 $P(X = 0)$, $P(X = 1)$, $P(X \ge 4)$를 구하라.
+포아송 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004$로 오탈자를 포함한다. (a) 정확한 분포는? (b) 포아송 근사의 모수는? (c) 포아송 근사로 $P(X = 0)$, $P(X = 1)$, $P(X \ge 4)$를 구하라.
 
 </div>
 
 ??? success "풀이"
     (a) $X \sim \mathrm{Binomial}(500, 0.004)$.
 
-    (b) $\lambda = np = 2$. $n$이 크고 $p$가 작으므로 Poisson 근사가 타당하다.
+    (b) $\lambda = np = 2$. $n$이 크고 $p$가 작으므로 포아송 근사가 타당하다.
 
     (c) $P(X = 0) \approx e^{-2} = 0.135$. $P(X = 1) \approx 2 e^{-2} = 0.271$. $P(X \ge 4) = 1 - e^{-2}(1 + 2 + 2 + 4/3) \approx 0.143$.
 
-    정확한 Binomial 계산은 $P(X = 2) \approx 0.272$를 주는데 Poisson 근사는 $0.271$이다. 소수점 셋째 자리까지 일치하며, 이 영역에서 Poisson 근사가 매우 잘 작동함을 보여 준다.
+    정확한 이항 계산은 $P(X = 2) \approx 0.272$를 주는데 포아송 근사는 $0.271$이다. 소수점 셋째 자리까지 일치하며, 이 영역에서 포아송 근사가 매우 잘 작동함을 보여 준다.
 
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-**도착 간 시간의 무기억성.** 사건이 비율 $\lambda$인 Poisson 과정에 따라 발생하면 도착 간 시간이 비율 $\lambda$인 Exponential 분포를 따름을 증명하라.
+**도착 간 시간의 무기억성.** 사건이 비율 $\lambda$인 포아송 과정에 따라 발생하면 도착 간 시간이 비율 $\lambda$인 지수분포를 따름을 증명하라.
 
 </div>
 
@@ -304,32 +304,32 @@ Poisson 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004
 
     따라서 $P(T_1 > t) = e^{-\lambda t}$이고, 이는 $\mathrm{Exp}(\lambda)$의 생존함수이다. 그러므로 $T_1 \sim \mathrm{Exp}(\lambda)$이다.
 
-    Poisson 과정의 정상증분 성질에 의해 $k$번째 사건과 $k+1$번째 사건 사이의 시간도 과거와 독립적으로 같은 분포를 따른다. 모든 도착 간 시간은 i.i.d. $\mathrm{Exp}(\lambda)$이다. $\square$
+    포아송 과정의 정상증분 성질에 의해 $k$번째 사건과 $k+1$번째 사건 사이의 시간도 과거와 독립적으로 같은 분포를 따른다. 모든 도착 간 시간은 i.i.d. $\mathrm{Exp}(\lambda)$이다. $\square$
 
-    이 연결 덕분에 Poisson 과정은 "완전히 무작위한" 사건 발생, 즉 과거의 기억 없이 일정한 비율로 도착하는 사건에 대한 표준 모형이 된다.
+    이 연결 덕분에 포아송 과정은 "완전히 무작위한" 사건 발생, 즉 과거의 기억 없이 일정한 비율로 도착하는 사건에 대한 표준 모형이 된다.
 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**합과 중첩.** 비율이 $\lambda_1, \lambda_2$인 독립 Poisson 과정을 중첩한다. 합쳐진 과정이 비율 $\lambda_1 + \lambda_2$인 Poisson 과정임을 보여라.
+**합과 중첩.** 비율이 $\lambda_1, \lambda_2$인 독립 포아송 과정을 중첩한다. 합쳐진 과정이 비율 $\lambda_1 + \lambda_2$인 포아송 과정임을 보여라.
 
 </div>
 
 ??? success "풀이"
-    $N_1(t), N_2(t)$를 독립인 Poisson 과정이라 하자. 합쳐진 계수는 $N(t) = N_1(t) + N_2(t)$이다.
+    $N_1(t), N_2(t)$를 독립인 포아송 과정이라 하자. 합쳐진 계수는 $N(t) = N_1(t) + N_2(t)$이다.
 
-    주변분포: Poisson 합 성질에 의해 $N(t) = N_1(t) + N_2(t) \sim \mathrm{Poisson}(\lambda_1 t) + \mathrm{Poisson}(\lambda_2 t) \sim \mathrm{Poisson}((\lambda_1 + \lambda_2) t)$이다.
+    주변분포: 포아송 합 성질에 의해 $N(t) = N_1(t) + N_2(t) \sim \mathrm{Poisson}(\lambda_1 t) + \mathrm{Poisson}(\lambda_2 t) \sim \mathrm{Poisson}((\lambda_1 + \lambda_2) t)$이다.
 
-    합쳐진 도착 간 시간은 비율 $\lambda_1 + \lambda_2$인 Exponential 분포를 따르며(독립인 두 Exponential 확률변수의 최솟값은 비율의 합을 갖는 Exponential 분포이다), 도착들 사이에서 독립성이 유지된다.
+    합쳐진 도착 간 시간은 비율 $\lambda_1 + \lambda_2$인 지수분포를 따르며(독립인 두 지수 확률변수의 최솟값은 비율의 합을 갖는 지수분포이다), 도착들 사이에서 독립성이 유지된다.
 
-    이 성질들을 종합하면 $N$은 비율 $\lambda_1 + \lambda_2$인 Poisson 과정이다. $\square$
+    이 성질들을 종합하면 $N$은 비율 $\lambda_1 + \lambda_2$인 포아송 과정이다. $\square$
 
-    **응용:** 어떤 상점의 고객 도착이 두 유형(온라인과 방문)으로 나뉘고 각각이 Poisson이면, 전체 도착은 두 비율을 합한 Poisson 과정을 이룬다. 이는 여러 Poisson 원천을 하나의 모형으로 합치는 것을 정당화한다.
+    **응용:** 어떤 상점의 고객 도착이 두 유형(온라인과 방문)으로 나뉘고 각각이 포아송이면, 전체 도착은 두 비율을 합한 포아송 과정을 이룬다. 이는 여러 포아송 원천을 하나의 모형으로 합치는 것을 정당화한다.
 
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-Poisson 분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathrm{Poisson}(\lambda)$에 대해 PMF로부터 직접 $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라.
+포아송분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathrm{Poisson}(\lambda)$에 대해 PMF로부터 직접 $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라.
 
 </div>
 
@@ -348,33 +348,33 @@ Poisson 분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathr
 
     **분산:** $\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda$. $\square$
 
-    **구별되는 특징:** 평균 = 분산은 Poisson 분포의 표식이다. 실제 계수 자료에서 분산이 평균보다 크게 나타나면(**과대산포**) Poisson 모형은 부적절하며, 보통 Negative Binomial 모형을 대신 사용한다.
+    **구별되는 특징:** 평균 = 분산은 포아송분포의 표식이다. 실제 계수 자료에서 분산이 평균보다 크게 나타나면(**과대산포**) 포아송 모형은 부적절하며, 보통 음이항 모형을 대신 사용한다.
 
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-**Poisson 가정에 대한 검정.** 계수 표본 $X_1, \ldots, X_n$이 주어졌을 때, 표본분산과 표본평균의 비를 이용한 간단한 **산포 검정**을 제안하라.
+**포아송 가정에 대한 검정.** 계수 표본 $X_1, \ldots, X_n$이 주어졌을 때, 표본분산과 표본평균의 비를 이용한 간단한 **산포 검정**을 제안하라.
 
 </div>
 
 ??? success "풀이"
     $H_0$ 아래에서 $X_i$는 i.i.d. $\mathrm{Poisson}(\lambda)$이고 $\mathrm{Var}(X) = \lambda = \mathbb{E}[X]$이므로, **산포비** $D = s^2/\bar X$는 1에 가까워야 한다.
 
-    검정통계량: $(n - 1) D = (n - 1) s^2 / \bar X$. $H_0$ 아래에서 이는 근사적으로 $\chi^2_{n-1}$을 따른다(**Poisson 산포 검정**이며, 표본평균이 비율에 근사한다는 가정 아래 유도된다).
+    검정통계량: $(n - 1) D = (n - 1) s^2 / \bar X$. $H_0$ 아래에서 이는 근사적으로 $\chi^2_{n-1}$을 따른다(**포아송 산포 검정**이며, 표본평균이 비율에 근사한다는 가정 아래 유도된다).
 
-    **판정 규칙:** $(n - 1)D$가 $\chi^2_{n-1}$의 $\alpha/2$ 분위수와 $1 - \alpha/2$ 분위수 밖에 있으면 Poisson 가정을 기각한다. 구체적으로:
+    **판정 규칙:** $(n - 1)D$가 $\chi^2_{n-1}$의 $\alpha/2$ 분위수와 $1 - \alpha/2$ 분위수 밖에 있으면 포아송 가정을 기각한다. 구체적으로:
 
-    - $D \gg 1$ (과대산포): 분산이 평균을 넘어선다. Negative Binomial이나 준-Poisson 모형을 대안으로 고려한다.
-    - $D \ll 1$ (과소산포): 분산이 평균보다 작다. Conway-Maxwell-Poisson이나 절단분포를 고려한다.
+    - $D \gg 1$ (과대산포): 분산이 평균을 넘어선다. Negative 이항이나 준-포아송 모형을 대안으로 고려한다.
+    - $D \ll 1$ (과소산포): 분산이 평균보다 작다. Conway-Maxwell-포아송이나 절단분포를 고려한다.
 
-    현대의 계수 자료 분석에서는 Poisson 모형을 아예 건너뛰고 더 유연한 모형(Negative Binomial, 영과잉 Poisson, 허들 모형)을 쓰는 경우가 많다. Poisson 분포는 유연한 적합 도구라기보다 (Poisson 과정에서의) *기본 구성요소*로서 더 유용하다.
+    현대의 계수 자료 분석에서는 포아송 모형을 아예 건너뛰고 더 유연한 모형(Negative Binomial, 영과잉 Poisson, 허들 모형)을 쓰는 경우가 많다. 포아송분포는 유연한 적합 도구라기보다 (포아송 과정에서의) *기본 구성요소*로서 더 유용하다.
 
 ---
 
 ## 정리하며
 
-- Poisson 분포는 희귀 사건의 발생 횟수를 모형화하며, 비율 모수 $\lambda$가 평균이자 분산이다.
-- $n$이 크고 $p$가 작을 때 Binomial 분포의 극한으로 나타난다.
+- 포아송분포는 희귀 사건의 발생 횟수를 모형화하며, 비율 모수 $\lambda$가 평균이자 분산이다.
+- $n$이 크고 $p$가 작을 때 이항분포의 극한으로 나타난다.
 - 가법성 덕분에 독립인 사건 계수들을 합칠 때 자연스럽게 쓰인다.
-- Poisson 과정과의 연결은 이산적인 사건 계수와 연속적인 도착 간 시간(Exponential 분포)을 이어 준다.
-- 평균과 분산이 같다는 성질은 유용한 진단 도구이다. 표본분산이 평균을 크게 넘어서면 그 자료는 Poisson 모형에 비해 **과대산포**되어 있을 수 있다.
+- 포아송 과정과의 연결은 이산적인 사건 계수와 연속적인 도착 간 시간(지수분포)을 이어 준다.
+- 평균과 분산이 같다는 성질은 유용한 진단 도구이다. 표본분산이 평균을 크게 넘어서면 그 자료는 포아송 모형에 비해 **과대산포**되어 있을 수 있다.

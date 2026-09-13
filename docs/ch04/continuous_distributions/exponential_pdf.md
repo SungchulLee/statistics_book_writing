@@ -2,7 +2,7 @@
 
 ## 개요
 
-**Exponential 분포**는 Poisson 과정에서 첫 사건이 일어날 때까지의 대기 시간을 모형화한다. Geometric 분포의 연속형 대응물이며, **무기억성**을 갖는 유일한 연속분포이다.
+**지수분포**는 포아송 과정에서 첫 사건이 일어날 때까지의 대기 시간을 모형화한다. 기하분포의 연속형 대응물이며, **무기억성**을 갖는 유일한 연속분포이다.
 
 비율 모수 $\lambda > 0$인 PDF는 다음과 같다:
 
@@ -62,7 +62,7 @@ $\lambda$가 클수록 사건이 더 자주 일어나므로 분포가 0 근처�
 
 ## 무기억성
 
-Exponential 분포는 다음을 만족한다:
+지수분포는 다음을 만족한다:
 
 $$
 P(X > s + t \mid X > s) = P(X > t) \qquad \text{for all } s, t \ge 0
@@ -77,7 +77,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-Exponential 분포의 무기억성을 증명하라.
+지수분포의 무기억성을 증명하라.
 
 </div>
 
@@ -93,7 +93,7 @@ Exponential 분포의 무기억성을 증명하라.
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff easy" title="쉬움"></span>
-고객 도착이 시간당 $\lambda = 3$인 Poisson 과정을 따를 때, 다음 고객을 30분 넘게 기다릴 확률은 얼마인가?
+고객 도착이 시간당 $\lambda = 3$인 포아송 과정을 따를 때, 다음 고객을 30분 넘게 기다릴 확률은 얼마인가?
 
 </div>
 
@@ -107,19 +107,19 @@ Exponential 분포의 무기억성을 증명하라.
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff hard" title="어려움"></span>
-Exponential 분포가 무기억성을 갖는 유일한 연속분포임을 보여라.
+지수분포가 무기억성을 갖는 유일한 연속분포임을 보여라.
 
 </div>
 
 ??? success "풀이"
     모든 $s, t \ge 0$에 대해 $P(X > s + t) = P(X > s) \cdot P(X > t)$라 하자. $g(t) = P(X > t)$로 두면 $g(0) = 1$이고 $g$는 감소하며 $g(s+t) = g(s)g(t)$이다.
 
-    $g(0) = 1$인 함수방정식 $g(s+t) = g(s)g(t)$의 연속인 해는 어떤 $\lambda > 0$에 대한 $g(t) = e^{-\lambda t}$뿐이다. 이는 Exponential 분포의 생존함수이다. $\square$
+    $g(0) = 1$인 함수방정식 $g(s+t) = g(s)g(t)$의 연속인 해는 어떤 $\lambda > 0$에 대한 $g(t) = e^{-\lambda t}$뿐이다. 이는 지수분포의 생존함수이다. $\square$
 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-PDF로부터 Exponential 분포의 CDF, 중앙값, 평균을 유도하라.
+PDF로부터 지수분포의 CDF, 중앙값, 평균을 유도하라.
 
 </div>
 

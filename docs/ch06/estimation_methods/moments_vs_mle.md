@@ -36,11 +36,11 @@ $$
 
 ARE가 1보다 작으면 MLE가 더 효율적이라는 뜻이다.
 
-!!! example "Exponential 분포: ARE 비교"
+!!! example "지수분포: ARE 비교"
 
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$라 하자. 적률법과 MLE 모두 같은 추정량 $\hat{\lambda} = 1/\bar{X}$를 주므로 ARE는 1이다. 적률법이 완전히 효율적인 사례이다.
 
-!!! example "Gamma 분포: ARE 비교"
+!!! example "감마분포: ARE 비교"
 
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Gamma}(\alpha, \beta)$라 하자. 적률법 추정량은
 
@@ -92,7 +92,7 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 로그가능도. (b) $\hat p_{\text{MLE}}$. (c) 적률법. (d) 둘이 같은가?
+기하분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 로그가능도. (b) $\hat p_{\text{MLE}}$. (c) 적률법. (d) 둘이 같은가?
 
 </div>
 
@@ -103,14 +103,14 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 
     (c) $\bar x = 1/p \Rightarrow \hat p_{\text{MoM}} = 1/\bar x$.
 
-    (d) **같다.** Geometric 분포에서 MLE와 적률법이 일치하며, 둘 다 표본평균의 역수이다.
+    (d) **같다.** 기하분포에서 MLE와 적률법이 일치하며, 둘 다 표본평균의 역수이다.
 
     이런 일은 모수 $\theta$가 1차 적률과 일대일로 대응하고 고차 적률 제약이 없을 때마다 일어난다. "단일모수이면서 평균으로 결정되는" 분포 대부분(Bernoulli, Poisson, Exponential, Geometric)에서 MLE = 적률법이다.
 
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-**Gamma 모의실험: MLE와 적률법.** $n = 5, 10, 30, 100, 500$에서 Gamma$(2, 3)$을 모의실험하여 평균제곱오차를 비교하라.
+**감마 모의실험: MLE와 적률법.** $n = 5, 10, 30, 100, 500$에서 Gamma$(2, 3)$을 모의실험하여 평균제곱오차를 비교하라.
 
 </div>
 
@@ -156,7 +156,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 ??? success "풀이"
     **ARE:** $\mathrm{ARE}(\hat\theta_{\text{MoM}}, \hat\theta_{\text{MLE}}) = $ 점근분산의 비 $\le 1$이다.
 
-    등호(ARE = 1)는 적률법이 우연히 MLE와 같아질 때에만 성립한다(예: Bernoulli, Poisson, Exponential에서 MLE와 적률법이 일치한다).
+    등호(ARE = 1)는 적률법이 우연히 MLE와 같아질 때에만 성립한다(예: Bernoulli, Poisson, 지수에서 MLE와 적률법이 일치한다).
 
     부등호(ARE < 1)가 일반적인 경우이다. 적률법은 저차 적률만 사용하고 MLE는 완전한 가능도를 사용하기 때문이다.
 
@@ -187,7 +187,7 @@ Geometric 분포: $P(X = k) = (1-p)^{k-1} p$. (a) $x_1, \ldots, x_n$에 대한 �
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff hard" title="어려움"></span>
-**Pareto의 적률법과 MLE.** $x \ge 1$에서 $X \sim \mathrm{Pareto}(\alpha)$일 때 둘을 유도하고 점근 상대효율을 논하라.
+**파레토의 적률법과 MLE.** $x \ge 1$에서 $X \sim \mathrm{Pareto}(\alpha)$일 때 둘을 유도하고 점근 상대효율을 논하라.
 
 </div>
 

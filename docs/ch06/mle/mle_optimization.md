@@ -300,7 +300,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff hard" title="어려움"></span> 성분이 둘인 Gaussian 혼합에서 로그가능도가 위로 유계가 아님을 보여라(힌트: 한 성분의 분산을 어떤 자료점 주위에서 0으로 보내라). 실무에서 이것이 MLE를 무효화하지 않는 이유는 무엇인가?
+**연습문제 4.** <span class="diff hard" title="어려움"></span> 성분이 둘인 정규 혼합에서 로그가능도가 위로 유계가 아님을 보여라(힌트: 한 성분의 분산을 어떤 자료점 주위에서 0으로 보내라). 실무에서 이것이 MLE를 무효화하지 않는 이유는 무엇인가?
 
 </div>
 
@@ -316,7 +316,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span> Bernoulli 분포의 모수 $p$를 추정하는 Fisher 점수법 알고리즘을 구현하라. Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. 참 $p = 0.3$인 $n = 50$개의 관측값에서 Newton-Raphson과 수렴 속도를 비교하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 베르누이분포의 모수 $p$를 추정하는 Fisher 점수법 알고리즘을 구현하라. Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. 참 $p = 0.3$인 $n = 50$개의 관측값에서 Newton-Raphson과 수렴 속도를 비교하라.
 
 </div>
 
@@ -371,7 +371,7 @@ Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
     FS  iter 10: p = 0.36000000
     ```
 
-    둘 다 $\hat{p} = x_{\text{sum}}/n$으로 수렴한다. Bernoulli에서는 관측 정보량과 기대 정보량이 밀접하게 연결되어 있어 수렴 속도가 거의 같다. 일반적으로는 관측 Hessian의 조건수가 나쁠 때 Fisher 점수법이 더 안정적일 수 있다. $\square$
+    둘 다 $\hat{p} = x_{\text{sum}}/n$으로 수렴한다. 베르누이에서는 관측 정보량과 기대 정보량이 밀접하게 연결되어 있어 수렴 속도가 거의 같다. 일반적으로는 관측 Hessian의 조건수가 나쁠 때 Fisher 점수법이 더 안정적일 수 있다. $\square$
 
 ---
 

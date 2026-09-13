@@ -1,8 +1,8 @@
-# Weibull 밀도함수와 위험함수
+# 와이불 밀도함수와 위험함수
 
 ## 개요
 
-**Weibull 분포**는 수명, 고장 시간, 생존 자료를 다루는 유연한 모형이다. 형상 모수 $k$가 위험률이 증가하는지, 감소하는지, 일정한지를 결정한다:
+**와이불분포**는 수명, 고장 시간, 생존 자료를 다루는 유연한 모형이다. 형상 모수 $k$가 위험률이 증가하는지, 감소하는지, 일정한지를 결정한다:
 
 $$
 f(x; k, \lambda) = \frac{k}{\lambda}\left(\frac{x}{\lambda}\right)^{k-1} \exp\!\left(-\left(\frac{x}{\lambda}\right)^k\right), \qquad x \ge 0
@@ -97,7 +97,7 @@ plt.show()
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-$k = 1$인 Weibull 분포가 비율 $1/\lambda$인 Exponential 분포로 환원됨을 보여라.
+$k = 1$인 와이불분포가 비율 $1/\lambda$인 지수분포로 환원됨을 보여라.
 
 </div>
 
@@ -113,7 +113,7 @@ $k = 1$인 Weibull 분포가 비율 $1/\lambda$인 Exponential 분포로 환원�
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-Weibull 분포의 CDF와 중앙값을 유도하라.
+와이불분포의 CDF와 중앙값을 유도하라.
 
 </div>
 
@@ -133,7 +133,7 @@ Weibull 분포의 CDF와 중앙값을 유도하라.
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff easy" title="쉬움"></span>
-어떤 부품의 수명이 $k = 2$, $\lambda = 1000$시간인 Weibull 분포를 따른다. 500시간을 넘겨 생존할 확률은? 1500시간은?
+어떤 부품의 수명이 $k = 2$, $\lambda = 1000$시간인 와이불분포를 따른다. 500시간을 넘겨 생존할 확률은? 1500시간은?
 
 </div>
 
@@ -151,17 +151,17 @@ Weibull 분포의 CDF와 중앙값을 유도하라.
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-더 유연한 분포들이 있는데도 Weibull 분포가 신뢰성 공학에서 널리 쓰이는 이유를 설명하라.
+더 유연한 분포들이 있는데도 와이불분포가 신뢰성 공학에서 널리 쓰이는 이유를 설명하라.
 
 </div>
 
 ??? success "풀이"
-    Weibull 분포가 널리 쓰이는 데에는 몇 가지 실용적인 장점이 있다:
+    와이불분포가 널리 쓰이는 데에는 몇 가지 실용적인 장점이 있다:
 
     1. **해석 가능한 위험률:** 모수 $k$ 하나가 고장률이 증가할지, 감소할지, 일정할지를 직접 결정한다.
     2. **닫힌 형태의 함수:** PDF, CDF, 생존함수, 위험함수가 모두 간단한 닫힌 형태로 주어져 수치적분이 필요 없다.
-    3. **선형화 가능:** $\ln(-\ln(S(x)))$를 $\ln(x)$에 대해 그리면 직선이 되어 그래프로 모수를 추정할 수 있다(Weibull 확률지).
-    4. **Exponential 분포를 포함:** $k=1$로 두면 가장 단순한 수명 모형이 복원되므로 Weibull은 그 자연스러운 일반화가 된다.
+    3. **선형화 가능:** $\ln(-\ln(S(x)))$를 $\ln(x)$에 대해 그리면 직선이 되어 그래프로 모수를 추정할 수 있다(와이불 확률지).
+    4. **지수분포를 포함:** $k=1$로 두면 가장 단순한 수명 모형이 복원되므로 와이불은 그 자연스러운 일반화가 된다.
 
 ---
 

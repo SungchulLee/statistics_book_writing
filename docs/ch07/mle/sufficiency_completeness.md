@@ -105,7 +105,7 @@ $\text{Bernoulli}(p)$에서 뽑은 확률표본에 대해 $T = \sum X_i$가 완�
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff hard" title="어려움"></span>
-Lehmann-Scheffé 정리를 진술하고, 이를 이용해 Bernoulli 표본에서 $p(1-p)$의 UMVUE를 구하라.
+Lehmann-Scheffé 정리를 진술하고, 이를 이용해 베르누이 표본에서 $p(1-p)$의 UMVUE를 구하라.
 
 </div>
 

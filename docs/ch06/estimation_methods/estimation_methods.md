@@ -158,7 +158,7 @@ MSE at lambda*:             0.1957
 
 </div>
 
-## Normal 분포의 MLE
+## 정규분포의 MLE
 
 $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$에 대해 MLE는 닫힌 형태의 해를 갖는다:
 
@@ -216,7 +216,7 @@ Numerical:   mu = 4.8995, sigma^2 = 2.3889
 
 </div>
 
-## Gamma 분포에서 MLE와 적률법
+## 감마분포에서 MLE와 적률법
 
 $E[X] = \alpha\beta$이고 $\text{Var}(X) = \alpha\beta^2$인 $X \sim \text{Gamma}(\alpha, \beta)$에 대해 적률법 추정량은:
 
@@ -276,7 +276,7 @@ MoM: bias=+0.0616, MSE=0.129929
 </div>
 
 !!! success "평균제곱오차에서 MLE의 승리"
-    Gamma 분포에서 $\alpha$와 $\beta$ 모두에 대해 MLE의 평균제곱오차가 적률법보다 작다. 점근이론과 일치하는 결과이다. MLE는 (Cramér–Rao 한계를 달성하여) 효율적인 반면 적률법은 일반적으로 그렇지 않다.
+    감마분포에서 $\alpha$와 $\beta$ 모두에 대해 MLE의 평균제곱오차가 적률법보다 작다. 점근이론과 일치하는 결과이다. MLE는 (Cramér–Rao 한계를 달성하여) 효율적인 반면 적률법은 일반적으로 그렇지 않다.
 
 ## Cramér-Rao 하한 확인
 
@@ -334,7 +334,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 모의실험은 여러 이론적 결과를 확인해 준다:
 
 1. **편향–분산 맞바꿈은 실재한다**: 평균제곱오차가 최적인 분산추정량은 편향되어 있음에도 $n-1$이 아니라 $n+1$로 나눈다.
-2. **MLE는 점근적으로 효율적이다**: Gamma 분포에서 이론이 예측한 대로 MLE가 적률법보다 낮은 평균제곱오차를 달성한다.
+2. **MLE는 점근적으로 효율적이다**: 감마분포에서 이론이 예측한 대로 MLE가 적률법보다 낮은 평균제곱오차를 달성한다.
 3. **축소가 도움이 될 수 있다**: 신호 대 잡음비 $\mu/(\sigma/\sqrt{n})$이 중간 정도일 때 표본평균을 0 쪽으로 당기면 평균제곱오차가 줄어든다.
 4. **표본평균은 CRLB를 달성한다**: 정규분포 평균에 대해 그 분산이 Cramér-Rao 하한과 정확히 일치한다.
 
@@ -347,11 +347,11 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 </div>
 
 ??? success "풀이"
-    Exponential 분포는 $E[X] = 1/\lambda$이므로 적률법은 $\bar{X} = 1/\hat{\lambda}$로 두어 $\hat{\lambda}_{\text{MoM}} = 1/\bar{X}$를 준다.
+    지수분포는 $E[X] = 1/\lambda$이므로 적률법은 $\bar{X} = 1/\hat{\lambda}$로 두어 $\hat{\lambda}_{\text{MoM}} = 1/\bar{X}$를 준다.
 
     로그가능도는 $\ell(\lambda) = n\log\lambda - \lambda \sum x_i$이다. $\ell'(\lambda) = n/\lambda - \sum x_i = 0$으로 두면 $\hat{\lambda}_{\text{MLE}} = n/\sum x_i = 1/\bar{X}$이다.
 
-    Exponential 분포에서 두 추정량은 동일하다. 모수가 하나이고 그것이 하나의 적률로 결정되기 때문이다. $\square$
+    지수분포에서 두 추정량은 동일하다. 모수가 하나이고 그것이 하나의 적률로 결정되기 때문이다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -378,7 +378,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span> $\alpha = 2, \beta = 5$인 Beta 분포 $\text{Beta}(\alpha, \beta)$에서 표본크기 $n = 50$으로 MLE와 적률법을 비교하는 Monte Carlo 모의실험을 수행하라. $\alpha$를 추정할 때 어느 방법의 평균제곱오차가 더 작은가?
+**연습문제 3.** <span class="diff med" title="중간"></span> $\alpha = 2, \beta = 5$인 베타분포 $\text{Beta}(\alpha, \beta)$에서 표본크기 $n = 50$으로 MLE와 적률법을 비교하는 Monte Carlo 모의실험을 수행하라. $\alpha$를 추정할 때 어느 방법의 평균제곱오차가 더 작은가?
 
 </div>
 
@@ -443,7 +443,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span> Bernoulli 모수 $p$의 Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. $p = 0.3$, $n = 100$일 때 표본비율 $\hat{p} = \bar{X}$의 분산이 Cramér-Rao 한계 $1/[nI(p)]$를 달성함을 수치적으로 확인하라.
+**연습문제 5.** <span class="diff med" title="중간"></span> 베르누이 모수 $p$의 Fisher 정보량은 $I(p) = 1/[p(1-p)]$이다. $p = 0.3$, $n = 100$일 때 표본비율 $\hat{p} = \bar{X}$의 분산이 Cramér-Rao 한계 $1/[nI(p)]$를 달성함을 수치적으로 확인하라.
 
 </div>
 

@@ -260,7 +260,7 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
     p^* = P^*(D^* \geq D_{\text{obs}})
     $$
 
-    를 갖는 Bernoulli 확률변수이다. 여기서 $P^*$는 붓스트랩 분포($\mathcal{N}(\hat{\mu}, \hat{\sigma}^2)$에서의 표집)를 나타낸다. 붓스트랩 $p$값은
+    를 갖는 베르누이 확률변수이다. 여기서 $P^*$는 붓스트랩 분포($\mathcal{N}(\hat{\mu}, \hat{\sigma}^2)$에서의 표집)를 나타낸다. 붓스트랩 $p$값은
 
     $$
     \hat{p}_B = \frac{1}{B}\sum_{b=1}^{B} \mathbf{1}(D_b^* \geq D_{\text{obs}}).

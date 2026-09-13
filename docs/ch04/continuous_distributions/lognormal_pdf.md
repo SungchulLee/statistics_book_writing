@@ -2,7 +2,7 @@
 
 ## 개요
 
-$X \sim N(\mu, \sigma^2)$이면 $Y = e^X$는 모수 $\mu$와 $\sigma$를 갖는 **Log-Normal 분포**를 따른다. 동등하게, $\ln Y \sim N(\mu, \sigma^2)$이다.
+$X \sim N(\mu, \sigma^2)$이면 $Y = e^X$는 모수 $\mu$와 $\sigma$를 갖는 **Log-정규분포**를 따른다. 동등하게, $\ln Y \sim N(\mu, \sigma^2)$이다.
 
 $$
 f(y) = \frac{1}{y\sigma\sqrt{2\pi}} \exp\!\left(-\frac{(\ln y - \mu)^2}{2\sigma^2}\right), \qquad y > 0
@@ -16,7 +16,7 @@ $$
 | 분산 | $(e^{\sigma^2} - 1)\,e^{2\mu + \sigma^2}$ |
 | 최빈값 | $e^{\mu - \sigma^2}$ |
 
-Log-Normal 분포는 자산 가격, 소득처럼 반드시 양수이고 오른쪽으로 치우친 양을 모형화하는 데 널리 쓰인다.
+Log-정규분포는 자산 가격, 소득처럼 반드시 양수이고 오른쪽으로 치우친 양을 모형화하는 데 널리 쓰인다.
 
 ---
 
@@ -86,7 +86,7 @@ $X \sim N(\mu, \sigma^2)$일 때 정규분포의 적률생성함수를 사용하
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대해 평균 $e^{\mu + \sigma^2/2}$보다 작음을 보여라.
+Log-정규분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대해 평균 $e^{\mu + \sigma^2/2}$보다 작음을 보여라.
 
 </div>
 
@@ -104,7 +104,7 @@ Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대�
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff easy" title="쉬움"></span>
-주식 수익률이 (연율화된) $\mu = 0.05$, $\sigma = 0.2$인 Log-Normal 분포를 따른다면, 주가가 가치의 20% 넘게 하락할 확률은 얼마인가?
+주식 수익률이 (연율화된) $\mu = 0.05$, $\sigma = 0.2$인 Log-정규분포를 따른다면, 주가가 가치의 20% 넘게 하락할 확률은 얼마인가?
 
 </div>
 
@@ -120,7 +120,7 @@ Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대�
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-독립인 Log-Normal 확률변수들의 곱이 다시 Log-Normal임을 증명하라.
+독립인 Log-정규 확률변수들의 곱이 다시 Log-정규임을 증명하라.
 
 </div>
 
@@ -131,9 +131,9 @@ Log-Normal 분포의 중앙값이 $e^\mu$이며, 임의의 $\sigma > 0$에 대�
     Y_1 Y_2 = e^{X_1 + X_2}
     $$
 
-    독립인 정규확률변수의 합에 의해 $X_1 + X_2 \sim N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$이므로, $Y_1 Y_2$는 모수가 $\mu_1 + \mu_2$와 $\sqrt{\sigma_1^2 + \sigma_2^2}$인 Log-Normal 분포이다.
+    독립인 정규확률변수의 합에 의해 $X_1 + X_2 \sim N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$이므로, $Y_1 Y_2$는 모수가 $\mu_1 + \mu_2$와 $\sqrt{\sigma_1^2 + \sigma_2^2}$인 Log-정규분포이다.
 
-    귀납법에 의해 독립인 Log-Normal 확률변수들의 임의의 유한 곱은 Log-Normal이다. $\square$
+    귀납법에 의해 독립인 Log-정규 확률변수들의 임의의 유한 곱은 Log-정규이다. $\square$
 
 ---
 

@@ -188,7 +188,7 @@ $$
 !!! note
     $\sigma^2$의 MLE는 $m-1$이 아니라 $m$으로 나누므로 편향되어 있다. 불편추정량 $S^2$은 $m-1$로 나눈다(Bessel 수정).
 
-### Bernoulli 모수의 MLE
+### 베르누이 모수의 MLE
 
 $x^{(1)}, \dots, x^{(m)}$을 $\text{Bernoulli}(p)$에서 뽑은 i.i.d. 관측값이라 하자.
 
@@ -364,7 +364,7 @@ MLE of N: 199
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-**Bernoulli의 MLE.** 동전을 100번 던져 앞면이 40번 나왔다. (a) 가능도 $L(p)$를 쓰라. (b) $\hat p_{\text{MLE}}$를 구하라.
+**베르누이의 MLE.** 동전을 100번 던져 앞면이 40번 나왔다. (a) 가능도 $L(p)$를 쓰라. (b) $\hat p_{\text{MLE}}$를 구하라.
 
 </div>
 
@@ -409,7 +409,7 @@ MLE of N: 199
 
     여기서 $g$는 $T(x)$를 통해서만 $\theta$에 의존하고 $h$는 $\theta$에 의존하지 않는다.
 
-    **Poisson의 경우:** $f(x_1, \ldots, x_n \mid \lambda) = \prod_i \frac{e^{-\lambda} \lambda^{x_i}}{x_i!} = e^{-n\lambda} \lambda^{\sum x_i} / \prod_i x_i!$.
+    **포아송의 경우:** $f(x_1, \ldots, x_n \mid \lambda) = \prod_i \frac{e^{-\lambda} \lambda^{x_i}}{x_i!} = e^{-n\lambda} \lambda^{\sum x_i} / \prod_i x_i!$.
 
     가능도가 $g(\sum x_i, \lambda) \cdot h(x) = (e^{-n\lambda} \lambda^{\sum x_i}) \cdot (1/\prod x_i!)$로 인수분해된다. 따라서 $T(X) = \sum X_i$는 충분통계량이다.
 
@@ -436,7 +436,7 @@ MLE of N: 199
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-**MLE의 점근정규성.** 일반적인 결과를 서술하라: $\sqrt n (\hat\theta_{\text{MLE}} - \theta) \xrightarrow{d} N(0, 1/I(\theta))$이며 $I(\theta)$는 관측값 하나당 Fisher 정보량이다. Poisson에 대해 확인하라.
+**MLE의 점근정규성.** 일반적인 결과를 서술하라: $\sqrt n (\hat\theta_{\text{MLE}} - \theta) \xrightarrow{d} N(0, 1/I(\theta))$이며 $I(\theta)$는 관측값 하나당 Fisher 정보량이다. 포아송에 대해 확인하라.
 
 </div>
 

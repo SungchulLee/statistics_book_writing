@@ -327,7 +327,7 @@ Cook의 거리 문턱 $4/n$의 근거를 유도하라. 구체적으로 $D_i$가 
 </div>
 
 ??? success "풀이"
-    관측값 $i$에 대한 Cook의 거리는 Beta 분포와 연결할 수 있다. 근사 $D_i \sim \text{Beta}(p/2,\, (n-p)/2)$ 아래에서 $\text{Beta}(\alpha, \beta)$ 확률변수의 기댓값은
+    관측값 $i$에 대한 Cook의 거리는 베타분포와 연결할 수 있다. 근사 $D_i \sim \text{Beta}(p/2,\, (n-p)/2)$ 아래에서 $\text{Beta}(\alpha, \beta)$ 확률변수의 기댓값은
 
     $$
     E[D_i] = \frac{\alpha}{\alpha + \beta} = \frac{p/2}{p/2 + (n-p)/2} = \frac{p}{n}

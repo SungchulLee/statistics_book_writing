@@ -47,7 +47,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Bernoulli 분포. $X \sim \text{Bernoulli}(p)$이면 $x \in \{0, 1\}$에서 $f(x; p) = p^x (1-p)^{1-x}$이다. 관측값 하나에 대한 로그가능도는
+**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이분포. $X \sim \text{Bernoulli}(p)$이면 $x \in \{0, 1\}$에서 $f(x; p) = p^x (1-p)^{1-x}$이다. 관측값 하나에 대한 로그가능도는
 
 </div>
 
@@ -72,7 +72,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Normal 분포 (평균). $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$이라 하자. 관측값 하나에 대한 로그가능도는
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규분포 (평균). $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$이라 하자. 관측값 하나에 대한 로그가능도는
 
 </div>
 
@@ -97,7 +97,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Poisson 분포. $X \sim \text{Poisson}(\lambda)$이면 $f(x; \lambda) = e^{-\lambda}\lambda^x / x!$이다. 로그가능도는
+**보기 3.** <span class="diff easy" title="쉬움"></span> 포아송분포. $X \sim \text{Poisson}(\lambda)$이면 $f(x; \lambda) = e^{-\lambda}\lambda^x / x!$이다. 로그가능도는
 
 </div>
 
@@ -160,7 +160,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-Pareto 분포: $x \ge 1$에서 $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이다. (a) $\hat\alpha_{\text{MLE}}$를 유도하라. (b) $\mathbb{E}[X] = \alpha/(\alpha-1)$을 이용한 적률법. (c) Fisher 정보량과 CRLB. (d) MLE는 효율적인가?
+파레토분포: $x \ge 1$에서 $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이다. (a) $\hat\alpha_{\text{MLE}}$를 유도하라. (b) $\mathbb{E}[X] = \alpha/(\alpha-1)$을 이용한 적률법. (c) Fisher 정보량과 CRLB. (d) MLE는 효율적인가?
 
 </div>
 

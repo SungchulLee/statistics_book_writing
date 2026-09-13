@@ -335,7 +335,7 @@ $\sigma = 0.6$인 대수정규는 왜도가 $2.26$으로 상당히 극단적인 
 
 ??? success "풀이"
 
-    각 모의실험은 성공확률 $\pi = \text{Power}$인 Bernoulli 시행이다. 추정량 $\hat{\pi} = \widehat{\text{Power}}$의 분산은 $\pi(1-\pi)/M$이므로 표준오차는
+    각 모의실험은 성공확률 $\pi = \text{Power}$인 베르누이 시행이다. 추정량 $\hat{\pi} = \widehat{\text{Power}}$의 분산은 $\pi(1-\pi)/M$이므로 표준오차는
 
     $$
     \text{SE}(\hat{\pi}) = \sqrt{\frac{\hat{\pi}(1 - \hat{\pi})}{M}}.

@@ -233,13 +233,13 @@ $$
 
 - Fisher 정보량은 참 모수에서 로그가능도의 **곡률**을 잰다. 곡률이 크면 자료가 정보를 많이 담고 있고 MLE가 정밀하다.
 - $I(\theta)$가 클수록 Cramér-Rao 한계가 좁아지므로 추정량이 더 정밀할 수 있다.
-- Fisher 정보량은 참 모수값에 의존한다. 예를 들어 Bernoulli의 $I(p) = 1/[p(1-p)]$는 $p$가 0이나 1에 가까울 때 가장 크고(관측값 하나하나가 많은 정보를 준다) $p = 0.5$에서 가장 작다(불확실성이 최대이다).
+- Fisher 정보량은 참 모수값에 의존한다. 예를 들어 베르누이의 $I(p) = 1/[p(1-p)]$는 $p$가 0이나 1에 가까울 때 가장 크고(관측값 하나하나가 많은 정보를 준다) $p = 0.5$에서 가장 작다(불확실성이 최대이다).
 
 ## 연습문제
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff med" title="중간"></span> Poisson 분포 $P(\lambda)$의 Fisher 정보량을 점수 분산의 정의와 2계도함수 기댓값의 음수, 두 가지 방식으로 유도하라. 둘이 일치함을 확인하라.
+**연습문제 1.** <span class="diff med" title="중간"></span> 포아송분포 $P(\lambda)$의 Fisher 정보량을 점수 분산의 정의와 2계도함수 기댓값의 음수, 두 가지 방식으로 유도하라. 둘이 일치함을 확인하라.
 
 </div>
 
@@ -256,7 +256,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span> 비율이 $\lambda$인 Exponential 분포($x > 0$에서 밀도 $f(x; \lambda) = \lambda e^{-\lambda x}$)에 대해 Fisher 정보량과, $n$개의 관측값으로 $\lambda$를 추정할 때의 Cramér-Rao 하한을 계산하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 비율이 $\lambda$인 지수분포($x > 0$에서 밀도 $f(x; \lambda) = \lambda e^{-\lambda x}$)에 대해 Fisher 정보량과, $n$개의 관측값으로 $\lambda$를 추정할 때의 Cramér-Rao 하한을 계산하라.
 
 </div>
 
@@ -277,7 +277,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span> Bernoulli 분포에서 Fisher 정보량 $I(p) = 1/[p(1-p)]$이 $p = 1/2$에서 최소가 됨을 보여라. 동전 던지기의 관점에서 이 결과를 해석하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 베르누이분포에서 Fisher 정보량 $I(p) = 1/[p(1-p)]$이 $p = 1/2$에서 최소가 됨을 보여라. 동전 던지기의 관점에서 이 결과를 해석하라.
 
 </div>
 

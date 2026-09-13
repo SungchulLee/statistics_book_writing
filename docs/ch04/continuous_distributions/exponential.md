@@ -1,18 +1,18 @@
-# Exponential 분포
+# 지수분포
 
 ## 개요
 
-**Exponential 분포**는 Poisson 과정에서 사건 사이의 시간을 모형화한다. Geometric 분포의 연속형 대응물이며, 무기억성을 갖는 유일한 연속분포이다. 도착 간 시간, 대기 시간, 부품 수명 모형화에 흔히 쓰인다.
+**지수분포**는 포아송 과정에서 사건 사이의 시간을 모형화한다. 기하분포의 연속형 대응물이며, 무기억성을 갖는 유일한 연속분포이다. 도착 간 시간, 대기 시간, 부품 수명 모형화에 흔히 쓰인다.
 
 ---
 
-## Exponential 분포와 누적분포함수
+## 지수분포와 누적분포함수
 
 <div class="defn" markdown>
 
-### 정의 1. Exponential 분포 { .dfn }
+### 정의 1. 지수분포 { .dfn }
 
-확률변수 $X$가 비율 모수 $\lambda > 0$인 Exponential 분포를 따른다는 것은 다음을 뜻한다:
+확률변수 $X$가 비율 모수 $\lambda > 0$인 지수분포를 따른다는 것은 다음을 뜻한다:
 
 $$
 X \sim \text{Exponential}(\lambda), \qquad f(x) = \lambda e^{-\lambda x}, \quad x \geq 0
@@ -47,7 +47,7 @@ E[X] &= \frac{1}{\lambda} \\[4pt]
 \end{aligned}
 $$
 
-$\text{평균} = \text{표준편차} = 1/\lambda$라는 점에 주목하라. Exponential 분포의 두드러진 특징이다.
+$\text{평균} = \text{표준편차} = 1/\lambda$라는 점에 주목하라. 지수분포의 두드러진 특징이다.
 
 ### 평균의 유도
 
@@ -69,7 +69,7 @@ $$
 
 ## 무기억성
 
-Exponential 분포는 무기억성을 갖는 **유일한** 연속분포이다:
+지수분포는 무기억성을 갖는 **유일한** 연속분포이다:
 
 $$
 P(X > s + t \mid X > s) = P(X > t) \quad \text{for all } s, t \geq 0
@@ -86,9 +86,9 @@ $$
 
     ---
 
-## Poisson 과정과의 연결
+## 포아송 과정과의 연결
 
-사건이 비율 $\lambda$인 Poisson 과정에 따라 도착하면:
+사건이 비율 $\lambda$인 포아송 과정에 따라 도착하면:
 
 $$
 \begin{aligned}
@@ -100,7 +100,7 @@ $$
 
 ---
 
-## Exponential 확률변수의 최솟값
+## 지수 확률변수의 최솟값
 
 $X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이면:
 
@@ -115,7 +115,7 @@ $$
     P(\min(X_1, X_2) > t) = P(X_1 > t) \cdot P(X_2 > t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2)t}
     $$
 
-    이는 $n$개의 독립인 Exponential 확률변수로 일반화된다: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
+    이는 $n$개의 독립인 지수 확률변수로 일반화된다: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
 
     ---
 
@@ -165,7 +165,7 @@ ax.legend()
 plt.show()
 ```
 
-![Exponential 분포](./img/exponential_132.png)
+![지수분포](./img/exponential_132.png)
 
 </div>
 
@@ -193,7 +193,7 @@ ax.legend()
 plt.show()
 ```
 
-![Exponential 분포](./img/exponential_150.png)
+![지수분포](./img/exponential_150.png)
 
 </div>
 
@@ -264,7 +264,7 @@ P(X>0.5+1.0|X>0.5) = 0.1360,  P(X>1.0) = 0.1355
 
 </div>
 
-### Poisson 과정 모의실험
+### 포아송 과정 모의실험
 
 <div class="codebox" markdown>
 
@@ -295,7 +295,7 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
-![Exponential 분포](./img/exponential_199.png)
+![지수분포](./img/exponential_199.png)
 
 </div>
 
@@ -320,7 +320,7 @@ plt.show()
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff hard" title="어려움"></span>
-Exponential 분포의 **무기억성을 증명**하고, 이 성질을 갖는 연속분포가 *유일*함을 보여라.
+지수분포의 **무기억성을 증명**하고, 이 성질을 갖는 연속분포가 *유일*함을 보여라.
 
 </div>
 
@@ -333,9 +333,9 @@ Exponential 분포의 **무기억성을 증명**하고, 이 성질을 갖는 연
 
     $\square$
 
-    **유일성:** $\bar F$가 연속이고 감소하며 $\bar F(0) = 1$이고 무기억성 $\bar F(s + t) = \bar F(s) \bar F(t)$를 만족한다고 하자. (연속성 아래에서 풀린) Cauchy 함수방정식에 의해 이런 함수는 어떤 $\lambda > 0$에 대한 $\bar F(t) = e^{-\lambda t}$뿐이다.
+    **유일성:** $\bar F$가 연속이고 감소하며 $\bar F(0) = 1$이고 무기억성 $\bar F(s + t) = \bar F(s) \bar F(t)$를 만족한다고 하자. (연속성 아래에서 풀린) 코시 함수방정식에 의해 이런 함수는 어떤 $\lambda > 0$에 대한 $\bar F(t) = e^{-\lambda t}$뿐이다.
 
-    따라서 Exponential 분포는 무기억성을 갖는 유일한 연속분포이며, 이는 Geometric 분포가 유일한 이산 무기억 분포인 것과 정확히 대응된다.
+    따라서 지수분포는 무기억성을 갖는 유일한 연속분포이며, 이는 기하분포가 유일한 이산 무기억 분포인 것과 정확히 대응된다.
 
 <div class="drillbox" markdown>
 
@@ -353,19 +353,19 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     분산: $\mathrm{Var}(T) = 2/\lambda^2 - 1/\lambda^2 = 1/\lambda^2$.
 
-    참고: 평균과 표준편차가 모두 $1/\lambda$인 것이 Exponential 분포의 두드러진 특징이다. 변동계수 CV = 1이다.
+    참고: 평균과 표준편차가 모두 $1/\lambda$인 것이 지수분포의 두드러진 특징이다. 변동계수 CV = 1이다.
 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**Poisson 과정과의 연결.** 사건이 비율 $\lambda$인 Poisson 과정에서 발생할 때 $k$번째 도착 시각 $T_k$의 분포를 유도하라.
+**포아송 과정과의 연결.** 사건이 비율 $\lambda$인 포아송 과정에서 발생할 때 $k$번째 도착 시각 $T_k$의 분포를 유도하라.
 
 </div>
 
 ??? success "풀이"
     $T_k = \sum_{i=1}^k X_i$이며, 여기서 $X_i$는 i.i.d. $\mathrm{Exp}(\lambda)$(도착 간 시간)이다.
 
-    $k$개의 i.i.d. Exponential 확률변수의 합은 **감마(Erlang) 분포**이다:
+    $k$개의 i.i.d. 지수 확률변수의 합은 **감마(Erlang) 분포**이다:
 
     $$
     T_k \sim \mathrm{Gamma}(\text{shape} = k, \text{rate} = \lambda)
@@ -375,7 +375,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     $\mathbb{E}[T_k] = k/\lambda$, $\mathrm{Var}(T_k) = k/\lambda^2$.
 
-    이는 Exponential 도착 간 시간과 Poisson 계수를 잇는 근본적인 연결이며, 대기행렬과 신뢰성 분석에서 재생이론의 토대가 된다.
+    이는 지수 도착 간 시간과 포아송 계수를 잇는 근본적인 연결이며, 대기행렬과 신뢰성 분석에서 재생이론의 토대가 된다.
 
 <div class="drillbox" markdown>
 
@@ -402,7 +402,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-**위험함수.** 위험률은 $h(t) = f(t)/\bar F(t)$로 정의된다. Exponential 분포의 위험률이 *상수*임을 보이고, 이것이 물리적으로 무엇을 뜻하는지 논하라.
+**위험함수.** 위험률은 $h(t) = f(t)/\bar F(t)$로 정의된다. 지수분포의 위험률이 *상수*임을 보이고, 이것이 물리적으로 무엇을 뜻하는지 논하라.
 
 </div>
 
@@ -419,14 +419,14 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
     - **감소하는 위험률** ($k < 1$): 부품이 길들여진다. 오래된 부품일수록 고장이 덜 난다. 초기 결함을 넘긴 전자 부품이 그렇다.
     - **욕조 곡선**: 초기에 높고(길들이기) 중간이 평평하며 이후 증가한다(마모). 위의 두 경우가 결합된 형태이다.
 
-    현실의 신뢰성이 정확히 Exponential 분포를 따르는 경우는 드물지만, Exponential 분포는 유용한 기준선이다. (a) 모수가 평균 수명이라는 직접적인 의미를 갖고, (b) 수학적으로 다루기 쉬우며, (c) 무기억성이 "완전히 무작위한" 고장에 대응하여 고장 모형화의 자연스러운 귀무가설이 되기 때문이다.
+    현실의 신뢰성이 정확히 지수분포를 따르는 경우는 드물지만, 지수분포는 유용한 기준선이다. (a) 모수가 평균 수명이라는 직접적인 의미를 갖고, (b) 수학적으로 다루기 쉬우며, (c) 무기억성이 "완전히 무작위한" 고장에 대응하여 고장 모형화의 자연스러운 귀무가설이 되기 때문이다.
 
 ---
 
 ## 정리하며
 
-- Exponential 분포는 사건 사이의 대기 시간을 모형화하며, 비율 $\lambda$(또는 척도 $1/\lambda$)로 모수화된다.
+- 지수분포는 사건 사이의 대기 시간을 모형화하며, 비율 $\lambda$(또는 척도 $1/\lambda$)로 모수화된다.
 - 무기억성을 갖는 유일한 연속분포이다. 남은 대기 시간은 이미 얼마나 기다렸는지와 무관하다.
-- Poisson 과정과 직접 연결된다. Poisson 계수와 Exponential 도착 간 시간은 같은 현상을 보는 두 관점이다.
-- 독립인 Exponential 확률변수들의 최솟값은 다시 Exponential 분포이며, 비율은 합해진다.
+- 포아송 과정과 직접 연결된다. 포아송 계수와 지수 도착 간 시간은 같은 현상을 보는 두 관점이다.
+- 독립인 지수 확률변수들의 최솟값은 다시 지수분포이며, 비율은 합해진다.
 - SciPy에서는 비율 모수화를 다루려면 `stats.expon(scale=1/lambda)`를 사용한다.

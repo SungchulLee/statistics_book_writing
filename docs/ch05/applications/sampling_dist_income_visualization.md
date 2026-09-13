@@ -6,7 +6,7 @@
 
 ## 설정: 모의 소득 자료
 
-실제 소득 자료는 위쪽 꼬리가 긴 오른쪽으로 치우친 모양이다. 이를 이동된 Exponential 분포로 모사한다:
+실제 소득 자료는 위쪽 꼬리가 긴 오른쪽으로 치우친 모양이다. 이를 이동된 지수분포로 모사한다:
 
 $$
 \text{Income} = 20{,}000 + Y, \qquad Y \sim \text{Exp}(\text{scale} = 50{,}000)
@@ -164,7 +164,7 @@ Ratio SE(5)/SE(20):      2.00
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span> 모의실험은 Exponential 척도 모수로 \$50,000을 사용하고 \$20,000을 더한다. 이 이동된 Exponential 분포의 정확한 모평균과 모표준편차를 유도하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 모의실험은 지수 척도 모수로 \$50,000을 사용하고 \$20,000을 더한다. 이 이동된 지수분포의 정확한 모평균과 모표준편차를 유도하라.
 
 </div>
 

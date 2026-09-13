@@ -193,7 +193,7 @@ PlantGrowth 자료에는 ctrl, trt1, trt2 세 집단이 있고 각각 관측값�
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-집단 분산이 다를 수 있을 때 분산분석 뒤의 쌍별 비교에서 합동(Student) $t$-검정보다 Welch $t$-검정이 선호되는 이유를 설명하라. 분산이 실제로 같으면 Welch 검정은 어떻게 되는가?
+집단 분산이 다를 수 있을 때 분산분석 뒤의 쌍별 비교에서 합동(스튜던트) $t$-검정보다 Welch $t$-검정이 선호되는 이유를 설명하라. 분산이 실제로 같으면 Welch 검정은 어떻게 되는가?
 
 </div>
 

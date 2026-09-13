@@ -18,7 +18,7 @@ $$
 
 여기서 $g \geq 0$은 자료에 오직 $T(\mathbf{x})$를 통해서만 의존하고 $\theta$에 의존할 수 있는 함수이며, $h \geq 0$은 $\mathbf{x}$만의 함수로 $\theta$에 의존하지 않는다.
 
-!!! example "Poisson 표본의 인수분해"
+!!! example "포아송 표본의 인수분해"
 
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$라 하자. 결합 질량함수는
 

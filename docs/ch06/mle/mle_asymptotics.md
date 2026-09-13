@@ -70,7 +70,7 @@ $$
 
 여기서 $z_{\alpha/2}$는 표준정규분포의 $(1 - \alpha/2)$ 분위수이다. $\theta_0$을 모르므로 실무에서는 Fisher 정보량을 $\hat{\theta}_{\text{MLE}}$에서 평가한다.
 
-!!! example "Bernoulli 모수의 점근 신뢰구간"
+!!! example "베르누이 모수의 점근 신뢰구간"
 
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$에서 MLE는 $\hat{p} = \bar{X}$이고 Fisher 정보량은 $I(p) = 1/(p(1-p))$이다. 근사적인 95% 신뢰구간은
 
@@ -135,7 +135,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-비율 모수가 $\lambda$인 Exponential 분포에서 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. Fisher 정보량 $I(\lambda)$를 계산하고 $\hat{\lambda}$의 점근분산이 $\lambda^2/n$임을 확인하라.
+비율 모수가 $\lambda$인 지수분포에서 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. Fisher 정보량 $I(\lambda)$를 계산하고 $\hat{\lambda}$의 점근분산이 $\lambda^2/n$임을 확인하라.
 
 </div>
 
@@ -163,7 +163,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-불변성은 $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE라는 성질이다. 이를 이용하여 Exponential 분포의 평균 $1/\lambda$의 MLE를 구하라.
+불변성은 $\hat{\theta}$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat{\theta})$가 $g(\theta)$의 MLE라는 성질이다. 이를 이용하여 지수분포의 평균 $1/\lambda$의 MLE를 구하라.
 
 </div>
 
@@ -174,7 +174,7 @@ $$
     \widehat{1/\lambda} = g(\hat{\lambda}) = \frac{1}{\hat{\lambda}} = \frac{1}{1/\bar{X}} = \bar{X}
     $$
 
-    Exponential 분포 평균의 MLE가 표본평균이라는 직관적인 결과가 확인된다. 불변성은 MLE를 처음부터 다시 유도하지 않고도 비선형 변환을 포함한 임의의 변환에 대해 작동하므로 강력하다.
+    지수분포 평균의 MLE가 표본평균이라는 직관적인 결과가 확인된다. 불변성은 MLE를 처음부터 다시 유도하지 않고도 비선형 변환을 포함한 임의의 변환에 대해 작동하므로 강력하다.
 
 <div class="drillbox" markdown>
 
