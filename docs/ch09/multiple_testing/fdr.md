@@ -312,6 +312,425 @@ p-값 6개 0.001, 0.008, 0.039, 0.041, 0.23, 0.76에 FDR 수준 $q = 0.10$에서
 
     FDR 통제의 검정력 이점을 보여준다: BH는 (약 25개의 거짓을 감수하며) 유전자 500개를 발견하는 반면 Bonferroni는 (거짓을 거의 0으로 하면서) 훨씬 적게 발견한다. 선택은 거짓 발견의 대가와 놓친 발견의 대가를 견주어 정한다.
 
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff med" title="중간"></span>
+BH 절차의 **실제 FDR과 검정력**을 $\pi_1$(참 대립가설의 비율)에 따라 모의실험으로 확인하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(31)
+    M, m = 400, 1_000
+
+    def bh_reject(p, q):
+        m = len(p)
+        o = np.argsort(p)
+        ps = p[o]
+        ok = np.where(ps <= q * np.arange(1, m + 1) / m)[0]
+        r = np.zeros(m, bool)
+        if len(ok):
+            r[o[:ok.max() + 1]] = True
+        return r
+
+    print(f"{'π1':>6s} {'실제 FDR':>10s} {'q·π0':>8s} {'검정력':>8s} "
+          f"{'평균 기각 수':>12s}")
+    for pi1 in [0.01, 0.05, 0.10, 0.30]:
+        fdrs, pows, nrej = [], [], []
+        for _ in range(M):
+            m1 = int(m * pi1)
+            z = rng.standard_normal(m)
+            z[:m1] += 3.5                        # 참 대립가설
+            p = 2 * stats.norm.sf(np.abs(z))
+            r = bh_reject(p, 0.05)
+            R, V = r.sum(), r[m1:].sum()
+            fdrs.append(V / max(R, 1))
+            pows.append(r[:m1].sum() / m1)
+            nrej.append(R)
+        print(f"{pi1:6.2f} {np.mean(fdrs):10.4f} {0.05 * (1 - pi1):8.4f} "
+              f"{np.mean(pows):8.4f} {np.mean(nrej):12.1f}")
+    ```
+
+    ```text
+        π1    실제 FDR     q·π0     검정력      평균 기각 수
+      0.01     0.0501   0.0495   0.4325          4.6
+      0.05     0.0486   0.0475   0.6409         33.7
+      0.10     0.0476   0.0450   0.7320         76.9
+      0.30     0.0341   0.0350   0.8449        262.5
+    ```
+
+    **실제 FDR이 $q\pi_0$와 거의 같다.** 이것이 BH 정리의 핵심이다.
+
+    $$
+    \text{FDR}\le\frac{m_0}{m}q=\pi_0q\le q
+    $$
+
+    **따라서 BH는 $\pi_0$가 1에 가까울 때만 문턱을 온전히 쓴다.** $\pi_1=0.30$이면 실제 FDR이 0.034로 목표 0.05의 3분의 2다. **보수적**이다.
+
+    **개선 — 적응적 BH.** $\pi_0$를 자료에서 추정해 $q/\hat\pi_0$를 쓰면 이 보수성이 사라진다. 스토리의 방법이 대표적이다.
+
+    ```python
+    def pi0_storey(p, lam=0.5):
+        return min((p > lam).sum() / ((1 - lam) * len(p)), 1.0)
+
+    m1 = 300
+    z = rng.standard_normal(m)
+    z[:m1] += 3.5
+    p = 2 * stats.norm.sf(np.abs(z))
+    print(f"참 π0 = {1 - m1 / m:.3f},  스토리 추정 = {pi0_storey(p):.3f}")
+    ```
+
+    ```text
+    참 π0 = 0.700,  스토리 추정 = 0.660
+    ```
+
+    **검정력이 $\pi_1$과 함께 오른다.** $\pi_1=0.01$에서 0.43, $\pi_1=0.30$에서 0.84다. **BH의 문턱이 기각 수에 따라 느슨해지기** 때문이다. 참 신호가 많으면 문턱이 올라가 더 많이 잡아낸다.
+
+    **이것이 본페로니와의 근본적 차이다.** 본페로니의 문턱 $\alpha/m$은 자료와 무관하게 고정이지만, BH는 **자료에 적응**한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
+BH와 본페로니의 **검정력**을 같은 조건에서 비교하고, 차이가 어디서 오는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(31)
+    M, m = 400, 1_000
+
+    def bh_reject(p, q):
+        mm = len(p)
+        o = np.argsort(p)
+        ok = np.where(p[o] <= q * np.arange(1, mm + 1) / mm)[0]
+        r = np.zeros(mm, bool)
+        if len(ok):
+            r[o[:ok.max() + 1]] = True
+        return r
+
+    print(f"{'π1':>6s} {'본페로니 검정력':>15s} {'BH 검정력':>11s} {'비':>6s}")
+    for pi1 in [0.01, 0.05, 0.10]:
+        pb, pbh = [], []
+        for _ in range(M):
+            m1 = int(m * pi1)
+            z = rng.standard_normal(m)
+            z[:m1] += 3.5
+            p = 2 * stats.norm.sf(np.abs(z))
+            pb.append((p[:m1] < 0.05 / m).sum() / m1)
+            pbh.append(bh_reject(p, 0.05)[:m1].sum() / m1)
+        print(f"{pi1:6.2f} {np.mean(pb):15.4f} {np.mean(pbh):11.4f} "
+              f"{np.mean(pbh) / np.mean(pb):6.2f}")
+    ```
+
+    ```text
+        π1    본페로니 검정력    BH 검정력      비
+      0.01          0.2925      0.4455    1.52
+      0.05          0.2868      0.6419    2.24
+      0.10          0.2858      0.7252    2.54
+    ```
+
+    **BH가 1.5~2.5배 강력하다.** $\pi_1$이 클수록 차이가 커진다.
+
+    **본페로니의 검정력은 $\pi_1$과 무관하다**(0.286~0.293). 문턱이 $\alpha/m$으로 고정이기 때문이다.
+
+    **BH의 검정력은 $\pi_1$과 함께 오른다.** 신호가 많으면 문턱이 느슨해져 **선순환**이 생긴다.
+
+    **차이의 원천 — 통제하는 양이 다르다.**
+
+    | | 본페로니(FWER) | BH(FDR) |
+    |---|---|---|
+    | 통제 | $P(V\ge1)\le\alpha$ | $E[V/R]\le q$ |
+    | 뜻 | **거짓발견이 하나라도** 있을 확률 | 발견 중 거짓의 **비율** |
+    | $m$이 클 때 | 극도로 엄격 | 합리적 |
+
+    **$m=1000$에서 FWER 통제는 "1000개 중 거짓 하나도 없기"** 를 요구한다. 지나치게 엄격하다. FDR은 "200개를 발견했다면 그중 10개쯤은 거짓일 수 있다"를 허용한다.
+
+    **어느 것이 맞는가 — 후속 절차에 달렸다.**
+
+    - **발견 하나하나를 확진 실험으로 검증**할 것이라면 FDR로 충분하다. 몇 개의 거짓 후보를 검증 단계에서 걸러 내면 된다.
+    - **발견을 곧바로 결론으로 삼는다면** FWER이 필요하다. 규제 제출, 최종 결론.
+
+    **유전체·뇌영상의 관행.** 탐색 단계에서는 FDR, 확증 단계에서는 FWER이나 매우 엄격한 문턱을 쓴다. **2단계 구조가 FDR을 정당화**한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
+**$q$-값**을 정의하고 $p$-값과의 차이를 설명하라. 스토리의 $\pi_0$ 추정이 왜 필요한가?
+
+</div>
+
+??? success "풀이"
+    **정의.**
+
+    - **$p$-값**: 이 가설을 기각하는 문턱을 관측값에 맞췄을 때의 **제1종 오류율**.
+    - **$q$-값**: 이 가설을 기각하는 문턱을 관측값에 맞췄을 때의 **FDR**.
+
+    형식적으로
+
+    $$
+    q(p_i)=\min_{t\ge p_i}\text{FDR}(t),
+    \qquad
+    \text{FDR}(t)\approx\frac{\pi_0\,m\,t}{\#\{p_j\le t\}}
+    $$
+
+    **해석.** "$q=0.02$인 유전자를 기각 목록에 넣으면, 그 목록의 2%가 거짓발견으로 예상된다."
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(5)
+    m, m1 = 2_000, 200
+    z = rng.standard_normal(m)
+    z[:m1] += 3.0
+    p = 2 * stats.norm.sf(np.abs(z))
+
+    def pi0_storey(p, lam=0.5):
+        return min((p > lam).sum() / ((1 - lam) * len(p)), 1.0)
+
+    def qvalues(p, pi0=1.0):
+        mm = len(p)
+        o = np.argsort(p)
+        ps = p[o]
+        q = pi0 * mm * ps / np.arange(1, mm + 1)
+        q = np.minimum.accumulate(q[::-1])[::-1]
+        out = np.empty(mm)
+        out[o] = np.minimum(q, 1)
+        return out
+
+    pi0 = pi0_storey(p)
+    q_cons = qvalues(p)                 # π0 = 1 (BH 와 동일)
+    q_ada = qvalues(p, pi0)             # π0 추정 반영
+    print(f"참 π0 = {1 - m1 / m:.3f},  스토리 추정 π0 = {pi0:.3f}")
+    for thr in [0.01, 0.05, 0.10]:
+        print(f"q ≤ {thr:.2f}:  BH {(q_cons <= thr).sum():4d}개   "
+              f"적응형 {(q_ada <= thr).sum():4d}개   "
+              f"(참 신호 중 발견: {(q_ada[:m1] <= thr).sum():3d}/{m1})")
+    ```
+
+    ```text
+    참 π0 = 0.900,  스토리 추정 π0 = 0.916
+    q ≤ 0.01:  BH   43개   적응형   43개   (참 신호 중 발견:  43/200)
+    q ≤ 0.05:  BH   83개   적응형   90개   (참 신호 중 발견:  87/200)
+    q ≤ 0.10:  BH  115개   적응형  122개   (참 신호 중 발견: 111/200)
+    ```
+
+    **$\pi_0$ 추정의 이득은 $\pi_0$가 작을 때 크다.** 여기서는 $\pi_0=0.9$라 0~7개 차이뿐이다. $\pi_0=0.5$라면 기각 수가 두 배 가까이 늘어난다. 여기서는 추정값 0.916이 참값 0.900보다 조금 커서 이득이 더 줄었다.
+
+    **$\pi_0$를 어떻게 추정하는가.** 큰 $p$-값은 거의 모두 참인 귀무가설에서 나온다. $H_0$ 아래 $p$가 균등분포이므로
+
+    $$
+    \hat\pi_0(\lambda)=\frac{\#\{p_j>\lambda\}}{(1-\lambda)m}
+    $$
+
+    **$\lambda$의 선택이 관건이다.** 크면 편향은 작지만 분산이 크고, 작으면 반대다. 스플라인으로 $\lambda\to1$의 극한을 외삽하는 방법이 표준이다.
+
+    **$p$-값과 $q$-값의 대비.**
+
+    | | $p$-값 | $q$-값 |
+    |---|---|---|
+    | 단위 | 개별 가설 | 기각 목록 전체 |
+    | 해석 | $H_0$ 아래 자료의 희귀성 | 목록의 거짓 비율 |
+    | 다른 검정에 의존 | 하지 않음 | **의존한다** |
+    | 단조성 | — | $p$의 단조 함수 |
+
+    **셋째 줄이 중요하다.** 같은 유전자의 $q$-값이 **함께 검정한 유전자 집합에 따라 달라진다.** 이것이 직관에 어긋나지만, FDR이 목록 전체의 성질이므로 당연하다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+BH 절차가 **종속 자료**에서 어떻게 작동하는지 확인하고, 언제 BY로 바꿔야 하는지 판단하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(77)
+    M, m, m1 = 300, 500, 50
+
+    def bh_reject(p, q):
+        mm = len(p)
+        o = np.argsort(p)
+        ok = np.where(p[o] <= q * np.arange(1, mm + 1) / mm)[0]
+        r = np.zeros(mm, bool)
+        if len(ok):
+            r[o[:ok.max() + 1]] = True
+        return r
+
+    print(f"{'상관 구조':>14s} {'BH FDR':>9s} {'BY FDR':>9s} "
+          f"{'BH 검정력':>11s} {'BY 검정력':>11s}")
+    c_m = np.sum(1 / np.arange(1, m + 1))
+    for name, rho in [("독립", 0.0), ("양의 등상관 0.5", 0.5),
+                      ("양의 등상관 0.9", 0.9)]:
+        f1, f2, p1, p2 = [], [], [], []
+        for _ in range(M):
+            common = rng.standard_normal(1)
+            z = np.sqrt(rho) * common + np.sqrt(1 - rho) * rng.standard_normal(m)
+            z[:m1] += 3.5
+            p = 2 * stats.norm.sf(np.abs(z))
+            for q, fl, pl in [(0.05, f1, p1), (0.05 / c_m, f2, p2)]:
+                r = bh_reject(p, q)
+                fl.append(r[m1:].sum() / max(r.sum(), 1))
+                pl.append(r[:m1].sum() / m1)
+        print(f"{name:>14s} {np.mean(f1):9.4f} {np.mean(f2):9.4f} "
+              f"{np.mean(p1):11.4f} {np.mean(p2):11.4f}")
+    ```
+
+    ```text
+             상관 구조    BH FDR    BY FDR    BH 검정력    BY 검정력
+             독립    0.0475    0.0075      0.7312      0.4803
+      양의 등상관 0.5    0.0396    0.0054      0.6847      0.4330
+      양의 등상관 0.9    0.0185    0.0016      0.6963      0.4837
+    ```
+
+    **BH가 양의 등상관에서도 FDR을 잘 통제한다.** 0.019~0.048로 모두 0.05 이하이며, 상관이 커질수록 오히려 보수적이 된다.
+
+    **이론적 근거.** 벤야미니-예쿠티엘리가 **PRDS(양의 회귀 종속)** 조건 아래 BH의 FDR 통제를 증명했다. 등상관 정규는 이 조건을 만족한다.
+
+    **BY는 지나치게 보수적이다.** FDR이 0.002~0.008로 목표의 10분의 1이고, 검정력을 20~25%포인트 잃는다. $c(m)=\sum_{i=1}^{500}1/i=6.79$배로 문턱을 낮추기 때문이다.
+
+    **언제 BY가 필요한가.**
+
+    | 상황 | 권장 |
+    |---|---|
+    | 독립 또는 양의 상관 | **BH** |
+    | 상관 구조를 모르지만 양의 상관이 그럴듯 | **BH**(대부분의 실무) |
+    | **음의 상관이 섞여 있음** | BY 또는 순열 |
+    | 최악의 경우 보장이 필수 | BY |
+    | 교환가능성이 성립 | **순열 기반 FDR**(가장 정확) |
+
+    **실무 판단.** 대부분의 응용에서 검정통계량은 **양의 상관**을 갖는다(같은 시료, 같은 피험자, 인접한 유전자·복셀). 따라서 **BH를 그대로 쓰는 것이 표준**이다.
+
+    **음의 상관이 생기는 경우.** 총합이 고정된 조성 자료(비율, 상대풍부도), 대비 간의 구조적 제약. 이런 경우에만 BY나 순열을 고려한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+FDR 통제 결과를 **어떻게 해석하고 보고해야 하는지** 정리하라. 흔한 오해는 무엇인가?
+
+</div>
+
+??? success "풀이"
+    **흔한 오해 다섯.**
+
+    **1 — "$q=0.05$이면 이 발견이 참일 확률이 95%다."**
+    틀렸다. $q$-값은 **개별 가설의 확률이 아니라 목록의 기대 비율**이다. 개별 확률은 지역 FDR(local FDR)이라는 다른 양이며, 대체로 $q$-값보다 크다.
+
+    **2 — "FDR을 통제했으니 각 발견이 검증되었다."**
+    아니다. 200개를 발견했다면 그중 10개는 거짓으로 **예상**된다. 어느 10개인지는 모른다.
+
+    **3 — "$V/R$의 기댓값이 $q$ 이하"와 "$V/R$이 항상 $q$ 이하"를 혼동.**
+    기댓값 통제이므로, 특정 실험에서는 실제 비율이 훨씬 클 수 있다. 분산이 크다. **FDX(초과확률 통제)** 라는 대안이 있다.
+
+    **4 — "$R=0$일 때의 처리."**
+    기각이 없으면 $V/R$이 정의되지 않는다. 관례적으로 0으로 둔다. 따라서 FDR은 $E[V/R\mid R>0]P(R>0)$와 다르다(후자는 pFDR).
+
+    **5 — "$q$-값이 개별 가설의 성질이다."**
+    앞서 본 대로 **함께 검정한 집합에 의존**한다. 유전자 하나를 다른 논문에서 검정하면 $q$-값이 달라진다.
+
+    **보고할 것.**
+
+    1. **$m$(검정 수)과 가족의 정의.**
+    2. **$q$ 수준과 방법**(BH/BY/스토리/순열).
+    3. **기각 수 $R$과 예상 거짓발견 수 $\approx qR$.**
+    4. **$\pi_0$ 추정값**(적응형을 썼다면).
+    5. **원 $p$-값과 $q$-값을 모두** 담은 표나 부록.
+    6. **종속 구조에 대한 논의.**
+
+    **좋은 보고의 예.**
+
+    > 유전자 20,531개에 대해 두 군의 발현 차이를 검정하고 BH 절차로 FDR을 0.05 수준에서 통제했다. 그 결과 342개가 유의했으며, 이 중 약 17개는 거짓발견으로 예상된다. 스토리의 방법으로 추정한 $\pi_0$는 0.83이었다. 검정통계량이 같은 시료에서 나와 양의 상관이 예상되므로 BH의 PRDS 조건이 충족된다고 보았다. 전체 $p$-값과 $q$-값은 보충자료 표 S1에 있다.
+
+    **후속 절차의 명시.** FDR을 쓴다는 것은 **거짓발견을 어느 정도 허용**한다는 뜻이므로, 그것을 어떻게 처리할지 밝혀야 한다.
+
+    > 상위 20개 유전자에 대해 독립 코호트에서 검증 실험을 수행할 계획이다.
+
+    이 한 문장이 FDR 선택을 정당화한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+FDR 이외의 **다른 오류 측도**들을 소개하고, 각각이 어떤 상황에 맞는지 정리하라.
+
+</div>
+
+??? success "풀이"
+
+    | 측도 | 정의 | 통제하는 것 | 언제 |
+    |---|---|---|---|
+    | **FWER** | $P(V\ge1)$ | 거짓발견이 하나라도 | 확증, 규제 |
+    | **FDR** | $E[V/R]$ | 거짓의 기대 비율 | 탐색 + 후속 검증 |
+    | **pFDR** | $E[V/R\mid R>0]$ | 기각이 있을 때의 비율 | $q$-값의 바탕 |
+    | **FDX** | $P(V/R>\gamma)$ | 비율이 $\gamma$를 넘을 확률 | **분산이 걱정될 때** |
+    | **$k$-FWER** | $P(V\ge k)$ | 거짓이 $k$개 이상일 확률 | 소수의 거짓은 허용 |
+    | **FNR** | $E[T/(m-R)]$ | 놓친 참의 비율 | 민감도가 중요할 때 |
+    | **per-comparison** | $E[V]/m$ | 개별 오류율 | 사실상 무보정 |
+
+    **FDR의 약점 — 분산.** $E[V/R]\le q$는 평균의 진술이다. 실제 $V/R$이 $q$를 크게 넘는 실험이 있을 수 있다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(13)
+    M, m, m1 = 2_000, 500, 25
+
+    def bh_reject(p, q):
+        mm = len(p)
+        o = np.argsort(p)
+        ok = np.where(p[o] <= q * np.arange(1, mm + 1) / mm)[0]
+        r = np.zeros(mm, bool)
+        if len(ok):
+            r[o[:ok.max() + 1]] = True
+        return r
+
+    fdps = []
+    for _ in range(M):
+        z = rng.standard_normal(m)
+        z[:m1] += 3.0
+        p = 2 * stats.norm.sf(np.abs(z))
+        r = bh_reject(p, 0.05)
+        fdps.append(r[m1:].sum() / max(r.sum(), 1))
+    fdps = np.array(fdps)
+    print(f"FDR(평균) = {fdps.mean():.4f}")
+    print(f"백분위 50/75/90/95/99: "
+          + " ".join(f"{v:.3f}" for v in np.percentile(fdps, [50, 75, 90, 95, 99])))
+    print(f"실제 비율이 0.10 을 넘은 비율 = {np.mean(fdps > 0.10):.4f}")
+    ```
+
+    ```text
+    FDR(평균) = 0.0478
+    백분위 50/75/90/95/99: 0.000 0.091 0.143 0.167 0.250
+    실제 비율이 0.10 을 넘은 비율 = 0.1910
+    ```
+
+    **평균은 0.048로 잘 통제되지만, 19%의 실험에서 실제 비율이 0.10을 넘는다.** 99 백분위는 0.25다.
+
+    **FDX가 이를 다룬다.** "$P(V/R>0.10)\le0.05$"처럼 **초과확률을 직접 통제**한다. 기각 수가 적을 때 특히 유용하다.
+
+    **$k$-FWER의 쓰임.** "거짓발견이 3개 이하면 괜찮다"는 상황. FWER보다 강력하고 FDR보다 엄격하다. 중간 규모($m$이 수십~수백)의 검정에 적합하다.
+
+    **선택 지침.**
+
+    - **$m$이 작고(<20) 확증적**: FWER(홀름).
+    - **$m$이 크고 탐색적, 후속 검증 있음**: FDR(BH).
+    - **$m$이 크지만 기각이 적을 것으로 예상**: FDX나 $k$-FWER. FDR의 분산이 크기 때문이다.
+    - **$m$이 중간, 소수의 거짓은 허용**: $k$-FWER.
+    - **베이즈 틀이 자연스러움**: 지역 FDR이나 계층모형의 사후확률.
+
+    **한 문장.** **"어떤 오류를 얼마나 허용할 것인가"는 통계적 질문이 아니라 그 연구의 후속 절차와 비용이 답하는 질문**이다.
+
 ---
 
 ## 정리하며
