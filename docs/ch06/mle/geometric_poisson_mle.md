@@ -40,7 +40,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 기하분포의 MLE
+#### 예제 1. 기하분포의 MLE { .eg }
 
 ```python
 import numpy as np
@@ -94,7 +94,7 @@ Test RMSE -- nonparametric: 0.01164
 
 <div class="codebox" markdown>
 
-**예제 2.** 기하분포 로그가능도 곡면
+#### 예제 2. 기하분포 로그가능도 곡면 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -169,7 +169,7 @@ Poisson 비율 모수의 MLE는 단순히 표본평균이다.
 
 <div class="codebox" markdown>
 
-**예제 3.** 포아송분포의 MLE
+#### 예제 3. 포아송분포의 MLE { .eg }
 
 ```python
 from scipy import stats
@@ -221,7 +221,7 @@ Test RMSE -- nonparametric: 0.03342
 
 <div class="codebox" markdown>
 
-**예제 4.** 모수적 적합과 비모수적 적합의 비교
+#### 예제 4. 모수적 적합과 비모수적 적합의 비교 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

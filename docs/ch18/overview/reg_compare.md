@@ -29,7 +29,7 @@ $p = 20$개와 관측치 $n = 200$개를 생성한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 상관된 설명변수 자료 만들기
+### 예제 1. 상관된 설명변수 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -71,7 +71,7 @@ X_scaled = scaler.fit_transform(X)
 
 <div class="codebox" markdown>
 
-**예제 2.** 세 방법을 교차검증으로 적합
+### 예제 2. 세 방법을 교차검증으로 적합 { .eg }
 
 ```python
 from sklearn.linear_model import RidgeCV, LassoCV, ElasticNetCV
@@ -114,7 +114,7 @@ enet_cv.fit(X_scaled, y)
 
 <div class="codebox" markdown>
 
-**예제 3.** 계수를 나란히 그리기
+### 예제 3. 계수를 나란히 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -156,7 +156,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 4.** 능형과 라쏘의 경로
+### 예제 4. 능형과 라쏘의 경로 { .eg }
 
 ```python
 from sklearn.linear_model import Ridge, Lasso
@@ -195,7 +195,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 축소 연산자 그리기
+### 예제 5. 축소 연산자 그리기 { .eg }
 
 ```python
 def plot_shrinkage_operators(lam=1.0):

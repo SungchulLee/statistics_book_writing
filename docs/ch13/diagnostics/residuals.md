@@ -47,7 +47,7 @@ $$\begin{array}{lll}
 
 <div class="codebox" markdown>
 
-**예제 1.** 모형이 잘 맞을 때의 잔차
+##### 예제 1. 모형이 잘 맞을 때의 잔차 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -106,7 +106,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 회귀·잔차 그림 함수
+#### 예제 2. 회귀·잔차 그림 함수 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -167,7 +167,7 @@ plot_regression_and_residuals(x, y, y_pred)
 
 <div class="codebox" markdown>
 
-**예제 3.** 이차 자료를 직선으로 맞추면
+#### 예제 3. 이차 자료를 직선으로 맞추면 { .eg }
 
 ```python
 def generate_data(n=50, noise_level=3.0, d=1, seed=0):
@@ -198,7 +198,7 @@ plot_regression_and_residuals(x, y, y_pred)
 
 <div class="codebox" markdown>
 
-**예제 4.** 평활선으로 본 굽은 잔차
+##### 예제 4. 평활선으로 본 굽은 잔차 { .eg }
 
 ```python
 import numpy as np
@@ -294,7 +294,7 @@ $R^2 = 0.083$이라는 값 자체보다, **잔차 그림이 그 원인을 알려
 
 <div class="codebox" markdown>
 
-**예제 5.** 다항회귀로 고치기
+#### 예제 5. 다항회귀로 고치기 { .eg }
 
 ```python
 def perform_regression(x, y, d=1):
@@ -329,7 +329,7 @@ plot_regression_and_residuals(x, y, y_pred)
 
 <div class="codebox" markdown>
 
-**예제 6.** 척도-위치 그림까지
+### 예제 6. 척도-위치 그림까지 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

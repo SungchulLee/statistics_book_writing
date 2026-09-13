@@ -32,7 +32,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 광고 자료로 다중회귀
+#### 예제 1. 광고 자료로 다중회귀 { .eg }
 
 ```python
 import pandas as pd
@@ -140,7 +140,7 @@ Model Coefficients: [0.0206 0.0474 0.001 ]
 
 <div class="codebox" markdown>
 
-**예제 2.** 순서대로 나눈 훈련·시험
+#### 예제 2. 순서대로 나눈 훈련·시험 { .eg }
 
 ```python
 import pandas as pd
@@ -216,7 +216,7 @@ Model Coefficients: [0.0183 0.0229 0.0011]
 
 <div class="codebox" markdown>
 
-**예제 3.** 세 매체를 모두 넣은 모형
+#### 예제 3. 세 매체를 모두 넣은 모형 { .eg }
 
 ```python
 import pandas as pd
@@ -318,7 +318,7 @@ TV와 라디오의 계수는 강하게 유의하지만 신문은 $p = 0.86$으�
 
 <div class="codebox" markdown>
 
-**예제 4.** 신문을 뺀 모형
+#### 예제 4. 신문을 뺀 모형 { .eg }
 
 ```python
 # 신문을 뺀 모형. R^2 가 거의 줄지 않는다. 신문 광고가 설명하는 몫이
@@ -370,7 +370,7 @@ Notes:
 
 <div class="codebox" markdown>
 
-**예제 5.** 교호작용을 넣은 모형
+#### 예제 5. 교호작용을 넣은 모형 { .eg }
 
 ```python
 # 이번에는 교호작용을 넣는다. statsmodels 의 수식에서 콜론이 교호작용 항이다.

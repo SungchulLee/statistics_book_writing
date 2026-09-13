@@ -20,7 +20,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 백분위수법
+### 예제 1. 백분위수법 { .eg }
 
 ```python
 def bootstrap_percentile_ci(data, statistic, n_boot=10_000, alpha=0.05, rng=None):
@@ -54,7 +54,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 기본(역백분위수)법
+### 예제 2. 기본(역백분위수)법 { .eg }
 
 ```python
 def bootstrap_basic_ci(data, statistic, boot_stats, alpha=0.05):
@@ -102,7 +102,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** BCa법
+### 예제 3. BCa법 { .eg }
 
 ```python
 def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
@@ -148,7 +148,7 @@ def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
 
 <div class="codebox" markdown>
 
-**예제 4.** 세 방법을 포아송 자료에
+### 예제 4. 세 방법을 포아송 자료에 { .eg }
 
 ```python
 import numpy as np

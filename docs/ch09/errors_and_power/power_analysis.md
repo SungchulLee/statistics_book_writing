@@ -30,7 +30,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 이표본 t-검정의 검정력 함수
+#### 예제 1. 이표본 t-검정의 검정력 함수 { .eg }
 
 ```python
 import numpy as np
@@ -68,7 +68,7 @@ $d = 0.5$에서 집단당 20명이면 검정력이 0.35에 불과하다. 실제�
 
 <div class="codebox" markdown>
 
-**예제 2.** 필요한 표본크기 함수
+#### 예제 2. 필요한 표본크기 함수 { .eg }
 
 ```python
 def sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80):
@@ -100,7 +100,7 @@ def sample_size_proportion(p1, p2, alpha=0.05, power=0.80):
 
 <div class="codebox" markdown>
 
-**예제 3.** 계산 예
+#### 예제 3. 계산 예 { .eg }
 
 ```python
 # 이표본 t-검정: 중간 크기 효과 (Cohen's d = 0.5)
@@ -129,7 +129,7 @@ Required n per group: 148,111
 
 <div class="codebox" markdown>
 
-**예제 4.** 검정력 곡선
+#### 예제 4. 검정력 곡선 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

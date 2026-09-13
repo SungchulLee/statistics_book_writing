@@ -61,7 +61,7 @@ PLS는 다음과 같은 상황에서 PCR을 능가하는 경향이 있다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 주택 자료와 최소제곱 기준선
+### 예제 1. 주택 자료와 최소제곱 기준선 { .eg }
 
 ```python
 import numpy as np
@@ -97,7 +97,7 @@ ols_rmse = np.sqrt(mean_squared_error(y, ols_model.predict(X_scaled)))
 
 <div class="codebox" markdown>
 
-**예제 2.** 주성분회귀
+### 예제 2. 주성분회귀 { .eg }
 
 ```python
 from sklearn.decomposition import PCA
@@ -141,7 +141,7 @@ pcr_cv_rmse = np.sqrt(pcr_mse_scores[M_opt_pcr - 1])
 
 <div class="codebox" markdown>
 
-**예제 3.** 부분최소제곱
+### 예제 3. 부분최소제곱 { .eg }
 
 ```python
 from sklearn.cross_decomposition import PLSRegression
@@ -168,7 +168,7 @@ pls_cv_rmse = np.sqrt(pls_mse_scores[M_opt_pls - 1])
 
 <div class="codebox" markdown>
 
-**예제 4.** 능형회귀와 견주기
+### 예제 4. 능형회귀와 견주기 { .eg }
 
 ```python
 from sklearn.linear_model import RidgeCV

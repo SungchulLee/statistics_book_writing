@@ -29,7 +29,7 @@ $\nu \to \infty$일 때 $t$ 분포는 $N(\mu, \sigma^2)$로 수렴한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** t 분포와 정규분포의 꼬리 비교
+### 예제 1. t 분포와 정규분포의 꼬리 비교 { .eg }
 
 ```python
 import numpy as np

@@ -58,7 +58,7 @@ $k = 0$이면 하한을 0으로, $k = n$이면 상한을 1로 두는 관례를 �
 
 <div class="codebox" markdown>
 
-**예제 1.** CSV에서 자료 읽기
+#### 예제 1. CSV에서 자료 읽기 { .eg }
 
 ```python
 import csv
@@ -107,7 +107,7 @@ n = 10, k = 3, p_hat = 0.3
 
 <div class="codebox" markdown>
 
-**예제 2.** 비율 신뢰구간 계산기 — 네 방법
+#### 예제 2. 비율 신뢰구간 계산기 — 네 방법 { .eg }
 
 ```python
 import math

@@ -176,7 +176,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 평균 신뢰구간의 포함확률 모의실험
+#### 예제 1. 평균 신뢰구간의 포함확률 모의실험 { .eg }
 
 ```python
 #!/usr/bin/env python3
@@ -300,7 +300,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 2.** 비율 신뢰구간의 포함확률 모의실험
+#### 예제 2. 비율 신뢰구간의 포함확률 모의실험 { .eg }
 
 ```python
 #!/usr/bin/env python3

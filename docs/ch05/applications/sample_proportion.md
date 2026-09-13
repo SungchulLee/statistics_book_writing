@@ -178,7 +178,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 표본비율의 표집분포 모의실험
+### 예제 1. 표본비율의 표집분포 모의실험 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

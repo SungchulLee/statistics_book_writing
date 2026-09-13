@@ -36,7 +36,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 비율의 신뢰구간 계산
+#### 예제 1. 비율의 신뢰구간 계산 { .eg }
 
 ```python
 import numpy as np

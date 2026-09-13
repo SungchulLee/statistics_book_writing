@@ -12,7 +12,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -64,7 +64,7 @@ Levene 검정은 모분산이 집단 사이에서 같다는 귀무가설을 평�
 
 <div class="codebox" markdown>
 
-**예제 2.** Levene 검정
+#### 예제 2. Levene 검정 { .eg }
 
 ```python
 from scipy.stats import levene
@@ -99,7 +99,7 @@ Bartlett 검정은 분산의 동질성에 대한 또 다른 검정이다. 자료
 
 <div class="codebox" markdown>
 
-**예제 3.** Bartlett 검정
+#### 예제 3. Bartlett 검정 { .eg }
 
 ```python
 from scipy.stats import bartlett
@@ -155,7 +155,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 잔차 대 적합값 그림
+#### 예제 4. 잔차 대 적합값 그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

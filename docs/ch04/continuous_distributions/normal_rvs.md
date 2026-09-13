@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규 표본을 뽑아 이론 밀도와 견주기
+### 예제 1. 정규 표본을 뽑아 이론 밀도와 견주기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

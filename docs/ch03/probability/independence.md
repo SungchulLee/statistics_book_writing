@@ -193,7 +193,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 동전 두 번 던지기의 독립성 확인
+### 예제 1. 동전 두 번 던지기의 독립성 확인 { .eg }
 
 ```python
 import numpy as np

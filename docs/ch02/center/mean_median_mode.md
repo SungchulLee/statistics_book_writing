@@ -43,7 +43,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 소득 자료의 평균
+#### 예제 1. 소득 자료의 평균 { .eg }
 
 ```python
 import pandas as pd
@@ -97,7 +97,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 소득 자료에서 중앙값과 평균 견주기
+#### 예제 2. 소득 자료에서 중앙값과 평균 견주기 { .eg }
 
 ```python
 import pandas as pd
@@ -150,7 +150,7 @@ print(f"차이   {mean_income - median_income:>9,.0f}  (양수 = 오른쪽 치�
 
 <div class="codebox" markdown>
 
-**예제 3.** 이상치가 평균과 중앙값에 미치는 영향
+#### 예제 3. 이상치가 평균과 중앙값에 미치는 영향 { .eg }
 
 ```python
 import pandas as pd
@@ -270,7 +270,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 절사평균과 중앙값 — 주 인구 자료
+#### 예제 4. 절사평균과 중앙값 — 주 인구 자료 { .eg }
 
 ```python
 import pandas as pd
@@ -327,13 +327,11 @@ $$
 
 여기서 $w_i$가 가중치다.
 
-### 예: 주 인구로 가중한 살인율
-
 전국 살인율을 계산할 때 인구가 많은 주가 평균에 더 크게 반영되어야 한다. 주의 인구를 가중치로 쓴다.
 
 <div class="codebox" markdown>
 
-**예제 5.** 주 인구로 가중한 살인율
+### 예제 5. 주 인구로 가중한 살인율 { .eg }
 
 ```python
 import pandas as pd
@@ -370,7 +368,7 @@ print(f"가중평균 살인율: {weighted_mean:.3f}")
 
 <div class="codebox" markdown>
 
-**예제 6.** 가중중앙값 구하기
+#### 예제 6. 가중중앙값 구하기 { .eg }
 
 ```python
 import pandas as pd
@@ -429,7 +427,7 @@ Weighted Median: 4.4
 
 <div class="codebox" markdown>
 
-**예제 7.** 최빈값 구하기
+#### 예제 7. 최빈값 구하기 { .eg }
 
 ```python
 import statistics
@@ -452,7 +450,7 @@ mode = 2
 
 <div class="codebox" markdown>
 
-**예제 8.** 최빈값이 둘일 때
+#### 예제 8. 최빈값이 둘일 때 { .eg }
 
 ```python
 import statistics

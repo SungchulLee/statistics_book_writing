@@ -49,7 +49,7 @@ King County(시애틀) 주택 매매 자료에서 우편번호 98105 지역만 �
 
 <div class="codebox" markdown>
 
-**예제 1.** 주택 자료 읽기
+### 예제 1. 주택 자료 읽기 { .eg }
 
 ```python
 import pandas as pd
@@ -87,7 +87,7 @@ max       3013254.0         5570.0       9.0
 
 <div class="codebox" markdown>
 
-**예제 2.** 영향점 진단량 구하기
+#### 예제 2. 영향점 진단량 구하기 { .eg }
 
 ```python
 import numpy as np
@@ -145,7 +145,7 @@ Cook 거리가 문턱 0.0128을 넘는 관측값이 20개이고, 그중 152번�
 
 <div class="codebox" markdown>
 
-**예제 3.** 영향점을 빼고 다시 적합
+#### 예제 3. 영향점을 빼고 다시 적합 { .eg }
 
 ```python
 # 문턱을 넘는 관측값을 빼고 다시 적합해 계수가 얼마나 달라지는지 본다.
@@ -192,7 +192,7 @@ R^2: 0.7954 -> 0.8415
 
 <div class="codebox" markdown>
 
-**예제 4.** 등분산 검정
+#### 예제 4. 등분산 검정 { .eg }
 
 ```python
 from statsmodels.stats.diagnostic import het_breuschpagan

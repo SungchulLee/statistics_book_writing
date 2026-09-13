@@ -26,7 +26,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 로그 변환과 Box-Cox 변환
+### 예제 1. 로그 변환과 Box-Cox 변환 { .eg }
 
 ```python
 import numpy as np

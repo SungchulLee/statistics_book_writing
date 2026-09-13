@@ -14,7 +14,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** S&P 500 ETF 상관 열지도
+#### 예제 1. S&P 500 ETF 상관 열지도 { .eg }
 
 ```python
 import pandas as pd
@@ -78,7 +78,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 값을 표시한 열지도
+### 예제 2. 값을 표시한 열지도 { .eg }
 
 ```python
 import pandas as pd
@@ -134,7 +134,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 군집화로 순서 다시 매기기
+#### 예제 3. 군집화로 순서 다시 매기기 { .eg }
 
 ```python
 import pandas as pd
@@ -172,7 +172,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 4.** 부분집합만 보기
+#### 예제 4. 부분집합만 보기 { .eg }
 
 ```python
 # 종목이 많으면 열지도가 읽히지 않는다. 업종 펀드만 열 개로 좁힌다.
@@ -200,7 +200,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 5.** 회색조 열지도
+### 예제 5. 회색조 열지도 { .eg }
 
 ```python
 import pandas as pd

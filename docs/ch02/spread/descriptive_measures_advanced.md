@@ -35,7 +35,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 산술평균과 기하평균
+#### 예제 1. 산술평균과 기하평균 { .eg }
 
 ```python
 import numpy as np
@@ -114,7 +114,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 체비쇼프 부등식 그리기
+#### 예제 2. 체비쇼프 부등식 그리기 { .eg }
 
 ```python
 import numpy as np
@@ -172,7 +172,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 표본분산의 편향 모의실험
+#### 예제 3. 표본분산의 편향 모의실험 { .eg }
 
 ```python
 import numpy as np
@@ -216,7 +216,7 @@ print(f"불편 추정 평균 (ddof=1): {unbiased_vars.mean():.4f}")
 
 <div class="codebox" markdown>
 
-**예제 4.** 두 추정량의 분포 겹쳐 보기
+#### 예제 4. 두 추정량의 분포 겹쳐 보기 { .eg }
 
 ```python
 # 두 추정값의 분포를 겹쳐 그리고 참값 자리에 세로선을 긋는다.

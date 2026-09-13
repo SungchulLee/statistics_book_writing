@@ -18,7 +18,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 모의자료와 다항 파이프라인
+### 예제 1. 모의자료와 다항 파이프라인 { .eg }
 
 ```python
 import numpy as np
@@ -66,7 +66,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 검증집합 방법
+### 예제 2. 검증집합 방법 { .eg }
 
 ```python
 def validation_set_mse(X, y, degrees, n_splits=10, rng=None):
@@ -116,7 +116,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 하나빼기 교차검증
+### 예제 3. 하나빼기 교차검증 { .eg }
 
 ```python
 from sklearn.model_selection import cross_val_score, LeaveOneOut
@@ -170,7 +170,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** k겹 교차검증
+### 예제 4. k겹 교차검증 { .eg }
 
 ```python
 from sklearn.model_selection import KFold

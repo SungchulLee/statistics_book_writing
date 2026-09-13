@@ -162,7 +162,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 무상관인데 독립이 아닌 경우
+#### 예제 1. 무상관인데 독립이 아닌 경우 { .eg }
 
 ```python
 import numpy as np
@@ -207,7 +207,7 @@ But Y is completely determined by X!
 
 <div class="codebox" markdown>
 
-**예제 2.** 결합분포와 주변분포를 견주어 독립성 확인
+#### 예제 2. 결합분포와 주변분포를 견주어 독립성 확인 { .eg }
 
 ```python
 import numpy as np
@@ -255,7 +255,7 @@ A: |X|<0.5,  B: Y>1
 
 <div class="codebox" markdown>
 
-**예제 3.** 결합정규에서는 무상관이 곧 독립
+#### 예제 3. 결합정규에서는 무상관이 곧 독립 { .eg }
 
 ```python
 import numpy as np

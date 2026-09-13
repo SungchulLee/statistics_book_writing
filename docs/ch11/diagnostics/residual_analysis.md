@@ -14,7 +14,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -68,7 +68,7 @@ F = 16.1314, p = 0.0000
 
 <div class="codebox" markdown>
 
-**예제 2.** 잔차 대 적합값 그림
+### 예제 2. 잔차 대 적합값 그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -120,7 +120,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 표준화 잔차
+### 예제 3. 표준화 잔차 { .eg }
 
 ```python
 import numpy as np
@@ -156,7 +156,7 @@ $|r_i| > 2$인 관측값은 자세히 살펴볼 만하고, $|r_i| > 3$인 관측
 
 <div class="codebox" markdown>
 
-**예제 4.** 척도-위치 그림
+### 예제 4. 척도-위치 그림 { .eg }
 
 ```python
 # 척도-위치 그림은 부호를 없애고 크기만 본다. 제곱근을 씌우는 것은 큰 값이

@@ -14,7 +14,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -88,7 +88,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** Durbin-Watson 검정
+#### 예제 2. Durbin-Watson 검정 { .eg }
 
 ```python
 from statsmodels.stats.stattools import durbin_watson
@@ -116,7 +116,7 @@ $d = 2.11$로 2에 가까워 자기상관의 증거가 없다. 자료를 서로 
 
 <div class="codebox" markdown>
 
-**예제 3.** 순서에 대한 잔차 그림
+#### 예제 3. 순서에 대한 잔차 그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

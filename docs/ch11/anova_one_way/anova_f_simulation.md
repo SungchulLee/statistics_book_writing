@@ -42,7 +42,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** F 통계량의 귀무분포 모의실험
+### 예제 1. F 통계량의 귀무분포 모의실험 { .eg }
 
 ```python
 import numpy as np
@@ -69,7 +69,7 @@ def simulate_f(mu, sigma, sizes, n_sim=1000):
 
 <div class="codebox" markdown>
 
-**예제 2.** 집단 차이를 키워 가며 보기
+### 예제 2. 집단 차이를 키워 가며 보기 { .eg }
 
 ```python
 scenarios = [

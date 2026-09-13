@@ -58,7 +58,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산에 대한 카이제곱 검정 구현
+### 예제 1. 분산에 대한 카이제곱 검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -90,7 +90,7 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
 
 <div class="codebox" markdown>
 
-**예제 2.** 분산을 키워 가며 검정하기
+### 예제 2. 분산을 키워 가며 검정하기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

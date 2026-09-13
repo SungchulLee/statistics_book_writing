@@ -47,7 +47,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 모집단 모양에 따른 오류율
+#### 예제 1. 모집단 모양에 따른 오류율 { .eg }
 
 ```python
 import numpy as np

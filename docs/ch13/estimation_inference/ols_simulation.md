@@ -52,7 +52,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 최소제곱의 행렬 연산
+#### 예제 1. 최소제곱의 행렬 연산 { .eg }
 
 ```python
 import numpy as np
@@ -93,7 +93,7 @@ def anova_decomposition(y, X, beta_hat):
 
 <div class="codebox" markdown>
 
-**예제 2.** 몬테카를로로 확인하는 불편성
+#### 예제 2. 몬테카를로로 확인하는 불편성 { .eg }
 
 ```python
 def monte_carlo(n=100, beta_true=[2, 3, -1], sigma=1.0, n_sim=5000):

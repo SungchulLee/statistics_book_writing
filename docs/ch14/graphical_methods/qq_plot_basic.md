@@ -32,7 +32,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Q-Q 그림과 검정을 함께
+### 예제 1. Q-Q 그림과 검정을 함께 { .eg }
 
 ```python
 import numpy as np

@@ -77,7 +77,7 @@ Statistical data
 
 <div class="codebox" markdown>
 
-**예제 1.** 만족도 응답에 평균을 쓸 수 있는가
+### 예제 1. 만족도 응답에 평균을 쓸 수 있는가 { .eg }
 
 ```python
 import numpy as np
@@ -114,7 +114,7 @@ print(f"최빈 범주: {levels[np.bincount(answers).argmax()]}")
 
 <div class="codebox" markdown>
 
-**예제 2.** 자료 종류에 따라 달라지는 그림
+### 예제 2. 자료 종류에 따라 달라지는 그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -155,7 +155,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** pandas 에 순서를 새겨 넣기
+#### 예제 3. pandas 에 순서를 새겨 넣기 { .eg }
 
 ```python
 import numpy as np
@@ -214,7 +214,7 @@ print("중앙값      :", levels[int(np.median(s_ord.cat.codes))])
 
 <div class="codebox" markdown>
 
-**예제 4.** 원핫 부호화와 범주 사이의 거리
+#### 예제 4. 원핫 부호화와 범주 사이의 거리 { .eg }
 
 ```python
 import pandas as pd
@@ -277,7 +277,7 @@ Stevens(1946)의 고전적인 분류는 수치형을 다시 둘로 나눈다. **
 
 <div class="codebox" markdown>
 
-**예제 5.** 섭씨와 화씨 — 간격척도와 비율척도
+### 예제 5. 섭씨와 화씨 — 간격척도와 비율척도 { .eg }
 
 ```python
 # 섭씨 -> 화씨는 순서와 간격은 보존하지만 비는 보존하지 않는다
@@ -330,7 +330,7 @@ print(f"켈빈: 비 = {k2 / k1:.4f},  랭킨: 비 = {r2 / r1:.4f}")
 
 <div class="codebox" markdown>
 
-**예제 6.** 이미지·소리·텍스트도 숫자 배열이다
+### 예제 6. 이미지·소리·텍스트도 숫자 배열이다 { .eg }
 
 ```python
 import numpy as np

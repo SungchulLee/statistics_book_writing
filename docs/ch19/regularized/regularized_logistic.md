@@ -41,7 +41,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** L2 벌점 로지스틱
+### 예제 1. L2 벌점 로지스틱 { .eg }
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -94,7 +94,7 @@ L1 벌점은 **희소성**을 유도한다. 충분히 작은 계수는 정확히
 
 <div class="codebox" markdown>
 
-**예제 2.** L1 벌점 로지스틱
+### 예제 2. L1 벌점 로지스틱 { .eg }
 
 ```python
 # L1 벌점은 lbfgs 로 풀 수 없다. 0 에서 미분이 되지 않기 때문이며,
@@ -135,7 +135,7 @@ $\alpha = 0$이면 능형, $\alpha = 1$이면 라쏘가 된다. 상관된 특성
 
 <div class="codebox" markdown>
 
-**예제 3.** 엘라스틱넷 로지스틱
+### 예제 3. 엘라스틱넷 로지스틱 { .eg }
 
 ```python
 # 엘라스틱넷은 l1_ratio 로 두 벌점의 배합비를 정한다. 0.5 면 절반씩이다.
@@ -165,7 +165,7 @@ $C$가 커지면(정칙화가 약해지면) 추정치가 벌점 없는 MLE에 �
 
 <div class="codebox" markdown>
 
-**예제 4.** 계수 경로 그리기
+### 예제 4. 계수 경로 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -206,7 +206,7 @@ scikit-learn은 $C$ 격자 위에서 교차검증을 수행하는 `LogisticRegre
 
 <div class="codebox" markdown>
 
-**예제 5.** 교차검증으로 C 고르기
+### 예제 5. 교차검증으로 C 고르기 { .eg }
 
 ```python
 from sklearn.linear_model import LogisticRegressionCV

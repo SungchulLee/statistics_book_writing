@@ -52,7 +52,7 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 
 <div class="codebox" markdown>
 
-**예제 1.** Axes 사용자화와 저장
+### 예제 1. Axes 사용자화와 저장 { .eg }
 
 ```python
 # 그림을 손보는 일은 거의 전부 Axes 객체의 메서드로 이루어진다.
@@ -78,7 +78,7 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 
 <div class="codebox" markdown>
 
-**예제 2.** pandas 그림 메서드로 세 패널 그리기
+### 예제 2. pandas 그림 메서드로 세 패널 그리기 { .eg }
 
 ```python
 """DataFrame 이 자체로 갖고 있는 그림 메서드로 세 패널을 한 번에 그린다."""

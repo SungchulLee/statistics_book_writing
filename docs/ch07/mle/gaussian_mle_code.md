@@ -20,7 +20,7 @@ $$\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 해석적 MLE와 수치적 MLE
+### 예제 1. 해석적 MLE와 수치적 MLE { .eg }
 
 ```python
 import numpy as np
@@ -75,7 +75,7 @@ Numerical:  mu=5.182447, sigma²=2.313763
 
 <div class="codebox" markdown>
 
-**예제 2.** 로그가능도 곡면과 단면
+### 예제 2. 로그가능도 곡면과 단면 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -149,7 +149,7 @@ $$E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$$
 
 <div class="codebox" markdown>
 
-**예제 3.** 유한표본에서의 편향
+### 예제 3. 유한표본에서의 편향 { .eg }
 
 ```python
 def finite_sample_bias(n_sim=200_000, seed=42):
@@ -201,7 +201,7 @@ $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \qquad \text{Var}(\hat{\sigma}^
 
 <div class="codebox" markdown>
 
-**예제 4.** 피셔 정보량과 크라메르-라오 하한
+### 예제 4. 피셔 정보량과 크라메르-라오 하한 { .eg }
 
 ```python
 def fisher_information_crlb(sigma=3.0, n_sim=100_000, seed=42):
@@ -262,7 +262,7 @@ Gaussian 모형에서는 세 종류의 신뢰구간이 나온다:
 
 <div class="codebox" markdown>
 
-**예제 5.** 신뢰구간의 포함확률
+### 예제 5. 신뢰구간의 포함확률 { .eg }
 
 ```python
 def confidence_interval_coverage(seed=42):
@@ -326,7 +326,7 @@ $$\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$$
 
 <div class="codebox" markdown>
 
-**예제 6.** 금융 응용 — VaR 추정
+### 예제 6. 금융 응용 — VaR 추정 { .eg }
 
 ```python
 def var_estimation_finance(seed=42):

@@ -87,7 +87,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규성이 깨질 때의 제1종 오류율
+### 예제 1. 정규성이 깨질 때의 제1종 오류율 { .eg }
 
 ```python
 import numpy as np

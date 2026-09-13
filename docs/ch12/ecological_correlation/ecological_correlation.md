@@ -47,7 +47,7 @@ David Justice는 1995년과 1996년 **각각** Derek Jeter보다 타율이 높�
 
 <div class="codebox" markdown>
 
-**예제 1.** UC 버클리 입학 자료의 생태학적 오류
+#### 예제 1. UC 버클리 입학 자료의 생태학적 오류 { .eg }
 
 ```python
 import pandas as pd

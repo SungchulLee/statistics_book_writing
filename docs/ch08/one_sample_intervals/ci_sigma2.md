@@ -54,7 +54,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산의 신뢰구간 계산
+#### 예제 1. 분산의 신뢰구간 계산 { .eg }
 
 ```python
 import numpy as np
@@ -106,7 +106,7 @@ $n = 12$로 분산을 추정한다는 것이 이 정도로 막연한 일이다. 
 
 <div class="codebox" markdown>
 
-**예제 2.** 분산 신뢰구간의 포함확률
+### 예제 2. 분산 신뢰구간의 포함확률 { .eg }
 
 ```python
 #!/usr/bin/env python3

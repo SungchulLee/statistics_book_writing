@@ -45,7 +45,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 카이제곱 분포의 밀도와 분포함수
+#### 예제 1. 카이제곱 분포의 밀도와 분포함수 { .eg }
 
 ```python
 import numpy as np
@@ -76,7 +76,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 정규 제곱합으로 만들어 보기
+#### 예제 2. 정규 제곱합으로 만들어 보기 { .eg }
 
 ```python
 df, seed = 5, 1

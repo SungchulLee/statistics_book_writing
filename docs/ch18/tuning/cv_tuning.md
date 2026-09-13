@@ -50,7 +50,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 교차검증과 1-표준오차 규칙
+### 예제 1. 교차검증과 1-표준오차 규칙 { .eg }
 
 ```python
 import numpy as np

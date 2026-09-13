@@ -49,7 +49,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산비의 붓스트랩 구간
+### 예제 1. 분산비의 붓스트랩 구간 { .eg }
 
 ```python
 import numpy as np

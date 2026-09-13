@@ -34,7 +34,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산 차이를 키워 가며 보는 Bartlett 검정
+### 예제 1. 분산 차이를 키워 가며 보는 Bartlett 검정 { .eg }
 
 ```python
 import numpy as np

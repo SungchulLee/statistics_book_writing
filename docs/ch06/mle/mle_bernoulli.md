@@ -69,7 +69,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 베르누이 로그가능도와 MLE
+### 예제 1. 베르누이 로그가능도와 MLE { .eg }
 
 ```python
 import numpy as np

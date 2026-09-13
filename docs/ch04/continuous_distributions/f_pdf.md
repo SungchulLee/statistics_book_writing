@@ -27,7 +27,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** F 분포의 밀도함수
+### 예제 1. F 분포의 밀도함수 { .eg }
 
 ```python
 import numpy as np

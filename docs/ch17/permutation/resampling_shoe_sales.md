@@ -28,7 +28,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 판매량 자료
+### 예제 1. 판매량 자료 { .eg }
 
 ```python
 import numpy as np
@@ -79,7 +79,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 순열검정
+### 예제 2. 순열검정 { .eg }
 
 ```python
 def permutation_test(before, after, n_perm=199_999, rng=None):
@@ -147,7 +147,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 붓스트랩 신뢰구간
+### 예제 3. 붓스트랩 신뢰구간 { .eg }
 
 ```python
 def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):

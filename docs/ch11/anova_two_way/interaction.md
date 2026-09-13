@@ -78,7 +78,7 @@ F-통계량을 F-분포표의 임계값과 비교하거나 p-값을 쓴다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 교호작용 그림과 이원배치 분산분석
+#### 예제 1. 교호작용 그림과 이원배치 분산분석 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -158,7 +158,7 @@ Residual         54.0   712.106000    13.187148        NaN           NaN
 
 <div class="codebox" markdown>
 
-**예제 2.** Tukey HSD로 하는 사후검정
+#### 예제 2. Tukey HSD로 하는 사후검정 { .eg }
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -296,7 +296,7 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 <div class="codebox" markdown>
 
-**예제 3.** 2x2 설계의 이원배치 분산분석
+### 예제 3. 2x2 설계의 이원배치 분산분석 { .eg }
 
 ```python
 import pandas as pd

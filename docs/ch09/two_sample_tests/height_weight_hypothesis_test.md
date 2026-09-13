@@ -26,7 +26,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 키 자료로 하는 일표본 검정
+### 예제 1. 키 자료로 하는 일표본 검정 { .eg }
 
 ```python
 import numpy as np
@@ -80,7 +80,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 남녀 키의 이표본 검정
+### 예제 2. 남녀 키의 이표본 검정 { .eg }
 
 ```python
 male = stats.norm.rvs(loc=170, scale=8, size=250)
@@ -111,7 +111,7 @@ $z = 8.33$은 표준정규분포에서 사실상 불가능한 값이다. p-값�
 
 <div class="codebox" markdown>
 
-**예제 3.** Welch 검정
+### 예제 3. Welch 검정 { .eg }
 
 ```python
 # equal_var=False 가 Welch 검정이다. 두 분산이 같다고 보지 않으므로
@@ -140,7 +140,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 거절률 비교 — 두 비율 검정
+### 예제 4. 거절률 비교 — 두 비율 검정 { .eg }
 
 ```python
 k1, n1 = 59, 649     # 여성: 649명 중 59명 거절

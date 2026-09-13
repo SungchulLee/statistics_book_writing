@@ -19,7 +19,7 @@ NumPy 문서와 거의 모든 코드가 따르는 관례이므로 그대로 쓰�
 
 <div class="codebox" markdown>
 
-**예제 1.** 리스트로 배열 만들기
+#### 예제 1. 리스트로 배열 만들기 { .eg }
 
 ```python
 # 리스트를 그대로 넘기면 NumPy 가 원소를 보고 dtype 을 정한다.
@@ -49,7 +49,7 @@ int64
 
 <div class="codebox" markdown>
 
-**예제 2.** 내장 생성자로 배열 만들기
+#### 예제 2. 내장 생성자로 배열 만들기 { .eg }
 
 ```python
 # 값을 하나하나 적지 않고 모양만 주어 배열을 만든다.
@@ -71,7 +71,7 @@ np.linspace(0, 1, 5)      # 개수 5로 끊는다: [0. 0.25 0.5 0.75 1.] — 끝
 
 <div class="codebox" markdown>
 
-**예제 3.** 재현 가능한 난수 배열
+#### 예제 3. 재현 가능한 난수 배열 { .eg }
 
 ```python
 # seed 를 주면 같은 난수열이 다시 나온다. 모의실험 결과를 남기려면 필수다.
@@ -101,7 +101,7 @@ rng.integers(0, 10, size=6)                  # [0, 10) 의 정수 6개
 
 <div class="codebox" markdown>
 
-**예제 4.** 1차원 인덱싱과 슬라이싱
+#### 예제 4. 1차원 인덱싱과 슬라이싱 { .eg }
 
 ```python
 a = np.array([10, 20, 30, 40, 50])
@@ -119,7 +119,7 @@ a[::-1]     # [50 40 30 20 10] — 간격을 -1로 주면 뒤집힌다
 
 <div class="codebox" markdown>
 
-**예제 5.** 2차원 인덱싱
+#### 예제 5. 2차원 인덱싱 { .eg }
 
 ```python
 M = np.array([[1, 2, 3],
@@ -142,7 +142,7 @@ M[:2, :2]     # 왼쪽 위 2×2 부분행렬
 
 <div class="codebox" markdown>
 
-**예제 6.** 불리언 인덱싱으로 걸러내기
+#### 예제 6. 불리언 인덱싱으로 걸러내기 { .eg }
 
 ```python
 a = np.array([3, 1, 4, 1, 5, 9])
@@ -174,7 +174,7 @@ NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순
 
 <div class="codebox" markdown>
 
-**예제 7.** 반복문 없는 원소별 연산
+### 예제 7. 반복문 없는 원소별 연산 { .eg }
 
 ```python
 a = np.array([1, 2, 3, 4, 5])
@@ -195,7 +195,7 @@ np.sqrt(a)    # [1.    1.414 1.732 2.    2.236]
 
 <div class="codebox" markdown>
 
-**예제 8.** 벡터화가 빠른 이유를 재어 보기
+#### 예제 8. 벡터화가 빠른 이유를 재어 보기 { .eg }
 
 ```python
 """같은 계산을 파이썬 반복문과 NumPy 로 재어 속도 차이를 확인한다."""
@@ -248,7 +248,7 @@ NumPy가 최소 10배 이상 빠른가? True
 
 <div class="codebox" markdown>
 
-**예제 9.** 모양이 다른 배열의 브로드캐스팅
+### 예제 9. 모양이 다른 배열의 브로드캐스팅 { .eg }
 
 ```python
 # 스칼라는 모양 ()이라 어떤 배열과도 맞춰진다.
@@ -280,7 +280,7 @@ print(col + row)
 
 <div class="codebox" markdown>
 
-**예제 10.** 브로드캐스팅으로 열 표준화하기
+#### 예제 10. 브로드캐스팅으로 열 표준화하기 { .eg }
 
 ```python
 """브로드캐스팅으로 자료행렬의 각 열을 평균 0, 표준편차 1로 맞춘다."""
@@ -309,7 +309,7 @@ print(X_std.std(axis=0, ddof=1).round(8))    # 1에 가깝다
 
 <div class="codebox" markdown>
 
-**예제 11.** 기본 집계 함수
+### 예제 11. 기본 집계 함수 { .eg }
 
 ```python
 a = np.array([4, 1, 7, 3, 9, 2])
@@ -334,7 +334,7 @@ np.median(a)   # 3.5
 
 <div class="codebox" markdown>
 
-**예제 12.** 축을 지정한 집계
+#### 예제 12. 축을 지정한 집계 { .eg }
 
 ```python
 M = np.array([[1, 2, 3],
@@ -355,7 +355,7 @@ M.mean(axis=0)   # [2.5 3.5 4.5]
 
 <div class="codebox" markdown>
 
-**예제 13.** 행렬 연산과 선형방정식
+### 예제 13. 행렬 연산과 선형방정식 { .eg }
 
 ```python
 A = np.array([[1, 2],
@@ -386,7 +386,7 @@ np.linalg.solve(A, b)  # [1. 2.]
 
 <div class="codebox" markdown>
 
-**예제 14.** 정규방정식으로 최소제곱 풀기
+#### 예제 14. 정규방정식으로 최소제곱 풀기 { .eg }
 
 ```python
 """정규방정식을 풀어 최소제곱추정값이 참값을 되찾는지 확인한다."""
@@ -417,7 +417,7 @@ print(beta_hat.round(3))     # 참값 [2, -1, 0.5, 3] 근처
 
 <div class="codebox" markdown>
 
-**예제 15.** 모양 바꾸기와 쌓기
+### 예제 15. 모양 바꾸기와 쌓기 { .eg }
 
 ```python
 a = np.arange(12)

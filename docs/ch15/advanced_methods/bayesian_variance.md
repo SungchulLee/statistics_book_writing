@@ -130,7 +130,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산의 사후분포와 신용구간
+### 예제 1. 분산의 사후분포와 신용구간 { .eg }
 
 ```python
 import numpy as np

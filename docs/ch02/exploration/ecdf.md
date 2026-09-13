@@ -24,7 +24,7 @@ ECDF를 모수적 누적분포함수와 비교하는 것은 분포 가정을 평
 
 <div class="codebox" markdown>
 
-**예제 1.** 경험적 누적분포함수와 이론적 누적분포함수 겹쳐 보기
+#### 예제 1. 경험적 누적분포함수와 이론적 누적분포함수 겹쳐 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -79,7 +79,7 @@ KS 검정 p값     = 0.9863
 
 <div class="codebox" markdown>
 
-**예제 2.** 누적분포함수와 확률밀도함수의 관계
+#### 예제 2. 누적분포함수와 확률밀도함수의 관계 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -162,7 +162,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 세 라이브러리의 분위수 함수
+### 예제 3. 세 라이브러리의 분위수 함수 { .eg }
 
 ```python
 import pandas as pd
@@ -195,7 +195,7 @@ stats.scoreatpercentile(df.x.values, 75) = 12.0
 
 <div class="codebox" markdown>
 
-**예제 4.** 누적상대도수 곡선에서 백분위수 읽기
+### 예제 4. 누적상대도수 곡선에서 백분위수 읽기 { .eg }
 
 ```python
 import numpy as np
@@ -249,7 +249,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 다섯 수치 요약과 상자그림
+### 예제 5. 다섯 수치 요약과 상자그림 { .eg }
 
 ```python
 import numpy as np
@@ -291,7 +291,7 @@ Max    : 8
 
 <div class="codebox" markdown>
 
-**예제 6.** Q-Q 그림을 그리는 함수 만들기
+#### 예제 6. Q-Q 그림을 그리는 함수 만들기 { .eg }
 
 ```python
 """표본의 분위수를 이론 분포의 분위수에 맞대어 그리는 Q-Q 그림을 만든다."""
@@ -324,7 +324,7 @@ plot_qq(sample_data, dist="norm")    # 정규 자료를 정규에 맞댄다 — 
 
 <div class="codebox" markdown>
 
-**예제 7.** 지수 자료를 지수 분위수에 맞대기
+#### 예제 7. 지수 자료를 지수 분위수에 맞대기 { .eg }
 
 ```python
 # 지수분포는 오른쪽으로 심하게 치우쳐 있다. 그래도 지수 분위수에 맞대면 직선이 된다.
@@ -342,7 +342,7 @@ plot_qq(sample_data, dist="expon")
 
 <div class="codebox" markdown>
 
-**예제 8.** 모양모수가 있는 분포의 Q-Q 그림
+#### 예제 8. 모양모수가 있는 분포의 Q-Q 그림 { .eg }
 
 ```python
 # 카이제곱은 자유도라는 모양모수가 있으므로 sparams=(10,) 으로 알려 주어야 한다.
@@ -362,7 +362,7 @@ plot_qq(sample_data, dist="chi2", sparams=(10,))
 
 <div class="codebox" markdown>
 
-**예제 9.** 분포를 잘못 가정했을 때의 Q-Q 그림
+#### 예제 9. 분포를 잘못 가정했을 때의 Q-Q 그림 { .eg }
 
 ```python
 # 같은 카이제곱 자료를 이번에는 정규 분위수에 맞댄다.

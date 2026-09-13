@@ -58,7 +58,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 베타-이항 켤레모형으로 비율 추정하기
+#### 예제 1. 베타-이항 켤레모형으로 비율 추정하기 { .eg }
 
 ```python
 import numpy as np
@@ -141,7 +141,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 정규-정규 켤레모형으로 평균 추정하기
+#### 예제 2. 정규-정규 켤레모형으로 평균 추정하기 { .eg }
 
 ```python
 import numpy as np

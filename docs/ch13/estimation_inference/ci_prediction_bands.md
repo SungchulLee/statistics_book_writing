@@ -32,7 +32,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 자료 만들기
+#### 예제 1. 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -51,7 +51,7 @@ def generate_data(n, sigma, seed=0):
 
 <div class="codebox" markdown>
 
-**예제 2.** 회귀직선 추정
+#### 예제 2. 회귀직선 추정 { .eg }
 
 ```python
 def estimate_regression_line(x, y):
@@ -76,7 +76,7 @@ def estimate_regression_line(x, y):
 
 <div class="codebox" markdown>
 
-**예제 3.** 잔차분산 구하기
+#### 예제 3. 잔차분산 구하기 { .eg }
 
 ```python
 def calculate_residual_variance(y, y_hat, n):
@@ -96,7 +96,7 @@ def calculate_residual_variance(y, y_hat, n):
 
 <div class="codebox" markdown>
 
-**예제 4.** 두 구간 계산
+#### 예제 4. 두 구간 계산 { .eg }
 
 ```python
 from scipy import stats

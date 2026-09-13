@@ -93,7 +93,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Wald 검정과 가능도비 검정
+### 예제 1. Wald 검정과 가능도비 검정 { .eg }
 
 ```python
 import numpy as np

@@ -26,7 +26,7 @@ SciPy는 `stats.lognorm(s=sigma, scale=np.exp(mu))`를 사용하며, `s`가 형�
 
 <div class="codebox" markdown>
 
-**예제 1.** 로그정규분포의 SciPy 모수화
+### 예제 1. 로그정규분포의 SciPy 모수화 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

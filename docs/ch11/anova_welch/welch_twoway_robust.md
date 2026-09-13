@@ -32,7 +32,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 로버스트 이원배치 분산분석
+### 예제 1. 로버스트 이원배치 분산분석 { .eg }
 
 ```python
 import pandas as pd
@@ -89,7 +89,7 @@ Interaction: Temperature x Fertilizer
 
 <div class="codebox" markdown>
 
-**예제 2.** 표준 분산분석과의 비교
+### 예제 2. 표준 분산분석과의 비교 { .eg }
 
 ```python
 import statsmodels.api as sm

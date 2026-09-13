@@ -32,7 +32,7 @@ WLS는 변환된 모형 $\sqrt{w_i}\,y_i = \sqrt{w_i}\,\mathbf{x}_i^\top\boldsym
 
 <div class="codebox" markdown>
 
-**예제 1.** OLS와 WLS 구현
+#### 예제 1. OLS와 WLS 구현 { .eg }
 
 ```python
 import numpy as np
@@ -60,7 +60,7 @@ def wls_fit(X, y, w):
 
 <div class="codebox" markdown>
 
-**예제 2.** 이분산 자료로 견주기
+#### 예제 2. 이분산 자료로 견주기 { .eg }
 
 ```python
 np.random.seed(42)
@@ -88,7 +88,7 @@ beta_wls = wls_fit(X, y, w)
 
 <div class="codebox" markdown>
 
-**예제 3.** 표준오차의 차이
+#### 예제 3. 표준오차의 차이 { .eg }
 
 ```python
 # 여기서 갈린다. OLS 의 표준오차 공식은 등분산을 전제하므로, 이분산

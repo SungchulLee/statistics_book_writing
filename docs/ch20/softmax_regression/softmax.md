@@ -69,7 +69,7 @@ $\tau\to\infty$이면 균등분포에 가까워진다. 온도 척도화는 모�
 
 <div class="codebox" markdown>
 
-**예제 1.** 소프트맥스 구현
+### 예제 1. 소프트맥스 구현 { .eg }
 
 ```python
 import numpy as np

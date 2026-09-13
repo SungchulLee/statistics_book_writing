@@ -154,7 +154,7 @@ $5$% 수준에서는 유의하지 않다. 각 집단이 $5$개뿐이므로 가�
 
 <div class="codebox" markdown>
 
-**예제 1.** 상관에 대한 순열검정
+### 예제 1. 상관에 대한 순열검정 { .eg }
 
 ```python
 import numpy as np
@@ -204,7 +204,7 @@ $n = 8$이므로 $8! = 40{,}320$가지 순열을 모두 열거할 수 있고, �
 
 <div class="codebox" markdown>
 
-**예제 2.** 대응자료의 부호 뒤집기 검정
+### 예제 2. 대응자료의 부호 뒤집기 검정 { .eg }
 
 ```python
 import numpy as np

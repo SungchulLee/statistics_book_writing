@@ -22,7 +22,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 수치적으로 안정한 소프트맥스
+### 예제 1. 수치적으로 안정한 소프트맥스 { .eg }
 
 ```python
 import numpy as np
@@ -45,7 +45,7 @@ def softmax(z):
 
 <div class="codebox" markdown>
 
-**예제 2.** 로짓에서 확률로
+### 예제 2. 로짓에서 확률로 { .eg }
 
 ```python
 # 로짓의 차이가 확률의 비를 정한다. 2 와 1 의 차이가 1 이므로 첫 확률이
@@ -79,7 +79,7 @@ $\varepsilon$이 $\log(0)$을 막는다.
 
 <div class="codebox" markdown>
 
-**예제 3.** 교차엔트로피 손실
+### 예제 3. 교차엔트로피 손실 { .eg }
 
 ```python
 def cross_entropy_loss(Y, Y_hat, eps=1e-12):
@@ -129,7 +129,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 기울기 계산
+### 예제 4. 기울기 계산 { .eg }
 
 ```python
 def compute_gradients(X, Y, Y_hat):
@@ -157,7 +157,7 @@ def compute_gradients(X, Y, Y_hat):
 
 <div class="codebox" markdown>
 
-**예제 5.** 원-핫 변환
+### 예제 5. 원-핫 변환 { .eg }
 
 ```python
 def one_hot(y, C):
@@ -182,7 +182,7 @@ def one_hot(y, C):
 
 <div class="codebox" markdown>
 
-**예제 6.** 붓꽃 자료로 학습하기
+### 예제 6. 붓꽃 자료로 학습하기 { .eg }
 
 ```python
 from sklearn.datasets import load_iris
@@ -249,7 +249,7 @@ Final training loss: 0.1326
 
 <div class="codebox" markdown>
 
-**예제 7.** 시험 정확도
+### 예제 7. 시험 정확도 { .eg }
 
 ```python
 # 시험자료에서의 정확도. 가장 큰 확률을 가진 범주를 고른다.
@@ -281,7 +281,7 @@ Test accuracy: 1.0000
 
 <div class="codebox" markdown>
 
-**예제 8.** sklearn 과 맞춰 보기
+### 예제 8. sklearn 과 맞춰 보기 { .eg }
 
 ```python
 from sklearn.linear_model import LogisticRegression

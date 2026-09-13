@@ -66,7 +66,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 확률밀도함수와 누적분포함수의 관계
+### 예제 1. 확률밀도함수와 누적분포함수의 관계 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -160,7 +160,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 분위수함수는 누적분포함수의 역함수
+### 예제 2. 분위수함수는 누적분포함수의 역함수 { .eg }
 
 ```python
 import scipy.stats as stats
@@ -185,7 +185,7 @@ $1.96$이라는 익숙한 수가 여기서 나온다. 8장의 95% 신뢰구간�
 
 <div class="codebox" markdown>
 
-**예제 3.** 분위수함수를 그림으로 보기
+### 예제 3. 분위수함수를 그림으로 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -242,7 +242,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 4.** 같은 점을 두 그림에서 확인하기
+### 예제 4. 같은 점을 두 그림에서 확인하기 { .eg }
 
 ```python
 import scipy.stats as stats
@@ -273,7 +273,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 5.** 역변환 표집으로 정규 표본 만들기
+### 예제 5. 역변환 표집으로 정규 표본 만들기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

@@ -34,7 +34,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 편차에서 분산까지
+### 예제 1. 편차에서 분산까지 { .eg }
 
 ```python
 import numpy as np
@@ -123,7 +123,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 분산 구하기 — ddof 의 뜻
+#### 예제 2. 분산 구하기 — ddof 의 뜻 { .eg }
 
 ```python
 import numpy as np
@@ -188,7 +188,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 표준편차 구하기
+#### 예제 3. 표준편차 구하기 { .eg }
 
 ```python
 import numpy as np
@@ -246,7 +246,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** Z-점수로 다른 시험 견주기
+### 예제 4. Z-점수로 다른 시험 견주기 { .eg }
 
 ```python
 # 두 시험은 평균도 표준편차도 다르다. 원점수만으로는 견줄 수 없다.

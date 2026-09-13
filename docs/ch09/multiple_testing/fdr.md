@@ -141,7 +141,7 @@ FDR 통제는 후속 조사를 할 유망한 후보 집합을 찾는 것이 목�
 
 <div class="codebox" markdown>
 
-**예제 1.** 벤자미니-호크버그 절차 구현
+### 예제 1. 벤자미니-호크버그 절차 구현 { .eg }
 
 ```python
 import numpy as np

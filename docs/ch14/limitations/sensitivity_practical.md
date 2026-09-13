@@ -62,7 +62,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 평균 검정과 분산 검정의 견딤새
+### 예제 1. 평균 검정과 분산 검정의 견딤새 { .eg }
 
 ```python
 import numpy as np

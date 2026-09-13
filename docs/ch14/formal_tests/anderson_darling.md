@@ -51,7 +51,7 @@ Anderson-Darling 검정통계량 $A^2$은 다음 단계로 계산한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 기각값 표로 판정하기
+### 예제 1. 기각값 표로 판정하기 { .eg }
 
 ```python
 import numpy as np
@@ -114,7 +114,7 @@ Anderson-Darling 검정은 각 유의수준(정규분포의 경우 15%, 10%, 5%,
 
 <div class="codebox" markdown>
 
-**예제 2.** p-값으로 판정하기
+#### 예제 2. p-값으로 판정하기 { .eg }
 
 ```python
 import numpy as np
@@ -150,7 +150,7 @@ Anderson-Darling Test: Statistic=0.2432179174634257, p-value=0.7659878263029309
 
 <div class="codebox" markdown>
 
-**예제 3.** 치우친 자료에 적용
+#### 예제 3. 치우친 자료에 적용 { .eg }
 
 ```python
 import numpy as np

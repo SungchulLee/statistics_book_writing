@@ -119,7 +119,7 @@ $$Z = \frac{W^+ - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 부호순위검정
+#### 예제 1. 부호순위검정 { .eg }
 
 ```python
 import numpy as np
@@ -170,7 +170,7 @@ Wilcoxon 부호순위검정의 대칭성 가정이 깨질 때는 **대응 부호
 
 <div class="codebox" markdown>
 
-**예제 2.** 같은 자료에 부호검정
+#### 예제 2. 같은 자료에 부호검정 { .eg }
 
 ```python
 from scipy.stats import binom

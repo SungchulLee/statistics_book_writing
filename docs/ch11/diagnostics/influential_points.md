@@ -8,7 +8,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -68,7 +68,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** Cook의 거리
+### 예제 2. Cook의 거리 { .eg }
 
 ```python
 import numpy as np
@@ -127,7 +127,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 지렛값
+### 예제 3. 지렛값 { .eg }
 
 ```python
 # 지렛값은 설명변수 쪽에서 그 점이 얼마나 외따로 있는지를 잰다.

@@ -33,7 +33,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 다섯 검정을 한자리에서
+### 예제 1. 다섯 검정을 한자리에서 { .eg }
 
 ```python
 import numpy as np

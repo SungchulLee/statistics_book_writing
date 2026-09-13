@@ -26,7 +26,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 불균형 자료 만들기
+### 예제 1. 불균형 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -102,7 +102,7 @@ scikit-learn에서는 다음과 같다.
 
 <div class="codebox" markdown>
 
-**예제 2.** 범주 가중값 주기
+#### 예제 2. 범주 가중값 주기 { .eg }
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -199,7 +199,7 @@ Oversampled: 81,105 paid off + 81,105 default (via replication)
 
 <div class="codebox" markdown>
 
-**예제 3.** SMOTE 로 늘리기
+#### 예제 3. SMOTE 로 늘리기 { .eg }
 
 ```python
 from imblearn.over_sampling import SMOTE
@@ -248,7 +248,7 @@ SMOTE 후: n = 3642, 연체율 = 0.500
 
 <div class="codebox" markdown>
 
-**예제 4.** BorderlineSMOTE 와 ADASYN
+#### 예제 4. BorderlineSMOTE 와 ADASYN { .eg }
 
 ```python
 from imblearn.over_sampling import BorderlineSMOTE, ADASYN
@@ -323,7 +323,7 @@ ADASYN:          n = 3635, 연체율 = 0.499
 
 <div class="codebox" markdown>
 
-**예제 5.** 권장 절차 — 확률 추정과 비용 문턱
+### 예제 5. 권장 절차 — 확률 추정과 비용 문턱 { .eg }
 
 ```python
 from sklearn.linear_model import LogisticRegression

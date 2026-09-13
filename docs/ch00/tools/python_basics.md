@@ -45,7 +45,7 @@ conda env export > environment.yml
 
 <div class="codebox" markdown>
 
-**예제 1.** 리스트 컴프리헨션
+### 예제 1. 리스트 컴프리헨션 { .eg }
 
 ```python
 data = [-2, 3, 0, 5, -1, 4]
@@ -68,7 +68,7 @@ print(squares)
 
 <div class="codebox" markdown>
 
-**예제 2.** 함수와 독스트링
+### 예제 2. 함수와 독스트링 { .eg }
 
 ```python
 def sample_mean(data):
@@ -88,7 +88,7 @@ def sample_mean(data):
 
 <div class="codebox" markdown>
 
-**예제 3.** 모듈 구조와 __main__ 가드
+### 예제 3. 모듈 구조와 __main__ 가드 { .eg }
 
 ```python
 """이 스크립트가 무엇을 하는지 적는 모듈 독스트링."""
@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 4.** 표준 임포트 별칭
+### 예제 4. 표준 임포트 별칭 { .eg }
 
 ```python
 # 이 별칭들은 사실상 표준이다. 다르게 쓰면 남이 읽기 어려워진다.

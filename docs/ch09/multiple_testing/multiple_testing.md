@@ -48,7 +48,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 효과가 없어도 유의한 결과는 나온다
+#### 예제 1. 효과가 없어도 유의한 결과는 나온다 { .eg }
 
 ```python
 import numpy as np
@@ -82,7 +82,7 @@ Sample std:  0.9082
 
 <div class="codebox" markdown>
 
-**예제 2.** statsmodels 로 보정하기
+#### 예제 2. statsmodels 로 보정하기 { .eg }
 
 ```python
 from statsmodels.stats.multitest import multipletests

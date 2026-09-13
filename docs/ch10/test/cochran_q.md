@@ -31,7 +31,7 @@ $k = 2$일 때 Cochran의 Q는 McNemar 검정으로 환원된다. 구체적으�
 
 <div class="codebox" markdown>
 
-**예제 1.** Cochran의 Q 검정 구현
+### 예제 1. Cochran의 Q 검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -68,7 +68,7 @@ def cochran_q(data):
 
 <div class="codebox" markdown>
 
-**예제 2.** 세 과제의 성공률 비교
+#### 예제 2. 세 과제의 성공률 비교 { .eg }
 
 ```python
 # 피험자 12명이 과제 3개를 수행한 결과 (성공=1, 실패=0)

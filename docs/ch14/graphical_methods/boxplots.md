@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규분포의 상자그림
+### 예제 1. 정규분포의 상자그림 { .eg }
 
 ```python
 import numpy as np
@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 2.** 지수분포의 상자그림
+### 예제 2. 지수분포의 상자그림 { .eg }
 
 ```python
 import numpy as np
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 3.** 카이제곱분포의 상자그림
+### 예제 3. 카이제곱분포의 상자그림 { .eg }
 
 ```python
 import numpy as np

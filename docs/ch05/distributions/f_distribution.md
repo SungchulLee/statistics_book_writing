@@ -63,7 +63,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** scipy 로 F 표본추출
+#### 예제 1. scipy 로 F 표본추출 { .eg }
 
 ```python
 import numpy as np
@@ -93,7 +93,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 카이제곱의 비로 F 만들기
+#### 예제 2. 카이제곱의 비로 F 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -183,7 +183,7 @@ F 분포 결과는 **정규성 아래에서만 정확하다**:
 
 <div class="codebox" markdown>
 
-**예제 3.** F 분포의 백분위점
+### 예제 3. F 분포의 백분위점 { .eg }
 
 ```python
 from scipy import stats

@@ -56,7 +56,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 등분산 F 검정 구현
+### 예제 1. 등분산 F 검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -85,7 +85,7 @@ def f_test(data_0, data_1):
 
 <div class="codebox" markdown>
 
-**예제 2.** 검정 실행
+### 예제 2. 검정 실행 { .eg }
 
 ```python
 # Bartlett 검정과 같은 설정으로 돌려 두 검정의 p-값을 견주어 볼 수 있다.

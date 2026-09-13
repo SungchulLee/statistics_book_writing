@@ -140,7 +140,7 @@ CV 오차가 최소인 lambda 선택
 
 <div class="codebox" markdown>
 
-**예제 1.** 라쏘 정칙화 경로 그리기
+#### 예제 1. 라쏘 정칙화 경로 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

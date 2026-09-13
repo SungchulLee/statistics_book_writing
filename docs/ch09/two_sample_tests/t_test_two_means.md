@@ -160,7 +160,7 @@ $p = 0.32$로 기각하지 못하지만 Cohen의 $d = 0.46$은 "작은~중간" �
 
 <div class="codebox" markdown>
 
-**예제 2.** scipy 로 이표본 t-검정
+#### 예제 2. scipy 로 이표본 t-검정 { .eg }
 
 ```python
 from scipy import stats
@@ -204,7 +204,7 @@ $n_1 = n_2$이면 두 방법의 **통계량이 정확히 같다**. 표본크기�
 
 <div class="codebox" markdown>
 
-**예제 3.** statsmodels 로 이표본 t-검정
+#### 예제 3. statsmodels 로 이표본 t-검정 { .eg }
 
 ```python
 import statsmodels.api as sm

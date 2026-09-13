@@ -22,7 +22,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 자료 만들기
+### 예제 1. 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -53,7 +53,7 @@ scores = np.clip(scores, 0, 1)
 
 <div class="codebox" markdown>
 
-**예제 2.** 혼동행렬
+### 예제 2. 혼동행렬 { .eg }
 
 ```python
 def confusion_matrix(y_true, y_pred):
@@ -96,7 +96,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 정밀도·재현율·F1
+### 예제 3. 정밀도·재현율·F1 { .eg }
 
 ```python
 def precision_recall_f1(y_true, y_pred):
@@ -135,7 +135,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** ROC 곡선
+### 예제 4. ROC 곡선 { .eg }
 
 ```python
 def roc_curve(y_true, scores):
@@ -190,7 +190,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** AUC 계산
+### 예제 5. AUC 계산 { .eg }
 
 ```python
 def auc_trapezoid(fpr, tpr):
@@ -236,7 +236,7 @@ AUC = 0.7935
 
 <div class="codebox" markdown>
 
-**예제 6.** 세 그림으로 보기
+### 예제 6. 세 그림으로 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

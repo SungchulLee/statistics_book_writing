@@ -31,7 +31,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 네 검정의 거짓 양성률
+### 예제 1. 네 검정의 거짓 양성률 { .eg }
 
 ```python
 import numpy as np
@@ -84,7 +84,7 @@ Fligner-Killeen     : false-positive rate = 0.1140
 
 <div class="codebox" markdown>
 
-**예제 2.** 네 검정의 검정력
+### 예제 2. 네 검정의 검정력 { .eg }
 
 ```python
 # 2부: 검정력. 이번에는 정규모집단이고 표준편차를 1, 1.5, 2 로 실제로

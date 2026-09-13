@@ -18,7 +18,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 이항분포
+### 예제 1. 이항분포 { .eg }
 
 ```python
 import numpy as np
@@ -61,7 +61,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 포아송분포
+### 예제 2. 포아송분포 { .eg }
 
 ```python
 lam = 1.2
@@ -92,7 +92,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 기하분포
+### 예제 3. 기하분포 { .eg }
 
 ```python
 p = 0.3
@@ -123,7 +123,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 초기하분포
+### 예제 4. 초기하분포 { .eg }
 
 ```python
 from scipy import special
@@ -150,7 +150,7 @@ E[X] = 1.00
 
 <div class="codebox" markdown>
 
-**예제 5.** 네 이산분포 한눈에 보기
+### 예제 5. 네 이산분포 한눈에 보기 { .eg }
 
 ```python
 # 네 이산분포를 2x2 격자에 나란히 놓는다.

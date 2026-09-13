@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 모형 적합과 계수
+### 예제 1. 모형 적합과 계수 { .eg }
 
 ```python
 import numpy as np
@@ -56,7 +56,7 @@ scikit-learn은 절편을 `intercept_`에, 기울기를 `coef_`에 따로 담는
 
 <div class="codebox" markdown>
 
-**예제 2.** 예측하기
+### 예제 2. 예측하기 { .eg }
 
 ```python
 y_pred_train = model.predict(X)
@@ -87,7 +87,7 @@ Predictions: [5.84872133 3.3265745 ]
 
 <div class="codebox" markdown>
 
-**예제 3.** 결정계수
+### 예제 3. 결정계수 { .eg }
 
 ```python
 # 회귀 모형의 score 는 R^2 다. 분류 모형이면 정확도를 돌려준다.
@@ -109,7 +109,7 @@ R-squared (training): 0.9706
 
 <div class="codebox" markdown>
 
-**예제 4.** 여러 성능 측도
+### 예제 4. 여러 성능 측도 { .eg }
 
 ```python
 from sklearn.metrics import mean_absolute_error, mean_squared_error, root_mean_squared_error
@@ -150,7 +150,7 @@ MAE 0.42, RMSE 0.53이다. RMSE가 MAE보다 큰 것은 언제나 성립한다. 
 
 <div class="codebox" markdown>
 
-**예제 5.** 훈련·시험 나누기
+### 예제 5. 훈련·시험 나누기 { .eg }
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -187,7 +187,7 @@ scikit-learn은 훈련-검정 분할의 반복을 자동화하는 교차검증 �
 
 <div class="codebox" markdown>
 
-**예제 6.** 교차검증
+### 예제 6. 교차검증 { .eg }
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -224,7 +224,7 @@ Std CV R-squared: 0.0054
 
 <div class="codebox" markdown>
 
-**예제 7.** 파이프라인
+### 예제 7. 파이프라인 { .eg }
 
 ```python
 from sklearn.pipeline import Pipeline

@@ -56,7 +56,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 포획-재포획 MLE 구현
+### 예제 1. 포획-재포획 MLE 구현 { .eg }
 
 ```python
 from scipy import special
@@ -154,7 +154,7 @@ Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이
 
 <div class="codebox" markdown>
 
-**예제 3.** 재포획 결과에 따른 민감도
+### 예제 3. 재포획 결과에 따른 민감도 { .eg }
 
 ```python
 from scipy import special

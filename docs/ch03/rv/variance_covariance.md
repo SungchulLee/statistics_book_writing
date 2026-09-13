@@ -152,7 +152,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 무상관이 독립을 뜻하지 않는다
+### 예제 1. 무상관이 독립을 뜻하지 않는다 { .eg }
 
 ```python
 import numpy as np

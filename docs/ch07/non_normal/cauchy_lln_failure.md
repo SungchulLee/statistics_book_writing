@@ -26,7 +26,7 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 코시와 정규의 표본평균 경로
+### 예제 1. 코시와 정규의 표본평균 경로 { .eg }
 
 ```python
 import numpy as np
@@ -95,7 +95,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 표본크기를 키워도 좁아지지 않는 분포
+### 예제 2. 표본크기를 키워도 좁아지지 않는 분포 { .eg }
 
 ```python
 from scipy import stats
@@ -150,7 +150,7 @@ Cauchy 분위수를 정규 분위수와 비교하는 **Q-Q 그림**은 Cauchy �
 
 <div class="codebox" markdown>
 
-**예제 3.** Q-Q 그림으로 보는 두꺼운 꼬리
+### 예제 3. Q-Q 그림으로 보는 두꺼운 꼬리 { .eg }
 
 ```python
 # Q-Q 그림은 자료의 분위수를 정규분포의 분위수와 짝지어 찍는다.

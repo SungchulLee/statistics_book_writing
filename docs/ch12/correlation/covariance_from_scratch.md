@@ -41,7 +41,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 공분산과 상관을 단계별로 구현
+### 예제 1. 공분산과 상관을 단계별로 구현 { .eg }
 
 ```python
 import numpy as np
@@ -92,7 +92,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 가격 자료 만들기
+### 예제 2. 가격 자료 만들기 { .eg }
 
 ```python
 np.random.seed(42)
@@ -113,7 +113,7 @@ NY = 350.0 + trend * 0.8 + np.random.normal(0, 0.6, WEEKS)
 
 <div class="codebox" markdown>
 
-**예제 3.** 라이브러리 결과와 맞춰 보기
+### 예제 3. 라이브러리 결과와 맞춰 보기 { .eg }
 
 ```python
 import pandas as pd
@@ -158,7 +158,7 @@ numpy corr  = 0.9753
 
 <div class="codebox" markdown>
 
-**예제 4.** 세 그림으로 이해하기
+### 예제 4. 세 그림으로 이해하기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

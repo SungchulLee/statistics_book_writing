@@ -16,7 +16,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 수익률의 요약통계
+### 예제 1. 두 수익률의 요약통계 { .eg }
 
 ```python
 import numpy as np
@@ -68,7 +68,7 @@ Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB 
 
 <div class="codebox" markdown>
 
-**예제 2.** 두 수익률의 Q-Q 그림
+### 예제 2. 두 수익률의 Q-Q 그림 { .eg }
 
 ```python
 import numpy as np

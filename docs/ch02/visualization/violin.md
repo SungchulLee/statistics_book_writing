@@ -18,7 +18,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 기본 바이올린 그림
+### 예제 1. 기본 바이올린 그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -83,7 +83,7 @@ Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을
 
 <div class="codebox" markdown>
 
-**예제 2.** Seaborn 으로 그리는 바이올린 그림
+### 예제 2. Seaborn 으로 그리는 바이올린 그림 { .eg }
 
 ```python
 import seaborn as sns

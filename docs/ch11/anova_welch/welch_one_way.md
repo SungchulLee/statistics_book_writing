@@ -117,7 +117,7 @@ Welch 분산분석이 유의한 차이를 찾으면, 등분산이나 동일 표�
 
 <div class="codebox" markdown>
 
-**예제 1.** Games-Howell 사후검정
+#### 예제 1. Games-Howell 사후검정 { .eg }
 
 ```python
 # Games-Howell 사후검정. Tukey HSD와 달리 쌍마다 자유도를 따로 계산한다.

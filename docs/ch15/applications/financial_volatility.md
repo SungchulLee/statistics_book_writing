@@ -118,7 +118,7 @@ $r_t^2$의 자기상관은 이 장의 모든 분산 검정이 요구하는 독�
 
 <div class="codebox" markdown>
 
-**예제 1.** 변동성 변화 검정하기
+#### 예제 1. 변동성 변화 검정하기 { .eg }
 
 ```python
 import numpy as np

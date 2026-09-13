@@ -48,7 +48,7 @@ $\rho > 0$(양의 짝 내 상관)이면 $D$의 분산이 $\sigma_X^2 + \sigma_Y^
 
 <div class="codebox" markdown>
 
-**예제 1.** 대응표본 구간 모의실험
+### 예제 1. 대응표본 구간 모의실험 { .eg }
 
 ```python
 import numpy as np
@@ -121,7 +121,7 @@ Paired t coverage: 95.0%
 
 <div class="codebox" markdown>
 
-**예제 2.** 구간 100개를 한 그림에
+#### 예제 2. 구간 100개를 한 그림에 { .eg }
 
 ```python
 # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은

@@ -165,7 +165,7 @@ $$\text{두 변수는 독립이 아니다.}$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 정의대로 계산한 독립성 검정
+#### 예제 1. 정의대로 계산한 독립성 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -250,7 +250,7 @@ p_value = 0.27%
 
 <div class="codebox" markdown>
 
-**예제 2.** scipy로 계산한 독립성 검정
+#### 예제 2. scipy로 계산한 독립성 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -685,7 +685,7 @@ $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. �
 
 <div class="codebox" markdown>
 
-**예제 5.** 재표본추출로 하는 검정 — 비복원
+#### 예제 5. 재표본추출로 하는 검정 — 비복원 { .eg }
 
 ```python
 def chi2_stat(observed, expected):
@@ -754,7 +754,7 @@ Resampling p-value: 0.4750
 
 <div class="codebox" markdown>
 
-**예제 6.** 재표본추출로 하는 검정 — 복원
+#### 예제 6. 재표본추출로 하는 검정 — 복원 { .eg }
 
 ```python
 def sample_with_replacement(box):
@@ -789,7 +789,7 @@ Resampling (with replacement) p-value: 0.6745
 
 <div class="codebox" markdown>
 
-**예제 7.** 재표본추출과 모수적 방법의 비교
+#### 예제 7. 재표본추출과 모수적 방법의 비교 { .eg }
 
 ```python
 # 모수적 카이제곱 검정
@@ -821,7 +821,7 @@ Resampling (with repl): p-value: 0.6745
 
 <div class="codebox" markdown>
 
-**예제 8.** 두 재표본 분포 그리기
+#### 예제 8. 두 재표본 분포 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

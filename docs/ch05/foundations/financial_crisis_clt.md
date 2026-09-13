@@ -85,7 +85,7 @@ pdf는 $\theta \in [0, 1]$에서 $f(\theta) = 2\theta$이며, 더 높은 부도�
 
 <div class="codebox" markdown>
 
-**예제 1.** 부도의 독립 여부에 따른 손실 분포
+### 예제 1. 부도의 독립 여부에 따른 손실 분포 { .eg }
 
 ```python
 import numpy as np
@@ -137,7 +137,7 @@ P(D > 90):
 
 <div class="codebox" markdown>
 
-**예제 2.** 세 분포를 나란히 보기
+### 예제 2. 세 분포를 나란히 보기 { .eg }
 
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(18, 5))

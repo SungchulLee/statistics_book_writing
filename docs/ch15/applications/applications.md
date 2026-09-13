@@ -47,7 +47,7 @@ Breusch-Pagan 검정은 잔차의 분산이 모형의 독립변수와 관련되�
 
 <div class="codebox" markdown>
 
-**예제 1.** 회귀에서의 등분산 검정
+#### 예제 1. 회귀에서의 등분산 검정 { .eg }
 
 ```python
 import statsmodels.api as sm
@@ -125,7 +125,7 @@ Levene 검정은 분산분석의 등분산 가정을 확인하는 데 자주 쓰
 
 <div class="codebox" markdown>
 
-**예제 2.** 평균이 달라도 분산이 같으면
+#### 예제 2. 평균이 달라도 분산이 같으면 { .eg }
 
 ```python
 import numpy as np
@@ -217,7 +217,7 @@ Levene 검정이 이분산을 시사하면 집단 간 등분산을 가정하지 
 
 <div class="codebox" markdown>
 
-**예제 3.** Welch 분산분석
+#### 예제 3. Welch 분산분석 { .eg }
 
 ```python
 import numpy as np

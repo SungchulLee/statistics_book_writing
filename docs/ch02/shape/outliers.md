@@ -70,7 +70,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 다섯 수치 요약과 상자그림
+### 예제 1. 다섯 수치 요약과 상자그림 { .eg }
 
 ```python
 import numpy as np
@@ -112,7 +112,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 상자그림을 나란히 놓고 견주기
+#### 예제 2. 상자그림을 나란히 놓고 견주기 { .eg }
 
 ```python
 import numpy as np

@@ -28,7 +28,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 범위 구하기
+#### 예제 1. 범위 구하기 { .eg }
 
 ```python
 import pandas as pd
@@ -83,7 +83,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** IQR 과 표준편차 견주기
+#### 예제 2. IQR 과 표준편차 견주기 { .eg }
 
 ```python
 import pandas as pd
@@ -156,7 +156,7 @@ print(f"평균 - 표준편차 = {mean_income - std_dev:>9,.0f}   "
 
 <div class="codebox" markdown>
 
-**예제 3.** 사분위수 구하기
+#### 예제 3. 사분위수 구하기 { .eg }
 
 ```python
 import pandas as pd

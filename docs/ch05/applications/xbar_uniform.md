@@ -44,7 +44,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 균등 모집단에서 표본평균의 표집분포
+### 예제 1. 균등 모집단에서 표본평균의 표집분포 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

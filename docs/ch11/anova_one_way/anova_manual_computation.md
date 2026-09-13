@@ -26,7 +26,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산분석표 직접 계산하기
+### 예제 1. 분산분석표 직접 계산하기 { .eg }
 
 ```python
 import numpy as np
@@ -82,7 +82,7 @@ scipy로 확인하는 것은 한 줄이면 된다:
 
 <div class="codebox" markdown>
 
-**예제 2.** scipy 결과와 맞춰 보기
+### 예제 2. scipy 결과와 맞춰 보기 { .eg }
 
 ```python
 # 손으로 구한 값과 맞는지 확인한다. 한 줄이면 되는 계산을 굳이 풀어 쓴 까닭은
@@ -113,7 +113,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** Fisher LSD 사후비교
+### 예제 3. Fisher LSD 사후비교 { .eg }
 
 ```python
 from itertools import combinations

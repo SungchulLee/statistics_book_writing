@@ -42,7 +42,7 @@ $\beta_j$의 95% 신뢰구간은 $\hat{\beta}_j \pm t^*_{n-k,\,0.025} \cdot \mat
 
 <div class="codebox" markdown>
 
-**예제 1.** OLS 적합 함수
+#### 예제 1. OLS 적합 함수 { .eg }
 
 ```python
 import numpy as np
@@ -69,7 +69,7 @@ def fit_ols(X, y):
 
 <div class="codebox" markdown>
 
-**예제 2.** 회귀 출력표 만들기
+#### 예제 2. 회귀 출력표 만들기 { .eg }
 
 ```python
 def regression_table(beta_hat, s, cov_matrix, n, k, var_names):
@@ -101,7 +101,7 @@ def regression_table(beta_hat, s, cov_matrix, n, k, var_names):
 
 <div class="codebox" markdown>
 
-**예제 3.** 광고 자료에 적용하기
+#### 예제 3. 광고 자료에 적용하기 { .eg }
 
 ```python
 import pandas as pd

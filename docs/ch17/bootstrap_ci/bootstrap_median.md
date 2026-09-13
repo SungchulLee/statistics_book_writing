@@ -36,7 +36,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 중앙값의 붓스트랩 분포
+### 예제 1. 중앙값의 붓스트랩 분포 { .eg }
 
 ```python
 import numpy as np
@@ -80,7 +80,7 @@ $\text{LogNormal}(10.5, 0.8^2)$에서 $n = 200$을 뽑은 예:
 
 <div class="codebox" markdown>
 
-**예제 2.** 평균과 견주기
+### 예제 2. 평균과 견주기 { .eg }
 
 ```python
 def bootstrap_mean(data, n_bootstrap=10_000, rng=None):
@@ -113,7 +113,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 이상치 하나가 바꾸는 것
+### 예제 3. 이상치 하나가 바꾸는 것 { .eg }
 
 ```python
 def robustness_comparison(data, outlier=1_000_000):
@@ -141,7 +141,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 여러 신뢰수준의 구간
+### 예제 4. 여러 신뢰수준의 구간 { .eg }
 
 ```python
 def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):

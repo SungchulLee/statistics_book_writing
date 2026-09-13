@@ -48,7 +48,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 붓스트랩으로 표준오차 구하기
+### 예제 1. 붓스트랩으로 표준오차 구하기 { .eg }
 
 ```python
 import numpy as np
@@ -110,7 +110,7 @@ Squared-error SE:   0.1810
 
 <div class="codebox" markdown>
 
-**예제 2.** 붓스트랩 분포 시각화
+### 예제 2. 붓스트랩 분포 시각화 { .eg }
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))

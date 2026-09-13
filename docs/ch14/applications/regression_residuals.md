@@ -90,7 +90,7 @@ $n$이 크면 사소한 이탈로도 기각할 수 있으므로 그런 경우에
 
 <div class="codebox" markdown>
 
-**예제 1.** 회귀 잔차의 정규성 확인
+### 예제 1. 회귀 잔차의 정규성 확인 { .eg }
 
 ```python
 import numpy as np

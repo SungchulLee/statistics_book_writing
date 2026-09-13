@@ -12,7 +12,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 파레토 그림 그리기
+### 예제 1. 파레토 그림 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

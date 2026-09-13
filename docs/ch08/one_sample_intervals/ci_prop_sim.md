@@ -54,7 +54,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 비율 신뢰구간 모의실험
+#### 예제 1. 비율 신뢰구간 모의실험 { .eg }
 
 ```python
 import numpy as np
@@ -119,7 +119,7 @@ wilson coverage: 96.0%
 
 <div class="codebox" markdown>
 
-**예제 2.** 구간 100개를 한 그림에
+#### 예제 2. 구간 100개를 한 그림에 { .eg }
 
 ```python
 # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은

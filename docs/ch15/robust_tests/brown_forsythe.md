@@ -91,7 +91,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Brown-Forsythe 검정과 세 방법 비교
+### 예제 1. Brown-Forsythe 검정과 세 방법 비교 { .eg }
 
 ```python
 import numpy as np

@@ -40,7 +40,7 @@ SciPy의 `stats.anderson`은 통계량 $A^2$과 함께 유의수준 15%, 10%, 5%
 
 <div class="codebox" markdown>
 
-**예제 1.** 섞인 자료에 Anderson-Darling 검정
+### 예제 1. 섞인 자료에 Anderson-Darling 검정 { .eg }
 
 ```python
 import numpy as np

@@ -221,7 +221,7 @@ A/B test p-value: 0.6785
 
 <div class="codebox" markdown>
 
-**예제 3.** 순열검정과 t 검정 견주기
+#### 예제 3. 순열검정과 t 검정 견주기 { .eg }
 
 ```python
 from scipy import stats

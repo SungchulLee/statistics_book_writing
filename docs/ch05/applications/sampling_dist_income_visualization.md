@@ -45,7 +45,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 치우친 소득 모집단에서의 표집분포
+### 예제 1. 치우친 소득 모집단에서의 표집분포 { .eg }
 
 ```python
 import numpy as np
@@ -101,7 +101,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 표준오차 공식 검증
+### 예제 2. 표준오차 공식 검증 { .eg }
 
 ```python
 pop_std = loans_income.std()

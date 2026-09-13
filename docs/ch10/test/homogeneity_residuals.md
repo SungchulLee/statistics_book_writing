@@ -40,7 +40,7 @@ $p_{ij}^{\text{Bonf}} < \alpha$이면 그 칸을 유의하다고 표시한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 잔차로 어느 칸이 어긋났는지 찾기
+#### 예제 1. 잔차로 어느 칸이 어긋났는지 찾기 { .eg }
 
 ```python
 import numpy as np
@@ -102,7 +102,7 @@ Bonferroni-adjusted per-cell p-values:
 
 <div class="codebox" markdown>
 
-**예제 2.** 잔차를 열지도로 보기
+#### 예제 2. 잔차를 열지도로 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

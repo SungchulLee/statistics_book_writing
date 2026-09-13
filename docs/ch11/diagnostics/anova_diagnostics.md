@@ -8,7 +8,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -79,7 +79,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 1단계 — 정규성
+### 예제 2. 1단계 — 정규성 { .eg }
 
 ```python
 from scipy.stats import shapiro
@@ -123,7 +123,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 2단계 — 등분산성
+### 예제 3. 2단계 — 등분산성 { .eg }
 
 ```python
 from scipy.stats import levene, bartlett
@@ -164,7 +164,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 3단계 — 독립성
+### 예제 4. 3단계 — 독립성 { .eg }
 
 ```python
 from statsmodels.stats.stattools import durbin_watson
@@ -199,7 +199,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 4단계 — 영향점
+### 예제 5. 4단계 — 영향점 { .eg }
 
 ```python
 # Cook 의 거리는 그 관측값 하나를 뺐을 때 적합값 전체가 얼마나 움직이는지를
@@ -236,7 +236,7 @@ Cook의 거리는 정규성 검정이나 등분산 검정과 달리 **어느 관
 
 <div class="codebox" markdown>
 
-**예제 6.** 네 진단을 한꺼번에
+### 예제 6. 네 진단을 한꺼번에 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

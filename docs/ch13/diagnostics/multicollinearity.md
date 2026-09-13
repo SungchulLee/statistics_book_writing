@@ -21,7 +21,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 상관행렬로 훑어보기
+#### 예제 1. 상관행렬로 훑어보기 { .eg }
 
 ```python
 import numpy as np
@@ -99,7 +99,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** VIF 계산
+##### 예제 2. VIF 계산 { .eg }
 
 ```python
 import statsmodels.api as sm
@@ -137,7 +137,7 @@ VIF가 어떻게 계산되는지 이해하면 더 깊은 통찰을 얻을 수 �
 
 <div class="codebox" markdown>
 
-**예제 3.** VIF를 정의대로 직접 구하기
+##### 예제 3. VIF를 정의대로 직접 구하기 { .eg }
 
 ```python
 import numpy as np
@@ -226,7 +226,7 @@ Longitude   :  R² = 0.8747,  VIF =    7.98
 
 <div class="codebox" markdown>
 
-**예제 4.** 대책 1 — 변수 빼기
+#### 예제 4. 대책 1 — 변수 빼기 { .eg }
 
 ```python
 # 대책 1: 얽힌 변수를 빼 버린다. 가장 간단하지만, 뺀 변수가 실제로
@@ -245,7 +245,7 @@ model_reduced = sm.OLS(y, X_reduced).fit()
 
 <div class="codebox" markdown>
 
-**예제 5.** 대책 2 — 변수 합치기
+#### 예제 5. 대책 2 — 변수 합치기 { .eg }
 
 ```python
 # 대책 2: 얽힌 변수를 하나로 합친다. 여기서는 위도와 경도를 평균 내
@@ -261,7 +261,7 @@ df['Location'] = (df['Latitude'] + df['Longitude']) / 2
 
 <div class="codebox" markdown>
 
-**예제 6.** 대책 3 — 능형회귀와 라쏘
+#### 예제 6. 대책 3 — 능형회귀와 라쏘 { .eg }
 
 ```python
 from sklearn.linear_model import Ridge, Lasso
@@ -295,7 +295,7 @@ OLS 계수와 릿지 계수를 비교한 것이다. 공선성이 있으면 OLS �
 
 <div class="codebox" markdown>
 
-**예제 7.** 대책 4 — 주성분회귀
+#### 예제 7. 대책 4 — 주성분회귀 { .eg }
 
 ```python
 from sklearn.decomposition import PCA

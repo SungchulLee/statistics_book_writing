@@ -131,7 +131,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** scipy로 하는 일원배치 분산분석
+##### 예제 1. scipy로 하는 일원배치 분산분석 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -217,7 +217,7 @@ P-Value = 0.0159
 
 <div class="codebox" markdown>
 
-**예제 2.** statsmodels로 하는 일원배치 분산분석
+##### 예제 2. statsmodels로 하는 일원배치 분산분석 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -561,13 +561,11 @@ $$
 p\text{-value} = \frac{\#\{\text{Perm Var} \geq \text{Obs Var}\}}{B}
 $$
 
-#### 예제: 네 개의 웹페이지
-
 네 웹페이지의 체류시간을 검정한다고 하자:
 
 <div class="codebox" markdown>
 
-**예제 3.** 네 웹페이지의 체류시간
+#### 예제 3. 네 웹페이지의 체류시간 { .eg }
 
 ```python
 import numpy as np
@@ -674,11 +672,9 @@ $$
 p\text{-value} = \frac{\#\{F_b \geq F_{\text{obs}}\}}{B}
 $$
 
-#### 예제: F-통계량 기반 검정
-
 <div class="codebox" markdown>
 
-**예제 4.** 집단평균 분산을 통계량으로 쓴 순열검정
+#### 예제 4. 집단평균 분산을 통계량으로 쓴 순열검정 { .eg }
 
 ```python
 from scipy import stats
@@ -732,7 +728,7 @@ p-value: 0.3550
 
 <div class="codebox" markdown>
 
-**예제 5.** 순열검정과 모수적 분산분석의 비교
+#### 예제 5. 순열검정과 모수적 분산분석의 비교 { .eg }
 
 ```python
 # 모수적 분산분석. 순열검정 결과와 견준다.

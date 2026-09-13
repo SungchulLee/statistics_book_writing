@@ -31,7 +31,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 형상모수에 따른 와이불 밀도와 위험함수
+### 예제 1. 형상모수에 따른 와이불 밀도와 위험함수 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

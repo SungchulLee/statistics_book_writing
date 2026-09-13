@@ -48,7 +48,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 검증집합을 스무 번 다시 나누기
+#### 예제 1. 검증집합을 스무 번 다시 나누기 { .eg }
 
 ```python
 import numpy as np
@@ -94,7 +94,7 @@ for run in range(n_validations):
 
 <div class="codebox" markdown>
 
-**예제 2.** 하나빼기 교차검증
+#### 예제 2. 하나빼기 교차검증 { .eg }
 
 ```python
 from sklearn.model_selection import cross_val_score, LeaveOneOut
@@ -118,7 +118,7 @@ for i, degree in enumerate(degrees):
 
 <div class="codebox" markdown>
 
-**예제 3.** 10겹 교차검증
+#### 예제 3. 10겹 교차검증 { .eg }
 
 ```python
 from sklearn.model_selection import KFold

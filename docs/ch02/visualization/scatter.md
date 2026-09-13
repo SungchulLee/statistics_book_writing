@@ -8,7 +8,7 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
 
 <div class="codebox" markdown>
 
-**예제 1.** plot 과 scatter 의 차이
+### 예제 1. plot 과 scatter 의 차이 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -68,7 +68,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 점이 뭉칠 때
+### 예제 2. 점이 뭉칠 때 { .eg }
 
 ```python
 import numpy as np
@@ -121,7 +121,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 이산값과 지터
+### 예제 3. 이산값과 지터 { .eg }
 
 ```python
 import numpy as np

@@ -8,7 +8,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -71,7 +71,7 @@ F = 16.1314, p = 0.0000
 
 <div class="codebox" markdown>
 
-**예제 2.** Kruskal-Wallis 검정
+#### 예제 2. Kruskal-Wallis 검정 { .eg }
 
 ```python
 from scipy.stats import kruskal
@@ -108,7 +108,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 로그 변환
+#### 예제 3. 로그 변환 { .eg }
 
 ```python
 import numpy as np
@@ -144,7 +144,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 제곱근 변환
+#### 예제 4. 제곱근 변환 { .eg }
 
 ```python
 # 제곱근 변환은 로그보다 약하게 편다. 도수 자료처럼 분산이 평균에 비례하는
@@ -177,7 +177,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** Box-Cox 변환
+#### 예제 5. Box-Cox 변환 { .eg }
 
 ```python
 from scipy.stats import boxcox
@@ -210,7 +210,7 @@ Welch 분산분석은 집단 사이의 등분산을 가정하지 않는다. Welc
 
 <div class="codebox" markdown>
 
-**예제 6.** Welch 분산분석
+#### 예제 6. Welch 분산분석 { .eg }
 
 ```python
 from scipy.stats import f_oneway
@@ -241,7 +241,7 @@ Huber나 M-추정량 같은 방법은 이상점에 덜 민감한 분산분석 �
 
 <div class="codebox" markdown>
 
-**예제 7.** 로버스트 추정량
+#### 예제 7. 로버스트 추정량 { .eg }
 
 ```python
 import statsmodels.api as sm
@@ -285,7 +285,7 @@ OLS로 적합하면 집단 C의 계수가 2.546인데 로버스트 추정은 2.2
 
 <div class="codebox" markdown>
 
-**예제 8.** 순열검정
+### 예제 8. 순열검정 { .eg }
 
 ```python
 import numpy as np

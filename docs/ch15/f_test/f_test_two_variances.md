@@ -135,7 +135,7 @@ $F = 1.5625$가 임계값 사이에 있으므로($0.3496 < 1.5625 < 2.6469$) 귀
 
 <div class="codebox" markdown>
 
-**예제 2.** 두 분산의 F 검정
+##### 예제 2. 두 분산의 F 검정 { .eg }
 
 ```python
 import numpy as np

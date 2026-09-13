@@ -41,7 +41,7 @@ $y$의 $x_j$에 대한 **부분의존**은 함수 $f_j(x_j)$이며, 다른 설�
 
 <div class="codebox" markdown>
 
-**예제 1.** 주택 자료 읽기
+### 예제 1. 주택 자료 읽기 { .eg }
 
 ```python
 import pandas as pd
@@ -68,7 +68,7 @@ print(f"98105 지역 {len(house_98105)}건")
 
 <div class="codebox" markdown>
 
-**예제 2.** 선형 모형과 다항 모형
+#### 예제 2. 선형 모형과 다항 모형 { .eg }
 
 ```python
 import numpy as np
@@ -98,7 +98,7 @@ result_poly = smf.ols(formula=formula_poly, data=house_98105).fit()
 
 <div class="codebox" markdown>
 
-**예제 3.** statsmodels로 GAM 적합
+#### 예제 3. statsmodels로 GAM 적합 { .eg }
 
 ```python
 from statsmodels.gam.api import GLMGam, BSplines
@@ -126,7 +126,7 @@ res_sm = gam_sm.fit()
 
 <div class="codebox" markdown>
 
-**예제 4.** pygam으로 GAM 적합
+#### 예제 4. pygam으로 GAM 적합 { .eg }
 
 ```python
 from pygam import LinearGAM, s, l

@@ -65,7 +65,7 @@ $$U = \min(U_1, U_2)$$
 
 <div class="codebox" markdown>
 
-**예제 1.** Mann-Whitney U 검정
+#### 예제 1. Mann-Whitney U 검정 { .eg }
 
 ```python
 import numpy as np
@@ -196,7 +196,7 @@ $$\chi^2 = \sum \frac{(O - E)^2}{E}$$
 
 <div class="codebox" markdown>
 
-**예제 2.** Mood의 중앙값 검정
+#### 예제 2. Mood의 중앙값 검정 { .eg }
 
 ```python
 import numpy as np
@@ -303,7 +303,7 @@ $H_0$ 아래에서 $H$는 근사적으로 자유도 $k - 1$인 $\chi^2$ 분포�
 
 <div class="codebox" markdown>
 
-**예제 3.** Kruskal-Wallis 검정
+#### 예제 3. Kruskal-Wallis 검정 { .eg }
 
 ```python
 from scipy.stats import kruskal

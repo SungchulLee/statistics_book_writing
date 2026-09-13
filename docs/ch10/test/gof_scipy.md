@@ -21,7 +21,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** scipy로 적합도 검정
+### 예제 1. scipy로 적합도 검정 { .eg }
 
 ```python
 from scipy import stats
@@ -72,7 +72,7 @@ p_value = 0.07243975703425146
 
 <div class="codebox" markdown>
 
-**예제 2.** 기대도수를 생략하는 경우
+### 예제 2. 기대도수를 생략하는 경우 { .eg }
 
 ```python
 statistic, p = stats.chisquare(f_obs=[4, 13, 7])
@@ -95,7 +95,7 @@ SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$
 
 <div class="codebox" markdown>
 
-**예제 3.** 기대 비율이 균등하지 않을 때
+### 예제 3. 기대 비율이 균등하지 않을 때 { .eg }
 
 ```python
 n = 300

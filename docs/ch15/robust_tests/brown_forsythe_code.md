@@ -46,7 +46,7 @@ SciPy에서는 함수 호출 한 번으로 끝난다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 중앙값 중심과 평균 중심
+### 예제 1. 중앙값 중심과 평균 중심 { .eg }
 
 ```python
 import numpy as np

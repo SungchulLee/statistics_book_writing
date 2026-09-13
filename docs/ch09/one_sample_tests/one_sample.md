@@ -58,15 +58,13 @@ p-값은 귀무가설에 반하는 증거의 척도를 준다:
 
 ### F. 예제
 
-#### 예제: 일표본 z 검정 — 양측
-
 $$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu\neq50$$
 
 주어진 값: $n = 500$, $\bar{x} = 48$, $s = 20.3$.
 
 <div class="codebox" markdown>
 
-**예제 1.** 일표본 z 검정 — 양측
+#### 예제 1. 일표본 z 검정 — 양측 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -145,15 +143,13 @@ $\bar x = 48$은 가설값 50에서 2만큼 떨어져 있을 뿐이지만 $n = 5
 
 </div>
 
-#### 예제: 일표본 z 검정 — 작음
-
 $$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu<50$$
 
 주어진 값: $n = 500$, $\bar{x} = 48$, $s = 20.3$.
 
 <div class="codebox" markdown>
 
-**예제 2.** 일표본 z 검정 — 작음
+#### 예제 2. 일표본 z 검정 — 작음 { .eg }
 
 ```python
 mu = 50
@@ -195,15 +191,13 @@ We choose H1, or using statistician's jargon, reject H0
 
 </div>
 
-#### 예제: 일표본 z 검정 — 큼
-
 $$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu>50$$
 
 주어진 값: $n = 500$, $\bar{x} = 52$, $s = 20.3$.
 
 <div class="codebox" markdown>
 
-**예제 3.** 일표본 z 검정 — 큼
+#### 예제 3. 일표본 z 검정 — 큼 { .eg }
 
 ```python
 mu = 50
@@ -282,13 +276,11 @@ $$ t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}} $$
 
 ### F. 예제
 
-#### 예제: 교사 경력에 대한 t 통계량
-
 Rory는 자기 학군의 교사들이 평균적으로 경력 5년 미만이라고 의심한다. $H_0: \mu = 5$ 대 $H_1: \mu < 5$를 검정한다. 교사 25명을 표본으로 모아 $\bar{x} = 4$년, $s = 2$년을 얻었다.
 
 <div class="codebox" markdown>
 
-**예제 4.** 교사 경력에 대한 t 통계량
+#### 예제 4. 교사 경력에 대한 t 통계량 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -358,13 +350,11 @@ $p = 0.0098$로 1% 수준에서도 기각된다. Rory의 의심을 자료가 강
 
 </div>
 
-#### 예제: Miriam의 검정에서 p-값
-
 Miriam은 $H_0: \mu = 18$ 대 $H_1: \mu < 18$을 검정했다. 관측값 $n = 7$개를 써서 $t = -1.9$를 얻었다.
 
 <div class="codebox" markdown>
 
-**예제 5.** Miriam의 검정에서 p-값
+#### 예제 5. Miriam의 검정에서 p-값 { .eg }
 
 ```python
 n = 7
@@ -394,13 +384,11 @@ $p = 0.0531$로 0.05를 아슬아슬하게 넘어 기각하지 못한다. 같은
 
 </div>
 
-#### 예제: Caterina의 검정에서 p-값
-
 Caterina는 $H_0: \mu = 0$ 대 $H_1: \mu \neq 0$을 검정했다. 관측값 $n = 6$개를 써서 $t = 2.75$를 얻었다.
 
 <div class="codebox" markdown>
 
-**예제 6.** Caterina의 검정에서 p-값
+#### 예제 6. Caterina의 검정에서 p-값 { .eg }
 
 ```python
 n = 6
@@ -433,13 +421,11 @@ p_value = 0.0403
 
 Jude는 음료 $n = 20$개로 $H_0: \mu = 530$ 대 $H_1: \mu \neq 530$을 검정했다. $\bar{x} = 528$ mL, $s = 4$ mL를 얻어 $t = -2.236$, $p \approx 0.038$이 되었다. $\alpha = 0.05$에서 p-값이 유의수준보다 작으므로 $H_0$을 기각하고 $H_1$을 택한다.
 
-#### 예제: 일표본 t 검정 — 간단한 예
-
 $$H_0 : \mu = 70 \quad\text{vs}\quad H_1: \mu > 70$$
 
 <div class="codebox" markdown>
 
-**예제 7.** 일표본 t 검정 — 간단한 예
+#### 예제 7. 일표본 t 검정 — 간단한 예 { .eg }
 
 ```python
 samples = np.array([78, 83, 68, 72, 88])
@@ -488,13 +474,11 @@ $\bar x = 77.8$로 가설값 70보다 한참 크지만 $n = 5$에 $s = 8.07$이�
 
 </div>
 
-#### 예제: 우유
-
 어떤 공장의 우유 용기에 128온스라고 표시되어 있다. 용기 12개의 표본에서 $\bar{x} = 127.2$ oz, $s = 2.1$ oz를 얻었다. $H_0: \mu = 128$ 대 $H_1: \mu < 128$을 검정하라.
 
 <div class="codebox" markdown>
 
-**예제 8.** 우유 표시량 검정
+#### 예제 8. 우유 표시량 검정 { .eg }
 
 ```python
 # 표시량 128 에 못 미치는지를 묻는 단측검정이다. 그래서 아래에서 cdf 를 쓴다.
@@ -585,13 +569,11 @@ California 가구의 약 90%가 인터넷을 이용한다. 시장조사자들이
 
 $$H_0: p = 0.90 \quad \text{vs} \quad H_1: p > 0.90$$
 
-#### 예제: 실업률 — 검정통계량
-
 시장이 주민 200명의 표본에서 22명이 실업 상태인 것을 보고 $H_0: p = 0.08$ 대 $H_1: p \neq 0.08$을 검정한다.
 
 <div class="codebox" markdown>
 
-**예제 9.** 실업률 — 검정통계량
+#### 예제 9. 실업률 — 검정통계량 { .eg }
 
 ```python
 p_hat = 22 / 200
@@ -618,13 +600,11 @@ P-value : 0.1179
 
 </div>
 
-#### 예제: 여러 언어를 쓰는 사람
-
 Fay는 $H_0: p = 0.26$ 대 $H_1: p > 0.26$을 검정한다. 120명 중 40명이 두 가지 이상의 언어를 쓸 수 있었다.
 
 <div class="codebox" markdown>
 
-**예제 10.** 여러 언어를 쓰는 사람
+#### 예제 10. 여러 언어를 쓰는 사람 { .eg }
 
 ```python
 # 비율의 검정에서 표준오차는 관측된 p_hat 이 아니라 귀무가설의 p 로 만든다.
@@ -651,13 +631,11 @@ $p = 0.0335 < 0.05$로 기각된다. 같은 통계량을 양측으로 계산했�
 
 </div>
 
-#### 예제: 공립학교 재정을 위한 증세
-
 연구자들이 200명 중 113명이 지지하는 자료로 $H_0: p = 0.50$ 대 $H_1: p > 0.50$을 검정한다.
 
 <div class="codebox" markdown>
 
-**예제 11.** 공립학교 재정을 위한 증세
+#### 예제 11. 공립학교 재정을 위한 증세 { .eg }
 
 ```python
 k = 113
@@ -690,13 +668,11 @@ Approximate P-value: 0.0330
 
 </div>
 
-#### 예제: 무료 비디오 대여권
-
 학생들이 $H_0: p = 0.20$ 대 $H_1: p < 0.20$을 검정한다. 상자 65개에서 대여권 11장을 찾았다.
 
 <div class="codebox" markdown>
 
-**예제 12.** 무료 비디오 대여권
+#### 예제 12. 무료 비디오 대여권 { .eg }
 
 ```python
 # n*p_0 = 13 으로 작은 편이라 정규근사가 미덥지 않다.
@@ -758,7 +734,7 @@ $$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
 <div class="codebox" markdown>
 
-**예제 13.** Wilcoxon 부호순위 검정
+#### 예제 13. Wilcoxon 부호순위 검정 { .eg }
 
 ```python
 import numpy as np
@@ -800,7 +776,7 @@ Fail to reject the null hypothesis: No significant difference.
 
 <div class="codebox" markdown>
 
-**예제 14.** 부호검정
+#### 예제 14. 부호검정 { .eg }
 
 ```python
 from scipy.stats import binom
@@ -842,7 +818,7 @@ P-value: 1.0, n+: 7, n-: 6, Ties: 2
 
 <div class="codebox" markdown>
 
-**예제 15.** 붓스트랩 검정
+#### 예제 15. 붓스트랩 검정 { .eg }
 
 ```python
 import numpy as np
@@ -884,7 +860,7 @@ print(f"95% CI for the Mean: ({lower:.2f}, {upper:.2f})")
 
 <div class="codebox" markdown>
 
-**예제 16.** 순열검정
+#### 예제 16. 순열검정 { .eg }
 
 ```python
 import numpy as np
@@ -942,7 +918,7 @@ Mood 중앙값 검정은 둘 이상 집단의 중앙값을 비교하는 비모�
 
 <div class="codebox" markdown>
 
-**예제 17.** Mood 중앙값 검정
+#### 예제 17. Mood 중앙값 검정 { .eg }
 
 ```python
 import numpy as np

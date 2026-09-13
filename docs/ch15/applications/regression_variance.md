@@ -121,7 +121,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 이분산 진단과 로버스트 표준오차
+### 예제 1. 이분산 진단과 로버스트 표준오차 { .eg }
 
 ```python
 import numpy as np

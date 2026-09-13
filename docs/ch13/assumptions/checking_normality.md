@@ -28,7 +28,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -78,7 +78,7 @@ R^2 = 0.7813
 
 <div class="codebox" markdown>
 
-**예제 2.** 잔차의 히스토그램
+### 예제 2. 잔차의 히스토그램 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -136,7 +136,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** Q-Q 그림
+### 예제 3. Q-Q 그림 { .eg }
 
 ```python
 import scipy.stats as stats
@@ -200,7 +200,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** Shapiro-Wilk 검정
+### 예제 4. Shapiro-Wilk 검정 { .eg }
 
 ```python
 from scipy.stats import shapiro
@@ -262,7 +262,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** Anderson-Darling 검정
+### 예제 5. Anderson-Darling 검정 { .eg }
 
 ```python
 from scipy.stats import anderson
@@ -330,7 +330,7 @@ $H_0$(정규성) 아래에서 $JB \sim \chi^2(2)$이다.
 
 <div class="codebox" markdown>
 
-**예제 6.** Jarque-Bera 검정
+### 예제 6. Jarque-Bera 검정 { .eg }
 
 ```python
 from statsmodels.stats.stattools import jarque_bera

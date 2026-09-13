@@ -65,7 +65,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 런 검정 구현
+#### 예제 1. 런 검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -254,7 +254,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 부호검정 구현
+#### 예제 3. 부호검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -302,7 +302,7 @@ def sign_test(paired_data, test_type="two-sided"):
 
 <div class="codebox" markdown>
 
-**예제 4.** 부호검정 실행
+#### 예제 4. 부호검정 실행 { .eg }
 
 ```python
 # 처리 전후 점수 15쌍. 아래 부호검정과 부호순위검정을 같은 자료에 돌려
@@ -396,7 +396,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 부호순위검정과 견주기
+#### 예제 5. 부호순위검정과 견주기 { .eg }
 
 ```python
 import numpy as np

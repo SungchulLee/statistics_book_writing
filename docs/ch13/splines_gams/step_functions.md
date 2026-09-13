@@ -34,7 +34,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 주택 자료 읽기
+### 예제 1. 주택 자료 읽기 { .eg }
 
 ```python
 import pandas as pd
@@ -71,7 +71,7 @@ max      11644855.0        10740.0   2015.0
 
 <div class="codebox" markdown>
 
-**예제 2.** 계단함수 회귀
+#### 예제 2. 계단함수 회귀 { .eg }
 
 ```python
 import numpy as np
@@ -126,7 +126,7 @@ R^2 = 0.0283
 
 <div class="codebox" markdown>
 
-**예제 3.** 구간 수를 바꿔 가며
+#### 예제 3. 구간 수를 바꿔 가며 { .eg }
 
 ```python
 # 구간을 몇 개로 나눌지가 이 방법의 유일한 조절값이다. 늘리면 R^2 는
@@ -167,7 +167,7 @@ print(pd.DataFrame(results).round(4).to_string(index=False))
 
 <div class="codebox" markdown>
 
-**예제 4.** 직선·다항식과 견주기
+#### 예제 4. 직선·다항식과 견주기 { .eg }
 
 ```python
 # 견줄 기준선 둘. 직선과 3차 다항식이다.

@@ -153,7 +153,7 @@ $H_0\!: \phi = 0$을 검정하는 것은 $2 \times 2$ 표의 카이제곱 독립
 
 <div class="codebox" markdown>
 
-**예제 1.** 점이연상관과 파이계수
+### 예제 1. 점이연상관과 파이계수 { .eg }
 
 ```python
 import numpy as np

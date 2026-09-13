@@ -23,7 +23,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산비 검정 계산기
+### 예제 1. 분산비 검정 계산기 { .eg }
 
 ```python
 from scipy.stats import f

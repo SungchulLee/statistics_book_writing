@@ -97,7 +97,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 아이스크림과 익사 사고 — 부분상관
+### 예제 1. 아이스크림과 익사 사고 — 부분상관 { .eg }
 
 ```python
 import numpy as np

@@ -53,7 +53,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** McNemar 검정 직접 구현
+#### 예제 1. McNemar 검정 직접 구현 { .eg }
 
 ```python
 import numpy as np
@@ -95,7 +95,7 @@ def mcnemar_test(table):
 
 <div class="codebox" markdown>
 
-**예제 2.** 치료 전후 자료로 검정하기
+#### 예제 2. 치료 전후 자료로 검정하기 { .eg }
 
 ```python
 # 치료 전후의 질병 상태. 같은 사람을 두 번 관찰한 대응자료다.

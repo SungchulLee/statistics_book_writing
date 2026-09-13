@@ -47,7 +47,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 일표본 z 신뢰구간 계산
+#### 예제 1. 일표본 z 신뢰구간 계산 { .eg }
 
 ```python
 import scipy.stats as stats
@@ -116,7 +116,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 일표본 t 신뢰구간 계산
+#### 예제 2. 일표본 t 신뢰구간 계산 { .eg }
 
 ```python
 import scipy.stats as stats

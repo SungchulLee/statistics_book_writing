@@ -46,7 +46,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 런 검정 구현
+### 예제 1. 런 검정 구현 { .eg }
 
 ```python
 import numpy as np

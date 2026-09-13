@@ -26,7 +26,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 평균의 신뢰구간 — z와 t
+#### 예제 1. 평균의 신뢰구간 — z와 t { .eg }
 
 ```python
 import numpy as np
@@ -93,7 +93,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 비율의 신뢰구간
+### 예제 2. 비율의 신뢰구간 { .eg }
 
 ```python
 x, n = 84, 200
@@ -145,7 +145,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 분산의 신뢰구간
+### 예제 3. 분산의 신뢰구간 { .eg }
 
 ```python
 data = np.array([120, 125, 118, 130, 122, 128, 115, 135, 121, 126])   # 앞의 20개 중 10개
@@ -203,7 +203,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 두 평균 차이의 신뢰구간
+#### 예제 4. 두 평균 차이의 신뢰구간 { .eg }
 
 ```python
 group_a = np.array([12, 15, 11, 14, 13, 16, 10, 15, 12, 14])
@@ -244,7 +244,7 @@ Welch CI: (-6.71, -3.09)
 
 <div class="codebox" markdown>
 
-**예제 5.** 포함확률 모의실험
+### 예제 5. 포함확률 모의실험 { .eg }
 
 ```python
 np.random.seed(42)
@@ -312,7 +312,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 6.** 필요한 표본크기 구하기
+### 예제 6. 필요한 표본크기 구하기 { .eg }
 
 ```python
 sigma_est = 15

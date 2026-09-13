@@ -14,7 +14,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 일표본 t-검정
+### 예제 1. 일표본 t-검정 { .eg }
 
 ```python
 import numpy as np
@@ -47,7 +47,7 @@ Decision: Reject H0
 
 <div class="codebox" markdown>
 
-**예제 2.** 단측 p-값 구하기
+### 예제 2. 단측 p-값 구하기 { .eg }
 
 ```python
 # 통계량이 대립가설 쪽(여기서는 음수)이면 양측 p-값을 반으로 나눈다.
@@ -69,7 +69,7 @@ one-sided p (H1: mu < 500) = 0.0213
 
 <div class="codebox" markdown>
 
-**예제 3.** 검정통계량 직접 계산
+#### 예제 3. 검정통계량 직접 계산 { .eg }
 
 ```python
 n = len(data)
@@ -102,7 +102,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 비율에 대한 일표본 검정
+### 예제 4. 비율에 대한 일표본 검정 { .eg }
 
 ```python
 from statsmodels.stats.proportion import proportions_ztest
@@ -147,7 +147,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 이표본 t-검정
+### 예제 5. 이표본 t-검정 { .eg }
 
 ```python
 drug_a = np.array([5.2, 4.8, 6.1, 5.5, 4.9, 5.7, 5.3, 6.0, 5.1, 5.4])
@@ -182,7 +182,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 6.** 대응 t-검정
+### 예제 6. 대응 t-검정 { .eg }
 
 ```python
 before = np.array([145, 150, 138, 155, 142, 148, 136, 152, 140, 146])
@@ -225,7 +225,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 7.** 검정력 분석
+### 예제 7. 검정력 분석 { .eg }
 
 ```python
 from statsmodels.stats.power import TTestPower, TTestIndPower
@@ -263,7 +263,7 @@ two-sample n per group = 63.8
 
 <div class="codebox" markdown>
 
-**예제 8.** 신뢰구간과 검정의 쌍대성
+### 예제 8. 신뢰구간과 검정의 쌍대성 { .eg }
 
 ```python
 data = np.array([52, 48, 55, 50, 47, 53, 49, 51, 54, 46])

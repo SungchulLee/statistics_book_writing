@@ -8,7 +8,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 기본 원그래프
+### 예제 1. 기본 원그래프 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -48,7 +48,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 원그래프와 막대그림 견주기
+### 예제 2. 원그래프와 막대그림 견주기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -114,7 +114,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 도넛 그래프
+#### 예제 3. 도넛 그래프 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

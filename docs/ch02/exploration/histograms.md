@@ -16,7 +16,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 밀도를 겹쳐 그린 히스토그램
+### 예제 1. 밀도를 겹쳐 그린 히스토그램 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -73,7 +73,7 @@ print(f"표본표준편차 {x_std:.3f}  (참값 10)")
 
 <div class="codebox" markdown>
 
-**예제 2.** 소득 분포에 정규곡선 겹쳐 보기
+### 예제 2. 소득 분포에 정규곡선 겹쳐 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -140,7 +140,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 3.** 주택 자료 아홉 변수를 한꺼번에
+### 예제 3. 주택 자료 아홉 변수를 한꺼번에 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -195,7 +195,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 4.** 타이타닉 자료의 히스토그램
+### 예제 4. 타이타닉 자료의 히스토그램 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -262,7 +262,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 폭이 다른 계급의 밀도 히스토그램
+### 예제 5. 폭이 다른 계급의 밀도 히스토그램 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

@@ -53,7 +53,7 @@ K-S 검정은 분포의 중심위치와 모양의 차이를 탐지하는 데 효
 
 <div class="codebox" markdown>
 
-**예제 1.** KS 검정의 함정
+#### 예제 1. KS 검정의 함정 { .eg }
 
 ```python
 import numpy as np
@@ -122,7 +122,7 @@ SciPy의 `stats.kstest` 함수는 **Kolmogorov-Smirnov(K-S) 검정**을 수행�
 
 <div class="codebox" markdown>
 
-**예제 2.** KS와 Lilliefors 견주기
+#### 예제 2. KS와 Lilliefors 견주기 { .eg }
 
 ```python
 import numpy as np

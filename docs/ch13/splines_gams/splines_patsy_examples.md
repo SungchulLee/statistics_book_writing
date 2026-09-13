@@ -40,7 +40,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 주택 자료 읽기
+### 예제 1. 주택 자료 읽기 { .eg }
 
 ```python
 import pandas as pd
@@ -77,7 +77,7 @@ max      11644855.0        10740.0   2015.0
 
 <div class="codebox" markdown>
 
-**예제 2.** B-스플라인 기저 만들기
+#### 예제 2. B-스플라인 기저 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -105,7 +105,7 @@ bs_r2 = r2_score(df['price'], bs_model.predict(bs_design))
 
 <div class="codebox" markdown>
 
-**예제 3.** 매듭 자리를 직접 정하기
+#### 예제 3. 매듭 자리를 직접 정하기 { .eg }
 
 ```python
 # 매듭 자리를 직접 정할 수도 있다. 관계가 꺾인다고 볼 만한 근거가 있으면
@@ -124,7 +124,7 @@ bs_custom_model = LinearRegression().fit(bs_custom_design, df['price'])
 
 <div class="codebox" markdown>
 
-**예제 4.** 자연 3차 스플라인
+#### 예제 4. 자연 3차 스플라인 { .eg }
 
 ```python
 # 자연 3차 스플라인. 양 끝에서 직선이 되도록 묶어 두어, 자료가 드문
@@ -141,7 +141,7 @@ cs_r2 = r2_score(df['price'], cs_model.predict(cs_design))
 
 <div class="codebox" markdown>
 
-**예제 5.** 예측할 때 기저 재사용하기
+#### 예제 5. 예측할 때 기저 재사용하기 { .eg }
 
 ```python
 age_grid = np.linspace(df['age'].min(), df['age'].max(), 300)

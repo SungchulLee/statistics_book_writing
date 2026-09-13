@@ -86,7 +86,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 표본공간을 나열해 사건의 확률 세기
+### 예제 1. 표본공간을 나열해 사건의 확률 세기 { .eg }
 
 ```python
 from itertools import product

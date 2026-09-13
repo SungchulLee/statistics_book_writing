@@ -20,7 +20,7 @@ Netflix 주식은 정규가 아닌 금융 수익률의 훌륭한 사례이다. �
 
 <div class="codebox" markdown>
 
-**예제 1.** 넷플릭스 수익률의 Q-Q 그림
+### 예제 1. 넷플릭스 수익률의 Q-Q 그림 { .eg }
 
 ```python
 import numpy as np
@@ -66,7 +66,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 히스토그램과 Q-Q 그림 견주기
+#### 예제 2. 히스토그램과 Q-Q 그림 견주기 { .eg }
 
 ```python
 import numpy as np
@@ -130,7 +130,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 수익률 진단 네 단계
+### 예제 3. 수익률 진단 네 단계 { .eg }
 
 ```python
 import numpy as np
@@ -208,7 +208,7 @@ Anderson-Darling statistic: 3.6529
 
 <div class="codebox" markdown>
 
-**예제 4.** 대안 분포 적합하기
+#### 예제 4. 대안 분포 적합하기 { .eg }
 
 ```python
 from scipy.stats import t as student_t

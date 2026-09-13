@@ -79,7 +79,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규분포가 꼬리를 얼마나 과소평가하는가
+### 예제 1. 정규분포가 꼬리를 얼마나 과소평가하는가 { .eg }
 
 ```python
 import numpy as np

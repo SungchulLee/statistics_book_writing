@@ -38,7 +38,7 @@ $\alpha$를 키우면(예: 0.01에서 0.05로) $H_0$을 기각하기 쉬워져 �
 
 <div class="codebox" markdown>
 
-**예제 1.** 필요한 표본크기 구하기
+#### 예제 1. 필요한 표본크기 구하기 { .eg }
 
 ```python
 from scipy import stats
@@ -83,7 +83,7 @@ $H_0$과 $H_a$ 아래의 분포를 함께 그리면 검정력을 이해할 수 �
 
 <div class="codebox" markdown>
 
-**예제 2.** 검정력을 그림으로 보기
+### 예제 2. 검정력을 그림으로 보기 { .eg }
 
 ```python
 import numpy as np
@@ -154,7 +154,7 @@ Statsmodels는 여러 검정 유형에 대한 검정력 분석 함수를 폭넓�
 
 <div class="codebox" markdown>
 
-**예제 3.** 일표본 t-검정의 검정력
+#### 예제 3. 일표본 t-검정의 검정력 { .eg }
 
 ```python
 from statsmodels.stats.power import TTestPower
@@ -196,7 +196,7 @@ One-sample t-test:
 
 <div class="codebox" markdown>
 
-**예제 4.** 이표본 t-검정의 검정력
+#### 예제 4. 이표본 t-검정의 검정력 { .eg }
 
 ```python
 from statsmodels.stats.power import TTestIndPower
@@ -254,7 +254,7 @@ Two-sample t-test (2:1 ratio):
 
 <div class="codebox" markdown>
 
-**예제 5.** 비율 검정의 검정력 — A/B 검정
+#### 예제 5. 비율 검정의 검정력 — A/B 검정 { .eg }
 
 ```python
 import numpy as np
@@ -304,7 +304,7 @@ A/B Test (Proportions):
 
 <div class="codebox" markdown>
 
-**예제 6.** 일원분산분석의 검정력
+#### 예제 6. 일원분산분석의 검정력 { .eg }
 
 ```python
 from statsmodels.stats.power import FTestAnovaPower
@@ -342,7 +342,7 @@ One-way ANOVA (4 groups):
 
 <div class="codebox" markdown>
 
-**예제 7.** 표본크기와 검정력의 곡선
+#### 예제 7. 표본크기와 검정력의 곡선 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -387,7 +387,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 8.** 연구 설계 작업 흐름
+#### 예제 8. 연구 설계 작업 흐름 { .eg }
 
 ```python
 def design_study(test_type, effect_size, alpha=0.05, power=0.80,

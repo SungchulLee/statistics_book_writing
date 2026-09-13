@@ -29,7 +29,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 적합도 검정 손계산
+### 예제 1. 적합도 검정 손계산 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -80,7 +80,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 검정 결과를 그림으로
+#### 예제 2. 검정 결과를 그림으로 { .eg }
 
 ```python
 fig, ax = plt.subplots(figsize=(12, 4))

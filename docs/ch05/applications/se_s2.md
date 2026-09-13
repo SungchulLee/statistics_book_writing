@@ -58,7 +58,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 표본분산의 표준오차 모의실험
+### 예제 1. 표본분산의 표준오차 모의실험 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

@@ -51,7 +51,7 @@ $n > e^2 \approx 7.4$이면 BIC가 AIC보다 모형 복잡도에 더 무거운 �
 
 <div class="codebox" markdown>
 
-**예제 1.** VIF로 다중공선성 보기
+#### 예제 1. VIF로 다중공선성 보기 { .eg }
 
 ```python
 import numpy as np
@@ -101,7 +101,7 @@ print(vif_data)
 
 <div class="codebox" markdown>
 
-**예제 2.** 잔차 진단 그림
+#### 예제 2. 잔차 진단 그림 { .eg }
 
 ```python
 y_pred = model.predict(X)
@@ -135,7 +135,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** AIC·BIC로 모형 고르기
+#### 예제 3. AIC·BIC로 모형 고르기 { .eg }
 
 ```python
 # 변수를 늘려 가며 네 모형을 견준다. R^2 는 변수를 더하면 반드시 오르므로

@@ -30,7 +30,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 기울기의 신뢰구간
+### 예제 1. 기울기의 신뢰구간 { .eg }
 
 ```python
 from scipy import stats

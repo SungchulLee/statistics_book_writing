@@ -18,7 +18,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 관계의 모양에 따른 세 측도
+### 예제 1. 관계의 모양에 따른 세 측도 { .eg }
 
 ```python
 import numpy as np
@@ -89,7 +89,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** Fisher z 신뢰구간
+### 예제 2. Fisher z 신뢰구간 { .eg }
 
 ```python
 def fisher_z_ci(x, y, alpha=0.05):
@@ -139,7 +139,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 심슨의 역설
+### 예제 3. 심슨의 역설 { .eg }
 
 ```python
 np.random.seed(42)
@@ -194,7 +194,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 부분상관
+### 예제 4. 부분상관 { .eg }
 
 ```python
 n = 200
@@ -238,7 +238,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 다중검정이 만드는 허위상관
+### 예제 5. 다중검정이 만드는 허위상관 { .eg }
 
 ```python
 def spurious_correlations_demo(n_vars=100, n_obs=30):
@@ -290,7 +290,7 @@ $H_0$ 아래에서 $z$는 근사적으로 표준정규분포를 따른다.
 
 <div class="codebox" markdown>
 
-**예제 6.** 두 상관의 비교
+### 예제 6. 두 상관의 비교 { .eg }
 
 ```python
 def compare_two_correlations(r1, n1, r2, n2, alpha=0.05):

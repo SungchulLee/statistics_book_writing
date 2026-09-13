@@ -12,7 +12,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 설정 모듈
+#### 예제 1. 설정 모듈 { .eg }
 
 ```python
 import argparse
@@ -36,7 +36,7 @@ ARGS.size = 1000
 
 <div class="codebox" markdown>
 
-**예제 2.** 자료 적재 모듈
+#### 예제 2. 자료 적재 모듈 { .eg }
 
 ```python
 import numpy as np
@@ -83,7 +83,7 @@ Pearson의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설
 
 <div class="codebox" markdown>
 
-**예제 3.** Pearson 상관 검정
+### 예제 3. Pearson 상관 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -126,7 +126,7 @@ Spearman의 $\rho_s$는 두 변수 사이의 **단조** 관계를 잰다. 원자
 
 <div class="codebox" markdown>
 
-**예제 4.** Spearman 순위상관 검정
+### 예제 4. Spearman 순위상관 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -174,7 +174,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** Kendall의 타우 검정
+### 예제 5. Kendall의 타우 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

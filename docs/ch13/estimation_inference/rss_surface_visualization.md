@@ -30,7 +30,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 자료와 최소제곱해
+#### 예제 1. 자료와 최소제곱해 { .eg }
 
 ```python
 import numpy as np
@@ -63,7 +63,7 @@ $X$를 중심화만 했으므로($\bar{x} = 0$) 절편은 `Sales`의 평균과 �
 
 <div class="codebox" markdown>
 
-**예제 2.** RSS 격자 계산
+#### 예제 2. RSS 격자 계산 { .eg }
 
 ```python
 # 최적해 둘레로 격자를 깔고 칸마다 잔차제곱합을 계산한다.
@@ -85,7 +85,7 @@ for i in range(B0_mesh.shape[0]):
 
 <div class="codebox" markdown>
 
-**예제 3.** 등고선과 곡면으로 보기
+#### 예제 3. 등고선과 곡면으로 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

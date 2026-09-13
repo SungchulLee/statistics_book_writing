@@ -62,7 +62,7 @@ $$ w_{ij} = \frac{n_{ij}}{s_{ij}^2} $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 이원배치 Welch 검정
+### 예제 1. 이원배치 Welch 검정 { .eg }
 
 ```python
 import pingouin as pg
@@ -110,7 +110,7 @@ print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
 
 <div class="codebox" markdown>
 
-**예제 2.** Games-Howell 사후검정
+#### 예제 2. Games-Howell 사후검정 { .eg }
 
 ```python
 # Temperature에 대한 Games-Howell 사후검정

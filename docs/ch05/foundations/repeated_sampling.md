@@ -60,7 +60,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 균등 모집단에서 반복추출
+### 예제 1. 균등 모집단에서 반복추출 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 2.** 지수 모집단에서 반복추출
+### 예제 2. 지수 모집단에서 반복추출 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -203,7 +203,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 3.** 베르누이 모집단에서 반복추출
+### 예제 3. 베르누이 모집단에서 반복추출 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

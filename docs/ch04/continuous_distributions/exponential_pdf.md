@@ -25,7 +25,7 @@ SciPy는 **척도** 모수화를 사용한다: `stats.expon(scale=1/lambda)`.
 
 <div class="codebox" markdown>
 
-**예제 1.** 비율모수에 따른 지수 밀도함수
+### 예제 1. 비율모수에 따른 지수 밀도함수 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

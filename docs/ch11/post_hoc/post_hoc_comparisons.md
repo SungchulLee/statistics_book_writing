@@ -26,7 +26,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Tukey HSD로 세 집단 견주기
+### 예제 1. Tukey HSD로 세 집단 견주기 { .eg }
 
 ```python
 import numpy as np

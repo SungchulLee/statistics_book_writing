@@ -21,7 +21,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 대응표본 평균 검정 계산기
+### 예제 1. 대응표본 평균 검정 계산기 { .eg }
 
 ```python
 import math

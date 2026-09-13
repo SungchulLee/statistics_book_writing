@@ -45,7 +45,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산추정량 셋의 MSE 비교
+### 예제 1. 분산추정량 셋의 MSE 비교 { .eg }
 
 ```python
 import numpy as np
@@ -115,7 +115,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 축소추정량의 MSE
+### 예제 2. 축소추정량의 MSE { .eg }
 
 ```python
 import numpy as np
@@ -174,7 +174,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 정규분포 모수의 최대가능도추정
+### 예제 3. 정규분포 모수의 최대가능도추정 { .eg }
 
 ```python
 import numpy as np
@@ -228,7 +228,7 @@ MLE는 닫힌 형태가 없어 수치 최적화가 필요하다.
 
 <div class="codebox" markdown>
 
-**예제 4.** 감마분포에서 MLE와 적률법 비교
+### 예제 4. 감마분포에서 MLE와 적률법 비교 { .eg }
 
 ```python
 import numpy as np
@@ -290,7 +290,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 크라메르-라오 하한 확인
+### 예제 5. 크라메르-라오 하한 확인 { .eg }
 
 ```python
 import numpy as np

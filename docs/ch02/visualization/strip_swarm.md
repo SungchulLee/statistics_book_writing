@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 스트립·스웜·상자그림 견주기
+### 예제 1. 스트립·스웜·상자그림 견주기 { .eg }
 
 ```python
 import numpy as np

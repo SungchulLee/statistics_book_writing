@@ -8,7 +8,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규분포와의 Q-Q 그림
+### 예제 1. 정규분포와의 Q-Q 그림 { .eg }
 
 ```python
 import numpy as np
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 2.** 지수분포와의 Q-Q 그림
+### 예제 2. 지수분포와의 Q-Q 그림 { .eg }
 
 ```python
 import numpy as np
@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 3.** 카이제곱분포와의 Q-Q 그림
+### 예제 3. 카이제곱분포와의 Q-Q 그림 { .eg }
 
 ```python
 import numpy as np

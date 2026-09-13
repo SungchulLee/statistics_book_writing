@@ -34,7 +34,7 @@ $W$가 작으면(동등하게 $p$값이 작으면) $H_0$을 기각한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 검정과 요약통계를 함께 읽기
+### 예제 1. 검정과 요약통계를 함께 읽기 { .eg }
 
 ```python
 import numpy as np

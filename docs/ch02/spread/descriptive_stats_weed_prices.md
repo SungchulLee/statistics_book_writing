@@ -14,7 +14,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 캘리포니아와 뉴욕의 가격 자료
+### 예제 1. 캘리포니아와 뉴욕의 가격 자료 { .eg }
 
 ```python
 import numpy as np
@@ -60,7 +60,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 평균 직접 구현하기
+### 예제 2. 평균 직접 구현하기 { .eg }
 
 ```python
 def mean_from_scratch(data):
@@ -99,7 +99,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 중앙값 직접 구현하기
+### 예제 3. 중앙값 직접 구현하기 { .eg }
 
 ```python
 def median_from_scratch(data):
@@ -133,7 +133,7 @@ pandas   : 242.0150
 
 <div class="codebox" markdown>
 
-**예제 4.** 최빈값 직접 구현하기
+### 예제 4. 최빈값 직접 구현하기 { .eg }
 
 ```python
 def mode_from_scratch(data, decimals=1):
@@ -179,7 +179,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 분산과 표준편차 직접 구현하기
+### 예제 5. 분산과 표준편차 직접 구현하기 { .eg }
 
 ```python
 def variance_from_scratch(data):
@@ -234,7 +234,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 6.** 공분산과 상관 직접 구현하기
+### 예제 6. 공분산과 상관 직접 구현하기 { .eg }
 
 ```python
 def covariance_from_scratch(x, y):
@@ -279,7 +279,7 @@ Cov(CA, CA) = 13.7559  =  Var(CA) = 13.7559
 
 <div class="codebox" markdown>
 
-**예제 7.** 직접 구현과 numpy 결과 맞춰 보기
+### 예제 7. 직접 구현과 numpy 결과 맞춰 보기 { .eg }
 
 ```python
 data = CA_PRICES
@@ -339,7 +339,7 @@ std           3.708895      3.708895   -8.88e-16
 
 <div class="codebox" markdown>
 
-**예제 8.** 세 그림으로 요약하기
+### 예제 8. 세 그림으로 요약하기 { .eg }
 
 ```python
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))

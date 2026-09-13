@@ -12,7 +12,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 사례 1 — 자료와 모형
+#### 예제 1. 사례 1 — 자료와 모형 { .eg }
 
 ```python
 import pandas as pd
@@ -46,7 +46,7 @@ $F = 31.7$, $p = 1.7 \times 10^{-7}$로 두 종의 꽃받침 길이가 다르다
 
 <div class="codebox" markdown>
 
-**예제 2.** 사례 1 — 정규성 확인
+#### 예제 2. 사례 1 — 정규성 확인 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -78,7 +78,7 @@ $p = 0.23$으로 정규성에 반하는 증거가 없고, Q-Q 그림의 점들�
 
 <div class="codebox" markdown>
 
-**예제 3.** 사례 1 — 등분산성 확인
+#### 예제 3. 사례 1 — 등분산성 확인 { .eg }
 
 ```python
 from scipy.stats import levene
@@ -104,7 +104,7 @@ $p = 0.31$로 등분산도 기각되지 않는다. 두 가정이 모두 무난�
 
 <div class="codebox" markdown>
 
-**예제 4.** 사례 1 — 잔차 그림
+#### 예제 4. 사례 1 — 잔차 그림 { .eg }
 
 ```python
 # 일원배치에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
@@ -139,7 +139,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 5.** 사례 2 — 자료와 모형
+#### 예제 5. 사례 2 — 자료와 모형 { .eg }
 
 ```python
 import pandas as pd
@@ -175,7 +175,7 @@ $F = 0.77$, $p = 0.49$로 기각하지 못한다. 세 형태의 생산성 평균
 
 <div class="codebox" markdown>
 
-**예제 6.** 사례 2 — 가정 확인
+#### 예제 6. 사례 2 — 가정 확인 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -234,7 +234,7 @@ Levene's Test: p-value = 0.7631
 
 <div class="codebox" markdown>
 
-**예제 7.** 사례 3 — 자료와 모형
+#### 예제 7. 사례 3 — 자료와 모형 { .eg }
 
 ```python
 import pandas as pd
@@ -269,7 +269,7 @@ $F = 0.46$, $p = 0.72$로 네 매장의 만족도에 차이가 없다. 집단 �
 
 <div class="codebox" markdown>
 
-**예제 8.** 사례 3 — 가정 확인
+#### 예제 8. 사례 3 — 가정 확인 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -316,7 +316,7 @@ Levene's Test: p-value = 0.9343
 
 <div class="codebox" markdown>
 
-**예제 9.** 사례 3 — 사후분석
+#### 예제 9. 사례 3 — 사후분석 { .eg }
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd

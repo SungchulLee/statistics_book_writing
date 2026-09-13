@@ -24,7 +24,7 @@ $p$값은 대립가설에 따라 달라진다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 관측된 F를 그림에 얹기
+### 예제 1. 관측된 F를 그림에 얹기 { .eg }
 
 ```python
 import numpy as np
@@ -72,7 +72,7 @@ $p$값을 명시적으로 계산하려면
 
 <div class="codebox" markdown>
 
-**예제 2.** 양측 p-값 계산
+### 예제 2. 양측 p-값 계산 { .eg }
 
 ```python
 # 두 꼬리 중 작은 쪽을 두 배 해 양측 p-값을 만든다. F 분포가 대칭이

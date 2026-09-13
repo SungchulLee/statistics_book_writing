@@ -31,7 +31,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 독립성 검정 템플릿 함수
+#### 예제 1. 독립성 검정 템플릿 함수 { .eg }
 
 ```python
 import numpy as np
@@ -69,7 +69,7 @@ correction=True : 4.8869
 
 <div class="codebox" markdown>
 
-**예제 2.** 템플릿 사용 예
+#### 예제 2. 템플릿 사용 예 { .eg }
 
 ```python
 observed = np.array([[30, 20, 10],

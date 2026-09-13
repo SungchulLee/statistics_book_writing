@@ -49,7 +49,7 @@ $0.6745 = \Phi^{-1}(0.75)$는 표준정규분포의 75번째 백분위수다. �
 
 <div class="codebox" markdown>
 
-**예제 1.** 주 인구 자료에서 표준편차와 MAD
+### 예제 1. 주 인구 자료에서 표준편차와 MAD { .eg }
 
 ```python
 import pandas as pd
@@ -96,7 +96,7 @@ MAD (직접)   : 3,849,876
 
 <div class="codebox" markdown>
 
-**예제 2.** 이상치를 넣으면 어떻게 달라지는가
+### 예제 2. 이상치를 넣으면 어떻게 달라지는가 { .eg }
 
 ```python
 import pandas as pd
@@ -176,7 +176,7 @@ MAD는 다음과 같은 성질을 갖는 **강건한** 통계량이다.
 
 <div class="codebox" markdown>
 
-**예제 3.** 금융 수익률에서의 MAD
+### 예제 3. 금융 수익률에서의 MAD { .eg }
 
 ```python
 import pandas as pd
@@ -211,7 +211,7 @@ MAD (보정) : 0.0222
 
 <div class="codebox" markdown>
 
-**예제 4.** statsmodels 로 MAD 구하기
+#### 예제 4. statsmodels 로 MAD 구하기 { .eg }
 
 ```python
 from statsmodels import robust
@@ -235,7 +235,7 @@ MAD: 2.22
 
 <div class="codebox" markdown>
 
-**예제 5.** MAD 를 정의대로 직접 구하기
+#### 예제 5. MAD 를 정의대로 직접 구하기 { .eg }
 
 ```python
 import pandas as pd

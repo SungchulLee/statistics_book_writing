@@ -36,7 +36,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** Seaborn 기본 쌍그림
+### 예제 1. Seaborn 기본 쌍그림 { .eg }
 
 ```python
 import seaborn as sns
@@ -73,7 +73,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 볼 변수만 고르기
+#### 예제 2. 볼 변수만 고르기 { .eg }
 
 ```python
 import seaborn as sns
@@ -104,7 +104,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 칸마다 상관계수 적기
+#### 예제 3. 칸마다 상관계수 적기 { .eg }
 
 ```python
 import seaborn as sns

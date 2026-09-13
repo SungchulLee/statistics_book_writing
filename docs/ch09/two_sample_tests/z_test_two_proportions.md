@@ -155,7 +155,7 @@ $\alpha = 0.05$에서 전환율이 다른지 검정하라.
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 비율의 z 검정 구현
+### 예제 1. 두 비율의 z 검정 구현 { .eg }
 
 ```python
 import numpy as np

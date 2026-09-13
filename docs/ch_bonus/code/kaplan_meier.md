@@ -21,7 +21,7 @@ $t_{(j)}$의 사건 수, $n_j$는 $t_{(j)}$ 직전에 위험에 있는 대상 �
 
 <div class="codebox" markdown>
 
-**예제 1.** 카플란-마이어 추정 구현
+#### 예제 1. 카플란-마이어 추정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -125,7 +125,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 로그순위 검정 구현
+#### 예제 2. 로그순위 검정 구현 { .eg }
 
 ```python
 from scipy import stats
@@ -183,7 +183,7 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
 
 <div class="codebox" markdown>
 
-**예제 3.** 전체 실행
+### 예제 3. 전체 실행 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

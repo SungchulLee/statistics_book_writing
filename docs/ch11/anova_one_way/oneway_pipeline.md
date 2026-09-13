@@ -16,7 +16,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 1단계 — 모형 적합
+### 예제 1. 1단계 — 모형 적합 { .eg }
 
 ```python
 import pandas as pd
@@ -59,7 +59,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 2단계 — Tukey HSD
+### 예제 2. 2단계 — Tukey HSD { .eg }
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -99,7 +99,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 3단계 — 본페로니 보정 쌍별 비교
+### 예제 3. 3단계 — 본페로니 보정 쌍별 비교 { .eg }
 
 ```python
 from itertools import combinations
@@ -142,7 +142,7 @@ ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 �
 
 <div class="codebox" markdown>
 
-**예제 4.** 4단계 — 상자그림
+### 예제 4. 4단계 — 상자그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

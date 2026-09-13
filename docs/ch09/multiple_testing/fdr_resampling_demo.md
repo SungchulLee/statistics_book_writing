@@ -50,7 +50,7 @@ $H_{(1)}, \ldots, H_{(k)}$를 모두 기각한다. 독립일 때 이 절차는 F
 
 <div class="codebox" markdown>
 
-**예제 1.** 검정 수에 따른 FWER
+#### 예제 1. 검정 수에 따른 FWER { .eg }
 
 ```python
 import numpy as np
@@ -81,7 +81,7 @@ alpha=0.001, m=100: FWER=0.0952
 
 <div class="codebox" markdown>
 
-**예제 2.** 보정을 적용한 다중검정
+#### 예제 2. 보정을 적용한 다중검정 { .eg }
 
 ```python
 from scipy import stats
@@ -142,7 +142,7 @@ Holm이 Bonferroni와 결과가 같다는 점도 눈에 띈다. Holm은 이론�
 
 <div class="codebox" markdown>
 
-**예제 3.** 재표본으로 FDR 추정하기
+#### 예제 3. 재표본으로 FDR 추정하기 { .eg }
 
 ```python
 def resampling_fdr(X_group1, X_group2, n_permutations=500):

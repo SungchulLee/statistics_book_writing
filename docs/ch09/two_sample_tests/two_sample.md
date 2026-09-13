@@ -36,7 +36,7 @@ $$ z = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 비율의 차이 — 간단한 예
+#### 예제 1. 두 비율의 차이 — 간단한 예 { .eg }
 
 ```python
 import numpy as np
@@ -115,7 +115,7 @@ $$H_0 : \mu_A = \mu_B \quad\text{vs}\quad H_1: \mu_A \neq \mu_B$$
 
 <div class="codebox" markdown>
 
-**예제 2.** 서로 다른 두 밭의 토마토
+##### 예제 2. 서로 다른 두 밭의 토마토 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -173,7 +173,7 @@ Reject H_0
 
 <div class="codebox" markdown>
 
-**예제 3.** 출생아 수 — 프랑스와 스위스
+##### 예제 3. 출생아 수 — 프랑스와 스위스 { .eg }
 
 ```python
 X_1_bar, X_2_bar = 1.85, 1.65
@@ -236,7 +236,7 @@ $$df = \frac{\left( \frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} \right)^2}{\frac{\left
 
 <div class="codebox" markdown>
 
-**예제 4.** 합동 t-검정 구현
+#### 예제 4. 합동 t-검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -304,8 +304,6 @@ $$z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}_{\text{pool}} (1 - \hat{p}_{\te
 
 ### C. 예제
 
-#### 예제: 새 법률에 대한 지지
-
 | | A 지구 | B 지구 | 합계 |
 |:---:|:---:|:---:|:---:|
 | 예 | 58 | 52 | 110 |
@@ -315,7 +313,7 @@ $$H_0 : p_A = p_B \quad\text{vs}\quad H_1: p_A \neq p_B$$
 
 <div class="codebox" markdown>
 
-**예제 5.** 새 법률에 대한 지지
+#### 예제 5. 새 법률에 대한 지지 { .eg }
 
 ```python
 import numpy as np
@@ -365,15 +363,13 @@ Kiley는 10센트 동전과 5센트 동전이 앞면을 보일 가능성이 같�
 
 $$H_0 : p_{\text{Dime}} = p_{\text{Nickel}} \quad\text{vs}\quad H_1: p_{\text{Dime}} \neq p_{\text{Nickel}}$$
 
-#### 예제: 근시
-
 연구자들이 2000년에서 2015년 사이에 근시 유병률이 높아졌는지 검정한다. 2000년: 400명 중 132명. 2015년: 600명 중 228명.
 
 $$H_0 : p_{2000} = p_{2015} \quad\text{vs}\quad H_1: p_{2000} < p_{2015}$$
 
 <div class="codebox" markdown>
 
-**예제 6.** 근시 비율의 변화
+#### 예제 6. 근시 비율의 변화 { .eg }
 
 ```python
 n_2000, n_2015 = 400, 600
@@ -409,13 +405,11 @@ $p = 0.0533$으로 0.05를 아슬아슬하게 넘겨 기각하지 못한다. 유
 
 </div>
 
-#### 예제: 고양이 질병
-
 수의사들이 수컷 고양이 259마리 중 24마리, 암컷 241마리 중 14마리가 이환된 자료로 $H_0: p_{\text{male}} = p_{\text{female}}$ 대 $H_1: p_{\text{male}} > p_{\text{female}}$을 검정한다.
 
 <div class="codebox" markdown>
 
-**예제 7.** 고양이 질병 — 암수 비교
+#### 예제 7. 고양이 질병 — 암수 비교 { .eg }
 
 ```python
 # 두 비율이 같다는 귀무가설 아래에서는 둘을 합쳐 하나의 비율로 보는 것이

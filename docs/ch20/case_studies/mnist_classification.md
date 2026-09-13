@@ -17,7 +17,7 @@ $[0, 1]$에 있다.
 
 <div class="codebox" markdown>
 
-**예제 1.** MNIST 자료 읽기
+### 예제 1. MNIST 자료 읽기 { .eg }
 
 ```python
 import torch
@@ -63,7 +63,7 @@ Image shape:      torch.Size([1, 28, 28])
 
 <div class="codebox" markdown>
 
-**예제 2.** 자료 눈으로 보기
+### 예제 2. 자료 눈으로 보기 { .eg }
 
 ```python
 # 모형을 세우기 전에 자료를 눈으로 본다. 어떤 자료인지도 모르고 학습부터
@@ -97,7 +97,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 소프트맥스 회귀 모형
+### 예제 3. 소프트맥스 회귀 모형 { .eg }
 
 ```python
 import torch.nn as nn
@@ -130,7 +130,7 @@ PyTorch의 `nn.CrossEntropyLoss`는 log-softmax와 음의 로그가능도를 수
 
 <div class="codebox" markdown>
 
-**예제 4.** 학습 함수
+### 예제 4. 학습 함수 { .eg }
 
 ```python
 def train_model(model, train_loader, epochs=5, lr=0.1):
@@ -165,7 +165,7 @@ def train_model(model, train_loader, epochs=5, lr=0.1):
 
 <div class="codebox" markdown>
 
-**예제 5.** 선형 모형 학습
+### 예제 5. 선형 모형 학습 { .eg }
 
 ```python
 # 1번: 선형 모형. 아래 두 모형과 견줄 기준선이다.
@@ -191,7 +191,7 @@ Epoch 5/5, Loss: 0.2948
 
 <div class="codebox" markdown>
 
-**예제 6.** 평가 함수
+### 예제 6. 평가 함수 { .eg }
 
 ```python
 def evaluate(model, test_loader):
@@ -257,7 +257,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 7.** 은닉층 하나짜리 신경망
+### 예제 7. 은닉층 하나짜리 신경망 { .eg }
 
 ```python
 class TwoLayerNet(nn.Module):
@@ -316,7 +316,7 @@ CNN은 국소 수용영역과 가중치 공유를 통해 이미지의 공간 구
 
 <div class="codebox" markdown>
 
-**예제 8.** 합성곱 신경망
+### 예제 8. 합성곱 신경망 { .eg }
 
 ```python
 import torch.nn.functional as F
@@ -399,7 +399,7 @@ CNN의 모수 개수가 이층 신경망보다 훨씬 적은데도 정확도는 
 
 <div class="codebox" markdown>
 
-**예제 9.** 세 모형의 학습 곡선
+### 예제 9. 세 모형의 학습 곡선 { .eg }
 
 ```python
 # 세 모형의 학습 곡선을 겹쳐 그린다. 구조가 복잡할수록 같은 세대에서
@@ -428,7 +428,7 @@ CNN의 혼동행렬은 모형이 여전히 헷갈려 하는 숫자 쌍을 드러
 
 <div class="codebox" markdown>
 
-**예제 10.** 혼동행렬 그리기
+### 예제 10. 혼동행렬 그리기 { .eg }
 
 ```python
 import numpy as np

@@ -8,7 +8,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -58,7 +58,7 @@ R^2 = 0.7813
 
 <div class="codebox" markdown>
 
-**예제 2.** 산점도로 보기
+### 예제 2. 산점도로 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -97,7 +97,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 잔차 그림으로 보기
+### 예제 3. 잔차 그림으로 보기 { .eg }
 
 ```python
 import statsmodels.api as sm
@@ -155,7 +155,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 성분-잔차 그림
+### 예제 4. 성분-잔차 그림 { .eg }
 
 ```python
 import statsmodels.api as sm
@@ -216,7 +216,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 이차항을 넣어 견주기
+### 예제 5. 이차항을 넣어 견주기 { .eg }
 
 ```python
 import numpy as np

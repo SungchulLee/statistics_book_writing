@@ -28,7 +28,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 모의실험 설계
+### 예제 1. 모의실험 설계 { .eg }
 
 ```python
 import numpy as np
@@ -72,7 +72,7 @@ single run p-value (null) = 0.4545
 
 <div class="codebox" markdown>
 
-**예제 2.** 제1종 오류율과 검정력 재기
+### 예제 2. 제1종 오류율과 검정력 재기 { .eg }
 
 ```python
 def run(n_sims=500, alpha=0.05):

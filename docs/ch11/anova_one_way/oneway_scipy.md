@@ -16,7 +16,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 자료와 자유도
+### 예제 1. 자료와 자유도 { .eg }
 
 ```python
 import pandas as pd
@@ -59,7 +59,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 분산분석 수행
+### 예제 2. 분산분석 수행 { .eg }
 
 ```python
 # F 는 집단 사이의 분산을 집단 안의 분산으로 나눈 값이다. 1 에 가까우면
@@ -84,7 +84,7 @@ $H_0: \mu_{\text{ctrl}} = \mu_{\text{trt1}} = \mu_{\text{trt2}}$ 아래에서 �
 
 <div class="codebox" markdown>
 
-**예제 3.** 상자그림으로 보기
+### 예제 3. 상자그림으로 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -112,7 +112,7 @@ $F_{2,27}$의 밀도함수를 그리고 관측된 $F$-통계량 너머의 넓이
 
 <div class="codebox" markdown>
 
-**예제 4.** F 분포와 관측된 꼬리
+### 예제 4. F 분포와 관측된 꼬리 { .eg }
 
 ```python
 import numpy as np

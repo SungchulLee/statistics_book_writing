@@ -46,7 +46,7 @@ SciPy는 `scipy.stats.fligner`로 직접 구현을 제공한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 세 집단에 적용하기
+### 예제 1. 세 집단에 적용하기 { .eg }
 
 ```python
 import numpy as np

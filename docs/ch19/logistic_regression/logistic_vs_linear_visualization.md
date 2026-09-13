@@ -19,7 +19,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 자료 만들기
+### 예제 1. 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -55,7 +55,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 선형회귀로 맞추면
+### 예제 2. 선형회귀로 맞추면 { .eg }
 
 ```python
 # 0/1 반응에 선형회귀를 씌우면 예측값이 0 아래나 1 위로 나간다.
@@ -92,7 +92,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 로지스틱으로 맞추면
+### 예제 3. 로지스틱으로 맞추면 { .eg }
 
 ```python
 # 로지스틱은 시그모이드를 거치므로 예측값이 언제나 (0, 1) 안에 머문다.
@@ -126,7 +126,7 @@ $(-4.1667,\ 0.003333)$에 가깝고, 예측 범위는 $[0.019,\ 0.981]$로 안�
 
 <div class="codebox" markdown>
 
-**예제 4.** 두 결과를 나란히 그리기
+### 예제 4. 두 결과를 나란히 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -181,7 +181,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 오즈비로 읽기
+### 예제 5. 오즈비로 읽기 { .eg }
 
 ```python
 # 계수가 아주 작으므로 1 달러당 오즈비는 1 에 가깝다. 이럴 때는 단위를

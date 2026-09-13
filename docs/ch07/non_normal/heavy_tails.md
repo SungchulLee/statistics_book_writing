@@ -66,7 +66,7 @@ $$\text{초과첨도} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규와 두꺼운 꼬리를 네 그림으로
+### 예제 1. 정규와 두꺼운 꼬리를 네 그림으로 { .eg }
 
 ```python
 import numpy as np
@@ -152,7 +152,7 @@ Heavy-Tailed (t) Distribution:
 
 <div class="codebox" markdown>
 
-**예제 2.** 중앙값의 표준오차를 붓스트랩으로
+#### 예제 2. 중앙값의 표준오차를 붓스트랩으로 { .eg }
 
 ```python
 import numpy as np
@@ -186,7 +186,7 @@ $$\bar{X}_{\text{trim}, \alpha} = \frac{1}{n(1-2\alpha)} \sum_{i=\lceil n\alpha 
 
 <div class="codebox" markdown>
 
-**예제 3.** 절사평균
+#### 예제 3. 절사평균 { .eg }
 
 ```python
 import numpy as np
@@ -217,7 +217,7 @@ print(f"10% 절단평균 {mean_trim10:7.4f}")
 
 <div class="codebox" markdown>
 
-**예제 4.** 윈저화 평균
+#### 예제 4. 윈저화 평균 { .eg }
 
 ```python
 import numpy as np
@@ -255,7 +255,7 @@ print(f"윈저화 평균    {winsorize_mean(data, alpha=0.1):7.4f}")
 
 <div class="codebox" markdown>
 
-**예제 5.** Huber M-추정량
+#### 예제 5. Huber M-추정량 { .eg }
 
 ```python
 import numpy as np
@@ -287,7 +287,7 @@ Huber 척도추정: 1.0812
 
 <div class="codebox" markdown>
 
-**예제 6.** 다섯 추정량 견주기
+### 예제 6. 다섯 추정량 견주기 { .eg }
 
 ```python
 import numpy as np

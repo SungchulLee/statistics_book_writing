@@ -12,7 +12,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 점그림 그리기
+### 예제 1. 점그림 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -72,7 +72,7 @@ print(dict(sorted(age_freq.items())))
 
 <div class="codebox" markdown>
 
-**예제 2.** 줄기잎그림 직접 만들기
+### 예제 2. 줄기잎그림 직접 만들기 { .eg }
 
 ```python
 from collections import defaultdict

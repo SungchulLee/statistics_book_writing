@@ -60,7 +60,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 카이제곱 분포의 밀도와 분포함수
+### 예제 1. 카이제곱 분포의 밀도와 분포함수 { .eg }
 
 ```python
 import numpy as np
@@ -99,7 +99,7 @@ $d$가 작으면 확률밀도함수가 오른쪽으로 치우치고 최빈값이
 
 <div class="codebox" markdown>
 
-**예제 2.** 정규 제곱합으로 만들어 보기
+### 예제 2. 정규 제곱합으로 만들어 보기 { .eg }
 
 ```python
 df, seed = 5, 1

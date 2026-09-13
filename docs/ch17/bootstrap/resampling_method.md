@@ -194,7 +194,7 @@ $$\text{Bias} = E[\text{추정량}] - \text{참 모수} \approx \text{mean}(\tex
 
 <div class="codebox" markdown>
 
-**예제 2.** 반복 횟수 B가 주는 차이
+#### 예제 2. 반복 횟수 B가 주는 차이 { .eg }
 
 ```python
 # 붓스트랩 반복 횟수 B 를 늘리면 추정이 안정된다. 다만 B 는 붓스트랩
@@ -252,7 +252,7 @@ $B = 100$과 $B = 5000$의 차이가 8%에 불과하다. 표준오차만 필요�
 
 <div class="codebox" markdown>
 
-**예제 3.** 블록 붓스트랩
+#### 예제 3. 블록 붓스트랩 { .eg }
 
 ```python
 def block_bootstrap(data, block_size, n_bootstrap, rng=None):
@@ -285,7 +285,7 @@ def block_bootstrap(data, block_size, n_bootstrap, rng=None):
 
 <div class="codebox" markdown>
 
-**예제 4.** 백분위수-t 붓스트랩
+#### 예제 4. 백분위수-t 붓스트랩 { .eg }
 
 ```python
 import numpy as np

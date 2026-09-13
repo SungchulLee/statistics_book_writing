@@ -32,7 +32,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** Q-Q 그림에 95% 띠 얹기
+### 예제 1. Q-Q 그림에 95% 띠 얹기 { .eg }
 
 ```python
 import numpy as np

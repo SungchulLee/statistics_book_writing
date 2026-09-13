@@ -91,7 +91,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 순전파와 역전파 구현
+#### 예제 1. 순전파와 역전파 구현 { .eg }
 
 ```python
 import numpy as np
@@ -157,7 +157,7 @@ def back_propagation(x, y, h, y_hat, w_o):
 
 <div class="codebox" markdown>
 
-**예제 2.** 학습 반복문
+#### 예제 2. 학습 반복문 { .eg }
 
 ```python
 def run_train_loop(x_train, y_train, y_train_cls,
@@ -206,7 +206,7 @@ def run_train_loop(x_train, y_train, y_train_cls,
 
 <div class="codebox" markdown>
 
-**예제 3.** MNIST 자료 읽기
+#### 예제 3. MNIST 자료 읽기 { .eg }
 
 ```python
 import numpy as np
@@ -251,7 +251,7 @@ $L(x)=x^2$에 대한 경사하강을 간단히 시각화하면 다음과 같다.
 
 <div class="codebox" markdown>
 
-**예제 4.** 경사하강법을 가장 단순한 함수에서
+### 예제 4. 경사하강법을 가장 단순한 함수에서 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

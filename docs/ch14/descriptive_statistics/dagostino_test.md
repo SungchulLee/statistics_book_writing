@@ -34,7 +34,7 @@ $p < \alpha$일 때 $H_0$을 기각한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 섞인 자료에 K-제곱 검정
+### 예제 1. 섞인 자료에 K-제곱 검정 { .eg }
 
 ```python
 import numpy as np

@@ -17,7 +17,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 타이타닉 승객 나이의 상자그림
+### 예제 1. 타이타닉 승객 나이의 상자그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -78,7 +78,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 히스토그램과 상자그림을 함께 보기
+### 예제 2. 히스토그램과 상자그림을 함께 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -136,7 +136,7 @@ Q2-Q1 = 0.794   Q3-Q2 = 1.098  (오른쪽이 길다)
 
 <div class="codebox" markdown>
 
-**예제 3.** 집단별 비교 상자그림
+### 예제 3. 집단별 비교 상자그림 { .eg }
 
 ```python
 import numpy as np

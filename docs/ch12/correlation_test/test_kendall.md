@@ -128,7 +128,7 @@ Kendall 검정과 Spearman 검정은 모두 단조 연관에 대한 비모수 �
 
 <div class="codebox" markdown>
 
-**예제 1.** Kendall 타우 검정과 손계산
+### 예제 1. Kendall 타우 검정과 손계산 { .eg }
 
 ```python
 import numpy as np

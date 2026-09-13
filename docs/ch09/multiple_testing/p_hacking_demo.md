@@ -14,7 +14,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 표본을 몰래 늘려 가며 보기
+### 예제 1. 표본을 몰래 늘려 가며 보기 { .eg }
 
 ```python
 import numpy as np
@@ -67,7 +67,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 결과변수를 여러 개 재기
+### 예제 2. 결과변수를 여러 개 재기 { .eg }
 
 ```python
 n_outcomes = 20
@@ -107,7 +107,7 @@ Cherry-pick rate: 0.6580  (theoretical: 0.6415)
 
 <div class="codebox" markdown>
 
-**예제 3.** p-해킹의 결과 모으기
+### 예제 3. p-해킹의 결과 모으기 { .eg }
 
 ```python
 n_experiments = 1000

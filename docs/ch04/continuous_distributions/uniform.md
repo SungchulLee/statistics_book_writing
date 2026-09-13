@@ -134,7 +134,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 균등분포의 밀도함수와 분포함수
+#### 예제 1. 균등분포의 밀도함수와 분포함수 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -164,7 +164,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 균등 표본의 히스토그램
+#### 예제 2. 균등 표본의 히스토그램 { .eg }
 
 ```python
 import numpy as np
@@ -194,7 +194,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 균등난수로 지수 표본 만들기
+#### 예제 3. 균등난수로 지수 표본 만들기 { .eg }
 
 ```python
 import numpy as np

@@ -60,7 +60,7 @@ $x_1, \ldots, x_n$이 정규분포에서 온 것으로 보이고 표본분산 $s
 
 <div class="codebox" markdown>
 
-**예제 1.** 모수적 붓스트랩과 비모수적 붓스트랩
+### 예제 1. 모수적 붓스트랩과 비모수적 붓스트랩 { .eg }
 
 ```python
 import numpy as np

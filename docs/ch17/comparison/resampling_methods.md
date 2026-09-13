@@ -40,7 +40,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 세 가지 붓스트랩 신뢰구간
+### 예제 1. 세 가지 붓스트랩 신뢰구간 { .eg }
 
 ```python
 import numpy as np
@@ -105,7 +105,7 @@ $\text{Exp}(3)$에서 $n = 30$을 뽑은 결과($M = 3{,}000$, $B = 2{,}000$):
 
 <div class="codebox" markdown>
 
-**예제 2.** 이표본 순열검정
+### 예제 2. 이표본 순열검정 { .eg }
 
 ```python
 def permutation_test_two_sample(x, y, B=9999, stat_func=None, rng=None):
@@ -142,7 +142,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 상관에 대한 순열검정
+### 예제 3. 상관에 대한 순열검정 { .eg }
 
 ```python
 def permutation_test_correlation(x, y, B=9999, rng=None):
@@ -171,7 +171,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 대응 순열검정
+### 예제 4. 대응 순열검정 { .eg }
 
 ```python
 def paired_permutation_test(x, y, B=9999, rng=None):
@@ -206,7 +206,7 @@ def paired_permutation_test(x, y, B=9999, rng=None):
 
 <div class="codebox" markdown>
 
-**예제 5.** 붓스트랩과 순열 나란히
+### 예제 5. 붓스트랩과 순열 나란히 { .eg }
 
 ```python
 def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):

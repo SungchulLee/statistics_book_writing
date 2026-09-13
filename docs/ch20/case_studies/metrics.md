@@ -42,7 +42,7 @@ $C\times C$ 혼동행렬 $M$의 원소 $M_{jk}$는 참 범주가 $j$이고 예�
 
 <div class="codebox" markdown>
 
-**예제 1.** 손글씨 숫자 분류와 혼동행렬
+### 예제 1. 손글씨 숫자 분류와 혼동행렬 { .eg }
 
 ```python
 from sklearn.datasets import load_digits
@@ -117,7 +117,7 @@ weighted avg       0.97      0.97      0.97       360
 
 <div class="codebox" markdown>
 
-**예제 2.** 틀린 예측 들여다보기
+### 예제 2. 틀린 예측 들여다보기 { .eg }
 
 ```python
 import numpy as np
@@ -164,7 +164,7 @@ draw_10_wrong_preds(x_test, y_test, y_pred, shape=(8, 8))
 
 <div class="codebox" markdown>
 
-**예제 3.** 손실과 정확도 곡선
+### 예제 3. 손실과 정확도 곡선 { .eg }
 
 ```python
 def draw_loss_and_accuracy(loss_trace, accuracy_trace):

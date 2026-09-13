@@ -8,7 +8,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 산점도와 육각구간그림 견주기
+### 예제 1. 산점도와 육각구간그림 견주기 { .eg }
 
 ```python
 import numpy as np

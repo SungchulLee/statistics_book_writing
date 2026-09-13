@@ -197,7 +197,9 @@
 .md-typeset h2.eg,
 .md-typeset h3.dfn,
 .md-typeset h3.thm,
-.md-typeset h3.eg {
+.md-typeset h3.eg,
+.md-typeset h4.eg,
+.md-typeset h5.eg {
     font-size: var(--boxhead-size);
     font-weight: var(--boxhead-weight);
     line-height: 1.6;

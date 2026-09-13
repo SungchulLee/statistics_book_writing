@@ -97,7 +97,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 같은 자료에 네 검정 돌려 보기
+### 예제 1. 같은 자료에 네 검정 돌려 보기 { .eg }
 
 ```python
 import numpy as np

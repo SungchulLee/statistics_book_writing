@@ -12,7 +12,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 이원 도수분포표 만들기
+### 예제 1. 이원 도수분포표 만들기 { .eg }
 
 ```python
 import pandas as pd
@@ -52,7 +52,7 @@ TOTAL     201   63    264
 
 <div class="codebox" markdown>
 
-**예제 2.** 상대도수분포표
+#### 예제 2. 상대도수분포표 { .eg }
 
 ```python
 # 모든 칸을 전체 합으로 나누면 상대도수분포표가 된다.
@@ -97,7 +97,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 모자이크 그림 그리기
+### 예제 3. 모자이크 그림 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -138,7 +138,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 4.** 독립이면 분할선이 나란해진다
+### 예제 4. 독립이면 분할선이 나란해진다 { .eg }
 
 ```python
 import numpy as np

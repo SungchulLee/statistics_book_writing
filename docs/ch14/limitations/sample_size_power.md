@@ -73,7 +73,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 표본크기에 따른 검정력
+### 예제 1. 표본크기에 따른 검정력 { .eg }
 
 ```python
 import numpy as np

@@ -37,7 +37,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 붓스트랩으로 분산 비교하기
+#### 예제 1. 붓스트랩으로 분산 비교하기 { .eg }
 
 ```python
 import numpy as np
@@ -155,7 +155,7 @@ Bayes 추론에는 `pymc` 패키지를 쓴다(과거의 `pymc3`는 더 이상 �
 
 <div class="codebox" markdown>
 
-**예제 2.** PyMC로 베이즈 분산 비교
+#### 예제 2. PyMC로 베이즈 분산 비교 { .eg }
 
 ```python
 import numpy as np

@@ -51,7 +51,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 라쏘와 엘라스틱넷의 집단 선택
+### 예제 1. 라쏘와 엘라스틱넷의 집단 선택 { .eg }
 
 ```python
 import numpy as np

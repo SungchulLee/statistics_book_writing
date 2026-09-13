@@ -18,7 +18,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 봉우리가 둘인 분포 만들기
+### 예제 1. 봉우리가 둘인 분포 만들기 { .eg }
 
 ```python
 import numpy as np

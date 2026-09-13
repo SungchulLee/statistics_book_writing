@@ -64,7 +64,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 자유도에 따른 카이제곱 밀도함수
+### 예제 1. 자유도에 따른 카이제곱 밀도함수 { .eg }
 
 ```python
 import numpy as np
@@ -100,7 +100,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 카이제곱 분포함수
+### 예제 2. 카이제곱 분포함수 { .eg }
 
 ```python
 import numpy as np
@@ -133,7 +133,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 카이제곱 백분위점
+### 예제 3. 카이제곱 백분위점 { .eg }
 
 ```python
 from scipy import stats
@@ -163,7 +163,7 @@ print(f"99th percentile of χ²(10): {chi2_99:.4f}")
 
 <div class="codebox" markdown>
 
-**예제 4.** scipy 로 카이제곱 표본추출
+#### 예제 4. scipy 로 카이제곱 표본추출 { .eg }
 
 ```python
 import numpy as np
@@ -190,7 +190,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 5.** 정규제곱합으로 카이제곱 만들기
+#### 예제 5. 정규제곱합으로 카이제곱 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -240,7 +240,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 6.** 정규모집단에서 표본분산의 분포
+#### 예제 6. 정규모집단에서 표본분산의 분포 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -274,7 +274,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 7.** 정규가 아닌 모집단에서는 어떻게 되는가
+#### 예제 7. 정규가 아닌 모집단에서는 어떻게 되는가 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

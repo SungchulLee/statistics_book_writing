@@ -26,7 +26,7 @@ $$E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2 \implies \text{Bias} = -\frac{\sigma^2}
 
 <div class="codebox" markdown>
 
-**예제 1.** 편향이 정확히 얼마인지 확인하기
+### 예제 1. 편향이 정확히 얼마인지 확인하기 { .eg }
 
 ```python
 import numpy as np
@@ -73,7 +73,7 @@ n= 500  E[S̃²]=8.9833  (n-1)/n·σ²=8.9820  Bias=-0.0167  -σ²/n=-0.0180
 
 <div class="codebox" markdown>
 
-**예제 2.** 세 추정량의 MSE
+### 예제 2. 세 추정량의 MSE { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -121,7 +121,7 @@ $$\sum_{i=1}^n (X_i - \bar{X}) = 0$$
 
 <div class="codebox" markdown>
 
-**예제 3.** 자유도가 n-1인 이유
+### 예제 3. 자유도가 n-1인 이유 { .eg }
 
 ```python
 def degrees_of_freedom_intuition(seed=42):
@@ -189,7 +189,7 @@ $$\hat{\sigma}^2_{\text{known}} = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2$$
 
 <div class="codebox" markdown>
 
-**예제 4.** 평균을 알 때와 모를 때
+### 예제 4. 평균을 알 때와 모를 때 { .eg }
 
 ```python
 def known_vs_unknown_mean(sigma=3.0, n_sim=100_000, seed=42):
@@ -234,7 +234,7 @@ n= 100  MSE(known μ)=1.6033  MSE(unknown)=1.5968  Ratio=0.996
 
 <div class="codebox" markdown>
 
-**예제 5.** 금융 응용 — 변동성 추정
+### 예제 5. 금융 응용 — 변동성 추정 { .eg }
 
 ```python
 def volatility_estimation_finance(seed=42):

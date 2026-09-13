@@ -142,7 +142,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 기하분포의 확률질량함수
+#### 예제 1. 기하분포의 확률질량함수 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -175,7 +175,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 음이항분포의 SciPy 판본
+#### 예제 2. 음이항분포의 SciPy 판본 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -207,7 +207,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 기하분포의 무기억성
+#### 예제 3. 기하분포의 무기억성 { .eg }
 
 ```python
 import numpy as np
@@ -243,7 +243,7 @@ P(X>3+5|X>3) = 0.1690,  P(X>5) = 0.1681
 
 <div class="codebox" markdown>
 
-**예제 4.** 성공확률에 따른 기하분포 비교
+#### 예제 4. 성공확률에 따른 기하분포 비교 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

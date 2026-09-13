@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -64,7 +64,7 @@ Q-Q 그림은 관측된 잔차의 분위수를 정규분포의 이론적 분위�
 
 <div class="codebox" markdown>
 
-**예제 2.** Q-Q 그림
+#### 예제 2. Q-Q 그림 { .eg }
 
 ```python
 import statsmodels.api as sm
@@ -95,7 +95,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** Shapiro-Wilk 검정
+#### 예제 3. Shapiro-Wilk 검정 { .eg }
 
 ```python
 from scipy.stats import shapiro
@@ -125,7 +125,7 @@ $p = 0.77$로 정규성에 반하는 증거가 없다. 자료를 실제로 정�
 
 <div class="codebox" markdown>
 
-**예제 4.** 잔차의 히스토그램
+#### 예제 4. 잔차의 히스토그램 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

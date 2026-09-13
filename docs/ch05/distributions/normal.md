@@ -109,7 +109,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규분포의 임계값
+### 예제 1. 정규분포의 임계값 { .eg }
 
 ```python
 from scipy import stats

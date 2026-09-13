@@ -14,7 +14,7 @@ $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 기대수익률의 정밀도
+### 예제 1. 기대수익률의 정밀도 { .eg }
 
 ```python
 import numpy as np
@@ -61,7 +61,7 @@ T= 100 years  SE=2.00%  95% CI=[4.08%, 11.92%]  Width=7.84%
 
 <div class="codebox" markdown>
 
-**예제 2.** 추정값의 분포 — 10년과 50년
+### 예제 2. 추정값의 분포 — 10년과 50년 { .eg }
 
 ```python
 def return_precision_simulation(seed=42):
@@ -109,7 +109,7 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 
 <div class="codebox" markdown>
 
-**예제 3.** 샤프비율의 불확실성
+### 예제 3. 샤프비율의 불확실성 { .eg }
 
 ```python
 def sharpe_ratio_uncertainty(seed=42):
@@ -163,7 +163,7 @@ T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
 
 <div class="codebox" markdown>
 
-**예제 4.** 실현변동성과 창의 길이
+### 예제 4. 실현변동성과 창의 길이 { .eg }
 
 ```python
 def realized_volatility_windows(seed=42):
@@ -224,7 +224,7 @@ realized_volatility_windows()
 
 <div class="codebox" markdown>
 
-**예제 5.** 연율화 관례
+### 예제 5. 연율화 관례 { .eg }
 
 ```python
 def annualization_conventions():

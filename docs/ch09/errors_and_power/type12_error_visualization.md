@@ -45,7 +45,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 오류를 한 그림에
+#### 예제 1. 두 오류를 한 그림에 { .eg }
 
 ```python
 import numpy as np
@@ -98,7 +98,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 분리 정도에 따른 검정력
+#### 예제 2. 분리 정도에 따른 검정력 { .eg }
 
 ```python
 for sep in [1, 2, 3, 4, 5]:

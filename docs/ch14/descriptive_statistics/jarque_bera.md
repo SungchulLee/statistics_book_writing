@@ -84,7 +84,7 @@ Jarque-Bera 검정통계량 $JB$는 귀무가설 아래에서 자유도 2인 카
 
 <div class="codebox" markdown>
 
-**예제 1.** JB 통계량을 정의대로 구하기
+#### 예제 1. JB 통계량을 정의대로 구하기 { .eg }
 
 ```python
 import numpy as np

@@ -20,7 +20,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 대출 소득 자료로 보는 표집분포
+### 예제 1. 대출 소득 자료로 보는 표집분포 { .eg }
 
 ```python
 import numpy as np
@@ -139,7 +139,7 @@ $n=20$의 표준오차는 $n=5$의 대략 절반이며, 그만큼 추정이 정�
 
 <div class="codebox" markdown>
 
-**예제 2.** 표본크기와 표준오차의 관계
+#### 예제 2. 표본크기와 표준오차의 관계 { .eg }
 
 ```python
 # 1/sqrt(n) 법칙을 숫자로 확인한다.
@@ -180,7 +180,7 @@ Ratio SE(5)/SE(20): 2.00
 
 <div class="codebox" markdown>
 
-**예제 3.** 표집분포를 숫자로 비교하기
+### 예제 3. 표집분포를 숫자로 비교하기 { .eg }
 
 ```python
 import numpy as np

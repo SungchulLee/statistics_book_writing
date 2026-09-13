@@ -38,7 +38,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 로그정규 자료의 왜도 검정
+### 예제 1. 로그정규 자료의 왜도 검정 { .eg }
 
 ```python
 import numpy as np

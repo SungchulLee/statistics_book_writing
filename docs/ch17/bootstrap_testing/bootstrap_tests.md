@@ -20,7 +20,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 일표본 붓스트랩 검정
+### 예제 1. 일표본 붓스트랩 검정 { .eg }
 
 ```python
 import numpy as np
@@ -62,7 +62,7 @@ $H_0\colon \mu_x = \mu_y$를 검정하기 위해 두 표본을 합치고 합친 
 
 <div class="codebox" markdown>
 
-**예제 2.** 이표본 붓스트랩 검정
+### 예제 2. 이표본 붓스트랩 검정 { .eg }
 
 ```python
 def bootstrap_two_sample(x, y, n_boot=10_000, rng=None):
@@ -104,7 +104,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 중앙값의 표준오차와 편향
+### 예제 3. 중앙값의 표준오차와 편향 { .eg }
 
 ```python
 def bootstrap_se_median(data, n_boot=10_000, rng=None):
@@ -129,7 +129,7 @@ def bootstrap_se_median(data, n_boot=10_000, rng=None):
 
 <div class="codebox" markdown>
 
-**예제 4.** 세 검정 실행
+### 예제 4. 세 검정 실행 { .eg }
 
 ```python
 import numpy as np

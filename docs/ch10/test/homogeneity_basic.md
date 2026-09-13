@@ -30,7 +30,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 동질성 검정 — 기본 예
+### 예제 1. 동질성 검정 — 기본 예 { .eg }
 
 ```python
 import numpy as np

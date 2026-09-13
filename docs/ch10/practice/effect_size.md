@@ -50,7 +50,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Cramer의 V로 효과크기 재기
+#### 예제 1. Cramer의 V로 효과크기 재기 { .eg }
 
 ```python
 import numpy as np

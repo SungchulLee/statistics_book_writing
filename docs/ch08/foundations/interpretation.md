@@ -22,7 +22,7 @@ $$P\left(\bar{X} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \leq \mu \leq \bar{X} + z
 
 <div class="codebox" markdown>
 
-**예제 1.** 신뢰수준의 뜻을 모의실험으로 확인하기
+#### 예제 1. 신뢰수준의 뜻을 모의실험으로 확인하기 { .eg }
 
 ```python
 import numpy as np

@@ -83,7 +83,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 가지 자료 만들기
+### 예제 1. 두 가지 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -131,7 +131,7 @@ def generate_diff_cov(n_per_class=200):
 
 <div class="codebox" markdown>
 
-**예제 2.** 네 분류기의 교차검증 정확도
+### 예제 2. 네 분류기의 교차검증 정확도 { .eg }
 
 ```python
 from sklearn.discriminant_analysis import (
@@ -194,7 +194,7 @@ for scenario_name, (X, y) in [
 
 <div class="codebox" markdown>
 
-**예제 3.** 결정경계 그리기
+### 예제 3. 결정경계 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

@@ -124,7 +124,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 세 모수적 생존모형의 로그가능도
+#### 예제 1. 세 모수적 생존모형의 로그가능도 { .eg }
 
 ```python
 import numpy as np

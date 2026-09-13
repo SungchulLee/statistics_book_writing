@@ -39,7 +39,7 @@ Lilliefors 검정은 모수 추정을 포함한 상태에서 $D_n$의 귀무분�
 
 <div class="codebox" markdown>
 
-**예제 1.** Lilliefors 검정 직접 구현
+### 예제 1. Lilliefors 검정 직접 구현 { .eg }
 
 ```python
 import numpy as np

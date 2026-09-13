@@ -42,7 +42,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** F 검정 구현
+### 예제 1. F 검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -74,7 +74,7 @@ def f_test(data_0, data_1):
 
 <div class="codebox" markdown>
 
-**예제 2.** 분산 차이를 키워 가며
+### 예제 2. 분산 차이를 키워 가며 { .eg }
 
 ```python
 # 표준편차 차이를 키워 가며 검정력을 눈으로 본다. 앞의 Bartlett·Levene 과

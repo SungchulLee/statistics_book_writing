@@ -48,7 +48,7 @@ $\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값
 
 <div class="codebox" markdown>
 
-**예제 1.** 람다에 따른 축소와 편향-분산 절충
+### 예제 1. 람다에 따른 축소와 편향-분산 절충 { .eg }
 
 ```python
 import numpy as np

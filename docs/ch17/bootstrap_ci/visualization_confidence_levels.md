@@ -152,7 +152,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 포함확률을 직접 세어 보기
+#### 예제 2. 포함확률을 직접 세어 보기 { .eg }
 
 ```python
 # "95% 신뢰"는 한 번 만든 구간에 대한 확률이 아니라, 같은 절차를 되풀이할
@@ -213,7 +213,7 @@ Coverage across 2000 simulations: 90.9%
 
 <div class="codebox" markdown>
 
-**예제 3.** 백분위수법과 BCa
+### 예제 3. 백분위수법과 BCa { .eg }
 
 ```python
 # 백분위수법 — 가장 간단하고 앞에서 쓴 방법이다.

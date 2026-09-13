@@ -11,7 +11,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 표본크기에 따라 달라지는 결론
+### 예제 1. 표본크기에 따라 달라지는 결론 { .eg }
 
 ```python
 import numpy as np
@@ -60,7 +60,7 @@ Shapiro-Wilk Test (large sample): p-value=0.7506816458200554
 
 <div class="codebox" markdown>
 
-**예제 2.** 치우침을 숫자로 재기
+### 예제 2. 치우침을 숫자로 재기 { .eg }
 
 ```python
 import numpy as np
@@ -100,7 +100,7 @@ Shapiro-Wilk Test: p-value=7.094914686692259e-25
 
 <div class="codebox" markdown>
 
-**예제 3.** 소득 자료처럼 늘 기각되는 경우
+### 예제 3. 소득 자료처럼 늘 기각되는 경우 { .eg }
 
 ```python
 import numpy as np
@@ -134,7 +134,7 @@ Shapiro-Wilk Test on Skewed Data: p-value=4.8578866080562626e-33
 
 <div class="codebox" markdown>
 
-**예제 4.** 중심극한정리가 지켜 주는 것
+### 예제 4. 중심극한정리가 지켜 주는 것 { .eg }
 
 ```python
 import numpy as np

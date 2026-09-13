@@ -18,7 +18,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 치우친 소득 모집단 만들기
+### 예제 1. 치우친 소득 모집단 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -61,7 +61,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 붓스트랩 표집분포
+### 예제 2. 붓스트랩 표집분포 { .eg }
 
 ```python
 def bootstrap_sampling_distribution(sample, n_bootstrap=20_000, rng=None):
@@ -96,7 +96,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 여러 신뢰수준의 구간
+### 예제 3. 여러 신뢰수준의 구간 { .eg }
 
 ```python
 def compute_confidence_intervals(bootstrap_dist):
@@ -152,7 +152,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 포함확률 모의실험
+### 예제 4. 포함확률 모의실험 { .eg }
 
 ```python
 def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):

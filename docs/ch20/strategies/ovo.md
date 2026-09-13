@@ -120,7 +120,7 @@ scikit-learn은 `OneVsOneClassifier` 래퍼를 제공한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 일대일 전략
+### 예제 1. 일대일 전략 { .eg }
 
 ```python
 from sklearn.linear_model import LogisticRegression

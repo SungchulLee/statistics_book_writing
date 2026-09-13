@@ -24,7 +24,7 @@ Logistic 분포는 정규분포와 비슷하지만 **꼬리가 더 두꺼워** �
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산을 맞춘 로지스틱과 정규분포 비교
+### 예제 1. 분산을 맞춘 로지스틱과 정규분포 비교 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

@@ -12,7 +12,7 @@ $$E[S^2] = \sigma^2$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 네 분포에서 확인하는 불편성
+### 예제 1. 네 분포에서 확인하는 불편성 { .eg }
 
 ```python
 import numpy as np
@@ -69,7 +69,7 @@ $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$$
 
 <div class="codebox" markdown>
 
-**예제 2.** 카이제곱분포 확인
+### 예제 2. 카이제곱분포 확인 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -119,7 +119,7 @@ $$E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
 
 <div class="codebox" markdown>
 
-**예제 3.** 표본평균과 표본분산의 독립성
+### 예제 3. 표본평균과 표본분산의 독립성 { .eg }
 
 ```python
 def independence_xbar_s2(sigma=3.0, n_sim=100_000, seed=42):
@@ -174,7 +174,7 @@ $$c_4(n) = \sqrt{\frac{2}{n-1}} \cdot \frac{\Gamma(n/2)}{\Gamma((n-1)/2)}$$
 
 <div class="codebox" markdown>
 
-**예제 4.** 표준편차의 편향과 보정상수
+### 예제 4. 표준편차의 편향과 보정상수 { .eg }
 
 ```python
 from scipy.special import gamma as gamma_func
@@ -220,7 +220,7 @@ n= 500  E[S]=2.9987  σ=3.0000  Bias=-0.0013  c₄=nan  E[S/c₄]=nan
 
 <div class="codebox" markdown>
 
-**예제 5.** 소프트웨어 기본값의 함정
+### 예제 5. 소프트웨어 기본값의 함정 { .eg }
 
 ```python
 import numpy as np
@@ -253,7 +253,7 @@ np.var(data, ddof=1)  = 4.5714  <- divides by n-1=7  (UNBIASED)
 
 <div class="codebox" markdown>
 
-**예제 6.** 금융 응용 — 추적오차
+### 예제 6. 금융 응용 — 추적오차 { .eg }
 
 ```python
 def tracking_error_estimation(seed=42):

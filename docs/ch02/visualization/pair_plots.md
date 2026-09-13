@@ -8,7 +8,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 타이타닉 자료의 쌍그림
+### 예제 1. 타이타닉 자료의 쌍그림 { .eg }
 
 ```python
 import seaborn as sns
@@ -49,7 +49,7 @@ $k$개 변수를 주면 $k \times k$ 격자가 만들어진다.
 
 <div class="codebox" markdown>
 
-**예제 2.** 격자의 구조 들여다보기
+### 예제 2. 격자의 구조 들여다보기 { .eg }
 
 ```python
 import seaborn as sns
@@ -81,7 +81,7 @@ g.map_upper(corr_text)
 
 <div class="codebox" markdown>
 
-**예제 3.** 집단별로 색 입히기
+### 예제 3. 집단별로 색 입히기 { .eg }
 
 ```python
 # hue 에 범주형 열을 주면 집단마다 색이 갈린다. 변수 쌍마다 두 집단이

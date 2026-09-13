@@ -29,7 +29,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 이변량 정규분포의 조건부분포
+### 예제 1. 이변량 정규분포의 조건부분포 { .eg }
 
 ```python
 import numpy as np

@@ -29,7 +29,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -79,7 +79,7 @@ R^2 = 0.7813
 
 <div class="codebox" markdown>
 
-**예제 2.** 잔차 대 적합값 그림
+### 예제 2. 잔차 대 적합값 그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -138,7 +138,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** Breusch-Pagan 검정
+### 예제 3. Breusch-Pagan 검정 { .eg }
 
 ```python
 from statsmodels.stats.diagnostic import het_breuschpagan
@@ -194,7 +194,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** White 검정
+### 예제 4. White 검정 { .eg }
 
 ```python
 from statsmodels.stats.diagnostic import het_white
@@ -241,7 +241,7 @@ White 검정도 $p < 0.0001$로 등분산을 기각한다. Breusch-Pagan이 이�
 
 <div class="codebox" markdown>
 
-**예제 5.** 척도-위치 그림
+### 예제 5. 척도-위치 그림 { .eg }
 
 ```python
 import numpy as np

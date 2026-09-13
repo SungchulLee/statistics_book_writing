@@ -46,7 +46,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산에 대한 카이제곱 검정 구현
+### 예제 1. 분산에 대한 카이제곱 검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -74,7 +74,7 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
 
 <div class="codebox" markdown>
 
-**예제 2.** 검정 실행
+### 예제 2. 검정 실행 { .eg }
 
 ```python
 seed = 1

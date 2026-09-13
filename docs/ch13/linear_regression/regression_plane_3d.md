@@ -26,7 +26,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 설명변수 둘인 자료와 적합
+#### 예제 1. 설명변수 둘인 자료와 적합 { .eg }
 
 ```python
 import numpy as np
@@ -56,7 +56,7 @@ beta_2 = model.coef_[1]  # TV
 
 <div class="codebox" markdown>
 
-**예제 2.** 회귀평면 격자 만들기
+#### 예제 2. 회귀평면 격자 만들기 { .eg }
 
 ```python
 # 평면을 그리려면 두 축의 격자를 만들고 칸마다 적합값을 계산한다.
@@ -73,7 +73,7 @@ Sales_mesh = beta_0 + beta_1 * Radio_mesh + beta_2 * TV_mesh
 
 <div class="codebox" markdown>
 
-**예제 3.** 평면과 잔차를 3차원으로
+#### 예제 3. 평면과 잔차를 3차원으로 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

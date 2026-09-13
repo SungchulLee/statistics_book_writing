@@ -122,7 +122,7 @@ IRLS는 보통 적은 반복으로 수렴하며, 많은 고전적 로지스틱 �
 
 <div class="codebox" markdown>
 
-**예제 1.** 자료 읽기
+#### 예제 1. 자료 읽기 { .eg }
 
 ```python
 import pandas as pd
@@ -150,7 +150,7 @@ def load_data(seed=1):
 
 <div class="codebox" markdown>
 
-**예제 2.** 로지스틱 회귀 직접 구현
+#### 예제 2. 로지스틱 회귀 직접 구현 { .eg }
 
 ```python
 import numpy as np
@@ -223,7 +223,7 @@ class LogisticRegression:
 
 <div class="codebox" markdown>
 
-**예제 3.** 직접 구현으로 적합하기
+#### 예제 3. 직접 구현으로 적합하기 { .eg }
 
 ```python
 # 직접 구현한 모형으로 적합한다. 학습률이 작고 반복이 10만 번이라 시간이 걸린다.
@@ -244,7 +244,7 @@ y_prob = model.predict_proba(x_test)
 
 <div class="codebox" markdown>
 
-**예제 4.** sklearn 으로 같은 일 하기
+### 예제 4. sklearn 으로 같은 일 하기 { .eg }
 
 ```python
 # 같은 일을 sklearn 으로 하면 세 줄이면 된다. lbfgs 는 기울기뿐 아니라

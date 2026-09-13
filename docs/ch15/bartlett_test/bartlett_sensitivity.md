@@ -24,7 +24,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 치우친 자료에서의 거짓 양성률
+### 예제 1. 치우친 자료에서의 거짓 양성률 { .eg }
 
 ```python
 import numpy as np

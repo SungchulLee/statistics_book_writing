@@ -122,7 +122,7 @@ Pearson을 쓸 때:
 
 <div class="codebox" markdown>
 
-**예제 1.** 단조 곡선에서의 Spearman
+### 예제 1. 단조 곡선에서의 Spearman { .eg }
 
 ```python
 import numpy as np

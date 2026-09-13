@@ -30,7 +30,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 교호작용 그림 그리기
+### 예제 1. 교호작용 그림 그리기 { .eg }
 
 ```python
 import pandas as pd

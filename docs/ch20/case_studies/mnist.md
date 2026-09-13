@@ -13,7 +13,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** MNIST 자료 읽기
+### 예제 1. MNIST 자료 읽기 { .eg }
 
 ```python
 import torch
@@ -66,7 +66,7 @@ train 60000, test 10000
 
 <div class="codebox" markdown>
 
-**예제 2.** 선형 모형 학습
+### 예제 2. 선형 모형 학습 { .eg }
 
 ```python
 import torch.nn as nn
@@ -158,7 +158,7 @@ Test accuracy: 92.03%
 
 <div class="codebox" markdown>
 
-**예제 3.** 학습 전후 예측 비교
+### 예제 3. 학습 전후 예측 비교 { .eg }
 
 ```python
 def show_images(images, true_labels, pred_labels, title):
@@ -199,7 +199,7 @@ show_images(fixed_images, fixed_labels, preds, "After Training")
 
 <div class="codebox" markdown>
 
-**예제 4.** 합성곱 신경망
+### 예제 4. 합성곱 신경망 { .eg }
 
 ```python
 import torch.nn.functional as F
@@ -262,7 +262,7 @@ Epoch 5, Loss: 0.0320
 
 <div class="codebox" markdown>
 
-**예제 5.** 되쓰기 좋게 만든 모형
+#### 예제 5. 되쓰기 좋게 만든 모형 { .eg }
 
 ```python
 class Net(nn.Module):
@@ -282,7 +282,7 @@ class Net(nn.Module):
 
 <div class="codebox" markdown>
 
-**예제 6.** 학습 반복문 함수
+#### 예제 6. 학습 반복문 함수 { .eg }
 
 ```python
 def train(model, loader, criterion, optimizer, epochs=2, device='cpu'):
@@ -309,7 +309,7 @@ def train(model, loader, criterion, optimizer, epochs=2, device='cpu'):
 
 <div class="codebox" markdown>
 
-**예제 7.** 정확도 계산 함수
+#### 예제 7. 정확도 계산 함수 { .eg }
 
 ```python
 def compute_accuracy(model, loader, classes, device='cpu'):
@@ -345,7 +345,7 @@ def compute_accuracy(model, loader, classes, device='cpu'):
 
 <div class="codebox" markdown>
 
-**예제 8.** 모형 저장과 적재
+#### 예제 8. 모형 저장과 적재 { .eg }
 
 ```python
 from pathlib import Path

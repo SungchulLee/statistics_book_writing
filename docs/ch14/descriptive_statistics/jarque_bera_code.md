@@ -28,7 +28,7 @@ $p$값은 $p = P(\chi^2_2 \geq \text{JB}_{\text{obs}})$이며 $p < \alpha$일 �
 
 <div class="codebox" markdown>
 
-**예제 1.** 섞인 자료에 Jarque-Bera 검정
+### 예제 1. 섞인 자료에 Jarque-Bera 검정 { .eg }
 
 ```python
 import numpy as np

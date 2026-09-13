@@ -36,7 +36,7 @@ SciPy는 `scipy.stats.bartlett`을 직접 제공한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산 차이를 키워 가며
+### 예제 1. 분산 차이를 키워 가며 { .eg }
 
 ```python
 import numpy as np

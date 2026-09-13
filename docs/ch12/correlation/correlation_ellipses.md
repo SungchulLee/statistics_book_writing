@@ -34,7 +34,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 타원으로 상관행렬 그리기
+### 예제 1. 타원으로 상관행렬 그리기 { .eg }
 
 ```python
 import numpy as np
@@ -97,7 +97,7 @@ def plot_corr_ellipses(data, figsize=None, **kwargs):
 
 <div class="codebox" markdown>
 
-**예제 2.** 업종 수익률 자료로 그려 보기
+### 예제 2. 업종 수익률 자료로 그려 보기 { .eg }
 
 ```python
 np.random.seed(42)

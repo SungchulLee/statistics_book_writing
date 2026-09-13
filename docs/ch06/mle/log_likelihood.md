@@ -71,7 +71,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 로그가능도 구현과 시각화
+### 예제 1. 로그가능도 구현과 시각화 { .eg }
 
 ```python
 import numpy as np
@@ -127,7 +127,7 @@ Max log-likelihood: -63.4179
 
 <div class="codebox" markdown>
 
-**예제 2.** 로그가능도의 벡터화
+### 예제 2. 로그가능도의 벡터화 { .eg }
 
 ```python
 import numpy as np
@@ -162,7 +162,7 @@ Vectorized MLE: p = 0.6699
 
 <div class="codebox" markdown>
 
-**예제 3.** 가능도와 로그가능도의 수치 비교
+### 예제 3. 가능도와 로그가능도의 수치 비교 { .eg }
 
 ```python
 import numpy as np

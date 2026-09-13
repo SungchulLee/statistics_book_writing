@@ -28,7 +28,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 1단계 — 일원배치 분산분석
+##### 예제 1. 1단계 — 일원배치 분산분석 { .eg }
 
 ```python
 import pandas as pd
@@ -65,7 +65,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
 <div class="codebox" markdown>
 
-**예제 2.** 2단계 — Tukey HSD
+##### 예제 2. 2단계 — Tukey HSD { .eg }
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -106,7 +106,7 @@ group1 group2 meandiff p-adj   lower  upper  reject
 
 <div class="codebox" markdown>
 
-**예제 3.** 3단계 — 본페로니 보정과의 비교
+##### 예제 3. 3단계 — 본페로니 보정과의 비교 { .eg }
 
 ```python
 from statsmodels.stats.multitest import multipletests
@@ -160,7 +160,7 @@ Scheffé 검정은 쌍별이 아닌 비교나 대비를 검정하는 데 적합�
 
 <div class="codebox" markdown>
 
-**예제 4.** scipy의 tukey_hsd 로 신뢰구간까지
+### 예제 4. scipy의 tukey_hsd 로 신뢰구간까지 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -354,7 +354,7 @@ Tukey의 HSD 결과는 95% 신뢰수준에서 집단 1과 집단 2 사이에 통
 
 <div class="codebox" markdown>
 
-**예제 5.** 1단계 — 이원배치 분산분석
+##### 예제 5. 1단계 — 이원배치 분산분석 { .eg }
 
 ```python
 import pandas as pd
@@ -389,7 +389,7 @@ Residual         54.0   712.106000    13.187148        NaN           NaN
 
 <div class="codebox" markdown>
 
-**예제 6.** 2단계 — 주효과 사후검정
+##### 예제 6. 2단계 — 주효과 사후검정 { .eg }
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -435,7 +435,7 @@ group1 group2 meandiff p-adj  lower  upper reject
 
 <div class="codebox" markdown>
 
-**예제 7.** 3단계 — 교호작용 사후검정
+##### 예제 7. 3단계 — 교호작용 사후검정 { .eg }
 
 ```python
 # 두 요인을 붙여 하나의 요인으로 만든다. 이러면 여섯 칸을 서로 견줄 수 있다.
@@ -483,7 +483,7 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 <div class="codebox" markdown>
 
-**예제 8.** 4단계 — 단순효과 분석
+##### 예제 8. 4단계 — 단순효과 분석 { .eg }
 
 ```python
 # 단순효과 분석: 보충제를 하나로 고정해 두고 투여량 효과만 본다.

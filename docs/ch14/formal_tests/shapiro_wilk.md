@@ -51,7 +51,7 @@ Shapiro-Wilk 검정통계량 $W$는 다음 단계로 계산한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** Shapiro-Wilk 검정
+#### 예제 1. Shapiro-Wilk 검정 { .eg }
 
 ```python
 import numpy as np

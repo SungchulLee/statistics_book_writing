@@ -133,7 +133,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 평균의 z 검정 구현
+### 예제 1. 두 평균의 z 검정 구현 { .eg }
 
 ```python
 import numpy as np

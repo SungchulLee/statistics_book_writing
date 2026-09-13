@@ -52,7 +52,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 사후분포에서 분산 뽑는 함수
+### 예제 1. 사후분포에서 분산 뽑는 함수 { .eg }
 
 ```python
 import numpy as np
@@ -103,7 +103,7 @@ $\rho$의 95% 신용구간이 1을 제외하면 분산이 다르다는 증거가
 
 <div class="codebox" markdown>
 
-**예제 2.** 두 분산비의 사후분포
+### 예제 2. 두 분산비의 사후분포 { .eg }
 
 ```python
 x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)

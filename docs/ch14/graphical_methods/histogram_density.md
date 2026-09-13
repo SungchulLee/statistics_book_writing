@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규 표본에 정규 곡선 겹치기
+### 예제 1. 정규 표본에 정규 곡선 겹치기 { .eg }
 
 ```python
 import numpy as np
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 2.** 지수 표본에 정규 곡선 겹치기
+### 예제 2. 지수 표본에 정규 곡선 겹치기 { .eg }
 
 ```python
 import numpy as np
@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 3.** 카이제곱 표본에 정규 곡선 겹치기
+### 예제 3. 카이제곱 표본에 정규 곡선 겹치기 { .eg }
 
 ```python
 import numpy as np

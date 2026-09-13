@@ -109,7 +109,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 표준오차를 한 파일로 구하기
+#### 예제 1. 표준오차를 한 파일로 구하기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -188,7 +188,7 @@ Standard Error   of X_bar : 0.1287
 
 <div class="codebox" markdown>
 
-**예제 2.** 공유 설정 모듈
+#### 예제 2. 공유 설정 모듈 { .eg }
 
 ```python
 import argparse
@@ -212,7 +212,7 @@ np.random.seed(ARGS.seed)
 
 <div class="codebox" markdown>
 
-**예제 3.** 표준오차를 그림에 표시하기
+#### 예제 3. 표준오차를 그림에 표시하기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -274,7 +274,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 4.** 표본크기에 따른 표준오차 변화
+#### 예제 4. 표본크기에 따른 표준오차 변화 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

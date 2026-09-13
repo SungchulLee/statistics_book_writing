@@ -22,7 +22,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 자료 만들기
+### 예제 1. 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -60,7 +60,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** sklearn 으로 적합
+### 예제 2. sklearn 으로 적합 { .eg }
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -105,7 +105,7 @@ statsmodels는 최대가능도 추정을 통해 표준오차, 왈드 검정, 신
 
 <div class="codebox" markdown>
 
-**예제 3.** statsmodels 로 추론까지
+### 예제 3. statsmodels 로 추론까지 { .eg }
 
 ```python
 import statsmodels.api as sm
@@ -177,7 +177,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 오즈비와 신뢰구간
+#### 예제 4. 오즈비와 신뢰구간 { .eg }
 
 ```python
 import numpy as np
@@ -218,7 +218,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 가능도비 검정
+#### 예제 5. 가능도비 검정 { .eg }
 
 ```python
 # 절편만 있는 모형과 견준다. 선형회귀의 F 검정에 해당하는 자리다.
@@ -260,7 +260,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 6.** 혼동행렬과 네 측도
+### 예제 6. 혼동행렬과 네 측도 { .eg }
 
 ```python
 from sklearn.metrics import (confusion_matrix, classification_report,
@@ -316,7 +316,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 7.** ROC 와 AUC
+### 예제 7. ROC 와 AUC { .eg }
 
 ```python
 from sklearn.metrics import roc_curve, roc_auc_score
@@ -348,7 +348,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 8.** 정밀도-재현율 곡선
+### 예제 8. 정밀도-재현율 곡선 { .eg }
 
 ```python
 from sklearn.metrics import precision_recall_curve, average_precision_score
@@ -379,7 +379,7 @@ $J = \text{TPR} - \text{FPR}$를 최대화하는 문턱을 고른다.
 
 <div class="codebox" markdown>
 
-**예제 9.** Youden의 J로 문턱 고르기
+### 예제 9. Youden의 J로 문턱 고르기 { .eg }
 
 ```python
 # Youden 의 J 로 문턱을 고른다. 두 오류의 비용이 같다고 볼 때의 선택이다.
@@ -405,7 +405,7 @@ Optimal threshold (Youden's J): 0.716
 
 <div class="codebox" markdown>
 
-**예제 10.** 문턱값에 따른 측도 변화
+### 예제 10. 문턱값에 따른 측도 변화 { .eg }
 
 ```python
 # 문턱을 바꿔 가며 네 측도가 어떻게 움직이는지 한 표로 본다.

@@ -38,7 +38,7 @@ $\hat{\beta}$의 표준오차는 $\sqrt{\hat{\beta}(1-\hat{\beta})/B}$이다.
 
 <div class="codebox" markdown>
 
-**예제 1.** F 검정의 검정력 모의실험
+### 예제 1. F 검정의 검정력 모의실험 { .eg }
 
 ```python
 import numpy as np
@@ -95,7 +95,7 @@ Estimated power: 0.506 (SE: 0.007)
 
 <div class="codebox" markdown>
 
-**예제 2.** 표본크기에 따른 검정력
+### 예제 2. 표본크기에 따른 검정력 { .eg }
 
 ```python
 # 이번에는 차이를 1.5 배로 줄이고 n 을 키워 간다. 쓸 만한 검정력을 얻으려면

@@ -14,7 +14,7 @@ $$\bar{X}_n \xrightarrow{\text{a.s.}} \mu \quad (n \to \infty)$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 여러 경로로 보는 강대수의 법칙
+### 예제 1. 여러 경로로 보는 강대수의 법칙 { .eg }
 
 ```python
 import numpy as np
@@ -79,7 +79,7 @@ $$\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)$$
 
 <div class="codebox" markdown>
 
-**예제 2.** 모집단 넷으로 보는 중심극한정리
+### 예제 2. 모집단 넷으로 보는 중심극한정리 { .eg }
 
 ```python
 from scipy import stats
@@ -145,7 +145,7 @@ Cauchy 관측값을 더 많이 평균해도 전혀 나아지지 않는다.
 
 <div class="codebox" markdown>
 
-**예제 3.** 코시분포에서 무너지는 수렴
+### 예제 3. 코시분포에서 무너지는 수렴 { .eg }
 
 ```python
 def cauchy_failure(seed=42):
@@ -203,7 +203,7 @@ $$\text{Var}(\bar{X}) \approx \frac{\sigma^2}{n} \cdot \frac{1 + \rho}{1 - \rho}
 
 <div class="codebox" markdown>
 
-**예제 4.** 자기상관이 표준오차에 미치는 영향
+### 예제 4. 자기상관이 표준오차에 미치는 영향 { .eg }
 
 ```python
 def autocorrelation_effect(n=100, n_sim=30_000, seed=42):
@@ -263,7 +263,7 @@ $$P(\bar{X}_T > r_f) = \mathcal{N}\left(\frac{\mu - r_f}{\sigma / \sqrt{T}}\righ
 
 <div class="codebox" markdown>
 
-**예제 5.** 초과수익을 확인하는 데 필요한 기간
+### 예제 5. 초과수익을 확인하는 데 필요한 기간 { .eg }
 
 ```python
 def estimation_horizon_analysis(seed=42):

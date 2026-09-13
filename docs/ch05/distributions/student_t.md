@@ -65,7 +65,7 @@ $t$ 분포는 정규분포보다 **꼬리가 두꺼워** 극단값이 나타날 
 
 <div class="codebox" markdown>
 
-**예제 1.** t 분포의 두꺼운 꼬리
+### 예제 1. t 분포의 두꺼운 꼬리 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -101,7 +101,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 자유도가 커지면 t가 정규로 간다
+#### 예제 2. 자유도가 커지면 t가 정규로 간다 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -145,7 +145,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 왜 t 분포가 필요한가
+### 예제 3. 왜 t 분포가 필요한가 { .eg }
 
 ```python
 import numpy as np
@@ -210,7 +210,7 @@ $t$ 분포는 $n$이 작을 때 가장 중요하다. 두꺼운 꼬리가 $\sigma
 
 <div class="codebox" markdown>
 
-**예제 4.** t 분포에서 표본추출
+### 예제 4. t 분포에서 표본추출 { .eg }
 
 ```python
 import numpy as np

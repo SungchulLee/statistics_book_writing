@@ -44,7 +44,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 이변량 자료 만들기
+### 예제 1. 이변량 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -69,7 +69,7 @@ SciPy는 각 측도에 대한 함수를 제공하며 계수와 함께 연관이 
 
 <div class="codebox" markdown>
 
-**예제 2.** 세 상관계수 구하기
+### 예제 2. 세 상관계수 구하기 { .eg }
 
 ```python
 # 세 측도를 함께 구한다. 관계가 선형이고 이상치가 없으면 셋이 비슷하게 나온다.
@@ -103,7 +103,7 @@ Kendall  tau = 0.6420  (p = 2.54e-25)
 
 <div class="codebox" markdown>
 
-**예제 3.** 순위에 대한 피어슨이 스피어만이다
+### 예제 3. 순위에 대한 피어슨이 스피어만이다 { .eg }
 
 ```python
 # Spearman 은 "순위에 대한 Pearson"이라는 정의를 그대로 확인한다.
@@ -132,7 +132,7 @@ Spearman rho       = 0.8363
 
 <div class="codebox" markdown>
 
-**예제 4.** 회귀직선을 얹은 산점도
+### 예제 4. 회귀직선을 얹은 산점도 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

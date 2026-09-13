@@ -46,7 +46,7 @@ $n \le 0.10 N$이면 이 수정은 무시할 만하다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 세 방법으로 만든 평균 신뢰구간
+### 예제 1. 세 방법으로 만든 평균 신뢰구간 { .eg }
 
 ```python
 import numpy as np
@@ -113,7 +113,7 @@ t-interval coverage: 96.0%
 
 <div class="codebox" markdown>
 
-**예제 2.** 구간 100개를 한 그림에
+#### 예제 2. 구간 100개를 한 그림에 { .eg }
 
 ```python
 # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은

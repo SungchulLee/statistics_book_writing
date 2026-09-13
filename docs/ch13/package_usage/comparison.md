@@ -85,7 +85,7 @@ max      8.780   37.970   22.000   50.000
 
 <div class="codebox" markdown>
 
-**예제 2.** statsmodels — 추론이 목적일 때
+#### 예제 2. statsmodels — 추론이 목적일 때 { .eg }
 
 ```python
 import statsmodels.api as sm
@@ -175,7 +175,7 @@ $R^2 = 0.679$이고 세 계수 모두 $p < 10^{-13}$로 강하게 유의하다. 
 
 <div class="codebox" markdown>
 
-**예제 3.** sklearn — 예측이 목적일 때
+#### 예제 3. sklearn — 예측이 목적일 때 { .eg }
 
 ```python
 from sklearn.linear_model import LinearRegression
@@ -229,7 +229,7 @@ sklearn이 statsmodels와 **같은 계수**를 준다(4.5154, $-0.5718$, $-0.930
 
 <div class="codebox" markdown>
 
-**예제 4.** 둘을 함께 쓰기
+### 예제 4. 둘을 함께 쓰기 { .eg }
 
 ```python
 # 실무에서는 둘을 함께 쓴다. 먼저 statsmodels 로 무엇이 유의한지,

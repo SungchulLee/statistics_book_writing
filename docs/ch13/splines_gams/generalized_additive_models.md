@@ -134,7 +134,7 @@ $$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) c_{jk}, \qquad \text{벌점: } \lambda
 
 <div class="codebox" markdown>
 
-**예제 1.** statsmodels로 GAM 적합
+#### 예제 1. statsmodels로 GAM 적합 { .eg }
 
 ```python
 import numpy as np
@@ -208,7 +208,7 @@ x2_s1          0.0997      0.059      1.704      0.088      -0.015       0.214
 
 <div class="codebox" markdown>
 
-**예제 2.** pygam과 부분의존도 그림
+#### 예제 2. pygam과 부분의존도 그림 { .eg }
 
 ```python
 from pygam import LinearGAM, s, l
@@ -345,7 +345,7 @@ None
 
 <div class="codebox" markdown>
 
-**예제 3.** 주택 자료에 GAM 적용
+### 예제 3. 주택 자료에 GAM 적용 { .eg }
 
 ```python
 from pygam import LinearGAM, s, l

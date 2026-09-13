@@ -326,7 +326,7 @@ p_value = 0.07243975703425146
 
 <div class="codebox" markdown>
 
-**예제 2.** 범주별로 따로 검정하면 안 되는 이유
+#### 예제 2. 범주별로 따로 검정하면 안 되는 이유 { .eg }
 
 ```python
 import numpy as np
@@ -375,7 +375,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 적합도 검정통계량
+#### 예제 3. 적합도 검정통계량 { .eg }
 
 ```python
 import numpy as np
@@ -449,7 +449,7 @@ $$\text{주사위는 조작되지 않았다.}$$
 
 <div class="codebox" markdown>
 
-**예제 4.** 정의대로 계산한 적합도 검정
+#### 예제 4. 정의대로 계산한 적합도 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -526,7 +526,7 @@ $p = 0.0647$로 5% 수준에서 기각하지 못한다. 눈 3만 따로 보았�
 
 <div class="codebox" markdown>
 
-**예제 5.** scipy로 계산한 적합도 검정
+#### 예제 5. scipy로 계산한 적합도 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

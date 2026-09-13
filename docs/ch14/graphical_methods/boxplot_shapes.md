@@ -41,7 +41,7 @@ $\text{Lognormal}(0, 0.7)$처럼 오른쪽으로 치우친 분포에서 자료�
 
 <div class="codebox" markdown>
 
-**예제 1.** 치우친 자료의 상자그림
+### 예제 1. 치우친 자료의 상자그림 { .eg }
 
 ```python
 import numpy as np
@@ -76,7 +76,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 꼬리가 두꺼운 자료의 상자그림
+### 예제 2. 꼬리가 두꺼운 자료의 상자그림 { .eg }
 
 ```python
 import numpy as np

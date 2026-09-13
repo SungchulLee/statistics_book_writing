@@ -72,7 +72,7 @@ $\alpha = 0.05$에서 $H_0: p_{\text{in\_person}} = p_{\text{online}}$을 검정
 
 <div class="codebox" markdown>
 
-**예제 1.** 신뢰구간과 검정이 같은 답을 준다
+### 예제 1. 신뢰구간과 검정이 같은 답을 준다 { .eg }
 
 ```python
 import numpy as np

@@ -95,7 +95,7 @@ $t$ 검정은 원자료(또는 각 집단의 자료)의 정규성을 가정하�
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산분석 잔차의 정규성 확인
+#### 예제 1. 분산분석 잔차의 정규성 확인 { .eg }
 
 ```python
 import numpy as np

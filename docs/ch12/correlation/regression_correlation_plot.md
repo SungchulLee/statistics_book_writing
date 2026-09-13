@@ -35,7 +35,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 기울기와 잡음을 바꿔 가며
+### 예제 1. 기울기와 잡음을 바꿔 가며 { .eg }
 
 ```python
 import numpy as np
@@ -80,7 +80,7 @@ def generate(beta1, beta2, error_scale, n=DATA_SIZE):
 
 <div class="codebox" markdown>
 
-**예제 2.** 여덟 칸을 한눈에
+### 예제 2. 여덟 칸을 한눈에 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

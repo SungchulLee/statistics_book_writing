@@ -38,7 +38,7 @@ $a + b$는 **사전 유효 표본크기**로 작동한다. 이 값이 클수록 
 
 <div class="codebox" markdown>
 
-**예제 1.** 베이즈 갱신 함수
+### 예제 1. 베이즈 갱신 함수 { .eg }
 
 ```python
 import numpy as np
@@ -82,7 +82,7 @@ print(f"사후평균 {a/(a+b):.4f}   (MLE = {7/10:.4f})")
 
 <div class="codebox" markdown>
 
-**예제 2.** 사전분포에 따른 민감도 분석
+### 예제 2. 사전분포에 따른 민감도 분석 { .eg }
 
 ```python
 n = 581
@@ -134,7 +134,7 @@ Strong prior at 0.5                  a_post= 381  b_post= 400  mean=0.4878  P(p<
 
 <div class="codebox" markdown>
 
-**예제 3.** 사전에서 사후로 가는 과정 그리기
+### 예제 3. 사전에서 사후로 가는 과정 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

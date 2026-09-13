@@ -48,7 +48,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 표본크기가 오차한계를 어떻게 줄이는가
+### 예제 1. 표본크기가 오차한계를 어떻게 줄이는가 { .eg }
 
 ```python
 import numpy as np

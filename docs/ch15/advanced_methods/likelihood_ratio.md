@@ -144,7 +144,7 @@ Bartlett 검정이 올바른 기준분포를 쓴다는 것이 확인된다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 가능도비 검정과 Bartlett 보정
+### 예제 1. 가능도비 검정과 Bartlett 보정 { .eg }
 
 ```python
 import numpy as np

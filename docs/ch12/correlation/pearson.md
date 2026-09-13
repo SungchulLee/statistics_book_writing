@@ -120,7 +120,7 @@ Pearson 상관은 평균과 표준편차에 기반하는데, 이들 자체가 �
 
 <div class="codebox" markdown>
 
-**예제 1.** Pearson 상관계수 구하기
+### 예제 1. Pearson 상관계수 구하기 { .eg }
 
 ```python
 import numpy as np

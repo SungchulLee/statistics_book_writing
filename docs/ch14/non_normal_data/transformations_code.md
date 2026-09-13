@@ -24,7 +24,7 @@ $X \sim \text{Lognormal}(\mu, \sigma^2)$이면 $Y \sim \mathcal{N}(\mu, \sigma^2
 
 <div class="codebox" markdown>
 
-**예제 1.** 로그 변환 전후의 왜도
+### 예제 1. 로그 변환 전후의 왜도 { .eg }
 
 ```python
 import numpy as np
@@ -91,7 +91,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** Box-Cox가 고르는 lambda
+### 예제 2. Box-Cox가 고르는 lambda { .eg }
 
 ```python
 import numpy as np

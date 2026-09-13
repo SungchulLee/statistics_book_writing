@@ -16,7 +16,7 @@ $$E[\bar{X}] = \mu$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분포를 바꿔 가며 확인하는 불편성
+### 예제 1. 분포를 바꿔 가며 확인하는 불편성 { .eg }
 
 ```python
 import numpy as np
@@ -76,7 +76,7 @@ $$\text{MSE}(\bar{X}) = \text{Bias}^2 + \text{Var}(\bar{X}) = 0 + \frac{\sigma^2
 
 <div class="codebox" markdown>
 
-**예제 2.** 분산과 평균제곱오차
+### 예제 2. 분산과 평균제곱오차 { .eg }
 
 ```python
 def verify_variance_and_mse(mu=10.0, sigma=3.0, n_sim=100_000, seed=42):
@@ -128,7 +128,7 @@ $\text{RE} > 1$이면 대안 $T$가 *더* 효율적이다.
 
 <div class="codebox" markdown>
 
-**예제 3.** 모집단에 따라 뒤바뀌는 효율
+### 예제 3. 모집단에 따라 뒤바뀌는 효율 { .eg }
 
 ```python
 from scipy import stats
@@ -211,7 +211,7 @@ $$w_i = \frac{1/\sigma_i^2}{\sum_{j=1}^k 1/\sigma_j^2}, \qquad \bar{X}_w = \sum_
 
 <div class="codebox" markdown>
 
-**예제 4.** 역분산 가중평균
+### 예제 4. 역분산 가중평균 { .eg }
 
 ```python
 def weighted_mean_demo(mu=5.0, n_sim=50_000, seed=42):
@@ -261,7 +261,7 @@ Variance reduction: 96.3%
 
 <div class="codebox" markdown>
 
-**예제 5.** 표준오차의 수렴 속도
+### 예제 5. 표준오차의 수렴 속도 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

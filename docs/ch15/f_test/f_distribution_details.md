@@ -107,7 +107,7 @@ F 분포는 여러 다른 분포와 연결된다.
 
 <div class="codebox" markdown>
 
-**예제 1.** F 분포의 성질과 기각값
+### 예제 1. F 분포의 성질과 기각값 { .eg }
 
 ```python
 from scipy import stats

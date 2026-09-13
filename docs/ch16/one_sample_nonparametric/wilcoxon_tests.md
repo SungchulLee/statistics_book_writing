@@ -42,7 +42,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 부호순위검정 — 대응표본
+#### 예제 1. 부호순위검정 — 대응표본 { .eg }
 
 ```python
 import numpy as np
@@ -106,7 +106,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 순위합검정 — 독립표본
+#### 예제 2. 순위합검정 — 독립표본 { .eg }
 
 ```python
 from scipy import stats

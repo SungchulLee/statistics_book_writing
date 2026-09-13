@@ -109,7 +109,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** K-제곱이 두 검정의 합임을 확인하기
+### 예제 1. K-제곱이 두 검정의 합임을 확인하기 { .eg }
 
 ```python
 import numpy as np

@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 시계열 꺾은선그림
+### 예제 1. 시계열 꺾은선그림 { .eg }
 
 ```python
 import numpy as np

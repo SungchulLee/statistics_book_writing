@@ -57,7 +57,7 @@ $4/n$ 문턱값은 실용적인 출발점으로 널리 쓰인다. 자료 크기�
 
 <div class="codebox" markdown>
 
-**예제 1.** 이상치를 넣고 뺀 회귀 비교
+#### 예제 1. 이상치를 넣고 뺀 회귀 비교 { .eg }
 
 ```python
 import numpy as np

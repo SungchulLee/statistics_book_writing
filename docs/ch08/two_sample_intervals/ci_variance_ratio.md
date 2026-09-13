@@ -41,7 +41,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산비의 신뢰구간 계산
+#### 예제 1. 분산비의 신뢰구간 계산 { .eg }
 
 ```python
 import numpy as np
@@ -89,7 +89,7 @@ print(f"95% CI for σ₁²/σ₂²: ({ci_lower:.4f}, {ci_upper:.4f})")
 
 <div class="codebox" markdown>
 
-**예제 2.** F 구간의 포함확률
+### 예제 2. F 구간의 포함확률 { .eg }
 
 ```python
 #!/usr/bin/env python3

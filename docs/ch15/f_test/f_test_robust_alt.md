@@ -26,7 +26,7 @@ Brown-Forsythe 검정은 집단평균을 집단중앙값으로 바꾸어 치우�
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규성 확인 뒤 로버스트 대안으로
+### 예제 1. 정규성 확인 뒤 로버스트 대안으로 { .eg }
 
 ```python
 import numpy as np

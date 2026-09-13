@@ -109,7 +109,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 정의대로 계산한 동질성 검정
+#### 예제 1. 정의대로 계산한 동질성 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -201,7 +201,7 @@ $\chi^2 = 212.94$는 자유도 8인 카이제곱분포에서 사실상 불가능
 
 <div class="codebox" markdown>
 
-**예제 2.** scipy로 계산한 동질성 검정
+#### 예제 2. scipy로 계산한 동질성 검정 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -271,7 +271,7 @@ p_value   = 0.00%
 
 <div class="codebox" markdown>
 
-**예제 3.** 동질적인 자료와 견주기
+#### 예제 3. 동질적인 자료와 견주기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -319,7 +319,7 @@ p_value   = 99.75%
 
 <div class="codebox" markdown>
 
-**예제 4.** 두 나라만 비교하기
+#### 예제 4. 두 나라만 비교하기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

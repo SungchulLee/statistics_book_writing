@@ -55,7 +55,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Fisher의 정확검정
+### 예제 1. Fisher의 정확검정 { .eg }
 
 ```python
 import numpy as np

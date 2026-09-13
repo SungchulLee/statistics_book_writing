@@ -44,7 +44,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 대응표본 평균 차이의 신뢰구간
+#### 예제 1. 대응표본 평균 차이의 신뢰구간 { .eg }
 
 ```python
 import numpy as np
@@ -243,7 +243,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 대응표본 신뢰구간의 포함확률
+### 예제 2. 대응표본 신뢰구간의 포함확률 { .eg }
 
 ```python
 #!/usr/bin/env python3

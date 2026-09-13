@@ -20,7 +20,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 동전 던지기 한 번의 실험
+#### 예제 1. 동전 던지기 한 번의 실험 { .eg }
 
 ```python
 import numpy as np
@@ -55,7 +55,7 @@ print([single_experiment() for _ in range(10)])
 
 <div class="codebox" markdown>
 
-**예제 2.** 모의실험 되풀이하기
+#### 예제 2. 모의실험 되풀이하기 { .eg }
 
 ```python
 def simulate_coin_tosses(n_simulations=NUM_SIMULATIONS,
@@ -90,7 +90,7 @@ Percentage: 0.0710%
 
 <div class="codebox" markdown>
 
-**예제 3.** 정확한 값과 견주기
+#### 예제 3. 정확한 값과 견주기 { .eg }
 
 ```python
 from scipy.stats import binom
@@ -115,7 +115,7 @@ Exact binomial P(X >= 24): 0.000715
 
 <div class="codebox" markdown>
 
-**예제 4.** 결과를 히스토그램으로
+#### 예제 4. 결과를 히스토그램으로 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

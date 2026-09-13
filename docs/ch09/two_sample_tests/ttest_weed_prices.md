@@ -16,7 +16,7 @@ p-값이 크면($> 0.05$) 정규성에 반하는 증거가 없다는 뜻이다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 주의 가격 자료 만들기
+### 예제 1. 두 주의 가격 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -69,7 +69,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 신뢰구간 함수
+### 예제 2. 신뢰구간 함수 { .eg }
 
 ```python
 def confidence_interval(data, confidence=0.95):
@@ -117,7 +117,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 합동 t-검정
+### 예제 3. 합동 t-검정 { .eg }
 
 ```python
 # equal_var=True는 합동 t-검정이다. scipy의 기본값이기도 하다.
@@ -151,7 +151,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 적합도 검정으로 본 판매량
+### 예제 4. 적합도 검정으로 본 판매량 { .eg }
 
 ```python
 counts_2014 = np.array([453020, 688699, 271937])

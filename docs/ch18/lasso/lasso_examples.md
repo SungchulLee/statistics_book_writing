@@ -37,7 +37,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 좌표하강으로 라쏘 풀기
+### 예제 1. 좌표하강으로 라쏘 풀기 { .eg }
 
 ```python
 import numpy as np
@@ -98,7 +98,7 @@ $\lambda$ 격자를 큰 값에서 작은 값으로 훑으면 계수들이 어떤
 
 <div class="codebox" markdown>
 
-**예제 2.** 계수 경로 구하기
+### 예제 2. 계수 경로 구하기 { .eg }
 
 ```python
 def lasso_path(X, y, lambdas):
@@ -123,7 +123,7 @@ def lasso_path(X, y, lambdas):
 
 <div class="codebox" markdown>
 
-**예제 3.** 교차검증 MSE
+### 예제 3. 교차검증 MSE { .eg }
 
 ```python
 def cv_lasso(X, y, lambdas, folds=5):
@@ -158,7 +158,7 @@ def cv_lasso(X, y, lambdas, folds=5):
 
 <div class="codebox" markdown>
 
-**예제 4.** 경로와 교차검증 실행
+### 예제 4. 경로와 교차검증 실행 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

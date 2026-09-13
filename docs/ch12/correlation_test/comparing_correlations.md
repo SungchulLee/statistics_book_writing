@@ -102,7 +102,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 독립인 두 상관의 비교
+#### 예제 1. 독립인 두 상관의 비교 { .eg }
 
 ```python
 import numpy as np

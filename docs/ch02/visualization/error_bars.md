@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 같은 자료, 세 가지 오차막대
+### 예제 1. 같은 자료, 세 가지 오차막대 { .eg }
 
 ```python
 import numpy as np

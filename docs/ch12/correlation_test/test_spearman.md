@@ -102,7 +102,7 @@ Spearman의 $r_s$ 검정은 다음을 요구한다:
 
 <div class="codebox" markdown>
 
-**예제 1.** Spearman 상관 검정과 손계산
+### 예제 1. Spearman 상관 검정과 손계산 { .eg }
 
 ```python
 import numpy as np

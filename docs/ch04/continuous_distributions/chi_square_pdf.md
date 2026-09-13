@@ -31,7 +31,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 카이제곱 밀도함수 그리기
+### 예제 1. 카이제곱 밀도함수 그리기 { .eg }
 
 ```python
 import numpy as np

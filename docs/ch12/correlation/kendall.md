@@ -133,7 +133,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Kendall의 타우 구하기
+### 예제 1. Kendall의 타우 구하기 { .eg }
 
 ```python
 import numpy as np

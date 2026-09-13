@@ -30,7 +30,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 순위합검정
+### 예제 1. 순위합검정 { .eg }
 
 ```python
 from scipy import stats
@@ -69,7 +69,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 부호순위검정
+### 예제 2. 부호순위검정 { .eg }
 
 ```python
 from scipy import stats
@@ -120,7 +120,7 @@ SciPy 구현은 **동점**을 동점 보정 분산과 연속성 보정 정규근
 
 <div class="codebox" markdown>
 
-**예제 3.** Mann-Whitney U 검정
+### 예제 3. Mann-Whitney U 검정 { .eg }
 
 ```python
 from scipy import stats
@@ -156,7 +156,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** Kruskal-Wallis 검정
+### 예제 4. Kruskal-Wallis 검정 { .eg }
 
 ```python
 from scipy import stats
@@ -188,7 +188,7 @@ Mood 중앙값검정은 Kruskal--Wallis의 더 간단한 대안이다. 모든 �
 
 <div class="codebox" markdown>
 
-**예제 5.** 중앙값 검정
+### 예제 5. 중앙값 검정 { .eg }
 
 ```python
 from scipy import stats

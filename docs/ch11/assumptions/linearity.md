@@ -16,7 +16,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 진단에 쓸 모형 준비
+### 예제 1. 진단에 쓸 모형 준비 { .eg }
 
 ```python
 import numpy as np
@@ -73,7 +73,7 @@ covariate 계수 = 0.3275
 
 <div class="codebox" markdown>
 
-**예제 2.** 집단별 산점도
+#### 예제 2. 집단별 산점도 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -106,7 +106,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 잔차 대 적합값 그림
+#### 예제 3. 잔차 대 적합값 그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

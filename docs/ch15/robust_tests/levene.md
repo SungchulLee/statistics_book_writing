@@ -90,7 +90,7 @@ $W > F_{1-\alpha,\, k-1,\, N-k}$이면 $H_0$을 기각한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** Levene 검정 — 중심의 선택
+### 예제 1. Levene 검정 — 중심의 선택 { .eg }
 
 ```python
 import numpy as np

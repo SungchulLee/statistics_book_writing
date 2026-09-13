@@ -97,7 +97,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 사전검정을 거치는 절차의 문제
+### 예제 1. 사전검정을 거치는 절차의 문제 { .eg }
 
 ```python
 import numpy as np

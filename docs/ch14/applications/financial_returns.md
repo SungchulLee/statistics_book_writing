@@ -105,7 +105,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 수익률의 정규성과 VaR
+### 예제 1. 수익률의 정규성과 VaR { .eg }
 
 ```python
 import numpy as np

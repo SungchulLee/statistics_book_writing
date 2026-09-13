@@ -25,7 +25,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 이표본 순열검정
+### 예제 1. 이표본 순열검정 { .eg }
 
 ```python
 import numpy as np
@@ -64,7 +64,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 다집단 순열검정
+### 예제 2. 다집단 순열검정 { .eg }
 
 ```python
 def perm_test_multi_group(groups, n_perm=9999, rng=None):
@@ -106,7 +106,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 비율에 대한 순열검정
+### 예제 3. 비율에 대한 순열검정 { .eg }
 
 ```python
 def perm_test_proportion(n_a, conv_a, n_b, conv_b, n_perm=9999, rng=None):
@@ -136,7 +136,7 @@ def perm_test_proportion(n_a, conv_a, n_b, conv_b, n_perm=9999, rng=None):
 
 <div class="codebox" markdown>
 
-**예제 4.** 난수 준비
+### 예제 4. 난수 준비 { .eg }
 
 ```python
 # 자료를 만드는 난수와 순열에 쓰는 난수를 따로 둔다. 이래야 자료를 그대로
@@ -153,7 +153,7 @@ rng = np.random.default_rng(3)
 
 <div class="codebox" markdown>
 
-**예제 5.** 체류시간 비교
+#### 예제 5. 체류시간 비교 { .eg }
 
 ```python
 # 두 페이지의 체류시간. 참 평균이 15 만큼 다르다.
@@ -180,7 +180,7 @@ Welch $t$ 검정은 $p = 0.0003$을 준다. 두 방법 모두 $15$단위 이동�
 
 <div class="codebox" markdown>
 
-**예제 6.** 네 처치군 비교
+#### 예제 6. 네 처치군 비교 { .eg }
 
 ```python
 # 네 처치군. 참 평균이 모두 다르다.
@@ -206,7 +206,7 @@ print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
 
 <div class="codebox" markdown>
 
-**예제 7.** 전환율 비교
+#### 예제 7. 전환율 비교 { .eg }
 
 ```python
 # 전환율 A/B 검정. 표본이 2만 이상인데 전환은 200 안팎이라 전환율이

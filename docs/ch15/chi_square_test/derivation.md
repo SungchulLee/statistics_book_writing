@@ -108,7 +108,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 요약값으로 하는 분산 검정
+### 예제 1. 요약값으로 하는 분산 검정 { .eg }
 
 ```python
 import numpy as np

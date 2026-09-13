@@ -30,7 +30,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 격자탐색으로 MLE 찾기
+### 예제 1. 격자탐색으로 MLE 찾기 { .eg }
 
 ```python
 import numpy as np
@@ -94,7 +94,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 재모수화로 제약 없애기
+#### 예제 2. 재모수화로 제약 없애기 { .eg }
 
 ```python
 import numpy as np
@@ -171,7 +171,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 출발값에 따른 수렴 위치
+### 예제 3. 출발값에 따른 수렴 위치 { .eg }
 
 ```python
 import numpy as np

@@ -20,7 +20,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 기각역과 검정통계량
+### 예제 1. 기각역과 검정통계량 { .eg }
 
 ```python
 import numpy as np
@@ -69,7 +69,7 @@ Rejection boundaries: 171.04 and 172.96
 
 <div class="codebox" markdown>
 
-**예제 2.** 기각역 그리기
+#### 예제 2. 기각역 그리기 { .eg }
 
 ```python
 # 기각역은 자료를 보기 전에 정해지는 영역이다. 관측된 통계량이 칠해진
@@ -119,7 +119,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 기각값 구하기
+#### 예제 3. 기각값 구하기 { .eg }
 
 ```python
 df = 100

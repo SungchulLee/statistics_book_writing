@@ -20,7 +20,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 대칭이면서 꼬리가 두꺼운 혼합분포
+##### 예제 1. 대칭이면서 꼬리가 두꺼운 혼합분포 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 2.** 오른쪽으로 치우친 분포 만들기
+#### 예제 2. 오른쪽으로 치우친 분포 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 3.** 왼쪽으로 치우친 분포 만들기
+#### 예제 3. 왼쪽으로 치우친 분포 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -176,7 +176,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 히스토그램과 상자그림을 나란히 보기
+#### 예제 4. 히스토그램과 상자그림을 나란히 보기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -232,7 +232,7 @@ IQR = 1.565,  울타리 밖 점 63개 / 1300개 (4.8%)
 
 <div class="codebox" markdown>
 
-**예제 5.** 오른쪽 치우침이 상자그림에 드러나는 모습
+#### 예제 5. 오른쪽 치우침이 상자그림에 드러나는 모습 { .eg }
 
 ```python
 import numpy as np
@@ -271,7 +271,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 6.** 왼쪽 치우침이 상자그림에 드러나는 모습
+#### 예제 6. 왼쪽 치우침이 상자그림에 드러나는 모습 { .eg }
 
 ```python
 import numpy as np
@@ -328,7 +328,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 7.** 덩어리 개수로 왜도를 조절하기
+#### 예제 7. 덩어리 개수로 왜도를 조절하기 { .eg }
 
 ```python
 import numpy as np
@@ -448,7 +448,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 8.** 뾰족한 봉우리로 첨도를 올리기
+#### 예제 8. 뾰족한 봉우리로 첨도를 올리기 { .eg }
 
 ```python
 import numpy as np
@@ -535,7 +535,7 @@ SciPy는 초과첨도를 직접 계산해 주는 편리한 함수를 제공한�
 
 <div class="codebox" markdown>
 
-**예제 9.** scipy 의 첨도 함수 비교
+#### 예제 9. scipy 의 첨도 함수 비교 { .eg }
 
 ```python
 from scipy import stats

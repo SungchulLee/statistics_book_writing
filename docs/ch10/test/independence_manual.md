@@ -43,7 +43,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 기대도수 계산
+#### 예제 1. 기대도수 계산 { .eg }
 
 ```python
 import numpy as np
@@ -87,7 +87,7 @@ print("열합 일치:", np.allclose(E.sum(axis=0), demo.sum(axis=0)))
 
 <div class="codebox" markdown>
 
-**예제 2.** 독립성 검정 손계산
+#### 예제 2. 독립성 검정 손계산 { .eg }
 
 ```python
 # 행이 한 변수의 수준, 열이 다른 변수의 수준이다.
@@ -121,7 +121,7 @@ p_value = 0.27%
 
 <div class="codebox" markdown>
 
-**예제 3.** 검정 결과를 그림으로
+#### 예제 3. 검정 결과를 그림으로 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

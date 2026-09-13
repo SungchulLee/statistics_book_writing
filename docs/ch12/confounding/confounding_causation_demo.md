@@ -22,7 +22,7 @@ $Y$는 오직 $C$에만 의존하므로 $T$가 $Y$에 미치는 참 인과효과
 
 <div class="codebox" markdown>
 
-**예제 1.** 교란된 자료 만들기
+#### 예제 1. 교란된 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -74,7 +74,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 짧은 회귀와 긴 회귀
+#### 예제 2. 짧은 회귀와 긴 회귀 { .eg }
 
 ```python
 def compute_regressions(t, c, y):
@@ -130,7 +130,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 부분회귀로 같은 값 얻기
+#### 예제 3. 부분회귀로 같은 값 얻기 { .eg }
 
 ```python
 # Frisch-Waugh-Lovell 정리: T 와 Y 에서 각각 C 로 설명되는 몫을 걷어 낸 뒤
@@ -174,7 +174,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 심슨의 역설과 층화
+#### 예제 4. 심슨의 역설과 층화 { .eg }
 
 ```python
 def simpson_paradox_demo(n=1000):

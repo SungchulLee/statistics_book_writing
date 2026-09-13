@@ -58,7 +58,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 붓스트랩으로 구간 구하기
+#### 예제 1. 붓스트랩으로 구간 구하기 { .eg }
 
 ```python
 import numpy as np
@@ -98,7 +98,7 @@ Bootstrap 95% CI for mean difference: (1.20, 4.80)
 
 <div class="codebox" markdown>
 
-**예제 2.** 순열로 p-값 구하기
+#### 예제 2. 순열로 p-값 구하기 { .eg }
 
 ```python
 import numpy as np, itertools

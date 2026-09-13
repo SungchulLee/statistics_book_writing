@@ -27,7 +27,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 1단계 — 모형 적합
+### 예제 1. 1단계 — 모형 적합 { .eg }
 
 ```python
 import pandas as pd
@@ -68,7 +68,7 @@ Residual          712.106000  54.0        NaN           NaN
 
 <div class="codebox" markdown>
 
-**예제 2.** 2단계 — 주효과 사후검정
+### 예제 2. 2단계 — 주효과 사후검정 { .eg }
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -109,7 +109,7 @@ $a \times b$개의 칸 평균을 모두 비교하려면 결합 집단 변수를 
 
 <div class="codebox" markdown>
 
-**예제 3.** 3단계 — 교호작용 사후검정
+### 예제 3. 3단계 — 교호작용 사후검정 { .eg }
 
 ```python
 # 교호작용이 유의하면 주효과만으로는 부족하다. 두 요인을 붙여 만든 여섯 칸을
@@ -163,7 +163,7 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 <div class="codebox" markdown>
 
-**예제 4.** 4단계 — 교호작용 그림
+### 예제 4. 4단계 — 교호작용 그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

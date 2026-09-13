@@ -34,7 +34,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Shapiro-Wilk 검정력 곡선
+### 예제 1. Shapiro-Wilk 검정력 곡선 { .eg }
 
 ```python
 import numpy as np

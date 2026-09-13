@@ -16,7 +16,7 @@ $C \times C$ 혼동행렬 $\mathbf{M}$의 원소 $M_{jk}$는 참 범주가 $j$�
 
 <div class="codebox" markdown>
 
-**예제 1.** 혼동행렬 구현
+### 예제 1. 혼동행렬 구현 { .eg }
 
 ```python
 import numpy as np
@@ -50,7 +50,7 @@ def confusion_matrix(y_true, y_pred, C):
 
 <div class="codebox" markdown>
 
-**예제 2.** 작은 예로 확인
+### 예제 2. 작은 예로 확인 { .eg }
 
 ```python
 # 범주마다 셋씩, 그중 둘을 맞힌 자료다. 아래 측도들을 손으로 따라가며
@@ -87,7 +87,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 전체 정확도
+### 예제 3. 전체 정확도 { .eg }
 
 ```python
 def accuracy(M):
@@ -128,7 +128,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 4.** 범주별 정밀도·재현율·F1
+### 예제 4. 범주별 정밀도·재현율·F1 { .eg }
 
 ```python
 def per_class_metrics(M):
@@ -191,7 +191,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 5.** 거시평균과 미시평균 F1
+### 예제 5. 거시평균과 미시평균 F1 { .eg }
 
 ```python
 def macro_f1(M):
@@ -246,7 +246,7 @@ Micro F1: 0.6667
 
 <div class="codebox" markdown>
 
-**예제 6.** 붓꽃 자료로 sklearn 과 맞춰 보기
+### 예제 6. 붓꽃 자료로 sklearn 과 맞춰 보기 { .eg }
 
 ```python
 from sklearn.datasets import load_iris
@@ -329,7 +329,7 @@ $\operatorname{diag}(19, 13, 13)$이 되고, 거시 F1과 미시 F1이 모두 $1
 
 <div class="codebox" markdown>
 
-**예제 7.** 혼동행렬 열지도
+### 예제 7. 혼동행렬 열지도 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

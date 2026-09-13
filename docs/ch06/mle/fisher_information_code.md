@@ -109,7 +109,7 @@ Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법�
 
 <div class="codebox" markdown>
 
-**예제 1.** 피셔 정보량을 수치로 구하기
+### 예제 1. 피셔 정보량을 수치로 구하기 { .eg }
 
 ```python
 import numpy as np
@@ -170,7 +170,7 @@ Normal mean Fisher information:
 
 <div class="codebox" markdown>
 
-**예제 2.** 표본평균이 하한에 도달함을 확인하기
+### 예제 2. 표본평균이 하한에 도달함을 확인하기 { .eg }
 
 ```python
 import numpy as np

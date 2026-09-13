@@ -44,7 +44,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 비율 차이의 신뢰구간 계산
+##### 예제 1. 두 비율 차이의 신뢰구간 계산 { .eg }
 
 ```python
 import numpy as np
@@ -155,7 +155,7 @@ $p_N - p_S$의 90% 신뢰구간을 구성하라.
 
 <div class="codebox" markdown>
 
-**예제 2.** 세 방법의 포함확률 비교
+### 예제 2. 세 방법의 포함확률 비교 { .eg }
 
 ```python
 #!/usr/bin/env python3

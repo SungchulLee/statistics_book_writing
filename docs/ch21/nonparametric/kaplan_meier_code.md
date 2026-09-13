@@ -23,7 +23,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 카플란-마이어 추정 구현
+#### 예제 1. 카플란-마이어 추정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -132,7 +132,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 로그순위 검정 구현
+#### 예제 2. 로그순위 검정 구현 { .eg }
 
 ```python
 from scipy import stats
@@ -188,7 +188,7 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
 
 <div class="codebox" markdown>
 
-**예제 3.** 두 집단의 생존곡선 그리기
+### 예제 3. 두 집단의 생존곡선 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

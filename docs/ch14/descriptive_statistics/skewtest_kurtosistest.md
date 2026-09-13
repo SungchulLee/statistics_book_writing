@@ -31,7 +31,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 왜도 검정
+#### 예제 1. 왜도 검정 { .eg }
 
 ```python
 import numpy as np
@@ -105,7 +105,7 @@ Fail to reject H_0: The data is symmetrically distributed (no significant skewne
 
 <div class="codebox" markdown>
 
-**예제 2.** 첨도 검정
+#### 예제 2. 첨도 검정 { .eg }
 
 ```python
 import numpy as np

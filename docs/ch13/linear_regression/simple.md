@@ -31,7 +31,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 키와 몸무게의 산점도
+#### 예제 1. 키와 몸무게의 산점도 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -84,7 +84,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 평균점 표시하기
+#### 예제 2. 평균점 표시하기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -132,7 +132,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 키의 2 SD 띠
+##### 예제 3. 키의 2 SD 띠 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -187,7 +187,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 4.** 몸무게의 2 SD 띠
+##### 예제 4. 몸무게의 2 SD 띠 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -248,7 +248,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 5.** 양의 SD 직선
+##### 예제 5. 양의 SD 직선 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -313,7 +313,7 @@ SD 직선은 평균점을 지나고 기울기가 $s_y/s_x$인 직선이다. 삼�
 
 <div class="codebox" markdown>
 
-**예제 6.** 음의 SD 직선
+##### 예제 6. 음의 SD 직선 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -377,7 +377,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 7.** 회귀직선과 SD 직선
+#### 예제 7. 회귀직선과 SD 직선 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -451,7 +451,7 @@ SD 직선의 기울기는 $s_y/s_x$이고 회귀직선의 기울기는 $r \cdot 
 
 <div class="codebox" markdown>
 
-**예제 8.** 두 회귀직선을 함께 그리기
+#### 예제 8. 두 회귀직선을 함께 그리기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -537,7 +537,7 @@ $|r| < 1$이면 두 직선이 갈라지고 $|r| = 1$이면 하나로 겹친다.
 
 <div class="codebox" markdown>
 
-**예제 9.** 세로 띠로 본 Y의 X에 대한 회귀
+#### 예제 9. 세로 띠로 본 Y의 X에 대한 회귀 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -609,7 +609,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 10.** 가로 띠로 본 X의 Y에 대한 회귀
+#### 예제 10. 가로 띠로 본 X의 Y에 대한 회귀 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -752,7 +752,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 11.** AAPL의 베타
+#### 예제 11. AAPL의 베타 { .eg }
 
 ```python
 from sklearn.linear_model import LinearRegression
@@ -829,7 +829,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 12.** WMT의 베타
+#### 예제 12. WMT의 베타 { .eg }
 
 ```python
 import yfinance as yf

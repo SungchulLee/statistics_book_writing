@@ -10,7 +10,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** OLS 적합과 출력표
+### 예제 1. OLS 적합과 출력표 { .eg }
 
 ```python
 import numpy as np
@@ -141,7 +141,7 @@ p값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지
 
 <div class="codebox" markdown>
 
-**예제 2.** 수식 API
+### 예제 2. 수식 API { .eg }
 
 ```python
 import pandas as pd
@@ -218,7 +218,7 @@ Notes:
 
 <div class="codebox" markdown>
 
-**예제 3.** 결과에서 값 꺼내기
+### 예제 3. 결과에서 값 꺼내기 { .eg }
 
 ```python
 # 적합 결과에서 꺼낼 수 있는 것들을 한자리에 모았다.
@@ -276,7 +276,7 @@ BIC: 169.41290695211777
 
 <div class="codebox" markdown>
 
-**예제 4.** 진단 도구들
+### 예제 4. 진단 도구들 { .eg }
 
 ```python
 # 진단 도구가 갖춰져 있다는 점이 statsmodels 를 쓰는 큰 이유다.

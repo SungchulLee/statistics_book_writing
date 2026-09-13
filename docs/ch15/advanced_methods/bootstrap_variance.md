@@ -104,7 +104,7 @@ $k > 2$개 집단에 대해 붓스트랩 접근은 자연스럽게 일반화된�
 
 <div class="codebox" markdown>
 
-**예제 1.** 붓스트랩 등분산 검정
+### 예제 1. 붓스트랩 등분산 검정 { .eg }
 
 ```python
 import numpy as np

@@ -18,7 +18,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 상관 구조를 가진 자료 만들기
+### 예제 1. 상관 구조를 가진 자료 만들기 { .eg }
 
 ```python
 import numpy as np
@@ -56,7 +56,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 상관행렬
+### 예제 2. 상관행렬 { .eg }
 
 ```python
 # rowvar=False 는 "행이 관측, 열이 변수"라는 뜻이다. 기본값은 그 반대이므로
@@ -74,7 +74,7 @@ corr_matrix = np.corrcoef(data, rowvar=False)
 
 <div class="codebox" markdown>
 
-**예제 3.** 상관 열지도
+### 예제 3. 상관 열지도 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -117,7 +117,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 4.** 산점도 행렬
+### 예제 4. 산점도 행렬 { .eg }
 
 ```python
 # 열지도는 숫자 하나로 요약하지만 산점도 행렬은 관계의 모양을 보여 준다.

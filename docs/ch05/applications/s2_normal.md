@@ -69,7 +69,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 모집단 모양에 따른 표본분산의 표집분포
+### 예제 1. 모집단 모양에 따른 표본분산의 표집분포 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

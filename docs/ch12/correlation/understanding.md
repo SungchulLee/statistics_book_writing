@@ -24,7 +24,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 양의 상관 시각화
+### 예제 1. 양의 상관 시각화 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 2.** 음의 상관 시각화
+### 예제 2. 음의 상관 시각화 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 3.** 강한 음에서 강한 양까지
+### 예제 3. 강한 음에서 강한 양까지 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

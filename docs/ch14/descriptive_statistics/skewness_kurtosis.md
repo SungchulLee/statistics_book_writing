@@ -23,7 +23,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규자료의 왜도
+### 예제 1. 정규자료의 왜도 { .eg }
 
 ```python
 import numpy as np
@@ -74,7 +74,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 지수자료의 왜도와 첨도
+### 예제 2. 지수자료의 왜도와 첨도 { .eg }
 
 ```python
 import numpy as np

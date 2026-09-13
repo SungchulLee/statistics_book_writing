@@ -121,7 +121,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 포획-재포획으로 모집단 크기 추정하기
+### 예제 1. 포획-재포획으로 모집단 크기 추정하기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

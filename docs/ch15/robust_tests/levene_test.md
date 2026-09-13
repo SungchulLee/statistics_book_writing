@@ -45,7 +45,7 @@ SciPy는 `scipy.stats.levene`을 직접 제공한다.
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산 차이를 키워 가며
+### 예제 1. 분산 차이를 키워 가며 { .eg }
 
 ```python
 import numpy as np
@@ -77,7 +77,7 @@ sigma_y=1.20  W=2.8187  p=0.095
 
 <div class="codebox" markdown>
 
-**예제 2.** 두 판본의 차이
+### 예제 2. 두 판본의 차이 { .eg }
 
 ```python
 # 중앙값 중심 — Brown-Forsythe 이며 scipy 의 기본값이다.

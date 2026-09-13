@@ -279,7 +279,7 @@ $\text{SE} \propto 1/\sqrt{n}$이므로 $n$을 네 배로 늘리면 표준오차
 
 <div class="codebox" markdown>
 
-**예제 1.** 표본평균의 표집분포 모의실험
+### 예제 1. 표본평균의 표집분포 모의실험 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

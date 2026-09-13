@@ -136,7 +136,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 부분로그가능도 구현
+### 예제 1. 부분로그가능도 구현 { .eg }
 
 ```python
 import numpy as np

@@ -136,7 +136,7 @@ $H_0$ 아래에서 $Z$는 근사적으로 표준정규분포를 따른다.
 
 <div class="codebox" markdown>
 
-**예제 1.** Pearson 상관 검정과 신뢰구간
+### 예제 1. Pearson 상관 검정과 신뢰구간 { .eg }
 
 ```python
 import numpy as np

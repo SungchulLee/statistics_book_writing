@@ -55,7 +55,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 평균 차이의 신뢰구간 계산
+#### 예제 1. 두 평균 차이의 신뢰구간 계산 { .eg }
 
 ```python
 import numpy as np
@@ -136,7 +136,7 @@ confidence_interval = (0.22892977648461788, 19.77107022351538)
 
 <div class="codebox" markdown>
 
-**예제 2.** 네 방법의 포함확률 비교
+### 예제 2. 네 방법의 포함확률 비교 { .eg }
 
 ```python
 #!/usr/bin/env python3

@@ -114,7 +114,7 @@ $\sigma^2$의 신뢰구간과 카이제곱 검정은 쌍대 절차이다. 값 $\
 
 <div class="codebox" markdown>
 
-**예제 1.** 분산과 표준편차의 신뢰구간
+### 예제 1. 분산과 표준편차의 신뢰구간 { .eg }
 
 ```python
 import numpy as np

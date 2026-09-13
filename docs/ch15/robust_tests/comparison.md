@@ -111,7 +111,7 @@ Bartlett의 겉보기 높은 기각률은 오도적이다. 제1종 오류율이 
 
 <div class="codebox" markdown>
 
-**예제 1.** 네 검정을 한자리에서
+### 예제 1. 네 검정을 한자리에서 { .eg }
 
 ```python
 from scipy import stats

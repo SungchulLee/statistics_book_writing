@@ -98,7 +98,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** Cox-Snell 잔차 진단
+#### 예제 1. Cox-Snell 잔차 진단 { .eg }
 
 ```python
 import numpy as np

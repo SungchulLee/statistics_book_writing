@@ -27,7 +27,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 주택 자료와 표준화
+### 예제 1. 주택 자료와 표준화 { .eg }
 
 ```python
 import numpy as np
@@ -67,7 +67,7 @@ $L_1$ 벌점 $\lambda\|\beta\|_1$은 모든 계수를 동등하게 벌하므로 
 
 <div class="codebox" markdown>
 
-**예제 2.** 기준선 — 최소제곱
+### 예제 2. 기준선 — 최소제곱 { .eg }
 
 ```python
 # 기준선이 될 최소제곱. 변수를 하나도 버리지 않으므로 계수가 전부 살아 있다.
@@ -91,7 +91,7 @@ OLS는 모든 특성을 0이 아닌 계수로 유지하며, 정칙화하지 않�
 
 <div class="codebox" markdown>
 
-**예제 3.** 라쏘 정칙화 경로
+### 예제 3. 라쏘 정칙화 경로 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -119,7 +119,7 @@ n_features_selected = (np.abs(lasso_coefs) > 1e-8).sum(axis=1)
 
 <div class="codebox" markdown>
 
-**예제 4.** 교차검증으로 고른 라쏘
+### 예제 4. 교차검증으로 고른 라쏘 { .eg }
 
 ```python
 # LassoCV 가 교차검증으로 alpha 를 스스로 고른다. 격자를 직접 주면
@@ -141,7 +141,7 @@ n_nonzero_lasso = np.sum(np.abs(lasso_cv.coef_) > 1e-8)
 
 <div class="codebox" markdown>
 
-**예제 5.** 능형회귀와 견주기
+### 예제 5. 능형회귀와 견주기 { .eg }
 
 ```python
 # 같은 자료에 능형회귀를 적용해 견준다. 능형은 계수를 0 으로 만들지

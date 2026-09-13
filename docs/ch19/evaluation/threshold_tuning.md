@@ -197,7 +197,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 불균형 자료와 예측확률
+### 예제 1. 불균형 자료와 예측확률 { .eg }
 
 ```python
 import numpy as np
@@ -235,7 +235,7 @@ print(f"예측확률 범위 = [{y_prob.min():.3f}, {y_prob.max():.3f}]")
 
 <div class="codebox" markdown>
 
-**예제 2.** 문턱값에 따른 측도 변화
+#### 예제 2. 문턱값에 따른 측도 변화 { .eg }
 
 ```python
 from sklearn.metrics import (confusion_matrix, precision_score,
@@ -274,7 +274,7 @@ Threshold 0.8: Precision=0.900, Recall=0.050, F1=0.094
 
 <div class="codebox" markdown>
 
-**예제 3.** Youden의 J로 문턱 고르기
+#### 예제 3. Youden의 J로 문턱 고르기 { .eg }
 
 ```python
 import numpy as np

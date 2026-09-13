@@ -34,7 +34,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 꼬리만 두꺼운 자료의 첨도 검정
+### 예제 1. 꼬리만 두꺼운 자료의 첨도 검정 { .eg }
 
 ```python
 import numpy as np

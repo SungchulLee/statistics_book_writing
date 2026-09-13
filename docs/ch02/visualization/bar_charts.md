@@ -32,7 +32,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 기본 막대그림
+### 예제 1. 기본 막대그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -71,7 +71,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 순서가 없는 범주는 정렬한다
+#### 예제 2. 순서가 없는 범주는 정렬한다 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -113,7 +113,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 이름이 길면 가로 막대
+#### 예제 3. 이름이 길면 가로 막대 { .eg }
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 3))
@@ -139,7 +139,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 4.** 묶음 막대그림
+### 예제 4. 묶음 막대그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -188,7 +188,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 5.** 분할 막대그림
+### 예제 5. 분할 막대그림 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -237,7 +237,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 6.** y축을 자르면 생기는 일
+### 예제 6. y축을 자르면 생기는 일 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

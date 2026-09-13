@@ -44,7 +44,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 중심을 무엇으로 잡을 것인가
+### 예제 1. 중심을 무엇으로 잡을 것인가 { .eg }
 
 ```python
 import scipy.stats as stats

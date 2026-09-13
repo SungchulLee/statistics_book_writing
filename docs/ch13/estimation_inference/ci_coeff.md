@@ -83,7 +83,7 @@ $S = 1.532$, $R^2 = 31.3\%$
 
 <div class="codebox" markdown>
 
-**예제 1.** 출력표만으로 신뢰구간 만들기
+### 예제 1. 출력표만으로 신뢰구간 만들기 { .eg }
 
 ```python
 from scipy import stats
@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-**예제 2.** 필요한 라이브러리
+#### 예제 2. 필요한 라이브러리 { .eg }
 
 ```python
 import numpy as np
@@ -150,7 +150,7 @@ from scipy import stats
 
 <div class="codebox" markdown>
 
-**예제 3.** 자료 만들기
+#### 예제 3. 자료 만들기 { .eg }
 
 ```python
 def generate_data(n, sigma, seed=0):
@@ -178,7 +178,7 @@ def generate_data(n, sigma, seed=0):
 
 <div class="codebox" markdown>
 
-**예제 4.** 회귀직선 추정
+#### 예제 4. 회귀직선 추정 { .eg }
 
 ```python
 def estimate_regression_line(x, y):
@@ -209,7 +209,7 @@ def estimate_regression_line(x, y):
 
 <div class="codebox" markdown>
 
-**예제 5.** 잔차분산 구하기
+#### 예제 5. 잔차분산 구하기 { .eg }
 
 ```python
 def calculate_residual_variance(y, y_hat, n):
@@ -229,7 +229,7 @@ def calculate_residual_variance(y, y_hat, n):
 
 <div class="codebox" markdown>
 
-**예제 6.** 신뢰구간과 예측구간 계산
+#### 예제 6. 신뢰구간과 예측구간 계산 { .eg }
 
 ```python
 def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
@@ -274,7 +274,7 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
 <div class="codebox" markdown>
 
-**예제 7.** 두 구간 그리기
+#### 예제 7. 두 구간 그리기 { .eg }
 
 ```python
 def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
@@ -307,7 +307,7 @@ def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
 
 <div class="codebox" markdown>
 
-**예제 8.** 전체 실행
+#### 예제 8. 전체 실행 { .eg }
 
 ```python
 n = 100

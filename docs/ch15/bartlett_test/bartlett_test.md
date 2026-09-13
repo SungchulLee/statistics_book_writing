@@ -63,7 +63,7 @@ Bartlett 검정은 정규성 가정의 위반에 로버스트하지 않다. 자�
 
 <div class="codebox" markdown>
 
-**예제 1.** Bartlett 검정
+#### 예제 1. Bartlett 검정 { .eg }
 
 ```python
 import numpy as np
@@ -106,7 +106,7 @@ Fail to reject H0: no significant difference in variances.
 
 <div class="codebox" markdown>
 
-**예제 2.** 통계량을 정의대로 구하기
+#### 예제 2. 통계량을 정의대로 구하기 { .eg }
 
 ```python
 import numpy as np

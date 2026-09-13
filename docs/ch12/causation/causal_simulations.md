@@ -22,7 +22,7 @@ $Z$가 참 공통원인인 자료를 생성한다:
 
 <div class="codebox" markdown>
 
-**예제 1.** 교란변수가 만드는 가짜 상관
+#### 예제 1. 교란변수가 만드는 가짜 상관 { .eg }
 
 ```python
 import numpy as np
@@ -52,7 +52,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 부분상관으로 걷어 내기
+#### 예제 2. 부분상관으로 걷어 내기 { .eg }
 
 ```python
 # 부분상관은 Z 로 설명되는 몫을 X 와 Y 에서 걷어 낸 뒤의 상관이다.
@@ -98,7 +98,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 3.** 심슨의 역설 — 자료 만들기
+#### 예제 3. 심슨의 역설 — 자료 만들기 { .eg }
 
 ```python
 rng = np.random.default_rng(42)
@@ -119,7 +119,7 @@ y_b = -0.4 * x_b + 45 + rng.normal(0, 2, n_b)
 
 <div class="codebox" markdown>
 
-**예제 4.** 합친 상관과 집단별 상관
+#### 예제 4. 합친 상관과 집단별 상관 { .eg }
 
 ```python
 # 합친 상관과 집단별 상관의 부호가 갈리는 것을 확인한다. 이것이 심슨의 역설이다.
@@ -151,7 +151,7 @@ Subgroup B r = -0.825
 
 <div class="codebox" markdown>
 
-**예제 5.** 역설을 그림으로
+#### 예제 5. 역설을 그림으로 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

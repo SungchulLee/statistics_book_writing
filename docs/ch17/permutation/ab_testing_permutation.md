@@ -20,7 +20,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 체류시간 순열검정
+### 예제 1. 체류시간 순열검정 { .eg }
 
 ```python
 import numpy as np
@@ -77,7 +77,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 2.** 전환율 순열검정
+### 예제 2. 전환율 순열검정 { .eg }
 
 ```python
 def perm_test_proportion(n_control, conv_control, n_treatment, conv_treatment,

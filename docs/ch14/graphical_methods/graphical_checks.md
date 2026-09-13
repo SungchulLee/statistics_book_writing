@@ -24,7 +24,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 히스토그램에 정규곡선 겹치기
+### 예제 1. 히스토그램에 정규곡선 겹치기 { .eg }
 
 ```python
 import numpy as np

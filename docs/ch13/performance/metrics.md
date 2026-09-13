@@ -118,7 +118,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 네 성능 측도 한자리에
+### 예제 1. 네 성능 측도 한자리에 { .eg }
 
 ```python
 import pandas as pd

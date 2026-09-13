@@ -19,7 +19,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** t 검정 전에 정규성 확인하기
+### 예제 1. t 검정 전에 정규성 확인하기 { .eg }
 
 ```python
 import numpy as np
@@ -65,7 +65,7 @@ Two-sample t-test: p-value=0.09856078338184512
 
 <div class="codebox" markdown>
 
-**예제 2.** 회귀 잔차의 정규성
+### 예제 2. 회귀 잔차의 정규성 { .eg }
 
 ```python
 import numpy as np
@@ -120,7 +120,7 @@ Residuals are normally distributed.
 
 <div class="codebox" markdown>
 
-**예제 3.** 분산분석의 정규성
+### 예제 3. 분산분석의 정규성 { .eg }
 
 ```python
 import numpy as np

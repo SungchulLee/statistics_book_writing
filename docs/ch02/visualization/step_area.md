@@ -11,7 +11,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 계단 그림
+### 예제 1. 계단 그림 { .eg }
 
 ```python
 import numpy as np
@@ -113,7 +113,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 100% 누적 면적 그림
+### 예제 2. 100% 누적 면적 그림 { .eg }
 
 ```python
 import numpy as np

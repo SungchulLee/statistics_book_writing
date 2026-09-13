@@ -30,7 +30,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 두 비율 차이 검정 계산기
+### 예제 1. 두 비율 차이 검정 계산기 { .eg }
 
 ```python
 import math

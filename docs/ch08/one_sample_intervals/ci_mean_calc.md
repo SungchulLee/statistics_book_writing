@@ -28,7 +28,7 @@ $t$-분포는 표준정규보다 꼬리가 두꺼우므로 모든 유한한 $n$�
 
 <div class="codebox" markdown>
 
-**예제 1.** CSV에서 자료 읽기
+#### 예제 1. CSV에서 자료 읽기 { .eg }
 
 ```python
 import csv
@@ -77,7 +77,7 @@ print(x, x.mean())
 
 <div class="codebox" markdown>
 
-**예제 2.** 평균 신뢰구간 계산기
+#### 예제 2. 평균 신뢰구간 계산기 { .eg }
 
 ```python
 import math

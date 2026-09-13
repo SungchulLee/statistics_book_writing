@@ -167,7 +167,7 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 
 <div class="codebox" markdown>
 
-**예제 1.** 이산 결합 확률질량함수 표
+#### 예제 1. 이산 결합 확률질량함수 표 { .eg }
 
 ```python
 import numpy as np
@@ -207,7 +207,7 @@ P(Y=y)  0.25  0.50  0.25    1.00
 
 <div class="codebox" markdown>
 
-**예제 2.** 연속 결합 밀도함수 시각화
+#### 예제 2. 연속 결합 밀도함수 시각화 { .eg }
 
 ```python
 import numpy as np
@@ -240,7 +240,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 3.** 이변량 정규분포 표본추출
+#### 예제 3. 이변량 정규분포 표본추출 { .eg }
 
 ```python
 import numpy as np

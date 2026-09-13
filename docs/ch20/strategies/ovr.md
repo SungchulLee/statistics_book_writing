@@ -116,7 +116,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 일대다 전략
+### 예제 1. 일대다 전략 { .eg }
 
 ```python
 from sklearn.linear_model import LogisticRegression

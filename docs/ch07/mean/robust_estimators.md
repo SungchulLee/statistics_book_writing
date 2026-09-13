@@ -16,7 +16,7 @@ $$\bar{X}_\alpha = \frac{1}{n - 2k}\sum_{i=k+1}^{n-k} X_{(i)}$$
 
 <div class="codebox" markdown>
 
-**예제 1.** 절사평균 구현하기
+#### 예제 1. 절사평균 구현하기 { .eg }
 
 ```python
 import numpy as np
@@ -60,7 +60,7 @@ $$\bar{X}_w = \frac{\sum_{i=1}^n w_i X_i}{\sum_{i=1}^n w_i}$$
 
 <div class="codebox" markdown>
 
-**예제 2.** 가중평균과 가중중앙값
+#### 예제 2. 가중평균과 가중중앙값 { .eg }
 
 ```python
 def weighted_mean(data, weights):
@@ -104,7 +104,7 @@ $$\text{MAD} = \text{median}(|X_i - \text{median}(X)|)$$
 
 <div class="codebox" markdown>
 
-**예제 3.** 중앙값 절대편차
+#### 예제 3. 중앙값 절대편차 { .eg }
 
 ```python
 def mad(data):
@@ -147,7 +147,7 @@ $$\text{IQR} = Q_3 - Q_1$$
 
 <div class="codebox" markdown>
 
-**예제 4.** 오염 아래에서 측도 견주기
+### 예제 4. 오염 아래에서 측도 견주기 { .eg }
 
 ```python
 np.random.seed(42)
@@ -205,7 +205,7 @@ Contaminated data (n = 105):
 
 <div class="codebox" markdown>
 
-**예제 5.** 오염을 늘려 가며 보는 붕괴점
+### 예제 5. 오염을 늘려 가며 보는 붕괴점 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

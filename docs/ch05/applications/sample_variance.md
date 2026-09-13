@@ -166,7 +166,7 @@ $$
 
 <div class="codebox" markdown>
 
-**예제 1.** 정규모집단에서 표본분산의 표집분포
+#### 예제 1. 정규모집단에서 표본분산의 표집분포 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -217,7 +217,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-**예제 2.** 치우친 모집단에서 표본분산의 표집분포
+#### 예제 2. 치우친 모집단에서 표본분산의 표집분포 { .eg }
 
 ```python
 import matplotlib.pyplot as plt

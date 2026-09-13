@@ -34,7 +34,7 @@
 
 <div class="codebox" markdown>
 
-**예제 1.** 실험용 자료
+#### 예제 1. 실험용 자료 { .eg }
 
 ```python
 import numpy as np
@@ -55,7 +55,7 @@ names = [f"x{i+1}" for i in range(p)]
 
 <div class="codebox" markdown>
 
-**예제 2.** 최적 부분집합 선택
+#### 예제 2. 최적 부분집합 선택 { .eg }
 
 ```python
 from itertools import combinations
@@ -87,7 +87,7 @@ def best_subset(X, y, max_k=None):
 
 <div class="codebox" markdown>
 
-**예제 3.** 전진 단계선택
+#### 예제 3. 전진 단계선택 { .eg }
 
 ```python
 def forward_stepwise(X, y):
@@ -119,7 +119,7 @@ def forward_stepwise(X, y):
 
 <div class="codebox" markdown>
 
-**예제 4.** 후진 단계선택
+#### 예제 4. 후진 단계선택 { .eg }
 
 ```python
 def backward_stepwise(X, y):
