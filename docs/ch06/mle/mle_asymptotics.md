@@ -196,6 +196,228 @@ MLE가 점근적으로는 불편인데도 유한표본에서 편향될 수 있�
 
     일반적으로 $\hat{\theta}$가 $\theta$의 MLE이고 $g$가 비선형이면 불변성에 의해 $g(\hat{\theta})$가 $g(\theta)$의 MLE이지만, Jensen 부등식에 의해 유한표본에서 $E[g(\hat{\theta})] \neq g(\theta)$가 되어 편향이 생긴다.
 
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff med" title="중간"></span>
+$X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \max_i X_i$는 **정칙 조건을 만족하지 않는다.** 어느 조건이 깨지는지 밝히고, 그 결과 점근분포가 어떻게 달라지는지 보여라.
+
+</div>
+
+??? success "풀이"
+    **깨지는 조건.** 정칙 조건의 핵심은 **밀도의 지지집합이 모수에 의존하지 않는다**는 것이다. 여기서는 지지집합이 $[0,\theta]$로 $\theta$에 직접 의존한다.
+
+    그 결과 미분과 적분을 맞바꿀 수 없게 되고, 점수함수의 기대값이 0이라는 기본 항등식 $E[\ell'(\theta)] = 0$이 무너진다. 실제로 로그가능도 $\ell(\theta) = -n\ln\theta$($\theta \ge x_{(n)}$)는 $\theta$에 대해 **감소**하며 도함수가 0이 되는 점이 없다. MLE는 미분이 아니라 제약의 경계 $\theta = x_{(n)}$에서 나온다.
+
+    **점근분포.** $M = \max_i X_i$의 CDF가 $(m/\theta)^n$이므로, $t > 0$에 대해
+
+    $$
+    P\left\{n(\theta - M) > t\right\} = P\left(M < \theta-\frac tn\right) = \left(1-\frac{t}{n\theta}\right)^n \to e^{-t/\theta}
+    $$
+
+    이다. 따라서
+
+    $$
+    n(\theta-\hat\theta) \xrightarrow{d} \text{Exp}(1/\theta)
+    $$
+
+    **정칙 경우와의 대비.**
+
+    | | 정칙 | 균등 |
+    |---|---|---|
+    | 수렴 속도 | $\sqrt n$ | $n$ (**더 빠름**) |
+    | 극한분포 | 정규 | 지수 |
+    | 대칭성 | 대칭 | 한쪽으로 치우침 |
+    | 크라메르-라오 | 점근적으로 달성 | **적용 불가** |
+
+    수렴이 $\sqrt n$보다 빠른 것을 **초일치성**이라 한다. 크라메르-라오 하한이 $\hat\theta$의 분산에 대해 아무것도 말해 주지 않는 이유가 여기 있다. 하한 자체가 정칙 조건 아래에서만 유도되기 때문이다.
+
+    **실무적 함의.** 이런 모형에서는 표준 오차와 왈드 구간을 쓰면 안 된다. 정확한 분포를 직접 쓰거나, 부트스트랩을 쓴다면 $m$-out-of-$n$ 같은 변형이 필요하다. 경제학의 경계모형, 생존분석의 임계 모수, 극단값 모형에서 같은 문제가 나타난다.
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
+**델타 방법**을 서술하고, MLE의 점근정규성과 결합해 $g(\hat\theta)$의 점근분포를 구하라. $\hat\lambda$의 점근분포에서 $\hat\mu = 1/\hat\lambda$의 점근분포를 유도해 확인하라.
+
+</div>
+
+??? success "풀이"
+    **델타 방법.** $\sqrt n(\hat\theta-\theta) \xrightarrow{d} N(0, \sigma^2)$이고 $g$가 $\theta$에서 미분가능하며 $g'(\theta) \ne 0$이면
+
+    $$
+    \sqrt n\left\{g(\hat\theta)-g(\theta)\right\} \xrightarrow{d} N\!\left(0,\ \{g'(\theta)\}^2\sigma^2\right)
+    $$
+
+    **증명 개요.** $\hat\theta$ 근처에서 테일러 전개하면
+
+    $$
+    g(\hat\theta) = g(\theta) + g'(\theta)(\hat\theta-\theta) + O_p\!\left((\hat\theta-\theta)^2\right)
+    $$
+
+    이고 $\sqrt n$을 곱하면 나머지항이 $O_p(n^{-1/2}) \to 0$이므로 슬러츠키 정리로 결론이 따라 나온다.
+
+    **MLE와 결합.** $\sigma^2 = 1/I_1(\theta)$이므로
+
+    $$
+    \sqrt n\left\{g(\hat\theta)-g(\theta)\right\} \xrightarrow{d} N\!\left(0,\ \frac{\{g'(\theta)\}^2}{I_1(\theta)}\right)
+    $$
+
+    이다. 이는 $g(\theta)$ 모수화에서의 크라메르-라오 하한과 정확히 같다. **MLE의 점근효율성은 변환에 대해 보존된다.**
+
+    **확인.** 지수분포에서 $\hat\lambda$의 점근분산이 $\lambda^2/n$이고 $g(\lambda) = 1/\lambda$이므로 $g'(\lambda) = -1/\lambda^2$이다.
+
+    $$
+    \operatorname{Var}(\hat\mu) \approx \frac{1}{\lambda^4}\cdot\frac{\lambda^2}{n} = \frac{1}{n\lambda^2} = \frac{\mu^2}{n}
+    $$
+
+    앞서 직접 구한 $\operatorname{Var}(\bar X) = \mu^2/n$과 일치한다. ✓
+
+    **주의할 점.** $g'(\theta) = 0$이면 1차항이 사라져 이 결과가 성립하지 않는다. 그때는 2차항이 주도해 극한분포가 정규가 아니라 카이제곱류가 된다. 예컨대 $\theta = 0$ 근처에서 $g(\theta)=\theta^2$의 분포가 그렇다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+모형이 **틀렸을 때**($\theta$ 값이 무엇이든 참 분포를 담지 못할 때) MLE는 무엇으로 수렴하는가? 표준오차는 어떻게 고쳐야 하는가?
+
+</div>
+
+??? success "풀이"
+    **수렴 대상.** 참 분포를 $g$, 모형족을 $\{f(\cdot;\theta)\}$라 하자. 로그가능도의 평균이
+
+    $$
+    \frac1n\ell(\theta) \xrightarrow{p} E_g[\ln f(X;\theta)]
+    $$
+
+    이고, 이를 최대로 하는 $\theta$는
+
+    $$
+    \theta^* = \arg\max_\theta E_g[\ln f(X;\theta)] = \arg\min_\theta D_{\text{KL}}(g \,\|\, f_\theta)
+    $$
+
+    이다. 즉 MLE는 **참 분포에 쿨백-라이블러 발산 기준으로 가장 가까운 모형**으로 수렴한다. 이를 유사참값(pseudo-true value)이라 하며, 추정량을 **유사최대가능도추정량(QMLE)** 이라 부른다.
+
+    **표준오차.** 모형이 맞으면 성립하던 정보량 등식
+
+    $$
+    A(\theta) := -E\left[\frac{\partial^2\ln f}{\partial\theta^2}\right] = E\left[\left(\frac{\partial\ln f}{\partial\theta}\right)^2\right] =: B(\theta)
+    $$
+
+    가 깨진다. 점근분포는
+
+    $$
+    \sqrt n(\hat\theta-\theta^*) \xrightarrow{d} N\!\left(0,\ A^{-1}BA^{-1}\right)
+    $$
+
+    이고, 이 $A^{-1}BA^{-1}$을 **샌드위치 분산** 또는 화이트의 강건 분산이라 한다. 모형이 맞으면 $A=B$가 되어 $A^{-1}$, 즉 보통의 $I^{-1}$로 돌아온다.
+
+    **추정.**
+
+    $$
+    \hat A = -\frac1n\sum_i \frac{\partial^2\ln f(x_i;\hat\theta)}{\partial\theta^2}, \qquad \hat B = \frac1n\sum_i\left(\frac{\partial\ln f(x_i;\hat\theta)}{\partial\theta}\right)^2
+    $$
+
+    **실무.** 회귀에서 이분산이 있을 때 쓰는 강건 표준오차(HC0~HC3), 군집 표준오차, 일반화추정방정식의 표준오차가 모두 샌드위치 형태다. 계수 추정값은 그대로 두고 불확실성만 고쳐 주는 것이 특징이다.
+
+    **주의.** 샌드위치 분산은 **표준오차만 고친다.** 점추정이 겨냥하는 $\theta^*$가 애초에 관심 모수가 아닐 수 있고, 우도비 검정도 더 이상 $\chi^2$를 따르지 않는다. "모형이 틀려도 강건 표준오차를 쓰면 된다"는 말은 지나친 단순화다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+MLE의 점근정규성을 점수함수의 테일러 전개로 유도하라. 어디서 큰수의 법칙이, 어디서 중심극한정리가 쓰이는가?
+
+</div>
+
+??? success "풀이"
+    점수함수를 $U_n(\theta) = \ell'(\theta)$라 하자. $\hat\theta$가 내부 최댓값이면 $U_n(\hat\theta) = 0$이다. 참값 $\theta_0$ 둘레에서 전개하면
+
+    $$
+    0 = U_n(\hat\theta) = U_n(\theta_0) + U_n'(\tilde\theta)(\hat\theta-\theta_0)
+    $$
+
+    이고($\tilde\theta$는 $\theta_0$와 $\hat\theta$ 사이의 어떤 값), 정리하면
+
+    $$
+    \sqrt n(\hat\theta-\theta_0) = \frac{n^{-1/2}U_n(\theta_0)}{-n^{-1}U_n'(\tilde\theta)}
+    $$
+
+    **분자 — 중심극한정리.** $U_n(\theta_0) = \sum_i s(X_i;\theta_0)$는 독립인 점수의 합이다. 정칙 조건에서 $E[s] = 0$이고 $\operatorname{Var}(s) = I_1(\theta_0)$이므로
+
+    $$
+    \frac{1}{\sqrt n}U_n(\theta_0) \xrightarrow{d} N\!\left(0,\ I_1(\theta_0)\right)
+    $$
+
+    **분모 — 큰수의 법칙.** $-n^{-1}U_n'(\theta_0) = -n^{-1}\sum_i s'(X_i;\theta_0)$ 역시 독립인 항의 평균이므로
+
+    $$
+    -\frac1n U_n'(\theta_0) \xrightarrow{p} -E[s'] = I_1(\theta_0)
+    $$
+
+    이다. $\hat\theta$의 일치성($\hat\theta\xrightarrow{p}\theta_0$)에서 $\tilde\theta \xrightarrow{p}\theta_0$이고, 적당한 연속성 조건 아래 $-n^{-1}U_n'(\tilde\theta)$도 같은 극한을 갖는다.
+
+    **결합 — 슬러츠키.** 분포수렴하는 분자를 확률수렴하는 상수로 나누면
+
+    $$
+    \sqrt n(\hat\theta-\theta_0) \xrightarrow{d} \frac{N(0, I_1)}{I_1} = N\!\left(0,\ \frac{1}{I_1(\theta_0)}\right)
+    $$
+
+    를 얻는다. $\square$
+
+    **구조를 읽으면.** 점근분산의 분자에 있는 $I_1$은 **점수의 변동**(중심극한정리)에서 오고, 분모의 $I_1^2$은 **로그가능도의 곡률**(큰수의 법칙)에서 온다. 둘이 같은 $I_1$인 것이 우연이 아니라 정보량 등식이며, 앞 연습문제에서 본 대로 모형이 틀리면 이 일치가 깨져 샌드위치 형태가 남는다.
+
+    **증명에 필요한 조건.** (1) $\hat\theta$가 내부에 있을 것(경계면 실패), (2) 세 번 미분 가능하고 3계 도함수가 유계일 것(테일러 전개의 나머지 통제), (3) 미분과 적분을 맞바꿀 수 있을 것(지지집합이 모수에 무관), (4) $\hat\theta$가 일치할 것, (5) $I_1(\theta_0)$이 유한하고 양수일 것.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+"점근적으로 정규"라는 말이 실무에서 얼마나 믿을 만한지 판단하려 한다. 어떤 요인들이 필요한 $n$을 좌우하는지 정리하고, 실제로 확인하는 방법을 적어라.
+
+</div>
+
+??? success "풀이"
+    **필요한 $n$을 좌우하는 요인.**
+
+    - **모수공간의 경계까지의 거리.** $\hat p$가 0이나 1에 가깝거나 분산성분이 0에 가까우면 아무리 $n$이 커도 정규근사가 나쁘다. 중요한 것은 $n$ 자체가 아니라 **$\hat\theta$가 경계에서 몇 표준오차 떨어져 있는가**다.
+    - **유효 정보량.** 이항에서는 $n$이 아니라 $np(1-p)$가, 생존분석에서는 관측 수가 아니라 **사건 수**가, 포아송에서는 총 계수가 기준이다.
+    - **모수화.** 로그가능도가 이차식에 얼마나 가까운지가 핵심이며, 이는 모수화에 따라 크게 달라진다. $\sigma$보다 $\ln\sigma$, $p$보다 로짓이 훨씬 빨리 정규에 다가간다.
+    - **모수의 개수.** $p$가 $n$에 비해 크면 점근이론이 통하지 않는다. 대략 $n/p \ge 10$은 되어야 한다는 경험칙이 있다.
+    - **성가신 모수의 수.** 관측 단위마다 모수가 하나씩 생기는 구조(네이만-스콧 문제)에서는 $n\to\infty$여도 일치성조차 없다.
+
+    **확인하는 방법.**
+
+    1. **로그가능도 곡선(또는 프로파일 곡선)을 그린다.** 포물선에서 얼마나 벗어나는지 눈으로 본다. 가장 값싸고 정보가 많은 진단이다.
+    2. **왈드 구간과 우도비 구간을 둘 다 계산해 견준다.** 둘이 크게 다르면 이차 근사가 나쁘다는 직접적인 증거다.
+    3. **부트스트랩한다.** $\hat\theta$의 부트스트랩 분포를 정규밀도와 겹쳐 그리거나 Q-Q 그림을 그린다.
+    4. **모의실험한다.** 추정값을 참값으로 놓고 자료를 생성해 신뢰구간의 실제 포함확률을 세어 본다. 가장 확실한 방법이며, 계산 비용이 감당되면 언제나 권할 만하다.
+
+    **결론.** "$n$이 충분히 크면 된다"는 말은 **구체적인 상황에서 확인해야 하는 주장**이지 자동으로 적용되는 보증이 아니다. 위 진단 중 하나만 해 보아도 대부분의 사고를 막을 수 있다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+MLE의 점근분산이 크라메르-라오 하한과 같다는 사실을 근거로 "MLE는 언제나 최선"이라고 말할 수 있는가? 반례를 들어 논하라.
+
+</div>
+
+??? success "풀이"
+    **말할 수 없다.** 네 가지 유보가 있다.
+
+    **(1) 점근적일 뿐이다.** 유한표본에서는 다른 추정량이 나을 수 있다. 정규분포의 $\hat\sigma^2_{\text{MLE}} = \frac1n\sum(x_i-\bar x)^2$은 편향되어 있고, 평균제곱오차 기준으로는 $\frac{1}{n+1}\sum(x_i-\bar x)^2$이 더 낫다. MLE도 불편추정량도 최적이 아니다.
+
+    **(2) 불편추정량 안에서만의 최적이다.** 크라메르-라오는 불편추정량의 분산에 대한 하한이다. 편향을 허용하면 평균제곱오차가 더 작은 추정량이 있을 수 있다.
+
+    가장 유명한 반례가 **제임스-스타인 추정량**이다. $\mathbf{X}\sim N_d(\boldsymbol\mu, I)$에서 $d \ge 3$이면
+
+    $$
+    \hat{\boldsymbol\mu}_{\text{JS}} = \left(1-\frac{d-2}{\|\mathbf{X}\|^2}\right)\mathbf{X}
+    $$
+
+    가 MLE $\mathbf{X}$를 **모든 $\boldsymbol\mu$에서** 평균제곱오차로 이긴다. MLE가 허용 불가능(inadmissible)하다는 뜻이다. 서로 무관해 보이는 여러 평균을 원점 쪽으로 함께 축소하는 것이 이득이라는 결과라 발표 당시 충격을 주었고, 오늘날 축소 추정과 계층모형의 출발점이 되었다.
+
+    **(3) 정칙 조건이 필요하다.** 연습문제 5의 균등분포에서는 MLE의 수렴 속도가 $n$이라 크라메르-라오가 아예 적용되지 않고, 하한을 훨씬 넘어선다.
+
+    **(4) 모형이 맞다는 전제가 있다.** 모형이 틀리면 MLE는 유사참값으로 수렴하며, 그 값이 관심 모수가 아닐 수 있다. 이상치가 있는 자료에서 정규 MLE(표본평균)는 강건 추정량보다 훨씬 나쁘다.
+
+    **정리.** MLE가 널리 쓰이는 이유는 "최선"이어서가 아니라 **일반적이고, 자동이며, 정칙 조건 아래 점근적으로 효율적**이기 때문이다. 표본이 작거나, 모수가 많거나, 모형이 미덥지 않거나, 모수공간에 경계가 있으면 대안을 함께 살펴야 한다.
+
 ---
 
 ## 정리하며

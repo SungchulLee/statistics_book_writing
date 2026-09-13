@@ -155,6 +155,162 @@ $$
 
     이런 실패 양상들이 편향 보정 MLE, 벌점 가능도, 프로파일 가능도, (베이즈의) 주변가능도 같은 개선을 이끌어 냈다.
 
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+**불변성**을 정확히 서술하고, $g$가 일대일이 아닐 때도 성립하도록 하려면 정의를 어떻게 확장해야 하는지 설명하라. 실무에서 이 성질이 왜 유용한가?
+
+</div>
+
+??? success "풀이"
+    **일대일인 경우.** $\eta = g(\theta)$로 모수화를 바꾸면 가능도가 $L^*(\eta) = L(g^{-1}(\eta))$이므로, $L$이 $\hat\theta$에서 최대이면 $L^*$는 $g(\hat\theta)$에서 최대다. 따라서
+
+    $$
+    \hat\eta = g(\hat\theta)
+    $$
+
+    **일대일이 아닌 경우.** $g$가 예를 들어 $\theta^2$처럼 여러 $\theta$를 같은 $\eta$로 보내면 $L^*$를 그대로 정의할 수 없다. **유도가능도**로 확장한다.
+
+    $$
+    L^*(\eta) = \sup_{\theta:\ g(\theta)=\eta} L(\theta)
+    $$
+
+    이렇게 두면 $L^*$를 최대로 하는 $\eta$가 여전히 $g(\hat\theta)$이므로 불변성이 유지된다.
+
+    **왜 유용한가.**
+
+    - **다시 최적화할 필요가 없다.** $\lambda$의 MLE를 구했으면 평균 $1/\lambda$, 중앙값 $\ln2/\lambda$, 생존확률 $e^{-\lambda t}$의 MLE가 모두 대입만으로 나온다.
+    - **모수화를 자유롭게 고를 수 있다.** 수치 최적화를 하기 좋은 척도(경계가 없는 척도)에서 풀고 원하는 척도로 되돌려도 답이 같다. $\sigma$ 대신 $\ln\sigma$, $p$ 대신 로짓을 쓰는 것이 표준적인 관행인 이유다.
+    - **보고 단위를 바꿔도 결론이 같다.** 위험비로 보고하든 로그위험비로 보고하든 추정값이 일관된다.
+
+    **다만 불편성은 물려받지 못한다.** 앞서 본 대로 $E[g(\hat\theta)] \ne g(E[\hat\theta])$이며, 표준오차도 단순히 변환되지 않아 델타 방법이 필요하다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+닫힌 해가 없는 모형에서 MLE를 구하는 **뉴턴-랩슨**과 **피셔 점수법**을 비교하라. 각각의 갱신식과 장단점을 적어라.
+
+</div>
+
+??? success "풀이"
+    점수함수 $U(\boldsymbol\theta) = \partial\ell/\partial\boldsymbol\theta$를 0으로 만드는 것이 목표다. $\hat{\boldsymbol\theta}$ 근처에서 테일러 전개하면 갱신식이 나온다.
+
+    **뉴턴-랩슨.** **관측정보량**(헤시안의 음수)을 쓴다.
+
+    $$
+    \boldsymbol\theta^{(k+1)} = \boldsymbol\theta^{(k)} + \left\{-\frac{\partial^2\ell}{\partial\boldsymbol\theta\partial\boldsymbol\theta^\top}\right\}^{-1}U(\boldsymbol\theta^{(k)})
+    $$
+
+    **피셔 점수법.** 관측정보량을 그 기대값인 **피셔 정보량**으로 바꾼다.
+
+    $$
+    \boldsymbol\theta^{(k+1)} = \boldsymbol\theta^{(k)} + I(\boldsymbol\theta^{(k)})^{-1}U(\boldsymbol\theta^{(k)})
+    $$
+
+    **비교.**
+
+    | | 뉴턴-랩슨 | 피셔 점수법 |
+    |---|---|---|
+    | 수렴 속도 | 이차(가까이서 매우 빠름) | 대체로 일차~이차 |
+    | 안정성 | 헤시안이 양정부호가 아니면 발산 가능 | $I$가 언제나 양반정부호라 안정적 |
+    | 계산 | 2계 도함수 필요 | 기대값을 미리 구해 두면 단순해지는 경우 많음 |
+    | 정준연결 GLM | — | **둘이 완전히 일치** |
+
+    피셔 점수법이 더 안정적인 이유는 $I(\boldsymbol\theta) = E[-\partial^2\ell/\partial\boldsymbol\theta^2]$가 언제나 양반정부호여서 갱신 방향이 반드시 오르막이기 때문이다. 관측 헤시안은 봉우리에서 멀 때 음정부호가 아닐 수 있어 엉뚱한 방향으로 뛴다.
+
+    **실무.** 일반화선형모형에서 피셔 점수법을 정리하면 **반복 가중최소제곱(IRLS)** 이 된다. 각 단계가 가중최소제곱 문제라 기존 선형대수 코드를 그대로 쓸 수 있고, 이것이 GLM 소프트웨어의 표준 구현이다.
+
+    **표준오차에는 어느 정보량을 쓸까.** 관측정보량 $-\ell''(\hat\theta)$을 쓰는 것이 일반적으로 권장된다. 자료가 실제로 담고 있는 곡률을 반영하고, 모형이 조금 틀렸을 때도 더 나은 근사를 준다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+자료 일부가 결측이거나 잠재변수가 있을 때 쓰는 **EM 알고리즘**의 두 단계를 설명하고, 왜 각 반복에서 가능도가 줄지 않는지 밝혀라.
+
+</div>
+
+??? success "풀이"
+    관측자료를 $\mathbf{y}$, 결측(또는 잠재)자료를 $\mathbf{z}$라 하자. 완전자료 로그가능도 $\ell_c(\boldsymbol\theta;\mathbf{y},\mathbf{z})$는 다루기 쉬운데 관측자료 가능도
+
+    $$
+    \ell(\boldsymbol\theta;\mathbf{y}) = \ln\int f(\mathbf{y},\mathbf{z};\boldsymbol\theta)\,d\mathbf{z}
+    $$
+
+    는 적분 때문에 다루기 어렵다.
+
+    **E 단계.** 현재 추정값 $\boldsymbol\theta^{(k)}$ 아래에서 완전자료 로그가능도의 조건부 기대값을 구한다.
+
+    $$
+    Q(\boldsymbol\theta \mid \boldsymbol\theta^{(k)}) = E_{\mathbf{z}\mid\mathbf{y},\,\boldsymbol\theta^{(k)}}\left[\ell_c(\boldsymbol\theta;\mathbf{y},\mathbf{z})\right]
+    $$
+
+    **M 단계.** $Q$를 최대로 하는 $\boldsymbol\theta^{(k+1)}$을 구한다.
+
+    **왜 가능도가 줄지 않는가.** 다음 분해가 열쇠다.
+
+    $$
+    \ell(\boldsymbol\theta) = Q(\boldsymbol\theta\mid\boldsymbol\theta^{(k)}) - H(\boldsymbol\theta\mid\boldsymbol\theta^{(k)}), \qquad H(\boldsymbol\theta\mid\boldsymbol\theta^{(k)}) = E\left[\ln f(\mathbf{z}\mid\mathbf{y};\boldsymbol\theta)\right]
+    $$
+
+    젠슨 부등식(또는 KL 발산의 비음수성)에서 모든 $\boldsymbol\theta$에 대해
+
+    $$
+    H(\boldsymbol\theta\mid\boldsymbol\theta^{(k)}) \le H(\boldsymbol\theta^{(k)}\mid\boldsymbol\theta^{(k)})
+    $$
+
+    이다. M 단계가 $Q(\boldsymbol\theta^{(k+1)}) \ge Q(\boldsymbol\theta^{(k)})$를 보장하므로
+
+    $$
+    \ell(\boldsymbol\theta^{(k+1)}) - \ell(\boldsymbol\theta^{(k)}) = \underbrace{\left\{Q^{(k+1)}-Q^{(k)}\right\}}_{\ge 0} + \underbrace{\left\{H^{(k)}-H^{(k+1)}\right\}}_{\ge 0} \ge 0
+    $$
+
+    이다. $\square$
+
+    **성질.** 단조증가가 보장되어 대단히 안정적이지만 수렴이 **일차**라 뉴턴법보다 느리다. 또 전역 최대를 보장하지 않으므로(정규혼합처럼 봉우리가 여럿인 경우) 여러 초기값에서 돌려 봐야 한다. 표준오차를 곧바로 주지 않는다는 점도 단점이라, 별도의 정보량 계산이나 부트스트랩이 필요하다.
+
+    **쓰임.** 혼합모형, 은닉 마르코프 모형, 결측자료, 요인분석, 중도절단 자료, $t$ 잡음 회귀가 모두 EM으로 적합된다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+최대 로그가능도 $\ell(\hat{\boldsymbol\theta})$는 모수를 늘릴수록 반드시 커진다. 그런데도 모형 선택에 가능도를 쓸 수 있는 이유를 **AIC**로 설명하고, BIC와 비교하라.
+
+</div>
+
+??? success "풀이"
+    **문제.** 모형 A가 모형 B에 내포되면 $\ell_A \ge \ell_B$가 언제나 성립한다. 더 넓은 모수공간에서 최대화하기 때문이다. 따라서 최대 로그가능도만 비교하면 **언제나 가장 복잡한 모형이 이긴다.**
+
+    **AIC.** 아카이케는 모수 개수 $p$로 벌점을 준다.
+
+    $$
+    \text{AIC} = -2\ell(\hat{\boldsymbol\theta}) + 2p
+    $$
+
+    작을수록 좋다. 벌점 $2p$의 근거는 이렇다. 같은 자료로 적합하고 평가하면 로그가능도가 낙관적으로 나오는데, 그 낙관의 크기(기대 과적합량)가 근사적으로 $p$이고, $-2$배를 하면 $2p$가 된다.
+
+    AIC가 겨냥하는 것은 **미래 자료에 대한 예측 성능**, 정확히는 참 분포와 적합된 모형 사이의 쿨백-라이블러 발산이다.
+
+    **BIC.**
+
+    $$
+    \text{BIC} = -2\ell(\hat{\boldsymbol\theta}) + p\ln n
+    $$
+
+    $n \ge 8$이면 $\ln n > 2$이므로 **AIC보다 강하게 벌점**하고, 더 단순한 모형을 고른다. 근거도 다르다. BIC는 베이즈 주변가능도의 근사이며 **참 모형을 찾는 것**을 겨냥한다.
+
+    **비교.**
+
+    | | AIC | BIC |
+    |---|---|---|
+    | 벌점 | $2p$ | $p\ln n$ |
+    | 목표 | 예측 정확도 | 참 모형 식별 |
+    | 참 모형이 후보에 있을 때 | 일치성 없음(과적합 경향) | 일치성 있음 |
+    | 참 모형이 후보에 없을 때 | 최선의 근사 모형을 고름 | 지나치게 단순한 모형을 고를 수 있음 |
+
+    **실무.** 예측이 목적이면 AIC, 설명이나 변수 선택이 목적이면 BIC가 흔히 권장된다. 다만 어느 쪽도 만능이 아니며, 예측이 진짜 목적이라면 **교차검증**이 더 직접적이다. 실제로 일탈 하나 빼기 교차검증이 AIC와 점근적으로 동등하다는 결과가 있다.
+
+    **주의할 점.** AIC나 BIC 값은 **같은 자료, 같은 반응변수**에 적합한 모형끼리만 비교할 수 있다. 반응변수를 변환하면($y$ 대 $\ln y$) 가능도의 척도가 달라져 비교가 무의미해진다. 야코비안을 보정하면 비교할 수 있지만 흔히 놓치는 함정이다.
+
 ---
 
 ## 정리하며

@@ -284,6 +284,193 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 
     **교훈:** 일치성을 가지려면 추정량이 커지는 표본크기를 "활용"해야 한다. $\hat\theta = X_1$은 $n$과 무관하게 첫 관측값을 제외한 모든 것을 무시한다.
 
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+예측모형에서 말하는 **편향-분산 분해**는 추정량의 분해와 무엇이 다른가? 예측오차를
+
+$$
+E\left[\left(Y-\hat f(x_0)\right)^2\right] = \sigma^2 + \operatorname{Bias}^2\{\hat f(x_0)\} + \operatorname{Var}\{\hat f(x_0)\}
+$$
+
+로 분해하고 각 항을 해석하라.
+
+</div>
+
+??? success "풀이"
+    참 관계를 $Y = f(x)+\varepsilon$, $E[\varepsilon]=0$, $\operatorname{Var}(\varepsilon)=\sigma^2$이라 하자. 새 관측 $Y_0 = f(x_0)+\varepsilon_0$을 예측한다.
+
+    $\varepsilon_0$이 훈련자료와 독립이므로
+
+    $$
+    E\left[(Y_0-\hat f(x_0))^2\right] = \underbrace{\sigma^2}_{\text{줄일 수 없음}} + E\left[\left(f(x_0)-\hat f(x_0)\right)^2\right]
+    $$
+
+    이고, 둘째 항에 추정량의 분해를 적용하면 편향 제곱과 분산이 나온다. $\square$
+
+    **추정량 분해와의 차이.**
+
+    | | 추정량의 MSE | 예측오차 |
+    |---|---|---|
+    | 항 | 편향$^2$ + 분산 | **$\sigma^2$** + 편향$^2$ + 분산 |
+    | 목표 | 고정된 모수 $\theta$ | 확률변수 $Y_0$ |
+    | 하한 | 0에 접근 가능 | $\sigma^2$ 아래로 못 감 |
+
+    **$\sigma^2$가 추가된 것이 핵심**이다. 모형이 아무리 완벽해도($\hat f = f$) 예측오차가 $\sigma^2$ 아래로 내려가지 않는다. 이를 **줄일 수 없는 오차**라 하며, 예측 성능의 상한이 자료 자체에 의해 정해져 있다는 뜻이다.
+
+    **실무적 함의.**
+
+    - 예측 $R^2$이 0.6에 머문다고 모형이 나쁜 것이 아니다. $\sigma^2$이 크면 그것이 최선일 수 있다.
+    - 훈련오차는 $\sigma^2$보다 작아질 수 있다(잡음까지 맞추므로). **훈련오차가 $\sigma^2$보다 작다는 것이 과적합의 정의에 가깝다.**
+    - 모형 복잡도를 올리면 편향은 줄고 분산은 는다. 그 합이 최소가 되는 지점이 최적 복잡도이며, 교차검증이 찾는 것이 바로 그 지점이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+$k$-최근접이웃 회귀에서 $k$가 커질수록 편향과 분산이 어떻게 변하는지 유도하고, 최적 $k$가 $n$과 함께 어떻게 커져야 하는지 논하라.
+
+</div>
+
+??? success "풀이"
+    $x_0$의 $k$개 최근접이웃을 $x_{(1)},\dots,x_{(k)}$라 하면
+
+    $$
+    \hat f(x_0) = \frac1k\sum_{j=1}^k y_{(j)}
+    $$
+
+    **분산.** 잡음이 독립이므로
+
+    $$
+    \operatorname{Var}\{\hat f(x_0)\} = \frac{\sigma^2}{k}
+    $$
+
+    $k$가 커질수록 **줄어든다.**
+
+    **편향.**
+
+    $$
+    \operatorname{Bias} = \frac1k\sum_j f(x_{(j)}) - f(x_0)
+    $$
+
+    $k$가 커지면 더 먼 이웃까지 평균에 들어오므로 $f$가 곡선이면 편향이 **커진다.** 1차원에서 이웃까지의 거리가 대략 $k/n$에 비례하므로, $f$가 매끄러우면
+
+    $$
+    |\operatorname{Bias}| \approx O\!\left(\left(\frac kn\right)^2\right)
+    $$
+
+    이다(2계 테일러 항).
+
+    **최적 $k$.** 예측오차의 줄일 수 있는 부분이
+
+    $$
+    \left(\frac kn\right)^4 + \frac{\sigma^2}{k}
+    $$
+
+    꼴이므로 $k$로 미분해 0으로 두면 $k^5 \propto n^4$, 즉
+
+    $$
+    k^* \propto n^{4/5}
+    $$
+
+    이다. 그때 예측오차의 줄일 수 있는 부분이 $O(n^{-4/5})$로 줄어든다.
+
+    **읽는 법.**
+
+    - **$k$는 $n$과 함께 커져야 하되 $n$보다 느리게 커야 한다.** $k$를 고정하면 분산이 줄지 않아 일치성이 없고, $k=n$으로 두면 전체 평균이 되어 편향이 남는다.
+    - $k/n \to 0$과 $k \to \infty$가 일치성의 조건이며, 커널 회귀의 띠폭 조건과 같은 형태다.
+    - **차원의 저주.** $d$차원에서는 이웃까지의 거리가 $(k/n)^{1/d}$에 비례하므로 편향이 $O((k/n)^{2/d})$가 되고, 최적 수렴 속도가 $O(n^{-4/(4+d)})$로 급격히 나빠진다. $d=10$이면 $n^{-2/7}$로, 같은 정밀도를 얻으려면 표본이 천문학적으로 필요하다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+정칙화(능형회귀)가 편향-분산 맞바꿈을 어떻게 조절하는지 설명하라. 벌점 $\lambda$가 0에서 $\infty$로 갈 때 편향과 분산의 극한을 적어라.
+
+</div>
+
+??? success "풀이"
+    능형 추정량은
+
+    $$
+    \hat{\boldsymbol\beta}_\lambda = (X^\top X+\lambda I)^{-1}X^\top\mathbf{y}
+    $$
+
+    이다. $X^\top X = \sum_j d_j^2\mathbf{v}_j\mathbf{v}_j^\top$(고유분해)로 쓰면 각 방향의 계수가
+
+    $$
+    \frac{d_j^2}{d_j^2+\lambda}
+    $$
+
+    배로 **축소**된다. 분산이 작은 방향($d_j$가 작은 방향)일수록 강하게 눌린다.
+
+    **편향.**
+
+    $$
+    E[\hat{\boldsymbol\beta}_\lambda] = (X^\top X+\lambda I)^{-1}X^\top X\boldsymbol\beta
+    $$
+
+    이므로 $\lambda>0$이면 편향이 있고, $\lambda$와 함께 커진다.
+
+    **분산.**
+
+    $$
+    \operatorname{Var}(\hat{\boldsymbol\beta}_\lambda) = \sigma^2(X^\top X+\lambda I)^{-1}X^\top X(X^\top X+\lambda I)^{-1}
+    $$
+
+    각 방향의 분산이 $\sigma^2 d_j^2/(d_j^2+\lambda)^2$로 $\lambda$와 함께 **줄어든다.**
+
+    **극한.**
+
+    | $\lambda$ | 편향 | 분산 | 추정량 |
+    |---|---|---|---|
+    | $0$ | 0 | 최대 | 최소제곱 |
+    | $\infty$ | 최대($-\boldsymbol\beta$) | 0 | $\mathbf{0}$ |
+
+    **핵심 결과.** 어떤 $\lambda>0$에서는 능형이 최소제곱보다 **평균제곱오차가 반드시 작다**는 것이 증명되어 있다. 즉 $\lambda=0$이 결코 최적이 아니다. 다중공선성이 있어 $d_j$가 작은 방향이 존재하면 이득이 특히 크다.
+
+    **$\lambda$를 어떻게 고르는가.** 교차검증이 표준이다. 유효 자유도
+
+    $$
+    \text{df}(\lambda) = \sum_j \frac{d_j^2}{d_j^2+\lambda}
+    $$
+
+    를 복잡도의 척도로 삼으면, $\lambda$를 바꾸는 것이 모형 복잡도를 **연속적으로** 조절하는 일임이 분명해진다. 변수를 넣고 빼는 이산적 선택보다 부드럽고 안정적이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+편향과 분산을 자료에서 **따로 추정할 수 있는가**? 할 수 있는 경우와 없는 경우를 구분하고, 모의실험으로 확인하는 방법을 적어라.
+
+</div>
+
+??? success "풀이"
+    **일반적으로는 할 수 없다.** 편향은 $E[\hat\theta]-\theta$인데 **참값 $\theta$를 모르기 때문**이다. 자료 하나에서 편향과 분산을 분리해 내는 것은 원리적으로 불가능하다. 관측되는 것은 둘의 합(MSE)의 한 실현값뿐이다.
+
+    **할 수 있는 경우.**
+
+    - **모의실험.** 참값을 우리가 정하므로 둘을 정확히 분리할 수 있다.
+
+      ```python
+      thetas = [estimate(simulate(theta_true)) for _ in range(B)]
+      bias = np.mean(thetas) - theta_true
+      var  = np.var(thetas, ddof=1)
+      mse  = np.mean((np.array(thetas) - theta_true)**2)
+      # 확인: mse ≈ bias**2 + var
+      ```
+
+      이것이 새 추정량을 평가하는 표준적인 방법이다.
+
+    - **이론적으로 편향을 알 때.** $E[\hat\sigma^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$처럼 편향의 공식을 알면, $\hat\sigma^2$을 대입해 편향을 추정하고 보정할 수 있다. 잭나이프와 부트스트랩은 이 발상을 일반화해 **편향을 자료에서 추정**한다.
+
+      $$
+      \widehat{\text{Bias}}_{\text{boot}} = \frac1B\sum_b \hat\theta^*_b - \hat\theta
+      $$
+
+      부트스트랩 세계에서 "참값" 역할을 $\hat\theta$가 맡는다. 다만 이 추정 자체에 잡음이 있어, 보정하면 편향은 줄지만 분산이 늘 수 있다.
+
+    - **분산만 따로.** 분산은 참값을 몰라도 추정할 수 있다. 표준오차 공식, 부트스트랩, 잭나이프가 모두 분산을 겨냥한다. **편향과 분산 중 분산 쪽이 훨씬 다루기 쉽다**는 것이 실무의 현실이다.
+
+    **예측 문제에서는 사정이 낫다.** 참 $f$를 몰라도 **총 예측오차**는 교차검증이나 검증셋으로 추정할 수 있다. 편향과 분산을 따로 알 필요 없이 그 합만 최소로 하면 되므로, 모형 선택의 목적에는 충분하다. 이것이 교차검증이 그토록 널리 쓰이는 이유다.
+
 ---
 
 ## 정리하며
