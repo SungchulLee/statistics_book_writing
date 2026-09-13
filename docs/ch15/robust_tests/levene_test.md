@@ -71,9 +71,9 @@ sigma_y=1.15  W=1.6657  p=0.198
 sigma_y=1.20  W=2.8187  p=0.095
 ```
 
-</div>
-
 `center` 인자가 중심화 방식을 조절한다.
+
+</div>
 
 <div class="codebox" markdown>
 

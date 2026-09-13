@@ -135,9 +135,9 @@ cox_snell_diagnostic(rng.exponential(1.0, 200))
 
 ![Cox-Snell 잔차 진단 그림](./img/model_comparison_code_99.png)
 
-</div>
-
 모형이 옳을 때의 모습이다. 점들이 45도선을 따라 놓인다. 실제 자료에서 점들이 이 선에서 체계적으로 벗어나면 모형 설정이 잘못되었다는 뜻이다.
+
+</div>
 
 ## 실무적 작업 흐름
 

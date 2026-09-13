@@ -66,9 +66,9 @@ plt.show()
 
 ![F 분포와 양쪽 꼬리](./img/f_test_tail_plot_27.png)
 
-</div>
-
 $p$값을 명시적으로 계산하려면
+
+</div>
 
 <div class="codebox" markdown>
 

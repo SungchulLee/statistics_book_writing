@@ -128,9 +128,9 @@ M_opt_pcr = np.argmin(pcr_mse_scores) + 1
 pcr_cv_rmse = np.sqrt(pcr_mse_scores[M_opt_pcr - 1])
 ```
 
-</div>
-
 설명분산의 스크리 그림을 보면 $X$의 변동 대부분을 몇 개의 성분이 포착하는지 가늠할 수 있다.
+
+</div>
 
 !!! warning "이 코드의 자료 누설"
     위 코드는 `PCA()`를 전체 자료에 한 번 적합한 뒤 그 성분으로 교차검증한다. 주성분이 검증

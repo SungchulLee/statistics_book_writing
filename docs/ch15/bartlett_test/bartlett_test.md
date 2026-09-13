@@ -98,9 +98,9 @@ P-value: 0.5202
 Fail to reject H0: no significant difference in variances.
 ```
 
-</div>
-
 세 집단의 표본분산은 $2.839$, $6.000$, $2.839$이다. 최대·최소 비가 $2.1$로 꽤 크지만 각 집단 $n = 8$로는 유의하지 않다.
+
+</div>
 
 ### 직접 계산
 
@@ -181,10 +181,9 @@ Bartlett's Test Statistic (T): 1.3070
 P-value: 0.5202
 ```
 
-</div>
-
 SciPy 결과와 정확히 일치한다. 보정인자가 $1.0635$로 통계량을 약 6% 줄인다는 점도 확인할 수 있다.
 
+</div>
 
 ## 연습문제
 

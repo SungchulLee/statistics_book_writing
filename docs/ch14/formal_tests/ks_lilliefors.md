@@ -162,9 +162,9 @@ Lilliefors Test: Statistic=0.019125294462402076, p-value=0.5818164701330186
 Fail to reject H_0: The data is normally distributed.
 ```
 
-</div>
-
 두 검정통계량은 거의 같지만($0.01903$ 대 $0.01913$) **$p$값이 다르다**($0.855$ 대 $0.582$). Lilliefors가 모수 추정을 반영한 다른 귀무분포를 쓰기 때문이다. 여기서는 자료가 실제로 정규이므로 두 검정 모두 기각하지 않지만, 자료가 정규가 아니라면 Lilliefors 쪽이 훨씬 먼저 이를 잡아낸다.
+
+</div>
 
 ---
 

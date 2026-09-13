@@ -84,9 +84,9 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
     return statistic, p_value
 ```
 
-</div>
-
 전형적인 사용법은 참 표준편차를 바꿔가며 자료를 생성하고 검정이 $\sigma_0^2 = 1$로부터의 이탈을 탐지하는지 확인하는 것이다.
+
+</div>
 
 <div class="codebox" markdown>
 

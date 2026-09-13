@@ -91,9 +91,9 @@ print("비모수 :", round(npb.std(ddof=1), 4))              # 0.8708
 비모수 : 0.8708
 ```
 
-</div>
-
 세 값이 잘 일치한다. 자료가 실제로 정규이므로 두 붓스트랩이 모두 옳게 작동한다.
+
+</div>
 
 <div class="exbox" markdown>
 

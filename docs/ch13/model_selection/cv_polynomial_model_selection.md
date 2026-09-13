@@ -80,9 +80,9 @@ for run in range(n_validations):
         val_mse_multiple[run, i] = np.mean((y[val_idx] - model.predict(X_va)) ** 2)
 ```
 
-</div>
-
 20번의 무작위 분할이 고른 최적 차수는
+
+</div>
 
 ```text
 [5, 6, 3, 3, 2, 3, 8, 6, 2, 2, 9, 9, 2, 8, 9, 2, 3, 3, 3, 5]

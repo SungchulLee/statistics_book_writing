@@ -58,10 +58,10 @@ scaler = StandardScaler()
 X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
 ```
 
-</div>
-
 $L_1$ 벌점 $\lambda\|\beta\|_1$은 모든 계수를 동등하게 벌하므로 표준화가 필수적이다. 표준화하지
 않으면 단위가 다른 변수들이 서로 다른 정도로 벌을 받게 된다.
+
+</div>
 
 ## 코드: OLS 기준선
 
@@ -81,9 +81,9 @@ ols_r2 = r2_score(y, ols_pred)
 n_nonzero_ols = np.sum(np.abs(ols_model.coef_) > 1e-8)
 ```
 
-</div>
-
 OLS는 모든 특성을 0이 아닌 계수로 유지하며, 정칙화하지 않은 기준선 역할을 한다.
+
+</div>
 
 ## 코드: 정칙화 경로
 
@@ -110,10 +110,10 @@ lasso_coefs = np.array(lasso_coefs)
 n_features_selected = (np.abs(lasso_coefs) > 1e-8).sum(axis=1)
 ```
 
-</div>
-
 정칙화 경로는 $\lambda$가 작아짐에 따라 특성들이 어떤 순서로 모형에 들어오는지 보여준다. 먼저
 등장하는 특성일수록 강한 예측변수다.
+
+</div>
 
 ## 코드: 교차검증으로 람다 선택
 
@@ -133,9 +133,9 @@ lasso_r2 = r2_score(y, lasso_pred)
 n_nonzero_lasso = np.sum(np.abs(lasso_cv.coef_) > 1e-8)
 ```
 
-</div>
-
 5-겹 교차검증 절차가 각 $\lambda$를 평가하여 평균 MSE가 가장 낮은 값을 고른다.
+
+</div>
 
 ## 코드: 모형 비교
 

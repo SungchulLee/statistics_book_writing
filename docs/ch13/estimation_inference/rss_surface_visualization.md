@@ -55,9 +55,9 @@ beta_0 = model.intercept_
 beta_1 = model.coef_[0]
 ```
 
-</div>
-
 $X$를 중심화만 했으므로($\bar{x} = 0$) 절편은 `Sales`의 평균과 같다. 적합 결과는 $\hat{\beta}_0 = 14.0506$, $\hat{\beta}_1 = 0.046935$이다.
+
+</div>
 
 ### RSS 곡면 계산
 
@@ -115,9 +115,9 @@ plt.show()
 
 ![RSS 곡면](./img/rss_surface_visualization_71.png)
 
-</div>
-
 $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것이 최소제곱 문제가 볼록이라는 사실을 눈으로 보여준다. 국소 최소점이 없으므로 해가 유일하다.
+
+</div>
 
 ## 해석
 

@@ -90,9 +90,9 @@ At 2.5% significance level: Fail to reject H_0. The data is normally distributed
 At 1.0% significance level: Fail to reject H_0. The data is normally distributed.
 ```
 
-</div>
-
 임계값은 $[0.574, 0.653, 0.784, 0.914, 1.088]$이며 $A^2 = 0.243$은 그 가운데 가장 작은 값보다도 작다. 어떤 유의수준에서도 정규성을 기각하지 않는다.
+
+</div>
 
 ---
 
@@ -135,8 +135,6 @@ print(f"Anderson-Darling Test: Statistic={statistic}, p-value={p_value}")
 Anderson-Darling Test: Statistic=0.2432179174634257, p-value=0.7659878263029309
 ```
 
-</div>
-
 `scipy.stats.anderson`이 준 통계량 $0.2432$와 같은 값에 근사 $p$값 $0.766$이 붙었다. 앞의 임계값 비교에서 1% 수준까지 모두 기각하지 못한 결과와 일치한다.
 
 **선택지 2: 임계값으로 해석하기**
@@ -145,6 +143,8 @@ Anderson-Darling Test: Statistic=0.2432179174634257, p-value=0.7659878263029309
 
 - 어떤 유의수준의 임계값보다 검정통계량이 **작으면** $p$값이 그 유의수준보다 **크다**.
 - 임계값보다 검정통계량이 **크면** $p$값이 그 유의수준보다 **작다**.
+
+</div>
 
 ### `normal_ad`를 이용한 Python 구현
 
@@ -181,9 +181,9 @@ Anderson-Darling Test: Statistic=0.243217917463312, p-value=0.7659878263032931
 Fail to reject H_0: The data is normally distributed.
 ```
 
-</div>
-
 통계량은 `stats.anderson`과 정확히 같고, 여기에 근사 $p$값 $0.766$이 더해진다.
+
+</div>
 
 ---
 

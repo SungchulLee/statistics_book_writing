@@ -68,9 +68,9 @@ Skewness Test: Statistic=0.4402, p-value=0.6598
 Fail to reject H_0: The data is symmetrically distributed (no significant skewness).
 ```
 
-</div>
-
 정규 자료이므로 왜도가 $0.0339$로 0에 가깝고 $p = 0.66$으로 기각하지 못한다. 기대한 대로이다.
+
+</div>
 
 ---
 

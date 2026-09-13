@@ -146,9 +146,9 @@ D'Agostino's K-squared Test: Statistic=0.2329889638562599, p-value=0.89003500824
 Fail to reject H_0: The data is normally distributed.
 ```
 
-</div>
-
 `normaltest`의 통계량이 두 z 점수의 제곱합과 정확히 일치함을 확인할 수 있다. 이것이 $K^2 = Z_{\text{skewness}}^2 + Z_{\text{kurtosis}}^2$의 정의이다.
+
+</div>
 
 ## 응용
 

@@ -71,9 +71,9 @@ y_pred = (scores >= 0.5).astype(int)
 cm = confusion_matrix(y_true, y_pred)
 ```
 
-</div>
-
 $\tau = 0.5$에서 TN $= 129$, FP $= 51$, FN $= 30$, TP $= 90$이다.
+
+</div>
 
 ## 정밀도, 재현율, F1 점수
 
@@ -118,11 +118,11 @@ prec, rec, f1 = precision_recall_f1(y_true, y_pred)
 accuracy = np.mean(y_true == y_pred)
 ```
 
-</div>
-
 결과는 정확도 $0.7300$, 정밀도 $0.6383$, 재현율 $0.7500$, $F_1 = 0.6897$이다. 재현율이
 정밀도보다 높은 것은 문턱 $0.5$가 음성 분포의 중심($0.35$)보다 양성 분포의 중심($0.65$)에서
 더 멀어, 음성 쪽에서 위양성이 많이 나오기 때문이다.
+
+</div>
 
 ## ROC 곡선 직접 만들기
 
@@ -214,9 +214,9 @@ print(f"AUC = {area:.4f}")
 AUC = 0.7935
 ```
 
-</div>
-
 이 구현은 AUC $= 0.7935$를 주는데, `sklearn.metrics.roc_auc_score`는 $0.7931$을 준다.
+
+</div>
 
 !!! note "미세한 차이는 동점 때문이다"
     `np.clip(scores, 0, 1)` 때문에 점수 $0$에 13개, $1$에 11개의 관측치가 몰려 **동점**이

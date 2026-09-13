@@ -58,9 +58,9 @@ After:  skewness = 0.2933
 
 ![로그 변환 전후의 히스토그램](./img/transformations_code_27.png)
 
-</div>
-
 왜도가 $3.54$에서 $0.29$로 떨어졌다. 사실상 대칭이 되었다.
+
+</div>
 
 ## 제곱근 변환
 
@@ -118,9 +118,9 @@ Before Box-Cox: skewness = 3.5432
 After  Box-Cox: skewness = -0.0018
 ```
 
-</div>
-
 자료가 대수정규이므로 참 최적값은 $\lambda = 0$(로그 변환)이고, 최대가능도 추정값 $-0.126$은 표집변동 범위 안에서 이를 잘 회복한다. $\hat{\lambda} \approx 0$이면 Box-Cox는 로그로, $\hat{\lambda} \approx 0.5$이면 제곱근으로 환원된다.
+
+</div>
 
 ## 해석
 

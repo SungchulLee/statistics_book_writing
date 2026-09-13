@@ -89,9 +89,9 @@ print(f"Estimated power: {power:.3f} (SE: {se:.3f})")
 Estimated power: 0.506 (SE: 0.007)
 ```
 
-</div>
-
 검정력이 표본크기에 따라 어떻게 변하는지 살펴보려면
+
+</div>
 
 <div class="codebox" markdown>
 

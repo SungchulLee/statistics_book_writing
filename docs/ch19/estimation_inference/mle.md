@@ -258,11 +258,11 @@ y_pred = model.predict(x_test)
 y_prob = model.predict_proba(x_test)[:, 1]
 ```
 
-</div>
-
 scikit-learn의 `LogisticRegression`은 기본적으로 L-BFGS(준뉴턴법)를 쓰는데, 헤세행렬을 명시적으로
 만들거나 역행렬을 구하지 않고 근사한다. 자료가 작을 때는 `solver='newton-cg'` 옵션이 정확한
 뉴턴 단계를 밟으며, 이는 IRLS와 동등하다.
+
+</div>
 
 ## 연습문제
 

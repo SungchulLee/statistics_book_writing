@@ -128,9 +128,9 @@ def permutation_test_two_sample(x, y, B=9999, stat_func=None, rng=None):
     return t_obs, (count + 1) / (B + 1)
 ```
 
-</div>
-
 처치군 대 대조군 자료에 적용하면 순열 $p$값이 대개 Welch $t$ 검정의 $p$값과 가깝다. **다만 분산이 다르고 표본이 불균형하면 그렇지 않다**(연습문제 2).
+
+</div>
 
 ## 상관에 대한 순열검정
 

@@ -132,9 +132,9 @@ Model Coefficients: [0.0206 0.0474 0.001 ]
 
 ![Advertising 자료](./img/multiple_33.png)
 
-</div>
-
 시장 200곳의 광고비와 매출이다.
+
+</div>
 
 ### 결정론적 훈련-검정 분할
 
@@ -204,9 +204,9 @@ Model Coefficients: [0.0183 0.0229 0.0011]
 
 ![적합된 회귀](./img/multiple_133.png)
 
-</div>
-
 세 계수가 각각 TV 0.0183, 라디오 0.0229, 신문 0.0011이다. 신문의 계수가 사실상 0이다.
+
+</div>
 
 ## statsmodels로 구현하기
 
@@ -308,11 +308,11 @@ Notes:
 
 ![세 설명변수 모형](./img/multiple_201.png)
 
-</div>
-
 TV와 라디오의 계수는 강하게 유의하지만 신문은 $p = 0.86$으로 유의하지 않다.
 
 단순회귀에서는 신문 광고도 매출과 상관이 있었는데(0.23) 다중회귀에서는 사라진다. 신문 광고가 라디오 광고와 함께 집행되는 경향이 있어, 라디오를 모형에 넣으면 신문이 따로 설명할 것이 남지 않기 때문이다.
+
+</div>
 
 ### Sales ~ TV + Radio
 
@@ -360,11 +360,11 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
-</div>
-
 신문을 뺀 모형이다. $R^2$가 세 변수 모형과 사실상 같다. 신문 광고의 계수가 유의하지 않았던 것과 일치한다.
 
 신문 광고를 뺀 모형이다. $R^2$가 세 변수 모형과 사실상 같다. 신문 광고의 계수가 유의하지 않았던 것과 일치한다.
+
+</div>
 
 ### Sales ~ TV + Radio + TV:Radio
 
@@ -415,11 +415,11 @@ Notes:
 strong multicollinearity or other numerical problems.
 ```
 
-</div>
-
 교호작용을 넣으면 $R^2$가 0.897에서 0.968로 오른다. TV와 라디오가 함께 쓰일 때의 상승효과다.
 
 교호작용을 넣은 모형의 $R^2$가 0.968로 넣지 않은 모형(0.897)보다 훨씬 높다. TV와 라디오가 함께 쓰일 때 상승효과가 있다는 뜻이다.
+
+</div>
 
 ## statsmodels 출력 읽기
 

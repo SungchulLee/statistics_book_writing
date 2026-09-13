@@ -117,10 +117,10 @@ class SoftmaxRegression(nn.Module):
         return self.fc(x.view(x.size(0), -1))
 ```
 
-</div>
-
 PyTorch의 `nn.CrossEntropyLoss`는 log-softmax와 음의 로그가능도를 수치적으로 안정한 하나의
 연산으로 결합한다. 따라서 모형의 `forward`는 확률이 아니라 **로짓**을 반환해야 한다.
+
+</div>
 
 ---
 
@@ -159,9 +159,9 @@ def train_model(model, train_loader, epochs=5, lr=0.1):
     return loss_history
 ```
 
-</div>
-
 소프트맥스 회귀 모형을 학습시킨다.
+
+</div>
 
 <div class="codebox" markdown>
 
@@ -241,9 +241,9 @@ Overall accuracy: 92.15%
   Digit 9: 90.2%
 ```
 
-</div>
-
 **전형적인 결과: 검정 정확도 약 92%.**
+
+</div>
 
 ---
 
@@ -303,10 +303,10 @@ Overall accuracy: 96.86%
   Digit 9: 94.4%
 ```
 
-</div>
-
 **전형적인 결과: 검정 정확도 약 97%.** 은닉층이 원시 화소값보다 판별력이 높은 획의 양상과
 곡선을 학습한다.
+
+</div>
 
 ---
 
@@ -367,10 +367,10 @@ Overall accuracy: 96.80%
   Digit 9: 94.3%
 ```
 
-</div>
-
 **전형적인 결과: 검정 정확도 약 98--99%.** 합성곱층은 위치와 무관하게 국소 양상(모서리, 꼭짓점,
 고리)을 검출하므로 이미지 자료에 매우 효과적이다.
+
+</div>
 
 ---
 
@@ -462,9 +462,9 @@ plt.show()
 
 ![CNN의 혼동행렬](./img/mnist_classification_260.png)
 
-</div>
-
 흔한 혼동으로는 4와 9(둘 다 오른쪽에 세로획이 있다), 3과 5(위쪽 곡선이 비슷하다)가 있다.
+
+</div>
 
 ---
 

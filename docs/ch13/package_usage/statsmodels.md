@@ -81,8 +81,6 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
-</div>
-
 요약표를 세 부분으로 나눠 읽는다.
 
 - **위 블록**: 모형 수준의 적합도. $R^2 = 0.971$, $F = 1603$, AIC/BIC.
@@ -92,6 +90,8 @@ Notes:
 `Cond. No.` 1.23도 눈여겨보라. 설명변수를 독립으로 만들었으므로 다중공선성이 없다. 이 값이 30을 넘으면 공선성을 의심한다.
 
 `sm.add_constant(X)` 함수는 설명변수 행렬 앞에 1로 채운 열을 붙인다. 이는 모형 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$의 절편항 $\beta_0$에 대응한다.
+
+</div>
 
 !!! warning "상수를 빠뜨리면"
     `sm.add_constant()`를 호출하지 않고 `X`를 그대로 넘기면 모형이 원점을 지나는 회귀(절편 없음)를 적합한다. 이는 거의 언제나 원하는 바가 아니다. 절편을 의도적으로 없앨 특별한 이유가 없다면 항상 상수를 추가하라.
@@ -190,13 +190,13 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
-</div>
-
 식 API가 앞의 배열 API와 **완전히 같은 결과**를 준다. 계수 이름이 `const, x1, x2`에서 `Intercept, x1, x2`로 바뀐 것뿐이다.
 
 식 API는 절편을 자동으로 넣어 준다. 배열 API에서 `add_constant`를 빠뜨리는 실수를 막아 준다는 점이 실용적인 장점이다.
 
 식 `'y ~ x1 + x2'`는 모형 $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \varepsilon$을 지정한다. 절편은 기본으로 포함된다. 없애려면 `'y ~ x1 + x2 - 1'`을 쓴다.
+
+</div>
 
 ### 식 문법
 
@@ -264,9 +264,9 @@ AIC: 161.5973963941535
 BIC: 169.41290695211777
 ```
 
-</div>
-
 `params`, `bse`, `pvalues`, `conf_int()`로 요약표의 각 열을 배열로 꺼낼 수 있다. 보고서를 자동 생성하거나 여러 모형을 비교할 때 이 접근이 필요하다.
+
+</div>
 
 ---
 
@@ -311,9 +311,9 @@ VIF for variable 1: 1.00
 VIF for variable 2: 1.00
 ```
 
-</div>
-
 Breusch-Pagan과 Jarque-Bera 모두 기각하지 못하고 VIF도 1.00이다. 자료를 가정에 맞게 만들었으니 당연한 결과이며, 진단 도구가 제대로 작동한다는 확인이기도 하다.
+
+</div>
 
 !!! note "VIF 반복문에서 상수 열은 건너뛴다"
     `X_with_const`의 0번 열은 절편을 위한 상수이다. 여기에 `variance_inflation_factor`를 호출해도 오류는 나지 않지만 그 값에는 아무 의미가 없다. 위 코드처럼 `range(1, ...)`로 시작해 실제 설명변수만 다루어야 한다.

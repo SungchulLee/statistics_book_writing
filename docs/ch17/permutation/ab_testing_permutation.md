@@ -46,8 +46,6 @@ def perm_test_two_sample_means(data, nA, n_perms=9999, rng=None):
     return p_value, perm_diffs, obs_diff
 ```
 
-</div>
-
 페이지 A의 평균은 $168.2$초, 페이지 B는 $173.6$초로 차이는 $-5.4$초이다. 순열검정은 $p = 0.327$을 준다.
 
 결과를 Welch $t$ 검정과 비교한다.
@@ -57,6 +55,8 @@ t = \frac{\bar x_A - \bar x_B}{\sqrt{s_A^2/n_A + s_B^2/n_B}}
 $$
 
 Welch $t$ 검정은 $p = 0.320$으로 사실상 같은 답을 준다. 두 검정 모두 기각하지 못한다. 표본이 작고($n = 10$) 자료가 정규가 아닐 수 있으므로 순열검정 쪽이 더 믿을 만하다.
+
+</div>
 
 ## 전환율 A/B 검정
 
@@ -101,8 +101,6 @@ def perm_test_proportion(n_control, conv_control, n_treatment, conv_treatment,
     return p_value, perm_diffs, obs_diff
 ```
 
-</div>
-
 비교 대상은 $2 \times 2$ 분할표에 대한 독립성 카이제곱 검정이다.
 
 $$
@@ -110,6 +108,8 @@ $$
 $$
 
 카이제곱 검정은 $p = 0.6996$, Fisher 정확검정은 $p = 0.6811$을 준다. 순열검정도 같은 범위의 값을 준다.
+
+</div>
 
 !!! tip "이 경우 재표집은 낭비이다"
     이진 자료의 이표본 순열분포는 초기하분포로 정확히 알려져 있으므로, 순열검정은 Fisher 정확검정과 **같은 것**이다. `stats.fisher_exact`가 근사 없이 답을 준다. 자세한 계산은 [기초](./foundations.md) 연습문제 4에 있다.

@@ -99,10 +99,10 @@ Test accuracy: 0.9722
 weighted avg       0.97      0.97      0.97       360
 ```
 
-</div>
-
 검정 정확도는 $0.9722$다. 혼동행렬을 보면 오류가 매우 드물게 흩어져 있고, 가장 흔한 오류는
 8을 5로 예측한 2건, 그다음이 각각 1건인 $0 \to 4$, $1 \to 4$, $3 \to 8$, $5 \to 1$ 등이다.
+
+</div>
 
 !!! note "`load_digits`는 MNIST가 아니다"
     scikit-learn의 `load_digits`는 $8 \times 8$ 화소의 저해상도 손글씨 숫자 1,797장이고,

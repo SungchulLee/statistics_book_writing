@@ -86,9 +86,9 @@ def softmax(z):
     return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 ```
 
-</div>
-
 `np.max`를 빼는 것은 평행이동 불변성 덕분에 결과를 바꾸지 않으면서 `np.exp`의 오버플로를 막는다.
+
+</div>
 
 ## 연습문제
 

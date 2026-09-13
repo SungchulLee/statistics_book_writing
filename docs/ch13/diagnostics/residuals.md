@@ -90,9 +90,9 @@ plt.show()
 
 ![가정이 성립할 때의 잔차](./img/residuals_48.png)
 
-</div>
-
 0을 중심으로 고르게 흩어진 띠. 이것이 기준선이며, 아래 그림들과 비교해 읽는다.
+
+</div>
 
 #### 그림 해석
 
@@ -157,9 +157,9 @@ plot_regression_and_residuals(x, y, y_pred)
 
 ![이분산에서의 잔차](./img/residuals_99.png)
 
-</div>
-
 오른쪽으로 갈수록 퍼지는 깔때기 모양이다.
+
+</div>
 
 ### 나쁜 경우: 다항 자료에 선형모형
 
@@ -188,9 +188,9 @@ plot_regression_and_residuals(x, y, y_pred)
 
 ![이차 관계에서의 잔차](./img/residuals_147.png)
 
-</div>
-
 잔차가 U자를 그린다. 모형이 선형인데 자료가 곡선이면 이런 패턴이 나온다.
+
+</div>
 
 #### 선형 대 이차 잔차 비교
 
@@ -280,13 +280,13 @@ Quadratic Model RSS: 77.72
 
 ![그림](./img/residuals_166.png)
 
-</div>
-
 이차 모형의 $R^2$가 0.083에서 0.953으로 뛴다. 선형 모형의 잔차 그림에 뚜렷한 곡선이 보였던 이유가 이것이다.
 
 $R^2 = 0.083$이라는 값 자체보다, **잔차 그림이 그 원인을 알려 준다**는 점이 중요하다. 결정계수는 "얼마나 못 맞히는가"만 말하고 "왜 못 맞히는가"는 말하지 않는다.
 
 **핵심 통찰**: 잔차를 지나는 LOWESS(국소가중 산점도 평활) 평활곡선이 위배 패턴을 뚜렷이 드러낸다. 선형모형에서는 이 곡선이 0 아래로 내려갔다가 위로 올라가며, 체계적인 과소예측과 과대예측이 일어나고 있음을 나타낸다. 이차 모형의 잔차는 무작위로 흩어져 비선형성의 형태가 제대로 포착되었음을 보여준다. $R^2$가 0.083에서 0.953으로 뛰고 잔차제곱합이 1530.56에서 77.72로 20분의 1 수준이 되는 것이 그 차이를 수치로 보여준다.
+
+</div>
 
 ### 해결: 다항회귀
 
@@ -316,9 +316,9 @@ plot_regression_and_residuals(x, y, y_pred)
 
 ![표준화 잔차](./img/residuals_250.png)
 
-</div>
-
 표준편차 단위로 바꾸면 $\pm 2$, $\pm 3$ 기준선과 곧바로 비교할 수 있다.
+
+</div>
 
 !!! tip "참고"
     [Transforming nonlinear data (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/transforming-nonlinear-data)
@@ -382,9 +382,9 @@ plt.show()
 
 ![잔차 진단 종합](./img/residuals_270.png)
 
-</div>
-
 네 그림을 함께 보면 어느 가정이 어디서 깨지는지 한눈에 들어온다.
+
+</div>
 
 ### 왜 제곱근을 쓰는가
 

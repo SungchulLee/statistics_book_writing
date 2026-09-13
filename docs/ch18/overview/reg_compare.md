@@ -61,9 +61,9 @@ scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 ```
 
-</div>
-
 20개 계수 중 5개만 0이 아니므로 참 구조는 희소하다.
+
+</div>
 
 ## 코드: 교차검증 적합
 
@@ -230,11 +230,11 @@ plot_shrinkage_operators()
 
 ![직교설계에서의 축소 연산자](./img/reg_compare_160.png)
 
-</div>
-
 여기서 경성 문턱은 문턱값을 $\lambda$로 두고 그린 것이다. 연습문제 1에서 보듯이, 벌점
 $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문턱값은 $\sqrt{2\lambda}$다.
 두 그림은 문턱 위치만 다를 뿐 모양은 같다.
+
+</div>
 
 ## 편향-분산 절충
 

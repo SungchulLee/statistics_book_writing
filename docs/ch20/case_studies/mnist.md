@@ -135,9 +135,9 @@ Epoch 5, Loss: 0.3032
 Test accuracy: 92.03%
 ```
 
-</div>
-
 **전형적인 검정 정확도: 약 92%.**
+
+</div>
 
 !!! note "`forward`가 로짓을 반환한다"
     `SimpleMNIST.forward`는 소프트맥스를 적용하지 않고 **로짓**을 그대로 반환한다. 이는
@@ -187,9 +187,9 @@ show_images(fixed_images, fixed_labels, preds, "After Training")
 
 ![학습 후 예측](./img/mnist_111_1.png)
 
-</div>
-
 학습 전에는 예측이 사실상 무작위지만, 다섯 세대만 지나도 대부분의 숫자를 맞힌다.
+
+</div>
 
 ---
 
@@ -248,9 +248,9 @@ Epoch 4, Loss: 0.1759
 Epoch 5, Loss: 0.0320
 ```
 
-</div>
-
 **전형적인 검정 정확도: 약 98--99%.**
+
+</div>
 
 ---
 

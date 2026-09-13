@@ -125,9 +125,9 @@ Jarque-Bera Test: Statistic=0.28220016508625234, p-value=0.8684023954281485
 Fail to reject H_0: The data is normally distributed.
 ```
 
-</div>
-
 손으로 계산한 값이 `scipy.stats.jarque_bera`와 정확히 일치한다. `stats.kurtosis`가 이미 **초과**첨도 $K-3$을 돌려주므로 코드에서 `kurtosis_value**2 / 4`가 공식의 $(K-3)^2/4$에 해당한다는 점에 유의하라.
+
+</div>
 
 ---
 

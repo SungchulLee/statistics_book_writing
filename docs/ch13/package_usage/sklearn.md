@@ -40,13 +40,13 @@ Intercept: 2.046396690621326
 Coefficients: [3.09536017 1.41392895]
 ```
 
-</div>
-
 참값이 절편 2.0, 계수 3.0과 1.5인데 추정값이 2.046, 3.095, 1.414다.
 
 scikit-learn은 절편을 `intercept_`에, 기울기를 `coef_`에 따로 담는다. statsmodels가 둘을 한 배열에 담는 것과 다르며, 두 라이브러리를 오가며 쓸 때 자주 헷갈리는 지점이다.
 
 적합된 모형은 절편을 `model.intercept_`에, 기울기 계수를 `model.coef_`에 저장한다. `X`에 1로 채운 열이 필요하지 않다는 점에 유의하라. `fit_intercept=True`(기본값)일 때 절편은 내부에서 처리된다.
+
+</div>
 
 ---
 
@@ -73,11 +73,11 @@ print("Predictions:", y_pred_new)
 Predictions: [5.84872133 3.3265745 ]
 ```
 
-</div>
-
 적합된 모형으로 새 입력의 예측값을 얻는다. `predict`는 2차원 배열을 받으므로 관측값이 하나여도 `[[x1, x2]]` 모양으로 넣어야 한다.
 
 `predict`의 입력은 훈련자료와 열의 개수가 같아야 한다. 각 행이 새로운 관측값이며 출력은 예측값의 벡터 $\hat{y} = \hat{\beta}_0 + \mathbf{X}_{\text{new}} \hat{\boldsymbol{\beta}}$이다.
+
+</div>
 
 ---
 
@@ -101,11 +101,11 @@ print(f"R-squared (training): {r2_train:.4f}")
 R-squared (training): 0.9706
 ```
 
-</div>
-
 훈련 자료의 $R^2 = 0.9706$이다. 잡음의 표준편차를 0.5로 두었으므로 이 정도가 상한에 가깝다.
 
 다른 척도가 필요하면 `sklearn.metrics`를 쓴다.
+
+</div>
 
 <div class="codebox" markdown>
 
@@ -135,9 +135,9 @@ MSE:  0.2775
 RMSE: 0.5268
 ```
 
-</div>
-
 MAE 0.42, RMSE 0.53이다. RMSE가 MAE보다 큰 것은 언제나 성립한다. 제곱이 큰 오차에 더 큰 가중치를 주기 때문이며, 두 값의 차이가 벌어질수록 오차 분포에 꼬리가 있다는 신호다.
+
+</div>
 
 !!! note "`root_mean_squared_error`는 scikit-learn 1.4부터"
     이 함수는 scikit-learn 1.4에서 추가되었다. 더 낮은 버전에서는 `mean_squared_error(y, y_pred, squared=False)`를 쓰거나 `np.sqrt(mean_squared_error(...))`로 직접 계산한다.
@@ -173,11 +173,11 @@ print(f"R-squared (test): {r2_test:.4f}")
 R-squared (test): 0.9855
 ```
 
-</div>
-
 시험 $R^2$가 훈련 $R^2$(0.9706)보다 오히려 높다. 과적합의 징후가 없다는 뜻이며, 설명변수가 둘뿐인 선형모형이라 예상할 만한 결과다.
 
 검정 $R^2$는 모형이 적합 과정에서 검정자료를 보지 않았으므로 훈련 $R^2$보다 예측 성능을 정직하게 추정한다.
+
+</div>
 
 ---
 
@@ -210,11 +210,11 @@ Mean CV R-squared: 0.9683
 Std CV R-squared: 0.0054
 ```
 
-</div>
-
 교차검증 $R^2$의 평균이 0.9683, 표준편차가 0.0054다. 겹마다 값이 크게 흔들리지 않으므로 모형이 안정적이다.
 
 `scoring` 인자는 scikit-learn의 어떤 채점기도 받는다. 회귀에서 흔한 선택은 `'r2'`, `'neg_mean_squared_error'`, `'neg_mean_absolute_error'`이다. "neg" 접두사가 붙는 것은 점수가 높을수록 좋다는 scikit-learn의 관례 때문이며, 그래서 오차 척도에 음수를 붙인다.
+
+</div>
 
 ---
 
@@ -250,11 +250,11 @@ print(f"Pipeline R-squared (test): {r2_pipeline:.4f}")
 Pipeline R-squared (test): 0.9858
 ```
 
-</div>
-
 파이프라인을 거친 시험 $R^2$가 0.9858로, 앞서 수동으로 표준화한 결과와 사실상 같다. 선형회귀에서 표준화는 예측 성능을 바꾸지 않는다. 계수의 해석과 규제(ridge, lasso)에서 의미가 생긴다.
 
 이 파이프라인은 먼저 각 설명변수를 평균 0, 분산 1로 표준화하고, 다음으로 (교호작용 항을 포함한) 다항 특성을 만들고, 마지막으로 선형회귀를 적합한다. 파이프라인 전체를 `cross_val_score`에 넘겨 교차검증으로 평가할 수 있다.
+
+</div>
 
 !!! note "파이프라인이 중요한 이유"
     파이프라인 없이 작업하면 전체 자료로 계산한 훈련 통계량으로 검정자료를 표준화하거나 변환하는 실수(자료 누출)를 저지르기 쉽다. 파이프라인은 각 변환 단계를 그 시점에 사용 가능한 자료에만 적용하여 이를 막아 준다.

@@ -156,9 +156,9 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
         print(f"{cl}% CI: [{lower:,.0f}, {upper:,.0f}]  Width: {upper-lower:,.0f}")
 ```
 
-</div>
-
 신뢰수준이 높을수록 구간이 넓어져 신뢰도와 정밀도의 절충을 반영한다.
+
+</div>
 
 ## 해석
 

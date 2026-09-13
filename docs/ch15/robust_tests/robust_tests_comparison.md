@@ -78,9 +78,9 @@ Brown-Forsythe      : false-positive rate = 0.0295
 Fligner-Killeen     : false-positive rate = 0.1140
 ```
 
-</div>
-
 분산이 실제로 다른 정규 자료에서의 검정력 비교는 다음과 같다.
+
+</div>
 
 <div class="codebox" markdown>
 

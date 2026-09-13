@@ -99,8 +99,6 @@ def permutation_test(before, after, n_perm=199_999, rng=None):
     return observed_diff, perm_diffs, p_value
 ```
 
-</div>
-
 | 검정 | $p$값 |
 |:---|---:|
 | 순열검정(단측) | **0.153** |
@@ -108,6 +106,8 @@ def permutation_test(before, after, n_perm=199_999, rng=None):
 | Welch $t$ 검정(양측) | 0.293 |
 
 **기각하지 못한다.** $2.25$켤레의 증가는 우연으로 충분히 설명된다. 이 자료의 주간 변동이 크기 때문이다(표준편차 $5.56$과 $4.61$).
+
+</div>
 
 ---
 
@@ -164,14 +164,14 @@ def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
     return diffs, np.percentile(diffs, [lo, 100 - lo])
 ```
 
-</div>
-
 | 신뢰수준 | 구간 | 폭 |
 |:---|:---|---:|
 | 90% | $[-1.17,\ 5.42]$ | 6.59 |
 | 95% | $[-1.83,\ 5.92]$ | 7.75 |
 
 붓스트랩 표준오차는 $1.994$이다. **두 구간 모두 $0$을 포함한다.** 순열검정이 기각하지 못한 것과 일관된다.
+
+</div>
 
 ---
 

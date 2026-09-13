@@ -68,9 +68,9 @@ def f_test(data_0, data_1):
     return statistic, p_value
 ```
 
-</div>
-
 다음 예제는 두 번째 표본의 표준편차를 점점 키우면서 F 검정을 적용한다.
+
+</div>
 
 <div class="codebox" markdown>
 

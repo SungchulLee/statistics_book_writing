@@ -225,9 +225,9 @@ print(f"Fitted df: {df:.2f} (lower df → heavier tails)")
 Fitted df: 6.68 (lower df → heavier tails)
 ```
 
-</div>
-
 위 자료에 적용하면 추정된 자유도가 $6.68$로, 자료를 생성한 참값 6에 가깝다.
+
+</div>
 
 ### 2. 비모수 방법
 

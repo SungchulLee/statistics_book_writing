@@ -39,9 +39,9 @@ def softmax(z):
     return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 ```
 
-</div>
-
 로짓 벡터 $\mathbf{z} = (2, 1, -1)^\top$로 구현을 확인할 수 있다.
+
+</div>
 
 <div class="codebox" markdown>
 
@@ -237,9 +237,9 @@ print(f"Final training loss: {loss_history[-1]:.4f}")
 Final training loss: 0.1326
 ```
 
-</div>
-
 최종 훈련 손실은 $0.1326$이다.
+
+</div>
 
 ---
 
@@ -266,11 +266,11 @@ print(f"Test accuracy: {accuracy:.4f}")
 Test accuracy: 1.0000
 ```
 
-</div>
-
 이 분할에서 검정 정확도는 $1.0000$이다. 검정자료가 45개뿐이고 붓꽃 자료의 세 품종이 잘
 분리되어 있어 완벽한 분류가 드물지 않다. 다만 45개에서의 $100\%$는 참 정확도가 $100\%$라는
 뜻이 아니다. 95% 신뢰구간(윌슨 구간)은 대략 $[92\%,\ 100\%]$로 여전히 넓다.
+
+</div>
 
 ---
 
@@ -298,9 +298,9 @@ print(f"scikit-learn accuracy: {clf.score(X_test, y_test):.4f}")
 scikit-learn accuracy: 1.0000
 ```
 
-</div>
-
 scikit-learn도 $1.0000$을 내어 두 구현이 일치한다.
+
+</div>
 
 !!! note "`multi_class='multinomial'`은 더 이상 필요하지 않다"
     예전 코드에서는 `LogisticRegression(multi_class='multinomial', ...)`처럼 명시하는 것이
