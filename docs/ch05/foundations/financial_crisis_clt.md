@@ -192,9 +192,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Default Distributions](./img/financial_crisis_clt_118.png)
+
+</div>
 
 ## 해석
 

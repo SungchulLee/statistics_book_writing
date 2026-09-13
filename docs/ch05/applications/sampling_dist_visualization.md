@@ -94,9 +94,9 @@ Sampling Distribution\n(Mean of 5)    1000  ...  167118.641562
 [3 rows x 5 columns]
 ```
 
-</div>
-
 ![표본분포 시각화: 표본크기의 효과](./img/sampling_dist_visualization_21.png)
+
+</div>
 
 ## 시각화 해석
 

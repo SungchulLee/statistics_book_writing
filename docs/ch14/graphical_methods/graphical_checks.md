@@ -52,9 +52,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![히스토그램과 적합된 정규밀도](./img/graphical_checks_27.png)
+
+</div>
 
 ## 커널밀도추정
 

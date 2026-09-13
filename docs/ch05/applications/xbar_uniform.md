@@ -90,9 +90,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Population Distribution](./img/xbar_uniform_45.png)
+
+</div>
 
 ## 해석
 

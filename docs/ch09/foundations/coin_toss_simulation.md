@@ -136,9 +136,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Coin Toss Simulation (100,000 runs)](./img/coin_toss_simulation_100.png)
+
+</div>
 
 히스토그램이 15를 중심으로 모여 있고 빨간 선이 그은 24는 오른쪽 꼬리 저 끝에 있다. 막대 높이가 눈에 보이지 않을 만큼 낮은 영역이다. p-값이란 결국 이 빨간 선 오른쪽에 있는 막대들의 넓이 비율이다.
 

@@ -111,9 +111,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Contour + Eigenvectors](./img/gaussian_2d_eigendecomposition_34.png)
+
+</div>
 
 ---
 

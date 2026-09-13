@@ -108,9 +108,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![산점도와 회귀직선](./img/regression_correlation_plot_71.png)
+
+</div>
 
 직선은 조건부 평균을, 점들의 흩어짐은 그 주위의 산포를 나타낸다.
 

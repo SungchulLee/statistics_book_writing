@@ -176,9 +176,9 @@ if __name__ == "__main__":
 Standard Error   of X_bar : 0.1287
 ```
 
-</div>
-
 ![Sampling Distribution of X_bar](./img/standard_error_106.png)
+
+</div>
 
 ## 같은 코드를 파일 둘로 나눈다면
 

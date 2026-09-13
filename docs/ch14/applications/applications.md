@@ -106,9 +106,9 @@ Shapiro-Wilk Test on Residuals: p-value=0.11418410564039025
 Residuals are normally distributed.
 ```
 
-</div>
-
 ![잔차의 히스토그램](./img/applications_59.png)
+
+</div>
 
 (엄밀히 말하면 "잔차가 정규분포를 따른다"가 아니라 "잔차가 정규성과 일관된다"가 옳은 표현이다. 기각하지 못한 것이 정규성을 증명하지는 않는다.)
 

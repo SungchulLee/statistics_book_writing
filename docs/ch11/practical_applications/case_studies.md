@@ -68,9 +68,9 @@ print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
 Shapiro-Wilk Test: W = 0.9831, p-value = 0.2285
 ```
 
-</div>
-
 ![잔차의 Q-Q 그림](./img/case_studies_29.png)
+
+</div>
 
 $p = 0.23$으로 정규성에 반하는 증거가 없고, Q-Q 그림의 점들도 기준선을 잘 따른다.
 
@@ -117,9 +117,9 @@ plt.title('Residuals vs. Fitted Values')
 plt.show()
 ```
 
-</div>
-
 ![잔차 대 적합값](./img/case_studies_56.png)
+
+</div>
 
 세로 띠가 둘이고 각 띠의 높이가 비슷하다. 등분산 가정이 무난하다는 Levene 검정의 결론과 일치한다.
 
@@ -212,9 +212,9 @@ Shapiro-Wilk Test: p-value = 0.7449
 Levene's Test: p-value = 0.7631
 ```
 
-</div>
-
 ![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_96.png)
+
+</div>
 
 두 검정 모두 기각하지 못한다($p = 0.74$, $p = 0.76$). 그러나 $n = 15$에서 이 검정들의 검정력은 매우 낮아, "가정이 확인되었다"기보다 "확인할 수 없었다"에 가깝다.
 
@@ -304,9 +304,9 @@ Shapiro-Wilk Test: p-value = 0.5488
 Levene's Test: p-value = 0.9343
 ```
 
-</div>
-
 ![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_156.png)
+
+</div>
 
 가정 위반의 증거가 없다.
 

@@ -192,9 +192,9 @@ MLE probability (p): 0.7425
 Max log-likelihood: -57.3074
 ```
 
-</div>
-
 ![Bernoulli 분포의 MLE](./img/mle_bernoulli_70.png)
+
+</div>
 
 ## 연습문제
 

@@ -72,9 +72,9 @@ plt.title('Scatterplot of Y vs X')
 plt.show()
 ```
 
-</div>
-
 ![Y 대 X 산점도](./img/checking_linearity_53.png)
+
+</div>
 
 점들이 직선 주위에 모여 있어 선형 관계로 보인다. 오른쪽으로 갈수록 퍼짐이 커지는 것도 그림에서 이미 보인다.
 
@@ -120,9 +120,9 @@ plt.axhline(y=0, color='red', linestyle='--')
 plt.show()
 ```
 
-</div>
-
 ![잔차 대 적합값](./img/checking_linearity_81.png)
+
+</div>
 
 잔차가 0을 중심으로 무작위로 흩어져 있고 휘어진 패턴이 없다. 다만 오른쪽으로 갈수록 퍼짐이 커지는 것이 보이는데, 이것은 선형성이 아니라 **등분산성**의 문제다. 같은 그림이 두 가정을 동시에 진단한다는 점이 중요하다.
 
@@ -172,9 +172,9 @@ plot_ccpr(results, exog_idx=1, ax=ax)
 plt.show()
 ```
 
-</div>
-
 ![성분+잔차 그림](./img/checking_linearity_125.png)
+
+</div>
 
 부분잔차가 직선을 따라 놓이면 그 설명변수에 대한 선형성이 뒷받침된다.
 

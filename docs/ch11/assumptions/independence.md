@@ -131,9 +131,9 @@ plt.title("Residuals vs. Observation Order")
 plt.show()
 ```
 
-</div>
-
 ![순서에 대한 잔차](./img/independence_94.png)
+
+</div>
 
 점들이 0을 중심으로 고르게 흩어져 있고 추세도 주기도 보이지 않는다.
 

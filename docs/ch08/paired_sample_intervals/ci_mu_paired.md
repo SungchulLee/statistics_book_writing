@@ -331,9 +331,9 @@ if __name__ == "__main__":
     main()
 ```
 
-</div>
-
 ![100 Paired t CIs for μ_D | n=12, ρ=0.60, CL=95%](./img/ci_mu_paired_232.png)
+
+</div>
 
 포함확률 95.0%로 명목값과 맞는다.
 

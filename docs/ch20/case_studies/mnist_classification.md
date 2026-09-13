@@ -78,9 +78,9 @@ plt.title("Sample MNIST Images")
 plt.show()
 ```
 
-</div>
-
 ![MNIST 표본 이미지](./img/mnist_classification_47.png)
+
+</div>
 
 ---
 
@@ -416,9 +416,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![훈련 손실 비교](./img/mnist_classification_241.png)
+
+</div>
 
 ---
 
@@ -460,9 +460,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![CNN의 혼동행렬](./img/mnist_classification_260.png)
+
+</div>
 
 흔한 혼동으로는 4와 9(둘 다 오른쪽에 세로획이 있다), 3과 5(위쪽 곡선이 비슷하다)가 있다.
 

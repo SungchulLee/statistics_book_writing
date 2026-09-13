@@ -82,9 +82,9 @@ ax.set_title(f"PDF and CDF of chi-squared({df})")
 plt.show()
 ```
 
-</div>
-
 ![카이제곱 분포의 pdf와 cdf](./img/chi_square_distribution_57.png)
+
+</div>
 
 자유도 5에서 확률밀도함수의 최빈값이 $d - 2 = 3$에 있고 오른쪽으로 길게 늘어져 있다. 누적분포함수는 15 근처에서 이미 1에 가까워진다.
 

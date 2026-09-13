@@ -60,9 +60,9 @@ axs[2].set_title(f'Box-Cox Transformed Data (λ={best_lambda:.2f})')
 plt.show()
 ```
 
-</div>
-
 ![원자료와 두 변환의 히스토그램](./img/transformations_29.png)
+
+</div>
 
 로그 변환과 Box-Cox 변환을 모두 치우친 자료에 적용했다. 변환의 효과를 왜도로 확인하면
 

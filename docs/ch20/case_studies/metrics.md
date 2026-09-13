@@ -147,9 +147,9 @@ draw_10_wrong_preds(x_test, y_test, y_pred, shape=(8, 8))
 틀린 예측 10건 / 360건
 ```
 
-</div>
-
 ![잘못 분류된 숫자 이미지](./img/metrics_109.png)
+
+</div>
 
 !!! warning "이 함수는 MNIST 전용이며 두 가지 결함이 있다"
     1. `reshape((28, 28))`이 하드코딩되어 있어 위의 `load_digits` 자료($8 \times 8$)에는

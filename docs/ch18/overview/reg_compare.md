@@ -142,9 +142,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![정칙화 방법의 계수 비교](./img/reg_compare_97.png)
+
+</div>
 
 ## 정칙화 경로
 
@@ -228,9 +228,9 @@ def plot_shrinkage_operators(lam=1.0):
 plot_shrinkage_operators()
 ```
 
-</div>
-
 ![직교설계에서의 축소 연산자](./img/reg_compare_160.png)
+
+</div>
 
 여기서 경성 문턱은 문턱값을 $\lambda$로 두고 그린 것이다. 연습문제 1에서 보듯이, 벌점
 $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문턱값은 $\sqrt{2\lambda}$다.

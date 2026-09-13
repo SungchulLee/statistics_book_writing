@@ -93,9 +93,9 @@ Estimated Mean of X_bar:  0.4981
 Standard Error of X_bar:  0.1287
 ```
 
-</div>
-
 ![Sampling Distribution of X-bar](./img/se_xbar_45.png)
+
+</div>
 
 ### 예상 출력
 

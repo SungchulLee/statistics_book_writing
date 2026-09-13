@@ -279,10 +279,9 @@ plt.grid(True)
 plt.show()
 ```
 
-</div>
-
 ![경사하강의 자취](./img/optimization_203.png)
 
+</div>
 
 ## 연습문제
 

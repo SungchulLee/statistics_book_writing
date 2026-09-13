@@ -91,9 +91,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![소득 자료 표본분포 시각화](./img/sampling_dist_income_visualization_46.png)
+
+</div>
 
 ## 표준오차 검증
 

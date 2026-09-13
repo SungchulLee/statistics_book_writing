@@ -153,9 +153,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![세 상관계수의 비교](./img/correlation_analysis_92.png)
+
+</div>
 
 산점도에 세 계수를 함께 적어 두면 어떤 모양에서 값이 갈리는지 볼 수 있다.
 

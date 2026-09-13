@@ -135,9 +135,9 @@ def loglikelihood_surface(seed=42):
 loglikelihood_surface()
 ```
 
-</div>
-
 ![Log-Likelihood Contours](./img/gaussian_mle_code_56.png)
+
+</div>
 
 ## 유한표본 편향
 

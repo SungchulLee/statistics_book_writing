@@ -56,9 +56,9 @@ if __name__ == "__main__":
     plot_histogram_with_density(sample_data)
 ```
 
-</div>
-
 ![정규 자료의 히스토그램과 밀도곡선](./img/histogram_density_11.png)
+
+</div>
 
 자료가 정규분포에서 뽑혔을 때 히스토그램은 겹쳐 그린 정규 확률밀도함수 곡선과 잘 맞는다.
 
@@ -106,9 +106,9 @@ if __name__ == "__main__":
     plot_histogram_with_density(sample_data)
 ```
 
-</div>
-
 ![지수분포 자료의 히스토그램과 정규밀도](./img/histogram_density_66.png)
+
+</div>
 
 지수 자료에서는 히스토그램이 오른쪽으로 강하게 치우쳐 있어 대칭인 정규 확률밀도함수 곡선과 뚜렷이 맞지 않는다.
 
@@ -152,9 +152,9 @@ if __name__ == "__main__":
     plot_histogram_with_density(sample_data)
 ```
 
-</div>
-
 ![카이제곱 자료의 히스토그램과 정규밀도](./img/histogram_density_101.png)
+
+</div>
 
 자유도가 중간 정도인 카이제곱 자료는 오른쪽으로 적당히 치우쳐 있다($\chi^2_{10}$의 왜도는 $\sqrt{8/10} = 0.894$이다). 정규 확률밀도함수가 대략은 맞지만 완벽하지 않으며, 시각적 점검을 넘어 형식적 검정이 필요한 이유를 보여준다.
 

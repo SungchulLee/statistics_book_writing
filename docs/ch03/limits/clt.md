@@ -106,11 +106,11 @@ demonstrate_clt('uniform', sample_size=5)
 demonstrate_clt('exponential', sample_size=5)
 ```
 
-</div>
-
 ![중심극한정리](./img/clt_59_0.png)
 
 ![중심극한정리](./img/clt_59_1.png)
+
+</div>
 
 $n = 5$라는 작은 표본에서도 균등분포 쪽은 이미 정규분포에 가깝다. 지수분포 쪽은 아직 오른쪽으로 치우쳐 있다. **정리는 분포와 무관하지만 수렴 속도는 그렇지 않다.**
 

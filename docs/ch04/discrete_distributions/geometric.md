@@ -167,9 +167,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Geometric 분포와 Negative Binomial 분포](./img/geometric_131.png)
+
+</div>
 
 ### Negative Binomial 분포
 
@@ -199,9 +199,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Geometric 분포와 Negative Binomial 분포](./img/geometric_151.png)
+
+</div>
 
 ### 무기억성 확인하기
 
@@ -262,9 +262,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Geometric 분포와 Negative Binomial 분포](./img/geometric_188.png)
+
+</div>
 
 ---
 

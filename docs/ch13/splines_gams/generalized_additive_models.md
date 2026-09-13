@@ -270,9 +270,9 @@ WARNING: p-values calculated in this manner behave correctly for un-penalized mo
 None
 ```
 
-</div>
-
 ![pyGAM 요약과 부분 의존 그림](./img/generalized_additive_models_174.png)
+
+</div>
 
 유효 자유도(Effective DoF) 9.58은 평활 벌점이 실제로 쓴 자유도다. 기저함수를 여럿 두어도 벌점이 그중 상당 부분을 눌러 실질적으로 10개 남짓만 쓴다는 뜻이다.
 
@@ -428,9 +428,9 @@ None
 Predicted price: $915,154
 ```
 
-</div>
-
 ![pyGAM 적합 결과](./img/generalized_additive_models_267.png)
+
+</div>
 
 부분 의존 그림이 각 설명변수의 기여를 따로 보여준다. GAM의 강점이 바로 이 해석 가능성이다. 비선형이면서도 변수별 효과를 하나씩 떼어 볼 수 있다.
 

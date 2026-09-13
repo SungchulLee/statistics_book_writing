@@ -84,9 +84,9 @@ plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
 
-</div>
-
 ![잔차 대 적합값](./img/residual_analysis_63.png)
+
+</div>
 
 세로 띠가 셋 있고, 그것이 집단 셋이다. 회귀분석의 잔차 그림처럼 연속적으로 퍼지지 않는 것은 적합값이 집단평균 세 개뿐이기 때문이다.
 
@@ -140,9 +140,9 @@ plt.title("Standardized Residuals vs. Fitted Values")
 plt.show()
 ```
 
-</div>
-
 ![표준화 잔차](./img/residual_analysis_100.png)
+
+</div>
 
 세로축이 표준편차 단위로 바뀌어 회색 기준선($\pm 2$)과 곧바로 비교할 수 있다. 이상점 하나가 4를 훌쩍 넘고, 나머지는 대부분 $\pm 2$ 안에 있다.
 
@@ -168,9 +168,9 @@ plt.title("Scale-Location Plot")
 plt.show()
 ```
 
-</div>
-
 ![척도-위치 그림](./img/residual_analysis_122.png)
+
+</div>
 
 세로축이 $\sqrt{|r_i|}$라 부호가 사라지고 **크기만** 남는다. 그래서 "어느 쪽으로 벗어났는가"가 아니라 "얼마나 퍼져 있는가"에 집중할 수 있다.
 

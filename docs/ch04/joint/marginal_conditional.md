@@ -291,9 +291,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![주변분포와 조건부분포](./img/marginal_conditional_221.png)
+
+</div>
 
 ---
 

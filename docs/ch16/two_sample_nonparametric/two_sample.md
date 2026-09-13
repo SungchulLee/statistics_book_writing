@@ -260,16 +260,6 @@ Contingency Table:
 
 </div>
 
-**출력:**
-
-```
-correction=True:  chi2=0.0000, p=1.0000
-correction=False: chi2=0.4000, p=0.5271
-Contingency Table:
-[[3 2]
- [2 3]]
-```
-
 !!! warning "SciPy는 $2\times2$ 표에 Yates 보정을 기본으로 적용한다"
     `chi2_contingency`의 `correction` 인자는 $2 \times 2$ 표에서 **기본값이 `True`**이다. 위 자료에서 Yates 보정을 적용하면 $\chi^2 = 0$, $p = 1$이 되고, 적용하지 않으면 $\chi^2 = 0.4$, $p = 0.527$이 된다.
 

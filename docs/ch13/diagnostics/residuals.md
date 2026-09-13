@@ -88,9 +88,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![가정이 성립할 때의 잔차](./img/residuals_48.png)
+
+</div>
 
 0을 중심으로 고르게 흩어진 띠. 이것이 기준선이며, 아래 그림들과 비교해 읽는다.
 
@@ -155,9 +155,9 @@ model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
-</div>
-
 ![이분산에서의 잔차](./img/residuals_99.png)
+
+</div>
 
 오른쪽으로 갈수록 퍼지는 깔때기 모양이다.
 
@@ -186,9 +186,9 @@ model, y_pred = perform_regression(x, y)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
-</div>
-
 ![이차 관계에서의 잔차](./img/residuals_147.png)
+
+</div>
 
 잔차가 U자를 그린다. 모형이 선형인데 자료가 곡선이면 이런 패턴이 나온다.
 
@@ -278,9 +278,9 @@ Linear Model RSS:    1530.56
 Quadratic Model RSS: 77.72
 ```
 
-</div>
-
 ![그림](./img/residuals_166.png)
+
+</div>
 
 이차 모형의 $R^2$가 0.083에서 0.953으로 뛴다. 선형 모형의 잔차 그림에 뚜렷한 곡선이 보였던 이유가 이것이다.
 
@@ -314,9 +314,9 @@ model, y_pred = perform_regression(x, y, d=2)
 plot_regression_and_residuals(x, y, y_pred)
 ```
 
-</div>
-
 ![표준화 잔차](./img/residuals_250.png)
+
+</div>
 
 표준편차 단위로 바꾸면 $\pm 2$, $\pm 3$ 기준선과 곧바로 비교할 수 있다.
 
@@ -380,9 +380,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![잔차 진단 종합](./img/residuals_270.png)
+
+</div>
 
 네 그림을 함께 보면 어느 가정이 어디서 깨지는지 한눈에 들어온다.
 

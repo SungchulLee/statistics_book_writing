@@ -60,9 +60,9 @@ if __name__ == "__main__":
 첨도 +7.150  (0보다 큼 = 정규분포보다 꼬리가 두껍다)
 ```
 
-</div>
-
 ![왜도와 첨도](./img/skewness_kurtosis_21.png)
+
+</div>
 
 ### 치우친 분포
 
@@ -110,9 +110,9 @@ if __name__ == "__main__":
 평균 +0.595 > 중앙값 +0.314
 ```
 
-</div>
-
 ![왜도와 첨도](./img/skewness_kurtosis_47.png)
+
+</div>
 
 **왼쪽 치우침(음의 왜도):** 꼬리가 왼쪽으로 뻗는다. 평균 < 중앙값 < 최빈값. 예: 은퇴 연령.
 
@@ -152,9 +152,9 @@ if __name__ == "__main__":
 평균 -0.636 < 중앙값 -0.396
 ```
 
-</div>
-
 ![왜도와 첨도](./img/skewness_kurtosis_69.png)
+
+</div>
 
 ---
 
@@ -224,9 +224,9 @@ IQR = 1.565,  울타리 밖 점 63개 / 1300개 (4.8%)
 정규분포라면 약 0.7% 이므로, 이보다 많으면 꼬리가 두꺼운 것이다.
 ```
 
-</div>
-
 ![Histogram of Combined Data (Density)](./img/skewness_kurtosis_107.png)
+
+</div>
 
 ### 상자그림: 오른쪽으로 치우친 분포
 
@@ -263,9 +263,9 @@ if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_right_skewed()
 ```
 
-</div>
-
 ![Histogram of Combined Data (Density)](./img/skewness_kurtosis_133.png)
+
+</div>
 
 ### 상자그림: 왼쪽으로 치우친 분포
 
@@ -302,9 +302,9 @@ if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_left_skewed()
 ```
 
-</div>
-
 ![Histogram of Combined Data (Density)](./img/skewness_kurtosis_159.png)
+
+</div>
 
 ---
 
@@ -414,9 +414,9 @@ Symmetric Distribution
   중앙값 -0.0273  (대칭이면 평균과 같아진다)
 ```
 
-</div>
-
 ![왜도 모의실험: 정규분포 적합과의 비교](./img/skewness_kurtosis_199.png)
+
+</div>
 
 ---
 
@@ -525,9 +525,9 @@ Leptokurtic Distribution
   초과첨도   +0.1053  (정규분포는 0)
 ```
 
-</div>
-
 ![첨도 모의실험: 정규분포 적합과의 비교](./img/skewness_kurtosis_275.png)
+
+</div>
 
 ### 파이썬에서 첨도 계산하기
 
@@ -560,9 +560,9 @@ print(stats.kurtosis(data, fisher=False), "  <- 3을 빼지 않은 값")
 2.9690454890443476   <- 3을 빼지 않은 값
 ```
 
-</div>
-
 표본이 10,000개인데도 참값 0에서 눈에 띄게 벗어난다. **첨도는 네제곱을 쓰기 때문에 추정이 매우 불안정하다.** 표본이 작으면 훨씬 크게 흔들리므로, 첨도 하나만 보고 꼬리의 두께를 단정해서는 안 된다.
+
+</div>
 
 ---
 

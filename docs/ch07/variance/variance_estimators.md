@@ -104,9 +104,9 @@ def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
 three_estimators_mse()
 ```
 
-</div>
-
 ![MSE of Variance Estimators (Normal Population)](./img/variance_estimators_51.png)
+
+</div>
 
 !!! info "편향–분산 맞바꿈"
     평균제곱오차 최적 추정량은 편향되어 있음에도 모든 $n$에서 평균제곱오차가 가장 작다. 편향–분산 맞바꿈을 깔끔하게 보여주는 예이다: 때로는 작은 편향을 받아들이는 편이 전체 추정오차를 줄인다.

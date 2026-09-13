@@ -80,9 +80,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Bivariate Normal: 3D Surface (top) and Contour (bottom)](./img/bivariate_normal_30.png)
+
+</div>
 
 ---
 

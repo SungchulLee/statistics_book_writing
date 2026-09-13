@@ -162,9 +162,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Central Limit Theorem: Sampling Distribution of x̄](./img/clt_visualization_58.png)
+
+</div>
 
 그림은 $4 \times 3$ 격자다. 맨 윗줄이 모집단, 나머지 세 줄이 $n = 2, 10, 100$의 표본분포다. 줄을 따라 내려가며 읽으면 수렴이 보인다.
 

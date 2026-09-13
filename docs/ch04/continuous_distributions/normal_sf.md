@@ -53,9 +53,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![정규분포의 생존함수](./img/normal_sf_17.png)
+
+</div>
 
 ---
 

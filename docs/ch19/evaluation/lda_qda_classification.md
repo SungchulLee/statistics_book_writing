@@ -243,9 +243,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![생성적 분류기의 결정경계](./img/lda_qda_classification_156.png)
+
+</div>
 
 그림에서 확인할 것은 정확도 숫자가 아니라 **경계의 모양**이다. LDA와 로지스틱 회귀는 직선을,
 QDA는 곡선을, 나이브 베이즈는 축에 정렬된 곡선을 그린다.

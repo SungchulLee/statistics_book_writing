@@ -106,9 +106,9 @@ Estimated Mean of S^2:   0.0838
 Standard Error of S^2:   0.0425
 ```
 
-</div>
-
 ![Sampling Distribution of S^2](./img/se_s2_55.png)
+
+</div>
 
 ### 예상 출력
 

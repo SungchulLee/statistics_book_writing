@@ -86,9 +86,9 @@ Anderson-Darling: A^2 = 0.6894
   Critical 1%: 1.0710 -> reject if A^2 > crit
 ```
 
-</div>
-
 ![자료의 Q-Q 그림](./img/qq_plot_basic_35.png)
+
+</div>
 
 ## 해석
 

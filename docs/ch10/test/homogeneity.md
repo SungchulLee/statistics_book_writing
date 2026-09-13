@@ -189,9 +189,9 @@ statistic = 212.94
 p_value   = 0.00%
 ```
 
-</div>
-
 ![카이제곱 분포와 p-값](./img/homogeneity_105.png)
+
+</div>
 
 $\chi^2 = 212.94$는 자유도 8인 카이제곱분포에서 사실상 불가능한 값이다. 세 나라의 만족도 분포가 같지 않다는 결론을 강하게 지지한다.
 
@@ -259,9 +259,9 @@ statistic = 212.94
 p_value   = 0.00%
 ```
 
-</div>
-
 ![카이제곱 분포와 p-값](./img/homogeneity_168.png)
+
+</div>
 
 `chi2_contingency`가 수동 계산과 같은 값을 준다.
 

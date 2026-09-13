@@ -52,9 +52,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Exponential Distribution — PDF](./img/exponential_pdf_26.png)
+
+</div>
 
 $\lambda$가 클수록 사건이 더 자주 일어나므로 분포가 0 근처에 더 몰린다.
 

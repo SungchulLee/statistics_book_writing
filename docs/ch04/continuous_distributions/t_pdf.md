@@ -60,9 +60,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Student](./img/t_pdf_30.png)
+
+</div>
 
 그림을 보면 $t$ 분포는 정규분포보다 꼬리에 확률이 더 많고 중앙에 더 적으며, $\nu$가 작아질수록 차이가 뚜렷해진다.
 

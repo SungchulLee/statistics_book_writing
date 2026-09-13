@@ -140,9 +140,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Chebyshev](./img/descriptive_measures_advanced_97.png)
+
+</div>
 
 ### 해석
 
@@ -233,9 +233,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Population vs Sample Variance](./img/descriptive_measures_advanced_179.png)
+
+</div>
 
 ### 해석
 

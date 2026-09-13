@@ -109,14 +109,14 @@ print(f"WLS:  intercept={beta_wls[0]:.3f} (SE={se_wls[0]:.3f}), "
       f"slope={beta_wls[1]:.3f} (SE={se_wls[1]:.3f})")
 ```
 
-</div>
-
 출력(참값은 절편 3.0, 기울기 2.0):
 
 ```text
 OLS:  intercept=4.083 (SE=1.851), slope=1.842 (SE=0.312)
 WLS:  intercept=3.350 (SE=0.841), slope=2.011 (SE=0.259)
 ```
+
+</div>
 
 WLS 추정값이 참값에 훨씬 가깝고(절편 $3.350$ 대 $4.083$, 기울기 $2.011$ 대 $1.842$) 표준오차도 절편에서 절반 이하, 기울기에서 17% 작다.
 

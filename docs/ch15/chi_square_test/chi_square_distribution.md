@@ -66,9 +66,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![자유도 5인 카이제곱 분포의 PDF와 CDF](./img/chi_square_distribution_44.png)
+
+</div>
 
 ### 표집과 정규분포로부터의 구성
 
@@ -104,9 +104,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![직접 표집과 $Z^2$ 합 구성의 비교](./img/chi_square_distribution_65.png)
+
+</div>
 
 ## 해석
 

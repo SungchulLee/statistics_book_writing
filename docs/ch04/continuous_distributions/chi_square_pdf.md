@@ -62,9 +62,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Chi-square Distribution — PDF](./img/chi_square_pdf_32.png)
+
+</div>
 
 ---
 

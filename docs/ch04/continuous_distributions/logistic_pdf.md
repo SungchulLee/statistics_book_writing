@@ -54,9 +54,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Logistic vs Normal Distribution — PDF](./img/logistic_pdf_25.png)
+
+</div>
 
 로지스틱 곡선은 분산을 맞춘 정규분포보다 중앙에서 약간 낮고 꼬리에서 더 높다.
 

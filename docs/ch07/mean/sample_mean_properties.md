@@ -295,9 +295,9 @@ def convergence_rate_plot(mu=5.0, sigma=3.0, n_sim=50_000, seed=42):
 convergence_rate_plot()
 ```
 
-</div>
-
 ![Convergence Rate of Sample Mean](./img/sample_mean_properties_151.png)
+
+</div>
 
 ## 해석
 

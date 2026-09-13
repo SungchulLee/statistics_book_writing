@@ -103,9 +103,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![회귀평면](./img/regression_plane_3d_62.png)
+
+</div>
 
 설명변수가 둘이면 회귀직선이 아니라 회귀**평면**이 된다. 점들이 평면 위아래로 흩어진 거리가 잔차다.
 

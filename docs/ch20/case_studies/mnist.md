@@ -53,9 +53,9 @@ plt.show()
 train 60000, test 10000
 ```
 
-</div>
-
 ![MNIST 표본 이미지](./img/mnist_14.png)
+
+</div>
 
 ---
 
@@ -183,11 +183,11 @@ with torch.no_grad():
 show_images(fixed_images, fixed_labels, preds, "After Training")
 ```
 
-</div>
-
 ![학습 전 예측](./img/mnist_111_0.png)
 
 ![학습 후 예측](./img/mnist_111_1.png)
+
+</div>
 
 학습 전에는 예측이 사실상 무작위지만, 다섯 세대만 지나도 대부분의 숫자를 맞힌다.
 

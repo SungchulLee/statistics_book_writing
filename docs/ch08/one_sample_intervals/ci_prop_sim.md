@@ -139,9 +139,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![100 WILSON CIs | n=20, p=0.2, CL=95%](./img/ci_prop_sim_108.png)
+
+</div>
 
 구간이 몇 가지 위치에만 나타나는 것은 $k$가 정수여서 $\hat p$가 $0, 0.05, 0.10, \ldots$ 스물한 가지 값밖에 갖지 못하기 때문이다. 같은 $k$가 나온 표본들은 완전히 같은 구간을 만든다.
 

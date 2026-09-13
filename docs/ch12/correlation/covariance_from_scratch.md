@@ -197,9 +197,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![공분산의 시각적 분해](./img/covariance_from_scratch_129.png)
+
+</div>
 
 세 번째 그림에서 두 계열이 나란히 내려가는 것이 보인다. 이 공통 추세가 곧 상관의 원천이다.
 

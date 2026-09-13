@@ -43,9 +43,9 @@ ax.grid(True, linestyle=':')
 plt.show()
 ```
 
-</div>
-
 ![정규 난수 생성](./img/normal_rvs_11.png)
+
+</div>
 
 핵심 옵션은 `hist()`의 `density=True`이다. 히스토그램을 정규화하여 전체 넓이를 1로 만들어 주므로 PDF 곡선과 직접 비교할 수 있다.
 

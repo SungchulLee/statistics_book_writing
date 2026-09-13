@@ -130,9 +130,9 @@ Model Intercept: 6.3749
 Model Coefficients: [0.0206 0.0474 0.001 ]
 ```
 
-</div>
-
 ![Advertising 자료](./img/multiple_33.png)
+
+</div>
 
 시장 200곳의 광고비와 매출이다.
 
@@ -202,9 +202,9 @@ Model Intercept: 6.8814
 Model Coefficients: [0.0183 0.0229 0.0011]
 ```
 
-</div>
-
 ![적합된 회귀](./img/multiple_133.png)
+
+</div>
 
 세 계수가 각각 TV 0.0183, 라디오 0.0229, 신문 0.0011이다. 신문의 계수가 사실상 0이다.
 
@@ -306,9 +306,9 @@ Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 ```
 
-</div>
-
 ![세 설명변수 모형](./img/multiple_201.png)
+
+</div>
 
 TV와 라디오의 계수는 강하게 유의하지만 신문은 $p = 0.86$으로 유의하지 않다.
 

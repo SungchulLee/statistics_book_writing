@@ -97,9 +97,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![2차원 Gaussian 조건부분포](./img/gaussian_2d_conditionals_30.png)
+
+</div>
 
 ---
 

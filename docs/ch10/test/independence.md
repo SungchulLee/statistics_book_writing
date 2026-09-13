@@ -242,9 +242,9 @@ chi_squared_statistic = 11.81
 p_value = 0.27%
 ```
 
-</div>
-
 ![카이제곱 분포와 p-값](./img/independence_161.png)
+
+</div>
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 사용)
 
@@ -313,9 +313,9 @@ expected_counts
  [  13.35538668   14.64461332]]
 ```
 
-</div>
-
 ![카이제곱 분포와 p-값](./img/independence_234.png)
+
+</div>
 
 수동 계산과 통계량이 소수점 둘째 자리까지 같다. `chi2_contingency`는 같은 식을 감싼 것이며, 덤으로 기대도수까지 돌려준다.
 
@@ -852,9 +852,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![재표본추출 분포](./img/independence_628.png)
+
+</div>
 
 두 히스토그램 모두 오른쪽으로 길게 늘어진 모양이고 빨간 선(관측값 1.67)이 분포의 한가운데쯤에 있다. 관측된 표가 "우연히 나올 법한" 범위 안에 있다는 뜻이다.
 

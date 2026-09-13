@@ -196,9 +196,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![릿지 로지스틱 회귀의 계수 경로](./img/regularized_logistic_119.png)
+
+</div>
 
 ## 교차검증으로 C 조율하기
 

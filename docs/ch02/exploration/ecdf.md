@@ -69,11 +69,11 @@ print(f"KS 검정 p값     = {pval:.4f}")
 KS 검정 p값     = 0.9863
 ```
 
-</div>
-
 ![경험적 누적분포함수와 분위수](./img/ecdf_25.png)
 
 경험적 곡선과 이론적 곡선이 가깝게 겹치면 모수 모형이 잘 맞는 것이다. 체계적으로 벗어나면 왜도, 두꺼운 꼬리, 또는 다봉성을 나타낸다.
+
+</div>
 
 ### 누적분포함수와 확률밀도함수 나란히 보기
 
@@ -118,11 +118,11 @@ PDF 최댓값    = 0.1995  (x = 0.99)
 P(|X-mu|<3s)  = 0.9973
 ```
 
-</div>
-
 ![경험적 누적분포함수와 분위수](./img/ecdf_50.png)
 
 확률밀도함수는 밀도가 어디에 몰려 있는지 보여주고, 누적분포함수는 누적 확률을 보여준다. 둘을 함께 보면 분포의 완전한 그림이 나온다.
+
+</div>
 
 ## 분위수, 백분위수, 사분위수
 
@@ -229,8 +229,6 @@ P50 = 25.0 g
 P75 = 38.8 g
 ```
 
-</div>
-
 ![경험적 누적분포함수와 분위수](./img/ecdf_138.png)
 
 **질문과 답:**
@@ -238,6 +236,8 @@ P75 = 38.8 g
 1. 당이 15그램인 커피는 대략 **20번째 백분위수**에 해당한다.
 2. **중앙값**(50번째 백분위수)은 대략 **25그램**이다.
 3. $Q_1 \approx 17.5$ g, $Q_3 \approx 38.5$ g이므로 $\text{IQR} = Q_3 - Q_1 \approx 21$ g이다.
+
+</div>
 
 ## 다섯 수치 요약
 
@@ -316,9 +316,9 @@ sample_data = np.random.normal(loc=0, scale=1, size=1000)
 plot_qq(sample_data, dist="norm")    # 정규 자료를 정규에 맞댄다 — 직선이 나온다
 ```
 
-</div>
-
 ![Q-Q Plot](./img/ecdf_262.png)
+
+</div>
 
 ### 지수분포에 대한 Q-Q 그림
 
@@ -334,9 +334,9 @@ sample_data = np.random.exponential(scale=1, size=1000)
 plot_qq(sample_data, dist="expon")
 ```
 
-</div>
-
 ![지수분포에 대한 Q-Q 그림](./img/ecdf_285.png)
+
+</div>
 
 ### 카이제곱분포에 대한 Q-Q 그림
 
@@ -352,9 +352,9 @@ sample_data = np.random.chisquare(df=10, size=1000)
 plot_qq(sample_data, dist="chi2", sparams=(10,))
 ```
 
-</div>
-
 ![카이제곱분포에 대한 Q-Q 그림](./img/ecdf_293.png)
+
+</div>
 
 ### 진단적 활용: 카이제곱 자료를 정규 Q-Q 그림에 그리기
 
@@ -372,9 +372,9 @@ sample_data = np.random.chisquare(df=10, size=1000)
 plot_qq(sample_data, dist="norm")
 ```
 
-</div>
-
 ![경험적 누적분포함수와 분위수](./img/ecdf_240.png)
+
+</div>
 
 ## 연습문제
 

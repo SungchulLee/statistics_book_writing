@@ -42,9 +42,9 @@ ax.set_title(f"Normal({mu}, {sigma}²) PDF")
 plt.show()
 ```
 
-</div>
-
 ![scipy.stats로 그리는 정규 밀도함수](./img/normal_pdf_19.png)
+
+</div>
 
 ---
 

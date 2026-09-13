@@ -71,9 +71,9 @@ if __name__ == "__main__":
     plot_correlations()
 ```
 
-</div>
-
 ![양의 상관](./img/understanding_25.png)
+
+</div>
 
 두 변수가 함께 커진다. 점들이 왼쪽 아래에서 오른쪽 위로 향하는 띠를 이룬다.
 
@@ -120,9 +120,9 @@ if __name__ == "__main__":
     plot_negative_correlations()
 ```
 
-</div>
-
 ![음의 상관](./img/understanding_75.png)
+
+</div>
 
 한 변수가 커지면 다른 변수가 작아진다. 띠의 방향만 반대일 뿐 구조는 같다.
 
@@ -170,9 +170,9 @@ if __name__ == "__main__":
     plot_all_correlations()
 ```
 
-</div>
-
 ![상관의 전체 스펙트럼](./img/understanding_113.png)
+
+</div>
 
 $r$이 $-1$에서 $+1$로 갈수록 구름이 좁은 타원으로 조여든다. $r = 0$ 근처에서는 방향을 알아볼 수 없는 둥근 구름이고, $|r|$이 커질수록 직선에 가까워진다.
 

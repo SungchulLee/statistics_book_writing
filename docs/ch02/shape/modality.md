@@ -43,11 +43,11 @@ ax.spines['right'].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![Histogram of Bimodal Distribution](./img/modality_19.png)
 
 두 봉우리가 뚜렷이 보이며, 각각이 구성 정규분포 하나씩에 대응한다.
+
+</div>
 
 ## 다봉 분포
 

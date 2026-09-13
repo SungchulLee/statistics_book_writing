@@ -155,9 +155,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Poisson 분포](./img/poisson_124.png)
+
+</div>
 
 ### 비율에 따른 비교
 
@@ -184,9 +184,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Poisson 분포](./img/poisson_144.png)
+
+</div>
 
 ### Binomial 극한으로서의 Poisson 분포
 
@@ -219,9 +219,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Poisson 분포](./img/poisson_161.png)
+
+</div>
 
 ### 표본추출과 평균–분산 점검
 

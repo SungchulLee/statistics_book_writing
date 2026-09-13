@@ -127,9 +127,9 @@ plt.legend()
 plt.show()
 ```
 
-</div>
-
 ![Geometric: Log-Likelihood Surface](./img/geometric_poisson_mle_80.png)
+
+</div>
 
 ## Poisson 분포의 MLE
 
@@ -252,9 +252,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Poisson: Train Fit](./img/geometric_poisson_mle_195.png)
+
+</div>
 
 ## 해석
 

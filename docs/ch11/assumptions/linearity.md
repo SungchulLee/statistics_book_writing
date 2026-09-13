@@ -87,9 +87,9 @@ plt.title("Response vs. Covariate by Group")
 plt.show()
 ```
 
-</div>
-
 ![집단별 반응 대 공변량](./img/linearity_67.png)
+
+</div>
 
 세 집단 모두 공변량이 커질수록 반응이 대체로 커진다. 자료를 만들 때 기울기 0.4의 선형 관계를 넣었으므로 기대한 모습이며, 휘어짐이 보이지 않는다.
 
@@ -122,9 +122,9 @@ plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
 
-</div>
-
 ![잔차 대 적합값](./img/linearity_85.png)
+
+</div>
 
 앞의 등분산성 페이지와 달리 적합값이 연속적으로 퍼져 있다. 모형에 연속형 공변량이 들어갔기 때문이다. 잔차가 0 주위에 무작위로 흩어져 있고 휘어진 패턴이 없으므로 선형성 가정이 무너진 흔적은 없다.
 

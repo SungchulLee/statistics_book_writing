@@ -64,9 +64,9 @@ Other       100.0
 dtype: float64
 ```
 
-</div>
-
 ![파레토 그림](./img/pareto.png)
+
+</div>
 
 ## 2. 읽는 법
 

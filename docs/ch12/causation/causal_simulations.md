@@ -174,9 +174,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![교란과 부분집단](./img/causal_simulations_101.png)
+
+</div>
 
 부분집단마다 색을 달리해 그리면 전체 추세와 집단 내 추세가 어긋나는 것이 보인다.
 

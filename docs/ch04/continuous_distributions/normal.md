@@ -187,9 +187,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Normal 분포](./img/normal_155.png)
+
+</div>
 
 ### 표본추출과 추정된 PDF
 
@@ -216,9 +216,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Normal 분포](./img/normal_173.png)
+
+</div>
 
 ### 68–95–99.7 규칙 확인
 

@@ -366,9 +366,9 @@ def plot_confusion_matrix(M, class_names=None):
 plot_confusion_matrix(M_ours, class_names=iris.target_names)
 ```
 
-</div>
-
 ![혼동행렬](./img/multiclass_metrics_228.png)
+
+</div>
 
 ---
 

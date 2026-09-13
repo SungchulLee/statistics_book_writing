@@ -93,9 +93,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Full PDF](./img/student_t_61.png)
+
+</div>
 
 ### 정규분포로의 수렴
 
@@ -122,9 +122,9 @@ ax.set_title('t-Distribution Converges to Normal as df Increases')
 plt.show()
 ```
 
-</div>
-
 ![t-Distribution Converges to Normal as df Increases](./img/student_t_85.png)
+
+</div>
 
 ---
 
@@ -176,9 +176,9 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![Student t 분포](./img/student_t_118.png)
+
+</div>
 
 ---
 
@@ -235,9 +235,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Student t 분포](./img/student_t_169.png)
+
+</div>
 
 ---
 

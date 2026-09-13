@@ -144,9 +144,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Standard Error Decreases with n](./img/bootstrap_standard_error_91.png)
+
+</div>
 
 ## 해석
 

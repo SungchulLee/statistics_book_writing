@@ -101,9 +101,9 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![Law of Large Numbers: Fair Die](./img/lln_61.png)
+
+</div>
 
 초반에는 크게 출렁이다가 점차 3.5에 붙는다. 출렁임의 폭이 $1/\sqrt n$으로 줄어드는 것이 눈에 보인다.
 

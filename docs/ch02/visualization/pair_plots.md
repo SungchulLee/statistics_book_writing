@@ -27,8 +27,6 @@ df['Sex_int'] = df['Sex'].apply(lambda x: 1 if x == 'male' else 0)
 sns.pairplot(df[["Survived", "Age", "Sex_int"]])
 ```
 
-</div>
-
 ![쌍그림](./img/gc_pairplot.png)
 
 세 변수의 격자에서 읽을 것이 몇 가지 있다.
@@ -36,6 +34,8 @@ sns.pairplot(df[["Survived", "Age", "Sex_int"]])
 - **Survived와 Sex_int의 산점도**는 네 귀퉁이에 점이 몰린 모양이다. 두 변수가 모두 0/1이기 때문인데, 왼쪽 위(여성·생존)와 오른쪽 아래(남성·사망)가 짙다. 성별과 생존이 강하게 얽혀 있다는 신호다.
 - **Age의 히스토그램**(가운데 대각선)은 20–30대에 봉우리가 있고 오른쪽으로 약간 치우쳐 있다.
 - **Age와 Survived**는 뚜렷한 관계가 보이지 않는다. 다만 이런 산점도는 한쪽이 0/1일 때 겹침이 심해 읽기 어려우므로, 앞 절의 바이올린 그림이나 상자그림이 더 낫다.
+
+</div>
 
 ## 2. 격자의 구조
 
@@ -71,9 +71,9 @@ def corr_text(x, y, **kwargs):
 g.map_upper(corr_text)
 ```
 
-</div>
-
 ![PairGrid로 삼각형마다 다른 그림 채우기](./img/pair_plots_44.png)
+
+</div>
 
 ## 3. 집단별로 색을 입힌다
 
@@ -91,11 +91,11 @@ sns.pairplot(df[["Survived", "Age", "Fare", "Sex"]], hue="Sex",
              diag_kind="kde", plot_kws={"s": 12, "alpha": .5})
 ```
 
-</div>
-
 ![성별로 색을 입힌 쌍그림](./img/pair_plots_68.png)
 
 이렇게 하면 모든 산점도에서 두 집단이 색으로 나뉘고, 대각선에는 집단별 밀도곡선이 겹쳐 그려진다. **어느 변수 쌍에서 두 집단이 갈라지는지**가 한눈에 보인다. 분류 문제에서 어떤 변수가 유용할지 가늠하는 표준적인 첫 단계다.
+
+</div>
 
 !!! warning "쌍그림은 결론을 내는 도구가 아니라 훑어보는 도구다"
     쌍그림의 각 칸은 아주 작다. 축 눈금이 촘촘하고 점도 작아서, 하나하나를 정확히 읽기는 어렵다.

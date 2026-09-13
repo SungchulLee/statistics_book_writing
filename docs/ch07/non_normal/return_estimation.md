@@ -95,9 +95,9 @@ def return_precision_simulation(seed=42):
 return_precision_simulation()
 ```
 
-</div>
-
 ![Distribution of Expected Return Estimates](./img/return_estimation_40.png)
+
+</div>
 
 ## Sharpe 비율의 불확실성
 
@@ -206,9 +206,9 @@ def realized_volatility_windows(seed=42):
 realized_volatility_windows()
 ```
 
-</div>
-
 ![Realized Volatility: Window Size Comparison](./img/return_estimation_128.png)
+
+</div>
 
 !!! info "실무 지침"
     유일하게 "옳은" 구간은 없다. 실무자들은 단기 위험관리에는 21일(월간) 구간을, 전략적 자산배분에는 252일(연간) 구간을 흔히 쓴다. 더 정교한 접근(지수가중, GARCH 모형)은 이 맞바꿈을 더 명시적으로 다룬다.

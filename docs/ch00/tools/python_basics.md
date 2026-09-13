@@ -60,9 +60,9 @@ print(squares)
 [9, 25, 16]
 ```
 
-</div>
-
 사전(`{k: f(k) for k in keys}`), 집합(`{f(x) for x in xs}`), 제너레이터(`(f(x) for x in xs)`)에도 같은 형태가 있다. 제너레이터는 게으르게 값을 내놓으므로 열이 크거나 무한할 때 중요하다.
+
+</div>
 
 ## 함수와 독스트링
 
@@ -76,9 +76,9 @@ def sample_mean(data):
     return sum(data) / len(data)
 ```
 
-</div>
-
 독스트링은 함수의 계약이다. 무엇을 계산하고, 무엇을 기대하며, 무엇을 반환하는지 밝힌다. `def` 줄 바로 뒤의 삼중 따옴표 문자열은 `help(fn)`으로 볼 수 있고 자동 문서화의 근거가 된다.
+
+</div>
 
 람다(`lambda x: x**2`)는 이름 없는 단일 표현식 함수로, `map`, `filter`, `sorted(..., key=...)`의 인수로 쓰기 편하다. 표현식 하나보다 길어지는 것은 이름 있는 `def`로 쓰는 편이 낫다.
 
@@ -112,9 +112,9 @@ if __name__ == "__main__":
 4
 ```
 
-</div>
-
 `if __name__ == "__main__":` 가드는 시연 블록이 직접 호출(`python my_script.py`)할 때만 실행되고, 다른 모듈이 `import my_script`할 때는 실행되지 않도록 보장한다. 이 책의 모든 `.py` 파일이 따르는 교육용 방식이다.
+
+</div>
 
 ## 표준 임포트 별칭
 
@@ -132,9 +132,9 @@ import matplotlib.pyplot as plt
 from scipy import stats
 ```
 
-</div>
-
 이 별칭들(`np`, `pd`, `plt`, `stats`)은 사실상의 표준이며 가독성을 높인다.
+
+</div>
 
 ## 주피터 필수 사항
 

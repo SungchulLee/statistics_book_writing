@@ -49,9 +49,9 @@ if __name__ == "__main__":
     plot_horizontal_boxplot(sample_data)
 ```
 
-</div>
-
 ![정규 자료의 가로 상자그림](./img/boxplots_11.png)
+
+</div>
 
 정규분포 자료에서는 상자그림이 대칭이다. 중앙값 선이 상자 가운데에 놓이고 수염이 양쪽으로 거의 같게 뻗는다.
 
@@ -94,9 +94,9 @@ if __name__ == "__main__":
     plot_horizontal_boxplot(sample_data)
 ```
 
-</div>
-
 ![지수분포 자료의 가로 상자그림](./img/boxplots_51.png)
+
+</div>
 
 지수 자료에서는 상자그림이 뚜렷하게 비대칭이다. 오른쪽 수염이 왼쪽보다 훨씬 길게 뻗고 오른쪽에 이상점이 여럿 나타나 강한 양의 치우침을 나타낸다.
 
@@ -139,9 +139,9 @@ if __name__ == "__main__":
     plot_horizontal_boxplot(sample_data)
 ```
 
-</div>
-
 ![카이제곱 자료의 가로 상자그림](./img/boxplots_83.png)
+
+</div>
 
 자유도 10인 카이제곱 자료는 상자그림에서 중간 정도의 오른쪽 치우침을 보인다. 중앙값이 상자 안에서 왼쪽으로 치우쳐 있고 오른쪽 수염이 왼쪽보다 길다.
 

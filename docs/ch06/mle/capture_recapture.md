@@ -211,9 +211,9 @@ draw(prob_list, mle_n, c, r, t)
 MLE n: 14
 ```
 
-</div>
-
 ![Capture-Recapture MLE for Population Size](./img/capture_recapture_124.png)
+
+</div>
 
 ## 연습문제
 

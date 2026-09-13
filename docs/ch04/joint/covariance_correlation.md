@@ -264,9 +264,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![공분산과 상관계수](./img/covariance_correlation_199.png)
+
+</div>
 
 ### 상관계수 열지도
 
@@ -310,9 +310,9 @@ fig.colorbar(im, ax=ax)
 plt.show()
 ```
 
-</div>
-
 ![공분산과 상관계수](./img/covariance_correlation_223.png)
+
+</div>
 
 ### 결합 PMF로부터 공분산 구하기
 

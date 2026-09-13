@@ -197,9 +197,9 @@ Correlation(X, X²) = 0.000122
 But Y is completely determined by X!
 ```
 
-</div>
-
 ![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_153.png)
+
+</div>
 
 ### 독립성 검정: 결합분포와 주변분포의 곱 비교
 
@@ -306,9 +306,9 @@ Jointly normal, ρ=0:
   Independent? True
 ```
 
-</div>
-
 ![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_198.png)
+
+</div>
 
 ---
 

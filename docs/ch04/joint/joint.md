@@ -232,9 +232,9 @@ ax.set_title('Joint PDF: f(x,y) = 6(1-y)')
 plt.show()
 ```
 
-</div>
-
 ![Joint PDF: f(x,y) = 6(1-y)](./img/joint_180.png)
+
+</div>
 
 ### 이변량 정규분포 표본추출
 
@@ -264,9 +264,9 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![결합분포](./img/joint_202.png)
+
+</div>
 
 ---
 

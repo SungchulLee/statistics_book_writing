@@ -85,9 +85,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Population Distribution (Exponential)](./img/xbar_exponential_40.png)
+
+</div>
 
 ## 해석
 

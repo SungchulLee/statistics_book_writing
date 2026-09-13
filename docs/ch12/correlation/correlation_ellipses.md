@@ -127,9 +127,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![이변량 정규분포의 등고선](./img/correlation_ellipses_82.png)
+
+</div>
 
 밀도의 등고선이 타원이라는 것이 이변량 정규분포의 정의적 성질이다.
 

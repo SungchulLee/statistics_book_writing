@@ -112,9 +112,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![100 Chi-square Variance CIs | n=12, CL=95%](./img/ci_var_sim_81.png)
+
+</div>
 
 각 구간의 점이 $s^2$이다. 점이 구간 한가운데가 아니라 왼쪽에 치우쳐 있다는 것이 이 구간의 특징이다. 평균의 $t$-구간에서는 점이 언제나 정확히 가운데였다.
 

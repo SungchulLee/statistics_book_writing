@@ -51,9 +51,9 @@ plt.suptitle("Iris Dataset: Pairwise Relationships by Species", y=1.02)
 plt.show()
 ```
 
-</div>
-
 ![기본 쌍 그림](./img/pairplots_37.png)
+
+</div>
 
 한 번의 호출로 모든 변수 쌍의 산점도와 각 변수의 분포를 얻는다. 탐색적 분석의 첫걸음으로 쓰기 좋다.
 
@@ -92,9 +92,9 @@ sns.pairplot(
 plt.show()
 ```
 
-</div>
-
 ![변수를 추린 쌍 그림](./img/pairplots_64.png)
+
+</div>
 
 변수가 많으면 쌍 그림이 $p^2$개의 칸으로 늘어나 읽을 수 없게 된다. 관심 있는 변수를 먼저 추리는 것이 실용적이다.
 
@@ -132,9 +132,9 @@ g.map_upper(annotate_corr)
 plt.show()
 ```
 
-</div>
-
 ![상관계수를 표시한 쌍 그림](./img/pairplots_85.png)
+
+</div>
 
 위쪽 삼각형에 상관계수를 적어 두면 그림과 숫자를 한자리에서 볼 수 있다. 산점도가 보여주는 모양과 계수가 요약한 값을 함께 보는 것이 요령이다.
 

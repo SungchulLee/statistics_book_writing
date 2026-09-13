@@ -133,9 +133,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![영향점 진단](./img/influence_54.png)
+
+</div>
 
 Cook 거리, 지렛값, 스튜던트화 잔차를 함께 그려 어느 관측값이 결과를 좌우하는지 본다.
 

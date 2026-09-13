@@ -113,9 +113,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![RSS 곡면](./img/rss_surface_visualization_71.png)
+
+</div>
 
 $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것이 최소제곱 문제가 볼록이라는 사실을 눈으로 보여준다. 국소 최소점이 없으므로 해가 유일하다.
 

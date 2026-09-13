@@ -159,9 +159,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![집단별 상자그림](./img/oneway_pipeline_83.png)
+
+</div>
 
 trt1의 상자가 가장 낮고 넓으며, trt2가 가장 높고 좁다. 두 상자가 겹치는 부분이 거의 없다는 것이 Tukey 검정이 이 쌍만 잡아낸 이유다. ctrl의 상자는 두 처리 사이에 걸쳐 있어 어느 쪽과도 뚜렷이 갈리지 않는다.
 

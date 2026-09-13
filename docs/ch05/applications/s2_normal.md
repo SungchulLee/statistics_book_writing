@@ -131,9 +131,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![S-squared의 표본분포 (Normal)](./img/s2_normal_61.png)
+
+</div>
 
 ## 해석
 

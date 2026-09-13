@@ -157,9 +157,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![카이제곱 분포와 p-값](./img/independence_manual_78.png)
+
+</div>
 
 칠해진 오른쪽 꼬리가 p-값 0.27%다. 자유도 2인 카이제곱분포에서 11.81은 오른쪽으로 한참 벗어난 값이다.
 

@@ -107,9 +107,9 @@ if __name__ == "__main__":
     main()
 ```
 
-</div>
-
 ![Pearson 상관: 세 자료](./img/correlation_tests_72.png)
+
+</div>
 
 왼쪽부터 무관계, 단조 관계, 사인 관계다. Pearson은 가운데에서만 큰 값을 준다. 오른쪽 사인 자료는 눈으로는 뚜렷한 구조가 있지만 $r$이 0 근처다.
 
@@ -150,9 +150,9 @@ if __name__ == "__main__":
     main()
 ```
 
-</div>
-
 ![Spearman 순위상관: 세 자료](./img/correlation_tests_105.png)
+
+</div>
 
 단조 자료에서 Spearman이 Pearson보다 높은 값을 준다. 사인 자료에서는 둘 다 0 근처인데, 관계가 단조가 아니어서 순위로 바꾸는 것도 도움이 되지 않기 때문이다.
 
@@ -198,9 +198,9 @@ if __name__ == "__main__":
     main()
 ```
 
-</div>
-
 ![Kendall의 타우: 세 자료](./img/correlation_tests_143.png)
+
+</div>
 
 Kendall의 $\tau$는 세 자료 모두에서 Spearman과 같은 방향을 가리키되 절댓값이 작다. 척도가 다르기 때문이며, 두 계수를 직접 비교하면 안 된다.
 

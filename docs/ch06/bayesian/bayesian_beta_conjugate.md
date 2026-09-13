@@ -173,9 +173,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![베이즈 Beta 켤레 사전분포](./img/bayesian_beta_conjugate_79.png)
+
+</div>
 
 ## 해석
 

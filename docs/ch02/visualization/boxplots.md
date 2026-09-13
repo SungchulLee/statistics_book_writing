@@ -54,9 +54,9 @@ max    80.00
 Name: Age, dtype: float64
 ```
 
-</div>
-
 ![Horizontal_Boxplot_of_Passenger_Ages_on_Titanic](./img/Horizontal_Boxplot_of_Passenger_Ages_on_Titanic.png)
+
+</div>
 
 ## 상자그림에서 왜도 알아보기
 
@@ -126,9 +126,9 @@ print(f"Q2-Q1 = {q2-q1:.3f}   Q3-Q2 = {q3-q2:.3f}  (오른쪽이 길다)")
 Q2-Q1 = 0.794   Q3-Q2 = 1.098  (오른쪽이 길다)
 ```
 
-</div>
-
 ![Right_Skewed_Data](./img/Right_Skewed_Data.png)
+
+</div>
 
 ## 비교 상자그림
 
@@ -185,9 +185,9 @@ for name, d in [("10^4", data_a), ("5*10^4", data_b), ("10^5", data_c)]:
    10^5: 중앙값   0.25  IQR 0.50
 ```
 
-</div>
-
 ![Comparative_Box_Plots](./img/Comparative_Box_Plots.png)
+
+</div>
 
 ## 연습문제
 

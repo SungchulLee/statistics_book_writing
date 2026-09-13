@@ -128,9 +128,9 @@ def plot_power(mu_0, mu_a, sigma, n, alpha=0.05):
 plot_power(mu_0=50, mu_a=52, sigma=10, n=25)
 ```
 
-</div>
-
 ![Power of a Hypothesis Test](./img/power_66.png)
+
+</div>
 
 파란 곡선이 $H_0$ 아래, 빨간 곡선이 $H_a$ 아래의 $\bar X$ 분포다. 검은 점선이 임계값 53.29이고, 그 오른쪽의 파란 영역이 $\alpha = 0.05$, 빨간 영역이 검정력이다.
 
@@ -375,9 +375,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Power Curves: Sample Size vs. Power](./img/power_224.png)
+
+</div>
 
 세 곡선 모두 처음에는 가파르게 오르다가 위로 갈수록 평평해진다. 이 평평해지는 구간이 실무에서 중요하다. $d = 0.5$에서 검정력 0.8에는 34명이면 되지만 0.9에는 44명이 필요하다. 30% 더 모아서 10%p를 얻는 셈이고, 0.95를 원하면 54명으로 더 늘어난다. 마지막 몇 %p가 가장 비싸다.
 

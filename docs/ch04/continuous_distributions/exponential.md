@@ -165,9 +165,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Exponential 분포](./img/exponential_132.png)
+
+</div>
 
 ### 비율에 따른 비교
 
@@ -193,9 +193,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Exponential 분포](./img/exponential_150.png)
+
+</div>
 
 ### 표본추출과 검증
 
@@ -295,9 +295,9 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![Exponential 분포](./img/exponential_199.png)
+
+</div>
 
 ---
 

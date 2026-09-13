@@ -68,9 +68,9 @@ fig.tight_layout()              # 축 이름표가 잘리지 않도록 여백을
 fig.savefig("figure.png", dpi=150, bbox_inches="tight")
 ```
 
-</div>
-
 `tight_layout`은 여러 패널이 있는 그림에서 축 이름표가 잘리거나 겹치는 것을 막는다. `dpi=150`이면 화면과 대부분의 인쇄 용도에 충분하고, `dpi=300`은 최종 출판용이 아니라면 과하다.
+
+</div>
 
 ## pandas와의 연동
 
@@ -104,11 +104,11 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![pandas의 그림 메서드 세 가지](./img/matplotlib_basics_68.png)
 
 빠르게 탐색할 때 편리하다. 최종 그림에서는 Matplotlib을 직접 호출하는 편이 더 세밀하게 제어할 수 있다.
+
+</div>
 
 <div class="codebox" markdown>
 

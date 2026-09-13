@@ -61,9 +61,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![정규 누적분포함수와 분위수](./img/normal_cdf_19.png)
+
+</div>
 
 ---
 

@@ -99,9 +99,9 @@ max Cook's D = 0.5058 at obs 59
 flagged = [52 59]
 ```
 
-</div>
-
 ![Cook의 거리](./img/influential_points_63.png)
+
+</div>
 
 막대 하나가 압도적으로 높다. 마지막 관측값(59번)의 Cook 거리 0.506은 문턱 0.067의 여덟 배에 가깝다. 52번도 문턱을 넘지만 값이 훨씬 작다.
 
@@ -151,9 +151,9 @@ print(f"leverage: min = {leverage.min():.4f}, max = {leverage.max():.4f}")
 leverage: min = 0.0500, max = 0.0500
 ```
 
-</div>
-
 ![지렛값 대 스튜던트화 잔차](./img/influential_points_97.png)
+
+</div>
 
 지렛값이 60개 모두 정확히 0.05다. 균형 설계라 모든 집단의 크기가 $n_i = 20$이고 $h_{ii} = 1/20 = 0.05$이기 때문이다.
 

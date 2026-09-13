@@ -86,9 +86,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Weibull PDF](./img/weibull_pdf_32.png)
+
+</div>
 
 ---
 

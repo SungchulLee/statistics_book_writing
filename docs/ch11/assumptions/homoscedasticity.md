@@ -170,9 +170,9 @@ plt.title("Residuals vs. Fitted Values")
 plt.show()
 ```
 
-</div>
-
 ![잔차 대 적합값](./img/homoscedasticity_116.png)
+
+</div>
 
 세로줄 세 개가 각 집단이다. 오른쪽 줄(집단 C)이 왼쪽 줄(집단 A)보다 위아래로 넓게 퍼져 있다. 형식적 검정이 놓친 분산 차이가 그림에서는 보인다.
 

@@ -209,9 +209,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Population Distribution (Normal)](./img/sample_variance_156.png)
+
+</div>
 
 ### 소득 (치우친) 모집단
 

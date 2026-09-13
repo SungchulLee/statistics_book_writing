@@ -82,9 +82,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Cauchy: Sample Mean Trajectories](./img/cauchy_lln_failure_27.png)
+
+</div>
 
 !!! note "수렴과 비수렴"
     정규분포(오른쪽 그림)에서는 $n$이 커지면 20개 궤적이 모두 눈에 띄게 0으로 수렴한다. Cauchy(왼쪽 그림)에서는 궤적이 계속 불규칙하게 떠돈다 — $n$이 커진 뒤에도 이따금 나타나는 극단 관측값이 누적평균을 "초기화"해 버린다.
@@ -137,9 +137,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Cauchy에서 대수의법칙의 실패](./img/cauchy_lln_failure_80.png)
+
+</div>
 
 !!! warning "Cauchy 분포는 집중되지 않는다"
     $n = 10{,}000$에서 정규 표본평균의 분포는 0에 뾰족하게 모여들지만(표준편차 $= 0.01$), Cauchy 표본평균의 분포는 $n = 100$일 때와 사실상 똑같아 보인다. Cauchy 자료를 더 많이 평균해도 도움이 되지 않는다.
@@ -164,9 +164,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Cauchy vs Normal Q-Q Plot](./img/cauchy_lln_failure_119.png)
+
+</div>
 
 특유의 S자(또는 하키스틱) 모양은 Cauchy가 정규분포보다 훨씬 극단적인 값을 만들어낸다는 것을 보여준다.
 

@@ -101,9 +101,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![산점도 행렬](./img/corr_viz_58.png)
+
+</div>
 
 변수 쌍마다 산점도를 그려 놓으면 상관행렬의 숫자가 어떤 모양에서 나왔는지 확인할 수 있다.
 
@@ -145,9 +145,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![여러 상관 수준의 산점도](./img/corr_viz_89.png)
+
+</div>
 
 $|r|$이 커질수록 점구름이 좁은 타원으로 조여든다.
 

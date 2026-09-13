@@ -137,9 +137,9 @@ Heavy-Tailed (t) Distribution:
   Excess Kurtosis: 1.78
 ```
 
-</div>
-
 ![Normal Distribution](./img/heavy_tails_67.png)
+
+</div>
 
 ## 평균의 로버스트한 대안
 

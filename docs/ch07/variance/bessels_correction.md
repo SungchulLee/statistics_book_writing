@@ -105,9 +105,9 @@ def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
 chi_squared_verification()
 ```
 
-</div>
-
 ![(n-1)S²/σ² ~ chi²(n-1) for Normal Data](./img/bessels_correction_47.png)
+
+</div>
 
 카이제곱분포로부터 곧바로 다음을 얻는다:
 

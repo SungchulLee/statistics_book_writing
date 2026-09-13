@@ -81,9 +81,9 @@ x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
 qq_with_band(x, B=600, seed=7)
 ```
 
-</div>
-
 ![신뢰띠를 포함한 Q-Q 그림](./img/qq_confidence_band_35.png)
+
+</div>
 
 ## 점별 띠와 동시 띠
 

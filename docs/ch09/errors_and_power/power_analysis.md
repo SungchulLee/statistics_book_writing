@@ -151,9 +151,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Power Curves for Two-Sample t-Test](./img/power_analysis_114.png)
+
+</div>
 
 세 곡선이 회색 기준선(검정력 0.80)을 지나는 지점이 각 효과크기에 필요한 표본크기다. $d = 0.8$은 26 언저리에서, $d = 0.5$는 63에서, $d = 0.2$는 그래프 오른쪽 끝 근처인 393에서 지난다.
 

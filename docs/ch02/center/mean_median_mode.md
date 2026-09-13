@@ -71,9 +71,9 @@ ax.spines['right'].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![Histogram of Income Data with Mean Indicator](./img/mean_median_mode_44.png)
+
+</div>
 
 ---
 
@@ -140,9 +140,9 @@ print(f"차이   {mean_income - median_income:>9,.0f}  (양수 = 오른쪽 치�
 차이       6,761  (양수 = 오른쪽 치우침)
 ```
 
-</div>
-
 ![Histogram of Income Data with Mean and Median](./img/mean_median_mode_87.png)
+
+</div>
 
 ### 중앙값은 이상치에 강건하다
 
@@ -228,13 +228,13 @@ print(f"{'중앙값':10}{median_income:>14,.0f}{median_outliers:>18,.0f}"
 중앙값               62,000            62,000     0.0%
 ```
 
-</div>
-
 ![Original Income Data](./img/mean_median_mode_117_0.png)
 
 ![Original Income Data](./img/mean_median_mode_117_1.png)
 
 이상치를 넣으면 평균은 극적으로 이동하지만 중앙값은 거의 변하지 않는다.
+
+</div>
 
 ### 중앙값이 선호되는 실제 사례
 
@@ -301,16 +301,9 @@ print(f"중앙값     : {median_pop:,.0f}")
 중앙값     : 4,436,370
 ```
 
-</div>
-
-**출력:**
-```
-Mean Population: 6,162,876
-10% Trimmed Mean: 4,783,697
-Median Population: 4,436,370
-```
-
 절단평균은 중간 지대를 차지한다. 극단값(캘리포니아의 3700만 인구)의 영향을 평균보다 덜 받으면서도 중앙값보다 많은 자료를 사용한다. 꼬리를 완전히 무시하지 않으면서 적당한 수준의 강건성을 원할 때 유용하다.
+
+</div>
 
 ### 절단평균을 쓸 때
 
@@ -367,15 +360,9 @@ print(f"가중평균 살인율: {weighted_mean:.3f}")
 가중평균 살인율: 4.446
 ```
 
-</div>
-
-**출력:**
-```
-Unweighted Mean Murder Rate: 4.066
-Weighted Mean Murder Rate: 4.446
-```
-
 인구가 많은 주(캘리포니아, 텍사스, 플로리다, 뉴욕)의 살인율이 작은 주보다 높은 경향이 있어 가중평균이 더 크다. 가중하지 않은 평균은 몬태나(인구 99만)와 캘리포니아(인구 3700만)를 동등하게 취급하는데, 가중평균이 이 왜곡을 바로잡는다.
+
+</div>
 
 ### 가중중앙값
 

@@ -194,9 +194,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Binomial(n=50, p=0.3)](./img/discrete_distributions_suite_95.png)
+
+</div>
 
 ---
 

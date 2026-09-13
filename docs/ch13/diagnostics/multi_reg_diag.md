@@ -123,9 +123,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![다중회귀 진단 패널](./img/multi_reg_diag_93.png)
+
+</div>
 
 잔차 그림, Q-Q 그림, 척도-위치, 영향 그림을 한자리에 놓았다.
 

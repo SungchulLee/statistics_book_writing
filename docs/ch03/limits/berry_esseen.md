@@ -202,9 +202,9 @@ berry_esseen_visualization(
 )
 ```
 
-</div>
-
 ![베리–에센 정리](./img/berry_esseen_101.png)
+
+</div>
 
 세 분포의 상한을 $n$의 함수로 겹쳐 그리면 순서가 분명해진다.
 
@@ -250,9 +250,9 @@ def convergence_rate_comparison():
 convergence_rate_comparison()
 ```
 
-</div>
-
 ![Convergence Rate to Normal: Berry–Esseen Bounds](./img/berry_esseen_187.png)
+
+</div>
 
 ## 3. 두 정리의 역할 분담
 

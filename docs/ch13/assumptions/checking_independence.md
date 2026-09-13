@@ -172,9 +172,9 @@ plt.axhline(y=0, color='red', linestyle='--')
 plt.show()
 ```
 
-</div>
-
 ![순서에 대한 잔차](./img/checking_independence_130.png)
+
+</div>
 
 잔차가 0을 중심으로 무작위로 흩어져 있고 추세나 주기가 없다.
 

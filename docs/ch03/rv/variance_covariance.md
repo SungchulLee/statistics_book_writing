@@ -197,9 +197,9 @@ Corr(X, X²) = -0.0016
 Yet X and X² are clearly dependent!
 ```
 
-</div>
-
 ![분산과 공분산](./img/variance_covariance_118.png)
+
+</div>
 
 ## 3. 합의 분산에는 교차항이 붙는다
 

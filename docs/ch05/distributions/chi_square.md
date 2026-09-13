@@ -90,9 +90,9 @@ ax.grid(True, alpha=0.3)
 plt.show()
 ```
 
-</div>
-
 ![Chi-Square PDF for Various Degrees of Freedom](./img/chi_square_61.png)
+
+</div>
 
 ---
 
@@ -123,9 +123,9 @@ ax.grid(True, alpha=0.3)
 plt.show()
 ```
 
-</div>
-
 ![Chi-Square CDF](./img/chi_square_84.png)
+
+</div>
 
 ---
 
@@ -182,9 +182,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![카이제곱 분포 (chi-squared)](./img/chi_square_124.png)
+
+</div>
 
 ### 정의로부터의 표본추출 (정규확률변수의 제곱합)
 
@@ -213,9 +213,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![카이제곱 분포 (chi-squared)](./img/chi_square_142.png)
+
+</div>
 
 ---
 
@@ -266,9 +266,9 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![(n-1)S²/σ² from Normal Population → χ² Exact](./img/chi_square_179.png)
+
+</div>
 
 ### 모의실험: 정규가 아닌 모집단
 

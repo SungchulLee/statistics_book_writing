@@ -87,9 +87,9 @@ n = 200: power = 1.000
 n = 300: power = 1.000
 ```
 
-</div>
-
 ![표본크기에 따른 검정력](./img/shapiro_power_sim_37.png)
+
+</div>
 
 ## 검정력 곡선 읽기
 

@@ -251,9 +251,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Location Estimators vs Outlier Count](./img/robust_estimators_181.png)
+
+</div>
 
 ## 붕괴점
 

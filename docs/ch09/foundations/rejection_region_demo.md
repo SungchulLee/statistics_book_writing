@@ -91,9 +91,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![기각역과 검정통계량](./img/rejection_region_demo_51.png)
+
+</div>
 
 파란 점선이 관측된 $t = -4.13$이고 붉게 칠한 양쪽 꼬리가 기각역이다. 점선이 왼쪽 기각역 안에 확실히 들어가 있다.
 

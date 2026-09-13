@@ -95,9 +95,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![정규 자료와 두꺼운 꼬리 자료의 Q-Q 비교](./img/qq_plot_financial_returns_64.png)
+
+</div>
 
 **정규 수익률:** 점들이 대각선을 따라 놓여 분포 가정을 확인해 준다.
 

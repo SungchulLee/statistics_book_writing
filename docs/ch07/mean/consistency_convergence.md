@@ -62,9 +62,9 @@ def consistency_visualization(seed=42):
 consistency_visualization()
 ```
 
-</div>
-
 ![일치성과 수렴](./img/consistency_convergence_15.png)
+
+</div>
 
 !!! tip "그림에서 보이는 양상"
     모집단 분포와 무관하게, $n$이 커지면 20개의 표본경로가 모두 빨간 점선($\mu$)으로 수렴한다. 강대수의법칙이 작동하는 모습이다.
@@ -128,9 +128,9 @@ def clt_demonstration(seed=42):
 clt_demonstration()
 ```
 
-</div>
-
 ![Central Limit Theorem](./img/consistency_convergence_60.png)
+
+</div>
 
 !!! note "정규성으로의 수렴 속도"
     대칭인 분포(Normal, Uniform)는 정규성에 빨리 도달한다. 치우친 분포(Exponential, $p$가 0.5에서 먼 Bernoulli)는 더 큰 $n$이 필요하다. $n = 30$쯤이면 대부분의 분포에서 정규근사가 충분하다.
@@ -186,9 +186,9 @@ def cauchy_failure(seed=42):
 cauchy_failure()
 ```
 
-</div>
-
 ![Normal: Converges](./img/consistency_convergence_106.png)
+
+</div>
 
 !!! warning "대수의법칙에는 유한한 평균이 필요하다"
     Cauchy의 표본평균은 $n$이 아무리 커도 불규칙하게 떠돈다. 그러나 표본 **중앙값**은 유한한 평균을 요구하지 않으므로 Cauchy 위치모수에 대해 일치한다.

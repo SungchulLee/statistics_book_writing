@@ -134,9 +134,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![100 t CIs | n=10, CL=95%](./img/ci_mean_sim_95.png)
+
+</div>
 
 가로선 하나가 표본 하나의 신뢰구간이고 세로 점선이 참값 $\mu = 0$이다. 놓친 넷만 빨간색이다.
 

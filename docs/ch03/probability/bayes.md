@@ -225,9 +225,9 @@ def bayes_update_visualization():
 bayes_update_visualization()
 ```
 
-</div>
-
 ![Bayes](./img/bayes_136.png)
+
+</div>
 
 곡선이 처음에 가파르게 오르는 것에 주목하라. 사후확률이 50%를 넘으려면 유병률이 상당히 높아야 한다. 검사 성능을 올리는 것보다 **검사 대상을 좁히는 것**이 효과적인 이유다.
 

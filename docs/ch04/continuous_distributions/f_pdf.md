@@ -61,9 +61,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![F Distribution — PDF](./img/f_pdf_28.png)
+
+</div>
 
 ---
 

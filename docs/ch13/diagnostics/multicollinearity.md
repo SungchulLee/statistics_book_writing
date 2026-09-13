@@ -64,9 +64,9 @@ High Correlations (|r| > 0.7):
   Latitude <-> Longitude: -0.925
 ```
 
-</div>
-
 ![상관 열지도](./img/multicollinearity_22.png)
+
+</div>
 
 AveRooms와 AveBedrms가 0.848, Latitude와 Longitude가 $-0.925$로 강하게 상관되어 있다. 상관행렬은 **쌍별** 관계만 보므로, 셋 이상이 얽힌 공선성은 VIF로 확인해야 한다.
 

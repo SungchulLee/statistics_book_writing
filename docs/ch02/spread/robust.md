@@ -148,9 +148,9 @@ print(f"평균 - 표준편차 = {mean_income - std_dev:>9,.0f}   "
 평균 - 표준편차 =    35,888   (최솟값 4,000보다 큰가? 예)
 ```
 
-</div>
-
 ![Mean and Std Dev](./img/robust_63.png)
+
+</div>
 
 ### 사분위수 계산하기
 

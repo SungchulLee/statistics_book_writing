@@ -72,9 +72,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![키와 몸무게 산점도](./img/simple_32.png)
+
+</div>
 
 키가 큰 사람일수록 몸무게가 더 나가는 경향이 보인다. 다만 점들이 넓게 흩어져 있어 관계가 결정론적이지는 않다.
 
@@ -118,9 +118,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![평균점](./img/simple_75.png)
+
+</div>
 
 가로 평균과 세로 평균이 만나는 점이다. 모든 회귀직선은 반드시 이 점을 지난다.
 
@@ -177,9 +177,9 @@ axis.legend()
 plt.show()
 ```
 
-</div>
-
 ![2 SD x-띠](./img/simple_113.png)
+
+</div>
 
 키 평균에서 $\pm 2$ 표준편차 구간을 표시한 것이다.
 
@@ -232,9 +232,9 @@ axis.legend()
 plt.show()
 ```
 
-</div>
-
 ![2 SD y-띠](./img/simple_158.png)
+
+</div>
 
 몸무게 평균에서 $\pm 2$ 표준편차 구간이다. 자료가 정규에 가까우면 이 띠 안에 약 95%가 들어간다.
 
@@ -301,9 +301,9 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
-</div>
-
 ![양의 SD 직선](./img/simple_209.png)
+
+</div>
 
 SD 직선은 평균점을 지나고 기울기가 $s_y/s_x$인 직선이다. 삼각형이 "$x$가 1 SD 늘면 $y$도 1 SD 는다"를 나타낸다.
 
@@ -365,9 +365,9 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
-</div>
-
 ![음의 SD 직선](./img/simple_264.png)
+
+</div>
 
 상관이 음일 때의 SD 직선이다. 기울기의 부호만 바뀔 뿐 구조는 같다.
 
@@ -430,9 +430,9 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
-</div>
-
 ![회귀직선과 SD 직선](./img/simple_318.png)
+
+</div>
 
 SD 직선의 기울기는 $s_y/s_x$이고 회귀직선의 기울기는 $r \cdot s_y/s_x$다. $|r| < 1$이므로 회귀직선이 언제나 SD 직선보다 완만하다. 이것이 평균으로의 회귀 현상이다.
 
@@ -523,9 +523,9 @@ axis.spines['right'].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![두 회귀직선](./img/simple_382.png)
+
+</div>
 
 $Y$의 $X$에 대한 회귀와 $X$의 $Y$에 대한 회귀가 서로 다른 직선이다. 두 직선은 평균점에서 만나며, SD 직선이 그 사이에 놓인다.
 
@@ -597,9 +597,9 @@ axis.legend(fontsize=15)
 plt.show()
 ```
 
-</div>
-
 ![세로 띠로 본 Y의 X에 대한 회귀](./img/simple_456.png)
+
+</div>
 
 키 구간마다 몸무게의 평균을 찍어 이으면 회귀직선에 가까워진다. 회귀직선이 "각 $x$에서의 조건부 평균"이라는 정의를 그림으로 보여준다.
 
@@ -670,9 +670,9 @@ axis.spines['right'].set_visible(False)
 plt.show()
 ```
 
-</div>
-
 ![가로 띠로 본 X의 Y에 대한 회귀](./img/simple_518.png)
+
+</div>
 
 몸무게 구간마다 키의 평균을 찍으면 $X$를 $Y$에 회귀시킨 직선이 나온다. 앞의 세로 띠 그림과 나란히 놓으면 두 회귀직선이 왜 다른지 눈으로 보인다.
 

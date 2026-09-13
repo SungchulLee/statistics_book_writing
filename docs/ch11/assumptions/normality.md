@@ -77,9 +77,9 @@ plt.title("Q-Q Plot of Residuals")
 plt.show()
 ```
 
-</div>
-
 ![잔차의 Q-Q 그림](./img/normality_59.png)
+
+</div>
 
 점들이 기준선을 잘 따른다. 양쪽 꼬리에서 한두 점이 살짝 벗어나지만 $n = 60$에서 이 정도는 표집 변동으로 볼 만하다.
 
@@ -139,9 +139,9 @@ plt.title("Histogram of Residuals")
 plt.show()
 ```
 
-</div>
-
 ![잔차의 히스토그램](./img/normality_92.png)
+
+</div>
 
 관측값 60개를 20개 구간에 나누어 담았으니 구간당 평균 3개다. 이 정도면 히스토그램이 울퉁불퉁해 보이는 것이 당연하며, 그 요철을 분포의 특징으로 읽으면 안 된다. 표본이 작을 때 정규성 판단에는 Q-Q 그림이 히스토그램보다 낫다.
 

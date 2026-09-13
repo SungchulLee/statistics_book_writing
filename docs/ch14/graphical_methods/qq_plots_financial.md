@@ -48,9 +48,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![일간 로그수익률의 Q-Q 그림](./img/qq_plots_financial_21.png)
+
+</div>
 
 ## 금융 자료의 Q-Q 그림 해석
 
@@ -108,9 +108,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![두꺼운 꼬리의 분포 모양과 Q-Q 그림](./img/qq_plots_financial_61.png)
+
+</div>
 
 ## 비정규성을 무시할 때의 결과
 
@@ -188,9 +188,9 @@ Anderson-Darling statistic: 3.6529
   critical values (15/10/5/2.5/1%): [0.574 0.654 0.785 0.916 1.089]
 ```
 
-</div>
-
 ![수익률의 정규성 진단 패널](./img/qq_plots_financial_114.png)
+
+</div>
 
 !!! warning "`stats.anderson`은 p값을 돌려주지 않는다"
     `stats.anderson`은 `(statistic, critical_values, significance_level)` 세 값을 담은 결과 객체를 돌려준다. `_, p_ad = stats.anderson(...)`처럼 두 값으로 풀면 `ValueError: too many values to unpack`이 난다. 검정통계량을 임계값과 직접 비교해야 한다.

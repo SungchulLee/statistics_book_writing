@@ -51,9 +51,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![정규분포의 백분위점 함수 (분위수 함수)](./img/normal_ppf_17.png)
+
+</div>
 
 ---
 

@@ -166,9 +166,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![이항 자료에 대한 선형회귀와 로지스틱 회귀](./img/logistic_vs_linear_visualization_93.png)
+
+</div>
 
 ## 오즈비 해석
 

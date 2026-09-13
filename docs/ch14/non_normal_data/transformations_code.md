@@ -56,9 +56,9 @@ Before: skewness = 3.5432
 After:  skewness = 0.2933
 ```
 
-</div>
-
 ![로그 변환 전후의 히스토그램](./img/transformations_code_27.png)
+
+</div>
 
 왜도가 $3.54$에서 $0.29$로 떨어졌다. 사실상 대칭이 되었다.
 

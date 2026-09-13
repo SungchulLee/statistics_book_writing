@@ -138,9 +138,9 @@ ax.set_ylabel("추정오차")
 plt.show()
 ```
 
-</div>
-
 ![이상치와 지렛대점](./img/outliers_102.png)
+
+</div>
 
 ---
 

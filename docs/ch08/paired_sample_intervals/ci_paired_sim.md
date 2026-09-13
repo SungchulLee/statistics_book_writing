@@ -142,9 +142,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![100 Paired t CIs | n=12, rho=0.6, CL=95%](./img/ci_paired_sim_110.png)
+
+</div>
 
 여기 쓰인 설정에서 $\sigma_D = \sqrt{1 + 1.44 - 1.44} = 1.00$이다. $\rho = 0.6$이라는 상관 덕분에 $\sigma_X^2 + \sigma_Y^2$의 상당 부분이 상쇄되었다. 같은 자료를 짝을 무시하고 다뤘다면 산포가 1.562가 되어 구간이 1.56배 넓어졌을 것이다.
 

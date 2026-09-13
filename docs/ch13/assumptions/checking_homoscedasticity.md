@@ -98,9 +98,9 @@ plt.title('Residuals vs. Fitted Values')
 plt.show()
 ```
 
-</div>
-
 ![잔차 대 적합값](./img/checking_homoscedasticity_70.png)
+
+</div>
 
 깔때기 모양이 뚜렷하다. 적합값이 커질수록 잔차의 퍼짐이 커지는 전형적인 이분산 패턴이다.
 
@@ -267,9 +267,9 @@ plt.plot(smooth[:, 0], smooth[:, 1], color='red', linewidth=2)
 plt.show()
 ```
 
-</div>
-
 ![척도-위치 그림](./img/checking_homoscedasticity_183.png)
+
+</div>
 
 $\sqrt{|표준화 잔차|}$를 적합값에 대해 그린 것이다. 오른쪽으로 갈수록 점들이 위로 올라가는 추세가 뚜렷해 이분산을 확인해 준다.
 

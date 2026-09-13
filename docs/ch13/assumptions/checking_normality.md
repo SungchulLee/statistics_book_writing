@@ -104,9 +104,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![잔차의 Q-Q 그림](./img/checking_normality_69.png)
+
+</div>
 
 점들이 기준선을 잘 따른다. 양 끝에서 조금 벗어나지만 $n = 120$에서 이 정도는 흔한 흔들림이다.
 
@@ -152,9 +152,9 @@ ax.set_title('Q-Q Plot of Residuals')
 plt.show()
 ```
 
-</div>
-
 ![잔차의 히스토그램](./img/checking_normality_116.png)
+
+</div>
 
 종 모양에 가깝다. 관측값 120개를 구간에 나누어 담았으므로 요철은 표집 변동으로 보아야 한다.
 

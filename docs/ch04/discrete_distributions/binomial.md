@@ -159,9 +159,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Bernoulli 분포와 Binomial 분포](./img/binomial_125.png)
+
+</div>
 
 ### 모수에 따른 비교
 
@@ -190,9 +190,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Bernoulli 분포와 Binomial 분포](./img/binomial_151.png)
+
+</div>
 
 ### 표본추출과 검증
 
@@ -258,9 +258,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Bernoulli 분포와 Binomial 분포](./img/binomial_186.png)
+
+</div>
 
 ---
 

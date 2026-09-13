@@ -86,9 +86,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![제1종 오류와 제2종 오류](./img/type12_error_visualization_44.png)
+
+</div>
 
 같은 세로 점선(임계값 1.645)이 두 곡선을 각각 자른다. 파란 곡선에서 오른쪽으로 잘린 조각이 $\alpha$, 빨간 곡선에서 왼쪽으로 잘린 조각이 $\beta$다.
 

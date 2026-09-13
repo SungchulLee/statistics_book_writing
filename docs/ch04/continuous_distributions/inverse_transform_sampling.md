@@ -83,9 +83,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Step 1: U ~ Uniform(0,1)](./img/inverse_transform_sampling_37.png)
+
+</div>
 
 ---
 
@@ -125,9 +125,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![Cauchy via Inverse Transform](./img/inverse_transform_sampling_94.png)
+
+</div>
 
 Cauchy 예는 역변환 표본추출이 유한한 평균조차 없는 두꺼운 꼬리 분포에서도 작동함을 보여 준다.
 

@@ -156,9 +156,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Uniform 분포](./img/uniform_125.png)
+
+</div>
 
 ### 표본추출과 히스토그램
 
@@ -186,9 +186,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Uniform 분포](./img/uniform_143.png)
+
+</div>
 
 ### 역변환 표본추출
 
@@ -221,9 +221,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![Uniform 분포](./img/uniform_163.png)
+
+</div>
 
 ---
 

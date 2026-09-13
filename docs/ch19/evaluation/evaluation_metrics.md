@@ -272,9 +272,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
 ![혼동행렬·점수분포·ROC 곡선](./img/evaluation_metrics_183.png)
+
+</div>
 
 ## 해석
 

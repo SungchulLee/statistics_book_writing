@@ -85,9 +85,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![F 분포](./img/f_distribution_60.png)
+
+</div>
 
 ### 정의로부터의 표본추출 (카이제곱의 비)
 
@@ -119,9 +119,9 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
 ![F 분포](./img/f_distribution_79.png)
+
+</div>
 
 ---
 
