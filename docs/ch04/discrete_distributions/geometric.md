@@ -406,6 +406,149 @@ $$
 
     **Python:** `np.ceil(np.log(np.random.rand()) / np.log(1 - p)).astype(int)`.
 
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+기하분포에는 "첫 성공이 나온 **시행 번호**"를 세는 판본과 "첫 성공 **이전의 실패 횟수**"를 세는 판본이 있다. 두 판본의 지지집합, 평균, 분산을 각각 적고, SciPy에서 어느 함수가 어느 판본인지 확인하라.
+
+</div>
+
+??? success "풀이"
+    두 판본을 $Y$(시행 번호)와 $X = Y - 1$(실패 횟수)이라 하자.
+
+    | | $Y$ = 시행 번호 | $X$ = 실패 횟수 |
+    |---|---|---|
+    | 지지집합 | $1, 2, 3, \dots$ | $0, 1, 2, \dots$ |
+    | PMF | $(1-p)^{k-1}p$ | $(1-p)^k p$ |
+    | 평균 | $1/p$ | $(1-p)/p$ |
+    | 분산 | $(1-p)/p^2$ | $(1-p)/p^2$ |
+
+    평균만 1만큼 다르고 분산은 같다. 상수를 빼도 분산은 변하지 않기 때문이다.
+
+    **SciPy.** `stats.geom(p)`은 **시행 번호** 판본이라 최솟값이 1이고 평균이 $1/p$이다. `stats.nbinom(1, p)`은 **실패 횟수** 판본이라 최솟값이 0이고 평균이 $(1-p)/p$이다. 이름이 다를 뿐 같은 분포족의 두 이동판이며, `stats.geom(p).pmf(k) == stats.nbinom(1, p).pmf(k-1)`이 성립한다.
+
+    ```python
+    from scipy import stats
+    p = 0.25
+    print(stats.geom(p).mean(), stats.nbinom(1, p).mean())   # 4.0  3.0
+    ```
+
+    실무에서 자주 겪는 사고가 여기서 나온다. 어떤 교재의 공식 $\operatorname{Var} = (1-p)/p^2$을 그대로 쓰면서 평균만 SciPy에서 가져오면 두 판본이 섞인다. **"무엇을 세는가"를 먼저 정하고 그에 맞는 공식과 함수를 짝지어야 한다.** 음이항분포에서도 똑같은 문제가 생기며, `stats.nbinom`은 언제나 실패 횟수를 센다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+$Y_1, \dots, Y_n$이 독립이고 $\text{Geometric}(p)$(시행 번호 판본)를 따를 때 $p$의 최대가능도추정량을 구하라. 이 추정량은 불편인가?
+
+</div>
+
+??? success "풀이"
+    가능도는
+
+    $$
+    L(p) = \prod_{i=1}^n (1-p)^{y_i - 1}p = p^n (1-p)^{\sum y_i - n}
+    $$
+
+    이고 로그를 취하면
+
+    $$
+    \ell(p) = n\ln p + \left(\sum_i y_i - n\right)\ln(1-p)
+    $$
+
+    이다. 미분해 0으로 두면
+
+    $$
+    \frac{n}{p} - \frac{\sum y_i - n}{1-p} = 0 \implies \hat p = \frac{n}{\sum_i y_i} = \frac{1}{\bar Y}
+    $$
+
+    이다. $E[Y] = 1/p$이니 자연스러운 결과다.
+
+    **불편이 아니다.** $1/x$가 볼록함수이므로 옌센 부등식에 따라
+
+    $$
+    E[\hat p] = E\!\left[\frac{1}{\bar Y}\right] > \frac{1}{E[\bar Y]} = p
+    $$
+
+    이다. 항상 $p$를 과대추정한다. 직관적으로도, 우연히 성공이 일찍 몰린 표본에서 $\bar Y$가 작아지고 그 역수가 크게 튀는데, 반대 방향으로는 $\bar Y$가 아무리 커져도 역수가 0 아래로는 못 내려가므로 위쪽으로 치우친다.
+
+    편향의 크기는 $O(1/n)$이라 $n$이 커지면 사라진다. 최대가능도추정량은 일반적으로 **일치추정량이지만 유한표본에서 불편은 아니며**, 특히 이렇게 비선형 변환이 끼면 편향이 생긴다. 정규분포의 $\hat\sigma^2_{\text{MLE}}$가 편향된 것과 같은 종류의 현상이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+$Y \mid \Lambda = \lambda \sim \text{Poisson}(\lambda)$이고 $\Lambda \sim \text{Gamma}(\text{형상}=r,\ \text{척도}=\theta)$일 때 $Y$의 주변분포가 음이항분포임을 보여라. 이것이 계수 자료 분석에서 왜 중요한가?
+
+</div>
+
+??? success "풀이"
+    조건부 확률에 사전밀도를 곱해 적분한다.
+
+    $$
+    P(Y=y) = \int_0^\infty \frac{e^{-\lambda}\lambda^y}{y!}\cdot\frac{\lambda^{r-1}e^{-\lambda/\theta}}{\Gamma(r)\theta^r}\,d\lambda = \frac{1}{y!\,\Gamma(r)\theta^r}\int_0^\infty \lambda^{y+r-1}e^{-\lambda(1+1/\theta)}\,d\lambda
+    $$
+
+    남은 적분은 감마적분이므로 $\Gamma(y+r)\,(1+1/\theta)^{-(y+r)}$이다. $p = 1/(1+\theta)$로 두면 $1-p = \theta/(1+\theta)$이고, 정리하면
+
+    $$
+    P(Y=y) = \frac{\Gamma(y+r)}{y!\,\Gamma(r)}\,p^r(1-p)^y, \qquad y = 0, 1, 2, \dots
+    $$
+
+    를 얻는다. 이것이 (실패 횟수를 세는 판본의) 음이항분포이다. $\square$
+
+    $r$이 정수일 필요도 없다. 이항계수 대신 감마함수로 쓴 덕분에 $r > 0$인 실수면 된다.
+
+    **왜 중요한가.** 적률을 계산하면
+
+    $$
+    E[Y] = r\theta, \qquad \operatorname{Var}(Y) = r\theta(1+\theta) = E[Y]\,(1+\theta)
+    $$
+
+    이다. 분산이 평균보다 $(1+\theta)$배 크다. 포아송분포는 평균과 분산이 같아야 하는데, 실제 계수 자료는 거의 언제나 분산이 더 크다. 이를 **과대산포**라 한다.
+
+    이 유도가 그 원인을 말해 준다. 개체마다 사건 발생률 $\lambda$가 다르면(관측되지 않은 이질성), 전체를 뭉뚱그린 분포는 포아송이 아니라 그 혼합이 되고 분산이 부풀어 오른다. 보험 가입자마다 사고 성향이 다르고, 지역마다 감염 위험이 다르며, 유전자마다 발현량이 다르다.
+
+    실무적 귀결은 분명하다. 과대산포된 자료에 포아송 회귀를 쓰면 계수 추정은 그런대로 나와도 **표준오차가 심하게 과소평가**되어 있지도 않은 유의성이 쏟아진다. 음이항 회귀를 쓰면 $\theta$가 이 여분의 산포를 흡수한다. RNA 시퀀싱 자료 분석 도구들이 하나같이 음이항 모형을 쓰는 이유이며, $\theta \to 0$이면 포아송으로 돌아가므로 포아송을 특수한 경우로 포함한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+기하분포(시행 번호 판본)의 확률생성함수 $G(s) = E[s^Y]$를 구하고, 이를 미분해 평균과 분산을 유도하라.
+
+</div>
+
+??? success "풀이"
+    등비급수를 쓴다. $|s(1-p)| < 1$에서
+
+    $$
+    G(s) = \sum_{k=1}^\infty s^k (1-p)^{k-1}p = ps\sum_{k=1}^\infty \{s(1-p)\}^{k-1} = \frac{ps}{1 - s(1-p)}
+    $$
+
+    이다. $q = 1-p$로 줄여 쓰면 $G(s) = ps/(1-qs)$이다.
+
+    **평균.** 몫의 미분법으로
+
+    $$
+    G'(s) = \frac{p(1-qs) - ps(-q)}{(1-qs)^2} = \frac{p}{(1-qs)^2}
+    $$
+
+    이므로 $E[Y] = G'(1) = p/p^2 = 1/p$이다.
+
+    **분산.** 한 번 더 미분하면
+
+    $$
+    G''(s) = \frac{2pq}{(1-qs)^3} \implies E[Y(Y-1)] = G''(1) = \frac{2q}{p^2}
+    $$
+
+    이다. 따라서
+
+    $$
+    \operatorname{Var}(Y) = E[Y(Y-1)] + E[Y] - (E[Y])^2 = \frac{2q}{p^2} + \frac1p - \frac{1}{p^2} = \frac{2q + p - 1}{p^2} = \frac{q}{p^2}
+    $$
+
+    로 $(1-p)/p^2$을 얻는다. $\square$
+
+    확률생성함수가 이산분포에서 특히 편리한 것은 $G^{(k)}(1)$이 **계승적률** $E[Y(Y-1)\cdots(Y-k+1)]$을 바로 준다는 점이다. 또 독립인 확률변수의 합에서는 생성함수가 곱해지므로, $r$개의 독립 기하분포를 더한 음이항분포의 생성함수가 $\{ps/(1-qs)\}^r$임을 즉시 알 수 있고 여기서 평균 $r/p$와 분산 $rq/p^2$이 따라 나온다.
+
 ---
 
 ## 정리하며

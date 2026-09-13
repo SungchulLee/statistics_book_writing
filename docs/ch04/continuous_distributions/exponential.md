@@ -421,6 +421,132 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     현실의 신뢰성이 정확히 지수분포를 따르는 경우는 드물지만, 지수분포는 유용한 기준선이다. (a) 모수가 평균 수명이라는 직접적인 의미를 갖고, (b) 수학적으로 다루기 쉬우며, (c) 무기억성이 "완전히 무작위한" 고장에 대응하여 고장 모형화의 자연스러운 귀무가설이 되기 때문이다.
 
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+$X \sim \text{Exp}(\lambda)$일 때 $N = \lfloor X \rfloor + 1$의 분포를 구하라. 이 결과가 "기하분포는 지수분포의 이산판"이라는 말과 어떻게 이어지는가?
+
+</div>
+
+??? success "풀이"
+    $N = k$($k = 1, 2, \dots$)일 필요충분조건은 $k-1 \le X < k$이므로
+
+    $$
+    P(N = k) = F(k) - F(k-1) = e^{-\lambda(k-1)} - e^{-\lambda k} = \left(e^{-\lambda}\right)^{k-1}\left(1 - e^{-\lambda}\right)
+    $$
+
+    이다. $p = 1 - e^{-\lambda}$로 두면
+
+    $$
+    P(N = k) = (1-p)^{k-1}p
+    $$
+
+    로 정확히 $\text{Geometric}(p)$이다. "첫 성공까지의 시행 횟수" 판이다.
+
+    **왜 자연스러운가.** 지수분포의 시간축을 길이 1인 칸으로 자르고 "이 칸 안에 사건이 있었는가"만 기록한 것이 $N$이다. 각 칸에서 사건이 일어날 확률이 $p = 1-e^{-\lambda}$로 같고, 무기억성 덕분에 칸들이 서로 독립이다. 독립적인 동전 던지기의 첫 성공까지 세는 것이 곧 기하분포다.
+
+    두 분포의 무기억성도 서로 대응한다. $P(X > s+t \mid X > s) = P(X > t)$가 $P(N > m+n \mid N > m) = P(N > n)$이 되고, 기하분포는 무기억성을 갖는 **유일한 이산분포**다. 반대 방향으로 $\lambda$를 작게 하면서 칸을 잘게 쪼개면 기하분포가 지수분포로 수렴한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+$T_1, \dots, T_n$이 독립이고 $\text{Exp}(\lambda)$를 따를 때 $2\lambda\sum_i T_i \sim \chi^2_{2n}$임을 보이고, 이를 이용해 $\lambda$의 정확한 95% 신뢰구간을 만들어라. $n = 20$, $\sum T_i = 87.4$일 때 값을 구하라.
+
+</div>
+
+??? success "풀이"
+    **분포.** $\sum_i T_i \sim \text{Gamma}(\text{형상}=n,\ \text{비율}=\lambda)$이다. 감마분포는 척도 변환에 대해 닫혀 있으므로 $2\lambda\sum T_i \sim \text{Gamma}(\text{형상}=n,\ \text{척도}=2)$이고, 이것이 바로 자유도 $2n$인 카이제곱분포의 정의이다.
+
+    **추축량.** $Q = 2\lambda\sum T_i$는 $\lambda$를 담고 있으면서 그 분포가 $\lambda$에 의존하지 않는다. 따라서
+
+    $$
+    P\!\left(\chi^2_{2n,\,0.025} \le 2\lambda\sum T_i \le \chi^2_{2n,\,0.975}\right) = 0.95
+    $$
+
+    이고, $\lambda$에 대해 풀면
+
+    $$
+    \left(\frac{\chi^2_{2n,\,0.025}}{2\sum T_i},\ \frac{\chi^2_{2n,\,0.975}}{2\sum T_i}\right)
+    $$
+
+    가 정확한 95% 신뢰구간이다.
+
+    **수치.** $n=20$이므로 자유도가 40이고 $\chi^2_{40,0.025} = 24.433$, $\chi^2_{40,0.975} = 59.342$이다. $2\sum T_i = 174.8$이므로
+
+    $$
+    \hat\lambda = \frac{20}{87.4} = 0.2288, \qquad \text{95\% CI} = (0.1398,\ 0.3395)
+    $$
+
+    이다. 평균 $1/\lambda$의 구간은 양끝을 뒤집어 $(2.95,\ 7.15)$이다.
+
+    두 가지를 눈여겨본다. 첫째, 구간이 $\hat\lambda$를 중심으로 **대칭이 아니다**. 오른쪽으로 더 길다. 정규근사로 만든 $\hat\lambda \pm 1.96\hat\lambda/\sqrt n$은 이 비대칭을 놓친다. 둘째, 이 구간은 근사가 아니라 **정확**하다. $n$이 아무리 작아도 포함확률이 정확히 0.95다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+수명 시험을 시각 $C$에서 중단했다. $n$개 가운데 $d$개가 고장 났고 나머지는 아직 살아 있다(우측 중도절단). $\lambda$의 최대가능도추정량을 구하고, 중도절단된 관측값을 그냥 버리면 무엇이 잘못되는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    고장 난 개체는 밀도 $f(t_i) = \lambda e^{-\lambda t_i}$로, 살아 있는 개체는 생존확률 $S(C) = e^{-\lambda C}$로 가능도에 들어간다. 관측시간을 $t_i$(고장이면 고장시각, 중도절단이면 $C$)라 하고 $\delta_i$를 고장 지시자라 하면
+
+    $$
+    L(\lambda) = \prod_{i=1}^n \left\{\lambda e^{-\lambda t_i}\right\}^{\delta_i}\left\{e^{-\lambda t_i}\right\}^{1-\delta_i} = \lambda^{d}\exp\!\left(-\lambda\sum_i t_i\right)
+    $$
+
+    이다. 로그를 취해 미분하면
+
+    $$
+    \ell'(\lambda) = \frac{d}{\lambda} - \sum_i t_i = 0 \implies \hat\lambda = \frac{d}{\sum_i t_i} = \frac{\text{고장 횟수}}{\text{총 노출시간}}
+    $$
+
+    이다. 분자에는 **사건 수**가, 분모에는 살아 있던 개체까지 포함한 **총 관찰시간**이 들어간다는 점이 핵심이다.
+
+    **중도절단 자료를 버리면.** 고장 난 $d$개만 써서 $\hat\lambda = d/\sum_{\delta_i=1}t_i$로 계산하게 되는데, 분모에서 살아남은 개체들의 노출시간이 통째로 빠진다. 분모가 작아지므로 $\lambda$를 **과대추정**하고 평균수명을 과소추정한다. 게다가 이 편향은 표본을 키워도 사라지지 않는다.
+
+    직관적으로도 그렇다. 시험을 일찍 끊을수록 오래 사는 개체가 더 많이 잘려 나가고, 관측된 고장은 짧은 수명 쪽에 치우친다. 살아 있는 개체가 주는 정보는 "적어도 $C$는 넘었다"이며, 이것도 엄연한 정보다. 생존분석 전체가 이 정보를 버리지 않으려고 만들어진 분야이며, 21장에서 다시 다룬다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+비율 $\lambda$인 포아송 과정에서 $[0, t]$ 동안 $n$개의 사건이 일어났다는 조건이 주어졌을 때, 그 도착시각 $(S_1, \dots, S_n)$의 조건부 결합분포가 $\text{Uniform}(0,t)$에서 뽑은 $n$개의 순서통계량과 같음을 보여라.
+
+</div>
+
+??? success "풀이"
+    도착 간 시간 $X_1, \dots, X_{n+1}$이 독립이고 $\text{Exp}(\lambda)$를 따르며 $S_k = X_1 + \cdots + X_k$이다. $(X_1,\dots,X_{n+1})$의 결합밀도는
+
+    $$
+    \lambda^{n+1}\exp\!\left(-\lambda\sum_{i=1}^{n+1}x_i\right)
+    $$
+
+    이다. 변환 $(x_1,\dots,x_{n+1}) \mapsto (s_1,\dots,s_n, x_{n+1})$은 선형이고 야코비안의 절댓값이 1이므로, $0 < s_1 < \cdots < s_n$ 영역에서
+
+    $$
+    f(s_1,\dots,s_n,x_{n+1}) = \lambda^{n+1}\exp\!\left\{-\lambda(s_n + x_{n+1})\right\}
+    $$
+
+    이다. 사건 $\{N(t) = n\}$은 $\{S_n \le t < S_n + X_{n+1}\}$, 즉 $x_{n+1} > t - s_n$과 같으므로 $x_{n+1}$을 적분해 없애면
+
+    $$
+    f(s_1,\dots,s_n,\, N(t)=n) = \lambda^{n+1}e^{-\lambda s_n}\int_{t-s_n}^{\infty}e^{-\lambda x}dx = \lambda^{n}e^{-\lambda t}
+    $$
+
+    를 얻는다. $s_n$이 깨끗이 사라졌다.
+
+    $P(N(t)=n) = e^{-\lambda t}(\lambda t)^n/n!$로 나누면
+
+    $$
+    f(s_1,\dots,s_n \mid N(t)=n) = \frac{\lambda^n e^{-\lambda t}}{e^{-\lambda t}(\lambda t)^n/n!} = \frac{n!}{t^n}, \qquad 0 < s_1 < \cdots < s_n < t
+    $$
+
+    이다. 이것이 정확히 $\text{Uniform}(0,t)$ 확률변수 $n$개의 순서통계량의 결합밀도이다($n!$은 순서를 매기는 가짓수, $1/t^n$은 각 변수의 밀도). $\square$
+
+    **뜻.** $\lambda$가 결과 식에서 완전히 사라진 것이 핵심이다. **몇 개가 일어났는지를 알고 나면, 그것들이 언제 일어났는지에 대해 포아송 과정은 "아무 선호도 없다".** 사건들이 구간 안에 완전히 무작위로 흩어져 있다는 뜻이고, 이것이 포아송 과정을 "완전 무작위"의 표준으로 삼는 이유다.
+
+    쓸모도 많다. 첫째, 포아송 과정을 모의실험하는 가장 빠른 방법을 준다. $N \sim \text{Poisson}(\lambda t)$를 뽑은 뒤 균등난수 $N$개를 뽑아 정렬하면 끝이다. 도착 간 시간을 하나씩 누적하는 것보다 벡터화하기 좋다. 둘째, 시간에 따라 비율이 변하는 비동질 포아송 과정의 표집(잔기 방법)과 공간통계의 완전공간랜덤성 검정이 모두 이 성질에 기댄다.
+
 ---
 
 ## 정리하며

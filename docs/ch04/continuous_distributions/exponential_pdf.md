@@ -144,6 +144,130 @@ PDF로부터 지수분포의 CDF, 중앙값, 평균을 유도하라.
 
     (부분적분으로 구한다.)
 
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
+평균 대기시간이 8분인 지수분포를 SciPy로 만들려 한다. `stats.expon`에 어떤 인자를 넘겨야 하는가? 비율모수 $\lambda$는 얼마인가? 또 대기시간이 평균인 8분을 넘길 확률을 구하라.
+
+</div>
+
+??? success "풀이"
+    SciPy는 척도 모수화를 쓰고 척도가 곧 평균이므로 `stats.expon(scale=8)`이다. 비율모수는 그 역수인 $\lambda = 1/8 = 0.125$(분당 0.125회)이다.
+
+    $$
+    P(X > 8) = e^{-\lambda \cdot 8} = e^{-1} \approx 0.3679
+    $$
+
+    평균을 넘길 확률이 절반이 아니라 0.368이다. 분포가 오른쪽으로 치우쳐 있어 중앙값 $8\ln 2 \approx 5.55$분이 평균보다 작기 때문이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
+$E[X^2]$을 직접 적분해 구하고, 이로부터 $\operatorname{Var}(X) = 1/\lambda^2$임을 보여라.
+
+</div>
+
+??? success "풀이"
+    부분적분을 두 번 하거나 감마적분 $\int_0^\infty x^{n} e^{-\lambda x}\,dx = n!/\lambda^{n+1}$을 쓰면
+
+    $$
+    E[X^2] = \int_0^\infty x^2 \lambda e^{-\lambda x}\,dx = \lambda \cdot \frac{2!}{\lambda^3} = \frac{2}{\lambda^2}
+    $$
+
+    이다. 따라서
+
+    $$
+    \operatorname{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
+    $$
+
+    이다. 표준편차가 평균과 같다는 점이 지수분포의 특징이다. 변동계수가 항상 1이다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+$X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이라 하자. $M = \min(X_1, X_2)$의 분포를 구하고, $P(X_1 < X_2)$를 구하라.
+
+</div>
+
+??? success "풀이"
+    최솟값이 $t$를 넘으려면 둘 다 $t$를 넘어야 한다. 독립이므로
+
+    $$
+    P(M > t) = P(X_1 > t)\,P(X_2 > t) = e^{-\lambda_1 t} e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2) t}
+    $$
+
+    이다. 즉 $M \sim \text{Exp}(\lambda_1 + \lambda_2)$이다. 비율이 더해진다.
+
+    다음으로 $X_1$의 밀도로 조건을 걸어 적분하면
+
+    $$
+    P(X_1 < X_2) = \int_0^\infty \lambda_1 e^{-\lambda_1 x} \, e^{-\lambda_2 x}\,dx = \frac{\lambda_1}{\lambda_1 + \lambda_2}
+    $$
+
+    이다. 두 창구 중 어느 쪽이 먼저 끝나는지가 비율에 비례한다는 뜻이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+위험함수는 $h(x) = f(x)/S(x)$로 정의한다. 지수분포의 위험함수를 구하고, 그 결과가 무기억성과 어떻게 이어지는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    $f(x) = \lambda e^{-\lambda x}$이고 $S(x) = e^{-\lambda x}$이므로
+
+    $$
+    h(x) = \frac{\lambda e^{-\lambda x}}{e^{-\lambda x}} = \lambda
+    $$
+
+    이다. 위험이 $x$에 무관한 상수다.
+
+    위험함수는 "지금까지 살아남았다는 조건 아래 바로 다음 순간에 고장 날 순간 비율"이다. 이것이 상수라는 말은 부품이 새것이든 1년을 썼든 앞으로의 고장 위험이 같다는 뜻이고, 그것이 곧 무기억성이다. 실제 기계 부품은 노화하므로 $h$가 증가하는데, 그런 경우를 담으려고 형상모수로 위험을 증가·감소시킬 수 있게 만든 것이 와이불분포다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+$U \sim \text{Uniform}(0, 1)$일 때 $X = -\ln(U)/\lambda$가 $\text{Exp}(\lambda)$를 따름을 보여라. 역변환 공식 $F^{-1}(u) = -\ln(1-u)/\lambda$와 견주어 보라.
+
+</div>
+
+??? success "풀이"
+    $x \ge 0$에 대해
+
+    $$
+    P(X \le x) = P\!\left(-\frac{\ln U}{\lambda} \le x\right) = P(\ln U \ge -\lambda x) = P(U \ge e^{-\lambda x}) = 1 - e^{-\lambda x}
+    $$
+
+    이다. 이는 $\text{Exp}(\lambda)$의 CDF이다.
+
+    $F(x) = 1 - e^{-\lambda x}$를 뒤집으면 $F^{-1}(u) = -\ln(1-u)/\lambda$이므로 정석은 $-\ln(1-U)/\lambda$이다. 그런데 $U$가 균등분포이면 $1 - U$도 같은 균등분포이므로 둘은 같은 분포를 낳는다. 뺄셈 한 번을 아끼려고 실제 구현에서는 $-\ln(U)/\lambda$를 쓴다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+$E[X \mid X > s] = s + 1/\lambda$임을 보여라. 또 $c > 0$에 대해 $cX \sim \text{Exp}(\lambda/c)$임을 보이고, 이것이 SciPy의 척도 모수화와 어떻게 맞아떨어지는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    **조건부 기대값.** 무기억성에 따라 모든 $t \ge 0$에서 $P(X - s > t \mid X > s) = e^{-\lambda t}$이므로, 조건부 초과분 $X - s \mid X > s$ 자체가 다시 $\text{Exp}(\lambda)$를 따른다. 따라서
+
+    $$
+    E[X \mid X > s] = s + E[X - s \mid X > s] = s + \frac{1}{\lambda}
+    $$
+
+    이다. 이미 $s$만큼 기다렸다는 사실이 앞으로 기다릴 기대시간을 전혀 줄여 주지 않는다.
+
+    **척도 변환.** $c > 0$에 대해
+
+    $$
+    P(cX > t) = P\!\left(X > \frac{t}{c}\right) = e^{-\lambda t / c} = e^{-(\lambda/c) t}
+    $$
+
+    이므로 $cX \sim \text{Exp}(\lambda/c)$이다. 즉 지수분포족은 척도 변환에 대해 닫혀 있고, $\lambda$는 척도의 역수처럼 움직인다.
+
+    그래서 $X = Z/\lambda$($Z \sim \text{Exp}(1)$) 꼴로 언제나 쓸 수 있고, SciPy가 모든 분포에 공통으로 제공하는 `scale` 인자 하나로 지수분포를 다룰 수 있다. `scale=1/lambda`가 붙는 이유가 여기에 있다. $\square$
+
 ---
 
 ## 정리하며
