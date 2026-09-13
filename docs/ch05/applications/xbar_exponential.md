@@ -243,6 +243,209 @@ plt.show()
 
     $n = 50$에서는 표본평균의 히스토그램이 거의 대칭이고 $N(1, 1/50)$ 밀도를 바짝 따라간다. $\bar{X}$의 왜도가 $2/\sqrt{50} \approx 0.28$로 충분히 작아 정규근사가 아주 잘 맞는다. $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
+$\lambda$의 최대가능도추정량이 $\hat\lambda = 1/\bar X$임을 보이고, $E[\hat\lambda] = \frac{n}{n-1}\lambda$임을 유도하라. 불편으로 고치면 무엇이 되는가?
+
+</div>
+
+??? success "풀이"
+    **최대가능도.** 로그가능도가 $\ell(\lambda) = n\ln\lambda - \lambda\sum x_i$이므로
+
+    $$
+    \ell'(\lambda) = \frac n\lambda - \sum x_i = 0 \implies \hat\lambda = \frac{n}{\sum X_i} = \frac{1}{\bar X}
+    $$
+
+    이다.
+
+    **기대값.** 연습문제 2에서 $S_n = \sum X_i \sim \text{Gamma}(n,\lambda)$이므로
+
+    $$
+    E\!\left[\frac1{S_n}\right] = \int_0^\infty \frac1s\cdot\frac{\lambda^n s^{n-1}e^{-\lambda s}}{\Gamma(n)}ds = \frac{\lambda^n}{\Gamma(n)}\int_0^\infty s^{n-2}e^{-\lambda s}ds = \frac{\lambda^n}{\Gamma(n)}\cdot\frac{\Gamma(n-1)}{\lambda^{n-1}} = \frac{\lambda}{n-1}
+    $$
+
+    이다($n \ge 2$에서만 수렴한다). 따라서
+
+    $$
+    E[\hat\lambda] = n\,E\!\left[\frac1{S_n}\right] = \frac{n}{n-1}\lambda
+    $$
+
+    이다. $\square$
+
+    **항상 과대추정한다.** $1/x$가 볼록함수이므로 옌센 부등식에서 예상되는 방향이다. 편향의 크기는 $\lambda/(n-1)$로, $n=5$면 25%나 된다.
+
+    **불편 보정.**
+
+    $$
+    \tilde\lambda = \frac{n-1}{n}\hat\lambda = \frac{n-1}{\sum X_i}
+    $$
+
+    로 두면 불편이 된다. $n=1$이면 기대값이 존재하지 않으므로 보정 자체가 불가능하다.
+
+    이 예가 보여 주는 것은 **최대가능도추정이 불변성은 가져도 불편성은 갖지 않는다**는 점이다. $\mu = 1/\lambda$의 MLE는 $\bar X$이고 이것은 불편인데, 역수를 취하는 순간 편향이 생긴다. 어느 모수화로 문제를 적느냐에 따라 불편성이 나타났다 사라진다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+지수분포에서 평균 $1/\lambda$를 추정하는 두 방법 — 표본평균 $\bar X$와 (중앙값을 $\ln 2$로 나눈) $\tilde X/\ln 2$ — 의 점근분산을 견주어라. 어느 쪽이 나은가?
+
+</div>
+
+??? success "풀이"
+    **표본평균.** $\operatorname{Var}(X) = 1/\lambda^2$이므로
+
+    $$
+    \operatorname{Var}(\bar X) = \frac{1}{n\lambda^2}
+    $$
+
+    **중앙값 기반.** 표본중앙값의 점근분산은 일반적으로
+
+    $$
+    \operatorname{Var}(\tilde X) \approx \frac{1}{4n\{f(m)\}^2}
+    $$
+
+    이다. 지수분포에서 중앙값은 $m = \ln2/\lambda$이고 그 점의 밀도는
+
+    $$
+    f(m) = \lambda e^{-\lambda m} = \lambda e^{-\ln 2} = \frac\lambda2
+    $$
+
+    이므로 $\operatorname{Var}(\tilde X) \approx 1/(n\lambda^2)$이다. 평균의 추정량은 $\tilde X/\ln2$이므로
+
+    $$
+    \operatorname{Var}\!\left(\frac{\tilde X}{\ln2}\right) \approx \frac{1}{n\lambda^2(\ln2)^2} = \frac{1}{0.4805\,n\lambda^2}
+    $$
+
+    **비교.** 상대효율이
+
+    $$
+    \frac{\operatorname{Var}(\bar X)}{\operatorname{Var}(\tilde X/\ln2)} = (\ln2)^2 = 0.48
+    $$
+
+    로, 중앙값 기반 추정량의 분산이 **두 배 넘게** 크다. 같은 정밀도를 얻으려면 표본이 2.08배 필요하다.
+
+    **뜻.** 모형이 정말 지수분포라면 표본평균을 써야 한다. $\bar X$가 충분통계량의 함수이자 최소분산불편추정량이기 때문이다.
+
+    그래도 중앙값을 쓸 이유가 있다면 **모형이 틀렸을 가능성**이다. 자료에 오염이 섞이거나 꼬리가 지수보다 두꺼우면 $\bar X$는 몇 개의 큰 값에 끌려가지만 중앙값은 버틴다. 효율 52%를 보험료로 내고 강건성을 사는 거래이며, 고장시간 자료처럼 극단값의 신뢰도가 낮은 경우에는 합리적인 선택일 수 있다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+어떤 창구에 손님이 비율 $\lambda$인 포아송 과정으로 도착하고 서비스 시간이 평균 $1/\mu$인 지수분포를 따른다(M/M/1 대기행렬). 도착 간격 30개와 서비스 시간 30개를 관측해 각각 $\bar x = 2.5$분, $\bar y = 2.0$분을 얻었다. 평균 체류시간 $W = 1/(\mu-\lambda)$를 추정하고 문제점을 지적하라.
+
+</div>
+
+??? success "풀이"
+    $\hat\lambda = 1/2.5 = 0.4$명/분, $\hat\mu = 1/2.0 = 0.5$명/분이므로
+
+    $$
+    \hat W = \frac{1}{\hat\mu-\hat\lambda} = \frac{1}{0.5-0.4} = 10\ \text{분}
+    $$
+
+    이다. 서비스 자체는 2분인데 대기까지 합치면 10분이다. 이용률 $\rho = \lambda/\mu = 0.8$의 효과다.
+
+    **문제점 1 — 극도로 불안정하다.** $\hat W$는 두 추정값의 **차이의 역수**다. $\hat\mu - \hat\lambda = 0.1$인데 각 추정값의 표준오차가
+
+    $$
+    \operatorname{SE}(\hat\lambda) \approx \frac{\lambda}{\sqrt n} = \frac{0.4}{\sqrt{30}} = 0.073
+    $$
+
+    수준이다. 분모가 자기 표준오차보다 조금 큰 정도에 지나지 않는다. 델타 방법으로 계산하면
+
+    $$
+    \operatorname{SE}(\hat W) \approx \frac{\sqrt{\operatorname{Var}(\hat\mu)+\operatorname{Var}(\hat\lambda)}}{(\mu-\lambda)^2} \approx \frac{\sqrt{0.0083+0.0053}}{0.01} \approx 11.7\ \text{분}
+    $$
+
+    으로 추정값 자체보다 크다. 사실상 아무것도 말하지 못한다.
+
+    **문제점 2 — 분모가 음수가 될 수 있다.** $\hat\mu < \hat\lambda$가 나오면 $\hat W$가 음수가 되고, 이는 "대기행렬이 발산한다"는 뜻이다. 표본이 작으면 실제로 $\rho<1$인데도 이런 일이 일어난다.
+
+    **문제점 3 — 비선형 변환의 편향.** $1/(\mu-\lambda)$가 볼록이므로 $\hat W$는 $W$를 체계적으로 과대추정한다.
+
+    **교훈.** **혼잡한 시스템($\rho \to 1$)의 성능 지표는 추정하기 대단히 어렵다.** 작은 추정오차가 결과를 폭발시킨다. 실무에서는 $\rho$를 직접 추정해 신뢰구간을 만들고, $W$는 부트스트랩이나 베이즈 방법으로 비대칭 구간을 보고하는 편이 낫다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+$n=5$, $\lambda=1$일 때 $\mu = 1/\lambda$에 대한 (가) 감마분포에 기반한 정확한 95% 신뢰구간과 (나) 정규근사 구간 $\bar x \pm 1.96\,\bar x/\sqrt n$의 실제 포함확률을 비교하라.
+
+</div>
+
+??? success "풀이"
+    **(가) 정확한 구간.** $2n\lambda\bar X = 2\lambda S_n \sim \chi^2_{2n}$이 추축량이다. $2n = 10$이므로
+
+    $$
+    P\!\left(\chi^2_{10,0.025} \le 2n\lambda\bar X \le \chi^2_{10,0.975}\right) = 0.95
+    $$
+
+    에서 $\mu = 1/\lambda$에 대해 풀면
+
+    $$
+    \left(\frac{2n\bar x}{\chi^2_{10,0.975}},\ \frac{2n\bar x}{\chi^2_{10,0.025}}\right) = \left(\frac{10\bar x}{20.483},\ \frac{10\bar x}{3.247}\right) = (0.488\bar x,\ 3.080\bar x)
+    $$
+
+    이다. **포함확률이 정확히 0.95**이며, $\bar x$를 중심으로 극도로 비대칭이다. 위로 3배까지 뻗는다.
+
+    **(나) 정규근사 구간.** $\operatorname{SE}(\bar X) = \mu/\sqrt n$을 $\bar x/\sqrt5$로 추정하면
+
+    $$
+    \bar x \pm 1.96\frac{\bar x}{\sqrt5} = \bar x(1 \pm 0.8765) = (0.124\bar x,\ 1.877\bar x)
+    $$
+
+    이다. 실제 포함확률은 $P(0.124\bar X \le 1 \le 1.877\bar X)$, 즉 $P(0.533 \le \bar X \le 8.06)$인데 $\bar X \sim \text{Gamma}(5, \text{척도}=1/5)$이므로 계산하면 **약 0.868**이다.
+
+    **비교.**
+
+    | 방법 | 구간(배율) | 실제 포함확률 |
+    |---|---|---|
+    | 정확(카이제곱) | $(0.488,\ 3.080)\bar x$ | 0.950 |
+    | 정규근사 | $(0.124,\ 1.877)\bar x$ | 0.868 |
+
+    정규근사는 명목 95%에서 실제로는 87%밖에 담지 못한다. 게다가 **어긋남이 한쪽으로 몰려 있다.** 위쪽 한계가 너무 낮아 참값이 위로 빠져나가는 경우가 대부분이다.
+
+    원인은 두 가지다. 첫째, $n=5$에서 $\bar X$의 왜도가 $2/\sqrt5 = 0.894$로 여전히 크다. 둘째, 표준오차를 $\mu$가 아니라 $\bar x$로 추정하면서 $\bar x$가 작게 나온 표본에서 구간이 함께 좁아지는 이중의 문제가 생긴다.
+
+    **결론.** 정확한 추축량을 알 수 있으면 반드시 그것을 쓴다. 지수·감마·포아송처럼 카이제곱 관계가 있는 분포에서는 정확한 구간이 공짜로 얻어진다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+$X_1,\dots,X_n \sim \text{Exp}(\lambda)$에서 $\min_i X_i$와 $\max_i X_i$의 분포를 구하고, $n$이 커질 때 세 통계량 $\min$, $\bar X$, $\max$가 각각 어떻게 움직이는지 견주어라.
+
+</div>
+
+??? success "풀이"
+    **최솟값.** $P(\min > t) = \{e^{-\lambda t}\}^n = e^{-n\lambda t}$이므로
+
+    $$
+    \min_i X_i \sim \text{Exp}(n\lambda), \qquad E[\min] = \frac{1}{n\lambda}
+    $$
+
+    **최댓값.** $P(\max \le t) = (1-e^{-\lambda t})^n$이고, 순서통계량의 기대값 공식에서
+
+    $$
+    E[\max] = \frac{1}{\lambda}\sum_{k=1}^n\frac1k = \frac{H_n}{\lambda} \approx \frac{\ln n + \gamma}{\lambda}
+    $$
+
+    이다($\gamma \approx 0.5772$는 오일러 상수). 이는 최댓값을 $\min$부터 차례로 쌓아 올리는 분해에서 나오며, 무기억성 덕분에 $k$번째 구간이 $\text{Exp}((n-k+1)\lambda)$를 따른다.
+
+    **세 통계량의 움직임.**
+
+    | 통계량 | 중심 | 산포 | $n\to\infty$ |
+    |---|---|---|---|
+    | $\min$ | $\dfrac{1}{n\lambda}$ | $\dfrac{1}{n\lambda}$ | 0으로 수렴 |
+    | $\bar X$ | $\dfrac1\lambda$ | $\dfrac{1}{\lambda\sqrt n}$ | $1/\lambda$로 수렴 |
+    | $\max$ | $\dfrac{\ln n}{\lambda}$ | $\dfrac{\pi}{\lambda\sqrt6}$ | 발산하되 산포는 **상수** |
+
+    셋의 성격이 완전히 다르다.
+
+    - $\min$은 $1/n$의 속도로 0에 붙는다. 산포도 같은 속도로 줄어 상대적 불확실성은 그대로다.
+    - $\bar X$는 큰수의 법칙대로 모평균에 수렴하고 산포가 $1/\sqrt n$로 준다. **유일하게 안정된 것**이다.
+    - $\max$는 $\ln n$으로 천천히 발산하지만 **산포가 줄지 않는다.** 실제로 $\lambda\max - \ln n$이 굼벨분포로 수렴한다. 표본을 아무리 늘려도 최댓값의 불확실성은 그대로라는 뜻이다.
+
+    극단값을 다룰 때 표본평균의 직관이 통하지 않는 이유가 여기 있다. **평균은 자료가 쌓이면 안정되지만 최댓값은 그렇지 않다.** 100년 홍수위나 최대 손실액 추정이 어려운 근본적인 까닭이며, 그래서 극단값 이론이라는 별도의 분야가 있다.
+
 ---
 
 ## 정리하며

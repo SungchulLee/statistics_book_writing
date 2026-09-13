@@ -239,6 +239,188 @@ $n = 5$인 Uniform(0, 1)에 대해:
 
     그렇다. 공식 $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$은 모집단 모양과 무관하게 분산이 유한한 **임의의** 모집단에서 타당하다. $\text{Var}(\bar{X}) = \sigma^2/n$이 관측값의 독립성과 분산의 성질에서 곧바로 따라 나오기 때문이다. 이 공식은 정규성에 의존하지 않는다. 모집단 모양에 의존하는 것은 $\bar{X}$의 **분포**(정규인지 아닌지)이며, 표준오차 공식 자체는 보편적이다. $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
+$\sigma/\sqrt n$ 공식은 관측값이 **독립**일 때만 성립한다. 관측값들이 서로 상관 $\rho$를 갖는다면 $\operatorname{Var}(\bar X)$는 무엇이 되는가? $\rho > 0$이고 $n\to\infty$이면 어떻게 되는가?
+
+</div>
+
+??? success "풀이"
+    모든 쌍의 상관이 $\rho$로 같다고 하자(등상관 구조). 그러면
+
+    $$
+    \operatorname{Var}(\bar X) = \frac{1}{n^2}\left\{\sum_i\operatorname{Var}(X_i) + \sum_{i\ne j}\operatorname{Cov}(X_i,X_j)\right\} = \frac{1}{n^2}\left\{n\sigma^2 + n(n-1)\rho\sigma^2\right\}
+    $$
+
+    이므로
+
+    $$
+    \operatorname{Var}(\bar X) = \frac{\sigma^2}{n}\left\{1+(n-1)\rho\right\}
+    $$
+
+    이다. $\rho = 0$이면 익숙한 $\sigma^2/n$으로 돌아온다.
+
+    **$\rho > 0$이고 $n\to\infty$이면**
+
+    $$
+    \operatorname{Var}(\bar X) \to \rho\sigma^2 \ne 0
+    $$
+
+    이다. **표본을 아무리 늘려도 표준오차가 0으로 가지 않는다.** 관측값들이 같은 정보를 되풀이해 담고 있어 새 관측이 새 정보를 주지 못하기 때문이다.
+
+    괄호 안의 $1+(n-1)\rho$를 **설계효과(DEFF)**라 하고, $n/\text{DEFF}$를 **유효 표본크기**라 한다. $\rho=0.05$이고 $n=20$인 군집이 50개면 관측이 1000개지만 유효 표본크기는
+
+    $$
+    \frac{1000}{1+19\times0.05} = \frac{1000}{1.95} = 513
+    $$
+
+    으로 절반에 지나지 않는다.
+
+    현실에서 이런 상황이 흔하다. 같은 학교 학생들, 같은 환자에게서 반복 측정한 값, 시계열의 이웃한 관측값이 모두 그렇다. **독립을 가정하고 $\sigma/\sqrt n$을 쓰면 표준오차를 심하게 과소평가하고**, 그 결과 신뢰구간이 좁아지고 있지도 않은 유의성이 나온다. 군집 표준오차, 혼합효과 모형, 일반화추정방정식이 모두 이 문제를 다루는 도구다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+실제로는 $\sigma$를 모르므로 $\widehat{\operatorname{SE}} = s/\sqrt n$을 쓴다. 정규모집단에서 이 추정값 자체의 상대 표준오차가 근사적으로 $1/\sqrt{2(n-1)}$임을 보이고, $n=5, 30$에서 값을 구하라.
+
+</div>
+
+??? success "풀이"
+    $\widehat{\operatorname{SE}} = S/\sqrt n$이므로 상대 변동은 $S$의 것과 같다. 정규모집단에서 $(n-1)S^2/\sigma^2\sim\chi^2_{n-1}$이므로
+
+    $$
+    \operatorname{Var}(S^2) = \frac{2\sigma^4}{n-1}
+    $$
+
+    이다. 델타 방법으로 $g(x)=\sqrt x$를 적용하면 $g'(\sigma^2) = 1/(2\sigma)$이므로
+
+    $$
+    \operatorname{Var}(S) \approx \frac{1}{4\sigma^2}\cdot\frac{2\sigma^4}{n-1} = \frac{\sigma^2}{2(n-1)}
+    $$
+
+    이고 상대 표준오차가
+
+    $$
+    \frac{\operatorname{SD}(S)}{\sigma} \approx \frac{1}{\sqrt{2(n-1)}}
+    $$
+
+    이다. $\square$
+
+    | $n$ | 5 | 30 | 100 |
+    |---|---|---|---|
+    | 상대 SE | 35.4% | 13.1% | 7.1% |
+
+    **$n=5$면 표준오차의 추정값 자체가 35%나 흔들린다.** "표준오차 = 0.13"이라고 소수점 둘째 자리까지 적는 것이 얼마나 허상인지 보여 준다.
+
+    이 여분의 불확실성을 보정하는 것이 바로 $t$ 분포다. $z$ 대신 $t_{n-1}$을 쓰면 분모가 흔들리는 만큼 임계값을 키워 준다. **$t$ 분포의 꼬리가 두꺼운 이유가 곧 이 연습문제의 답이다.**
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+변동계수 $\hat c = S/\bar X$의 표준오차를 델타 방법으로 구하라(정규모집단 가정). 왜 이 통계량은 $\mu$가 0에 가까울 때 쓸 수 없는가?
+
+</div>
+
+??? success "풀이"
+    이변량 델타 방법을 쓴다. $g(\mu,\sigma) = \sigma/\mu$에 대해
+
+    $$
+    \frac{\partial g}{\partial\mu} = -\frac{\sigma}{\mu^2}, \qquad \frac{\partial g}{\partial\sigma} = \frac1\mu
+    $$
+
+    이고 정규모집단에서 $\bar X$와 $S$가 **독립**이므로 공분산 항이 없다. 연습문제 7의 $\operatorname{Var}(S) \approx \sigma^2/\{2(n-1)\}$과 $\operatorname{Var}(\bar X) = \sigma^2/n$을 넣으면
+
+    $$
+    \operatorname{Var}(\hat c) \approx \frac{\sigma^2}{\mu^4}\cdot\frac{\sigma^2}{n} + \frac{1}{\mu^2}\cdot\frac{\sigma^2}{2(n-1)} = \frac{c^2}{n}\left\{c^2 + \frac{n}{2(n-1)}\right\}
+    $$
+
+    이다($c = \sigma/\mu$). $n$이 크면
+
+    $$
+    \operatorname{SE}(\hat c) \approx \frac{c}{\sqrt n}\sqrt{c^2+\frac12}
+    $$
+
+    로 간단해진다.
+
+    **$\mu \to 0$일 때.** 위 식에서 $c = \sigma/\mu \to \infty$이므로 표준오차가 발산한다. 더 근본적으로, $\bar X$가 0을 지날 수 있으면 $\hat c$가 무한대로 튀거나 부호가 뒤집힌다. 델타 방법은 $g$를 $\mu$ 근처에서 선형근사하는 것인데, $\mu$가 0 근처면 $1/\mu$의 곡률이 폭발해 근사 자체가 무너진다.
+
+    **실무 규칙.** 변동계수는 **비율 척도**(참 영점이 있고 값이 모두 양수인 척도)에서만 뜻이 있다. 무게, 시간, 농도, 소득에는 쓸 수 있지만 섭씨온도나 표준점수에는 쓸 수 없다. 섭씨를 화씨로 바꾸면 변동계수가 완전히 달라진다는 점을 생각해 보면 명확하다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+$\bar X$의 표준오차를 $\sigma$나 정규성 가정 없이 자료만으로 추정하는 방법을 적고, 예제 1의 모의실험 결과와 견주어라.
+
+</div>
+
+??? success "풀이"
+    **부트스트랩**을 쓴다.
+
+    ```python
+    rng = np.random.default_rng(0)
+    x = rng.uniform(0, 1, 5)              # 우리가 가진 표본은 이것뿐
+    boot = [rng.choice(x, size=5, replace=True).mean() for _ in range(10_000)]
+    print(f"부트스트랩 SE = {np.std(boot, ddof=1):.4f}")
+    ```
+
+    **원리.** 참 모집단에서 반복 표집하는 대신 **관측된 표본 자체를 모집단으로 삼아** 복원추출한다. 표본이 모집단을 잘 대신한다면 재표집으로 얻은 평균들의 흩어짐이 참 표집분포의 흩어짐에 가깝다.
+
+    **예제 1과의 관계.** 예제 1의 모의실험은 참 모집단 $\text{Uniform}(0,1)$에서 1만 번 표집했다. 그것이 가능한 것은 모집단을 알기 때문이며, **현실에서는 불가능하다.** 부트스트랩은 같은 일을 표본 하나만 가지고 흉내 낸다.
+
+    $n=5$에서는 결과가 그리 좋지 않다. 부트스트랩 SE가 이론값 0.1291보다 체계적으로 **작게** 나오는데, 복원추출이 $\sigma^2$이 아니라 $\frac{n-1}{n}\sigma^2$을 추정하기 때문이다($\sqrt{4/5} = 0.894$배). 이런 편향은 $n$이 크면 사라진다.
+
+    **부트스트랩을 쓸 이유.** 평균이라면 $s/\sqrt n$이라는 공식이 있으니 굳이 필요 없다. 부트스트랩이 빛나는 것은 **공식이 없는 통계량**이다. 중앙값, 절사평균, 사분위수 범위, 두 추정값의 비, 상관계수, 회귀에서 파생된 복잡한 양의 표준오차를 모두 같은 절차로 얻을 수 있다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+표본평균이 아닌 다른 중심 추정량의 표준오차를 견주어 보자. 정규모집단에서 표본중앙값의 점근 표준오차가 $\sigma\sqrt{\pi/(2n)}$임을 보이고, 어느 쪽을 언제 써야 하는지 정리하라.
+
+</div>
+
+??? success "풀이"
+    표본중앙값 $\tilde X$의 점근분포는
+
+    $$
+    \sqrt n(\tilde X - m) \xrightarrow{d} N\!\left(0,\ \frac{1}{4f(m)^2}\right)
+    $$
+
+    이다($m$은 모중앙값, $f$는 밀도). 정규분포에서는 $m=\mu$이고
+
+    $$
+    f(\mu) = \frac{1}{\sigma\sqrt{2\pi}}
+    $$
+
+    이므로
+
+    $$
+    \operatorname{Var}(\tilde X) \approx \frac{1}{4n}\cdot 2\pi\sigma^2 = \frac{\pi\sigma^2}{2n}, \qquad \operatorname{SE}(\tilde X) \approx \sigma\sqrt{\frac{\pi}{2n}}
+    $$
+
+    이다. $\square$
+
+    **비교.** $\operatorname{SE}(\bar X) = \sigma/\sqrt n$이므로
+
+    $$
+    \frac{\operatorname{Var}(\bar X)}{\operatorname{Var}(\tilde X)} = \frac{2}{\pi} \approx 0.637
+    $$
+
+    로, 중앙값의 분산이 평균의 1.57배다. 정규모집단에서 중앙값을 쓰면 **표본의 36%를 버리는 셈**이다. 표본 100개로 중앙값을 내는 것이 표본 64개로 평균을 내는 것과 같다.
+
+    **그래도 중앙값을 쓸 때.**
+
+    | 상황 | 권장 |
+    |---|---|
+    | 모집단이 정규에 가깝고 이상치가 없다 | $\bar X$ |
+    | 이상치나 오염이 의심된다 | $\tilde X$ 또는 절사평균 |
+    | 꼬리가 두껍다($t_3$, 코시 등) | $\tilde X$가 **더 효율적**이다 |
+    | 분포가 치우쳐 "전형적인 값"을 말하고 싶다 | $\tilde X$(다른 양을 추정하는 것임에 유의) |
+
+    꼬리가 두꺼우면 순서가 뒤집힌다는 점이 중요하다. $t_3$ 모집단에서는 중앙값의 점근효율이 평균의 1.6배이고, 코시에서는 평균이 아예 수렴하지 않는 반면 중앙값은 제대로 작동한다.
+
+    타협안으로 **절사평균**이 있다. 양끝 10~20%를 버리고 평균을 내면 정규분포에서 효율을 거의 잃지 않으면서(95% 이상) 이상치에 대한 저항성을 얻는다. 후버 M-추정량도 같은 절충이다.
+
 ---
 
 ## 정리하며
