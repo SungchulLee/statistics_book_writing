@@ -76,7 +76,7 @@ z
 \end{array}
 $$
 
-## 예: 물 부족
+## 물 부족
 
 > **참고 자료:** [Khan Academy — Sampling Distribution Example Problem](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/sampling-distribution-mean/v/sampling-distribution-example-problem)
 

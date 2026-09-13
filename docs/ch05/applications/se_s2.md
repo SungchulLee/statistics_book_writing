@@ -30,7 +30,7 @@ $$
 
 </div>
 
-## 예: Uniform(0, 1) 모집단
+## Uniform(0, 1) 모집단
 
 $X \sim \text{Uniform}(0, 1)$에 대해:
 

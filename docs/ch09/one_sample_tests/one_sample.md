@@ -417,15 +417,19 @@ p_value = 0.0403
 
 </div>
 
-#### 예제: Jude의 자동 음료 충전기
+<div class="codebox" markdown>
+
+#### 예제 7. Jude의 자동 음료 충전기 { .eg }
 
 Jude는 음료 $n = 20$개로 $H_0: \mu = 530$ 대 $H_1: \mu \neq 530$을 검정했다. $\bar{x} = 528$ mL, $s = 4$ mL를 얻어 $t = -2.236$, $p \approx 0.038$이 되었다. $\alpha = 0.05$에서 p-값이 유의수준보다 작으므로 $H_0$을 기각하고 $H_1$을 택한다.
+
+</div>
 
 $$H_0 : \mu = 70 \quad\text{vs}\quad H_1: \mu > 70$$
 
 <div class="codebox" markdown>
 
-#### 예제 7. 일표본 t 검정 — 간단한 예 { .eg }
+#### 예제 8. 일표본 t 검정 — 간단한 예 { .eg }
 
 ```python
 samples = np.array([78, 83, 68, 72, 88])
@@ -478,7 +482,7 @@ $\bar x = 77.8$로 가설값 70보다 한참 크지만 $n = 5$에 $s = 8.07$이�
 
 <div class="codebox" markdown>
 
-#### 예제 8. 우유 표시량 검정 { .eg }
+#### 예제 9. 우유 표시량 검정 { .eg }
 
 ```python
 # 표시량 128 에 못 미치는지를 묻는 단측검정이다. 그래서 아래에서 cdf 를 쓴다.
@@ -557,13 +561,19 @@ $$ z = \frac{\hat{p} - p_0}{\sqrt{\frac{p_0 (1 - p_0)}{n}}} $$
 
 ### F. 예제
 
-#### 예제: 노동조합 가입 비율
+<div class="codebox" markdown>
+
+#### 예제 10. 노동조합 가입 비율 { .eg }
 
 Ariel은 자기 주의 교사 중 49%가 조합원인지 검정하려 한다.
 
 $$H_0: p = 0.49 \quad \text{vs} \quad H_1: p \neq 0.49$$
 
-#### 예제: 인터넷을 쓰는 California 가구의 비율
+</div>
+
+<div class="codebox" markdown>
+
+#### 예제 11. 인터넷을 쓰는 California 가구의 비율 { .eg }
 
 California 가구의 약 90%가 인터넷을 이용한다. 시장조사자들이 가구 1,000곳의 표본에서 920곳(92%)이 이용하는 것을 보고 그 비율이 더 높아졌는지 검정한다.
 
@@ -571,9 +581,11 @@ $$H_0: p = 0.90 \quad \text{vs} \quad H_1: p > 0.90$$
 
 시장이 주민 200명의 표본에서 22명이 실업 상태인 것을 보고 $H_0: p = 0.08$ 대 $H_1: p \neq 0.08$을 검정한다.
 
+</div>
+
 <div class="codebox" markdown>
 
-#### 예제 9. 실업률 — 검정통계량 { .eg }
+#### 예제 12. 실업률 — 검정통계량 { .eg }
 
 ```python
 p_hat = 22 / 200
@@ -604,7 +616,7 @@ Fay는 $H_0: p = 0.26$ 대 $H_1: p > 0.26$을 검정한다. 120명 중 40명이 
 
 <div class="codebox" markdown>
 
-#### 예제 10. 여러 언어를 쓰는 사람 { .eg }
+#### 예제 13. 여러 언어를 쓰는 사람 { .eg }
 
 ```python
 # 비율의 검정에서 표준오차는 관측된 p_hat 이 아니라 귀무가설의 p 로 만든다.
@@ -635,7 +647,7 @@ $p = 0.0335 < 0.05$로 기각된다. 같은 통계량을 양측으로 계산했�
 
 <div class="codebox" markdown>
 
-#### 예제 11. 공립학교 재정을 위한 증세 { .eg }
+#### 예제 14. 공립학교 재정을 위한 증세 { .eg }
 
 ```python
 k = 113
@@ -672,7 +684,7 @@ Approximate P-value: 0.0330
 
 <div class="codebox" markdown>
 
-#### 예제 12. 무료 비디오 대여권 { .eg }
+#### 예제 15. 무료 비디오 대여권 { .eg }
 
 ```python
 # n*p_0 = 13 으로 작은 편이라 정규근사가 미덥지 않다.
@@ -734,7 +746,7 @@ $$Z = \frac{W - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
 <div class="codebox" markdown>
 
-#### 예제 13. Wilcoxon 부호순위 검정 { .eg }
+#### 예제 16. Wilcoxon 부호순위 검정 { .eg }
 
 ```python
 import numpy as np
@@ -776,7 +788,7 @@ Fail to reject the null hypothesis: No significant difference.
 
 <div class="codebox" markdown>
 
-#### 예제 14. 부호검정 { .eg }
+#### 예제 17. 부호검정 { .eg }
 
 ```python
 from scipy.stats import binom
@@ -818,7 +830,7 @@ P-value: 1.0, n+: 7, n-: 6, Ties: 2
 
 <div class="codebox" markdown>
 
-#### 예제 15. 붓스트랩 검정 { .eg }
+#### 예제 18. 붓스트랩 검정 { .eg }
 
 ```python
 import numpy as np
@@ -860,7 +872,7 @@ print(f"95% CI for the Mean: ({lower:.2f}, {upper:.2f})")
 
 <div class="codebox" markdown>
 
-#### 예제 16. 순열검정 { .eg }
+#### 예제 19. 순열검정 { .eg }
 
 ```python
 import numpy as np
@@ -918,7 +930,7 @@ Mood 중앙값 검정은 둘 이상 집단의 중앙값을 비교하는 비모�
 
 <div class="codebox" markdown>
 
-#### 예제 17. Mood 중앙값 검정 { .eg }
+#### 예제 20. Mood 중앙값 검정 { .eg }
 
 ```python
 import numpy as np

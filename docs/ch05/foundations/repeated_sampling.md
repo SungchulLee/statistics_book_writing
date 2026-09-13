@@ -269,7 +269,7 @@ if __name__ == "__main__":
 
 </div>
 
-## 예: 공 세 개에서 두 개를 뽑을 때의 표본분포
+## 공 세 개에서 두 개를 뽑을 때의 표본분포
 
 > **출처:** [Khan Academy — Introduction to Sampling Distributions](https://www.khanacademy.org/math/ap-statistics/sampling-distribution-ap/what-is-sampling-distribution/v/introduction-to-sampling-distributions)
 

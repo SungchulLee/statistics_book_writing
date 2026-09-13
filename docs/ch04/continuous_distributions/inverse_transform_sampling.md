@@ -26,7 +26,7 @@ $$
 
 ---
 
-## 예 1: Exponential 분포
+## Exponential 분포
 
 Exponential 분포의 CDF는 $F(x) = 1 - e^{-\lambda x}$이다. 역함수를 구하면:
 
@@ -89,7 +89,7 @@ plt.show()
 
 ---
 
-## 예 2: Cauchy 분포
+## Cauchy 분포
 
 표준 Cauchy 분포의 CDF는 $F(x) = \frac{1}{2} + \frac{1}{\pi}\arctan(x)$이다. 역함수를 구하면:
 

@@ -97,13 +97,15 @@ $$ s_p = \sqrt{\frac{(n_1 - 1) s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 - 2}} $$
 
 ### D. 예제
 
-#### 예제: 급여의 성별 격차
+<div class="codebox" markdown>
+
+#### 예제 2. 급여의 성별 격차 { .eg }
 
 시장조사자들이 남성 관리자와 여성 관리자의 평균 급여를 비교한다.
 
 $$H_0 : \mu_{\text{men}} = \mu_{\text{women}} \quad\text{vs}\quad H_1: \mu_{\text{men}} > \mu_{\text{women}}$$
 
-#### 예제: 서로 다른 두 밭의 토마토
+</div>
 
 | | 밭 A | 밭 B |
 |:---:|:---:|:---:|
@@ -115,7 +117,7 @@ $$H_0 : \mu_A = \mu_B \quad\text{vs}\quad H_1: \mu_A \neq \mu_B$$
 
 <div class="codebox" markdown>
 
-##### 예제 2. 서로 다른 두 밭의 토마토 { .eg }
+#### 예제 3. 서로 다른 두 밭의 토마토 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -161,8 +163,6 @@ Reject H_0
 
 </div>
 
-#### 예제: 출생아 수 (France 대 Switzerland)
-
 | | France | Switzerland |
 |:---:|:---:|:---:|
 | 평균 | 1.85 | 1.65 |
@@ -173,7 +173,7 @@ Reject H_0
 
 <div class="codebox" markdown>
 
-##### 예제 3. 출생아 수 — 프랑스와 스위스 { .eg }
+#### 예제 4. 출생아 수 — 프랑스와 스위스 { .eg }
 
 ```python
 X_1_bar, X_2_bar = 1.85, 1.65
@@ -204,7 +204,9 @@ p_value   = 0.2596
 
 </div>
 
-#### 예제: 두 품종의 배 (Bosc와 Anjou)
+<div class="codebox" markdown>
+
+#### 예제 5. 두 품종의 배 (Bosc와 Anjou) { .eg }
 
 | | Bosc | Anjou |
 |:---:|:---:|:---:|
@@ -213,6 +215,8 @@ p_value   = 0.2596
 | n | 65 | 65 |
 
 $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44$, 즉 $(-2.44, 10.44)$이다. 신뢰구간이 0을 포함하므로 $\alpha = 0.01$에서 $H_0$을 기각하지 못한다.
+
+</div>
 
 ---
 
@@ -236,7 +240,7 @@ $$df = \frac{\left( \frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} \right)^2}{\frac{\left
 
 <div class="codebox" markdown>
 
-#### 예제 4. 합동 t-검정 구현 { .eg }
+#### 예제 6. 합동 t-검정 구현 { .eg }
 
 ```python
 import numpy as np
@@ -313,7 +317,7 @@ $$H_0 : p_A = p_B \quad\text{vs}\quad H_1: p_A \neq p_B$$
 
 <div class="codebox" markdown>
 
-#### 예제 5. 새 법률에 대한 지지 { .eg }
+#### 예제 7. 새 법률에 대한 지지 { .eg }
 
 ```python
 import numpy as np
@@ -351,13 +355,19 @@ Fail to reject H_0
 
 </div>
 
-#### 예제: Derrick의 지지율
+<div class="codebox" markdown>
+
+#### 예제 8. Derrick의 지지율 { .eg }
 
 Derrick은 총리 지지율이 11월보다 12월에 낮은지 검정한다.
 
 $$H_0 : p_{\text{Nov}} = p_{\text{Dec}} \quad\text{vs}\quad H_1: p_{\text{Nov}} > p_{\text{Dec}}$$
 
-#### 예제: 10센트와 5센트 동전
+</div>
+
+<div class="codebox" markdown>
+
+#### 예제 9. 10센트와 5센트 동전 { .eg }
 
 Kiley는 10센트 동전과 5센트 동전이 앞면을 보일 가능성이 같은지 검정한다.
 
@@ -367,9 +377,11 @@ $$H_0 : p_{\text{Dime}} = p_{\text{Nickel}} \quad\text{vs}\quad H_1: p_{\text{Di
 
 $$H_0 : p_{2000} = p_{2015} \quad\text{vs}\quad H_1: p_{2000} < p_{2015}$$
 
+</div>
+
 <div class="codebox" markdown>
 
-#### 예제 6. 근시 비율의 변화 { .eg }
+#### 예제 10. 근시 비율의 변화 { .eg }
 
 ```python
 n_2000, n_2015 = 400, 600
@@ -409,7 +421,7 @@ $p = 0.0533$으로 0.05를 아슬아슬하게 넘겨 기각하지 못한다. 유
 
 <div class="codebox" markdown>
 
-#### 예제 7. 고양이 질병 — 암수 비교 { .eg }
+#### 예제 11. 고양이 질병 — 암수 비교 { .eg }
 
 ```python
 # 두 비율이 같다는 귀무가설 아래에서는 둘을 합쳐 하나의 비율로 보는 것이
@@ -437,9 +449,13 @@ p_value = 0.0725
 
 </div>
 
-#### 예제: 대면 수업과 온라인 수업
+<div class="codebox" markdown>
+
+#### 예제 12. 대면 수업과 온라인 수업 { .eg }
 
 $p_{\text{in\_person}} - p_{\text{online}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다. 구간이 0을 포함하므로 $H_0: p_{\text{in\_person}} = p_{\text{online}}$을 기각하지 못한다.
+
+</div>
 
 ---
 

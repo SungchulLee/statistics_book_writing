@@ -86,7 +86,7 @@ $$
 또는 간단히 $w_{\text{minority}} = 1$, $w_{\text{majority}} = p_{\text{minority}} / p_{\text{majority}}$
 로 둔다.
 
-### 예: 대출 자료
+### 대출 자료
 
 연체율 18.9%, 상환율 81.1%인 어떤 대출자료에서 보고된 결과는 다음과 같다.
 
@@ -195,7 +195,7 @@ Oversampled: 81,105 paid off + 81,105 default (via replication)
 
    여기서 $\lambda \in [0, 1]$은 무작위다.
 
-### 예: SMOTE를 적용한 대출 자료
+### SMOTE를 적용한 대출 자료
 
 <div class="codebox" markdown>
 

@@ -59,7 +59,7 @@ $\sigma^2 < \infty$이기만 하면 모집단의 모양과 무관하게 성립�
 | 임의의 모집단, 큰 $n$, $\sigma$를 앎 | $\frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ | 근사적으로 $N(0, 1)$ |
 | 임의의 모집단, 큰 $n$, $\sigma$를 모름 | $\frac{\bar{X} - \mu}{S/\sqrt{n}}$ | 근사적으로 $N(0, 1)$ 또는 $t_{n-1}$ |
 
-## 예: 표준오차 계산
+## 표준오차 계산
 
 <div class="probox" markdown>
 
@@ -223,7 +223,7 @@ $$
 Z = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2}} \sim N(0, 1)
 $$
 
-### 예: 두 교대조의 컵케이크
+### 두 교대조의 컵케이크
 
 <div class="probox" markdown>
 

@@ -111,7 +111,7 @@ $$
 | 정규, $\sigma_1^2 \neq \sigma_2^2$ | Welch의 $t$ | $t_\nu$ (Satterthwaite) |
 | 정규, 빠른 근사 | 보수적 $t$ | $t_{\min(n_1-1, n_2-1)}$ |
 
-## 예: 두 교대조의 컵케이크
+## 두 교대조의 컵케이크
 
 <div class="probox" markdown>
 
@@ -164,7 +164,7 @@ $$
     ```
     P(|X_bar_A - X_bar_B| > 6) = 0.1030
     ```
-## 예: 차의 표준오차
+## 차의 표준오차
 
 <div class="probox" markdown>
 
