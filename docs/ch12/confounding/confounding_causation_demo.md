@@ -54,9 +54,9 @@ corr(T, C) = 0.7908
 corr(T, Y) = 0.5282   (참 인과효과는 0)
 ```
 
-</div>
-
 $T$와 $Y$의 상관이 0.53이나 되지만 $T$는 $Y$에 아무 영향도 주지 않는다. 오직 $C$를 공유할 뿐이다.
+
+</div>
 
 ### 짧은 회귀와 긴 회귀
 
@@ -112,9 +112,9 @@ long_beta_T  =  -0.1000
 long_beta_C  =   1.0915
 ```
 
-</div>
-
 $T$에 아무런 인과효과가 없는데도 짧은 회귀는 $\beta_T^{\text{short}} = 0.777$이라는 압도적으로 유의한 기울기를 내놓는다. 긴 회귀는 $\beta_T^{\text{long}} \approx 0$을 올바르게 추정한다.
+
+</div>
 
 ### 부분회귀(Frisch-Waugh-Lovell)
 
@@ -148,9 +148,9 @@ print(f"slope_partial = {slope_partial:.4f}")
 slope_partial = -0.1000
 ```
 
-</div>
-
 이렇게 얻은 `slope_partial`은 $-0.1000$으로 긴 회귀의 $\beta_T^{\text{long}}$과 소수점 넷째 자리까지 일치한다. **Frisch-Waugh-Lovell 정리**가 작동하는 모습이다. 긴 회귀에서 $T$의 계수는 $e_Y$를 $e_T$에 회귀시킨 기울기와 같다.
+
+</div>
 
 ---
 

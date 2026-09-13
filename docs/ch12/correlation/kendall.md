@@ -161,13 +161,13 @@ Kendall tau-b = -0.6000, p-value = 0.2333
 Spearman r_s  = -0.7000, p-value = 0.1881
 ```
 
-</div>
-
 Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우연이 아니라 일반적인 경향이다. 두 계수는 대체로 $\tau \approx \frac{2}{\pi}\arcsin(r_s)$ 관계에 있어 $|\tau| \le |r_s|$가 된다. 두 값을 직접 비교하면 안 되고, 각자의 척도에서 읽어야 한다.
 
 관측값이 5개뿐이라 두 p-값 모두 유의하지 않다.
 
 `scipy.stats.kendalltau` 함수는 기본으로 타우-b를 계산한다. 가설검정의 자세한 내용은 [Kendall의 타우 검정](../correlation_test/test_kendall.md)을 보라.
+
+</div>
 
 ---
 

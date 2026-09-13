@@ -91,9 +91,9 @@ Spearman rho = 0.8363  (p = 1.38e-32)
 Kendall  tau = 0.6420  (p = 2.54e-25)
 ```
 
-</div>
-
 세 계수가 0.82, 0.84, 0.64로 다르다. Kendall이 유독 작은 것은 척도가 달라서이며, 강도가 약하다는 뜻이 아니다.
+
+</div>
 
 ---
 
@@ -120,9 +120,9 @@ Pearson r on ranks = 0.8363
 Spearman rho       = 0.8363
 ```
 
-</div>
-
 순위로 바꾼 뒤 계산한 Pearson 상관이 Spearman과 정확히 같다. Spearman은 별개의 공식이 아니라 **순위에 적용한 Pearson**이라는 정의를 수치로 확인한 것이다.
+
+</div>
 
 ---
 
@@ -155,9 +155,9 @@ plt.show()
 
 ![세 상관계수의 비교](./img/correlation_analysis_92.png)
 
-</div>
-
 산점도에 세 계수를 함께 적어 두면 어떤 모양에서 값이 갈리는지 볼 수 있다.
+
+</div>
 
 ---
 

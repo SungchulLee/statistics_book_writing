@@ -79,9 +79,9 @@ def f_test(data_0, data_1):
     return statistic, p_value
 ```
 
-</div>
-
 예제는 $X \sim N(0, 1)$과 여러 $\sigma_Y$ 값에 대한 $Y \sim N(1, \sigma_Y)$을 생성한다:
+
+</div>
 
 <div class="codebox" markdown>
 
@@ -108,8 +108,6 @@ sigma_y=1.15: F=0.76, p=0.166
 sigma_y=1.20: F=0.69, p=0.071
 ```
 
-</div>
-
 p-값이 앞의 Bartlett 검정과 소수점 셋째 자리까지 같다. 우연이 아니다. 집단이 둘이고 자료가 정규일 때 Bartlett 검정은 등분산 $F$-검정과 동등하다.
 
 표로 정리하면:
@@ -121,6 +119,8 @@ p-값이 앞의 Bartlett 검정과 소수점 셋째 자리까지 같다. 우연�
 | 1.10 | 0.826 | 0.345 |
 | 1.15 | 0.756 | 0.166 |
 | 1.20 | 0.694 | 0.071 |
+
+</div>
 
 ## 해석
 

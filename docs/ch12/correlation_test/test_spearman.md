@@ -134,11 +134,11 @@ t-statistic  = 2.7584
 Manual p     = 0.0202
 ```
 
-</div>
-
 scipy의 p-값과 $t$ 근사로 손계산한 값이 소수점 넷째 자리까지 같다. Spearman 검정의 p-값이 자유도 $n-2$인 $t$-분포에서 나온다는 것을 확인해 준다.
 
 `scipy.stats.spearmanr` 함수는 표본이 크면 t 근사를 쓰며 동점도 처리한다.
+
+</div>
 
 ---
 

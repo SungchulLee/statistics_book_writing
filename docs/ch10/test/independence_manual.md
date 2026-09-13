@@ -77,11 +77,11 @@ print("열합 일치:", np.allclose(E.sum(axis=0), demo.sum(axis=0)))
 열합 일치: True
 ```
 
-</div>
-
 주변 합계가 보존된다는 것이 자유도가 $rc$가 아니라 $(r-1)(c-1)$인 이유다. 행합과 열합이 고정되면 $3 \times 2$ 표에서 자유롭게 정할 수 있는 칸은 2개뿐이다.
 
 `keepdims=True` 인자는 2차원 모양을 유지하여 행렬 곱 `row_totals @ col_totals`이 $r \times c$ 기대도수 행렬로 올바르게 계산되도록 한다.
+
+</div>
 
 ### 전체 계산
 
@@ -113,9 +113,9 @@ chi_squared_statistic = 11.81
 p_value = 0.27%
 ```
 
-</div>
-
 `scipy.stats.chi2_contingency`에 같은 표를 넣어도 같은 값이 나온다. 다만 그 함수는 $2 \times 2$ 표에 한해 Yates 연속성 보정을 기본으로 적용하므로, 이 $3 \times 2$ 표에서만 결과가 일치한다.
+
+</div>
 
 ### 시각화
 
@@ -159,9 +159,9 @@ plt.show()
 
 ![카이제곱 분포와 p-값](./img/independence_manual_78.png)
 
-</div>
-
 칠해진 오른쪽 꼬리가 p-값 0.27%다. 자유도 2인 카이제곱분포에서 11.81은 오른쪽으로 한참 벗어난 값이다.
+
+</div>
 
 ## 해석
 
