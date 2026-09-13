@@ -56,9 +56,9 @@ plt.show()
 
 ![Uniform Distribution — PDF](./img/uniform_pdf_26.png)
 
-</div>
-
 전체 넓이가 1이어야 하므로 구간이 넓어질수록 직사각형은 (더 넓어지는 대신) 더 낮아진다.
+
+</div>
 
 ---
 

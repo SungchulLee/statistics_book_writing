@@ -139,9 +139,9 @@ Mean of sample medians: 16.44
 
 ![Simulation-Based Distribution of Sample Median](./img/statistics_as_rv_81.png)
 
-</div>
-
 **결론.** 표본중앙값의 표본분포는 근사적으로 대칭이고 참 중앙값 16을 중심으로 하며, 이는 표본중앙값이 모집단 중앙값의 불편추정량임을 시사한다.
+
+</div>
 
 ## 최대가능도추정 (MLE)
 

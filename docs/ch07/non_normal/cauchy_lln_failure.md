@@ -166,9 +166,9 @@ plt.show()
 
 ![Cauchy vs Normal Q-Q Plot](./img/cauchy_lln_failure_119.png)
 
-</div>
-
 특유의 S자(또는 하키스틱) 모양은 Cauchy가 정규분포보다 훨씬 극단적인 값을 만들어낸다는 것을 보여준다.
+
+</div>
 
 ## 평균이 실패하는 이유: 특성함수를 통한 증명
 

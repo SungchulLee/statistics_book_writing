@@ -64,9 +64,9 @@ print(f"{confidence_interval = }")
 confidence_interval = (0.5321048559554297, 0.6678951440445703)
 ```
 
-</div>
-
 타당성 조건 $n\hat p = 120 \ge 10$과 $n(1-\hat p) = 80 \ge 10$을 넉넉히 만족하므로 Wald 구간을 써도 되는 경우다.
+
+</div>
 
 ---
 

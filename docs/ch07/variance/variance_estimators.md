@@ -171,13 +171,13 @@ degrees_of_freedom_intuition()
   Difference = n·(X̄−μ)² = 0.792
 ```
 
-</div>
-
 두 제곱합을 잇는 핵심 항등식은:
 
 $$\sum_{i=1}^n (X_i - \mu)^2 = \sum_{i=1}^n (X_i - \bar{X})^2 + n(\bar{X} - \mu)^2$$
 
 $E[n(\bar{X} - \mu)^2] = \sigma^2$이므로, $\bar{X}$로부터의 편차는 평균적으로 정확히 $\sigma^2$만큼 $\mu$로부터의 편차를 과소평가한다.
+
+</div>
 
 ## 평균을 아는 경우와 모르는 경우
 

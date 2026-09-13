@@ -279,9 +279,9 @@ plot_mgf_comparison()
 
 ![Moment Generating Functions](./img/mgf_174.png)
 
-</div>
-
 모든 곡선이 $t = 0$에서 값 1을 지난다는 점에 주목하라. $M_X(0) = E[e^0] = 1$이므로 언제나 그렇다. 그 점에서의 기울기가 평균이다.
+
+</div>
 
 <div class="codebox" markdown>
 

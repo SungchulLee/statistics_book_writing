@@ -59,9 +59,9 @@ plt.show()
 
 ![Log-Normal Distribution — PDF ($\mu=0$, varying $\sigma$)](./img/lognormal_pdf_27.png)
 
-</div>
-
 $\sigma$가 커질수록 분포가 오른쪽으로 더 치우치고 최빈값은 0 쪽으로 이동한다.
+
+</div>
 
 ---
 

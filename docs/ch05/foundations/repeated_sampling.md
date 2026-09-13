@@ -123,9 +123,9 @@ if __name__ == "__main__":
 
 ![Population Distribution](./img/repeated_sampling_61.png)
 
-</div>
-
 **관찰.** 모집단이 균등분포(평평한 모양)임에도 $\bar{X}$의 표본분포는 종 모양이고 훨씬 좁게 모여 있다. 중심극한정리를 미리 엿보는 셈이다.
+
+</div>
 
 ## 모의실험 2: 지수 모집단
 
@@ -195,9 +195,9 @@ if __name__ == "__main__":
 
 ![Population Distribution](./img/repeated_sampling_124.png)
 
-</div>
-
 **관찰.** 지수 모집단은 오른쪽으로 심하게 치우쳐 있지만, $n = 30$일 때 $\bar{X}$의 표본분포는 근사적으로 정규분포이다. 중심극한정리가 작동하는 모습이다.
+
+</div>
 
 ## 모의실험 3: Bernoulli 모집단
 

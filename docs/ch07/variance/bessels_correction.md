@@ -107,11 +107,11 @@ chi_squared_verification()
 
 ![(n-1)S²/σ² ~ chi²(n-1) for Normal Data](./img/bessels_correction_47.png)
 
-</div>
-
 카이제곱분포로부터 곧바로 다음을 얻는다:
 
 $$E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
+
+</div>
 
 ## X-bar와 S-squared의 독립성
 
