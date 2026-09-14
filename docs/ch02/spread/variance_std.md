@@ -317,26 +317,74 @@ Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 �
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 자료에 대해 베셀 보정을 적용한 표본분산이 불편임을 증명하라: $\mathbb{E}[s^2] = \sigma^2$.
+같은 자료를 넣어도 **라이브러리마다 분산이 다르게 나온다.** `numpy`, `pandas`, 표준 라이브러리 `statistics` 로 같은 자료의 분산과 표준편차를 구해 비교하고, 왜 그런지 설명하라. 어떤 경우에 이 차이가 실제로 문제가 되는가?
 
 </div>
 
 ??? success "풀이"
-    항등식 $\sum_i (X_i - \bar{X})^2 = \sum_i X_i^2 - n\bar{X}^2$을 이용한다. 기댓값을 취하면
+    ```python
+    import numpy as np
+    import pandas as pd
+    import statistics
+
+    x = [2, 4, 4, 4, 5, 5, 7, 9]
+    n = len(x)
+
+    print(f"자료 {x},  n = {n}\n")
+    print(f"{'호출':>26s}{'분산':>12s}{'표준편차':>12s}")
+    print(f"{'np.var(x)':>26s}{np.var(x):>12.6f}{np.std(x):>12.6f}")
+    print(f"{'pd.Series(x).var()':>26s}{pd.Series(x).var():>12.6f}"
+          f"{pd.Series(x).std():>12.6f}")
+    print(f"{'statistics.pvariance(x)':>26s}{statistics.pvariance(x):>12.6f}"
+          f"{statistics.pstdev(x):>12.6f}")
+    print(f"{'statistics.variance(x)':>26s}{statistics.variance(x):>12.6f}"
+          f"{statistics.stdev(x):>12.6f}")
+
+    print(f"\n두 값의 비 = {pd.Series(x).var() / np.var(x):.6f}")
+    print(f"n / (n-1)  = {n / (n - 1):.6f}")
+    ```
+
+    ```text
+    자료 [2, 4, 4, 4, 5, 5, 7, 9],  n = 8
+
+                            호출          분산        표준편차
+                     np.var(x)    4.000000    2.000000
+            pd.Series(x).var()    4.571429    2.138090
+       statistics.pvariance(x)    4.000000    2.000000
+        statistics.variance(x)    4.571429    2.138090
+
+    두 값의 비 = 1.142857
+    n / (n-1)  = 1.142857
+    ```
+
+    **`numpy` 와 `pandas` 가 같은 자료에서 14% 다른 분산을 준다.**
+
+    | 호출 | 분모 | 값 |
+    |---|---|---|
+    | `np.var`, `np.std` | **$n$** (ddof 기본값 0) | 4.000 |
+    | `pd.Series.var`, `.std` | **$n-1$** (ddof 기본값 1) | 4.571 |
+    | `statistics.pvariance` | $n$ | 4.000 |
+    | `statistics.variance` | $n-1$ | 4.571 |
+
+    **두 값의 비가 정확히 $n/(n-1)=8/7=1.1429$다.** 우연이 아니라 분모만 다르기 때문이다.
 
     $$
-    \mathbb{E}\!\sum_i X_i^2 = n(\sigma^2 + \mu^2), \qquad \mathbb{E}[n\bar{X}^2] = n\!\left(\frac{\sigma^2}{n} + \mu^2\right) = \sigma^2 + n\mu^2
+    \frac{s^2}{\hat\sigma^2}
+    =\frac{\frac{1}{n-1}\sum(x_i-\bar x)^2}{\frac{1}{n}\sum(x_i-\bar x)^2}
+    =\frac{n}{n-1}
     $$
 
-    이고, 빼면
+    **차이가 문제가 되는 경우.**
 
-    $$
-    \mathbb{E}\!\sum_i (X_i - \bar{X})^2 = (n-1)\sigma^2
-    $$
+    1. **$n$이 작을 때.** $n=8$에서 분산이 14%, 표준편차가 6.9% 차이다. $n=3$이면 분산이 50% 차이다. $n=100$이면 1%라 대개 무시할 만하다.
+    2. **두 도구의 결과를 견줄 때.** `numpy` 로 계산한 표준편차와 `pandas` 로 계산한 것을 나란히 놓으면 **자료가 다른 것처럼 보인다.**
+    3. **표준편차를 곱해 쓸 때.** 변동성을 연율화하거나 $z$ 점수를 만들 때 이 차이가 그대로 따라간다.
 
-    이다. 따라서 $\mathbb{E}[s^2] = (n-1)\sigma^2/(n-1) = \sigma^2$이다. $\square$
+    **처방.** `ddof` 를 **언제나 명시한다.** `np.std(x, ddof=1)` 처럼 적어 두면 기본값을 기억할 필요가 없고, 코드를 읽는 사람도 어느 쪽인지 안다.
 
-    반면 최대가능도추정량($n$으로 나누는 것)은 $\mathbb{E}[\tilde s^2] = \frac{n-1}{n}\sigma^2$을 주어 아래쪽으로 편향되며, 이 편향은 $n \to \infty$일 때만 사라진다.
+    **어느 쪽을 써야 하는가.** 가진 자료가 **모집단 전체**이면 $n$, **표본**이면 $n-1$이다. 실무에서는 거의 언제나 표본이므로 $n-1$ 이 기본이 되어야 한다.
+
+    **왜 $n-1$ 이 표본에 맞는 분모인지**는 기댓값을 다루는 도구가 필요하다. [베셀 보정](../../ch07/variance/bessels_correction.md) 절에서 $\mathbb{E}[s^2]=\sigma^2$ 을 증명한다. $\square$
 
 <div class="drillbox" markdown>
 

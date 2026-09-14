@@ -165,7 +165,7 @@ decimals=2: 최빈값 = 236.56
 
 ## 5. 분산과 표준편차
 
-표본분산은 모분산의 불편추정값을 얻기 위해 베셀 보정($n - 1$로 나누기)을 사용한다.
+표본분산은 모분산의 불편추정값을 얻기 위해 베셀 보정($n - 1$로 나누기)을 사용한다. **왜 $n-1$ 인지**는 기댓값을 다루는 도구가 필요하므로 [베셀 보정](../../ch07/variance/bessels_correction.md) 절에 미룬다.
 
 $$
 s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2
@@ -349,18 +349,18 @@ axes[0].hist(data, bins=15, edgecolor="white", alpha=0.7)
 axes[0].axvline(m, color="red", linestyle="--", label=f"Mean {m:.1f}")
 axes[0].axvline(med, color="blue", linestyle=":", label=f"Median {med:.1f}")
 axes[0].set_title("캘리포니아 가격 분포")
-axes[0].set_xlabel("가격 (\$)")
+axes[0].set_xlabel("가격 ($)")
 axes[0].legend(fontsize=8)
 
 # 가운데: 같은 자료의 상자그림. 다섯 수치 요약을 한 눈에 보여 준다.
 axes[1].boxplot(data, vert=True)
 axes[1].set_title("상자그림 — 캘리포니아")
-axes[1].set_ylabel("가격 (\$)")
+axes[1].set_ylabel("가격 ($)")
 
 # 오른쪽: 두 주의 가격을 짝지어 찍는다. 점이 직선에 가까울수록 상관이 크다.
 axes[2].scatter(CA_PRICES, NY_PRICES, alpha=0.6)
-axes[2].set_xlabel("캘리포니아 (\$)")
-axes[2].set_ylabel("뉴욕 (\$)")
+axes[2].set_xlabel("캘리포니아 ($)")
+axes[2].set_ylabel("뉴욕 ($)")
 axes[2].set_title(f"캘리포니아 대 뉴욕  (r = {corr:.3f})")
 
 plt.tight_layout()
@@ -392,35 +392,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span>
-$E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분산 $s^2$의 공식을 유도하라. 분모가 왜 $n$이 아니라 $n - 1$인지 설명하라.
-
-</div>
-
-??? success "풀이"
-    소박한 추정량 $\hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$에서 시작한다. 전개하면
-
-    $$
-    \sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2
-    $$
-
-    이고, 기댓값을 취하면
-
-    $$
-    E\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n\sigma^2 - n \cdot \frac{\sigma^2}{n} = (n-1)\sigma^2
-    $$
-
-    이다. 따라서 $E[\hat{\sigma}^2] = \frac{(n-1)\sigma^2}{n} \neq \sigma^2$이다. $n$ 대신 $n-1$로 나누면 이것이 보정된다.
-
-    $$
-    E\left[\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2\right] = \sigma^2
-    $$
-
-    인자 $n - 1$은 $\mu$를 $\bar{X}$로 추정하면서 소모한 자유도 하나를 반영한다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 3.** <span class="diff easy" title="쉬움"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 두 주식의 연간 수익률이 $X = (0.10, -0.05, 0.08)$과 $Y = (-0.02, 0.12, -0.03)$이다. $\text{Cov}(X, Y)$와 피어슨 상관 $r$을 손으로 계산하라.
 
 </div>
@@ -458,7 +430,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 피어슨 상관계수가 $-1 \le r \le 1$을 만족함을 보여라. 등호는 어떤 조건에서 성립하는가?
 
 </div>
@@ -480,7 +452,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff hard" title="어려움"></span>
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
 위의 CA 가격은 거의 선형으로 감소한다. 가격이 정확히 선형이라면(상수 $a, b > 0$과 $i = 1, \ldots, n$에 대해 $x_i = a - bi$) 표본평균이 $a - b \cdot \frac{n+1}{2}$과 같음을 보이고 표본분산의 닫힌 형태 표현을 구하라.
 
 </div>
@@ -514,7 +486,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff easy" title="쉬움"></span>
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
 **변동계수** $\mathrm{CV} = s/\bar x$는 상대적 퍼짐을 재는 단위 없는 측도다. 위의 CA 가격은 $\bar x \approx 244$, $s \approx 9$이고 오리건(OR) 가격은 $\bar x \approx 209$, $s \approx 5$다. 각각의 CV를 계산하고 어느 주의 가격 변동성이 *상대적으로* 더 큰지 설명하라.
 
 </div>
@@ -531,7 +503,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **피어슨 상관은 왜 *선형* 연관만을 재는가?** $X$와 $Y$가 결정론적으로 완벽하게 관련되어 있지만($Y$가 $X$의 함수) 피어슨의 $r \approx 0$인 작은 자료를 만들어라.
 
 </div>
@@ -551,7 +523,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 이 절의 가격 자료는 **시계열**이다. 시간에 따라 움직이는 두 계열의 상관을 계산할 때 특별히 조심해야 할 것이 있다. 독립인 두 확률보행의 상관을 계산해 무슨 일이 일어나는지 보여라.
 
 </div>
@@ -607,7 +579,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 연습문제 7이 상관이 비선형 관계를 놓친다는 것을 보였다면, 더 극적인 예가 있다. **안스콤의 사중주**를 재현하고 무엇을 시사하는지 논하라.
 
 </div>
@@ -665,7 +637,7 @@ $E[s^2] = \sigma^2$(불편성)이라는 요구조건에서 출발해 표본분�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff hard" title="어려움"></span>
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 관측된 상관이 참 상관보다 작게 나오는 체계적인 이유가 있다. **측정오차에 의한 감쇠**를 유도하고 확인하라.
 
 </div>
