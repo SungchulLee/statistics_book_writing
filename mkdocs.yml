@@ -474,6 +474,7 @@ nav:
         - 13.1 선형회귀:
             - 단순선형회귀: ch13/linear_regression/simple.md
             - 다중선형회귀: ch13/linear_regression/multiple.md
+            - 범주형 설명변수: ch13/linear_regression/categorical_predictors.md
             - 3차원 회귀평면: ch13/linear_regression/regression_plane_3d.md
             - 회귀 (대마초 가격과 인구통계): ch13/linear_regression/regression_weed_demographics.md
         - 13.2 추정과 추론:

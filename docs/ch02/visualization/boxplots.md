@@ -435,83 +435,95 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
 
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
-연습문제 6의 노치를 검증하라. 상수 $1.57$이 정말 $95\%$ 신뢰구간을 주는가? 그리고 "노치가 겹치지 않으면 유의하다"는 시각적 검정의 실제 오류율은 얼마인가?
+**연습문제 9.** <span class="diff med" title="중간"></span>
+연습문제 6에서 **표본이 작으면 노치가 상자를 넘어 뻗는다**고 했다. 정확히 **$n$이 얼마 이하일 때** 그런 일이 생기는지 구하고, 그림으로 확인하라.
 
 </div>
 
 ??? success "풀이"
+    **두 길이를 견주면 된다.** 노치의 반폭과 상자의 반높이다.
+
+    $$
+    \text{노치 반폭}=1.57\cdot\frac{\mathrm{IQR}}{\sqrt{n}},
+    \qquad
+    \text{상자 반높이}=\frac{Q_3-Q_1}{2}=\frac{\mathrm{IQR}}{2}
+    $$
+
+    노치가 상자를 넘으려면 앞의 것이 더 커야 하므로
+
+    $$
+    1.57\cdot\frac{\mathrm{IQR}}{\sqrt{n}}>\frac{\mathrm{IQR}}{2}
+    \quad\Longleftrightarrow\quad
+    \sqrt{n}<3.14
+    \quad\Longleftrightarrow\quad
+    n<9.86
+    $$
+
+    **$\mathrm{IQR}$가 양변에서 약분된다.** 자료가 무엇이든 상관없이 **표본 크기만으로 정해지는 조건**이다.
+
     ```python
     import numpy as np
 
-    rng = np.random.default_rng(1)
+    print(f"{'n':>5s}{'노치 반폭/상자 반높이':>22s}{'모양':>10s}")
+    for n in [4, 6, 8, 9, 10, 12, 20, 50]:
+        ratio = 1.57 / np.sqrt(n) / 0.5
+        print(f"{n:>5d}{ratio:>22.4f}{'모래시계' if ratio > 1 else '정상':>10s}")
 
-    def notch(x):
-        q1, q3 = np.percentile(x, [25, 75])
-        h = 1.57 * (q3 - q1) / np.sqrt(len(x))
-        return np.median(x) - h, np.median(x) + h
-
-    print("(1) 노치가 참 중앙값을 포함하는 비율")
-    for n in (20, 50, 200, 1000):
-        c = sum(1 for _ in range(20_000)
-                if (lambda lo, hi: lo <= 0 <= hi)(*notch(rng.normal(0, 1, n))))
-        print(f"  n={n:>5}: {c / 20_000:.4f}")
-
-    print("\n(2) 두 집단의 참 중앙값이 같을 때 노치가 겹치지 않을 확률")
-    for n in (20, 50, 200, 1000):
-        c = 0
-        for _ in range(20_000):
-            a, b = notch(rng.normal(0, 1, n)), notch(rng.normal(0, 1, n))
-            if a[1] < b[0] or b[1] < a[0]:
-                c += 1
-        print(f"  n={n:>5}: {c / 20_000:.4f}   (목표 0.05)")
+    print(f"\n경계: n = {3.14 ** 2:.4f}  ->  n <= 9 이면 모래시계")
     ```
 
-    출력:
+    ```text
+        n          노치 반폭/상자 반높이        모양
+        4                1.5700      모래시계
+        6                1.2819      모래시계
+        8                1.1102      모래시계
+        9                1.0467      모래시계
+       10                0.9930        정상
+       12                0.9064        정상
+       20                0.7021        정상
+       50                0.4441        정상
 
-    ```
-    (1) 노치가 참 중앙값을 포함하는 비율
-      n=   20: 0.8777
-      n=   50: 0.8953
-      n=  200: 0.9037
-      n= 1000: 0.9033
-
-    (2) 두 집단의 참 중앙값이 같을 때 노치가 겹치지 않을 확률
-      n=   20: 0.0290   (목표 0.05)
-      n=   50: 0.0225   (목표 0.05)
-      n=  200: 0.0178   (목표 0.05)
-      n= 1000: 0.0158   (목표 0.05)
+    경계: n = 9.8596  ->  n <= 9 이면 모래시계
     ```
 
-    **두 결과 모두 광고와 다르다.**
+    **$n\le 9$ 이면 반드시 모래시계가 된다.** 자료의 분포와 무관하다.
 
-    **(1) 단일 집단 포함률은 $95\%$가 아니라 약 $91\%$다.** 정규분포에서 $\operatorname{SE}(\text{중앙값}) \approx 1.253\sigma/\sqrt{n}$이고 $\mathrm{IQR} \approx 1.349\sigma$이므로
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-    $$
-    1.57 \cdot \frac{\mathrm{IQR}}{\sqrt{n}} \approx \frac{2.118\sigma}{\sqrt{n}}
-    \quad\text{대}\quad
-    1.96 \cdot \operatorname{SE} \approx \frac{2.456\sigma}{\sqrt{n}}
-    $$
+    rng = np.random.default_rng(7)
+    fig, ax = plt.subplots(1, 2, figsize=(10, 4.4))
 
-    로 **노치가 $95\%$ 구간보다 좁다.** 애초에 그렇게 설계된 것이다.
+    for k, n in enumerate([6, 60]):
+        data = [rng.normal(0, 1, n) for _ in range(3)]
+        bp = ax[k].boxplot(data, notch=True, patch_artist=True, widths=0.5)
+        for b in bp["boxes"]:
+            b.set_facecolor("lightsteelblue"); b.set_edgecolor("black")
+        for med in bp["medians"]:
+            med.set_color("crimson"); med.set_linewidth(2)
+        ratio = 1.57 / np.sqrt(n) / 0.5
+        ax[k].set_title(f"n = {n}   (notch half-width / box half-height = {ratio:.2f})")
+        ax[k].set_xlabel("group"); ax[k].grid(alpha=0.25, axis="y")
+    ax[0].set_ylabel("value")
+    fig.suptitle("When n is small the notch folds past the box: the hourglass", y=1.00)
+    fig.tight_layout()
+    plt.show()
+    ```
 
-    **(2) 두 집단 비교의 1종 오류율은 $0.05$가 아니라 $0.018$–$0.030$이다.** 즉 이 시각적 검정은 **보수적**이다.
+    ![표본이 작을 때 노치가 상자를 넘는 모래시계 모양](./img/boxplots_notch.png)
 
-    | $n$ | 포함률 | 겹치지 않을 확률 |
-    |---|---|---|
-    | $20$ | $0.875$ | $0.030$ |
-    | $200$ | $0.906$ | $0.019$ |
-    | $1000$ | $0.908$ | $0.018$ |
+    **왼쪽($n=6$)에서 상자가 모래시계로 접혀 있다.** 노치의 위아래 꼭짓점이 $Q_1$ 아래와 $Q_3$ 위로 뻗어 나가 상자의 옆면이 안으로 꺾였다. **오른쪽($n=60$)은 정상적인 허리 모양**이다.
 
-    **왜 보수적인가.** 두 구간이 겹치지 않으려면 각각이 상당히 떨어져야 하는데, 이는 차이의 표준오차 $\sqrt{\text{SE}_1^2+\text{SE}_2^2}$로 판정하는 것보다 까다로운 조건이다. **두 개의 신뢰구간이 겹치는지 보는 것은 차이의 신뢰구간을 보는 것과 다르며, 언제나 더 보수적이다.** 이는 노치만의 문제가 아니라 오차막대를 비교할 때 늘 생기는 함정이다.
+    **이것은 그리기 오류가 아니라 경고다.** matplotlib 은 계산된 대로 그릴 뿐이며, 모래시계 모양은 **"중앙값의 불확실성이 자료의 퍼짐보다 크다"**는 뜻이다. 중앙값을 어디라고 말하기 어려울 만큼 표본이 작다는 신호다.
 
-    **실무적 해석.**
+    **읽는 법 셋.**
 
-    - **노치가 겹치지 않으면** 차이가 있다고 볼 만하다. 보수적이므로 이 방향의 결론은 안전하다.
-    - **노치가 겹친다고 차이가 없는 것은 아니다.** 검정력이 낮으므로 진짜 차이를 놓칠 수 있다(위 모의에서 $0.5\sigma$ 차이를 $n=50$에서 $37\%$만 탐지).
-    - **형식적 결론이 필요하면 검정을 하라.** 노치는 그림을 읽는 보조 장치이지 검정의 대체물이 아니다.
+    1. **모래시계가 보이면 $n$을 확인한다.** 10 미만일 것이다.
+    2. **그런 상자의 중앙값 위치를 해석하지 않는다.** 노치가 상자보다 넓다는 것은 중앙값이 상자 어디에 있어도 이상하지 않다는 뜻이다.
+    3. **표본이 그렇게 작으면 상자그림을 쓰지 않는다.** 점 9개는 그냥 다 찍는 편이 정직하다([스트립 그림과 스웜 그림](strip_swarm.md) 절).
 
-    **한 가지 더.** 노치의 폭이 $\mathrm{IQR}$에 비례하므로, $n$이 작으면 노치가 상자보다 넓어져 그림이 **모래시계 모양으로 뒤집힌다.** matplotlib도 이 경우를 그대로 그리며, 그것은 "표본이 너무 작아 중앙값을 신뢰할 수 없다"는 시각적 경고로 읽으면 된다. $\square$
+    **노치를 집단 비교에 쓸 때의 문제는 따로 있다.** "노치가 겹치지 않으면 유의하다"는 시각적 판정이 실제로 어떤 오류율을 갖는지는 신뢰구간을 배운 뒤에 따질 수 있으며, [오차막대 그림](../../ch08/foundations/error_bars.md) 절에서 오차막대 일반의 문제로 다룬다. $\square$
 
 <div class="drillbox" markdown>
 
