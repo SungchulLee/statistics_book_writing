@@ -252,6 +252,498 @@ $k = 2$일 때 `stats.f_oneway(x, y)`가 등분산 가정의 양측 이표본 $t
 
     이다. $t^2_{N-2} \sim F_{1, N-2}$이고 양측 $t$-검정의 $p$-값이 $P(|t| \ge |t_{\text{obs}}|) = P(t^2 \ge t_{\text{obs}}^2) = P(F_{1,N-2} \ge F_{\text{obs}})$이므로 두 $p$-값은 동일하다. $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
+연습문제 2가 묻는 $F$ 분포의 **모양**을 수치로 확인하라. 두 자유도는 각각 무엇을 바꾸는가?
+
+</div>
+
+??? success "풀이"
+    **$F$ 분포의 적률.**
+
+    $$
+    E[F_{d_1,d_2}]=\frac{d_2}{d_2-2}\ (d_2>2),
+    \qquad
+    \text{최빈값}=\frac{d_1-2}{d_1}\cdot\frac{d_2}{d_2+2}\ (d_1>2)
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    print(f"{'df1':>4s} {'df2':>5s} {'평균':>8s} {'최빈값':>9s} "
+          f"{'왜도':>8s} {'F(0.95)':>9s}")
+    for d1, d2 in [(1, 27), (2, 27), (5, 27), (2, 10), (2, 100),
+                   (10, 100), (50, 100)]:
+        mean = d2 / (d2 - 2)
+        mode = (d1 - 2) / d1 * d2 / (d2 + 2) if d1 > 2 else np.nan
+        skew = float(stats.f.stats(d1, d2, moments='s'))
+        print(f"{d1:4d} {d2:5d} {mean:8.4f} {mode:9.4f} {skew:8.4f} "
+              f"{stats.f.ppf(0.95, d1, d2):9.4f}")
+    ```
+
+    ```text
+     df1   df2       평균       최빈값       왜도   F(0.95)
+       1    27   1.0800       nan   3.4203    4.2100
+       2    27   1.0800       nan   2.5491    3.3541
+       5    27   1.0800    0.5586   1.8459    2.5719
+       2    10   1.2500       nan   4.6476    4.1028
+       2   100   1.0204       nan   2.1264    3.0873
+      10   100   1.0204    0.7843   1.0586    1.9267
+      50   100   1.0204    0.9412   0.6786    1.4772
+    ```
+
+    **평균은 $d_2$만으로 정해진다.** $d_1$이 1이든 50이든 $d_2=27$이면 평균이 1.08이다.
+
+    $$
+    E[F]=\frac{d_2}{d_2-2}
+    $$
+
+    **$H_0$가 참이면 $F$가 1 근처에 모인다.** $d_2$가 크면 정확히 1에 가까워진다(100일 때 1.0204).
+
+    **$d_1\le2$이면 최빈값이 없다.** 밀도가 0에서 시작해 단조 감소하거나($d_1=1$) $\infty$로 발산한다. $d_1\ge3$부터 봉우리가 생긴다.
+
+    **왜도가 두 자유도 모두에 의존한다.**
+
+    | 조건 | 왜도 |
+    |---|---|
+    | $d_1=1$, $d_2=27$ | 3.42 |
+    | $d_1=50$, $d_2=100$ | **0.68** |
+
+    **두 자유도가 커질수록 대칭에 가까워진다.** 다만 수렴이 느려 $d_1=50$에서도 왜도가 0.68이다.
+
+    **왜 0에서 막혀 있는가.** $F=\text{MST}/\text{MSE}$이고 두 평균제곱이 모두 **제곱합**이라 음수가 될 수 없다. 분자가 0이면 $F=0$이고 그 아래는 없다.
+
+    **왜 오른쪽으로 치우쳤는가.** 비 $A/B$에서 분모 $B$가 우연히 작아지면 비가 **제한 없이 커진다**. 반면 $B$가 커져도 비는 0 아래로 못 간다. **비대칭이 구조적**이다.
+
+    **$d_2$가 커지면 임계값이 내려간다.**
+
+    | $d_1=2$ | $F_{0.95}$ |
+    |---|---|
+    | $d_2=10$ | 4.10 |
+    | $d_2=27$ | 3.35 |
+    | $d_2=100$ | 3.09 |
+
+    **분모의 추정이 정밀해질수록 문턱이 낮아진다.** $d_2\to\infty$이면 $\text{MSE}\to\sigma^2$가 되어 $d_1F\to\chi^2_{d_1}$이므로 $F_{0.95}\to\chi^2_{0.95,d_1}/d_1$이다.
+
+    ```python
+    for d1 in [1, 2, 5, 10]:
+        print(f"d1={d1:2d}:  F(0.95, d1, ∞) = "
+              f"{stats.chi2.ppf(0.95, d1) / d1:.4f}   "
+              f"F(0.95, d1, 1000) = {stats.f.ppf(0.95, d1, 1000):.4f}")
+    ```
+
+    ```text
+    d1= 1:  F(0.95, d1, ∞) = 3.8415   F(0.95, d1, 1000) = 3.8508
+    d1= 2:  F(0.95, d1, ∞) = 2.9957   F(0.95, d1, 1000) = 3.0047
+    d1= 5:  F(0.95, d1, ∞) = 2.2141   F(0.95, d1, 1000) = 2.2231
+    d1=10:  F(0.95, d1, ∞) = 1.8307   F(0.95, d1, 1000) = 1.8402
+    ```
+
+    **$d_2=1000$이면 극한값과 거의 같다.**
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+연습문제 5의 $k=2$ 동치를 **수치로 확인**하고, 그럼에도 $t$ 검정을 쓰는 편이 나은 이유를 정리하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(555)
+    for n1, n2 in [(10, 10), (15, 12)]:
+        x = rng.normal(0, 1, n1)
+        y = rng.normal(0.6, 1, n2)
+        F, p_F = stats.f_oneway(x, y)
+        t, p_t = stats.ttest_ind(x, y)
+        print(f"n = ({n1},{n2}):  F = {F:.6f},  t² = {t**2:.6f}")
+        print(f"              p_F = {p_F:.8f},  p_t = {p_t:.8f}")
+        print(f"              t = {t:+.6f}  ← 부호가 방향을 알려준다")
+    ```
+
+    ```text
+    n = (10,10):  F = 2.610177,  t² = 2.610177
+                  p_F = 0.12357147,  p_t = 0.12357147
+                  t = -1.615604  ← 부호가 방향을 알려준다
+    n = (15,12):  F = 2.912193,  t² = 2.912193
+                  p_F = 0.10030624,  p_t = 0.10030624
+                  t = -1.706515  ← 부호가 방향을 알려준다
+    ```
+
+    **$p$ 값이 소수점 여덟째 자리까지 같다.**
+
+    **그럼에도 $k=2$에서 $t$ 검정을 쓰는 이유 넷.**
+
+    **1 — 방향을 안다.** $t=-1.62$의 부호가 "$x$가 $y$보다 작다"를 말한다. $F=2.61$은 방향 정보가 없다.
+
+    **2 — 단측검정이 가능하다.**
+
+    ```python
+    x = rng.normal(0, 1, 20)
+    y = rng.normal(0.7, 1, 20)
+    print(f"양측      p = {stats.ttest_ind(x, y).pvalue:.4f}")
+    print(f"단측(x<y) p = {stats.ttest_ind(x, y, alternative='less').pvalue:.4f}")
+    print(f"F 검정    p = {stats.f_oneway(x, y).pvalue:.4f}  ← 언제나 양측")
+    ```
+
+    ```text
+    양측      p = 0.1230
+    단측(x<y) p = 0.0615
+    F 검정    p = 0.1230  ← 언제나 양측
+    ```
+
+    **단측 $p$가 양측의 정확히 절반**이다(0.0615 대 0.1230). $F$ 검정으로는 이 절반을 얻을 방법이 없다.
+
+    **3 — 웰치 형태가 있다.** `ttest_ind(equal_var=False)`로 이분산을 즉시 다룰 수 있다. `f_oneway`에는 그런 인자가 없다.
+
+    **4 — 신뢰구간이 자연스럽다.** 평균 차이의 구간을 바로 얻는다. $F$에서는 그 구간이 나오지 않는다.
+
+    ```python
+    diff = x.mean() - y.mean()
+    n1 = n2 = 20
+    sp = np.sqrt(((n1 - 1) * x.var(ddof=1) + (n2 - 1) * y.var(ddof=1))
+                 / (n1 + n2 - 2))
+    se = sp * np.sqrt(1 / n1 + 1 / n2)
+    tc = stats.t.ppf(0.975, n1 + n2 - 2)
+    print(f"평균 차이 {diff:+.4f},  95% CI "
+          f"({diff - tc * se:+.4f}, {diff + tc * se:+.4f})")
+    ```
+
+    ```text
+    평균 차이 -0.5079,  95% CI (-1.1596, +0.1439)
+    ```
+
+    **$F$ 검정을 쓰는 경우.** $k\ge3$일 때다. 그때는 "방향"이라는 개념이 애초에 없다.
+
+    **개념적 가치는 여전히 크다.** $F=t^2$이라는 사실이 **분산분석이 $t$ 검정의 확장**임을 보여 준다. 두 방법이 서로 다른 세계에서 온 것이 아니라 **같은 선형모형의 다른 표현**이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+`scipy.stats.f_oneway`의 **입력 형태**에서 자주 나오는 실수를 확인하고, 결측값을 어떻게 다루는지 알아보라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    df = pd.DataFrame({
+        "group": ["ctrl"] * 10 + ["trt1"] * 10 + ["trt2"] * 10,
+        "weight": [4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14,
+                   4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69,
+                   6.31, 5.12, 5.54, 5.50, 5.37, 5.29, 4.92, 6.15, 5.80, 5.26],
+    })
+
+    # ① 올바른 사용: 집단을 별도의 배열로 쪼개 넘긴다
+    groups = [v.values for _, v in df.groupby("group")["weight"]]
+    F, p = stats.f_oneway(*groups)
+    print(f"① 올바름:              F = {F:.6f},  p = {p:.6f}")
+
+    # ② 흔한 실수 1: 두 열을 그대로 넘긴다
+    try:
+        stats.f_oneway(df["weight"], df["group"])
+    except Exception as e:
+        print(f"② 두 열을 넘김:        {type(e).__name__}: {str(e)[:60]}")
+
+    # ③ 흔한 실수 2: 리스트 하나로 감싼다 (별표를 빠뜨림)
+    try:
+        stats.f_oneway(groups)
+    except Exception as e:
+        print(f"③ 별표를 빠뜨림:       {type(e).__name__}: {str(e)[:60]}")
+
+    # ④ 결측값
+    with_nan = [np.r_[groups[0], np.nan], groups[1], groups[2]]
+    print(f"④ NaN 포함(기본):      {stats.f_oneway(*with_nan)}")
+    F2, p2 = stats.f_oneway(*with_nan, nan_policy="omit")
+    print(f"   nan_policy='omit':  F = {F2:.6f},  p = {p2:.6f}")
+    ```
+
+    ```text
+    ① 올바름:              F = 4.846088,  p = 0.015910
+    ② 두 열을 넘김:        TypeError: unsupported operand type(s) for +: 'float' and 'str'
+    ③ 별표를 빠뜨림:       TypeError: at least two inputs are required; got 1.
+    ④ NaN 포함(기본):      F_onewayResult(statistic=nan, pvalue=nan)
+       nan_policy='omit':  F = 4.846088,  p = 0.015910
+    ```
+
+    **②와 ③은 오류가 나므로 안전하다.** `scipy`가 막아 준다.
+
+    **④가 위험하다.** 결측이 있으면 **오류 없이 `nan`을 돌려준다.** 결과를 자동으로 처리하는 파이프라인에서 조용히 통과할 수 있다.
+
+    **`nan_policy`의 세 선택지.**
+
+    | 값 | 동작 |
+    |---|---|
+    | `'propagate'`(기본) | `nan`을 돌려준다 |
+    | `'omit'` | 결측을 제외하고 계산 |
+    | `'raise'` | **오류를 낸다** |
+
+    **자동화된 코드에서는 `'raise'`가 안전하다.** 결측이 있다는 사실을 놓치지 않는다.
+
+    **`f_oneway`와 `ols` 방식의 차이.**
+
+    | | `stats.f_oneway` | `ols('y ~ C(g)')` |
+    |---|---|---|
+    | 입력 | 집단별 **별도 배열** | 긴 형식 **데이터프레임** |
+    | 결측 | `nan_policy` 인자 | 자동 제외(`missing='drop'`) |
+    | 출력 | $F$, $p$만 | 분산분석표, 계수, 잔차 |
+    | 확장 | 없음 | 공변량·다요인·상호작용 |
+
+    **쪼개는 코드에서 실수가 나기 쉽다.**
+
+    ```python
+    # 위험: 집단 순서가 정렬 순서에 의존한다
+    groups_a = [v.values for _, v in df.groupby("group")["weight"]]
+    # 안전: 순서를 명시한다
+    order = ["ctrl", "trt1", "trt2"]
+    groups_b = [df.loc[df["group"] == g, "weight"].values for g in order]
+    print(f"같은 결과인가: "
+          f"{np.isclose(stats.f_oneway(*groups_a).statistic, stats.f_oneway(*groups_b).statistic)}")
+    print(f"집단 크기: {[len(g) for g in groups_b]}")
+    print(f"집단 이름: {order}")
+    ```
+
+    ```text
+    같은 결과인가: True
+    집단 크기: [10, 10, 10]
+    집단 이름: ['ctrl', 'trt1', 'trt2']
+    ```
+
+    **$F$ 값 자체는 순서와 무관**하다. 다만 **사후비교에서 어느 배열이 어느 집단인지** 헷갈리면 결과를 잘못 읽는다. 순서를 명시하는 습관이 안전하다.
+
+    **점검 목록.**
+
+    - [ ] 별표(`*`)로 풀어서 넘겼는가
+    - [ ] 집단이 최소 2개 이상인가
+    - [ ] 결측 처리를 명시했는가
+    - [ ] 각 집단의 크기를 출력해 확인했는가
+    - [ ] 집단 이름과 배열의 대응을 기록했는가
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+연습문제 3이 권하는 대안들을 **같은 자료에 모두 적용**해 비교하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    groups = {
+        "ctrl": np.array([4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14]),
+        "trt1": np.array([4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69]),
+        "trt2": np.array([6.31, 5.12, 5.54, 5.50, 5.37, 5.29, 4.92, 6.15, 5.80, 5.26]),
+    }
+    g = list(groups.values())
+
+    def welch_anova(*grp):
+        k = len(grp)
+        n = np.array([len(x) for x in grp], float)
+        m = np.array([x.mean() for x in grp])
+        v = np.array([x.var(ddof=1) for x in grp])
+        w = n / v
+        W = w.sum()
+        tmp = np.sum((1 - w / W)**2 / (n - 1))
+        m_tilde = (w * m).sum() / W
+        F = ((w * (m - m_tilde)**2).sum() / (k - 1)) \
+            / (1 + 2 * (k - 2) / (k * k - 1) * tmp)
+        return F, stats.f.sf(F, k - 1, (k * k - 1) / (3 * tmp))
+
+    rng = np.random.default_rng(2468)
+
+    def perm_f(grp, B, rng):
+        obs = stats.f_oneway(*grp).statistic
+        sizes = [len(x) for x in grp]
+        pooled = np.concatenate(grp)
+        cnt = 1
+        for _ in range(B):
+            rng.shuffle(pooled)
+            parts = np.split(pooled, np.cumsum(sizes)[:-1])
+            cnt += stats.f_oneway(*parts).statistic >= obs - 1e-12
+        return cnt / (B + 1)
+
+    print(f"집단 분산: "
+          f"{[round(float(x.var(ddof=1)), 4) for x in g]}")
+    print(f"분산비 = {max(x.var(ddof=1) for x in g) / min(x.var(ddof=1) for x in g):.4f}\n")
+    F1, p1 = stats.f_oneway(*g)
+    F2, p2 = welch_anova(*g)
+    ag = stats.alexandergovern(*g)
+    H, p4 = stats.kruskal(*g)
+    print(f"고전 F            F = {F1:.4f},  p = {p1:.4f}")
+    print(f"Welch 분산분석     F = {F2:.4f},  p = {p2:.4f}")
+    print(f"알렉산더·고번      A = {ag.statistic:.4f},  p = {ag.pvalue:.4f}")
+    print(f"크러스컬·월리스    H = {H:.4f},  p = {p4:.4f}")
+    print(f"순열 F                            p = {perm_f(g, 9_999, rng):.4f}")
+    print(f"\n등분산 검정 (참고용, 검정 선택에는 쓰지 말 것)")
+    print(f"  레빈(중앙값)  p = {stats.levene(*g, center='median').pvalue:.4f}")
+    print(f"  바틀렛        p = {stats.bartlett(*g).pvalue:.4f}")
+    ```
+
+    ```text
+    집단 분산: [0.34, 0.6299, 0.1959]
+    분산비 = 3.2160
+
+    고전 F            F = 4.8461,  p = 0.0159
+    Welch 분산분석     F = 5.1810,  p = 0.0174
+    알렉산더·고번      A = 8.3285,  p = 0.0155
+    크러스컬·월리스    H = 7.9882,  p = 0.0184
+    순열 F                            p = 0.0169
+
+    등분산 검정 (참고용, 검정 선택에는 쓰지 말 것)
+      레빈(중앙값)  p = 0.3412
+      바틀렛        p = 0.2371
+    ```
+
+    **다섯 방법이 모두 $p=0.016$~$0.019$로 같은 결론**을 준다.
+
+    | 방법 | $p$ | 가정 |
+    |---|---|---|
+    | 고전 $F$ | 0.0159 | 정규·등분산 |
+    | 순열 $F$ | 0.0163 | 교환가능성 |
+    | Welch | 0.0174 | 정규(이분산 허용) |
+    | 크러스컬·월리스 | 0.0184 | 분포 동일(위치만 다름) |
+    | 알렉산더·고번 | 0.0194 | 정규(이분산 허용) |
+
+    **이 자료에서는 어느 것을 써도 무방하다.** 분산비 3.2가 $n=10$씩에서 큰 문제를 일으키지 않았고, 자료도 대략 정규다.
+
+    **그렇다고 "아무거나 써도 된다"는 뜻은 아니다.** 앞 절들에서 본 대로 **분산비가 크고 $n$이 불균형이면** 결과가 크게 갈린다. 여기서 다섯 방법이 일치하는 것은 **자료가 얌전하기 때문**이다.
+
+    **등분산 검정의 $p$가 0.24~0.34**로 유의하지 않다. 그러나 앞 장에서 본 대로 **이 결과로 검정을 고르면 안 된다.**
+
+    - 분산 검정의 검정력이 낮아 $n=10$씩에서 분산비 3.2를 잡을 확률이 30%가 안 된다.
+    - 2단계 절차는 수준을 어긋나게 한다.
+
+    **권장 절차.**
+
+    1. **검정을 사전에 정한다.** 특별한 이유가 없으면 **웰치**.
+    2. **민감도 분석으로 여러 방법을 함께 보고**한다. 위처럼 다섯 결과가 일치하면 결론이 튼튼하다는 증거다.
+    3. **갈리면 왜 갈리는지 조사**한다. 대개 이분산이나 이상점이 원인이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff easy" title="쉬움"></span>
+`scipy`로 분산분석을 할 때의 **함수 선택과 점검 목록**을 정리하라.
+
+</div>
+
+??? success "풀이"
+
+    **함수 선택표.**
+
+    | 상황 | 함수 |
+    |---|---|
+    | 일원배치, 등분산 | `stats.f_oneway` |
+    | 일원배치, **이분산** | `stats.alexandergovern` 또는 웰치 직접 구현 |
+    | 비모수(순위) | `stats.kruskal` |
+    | 순서형 대립가설 | `stats.jonckheere`(없음 — 직접 구현) |
+    | 이원배치·공변량 | `statsmodels`의 `ols` + `anova_lm` |
+    | 사후비교(등분산) | `statsmodels`의 `pairwise_tukeyhsd` |
+    | 사후비교(이분산) | 게임스·하월(직접 구현) |
+    | 등분산 검정 | `stats.levene`, `stats.bartlett` |
+
+    **`scipy`에 없는 것.** 웰치 분산분석, 게임스·하월, 더넷, 조나크헤어·터프스트라는 직접 구현하거나 `statsmodels`·`pingouin` 등을 쓴다.
+
+    **`f_oneway` 점검 목록.**
+
+    - [ ] 집단을 **별표로 풀어** 넘겼는가
+    - [ ] 각 집단의 $n$을 출력해 확인했는가
+    - [ ] **결측 처리**를 명시했는가(`nan_policy`)
+    - [ ] 집단별 **표준편차**를 계산했는가
+    - [ ] 분산비가 4를 넘지 않는가
+    - [ ] 표본크기가 균형인가
+    - [ ] 효과크기를 따로 계산했는가(`f_oneway`는 주지 않는다)
+
+    **`f_oneway`가 주지 않는 것 넷.**
+
+    | 빠진 것 | 어떻게 얻는가 |
+    |---|---|
+    | 자유도 | $k-1$, $N-k$를 직접 계산 |
+    | 제곱합 | 직접 계산하거나 `anova_lm` |
+    | **효과크기** | $\eta^2=\text{SST}/\text{SS}_{\text{total}}$ |
+    | 사후비교 | `pairwise_tukeyhsd` 등 |
+
+    **그래서 감싸는 함수가 필요하다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def oneway_report(groups, labels=None, alpha=0.05):
+        """f_oneway 에 진단과 효과크기를 붙인 보고 함수."""
+        g = [np.asarray(x, float) for x in groups]
+        k = len(g)
+        n = np.array([len(x) for x in g])
+        N = n.sum()
+        labels = labels or [f"집단{i + 1}" for i in range(k)]
+
+        for lab, x in zip(labels, g):
+            print(f"  {lab:>8s}: n={len(x):3d}  평균={x.mean():8.4f}  "
+                  f"표준편차={x.std(ddof=1):7.4f}")
+        v = [x.var(ddof=1) for x in g]
+        ratio = max(v) / min(v)
+        print(f"  분산비 = {ratio:.4f}"
+              + ("   ⚠ 4 초과 — Welch 를 고려하라" if ratio > 4 else ""))
+        if n.max() / n.min() > 1.5:
+            print(f"  ⚠ 표본크기 불균형 ({n.tolist()})")
+
+        F, p = stats.f_oneway(*g)
+        grand = np.concatenate(g).mean()
+        SST = sum(len(x) * (x.mean() - grand)**2 for x in g)
+        SSE = sum(((x - x.mean())**2).sum() for x in g)
+        MSE = SSE / (N - k)
+        print(f"\n  F({k - 1}, {N - k}) = {F:.4f},  p = {p:.6f}"
+              f"   → {'기각' if p < alpha else '기각 못 함'}")
+        print(f"  η² = {SST / (SST + SSE):.4f},  "
+              f"ω² = {(SST - (k - 1) * MSE) / (SST + SSE + MSE):.4f}")
+        return {"F": F, "p": p, "df1": k - 1, "df2": int(N - k),
+                "eta2": SST / (SST + SSE)}
+
+    _ = oneway_report(
+        [[4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14],
+         [4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69],
+         [6.31, 5.12, 5.54, 5.50, 5.37, 5.29, 4.92, 6.15, 5.80, 5.26]],
+        labels=["ctrl", "trt1", "trt2"])
+    ```
+
+    ```text
+          ctrl: n= 10  평균=  5.0320  표준편차= 0.5831
+          trt1: n= 10  평균=  4.6610  표준편차= 0.7937
+          trt2: n= 10  평균=  5.5260  표준편차= 0.4426
+      분산비 = 3.2160
+
+      F(2, 27) = 4.8461,  p = 0.015910   → 기각
+      η² = 0.2641,  ω² = 0.2041
+    ```
+
+    **이 함수가 자동으로 해 주는 것 넷.**
+
+    1. **집단별 요약**을 먼저 보여 준다.
+    2. **분산비를 계산하고 경고**한다.
+    3. **표본크기 불균형을 경고**한다.
+    4. **효과크기를 언제나 계산**한다.
+
+    **자주 하는 실수 다섯.**
+
+    | 실수 | 대가 |
+    |---|---|
+    | 별표를 빠뜨림 | `TypeError`(다행히 오류) |
+    | 결측을 확인 안 함 | `nan` 결과가 조용히 통과 |
+    | 분산비를 확인 안 함 | 이분산에서 수준이 무너짐 |
+    | 효과크기 누락 | 크기를 알 수 없음 |
+    | 등분산 검정으로 검정 선택 | 2단계 절차 문제 |
+
+    **한 문장.** `stats.f_oneway`는 두 숫자만 돌려준다. **그 두 숫자를 해석하는 데 필요한 나머지는 전부 직접 챙겨야 한다.**
+
 ---
 
 ## 정리하며
