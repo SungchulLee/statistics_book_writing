@@ -122,7 +122,6 @@ nav:
             - 쌍그림: ch02/visualization/pair_plots.md
             - 선그림: ch02/visualization/line_plots.md
             - 계단 그림과 면적 그림: ch02/visualization/step_area.md
-            - 오차막대 그림: ch02/visualization/error_bars.md
 
     - 3 확률의 기초:
         - 장 개요: ch03/index.md
@@ -285,6 +284,7 @@ nav:
             - 신뢰수준과 포함확률: ch08/foundations/coverage.md
             - 해석과 흔한 함정: ch08/foundations/interpretation.md
             - 신뢰구간 시연: ch08/foundations/confidence_intervals.md
+            - 오차막대 그림: ch08/foundations/error_bars.md
         - 8.2 일표본 구간:
             - μ의 신뢰구간: ch08/one_sample_intervals/ci_mu.md
             - p의 신뢰구간: ch08/one_sample_intervals/ci_p.md
