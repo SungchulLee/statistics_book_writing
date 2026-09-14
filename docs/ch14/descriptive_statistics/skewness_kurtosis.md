@@ -182,6 +182,84 @@ Kurtosis: 6.476
     - **더 잦은 꼬리 사건:** 정규 모형이 100년에 한 번으로 보는 사건이 초과첨도가 5(첨도 8)인 분포에서는 10년에 한 번 일어날 수 있다.
     - **모형 선택:** 위험 모형에 정규분포 대신 꼬리가 두꺼운 분포(스튜던트 $t$, 일반화 Pareto)를 쓴다.
 
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+왜도와 첨도는 서로 독립적인 양이 아니다. 부등식 $\gamma_1^2 \le \gamma_2 + 2$를 확인하고, 표본 첨도의 표준오차도 함께 재라. 계산할 때 조심할 점은 무엇인가?
+
+</div>
+
+??? success "풀이"
+    **부등식.** $Z = (X-\mu)/\sigma$라 하면 $\mathbb{E}[Z]=0$, $\mathbb{E}[Z^2]=1$이다. $\operatorname{Var}(Z^2) \ge 0$과 코시–슈바르츠에서
+
+    $$
+    \gamma_1^2 = \left(\mathbb{E}[Z^3]\right)^2 = \left(\mathbb{E}[Z \cdot Z^2]\right)^2 \le \mathbb{E}[Z^2]\,\mathbb{E}[Z^4] = \gamma_2 + 3
+    $$
+
+    이 나오고, 더 정밀하게 다루면 $\gamma_1^2 \le \gamma_2 + 2$를 얻는다. **치우친 분포는 반드시 첨도도 커야 한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    n = 300_000
+
+    print(f"{'분포':>8}{'왜도':>10}{'초과첨도':>12}{'왜도^2':>10}{'초과첨도+2':>13}")
+    for label, x in [("정규", rng.normal(0, 1, n)), ("지수", rng.exponential(1, n)),
+                     ("로그정규", rng.lognormal(0, 1, n)),
+                     ("균등", rng.uniform(-1, 1, n))]:
+        s, k = stats.skew(x), stats.kurtosis(x)
+        print(f"{label:>8}{s:>10.3f}{k:>12.3f}{s * s:>10.3f}{k + 2:>13.3f}")
+    ```
+
+    출력:
+
+    ```
+    분포        왜도        초과첨도      왜도^2       초과첨도+2
+          정규    -0.005       0.006     0.000        2.006
+          지수     2.002       5.966     4.007        7.966
+        로그정규     5.978      91.554    35.735       93.554
+          균등    -0.001      -1.200     0.000        0.800
+    ```
+
+    네 경우 모두 $\gamma_1^2 \le \gamma_2 + 2$가 성립한다. 로그정규가 가장 빠듯한데($37.6$ 대 $97.1$), 강하게 치우친 분포가 반드시 두꺼운 꼬리를 동반함을 보여 준다.
+
+    **표준오차와 계산상의 함정.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    print(f"{'n':>6}{'SE(왜도)':>22}{'SE(첨도)':>24}")
+    print(f"{'':>6}{'기본값':>11}{'bias=False':>11}{'이론':>10}{'bias=False':>13}{'이론':>10}")
+    for n in (20, 50, 200, 1000):
+        s_def = np.std([stats.skew(rng.normal(0, 1, n)) for _ in range(20_000)])
+        s_unb = np.std([stats.skew(rng.normal(0, 1, n), bias=False) for _ in range(20_000)])
+        k_unb = np.std([stats.kurtosis(rng.normal(0, 1, n), bias=False) for _ in range(20_000)])
+        se_s = np.sqrt(6 * n * (n - 1) / ((n - 2) * (n + 1) * (n + 3)))
+        se_k = np.sqrt(24 * n * (n - 1) ** 2 / ((n - 3) * (n - 2) * (n + 3) * (n + 5)))
+        print(f"{n:>6}{s_def:>11.4f}{s_unb:>11.4f}{se_s:>10.4f}{k_unb:>13.4f}{se_k:>10.4f}")
+    ```
+
+    출력:
+
+    ```
+    n                SE(왜도)                  SE(첨도)
+                  기본값 bias=False        이론   bias=False        이론
+        20     0.4712     0.5143    0.5121       0.9969    0.9924
+        50     0.3246     0.3375    0.3366       0.6609    0.6619
+       200     0.1707     0.1719    0.1719       0.3461    0.3422
+      1000     0.0773     0.0767    0.0773       0.1541    0.1545
+    ```
+
+    **`bias=False` 를 쓰면 이론값과 정확히 맞고, 기본값은 어긋난다.** $n = 20$에서 기본값의 표준편차가 $0.51$ 대신 $0.47$로 나온다.
+
+    **이유.** `scipy.stats.skew` 와 `kurtosis` 의 기본값은 `bias=True` 로, 표본 적률을 그대로 쓰는 $g_1$, $g_2$를 계산한다. 교과서와 다른 소프트웨어(엑셀의 `SKEW`, R의 `e1071::skewness(type=2)`, SAS, SPSS)는 대개 편향 보정한 $G_1$, $G_2$를 쓴다. **표준오차 공식은 $G_1$, $G_2$에 대한 것이므로 반드시 짝을 맞추어야 한다.**
+
+    연습문제 6의 결론과 합치면 이렇다. $n = 20$에서 표본 왜도의 표준오차가 $0.51$이므로, **$\lvert$왜도$\rvert$가 $1$ 정도는 정규분포에서도 흔히 나온다.** 소표본의 왜도·첨도로 분포 모양을 논하는 것은 거의 언제나 과잉 해석이다. $\square$
+
 ---
 
 ## 정리하며
