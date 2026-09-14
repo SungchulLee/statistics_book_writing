@@ -274,6 +274,466 @@ $$
 
     동등하게, (기대도수가 강제하는 대로) 행과 열의 주변 합계가 고정되면 표에서 자유롭게 변할 수 있는 칸의 수가 $(r-1)(c-1)$이다. $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
+연습문제 4가 증명한 $\sum E_{ij}=n$보다 강한 성질, 즉 **기대도수의 행 합과 열 합이 각각 보존된다**는 것을 확인하고, 그것이 잔차에 무엇을 뜻하는지 보여라.
+
+</div>
+
+??? success "풀이"
+    **행별로도 성립한다.**
+
+    $$
+    \sum_j E_{ij}=\sum_j\frac{R_iC_j}{n}=\frac{R_i}{n}\sum_j C_j=\frac{R_i}{n}\cdot n=R_i
+    $$
+
+    열에 대해서도 같다. 따라서 **편차의 행 합과 열 합이 모두 0**이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    obs = np.array([[934., 1070.], [113., 92.], [20., 8.]])
+    exp = np.outer(obs.sum(1), obs.sum(0)) / obs.sum()
+    dev = obs - exp
+
+    print("O − E 의 행 합", np.round(dev.sum(1), 10).tolist())
+    print("O − E 의 열 합", np.round(dev.sum(0), 10).tolist())
+
+    resid = dev / np.sqrt(exp)
+    print(f"\n표준화 잔차\n{np.round(resid, 4)}")
+    print(f"R 의 행 합 {np.round(resid.sum(1), 4).tolist()}  ← 0 이 아니다")
+    ```
+
+    ```text
+    O − E 의 행 합 [0.0, 0.0, 0.0]
+    O − E 의 열 합 [0.0, 0.0]
+
+    표준화 잔차
+    [[-0.7072  0.6753]
+     [ 1.5391 -1.4698]
+     [ 1.8182 -1.7363]]
+    R 의 행 합 [-0.0318, 0.0693, 0.0819]  ← 0 이 아니다
+    ```
+
+    **$O-E$의 행 합과 열 합이 정확히 0**이다. 이것이 $r+c-1$개의 제약이고, 자유도가
+
+    $$
+    rc-(r+c-1)=(r-1)(c-1)
+    $$
+
+    이 되는 이유다(연습문제 5).
+
+    **표준화 잔차의 행 합은 0이 아니다.** $\sqrt{E_{ij}}$로 나누면서 각 항의 무게가 달라지기 때문이다. **제약은 $O-E$에 걸려 있지 $R$에 걸려 있지 않다.**
+
+    **$3\times2$ 표에서 자유로운 칸이 2개**임을 직접 확인해 보자.
+
+    ```python
+    free = np.array([[5.0, 0.0], [0.0, 0.0], [0.0, 0.0]])   # (0,0) 칸만 +5
+    print("(0,0) 칸을 5 늘리고 주변합을 유지하려면")
+    adj = free.copy()
+    adj[0, 1] = -5      # 같은 행에서 빼고
+    adj[2, 0] = -5      # 같은 열에서 빼고
+    adj[2, 1] = +5      # 그 교차점에서 다시 더한다
+    print(adj.astype(int))
+    print(f"  행 합 {adj.sum(1).astype(int).tolist()},  "
+          f"열 합 {adj.sum(0).astype(int).tolist()}   모두 0")
+    ```
+
+    ```text
+    (0,0) 칸을 5 늘리고 주변합을 유지하려면
+    [[ 5 -5]
+     [ 0  0]
+     [-5  5]]
+      행 합 [0, 0, 0],  열 합 [0, 0]   모두 0
+    ```
+
+    **한 칸을 움직이면 세 칸이 따라 움직인다.** 이런 "$2\times2$ 순환"이 주변합을 보존하는 최소 단위이고, $3\times2$ 표에서는 서로 독립인 순환이 **2개**뿐이다. 그것이 $(3-1)(2-1)=2$다.
+
+    **실무적 쓸모 셋.**
+
+    1. **가장 빠른 검산.** 기대도수를 계산한 뒤 행 합·열 합만 확인하면 산술 오류를 거의 다 잡는다.
+    2. **잔차를 볼 때의 주의.** 잔차들이 **독립이 아니다.** 한 칸이 크면 다른 칸이 작아질 수밖에 없다.
+    3. **순열검정의 설계.** 주변합을 고정한 채 표를 섞는 것이 자연스러운 이유가 여기 있다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+연습문제 5가 증명한 자유도 $(r-1)(c-1)$을 **모의실험으로 확인**하라. 카이제곱 분포의 평균과 분산을 쓴다.
+
+</div>
+
+??? success "풀이"
+    **확인 방법.** $\chi^2_d$의 평균이 $d$, 분산이 $2d$이므로, $H_0$ 아래에서 통계량을 많이 만들어 두 적률을 재면 된다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(4321)
+    M = 20_000
+
+    print(f"{'표':>7s} {'n':>6s} {'df':>4s} {'통계량 평균':>12s} "
+          f"{'통계량 분산':>12s} {'2·df':>6s}")
+    for (r, c), n in [((3, 2), 2237), ((4, 5), 1000), ((2, 2), 500)]:
+        # 주변분포를 임의로 잡되 독립이 참이 되도록 만든다
+        P = np.outer(rng.dirichlet(np.ones(r) * 5),
+                     rng.dirichlet(np.ones(c) * 5))
+        stat = []
+        for _ in range(M):
+            T = rng.multinomial(n, P.ravel()).reshape(r, c).astype(float)
+            if (T.sum(0) > 0).all() and (T.sum(1) > 0).all():
+                stat.append(stats.chi2_contingency(T, correction=False)[0])
+        stat = np.array(stat)
+        df = (r - 1) * (c - 1)
+        print(f"{f'{r}×{c}':>7s} {n:6d} {df:4d} {stat.mean():12.4f} "
+              f"{stat.var(ddof=1):12.4f} {2 * df:6d}")
+    ```
+
+    ```text
+          표      n   df       통계량 평균       통계량 분산   2·df
+        3×2   2237    2       1.9995       3.9104      4
+        4×5   1000   12      12.0108      23.7417     24
+        2×2    500    1       0.9893       1.9736      2
+    ```
+
+    **평균이 자유도와 거의 정확히 일치한다**(1.9995, 12.0108, 0.9893).
+
+    **분산도 $2d$에 가깝다**(3.91 대 4, 23.74 대 24, 1.97 대 2). 약간 작은 것은 유한표본 효과다.
+
+    **이 방법의 장점.** 이론을 몰라도 자유도를 **실험으로 알아낼 수 있다.** 새로운 검정을 만들었을 때 자유도가 몇인지 확인하는 가장 확실한 방법이다.
+
+    **자유도를 잘못 쓰면 어떻게 되는지도 바로 보인다.**
+
+    ```python
+    P = np.outer([0.4, 0.35, 0.25], [0.55, 0.45])
+    stat = []
+    for _ in range(M):
+        T = rng.multinomial(2237, P.ravel()).reshape(3, 2).astype(float)
+        if (T.sum(0) > 0).all() and (T.sum(1) > 0).all():
+            stat.append(stats.chi2_contingency(T, correction=False)[0])
+    stat = np.array(stat)
+    print(f"통계량 평균 {stat.mean():.4f}")
+    for df in [1, 2, 3, 5]:
+        print(f"  df={df} 로 읽으면 기각률 "
+              f"{np.mean(stat > stats.chi2.ppf(0.95, df)):.4f}")
+    ```
+
+    ```text
+    통계량 평균 1.9783
+      df=1 로 읽으면 기각률 0.1442
+      df=2 로 읽으면 기각률 0.0500
+      df=3 로 읽으면 기각률 0.0197
+      df=5 로 읽으면 기각률 0.0029
+    ```
+
+    **올바른 df=2에서만 0.05가 나온다.**
+
+    | 잘못된 df | 기각률 | 방향 |
+    |---|---|---|
+    | 1 (너무 작게) | 0.144 | **과대기각** — 위험 |
+    | 3 (조금 크게) | 0.020 | 보수적 |
+    | 5 (많이 크게) | 0.003 | 매우 보수적 |
+
+    **자유도를 작게 잡는 실수가 훨씬 위험하다.** $rc-1$처럼 크게 잡는 실수는 흔하지만 보수적이라 "발견을 놓치는" 데 그친다. 반대로 작게 잡으면 **없는 연관을 만들어 낸다.**
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+손으로 짠 계산 코드가 **수치적으로 안전한지** 점검하라. 큰 수, 0인 칸, 대수적으로 같은 두 표현의 차이를 확인한다.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    print("① 도수의 규모가 커지면")
+    base = np.array([[934., 1070.], [113., 92.], [20., 8.]])
+    for scale in [1, 1e3, 1e6]:
+        c, p, df, _ = stats.chi2_contingency(base * scale, correction=False)
+        print(f"  ×{scale:>8.0e}:  χ² = {c:14.4f},  p = {p:.6g}")
+
+    print("\n② 0 인 칸이 있으면")
+    cases = [np.array([[10., 0.], [5., 15.]]),
+             np.array([[10., 0.], [0., 15.]]),
+             np.array([[10., 5., 0.], [5., 10., 0.]])]
+    for T in cases:
+        try:
+            c, p, df, _ = stats.chi2_contingency(T, correction=False)
+            print(f"  {T.astype(int).tolist()}:  χ² = {c:.4f}, df = {df}, "
+                  f"p = {p:.4f}")
+        except Exception as e:
+            print(f"  {T.astype(int).tolist()}:  {type(e).__name__}")
+            print(f"    {e}")
+
+    print("\n③ 대수적으로 같은 두 표현")
+    T = np.array([[1e6 + 3, 1e6], [1e6, 1e6]])
+    exp = np.outer(T.sum(1), T.sum(0)) / T.sum()
+    form_a = np.sum((T - exp)**2 / exp)
+    form_b = np.sum(T**2 / exp) - T.sum()
+    print(f"  (O−E)²/E 의 합  = {form_a:.12f}")
+    print(f"  O²/E − n        = {form_b:.12f}")
+    print(f"  차이 = {abs(form_a - form_b):.3e}")
+    ```
+
+    ```text
+    ① 도수의 규모가 커지면
+      ×   1e+00:  χ² =        11.8061,  p = 0.00273105
+      ×   1e+03:  χ² =     11806.1347,  p = 0
+      ×   1e+06:  χ² =  11806134.6670,  p = 0
+
+    ② 0 인 칸이 있으면
+      [[10, 0], [5, 15]]:  χ² = 15.0000, df = 1, p = 0.0001
+      [[10, 0], [0, 15]]:  χ² = 25.0000, df = 1, p = 0.0000
+      [[10, 5, 0], [5, 10, 0]]:  ValueError
+        The internally computed table of expected frequencies has a zero element at (0, 2).
+
+    ③ 대수적으로 같은 두 표현
+      (O−E)²/E 의 합  = 0.000002249995
+      O²/E − n        = 0.000002250075
+      차이 = 8.040e-11
+    ```
+
+    **① 통계량이 $n$에 정비례한다.** 도수를 1000배 하면 $\chi^2$도 정확히 1000배다. **$p$ 값이 0으로 언더플로**하므로, 큰 자료에서는 $p$ 대신 $\chi^2$과 효과크기를 보고해야 한다.
+
+    **② 표본 0은 괜찮지만 주변합 0은 안 된다.**
+
+    | 상황 | 결과 |
+    |---|---|
+    | 칸 하나가 0 | 계산 가능 |
+    | 대각선만 채워짐 | 계산 가능 |
+    | **한 열 전체가 0** | **오류** — 그 열을 빼야 한다 |
+
+    **한 열이 통째로 비면 그 범주는 존재하지 않는 것**이므로, 표에서 제거하고 자유도를 다시 계산해야 한다. `scipy`가 오류를 내 주는 것이 다행이다.
+
+    **③ 두 표현의 차이가 유효숫자를 잃게 한다.** 참값이 $2.25\times10^{-6}$인데 $O^2/E-n$ 형태는 여덟째 자리부터 틀린다.
+
+    **왜.** $\sum O^2/E\approx4\times10^6$에서 $n=4\times10^6$을 빼면 **큰 수끼리의 뺄셈**이 일어나 자리수가 소거된다. 반면 $(O-E)^2/E$는 처음부터 작은 수를 다룬다.
+
+    **일반 원칙.** 손으로 짤 때는 **차이를 먼저 계산**한다. 교과서 공식이 "계산이 편한 형태"로 변형되어 있는 경우가 많은데, 그 형태가 수치적으로는 나쁠 수 있다.
+
+    | 나쁨 | 좋음 |
+    |---|---|
+    | $\sum O^2/E-n$ | $\sum(O-E)^2/E$ |
+    | $\sum x^2/n-\bar x^2$ | $\sum(x-\bar x)^2/n$ |
+    | $\log(1+x)$를 직접 | `np.log1p(x)` |
+
+    **점검 방법.** 같은 양을 두 가지 방법으로 계산해 비교해 본다. 차이가 크면 어느 쪽이 안정적인지 따져 본다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+연습문제 3이 다룬 `keepdims=True`를 빼면 정확히 어떤 일이 생기는지 **실행해 확인**하고, 안전한 대안을 제시하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    obs = np.array([[934., 1070.], [113., 92.], [20., 8.]])
+    n = obs.sum()
+
+    row_keep = obs.sum(axis=1, keepdims=True)
+    col_keep = obs.sum(axis=0, keepdims=True)
+    row_flat = obs.sum(axis=1)
+    col_flat = obs.sum(axis=0)
+    print(f"keepdims=True 일 때  행합 모양 {row_keep.shape}, "
+          f"열합 모양 {col_keep.shape}")
+    print(f"keepdims 없이       행합 모양 {row_flat.shape}, "
+          f"열합 모양 {col_flat.shape}\n")
+
+    good = (row_keep @ col_keep) / n
+    print(f"올바른 기대도수 (모양 {good.shape})\n{np.round(good, 2)}")
+
+    try:
+        bad = (row_flat @ col_flat) / n
+        print(f"\nkeepdims 없이: {bad}   ← 스칼라!  모양 {np.shape(bad)}")
+    except Exception as e:
+        print(f"\nkeepdims 없이: {type(e).__name__}: {e}")
+    ```
+
+    ```text
+    keepdims=True 일 때  행합 모양 (3, 1), 열합 모양 (1, 2)
+    keepdims 없이       행합 모양 (3,), 열합 모양 (2,)
+
+    올바른 기대도수 (모양 (3, 2))
+    [[ 955.86 1048.14]
+     [  97.78  107.22]
+     [  13.36   14.64]]
+
+    keepdims 없이: ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 2 is different from 3)
+    ```
+
+    **이 표에서는 운 좋게 오류가 난다.** 행이 3개, 열이 2개로 길이가 달라 행렬곱이 성립하지 않기 때문이다.
+
+    **정방 표에서는 조용히 틀린 값이 나온다.**
+
+    ```python
+    square = np.array([[30., 20.], [10., 40.]])
+    m = square.sum()
+    r_flat, c_flat = square.sum(axis=1), square.sum(axis=0)
+    r_keep = square.sum(axis=1, keepdims=True)
+    c_keep = square.sum(axis=0, keepdims=True)
+
+    print(f"올바른 기대도수\n{np.round((r_keep @ c_keep) / m, 4)}")
+    print(f"\nkeepdims 없이 @ 를 쓰면: {(r_flat @ c_flat) / m:.4f}  ← 내적(스칼라)")
+    print(f"안전한 대안 np.outer:\n{np.round(np.outer(r_flat, c_flat) / m, 4)}")
+    ```
+
+    ```text
+    올바른 기대도수
+    [[20. 30.]
+     [20. 30.]]
+
+    keepdims 없이 @ 를 쓰면: 50.0000  ← 내적(스칼라)
+    안전한 대안 np.outer:
+    [[20. 30.]
+     [20. 30.]]
+    ```
+
+    **$2\times2$ 표에서는 오류 없이 49.0이라는 스칼라가 나온다.** 그 뒤의 계산이 브로드캐스팅으로 진행되어 **완전히 틀린 결과가 조용히 산출**된다.
+
+    **왜 이런 차이가.** 1차원 배열 두 개에 `@`를 쓰면 numpy는 **내적**으로 해석한다. $(3,)$과 $(2,)$는 길이가 달라 오류가 나지만, $(2,)$와 $(2,)$는 내적이 성립한다.
+
+    **더 안전한 세 가지 대안.**
+
+    ```python
+    r, c = square.sum(axis=1), square.sum(axis=0)
+    print("① np.outer        :", np.allclose(np.outer(r, c) / m,
+                                             (r_keep @ c_keep) / m))
+    print("② 명시적 reshape  :", np.allclose(r.reshape(-1, 1) * c.reshape(1, -1) / m,
+                                             (r_keep @ c_keep) / m))
+    print("③ np.einsum       :", np.allclose(np.einsum('i,j->ij', r, c) / m,
+                                             (r_keep @ c_keep) / m))
+    ```
+
+    ```text
+    ① np.outer        : True
+    ② 명시적 reshape  : True
+    ③ np.einsum       : True
+    ```
+
+    **`np.outer`를 권한다.** 이름이 의도를 그대로 드러내고($\mathbf r\otimes\mathbf c$), 1차원 입력을 받는 것이 자연스러우며, 모양 실수가 일어날 여지가 없다.
+
+    **일반 교훈 셋.**
+
+    1. **모양(shape)을 출력해 보는 습관**을 들인다. 배열 연산 버그의 대부분이 모양 문제다.
+    2. **정방 행렬로만 시험하지 않는다.** $3\times2$처럼 **비정방** 자료로 시험해야 모양 버그가 드러난다.
+    3. **검산을 넣는다.** 기대도수의 행 합·열 합을 확인하면(연습문제 6) 이런 실수가 즉시 잡힌다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff easy" title="쉬움"></span>
+손으로 짠 독립성 검정 코드의 **완성형**을 만들고 점검 목록을 정리하라.
+
+</div>
+
+??? success "풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def chi2_independence(obs, alpha=0.05, verbose=True):
+        """분할표의 독립성 검정을 처음부터 계산한다.
+
+        진단 정보(기대도수 최솟값, 효과크기, 조정 잔차)를 함께 돌려준다.
+        """
+        obs = np.asarray(obs, float)
+        if obs.ndim != 2:
+            raise ValueError("2차원 분할표가 필요하다")
+        r, c = obs.shape
+        n = obs.sum()
+        row, col = obs.sum(1), obs.sum(0)
+        if row.min() == 0 or col.min() == 0:
+            raise ValueError("합이 0 인 행 또는 열이 있다. 먼저 제거하라")
+
+        exp = np.outer(row, col) / n                      # np.outer 가 안전
+        assert np.allclose(exp.sum(1), row)               # 검산
+        assert np.allclose(exp.sum(0), col)
+
+        chi2 = np.sum((obs - exp)**2 / exp)               # 차이를 먼저
+        df = (r - 1) * (c - 1)
+        p = stats.chi2(df).sf(chi2)                       # 오른쪽 꼬리
+        v = np.sqrt(chi2 / (n * (min(r, c) - 1)))
+        adj = (obs - exp) / np.sqrt(exp * np.outer(1 - row / n, 1 - col / n))
+
+        if verbose:
+            print(f"χ² = {chi2:.4f},  df = {df},  p = {p:.6f}")
+            print(f"크라메르 V = {v:.4f}"
+                  f"   (독립일 때 기댓값 ≈ "
+                  f"{np.sqrt(df / (n * (min(r, c) - 1))):.4f})")
+            print(f"E_min = {exp.min():.3f}"
+                  + ("   ⚠ 5 미만" if exp.min() < 5 else ""))
+            if p < alpha:
+                print(f"조정 잔차 (|·| 최대 {np.abs(adj).max():.3f})\n"
+                      f"{np.round(adj, 3)}")
+        return {"chi2": chi2, "df": df, "p": p, "V": v,
+                "expected": exp, "adj_resid": adj}
+
+    _ = chi2_independence([[934, 1070], [113, 92], [20, 8]])
+    print()
+    try:
+        chi2_independence([[10, 5, 0], [5, 10, 0]])
+    except ValueError as e:
+        print(f"ValueError: {e}")
+    ```
+
+    ```text
+    χ² = 11.8061,  df = 2,  p = 0.002731
+    크라메르 V = 0.0726   (독립일 때 기댓값 ≈ 0.0299)
+    E_min = 13.355
+    조정 잔차 (|·| 최대 3.030)
+    [[-3.03   3.03 ]
+     [ 2.233 -2.233]
+     [ 2.53  -2.53 ]]
+
+    ValueError: 합이 0 인 행 또는 열이 있다. 먼저 제거하라
+    ```
+
+    **이 함수가 막아 주는 실수들.**
+
+    | 방어 장치 | 막는 실수 |
+    |---|---|
+    | `obs.ndim != 2` 확인 | 1차원 배열을 넣는 실수 |
+    | 합이 0 인 행·열 확인 | 계산 불능 상황을 명확한 메시지로 |
+    | `np.outer` 사용 | 모양 버그(연습문제 9) |
+    | `assert`로 행·열 합 검산 | 산술 오류(연습문제 6) |
+    | `(obs - exp)**2 / exp` | 수치 소거(연습문제 8) |
+    | `sf` 사용 | 꼬리를 뒤집는 실수 |
+    | $E_{\min}$ 경고 | 근사 조건 위반 |
+    | $V$와 그 귀무 기댓값 | 효과크기 누락 |
+    | **조정** 잔차 | 잘못된 잔차로 판정 |
+
+    **$V=0.0726$이 독립일 때의 기댓값 0.0299보다 2.4배**다. 관례적 기준으로는 "무시할 만함"이지만, 우연히 나올 값보다는 확실히 크다.
+
+    **조정 잔차의 최댓값이 3.030**이다. 칸이 6개이므로 본페로니 임계값이 $z_{1-0.025/6}=2.638$인데, 이를 넘으므로 **첫 행(오른손잡이)의 두 칸이 유의**하다.
+
+    **앞 절에서 단순 표준화 잔차로 보았다면 놓쳤을 신호다.** 같은 자료의 표준화 잔차 최댓값은 0.707로, $\pm1.96$에도 한참 못 미친다. 분모에 $(1-R_i/n)(1-C_j/n)$을 넣는 한 줄이 결론을 바꾼다.
+
+    **점검 목록.**
+
+    - [ ] 입력이 **2차원 도수 배열**인가
+    - [ ] 합이 0 인 행·열이 없는가
+    - [ ] 기대도수의 행 합·열 합을 검산했는가
+    - [ ] $E_{\min}$을 확인했는가
+    - [ ] 자유도가 $(r-1)(c-1)$인가
+    - [ ] **오른쪽 꼬리**(`sf`)를 썼는가
+    - [ ] 효과크기를 보고했는가
+    - [ ] 잔차를 볼 때 **조정** 잔차를 썼고 다중비교를 고려했는가
+
+    **손으로 짜는 것의 가치.** `scipy.stats.chi2_contingency` 한 줄이면 되지만, 직접 짜 보면
+
+    1. **기대도수 공식이 독립의 정의 그 자체**임을 알게 된다.
+    2. **자유도가 주변합 제약에서 온다**는 것이 몸으로 이해된다.
+    3. **결과가 이상할 때 어디를 볼지** 안다.
+
+    **한 문장.** 검정을 손으로 한 번 짜 보는 것은 계산을 배우려는 것이 아니라 **무엇이 가정되고 있는지를 배우려는 것**이다.
+
 ---
 
 ## 정리하며

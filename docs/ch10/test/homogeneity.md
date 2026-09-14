@@ -572,6 +572,368 @@ Expected frequencies:
 
     `statsmodels.stats.power.GofChisquarePower`를 쓰거나 직접 계산한다. 표본크기 계획은 필수적이다. 응용 연구에서 검정력이 부족한 카이제곱 검정이 흔하다.
 
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
+연습문제 3의 세 약(A 60/100, B 55/100, C 45/100)에 대해 연습문제 4가 말한 **사후 쌍별 비교**를 실제로 수행하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+    from itertools import combinations
+    from statsmodels.stats.multitest import multipletests
+
+    table = np.array([[60, 40], [55, 45], [45, 55]], float)
+    labels = ["A", "B", "C"]
+
+    chi2, p, df, exp = stats.chi2_contingency(table, correction=False)
+    print(f"전체 동질성:  χ² = {chi2:.4f},  df = {df},  p = {p:.4f}\n")
+
+    print("쌍별 비교 (보정 전)")
+    pvals, pairs = [], []
+    for i, j in combinations(range(3), 2):
+        c, pp, _, _ = stats.chi2_contingency(table[[i, j]], correction=False)
+        pvals.append(pp)
+        pairs.append(f"{labels[i]}-{labels[j]}")
+        print(f"  {labels[i]}-{labels[j]}:  χ² = {c:.4f},  p = {pp:.4f}")
+
+    pvals = np.array(pvals)
+    print()
+    for method, name in [("bonferroni", "본페로니"), ("holm", "홀름  "),
+                         ("fdr_bh", "BH    ")]:
+        rej, adj, _, _ = multipletests(pvals, alpha=0.05, method=method)
+        detail = "  ".join(f"{pairs[k]} {adj[k]:.4f}{'*' if rej[k] else ' '}"
+                           for k in range(3))
+        print(f"  {name}: {detail}")
+    ```
+
+    ```text
+    전체 동질성:  χ² = 4.6875,  df = 2,  p = 0.0960
+
+    쌍별 비교 (보정 전)
+      A-B:  χ² = 0.5115,  p = 0.4745
+      A-C:  χ² = 4.5113,  p = 0.0337
+      B-C:  χ² = 2.0000,  p = 0.1573
+
+      본페로니: A-B 1.0000   A-C 0.1010   B-C 0.4719 
+      홀름  : A-B 0.4745   A-C 0.1010   B-C 0.3146 
+      BH    : A-B 0.4745   A-C 0.1010   B-C 0.2359 
+    ```
+
+    **전체 검정이 $p=0.096$으로 기각되지 않는다.** 따라서 **사후분석으로 넘어가면 안 된다.**
+
+    **그런데 보정 전 A-C가 $p=0.0337$로 유의해 보인다.** 이것이 사후분석의 함정이다.
+
+    | 단계 | 결과 |
+    |---|---|
+    | 옴니버스 | $p=0.096$ — 기각 못 함 |
+    | A-C 보정 전 | $p=0.034$ — "유의" |
+    | A-C 보정 후 | $p=0.101$ — 기각 못 함 |
+
+    **보정이 일관성을 되돌려 준다.** 세 보정 모두 A-C를 0.101로 보내 옴니버스와 같은 결론에 이른다.
+
+    **보호된 절차(protected procedure).** "옴니버스가 기각했을 때만 사후비교를 한다"는 규칙이다. 이유는
+
+    1. **전체 FWER을 대략 $\alpha$로 유지**한다.
+    2. **논리적 일관성**을 지킨다. 전체적으로 차이가 없다고 했는데 특정 쌍에서 차이가 있다고 말하면 모순처럼 들린다.
+
+    **보정 방법의 차이가 여기서 드러난다.**
+
+    - **본페로니**: A-B의 조정 $p$가 **1.0000**으로 잘려 나간다. $3\times0.4745=1.42>1$이기 때문이다.
+    - **홀름·BH**: A-B를 0.4745로 남긴다. 가장 큰 $p$는 보정하지 않는 것이 두 방법의 구조다.
+    - **가장 작은 $p$(A-C)는 세 방법이 모두 0.1010**으로 같다. 최솟값에 대해서는 세 방법이 일치한다.
+
+    **표본이 얼마나 더 필요했을까.**
+
+    ```python
+    def n_per_group_for(p1, p2, power=0.80, alpha=0.05):
+        za, zb = stats.norm.ppf(1 - alpha / 2), stats.norm.ppf(power)
+        pbar = (p1 + p2) / 2
+        num = (za * np.sqrt(2 * pbar * (1 - pbar))
+               + zb * np.sqrt(p1 * (1 - p1) + p2 * (1 - p2)))**2
+        return int(np.ceil(num / (p1 - p2)**2))
+
+    print(f"A 대 C (0.60 대 0.45) 를 80% 로 탐지: 군당 "
+          f"{n_per_group_for(0.60, 0.45)}명")
+    print(f"A 대 B (0.60 대 0.55) 를 80% 로 탐지: 군당 "
+          f"{n_per_group_for(0.60, 0.55)}명")
+    ```
+
+    ```text
+    A 대 C (0.60 대 0.45) 를 80% 로 탐지: 군당 173명
+    A 대 B (0.60 대 0.55) 를 80% 로 탐지: 군당 1534명
+    ```
+
+    **군당 100명은 부족했다.** A와 C의 15%p 차이를 안정적으로 잡으려면 173명이 필요하다. **다중비교까지 고려하면 더 필요하다.**
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+집단에 **순서**가 있을 때(예: 용량 수준) 일반적인 동질성 검정 대신 쓸 수 있는 **추세검정**을 구현하고 비교하라.
+
+</div>
+
+??? success "풀이"
+    **코크런·아미티지 추세검정.** 집단에 점수 $x_i$를 부여하고, 성공률이 그 점수에 따라 **선형으로 변하는지**를 자유도 1로 검정한다.
+
+    $$
+    T=\sum_i\Bigl(X_i-\bar p\,n_i\Bigr)x_i,
+    \qquad
+    Z=\frac{T}{\sqrt{\bar p(1-\bar p)\bigl[\sum_i n_ix_i^2-(\sum_i n_ix_i)^2/N\bigr]}}
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def cochran_armitage(success, total, scores=None):
+        """순서형 집단에 대한 선형 추세 검정. (z, 양측 p) 를 돌려준다."""
+        success = np.asarray(success, float)
+        total = np.asarray(total, float)
+        x = (np.arange(len(success), dtype=float) if scores is None
+             else np.asarray(scores, float))
+        N, S = total.sum(), success.sum()
+        p_bar = S / N
+        t = (success * x).sum() - p_bar * (total * x).sum()
+        var = p_bar * (1 - p_bar) * ((total * x**2).sum()
+                                     - (total * x).sum()**2 / N)
+        z = t / np.sqrt(var)
+        return z, 2 * stats.norm.sf(abs(z))
+
+    tot = [50, 50, 50, 50]
+    for label, succ in [("단조 증가", [10, 14, 18, 24]),
+                        ("비단조(뒤섞음)", [10, 24, 14, 18])]:
+        table = np.array([[s, t - s] for s, t in zip(succ, tot)], float)
+        c, p, df, _ = stats.chi2_contingency(table, correction=False)
+        z, pz = cochran_armitage(succ, tot)
+        print(f"{label}  성공 {succ} / 각 50")
+        print(f"  일반 동질성   χ² = {c:.4f}, df = {df}, p = {p:.4f}")
+        print(f"  추세검정      z = {z:.4f}, df = 1, p = {pz:.4f}\n")
+    ```
+
+    ```text
+    단조 증가  성공 [10, 14, 18, 24] / 각 50
+      일반 동질성   χ² = 9.6789, df = 3, p = 0.0215
+      추세검정      z = 3.0936, df = 1, p = 0.0020
+
+    비단조(뒤섞음)  성공 [10, 24, 14, 18] / 각 50
+      일반 동질성   χ² = 9.6789, df = 3, p = 0.0215
+      추세검정      z = 0.9415, df = 1, p = 0.3464
+    ```
+
+    **두 자료의 일반 동질성 $\chi^2$이 정확히 같다**(9.6789). 도수만 순서를 바꿨으므로 당연하다. **일반 검정은 집단의 순서를 전혀 모른다.**
+
+    **추세검정은 둘을 완전히 구분한다.** 단조 자료에서 $p=0.002$, 뒤섞은 자료에서 $p=0.346$이다.
+
+    **검정력 비교.**
+
+    ```python
+    rng = np.random.default_rng(1357)
+    M = 5_000
+    for label, ps in [("단조 증가 (0.20→0.44)", [0.20, 0.28, 0.36, 0.44]),
+                      ("V자 (0.35,0.20,0.20,0.35)", [0.35, 0.20, 0.20, 0.35])]:
+        a = b = 0
+        for _ in range(M):
+            s = [rng.binomial(50, q) for q in ps]
+            table = np.array([[x, 50 - x] for x in s], float)
+            if table.sum(0).min() > 0:
+                a += stats.chi2_contingency(table, correction=False)[1] < 0.05
+            b += cochran_armitage(s, [50] * 4)[1] < 0.05
+        print(f"{label:>26s}:  일반 χ² {a / M:.4f}   추세검정 {b / M:.4f}")
+    ```
+
+    ```text
+             단조 증가 (0.20→0.44):  일반 χ² 0.6220   추세검정 0.7768
+      V자 (0.35,0.20,0.20,0.35):  일반 χ² 0.4856   추세검정 0.0592
+    ```
+
+    **추세가 있으면 추세검정이 압도적**이다(0.777 대 0.622).
+
+    **추세가 없으면 완전히 실패한다.** V자 패턴에서 추세검정의 검정력이 **0.059로 유의수준과 다를 바 없다.** 올라갔다 내려오는 효과가 서로 상쇄되어 $T$가 0에 가까워지기 때문이다.
+
+    **선택 기준.**
+
+    | 상황 | 검정 |
+    |---|---|
+    | 집단에 **순서가 있고** 단조 관계를 예상 | **추세검정** |
+    | 순서가 있지만 모양을 모름 | 둘 다 보고(사전 지정) |
+    | 순서가 없음(명목형) | 일반 동질성 |
+    | 비단조 관계 예상(U자 등) | 일반 동질성 또는 이차항 포함 모형 |
+
+    **주의 셋.**
+
+    1. **점수를 사전에 정한다.** 용량이 0, 10, 50, 200 mg이면 $\log$ 점수가 나을 수 있는데, **자료를 보고 고르면 안 된다.**
+    2. **자료를 보고 추세검정으로 갈아타지 않는다.** 그림에서 단조로워 보인다고 바꾸면 수준이 부풀어 오른다.
+    3. **추세가 없다고 "차이가 없다"는 아니다.** V자 자료가 그 예다. 옴니버스 검정을 함께 보고한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+동질성 검정에서 **과대산포**가 있으면 어떻게 되는지 확인하고, 진단과 보정 방법을 제시하라.
+
+</div>
+
+??? success "풀이"
+    **과대산포.** 각 집단의 관측이 서로 독립인 베르누이가 아니라 **군집을 이루면**, 도수의 분산이 이항분포가 예측하는 것보다 크다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(2468)
+    M, m, n_cluster = 5_000, 10, 10      # 군당 군집 10개 × 크기 10 = 100명
+
+    print(f"{'ICC':>5s} {'DEFF':>6s} {'보정 없음':>10s} {'DEFF 로 나눔':>13s} "
+          f"{'χ²/df 평균':>11s}")
+    for icc in [0.0, 0.05, 0.10, 0.20]:
+        deff = 1 + (m - 1) * icc
+        a = b = 0.5 * (1 / icc - 1) if icc > 0 else None
+        raw = adj = 0
+        phis = []
+        for _ in range(M):
+            table = np.zeros((3, 2))
+            for g in range(3):
+                for _ in range(n_cluster):
+                    p_c = rng.beta(a, b) if icc > 0 else 0.5
+                    k = rng.binomial(m, p_c)
+                    table[g, 0] += k
+                    table[g, 1] += m - k
+            if table.sum(0).min() > 0:
+                chi2, p, df, _ = stats.chi2_contingency(table, correction=False)
+                raw += p < 0.05
+                adj += stats.chi2.sf(chi2 / deff, df) < 0.05
+                phis.append(chi2 / df)
+        print(f"{icc:5.2f} {deff:6.2f} {raw / M:10.4f} {adj / M:13.4f} "
+              f"{np.mean(phis):11.4f}")
+    ```
+
+    ```text
+      ICC   DEFF      보정 없음     DEFF 로 나눔    χ²/df 평균
+     0.00   1.00     0.0524        0.0524      1.0084
+     0.05   1.45     0.1208        0.0466      1.4339
+     0.10   1.90     0.2092        0.0516      1.9139
+     0.20   2.80     0.3520        0.0510      2.8554
+    ```
+
+    **ICC가 0.2면 수준이 0.352**다. 세 집단의 비율이 모두 같은데도 35%가 "차이가 있다"고 결론짓는다.
+
+    **진단은 $\chi^2/\text{df}$로 한다.** 마지막 열을 보면
+
+    | ICC | DEFF | $\chi^2/\text{df}$ 평균 |
+    |---|---|---|
+    | 0.00 | 1.00 | **1.008** |
+    | 0.05 | 1.45 | **1.434** |
+    | 0.10 | 1.90 | **1.914** |
+    | 0.20 | 2.80 | **2.855** |
+
+    **$\chi^2/\text{df}$의 평균이 DEFF와 거의 정확히 일치한다.** $H_0$ 아래에서 $E[\chi^2]=\text{df}$여야 하므로, **1보다 크면 과대산포의 신호**다.
+
+    **보정은 그 값으로 나누는 것이다.**
+
+    $$
+    \chi^2_{\text{보정}}=\frac{\chi^2}{\hat\phi},\qquad \hat\phi=\frac{\chi^2}{\text{df}}\ \text{또는 DEFF}
+    $$
+
+    위에서 DEFF로 나누면 수준이 0.047~0.052로 완벽히 회복된다.
+
+    **그런데 진단이 실무에서 어려운 이유.** 표 하나에서 $\chi^2/\text{df}$를 재면 **자유도가 작아 추정이 아주 불안정**하다. 여기서는 df=2이므로 $\hat\phi$의 상대표준오차가 $\sqrt{2/2}=100\%$다. **평균은 맞지만 개별 값은 믿을 수 없다.**
+
+    **그래서 실제로는 이렇게 한다.**
+
+    | 방법 | 내용 |
+    |---|---|
+    | **군집을 분석단위로** | 각 군집의 비율을 관측 하나로 보고 ANOVA·$t$ 검정 |
+    | **ICC를 따로 추정** | 반복 자료나 문헌값에서 얻어 DEFF 계산 |
+    | **일반화추정방정식** | 군집 로버스트 표준오차 |
+    | **혼합효과 로지스틱** | 군집을 확률효과로 |
+    | **붓스트랩** | 군집 단위로 재추출 |
+
+    **첫 방법이 가장 단순하고 확실하다.** 정보를 조금 잃지만 가정이 거의 필요 없다.
+
+    **어떻게 알아채는가.** 과대산포는 **자료만 보고는 잘 드러나지 않는다.** 다음을 확인한다.
+
+    - 자료가 **군집·다단계 표집**으로 모였는가
+    - 같은 개체를 **여러 번** 세지 않았는가
+    - **시간·공간적으로 인접**한 관측이 있는가
+    - 여러 표에서 $\chi^2/\text{df}$가 **일관되게 1보다 큰가**
+
+    **마지막 항목이 실용적인 진단**이다. 비슷한 표가 여럿 있으면 $\chi^2/\text{df}$를 모아 평균 내 본다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff easy" title="쉬움"></span>
+동질성 검정의 **전체 분석 흐름**을 정리하라.
+
+</div>
+
+??? success "풀이"
+
+    **흐름.**
+
+    ```text
+    여러 집단의 분포가 같은지 묻는다
+        │
+        ├─ ① 표집 설계 확인
+        │     ├─ 집단별로 따로 표집 → 동질성 검정
+        │     ├─ 한 표본을 두 변수로 분류 → 독립성 검정 (계산은 같다)
+        │     └─ 같은 개체를 반복 측정 → McNemar / 코크런 Q
+        │
+        ├─ ② 독립성 확인
+        │     └─ 군집 구조가 있으면 DEFF 보정 (연습문제 9)
+        │
+        ├─ ③ 집단에 순서가 있는가
+        │     ├─ 예, 단조 관계 예상 → 추세검정 (연습문제 8)
+        │     └─ 아니오 → 일반 동질성 검정
+        │
+        ├─ ④ 기대도수 확인 → 필요하면 병합·정확검정
+        │
+        ├─ ⑤ 옴니버스 검정
+        │     └─ 기각 못 하면 여기서 멈춘다
+        │
+        ├─ ⑥ 사후분석 (연습문제 7)
+        │     ├─ 쌍별 비교 + 다중비교 보정
+        │     └─ 또는 조정 표준화 잔차
+        │
+        └─ ⑦ 효과크기 + 신뢰구간 + 원 도수표
+    ```
+
+    **동질성과 독립성의 차이 — 한 번 더.**
+
+    | | 동질성 | 독립성 |
+    |---|---|---|
+    | 표집 | 집단마다 따로, **행 합이 고정** | 한 표본, **총합만 고정** |
+    | 귀무가설 | 집단별 **조건부 분포**가 같다 | 두 변수가 **독립** |
+    | 계산 | **완전히 같다** | 완전히 같다 |
+    | 해석 | "집단이 결과에 영향을 주는가" | "두 특성이 연관되는가" |
+
+    **계산이 같으므로 소프트웨어도 같은 함수를 쓴다.** 다른 것은 **연구 설계와 결론의 서술**뿐이다.
+
+    **보고 점검 목록.**
+
+    - [ ] 표집 설계를 명시했는가(집단별 표집인지)
+    - [ ] **원 도수표**를 실었는가
+    - [ ] 행 백분율을 함께 보였는가
+    - [ ] 기대도수의 최솟값을 보고했는가
+    - [ ] $\chi^2$, df, $p$
+    - [ ] **효과크기**(크라메르 $V$)와 신뢰구간
+    - [ ] 사후분석을 했다면 **보정 방법**을 밝혔는가
+    - [ ] 군집 구조가 없음을 확인했는가
+
+    **자주 하는 실수 다섯.**
+
+    | 실수 | 대가 |
+    |---|---|
+    | 옴니버스 기각 전에 사후비교 | 일관성 없는 결론(연습문제 7) |
+    | 사후비교에 보정 없음 | FWER 부풀림 |
+    | 순서형 집단에 일반 검정 | 검정력 손실(연습문제 8) |
+    | 군집 자료를 개인 단위로 | 수준이 0.35까지(연습문제 9) |
+    | $p$만 보고, 효과크기 누락 | $n$이 크면 언제나 유의 |
+
+    **한 문장.** 동질성 검정은 **"어느 집단이 어떻게 다른가"로 가는 관문**일 뿐이다. 옴니버스 $p$ 값 하나로 끝내면 자료가 가진 정보의 대부분을 버리는 셈이다.
+
 ---
 
 ## 정리하며
