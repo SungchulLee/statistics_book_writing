@@ -111,6 +111,7 @@ nav:
             - 원그래프: ch02/visualization/pie_charts.md
             - 파레토 그림: ch02/visualization/pareto.md
             - 모자이크 그림과 도수분포표: ch02/visualization/mosaic.md
+            - 트리맵: ch02/visualization/treemap.md
             - 점그림과 줄기잎그림: ch02/visualization/dot_stem.md
             - 상자그림: ch02/visualization/boxplots.md
             - 바이올린 그림: ch02/visualization/violin.md
