@@ -364,6 +364,7 @@ nav:
         - 10.2 범주형 자료에 대한 카이제곱 검정:
             - 적합도 검정: ch10/test/gof.md
             - 독립성 검정: ch10/test/independence.md
+            - 독립성 검정 - 타이타닉 생존과 성별: ch10/test/independence_titanic.md
             - 동질성 검정: ch10/test/homogeneity.md
             - 카이제곱 적합도 검정 (수동): ch10/test/gof_manual.md
             - 카이제곱 적합도 검정 (scipy): ch10/test/gof_scipy.md
