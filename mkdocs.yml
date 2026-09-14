@@ -350,6 +350,7 @@ nav:
             - 제1종/제2종 오류의 시각화: ch09/errors_and_power/type12_error_visualization.md
         - 9.6 다중검정:
             - p-해킹 시연: ch09/multiple_testing/p_hacking_demo.md
+            - p-해킹 시연 - 타이타닉 절단점 탐색: ch09/multiple_testing/p_hacking_titanic_cutoff.md
             - 가족단위 오류율: ch09/multiple_testing/fwer.md
             - Bonferroni와 Holm 보정: ch09/multiple_testing/bonferroni_holm.md
             - 거짓발견율 (Benjamini-Hochberg): ch09/multiple_testing/fdr.md
