@@ -215,7 +215,6 @@ nav:
     - 6 통계적 추정:
         - 장 개요: ch06/index.md
         - 6.1 추정량의 품질:
-            - 추정량의 품질 — 기본: ch06/estimator_quality/quality_basics.md
             - 편향–분산 맞바꿈: ch06/estimator_quality/bias_variance.md
             - 평균제곱오차: ch06/estimator_quality/mse.md
             - 일치성과 점근정규성: ch06/estimator_quality/consistency.md
@@ -290,7 +289,6 @@ nav:
             - μ의 신뢰구간: ch08/one_sample_intervals/ci_mu.md
             - p의 신뢰구간: ch08/one_sample_intervals/ci_p.md
             - σ²의 신뢰구간: ch08/one_sample_intervals/ci_sigma2.md
-            - 모표준편차를 모를 때의 t 신뢰구간 — 기본: ch08/one_sample_intervals/t_interval_basics.md
             - 평균 신뢰구간의 포함확률 모의실험: ch08/one_sample_intervals/ci_mean_sim.md
             - 비율 신뢰구간의 포함확률 모의실험: ch08/one_sample_intervals/ci_prop_sim.md
             - 분산 신뢰구간의 포함확률 모의실험: ch08/one_sample_intervals/ci_var_sim.md
@@ -300,7 +298,6 @@ nav:
             - μ₁−μ₂의 신뢰구간: ch08/two_sample_intervals/ci_mu_diff.md
             - p₁−p₂의 신뢰구간: ch08/two_sample_intervals/ci_p_diff.md
             - σ₁²/σ₂²의 신뢰구간: ch08/two_sample_intervals/ci_variance_ratio.md
-            - 비율구간과 두 표본 비교 — 기본: ch08/two_sample_intervals/two_sample_basics.md
             - 평균 차이 신뢰구간 모의실험: ch08/two_sample_intervals/ci_diff_means_sim.md
         - 8.4 대응표본 구간:
             - μ_D (차이의 평균)의 신뢰구간: ch08/paired_sample_intervals/ci_mu_paired.md
@@ -318,7 +315,6 @@ nav:
             - 귀무가설과 대립가설: ch09/foundations/hypotheses.md
             - 검정통계량과 p-값: ch09/foundations/pvalues.md
             - 유의수준과 판정 규칙: ch09/foundations/significance_level.md
-            - 통계적 유의성과 실제적 중요성: ch09/foundations/practical_significance.md
             - 가설검정 시연: ch09/foundations/hypothesis_tests.md
             - 동전 던지기 모의실험: ch09/foundations/coin_toss_simulation.md
             - 기각역 시연: ch09/foundations/rejection_region_demo.md
@@ -458,7 +454,6 @@ nav:
         - 12.4 인과:
             - 인과 추론의 기준: ch12/causation/causal_criteria.md
             - 무작위 실험과 인과: ch12/causation/experiments_causation.md
-            - 무작위 추출과 무작위 배정의 역할: ch12/causation/randomization_roles.md
             - 도구변수 (입문): ch12/causation/instrumental_variables.md
             - 방향성 비순환 그래프: ch12/causation/dags.md
             - 인과 개관: ch12/causation/causation.md
