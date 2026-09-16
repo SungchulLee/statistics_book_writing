@@ -35,3 +35,29 @@
   식은 줄을 바꿔 가운데 정렬한다
 - 실습 예제는 파이썬의 NumPy, SciPy, statsmodels를 사용한다
 - 정의, 정리, 주의, 예제는 색이 있는 상자로 구분해 표시한다
+
+## 이 책의 소스와 로컬 실행
+
+이 책은 [MkDocs Material](https://squidfunk.github.io/mkdocs-material/)로 만든 정적 사이트이며, 소스는
+GitHub 저장소 [SungchulLee/statistics_book_writing](https://github.com/SungchulLee/statistics_book_writing)에
+공개되어 있다. 본문은 모두 마크다운으로 쓰고, 수식은 LaTeX 문법을 그대로 적어 MathJax가 렌더링하며,
+표나 세부 서식이 필요한 곳에는 HTML을 섞어 쓴다.
+
+흩어져 있는 `.md` 파일들을 하나의 목차로 묶는 것은 저장소 맨 위의 `mkdocs.yml` 한 파일이다.
+`key: value` 형태의 설정이 이어지고, 그중 `nav` 항목이 "부 → 장 → 절 → 쪽" 계층으로 각 파일을 연결한다.
+
+내려받아 직접 고쳐 볼 수도 있다.
+
+```bash
+git clone https://github.com/SungchulLee/statistics_book_writing.git
+cd statistics_book_writing
+pip install -r requirements.txt
+mkdocs serve
+```
+
+`mkdocs serve`를 실행하면 로컬 서버(<http://127.0.0.1:8000>)가 뜨고, 파일을 저장할 때마다 브라우저가
+자동으로 새로 고쳐진다. 스터디에서 각자 고친 내용을 바로 확인해 가며 읽기에 좋다.
+
+지금 보고 있는 이 사이트도 같은 소스에서 나온다. `main` 가지에 변경이 올라가면 GitHub Actions가
+`mkdocs build --strict`로 사이트를 다시 만들어 GitHub Pages에 배포한다. 원고를 고쳐 밀어 넣는 것과
+사이트가 갱신되는 것 사이에 손으로 하는 일이 없다.
