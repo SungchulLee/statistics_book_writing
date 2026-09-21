@@ -158,7 +158,6 @@ nav:
             - 이산분포 모음: ch04/discrete_distributions/discrete_distributions_suite.md
         - 4.2 연속분포:
             - 균등분포 U(a, b): ch04/continuous_distributions/uniform.md
-            - 균등분포 밀도함수: ch04/continuous_distributions/uniform_pdf.md
             - 지수분포 Exp(λ): ch04/continuous_distributions/exponential.md
             - 지수분포 밀도함수: ch04/continuous_distributions/exponential_pdf.md
             - 정규분포 N(μ, σ²): ch04/continuous_distributions/normal.md
