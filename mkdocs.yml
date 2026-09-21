@@ -162,9 +162,9 @@ nav:
             - 카이제곱분포 χ²(d): ch04/continuous_distributions/chi_square.md
             - t 분포 t(d): ch04/continuous_distributions/student_t.md
             - F 분포 F(d₁, d₂): ch04/continuous_distributions/f_distribution.md
-            - 로그정규분포 LogN(μ, σ²) 밀도함수: ch04/continuous_distributions/lognormal_pdf.md
-            - 로지스틱분포 Logistic(μ, s) 밀도함수 (정규분포와 비교): ch04/continuous_distributions/logistic_pdf.md
-            - 와이불분포 Weibull(k, λ) 밀도함수와 위험함수: ch04/continuous_distributions/weibull_pdf.md
+            - 로그정규분포 LogN(μ, σ²): ch04/continuous_distributions/lognormal.md
+            - 로지스틱분포 Logistic(μ, s): ch04/continuous_distributions/logistic.md
+            - 와이불분포 Weibull(k, λ): ch04/continuous_distributions/weibull.md
             - 역변환 표본추출: ch04/continuous_distributions/inverse_transform_sampling.md
         - 4.3 다변량 구조:
             - 결합분포: ch04/joint/joint.md
