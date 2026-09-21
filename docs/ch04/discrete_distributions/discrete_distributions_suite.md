@@ -113,13 +113,13 @@ E[failures] = 2.33
 
 ## 4. 초기하분포
 
-성공이 $K$개 들어 있는 크기 $N$의 모집단에서 **비복원**으로 $n$개를 뽑을 때의 성공 개수:
+성공이 $N$개 들어 있는 크기 $M$의 모집단에서 **비복원**으로 $n$개를 뽑을 때의 성공 개수:
 
 $$
-P(X = k) = \frac{\binom{K}{k}\binom{N-K}{n-k}}{\binom{N}{n}}
+P(X = k) = \frac{\binom{N}{k}\binom{M-N}{n-k}}{\binom{M}{n}}
 $$
 
-**예:** 모집단 $N = 100$, 불량품 $K = 20$, 추출 $n = 5$.
+**예:** 모집단 $M = 100$, 불량품 $N = 20$, 추출 $n = 5$. 유도와 성질은 [초기하분포](hypergeometric.md) 페이지에서 다룬다.
 
 <div class="codebox" markdown>
 
@@ -128,11 +128,13 @@ $$
 ```python
 from scipy import special
 
-N, K, n = 100, 20, 5
-p2 = stats.hypergeom.pmf(2, N, K, n)
-p2_manual = (special.comb(K, 2) * special.comb(N-K, n-2)) / special.comb(N, n)
+# 이 책의 표기는 HG(n, N, M) = HG(추출 5, 성공 20, 모집단 100)인데
+# scipy 인수는 (모집단, 성공, 추출) 순서다. 이름을 따로 두어 혼동을 막는다.
+pop, succ, draw = 100, 20, 5
+p2 = stats.hypergeom.pmf(2, pop, succ, draw)
+p2_manual = (special.comb(succ, 2) * special.comb(pop - succ, draw - 2)) / special.comb(pop, draw)
 print(f"P(X = 2) = {p2:.4f}  (manual = {p2_manual:.4f})")
-print(f"E[X] = {n*K/N:.2f}")
+print(f"E[X] = {draw*succ/pop:.2f}")
 ```
 
 출력:
@@ -181,13 +183,13 @@ axes[1, 0].bar(gk, stats.geom.pmf(gk + 1, 0.3), color="coral",
 axes[1, 0].set_title("Geometric(p=0.3)")
 axes[1, 0].set_xlabel("k (failures)")
 
-hk = np.arange(0, n + 1)
-# 초기하분포: 전체 N개 중 성공이 K개일 때, n개를 **비복원**으로 뽑아
+hk = np.arange(0, draw + 1)
+# 초기하분포: 전체 M개 중 성공이 N개일 때, n개를 **비복원**으로 뽑아
 # 성공이 몇 개 나오는가. 뽑을 때마다 남은 구성이 바뀌므로 시행이 독립이 아니다.
 # 그 점이 이항분포와의 유일하면서도 결정적인 차이다.
-axes[1, 1].bar(hk, stats.hypergeom.pmf(hk, N, K, n), color="mediumpurple",
+axes[1, 1].bar(hk, stats.hypergeom.pmf(hk, pop, succ, draw), color="mediumpurple",
                edgecolor="white", alpha=0.8)
-axes[1, 1].set_title("Hypergeometric(N=100, K=20, n=5)")
+axes[1, 1].set_title("Hypergeometric(M=100, N=20, n=5)")
 axes[1, 1].set_xlabel("k (defectives)")
 
 plt.tight_layout()
@@ -232,11 +234,11 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 포아송분포
 </div>
 
 ??? success "풀이"
-    **Hypergeometric:** $P(X=2) = \binom{20}{2}\binom{80}{3}/\binom{100}{5} \approx 0.2075$.
+    **초기하분포** $\text{HG}(5, 20, 100)$: $P(X=2) = \binom{20}{2}\binom{80}{3}\big/\binom{100}{5} = 15610400/75287520 \approx 0.2073$.
 
     **Binomial** ($n=5$, $p=0.2$): $P(X=2) = \binom{5}{2}(0.2)^2(0.8)^3 = 10 \times 0.04 \times 0.512 = 0.2048$.
 
-    $n/N = 5/100 = 5\%$로 작기 때문에 근사가 가깝다. 경험 법칙으로, 표본이 모집단의 5–10%보다 작으면 이항분포가 초기하분포를 잘 근사한다.
+    $n/M = 5/100 = 5\%$로 작기 때문에 근사가 가깝다. 경험 법칙으로, 표본이 모집단의 5–10%보다 작으면 이항분포가 초기하분포를 잘 근사한다.
 
 <div class="drillbox" markdown>
 
@@ -257,15 +259,15 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 포아송분포
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-초기하분포의 기댓값은 $E[X] = nK/N$이다. 이 결과를 유도하라.
+초기하분포의 기댓값은 $E[X] = nN/M$이다. 이 결과를 유도하라.
 
 </div>
 
 ??? success "풀이"
-    $i$번째로 뽑은 물건이 불량이면 $X_i = 1$로 두고 $X = \sum_{i=1}^n X_i$로 쓰자. 대칭성에 의해 각 $i$에 대해 $P(X_i = 1) = K/N$이다(뽑힌 물건이 $N$개 중 어느 것일 확률이 모두 같다). 기댓값의 선형성에 의해:
+    $i$번째로 뽑은 물건이 불량이면 $X_i = 1$로 두고 $X = \sum_{i=1}^n X_i$로 쓰자. 대칭성에 의해 각 $i$에 대해 $P(X_i = 1) = N/M$이다(뽑힌 물건이 $M$개 중 어느 것일 확률이 모두 같다). 기댓값의 선형성에 의해:
 
     $$
-    E[X] = \sum_{i=1}^n E[X_i] = n \cdot \frac{K}{N}
+    E[X] = \sum_{i=1}^n E[X_i] = n \cdot \frac{N}{M}
     $$
 
     참고: 비복원추출이므로 $X_i$들은 독립이 아니지만, 기댓값의 선형성에는 독립성이 필요하지 않다. $\square$
@@ -286,7 +288,7 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 포아송분포
     1. **이항분포** $\text{Binomial}(200, 0.02)$. 시행 수가 고정이고 각 시행이 독립이며 성공확률이 같다. 참고로 $n$이 크고 $p$가 작아 $\text{Poisson}(4)$로 근사해도 좋다.
     2. **포아송분포** $\text{Poisson}(6)$. 고정된 구간에서 상한 없이 세며, 도착이 서로 독립이다.
     3. **기하분포** $\text{Geometric}(0.1)$. 첫 성공까지의 대기 횟수다. 시행 번호를 세면 평균 10명, 실패 횟수를 세면 평균 9명이다.
-    4. **초기하분포** $\text{Hypergeometric}(N=45, K=6, n=6)$. 비복원추출이고 모집단이 작아 이항근사를 쓸 수 없다($n/N = 0.133$).
+    4. **초기하분포** $\text{HG}(n=6, N=6, M=45)$. 비복원추출이고 모집단이 작아 이항근사를 쓸 수 없다($n/M = 0.133$).
 
     **고르는 순서.** 먼저 "시행 횟수가 정해져 있는가"를 묻는다. 정해져 있으면 이항 또는 초기하이고, 그다음 "복원인가"로 갈린다. 정해져 있지 않으면 "구간당 개수를 세는가(포아송)" 아니면 "성공까지 기다리는가(기하·음이항)"로 갈린다.
 
@@ -296,7 +298,7 @@ $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$일 때 포아송분포
 연습문제 4의 지시함수 표현을 이어받아 초기하분포의 분산
 
 $$
-\operatorname{Var}(X) = n\frac{K}{N}\left(1-\frac{K}{N}\right)\frac{N-n}{N-1}
+\operatorname{Var}(X) = n\frac{N}{M}\left(1-\frac{N}{M}\right)\frac{M-n}{M-1}
 $$
 
 을 유도하라.
@@ -304,7 +306,7 @@ $$
 </div>
 
 ??? success "풀이"
-    $p = K/N$으로 두면 $X_i \sim \text{Bernoulli}(p)$이므로 $\operatorname{Var}(X_i) = p(1-p)$이다. $X_i$들이 독립이 아니므로 공분산 항이 살아 있다.
+    $p = N/M$으로 두면 $X_i \sim \text{Bernoulli}(p)$이므로 $\operatorname{Var}(X_i) = p(1-p)$이다. $X_i$들이 독립이 아니므로 공분산 항이 살아 있다.
 
     $$
     \operatorname{Var}(X) = \sum_i \operatorname{Var}(X_i) + \sum_{i \ne j}\operatorname{Cov}(X_i, X_j) = np(1-p) + n(n-1)\operatorname{Cov}(X_1, X_2)
@@ -315,21 +317,21 @@ $$
     $E[X_1X_2] = P(\text{첫째와 둘째가 모두 성공})$인데, 비복원이므로
 
     $$
-    E[X_1X_2] = \frac{K}{N}\cdot\frac{K-1}{N-1}
+    E[X_1X_2] = \frac{N}{M}\cdot\frac{N-1}{M-1}
     $$
 
     이다. 따라서
 
     $$
-    \operatorname{Cov}(X_1,X_2) = \frac{K(K-1)}{N(N-1)} - \frac{K^2}{N^2} = \frac{K}{N}\cdot\frac{N(K-1) - K(N-1)}{N(N-1)} = -\frac{p(1-p)}{N-1}
+    \operatorname{Cov}(X_1,X_2) = \frac{N(N-1)}{M(M-1)} - \frac{N^2}{M^2} = \frac{N}{M}\cdot\frac{M(N-1) - N(M-1)}{M(M-1)} = -\frac{p(1-p)}{M-1}
     $$
 
-    이다(분자가 $NK - N - KN + K = K - N$로 정리된다). **음수**라는 점이 핵심이다.
+    이다(분자가 $MN - M - NM + N = N - M$으로 정리된다). **음수**라는 점이 핵심이다.
 
     대입하면
 
     $$
-    \operatorname{Var}(X) = np(1-p) - \frac{n(n-1)p(1-p)}{N-1} = np(1-p)\left(1 - \frac{n-1}{N-1}\right) = np(1-p)\frac{N-n}{N-1}
+    \operatorname{Var}(X) = np(1-p) - \frac{n(n-1)p(1-p)}{M-1} = np(1-p)\left(1 - \frac{n-1}{M-1}\right) = np(1-p)\frac{M-n}{M-1}
     $$
 
     이다. $\square$
@@ -350,7 +352,7 @@ $$
     | 이항 | $np$ | $np(1-p)$ | $1-p < 1$ |
     | 포아송 | $\lambda$ | $\lambda$ | $1$ |
     | 기하(실패 횟수) | $(1-p)/p$ | $(1-p)/p^2$ | $1/p > 1$ |
-    | 초기하 | $nK/N$ | $np(1-p)\frac{N-n}{N-1}$ | $(1-p)\frac{N-n}{N-1} < 1$ |
+    | 초기하 | $nN/M$ | $np(1-p)\frac{M-n}{M-1}$ | $(1-p)\frac{M-n}{M-1} < 1$ |
 
     **포아송의 비가 정확히 1**이고, 이것이 기준선이 된다.
 
@@ -442,13 +444,13 @@ $n$번의 시행에서 성공확률 $p$가 시행마다 같지 않고 **묶음�
 ??? success "풀이"
     SciPy의 규약은 다음과 같다.
 
-    - `M` — 모집단 전체 크기 (이 책의 $N$)
-    - `n` — 모집단 안의 성공 개수 (이 책의 $K$)
+    - `M` — 모집단 전체 크기 (이 책의 $M$)
+    - `n` — 모집단 안의 성공 개수 (이 책의 $N$)
     - `N` — 뽑는 개수 (이 책의 $n$)
 
     따라서 본문 예제는 `stats.hypergeom(M=100, n=20, N=5)`이고, 위치 인자로는 `stats.hypergeom(100, 20, 5)`이다.
 
-    **혼동의 원인은 이름이 뒤집혀 있다는 점이다.** 거의 모든 교재가 모집단 크기를 $N$, 표본 크기를 $n$으로 쓰는데 SciPy는 정확히 반대로 쓴다. `stats.hypergeom(100, 20, 5)`를 "$N=100$, $K=20$, $n=5$"라고 읽으면 우연히 맞지만, 키워드 인자로 `N=100`이라고 쓰면 "100개를 뽑는다"는 뜻이 되어 오류가 난다.
+    **혼동의 원인은 같은 문자가 다른 뜻으로 쓰인다는 점이다.** 이 책은 $\text{HG}(n, N, M)$에서 $M$을 모집단, $N$을 성공 개수, $n$을 표본 크기로 쓴다. SciPy의 `M`은 다행히 모집단으로 같지만, `N`은 이 책의 $n$(뽑는 개수)을 뜻해 정반대다. 키워드 인자로 `N=100`이라고 쓰면 "100개를 뽑는다"는 뜻이 되어 엉뚱한 결과가 나온다.
 
     ```python
     from scipy import stats
@@ -456,7 +458,7 @@ $n$번의 시행에서 성공확률 $p$가 시행마다 같지 않고 **묶음�
     print(rv.pmf(2), rv.mean(), rv.var())  # 0.2073  1.0  0.7677
     ```
 
-    이런 함정이 SciPy 곳곳에 있다. 균등분포의 `scale`은 오른쪽 끝점이 아니라 폭이고, 로그정규분포의 `scale`은 평균이 아니라 $e^\mu$이며, 정규분포의 `scale`은 분산이 아니라 표준편차다. **처음 쓰는 분포는 반드시 `mean()`과 `var()`로 검산하는 습관**이 가장 확실한 방어다. 위에서 평균 $nK/N = 5 \times 0.2 = 1.0$이 맞게 나오는 것으로 인자를 제대로 넘겼음을 확인할 수 있다.
+    이런 함정이 SciPy 곳곳에 있다. 균등분포의 `scale`은 오른쪽 끝점이 아니라 폭이고, 로그정규분포의 `scale`은 평균이 아니라 $e^\mu$이며, 정규분포의 `scale`은 분산이 아니라 표준편차다. **처음 쓰는 분포는 반드시 `mean()`과 `var()`로 검산하는 습관**이 가장 확실한 방어다. 위에서 평균 $nN/M = 5 \times 0.2 = 1.0$이 맞게 나오는 것으로 인자를 제대로 넘겼음을 확인할 수 있다.
 
 ---
 
@@ -471,9 +473,9 @@ $n$번의 시행에서 성공확률 $p$가 시행마다 같지 않고 **묶음�
 | 기하 | 첫 성공까지의 시행 수 | 확률 $p$ |
 | 초기하 | 비복원 추출에서의 성공 수 | 모집단 구성과 뽑는 수 |
 
-- **이항과 초기하의 갈림길은 복원 여부다.** 모집단이 뽑는 수보다 훨씬 크면($n/N\le0.1$) 초기하가 이항에 가까워지므로 실무에서는 이항으로 근사한다.
+- **이항과 초기하의 갈림길은 복원 여부다.** 모집단이 뽑는 수보다 훨씬 크면($n/M\le0.1$) 초기하가 이항에 가까워지므로 실무에서는 이항으로 근사한다.
 - **이항과 포아송.** $n$ 이 크고 $p$ 가 작으며 $np=\lambda$ 가 중간 정도면 이항이 포아송으로 간다. 드문 사건을 셀 때 포아송이 등장하는 이유다.
 - **기하분포의 무기억성.** 지금까지 실패했다는 사실이 앞으로 몇 번 더 해야 하는지에 아무 정보도 주지 않는다. 연속형 대응물이 지수분포다.
 - **평균과 분산의 관계가 분포를 식별해 준다.** 이항은 분산이 평균보다 작고($np(1-p)<np$), 포아송은 같으며, 자료에서 분산이 평균보다 크면(과산포) 음이항 같은 다른 모형이 필요하다.
 
-다음 절부터 **연속분포**로 넘어간다. 균등분포에서 시작해 지수·정규·$t$·카이제곱·$F$ 로 이어지며, 뒤의 셋은 추론에서 쓰이는 표집분포들이다.
+다음 절부터 **연속분포**로 넘어간다. 균등분포를 준비 운동 삼은 뒤 지수 $\to$ 정규 $\to$ 카이제곱 $\to$ $t$ $\to$ $F$ 로 이어지는 사슬을 따라가며, 뒤의 셋은 정규분포에서 만들어지는 추론용 분포들이다.
