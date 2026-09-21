@@ -280,11 +280,50 @@ plt.show()
 
 </div>
 
+### 평균과 최빈값이 갈라져 있다
+
+<div class="codebox" markdown>
+
+#### 예제 2. 평균과 최빈값을 함께 그리기 { .eg }
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+
+k = 5                      # 자유도. 표준정규 k개를 제곱해 더한 것의 분포다.
+chi2 = stats.chi2(df=k)
+
+# x 범위를 분위수로 정한다. 눈대중으로 (0, 20) 같은 범위를 쓰면
+# 자유도가 바뀔 때마다 그림이 잘리거나 남는다.
+# ppf(1e-6)부터 ppf(1-1e-6)까지 잡으면 어떤 k에서도 꼬리까지 알맞게 담긴다.
+x = np.linspace(chi2.ppf(1e-6), chi2.ppf(1 - 1e-6), 600)
+y = chi2.pdf(x)
+
+fig, ax = plt.subplots(figsize=(12, 3))
+ax.plot(x, y, lw=2, label=f"χ² PDF (k={k})")
+# 평균은 정확히 k, 최빈값은 k-2 (k >= 2일 때).
+# 둘이 다르다는 것이 곧 이 분포가 오른쪽으로 치우쳐 있다는 뜻이다.
+ax.axvline(k, linestyle='--', alpha=0.8, label=f"mean = {k}")
+ax.axvline(max(k - 2, 0), linestyle=':', alpha=0.8, label=f"mode = {max(k-2, 0)}")
+ax.set_title("Chi-square Distribution — PDF")
+ax.set_xlabel("x")
+ax.set_ylabel("density")
+ax.legend()
+ax.grid(True, linestyle=":")
+plt.tight_layout()
+plt.show()
+```
+
+![Chi-square Distribution — PDF](./img/chi_square_pdf_32.png)
+
+</div>
+
 ### 정의대로 만들어 보기
 
 <div class="codebox" markdown>
 
-#### 예제 2. 정규 제곱합이 정말 카이제곱인가 { .eg }
+#### 예제 3. 정규 제곱합이 정말 카이제곱인가 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -327,7 +366,7 @@ sample var  10.022 (theory 10)
 
 <div class="codebox" markdown>
 
-#### 예제 3. 세 가지 이름, 같은 분포 { .eg }
+#### 예제 4. 세 가지 이름, 같은 분포 { .eg }
 
 ```python
 import numpy as np
@@ -359,7 +398,7 @@ expon   : [0.3894   0.303265 0.18394  0.067668]
 
 <div class="codebox" markdown>
 
-#### 예제 4. 자유도가 커지면 대칭에 가까워진다 { .eg }
+#### 예제 5. 자유도가 커지면 대칭에 가까워진다 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -614,6 +653,303 @@ $Z_1, Z_2$가 독립인 표준정규일 때, $R^2 = Z_1^2 + Z_2^2$과 각도 $\T
 
     로 두면 $-2\ln U_1 \sim \text{Exp}(1/2)$가 거리 제곱을, $2\pi U_2$가 각도를 담당하여 독립인 표준정규 두 개가 나온다. 균등난수만으로 정규난수를 만드는 고전적인 방법이며, 4.2절의 역변환 표본추출 페이지에서 다루는 방식이 정규분포에 잘 통하지 않는 문제(정규 CDF의 역함수가 닫힌 꼴이 아니다)를 우회한다.
 
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff easy" title="쉬움"></span>
+$N(\mu, \sigma^2)$에서 크기 $n = 25$인 확률표본을 뽑아 $s^2 = 12$를 얻었다. 카이제곱분포를 사용하여 $\sigma^2$에 대한 95% 신뢰구간을 구성하라.
+
+</div>
+
+??? success "풀이"
+    추축량은 $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$이다. $n-1 = 24$이므로
+
+    $$
+    P\!\left(\chi^2_{0.025} \le \frac{24 \cdot 12}{\sigma^2} \le \chi^2_{0.975}\right) = 0.95
+    $$
+
+    이다. SciPy로 $\chi^2_{0.025, 24} = 12.40$, $\chi^2_{0.975, 24} = 39.36$을 얻고 $\sigma^2$에 대해 풀면
+
+    $$
+    \frac{24 \times 12}{39.36} \le \sigma^2 \le \frac{24 \times 12}{12.40}, \qquad 7.32 \le \sigma^2 \le 23.23
+    $$
+
+    이다.
+
+    구간이 $s^2 = 12$를 중심으로 **비대칭**이라는 점에 주목하라. 아래로는 4.7만큼, 위로는 11.2만큼 뻗는다. 카이제곱분포가 오른쪽으로 치우쳐 있기 때문이며, 분산 추정이 위쪽으로 훨씬 불확실하다는 뜻이다. 이 구간의 정규성 의존은 연습문제 14에서 따져 본다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+누율생성함수 $K_Q(t) = \ln M_Q(t)$를 써서 $\chi^2_d$의 모든 누율을 구하고, 왜도와 초과첨도를 밝혀라.
+
+</div>
+
+??? success "풀이"
+    $M_Q(t) = (1-2t)^{-d/2}$이므로
+
+    $$
+    K_Q(t) = -\frac d2\ln(1 - 2t) \;\Longrightarrow\; \kappa_n = 2^{n-1}(n-1)!\;d
+    $$
+
+    이다. 따라서 $\kappa_1 = d$, $\kappa_2 = 2d$, $\kappa_3 = 8d$, $\kappa_4 = 48d$이고
+
+    $$
+    \gamma_1 = \frac{\kappa_3}{\kappa_2^{3/2}} = \sqrt{\frac 8d}, \qquad \gamma_2 = \frac{\kappa_4}{\kappa_2^2} = \frac{12}{d}
+    $$
+
+    이다. 누율이 모두 $d$에 **비례**한다는 점이 가법성(정리 3)의 또 다른 표현이다. 독립인 것을 더하면 누율이 더해지기 때문이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    print(f"{'d':>5}{'sqrt(8/d)':>13}{'scipy 왜도':>13}{'12/d':>10}{'scipy 초과첨도':>16}")
+    for d in (1, 2, 5, 10, 50, 100):
+        s, kk = stats.chi2.stats(d, moments="sk")
+        print(f"{d:>5}{np.sqrt(8 / d):>13.4f}{float(s):>13.4f}"
+              f"{12 / d:>10.4f}{float(kk):>16.4f}")
+    ```
+
+    출력:
+
+    ```
+        d    sqrt(8/d)     scipy 왜도      12/d      scipy 초과첨도
+        1       2.8284       2.8284   12.0000         12.0000
+        2       2.0000       2.0000    6.0000          6.0000
+        5       1.2649       1.2649    2.4000          2.4000
+       10       0.8944       0.8944    1.2000          1.2000
+       50       0.4000       0.4000    0.2400          0.2400
+      100       0.2828       0.2828    0.1200          0.1200
+    ```
+
+    $d \to \infty$에서 $\gamma_1, \gamma_2 \to 0$이므로 정규근사가 정당화된다. **다만 수렴이 느리다.** $d = 100$에서도 왜도가 0.283이다. 이 치우침을 다루는 방법이 연습문제 7의 변환근사다.
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span>
+표본분산이 왜 $\chi^2_{n-1}$을 따르는지, 자유도가 왜 $n$이 아니라 $n-1$인지 설명하고 모의실험으로 확인하라.
+
+</div>
+
+??? success "풀이"
+    $X_i \sim N(\mu, \sigma^2)$일 때 다음 항등식이 성립한다.
+
+    $$
+    \underbrace{\sum_i\frac{(X_i-\mu)^2}{\sigma^2}}_{\chi^2_n}
+    =\underbrace{\frac{n(\bar X-\mu)^2}{\sigma^2}}_{\chi^2_1}
+    +\underbrace{\frac{(n-1)s^2}{\sigma^2}}_{\chi^2_{n-1}}
+    $$
+
+    **코크런 정리**에 의해 우변의 두 항은 독립이며 각각 $\chi^2_1$, $\chi^2_{n-1}$을 따른다. 가법성(정리 3)이 자유도 장부를 맞춰 준다: $n = 1 + (n-1)$.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    x = np.linspace(0.1, 20, 7)
+    print("chi2(d=5) 와 Gamma(a=2.5, scale=2) 의 밀도가 같은가:",
+          np.allclose(stats.chi2.pdf(x, 5), stats.gamma.pdf(x, 2.5, scale=2)))
+
+    n, mu, sig = 8, 3.0, 2.0
+    X = rng.normal(mu, sig, (400_000, n))
+    m, s2 = X.mean(1), X.var(1, ddof=1)
+    Q = (n - 1) * s2 / sig ** 2
+
+    print(f"\n(n-1)s^2/sigma^2:  평균 {Q.mean():.4f} (df={n-1}),"
+          f"  분산 {Q.var():.4f} (2df={2*(n-1)})")
+    print(f"  chi2_{n-1} 까지의 KS 거리 = "
+          f"{stats.kstest(Q, 'chi2', args=(n - 1,)).statistic:.4f}")
+    print(f"  corr(Xbar, s^2) = {np.corrcoef(m, s2)[0, 1]:+.5f}   <- 독립")
+
+    left = ((X - mu) ** 2).sum(1) / sig ** 2
+    right1 = n * (m - mu) ** 2 / sig ** 2
+    print(f"\n분해:  좌변 평균 {left.mean():.4f} (df={n})"
+          f"  =  {right1.mean():.4f} (df=1)  +  {Q.mean():.4f} (df={n-1})")
+    ```
+
+    출력:
+
+    ```
+    chi2(d=5) 와 Gamma(a=2.5, scale=2) 의 밀도가 같은가: True
+
+    (n-1)s^2/sigma^2:  평균 6.9973 (df=7),  분산 14.0410 (2df=14)
+      chi2_7 까지의 KS 거리 = 0.0017
+      corr(Xbar, s^2) = +0.00095   <- 독립
+
+    분해:  좌변 평균 7.9963 (df=8)  =  0.9990 (df=1)  +  6.9973 (df=7)
+    ```
+
+    평균 $6.997 \approx 7$, 분산 $14.04 \approx 14$, KS 거리 0.0017(모의오차 수준), 상관 $+0.00095 \approx 0$으로 모두 확인된다.
+
+    **자유도 하나를 잃는 이유.** $\mu$ 대신 $\bar X$를 쓰면 $n$개의 편차 $X_i - \bar X$가 $\sum_i(X_i - \bar X) = 0$이라는 **제약 하나**를 만족한다. $n$차원 공간의 자유로운 방향이 $n-1$개로 줄어드는 것이며, 이것이 베셀 보정($n-1$로 나누기)의 기하학적 의미다.
+
+    **정규성이 본질적이다.** $\bar X$와 $s^2$의 독립성은 정규분포만의 성질이며, 다음 페이지의 $t$ 분포와 그다음의 $F$ 분포가 성립하는 근거다.
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span>
+적합도 검정통계량 $X^2 = \sum_j (O_j - E_j)^2/E_j$가 왜 $\chi^2_{m-1}$로 가는지 설명하고 확인하라.
+
+</div>
+
+??? success "풀이"
+    $(O_1,\ldots,O_m)\sim\text{Multinomial}(n,\mathbf p)$일 때 각 $O_j$는 근사적으로 $N(np_j,\,np_j(1-p_j))$이고 서로 음의 상관을 갖는다. 다변량 중심극한정리를 적용하면 표준화된 벡터
+
+    $$
+    U_j=\frac{O_j-np_j}{\sqrt{np_j}}
+    $$
+
+    가 근사적으로 다변량 정규를 따르며, 그 공분산행렬이 $I-\sqrt{\mathbf p}\sqrt{\mathbf p}^\top$이다. 이는 $\sqrt{\mathbf p}$ 방향으로의 사영을 뺀 것, 곧 계수 $m-1$인 사영행렬이다. 따라서
+
+    $$
+    X^2=\|\mathbf U\|^2 \xrightarrow{d}\chi^2_{m-1}
+    $$
+
+    이다. **자유도가 $m-1$인 이유는 $\sum_j O_j = n$이라는 제약** 하나 때문이며, 연습문제 11과 같은 구조다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    for m, n in [(4, 50), (4, 500), (10, 500)]:
+        p = np.full(m, 1 / m)
+        O = rng.multinomial(n, p, size=200_000)
+        X2 = ((O - n * p) ** 2 / (n * p)).sum(1)
+        print(f"범주 {m:>2}, n={n:>4}:  평균 {X2.mean():>7.4f} (df={m-1}),"
+              f"  분산 {X2.var():>7.4f} (2df={2*(m-1)}),"
+              f"  KS = {stats.kstest(X2, 'chi2', args=(m - 1,)).statistic:.4f}")
+    ```
+
+    출력:
+
+    ```
+    범주  4, n=  50:  평균  3.0022 (df=3),  분산  5.9008 (2df=6),  KS = 0.0507
+    범주  4, n= 500:  평균  3.0051 (df=3),  분산  5.9967 (2df=6),  KS = 0.0084
+    범주 10, n= 500:  평균  8.9948 (df=9),  분산 17.9558 (2df=18),  KS = 0.0031
+    ```
+
+    **평균과 분산은 $n = 50$에서도 정확히 $m-1$과 $2(m-1)$이다.** 그러나 분포 전체의 근사는 $n$에 달렸다. KS 거리가 $n=50$에서 0.051, $n=500$에서 0.0084로 줄어든다. 처음 두 적률은 소표본에서도 맞지만 꼬리는 그렇지 않다는 뜻이고, 이것이 "기대도수 5 이상" 규칙의 근거다.
+
+    **모수를 추정하면 자유도가 더 줄어든다.** 분포의 모수 $r$개를 자료에서 추정하면 자유도가 $m-1-r$이 된다. 제약이 하나씩 더 붙기 때문이며, 같은 사영 논리다.
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff hard" title="어려움"></span>
+대립가설 아래에서 $X^2$은 **비중심 카이제곱**을 따른다. 이를 이용해 적합도 검정의 검정력을 계산하고, 표본크기 설계로 옮겨라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf Z\sim N(\boldsymbol\delta,I_d)$이면 $\|\mathbf Z\|^2$은 비중심모수 $\lambda=\|\boldsymbol\delta\|^2$인 비중심 카이제곱 $\chi^2_d(\lambda)$를 따르고
+
+    $$
+    E = d+\lambda, \qquad \operatorname{Var} = 2d+4\lambda
+    $$
+
+    이다(연습문제 6의 한 변수 판을 벡터로 확장한 것이다). 적합도 검정에서 참 확률이 $\mathbf p^{(1)}$이고 귀무가설이 $\mathbf p^{(0)}$이면
+
+    $$
+    \lambda = n\sum_j \frac{\left(p^{(1)}_j-p^{(0)}_j\right)^2}{p^{(0)}_j}
+    $$
+
+    이다. **$\lambda$가 $n$에 비례한다.** 이것이 표본을 늘리면 검정력이 오르는 정확한 메커니즘이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    p1 = np.array([0.30, 0.25, 0.25, 0.20])
+    p0 = np.full(4, 0.25)
+    crit = stats.chi2.ppf(0.95, 3)
+    print(f"기각역: X^2 > {crit:.4f}")
+    print(f"{'n':>7}{'lambda':>12}{'이론 검정력':>15}{'모의 검정력':>15}")
+    for n in (100, 300, 1000, 3000):
+        lam = n * ((p1 - p0) ** 2 / p0).sum()
+        O = rng.multinomial(n, p1, size=100_000)
+        X2 = ((O - n * p0) ** 2 / (n * p0)).sum(1)
+        print(f"{n:>7}{lam:>12.4f}{stats.ncx2.sf(crit, 3, lam):>15.4f}"
+              f"{np.mean(X2 > crit):>15.4f}")
+    ```
+
+    출력:
+
+    ```
+    기각역: X^2 > 7.8147
+          n      lambda         이론 검정력         모의 검정력
+        100      2.0000         0.1922         0.1903
+        300      6.0000         0.5181         0.5168
+       1000     20.0000         0.9751         0.9765
+       3000     60.0000         1.0000         1.0000
+    ```
+
+    이론과 모의가 소수 셋째 자리까지 맞는다.
+
+    **표본크기 설계에 바로 쓸 수 있다.** 검정력 0.80을 원하면 $\lambda \approx 10.9$가 필요하고, 여기서는 $\lambda = n \times 0.02$이므로 $n \approx 545$다.
+
+    **$\lambda/n$이 효과크기다.** 위 예에서 $\sum_j(p^{(1)}_j-p^{(0)}_j)^2/p^{(0)}_j = 0.02$이며 코헨의 $w = \sqrt{0.02} = 0.141$로 "작은 효과"에 해당한다. 작은 효과를 잡으려면 큰 표본이 필요하다는 것이 $\lambda \propto n$의 실무적 번역이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff med" title="중간"></span>
+연습문제 9의 신뢰구간은 **정규성**을 가정한다. 그 가정이 틀리면 얼마나 나빠지는가? 실제 포함률을 모의실험으로 측정하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    n, B = 25, 100_000
+    lo, hi = stats.chi2.ppf([0.025, 0.975], n - 1)
+
+    print(f"n = {n}, 목표 신뢰수준 95%")
+    print(f"{'모집단':>12}{'초과첨도':>12}{'실제 포함률':>14}")
+    cases = [("정규", stats.norm), ("균등", stats.uniform), ("지수", stats.expon),
+             ("t(5)", stats.t(5)), ("로그정규", stats.lognorm(1.0))]
+    for name, d in cases:
+        X = d.rvs(size=(B, n), random_state=rng)
+        s2, v = X.var(1, ddof=1), d.var()
+        cover = np.mean(((n - 1) * s2 / hi <= v) & (v <= (n - 1) * s2 / lo))
+        print(f"{name:>12}{float(d.stats(moments='k')):>12.2f}{cover:>14.4f}")
+    ```
+
+    출력:
+
+    ```
+    n = 25, 목표 신뢰수준 95%
+             모집단        초과첨도        실제 포함률
+              정규        0.00        0.9495
+              균등       -1.20        0.9963
+              지수        6.00        0.7208
+            t(5)        6.00        0.8338
+            로그정규      110.94        0.4165
+    ```
+
+    **결과가 참담하다.** 로그정규 자료에서 명목 95% 구간이 실제로는 42%만 포함한다. 절반 이상의 경우에 참 분산이 구간 밖에 있다.
+
+    **원인은 4차 적률이다.** $\sqrt n(s^2-\sigma^2)$의 점근분산은 $\mu_4-\sigma^4 = \sigma^4(\gamma_2+2)$인데, 카이제곱 구간은 $\gamma_2 = 0$(정규)을 가정해 $2\sigma^4$만 반영한다. 초과첨도가 6이면 실제 변동성이 네 배($\gamma_2 + 2 = 8$ 대 2)라 구간이 절반 폭으로 좁다.
+
+    **표본크기를 늘려도 낫지 않는다.** 평균의 신뢰구간은 중심극한정리 덕분에 $n$이 커지면 정규성 위반이 씻겨 나가지만, 분산의 카이제곱 구간은 $n \to \infty$에서도 잘못된 분포를 쓰고 있다. 편향이 사라지지 않는다.
+
+    !!! danger "분산의 카이제곱 신뢰구간은 정규성에 취약하다"
+        평균의 $t$ 구간은 웬만큼 강건하지만 분산의 $\chi^2$ 구간은 강건하지 않다. 자료가 정규임을 확신할 수 없으면 쓰지 말아야 한다.
+
+    **대안.**
+
+    | 방법 | 내용 |
+    |---|---|
+    | 부트스트랩 | $s^2$의 분포를 재표집으로 직접 추정 |
+    | 첨도 보정 | 점근분산에 $\hat\gamma_2$를 넣어 조정 |
+    | 로그 변환 후 분석 | 곱셈적 자료(로그정규)에 적합 |
+    | 사분위범위·MAD | 분산 자체를 포기하고 강건 척도 사용 |
+
+    먼저 첨도를 재라. $\hat\gamma_2$가 1을 넘으면 카이제곱 구간을 신뢰하지 않는 편이 안전하다.
+
 ---
 
 ## 정리하며
@@ -623,4 +959,9 @@ $Z_1, Z_2$가 독립인 표준정규일 때, $R^2 = Z_1^2 + Z_2^2$과 각도 $\T
 - 평균이 $d$, 분산이 $2d$이며, $E[Z^2]=1$과 $\text{Var}(Z^2)=2$를 $d$번 더한 것이다.
 - $\chi^2_d$는 형상 $d/2$, 척도 2인 감마분포이고, 특히 $\chi^2_2$는 지수분포 $\text{Exp}(1/2)$다. 사슬의 첫 고리가 여기에 다시 나타난다.
 - 독립인 카이제곱은 자유도를 더해 가며 합쳐진다. 제곱합을 조각내는 분산분석이 이 성질 위에 서 있다.
+- $d$가 크면 $N(d, 2d)$에 가까워지지만 **수렴이 느리다.** 왜도가 $\sqrt{8/d}$라 $d = 100$에서도 0.28이다. 정규근사가 필요하면 단순 표준화보다 윌슨–힐퍼티 세제곱근 변환이 훨씬 정확하다.
+- **어디서 나오는가.** 표본분산의 분포 $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$, 적합도·독립성 검정통계량의 극한, 그리고 $F$ 분포의 분자와 분모가 모두 카이제곱이다.
 - 남은 두 고리 $t$와 $F$는 모두 카이제곱을 재료로 만들어진다. $t$는 정규를 카이제곱으로 나누고, $F$는 카이제곱 둘의 비를 잡는다.
+
+!!! warning "분산의 카이제곱 신뢰구간은 정규성에 취약하다"
+    평균의 $t$ 구간과 달리 이 구간은 강건하지 않다. 연습문제 14에서 보듯 로그정규 자료에서 명목 95% 구간의 실제 포함률이 42%까지 떨어지며, **표본을 늘려도 나아지지 않는다.**
