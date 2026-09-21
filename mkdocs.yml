@@ -159,7 +159,6 @@ nav:
         - 4.2 연속분포:
             - 균등분포 U(a, b): ch04/continuous_distributions/uniform.md
             - 지수분포 Exp(λ): ch04/continuous_distributions/exponential.md
-            - 지수분포 밀도함수: ch04/continuous_distributions/exponential_pdf.md
             - 정규분포 N(μ, σ²): ch04/continuous_distributions/normal.md
             - 정규분포 밀도함수 (scipy.stats): ch04/continuous_distributions/normal_pdf.md
             - 정규분포 누적분포함수와 분위수: ch04/continuous_distributions/normal_cdf.md
