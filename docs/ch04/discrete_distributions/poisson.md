@@ -357,7 +357,6 @@ plt.show()
 ![네 이산분포 한눈에 보기](./img/four_discrete_95.png)
 
 </div>
-</div>
 
 ---
 
