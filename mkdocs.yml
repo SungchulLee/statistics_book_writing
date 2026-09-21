@@ -167,8 +167,9 @@ nav:
             - 정규분포 백분위점 함수 (분위수 함수): ch04/continuous_distributions/normal_ppf.md
             - 정규분포 생존함수: ch04/continuous_distributions/normal_sf.md
             - 정규분포 난수 생성: ch04/continuous_distributions/normal_rvs.md
-            - t 분포 t(ν) 밀도함수: ch04/continuous_distributions/t_pdf.md
+            - 카이제곱분포 χ²(d): ch04/continuous_distributions/chi_square.md
             - 카이제곱분포 χ²(k) 밀도함수: ch04/continuous_distributions/chi_square_pdf.md
+            - t 분포 t(ν) 밀도함수: ch04/continuous_distributions/t_pdf.md
             - F 분포 F(d₁, d₂) 밀도함수: ch04/continuous_distributions/f_pdf.md
             - 로그정규분포 LogN(μ, σ²) 밀도함수: ch04/continuous_distributions/lognormal_pdf.md
             - 로지스틱분포 Logistic(μ, s) 밀도함수 (정규분포와 비교): ch04/continuous_distributions/logistic_pdf.md
