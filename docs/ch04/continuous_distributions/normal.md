@@ -598,6 +598,96 @@ print(samples)  # 시드가 42면 언제나 같은 값이 나온다
 
 ---
 
+## 지수를 씌우면: 로그정규분포
+
+제곱하거나 나누는 대신 **지수를 씌우면** 또 하나의 분포가 나온다.
+
+<div class="defn" markdown>
+
+### 정의 2. 로그정규분포 { .dfn }
+
+$X \sim N(\mu, \sigma^2)$일 때 $Y = e^X$의 분포를 **로그정규분포**라 하고 $Y \sim \text{LogN}(\mu, \sigma^2)$로 쓴다. 동등하게 $\ln Y \sim N(\mu, \sigma^2)$이며, 밀도는
+
+$$
+f(y) = \frac{1}{y\,\sigma\sqrt{2\pi}}\exp\!\left(-\frac{(\ln y - \mu)^2}{2\sigma^2}\right), \qquad y > 0
+$$
+
+</div>
+
+!!! warning "$\mu$와 $\sigma$는 $Y$의 것이 아니다"
+    **$\mu$와 $\sigma$는 로그를 취한 뒤의 평균과 표준편차**다. $Y$ 자체의 평균은 $e^{\mu+\sigma^2/2}$로 $e^\mu$보다 크다. SciPy도 헷갈리기 쉽게 되어 있어서 `stats.lognorm(s=sigma, scale=np.exp(mu))`로 써야 한다. `s`가 $\sigma$이고 `scale`이 **중앙값** $e^\mu$다.
+
+| 성질 | 값 |
+|---|---|
+| 지지집합 | $(0, \infty)$ |
+| 평균 | $e^{\mu + \sigma^2/2}$ |
+| 중앙값 | $e^{\mu}$ |
+| 최빈값 | $e^{\mu - \sigma^2}$ |
+| 분산 | $(e^{\sigma^2} - 1)\,e^{2\mu + \sigma^2}$ |
+| 변동계수 | $\sqrt{e^{\sigma^2} - 1}$ ($\mu$와 무관) |
+
+세 대푯값의 순서가 언제나
+
+$$
+\underbrace{e^{\mu - \sigma^2}}_{\text{최빈값}} < \underbrace{e^{\mu}}_{\text{중앙값}} < \underbrace{e^{\mu + \sigma^2/2}}_{\text{평균}}
+$$
+
+로 정해져 있다. **오른쪽으로 치우친 분포의 교과서적인 예**이며, 2장에서 본 "평균 > 중앙값이면 오른쪽 꼬리"가 그대로 나타난다. 중앙값이 $e^\mu$로 깔끔한 것은 지수함수가 증가함수라 분위수가 그대로 옮겨 가기 때문이다.
+
+### 왜 이 분포가 그렇게 자주 나타나는가
+
+중심극한정리는 **더하기**에 관한 정리다. 그런데 현실에는 곱으로 쌓이는 양이 많다. 해마다 수익률이 곱해지는 자산 가격, 세대마다 배수로 늘어나는 개체 수, 단계마다 비율로 줄어드는 입자 크기가 그렇다. 양수인 독립 인자 $Z_i$의 곱에 로그를 씌우면
+
+$$
+\ln \prod_{i=1}^n Z_i = \sum_{i=1}^n \ln Z_i
+$$
+
+로 **곱이 합이 되고**, 오른쪽에 중심극한정리를 그대로 적용할 수 있다. 따라서 합이 정규에 가까워지고, 원래의 곱은 로그정규에 가까워진다.
+
+> **덧셈적으로 쌓이면 정규, 곱셈적으로 쌓이면 로그정규.**
+
+소득·주가·생존시간·입자 크기처럼 "반드시 양수이고 오른쪽으로 긴 꼬리를 가진" 자료에 로그정규가 기본 모형으로 쓰이는 이유가 이것이다. 7장(비정규 자료)과 14장(변환)에서 이 분포가 계속 등장한다.
+
+<div class="codebox" markdown>
+
+#### 예제 10. 로그 척도의 표준편차에 따른 모양 { .eg }
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as stats
+
+# 로그정규분포: log(X)가 N(mu, sigma^2)을 따르는 분포다.
+# mu와 sigma는 **로그를 취한 뒤의** 평균과 표준편차이지 X 자체의 것이 아니다.
+mu = 0
+sigmas = [0.5, 1.0, 1.5, 2.0]
+x = np.linspace(0.001, 8, 500)     # X > 0 이므로 0에서 시작한다
+
+fig, ax = plt.subplots(figsize=(12, 4))
+for sigma in sigmas:
+    #   s     = 로그 척도의 표준편차 sigma
+    #   scale = exp(mu)  <- loc가 아니라 scale에 넣는다
+    rv = stats.lognorm(s=sigma, scale=np.exp(mu))
+    # sigma가 커질수록 봉우리가 0쪽으로 밀리고 오른쪽 꼬리가 길어진다.
+    # mu=0 이라 중앙값은 네 곡선 모두 exp(0)=1 로 같다는 점을 확인하라.
+    ax.plot(x, rv.pdf(x), label=rf'$\sigma={sigma}$')
+ax.set_xlabel('x')
+ax.set_ylabel('f(x)')
+ax.set_title(r'Log-Normal Distribution — PDF ($\mu=0$, varying $\sigma$)')
+ax.legend()
+ax.set_ylim(bottom=-0.02)
+plt.tight_layout()
+plt.show()
+```
+
+![로그 척도의 표준편차에 따른 로그정규분포](./img/lognormal_pdf_27.png)
+
+$\sigma$가 커질수록 최빈값 $e^{-\sigma^2}$은 0 쪽으로 밀리고 평균 $e^{\sigma^2/2}$은 오른쪽으로 달아난다. 중앙값만 1에 붙박여 있다.
+
+</div>
+
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -1370,6 +1460,62 @@ $N(\mu, \sigma^2)$에서 크기 $n = 20$인 표본을 $B = 10{,}000$번 뽑아 �
 
     이 모의실험이 정말 쓸모 있는 경우는 가정을 깰 때다. 자료를 지수분포나 자유도 3인 $t$ 분포에서 뽑아 같은 $t$ 구간을 만들어 보면 포함비율이 0.95에서 눈에 띄게 벗어나며, $n$을 키우면 중심극한정리 덕분에 서서히 0.95로 돌아온다. "$n$이 얼마나 커야 충분한가"라는 물음에 수치로 답하는 표준적인 방법이다.
 
+<div class="drillbox" markdown>
+
+**연습문제 31.** <span class="diff hard" title="어려움"></span>
+$Z_1, Z_2, \dots$가 독립이고 같은 분포를 따르는 양의 확률변수이며 $E[\ln Z_i] = m$, $\operatorname{Var}(\ln Z_i) = v < \infty$라 하자. $P_n = \prod_{i=1}^n Z_i$의 극한 성질을 중심극한정리로 기술하고, 로그정규분포가 왜 그토록 자주 나타나는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    로그를 취하면 곱이 합이 된다.
+
+    $$
+    \ln P_n = \sum_{i=1}^n \ln Z_i
+    $$
+
+    $\ln Z_i$가 독립이고 같은 분포를 따르며 분산이 유한하므로 중심극한정리에 따라
+
+    $$
+    \frac{\ln P_n - nm}{\sqrt{nv}} \xrightarrow{d} N(0,1)
+    $$
+
+    이다. 지수를 되돌리면 $P_n$이 근사적으로 모수 $nm$과 $nv$인 로그정규분포를 따른다.
+
+    핵심은 **$Z_i$의 분포가 무엇이든 상관없다**는 것이다. 유한한 로그분산만 있으면 된다. 중심극한정리가 "덧셈적으로 쌓이는 무작위 요인"을 정규분포로 몰아가듯, 그 로그판인 이 결과는 "곱셈적으로 쌓이는 무작위 요인"을 로그정규분포로 몰아간다.
+
+    현실에서 많은 양이 곱셈적으로 자란다. 자산 가격은 일별 수익률 $(1+r_i)$의 곱이고, 생물의 크기는 성장률의 곱이며, 소득은 여러 배율 요인의 누적이다. 그래서 이 양들이 로그정규분포에 가까워진다.
+
+    다만 주의할 점이 있다. 이 근사는 중앙 부근에서만 좋다. 꼬리에서는 수렴이 훨씬 느리고, 실제 자료의 극단값은 로그정규분포가 예측하는 것보다 자주 나타나는 경우가 많다. 금융에서 로그정규 모형이 폭락을 과소평가한다는 비판이 여기서 나온다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 32.** <span class="diff hard" title="어려움"></span>
+반응변수에 로그를 씌워 $\ln Y = \mathbf{x}^\top\boldsymbol\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2)$을 적합한 뒤 예측값에 지수를 취해 $\hat Y = e^{\mathbf{x}^\top\hat{\boldsymbol\beta}}$로 보고했다. 이 값이 무엇의 추정치인지 밝히고, $E[Y \mid \mathbf{x}]$를 원한다면 어떻게 고쳐야 하는지 적어라.
+
+</div>
+
+??? success "풀이"
+    $\ln Y \mid \mathbf{x} \sim N(\mathbf{x}^\top\boldsymbol\beta, \sigma^2)$이므로 $Y \mid \mathbf{x}$는 로그정규분포를 따른다. 연습문제 2에 따라 그 중앙값이 $e^{\mathbf{x}^\top\boldsymbol\beta}$이다. 즉 지수를 그냥 되돌린 값은 **조건부 중앙값**의 추정치이지 조건부 평균이 아니다.
+
+    조건부 평균은
+
+    $$
+    E[Y \mid \mathbf{x}] = e^{\mathbf{x}^\top\boldsymbol\beta + \sigma^2/2} = e^{\mathbf{x}^\top\boldsymbol\beta} \cdot e^{\sigma^2/2}
+    $$
+
+    이므로 $e^{\hat\sigma^2/2}$를 곱해 주어야 한다. $\hat\sigma^2$은 잔차 평균제곱이다. 예를 들어 $\hat\sigma^2 = 0.5$이면 보정계수가 $e^{0.25} \approx 1.284$로, 28%를 그냥 잃고 있었던 셈이다. 아무리 표본이 커져도 사라지지 않는 체계적 과소예측이다.
+
+    다만 이 보정은 오차가 정규분포라는 가정에 기대고 있다. 그 가정이 미덥지 않으면 잔차의 경험분포를 그대로 쓰는 **두안(Duan)의 스미어링 추정량**
+
+    $$
+    \hat E[Y \mid \mathbf{x}] = e^{\mathbf{x}^\top\hat{\boldsymbol\beta}} \cdot \frac{1}{n}\sum_{i=1}^n e^{\hat\varepsilon_i}
+    $$
+
+    을 쓴다. 정규성이 성립하면 $\frac1n\sum e^{\hat\varepsilon_i} \approx e^{\hat\sigma^2/2}$이 되어 두 방법이 일치한다.
+
+    가장 좋은 길은 아예 로그를 씌우지 않는 것이다. 로그연결함수를 쓰는 감마 일반화선형모형이나 포아송 유사가능도를 쓰면 평균을 직접 모형화하므로 역변환 문제가 생기지 않는다. $\square$
+
 ---
 
 ## 정리하며
@@ -1380,3 +1526,4 @@ $N(\mu, \sigma^2)$에서 크기 $n = 20$인 표본을 $B = 10{,}000$번 뽑아 �
 - CDF는 닫힌 형태가 없지만 수치적으로 효율적으로 계산된다.
 - 중심극한정리는 정규분포가 자연과 통계학에서 그토록 자주 나타나는 이유를 설명한다.
 - 정규분포는 4.2절 사슬의 중심이다. 제곱해 더하면 카이제곱, 카이제곱으로 나누면 $t$, 카이제곱끼리 나누면 $F$가 되어 추론에 쓰이는 분포가 모두 여기서 파생된다.
+- 지수를 씌우면 **로그정규분포**가 된다. 덧셈적으로 쌓이는 양이 정규로 간다면, 곱셈적으로 쌓이는 양은 로그정규로 간다.
