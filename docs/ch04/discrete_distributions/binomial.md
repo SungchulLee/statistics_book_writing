@@ -1,62 +1,24 @@
-# 베르누이분포와 이항분포
+# 이항분포
 
 ## 개요
 
-**베르누이분포**는 두 가지 결과(성공/실패)를 갖는 단일 시행을 모형화하고, **이항분포**는 이를 확장하여 $n$번의 독립 시행에서 성공 횟수를 센다. 이 둘은 이산확률모형의 기초를 이룬다.
-
-4.1절의 이산분포는 모두 베르누이 시행 하나에서 출발해 조건을 하나씩 바꾸어 가며 얻어지는 사슬을 이룬다.
+**이항분포**는 성공확률이 같은 독립 베르누이 시행을 $n$번 하고 성공 횟수를 센 것의 분포다. 앞 페이지의 벽돌 하나를 $n$개 쌓아 올린 첫 번째 건물이며, 이산확률모형의 기준점이 된다.
 
 $$
-\text{Bernoulli}(p) \longrightarrow B(n, p) \longrightarrow \text{HG}(n, N, M) \longrightarrow \text{Geo}(p) \longrightarrow \text{NB}(r, p) \longrightarrow \text{Poisson}(\lambda)
+\text{Bernoulli}(p) \;\longrightarrow\; B(n, p) \;\longrightarrow\; \text{HG}(n, N, M) \;\longrightarrow\; \text{Geo}(p) \;\longrightarrow\; \text{NB}(r, p) \;\longrightarrow\; \text{Poisson}(\lambda)
 $$
 
-이 페이지는 그 사슬의 첫 두 고리를 다룬다.
+사슬의 나머지는 모두 이항분포의 가정을 하나씩 바꾸어 얻어진다. 그 갈림길은 아래 "이항분포에서 갈라지는 길" 절에 정리해 두었다.
 
 ---
 
-## 베르누이분포
+## 정의
 
 <div class="defn" markdown>
 
-### 정의 1. 베르누이분포 { .dfn }
+### 정의 1. 이항분포 { .dfn }
 
-확률변수 $X$가 확률 $p$로 값 1(성공)을, 확률 $1 - p$로 값 0(실패)을 가지면 $X$는 베르누이분포를 따른다:
-
-$$
-X \sim \text{Bernoulli}(p), \qquad P(X = x) = p^x (1 - p)^{1-x}, \quad x \in \{0, 1\}
-$$
-
-</div>
-
-### 성질
-
-$$
-\begin{aligned}
-E[X] &= p \\
-\text{Var}(X) &= p(1 - p) \\
-\text{SD}(X) &= \sqrt{p(1 - p)}
-\end{aligned}
-$$
-
-### 분산의 유도
-
-$$
-E[X^2] = 0^2 \cdot (1-p) + 1^2 \cdot p = p
-$$
-
-$$
-\text{Var}(X) = E[X^2] - (E[X])^2 = p - p^2 = p(1 - p)
-$$
-
----
-
-## 이항분포
-
-<div class="defn" markdown>
-
-### 정의 2. 이항분포 { .dfn }
-
-$X_1, X_2, \ldots, X_n$이 독립인 $\text{Bernoulli}(p)$ 확률변수이면, $Y = \sum_{i=1}^n X_i$는 **이항분포**를 따른다:
+$X_1, X_2, \ldots, X_n$이 독립인 [$\text{Bernoulli}(p)$](bernoulli.md) 확률변수이면, $Y = \sum_{i=1}^n X_i$는 **이항분포**를 따른다:
 
 $$
 Y \sim \text{Binomial}(n, p), \qquad P(Y = k) = \binom{n}{k} p^k (1 - p)^{n-k}, \quad k = 0, 1, \ldots, n
@@ -283,7 +245,7 @@ plt.show()
 | $n \to \infty$, $p \to 0$, $np \to \lambda$ | $\text{Poisson}(\lambda)$ | 4.1 |
 | $n \to \infty$, $p$ 고정 | $N(np,\, np(1-p))$ | 4.2 |
 
-바로 위 절에서 다룬 정규근사가 마지막 줄이고, 연습문제 9가 셋째 줄이며, 연습문제 10이 첫째 줄의 맛보기다. 다음 페이지에서 그 첫째 줄을 제대로 다룬다.
+바로 위 절에서 다룬 정규근사가 마지막 줄이고, 연습문제 8이 셋째 줄이며, 연습문제 9가 첫째 줄의 맛보기다. 다음 페이지에서 그 첫째 줄을 제대로 다룬다.
 
 ---
 
@@ -374,26 +336,6 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-**베르누이 분산은 $p = 1/2$에서 최대가 된다.** 이를 해석적으로 증명하고 신뢰구간 계산에서 갖는 실용적 의미를 설명하라.
-
-</div>
-
-??? success "풀이"
-    $\mathrm{Var}(X) = p(1 - p)$를 $p$에 대해 미분하면:
-
-    $$
-    \frac{d}{dp}\, p(1-p) = 1 - 2p
-    $$
-
-    0으로 두면 $p = 1/2$이다. 이계도함수가 $-2 < 0$이므로 최대점이며, 최대 분산은 $1/4$이다.
-
-    **실용적 의미:** 이항 비율의 신뢰구간에서 최악의 경우 분산은 $p(1-p) \le 1/4$이다. 보수적인 표준오차는 $\sqrt{1/(4n)} = 1/(2\sqrt n)$이므로, 95% 오차한계는 최대 $1.96/(2\sqrt n) \approx 1/\sqrt n$이다.
-
-    오차한계를 $\le 0.03$으로 두면 $n \ge 1/(0.03)^2 \approx 1111$이 되는데, 이것이 전국 여론조사에서 "n ≈ 1000" 규칙이 나온 배경이다. 실제 $p$는 대개 0.5에서 떨어져 있으므로 이 보수적 한계는 다소 느슨하지만, $p$가 무엇이든 통하는 표본크기 추정치를 제공한다.
-
-<div class="drillbox" markdown>
-
-**연습문제 6.** <span class="diff med" title="중간"></span>
 **역문제: 표본으로부터 $p$ 구하기.** $n = 100$번의 시행에서 $Y = 35$번의 성공을 관측했다. 두 가지 방법으로 $p$에 대한 근사 95% 신뢰구간을 구성하라: (a) **Wald** ($\hat p \pm 1.96 \sqrt{\hat p(1 - \hat p)/n}$); (b) **Wilson 점수 구간**. 둘을 비교하라.
 
 </div>
@@ -421,7 +363,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 동전을 20번 던져 앞면이 15번 나왔다. $H_0: p = 0.5$를 양측으로 검정하라. 정확 이항검정과 정규근사(연속성 수정 유무 각각)를 견주어라.
 
 </div>
@@ -455,7 +397,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 $\text{Binomial}(n, p)$의 최빈값이 $\lfloor (n+1)p \rfloor$임을 보여라(단 $(n+1)p$가 정수이면 봉우리가 둘이다). $n=20$, $p=0.5$일 때 확인하라.
 
 </div>
@@ -483,7 +425,7 @@ $\text{Binomial}(n, p)$의 최빈값이 $\lfloor (n+1)p \rfloor$임을 보여라
 
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
 $n \to \infty$, $p \to 0$이면서 $np \to \lambda$로 고정될 때 $\text{Binomial}(n,p)$의 PMF가 $\text{Poisson}(\lambda)$의 PMF로 수렴함을 보여라.
 
 </div>
@@ -519,7 +461,7 @@ $n \to \infty$, $p \to 0$이면서 $np \to \lambda$로 고정될 때 $\text{Bino
 
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 크기 $M = 500$인 상자에 불량품이 $N = 100$개 들어 있다. 20개를 **비복원**으로 뽑을 때 불량품 개수의 분포는 무엇인가? 이항분포로 근사하면 분산이 얼마나 어긋나는가?
 
 </div>
@@ -555,7 +497,7 @@ $n \to \infty$, $p \to 0$이면서 $np \to \lambda$로 고정될 때 $\text{Bino
 
 <div class="drillbox" markdown>
 
-**연습문제 11.** <span class="diff med" title="중간"></span>
+**연습문제 10.** <span class="diff med" title="중간"></span>
 이항분포를 결과가 셋 이상인 경우로 넓힌 것이 **다항분포**이다. PMF를 적고, 각 성분의 주변분포와 두 성분의 공분산을 구하라.
 
 </div>
@@ -587,7 +529,7 @@ $n \to \infty$, $p \to 0$이면서 $np \to \lambda$로 고정될 때 $\text{Bino
 
 <div class="drillbox" markdown>
 
-**연습문제 12.** <span class="diff hard" title="어려움"></span>
+**연습문제 11.** <span class="diff hard" title="어려움"></span>
 $n$번의 시행에서 성공확률 $p$가 시행마다 같지 않고 **묶음마다 다르다**고 하자. $P \sim \text{Beta}(a,b)$이고 $X \mid P = p \sim \text{Binomial}(n,p)$일 때 $X$의 평균과 분산을 구하고, 이항분포와 견주어라.
 
 </div>
@@ -619,7 +561,7 @@ $n$번의 시행에서 성공확률 $p$가 시행마다 같지 않고 **묶음�
 
     **견주면.** 평균은 같은데 분산이 이항분포의 $\{1 + (n-1)/(a+b+1)\}$배다. 언제나 1보다 크므로 **과대산포**다. $a+b \to \infty$이면 $P$가 한 점으로 모여 이항분포로 돌아간다.
 
-    이 분포를 **베타-이항분포**라 하며, 기하분포 절에서 본 감마-포아송 혼합(음이항)과 정확히 같은 구조다. **모수를 확률변수로 두고 섞으면 산포가 커진다.** 일반적으로 전체분산 정리의 둘째 항 $\operatorname{Var}\{E[X\mid P]\}$이 양수인 한 그렇다.
+    이 분포를 **베타-이항분포**라 하며, [음이항분포](negative_binomial.md) 페이지에서 볼 감마–포아송 혼합과 정확히 같은 구조다. **모수를 확률변수로 두고 섞으면 산포가 커진다.** 일반적으로 전체분산 정리의 둘째 항 $\operatorname{Var}\{E[X\mid P]\}$이 양수인 한 그렇다.
 
     실제 자료에서 이런 구조가 흔하다. 같은 농장의 닭들, 같은 학급의 학생들, 같은 환자에게서 여러 번 잰 값은 묶음 안에서 닮아 있다. 이를 무시하고 이항 모형을 쓰면 표준오차가 과소평가되어 잘못된 유의성이 나온다. 묶음 자료의 유효 표본크기가 관측 수보다 훨씬 작다는 사실을 반영하려면 베타-이항, 혼합효과 로지스틱, 일반화추정방정식 같은 도구가 필요하다.
 
@@ -627,7 +569,7 @@ $n$번의 시행에서 성공확률 $p$가 시행마다 같지 않고 **묶음�
 
 ## 정리하며
 
-- 베르누이분포는 단일 이항 시행을 모형화하고, 이항분포는 $n$번의 독립 시행에서 성공 횟수를 센다.
+- 이항분포는 독립인 베르누이 시행 $n$번의 성공 횟수를 센다. 모수는 시행 횟수 $n$과 성공확률 $p$ 둘이다.
 - Binomial PMF는 성공이 나타날 수 있는 모든 순서를 반영하기 위해 이항계수를 사용한다.
 - 평균 $np$와 분산 $np(1-p)$는 독립 베르누이 확률변수의 합이라는 표현에서 곧바로 따라 나온다.
 - $n$이 크면 이항분포는 정규분포로 잘 근사되어 이산확률과 연속확률을 이어 준다.

@@ -1,20 +1,20 @@
-# 기하분포와 음이항분포
+# 기하분포
 
 ## 개요
 
-**기하분포**는 첫 성공까지의 시행 횟수를 모형화하고, **음이항분포**는 이를 일반화하여 $r$번째 성공까지의 시행 횟수를 다룬다. 두 분포 모두 독립 베르누이 시행을 순차적으로 반복하는 실험에서 자연스럽게 나타난다.
+**기하분포**는 첫 성공이 나올 때까지 걸리는 시행 횟수를 모형화한다. 독립 베르누이 시행을 성공이 나올 때까지 되풀이하는 실험에서 자연스럽게 나타난다.
 
 4.1절의 사슬에서 이 페이지는 **무엇을 고정하는지를 뒤집는** 자리에 있다.
 
 $$
-\text{HG}(n, N, M) \;\longrightarrow\; \text{Geo}(p) \;\longrightarrow\; \text{NB}(r, p)
+\text{Bernoulli}(p) \to B(n, p) \to \text{HG}(n, N, M) \;\longrightarrow\; \text{Geo}(p) \;\longrightarrow\; \text{NB}(r, p) \to \text{Poisson}(\lambda)
 $$
 
-앞의 두 분포(이항, 초기하)는 **시행 횟수를 정해 놓고 성공 횟수를 셌다.** 여기서는 반대로 **성공 횟수를 정해 놓고 시행 횟수를 센다.** 성공 1번이면 기하분포, $r$번이면 음이항분포다. 같은 베르누이 시행 열을 보면서 무엇을 세느냐만 바꾼 것이다.
+앞의 두 분포(이항, 초기하)는 **시행 횟수를 정해 놓고 성공 횟수를 셌다.** 여기서는 반대로 **성공 횟수를 정해 놓고 시행 횟수를 센다.** 성공 1번이면 기하분포이고, $r$번으로 올리면 다음 페이지의 [음이항분포](negative_binomial.md)가 된다. 같은 베르누이 시행 열을 보면서 무엇을 세느냐만 바꾼 것이다.
 
 ---
 
-## 기하분포
+## 정의
 
 <div class="defn" markdown>
 
@@ -88,43 +88,6 @@ $$
 
     ---
 
-## 음이항분포
-
-<div class="defn" markdown>
-
-### 정의 2. 음이항분포 { .dfn }
-
-독립 베르누이 시행에서 $r$번의 성공을 얻는 데 필요한 시행 횟수 $Y$는 **음이항분포**를 따른다:
-
-$$
-Y \sim \text{NegBin}(r, p), \qquad P(Y = k) = \binom{k-1}{r-1} p^r (1-p)^{k-r}, \quad k = r, r+1, r+2, \ldots
-$$
-
-이항계수 $\binom{k-1}{r-1}$은 처음 $k-1$번의 시행 중에 $r-1$번의 성공을 배치하는 경우의 수를 센다($k$번째 시행은 반드시 성공이어야 한다).
-
-**참고:** $r = 1$이면 음이항분포는 기하분포로 환원된다.
-
-</div>
-
-### 성질
-
-$$
-\begin{aligned}
-E[Y] &= \frac{r}{p} \\[4pt]
-\text{Var}(Y) &= \frac{r(1-p)}{p^2}
-\end{aligned}
-$$
-
-### 기하 확률변수의 합을 통한 유도
-
-$X_1, X_2, \ldots, X_r$이 독립인 $\text{Geometric}(p)$ 확률변수이면 $Y = \sum_{i=1}^r X_i \sim \text{NegBin}(r, p)$이다. 따라서:
-
-$$
-E[Y] = \sum_{i=1}^r E[X_i] = \frac{r}{p}, \qquad \text{Var}(Y) = \sum_{i=1}^r \text{Var}(X_i) = \frac{r(1-p)}{p^2}
-$$
-
----
-
 ## 문제
 
 <div class="probox" markdown>
@@ -175,39 +138,7 @@ ax.legend()
 plt.show()
 ```
 
-![기하분포와 Negative 이항분포](./img/geometric_131.png)
-
-</div>
-
-### 음이항분포
-
-<div class="codebox" markdown>
-
-#### 예제 2. 음이항분포의 SciPy 판본 { .eg }
-
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
-
-# scipy의 음이항분포는 **실패 횟수**를 세는 판본이다.
-# nbinom(r, p).pmf(k) = "r번째 성공이 나오기까지 실패가 k번 일어날 확률"
-# 따라서 총 시행 횟수는 k + r 이고, x가 0부터 시작한다.
-# 기하분포는 r = 1 인 특수한 경우다.
-r, p = 5, 0.4
-x = np.arange(0, 30)
-
-fig, ax = plt.subplots(figsize=(12, 3))
-# 기하분포와 달리 봉우리가 생긴다. 실패가 너무 적어도(운이 좋아도)
-# 너무 많아도 확률이 낮기 때문이다.
-ax.bar(x, stats.nbinom(r, p).pmf(x), alpha=0.7, label=f'NegBin(r={r}, p={p})')
-ax.set_xlabel('k (number of failures before r-th success)')
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
-
-![기하분포와 Negative 이항분포](./img/geometric_151.png)
+![기하분포의 확률질량함수와 분포함수](./img/geometric_131.png)
 
 </div>
 
@@ -215,7 +146,7 @@ plt.show()
 
 <div class="codebox" markdown>
 
-#### 예제 3. 기하분포의 무기억성 { .eg }
+#### 예제 2. 기하분포의 무기억성 { .eg }
 
 ```python
 import numpy as np
@@ -251,7 +182,7 @@ P(X>3+5|X>3) = 0.1690,  P(X>5) = 0.1681
 
 <div class="codebox" markdown>
 
-#### 예제 4. 성공확률에 따른 기하분포 비교 { .eg }
+#### 예제 3. 성공확률에 따른 기하분포 비교 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -270,7 +201,7 @@ ax.legend()
 plt.show()
 ```
 
-![기하분포와 Negative 이항분포](./img/geometric_188.png)
+![성공확률에 따른 기하분포 비교](./img/geometric_188.png)
 
 </div>
 
@@ -286,14 +217,9 @@ $$
 \end{aligned}
 $$
 
-### 다음 고리: 음이항분포에서 포아송분포로
+### 다음 고리: 목표를 r번으로 올리면
 
-음이항분포는 두 가지 서로 다른 길로 포아송분포에 닿는다. 4.1절 사슬의 마지막 고리다.
-
-- **극한으로서.** $r \to \infty$, $p \to 1$이면서 $r(1-p)/p \to \lambda$로 고정하면 실패 횟수를 세는 음이항분포가 $\text{Poisson}(\lambda)$로 수렴한다. 성공이 너무 흔해져서 실패가 드문 사건이 되는 상황이다.
-- **혼합으로서.** 포아송분포의 비율 $\lambda$ 자체를 감마분포를 따르는 확률변수로 두고 섞으면 음이항분포가 나온다(연습문제 9). 방향을 거꾸로 읽으면, 음이항분포는 **포아송분포에 산포를 하나 더 얹은 것**이다. $\theta \to 0$이면 포아송으로 되돌아간다.
-
-실제 계수 자료에서 분산이 평균보다 크면(과대산포) 포아송 대신 음이항을 쓰는 관행이 여기에서 나온다.
+첫 성공까지가 아니라 $r$번째 성공까지 기다리면 음이항분포가 된다. 독립인 기하확률변수 $r$개의 합이므로 평균과 분산이 그대로 $r$배가 되며, 거기서 사슬은 포아송분포로 이어진다. 다음 페이지에서 다룬다.
 
 ---
 
@@ -335,29 +261,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
-**음이항분포.** i.i.d. Bernoulli($p$) 시행에서 $r$번째 성공까지의 시행 횟수를 $Z$라 하자. PMF, $\mathbb{E}[Z]$, $\mathrm{Var}(Z)$를 유도하라.
-
-</div>
-
-??? success "풀이"
-    $Z = k$이려면 처음 $k - 1$번의 시행에서 정확히 $r - 1$번 성공하고 $k$번째 시행에서 성공해야 한다:
-
-    $$
-    P(Z = k) = \binom{k-1}{r-1} p^r (1-p)^{k-r}, \quad k = r, r+1, \ldots
-    $$
-
-    $Z$는 독립인 기하 확률변수 $Y_1, \ldots, Y_r$(각 성공까지의 대기 시간)의 합으로 쓸 수 있다. 따라서:
-
-    $$
-    \mathbb{E}[Z] = r/p, \qquad \mathrm{Var}(Z) = r(1-p)/p^2
-    $$
-
-    $r = 1$이면 기하분포로 환원된다. 음이항분포는 기하분포를 여러 번의 성공으로 일반화하며, 과대산포된 계수 자료의 모형에 바탕이 된다.
-
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff hard" title="어려움"></span>
+**연습문제 3.** <span class="diff hard" title="어려움"></span>
 **쿠폰 수집가 문제.** $n$가지 종류의 쿠폰을 모두 모으려면 (복원추출로) 독립적인 무작위 추출을 몇 번 해야 하는가? 전체 추출 횟수 $T$에 대해 $\mathbb{E}[T]$를 구하라.
 
 </div>
@@ -379,7 +283,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **이산화된 지수분포로서의 기하분포.** $\Delta t$가 작을 때 $p$가 $\lambda \Delta t$에 대응하는 방식으로, 기하분포가 지수분포의 이산시간 대응물로 나타남을 보여라.
 
 </div>
@@ -397,7 +301,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **기하분포의 역변환 표본추출.** $U \sim \mathrm{Uniform}(0, 1)$이 주어졌을 때 $X \sim \mathrm{Geometric}(p)$를 생성하는 공식을 유도하라.
 
 </div>
@@ -425,7 +329,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 기하분포에는 "첫 성공이 나온 **시행 번호**"를 세는 판본과 "첫 성공 **이전의 실패 횟수**"를 세는 판본이 있다. 두 판본의 지지집합, 평균, 분산을 각각 적고, SciPy에서 어느 함수가 어느 판본인지 확인하라.
 
 </div>
@@ -454,7 +358,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 $Y_1, \dots, Y_n$이 독립이고 $\text{Geometric}(p)$(시행 번호 판본)를 따를 때 $p$의 최대가능도추정량을 구하라. 이 추정량은 불편인가?
 
 </div>
@@ -492,43 +396,7 @@ $Y_1, \dots, Y_n$이 독립이고 $\text{Geometric}(p)$(시행 번호 판본)를
 
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
-$Y \mid \Lambda = \lambda \sim \text{Poisson}(\lambda)$이고 $\Lambda \sim \text{Gamma}(\text{형상}=r,\ \text{척도}=\theta)$일 때 $Y$의 주변분포가 음이항분포임을 보여라. 이것이 계수 자료 분석에서 왜 중요한가?
-
-</div>
-
-??? success "풀이"
-    조건부 확률에 사전밀도를 곱해 적분한다.
-
-    $$
-    P(Y=y) = \int_0^\infty \frac{e^{-\lambda}\lambda^y}{y!}\cdot\frac{\lambda^{r-1}e^{-\lambda/\theta}}{\Gamma(r)\theta^r}\,d\lambda = \frac{1}{y!\,\Gamma(r)\theta^r}\int_0^\infty \lambda^{y+r-1}e^{-\lambda(1+1/\theta)}\,d\lambda
-    $$
-
-    남은 적분은 감마적분이므로 $\Gamma(y+r)\,(1+1/\theta)^{-(y+r)}$이다. $p = 1/(1+\theta)$로 두면 $1-p = \theta/(1+\theta)$이고, 정리하면
-
-    $$
-    P(Y=y) = \frac{\Gamma(y+r)}{y!\,\Gamma(r)}\,p^r(1-p)^y, \qquad y = 0, 1, 2, \dots
-    $$
-
-    를 얻는다. 이것이 (실패 횟수를 세는 판본의) 음이항분포이다. $\square$
-
-    $r$이 정수일 필요도 없다. 이항계수 대신 감마함수로 쓴 덕분에 $r > 0$인 실수면 된다.
-
-    **왜 중요한가.** 적률을 계산하면
-
-    $$
-    E[Y] = r\theta, \qquad \operatorname{Var}(Y) = r\theta(1+\theta) = E[Y]\,(1+\theta)
-    $$
-
-    이다. 분산이 평균보다 $(1+\theta)$배 크다. 포아송분포는 평균과 분산이 같아야 하는데, 실제 계수 자료는 거의 언제나 분산이 더 크다. 이를 **과대산포**라 한다.
-
-    이 유도가 그 원인을 말해 준다. 개체마다 사건 발생률 $\lambda$가 다르면(관측되지 않은 이질성), 전체를 뭉뚱그린 분포는 포아송이 아니라 그 혼합이 되고 분산이 부풀어 오른다. 보험 가입자마다 사고 성향이 다르고, 지역마다 감염 위험이 다르며, 유전자마다 발현량이 다르다.
-
-    실무적 귀결은 분명하다. 과대산포된 자료에 포아송 회귀를 쓰면 계수 추정은 그런대로 나와도 **표준오차가 심하게 과소평가**되어 있지도 않은 유의성이 쏟아진다. 음이항 회귀를 쓰면 $\theta$가 이 여분의 산포를 흡수한다. RNA 시퀀싱 자료 분석 도구들이 하나같이 음이항 모형을 쓰는 이유이며, $\theta \to 0$이면 포아송으로 돌아가므로 포아송을 특수한 경우로 포함한다.
-
-<div class="drillbox" markdown>
-
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 기하분포(시행 번호 판본)의 확률생성함수 $G(s) = E[s^Y]$를 구하고, 이를 미분해 평균과 분산을 유도하라.
 
 </div>
@@ -570,8 +438,9 @@ $Y \mid \Lambda = \lambda \sim \text{Poisson}(\lambda)$이고 $\Lambda \sim \tex
 
 ## 정리하며
 
-- 기하분포는 첫 성공까지의 대기 시간을 모형화하며, 무기억성을 갖는 유일한 이산분포이다.
-- 음이항분포는 기하분포를 일반화하여 $r$번째 성공까지의 시행 횟수를 센다.
-- 두 분포 모두 독립 베르누이 시행의 열에서 나온다.
-- 기하분포의 평균 $1/p$는 직관적으로 해석된다. 성공확률이 낮을수록 기대 대기 시간이 길어진다.
-- 기하분포는 지수분포의 이산형 대응물로, 무기억성을 공유한다.
+- 기하분포는 첫 성공까지의 대기 시간을 모형화하며, **무기억성을 갖는 유일한 이산분포**다.
+- 평균 $1/p$는 직관적으로 읽힌다. 성공확률이 낮을수록 기대 대기 시간이 길어진다.
+- 분산 $(1-p)/p^2$은 평균보다 크다. 대기 문제는 원래 흔들림이 큰 현상이다.
+- 지수분포의 이산형 대응물이며 무기억성을 공유한다. 시간을 잘게 쪼개면 기하분포가 지수분포로 간다.
+- SciPy의 `geom`은 **시행 번호**를 세는 판본이라 최솟값이 1이다. 실패 횟수를 세는 판본과 평균이 1만큼 다르다.
+- 목표를 $r$번째 성공으로 올리면 다음 페이지의 음이항분포가 된다.

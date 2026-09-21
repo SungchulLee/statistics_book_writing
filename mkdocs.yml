@@ -151,9 +151,11 @@ nav:
     - 4 분포:
         - 장 개요: ch04/index.md
         - 4.1 이산분포:
-            - 베르누이분포 Bernoulli(p)와 이항분포 B(n, p): ch04/discrete_distributions/binomial.md
+            - 베르누이분포 Bernoulli(p): ch04/discrete_distributions/bernoulli.md
+            - 이항분포 B(n, p): ch04/discrete_distributions/binomial.md
             - 초기하분포 HG(n, N, M): ch04/discrete_distributions/hypergeometric.md
-            - 기하분포와 음이항분포 NB(r, p): ch04/discrete_distributions/geometric.md
+            - 기하분포 Geo(p): ch04/discrete_distributions/geometric.md
+            - 음이항분포 NB(r, p): ch04/discrete_distributions/negative_binomial.md
             - 포아송분포 Poisson(λ): ch04/discrete_distributions/poisson.md
         - 4.2 연속분포:
             - 균등분포 U(a, b): ch04/continuous_distributions/uniform.md
