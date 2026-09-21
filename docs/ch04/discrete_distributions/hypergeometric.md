@@ -332,6 +332,38 @@ binomial var (no FPC): 3.2000,  FPC = 0.9045
 
 ---
 
+### 손계산과 맞춰 보기
+
+<div class="codebox" markdown>
+
+#### 예제 4. 손계산과 scipy 결과 맞춰 보기 { .eg }
+
+```python
+from scipy import special
+from scipy import stats
+
+# 이 책의 표기는 HG(n, N, M) = HG(추출 5, 성공 20, 모집단 100)인데
+# scipy 인수는 (모집단, 성공, 추출) 순서다. 이름을 따로 두어 혼동을 막는다.
+pop, succ, draw = 100, 20, 5
+p2 = stats.hypergeom.pmf(2, pop, succ, draw)
+p2_manual = (special.comb(succ, 2) * special.comb(pop - succ, draw - 2)) / special.comb(pop, draw)
+print(f"P(X = 2) = {p2:.4f}  (manual = {p2_manual:.4f})")
+print(f"E[X] = {draw*succ/pop:.2f}")
+```
+
+출력:
+
+```
+P(X = 2) = 0.2073  (manual = 0.2073)
+E[X] = 1.00
+```
+
+손으로 세는 방법과 scipy가 정확히 같은 값을 준다. 평균 $nN/M = 5 \times 0.2 = 1.0$까지 맞으므로 인수를 제대로 넘겼다는 것도 함께 확인된다. **처음 쓰는 분포는 `mean()`이나 손계산으로 한 번 검산하는 습관**이 인수 순서 실수를 막는 가장 확실한 방법이다.
+
+</div>
+
+---
+
 ## 다른 분포와의 관계
 
 $$
@@ -550,6 +582,32 @@ $M \to \infty$, $n \to \infty$, $N$은 고정이고 $nN/M \to \lambda$일 때 $\
     이다. 여기서 성공확률 $n/M \to 0$이지만 $N$이 고정이라 $B(N, n/M)$의 평균 $Nn/M \to \lambda$는 유한하다. 이제 $N$도 함께 키우면 이항–포아송 극한(4.1절의 포아송 페이지)에 의해 $\text{Poisson}(\lambda)$로 간다. $\square$
 
     **해당하는 상황.** 아주 큰 모집단에서 표본은 크게 뽑지만 표시된 개체는 몇 개 안 되는 경우다. 예를 들어 100만 개의 부품 중 결함품이 5개 있고 1만 개를 검사한다면 $\lambda = 10^4 \times 5 / 10^6 = 0.05$인 포아송분포로 근사된다. 검사에서 결함을 하나도 못 찾을 확률이 $e^{-0.05} = 0.951$이라는 계산이 곧바로 나온다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff med" title="중간"></span>
+`stats.hypergeom`의 인자는 `(M, n, N)`이다. 각각이 무엇을 뜻하는지 확인하고, 본문 예제의 "모집단 100개, 불량 20개, 추출 5개"를 어떻게 넘겨야 하는지 적어라. 어떤 혼동이 생기기 쉬운가?
+
+</div>
+
+??? success "풀이"
+    SciPy의 규약은 다음과 같다.
+
+    - `M` — 모집단 전체 크기 (이 책의 $M$)
+    - `n` — 모집단 안의 성공 개수 (이 책의 $N$)
+    - `N` — 뽑는 개수 (이 책의 $n$)
+
+    따라서 본문 예제는 `stats.hypergeom(M=100, n=20, N=5)`이고, 위치 인자로는 `stats.hypergeom(100, 20, 5)`이다.
+
+    **혼동의 원인은 같은 문자가 다른 뜻으로 쓰인다는 점이다.** 이 책은 $\text{HG}(n, N, M)$에서 $M$을 모집단, $N$을 성공 개수, $n$을 표본 크기로 쓴다. SciPy의 `M`은 다행히 모집단으로 같지만, `N`은 이 책의 $n$(뽑는 개수)을 뜻해 정반대다. 키워드 인자로 `N=100`이라고 쓰면 "100개를 뽑는다"는 뜻이 되어 엉뚱한 결과가 나온다.
+
+    ```python
+    from scipy import stats
+    rv = stats.hypergeom(100, 20, 5)     # 안전: 위치 인자로 순서를 지킨다
+    print(rv.pmf(2), rv.mean(), rv.var())  # 0.2073  1.0  0.7677
+    ```
+
+    이런 함정이 SciPy 곳곳에 있다. 균등분포의 `scale`은 오른쪽 끝점이 아니라 폭이고, 로그정규분포의 `scale`은 평균이 아니라 $e^\mu$이며, 정규분포의 `scale`은 분산이 아니라 표준편차다. **처음 쓰는 분포는 반드시 `mean()`과 `var()`로 검산하는 습관**이 가장 확실한 방어다. 위에서 평균 $nN/M = 5 \times 0.2 = 1.0$이 맞게 나오는 것으로 인자를 제대로 넘겼음을 확인할 수 있다.
 
 ---
 
