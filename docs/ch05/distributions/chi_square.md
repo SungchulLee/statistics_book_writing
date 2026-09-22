@@ -302,6 +302,8 @@ ax.spines[['top', 'right']].set_visible(False)
 plt.show()
 ```
 
+![지수모집단에서 (n-1)S²의 분포와 카이제곱 곡선](./img/chi_square_279.png)
+
 </div>
 
 ---

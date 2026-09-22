@@ -105,6 +105,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![성공확률에 따른 표본비율의 표집분포](./img/xbar_bernoulli_60.png)
+
 </div>
 
 ## 해석

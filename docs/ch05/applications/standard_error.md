@@ -266,6 +266,17 @@ if __name__ == "__main__":
     main()
 ```
 
+출력:
+
+```
+(Estimated) Mean of X_bar : 0.4993
+Standard Error   of X_bar : 0.1281
+```
+
+![Sampling Distribution of X_bar](./img/standard_error_215.png)
+
+예제 1과 계산이 같은데 값이 조금 다르다. 시드가 다르기 때문이다(예제 1은 0, 여기서는 `global_name_space.py`의 기본값 1). 두 결과가 모두 참값 $\mu = 0.5$와 $\sigma/\sqrt5 = 0.1291$ 근처에 있으며, 그 흔들림 자체가 모의실험 오차다.
+
 </div>
 
 ## Python: S-squared의 표준오차
@@ -286,8 +297,9 @@ def main():
     S_square = []
     for _ in range(10_000):
         x = np.random.uniform(size=(5,))
-        sigma = x.std()
-        S_square.append(sigma**2)
+        # ddof=1 을 반드시 적어야 한다. numpy의 기본값은 ddof=0 이라
+        # x.var() 나 x.std()**2 는 n 으로 나눈 **편향추정량**을 준다.
+        S_square.append(x.var(ddof=1))
 
     average = np.array(S_square).mean()
     standard_error = np.array(S_square).std()
@@ -300,24 +312,24 @@ def main():
     ax.set_title("Sampling Distribution of S^2", fontsize=20)
 
     ax.hist(S_square, bins=100, density=True, alpha=0.3)
-    ax.vlines(average, ymin=0, ymax=12, alpha=1.0, color='k', ls='-', lw=5)
-    ax.vlines(average + standard_error, ymin=0, ymax=12, alpha=0.7, color='k', ls='--')
-    ax.vlines(average - standard_error, ymin=0, ymax=12, alpha=0.7, color='k', ls='--')
+    ax.vlines(average, ymin=0, ymax=8, alpha=1.0, color='k', ls='-', lw=5)
+    ax.vlines(average + standard_error, ymin=0, ymax=8, alpha=0.7, color='k', ls='--')
+    ax.vlines(average - standard_error, ymin=0, ymax=8, alpha=0.7, color='k', ls='--')
 
     # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
     # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
     arrowprops = dict(arrowstyle='<->', color='k', linewidth=3, mutation_scale=20)
     ax.annotate(text='',
-                xy=(average, 12),
-                xytext=(average + standard_error, 12),
+                xy=(average, 8),
+                xytext=(average + standard_error, 8),
                 arrowprops=arrowprops)
     ax.annotate(text='Standard Error',
-                xy=(average, 13),
-                xytext=(average, 13),
+                xy=(average, 8.8),
+                xytext=(average, 8.8),
                 fontsize=15)
 
-    ax.set_xlim(0.0, 0.2)
-    ax.set_ylim(-0.1, 15)
+    ax.set_xlim(0.0, 0.25)
+    ax.set_ylim(-0.1, 10)
 
     ax.spines['right'].set_visible(False)
     ax.spines['top'].set_visible(False)
@@ -327,6 +339,28 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+출력:
+
+```
+(Estimated) Mean of S^2 : 0.08406
+Standard Error   of S^2 : 0.04263
+```
+
+![Sampling Distribution of S^2](./img/standard_error_277.png)
+
+두 수치를 이론과 견주어 보자. $\text{Uniform}(0,1)$의 분산이 $\sigma^2 = 1/12 = 0.0833$이므로 평균 0.0841은 **불편성**을 확인해 준다. 표준오차 0.0426은 5.6절에서 볼 공식
+
+$$
+\text{SE}(S^2) = \sqrt{\frac1n\left(\kappa - \frac{n-3}{n-1}\right)}\,\sigma^2
+$$
+
+에 균등분포의 첨도 $\kappa = 1.8$과 $n = 5$를 넣은 값 0.0425와 맞는다.
+
+!!! warning "numpy의 `ddof` 기본값은 0이다"
+    `x.var()`와 `x.std()**2`는 $n$으로 나눈 **편향추정량**을 준다. $S^2$을 원하면 `x.var(ddof=1)`이라고 명시해야 한다. 위 코드에서 `ddof=1`을 빼면 평균이 0.0841이 아니라 $\frac{n-1}{n}\sigma^2 = 0.0667$로 나와 불편성이 깨진 것처럼 보인다.
+
+    $n = 5$처럼 작은 표본에서는 이 차이가 20%나 된다. pandas의 `.var()`는 반대로 기본값이 `ddof=1`이므로, 두 라이브러리를 섞어 쓸 때 특히 조심해야 한다.
 
 </div>
 

@@ -83,6 +83,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![정규모집단, 표본 하나, 표본평균의 표집분포](./img/xbar_normal_42.png)
+
 </div>
 
 ## 해석

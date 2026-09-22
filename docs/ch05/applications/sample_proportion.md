@@ -219,6 +219,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![베르누이 모집단과 표본비율의 표집분포](./img/sample_proportion_183.png)
+
 </div>
 
 ## 대학원 수준의 보충

@@ -324,6 +324,8 @@ plt.tight_layout()
 plt.show()
 ```
 
+![정규모집단에서 표본평균의 표집분포](./img/sample_mean_284.png)
+
 </div>
 
 ## 대학원 수준의 보충
