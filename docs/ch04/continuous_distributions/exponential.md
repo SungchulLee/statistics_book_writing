@@ -94,6 +94,41 @@ $$
 
     ---
 
+## 기하분포에서 건너오는 다리
+
+무기억성을 갖는 이산분포가 하나 있었다. [기하분포](../discrete_distributions/geometric.md)다. 두 분포가 같은 성질을 공유하는 것은 우연이 아니라, 하나가 다른 하나의 극한이기 때문이다. 4.1절의 사슬과 4.2절의 사슬이 만나는 자리가 여기다.
+
+동전을 아주 빠르게 던진다고 하자. $1/n$초에 한 번씩 던지되 앞면이 나올 확률을 $p = \lambda/n$로 낮춘다. 던지는 속도를 올린 만큼 성공을 어렵게 만든 셈이라, 단위 시간당 기대 성공 횟수 $np$는 $\lambda$로 붙들려 있다. 첫 앞면이 나오기까지의 **시행 횟수**를 $X \sim \text{Geo}(p)$라 하면, 첫 앞면까지의 **시간**은 $T = X/n$이다.
+
+$T$의 생존함수를 계산해 보면 된다. $T > t$라는 것은 처음 $nt$번의 시행이 모두 실패했다는 뜻이므로
+
+$$
+P(T > t) = P(X > nt) = (1-p)^{\lfloor nt \rfloor} = \left(1 - \frac{\lambda}{n}\right)^{\lfloor nt \rfloor} \;\xrightarrow[n \to \infty]{}\; e^{-\lambda t}
+$$
+
+이고, 이것이 바로 $\text{Exp}(\lambda)$의 생존함수다. 평균과 분산도 따라온다. $E[X] = 1/p = n/\lambda$이므로 $E[T] = E[X]/n = 1/\lambda$이고, $\text{Var}(X) = (1-p)/p^2$이므로
+
+$$
+\text{Var}(T) = \frac{\text{Var}(X)}{n^2} = \frac{1 - \lambda/n}{\lambda^2} \;\xrightarrow[n \to \infty]{}\; \frac{1}{\lambda^2}
+$$
+
+이다. 기하분포의 $1/p$와 $(1-p)/p^2$이 지수분포의 $1/\lambda$와 $1/\lambda^2$로 정확히 옮겨 간다. 시간 간격 $\Delta t$를 직접 붙들고 같은 극한을 취하는 방식은 [기하분포](../discrete_distributions/geometric.md) 쪽 연습문제에서 다룬다.
+
+### 같은 극한의 두 얼굴
+
+이 극한은 처음 보는 것이 아니다. $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$으로 보내는 것은 [포아송분포](../discrete_distributions/poisson.md)를 얻을 때 쓴 바로 그 극한이다. 달라지는 것은 무엇을 묻느냐뿐이다.
+
+**세는 쪽**에서 물으면, 곧 "단위 시간 안에 앞면이 몇 번 나왔는가"를 물으면 $B(n, p) \to \text{Poisson}(\lambda)$다. **기다리는 쪽**에서 물으면, 곧 "첫 앞면까지 얼마나 걸렸는가"를 물으면 $\frac{1}{n}\text{Geo}(p) \to \text{Exp}(\lambda)$다. 같은 실험을 두 방향에서 본 것이고, 그래서 두 결과가 같은 하나의 대상을 기술한다. 그 대상이 다음 절의 **포아송 과정**이다.
+
+$$
+\begin{array}{ccc}
+B(n, p) & \longrightarrow & \text{Poisson}(\lambda) \\
+\text{Geo}(p)/n & \longrightarrow & \text{Exp}(\lambda)
+\end{array}
+$$
+
+윗줄이 사건의 개수를 세고 아랫줄이 사건 사이의 시간을 잰다. 무기억성이 기하분포에서 지수분포로 고스란히 건너온 것도 이 그림 안에서 자연스럽다. 매 시행이 과거를 기억하지 않으니, 시행을 아무리 잘게 쪼개도 그 성질이 남는다.
+
 ## 포아송 과정과의 연결
 
 사건이 비율 $\lambda$인 포아송 과정에 따라 도착하면:
