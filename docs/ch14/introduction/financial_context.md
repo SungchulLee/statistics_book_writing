@@ -72,10 +72,14 @@ $$
 여기서
 
 $$
-\tilde{z}_\alpha = z_\alpha + \frac{1}{6}(z_\alpha^2 - 1)\gamma + \frac{1}{24}(z_\alpha^3 - 3z_\alpha)(\beta_2 - 3) - \frac{1}{36}(2z_\alpha^3 - 5z_\alpha)\gamma^2
+\tilde{z}_\alpha = z_\alpha + \frac{1}{6}(z_\alpha^2 - 1)\gamma_1 + \frac{1}{24}(z_\alpha^3 - 3z_\alpha)\gamma_2 - \frac{1}{36}(2z_\alpha^3 - 5z_\alpha)\gamma_1^2
 $$
 
-이고 $\gamma$는 왜도, $\beta_2$는 수익률 분포의 첨도이다.
+이고 $\gamma_1$은 왜도, $\gamma_2$는 수익률 분포의 **초과**첨도다. 이 전개가 $\gamma_1$과 $\gamma_2$로 깔끔하게 적히는 것은 우연이 아니다. Cornish–Fisher는 에지워스 전개에서 나오고 에지워스 전개는 누율의 언어로 쓰이는데, $\gamma_1 = \kappa_3/\kappa_2^{3/2}$이고 $\gamma_2 = \kappa_4/\kappa_2^2$이기 때문이다(3.3절). 정규분포는 3차 이상 누율이 모두 0이라 두 보정항이 함께 사라지고 $\tilde z_\alpha = z_\alpha$로 돌아간다.
+
+!!! note "금융 문헌의 표기"
+
+    금융과 위험관리 문헌에서는 첨도를 $\kappa$로 쓰는 일이 흔하다. 정규에서 3인 값을 가리킬 때도 있고 초과첨도를 가리킬 때도 있으니, 다른 자료를 읽을 때는 **정규분포에서 그 값이 3인지 0인지**를 먼저 확인하는 것이 안전하다. 이 책은 2.4절의 약속대로 $\beta_2$(정규에서 3)와 $\gamma_2$(정규에서 0)를 쓰고, $\kappa_n$은 누율에만 쓴다.
 
 <div class="codebox" markdown>
 
