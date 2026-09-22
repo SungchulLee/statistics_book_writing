@@ -184,25 +184,35 @@ nav:
             - t 분포 t(ν): ch05/distributions/student_t.md
             - 카이제곱분포 χ²(k): ch05/distributions/chi_square.md
             - F 분포 F(d₁, d₂): ch05/distributions/f_distribution.md
-        - 5.3 흔히 쓰는 통계량에의 응용:
-            - 평균의 표본분포: ch05/applications/sample_mean.md
+        - 5.3 표준오차와 부트스트랩:
             - 표준오차: ch05/applications/standard_error.md
-            - 비율의 표본분포: ch05/applications/sample_proportion.md
-            - 분산의 표본분포: ch05/applications/sample_variance.md
-            - 두 표본평균의 차: ch05/applications/diff_means.md
-            - 두 표본비율의 차: ch05/applications/diff_proportions.md
+            - 붓스트랩 표준오차: ch05/applications/bootstrap_standard_error.md
+        - 5.4 표본평균 X̄:
+            - 평균의 표본분포: ch05/applications/sample_mean.md
+            - X̄의 표준오차: ch05/applications/se_xbar.md
             - X̄의 표본분포 (균등분포): ch05/applications/xbar_uniform.md
             - X̄의 표본분포 (지수분포): ch05/applications/xbar_exponential.md
             - X̄의 표본분포 (정규분포): ch05/applications/xbar_normal.md
             - X̄의 표본분포 (베르누이분포): ch05/applications/xbar_bernoulli.md
+        - 5.5 표본비율 p̂:
+            - 비율의 표본분포: ch05/applications/sample_proportion.md
+        - 5.6 표본분산 S²:
+            - 분산의 표본분포: ch05/applications/sample_variance.md
+            - S²의 표준오차: ch05/applications/se_s2.md
             - S²의 표본분포 (균등분포): ch05/applications/s2_uniform.md
             - S²의 표본분포 (지수분포): ch05/applications/s2_exponential.md
             - S²의 표본분포 (정규분포): ch05/applications/s2_normal.md
             - S²의 표본분포 (베르누이분포): ch05/applications/s2_bernoulli.md
-            - X̄의 표준오차: ch05/applications/se_xbar.md
-            - S²의 표준오차: ch05/applications/se_s2.md
-            - 붓스트랩 표준오차: ch05/applications/bootstrap_standard_error.md
-        - 5.4 시각화:
+        - 5.7 두 표본평균의 차 X̄₁ - X̄₂:
+            - 두 표본평균의 차: ch05/applications/diff_means.md
+        - 5.8 두 표본비율의 차 p̂₁ - p̂₂:
+            - 두 표본비율의 차: ch05/applications/diff_proportions.md
+        - 5.9 두 표본분산의 비 S₁²/S₂²:
+            - 두 표본분산의 비: ch05/applications/var_ratio.md
+            - S₁²/S₂²의 표본분포 (정규모집단): ch05/applications/var_ratio_normal.md
+            - S₁²/S₂²의 표본분포 (비정규 모집단): ch05/applications/var_ratio_nonnormal.md
+            - 등분산 검정의 강건한 대안: ch05/applications/var_ratio_robust.md
+        - 5.10 시각화:
             - 표본분포 시각화: ch05/applications/sampling_dist_visualization.md
             - 소득 자료 표본분포 시각화: ch05/applications/sampling_dist_income_visualization.md
 
