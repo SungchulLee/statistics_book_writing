@@ -13,17 +13,19 @@ $$
 \\
 \text{Population} &\rightarrow& \text{Sample } \mathbf{x}_2 &\rightarrow& \hat{\theta}(\mathbf{x}_2) \\
 &\vdots& & & \\
-\text{Population} &\rightarrow& \text{Sample } \mathbf{x}_n &\rightarrow& \hat{\theta}(\mathbf{x}_n) \\
+\text{Population} &\rightarrow& \text{Sample } \mathbf{x}_k &\rightarrow& \hat{\theta}(\mathbf{x}_k) \\
 &\vdots& & &
 \end{array}
 \right\}
 \;\;
 \begin{array}{c}
 \text{Sampling Distribution:} \\
-\text{Distribution of } \hat{\theta}(\mathbf{x}_1), \hat{\theta}(\mathbf{x}_2), \cdots, \hat{\theta}(\mathbf{x}_n), \cdots \\
+\text{Distribution of } \hat{\theta}(\mathbf{x}_1), \hat{\theta}(\mathbf{x}_2), \cdots, \hat{\theta}(\mathbf{x}_k), \cdots \\
 \text{or Distribution of } \hat{\theta}(\mathbf{x})
 \end{array}
 $$
+
+첨자 $k$가 **몇 번째 표본인가**를 세는 번호라는 점에 주의할 것. 표본 하나에 들어 있는 관측값의 개수, 곧 표본크기는 $n$으로 쓰며 이 책 전체에서 그렇다. 여기서는 $n$을 고정해 두고 같은 크기의 표본을 계속 다시 뽑는 중이다. 뽑기를 몇 번 되풀이하느냐는 표본분포를 얼마나 선명하게 그려 내느냐를 정할 뿐이고, 표본분포 자체의 모양은 $n$이 정한다. 이 구별이 다음 절에서 다시 중요해진다.
 
 이 그림 하나가 추론통계학 전체를 지탱한다. 표본에서 얻은 값으로 모평균이나 모분산을 추정할 수 있는 것도, 그 추정이 얼마나 정밀한지를 표준오차로 잴 수 있는 것도, 신뢰구간을 그리고 가설검정으로 판단을 내릴 수 있는 것도 모두 통계량이 어떻게 흩어지는지를 알기 때문이다. 표본분포를 모르면 손에 쥔 숫자 하나가 얼마나 믿을 만한지 말할 길이 없다.
 
