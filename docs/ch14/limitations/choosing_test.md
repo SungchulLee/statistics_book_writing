@@ -53,10 +53,10 @@ $$
 Jarque-Bera 검정은 표본왜도와 표본첨도에 기초한다. 검정통계량은
 
 $$
-JB = \frac{n}{6}\left(\hat{\gamma}^2 + \frac{(\hat\beta_2 - 3)^2}{4}\right)
+JB = \frac{n}{6}\left(\hat\gamma_1^{\,2} + \frac{\hat\gamma_2^{\,2}}{4}\right)
 $$
 
-여기서 $\hat{\gamma}$는 표본왜도, $\hat\beta_2$는 표본첨도이다. $H_0$ 아래에서 $n \to \infty$일 때 $JB \overset{d}{\to} \chi^2_2$이다.
+여기서 $\hat\gamma_1$은 표본왜도, $\hat\gamma_2 = \hat\beta_2 - 3$은 표본 **초과**첨도다. $H_0$ 아래에서 $n \to \infty$일 때 $JB \overset{d}{\to} \chi^2_2$이다.
 
 **강점:** 정규성 이탈의 가장 흔한 두 유형인 치우침과 첨도를 직접 겨냥한다. 계산이 단순하다. 계량경제학과 금융에서 널리 쓰인다.
 
