@@ -208,8 +208,13 @@ nav:
             - S²의 표본분포 (베르누이분포): ch05/applications/s2_bernoulli.md
         - 5.7 두 표본평균의 차 X̄₁ - X̄₂:
             - 두 표본평균의 차: ch05/applications/diff_means.md
+            - X̄₁ - X̄₂의 표본분포 (등분산 정규모집단): ch05/applications/diff_means_equal.md
+            - X̄₁ - X̄₂의 표본분포 (이분산과 불균형): ch05/applications/diff_means_welch.md
+            - X̄₁ - X̄₂의 표본분포 (비정규 모집단): ch05/applications/diff_means_nonnormal.md
         - 5.8 두 표본비율의 차 p̂₁ - p̂₂:
             - 두 표본비율의 차: ch05/applications/diff_proportions.md
+            - p̂₁ - p̂₂의 표본분포 (정규근사가 듣는 경우): ch05/applications/diff_props_normal.md
+            - p̂₁ - p̂₂의 표본분포 (작은 기대도수): ch05/applications/diff_props_small.md
         - 5.9 두 표본분산의 비 S₁²/S₂²:
             - 두 표본분산의 비: ch05/applications/var_ratio.md
             - S₁²/S₂²의 표본분포 (정규모집단): ch05/applications/var_ratio_normal.md
