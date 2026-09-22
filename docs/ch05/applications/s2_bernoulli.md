@@ -27,10 +27,10 @@ $$
 중심적률을 직접 계산하면 닫힌 꼴이 나온다.
 
 $$
-\mu_3 = pq\,(q - p), \qquad \mu_4 = pq\,(1 - 3pq), \qquad \kappa = \frac{\mu_4}{\sigma^4} = 1 + \frac{(q-p)^2}{pq}
+\mu_3 = pq\,(q - p), \qquad \mu_4 = pq\,(1 - 3pq), \qquad \beta_2 = \frac{\mu_4}{\sigma^4} = 1 + \frac{(q-p)^2}{pq}
 $$
 
-| $p$ | $\sigma^2$ | 첨도 $\kappa$ | 배율 $(\kappa-1)/2$ |
+| $p$ | $\sigma^2$ | 첨도 $\beta_2$ | 배율 $(\beta_2-1)/2$ |
 |---|---|---|---|
 | 0.5 | 0.250 | **1.00** | **0** |
 | 0.3 | 0.210 | 1.76 | 0.38 |
@@ -38,7 +38,7 @@ $$
 | 0.1 | 0.090 | 8.11 | 3.56 |
 
 !!! note "$p = 1/2$는 첨도의 보편 하한을 달성한다"
-    어떤 분포에서도 옌센 부등식에 의해 $\mu_4 = E[(X-\mu)^4] \ge \{E[(X-\mu)^2]\}^2 = \sigma^4$이므로 $\kappa \ge 1$이다. 등호는 $(X-\mu)^2$이 **상수**일 때만 성립하고, 그것은 $X$가 평균에서 같은 거리에 있는 두 값만 갖는다는 뜻이다. 즉 $\text{Bernoulli}(1/2)$가 세상에서 첨도가 가장 작은 분포다.
+    어떤 분포에서도 옌센 부등식에 의해 $\mu_4 = E[(X-\mu)^4] \ge \{E[(X-\mu)^2]\}^2 = \sigma^4$이므로 $\beta_2 \ge 1$이다. 등호는 $(X-\mu)^2$이 **상수**일 때만 성립하고, 그것은 $X$가 평균에서 같은 거리에 있는 두 값만 갖는다는 뜻이다. 즉 $\text{Bernoulli}(1/2)$가 세상에서 첨도가 가장 작은 분포다.
 
     $p$가 0이나 1로 갈수록 반대편 극단이 된다. $p = 0.1$이면 첨도가 8.11로 지수분포(9)에 가까워진다. 희귀사건은 꼬리가 무거운 자료처럼 행동한다.
 
@@ -67,10 +67,10 @@ $$
 일반 공식은 그대로 쓰인다.
 
 $$
-\text{Var}(S^2) = \frac{1}{n}\left(\kappa - \frac{n-3}{n-1}\right)\sigma^4
+\text{Var}(S^2) = \frac{1}{n}\left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4
 $$
 
-$p = 1/2$에서는 $\kappa = 1$이라 이 식이 무너진다.
+$p = 1/2$에서는 $\beta_2 = 1$이라 이 식이 무너진다.
 
 $$
 \text{Var}(S^2) = \frac{\sigma^4}{n}\left(1 - \frac{n-3}{n-1}\right) = \frac{2\sigma^4}{n(n-1)}
@@ -98,7 +98,7 @@ $$
 ### 상관계수는 ±1로 간다
 
 $$
-\text{corr}(\bar X, S^2) \to \frac{\mu_3}{\sigma^3\sqrt{\kappa-1}}
+\text{corr}(\bar X, S^2) \to \frac{\mu_3}{\sigma^3\sqrt{\beta_2-1}}
 = \frac{pq(q-p)}{(pq)^{3/2}\cdot\frac{|q-p|}{\sqrt{pq}}} = \frac{q-p}{|q-p|} = \text{sign}(q-p)
 $$
 
@@ -251,7 +251,7 @@ $X_i \in \{0, 1\}$일 때 $S^2 = \frac{n}{n-1}\bar X(1-\bar X)$임을 보여라.
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-$\text{Bernoulli}(p)$의 첨도가 $\kappa = 1 + \dfrac{(q-p)^2}{pq}$임을 보이고, $\kappa \ge 1$이 모든 분포에서 성립하는 보편 하한임을 설명하라.
+$\text{Bernoulli}(p)$의 첨도가 $\beta_2 = 1 + \dfrac{(q-p)^2}{pq}$임을 보이고, $\beta_2 \ge 1$이 모든 분포에서 성립하는 보편 하한임을 설명하라.
 
 </div>
 
@@ -265,7 +265,7 @@ $\text{Bernoulli}(p)$의 첨도가 $\kappa = 1 + \dfrac{(q-p)^2}{pq}$임을 보�
     이다. $p^3 + q^3 = (p+q)^3 - 3pq(p+q) = 1 - 3pq$이므로 $\mu_4 = pq(1-3pq)$이고
 
     $$
-    \kappa = \frac{pq(1-3pq)}{(pq)^2} = \frac{1-3pq}{pq} = \frac{1 - 4pq + pq}{pq} = \frac{(q-p)^2}{pq} + 1
+    \beta_2 = \frac{pq(1-3pq)}{(pq)^2} = \frac{1-3pq}{pq} = \frac{1 - 4pq + pq}{pq} = \frac{(q-p)^2}{pq} + 1
     $$
 
     이다. 마지막 단계에서 $1 - 4pq = (p+q)^2 - 4pq = (q-p)^2$을 썼다. $\square$
@@ -273,12 +273,12 @@ $\text{Bernoulli}(p)$의 첨도가 $\kappa = 1 + \dfrac{(q-p)^2}{pq}$임을 보�
     **보편 하한.** $Y = (X-\mu)^2 \ge 0$에 옌센 부등식(또는 $\text{Var}(Y) \ge 0$)을 적용하면
 
     $$
-    \mu_4 = E[Y^2] \ge (E[Y])^2 = \sigma^4 \implies \kappa \ge 1
+    \mu_4 = E[Y^2] \ge (E[Y])^2 = \sigma^4 \implies \beta_2 \ge 1
     $$
 
     이다. 등호는 $\text{Var}(Y) = 0$, 즉 $(X-\mu)^2$이 **상수**일 때만 성립한다. 그러면 $X$는 $\mu \pm c$ 두 값만 가지며 두 값의 확률이 같아야 평균이 $\mu$가 되므로, 위치와 척도를 빼면 $\text{Bernoulli}(1/2)$다.
 
-    **정규분포의 $\kappa = 3$이 기준선이라는 관행**을 다시 보게 하는 결과다. 첨도는 아래로 1에서 막혀 있고 위로는 무한히 열려 있다. 그래서 초과첨도는 $-2$ 아래로 내려갈 수 없다.
+    **정규분포의 $\beta_2 = 3$이 기준선이라는 관행**을 다시 보게 하는 결과다. 첨도는 아래로 1에서 막혀 있고 위로는 무한히 열려 있다. 그래서 초과첨도는 $-2$ 아래로 내려갈 수 없다.
 
 <div class="drillbox" markdown>
 
@@ -288,7 +288,7 @@ $p = 1/2$에서 $\text{Var}(S^2) = \dfrac{2\sigma^4}{n(n-1)}$임을 보이고, �
 </div>
 
 ??? success "풀이"
-    $p = 1/2$이면 $\kappa = 1$이므로 일반 공식에 넣으면
+    $p = 1/2$이면 $\beta_2 = 1$이므로 일반 공식에 넣으면
 
     $$
     \text{Var}(S^2) = \frac{\sigma^4}{n}\left(1 - \frac{n-3}{n-1}\right) = \frac{\sigma^4}{n}\cdot\frac{(n-1)-(n-3)}{n-1} = \frac{2\sigma^4}{n(n-1)}
@@ -310,7 +310,7 @@ $p = 1/2$에서 $\text{Var}(S^2) = \dfrac{2\sigma^4}{n(n-1)}$임을 보이고, �
 
     로 100배 차이 난다. 모의실험 값도 $1.26 \times 10^{-5}$로 공식과 맞는다.
 
-    다른 모집단에서는 배율이 $(\kappa-1)/2$라는 **상수**였는데 여기서는 $1/n$로 **0으로 간다.** 어긋남의 성질이 질적으로 다르다는 뜻이다. 앞의 두 페이지에서는 카이제곱 구간의 폭이 일정 비율로 틀렸지만, $\text{Bernoulli}(1/2)$에서는 $n$이 커질수록 무한히 더 틀린다.
+    다른 모집단에서는 배율이 $(\beta_2-1)/2$라는 **상수**였는데 여기서는 $1/n$로 **0으로 간다.** 어긋남의 성질이 질적으로 다르다는 뜻이다. 앞의 두 페이지에서는 카이제곱 구간의 폭이 일정 비율로 틀렸지만, $\text{Bernoulli}(1/2)$에서는 $n$이 커질수록 무한히 더 틀린다.
 
 <div class="drillbox" markdown>
 
@@ -320,16 +320,16 @@ $p \ne 1/2$일 때 $\text{corr}(\bar X, S^2) \to \text{sign}(q-p)$임을 보여�
 </div>
 
 ??? success "풀이"
-    $\text{Cov}(\bar X, S^2) = \mu_3/n$, $\text{Var}(\bar X) = \sigma^2/n$, $\text{Var}(S^2) \approx (\kappa-1)\sigma^4/n$을 넣으면
+    $\text{Cov}(\bar X, S^2) = \mu_3/n$, $\text{Var}(\bar X) = \sigma^2/n$, $\text{Var}(S^2) \approx (\beta_2-1)\sigma^4/n$을 넣으면
 
     $$
-    \text{corr} \to \frac{\mu_3}{\sigma^3\sqrt{\kappa - 1}}
+    \text{corr} \to \frac{\mu_3}{\sigma^3\sqrt{\beta_2 - 1}}
     $$
 
-    이다. 베르누이에서 $\mu_3 = pq(q-p)$, $\sigma^3 = (pq)^{3/2}$, $\kappa - 1 = (q-p)^2/(pq)$이므로
+    이다. 베르누이에서 $\mu_3 = pq(q-p)$, $\sigma^3 = (pq)^{3/2}$, $\beta_2 - 1 = (q-p)^2/(pq)$이므로
 
     $$
-    \sigma^3\sqrt{\kappa-1} = (pq)^{3/2}\cdot\frac{|q-p|}{(pq)^{1/2}} = pq\,|q-p|
+    \sigma^3\sqrt{\beta_2-1} = (pq)^{3/2}\cdot\frac{|q-p|}{(pq)^{1/2}} = pq\,|q-p|
     $$
 
     이고 따라서 $\text{corr} \to \dfrac{pq(q-p)}{pq|q-p|} = \text{sign}(q-p)$다. $\square$
@@ -392,7 +392,7 @@ $p = 1/2$인 베르누이모집단에서 $\bar X$와 $S^2$이 **무상관이지�
 
 - 0/1 자료에서는 $X_i^2 = X_i$이므로 $S^2 = \frac{n}{n-1}\bar X(1-\bar X)$라는 **항등식**이 성립한다. $S^2$은 $\bar X$의 함수이며 새로운 정보를 담지 않는다.
 - 따라서 $S^2$의 표집분포는 이항분포를 옮겨 놓은 **$n+1$개의 점질량**이다. 연속분포로 근사한다는 발상 자체가 어색하다.
-- 첨도는 $\kappa = 1 + (q-p)^2/(pq)$로, $p = 1/2$에서 **모든 분포의 하한인 1**을 달성한다. 그때 $\text{Var}(S^2)$은 $O(n^{-2})$로 카이제곱 예측과 차수부터 다르다.
+- 첨도는 $\beta_2 = 1 + (q-p)^2/(pq)$로, $p = 1/2$에서 **모든 분포의 하한인 1**을 달성한다. 그때 $\text{Var}(S^2)$은 $O(n^{-2})$로 카이제곱 예측과 차수부터 다르다.
 - $p = 1/2$에서 $\text{corr}(\bar X, S^2) = 0$이지만 두 통계량은 **함수 관계**다. 무상관과 독립이 다르다는 것을 이보다 분명히 보여 주는 예가 드물다. $p \ne 1/2$에서는 상관계수가 $\pm 1$로 수렴한다.
 - 비율의 표준오차 $\sqrt{\hat p(1-\hat p)/n}$이 곧 이 항등식이다. 비율 추론에서 분산을 따로 추정하지 않는 이유다.
 

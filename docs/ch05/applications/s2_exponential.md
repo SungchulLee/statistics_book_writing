@@ -21,7 +21,7 @@ $$
 $\text{Exp}(\lambda)$의 $k$차 원점적률이 $E[X^k] = k!/\lambda^k$이므로, $\lambda = 1$에서 중심적률을 계산하면
 
 $$
-\mu_3 = 2, \qquad \mu_4 = 9, \qquad \kappa = \frac{\mu_4}{\sigma^4} = 9
+\mu_3 = 2, \qquad \mu_4 = 9, \qquad \beta_2 = \frac{\mu_4}{\sigma^4} = 9
 $$
 
 이다. 초과첨도가 $6$으로 정규분포보다 꼬리가 훨씬 무겁다. 이 하나의 수가 이 페이지의 모든 결과를 결정한다.
@@ -37,8 +37,8 @@ $$
 분산은 첨도를 통해 어긋난다.
 
 $$
-\text{Var}(S^2) = \frac{1}{n}\left(\kappa - \frac{n-3}{n-1}\right)\sigma^4, \qquad
-\frac{\text{Var}(S^2)}{2\sigma^4/(n-1)} \;\xrightarrow{\;n \to \infty\;}\; \frac{\kappa-1}{2} = 4
+\text{Var}(S^2) = \frac{1}{n}\left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4, \qquad
+\frac{\text{Var}(S^2)}{2\sigma^4/(n-1)} \;\xrightarrow{\;n \to \infty\;}\; \frac{\beta_2-1}{2} = 4
 $$
 
 !!! danger "폭이 두 배, 그리고 표본을 키워도 그대로다"
@@ -55,7 +55,7 @@ $$
 치우친 모집단에서는 $\mu_3 \ne 0$이므로 두 통계량이 상관을 갖는다. 상관계수는
 
 $$
-\text{corr}(\bar X, S^2) = \frac{\mu_3/n}{\sqrt{\sigma^2/n}\sqrt{(\kappa-1)\sigma^4/n}} = \frac{\mu_3}{\sigma\sqrt{(\kappa-1)\sigma^4}} = \frac{2}{\sqrt 8} = 0.707
+\text{corr}(\bar X, S^2) = \frac{\mu_3/n}{\sqrt{\sigma^2/n}\sqrt{(\beta_2-1)\sigma^4/n}} = \frac{\mu_3}{\sigma\sqrt{(\beta_2-1)\sigma^4}} = \frac{2}{\sqrt 8} = 0.707
 $$
 
 로 **$n$에 의존하지 않는다.** 모의실험에서도 $n = 10$과 $n = 100$에서 모두 $+0.70$ 근처로 나온다.
@@ -161,7 +161,7 @@ n = 1000:  실제 포함률 0.674
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-$X \sim \text{Exp}(1)$에 대해 $E[X^k] = k!$임을 이용해 $\mu_3 = 2$, $\mu_4 = 9$를 구하고 첨도 $\kappa = 9$를 확인하라. 이 값이 $\lambda$에 의존하는가?
+$X \sim \text{Exp}(1)$에 대해 $E[X^k] = k!$임을 이용해 $\mu_3 = 2$, $\mu_4 = 9$를 구하고 첨도 $\beta_2 = 9$를 확인하라. 이 값이 $\lambda$에 의존하는가?
 
 </div>
 
@@ -176,7 +176,7 @@ $X \sim \text{Exp}(1)$에 대해 $E[X^k] = k!$임을 이용해 $\mu_3 = 2$, $\mu
     \mu_4 = E[X^4] - 4\mu E[X^3] + 6\mu^2E[X^2] - 3\mu^4 = 24 - 24 + 12 - 3 = 9
     $$
 
-    이다. $\sigma^2 = 1$이므로 $\kappa = 9$, 왜도는 $\mu_3/\sigma^3 = 2$다.
+    이다. $\sigma^2 = 1$이므로 $\beta_2 = 9$, 왜도는 $\mu_3/\sigma^3 = 2$다.
 
     **$\lambda$에 의존하지 않는다.** 왜도와 첨도는 척도에 불변이고 $\text{Exp}(\lambda)$는 $\text{Exp}(1)$을 $1/\lambda$배 한 것이기 때문이다. 어떤 비율모수를 쓰든 배율은 언제나 4다.
 
@@ -188,7 +188,7 @@ $n = 100$에서 $S^2$의 표준편차를 (a) 참 공식과 (b) 카이제곱 예�
 </div>
 
 ??? success "풀이"
-    **(a) 참값.** $\kappa = 9$, $\sigma^4 = 1$, $n = 100$이므로
+    **(a) 참값.** $\beta_2 = 9$, $\sigma^4 = 1$, $n = 100$이므로
 
     $$
     \text{Var}(S^2) = \frac{1}{100}\left(9 - \frac{97}{99}\right) = \frac{8.0202}{100} = 0.0802, \qquad \text{SD} = 0.283
@@ -215,13 +215,13 @@ $n \to \infty$에서 카이제곱 기반 95% 구간의 포함률이 어떤 값�
     $n$이 크면 두 분포 모두 정규로 근사된다. 참 분포는
 
     $$
-    S^2 \;\dot\sim\; N\!\left(\sigma^2,\ \frac{(\kappa-1)\sigma^4}{n}\right), \qquad \text{SD}_{\text{참}} = \sigma^2\sqrt{\frac{\kappa-1}{n}}
+    S^2 \;\dot\sim\; N\!\left(\sigma^2,\ \frac{(\beta_2-1)\sigma^4}{n}\right), \qquad \text{SD}_{\text{참}} = \sigma^2\sqrt{\frac{\beta_2-1}{n}}
     $$
 
     이고, 카이제곱 구간은 $S^2$의 표준편차를 $\text{SD}_{\chi^2} = \sigma^2\sqrt{2/n}$로 믿고 $\pm 1.96\,\text{SD}_{\chi^2}$만큼 뻗는다. 따라서 구간이 참 표준편차 단위로는
 
     $$
-    \pm 1.96\cdot\frac{\text{SD}_{\chi^2}}{\text{SD}_{\text{참}}} = \pm 1.96\sqrt{\frac{2}{\kappa-1}} = \pm\frac{1.96}{2} = \pm 0.98
+    \pm 1.96\cdot\frac{\text{SD}_{\chi^2}}{\text{SD}_{\text{참}}} = \pm 1.96\sqrt{\frac{2}{\beta_2-1}} = \pm\frac{1.96}{2} = \pm 0.98
     $$
 
     만큼만 뻗는다. 그러므로 포함률의 극한은
@@ -235,10 +235,10 @@ $n \to \infty$에서 카이제곱 기반 95% 구간의 포함률이 어떤 값�
     이 계산은 일반적인 공식을 준다. 명목 신뢰수준 $1-\alpha$에서 극한 포함률은
 
     $$
-    2\Phi\!\left(z_{1-\alpha/2}\sqrt{\frac{2}{\kappa-1}}\right) - 1
+    2\Phi\!\left(z_{1-\alpha/2}\sqrt{\frac{2}{\beta_2-1}}\right) - 1
     $$
 
-    이다. 균등분포($\kappa = 1.8$)를 넣으면 $2\Phi(1.96\sqrt{2.5}) - 1 = 2\Phi(3.10) - 1 = 0.998$로 앞 페이지의 값이 나온다. **첨도 하나만 알면 카이제곱 구간이 얼마나 망가지는지 미리 계산할 수 있다.**
+    이다. 균등분포($\beta_2 = 1.8$)를 넣으면 $2\Phi(1.96\sqrt{2.5}) - 1 = 2\Phi(3.10) - 1 = 0.998$로 앞 페이지의 값이 나온다. **첨도 하나만 알면 카이제곱 구간이 얼마나 망가지는지 미리 계산할 수 있다.**
 
 <div class="drillbox" markdown>
 
@@ -248,15 +248,15 @@ $\text{corr}(\bar X, S^2) = 0.707$이 $n$과 무관함을 보이고, 이것이 $
 </div>
 
 ??? success "풀이"
-    $\text{Cov}(\bar X, S^2) = \mu_3/n$이고 $\text{Var}(\bar X) = \sigma^2/n$, $\text{Var}(S^2) \approx (\kappa-1)\sigma^4/n$이므로
+    $\text{Cov}(\bar X, S^2) = \mu_3/n$이고 $\text{Var}(\bar X) = \sigma^2/n$, $\text{Var}(S^2) \approx (\beta_2-1)\sigma^4/n$이므로
 
     $$
-    \text{corr} = \frac{\mu_3/n}{\sqrt{\sigma^2/n}\cdot\sqrt{(\kappa-1)\sigma^4/n}} = \frac{\mu_3}{\sigma^3\sqrt{\kappa-1}}
+    \text{corr} = \frac{\mu_3/n}{\sqrt{\sigma^2/n}\cdot\sqrt{(\beta_2-1)\sigma^4/n}} = \frac{\mu_3}{\sigma^3\sqrt{\beta_2-1}}
     $$
 
-    이다. 분자와 분모가 모두 $1/n$이라 **$n$이 약분된다.** 지수분포는 $\mu_3 = 2$, $\sigma = 1$, $\kappa = 9$이므로 $2/\sqrt 8 = 0.707$이다. $\square$
+    이다. 분자와 분모가 모두 $1/n$이라 **$n$이 약분된다.** 지수분포는 $\mu_3 = 2$, $\sigma = 1$, $\beta_2 = 9$이므로 $2/\sqrt 8 = 0.707$이다. $\square$
 
-    분자의 $\mu_3/\sigma^3$은 왜도이므로, 이 상관계수는 왜도를 $\sqrt{\kappa-1}$로 나눈 것이다. **모집단이 치우친 만큼 $\bar X$와 $S^2$이 얽힌다.**
+    분자의 $\mu_3/\sigma^3$은 왜도이므로, 이 상관계수는 왜도를 $\sqrt{\beta_2-1}$로 나눈 것이다. **모집단이 치우친 만큼 $\bar X$와 $S^2$이 얽힌다.**
 
     **$t$ 통계량에 미치는 영향.** $t = (\bar X - \mu)/(S/\sqrt n)$에서 분자가 크면 분모도 함께 커진다. 오른쪽으로 치우친 모집단에서 $\bar X$가 우연히 크게 나온 표본은 $S$도 크므로 $t$가 그만큼 커지지 못하고, 반대로 $\bar X$가 작으면 $S$도 작아 $t$가 더 음수 쪽으로 간다. 그 결과 $t$의 분포가 **왼쪽으로 치우친다.** 단측검정의 실제 유의수준이 한쪽은 명목보다 높고 다른 쪽은 낮아진다.
 
@@ -275,10 +275,10 @@ $\text{corr}(\bar X, S^2) = 0.707$이 $n$과 무관함을 보이고, 이것이 $
     **(2) 첨도를 추정해 정규근사를 쓴다.**
 
     $$
-    s^2 \pm z_{1-\alpha/2}\,s^2\sqrt{\frac{\hat\kappa - 1}{n}}
+    s^2 \pm z_{1-\alpha/2}\,s^2\sqrt{\frac{\hat\beta_2 - 1}{n}}
     $$
 
-    전제는 $n$이 충분히 커서 $S^2$의 정규근사가 통하고 $\hat\kappa$가 안정적이라는 것이다. 문제는 **$\hat\kappa$ 자체가 4차 적률 추정이라 매우 불안정**하다는 점이다. 꼬리가 두꺼운 자료에서 표본첨도는 표본크기에 따라 계속 커지기도 한다.
+    전제는 $n$이 충분히 커서 $S^2$의 정규근사가 통하고 $\hat\beta_2$가 안정적이라는 것이다. 문제는 **$\hat\beta_2$ 자체가 4차 적률 추정이라 매우 불안정**하다는 점이다. 꼬리가 두꺼운 자료에서 표본첨도는 표본크기에 따라 계속 커지기도 한다.
 
     **(3) 부트스트랩.** $S^2$의 표집분포를 재표집으로 직접 추정한다. 분포족도 첨도 공식도 필요 없고, 전제는 표본이 모집단을 대표한다는 것과 4차 적률이 유한하다는 것뿐이다. 5장의 부트스트랩 표준오차 페이지에서 다룬다. 실무의 기본 선택이다.
 
@@ -309,7 +309,7 @@ $\text{corr}(\bar X, S^2) = 0.707$이 $n$과 무관함을 보이고, 이것이 $
 
 ## 정리하며
 
-- 지수모집단에서 $S^2$의 분산은 카이제곱 예측의 **4배**(표준편차 2배)다. 첨도 $\kappa = 9$ 하나가 이 배율 $(\kappa-1)/2$를 정한다.
+- 지수모집단에서 $S^2$의 분산은 카이제곱 예측의 **4배**(표준편차 2배)다. 첨도 $\beta_2 = 9$ 하나가 이 배율 $(\beta_2-1)/2$를 정한다.
 - 어긋남의 방향이 위험한 쪽이다. 명목 95% 분산 신뢰구간의 실제 포함률이 **0.69**이고, $n$을 키우면 극한값 $2\Phi(0.98)-1 = 0.673$으로 오히려 내려간다.
 - $\text{Cov}(\bar X, S^2) = \mu_3/n \ne 0$이라 두 통계량이 상관 $+0.71$로 얽힌다. 정규모집단의 독립성이 깨지고, 그 결과 $t$ 통계량의 분포가 치우친다.
 - **$\bar X$는 정리의 수렴이 문제이고 $S^2$은 정리의 전제가 문제다.** 그래서 표본크기가 $\bar X$는 구해 주지만 $S^2$은 구해 주지 못한다.

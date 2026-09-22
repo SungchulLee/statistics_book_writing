@@ -781,10 +781,10 @@ $n=25$의 정규 표본에서 **분산**에 대한 카이제곱 구간이 정규
     **이유.** $S^2$의 점근분산은
 
     $$
-    \operatorname{Var}(S^2)\approx\frac{\mu_4-\sigma^4}{n}=\frac{\sigma^4(\kappa+2)}{n}
+    \operatorname{Var}(S^2)\approx\frac{\mu_4-\sigma^4}{n}=\frac{\sigma^4(\gamma_2+2)}{n}
     $$
 
-    로 초과첨도 $\kappa$에 직접 비례한다. 정규에서는 $\kappa=0$이라 $2\sigma^4/n$인데, 지수에서는 $\kappa=6$이라 **네 배**다. 카이제곱 구간은 $\kappa=0$을 가정하므로 폭이 실제 필요한 것의 절반밖에 되지 않는다.
+    로 초과첨도 $\gamma_2$에 직접 비례한다. 정규에서는 $\gamma_2=0$이라 $2\sigma^4/n$인데, 지수에서는 $\gamma_2=6$이라 **네 배**다. 카이제곱 구간은 $\gamma_2=0$을 가정하므로 폭이 실제 필요한 것의 절반밖에 되지 않는다.
 
     **대처.**
 
