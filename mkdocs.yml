@@ -189,7 +189,6 @@ nav:
             - 붓스트랩 표준오차: ch05/applications/bootstrap_standard_error.md
         - 5.4 표본평균 X̄:
             - 평균의 표본분포: ch05/applications/sample_mean.md
-            - X̄의 표준오차: ch05/applications/se_xbar.md
             - X̄의 표본분포 (균등분포): ch05/applications/xbar_uniform.md
             - X̄의 표본분포 (지수분포): ch05/applications/xbar_exponential.md
             - X̄의 표본분포 (정규분포): ch05/applications/xbar_normal.md
