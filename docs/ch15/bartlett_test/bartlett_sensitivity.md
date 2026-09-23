@@ -102,7 +102,7 @@ False-positive rates under skewed (lognormal) data:
 !!! warning "여기서 통제되는 검정은 Brown-Forsythe뿐이다"
     위 코드는 세 검정만 비교하지만, 같은 조건에서 **Brown-Forsythe**(`center='median'`)를 추가하면 거짓 양성률이 $0.030$으로 유일하게 통제된다.
 
-    $\text{Lognormal}(0,1)$은 왜도 $6.185$, 초과첨도 $110.9$로 극단적으로 치우쳐 있다. 이 정도 치우침에서는 순위 변환(Fligner-Killeen)조차 부족하고 **중앙값 중심화**가 결정적이다. 자세한 비교는 15.8절 [로버스트 분산 검정 비교](../robust_tests/robust_tests_comparison.md)를 보라.
+    $\text{Lognormal}(0,1)$은 왜도 $6.185$, 초과첨도 $110.9$로 극단적으로 치우쳐 있다. 이 정도 치우침에서는 순위 변환(Fligner-Killeen)조차 부족하고 **중앙값 중심화**가 결정적이다. 자세한 비교는 15.5절 [대수정규에서의 비교](../robust_tests/robust_tests_comparison.md)를 보라.
 
 핵심은 Bartlett의 비정규성 민감도가 사소한 불편이 아니라 **근본적으로 잘못된 결론**으로 이어질 수 있다는 점이다.
 
@@ -190,7 +190,7 @@ False-positive rates under skewed (lognormal) data:
     |---|---|---|---|
     | Bartlett 거짓 양성률 | 0.675 | 0.732 | 0.813 |
 
-    ($n = 30$ 값은 15.8절 [로버스트 분산 검정 비교](../robust_tests/robust_tests_comparison.md)에서 얻었다.)
+    ($n = 30$ 값은 15.5절 [대수정규에서의 비교](../robust_tests/robust_tests_comparison.md)에서 얻었다.)
 
     표본이 커지면 분산 추정이 정밀해지지만 검정의 통계적 검정력도 커진다. 근본 문제는 Bartlett의 $\chi^2$ 기준분포가 비정규 자료에 대해 **틀렸다**는 것이며, 이는 표본크기로 개선되지 않는다. 편향이 유한표본 문제가 아니라 점근적이다.
 

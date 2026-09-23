@@ -627,7 +627,7 @@ nav:
             - 로버스트 방법의 비교: ch15/robust_tests/comparison.md
             - 로버스트 검정 개관: ch15/robust_tests/robust_tests.md
             - Levene 검정 (코드): ch15/robust_tests/levene_test.md
-            - 로버스트 분산 검정 비교: ch15/robust_tests/robust_tests_comparison.md
+            - 대수정규에서의 비교 (치우침이 극단일 때): ch15/robust_tests/robust_tests_comparison.md
             - Levene 검정 정규 대 치우친 분포 모의실험: ch15/robust_tests/levene_simulation.md
             - Brown-Forsythe 검정 (scipy): ch15/robust_tests/brown_forsythe_code.md
             - Fligner-Killeen 검정 (scipy): ch15/robust_tests/fligner_killeen_code.md

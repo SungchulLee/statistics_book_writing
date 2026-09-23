@@ -188,7 +188,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
     대칭 분포(정규 포함)에서는 평균과 중앙값이 가까워 두 판이 비슷하게 작동한다. 정규성 아래에서는 평균 중심 판의 검정력이 약간 높을 수 있다.
 
-    **수치로 본 차이.** 15.8절 [로버스트 분산 검정 비교](../robust_tests/robust_tests_comparison.md)의 결과를 정리하면($k=3$, $n=30$, $\alpha=0.05$)
+    **수치로 본 차이.** 15.5절 [대수정규에서의 비교](../robust_tests/robust_tests_comparison.md)의 결과를 정리하면($k=3$, $n=30$, $\alpha=0.05$)
 
     | 자료 | Levene (평균) | Brown-Forsythe (중앙값) |
     |---|---|---|
@@ -228,7 +228,7 @@ Fligner-Killeen:                  X2=1.6063, p=0.205015
 
     반면 Bartlett 검정에서는 이상점 하나가 $S_i^2$을 통해 무제한으로 통계량을 키운다. 유계와 무계의 차이가 로버스트성의 본질이다.
 
-    **다만 만능은 아니다.** 15.8절 비교 페이지에서 보았듯 극단적으로 치우친 자료($\text{Lognormal}(0,1)$)에서는 Fligner-Killeen의 크기가 $0.114$까지 올라가 Brown-Forsythe의 $0.030$보다 나쁘다. 순위 변환이 **대칭인** 두꺼운 꼬리에는 잘 대응하지만, 편차 자체의 강한 치우침은 완전히 제거하지 못하기 때문이다. $\square$
+    **다만 만능은 아니다.** 15.5절 [대수정규에서의 비교](../robust_tests/robust_tests_comparison.md)에서 보았듯 극단적으로 치우친 자료($\text{Lognormal}(0,1)$)에서는 Fligner-Killeen의 크기가 $0.114$까지 올라가 Brown-Forsythe의 $0.030$보다 나쁘다. 순위 변환이 **대칭인** 두꺼운 꼬리에는 잘 대응하지만, 편차 자체의 강한 치우침은 완전히 제거하지 못하기 때문이다. $\square$
 
 <div class="drillbox" markdown>
 
