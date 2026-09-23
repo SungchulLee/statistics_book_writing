@@ -231,72 +231,9 @@ $$
     P(X_bar > 2100) = 0.0228
     ```
 
-## 표본크기가 표준오차에 미치는 영향
+지금까지 나온 모든 계산에서 표본크기는 $\sqrt n$의 꼴로만 들어왔다. 늘리는 쪽은 곱셈인데 줄어드는 쪽은 그 제곱근이라 표본을 네 배로 늘려야 표준오차가 겨우 절반이 된다. 이 맞바꿈이 표본크기를 정하는 모든 계산의 바탕에 깔려 있으므로, 다음 쪽에서 이 한 공식만 따로 떼어 자세히 본다.
 
-지금까지 나온 모든 계산에서 표본크기는 $\sqrt n$의 꼴로만 들어왔다. 그것이 무슨 뜻인지 $\sigma = 50$인 모집단에서 값을 직접 넣어 보면 분명해진다.
-
-| $n$ | SE ($\sigma = 50$일 때) |
-|-----|------------------------|
-| 25 | 10 |
-| 100 | 5 |
-| 400 | 2.5 |
-
-$\text{SE} \propto 1/\sqrt{n}$이므로 $n$을 네 배로 늘려야 표준오차가 겨우 절반이 된다. 조사 비용을 네 배로 치르고 정밀도는 두 배만 얻는 셈이며, 이 맞바꿈이 표본크기를 정하는 모든 계산의 바탕에 깔려 있다. 다음 쪽에서 이 한 공식만 따로 떼어 자세히 본다.
-
-## 모의실험
-
-이론이 말한 것을 눈으로 확인해 보자. 표준정규 모집단에서 크기 10짜리 표본을 1만 번 뽑아 표본평균을 모은 뒤, 모집단과 나란히 그린다. 두 히스토그램의 중심은 같고 폭만 다를 것이다. 다만 그림을 볼 때 **두 패널의 가로 눈금이 다르다**는 점에 주의해야 한다. 표집분포가 워낙 좁아 같은 축에 그리면 한 점처럼 보이기 때문이다.
-
-<div class="codebox" markdown>
-
-### 예제 1. 표본평균의 표집분포 모의실험 { .eg }
-
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
-
-np.random.seed(1)
-
-# 1단계: 모집단을 만든다. 10만 개면 사실상 무한 모집단으로 취급할 수 있다.
-population = stats.norm().rvs(100_000)
-sample_size = 10       # 표본 하나의 크기
-n_samples = 10_000     # 표본을 몇 번 되풀이해 뽑을 것인가
-
-# 2단계: 표본을 1만 번 뽑고 그때마다 표본평균을 기록한다.
-# replace=False 는 비복원추출. 모집단이 10만이고 표본이 10이라
-# 복원이든 비복원이든 결과에 거의 차이가 없다.
-#
-# 현실에서는 표본을 한 번만 뽑으므로 표본평균도 하나뿐이다.
-# 이 반복은 "만약 다시 뽑는다면 얼마가 나올까"를 눈으로 보기 위한 장치이며,
-# 그렇게 만들어진 분포가 곧 **표집분포**다.
-sample_means = [
-    np.mean(np.random.choice(population, size=sample_size, replace=False))
-    for _ in range(n_samples)
-]
-
-# 위아래 두 패널로 나눈다. 위는 모집단, 아래는 통계량의 표집분포다.
-# 둘의 **가로 눈금이 다르다**는 점에 주의하라.
-# 표집분포가 훨씬 좁으므로 같은 축에 그리면 한 점처럼 보인다.
-fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
-
-ax0.hist(population, bins=100, density=True, alpha=0.5)
-ax0.set_title('Population Distribution (Normal)', fontsize=16)
-
-ax1.hist(sample_means, bins=100, density=True, alpha=0.5)
-ax1.set_title(rf'Sampling Distribution of $\bar{{X}}$ (n = {sample_size})', fontsize=16)
-
-for ax in (ax0, ax1):
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-
-plt.tight_layout()
-plt.show()
-```
-
-![정규모집단에서 표본평균의 표집분포](./img/sample_mean_284.png)
-
-</div>
+---
 
 ## 더 파고들 세 갈래
 
