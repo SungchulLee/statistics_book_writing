@@ -330,7 +330,7 @@ US ($\bar X = 25.5, s = 3.8, n = 108$) 대 Canada ($\bar X = 26.3, s = 3.2, n = 
 
     **Welch 검정:** 등분산을 가정하지 않는다. 실제로 분산이 같을 때 검정력이 약간 낮을 뿐이다(효율 손실이 작다).
 
-    **현대의 기본값:** Welch (R의 `t.test`, scipy의 `ttest_ind(equal_var=False)`). $\alpha$가 부풀 위험을 피한다.
+    **현대의 권고:** Welch. $\alpha$가 부풀 위험을 피한다. R의 `t.test`는 이것이 기본값이지만 scipy의 `ttest_ind`는 합동 $t$가 기본이므로 `equal_var=False`를 명시해야 한다.
 
 <div class="drillbox" markdown>
 

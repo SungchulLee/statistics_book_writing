@@ -288,7 +288,7 @@ $t$ 분포가 고쳐 주는 것과 고쳐 주지 못하는 것을 갈라 두는 
 
     구현: $\nu_{WS}$를 내림한(보수적인) 값으로 $t_{\nu_{WS}}$ 임계값을 쓰거나, 정수가 아닌 자유도를 받아들이는 소프트웨어에서는 그대로 사용한다.
 
-    Welch 검정은 R(`t.test`)과 SciPy(`scipy.stats.ttest_ind(equal_var=False)`)에서 **기본 두 표본 $t$ 검정**이다. 원래의 스튜던트 $t$ 검정이 요구하는 등분산 가정을 필요로 하지 않기 때문이다.
+    Welch 검정은 오늘날 두 표본 비교의 **표준**으로 여겨진다. 원래의 스튜던트 $t$ 검정이 요구하는 등분산 가정을 필요로 하지 않기 때문이다. 다만 소프트웨어의 기본값은 갈린다. R의 `t.test()`는 `var.equal = FALSE`라 Welch가 기본이지만, **SciPy의 `ttest_ind()`는 `equal_var=True`가 기본이어서 합동 $t$를 돌린다.** Welch를 쓰려면 `equal_var=False`를 직접 넣어야 한다.
 
 <div class="drillbox" markdown>
 
