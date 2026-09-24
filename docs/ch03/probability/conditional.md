@@ -287,15 +287,23 @@ $P(B) > 0$이면 $P(\cdot \mid B)$가 확률의 세 공리를 만족함을 증�
 ??? success "풀이"
     $P(\cdot \mid B)$에 대해 세 공리를 확인한다.
 
-    **비음성:** 임의의 사건 $A$에 대해 $P(A \cap B) \geq 0$이고 $P(B) > 0$이므로
+    **범위:** 임의의 사건 $A$에 대해 $P(A \cap B) \geq 0$이고 $P(B) > 0$이므로
 
     $$
     P(A \mid B) = \frac{P(A \cap B)}{P(B)} \geq 0
     $$
 
-    **정규화:**
+    이다. 위쪽은 $A \cap B \subseteq B$에서 나온다. 단조성에 의해 $P(A \cap B) \leq P(B)$이므로
 
     $$
+    P(A \mid B) = \frac{P(A \cap B)}{P(B)} \leq \frac{P(B)}{P(B)} = 1
+    $$
+
+    **정규화:** $\emptyset \cap B = \emptyset$이고 $\Omega \cap B = B$이므로
+
+    $$
+    P(\emptyset \mid B) = \frac{P(\emptyset)}{P(B)} = 0,
+    \qquad
     P(\Omega \mid B) = \frac{P(\Omega \cap B)}{P(B)} = \frac{P(B)}{P(B)} = 1
     $$
 
