@@ -609,6 +609,106 @@ $M \to \infty$, $n \to \infty$, $N$은 고정이고 $nN/M \to \lambda$일 때 $\
 
     이런 함정이 SciPy 곳곳에 있다. 균등분포의 `scale`은 오른쪽 끝점이 아니라 폭이고, 로그정규분포의 `scale`은 평균이 아니라 $e^\mu$이며, 정규분포의 `scale`은 분산이 아니라 표준편차다. **처음 쓰는 분포는 반드시 `mean()`과 `var()`로 검산하는 습관**이 가장 확실한 방어다. 위에서 평균 $nN/M = 5 \times 0.2 = 1.0$이 맞게 나오는 것으로 인자를 제대로 넘겼음을 확인할 수 있다.
 
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+**다변량 초기하분포.** 모집단 $M$개가 두 종류가 아니라 $c$종류로 나뉘어 각각 $N_1, \ldots, N_c$개 있다($\sum_j N_j = M$). 여기서 $n$개를 비복원으로 뽑을 때 종류별 개수 $(X_1, \ldots, X_c)$의 결합 PMF를 쓰고, 각 $X_j$의 주변분포와 $\operatorname{Cov}(X_j, X_l)$을 구하라. 이항분포에 대한 다항분포가 그렇듯, $c = 2$면 초기하분포로 돌아감을 확인하라.
+
+</div>
+
+??? success "풀이"
+    **결합 PMF.** 종류 $j$에서 $x_j$개를 고르는 방법이 $\binom{N_j}{x_j}$가지이고 선택은 종류마다 따로 하므로, $\sum_j x_j = n$인 $(x_1,\ldots,x_c)$에 대해
+
+    $$
+    P(X_1 = x_1, \ldots, X_c = x_c) = \frac{\prod_{j=1}^{c}\binom{N_j}{x_j}}{\binom{M}{n}}
+    $$
+
+    이다. 분자와 분모가 모두 "고르는 방법의 수"이므로 4.1절 초기하분포 유도와 논리가 똑같다.
+
+    **주변분포.** 종류 $j$ 하나만 보고 나머지를 전부 "종류 $j$가 아님"으로 뭉치면 두 종류짜리 문제가 된다. 따라서
+
+    $$
+    X_j \sim \text{HG}(n, N_j, M)
+    $$
+
+    이고, 곧바로
+
+    $$
+    E[X_j] = n\frac{N_j}{M}, \qquad
+    \operatorname{Var}(X_j) = n\frac{N_j}{M}\left(1 - \frac{N_j}{M}\right)\frac{M-n}{M-1}
+    $$
+
+    이다. **뭉치기가 통한다는 것이 핵심이다.** 다변량 분포를 새로 계산할 필요 없이, 관심 없는 종류를 하나로 합치면 이미 아는 분포가 된다.
+
+    **공분산.** 지시함수로 간다. $p_j = N_j/M$이라 하고 $I_{ij}$를 "$i$번째로 뽑은 것이 종류 $j$"의 지시함수라 하면 $X_j = \sum_{i=1}^n I_{ij}$이다. 같은 추출은 한 종류에만 속하므로 $I_{ij}I_{il} = 0$($j \ne l$)이고, 따라서
+
+    $$
+    E[I_{ij}I_{il}] = 0, \qquad \operatorname{Cov}(I_{ij}, I_{il}) = -p_jp_l
+    $$
+
+    이다. 서로 다른 추출 $i \ne i'$에 대해서는 비복원이므로
+
+    $$
+    E[I_{ij}I_{i'l}] = \frac{N_j}{M}\cdot\frac{N_l}{M-1},
+    \qquad
+    \operatorname{Cov}(I_{ij}, I_{i'l}) = \frac{N_jN_l}{M(M-1)} - p_jp_l = \frac{p_jp_l}{M-1}\cdot(-1)
+    $$
+
+    이다. 앞의 것이 $n$개, 뒤의 것이 $n(n-1)$개이므로
+
+    $$
+    \operatorname{Cov}(X_j, X_l) = -np_jp_l - n(n-1)\frac{p_jp_l}{M-1}
+    = -n\,p_jp_l\,\frac{M-n}{M-1}
+    \qquad (j \ne l)
+    $$
+
+    를 얻는다.
+
+    **부호를 읽어라.** 공분산이 **언제나 음수**다. 뽑은 개수의 총합이 $n$으로 묶여 있으니 한 종류를 많이 뽑으면 다른 종류는 적게 뽑을 수밖에 없다. 다항분포의 $\operatorname{Cov} = -np_jp_l$과 같은 모양이고, **똑같은 유한모집단 수정계수 $\frac{M-n}{M-1}$이 한 번 더 곱해진** 것만 다르다.
+
+    | | 복원추출 | 비복원추출 |
+    |---|---|---|
+    | 두 종류 | $B(n, p)$ | $\text{HG}(n, N, M)$ |
+    | $c$종류 | 다항분포 | **다변량 초기하분포** |
+    | $\operatorname{Cov}(X_j, X_l)$ | $-np_jp_l$ | $-np_jp_l\frac{M-n}{M-1}$ |
+
+    $M \to \infty$면 수정계수가 1로 가서 다항분포로 수렴한다. 본문에서 본 초기하 $\to$ 이항의 극한이 종류를 늘려도 그대로 성립한다.
+
+    ```python
+    import numpy as np
+    from scipy.stats import multivariate_hypergeom
+
+    N = [30, 20, 50]          # 종류별 개수, 모집단 M = 100
+    M, n = sum(N), 10
+    rv = multivariate_hypergeom(N, n)
+
+    X = rv.rvs(size=400_000, random_state=0)
+    p = np.array(N) / M
+    fpc = (M - n) / (M - 1)
+
+    print(f"{'':>6}{'모의 평균':>12}{'이론':>10}{'모의 분산':>12}{'이론':>10}")
+    for j in range(3):
+        th_v = n * p[j] * (1 - p[j]) * fpc
+        print(f"X{j+1:<5}{X[:, j].mean():>12.4f}{n*p[j]:>10.4f}"
+              f"{X[:, j].var():>12.4f}{th_v:>10.4f}")
+
+    print(f"\nCov(X1, X2) 모의 {np.cov(X[:, 0], X[:, 1])[0, 1]:>8.4f}"
+          f"   이론 {-n*p[0]*p[1]*fpc:>8.4f}")
+    ```
+
+    출력:
+
+    ```
+                 모의 평균        이론       모의 분산        이론
+    X1          3.0015    3.0000      1.9078    1.9091
+    X2          1.9989    2.0000      1.4537    1.4545
+    X3          4.9996    5.0000      2.2697    2.2727
+
+    Cov(X1, X2) 모의  -0.5459   이론  -0.5455
+    ```
+
+    **어디에 쓰이는가.** 카드 패의 무늬별 장수, 여러 불량 유형이 섞인 로트 검사, 그리고 $r \times c$ 분할표의 **피셔 정확검정**이 모두 이 분포다. 연습문제 6에서 $2\times2$ 표의 한 칸이 초기하분포를 따른다고 했는데, 행과 열이 늘어나면 그 자리에 다변량 초기하분포가 들어선다. $\square$
+
 ---
 
 ## 정리하며
