@@ -134,6 +134,18 @@ $$
 
 이 근사는 표본크기가 커질수록 좋아지며 신뢰구간과 Wald 검정통계량 구성의 바탕이 된다.
 
+![곡률에서 표준오차로](./img/fisher_curvature_se.png)
+
+왼쪽이 이 공식이 나오는 자리다. 로그가능도를 꼭대기에서 테일러 전개하면 1차항은 0이고(꼭대기이므로) 2차항만 남아, 봉우리 부근이 포물선으로 보인다.
+
+$$
+\ell(\theta) \approx \ell(\hat\theta) - \frac{1}{2}\,[-\ell''(\hat\theta)]\,(\theta - \hat\theta)^2
+$$
+
+이 포물선의 계수가 $-\ell''(\hat\theta) = nI(\hat\theta)$이다. 지수를 취해 가능도로 되돌리면 $\exp\{-(\theta-\hat\theta)^2 / (2/nI)\}$, 곧 표준편차가 $1/\sqrt{nI}$인 정규분포의 모양이 된다. **표준오차 공식은 이 포물선의 계수를 읽은 것**이고, 오른쪽 그림이 그 결과다.
+
+그래서 곡률이 크면 분포가 좁고 곡률이 작으면 넓다. 정보량이 "자료가 $\theta$에 관해 얼마나 말해 주는가"를 재는 양이라는 말의 계산적 내용이 이것이다. 같은 관계를 하한의 관점에서 본 것이 [효율성과 Cramér–Rao 하한](../estimator_quality/efficiency_crlb.md)이다.
+
 !!! example "Bernoulli MLE의 표준오차"
 
     $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$에서 MLE는 $\hat{p} = \bar{X}$이다. 추정된 표준오차는
