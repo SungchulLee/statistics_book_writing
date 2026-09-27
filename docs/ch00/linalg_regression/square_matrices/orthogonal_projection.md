@@ -50,6 +50,14 @@ $$
 
     바로 이것이 최소제곱이 잔차제곱합을 최소화하는 이유다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\operatorname{col}(\mathbf{X})$ 안에서 $\mathbf{y}$에 가장 가까운 점이다.
 
+![왼쪽은 평면 col(X) 위의 적합값과 그에 수직인 잔차가 이루는 직각삼각형, 오른쪽은 부분공간 안에서 점을 옮길 때 거리의 제곱이 그리는 포물선](./img/least_squares_pythagoras.png)
+
+왼쪽 그림의 세 변은 길이가 실제 값이다. $\lVert\hat{\mathbf{y}}\rVert = 3.606$, $\lVert\mathbf{e}\rVert = 2.500$, $\lVert\mathbf{y}\rVert = 4.387$이고 $4.387^2 = 3.606^2 + 2.500^2 = 19.25$가 정확히 맞는다. 맞아떨어지는 이유는 하나뿐이다. $\mathbf{e}$가 평면 $\operatorname{col}(\mathbf{X})$에 수직이라 $\hat{\mathbf{y}}$에서의 각이 직각이기 때문이다. **피타고라스 분해는 직교성을 길이의 언어로 바꿔 쓴 것일 뿐이다.**
+
+이제 평면 안에서 다른 점 $\mathbf{v}$를 골라 보자. 그림에서 $\mathbf{v}$까지 그은 회색 점선의 길이는 $3.084$로 $2.500$보다 길다. 그럴 수밖에 없다. $\mathbf{y} - \mathbf{v}$를 평면에 수직인 $\mathbf{e}$와 평면 안에 놓인 $\hat{\mathbf{y}} - \mathbf{v}$로 쪼개면 다시 직각삼각형이 되어 $\lVert\mathbf{y}-\mathbf{v}\rVert^2 = \lVert\mathbf{e}\rVert^2 + \lVert\hat{\mathbf{y}}-\mathbf{v}\rVert^2$이고, 오른쪽 둘째 항은 결코 음수가 될 수 없다. 위 증명이 한 일이 바로 이것이다.
+
+오른쪽 그림은 그 식을 $\mathbf{v}$의 위치에 대한 함수로 그린 것이다. 부분공간 안에서 $\hat{\mathbf{y}}$로부터 멀어진 거리를 가로축에 놓으면 거리의 제곱은 꼭짓점이 $\mathbf{v} = \hat{\mathbf{y}}$인 포물선이 되고, 바닥 높이가 $\lVert\mathbf{e}\rVert^2 = 6.25$다. 잔차제곱합은 아무리 잘 해도 이 아래로 내려가지 않으며, 그 바닥에 닿는 점은 단 하나다. 최소제곱해가 존재하고 유일하다는 말의 기하가 이 포물선이다.
+
 ## 열공간 위로의 직교사영 공식
 
 <div class="thmbox" markdown>
