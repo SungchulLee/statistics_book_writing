@@ -70,51 +70,11 @@ $$
 
 정리 1에서 분산을 가정했지만, 실제로는 **평균만 유한하면** 약한 큰수의 법칙이 성립한다(분산이 무한해도 된다). 증명은 더 정교한 도구가 필요하다.
 
-<div class="codebox" markdown>
-
-### 예제 1. 표본평균이 참 평균으로 수렴하는 모습 { .eg }
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-np.random.seed(42)
-
-# 주사위를 1만 번 굴리고 "여태까지의 평균"을 매 시점 기록한다.
-n_rolls = 10_000
-rolls = np.random.randint(1, 7, size=n_rolls)
-
-# cumsum(누적합)을 1, 2, 3, ... 로 나누면 각 시점까지의 평균이 된다.
-# running_avg[k] = 처음 k+1번의 평균
-# 반복문 없이 한 줄로 1만 개의 평균을 얻는 요령이다.
-running_avg = np.cumsum(rolls) / np.arange(1, n_rolls + 1)
-
-fig, ax = plt.subplots(figsize=(12, 4))
-ax.plot(running_avg, alpha=0.8, label='Running Average')
-# 참 기댓값 (1+2+3+4+5+6)/6 = 3.5. 큰수의 법칙은 곡선이 이 선에 붙는다고 말한다.
-ax.axhline(y=3.5, color='r', linestyle='--', label='E[X] = 3.5')
-ax.set_xlabel('Number of Rolls')
-ax.set_ylabel('Sample Mean')
-ax.set_title('Law of Large Numbers: Fair Die')
-ax.legend()
-ax.spines[['top', 'right']].set_visible(False)
-plt.show()
-```
-
-![Law of Large Numbers: Fair Die](./img/lln_61.png)
-
-초반에는 크게 출렁이다가 점차 3.5에 붙는다. 출렁임의 폭이 $1/\sqrt n$으로 줄어드는 것이 눈에 보인다.
-
-</div>
-
-!!! warning "이 그림은 약한 법칙이 아니라 강한 법칙의 그림이다"
-    위 그림은 **표본경로 하나**를 끝까지 따라간 것이다. 그 하나의 경로가 3.5에 붙는다는 진술은 §3의 **강한** 큰수의 법칙에 해당한다.
-
-    반면 정리 2가 말하는 것은 경로가 아니라 **분포**다. 각 $n$마다 "크기 $n$인 표본을 새로 뽑는 일"을 수없이 되풀이했을 때 $\bar X_n$이 어떻게 흩어지는가, 그리고 그 흩어짐에서 $\mu \pm \varepsilon$ 밖에 떨어지는 몫이 얼마나 되는가를 말한다. **경로 하나로는 그 확률을 볼 수 없다.** 다음 예제가 그것을 직접 그린다.
+정리 2가 말하는 것은 경로가 아니라 **분포**임을 새겨 두자. 각 $n$마다 "크기 $n$인 표본을 새로 뽑는 일"을 수없이 되풀이했을 때 $\bar X_n$이 어떻게 흩어지는가, 그리고 그 흩어짐에서 $\mu \pm \varepsilon$ 밖에 떨어지는 몫이 얼마나 되는가를 말한다. 그러므로 확인하려면 표본을 여러 번 뽑아 **$\bar X_n$의 분포**를 보아야 한다.
 
 <div class="codebox" markdown>
 
-### 예제 2. 확률이 0으로 가는 모습 { .eg }
+### 예제 1. 확률이 0으로 가는 모습 { .eg }
 
 ```python
 import numpy as np
@@ -173,7 +133,7 @@ n = 25 : 0.312      n = 50 : 0.147
 
 두 가지를 짚어 두자. 첫째, **$n = 50$에서도 그 확률이 $0.147$이다.** 여전히 일곱 번에 한 번꼴로 $\varepsilon$ 밖에 떨어진다. 정리는 극한을 말할 뿐 "충분히 큰 $n$"이 얼마인지는 말해 주지 않으며, $\varepsilon$을 좁게 잡을수록 그 $n$은 커진다. 둘째, **줄어드는 속도가 느리다.** $n$을 10배로 키우는 동안 확률은 4.5배밖에 줄지 않았는데, 이는 $\bar X_n$의 퍼짐이 $1/\sqrt n$로만 줄기 때문이다.
 
-이 둘째 관찰이 다음 절로 이어진다. 히스토그램이 오그라드는 **속도**가 $1/\sqrt n$으로 정해져 있다면, 눈금을 그 속도에 맞추어 $\sqrt n$배씩 당겨 가며 보면 어떻게 될까. 오그라드는 것과 당기는 것이 정확히 상쇄되어 **무엇인가가 남는다.** 그 남는 것이 중심극한정리의 정규분포이며, [다음 절](clt.md)에서 같은 히스토그램에 눈금 두 벌을 달아 확인한다. **두 정리는 별개의 사실이 아니라 같은 그림을 다른 자로 읽은 것이다.**
+둘째 관찰은 이 절을 넘어간다. 히스토그램이 오그라드는 **속도**가 $1/\sqrt n$으로 정해져 있다면, 눈금을 그 속도에 맞추어 $\sqrt n$배씩 당겨 가며 보면 어떻게 될까. 오그라드는 것과 당기는 것이 정확히 상쇄되어 **무엇인가가 남는다.** 그 남는 것이 [중심극한정리](clt.md)의 정규분포이며, 그 쪽에서 이 히스토그램에 눈금 두 벌을 달아 확인한다. **두 정리는 별개의 사실이 아니라 같은 그림을 다른 자로 읽은 것이다.**
 
 </div>
 
@@ -221,6 +181,49 @@ $$
 "거의 확실하게"라는 단서는 3.1절에서 본 그것이다. 수렴하지 않는 표본경로가 존재할 수는 있지만(예: 언제나 앞면만 나오는 경로) 그 집합의 확률이 0이다. **확률 0은 불가능이 아니다.**
 
 강한 법칙이 가산가법성 공리(3.2절 정리 3)를 필요로 하는 이유도 여기 있다. "수렴한다"는 사건은 가산 개의 사건으로 표현되며, 유한 가법성만으로는 그 확률을 다룰 수 없다.
+
+<div class="codebox" markdown>
+
+### 예제 2. 표본경로 하나를 끝까지 따라가면 { .eg }
+
+강한 법칙이 말하는 대상은 **경로 하나**이므로, 확인하는 방법도 예제 1과 다르다. 표본을 여러 번 뽑는 것이 아니라 실험 하나를 길게 이어 가며 그 수열이 어디로 가는지 본다.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(42)
+
+# 주사위를 1만 번 굴리고 "여태까지의 평균"을 매 시점 기록한다.
+n_rolls = 10_000
+rolls = np.random.randint(1, 7, size=n_rolls)
+
+# cumsum(누적합)을 1, 2, 3, ... 로 나누면 각 시점까지의 평균이 된다.
+# running_avg[k] = 처음 k+1번의 평균
+# 반복문 없이 한 줄로 1만 개의 평균을 얻는 요령이다.
+running_avg = np.cumsum(rolls) / np.arange(1, n_rolls + 1)
+
+fig, ax = plt.subplots(figsize=(12, 4))
+ax.plot(running_avg, alpha=0.8, label='Running Average')
+# 참 기댓값 (1+2+3+4+5+6)/6 = 3.5. 큰수의 법칙은 곡선이 이 선에 붙는다고 말한다.
+ax.axhline(y=3.5, color='r', linestyle='--', label='E[X] = 3.5')
+ax.set_xlabel('Number of Rolls')
+ax.set_ylabel('Sample Mean')
+ax.set_title('Law of Large Numbers: Fair Die')
+ax.legend()
+ax.spines[['top', 'right']].set_visible(False)
+plt.show()
+```
+
+![Law of Large Numbers: Fair Die](./img/lln_61.png)
+
+초반에는 크게 출렁이다가 점차 3.5에 붙는다. 출렁임의 폭이 $1/\sqrt n$으로 줄어드는 것이 눈에 보인다.
+
+**두 예제가 보는 것이 다르다.** 예제 1은 가로축이 $n$이 아니라 $\bar X_n$이었고, 칸마다 표본을 1만 번씩 새로 뽑아 **분포**를 그렸다. 여기서는 표본을 한 번만 뽑되 그것을 1만 번까지 **이어 간** 하나의 수열을 그린다. 약한 법칙은 앞의 그림에서, 강한 법칙은 뒤의 그림에서 읽힌다.
+
+다만 그림 하나로 강한 법칙을 "확인"할 수는 없다는 점도 분명히 해 두자. 이 경로가 3.5에 붙는 것처럼 보이지만, 거의 확실한 수렴은 **모든 경로의 집합**에 대한 진술이고 그림은 그중 하나를 보여 줄 뿐이다. 유한한 그림으로는 "어느 시점 이후로 영영 $\varepsilon$ 안에 머문다"를 끝까지 볼 수 없다.
+
+</div>
 
 ## 연습문제
 
