@@ -105,6 +105,12 @@ $$
 import matplotlib.pyplot as plt
 import numpy as np
 
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
+
 np.random.seed(0)
 
 def main():
@@ -124,11 +130,12 @@ def main():
     average = X_bar.mean()
     standard_error = X_bar.std()
 
-    print(f'(Estimated) Mean of X_bar : {average:.4}')
-    print(f'Standard Error   of X_bar : {standard_error:.4}')
+    print(f'표본평균의 표집분포 중심 : {average:.4}')
+    print(f'표본평균의 표준오차      : {standard_error:.4}')
 
     fig, ax = plt.subplots(figsize=(12, 3))
-    ax.set_title('Sampling Distribution of X_bar', fontsize=20)
+    # 한글은 $...$ 바깥에 둔다. 수식 글꼴에는 한글 글리프가 없다.
+    ax.set_title(r'표본평균 $\bar X$ 의 표집분포', fontsize=20)
 
     ax.hist(X_bar, bins=100, density=True, alpha=0.3)
     ax.vlines(average, ymin=0, ymax=5, alpha=1.0, color='k', ls='-', lw=5)
@@ -140,7 +147,7 @@ def main():
     ax.annotate('', xy=(average, 5), xytext=(average + standard_error, 5),
                 arrowprops=dict(arrowstyle='<->', color='k', linewidth=3,
                                 mutation_scale=20))
-    ax.text(average, 5.5, 'Standard Error', fontsize=15)
+    ax.text(average, 5.5, '표준오차', fontsize=15)
 
     ax.set_xlim(0.0, 1.0)
     ax.set_ylim(-0.1, 6)
@@ -157,11 +164,11 @@ if __name__ == "__main__":
 출력:
 
 ```
-(Estimated) Mean of X_bar : 0.4981
-Standard Error   of X_bar : 0.1287
+표본평균의 표집분포 중심 : 0.4981
+표본평균의 표준오차      : 0.1287
 ```
 
-![Sampling Distribution of X_bar](./img/standard_error_106.png)
+![표본평균의 표집분포](./img/se_xbar_single_file.png)
 
 </div>
 
@@ -177,6 +184,8 @@ Standard Error   of X_bar : 0.1287
 
 ```python
 import argparse
+
+import matplotlib.pyplot as plt
 import numpy as np
 
 # 이 파일은 여러 스크립트가 공유하는 설정을 한곳에 모아 두는 용도다.
@@ -189,6 +198,14 @@ ARGS = parser.parse_args()
 # 시드를 여기서 한 번만 고정하면 이 설정을 가져다 쓰는 모든 스크립트가
 # 같은 난수열을 쓰게 되어 결과가 재현된다.
 np.random.seed(ARGS.seed)
+
+# 그림 설정도 여기 모아 둔다. 이 파일을 가져다 쓰는 스크립트는 글꼴을
+# 따로 손대지 않아도 된다.
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
 ```
 
 </div>
@@ -206,26 +223,27 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # 이 import 는 ARGS 라는 이름이 필요해서가 아니다. global_name_space 를 불러오는
-# 순간 그 파일의 np.random.seed(ARGS.seed) 가 실행되어 난수열이 고정된다.
+# 순간 그 파일의 np.random.seed(ARGS.seed) 와 글꼴 설정이 실행된다.
 # 즉 "가져오는 것" 자체가 설정을 적용하는 일이다.
 from global_name_space import ARGS
 
 
-def draw(values, name, ymax, ytop, xlim):
+def draw(values, name, symbol, ymax, ytop, xlim):
     """표집분포의 히스토그램에 평균선과 ±1 표준오차를 그린다.
 
-    X_bar 든 S^2 든 재는 방법도 그리는 방법도 같으므로 한곳에 모아 둔다.
-    values 에 무엇을 담아 넘기느냐만 바뀐다.
+    표본평균이든 표본분산이든 재는 방법도 그리는 방법도 같으므로
+    한곳에 모아 둔다. values 에 무엇을 담아 넘기느냐만 바뀐다.
     """
     values = np.array(values)
     average = values.mean()
     standard_error = values.std()
 
-    print(f'(Estimated) Mean of {name} : {average:.4}')
-    print(f'Standard Error   of {name} : {standard_error:.4}')
+    print(f'{name}의 표집분포 중심 : {average:.4}')
+    print(f'{name}의 표준오차      : {standard_error:.4}')
 
     fig, ax = plt.subplots(figsize=(12, 3))
-    ax.set_title(f'Sampling Distribution of {name}', fontsize=20)
+    # 한글은 $...$ 바깥에 둔다. 수식 글꼴에는 한글 글리프가 없다.
+    ax.set_title(f'{name} ${symbol}$ 의 표집분포', fontsize=20)
 
     ax.hist(values, bins=100, density=True, alpha=0.3)
     ax.vlines(average, ymin=0, ymax=ymax, alpha=1.0, color='k', ls='-', lw=5)
@@ -237,7 +255,7 @@ def draw(values, name, ymax, ytop, xlim):
     ax.annotate('', xy=(average, ymax), xytext=(average + standard_error, ymax),
                 arrowprops=dict(arrowstyle='<->', color='k', linewidth=3,
                                 mutation_scale=20))
-    ax.text(average, ymax * 1.1, 'Standard Error', fontsize=15)
+    ax.text(average, ymax * 1.1, '표준오차', fontsize=15)
 
     ax.set_xlim(*xlim)
     ax.set_ylim(-0.1, ytop)
@@ -254,7 +272,7 @@ def main():
         x_bar = x.mean()
         X_bar.append(x_bar)
 
-    draw(X_bar, 'X_bar', ymax=5, ytop=6, xlim=(0.0, 1.0))
+    draw(X_bar, '표본평균', r'\bar X', ymax=5, ytop=6, xlim=(0.0, 1.0))
 
 if __name__ == "__main__":
     main()
@@ -263,11 +281,11 @@ if __name__ == "__main__":
 출력:
 
 ```
-(Estimated) Mean of X_bar : 0.4993
-Standard Error   of X_bar : 0.1281
+표본평균의 표집분포 중심 : 0.4993
+표본평균의 표준오차      : 0.1281
 ```
 
-![Sampling Distribution of X_bar](./img/standard_error_215.png)
+![표본평균의 표집분포 — 모듈 버전](./img/se_xbar_module.png)
 
 예제 1과 계산이 같은데 값이 조금 다르다. 시드가 다르기 때문이다(예제 1은 0, 여기서는 `global_name_space.py`의 기본값 1). 두 결과가 모두 참값 $\mu = 0.5$와 $\sigma/\sqrt5 = 0.1291$ 근처에 있으며, 그 흔들림 자체가 모의실험 오차다.
 
@@ -299,7 +317,7 @@ def main():
         # x.var() 나 x.std()**2 는 n 으로 나눈 편향추정량을 준다.
         S_square.append(x.var(ddof=1))
 
-    draw(S_square, 'S^2', ymax=8, ytop=10, xlim=(0.0, 0.25))
+    draw(S_square, '표본분산', 'S^2', ymax=8, ytop=10, xlim=(0.0, 0.25))
 
 if __name__ == "__main__":
     main()
@@ -308,11 +326,11 @@ if __name__ == "__main__":
 출력:
 
 ```
-(Estimated) Mean of S^2 : 0.08406
-Standard Error   of S^2 : 0.04263
+표본분산의 표집분포 중심 : 0.08406
+표본분산의 표준오차      : 0.04263
 ```
 
-![Sampling Distribution of S^2](./img/standard_error_277.png)
+![표본분산의 표집분포](./img/se_s2_module.png)
 
 두 수치를 이론과 견주어 보자. $\text{Uniform}(0,1)$의 분산이 $\sigma^2 = 1/12 = 0.0833$이므로 평균 0.0841은 **불편성**을 확인해 준다. 표준오차 0.0426은 5.6절에서 볼 공식
 
