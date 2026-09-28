@@ -14,6 +14,8 @@ r"""3.5절 — 약한 큰수의 법칙과 중심극한정리를 한 그림에 �
   ch03/limits/img/lln_clt_exponential.png
   ch03/limits/img/lln_clt_lognormal.png
   ch03/limits/img/lln_clt_bernoulli.png
+  ch03/limits/img/two_rulers_exponential.png      한 그림에 눈금 두 벌 (clt.md)
+  ch03/limits/img/rate_trichotomy_exponential.png 배율 세 가지 (clt.md)
 
 실행:  python3 scripts/make_ch03_lln_clt.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,6 +33,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
 OUT = "docs/ch03/limits/img/"
+INK = "#37474F"
 
 N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
 M = 10_000                    # 되풀이 횟수
@@ -215,8 +218,81 @@ def two_rulers(dist="exponential", ns=(5, 50)):
         print(f"    n={n:>3}  x̄ 눈금 반폭 = {4 * sigma / np.sqrt(n):.3f}")
 
 
+def rate_trichotomy(dist="exponential", ns=(5, 20, 100, 500)):
+    """배율을 바꿔 가며 n^a (X̄-μ)/σ 를 그린다.
+
+    a < 1/2 이면 0 으로 뭉개지고, a > 1/2 이면 퍼져 나간다. a = 1/2 에서만
+    아무 데로도 가지 않고 모양이 남는다. 이것이 "수렴 속도가 1/√n" 의 뜻이다.
+    """
+    sampler, mu, sigma, label, _ = DISTRIBUTIONS[dist]
+    rng = np.random.default_rng(SEED)
+    X = sampler(rng, (M, max(ns)))
+
+    exps = [(0.25, r"$n^{1/4}(\bar X_n-\mu)/\sigma$", "너무 약한 배율",
+             "한 점으로 뭉개진다", "tab:orange"),
+            (0.50, r"$n^{1/2}(\bar X_n-\mu)/\sigma$", "꼭 맞는 배율",
+             "모양이 남는다", "tab:green"),
+            (1.00, r"$n^{1}(\bar X_n-\mu)/\sigma$", "너무 센 배율",
+             "그림 밖으로 나간다", "tab:purple")]
+
+    # 표준편차가 줄마다 100배 넘게 차이 나므로 칸 폭도 줄마다 맞춰 준다.
+    # 고정 폭을 쓰면 좁은 분포가 들쭉날쭉한 막대 몇 개로 뭉개진다.
+    scaled = {(i, n): n ** a * (X[:, :n].mean(axis=1) - mu) / sigma
+              for i, (a, *_ ) in enumerate(exps) for n in ns}
+
+    fig, axes = plt.subplots(3, len(ns), figsize=(13.5, 7.6),
+                             constrained_layout=True, sharex=True)
+    grid = np.linspace(-4, 4, 400)
+
+    for i, (a, formula, note, fate, color) in enumerate(exps):
+        # 한 줄 안에서는 세로 눈금을 하나로 묶어야 폭의 변화가 읽힌다.
+        peaks = []
+        for n in ns:
+            t = scaled[(i, n)]
+            w = float(np.clip(t.std() / 10, 8 / 400, 8 / 18))
+            h, _ = np.histogram(t, bins=np.arange(-4, 4 + w, w), density=True)
+            peaks.append(h.max())
+        row_top = 1.15 * max(peaks)
+
+        for j, n in enumerate(ns):
+            ax = axes[i, j]
+            t = scaled[(i, n)]
+            w = float(np.clip(t.std() / 10, 8 / 400, 8 / 18))
+            ax.hist(t, bins=np.arange(-4, 4 + w, w), density=True,
+                    color=color, alpha=0.65, edgecolor="none")
+            if abs(a - 0.5) < 1e-9:
+                ax.plot(grid, stats.norm.pdf(grid), "k-", lw=1.8)
+            ax.set_xlim(-4, 4)
+            ax.set_ylim(0, row_top)
+            ax.set_yticks([])
+            ax.tick_params(labelsize=9)
+            ax.spines[["top", "right", "left"]].set_visible(False)
+            ax.text(0.03, 0.93, f"표준편차 {t.std():.2f}", transform=ax.transAxes,
+                    fontsize=10, color=INK, va="top")
+            if i == 0:
+                ax.set_title(f"n = {n}", fontsize=12.5)
+        axes[i, 0].set_ylabel(f"{formula}\n{note} — {fate}", fontsize=11,
+                              color=color, rotation=0, ha="right", va="center",
+                              labelpad=12)
+
+    fig.suptitle(f"$\\sqrt{{n}}$ 만이 꼭 맞는 배율이다 — {label}", fontsize=14.5)
+    fig.text(0.5, -0.03,
+             "네 칸 모두 가로 범위가 같다. 줄마다 세로 눈금은 그 줄에 맞추었으므로 "
+             "읽어야 할 것은 높이가 아니라 폭이다.",
+             ha="center", fontsize=11)
+    fig.savefig(OUT + f"rate_trichotomy_{dist}.png", dpi=170,
+                facecolor="white", bbox_inches="tight")
+    plt.close(fig)
+    print(f"saved {OUT}rate_trichotomy_{dist}.png")
+    for i, (a, _, note, _, _) in enumerate(exps):
+        sds = [float(scaled[(i, n)].std()) for n in ns]
+        print(f"    a={a:.2f} ({note}): sd = "
+              + ", ".join(f"{v:.2f}" for v in sds))
+
+
 if __name__ == "__main__":
     draw("exponential", rows=1)          # lln.md 용
     for d in ("uniform", "exponential", "lognormal", "bernoulli"):
         draw(d, rows=2)                  # clt.md 용
     two_rulers("exponential")            # clt.md 정리 2 바로 뒤
+    rate_trichotomy("exponential")       # clt.md 배율 이야기
