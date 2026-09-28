@@ -1,0 +1,168 @@
+r"""3.5절 — 약한 큰수의 법칙과 중심극한정리를 한 그림에 담는다.
+
+같은 모의실험을 두 배율로 본다.
+
+  윗줄 (약한 큰수의 법칙)  표본평균 X̄_n 의 분포. n 이 커지면 μ 둘레로
+                           오그라들고, 제목의 P(|X̄_n - μ| > ε) 가 0 으로 간다.
+  아랫줄 (중심극한정리)    표준화한 Z_n = √n (X̄_n - μ)/σ 의 분포를 N(0,1) 과
+                           견준다.
+
+만드는 파일:
+
+  ch03/limits/img/wlln_exponential.png      윗줄만 (lln.md 용)
+  ch03/limits/img/lln_clt_uniform.png       두 줄 (clt.md 용)
+  ch03/limits/img/lln_clt_exponential.png
+  ch03/limits/img/lln_clt_lognormal.png
+  ch03/limits/img/lln_clt_bernoulli.png
+
+실행:  python3 scripts/make_ch03_lln_clt.py   (저장소 최상위에서)
+필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
+       그림은 PNG로 커밋되므로 CI에서 다시 그리지 않는다.
+"""
+
+import numpy as np
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from scipy import stats
+
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
+
+OUT = "docs/ch03/limits/img/"
+
+N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+M = 10_000                    # 되풀이 횟수
+EPS = 0.2                     # ε (σ 단위)
+SEED = 2026
+
+# 이름 -> (표본추출기, 평균 μ, 표준편차 σ, 라벨, 이산인가)
+DISTRIBUTIONS = {
+    "uniform": (
+        lambda rng, s: rng.uniform(0, 1, s),
+        0.5, np.sqrt(1 / 12), "Uniform(0,1)", False),
+    "exponential": (
+        lambda rng, s: rng.exponential(1.0, s),
+        1.0, 1.0, "Exponential(1)", False),
+    "bernoulli": (
+        lambda rng, s: rng.binomial(1, 0.3, s).astype(float),
+        0.3, np.sqrt(0.3 * 0.7), "Bernoulli(0.3)", True),
+    "poisson": (
+        lambda rng, s: rng.poisson(2.0, s).astype(float),
+        2.0, np.sqrt(2.0), "Poisson(2)", True),
+    "chi2": (
+        lambda rng, s: rng.chisquare(1, s),
+        1.0, np.sqrt(2.0), r"$\chi^2_1$", False),
+    "gamma": (
+        lambda rng, s: rng.gamma(0.5, 2.0, s),
+        1.0, np.sqrt(0.5) * 2.0, "Gamma(0.5, 2)", False),
+    "lognormal": (
+        lambda rng, s: rng.lognormal(0, 0.75, s),
+        np.exp(0.75 ** 2 / 2),
+        np.sqrt((np.exp(0.75 ** 2) - 1) * np.exp(0.75 ** 2)),
+        "LogNormal(0, 0.75)", False),
+    "beta": (
+        lambda rng, s: rng.beta(0.5, 0.5, s),
+        0.5, np.sqrt(0.25 / 2), "Beta(0.5, 0.5)", False),
+}
+
+
+def draw(dist, rows=2):
+    """rows=2 면 큰수의 법칙과 중심극한정리를 함께, rows=1 이면 윗줄만 그린다."""
+    sampler, mu, sigma, label, discrete = DISTRIBUTIONS[dist]
+    rng = np.random.default_rng(SEED)
+    eps = EPS * sigma
+
+    # 가장 큰 n 으로 한 번만 뽑고 앞쪽 n 개 열을 각 칸에 쓴다.
+    # 표본이 중첩되므로 칸끼리 다른 것은 오직 n 뿐이다.
+    X = sampler(rng, (M, max(N_LIST)))
+
+    height = 7.5 if rows == 2 else 4.0
+    fig, axes = plt.subplots(rows, 10, figsize=(22, height),
+                             constrained_layout=True, squeeze=False)
+    head = ("Weak LLN (top) and CLT (bottom)" if rows == 2
+            else "Weak LLN: distribution of the sample mean")
+    fig.suptitle(f"{head} for {label}:  "
+                 f"$\\mu$ = {mu:.3f},  $\\sigma$ = {sigma:.3f},  "
+                 f"Monte Carlo size = {M:,}", fontsize=15)
+
+    # 윗줄의 가로 범위는 가장 넓은 경우(가장 작은 n)에 맞춘다.
+    means_min_n = X[:, :min(N_LIST)].mean(axis=1)
+    lo, hi = np.percentile(means_min_n, [0.5, 99.5])
+    pad = 0.1 * (hi - lo)
+    lln_xlim = (lo - pad, hi + pad)
+    lln_bins = np.linspace(*lln_xlim, 60)
+
+    z_grid = np.linspace(-4, 4, 400)
+    z_bins = np.linspace(-4, 4, 50)
+
+    report = []
+    for j, n in enumerate(N_LIST):
+        xbar = X[:, :n].mean(axis=1)
+
+        # 정수값 분포에서는 합 S_n 이 정수이므로 X̄_n 이 격자 k/n 위에만 있다.
+        # 격자점마다 막대 하나를 두어야 밀도로 읽을 수 있다.
+        if discrete:
+            s = np.rint(X[:, :n].sum(axis=1))
+            edges = (np.arange(s.min(), s.max() + 2) - 0.5) / n
+            lln_bins = edges
+            z_bins = np.sqrt(n) * (edges - mu) / sigma
+
+        # ---- 윗줄: 약한 큰수의 법칙 ----
+        ax = axes[0, j]
+        ax.hist(xbar, bins=lln_bins, density=True,
+                color="tab:blue", alpha=0.6, edgecolor="white", linewidth=0.3)
+        ax.axvline(mu, color="red", lw=2, label=r"$\mu$")
+        ax.axvspan(mu - eps, mu + eps, color="orange", alpha=0.18,
+                   label=r"$\mu\pm\varepsilon$")
+        p_out = float(np.mean(np.abs(xbar - mu) > eps))
+        ax.set_title(f"n = {n}\n"
+                     rf"$\hat P(|\bar X_n-\mu|>\varepsilon)$ = {p_out:.3f}",
+                     fontsize=11)
+        ax.set_xlim(lln_xlim)
+        ax.set_xlabel(r"$\bar X_n$")
+        if j == 0:
+            ax.set_ylabel("Weak LLN\ndensity of $\\bar X_n$", fontsize=12)
+            ax.legend(fontsize=9, loc="upper right")
+        ax.set_ylim(bottom=0)
+
+        # ---- 아랫줄: 중심극한정리 ----
+        z = np.sqrt(n) * (xbar - mu) / sigma
+        ks = float(stats.kstest(z, "norm").statistic)
+        skew = float(stats.skew(z))
+        report.append((n, p_out, ks, skew))
+
+        if rows == 2:
+            ax = axes[1, j]
+            ax.hist(z, bins=z_bins, density=True,
+                    color="tab:green", alpha=0.6, edgecolor="white",
+                    linewidth=0.3)
+            ax.plot(z_grid, stats.norm.pdf(z_grid), "k-", lw=2, label="N(0,1)")
+            ax.set_title(f"n = {n}\nKS = {ks:.3f},  skew = {skew:.2f}",
+                         fontsize=11)
+            ax.set_xlim(-4, 4)
+            ax.set_xlabel(r"$Z_n=\sqrt{n}(\bar X_n-\mu)/\sigma$")
+            if j == 0:
+                ax.set_ylabel("CLT\ndensity of $Z_n$", fontsize=12)
+                ax.legend(fontsize=9, loc="upper right")
+
+    if discrete:
+        fig.text(0.5, -0.04,
+                 "Note: discrete distribution — $\\bar X_n$ lives on the "
+                 "lattice $k/n$; one histogram bar per lattice point.",
+                 ha="center", fontsize=10, style="italic")
+
+    name = f"lln_clt_{dist}.png" if rows == 2 else f"wlln_{dist}.png"
+    fig.savefig(OUT + name, dpi=150, facecolor="white", bbox_inches="tight")
+    plt.close(fig)
+    print(f"saved {OUT}{name}")
+    for n, p_out, ks, skew in report:
+        print(f"    n={n:>3}  P(|Xbar-mu|>eps)={p_out:.4f}  "
+              f"KS={ks:.4f}  skew={skew:+.3f}")
+
+
+if __name__ == "__main__":
+    draw("exponential", rows=1)          # lln.md 용
+    for d in ("uniform", "exponential", "lognormal", "bernoulli"):
+        draw(d, rows=2)                  # clt.md 용

@@ -114,6 +114,113 @@ $n = 5$라는 작은 표본에서도 균등분포 쪽은 이미 정규분포에 
 
 </div>
 
+<div class="codebox" markdown>
+
+### 예제 2. 같은 모의실험을 두 배율로 보기 { .eg }
+
+정리 2를 코드로 확인하는 가장 곧은 길은 **같은 $\bar X_n$을 두 번 그리는 것**이다. 한 번은 그대로, 한 번은 $\sqrt n / \sigma$를 곱해서. 앞 절 큰수의 법칙에서 쓴 코드에 둘째 줄을 덧붙이면 된다.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+M = 10_000                    # 되풀이 횟수
+EPS = 0.2                     # ε (σ 단위)
+
+# 이름 -> (표본추출기, 평균 μ, 표준편차 σ, 라벨, 이산인가)
+DISTRIBUTIONS = {
+    "uniform": (lambda rng, s: rng.uniform(0, 1, s),
+                0.5, np.sqrt(1 / 12), "Uniform(0,1)", False),
+    "exponential": (lambda rng, s: rng.exponential(1.0, s),
+                    1.0, 1.0, "Exponential(1)", False),
+    "lognormal": (lambda rng, s: rng.lognormal(0, 0.75, s),
+                  np.exp(0.75**2 / 2),
+                  np.sqrt((np.exp(0.75**2) - 1) * np.exp(0.75**2)),
+                  "LogNormal(0, 0.75)", False),
+    "bernoulli": (lambda rng, s: rng.binomial(1, 0.3, s).astype(float),
+                  0.3, np.sqrt(0.3 * 0.7), "Bernoulli(0.3)", True),
+}
+
+
+def lln_and_clt(dist):
+    sampler, mu, sigma, label, discrete = DISTRIBUTIONS[dist]
+    rng = np.random.default_rng(2026)
+    eps = EPS * sigma
+    X = sampler(rng, (M, max(N_LIST)))    # 가장 큰 n 으로 한 번만 뽑는다
+
+    fig, axes = plt.subplots(2, 10, figsize=(22, 7.5), constrained_layout=True)
+    lo, hi = np.percentile(X[:, :min(N_LIST)].mean(axis=1), [0.5, 99.5])
+    pad = 0.1 * (hi - lo)
+    lln_bins = np.linspace(lo - pad, hi + pad, 60)
+    z_grid, z_bins = np.linspace(-4, 4, 400), np.linspace(-4, 4, 50)
+
+    for j, n in enumerate(N_LIST):
+        xbar = X[:, :n].mean(axis=1)
+
+        # 정수값 분포에서는 X̄_n 이 격자 k/n 위에만 있다.
+        # 격자점마다 막대 하나를 두어야 밀도로 읽을 수 있다.
+        if discrete:
+            s = np.rint(X[:, :n].sum(axis=1))
+            lln_bins = (np.arange(s.min(), s.max() + 2) - 0.5) / n
+            z_bins = np.sqrt(n) * (lln_bins - mu) / sigma
+
+        # 윗줄 — 배율을 주지 않으면 μ 로 오그라든다 (큰수의 법칙)
+        ax = axes[0, j]
+        ax.hist(xbar, bins=lln_bins, density=True, color="tab:blue",
+                alpha=0.6, edgecolor="white", linewidth=0.3)
+        ax.axvline(mu, color="red", lw=2)
+        ax.axvspan(mu - eps, mu + eps, color="orange", alpha=0.18)
+        p_out = np.mean(np.abs(xbar - mu) > eps)
+        ax.set_title(f"n = {n}\n"
+                     rf"$\hat P(|\bar X_n-\mu|>\varepsilon)$ = {p_out:.3f}")
+        ax.set_xlim(lo - pad, hi + pad)
+
+        # 아랫줄 — √n/σ 를 곱해 확대하면 모양이 남는다 (중심극한정리)
+        ax = axes[1, j]
+        z = np.sqrt(n) * (xbar - mu) / sigma
+        ax.hist(z, bins=z_bins, density=True, color="tab:green",
+                alpha=0.6, edgecolor="white", linewidth=0.3)
+        ax.plot(z_grid, stats.norm.pdf(z_grid), "k-", lw=2)
+        ax.set_title(f"n = {n}\nKS = {stats.kstest(z, 'norm').statistic:.3f},"
+                     f"  skew = {stats.skew(z):.2f}")
+        ax.set_xlim(-4, 4)
+
+    fig.suptitle(f"Weak LLN (top) and CLT (bottom) for {label}")
+    plt.show()
+
+
+for name in DISTRIBUTIONS:
+    lln_and_clt(name)
+```
+
+**균등분포 — 이미 거의 정규다.**
+
+![균등분포](./img/lln_clt_uniform.png)
+
+**지수분포 — 치우침이 남아 있다가 천천히 펴진다.**
+
+![지수분포](./img/lln_clt_exponential.png)
+
+**로그정규분포 — 같은 $n$에서 가장 느리다.**
+
+![로그정규분포](./img/lln_clt_lognormal.png)
+
+**베르누이분포 — 값이 격자 위에만 있다.**
+
+![베르누이분포](./img/lln_clt_bernoulli.png)
+
+**네 그림에서 윗줄은 모두 같은 일을 한다.** 분포가 무엇이든 파란 히스토그램은 $\mu$ 둘레로 오그라들고 $\hat P(|\bar X_n - \mu| > \varepsilon)$가 줄어든다. 이것이 큰수의 법칙이며, 여기서 얻는 정보는 "편차가 0으로 간다"는 것뿐이다.
+
+**아랫줄은 그 사라지는 편차를 $\sqrt n / \sigma$배로 확대한 것이다.** 놀라운 점은 확대해도 아무것도 남지 않거나 발산하지 않는다는 것이다. 배율이 정확히 맞아떨어져 **네 경우 모두 같은 종 모양이 남는다.** 윗줄과 아랫줄은 같은 $\bar X_n$을 담고 있으며, 달라진 것은 자의 눈금뿐이다.
+
+수렴 속도는 분포마다 다르다. $n = 5$에서 KS 거리가 균등 $0.019$, 지수 $0.057$, 로그정규 $0.083$이고, $n = 50$에서는 각각 $0.018$, $0.029$, $0.030$이다. **치우친 분포일수록 늦게 도착할 뿐 도착하지 않는 것은 아니다.** 치우침(skew)이 지수분포에서 $0.95 \to 0.32$로, 로그정규에서 $1.62 \to 0.41$로 줄어드는 것이 그 과정이다.
+
+베르누이는 다른 이유로 뒤처진다. $\bar X_n$이 격자 $k/n$ 위에만 있으므로 히스토그램이 매끄러운 곡선이 될 수 없고, KS 거리가 $n = 35$ 이후 $0.08$ 근처에서 더 내려가지 않는다. **이것은 수렴이 멈춘 것이 아니라 이산성이 남긴 계단이며**, 이 절 뒤의 [베리–에센 정리](berry_esseen.md) 페이지가 그 계단의 크기를 정확히 재고 연속성 보정으로 어떻게 다루는지 다룬다. $n = 5$에서 윗줄의 확률이 정확히 $1.000$인 것도 같은 이산성 때문이다. 이때 $\bar X_5$가 가질 수 있는 값은 $0, 0.2, 0.4, \ldots$뿐이라 $\mu = 0.3$에서 최소 $0.1$은 떨어지는데, $\varepsilon = 0.2\sigma = 0.092$가 그보다 좁다.
+
+</div>
+
 ## 3. 언제 써도 되는가
 
 정리는 $n \to \infty$를 말하지만 실제 자료의 $n$은 유한하다. 얼마나 커야 "충분히 큰가"는 정리가 답해 주지 않으므로 실무 기준이 필요하다.

@@ -107,6 +107,74 @@ plt.show()
 
 </div>
 
+!!! warning "이 그림은 약한 법칙이 아니라 강한 법칙의 그림이다"
+    위 그림은 **표본경로 하나**를 끝까지 따라간 것이다. 그 하나의 경로가 3.5에 붙는다는 진술은 §3의 **강한** 큰수의 법칙에 해당한다.
+
+    반면 정리 2가 말하는 것은 경로가 아니라 **분포**다. 각 $n$마다 "크기 $n$인 표본을 새로 뽑는 일"을 수없이 되풀이했을 때 $\bar X_n$이 어떻게 흩어지는가, 그리고 그 흩어짐에서 $\mu \pm \varepsilon$ 밖에 떨어지는 몫이 얼마나 되는가를 말한다. **경로 하나로는 그 확률을 볼 수 없다.** 다음 예제가 그것을 직접 그린다.
+
+<div class="codebox" markdown>
+
+### 예제 2. 확률이 0으로 가는 모습 { .eg }
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+M = 10_000                    # 되풀이 횟수
+EPS = 0.2                     # ε (σ 단위)
+
+rng = np.random.default_rng(2026)
+mu, sigma = 1.0, 1.0          # Exponential(1) 의 평균과 표준편차
+eps = EPS * sigma
+
+# 가장 큰 n 으로 한 번만 뽑고 앞쪽 n 개 열을 각 칸에 쓴다.
+# 표본이 중첩되므로 칸끼리 다른 것은 오직 n 뿐이다.
+X = rng.exponential(1.0, (M, max(N_LIST)))
+
+lo, hi = np.percentile(X[:, :min(N_LIST)].mean(axis=1), [0.5, 99.5])
+pad = 0.1 * (hi - lo)
+bins = np.linspace(lo - pad, hi + pad, 60)
+
+fig, axes = plt.subplots(1, 10, figsize=(22, 4), constrained_layout=True)
+for ax, n in zip(axes, N_LIST):
+    xbar = X[:, :n].mean(axis=1)          # 크기 n 인 표본 M 개의 평균
+    ax.hist(xbar, bins=bins, density=True, color="tab:blue", alpha=0.6,
+            edgecolor="white", linewidth=0.3)
+    ax.axvline(mu, color="red", lw=2, label=r"$\mu$")
+    ax.axvspan(mu - eps, mu + eps, color="orange", alpha=0.18,
+               label=r"$\mu\pm\varepsilon$")
+
+    # 정리 2가 "0으로 간다"고 말하는 바로 그 확률을 세어 본다.
+    p_out = np.mean(np.abs(xbar - mu) > eps)
+    ax.set_title(f"n = {n}\n"
+                 rf"$\hat P(|\bar X_n-\mu|>\varepsilon)$ = {p_out:.3f}",
+                 fontsize=11)
+    ax.set_xlim(bins[0], bins[-1])
+    ax.set_xlabel(r"$\bar X_n$")
+axes[0].set_ylabel("density of $\\bar X_n$")
+axes[0].legend(fontsize=9, loc="upper right")
+plt.show()
+```
+
+출력:
+
+```
+n =  5 : 0.661      n = 30 : 0.269
+n = 10 : 0.522      n = 35 : 0.229
+n = 15 : 0.434      n = 40 : 0.198
+n = 20 : 0.370      n = 45 : 0.169
+n = 25 : 0.312      n = 50 : 0.147
+```
+
+![약한 큰수의 법칙 — 표본평균의 분포가 오그라든다](./img/wlln_exponential.png)
+
+칸마다 파란 히스토그램이 좁아지고, 주황 띠($\mu \pm \varepsilon$) 밖으로 나가는 몫이 $0.661$에서 $0.147$로 줄어든다. **이 수열이 0으로 간다는 것이 정리 2의 전부다.**
+
+두 가지를 짚어 두자. 첫째, **$n = 50$에서도 그 확률이 $0.147$이다.** 여전히 일곱 번에 한 번꼴로 $\varepsilon$ 밖에 떨어진다. 정리는 극한을 말할 뿐 "충분히 큰 $n$"이 얼마인지는 말해 주지 않으며, $\varepsilon$을 좁게 잡을수록 그 $n$은 커진다. 둘째, **줄어드는 속도가 느리다.** $n$을 10배로 키우는 동안 확률은 4.5배밖에 줄지 않았는데, 이는 $\bar X_n$의 퍼짐이 $1/\sqrt n$로만 줄기 때문이다. 이 $\sqrt n$이 다음 절 중심극한정리의 배율이 된다.
+
+</div>
+
 !!! warning "도박사의 오류: 큰수의 법칙은 균형을 맞춰 주지 않는다"
     동전을 100번 던져 앞면이 40번뿐이었다면, 앞으로 앞면이 더 자주 나와 균형을 맞출까?
 
