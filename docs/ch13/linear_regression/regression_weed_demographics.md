@@ -12,7 +12,7 @@
 다중선형회귀 모형은
 
 $$
-\text{HighQ}_i = \beta_0 + \beta_1 \cdot \text{population}_i + \beta_2 \cdot \text{income}_i + \beta_3 \cdot \text{pct\_white}_i + \varepsilon_i.
+\text{HighQ}_i = \beta_0 + \beta_1 \cdot \text{population}_i + \beta_2 \cdot \text{income}_i + \beta_3 \cdot \text{percent_white}_i + \varepsilon_i.
 $$
 
 OLS 추정량은 다음을 최소화한다.
@@ -299,7 +299,7 @@ state_47  231.03     242.62 -11.59
     $F$ 검정은 다음을 평가한다.
 
     $$
-    H_0\colon \beta_{\text{income}} = \beta_{\text{pct\_white}} = 0 \quad \text{대} \quad H_1\colon \text{적어도 하나는 0이 아니다}.
+    H_0\colon \beta_{\text{income}} = \beta_{\text{percent_white}} = 0 \quad \text{대} \quad H_1\colon \text{적어도 하나는 0이 아니다}.
     $$
 
     ```python

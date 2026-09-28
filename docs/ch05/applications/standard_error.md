@@ -37,7 +37,7 @@ $$
 $$
 \begin{array}{lllllll}
 \displaystyle
-\frac{\text{unbiased\_estimator} - \text{parameter}}{\text{standard\_error}}
+\frac{\text{불편추정량} - \text{모수}}{\text{표준오차}}
 &=&
 \displaystyle
 \frac{\bar{X} - \mu}{\frac{\sigma}{\sqrt{n}}}
@@ -45,9 +45,9 @@ $$
 \displaystyle
 \frac{\bar{X} - \mu}{\frac{s}{\sqrt{n}}}
 &\approx&
-z \;\text{ or }\; t_{n-1} \\[16pt]
+z \;\text{ 또는 }\; t_{n-1} \\[16pt]
 \displaystyle
-\frac{\text{unbiased\_estimator} - \text{parameter}}{\text{standard\_error}}
+\frac{\text{불편추정량} - \text{모수}}{\text{표준오차}}
 &=&
 \displaystyle
 \frac{\hat{p} - p}{\sqrt{\frac{p(1-p)}{n}}}
@@ -117,18 +117,18 @@ def main():
 
     # 표준오차의 정의를 그대로 실행한 것이 아래 두 줄이다.
     #   average        = 표집분포의 중심 (참 mu = 0.5 의 좋은 추정)
-    #   standard_error = 표집분포의 **표준편차**
+    #   standard_error = 표집분포의 표준편차 <- 이것이 표준오차다
     # 즉 표준오차는 새로운 개념이 아니라, 통계량의 분포에 대한 표준편차다.
     # 현실에서는 표본이 하나뿐이라 이렇게 구할 수 없어 공식 s/sqrt(n) 을 쓴다.
-    average = np.array(X_bar).mean()
-    standard_error = np.array(X_bar).std()
+    X_bar = np.array(X_bar)
+    average = X_bar.mean()
+    standard_error = X_bar.std()
 
     print(f'(Estimated) Mean of X_bar : {average:.4}')
     print(f'Standard Error   of X_bar : {standard_error:.4}')
 
     fig, ax = plt.subplots(figsize=(12, 3))
-
-    ax.set_title("Sampling Distribution of X_bar", fontsize=20)
+    ax.set_title('Sampling Distribution of X_bar', fontsize=20)
 
     ax.hist(X_bar, bins=100, density=True, alpha=0.3)
     ax.vlines(average, ymin=0, ymax=5, alpha=1.0, color='k', ls='-', lw=5)
@@ -137,15 +137,10 @@ def main():
 
     # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
     # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
-    arrowprops = dict(arrowstyle='<->', color='k', linewidth=3, mutation_scale=20)
-    ax.annotate(text='',
-                xy=(average, 5),
-                xytext=(average + standard_error, 5),
-                arrowprops=arrowprops)
-    ax.annotate(text='Standard Error',
-                xy=(average, 5.5),
-                xytext=(average, 5.5),
-                fontsize=15)
+    ax.annotate('', xy=(average, 5), xytext=(average + standard_error, 5),
+                arrowprops=dict(arrowstyle='<->', color='k', linewidth=3,
+                                mutation_scale=20))
+    ax.text(average, 5.5, 'Standard Error', fontsize=15)
 
     ax.set_xlim(0.0, 1.0)
     ax.set_ylim(-0.1, 6)
@@ -200,6 +195,8 @@ np.random.seed(ARGS.seed)
 
 ### 모듈 버전: `standard_error_of_x_bar.py`
 
+예제 1과 계산은 같다. 달라진 곳은 두 군데다. 시드를 직접 고정하는 대신 `global_name_space`를 가져오고, 그리는 부분을 `draw()`로 떼어 놓았다. 뒤에서 같은 그림을 $S^2$에 대해 한 번 더 그릴 것이므로 미리 나누어 둔 것이다.
+
 <div class="codebox" markdown>
 
 #### 예제 3. 표준오차를 그림에 표시하기 { .eg }
@@ -208,7 +205,47 @@ np.random.seed(ARGS.seed)
 import matplotlib.pyplot as plt
 import numpy as np
 
+# 이 import 는 ARGS 라는 이름이 필요해서가 아니다. global_name_space 를 불러오는
+# 순간 그 파일의 np.random.seed(ARGS.seed) 가 실행되어 난수열이 고정된다.
+# 즉 "가져오는 것" 자체가 설정을 적용하는 일이다.
 from global_name_space import ARGS
+
+
+def draw(values, name, ymax, ytop, xlim):
+    """표집분포의 히스토그램에 평균선과 ±1 표준오차를 그린다.
+
+    X_bar 든 S^2 든 재는 방법도 그리는 방법도 같으므로 한곳에 모아 둔다.
+    values 에 무엇을 담아 넘기느냐만 바뀐다.
+    """
+    values = np.array(values)
+    average = values.mean()
+    standard_error = values.std()
+
+    print(f'(Estimated) Mean of {name} : {average:.4}')
+    print(f'Standard Error   of {name} : {standard_error:.4}')
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.set_title(f'Sampling Distribution of {name}', fontsize=20)
+
+    ax.hist(values, bins=100, density=True, alpha=0.3)
+    ax.vlines(average, ymin=0, ymax=ymax, alpha=1.0, color='k', ls='-', lw=5)
+    ax.vlines(average + standard_error, ymin=0, ymax=ymax, alpha=0.7, color='k', ls='--')
+    ax.vlines(average - standard_error, ymin=0, ymax=ymax, alpha=0.7, color='k', ls='--')
+
+    # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
+    # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
+    ax.annotate('', xy=(average, ymax), xytext=(average + standard_error, ymax),
+                arrowprops=dict(arrowstyle='<->', color='k', linewidth=3,
+                                mutation_scale=20))
+    ax.text(average, ymax * 1.1, 'Standard Error', fontsize=15)
+
+    ax.set_xlim(*xlim)
+    ax.set_ylim(-0.1, ytop)
+
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
+    plt.show()
 
 def main():
     X_bar = []
@@ -217,40 +254,7 @@ def main():
         x_bar = x.mean()
         X_bar.append(x_bar)
 
-    average = np.array(X_bar).mean()
-    standard_error = np.array(X_bar).std()
-
-    print(f'(Estimated) Mean of X_bar : {average:.4}')
-    print(f'Standard Error   of X_bar : {standard_error:.4}')
-
-    fig, ax = plt.subplots(figsize=(12, 3))
-
-    ax.set_title("Sampling Distribution of X_bar", fontsize=20)
-
-    ax.hist(X_bar, bins=100, density=True, alpha=0.3)
-    ax.vlines(average, ymin=0, ymax=5, alpha=1.0, color='k', ls='-', lw=5)
-    ax.vlines(average + standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
-    ax.vlines(average - standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
-
-    # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
-    # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
-    arrowprops = dict(arrowstyle='<->', color='k', linewidth=3, mutation_scale=20)
-    ax.annotate(text='',
-                xy=(average, 5),
-                xytext=(average + standard_error, 5),
-                arrowprops=arrowprops)
-    ax.annotate(text='Standard Error',
-                xy=(average, 5.5),
-                xytext=(average, 5.5),
-                fontsize=15)
-
-    ax.set_xlim(0.0, 1.0)
-    ax.set_ylim(-0.1, 6)
-
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-
-    plt.show()
+    draw(X_bar, 'X_bar', ymax=5, ytop=6, xlim=(0.0, 1.0))
 
 if __name__ == "__main__":
     main()
@@ -271,60 +275,31 @@ Standard Error   of X_bar : 0.1281
 
 ## 분산에도 표준오차가 있다
 
-표준오차는 평균만의 것이 아니다. 표본마다 값이 달라지는 양이면 무엇이든 표본분포를 갖고, 따라서 표준오차를 갖는다. 같은 실험을 $S^2$에 대해 되풀이해 보자. 파일 이름은 `standard_error_of_s_square.py`이고 앞의 `global_name_space.py`를 그대로 가져다 쓴다. 바뀌는 것은 표본평균 대신 표본분산을 기록한다는 것 하나뿐인데, 나오는 그림의 모양은 사뭇 다르다.
+표준오차는 평균만의 것이 아니다. 표본마다 값이 달라지는 양이면 무엇이든 표본분포를 갖고, 따라서 표준오차를 갖는다. 같은 실험을 $S^2$에 대해 되풀이해 보자. 파일 이름은 `standard_error_of_s_square.py`이고, 앞 파일에서 `draw()`를 그대로 가져다 쓴다. 바뀌는 것은 표본평균 대신 표본분산을 기록한다는 것 하나뿐이며, 그래서 파일이 열 줄 남짓으로 끝난다. 그런데도 나오는 그림의 모양은 사뭇 다르다.
 
 <div class="codebox" markdown>
 
-#### 예제 4. 표본크기에 따른 표준오차 변화 { .eg }
+#### 예제 4. 분산의 표준오차도 같은 방법으로 { .eg }
 
 ```python
-import matplotlib.pyplot as plt
 import numpy as np
 
-from global_name_space import ARGS
+# 그리는 부분은 앞 파일에 이미 있으므로 가져다 쓴다.
+# 앞 파일에 if __name__ == "__main__": 가드가 있어서, import 해도
+# 그쪽 main() 은 실행되지 않고 함수 정의만 넘어온다. 가드를 두는 이유가 이것이다.
+# 이 import 가 global_name_space 도 함께 불러오므로 시드도 같이 고정된다.
+from standard_error_of_x_bar import draw
+
 
 def main():
     S_square = []
     for _ in range(10_000):
         x = np.random.uniform(size=(5,))
         # ddof=1 을 반드시 적어야 한다. numpy의 기본값은 ddof=0 이라
-        # x.var() 나 x.std()**2 는 n 으로 나눈 **편향추정량**을 준다.
+        # x.var() 나 x.std()**2 는 n 으로 나눈 편향추정량을 준다.
         S_square.append(x.var(ddof=1))
 
-    average = np.array(S_square).mean()
-    standard_error = np.array(S_square).std()
-
-    print(f'(Estimated) Mean of S^2 : {average:.4}')
-    print(f'Standard Error   of S^2 : {standard_error:.4}')
-
-    fig, ax = plt.subplots(figsize=(12, 3))
-
-    ax.set_title("Sampling Distribution of S^2", fontsize=20)
-
-    ax.hist(S_square, bins=100, density=True, alpha=0.3)
-    ax.vlines(average, ymin=0, ymax=8, alpha=1.0, color='k', ls='-', lw=5)
-    ax.vlines(average + standard_error, ymin=0, ymax=8, alpha=0.7, color='k', ls='--')
-    ax.vlines(average - standard_error, ymin=0, ymax=8, alpha=0.7, color='k', ls='--')
-
-    # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
-    # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
-    arrowprops = dict(arrowstyle='<->', color='k', linewidth=3, mutation_scale=20)
-    ax.annotate(text='',
-                xy=(average, 8),
-                xytext=(average + standard_error, 8),
-                arrowprops=arrowprops)
-    ax.annotate(text='Standard Error',
-                xy=(average, 8.8),
-                xytext=(average, 8.8),
-                fontsize=15)
-
-    ax.set_xlim(0.0, 0.25)
-    ax.set_ylim(-0.1, 10)
-
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-
-    plt.show()
+    draw(S_square, 'S^2', ymax=8, ytop=10, xlim=(0.0, 0.25))
 
 if __name__ == "__main__":
     main()

@@ -64,9 +64,9 @@ $\alpha = 0.01$에서 $H_0: \mu_{\text{Bosc}} = \mu_{\text{Anjou}}$(즉 $\mu_{\t
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 대면 수업과 온라인 수업. $p_{\text{in\_person}} - p_{\text{online}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 대면 수업과 온라인 수업. $p_{\text{대면}} - p_{\text{온라인}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다.
 
-$\alpha = 0.05$에서 $H_0: p_{\text{in\_person}} = p_{\text{online}}$을 검정하면:
+$\alpha = 0.05$에서 $H_0: p_{\text{대면}} = p_{\text{온라인}}$을 검정하면:
 
 </div>
 
