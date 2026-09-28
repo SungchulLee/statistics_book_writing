@@ -162,7 +162,61 @@ def draw(dist, rows=2):
               f"KS={ks:.4f}  skew={skew:+.3f}")
 
 
+def two_rulers(dist="exponential", ns=(5, 50)):
+    """같은 히스토그램에 눈금 두 벌을 달아 '한 동전의 양면'을 보인다.
+
+    z 눈금으로 그리면 두 칸의 폭이 같다. 같은 그림을 x̄ 눈금으로 읽으면
+    n 이 큰 쪽이 √n 배 좁다. 두 정리는 이 두 눈금에 각각 붙은 이름이다.
+    """
+    sampler, mu, sigma, label, _ = DISTRIBUTIONS[dist]
+    rng = np.random.default_rng(SEED)
+    X = sampler(rng, (M, max(ns)))
+
+    fig, axes = plt.subplots(1, len(ns), figsize=(12.5, 4.6),
+                             constrained_layout=True)
+    z_bins = np.linspace(-4, 4, 46)
+    z_grid = np.linspace(-4, 4, 400)
+
+    for ax, n in zip(axes, ns):
+        xbar = X[:, :n].mean(axis=1)
+        z = np.sqrt(n) * (xbar - mu) / sigma
+        half = 4 * sigma / np.sqrt(n)          # x̄ 눈금에서의 반폭
+
+        ax.hist(z, bins=z_bins, density=True, color="tab:blue", alpha=0.55,
+                edgecolor="white", linewidth=0.4)
+        ax.plot(z_grid, stats.norm.pdf(z_grid), "k-", lw=2)
+        ax.set_xlim(-4, 4)
+        ax.set_ylim(0, 0.52)
+        ax.set_xlabel(r"아래 눈금:  $Z_n=\sqrt{n}\,(\bar X_n-\mu)/\sigma$",
+                      fontsize=11)
+        ax.set_title(f"n = {n}", fontsize=13, pad=34)
+        ax.tick_params(labelsize=10)
+        ax.spines[["top", "right"]].set_visible(False)
+
+        # 같은 그림에 x̄ 눈금을 하나 더 단다.
+        top = ax.secondary_xaxis(
+            "top", functions=(lambda t, n=n: mu + t * sigma / np.sqrt(n),
+                              lambda v, n=n: (v - mu) * np.sqrt(n) / sigma))
+        top.set_xlabel(rf"위 눈금:  $\bar X_n$   (폭 $\pm${half:.2f})",
+                       fontsize=11, color="tab:red")
+        top.tick_params(labelsize=10, colors="tab:red")
+
+    axes[0].set_ylabel("같은 히스토그램", fontsize=12)
+    fig.suptitle(f"한 히스토그램, 두 눈금 — {label}", fontsize=14)
+    fig.text(0.5, -0.04,
+             "두 칸의 히스토그램은 폭이 같다. 위의 붉은 눈금으로 읽으면 "
+             f"{ns[1]} 쪽이 {np.sqrt(ns[1] / ns[0]):.1f}배 좁다.",
+             ha="center", fontsize=11)
+    fig.savefig(OUT + f"two_rulers_{dist}.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+    plt.close(fig)
+    print(f"saved {OUT}two_rulers_{dist}.png")
+    for n in ns:
+        print(f"    n={n:>3}  x̄ 눈금 반폭 = {4 * sigma / np.sqrt(n):.3f}")
+
+
 if __name__ == "__main__":
     draw("exponential", rows=1)          # lln.md 용
     for d in ("uniform", "exponential", "lognormal", "bernoulli"):
         draw(d, rows=2)                  # clt.md 용
+    two_rulers("exponential")            # clt.md 정리 2 바로 뒤
