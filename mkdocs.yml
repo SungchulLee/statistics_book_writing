@@ -149,7 +149,6 @@ nav:
             - 큰수의 법칙: ch03/limits/lln.md
             - 중심극한정리: ch03/limits/clt.md
             - 베리–에센 정리: ch03/limits/berry_esseen.md
-            - 중심극한정리 다중 분포 시각화: ch03/limits/clt_visualization.md
             - 도박사의 역설 (큰수의 법칙의 실패): ch03/limits/gambler_paradox_lln.md
 
     - 4 분포:

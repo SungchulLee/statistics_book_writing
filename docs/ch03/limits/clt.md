@@ -6,7 +6,7 @@
 
 이 보편성 덕분에 신뢰구간과 가설검정이 모집단 분포를 몰라도 작동한다. 5장 이후 이 책의 추론 전체가 이 정리 위에 서 있다.
 
-이 절은 세 개의 정리로 이루어진다. 정리의 진술(정리 1), 큰수의 법칙과의 관계(정리 2), 그리고 실제로 언제 쓸 수 있는가(정리 3)이다.
+이 절은 네 개의 정리로 이루어진다. 정리의 진술(정리 1), 큰수의 법칙과의 관계(정리 2), 모양의 수렴과 폭의 수축이라는 두 예측의 구분(정리 3), 그리고 실제로 언제 쓸 수 있는가(정리 4)이다.
 
 ## 1. 오차의 모양은 언제나 정규분포다
 
@@ -97,57 +97,7 @@ $$
 
 <div class="codebox" markdown>
 
-### 예제 1. 모집단이 달라도 표본평균은 정규로 간다 { .eg }
-
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
-
-def demonstrate_clt(distribution_type, sample_size, n_simulations=10_000):
-    """모집단이 무엇이든 표본평균이 정규분포로 간다는 것을 보인다."""
-    np.random.seed(0)
-
-    # (sample_size, n_simulations) 모양으로 한 번에 뽑고 axis=0으로 평균 낸다.
-    # 즉 "크기 n인 표본을 1만 번 뽑아 각각의 평균을 구한 것"이 한 줄에 들어 있다.
-    if distribution_type == 'uniform':
-        data = np.mean(stats.uniform().rvs((sample_size, n_simulations)), axis=0)
-        label = 'Uniform(0,1)'      # 평평한 분포. 종 모양과 전혀 다르다.
-    elif distribution_type == 'exponential':
-        data = np.mean(stats.expon().rvs((sample_size, n_simulations)), axis=0)
-        label = 'Exponential(1)'    # 오른쪽으로 심하게 치우친 분포
-
-    # 1만 개의 표본평균에서 잰 중심과 퍼짐
-    mu, sigma = data.mean(), data.std()
-
-    fig, ax = plt.subplots(figsize=(12, 3))
-    _, bins, _ = ax.hist(data, bins=100, density=True, alpha=0.3, color='blue',
-                         label=f'Sample Means (n={sample_size})')
-    # 같은 평균·표준편차의 정규분포를 겹친다.
-    # 이 곡선이 히스토그램에 얼마나 붙는지가 중심극한정리의 성적표다.
-    ax.plot(bins, stats.norm(mu, sigma).pdf(bins), '--r', lw=2, label='Normal PDF')
-    ax.set_title(f'CLT: Sample Means from {label}')
-    ax.spines[['top', 'right']].set_visible(False)
-    ax.legend()
-    plt.tight_layout()
-    plt.show()
-
-# 두 분포에 모두 적용해 본다
-demonstrate_clt('uniform', sample_size=5)
-demonstrate_clt('exponential', sample_size=5)
-```
-
-![중심극한정리](./img/clt_59_0.png)
-
-![중심극한정리](./img/clt_59_1.png)
-
-$n = 5$라는 작은 표본에서도 균등분포 쪽은 이미 정규분포에 가깝다. 지수분포 쪽은 아직 오른쪽으로 치우쳐 있다. **정리는 분포와 무관하지만 수렴 속도는 그렇지 않다.**
-
-</div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 같은 모의실험을 두 배율로 보기 { .eg }
+### 예제 1. 같은 모의실험을 두 배율로 보기 { .eg }
 
 정리 2를 코드로 확인하는 가장 곧은 길은 **같은 $\bar X_n$을 두 번 그리는 것**이다. 한 번은 그대로, 한 번은 $\sqrt n / \sigma$를 곱해서. 앞 절 큰수의 법칙에서 쓴 코드에 둘째 줄을 덧붙이면 된다.
 
@@ -254,13 +204,179 @@ for name in DISTRIBUTIONS:
 
 </div>
 
-## 3. 언제 써도 되는가
+## 3. 모양의 수렴과 폭의 수축은 별개의 예측이다
+
+여기까지 본 것은 **배율**이었다. 이번에는 배율을 주지 않은 $\bar X_n$의 분포를 여러 모집단에서 나란히 놓고 본다. 그러면 중심극한정리가 실은 **두 가지**를 동시에 주장하고 있다는 것과, 그 둘의 성격이 전혀 다르다는 것이 함께 드러난다.
+
+<div class="thmbox" markdown>
+
+### 정리 3. 두 예측의 성격이 다르다 — 모양은 근사, 폭은 등식 { .thm }
+
+**모양의 수렴.** $n$이 커질수록 $\bar X_n$의 표본분포는 모집단의 모양(평평함, 왼쪽 치우침, 오른쪽 치우침)을 잃고 대칭인 종 모양으로 간다. 이것은 **근사**이며 $n$이 커야 한다.
+
+**폭의 수축.**
+
+$$
+\operatorname{std}(\bar X_n) = \frac{\sigma}{\sqrt n}
+$$
+
+이것은 근사가 아니라 **등식**이다. 중심극한정리가 아니라 3.4절의 분산 성질에서 곧바로 나오며, 정규성과 무관하게 $n$이 작아도 정확하다.
+
+</div>
+
+**두 주장을 섞지 않는 것이 중요하다.** $n = 2$에서도 표준편차는 $\sigma/\sqrt 2$로 정확히 맞지만 히스토그램은 아직 종 모양 근처에도 가지 않는다. 폭은 처음부터 맞고 모양만 뒤늦게 따라온다. 중심극한정리가 새로 말해 주는 것은 폭이 아니라 **모양** 쪽이다.
+
+!!! note "표본분포를 어떻게 눈으로 보는가"
+    표본분포는 "표본을 뽑을 때마다 달라지는 $\bar X$의 분포"다. 실제 조사에서는 표본을 한 번만 뽑으므로 이 분포를 직접 볼 수 없다. 모의실험에서는 볼 수 있다.
+
+    크기 $n$인 표본을 독립적으로 $B$번 뽑아 각각의 평균 $\bar x^{(1)}, \ldots, \bar x^{(B)}$을 계산하면, 이 $B$개 값의 히스토그램은 $B \to \infty$일 때 $\bar X_n$의 참 표본분포로 수렴한다. 각 $\bar x^{(b)}$가 $\bar X_n$에서 뽑은 i.i.d. 관측이므로 이것 자체가 **큰수의 법칙의 한 적용**이다. 이 페이지의 모든 그림이 이 방법으로 그려졌다.
+
+모양이 뚜렷하게 다른 비정규 모집단 셋을 고른다. 어느 것도 종 모양이 아니다.
+
+| 분포 | 모양 | 평균 | 분산 |
+|:---|:---|---:|---:|
+| Uniform(2, 8) | 평평하고 대칭 | 5 | 3 |
+| Beta(6, 2) | 왼쪽으로 치우침, $[0,1]$에서 유계 | 0.75 | 0.0208 |
+| Gamma(6, 1) | 오른쪽으로 치우침, 유계 아님 | 6 | 6 |
+
+<div class="codebox" markdown>
+
+### 예제 2. 세 모집단에서 모집단의 흔적이 씻겨 나가는 과정 { .eg }
+
+**먼저 폭부터 확인한다.** 정리 3의 등식 쪽은 $n$이 작아도 맞아야 한다.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+np.random.seed(42)
+N_REPS = 2000
+
+def sample_means(dist_rvs, sample_sizes, n_reps=N_REPS):
+    """표본 크기마다 n_reps개의 표본을 뽑아 각 표본평균을 모아 돌려준다.
+
+    dist_rvs 는 "크기 n을 받아 표본을 돌려주는 함수"다.
+    이렇게 함수를 인자로 받아 두면 균등·베르누이·감마 등
+    어떤 모집단에도 같은 코드를 쓸 수 있다.
+
+    돌려주는 results[n] 이 X-bar_n 의 표본분포 근사(2000개)다.
+    """
+    results = {}
+    for n in sample_sizes:
+        means = np.array([dist_rvs(n).mean() for _ in range(n_reps)])
+        results[n] = means
+    return results
+
+
+# 균등분포 U(0,1)로 시험해 본다. 모평균 0.5, 모분산 1/12.
+# 중심극한정리는 X-bar_n 의 표준편차가 sigma/sqrt(n) 이라고 예측한다.
+demo = sample_means(lambda n: np.random.uniform(0, 1, n), [2, 10, 100])
+sigma = (1 / 12) ** 0.5
+for n, means in demo.items():
+    print(f"n = {n:>3}: 평균 {means.mean():.4f}  "
+          f"표준편차 {means.std():.4f}  (이론 {sigma / n**0.5:.4f})")
+```
+
+출력:
+
+```
+n =   2: 평균 0.4975  표준편차 0.2050  (이론 0.2041)
+n =  10: 평균 0.5022  표준편차 0.0911  (이론 0.0913)
+n = 100: 평균 0.5002  표준편차 0.0288  (이론 0.0289)
+```
+
+`results[n]`의 각 항목이 $\bar X_n$의 한 실현값이다. 2000개를 그리면 표본분포의 근사가 된다.
+
+**소수 셋째 자리까지 맞는다.** $n = 2$에서 $0.2050$ 대 이론값 $0.2041$이다. 모양이 아직 종이 아닌 $n = 2$에서도 폭은 이미 정확하다.
+
+**이제 모양을 본다.** 같은 방식으로 세 모집단에 대해 $n$을 키워 가며 그린다.
+
+```python
+sample_sizes = [2, 10, 100]
+
+# 모양이 서로 전혀 다른 모집단 셋을 준비한다.
+# 각 항목은 표본을 뽑는 함수(rvs)와 모집단 밀도를 그릴 정보를 담는다.
+#   Uniform: 평평하다        (봉우리가 없음)
+#   Beta   : 왼쪽으로 치우침  (유계)
+#   Gamma  : 오른쪽으로 치우침 (유계가 아님)
+# 세 모집단이 이렇게 다른데도 표본평균은 모두 종 모양으로 간다는 것이 요점이다.
+distributions = {
+    "Uniform(2, 8)": {
+        "rvs": lambda n: np.random.uniform(2, 8, n),
+        "color": "tomato",
+        "pop_x": np.linspace(2, 8, 200),
+        "pop_pdf": lambda x: np.ones_like(x) / 6,
+    },
+    "Beta(6, 2)": {
+        "rvs": lambda n: stats.beta.rvs(6, 2, size=n),
+        "color": "seagreen",
+        "pop_x": np.linspace(0, 1, 200),
+        "pop_pdf": lambda x: stats.beta.pdf(x, 6, 2),
+    },
+    "Gamma(6, 1)": {
+        "rvs": lambda n: stats.gamma.rvs(6, size=n),
+        "color": "steelblue",
+        "pop_x": np.linspace(0, 25, 200),
+        "pop_pdf": lambda x: stats.gamma.pdf(x, 6),
+    },
+}
+
+n_dists = len(distributions)
+# 격자 구성: 열 = 모집단, 행 = (모집단 자체, n=2, n=10, n=100)
+# 세로로 내려가며 읽으면 "n이 커질수록 어떻게 변하는가"가 보이고,
+# 가로로 읽으면 "모집단이 달라도 결과가 같은가"가 보인다.
+n_rows = 1 + len(sample_sizes)
+fig, axes = plt.subplots(n_rows, n_dists, figsize=(6 * n_dists, 4 * n_rows))
+
+for col, (name, d) in enumerate(distributions.items()):
+    c = d["color"]
+
+    # 0행: 모집단의 밀도함수. 셋이 얼마나 다른지 먼저 확인한다.
+    ax = axes[0, col]
+    ax.plot(d["pop_x"], d["pop_pdf"](d["pop_x"]), lw=3, color=c)
+    ax.fill_between(d["pop_x"], d["pop_pdf"](d["pop_x"]), alpha=0.3, color=c)
+    ax.set_title(name, fontsize=14, fontweight="bold")
+    if col == 0:
+        ax.set_ylabel("Population PDF", fontsize=11)
+
+    # 1~3행: 표본평균의 표집분포.
+    # 앞서 정의한 sample_means 로 각 n마다 2000개의 표본평균을 얻는다.
+    means_dict = sample_means(d["rvs"], sample_sizes)
+    for row, n in enumerate(sample_sizes, start=1):
+        ax = axes[row, col]
+        ax.hist(means_dict[n], bins=30, color=c, alpha=0.5,
+                edgecolor="white", density=True)
+        ax.set_title(f"n = {n}", fontsize=11)
+        if col == 0:
+            ax.set_ylabel(f"Sampling Dist (n={n})", fontsize=10)
+
+plt.suptitle("Central Limit Theorem: Sampling Distribution of x̄",
+             fontsize=15, y=1.01)
+plt.tight_layout()
+plt.show()
+```
+
+![Central Limit Theorem: Sampling Distribution of x̄](./img/clt_three_populations.png)
+
+그림은 $4 \times 3$ 격자다. 맨 윗줄이 모집단, 나머지 세 줄이 $n = 2, 10, 100$의 표본분포다. 줄을 따라 내려가며 읽으면 수렴이 보인다.
+
+- **맨 윗줄.** 세 모집단이 눈에 띄게 비정규다. 평평하고, 왼쪽으로 치우쳤고, 오른쪽으로 치우쳤다.
+- **$n = 2$.** 표본분포가 여전히 모집단의 모양을 반영한다. 관측 두 개의 평균으로는 거의 매끄러워지지 않는다.
+- **$n = 10$.** 종 모양에 눈에 띄게 가까워지지만, 감마분포 쪽에는 오른쪽 치우침이 남아 있다.
+- **$n = 100$.** 세 열이 모두 근사적으로 정규다. 모집단이 무엇이었는지 알아볼 수 없다.
+
+**감마분포 열이 가장 느리다.** 왜도가 클수록 수렴이 느리기 때문이며, 다음 절의 [베리–에센 정리](berry_esseen.md)가 그 지연의 크기를 $\rho/\sigma^3$으로 정확히 잰다.
+
+</div>
+
+## 4. 언제 써도 되는가
 
 정리는 $n \to \infty$를 말하지만 실제 자료의 $n$은 유한하다. 얼마나 커야 "충분히 큰가"는 정리가 답해 주지 않으므로 실무 기준이 필요하다.
 
 <div class="thmbox" markdown>
 
-### 정리 3. 정규근사의 실무 조건 — 세 가지 확인 사항 { .thm }
+### 정리 4. 정규근사의 실무 조건 — 세 가지 확인 사항 { .thm }
 
 | 상황 | 어림 기준 |
 |:---|:---|
@@ -290,6 +406,8 @@ $$
 
 $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
+**독립이 깨지는 더 흔한 경우는 시계열이다.** 자기상관이 강한 자료에서는 관측 $n$개가 독립인 $n$개만큼의 정보를 주지 못한다. **유효 표본크기**가 $n$보다 작아지므로 표준오차가 $\sigma/\sqrt n$보다 크고, 정규근사도 그만큼 늦게 도착한다. 이 보정은 19장에서 다룬다.
+
 !!! warning "$n \ge 30$을 규칙으로 믿지 말 것"
     치우침이 심하면 $n = 30$은 턱없이 부족하다. 5장에서 왜도가 2인 지수분포로 확인해 보면 $n = 100$에서도 95% 신뢰구간의 실제 포함확률이 $0.934$에 그친다.
 
@@ -301,7 +419,55 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff med" title="중간"></span>
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
+$X_1, \ldots, X_n$이 i.i.d. Uniform(0, 1)이면 $\bar{X}$의 정확한 평균과 분산을 쓰라. $n = 12$일 때 $\bar{X}$의 표준편차는 얼마인가?
+
+</div>
+
+??? success "풀이"
+    Uniform(0, 1)에서 $\mu = 1/2$, $\sigma^2 = 1/12$이다.
+
+    $$
+    E[\bar{X}] = \mu = \frac{1}{2}, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n} = \frac{1}{12n}
+    $$
+
+    $n = 12$이면
+
+    $$
+    \text{Var}(\bar{X}) = \frac{1}{144}, \qquad \text{std}(\bar{X}) = \frac{1}{12} \approx 0.0833
+    $$
+
+    이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
+Gamma(2, 3) 분포($\mu = 6$, $\sigma^2 = 18$)에서 크기 $n$의 표본을 뽑는다고 하자. 중심극한정리 근사를 써서 $P(|\bar{X} - 6| < 0.5) \ge 0.95$가 되려면 $n$이 얼마나 커야 하는가?
+
+</div>
+
+??? success "풀이"
+    중심극한정리에 의해 $\bar{X} \approx N(\mu, \sigma^2/n)$이다. 다음이 필요하다.
+
+    $$
+    P\left(\left|\frac{\bar{X} - 6}{\sqrt{18/n}}\right| < \frac{0.5}{\sqrt{18/n}}\right) \ge 0.95
+    $$
+
+    이를 위해서는 $\frac{0.5}{\sqrt{18/n}} \ge 1.96$이어야 하므로
+
+    $$
+    \sqrt{18/n} \le \frac{0.5}{1.96} \approx 0.2551
+    $$
+
+    $$
+    \frac{18}{n} \le 0.06506 \implies n \ge \frac{18}{0.06506} \approx 276.7
+    $$
+
+    이다. 따라서 $n \ge 277$이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 기계가 $\mu = 500$ ml, $\sigma = 10$ ml로 병을 채운다(정규분포가 아니다). (a) 중심극한정리에 따른 $\bar X_{36}$의 분포는? (b) $P(\bar X_{36} > 503)$은? (c) $P(|\bar X_n - 500| < 2) \ge 0.95$가 되려면 $n$은?
 
 </div>
@@ -315,29 +481,73 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff hard" title="어려움"></span>
-평균 0, 분산 1이고 0의 근방에서 적률생성함수 $M(t)$가 유한한 i.i.d. $X_i$에 대해 **적률생성함수 방법으로 중심극한정리를 증명하라**. $\sqrt n \bar X_n$의 적률생성함수가 $e^{t^2/2}$로 수렴함을 보여라.
+**연습문제 4.** <span class="diff med" title="중간"></span>
+$X_i$가 분산 $\sigma^2$인 i.i.d.일 때 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$의 분산이 $\sigma^2 / n$임을 증명하라.
 
 </div>
 
 ??? success "풀이"
-    표준화된 합: $Z_n = \sqrt n \bar X_n = (X_1 + \cdots + X_n)/\sqrt n$.
+    독립인 확률변수에 대한 분산의 성질에 의해
 
-    그 적률생성함수: $M_{Z_n}(t) = \mathbb{E}[e^{t Z_n}] = \prod_i \mathbb{E}[e^{t X_i / \sqrt n}] = [M(t/\sqrt n)]^n$.
+    $$
+    \text{Var}(\bar{X}_n) = \text{Var}\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2} \sum_{i=1}^n \text{Var}(X_i) = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}
+    $$
 
-    $M(t/\sqrt n)$을 0 주위로 전개한다. $\mu = 0$, $\sigma^2 = 1$을 쓰면 $M(u) = 1 + \mu u + (\sigma^2 + \mu^2) u^2/2 + O(u^3) = 1 + u^2/2 + O(u^3)$이다.
-
-    따라서 $M(t/\sqrt n) = 1 + t^2/(2n) + O(n^{-3/2})$이다.
-
-    $n$제곱을 취하면 ($(1 + a/n + o(1/n))^n \to e^a$를 이용해) $n \to \infty$일 때 $M_{Z_n}(t) = (1 + t^2/(2n) + O(n^{-3/2}))^n \to e^{t^2/2}$이다.
-
-    극한 적률생성함수 $e^{t^2/2}$이 $N(0, 1)$의 것이다. 적률생성함수 수렴 정리에 의해 $Z_n \xrightarrow{d} N(0, 1)$이다. $\square$
-
-    참고: 이 증명은 근방에서 적률생성함수가 유한할 것을 요구하므로 꼬리가 두꺼운 일부 분포를 배제한다. ($\phi(t) = \mathbb{E}[e^{itX}]$를 쓰는) 특성함수 증명은 분산이 유한한 모든 분포로 일반화된다.
+    이다. 두 번째 등호는 독립성(합의 분산이 분산의 합)과 각 $X_i$의 분산이 모두 $\sigma^2$이라는 사실을 쓴다. $\square$
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
+중심극한정리를 이용해 $\bar{X}$와 $s$(표본표준편차)에 근거한 모평균 $\mu$의 근사적 95% 신뢰구간을 유도하라.
+
+</div>
+
+??? success "풀이"
+    중심극한정리에 의해 $n$이 크면
+
+    $$
+    \frac{\bar{X} - \mu}{s / \sqrt{n}} \approx N(0, 1)
+    $$
+
+    이다. 95% 구간은 $|Z| \le 1.96$을 요구하므로
+
+    $$
+    P\left(-1.96 \le \frac{\bar{X} - \mu}{s/\sqrt{n}} \le 1.96\right) \approx 0.95
+    $$
+
+    이고, 정리하면
+
+    $$
+    \bar{X} - 1.96 \frac{s}{\sqrt{n}} \le \mu \le \bar{X} + 1.96 \frac{s}{\sqrt{n}}
+    $$
+
+    이다. 근사적 95% 신뢰구간은 $\bar{X} \pm 1.96 \, s / \sqrt{n}$이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
+이산분포에 대한 정규근사의 **연속성 수정**: 정숫값 $X$에 대해 $P(X \le k)$를 정규분포로 근사할 때 $\Phi((k + 0.5 - \mu)/\sigma)$를 쓴다. 왜 그런가?
+
+</div>
+
+??? success "풀이"
+    이산확률변수는 정수에 질량을 놓지만 연속 근사는 질량을 매끄럽게 퍼뜨린다. 수정하지 않으면 $P(X \le k) \approx \Phi((k - \mu)/\sigma)$가 사실상 $X = k$의 질량을 제외해 버린다.
+
+    연속성 수정은 각 정수를 그 정수를 중심으로 하는 너비 1인 구간으로 취급한다. $P(X \le k)$에는 위쪽 끝점 $k + 0.5$를 쓴다.
+
+    $$
+    P(X \le k) \approx \Phi\!\left(\frac{k + 0.5 - \mu}{\sigma}\right)
+    $$
+
+    **개선:** 오차율이 $O(1/\sqrt n)$에서 $O(1/n)$으로 좋아진다.
+
+    **예:** Binomial(20, 0.5)에서 $\mu = 10$, $\sigma \approx 2.236$이다. 정확한 값은 $P(X \le 12) = 0.8684$이다. 수정하지 않으면 $\Phi(0.894) = 0.814$(오차 0.054)이고, 수정하면 $\Phi(1.118) = 0.868$(오차 0.000)이다.
+
+    특히 $n$이 크지 않을 때 이산에서 연속으로의 근사에는 언제나 연속성 수정을 적용하라.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span>
 심하게 치우친 분포에서 **중심극한정리의 느린 수렴을 보여라.** $X_i$가 평균 1인 지수분포를 따른다고 하자. $n = 30$일 때 $\bar X_n$의 왜도는 얼마인가? 정규 극한의 대칭성과 비교하라.
 
 </div>
@@ -357,221 +567,121 @@ $n/N$이 작으면 수정계수가 1에 가까워 무시할 수 있다.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff hard" title="어려움"></span>
-**다변량 중심극한정리.** $\mathbf X_i \in \mathbb{R}^d$가 평균 $\boldsymbol\mu$, 공분산 $\boldsymbol\Sigma$인 i.i.d.라 하자. 다변량 중심극한정리를 진술하고, 그것이 다변량 정규분포에 근거한 신뢰타원체를 왜 정당화하는지 설명하라.
+**연습문제 8.** <span class="diff med" title="중간"></span>
+**"$n\ge30$이면 충분하다"는 규칙을 두 방향에서 검증하라.** (a) 분포마다 실제로 얼마나 큰 $n$이 필요한지 **측정**하라. (b) 같은 $n$에서 근사가 중심부와 꼬리 중 **어디에서 먼저** 무너지는가?
 
 </div>
 
 ??? success "풀이"
-    **다변량 중심극한정리:**
-
-    $$
-    \sqrt n (\bar{\mathbf X}_n - \boldsymbol\mu) \xrightarrow{d} N_d(\mathbf 0, \boldsymbol\Sigma)
-    $$
-
-    이며 수렴은 $\mathbb{R}^d$에서의 분포수렴(모든 성분의 결합분포)이다.
-
-    증명 개요: **크라메르–월드 장치**를 쓴다. 다변량 수렴은 모든 선형 사영이 (일변량으로) 수렴할 때에 한해 성립한다. 임의의 $\mathbf a \in \mathbb{R}^d$에 대해 스칼라 사영에 일변량 중심극한정리를 적용하면 $\sqrt n \, \mathbf a^T(\bar{\mathbf X}_n - \boldsymbol\mu) \xrightarrow{d} N(0, \mathbf a^T \boldsymbol\Sigma \mathbf a)$이고, 이로부터 $N_d(\mathbf 0, \boldsymbol\Sigma)$로의 다변량 수렴이 따라온다.
-
-    **신뢰타원체의 정당화:** $\bar{\mathbf X}_n \approx N_d(\boldsymbol\mu, \boldsymbol\Sigma/n)$이면 $n(\bar{\mathbf X}_n - \boldsymbol\mu)^T \boldsymbol\Sigma^{-1}(\bar{\mathbf X}_n - \boldsymbol\mu) \approx \chi^2_d$이다. 집합 $\{\boldsymbol\mu : n(\bar{\mathbf X}_n - \boldsymbol\mu)^T \boldsymbol\Sigma^{-1}(\bar{\mathbf X}_n - \boldsymbol\mu) \le \chi^2_{d, 0.95}\}$은 참 평균을 95%의 점근 확률로 덮는 타원체다. 호텔링의 $T^2$ 검정과 다변량 신뢰영역이 모두 이 위에 서 있다.
-
-<div class="drillbox" markdown>
-
-**연습문제 5.** <span class="diff hard" title="어려움"></span>
-**린데베르그 중심극한정리**는 동일분포가 아니어도 독립이기만 하면 되는 확률변수를 허용한다. **린데베르그 조건**을 진술하고 언제 성립하는지 설명하라.
-
-</div>
-
-??? success "풀이"
-    $X_1, X_2, \ldots$가 독립이고(동일분포일 필요는 없다) $\mathbb{E}[X_i] = 0$, $\mathrm{Var}(X_i) = \sigma_i^2$, $s_n^2 = \sum_{i=1}^n \sigma_i^2$이라 하자. **린데베르그 조건**은 다음과 같다.
-
-    $$
-    \forall\, \varepsilon > 0: \quad \frac{1}{s_n^2}\sum_{i=1}^n \mathbb{E}\!\left[X_i^2 \mathbf 1(|X_i| > \varepsilon s_n)\right] \to 0
-    $$
-
-    직관: 개별 $X_i$의 "꼬리"(즉 $|X_i|$가 $\varepsilon s_n$을 넘는 부분)가 기여하는 총 분산이 무시할 만해진다는 것이다. 어느 한 $X_i$도 분산을 지배하지 않는다.
-
-    **성립하는 경우:** (1) 분산이 유한한 i.i.d.인 경우 자명하게 성립한다. (2) $X_i$가 균등하게 유계이고 $s_n \to \infty$인 경우. (3) 최대 분산이 $\max_i \sigma_i^2 / s_n^2 \to 0$을 만족하는 임의의 열.
-
-    **실패하는 경우:** 한 항이 총 분산에서 사라지지 않는 몫을 차지하면(예: 가우시안 $Y$에 대해 $X_n = n \cdot Y$여서 $X_n$이 지배하는 경우) 극한이 가우시안이 아니라 안정분포가 된다.
-
-    린데베르그 중심극한정리는 i.i.d. 중심극한정리를 포괄하며, 독립이지만 이질적인 기여들의 합에 적용된다. 동일분포가 아닌 오차를 갖는 회귀에 핵심적이다.
-
-<div class="drillbox" markdown>
-
-**연습문제 6.** <span class="diff hard" title="어려움"></span>
-중심극한정리는 **유한한 분산**을 요구한다. 그 이유와, 분산이 무한할 때(꼬리가 두꺼운 분포) 어떻게 되는지 논하라. **안정분포**와 **알파-안정 중심극한정리**를 언급하라.
-
-</div>
-
-??? success "풀이"
-    **유한한 분산이 필수인 이유:** 표준화 $(S_n - n\mu)/\sqrt{n\sigma^2}$이 암묵적으로 $\sigma^2 < \infty$를 가정한다. 분산이 무한하면 이 표준화가 정의되지 않는다. 개별 기여의 "무시가능성"을 확립할 수 없으므로 린데베르그–펠러 틀이 무너진다.
-
-    **꼬리가 두꺼운 경우의 행동:** $\alpha < 2$인 **안정분포** $S_\alpha(\sigma, \beta)$의 흡인 영역에 있는 분포는 거듭제곱 법칙 꼬리 $P(|X| > x) \sim x^{-\alpha}$를 갖는다. $\alpha \le 2$이면 분산이 무한하고 $\alpha \le 1$이면 평균이 무한하다.
-
-    **알파-안정 중심극한정리:** 꼬리 지수가 $0 < \alpha \le 2$인 i.i.d. $X_i$에 대해 정규화된 합
-
-    $$
-    \frac{S_n - n a_n}{n^{1/\alpha}} \xrightarrow{d} S_\alpha(\sigma, \beta)
-    $$
-
-    이 $\alpha$-안정분포로 수렴한다. 정규화가 $\sqrt n$이 아니라 $n^{1/\alpha}$임에 주목하라. $\alpha = 2$이면 가우시안 중심극한정리가 복원되고, $\alpha = 1$이면 코시 극한을 얻으며, $\alpha < 1$이면 평균조차 수렴하지 않는다.
-
-    **실무적 함의:** 금융 수익률은 흔히 $\alpha \approx 1.5$–$1.8$이다(꼬리는 두껍지만 분산이 유한하므로 가우시안 중심극한정리가 느리게나마 적용된다). 네트워크 패킷 크기, 파일 크기, 대기 지연은 흔히 $\alpha < 2$여서(진짜로 꼬리가 두꺼워서) 가우시안 기반 신뢰구간이 타당하지 않다. 알맞은 도구는 두꺼운 꼬리를 고려하는 것들이다. 조심스러운 부트스트랩, 분위수 추정량, 알파-안정 모형 등이다.
-
-<div class="drillbox" markdown>
-
-**연습문제 7.** <span class="diff med" title="중간"></span>
-중심극한정리는 $\sigma$를 **안다**고 가정한다. 실제로는 표본표준편차 $s$로 바꿔 쓴다. 그 대체를 정당화하는 **슬러츠키 정리**를 진술하고, 소표본에서 무엇이 대가로 치러지는지 확인하라.
-
-</div>
-
-??? success "풀이"
-    **슬러츠키 정리.** $Z_n\xrightarrow{d}Z$이고 $W_n\xrightarrow{p}c$($c$는 상수)이면
-
-    $$
-    Z_n + W_n \xrightarrow{d} Z+c,\qquad Z_nW_n\xrightarrow{d}cZ,\qquad
-    \frac{Z_n}{W_n}\xrightarrow{d}\frac{Z}{c}\;(c\ne0)
-    $$
-
-    **적용.** $Z_n=\sqrt n(\bar X_n-\mu)/\sigma\xrightarrow{d}N(0,1)$이고, 큰수의 법칙으로 $s_n/\sigma\xrightarrow{p}1$이다. 따라서
-
-    $$
-    T_n=\frac{\sqrt n(\bar X_n-\mu)}{s_n}=Z_n\cdot\frac{\sigma}{s_n}\xrightarrow{d}N(0,1)
-    $$
-
-    **모르는 $\sigma$를 추정값으로 바꿔도 극한분포가 그대로다.** 이것이 없으면 실무에서 중심극한정리를 쓸 수 없다.
+    **(a) 분포마다 얼마나 큰 $n$이 필요한가**
 
     ```python
     import numpy as np
+    import matplotlib.pyplot as plt
     from scipy import stats
 
     rng = np.random.default_rng(0)
-    print("자료 ~ Exp(1)  (mu = 1, sigma = 1)")
-    print(f"{'n':>6}{'sigma 사용 sd':>16}{'s 사용 sd':>14}"
-          f"{'|T|>1.96 비율':>16}{'|T|>t 분위수':>15}")
-    for n in (5, 10, 30, 100, 1000):
-        X = rng.exponential(1.0, (200_000, n))
-        m, s = X.mean(1), X.std(1, ddof=1)
-        Z = np.sqrt(n) * (m - 1) / 1.0
-        T = np.sqrt(n) * (m - 1) / s
-        tq = stats.t.ppf(0.975, n - 1)
-        print(f"{n:>6}{Z.std():>16.4f}{T.std():>14.4f}"
-              f"{np.mean(np.abs(T) > 1.96):>16.4f}{np.mean(np.abs(T) > tq):>15.4f}")
-    print("  (마지막 두 열의 목표는 0.05)")
+    dists = [("Uniform(0,1)", stats.uniform), ("Exponential(1)", stats.expon),
+             ("Lognormal(0,1)", stats.lognorm(1.0)),
+             ("Bernoulli(0.05)", stats.bernoulli(0.05))]
+    ns = (5, 30, 100, 1000)
+
+    print("표준화 표본평균과 N(0,1) 사이의 콜모고로프-스미르노프 거리")
+    print(f"{'분포':>18}{'왜도':>8}" + "".join(f"{'n=' + str(n):>11}" for n in ns))
+    ks = {}
+    for name, d in dists:
+        mu, sd = d.mean(), d.std()
+        ks[name] = [stats.kstest(
+            np.sqrt(n) * (d.rvs(size=(100_000, n), random_state=rng).mean(1) - mu) / sd,
+            "norm").statistic for n in ns]
+        print(f"{name:>18}{float(d.stats(moments='s')):>8.2f}"
+              + "".join(f"{v:>11.4f}" for v in ks[name]))
+
+    print(f"\n참고: 100000회 모의에서 KS 통계량 자체의 크기 ~ 0.83/sqrt(B) = "
+          f"{0.83 / np.sqrt(100_000):.4f}")
+    print("\nKS ~ c/sqrt(n) 으로 보고 (n=100 기준) KS < 0.01 에 필요한 n")
+    print(f"{'분포':>18}{'c':>10}{'필요한 n':>12}")
+    for name, row in ks.items():
+        c = row[2] * 10
+        print(f"{name:>18}{c:>10.3f}{(c / 0.01) ** 2:>12.0f}")
+
+    plt.figure(figsize=(8, 6))
+    for name, row in ks.items():
+        plt.loglog(ns, row, "o-", label=name)
+    plt.loglog(ns, [0.3 / np.sqrt(n) for n in ns], "k--", label="reference $n^{-1/2}$")
+    plt.axhline(0.01, color="gray", lw=1)
+    plt.xlabel("sample size n")
+    plt.ylabel("KS distance to N(0,1)")
+    plt.title("How fast does the CLT actually converge?")
+    plt.legend()
+    plt.grid(alpha=0.3, which="both")
+    plt.show()
     ```
 
     출력:
 
     ```
-    자료 ~ Exp(1)  (mu = 1, sigma = 1)
-         n     sigma 사용 sd       s 사용 sd     |T|>1.96 비율      |T|>t 분위수
-         5          0.9989        2.3325          0.1882         0.1170
-        10          0.9974        1.4935          0.1305         0.0990
-        30          1.0015        1.1474          0.0824         0.0729
-       100          1.0021        1.0459          0.0608         0.0582
-      1000          1.0005        1.0046          0.0512         0.0510
-      (마지막 두 열의 목표는 0.05)
+    표준화 표본평균과 N(0,1) 사이의 콜모고로프-스미르노프 거리
+                    분포      왜도        n=5       n=30      n=100     n=1000
+          Uniform(0,1)    0.00     0.0079     0.0024     0.0020     0.0017
+        Exponential(1)    2.00     0.0603     0.0243     0.0138     0.0036
+        Lognormal(0,1)    6.18     0.1156     0.0590     0.0365     0.0110
+       Bernoulli(0.05)    4.13     0.4716     0.2134     0.1165     0.0381
+
+    참고: 100000회 모의에서 KS 통계량 자체의 크기 ~ 0.83/sqrt(B) = 0.0026
+
+    KS ~ c/sqrt(n) 으로 보고 (n=100 기준) KS < 0.01 에 필요한 n
+                    분포         c       필요한 n
+          Uniform(0,1)     0.020           4
+        Exponential(1)     0.138         189
+        Lognormal(0,1)     0.365        1333
+       Bernoulli(0.05)     1.165       13563
     ```
 
-    **극한에서는 정확히 성립한다.** $n=1000$에서 $s$를 쓴 표준편차가 $1.0046$, 기각률이 $0.0512$로 목표에 닿는다.
+    ![CLT convergence rate on log-log axes](./img/clt_convergence_rate.png)
 
-    **그러나 소표본의 대가가 크다.**
+    **"$n\ge30$"이 맞는 경우는 하나뿐이다.**
 
-    | $n$ | $s$ 사용 시 sd | 실제 제1종 오류 |
-    |---|---|---|
-    | $5$ | $2.33$ | $0.188$ |
-    | $10$ | $1.49$ | $0.131$ |
-    | $30$ | $1.15$ | $0.082$ |
-    | $100$ | $1.05$ | $0.061$ |
-
-    $n=5$에서 $5\%$ 검정이 실제로는 $19\%$나 기각한다. **$\sigma$를 알 때는 $0.999$로 완벽했는데** $s$로 바꾸는 순간 무너진다.
-
-    **왜 이렇게 나쁜가.** $s_n$이 $\sigma$로 수렴하긴 하지만 소표본에서 크게 흔들리고, **$\bar X_n$과 상관되어 있다**(지수분포에서는 우연히 큰 관측이 평균과 $s$를 함께 올린다). 슬러츠키는 극한만 보장할 뿐 유한표본을 말해 주지 않는다.
-
-    **$t$ 분위수를 써도 절반만 낫는다.** $n=5$에서 $0.188\to0.117$로 개선되지만 여전히 $5\%$의 두 배가 넘는다. **$t$ 분포는 모집단이 정규일 때만 정확**하기 때문이다(5장). 여기서는 지수분포라 정당화되지 않는다.
-
-    **교훈.** 슬러츠키 정리는 "$n$이 크면 $\sigma$ 대신 $s$를 써도 된다"를 보장하는 **점근** 결과다. "$n$이 얼마나 커야 하는가"는 답하지 않으며, 그 답은 모집단의 치우침에 달려 있다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 8.** <span class="diff med" title="중간"></span>
-$\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산이 $\sigma^2$로 수렴한다**고 말할 수 있는가? **분포수렴이 적률수렴을 함의하지 않음**을 보여라.
-
-</div>
-
-??? success "풀이"
-    ```python
-    import numpy as np
-
-    rng = np.random.default_rng(0)
-    print("반례:  P(X_n = 0) = 1 - 1/n,  P(X_n = n) = 1/n")
-    print(f"{'n':>7}{'P(X_n=0)':>12}{'E[X_n]':>10}{'E[X_n^2]':>12}")
-    for n in (10, 100, 1000, 10_000):
-        print(f"{n:>7}{1 - 1 / n:>12.4f}{n * (1 / n):>10.2f}{n * n * (1 / n):>12.1f}")
-    print("  X_n -> 0 (분포수렴)  그런데 E[X_n] = 1 이고 E[X_n^2] -> 무한\n")
-
-    print("통계적 사례: Exp 비율의 최대가능도추정량 1/Xbar  (참값 1)")
-    print(f"{'n':>6}{'점근 sd = 1/sqrt(n)':>22}{'실제 sd':>12}{'실제 평균':>12}")
-    for n in (3, 5, 10, 30, 100):
-        r = 1 / rng.exponential(1.0, (400_000, n)).mean(1)
-        print(f"{n:>6}{1 / np.sqrt(n):>22.4f}{r.std():>12.4f}{r.mean():>12.4f}")
-    ```
-
-    출력:
-
-    ```
-    반례:  P(X_n = 0) = 1 - 1/n,  P(X_n = n) = 1/n
-          n    P(X_n=0)    E[X_n]    E[X_n^2]
-         10      0.9000      1.00        10.0
-        100      0.9900      1.00       100.0
-       1000      0.9990      1.00      1000.0
-      10000      0.9999      1.00     10000.0
-      X_n -> 0 (분포수렴)  그런데 E[X_n] = 1 이고 E[X_n^2] -> 무한
-
-    통계적 사례: Exp 비율의 최대가능도추정량 1/Xbar  (참값 1)
-         n     점근 sd = 1/sqrt(n)       실제 sd       실제 평균
-         3                0.5774      1.4360      1.5000
-         5                0.4472      0.7238      1.2505
-        10                0.3162      0.3937      1.1114
-        30                0.1826      0.1955      1.0346
-       100                0.1000      0.1019      1.0100
-    ```
-
-    **첫 반례가 구조를 보여준다.** $X_n$은 확률 $1-1/n$로 $0$이므로 분포가 $0$에 집중되어 $X_n\xrightarrow{d}0$이다. 그런데 확률 $1/n$로 $n$이라는 큰 값을 갖고, 그 곱이 정확히 $1$로 유지된다. **극한분포가 못 보는 곳에 질량이 조금 남아 적률을 전부 가져간다.**
-
-    **둘째는 실제 추정 문제다.** $\hat\lambda=1/\bar X_n$은 지수분포 비율의 최대가능도추정량이고 $\sqrt n(\hat\lambda-1)\xrightarrow{d}N(0,1)$이다. 그런데 정확한 값은
-
-    $$
-    \mathbb{E}[\hat\lambda]=\frac{n}{n-1},\qquad
-    \operatorname{Var}(\hat\lambda)=\frac{n^2}{(n-1)^2(n-2)}
-    $$
-
-    이다. **$n\le2$이면 분산이 무한대**인데도 점근분포는 얌전한 정규분포다.
-
-    | $n$ | 점근 sd | 실제 sd | 실제 평균 |
+    | 분포 | $\gamma_1$ | $n=30$의 KS | KS $<0.01$에 필요한 $n$ |
     |---|---|---|---|
-    | $3$ | $0.577$ | $1.436$ | $1.500$ |
-    | $10$ | $0.316$ | $0.394$ | $1.111$ |
-    | $100$ | $0.100$ | $0.102$ | $1.010$ |
+    | 균등 | $0$ | $0.0024$ | $\approx 4$ |
+    | 지수 | $2.00$ | $0.0243$ | $\approx 190$ |
+    | 로그정규 | $6.18$ | $0.0590$ | $\approx 1\,300$ |
+    | 베르누이$(0.05)$ | $4.13$ | $0.2134$ | $\approx 13\,600$ |
 
-    $n=3$에서 실제 표준편차가 점근값의 $2.5$배다. $\bar X_n$이 $0$에 가까울 때 $1/\bar X_n$이 폭발하는데, **그 사건의 확률은 $0$으로 가지만 크기가 그보다 빨리 커진다.**
+    **$3$천 배 넘게 차이 난다.** 균등분포는 $n=5$에서 이미 충분하고, 베르누이$(0.05)$는 $1$만 개가 넘어야 한다.
 
-    !!! warning "점근분산 ≠ 분산의 극한"
-        $\sqrt n(\hat\theta-\theta)\xrightarrow{d}N(0,v)$에서 $v$를 **점근분산**이라 부르지만, 이것이 $\lim n\operatorname{Var}(\hat\theta)$라는 뜻은 아니다. 후자는 존재하지 않을 수도 있다.
+    **균등분포의 곡선은 바닥에 눕는다.** $0.002$ 부근에서 평평해지는데, 이는 수렴이 멈춘 것이 아니라 **모의실험 자체의 잡음 바닥**($\approx0.83/\sqrt{B}=0.0026$)에 닿았기 때문이다. 실제 KS 거리는 그보다 훨씬 작다.
 
-    **언제 적률도 수렴하는가.** **균등적분가능성**이 추가로 필요하다. 실용적 충분조건은 어떤 $\delta>0$에 대해 $\sup_n\mathbb{E}|X_n|^{2+\delta}<\infty$이다. 위 반례들은 정확히 이것을 위반한다.
+    **나머지 세 곡선의 기울기는 $-1/2$이다.** 로그–로그 그림에서 지수·로그정규·베르누이 세 선이 참조선 $n^{-1/2}$와 나란히 내려간다. **속도는 모두 같고 상수만 다르다** — 정확히 베리–에센 정리가 말하는 바다.
 
-    **실무적 함의.** 점근 표준오차로 만든 신뢰구간은 소표본에서 **실제 변동성을 과소평가할 수 있다.** 비($1/\bar X$), 로그, 역수 같은 비선형 변환이 개입하면 특히 그렇다. 부트스트랩(17장)이 유용한 이유 중 하나가 이것으로, 부트스트랩은 점근 공식이 아니라 **유한표본 분포 자체**를 흉내 낸다. $\square$
+    **상수를 결정하는 것.**
 
-<div class="drillbox" markdown>
+    | 요인 | 효과 |
+    |---|---|
+    | 왜도 $\gamma_1$ | 주된 요인 — 대략 비례 |
+    | **이산성(격자)** | 왜도와 **무관하게** 별도로 더해짐 |
+    | 첨도 | 이차적 요인($1/n$ 항) |
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
-정리 $3$의 "$n\ge30$" 규칙을 **꼬리에서** 검증하라. 근사가 중심부와 꼬리 중 어디에서 먼저 무너지는가?
+    **베르누이가 특히 나쁜 이유는 왜도만이 아니다.** 왜도 $4.13$은 로그정규($6.18$)보다 낮은데 필요한 $n$은 $10$배다. 베리–에센 문서 연습문제 $7$에서 본 **격자 오차**가 더해지기 때문이며, 이 성분은 왜도 보정으로도 사라지지 않는다.
 
-</div>
+    **실무 지침.**
 
-??? success "풀이"
+    | 상황 | 권고 |
+    |---|---|
+    | 대칭·유계 자료 | $n\ge20$이면 충분 |
+    | 중간 정도 치우침($\gamma_1\approx2$) | $n\ge200$ |
+    | 심한 치우침(소득, 보험청구) | $n\ge1000$ 또는 부트스트랩 |
+    | 희귀 이항($np<10$) | 정확 계산 또는 포아송 근사 |
+    | 꼬리확률·작은 $p$값이 목표 | 어떤 $n$에서도 근사를 믿지 말 것 |
+
+    !!! tip "먼저 왜도를 재라"
+        자료에서 $\hat\gamma_1$을 계산하고 $|\hat\gamma_1|/\sqrt n$을 보라. 이 값이 $0.1$보다 크면 정규근사를 의심해야 한다. 위 표의 "필요한 $n$"이 대략 $(\gamma_1/0.06)^2$과 맞아떨어진다.
+
+    **가장 안전한 답은 근사를 재는 것이다.** 자신의 자료에서 부트스트랩으로 표본평균의 분포를 만들어 정규분포와 비교하면, 남의 경험칙을 빌리지 않고 직접 확인할 수 있다.
+
+    **(b) 중심부와 꼬리 중 어디가 먼저 무너지는가**
+
     ```python
     import numpy as np
     from scipy import stats
@@ -652,7 +762,447 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff hard" title="어려움"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
+본문의 히스토그램은 **가운데 모양**을 보여준다. 히스토그램이 숨기는 것을 드러내는 **Q-Q 플롯**으로 같은 수렴을 다시 그려라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    dists = [("Uniform(0,1)", stats.uniform), ("Exponential(1)", stats.expon),
+             ("Lognormal(0,1)", stats.lognorm(1.0))]
+    ns = [5, 30, 100]
+
+    fig, axes = plt.subplots(len(dists), len(ns), figsize=(12, 11))
+    for i, (name, d) in enumerate(dists):
+        mu, sd = d.mean(), d.std()
+        for j, n in enumerate(ns):
+            Z = np.sqrt(n) * (d.rvs(size=(4000, n), random_state=rng).mean(1) - mu) / sd
+            ax = axes[i, j]
+            stats.probplot(Z, dist="norm", plot=ax)
+            ax.get_lines()[0].set_markersize(2)
+            ax.get_lines()[1].set_color("red")
+            ax.set_title(f"{name},  n = {n}", fontsize=10)
+            ax.set_xlabel("Theoretical quantiles" if i == len(dists) - 1 else "")
+            ax.set_ylabel("Sample quantiles" if j == 0 else "")
+            ax.set_xlim(-4, 4)
+            ax.set_ylim(-4, 6)
+    plt.suptitle("Q-Q plots of standardized sample means", fontsize=14)
+    plt.tight_layout()
+    plt.show()
+
+    print(f"{'분포':>16}{'n':>6}{'표준화 평균의 왜도':>20}{'P(Z>3)':>11}"
+          f"{'정규값':>10}")
+    for name, d in dists:
+        mu, sd = d.mean(), d.std()
+        for n in ns:
+            Z = np.sqrt(n) * (d.rvs(size=(200_000, n), random_state=rng).mean(1) - mu) / sd
+            print(f"{name:>16}{n:>6}{stats.skew(Z):>20.3f}"
+                  f"{np.mean(Z > 3):>11.5f}{0.00135:>10.5f}")
+    ```
+
+    출력:
+
+    ```
+    분포     n          표준화 평균의 왜도     P(Z>3)       정규값
+        Uniform(0,1)     5               0.001    0.00047   0.00135
+        Uniform(0,1)    30               0.010    0.00128   0.00135
+        Uniform(0,1)   100              -0.008    0.00131   0.00135
+      Exponential(1)     5               0.886    0.00935   0.00135
+      Exponential(1)    30               0.359    0.00411   0.00135
+      Exponential(1)   100               0.212    0.00288   0.00135
+      Lognormal(0,1)     5               2.806    0.01650   0.00135
+      Lognormal(0,1)    30               1.106    0.01041   0.00135
+      Lognormal(0,1)   100               0.626    0.00684   0.00135
+    ```
+
+    ![Q-Q plots of standardized sample means](./img/clt_qq_convergence.png)
+
+    **Q-Q 플롯은 꼬리를 확대한다.** 히스토그램에서는 $n=30$의 로그정규가 이미 "종 모양"으로 보이지만, Q-Q 플롯에서는 오른쪽 끝이 직선 위로 크게 휘어 있다.
+
+    **수치가 그것을 확인해 준다.** 로그정규는 $n=100$에서도 $P(Z>3)=0.00684$로 정규값 $0.00135$의 **$5$배**다.
+
+    **왜도가 정확히 $\gamma_1/\sqrt n$로 준다.**
+
+    | 분포 | $\gamma_1$ | $n=5$ | $n=30$ | $n=100$ | $\gamma_1/\sqrt{100}$ |
+    |---|---|---|---|---|---|
+    | 균등 | $0$ | $0.001$ | $0.010$ | $-0.008$ | $0$ |
+    | 지수 | $2.00$ | $0.886$ | $0.359$ | $0.212$ | $0.200$ |
+    | 로그정규 | $6.18$ | $2.806$ | $1.106$ | $0.626$ | $0.618$ |
+
+    측정값이 이론값과 거의 정확히 맞는다. **중심극한정리가 지우는 것이 바로 이 $\gamma_1/\sqrt n$이며**, 얼마나 남았는지가 곧 "얼마나 정규에 가까운가"다. [베리–에센 정리](berry_esseen.md) 페이지 연습문제 $5$의 에지워스 전개에서 첫 보정항이 바로 이것이다.
+
+    **히스토그램 대신 Q-Q 플롯을 봐야 하는 이유.**
+
+    | 진단 대상 | 히스토그램 | Q-Q 플롯 |
+    |---|---|---|
+    | 중심의 모양 | 잘 보임 | 잘 보임 |
+    | 치우침 | 보임 | 잘 보임 |
+    | **꼬리의 두께** | **거의 안 보임** | 명확히 보임 |
+    | **극단 이상치** | **막대 하나에 묻힘** | 점 하나로 튐 |
+    | 구간폭 선택 의존 | 있음 | 없음 |
+
+    **히스토그램에서 꼬리는 높이 $0$에 가까운 막대다.** 확률 $0.001$과 $0.005$가 눈으로 구별되지 않는다. Q-Q 플롯은 분위수를 비교하므로 그 차이가 위치의 차이로 나타난다.
+
+    **실무 규칙.** 정규성을 눈으로 판단할 때는 **언제나 Q-Q 플롯을 먼저 본다.** 히스토그램은 청중에게 설명할 때, Q-Q 플롯은 스스로 판단할 때 쓴다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+중심극한정리는 **표본분산**에도 적용된다. 그런데 표본평균보다 훨씬 느리게 수렴한다. **정규 모집단에서조차** 그렇다. 이유를 밝혀라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    print("모집단이 N(0,1) 일 때 정규분포까지의 KS 거리")
+    print(f"{'n':>7}{'표본평균':>15}{'표본분산':>15}")
+    for n in (5, 10, 30, 100, 1000):
+        X = rng.normal(0, 1, (200_000, n))
+        Zm = np.sqrt(n) * X.mean(1)
+        Zv = np.sqrt(n) * (X.var(1, ddof=1) - 1) / np.sqrt(2)
+        print(f"{n:>7}{stats.kstest(Zm, 'norm').statistic:>15.4f}"
+              f"{stats.kstest(Zv, 'norm').statistic:>15.4f}")
+
+    print("\n표본분산은 (X - mu)^2 들의 평균이다. 그 분포의 왜도를 보라.")
+    print(f"  X ~ N(0,1) 의 왜도          {float(stats.norm.stats(moments='s')):>8.4f}")
+    print(f"  (X-mu)^2 ~ chi^2_1 의 왜도  {float(stats.chi2.stats(1, moments='s')):>8.4f}"
+          f"   (= sqrt(8))")
+    print(f"  참고: Exp(1) 의 왜도        {float(stats.expon.stats(moments='s')):>8.4f}")
+    ```
+
+    출력:
+
+    ```
+    모집단이 N(0,1) 일 때 정규분포까지의 KS 거리
+          n           표본평균           표본분산
+          5         0.0021         0.1002
+         10         0.0012         0.0675
+         30         0.0017         0.0372
+        100         0.0024         0.0183
+       1000         0.0015         0.0052
+
+    표본분산은 (X - mu)^2 들의 평균이다. 그 분포의 왜도를 보라.
+      X ~ N(0,1) 의 왜도            0.0000
+      (X-mu)^2 ~ chi^2_1 의 왜도    2.8284   (= sqrt(8))
+      참고: Exp(1) 의 왜도          2.0000
+    ```
+
+    **표본평균은 $n=5$에서 이미 완벽하다**(KS $0.0021$은 모의오차 수준). 모집단이 정규면 $\bar X_n$이 **정확히** 정규이기 때문이다.
+
+    **표본분산은 그렇지 않다.** $n=5$에서 $0.1002$, $n=100$에서도 $0.0183$이다. 표본평균보다 훨씬 나쁘다.
+
+    **이유는 무엇의 평균인지에 있다.**
+
+    $$
+    s_n^2 \approx \frac1n\sum_i (X_i-\mu)^2
+    $$
+
+    **$s^2$은 $X_i$의 평균이 아니라 $(X_i-\mu)^2$의 평균이다.** 그리고 $X\sim N(0,1)$이면
+
+    $$
+    (X-\mu)^2\sim\chi^2_1,\qquad \gamma_1(\chi^2_1)=\sqrt8=2.828
+    $$
+
+    **정규분포를 제곱하는 순간 왜도 $2.83$짜리 분포가 된다.** 이는 지수분포($\gamma_1=2$)보다 더 치우쳤다. 연습문제 $8$의 표에서 지수분포의 표본평균이 $n=100$에서 KS $0.0138$이었던 것과 견주면, $s^2$의 $0.0183$은 자연스럽다.
+
+    **점근분포는 이렇다.** 4차적률 $\mu_4$가 유한하면
+
+    $$
+    \sqrt n\,(s_n^2-\sigma^2)\xrightarrow{d} N\!\left(0,\;\mu_4-\sigma^4\right)
+    $$
+
+    이고, 정규 모집단이면 $\mu_4=3\sigma^4$이라 분산이 $2\sigma^4$이다.
+
+    !!! warning "4차적률이 필요하다"
+        표본평균의 중심극한정리는 **2차적률**만 요구하지만, 표본분산은 **4차적률**을 요구한다. 꼬리가 두꺼운 자료에서는 $\mu_4=\infty$인 경우가 흔하고($t_4$ 분포, $\alpha<4$인 파레토), 그러면 $s^2$에 대한 정규근사가 **아예 성립하지 않는다.**
+
+    **실무적 함의.**
+
+    | 대상 | 필요한 적률 | 실무적 신뢰도 |
+    |---|---|---|
+    | 평균의 신뢰구간 | 2차 | 대체로 안전 |
+    | 분산의 신뢰구간 | 4차 | 꼬리에 매우 민감 |
+    | 상관계수 | 4차 | 마찬가지로 민감 |
+    | 첨도 | 8차 | 사실상 신뢰 불가 |
+
+    **적률의 차수가 올라갈수록 수렴이 느려지고 조건이 까다로워진다.** 분산이나 상관계수의 구간추정에는 정규근사 대신 **부트스트랩**(17장)을 쓰는 편이 안전한 이유다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff hard" title="어려움"></span>
+평균 0, 분산 1이고 0의 근방에서 적률생성함수 $M(t)$가 유한한 i.i.d. $X_i$에 대해 **적률생성함수 방법으로 중심극한정리를 증명하라**. $\sqrt n \bar X_n$의 적률생성함수가 $e^{t^2/2}$로 수렴함을 보여라.
+
+</div>
+
+??? success "풀이"
+    표준화된 합: $Z_n = \sqrt n \bar X_n = (X_1 + \cdots + X_n)/\sqrt n$.
+
+    그 적률생성함수: $M_{Z_n}(t) = \mathbb{E}[e^{t Z_n}] = \prod_i \mathbb{E}[e^{t X_i / \sqrt n}] = [M(t/\sqrt n)]^n$.
+
+    $M(t/\sqrt n)$을 0 주위로 전개한다. $\mu = 0$, $\sigma^2 = 1$을 쓰면 $M(u) = 1 + \mu u + (\sigma^2 + \mu^2) u^2/2 + O(u^3) = 1 + u^2/2 + O(u^3)$이다.
+
+    따라서 $M(t/\sqrt n) = 1 + t^2/(2n) + O(n^{-3/2})$이다.
+
+    $n$제곱을 취하면 ($(1 + a/n + o(1/n))^n \to e^a$를 이용해) $n \to \infty$일 때 $M_{Z_n}(t) = (1 + t^2/(2n) + O(n^{-3/2}))^n \to e^{t^2/2}$이다.
+
+    극한 적률생성함수 $e^{t^2/2}$이 $N(0, 1)$의 것이다. 적률생성함수 수렴 정리에 의해 $Z_n \xrightarrow{d} N(0, 1)$이다. $\square$
+
+    참고: 이 증명은 근방에서 적률생성함수가 유한할 것을 요구하므로 꼬리가 두꺼운 일부 분포를 배제한다. ($\phi(t) = \mathbb{E}[e^{itX}]$를 쓰는) 특성함수 증명은 분산이 유한한 모든 분포로 일반화된다.
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span>
+중심극한정리는 $\sigma$를 **안다**고 가정한다. 실제로는 표본표준편차 $s$로 바꿔 쓴다. 그 대체를 정당화하는 **슬러츠키 정리**를 진술하고, 소표본에서 무엇이 대가로 치러지는지 확인하라.
+
+</div>
+
+??? success "풀이"
+    **슬러츠키 정리.** $Z_n\xrightarrow{d}Z$이고 $W_n\xrightarrow{p}c$($c$는 상수)이면
+
+    $$
+    Z_n + W_n \xrightarrow{d} Z+c,\qquad Z_nW_n\xrightarrow{d}cZ,\qquad
+    \frac{Z_n}{W_n}\xrightarrow{d}\frac{Z}{c}\;(c\ne0)
+    $$
+
+    **적용.** $Z_n=\sqrt n(\bar X_n-\mu)/\sigma\xrightarrow{d}N(0,1)$이고, 큰수의 법칙으로 $s_n/\sigma\xrightarrow{p}1$이다. 따라서
+
+    $$
+    T_n=\frac{\sqrt n(\bar X_n-\mu)}{s_n}=Z_n\cdot\frac{\sigma}{s_n}\xrightarrow{d}N(0,1)
+    $$
+
+    **모르는 $\sigma$를 추정값으로 바꿔도 극한분포가 그대로다.** 이것이 없으면 실무에서 중심극한정리를 쓸 수 없다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    print("자료 ~ Exp(1)  (mu = 1, sigma = 1)")
+    print(f"{'n':>6}{'sigma 사용 sd':>16}{'s 사용 sd':>14}"
+          f"{'|T|>1.96 비율':>16}{'|T|>t 분위수':>15}")
+    for n in (5, 10, 30, 100, 1000):
+        X = rng.exponential(1.0, (200_000, n))
+        m, s = X.mean(1), X.std(1, ddof=1)
+        Z = np.sqrt(n) * (m - 1) / 1.0
+        T = np.sqrt(n) * (m - 1) / s
+        tq = stats.t.ppf(0.975, n - 1)
+        print(f"{n:>6}{Z.std():>16.4f}{T.std():>14.4f}"
+              f"{np.mean(np.abs(T) > 1.96):>16.4f}{np.mean(np.abs(T) > tq):>15.4f}")
+    print("  (마지막 두 열의 목표는 0.05)")
+    ```
+
+    출력:
+
+    ```
+    자료 ~ Exp(1)  (mu = 1, sigma = 1)
+         n     sigma 사용 sd       s 사용 sd     |T|>1.96 비율      |T|>t 분위수
+         5          0.9989        2.3325          0.1882         0.1170
+        10          0.9974        1.4935          0.1305         0.0990
+        30          1.0015        1.1474          0.0824         0.0729
+       100          1.0021        1.0459          0.0608         0.0582
+      1000          1.0005        1.0046          0.0512         0.0510
+      (마지막 두 열의 목표는 0.05)
+    ```
+
+    **극한에서는 정확히 성립한다.** $n=1000$에서 $s$를 쓴 표준편차가 $1.0046$, 기각률이 $0.0512$로 목표에 닿는다.
+
+    **그러나 소표본의 대가가 크다.**
+
+    | $n$ | $s$ 사용 시 sd | 실제 제1종 오류 |
+    |---|---|---|
+    | $5$ | $2.33$ | $0.188$ |
+    | $10$ | $1.49$ | $0.131$ |
+    | $30$ | $1.15$ | $0.082$ |
+    | $100$ | $1.05$ | $0.061$ |
+
+    $n=5$에서 $5\%$ 검정이 실제로는 $19\%$나 기각한다. **$\sigma$를 알 때는 $0.999$로 완벽했는데** $s$로 바꾸는 순간 무너진다.
+
+    **왜 이렇게 나쁜가.** $s_n$이 $\sigma$로 수렴하긴 하지만 소표본에서 크게 흔들리고, **$\bar X_n$과 상관되어 있다**(지수분포에서는 우연히 큰 관측이 평균과 $s$를 함께 올린다). 슬러츠키는 극한만 보장할 뿐 유한표본을 말해 주지 않는다.
+
+    **$t$ 분위수를 써도 절반만 낫는다.** $n=5$에서 $0.188\to0.117$로 개선되지만 여전히 $5\%$의 두 배가 넘는다. **$t$ 분포는 모집단이 정규일 때만 정확**하기 때문이다(5장). 여기서는 지수분포라 정당화되지 않는다.
+
+    **교훈.** 슬러츠키 정리는 "$n$이 크면 $\sigma$ 대신 $s$를 써도 된다"를 보장하는 **점근** 결과다. "$n$이 얼마나 커야 하는가"는 답하지 않으며, 그 답은 모집단의 치우침에 달려 있다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff med" title="중간"></span>
+$\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산이 $\sigma^2$로 수렴한다**고 말할 수 있는가? **분포수렴이 적률수렴을 함의하지 않음**을 보여라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    print("반례:  P(X_n = 0) = 1 - 1/n,  P(X_n = n) = 1/n")
+    print(f"{'n':>7}{'P(X_n=0)':>12}{'E[X_n]':>10}{'E[X_n^2]':>12}")
+    for n in (10, 100, 1000, 10_000):
+        print(f"{n:>7}{1 - 1 / n:>12.4f}{n * (1 / n):>10.2f}{n * n * (1 / n):>12.1f}")
+    print("  X_n -> 0 (분포수렴)  그런데 E[X_n] = 1 이고 E[X_n^2] -> 무한\n")
+
+    print("통계적 사례: Exp 비율의 최대가능도추정량 1/Xbar  (참값 1)")
+    print(f"{'n':>6}{'점근 sd = 1/sqrt(n)':>22}{'실제 sd':>12}{'실제 평균':>12}")
+    for n in (3, 5, 10, 30, 100):
+        r = 1 / rng.exponential(1.0, (400_000, n)).mean(1)
+        print(f"{n:>6}{1 / np.sqrt(n):>22.4f}{r.std():>12.4f}{r.mean():>12.4f}")
+    ```
+
+    출력:
+
+    ```
+    반례:  P(X_n = 0) = 1 - 1/n,  P(X_n = n) = 1/n
+          n    P(X_n=0)    E[X_n]    E[X_n^2]
+         10      0.9000      1.00        10.0
+        100      0.9900      1.00       100.0
+       1000      0.9990      1.00      1000.0
+      10000      0.9999      1.00     10000.0
+      X_n -> 0 (분포수렴)  그런데 E[X_n] = 1 이고 E[X_n^2] -> 무한
+
+    통계적 사례: Exp 비율의 최대가능도추정량 1/Xbar  (참값 1)
+         n     점근 sd = 1/sqrt(n)       실제 sd       실제 평균
+         3                0.5774      1.4360      1.5000
+         5                0.4472      0.7238      1.2505
+        10                0.3162      0.3937      1.1114
+        30                0.1826      0.1955      1.0346
+       100                0.1000      0.1019      1.0100
+    ```
+
+    **첫 반례가 구조를 보여준다.** $X_n$은 확률 $1-1/n$로 $0$이므로 분포가 $0$에 집중되어 $X_n\xrightarrow{d}0$이다. 그런데 확률 $1/n$로 $n$이라는 큰 값을 갖고, 그 곱이 정확히 $1$로 유지된다. **극한분포가 못 보는 곳에 질량이 조금 남아 적률을 전부 가져간다.**
+
+    **둘째는 실제 추정 문제다.** $\hat\lambda=1/\bar X_n$은 지수분포 비율의 최대가능도추정량이고 $\sqrt n(\hat\lambda-1)\xrightarrow{d}N(0,1)$이다. 그런데 정확한 값은
+
+    $$
+    \mathbb{E}[\hat\lambda]=\frac{n}{n-1},\qquad
+    \operatorname{Var}(\hat\lambda)=\frac{n^2}{(n-1)^2(n-2)}
+    $$
+
+    이다. **$n\le2$이면 분산이 무한대**인데도 점근분포는 얌전한 정규분포다.
+
+    | $n$ | 점근 sd | 실제 sd | 실제 평균 |
+    |---|---|---|---|
+    | $3$ | $0.577$ | $1.436$ | $1.500$ |
+    | $10$ | $0.316$ | $0.394$ | $1.111$ |
+    | $100$ | $0.100$ | $0.102$ | $1.010$ |
+
+    $n=3$에서 실제 표준편차가 점근값의 $2.5$배다. $\bar X_n$이 $0$에 가까울 때 $1/\bar X_n$이 폭발하는데, **그 사건의 확률은 $0$으로 가지만 크기가 그보다 빨리 커진다.**
+
+    !!! warning "점근분산 ≠ 분산의 극한"
+        $\sqrt n(\hat\theta-\theta)\xrightarrow{d}N(0,v)$에서 $v$를 **점근분산**이라 부르지만, 이것이 $\lim n\operatorname{Var}(\hat\theta)$라는 뜻은 아니다. 후자는 존재하지 않을 수도 있다.
+
+    **언제 적률도 수렴하는가.** **균등적분가능성**이 추가로 필요하다. 실용적 충분조건은 어떤 $\delta>0$에 대해 $\sup_n\mathbb{E}|X_n|^{2+\delta}<\infty$이다. 위 반례들은 정확히 이것을 위반한다.
+
+    **실무적 함의.** 점근 표준오차로 만든 신뢰구간은 소표본에서 **실제 변동성을 과소평가할 수 있다.** 비($1/\bar X$), 로그, 역수 같은 비선형 변환이 개입하면 특히 그렇다. 부트스트랩(17장)이 유용한 이유 중 하나가 이것으로, 부트스트랩은 점근 공식이 아니라 **유한표본 분포 자체**를 흉내 낸다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff hard" title="어려움"></span>
+**린데베르그 중심극한정리**는 동일분포가 아니어도 독립이기만 하면 되는 확률변수를 허용한다. **린데베르그 조건**을 진술하고 언제 성립하는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    $X_1, X_2, \ldots$가 독립이고(동일분포일 필요는 없다) $\mathbb{E}[X_i] = 0$, $\mathrm{Var}(X_i) = \sigma_i^2$, $s_n^2 = \sum_{i=1}^n \sigma_i^2$이라 하자. **린데베르그 조건**은 다음과 같다.
+
+    $$
+    \forall\, \varepsilon > 0: \quad \frac{1}{s_n^2}\sum_{i=1}^n \mathbb{E}\!\left[X_i^2 \mathbf 1(|X_i| > \varepsilon s_n)\right] \to 0
+    $$
+
+    직관: 개별 $X_i$의 "꼬리"(즉 $|X_i|$가 $\varepsilon s_n$을 넘는 부분)가 기여하는 총 분산이 무시할 만해진다는 것이다. 어느 한 $X_i$도 분산을 지배하지 않는다.
+
+    **성립하는 경우:** (1) 분산이 유한한 i.i.d.인 경우 자명하게 성립한다. (2) $X_i$가 균등하게 유계이고 $s_n \to \infty$인 경우. (3) 최대 분산이 $\max_i \sigma_i^2 / s_n^2 \to 0$을 만족하는 임의의 열.
+
+    **실패하는 경우:** 한 항이 총 분산에서 사라지지 않는 몫을 차지하면(예: 가우시안 $Y$에 대해 $X_n = n \cdot Y$여서 $X_n$이 지배하는 경우) 극한이 가우시안이 아니라 안정분포가 된다.
+
+    린데베르그 중심극한정리는 i.i.d. 중심극한정리를 포괄하며, 독립이지만 이질적인 기여들의 합에 적용된다. 동일분포가 아닌 오차를 갖는 회귀에 핵심적이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 15.** <span class="diff hard" title="어려움"></span>
+**다변량 중심극한정리.** $\mathbf X_i \in \mathbb{R}^d$가 평균 $\boldsymbol\mu$, 공분산 $\boldsymbol\Sigma$인 i.i.d.라 하자. 다변량 중심극한정리를 진술하고, 그것이 다변량 정규분포에 근거한 신뢰타원체를 왜 정당화하는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    **다변량 중심극한정리:**
+
+    $$
+    \sqrt n (\bar{\mathbf X}_n - \boldsymbol\mu) \xrightarrow{d} N_d(\mathbf 0, \boldsymbol\Sigma)
+    $$
+
+    이며 수렴은 $\mathbb{R}^d$에서의 분포수렴(모든 성분의 결합분포)이다.
+
+    증명 개요: **크라메르–월드 장치**를 쓴다. 다변량 수렴은 모든 선형 사영이 (일변량으로) 수렴할 때에 한해 성립한다. 임의의 $\mathbf a \in \mathbb{R}^d$에 대해 스칼라 사영에 일변량 중심극한정리를 적용하면 $\sqrt n \, \mathbf a^T(\bar{\mathbf X}_n - \boldsymbol\mu) \xrightarrow{d} N(0, \mathbf a^T \boldsymbol\Sigma \mathbf a)$이고, 이로부터 $N_d(\mathbf 0, \boldsymbol\Sigma)$로의 다변량 수렴이 따라온다.
+
+    **신뢰타원체의 정당화:** $\bar{\mathbf X}_n \approx N_d(\boldsymbol\mu, \boldsymbol\Sigma/n)$이면 $n(\bar{\mathbf X}_n - \boldsymbol\mu)^T \boldsymbol\Sigma^{-1}(\bar{\mathbf X}_n - \boldsymbol\mu) \approx \chi^2_d$이다. 집합 $\{\boldsymbol\mu : n(\bar{\mathbf X}_n - \boldsymbol\mu)^T \boldsymbol\Sigma^{-1}(\bar{\mathbf X}_n - \boldsymbol\mu) \le \chi^2_{d, 0.95}\}$은 참 평균을 95%의 점근 확률로 덮는 타원체다. 호텔링의 $T^2$ 검정과 다변량 신뢰영역이 모두 이 위에 서 있다.
+
+<div class="drillbox" markdown>
+
+**연습문제 16.** <span class="diff hard" title="어려움"></span>
+중심극한정리는 **유한한 분산**을 요구한다. (a) 코시분포에 적용되지 않는 이유는 무엇이며, $n$이 커질 때 i.i.d. 코시 확률변수의 표본평균은 어떻게 되는가? (b) 일반적으로 분산이 무한할 때 무슨 일이 벌어지는지 **안정분포**와 **알파-안정 중심극한정리**로 논하라.
+
+</div>
+
+??? success "풀이"
+    **(a) 코시분포**
+
+    코시분포의 밀도는 $f(x) = \frac{1}{\pi(1 + x^2)}$이다. 그 평균이 존재하지 않고(적분 $\int x f(x)\, dx$가 발산한다) 따라서 분산도 존재하지 않는다.
+
+    중심극한정리는 유한한 평균과 분산을 요구하므로 적용되지 않는다. 실제로 i.i.d. 코시 $X_1, \ldots, X_n$에서 표본평균 $\bar{X}$는 관측값 하나와 같은 코시분포를 갖는다. 평균을 내도 퍼짐이 전혀 줄지 않는다. 코시분포가 지수 $\alpha = 1$인 안정분포이기 때문이다.
+
+    **(b) 안정분포와 알파-안정 중심극한정리**
+
+    **유한한 분산이 필수인 이유:** 표준화 $(S_n - n\mu)/\sqrt{n\sigma^2}$이 암묵적으로 $\sigma^2 < \infty$를 가정한다. 분산이 무한하면 이 표준화가 정의되지 않는다. 개별 기여의 "무시가능성"을 확립할 수 없으므로 린데베르그–펠러 틀이 무너진다.
+
+    **꼬리가 두꺼운 경우의 행동:** $\alpha < 2$인 **안정분포** $S_\alpha(\sigma, \beta)$의 흡인 영역에 있는 분포는 거듭제곱 법칙 꼬리 $P(|X| > x) \sim x^{-\alpha}$를 갖는다. $\alpha \le 2$이면 분산이 무한하고 $\alpha \le 1$이면 평균이 무한하다.
+
+    **알파-안정 중심극한정리:** 꼬리 지수가 $0 < \alpha \le 2$인 i.i.d. $X_i$에 대해 정규화된 합
+
+    $$
+    \frac{S_n - n a_n}{n^{1/\alpha}} \xrightarrow{d} S_\alpha(\sigma, \beta)
+    $$
+
+    이 $\alpha$-안정분포로 수렴한다. 정규화가 $\sqrt n$이 아니라 $n^{1/\alpha}$임에 주목하라. $\alpha = 2$이면 가우시안 중심극한정리가 복원되고, $\alpha = 1$이면 코시 극한을 얻으며, $\alpha < 1$이면 평균조차 수렴하지 않는다.
+
+    **실무적 함의:** 금융 수익률은 흔히 $\alpha \approx 1.5$–$1.8$이다(꼬리는 두껍지만 분산이 유한하므로 가우시안 중심극한정리가 느리게나마 적용된다). 네트워크 패킷 크기, 파일 크기, 대기 지연은 흔히 $\alpha < 2$여서(진짜로 꼬리가 두꺼워서) 가우시안 기반 신뢰구간이 타당하지 않다. 알맞은 도구는 두꺼운 꼬리를 고려하는 것들이다. 조심스러운 부트스트랩, 분위수 추정량, 알파-안정 모형 등이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 17.** <span class="diff hard" title="어려움"></span>
+**중심극한정리는 최댓값에 적용되지 않는다.** i.i.d. 표본의 최댓값 $M_n = \max_i X_i$이 가우시안 극한을 갖지 않음을 보여라. 그 극한분포는 무엇인가?
+
+</div>
+
+??? success "풀이"
+    $F_{M_n}(x) = F(x)^n$이다. $n \to \infty$이면 이것이 계단함수로 퇴화하며 가우시안이 아니다.
+
+    적절히 척도를 다시 맞추면 퇴화하지 않는 극한을 얻는다. 수열 $a_n > 0$과 $b_n$에 대해
+
+    $$
+    P\!\left(\frac{M_n - b_n}{a_n} \le x\right) \to G(x)
+    $$
+
+    이다. **피셔–티펫–그네덴코 정리**에 의해 $G$는 세 가지 극단값 분포 중 하나여야 한다.
+
+    - 꼬리가 얇은 $F$(정규, 지수)에 대해 **검벨**.
+    - 꼬리가 두꺼운 $F$(파레토, $t$)에 대해 **프레셰**.
+    - 받침이 유계인 $F$(균등)에 대해 **와이불**.
+
+    **실용적 쓰임:** 극단값 이론은 최대 하천 수위(수문학), 최대 금융 손실(위험관리), 최소 수명 신뢰도 문제를 지배한다. 가우시안 중심극한정리는 합을 다루고 극단값 이론은 최댓값을 다룬다. 같은 자료의 서로 다른 통계량에 대한 별개의 점근 틀이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 18.** <span class="diff hard" title="어려움"></span>
 중심극한정리는 **표본평균**에만 적용되는가? **표본분위수의 중심극한정리**를 진술하고 확인하라.
 
 </div>
@@ -740,13 +1290,14 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 중심극한정리가 통계학의 척추인 이유는 그 **보편성**에 있다.
 
 - **정리 1**은 모집단의 모양과 무관하게 표준화된 표본평균이 $N(0,1)$로 감을 말한다. 가정은 i.i.d.와 유한한 평균·분산뿐이다.
-- **정리 2**는 큰수의 법칙과의 관계를 밝혔다. 큰수의 법칙이 편차가 0으로 간다는 것만 말하는 데 비해, 중심극한정리는 그 **속도**를 말한다. $\sqrt n$을 곱했는데도 0으로 가지 않는다는 것이 곧 속도가 $1/\sqrt n$이라는 뜻이고, 덤으로 남는 모양이 정규분포다. 정밀도가 $1/\sqrt n$로 좋아진다는 실무 법칙이 여기서 나온다.
-- **정리 3**은 유한한 $n$에서 언제 써도 되는지를 정리했다. 다만 $n \ge 30$은 정리가 아니라 관례다.
+- **정리 2**는 큰수의 법칙과의 관계를 밝혔다. 큰수의 법칙이 편차가 0으로 간다는 것만 말하는 데 비해, 중심극한정리는 그 **속도**를 말한다. $\sqrt n$을 곱했는데도 0으로 가지 않는다는 것이 곧 속도가 $1/\sqrt n$이라는 뜻이고, 덤으로 남는 모양이 정규분포다.
+- **정리 3**은 표본분포의 두 예측을 갈라놓았다. **폭의 수축은 등식**이라 $n$이 작아도 정확하고, **모양의 수렴은 근사**라 $n$이 커야 한다. 정밀도가 $1/\sqrt n$로 좋아진다는 실무 법칙은 앞쪽에서 나오고, 모집단을 몰라도 된다는 자유는 뒤쪽에서 나온다.
+- **정리 4**는 유한한 $n$에서 언제 써도 되는지를 정리했다. 다만 $n \ge 30$은 정리가 아니라 관례다.
 
 이 정리 덕분에 우리는 모집단 분포를 몰라도 신뢰구간을 만들고 가설을 검정할 수 있다. 8장과 9장에서 쓰는 $1.96$이라는 수가 정규분포의 분위수인 것도, 5장의 표본분포가 정규분포 중심으로 전개되는 것도 모두 여기서 비롯한다.
 
 다만 두 가지 물음이 남는다.
 
-**첫째, 근사가 얼마나 정확한가?** "$n$이 크면 정규분포에 가깝다"는 말은 오차의 크기를 말해 주지 않는다. 다음 절의 **베리–에센 정리**가 그 오차에 명시적인 상한을 준다. $n \ge 30$이라는 관례가 어디서 오는지도 거기서 드러난다.
+**첫째, 근사가 얼마나 정확한가?** "$n$이 크면 정규분포에 가깝다"는 말은 오차의 크기를 말해 주지 않는다. 다음 절의 **베리–에센 정리**가 그 오차에 명시적인 상한을 준다. 세 모집단 가운데 감마분포가 가장 늦게 도착한 이유도, $n \ge 30$이라는 관례가 어디서 오는지도 거기서 드러난다.
 
-**둘째, 가정이 깨지면 어떻게 되는가?** 분산이 무한한 분포에서는 중심극한정리가 성립하지 않는다. 이 절 뒤의 **도박사의 역설** 페이지와 5장의 금융위기 사례가 그 실패를 다룬다.
+**둘째, 가정이 깨지면 어떻게 되는가?** 분산이 무한한 분포에서는 중심극한정리가 성립하지 않는다. 이 절 뒤의 **도박사의 역설** 페이지와 5장의 금융위기 사례가 그 실패를 다룬다. 정리의 가정이 장식이 아니라는 사실을 그 사례가 분명히 한다.
