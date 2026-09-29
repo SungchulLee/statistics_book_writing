@@ -141,7 +141,8 @@ nav:
             - 이산확률변수: ch03/rv/discrete.md
             - 연속확률변수: ch03/rv/continuous.md
             - '확률질량함수, 확률밀도함수, 누적분포함수': ch03/rv/pmf_pdf_cdf.md
-            - 결합분포와 주변분포: ch03/rv/joint_marginal.md
+            - 결합분포와 주변분포: ch03/rv/joint.md
+            - 조건부분포: ch03/rv/conditional_dist.md
         - 3.4 기댓값과 적률:
             - 기댓값과 선형성: ch03/rv/expectation.md
             - 분산과 공분산: ch03/rv/variance_covariance.md
@@ -169,8 +170,6 @@ nav:
             - t 분포 t(d): ch04/continuous_distributions/student_t.md
             - F 분포 F(d₁, d₂): ch04/continuous_distributions/f_distribution.md
         - 4.3 다변량 구조:
-            - 결합분포: ch04/joint/joint.md
-            - 주변분포와 조건부분포: ch04/joint/marginal_conditional.md
             - 공분산과 상관계수: ch04/joint/covariance_correlation.md
             - 독립성과 무상관성의 차이: ch04/joint/independence_vs_zero_corr.md
             - 이변량 정규분포: ch04/joint/bivariate_normal.md

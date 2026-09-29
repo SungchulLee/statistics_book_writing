@@ -12,7 +12,7 @@ r"""3.3절 — 결합분포와 주변분포, 그리고 확률변수의 독립.
 
 만드는 파일:
 
-  ch03/rv/img/joint_marginal_coins.png
+  ch03/rv/img/joint_coins_lattice.png
 
 실행:  python3 scripts/make_ch03_joint_marginal.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -146,7 +146,7 @@ def main():
              "무게의 곱과 같고(왼쪽, 초록), 아니면 어긋난다(오른쪽, 빨강).",
              ha="center", fontsize=11)
 
-    path = OUT + "joint_marginal_coins.png"
+    path = OUT + "joint_coins_lattice.png"
     fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print(f"saved {path}")
