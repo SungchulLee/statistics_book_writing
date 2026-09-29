@@ -141,6 +141,7 @@ nav:
             - 이산확률변수: ch03/rv/discrete.md
             - 연속확률변수: ch03/rv/continuous.md
             - '확률질량함수, 확률밀도함수, 누적분포함수': ch03/rv/pmf_pdf_cdf.md
+            - 결합분포와 주변분포: ch03/rv/joint_marginal.md
         - 3.4 기댓값과 적률:
             - 기댓값과 선형성: ch03/rv/expectation.md
             - 분산과 공분산: ch03/rv/variance_covariance.md
