@@ -287,30 +287,71 @@ $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-$\hat{\beta}_0$과 $\hat{\beta}_1$이 상관되어 있음을 보이고 $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\bar{x}\,\sigma^2/S_{xx}$을 유도하라.
+연습문제 2를 절편에 대해 되풀이하라. $d_i = \dfrac{1}{n} - \bar{x}\,c_i$로 두면 $\hat{\beta}_0 = \sum_{i=1}^n d_i Y_i$임을 보이고, 이 가중치로부터 정리 2의 $\operatorname{Var}(\hat{\beta}_0) = \sigma^2\!\left(\dfrac{1}{n} + \dfrac{\bar{x}^2}{S_{xx}}\right)$을 유도하라.
 
 </div>
 
 ??? success "풀이"
-    $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{x}$이므로
+    $\bar{Y} = \sum_i \frac{1}{n}Y_i$이고 $\hat{\beta}_1 = \sum_i c_i Y_i$이므로
 
     $$
-    \operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = \operatorname{Cov}(\bar{Y} - \hat{\beta}_1 \bar{x},\; \hat{\beta}_1) = \operatorname{Cov}(\bar{Y}, \hat{\beta}_1) - \bar{x}\operatorname{Var}(\hat{\beta}_1)
+    \hat{\beta}_0 = \bar{Y} - \hat{\beta}_1\bar{x}
+    = \sum_{i=1}^n \frac{1}{n}Y_i - \bar{x}\sum_{i=1}^n c_i Y_i
+    = \sum_{i=1}^n \underbrace{\left(\frac{1}{n} - \bar{x}\,c_i\right)}_{d_i} Y_i
     $$
 
-    을 계산한다. 이제 $\bar{Y} = \frac{1}{n}\sum Y_i$이고 $c_i = (x_i - \bar{x})/S_{xx}$에 대해 $\hat{\beta}_1 = \sum c_i Y_i$이므로
+    이다. 절편 추정량도 반응의 선형함수이며, 독립 정규확률변수의 선형결합이므로 정규분포를 따른다.
+
+    가중치 $d_i$는 두 항등식을 만족한다. $\sum_i c_i = 0$에서 $\sum_i d_i = 1$이고, $\sum_i c_i x_i = 1$에서 $\sum_i d_i x_i = \bar{x} - \bar{x} = 0$이다. 이 둘이 곧 불편성이다.
 
     $$
-    \operatorname{Cov}(\bar{Y}, \hat{\beta}_1) = \frac{1}{n}\sum_{i=1}^n c_i \operatorname{Var}(Y_i) = \frac{\sigma^2}{n} \sum_{i=1}^n \frac{x_i - \bar{x}}{S_{xx}} = 0
+    E[\hat{\beta}_0] = \sum_i d_i(\beta_0 + \beta_1 x_i) = \beta_0\sum_i d_i + \beta_1 \sum_i d_i x_i = \beta_0
     $$
 
-    이다($\sum(x_i - \bar{x}) = 0$이므로). 따라서
+    분산은 $\sum_i d_i^2$만 계산하면 된다.
 
     $$
-    \operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = 0 - \bar{x} \cdot \frac{\sigma^2}{S_{xx}} = -\frac{\bar{x}\,\sigma^2}{S_{xx}}
+    \sum_{i=1}^n d_i^2
+    = \sum_{i=1}^n \left(\frac{1}{n^2} - \frac{2\bar{x}c_i}{n} + \bar{x}^2 c_i^2\right)
+    = \frac{1}{n} - \frac{2\bar{x}}{n}\underbrace{\sum_i c_i}_{=\,0} + \bar{x}^2 \underbrace{\sum_i c_i^2}_{=\,1/S_{xx}}
+    = \frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}
     $$
 
-    이다. $\bar{x} > 0$일 때 두 추정량은 음의 상관을 갖는다. $\square$
+    이므로 $\operatorname{Var}(\hat{\beta}_0) = \sigma^2\sum_i d_i^2 = \sigma^2\!\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right)$이다. 교차항이 $\sum_i c_i = 0$ 때문에 사라진 것이 정리 2의 증명에서 $\operatorname{Cov}(\bar{Y}, \hat{\beta}_1) = 0$을 쓴 것과 같은 사실임에 주의하라.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(4)
+    x = np.arange(1., 9.)
+    n, b0, b1, sig = len(x), 2., 3., 1.5
+    Sxx = ((x - x.mean()) ** 2).sum()
+
+    c = (x - x.mean()) / Sxx
+    d = 1. / n - x.mean() * c
+    print("sum d_i = 1 인가    :", np.isclose(d.sum(), 1.0))
+    print("sum d_i x_i = 0 인가:", np.isclose((d * x).sum(), 0.0))
+
+    X = np.column_stack([np.ones(n), x])
+    Y = b0 + b1 * x + rng.normal(0, sig, size=(200_000, n))
+    beta = Y @ X @ np.linalg.inv(X.T @ X)
+
+    print("가중치 d 로 계산한 값이 최소제곱해와 같은가:", np.allclose(Y @ d, beta[:, 0]))
+    print(f"E[b0]    모의 {beta[:, 0].mean():.4f}     이론 {b0:.4f}")
+    print(f"Var(b0)  모의 {beta[:, 0].var():.6f}   이론 {sig**2 * (1/n + x.mean()**2/Sxx):.6f}")
+    ```
+
+    출력:
+
+    ```
+    sum d_i = 1 인가    : True
+    sum d_i x_i = 0 인가: True
+    가중치 d 로 계산한 값이 최소제곱해와 같은가: True
+    E[b0]    모의 2.0030     이론 2.0000
+    Var(b0)  모의 1.356516   이론 1.366071
+    ```
+
+    $\bar{x} = 4.5$, $S_{xx} = 42$인 이 설계에서 절편의 분산은 $1.366$인데 기울기의 분산은 $0.054$에 불과하다. $\bar{x}^2/S_{xx} = 0.482$가 $1/n = 0.125$를 압도하기 때문이다. **$x$가 원점에서 멀면 절편은 자료로부터 멀리 외삽한 값이 되고, 그 대가가 이 항에 그대로 나타난다.** $\square$
 
 <div class="drillbox" markdown>
 

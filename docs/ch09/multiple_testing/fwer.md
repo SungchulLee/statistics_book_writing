@@ -131,6 +131,8 @@ FWER 통제는 다음 경우에 가장 적절하다:
 
 검정 수가 아주 많고 거짓 양성을 어느 정도 감수할 수 있으면 [거짓발견율(FDR)](fdr.md)이 통계적 검정력을 더 남기는 덜 보수적인 틀을 제공한다. FWER을 통제하는 구체적인 절차는 [Bonferroni와 Holm 보정](bonferroni_holm.md)을 보라.
 
+한 가지 덧붙이면, 이 절의 합집합 한계는 **가족의 종속 구조를 모를 때** 쓰는 도구다. 구조를 아는 가족이라면 같은 FWER을 더 정확하게 통제할 수 있다. 분산분석 뒤의 [사후비교](../../ch11/post_hoc/bonferroni_scheffe.md)가 그런 경우로, 거기서는 모든 비교가 하나의 합동 $\text{MS}_W$와 하나의 오차 자유도를 공유하므로 상관이 알려져 있고, [Tukey의 HSD](../../ch11/post_hoc/tukey.md)가 그 구조를 그대로 써서 정확한 임계값을 얻는다.
+
 ## 연습문제
 
 <div class="drillbox" markdown>

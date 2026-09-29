@@ -32,24 +32,26 @@ import math
 from scipy.stats import t as tdist, norm
 
 def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
-                         alt="two-sided", alpha=0.05):
+                         alternative="two-sided", alpha=0.05):
     """known_sigma를 주면 z-검정, 아니면 표본 sd로 t-검정.
 
     원자료가 아니라 요약통계량(xbar, n, sd)만 받는다.
     검정에 필요한 것이 그것뿐이기 때문이다.
+    alternative는 scipy의 관례를 그대로 따른다.
     돌려주는 값은 (통계량, p-값, 기각 여부, 이름)이다.
     """
     if known_sigma is not None:
         se = known_sigma / math.sqrt(n)
         z = (xbar - mu0) / se
-        if alt == "two-sided":
+        if alternative == "two-sided":
             # 작은 쪽 꼬리를 골라 두 배 한다. z의 부호를 따지지 않아도 되고
             # 어느 쪽으로 치우쳐도 같은 식이 쓰인다.
-            p = 2 * min(norm.cdf(z), 1 - norm.cdf(z))
-        elif alt == "less":
+            p = 2 * min(norm.cdf(z), norm.sf(z))
+        elif alternative == "less":
             p = norm.cdf(z)
         else:
-            p = 1 - norm.cdf(z)
+            # 오른쪽 꼬리는 sf로 계산한다. 1 - cdf는 꼬리에서 정밀도를 잃는다.
+            p = norm.sf(z)
         return z, p, (p < alpha), "z-test"
 
     if sd is None:
@@ -57,12 +59,12 @@ def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
     se = sd / math.sqrt(n)
     df = n - 1               # sd를 자료에서 추정했으므로 자유도 하나를 잃는다
     t = (xbar - mu0) / se
-    if alt == "two-sided":
-        p = 2 * min(tdist.cdf(t, df), 1 - tdist.cdf(t, df))
-    elif alt == "less":
+    if alternative == "two-sided":
+        p = 2 * min(tdist.cdf(t, df), tdist.sf(t, df))
+    elif alternative == "less":
         p = tdist.cdf(t, df)
     else:
-        p = 1 - tdist.cdf(t, df)
+        p = tdist.sf(t, df)
     return t, p, (p < alpha), f"t-test (df={df})"
 ```
 
@@ -74,13 +76,13 @@ def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
 
 ```python
 stat, p, reject, label = test_mean_one_sample(
-    xbar=3.2, n=25, mu0=3.0, sd=1.1, alt="greater"
+    xbar=3.2, n=25, mu0=3.0, sd=1.1, alternative="greater"
 )
 print(label, "stat:", stat, "p:", p, "reject:", reject)
 
 # 같은 자료를 sigma=1.1을 안다고 가정하고 z-검정으로도 해 본다.
 stat_z, p_z, reject_z, label_z = test_mean_one_sample(
-    xbar=3.2, n=25, mu0=3.0, known_sigma=1.1, alt="greater"
+    xbar=3.2, n=25, mu0=3.0, known_sigma=1.1, alternative="greater"
 )
 print(label_z, "stat:", stat_z, "p:", p_z, "reject:", reject_z)
 ```
@@ -88,8 +90,8 @@ print(label_z, "stat:", stat_z, "p:", p_z, "reject:", reject_z)
 출력:
 
 ```
-t-test (df=24) stat: 0.9090909090909097 p: 0.18617076763866547 reject: False
-z-test stat: 0.9090909090909097 p: 0.18165107044344886 reject: False
+t-test (df=24) stat: 0.9090909090909097 p: 0.18617076763866552 reject: False
+z-test stat: 0.9090909090909097 p: 0.1816510704434488 reject: False
 ```
 
 통계량은 같고 p-값만 다르다. 산포로 넣은 숫자가 1.1로 같으니 분자와 분모가 같을 수밖에 없고, 달라지는 것은 그 통계량을 어느 분포에 견주느냐뿐이다. $t_{24}$가 정규분포보다 꼬리가 두꺼워 같은 통계량에 더 큰 p-값을 준다. $\sigma$를 모른다는 사실의 값이 여기서는 0.0045만큼이다.
@@ -574,10 +576,10 @@ $$
 
 평균 검정을 **코드로 구현**하며 실무의 세부를 확인했다.
 
-- **$z$ 와 $t$ 의 분기는 한 줄이다.** $\sigma$ 가 주어졌는지로 갈리며, 나머지 계산은 동일하다. 함수 하나에 `sigma=None` 기본값을 두는 것이 깔끔하다.
-- **단측·양측을 인자로 받는다.** `alternative` 를 `"two-sided"`, `"greater"`, `"less"` 로 두는 것이 `scipy` 의 관례이며, 이를 따르면 혼동이 줄어든다.
-- **원자료와 요약통계량 둘 다 받도록 만든다.** $\bar x$, $s$, $n$ 만 있으면 검정이 가능하므로, 논문의 보고값만으로 재현할 수 있다.
-- **`scipy.stats.ttest_1samp` 와 대조해 검산한다.** 직접 구현한 값이 라이브러리와 맞는지 확인하는 것이 이 절의 목적이며, 맞지 않으면 대개 자유도나 단측 처리에서 어긋난다.
-- **작은 $p$ 값은 `sf` 로 계산한다.** `1 - cdf` 는 꼬리에서 정밀도를 잃는다(4장).
+- **$z$ 와 $t$ 의 분기는 한 줄이다.** $\sigma$ 가 주어졌는지로 갈리며, 나머지 계산은 동일하다. 함수 하나에 `known_sigma=None` 기본값을 두고 그 값이 들어왔는지로 갈라 쓰면 깔끔하다.
+- **단측·양측을 인자로 받는다.** `alternative` 를 `"two-sided"`, `"greater"`, `"less"` 로 두는 것이 `scipy` 의 관례이며, 예제 1의 함수도 이를 따랐다.
+- **요약통계량만으로 검정이 된다.** $\bar x$, $s$, $n$ 이 전부이므로 원자료가 없어도 논문의 보고값만으로 재현할 수 있다. 거꾸로 `scipy.stats.ttest_1samp` 는 원자료를 요구하므로, 보고값만 있는 상황에서는 이렇게 직접 계산하는 함수가 필요하다.
+- **틀리는 자리는 자유도와 단측 처리다.** 예제 2에서 같은 통계량 $0.909$ 에 $t_{24}$ 는 $p = 0.186$, 정규는 $0.182$ 를 준다. 자유도를 잘못 쓰거나 단측을 양측으로 다루면 이 정도 차이로 결론이 뒤집힐 수 있다.
+- **작은 $p$ 값은 `sf` 로 계산한다.** `1 - cdf` 는 꼬리에서 정밀도를 잃는다(4장). 예제 1의 함수도 오른쪽 꼬리에 `norm.sf`, `tdist.sf` 를 쓴다.
 
 다음 절 **일표본 비율 검정**으로 넘어간다.

@@ -135,7 +135,7 @@ $$
 
 - **이차형식의 단순화.** 마할라노비스 거리 $(\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1}$이 대각이 되는 고유기저로 옮겨서 분석할 수 있다. 이것이 정규확률벡터의 이차형식이 카이제곱분포를 따름을 유도하는 근거다.
 
-- **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$인데, 재매개변수화가 $\mathbf{X}^T\mathbf{X}$의 닮음변환에 해당하기 때문이다.
+- **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$다. 다만 그 이유는 닮음이 아니다. 재매개변수화 $\mathbf{X} \mapsto \mathbf{X}\mathbf{C}$는 그람 행렬을 $\mathbf{C}^T\mathbf{X}^T\mathbf{X}\mathbf{C}$로 보내는 **합동변환**이며, $\mathbf{C}$가 직교행렬이 아니면 닮음변환이 아니라서 고윳값도 보존하지 않는다. $\operatorname{tr}(\mathbf{H})$가 보존되는 것은 열공간이 그대로여서 $\mathbf{H}$ 자체가 아예 바뀌지 않기 때문이다(연습문제 4).
 
 ## 연습문제
 
@@ -194,7 +194,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-닮음 개념을 이용해, 회귀모형을 재매개변수화해도(예: 예측변수를 중심화해도) $\operatorname{tr}(\mathbf{H})$나 $\mathbf{X}^T\mathbf{X}$의 고윳값이 바뀌지 않는 이유를 설명하라.
+회귀모형을 재매개변수화하면(예: 예측변수를 중심화하면) $\operatorname{tr}(\mathbf{H})$는 바뀌지 않는데 $\mathbf{X}^T\mathbf{X}$의 고윳값은 바뀔 수 있다. **닮음**과 **합동**의 차이로 이 비대칭을 설명하고 수치로 확인하라.
 
 </div>
 
@@ -205,7 +205,42 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
     \mathbf{H}' = \mathbf{X}\mathbf{C}(\mathbf{C}^T\mathbf{X}^T\mathbf{X}\mathbf{C})^{-1}\mathbf{C}^T\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
     $$
 
-    모자 행렬은 대각합만이 아니라 완전히 불변이다. 그람 행렬 $\mathbf{X}^T\mathbf{X}$와 $\mathbf{C}^T\mathbf{X}^T\mathbf{X}\mathbf{C}$는 합동변환으로 연결된다. ($\mathbf{C}$가 직교행렬이 아닌 한) 표준적인 닮음은 아니지만 핵심 성질을 공유한다. 계수가 같고 적합값이 동일하다. $\operatorname{tr}(\mathbf{H}) = p$의 불변성은 재매개변수화로 모수의 개수가 바뀌지 않는다는 사실을 반영한다.
+    모자 행렬은 대각합만이 아니라 **완전히** 불변이다. $\mathbf{X}$와 $\mathbf{X}\mathbf{C}$의 열공간이 같고, $\mathbf{H}$는 그 열공간으로의 직교사영이어서 기저를 어떻게 적든 같은 사영이기 때문이다. 따라서 $\operatorname{tr}(\mathbf{H}) = p$도 그대로이며, 이는 재매개변수화로 모수의 개수가 바뀌지 않는다는 사실을 반영한다.
+
+    그람 행렬은 사정이 다르다. $\mathbf{X}^T\mathbf{X}$는 $\mathbf{C}^T(\mathbf{X}^T\mathbf{X})\mathbf{C}$로 바뀌는데, 이는 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P}$ 꼴이 아니라 $\mathbf{C}^T\mathbf{A}\mathbf{C}$ 꼴, 곧 **합동변환**이다. $\mathbf{C}$가 직교행렬이면 $\mathbf{C}^T = \mathbf{C}^{-1}$이라 둘이 일치하지만, 일반적인 가역행렬에서는 서로 다른 관계다. **합동이 보존하는 것은 계수와, 실베스터의 관성 법칙에 따른 고윳값의 부호 분포뿐이고 고윳값 자체는 보존하지 않는다.**
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    n = 50
+    x = rng.normal(5, 2, n)
+
+    X = np.column_stack([np.ones(n), x])              # 원래 설계행렬
+    Xc = np.column_stack([np.ones(n), x - x.mean()])  # 중심화한 설계행렬
+    C = np.array([[1., -x.mean()], [0., 1.]])         # Xc = X C
+
+    print("Xc = X C 인가:", np.allclose(X @ C, Xc))
+    print("그람 고윳값  원래:", np.linalg.eigvalsh(X.T @ X).round(4))
+    print("그람 고윳값 중심화:", np.linalg.eigvalsh(Xc.T @ Xc).round(4))
+
+    H = X @ np.linalg.inv(X.T @ X) @ X.T
+    Hc = Xc @ np.linalg.inv(Xc.T @ Xc) @ Xc.T
+    print("H = H' 인가:", np.allclose(H, Hc))
+    print("tr(H), tr(H'):", round(np.trace(H), 6), round(np.trace(Hc), 6))
+    ```
+
+    출력:
+
+    ```
+    Xc = X C 인가: True
+    그람 고윳값  원래: [   5.2108 1593.1458]
+    그람 고윳값 중심화: [ 50.     166.0321]
+    H = H' 인가: True
+    tr(H), tr(H'): 2.0 2.0
+    ```
+
+    모자 행렬은 성분 하나까지 같은데 그람 행렬의 고윳값은 $\{5.21,\ 1593.15\}$에서 $\{50.00,\ 166.03\}$으로 전혀 다른 값이 된다. **중심화가 조건수를 $306$에서 $3.3$으로 줄여 놓았는데, 적합값과 자유도는 하나도 달라지지 않았다.** 다중공선성 진단에 쓰는 조건수가 중심화 여부에 이토록 민감한 이유가 여기에 있고, 그러면서도 그 진단이 적합 자체와 무관한 이유도 여기에 있다. $\square$
 
 <div class="drillbox" markdown>
 

@@ -184,7 +184,7 @@ $$
 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$일 때 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$인 선형회귀에서 모자 행렬 $\mathbf{H}$는 멱등이므로($\mathbf{H}^2 = \mathbf{H}$) 고윳값이 0 아니면 1이다. 대각합은
 
 $$
-\operatorname{tr}(\mathbf{H}) = \text{(number of eigenvalues equal to 1)} = \operatorname{rank}(\mathbf{X}) = p
+\operatorname{tr}(\mathbf{H}) = (\text{고윳값이 } 1 \text{인 것의 개수}) = \operatorname{rank}(\mathbf{X}) = p
 $$
 
 를 준다. 여기서 $p$는 추정된 모수의 개수다. 마찬가지로 $\operatorname{tr}(\mathbf{I} - \mathbf{H}) = n - p$가 잔차 자유도를 센다.

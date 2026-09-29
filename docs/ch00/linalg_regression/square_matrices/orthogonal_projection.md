@@ -190,13 +190,19 @@ $$
 \lVert\mathbf{y}\rVert^2 = \lVert\hat{\mathbf{y}}\rVert^2 + \lVert\mathbf{e}\rVert^2
 $$
 
-모형이 절편을 포함하고 평균을 기준으로 측정하면 이것이 분산분석 분해가 된다.
+이것은 **원점을 기준으로 한** 분해다. 모형이 절편을 포함하면 $\mathbf{1} \in \operatorname{col}(\mathbf{X})$이므로 $\mathbf{e} \perp \mathbf{1}$, 곧 $\sum_i e_i = 0$이고 $\hat{\mathbf{y}}$의 평균이 $\bar{y}$와 같다. 양변에서 $\mathbf{1}$ 위로의 사영 $\bar{y}\mathbf{1}$을 먼저 걷어내면 분산분석 분해가 나온다.
 
 $$
-\text{SST} = \text{SSR} + \text{SSE}
+\underbrace{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2}_{\text{SST}} = \underbrace{\lVert\hat{\mathbf{y}} - \bar{y}\mathbf{1}\rVert^2}_{\text{SSR}} + \underbrace{\lVert\mathbf{e}\rVert^2}_{\text{SSE}}
 $$
 
-여기서 SST는 총제곱합, SSR은 회귀제곱합, SSE는 오차제곱합이다. 그러면 $R^2$ 계수는 $R^2 = \text{SSR}/\text{SST} = \lVert\hat{\mathbf{y}}\rVert^2 / \lVert\mathbf{y}\rVert^2$이며, 이는 $\mathbf{y}$와 $\hat{\mathbf{y}}$ 사이 각의 코사인의 제곱, 즉 모형이 얼마나 잘 맞는지에 대한 기하적 측도다.
+여기서 SST는 총제곱합, SSR은 회귀제곱합, SSE는 오차제곱합이다. 교차항이 사라지는 것은 $\mathbf{e}$가 $\hat{\mathbf{y}}$과 $\mathbf{1}$ 모두에 직교하기 때문이다. 통상 보고하는 $R^2$은 이 **중심화된** 양들의 비
+
+$$
+R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\lVert\mathbf{e}\rVert^2}{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2}
+$$
+
+이고, 이는 중심화한 두 벡터 $\mathbf{y} - \bar{y}\mathbf{1}$과 $\hat{\mathbf{y}} - \bar{y}\mathbf{1}$ 사이 각의 코사인의 제곱이다. 중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$도 같은 기하적 의미를 갖지만 기준점이 평균이 아니라 **원점**이어서 값이 다르다. 절편이 있는 모형에서는 평균 수준 $\bar{y}$를 절편이 언제나 정확히 맞히므로 중심화하지 않은 비가 부풀려진다. 두 양을 섞지 않는 것이 중요하다(연습문제 4, 10).
 
 ## 연습문제
 
@@ -265,20 +271,22 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-$\mathbf{y}$와 그 사영 $\hat{\mathbf{y}}$ 사이의 각이라는 관점에서 $R^2 = \lVert \hat{\mathbf{y}} \rVert^2 / \lVert \mathbf{y} \rVert^2$의 기하적 해석을 설명하라. $R^2 = 1$은 기하적으로 무엇을 뜻하는가?
+절편을 포함하는 모형에서 $R^2 = \text{SSR}/\text{SST}$를 각의 코사인 제곱으로 해석하라. $R^2 = 1$과 $R^2 = 0$은 기하적으로 각각 무엇을 뜻하는가? 중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 무엇이 다른가?
 
 </div>
 
 ??? success "풀이"
-    $\theta$를 $\mathbb{R}^n$에서 $\mathbf{y}$와 $\hat{\mathbf{y}}$ 사이의 각이라 하자. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\mathbf{y}$를 $\text{col}(\mathbf{X})$ 위로 사영한 것이므로
+    중심화한 두 벡터 $\tilde{\mathbf{y}} = \mathbf{y} - \bar{y}\mathbf{1}$과 $\tilde{\mathbf{y}}_{\!*} = \hat{\mathbf{y}} - \bar{y}\mathbf{1}$을 잡고 $\theta$를 둘 사이의 각이라 하자. $\tilde{\mathbf{y}} = \tilde{\mathbf{y}}_{\!*} + \mathbf{e}$이고 $\mathbf{e}$가 $\hat{\mathbf{y}}$과 $\mathbf{1}$ 모두에 직교하므로 $\tilde{\mathbf{y}}_{\!*}^T\mathbf{e} = 0$이며, 따라서
 
     $$
-    \cos\theta = \frac{\hat{\mathbf{y}}^T\mathbf{y}}{\lVert \hat{\mathbf{y}} \rVert \lVert \mathbf{y} \rVert} = \frac{\lVert \hat{\mathbf{y}} \rVert^2}{\lVert \hat{\mathbf{y}} \rVert \lVert \mathbf{y} \rVert} = \frac{\lVert \hat{\mathbf{y}} \rVert}{\lVert \mathbf{y} \rVert}
+    \cos\theta = \frac{\tilde{\mathbf{y}}_{\!*}^T\tilde{\mathbf{y}}}{\lVert \tilde{\mathbf{y}}_{\!*} \rVert \lVert \tilde{\mathbf{y}} \rVert} = \frac{\lVert \tilde{\mathbf{y}}_{\!*} \rVert^2}{\lVert \tilde{\mathbf{y}}_{\!*} \rVert \lVert \tilde{\mathbf{y}} \rVert} = \frac{\lVert \tilde{\mathbf{y}}_{\!*} \rVert}{\lVert \tilde{\mathbf{y}} \rVert}
     $$
 
-    이다. 따라서 $R^2 = \cos^2\theta$이다. 즉 반응벡터와 그것을 모형 부분공간 위로 사영한 벡터 사이 각의 코사인의 제곱이다.
+    이다. 곧 $R^2 = \text{SSR}/\text{SST} = \cos^2\theta$로, **평균만 맞히는 모형에서 출발한 반응벡터**와 그것을 모형 부분공간 위로 사영한 벡터 사이 각의 코사인의 제곱이다.
 
-    $R^2 = 1$은 $\cos^2\theta = 1$, 즉 $\theta = 0$을 뜻하므로 반응벡터 $\mathbf{y}$가 정확히 $\text{col}(\mathbf{X})$ 안에 놓인다. 기하적으로 자료가 잔차 없이 모형에 완벽히 들어맞는다는 뜻이다.
+    $R^2 = 1$은 $\theta = 0$, 곧 $\mathbf{e} = \mathbf{0}$이므로 $\mathbf{y}$가 정확히 $\text{col}(\mathbf{X})$ 안에 놓인다는 뜻이다. 자료가 잔차 없이 모형에 완벽히 들어맞는다. $R^2 = 0$은 $\tilde{\mathbf{y}}_{\!*} = \mathbf{0}$, 곧 $\hat{\mathbf{y}} = \bar{y}\mathbf{1}$이므로 사영이 절편 방향밖에 쓰지 못한 경우다. 예측변수가 아무것도 설명하지 못한다.
+
+    중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 같은 계산을 **원점** 기준으로 한 것이어서 $\mathbf{y}$와 $\hat{\mathbf{y}}$ 사이 각의 코사인 제곱이다. 절편이 있는 모형에서는 $\lVert\mathbf{y}\rVert^2$ 안에 평균 수준 $n\bar{y}^2$이 들어 있고 그 부분은 절편이 언제나 정확히 맞히므로, 이 비는 중심화한 $R^2$보다 크게 나온다. 실제로 $\lVert\hat{\mathbf{y}}\rVert^2 = \text{SSR} + n\bar{y}^2$, $\lVert\mathbf{y}\rVert^2 = \text{SST} + n\bar{y}^2$이므로 분자와 분모에 같은 양을 더한 꼴이며, 두 값이 일치하는 것은 $\bar{y} = 0$이거나 $R^2 = 1$일 때뿐이다. 연습문제 10에서 같은 자료에 대해 두 값을 나란히 계산한다.
 
 <div class="drillbox" markdown>
 
@@ -494,10 +502,16 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
     print("\n||y||^2          =", round(y @ y, 6))
     print("||y_hat||^2 + ||e||^2 =", round(y_hat @ y_hat + e @ e, 6))
+    print("원점 기준 cos^2(theta) =", round((y_hat @ y_hat) / (y @ y), 6))
 
-    cos2 = (y_hat @ y_hat) / (y @ y)
-    print("\ncos^2(theta) =", round(cos2, 6))
-    print("R^2 (원점 기준) =", round((y_hat @ y_hat) / (y @ y), 6))
+    # 중심화: 1 위로의 사영을 걷어낸 뒤 같은 분해를 반복한다
+    yt = y - y.mean()
+    yt_hat = y_hat - y.mean()
+    sst, ssr, sse = yt @ yt, yt_hat @ yt_hat, e @ e
+    print("\nSST =", round(sst, 6), " SSR =", round(ssr, 6), " SSE =", round(sse, 6))
+    print("SSR + SSE =", round(ssr + sse, 6))
+    print("R^2 = SSR/SST     =", round(ssr / sst, 6))
+    print("R^2 = 1 - SSE/SST =", round(1 - sse / sst, 6))
     ```
 
     출력:
@@ -510,14 +524,17 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
     ||y||^2          = 158.337856
     ||y_hat||^2 + ||e||^2 = 158.337856
+    원점 기준 cos^2(theta) = 0.885583
 
-    cos^2(theta) = 0.885583
-    R^2 (원점 기준) = 0.885583
+    SST = 121.938838  SSR = 103.822325  SSE = 18.116513
+    SSR + SSE = 121.938838
+    R^2 = SSR/SST     = 0.85143
+    R^2 = 1 - SSE/SST = 0.85143
     ```
 
-    네 성질이 모두 확인된다. 잔차와 적합값의 내적은 반올림 오차 수준에서 0이다.
+    네 성질이 모두 확인된다. 잔차와 적합값의 내적은 반올림 오차 수준에서 0이고, 피타고라스 분해는 원점 기준($158.337856$)과 평균 기준($121.938838$) 양쪽에서 모두 성립한다.
 
-    **주의.** 여기서 계산한 $R^2 = \lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 **원점을 기준으로 한** 값이다. 보고되는 통상의 $R^2$은 평균을 빼고 계산한 $1 - \lVert\mathbf{e}\rVert^2/\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2$이며, 이는 $\mathbf{1}$ 위로의 사영을 먼저 걷어낸 뒤 같은 논리를 적용한 것이다. 절편이 있는 모형에서 두 값이 다르다는 점에 유의하라. $\square$
+    **두 $R^2$이 다르다.** 원점 기준 값은 $0.885583$이고 보고되는 통상의 $R^2$은 $0.851430$이다. 차이는 $\bar{y} = 1.1015$ 때문이다. $\lVert\mathbf{y}\rVert^2 = \text{SST} + n\bar{y}^2 = 121.938838 + 30 \times 1.1015^2 = 158.34$에서 보듯, 원점 기준 비는 **절편이 공짜로 맞히는 평균 수준까지 설명력으로 세는** 셈이다. $R^2$을 보고할 때는 $\mathbf{1}$ 위로의 사영을 먼저 걷어낸 중심화된 쪽을 쓴다. $\square$
 
 ---
 
