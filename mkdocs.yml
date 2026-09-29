@@ -147,6 +147,8 @@ nav:
         - 3.4 기댓값과 적률:
             - 기댓값과 선형성: ch03/rv/expectation.md
             - 분산과 공분산: ch03/rv/variance_covariance.md
+            - 상관계수: ch03/rv/correlation.md
+            - 독립성과 무상관성의 차이: ch03/rv/independence_vs_zero_corr.md
             - 적률생성함수: ch03/rv/mgf.md
         - 3.5 극한정리:
             - 큰수의 법칙: ch03/limits/lln.md
@@ -170,9 +172,7 @@ nav:
             - 카이제곱분포 χ²(d): ch04/continuous_distributions/chi_square.md
             - t 분포 t(d): ch04/continuous_distributions/student_t.md
             - F 분포 F(d₁, d₂): ch04/continuous_distributions/f_distribution.md
-        - 4.3 다변량 구조:
-            - 공분산과 상관계수: ch04/joint/covariance_correlation.md
-            - 독립성과 무상관성의 차이: ch04/joint/independence_vs_zero_corr.md
+        - 4.3 이변량 정규분포:
             - 이변량 정규분포: ch04/joint/bivariate_normal.md
             - 2차원 정규분포 조건부분포: ch04/joint/gaussian_2d_conditionals.md
             - 2차원 정규분포 고유분해: ch04/joint/gaussian_2d_eigendecomposition.md

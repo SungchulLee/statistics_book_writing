@@ -1,110 +1,67 @@
-# 공분산과 상관계수
+# 상관계수
 
-## 개요
+앞 절에서 **공분산**을 정의했다. $\operatorname{Cov}(X,Y) = E[XY] - E[X]E[Y]$는 곱 규칙이 깨지는 정도를 재는 양이었다.
 
-**공분산**과 **상관계수**는 두 확률변수 사이의 선형 관계를 정량화한다. 공분산은 (원래 단위로) 동조 움직임의 방향과 크기를 재고, 상관계수는 이를 $-1$과 $+1$ 사이의 무차원 양으로 표준화한다.
+그런데 공분산에는 실용적인 결함이 하나 있다. **단위가 붙어 있다.** 키와 몸무게의 공분산은 cm·kg 단위로 나오고, 키를 m로 바꿔 재면 같은 자료인데도 값이 100분의 1이 된다. 크기만 보고 "관계가 세다"고 말할 수 없다는 뜻이다.
 
----
+단위를 없애면 비교할 수 있게 된다. 그것이 상관계수다.
 
-## 공분산
+## 1. 공분산을 표준편차로 나누면 단위가 사라진다
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정의 1. 공분산 { .dfn }
+### 정리 1. 피어슨 상관계수와 그 범위 { .thm }
 
 $$
-\text{Cov}(X, Y) = E[(X - \mu_X)(Y - \mu_Y)] = E[XY] - E[X]E[Y]
+\rho(X, Y) = \frac{\operatorname{Cov}(X, Y)}{\sigma_X \, \sigma_Y}
 $$
+
+는 **단위가 없는** 수이며 언제나
+
+$$
+-1 \le \rho(X,Y) \le 1
+$$
+
+이다. $\rho = \pm 1$일 필요충분조건은 $Y = aX + b$ 꼴의 **완전한 선형관계**($a \ne 0$)다.
 
 </div>
 
-### 두 표현이 같음을 증명
+**범위가 $[-1, 1]$인 것은 코시–슈바르츠 부등식의 결과다.** 임의의 실수 $t$에 대해
 
 $$
-\begin{aligned}
-\text{Cov}(X,Y) &= E[(X - \mu_X)(Y - \mu_Y)] \\
-&= E[XY - X\mu_Y - \mu_X Y + \mu_X \mu_Y] \\
-&= E[XY] - \mu_Y E[X] - \mu_X E[Y] + \mu_X \mu_Y \\
-&= E[XY] - E[X]E[Y]
-\end{aligned}
+0 \le \operatorname{Var}\bigl(t(X - \mu_X) + (Y - \mu_Y)\bigr)
+= t^2 \sigma_X^2 + 2t\operatorname{Cov}(X,Y) + \sigma_Y^2
 $$
 
-### 성질
+이다. 왼쪽이 분산이므로 음수가 될 수 없고, 오른쪽은 $t$에 대한 이차식이다. **모든 $t$에서 음수가 아닌 이차식은 판별식이 $0$ 이하**여야 하므로
 
 $$
-\begin{aligned}
-(1) &\quad \text{Cov}(X, X) = \text{Var}(X) \\[4pt]
-(2) &\quad \text{Cov}(X, Y) = \text{Cov}(Y, X) \quad \text{(대칭성)} \\[4pt]
-(3) &\quad \text{Cov}(aX + b, \, cY + d) = ac \cdot \text{Cov}(X, Y) \\[4pt]
-(4) &\quad \text{Cov}\left(\sum_i X_i, \sum_j Y_j\right) = \sum_i \sum_j \text{Cov}(X_i, Y_j) \quad \text{(쌍선형성)} \\[4pt]
-(5) &\quad X \perp Y \implies \text{Cov}(X, Y) = 0
-\end{aligned}
+4\operatorname{Cov}(X,Y)^2 - 4\sigma_X^2\sigma_Y^2 \le 0
+\quad \Longrightarrow \quad
+|\operatorname{Cov}(X,Y)| \le \sigma_X \sigma_Y
 $$
 
-**주의:** (5)의 역은 일반적으로 **성립하지 않는다**. 공분산이 0이라고 해서 독립인 것은 아니다.
+이고, 양변을 $\sigma_X\sigma_Y$로 나누면 $|\rho| \le 1$이다. 등호는 판별식이 정확히 $0$일 때, 곧 어떤 $t$에서 분산이 $0$이 될 때이며, 그것은 $t(X-\mu_X) + (Y-\mu_Y)$가 상수라는 뜻이다. **직선 위에 놓인다는 말이다.**
 
-### 합의 분산
+**단위가 없다는 것이 핵심이다.** $\rho(aX+b,\; cY+d) = \operatorname{sign}(ac)\,\rho(X,Y)$이므로 척도를 바꾸어도 값이 변하지 않는다. 키를 cm로 재든 m로 재든 상관계수는 같다.
 
-합의 분산에 대한 일반 공식은 쌍선형성으로부터 따라 나온다:
-
-$$
-\text{Var}\left(\sum_{i=1}^n X_i\right) = \sum_{i=1}^n \text{Var}(X_i) + 2\sum_{i < j} \text{Cov}(X_i, X_j)
-$$
-
-변수가 두 개일 때:
-
-$$
-\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X, Y)
-$$
-
-$$
-\text{Var}(X - Y) = \text{Var}(X) + \text{Var}(Y) - 2\text{Cov}(X, Y)
-$$
-
----
-
-## 상관계수
+## 2. 상관계수가 재는 것과 못 재는 것
 
 <div class="defn" markdown>
 
-### 정의 2. Pearson 상관계수 { .dfn }
+<div class="thmbox" markdown>
 
-**Pearson 상관계수**는 공분산을 표준편차로 나누어 표준화한다:
+### 정리 2. 상관계수는 선형 관계만, 그것도 잰 집단 안에서만 잰다 { .thm }
 
-$$
-\rho(X, Y) = \text{Corr}(X, Y) = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y} = \frac{\text{Cov}(X, Y)}{\sqrt{\text{Var}(X)\,\text{Var}(Y)}}
-$$
+$\rho$는 두 가지를 하지 **못한다.**
+
+**하나, 비선형 관계를 보지 못한다.** $\rho = 0$은 "선형 성분이 없다"는 뜻이지 "관계가 없다"는 뜻이 아니다.
+
+**둘, 두 변수만의 성질이 아니다.** 같은 두 변수라도 **어떤 집단에서 쟀느냐**에 따라 값이, 심지어 부호까지 달라진다.
 
 </div>
 
-### 성질
-
-$$
-\begin{aligned}
-(1) &\quad -1 \leq \rho(X, Y) \leq 1 \\[4pt]
-(2) &\quad \rho(X, Y) = \pm 1 \iff Y = aX + b \text{ for some } a \neq 0 \\[4pt]
-(3) &\quad \rho(aX + b, \, cY + d) = \text{sign}(ac) \cdot \rho(X, Y) \\[4pt]
-(4) &\quad \rho(X, Y) = 0 \text{ 이면 } X, Y \text{ 는 무상관이다 (선형 관계가 없다)}
-\end{aligned}
-$$
-
-### |rho| <= 1의 증명 (Cauchy–Schwarz)
-
-Cauchy–Schwarz 부등식에 의해:
-
-$$
-|E[UV]|^2 \leq E[U^2] \cdot E[V^2]
-$$
-
-$U = X - \mu_X$, $V = Y - \mu_Y$로 두면:
-
-$$
-|\text{Cov}(X,Y)|^2 \leq \text{Var}(X) \cdot \text{Var}(Y) \implies |\rho(X,Y)| \leq 1
-$$
-
----
-
-## 상관계수의 해석
+### 값을 어떻게 읽을 것인가
 
 | $\rho$ | 해석 |
 |:---|:---|
@@ -182,7 +139,32 @@ virginica           6.59         2.97
 
 ---
 
-## 공분산행렬
+## 3. 변수가 여럿이면 행렬이 된다
+
+변수가 둘일 때는 공분산이 수 하나였다. 셋 이상이면 쌍마다 하나씩 생기므로 표로 묶는 편이 낫다.
+
+<div class="thmbox" markdown>
+
+### 정리 3. 공분산행렬과 상관행렬 { .thm }
+
+$\mathbf X = (X_1, \ldots, X_p)^\top$에 대해 공분산행렬은 $(i,j)$ 자리에 $\operatorname{Cov}(X_i, X_j)$를 놓은 $p \times p$ 행렬이다.
+
+$$
+\boldsymbol\Sigma = E\bigl[(\mathbf X - \boldsymbol\mu)(\mathbf X - \boldsymbol\mu)^\top\bigr]
+$$
+
+대각선에는 각 변수의 **분산**이 앉고, 그 밖에는 공분산이 앉는다. $\boldsymbol\Sigma$는 **대칭**이며 **양의 준정부호**다. 임의의 $\mathbf a$에 대해
+
+$$
+\operatorname{Var}(\mathbf a^\top \mathbf X) = \mathbf a^\top \boldsymbol\Sigma\, \mathbf a \;\ge\; 0
+$$
+
+이기 때문이다. 각 원소를 $\sigma_i \sigma_j$로 나누어 표준화한 것이 **상관행렬**이며, 대각선이 모두 $1$이다.
+
+</div>
+
+**양의 준정부호라는 조건이 장식이 아니다.** 상관계수를 아무 값이나 골라 행렬에 채워 넣으면 존재할 수 없는 분포가 만들어진다. 고윳값 하나가 음수가 되고, 그 방향의 선형결합이 **음의 분산**을 갖게 되기 때문이다. [3.4절 분산과 공분산](variance_covariance.md)의 연습문제가 그 예를 다룬다.
+
 
 확률벡터 $\mathbf{X} = (X_1, X_2, \ldots, X_n)^\top$에 대해 **공분산행렬**은 다음과 같다:
 
@@ -206,7 +188,7 @@ $\mathbf{R}$의 대각 성분은 모두 1이다.
 
 ---
 
-## 문제
+### 손으로 풀어 보기
 
 <div class="probox" markdown>
 
@@ -246,7 +228,7 @@ $\mathbf{R}$의 대각 성분은 모두 1이다.
     $$
 ---
 
-## Python: 계산과 시각화
+### 코드로 확인하기
 
 ### 자료로부터 공분산과 상관계수 구하기
 
