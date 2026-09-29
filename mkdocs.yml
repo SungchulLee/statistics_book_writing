@@ -173,9 +173,9 @@ nav:
             - t 분포 t(d): ch04/continuous_distributions/student_t.md
             - F 분포 F(d₁, d₂): ch04/continuous_distributions/f_distribution.md
         - 4.3 이변량 정규분포:
-            - 이변량 정규분포: ch04/joint/bivariate_normal.md
-            - 2차원 정규분포 조건부분포: ch04/joint/gaussian_2d_conditionals.md
-            - 2차원 정규분포 고유분해: ch04/joint/gaussian_2d_eigendecomposition.md
+            - 이변량 정규분포: ch04/bivariate_normal/bivariate_normal.md
+            - 2차원 정규분포 조건부분포: ch04/bivariate_normal/gaussian_2d_conditionals.md
+            - 2차원 정규분포 고유분해: ch04/bivariate_normal/gaussian_2d_eigendecomposition.md
 
     - 5 표본분포:
         - 장 개요: ch05/index.md
