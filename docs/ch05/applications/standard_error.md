@@ -225,11 +225,9 @@ if __name__ == "__main__":
 
 위 예제는 한 덩어리로 실행하는 형태였다. 실제 프로젝트에서는 설정과 본문을 파일로 나누는 편이 낫다. 아래 두 블록은 **두 개의 `.py` 파일**을 각각 적은 것이므로, 문서에서 이어 붙여 실행할 수는 없다. 같은 디렉터리에 저장한 뒤 `python standard_error_of_x_bar.py --seed 7` 처럼 실행한다.
 
-### 모듈 버전: `global_name_space.py`
-
 <div class="codebox" markdown>
 
-#### 예제 2. 공유 설정 모듈 { .eg }
+#### 예제 2. 공유 설정 모듈 — `global_name_space.py` { .eg }
 
 ```python
 import argparse
@@ -259,13 +257,11 @@ plt.rcParams['axes.unicode_minus'] = False
 
 </div>
 
-### 모듈 버전: `standard_error_of_x_bar.py`
-
-예제 1과 계산은 같다. 달라진 곳은 두 군데다. 시드를 직접 고정하는 대신 `global_name_space`를 가져오고, 그리는 부분을 `draw()`로 떼어 놓았다. 뒤에서 같은 그림을 $S^2$에 대해 한 번 더 그릴 것이므로 미리 나누어 둔 것이다.
+이제 본문 쪽이다. `standard_error_of_x_bar.py`는 예제 1과 계산이 같다. 달라진 곳은 두 군데다. 시드를 직접 고정하는 대신 `global_name_space`를 가져오고, 그리는 부분을 `draw()`로 떼어 놓았다. 뒤에서 같은 그림을 $S^2$에 대해 한 번 더 그릴 것이므로 미리 나누어 둔 것이다.
 
 <div class="codebox" markdown>
 
-#### 예제 3. 표준오차를 그림에 표시하기 { .eg }
+#### 예제 3. 표준오차를 그림에 표시하기 — `standard_error_of_x_bar.py` { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -346,7 +342,7 @@ if __name__ == "__main__":
 
 <div class="codebox" markdown>
 
-#### 예제 4. 분산의 표준오차도 같은 방법으로 { .eg }
+#### 예제 4. 분산의 표준오차도 같은 방법으로 — `standard_error_of_s_square.py` { .eg }
 
 ```python
 import numpy as np
