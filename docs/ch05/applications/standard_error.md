@@ -68,7 +68,7 @@ $$
 | 절 | 통계량 | 표준화한 양 | 분포 | 언제 쓸 수 있는가 |
 |:---|:---|:---|:---|:---|
 | [5.4](sample_mean.md) | $\bar X$ | $\dfrac{\bar X - \mu}{\sigma/\sqrt n}$ | $N(0,1)$ | 정규모집단이면 **정확**. 아니면 대략 $n \ge 30$ |
-| [5.4](sample_mean.md) | $\bar X$ ($\sigma$를 모를 때) | $\dfrac{\bar X - \mu}{S/\sqrt n}$ | $t_{n-1}$ | 정규모집단이면 **정확**. 아니면 근사이며, $S$도 함께 흔들려 $\sigma$를 알 때보다 큰 $n$이 필요하다 |
+| [5.4](sample_mean.md) | 같음 ($\sigma$ 모름) | $\dfrac{\bar X - \mu}{S/\sqrt n}$ | $t_{n-1}$ | 정규모집단이면 **정확**. 아니면 근사이며, $S$도 함께 흔들려 $\sigma$를 알 때보다 큰 $n$이 필요하다 |
 | [5.5](sample_proportion.md) | $\hat p$ | $\dfrac{\hat p - p}{\sqrt{p(1-p)/n}}$ | $N(0,1)$ | $n\hat p \ge 5$ 그리고 $n(1-\hat p) \ge 5$ — 확률을 어림할 때. 신뢰구간이나 검정에 쓰려면 둘 다 $10$ 이상 |
 | [5.6](sample_variance.md) | $S^2$ | $\dfrac{(n-1)S^2}{\sigma^2}$ | $\chi^2_{n-1}$ | 정규모집단이면 **정확**. 아니면 $n$을 키워도 낫지 않는다 |
 | [5.7](diff_means.md) | $\bar X_1 - \bar X_2$ | $\dfrac{(\bar X_1 - \bar X_2)-(\mu_1-\mu_2)}{\sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2}}$ | $N(0,1)$ | 정규모집단이면 **정확**. 아니면 두 $n$ 모두 대략 $30$ 이상 |
