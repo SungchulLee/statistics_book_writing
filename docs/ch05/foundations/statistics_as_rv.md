@@ -113,25 +113,32 @@ $$
 
 </div>
 
-**앞쪽은 기댓값의 선형성만으로 끝난다.**
+??? proof "증명"
 
-$$
-E[\bar X] = E\!\left[\frac1n \sum_i X_i\right] = \frac1n \sum_i E[X_i] = \frac1n \cdot n\mu = \mu
-$$
+    **표본평균.** 기댓값의 선형성만으로 끝난다. 독립성조차 쓰지 않는다.
 
-**뒤쪽이 $n-1$의 정체를 드러낸다.** 제곱합을 모평균 기준으로 바꿔 쓰면 다음 항등식이 성립한다.
+    $$
+    E[\bar X] = E\!\left[\frac1n \sum_i X_i\right]
+    = \frac1n \sum_i E[X_i] = \frac1n \cdot n\mu = \mu
+    $$
 
-$$
-\sum_i (X_i - \bar X)^2 = \sum_i (X_i - \mu)^2 - n(\bar X - \mu)^2
-$$
+    **표본분산.** 제곱합을 모평균 기준으로 바꿔 쓰면 다음 항등식이 성립한다. 양변을 전개하면 곧바로 확인된다.
 
-기댓값을 취하면 앞 항은 $n\sigma^2$이고, 뒤 항은 $n \cdot \operatorname{Var}(\bar X) = n \cdot \sigma^2/n = \sigma^2$이다. 따라서
+    $$
+    \sum_i (X_i - \bar X)^2 = \sum_i (X_i - \mu)^2 - n(\bar X - \mu)^2
+    $$
 
-$$
-E\!\left[\sum_i (X_i - \bar X)^2\right] = n\sigma^2 - \sigma^2 = (n-1)\sigma^2
-$$
+    기댓값을 취한다. 앞 항은 각 $E[(X_i-\mu)^2] = \sigma^2$이 $n$개이므로 $n\sigma^2$이고, 뒤 항은 독립성에서 $\operatorname{Var}(\bar X) = \sigma^2/n$이므로 $n \cdot \sigma^2/n = \sigma^2$이다.
 
-이고, $n-1$로 나누어야 $\sigma^2$이 된다. **$\bar X$가 자기 자료에 가장 가까이 붙어 있기 때문에 제곱합이 딱 $\sigma^2$만큼 모자라며, 그 모자람을 메우는 것이 $n-1$이다.** 위 모의실험에서 $\mu = 170$, $\sigma = 6$, $n = 25$로 두면 $E[\sum(X_i-\bar X)^2]$의 실측값이 $863.8$로 $(n-1)\sigma^2 = 864$와 맞고, $E[S^2] = 35.99$로 $\sigma^2 = 36$과 맞는다.
+    $$
+    E\!\left[\sum_i (X_i - \bar X)^2\right] = n\sigma^2 - \sigma^2 = (n-1)\sigma^2
+    $$
+
+    양변을 $n-1$로 나누면 $E[S^2] = \sigma^2$이다. $\square$
+
+**$n-1$의 정체가 여기서 드러난다.** 모평균 $\mu$ 대신 표본평균 $\bar X$를 중심으로 쓰는 순간 제곱합이 정확히 $\sigma^2$만큼 줄어든다. $\bar X$가 **자기 자료에 가장 가까이 붙어 있기** 때문이며, 그 모자람을 메우려고 $n$이 아니라 $n-1$로 나눈다.
+
+위 모의실험의 설정 그대로 $\mu = 170$, $\sigma = 6$, $n = 25$로 확인하면 $E[\sum(X_i-\bar X)^2]$의 실측값이 $863.8$로 $(n-1)\sigma^2 = 864$와 맞고, $E[S^2] = 35.99$로 $\sigma^2 = 36$과 맞는다.
 
 같은 논의를 더 자세히 다루는 곳은 [5.6절 분산의 표본분포](../applications/sample_variance.md)와 [7장 베셀 보정](../../ch07/variance/bessels.md)이다.
 

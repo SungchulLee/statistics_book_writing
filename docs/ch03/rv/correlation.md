@@ -26,22 +26,28 @@ $$
 
 </div>
 
-**범위가 $[-1, 1]$인 것은 코시–슈바르츠 부등식의 결과다.** 임의의 실수 $t$에 대해
+??? proof "증명"
 
-$$
-0 \le \operatorname{Var}\bigl(t(X - \mu_X) + (Y - \mu_Y)\bigr)
-= t^2 \sigma_X^2 + 2t\operatorname{Cov}(X,Y) + \sigma_Y^2
-$$
+    범위가 $[-1, 1]$이라는 것은 코시–슈바르츠 부등식의 결과이며, 분산이 음수가 될 수 없다는 사실만으로 유도된다. 임의의 실수 $t$에 대해
 
-이다. 왼쪽이 분산이므로 음수가 될 수 없고, 오른쪽은 $t$에 대한 이차식이다. **모든 $t$에서 음수가 아닌 이차식은 판별식이 $0$ 이하**여야 하므로
+    $$
+    0 \le \operatorname{Var}\bigl(t(X - \mu_X) + (Y - \mu_Y)\bigr)
+    = t^2 \sigma_X^2 + 2t\operatorname{Cov}(X,Y) + \sigma_Y^2
+    $$
 
-$$
-4\operatorname{Cov}(X,Y)^2 - 4\sigma_X^2\sigma_Y^2 \le 0
-\quad \Longrightarrow \quad
-|\operatorname{Cov}(X,Y)| \le \sigma_X \sigma_Y
-$$
+    이다. 오른쪽은 $t$에 대한 이차식인데 **모든 $t$에서 음수가 아니므로 판별식이 $0$ 이하**여야 한다.
 
-이고, 양변을 $\sigma_X\sigma_Y$로 나누면 $|\rho| \le 1$이다. 등호는 판별식이 정확히 $0$일 때, 곧 어떤 $t$에서 분산이 $0$이 될 때이며, 그것은 $t(X-\mu_X) + (Y-\mu_Y)$가 상수라는 뜻이다. **직선 위에 놓인다는 말이다.**
+    $$
+    4\operatorname{Cov}(X,Y)^2 - 4\sigma_X^2\sigma_Y^2 \le 0
+    \quad \Longrightarrow \quad
+    |\operatorname{Cov}(X,Y)| \le \sigma_X \sigma_Y
+    $$
+
+    양변을 $\sigma_X\sigma_Y$로 나누면 $|\rho| \le 1$이다.
+
+    **등호가 성립하는 경우.** 판별식이 정확히 $0$이면 어떤 $t$에서 위 분산이 $0$이 되고, 그것은 $t(X-\mu_X) + (Y-\mu_Y)$가 상수라는 뜻이다. 곧 $Y$가 $X$의 일차식으로 완전히 결정된다. $\square$
+
+**등호가 뜻하는 것을 새겨 두자.** $\rho = \pm 1$은 두 변수가 **직선 위에 놓인다**는 말이며, 그보다 약한 어떤 관계도 아니다. 뒤집어 말하면 $\rho$는 직선에서 얼마나 벗어났는지만 재고 있다는 뜻이기도 하다.
 
 **단위가 없다는 것이 핵심이다.** $\rho(aX+b,\; cY+d) = \operatorname{sign}(ac)\,\rho(X,Y)$이므로 척도를 바꾸어도 값이 변하지 않는다. 키를 cm로 재든 m로 재든 상관계수는 같다.
 
