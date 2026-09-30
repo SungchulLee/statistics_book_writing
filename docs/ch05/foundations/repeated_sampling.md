@@ -6,24 +6,11 @@
 
 답을 얻는 방법은 원리만 보면 단순하다. 같은 모집단에서 같은 크기의 표본을 뽑아 통계량을 계산하는 일을 끝없이 되풀이하고, 그렇게 쌓인 값들이 이루는 분포를 보면 된다. 그 분포를 통계량의 **표본분포**라 부른다. 그림의 오른쪽 끝에 모이는 것이 그것이다.
 
-$$
-\left.
-\begin{array}{ccccc}
-\text{Population} &\rightarrow& \text{Sample } \mathbf{x}_1 &\rightarrow& \hat{\theta}(\mathbf{x}_1) \\
-\\
-\text{Population} &\rightarrow& \text{Sample } \mathbf{x}_2 &\rightarrow& \hat{\theta}(\mathbf{x}_2) \\
-&\vdots& & & \\
-\text{Population} &\rightarrow& \text{Sample } \mathbf{x}_k &\rightarrow& \hat{\theta}(\mathbf{x}_k) \\
-&\vdots& & &
-\end{array}
-\right\}
-\;\;
-\begin{array}{c}
-\text{Sampling Distribution:} \\
-\text{Distribution of } \hat{\theta}(\mathbf{x}_1), \hat{\theta}(\mathbf{x}_2), \cdots, \hat{\theta}(\mathbf{x}_k), \cdots \\
-\text{or Distribution of } \hat{\theta}(\mathbf{x})
-\end{array}
-$$
+![같은 모집단에서 되풀이해 뽑으면 추정값이 쌓이고, 그 쌓인 것이 표본분포로 드러난다](./img/repeated_sampling_loop.png)
+
+왼쪽이 그 되풀이다. **모집단은 하나이고 달라지는 것은 뽑히는 표본뿐이다.** 같은 크기 $n = 25$로 뽑을 때마다 추정값 $\hat\theta(\mathbf{x}_k)$이 하나씩 나오고, 그 값들이 초록 괄호 안에 쌓인다.
+
+오른쪽은 쌓인 값들이 이루는 분포다. $k = 10$일 때는 막대 몇 개가 흩어져 있을 뿐이라 모양이라 할 것이 없다. $k = 200$이면 가운데가 두툼해지는 것이 보이고, $k = 20{,}000$에 이르면 매끄러운 종 모양이 드러난다. **표본분포는 원래 거기 있었고 되풀이가 그것을 드러낸 것뿐이다.**
 
 첨자 $k$가 **몇 번째 표본인가**를 세는 번호라는 점에 주의할 것. 표본 하나에 들어 있는 관측값의 개수, 곧 표본크기는 $n$으로 쓰며 이 책 전체에서 그렇다. 여기서는 $n$을 고정해 두고 같은 크기의 표본을 계속 다시 뽑는 중이다. 뽑기를 몇 번 되풀이하느냐는 표본분포를 얼마나 선명하게 그려 내느냐를 정할 뿐이고, 표본분포 자체의 모양은 $n$이 정한다. 이 구별이 다음 절에서 다시 중요해진다.
 
@@ -39,19 +26,11 @@ $$
 
 셋째가 **표본분포**다. 여기서 뽑히는 것은 개체가 아니라 **표본 전체**다. 같은 크기의 표본을 무한히 되풀이해 뽑고 그때마다 통계량 하나를 계산한다고 할 때, 그 통계량들이 이루는 분포가 표본분포다. 따라서 표본분포에서 점 하나는 관측값 하나가 아니라 **표본 하나**에 대응한다. 앞의 둘과 층이 다른 지점이 바로 여기다.
 
-$$
-\begin{array}{ccccccc}
-\text{Population}
-&\rightarrow&
-\text{Sample } \mathbf{x}
-&\rightarrow&
-\text{Estimate } \hat{\theta}(\mathbf{x}) \\
-\uparrow && \uparrow && \uparrow \\
-\text{Population Distribution:} && \text{Sample Distribution:} && \text{Sampling Distribution:} \\
-\text{Distribution of} && \text{Distribution of} && \text{Distribution of} \\
-\text{Whole Population} && \text{Numbers in Particular Sample } \mathbf{x} && \text{Infinitely Many Estimates } \hat{\theta}(\mathbf{x}_i)
-\end{array}
-$$
+![모집단분포, 한 표본의 분포, 표본분포를 나란히 놓은 그림](./img/three_distributions.png)
+
+위쪽 줄이 앞 절의 흐름 그대로다. 모집단에서 표본을 뽑고, 표본에서 추정값을 계산한다. **아래로 내린 화살표가 각 단계에 붙어 있는 분포를 가리킨다.** 세 분포가 서로 다른 단계에 사는 것이지 같은 것의 다른 이름이 아니다.
+
+가로축을 셋 다 $150$–$190$으로 맞춰 두었으므로 **폭을 곧바로 견줄 수 있다.** 왼쪽 둘은 퍼짐이 $\sigma = 6$으로 비슷한데, 오른쪽만 $\sigma/\sqrt n = 1.2$로 다섯 배 좁다. 같은 자료에서 나온 분포인데도 그렇다. 가운데 칸 아래에 찍힌 눈금 $25$개가 실제로 뽑아 온 값이며, **셋 가운데 히스토그램을 그릴 수 있는 것은 이것뿐이다.**
 
 셋의 관계를 한 문장으로 줄이면 이렇다. **관측되는 것은 둘째뿐이고, 알고 싶은 것은 첫째이며, 그 사이를 이어 주는 것이 셋째다.** 표본분포는 현실에서 한 번도 관측되지 않는다. 표본을 무한히 되풀이해 뽑는 일은 실제로 일어나지 않기 때문이다. 그런데도 그것을 계산할 수 있고, 계산할 수 있기 때문에 하나뿐인 표본으로 모집단을 말할 수 있다.
 
