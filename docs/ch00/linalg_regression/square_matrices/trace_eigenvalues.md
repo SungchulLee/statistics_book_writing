@@ -95,31 +95,37 @@ $$
 
 </div>
 
-**특성다항식을 이용한 증명.** $\mathbf{A}$의 특성다항식은
+??? proof "증명 — 특성다항식으로"
 
-$$
-p(\lambda) = \det(\lambda\mathbf{I} - \mathbf{A}) = \lambda^n - (\operatorname{tr}\mathbf{A})\lambda^{n-1} + \cdots + (-1)^n\det(\mathbf{A})
-$$
+    $\mathbf{A}$의 특성다항식은
 
-이다. $\lambda^{n-1}$의 계수는 두 가지 방식으로 계산할 수 있다. $\det(\lambda\mathbf{I} - \mathbf{A})$의 여인수 전개에서 $n-1$개의 대각항의 곱을 얻는 유일한 방법은 대각 성분 $(\lambda - a_{ii})$ 중 하나만 빼고 모두 고르는 것이며, 그 결과 계수가 $-(a_{11} + \cdots + a_{nn}) = -\operatorname{tr}(\mathbf{A})$가 된다.
+    $$
+    p(\lambda) = \det(\lambda\mathbf{I} - \mathbf{A}) = \lambda^n - (\operatorname{tr}\mathbf{A})\lambda^{n-1} + \cdots + (-1)^n\det(\mathbf{A})
+    $$
 
-한편 특성다항식을 근으로 인수분해하면
+    이다. $\lambda^{n-1}$의 계수는 두 가지 방식으로 계산할 수 있다. $\det(\lambda\mathbf{I} - \mathbf{A})$의 여인수 전개에서 $n-1$개의 대각항의 곱을 얻는 유일한 방법은 대각 성분 $(\lambda - a_{ii})$ 중 하나만 빼고 모두 고르는 것이며, 그 결과 계수가 $-(a_{11} + \cdots + a_{nn}) = -\operatorname{tr}(\mathbf{A})$가 된다.
 
-$$
-p(\lambda) = (\lambda - \lambda_1)(\lambda - \lambda_2)\cdots(\lambda - \lambda_n)
-$$
+    한편 특성다항식을 근으로 인수분해하면
 
-이고, 전개하면 $\lambda^{n-1}$의 계수는 $-(\lambda_1 + \lambda_2 + \cdots + \lambda_n)$이다.
+    $$
+    p(\lambda) = (\lambda - \lambda_1)(\lambda - \lambda_2)\cdots(\lambda - \lambda_n)
+    $$
 
-두 표현을 같다고 놓으면 $\operatorname{tr}(\mathbf{A}) = \lambda_1 + \lambda_2 + \cdots + \lambda_n$이다. $\square$
+    이고, 전개하면 $\lambda^{n-1}$의 계수는 $-(\lambda_1 + \lambda_2 + \cdots + \lambda_n)$이다.
 
-**닮음을 이용한 다른 증명($\mathbf{A}$가 대각화 가능한 경우).** 대각합은 닮음 불변량이다. 순환 성질에 의해
+    두 표현을 같다고 놓으면 $\operatorname{tr}(\mathbf{A}) = \lambda_1 + \lambda_2 + \cdots + \lambda_n$이다. $\square$
 
-$$
-\operatorname{tr}(\mathbf{P}^{-1}\mathbf{A}\mathbf{P}) = \operatorname{tr}(\mathbf{A}\mathbf{P}\mathbf{P}^{-1}) = \operatorname{tr}(\mathbf{A})
-$$
+??? proof "다른 증명 — 닮음으로"
 
-이기 때문이다. $\mathbf{A}$가 대각화 가능하면 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \boldsymbol{\Lambda}$이고 $\boldsymbol{\Lambda}$의 대각 성분이 바로 고윳값이므로 $\operatorname{tr}(\mathbf{A}) = \operatorname{tr}(\boldsymbol{\Lambda}) = \sum_i \lambda_i$이다. 위의 특성다항식 증명과 달리 이 논법은 대각화 가능한 행렬에만 통하지만, 통계에서 만나는 행렬은 대부분 대칭이어서 늘 대각화 가능하다.
+    ($\mathbf{A}$가 대각화 가능한 경우)
+
+    대각합은 닮음 불변량이다. 순환 성질에 의해
+
+    $$
+    \operatorname{tr}(\mathbf{P}^{-1}\mathbf{A}\mathbf{P}) = \operatorname{tr}(\mathbf{A}\mathbf{P}\mathbf{P}^{-1}) = \operatorname{tr}(\mathbf{A})
+    $$
+
+    이기 때문이다. $\mathbf{A}$가 대각화 가능하면 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \boldsymbol{\Lambda}$이고 $\boldsymbol{\Lambda}$의 대각 성분이 바로 고윳값이므로 $\operatorname{tr}(\mathbf{A}) = \operatorname{tr}(\boldsymbol{\Lambda}) = \sum_i \lambda_i$이다. 위의 특성다항식 증명과 달리 이 논법은 대각화 가능한 행렬에만 통하지만, 통계에서 만나는 행렬은 대부분 대칭이어서 늘 대각화 가능하다.
 
 ## 행렬식은 고윳값의 곱과 같다
 

@@ -90,7 +90,9 @@ $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고 $\mathbf{A}$가 대�
 
 </div>
 
-**증명 개요(필요성).** $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2 \sim \chi^2_r$이면 적률생성함수가 $\chi^2_r$의 것과 일치해야 한다. $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2$의 적률생성함수는 $\prod_{i=1}^n(1 - 2\lambda_i t)^{-1/2}$이고 $\chi^2_r$의 것은 $(1 - 2t)^{-r/2}$이다. 이 둘이 같으려면 정확히 $r$개의 고윳값이 1이고 나머지가 0이어야 하며, 이는 $\mathbf{A}$가 계수 $r$인 멱등행렬이라는 뜻이다. $\square$
+??? proof "증명 개요 — 필요성"
+
+    $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2 \sim \chi^2_r$이면 적률생성함수가 $\chi^2_r$의 것과 일치해야 한다. $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2$의 적률생성함수는 $\prod_{i=1}^n(1 - 2\lambda_i t)^{-1/2}$이고 $\chi^2_r$의 것은 $(1 - 2t)^{-r/2}$이다. 이 둘이 같으려면 정확히 $r$개의 고윳값이 1이고 나머지가 0이어야 하며, 이는 $\mathbf{A}$가 계수 $r$인 멱등행렬이라는 뜻이다. $\square$
 
 ## 이차형식의 독립성
 

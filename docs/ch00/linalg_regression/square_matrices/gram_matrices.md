@@ -31,13 +31,15 @@ $$
 
 </div>
 
-**양반정치성의 증명.** 임의의 $\mathbf{y} \in \mathbb{R}^p$에 대해
+??? proof "증명"
 
-$$
-\mathbf{y}^T\mathbf{G}\mathbf{y} = \mathbf{y}^T\mathbf{X}^T\mathbf{X}\mathbf{y} = (\mathbf{X}\mathbf{y})^T(\mathbf{X}\mathbf{y}) = \lVert\mathbf{X}\mathbf{y}\rVert^2 \geq 0
-$$
+    **대칭성**은 전치를 두 번 취하면 바로 나오므로 양반정치성만 보이면 된다. 임의의 $\mathbf{y} \in \mathbb{R}^p$에 대해
 
-이다. 이차형식이 $\mathbf{X}\mathbf{y}$의 유클리드 노름의 제곱과 같으므로 언제나 음이 아니다. $\square$
+    $$
+    \mathbf{y}^T\mathbf{G}\mathbf{y} = \mathbf{y}^T\mathbf{X}^T\mathbf{X}\mathbf{y} = (\mathbf{X}\mathbf{y})^T(\mathbf{X}\mathbf{y}) = \lVert\mathbf{X}\mathbf{y}\rVert^2 \geq 0
+    $$
+
+    이다. 이차형식이 $\mathbf{X}\mathbf{y}$의 유클리드 노름의 제곱과 같으므로 언제나 음이 아니다. $\square$
 
 ## 그람 행렬이 언제 양정치인가
 
