@@ -122,11 +122,21 @@ $$
     = \frac1n \sum_i E[X_i] = \frac1n \cdot n\mu = \mu
     $$
 
-    **표본분산.** 제곱합을 모평균 기준으로 바꿔 쓰면 다음 항등식이 성립한다. 양변을 전개하면 곧바로 확인된다.
+    **표본분산.** 편차 $X_i - \bar X$ 안에 $\mu$를 넣었다 빼는 것에서 출발한다. 모르는 $\mu$를 일부러 끌어들이는 이유는 $E[(X_i-\mu)^2] = \sigma^2$이라는 아는 사실을 쓰기 위해서다.
 
     $$
-    \sum_i (X_i - \bar X)^2 = \sum_i (X_i - \mu)^2 - n(\bar X - \mu)^2
+    \sum_i (X_i - \bar X)^2
+    = \sum_i \big((X_i - \mu) - (\bar X - \mu)\big)^2
+    = \sum_i (X_i - \mu)^2 - n(\bar X - \mu)^2
     $$
+
+    가운데에서 오른쪽으로 갈 때 교차항이 정리된다. 제곱을 펼치면
+
+    $$
+    \sum_i (X_i-\mu)^2 - 2(\bar X - \mu)\sum_i (X_i - \mu) + n(\bar X - \mu)^2
+    $$
+
+    인데, $\sum_i (X_i - \mu) = n(\bar X - \mu)$이므로 가운데 항이 $-2n(\bar X-\mu)^2$이 되어 마지막 항과 합쳐져 $-n(\bar X - \mu)^2$ 하나만 남는다.
 
     기댓값을 취한다. 앞 항은 각 $E[(X_i-\mu)^2] = \sigma^2$이 $n$개이므로 $n\sigma^2$이고, 뒤 항은 독립성에서 $\operatorname{Var}(\bar X) = \sigma^2/n$이므로 $n \cdot \sigma^2/n = \sigma^2$이다.
 
