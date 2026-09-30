@@ -122,29 +122,43 @@ $$
 | 적률 $E[|T|^k]$ | $k < d$ | 유한 |
 | MGF | — | **존재하지 않음** |
 
-### 분산의 유도
+<div class="defn" markdown>
 
-정의와 독립성을 쓰면 계산이 짧다.
+### 정리 2. t 분포의 분산 { .dfn }
 
-$$
-\text{Var}(T) = E[T^2] = E\!\left[\frac{Z^2}{V/d}\right] = d\,E[Z^2]\,E\!\left[\frac1V\right] = d\,E\!\left[\frac1V\right]
-$$
-
-두 번째 등호에서 독립성 덕분에 기댓값이 쪼개졌다. 이제 $V \sim \chi^2_d$의 역수의 기댓값을 구한다.
+$T \sim t_d$이고 $d > 2$이면
 
 $$
-E\!\left[\frac1V\right] = \frac{1}{2^{d/2}\Gamma(d/2)}\int_0^\infty v^{\frac d2 - 2}e^{-v/2}dv = \frac{2^{\frac d2 - 1}\Gamma\!\left(\frac d2 - 1\right)}{2^{d/2}\Gamma\!\left(\frac d2\right)} = \frac{1}{d - 2}
+\text{Var}(T) = \frac{d}{d-2}
 $$
 
-마지막 등호는 $\Gamma(a) = (a-1)\Gamma(a-1)$을 $a = d/2$에 적용한 것이다. 따라서
+이다. $1 < d \le 2$이면 분산이 무한대이고, $d \le 1$이면 평균조차 존재하지 않는다.
 
-$$
-\text{Var}(T) = \frac{d}{d-2}, \qquad d > 2
-$$
+</div>
 
-$\square$
+??? proof "증명"
 
-$d \le 2$이면 위 적분이 발산한다. **분모가 0에 가까워질 수 있다는 것**이 원인이다. $V$가 아주 작은 값을 가질 확률이 충분히 크면 $1/V$의 기댓값이 무한대가 된다. 자유도가 작을수록 분모의 추정이 불안정하다는 사실이 여기에 그대로 반영되어 있다.
+    정의와 독립성을 쓰면 계산이 짧다.
+
+    $$
+    \text{Var}(T) = E[T^2] = E\!\left[\frac{Z^2}{V/d}\right] = d\,E[Z^2]\,E\!\left[\frac1V\right] = d\,E\!\left[\frac1V\right]
+    $$
+
+    두 번째 등호에서 독립성 덕분에 기댓값이 쪼개졌다. 이제 $V \sim \chi^2_d$의 역수의 기댓값을 구한다.
+
+    $$
+    E\!\left[\frac1V\right] = \frac{1}{2^{d/2}\Gamma(d/2)}\int_0^\infty v^{\frac d2 - 2}e^{-v/2}dv = \frac{2^{\frac d2 - 1}\Gamma\!\left(\frac d2 - 1\right)}{2^{d/2}\Gamma\!\left(\frac d2\right)} = \frac{1}{d - 2}
+    $$
+
+    마지막 등호는 $\Gamma(a) = (a-1)\Gamma(a-1)$을 $a = d/2$에 적용한 것이다. 따라서
+
+    $$
+    \text{Var}(T) = \frac{d}{d-2}, \qquad d > 2
+    $$
+
+    $\square$
+
+    $d \le 2$이면 위 적분이 발산한다. **분모가 0에 가까워질 수 있다는 것**이 원인이다. $V$가 아주 작은 값을 가질 확률이 충분히 크면 $1/V$의 기댓값이 무한대가 된다. 자유도가 작을수록 분모의 추정이 불안정하다는 사실이 여기에 그대로 반영되어 있다.
 
 ### 위치와 척도를 붙인 판
 
@@ -192,7 +206,7 @@ $$
 
 <div class="defn" markdown>
 
-### 정리 2. 정규분포로의 수렴 { .dfn }
+### 정리 3. 정규분포로의 수렴 { .dfn }
 
 모든 $t$에 대해
 

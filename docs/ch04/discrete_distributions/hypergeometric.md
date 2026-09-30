@@ -101,35 +101,49 @@ $$
 E[X] = \sum_{i=1}^n E[I_i] = n\,\frac{N}{M} = np
 $$
 
-### 분산의 유도
+<div class="defn" markdown>
 
-독립이 아니므로 공분산 항을 빼놓을 수 없다:
+### 정리 1. 초기하분포의 분산 { .dfn }
 
-$$
-\text{Var}(X) = \sum_{i=1}^n \text{Var}(I_i) + \sum_{i \ne j} \text{Cov}(I_i, I_j)
-$$
-
-각 항을 계산한다. 먼저 $\text{Var}(I_i) = p(1-p)$이다. 다음으로 $i \ne j$이면
+$X \sim \text{HG}(n, N, M)$이고 $p = N/M$이면
 
 $$
-E[I_i I_j] = P(I_i = 1,\, I_j = 1) = \frac{N}{M}\cdot\frac{N-1}{M-1}
+\text{Var}(X) = np(1-p)\,\frac{M-n}{M-1}
 $$
 
-이므로
+이다. 이항분포의 $np(1-p)$에 **유한모집단 수정계수** $\frac{M-n}{M-1}$이 곱해진 꼴이다.
 
-$$
-\text{Cov}(I_i, I_j) = \frac{N(N-1)}{M(M-1)} - \frac{N^2}{M^2} = -\frac{N(M-N)}{M^2(M-1)} = -\frac{p(1-p)}{M - 1}
-$$
+</div>
 
-**공분산이 음수**라는 사실이 이 분포의 성격을 결정한다. 앞에서 성공을 뽑으면 항아리에 남은 성공이 줄어 뒤에서 뽑힐 확률이 내려간다. 순서쌍 $(i, j)$가 $n(n-1)$개이므로
+??? proof "증명"
 
-$$
-\text{Var}(X) = np(1-p) - n(n-1)\frac{p(1-p)}{M-1} = np(1-p)\left(1 - \frac{n-1}{M-1}\right) = np(1-p)\,\frac{M-n}{M-1}
-$$
+    독립이 아니므로 공분산 항을 빼놓을 수 없다:
 
-$\square$
+    $$
+    \text{Var}(X) = \sum_{i=1}^n \text{Var}(I_i) + \sum_{i \ne j} \text{Cov}(I_i, I_j)
+    $$
 
----
+    각 항을 계산한다. 먼저 $\text{Var}(I_i) = p(1-p)$이다. 다음으로 $i \ne j$이면
+
+    $$
+    E[I_i I_j] = P(I_i = 1,\, I_j = 1) = \frac{N}{M}\cdot\frac{N-1}{M-1}
+    $$
+
+    이므로
+
+    $$
+    \text{Cov}(I_i, I_j) = \frac{N(N-1)}{M(M-1)} - \frac{N^2}{M^2} = -\frac{N(M-N)}{M^2(M-1)} = -\frac{p(1-p)}{M - 1}
+    $$
+
+    **공분산이 음수**라는 사실이 이 분포의 성격을 결정한다. 앞에서 성공을 뽑으면 항아리에 남은 성공이 줄어 뒤에서 뽑힐 확률이 내려간다. 순서쌍 $(i, j)$가 $n(n-1)$개이므로
+
+    $$
+    \text{Var}(X) = np(1-p) - n(n-1)\frac{p(1-p)}{M-1} = np(1-p)\left(1 - \frac{n-1}{M-1}\right) = np(1-p)\,\frac{M-n}{M-1}
+    $$
+
+    $\square$
+
+    ---
 
 ## 유한모집단 수정계수
 
@@ -154,7 +168,7 @@ $$
 
 <div class="defn" markdown>
 
-### 정리 1. 초기하분포의 이항극한 { .dfn }
+### 정리 2. 초기하분포의 이항극한 { .dfn }
 
 $M \to \infty$, $N \to \infty$이면서 $N/M \to p$로 고정되면, 고정된 $n$과 $k$에 대해
 
@@ -573,7 +587,7 @@ $M \to \infty$, $n \to \infty$, $N$은 고정이고 $nN/M \to \lambda$일 때 $\
 </div>
 
 ??? success "풀이"
-    대칭성(연습문제 4)을 써서 $n$과 $N$의 역할을 바꾸면 "$N$번 뽑는데 성공이 $n$개 있는" 문제가 된다. 정리 1의 이항극한을 이 형태에 적용하면, $N$이 고정이고 $n/M \to 0$이므로
+    대칭성(연습문제 4)을 써서 $n$과 $N$의 역할을 바꾸면 "$N$번 뽑는데 성공이 $n$개 있는" 문제가 된다. 정리 2의 이항극한을 이 형태에 적용하면, $N$이 고정이고 $n/M \to 0$이므로
 
     $$
     \text{HG}(n, N, M) = \text{HG}(N, n, M) \;\longrightarrow\; B\!\left(N, \frac{n}{M}\right)
