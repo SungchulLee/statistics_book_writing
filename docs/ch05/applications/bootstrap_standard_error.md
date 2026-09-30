@@ -78,7 +78,8 @@ boot_means = np.array([
 ])
 se_bootstrap = boot_means.std(ddof=1)
 
-# 붓스트랩 표준오차: 재표본 통계량의 표준편차다.
+# 같은 양을 조금 다르게 적은 것. 흩어짐을 복제값들 자신의 평균이 아니라
+# 원래 표본평균에서 잰다. B 가 크면 위와 거의 같은 답을 준다.
 sq_errors = np.array([
     (np.random.choice(data, size=n, replace=True).mean() - data.mean()) ** 2
     for _ in range(n_boot)
@@ -98,7 +99,9 @@ Bootstrap SE:       0.1834
 Squared-error SE:   0.1810
 ```
 
-세 값이 소수점 둘째 자리까지 같다. 공식을 쓴 쪽과 공식 없이 재표집만으로 얻은 쪽이 같은 답에 이르렀다는 뜻이며, 남은 차이는 재표집 1만 번이 만들어 낸 우연의 몫이다. 시험은 통과했다.
+세 값이 소수점 둘째 자리까지 같다. 공식을 쓴 쪽과 공식 없이 재표집만으로 얻은 쪽이 같은 답에 이르렀다는 뜻이다. 시험은 통과했다.
+
+남은 차이는 두 몫이다. 하나는 재표집 1만 번이 만들어 낸 우연이고, 다른 하나는 붓스트랩 쪽이 체계적으로 $\sqrt{(n-1)/n} = 0.984$배 작게 나오는 데서 온다. 뒤의 것은 우연이 아니라 극한값 자체의 성질이며, 연습문제 5가 그 까닭을 밝힌다.
 
 </div>
 
@@ -179,7 +182,7 @@ plt.show()
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff easy" title="쉬움"></span> 위의 가격 자료($n = 31$, $s \approx 1.01$)에 대해 고전적 표준오차를 손으로 계산하고 모의실험 출력과 일치하는지 확인하라.
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 위의 가격 자료($n = 31$, $s \approx 1.03$)에 대해 고전적 표준오차를 손으로 계산하고 모의실험 출력과 일치하는지 확인하라.
 
 </div>
 
@@ -190,19 +193,19 @@ plt.show()
     s = \sqrt{\frac{1}{30}\sum_{i=1}^{31}(x_i - \bar{x})^2}
     $$
 
-    자료는 241.59에서 245.02까지 거의 균등한 간격으로 분포한다. 표본평균은 약 $\bar{x} \approx 243.31$이다. $s$를 계산하면(또는 코드 출력에서 확인하면):
+    자료는 241.59에서 245.02까지 거의 균등한 간격으로 분포한다. 표본평균은 약 $\bar{x} \approx 243.29$이다. $s$를 계산하면(또는 코드 출력에서 확인하면):
 
     $$
-    s \approx 1.013
+    s \approx 1.032
     $$
 
     고전적 표준오차는:
 
     $$
-    \text{SE} = \frac{s}{\sqrt{n}} = \frac{1.013}{\sqrt{31}} = \frac{1.013}{5.568} \approx 0.182
+    \text{SE} = \frac{s}{\sqrt{n}} = \frac{1.032}{\sqrt{31}} = \frac{1.032}{5.568} \approx 0.185
     $$
 
-    이 값이 모의실험 출력과 잘 맞아야 한다. $\square$
+    예제 1이 찍은 `Classical SE: 0.1854`와 맞는다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -301,7 +304,9 @@ plt.show()
     \widehat{\text{SE}}_{\text{boot}} \to \sqrt{\frac{(n-1)s^2}{n^2}} = \frac{s\sqrt{n-1}}{n}
     $$
 
-    이는 $n$이 크면 $s/\sqrt{n}$에 매우 가깝다($\sqrt{(n-1)/n}$배만큼 다르다). 붓스트랩 평균들의 표준편차에 $\text{ddof}=1$을 사용하면 극한에서 정확히 $s/\sqrt{n}$이 된다. 이 작은 차이는 분산을 $n$으로 나누느냐 $n-1$로 나누느냐의 구별에서 오며 $n \to \infty$일 때 사라진다. $\square$
+    이는 $n$이 크면 $s/\sqrt{n}$에 매우 가깝다($\sqrt{(n-1)/n}$배만큼 다르다). 이 작은 차이는 붓스트랩 세계의 분산 $\text{Var}^*(x_j^*)$가 편차제곱합을 $n-1$이 아니라 $n$으로 나눈 값이라는 데서 오며, $n \to \infty$일 때 사라진다.
+
+    **복제값들의 표준편차를 $\text{ddof}=1$로 계산해도 이 차이는 없어지지 않는다.** $\text{ddof}$는 $B$개의 복제값을 평균 내는 쪽의 보정이라 유한한 $B$에서의 치우침만 손볼 뿐, $B \to \infty$ 극한값은 $\text{ddof}$와 무관하게 $s\sqrt{n-1}/n$이다. 예제 1이 바로 그 확인이다. $\text{ddof}=1$로 계산한 붓스트랩 값이 $0.1834$로, 고전 값 $0.1854$가 아니라 $1.0320 \times \sqrt{30}/31 = 0.1823$ 쪽에 앉는다. $\square$
 
 <div class="drillbox" markdown>
 
