@@ -2,7 +2,7 @@
 
 docs/ch01/paradigms/reinforcement.md 에 실리는
 img/robot_cleaner_map.png 를 만든다. 시뮬레이션 본체는 그 페이지의 파이썬
-예제와 동일하며(같은 시드, 같은 방), 여기에 그리기 코드만 덧붙였다.
+보기와 동일하며(같은 시드, 같은 방), 여기에 그리기 코드만 덧붙였다.
 
 실행:  python3 scripts/make_robot_cleaner_map.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.

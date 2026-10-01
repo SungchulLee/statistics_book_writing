@@ -270,7 +270,7 @@ ROUNDS = 30
 
 
 def _run(rng, explore, rule):
-    """본문 예제 1과 같은 고리를 돌리며 회차별 기록 비중을 남긴다."""
+    """본문 보기 1과 같은 고리를 돌리며 회차별 기록 비중을 남긴다."""
     records = np.array([102.0, 100.0])
     traj = [100 * records[0] / records.sum()]
     for _ in range(ROUNDS):
@@ -349,7 +349,7 @@ def fig_feedback_loop():
                                   zorder=2, shrinkA=2, shrinkB=2))
 
     # --- 오른쪽: 궤적 ---
-    rng = np.random.default_rng(7)          # 본문 예제 1과 같은 씨앗·같은 순서
+    rng = np.random.default_rng(7)          # 본문 보기 1과 같은 씨앗·같은 순서
     t_w0 = _run(rng, 0.0, "winner")
     t_w20 = _run(rng, 0.2, "winner")
     t_prop = _run(np.random.default_rng(7), 0.0, "proportional")

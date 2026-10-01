@@ -3,7 +3,7 @@ r"""2장 산포 절에서 그림이 없던 두 쪽의 그림을 생성한다.
   ch02/spread/img/why_square.png        편차를 왜 제곱하는가
   ch02/spread/img/mad_breakdown.png     이상치가 들어올 때 두 척도의 운명
 
-mad_breakdown 의 왼쪽 칸은 그 쪽 예제 2 가 보고한 수치를 그대로 옮긴
+mad_breakdown 의 왼쪽 칸은 그 쪽 보기 2 가 보고한 수치를 그대로 옮긴
 것이다(원자료는 실행 때 내려받는 것이라 다시 읽지 않았다). 오른쪽 칸은
 이 스크립트가 직접 모의실험한다.
 
@@ -147,7 +147,7 @@ def mad_breakdown():
     fig, axes = plt.subplots(1, 2, figsize=(13, 4.8),
                              gridspec_kw={"width_ratios": [1, 1.2]})
 
-    # (a) 그 쪽 예제 2 의 수치를 그대로
+    # (a) 그 쪽 보기 2 의 수치를 그대로
     ax = axes[0]
     names = ["표준편차", "MAD"]
     before = np.array([6_848_235, 3_849_876])

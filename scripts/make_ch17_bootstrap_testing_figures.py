@@ -64,7 +64,7 @@ def step_hist(ax, v, bins, col, colf, lw=1.3):
 # ===========================================================================
 def fig_shift():
     rng_data = np.random.default_rng(1)
-    rng = np.random.default_rng(7)      # 본문 예제와 같은 난수열
+    rng = np.random.default_rng(7)      # 본문 보기와 같은 난수열
     rng2 = np.random.default_rng(99)    # 비교용(옮기지 않은) 분포에만 쓴다
     B = 10000
 

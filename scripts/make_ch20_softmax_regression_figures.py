@@ -141,7 +141,7 @@ EPS = 1e-12
 
 # --- 왼쪽: 로짓을 통째로 키우면 순진한 소프트맥스가 NaN 이 된다 ----------
 M = np.linspace(0, 900, 1801)
-shape = np.array([-1.0, 0.0, -2.0])            # 본문 예제와 같은 모양
+shape = np.array([-1.0, 0.0, -2.0])            # 본문 보기와 같은 모양
 naive = np.empty((M.size, 3))
 stable = np.empty((M.size, 3))
 with np.errstate(over="ignore", invalid="ignore"):

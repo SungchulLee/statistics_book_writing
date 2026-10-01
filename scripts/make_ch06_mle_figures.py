@@ -6,8 +6,8 @@ r"""6.4 최대가능도 절의 개념 그림을 생성한다.
 
   ch06/mle/img/probability_vs_likelihood.png   확률과 가능도 — 무엇을 고정하는가
   ch06/mle/img/mle_candidates.png              후보 분포 가운데 고르기
-  ch06/mle/img/bernoulli_loglik_curve.png      예제 1 의 로그가능도 곡선
-  ch06/mle/img/likelihood_vs_loglik_scale.png  예제 3 의 두 축
+  ch06/mle/img/bernoulli_loglik_curve.png      보기 1 의 로그가능도 곡선
+  ch06/mle/img/likelihood_vs_loglik_scale.png  보기 3 의 두 축
   ch06/mle/img/fisher_curvature_se.png         곡률에서 표준오차로
   ch06/mle/img/mle_asymptotics.png             n 이 커지며 정규로
 
@@ -177,10 +177,10 @@ def mle_candidates():
 
 
 # ==================================================================
-# 3·4. 쪽의 예제와 같은 자료로 그린 로그가능도
+# 3·4. 쪽의 보기와 같은 자료로 그린 로그가능도
 # ==================================================================
 def _page_coins():
-    """예제 1·3 과 같은 자료. 같은 시드이므로 k = 67 이 그대로 나온다."""
+    """보기 1·3 과 같은 자료. 같은 시드이므로 k = 67 이 그대로 나온다."""
     rng = np.random.default_rng(1)
     coins = rng.binomial(n=1, p=0.7, size=100)
     return coins.sum(), len(coins)

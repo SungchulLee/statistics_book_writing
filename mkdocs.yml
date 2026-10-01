@@ -119,7 +119,7 @@ nav:
             - 점그림과 줄기잎그림: ch02/visualization/dot_stem.md
             - 상자그림: ch02/visualization/boxplots.md
             - 바이올린 그림: ch02/visualization/violin.md
-            - 집단 비교 예제: ch02/visualization/group_comparison_examples.md
+            - 집단 비교 보기: ch02/visualization/group_comparison_examples.md
             - 스트립 그림과 스웜 그림: ch02/visualization/strip_swarm.md
             - 산점도: ch02/visualization/scatter.md
             - 육각형 구간 그림과 2차원 히스토그램: ch02/visualization/hexbin.md
@@ -241,7 +241,7 @@ nav:
             - 포획–재포획법: ch06/mle/capture_recapture.md
             - 최대가능도의 점근적 성질: ch06/mle/mle_asymptotics.md
             - Fisher 정보량과 표준오차: ch06/mle/fisher_information.md
-            - 최대가능도 최적화 예제: ch06/mle/mle_optimization.md
+            - 최대가능도 최적화 보기: ch06/mle/mle_optimization.md
             - Fisher 정보량 계산: ch06/mle/fisher_information_code.md
             - 포획–재포획 최대가능도: ch06/mle/capture_recapture_code.md
             - 로그가능도 시각화: ch06/mle/log_likelihood.md
@@ -410,7 +410,7 @@ nav:
             - Bonferroni와 Scheffé 방법: ch11/post_hoc/bonferroni_scheffe.md
             - Dunnett 검정 (대조군과의 비교): ch11/post_hoc/dunnett.md
             - Games-Howell (분산이 다를 때): ch11/post_hoc/games_howell.md
-            - 사후비교 예제: ch11/post_hoc/post_hoc_comparisons.md
+            - 사후비교 보기: ch11/post_hoc/post_hoc_comparisons.md
         - 11.4 Welch 분산분석:
             - Welch의 일원배치 분산분석: ch11/anova_welch/welch_one_way.md
             - Welch의 이원배치 분산분석: ch11/anova_welch/welch_two_way.md
@@ -493,7 +493,7 @@ nav:
             - 단순 OLS 추정량의 표집분포: ch13/estimation_inference/sampling_dist_simple.md
             - 단순 OLS 추정량의 신뢰구간: ch13/estimation_inference/ci_coeff.md
             - 일반 OLS 추정량의 표집분포: ch13/estimation_inference/tests_coeff.md
-            - 기울기의 신뢰구간 (카페인 예제): ch13/estimation_inference/ci_slope_example.md
+            - 기울기의 신뢰구간 (카페인 보기): ch13/estimation_inference/ci_slope_example.md
             - 신뢰띠와 예측띠: ch13/estimation_inference/ci_prediction_bands.md
             - 잔차제곱합 곡면 시각화: ch13/estimation_inference/rss_surface_visualization.md
             - 최소제곱 모의실험 (몬테카를로): ch13/estimation_inference/ols_simulation.md
@@ -502,7 +502,7 @@ nav:
             - 계수의 p값과 신뢰구간: ch13/testing_coefficients/pvalues_ci.md
             - 유의성의 해석: ch13/testing_coefficients/significance.md
             - OLS 회귀 출력 재현: ch13/testing_coefficients/ols_regression_output.md
-            - 계수 검정 예제: ch13/testing_coefficients/testing_coefficients.md
+            - 계수 검정 보기: ch13/testing_coefficients/testing_coefficients.md
         - 13.4 교호작용과 다항식 확장:
             - 교호작용 항: ch13/interaction_polynomial/interaction_terms.md
             - 다항회귀: ch13/interaction_polynomial/polynomial_regression.md
@@ -735,7 +735,7 @@ nav:
             - 베이즈 해석 (정규 사전분포): ch18/ridge/bayesian.md
             - 능형 자취와 λ 선택: ch18/ridge/lambda_selection.md
             - 능형회귀 개관: ch18/ridge/ridge.md
-            - 능형회귀 예제 (코드): ch18/ridge/ridge_examples.md
+            - 능형회귀 보기 (코드): ch18/ridge/ridge_examples.md
         - 18.3 라쏘 회귀:
             - 라쏘 정식화와 희소성: ch18/lasso/formulation.md
             - 기하학적 해석 (L1 벌점): ch18/lasso/geometry.md
@@ -743,14 +743,14 @@ nav:
             - 좌표하강 알고리즘: ch18/lasso/coordinate_descent.md
             - 변수선택 도구로서의 라쏘: ch18/lasso/feature_selection.md
             - 라쏘 회귀 개관: ch18/lasso/lasso.md
-            - 라쏘 회귀 예제 (코드): ch18/lasso/lasso_examples.md
+            - 라쏘 회귀 보기 (코드): ch18/lasso/lasso_examples.md
             - 주택가격 자료의 라쏘 정칙화 경로 (코드): ch18/lasso/lasso_housing_regularization_path.md
         - 18.4 엘라스틱넷:
             - 엘라스틱넷 정식화: ch18/elastic_net/formulation.md
             - 순수 능형회귀·라쏘에 대한 이점: ch18/elastic_net/advantages.md
             - 상관된 변수에 대한 그룹 효과: ch18/elastic_net/grouping_effect.md
             - 엘라스틱넷 개관: ch18/elastic_net/elastic_net.md
-            - 엘라스틱넷 예제 (코드): ch18/elastic_net/elastic_net_examples.md
+            - 엘라스틱넷 보기 (코드): ch18/elastic_net/elastic_net_examples.md
         - 18.5 초모수 조율:
             - λ 선택을 위한 교차검증: ch18/tuning/cross_validation.md
             - 정칙화 경로: ch18/tuning/regularization_path.md
@@ -760,7 +760,7 @@ nav:
             - 주성분회귀와 부분최소제곱 개관: ch18/pcr_pls/index.md
             - 주성분회귀: ch18/pcr_pls/principal_components_regression.md
             - 부분최소제곱: ch18/pcr_pls/partial_least_squares.md
-            - 주성분회귀와 부분최소제곱 예제 (코드): ch18/pcr_pls/pcr_pls_examples.md
+            - 주성분회귀와 부분최소제곱 보기 (코드): ch18/pcr_pls/pcr_pls_examples.md
         - 18.7 개관과 비교:
             - 능형회귀 대 라쏘 대 엘라스틱넷: ch18/overview/comparison.md
             - 방법 선택 지침: ch18/overview/guidelines.md

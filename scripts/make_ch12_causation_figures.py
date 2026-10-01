@@ -243,7 +243,7 @@ def fig_four_structures():
 
 # === 그림 3. 심슨의 역설과 부분상관 ===
 def fig_simpson_and_partial():
-    # 본문 예제 3 과 똑같은 난수 순서를 재현한다.
+    # 본문 보기 3 과 똑같은 난수 순서를 재현한다.
     np.random.seed(42)
     groups = {"A": (50, 0.2, 2, -0.5),
               "B": (50, 0.5, 5, -0.5),
@@ -260,7 +260,7 @@ def fig_simpson_and_partial():
     m_all, b_all = np.polyfit(all_x, all_y, 1)
     r_all, _ = stats.pearsonr(all_x, all_y)
 
-    # 본문 예제 4 와 똑같은 난수 순서
+    # 본문 보기 4 와 똑같은 난수 순서
     np.random.seed(42)
     n = 200
     Z = np.random.normal(0, 1, n)

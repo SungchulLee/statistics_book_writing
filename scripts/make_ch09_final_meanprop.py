@@ -95,8 +95,8 @@ def power_curve_mean():
                  fontsize=9.5, color=INK, ha="left", va="center",
                  arrowprops=dict(arrowstyle="->", color=MUTED, lw=1.0))
 
-    # --- 오른쪽: 이 쪽의 예제를 표본크기로 밀어 본다 ---
-    d0 = 0.2 / 1.1                     # 예제 2: xbar-mu0 = 0.2, s = 1.1
+    # --- 오른쪽: 이 쪽의 보기를 표본크기로 밀어 본다 ---
+    d0 = 0.2 / 1.1                     # 보기 2: xbar-mu0 = 0.2, s = 1.1
     ns = np.arange(5, 401)
     pw = np.array([t_power(n, d0, two_sided=False) for n in ns])
     axR.plot(ns, pw, color=BLUE, lw=2.2)
@@ -109,7 +109,7 @@ def power_curve_mean():
              fontsize=9.5, color=INK)
 
     axR.plot([25], [p25], "o", color=RED, ms=6.5, zorder=6)
-    axR.annotate(f"예제의 $n=25$\n검정력 {p25:.2f}",
+    axR.annotate(f"보기의 $n=25$\n검정력 {p25:.2f}",
                  xy=(25, p25), xytext=(70, 0.30),
                  fontsize=10, color=RED, ha="left",
                  arrowprops=dict(arrowstyle="->", color=RED, lw=1.1))
@@ -124,7 +124,7 @@ def power_curve_mean():
     axR.set_ylim(0, 1.04)
     axR.set_xlabel("표본크기 $n$", fontsize=11, color=INK)
     axR.set_ylabel("검정력", fontsize=11, color=INK)
-    axR.set_title("예제 2의 효과크기 $d=0.18$ 을 고정하고 (단측)",
+    axR.set_title("보기 2의 효과크기 $d=0.18$ 을 고정하고 (단측)",
                   fontsize=12, color=INK, pad=9)
     clean_axis(axR)
 

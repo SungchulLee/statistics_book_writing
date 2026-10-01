@@ -303,7 +303,7 @@ def fig_shapiro_power():
     ax.axhline(0.8, color=GREEN, lw=1.2, ls=(0, (5, 3)))
     ax.text(121, 0.81, "검정력 0.8", fontsize=10, color=GREEN, ha="right")
     ax.vlines(8, 0, 1.0, color=INK, lw=1.2, ls=(0, (2, 2)))
-    ax.annotate("본문 예제의 $n = 8$", xy=(8, 0.62), xytext=(17, 0.70),
+    ax.annotate("본문 보기의 $n = 8$", xy=(8, 0.62), xytext=(17, 0.70),
                 fontsize=10.5, color=INK,
                 arrowprops=dict(arrowstyle="->", color=INK, lw=1.0))
     ax.set_xlim(0, 126)
@@ -356,7 +356,7 @@ def fig_ratio_dullness():
     ax.set_xlabel("$F = s_x^2/s_y^2$   ($n_1 = n_2 = 100$)", fontsize=11,
                   color=INK)
     bare(ax)
-    ax.set_title("귀무분포 $F_{99,99}$ 와 본문 예제의 다섯 관측값",
+    ax.set_title("귀무분포 $F_{99,99}$ 와 본문 보기의 다섯 관측값",
                  fontsize=12.5, color=INK, pad=10)
     save(fig, "f_ratio_dullness.png")
     print(f"  임계값 {lo:.4f}, {hi:.4f}")

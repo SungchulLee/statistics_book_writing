@@ -202,7 +202,7 @@ import matplotlib; matplotlib.use("Agg")
 import pandas as pd, numpy as np, matplotlib.pyplot as plt, seaborn as sns
 OUT="/Users/sungchul/Desktop/book/statistics_in_korean/docs/ch02/visualization/img/"
 
-# 예제 1
+# 보기 1
 np.random.seed(42)
 airlines=['American','Delta','Southwest','United']; n_obs=100
 params={'American':(2,3),'Delta':(1.5,2.5),'Southwest':(1.2,2),'United':(1.8,3.2)}
@@ -211,7 +211,7 @@ for a in airlines:
     sh,sc=params[a]
     for d in np.random.gamma(shape=sh,scale=sc,size=n_obs): rows.append({'airline':a,'pct_carrier_delay':d})
 airline_stats=pd.DataFrame(rows)
-print("=== 예제 1: 항공사별 지연 요약 ===")
+print("=== 보기 1: 항공사별 지연 요약 ===")
 print(airline_stats.groupby('airline')['pct_carrier_delay'].describe()[['count','mean','50%','std','max']].round(2).to_string())
 
 fig,ax=plt.subplots(figsize=(8,5))
@@ -226,7 +226,7 @@ ax.set_xlabel('Airline'); ax.set_ylabel('Daily % of Delayed Flights')
 ax.set_title('Airline Delay Comparison: Violin Plots')
 plt.tight_layout(); plt.savefig(OUT+"gce_airline_violin.png",dpi=140,facecolor="white"); plt.close()
 
-# 예제 2
+# 보기 2
 np.random.seed(123)
 zips=[98188,98105,98108,98126]; n_homes=150; rows=[]
 for z in zips:
@@ -234,7 +234,7 @@ for z in zips:
     pr=np.clip(np.random.normal(base,100_000,n_homes),50_000,2_000_000)
     for p in pr: rows.append({'ZipCode':str(z),'TaxAssessedValue':p})
 housing=pd.DataFrame(rows)
-print("\n=== 예제 2: 우편번호별 주택가치 (천 달러) ===")
+print("\n=== 보기 2: 우편번호별 주택가치 (천 달러) ===")
 print((housing.groupby('ZipCode')['TaxAssessedValue'].agg(['count','mean','median','std'])/1000).round(1).assign(count=lambda d:(d['count']*1000).astype(int)).to_string())
 fig,ax=plt.subplots(figsize=(8,5))
 housing.boxplot(by='ZipCode',column='TaxAssessedValue',ax=ax)
@@ -242,7 +242,7 @@ ax.set_xlabel('Zip Code'); ax.set_ylabel('Tax Assessed Value ($)')
 ax.set_title('Housing Values Across Neighborhoods'); plt.suptitle('')
 plt.tight_layout(); plt.savefig(OUT+"gce_housing_box.png",dpi=140,facecolor="white"); plt.close()
 
-# 예제 3
+# 보기 3
 np.random.seed(456)
 grades=list('ABCDEFG'); rows=[]
 for g in grades:
@@ -250,7 +250,7 @@ for g in grades:
     inc=np.clip(np.random.normal(80_000-i*8_000,15_000+i*5_000,100),10_000,200_000)
     for v in inc: rows.append({'grade':g,'income':v})
 loans=pd.DataFrame(rows)
-print("\n=== 예제 3: 신용등급별 소득 (천 달러) ===")
+print("\n=== 보기 3: 신용등급별 소득 (천 달러) ===")
 print((loans.groupby('grade')['income'].agg(['mean','median','std'])/1000).round(1).to_string())
 fig,ax=plt.subplots(figsize=(10,5))
 sns.violinplot(data=loans,x='grade',y='income',ax=ax,color='lightgreen')

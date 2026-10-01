@@ -58,7 +58,7 @@ def clean_axis(ax):
 
 
 # === 측정 ===
-D1, D2 = 9, 11                      # 본문 수치 예제와 같은 자유도
+D1, D2 = 9, 11                      # 본문 수치 보기와 같은 자유도
 LO = stats.f.ppf(ALPHA / 2, D1, D2)         # 아래쪽 2.5% 점
 HI = stats.f.ppf(1 - ALPHA / 2, D1, D2)     # 위쪽 2.5% 점
 HI_SWAP = stats.f.ppf(1 - ALPHA / 2, D2, D1)

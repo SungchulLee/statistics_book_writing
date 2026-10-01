@@ -270,7 +270,7 @@ def pairing_efficiency():
 def z_rejection_two_scales():
     mu0, sigma, n = 50.0, 10.0, 25
     se = sigma / np.sqrt(n)
-    xbar = 53.5                       # 쪽의 풀이 예제와 같은 숫자
+    xbar = 53.5                       # 쪽의 풀이 보기와 같은 숫자
     z_obs = (xbar - mu0) / se
 
     fig, axes = plt.subplots(2, 1, figsize=(11.5, 5.6), sharex=False)

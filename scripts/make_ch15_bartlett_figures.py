@@ -272,7 +272,7 @@ def fig_equals_f():
     ax1.set_xlabel("바틀렛 통계량 $T$   (귀무분포 $\\chi^2_1$)", fontsize=11,
                    color=INK)
     bare(ax1)
-    ax1.set_title("$k = 2$, $n_1 = n_2 = 100$ — 본문 예제의 다섯 값",
+    ax1.set_title("$k = 2$, $n_1 = n_2 = 100$ — 본문 보기의 다섯 값",
                   fontsize=11.5, color=INK, pad=9)
 
     n = 100

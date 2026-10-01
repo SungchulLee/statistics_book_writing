@@ -28,7 +28,7 @@ MUTED = "#90A4AE"
 RED = "#D32F2F"
 
 
-# === 본문 예제의 혼동행렬 (행 = 실제, 열 = 예측) =========================
+# === 본문 보기의 혼동행렬 (행 = 실제, 열 = 예측) =========================
 CM = np.array([[760, 30, 10],
                [40, 100, 10],
                [25, 5, 20]], dtype=float)
@@ -118,10 +118,10 @@ ax2.annotate(f"교차: 지지도 {pr[i_cross]*100:.0f}%",
              fontsize=9, color=INK, ha="left", va="center",
              arrowprops=dict(arrowstyle="->", color=INK, lw=1.0))
 
-# 본문 예제 위치 (C 의 지지도 5%)
+# 본문 보기 위치 (C 의 지지도 5%)
 ax2.axvline(0.05, color=MUTED, lw=1.2, ls=":")
 ax2.plot([0.05, 0.05], [P_w, acc], "o", color=INK, ms=5, zorder=5)
-ax2.annotate(f"본문 예제\n가중 {P_w:.3f} / 미시 {acc:.3f}",
+ax2.annotate(f"본문 보기\n가중 {P_w:.3f} / 미시 {acc:.3f}",
              xy=(0.05, acc), xytext=(0.105, 0.925),
              fontsize=9, color=INK,
              arrowprops=dict(arrowstyle="->", color=INK, lw=1.0))

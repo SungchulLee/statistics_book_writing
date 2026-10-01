@@ -8,10 +8,10 @@ r"""5.3 표준오차 페이지의 그림 세 장을 다시 그린다.
 
 페이지에는 파이썬 블록이 넷 있고 그중 그림을 그리는 것은 셋이다.
 
-  블록 1  예제 1  한 파일 판                  -> se_xbar_single_file.png
-  블록 2  예제 2  global_name_space.py        (설정만, 그림 없음)
-  블록 3  예제 3  standard_error_of_x_bar.py  -> se_xbar_module.png
-  블록 4  예제 4  standard_error_of_s_square.py -> se_s2_module.png
+  블록 1  보기 1  한 파일 판                  -> se_xbar_single_file.png
+  블록 2  보기 2  global_name_space.py        (설정만, 그림 없음)
+  블록 3  보기 3  standard_error_of_x_bar.py  -> se_xbar_module.png
+  블록 4  보기 4  standard_error_of_s_square.py -> se_s2_module.png
 
 블록 3 과 4 는 서로, 그리고 블록 2 를 import 하므로 임시 디렉터리에 실제
 파일로 풀어 놓고 실행한다. 시드는 블록 2 의 기본값(1)을 쓴다.
@@ -85,7 +85,7 @@ def python_blocks(text):
 
 
 def main():
-    # 페이지 뒤쪽 연습문제에도 파이썬 블록이 있다. 예제는 앞의 넷이다.
+    # 페이지 뒤쪽 연습문제에도 파이썬 블록이 있다. 보기는 앞의 넷이다.
     blocks = python_blocks(PAGE.read_text(encoding="utf-8"))
     if len(blocks) < len(PLAN):
         raise SystemExit(f"파이썬 블록이 {len(blocks)}개뿐이다. "

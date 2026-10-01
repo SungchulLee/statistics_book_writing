@@ -281,7 +281,7 @@ def optimization_paths():
     ax.set_title("닫힌 형태가 없으면 반복해 오른다 (Newton–Raphson)",
                  fontsize=12.5, pad=10)
 
-    # (b) 봉우리가 둘인 혼합모형 — 쪽의 예제와 같은 자료
+    # (b) 봉우리가 둘인 혼합모형 — 쪽의 보기와 같은 자료
     ax = axes[1]
     rng = np.random.default_rng(42)
     m = 200

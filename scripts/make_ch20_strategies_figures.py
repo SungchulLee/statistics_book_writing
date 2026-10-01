@@ -36,7 +36,7 @@ from sklearn.datasets import make_classification            # noqa: E402
 from sklearn.linear_model import LogisticRegression         # noqa: E402
 from sklearn.multiclass import OneVsRestClassifier          # noqa: E402
 
-# --- 본문 예제 표의 5-겹 교차검증 결과 -----------------------------------
+# --- 본문 보기 표의 5-겹 교차검증 결과 -----------------------------------
 meth = ["OvR", "OvO", "소프트맥스"]
 acc = np.array([0.6800, 0.6700, 0.6820])
 sd = np.array([0.0105, 0.0138, 0.0068])

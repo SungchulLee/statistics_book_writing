@@ -68,7 +68,7 @@ def fig_thresholds():
         print(f"  k={k}: LSD {lsd[i]:.3f}  투키 {tuk[i]:.3f}  "
               f"본페로니 {bon[i]:.3f}  셰페 {sch[i]:.3f}")
 
-    # 본문 예제 자료
+    # 본문 보기 자료
     rng = np.random.default_rng(42)
     g = [rng.normal(10.0, 3.5, 15), rng.normal(12.0, 3.5, 15),
          rng.normal(15.0, 3.5, 15)]
@@ -124,7 +124,7 @@ def fig_thresholds():
     ax.set_xlim(0, 6.9)
     ax.set_ylim(-0.75, 2.85)
     ax.set_xlabel("평균 차이", fontsize=10.5, color=INK)
-    ax.set_title("$k$ = 3, $n$ = 15 인 본문 예제", fontsize=11.5, color=INK)
+    ax.set_title("$k$ = 3, $n$ = 15 인 본문 보기", fontsize=11.5, color=INK)
     ax.legend(fontsize=9.5, loc="lower right")
     clean(ax)
 

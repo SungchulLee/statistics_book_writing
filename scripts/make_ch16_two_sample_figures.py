@@ -188,7 +188,7 @@ def ecdf(x, grid):
 def ks_ecdf_gap():
     fig, axes = plt.subplots(1, 2, figsize=(12.2, 4.8))
 
-    # (가) 본문 예제
+    # (가) 본문 보기
     A = np.array([10.1, 10.3, 10.2, 10.5, 10.4])
     B = np.array([10.0, 10.2, 10.6, 10.8, 10.4])
     ax = axes[0]

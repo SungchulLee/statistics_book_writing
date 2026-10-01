@@ -189,7 +189,7 @@ def fig_mae_rmse():
         ("모든 잔차가 같은 크기", np.ones(m)),
         ("균등분포", rng.uniform(-1, 1, m)),
         ("정규분포", rng.normal(0, 1, m)),
-        ("위 예제 (이상점 하나)", e),
+        ("위 보기 (이상점 하나)", e),
         ("라플라스분포", rng.laplace(0, 1, m)),
         (r"$t_3$ 분포", rng.standard_t(3, m)),
     ]

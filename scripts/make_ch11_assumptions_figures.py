@@ -262,7 +262,7 @@ def fig_bartlett():
     ax.axhline(0.8, color=RED, lw=1.4, ls="--")
     ax.text(30, 0.83, "검정력 0.80", color=RED, fontsize=10)
     ax.axvline(100, color=MUTED, lw=1.2, ls=":")
-    ax.text(112, 0.12, "본문 예제의 $n$ = 100", fontsize=10, color=INK)
+    ax.text(112, 0.12, "본문 보기의 $n$ = 100", fontsize=10, color=INK)
     ax.set_xscale("log")
     ax.set_xticks(ns)
     ax.set_xticklabels([str(n) for n in ns], fontsize=10)
