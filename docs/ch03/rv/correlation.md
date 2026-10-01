@@ -109,49 +109,133 @@ $\rho$는 두 가지를 하지 **못한다.**
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 상관계수는 집단을 탄다
+**보기 1.** <span class="diff easy" title="쉬움"></span> 상관계수는 집단을 탄다. 붓꽃 $150$ 송이의 꽃받침 길이와 너비를 쓴다. setosa·versicolor·virginica 세 품종이 $50$ 송이씩이다.
+
+**(1)** $150$ 송이를 한 덩어리로 재면 $r = -0.118$ 인데 품종별로 재면 셋 다 양수다. 전체 공분산을 **품종 안의 몫**과 **품종 사이의 몫**으로 정확히 쪼개는 식을 적고, 두 몫의 부호가 어떻게 갈리는지 보이시오.
+
+**(2)** 품종별 평균이 setosa $(5.01,\, 3.43)$, versicolor $(5.94,\, 2.77)$, virginica $(6.59,\, 2.97)$ 이다. 이 세 점만 보고도 "사이의 몫"이 음수일 것임을 알 수 있는가.
 
 </div>
 
-```python
-import seaborn as sns
+??? success "풀이"
 
-# 붓꽃 150송이의 실측 자료. 세 품종이 50송이씩 들어 있다.
-iris = sns.load_dataset("iris")
+    **(1) 공분산이 두 조각으로 정확히 쪼개진다.** 품종을 $G$ 라 하면 전체 공분산은 **전체 공분산의 법칙**에 의해
 
-print("꽃받침 길이와 너비의 상관계수")
-print(f"  {'전체 150송이':<16}{iris['sepal_length'].corr(iris['sepal_width']):+.3f}")
-for name, g in iris.groupby("species"):
-    print(f"  {name:<16}{g['sepal_length'].corr(g['sepal_width']):+.3f}")
+    $$
+    \operatorname{Cov}(X, Y) = \underbrace{E\big[\operatorname{Cov}(X, Y \mid G)\big]}_{\text{품종 안}} + \underbrace{\operatorname{Cov}\big(E[X \mid G],\, E[Y \mid G]\big)}_{\text{품종 사이}}
+    $$
 
-print("\n품종별 평균")
-print(iris.groupby("species")[["sepal_length", "sepal_width"]].mean().round(2))
-```
+    다. 세 품종이 $50$ 송이씩으로 같으므로 가중치가 모두 $1/3$ 이고, 표본에서는 다음 항등식이 된다.
 
-출력:
+    $$
+    \widehat{\operatorname{Cov}}
+    = \frac13 \sum_{g} \widehat{\operatorname{Cov}}_g
+    + \frac13 \sum_{g} (\bar x_g - \bar x)(\bar y_g - \bar y)
+    $$
 
-```
-꽃받침 길이와 너비의 상관계수
-  전체 150송이        -0.118
-  setosa          +0.743
-  versicolor      +0.526
-  virginica       +0.457
+    (여기서 각 공분산은 $n$ 으로 나눈 것이다. 그래야 항등식이 정확히 맞는다.)
 
-품종별 평균
-            sepal_length  sepal_width
-species                              
-setosa              5.01         3.43
-versicolor          5.94         2.77
-virginica           6.59         2.97
-```
+    첫째 항은 각 무리 **안에서** 길이와 너비가 같이 움직이는 정도이고, 둘째 항은 **무리의 중심들**이 길이와 너비 평면에서 어떻게 늘어서 있는가다. 이 자료에서는
 
-![붓꽃: 품종을 섞으면 상관의 부호가 뒤집힌다](./img/covariance_correlation_iris.png)
+    $$
+    \text{품종 안} = +0.0909,
+    \qquad
+    \text{품종 사이} = -0.1330,
+    \qquad
+    \text{합} = -0.0422
+    $$
 
-150송이를 한 덩어리로 놓고 재면 $r = -0.118$로 **음의 상관**이다. 길수록 오히려 좁다는 말이 된다. 그런데 품종별로 나누어 재면 $+0.743$, $+0.526$, $+0.457$로 셋 다 **뚜렷한 양의 상관**이다. 부호가 뒤집힌다.
+    이다. **두 몫의 부호가 반대이고 사이의 몫이 더 크다.** 그래서 합이 음수가 되고, 이것을 $s_x s_y = 0.8253 \times 0.4344$ 로 나눈 $-0.1176$ 이 전체 상관계수다. 세 품종 모두에서 $r$ 이 $+0.46$ 이상인데도 전체가 음수인 이유가 수치 하나로 드러난다.
 
-품종별 평균을 보면 까닭이 드러난다. setosa는 꽃받침이 짧고($5.01$) 넓은($3.43$) 반면 versicolor와 virginica는 길고($5.94$, $6.59$) 좁다($2.77$, $2.97$). 품종이라는 숨은 변수가 길이와 너비를 **서로 반대 방향으로** 밀어 놓은 것이다. 세 덩어리를 한데 섞으면 이 품종 간의 차이가 품종 안의 관계를 압도해 버린다.
+    **(2) 세 점만으로 알 수 있다.** 둘째 항은 세 중심의 $(x, y)$ 편차를 곱해 더한 것이므로, 중심들이 **오른쪽으로 갈수록 아래로 내려가면** 각 곱이 음수가 되어 합도 음수다. 전체 평균이 $(5.843,\, 3.057)$ 이므로 편차는
 
-오른쪽 그림이 이 사정을 그대로 보여 준다. 세 무리가 각각 오른쪽 위로 기울어 있는데, 무리들의 **위치**가 왼쪽 위에서 오른쪽 아래로 늘어서 있다. 무리를 무시하고 직선 하나를 그으면 무리 사이의 배치를 따라가므로 기울기가 음수가 된다.
+    | 품종 | $\bar x_g - \bar x$ | $\bar y_g - \bar y$ | 곱 |
+    |:---|---:|---:|---:|
+    | setosa | $-0.837$ | $+0.371$ | $-0.310$ |
+    | versicolor | $+0.093$ | $-0.287$ | $-0.027$ |
+    | virginica | $+0.745$ | $-0.083$ | $-0.062$ |
+
+    로 **세 곱이 모두 음수**다. 특히 setosa 한 품종이 $-0.310$ 으로 세 곱의 합 $-0.399$ 가운데 $78\%$ 를 만든다. 꽃받침이 유난히 짧고($-0.84$) 넓은($+0.37$) 무리이기 때문이다.
+
+    짜임을 한 줄로 적으면 이렇다. **품종이라는 숨은 변수가 길이와 너비를 서로 반대 방향으로 밀어 놓았고, 그 밀어냄이 품종 안의 양의 관계보다 세다.** 세 무리를 한데 섞는 순간 무리 사이의 배치가 무리 안의 기울기를 덮어 버린다.
+
+    **(3) 수치적으로.** 항등식이 정말 맞는지 두 몫을 더해 전체와 맞춰 본다.
+
+    ```python
+    import numpy as np
+    import seaborn as sns
+
+    # 붓꽃 150송이의 실측 자료. 세 품종이 50송이씩 들어 있다.
+    iris = sns.load_dataset("iris")
+
+    print("꽃받침 길이와 너비의 상관계수")
+    print(f"  {'전체 150송이':<16}{iris['sepal_length'].corr(iris['sepal_width']):+.3f}")
+    for name, g in iris.groupby("species"):
+        print(f"  {name:<16}{g['sepal_length'].corr(g['sepal_width']):+.3f}")
+
+    print("\n품종별 평균")
+    print(iris.groupby("species")[["sepal_length", "sepal_width"]].mean().round(2))
+
+    # 전체 공분산을 "품종 안"과 "품종 사이"로 쪼갠다.
+    #   Cov = (1/3) * sum_g Cov_g  +  (1/3) * sum_g (xbar_g - xbar)(ybar_g - ybar)
+    # 세 품종의 크기가 50으로 같아 가중치가 모두 1/3 이다.
+    x = iris["sepal_length"].to_numpy()
+    y = iris["sepal_width"].to_numpy()
+    xbar, ybar = x.mean(), y.mean()
+
+    within = between = 0.0
+    print("\n품종 안의 공분산과 품종 사이의 기여")
+    for name, g in iris.groupby("species"):
+        w = len(g) / len(iris)
+        cov_g = np.cov(g["sepal_length"], g["sepal_width"], ddof=0)[0, 1]
+        bet_g = (g["sepal_length"].mean() - xbar) * (g["sepal_width"].mean() - ybar)
+        within += w * cov_g
+        between += w * bet_g
+        print(f"  {name:<12} 안의 공분산 {cov_g:+.6f}   사이 기여 {bet_g:+.6f}")
+
+    total = np.cov(x, y, ddof=0)[0, 1]
+    print(f"\n  품종 안  (1/3)*sum Cov_g           = {within:+.6f}")
+    print(f"  품종 사이 (1/3)*sum (dx)(dy)        = {between:+.6f}")
+    print(f"  합                                  = {within + between:+.6f}")
+    print(f"  전체 150송이의 공분산                = {total:+.6f}")
+    print(f"  r = 합 / (sd_x * sd_y)              = {(within + between) / (x.std() * y.std()):+.6f}")
+    ```
+
+    출력:
+
+    ```
+    꽃받침 길이와 너비의 상관계수
+      전체 150송이        -0.118
+      setosa          +0.743
+      versicolor      +0.526
+      virginica       +0.457
+
+    품종별 평균
+                sepal_length  sepal_width
+    species                              
+    setosa              5.01         3.43
+    versicolor          5.94         2.77
+    virginica           6.59         2.97
+
+    품종 안의 공분산과 품종 사이의 기여
+      setosa       안의 공분산 +0.097232   사이 기여 -0.310372
+      versicolor   안의 공분산 +0.083480   사이 기여 -0.026626
+      virginica    안의 공분산 +0.091888   사이 기여 -0.062056
+
+      품종 안  (1/3)*sum Cov_g           = +0.090867
+      품종 사이 (1/3)*sum (dx)(dy)        = -0.133018
+      합                                  = -0.042151
+      전체 150송이의 공분산                = -0.042151
+      r = 합 / (sd_x * sd_y)              = -0.117570
+    ```
+
+    **항등식이 소수 여섯째 자리까지 맞는다.** $+0.090867$ 과 $-0.133018$ 을 더한 $-0.042151$ 이 전체 공분산 $-0.042151$ 과 같고, 그것을 두 표준편차로 나눈 $-0.117570$ 이 맨 윗줄의 $-0.118$ 과 같다. 근사가 아니라 항등식이다.
+
+    ![붓꽃: 품종을 섞으면 상관의 부호가 뒤집힌다](./img/covariance_correlation_iris.png)
+
+    그림이 두 몫을 각각 보여 준다. 오른쪽 칸에서 세 색의 직선이 모두 **오른쪽 위로** 기울어 있는 것이 품종 안의 몫이고, 세 무리의 **위치**가 왼쪽 위(파랑)에서 오른쪽 아래(주황·초록)로 늘어서 있는 것이 품종 사이의 몫이다. 왼쪽 칸의 빨간 직선은 무리를 무시하고 그은 것이라 그 배치를 따라가 기울기가 음수가 된다.
+
+    눈여겨볼 것은 왼쪽 칸만으로는 오른쪽 칸을 짐작할 수 없다는 점이다. 색을 지우면 점들이 그저 넓게 퍼진 구름으로 보이고, 그 안에 기울기가 양인 세 덩어리가 숨어 있다는 단서가 없다. **$r = -0.118$ 이라는 수 하나를 보고 "길수록 좁다" 고 읽으면 세 품종 모두에서 참인 사실을 정반대로 말하게 된다.**
 
 !!! warning "상관계수를 보고할 때 함께 물을 것"
 
@@ -218,174 +302,620 @@ $\mathbf R$ 역시 대칭이고 양반정치이며, 대각선은 모두 $1$이�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 자료에서 공분산과 상관계수 구하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 자료에서 공분산과 상관계수 구하기. $X \sim N(0,1)$ 과 그와 독립인 $\varepsilon \sim N(0, 0.5^2)$ 로
+
+$$
+Y = 0.7\,X + \varepsilon
+$$
+
+를 만들고 $n = 10{,}000$ 쌍을 뽑는다.
+
+**(1)** $\operatorname{Cov}(X,Y)$, $\operatorname{Var}(Y)$, $\rho(X,Y)$ 를 구하시오. $\rho$ 가 기울기 $0.7$ 과 다른 까닭은 무엇인가.
+
+**(2)** 잡음의 표준편차를 얼마로 바꾸면 $\rho = 0.9$ 가 되는가. 그리고 표본 $10{,}000$ 개에서 잰 $r$ 이 이론값에서 얼마나 흔들리는지 적으시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-np.random.seed(42)
-n = 10_000
-X = np.random.normal(0, 1, n)
-# Y = 0.7X + 잡음.  Var(Y) = 0.7^2 * 1 + 0.5^2 = 0.74 이므로
-# Cov(X,Y) = 0.7 이고 Corr = 0.7 / sqrt(1 * 0.74) ≈ 0.814 로 예측된다.
-Y = 0.7 * X + np.random.normal(0, 0.5, n)
+    **(1) 해석적으로.** 쌍선형성과 $\operatorname{Cov}(X, \varepsilon) = 0$ 만 쓰면 된다.
 
-# np.cov / np.corrcoef 는 스칼라가 아니라 **행렬**을 돌려준다.
-#   대각원소  = 각 변수의 분산 (상관행렬에서는 항상 1)
-#   비대각원소 = 두 변수 사이의 공분산(또는 상관)
-# 그래서 [0,1] 로 꺼내야 우리가 원하는 값이 나온다.
-cov_matrix = np.cov(X, Y)
-corr_matrix = np.corrcoef(X, Y)
+    $$
+    \operatorname{Cov}(X, Y) = \operatorname{Cov}(X,\; 0.7X + \varepsilon)
+    = 0.7\operatorname{Var}(X) + \operatorname{Cov}(X, \varepsilon)
+    = 0.7 \times 1 + 0 = 0.7
+    $$
 
-print(f"Cov(X,Y) = {cov_matrix[0,1]:.4f}")
-print(f"Corr(X,Y) = {corr_matrix[0,1]:.4f}")
-print(f"\nCovariance matrix:\n{cov_matrix}")
-print(f"\nCorrelation matrix:\n{corr_matrix}")
-```
+    분산은 교차항이 사라져 두 조각의 합이다.
 
-출력:
+    $$
+    \operatorname{Var}(Y) = 0.7^2 \operatorname{Var}(X) + \operatorname{Var}(\varepsilon)
+    = 0.49 + 0.25 = 0.74
+    $$
 
-```
-Cov(X,Y) = 0.7006
-Corr(X,Y) = 0.8127
+    그러므로
 
-Covariance matrix:
-[[1.00693675 0.70055986]
- [0.70055986 0.73789018]]
+    $$
+    \rho = \frac{0.7}{\sqrt{1 \times 0.74}} = \frac{0.7}{0.86023} = 0.81373
+    $$
 
-Correlation matrix:
-[[1.         0.81273374]
- [0.81273374 1.        ]]
-```
+    이다. **$\rho$ 가 기울기 $0.7$ 과 다른 것은 $\rho$ 가 단위를 지운 양이기 때문이다.** 기울기는 "$X$ 가 $1$ 늘면 $Y$ 가 얼마나 느는가" 이고, $\rho$ 는 그것을 두 변수의 퍼짐으로 나눈 것이다. $Y$ 의 표준편차가 $\sqrt{0.74} = 0.860$ 이라 $1$ 보다 작으므로 $\rho$ 가 기울기보다 오히려 커졌다. 기울기와 $\rho$ 가 같아지는 것은 두 표준편차가 같을 때뿐이다.
+
+    제곱해 보면 뜻이 더 분명하다.
+
+    $$
+    \rho^2 = \frac{0.49}{0.74} = 0.6622
+    $$
+
+    **$Y$ 의 분산 가운데 $X$ 가 만든 몫이 $66.2\%$, 잡음이 만든 몫이 $33.8\%$** 라는 뜻이다. 일반적으로 $Y = aX + \varepsilon$ 이면
+
+    $$
+    \rho = \frac{a\,\sigma_X}{\sqrt{a^2\sigma_X^2 + \sigma_\varepsilon^2}},
+    \qquad
+    \rho^2 = \frac{a^2\sigma_X^2}{a^2\sigma_X^2 + \sigma_\varepsilon^2}
+    $$
+
+    이다. **신호와 잡음의 비가 $\rho$ 를 정하며, 기울기 하나만으로는 정해지지 않는다.**
+
+    **(2) 거꾸로 풀면 된다.** $\sigma_X = 1$, $a = 0.7$ 을 고정하고 위 식을 $\sigma_\varepsilon$ 에 대해 푼다.
+
+    $$
+    \rho^2 = \frac{a^2}{a^2 + \sigma_\varepsilon^2} = 0.81
+    \quad\Longrightarrow\quad
+    \sigma_\varepsilon^2 = a^2\left(\frac{1}{0.81} - 1\right) = 0.49 \times 0.234568 = 0.114938
+    $$
+
+    이므로 $\sigma_\varepsilon = 0.33903$ 이다. 지금의 $0.5$ 에서 잡음을 $32\%$ 줄이면 상관계수가 $0.814$ 에서 $0.900$ 으로 오른다.
+
+    **흔들림.** 표본상관계수의 큰표본 표준오차는 $(1-\rho^2)/\sqrt n$ 이므로 $\rho = 0.81373$, $n = 10^4$ 에서
+
+    $$
+    \operatorname{SE}(r) = \frac{1 - 0.6622}{100} = 0.00338
+    $$
+
+    이다. 소수 셋째 자리에서 흔들린다는 뜻이고, 보고할 때 $0.8127$ 처럼 네 자리를 적는 것은 자릿수를 과장하는 일이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    np.random.seed(42)
+    n = 10_000
+    X = np.random.normal(0, 1, n)
+    # Y = 0.7X + 잡음.  Var(Y) = 0.7^2 * 1 + 0.5^2 = 0.74 이므로
+    # Cov(X,Y) = 0.7 이고 Corr = 0.7 / sqrt(1 * 0.74) ≈ 0.814 로 예측된다.
+    Y = 0.7 * X + np.random.normal(0, 0.5, n)
+
+    # np.cov / np.corrcoef 는 스칼라가 아니라 **행렬**을 돌려준다.
+    #   대각원소  = 각 변수의 분산 (상관행렬에서는 항상 1)
+    #   비대각원소 = 두 변수 사이의 공분산(또는 상관)
+    # 그래서 [0,1] 로 꺼내야 우리가 원하는 값이 나온다.
+    cov_matrix = np.cov(X, Y)
+    corr_matrix = np.corrcoef(X, Y)
+
+    print(f"Cov(X,Y) = {cov_matrix[0,1]:.4f}")
+    print(f"Corr(X,Y) = {corr_matrix[0,1]:.4f}")
+    print(f"\nCovariance matrix:\n{cov_matrix}")
+    print(f"\nCorrelation matrix:\n{corr_matrix}")
+
+    # 유도한 이론값과 견준다.
+    a, sigma = 0.7, 0.5
+    rho = a / np.sqrt(a**2 + sigma**2)
+    se = (1 - rho**2) / np.sqrt(n)          # 표본상관계수의 큰표본 표준오차
+    print(f"\n이론:  Cov = {a:.4f},  Var(Y) = {a**2 + sigma**2:.4f},  rho = {rho:.6f}")
+    print(f"  rho^2 = {rho**2:.4f}  (Y 의 분산 가운데 X 가 설명하는 몫)")
+    print(f"  SE(r) = {se:.6f},  (관측 - 이론)/SE = {(corr_matrix[0,1] - rho) / se:+.3f}")
+
+    # rho = 0.9 가 되려면 잡음의 표준편차가 얼마여야 하는가.
+    #   rho = a / sqrt(a^2 + s^2) = 0.9  =>  s^2 = a^2 (1/0.81 - 1)
+    target = 0.9
+    s2 = a**2 * (1 / target**2 - 1)
+    print(f"\nrho = {target} 이 되려면 sigma = {np.sqrt(s2):.6f}")
+    Z = a * X + np.random.normal(0, np.sqrt(s2), n)
+    r2 = np.corrcoef(X, Z)[0, 1]
+    se2 = (1 - target**2) / np.sqrt(n)
+    print(f"  그 잡음으로 다시 만들면 r = {r2:.4f}"
+          f"   SE = {se2:.6f},  (관측 - 이론)/SE = {(r2 - target) / se2:+.3f}")
+    ```
+
+    출력:
+
+    ```
+    Cov(X,Y) = 0.7006
+    Corr(X,Y) = 0.8127
+
+    Covariance matrix:
+    [[1.00693675 0.70055986]
+     [0.70055986 0.73789018]]
+
+    Correlation matrix:
+    [[1.         0.81273374]
+     [0.81273374 1.        ]]
+
+    이론:  Cov = 0.7000,  Var(Y) = 0.7400,  rho = 0.813733
+      rho^2 = 0.6622  (Y 의 분산 가운데 X 가 설명하는 몫)
+      SE(r) = 0.003378,  (관측 - 이론)/SE = -0.296
+
+    rho = 0.9 이 되려면 sigma = 0.339025
+      그 잡음으로 다시 만들면 r = 0.9042   SE = 0.001900,  (관측 - 이론)/SE = +2.222
+    ```
+
+    유도한 $\operatorname{Cov} = 0.7$, $\operatorname{Var}(Y) = 0.74$, $\rho = 0.813733$ 이 모두 맞는다. 표본값은 $0.70056$, $0.73789$, $0.81273$ 이고 상관계수는 이론값에서 $0.296$ 표준오차 떨어져 있다.
+
+    행렬의 생김새도 유도와 맞춰 두면 좋다. 공분산행렬의 대각원소 $1.00694$ 와 $0.73789$ 가 각각 $\operatorname{Var}(X) = 1$, $\operatorname{Var}(Y) = 0.74$ 의 추정값이고, 상관행렬의 대각원소는 $\operatorname{Cov}(X,X)/\operatorname{Var}(X) = 1$ 이라 **언제나 정확히 $1$** 이다. 그래서 둘 다 $[0,1]$ 로 꺼내야 한다.
+
+    마지막 줄은 조금 빗나갔다. $\sigma_\varepsilon = 0.339025$ 로 다시 만든 표본의 $r$ 이 $0.9042$ 로, 목표 $0.9$ 에서 $2.22$ 표준오차 떨어져 있다. **표준오차의 두 배 남짓이므로 어긋남이라 할 것은 아니지만 흔한 쪽도 아니다.** 같은 $X$ 를 재사용했으므로 앞의 $r$ 과 독립인 시도도 아니다. 씨앗을 바꾸면 $0.9$ 를 중심으로 $\pm 0.002$ 안에 대개 들어온다.
 
 상관계수의 값이 점구름의 모양으로 어떻게 나타나는지 눈에 익혀 두면 산점도만 보고 대략의 값을 짚을 수 있다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 여러 상관계수를 그림으로 보기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 여러 상관계수를 그림으로 보기. 평균 $\mathbf 0$, 두 분산이 모두 $1$ 이고 상관계수가 $\rho = -0.9,\, -0.3,\, 0.3,\, 0.9$ 인 이변량 정규분포에서 각각 $500$ 쌍을 뽑아 네 칸에 그린다.
+
+**(1)** 점구름이 이루는 타원의 **축 길이 비**를 $\rho$ 로 적으시오. $\rho = 0.3$ 과 $\rho = 0.9$ 에서 각각 얼마인가.
+
+**(2)** $\rho = \pm 0.3$ 칸은 눈으로 보면 거의 둥글다. (1) 의 수가 그 까닭을 설명하는가. 또 네 칸에서 실제로 잰 $r$ 이 참값에서 얼마나 벗어나는지 표준오차와 견주시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
-n = 500
-fig, axes = plt.subplots(1, 4, figsize=(14, 3))
+    **(1) 고유분해가 답을 준다.** 공분산행렬이
 
-for ax, rho in zip(axes, [-0.9, -0.3, 0.3, 0.9]):
-    # 분산을 둘 다 1로 두면 공분산행렬의 비대각원소가 곧 상관계수가 된다.
-    # 상관 = 공분산 / (sd_X * sd_Y) 인데 분모가 1이기 때문이다.
-    cov = [[1, rho], [rho, 1]]
-    data = np.random.multivariate_normal([0, 0], cov, n)
-    ax.scatter(data[:, 0], data[:, 1], s=5, alpha=0.5)
-    ax.set_title(f'ρ = {rho}')
-    # set_aspect('equal') 이 중요하다. 가로세로 비가 다르면
-    # 같은 rho라도 점구름이 더 납작하거나 둥글게 보여 오해를 부른다.
-    ax.set_aspect('equal')
-    ax.set_xlim(-4, 4)
-    ax.set_ylim(-4, 4)
-    ax.spines[['top', 'right']].set_visible(False)
+    $$
+    \Sigma = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}
+    $$
 
-plt.tight_layout()
-plt.show()
-```
+    이고 대각원소가 같으므로 고유벡터가 $(1,1)^{\mathsf T}$ 와 $(1,-1)^{\mathsf T}$ 로 고정된다.
 
-![상관계수가 달라지면 점구름의 모양이 어떻게 달라지는가](./img/covariance_correlation_199.png)
+    $$
+    \Sigma \begin{pmatrix} 1 \\ 1 \end{pmatrix} = (1+\rho)\begin{pmatrix} 1 \\ 1 \end{pmatrix},
+    \qquad
+    \Sigma \begin{pmatrix} 1 \\ -1 \end{pmatrix} = (1-\rho)\begin{pmatrix} 1 \\ -1 \end{pmatrix}
+    $$
+
+    고유값은 그 방향으로 잰 **분산**이므로 축 길이는 그 제곱근에 비례한다. 긴 쪽을 위로 두면
+
+    $$
+    \frac{\text{긴 축}}{\text{짧은 축}} = \sqrt{\frac{1 + \lvert\rho\rvert}{1 - \lvert\rho\rvert}}
+    $$
+
+    다. $\rho$ 의 부호는 길이가 아니라 **어느 대각선이 긴 축인가**만 정한다. 양이면 $y = x$, 음이면 $y = -x$ 다. 값을 넣으면
+
+    $$
+    \rho = 0.9: \;\sqrt{\frac{1.9}{0.1}} = \sqrt{19} = 4.359,
+    \qquad
+    \rho = 0.3: \;\sqrt{\frac{1.3}{0.7}} = 1.363
+    $$
+
+    이다.
+
+    **(2) 설명한다.** $\rho = 0.3$ 의 타원은 긴 쪽이 짧은 쪽의 $1.36$ 배밖에 되지 않는다. 가로세로 비를 맞춰 그린 $500$ 개짜리 점구름에서 $36\%$ 쯤 늘어난 것을 눈으로 집어내기는 어렵다. 같은 이야기를 분산으로 적으면 더 분명하다. $\rho^2 = 0.09$ 이므로 **한 변수가 다른 변수의 분산 가운데 $9\%$ 만 설명한다.** 반면 $\rho = 0.9$ 는 축 비가 $4.36$ 배, 설명하는 몫이 $81\%$ 라 한눈에 보인다.
+
+    **$\rho$ 는 눈에 보이는 "길쭉함" 에 비례하지 않는다.** $\rho$ 를 $0.3$ 에서 $0.9$ 로 세 배 키우면 축 비는 $1.36$ 에서 $4.36$ 으로 **세 배가 아니라 $3.2$ 배** 커지고, $\rho$ 가 $1$ 에 다가갈수록 축 비는 무한대로 발산한다. 그러므로 흩뿌림그림을 보고 $\rho$ 를 눈대중하는 일은 양 끝에서는 쉽고 가운데에서는 어렵다.
+
+    **흔들림.** 표본상관계수의 큰표본 표준오차는 $(1-\rho^2)/\sqrt n$ 이고 $n = 500$ 이므로
+
+    $$
+    \rho = \pm 0.9: \; \frac{0.19}{22.36} = 0.0085,
+    \qquad
+    \rho = \pm 0.3: \; \frac{0.91}{22.36} = 0.0407
+    $$
+
+    이다. **$\rho$ 가 $0$ 에 가까울수록 표준오차가 크다.** 약한 상관을 재는 일이 강한 상관을 재는 일보다 어렵다는 뜻이고, $(1-\rho^2)$ 이라는 인자가 그것을 말한다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    n = 500
+    fig, axes = plt.subplots(1, 4, figsize=(14, 3))
+
+    print(f"{'rho':>6}{'표본 r':>10}{'SE(r)':>9}{'(r-rho)/SE':>12}"
+          f"{'축 길이 비':>12}{'rho^2':>8}")
+    for ax, rho in zip(axes, [-0.9, -0.3, 0.3, 0.9]):
+        # 분산을 둘 다 1로 두면 공분산행렬의 비대각원소가 곧 상관계수가 된다.
+        # 상관 = 공분산 / (sd_X * sd_Y) 인데 분모가 1이기 때문이다.
+        cov = [[1, rho], [rho, 1]]
+        data = np.random.multivariate_normal([0, 0], cov, n)
+        ax.scatter(data[:, 0], data[:, 1], s=5, alpha=0.5)
+        ax.set_title(f'ρ = {rho}')
+        # set_aspect('equal') 이 중요하다. 가로세로 비가 다르면
+        # 같은 rho라도 점구름이 더 납작하거나 둥글게 보여 오해를 부른다.
+        ax.set_aspect('equal')
+        ax.set_xlim(-4, 4)
+        ax.set_ylim(-4, 4)
+        ax.spines[['top', 'right']].set_visible(False)
+
+        # 유도한 것들과 견준다.
+        #   타원 축 길이의 비 = sqrt((1+|rho|)/(1-|rho|))
+        #   표본상관계수의 표준오차 = (1-rho^2)/sqrt(n)
+        r = np.corrcoef(data[:, 0], data[:, 1])[0, 1]
+        se = (1 - rho ** 2) / np.sqrt(n)
+        ratio = np.sqrt((1 + abs(rho)) / (1 - abs(rho)))
+        print(f"{rho:>6.1f}{r:>10.4f}{se:>9.4f}{(r - rho) / se:>12.3f}"
+              f"{ratio:>12.4f}{rho ** 2:>8.2f}")
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+       rho      표본 r    SE(r)  (r-rho)/SE      축 길이 비   rho^2
+      -0.9   -0.8951   0.0085       0.575      4.3589    0.81
+      -0.3   -0.2237   0.0407       1.875      1.3628    0.09
+       0.3    0.2999   0.0407      -0.004      1.3628    0.09
+       0.9    0.9021   0.0085       0.250      4.3589    0.81
+    ```
+
+    축 길이 비 $4.3589$ 와 $1.3628$ 이 유도한 $\sqrt{19}$, $\sqrt{13/7}$ 과 맞고, 표준오차 $0.0085$ 와 $0.0407$ 도 맞는다.
+
+    표본값을 보면 (2) 에서 말한 것이 그대로 일어난다. $\rho = \pm 0.9$ 칸에서는 $r$ 이 $-0.8951$, $0.9021$ 로 참값에서 $0.58$ 과 $0.25$ 표준오차 안이다. 그런데 $\rho = -0.3$ 칸에서는 $r = -0.2237$ 이 나왔다. 참값에서 $1.875$ 표준오차, 절대값으로는 **$25\%$ 나 작다.** 그 칸의 점구름을 눈으로 보고 "$-0.3$ 쯤" 이라 말하기는커녕 **부호를 읽어 내기도 쉽지 않다.**
+
+    ![상관계수가 달라지면 점구름의 모양이 어떻게 달라지는가](./img/covariance_correlation_199.png)
+
+    그림에서 확인할 것은 셋이다. 첫째, 양 끝 두 칸은 기울어진 타원이 또렷하고 부호도 분명하다. 둘째, 가운데 두 칸은 거의 원에 가까워 $-0.3$ 과 $+0.3$ 을 바꿔 놓아도 알아차리기 어렵다. 셋째, 네 칸 모두 가로세로 범위가 $[-4, 4]$ 로 같고 `set_aspect('equal')` 이 걸려 있다. **축 비를 맞추지 않으면 같은 $\rho$ 라도 더 납작하거나 둥글게 보이므로, 흩뿌림그림으로 상관을 견줄 때는 반드시 축을 맞춰야 한다.**
 
 변수가 넷이면 상관행렬이 $4\times4$가 된다. 색으로 칠해 보면 구조가 한눈에 읽힌다.
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 상관계수 열지도
+**보기 4.** <span class="diff easy" title="쉬움"></span> 상관계수 열지도. 서로 독립인 표준정규 $Z_1, \varepsilon_2, \varepsilon_3, Z_4$ 로 변수 넷을 사슬처럼 엮는다.
+
+$$
+X_1 = Z_1,
+\qquad
+X_2 = 0.5X_1 + \varepsilon_2,
+\qquad
+X_3 = -0.3X_1 + 0.6X_2 + \varepsilon_3,
+\qquad
+X_4 = Z_4
+$$
+
+**(1)** $4 \times 4$ 상관행렬을 손으로 구하시오.
+
+**(2)** 열지도에서 $0$ 에 가까운 칸이 $X_4$ 의 행·열만이 아니다. $X_1$–$X_3$ 칸도 $-0.00$ 으로 나온다. $X_3$ 의 식에는 $X_1$ 이 버젓이 들어 있는데 왜 그런가. 그렇다면 $X_1$ 과 $X_3$ 는 독립인가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
-n = 5000
-# 변수 넷을 사슬처럼 엮는다.
-#   X1 : 독립
-#   X2 : X1에 의존
-#   X3 : X1과 X2 모두에 의존
-#   X4 : 아무것과도 무관 (대조군)
-# 열지도에서 X4의 행/열만 0에 가깝게 나오는지 확인해 보라.
-X1 = np.random.normal(0, 1, n)
-X2 = 0.5 * X1 + np.random.normal(0, 1, n)
-X3 = -0.3 * X1 + 0.6 * X2 + np.random.normal(0, 1, n)
-X4 = np.random.normal(0, 1, n)
+    **(1) 쌍선형성으로 차례차례.** $\operatorname{Var}(X_1) = 1$ 에서 출발한다.
 
-data = np.column_stack([X1, X2, X3, X4])
-# rowvar=False: 열이 변수이고 행이 관측이라는 뜻.
-# numpy의 기본값은 반대(rowvar=True)라서 빠뜨리면 5000x5000 행렬이 나온다.
-corr = np.corrcoef(data, rowvar=False)
+    $$
+    \operatorname{Cov}(X_1, X_2) = 0.5\operatorname{Var}(X_1) = 0.5,
+    \qquad
+    \operatorname{Var}(X_2) = 0.25 + 1 = 1.25
+    $$
 
-fig, ax = plt.subplots(figsize=(5, 4))
-im = ax.imshow(corr, cmap='coolwarm', vmin=-1, vmax=1)
-labels = ['X1', 'X2', 'X3', 'X4']
-ax.set_xticks(range(4))
-ax.set_xticklabels(labels)
-ax.set_yticks(range(4))
-ax.set_yticklabels(labels)
-for i in range(4):
-    for j in range(4):
-        ax.text(j, i, f'{corr[i,j]:.2f}', ha='center', va='center', fontsize=10)
-fig.colorbar(im, ax=ax)
-plt.show()
-```
+    $$
+    \rho_{12} = \frac{0.5}{\sqrt{1 \times 1.25}} = 0.4472
+    $$
 
-![네 변수의 상관계수 열지도](./img/covariance_correlation_223.png)
+    다음은 $X_3$ 다. 잡음 $\varepsilon_3$ 은 $X_1$, $X_2$ 와 독립이므로 공분산에 기여하지 않는다.
+
+    $$
+    \operatorname{Cov}(X_1, X_3) = -0.3\operatorname{Var}(X_1) + 0.6\operatorname{Cov}(X_1, X_2)
+    = -0.3 + 0.6 \times 0.5 = 0
+    $$
+
+    $$
+    \operatorname{Cov}(X_2, X_3) = -0.3\operatorname{Cov}(X_1, X_2) + 0.6\operatorname{Var}(X_2)
+    = -0.15 + 0.75 = 0.6
+    $$
+
+    $$
+    \operatorname{Var}(X_3) = 0.09\operatorname{Var}(X_1) + 0.36\operatorname{Var}(X_2)
+    - 2(0.3)(0.6)\operatorname{Cov}(X_1,X_2) + 1
+    = 0.09 + 0.45 - 0.18 + 1 = 1.36
+    $$
+
+    따라서 $\rho_{13} = 0$ 이고
+
+    $$
+    \rho_{23} = \frac{0.6}{\sqrt{1.25 \times 1.36}} = \frac{0.6}{\sqrt{1.7}} = 0.4602
+    $$
+
+    다. $X_4$ 는 셋 모두와 독립이므로 그 행과 열은 대각원소만 빼고 전부 $0$ 이다.
+
+    $$
+    \mathbf R = \begin{pmatrix}
+    1 & 0.4472 & 0 & 0 \\
+    0.4472 & 1 & 0.4602 & 0 \\
+    0 & 0.4602 & 1 & 0 \\
+    0 & 0 & 0 & 1
+    \end{pmatrix}
+    $$
+
+    **(2) 두 경로가 정확히 상쇄된다.** $X_1$ 에서 $X_3$ 로 가는 길이 둘이다. 계수 $-0.3$ 인 **곧바른 길**과 $X_2$ 를 거치는 **에두른 길**이고, 에두른 길의 세기는 $0.6 \times 0.5 = +0.3$ 이다. 둘을 더하면 $-0.3 + 0.3 = 0$ 이다.
+
+    대입해 보면 더 분명하다. $X_2 = 0.5X_1 + \varepsilon_2$ 를 $X_3$ 의 식에 넣으면
+
+    $$
+    X_3 = -0.3X_1 + 0.6(0.5X_1 + \varepsilon_2) + \varepsilon_3
+    = (-0.3 + 0.3)X_1 + 0.6\varepsilon_2 + \varepsilon_3
+    = 0.6\,\varepsilon_2 + \varepsilon_3
+    $$
+
+    **$X_3$ 에는 $X_1$ 이 아예 들어 있지 않다.** 식을 보고 "$X_3$ 가 $X_1$ 에 의존한다" 고 읽은 것이 잘못이었다. ($\operatorname{Var}(X_3) = 0.36 + 1 = 1.36$ 도 이 꼴에서 한 줄로 나온다.)
+
+    **그러므로 독립이다.** 보통은 $\rho = 0$ 에서 독립을 말할 수 없지만(바로 앞 쪽 [분산과 공분산](variance_covariance.md)의 보기 3 이 그 반례다) 여기서는 말할 수 있다. 까닭이 둘이다. 첫째, $X_3 = 0.6\varepsilon_2 + \varepsilon_3$ 은 $X_1 = Z_1$ 과 **재료가 겹치지 않으므로** 정의부터 독립이다. 둘째, 네 변수가 모두 독립인 정규확률변수의 선형결합이라 **결합정규**이고, 결합정규에서는 무상관이 곧 독립이다. 이 마지막 사실은 [독립성과 무상관성의 차이](independence_vs_zero_corr.md)에서 따로 다룬다.
+
+    **읽을 때 조심할 것.** 열지도의 $X_1$–$X_3$ 칸과 $X_1$–$X_4$ 칸은 둘 다 $0$ 이지만 사정이 전혀 다르다. $X_4$ 는 애초에 아무 데도 연결되지 않았고, $X_3$ 는 **두 갈래로 연결되어 있는데 그 둘이 상쇄된 것**이다. 계수를 $-0.3$ 에서 $-0.2$ 로 조금만 바꾸면 $\operatorname{Cov}(X_1, X_3) = 0.1$ 이 되어 칸이 되살아난다. **상관행렬은 "연결이 없다" 와 "연결이 상쇄된다" 를 구별하지 못한다.**
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    n = 5000
+    # 변수 넷을 사슬처럼 엮는다.
+    #   X1 : 독립
+    #   X2 : X1에 의존
+    #   X3 : 식에 X1과 X2가 모두 들어 있다
+    #   X4 : 아무것과도 무관 (대조군)
+    # 열지도에서 0에 가까운 칸이 X4의 행/열뿐인지 확인해 보라.
+    X1 = np.random.normal(0, 1, n)
+    X2 = 0.5 * X1 + np.random.normal(0, 1, n)
+    X3 = -0.3 * X1 + 0.6 * X2 + np.random.normal(0, 1, n)
+    X4 = np.random.normal(0, 1, n)
+
+    data = np.column_stack([X1, X2, X3, X4])
+    # rowvar=False: 열이 변수이고 행이 관측이라는 뜻.
+    # numpy의 기본값은 반대(rowvar=True)라서 빠뜨리면 5000x5000 행렬이 나온다.
+    corr = np.corrcoef(data, rowvar=False)
+
+    # 손으로 구한 상관행렬과 맞춰 본다.
+    #   Var(X2) = 0.25 + 1 = 1.25,        Cov(X1,X2) = 0.5
+    #   Cov(X1,X3) = -0.3*1 + 0.6*0.5 = 0 (정확히)
+    #   Cov(X2,X3) = -0.3*0.5 + 0.6*1.25 = 0.6
+    #   Var(X3) = 0.09 + 0.36*1.25 - 2*0.18*0.5 + 1 = 1.36
+    theory = np.array([
+        [1.0,                  0.5 / np.sqrt(1.25),  0.0,                            0.0],
+        [0.5 / np.sqrt(1.25),  1.0,                  0.6 / np.sqrt(1.25 * 1.36),     0.0],
+        [0.0,                  0.6 / np.sqrt(1.25 * 1.36), 1.0,                      0.0],
+        [0.0,                  0.0,                  0.0,                            1.0],
+    ])
+    print("이론 상관행렬")
+    print(np.round(theory, 4))
+    print("\n표본 상관행렬")
+    print(np.round(corr, 4))
+    print(f"\n최대 차이 = {np.abs(corr - theory).max():.4f}"
+          f"   rho=0 일 때 r 의 SE = {1 / np.sqrt(n):.4f}")
+
+    # X2를 대입해 보면 X1 항이 사라진다.  X3 = 0.6*e2 + e3 다.
+    e2 = X2 - 0.5 * X1
+    e3 = X3 + 0.3 * X1 - 0.6 * X2
+    print(f"\nX3 와 0.6*e2 + e3 의 최대 차이 = {np.abs(X3 - (0.6 * e2 + e3)).max():.2e}")
+    print(f"X1 과 X3 의 표본상관 = {corr[0, 2]:+.4f}  ({corr[0, 2] * np.sqrt(n):+.3f} SE)")
+
+    fig, ax = plt.subplots(figsize=(5, 4))
+    im = ax.imshow(corr, cmap='coolwarm', vmin=-1, vmax=1)
+    labels = ['X1', 'X2', 'X3', 'X4']
+    ax.set_xticks(range(4))
+    ax.set_xticklabels(labels)
+    ax.set_yticks(range(4))
+    ax.set_yticklabels(labels)
+    for i in range(4):
+        for j in range(4):
+            ax.text(j, i, f'{corr[i,j]:.2f}', ha='center', va='center', fontsize=10)
+    fig.colorbar(im, ax=ax)
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    이론 상관행렬
+    [[1.     0.4472 0.     0.    ]
+     [0.4472 1.     0.4602 0.    ]
+     [0.     0.4602 1.     0.    ]
+     [0.     0.     0.     1.    ]]
+
+    표본 상관행렬
+    [[ 1.      0.4409 -0.0033  0.0014]
+     [ 0.4409  1.      0.461  -0.0121]
+     [-0.0033  0.461   1.      0.0041]
+     [ 0.0014 -0.0121  0.0041  1.    ]]
+
+    최대 차이 = 0.0121   rho=0 일 때 r 의 SE = 0.0141
+
+    X3 와 0.6*e2 + e3 의 최대 차이 = 4.44e-16
+    X1 과 X3 의 표본상관 = -0.0033  (-0.235 SE)
+    ```
+
+    손으로 구한 $\rho_{12} = 0.4472$, $\rho_{13} = 0$, $\rho_{23} = 0.4602$ 가 표본값 $0.4409$, $-0.0033$, $0.4610$ 과 맞는다. 이론과 표본의 최대 차이가 $0.0121$ 인데 $\rho = 0$ 일 때 $r$ 의 표준오차가 $1/\sqrt{5000} = 0.0141$ 이므로 모든 칸이 표준오차 안쪽이다. $X_1$–$X_3$ 칸의 $-0.0033$ 은 $0$ 에서 $0.24$ 표준오차 떨어져 있을 뿐이다.
+
+    대입이 맞는지도 확인했다. $X_3$ 와 $0.6\varepsilon_2 + \varepsilon_3$ 의 최대 차이가 $4.44 \times 10^{-16}$ 으로 **부동소수점 오차 수준**이다. 두 식이 같은 식이라는 뜻이다.
+
+    ![네 변수의 상관계수 열지도](./img/covariance_correlation_223.png)
+
+    열지도에서 붉은 칸은 대각선과 $X_1$–$X_2$, $X_2$–$X_3$ 네 자리뿐이고 나머지는 모두 회색이다. $X_2$ 만 양쪽에 연결되어 있어 **$X_2$ 의 행이 가장 붉다.** 그러나 색만 보고 "$X_1$ 과 $X_3$ 는 아무 상관 없는 변수" 라고 읽으면 안 된다. 생성식에는 둘을 잇는 항이 분명히 있었고, 다만 그 둘이 서로를 지웠을 뿐이다.
 
 마지막으로 결합 확률질량함수 표에서 직접 계산해 본다. 아래 연습문제 1을 손으로 푼 결과와 맞추어 보라.
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 결합 확률질량함수에서 공분산 구하기
+**보기 5.** <span class="diff easy" title="쉬움"></span> 결합 확률질량함수에서 공분산 구하기. $X$ 와 $Y$ 가 모두 $0$ 또는 $1$ 이고 결합 PMF 가 다음과 같다.
+
+| $p_{X,Y}$ | $Y=0$ | $Y=1$ |
+|:---|---:|---:|
+| $X=0$ | $0.2$ | $0.1$ |
+| $X=1$ | $0.3$ | $0.4$ |
+
+**(1)** 두 주변분포와 $E[X]$, $E[Y]$, $E[XY]$, $\operatorname{Cov}(X,Y)$, $\rho(X,Y)$ 를 손으로 구하시오.
+
+**(2)** 두 변수가 모두 $0/1$ 일 때 공분산이 **대각곱의 차** $p_{11}p_{00} - p_{10}p_{01}$ 과 같음을 보이시오. 또 이 주변분포를 그대로 둔 채 $\rho$ 를 최대로 키우면 얼마까지 올라가는가.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# 결합 PMF 표. pmf[i, j] = P(X = x_vals[i], Y = y_vals[j]) 이고 합이 1이다.
-pmf = np.array([[0.2, 0.1],
-                [0.3, 0.4]])
-x_vals = np.array([0, 1])
-y_vals = np.array([0, 1])
+    **(1) 해석적으로.** 행과 열을 더하면 주변분포가 나온다.
 
-# 브로드캐스팅으로 표 전체를 한 번에 가중합한다.
-#   x_vals[:, None] 은 세로 벡터 (행 방향으로 퍼진다)  -> X의 값
-#   y_vals[None, :] 은 가로 벡터 (열 방향으로 퍼진다)  -> Y의 값
-# 이렇게 하면 이중 반복문 없이 sum(x * P(x,y)) 를 그대로 쓸 수 있다.
-E_X = np.sum(x_vals[:, None] * pmf)
-E_Y = np.sum(y_vals[None, :] * pmf)
-E_XY = np.sum(x_vals[:, None] * y_vals[None, :] * pmf)
+    $$
+    p_X = (0.3,\; 0.7),
+    \qquad
+    p_Y = (0.5,\; 0.5)
+    $$
 
-# Cov(X,Y) = E[XY] - E[X]E[Y]
-cov_XY = E_XY - E_X * E_Y
-var_X = np.sum(x_vals[:, None]**2 * pmf) - E_X**2
-var_Y = np.sum(y_vals[None, :]**2 * pmf) - E_Y**2
-# 상관계수는 공분산을 두 표준편차로 나눈 것. 단위가 없어져 [-1, 1]에 들어간다.
-corr_XY = cov_XY / np.sqrt(var_X * var_Y)
+    $0/1$ 변수에서는 기댓값이 곧 $1$ 이 나올 확률이다.
 
-print(f"E[X] = {E_X:.4f}, E[Y] = {E_Y:.4f}, E[XY] = {E_XY:.4f}")
-print(f"Cov(X,Y) = {cov_XY:.4f}")
-print(f"Corr(X,Y) = {corr_XY:.4f}")
-```
+    $$
+    E[X] = P(X=1) = 0.7,
+    \qquad
+    E[Y] = P(Y=1) = 0.5
+    $$
 
-출력:
+    $XY$ 는 둘 다 $1$ 일 때만 $1$ 이므로 곱의 기댓값도 칸 하나다.
 
-```
-E[X] = 0.7000, E[Y] = 0.5000, E[XY] = 0.4000
-Cov(X,Y) = 0.0500
-Corr(X,Y) = 0.2182
-```
+    $$
+    E[XY] = 1 \cdot 1 \cdot p_{11} = 0.4
+    $$
+
+    따라서
+
+    $$
+    \operatorname{Cov}(X,Y) = 0.4 - 0.7 \times 0.5 = 0.05
+    $$
+
+    이다. 분산은 더 짧다. $X^2 = X$ 이므로 $E[X^2] = E[X]$ 이고
+
+    $$
+    \operatorname{Var}(X) = 0.7 - 0.7^2 = 0.7 \times 0.3 = 0.21,
+    \qquad
+    \operatorname{Var}(Y) = 0.5 \times 0.5 = 0.25
+    $$
+
+    이다. 곧 $0/1$ 변수의 분산은 언제나 $p(1-p)$ 다. 그러므로
+
+    $$
+    \rho = \frac{0.05}{\sqrt{0.21 \times 0.25}} = \frac{0.05}{0.229129} = 0.2182
+    $$
+
+    **(2) 대각곱의 차.** $p_{1\cdot} = p_{10} + p_{11}$, $p_{\cdot 1} = p_{01} + p_{11}$ 이고 네 칸의 합이 $1$ 이라는 것만 쓴다. 먼저 $p_{11}$ 에 $1$ 을 곱한 꼴로 적는다.
+
+    $$
+    p_{11} = p_{11}(p_{00} + p_{01} + p_{10} + p_{11})
+    $$
+
+    한편
+
+    $$
+    p_{1\cdot}\,p_{\cdot 1} = (p_{10} + p_{11})(p_{01} + p_{11})
+    = p_{10}p_{01} + p_{10}p_{11} + p_{11}p_{01} + p_{11}^2
+    $$
+
+    이다. 빼면 가운데 세 항이 그대로 지워지고
+
+    $$
+    \operatorname{Cov}(X,Y) = p_{11} - p_{1\cdot}p_{\cdot 1} = p_{11}p_{00} - p_{10}p_{01}
+    $$
+
+    만 남는다. 분산까지 넣으면 상관계수가
+
+    $$
+    \rho = \frac{p_{11}p_{00} - p_{10}p_{01}}{\sqrt{p_{1\cdot}p_{0\cdot}\,p_{\cdot 1}p_{\cdot 0}}}
+    $$
+
+    인데, 이것을 **파이계수**라 부른다. 확인해 보면 $0.4 \times 0.2 - 0.3 \times 0.1 = 0.08 - 0.03 = 0.05$ 로 (1) 과 같다. **$2\times2$ 표에서는 대각선 두 칸의 곱과 반대각선 두 칸의 곱을 견주는 것이 곧 공분산이다.**
+
+    **최대는 $1$ 이 아니다.** 주변분포를 고정하면 가운데 칸이 움직일 수 있는 범위가 좁아진다. $p_{11}$ 은 행합과 열합을 넘을 수 없으므로
+
+    $$
+    p_{11} \le \min(p_{1\cdot},\, p_{\cdot 1}) = \min(0.7,\, 0.5) = 0.5
+    $$
+
+    이고, 그때 $\operatorname{Cov} = 0.5 - 0.35 = 0.15$ 이므로
+
+    $$
+    \rho_{\max} = \frac{0.15}{0.229129} = 0.6547
+    $$
+
+    이다. $p_{1\cdot} \ge p_{\cdot 1}$ 인 일반 꼴로 적으면 $\rho_{\max} = \sqrt{p_{\cdot 1}p_{0\cdot} / (p_{1\cdot}p_{\cdot 0})}$ 이고, 여기서는 $\sqrt{0.15/0.35} = 0.6547$ 이다.
+
+    **왜 $1$ 이 못 되는가.** 정리 1 에 따르면 $\rho = 1$ 은 $Y = aX + b$ 가 확률 $1$ 로 성립할 때뿐이다. 둘 다 $0/1$ 이면 그 직선은 $Y = X$ 이거나 $Y = 1 - X$ 밖에 없고, 각각 $P(Y=1) = P(X=1)$ 또는 $P(Y=1) = P(X=0)$ 을 요구한다. 그런데 여기서는 $0.5 \ne 0.7$ 이고 $0.5 \ne 0.3$ 이다. **주변분포가 어긋나 있는 한 $\rho$ 는 $\pm 1$ 에 닿을 수 없다.** 그러므로 $0.2182$ 를 "$1$ 에서 멀다" 고 읽는 것은 부당하고, 도달 가능한 최대 $0.6547$ 의 $33\%$ 라고 읽어야 한다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    # 결합 PMF 표. pmf[i, j] = P(X = x_vals[i], Y = y_vals[j]) 이고 합이 1이다.
+    pmf = np.array([[0.2, 0.1],
+                    [0.3, 0.4]])
+    x_vals = np.array([0, 1])
+    y_vals = np.array([0, 1])
+
+    # 브로드캐스팅으로 표 전체를 한 번에 가중합한다.
+    #   x_vals[:, None] 은 세로 벡터 (행 방향으로 퍼진다)  -> X의 값
+    #   y_vals[None, :] 은 가로 벡터 (열 방향으로 퍼진다)  -> Y의 값
+    # 이렇게 하면 이중 반복문 없이 sum(x * P(x,y)) 를 그대로 쓸 수 있다.
+    E_X = np.sum(x_vals[:, None] * pmf)
+    E_Y = np.sum(y_vals[None, :] * pmf)
+    E_XY = np.sum(x_vals[:, None] * y_vals[None, :] * pmf)
+
+    # Cov(X,Y) = E[XY] - E[X]E[Y]
+    cov_XY = E_XY - E_X * E_Y
+    var_X = np.sum(x_vals[:, None]**2 * pmf) - E_X**2
+    var_Y = np.sum(y_vals[None, :]**2 * pmf) - E_Y**2
+    # 상관계수는 공분산을 두 표준편차로 나눈 것. 단위가 없어져 [-1, 1]에 들어간다.
+    corr_XY = cov_XY / np.sqrt(var_X * var_Y)
+
+    print(f"E[X] = {E_X:.4f}, E[Y] = {E_Y:.4f}, E[XY] = {E_XY:.4f}")
+    print(f"Cov(X,Y) = {cov_XY:.4f}")
+    print(f"Corr(X,Y) = {corr_XY:.4f}")
+
+    # 0/1 변수에서는 같은 값이 대각곱의 차로도 나온다.
+    #   Cov = p11*p00 - p10*p01
+    #   Var(X) = p1. * p0.,   Var(Y) = p.1 * p.0
+    p00, p01, p10, p11 = pmf[0, 0], pmf[0, 1], pmf[1, 0], pmf[1, 1]
+    px1, py1 = pmf[1].sum(), pmf[:, 1].sum()
+    print(f"\n0/1 변수의 지름길")
+    print(f"  주변 P(X=1) = {px1:.4f},  P(Y=1) = {py1:.4f}")
+    print(f"  대각곱의 차 p11*p00 - p10*p01 = {p11 * p00 - p10 * p01:.4f}")
+    print(f"  Var(X) = p1.*p0. = {px1 * (1 - px1):.4f},"
+          f"  Var(Y) = p.1*p.0 = {py1 * (1 - py1):.4f}")
+    print(f"  rho = {(p11 * p00 - p10 * p01) / np.sqrt(px1 * (1 - px1) * py1 * (1 - py1)):.4f}")
+
+    # 주변분포를 그대로 두고 상관을 최대로 키우면 어디까지 갈 수 있는가.
+    #   P(X=1)=0.7, P(Y=1)=0.5 이므로 p11 은 많아야 min(0.7, 0.5) = 0.5 다.
+    p11_max = min(px1, py1)
+    cov_max = p11_max - px1 * py1
+    print(f"\n같은 주변분포에서 가능한 최대")
+    print(f"  p11 <= min(0.7, 0.5) = {p11_max:.2f}"
+          f"   Cov_max = {cov_max:.4f}"
+          f"   rho_max = {cov_max / np.sqrt(px1 * (1 - px1) * py1 * (1 - py1)):.4f}")
+    ```
+
+    출력:
+
+    ```
+    E[X] = 0.7000, E[Y] = 0.5000, E[XY] = 0.4000
+    Cov(X,Y) = 0.0500
+    Corr(X,Y) = 0.2182
+
+    0/1 변수의 지름길
+      주변 P(X=1) = 0.7000,  P(Y=1) = 0.5000
+      대각곱의 차 p11*p00 - p10*p01 = 0.0500
+      Var(X) = p1.*p0. = 0.2100,  Var(Y) = p.1*p.0 = 0.2500
+      rho = 0.2182
+
+    같은 주변분포에서 가능한 최대
+      p11 <= min(0.7, 0.5) = 0.50   Cov_max = 0.1500   rho_max = 0.6547
+    ```
+
+    손으로 구한 값들이 그대로 나온다. $E[X] = 0.7$, $E[Y] = 0.5$, $E[XY] = 0.4$, $\operatorname{Cov} = 0.05$, $\rho = 0.2182$ 다. 대각곱의 차로 구한 $0.05$ 도 같고, $p(1-p)$ 로 구한 분산 $0.21$ 과 $0.25$ 도 같다. 아래 연습문제 $1$ 이 같은 표를 다루므로 맞추어 보라.
+
+    마지막 줄이 이 보기에서 새로 얻은 것이다. $p_{11}$ 을 최대 $0.5$ 까지 올려도 $\rho$ 는 $0.6547$ 에서 멈춘다. **상관계수가 $[-1, 1]$ 을 다 쓸 수 있다는 말은 두 주변분포가 서로 맞을 때만 참이다.** 범주형 자료에서 $\rho$ 를 "얼마나 센가" 의 눈금으로 읽을 때 반드시 함께 보아야 할 사실이다.
 
 
 ## 연습문제

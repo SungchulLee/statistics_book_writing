@@ -205,54 +205,146 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 무상관이 독립을 뜻하지 않는다
+**보기 3.** <span class="diff easy" title="쉬움"></span> 무상관이 독립을 뜻하지 않는다. $X \sim N(0,1)$ 이고 $Y = X^2$ 이다.
+
+**(1)** $\operatorname{Cov}(X, Y) = 0$ 임을 해석적으로 보이시오. 무엇이 이것을 만드는가. 정규분포라는 사실이 꼭 필요한가.
+
+**(2)** 그런데 $X$ 와 $Y$ 는 독립이 아니다. 확률이 양수인 사건 둘을 잡아 독립이 깨짐을 보이시오. 또 모의실험이 준 $\operatorname{Cov} = -0.0023$ 은 $0$ 에서 얼마나 떨어진 값인가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-def demonstrate_correlation():
-    """무상관이 독립을 뜻하지 않는다는 것을 보인다."""
-    np.random.seed(42)
-    n = 10_000
+    **(1) 홀수 적률이 전부 $0$ 이어서다.** 정리 2 의 둘째 형태를 쓰면
 
-    X = np.random.randn(n)      # 0을 중심으로 대칭인 표준정규
-    Y = X ** 2                  # X만 알면 Y가 완전히 결정된다. 극단적인 종속이다.
+    $$
+    \operatorname{Cov}(X, X^2) = E[X \cdot X^2] - E[X]\,E[X^2] = E[X^3] - E[X]\,E[X^2]
+    $$
 
-    # 그런데 공분산은 0이 나온다. 이유는 대칭성에 있다.
-    #   Cov(X, X^2) = E[X^3] - E[X]E[X^2] = 0 - 0*1 = 0
-    # X가 0을 중심으로 대칭이면 E[X^3] = 0 이기 때문이다.
-    # 양의 X가 만드는 기여와 음의 X가 만드는 기여가 정확히 상쇄된다.
-    cov_XY = np.cov(X, Y)[0, 1]
-    corr_XY = np.corrcoef(X, Y)[0, 1]
+    이다. $X$ 의 분포가 $0$ 을 중심으로 **대칭**이면 $-X$ 와 $X$ 가 같은 분포를 가지므로 홀수 거듭제곱의 기댓값이 자기 자신의 부호를 바꾼 것과 같아진다.
 
-    print(f"Cov(X, X²) = {cov_XY:.4f} (theoretically 0)")
-    print(f"Corr(X, X²) = {corr_XY:.4f}")
-    print(f"Yet X and X² are clearly dependent!")
+    $$
+    E[X^3] = E[(-X)^3] = -E[X^3]
+    \quad\Longrightarrow\quad
+    E[X^3] = 0
+    $$
 
-    fig, ax = plt.subplots(figsize=(12, 4))
-    ax.scatter(X[:500], Y[:500], alpha=0.3, s=10)
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y = X²')
-    ax.set_title(f'Uncorrelated but Dependent (ρ = {corr_XY:.3f})')
-    ax.spines[['top', 'right']].set_visible(False)
-    plt.tight_layout()
-    plt.show()
+    같은 논증이 $E[X] = 0$ 도 준다. 따라서 두 항이 모두 $0$ 이고
 
-demonstrate_correlation()
-```
+    $$
+    \operatorname{Cov}(X, X^2) = 0 - 0 \cdot 1 = 0
+    $$
 
-출력:
+    이다. **근사가 아니라 정확한 $0$ 이다.**
 
-```
-Cov(X, X²) = -0.0023 (theoretically 0)
-Corr(X, X²) = -0.0016
-Yet X and X² are clearly dependent!
-```
+    **정규분포는 필요 없다.** 쓴 것은 $0$ 중심 대칭과 $E[\lvert X \rvert^3] < \infty$ 뿐이다. $X \sim \text{Uniform}(-1, 1)$ 로 바꾸어도 $E[X] = E[X^3] = 0$ 이라 똑같이 $\operatorname{Cov}(X, X^2) = 0$ 이 나온다. 대칭성이 깨지면 이야기가 달라진다. 예컨대 $X \sim \text{Exp}(1)$ 이면 $E[X^3] = 6$, $E[X] = 1$, $E[X^2] = 2$ 라 $\operatorname{Cov}(X, X^2) = 6 - 2 = 4 \ne 0$ 이다. **$0$ 을 만드는 것은 포물선이 아니라 대칭이다.**
 
-![분산과 공분산](./img/variance_covariance_118.png)
+    **(2) 독립은 확실히 깨진다.** 두 사건을 잡는다.
+
+    $$
+    A = \{\lvert X \rvert \le 1\},
+    \qquad
+    B = \{Y \le 1\}
+    $$
+
+    $Y = X^2$ 이므로 $Y \le 1$ 과 $\lvert X \rvert \le 1$ 은 **같은 사건**이다. 곧 $A = B$ 이고 $A \cap B = A$ 다. 표준정규에서 $P(A) = 2\Phi(1) - 1 = 0.6827$ 이므로
+
+    $$
+    P(A \cap B) = 0.6827,
+    \qquad
+    P(A)P(B) = 0.6827^2 = 0.4660
+    $$
+
+    이다. 독립이라면 둘이 같아야 하는데 $1.465$ 배 차이가 난다. **공분산이 정확히 $0$ 인 바로 그 쌍에서 독립이 $1.465$ 배로 깨져 있다.** 더 극단적으로 말하면 $X$ 를 아는 순간 $Y$ 는 한 점으로 정해져 $\operatorname{Var}(Y \mid X) = 0$ 이다. 이보다 강한 종속은 없다.
+
+    공분산이 이것을 놓치는 까닭은 정리 2 의 정의에 그대로 적혀 있다. 공분산은 $(X - \mu_X)(Y - \mu_Y)$ 의 평균, 곧 **부호가 같이 바뀌는 경향**을 재는 양이다. $Y = X^2$ 에서는 $X$ 가 양일 때와 음일 때의 기여가 크기는 같고 부호만 반대라 평균에서 정확히 상쇄된다. **관계가 없어서 $0$ 이 아니라 관계가 대칭이라 상쇄되어 $0$ 이다.**
+
+    **(3) 수치적으로.** 표본공분산도 확률변수이므로 그 퍼짐을 함께 잰다. $\mu_X = 0$, $\mu_Y = 1$ 이므로
+
+    $$
+    \operatorname{Var}(\widehat{\operatorname{Cov}}) \approx \frac{E\big[X^2(X^2-1)^2\big]}{n}
+    = \frac{E[X^6] - 2E[X^4] + E[X^2]}{n}
+    = \frac{15 - 6 + 1}{n} = \frac{10}{n}
+    $$
+
+    이고 $n = 10^4$ 에서 표준오차가 $\sqrt{10/10^4} = 0.0316$ 이다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    def demonstrate_correlation():
+        """무상관이 독립을 뜻하지 않는다는 것을 보인다."""
+        np.random.seed(42)
+        n = 10_000
+
+        X = np.random.randn(n)      # 0을 중심으로 대칭인 표준정규
+        Y = X ** 2                  # X만 알면 Y가 완전히 결정된다. 극단적인 종속이다.
+
+        # 그런데 공분산은 0이 나온다. 이유는 대칭성에 있다.
+        #   Cov(X, X^2) = E[X^3] - E[X]E[X^2] = 0 - 0*1 = 0
+        # X가 0을 중심으로 대칭이면 E[X^3] = 0 이기 때문이다.
+        # 양의 X가 만드는 기여와 음의 X가 만드는 기여가 정확히 상쇄된다.
+        cov_XY = np.cov(X, Y)[0, 1]
+        corr_XY = np.corrcoef(X, Y)[0, 1]
+
+        print(f"Cov(X, X²) = {cov_XY:.4f} (theoretically 0)")
+        print(f"Corr(X, X²) = {corr_XY:.4f}")
+        print(f"Yet X and X² are clearly dependent!")
+
+        # 표본공분산도 확률변수다. 그 퍼짐을 알아야 -0.0023 을 읽을 수 있다.
+        #   Var(표본공분산) ~ E[(X-0)^2 (Y-1)^2]/n = E[X^6 - 2X^4 + X^2]/n = 10/n
+        se_cov = np.sqrt(10 / n)
+        se_corr = se_cov / np.sqrt(2)          # sd(X)=1, sd(Y)=sqrt(2)
+        print(f"\n표본공분산의 SE = {se_cov:.4f},  관측/SE = {cov_XY / se_cov:+.3f}")
+        print(f"표본상관계수의 SE = {se_corr:.4f},  관측/SE = {corr_XY / se_corr:+.3f}")
+
+        # 독립이 아님을 사건 하나로 보인다. A = {|X| <= 1}, B = {Y <= 1} 은 같은 사건이다.
+        A = np.abs(X) <= 1
+        B = Y <= 1
+        print(f"\nA = {{|X| <= 1}},  B = {{Y <= 1}}  (실은 같은 사건이다)")
+        print(f"  P(A) = {A.mean():.4f}   이론 {2 * stats.norm.cdf(1) - 1:.4f}")
+        print(f"  P(A and B) = {(A & B).mean():.4f}")
+        print(f"  독립이라면 P(A)P(B) = {A.mean() * B.mean():.4f}")
+        print(f"  비 = {(A & B).mean() / (A.mean() * B.mean()):.4f}")
+
+        fig, ax = plt.subplots(figsize=(12, 4))
+        ax.scatter(X[:500], Y[:500], alpha=0.3, s=10)
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y = X²')
+        ax.set_title(f'Uncorrelated but Dependent (ρ = {corr_XY:.3f})')
+        ax.spines[['top', 'right']].set_visible(False)
+        plt.tight_layout()
+        plt.show()
+
+    demonstrate_correlation()
+    ```
+
+    출력:
+
+    ```
+    Cov(X, X²) = -0.0023 (theoretically 0)
+    Corr(X, X²) = -0.0016
+    Yet X and X² are clearly dependent!
+
+    표본공분산의 SE = 0.0316,  관측/SE = -0.073
+    표본상관계수의 SE = 0.0224,  관측/SE = -0.072
+
+    A = {|X| <= 1},  B = {Y <= 1}  (실은 같은 사건이다)
+      P(A) = 0.6820   이론 0.6827
+      P(A and B) = 0.6820
+      독립이라면 P(A)P(B) = 0.4651
+      비 = 1.4663
+    ```
+
+    **$-0.0023$ 은 $0$ 에서 $0.073$ 표준오차 떨어져 있다.** 어긋남이 아니라 몬테카를로 잡음이며, 참값은 정확히 $0$ 이다. 상관계수 쪽도 $-0.0016$ 이 표준오차 $0.0224$ 의 $0.072$ 배다. **"$-0.0023$" 이라는 작은 음수를 보고 "약한 음의 관계" 라고 읽어서는 안 된다.**
+
+    사건 쪽은 유도와 그대로 맞는다. $P(A) = 0.6820$ 이 이론값 $0.6827$ 과 맞고, $P(A \cap B)$ 가 $P(A)$ 와 소수 넷째 자리까지 같아 두 사건이 실제로 같은 사건임이 확인된다. 독립이라면 나와야 할 $0.4651$ 과는 $1.4663$ 배 벌어져 있다.
+
+    ![분산과 공분산](./img/variance_covariance_118.png)
+
+    그림이 이 모든 것을 한 장에 담고 있다. 점들이 포물선 위에 **정확히** 놓여 있다. 흩어짐이 전혀 없으니 $X$ 를 알면 $Y$ 가 완전히 정해진다는 뜻이고, 이보다 강한 종속은 없다. 그런데 제목에 적힌 상관계수는 $\rho = -0.002$ 다. **흩뿌림그림이 완벽한 곡선을 보여 주는데도 상관계수는 $0$ 이라고 말한다.** 상관계수를 보기 전에 그림을 그려야 하는 이유가 이 한 장에 들어 있다.
 
 ## 3. 합의 분산에는 교차항이 붙는다
 

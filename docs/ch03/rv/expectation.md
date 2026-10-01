@@ -232,100 +232,278 @@ $$
     E[T] = \sum_{i=1}^{n} \frac{n}{n-i+1} = n\sum_{k=1}^{n}\frac{1}{k} = n H_n \approx n \ln n
     $$
 
-    이다. $n = 50$이면 약 225번 사야 한다. 단계들의 길이는 서로 종속이지만 선형성은 개의치 않는다.
+    이다. $n = 50$이면 $nH_n = 224.96$, 곧 약 225번 사야 한다(어림식 $n\ln n$은 195.6으로 30쯤 모자라다 — 빠진 것이 $n\gamma \approx 28.9$다). 여기서 단계의 길이 $T_i$들은 사실 서로 **독립인** 기하분포다. 다만 선형성은 그것을 묻지 않는다. 종속이었더라도 $E[T] = \sum E[T_i]$는 그대로 성립한다.
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 쿠폰 수집가 문제
+**보기 4.** <span class="diff easy" title="쉬움"></span> 쿠폰 수집가 문제. 쿠폰이 $n = 50$ 종류 있고 한 번 살 때마다 균등하게 하나를 받는다. 전부 모을 때까지 사야 하는 횟수를 $T$ 라 한다. 기댓값 $E[T] = nH_n$ 은 바로 위에서 유도했으므로 그 값이 실제로 어떤 수인지를 따진다.
+
+**(1)** $n = 50$ 에서 $nH_n$ 의 정확한 값을 구하고, 위에서 적은 어림식 $n\ln n$ 이 주는 값과 견주시오. 어림식이 그만큼 빗나가는 까닭은 무엇이며, 무엇을 보태면 맞는가.
+
+**(2)** 모의실험 $10{,}000$ 번이 준 평균이 $225.5$ 다. 정확값과 다르다. 몬테카를로 오차로 설명되는가.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def coupon_collector_simulation(n_coupons, n_trials=10_000):
-    """쿠폰 수집가 문제: n종을 모두 모으려면 몇 개를 사야 하는가."""
-    np.random.seed(42)
-    totals = []
-    for _ in range(n_trials):
-        collected = set()      # set이라 중복은 저절로 걸러진다
-        count = 0
-        # 종류를 다 모을 때까지 무작위로 하나씩 뽑는다
-        while len(collected) < n_coupons:
-            collected.add(np.random.randint(0, n_coupons))
-            count += 1
-        totals.append(count)
+    **(1) 해석적으로.** 조화수를 그대로 더하면
 
-    simulated = np.mean(totals)
+    $$
+    H_{50} = \sum_{k=1}^{50} \frac1k = 4.4992053,
+    \qquad
+    50\,H_{50} = 224.9603
+    $$
 
-    # 이론값 유도: 이미 k종을 모았을 때 새 종이 나올 확률은 (n-k)/n 이므로
-    # 새 종 하나를 더 얻기까지 기대 횟수는 n/(n-k) 다.
-    # 이를 k = 0..n-1 로 모두 더하면
-    #   n/n + n/(n-1) + ... + n/1 = n * (1 + 1/2 + ... + 1/n) = n * H_n
-    # 기댓값의 선형성 덕분에 각 단계가 독립이 아니어도 그냥 더할 수 있다.
-    H_n = sum(1/k for k in range(1, n_coupons + 1))      # 조화수 H_n
-    theoretical = n_coupons * H_n
+    이다. 그런데 어림식 $n\ln n$ 에 넣으면
 
-    print(f"n = {n_coupons}")
-    print(f"Simulated E[T] = {simulated:.1f}")
-    print(f"Theoretical E[T] = n·Hₙ = {theoretical:.1f}")
+    $$
+    50 \ln 50 = 50 \times 3.9120 = 195.6012
+    $$
 
-coupon_collector_simulation(50)
-```
+    로 **$29.4$ 나 낮다.** 상대오차가 $13\%$ 이니 "약 $225$ 번" 과는 거리가 멀다.
 
-출력:
+    빠진 것은 상수항이다. 조화수의 점근전개는
 
-```
-n = 50
-Simulated E[T] = 225.5
-Theoretical E[T] = n·Hₙ = 225.0
-```
+    $$
+    H_n = \ln n + \gamma + \frac{1}{2n} - \frac{1}{12n^2} + \cdots,
+    \qquad
+    \gamma = 0.5772157
+    $$
+
+    이고, 여기에 $n$ 을 곱하면
+
+    $$
+    nH_n = n\ln n + n\gamma + \frac12 - \frac{1}{12n} + \cdots
+    $$
+
+    이다. **$n\ln n$ 다음 항 $n\gamma$ 가 $n$ 에 비례해서 커지므로 결코 무시할 수 없다.** $n = 50$ 에서 $50\gamma = 28.86$ 이고, 이것이 방금 본 차이 $29.4$ 의 거의 전부다. 여기에 상수 $\tfrac12$ 까지 보태면
+
+    $$
+    50\ln 50 + 50\gamma + \tfrac12 = 224.9619
+    $$
+
+    로 정확값 $224.9603$ 과 소수 둘째 자리까지 맞는다. $n\ln n$ 은 **비율로만** 맞는 어림이고($nH_n / (n\ln n) \to 1$), 차이는 오히려 커진다.
+
+    **(2) 몬테카를로 오차로 설명된다.** 되풀이 $10{,}000$ 번으로 추정한 평균의 표준오차는 $\operatorname{sd}(T)/\sqrt{10000}$ 이다. $\operatorname{sd}(T)$ 를 모의실험에서 직접 재면 $62.22$ 이므로
+
+    $$
+    \operatorname{SE} = \frac{62.22}{100} = 0.6222
+    $$
+
+    이고, 벗어남 $225.52 - 224.96 = 0.56$ 은 $0.90$ 표준오차에 지나지 않는다. **이 문제에서 $T$ 는 매우 넓게 퍼져 있다는 점이 요점이다.** 표준편차가 $62$ 로 평균의 $28\%$ 나 되므로, 평균을 소수 첫째 자리까지 맞히려면 되풀이가 $10{,}000$ 번으로는 모자란다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    def coupon_collector_simulation(n_coupons, n_trials=10_000):
+        """쿠폰 수집가 문제: n종을 모두 모으려면 몇 개를 사야 하는가."""
+        np.random.seed(42)
+        totals = []
+        for _ in range(n_trials):
+            collected = set()      # set이라 중복은 저절로 걸러진다
+            count = 0
+            # 종류를 다 모을 때까지 무작위로 하나씩 뽑는다
+            while len(collected) < n_coupons:
+                collected.add(np.random.randint(0, n_coupons))
+                count += 1
+            totals.append(count)
+
+        simulated = np.mean(totals)
+
+        # 이론값 유도: 이미 k종을 모았을 때 새 종이 나올 확률은 (n-k)/n 이므로
+        # 새 종 하나를 더 얻기까지 기대 횟수는 n/(n-k) 다.
+        # 이를 k = 0..n-1 로 모두 더하면
+        #   n/n + n/(n-1) + ... + n/1 = n * (1 + 1/2 + ... + 1/n) = n * H_n
+        # 기댓값의 선형성 덕분에 각 단계가 독립이 아니어도 그냥 더할 수 있다.
+        H_n = sum(1/k for k in range(1, n_coupons + 1))      # 조화수 H_n
+        theoretical = n_coupons * H_n
+
+        print(f"n = {n_coupons}")
+        print(f"Simulated E[T] = {simulated:.1f}")
+        print(f"Theoretical E[T] = n·Hₙ = {theoretical:.1f}")
+
+        # (1) 어림식 n ln n 과 견준다. 빠진 것이 오일러-마스케로니 상수 항이다.
+        gamma = 0.5772156649015329
+        approx1 = n_coupons * np.log(n_coupons)
+        approx2 = n_coupons * (np.log(n_coupons) + gamma)
+        approx3 = approx2 + 0.5
+        print(f"  정확값      n*H_n              = {theoretical:.4f}")
+        print(f"  어림식 1    n*ln n             = {approx1:.4f}"
+              f"   (오차 {approx1 - theoretical:+.4f})")
+        print(f"  어림식 2    n*(ln n + gamma)   = {approx2:.4f}"
+              f"   (오차 {approx2 - theoretical:+.4f})")
+        print(f"  어림식 3    + 1/2              = {approx3:.4f}"
+              f"   (오차 {approx3 - theoretical:+.4f})")
+
+        # (2) 모의값이 정확값에서 벗어난 것이 몬테카를로 오차로 설명되는가.
+        sd = np.std(totals, ddof=1)
+        se = sd / np.sqrt(n_trials)
+        print(f"  모의 표준편차 = {sd:.2f},  평균의 SE = {se:.4f}")
+        print(f"  (모의 - 정확)/SE = {(simulated - theoretical) / se:+.3f}")
+
+    coupon_collector_simulation(50)
+    ```
+
+    출력:
+
+    ```
+    n = 50
+    Simulated E[T] = 225.5
+    Theoretical E[T] = n·Hₙ = 225.0
+      정확값      n*H_n              = 224.9603
+      어림식 1    n*ln n             = 195.6012   (오차 -29.3591)
+      어림식 2    n*(ln n + gamma)   = 224.4619   (오차 -0.4983)
+      어림식 3    + 1/2              = 224.9619   (오차 +0.0017)
+      모의 표준편차 = 62.22,  평균의 SE = 0.6222
+      (모의 - 정확)/SE = +0.900
+    ```
+
+    $n\ln n$ 의 오차가 $-29.36$, 여기에 $n\gamma$ 를 더하면 $-0.50$, 상수 $\tfrac12$ 까지 더하면 $+0.0017$ 로 줄어든다. 유도한 전개가 항마다 그대로 확인된다. 모의값 $225.52$ 는 정확값에서 $0.900$ 표준오차 떨어져 있어 어긋남이 아니다.
+
+    **어림식을 쓸 때 무엇을 버렸는지 알아야 한다.** $n\ln n$ 은 $T$ 가 커지는 **차수**를 말해 주지만 $n = 50$ 같은 실제 값에서는 $13\%$ 를 놓친다. 위 본문이 "$n = 50$ 이면 약 $225$ 번" 이라 한 것은 어림식이 아니라 정확식 $nH_n$ 을 쓴 값이다.
 
 종속인 변수에서도 선형성이 성립함을 직접 확인해 보자. $Y = X^2$은 $X$에 완전히 종속이다.
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 종속이어도 기댓값은 더해진다
+**보기 5.** <span class="diff easy" title="쉬움"></span> 종속이어도 기댓값은 더해진다. $X \sim \text{Uniform}(0,1)$ 이고 $Y = X^2$ 이다. $X$ 를 알면 $Y$ 가 완전히 정해지므로 이보다 더 종속일 수 없다.
+
+**(1)** $E[X]$, $E[Y]$, $E[X+Y]$ 를 구해 선형성 $E[X+Y] = E[X] + E[Y]$ 가 성립함을 확인하시오.
+
+**(2)** 같은 쌍에서 **곱 규칙** $E[XY] = E[X]E[Y]$ 와 **분산의 덧셈** $\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y)$ 는 어떻게 되는가. 얼마나 빗나가는지 수로 적으시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-def linearity_demonstration():
-    """종속인 두 변수에서도 기댓값의 선형성이 성립함을 확인한다.
+    **(1) 해석적으로.** 균등분포의 적률은 한 줄로 나온다. $k \ge 0$ 에 대해
 
-    E[X + Y] = E[X] + E[Y] 는 X와 Y가 **독립이 아니어도** 성립한다.
-    독립이 필요한 것은 곱의 기댓값 E[XY] = E[X]E[Y] 이나
-    분산의 덧셈 Var(X+Y) = Var(X) + Var(Y) 쪽이다.
-    이 구분이 확률론에서 가장 자주 헷갈리는 지점 중 하나다.
-    """
-    np.random.seed(42)
-    n_sim = 100_000
+    $$
+    E[X^k] = \int_0^1 x^k\,dx = \frac{1}{k+1}
+    $$
 
-    # X ~ Uniform(0,1), Y = X^2. X를 알면 Y가 완전히 결정되므로 극단적으로 종속이다.
-    X = np.random.rand(n_sim)
-    Y = X ** 2
+    이므로 $E[X] = \tfrac12$, $E[Y] = E[X^2] = \tfrac13$ 이고
 
-    print("X and Y = X² are dependent, but linearity still holds:")
-    print(f"E[X] = {X.mean():.4f} (theoretical: 0.5)")
-    print(f"E[Y] = {Y.mean():.4f} (theoretical: 0.3333)")
-    print(f"E[X + Y] = {(X + Y).mean():.4f}")
-    print(f"E[X] + E[Y] = {X.mean() + Y.mean():.4f}")
+    $$
+    E[X + Y] = \int_0^1 (x + x^2)\,dx = \frac12 + \frac13 = \frac56 = 0.8333
+    $$
 
-linearity_demonstration()
-```
+    이다. **한쪽을 알면 다른 쪽이 완전히 정해지는 극단적인 종속인데도 기댓값은 그냥 더해진다.** 선형성의 증명 어디에도 독립이 쓰이지 않았기 때문이다. 합의 기댓값은 결합분포 위에서 $x + y$ 를 적분한 것이고, 그 적분이 $x$ 의 적분과 $y$ 의 적분으로 쪼개지는 것은 **덧셈의 성질**이지 확률의 성질이 아니다.
 
-출력:
+    **(2) 다른 둘은 깨진다.** 곱 규칙부터 본다. $XY = X \cdot X^2 = X^3$ 이므로
 
-```
-X and Y = X² are dependent, but linearity still holds:
-E[X] = 0.4995 (theoretical: 0.5)
-E[Y] = 0.3326 (theoretical: 0.3333)
-E[X + Y] = 0.8321
-E[X] + E[Y] = 0.8321
-```
+    $$
+    E[XY] = E[X^3] = \frac14 = 0.25,
+    \qquad
+    E[X]E[Y] = \frac12 \cdot \frac13 = \frac16 = 0.1667
+    $$
+
+    로 **$1.5$ 배 차이**가 난다. 그 차이가 곧 공분산이다.
+
+    $$
+    \operatorname{Cov}(X, Y) = \frac14 - \frac16 = \frac{1}{12} = 0.0833
+    $$
+
+    분산도 보자. $E[X^4] = \tfrac15$ 이므로
+
+    $$
+    \operatorname{Var}(X) = \frac13 - \frac14 = \frac1{12} = 0.0833,
+    \qquad
+    \operatorname{Var}(Y) = \frac15 - \frac19 = \frac{4}{45} = 0.0889
+    $$
+
+    이고, 교차항을 포함한 참값은
+
+    $$
+    \operatorname{Var}(X+Y) = \frac1{12} + \frac4{45} + 2 \cdot \frac1{12} = \frac{61}{180} = 0.3389
+    $$
+
+    인데 교차항을 빠뜨리면 $\tfrac1{12} + \tfrac4{45} = 0.1722$ 다. **거의 두 배(1.97배)를 놓친다.** 상관계수를 내 보면 얼마나 세게 얽혀 있는지 드러난다.
+
+    $$
+    \rho = \frac{1/12}{\sqrt{(1/12)(4/45)}},
+    \qquad
+    \rho^2 = \frac{1/144}{(1/12)(4/45)} = \frac{15}{16},
+    \qquad
+    \rho = \frac{\sqrt{15}}{4} = 0.9682
+    $$
+
+    $Y$ 가 $X$ 의 함수인데도 $\rho$ 가 $1$ 이 아닌 것은 그 함수가 **직선이 아니기** 때문이다. 상관계수는 직선 관계만 재므로, 완전한 종속조차 $0.9682$ 로밖에 잡아내지 못한다. 이 어긋남을 정면으로 다루는 곳이 [독립성과 무상관성의 차이](independence_vs_zero_corr.md)다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def linearity_demonstration():
+        """종속인 두 변수에서도 기댓값의 선형성이 성립함을 확인한다.
+
+        E[X + Y] = E[X] + E[Y] 는 X와 Y가 **독립이 아니어도** 성립한다.
+        독립이 필요한 것은 곱의 기댓값 E[XY] = E[X]E[Y] 이나
+        분산의 덧셈 Var(X+Y) = Var(X) + Var(Y) 쪽이다.
+        이 구분이 확률론에서 가장 자주 헷갈리는 지점 중 하나다.
+        """
+        np.random.seed(42)
+        n_sim = 100_000
+
+        # X ~ Uniform(0,1), Y = X^2. X를 알면 Y가 완전히 결정되므로 극단적으로 종속이다.
+        X = np.random.rand(n_sim)
+        Y = X ** 2
+
+        print("X and Y = X² are dependent, but linearity still holds:")
+        print(f"E[X] = {X.mean():.4f} (theoretical: 0.5)")
+        print(f"E[Y] = {Y.mean():.4f} (theoretical: 0.3333)")
+        print(f"E[X + Y] = {(X + Y).mean():.4f}")
+        print(f"E[X] + E[Y] = {X.mean() + Y.mean():.4f}")
+
+        # 곱 규칙은 깨진다. E[XY] = E[X^3] = 1/4 이지만 E[X]E[Y] = 1/6 이다.
+        print("\n곱 규칙은 깨진다:")
+        print(f"E[XY] = {(X * Y).mean():.4f} (theoretical: {1/4:.4f})")
+        print(f"E[X]E[Y] = {X.mean() * Y.mean():.4f} (theoretical: {1/6:.4f})")
+        print(f"Cov(X,Y) = {np.cov(X, Y, ddof=0)[0, 1]:.4f} (theoretical: {1/12:.4f})")
+
+        # 분산의 덧셈도 깨진다. 교차항 2Cov 가 남는다.
+        print("\n분산의 덧셈도 깨진다:")
+        vx, vy = X.var(), Y.var()
+        print(f"Var(X) = {vx:.4f} (theoretical: {1/12:.4f})")
+        print(f"Var(Y) = {vy:.4f} (theoretical: {4/45:.4f})")
+        print(f"Var(X+Y) = {(X + Y).var():.4f} (theoretical: {61/180:.4f})")
+        print(f"Var(X)+Var(Y) = {vx + vy:.4f} (theoretical: {1/12 + 4/45:.4f})")
+        print(f"rho = {np.corrcoef(X, Y)[0, 1]:.4f} (theoretical: {np.sqrt(15)/4:.4f})")
+
+    linearity_demonstration()
+    ```
+
+    출력:
+
+    ```
+    X and Y = X² are dependent, but linearity still holds:
+    E[X] = 0.4995 (theoretical: 0.5)
+    E[Y] = 0.3326 (theoretical: 0.3333)
+    E[X + Y] = 0.8321
+    E[X] + E[Y] = 0.8321
+
+    곱 규칙은 깨진다:
+    E[XY] = 0.2492 (theoretical: 0.2500)
+    E[X]E[Y] = 0.1661 (theoretical: 0.1667)
+    Cov(X,Y) = 0.0830 (theoretical: 0.0833)
+
+    분산의 덧셈도 깨진다:
+    Var(X) = 0.0831 (theoretical: 0.0833)
+    Var(Y) = 0.0885 (theoretical: 0.0889)
+    Var(X+Y) = 0.3377 (theoretical: 0.3389)
+    Var(X)+Var(Y) = 0.1716 (theoretical: 0.1722)
+    rho = 0.9683 (theoretical: 0.9682)
+    ```
+
+    선형성 쪽은 $E[X+Y] = 0.8321$ 과 $E[X] + E[Y] = 0.8321$ 이 **소수 넷째 자리까지 한 글자도 다르지 않다.** 모의실험의 흔들림조차 양쪽에 똑같이 들어가기 때문이며, 이 등식은 표본마다 성립하는 항등식이다. 이론값 $0.8333$ 과는 $0.0012$ 차이인데, $\operatorname{sd}(X+Y) = \sqrt{0.3389} = 0.582$ 이므로 표준오차가 $0.582/\sqrt{100000} = 0.0018$ 이고 벗어남은 그 안이다.
+
+    나머지 값들도 유도와 맞는다. $E[XY] = 0.2492$ 대 $0.25$, 공분산 $0.0830$ 대 $1/12 = 0.0833$, $\operatorname{Var}(X+Y) = 0.3377$ 대 $61/180 = 0.3389$, $\rho = 0.9683$ 대 $\sqrt{15}/4 = 0.9682$ 다.
+
+    **정리하면 이렇다.** 같은 $(X, Y)$ 한 쌍에서 선형성은 정확히 성립하고 곱 규칙은 $1.5$ 배, 분산의 덧셈은 $1.97$ 배 빗나간다. 독립이 필요한 자리와 필요 없는 자리가 이렇게 갈린다.
 
 ## 연습문제
 

@@ -85,94 +85,168 @@ $x$를 고정하면 수이지만, $x$를 움직이면 $x$의 **함수**다. 그 
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 조건을 더할수록 이야기가 달라진다
+**보기 1.** <span class="diff easy" title="쉬움"></span> 조건을 더할수록 이야기가 달라진다. 타이타닉 승객 $891$ 명에서 객실등급·성별·생존을 본다. 앞 절 [확률변수의 독립](rv_independence.md)의 보기 $1$ 에서 결합확률 $P(\text{1등석},\text{생존}) = 0.1526$ 을 얻었다.
+
+**(1)** 그 결합확률 하나만으로 "1등석 승객이 잘 살아남았다" 고 말할 수 있는가. $P(\text{생존} \mid \text{등급})$ 세 값을 구하고, 결합확률이 답하지 못하는 것을 조건부확률이 어떻게 답하는지 적으시오.
+
+**(2)** 성별을 조건에 더하면 3등석 **여성**($0.500$)이 1등석 **남성**($0.369$)보다 높다. 이것이 심프슨의 역설인가. 전체 기댓값의 법칙(정리 3)으로 두 표를 이어 판정하시오.
 
 </div>
 
-```python
-import pandas as pd
+??? success "풀이"
 
-URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-t = pd.read_csv(URL)
+    **(1) 말할 수 없다.** 결합확률 $0.1526$ 은 "1등석이면서 살아남은 사람이 전체의 $15.26\%$" 라는 뜻이다. 이 수는 **1등석 승객이 몇 명이었는지**와 **그 안에서 얼마나 살아남았는지**를 한 덩어리로 섞어 놓았다. 1등석이 애초에 많았다면 생존율이 낮아도 이 값이 클 수 있다.
 
-# 조건부분포는 결합을 조건 변수의 주변으로 나눈 것이다.
-# 여기서는 P(생존=1 | 등급) 이므로 등급별 생존 비율이 곧 그 값이다.
-print("P(생존 | 등급)")
-print(t.groupby("Pclass").Survived.mean().round(3).to_string())
-print(f"{'전체':>6}  {t.Survived.mean():.3f}")
+    정리 1 의 나눗셈이 그 섞임을 푼다.
 
-# 성별을 하나 더 조건에 넣는다. 등급의 효과가 사라질까?
-print("\nP(생존 | 등급, 성별)")
-tab = t.pivot_table(index="Sex", columns="Pclass", values="Survived", aggfunc="mean")
-print(tab.round(3).to_string())
+    $$
+    P(\text{생존} \mid \text{1등석})
+    = \frac{P(\text{1등석},\, \text{생존})}{P(\text{1등석})}
+    = \frac{0.1526}{0.2424}
+    = \frac{136}{216} = 0.6296
+    $$
 
-print("\n인원")
-print(t.pivot_table(index="Sex", columns="Pclass", values="Survived", aggfunc="size").to_string())
-```
+    사람 수로 적으면 더 분명하다. $891$ 이 분자와 분모에서 약분되어 **"1등석이 몇 명이었는가" 가 지워지고 "1등석 안에서 어떠했는가" 만 남는다.** 세 값은
 
-출력:
+    $$
+    \frac{136}{216} = 0.630,
+    \qquad
+    \frac{87}{184} = 0.473,
+    \qquad
+    \frac{119}{491} = 0.242
+    $$
 
-```
-P(생존 | 등급)
-Pclass
-1    0.630
-2    0.473
-3    0.242
-    전체  0.384
+    이고 전체 생존율 $0.384$ 를 사이에 두고 갈라진다. **독립이었다면 세 값이 모두 $0.384$ 로 같았을 것이다.** 조건부분포가 조건에 따라 달라진다는 것이 곧 종속이며, 이것이 앞 절에서 본 "실제가 곱의 $1.64$ 배" 를 조건부분포의 말로 옮긴 것이다.
 
-P(생존 | 등급, 성별)
-Pclass      1      2      3
-Sex                        
-female  0.968  0.921  0.500
-male    0.369  0.157  0.135
+    **(2) 심프슨의 역설이 아니다.** 판정 기준은 하나다. **조건을 걸기 전과 건 뒤에 같은 비교의 방향이 뒤집히는가.** 여기서 비교하는 것은 등급이다.
 
-인원
-Pclass    1    2    3
-Sex                  
-female   94   76  144
-male    122  108  347
-```
+    조건 전: $0.630 > 0.473 > 0.242$
 
-![타이타닉: 조건을 더하면 순서가 교차한다](./img/marginal_conditional_titanic.png)
+    여성 안: $0.968 > 0.921 > 0.500$
 
-### 조건부분포가 읽기 쉬운 이유
+    남성 안: $0.369 > 0.157 > 0.135$
 
-앞 절의 결합분포 표에서 1등석·생존 칸의 값은 $0.1526$이었다. 이 숫자만으로는 1등석 승객이 잘 살아남았는지 알기 어렵다. 1등석 승객이 애초에 많았을 수도 있기 때문이다. 조건부확률은 그 혼동을 없앤다.
+    **세 줄의 부등호 방향이 모두 같다.** 등급의 효과는 성별을 고정해도 그대로 남으므로 뒤집힘이 없고, 따라서 심프슨의 역설이 아니다. 뒤집히려면 여성 안이나 남성 안에서 3등석이 1등석보다 높아야 한다.
 
-$$
-P(\text{생존} \mid \text{1등석}) = \frac{P(\text{1등석}, \text{생존})}{P(\text{1등석})} = \frac{0.1526}{0.2424} = 0.630
-$$
+    $0.500 > 0.369$ 은 **서로 다른 칸끼리의 비교**다. 3등석 여성과 1등석 남성은 등급도 성별도 다르므로 같은 비교를 두 번 한 것이 아니다. 읽을 수 있는 것은 **성별의 효과가 등급의 효과보다 크다**는 것뿐이다.
 
-분모로 나누면서 **"1등석이 몇 명이었는가"가 지워지고 "1등석 안에서 어떠했는가"만 남는다.** 세 값을 나란히 놓으면 $0.630$, $0.473$, $0.242$로 전체 생존율 $0.384$를 사이에 두고 갈라진다. 독립이었다면 세 값이 모두 $0.384$로 같았을 것이다. **조건부분포가 조건에 따라 달라진다는 것이 곧 종속이다.**
+    두 표가 어긋나지 않는다는 것은 전체 기댓값의 법칙이 보증한다. 성별을 $G$, 등급을 $C$ 라 하면
 
-### 조건을 하나 더 걸면
+    $$
+    P(\text{생존} \mid C = c)
+    = \sum_{g} P(\text{생존} \mid C = c,\, G = g)\, P(G = g \mid C = c)
+    $$
 
-여기서 멈추면 "등급이 생존을 갈랐다"로 끝난다. 성별을 조건에 더해 보면 이야기가 더 나온다.
+    이고, 1등석에 넣으면 $P(\text{여성} \mid \text{1등석}) = 94/216 = 0.4352$ 이므로
 
-먼저, **등급의 효과는 사라지지 않는다.** 여성 안에서도 $0.968 \to 0.921 \to 0.500$으로 내려가고 남성 안에서도 $0.369 \to 0.157 \to 0.135$로 내려간다. 성별을 고정해도 등급이 여전히 갈라 놓으므로, 등급과 생존은 **성별이 주어진 조건에서도 독립이 아니다.**
+    $$
+    0.968 \times 0.4352 + 0.369 \times 0.5648 = 0.4213 + 0.2083 = 0.6296
+    $$
+
+    로 (1) 의 값이 정확히 되살아난다. **칸별 값과 성별 구성비만 알면 등급별 값이 유일하게 정해진다.** 뒤집힘이 일어나려면 구성비가 등급마다 크게 달라야 하는데, 여성 비중이 $43.5\%$, $41.3\%$, $29.3\%$ 로 등급이 내려갈수록 줄어드니 오히려 **등급 차이를 더 벌리는 쪽**으로 작용했다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import pandas as pd
+
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    t = pd.read_csv(URL)
+
+    # 조건부분포는 결합을 조건 변수의 주변으로 나눈 것이다.
+    # 여기서는 P(생존=1 | 등급) 이므로 등급별 생존 비율이 곧 그 값이다.
+    print("P(생존 | 등급)")
+    print(t.groupby("Pclass").Survived.mean().round(3).to_string())
+    print(f"{'전체':>6}  {t.Survived.mean():.3f}")
+
+    # 성별을 하나 더 조건에 넣는다. 등급의 효과가 사라질까?
+    print("\nP(생존 | 등급, 성별)")
+    tab = t.pivot_table(index="Sex", columns="Pclass", values="Survived", aggfunc="mean")
+    print(tab.round(3).to_string())
+
+    print("\n인원")
+    print(t.pivot_table(index="Sex", columns="Pclass", values="Survived", aggfunc="size").to_string())
+
+    # 전체 기댓값의 법칙으로 두 표를 잇는다.
+    #   P(생존 | 등급) = sum_성별 P(생존 | 등급, 성별) * P(성별 | 등급)
+    share = pd.crosstab(t.Sex, t.Pclass, normalize="columns")
+    print("\nP(성별 | 등급)")
+    print(share.round(4).to_string())
+    print("\n탑 성질로 되맞추기")
+    print(f"{'등급':>5}{'여성 몫':>12}{'남성 몫':>12}{'합':>10}{'직접':>10}")
+    for c in (1, 2, 3):
+        f = tab.loc["female", c] * share.loc["female", c]
+        m = tab.loc["male", c] * share.loc["male", c]
+        direct = t[t.Pclass == c].Survived.mean()
+        print(f"{c:>5}{f:>12.4f}{m:>12.4f}{f + m:>10.4f}{direct:>10.4f}")
+
+    # 순서가 교차하는가, 뒤집히는가.
+    print("\n성별을 고정해도 등급의 순서가 유지되는가")
+    for s in ("female", "male"):
+        r = [tab.loc[s, c] for c in (1, 2, 3)]
+        print(f"  {s:>7}: {r[0]:.3f} > {r[1]:.3f} > {r[2]:.3f} ? "
+              f"{r[0] > r[1] > r[2]}")
+    print(f"  3등석 여성 {tab.loc['female', 3]:.3f} > 1등석 남성 {tab.loc['male', 1]:.3f}"
+          f"  (서로 다른 칸끼리의 비교다)")
+    ```
+
+    출력:
+
+    ```
+    P(생존 | 등급)
+    Pclass
+    1    0.630
+    2    0.473
+    3    0.242
+        전체  0.384
+
+    P(생존 | 등급, 성별)
+    Pclass      1      2      3
+    Sex                        
+    female  0.968  0.921  0.500
+    male    0.369  0.157  0.135
+
+    인원
+    Pclass    1    2    3
+    Sex                  
+    female   94   76  144
+    male    122  108  347
+
+    P(성별 | 등급)
+    Pclass       1      2       3
+    Sex                          
+    female  0.4352  0.413  0.2933
+    male    0.5648  0.587  0.7067
+
+    탑 성질로 되맞추기
+       등급        여성 몫        남성 몫         합        직접
+        1      0.4213      0.2083    0.6296    0.6296
+        2      0.3804      0.0924    0.4728    0.4728
+        3      0.1466      0.0957    0.2424    0.2424
+
+    성별을 고정해도 등급의 순서가 유지되는가
+       female: 0.968 > 0.921 > 0.500 ? True
+         male: 0.369 > 0.157 > 0.135 ? True
+      3등석 여성 0.500 > 1등석 남성 0.369  (서로 다른 칸끼리의 비교다)
+    ```
+
+    ![타이타닉: 조건을 더하면 순서가 교차한다](./img/marginal_conditional_titanic.png)
+
+    탑 성질이 세 등급 모두에서 소수 넷째 자리까지 맞는다. $0.6296$, $0.4728$, $0.2424$ 가 직접 센 값과 같다. 등급 순서도 여성 안과 남성 안 모두에서 유지되어 심프슨의 역설이 아님이 확인된다.
+
+    그림의 오른쪽 칸에서 두 점선이 교차하는 것이 $0.500$ 과 $0.369$ 다. 교차가 일어나는 까닭은 성별의 **격차**가 등급의 격차보다 크기 때문이고, 그 격차 자체도 등급마다 다르다. 1등석에서 $0.968 - 0.369 = 0.599$, 2등석에서 $0.921 - 0.157 = 0.764$, 3등석에서 $0.500 - 0.135 = 0.365$ 로 2등석이 가장 크다. **두 설명변수가 서로의 효과를 바꾸어 놓는 이 현상이 교호작용**이며, 11장 이원배치 분산분석과 13장 회귀에서 정면으로 다룬다.
+
+    여기서 기억할 것은 하나다. **"$X$ 가 $Y$ 에 미치는 영향" 이라는 말이 무조건 뜻을 갖는 것은 아니며, 무엇을 조건으로 걸었는지에 따라 달라진다.** 조건을 더했더니 결론의 **부호까지** 뒤집히는 경우가 심프슨의 역설이고 12장에서 다룬다. 타이타닉에서는 부호가 뒤집히지는 않고 서로 다른 칸끼리의 순서가 교차하는 데 그쳤다.
+
+### 조건부 종속
+
+보기 $1$ 에서 성별을 고정해도 등급이 여전히 생존율을 갈라 놓았다. 식으로 적으면
 
 $$
 P(\text{생존} \mid \text{등급}, \text{성별}) \ne P(\text{생존} \mid \text{성별})
 $$
 
-이것을 **조건부 종속**이라 한다. 조건을 걸면 종속이 사라지는 경우도 있는데(그때는 조건부 독립이라 한다), 여기서는 그렇지 않다는 것이 자료의 답이다.
-
-둘째, 훨씬 흥미로운 것이 있다. 두 조건을 함께 보면 **순서가 교차한다.**
-
-| | 생존율 |
-|---|---|
-| 3등석 **여성** | $0.500$ |
-| 1등석 **남성** | $0.369$ |
-
-등급만 보면 1등석이 3등석보다 유리하다. 그런데 3등석 여성이 1등석 남성보다 살아남을 확률이 높다. **한 변수의 조건부분포만으로는 예측이 뒤집힐 수 있다**는 뜻이며, 그림 오른쪽의 두 점선이 이 교차를 보여 준다.
-
-!!! note "두 변수가 함께 작용하는 방식"
-
-    성별의 효과가 등급보다 크다는 것만이 아니다. 효과의 **크기 자체가 등급에 따라 다르다.** 1등석에서 여성과 남성의 격차는 $0.968 - 0.369 = 0.599$인데 3등석에서는 $0.500 - 0.135 = 0.365$다. 2등석은 $0.764$로 가장 크다.
-
-    두 설명변수가 서로의 효과를 바꾸어 놓는 이 현상을 **교호작용**이라 부르며, 11장 이원배치 분산분석과 13장 회귀에서 정면으로 다룬다. 여기서 기억할 것은 하나다. **"$X$가 $Y$에 미치는 영향"이라는 말이 무조건 뜻을 갖는 것은 아니며, 무엇을 조건으로 걸었는지에 따라 달라진다.**
-
-    조건을 더했더니 결론의 **부호까지** 뒤집히는 경우도 있다. 그것이 심프슨의 역설이며 12장에서 다룬다. 타이타닉에서는 부호가 뒤집히지는 않고 순서가 교차하는 데 그쳤다.
+이고, 이것을 **조건부 종속**이라 한다. 조건을 걸면 종속이 사라지는 경우도 있는데(그때는 **조건부 독립**이라 한다) 여기서는 그렇지 않다는 것이 자료의 답이다.
 
 ### 조건을 걸면 사라지는 연관
 
@@ -180,66 +254,136 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 조건을 걸면 사라지는 연관
+**보기 2.** <span class="diff easy" title="쉬움"></span> 조건을 걸면 사라지는 연관. 같은 타이타닉 자료에서 **승선항**(C 셰르부르, Q 퀸스타운, S 사우샘프턴)과 생존을 본다. 주변적으로는 생존율이 $0.554$, $0.390$, $0.337$ 로 뚜렷하게 갈린다.
+
+**(1)** "셰르부르에서 타는 것이 안전했다" 고 읽어도 되는가. $P(\text{등급} \mid \text{승선항})$ 을 함께 보고 판정하시오.
+
+**(2)** 등급 구성만으로 항구별 생존율을 되맞추면 얼마가 나오는가. 곧 **항구 효과가 전혀 없었다면** 등급 구성의 차이만으로 C 와 S 사이에 얼마나 벌어졌을 것인가. 실제 격차와 견주시오.
 
 </div>
 
-```python
-import pandas as pd
-from scipy import stats
+??? success "풀이"
 
-URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-t = pd.read_csv(URL).dropna(subset=["Embarked"])
+    **(1) 읽으면 안 된다.** 승선항이 객실등급과 심하게 얽혀 있기 때문이다. 셰르부르 승객의 절반 이상($50.6\%$)이 1등석이었던 반면 사우샘프턴은 $19.7\%$ 뿐이고, 퀸스타운은 무려 $93.5\%$ 가 3등석이었다. 그런데 등급은 이미 생존과 강하게 얽혀 있다(보기 $1$). 그러므로 항구별 생존율의 차이는 **항구의 효과가 아니라 등급의 효과가 항구를 통해 비쳐 보인 것**일 수 있다.
 
-# 승선항(C 셰르부르, Q 퀸스타운, S 사우샘프턴)과 생존.
-print("P(생존 | 승선항)")
-print(t.groupby("Embarked").Survived.agg(["mean", "size"]).round(3).to_string())
-chi2, p, _, _ = stats.chi2_contingency(pd.crosstab(t.Embarked, t.Survived))
-print(f"  독립성 검정: chi2 = {chi2:.2f}, p = {p:.2e}")
+    등급을 고정하고 다시 재면 답이 나온다. 1등석 안에서는 $p = 0.242$, 2등석 안에서는 $p = 0.695$ 로 **승선항의 효과가 사라진다.** 1등석에 탄 승객에게는 어느 항구에서 탔는지가 생존과 거의 무관했다는 뜻이다. 다만 3등석에서는 $p < 0.001$ 로 차이가 남는다($0.379$, $0.375$ 대 $0.190$). 그러니 이 자료가 보여 주는 것은 완전한 조건부 독립이 아니라 **대부분이 등급으로 설명되는 부분적 교란**이다.
 
-# 승선항은 객실등급과 심하게 얽혀 있다.
-print("\nP(등급 | 승선항)")
-print(pd.crosstab(t.Embarked, t.Pclass, normalize="index").round(3).to_string())
+    **(2) 등급 구성만으로 되맞춰 본다.** 전체 기댓값의 법칙이 항구별 생존율을 등급으로 쪼갠다.
 
-# 등급을 조건에 넣으면 승선항의 효과가 남는가?
-print("\n등급을 고정한 뒤의 승선항 효과")
-for c, g in t.groupby("Pclass"):
-    chi2, p, _, _ = stats.chi2_contingency(pd.crosstab(g.Embarked, g.Survived))
-    rates = g.groupby("Embarked").Survived.mean().round(3).to_dict()
-    print(f"  {c}등석  {rates}   p = {p:.3f}")
-```
+    $$
+    P(\text{생존} \mid E = e)
+    = \sum_{c} P(\text{생존} \mid E = e,\, C = c)\, P(C = c \mid E = e)
+    $$
 
-출력:
+    오른쪽에는 두 가지가 들어 있다. **칸별 생존율**과 **등급 구성**이다. 여기서 칸별 생존율을 항구와 무관한 전체 등급별 생존율 $P(\text{생존} \mid C = c) = (0.630,\, 0.473,\, 0.242)$ 로 바꿔 끼우면, 항구 효과가 전혀 없고 **구성만 다른 가상의 세계**가 만들어진다.
 
-```
-P(생존 | 승선항)
-           mean  size
-Embarked             
-C         0.554   168
-Q         0.390    77
-S         0.337   644
-  독립성 검정: chi2 = 26.49, p = 1.77e-06
+    $$
+    \widetilde P(e) = \sum_{c} P(\text{생존} \mid C = c)\, P(C = c \mid E = e)
+    $$
 
-P(등급 | 승선항)
-Pclass        1      2      3
-Embarked                     
-C         0.506  0.101  0.393
-Q         0.026  0.039  0.935
-S         0.197  0.255  0.548
+    셰르부르에 넣으면
 
-등급을 고정한 뒤의 승선항 효과
-  1등석  {'C': 0.694, 'Q': 0.5, 'S': 0.583}   p = 0.242
-  2등석  {'C': 0.529, 'Q': 0.667, 'S': 0.463}   p = 0.695
-  3등석  {'C': 0.379, 'Q': 0.375, 'S': 0.19}   p = 0.000
-```
+    $$
+    0.630 \times 0.506 + 0.473 \times 0.101 + 0.242 \times 0.393 = 0.4599
+    $$
 
-주변만 보면 연관이 뚜렷하다. 셰르부르에서 탄 승객의 생존율이 $55.4\%$인데 사우샘프턴은 $33.7\%$다. 독립성 검정의 $p$값이 $1.8 \times 10^{-6}$이니 우연으로 넘기기 어렵다. "셰르부르에서 타는 것이 안전했다"고 말하고 싶어진다.
+    이고 같은 식으로 $\widetilde P(Q) = 0.2613$, $\widetilde P(S) = 0.3767$ 이다. 이것이 **등급 구성만으로 설명되는 몫**이다.
 
-두 번째 표가 그 해석을 흔든다. 셰르부르 승객의 절반 이상($50.6\%$)이 1등석이었던 반면 사우샘프턴은 $19.7\%$뿐이고, 퀸스타운은 무려 $93.5\%$가 3등석이었다. **승선항이 객실등급과 심하게 얽혀 있다.** 그렇다면 앞의 차이는 항구의 효과가 아니라 등급의 효과가 항구를 통해 비쳐 보인 것일 수 있다.
+    C 와 S 의 격차로 견주면
 
-등급을 고정하고 다시 재면 답이 나온다. 1등석 안에서는 $p = 0.242$, 2등석 안에서는 $p = 0.695$로 **승선항의 효과가 사라진다.** 1등석에 탄 승객에게는 어느 항구에서 탔는지가 생존과 거의 무관했다는 뜻이다.
+    $$
+    \frac{\widetilde P(C) - \widetilde P(S)}{P(C) - P(S)}
+    = \frac{0.4599 - 0.3767}{0.5536 - 0.3370}
+    = \frac{0.0831}{0.2166}
+    = 0.38
+    $$
 
-다만 3등석에서는 $p < 0.001$로 차이가 남는다($0.379$, $0.375$ 대 $0.190$). 그러니 이 자료가 보여 주는 것은 완전한 조건부 독립이 아니라 **대부분이 등급으로 설명되는 부분적 교란**이다. 실제 자료에서 $X \perp Y \mid Z$가 딱 떨어지는 일은 드물다. 교과서의 깔끔한 예는 이 상황을 극단까지 이상화한 것이다.
+    이다. **격차의 $38\%$ 가 등급 구성만으로 설명된다.** 나머지 $62\%$ 는 칸별 생존율이 항구마다 달랐기 때문인데, (1) 에서 보았듯 그 차이는 3등석에 거의 몰려 있다.
+
+    퀸스타운은 더 극단적이다. 구성만 보면 $0.2613$ 으로 세 항구 가운데 가장 낮아야 하는데 실제로는 $0.3896$ 으로 사우샘프턴($0.3370$)보다 높다. $93.5\%$ 가 3등석이었는데도 그렇다. **구성이 설명하는 방향과 실제가 어긋나는 셈**이고, 이것이 3등석 안에서 $0.375$ 대 $0.190$ 이라는 차이로 남아 있는 그 효과다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    from scipy import stats
+
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    t = pd.read_csv(URL).dropna(subset=["Embarked"])
+
+    # 승선항(C 셰르부르, Q 퀸스타운, S 사우샘프턴)과 생존.
+    print("P(생존 | 승선항)")
+    print(t.groupby("Embarked").Survived.agg(["mean", "size"]).round(3).to_string())
+    chi2, p, _, _ = stats.chi2_contingency(pd.crosstab(t.Embarked, t.Survived))
+    print(f"  독립성 검정: chi2 = {chi2:.2f}, p = {p:.2e}")
+
+    # 승선항은 객실등급과 심하게 얽혀 있다.
+    print("\nP(등급 | 승선항)")
+    print(pd.crosstab(t.Embarked, t.Pclass, normalize="index").round(3).to_string())
+
+    # 등급을 조건에 넣으면 승선항의 효과가 남는가?
+    print("\n등급을 고정한 뒤의 승선항 효과")
+    for c, g in t.groupby("Pclass"):
+        chi2, p, _, _ = stats.chi2_contingency(pd.crosstab(g.Embarked, g.Survived))
+        rates = g.groupby("Embarked").Survived.mean().round(3).to_dict()
+        print(f"  {c}등석  {rates}   p = {p:.3f}")
+
+    # 등급 구성만으로 항구별 생존율을 되맞춰 본다(직접표준화).
+    #   탑 성질:   P(생존|항구) = sum_등급 P(생존|항구,등급) P(등급|항구)
+    #   반사실:    항구 효과가 전혀 없다면 P(생존|항구,등급) 자리에
+    #              전체 등급별 생존율 P(생존|등급) 을 넣으면 된다.
+    mix = pd.crosstab(t.Embarked, t.Pclass, normalize="index")
+    cell = t.pivot_table(index="Embarked", columns="Pclass", values="Survived", aggfunc="mean")
+    overall = t.groupby("Pclass").Survived.mean()
+
+    tower = (mix * cell).sum(axis=1)
+    counterfactual = (mix * overall).sum(axis=1)
+    observed = t.groupby("Embarked").Survived.mean()
+
+    print("\n{:>6}{:>10}{:>12}{:>16}".format("항구", "실제", "탑 성질", "등급 구성만"))
+    for e in ("C", "Q", "S"):
+        print(f"{e:>6}{observed[e]:>10.4f}{tower[e]:>12.4f}{counterfactual[e]:>16.4f}")
+
+    gap_obs = observed["C"] - observed["S"]
+    gap_cf = counterfactual["C"] - counterfactual["S"]
+    print(f"\nC 와 S 의 격차:  실제 {gap_obs:.4f},  등급 구성만으로 {gap_cf:.4f}"
+          f"   ({gap_cf / gap_obs * 100:.0f}%)")
+    ```
+
+    출력:
+
+    ```
+    P(생존 | 승선항)
+               mean  size
+    Embarked             
+    C         0.554   168
+    Q         0.390    77
+    S         0.337   644
+      독립성 검정: chi2 = 26.49, p = 1.77e-06
+
+    P(등급 | 승선항)
+    Pclass        1      2      3
+    Embarked                     
+    C         0.506  0.101  0.393
+    Q         0.026  0.039  0.935
+    S         0.197  0.255  0.548
+
+    등급을 고정한 뒤의 승선항 효과
+      1등석  {'C': 0.694, 'Q': 0.5, 'S': 0.583}   p = 0.242
+      2등석  {'C': 0.529, 'Q': 0.667, 'S': 0.463}   p = 0.695
+      3등석  {'C': 0.379, 'Q': 0.375, 'S': 0.19}   p = 0.000
+
+        항구        실제        탑 성질          등급 구성만
+         C    0.5536      0.5536          0.4599
+         Q    0.3896      0.3896          0.2613
+         S    0.3370      0.3370          0.3767
+
+    C 와 S 의 격차:  실제 0.2166,  등급 구성만으로 0.0831   (38%)
+    ```
+
+    탑 성질 열이 실제 열과 네 자리까지 같다($0.5536$, $0.3896$, $0.3370$). 당연한 일이고, 그 식이 맞는다는 것을 확인한 것이다. 새로 얻은 것은 세 번째 열이다. 등급 구성만 남기고 칸별 차이를 지우면 $0.4599$, $0.2613$, $0.3767$ 이 나오고, C–S 격차가 $0.2166$ 에서 $0.0831$ 로 줄어 $38\%$ 만 남는다.
+
+    **주변 연관 $p = 1.8 \times 10^{-6}$ 을 "항구가 생존을 갈랐다" 로 읽으면 안 된다**는 것이 이 보기의 결론이다. 그렇다고 "전부 등급 때문" 도 아니다. 실제 자료에서 $X \perp Y \mid Z$ 가 딱 떨어지는 일은 드물고, 교과서의 깔끔한 예는 이 상황을 극단까지 이상화한 것이다.
 
 ### 조건을 걸었을 때 일어날 수 있는 네 가지
 
@@ -320,59 +464,149 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 공유된 잠재 요인이 만드는 종속
+**보기 3.** <span class="diff easy" title="쉬움"></span> 공유된 잠재 요인이 만드는 종속. 위에서 $\operatorname{Cov}(X_1, X_2) = \operatorname{Var}(\theta)$ 를 얻었다. 타이타닉에서 지역의 자리에 **객실등급**을, 지지의 자리에 **생존**을 넣어 숫자를 붙인다.
+
+**(1)** 같은 군집에서 $m$ 명을 뽑아 평균을 내면 $\operatorname{Var}(\bar X)$ 가 독립일 때의 몇 배인가. 급내상관 $\rho = \operatorname{Var}(\theta)/\{\mu(1-\mu)\}$ 로 적어 **설계효과**를 유도하시오. $m$ 을 한없이 키우면 유효표본은 어떻게 되는가.
+
+**(2)** 급내상관 $\rho$ 는 Eve 의 법칙(정리 3)과 어떤 관계인가. 타이타닉 수치로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
+??? success "풀이"
 
-URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-t = pd.read_csv(URL)
+    **(1) 합의 분산에 교차항이 $m(m-1)$ 개 붙는다.** 같은 군집의 $m$ 명은 **교환가능**하므로 분산이 모두 $\sigma^2 = \mu(1-\mu)$ 로 같고 공분산도 모두 $\operatorname{Var}(\theta)$ 로 같다. 합의 분산 공식에 넣으면
 
-theta = t.groupby("Pclass").Survived.mean()          # 등급별 생존율
-w = t.Pclass.value_counts(normalize=True).sort_index()  # 등급별 인원 비중
-mu = t.Survived.mean()
+    $$
+    \operatorname{Var}\!\left(\sum_{i=1}^m X_i\right)
+    = m\sigma^2 + m(m-1)\operatorname{Var}(\theta)
+    = m\sigma^2\Big(1 + (m-1)\rho\Big)
+    $$
 
-var_theta = float((w * theta**2).sum() - mu**2)      # 등급 간 분산
-rho = var_theta / (mu * (1 - mu))                    # 급내상관
+    이다. 마지막에서 $\operatorname{Var}(\theta) = \rho\sigma^2$ 을 썼다. 양변을 $m^2$ 으로 나누면
 
-print(f"전체 생존율 mu        = {mu:.4f}")
-print(f"등급 간 분산 Var(theta) = {var_theta:.4f}")
-print(f"급내상관 rho          = {rho:.4f}")
+    $$
+    \operatorname{Var}(\bar X) = \frac{\sigma^2}{m}\Big(1 + (m-1)\rho\Big)
+    $$
 
-print("\n같은 등급에서 두 명을 뽑을 때")
-print(f"  P(둘 다 생존) = E[theta^2] = {float((w * theta**2).sum()):.4f}")
-print(f"  독립이라면     mu^2        = {mu**2:.4f}")
-print(f"  차이                       = {var_theta:.4f}")
+    이고, 독립일 때의 $\sigma^2/m$ 에 견주어 **$1 + (m-1)\rho$ 배로 부푼다.** 이 배수를 **설계효과**라 하고, 같은 정밀도를 주는 독립 표본의 크기
 
-print("\n설계효과 DEFF = 1 + (m-1)rho")
-for m in (2, 10, 50, 100):
-    print(f"  한 등급에서 {m:3d}명 → DEFF {1 + (m - 1) * rho:5.2f}"
-          f"   유효표본 {m / (1 + (m - 1) * rho):5.1f}명")
-```
+    $$
+    m_{\text{eff}} = \frac{m}{1 + (m-1)\rho}
+    $$
 
-출력:
+    를 유효표본크기라 한다.
 
-```
-전체 생존율 mu        = 0.3838
-등급 간 분산 Var(theta) = 0.0273
-급내상관 rho          = 0.1155
+    **$m$ 을 키워도 유효표본은 무한히 늘지 않는다.** 위 식의 극한을 보면
 
-같은 등급에서 두 명을 뽑을 때
-  P(둘 다 생존) = E[theta^2] = 0.1746
-  독립이라면     mu^2        = 0.1473
-  차이                       = 0.0273
+    $$
+    \lim_{m \to \infty} m_{\text{eff}} = \lim_{m\to\infty}\frac{m}{1 + (m-1)\rho} = \frac{1}{\rho}
+    $$
 
-설계효과 DEFF = 1 + (m-1)rho
-  한 등급에서   2명 → DEFF  1.12   유효표본   1.8명
-  한 등급에서  10명 → DEFF  2.04   유효표본   4.9명
-  한 등급에서  50명 → DEFF  6.66   유효표본   7.5명
-  한 등급에서 100명 → DEFF 12.43   유효표본   8.0명
-```
+    이다. 타이타닉 수치 $\rho = 0.1155$ 에서는 $1/\rho = 8.7$ 이니, **한 등급에서 아무리 많이 뽑아도 아홉 명분 남짓의 정보밖에 얻지 못한다.** 군집을 여러 개 뽑아야 하는 이유가 이것이다.
 
-같은 등급에서 두 명을 뽑으면 둘 다 살아남을 확률이 $0.1746$인데, 독립이라면 $0.3838^2 = 0.1473$이어야 한다. 차이 $0.0273$이 정확히 등급 간 분산 $\text{Var}(\theta)$다. 유도한 식이 그대로 맞는다.
+    **(2) $\rho$ 가 곧 Eve 법칙의 "설명된 몫" 비율이다.** 생존 여부 $Y$ 가 $0/1$ 이므로
+
+    $$
+    \operatorname{Var}(Y) = \mu(1-\mu),
+    \qquad
+    \operatorname{Var}(Y \mid C = c) = \theta_c(1-\theta_c),
+    \qquad
+    E[Y \mid C] = \theta_C
+    $$
+
+    다. 정리 3 의 분해에 넣으면
+
+    $$
+    \underbrace{\mu(1-\mu)}_{\operatorname{Var}(Y)}
+    = \underbrace{E\big[\theta_C(1-\theta_C)\big]}_{\text{설명 안 된 몫}}
+    + \underbrace{\operatorname{Var}(\theta_C)}_{\text{설명된 몫}}
+    $$
+
+    인데, 급내상관의 정의가 바로 뒤 항을 전체로 나눈 것이다.
+
+    $$
+    \rho = \frac{\operatorname{Var}(\theta)}{\mu(1-\mu)}
+    = \frac{\operatorname{Var}\big(E[Y \mid C]\big)}{\operatorname{Var}(Y)}
+    $$
+
+    **그러므로 $\rho$ 는 "군집이 설명하는 분산의 비율" 이고, 회귀의 $R^2$ 과 같은 자리에 있는 양이다.** 둘 다 Eve 법칙의 뒤 항이 차지하는 몫이며, 이름만 다르다. 여기서는 $0.0273/0.2365 = 0.1155$ 로 **등급이 생존 여부의 흔들림 가운데 $11.6\%$ 만 설명한다.** 설명력이 그리 크지 않은데도 표본 $100$ 개를 $8$ 개로 만들어 버린다는 것이 (1) 의 경고다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    t = pd.read_csv(URL)
+
+    theta = t.groupby("Pclass").Survived.mean()          # 등급별 생존율
+    w = t.Pclass.value_counts(normalize=True).sort_index()  # 등급별 인원 비중
+    mu = t.Survived.mean()
+
+    var_theta = float((w * theta**2).sum() - mu**2)      # 등급 간 분산
+    rho = var_theta / (mu * (1 - mu))                    # 급내상관
+
+    print(f"전체 생존율 mu        = {mu:.4f}")
+    print(f"등급 간 분산 Var(theta) = {var_theta:.4f}")
+    print(f"급내상관 rho          = {rho:.4f}")
+
+    print("\n같은 등급에서 두 명을 뽑을 때")
+    print(f"  P(둘 다 생존) = E[theta^2] = {float((w * theta**2).sum()):.4f}")
+    print(f"  독립이라면     mu^2        = {mu**2:.4f}")
+    print(f"  차이                       = {var_theta:.4f}")
+
+    # Eve 의 법칙(정리 3)으로 Var(Y) 를 두 조각으로 쪼갠다.
+    #   Y 가 0/1 이므로 Var(Y) = mu(1-mu) 이고
+    #   Var(Y | 등급=c) = theta_c (1 - theta_c) 다.
+    within = float((w * theta * (1 - theta)).sum())      # E[Var(Y | 등급)]
+    between = var_theta                                  # Var(E[Y | 등급])
+    print("\nEve 의 법칙")
+    print(f"  Var(Y)              = mu(1-mu)   = {mu * (1 - mu):.6f}")
+    print(f"  E[Var(Y | 등급)]     설명 안 된 몫 = {within:.6f}")
+    print(f"  Var(E[Y | 등급])     설명된 몫     = {between:.6f}")
+    print(f"  두 조각의 합                      = {within + between:.6f}")
+    print(f"  설명된 비율 = {between / (mu * (1 - mu)):.4f}  (= 급내상관 rho)")
+
+    print("\n설계효과 DEFF = 1 + (m-1)rho")
+    for m in (2, 10, 50, 100):
+        print(f"  한 등급에서 {m:3d}명 → DEFF {1 + (m - 1) * rho:5.2f}"
+              f"   유효표본 {m / (1 + (m - 1) * rho):5.1f}명")
+    print(f"  m -> 무한대 에서의 유효표본 상한 = 1/rho = {1 / rho:.1f}명")
+    ```
+
+    출력:
+
+    ```
+    전체 생존율 mu        = 0.3838
+    등급 간 분산 Var(theta) = 0.0273
+    급내상관 rho          = 0.1155
+
+    같은 등급에서 두 명을 뽑을 때
+      P(둘 다 생존) = E[theta^2] = 0.1746
+      독립이라면     mu^2        = 0.1473
+      차이                       = 0.0273
+
+    Eve 의 법칙
+      Var(Y)              = mu(1-mu)   = 0.236506
+      E[Var(Y | 등급)]     설명 안 된 몫 = 0.209196
+      Var(E[Y | 등급])     설명된 몫     = 0.027311
+      두 조각의 합                      = 0.236506
+      설명된 비율 = 0.1155  (= 급내상관 rho)
+
+    설계효과 DEFF = 1 + (m-1)rho
+      한 등급에서   2명 → DEFF  1.12   유효표본   1.8명
+      한 등급에서  10명 → DEFF  2.04   유효표본   4.9명
+      한 등급에서  50명 → DEFF  6.66   유효표본   7.5명
+      한 등급에서 100명 → DEFF 12.43   유효표본   8.0명
+      m -> 무한대 에서의 유효표본 상한 = 1/rho = 8.7명
+    ```
+
+    같은 등급에서 두 명을 뽑으면 둘 다 살아남을 확률이 $0.1746$ 인데, 독립이라면 $0.3838^2 = 0.1473$ 이어야 한다. 차이 $0.0273$ 이 정확히 등급 간 분산 $\operatorname{Var}(\theta)$ 다. **본문에서 유도한 $\operatorname{Cov}(X_1,X_2) = \operatorname{Var}(\theta)$ 가 그대로 맞는다.**
+
+    Eve 의 법칙도 소수 여섯째 자리까지 닫힌다. $0.209196 + 0.027311 = 0.236506 = \mu(1-\mu)$ 이고, 설명된 비율 $0.1155$ 가 급내상관과 **같은 수**다. (2) 의 주장이 수치로 확인된다.
+
+    마지막 표가 (1) 의 유도를 확인한다. 한 등급에서 $100$ 명을 뽑으면 $\text{DEFF} = 1 + 99 \times 0.1155 = 12.43$ 이라 실질적으로 **$8.0$ 명분의 정보**밖에 되지 않고, $m$ 을 한없이 키워도 $1/\rho = 8.7$ 명이 천장이다. **표본을 늘려 얻는 것이 금세 바닥난다**는 것이 군집표본의 핵심이다.
 
 !!! danger "이것이 i.i.d. 가정이 깨지는 가장 흔한 방식이다"
 
@@ -459,131 +693,508 @@ $P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 이산형 주변분포와 조건부분포
+**보기 4.** <span class="diff easy" title="쉬움"></span> 이산형 주변분포와 조건부분포. 바로 위 「손으로 풀어 보기 — 이산」의 결합 PMF 를 다시 쓴다.
+
+| | $Y=0$ | $Y=1$ | $Y=2$ |
+|:---|:---:|:---:|:---:|
+| $X=0$ | 0.10 | 0.15 | 0.05 |
+| $X=1$ | 0.10 | 0.25 | 0.10 |
+| $X=2$ | 0.05 | 0.10 | 0.10 |
+
+**(1)** 세 조건부분포 $p_{Y|X}(\cdot \mid x)$ 와 $E[Y \mid X = x]$ 를 모두 구하고, 전체 기댓값의 법칙으로 $E[Y]$ 를 되맞추시오.
+
+**(2)** Eve 의 법칙으로 $\operatorname{Var}(Y)$ 를 두 조각으로 쪼개시오. $X$ 가 설명하는 몫은 몇 %인가.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
+??? success "풀이"
 
-pmf = np.array([
-    [0.10, 0.15, 0.05],
-    [0.10, 0.25, 0.10],
-    [0.05, 0.10, 0.10]
-])
+    **(1) 행마다 그 행의 합으로 나눈다.** 주변분포는 $p_X = (0.30,\, 0.45,\, 0.25)$, $p_Y = (0.25,\, 0.50,\, 0.25)$ 이고 정리 1 대로 행을 $p_X(x)$ 로 나누면
 
-# 주변분포: 관심 없는 변수를 **합해서 지운다**.
-#   axis=1 로 더하면 Y가 사라져 P(X=x)만 남는다.
-#   axis=0 로 더하면 X가 사라져 P(Y=y)만 남는다.
-p_X = pmf.sum(axis=1)
-p_Y = pmf.sum(axis=0)
-print("Marginal of X:", p_X)
-print("Marginal of Y:", p_Y)
+    $$
+    p_{Y|X}(\cdot \mid 0) = \frac{(0.10,\, 0.15,\, 0.05)}{0.30} = \left(\tfrac13,\, \tfrac12,\, \tfrac16\right)
+    $$
 
-# 조건부분포: X=1 인 **행 하나만** 떼어 낸 뒤 그 행의 합으로 나눈다.
-# 나누는 이유는 떼어 낸 행의 합이 P(X=1)이라 1이 아니기 때문이다.
-# 확률로 쓰려면 합이 1이 되게 다시 정규화해야 한다.
-# 이것이 P(Y|X) = P(X,Y)/P(X) 를 표에서 실행한 것이다.
-x_val = 1
-cond_Y_given_X1 = pmf[x_val, :] / p_X[x_val]
-print(f"\nP(Y|X={x_val}):", cond_Y_given_X1)
+    $$
+    p_{Y|X}(\cdot \mid 1) = \frac{(0.10,\, 0.25,\, 0.10)}{0.45} = \left(\tfrac29,\, \tfrac59,\, \tfrac29\right)
+    $$
 
-# 조건부기댓값은 조건부분포로 가중평균한 것이다.
-# 주변분포가 아니라 **조건부분포**로 가중해야 한다는 점이 요점이다.
-y_vals = np.array([0, 1, 2])
-E_Y_given_X1 = np.sum(y_vals * cond_Y_given_X1)
-print(f"E[Y|X={x_val}] = {E_Y_given_X1:.4f}")
-```
+    $$
+    p_{Y|X}(\cdot \mid 2) = \frac{(0.05,\, 0.10,\, 0.10)}{0.25} = \left(\tfrac15,\, \tfrac25,\, \tfrac25\right)
+    $$
 
-출력:
+    다. 세 줄 모두 합이 $1$ 이다. 조건부평균은 이 **조건부분포**로 가중평균한 것이지 주변분포로 가중한 것이 아니다.
 
-```
-Marginal of X: [0.3  0.45 0.25]
-Marginal of Y: [0.25 0.5  0.25]
+    $$
+    E[Y \mid X=0] = \frac{0.15 + 2(0.05)}{0.30} = \frac{0.25}{0.30} = 0.8333
+    $$
 
-P(Y|X=1): [0.22222222 0.55555556 0.22222222]
-E[Y|X=1] = 1.0000
-```
+    $$
+    E[Y \mid X=1] = \frac{0.25 + 2(0.10)}{0.45} = \frac{0.45}{0.45} = 1,
+    \qquad
+    E[Y \mid X=2] = \frac{0.10 + 2(0.10)}{0.25} = \frac{0.30}{0.25} = 1.2
+    $$
+
+    **분자가 분모와 같아져 $E[Y \mid X=1] = 1$ 이 딱 떨어진 것은 우연이다.** 전체 기댓값의 법칙으로 되맞추면
+
+    $$
+    \sum_x p_X(x)\,E[Y \mid X=x]
+    = 0.30(0.8333) + 0.45(1) + 0.25(1.2)
+    = 0.25 + 0.45 + 0.30 = 1
+    $$
+
+    이고 직접 구한 $E[Y] = 0.50 + 2(0.25) = 1$ 과 같다. 세 항의 분모가 약분되어 **결국 결합표의 열 가중합으로 되돌아가는 것**이 이 법칙의 정체다.
+
+    **(2) 두 조각으로 가른다.** 조건부분산도 조건부분포로 잰다.
+
+    $$
+    \operatorname{Var}(Y \mid X=0) = \frac{0.15 + 4(0.05)}{0.30} - 0.8333^2 = 1.1667 - 0.6944 = 0.4722
+    $$
+
+    $$
+    \operatorname{Var}(Y \mid X=1) = \frac{0.65}{0.45} - 1 = 0.4444,
+    \qquad
+    \operatorname{Var}(Y \mid X=2) = \frac{0.50}{0.25} - 1.44 = 0.56
+    $$
+
+    이고 이것을 $p_X$ 로 평균하면
+
+    $$
+    E\big[\operatorname{Var}(Y \mid X)\big] = 0.30(0.4722) + 0.45(0.4444) + 0.25(0.56) = 0.481667
+    $$
+
+    다. 뒤 항은 조건부평균들의 분산이다.
+
+    $$
+    \operatorname{Var}\big(E[Y \mid X]\big)
+    = 0.30(0.8333^2) + 0.45(1^2) + 0.25(1.2^2) - 1^2
+    = 1.018333 - 1 = 0.018333
+    $$
+
+    둘을 더하면
+
+    $$
+    0.481667 + 0.018333 = 0.5 = \operatorname{Var}(Y)
+    $$
+
+    로 직접 구한 $E[Y^2] - 1 = 1.5 - 1 = 0.5$ 와 맞는다.
+
+    **$X$ 가 설명하는 몫은 $0.018333/0.5 = 3.7\%$ 다.** 조건부평균이 $0.83$ 에서 $1.2$ 까지 움직이므로 $X$ 와 $Y$ 가 독립은 아니지만, $Y$ 자체의 흔들림에 견주면 그 움직임이 아주 작다. **"독립이 아니다" 와 "많이 알려 준다" 는 전혀 다른 말**이고, 그 차이를 재는 것이 Eve 법칙의 뒤 항이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    pmf = np.array([
+        [0.10, 0.15, 0.05],
+        [0.10, 0.25, 0.10],
+        [0.05, 0.10, 0.10]
+    ])
+
+    # 주변분포: 관심 없는 변수를 **합해서 지운다**.
+    #   axis=1 로 더하면 Y가 사라져 P(X=x)만 남는다.
+    #   axis=0 로 더하면 X가 사라져 P(Y=y)만 남는다.
+    p_X = pmf.sum(axis=1)
+    p_Y = pmf.sum(axis=0)
+    print("Marginal of X:", p_X)
+    print("Marginal of Y:", p_Y)
+
+    # 조건부분포: X=1 인 **행 하나만** 떼어 낸 뒤 그 행의 합으로 나눈다.
+    # 나누는 이유는 떼어 낸 행의 합이 P(X=1)이라 1이 아니기 때문이다.
+    # 확률로 쓰려면 합이 1이 되게 다시 정규화해야 한다.
+    # 이것이 P(Y|X) = P(X,Y)/P(X) 를 표에서 실행한 것이다.
+    x_val = 1
+    cond_Y_given_X1 = pmf[x_val, :] / p_X[x_val]
+    print(f"\nP(Y|X={x_val}):", cond_Y_given_X1)
+
+    # 조건부기댓값은 조건부분포로 가중평균한 것이다.
+    # 주변분포가 아니라 **조건부분포**로 가중해야 한다는 점이 요점이다.
+    y_vals = np.array([0, 1, 2])
+    E_Y_given_X1 = np.sum(y_vals * cond_Y_given_X1)
+    print(f"E[Y|X={x_val}] = {E_Y_given_X1:.4f}")
+
+    # 세 행을 모두 같은 방식으로 처리해 조건부평균과 조건부분산을 얻는다.
+    cond = pmf / p_X[:, None]
+    m = cond @ y_vals                       # E[Y | X=x]
+    v = cond @ y_vals**2 - m**2             # Var(Y | X=x)
+    print(f"\n{'x':>3}{'P(Y|X=x)':>30}{'E[Y|X=x]':>12}{'Var(Y|X=x)':>14}")
+    for x in range(3):
+        print(f"{x:>3}{str(np.round(cond[x], 4)):>30}{m[x]:>12.4f}{v[x]:>14.4f}")
+
+    # 전체 기댓값의 법칙: 조건부평균을 p_X 로 다시 평균하면 E[Y] 다.
+    E_Y = float(y_vals @ p_Y)
+    print(f"\n전체 기댓값의 법칙")
+    print(f"  sum_x p_X(x) E[Y|X=x] = {float(p_X @ m):.6f}")
+    print(f"  직접 계산한 E[Y]       = {E_Y:.6f}")
+
+    # Eve 의 법칙: Var(Y) 를 설명 안 된 몫과 설명된 몫으로 가른다.
+    var_Y = float(y_vals**2 @ p_Y) - E_Y**2
+    within = float(p_X @ v)                 # E[Var(Y|X)]
+    between = float(p_X @ m**2) - E_Y**2    # Var(E[Y|X])
+    print(f"\nEve 의 법칙")
+    print(f"  E[Var(Y|X)]  설명 안 된 몫 = {within:.6f}")
+    print(f"  Var(E[Y|X])  설명된 몫     = {between:.6f}")
+    print(f"  두 조각의 합               = {within + between:.6f}")
+    print(f"  직접 계산한 Var(Y)         = {var_Y:.6f}")
+    print(f"  설명된 비율                = {between / var_Y:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Marginal of X: [0.3  0.45 0.25]
+    Marginal of Y: [0.25 0.5  0.25]
+
+    P(Y|X=1): [0.22222222 0.55555556 0.22222222]
+    E[Y|X=1] = 1.0000
+
+      x                      P(Y|X=x)    E[Y|X=x]    Var(Y|X=x)
+      0        [0.3333 0.5    0.1667]      0.8333        0.4722
+      1        [0.2222 0.5556 0.2222]      1.0000        0.4444
+      2                 [0.2 0.4 0.4]      1.2000        0.5600
+
+    전체 기댓값의 법칙
+      sum_x p_X(x) E[Y|X=x] = 1.000000
+      직접 계산한 E[Y]       = 1.000000
+
+    Eve 의 법칙
+      E[Var(Y|X)]  설명 안 된 몫 = 0.481667
+      Var(E[Y|X])  설명된 몫     = 0.018333
+      두 조각의 합               = 0.500000
+      직접 계산한 Var(Y)         = 0.500000
+      설명된 비율                = 0.0367
+    ```
+
+    세 조건부분포와 조건부평균 $0.8333$, $1.0000$, $1.2000$ 이 손 계산과 맞고, 조건부분산 $0.4722$, $0.4444$, $0.5600$ 도 맞는다. 전체 기댓값의 법칙이 $1.000000$ 으로 닫히고 Eve 의 법칙이 $0.481667 + 0.018333 = 0.500000$ 으로 닫힌다. 설명된 비율은 $0.0367$ 이다.
 
 ### 적분을 통한 연속형 주변분포
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 적분으로 구하는 연속형 주변분포
+**보기 5.** <span class="diff easy" title="쉬움"></span> 적분으로 구하는 연속형 주변분포. $0 \le x \le y \le 1$ 에서 $f_{X,Y}(x,y) = 2$ 다. 바로 위 「손으로 풀어 보기 — 연속」이 $f_X(x) = 2(1-x)$, $Y \mid X = x \sim \text{Uniform}(x, 1)$, $E[Y] = 2/3$ 까지 구했다. 거기서 이어 간다.
+
+**(1)** Eve 의 법칙으로 $\operatorname{Var}(Y)$ 를 두 조각으로 구하시오. $f_Y$ 를 직접 구해 얻은 값과 맞는가.
+
+**(2)** 조건을 반대로 걸면 $X \mid Y = y$ 는 무슨 분포인가. 전체 기댓값의 법칙으로 $E[X]$ 를 구하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import integrate
+??? success "풀이"
 
-# f(x,y) = 2 for 0 <= x <= y <= 1
-def joint_pdf(x, y):
-    return 2.0 if 0 <= x <= y <= 1 else 0.0
+    **(1) 두 조각을 차례로 구한다.** $Y \mid X = x$ 가 $\text{Uniform}(x, 1)$ 이므로 균등분포의 분산 공식에서
 
-# 주변밀도 f_X(x) 는 f(x,y) 를 y 에 대해 x 에서 1 까지 적분한 것이다
-def marginal_X(x):
-    result, _ = integrate.quad(lambda y: joint_pdf(x, y), x, 1)
-    return result
+    $$
+    \operatorname{Var}(Y \mid X = x) = \frac{(1-x)^2}{12}
+    $$
 
-# 조건부분포로 구한 E[Y | X=x]
-def E_Y_given_X(x):
-    fx = marginal_X(x)
-    if fx == 0:
-        return 0
-    result, _ = integrate.quad(lambda y: y * joint_pdf(x, y) / fx, x, 1)
-    return result
+    다. 이것을 $f_X(x) = 2(1-x)$ 로 평균하면
 
-# 전체기댓값의 법칙 확인
-E_Y, _ = integrate.quad(lambda x: E_Y_given_X(x) * marginal_X(x), 0, 1)
-print(f"E[Y] via Law of Total Expectation: {E_Y:.4f}")  # Should be 2/3
-```
+    $$
+    E\big[\operatorname{Var}(Y \mid X)\big]
+    = \int_0^1 \frac{(1-x)^2}{12}\cdot 2(1-x)\,dx
+    = \frac16\int_0^1 (1-x)^3\,dx
+    = \frac16 \cdot \frac14 = \frac{1}{24}
+    $$
 
-출력:
+    이다. 뒤 항은 $E[Y \mid X] = (X+1)/2$ 의 분산이므로 $\operatorname{Var}(X)/4$ 다. $f_X$ 로 $X$ 의 적률을 구하면
 
-```
-E[Y] via Law of Total Expectation: 0.6667
-```
+    $$
+    E[X] = \int_0^1 x\,2(1-x)\,dx = 2\left(\frac12 - \frac13\right) = \frac13,
+    \qquad
+    E[X^2] = 2\left(\frac13 - \frac14\right) = \frac16
+    $$
+
+    이므로 $\operatorname{Var}(X) = \tfrac16 - \tfrac19 = \tfrac{1}{18}$ 이고
+
+    $$
+    \operatorname{Var}\big(E[Y \mid X]\big) = \frac{1}{4}\cdot\frac{1}{18} = \frac{1}{72}
+    $$
+
+    다. 둘을 더하면
+
+    $$
+    \operatorname{Var}(Y) = \frac{1}{24} + \frac{1}{72} = \frac{3}{72} + \frac{1}{72} = \frac{4}{72} = \frac{1}{18}
+    $$
+
+    **직접 확인한다.** $f_Y(y) = \int_0^y 2\,dx = 2y$ 이므로 $Y \sim \text{Beta}(2,1)$ 이고
+
+    $$
+    E[Y] = \int_0^1 y\,2y\,dy = \frac23,
+    \qquad
+    E[Y^2] = \int_0^1 y^2\,2y\,dy = \frac12,
+    \qquad
+    \operatorname{Var}(Y) = \frac12 - \frac49 = \frac{1}{18}
+    $$
+
+    로 맞는다. 설명된 몫은 $\tfrac{1/72}{1/18} = \tfrac14$ 다. **$X$ 를 알면 $Y$ 의 흔들림이 $25\%$ 줄어든다.**
+
+    **(2) 반대쪽도 균등분포다.** $y$ 를 고정하면 $x$ 가 $0$ 부터 $y$ 까지이므로
+
+    $$
+    f_{X|Y}(x \mid y) = \frac{f_{X,Y}(x,y)}{f_Y(y)} = \frac{2}{2y} = \frac1y,
+    \qquad 0 \le x \le y
+    $$
+
+    곧 $X \mid Y = y \sim \text{Uniform}(0, y)$ 이고 $E[X \mid Y = y] = y/2$ 다. 전체 기댓값의 법칙을 쓰면
+
+    $$
+    E[X] = E\big[E[X \mid Y]\big] = E\!\left[\frac{Y}{2}\right] = \frac{1}{2}\cdot\frac{2}{3} = \frac13
+    $$
+
+    으로 (1) 에서 $f_X$ 로 직접 구한 값과 같다. **삼각형 위의 균등분포에서는 어느 쪽으로 잘라도 단면이 균등분포**이고, 달라지는 것은 단면의 길이뿐이다. 세로로 자르면 길이가 $1-x$, 가로로 자르면 $y$ 다.
+
+    **(3) 수치적으로.** 수치적분으로 위 값을 모두 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import integrate
+
+    # f(x,y) = 2 for 0 <= x <= y <= 1
+    def joint_pdf(x, y):
+        return 2.0 if 0 <= x <= y <= 1 else 0.0
+
+    # 주변밀도 f_X(x) 는 f(x,y) 를 y 에 대해 x 에서 1 까지 적분한 것이다
+    def marginal_X(x):
+        result, _ = integrate.quad(lambda y: joint_pdf(x, y), x, 1)
+        return result
+
+    # 조건부분포로 구한 E[Y | X=x]
+    def E_Y_given_X(x):
+        fx = marginal_X(x)
+        if fx == 0:
+            return 0
+        result, _ = integrate.quad(lambda y: y * joint_pdf(x, y) / fx, x, 1)
+        return result
+
+    # 전체기댓값의 법칙 확인
+    E_Y, _ = integrate.quad(lambda x: E_Y_given_X(x) * marginal_X(x), 0, 1)
+    print(f"E[Y] via Law of Total Expectation: {E_Y:.4f}")  # Should be 2/3
+
+    # 조건부분산 Var(Y | X=x). Y | X=x 가 Uniform(x,1) 이므로 (1-x)^2/12 여야 한다.
+    def Var_Y_given_X(x):
+        fx = marginal_X(x)
+        m = E_Y_given_X(x)
+        result, _ = integrate.quad(lambda y: y**2 * joint_pdf(x, y) / fx, x, 1)
+        return result - m**2
+
+    print("\n조건부평균과 조건부분산")
+    print(f"{'x':>6}{'E[Y|X=x]':>12}{'(x+1)/2':>12}{'Var(Y|X=x)':>14}{'(1-x)^2/12':>14}")
+    for x in (0.0, 0.25, 0.5, 0.75):
+        print(f"{x:>6.2f}{E_Y_given_X(x):>12.6f}{(x + 1) / 2:>12.6f}"
+              f"{Var_Y_given_X(x):>14.6f}{(1 - x)**2 / 12:>14.6f}")
+
+    # Eve 의 법칙으로 Var(Y) 를 두 조각으로 구한다.
+    within, _ = integrate.quad(lambda x: Var_Y_given_X(x) * marginal_X(x), 0, 1)
+    between, _ = integrate.quad(lambda x: (E_Y_given_X(x) - E_Y)**2 * marginal_X(x), 0, 1)
+    print(f"\nEve 의 법칙")
+    print(f"  E[Var(Y|X)]  = {within:.6f}   (유도 1/24 = {1/24:.6f})")
+    print(f"  Var(E[Y|X])  = {between:.6f}   (유도 1/72 = {1/72:.6f})")
+    print(f"  합            = {within + between:.6f}   (유도 1/18 = {1/18:.6f})")
+
+    # 직접 계산: f_Y(y) = 2y 이므로 Y ~ Beta(2,1) 이다.
+    E_Y2, _ = integrate.quad(lambda y: y**2 * 2 * y, 0, 1)
+    print(f"  f_Y(y)=2y 로 직접 구한 Var(Y) = {E_Y2 - E_Y**2:.6f}")
+
+    # 조건을 반대로 걸면 X | Y=y ~ Uniform(0, y) 다.
+    def marginal_Y(y):
+        result, _ = integrate.quad(lambda x: joint_pdf(x, y), 0, y)
+        return result
+
+    def E_X_given_Y(y):
+        fy = marginal_Y(y)
+        result, _ = integrate.quad(lambda x: x * joint_pdf(x, y) / fy, 0, y)
+        return result
+
+    print("\n조건을 반대로 걸면")
+    for y in (0.25, 0.5, 0.75, 1.0):
+        print(f"  f_Y({y}) = {marginal_Y(y):.6f} (유도 2y = {2 * y:.6f})"
+              f"   E[X|Y={y}] = {E_X_given_Y(y):.6f} (유도 y/2 = {y / 2:.6f})")
+    # y=0 에서 f_Y(0)=0 이라 나눗셈이 깨지므로 아래 끝을 아주 조금 띄운다.
+    E_X, _ = integrate.quad(lambda y: E_X_given_Y(y) * marginal_Y(y), 0.001, 1)
+    print(f"  E[X] = E[E[X|Y]] = {E_X:.6f}   (유도 1/3 = {1/3:.6f})")
+    ```
+
+    출력:
+
+    ```
+    E[Y] via Law of Total Expectation: 0.6667
+
+    조건부평균과 조건부분산
+         x    E[Y|X=x]     (x+1)/2    Var(Y|X=x)    (1-x)^2/12
+      0.00    0.500000    0.500000      0.083333      0.083333
+      0.25    0.625000    0.625000      0.046875      0.046875
+      0.50    0.750000    0.750000      0.020833      0.020833
+      0.75    0.875000    0.875000      0.005208      0.005208
+
+    Eve 의 법칙
+      E[Var(Y|X)]  = 0.041667   (유도 1/24 = 0.041667)
+      Var(E[Y|X])  = 0.013889   (유도 1/72 = 0.013889)
+      합            = 0.055556   (유도 1/18 = 0.055556)
+      f_Y(y)=2y 로 직접 구한 Var(Y) = 0.055556
+
+    조건을 반대로 걸면
+      f_Y(0.25) = 0.500000 (유도 2y = 0.500000)   E[X|Y=0.25] = 0.125000 (유도 y/2 = 0.125000)
+      f_Y(0.5) = 1.000000 (유도 2y = 1.000000)   E[X|Y=0.5] = 0.250000 (유도 y/2 = 0.250000)
+      f_Y(0.75) = 1.500000 (유도 2y = 1.500000)   E[X|Y=0.75] = 0.375000 (유도 y/2 = 0.375000)
+      f_Y(1.0) = 2.000000 (유도 2y = 2.000000)   E[X|Y=1.0] = 0.500000 (유도 y/2 = 0.500000)
+      E[X] = E[E[X|Y]] = 0.333333   (유도 1/3 = 0.333333)
+    ```
+
+    조건부평균 $(x+1)/2$ 와 조건부분산 $(1-x)^2/12$ 가 네 자리 $x$ 에서 모두 수치적분과 소수 여섯째 자리까지 같다. Eve 의 법칙도 $1/24 = 0.041667$, $1/72 = 0.013889$, 합 $1/18 = 0.055556$ 으로 유도한 그대로이고, $f_Y(y) = 2y$ 로 직접 구한 $\operatorname{Var}(Y)$ 와 같다.
+
+    반대 방향도 $f_Y(y) = 2y$, $E[X \mid Y = y] = y/2$ 가 네 자리 $y$ 에서 모두 맞고, $E[X] = 0.333333$ 이 나온다. **전체 기댓값의 법칙이 $0.6667$ 과 $0.3333$ 을 양쪽에서 각각 되살려 준 셈**이다.
 
 ### 조건부분포 시각화
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 조건부분포 시각화
+**보기 6.** <span class="diff easy" title="쉬움"></span> 조건부분포 시각화. 표준 이변량 정규분포($\rho = 0.8$)에서 $10$ 만 쌍을 뽑고, $X$ 가 $-1$, $0$, $1$ 근처인 표본만 골라 $Y$ 의 히스토그램을 셋 겹쳐 그린다.
+
+**(1)** 세 히스토그램의 중심과 폭이 이론상 얼마여야 하는가. 폭이 셋 다 같아야 하는 까닭은 무엇인가.
+
+**(2)** 코드는 $X = x_0$ 가 아니라 $\lvert X - x_0 \rvert < 0.1$ 인 **띠**로 조건을 근사한다. 그 때문에 중심과 폭이 참값에서 얼마나 벗어나는가. 띠를 좁히면 무엇이 좋아지고 무엇이 나빠지는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-mean = [0, 0]
-cov = [[1, 0.8], [0.8, 1]]      # 상관 0.8
-samples = np.random.multivariate_normal(mean, cov, 100_000)
+    **(1) 중심은 움직이고 폭은 고정이다.** §1 에서 적은 대로 두 주변분포가 표준정규인 이변량 정규에서는
 
-fig, ax = plt.subplots(figsize=(12, 3))
+    $$
+    Y \mid X = x \;\sim\; N\big(\rho x,\; 1 - \rho^2\big)
+    $$
 
-# 연속변수에서는 P(X = 1)이 0이므로 "정확히 X=1"로 조건을 걸 수 없다.
-# 대신 얇은 띠 |X - x0| < 0.1 안에 든 표본만 골라 근사한다.
-# 띠가 좁을수록 참 조건부분포에 가깝지만 표본 수가 줄어 잡음이 커진다.
-for x_cond in [-1, 0, 1]:
-    mask = np.abs(samples[:, 0] - x_cond) < 0.1
-    # 이론이 예측하는 바를 그림에서 확인하라.
-    #   중심: rho * x0 = 0.8 * x0  ->  -0.8, 0, +0.8 로 이동한다
-    #   폭  : sqrt(1 - rho^2) = 0.6  ->  세 히스토그램의 폭이 **모두 같다**
-    ax.hist(samples[mask, 1], bins=50, density=True, alpha=0.4,
-            label=f'Y | X≈{x_cond}')
+    이다. $\rho = 0.8$ 이므로 중심은 $0.8x$, 분산은 $1 - 0.64 = 0.36$, 표준편차는 $0.6$ 이다. 세 자리에 넣으면
 
-ax.spines[['top', 'right']].set_visible(False)
-ax.set_xlabel('Y')
-ax.legend()
-plt.show()
-```
+    $$
+    Y \mid X = -1 \sim N(-0.8,\, 0.36),
+    \qquad
+    N(0,\, 0.36),
+    \qquad
+    N(0.8,\, 0.36)
+    $$
 
-![주변분포와 조건부분포](./img/marginal_conditional_221.png)
+    로 **중심이 $-0.8$, $0$, $+0.8$ 로 옮겨 가고 폭은 셋 다 $0.6$ 으로 같다.**
+
+    폭이 같은 까닭은 조건부분산 $1-\rho^2$ 에 **$x$ 가 들어 있지 않기 때문**이다. 이것을 등분산성이라 하며 이변량 정규분포의 특별한 성질이다. 일반적인 결합분포에서는 단면마다 폭이 달라진다. 바로 앞 보기 $5$ 가 그 예다. 거기서는 $\operatorname{Var}(Y \mid X = x) = (1-x)^2/12$ 로 $x$ 가 커질수록 단면이 좁아졌다.
+
+    **폭이 $1$ 에서 $0.6$ 으로 줄었다는 것**이 조건을 건 보람이다. $Y$ 의 주변분포는 $N(0,1)$ 인데 $X$ 를 알고 나면 표준편차가 $0.6$ 이 되므로 분산이 $36\%$ 로, 곧 $\rho^2 = 64\%$ 만큼 줄었다. Eve 의 법칙으로 적으면 $\operatorname{Var}(E[Y\mid X]) = \rho^2 = 0.64$ 가 설명된 몫이고 $E[\operatorname{Var}(Y \mid X)] = 1-\rho^2 = 0.36$ 이 남은 몫이다.
+
+    **(2) 띠는 조건부분포들의 섞음이다.** $X$ 가 띠 $(x_0 - h,\, x_0 + h)$ 안에 있다고만 알면, $Y$ 는 그 안의 여러 $N(0.8x, 0.36)$ 을 섞은 분포를 따른다. 섞음의 평균과 분산은 전체 기댓값·전체 분산의 법칙이 준다.
+
+    $$
+    E[Y \mid \text{띠}] = 0.8\,E[X \mid \text{띠}],
+    \qquad
+    \operatorname{Var}(Y \mid \text{띠}) = 0.36 + 0.64\,\operatorname{Var}(X \mid \text{띠})
+    $$
+
+    **두 가지가 함께 어긋난다.** 중심은 $E[X \mid \text{띠}]$ 가 $x_0$ 이 아니라는 만큼 밀리고, 폭은 띠 안에서 $X$ 가 흔들리는 만큼 넓어진다.
+
+    $x_0 = 1$, $h = 0.1$ 에서 잘라 낸 정규분포의 적률을 쓰면 $E[X \mid \text{띠}] = 0.996673$, $\operatorname{Var}(X \mid \text{띠}) = 0.003322$ 이므로
+
+    $$
+    E[Y \mid \text{띠}] = 0.797339 \quad(\text{참값 } 0.8),
+    \qquad
+    \operatorname{sd}(Y \mid \text{띠}) = 0.601769 \quad(\text{참값 } 0.6)
+    $$
+
+    다. 중심이 $0.0027$ 안쪽으로 당겨지고 폭이 $0.3\%$ 넓어진다. 중심이 **$0$ 쪽으로** 당겨지는 것은 정규밀도가 띠 안에서도 왼쪽이 더 두껍기 때문이다.
+
+    **띠를 좁히면 치우침과 잡음이 반대로 움직인다.** 띠 안에서 $X$ 가 거의 균등하다고 보면 $\operatorname{Var}(X \mid \text{띠}) \approx h^2/3$ 이고 중심의 치우침도 $h^2$ 에 비례해 줄어든다. 반면 띠 안의 표본 수는 $h$ 에 비례하므로 평균의 표준오차는 $1/\sqrt h$ 로 커진다.
+
+    $$
+    \text{치우침} \propto h^2,
+    \qquad
+    \text{표준오차} \propto h^{-1/2}
+    $$
+
+    **$h$ 를 네 배 줄이면 치우침은 열여섯 배 줄지만 잡음은 두 배로 는다.** 아래 표가 그 맞바꿈을 보여 준다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(42)
+    mean = [0, 0]
+    cov = [[1, 0.8], [0.8, 1]]      # 상관 0.8
+    samples = np.random.multivariate_normal(mean, cov, 100_000)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+
+    # 연속변수에서는 P(X = 1)이 0이므로 "정확히 X=1"로 조건을 걸 수 없다.
+    # 대신 얇은 띠 |X - x0| < 0.1 안에 든 표본만 골라 근사한다.
+    # 띠가 좁을수록 참 조건부분포에 가깝지만 표본 수가 줄어 잡음이 커진다.
+    for x_cond in [-1, 0, 1]:
+        mask = np.abs(samples[:, 0] - x_cond) < 0.1
+        # 이론이 예측하는 바를 그림에서 확인하라.
+        #   중심: rho * x0 = 0.8 * x0  ->  -0.8, 0, +0.8 로 이동한다
+        #   폭  : sqrt(1 - rho^2) = 0.6  ->  세 히스토그램의 폭이 **모두 같다**
+        ax.hist(samples[mask, 1], bins=50, density=True, alpha=0.4,
+                label=f'Y | X≈{x_cond}')
+
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.set_xlabel('Y')
+    ax.legend()
+    plt.show()
+
+    # 띠로 조건을 걸면 참값에서 얼마나 벗어나는가.
+    #   띠 안의 Y 는 N(0.8x, 0.36) 들의 섞음이므로
+    #     평균 = 0.8 * E[X | 띠]
+    #     분산 = 0.36 + 0.64 * Var(X | 띠)
+    # 잘라 낸 정규분포의 적률로 그 둘을 정확히 계산한다.
+    nd, rho, h = stats.norm(), 0.8, 0.1
+    print(f"{'x0':>4}{'표본 수':>9}{'모의 평균':>12}{'띠의 참값':>12}{'X=x0 참값':>12}"
+          f"{'모의 sd':>10}{'띠 참값':>10}{'SE':>9}")
+    for x0 in (-1, 0, 1):
+        a, b = x0 - h, x0 + h
+        den = nd.cdf(b) - nd.cdf(a)
+        e_x = (nd.pdf(a) - nd.pdf(b)) / den                      # E[X | 띠]
+        e_x2 = 1 + (a * nd.pdf(a) - b * nd.pdf(b)) / den         # E[X^2 | 띠]
+        mean_band = rho * e_x
+        sd_band = np.sqrt(1 - rho**2 + rho**2 * (e_x2 - e_x**2))
+        mask = np.abs(samples[:, 0] - x0) < h
+        y = samples[mask, 1]
+        print(f"{x0:>4}{mask.sum():>9}{y.mean():>12.4f}{mean_band:>12.6f}"
+              f"{rho * x0:>12.6f}{y.std(ddof=1):>10.4f}{sd_band:>10.6f}"
+              f"{sd_band / np.sqrt(mask.sum()):>9.4f}")
+
+    # 띠를 좁히면 치우침은 줄지만 표본이 줄어 잡음이 커진다.
+    print(f"\n띠 반폭 h 를 바꾸면")
+    for hh in (0.4, 0.1, 0.025):
+        a, b = 1 - hh, 1 + hh
+        den = nd.cdf(b) - nd.cdf(a)
+        e_x = (nd.pdf(a) - nd.pdf(b)) / den
+        n_band = int(den * len(samples))
+        print(f"  h = {hh:<6} 치우침 {rho * e_x - rho:+.6f}"
+              f"   표본 {n_band:>6}개   평균의 SE {0.6 / np.sqrt(n_band):.4f}")
+    ```
+
+    출력:
+
+    ```
+      x0     표본 수       모의 평균       띠의 참값     X=x0 참값     모의 sd      띠 참값       SE
+      -1     4880     -0.8013   -0.797339   -0.800000    0.6027  0.601769   0.0086
+       0     7870     -0.0112    0.000000    0.000000    0.5937  0.601773   0.0068
+       1     4770      0.7955    0.797339    0.800000    0.6014  0.601769   0.0087
+
+    띠 반폭 h 를 바꾸면
+      h = 0.4    치우침 -0.041342   표본  19349개   평균의 SE 0.0043
+      h = 0.1    치우침 -0.002661   표본   4839개   평균의 SE 0.0086
+      h = 0.025  치우침 -0.000167   표본   1209개   평균의 SE 0.0173
+    ```
+
+    ![주변분포와 조건부분포](./img/marginal_conditional_221.png)
+
+    모의값이 띠의 참값과 맞는다. $x_0 = 1$ 에서 모의 평균 $0.7955$ 가 띠 참값 $0.797339$ 에서 $0.2$ 표준오차, $x_0 = -1$ 에서 $-0.8013$ 이 $-0.797339$ 에서 $0.4$ 표준오차 떨어져 있다. 표준편차는 셋 다 $0.59$ ~ $0.60$ 으로 참값 $0.6017$ 에 가깝다. **$h = 0.1$ 에서 치우침은 $0.0027$ 인데 표준오차가 $0.0086$ 이므로, 치우침이 잡음에 묻혀 보이지 않는다.**
+
+    마지막 표가 맞바꿈을 수로 보인다. $h$ 를 $0.4 \to 0.1 \to 0.025$ 로 네 배씩 줄이면 치우침이 $-0.0413 \to -0.00266 \to -0.000167$ 로 **정확히 열여섯 배씩** 줄어 $h^2$ 비례가 확인되고, 표준오차는 $0.0043 \to 0.0086 \to 0.0173$ 으로 **두 배씩** 늘어 $h^{-1/2}$ 비례가 확인된다. $h = 0.4$ 에서는 치우침 $0.041$ 이 표준오차 $0.0043$ 의 열 배라 눈에 보이는 왜곡이 되고, $h = 0.025$ 에서는 거꾸로 잡음만 커진다. **$h = 0.1$ 은 그 사이에서 고른 값이다.**
+
+    그림에서 읽을 것은 (1) 의 두 가지다. 세 덩어리의 봉우리가 $-0.8$, $0$, $+0.8$ 근처에 차례로 서 있고, 폭은 셋 다 비슷하다. 다만 **높이는 같지 않아 보이는데** 그것은 밀도로 정규화했어도 각 히스토그램의 표본 수가 다르기 때문이 아니라(밀도는 표본 수에 무관하다) 칸이 $50$ 개로 잘아 칸마다 들어가는 표본이 $100$ 개 안팎이라 들쭉날쭉한 탓이다. 가운데 주황색 덩어리가 가장 매끄러운 것도 표본이 $7{,}870$ 개로 가장 많기 때문이다.
 
 ---
 

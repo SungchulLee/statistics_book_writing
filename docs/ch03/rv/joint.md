@@ -190,74 +190,258 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이산 결합 확률질량함수 표
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이산 결합 확률질량함수 표. 앞의 「손으로 풀어 보기 — 이산」에서 쓴 결합 PMF 를 다시 가져온다.
+
+| | $Y=0$ | $Y=1$ | $Y=2$ |
+|:---|:---:|:---:|:---:|
+| $X=0$ | 0.10 | 0.15 | 0.05 |
+| $X=1$ | 0.10 | 0.25 | 0.10 |
+| $X=2$ | 0.05 | 0.10 | 0.10 |
+
+**(1)** 두 주변분포를 구하고 $E[X]$, $E[Y]$, $\operatorname{Var}(X+Y)$ 를 구하시오. $E[XY]$ 는 위에서 이미 구한 값을 쓴다.
+
+**(2)** 두 주변분포를 그대로 둔 채 $X$ 와 $Y$ 를 독립으로 짝지으면 $\operatorname{Var}(X+Y)$ 가 얼마가 되는가. (1) 의 답과 왜 다른가.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
+??? success "풀이"
 
-# 결합 PMF를 2차원 배열로 적는다. pmf[i, j] = P(X=i, Y=j) 이고 전체 합이 1이다.
-pmf = np.array([
-    [0.10, 0.15, 0.05],
-    [0.10, 0.25, 0.10],
-    [0.05, 0.10, 0.10]
-])
+    **(1) 해석적으로.** 주변화는 표에서 그냥 더하는 일이다. 행을 더하면 $Y$ 가 지워지고 열을 더하면 $X$ 가 지워진다.
 
-df = pd.DataFrame(pmf, index=['X=0', 'X=1', 'X=2'], columns=['Y=0', 'Y=1', 'Y=2'])
+    $$
+    p_X = (0.30,\; 0.45,\; 0.25),
+    \qquad
+    p_Y = (0.25,\; 0.50,\; 0.25)
+    $$
 
-# 주변분포는 표의 "가장자리(margin)"에 놓인다. 이름의 유래가 그것이다.
-#   행 방향으로 더하면(axis=1) Y를 지워 P(X=x)가 남고,
-#   열 방향으로 더하면(axis=0) X를 지워 P(Y=y)가 남는다.
-# 이것이 주변화 p(x) = sum_y p(x,y) 를 표에서 실행한 것이다.
-df['P(X=x)'] = pmf.sum(axis=1)
-df.loc['P(Y=y)'] = pmf.sum(axis=0).tolist() + [1.0]   # 맨 끝 1.0은 전체 합
-print(df)
-```
+    $p_Y$ 는 $1$ 을 중심으로 대칭이므로 $E[Y] = 1$ 이 곧바로 보인다. $X$ 쪽은 직접 더한다.
 
-출력:
+    $$
+    E[X] = 0(0.30) + 1(0.45) + 2(0.25) = 0.95
+    $$
 
-```
-         Y=0   Y=1   Y=2  P(X=x)
-X=0     0.10  0.15  0.05    0.30
-X=1     0.10  0.25  0.10    0.45
-X=2     0.05  0.10  0.10    0.25
-P(Y=y)  0.25  0.50  0.25    1.00
-```
+    둘째 적률도 같은 방식이다.
+
+    $$
+    E[X^2] = 0.45 + 4(0.25) = 1.45,
+    \qquad
+    E[Y^2] = 0.50 + 4(0.25) = 1.50
+    $$
+
+    따라서
+
+    $$
+    \operatorname{Var}(X) = 1.45 - 0.95^2 = 0.5475,
+    \qquad
+    \operatorname{Var}(Y) = 1.50 - 1^2 = 0.5
+    $$
+
+    이다. 여기까지는 **그림자만으로** 된 계산이다. 교차항은 그렇지 않다. 「손으로 풀어 보기 — 이산」에서 네 칸만 남겨 $E[XY] = 1.05$ 를 얻었으므로
+
+    $$
+    \operatorname{Cov}(X, Y) = E[XY] - E[X]E[Y] = 1.05 - 0.95 \times 1 = 0.10
+    $$
+
+    이고, 정리 3 의 공식에 넣으면
+
+    $$
+    \operatorname{Var}(X + Y) = 0.5475 + 0.5 + 2(0.10) = 1.2475
+    $$
+
+    이다.
+
+    **(2) 같은 그림자, 다른 무게.** 주변분포를 곱해 새 표 $\tilde p(x,y) = p_X(x)\,p_Y(y)$ 를 만들면 행합과 열합은 한 칸도 바뀌지 않는다. 그러나 안쪽은 전혀 다르다.
+
+    | | $Y=0$ | $Y=1$ | $Y=2$ |
+    |:---|:---:|:---:|:---:|
+    | $X=0$ | 0.0750 | 0.1500 | 0.0750 |
+    | $X=1$ | 0.1125 | 0.2250 | 0.1125 |
+    | $X=2$ | 0.0625 | 0.1250 | 0.0625 |
+
+    이 배치에서는 $\operatorname{Cov} = 0$ 이므로 교차항이 사라진다.
+
+    $$
+    \operatorname{Var}(X + Y) = 0.5475 + 0.5 = 1.0475
+    $$
+
+    **차이 $1.2475 - 1.0475 = 0.2$ 가 정확히 $2\operatorname{Cov}(X,Y)$ 다.** 두 표는 가장자리가 같아 $E[X+Y] = 1.95$ 도 같지만 퍼짐은 다르다. §2 에서 말한 "주변분포는 결합분포를 결정하지 못한다" 가 분산 한 개의 수치로 드러난 것이다.
+
+    **(3) 수치적으로.** 표를 배열로 적어 두 배치를 나란히 재 본다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    # 결합 PMF를 2차원 배열로 적는다. pmf[i, j] = P(X=i, Y=j) 이고 전체 합이 1이다.
+    pmf = np.array([
+        [0.10, 0.15, 0.05],
+        [0.10, 0.25, 0.10],
+        [0.05, 0.10, 0.10]
+    ])
+
+    df = pd.DataFrame(pmf, index=['X=0', 'X=1', 'X=2'], columns=['Y=0', 'Y=1', 'Y=2'])
+
+    # 주변분포는 표의 "가장자리(margin)"에 놓인다. 이름의 유래가 그것이다.
+    #   행 방향으로 더하면(axis=1) Y를 지워 P(X=x)가 남고,
+    #   열 방향으로 더하면(axis=0) X를 지워 P(Y=y)가 남는다.
+    # 이것이 주변화 p(x) = sum_y p(x,y) 를 표에서 실행한 것이다.
+    df['P(X=x)'] = pmf.sum(axis=1)
+    df.loc['P(Y=y)'] = pmf.sum(axis=0).tolist() + [1.0]   # 맨 끝 1.0은 전체 합
+    print(df)
+
+    vals = np.arange(3)
+    p_x, p_y = pmf.sum(axis=1), pmf.sum(axis=0)
+
+    def moments(table):
+        """결합표 하나에서 E[X], E[Y], E[XY], Var(X+Y) 를 전부 꺼낸다."""
+        mx, my = table.sum(axis=1), table.sum(axis=0)
+        e_x, e_y = (vals * mx).sum(), (vals * my).sum()
+        e_xy = sum(i * j * table[i, j] for i in vals for j in vals)
+        v_x = (vals ** 2 * mx).sum() - e_x ** 2
+        v_y = (vals ** 2 * my).sum() - e_y ** 2
+        cov = e_xy - e_x * e_y
+        return e_x, e_y, e_xy, v_x, v_y, cov, v_x + v_y + 2 * cov
+
+    # 주변분포를 곱해 만든 독립 배치. 가장자리는 똑같고 안쪽만 다르다.
+    indep = np.outer(p_x, p_y)
+    print(f"\n두 배치의 주변분포가 같은가: "
+          f"{np.allclose(indep.sum(axis=1), p_x) and np.allclose(indep.sum(axis=0), p_y)}")
+
+    for name, table in [("원래 표", pmf), ("독립 배치", indep)]:
+        e_x, e_y, e_xy, v_x, v_y, cov, v_s = moments(table)
+        print(f"{name}: E[X]={e_x:.4f} E[Y]={e_y:.4f} E[XY]={e_xy:.4f} "
+              f"Var(X)={v_x:.4f} Var(Y)={v_y:.4f} Cov={cov:.4f} Var(X+Y)={v_s:.4f}")
+
+    # S = X + Y 의 분포를 직접 세어 공식과 맞춰 본다.
+    for name, table in [("원래 표", pmf), ("독립 배치", indep)]:
+        s_pmf = np.zeros(5)
+        for i in vals:
+            for j in vals:
+                s_pmf[i + j] += table[i, j]
+        e_s = (np.arange(5) * s_pmf).sum()
+        v_s = (np.arange(5) ** 2 * s_pmf).sum() - e_s ** 2
+        print(f"{name}: S 의 PMF = {np.round(s_pmf, 4)}  E[S]={e_s:.4f}  Var(S)={v_s:.4f}")
+    ```
+
+    출력:
+
+    ```
+             Y=0   Y=1   Y=2  P(X=x)
+    X=0     0.10  0.15  0.05    0.30
+    X=1     0.10  0.25  0.10    0.45
+    X=2     0.05  0.10  0.10    0.25
+    P(Y=y)  0.25  0.50  0.25    1.00
+
+    두 배치의 주변분포가 같은가: True
+    원래 표: E[X]=0.9500 E[Y]=1.0000 E[XY]=1.0500 Var(X)=0.5475 Var(Y)=0.5000 Cov=0.1000 Var(X+Y)=1.2475
+    독립 배치: E[X]=0.9500 E[Y]=1.0000 E[XY]=0.9500 Var(X)=0.5475 Var(Y)=0.5000 Cov=0.0000 Var(X+Y)=1.0475
+    원래 표: S 의 PMF = [0.1  0.25 0.35 0.2  0.1 ]  E[S]=1.9500  Var(S)=1.2475
+    독립 배치: S 의 PMF = [0.075  0.2625 0.3625 0.2375 0.0625]  E[S]=1.9500  Var(S)=1.0475
+    ```
+
+    유도한 $1.2475$ 와 $1.0475$ 가 코드가 준 값과 맞고, $S$ 의 분포를 직접 세어 구한 분산도 같은 두 값을 준다. $E[S] = 1.95$ 는 두 배치에서 똑같다. **평균은 그림자가 정하고 분산은 안쪽 무게가 정한다.**
 
 ### 연속 결합 PDF 시각화
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 연속 결합 밀도함수 시각화
+**보기 2.** <span class="diff easy" title="쉬움"></span> 연속 결합 밀도함수 시각화. 「손으로 풀어 보기 — 연속」에서 쓴 $0 \le x \le y \le 1$ 위의 밀도 $f_{X,Y}(x,y) = 6(1-y)$ 를 그림으로 본다.
+
+**(1)** 등고선이 가로줄로만 놓이는 까닭을 말하고, 두 주변밀도 $f_X$ 와 $f_Y$ 를 적분으로 구하시오.
+
+**(2)** 결합밀도의 높이는 $y \to 0$ 에서 가장 크다. 그런데 $f_Y(0) = 0$ 이다. 어긋난 것인가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-x = np.linspace(0, 1, 200)
-y = np.linspace(0, 1, 200)
-X, Y = np.meshgrid(x, y)
+    **(1) 해석적으로.** 식 $6(1-y)$ 에 $x$ 가 아예 없다. 그러므로 삼각형 안에서 밀도는 **$y$ 만으로 정해지고 $x$ 방향으로는 평평하다.** 등고선 $f = c$ 는 $y$ 가 상수인 집합, 곧 가로줄이 된다. 삼각형 바깥이 $0$ 이므로 각 가로줄은 $x \in [0, y]$ 에서만 그려진다.
 
-# 이 결합밀도는 삼각형 영역 0 <= x <= y <= 1 위에서만 0이 아니다.
-# where로 그 조건을 걸어 바깥을 0으로 만든다.
-# **정의역이 사각형이 아니라는 점이 핵심이다.** X의 범위가 Y에 달려 있으므로
-# 두 변수는 종속이며, 결합밀도를 주변밀도의 곱으로 쪼갤 수 없다.
-Z = np.where(X <= Y, 6 * (1 - Y), 0)
+    주변밀도는 다른 변수를 더해 없애면 된다. 적분 범위가 삼각형에 걸려 있으니 그것만 조심한다. $y$ 를 고정하면 $x$ 는 $0$ 부터 $y$ 까지이므로
 
-fig, ax = plt.subplots(figsize=(6, 5))
-c = ax.contourf(X, Y, Z, levels=20, cmap='viridis')
-fig.colorbar(c, ax=ax, label='f(x, y)')
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_title('Joint PDF: f(x,y) = 6(1-y)')
-plt.show()
-```
+    $$
+    f_Y(y) = \int_0^y 6(1-y)\,dx = 6y(1-y),
+    \qquad 0 \le y \le 1
+    $$
 
-![Joint PDF: f(x,y) = 6(1-y)](./img/joint_180.png)
+    이고, 거꾸로 $x$ 를 고정하면 $y$ 는 $x$ 부터 $1$ 까지이므로
+
+    $$
+    f_X(x) = \int_x^1 6(1-y)\,dy = 6\left[y - \frac{y^2}{2}\right]_x^1 = 3(1-x)^2,
+    \qquad 0 \le x \le 1
+    $$
+
+    이다. 둘 다 적분이 $1$ 인지 확인한다. $\int_0^1 6y(1-y)\,dy = 6(\tfrac12 - \tfrac13) = 1$ 이고 $\int_0^1 3(1-x)^2 dx = 1$ 이다. 이름을 붙이면 $Y \sim \text{Beta}(2,2)$, $X \sim \text{Beta}(1,3)$ 이고 평균은 $E[Y] = \tfrac12$, $E[X] = \tfrac14$ 다.
+
+    **두 주변밀도의 곱은 원래 밀도가 아니다.** $f_X(x) f_Y(y) = 3(1-x)^2 \cdot 6y(1-y)$ 는 단위정사각형 전체에서 양수이지만 $f_{X,Y}$ 는 삼각형 밖에서 $0$ 이다. 정의역이 사각형이 아니라는 것만으로 이미 종속이다.
+
+    **(2) 어긋난 것이 아니다.** 주변밀도는 밀도의 **높이가 아니라 단면의 무게**다. 높이에 단면의 길이를 곱한 것이기 때문이다.
+
+    $$
+    f_Y(y) = \underbrace{6(1-y)}_{\text{높이}} \times \underbrace{y}_{\text{단면 }[0,y]\text{의 길이}}
+    $$
+
+    $y \to 0$ 에서 높이는 $6$ 으로 가장 크지만 단면이 한 점으로 쪼그라들어 길이가 $0$ 이다. 거꾸로 $y \to 1$ 에서는 단면이 가장 길지만 높이가 $0$ 이다. 두 효과가 맞물려 $f_Y$ 는 가운데 $y = \tfrac12$ 에서 최대 $6 \cdot \tfrac12 \cdot \tfrac12 = 1.5$ 를 갖는다. **그림에서 색이 가장 진한 곳과 $Y$ 가 가장 많이 머무는 곳이 다르다**는 것이 이 보기에서 볼 것이다.
+
+    **(3) 수치적으로.** 등고선을 그리고, 유도한 두 주변밀도를 수치적분과 맞춰 본다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import integrate
+
+    x = np.linspace(0, 1, 200)
+    y = np.linspace(0, 1, 200)
+    X, Y = np.meshgrid(x, y)
+
+    # 이 결합밀도는 삼각형 영역 0 <= x <= y <= 1 위에서만 0이 아니다.
+    # where로 그 조건을 걸어 바깥을 0으로 만든다.
+    # **정의역이 사각형이 아니라는 점이 핵심이다.** X의 범위가 Y에 달려 있으므로
+    # 두 변수는 종속이며, 결합밀도를 주변밀도의 곱으로 쪼갤 수 없다.
+    Z = np.where(X <= Y, 6 * (1 - Y), 0)
+
+    # 유도한 주변밀도. 수치적분으로 같은 값이 나오는지 확인한다.
+    f_X = lambda t: 3 * (1 - t) ** 2
+    f_Y = lambda t: 6 * t * (1 - t)
+
+    for t in (0.2, 0.5, 0.8):
+        # f_X(x) = int_x^1 6(1-y) dy,  f_Y(y) = int_0^y 6(1-y) dx = 6y(1-y)
+        num_x = integrate.quad(lambda yy: 6 * (1 - yy), t, 1)[0]
+        print(f"t={t}:  f_X 유도 {f_X(t):.6f} / 적분 {num_x:.6f}"
+              f"   f_Y 유도 {f_Y(t):.6f} / 높이×길이 {6 * (1 - t) * t:.6f}")
+
+    print(f"규격화: int f_X = {integrate.quad(f_X, 0, 1)[0]:.6f},"
+          f"  int f_Y = {integrate.quad(f_Y, 0, 1)[0]:.6f}")
+    print(f"E[X] = {integrate.quad(lambda t: t * f_X(t), 0, 1)[0]:.6f},"
+          f"  E[Y] = {integrate.quad(lambda t: t * f_Y(t), 0, 1)[0]:.6f}")
+    print(f"결합밀도 최대 높이 = {6 * (1 - 0):.1f} (y=0),"
+          f"  f_Y 최대 = {f_Y(0.5):.1f} (y=0.5)")
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    c = ax.contourf(X, Y, Z, levels=20, cmap='viridis')
+    fig.colorbar(c, ax=ax, label='f(x, y)')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_title('Joint PDF: f(x,y) = 6(1-y)')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    t=0.2:  f_X 유도 1.920000 / 적분 1.920000   f_Y 유도 0.960000 / 높이×길이 0.960000
+    t=0.5:  f_X 유도 0.750000 / 적분 0.750000   f_Y 유도 1.500000 / 높이×길이 1.500000
+    t=0.8:  f_X 유도 0.120000 / 적분 0.120000   f_Y 유도 0.960000 / 높이×길이 0.960000
+    규격화: int f_X = 1.000000,  int f_Y = 1.000000
+    E[X] = 0.250000,  E[Y] = 0.500000
+    결합밀도 최대 높이 = 6.0 (y=0),  f_Y 최대 = 1.5 (y=0.5)
+    ```
+
+    ![Joint PDF: f(x,y) = 6(1-y)](./img/joint_180.png)
+
+    유도한 $f_X(x) = 3(1-x)^2$ 와 $f_Y(y) = 6y(1-y)$ 가 수치적분과 소수점 여섯 자리까지 맞고, 규격화와 평균 $\tfrac14$, $\tfrac12$ 도 그대로 나온다.
+
+    그림에서 읽을 것은 두 가지다. 첫째, **색띠가 가로로만 바뀐다.** 삼각형 안에서 가로로 움직이면 색이 그대로이고, 위로 올라갈 때만 노란색에서 짙은 남색으로 변한다. $x$ 가 밀도에 들어 있지 않다는 사실이 그대로 보인다. 둘째, **그림이 가리는 것이 주변밀도다.** 색이 가장 밝은 곳(노란색)은 아래쪽 $y \approx 0$ 의 꼭짓점 언저리인데 그곳의 삼각형 단면은 거의 폭이 없다. 등고선 그림은 높이만 칠해 주므로 "무게가 실제로 어디에 모여 있는가"는 보여 주지 못하며, 그것을 보려면 (1) 처럼 눌러 모아야 한다.
 
 ### 이변량 정규분포 표본추출
 
@@ -265,33 +449,102 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 이변량 정규분포 표본추출
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이변량 정규분포 표본추출. 평균 $\mathbf 0$, 공분산행렬
+
+$$
+\Sigma = \begin{pmatrix} 1 & 0.7 \\ 0.7 & 1 \end{pmatrix}
+$$
+
+인 이변량 정규분포에서 $n = 5000$ 쌍을 뽑아 흩뿌림그림을 그린다.
+
+**(1)** 점구름이 어느 방향으로 얼마나 길쭉해야 하는가. $\Sigma$ 의 고유값과 고유벡터로 주축의 방향과 두 축 길이의 비를 구하시오.
+
+**(2)** 이 표본에서 잰 표본상관계수가 $0.7$ 에서 얼마나 벗어나면 이상한 것인가. 이론 표준오차를 적고 실제 벗어남과 견주시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
-mean = [0, 0]
-# 분산이 둘 다 1이므로 비대각원소 0.7이 곧 상관계수다.
-cov = [[1, 0.7], [0.7, 1]]
-# 5000개의 (x, y) 쌍을 뽑는다. 결과는 (5000, 2) 모양이다.
-samples = np.random.multivariate_normal(mean, cov, 5000)
+    **(1) 해석적으로.** 대각원소가 둘 다 $1$ 로 같다는 것이 계산을 끝내 준다. 벡터 $(1,1)^{\mathsf T}$ 와 $(1,-1)^{\mathsf T}$ 를 넣어 보면
 
-fig, ax = plt.subplots(figsize=(6, 5))
-# alpha를 낮춰 겹침을 푼다. 5000개를 그대로 찍으면 가운데가 뭉개진다.
-ax.scatter(samples[:, 0], samples[:, 1], alpha=0.2, s=5)
-ax.set_xlabel('X')
-ax.set_ylabel('Y')
-# 가로세로 비를 맞춰야 타원의 기울기를 정직하게 볼 수 있다
-ax.set_aspect('equal')
-ax.spines[['top', 'right']].set_visible(False)
-plt.show()
-```
+    $$
+    \Sigma \begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} 1.7 \\ 1.7 \end{pmatrix} = 1.7 \begin{pmatrix} 1 \\ 1 \end{pmatrix},
+    \qquad
+    \Sigma \begin{pmatrix} 1 \\ -1 \end{pmatrix} = \begin{pmatrix} 0.3 \\ -0.3 \end{pmatrix} = 0.3 \begin{pmatrix} 1 \\ -1 \end{pmatrix}
+    $$
 
-![결합분포](./img/joint_202.png)
+    이므로 고유값은 $\lambda_1 = 1 + \rho = 1.7$, $\lambda_2 = 1 - \rho = 0.3$ 이고 고유벡터는 각각 $45^\circ$ 선 $y = x$ 와 그에 직교하는 $y = -x$ 다. 분산이 같은 두 변수에서는 상관의 부호만 주축이 어느 대각선인지를 정한다.
+
+    고유값은 **그 방향으로 잰 분산**이므로 축 길이의 비는 표준편차의 비다.
+
+    $$
+    \sqrt{\frac{\lambda_1}{\lambda_2}} = \sqrt{\frac{1.7}{0.3}} = \sqrt{\frac{17}{3}} = 2.3805
+    $$
+
+    $45^\circ$ 방향으로 직교 방향보다 $2.38$ 배 길쭉한 타원이 나와야 한다.
+
+    **한 가지 헷갈리기 쉬운 것.** 주축의 기울기는 $1$ 이지만 **$x$ 를 주었을 때 $Y$ 의 평균을 잇는 직선의 기울기는 $\rho = 0.7$ 이다.** 두 직선은 다르다. 앞의 것은 점구름이 가장 길게 뻗은 방향이고 뒤의 것은 세로 단면들의 중심을 이은 선이다. 이 구별은 다음 절 [조건부분포](conditional_dist.md)와 [4.3절 이변량 정규분포](../../ch04/bivariate_normal/bivariate_normal.md)에서 다시 다룬다.
+
+    **(2) 이론값.** 표본상관계수 $r$ 의 큰표본 표준오차는
+
+    $$
+    \operatorname{SE}(r) \approx \frac{1 - \rho^2}{\sqrt n} = \frac{1 - 0.49}{\sqrt{5000}} = \frac{0.51}{70.711} = 0.00721
+    $$
+
+    이다. $0.7$ 에서 $0.007$ 쯤 벗어나는 것은 늘 있는 일이고, $0.02$ 이상 벗어나면 세 표준오차 밖이라 눈여겨볼 만하다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    mean = [0, 0]
+    # 분산이 둘 다 1이므로 비대각원소 0.7이 곧 상관계수다.
+    cov = [[1, 0.7], [0.7, 1]]
+    # 5000개의 (x, y) 쌍을 뽑는다. 결과는 (5000, 2) 모양이다.
+    samples = np.random.multivariate_normal(mean, cov, 5000)
+
+    # (1) 고유분해. 고유값은 그 방향으로 잰 분산이므로
+    # 축 길이의 비는 고유값의 비가 아니라 그 제곱근의 비다.
+    evals, evecs = np.linalg.eigh(np.array(cov))
+    print(f"고유값 = {evals}  (이론 1-rho=0.3, 1+rho=1.7)")
+    print(f"큰 고유값의 고유벡터 = {np.round(evecs[:, 1], 4)}  (이론 (1,1)/sqrt(2) = {1 / np.sqrt(2):.4f})")
+    print(f"축 길이의 비 = {np.sqrt(evals[1] / evals[0]):.4f}  (이론 sqrt(17/3) = {np.sqrt(17 / 3):.4f})")
+
+    # (2) 표본에서 잰 값들. 주변분산은 1, 상관계수는 0.7 이어야 한다.
+    r = np.corrcoef(samples.T)[0, 1]
+    se = (1 - 0.7 ** 2) / np.sqrt(len(samples))
+    print(f"표본 주변분산 = {np.round(samples.var(axis=0, ddof=1), 4)}  (이론 1, 1)")
+    print(f"표본상관계수 r = {r:.6f},  SE(r) = {se:.6f},  (r - 0.7)/SE = {(r - 0.7) / se:+.3f}")
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    # alpha를 낮춰 겹침을 푼다. 5000개를 그대로 찍으면 가운데가 뭉개진다.
+    ax.scatter(samples[:, 0], samples[:, 1], alpha=0.2, s=5)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    # 가로세로 비를 맞춰야 타원의 기울기를 정직하게 볼 수 있다
+    ax.set_aspect('equal')
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    고유값 = [0.3 1.7]  (이론 1-rho=0.3, 1+rho=1.7)
+    큰 고유값의 고유벡터 = [0.7071 0.7071]  (이론 (1,1)/sqrt(2) = 0.7071)
+    축 길이의 비 = 2.3805  (이론 sqrt(17/3) = 2.3805)
+    표본 주변분산 = [1.0022 1.0126]  (이론 1, 1)
+    표본상관계수 r = 0.700283,  SE(r) = 0.007212,  (r - 0.7)/SE = +0.039
+    ```
+
+    ![결합분포](./img/joint_202.png)
+
+    고유값 $0.3$ 과 $1.7$, 축 비 $2.3805$, 고유벡터 $(0.7071, 0.7071)$ 이 모두 (1) 의 유도와 맞는다. 표본상관계수 $0.700283$ 은 $0.7$ 에서 $0.04$ 표준오차밖에 떨어져 있지 않다. **표본 하나로 얻은 값이 참값과 이만큼 가까운 것은 운이 좋은 편이며**, 다른 씨앗을 쓰면 대개 $0.007$ 쯤 떨어진 값이 나온다.
+
+    그림에서 확인할 것은 기울기다. 점구름이 $45^\circ$ 선을 따라 길게 뻗어 있고, 가로세로 비를 맞춰 그렸으므로 그 기울기를 눈대중으로 읽어도 된다. 가로로는 대략 $-4$ 부터 $3.5$ 까지, 세로로도 비슷한 폭으로 퍼져 있다. **주변분포만 보면 둘 다 그냥 $N(0,1)$ 이고, 이 기울기는 주변분포 어디에도 적혀 있지 않다.** 보기 1 에서 표로 본 것과 같은 이야기가 연속형에서 되풀이된 것이다.
 
 ---
 

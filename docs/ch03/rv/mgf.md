@@ -91,57 +91,161 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 정규분포의 적률생성함수로 적률 구하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규분포의 적률생성함수로 적률 구하기. $X \sim N(3, 4)$ 의 적률생성함수를 $t = 0$ 에서 **수치미분**해 평균과 분산을 꺼내려 한다. 중심차분을 쓴다.
+
+$$
+D_1(h) = \frac{M(h) - M(-h)}{2h},
+\qquad
+D_2(h) = \frac{M(h) - 2M(0) + M(-h)}{h^2}
+$$
+
+**(1)** 테일러 전개로 두 근사의 **절단오차**를 $h$ 와 $M$ 의 고계도함수로 적으시오. 그 도함수들은 정규분포의 어떤 적률인가.
+
+**(2)** 2계 차분의 $h$ 를 1계보다 **크게** 잡아야 하는 까닭을 말하고, $h$ 를 $10^{-1}$ 부터 $10^{-9}$ 까지 줄여 가며 실제 오차를 재어 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def mgf_normal(t, mu, sigma2):
-    """정규분포 N(mu, sigma2)의 적률생성함수.
+    **(1) 해석적으로.** $M$ 을 $0$ 근방에서 전개한다. 정리 1 의 증명이 보인 대로 $M$ 은 $0$ 근방에서 해석적이므로 전개가 가능하다.
 
-        M(t) = exp(mu*t + sigma2*t^2/2)
-    """
-    return np.exp(mu * t + sigma2 * t**2 / 2)
+    $$
+    M(\pm h) = M(0) \pm h M'(0) + \frac{h^2}{2}M''(0) \pm \frac{h^3}{6}M'''(0) + \frac{h^4}{24}M^{(4)}(0) + \cdots
+    $$
+
+    **1계.** 빼면 짝수 차수 항이 모두 지워진다.
+
+    $$
+    M(h) - M(-h) = 2h M'(0) + \frac{h^3}{3}M'''(0) + O(h^5)
+    $$
+
+    $2h$ 로 나누면
+
+    $$
+    D_1(h) = M'(0) + \frac{h^2}{6}M'''(0) + O(h^4)
+    $$
+
+    **2계.** 더하면 홀수 차수 항이 지워진다.
+
+    $$
+    M(h) - 2M(0) + M(-h) = h^2 M''(0) + \frac{h^4}{12}M^{(4)}(0) + O(h^6)
+    $$
+
+    $h^2$ 으로 나누면
+
+    $$
+    D_2(h) = M''(0) + \frac{h^2}{12}M^{(4)}(0) + O(h^4)
+    $$
+
+    둘 다 절단오차가 $h^2$ 에 비례한다. 그런데 계수에 **$M$ 의 고계도함수**가 들어 있고, 정리 1 에 따르면 $M^{(n)}(0) = E[X^n]$ 이므로 그것은 곧 적률이다. $N(3,4)$ 에서는
+
+    $$
+    E[X^3] = \mu^3 + 3\mu\sigma^2 = 27 + 36 = 63,
+    \qquad
+    E[X^4] = \mu^4 + 6\mu^2\sigma^2 + 3\sigma^4 = 81 + 216 + 48 = 345
+    $$
+
+    이므로 절단오차의 예측값은
+
+    $$
+    \lvert D_1(h) - 3 \rvert \approx \frac{63}{6}h^2 = 10.5\,h^2,
+    \qquad
+    \lvert D_2(h) - 13 \rvert \approx \frac{345}{12}h^2 = 28.75\,h^2
+    $$
+
+    이다. **수치미분의 오차를 예측하는 데 그 자신이 꺼내려는 적률이 쓰인다**는 점이 재미있다.
+
+    **(2) 반올림이 반대 방향으로 민다.** $h$ 를 줄이면 절단오차는 $h^2$ 으로 줄지만 분자가 **거의 상쇄되어** 유효숫자를 잃는다. 배정밀도에서 $M(\pm h)$ 는 상대오차 $\varepsilon \approx 2.2 \times 10^{-16}$ 을 달고 다니므로 분자에 생기는 절대오차는 $h$ 와 무관하게 $\varepsilon M(0)$ 규모다. 그것을 무엇으로 나누느냐가 두 차분을 가른다.
+
+    $$
+    \text{1계의 반올림오차} \sim \frac{\varepsilon}{2h},
+    \qquad
+    \text{2계의 반올림오차} \sim \frac{\varepsilon}{h^2}
+    $$
+
+    $h = 10^{-6}$ 이면 앞의 것은 $\varepsilon$ 을 $10^{6}$ 배 키우지만 뒤의 것은 $10^{12}$ 배 키운다. **같은 분자 오차를 $h^2$ 으로 나누기 때문에 2계 차분이 훨씬 먼저 무너진다.** 그래서 최적의 $h$ 가 2계 쪽에서 더 크고, 코드가 1계에 $10^{-4}$, 2계에 $10^{-3}$ 을 쓴 이유가 이것이다.
+
+    **(3) 수치적으로.** 두 예측을 실제 오차와 나란히 잰다.
+
+    ```python
+    import numpy as np
+
+    def mgf_normal(t, mu, sigma2):
+        """정규분포 N(mu, sigma2)의 적률생성함수.
+
+            M(t) = exp(mu*t + sigma2*t^2/2)
+        """
+        return np.exp(mu * t + sigma2 * t**2 / 2)
 
 
-def d1(f, x, h=1e-4):
-    """중심차분으로 1계 도함수를 근사한다:  (f(x+h) - f(x-h)) / (2h)"""
-    return (f(x + h) - f(x - h)) / (2 * h)
+    def d1(f, x, h=1e-4):
+        """중심차분으로 1계 도함수를 근사한다:  (f(x+h) - f(x-h)) / (2h)"""
+        return (f(x + h) - f(x - h)) / (2 * h)
 
 
-def d2(f, x, h=1e-3):
-    """중심차분으로 2계 도함수를 근사한다:  (f(x+h) - 2f(x) + f(x-h)) / h^2
+    def d2(f, x, h=1e-3):
+        """중심차분으로 2계 도함수를 근사한다:  (f(x+h) - 2f(x) + f(x-h)) / h^2
 
-    h를 1계보다 크게 잡은 이유가 있다. 2계 차분은 h^2 으로 나누므로
-    h가 너무 작으면 분자의 반올림 오차가 크게 증폭된다.
-    """
-    return (f(x + h) - 2 * f(x) + f(x - h)) / h**2
+        h를 1계보다 크게 잡은 이유가 있다. 2계 차분은 h^2 으로 나누므로
+        h가 너무 작으면 분자의 반올림 오차가 크게 증폭된다.
+        """
+        return (f(x + h) - 2 * f(x) + f(x - h)) / h**2
 
 
-# "적률생성함수"라는 이름 그대로, t=0 에서 k번 미분하면 k번째 적률이 나온다.
-#   M'(0)  = E[X]
-#   M''(0) = E[X^2]
-mu, sigma2 = 3.0, 4.0
-M = lambda t: mgf_normal(t, mu, sigma2)
+    # "적률생성함수"라는 이름 그대로, t=0 에서 k번 미분하면 k번째 적률이 나온다.
+    #   M'(0)  = E[X]
+    #   M''(0) = E[X^2]
+    mu, sigma2 = 3.0, 4.0
+    M = lambda t: mgf_normal(t, mu, sigma2)
 
-E_X = d1(M, 0.0)
-E_X2 = d2(M, 0.0)
-Var_X = E_X2 - E_X**2
+    E_X = d1(M, 0.0)
+    E_X2 = d2(M, 0.0)
+    Var_X = E_X2 - E_X**2
 
-print(f"E[X] = {E_X:.4f} (theoretical: {mu})")
-print(f"E[X²] = {E_X2:.4f} (theoretical: {sigma2 + mu**2})")
-print(f"Var(X) = {Var_X:.4f} (theoretical: {sigma2})")
-```
+    print(f"E[X] = {E_X:.4f} (theoretical: {mu})")
+    print(f"E[X²] = {E_X2:.4f} (theoretical: {sigma2 + mu**2})")
+    print(f"Var(X) = {Var_X:.4f} (theoretical: {sigma2})")
 
-출력:
+    # 유도한 절단오차 예측과 실제 오차를 h마다 나란히 잰다.
+    #   1계:  h^2 * M'''(0) / 6,    M'''(0)  = E[X^3]
+    #   2계:  h^2 * M''''(0) / 12,  M''''(0) = E[X^4]
+    m3 = mu**3 + 3 * mu * sigma2
+    m4 = mu**4 + 6 * mu**2 * sigma2 + 3 * sigma2**2
+    print(f"\nE[X^3] = {m3:.0f},  E[X^4] = {m4:.0f}")
+    print(f"{'h':>7}{'d1 err':>12}{'pred':>12}{'d2 err':>12}{'pred':>12}")
+    for k in range(1, 10):
+        h = 10.0 ** (-k)
+        e1 = abs(d1(M, 0.0, h) - mu)
+        e2 = abs(d2(M, 0.0, h) - (sigma2 + mu**2))
+        print(f"{h:>7.0e}{e1:>12.3e}{h**2 * m3 / 6:>12.3e}"
+              f"{e2:>12.3e}{h**2 * m4 / 12:>12.3e}")
+    ```
 
-```
-E[X] = 3.0000 (theoretical: 3.0)
-E[X²] = 13.0000 (theoretical: 13.0)
-Var(X) = 4.0000 (theoretical: 4.0)
-```
+    출력:
+
+    ```
+    E[X] = 3.0000 (theoretical: 3.0)
+    E[X²] = 13.0000 (theoretical: 13.0)
+    Var(X) = 4.0000 (theoretical: 4.0)
+
+    E[X^3] = 63,  E[X^4] = 345
+          h      d1 err        pred      d2 err        pred
+      1e-01   1.067e-01   1.050e-01   2.912e-01   2.875e-01
+      1e-02   1.050e-03   1.050e-03   2.875e-03   2.875e-03
+      1e-03   1.050e-05   1.050e-05   2.875e-05   2.875e-05
+      1e-04   1.050e-07   1.050e-07   2.874e-07   2.875e-07
+      1e-05   1.047e-09   1.050e-09   3.460e-08   2.875e-09
+      1e-06   8.627e-11   1.050e-11   4.548e-05   2.875e-11
+      1e-07   8.627e-11   1.050e-13   7.116e-04   2.875e-13
+      1e-08   3.972e-09   1.050e-15   3.227e-01   2.875e-15
+      1e-09   2.618e-08   1.050e-17   1.300e+01   2.875e-17
+    ```
+
+    **절단오차 예측이 그대로 맞는다.** $h = 10^{-2}$ 부터 $10^{-4}$ 까지 "실제 오차" 열과 "예측" 열이 유효숫자 세 자리까지 같고, $h$ 를 열 배 줄일 때마다 오차가 백 분의 일로 줄어 $h^2$ 비례도 확인된다. $h = 10^{-1}$ 에서만 $1.067$ 대 $1.050$ 으로 조금 어긋나는데, 그때는 버린 $O(h^4)$ 항이 아직 보일 만큼 크기 때문이다.
+
+    **무너지는 자리가 다르다.** 1계 차분은 $h = 10^{-6}$ 에서 오차 $8.6\times 10^{-11}$ 로 바닥을 치고 그 아래로 내려가도 $10^{-8}$ 수준에 머문다. 2계 차분은 $h = 10^{-5}$ 에서 $3.5\times 10^{-8}$ 로 바닥을 친 뒤 급격히 올라가 $h = 10^{-9}$ 에서는 오차가 $13.0$, 곧 **답 자체보다 크다.** 그 자리에서 $D_2$ 가 돌려준 값은 $0$ 근처의 잡음일 뿐이다.
+
+    코드가 고른 $h$ 는 둘 다 **절단오차가 지배하는 안전한 쪽**에 있다. $h = 10^{-4}$ 의 1계 오차가 $1.05\times 10^{-7}$ 이고 $h = 10^{-3}$ 의 2계 오차가 $2.875\times 10^{-5}$ 이므로, 소수 넷째 자리까지 찍는 출력에서는 둘 다 보이지 않고 $3.0000$, $13.0000$, $4.0000$ 이 깨끗하게 나왔다. 2계 쪽을 $h = 10^{-6}$ 으로 "더 정밀하게" 바꾸면 오차가 $4.5\times 10^{-5}$ 로 **오히려 커진다.** **수치미분에서 $h$ 는 작을수록 좋은 것이 아니다.**
 
 ## 2. 적률생성함수가 같으면 분포가 같다
 
@@ -269,97 +373,272 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 네 분포의 적률생성함수 비교
+**보기 4.** <span class="diff easy" title="쉬움"></span> 네 분포의 적률생성함수 비교. $N(0,1)$, $\text{Exp}(1)$, $\text{Poisson}(3)$, $\text{Bernoulli}(0.5)$ 의 적률생성함수를 $t \in [-1.5, 1.5]$ 에서 한 그림에 겹쳐 그린다.
+
+**(1)** 네 곡선이 모두 점 $(0, 1)$ 을 지나고 모두 아래로 볼록하다. 이것이 우연인가, 아무 분포에나 성립하는가. 또 $t = 0$ 에서의 기울기는 각각 얼마인가.
+
+**(2)** $t \to -\infty$ 로 갈 때 네 곡선이 가는 곳이 서로 다르다. 각각 어디로 가며 그 값은 분포의 무엇인가. 그리고 $\text{Exp}(1)$ 곡선만 유한한 $t$ 에서 수직으로 솟는 까닭은 무엇이며, 그것이 정리 2 의 "$0$ 을 포함하는 열린구간" 이라는 단서와 어떻게 이어지는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-def plot_mgf_comparison():
-    """분포 넷의 적률생성함수를 한 그림에 겹쳐 그린다.
+    **(1) 둘 다 아무 분포에나 성립한다.** 먼저 $t = 0$ 을 넣으면 $e^{0 \cdot X} = 1$ 이므로
 
-    네 곡선이 모두 t=0 에서 1을 지난다는 점에 주목하라.
-    M(0) = E[e^0] = E[1] = 1 이므로 어떤 분포든 반드시 그렇다.
-    그리고 t=0 에서의 기울기가 곧 그 분포의 평균이다.
-    """
-    t = np.linspace(-1.5, 1.5, 300)
+    $$
+    M_X(0) = E\big[e^{0 \cdot X}\big] = E[1] = 1
+    $$
 
-    fig, ax = plt.subplots(figsize=(12, 4))
+    이다. 분포가 무엇이든 그렇다. 볼록성도 마찬가지다. 기댓값 안으로 미분을 넣으면
 
-    # 정규분포 N(0,1):  M(t) = exp(t^2/2). 모든 t에서 유한하다.
-    ax.plot(t, np.exp(t**2 / 2), label='N(0, 1)', lw=2)
+    $$
+    M_X''(t) = E\big[X^2 e^{tX}\big] \ge 0
+    $$
 
-    # 지수분포 Exp(1):  M(t) = 1/(1-t).  t < 1 에서만 존재한다.
-    # 꼬리가 지수적으로 감소하는 속도보다 e^{tx} 가 빨리 커지면 적분이 발산하기 때문이다.
-    # 그래서 t >= 1 인 부분을 아예 잘라 내고 그린다.
-    t_exp = t[t < 1]
-    ax.plot(t_exp, 1 / (1 - t_exp), label='Exp(1)', lw=2)
+    인데 $X^2 \ge 0$ 이고 $e^{tX} > 0$ 이므로 피적분함수가 음이 될 수 없다. **적률생성함수는 유한한 곳에서 언제나 아래로 볼록하다.** $X$ 가 상수가 아니면 부등호가 엄격해 진짜로 휜다.
 
-    # 포아송(3):  M(t) = exp(lambda*(e^t - 1))
-    lam = 3
-    ax.plot(t, np.exp(lam * (np.exp(t) - 1)), label='Poisson(3)', lw=2)
+    기울기는 정리 1 이 곧바로 준다. $M_X'(0) = E[X]$ 이므로
 
-    # 베르누이(0.5):  M(t) = 1 - p + p*e^t.  값이 둘뿐이라 가장 단순한 형태다.
-    p = 0.5
-    ax.plot(t, 1 - p + p * np.exp(t), label='Bernoulli(0.5)', lw=2)
+    $$
+    N(0,1) \to 0,
+    \qquad
+    \text{Exp}(1) \to 1,
+    \qquad
+    \text{Poisson}(3) \to 3,
+    \qquad
+    \text{Bernoulli}(0.5) \to 0.5
+    $$
 
-    ax.set_xlabel('t')
-    ax.set_ylabel('M_X(t)')
-    ax.set_title('Moment Generating Functions')
-    ax.set_ylim(0, 15)
-    ax.legend()
-    ax.spines[['top', 'right']].set_visible(False)
-    plt.tight_layout()
-    plt.show()
+    이다. 네 곡선이 한 점에서 만난 뒤 갈라지는 각도가 곧 평균이다. 특히 **$N(0,1)$ 만 평균이 $0$ 이라 $t = 0$ 에서 접선이 수평이고, 볼록하므로 그 점이 곡선의 최솟값이다.** 그림에서 파란 곡선만 $U$ 자로 보이는 이유가 이것이다.
 
-plot_mgf_comparison()
-```
+    **(2) 왼쪽 극한은 원점의 확률질량이다.** $X \ge 0$ 이면 $t \to -\infty$ 일 때 $e^{tX}$ 는 $X = 0$ 에서 $1$, $X > 0$ 에서 $0$ 으로 간다. $0 \le e^{tX} \le 1$ 이므로 유계수렴정리로 극한을 기댓값 안에 넣을 수 있고
 
-![Moment Generating Functions](./img/mgf_174.png)
+    $$
+    \lim_{t \to -\infty} M_X(t) = E\big[\mathbf 1\{X = 0\}\big] = P(X = 0)
+    $$
 
-모든 곡선이 $t = 0$에서 값 1을 지난다는 점에 주목하라. $M_X(0) = E[e^0] = 1$이므로 언제나 그렇다. 그 점에서의 기울기가 평균이다.
+    이다. 셋을 대입하면 $\text{Bernoulli}(0.5) \to 1 - p = 0.5$, $\text{Poisson}(3) \to e^{-3} = 0.0498$, $\text{Exp}(1) \to 0$ 이다. 마지막 것이 $0$ 인 이유는 지수분포가 연속이라 한 점에 질량이 없기 때문이다. $N(0,1)$ 은 다르다. 음의 값을 가질 수 있으므로 $t$ 가 음으로 크면 $e^{tX}$ 가 **왼쪽** 꼬리에서 터져 $M(t) = e^{t^2/2} \to \infty$ 가 된다.
+
+    **$\text{Exp}(1)$ 이 끊기는 까닭.** 정의대로 적분하면
+
+    $$
+    M(t) = \int_0^\infty e^{tx} e^{-x}\,dx = \int_0^\infty e^{-(1-t)x}\,dx
+    $$
+
+    이고 이것은 $1 - t > 0$, 곧 $t < 1$ 일 때만 수렴해 $1/(1-t)$ 를 준다. $t \ge 1$ 에서는 $e^{tx}$ 가 꼬리 $e^{-x}$ 보다 빨리 커져 적분이 발산한다. **꼬리가 지수적으로 줄어드는 속도가 정의역의 오른쪽 끝을 정한다.**
+
+    그래도 정리 2 는 그대로 쓸 수 있다. 정의역 $(-\infty, 1)$ 이 **$0$ 을 품은 열린구간**이기 때문이다. 단서가 걸러 내려는 것은 이런 분포가 아니라 $0$ 의 어느 근방에서도 적률생성함수가 무한한 분포다. 연습문제 5 의 코시분포는 $t \ne 0$ 인 모든 $t$ 에서, 연습문제 6 의 로그정규분포는 모든 $t > 0$ 에서 적분이 발산하며, 그래서 로그정규는 적률이 모두 같은 다른 분포를 곁에 둘 수 있다.
+
+    **(3) 수치적으로.** 네 곡선을 그리고 그림에서 읽을 값들을 따로 찍어 둔다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def plot_mgf_comparison():
+        """분포 넷의 적률생성함수를 한 그림에 겹쳐 그린다.
+
+        네 곡선이 모두 t=0 에서 1을 지난다는 점에 주목하라.
+        M(0) = E[e^0] = E[1] = 1 이므로 어떤 분포든 반드시 그렇다.
+        그리고 t=0 에서의 기울기가 곧 그 분포의 평균이다.
+        """
+        t = np.linspace(-1.5, 1.5, 300)
+
+        fig, ax = plt.subplots(figsize=(12, 4))
+
+        # 정규분포 N(0,1):  M(t) = exp(t^2/2). 모든 t에서 유한하다.
+        ax.plot(t, np.exp(t**2 / 2), label='N(0, 1)', lw=2)
+
+        # 지수분포 Exp(1):  M(t) = 1/(1-t).  t < 1 에서만 존재한다.
+        # 꼬리가 지수적으로 감소하는 속도보다 e^{tx} 가 빨리 커지면 적분이 발산하기 때문이다.
+        # 그래서 t >= 1 인 부분을 아예 잘라 내고 그린다.
+        t_exp = t[t < 1]
+        ax.plot(t_exp, 1 / (1 - t_exp), label='Exp(1)', lw=2)
+
+        # 포아송(3):  M(t) = exp(lambda*(e^t - 1))
+        lam = 3
+        ax.plot(t, np.exp(lam * (np.exp(t) - 1)), label='Poisson(3)', lw=2)
+
+        # 베르누이(0.5):  M(t) = 1 - p + p*e^t.  값이 둘뿐이라 가장 단순한 형태다.
+        p = 0.5
+        ax.plot(t, 1 - p + p * np.exp(t), label='Bernoulli(0.5)', lw=2)
+
+        ax.set_xlabel('t')
+        ax.set_ylabel('M_X(t)')
+        ax.set_title('Moment Generating Functions')
+        ax.set_ylim(0, 15)
+        ax.legend()
+        ax.spines[['top', 'right']].set_visible(False)
+        plt.tight_layout()
+        plt.show()
+
+    plot_mgf_comparison()
+
+    # 그림에서 읽을 수치를 따로 찍어 둔다.
+    mgfs = {
+        "N(0,1)":        lambda t: np.exp(t ** 2 / 2),
+        "Exp(1)":        lambda t: 1 / (1 - t),
+        "Poisson(3)":    lambda t: np.exp(3 * (np.exp(t) - 1)),
+        "Bernoulli(.5)": lambda t: 0.5 + 0.5 * np.exp(t),
+    }
+    h = 1e-5
+    print(f"{'dist':>14}{'M(0)':>9}{'slope(0)':>10}{'M(-1.5)':>10}{'M(0.5)':>10}")
+    for name, M in mgfs.items():
+        slope = (M(h) - M(-h)) / (2 * h)
+        print(f"{name:>14}{M(0.0):>9.4f}{slope:>10.4f}{M(-1.5):>10.4f}{M(0.5):>10.4f}")
+
+    # t -> -무한 에서의 극한. X >= 0 이면 e^{tX} 가 1{X=0} 으로 가므로
+    # 극한이 원점의 확률질량 P(X=0) 이다. N(0,1) 은 음의 값을 가지므로 발산한다.
+    print("\nt -> -inf 에서의 극한  (X >= 0 이면 P(X=0))")
+    atom = {"Exp(1)": 0.0, "Poisson(3)": np.exp(-3), "Bernoulli(.5)": 0.5}
+    for name, a in atom.items():
+        M = mgfs[name]
+        print(f"{name:>14}  M(-5)={M(-5.0):.6f}  M(-50)={M(-50.0):.6f}  P(X=0)={a:.6f}")
+    print(f"{'N(0,1)':>14}  M(-5)={mgfs['N(0,1)'](-5.0):.1f}  -> 발산 (X 가 음수를 가질 수 있다)")
+
+    # 각 곡선이 M = 15 를 넘어 화면 밖으로 나가는 자리
+    print(f"\nM=15 를 넘는 t:  Poisson(3) {np.log(1 + np.log(15) / 3):.4f}"
+          f"   Exp(1) {1 - 1 / 15:.4f}"
+          f"   N(0,1) {np.sqrt(2 * np.log(15)):.4f}   Bernoulli(.5) {np.log(29):.4f}")
+    ```
+
+    출력:
+
+    ```
+              dist     M(0)  slope(0)   M(-1.5)    M(0.5)
+            N(0,1)   1.0000    0.0000    3.0802    1.1331
+            Exp(1)   1.0000    1.0000    0.4000    2.0000
+        Poisson(3)   1.0000    3.0000    0.0972    7.0018
+     Bernoulli(.5)   1.0000    0.5000    0.6116    1.3244
+
+    t -> -inf 에서의 극한  (X >= 0 이면 P(X=0))
+            Exp(1)  M(-5)=0.166667  M(-50)=0.019608  P(X=0)=0.000000
+        Poisson(3)  M(-5)=0.050804  M(-50)=0.049787  P(X=0)=0.049787
+     Bernoulli(.5)  M(-5)=0.503369  M(-50)=0.500000  P(X=0)=0.500000
+            N(0,1)  M(-5)=268337.3  -> 발산 (X 가 음수를 가질 수 있다)
+
+    M=15 를 넘는 t:  Poisson(3) 0.6433   Exp(1) 0.9333   N(0,1) 2.3273   Bernoulli(.5) 3.3673
+    ```
+
+    ![Moment Generating Functions](./img/mgf_174.png)
+
+    네 값이 모두 $M(0) = 1$ 로 나오고 기울기가 $0$, $1$, $3$, $0.5$ 로 (1) 의 평균과 맞는다. 왼쪽 극한도 맞는다. $t = -50$ 에서 $\text{Poisson}(3)$ 은 $0.049787 = e^{-3}$ 에 이미 소수 여섯째 자리까지 닿았고 $\text{Bernoulli}(0.5)$ 는 정확히 $0.5$ 다. $\text{Exp}(1)$ 만 $0.019608 = 1/51$ 로 아직 $0$ 에서 멀다. 극한이 $0$ 인 것은 맞지만 **$1/(1-t)$ 는 $1/\lvert t \rvert$ 꼴로 천천히 내려가기 때문**이며, 지수적으로 내려가는 앞의 둘과 속도가 다르다.
+
+    그림에서 읽을 것은 **왼쪽과 오른쪽에서 순서가 뒤집힌다**는 점이다. 오른쪽 $t = 0.5$ 에서는 $\text{Poisson}(3)$ 이 $7.00$ 으로 가장 높고 $N(0,1)$ 이 $1.13$ 으로 가장 낮다. 왼쪽 $t = -1.5$ 에서는 정반대로 $N(0,1)$ 이 $3.08$ 로 가장 높고 $\text{Poisson}(3)$ 이 $0.097$ 로 가장 낮다. 평균이 클수록 오른쪽에서 빨리 솟지만, 왼쪽에서는 **원점에 질량이 얼마나 있는가**가 높이를 정하기 때문이다.
+
+    화면 밖으로 나가는 자리도 계산과 맞는다. $\text{Poisson}(3)$ 은 $t = 0.6433$ 에서, $\text{Exp}(1)$ 은 $t = 0.9333$ 에서 $M = 15$ 를 넘어 사라진다. $N(0,1)$ 과 $\text{Bernoulli}(0.5)$ 는 각각 $t = 2.33$, $t = 3.37$ 에서야 넘으므로 그림 안에 끝까지 남는다. **$\text{Exp}(1)$ 이 $t = 1$ 직전에서 수직으로 서는 것과 $\text{Poisson}(3)$ 이 그보다 먼저 사라지는 것은 성격이 다르다.** 앞의 것은 정의역의 끝이고, 뒤의 것은 $y$ 축 범위를 $15$ 로 잘랐기 때문일 뿐이다. 포아송의 적률생성함수는 모든 $t$ 에서 유한하다.
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 독립인 정규분포의 합
+**보기 5.** <span class="diff easy" title="쉬움"></span> 독립인 정규분포의 합. $X_1 \sim N(2, 3^2)$ 과 $X_2 \sim N(5, 4^2)$ 이 독립이고 $S = X_1 + X_2$ 다.
+
+**(1)** 적률생성함수를 곱해 $S$ 의 분포를 구하시오. $\operatorname{sd}(S)$ 는 왜 $3 + 4 = 7$ 이 아닌가. $7$ 이 되려면 무엇이 달라져야 하는가.
+
+**(2)** 표본 $10$ 만 개로 $E[S]$ 와 $\operatorname{Var}(S)$ 를 추정하면 이론값 $7$ 과 $25$ 에서 얼마나 벗어나는 것이 정상인가. 몬테카를로 표준오차를 구해 실제 벗어남과 견주시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def verify_sum_of_normals(n_simulations=100_000):
-    """독립인 정규분포의 합이 다시 정규분포임을 모의실험으로 확인한다.
+    **(1) 해석적으로.** 표에서 정규분포의 적률생성함수를 가져와 정리 3 대로 곱한다.
 
-    적률생성함수로 증명한 결과를 눈으로 확인하는 것이다.
-    MGF가 곱해지면 지수의 어깨가 더해지므로
-    평균은 mu1+mu2, 분산은 sigma1^2+sigma2^2 이 된다.
-    """
-    np.random.seed(42)
-    mu1, sigma1 = 2, 3
-    mu2, sigma2 = 5, 4
+    $$
+    M_S(t) = M_{X_1}(t)\,M_{X_2}(t)
+    = \exp\!\left(2t + \frac{9t^2}{2}\right)\exp\!\left(5t + \frac{16t^2}{2}\right)
+    = \exp\!\left(7t + \frac{25t^2}{2}\right)
+    $$
 
-    X1 = np.random.normal(mu1, sigma1, n_simulations)
-    X2 = np.random.normal(mu2, sigma2, n_simulations)
-    S = X1 + X2
+    **지수의 어깨가 그냥 더해진다.** 마지막 식이 $N(7, 25)$ 의 적률생성함수이므로 유일성(정리 2)에 의해 $S \sim N(7, 25)$ 이고 $\operatorname{sd}(S) = 5$ 다. 보기 3 의 일반식에 $\mu_1 = 2$, $\mu_2 = 5$, $\sigma_1 = 3$, $\sigma_2 = 4$ 를 넣은 것과 같다.
 
-    # 분산은 더해지지만 **표준편차는 더해지지 않는다**는 점에 주의하라.
-    # sqrt(3^2 + 4^2) = 5 이지 3 + 4 = 7 이 아니다.
+    **더해지는 것은 분산이지 표준편차가 아니다.** $t^2$ 의 계수에 $\sigma^2$ 이 들어 있기 때문이다. 그래서
 
-    print(f"E[X1+X2] = {S.mean():.4f} (theoretical: {mu1 + mu2})")
-    print(f"Var(X1+X2) = {S.var():.4f} (theoretical: {sigma1**2 + sigma2**2})")
+    $$
+    \operatorname{sd}(S) = \sqrt{3^2 + 4^2} = 5 \ne 3 + 4 = 7
+    $$
 
-verify_sum_of_normals()
-```
+    이고, 이 관계는 $3$–$4$–$5$ 직각삼각형과 같은 모양이다. **표준편차는 피타고라스로 합쳐진다.**
 
-출력:
+    $7$ 이 되려면 독립이 깨져야 한다. 일반적으로
 
-```
-E[X1+X2] = 7.0068 (theoretical: 7)
-Var(X1+X2) = 25.1339 (theoretical: 25)
-```
+    $$
+    \operatorname{Var}(X_1 + X_2) = \sigma_1^2 + \sigma_2^2 + 2\rho\,\sigma_1\sigma_2
+    $$
+
+    이므로 $\rho = 1$ 일 때 $9 + 16 + 24 = 49$, 곧 $\operatorname{sd} = 7$ 이다. **$3 + 4 = 7$ 은 두 변수가 완전히 같이 움직일 때만 맞는 셈이며, 독립일 때 그보다 작은 것이 분산이 주는 이득이다.**
+
+    **(2) 이론값.** 표본 $n = 10^5$ 개로 재면 두 추정값 모두 흔들린다. 평균 쪽은
+
+    $$
+    \operatorname{SE}(\bar S) = \frac{\operatorname{sd}(S)}{\sqrt n} = \frac{5}{\sqrt{100000}} = 0.015811
+    $$
+
+    이고, 정규표본의 표본분산은 $\operatorname{Var}(\hat\sigma^2) \approx 2\sigma^4/n$ 이므로
+
+    $$
+    \operatorname{SE}(\hat\sigma^2) \approx \sigma^2\sqrt{\frac{2}{n}} = 25\sqrt{\frac{2}{100000}} = 0.111803
+    $$
+
+    이다. 평균은 $7 \pm 0.03$, 분산은 $25 \pm 0.22$ 안쪽이면(두 표준오차) 아무 일도 아니다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    def verify_sum_of_normals(n_simulations=100_000):
+        """독립인 정규분포의 합이 다시 정규분포임을 모의실험으로 확인한다.
+
+        적률생성함수로 증명한 결과를 눈으로 확인하는 것이다.
+        MGF가 곱해지면 지수의 어깨가 더해지므로
+        평균은 mu1+mu2, 분산은 sigma1^2+sigma2^2 이 된다.
+        """
+        np.random.seed(42)
+        mu1, sigma1 = 2, 3
+        mu2, sigma2 = 5, 4
+
+        X1 = np.random.normal(mu1, sigma1, n_simulations)
+        X2 = np.random.normal(mu2, sigma2, n_simulations)
+        S = X1 + X2
+
+        # 분산은 더해지지만 **표준편차는 더해지지 않는다**는 점에 주의하라.
+        # sqrt(3^2 + 4^2) = 5 이지 3 + 4 = 7 이 아니다.
+
+        print(f"E[X1+X2] = {S.mean():.4f} (theoretical: {mu1 + mu2})")
+        print(f"Var(X1+X2) = {S.var():.4f} (theoretical: {sigma1**2 + sigma2**2})")
+
+        # 몬테카를로 표준오차. 이만큼은 벗어나는 것이 정상이다.
+        #   평균:  sd(S)/sqrt(n)
+        #   분산:  sd(S)^2 * sqrt(2/n)   (정규표본의 표본분산이 갖는 퍼짐)
+        var_true = sigma1**2 + sigma2**2
+        sd_true = np.sqrt(var_true)
+        se_mean = sd_true / np.sqrt(n_simulations)
+        se_var = var_true * np.sqrt(2 / n_simulations)
+        print(f"  평균의 SE = {se_mean:.6f},  (관측 - 이론)/SE = {(S.mean() - 7) / se_mean:+.3f}")
+        print(f"  분산의 SE = {se_var:.6f},  (관측 - 이론)/SE = {(S.var() - var_true) / se_var:+.3f}")
+
+        # 표준편차는 더해지지 않는다. 더해지려면 상관계수가 1 이어야 한다.
+        print(f"sd(S) = {S.std():.4f} (theoretical: {sd_true})"
+              f"   sigma1 + sigma2 = {sigma1 + sigma2}")
+        print(f"  rho=1 이면 Var = {sigma1**2 + sigma2**2 + 2 * sigma1 * sigma2},"
+              f"  sd = {sigma1 + sigma2}")
+
+    verify_sum_of_normals()
+    ```
+
+    출력:
+
+    ```
+    E[X1+X2] = 7.0068 (theoretical: 7)
+    Var(X1+X2) = 25.1339 (theoretical: 25)
+      평균의 SE = 0.015811,  (관측 - 이론)/SE = +0.432
+      분산의 SE = 0.111803,  (관측 - 이론)/SE = +1.198
+    sd(S) = 5.0134 (theoretical: 5.0)   sigma1 + sigma2 = 7
+      rho=1 이면 Var = 49,  sd = 7
+    ```
+
+    모의값 $7.0068$ 은 이론값 $7$ 에서 $0.43$ 표준오차, $25.1339$ 는 $25$ 에서 $1.20$ 표준오차 떨어져 있다. **둘 다 몬테카를로 오차 안이며 어긋남이 아니다.** 표본표준편차 $5.0134$ 도 이론값 $5$ 와 맞고, $\sigma_1 + \sigma_2 = 7$ 과는 확연히 다르다.
+
+    되풀이를 $10$ 만 번으로 늘려도 분산 쪽이 셋째 자리에서 흔들리는 것은 어쩔 수 없다. 분산의 표준오차가 $n$ 의 제곱근에 반비례하므로, 소수 셋째 자리까지 맞추려면 되풀이를 $10^4$ 배로 늘려야 한다. **모의실험은 유도한 식을 확인해 주지만 그 식을 대신하지는 못한다.**
 
 ## 연습문제
 

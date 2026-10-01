@@ -216,44 +216,150 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 무상관인데 독립이 아닌 경우
+**보기 1.** <span class="diff easy" title="쉬움"></span> 무상관인데 독립이 아닌 경우. 반례 $1$ 의 $X \sim N(0,1)$, $Y = X^2$ 을 모의실험으로 본다. $\operatorname{Cov}(X, Y) = 0$ 은 위에서 이미 보였으므로 한 걸음 더 들어간다.
+
+**(1)** 두 조건부 평균 $E[Y \mid X]$ 와 $E[X \mid Y]$ 를 구하시오. 둘 중 **어느 쪽이 상수인가.** 그 상수인 쪽에서 $\operatorname{Cov}(X,Y) = 0$ 을 다시 끌어내시오.
+
+**(2)** 그래서 이 쌍은 위 위계 $\text{독립} \Rightarrow \text{평균독립} \Rightarrow \text{무상관}$ 의 어디에 놓이는가. 또 모의실험이 준 $\rho = 0.000122$ 는 $0$ 에서 얼마나 떨어진 값인가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
-n = 100_000
-X = np.random.normal(0, 1, n)
-Y = X**2        # X만 알면 Y가 완전히 결정된다. 이보다 강한 종속은 없다.
+    **(1) 한쪽만 상수다.** $Y$ 쪽은 간단하다. $X$ 를 알면 $Y$ 가 한 점으로 정해지므로
 
-# 그런데 상관계수는 0이 나온다.
-# Cov(X, X^2) = E[X^3] - E[X]E[X^2] 인데, X가 0을 중심으로 대칭이면
-# E[X] = 0 이고 E[X^3] = 0 이므로 공분산이 정확히 0이다.
-# 상관은 **직선 관계만** 재기 때문에 포물선 관계를 전혀 보지 못한다.
-corr = np.corrcoef(X, Y)[0, 1]
-print(f"Correlation(X, X²) = {corr:.6f}")
-print(f"But Y is completely determined by X!")
+    $$
+    E[Y \mid X = x] = x^2
+    $$
 
-fig, ax = plt.subplots(figsize=(6, 4))
-ax.scatter(X[:2000], Y[:2000], s=2, alpha=0.3)
-ax.set_xlabel('X')
-ax.set_ylabel('Y = X²')
-ax.set_title(f'Uncorrelated (ρ={corr:.4f}) but Dependent')
-ax.spines[['top', 'right']].set_visible(False)
-plt.show()
-```
+    이고, $x$ 에 따라 변하니 **상수가 아니다.** 곧 $Y$ 는 $X$ 에 평균독립이 아니다.
 
-출력:
+    반대 방향은 다르다. $Y = y > 0$ 을 관측했다면 $X$ 는 $+\sqrt y$ 또는 $-\sqrt y$ 인데, $X$ 의 분포가 $0$ 을 중심으로 대칭이므로 두 쪽의 밀도가 같다. 따라서 둘 중 어느 쪽인지는 **동전 던지기와 같고**
 
-```
-Correlation(X, X²) = 0.000122
-But Y is completely determined by X!
-```
+    $$
+    P(X = +\sqrt y \mid Y = y) = P(X = -\sqrt y \mid Y = y) = \tfrac12,
+    \qquad
+    E[X \mid Y = y] = \tfrac12\sqrt y - \tfrac12\sqrt y = 0
+    $$
 
-![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_153.png)
+    이다. **$X$ 는 $Y$ 에 평균독립이다.** $E[X \mid Y] = 0 = E[X]$ 이기 때문이다.
+
+    이 상수인 쪽에서 공분산이 곧바로 나온다. 탑 성질(전체 기댓값의 법칙)을 $Y$ 로 조건을 걸어 쓰면
+
+    $$
+    E[XY] = E\big[E[XY \mid Y]\big] = E\big[Y\,E[X \mid Y]\big] = E[Y \cdot 0] = 0
+    $$
+
+    이고 $E[X] = 0$ 이므로 $\operatorname{Cov}(X,Y) = 0 - 0 \cdot E[Y] = 0$ 이다. 앞에서 $E[X^3] = 0$ 을 써서 얻은 것과 같은 결론인데, **이번 논증은 $X^3$ 의 적률을 전혀 쓰지 않았다.** 쓴 것은 "조건을 걸면 평균이 $0$" 이라는 사실 하나이고, 그것이 곧 $\text{평균독립} \Rightarrow \text{무상관}$ 의 증명이다.
+
+    **(2) 가운데 칸에 놓인다.** 정리하면 이렇다.
+
+    | 성질 | $(X, Y)$ | $(Y, X)$ |
+    |:---|:---:|:---:|
+    | 독립 | 아니다 | 아니다 |
+    | 평균독립 $E[\cdot \mid \cdot]$ 가 상수 | **$E[X \mid Y]$ 는 상수** | $E[Y \mid X]$ 는 상수가 아니다 |
+    | 무상관 | 그렇다 | 그렇다 |
+
+    **독립이 아니면서 한 방향으로는 평균독립인 쌍**, 곧 위계 표에서 첫째 화살표가 뒤집히지 않음을 보이는 예다. 동시에 **평균독립이 비대칭인 관계**라는 것도 드러난다. $X$ 는 $Y$ 에 평균독립이지만 $Y$ 는 $X$ 에 그렇지 않다. 무상관은 $\operatorname{Cov}(X,Y) = \operatorname{Cov}(Y,X)$ 이므로 언제나 대칭이고, 독립도 대칭이다. **가운데 층만 방향을 탄다.**
+
+    **$0.000122$ 는 $0$ 이다.** 표본상관계수의 퍼짐을 재 보면 안다. $\mu_X = 0$, $\mu_Y = 1$ 이므로
+
+    $$
+    \operatorname{Var}(\widehat{\operatorname{Cov}}) \approx \frac{E\big[X^2(X^2-1)^2\big]}{n}
+    = \frac{15 - 6 + 1}{n} = \frac{10}{n}
+    $$
+
+    이고, 이것을 $\operatorname{sd}(X)\operatorname{sd}(Y) = 1 \times \sqrt2$ 로 나누면
+
+    $$
+    \operatorname{SE}(r) \approx \frac{\sqrt{10/10^5}}{\sqrt2} = 0.00707
+    $$
+
+    이다. $0.000122$ 는 그 $0.017$ 배이니 **소수 여섯째 자리까지 적힌 것이 무색하게 전부 잡음**이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 100_000
+    X = np.random.normal(0, 1, n)
+    Y = X**2        # X만 알면 Y가 완전히 결정된다. 이보다 강한 종속은 없다.
+
+    # 그런데 상관계수는 0이 나온다.
+    # Cov(X, X^2) = E[X^3] - E[X]E[X^2] 인데, X가 0을 중심으로 대칭이면
+    # E[X] = 0 이고 E[X^3] = 0 이므로 공분산이 정확히 0이다.
+    # 상관은 **직선 관계만** 재기 때문에 포물선 관계를 전혀 보지 못한다.
+    corr = np.corrcoef(X, Y)[0, 1]
+    print(f"Correlation(X, X²) = {corr:.6f}")
+    print(f"But Y is completely determined by X!")
+
+    # 표본상관계수도 확률변수다. 0 에서 얼마나 떨어진 값인지 재 둔다.
+    #   sd(표본공분산) ~ sqrt(E[X^2 (X^2-1)^2]/n) = sqrt(10/n)
+    #   sd(X) = 1, sd(Y) = sqrt(2) 로 나누면 r 의 표준오차가 된다.
+    se_r = np.sqrt(10 / n) / np.sqrt(2)
+    print(f"  SE(r) = {se_r:.6f},  r/SE = {corr / se_r:+.3f}")
+
+    # 조건부 평균 둘을 구간별로 잰다. 한쪽은 상수가 아니고 다른 쪽은 상수다.
+    # 구간 [a,b) 에서 잘라 낸 정규분포의 2차 적률.
+    #   E[X^2 | a <= X < b] = 1 + (a*phi(a) - b*phi(b)) / (Phi(b) - Phi(a))
+    def truncated_second_moment(a, b):
+        num = a * stats.norm.pdf(a) - b * stats.norm.pdf(b)
+        return 1 + num / (stats.norm.cdf(b) - stats.norm.cdf(a))
+
+    print(f"\nE[Y | X] 는 상수가 아니다")
+    for lo, hi in [(-2.5, -1.5), (-0.5, 0.5), (1.5, 2.5)]:
+        m = (X >= lo) & (X < hi)
+        print(f"  {lo:+.1f} <= X < {hi:+.1f}:  평균 {Y[m].mean():7.4f}"
+              f"   (이론 {truncated_second_moment(lo, hi):.4f})")
+    print(f"  전체 E[Y] = {Y.mean():.4f}  (이론 1)")
+
+    print(f"\nE[X | Y] 는 상수다  (이론: 0)")
+    for lo, hi in [(0.0, 0.25), (1.0, 2.0), (4.0, 9.0)]:
+        m = (Y >= lo) & (Y < hi)
+        print(f"  {lo:4.2f} <= Y < {hi:4.2f}:  평균 {X[m].mean():+7.4f}"
+              f"   (표본 {m.sum():>6}개, SE {X[m].std() / np.sqrt(m.sum()):.4f})")
+    print(f"  전체 E[X] = {X.mean():+.4f}  (이론 0)")
+
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.scatter(X[:2000], Y[:2000], s=2, alpha=0.3)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y = X²')
+    ax.set_title(f'Uncorrelated (ρ={corr:.4f}) but Dependent')
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Correlation(X, X²) = 0.000122
+    But Y is completely determined by X!
+      SE(r) = 0.007071,  r/SE = +0.017
+
+    E[Y | X] 는 상수가 아니다
+      -2.5 <= X < -1.5:  평균  3.4869   (이론 3.4829)
+      -0.5 <= X < +0.5:  평균  0.0805   (이론 0.0806)
+      +1.5 <= X < +2.5:  평균  3.4845   (이론 3.4829)
+      전체 E[Y] = 1.0018  (이론 1)
+
+    E[X | Y] 는 상수다  (이론: 0)
+      0.00 <= Y < 0.25:  평균 +0.0008   (표본  38249개, SE 0.0015)
+      1.00 <= Y < 2.00:  평균 +0.0018   (표본  16144개, SE 0.0094)
+      4.00 <= Y < 9.00:  평균 -0.0041   (표본   4289개, SE 0.0356)
+      전체 E[X] = +0.0010  (이론 0)
+    ```
+
+    ![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_153.png)
+
+    조건부 평균이 유도와 맞는다. $X$ 로 조건을 걸면 $E[Y \mid X]$ 가 $0.0805$ 에서 $3.4869$ 까지 **마흔 배 넘게** 움직이고, 세 구간 모두 구간별 이론값(잘라 낸 정규분포의 둘째 적률)과 소수 셋째 자리까지 맞는다. 전체 평균 $1.0018$ 과는 아무 관계가 없다. 반면 $Y$ 로 조건을 걸면 $E[X \mid Y]$ 가 $+0.0008$, $+0.0018$, $-0.0041$ 로 셋 다 자기 표준오차 안이다. **한 방향으로는 평평하고 다른 방향으로는 포물선이다.**
+
+    그림이 그 비대칭을 보여 준다. 가로로 훑으면 포물선이 솟아오르지만, 세로로 훑으면 같은 높이에 점이 **좌우 한 쌍씩** 놓여 평균이 가운데로 돌아온다. 상관계수가 재는 것은 뒤쪽이고, 그래서 $0$ 이 나온다.
+
+    눈여겨볼 것이 하나 더 있다. 그림의 점이 $2000$ 개뿐이라 꼬리가 성겨 보이지만, 상관계수는 $100{,}000$ 개 전부로 계산한 값이다. **그림의 표본 수와 수치의 표본 수가 다르다는 점을 흘려 보면 안 된다.**
 
 ### 실제 자료에서: 태양 흑점
 
@@ -263,67 +369,159 @@ $Y = X^2$은 만들어 낸 예다. 실제로 관측한 자료에서도 같은 �
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 무상관이지만 독립이 아닌 실제 자료
+**보기 2.** <span class="diff easy" title="쉬움"></span> 무상관이지만 독립이 아닌 실제 자료. $1700$ 년부터 $2008$ 년까지 기록된 연평균 태양 흑점 수를 쓴다. 올해의 흑점 수와 $3$ 년 뒤의 흑점 수를 짝지으면 상관계수가 $0.040$ 으로 사실상 $0$ 이다.
+
+**(1)** 오늘의 흑점 수를 다섯 구간으로 나누고 각 구간에서 $3$ 년 뒤 평균을 보면 $54.0$, $55.8$, $42.7$, $38.1$, $60.1$ 로 **아래로 볼록한 U자**를 그린다. 전체 평균은 $50.1$ 이다. 이 U자가 설명하는 분산의 몫과 직선이 설명하는 몫을 각각 수로 적어 견주시오.
+
+**(2)** U자가 우연히 생긴 모양이 아님을 보이시오. 그리고 이 쌍이 앞 위계의 어디에 놓이는지 말하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-import statsmodels.api as sm
+??? success "풀이"
 
-# 1700~2008년 연평균 태양 흑점 수. statsmodels에 함께 배포되는 실제 관측 자료다.
-sun = sm.datasets.sunspots.load_pandas().data
-x = sun["SUNACTIVITY"].values
+    **유도할 닫힌 꼴이 없는 자료다.** 태양이 왜 $11$ 년 주기로 도는지에서 $3$ 년 시차의 조건부 평균을 계산해 낼 길은 없다. 그러므로 이 보기의 몫은 **직선으로 재는 것과 구간별 평균으로 재는 것이 얼마나 다른가를 수로 말하는 것**이다.
 
-# 올해 값과 k년 뒤 값을 짝지어 상관계수를 잰다.
-print(f"{'시차(년)':>8}{'상관계수':>10}")
-for lag in (1, 3, 5, 11):
-    print(f"{lag:>8}{np.corrcoef(x[:-lag], x[lag:])[0, 1]:>10.3f}")
+    **(1) 두 몫을 같은 자로 잰다.** 직선이 설명하는 분산의 몫은 $r^2$ 이다.
 
-# 시차 3년에서 상관이 사실상 0이다. 독립일까?
-lag = 3
-today, later = x[:-lag], x[lag:]
+    $$
+    r^2 = 0.040^2 = 0.0016
+    $$
 
-# 오늘의 흑점 수를 5분위로 나누고, 각 구간에서 3년 뒤 평균을 본다.
-edges = np.quantile(today, [0, .2, .4, .6, .8, 1.0])
-print(f"\n{'오늘의 흑점 수':>18}{'3년 뒤 평균':>12}")
-for i in range(5):
-    lo, hi = edges[i], edges[i + 1]
-    m = (today >= lo) & (today <= hi) if i == 4 else (today >= lo) & (today < hi)
-    print(f"{f'{lo:6.1f} ~ {hi:6.1f}':>18}{later[m].mean():12.1f}")
-print(f"{'전체 평균':>18}{later.mean():12.1f}")
-```
+    **$0.16\%$ 다.** 구간별 평균이 설명하는 몫은 **상관비**라 부르고, 구간 평균들이 전체 평균에서 흩어진 정도를 전체 분산으로 나눈 것이다.
 
-출력:
+    $$
+    \eta^2 = \frac{\sum_g w_g\,(\bar y_g - \bar y)^2}{\operatorname{Var}(Y)},
+    \qquad w_g = \tfrac15 \;\text{(5분위라 모두 같다)}
+    $$
 
-```
-   시차(년)      상관계수
-       1     0.824
-       3     0.040
-       5    -0.430
-      11     0.672
+    분자를 직접 계산하면
 
-          오늘의 흑점 수     3년 뒤 평균
-      0.0 ~   12.4        54.0
-     12.4 ~   30.6        55.8
-     30.6 ~   52.2        42.7
-     52.2 ~   82.9        38.1
-     82.9 ~  190.2        60.1
-             전체 평균        50.1
-```
+    $$
+    \tfrac15\big[(54.0-50.1)^2 + (55.8-50.1)^2 + (42.7-50.1)^2 + (38.1-50.1)^2 + (60.1-50.1)^2\big]
+    $$
 
-![태양 흑점: 무상관이지만 독립이 아니다](./img/independence_vs_zero_corr_sunspots.png)
+    이고, 이것을 $\operatorname{Var}(Y)$ 로 나눈 값이 $\eta^2 = 0.0427$ 이다. **$4.27\%$ 로 직선의 $26.9$ 배다.**
 
-시차별 상관계수부터 읽어 보자. 1년 뒤와는 $0.824$로 강하게 붙어 있고, 11년 뒤와는 $0.672$로 다시 붙는다. 한 주기를 돌아 같은 국면으로 돌아왔기 때문이다. 5년 뒤와는 $-0.430$인데, 반주기쯤 지나 극대가 극소와 마주 보는 자리다.
+    두 수의 관계가 중요하다. $\eta^2 \ge r^2$ 은 언제나 성립한다. 직선도 구간별로 보면 계단함수로 근사되는 특별한 꼴이기 때문이다. **$\eta^2$ 이 $r^2$ 보다 훨씬 크다는 것은 관계가 직선이 아니라는 뜻**이고, 여기서는 그 차이가 스물여섯 배다.
 
-문제는 **시차 3년**이다. 상관계수가 $0.040$으로 사실상 0이다. 여기서 "3년 뒤 흑점 수는 올해와 무관하다"고 말하고 싶어지는데, 태양이 11년 주기로 돈다는 것을 아는 이상 그럴 리가 없다.
+    다만 $\eta^2$ 은 구간을 다섯 개로 나누느라 모수를 넷 더 쓴 값이므로, 아무 관계가 없어도 어느 정도는 커진다. 독립일 때의 기댓값이 대략
 
-오른쪽 그림의 붉은 선이 답을 준다. 오늘의 흑점 수로 자료를 다섯 구간으로 나누고 각 구간에서 3년 뒤 평균을 찍은 것인데, **아래로 볼록한 U자**를 그린다. 오늘이 아주 적으면($0 \sim 12$) 3년 뒤는 $54.0$으로 평균보다 높고, 오늘이 중간쯤이면($52 \sim 83$) 3년 뒤는 $38.1$로 평균보다 낮으며, 오늘이 아주 많으면($83$ 이상) 3년 뒤는 $60.1$로 다시 높다.
+    $$
+    E[\eta^2] \approx \frac{k-1}{n-1} = \frac{4}{305} = 0.0131
+    $$
 
-이유는 주기에 있다. 흑점이 아주 적다는 것은 **골짜기 근처**라는 뜻이고 3년 뒤면 올라가는 중이다. 아주 많다는 것은 **봉우리 근처**라는 뜻인데 3년 뒤면 아직 높은 수준이 남아 있다. 중간값은 오르는 길일 수도 내리는 길일 수도 있어서, 두 경우가 섞이며 평균이 낮게 나온다.
+    이니 관측한 $0.0427$ 은 그 $3.3$ 배다. **공짜로 얻어지는 몫보다는 확실히 크다.**
 
-$Y = X^2$에서 본 것과 **정확히 같은 구조**다. 관계가 U자라서 직선으로 요약하면 올라가는 쪽과 내려가는 쪽이 서로 상쇄되고, 상관계수가 0에 가깝게 나온다. 상관계수가 못 보는 것이지 관계가 없는 것이 아니다.
+    **(2) 2차항을 끼워 넣어 본다.** U자가 실재하는지 보려면 $\text{오늘}^2$ 항의 계수가 $0$ 과 다른지 보면 된다. 최소제곱으로
+
+    $$
+    \widehat{\text{3년 뒤}} = 59.99 - 0.5385\,(\text{오늘}) + 0.004138\,(\text{오늘})^2
+    $$
+
+    을 얻는데, 2차항의 $t$ 값이 $3.57$ 이고 $p = 0.00042$ 다. **$U$ 자는 우연이 아니다.** 꼭짓점은 $-b/(2c) = 0.5385/(2 \times 0.004138) = 65.1$ 로, 오늘이 $65$ 개쯤일 때 $3$ 년 뒤가 가장 적다는 뜻이고 구간별 평균의 최솟값 $38.1$ 이 놓인 구간($52 \sim 83$)과 맞는다.
+
+    **1차항의 계수가 음수인데 상관계수는 양수**라는 점도 눈여겨볼 만하다. $-0.5385$ 는 2차항을 함께 넣었을 때의 기울기이고, 2차항 없이 혼자 재면 $r = +0.040$ 이다. 같은 자료에서 "기울기" 가 부호까지 달라지는 것이며, **어떤 모형 안에서 잰 기울기인가를 밝히지 않은 기울기는 뜻이 없다.**
+
+    **위계에서의 자리.** $E[\,\text{3년 뒤} \mid \text{오늘}\,]$ 이 $38.1$ 에서 $60.1$ 까지 움직이므로 평균독립이 아니고, 따라서 독립도 아니다. 그런데 무상관이다. **반례 $1$ 의 $Y = X^2$ 과 정확히 같은 자리**이며, 다른 점은 이것이 만들어 낸 예가 아니라 $309$ 년치 관측이라는 것뿐이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import statsmodels.api as sm
+    from scipy import stats
+
+    # 1700~2008년 연평균 태양 흑점 수. statsmodels에 함께 배포되는 실제 관측 자료다.
+    sun = sm.datasets.sunspots.load_pandas().data
+    x = sun["SUNACTIVITY"].values
+
+    # 올해 값과 k년 뒤 값을 짝지어 상관계수를 잰다.
+    print(f"{'시차(년)':>8}{'상관계수':>10}")
+    for lag in (1, 3, 5, 11):
+        print(f"{lag:>8}{np.corrcoef(x[:-lag], x[lag:])[0, 1]:>10.3f}")
+
+    # 시차 3년에서 상관이 사실상 0이다. 독립일까?
+    lag = 3
+    today, later = x[:-lag], x[lag:]
+
+    # 오늘의 흑점 수를 5분위로 나누고, 각 구간에서 3년 뒤 평균을 본다.
+    edges = np.quantile(today, [0, .2, .4, .6, .8, 1.0])
+    print(f"\n{'오늘의 흑점 수':>18}{'3년 뒤 평균':>12}")
+    cell_means, weights = [], []
+    for i in range(5):
+        lo, hi = edges[i], edges[i + 1]
+        m = (today >= lo) & (today <= hi) if i == 4 else (today >= lo) & (today < hi)
+        cell_means.append(later[m].mean())
+        weights.append(m.mean())
+        print(f"{f'{lo:6.1f} ~ {hi:6.1f}':>18}{later[m].mean():12.1f}")
+    print(f"{'전체 평균':>18}{later.mean():12.1f}")
+
+    # 직선으로 설명되는 몫(r^2)과 5분위 계단함수로 설명되는 몫(상관비 eta^2)을 견준다.
+    r = np.corrcoef(today, later)[0, 1]
+    cell_means, weights = np.array(cell_means), np.array(weights)
+    eta2 = np.sum(weights * (cell_means - later.mean()) ** 2) / later.var()
+    print(f"\n설명되는 분산의 몫")
+    print(f"  직선       r^2  = {r ** 2:.4f}")
+    print(f"  5분위 평균  eta^2 = {eta2:.4f}   ({eta2 / r ** 2:.1f}배)")
+    print(f"  독립일 때 eta^2 의 기댓값 = (k-1)/(n-1) = {4 / (len(today) - 1):.4f}")
+
+    # 2차 다항식을 끼워 넣어 U자가 우연인지 본다.
+    A = np.column_stack([np.ones_like(today), today, today ** 2])
+    beta, *_ = np.linalg.lstsq(A, later, rcond=None)
+    resid = later - A @ beta
+    s2 = (resid ** 2).sum() / (len(today) - 3)
+    se = np.sqrt(s2 * np.diag(np.linalg.inv(A.T @ A)))
+    t_stat = beta[2] / se[2]
+    print(f"\n2차 적합  later = {beta[0]:.2f} {beta[1]:+.4f}*today {beta[2]:+.6f}*today^2")
+    print(f"  2차항의 t = {t_stat:.2f},  p = {2 * (1 - stats.t.cdf(abs(t_stat), len(today) - 3)):.6f}")
+    print(f"  R^2(2차) = {1 - (resid ** 2).sum() / ((later - later.mean()) ** 2).sum():.4f}")
+
+    # 상관계수가 가장 큰 시차를 자료에서 직접 찾는다. 11년 주기의 증거다.
+    acf = [np.corrcoef(x[:-k], x[k:])[0, 1] for k in range(1, 26)]
+    best = 5 + int(np.argmax(acf[4:]))
+    print(f"\n시차 5년 이상에서 상관이 가장 큰 곳: {best}년 (r = {acf[best - 1]:.3f}),"
+          f"  11년 (r = {acf[10]:.3f})")
+    ```
+
+    출력:
+
+    ```
+       시차(년)      상관계수
+           1     0.824
+           3     0.040
+           5    -0.430
+          11     0.672
+
+              오늘의 흑점 수     3년 뒤 평균
+          0.0 ~   12.4        54.0
+         12.4 ~   30.6        55.8
+         30.6 ~   52.2        42.7
+         52.2 ~   82.9        38.1
+         82.9 ~  190.2        60.1
+                 전체 평균        50.1
+
+    설명되는 분산의 몫
+      직선       r^2  = 0.0016
+      5분위 평균  eta^2 = 0.0427   (26.9배)
+      독립일 때 eta^2 의 기댓값 = (k-1)/(n-1) = 0.0131
+
+    2차 적합  later = 59.99 -0.5385*today +0.004138*today^2
+      2차항의 t = 3.57,  p = 0.000420
+      R^2(2차) = 0.0418
+
+    시차 5년 이상에서 상관이 가장 큰 곳: 10년 (r = 0.679),  11년 (r = 0.672)
+    ```
+
+    ![태양 흑점: 무상관이지만 독립이 아니다](./img/independence_vs_zero_corr_sunspots.png)
+
+    시차별 상관계수부터 읽는다. $1$ 년 뒤와는 $0.824$ 로 강하게 붙어 있고 $11$ 년 뒤와는 $0.672$ 로 다시 붙는다. 한 주기를 돌아 같은 국면으로 돌아왔기 때문이다. $5$ 년 뒤와는 $-0.430$ 인데 반주기쯤 지나 극대가 극소와 마주 보는 자리다. 주기가 정말 $11$ 년인지는 자료가 직접 답한다. 시차 $5$ 년 이상에서 상관이 가장 큰 곳이 $10$ 년($0.679$)이고 $11$ 년이 $0.672$ 로 바로 뒤를 따른다. **주기가 $10 \sim 11$ 년 언저리라는 것이 상관계수만으로 나온다.**
+
+    문제는 시차 $3$ 년이다. 상관계수 $0.040$ 만 보고 "$3$ 년 뒤 흑점 수는 올해와 무관하다" 고 말하고 싶어지는데, (1) 과 (2) 의 수가 그것을 막는다. $\eta^2$ 이 $r^2$ 의 $26.9$ 배이고 2차항의 $p$ 가 $0.0004$ 다.
+
+    오른쪽 그림의 붉은 선이 그 U자다. 오늘이 아주 적으면($0 \sim 12$) 3년 뒤는 $54.0$ 으로 평균보다 높고, 중간쯤이면($52 \sim 83$) $38.1$ 로 평균보다 낮으며, 아주 많으면($83$ 이상) $60.1$ 로 다시 높다. 까닭은 주기에 있다. 흑점이 아주 적다는 것은 **골짜기 근처**라는 뜻이고 $3$ 년 뒤면 올라가는 중이다. 아주 많다는 것은 **봉우리 근처**라는 뜻인데 $3$ 년 뒤면 아직 높은 수준이 남아 있다. 중간값은 오르는 길일 수도 내리는 길일 수도 있어 두 경우가 섞이며 평균이 낮게 나온다.
+
+    왼쪽 칸이 그 사정의 출처다. 봉우리와 골짜기가 규칙적으로 되풀이되고, 봉우리의 **높이**는 $1800$ 년 무렵의 $50$ 에서 $1957$ 년의 $190$ 까지 크게 다르다. 이 들쭉날쭉함 때문에 시차 $11$ 년의 상관이 $1$ 이 아니라 $0.672$ 에 그친다. **주기는 선명한데 진폭은 선명하지 않다**는 것을 두 칸이 함께 말해 준다.
 
 !!! warning "시계열에서 특히 조심할 것"
 
@@ -336,47 +534,120 @@ $Y = X^2$에서 본 것과 **정확히 같은 구조**다. 관계가 U자라서 
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 결합분포와 주변분포를 견주어 독립성 확인
+**보기 3.** <span class="diff easy" title="쉬움"></span> 결합분포와 주변분포를 견주어 독립성 확인. 앞과 같은 $X \sim N(0,1)$, $Y = X^2$ 에서 사건 쌍 둘을 골라 곱셈 규칙을 확인한다.
+
+$$
+\text{쌍 1: } A = \{X > 0\},\ B = \{Y > 1\}
+\qquad
+\text{쌍 2: } A' = \{\lvert X \rvert < 0.5\},\ B = \{Y > 1\}
+$$
+
+**(1)** 쌍 $1$ 이 곱셈 규칙을 만족하는 것은 **우연이 아니다.** $P(A)$, $P(B)$, $P(A \cap B)$ 의 참값을 적고, 어떤 성질이 등식을 정확히 만들어 내는지 보이시오.
+
+**(2)** 그런데도 $X$ 와 $Y$ 는 독립이 아니다. 쌍 $1$ 의 통과가 왜 아무것도 보장하지 않는가. 쌍 $2$ 의 두 확률 참값을 적으시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-np.random.seed(42)
-n = 100_000
-X = np.random.normal(0, 1, n)
-Y = X**2
+    **(1) 부호와 크기가 독립이다.** $X$ 의 분포가 $0$ 을 중심으로 대칭이면, 부호 $S = \operatorname{sign}(X)$ 와 크기 $\lvert X \rvert$ 가 **서로 독립**이다. 임의의 $t > 0$ 에 대해
+
+    $$
+    P(S = +1,\; \lvert X \rvert \le t) = P(0 < X \le t)
+    = \tfrac12 P(\lvert X \rvert \le t)
+    = P(S = +1)\,P(\lvert X \rvert \le t)
+    $$
+
+    이기 때문이다. 가운데 등식이 대칭성이고, $P(S = +1) = \tfrac12$ 이다.
+
+    그런데 $Y = X^2 = \lvert X \rvert^2$ 은 **$\lvert X \rvert$ 만의 함수**다. 그러므로 $Y$ 로 만든 어떤 사건도 $S$ 로 만든 어떤 사건과 독립이다. 쌍 $1$ 이 바로 그 꼴이다. $A = \{S = +1\}$ 이고 $B = \{Y > 1\} = \{\lvert X \rvert > 1\}$ 이니
+
+    $$
+    P(A) = \tfrac12,
+    \qquad
+    P(B) = 2\big(1 - \Phi(1)\big) = 0.317310,
+    \qquad
+    P(A \cap B) = 1 - \Phi(1) = 0.158655
+    $$
+
+    이고 $\tfrac12 \times 0.317310 = 0.158655$ 로 **소수 여섯째 자리까지 정확히 같다.** 근사가 아니라 등식이며, 어떤 문턱을 잡아도, 심지어 $Y$ 대신 $\lvert X \rvert$ 의 어떤 함수를 써도 그렇다.
+
+    **(2) 독립은 모든 쌍에 대한 조건이다.** 정의 $1$ 은 $X$ 가 만드는 모든 사건과 $Y$ 가 만드는 모든 사건에 대해 곱셈 규칙을 요구한다. 쌍 하나가 통과했다는 것은 **그 쌍이 통과했다는 것뿐**이고, 방금 본 대로 쌍 $1$ 은 통과하도록 생겨 먹은 쌍이었다. $X$ 가 담고 있는 정보는 부호와 크기 둘인데, 그 가운데 $Y$ 와 무관한 쪽(부호)만 골라 물은 셈이다.
+
+    $Y$ 와 **묶여 있는 쪽**을 고르면 곧바로 깨진다. $A' = \{\lvert X \rvert < 0.5\}$ 는 크기만의 사건이다. $\lvert X \rvert < 0.5$ 이면 $Y = X^2 < 0.25$ 이므로 $Y > 1$ 은 일어날 수 없고
+
+    $$
+    P(A' \cap B) = 0,
+    \qquad
+    P(A')P(B) = \big(2\Phi(0.5) - 1\big) \times 0.317310 = 0.382925 \times 0.317310 = 0.121506
+    $$
+
+    이다. **$0$ 과 $0.1215$ 이니 반례로 충분하고, 반례 하나면 종속이 증명된다.**
+
+    비대칭을 기억해 둘 만하다. **독립을 증명하려면 무한히 많은 쌍을 모두 확인해야 하지만 종속을 증명하는 데는 한 쌍이면 된다.** 상관계수만 보는 것도 같은 구조다. $\rho = 0$ 은 "한 가지 방식으로 재었더니 걸리지 않았다" 는 뜻이지 관계가 없다는 뜻이 아니다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 100_000
+    X = np.random.normal(0, 1, n)
+    Y = X**2
 
 
-def check(name, A, B):
-    """P(A ∩ B) 와 P(A)P(B) 를 비교한다. 다르면 독립이 아니다."""
-    p_joint = np.mean(A & B)
-    p_prod = np.mean(A) * np.mean(B)
-    same = np.isclose(p_joint, p_prod, atol=0.01)
-    print(f"{name}\n  P(A∩B) = {p_joint:.4f},  P(A)P(B) = {p_prod:.4f}"
-          f"  ->  {'같다' if same else '다르다'}")
+    def check(name, A, B, exact_joint, exact_prod):
+        """P(A ∩ B) 와 P(A)P(B) 를 비교한다. 다르면 독립이 아니다."""
+        p_joint = np.mean(A & B)
+        p_prod = np.mean(A) * np.mean(B)
+        same = np.isclose(p_joint, p_prod, atol=0.01)
+        print(f"{name}\n  P(A∩B) = {p_joint:.4f},  P(A)P(B) = {p_prod:.4f}"
+              f"  ->  {'같다' if same else '다르다'}")
+        print(f"  참값     {exact_joint:.6f}            {exact_prod:.6f}")
 
 
-# 사건을 잘못 고르면 종속인데도 통과한다.
-# X>0 과 X^2>1 은 X의 대칭성 때문에 우연히 곱셈 규칙을 만족한다.
-check("A: X>0,      B: Y>1", X > 0, Y > 1)
+    # 사건을 잘못 고르면 종속인데도 통과한다.
+    # X>0 과 X^2>1 은 X가 대칭이라 **정확히** 곱셈 규칙을 만족한다.
+    # 부호 sign(X) 와 크기 |X| 가 독립이고, Y 는 |X| 만의 함수이기 때문이다.
+    p_tail = 1 - stats.norm.cdf(1)                 # P(X > 1)
+    check("A: X>0,      B: Y>1", X > 0, Y > 1,
+          exact_joint=p_tail, exact_prod=0.5 * 2 * p_tail)
 
-# 반례를 제대로 고르면 곧바로 드러난다.
-# |X| < 0.5 이면 Y = X^2 < 0.25 이므로 Y > 1 일 수가 없다. 결합확률이 0이다.
-check("A: |X|<0.5,  B: Y>1", np.abs(X) < 0.5, Y > 1)
-```
+    # 반례를 제대로 고르면 곧바로 드러난다.
+    # |X| < 0.5 이면 Y = X^2 < 0.25 이므로 Y > 1 일 수가 없다. 결합확률이 0이다.
+    p_half = 2 * stats.norm.cdf(0.5) - 1           # P(|X| < 0.5)
+    check("A: |X|<0.5,  B: Y>1", np.abs(X) < 0.5, Y > 1,
+          exact_joint=0.0, exact_prod=p_half * 2 * p_tail)
 
-출력:
+    # 부호와 크기가 정말 독립인지 사건을 바꿔 가며 확인한다.
+    print("\nsign(X) 와 |X| 는 독립이므로 어떤 t 를 잡아도 비가 1 이다")
+    for t in (0.25, 1.0, 2.0):
+        p_joint = np.mean((X > 0) & (np.abs(X) > t))
+        p_prod = np.mean(X > 0) * np.mean(np.abs(X) > t)
+        print(f"  t = {t:>4}:  P(A∩B)/P(A)P(B) = {p_joint / p_prod:.4f}")
+    ```
 
-```
-A: X>0,      B: Y>1
-  P(A∩B) = 0.1599,  P(A)P(B) = 0.1596  ->  같다
-A: |X|<0.5,  B: Y>1
-  P(A∩B) = 0.0000,  P(A)P(B) = 0.1218  ->  다르다
-```
+    출력:
 
-**첫 번째 쌍이 통과했다고 독립인 것이 아니다.** 두 번째 쌍이 곱셈 규칙을 깨뜨리므로 $X$와 $Y$는 독립이 아니다. 반례 하나면 충분하다.
+    ```
+    A: X>0,      B: Y>1
+      P(A∩B) = 0.1599,  P(A)P(B) = 0.1596  ->  같다
+      참값     0.158655            0.158655
+    A: |X|<0.5,  B: Y>1
+      P(A∩B) = 0.0000,  P(A)P(B) = 0.1218  ->  다르다
+      참값     0.000000            0.121506
+
+    sign(X) 와 |X| 는 독립이므로 어떤 t 를 잡아도 비가 1 이다
+      t = 0.25:  P(A∩B)/P(A)P(B) = 0.9978
+      t =  1.0:  P(A∩B)/P(A)P(B) = 1.0024
+      t =  2.0:  P(A∩B)/P(A)P(B) = 0.9962
+    ```
+
+    쌍 $1$ 의 표본값 $0.1599$ 와 $0.1596$ 이 둘 다 참값 $0.158655$ 언저리이고, 쌍 $2$ 는 $0$ 과 $0.1218$ 로 참값 $0$, $0.121506$ 과 맞는다. 마지막 묶음이 (1) 의 유도를 직접 확인한다. 문턱 $t$ 를 $0.25$, $1.0$, $2.0$ 으로 바꿔도 비가 $0.998$, $1.002$, $0.996$ 으로 모두 $1$ 이다. **부호는 크기에 대해 어떤 문턱에서도 독립이다.**
+
+    **첫 번째 쌍이 통과했다고 독립인 것이 아니다.** 두 번째 쌍이 곱셈 규칙을 깨뜨리므로 $X$ 와 $Y$ 는 독립이 아니다. 이 두 줄이 이 보기의 전부이고, 상관계수 하나를 보고 독립을 말하는 일이 왜 위험한지도 같은 이유다.
 
 이것이 상관계수만 보는 것의 위험과 같은 구조다. 상관은 사실상 "한 가지 방식으로만" 관계를 확인하는 것이고, 위의 첫 번째 검사도 한 가지 사건 쌍만 확인한 것이다. 어느 쪽이든 **통과했다는 사실은 아무것도 보장하지 않는다.**
 
@@ -384,60 +655,150 @@ A: |X|<0.5,  B: Y>1
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 결합정규에서는 무상관이 곧 독립
+**보기 4.** <span class="diff easy" title="쉬움"></span> 결합정규에서는 무상관이 곧 독립. 표준 이변량 정규분포에서 $\rho = 0.8$ 인 것과 $\rho = 0$ 인 것을 각각 $10$ 만 쌍 뽑아 나란히 본다.
+
+**(1)** $\rho = 0$ 인 쪽에서 $P(X>1,\, Y>1)$ 의 참값을 적으시오.
+
+**(2)** $\rho$ 가 $0$ 이 아니면 그 값이 얼마나 달라지는가. 문턱을 $1$ 대신 $0$ 으로 두면 닫힌 꼴이 나온다. 회전대칭성을 써서
+
+$$
+P(X > 0,\; Y > 0) = \frac14 + \frac{\arcsin\rho}{2\pi}
+$$
+
+임을 보이고 $\rho = 0.8$ 에서 값을 구하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
-n = 100_000
+    **(1) 곱으로 끝난다.** 정리 $2$ 가 $\rho = 0$ 인 결합정규에서 $X \perp\!\!\!\perp Y$ 를 보장하므로 곱셈 규칙을 그냥 쓸 수 있다.
 
-# 결합정규분포에서는 앞의 반례가 통하지 않는다.
-# 정리 2에 의해 무상관이 곧 독립이기 때문이다.
-# 주의: 두 변수가 **각각** 정규분포인 것으로는 부족하고,
-#       둘의 **결합분포**가 정규여야 한다(연습문제 2).
-rho = 0.8
-cov = [[1, rho], [rho, 1]]
-corr_data = np.random.multivariate_normal([0, 0], cov, n)
+    $$
+    P(X>1,\, Y>1) = P(X>1)\,P(Y>1) = \big(1 - \Phi(1)\big)^2 = 0.158655^2 = 0.025171
+    $$
 
-# rho = 0 인 결합정규. 무상관이면서 동시에 독립이다.
-indep_data = np.random.multivariate_normal([0, 0], [[1, 0], [0, 1]], n)
+    **(2) 쐐기의 각도를 재면 된다.** $Z_1, Z_2$ 를 독립인 표준정규라 하고
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 4))
-for ax, data, title in zip(axes,
-    [corr_data, indep_data],
-    [f'ρ={rho} (correlated, dependent)', 'ρ=0 (uncorrelated, independent)']):
-    ax.scatter(data[:2000, 0], data[:2000, 1], s=2, alpha=0.3)
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_title(title)
-    ax.set_aspect('equal')
-    ax.set_xlim(-4, 4)
-    ax.set_ylim(-4, 4)
-    ax.spines[['top', 'right']].set_visible(False)
-plt.tight_layout()
-plt.show()
+    $$
+    X = Z_1,
+    \qquad
+    Y = \rho Z_1 + \sqrt{1-\rho^2}\,Z_2
+    $$
 
-# 정규분포에서는 무상관이 곧 독립임을 확인한다
-p_joint = np.mean((indep_data[:, 0] > 1) & (indep_data[:, 1] > 1))
-p_prod = np.mean(indep_data[:, 0] > 1) * np.mean(indep_data[:, 1] > 1)
-print(f"Jointly normal, ρ=0:")
-print(f"  P(X>1,Y>1) = {p_joint:.4f}, P(X>1)P(Y>1) = {p_prod:.4f}")
-print(f"  Independent? {np.isclose(p_joint, p_prod, atol=0.005)}")
-```
+    로 두면 $(X, Y)$ 가 상관계수 $\rho$ 인 표준 이변량 정규가 된다. 이때 $(Z_1, Z_2)$ 의 분포는 **원점 둘레로 회전대칭**이므로, 원점을 꼭짓점으로 하는 쐐기의 확률은 그 쐐기의 각도를 $2\pi$ 로 나눈 값이다.
 
-출력:
+    우리가 재려는 영역은 두 반평면의 교집합이다.
 
-```
-Jointly normal, ρ=0:
-  P(X>1,Y>1) = 0.0255, P(X>1)P(Y>1) = 0.0253
-  Independent? True
-```
+    $$
+    \{z_1 > 0\}
+    \quad\text{과}\quad
+    \{\rho z_1 + \sqrt{1-\rho^2}\,z_2 > 0\}
+    $$
 
-![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_198.png)
+    두 경계선의 법선벡터는 $(1, 0)$ 과 $(\rho, \sqrt{1-\rho^2})$ 이고, 둘 다 단위벡터이므로 그 사이각은 $\arccos\rho$ 다. 두 반평면이 겹치는 쐐기의 각도는 $\pi$ 에서 법선 사이각을 뺀 것이므로
+
+    $$
+    P(X>0,\, Y>0) = \frac{\pi - \arccos\rho}{2\pi}
+    $$
+
+    이다. $\arccos\rho = \tfrac\pi2 - \arcsin\rho$ 를 넣어 정리하면
+
+    $$
+    = \frac12 - \frac{\pi/2 - \arcsin\rho}{2\pi}
+    = \frac14 + \frac{\arcsin\rho}{2\pi}
+    $$
+
+    를 얻는다. 끝점에서 확인해 보라. $\rho = 0$ 이면 $\tfrac14$ 로 독립일 때의 값과 같고, $\rho = 1$ 이면 $\tfrac14 + \tfrac14 = \tfrac12$ 로 두 변수가 같아 사분면 둘이 비는 경우와 맞으며, $\rho = -1$ 이면 $0$ 이다.
+
+    $\rho = 0.8$ 을 넣으면 $\arcsin 0.8 = 0.927295$ 이므로
+
+    $$
+    P(X>0,\, Y>0) = \frac14 + \frac{0.927295}{2\pi} = 0.25 + 0.147584 = 0.397584
+    $$
+
+    **독립일 때의 $0.25$ 보다 $1.59$ 배다.** 상관이 있으면 "둘 다 양수" 인 일이 그만큼 잦아진다는 뜻이고, 포트폴리오 둘이 함께 무너질 확률을 생각할 때 이 배수가 바로 문제가 된다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 100_000
+
+    # 결합정규분포에서는 앞의 반례가 통하지 않는다.
+    # 정리 2에 의해 무상관이 곧 독립이기 때문이다.
+    # 주의: 두 변수가 **각각** 정규분포인 것으로는 부족하고,
+    #       둘의 **결합분포**가 정규여야 한다(연습문제 2).
+    rho = 0.8
+    cov = [[1, rho], [rho, 1]]
+    corr_data = np.random.multivariate_normal([0, 0], cov, n)
+
+    # rho = 0 인 결합정규. 무상관이면서 동시에 독립이다.
+    indep_data = np.random.multivariate_normal([0, 0], [[1, 0], [0, 1]], n)
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+    for ax, data, title in zip(axes,
+        [corr_data, indep_data],
+        [f'ρ={rho} (correlated, dependent)', 'ρ=0 (uncorrelated, independent)']):
+        ax.scatter(data[:2000, 0], data[:2000, 1], s=2, alpha=0.3)
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_title(title)
+        ax.set_aspect('equal')
+        ax.set_xlim(-4, 4)
+        ax.set_ylim(-4, 4)
+        ax.spines[['top', 'right']].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+
+    # 정규분포에서는 무상관이 곧 독립임을 확인한다
+    p_joint = np.mean((indep_data[:, 0] > 1) & (indep_data[:, 1] > 1))
+    p_prod = np.mean(indep_data[:, 0] > 1) * np.mean(indep_data[:, 1] > 1)
+    print(f"Jointly normal, ρ=0:")
+    print(f"  P(X>1,Y>1) = {p_joint:.4f}, P(X>1)P(Y>1) = {p_prod:.4f}")
+    print(f"  Independent? {np.isclose(p_joint, p_prod, atol=0.005)}")
+
+    # 참값은 (1 - Phi(1))^2 이다. 표본오차와 견준다.
+    exact = (1 - stats.norm.cdf(1)) ** 2
+    se = np.sqrt(exact * (1 - exact) / n)
+    print(f"  참값 (1-Phi(1))^2 = {exact:.6f},  SE = {se:.6f},"
+          f"  (관측 - 참값)/SE = {(p_joint - exact) / se:+.3f}")
+
+    # rho = 0.8 이면 곱셈 규칙이 깨진다. 문턱을 0 으로 두면 닫힌 꼴이 나온다.
+    #   P(X>0, Y>0) = 1/4 + arcsin(rho)/(2*pi)
+    print("\n문턱 0 에서의 사분면 확률  P(X>0, Y>0)")
+    for name, data, r in [("rho = 0.8", corr_data, rho), ("rho = 0", indep_data, 0.0)]:
+        obs = np.mean((data[:, 0] > 0) & (data[:, 1] > 0))
+        th = 0.25 + np.arcsin(r) / (2 * np.pi)
+        print(f"  {name:>9}:  모의 {obs:.4f}   닫힌 꼴 1/4 + arcsin(rho)/2pi = {th:.6f}"
+              f"   독립이라면 0.25")
+    print(f"  rho=0.8 은 독립일 때의 {(0.25 + np.arcsin(rho) / (2 * np.pi)) / 0.25:.3f} 배")
+    ```
+
+    출력:
+
+    ```
+    Jointly normal, ρ=0:
+      P(X>1,Y>1) = 0.0255, P(X>1)P(Y>1) = 0.0253
+      Independent? True
+      참값 (1-Phi(1))^2 = 0.025171,  SE = 0.000495,  (관측 - 참값)/SE = +0.724
+
+    문턱 0 에서의 사분면 확률  P(X>0, Y>0)
+      rho = 0.8:  모의 0.3957   닫힌 꼴 1/4 + arcsin(rho)/2pi = 0.397584   독립이라면 0.25
+        rho = 0:  모의 0.2499   닫힌 꼴 1/4 + arcsin(rho)/2pi = 0.250000   독립이라면 0.25
+      rho=0.8 은 독립일 때의 1.590 배
+    ```
+
+    ![독립성과 무상관성의 차이](./img/independence_vs_zero_corr_198.png)
+
+    $\rho = 0$ 쪽에서 $P(X>1, Y>1) = 0.0255$ 가 참값 $0.025171$ 에서 $0.72$ 표준오차 떨어져 있고, $P(X>1)P(Y>1) = 0.0253$ 과도 같다. **결합정규에서는 무상관이 곧 독립**임이 수치로 확인된다. 반례 $1$ 의 $(X, X^2)$ 에서는 같은 자리에서 곱셈 규칙이 깨졌다는 것을 떠올려 보라. 달라진 것은 $\rho = 0$ 이라는 사실이 아니라 **결합분포가 정규라는 조건**이다.
+
+    닫힌 꼴도 맞는다. $\rho = 0.8$ 에서 모의값 $0.3957$ 이 유도한 $0.397584$ 와 맞고, $\rho = 0$ 에서는 $0.2499$ 가 $0.25$ 와 맞는다.
+
+    두 그림을 견주면 조건의 뜻이 분명해진다. 왼쪽($\rho = 0.8$)은 $45^\circ$ 로 기울어진 타원이고 오른쪽($\rho = 0$)은 둥근 원이다. **결합정규에서 상관계수는 타원이 얼마나 기울었는가 하나로 모든 의존성을 담는다.** 그래서 그것이 $0$ 이면 남는 의존성이 없고, 그림은 완전한 원이 된다. 반례 $1$ 의 포물선처럼 기울기가 $0$ 인데도 모양이 남아 있는 일은 결합정규에서는 일어날 수 없다.
 
 
 ## 연습문제
