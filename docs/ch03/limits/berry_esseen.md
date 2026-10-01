@@ -22,7 +22,7 @@ $$
 \sup_{x \in \mathbb{R}} \big|F_n(x) - \mathcal N(x)\big| \;\le\; \frac{C\,\rho}{\sigma^3 \sqrt n}
 $$
 
-이다. 여기서 $C$는 보편 상수이며 알려진 최선의 값은 $C \le 0.4748$이다(Shevtsova, 2011).
+이다. 여기서 $C$는 보편 상수다. 동일분포 가정 아래 알려진 가장 작은 값은 $C \le 0.4690$(셰프초바, 2011)이며, 이 페이지의 계산에는 널리 인용되는 $C = 0.4748$을 쓴다. 상수의 역사와 하한은 연습문제 8에 정리해 두었다.
 
 </div>
 
@@ -69,16 +69,16 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포. $X_i \sim \text{Exponential}(1)$이면 $\mu = 1$, $\sigma^2 = 1$, $\rho = 2 + e^{-1} \approx 2.368$이므로
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포. $X_i \sim \text{Exponential}(1)$이면 $\mu = 1$, $\sigma^2 = 1$, $\rho = 12e^{-1} - 2 \approx 2.4146$이므로
 
 </div>
 
 ??? success "풀이"
     $$
-    \text{상한} = \frac{0.4748 \times 2.368}{\sqrt n} \approx \frac{1.124}{\sqrt n}
+    \text{상한} = \frac{0.4748 \times 2.4146}{\sqrt n} \approx \frac{1.146}{\sqrt n}
     $$
 
-    $n = 100$에서 약 $0.112$다. 대칭인 베르누이보다 **두 배 이상** 크다. 지수분포가 오른쪽으로 치우쳐 있기 때문이다.
+    $n = 100$에서 약 $0.115$다. 대칭인 베르누이보다 **두 배 이상** 크다. 지수분포가 오른쪽으로 치우쳐 있기 때문이다.
 
     ```python
     import numpy as np
@@ -106,9 +106,10 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
     print()
 
     # 지수분포(1): 오른쪽으로 크게 치우쳐 정규근사가 훨씬 느리다.
-    # rho/sigma^3 이 2.368 대 0.125 로 19배쯤 크므로 상계도 그만큼 커진다.
+    # rho/sigma^3 이 2.415 대 1 로 2.4배 크므로 상계도 그만큼 커진다.
+    # rho = E|X - 1|^3 = 12/e - 2 (지수분포의 3차 절대적률)
     sigma_e = 1.0
-    rho_e = 2.368
+    rho_e = 12 / np.e - 2
     print("=== Exponential(1) ===")
     for n in [10, 30, 100, 1000]:
         bound = berry_esseen_bound(sigma_e, rho_e, n)
@@ -125,14 +126,14 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
     n =  1000: Berry–Esseen bound = 0.0150
 
     === Exponential(1) ===
-    n =    10: Berry–Esseen bound = 0.3555
-    n =    30: Berry–Esseen bound = 0.2053
-    n =   100: Berry–Esseen bound = 0.1124
-    n =  1000: Berry–Esseen bound = 0.0356
+    n =    10: Berry–Esseen bound = 0.3625
+    n =    30: Berry–Esseen bound = 0.2093
+    n =   100: Berry–Esseen bound = 0.1146
+    n =  1000: Berry–Esseen bound = 0.0363
     ```
 
 !!! note "$n \ge 30$ 관례의 정체"
-    지수분포에서 $n = 30$이면 상한이 $1.124/\sqrt{30} \approx 0.205$다. **누적분포함수 오차가 20%까지 허용된다**는 뜻이며, 신뢰구간을 만들기에는 전혀 안심할 수 없는 수준이다.
+    지수분포에서 $n = 30$이면 상한이 $1.146/\sqrt{30} \approx 0.209$다. **누적분포함수 오차가 20%를 넘게 허용된다**는 뜻이며, 신뢰구간을 만들기에는 전혀 안심할 수 없는 수준이다.
 
     같은 $n = 30$에서 베르누이(0.5)는 상한이 $0.087$이다. 같은 표본크기인데 보장 수준이 두 배 이상 차이 난다.
 
@@ -140,14 +141,19 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 
     다만 이 상한은 **보수적**이다. 실제 오차는 대개 훨씬 작다. 아래 시뮬레이션이 그 여유를 보여 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 실제 오차와 베리-에센 상계 비교 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 실제 오차와 베리-에센 상계 비교
+
+</div>
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
 
 def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
     """실제 오차와 베리-에센 상계를 나란히 그린다.
@@ -161,7 +167,7 @@ def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
 
     fig, axes = plt.subplots(1, len(sample_sizes), figsize=(12, 3),
                              sharey=True)
-    fig.suptitle(f'Berry–Esseen: {dist_name}', fontsize=14)
+    fig.suptitle(f'베리–에센: {dist_name}', fontsize=14)
 
     for ax, n in zip(axes, sample_sizes):
         np.random.seed(42)
@@ -181,15 +187,15 @@ def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
 
         bound = C * rho / (sigma**3 * np.sqrt(n))
 
-        ax.plot(x_grid, actual_error, lw=1.5, label=f'Actual max: {max_error:.4f}')
+        ax.plot(x_grid, actual_error, lw=1.5, label=f'실제 최대오차: {max_error:.4f}')
         ax.axhline(bound, color='r', linestyle='--', lw=1.5,
-                   label=f'BE bound: {bound:.4f}')
+                   label=f'베리–에센 상한: {bound:.4f}')
         ax.set_title(f'n = {n}')
         ax.set_xlabel('x')
         ax.legend(fontsize=8)
         ax.spines[['top', 'right']].set_visible(False)
 
-    axes[0].set_ylabel('|Fₙ(x) − Φ(x)|')
+    axes[0].set_ylabel(r'$|F_n(x) - \Phi(x)|$')
     plt.tight_layout()
     plt.show()
 
@@ -197,28 +203,31 @@ def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
 berry_esseen_visualization(
     'Exponential(1)',
     lambda size: np.random.exponential(1, size),
-    mu=1.0, sigma=1.0, rho=2.368,
+    mu=1.0, sigma=1.0, rho=12 / np.e - 2,      # E|X-1|^3 = 12/e - 2
     sample_sizes=[5, 30, 100]
 )
 ```
 
 ![베리–에센 정리](./img/berry_esseen_101.png)
 
-</div>
-
 세 분포의 상한을 $n$의 함수로 겹쳐 그리면 순서가 분명해진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 분포별 정규근사의 수렴 속도 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 분포별 정규근사의 수렴 속도
+
+</div>
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
+
 def convergence_rate_comparison():
     """분포마다 정규근사가 얼마나 빨리 좋아지는지 비교한다."""
-    C = 0.4748           # 베리-에센 상수의 현재까지 알려진 최선의 값(셰바초바 2011)
+    C = 0.4748           # 이 쪽의 계산에 쓰는 값. 가장 날카로운 것은 0.4690 이다(정리 1)
     ns = np.arange(5, 501)
 
     # 각 분포에 필요한 것은 두 값뿐이다.
@@ -228,7 +237,7 @@ def convergence_rate_comparison():
     distributions = {
         'Bernoulli(0.5)': {'sigma': np.sqrt(0.25), 'rho': 0.125},
         'Uniform(0,1)':   {'sigma': 1/np.sqrt(12), 'rho': 1/32},
-        'Exponential(1)': {'sigma': 1.0,            'rho': 2.368},
+        'Exponential(1)': {'sigma': 1.0,            'rho': 12/np.e - 2},
     }
 
     fig, ax = plt.subplots(figsize=(12, 4))
@@ -239,9 +248,9 @@ def convergence_rate_comparison():
         bounds = C * params['rho'] / (params['sigma']**3 * np.sqrt(ns))
         ax.plot(ns, bounds, label=name, lw=2)
 
-    ax.set_xlabel('Sample Size n')
-    ax.set_ylabel('Berry–Esseen Bound')
-    ax.set_title('Convergence Rate to Normal: Berry–Esseen Bounds')
+    ax.set_xlabel('표본크기 $n$')
+    ax.set_ylabel('베리–에센 상한')
+    ax.set_title('정규분포로의 수렴 속도 — 베리–에센 상한')
     ax.legend()
     ax.spines[['top', 'right']].set_visible(False)
     plt.tight_layout()
@@ -250,9 +259,7 @@ def convergence_rate_comparison():
 convergence_rate_comparison()
 ```
 
-![Convergence Rate to Normal: Berry–Esseen Bounds](./img/berry_esseen_187.png)
-
-</div>
+![정규분포로의 수렴 속도 — 베리–에센 상한](./img/berry_esseen_187.png)
 
 ## 3. 두 정리의 역할 분담
 
@@ -314,7 +321,7 @@ convergence_rate_comparison()
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-$\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분포를 생각하자. $n = 30$에서의 베리–에센 한계를 같은 표본 크기의 Bernoulli(0.5)와 비교하라. 어느 분포가 정규분포로 더 빨리 수렴하며 그 이유는 무엇인가?
+$\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] = 12e^{-1} - 2 \approx 2.4146$인 Exponential(1) 분포를 생각하자. $n = 30$에서의 베리–에센 한계를 같은 표본 크기의 Bernoulli(0.5)와 비교하라. 어느 분포가 정규분포로 더 빨리 수렴하며 그 이유는 무엇인가?
 
 </div>
 
@@ -325,13 +332,13 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
     \text{Bound} = \frac{0.4748 \times 0.125}{0.5^3 \sqrt{30}} = \frac{0.05935}{0.125 \times 5.477} = \frac{0.05935}{0.6847} \approx 0.0867
     $$
 
-    **Exponential(1):** $\rho = 2.368$, $\sigma = 1$이므로
+    **Exponential(1):** $\rho = 2.4146$, $\sigma = 1$이므로
 
     $$
-    \text{Bound} = \frac{0.4748 \times 2.368}{1^3 \sqrt{30}} = \frac{1.1243}{5.477} \approx 0.2053
+    \text{Bound} = \frac{0.4748 \times 2.4146}{1^3 \sqrt{30}} = \frac{1.1464}{5.477} \approx 0.2093
     $$
 
-    Bernoulli(0.5)의 한계(0.087)가 Exponential(1)의 한계(0.205)보다 훨씬 작다. Bernoulli(0.5)는 대칭이라($\rho/\sigma^3$이 작아서) 더 빨리 수렴하는 반면, Exponential(1)은 오른쪽으로 치우쳐 있고 $\sigma^3$에 비해 3차 절대적률이 크다.
+    Bernoulli(0.5)의 한계(0.087)가 Exponential(1)의 한계(0.209)보다 훨씬 작다. Bernoulli(0.5)는 대칭이라($\rho/\sigma^3$이 작아서) 더 빨리 수렴하는 반면, Exponential(1)은 오른쪽으로 치우쳐 있고 $\sigma^3$에 비해 3차 절대적률이 크다.
 
 <div class="drillbox" markdown>
 
@@ -533,7 +540,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
     출력:
 
     ```
-    p   rho/sigma^3       n=100      n=1000     n=10000    n=100000
+          p   rho/sigma^3       n=100      n=1000     n=10000    n=100000
         0.5        1.0000      0.3979      0.3988      0.3989      0.3989
         0.2        1.7000      0.3498      0.3518      0.3520      0.3520
        0.05        4.1524      0.2794      0.2858      0.2865      0.2865
@@ -560,7 +567,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
-베리–에센 한계는 **모든 $x$에 같은 값**을 준다. 그런데 clt 문서 연습문제 $9$에서 보았듯 근사의 질은 중심과 꼬리에서 크게 다르다. **비균등 베리–에센 한계**를 진술하고 확인하라.
+베리–에센 한계는 **모든 $x$에 같은 값**을 준다. 그런데 clt 문서 연습문제 $8$에서 보았듯 근사의 질은 중심과 꼬리에서 크게 다르다. **비균등 베리–에센 한계**를 진술하고 확인하라.
 
 </div>
 
@@ -591,7 +598,7 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
     출력:
 
     ```
-    n         균등 오차       |z|<1 구간        |z|>2 구간       (1+|z|)^3 가중 최대
+          n         균등 오차       |z|<1 구간        |z|>2 구간       (1+|z|)^3 가중 최대
         100      0.039795       0.039795      0.00369665              0.220041
        1000      0.012613       0.012613      0.00165320              0.067135
       10000      0.003989       0.003989      0.00052121              0.020971
@@ -719,6 +726,6 @@ $\mu = 1$, $\sigma = 1$, $\rho = E[|X-1|^3] \approx 2.368$인 Exponential(1) 분
 
 실무적으로 남길 것은 하나다. **$n \ge 30$은 대칭에 가까운 분포를 전제한 관례다.** 지수분포에서는 $n = 30$의 보장이 20% 수준에 그친다. 자료가 치우쳐 있다면 표본크기 규칙보다 그림(14장 Q-Q 그림)이나 붓스트랩(17장)이 낫다.
 
-이것으로 3.5절의 이론이 끝났다. 남은 두 페이지는 이 정리들이 **눈으로 어떻게 보이는지**, 그리고 **가정이 깨지면 어떻게 되는지**를 다룬다.
+이것으로 3.5절의 이론이 끝났다. 남은 한 페이지는 **가정이 깨지면 어떻게 되는지**를 다룬다.
 
 이어지는 **도박사의 역설**은 평균이 무한한 분포에서 큰수의 법칙이 실패하는 모습을 다룬다. 정리의 가정이 장식이 아니라는 것을 그 사례가 분명히 한다.

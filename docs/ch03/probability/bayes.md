@@ -30,7 +30,7 @@ $$
 
 </div>
 
-??? proof "유도"
+??? proof "증명"
 
     조건부확률의 정의에서
 
@@ -38,7 +38,9 @@ $$
     P(A \mid B) = \frac{P(A \cap B)}{P(B)} = \frac{P(B \mid A)\,P(A)}{P(B)}
     $$
 
-    이다. 가운데 등식이 앞 절의 곱셈 규칙이다. 분모는 전확률의 법칙으로 전개하는 것이 보통이다. $\square$
+    이다. 가운데 등식이 앞 절의 곱셈 규칙 $P(A \cap B) = P(B \mid A)\,P(A)$다. $\square$
+
+분모는 전확률의 법칙으로 전개하는 것이 보통이다.
 
 $$
 P(B) = P(B \mid A)\,P(A) + P(B \mid A^c)\,P(A^c)
@@ -69,6 +71,24 @@ $$
 이다.
 
 </div>
+
+??? proof "증명"
+
+    정리 1을 $A = A_i$, $B = B$에 그대로 적용하면
+
+    $$
+    P(A_i \mid B) = \frac{P(B \mid A_i)\,P(A_i)}{P(B)}
+    $$
+
+    이다. 남은 일은 분모를 전개하는 것뿐이다. $A_1, \ldots, A_n$이 $\Omega$의 분할이므로 앞 절 정리 3의 전확률의 법칙이
+
+    $$
+    P(B) = \sum_{j=1}^{n} P(B \mid A_j)\,P(A_j)
+    $$
+
+    를 주고, 이를 대입하면 주장한 식이 된다. $\square$
+
+    $n = 2$이고 $A_1 = A$, $A_2 = A^c$이면 정리 1 바로 뒤의 계산용 형태로 돌아온다.
 
 분모는 $i$에 의존하지 않는다. 그래서 실무에서는 분자만 계산해 두고 마지막에 합이 1이 되도록 나누는 방식을 흔히 쓴다. **사후확률 $\propto$ 가능도 $\times$ 사전확률**이라는 표현이 이 뜻이다.
 
@@ -106,9 +126,39 @@ $$
 
 ### 정리 3. 기저율의 지배 — 사후확률은 사전확률에 붙들린다 { .thm }
 
-사건 $A$가 드물면($P(A)$가 작으면) $P(B \mid A)$가 아무리 커도 $P(A \mid B)$는 작게 남는다. 분자 $P(B \mid A)P(A)$가 작은 $P(A)$에 묶여 있는 반면, 분모의 거짓양성 항 $P(B \mid A^c)P(A^c)$는 큰 $P(A^c)$를 갖기 때문이다.
+사건 $A$가 드물면($P(A)$가 작으면) $P(B \mid A)$가 아무리 커도 $P(A \mid B)$는 작게 남는다. 분자 $P(B \mid A)P(A)$가 작은 $P(A)$에 묶여 있는 반면, 분모의 거짓양성 항 $P(B \mid A^c)P(A^c)$는 큰 $P(A^c)$를 갖기 때문이다. 거짓양성률 $\beta = P(B \mid A^c) > 0$을 고정하고 $\varepsilon = P(A)$라 하면
+
+$$
+P(A \mid B) \;\leq\; \frac{\varepsilon}{\varepsilon + \beta\,(1 - \varepsilon)}
+$$
+
+이므로, 가능도 $P(B \mid A)$를 $1$까지 끌어올려도 사후확률은 이 상한을 넘지 못한다. 등호는 $P(B \mid A) = 1$일 때 성립하므로 이 상한은 더 줄일 수 없다.
 
 </div>
+
+??? proof "증명"
+
+    $\alpha = P(B \mid A)$, $\beta = P(B \mid A^c)$, $\varepsilon = P(A)$라 두면 정리 1의 계산용 형태가
+
+    $$
+    P(A \mid B) = \frac{\alpha \varepsilon}{\alpha \varepsilon + \beta (1 - \varepsilon)}
+    $$
+
+    이다. 분자와 분모를 $\alpha \varepsilon$으로 나누면
+
+    $$
+    P(A \mid B) = \frac{1}{1 + \dfrac{\beta (1 - \varepsilon)}{\alpha \varepsilon}}
+    $$
+
+    이고, 분모의 분수는 $\alpha$에 대해 감소하므로 $P(A \mid B)$는 $\alpha$에 대해 증가한다. 따라서 $\alpha \leq 1$에서 최댓값은 $\alpha = 1$에서 나오고
+
+    $$
+    P(A \mid B) \;\leq\; \frac{\varepsilon}{\varepsilon + \beta (1 - \varepsilon)}
+    $$
+
+    이다. 오른쪽 변은 $\alpha$에 전혀 의존하지 않으며 $\varepsilon \to 0$일 때 $0$으로 간다. $\square$
+
+    **읽는 법.** $\beta$가 고정된 채 $\varepsilon$이 작아지면 분모에서 $\varepsilon$이 무시할 만해지므로 상한이 $\varepsilon / \beta$ 정도로 줄어든다. 아래 보기 3에서 $\varepsilon = 0.01$, $\beta = 0.1$이므로 상한이 $0.01/(0.01 + 0.1 \times 0.99) \approx 0.0917$이고, 실제 값 $0.0876$이 그 아래에 있다. 이 상한은 $\alpha = 1$에서 달성되므로, 민감도가 완벽한 검사를 가져와도 $8.8\%$가 $9.2\%$로 오르는 것이 전부다. **사후확률을 끌어올리는 길은 가능도를 키우는 것($\alpha \to 1$)이 아니라 $\varepsilon$을 키우거나 $\beta$를 줄이는 것뿐이다.**
 
 <div class="exbox" markdown>
 
@@ -149,9 +199,11 @@ $$
 
 유병률이 달라지면 사후확률이 어떻게 움직이는지 그려 보자.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 베이즈 정리로 사후확률 구하기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 베이즈 정리로 사후확률 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -164,7 +216,7 @@ def bayes_theorem(prior, likelihood, evidence):
     posterior = (likelihood * prior) / evidence
     return posterior
 
-# 의학 진단 예제
+# 의학 진단 보기
 prior_disease = 0.01         # 사전확률 P(질병) = 유병률 1%
 sensitivity = 0.95           # 가능도 P(양성|질병) = 95%
 specificity = 0.90           # 특이도 P(음성|건강) = 90%
@@ -189,11 +241,11 @@ P(disease | positive) = 0.0876
 Despite a 95% sensitive test, only 8.8% of positives truly have the disease.
 ```
 
+<div class="exbox" markdown>
+
+**보기 5.** <span class="diff easy" title="쉬움"></span> 유병률이 사후확률을 지배한다
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 유병률이 사후확률을 지배한다 { .eg }
 
 ```python
 import numpy as np
@@ -237,8 +289,6 @@ bayes_update_visualization()
 
 곡선이 처음에 가파르게 오르는 것에 주목하라. 사후확률이 50%를 넘으려면 유병률이 상당히 높아야 한다. 검사 성능을 올리는 것보다 **검사 대상을 좁히는 것**이 효과적인 이유다.
 
-</div>
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -265,7 +315,7 @@ bayes_update_visualization()
 ??? success "풀이"
     (a) $P(D) = 0.02 \cdot 0.50 + 0.03 \cdot 0.30 + 0.05 \cdot 0.20 = 0.010 + 0.009 + 0.010 = 0.029$이다. 전체 불량률은 2.9%다.
 
-    (b) $P(M_3 \mid D) = (0.05 \cdot 0.20)/0.029 = 0.010/0.029 \approx 0.345$이다. 3번 기계는 생산량의 20%만 만들지만 불량의 34.5%를 낸다. 불량률이 평균의 2.5배이기 때문이다.
+    (b) $P(M_3 \mid D) = (0.05 \cdot 0.20)/0.029 = 0.010/0.029 \approx 0.345$이다. 3번 기계는 생산량의 20%만 만들지만 불량의 34.5%를 낸다. 불량률 5%가 전체 평균 2.9%의 약 1.7배이고, $0.345/0.20 = 1.72$가 정확히 그 비이기 때문이다.
 
 <div class="drillbox" markdown>
 
@@ -361,7 +411,7 @@ bayes_update_visualization()
 
     이다. 유죄일 확률이 약 50%에 불과하여 "합리적 의심을 넘어"와는 거리가 멀다. 100만분의 1이라는 수치는 사전승산을 무시한다. 사전승산을 반영하고 나면 사후확률은 훨씬 약해진다. 확신에 찬 평결에 이르려면 DNA 일치 외의 추가 증거가 필요하다.
 
-    이는 희귀질환 예제와 같은 오류 유형이다. 기저율을 잊는 것이다. 현실의 배심원과 정책결정자가 이 오류를 일상적으로 범한다. 베이즈 틀이 그 교정을 제공한다.
+    이는 희귀질환 보기와 같은 오류 유형이다. 기저율을 잊는 것이다. 현실의 배심원과 정책결정자가 이 오류를 일상적으로 범한다. 베이즈 틀이 그 교정을 제공한다.
 
 <div class="drillbox" markdown>
 
@@ -436,6 +486,7 @@ bayes_update_visualization()
     | $1$–$3$ | 언급할 가치 없음 |
     | $3$–$10$ | 상당함 |
     | $10$–$30$ | 강함 |
+    | $30$–$100$ | 매우 강함 |
     | $> 100$ | 결정적 |
 
     **한 가지 중요한 성질.** 베이즈 인자는 **사전확률과 무관하다.** 자료가 두 가설을 얼마나 차별하는지만 잰다. 그래서 서로 다른 사전을 가진 사람들이 **같은 베이즈 인자에 동의할 수 있고**, 각자 자기 사전에 그것을 곱하면 된다. 이것이 승산 형태의 실무적 가치다. $\square$
@@ -625,7 +676,7 @@ bayes_update_visualization()
 
     **연속 모수에서 달라지는 것.**
 
-    - **가설이 비가산 무한개다.** 각 $\theta$의 확률이 $0$이므로 앞 절 공리 문서 연습문제 10에서 예고한 문제가 실제로 나타난다. 확률질량 대신 **밀도**로 다루어야 한다.
+    - **가설이 비가산 무한개다.** 각 $\theta$의 확률이 $0$이므로 앞 절 공리 문서 연습문제 11에서 예고한 문제가 실제로 나타난다. 확률질량 대신 **밀도**로 다루어야 한다.
     - **"사후확률"이 아니라 "사후분포"를 얻는다.** 하나의 수가 아니라 함수 전체가 답이므로, 요약하려면 사후 평균·중앙값·최빈값(MAP) 중 하나를 골라야 한다.
     - **구간 추정이 자연스럽다.** 위 출력의 $95\%$ 구간은 **신용구간**이며, "$\theta$가 이 구간에 있을 확률이 $0.95$"라고 직접 말할 수 있다. 빈도주의 신뢰구간과 해석이 다른 지점이다(1장 모수 대 통계량 문서 연습문제 4).
 
