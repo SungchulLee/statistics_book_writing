@@ -141,135 +141,616 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 균등분포의 밀도함수와 분포함수
+**보기 1.** <span class="diff easy" title="쉬움"></span> 밀도를 적분하면 분포함수가 된다. $X \sim \text{Uniform}(a, b)$의 밀도와 분포함수를 한 축에 겹쳐 그린다.
+
+**(1)** 밀도 $f$를 적분해 $F$를 구하시오. $f$는 $x = a$와 $x = b$에서 뛰는데 $F$는 그 자리에서 어떠한가.
+
+**(2)** 그림에서 두 곡선이 꼭 한 번 만난다. 만나는 자리를 $a$, $b$로 나타내고, 만나지 않는 경우가 있다면 언제인지 밝히시오. $a = 2$, $b = 8$에서 수치로 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-a, b = 2, 8
-# 구간 바깥까지 그려야 "밖에서는 0"이라는 사실이 그림에 드러난다
-x = np.linspace(a - 1, b + 1, 300)
+    **(1) 해석적으로.** 먼저 밀도의 높이부터 따진다. 구간 안에서 상수 $h$라는 것만 요구하면 전체 넓이가
 
-fig, ax = plt.subplots(figsize=(12, 3))
-# scale은 폭 b-a 이지 b가 아니다(loc=2, scale=6 이 [2, 8]을 뜻한다).
-# PDF는 구간 안에서 1/(b-a) = 1/6 로 평평하다.
-# CDF는 그 평평한 값을 적분한 것이므로 **기울기 1/6 의 직선**이 된다.
-ax.plot(x, stats.uniform(loc=a, scale=b-a).pdf(x), label='PDF', lw=2)
-ax.plot(x, stats.uniform(loc=a, scale=b-a).cdf(x), label='CDF', lw=2)
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    $$
+    \int_a^b h\,dx = h\,(b-a) = 1
+    $$
 
-![균등분포](./img/uniform_125.png)
+    이어야 하므로 $h = 1/(b-a)$로 **정해져 버린다.** 균등분포에 고를 여지가 없는 까닭이다.
+
+    분포함수는 이 밀도를 왼쪽부터 쌓은 것이다. $F(x) = \int_{-\infty}^{x} f(t)\,dt$에서 세 구간으로 나뉜다. $x < a$이면 피적분함수가 내내 $0$이라 $F(x) = 0$이고, $a \le x \le b$이면
+
+    $$
+    F(x) = \int_a^x \frac{dt}{b-a} = \frac{x-a}{b-a}
+    $$
+
+    이며, $x > b$이면 $[a, b]$ 전체를 다 쌓았으므로 $F(x) = 1$이다. 정리하면
+
+    $$
+    F(x) = \begin{cases} 0 & x < a \\[2pt] \dfrac{x-a}{b-a} & a \le x \le b \\[4pt] 1 & x > b\end{cases}
+    $$
+
+    이고, 이것이 위 **CDF** 절에 적어 둔 식이다. **상수를 적분했으므로 기울기 $1/(b-a)$인 직선**이 나온다.
+
+    끝점에서 무슨 일이 일어나는지가 이 보기의 요점이다. 가운데 조각에 $x = a$를 넣으면 $0$, $x = b$를 넣으면 $1$이라 양옆 조각과 값이 이어진다. **$f$는 $a$와 $b$에서 $0$과 $1/(b-a)$ 사이를 뛰는데 $F$는 어디서도 뛰지 않는다.** 적분이 뜀을 한 단계 매끄럽게 만든 것이다. 그렇다고 완전히 매끄러워지지는 않아서, $F$의 기울기는 $a$에서 $0 \to 1/(b-a)$로, $b$에서 $1/(b-a) \to 0$으로 튄다. 곧 $F$는 **연속이지만 $a$와 $b$에서 미분불가**이고, 그 두 점을 뺀 곳에서 $F' = f$다.
+
+    $F$가 연속이라는 데서 바로 따라 나오는 것이 있다.
+
+    $$
+    P(X = a) = F(a) - F(a^-) = 0
+    $$
+
+    이므로 정의 1의 $a \le x \le b$를 $a < x < b$로 바꿔 적어도 **같은 분포**다. 연속확률변수에서 끝점을 넣고 빼는 일에 신경 쓸 필요가 없는 이유가 이것이다.
+
+    한 가지 더. $h = 1/(b-a)$는 **밀도이지 확률이 아니므로 $1$을 넘을 수 있다.** $b - a < 1$이면 그렇게 된다. 다음 보기의 $\text{Uniform}(0,1)$이 높이가 꼭 $1$인 경계 경우다.
+
+    **(2) 해석적으로.** 두 곡선이 만나려면 $a \le x \le b$에서
+
+    $$
+    \frac{1}{b-a} = \frac{x-a}{b-a}
+    $$
+
+    이어야 하고, 양변에 $b-a$를 곱하면 $1 = x - a$, 곧
+
+    $$
+    x^{*} = a + 1
+    $$
+
+    이다. **오른쪽 끝점 $b$가 식에서 사라졌다.** 구간을 아무리 늘려도 교차점은 왼쪽 끝에서 $1$만큼 떨어진 곳에 붙박여 있다.
+
+    단, 그 자리가 구간 안에 있어야 한다. $a + 1 \le b$, 곧 $b - a \ge 1$일 때만 교차가 생긴다. 폭이 $1$보다 좁으면 밀도의 높이가 $1/(b-a) > 1$인데 $F$는 어디서도 $1$을 넘지 못하므로 두 곡선은 **아예 만나지 않는다.** 폭이 정확히 $1$이면 오른쪽 끝점 $x = b$에서 스치듯 한 번 만난다.
+
+    여기서 못박아 둘 것이 있다. **밀도와 확률은 단위가 다르다.** $f$의 단위는 $1/[x]$이고 $F$는 무차원이라 둘을 견주는 것은 원래 말이 되지 않는다. $x^{*} = a + 1$의 그 "$1$"도 순수한 수가 아니라 **길이 $1$**이어서, $x$를 다른 단위로 재면 교차점이 옮겨 간다. 두 곡선을 한 축에 그린 것은 모양을 나란히 보여 주려는 편의일 뿐이고, **교차점에 통계적인 뜻은 없다.** 유도가 깨끗하다고 해서 의미까지 생기지는 않는다는 예로 기억해 둘 만하다.
+
+    **(3) 수치적으로.** 먼저 그림이다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    a, b = 2, 8
+    # 구간 바깥까지 그려야 "밖에서는 0"이라는 사실이 그림에 드러난다
+    x = np.linspace(a - 1, b + 1, 300)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # scale은 폭 b-a 이지 b가 아니다(loc=2, scale=6 이 [2, 8]을 뜻한다).
+    # PDF는 구간 안에서 1/(b-a) = 1/6 로 평평하다.
+    # CDF는 그 평평한 값을 적분한 것이므로 **기울기 1/6 의 직선**이 된다.
+    ax.plot(x, stats.uniform(loc=a, scale=b-a).pdf(x), label='PDF', lw=2)
+    ax.plot(x, stats.uniform(loc=a, scale=b-a).cdf(x), label='CDF', lw=2)
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![균등분포](./img/uniform_125.png)
+
+    손으로 한 적분을 `quad`로 맞춰 보고, 교차점도 격자로 찾아 본다.
+
+    ```python
+    import numpy as np
+    from scipy import integrate, stats
+
+    a, b = 2, 8
+    rv = stats.uniform(loc=a, scale=b - a)
+
+    # 밀도를 직접 적어 두고 quad 로 적분한다. 닫힌 꼴 (x-a)/(b-a) 와 맞는지 본다.
+    f = lambda t: 1.0 / (b - a) if a <= t <= b else 0.0
+
+    total, _ = integrate.quad(f, a - 5, b + 5, points=[a, b])
+    print(f"전체 적분 = {total:.12f}")
+
+    print(f"{'x':>5}{'quad 적분':>14}{'(x-a)/(b-a)':>14}{'scipy cdf':>14}")
+    for x in (1.0, 2.0, 3.0, 5.0, 8.0, 9.0):
+        num, _ = integrate.quad(f, a - 5, x, points=[a, b], limit=200)
+        closed = min(max((x - a) / (b - a), 0.0), 1.0)
+        print(f"{x:>5.1f}{num:>14.10f}{closed:>14.10f}{rv.cdf(x):>14.10f}")
+
+    # 유도대로라면 두 곡선은 x = a + 1 에서 만난다. b 와는 무관하다.
+    xs = np.linspace(a, b, 600_001)
+    gap = np.abs(rv.pdf(xs) - rv.cdf(xs))
+    print(f"격자가 찾은 교차점 = {xs[gap.argmin()]:.6f},  유도한 a + 1 = {a + 1}")
+    print(f"  그 자리에서 PDF = {rv.pdf(a + 1):.10f},  CDF = {rv.cdf(a + 1):.10f}")
+
+    # F 는 끝점에서 이어지지만 기울기는 튄다.
+    eps = 1e-9
+    for x in (a, b):
+        left = (rv.cdf(x) - rv.cdf(x - eps)) / eps
+        right = (rv.cdf(x + eps) - rv.cdf(x)) / eps
+        print(f"  x = {x}: F 는 연속(F = {rv.cdf(x):.4f}) 이지만 기울기가 "
+              f"{left:.4f} -> {right:.4f} 로 튄다")
+    ```
+
+    출력:
+
+    ```
+    전체 적분 = 1.000000000000
+        x       quad 적분   (x-a)/(b-a)     scipy cdf
+      1.0  0.0000000000  0.0000000000  0.0000000000
+      2.0  0.0000000000  0.0000000000  0.0000000000
+      3.0  0.1666666667  0.1666666667  0.1666666667
+      5.0  0.5000000000  0.5000000000  0.5000000000
+      8.0  1.0000000000  1.0000000000  1.0000000000
+      9.0  1.0000000000  1.0000000000  1.0000000000
+    격자가 찾은 교차점 = 3.000000,  유도한 a + 1 = 3
+      그 자리에서 PDF = 0.1666666667,  CDF = 0.1666666667
+      x = 2: F 는 연속(F = 0.0000) 이지만 기울기가 0.0000 -> 0.1667 로 튄다
+      x = 8: F 는 연속(F = 1.0000) 이지만 기울기가 0.1667 -> 0.0000 로 튄다
+    ```
+
+    **셋 다 유도와 맞는다.** `quad`가 낸 적분이 열째 자리까지 $(x-a)/(b-a)$와 같고, 격자가 찾은 교차점은 $3.000000$으로 $a + 1 = 3$이며, 그 자리의 두 값이 모두 $1/6 = 0.1666666667$이다. 끝점에서는 $F$ 값이 이어지는데 기울기만 $0$과 $1/6$ 사이를 오간다.
+
+    그림을 다시 보면 유도한 것이 그대로 보인다. 파란 PDF는 $[2, 8]$ 밖에서 바닥에 붙어 있다가 두 끝점에서 수직으로 뛰고, 주황 CDF는 그 뜀을 전혀 따라 하지 않은 채 $x=2$에서 꺾여 올라가 $x=8$에서 다시 꺾이며 멈춘다. 두 선이 만나는 곳은 $x = 3$ 한 군데다.
+
+    **그림이 가리는 것도 있다.** 수직으로 보이는 PDF의 양쪽 변은 사실 **선이 아니다.** 밀도는 $x = 2$에서 $0$ 아니면 $1/6$이지 그 사이 값을 갖지 않는데, `plot`이 격자점 $300$개를 선분으로 이어 붙이느라 없는 변을 그려 넣은 것이다. 같은 이유로 꼭짓점이 살짝 둥글게 보이기도 한다. 불연속함수를 꺾은선으로 그릴 때면 늘 따라붙는 군더더기다.
 
 ### 구간에 따른 비교
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 구간에 따른 균등 밀도함수
+**보기 2.** <span class="diff easy" title="쉬움"></span> 폭 하나가 모든 것을 정한다. 구간이 서로 다른 세 균등분포 $\text{Uniform}(0,1)$, $\text{Uniform}(-2,2)$, $\text{Uniform}(1,5)$의 밀도를 겹쳐 그린다.
+
+**(1)** 밀도의 높이 $h$와 표준편차 $\sigma$가 둘 다 폭 $w = b - a$ 하나로 정해짐을 보이고, 곱 $h\sigma$가 구간과 무관한 상수임을 구하시오.
+
+**(2)** 그 상수를 세 분포에서 수치로 확인하고, 그림에서 높이가 같은 두 곡선이 서로 무엇이 다른지 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-# 구간 [a, b]를 셋 준비한다. 폭이 1, 4, 4로 다르다.
-intervals = [(0, 1), (-2, 2), (1, 5)]
-x = np.linspace(-3, 6, 500)
+    **(1) 해석적으로.** 보기 1에서 보았듯 전체 넓이가 $1$이라는 요구가 높이를 정한다.
 
-fig, ax = plt.subplots(figsize=(12, 4))
-for a, b in intervals:
-    # scipy의 균등분포 매개변수화에 주의하라.
-    # loc = 시작점 a, scale = **폭** (b가 아니라 b - a) 이다.
-    # stats.uniform(1, 5) 는 [1, 5]가 아니라 [1, 6]을 뜻한다.
-    rv = stats.uniform(loc=a, scale=b - a)
-    # 밀도는 구간 안에서 1/(b-a)로 일정하고 밖에서는 0이다.
-    # 폭이 좁을수록 높이가 높아진다. 전체 넓이가 언제나 1이어야 하기 때문이다.
-    ax.plot(x, rv.pdf(x), label=f'Uniform({a}, {b})')
-ax.set_xlabel('x')
-ax.set_ylabel('f(x)')
-ax.set_title('Uniform Distribution — PDF')
-ax.legend()
-ax.set_ylim(bottom=-0.05)
-plt.tight_layout()
-plt.show()
-```
+    $$
+    h = \frac{1}{w}, \qquad w = b - a
+    $$
 
-![Uniform Distribution — PDF](./img/uniform_pdf_26.png)
+    **폭이 넓어지면 높이는 그에 반비례해 낮아진다.** 직사각형의 넓이가 언제나 $1$이어야 하기 때문이고, 그림에서 폭 $1$인 곡선만 혼자 높이 솟아 있는 까닭이 이것이다.
 
-전체 넓이가 1이어야 하므로 구간이 넓어질수록 직사각형은 (더 넓어지는 대신) 더 낮아진다.
+    표준편차도 폭 하나로 정해진다. 위 **성질** 절에서 $\operatorname{Var}(X) = w^2/12$였으므로
+
+    $$
+    \sigma = \frac{w}{2\sqrt3}
+    $$
+
+    이다. 둘을 곱하면 $w$가 지워진다.
+
+    $$
+    h\,\sigma = \frac{1}{w}\cdot\frac{w}{2\sqrt3} = \frac{1}{2\sqrt3} = \frac{\sqrt3}{6} \approx 0.288675
+    $$
+
+    **어떤 구간의 균등분포든 이 값이 같다.** 같은 식을 분산 쪽으로 돌려 적으면
+
+    $$
+    \operatorname{Var}(X) = \frac{1}{12\,h^2}
+    $$
+
+    이라, 밀도의 높이만 보면 분산을 알 수 있다는 뜻이 된다.
+
+    이 상수가 뜻을 갖는 까닭은 **무차원**이기 때문이다. $h$의 단위는 $1/[x]$이고 $\sigma$의 단위는 $[x]$라 곱하면 단위가 사라진다. 그래서 $x$를 센티미터로 재든 인치로 재든 $0.288675$가 나온다. 보기 1의 교차점 $a+1$이 단위를 바꾸면 옮겨 가 버리던 것과 정반대이고, **이쪽이 분포의 모양에 관한 진짜 정보**다.
+
+    모양에 관한 정보이므로 다른 분포와 견줄 수 있다. 봉우리 높이에 표준편차를 곱한 같은 양을 재 보면
+
+    $$
+    \text{균등} \frac{1}{2\sqrt3} \approx 0.2887, \qquad
+    \text{정규 } \varphi(0)\,\sigma = \frac{1}{\sqrt{2\pi}} \approx 0.3989, \qquad
+    \text{지수 } \lambda \cdot \frac1\lambda = 1
+    $$
+
+    이다. **같은 표준편차를 갖도록 맞춰 놓으면 균등분포의 봉우리가 셋 중 가장 낮다.** 균등분포는 질량을 가운데 쌓지 않고 끝까지 고르게 펴 놓으므로, 같은 퍼짐을 내는 데 높이가 덜 필요하다. 반대로 지수분포는 $0$ 근처에 몰아 두어 봉우리가 가장 높다.
+
+    **(2) 수치적으로.** 먼저 그림이다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    # 구간 [a, b]를 셋 준비한다. 폭이 1, 4, 4로 다르다.
+    intervals = [(0, 1), (-2, 2), (1, 5)]
+    x = np.linspace(-3, 6, 500)
+
+    fig, ax = plt.subplots(figsize=(12, 4))
+    for a, b in intervals:
+        # scipy의 균등분포 매개변수화에 주의하라.
+        # loc = 시작점 a, scale = **폭** (b가 아니라 b - a) 이다.
+        # stats.uniform(1, 5) 는 [1, 5]가 아니라 [1, 6]을 뜻한다.
+        rv = stats.uniform(loc=a, scale=b - a)
+        # 밀도는 구간 안에서 1/(b-a)로 일정하고 밖에서는 0이다.
+        # 폭이 좁을수록 높이가 높아진다. 전체 넓이가 언제나 1이어야 하기 때문이다.
+        ax.plot(x, rv.pdf(x), label=f'Uniform({a}, {b})')
+    ax.set_xlabel('x')
+    ax.set_ylabel('f(x)')
+    ax.set_title('Uniform Distribution — PDF')
+    ax.legend()
+    ax.set_ylim(bottom=-0.05)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![Uniform Distribution — PDF](./img/uniform_pdf_26.png)
+
+    평균과 분산을 손으로 한 적분 대신 `quad`로 다시 구해 닫힌 꼴과 맞추고, $h\sigma$도 재 본다.
+
+    ```python
+    import numpy as np
+    from scipy import integrate, stats
+
+    print(f"{'구간':>10}{'폭 w':>7}{'높이 h':>9}{'quad 평균':>12}{'quad 분산':>12}"
+          f"{'w^2/12':>10}{'SD':>10}{'h*SD':>12}")
+    for a, b in [(0, 1), (-2, 2), (1, 5)]:
+        w = b - a
+        h = 1 / w
+        rv = stats.uniform(loc=a, scale=w)
+        # 평균과 분산을 손이 아니라 quad 로 다시 구해 닫힌 꼴과 맞춘다.
+        m1, _ = integrate.quad(lambda x: x * h, a, b)
+        m2, _ = integrate.quad(lambda x: x * x * h, a, b)
+        var = m2 - m1 ** 2
+        sd = np.sqrt(var)
+        print(f"{f'[{a}, {b}]':>10}{w:>7}{h:>9.4f}{m1:>12.6f}{var:>12.6f}"
+              f"{w ** 2 / 12:>10.6f}{sd:>10.6f}{h * sd:>12.8f}")
+
+    print(f"유도한 h*SD = 1/(2 sqrt(3)) = {1 / (2 * np.sqrt(3)):.8f}")
+
+    # 같은 양을 다른 분포에서도 재 본다. 봉우리 높이 x 표준편차는 무차원이다.
+    print()
+    print("봉우리 높이 x 표준편차 (무차원)")
+    print(f"  균등     : {1 / (2 * np.sqrt(3)):.6f}")
+    nrm = stats.norm(loc=0, scale=2.5)
+    print(f"  정규     : {nrm.pdf(0) * nrm.std():.6f}   (= 1/sqrt(2 pi) = {1 / np.sqrt(2 * np.pi):.6f})")
+    exp = stats.expon(scale=1 / 3)
+    print(f"  지수     : {exp.pdf(0) * exp.std():.6f}   (= 1)")
+    ```
+
+    출력:
+
+    ```
+            구간    폭 w     높이 h     quad 평균     quad 분산    w^2/12        SD        h*SD
+        [0, 1]      1   1.0000    0.500000    0.083333  0.083333  0.288675  0.28867513
+       [-2, 2]      4   0.2500    0.000000    1.333333  1.333333  1.154701  0.28867513
+        [1, 5]      4   0.2500    3.000000    1.333333  1.333333  1.154701  0.28867513
+    유도한 h*SD = 1/(2 sqrt(3)) = 0.28867513
+
+    봉우리 높이 x 표준편차 (무차원)
+      균등     : 0.288675
+      정규     : 0.398942   (= 1/sqrt(2 pi) = 0.398942)
+      지수     : 1.000000   (= 1)
+    ```
+
+    **맞는다.** `quad`가 낸 분산이 세 경우 모두 $w^2/12$와 소수 여섯째 자리까지 같고, $h\sigma$는 구간이 어디든 $0.28867513$으로 똑같다. 정규와 지수에서 잰 값도 각각 $1/\sqrt{2\pi}$와 $1$에 맞는다. 정규분포에 척도 $2.5$를, 지수분포에 $\lambda = 3$을 넣었는데도 그 수들이 결과에서 사라지는 것이 무차원 양의 성질이다.
+
+    **그림에서 읽히는 것.** 세로축을 보면 $\text{Uniform}(0,1)$만 높이 $1.0$이고 나머지 둘은 $0.25$다. 폭이 $1$에서 $4$로 네 배가 되자 높이가 정확히 사분의 일이 되었고, 분산은 $0.0833$에서 $1.3333$으로 $16$배, 곧 폭의 제곱배가 되었다.
+
+    **높이가 같은 두 곡선은 위치만 다르다.** $\text{Uniform}(-2,2)$와 $\text{Uniform}(1,5)$는 폭이 둘 다 $4$라 높이도 분산도 $1.3333$으로 같고, 평균만 $0$과 $3$으로 다르다. 뒤엣것은 앞엣것을 오른쪽으로 $3$만큼 민 것일 뿐이다. 표준 균등분포 절의 $X = a + (b-a)U$에서 $a$는 밀거나 당기기만 하고 $b-a$만 모양을 바꾼다는 사실이 그림에 그대로 나와 있다. **위치는 중점이, 퍼짐은 폭만이 결정한다.**
+
+    눈으로 재기 어려운 것도 있다. $[1,2]$ 구간에서는 주황과 초록이 똑같은 높이로 겹쳐 있어 **선 하나만 보인다.** 겹친 자리에서 어느 곡선이 밑에 깔렸는지 그림만으로는 알 수 없고, 범례의 순서를 알아야 한다.
 
 ### 표본추출과 히스토그램
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 균등 표본의 히스토그램
+**보기 3.** <span class="diff easy" title="쉬움"></span> 들쭉날쭉함도 크기가 정해져 있다. $\text{Uniform}(2, 8)$에서 $n = 50{,}000$개를 뽑아 $K = 60$칸짜리 히스토그램을 그리면 막대 높이가 고르지 않다.
+
+**(1)** 칸 하나에 들어가는 도수의 평균과 표준편차를 유도하고, 이를 `density=True`의 밀도 눈금으로 옮겨 막대 높이가 들어야 할 $\pm 2\mathrm{SE}$ 띠를 구하시오.
+
+**(2)** 씨앗 42의 표본이 그 띠에 들어가는지 확인하시오. 칸들이 흩어진 정도가 유도한 $\mathrm{SE}$와 맞는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-a, b = 2, 8
-samples = stats.uniform(loc=a, scale=b-a).rvs(50_000)
+    **(1) 해석적으로.** 칸의 폭을 $w$라 하면, 표본 하나가 어떤 한 칸에 떨어질 확률은 밀도가 상수이므로 길이의 비 그대로다.
 
-fig, ax = plt.subplots(figsize=(12, 3))
-# 5만 개를 60개 구간에 넣으면 구간마다 평균 833개다.
-# 막대 높이가 들쭉날쭉한 것은 잡음이며, 표본을 늘리면 평평해진다.
-ax.hist(samples, bins=60, density=True, alpha=0.7, label='Samples')
-x = np.linspace(a - 1, b + 1, 300)
-ax.plot(x, stats.uniform(loc=a, scale=b-a).pdf(x), 'r-', lw=2, label='PDF')
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    $$
+    p = \frac{w}{b-a} = \frac{1}{K}
+    $$
 
-![균등분포](./img/uniform_143.png)
+    표본이 서로 독립이므로 그 칸의 도수 $N_j$는 **성공확률 $p$인 베르누이 시행을 $n$번 되풀이한 것의 성공 횟수**, 곧
+
+    $$
+    N_j \sim \text{Binomial}(n,\, p), \qquad
+    E[N_j] = np, \qquad \mathrm{SD}(N_j) = \sqrt{np(1-p)}
+    $$
+
+    이다. $n = 50{,}000$, $K = 60$을 넣으면
+
+    $$
+    E[N_j] = \frac{50{,}000}{60} = 833.33, \qquad
+    \mathrm{SD}(N_j) = \sqrt{50{,}000 \cdot \tfrac{1}{60}\cdot\tfrac{59}{60}} = 28.63
+    $$
+
+    이다. 상대적인 크기로는
+
+    $$
+    \frac{\mathrm{SD}(N_j)}{E[N_j]} = \sqrt{\frac{1-p}{np}} \approx \frac{1}{\sqrt{np}} = \frac{1}{\sqrt{833.33}} = 3.44\%
+    $$
+
+    다. **칸을 잘게 쪼갤수록 이 값이 커진다.** $K$를 두 배로 하면 칸마다 들어오는 수가 반으로 줄어 상대변동이 $\sqrt2$배가 된다. 히스토그램의 칸 수를 정하는 일이 늘 맞바꿈인 까닭이 이것이다. 칸이 성기면 모양을 뭉개고, 촘촘하면 잡음이 커진다.
+
+    `density=True`는 막대 높이를 도수가 아니라
+
+    $$
+    \hat f_j = \frac{N_j}{n\,w}
+    $$
+
+    로 그린다. 상수 $nw$로 나눈 것뿐이므로 평균과 표준편차가 그대로 따라온다.
+
+    $$
+    E[\hat f_j] = \frac{np}{nw} = \frac{p}{w} = \frac{1}{b-a} = \frac16, \qquad
+    \mathrm{SD}(\hat f_j) = \frac{\sqrt{np(1-p)}}{nw} = \frac{28.63}{5{,}000} = 0.005725
+    $$
+
+    **기댓값이 참 밀도와 정확히 같다.** 히스토그램이 밀도의 불편추정이라는 말이 이 한 줄이다. 따라서 막대가 들어야 할 띠는
+
+    $$
+    \frac16 \pm 2(0.005725) = [\,0.1552,\ 0.1781\,]
+    $$
+
+    이고, $60$칸 가운데 이 띠를 벗어나는 칸은 $60 \times 0.0455 \approx 2.7$개쯤이 **정상**이다. 하나도 안 벗어나는 쪽이 오히려 이상하다.
+
+    **(2) 수치적으로.** 먼저 그림이다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(42)
+    a, b = 2, 8
+    samples = stats.uniform(loc=a, scale=b-a).rvs(50_000)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # 5만 개를 60개 구간에 넣으면 구간마다 평균 833개다.
+    # 막대 높이가 들쭉날쭉한 것은 잡음이며, 표본을 늘리면 평평해진다.
+    ax.hist(samples, bins=60, density=True, alpha=0.7, label='Samples')
+    x = np.linspace(a - 1, b + 1, 300)
+    ax.plot(x, stats.uniform(loc=a, scale=b-a).pdf(x), 'r-', lw=2, label='PDF')
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![균등분포](./img/uniform_143.png)
+
+    같은 표본의 도수를 꺼내어 유도한 값과 맞춰 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    a, b, n, K = 2, 8, 50_000, 60
+    samples = stats.uniform(loc=a, scale=b - a).rvs(n)
+
+    # hist 는 칸을 [min, max] 에 걸치므로 칸폭이 (b-a)/K 와 아주 조금 다르다.
+    counts, edges = np.histogram(samples, bins=K)
+    w = edges[1] - edges[0]
+    print(f"표본 최소 {samples.min():.6f}  최대 {samples.max():.6f}")
+    print(f"칸폭 {w:.8f}  (이론 (b-a)/K = {(b - a) / K:.8f})")
+
+    # 칸 하나의 도수는 Binomial(n, 1/K) 다.
+    p = 1 / K
+    E, SE = n * p, np.sqrt(n * p * (1 - p))
+    print(f"\n도수 눈금:  기대 np = {E:.4f},  SE = sqrt(np(1-p)) = {SE:.4f},"
+          f"  상대변동 {SE / E:.4%}")
+    print(f"  실제 도수 최소 {counts.min()}  최대 {counts.max()}"
+          f"   (z = {(counts.min() - E) / SE:+.3f}, {(counts.max() - E) / SE:+.3f})")
+
+    # density=True 는 높이를 count/(n*w) 로 그린다.
+    dens, SEd, h = counts / (n * w), SE / (n * w), 1 / (b - a)
+    print(f"\n밀도 눈금:  참 높이 1/(b-a) = {h:.6f},  SE = {SEd:.6f}")
+    print(f"  ±2SE 띠 = [{h - 2 * SEd:.6f}, {h + 2 * SEd:.6f}]")
+    print(f"  실제 막대 최소 {dens.min():.6f}  최대 {dens.max():.6f}")
+
+    outside = int((np.abs((counts - E) / SE) > 2).sum())
+    print(f"  띠 밖 칸 수 = {outside} / {K}   (기대 {K * 2 * stats.norm.sf(2):.2f})")
+
+    # 칸 사이 흩어짐도 재 본다. 이 씨앗은 이론보다 얌전하다.
+    chi2 = ((counts - E) ** 2 / E).sum()
+    print(f"\n칸 도수의 표준편차 = {counts.std(ddof=1):.2f}  (이론 SE {SE:.2f})")
+    print(f"카이제곱 적합도 = {chi2:.2f},  자유도 {K - 1},  위꼬리 p = {stats.chi2.sf(chi2, K - 1):.3f}")
+
+    # 씨앗 하나로는 알 수 없으니 되풀이해 본다.
+    rng = np.random.default_rng(0)
+    sds = [np.histogram(rng.uniform(a, b, n), bins=K)[0].std(ddof=1) for _ in range(400)]
+    sds = np.array(sds)
+    print(f"400번 되풀이: 칸 도수 표준편차의 평균 = {sds.mean():.2f}  (이론 {SE:.2f})")
+    print(f"              {counts.std(ddof=1):.2f} 보다 작게 나온 비율 = {np.mean(sds < counts.std(ddof=1)):.3f}")
+    ```
+
+    출력:
+
+    ```
+    표본 최소 2.000033  최대 7.999833
+    칸폭 0.09999666  (이론 (b-a)/K = 0.10000000)
+
+    도수 눈금:  기대 np = 833.3333,  SE = sqrt(np(1-p)) = 28.6259,  상대변동 3.4351%
+      실제 도수 최소 775  최대 897   (z = -2.038, +2.224)
+
+    밀도 눈금:  참 높이 1/(b-a) = 0.166667,  SE = 0.005725
+      ±2SE 띠 = [0.155216, 0.178117]
+      실제 막대 최소 0.155005  최대 0.179406
+      띠 밖 칸 수 = 2 / 60   (기대 2.73)
+
+    칸 도수의 표준편차 = 24.48  (이론 SE 28.63)
+    카이제곱 적합도 = 42.41,  자유도 59,  위꼬리 p = 0.949
+    400번 되풀이: 칸 도수 표준편차의 평균 = 28.98  (이론 28.63)
+                  24.48 보다 작게 나온 비율 = 0.040
+    ```
+
+    **띠는 유도한 대로다.** 밀도 눈금의 평균이 $0.166667$로 참 밀도 $1/6$과 같고, $\mathrm{SE}$는 $0.005725$로 손으로 구한 값과 같다. 막대가 $0.155005$에서 $0.179406$ 사이에 있어 $\pm2\mathrm{SE}$ 띠 $[0.155216,\ 0.178117]$를 **양쪽으로 각각 한 칸씩 벗어났다.** 벗어난 칸이 $2$개이고 기대치가 $2.73$개이니 이것이 바로 정상이다. 도수로 보면 가장 적은 칸이 $775$개($z = -2.04$), 가장 많은 칸이 $897$개($z = +2.22$)다.
+
+    **그런데 한 군데 어긋난다.** 칸 도수들이 흩어진 정도가 $24.48$로, 유도한 $\mathrm{SE} = 28.63$보다 눈에 띄게 **작다.** 카이제곱 적합도가 $42.41$인데 자유도는 $59$이니 같은 방향이다. 둘 중 하나가 틀렸는지 따져 볼 일이다.
+
+    따져 보면 유도가 틀린 것이 아니다. 카이제곱의 위꼬리 $p = 0.949$는 "너무 잘 맞아서 이상한가"를 재는 쪽인데, $\chi^2_{59}$의 표준편차가 $\sqrt{2\cdot59} = 10.9$이므로 $42.41$은 평균에서 $1.5$ 표준편차 떨어진 자리일 뿐이다. 되풀이해 보면 확실해진다. 다른 씨앗으로 $400$번 다시 뽑으니 흩어짐의 평균이 $28.98$로 이론값 $28.63$에 맞고, $24.48$ 아래로 내려간 경우는 $4\%$뿐이었다. **씨앗 $42$의 표본이 우연히 유난히 고른 쪽 $4\%$에 들었던 것이다.** 모의실험 하나를 보고 이론이 틀렸다고 말하면 안 되는 이유가 여기 있다.
+
+    칸폭이 $0.1$이 아니라 $0.09999666$인 것도 눈여겨볼 만하다. `hist(samples, bins=60)`은 칸을 $[2, 8]$이 아니라 **표본의 최솟값과 최댓값 사이**에 걸치기 때문이다. 차이가 $3\times10^{-5}$ 수준이라 그림으로는 보이지 않지만, 밀도 높이를 손으로 다시 계산할 때는 이 $w$를 써야 숫자가 맞는다.
+
+    **그림이 가리는 것.** 막대가 들쭉날쭉한 것은 눈에 잘 띄지만, 그 들쭉날쭉함이 **얼마만큼이어야 정상인지는 그림에 적혀 있지 않다.** 세로축이 $0$부터 시작하는 탓에 $3.4\%$의 변동이 실제보다 작아 보이기도 한다. 막대 높이에 $\pm2\mathrm{SE}$ 띠를 함께 그려 넣지 않으면 "고르다/고르지 않다"는 인상은 눈금을 어떻게 잡았느냐에 좌우된다.
 
 ### 역변환 표본추출
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 균등난수로 지수 표본 만들기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 균등난수 하나로 지수분포를 만든다. 위 **확률적분변환** 절의 역방향을 직접 써 본다.
+
+**(1)** $\text{Exp}(\lambda)$의 분포함수를 뒤집어 $F^{-1}$을 구하고, $U \sim \text{Uniform}(0,1)$일 때 $X = F^{-1}(U)$의 분포함수가 정말 $F$임을 보이시오. 더 짧은 공식 $-\ln U/\lambda$도 같은 분포를 주는가.
+
+**(2)** $\lambda = 2$, $n = 50{,}000$에서 두 공식을 모두 확인하시오. 두 공식은 **같은** $U$에서 같은 표본을 주는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** 지수분포의 분포함수는 $x \ge 0$에서
 
-# 균등난수로 지수분포 표본을 만든다(역변환 표집).
-# 지수분포의 CDF는 F(x) = 1 - e^{-lam x} 이므로 이를 x에 대해 풀면
-#   u = 1 - e^{-lam x}  ->  x = -ln(1-u) / lam
-# 이 역함수가 아래 한 줄이다. 균등난수만 있으면 어떤 분포든 만들 수 있다는
-# 사실이 몬테카를로 방법의 출발점이다.
-u = np.random.uniform(0, 1, 50_000)
-lam = 2.0
-x_exp = -np.log(1 - u) / lam
+    $$
+    F(x) = 1 - e^{-\lambda x}
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.hist(x_exp, bins=100, density=True, alpha=0.7, label='Inverse transform samples')
-t = np.linspace(0, 4, 200)
-ax.plot(t, stats.expon(scale=1/lam).pdf(t), 'r-', lw=2, label='Exponential PDF')
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    이고, $[0,\infty)$에서 $0$부터 $1$까지 **순증가**하므로 역함수가 있다. $u = 1 - e^{-\lambda x}$를 $x$에 대해 푼다.
 
-![균등분포](./img/uniform_163.png)
+    $$
+    e^{-\lambda x} = 1 - u
+    \;\Longrightarrow\;
+    -\lambda x = \ln(1-u)
+    \;\Longrightarrow\;
+    F^{-1}(u) = -\frac{\ln(1-u)}{\lambda}
+    $$
+
+    이것이 코드 한 줄의 정체다. 이제 $X = F^{-1}(U)$의 분포함수를 직접 구해 $F$가 맞는지 본다. $\ln$이 증가함수이고 $-1/\lambda$를 곱하면 부등호가 뒤집힌다는 것만 주의하면 된다.
+
+    $$
+    P(X \le x)
+    = P\!\left(-\frac{\ln(1-U)}{\lambda} \le x\right)
+    = P\big(\ln(1-U) \ge -\lambda x\big)
+    = P\big(1-U \ge e^{-\lambda x}\big)
+    $$
+
+    이고, 이는 $P\big(U \le 1 - e^{-\lambda x}\big)$와 같다. $U$가 표준 균등분포라 $P(U \le t) = t$이므로
+
+    $$
+    P(X \le x) = 1 - e^{-\lambda x} = F(x) \qquad \square
+    $$
+
+    **짧은 공식도 된다.** 핵심은 $1-U$가 $U$와 같은 분포라는 것이다.
+
+    $$
+    P(1-U \le t) = P(U \ge 1-t) = 1 - (1-t) = t, \qquad 0 \le t \le 1
+    $$
+
+    이므로 $1-U \sim \text{Uniform}(0,1)$이고(연습문제 1의 (d)), 위 유도에서 $1-U$가 놓인 자리에 $U$를 그대로 넣어도 결론이 같다. 따라서
+
+    $$
+    -\frac{\ln U}{\lambda} \sim \text{Exp}(\lambda)
+    $$
+
+    도 성립한다. 뺄셈 한 번을 아낀 셈이다.
+
+    다만 **이 둘이 완전히 맞바꿀 수 있는 것은 아니다.** `np.random.uniform(0, 1)`이 뽑는 구간은 $[0, 1)$이라 $U = 0$이 나올 수 있고, 그러면 $-\ln U$는 `inf`가 된다. 확률이 $2^{-53}$ 수준이라 좀처럼 보이지 않지만, $1-U \in (0, 1]$이므로 $-\ln(1-U)$ 쪽은 그런 걱정이 없다. **긴 쪽이 안전하다.**
+
+    **(2) 수치적으로.** 먼저 그림이다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(42)
+
+    # 균등난수로 지수분포 표본을 만든다(역변환 표집).
+    # 지수분포의 CDF는 F(x) = 1 - e^{-lam x} 이므로 이를 x에 대해 풀면
+    #   u = 1 - e^{-lam x}  ->  x = -ln(1-u) / lam
+    # 이 역함수가 아래 한 줄이다. 균등난수만 있으면 어떤 분포든 만들 수 있다는
+    # 사실이 몬테카를로 방법의 출발점이다.
+    u = np.random.uniform(0, 1, 50_000)
+    lam = 2.0
+    x_exp = -np.log(1 - u) / lam
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.hist(x_exp, bins=100, density=True, alpha=0.7, label='Inverse transform samples')
+    t = np.linspace(0, 4, 200)
+    ax.plot(t, stats.expon(scale=1/lam).pdf(t), 'r-', lw=2, label='Exponential PDF')
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![균등분포](./img/uniform_163.png)
+
+    두 공식을 나란히 돌려 적률과 콜모고로프–스미르노프 거리를 잰다.
+
+    ```python
+    import numpy as np
+    from scipy import integrate, stats
+
+    np.random.seed(42)
+    lam, n = 2.0, 50_000
+    u = np.random.uniform(0, 1, n)
+
+    x1 = -np.log(1 - u) / lam   # F^{-1}(U)
+    x2 = -np.log(u) / lam       # 1-U 도 균등이므로 같은 분포
+
+    print(f"이론: 평균 = SD = 1/lam = {1 / lam:.6f}")
+    target = stats.expon(scale=1 / lam)
+    for name, x in (("-log(1-U)/lam", x1), ("-log(U)/lam", x2)):
+        ks = stats.kstest(x, target.cdf)
+        print(f"  {name:>14}: 평균 {x.mean():.6f}  SD {x.std(ddof=1):.6f}"
+              f"  KS D = {ks.statistic:.8f}  p = {ks.pvalue:.3f}")
+
+    # CDF 를 몇 점에서 직접 맞춰 본다.
+    print(f"\n{'x':>6}{'모의 P(X<=x)':>15}{'1-exp(-lam x)':>16}")
+    for xv in (0.25, 0.5, 1.0, 2.0):
+        print(f"{xv:>6.2f}{np.mean(x1 <= xv):>15.5f}{1 - np.exp(-lam * xv):>16.5f}")
+
+    # 두 공식은 같은 분포를 주지만 같은 수를 주지는 않는다.
+    print(f"\n두 표본이 같은가? {np.allclose(x1, x2)}")
+    print(f"corr(x1, x2) = {np.corrcoef(x1, x2)[0, 1]:.6f}")
+    I, _ = integrate.quad(lambda t: np.log(t) * np.log(1 - t), 0, 1)
+    print(f"  E[XY] = int_0^1 ln u ln(1-u) du = {I:.9f}"
+          f"   (2 - pi^2/6 = {2 - np.pi ** 2 / 6:.9f})")
+    print(f"  따라서 이론 상관 = 1 - pi^2/6 = {1 - np.pi ** 2 / 6:.6f}")
+    ```
+
+    출력:
+
+    ```
+    이론: 평균 = SD = 1/lam = 0.500000
+       -log(1-U)/lam: 평균 0.498058  SD 0.498354  KS D = 0.00332721  p = 0.636
+         -log(U)/lam: 평균 0.501022  SD 0.500021  KS D = 0.00332721  p = 0.636
+
+         x     모의 P(X<=x)   1-exp(-lam x)
+      0.25        0.39512         0.39347
+      0.50        0.63420         0.63212
+      1.00        0.86536         0.86466
+      2.00        0.98160         0.98168
+
+    두 표본이 같은가? False
+    corr(x1, x2) = -0.644927
+      E[XY] = int_0^1 ln u ln(1-u) du = 0.355065933   (2 - pi^2/6 = 0.355065933)
+      따라서 이론 상관 = 1 - pi^2/6 = -0.644934
+    ```
+
+    **두 공식 다 맞는다.** 평균과 표준편차가 이론값 $1/\lambda = 0.5$에 셋째 자리까지 맞고, 콜모고로프–스미르노프 검정의 $p$값이 $0.636$이라 지수분포라는 것을 의심할 근거가 없다. 분포함수를 네 점에서 직접 맞춰 본 것도 차이가 $+0.00165$, $+0.00208$, $+0.00070$, $-0.00008$로, 모두 몬테카를로 표준오차 $\sqrt{p(1-p)/n} \approx 0.002$ 안쪽이다(차례로 $0.76$, $0.96$, $0.45$, $0.14$ 표준오차).
+
+    **KS 거리가 둘이 같은 것은 우연이 아니다.** $x_1 = F^{-1}(u)$이므로 $F(x_1) = u$이고, $x_2 = -\ln u/\lambda$이므로 $F(x_2) = 1-u$다. 곧 두 표본을 $F$로 되돌리면 하나는 $\{u_i\}$, 다른 하나는 그것을 $0.5$ 기준으로 뒤집은 $\{1-u_i\}$다. 그런데 균등분포에 대한 KS 통계량은 $D = \max(D^+, D^-)$인데 이 뒤집기가 $D^+$와 $D^-$를 **맞바꾸기만** 하므로 $D$가 변하지 않는다. 실제로 둘이 열셋째 자리까지 같고, 그 아래의 차이는 부동소수점 반올림이다.
+
+    **그러나 두 표본은 같은 수가 아니다.** `np.allclose`가 `False`를 주었고, 상관계수가 $-0.644927$로 **음수**다. 같은 $u$가 클수록 $x_1$은 커지고 $x_2$는 작아지기 때문이다. 이론값은 $E[XY]$를 적분해 얻는다. $\lambda = 1$로 두면 $X = -\ln U$, $Y = -\ln(1-U)$가 각각 평균 $1$, 분산 $1$이므로
+
+    $$
+    \operatorname{Corr}(X, Y) = E[XY] - 1 = \int_0^1 \ln u \ln(1-u)\,du - 1
+    $$
+
+    이고, 그 적분을 `quad`로 재면 $0.355065933$이다. 이는 $2 - \pi^2/6 = 0.355065933$과 아홉째 자리까지 같다. 따라서 이론 상관은
+
+    $$
+    1 - \frac{\pi^2}{6} \approx -0.644934
+    $$
+
+    이며, 모의값 $-0.644927$과 다섯째 자리까지 맞는다. $\lambda$로 나누는 것은 둘 다 같은 양수배이므로 상관계수를 바꾸지 않는다.
+
+    이 음의 상관이 쓸모가 있다. 같은 균등난수에서 **같은 분포를 따르면서 서로 반대로 움직이는 두 표본**을 공짜로 얻은 셈이고, 둘의 평균을 쓰면 추정량의 분산이 독립인 두 표본을 쓸 때보다 작아진다. 이것이 몬테카를로 적분(연습문제 9)에서 쓰는 분산감소 기법의 하나인 **대조변량**이며, 역변환법이 그 바탕을 깔아 준다.
 
 ---
 

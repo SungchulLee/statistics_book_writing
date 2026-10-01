@@ -316,180 +316,831 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 자유도에 따른 카이제곱 밀도
+**보기 1.** <span class="diff easy" title="쉬움"></span> 원점에서 갈라지는 세 가지 모양. $\chi^2_d$의 밀도를 $d = 1, 2, 4, 8$에 대해 $[0.01,\, 20]$에서 겹쳐 그린다.
+
+**(1)** $q \to 0^+$에서 밀도가 어떻게 행동하는지 $d$에 따라 나누어 밝히고, $d = 2$의 곡선이 세로축에 닿는 높이를 구하시오.
+
+**(2)** 자유도가 다른 두 카이제곱 밀도가 몇 번 만나는지 밝히고, 만나는 자리를 닫힌 꼴로 구하시오. 그림에 있는 곡선들에 대해 그 값을 수치로 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-x = np.linspace(0.01, 20, 400)   # 0에서 시작하면 d=1에서 발산해 그림이 깨진다
+    **(1) 해석적으로.** 밀도는
 
-fig, ax = plt.subplots(figsize=(12, 3))
-# 자유도 = 더한 제곱의 개수.
-#   d=1 : 0 근처에서 치솟는다(정규분포가 0 근처에 몰려 있으므로)
-#   d=2 : 지수분포 Exp(1/2)와 정확히 같다. 0에서 높이 0.5로 시작한다.
-#   d>=3: 최빈값 d-2 에 봉우리가 생기고, 평균 d 는 그보다 오른쪽에 있다.
-for d in [1, 2, 4, 8]:
-    ax.plot(x, stats.chi2(d).pdf(x), lw=2, label=f'd={d}')
-ax.axhline(0.5, color='gray', ls=':', lw=1)   # d=2가 0에서 닿는 높이
-ax.set_ylim(0, 0.6)
-ax.set_xlabel('q')
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    $$
+    f(q; d) = \frac{1}{2^{d/2}\,\Gamma(d/2)}\, q^{d/2 - 1}\, e^{-q/2}
+    $$
 
-![자유도에 따른 카이제곱 밀도](./img/chi_square_257.png)
+    이고 $q \to 0^+$에서 $e^{-q/2} \to 1$이므로 **거동을 정하는 것은 $q^{d/2-1}$ 하나**다. 지수 $d/2 - 1$의 부호가 세 갈래를 만든다.
+
+    $$
+    \lim_{q \to 0^+} f(q; d) =
+    \begin{cases}
+    +\infty, & d = 1 \quad (\text{지수} = -\tfrac12 < 0) \\[4pt]
+    \tfrac12, & d = 2 \quad (\text{지수} = 0) \\[4pt]
+    0, & d \ge 3 \quad (\text{지수} > 0)
+    \end{cases}
+    $$
+
+    $d = 2$의 높이는 지수가 $0$이라 상수만 남아
+
+    $$
+    f(0^+; 2) = \frac{1}{2^{1}\,\Gamma(1)} = \frac12
+    $$
+
+    이다. 코드가 $y = 0.5$에 점선을 그어 둔 것이 이 값이며, **$\chi^2_2 = \text{Exp}(1/2)$의 밀도가 비율 $\lambda = 1/2$에서 출발한다**는 사실의 다른 표현이다.
+
+    $d = 1$에서 밀도가 발산하는 것이 모순이 아님을 짚어 두자. 발산 속도가 $q^{-1/2}$뿐이고 $\int_0^\epsilon q^{-1/2}\,dq = 2\sqrt\epsilon$은 유한하므로 **밀도는 무한대로 가지만 질량은 $0$으로 간다.** 정리 1의 CDF가 그것을 바로 보여 준다.
+
+    $$
+    P(Q \le \epsilon) = 2\Phi(\sqrt\epsilon) - 1 \;\xrightarrow{\;\epsilon \to 0^+\;}\; 0
+    $$
+
+    **(2) 해석적으로.** $d_1 < d_2$인 두 밀도의 비를 잡으면 $e^{-q/2}$가 약분된다.
+
+    $$
+    \frac{f(q; d_2)}{f(q; d_1)}
+    = \frac{2^{d_1/2}\,\Gamma(d_1/2)}{2^{d_2/2}\,\Gamma(d_2/2)}\; q^{(d_2 - d_1)/2}
+    $$
+
+    남은 것은 $q$의 **양의 거듭제곱 하나**이고, 그것은 $(0, \infty)$에서 $0$부터 $\infty$까지 단조증가한다. 그러므로 비가 $1$이 되는 자리는 **정확히 하나**뿐이다. 비를 $1$로 두고 풀면
+
+    $$
+    q^{(d_2 - d_1)/2} = 2^{(d_2 - d_1)/2}\,\frac{\Gamma(d_2/2)}{\Gamma(d_1/2)}
+    \qquad\Longrightarrow\qquad
+    q^* = 2\left[\frac{\Gamma(d_2/2)}{\Gamma(d_1/2)}\right]^{2/(d_2 - d_1)}
+    $$
+
+    을 얻는다. $q < q^*$에서는 자유도가 작은 쪽이 높고, $q > q^*$에서는 큰 쪽이 높다. **자유도를 올리는 일은 밀도를 오른쪽으로 옮기는 일**이며 그 교환이 일어나는 지점이 $q^*$ 하나라는 뜻이다.
+
+    그림에 있는 이웃한 쌍에 넣어 본다. $\Gamma(1/2) = \sqrt\pi$, $\Gamma(1) = \Gamma(2) = 1$, $\Gamma(4) = 6$이므로
+
+    $$
+    \begin{aligned}
+    (d_1, d_2) = (1, 2): &\quad q^* = 2\left[\frac{\Gamma(1)}{\Gamma(1/2)}\right]^{2} = \frac{2}{\pi} \approx 0.6366 \\[4pt]
+    (d_1, d_2) = (2, 4): &\quad q^* = 2\left[\frac{\Gamma(2)}{\Gamma(1)}\right]^{1} = 2 \\[4pt]
+    (d_1, d_2) = (4, 8): &\quad q^* = 2\left[\frac{\Gamma(4)}{\Gamma(2)}\right]^{1/2} = 2\sqrt6 \approx 4.8990
+    \end{aligned}
+    $$
+
+    다. 첫 줄에 $\pi$가 나오는 것은 $d_1 = 1$이 홀수라 $\Gamma(1/2) = \sqrt\pi$를 끌고 들어오기 때문이다.
+
+    **(2) 수치적으로.** 유도한 세 가지, 곧 세 갈래 거동과 $d = 2$의 높이 $1/2$와 교차점 공식을 차례로 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import optimize, special, stats
+
+    # (1) q -> 0+ 에서의 거동. 지수 d/2 - 1 의 부호가 세 갈래를 만든다.
+    print(f"{'d':>4}{'지수 d/2-1':>12}{'f(1e-6)':>14}{'f(0.01)':>12}")
+    for d in (1, 2, 3, 4, 8):
+        print(f"{d:>4}{d / 2 - 1:>12.1f}{stats.chi2(d).pdf(1e-6):>14.6g}"
+              f"{stats.chi2(d).pdf(0.01):>12.6g}")
+
+    # d=1 은 밀도가 발산하지만 질량은 0 으로 간다.
+    print(f"\nd=1:  f(0.01) = {stats.chi2(1).pdf(0.01):.4f}  <- 그림의 ylim 0.6 을 훌쩍 넘는다")
+    print(f"      P(Q <= 0.01) = {stats.chi2(1).cdf(0.01):.6f}"
+          f"  = 2*Phi(0.1) - 1 = {2 * stats.norm.cdf(0.1) - 1:.6f}")
+
+    # (2) 교차점의 닫힌 꼴. 비가 q 의 양의 거듭제곱이므로 영점은 하나뿐이다.
+    def q_star(d1, d2):
+        return 2 * (special.gamma(d2 / 2) / special.gamma(d1 / 2)) ** (2 / (d2 - d1))
+
+    print(f"\n{'(d1,d2)':>10}{'닫힌 꼴':>14}{'수치해':>14}{'두 밀도 값':>26}")
+    for d1, d2 in [(1, 2), (2, 4), (4, 8), (1, 8)]:
+        q = q_star(d1, d2)
+        root = optimize.brentq(
+            lambda x: stats.chi2(d2).pdf(x) - stats.chi2(d1).pdf(x), 1e-9, 200)
+        print(f"{f'({d1},{d2})':>10}{q:>14.9f}{root:>14.9f}"
+              f"{stats.chi2(d1).pdf(q):>13.9f}{stats.chi2(d2).pdf(q):>13.9f}")
+
+    print(f"\n손으로 얻은 값:  2/pi = {2 / np.pi:.9f},   2 = 2,   2*sqrt(6) = {2 * np.sqrt(6):.9f}")
+    ```
+
+    출력:
+
+    ```
+       d    지수 d/2-1       f(1e-6)     f(0.01)
+       1        -0.5       398.942     3.96953
+       2         0.0           0.5    0.497506
+       3         0.5   0.000398942   0.0396953
+       4         1.0       2.5e-07  0.00248753
+       8         3.0   1.04167e-20 1.03647e-08
+
+    d=1:  f(0.01) = 3.9695  <- 그림의 ylim 0.6 을 훌쩍 넘는다
+          P(Q <= 0.01) = 0.079656  = 2*Phi(0.1) - 1 = 0.079656
+
+       (d1,d2)          닫힌 꼴           수치해                    두 밀도 값
+         (1,2)   0.636619772   0.636619772  0.363688675  0.363688675
+         (2,4)   2.000000000   2.000000000  0.183939721  0.183939721
+         (4,8)   4.898979486   4.898979486  0.105741569  0.105741569
+         (1,8)   2.833593280   2.833593280  0.057469093  0.057469093
+
+    손으로 얻은 값:  2/pi = 0.636619772,   2 = 2,   2*sqrt(6) = 4.898979486
+    ```
+
+    **셋 모두 유도와 맞는다.** 지수의 부호가 바뀌는 자리에서 $f(10^{-6})$이 $398.942$에서 $0.5$로, 다시 $0.000399$로 떨어진다. $d = 2$의 값은 $10^{-6}$에서도 $0.5$ 그대로다. 교차점은 닫힌 꼴과 수치해가 아홉째 자리까지 같고, 그 자리에서 두 밀도 값이 실제로 일치한다. 이웃하지 않은 쌍 $(1, 8)$도 같은 공식으로 맞는다.
+
+    그림을 그리는 코드는 아래와 같다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    x = np.linspace(0.01, 20, 400)   # 0에서 시작하면 d=1에서 발산해 그림이 깨진다
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # 자유도 = 더한 제곱의 개수.
+    #   d=1 : 0 근처에서 치솟는다(정규분포가 0 근처에 몰려 있으므로)
+    #   d=2 : 지수분포 Exp(1/2)와 정확히 같다. 0에서 높이 0.5로 시작한다.
+    #   d>=3: 최빈값 d-2 에 봉우리가 생기고, 평균 d 는 그보다 오른쪽에 있다.
+    for d in [1, 2, 4, 8]:
+        ax.plot(x, stats.chi2(d).pdf(x), lw=2, label=f'd={d}')
+    ax.axhline(0.5, color='gray', ls=':', lw=1)   # d=2가 0에서 닿는 높이
+    ax.set_ylim(0, 0.6)
+    ax.set_xlabel('q')
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![자유도에 따른 카이제곱 밀도](./img/chi_square_257.png)
+
+    **그림이 가리는 것이 둘 있다.** 하나는 $d = 1$ 곡선의 머리다. $x$ 격자가 $0.01$에서 시작하는데 그 자리의 밀도가 $3.97$이고 `set_ylim(0, 0.6)`이 걸려 있으므로, 왼쪽 끝에서 곡선이 **그림 위로 잘려 나간다.** 발산을 그림으로 보일 방법은 없고, 잘린 자리가 발산의 흔적인 셈이다. 다른 하나는 $d = 1$과 $d = 2$의 교차다. $q^* = 2/\pi \approx 0.637$은 가로축 $20$ 전체에서 왼쪽 끝 $3\%$ 안쪽이라 두 곡선이 갈리는 모습이 거의 한 점으로 뭉쳐 보인다.
+
+    반대로 $d = 4$와 $d = 8$의 교차점 $2\sqrt6 \approx 4.90$은 가로축의 $25\%$ 자리이자 두 곡선이 모두 높은 구간이라 또렷하게 보인다. **교차점이 $q^* = 2[\Gamma(d_2/2)/\Gamma(d_1/2)]^{2/(d_2-d_1)}$로 자유도와 함께 오른쪽으로 밀려가므로**, 자유도가 큰 쌍일수록 교차가 눈에 잘 띄는 자리에서 일어난다.
 
 ### 평균과 최빈값이 갈라져 있다
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 평균과 최빈값을 함께 그리기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균과 최빈값이 갈라진 간격. $\chi^2_5$의 밀도를 그리고 평균과 최빈값에 각각 세로선을 긋는다.
+
+**(1)** 평균과 최빈값의 간격을 자유도의 함수로 구하시오. 그 간격을 표준편차 단위로 재면 무엇이 되는가.
+
+**(2)** 세 중심(최빈값·중앙값·평균)의 순서를 밝히고, 간격 $2$가 두 조각으로 어떻게 갈리는지 수치로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-import scipy.stats as stats
+??? success "풀이"
 
-k = 5                      # 자유도. 표준정규 k개를 제곱해 더한 것의 분포다.
-chi2 = stats.chi2(df=k)
+    **(1) 해석적으로.** 최빈값은 로그밀도를 미분해 얻는다. 상수를 뺀
 
-# x 범위를 분위수로 정한다. 눈대중으로 (0, 20) 같은 범위를 쓰면
-# 자유도가 바뀔 때마다 그림이 잘리거나 남는다.
-# ppf(1e-6)부터 ppf(1-1e-6)까지 잡으면 어떤 k에서도 꼬리까지 알맞게 담긴다.
-x = np.linspace(chi2.ppf(1e-6), chi2.ppf(1 - 1e-6), 600)
-y = chi2.pdf(x)
+    $$
+    \log f(q; d) = \left(\frac d2 - 1\right)\log q - \frac q2 + c
+    \qquad\Longrightarrow\qquad
+    \frac{d}{dq}\log f = \frac{d/2 - 1}{q} - \frac12
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(x, y, lw=2, label=f"χ² PDF (k={k})")
-# 평균은 정확히 k, 최빈값은 k-2 (k >= 2일 때).
-# 둘이 다르다는 것이 곧 이 분포가 오른쪽으로 치우쳐 있다는 뜻이다.
-ax.axvline(k, linestyle='--', alpha=0.8, label=f"mean = {k}")
-ax.axvline(max(k - 2, 0), linestyle=':', alpha=0.8, label=f"mode = {max(k-2, 0)}")
-ax.set_title("Chi-square Distribution — PDF")
-ax.set_xlabel("x")
-ax.set_ylabel("density")
-ax.legend()
-ax.grid(True, linestyle=":")
-plt.tight_layout()
-plt.show()
-```
+    을 $0$으로 두면 $q = d - 2$다. $d > 2$에서 이계도함수가 $-(d/2-1)/q^2 < 0$이므로 최대점이며, $d \le 2$에서는 도함수가 $(0,\infty)$ 내내 음수라 밀도가 단조감소해 최빈값이 경계 $0$이다(연습문제 4). 곧
 
-![Chi-square Distribution — PDF](./img/chi_square_pdf_32.png)
+    $$
+    \text{최빈값} = \max(d - 2,\, 0)
+    $$
+
+    이다. 평균은 $d$이므로 $d \ge 2$에서
+
+    $$
+    \text{평균} - \text{최빈값} = d - (d-2) = 2
+    $$
+
+    로 **자유도와 무관하게 늘 $2$**다. 자유도를 하나 올리면 봉우리와 평균이 **나란히** 한 칸씩 오른쪽으로 가고 간격은 그대로라는 뜻이다.
+
+    그런데 분포의 폭은 자유도와 함께 자란다. 표준편차가 $\sqrt{2d}$이므로 간격을 그 단위로 재면
+
+    $$
+    \frac{\text{평균} - \text{최빈값}}{\sqrt{\operatorname{Var}}} = \frac{2}{\sqrt{2d}} = \sqrt{\frac2d}
+    $$
+
+    이고, 이것은 성질 표의 왜도 $\sqrt{8/d}$의 **정확히 절반**이다.
+
+    $$
+    \sqrt{\frac2d} = \frac12\sqrt{\frac8d} = \frac{\gamma_1}{2}
+    $$
+
+    **치우침의 두 가지 척도가 상수배로 묶여 있다.** 간격 $2$는 그대로인데 폭이 $\sqrt{2d}$로 자라므로, 자유도가 커질 때 분포가 대칭에 가까워지는 것은 간격이 줄기 때문이 아니라 **폭이 간격을 따라잡기 때문**이다. $d = 5$에서 $\sqrt{2/5} = 0.632$, $d = 100$에서 $0.141$이다.
+
+    **(2) 해석적으로.** 오른쪽으로 치우친 단봉분포의 일반적인 순서가 그대로 성립한다.
+
+    $$
+    \text{최빈값} \;<\; \text{중앙값} \;<\; \text{평균}
+    $$
+
+    중앙값은 닫힌 꼴이 없으나 윌슨–힐퍼티 근사(연습문제 7)가 쓸 만한 식을 준다. $(Q/d)^{1/3}$의 중앙값이 그 근사정규의 평균 $1 - 2/(9d)$이므로
+
+    $$
+    \text{중앙값} \approx d\left(1 - \frac{2}{9d}\right)^3 \approx d\left(1 - \frac{6}{9d}\right) = d - \frac23
+    $$
+
+    이다. 그러면 간격 $2$가 갈리는 비율이 예측된다.
+
+    $$
+    \text{평균} - \text{중앙값} \approx \frac23,
+    \qquad
+    \text{중앙값} - \text{최빈값} \approx 2 - \frac23 = \frac43
+    $$
+
+    곧 **$2 : 1$로 갈린다.** 아래에서 이 예측을 수로 확인한다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import integrate, stats
+
+    d = 5
+    chi2 = stats.chi2(d)
+
+    # (1) 최빈값을 격자로 확인한다. 유도한 값은 d - 2 = 3 이다.
+    grid = np.linspace(1e-9, 20, 2_000_001)
+    print(f"d = {d}:  유도한 최빈값 d-2 = {d - 2},"
+          f"  격자 최대점 = {grid[chi2.pdf(grid).argmax()]:.6f}")
+
+    # 세 중심의 순서와 간격. 평균 - 최빈값은 자유도와 무관하게 2 다.
+    print(f"\n{'d':>5}{'최빈값 d-2':>12}{'중앙값':>12}{'WH 근사':>12}{'평균 d':>9}"
+          f"{'평균-중앙':>11}{'중앙-최빈':>11}{'비':>7}")
+    for k in (3, 5, 10, 20, 50, 100, 500):
+        med = stats.chi2(k).median()
+        wh = k * (1 - 2 / (9 * k)) ** 3
+        print(f"{k:>5}{k - 2:>12}{med:>12.6f}{wh:>12.6f}{k:>9}"
+              f"{k - med:>11.6f}{med - (k - 2):>11.6f}{(med - (k - 2)) / (k - med):>7.3f}")
+
+    # 치우침을 표준편차 단위로 재면 평균-최빈값 간격이 왜도의 절반이다.
+    print(f"\n{'d':>5}{'(평균-최빈)/sd':>16}{'sqrt(2/d)':>12}{'왜도/2':>10}{'P(Q<=d)':>11}")
+    for k in (3, 5, 10, 20, 50, 100, 500):
+        print(f"{k:>5}{2 / np.sqrt(2 * k):>16.6f}{np.sqrt(2 / k):>12.6f}"
+              f"{np.sqrt(8 / k) / 2:>10.6f}{stats.chi2(k).cdf(k):>11.6f}")
+
+    # d=5 에서 세 자리의 밀도 높이와, 평균 왼쪽에 놓인 확률
+    print(f"\nd = 5:  f(최빈 3) = {chi2.pdf(3):.6f},  f(중앙 {chi2.median():.4f})"
+          f" = {chi2.pdf(chi2.median()):.6f},  f(평균 5) = {chi2.pdf(5):.6f}")
+    print(f"        P(Q <= 5) = {chi2.cdf(5):.6f}"
+          f"   (quad 로 재확인 {integrate.quad(chi2.pdf, 0, 5)[0]:.6f})")
+    ```
+
+    출력:
+
+    ```
+    d = 5:  유도한 최빈값 d-2 = 3,  격자 최대점 = 3.000000
+
+        d     최빈값 d-2         중앙값       WH 근사     평균 d      평균-중앙      중앙-최빈      비
+        3           1    2.365974    2.381497        3   0.634026   1.365974  2.154
+        5           3    4.351460    4.362524        5   0.648540   1.351460  2.084
+       10           8    9.341818    9.348038       10   0.658182   1.341818  2.039
+       20          18   19.337429   19.340713       20   0.662571   1.337429  2.019
+       50          48   49.334937   49.336292       50   0.665063   1.334937  2.007
+      100          98   99.334129   99.334814      100   0.665871   1.334129  2.004
+      500         498  499.333492  499.333630      500   0.666508   1.333492  2.001
+
+        d      (평균-최빈)/sd   sqrt(2/d)      왜도/2    P(Q<=d)
+        3        0.816497    0.816497  0.816497   0.608375
+        5        0.632456    0.632456  0.632456   0.584120
+       10        0.447214    0.447214  0.447214   0.559507
+       20        0.316228    0.316228  0.316228   0.542070
+       50        0.200000    0.200000  0.200000   0.526602
+      100        0.141421    0.141421  0.141421   0.518808
+      500        0.063246    0.063246  0.063246   0.508411
+
+    d = 5:  f(최빈 3) = 0.154180,  f(중앙 4.3515) = 0.137036,  f(평균 5) = 0.122042
+            P(Q <= 5) = 0.584120   (quad 로 재확인 0.584120)
+    ```
+
+    **유도가 모두 맞는다.** 격자가 찾은 최빈값은 $3.000000$이고, 둘째 표에서 $(\text{평균}-\text{최빈})/\text{sd}$와 $\sqrt{2/d}$와 $\gamma_1/2$가 여섯째 자리까지 같은 열로 겹친다. 첫째 표의 마지막 열은 $d = 3$에서 $2.154$였다가 $d = 500$에서 $2.001$로 내려가며 **$2 : 1$ 분할이 큰 자유도에서 성립한다**는 것을 보인다. 윌슨–힐퍼티 근사는 $d = 3$에서도 참 중앙값 $2.3660$을 $2.3815$로 맞힌다.
+
+    세로선이 서 있는 자리의 밀도 높이를 보면 치우침이 또 다르게 읽힌다. $d = 5$에서 봉우리가 $0.1542$인데 평균 자리의 높이는 $0.1220$으로 **$21\%$ 낮다.** 평균은 밀도가 가장 높은 곳이 아니며, 오른쪽 꼬리가 평균을 봉우리 밖으로 끌어낸 결과다.
+
+    마지막 열 $P(Q \le d)$는 **평균이 중앙값이 아니라는 사실의 직접적인 측정**이다. $d = 5$에서 $0.5841$이므로 관측값의 $58\%$가 평균보다 작다. 치우친 분포에서 "평균보다 작은 쪽이 더 흔하다"는 것이고, 자유도가 커지면 $0.5088$($d = 500$)까지 내려가 $1/2$에 다가간다. 다만 **내려가는 속도가 $\sqrt{2/d}$만큼 느리다**는 점이 중요하다. $d = 100$에서도 아직 $0.5188$이며, 이것이 큰 자유도에서조차 정규근사가 꼬리에서 어긋나는 까닭이다(보기 5).
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+
+    k = 5                      # 자유도. 표준정규 k개를 제곱해 더한 것의 분포다.
+    chi2 = stats.chi2(df=k)
+
+    # x 범위를 분위수로 정한다. 눈대중으로 (0, 20) 같은 범위를 쓰면
+    # 자유도가 바뀔 때마다 그림이 잘리거나 남는다.
+    # ppf(1e-6)부터 ppf(1-1e-6)까지 잡으면 어떤 k에서도 꼬리까지 알맞게 담긴다.
+    x = np.linspace(chi2.ppf(1e-6), chi2.ppf(1 - 1e-6), 600)
+    y = chi2.pdf(x)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.plot(x, y, lw=2, label=f"χ² PDF (k={k})")
+    # 평균은 정확히 k, 최빈값은 k-2 (k >= 2일 때).
+    # 둘이 다르다는 것이 곧 이 분포가 오른쪽으로 치우쳐 있다는 뜻이다.
+    ax.axvline(k, linestyle='--', alpha=0.8, label=f"mean = {k}")
+    ax.axvline(max(k - 2, 0), linestyle=':', alpha=0.8, label=f"mode = {max(k-2, 0)}")
+    ax.set_title("Chi-square Distribution — PDF")
+    ax.set_xlabel("x")
+    ax.set_ylabel("density")
+    ax.legend()
+    ax.grid(True, linestyle=":")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![Chi-square Distribution — PDF](./img/chi_square_pdf_32.png)
+
+    그림에서 두 세로선 사이의 거리가 $2$이고, 그 폭이 곡선 전체의 폭에 비해 작지 않다는 것이 $d = 5$가 아직 꽤 치우친 분포라는 뜻이다. 같은 그림을 $d = 100$으로 다시 그리면 두 선이 거의 붙어 보이는데, 간격이 줄어서가 아니라 가로축이 $\sqrt{2d}$만큼 늘어나서다.
 
 ### 정의대로 만들어 보기
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 정규 제곱합이 정말 카이제곱인가
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정의를 그대로 실행하기. 표준정규 $5$개를 뽑아 제곱해 더하는 일을 $N = 50{,}000$번 되풀이하고, 얻은 값들의 히스토그램을 $\chi^2_5$의 밀도와 겹쳐 그린다.
+
+**(1)** 제곱합이 $\chi^2_d$를 따른다는 것을 적률생성함수로 보이시오.
+
+**(2)** 모의실험의 표본평균과 표본분산이 이론값 $d$와 $2d$에서 얼마나 벗어나도 되는지 표준오차로 밝히고, 관측된 값이 그 안에 드는지 확인하시오. 적률생성함수를 표본으로 직접 재면 어느 $t$까지 맞는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-d = 5
-# 정의를 그대로 실행한다. 표준정규 5개를 뽑아 제곱해 더하기를 5만 번.
-#   rvs((d, 50000)) 이 (5, 50000) 배열을 주고
-#   axis=0 으로 더하면 열마다(= 시행마다) 5개의 제곱합이 나온다.
-z = stats.norm.rvs(size=(d, 50_000))
-q = (z ** 2).sum(axis=0)
+    **(1) 해석적으로.** 제곱 하나짜리의 MGF는 본문에서 이미 얻었다. $t < 1/2$에 대해
 
-x = np.linspace(0.01, 25, 400)
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.hist(q, bins=80, density=True, alpha=0.5, label='sum of 5 squared normals')
-ax.plot(x, stats.chi2(d).pdf(x), 'r-', lw=2, label='chi2(5) pdf')
-ax.set_xlabel('q')
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
+    $$
+    E\!\left[e^{tZ^2}\right] = \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}}\,e^{-\frac{(1-2t)z^2}{2}}\,dz = (1-2t)^{-1/2}
+    $$
 
-print(f"sample mean {q.mean():.3f} (theory {d})")
-print(f"sample var  {q.var():.3f} (theory {2*d})")
-```
+    이고, 마지막 등호는 피적분함수가 분산 $1/(1-2t)$인 정규밀도의 $(1-2t)^{-1/2}$배임을 알아본 것이다. $Z_1, \ldots, Z_d$가 독립이면 **독립인 것의 합의 MGF는 MGF의 곱**이므로
 
-출력:
+    $$
+    M_Q(t) = E\!\left[e^{t\sum_i Z_i^2}\right] = \prod_{i=1}^d E\!\left[e^{tZ_i^2}\right] = (1-2t)^{-d/2}
+    $$
 
-```
-sample mean 5.000 (theory 5)
-sample var  10.022 (theory 10)
-```
+    다. 이것이 정리 2의 밀도가 갖는 MGF와 같고, MGF가 $0$의 근방에서 유한하면 분포를 **하나로 결정하므로** $Q \sim \chi^2_d$다. 여기서 $d$가 지수에 더해지는 방식이 곧 가법성(정리 4)이며, 자유도가 "더한 제곱의 개수"인 까닭이기도 하다.
 
-![정규 제곱합과 카이제곱 밀도](./img/chi_square_289.png)
+    $d = 1$만은 밀도를 직접 얻을 수도 있다. $P(Z^2 \le q) = 2\Phi(\sqrt q) - 1$을 미분하면 정리 1의 $f(q) = (2\pi q)^{-1/2}e^{-q/2}$가 나오고, $\Gamma(1/2) = \sqrt\pi$를 쓰면 정리 2의 식과 같다.
+
+    **(2) 해석적으로.** 모의실험이 "맞았다"고 말하려면 **얼마나 맞아야 하는지**를 먼저 정해야 한다. $Q_1, \ldots, Q_N$이 독립인 $\chi^2_d$이므로 표본평균의 표준오차는
+
+    $$
+    \mathrm{SE}(\bar Q) = \sqrt{\frac{\operatorname{Var}(Q)}{N}} = \sqrt{\frac{2d}{N}}
+    = \sqrt{\frac{10}{50{,}000}} = 0.01414
+    $$
+
+    다. 표본분산의 표준오차에는 넷째 누율이 필요하다. 연습문제 9의 $\kappa_n = 2^{n-1}(n-1)!\,d$에서 $\kappa_2 = 2d = 10$, $\kappa_4 = 48d = 240$이므로
+
+    $$
+    \operatorname{Var}(s^2) \approx \frac{\kappa_4}{N} + \frac{2\kappa_2^2}{N-1}
+    = \frac{240}{50{,}000} + \frac{200}{49{,}999} = 0.008800
+    \;\Longrightarrow\; \mathrm{SE}(s^2) = 0.0938
+    $$
+
+    이다. **이론값에서 이 눈금의 두세 배 안에 들면 맞는 것이고, 그보다 멀면 무언가 틀린 것이다.**
+
+    적률생성함수를 표본으로 재는 일에는 함정이 하나 있다. 추정량 $\widehat M(t) = \frac1N\sum_i e^{tQ_i}$의 기댓값은 $t < 1/2$이면 늘 $M(t)$가 맞지만, 그 **분산**은
+
+    $$
+    \operatorname{Var}\!\left(e^{tQ}\right) = M(2t) - M(t)^2
+    = (1-4t)^{-d/2} - (1-2t)^{-d}
+    $$
+
+    이므로 $2t < 1/2$, 곧 $t < 1/4$에서만 유한하다. $t \ge 1/4$에서는 분산이 무한대이고, 그때 표본평균은 **중심극한정리의 보호를 받지 못한다.** 평균은 여전히 올바른 값을 향하지만 수렴이 극단적으로 느리며, 몇 개의 큰 $Q_i$가 합을 좌우한다.
+
+    **(2) 수치적으로.** 먼저 정의를 그대로 실행해 히스토그램을 그린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    d = 5
+    # 정의를 그대로 실행한다. 표준정규 5개를 뽑아 제곱해 더하기를 5만 번.
+    #   rvs((d, 50000)) 이 (5, 50000) 배열을 주고
+    #   axis=0 으로 더하면 열마다(= 시행마다) 5개의 제곱합이 나온다.
+    z = stats.norm.rvs(size=(d, 50_000))
+    q = (z ** 2).sum(axis=0)
+
+    x = np.linspace(0.01, 25, 400)
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.hist(q, bins=80, density=True, alpha=0.5, label='sum of 5 squared normals')
+    ax.plot(x, stats.chi2(d).pdf(x), 'r-', lw=2, label='chi2(5) pdf')
+    ax.set_xlabel('q')
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+
+    print(f"sample mean {q.mean():.3f} (theory {d})")
+    print(f"sample var  {q.var():.3f} (theory {2*d})")
+    ```
+
+    출력:
+
+    ```
+    sample mean 5.000 (theory 5)
+    sample var  10.022 (theory 10)
+    ```
+
+    ![정규 제곱합과 카이제곱 밀도](./img/chi_square_289.png)
+
+    이제 (2)에서 세운 기준으로 그 두 수를 재고, 분포 전체의 거리와 MGF까지 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    d, N = 5, 50_000
+    q = (stats.norm.rvs(size=(d, N)) ** 2).sum(axis=0)
+
+    # 누율은 kappa_n = 2^(n-1) (n-1)! d 다(연습문제 9). 쓸 것은 kappa_2, kappa_4.
+    k2, k4 = 2 * d, 48 * d
+
+    # 표본평균과 표본분산의 이론 표준오차. 이것이 "얼마나 맞아야 맞는 것인가"의 기준이다.
+    se_mean = np.sqrt(k2 / N)
+    se_var = np.sqrt(k4 / N + 2 * k2 ** 2 / (N - 1))
+
+    print(f"표본평균 {q.mean():.4f}   이론 {d}   SE = sqrt(2d/N) = {se_mean:.4f}"
+          f"   편차/SE = {abs(q.mean() - d) / se_mean:.2f}")
+    print(f"표본분산 {q.var():.4f}  이론 {k2}  SE = {se_var:.4f}"
+          f"   편차/SE = {abs(q.var() - k2) / se_var:.2f}")
+
+    ks = stats.kstest(q, "chi2", args=(d,))
+    print(f"\nKS 거리 = {ks.statistic:.5f}   (5% 임계 ~ 1.36/sqrt(N) = {1.36 / np.sqrt(N):.5f}),"
+          f"  p = {ks.pvalue:.4f}")
+
+    # MGF 를 직접 재 본다. 이론은 (1-2t)^(-d/2) 이고 t < 1/2 에서만 정의된다.
+    # 그런데 추정량 mean(exp(tQ)) 의 **분산**은 E[exp(2tQ)] 를 요구하므로
+    # t < 1/4 에서만 유한하다. 그 경계를 넘으면 수가 맞지 않기 시작한다.
+    print(f"\n{'t':>7}{'표본 MGF':>13}{'이론 MGF':>13}{'SE':>12}{'편차/SE':>10}")
+    for t in (-0.50, -0.10, 0.10, 0.20, 0.24, 0.25, 0.30, 0.40):
+        theory = (1 - 2 * t) ** (-d / 2)
+        sample = np.mean(np.exp(t * q))
+        if 2 * t < 0.5:
+            se = np.sqrt(((1 - 4 * t) ** (-d / 2) - theory ** 2) / N)
+            print(f"{t:>7.2f}{sample:>13.5f}{theory:>13.5f}{se:>12.5f}"
+                  f"{abs(sample - theory) / se:>10.2f}")
+        else:
+            print(f"{t:>7.2f}{sample:>13.5f}{theory:>13.5f}{'무한':>11}{'--':>10}")
+    ```
+
+    출력:
+
+    ```
+    표본평균 4.9999   이론 5   SE = sqrt(2d/N) = 0.0141   편차/SE = 0.01
+    표본분산 10.0223  이론 10  SE = 0.0938   편차/SE = 0.24
+
+    KS 거리 = 0.00234   (5% 임계 ~ 1.36/sqrt(N) = 0.00608),  p = 0.9473
+
+          t       표본 MGF       이론 MGF          SE     편차/SE
+      -0.50      0.17678      0.17678     0.00081      0.00
+      -0.10      0.63398      0.63394     0.00077      0.05
+       0.10      1.74732      1.74693     0.00327      0.12
+       0.20      3.59425      3.58610     0.02934      0.28
+       0.24      5.15315      5.12852     0.24895      0.10
+       0.25      5.68914      5.65685         무한        --
+       0.30      9.99557      9.88212         무한        --
+       0.40     51.29793     55.90170         무한        --
+    ```
+
+    **두 적률이 유도한 눈금 안에 든다.** 평균은 $0.01\,\mathrm{SE}$, 분산은 $0.24\,\mathrm{SE}$ 어긋나 있다. 쪽의 출력이 `sample var 10.022`로 이론값 $10$과 달라 보이지만, **$0.022$는 $\mathrm{SE} = 0.094$의 사분의 일이므로 어긋남이 아니다.** 표준오차를 계산해 두지 않으면 이런 판정을 내릴 수 없다는 것이 (2)의 요점이다. KS 거리 $0.00234$도 $5\%$ 임계값 $0.00608$보다 작아 분포 전체가 $\chi^2_5$와 구별되지 않는다.
+
+    **MGF 표에서 $t = 1/4$ 경계가 눈에 보인다.** $t \le 0.24$에서는 편차가 $\mathrm{SE}$의 $0.3$배 안쪽이다. 그런데 $t = 0.40$에서는 표본값 $51.30$과 이론값 $55.90$이 $8\%$나 벌어진다. $5$만 개를 뽑았는데도 그렇다.
+
+    **이 어긋남은 코드의 결함이 아니라 (2)에서 유도한 바로 그 현상이다.** $t = 0.4$이면 $e^{0.4Q}$의 분산이 $M(0.8)$을 요구하는데 $0.8 > 1/2$이라 무한대다. 그러면 표본평균은 **가장 큰 몇 개의 $Q_i$에 거의 전부 의존한다.** $t = 0.24$에서 이미 $\mathrm{SE}$가 $0.249$로 $t = 0.20$의 $0.029$보다 여덟 배 넘게 커진 것이 경계에 다가가는 모습이다.
+
+    교훈은 모의실험 일반에 적용된다. **꼬리에 큰 가중치를 주는 양은 표본으로 재면 안 된다.** 평균과 분산은 잘 추정되는데 같은 표본으로 $E[e^{0.4Q}]$를 재면 틀리는 이유가 이것이고, 히스토그램이 밀도와 잘 겹쳐 보이는 것과도 아무 모순이 없다. 히스토그램은 질량이 있는 곳을 보여 줄 뿐 꼬리의 지수적 무게를 보여 주지 못한다.
 
 ### 감마·지수와 같음을 확인하기
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 세 가지 이름, 같은 분포
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 가지 이름, 같은 분포. $\chi^2_5$를 감마분포로, $\chi^2_2$를 지수분포로 다시 쓰고 밀도를 자리마다 맞춰 본다.
+
+**(1)** $\chi^2_d = \text{Gamma}(\text{형상} = d/2,\ \text{척도} = 2)$임을 밀도를 맞춰 보이고, $d = 2$에서 왜 $\text{Exp}(1/2)$가 되는지 밝히시오. 짝수 자유도에서는 어떤 해석이 더 붙는가.
+
+**(2)** `scipy.stats`의 `gamma`와 `expon`에 모수를 넘길 때 생기는 함정을 찾고, 잘못 넘겼을 때 무슨 일이 일어나는지 수로 보이시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-x = np.array([0.5, 1.0, 2.0, 4.0])
+    **(1) 해석적으로.** 감마분포의 밀도를 형상 $a$, 척도 $\theta$로 적으면
 
-# chi2(d) = Gamma(shape=d/2, scale=2). scipy의 gamma는 a=shape, scale=scale 이다.
-print("chi2(5) :", np.round(stats.chi2(5).pdf(x), 6))
-print("gamma   :", np.round(stats.gamma(a=2.5, scale=2).pdf(x), 6))
+    $$
+    g(q; a, \theta) = \frac{1}{\Gamma(a)\,\theta^{a}}\, q^{a-1} e^{-q/\theta}, \qquad q > 0
+    $$
 
-# d=2 이면 비율 1/2 인 지수분포다. scipy의 expon은 scale=1/rate 를 받는다.
-print("chi2(2) :", np.round(stats.chi2(2).pdf(x), 6))
-print("expon   :", np.round(stats.expon(scale=2).pdf(x), 6))
-```
+    이다. 여기에 $a = d/2$, $\theta = 2$를 넣으면
 
-출력:
+    $$
+    g\!\left(q; \frac d2, 2\right) = \frac{1}{\Gamma(d/2)\,2^{d/2}}\, q^{d/2-1} e^{-q/2}
+    $$
 
-```
-chi2(5) : [0.036616 0.080657 0.138369 0.143976]
-gamma   : [0.036616 0.080657 0.138369 0.143976]
-chi2(2) : [0.3894   0.303265 0.18394  0.067668]
-expon   : [0.3894   0.303265 0.18394  0.067668]
-```
+    이고 이것이 정리 2의 카이제곱 밀도와 **글자 하나까지 같다.** 두 분포는 같은 분포에 붙은 두 이름이며, 감마족 안에서 카이제곱은 "척도가 $2$로 고정되고 형상이 자유도의 절반인 단면"이다.
+
+    $d = 2$를 넣으면 $a = 1$이라 $q^{a-1} = q^0 = 1$이 되어 거듭제곱 인자가 사라진다.
+
+    $$
+    g(q; 1, 2) = \frac{1}{\Gamma(1)\cdot 2}\,e^{-q/2} = \frac12 e^{-q/2}
+    $$
+
+    **형상이 $1$인 감마분포가 지수분포**이고, 척도 $2$는 비율 $\lambda = 1/\theta = 1/2$에 해당하므로 $\chi^2_2 = \text{Exp}(1/2)$다.
+
+    짝수 자유도에는 해석이 하나 더 붙는다. 형상이 정수 $k = d/2$인 감마분포는 **얼랑분포**이고, 이는 독립인 $\text{Exp}(1/2)$를 $k$개 더한 것이다.
+
+    $$
+    \chi^2_{2k} \;=\; \text{Gamma}(k,\ 2) \;=\; \underbrace{\text{Exp}(1/2) + \cdots + \text{Exp}(1/2)}_{k\ \text{개}}
+    $$
+
+    카이제곱의 가법성(정리 4)으로도 같은 식이 나온다. $\chi^2_2$를 $k$개 더하면 $\chi^2_{2k}$이고 각 $\chi^2_2$가 $\text{Exp}(1/2)$이기 때문이다. **제곱정규를 두 개씩 묶으면 지수난수가 된다**는 것이고, 연습문제 8의 박스–뮐러 변환이 쓰는 사실이 바로 이것이다.
+
+    **(2) 해석적으로.** 감마분포에는 널리 쓰이는 두 가지 모수화가 있다.
+
+    $$
+    \text{척도}\ \theta: \; e^{-q/\theta}
+    \qquad\text{대}\qquad
+    \text{비율}\ \beta = 1/\theta: \; e^{-\beta q}
+    $$
+
+    `scipy.stats`는 **척도**를 받는다(`gamma(a, scale=...)`, `expon(scale=...)`). 그런데 $\chi^2_2 = \text{Exp}(1/2)$라고 적을 때의 $1/2$는 **비율**이므로, 그 수를 그대로 `scale`에 넣으면 척도 $1/2$인 다른 분포가 된다. 올바른 값은 $\text{scale} = 1/\lambda = 2$다.
+
+    얼마나 틀리는지는 평균으로 바로 읽힌다. 감마의 평균이 $a\theta$이므로 척도를 $2$ 대신 $1/2$로 주면 평균이 **$4$배 작아진다.**
+
+    $$
+    a\theta = \frac d2 \cdot 2 = d
+    \qquad\text{대}\qquad
+    \frac d2 \cdot \frac12 = \frac d4
+    $$
+
+    **이 실수는 예외를 던지지 않는다.** 두 값 모두 적법한 척도라 코드는 조용히 돌아가고, 틀린 밀도와 틀린 $p$값이 나올 뿐이다. 그래서 모수화를 맞춰 보는 일 자체가 점검 항목이 된다.
+
+    **(1)·(2) 수치적으로.** 밀도만 같은 것으로는 충분하지 않다. CDF와 분위수까지 같아야 "같은 분포"다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    x = np.array([0.5, 1.0, 2.0, 4.0])
+
+    # chi2(d) = Gamma(shape=d/2, scale=2). scipy의 gamma는 a=shape, scale=scale 이다.
+    print("chi2(5) :", np.round(stats.chi2(5).pdf(x), 6))
+    print("gamma   :", np.round(stats.gamma(a=2.5, scale=2).pdf(x), 6))
+
+    # d=2 이면 비율 1/2 인 지수분포다. scipy의 expon은 scale=1/rate 를 받는다.
+    print("chi2(2) :", np.round(stats.chi2(2).pdf(x), 6))
+    print("expon   :", np.round(stats.expon(scale=2).pdf(x), 6))
+    ```
+
+    출력:
+
+    ```
+    chi2(5) : [0.036616 0.080657 0.138369 0.143976]
+    gamma   : [0.036616 0.080657 0.138369 0.143976]
+    chi2(2) : [0.3894   0.303265 0.18394  0.067668]
+    expon   : [0.3894   0.303265 0.18394  0.067668]
+    ```
+
+    자유도를 바꿔 가며 밀도·분포함수·분위수를 모두 맞추고, 모수화 함정과 얼랑 해석도 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    x = np.array([0.5, 1.0, 2.0, 4.0])
+
+    # 밀도만이 아니라 CDF 와 분위수까지 같아야 "같은 분포"다.
+    for d in (1, 2, 3, 5, 8):
+        g = stats.gamma(a=d / 2, scale=2)
+        c = stats.chi2(d)
+        print(f"d={d}:  gamma(a={d/2}, scale=2) 와 pdf {np.allclose(c.pdf(x), g.pdf(x))},"
+              f"  cdf {np.allclose(c.cdf(x), g.cdf(x))},"
+              f"  ppf {np.allclose(c.ppf([.05, .5, .95]), g.ppf([.05, .5, .95]))}")
+
+    # 함정: scipy 의 gamma·expon 은 **척도**를 받는다. 비율을 넣으면 조용히 틀린다.
+    print(f"\n척도 2 를 바르게 준 경우   : 평균 {stats.gamma(a=2.5, scale=2).mean():.4f}"
+          f"  (chi2(5) 의 평균 {stats.chi2(5).mean():.4f})")
+    print(f"비율 1/2 를 잘못 준 경우   : 평균 {stats.gamma(a=2.5, scale=0.5).mean():.4f}"
+          f"  <- 4배 작다. 예외도 경고도 없다")
+    print(f"expon(scale=2)  평균 {stats.expon(scale=2).mean():.4f}"
+          f"   expon(scale=0.5) 평균 {stats.expon(scale=0.5).mean():.4f}")
+
+    # 짝수 자유도는 얼랑분포, 곧 독립 Exp(1/2) 를 d/2 개 더한 것이다.
+    rng = np.random.default_rng(7)
+    print(f"\n{'k':>3}{'chi2_(2k)':>12}{'KS 거리':>12}{'p값':>9}{'표본평균':>12}{'이론':>7}")
+    for k in (1, 2, 3, 5):
+        s = rng.exponential(scale=2, size=(200_000, k)).sum(axis=1)
+        r = stats.kstest(s, "chi2", args=(2 * k,))
+        print(f"{k:>3}{f'chi2_{2*k}':>12}{r.statistic:>12.5f}{r.pvalue:>9.4f}"
+              f"{s.mean():>12.4f}{2*k:>7}")
+    print(f"KS 의 5% 임계 ~ 1.36/sqrt(200000) = {1.36 / np.sqrt(200_000):.5f}")
+    ```
+
+    출력:
+
+    ```
+    d=1:  gamma(a=0.5, scale=2) 와 pdf True,  cdf True,  ppf True
+    d=2:  gamma(a=1.0, scale=2) 와 pdf True,  cdf True,  ppf True
+    d=3:  gamma(a=1.5, scale=2) 와 pdf True,  cdf True,  ppf True
+    d=5:  gamma(a=2.5, scale=2) 와 pdf True,  cdf True,  ppf True
+    d=8:  gamma(a=4.0, scale=2) 와 pdf True,  cdf True,  ppf True
+
+    척도 2 를 바르게 준 경우   : 평균 5.0000  (chi2(5) 의 평균 5.0000)
+    비율 1/2 를 잘못 준 경우   : 평균 1.2500  <- 4배 작다. 예외도 경고도 없다
+    expon(scale=2)  평균 2.0000   expon(scale=0.5) 평균 0.5000
+
+      k   chi2_(2k)       KS 거리       p값        표본평균     이론
+      1      chi2_2     0.00230   0.2421      1.9993      2
+      2      chi2_4     0.00148   0.7761      3.9948      4
+      3      chi2_6     0.00157   0.7083      6.0015      6
+      5     chi2_10     0.00324   0.0296      9.9865     10
+    KS 의 5% 임계 ~ 1.36/sqrt(200000) = 0.00304
+    ```
+
+    **모수화 대응은 완전히 맞는다.** $d$가 홀수든 짝수든 `gamma(a=d/2, scale=2)`가 밀도·분포함수·분위수에서 `chi2(d)`와 같다. 이것은 모의실험이 아니라 **항등식의 확인**이므로 `True`가 나오는 것이 당연하다.
+
+    얼랑 해석의 모의실험에서는 표본평균이 네 경우 모두 이론값 $2k$와 맞는다. 그런데 **KS 검정은 $k = 5$에서 $p = 0.0296$으로 $5\%$를 밑돈다.** 덮어 두지 말고 따져 보자.
+
+    $\chi^2_{2k} = \text{Exp}(1/2)$의 $k$개 합은 **정확한 항등식**이므로 귀무가설이 참이고, 따라서 이 $p$값은 오차가 아니라 **우연**이다. 네 번 검정했으므로 적어도 하나가 $5\%$를 밑돌 확률은 $1 - 0.95^4 = 0.185$로 다섯 번에 한 번쯤 일어난다. 씨앗을 바꾸면 사라지는 종류의 일이고, 실제로 KS 거리 $0.00324$는 임계값 $0.00304$를 겨우 $7\%$ 넘겼을 뿐이다.
+
+    여기서 짚어 둘 것은 **표본이 클 때 KS 검정이 지나치게 예민해진다**는 점이다. 임계 거리가 $1.36/\sqrt N$로 줄어드므로 $N = 200{,}000$에서는 $0.3\%$의 분포 차이도 잡아낸다. 참인 귀무가설 아래에서 $p$값은 $(0,1)$에 균등하게 흩어지며, 작은 $p$값 하나를 "어긋남"으로 읽으면 안 된다. 반대로 분포가 **정말로** 조금 다를 때도 큰 $N$에서는 반드시 기각되므로, 큰 표본에서 KS의 $p$값은 "같은가"보다 거리 자체를 보는 쪽이 낫다.
+
+    **함정의 대가는 평균이 $5$에서 $1.25$로 바뀌는 것이다.** 유도한 대로 정확히 $4$배 차이이고, 어떤 경고도 없이 그렇게 된다. $d/2 \cdot 1/2 = 1.25$라는 수가 그 자리에 조용히 들어앉는 셈이다.
+
+    **이름이 셋인 것이 낭비가 아니다.** 같은 분포를 어느 이름으로 부르느냐에 따라 보이는 성질이 다르다. 카이제곱으로 부르면 자유도의 가법성이 보이고, 감마로 부르면 형상과 척도를 따로 움직일 수 있어 일반화가 보이고, 지수로 부르면 무기억성과 포아송 과정이 보인다. 실무에서는 척도를 추정해야 할 때 감마로 옮겨 쓰는 일이 흔하다. 카이제곱은 척도가 $2$로 못박혀 있어서다.
 
 ### 큰 자유도에서의 정규근사
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 자유도가 커지면 대칭에 가까워진다
+**보기 5.** <span class="diff easy" title="쉬움"></span> 대칭으로 다가가는 속도. $(Q-d)/\sqrt{2d}$의 밀도를 $d = 5, 20, 100$에 대해 $N(0,1)$과 겹쳐 $[-4, 4]$에서 그린다.
+
+**(1)** 표준화한 분포의 지지집합의 왼쪽 끝과 최빈값을 $d$의 함수로 구하고, 최빈값이 왜도와 어떤 관계인지 밝히시오.
+
+**(2)** 표준화한 분포와 $N(0,1)$ 사이의 콜모고로프–스미르노프 거리가 $d$에 따라 어떤 속도로 줄어드는지 닫힌 꼴로 구하고 수치로 확인하시오. 가장 많이 벌어지는 자리는 어디인가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-z = np.linspace(-4, 4, 400)
+    **(1) 해석적으로.** $Y = (Q-d)/\sqrt{2d}$로 두면 $E[Y] = 0$, $\operatorname{Var}(Y) = 1$이다. 밀도는 변수변환으로
 
-fig, ax = plt.subplots(figsize=(12, 3))
-# (Q - d)/sqrt(2d) 를 그린다. 중심극한정리에 따라 N(0,1)로 가야 한다.
-# 왜도가 sqrt(8/d) 이므로 d=5에서 1.26, d=20에서 0.63, d=100에서 0.28 이다.
-# 두 가지를 보라.
-#   Q >= 0 이므로 왼쪽은 -sqrt(d/2) 에서 **뚝 잘린다**(d=5면 -1.58).
-#   대신 오른쪽 꼬리가 정규보다 두껍다. 치우침이 사라지는 속도가 느리다.
-for d in [5, 20, 100]:
-    ax.plot(z, stats.chi2(d).pdf(d + z * np.sqrt(2 * d)) * np.sqrt(2 * d),
-            lw=2, label=f'standardized chi2({d})')
-ax.plot(z, stats.norm.pdf(z), 'k--', lw=2, label='N(0, 1)')
-ax.set_xlabel('(q - d) / sqrt(2d)')
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    $$
+    f_Y(z) = \sqrt{2d}\; f_Q\!\left(d + z\sqrt{2d}\right)
+    $$
 
-![표준화한 카이제곱과 표준정규](./img/chi_square_364.png)
+    이다. $Q \ge 0$이 $z \ge -d/\sqrt{2d}$와 같으므로 지지집합이 왼쪽에서 **뚝 잘린다.**
+
+    $$
+    z \ge -\frac{d}{\sqrt{2d}} = -\sqrt{\frac d2}
+    $$
+
+    **이것이 정규근사의 가장 뚜렷한 결함이다.** 정규분포는 $(-\infty, \infty)$ 전체에 질량을 두는데 표준화한 카이제곱은 $-\sqrt{d/2}$ 왼쪽에 아무것도 없다. 다만 그 벽이 $\sqrt{d/2}$로 멀어지므로 자유도가 커지면 문제가 되지 않는다($d = 5$에서 $-1.58$, $d = 100$에서 $-7.07$).
+
+    최빈값은 보기 2의 $\max(d-2, 0)$을 그대로 옮기면 된다. $d \ge 2$에서
+
+    $$
+    \text{최빈값}(Y) = \frac{(d-2) - d}{\sqrt{2d}} = -\frac{2}{\sqrt{2d}} = -\sqrt{\frac2d}
+    $$
+
+    이다. 봉우리가 $0$의 **왼쪽**에 있고, 보기 2에서 본 대로 그 거리가 왜도의 절반이다.
+
+    $$
+    \left|\text{최빈값}(Y)\right| = \sqrt{\frac2d} = \frac12\sqrt{\frac8d} = \frac{\gamma_1}{2}
+    $$
+
+    초과첨도는 연습문제 9의 $\gamma_2 = 12/d$다. 세 양이 모두 $0$으로 가지만 속도가 다르다. **왜도는 $d^{-1/2}$로, 초과첨도는 $d^{-1}$로 간다.** 그러므로 큰 자유도에서 남는 결함은 첨도가 아니라 **치우침**이며, 정규근사를 고칠 때 왜도항부터 손대는 까닭이 이것이다.
+
+    **(2) 해석적으로.** 치우침이 CDF를 얼마나 밀어 놓는지는 에지워스 전개의 첫 보정항이 말해 준다. 표준화한 합에 대해
+
+    $$
+    F_Y(z) = \Phi(z) - \frac{\gamma_1}{6}\left(z^2 - 1\right)\varphi(z) + O\!\left(\frac1d\right)
+    $$
+
+    이므로 KS 거리는 그 보정항의 최댓값이다.
+
+    $$
+    \sup_z \left|F_Y(z) - \Phi(z)\right| \approx \frac{\gamma_1}{6}\,\sup_z \left|(z^2-1)\varphi(z)\right|
+    $$
+
+    남은 것은 $h(z) = (z^2-1)\varphi(z)$의 최댓값을 찾는 일이다. 미분하면 $\varphi'(z) = -z\varphi(z)$를 써서
+
+    $$
+    h'(z) = 2z\,\varphi(z) - z(z^2-1)\varphi(z) = z\left(3 - z^2\right)\varphi(z)
+    $$
+
+    이고 임계점은 $z = 0$과 $z = \pm\sqrt3$이다. 값을 재면
+
+    $$
+    |h(0)| = \varphi(0) = \frac{1}{\sqrt{2\pi}} = 0.3989,
+    \qquad
+    |h(\pm\sqrt3)| = 2\varphi(\sqrt3) = 0.1780
+    $$
+
+    이라 **최댓값은 $z = 0$에서 잡힌다.** 그러므로 $\gamma_1 = \sqrt{8/d}$를 넣으면
+
+    $$
+    \text{KS} \approx \frac{1}{6}\sqrt{\frac8d}\cdot\frac{1}{\sqrt{2\pi}}
+    = \frac{2\sqrt2}{6\sqrt{2\pi}\sqrt d}
+    = \frac{1}{3\sqrt{\pi d}}
+    $$
+
+    을 얻는다. 두 가지가 나왔다. 첫째, **수렴 속도가 $d^{-1/2}$이고 상수는 $1/(3\sqrt\pi) = 0.1881$**이다. 둘째, **가장 많이 벌어지는 자리는 꼬리가 아니라 $z = 0$, 곧 평균 근처**다. 치우친 분포에서 평균 왼쪽의 질량이 절반을 넘는다는 보기 2의 사실이 CDF 차이로 나타난 것이다.
+
+    **(1)·(2) 수치적으로.** 먼저 그림을 그린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    z = np.linspace(-4, 4, 400)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # (Q - d)/sqrt(2d) 를 그린다. 중심극한정리에 따라 N(0,1)로 가야 한다.
+    # 왜도가 sqrt(8/d) 이므로 d=5에서 1.26, d=20에서 0.63, d=100에서 0.28 이다.
+    # 두 가지를 보라.
+    #   Q >= 0 이므로 왼쪽은 -sqrt(d/2) 에서 **뚝 잘린다**(d=5면 -1.58).
+    #   대신 오른쪽 꼬리가 정규보다 두껍다. 치우침이 사라지는 속도가 느리다.
+    for d in [5, 20, 100]:
+        ax.plot(z, stats.chi2(d).pdf(d + z * np.sqrt(2 * d)) * np.sqrt(2 * d),
+                lw=2, label=f'standardized chi2({d})')
+    ax.plot(z, stats.norm.pdf(z), 'k--', lw=2, label='N(0, 1)')
+    ax.set_xlabel('(q - d) / sqrt(2d)')
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![표준화한 카이제곱과 표준정규](./img/chi_square_364.png)
+
+    이제 (1)의 세 양과 (2)의 닫힌 꼴을 차례로 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 표준화한 밀도. Y = (Q - d)/sqrt(2d) 이므로 f_Y(z) = sqrt(2d) * f_Q(d + z*sqrt(2d)).
+    def std_pdf(z, d):
+        return stats.chi2(d).pdf(d + z * np.sqrt(2 * d)) * np.sqrt(2 * d)
+
+    print(f"{'d':>7}{'왼쪽끝':>10}{'최빈(유도)':>12}{'최빈(격자)':>12}"
+          f"{'봉우리':>9}{'왜도':>9}{'초과첨도':>11}")
+    for d in (5, 20, 100, 400, 1600):
+        left, mode = -np.sqrt(d / 2), -np.sqrt(2 / d)
+        zs = np.linspace(left + 1e-9, 8, 400_001)
+        pk = std_pdf(zs, d)
+        g1, g2 = stats.chi2.stats(d, moments="sk")
+        print(f"{d:>7}{left:>10.4f}{mode:>12.4f}{zs[pk.argmax()]:>12.4f}"
+              f"{pk.max():>9.4f}{float(g1):>9.4f}{float(g2):>11.4f}")
+    print(f"{'N(0,1)':>7}{'-inf':>10}{0.0:>12.4f}{0.0:>12.4f}"
+          f"{1 / np.sqrt(2 * np.pi):>9.4f}{0.0:>9.4f}{0.0:>11.4f}")
+
+    # 정규분포까지의 KS 거리. 유도에 따르면 1/(3 sqrt(pi d)) 이고
+    # 가장 많이 벌어지는 자리는 꼬리가 아니라 z = 0, 곧 평균이다.
+    print(f"\n{'d':>7}{'KS 거리':>11}{'1/(3 sqrt(pi d))':>19}{'비':>8}{'최대 벌어짐 z':>15}")
+    for d in (5, 20, 100, 400, 1600, 6400):
+        zz = np.linspace(-np.sqrt(d / 2), 10, 400_001)
+        gap = np.abs(stats.chi2(d).cdf(d + zz * np.sqrt(2 * d)) - stats.norm.cdf(zz))
+        ks, pred = gap.max(), 1 / (3 * np.sqrt(np.pi * d))
+        print(f"{d:>7}{ks:>11.6f}{pred:>19.6f}{ks / pred:>8.4f}{zz[gap.argmax()]:>15.4f}")
+
+    # 그림 창은 [-4, 4] 다. 왼쪽 절단이 그 안에 들어오는 자유도만 잘린 모습이 보인다.
+    print("\n그림 창 [-4, 4] 안에 왼쪽 끝 -sqrt(d/2) 가 들어오는가:")
+    for d in (5, 20, 100):
+        left = -np.sqrt(d / 2)
+        print(f"  d={d:>4}: {left:>8.4f}  ->  "
+              f"{'창 안이라 절단이 보인다' if left > -4 else '창 밖이라 절단이 안 보인다'}")
+    ```
+
+    출력:
+
+    ```
+          d       왼쪽끝      최빈(유도)      최빈(격자)      봉우리       왜도       초과첨도
+          5   -1.5811     -0.6325     -0.6325   0.4876   1.2649     2.4000
+         20   -3.1623     -0.3162     -0.3162   0.4166   0.6325     0.6000
+        100   -7.0711     -0.1414     -0.1414   0.4023   0.2828     0.1200
+        400  -14.1421     -0.0707     -0.0707   0.3998   0.1414     0.0300
+       1600  -28.2843     -0.0354     -0.0353   0.3992   0.0707     0.0075
+     N(0,1)      -inf      0.0000      0.0000   0.3989   0.0000     0.0000
+
+          d      KS 거리   1/(3 sqrt(pi d))       비       최대 벌어짐 z
+          5   0.084459           0.084104  1.0042        -0.0516
+         20   0.042114           0.042052  1.0015        -0.0262
+        100   0.018812           0.018806  1.0003        -0.0118
+        400   0.009404           0.009403  1.0001        -0.0059
+       1600   0.004702           0.004702  1.0000        -0.0029
+       6400   0.002351           0.002351  1.0000        -0.0014
+
+    그림 창 [-4, 4] 안에 왼쪽 끝 -sqrt(d/2) 가 들어오는가:
+      d=   5:  -1.5811  ->  창 안이라 절단이 보인다
+      d=  20:  -3.1623  ->  창 안이라 절단이 보인다
+      d= 100:  -7.0711  ->  창 밖이라 절단이 안 보인다
+    ```
+
+    **유도가 모두 맞는다.** 격자가 찾은 최빈값이 $-\sqrt{2/d}$와 넷째 자리까지 같고, 봉우리 높이가 $0.4876$에서 $0.3992$로 내려가며 $1/\sqrt{2\pi} = 0.3989$에 **위에서** 다가간다. 표준화해도 봉우리가 정규보다 높은 것은 왼쪽 벽이 질량을 가운데로 밀어 놓기 때문이다.
+
+    **KS 거리의 닫힌 꼴이 놀랄 만큼 잘 맞는다.** $d = 5$에서도 비가 $1.0042$이고 $d \ge 400$에서는 $1.0000$이다. 에지워스 전개의 첫 항 하나로 상수 $1/(3\sqrt\pi) = 0.1881$까지 맞힌 셈이다. 그리고 마지막 열이 (2)의 예측을 확인한다. **최대 벌어짐이 $z \approx 0$에서 일어나며** 자유도가 커질수록 정확히 $0$으로 다가간다.
+
+    **속도가 느리다는 것이 수치로 분명하다.** $d = 100$에서 KS 거리가 아직 $0.0188$이다. 자유도를 $100$까지 올려도 CDF가 둘째 소수점에서 어긋난다는 뜻이고, $d^{-1/2}$ 속도이므로 거리를 절반으로 줄이려면 자유도를 **네 배**로 늘려야 한다. 본문이 말한 "수렴이 느린 편"의 정확한 내용이 이것이며, 연습문제 7의 변환근사들이 필요한 이유다. 그 변환들은 왜도항 자체를 상쇄해 $d^{-1/2}$ 항을 없애 버린다.
+
+    **그림이 보여 주는 것과 가리는 것.** 왼쪽 절단은 $d = 5$와 $d = 20$에서만 창 안에 들어온다. $d = 100$의 벽은 $-7.07$이라 $[-4,4]$ 밖이므로, 그림에서 $d = 100$ 곡선은 정규와 거의 구별되지 않는다. 그러나 KS 거리는 그 자유도에서도 $0.0188$로 $d = 5$의 $0.0845$의 $22\%$나 남아 있다. **눈으로 보아 겹치는 것이 수치로 맞는 것은 아니다.** 게다가 차이가 가장 큰 자리가 $z \approx 0$인데, 거기는 두 곡선이 가장 높고 가까워 보여 차이를 읽어 내기 가장 어려운 자리다.
 
 ---
 
