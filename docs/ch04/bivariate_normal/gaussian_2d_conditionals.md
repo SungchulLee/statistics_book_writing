@@ -29,77 +29,208 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이변량 정규분포의 조건부분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이변량 정규분포의 조건부분포. $\rho = 0, 0.5, 0.9$인 표준 이변량 정규분포에서 $a = 1$로 자른 단면을 결합 등고선과 나란히 그린다.
+
+**(1)** 결합밀도의 지수를 $b$에 대해 완전제곱으로 묶어 $b \mid a = a_0 \sim N(\rho a_0,\ 1-\rho^2)$을 유도하시오. 조건부 분산이 $a_0$에 의존하지 않는 까닭은 식의 어디에서 나오는가.
+
+**(2)** 세 $\rho$에서 조건부 평균과 표준편차를 모의실험으로 확인하시오. 위 해석 표는 $\rho = 0.9$에서 "$a$를 알면 $b$가 거의 결정된다"고 한다. 분산과 표준편차 가운데 어느 쪽으로 재는 말인가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-def bivariate_gaussian_pdf(x, y, rho):
-    """표준화된 이변량 정규분포의 밀도. 두 주변분포가 모두 N(0,1)이고
-    상관계수만 rho 인 경우다."""
-    return (np.exp(-(x**2 - 2*rho*x*y + y**2) / (2*(1 - rho**2)))
-            / (2 * np.pi * np.sqrt(1 - rho**2)))
+    **(1) 해석적으로.** 코드의 `bivariate_gaussian_pdf`가 쓰는 밀도는
+
+    $$
+    f(a, b) = \frac{1}{2\pi\sqrt{1-\rho^2}}
+    \exp\!\left(-\frac{a^2 - 2\rho ab + b^2}{2(1-\rho^2)}\right)
+    $$
+
+    다. 지수의 분자를 $b$에 대한 이차식으로 보고 완전제곱을 만든다.
+
+    $$
+    b^2 - 2\rho a b + a^2
+    = \big(b - \rho a\big)^2 - \rho^2 a^2 + a^2
+    = \big(b - \rho a\big)^2 + a^2\big(1 - \rho^2\big)
+    $$
+
+    $-2\rho ab$를 메우려고 $(\rho a)^2$을 더했다 뺀 것뿐이다. 이것을 넣고 분모 $2(1-\rho^2)$로 나누면 둘째 항의 $(1-\rho^2)$가 약분된다.
+
+    $$
+    -\frac{a^2 - 2\rho ab + b^2}{2(1-\rho^2)}
+    = -\frac{(b - \rho a)^2}{2(1-\rho^2)} - \frac{a^2}{2}
+    $$
+
+    따라서 밀도가 **두 인수의 곱**으로 쪼개진다.
+
+    $$
+    f(a, b)
+    = \underbrace{\frac{1}{\sqrt{2\pi}}e^{-a^2/2}}_{f_A(a)\,=\,N(0,1)}
+    \cdot
+    \underbrace{\frac{1}{\sqrt{2\pi}\sqrt{1-\rho^2}}
+    \exp\!\left(-\frac{(b-\rho a)^2}{2(1-\rho^2)}\right)}_{N(\rho a,\;1-\rho^2)\text{의 밀도}}
+    $$
+
+    왼쪽 인수가 $a$만의 함수이고 $b$에 대해 적분하면 $1$이 되므로 그것이 바로 $a$의 주변밀도다. 그러면 $f(b \mid a) = f(a,b)/f_A(a)$가 오른쪽 인수이므로
+
+    $$
+    b \mid a = a_0 \;\sim\; N\!\big(\rho a_0,\; 1 - \rho^2\big)
+    $$
+
+    이다. **한 번의 완전제곱으로 주변분포와 조건부분포가 동시에 나온다.** 연습문제 4가 적분으로 구하는 주변분포도 이 쪼개기의 부산물이다.
+
+    **분산이 $a_0$에 의존하지 않는 까닭**은 식에서 분명하다. $a$는 오른쪽 인수에 **$b - \rho a$라는 평행이동으로만** 들어간다. 봉우리의 자리를 $\rho a_0$로 옮기기만 하고 폭 $\sqrt{1-\rho^2}$은 건드리지 않는다. 완전제곱이 깔끔하게 되는 것은 지수가 $b$의 **이차식**이고 그 이차항의 계수가 $a$와 무관하기 때문인데, 이 구조가 바로 회귀의 **등분산 가정**에 대응한다. 코드 주석이 적은 세 성질이 모두 이 한 줄의 대수에서 나온다.
+
+    **(2) 해석적으로.** 세 $\rho$에 넣으면 조건부 분산이 $1$, $0.75$, $0.19$이고 조건부 표준편차가 $1$, $0.8660$, $0.4359$다. 위 해석 표의 숫자와 같다.
+
+    "거의 결정된다"는 **분산으로 재는 말**이다. $\rho = 0.9$이면 설명된 분산의 비율이 $\rho^2 = 81\%$다. 그런데 표준편차는 $1 \to 0.4359$로 $56.4\%$만 줄었다.
+
+    $$
+    1 - \sqrt{1-\rho^2} = 1 - 0.4359 = 0.564
+    $$
+
+    예측구간의 폭은 **표준편차**에 비례하므로, 실무에서 느끼는 개선은 $81\%$가 아니라 $56\%$다. 일반적으로
+
+    $$
+    \text{분산 감소} = \rho^2, \qquad \text{SD 감소} = 1 - \sqrt{1-\rho^2}
+    $$
+
+    이고 뒤의 것이 늘 작다. 표준편차를 절반으로 줄이려면 $\sqrt{1-\rho^2} = 1/2$에서 $\rho = \sqrt{3}/2 = 0.866$이 필요하고, 10분의 1로 줄이려면 $\rho = 0.995$가 필요하다. **상관계수 $0.9$는 생각보다 약하다.** $R^2$를 보고 받는 인상과 예측구간을 보고 받는 인상이 갈리는 자리다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def bivariate_gaussian_pdf(x, y, rho):
+        """표준화된 이변량 정규분포의 밀도. 두 주변분포가 모두 N(0,1)이고
+        상관계수만 rho 인 경우다."""
+        return (np.exp(-(x**2 - 2*rho*x*y + y**2) / (2*(1 - rho**2)))
+                / (2 * np.pi * np.sqrt(1 - rho**2)))
 
 
-def conditional_pdf(x0, y, rho):
-    """X = x0 으로 조건을 걸었을 때 Y의 분포.
+    def conditional_pdf(x0, y, rho):
+        """X = x0 으로 조건을 걸었을 때 Y의 분포.
 
-    이변량 정규분포의 핵심 성질 세 가지가 여기 들어 있다.
-      1. 조건부분포도 **정규분포**다. (다른 분포에서는 일반적으로 성립하지 않는다.)
-      2. 조건부 평균은 x0에 **선형**으로 의존한다: mu = rho * x0.
-         이것이 선형회귀가 왜 정규분포 가정과 잘 맞는지의 뿌리다.
-      3. 조건부 분산 1 - rho^2 은 **x0에 의존하지 않는다.**
-         어디를 잘라도 폭이 같다는 뜻이며, 회귀의 등분산 가정에 대응한다.
-    """
-    sigma_cond = np.sqrt(1 - rho**2)
-    mu_cond = rho * x0
-    return (1 / (np.sqrt(2*np.pi) * sigma_cond)
-            * np.exp(-0.5 * ((y - mu_cond) / sigma_cond)**2))
+        이변량 정규분포의 핵심 성질 세 가지가 여기 들어 있다.
+          1. 조건부분포도 **정규분포**다. (다른 분포에서는 일반적으로 성립하지 않는다.)
+          2. 조건부 평균은 x0에 **선형**으로 의존한다: mu = rho * x0.
+             이것이 선형회귀가 왜 정규분포 가정과 잘 맞는지의 뿌리다.
+          3. 조건부 분산 1 - rho^2 은 **x0에 의존하지 않는다.**
+             어디를 잘라도 폭이 같다는 뜻이며, 회귀의 등분산 가정에 대응한다.
+        """
+        sigma_cond = np.sqrt(1 - rho**2)
+        mu_cond = rho * x0
+        return (1 / (np.sqrt(2*np.pi) * sigma_cond)
+                * np.exp(-0.5 * ((y - mu_cond) / sigma_cond)**2))
 
-x = np.linspace(-3, 3, 200)
-y = np.linspace(-3, 3, 200)
-X, Y = np.meshgrid(x, y)
+    x = np.linspace(-3, 3, 200)
+    y = np.linspace(-3, 3, 200)
+    X, Y = np.meshgrid(x, y)
 
-rho_vals = [0.0, 0.5, 0.9]
-cond_val = 1.0  # condition on a = 1
+    rho_vals = [0.0, 0.5, 0.9]
+    cond_val = 1.0  # condition on a = 1
 
-fig, axes = plt.subplots(len(rho_vals), 2, figsize=(10, 4 * len(rho_vals)))
+    fig, axes = plt.subplots(len(rho_vals), 2, figsize=(10, 4 * len(rho_vals)))
 
-for i, rho in enumerate(rho_vals):
-    Z = bivariate_gaussian_pdf(X, Y, rho)
-    mu_cond = rho * cond_val
-    sigma_cond = np.sqrt(1 - rho**2)
+    for i, rho in enumerate(rho_vals):
+        Z = bivariate_gaussian_pdf(X, Y, rho)
+        mu_cond = rho * cond_val
+        sigma_cond = np.sqrt(1 - rho**2)
 
-    # 결합분포 등고선에 자른 면을 표시
-    ax = axes[i, 0]
-    ax.contourf(X, Y, Z, levels=20, cmap="Blues", alpha=0.4)
-    ax.axvline(cond_val, color="red", linestyle="--", lw=2, label=f"a = {cond_val}")
-    ax.set_xlabel("a")
-    ax.set_ylabel("b")
-    ax.set_title(f"Joint PDF (ρ = {rho})")
-    ax.legend(fontsize=8)
-    ax.set_aspect("equal")
+        # 결합분포 등고선에 자른 면을 표시
+        ax = axes[i, 0]
+        ax.contourf(X, Y, Z, levels=20, cmap="Blues", alpha=0.4)
+        ax.axvline(cond_val, color="red", linestyle="--", lw=2, label=f"a = {cond_val}")
+        ax.set_xlabel("a")
+        ax.set_ylabel("b")
+        ax.set_title(f"Joint PDF (ρ = {rho})")
+        ax.legend(fontsize=8)
+        ax.set_aspect("equal")
 
-    # 조건부 밀도함수
-    ax = axes[i, 1]
-    cond_y = conditional_pdf(cond_val, y, rho)
-    ax.plot(y, cond_y, "b-", lw=2)
-    ax.axvline(mu_cond, color="red", linestyle="--", lw=1.5,
-               label=f"E[b|a=1] = {mu_cond:.2f}")
-    ax.fill_between(y, cond_y, alpha=0.15, color="blue")
-    ax.set_xlabel("b")
-    ax.set_ylabel("f(b | a = 1)")
-    ax.set_title(f"Conditional PDF (σ = {sigma_cond:.3f})")
-    ax.legend(fontsize=8)
+        # 조건부 밀도함수
+        ax = axes[i, 1]
+        cond_y = conditional_pdf(cond_val, y, rho)
+        ax.plot(y, cond_y, "b-", lw=2)
+        ax.axvline(mu_cond, color="red", linestyle="--", lw=1.5,
+                   label=f"E[b|a=1] = {mu_cond:.2f}")
+        ax.fill_between(y, cond_y, alpha=0.15, color="blue")
+        ax.set_xlabel("b")
+        ax.set_ylabel("f(b | a = 1)")
+        ax.set_title(f"Conditional PDF (σ = {sigma_cond:.3f})")
+        ax.legend(fontsize=8)
 
-plt.tight_layout()
-plt.show()
-```
+    plt.tight_layout()
+    plt.show()
+    ```
 
-![2차원 정규조건부분포](./img/gaussian_2d_conditionals_30.png)
+    ![2차원 정규조건부분포](./img/gaussian_2d_conditionals_30.png)
+
+    왼쪽 열의 등고선이 위에서 아래로 원 $\to$ 기운 타원 $\to$ 더 납작한 타원으로 바뀌고, 빨간 점선 $a = 1$이 자르는 자리가 점점 위로 올라간다. 오른쪽 열의 종 모양 곡선은 봉우리가 $0 \to 0.5 \to 0.9$로 옮겨 가면서 좁아진다. **자른 단면이 늘 정규분포 모양이라는 것**이 이 그림의 요점이다.
+
+    이제 $a$를 $1$ 근처로 자른 표본으로 (1)과 (2)를 확인한다.
+
+    ```python
+    import numpy as np
+    from math import sqrt
+
+    rng = np.random.default_rng(0)
+    N, a0, h = 4_000_000, 1.0, 0.02      # a 를 [1-h, 1+h] 띠로 자른다
+
+    print(f"{'rho':>5}{'E[b|a=1]':>10}{'Var':>8}{'SD':>8}{'설명분산':>10}{'SD 감소':>9}")
+    for rho in (0.0, 0.5, 0.9):
+        print(f"{rho:>5}{rho*a0:>10.4f}{1-rho**2:>8.4f}{sqrt(1-rho**2):>8.4f}"
+              f"{rho**2*100:>9.1f}%{(1-sqrt(1-rho**2))*100:>8.1f}%")
+
+    print(f"\n띠 폭 +-{h} 로 잘라 확인한다 (N = {N:,})")
+    print(f"{'rho':>5}{'띠 안 개수':>12}{'E[a|띠]':>10}{'E[b|띠]':>10}{'rho*E[a|띠]':>13}"
+          f"{'SE':>9}{'z':>8}{'SD[b|띠]':>11}{'이론 SD':>10}")
+    Z = rng.standard_normal((N, 2))
+    for rho in (0.0, 0.5, 0.9):
+        # b = rho*a + sqrt(1-rho^2)*Z2 로 만들면 정확히 Corr(a, b) = rho 다.
+        a = Z[:, 0]
+        b = rho * a + sqrt(1 - rho**2) * Z[:, 1]
+        m = np.abs(a - a0) <= h
+        n = int(m.sum())
+        ea, eb, sb = a[m].mean(), b[m].mean(), b[m].std()
+        se = sqrt(1 - rho**2) / sqrt(n)
+        print(f"{rho:>5}{n:>12}{ea:>10.5f}{eb:>10.5f}{rho*ea:>13.5f}"
+              f"{se:>9.5f}{(eb-rho*ea)/se:>8.3f}{sb:>11.5f}{sqrt(1-rho**2):>10.5f}")
+    ```
+
+    출력:
+
+    ```
+      rho  E[b|a=1]     Var      SD      설명분산    SD 감소
+      0.0    0.0000  1.0000  1.0000      0.0%     0.0%
+      0.5    0.5000  0.7500  0.8660     25.0%    13.4%
+      0.9    0.9000  0.1900  0.4359     81.0%    56.4%
+
+    띠 폭 +-0.02 로 잘라 확인한다 (N = 4,000,000)
+      rho      띠 안 개수    E[a|띠]    E[b|띠]   rho*E[a|띠]       SE       z    SD[b|띠]     이론 SD
+      0.0       38601   0.99991  -0.00394      0.00000  0.00509  -0.774    0.99932   1.00000
+      0.5       38601   0.99991   0.49654      0.49996  0.00441  -0.774    0.86544   0.86603
+      0.9       38601   0.99991   0.89820      0.89992  0.00222  -0.774    0.43569   0.43589
+    ```
+
+    (1)과 (2)가 모두 맞는다.
+
+    **조건부 평균.** 띠 안에서 잰 $E[b \mid \text{띠}]$가 $-0.0039$, $0.4965$, $0.8982$이고 예측값 $\rho\,E[a \mid \text{띠}]$가 $0$, $0.4999$, $0.8999$다. $z$가 세 줄 모두 $-0.774$로 $1$ SE 안이다. 띠의 폭을 $\pm 0.02$로 좁게 잡았으므로 $E[a \mid \text{띠}] = 0.99991$이 $a_0 = 1$과 거의 같고, $\rho$를 곱한 값으로 비교한 것은 그 남은 $0.00009$까지 치워 두기 위함이다.
+
+    **조건부 표준편차.** $0.99932$, $0.86544$, $0.43569$가 이론값 $1$, $0.86603$, $0.43589$와 소수점 셋째 자리까지 맞는다. 세 값 모두 이론보다 아주 조금 작은데, $38601$개 표본의 표준편차 추정이 $1/\sqrt{2n} = 0.0036$ 수준으로 흔들리니 그 안이다.
+
+    **$z$가 세 줄 모두 똑같은 것이 우연이 아니다.** 코드가 $b = \rho a + \sqrt{1-\rho^2}\,Z_2$로 만들었으므로
+
+    $$
+    \frac{E[b \mid \text{띠}] - \rho\,E[a \mid \text{띠}]}{\sqrt{1-\rho^2}/\sqrt n}
+    = \frac{\sqrt{1-\rho^2}\;\overline{Z_2}}{\sqrt{1-\rho^2}/\sqrt n}
+    = \sqrt n\,\overline{Z_2}
+    $$
+
+    로 $\rho$가 깨끗이 약분된다. 띠를 고르는 조건이 $a$만 보므로 $Z_2$의 띠 안 평균은 $\rho$와 무관하고, 세 줄이 **같은 잡음을 재사용**한 셈이다. 세 줄의 일치를 "세 번 독립으로 확인했다"고 읽으면 안 된다. 확인된 것은 $\rho$를 바꿀 때 식이 예측하는 **배율** $\sqrt{1-\rho^2}$이 맞다는 것이다.
+
+    **"거의 결정된다"의 눈금.** 마지막 두 열이 (2)의 요점을 보인다. $\rho = 0.9$에서 분산은 $1 \to 0.19$로 $81\%$ 줄었지만 표준편차는 $1 \to 0.436$으로 $56\%$만 줄었다. $a$를 알고도 $b$의 $95\%$ 예측구간이 $\pm 1.96 \times 0.436 = \pm 0.85$나 된다. $a$를 모를 때의 $\pm 1.96$에 비해 좁아지기는 했지만 "거의 결정"이라 하기에는 넉넉한 폭이다.
 
 ---
 

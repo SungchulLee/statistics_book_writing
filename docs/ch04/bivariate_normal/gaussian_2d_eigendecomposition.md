@@ -33,87 +33,223 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 공분산행렬의 고유분해와 등고선 축
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공분산행렬의 고유분해와 등고선 축. 세 $\boldsymbol\Sigma$에 대해 3차원 곡면과 등고선을 그리고 등고선 위에 고유벡터 화살표를 얹는다.
+
+**(1)** 세 $\boldsymbol\Sigma$의 고윳값과 장축이 $x$축과 이루는 **각도**를 구하시오. 각도를 $\boldsymbol\Sigma$의 성분으로 주는 식을 유도하고, 그 각도가 상관계수 $\rho$만으로 정해지지 **않는다**는 것을 보이시오.
+
+**(2)** 코드가 그리는 화살표의 길이는 무엇인가. (1)을 재어 확인하고, $\sigma_{11} = \sigma_{22}$일 때 각도가 $\rho$와 무관하게 늘 $45^\circ$라는 것도 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-def bivariate_normal_pdf(X, Y, inv_Sigma, det_Sigma):
-    """평균이 0인 이변량 정규분포의 밀도를 정의대로 계산한다.
+    **(1) 해석적으로.** $\boldsymbol\Sigma = \begin{pmatrix}a & c\\ c& b\end{pmatrix}$라 두면 특성방정식이
 
-    지수의 어깨에 있는 것이 이차형식 z' Sigma^{-1} z 이고,
-    이를 전개하면 아래처럼 X^2, XY, Y^2 항이 나온다.
-    분모의 sqrt(det Sigma) 는 전체 적분을 1로 만드는 정규화 상수다.
-    """
-    return (np.exp(-(inv_Sigma[0,0]*X**2 + 2*inv_Sigma[0,1]*X*Y
-                     + inv_Sigma[1,1]*Y**2) / 2)
-            / (2 * np.pi * np.sqrt(det_Sigma)))
+    $$
+    (a-\lambda)(b-\lambda) - c^2 = 0
+    \quad \Longleftrightarrow \quad
+    \lambda^2 - (a+b)\lambda + (ab - c^2) = 0
+    $$
 
-# 공분산행렬 셋. 고유분해가 무엇을 알려 주는지 비교하기 위한 것이다.
-#   1) 비대각이 0이 아님  -> 타원이 45도로 기운다. 고유벡터도 기운다.
-#   2) 대각행렬          -> 타원이 축에 나란하다. 고유벡터가 곧 좌표축이다.
-#   3) 비대각도 있고 분산도 다름 -> 기울기와 늘어남이 함께 나타난다.
-configs = [
-    {"label": "Σ = [[0.5, 0.3], [0.3, 0.5]]",
-     "Sigma": np.array([[0.5, 0.3], [0.3, 0.5]])},
-    {"label": "Σ = [[1.0, 0.0], [0.0, 0.3]]",
-     "Sigma": np.array([[1.0, 0.0], [0.0, 0.3]])},
-    {"label": "Σ = [[0.2, 0.14], [0.14, 0.8]]",
-     "Sigma": np.array([[0.2, 0.14], [0.14, 0.8]])},
-]
+    이므로
 
-x = np.linspace(-2.5, 2.5, 200)
-X, Y = np.meshgrid(x, x)
+    $$
+    \lambda_{1,2} = \frac{a+b}{2} \pm \sqrt{\left(\frac{a-b}{2}\right)^2 + c^2}
+    $$
 
-fig, axes = plt.subplots(len(configs), 2, figsize=(12, 5 * len(configs)))
+    이다. 근의 공식에서 판별식 $(a+b)^2 - 4(ab-c^2) = (a-b)^2 + 4c^2$을 정리한 꼴이다. 두 고윳값의 합이 $a+b = \text{tr}\,\boldsymbol\Sigma$, 곱이 $ab - c^2 = \det\boldsymbol\Sigma$라는 것도 식에서 바로 읽힌다.
 
-for i, cfg in enumerate(configs):
-    Sigma = cfg["Sigma"]
-    inv_Sigma = np.linalg.inv(Sigma)
-    det_Sigma = np.linalg.det(Sigma)
+    세 설정에 넣으면
 
-    # eigh 는 **대칭행렬 전용** 고유분해다. 공분산행렬은 언제나 대칭이므로
-    # 일반용 eig 보다 빠르고 수치적으로 안정하며, 고윳값이 실수로 나온다.
-    # 결과의 기하학적 의미:
-    #   고유벡터 = 타원의 주축 방향
-    #   고윳값   = 그 방향의 분산. sqrt(고윳값)이 그 축의 반지름이다.
-    eigenvalues, eigenvectors = np.linalg.eigh(Sigma)
+    | $\boldsymbol\Sigma$ | $\rho$ | $\text{tr}$ | $\det$ | $\lambda_1$ | $\lambda_2$ |
+    |---|---|---|---|---|---|
+    | $\begin{pmatrix}0.5&0.3\\0.3&0.5\end{pmatrix}$ | $0.6$ | $1.0$ | $0.16$ | $0.8$ | $0.2$ |
+    | $\begin{pmatrix}1&0\\0&0.3\end{pmatrix}$ | $0$ | $1.3$ | $0.3$ | $1$ | $0.3$ |
+    | $\begin{pmatrix}0.2&0.14\\0.14&0.8\end{pmatrix}$ | $0.35$ | $1.0$ | $0.1404$ | $0.83106$ | $0.16894$ |
 
-    Z = bivariate_normal_pdf(X, Y, inv_Sigma, det_Sigma)
+    이다. 둘째는 이미 대각이므로 고윳값이 대각성분 그 자체다.
 
-    # eigh는 고윳값을 오름차순으로 준다. 큰 것(장축)이 먼저 오도록 뒤집는다.
-    # eigenvectors는 **열**이 고유벡터이므로 [:, idx] 로 열을 재배열한다.
-    idx = eigenvalues.argsort()[::-1]
-    eigenvalues = eigenvalues[idx]
-    eigenvectors = eigenvectors[:, idx]
+    **각도.** 장축 방향을 $(\cos\theta, \sin\theta)^\top$이라 두고 고유벡터 방정식 $\boldsymbol\Sigma\mathbf v = \lambda_1 \mathbf v$의 두 성분을 쓰면
 
-    # 3차원 곡면
-    axes[i, 0].remove()
-    ax3d = fig.add_subplot(len(configs), 2, 2*i + 1, projection="3d")
-    ax3d.plot_surface(X, Y, Z, cmap="viridis", alpha=0.85, edgecolor="none")
-    ax3d.set_title(cfg["label"], fontsize=10)
+    $$
+    a\cos\theta + c\sin\theta = \lambda_1\cos\theta, \qquad
+    c\cos\theta + b\sin\theta = \lambda_1\sin\theta
+    $$
 
-    # 등고선에 고유벡터를 얹는다
-    ax = axes[i, 1]
-    ax.contourf(X, Y, Z, levels=20, cmap="Blues", alpha=0.5)
-    colors_ev = ["red", "darkgreen"]
-    for j in range(2):
-        scale = np.sqrt(eigenvalues[j])
-        dx = eigenvectors[0, j] * scale
-        dy = eigenvectors[1, j] * scale
-        ax.annotate("", xy=(dx, dy), xytext=(0, 0),
-                    arrowprops=dict(arrowstyle="->", color=colors_ev[j], lw=2.5))
-    ax.set_title("Contour + Eigenvectors", fontsize=10)
-    ax.set_aspect("equal")
+    이다. 첫 식에서 $\lambda_1 - a = c\tan\theta$, 둘째 식에서 $\lambda_1 - b = c\cot\theta$를 얻고 두 식을 빼면 $b - a = c(\tan\theta - \cot\theta)$다. 여기서 $\tan\theta - \cot\theta = -2\cot 2\theta$라는 삼각항등식을 쓰면
 
-plt.tight_layout()
-plt.show()
-```
+    $$
+    \tan 2\theta = \frac{2c}{a - b}
+    \qquad \text{곧} \qquad
+    \theta = \frac12\arctan\!\frac{2\sigma_{12}}{\sigma_{11} - \sigma_{22}}
+    $$
 
-![Contour + Eigenvectors](./img/gaussian_2d_eigendecomposition_34.png)
+    이다(사분면을 가리려면 `atan2(2c, a-b)`를 쓴다). 세 설정에 넣으면
+
+    $$
+    \tan 2\theta = \frac{0.6}{0} = \infty \;\Rightarrow\; \theta = 45^\circ,
+    \qquad
+    \tan 2\theta = \frac{0}{0.7} = 0 \;\Rightarrow\; \theta = 0^\circ,
+    $$
+
+    $$
+    \tan 2\theta = \frac{0.28}{-0.6} \;\Rightarrow\; 2\theta = 154.98^\circ \;\Rightarrow\; \theta = 77.49^\circ
+    $$
+
+    이다.
+
+    **각도는 $\rho$만으로 정해지지 않는다.** 첫째와 셋째를 보라. 둘 다 양의 상관인데 $\rho = 0.6$인 쪽이 $45^\circ$이고 $\rho = 0.35$인 쪽이 $77.49^\circ$다. **상관이 더 약한 쪽이 더 많이 기울었다.** 식이 그 까닭을 말해 준다. 분자에는 $\sigma_{12}$가, 분모에는 $\sigma_{11} - \sigma_{22}$가 있으므로 각도는 **공분산과 두 분산의 차이의 비**로 정해진다. 셋째는 $\sigma_{22} = 0.8$이 $\sigma_{11} = 0.2$의 네 배라 분모가 커서 각도가 수직 쪽으로 밀려났다.
+
+    극단적인 경우가 $\sigma_{11} = \sigma_{22}$다. 그러면 분모가 $0$이라 $\tan 2\theta = \infty$, 곧 $2\theta = 90^\circ$이고
+
+    $$
+    \theta = 45^\circ \qquad (\sigma_{11} = \sigma_{22},\ \sigma_{12} \ne 0)
+    $$
+
+    이 $\rho$와 **무관하게** 성립한다. $\rho = 0.01$이어도 타원은 정확히 $45^\circ$로 기운다. 다만 그때는 $\lambda_2/\lambda_1 = (1-\rho)/(1+\rho) = 0.98$로 거의 원이라 기울기가 눈에 보이지 않는다. $\boldsymbol\Sigma = \sigma^2\begin{pmatrix}1&\rho\\\rho&1\end{pmatrix}$의 고윳값이 $\sigma^2(1\pm\rho)$이기 때문이다.
+
+    **정리하면 $\rho$와 분산비가 역할을 나눈다.** $\rho$는 타원이 얼마나 **납작한지**($\lambda_2/\lambda_1$)에 주로 작용하고, 기운 **각도**는 공분산과 분산 차이의 비가 정한다. 본문 개요 절과 "해석" 절이 말하는 두 가지가 바로 이 분업이다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def bivariate_normal_pdf(X, Y, inv_Sigma, det_Sigma):
+        """평균이 0인 이변량 정규분포의 밀도를 정의대로 계산한다.
+
+        지수의 어깨에 있는 것이 이차형식 z' Sigma^{-1} z 이고,
+        이를 전개하면 아래처럼 X^2, XY, Y^2 항이 나온다.
+        분모의 sqrt(det Sigma) 는 전체 적분을 1로 만드는 정규화 상수다.
+        """
+        return (np.exp(-(inv_Sigma[0,0]*X**2 + 2*inv_Sigma[0,1]*X*Y
+                         + inv_Sigma[1,1]*Y**2) / 2)
+                / (2 * np.pi * np.sqrt(det_Sigma)))
+
+    # 공분산행렬 셋. 고유분해가 무엇을 알려 주는지 비교하기 위한 것이다.
+    #   1) 비대각이 0이 아님  -> 타원이 45도로 기운다. 고유벡터도 기운다.
+    #   2) 대각행렬          -> 타원이 축에 나란하다. 고유벡터가 곧 좌표축이다.
+    #   3) 비대각도 있고 분산도 다름 -> 기울기와 늘어남이 함께 나타난다.
+    configs = [
+        {"label": "Σ = [[0.5, 0.3], [0.3, 0.5]]",
+         "Sigma": np.array([[0.5, 0.3], [0.3, 0.5]])},
+        {"label": "Σ = [[1.0, 0.0], [0.0, 0.3]]",
+         "Sigma": np.array([[1.0, 0.0], [0.0, 0.3]])},
+        {"label": "Σ = [[0.2, 0.14], [0.14, 0.8]]",
+         "Sigma": np.array([[0.2, 0.14], [0.14, 0.8]])},
+    ]
+
+    x = np.linspace(-2.5, 2.5, 200)
+    X, Y = np.meshgrid(x, x)
+
+    fig, axes = plt.subplots(len(configs), 2, figsize=(12, 5 * len(configs)))
+
+    for i, cfg in enumerate(configs):
+        Sigma = cfg["Sigma"]
+        inv_Sigma = np.linalg.inv(Sigma)
+        det_Sigma = np.linalg.det(Sigma)
+
+        # eigh 는 **대칭행렬 전용** 고유분해다. 공분산행렬은 언제나 대칭이므로
+        # 일반용 eig 보다 빠르고 수치적으로 안정하며, 고윳값이 실수로 나온다.
+        # 결과의 기하학적 의미:
+        #   고유벡터 = 타원의 주축 방향
+        #   고윳값   = 그 방향의 분산. sqrt(고윳값)이 그 축의 반지름이다.
+        eigenvalues, eigenvectors = np.linalg.eigh(Sigma)
+
+        Z = bivariate_normal_pdf(X, Y, inv_Sigma, det_Sigma)
+
+        # eigh는 고윳값을 오름차순으로 준다. 큰 것(장축)이 먼저 오도록 뒤집는다.
+        # eigenvectors는 **열**이 고유벡터이므로 [:, idx] 로 열을 재배열한다.
+        idx = eigenvalues.argsort()[::-1]
+        eigenvalues = eigenvalues[idx]
+        eigenvectors = eigenvectors[:, idx]
+
+        # 3차원 곡면
+        axes[i, 0].remove()
+        ax3d = fig.add_subplot(len(configs), 2, 2*i + 1, projection="3d")
+        ax3d.plot_surface(X, Y, Z, cmap="viridis", alpha=0.85, edgecolor="none")
+        ax3d.set_title(cfg["label"], fontsize=10)
+
+        # 등고선에 고유벡터를 얹는다
+        ax = axes[i, 1]
+        ax.contourf(X, Y, Z, levels=20, cmap="Blues", alpha=0.5)
+        colors_ev = ["red", "darkgreen"]
+        for j in range(2):
+            scale = np.sqrt(eigenvalues[j])
+            dx = eigenvectors[0, j] * scale
+            dy = eigenvectors[1, j] * scale
+            ax.annotate("", xy=(dx, dy), xytext=(0, 0),
+                        arrowprops=dict(arrowstyle="->", color=colors_ev[j], lw=2.5))
+        ax.set_title("Contour + Eigenvectors", fontsize=10)
+        ax.set_aspect("equal")
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![Contour + Eigenvectors](./img/gaussian_2d_eigendecomposition_34.png)
+
+    오른쪽 열의 두 화살표가 늘 **서로 직각**이다. 대칭행렬의 고유벡터가 직교하기 때문이고, 공분산행렬이 언제나 대칭이므로 어떤 $\boldsymbol\Sigma$를 넣어도 그렇다. 첫째 칸의 빨간 화살표는 대각선 방향, 둘째 칸은 가로 방향, 셋째 칸은 거의 세로 방향을 가리킨다.
+
+    **화살표의 길이는 $\sqrt{\lambda_i}$**다. 코드의 `scale = np.sqrt(eigenvalues[j])`가 그것이고, 기하적으로는 $c = 1$인 등고선 타원의 반길이다. 곧 화살표 끝이 그 방향의 "$1$ 표준편차" 자리다. 수로 확인한다.
+
+    ```python
+    import numpy as np
+    from math import atan2, degrees, sqrt
+
+    configs = [("[[0.5,0.3],[0.3,0.5]]", [[0.5, 0.3], [0.3, 0.5]]),
+               ("[[1.0,0.0],[0.0,0.3]]", [[1.0, 0.0], [0.0, 0.3]]),
+               ("[[0.2,0.14],[0.14,0.8]]", [[0.2, 0.14], [0.14, 0.8]])]
+
+    print(f"{'Sigma':>25}{'rho':>7}{'tr':>7}{'det':>8}{'lam1':>9}{'lam2':>9}"
+          f"{'lam2/lam1':>11}{'각도(식)':>11}{'각도(eigh)':>12}{'화살표 길이':>18}")
+    for label, S in configs:
+        S = np.array(S, float)
+        a, b, c = S[0, 0], S[1, 1], S[0, 1]
+        rho = c / sqrt(a * b)
+        lam, V = np.linalg.eigh(S)
+        i = lam.argsort()[::-1]
+        lam, V = lam[i], V[:, i]
+        v1 = V[:, 0]
+        th_eigh = degrees(atan2(v1[1], v1[0])) % 180          # 장축 방향
+        th_formula = degrees(0.5 * atan2(2 * c, a - b)) % 180  # tan 2theta = 2c/(a-b)
+        print(f"{label:>25}{rho:>7.3f}{np.trace(S):>7.2f}{np.linalg.det(S):>8.4f}"
+              f"{lam[0]:>9.5f}{lam[1]:>9.5f}{lam[1]/lam[0]:>11.5f}"
+              f"{th_formula:>10.2f}도{th_eigh:>11.2f}도{str(np.round(np.sqrt(lam),4)):>18}")
+
+    print()
+    # sigma11 = sigma22 이면 rho 가 무엇이든 각도가 정확히 45 도다.
+    for rho in (0.1, 0.6, 0.95):
+        S = np.array([[0.5, 0.5 * rho], [0.5 * rho, 0.5]])
+        lam = np.sort(np.linalg.eigvalsh(S))[::-1]
+        th = degrees(0.5 * atan2(2 * S[0, 1], S[0, 0] - S[1, 1])) % 180
+        print(f"분산이 같을 때 rho={rho:<5}: 각도 {th:.2f}도,  lam2/lam1 = {lam[1]/lam[0]:.5f}"
+              f"   (1-rho)/(1+rho) = {(1-rho)/(1+rho):.5f}")
+    ```
+
+    출력:
+
+    ```
+                        Sigma    rho     tr     det     lam1     lam2  lam2/lam1      각도(식)    각도(eigh)            화살표 길이
+        [[0.5,0.3],[0.3,0.5]]  0.600   1.00  0.1600  0.80000  0.20000    0.25000     45.00도      45.00도   [0.8944 0.4472]
+        [[1.0,0.0],[0.0,0.3]]  0.000   1.30  0.3000  1.00000  0.30000    0.30000      0.00도       0.00도   [1.     0.5477]
+      [[0.2,0.14],[0.14,0.8]]  0.350   1.00  0.1404  0.83106  0.16894    0.20328     77.49도      77.49도   [0.9116 0.411 ]
+
+    분산이 같을 때 rho=0.1  : 각도 45.00도,  lam2/lam1 = 0.81818   (1-rho)/(1+rho) = 0.81818
+    분산이 같을 때 rho=0.6  : 각도 45.00도,  lam2/lam1 = 0.25000   (1-rho)/(1+rho) = 0.25000
+    분산이 같을 때 rho=0.95 : 각도 45.00도,  lam2/lam1 = 0.02564   (1-rho)/(1+rho) = 0.02564
+    ```
+
+    (1)이 다 맞는다.
+
+    **고윳값.** $(0.8, 0.2)$, $(1, 0.3)$, $(0.83106, 0.16894)$가 근의 공식으로 얻은 값과 같다. 아래 "해석" 절이 첫째 설정에 대해 적은 $\lambda_1 = 0.8$, $\lambda_2 = 0.2$, $\sqrt{\lambda_1/\lambda_2} = 2$도 그대로다($\sqrt{0.8/0.2} = 2$).
+
+    **각도.** `각도(식)` 열과 `각도(eigh)` 열이 소수점 둘째 자리까지 같다. 손으로 유도한 $\tan 2\theta = 2c/(a-b)$와 수치 고유분해가 같은 답을 준다는 확인이다. 둘째 설정의 $0^\circ$는 이미 축에 나란하다는 뜻이고, 셋째의 $77.49^\circ$는 거의 수직이다.
+
+    **$\rho$와 각도가 따로 움직인다.** 첫째 줄과 셋째 줄이 $\text{tr} = 1.00$으로 같은데, $\rho$는 $0.600$ 대 $0.350$이고 각도는 $45^\circ$ 대 $77.49^\circ$다. **상관이 약한 쪽이 더 기울었다.** 그런데 납작함 $\lambda_2/\lambda_1$은 $0.25000$ 대 $0.20328$로 셋째가 더 납작하다. 셋째에서 납작함을 만드는 것은 상관이 아니라 **두 분산의 불균형**($0.2$ 대 $0.8$)이다. 상관이 없어도 분산이 다르면 타원은 납작해진다는 것을 둘째 줄이($\rho = 0$인데 $\lambda_2/\lambda_1 = 0.3$) 가장 분명히 보인다.
+
+    **분산이 같을 때.** 마지막 세 줄에서 $\rho$를 $0.1$에서 $0.95$까지 바꾸어도 각도가 $45.00^\circ$에서 꼼짝하지 않는다. 바뀌는 것은 납작함뿐이고, $\lambda_2/\lambda_1$이 $0.81818 \to 0.25000 \to 0.02564$로 유도한 $(1-\rho)/(1+\rho)$와 다섯째 자리까지 일치한다. $\rho = 0.1$일 때 $0.818$은 거의 원이므로, 타원이 $45^\circ$로 기울어 있다는 사실은 **눈으로 볼 수 없어도 대수적으로는 참**이다. 그림에서 기울기를 읽지 못했다고 상관이 $0$이라 결론지으면 안 된다는 뜻이다.
 
 ---
 

@@ -29,60 +29,182 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 공분산행렬에 따른 이변량 정규분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공분산행렬에 따른 이변량 정규분포. 위 표의 네 $\boldsymbol\Sigma$에 대해 3차원 곡면과 등고선을 나란히 그린다.
+
+**(1)** 네 설정의 등고선 타원의 **축 방향**과 95% 타원의 **반길이**를 고윳값으로 구하고, 곡면의 **봉우리 높이**와 타원의 **넓이**를 $\det\boldsymbol\Sigma$의 식으로 적으시오. 두 양의 곱은 무엇인가.
+
+**(2)** (1)을 재어 확인하고, 네 설정 가운데 어느 둘이 같은 곡면의 거울상인지, 또 $\rho = 0$인 두 설정이 왜 전혀 다르게 보이는지 수로 적으시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import multivariate_normal
+??? success "풀이"
 
-# 공분산행렬 [[var_X, cov], [cov, var_Y]] 를 네 가지로 바꿔 가며 본다.
-# 분산이 4일 때 rho = cov/4 이므로 cov = 2.8 이면 rho = 0.7 이다.
-#   1) 비대각이 0     -> 독립. 등고선이 원이 된다.
-#   2) 비대각이 양수  -> 등고선이 우상향 타원으로 기운다.
-#   3) 비대각이 음수  -> 좌상향으로 기운다.
-#   4) 대각이 서로 다름 -> 기울지는 않지만 세로로 늘어난 타원이 된다.
-# 4번이 중요하다. **타원이 늘어난 것과 기운 것은 다른 이야기다.**
-configs = [
-    {"label": "Independent (ρ=0)", "mu": [0, 0], "cov": [[4, 0], [0, 4]]},
-    {"label": "Positive corr (ρ=0.7)", "mu": [0, 0], "cov": [[4, 2.8], [2.8, 4]]},
-    {"label": "Negative corr (ρ=−0.7)", "mu": [0, 0], "cov": [[4, -2.8], [-2.8, 4]]},
-    {"label": "Unequal variances", "mu": [0, 0], "cov": [[7, 0], [0, 15]]},
-]
+    **(1) 해석적으로.** 등고선은 $\mathbf{x}^\top\boldsymbol\Sigma^{-1}\mathbf{x} = c$를 만족하는 타원이다($\boldsymbol\mu = \mathbf 0$). $\boldsymbol\Sigma = V\Lambda V^\top$로 대각화하고 $\mathbf y = V^\top\mathbf x$로 좌표를 돌리면
 
-x = np.linspace(-10, 10, 200)
-# meshgrid: 1차원 격자 두 개를 2차원 좌표판으로 펼친다.
-# X[i,j], Y[i,j] 가 (i,j) 칸의 좌표가 된다.
-X, Y = np.meshgrid(x, x)
+    $$
+    \frac{y_1^2}{\lambda_1} + \frac{y_2^2}{\lambda_2} = c
+    $$
 
-fig = plt.figure(figsize=(18, 12))
-for i, cfg in enumerate(configs):
-    # dstack으로 (X, Y)를 마지막 축에 쌓아 (200, 200, 2) 모양을 만든다.
-    # scipy의 다변량 pdf는 "마지막 축이 좌표"인 배열을 받는다.
-    pos = np.dstack((X, Y))
-    rv = multivariate_normal(mean=cfg["mu"], cov=cfg["cov"])
-    Z = rv.pdf(pos)      # 각 격자점에서의 밀도. (200, 200) 모양
+    가 되므로 **축 방향은 고유벡터**이고 **반길이는 $\sqrt{\lambda_i c}$**다. 95% 타원이면 연습문제 5에서 본 대로 $c = \chi^2_{2,\,0.95} = 5.9915$다.
 
-    # 3차원 곡면
-    ax = fig.add_subplot(2, 4, i + 1, projection="3d")
-    ax.plot_surface(X, Y, Z, cmap="viridis", alpha=0.85, edgecolor="none")
-    ax.set_title(cfg["label"], fontsize=9)
+    네 $\boldsymbol\Sigma$의 고윳값을 구한다. 대각행렬인 1번과 4번은 고윳값이 대각성분 그 자체이고 고유벡터가 좌표축이다. 2번과 3번은 $\begin{pmatrix}4&\pm2.8\\\pm2.8&4\end{pmatrix}$ 꼴이라 특성방정식 $(4-\lambda)^2 = 2.8^2$에서 $\lambda = 4 \pm 2.8$, 곧 $6.8$과 $1.2$다(연습문제 3).
 
-    # 등고선
-    ax2 = fig.add_subplot(2, 4, i + 5)
-    ax2.contourf(X, Y, Z, levels=20, cmap="viridis")
-    ax2.contour(X, Y, Z, levels=8, colors="white", linewidths=0.5)
-    ax2.set_title(cfg["label"], fontsize=9)
-    ax2.set_aspect("equal")
+    | 설정 | $\lambda_1, \lambda_2$ | 장축 방향 | 95% 반길이 |
+    |---|---|---|---|
+    | 독립 | $4,\ 4$ | **정해지지 않는다** | $4.895,\ 4.895$ |
+    | 양의 상관 | $6.8,\ 1.2$ | $(1,1)/\sqrt2$ | $6.383,\ 2.681$ |
+    | 음의 상관 | $6.8,\ 1.2$ | $(1,-1)/\sqrt2$ | $6.383,\ 2.681$ |
+    | 분산이 다름 | $15,\ 7$ | $(0,1)$ | $9.480,\ 6.476$ |
 
-plt.suptitle("Bivariate Normal: 3D Surface (top) and Contour (bottom)")
-plt.tight_layout()
-plt.show()
-```
+    첫 줄의 "정해지지 않는다"는 결함이 아니다. $\boldsymbol\Sigma = 4I$는 고윳값이 겹쳐 있어 **모든 방향이 고유벡터**다. 등고선이 원이니 장축이 따로 없는 것이 당연하고, 수치 고유분해가 어떤 축을 돌려주든 그것은 알고리즘이 고른 것이지 분포가 고른 것이 아니다.
 
-![Bivariate Normal: 3D Surface (top) and Contour (bottom)](./img/bivariate_normal_30.png)
+    **봉우리 높이와 넓이.** 밀도의 최대는 $\mathbf x = \boldsymbol\mu$에서 지수가 $0$이 될 때이므로 앞의 상수가 그대로 남는다.
+
+    $$
+    f(\boldsymbol\mu) = \frac{1}{2\pi\lvert\boldsymbol\Sigma\rvert^{1/2}} = \frac{1}{2\pi\sqrt{\det\boldsymbol\Sigma}}
+    $$
+
+    타원의 넓이는 반길이의 곱에 $\pi$를 곱한 것이다.
+
+    $$
+    \text{넓이} = \pi\sqrt{\lambda_1 c}\sqrt{\lambda_2 c} = \pi c \sqrt{\lambda_1\lambda_2} = \pi c \sqrt{\det\boldsymbol\Sigma}
+    $$
+
+    $\det\boldsymbol\Sigma = \lambda_1\lambda_2$를 썼다. 뒤집어 읽으면 **$\det\boldsymbol\Sigma$가 넓이의 제곱에 비례한다.** 행렬식을 "일반화분산"이라 부르는 까닭이고, 2차원에서 그것이 뜻하는 바가 곧 넓이다.
+
+    두 양을 곱하면 $\sqrt{\det\boldsymbol\Sigma}$가 깨끗이 지워진다.
+
+    $$
+    f(\boldsymbol\mu) \times \text{넓이}
+    = \frac{1}{2\pi\sqrt{\det\boldsymbol\Sigma}} \cdot \pi c \sqrt{\det\boldsymbol\Sigma}
+    = \frac{c}{2} = 2.9957
+    $$
+
+    **$\boldsymbol\Sigma$에 전혀 의존하지 않는다.** 넓이 $1$을 담은 곡면이라는 제약이 있으니, 넓게 퍼지면 반드시 낮아지고 좁게 모이면 반드시 높아진다. 포아송 쪽에서 봉우리가 $\lambda^{-1/2}$로 낮아진 것과 같은 보존이 2차원에서 이렇게 나타난다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import multivariate_normal
+
+    # 공분산행렬 [[var_X, cov], [cov, var_Y]] 를 네 가지로 바꿔 가며 본다.
+    # 분산이 4일 때 rho = cov/4 이므로 cov = 2.8 이면 rho = 0.7 이다.
+    #   1) 비대각이 0     -> 독립. 등고선이 원이 된다.
+    #   2) 비대각이 양수  -> 등고선이 우상향 타원으로 기운다.
+    #   3) 비대각이 음수  -> 좌상향으로 기운다.
+    #   4) 대각이 서로 다름 -> 기울지는 않지만 세로로 늘어난 타원이 된다.
+    # 4번이 중요하다. **타원이 늘어난 것과 기운 것은 다른 이야기다.**
+    configs = [
+        {"label": "Independent (ρ=0)", "mu": [0, 0], "cov": [[4, 0], [0, 4]]},
+        {"label": "Positive corr (ρ=0.7)", "mu": [0, 0], "cov": [[4, 2.8], [2.8, 4]]},
+        {"label": "Negative corr (ρ=−0.7)", "mu": [0, 0], "cov": [[4, -2.8], [-2.8, 4]]},
+        {"label": "Unequal variances", "mu": [0, 0], "cov": [[7, 0], [0, 15]]},
+    ]
+
+    x = np.linspace(-10, 10, 200)
+    # meshgrid: 1차원 격자 두 개를 2차원 좌표판으로 펼친다.
+    # X[i,j], Y[i,j] 가 (i,j) 칸의 좌표가 된다.
+    X, Y = np.meshgrid(x, x)
+
+    fig = plt.figure(figsize=(18, 12))
+    for i, cfg in enumerate(configs):
+        # dstack으로 (X, Y)를 마지막 축에 쌓아 (200, 200, 2) 모양을 만든다.
+        # scipy의 다변량 pdf는 "마지막 축이 좌표"인 배열을 받는다.
+        pos = np.dstack((X, Y))
+        rv = multivariate_normal(mean=cfg["mu"], cov=cfg["cov"])
+        Z = rv.pdf(pos)      # 각 격자점에서의 밀도. (200, 200) 모양
+
+        # 3차원 곡면
+        ax = fig.add_subplot(2, 4, i + 1, projection="3d")
+        ax.plot_surface(X, Y, Z, cmap="viridis", alpha=0.85, edgecolor="none")
+        ax.set_title(cfg["label"], fontsize=9)
+
+        # 등고선
+        ax2 = fig.add_subplot(2, 4, i + 5)
+        ax2.contourf(X, Y, Z, levels=20, cmap="viridis")
+        ax2.contour(X, Y, Z, levels=8, colors="white", linewidths=0.5)
+        ax2.set_title(cfg["label"], fontsize=9)
+        ax2.set_aspect("equal")
+
+    plt.suptitle("Bivariate Normal: 3D Surface (top) and Contour (bottom)")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![Bivariate Normal: 3D Surface (top) and Contour (bottom)](./img/bivariate_normal_30.png)
+
+    위줄의 곡면은 첫째가 가장 낮고 넓게 퍼졌으며 둘째와 셋째가 더 높고 뾰족하다. 아래줄의 등고선은 첫째가 원, 둘째가 우상향 타원, 셋째가 좌상향 타원, 넷째가 세로로 늘어난 타원이다. 수로 재 본다.
+
+    ```python
+    import numpy as np
+    from math import pi, sqrt
+    from scipy import stats
+
+    c = stats.chi2(2).ppf(0.95)          # 95% 타원의 문턱
+    print(f"chi2_2 의 95% 분위수 c = {c:.4f}")
+    print(f"{'설정':>12}{'고윳값':>18}{'det':>9}{'sqrt(det)':>11}{'tr':>6}"
+          f"{'반길이':>17}{'봉우리':>10}{'95% 넓이':>11}{'봉우리x넓이':>13}")
+
+    configs = [("독립 (rho=0)", [[4, 0], [0, 4]]),
+               ("양의 상관", [[4, 2.8], [2.8, 4]]),
+               ("음의 상관", [[4, -2.8], [-2.8, 4]]),
+               ("분산이 다름", [[7, 0], [0, 15]])]
+
+    rng = np.random.default_rng(0)
+    for label, S in configs:
+        S = np.array(S, float)
+        lam, V = np.linalg.eigh(S)
+        lam = lam[::-1]                   # 큰 것부터
+        det = np.linalg.det(S)
+        semi = np.sqrt(lam * c)
+        peak = 1 / (2 * pi * sqrt(det))
+        area = pi * c * sqrt(det)
+        print(f"{label:>12}{str(np.round(lam, 2)):>18}{det:>9.2f}{sqrt(det):>11.4f}"
+              f"{np.trace(S):>6.1f}{str(np.round(semi, 3)):>17}{peak:>10.5f}{area:>11.2f}"
+              f"{peak*area:>13.4f}")
+
+    print(f"\n봉우리 x 넓이 = c/2 = {c/2:.4f} 이어야 한다")
+
+    # 95% 타원이 정말 95% 를 담는가. 마할라노비스 거리로 센다.
+    for label, S in configs:
+        S = np.array(S, float)
+        X = rng.multivariate_normal([0, 0], S, size=400_000)
+        d2 = np.einsum("ij,jk,ik->i", X, np.linalg.inv(S), X)
+        hit = np.mean(d2 <= c)
+        print(f"{label:>12}: 95% 타원 안의 비율 {hit:.4f}   SE {sqrt(0.95*0.05/400_000):.4f}"
+              f"   z = {(hit-0.95)/sqrt(0.95*0.05/400_000):+.2f}")
+    ```
+
+    출력:
+
+    ```
+    chi2_2 의 95% 분위수 c = 5.9915
+              설정               고윳값      det  sqrt(det)    tr              반길이       봉우리     95% 넓이       봉우리x넓이
+      독립 (rho=0)           [4. 4.]    16.00     4.0000   8.0    [4.895 4.895]   0.03979      75.29       2.9957
+           양의 상관         [6.8 1.2]     8.16     2.8566   8.0    [6.383 2.681]   0.05572      53.77       2.9957
+           음의 상관         [6.8 1.2]     8.16     2.8566   8.0    [6.383 2.681]   0.05572      53.77       2.9957
+          분산이 다름         [15.  7.]   105.00    10.2470  22.0    [9.48  6.476]   0.01553     192.88       2.9957
+
+    봉우리 x 넓이 = c/2 = 2.9957 이어야 한다
+      독립 (rho=0): 95% 타원 안의 비율 0.9499   SE 0.0003   z = -0.21
+           양의 상관: 95% 타원 안의 비율 0.9497   SE 0.0003   z = -0.88
+           음의 상관: 95% 타원 안의 비율 0.9505   SE 0.0003   z = +1.49
+          분산이 다름: 95% 타원 안의 비율 0.9498   SE 0.0003   z = -0.67
+    ```
+
+    (1)의 표가 그대로 나온다. 고윳값 $\{4,4\}$, $\{6.8, 1.2\}$, $\{6.8,1.2\}$, $\{15,7\}$과 반길이 $4.895$, $(6.383, 2.681)$, $(9.480, 6.476)$이 손계산과 일치한다.
+
+    **곱이 상수다.** 마지막 열이 네 설정 모두 $2.9957$이고 $c/2 = 5.9915/2$와 같다. 봉우리 높이는 $0.0155$부터 $0.0557$까지 $3.6$배 차이 나고 넓이는 $53.8$부터 $192.9$까지 $3.6$배 차이 나는데, 둘의 곱은 꼼짝하지 않는다. **퍼짐과 높이는 서로를 정확히 상쇄한다.**
+
+    **거울상인 둘.** 양의 상관과 음의 상관이 고윳값·행렬식·반길이·봉우리·넓이를 **모두 똑같이** 갖는다. 다른 것은 고유벡터의 방향뿐이다. 실제로 $(x_1, x_2) \mapsto (x_1, -x_2)$는 $\rho$의 부호만 바꾸는 변환이고 행렬식을 보존하므로, 두 곡면은 한 곡면을 뒤집어 놓은 것이다. 3차원 그림만 보고 둘을 구별할 수 없고 등고선의 기울기를 보아야 한다.
+
+    **$\rho = 0$인 둘이 왜 다른가.** 첫째와 넷째가 모두 $\rho = 0$인데 넓이가 $75.29$와 $192.88$로 $2.6$배 차이 난다. $\rho$는 **기울기**만 말하고 **크기**는 말하지 않기 때문이다. 넷째는 기울지 않았을 뿐이고 세로로 $9.48$, 가로로 $6.48$까지 늘어나 있다. 코드 주석의 "타원이 늘어난 것과 기운 것은 다른 이야기다"가 이 두 줄의 대비다.
+
+    **대각합과 행렬식이 다른 것을 센다.** 첫째·둘째·셋째의 대각합이 모두 $8.0$으로 같다. 곧 $\text{Var}(X_1) + \text{Var}(X_2)$가 같다는 뜻이다. 그런데 넓이는 $75.29$ 대 $53.77$로 다르다. 상관이 붙으면 총분산은 그대로인데 **타원이 좁아진다.** 분산이 한 방향으로 몰리기 때문이다($6.8$과 $1.2$로 쪼개진다). 대각합은 고윳값의 합, 행렬식은 고윳값의 곱이라 같은 합을 어떻게 쪼개는지에 따라 곱이 달라지고, $\lambda_1 = \lambda_2$일 때 곱이 최대가 된다. **원이 같은 총분산에서 가장 넓은 타원이다.**
+
+    **95% 타원은 정말 95%를 담는다.** 네 설정에서 모의로 잰 포함률이 $0.9497 \sim 0.9505$이고 $z$가 $-0.88$에서 $+1.49$ 사이다. $c = \chi^2_{2,\,0.95}$라는 선택이 $\boldsymbol\Sigma$에 상관없이 작동한다는 것이 확인된다. 연습문제 5에서 본 대로 마할라노비스 거리의 제곱이 $\boldsymbol\Sigma$와 무관하게 $\chi^2_2$를 따르기 때문이다.
 
 ---
 

@@ -158,128 +158,445 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 포아송분포의 확률질량함수와 분포함수
+**보기 1.** <span class="diff easy" title="쉬움"></span> 포아송분포의 확률질량함수와 분포함수. $X \sim \text{Poisson}(5)$의 PMF와 CDF를 $k = 0, \ldots, 19$에서 나란히 그린다.
+
+**(1)** PMF를 가장 크게 만드는 $k$, 곧 최빈값을 구하시오. $\lambda$가 정수일 때는 무슨 일이 일어나는가.
+
+**(2)** $k \ge 20$을 잘라 버린 것이 정당한지 꼬리확률로 확인하고, 그림에서 (1)의 답이 읽히는지 보시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-lam = 5            # 단위 시간(구간)당 평균 발생 횟수
-# 포아송은 0, 1, 2, ... 로 상한이 없다. 20에서 자른 것은 그 너머의 확률이
-# 무시할 만큼 작기 때문이다(lam=5에서 P(X >= 20)은 1e-6 수준).
-x = np.arange(0, 20)
+    **(1) 해석적으로.** $k$는 **정수**라 미분할 수 없다. 이웃한 두 확률의 비를 본다.
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.bar(x - 0.15, stats.poisson(lam).pmf(x), width=0.3, label='PMF', alpha=0.7)
-ax.bar(x + 0.15, stats.poisson(lam).cdf(x), width=0.3, label='CDF', alpha=0.7)
-ax.set_xlabel('k')
-ax.set_xticks(x)
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    $$
+    \frac{p(k)}{p(k-1)}
+    = \frac{e^{-\lambda}\lambda^k / k!}{e^{-\lambda}\lambda^{k-1} / (k-1)!}
+    = \frac{\lambda}{k}
+    $$
 
-![포아송분포](./img/poisson_124.png)
+    $e^{-\lambda}$와 $\lambda^{k-1}$, $(k-1)!$이 모두 약분되고 $\lambda/k$ 하나만 남는다. 이 비가 $1$ 이상인 조건은
+
+    $$
+    \frac{\lambda}{k} \ge 1 \qquad \Longleftrightarrow \qquad k \le \lambda
+    $$
+
+    다. 그리고 $\lambda/k$는 $k$에 대해 **감소**하므로 비가 $1$을 지나는 자리는 단 한 곳이다. 즉 PMF는 $k \le \lambda$까지 오르다가 그 뒤로는 계속 내려가고, 봉우리는 하나다. 따라서
+
+    $$
+    \text{최빈값} = \lfloor \lambda \rfloor
+    $$
+
+    이다. 비가 주는 문턱 $\lambda$에 **바닥함수가 붙는다**는 것이 요점이고, 그 까닭은 $k$가 정수라는 것 하나다.
+
+    $\lambda$가 정수이면 $k = \lambda$에서 위 부등식이 **등호**가 되어 비가 정확히 $1$, 곧
+
+    $$
+    p(\lambda) = p(\lambda - 1)
+    $$
+
+    이다. 최빈값이 **둘**이고 둘 중 어느 쪽도 더 그럴듯하지 않다. $\lambda = 5$가 바로 그 경우이므로 최빈값은 $4$와 $5$이고, 공통인 $e^{-5}$를 떼어 내면
+
+    $$
+    \frac{5^4}{4!} = \frac{625}{24}, \qquad \frac{5^5}{5!} = \frac{3125}{120} = \frac{625}{24}
+    $$
+
+    로 한 치도 다르지 않다. 근삿값이 아니라 **정확한 등식**이다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    lam = 5            # 단위 시간(구간)당 평균 발생 횟수
+    # 포아송은 0, 1, 2, ... 로 상한이 없다. 20에서 자른 것은 그 너머의 확률이
+    # 무시할 만큼 작기 때문이다(lam=5에서 P(X >= 20)은 1e-6 수준).
+    x = np.arange(0, 20)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.bar(x - 0.15, stats.poisson(lam).pmf(x), width=0.3, label='PMF', alpha=0.7)
+    ax.bar(x + 0.15, stats.poisson(lam).cdf(x), width=0.3, label='CDF', alpha=0.7)
+    ax.set_xlabel('k')
+    ax.set_xticks(x)
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![포아송분포](./img/poisson_124.png)
+
+    왼쪽 막대가 $k = 4$와 $k = 5$에서 **같은 높이로 나란히** 서 있고, 그 뒤로는 단조롭게 주저앉는다. CDF 막대는 $k = 12$ 무렵($\text{CDF} = 0.998$)부터 눈으로는 $1$과 구별되지 않는다.
+
+    (1)이 유도한 것을 분수로 확인한다. 이산분포의 좋은 점은 **반올림 없이** 확인할 수 있다는 것이다.
+
+    ```python
+    from fractions import Fraction
+    from math import factorial
+    from scipy import stats
+
+    lam = 5
+
+    # 비 p(k)/p(k-1) = lam/k 를 분수로 적는다. 1 을 넘는 동안 PMF 가 오른다.
+    for k in range(1, 8):
+        ratio = Fraction(lam, k)
+        mark = ">1 (오름)" if ratio > 1 else ("=1 (동점)" if ratio == 1 else "<1 (내림)")
+        print(f"p({k})/p({k-1}) = {str(ratio):>5}   {mark}")
+
+    # lam = 5 는 정수라 p(4) 와 p(5) 가 **정확히** 같다. e^{-lam} 은 공통이므로
+    # lam^k/k! 만 분수로 비교하면 반올림이 끼어들 틈이 없다.
+    a, b = Fraction(lam**4, factorial(4)), Fraction(lam**5, factorial(5))
+    print(f"lam^4/4! = {a},  lam^5/5! = {b},  같은가? {a == b}")
+    print(f"부동소수점: pmf(4) - pmf(5) = {stats.poisson(lam).pmf(4) - stats.poisson(lam).pmf(5):+.3e}")
+
+    # 20 에서 자른 것이 정당한가.
+    print(f"P(X >= 20) = {stats.poisson(lam).sf(19):.3e}")
+    ```
+
+    출력:
+
+    ```
+    p(1)/p(0) =     5   >1 (오름)
+    p(2)/p(1) =   5/2   >1 (오름)
+    p(3)/p(2) =   5/3   >1 (오름)
+    p(4)/p(3) =   5/4   >1 (오름)
+    p(5)/p(4) =     1   =1 (동점)
+    p(6)/p(5) =   5/6   <1 (내림)
+    p(7)/p(6) =   5/7   <1 (내림)
+    lam^4/4! = 625/24,  lam^5/5! = 625/24,  같은가? True
+    부동소수점: pmf(4) - pmf(5) = -5.551e-17
+    P(X >= 20) = 3.452e-07
+    ```
+
+    비가 $k = 5$에서 정확히 $1$을 찍고 돌아선다. 분수로 재면 $p(4)$와 $p(5)$가 같은데, 부동소수점으로는 $5.6 \times 10^{-17}$만큼 어긋난다. **이 어긋남은 수학이 아니라 배정도 실수의 반올림이다.** `pmf` 의 argmax 를 그대로 믿으면 동점을 못 보고 한쪽만 집게 되는데, 여기서 분수를 쓴 이유가 그것이다.
+
+    꼬리는 $P(X \ge 20) = 3.45 \times 10^{-7}$이라 코드 주석의 "1e-6 수준"과 맞는다. 평균 $5$에서 $20$은 $(20-5)/\sqrt5 = 6.7$ 표준편차 밖이니 그림에서 잘라도 좋다.
 
 ### 비율에 따른 비교
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 비율모수에 따른 포아송 비교
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비율모수에 따른 포아송 비교. $\lambda = 1, 4, 10$인 세 포아송 PMF를 한 그림에 겹쳐 그린다. $\lambda$가 커질수록 봉우리가 오른쪽으로 가면서 **낮아진다.**
+
+**(1)** 봉우리가 왜 낮아지는지 설명하시오. 최대 PMF 값이 $\lambda$가 커질 때 어떤 크기로 줄어드는가.
+
+**(2)** 세 $\lambda$에서 최빈값과 봉우리 높이를 재어 (1)의 답과 견주시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-fig, ax = plt.subplots(figsize=(12, 3))
-# lam 하나가 중심과 퍼짐을 동시에 결정한다.
-# 포아송은 평균 = 분산 = lam 이라 모수가 하나뿐이기 때문이다.
-# lam이 커질수록 봉우리가 오른쪽으로 가면서 동시에 넓어지고,
-# 모양도 점점 대칭인 종 모양(정규분포)에 가까워진다.
-for lam in [1, 4, 10]:
-    x = np.arange(0, 25)
-    ax.plot(x, stats.poisson(lam).pmf(x), 'o-', label=f'λ={lam}', markersize=4)
-ax.spines[['top', 'right']].set_visible(False)
-ax.set_xlabel('k')
-ax.legend()
-plt.show()
-```
+    **(1) 해석적으로.** 보기 1에서 최빈값은 $\lfloor \lambda \rfloor$였다. $\lambda = 1, 4, 10$은 모두 정수이므로 세 경우 다 **동점**이고 최빈값은 각각 $\{0,1\}$, $\{3,4\}$, $\{9,10\}$이다. 봉우리가 오른쪽으로 가는 것은 이것으로 설명된다.
 
-![포아송분포](./img/poisson_144.png)
+    낮아지는 까닭은 **분포가 퍼지는데 총합은 늘 $1$**이라는 데 있다. 표준편차가 $\sqrt{\lambda}$로 커지므로 확률이 실질적으로 올라앉는 구간의 폭이 $\sqrt{\lambda}$에 비례해 늘어난다. 넓이 $1$을 폭 $\sqrt{\lambda}$에 나누어 담으면 높이는 $1/\sqrt{\lambda}$ 꼴로 줄어야 한다.
+
+    상수까지 적어 보자. 최빈값 $k = \lambda$($\lambda$가 정수)에서의 확률에 스털링 근사 $\lambda! \approx \sqrt{2\pi\lambda}\,\lambda^{\lambda}e^{-\lambda}$를 넣으면
+
+    $$
+    p(\lambda) = \frac{e^{-\lambda}\lambda^{\lambda}}{\lambda!}
+    \approx \frac{e^{-\lambda}\lambda^{\lambda}}{\sqrt{2\pi\lambda}\,\lambda^{\lambda}e^{-\lambda}}
+    = \frac{1}{\sqrt{2\pi\lambda}}
+    $$
+
+    이다. $\lambda^{\lambda}$와 $e^{-\lambda}$가 깨끗이 약분되고 스털링의 $\sqrt{2\pi\lambda}$만 남는다. **봉우리 높이는 $\lambda^{-1/2}$로 줄어든다.** $\lambda$를 $1 \to 4 \to 10$으로 키우면 높이는 대략 $1 \to 1/2 \to 1/\sqrt{10}$ 배가 된다.
+
+    이 식은 $N(\lambda, \lambda)$ 밀도의 봉우리 높이 $1/\sqrt{2\pi\lambda}$와 **똑같다.** $\lambda$가 커질 때 포아송이 정규분포에 가까워진다는 것이 봉우리 한 점에서 미리 비친 셈이다. 다만 스털링은 큰 $\lambda$에서만 정확하므로 $\lambda = 1$에서는 어긋남이 꽤 클 것이다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # lam 하나가 중심과 퍼짐을 동시에 결정한다.
+    # 포아송은 평균 = 분산 = lam 이라 모수가 하나뿐이기 때문이다.
+    # lam이 커질수록 봉우리가 오른쪽으로 가면서 동시에 넓어지고,
+    # 모양도 점점 대칭인 종 모양(정규분포)에 가까워진다.
+    for lam in [1, 4, 10]:
+        x = np.arange(0, 25)
+        ax.plot(x, stats.poisson(lam).pmf(x), 'o-', label=f'λ={lam}', markersize=4)
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.set_xlabel('k')
+    ax.legend()
+    plt.show()
+    ```
+
+    ![포아송분포](./img/poisson_144.png)
+
+    세 곡선이 각각 어디서 가장 높은지, 그 높이가 $1/\sqrt{2\pi\lambda}$와 얼마나 맞는지 잰다.
+
+    ```python
+    import numpy as np
+    from fractions import Fraction
+    from math import factorial, pi, sqrt
+    from scipy import stats
+
+    for lam in (1, 4, 10):
+        pmf = stats.poisson(lam).pmf(np.arange(0, 60))
+        modes = np.flatnonzero(pmf == pmf.max())
+        # lam 이 정수이면 lam^lam/lam! = lam^(lam-1)/(lam-1)! 이라 동점이다.
+        tie = Fraction(lam**lam, factorial(lam)) == Fraction(lam**(lam - 1), factorial(lam - 1))
+        approx = 1 / sqrt(2 * pi * lam)
+        print(f"lam={lam:2d}:  최빈값 {modes}  (동점이 정확한가? {tie})   SD = {sqrt(lam):.4f}")
+        print(f"        봉우리 {pmf.max():.6f}  vs  1/sqrt(2*pi*lam) = {approx:.6f}"
+              f"   상대오차 {(pmf.max() - approx) / approx * 100:+.2f}%")
+    ```
+
+    출력:
+
+    ```
+    lam= 1:  최빈값 [0 1]  (동점이 정확한가? True)   SD = 1.0000
+            봉우리 0.367879  vs  1/sqrt(2*pi*lam) = 0.398942   상대오차 -7.79%
+    lam= 4:  최빈값 [3 4]  (동점이 정확한가? True)   SD = 2.0000
+            봉우리 0.195367  vs  1/sqrt(2*pi*lam) = 0.199471   상대오차 -2.06%
+    lam=10:  최빈값 [ 9 10]  (동점이 정확한가? True)   SD = 3.1623
+            봉우리 0.125110  vs  1/sqrt(2*pi*lam) = 0.126157   상대오차 -0.83%
+    ```
+
+    최빈값은 세 경우 모두 예측대로 동점이고, 분수로 재어도 정확히 같다. $\lambda = 1$에서 두 최빈값은 $p(0) = p(1) = e^{-1} = 0.3679$이다.
+
+    봉우리 높이도 $1/\sqrt{2\pi\lambda}$와 맞는데, **맞는 정도가 $\lambda$에 따라 달라진다.** $\lambda = 1$에서 $-7.8\%$, $\lambda = 4$에서 $-2.1\%$, $\lambda = 10$에서 $-0.8\%$다. 오차가 $\lambda$에 **반비례**해 줄어드는데, 스털링 근사의 상대오차가 $1/(12\lambda)$ 꼴이라는 것과 들어맞는다. $\lambda = 4$이면 $1/48 = 2.08\%$이고 표의 값은 $2.06\%$, $\lambda = 10$이면 $1/120 = 0.83\%$이고 표의 값도 $0.83\%$다. **근사가 어긋나는 쪽으로도 예측이 맞는다**는 것이 확인의 요점이다.
+
+    높이가 늘 $1/\sqrt{2\pi\lambda}$보다 **작다**는 것도 우연이 아니다. 스털링 근사는 $\lambda!$를 아래로 잡으므로($\lambda! > \sqrt{2\pi\lambda}\lambda^\lambda e^{-\lambda}$) 그것으로 나눈 $p(\lambda)$는 위로 잡히게 된다.
 
 ### 이항 극한으로서의 포아송분포
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 이항분포의 극한으로서의 포아송
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이항분포의 극한으로서의 포아송. $\lambda = 5$를 고정하고 $n = 20, 50, 200$에 대해 $B(n, \lambda/n)$의 PMF를 $\text{Poisson}(5)$ 위에 겹쳐 그린다.
+
+**(1)** $k$를 고정하고 $n \to \infty$일 때 $B(n, \lambda/n)$의 PMF가 포아송 PMF로 간다는 것을 보이고, $k = 0$에서 **수렴 속도**가 어떤 꼴인지 구하시오.
+
+**(2)** 세 $n$에서 두 PMF의 최대 차이를 재어 (1)이 예측한 속도와 견주시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-lam = 5
-x = np.arange(0, 20)
+    **(1) 해석적으로.** $p = \lambda/n$으로 두고 이항 PMF를 세 덩어리로 쪼갠다.
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.bar(x, stats.poisson(lam).pmf(x), alpha=0.5, label='Poisson(λ=5)')
+    $$
+    \binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1 - \frac{\lambda}{n}\right)^{n-k}
+    = \underbrace{\frac{n!}{(n-k)!\,n^k}}_{A_n}
+    \cdot \frac{\lambda^k}{k!}
+    \cdot \underbrace{\left(1 - \frac{\lambda}{n}\right)^{n}}_{B_n}
+    \cdot \underbrace{\left(1 - \frac{\lambda}{n}\right)^{-k}}_{C_n}
+    $$
 
-# 포아송은 이항분포의 극한이다.
-# n을 키우면서 p = lam/n 으로 줄여 **곱 np = lam 을 고정**하면
-# 이항분포가 포아송으로 수렴한다.
-#   n=20  -> p=0.250
-#   n=50  -> p=0.100
-#   n=200 -> p=0.025
-# "시행이 아주 많고 각각의 성공확률이 아주 작은" 상황이 포아송의 정체다.
-for n in [20, 50, 200]:
-    ax.plot(x, stats.binom(n, lam/n).pmf(x), 'o-', label=f'Binom(n={n}, p={lam/n:.3f})', markersize=4)
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    $k$가 고정이면 세 덩어리의 극한이 모두 쉽다. $A_n = \frac{n}{n}\cdot\frac{n-1}{n}\cdots\frac{n-k+1}{n}$은 $1$에 가까운 인수 $k$개의 곱이므로 $A_n \to 1$이고, $\log B_n = n\log(1 - \lambda/n) \to -\lambda$이므로 $B_n \to e^{-\lambda}$이며, $C_n \to 1$이다. 셋을 합쳐
 
-![포아송분포](./img/poisson_161.png)
+    $$
+    \lim_{n\to\infty} P(B = k) = \frac{e^{-\lambda}\lambda^k}{k!}
+    $$
+
+    를 얻는다.
+
+    **속도는 $k = 0$에서 깨끗하게 읽힌다.** 그 자리에서는 $A_n = C_n = 1$이라 $B_n$만 남고
+
+    $$
+    \log \frac{P(B=0)}{P(\text{Poisson}=0)}
+    = n\log\!\left(1 - \frac{\lambda}{n}\right) + \lambda
+    = n\left(-\frac{\lambda}{n} - \frac{\lambda^2}{2n^2} - \frac{\lambda^3}{3n^3} - \cdots\right) + \lambda
+    = -\frac{\lambda^2}{2n} - O\!\left(\frac{1}{n^2}\right)
+    $$
+
+    이다($\log(1-u) = -u - u^2/2 - u^3/3 - \cdots$를 썼다). 곧
+
+    $$
+    \frac{P(B=0)}{P(\text{Poisson}=0)} \approx \exp\!\left(-\frac{\lambda^2}{2n}\right) \approx 1 - \frac{\lambda^2}{2n}
+    $$
+
+    이다. **오차는 $1/n$에 비례한다.** $n$을 10배로 하면 오차가 대략 10분의 1이 된다는 뜻이고, 이것이 $p$를 줄이는 쪽이 아니라 $n$을 키우는 쪽이 중요한 이유다. 로그가 항상 음수이므로 이항은 포아송보다 $k = 0$을 **덜** 자주 내놓는다.
+
+    여기서 $\lambda^2/(2n)$이 작아야 근사가 쓸 만하다는 조건이 나온다. $\lambda = 5$, $n = 20$이면 $\lambda^2/(2n) = 0.625$로 작지 않으니 $n = 20$은 아직 거친 근사일 것이다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    lam = 5
+    x = np.arange(0, 20)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.bar(x, stats.poisson(lam).pmf(x), alpha=0.5, label='Poisson(λ=5)')
+
+    # 포아송은 이항분포의 극한이다.
+    # n을 키우면서 p = lam/n 으로 줄여 **곱 np = lam 을 고정**하면
+    # 이항분포가 포아송으로 수렴한다.
+    #   n=20  -> p=0.250
+    #   n=50  -> p=0.100
+    #   n=200 -> p=0.025
+    # "시행이 아주 많고 각각의 성공확률이 아주 작은" 상황이 포아송의 정체다.
+    for n in [20, 50, 200]:
+        ax.plot(x, stats.binom(n, lam/n).pmf(x), 'o-', label=f'Binom(n={n}, p={lam/n:.3f})', markersize=4)
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![포아송분포](./img/poisson_161.png)
+
+    $n = 20$ 곡선은 봉우리가 포아송보다 눈에 띄게 높고 좁은데, $B(20, 0.25)$의 분산이 $20 \cdot 0.25 \cdot 0.75 = 3.75$로 포아송의 $5$보다 작기 때문이다. $n = 200$ 곡선은 막대와 거의 겹친다.
+
+    오차를 수로 재고, $n$을 10배 키운 $n = 2000$까지 덧붙여 속도를 본다.
+
+    ```python
+    import numpy as np
+    from math import exp
+    from scipy import stats
+
+    lam = 5
+    ks = np.arange(0, 60)
+    pois = stats.poisson(lam).pmf(ks)
+
+    print(f"{'n':>6}{'max|차이|':>13}{'n x max':>10}{'P(B=0)/P(Poi=0)':>18}{'exp(-lam^2/2n)':>17}")
+    for n in (20, 50, 200, 2000):
+        binom = stats.binom(n, lam / n).pmf(ks)
+        d = np.abs(binom - pois)
+        print(f"{n:>6}{d.max():>13.3e}{n * d.max():>10.4f}"
+              f"{(1 - lam / n)**n / exp(-lam):>18.6f}{exp(-lam**2 / (2 * n)):>17.6f}")
+    ```
+
+    출력:
+
+    ```
+         n      max|차이|   n x max   P(B=0)/P(Poi=0)   exp(-lam^2/2n)
+        20    2.686e-02    0.5373          0.470650         0.535261
+        50    9.457e-03    0.4729          0.764888         0.778801
+       200    2.233e-03    0.4467          0.938416         0.939413
+      2000    2.197e-04    0.4395          0.993759         0.993769
+    ```
+
+    두 예측이 모두 맞는다.
+
+    **속도.** `n × max|차이|` 열이 $0.54 \to 0.47 \to 0.45 \to 0.44$로 거의 상수에 눕는다. 최대 차이가 $1/n$에 비례한다는 뜻이다. 실제로 $n$을 $200$에서 $2000$으로 10배 키우면 오차가 $2.23 \times 10^{-3}$에서 $2.20 \times 10^{-4}$로 정확히 10분의 1이 되었다.
+
+    **$k = 0$의 비.** $n = 2000$에서 실제 비 $0.993759$와 근사 $\exp(-\lambda^2/2n) = 0.993769$가 소수점 다섯째 자리까지 맞는다. $n = 200$에서도 $0.9384$ 대 $0.9394$로 맞지만, $n = 20$에서는 $0.4707$ 대 $0.5353$으로 꽤 벌어진다. **(1)에서 $\lambda^2/(2n) = 0.625$가 작지 않다고 미리 말해 둔 그 경우다.** 버린 $O(1/n^2)$ 항이 일하기 시작한 것이고, 근사가 어긋나는 자리까지 유도가 맞힌 셈이다.
+
+    모든 $n$에서 비가 $1$보다 작다는 것도 유도와 같다. 이항은 "$0$번 성공"을 포아송보다 드물게 낸다.
 
 ### 표본추출과 평균–분산 점검
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 포아송의 평균과 분산이 같음을 확인
+**보기 4.** <span class="diff easy" title="쉬움"></span> 포아송의 평균과 분산이 같음을 확인. $\text{Poisson}(7)$에서 $n = 10^5$개를 뽑아 표본평균과 표본분산을 잰다.
+
+**(1)** 표본평균과 표본분산이 각각 얼마나 흔들리는지, 곧 두 표준오차를 구하시오. 분산 쪽에는 포아송의 4차 중심적률이 필요하다.
+
+**(2)** 코드가 준 두 값이 (1)의 표준오차로 재어 몇 배 안에 들어오는지 확인하시오. 코드의 `atol=0.1`은 적절한 허용폭인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-lam = 7
-samples = stats.poisson(lam).rvs(100_000)
+    **(1) 해석적으로.** 평균 쪽은 쉽다. $\text{Var}(X) = \lambda$이므로
 
-# 포아송의 특징: 평균과 분산이 **같다**.
-# 실제 계수 자료에서 표본분산이 표본평균보다 뚜렷이 크면
-# 포아송 가정이 깨졌다는 신호이며(과산포), 음이항분포 등을 고려해야 한다.
+    $$
+    \text{SE}(\bar X) = \frac{\text{SD}(X)}{\sqrt n} = \sqrt{\frac{\lambda}{n}}
+    = \sqrt{\frac{7}{10^5}} = 0.008367
+    $$
 
-print(f"Theoretical mean: {lam},  Sample mean: {samples.mean():.4f}")
-print(f"Theoretical var:  {lam},  Sample var:  {samples.var():.4f}")
-print(f"Mean ≈ Var: {np.isclose(samples.mean(), samples.var(), atol=0.1)}")
-```
+    이다. 분산 쪽은 표본분산의 분산을 알아야 하고, 큰 $n$에서 그것은
 
-출력:
+    $$
+    \text{Var}(S^2) \approx \frac{\mu_4 - \sigma^4}{n}, \qquad
+    \mu_4 = E\big[(X-\lambda)^4\big]
+    $$
 
-```
-Theoretical mean: 7,  Sample mean: 7.0065
-Theoretical var:  7,  Sample var:  7.0213
-Mean ≈ Var: True
-```
+    이다. 포아송의 4차 중심적률을 계승적률로 구한다. $E[X]=\lambda$, $E[X(X-1)]=\lambda^2$, $E[X(X-1)(X-2)]=\lambda^3$, $E[X(X-1)(X-2)(X-3)]=\lambda^4$임은 본문의 평균 유도와 같은 계산을 반복하면 나온다. 이것을 모으면
+
+    $$
+    \mu_4 = 3\lambda^2 + \lambda
+    $$
+
+    이다. 따라서 $\sigma^4 = \lambda^2$를 빼면
+
+    $$
+    \text{Var}(S^2) \approx \frac{3\lambda^2 + \lambda - \lambda^2}{n} = \frac{2\lambda^2 + \lambda}{n},
+    \qquad
+    \text{SE}(S^2) = \sqrt{\frac{2\lambda^2 + \lambda}{n}}
+    $$
+
+    이고 $\lambda = 7$, $n = 10^5$에서
+
+    $$
+    \text{SE}(S^2) = \sqrt{\frac{2 \cdot 49 + 7}{10^5}} = \sqrt{1.05 \times 10^{-3}} = 0.03240
+    $$
+
+    이다. **분산이 평균보다 네 배 가까이 더 흔들린다.** 분산은 제곱을 평균하므로 꼬리의 큰 값에 훨씬 민감하고, 그 비는 $\sqrt{(2\lambda^2+\lambda)/\lambda} = \sqrt{2\lambda+1}$이라 $\lambda$가 커지면 더 벌어진다.
+
+    **(2) 수치적으로.** 먼저 쪽의 코드를 그대로 돌린다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    lam = 7
+    samples = stats.poisson(lam).rvs(100_000)
+
+    # 포아송의 특징: 평균과 분산이 **같다**.
+    # 실제 계수 자료에서 표본분산이 표본평균보다 뚜렷이 크면
+    # 포아송 가정이 깨졌다는 신호이며(과산포), 음이항분포 등을 고려해야 한다.
+
+    print(f"Theoretical mean: {lam},  Sample mean: {samples.mean():.4f}")
+    print(f"Theoretical var:  {lam},  Sample var:  {samples.var():.4f}")
+    print(f"Mean ≈ Var: {np.isclose(samples.mean(), samples.var(), atol=0.1)}")
+    ```
+
+    출력:
+
+    ```
+    Theoretical mean: 7,  Sample mean: 7.0065
+    Theoretical var:  7,  Sample var:  7.0213
+    Mean ≈ Var: True
+    ```
+
+    이 두 값이 "가깝다"고 말할 자격이 있는지 (1)의 표준오차로 재 본다.
+
+    ```python
+    import numpy as np
+    from math import sqrt
+    from scipy import stats
+
+    lam, n = 7, 100_000
+    np.random.seed(42)
+    samples = stats.poisson(lam).rvs(n)
+
+    # 포아송의 4차 중심적률이 정말 3*lam^2 + lam 인지 먼저 확인한다.
+    k = np.arange(0, 200)
+    mu4 = (((k - lam) ** 4) * stats.poisson(lam).pmf(k)).sum()
+    print(f"mu4 = {mu4:.4f},   3*lam^2 + lam = {3 * lam**2 + lam}")
+
+    se_mean = sqrt(lam / n)                      # SD(X)/sqrt(n) = sqrt(lam/n)
+    se_var = sqrt((2 * lam**2 + lam) / n)        # (mu4 - sigma^4)/n = (2 lam^2 + lam)/n
+
+    for name, value, se in (("표본평균", samples.mean(), se_mean),
+                            ("표본분산", samples.var(), se_var)):
+        print(f"{name} {value:.4f}   이론값 {lam}   SE {se:.4f}   z = {(value - lam) / se:+.3f}")
+
+    print(f"산포비 s^2/xbar = {samples.var() / samples.mean():.4f}   (SE 약 {se_var / lam:.4f})")
+    ```
+
+    출력:
+
+    ```
+    mu4 = 154.0000,   3*lam^2 + lam = 154
+    표본평균 7.0065   이론값 7   SE 0.0084   z = +0.771
+    표본분산 7.0213   이론값 7   SE 0.0324   z = +0.658
+    산포비 s^2/xbar = 1.0021   (SE 약 0.0046)
+    ```
+
+    4차 중심적률이 $154$로 유도한 $3\lambda^2 + \lambda = 147 + 7 = 154$와 정확히 맞고, 표준오차도 유도한 $0.008367$과 $0.03240$을 그대로 재현한다. 두 표본값은 각각 $+0.77$ SE, $+0.66$ SE 떨어져 있으니 **몬테카를로 오차 범위 안**이다. 이상적인 어긋남이 아니라 있어야 할 만큼의 어긋남이다.
+
+    **`atol=0.1`은 느슨하다.** 분산의 SE가 $0.032$이니 $0.1$은 약 $3$ SE에 해당한다. 포아송이 맞을 때 통과하기는 하지만, 평균이 $7$인데 분산이 $7.09$인 자료(산포비 $1.013$)도 통과시킨다. 산포 자체를 판정하려면 절대 허용폭 대신 **산포비** $s^2/\bar x$를 쓰고 그 표준오차 $\text{SE}(S^2)/\lambda \approx \sqrt{(2\lambda+1)/(n\lambda)} = 0.0046$으로 재는 것이 옳다. 관측된 $1.0021$은 $0.46$ SE이므로 역시 문제가 없다. 연습문제 6의 산포 검정이 이 생각을 $\chi^2$ 분포로 정식화한 것이다.
 
 ---
 
@@ -301,63 +618,125 @@ Mean ≈ Var: True
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 네 이산분포 한눈에 보기
+**보기 5.** <span class="diff easy" title="쉬움"></span> 네 이산분포 한눈에 보기. $B(50, 0.3)$, $\text{Poisson}(1.2)$, $\text{Geo}(0.3)$(실패 횟수), $\text{HG}(5, 20, 100)$의 PMF를 $2 \times 2$ 격자에 그린다.
+
+**(1)** 네 분포를 그려 보고, 그림에서 무엇을 읽어 낼 수 있는지 말하시오. 특히 위 표의 분산/평균 비를 네 모수 조합에서 구하시오.
+
+**(2)** 이 그림이 **가리는 것**은 무엇인가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-n, p = 50, 0.3                      # 이항: 시행 50번, 성공확률 0.3
-k_vals = np.arange(0, n + 1)
-pmf = stats.binom.pmf(k_vals, n, p)
-lam = 1.2                           # 포아송: 평균 1.2건
-pop, succ, draw = 100, 20, 5        # 초기하: 모집단 100, 성공 20, 추출 5
+    **(1) 무엇을 읽는가.** 이 보기에는 유도할 답이 없다. 네 분포를 나란히 놓고 **무엇을 세는지가 다르다**는 것을 보이는 그림이고, 거기서 읽어 낼 것을 수와 함께 적는 것이 이 보기의 몫이다.
 
-# 네 이산분포를 2x2 격자에 나란히 놓는다.
-# 서로 어떻게 다른지가 아니라 **무엇을 세는지가** 다르다는 데 주목하라.
-#   Binomial      : 시행 수를 정해 놓고 성공 횟수를 센다 (복원추출)
-#   Poisson       : 정해진 구간에서 사건 발생 횟수를 센다 (상한 없음)
-#   Geometric     : 첫 성공까지 걸린 시행 수를 센다
-#   Hypergeometric: 유한 모집단에서 비복원추출했을 때의 성공 횟수
-fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    먼저 그림을 그린다.
 
-axes[0, 0].bar(k_vals, pmf, color="steelblue", edgecolor="white", alpha=0.8)
-axes[0, 0].axvline(n * p, color="red", linestyle="--", label=f"E[X] = {n*p:.0f}")
-axes[0, 0].set_title("Binomial(n=50, p=0.3)")
-axes[0, 0].set_xlabel("k")
-axes[0, 0].legend()
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
 
-pk = np.arange(0, 10)
-axes[0, 1].bar(pk, stats.poisson.pmf(pk, lam), color="seagreen",
-               edgecolor="white", alpha=0.8)
-axes[0, 1].set_title(f"Poisson(λ={lam})")
-axes[0, 1].set_xlabel("k")
+    n, p = 50, 0.3                      # 이항: 시행 50번, 성공확률 0.3
+    k_vals = np.arange(0, n + 1)
+    pmf = stats.binom.pmf(k_vals, n, p)
+    lam = 1.2                           # 포아송: 평균 1.2건
+    pop, succ, draw = 100, 20, 5        # 초기하: 모집단 100, 성공 20, 추출 5
 
-gk = np.arange(0, 20)
-# gk + 1 을 넣는 이유: scipy의 geom은 시행 번호(1부터)를 받는데
-# 여기서는 실패 횟수(0부터)를 가로축으로 쓰고 싶기 때문이다.
-axes[1, 0].bar(gk, stats.geom.pmf(gk + 1, 0.3), color="coral",
-               edgecolor="white", alpha=0.8)
-axes[1, 0].set_title("Geometric(p=0.3)")
-axes[1, 0].set_xlabel("k (failures)")
+    # 네 이산분포를 2x2 격자에 나란히 놓는다.
+    # 서로 어떻게 다른지가 아니라 **무엇을 세는지가** 다르다는 데 주목하라.
+    #   Binomial      : 시행 수를 정해 놓고 성공 횟수를 센다 (복원추출)
+    #   Poisson       : 정해진 구간에서 사건 발생 횟수를 센다 (상한 없음)
+    #   Geometric     : 첫 성공까지 걸린 시행 수를 센다
+    #   Hypergeometric: 유한 모집단에서 비복원추출했을 때의 성공 횟수
+    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 
-hk = np.arange(0, draw + 1)
-# 초기하분포: 전체 M개 중 성공이 N개일 때, n개를 **비복원**으로 뽑아
-# 성공이 몇 개 나오는가. 뽑을 때마다 남은 구성이 바뀌므로 시행이 독립이 아니다.
-# 그 점이 이항분포와의 유일하면서도 결정적인 차이다.
-axes[1, 1].bar(hk, stats.hypergeom.pmf(hk, pop, succ, draw), color="mediumpurple",
-               edgecolor="white", alpha=0.8)
-axes[1, 1].set_title("Hypergeometric(M=100, N=20, n=5)")
-axes[1, 1].set_xlabel("k (defectives)")
+    axes[0, 0].bar(k_vals, pmf, color="steelblue", edgecolor="white", alpha=0.8)
+    axes[0, 0].axvline(n * p, color="red", linestyle="--", label=f"E[X] = {n*p:.0f}")
+    axes[0, 0].set_title("Binomial(n=50, p=0.3)")
+    axes[0, 0].set_xlabel("k")
+    axes[0, 0].legend()
 
-plt.tight_layout()
-plt.show()
-```
+    pk = np.arange(0, 10)
+    axes[0, 1].bar(pk, stats.poisson.pmf(pk, lam), color="seagreen",
+                   edgecolor="white", alpha=0.8)
+    axes[0, 1].set_title(f"Poisson(λ={lam})")
+    axes[0, 1].set_xlabel("k")
 
-![네 이산분포 한눈에 보기](./img/four_discrete_95.png)
+    gk = np.arange(0, 20)
+    # gk + 1 을 넣는 이유: scipy의 geom은 시행 번호(1부터)를 받는데
+    # 여기서는 실패 횟수(0부터)를 가로축으로 쓰고 싶기 때문이다.
+    axes[1, 0].bar(gk, stats.geom.pmf(gk + 1, 0.3), color="coral",
+                   edgecolor="white", alpha=0.8)
+    axes[1, 0].set_title("Geometric(p=0.3)")
+    axes[1, 0].set_xlabel("k (failures)")
+
+    hk = np.arange(0, draw + 1)
+    # 초기하분포: 전체 M개 중 성공이 N개일 때, n개를 **비복원**으로 뽑아
+    # 성공이 몇 개 나오는가. 뽑을 때마다 남은 구성이 바뀌므로 시행이 독립이 아니다.
+    # 그 점이 이항분포와의 유일하면서도 결정적인 차이다.
+    axes[1, 1].bar(hk, stats.hypergeom.pmf(hk, pop, succ, draw), color="mediumpurple",
+                   edgecolor="white", alpha=0.8)
+    axes[1, 1].set_title("Hypergeometric(M=100, N=20, n=5)")
+    axes[1, 1].set_xlabel("k (defectives)")
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![네 이산분포 한눈에 보기](./img/four_discrete_95.png)
+
+    네 칸이 모두 다른 모양이다. 왼쪽 위는 $k = 15$ 근처에 거의 대칭인 종 모양, 오른쪽 위는 $k = 0$이 가장 높고 오른쪽으로 꼬리를 끄는 모양, 왼쪽 아래는 $k = 0$에서 출발해 공비 $0.7$로 **단조 감소**하는 모양, 오른쪽 아래는 $k = 0, 1$에 거의 모든 확률이 몰려 있고 $k = 5$에서는 눈에 보이지 않는 모양이다.
+
+    그러나 **모양만 보면 포아송과 기하를 구별하기 어렵다.** 둘 다 왼쪽이 높고 오른쪽으로 꼬리를 끈다. 식별해 주는 것은 모양이 아니라 **분산/평균 비**다. 위 표의 식을 네 모수 조합에 넣어 본다.
+
+    ```python
+    from fractions import Fraction as F
+    import numpy as np
+    from scipy import stats
+
+    n, p = 50, F(3, 10)                 # 이항: 시행 50, 성공확률 0.3
+    lam = F(12, 10)                     # 포아송: 평균 1.2
+    q = F(3, 10)                        # 기하: 성공확률 0.3
+    M, N, d = 100, 20, 5                # 초기하: 모집단 M, 성공 N, 추출 d
+    r = F(N, M)
+
+    rows = [
+        ("이항 B(50, 0.3)", n * p, n * p * (1 - p)),
+        ("포아송 Poisson(1.2)", lam, lam),
+        ("기하 Geo(0.3), 실패 횟수", (1 - q) / q, (1 - q) / q**2),
+        (f"초기하 HG({d}, {N}, {M})", d * r, d * r * (1 - r) * F(M - d, M - 1)),
+    ]
+    for name, mean, var in rows:
+        print(f"{name:26s} 평균 {float(mean):7.4f}  분산 {float(var):7.4f}"
+              f"  분산/평균 {float(var / mean):.4f}  (분수 {var / mean})")
+
+    # 네 칸의 봉우리 높이. 세로축 범위가 서로 다르다는 것을 수로 확인한다.
+    print(f"봉우리 높이:  이항 {stats.binom(50, 0.3).pmf(np.arange(51)).max():.4f}"
+          f"   포아송 {stats.poisson(1.2).pmf(np.arange(10)).max():.4f}"
+          f"   기하 {stats.geom.pmf(np.arange(20) + 1, 0.3).max():.4f}"
+          f"   초기하 {stats.hypergeom(100, 20, 5).pmf(np.arange(6)).max():.4f}")
+    ```
+
+    출력:
+
+    ```
+    이항 B(50, 0.3)              평균 15.0000  분산 10.5000  분산/평균 0.7000  (분수 7/10)
+    포아송 Poisson(1.2)           평균  1.2000  분산  1.2000  분산/평균 1.0000  (분수 1)
+    기하 Geo(0.3), 실패 횟수         평균  2.3333  분산  7.7778  분산/평균 3.3333  (분수 10/3)
+    초기하 HG(5, 20, 100)         평균  1.0000  분산  0.7677  분산/평균 0.7677  (분수 76/99)
+    봉우리 높이:  이항 0.1223   포아송 0.3614   기하 0.3000   초기하 0.4201
+    ```
+
+    분수까지 적어 두니 네 비가 어디서 오는지 그대로 읽힌다. 이항은 $1 - p = 7/10$, 포아송은 정확히 $1$, 기하는 $1/p = 10/3$, 초기하는 $(1-N/M)\frac{M-d}{M-1} = \frac45 \cdot \frac{95}{99} = \frac{76}{99}$다. **포아송의 $1$을 기준선 삼으면 이항·초기하는 그 아래(과소산포), 기하는 그 위(과대산포)로 깔끔하게 갈린다.** 계수 자료를 받았을 때 $s^2/\bar x$를 먼저 재는 이유가 이것이다.
+
+    **(2) 그림이 가리는 것.** 셋이다.
+
+    첫째, **네 칸의 세로축이 서로 다르다.** 봉우리 높이가 $0.12$부터 $0.42$까지 세 배 넘게 차이 나는데도 네 칸이 비슷한 크기로 보인다. 같은 축에 놓으면 이항 곡선은 거의 납작해 보일 것이다. 격자 그림에서 "비슷해 보인다"는 인상은 믿을 것이 아니다.
+
+    둘째, **가로축의 뜻이 칸마다 다르다.** 왼쪽 위와 오른쪽 아래의 $k$는 성공 횟수이고, 오른쪽 위는 구간 안의 사건 수이며, 왼쪽 아래는 **실패 횟수**다. 코드에서 `gk + 1`을 넣은 것이 그 때문인데, SciPy 의 `geom` 은 시행 번호(1부터)를 받으므로 실패 횟수로 바꾸려면 하나를 더해 주어야 한다. 이 한 칸 차이가 평균을 $1/p = 3.33$에서 $(1-p)/p = 2.33$으로 바꾼다. **같은 "기하분포"라는 이름 아래 평균이 다른 두 관례가 있다**는 것이 그림에는 전혀 나타나지 않는다.
+
+    셋째, **잘린 꼬리가 보이지 않는다.** 포아송과 기하는 상한이 없는데 각각 $k \le 9$, $k \le 19$에서 끊었다. 기하의 경우 $P(\text{실패} \ge 20) = 0.7^{20} = 7.98 \times 10^{-4}$라 버려도 좋지만, 그림만 보면 분포에 상한이 있는 것처럼 읽힌다. 이항·초기하의 가로축 끝은 **진짜 상한**($n = 50$, $d = 5$)이어서 성질이 전혀 다른데도 그림에서는 똑같이 "끝"으로 보인다.
 
 ---
 

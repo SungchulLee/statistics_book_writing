@@ -143,91 +143,377 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이항분포의 확률질량함수와 분포함수
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이항분포의 확률질량함수와 분포함수. $Y \sim B(10, 0.6)$의 PMF와 CDF를 $k = 0, \ldots, 10$에서 나란히 그린다.
+
+**(1)** PMF를 가장 크게 만드는 $k$, 곧 최빈값을 구하시오. $(n+1)p$가 정수일 때는 무슨 일이 일어나는가.
+
+**(2)** $n = 10$, $p = 0.6$에서 (1)의 답을 확인하고, $(n+1)p$가 정수가 되는 $n = 9$, $p = 0.6$에서 동점을 분수로 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-n, p = 10, 0.6                # 시행 10번, 각 시행의 성공확률 0.6
-x = np.arange(0, n + 1)       # 가능한 성공 횟수 0~10
+    **(1) 해석적으로.** $k$는 **정수**라 미분할 수 없다. 이웃한 두 확률의 비를 본다.
 
-fig, ax = plt.subplots(figsize=(12, 3))
-# 같은 k에 대해 PMF와 CDF 막대를 좌우로 조금씩 밀어 나란히 놓는다.
-#   PMF: "정확히 k번 성공할 확률"        -> 봉우리 모양
-#   CDF: "k번 이하로 성공할 확률"        -> 단조 증가해 1에 도달
-# CDF 막대는 PMF 막대를 왼쪽부터 누적한 값이다.
-ax.bar(x - 0.15, stats.binom(n, p).pmf(x), width=0.3, label='PMF', alpha=0.7)
-ax.bar(x + 0.15, stats.binom(n, p).cdf(x), width=0.3, label='CDF', alpha=0.7)
-ax.set_xlabel('k')
-ax.set_xticks(x)
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    $$
+    \frac{p(k)}{p(k-1)}
+    = \frac{\binom{n}{k}p^k(1-p)^{n-k}}{\binom{n}{k-1}p^{k-1}(1-p)^{n-k+1}}
+    = \frac{n-k+1}{k}\cdot\frac{p}{1-p}
+    $$
 
-![베르누이분포와 이항분포](./img/binomial_125.png)
+    $\binom{n}{k}\big/\binom{n}{k-1} = (n-k+1)/k$를 썼고, $p$와 $(1-p)$의 지수는 각각 하나씩만 남았다. 이 비가 $1$ 이상인 조건은
+
+    $$
+    (n-k+1)p \ge k(1-p)
+    \qquad \Longleftrightarrow \qquad
+    k \le (n+1)p
+    $$
+
+    다. 양변을 펼치면 $kp$ 항이 지워져 이렇게 깔끔해진다. 그리고 $\frac{n-k+1}{k}$는 $k$에 대해 **감소**하므로 비가 $1$을 지나는 자리는 단 한 곳이다. 즉 PMF는 $k \le (n+1)p$까지 오르다가 그 뒤로는 계속 내려가고, 봉우리는 하나다. 따라서
+
+    $$
+    \text{최빈값} = \lfloor (n+1)p \rfloor
+    $$
+
+    이다. 비가 주는 문턱 $(n+1)p$에 **바닥함수가 붙는다**는 것이 요점이고, 그 까닭은 $k$가 정수라는 것 하나다. 연습문제 7이 같은 유도를 다른 모수에서 되짚는다.
+
+    $(n+1)p$가 정수 $m$이면 $k = m$에서 위 부등식이 **등호**가 되어 비가 정확히 $1$, 곧
+
+    $$
+    p(m) = p(m-1)
+    $$
+
+    이다. 최빈값이 **둘**이고 둘 중 어느 쪽도 더 그럴듯하지 않다. $n = 10$, $p = 0.6$은 $(n+1)p = 11 \times 0.6 = 6.6$으로 정수가 아니므로 최빈값은 $\lfloor 6.6 \rfloor = 6$ 하나다. 평균 $np = 6$과 같은데, 이것은 우연이다. $\lfloor (n+1)p \rfloor$와 $np$는 일반적으로 다르다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    n, p = 10, 0.6                # 시행 10번, 각 시행의 성공확률 0.6
+    x = np.arange(0, n + 1)       # 가능한 성공 횟수 0~10
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # 같은 k에 대해 PMF와 CDF 막대를 좌우로 조금씩 밀어 나란히 놓는다.
+    #   PMF: "정확히 k번 성공할 확률"        -> 봉우리 모양
+    #   CDF: "k번 이하로 성공할 확률"        -> 단조 증가해 1에 도달
+    # CDF 막대는 PMF 막대를 왼쪽부터 누적한 값이다.
+    ax.bar(x - 0.15, stats.binom(n, p).pmf(x), width=0.3, label='PMF', alpha=0.7)
+    ax.bar(x + 0.15, stats.binom(n, p).cdf(x), width=0.3, label='CDF', alpha=0.7)
+    ax.set_xlabel('k')
+    ax.set_xticks(x)
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![베르누이분포와 이항분포](./img/binomial_125.png)
+
+    왼쪽 막대가 $k = 6$에서 가장 높고 그 양쪽으로 주저앉는다. CDF 막대는 단조 증가해 $k = 10$에서 정확히 $1$에 닿는다. 포아송과 달리 이항분포는 상한이 **진짜로** $n$이므로 잘라 낸 꼬리가 없다.
+
+    (1)이 유도한 것을 분수로 확인한다. 이산분포의 좋은 점은 **반올림 없이** 확인할 수 있다는 것이다.
+
+    ```python
+    from fractions import Fraction
+    from math import comb
+    import numpy as np
+    from scipy import stats
+
+    n, p = 10, Fraction(3, 5)        # p = 0.6 을 분수로 적는다
+
+    # 비 p(k)/p(k-1) = (n-k+1)/k * p/(1-p). 1 을 넘는 동안 PMF 가 오른다.
+    for k in range(1, n + 1):
+        ratio = Fraction(n - k + 1, k) * p / (1 - p)
+        mark = ">1 (오름)" if ratio > 1 else ("=1 (동점)" if ratio == 1 else "<1 (내림)")
+        print(f"p({k})/p({k-1}) = {str(ratio):>7}   {mark}")
+
+    print(f"(n+1)p = {(n + 1) * p} = {float((n+1)*p)},  floor = {int((n + 1) * p)}")
+    print(f"argmax pmf = {stats.binom(10, 0.6).pmf(np.arange(11)).argmax()}")
+
+    # (n+1)p 가 정수가 되는 자리를 하나 잡는다. n=9, p=3/5 이면 (n+1)p = 6.
+    m, q = 9, Fraction(3, 5)
+    a = Fraction(comb(m, 5)) * q**5 * (1 - q)**4
+    b = Fraction(comb(m, 6)) * q**6 * (1 - q)**3
+    print(f"n={m}: (n+1)p = {(m+1)*q}")
+    print(f"P(5) = {a},  P(6) = {b},  같은가? {a == b}")
+
+    pm = stats.binom(9, 0.6).pmf(np.arange(10))
+    print(f"부동소수점: pmf(5) - pmf(6) = {pm[5]-pm[6]:+.3e}")
+    print(f"동점으로 잡히는 자리 = {np.flatnonzero(pm == pm.max())}")
+    ```
+
+    출력:
+
+    ```
+    p(1)/p(0) =      15   >1 (오름)
+    p(2)/p(1) =    27/4   >1 (오름)
+    p(3)/p(2) =       4   >1 (오름)
+    p(4)/p(3) =    21/8   >1 (오름)
+    p(5)/p(4) =     9/5   >1 (오름)
+    p(6)/p(5) =     5/4   >1 (오름)
+    p(7)/p(6) =     6/7   <1 (내림)
+    p(8)/p(7) =    9/16   <1 (내림)
+    p(9)/p(8) =     1/3   <1 (내림)
+    p(10)/p(9) =    3/20   <1 (내림)
+    (n+1)p = 33/5 = 6.6,  floor = 6
+    argmax pmf = 6
+    n=9: (n+1)p = 6
+    P(5) = 489888/1953125,  P(6) = 489888/1953125,  같은가? True
+    부동소수점: pmf(5) - pmf(6) = -1.665e-16
+    동점으로 잡히는 자리 = [6]
+    ```
+
+    비가 $k = 6$과 $k = 7$ 사이에서 $5/4$에서 $6/7$로 $1$을 넘어 내려간다. 넘는 자리가 한 곳뿐이고, 그 앞이 최빈값 $6$이다. 분수로만 보아도 등호가 걸리는 $k$가 없으니 동점이 아니다.
+
+    $n = 9$로 바꾸면 $(n+1)p = 6$이 정수가 되고, $P(5)$와 $P(6)$이 분수로 **한 치도 다르지 않다**($489888/1953125$). 그런데 부동소수점으로는 $1.7 \times 10^{-16}$만큼 어긋나서 `flatnonzero(pmf == pmf.max())`가 동점을 못 보고 $6$ 하나만 집는다. **이 어긋남은 수학이 아니라 배정도 실수의 반올림이다.** 동점을 보려면 분수로 재야 한다.
 
 ### 모수에 따른 비교
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 모수에 따른 이항분포 비교
+**보기 2.** <span class="diff easy" title="쉬움"></span> 모수에 따른 이항분포 비교. $(n, p) = (10, 0.5)$, $(20, 0.5)$, $(20, 0.7)$인 세 PMF를 한 그림에 겹쳐 그린다.
+
+**(1)** 봉우리의 **자리**와 **높이**를 각각 $n$과 $p$의 식으로 적으시오. 높이에는 스털링 근사가 필요하다.
+
+**(2)** 세 조합에서 최빈값과 봉우리 높이를 재어 (1)의 답과 견주시오. $n$만 키운 경우와 $p$만 바꾼 경우가 어떻게 다른가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-fig, ax = plt.subplots(figsize=(12, 3))
-# 두 모수가 각각 무엇을 바꾸는지 나누어 본다.
-#   (10, 0.5) -> (20, 0.5): n만 바뀐다. 봉우리가 오른쪽으로 가고 넓어진다.
-#   (20, 0.5) -> (20, 0.7): p만 바뀐다. 봉우리가 오른쪽으로 가고 좁아진다.
-# p가 0.5에서 멀어지면 분산 np(1-p)가 줄어들기 때문이다.
-for n, p in [(10, 0.5), (20, 0.5), (20, 0.7)]:
-    x = np.arange(0, n + 1)
-    # 이산분포이므로 원래는 막대가 맞지만, 여러 개를 겹쳐 비교할 때는
-    # 점을 이어 그리는 편이 읽기 쉽다. 선 자체에 의미는 없다.
-    ax.plot(x, stats.binom(n, p).pmf(x), 'o-', label=f'n={n}, p={p}', markersize=4)
-ax.spines[['top', 'right']].set_visible(False)
-ax.set_xlabel('k')
-ax.legend()
-plt.show()
-```
+    **(1) 해석적으로.** 자리는 보기 1에서 이미 나왔다. 최빈값은 $\lfloor (n+1)p \rfloor = \lfloor np + p \rfloor$이고, 세 조합 모두 $np$가 정수($5$, $10$, $14$)이며 $0 < p < 1$이므로 바닥함수가 소수부 $p$를 깎아 낸다. 곧 **최빈값이 평균 $np$와 정확히 같다.**
 
-![베르누이분포와 이항분포](./img/binomial_151.png)
+    $$
+    \text{최빈값} = \lfloor np + p \rfloor = np \qquad (np \in \mathbb{Z})
+    $$
+
+    높이는 그 자리의 확률 $p(np) = \frac{n!}{(np)!\,(nq)!}p^{np}q^{nq}$($q = 1-p$)를 스털링 근사
+
+    $$
+    m! = \sqrt{2\pi m}\, m^m e^{-m}\left(1 + \frac{1}{12m} + \cdots\right)
+    $$
+
+    로 세 계승에 모두 적용해 얻는다. 거듭제곱 부분이 먼저 깨끗이 지워진다.
+
+    $$
+    \frac{n^n}{(np)^{np}(nq)^{nq}}\, p^{np} q^{nq}
+    = \frac{n^n}{n^{np}n^{nq}} \cdot \frac{p^{np}q^{nq}}{p^{np}q^{nq}} = 1
+    $$
+
+    $np + nq = n$이라 $n$의 거듭제곱도 지워지고 $e^{-n}$도 $e^{-np}e^{-nq}$와 약분된다. 남는 것은 제곱근뿐이다.
+
+    $$
+    \frac{\sqrt{2\pi n}}{\sqrt{2\pi np}\sqrt{2\pi nq}} = \frac{1}{\sqrt{2\pi npq}}
+    $$
+
+    따라서
+
+    $$
+    p(np) \approx \frac{1}{\sqrt{2\pi n p q}} = \frac{1}{\sqrt{2\pi \text{Var}(Y)}}
+    $$
+
+    이다. **봉우리 높이는 분산의 제곱근에 반비례한다.** 넓이 $1$을 폭 $\sqrt{npq}$에 나누어 담는다고 읽으면 된다. 이 식은 $N(np, npq)$ 밀도의 봉우리 높이와 똑같아서, 뒤에 나올 정규근사가 한 점에서 미리 비친 셈이다.
+
+    보정항까지 끌고 가면 어긋남의 **방향과 크기**까지 나온다. $\left(1+\frac{1}{12n}\right)\big/\left[\left(1+\frac{1}{12np}\right)\left(1+\frac{1}{12nq}\right)\right]$를 1차까지 펼치고 $p + q = 1$을 쓰면
+
+    $$
+    1 + \frac{1}{12n}\left(1 - \frac1p - \frac1q\right)
+    = 1 + \frac{1}{12n}\cdot\frac{pq - 1}{pq}
+    = 1 - \frac{1 - pq}{12npq}
+    $$
+
+    이다. $pq \le 1/4 < 1$이므로 보정은 **언제나 음수**다. 실제 봉우리는 $1/\sqrt{2\pi npq}$보다 늘 조금 낮고, 상대오차가 $-(1-pq)/(12npq)$로 예측된다.
+
+    이제 두 모수의 몫이 갈린다. $n$을 $10 \to 20$으로 키우면($p = 0.5$ 고정) 분산이 $2.5 \to 5$로 **두 배**가 되어 봉우리가 $1/\sqrt2 = 0.707$배로 낮아진다. 반면 $p$를 $0.5 \to 0.7$로 옮기면($n = 20$ 고정) 분산이 $5 \to 4.2$로 **줄어들어** 봉우리가 $\sqrt{5/4.2} = 1.09$배로 오히려 **높아진다.** $pq$가 $p = 0.5$에서 최대이기 때문이다. 코드 주석의 "p가 0.5에서 멀어지면 분산이 줄어든다"가 가리키는 것이 이것이다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # 두 모수가 각각 무엇을 바꾸는지 나누어 본다.
+    #   (10, 0.5) -> (20, 0.5): n만 바뀐다. 봉우리가 오른쪽으로 가고 넓어진다.
+    #   (20, 0.5) -> (20, 0.7): p만 바뀐다. 봉우리가 오른쪽으로 가고 좁아진다.
+    # p가 0.5에서 멀어지면 분산 np(1-p)가 줄어들기 때문이다.
+    for n, p in [(10, 0.5), (20, 0.5), (20, 0.7)]:
+        x = np.arange(0, n + 1)
+        # 이산분포이므로 원래는 막대가 맞지만, 여러 개를 겹쳐 비교할 때는
+        # 점을 이어 그리는 편이 읽기 쉽다. 선 자체에 의미는 없다.
+        ax.plot(x, stats.binom(n, p).pmf(x), 'o-', label=f'n={n}, p={p}', markersize=4)
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.set_xlabel('k')
+    ax.legend()
+    plt.show()
+    ```
+
+    ![베르누이분포와 이항분포](./img/binomial_151.png)
+
+    세 곡선의 봉우리가 $k = 5, 10, 14$에 차례로 서 있다. 가운데 곡선이 가장 낮고, 오른쪽으로 더 간 셋째 곡선이 그보다 **높다**. 봉우리의 자리와 높이를 재어 (1)과 맞춰 본다.
+
+    ```python
+    import numpy as np
+    from math import pi, sqrt
+    from scipy import stats
+
+    print(f"{'(n, p)':>11}{'평균':>8}{'분산':>8}{'(n+1)p':>9}{'최빈값':>8}"
+          f"{'봉우리':>9}{'1/sqrt(2pi npq)':>17}{'상대오차':>10}{'-(1-pq)/(12npq)':>17}")
+    for n, p in ((10, 0.5), (20, 0.5), (20, 0.7)):
+        q = 1 - p
+        v = n * p * q                      # 분산 npq
+        pmf = stats.binom(n, p).pmf(np.arange(n + 1))
+        approx = 1 / sqrt(2 * pi * v)      # 봉우리 높이의 근사
+        rel = (pmf.max() - approx) / approx
+        pred = -(1 - p * q) / (12 * v)     # 스털링 1차 보정이 예측하는 상대오차
+        print(f"{f'({n}, {p})':>11}{n*p:>8.2f}{v:>8.2f}{(n+1)*p:>9.1f}{pmf.argmax():>8d}"
+              f"{pmf.max():>9.4f}{approx:>17.4f}{rel*100:>9.2f}%{pred*100:>16.2f}%")
+    ```
+
+    출력:
+
+    ```
+         (n, p)      평균      분산   (n+1)p     최빈값      봉우리  1/sqrt(2pi npq)      상대오차  -(1-pq)/(12npq)
+      (10, 0.5)    5.00    2.50      5.5       5   0.2461           0.2523    -2.46%           -2.50%
+      (20, 0.5)   10.00    5.00     10.5      10   0.1762           0.1784    -1.24%           -1.25%
+      (20, 0.7)   14.00    4.20     14.7      14   0.1916           0.1947    -1.55%           -1.57%
+    ```
+
+    세 줄이 모두 (1)과 맞는다.
+
+    **자리.** $(n+1)p$가 $5.5$, $10.5$, $14.7$이고 바닥함수를 씌운 $5$, $10$, $14$가 `argmax`와 일치한다. 세 경우 다 평균 $np$와 같은데, $np$가 정수라서 그렇다. 셋 모두 정수가 아니므로 동점은 없다.
+
+    **높이.** $n$을 $10$에서 $20$으로 키우면 봉우리가 $0.2461 \to 0.1762$로 내려가는데 비가 $0.716$이고 예측한 $1/\sqrt2 = 0.707$에 가깝다. $p$를 $0.5$에서 $0.7$로 옮기면 $0.1762 \to 0.1916$으로 **올라가는데** 비가 $1.087$이고 예측한 $\sqrt{5/4.2} = 1.091$과 맞는다. **"오른쪽으로 가면 낮아진다"가 아니라 "분산이 커지면 낮아진다"**는 것이 올바른 읽기다. 포아송은 모수가 하나라 둘이 늘 같이 움직였지만, 이항은 모수가 둘이라 갈라진다.
+
+    **보정항.** 마지막 두 열이 $-2.46$ 대 $-2.50$, $-1.24$ 대 $-1.25$, $-1.55$ 대 $-1.57$로 소수점 둘째 자리까지 맞는다. 셋 다 음수라는 것도 $pq < 1$에서 예측한 대로다. 버린 $O(1/n^2)$ 항이 $0.02$퍼센트포인트 남짓 남은 것이고, **근사가 어긋나는 쪽으로도 예측이 맞는다**는 것이 확인의 요점이다.
 
 ### 표본추출과 검증
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 이항 표본추출과 검증
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이항 표본추출과 검증. $B(10, 0.6)$에서 $N = 10^5$개를 뽑아 표본평균과 표본분산을 이론값과 견준다.
+
+**(1)** 표본평균과 표본분산이 각각 얼마나 흔들리는지, 곧 두 표준오차를 구하시오. 분산 쪽에는 이항분포의 4차 중심적률이 필요하다.
+
+**(2)** 코드가 준 두 값이 (1)의 표준오차로 재어 몇 배 안에 들어오는지 확인하시오. 산포비 $s^2/\bar y$는 무엇으로 가는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-n, p = 10, 0.6
-samples = stats.binom(n, p).rvs(100_000)
+    **(1) 해석적으로.** 평균 쪽은 쉽다. $\text{Var}(Y) = npq$($q = 1-p$)이므로
 
-print(f"Theoretical mean: {n*p:.4f},  Sample mean: {samples.mean():.4f}")
-print(f"Theoretical var:  {n*p*(1-p):.4f},  Sample var:  {samples.var():.4f}")
-```
+    $$
+    \text{SE}(\bar Y) = \frac{\text{SD}(Y)}{\sqrt N} = \sqrt{\frac{npq}{N}}
+    = \sqrt{\frac{10 \cdot 0.6 \cdot 0.4}{10^5}} = \sqrt{2.4 \times 10^{-5}} = 0.004899
+    $$
 
-출력:
+    이다. 분산 쪽은 큰 $N$에서
 
-```
-Theoretical mean: 6.0000,  Sample mean: 6.0030
-Theoretical var:  2.4000,  Sample var:  2.3861
-```
+    $$
+    \text{Var}(S^2) \approx \frac{\mu_4 - \sigma^4}{N}, \qquad
+    \mu_4 = E\big[(Y - np)^4\big]
+    $$
+
+    이므로 4차 중심적률이 필요하다. $Y = \sum_{i=1}^n X_i$를 쓰면 구할 수 있다. $Z_i = X_i - p$라 두면 $Z_i$는 독립이고 평균이 $0$이며
+
+    $$
+    E[Z_i^2] = pq, \qquad E[Z_i^4] = pq(1 - 3pq)
+    $$
+
+    이다(둘째 것은 $q^4 p + p^4 q = pq(p^3 + q^3)$을 $p + q = 1$로 정리하면 나온다). $\left(\sum Z_i\right)^4$를 펼치면 평균이 $0$인 인수가 홀수 번 들어간 항은 모두 사라지고 $E[Z_i^4]$ 꼴 $n$개와 $E[Z_i^2]E[Z_j^2]$ 꼴 $3n(n-1)$개만 남는다. 따라서
+
+    $$
+    \mu_4 = n\,pq(1-3pq) + 3n(n-1)(pq)^2 = npq\big[1 + 3(n-2)pq\big]
+    $$
+
+    이다. $\sigma^4 = (npq)^2$를 빼면
+
+    $$
+    \mu_4 - \sigma^4 = 2(npq)^2 + npq(1 - 6pq)
+    $$
+
+    이고, $n = 10$, $p = 0.6$에서 $npq = 2.4$, $pq = 0.24$이므로
+
+    $$
+    \mu_4 = 2.4\big[1 + 3 \cdot 8 \cdot 0.24\big] = 2.4 \times 6.76 = 16.224,
+    \qquad \mu_4 - \sigma^4 = 16.224 - 5.76 = 10.464
+    $$
+
+    $$
+    \text{SE}(S^2) = \sqrt{\frac{10.464}{10^5}} = \sqrt{1.0464 \times 10^{-4}} = 0.01023
+    $$
+
+    이다. **분산이 평균보다 두 배 넘게 더 흔들린다.** 분산은 제곱을 평균하므로 꼬리의 큰 값에 훨씬 민감하다.
+
+    **(2) 수치적으로.** 먼저 쪽의 코드를 그대로 돌린다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n, p = 10, 0.6
+    samples = stats.binom(n, p).rvs(100_000)
+
+    print(f"Theoretical mean: {n*p:.4f},  Sample mean: {samples.mean():.4f}")
+    print(f"Theoretical var:  {n*p*(1-p):.4f},  Sample var:  {samples.var():.4f}")
+    ```
+
+    출력:
+
+    ```
+    Theoretical mean: 6.0000,  Sample mean: 6.0030
+    Theoretical var:  2.4000,  Sample var:  2.3861
+    ```
+
+    이 두 값이 "가깝다"고 말할 자격이 있는지 (1)의 표준오차로 재 본다.
+
+    ```python
+    import numpy as np
+    from math import sqrt
+    from scipy import stats
+
+    n, p, N = 10, 0.6, 100_000
+    q = 1 - p
+    np.random.seed(42)
+    samples = stats.binom(n, p).rvs(N)
+
+    # 4차 중심적률이 정말 npq[1 + 3(n-2)pq] 인지 열거로 먼저 확인한다.
+    k = np.arange(0, n + 1)
+    mu4 = (((k - n * p) ** 4) * stats.binom(n, p).pmf(k)).sum()
+    print(f"mu4 = {mu4:.4f},   npq[1+3(n-2)pq] = {n*p*q*(1 + 3*(n-2)*p*q):.4f}")
+
+    se_mean = sqrt(n * p * q / N)                              # sqrt(npq/N)
+    se_var = sqrt((2 * (n*p*q)**2 + n*p*q*(1 - 6*p*q)) / N)    # (mu4 - sigma^4)/N
+    print(f"mu4 - sigma^4 = {mu4 - (n*p*q)**2:.4f},   "
+          f"2(npq)^2 + npq(1-6pq) = {2*(n*p*q)**2 + n*p*q*(1-6*p*q):.4f}")
+
+    for name, value, theo, se in (("표본평균", samples.mean(), n*p, se_mean),
+                                  ("표본분산", samples.var(), n*p*q, se_var)):
+        print(f"{name} {value:.4f}   이론값 {theo:.4f}   SE {se:.4f}   z = {(value - theo) / se:+.3f}")
+
+    print(f"산포비 s^2/xbar = {samples.var() / samples.mean():.4f}   이론값 1-p = {q}")
+    ```
+
+    출력:
+
+    ```
+    mu4 = 16.2240,   npq[1+3(n-2)pq] = 16.2240
+    mu4 - sigma^4 = 10.4640,   2(npq)^2 + npq(1-6pq) = 10.4640
+    표본평균 6.0030   이론값 6.0000   SE 0.0049   z = +0.618
+    표본분산 2.3861   이론값 2.4000   SE 0.0102   z = -1.359
+    산포비 s^2/xbar = 0.3975   이론값 1-p = 0.4
+    ```
+
+    4차 중심적률이 열거로 잰 $16.2240$과 유도한 $npq[1+3(n-2)pq] = 2.4 \times 6.76 = 16.224$로 정확히 맞고, $\mu_4 - \sigma^4$도 두 식이 $10.4640$에서 일치한다. 표준오차 $0.0049$와 $0.0102$는 유도한 $0.004899$, $0.01023$을 그대로 재현한다.
+
+    두 표본값은 각각 $+0.62$ SE, $-1.36$ SE 떨어져 있으니 **몬테카를로 오차 범위 안**이다. 표본분산이 이론값보다 작게 나온 것이 눈에 걸리지만 $1.4$ SE는 흔한 일이고(양측 $p$-값 약 $0.17$), $N$을 키우면 줄어들 흔들림이다. 이상적인 어긋남이 아니라 있어야 할 만큼의 어긋남이다.
+
+    **산포비.** $s^2/\bar y = 0.3975$가 이론값 $\text{Var}(Y)/E[Y] = npq/np = 1 - p = 0.4$와 맞는다. $1 - p < 1$이므로 이항분포는 언제나 **과소산포**다. 포아송분포가 비 $1$이고 기하분포가 $1/p > 1$이므로, 계수 자료를 받았을 때 $s^2/\bar y$를 먼저 재면 세 모형 가운데 어느 쪽인지 가려낼 수 있다. 다만 여기서 $1 - p$를 쓰려면 **시행 횟수 $n$을 알아야** 하는데, 자료만 보고는 $n$을 모르는 경우가 많다는 것이 이항 쪽의 어려움이다.
 
 ---
 
@@ -286,32 +572,155 @@ $np = 5$에서 **모양은 이미 쓸 만하다.** 누적확률의 오차가 최
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 이항분포의 정규근사
+**보기 4.** <span class="diff easy" title="쉬움"></span> 이항분포의 정규근사. $B(50, 0.4)$의 PMF 막대 위에 $N(np,\, np(1-p))$의 밀도곡선을 겹쳐 그린다.
+
+**(1)** 연속인 밀도곡선이 이산인 막대의 **높이**와 맞아도 되는 까닭을 설명하고, 봉우리에서 두 높이를 각각 식으로 적으시오. $B(50, 0.4)$의 왜도도 구해 본문의 느슨한 기준과 견주시오.
+
+**(2)** 연속성 수정을 쓰지 않으면 CDF의 오차가 봉우리 근처에서 얼마나 되는지 예측하고 재어 보시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-n, p = 50, 0.4
-# np = 20, n(1-p) = 30. 둘 다 5를 넉넉히 넘으므로 정규근사 조건을 만족한다.
-x_disc = np.arange(0, n + 1)      # 이항분포는 정수에서만 값을 갖는다
-x_cont = np.linspace(0, n, 200)   # 정규분포는 연속이므로 촘촘한 격자가 필요하다
+    **(1) 해석적으로.** 밀도와 확률은 단위가 다르다. 그런데도 같은 축에 겹쳐 놓을 수 있는 까닭은 **막대의 폭이 $1$**이기 때문이다. $k$번째 막대가 덮는 구간 $[k - \tfrac12,\, k + \tfrac12]$에서 밀도가 거의 일정하다고 보면
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.bar(x_disc, stats.binom(n, p).pmf(x_disc), alpha=0.5, label='Binomial PMF')
-# 평균 np, 분산 np(1-p)를 그대로 맞춘 정규분포를 겹친다.
-# scipy의 norm은 표준편차를 받으므로 분산에 제곱근을 씌워 넣는다.
-ax.plot(x_cont, stats.norm(n*p, np.sqrt(n*p*(1-p))).pdf(x_cont),
-        'r-', lw=2, label='Normal approx.')
-ax.spines[['top', 'right']].set_visible(False)
-ax.legend()
-plt.show()
-```
+    $$
+    P(Y = k) \approx \int_{k - 1/2}^{k + 1/2} f(y)\,dy \approx f(k) \cdot 1 = f(k)
+    $$
 
-![베르누이분포와 이항분포](./img/binomial_186.png)
+    이다. 폭이 $1$이라 밀도값이 그대로 확률값이 된다. 폭이 $1$이 아닌 이산분포라면 이 그림은 성립하지 않고, 바로 아래 (2)의 연속성 수정이 이 적분의 끝점 $k \pm \tfrac12$에서 나온다.
+
+    두 높이를 적어 본다. 보기 2에서 봉우리 높이는
+
+    $$
+    P(Y = \lfloor (n+1)p \rfloor) \approx \frac{1}{\sqrt{2\pi npq}}\left(1 - \frac{1 - pq}{12npq}\right)
+    $$
+
+    였고, 정규밀도의 봉우리 높이는
+
+    $$
+    f(np) = \frac{1}{\sqrt{2\pi \cdot npq}}
+    $$
+
+    이다. **두 식의 주항이 같다.** 보기 2에서 스털링 근사로 얻은 $1/\sqrt{2\pi npq}$가 바로 정규밀도의 봉우리였던 것이고, 보정항이 둘 사이의 어긋남을 말해 준다. $n = 50$, $p = 0.4$에서 $npq = 12$, $pq = 0.24$이므로 상대차는
+
+    $$
+    -\frac{1 - 0.24}{12 \times 12} = -0.00528 = -0.528\%
+    $$
+
+    로 예측된다. 또 최빈값은 $\lfloor (n+1)p \rfloor = \lfloor 51 \times 0.4 \rfloor = \lfloor 20.4 \rfloor = 20$이고 평균 $np = 20$과 같으니, 봉우리가 어긋나서 생기는 오차는 없다.
+
+    왜도는 본문 식에 넣으면
+
+    $$
+    \gamma_1 = \frac{1 - 2p}{\sqrt{npq}} = \frac{1 - 0.8}{\sqrt{12}} = \frac{0.2}{3.4641} = 0.0577
+    $$
+
+    이다. 본문의 느슨한 기준 $np \ge 5$는 왜도를 $1/\sqrt5 \approx 0.45$ 아래로 묶는 것이었는데, 여기서는 $np = 20$에 $p$도 $0.5$에 가까워 왜도가 그보다 **여덟 배 작다.** 거의 대칭이라는 뜻이다.
+
+    **(2) 해석적으로.** 연속성 수정 없이 $P(Y \le k) \approx \Phi\!\left(\frac{k - np}{\sqrt{npq}}\right)$를 쓰면, 정규 적분이 $k$번째 막대의 **중심**에서 멈춘다. 그런데 $P(Y \le k)$는 그 막대를 **온전히** 포함한다. 곧 막대의 오른쪽 절반이 빠지고
+
+    $$
+    \Phi\!\left(\frac{k - np}{\sqrt{npq}}\right) - P(Y \le k) \approx -\frac{P(Y = k)}{2}
+    $$
+
+    이다. 오차가 $-$ 쪽이고 그 크기가 막대 높이의 절반이다. 봉우리에서 가장 클 것이고 그 값은
+
+    $$
+    \frac{1}{2}\cdot\frac{1}{\sqrt{2\pi npq}} = \frac{1}{2\sqrt{2\pi \cdot 12}} = 0.0576
+    $$
+
+    쯤이다. $k$를 $k + \tfrac12$로 바꾸면 이 반 칸이 메워지고, 남는 것은 정규근사 자체의 오차뿐이다. **연속성 수정이 고치는 것은 근사의 질이 아니라 눈금의 자리다.**
+
+    **수치적으로.** 먼저 쪽의 그림을 그린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    n, p = 50, 0.4
+    # np = 20, n(1-p) = 30. 둘 다 5를 넉넉히 넘으므로 정규근사 조건을 만족한다.
+    x_disc = np.arange(0, n + 1)      # 이항분포는 정수에서만 값을 갖는다
+    x_cont = np.linspace(0, n, 200)   # 정규분포는 연속이므로 촘촘한 격자가 필요하다
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.bar(x_disc, stats.binom(n, p).pmf(x_disc), alpha=0.5, label='Binomial PMF')
+    # 평균 np, 분산 np(1-p)를 그대로 맞춘 정규분포를 겹친다.
+    # scipy의 norm은 표준편차를 받으므로 분산에 제곱근을 씌워 넣는다.
+    ax.plot(x_cont, stats.norm(n*p, np.sqrt(n*p*(1-p))).pdf(x_cont),
+            'r-', lw=2, label='Normal approx.')
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![베르누이분포와 이항분포](./img/binomial_186.png)
+
+    빨간 곡선이 막대 끝을 거의 그대로 따라간다. 눈으로는 어긋남이 보이지 않으니 수로 재야 한다.
+
+    ```python
+    import numpy as np
+    from math import pi, sqrt
+    from scipy import stats
+
+    n, p = 50, 0.4
+    q = 1 - p
+    mu, sd = n * p, sqrt(n * p * q)
+    k = np.arange(0, n + 1)
+    binom, norm = stats.binom(n, p), stats.norm(mu, sd)
+
+    print(f"SD = sqrt(npq) = {sd:.4f},   왜도 (1-2p)/sqrt(npq) = {(1 - 2*p) / sd:.4f}")
+    print(f"최빈값 floor((n+1)p) = floor(20.4) = 20,   argmax = {binom.pmf(k).argmax()}")
+
+    # 봉우리에서 막대 높이와 정규밀도를 견준다.
+    peak, dens = binom.pmf(20), norm.pdf(20)
+    print(f"PMF 봉우리 {peak:.6f}   정규밀도 {dens:.6f}   1/sqrt(2pi npq) = {1/sqrt(2*pi*n*p*q):.6f}")
+    print(f"  상대차 {(peak - dens) / dens * 100:+.3f}%   예측 -(1-pq)/(12npq) = "
+          f"{-(1 - p*q) / (12*n*p*q) * 100:+.3f}%")
+
+    # CDF 오차. 연속성 수정은 k 를 k + 0.5 로 바꾸는 것뿐이다.
+    cdf = binom.cdf(k)
+    e_plain, e_corr = norm.cdf(k) - cdf, norm.cdf(k + 0.5) - cdf
+    i, j = np.abs(e_plain).argmax(), np.abs(e_corr).argmax()
+    print(f"CDF 오차 (수정 없이) 최대 {e_plain[i]:+.4f}  at k={i}")
+    print(f"CDF 오차 (수정 적용) 최대 {e_corr[j]:+.4f}  at k={j}")
+    print(f"  k=20: 수정 없이 {e_plain[20]:+.4f} = 수정 {e_corr[20]:+.4f} - 반 칸 {peak/2:.4f}")
+
+    # 본문 표가 수정을 적용한 쪽임을 확인한다.
+    for target in (5, 10):
+        errs = []
+        for pp in (0.1, 0.3, 0.5):
+            m = int(round(target / pp))
+            kk = np.arange(0, m + 1)
+            s = sqrt(m * pp * (1 - pp))
+            errs.append(np.abs(stats.norm(m*pp, s).cdf(kk + 0.5) - stats.binom(m, pp).cdf(kk)).max())
+        print(f"np={target:2d}: 수정 후 최대오차 {[f'{e:.4f}' for e in errs]}  (p=0.1, 0.3, 0.5)")
+    ```
+
+    출력:
+
+    ```
+    SD = sqrt(npq) = 3.4641,   왜도 (1-2p)/sqrt(npq) = 0.0577
+    최빈값 floor((n+1)p) = floor(20.4) = 20,   argmax = 20
+    PMF 봉우리 0.114559   정규밀도 0.115165   1/sqrt(2pi npq) = 0.115165
+      상대차 -0.526%   예측 -(1-pq)/(12npq) = -0.528%
+    CDF 오차 (수정 없이) 최대 -0.0610  at k=20
+    CDF 오차 (수정 적용) 최대 -0.0039  at k=19
+      k=20: 수정 없이 -0.0610 = 수정 -0.0037 - 반 칸 0.0573
+    np= 5: 수정 후 최대오차 ['0.0244', '0.0133', '0.0027']  (p=0.1, 0.3, 0.5)
+    np=10: 수정 후 최대오차 ['0.0175', '0.0101', '0.0014']  (p=0.1, 0.3, 0.5)
+    ```
+
+    넷 다 맞는다.
+
+    **봉우리.** 막대 $0.114559$와 정규밀도 $0.115165$의 상대차가 $-0.526\%$이고 예측한 $-0.528\%$와 소수점 셋째 자리까지 맞는다. 정규밀도가 $1/\sqrt{2\pi npq}$와 **완전히 같은 값**으로 찍혀 있는 것도 유도한 대로다.
+
+    **반 칸.** 수정 없는 오차 $-0.0610$이 수정 후 오차 $-0.0037$과 반 칸 $-0.0573$의 합으로 **정확히 쪼개진다.** 예측한 $0.0576$은 봉우리 높이를 정규밀도로 어림한 값이고 실제 반 칸은 막대 높이의 절반 $0.0573$이다. 오차가 모두 $-$ 쪽이라는 것도 유도와 같다.
+
+    **크기의 차이가 중요하다.** 수정하면 최대오차가 $0.0610$에서 $0.0039$로 **열다섯 배** 줄어든다. 연습문제 4에서 $B(100, 0.4)$의 구간확률 오차가 $0.046$에서 $0.0004$로 줄어든 것과 같은 일이다. 이항분포를 정규분포로 바꿀 때 연속성 수정을 빼먹으면, $n$을 아무리 키워도 반 칸만큼의 오차가 $1/\sqrt{npq}$ 속도로만 줄어들며 남는다.
+
+    **본문 표와의 맞춤.** 마지막 두 줄이 $np = 5$에서 $0.0027 \sim 0.0244$, $np = 10$에서 $0.0014 \sim 0.0175$를 주어 위 표의 "0.003 ~ 0.024", "0.001 ~ 0.018"과 맞는다. 곧 **본문 표의 오차는 연속성 수정을 적용한 쪽**이다. 수정 없이 재면 같은 조건에서 $0.12$, $0.09$ 수준이 되어 표와 전혀 다른 이야기가 된다.
 
 ---
 
