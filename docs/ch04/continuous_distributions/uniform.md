@@ -97,7 +97,7 @@ $$
 
     이 정리는 균등난수 생성기만으로 임의의 분포에서 확률표본을 생성할 수 있게 하는 근거이다.
 
-    ---
+---
 
 ## 이산 균등분포
 
@@ -139,9 +139,11 @@ $$
 
 ### PDF와 CDF
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 균등분포의 밀도함수와 분포함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 균등분포의 밀도함수와 분포함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -165,13 +167,13 @@ plt.show()
 
 ![균등분포](./img/uniform_125.png)
 
-</div>
-
 ### 구간에 따른 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 구간에 따른 균등 밀도함수 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간에 따른 균등 밀도함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -204,13 +206,13 @@ plt.show()
 
 전체 넓이가 1이어야 하므로 구간이 넓어질수록 직사각형은 (더 넓어지는 대신) 더 낮아진다.
 
-</div>
-
 ### 표본추출과 히스토그램
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 균등 표본의 히스토그램 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 균등 표본의 히스토그램
+
+</div>
 
 ```python
 import numpy as np
@@ -234,13 +236,13 @@ plt.show()
 
 ![균등분포](./img/uniform_143.png)
 
-</div>
-
 ### 역변환 표본추출
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 균등난수로 지수 표본 만들기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 균등난수로 지수 표본 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -268,8 +270,6 @@ plt.show()
 ```
 
 ![균등분포](./img/uniform_163.png)
-
-</div>
 
 ---
 
@@ -616,7 +616,7 @@ $X_1, \dots, X_n$이 $\text{Uniform}(0, \theta)$에서 나왔다. $\theta$의 �
 
 - **밀도가 상수** $1/(b-a)$이므로 확률이 곧 길이의 비다. 평균은 $(a+b)/2$, 분산은 $(b-a)^2/12$이며 **위치는 중점이, 퍼짐은 폭만이 결정한다.**
 - **유계 구간 위의 최대 엔트로피 분포다.** 값이 어디 놓일지에 대해 가장 적은 가정을 하므로, 아는 것이 범위뿐일 때의 기본 선택이 된다.
-- **확률적분변환**은 임의의 연속확률변수에 그 CDF를 적용하면 균등분포가 됨을 말해 주고, 그 역인 **역변환 표본추출** $X = F^{-1}(U)$는 균등난수로 임의의 분포를 만들어 낸다(예제 4, 연습문제 1). 몬테카를로 방법 전체가 이 한 쌍 위에 서 있다.
+- **확률적분변환**은 임의의 연속확률변수에 그 CDF를 적용하면 균등분포가 됨을 말해 주고, 그 역인 **역변환 표본추출** $X = F^{-1}(U)$는 균등난수로 임의의 분포를 만들어 낸다(보기 4, 연습문제 1). 몬테카를로 방법 전체가 이 한 쌍 위에 서 있다.
 - **SciPy 모수화에 주의하라.** `stats.uniform(loc=a, scale=b-a)`에서 둘째 인자는 오른쪽 끝점이 아니라 **폭**이다.
 
 다음은 **지수분포**다. 균등분포가 "아무 데나 고르게"라면 지수분포는 "사건이 일어날 때까지 기다리는 시간"이며, 무기억성이라는 특이한 성질을 갖는다. 4.2절의 사슬이 거기서 시작된다.

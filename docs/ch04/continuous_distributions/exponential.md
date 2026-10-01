@@ -92,7 +92,7 @@ $$
 
     **해석:** 이미 $s$만큼의 시간을 기다렸더라도 남은 대기 시간의 분포는 방금 시작했을 때와 같다. 이 과정은 자신의 이력을 "잊어버린다".
 
-    ---
+---
 
 ## 기하분포에서 건너오는 다리
 
@@ -160,7 +160,7 @@ $$
 
     이는 $n$개의 독립인 지수 확률변수로 일반화된다: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
 
-    ---
+---
 
 ## 다음 고리: 더하면 정규분포로 간다
 
@@ -221,9 +221,11 @@ $$
 
 ### PDF와 CDF
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 지수분포의 밀도함수와 분포함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 지수분포의 밀도함수와 분포함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -247,13 +249,13 @@ plt.show()
 
 ![지수분포](./img/exponential_132.png)
 
-</div>
-
 ### 비율에 따른 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 비율모수에 따른 지수분포 비교 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비율모수에 따른 지수분포 비교
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -275,13 +277,13 @@ plt.show()
 
 ![지수분포](./img/exponential_150.png)
 
-</div>
-
 ### 표본추출과 검증
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 지수 표본의 평균과 표준편차 확인 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 지수 표본의 평균과 표준편차 확인
+
+</div>
 
 ```python
 import numpy as np
@@ -306,13 +308,13 @@ Theoretical var:  0.1111,  Sample var:  0.1096
 Mean ≈ SD: True
 ```
 
-</div>
-
 ### 무기억성 확인하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 무기억성 확인하기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 무기억성 확인하기
+
+</div>
 
 ```python
 import numpy as np
@@ -342,13 +344,13 @@ P(X>0.5+0.5|X>0.5) = 0.3681,  P(X>0.5) = 0.3682
 P(X>0.5+1.0|X>0.5) = 0.1360,  P(X>1.0) = 0.1355
 ```
 
-</div>
-
 ### 포아송 과정 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 포아송 과정 모의실험 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 포아송 과정 모의실험
+
+</div>
 
 ```python
 import numpy as np
@@ -376,8 +378,6 @@ plt.show()
 ```
 
 ![지수분포](./img/exponential_199.png)
-
-</div>
 
 ---
 

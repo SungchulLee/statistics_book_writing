@@ -40,9 +40,9 @@ $d_1$과 $d_2$의 **순서가 중요하다.** $F_{5,20}$과 $F_{20,5}$은 전혀
 
 ## 밀도
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 1. F 분포의 밀도 { .dfn }
+### 정리 1. F 분포의 밀도 { .thm }
 
 $X \sim F_{d_1, d_2}$의 밀도는
 
@@ -108,9 +108,9 @@ $$
 
 여기서 $E[1/V] = 1/(d_2 - 2)$는 [t 분포](student_t.md) 페이지에서 유도한 것이다.
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 2. F 분포의 분산 { .dfn }
+### 정리 2. F 분포의 분산 { .thm }
 
 $X \sim F_{d_1, d_2}$이고 $d_2 > 4$이면
 
@@ -188,9 +188,9 @@ $$
 
 ### 역수 관계
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 3. 역수 관계 { .dfn }
+### 정리 3. 역수 관계 { .thm }
 
 $X \sim F_{d_1, d_2}$이면
 
@@ -322,9 +322,11 @@ $$
 
 ### 자유도에 따른 밀도
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 자유도에 따른 F 밀도 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자유도에 따른 F 밀도
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -351,13 +353,13 @@ plt.show()
 
 ![자유도에 따른 F 밀도](./img/f_distribution_267.png)
 
-</div>
-
 ### 평균과 최빈값이 1을 사이에 두고 갈라진다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 평균과 최빈값을 함께 그리기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균과 최빈값을 함께 그리기
+
+</div>
 
 ```python
 import numpy as np
@@ -393,13 +395,13 @@ plt.show()
 
 ![F Distribution — PDF](./img/f_pdf_28.png)
 
-</div>
-
 ### 정의대로 만들어 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 카이제곱 두 개의 비가 정말 F인가 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 카이제곱 두 개의 비가 정말 F인가
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -437,13 +439,13 @@ P(X > 2.711) = 0.0507 (theory 0.05)
 
 ![정의로 만든 F 표본과 F 밀도](./img/f_distribution_300.png)
 
-</div>
-
 ### 관계 확인하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 역수 관계, t 제곱, 카이제곱 극한 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 역수 관계, t 제곱, 카이제곱 극한
+
+</div>
 
 ```python
 from scipy import stats
@@ -473,8 +475,6 @@ chi2(4).ppf(0.95)       = 9.4877
 ```
 
 세 관계가 모두 소수점 아래까지 맞는다. 셋째 것만 근사이며, 분모 자유도를 더 키우면 차이가 더 줄어든다.
-
-</div>
 
 ---
 

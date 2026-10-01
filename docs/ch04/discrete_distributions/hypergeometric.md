@@ -101,9 +101,9 @@ $$
 E[X] = \sum_{i=1}^n E[I_i] = n\,\frac{N}{M} = np
 $$
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 1. 초기하분포의 분산 { .dfn }
+### 정리 1. 초기하분포의 분산 { .thm }
 
 $X \sim \text{HG}(n, N, M)$이고 $p = N/M$이면
 
@@ -143,7 +143,7 @@ $$
 
     $\square$
 
-    ---
+---
 
 ## 유한모집단 수정계수
 
@@ -166,9 +166,9 @@ $$
 
 ## 이항분포와의 관계
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 2. 초기하분포의 이항극한 { .dfn }
+### 정리 2. 초기하분포의 이항극한 { .thm }
 
 $M \to \infty$, $N \to \infty$이면서 $N/M \to p$로 고정되면, 고정된 $n$과 $k$에 대해
 
@@ -246,9 +246,11 @@ $$
 
 ### PMF와 CDF
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 초기하분포의 확률질량함수와 분포함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 초기하분포의 확률질량함수와 분포함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -275,13 +277,13 @@ plt.show()
 
 ![초기하분포의 PMF와 CDF](./img/hypergeometric_239.png)
 
-</div>
-
 ### 이항분포와의 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 모집단 크기에 따른 초기하와 이항의 차이 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 모집단 크기에 따른 초기하와 이항의 차이
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -309,13 +311,13 @@ plt.show()
 
 ![모집단 크기에 따른 초기하와 이항의 차이](./img/hypergeometric_272.png)
 
-</div>
-
 ### 표본추출과 검증
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 유한모집단 수정계수 확인 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 유한모집단 수정계수 확인
+
+</div>
 
 ```python
 import numpy as np
@@ -342,15 +344,15 @@ binomial var (no FPC): 3.2000,  FPC = 0.9045
 
 표본분산이 이항분포의 3.2가 아니라 수정계수를 곱한 2.89에 맞는다. 평균은 두 모형이 똑같이 4로 맞는다.
 
-</div>
-
 ---
 
 ### 손계산과 맞춰 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 손계산과 scipy 결과 맞춰 보기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 손계산과 scipy 결과 맞춰 보기
+
+</div>
 
 ```python
 from scipy import special
@@ -373,8 +375,6 @@ E[X] = 1.00
 ```
 
 손으로 세는 방법과 scipy가 정확히 같은 값을 준다. 평균 $nN/M = 5 \times 0.2 = 1.0$까지 맞으므로 인수를 제대로 넘겼다는 것도 함께 확인된다. **처음 쓰는 분포는 `mean()`이나 손계산으로 한 번 검산하는 습관**이 인수 순서 실수를 막는 가장 확실한 방법이다.
-
-</div>
 
 ---
 
@@ -582,25 +582,27 @@ $\text{HG}(n, N, M)$의 최빈값이 $\left\lfloor \dfrac{(n+1)(N+1)}{M+2} \righ
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-$M \to \infty$, $n \to \infty$, $N$은 고정이고 $nN/M \to \lambda$일 때 $\text{HG}(n, N, M)$이 $\text{Poisson}(\lambda)$로 수렴함을 보여라. 어떤 실제 상황이 이에 해당하는가?
+$M \to \infty$, $n \to \infty$, $N \to \infty$이면서 $nN/M \to \lambda$일 때 $\text{HG}(n, N, M)$이 $\text{Poisson}(\lambda)$로 수렴함을 보여라. 어떤 실제 상황이 이에 해당하는가?
 
 </div>
 
 ??? success "풀이"
-    대칭성(연습문제 4)을 써서 $n$과 $N$의 역할을 바꾸면 "$N$번 뽑는데 성공이 $n$개 있는" 문제가 된다. 정리 2의 이항극한을 이 형태에 적용하면, $N$이 고정이고 $n/M \to 0$이므로
+    대칭성(연습문제 4)을 써서 $n$과 $N$의 역할을 바꾸면 "$N$개를 뽑는데 성공이 $n$개 있는" 문제가 된다. 표본크기 $N$을 잠시 붙들어 두면 $M \to \infty$이고 성공비율이 $n/M$인 상황이므로 정리 2의 이항극한이 그대로 적용되어
 
     $$
     \text{HG}(n, N, M) = \text{HG}(N, n, M) \;\longrightarrow\; B\!\left(N, \frac{n}{M}\right)
     $$
 
-    이다. 여기서 성공확률 $n/M \to 0$이지만 $N$이 고정이라 $B(N, n/M)$의 평균 $Nn/M \to \lambda$는 유한하다. 이제 $N$도 함께 키우면 이항–포아송 극한(4.1절의 포아송 페이지)에 의해 $\text{Poisson}(\lambda)$로 간다. $\square$
+    이다. 이제 $N$을 키운다. 이 이항분포의 성공확률은 $n/M = (nN/M)/N \to \lambda/N$이라 $N \to \infty$에서 0으로 가는데 평균 $N \cdot (n/M) \to \lambda$는 유한하게 남으므로, 이항–포아송 극한(4.1절의 포아송 페이지)에 의해 $\text{Poisson}(\lambda)$로 간다. $\square$
+
+    **$N$이 고정이면 포아송이 아니다.** 위 계산이 보여 주듯 $N$을 붙들어 둔 채로 얻는 극한은 $B(N, \lambda/N)$이고, 거기서 $N$을 키워야 비로소 포아송이 된다. 다만 $\lambda/N$이 충분히 작으면 $B(N, \lambda/N)$이 이미 $\text{Poisson}(\lambda)$와 거의 같아서, 아래 예처럼 $N$이 작아도 실용적으로는 포아송 근사를 쓴다.
 
     **해당하는 상황.** 아주 큰 모집단에서 표본은 크게 뽑지만 표시된 개체는 몇 개 안 되는 경우다. 예를 들어 100만 개의 부품 중 결함품이 5개 있고 1만 개를 검사한다면 $\lambda = 10^4 \times 5 / 10^6 = 0.05$인 포아송분포로 근사된다. 검사에서 결함을 하나도 못 찾을 확률이 $e^{-0.05} = 0.951$이라는 계산이 곧바로 나온다.
 
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-`stats.hypergeom`의 인자는 `(M, n, N)`이다. 각각이 무엇을 뜻하는지 확인하고, 본문 예제의 "모집단 100개, 불량 20개, 추출 5개"를 어떻게 넘겨야 하는지 적어라. 어떤 혼동이 생기기 쉬운가?
+`stats.hypergeom`의 인자는 `(M, n, N)`이다. 각각이 무엇을 뜻하는지 확인하고, 본문 보기의 "모집단 100개, 불량 20개, 추출 5개"를 어떻게 넘겨야 하는지 적어라. 어떤 혼동이 생기기 쉬운가?
 
 </div>
 
@@ -611,7 +613,7 @@ $M \to \infty$, $n \to \infty$, $N$은 고정이고 $nN/M \to \lambda$일 때 $\
     - `n` — 모집단 안의 성공 개수 (이 책의 $N$)
     - `N` — 뽑는 개수 (이 책의 $n$)
 
-    따라서 본문 예제는 `stats.hypergeom(M=100, n=20, N=5)`이고, 위치 인자로는 `stats.hypergeom(100, 20, 5)`이다.
+    따라서 본문 보기는 `stats.hypergeom(M=100, n=20, N=5)`이고, 위치 인자로는 `stats.hypergeom(100, 20, 5)`이다.
 
     **혼동의 원인은 같은 문자가 다른 뜻으로 쓰인다는 점이다.** 이 책은 $\text{HG}(n, N, M)$에서 $M$을 모집단, $N$을 성공 개수, $n$을 표본 크기로 쓴다. SciPy의 `M`은 다행히 모집단으로 같지만, `N`은 이 책의 $n$(뽑는 개수)을 뜻해 정반대다. 키워드 인자로 `N=100`이라고 쓰면 "100개를 뽑는다"는 뜻이 되어 엉뚱한 결과가 나온다.
 
@@ -665,13 +667,14 @@ $M \to \infty$, $n \to \infty$, $N$은 고정이고 $nN/M \to \lambda$일 때 $\
     $$
     E[I_{ij}I_{i'l}] = \frac{N_j}{M}\cdot\frac{N_l}{M-1},
     \qquad
-    \operatorname{Cov}(I_{ij}, I_{i'l}) = \frac{N_jN_l}{M(M-1)} - p_jp_l = \frac{p_jp_l}{M-1}\cdot(-1)
+    \operatorname{Cov}(I_{ij}, I_{i'l}) = \frac{N_jN_l}{M(M-1)} - p_jp_l = +\frac{p_jp_l}{M-1}
     $$
 
-    이다. 앞의 것이 $n$개, 뒤의 것이 $n(n-1)$개이므로
+    이다. 이 항이 **양수**라는 점에 주의하라. $i$번째가 종류 $j$였다면 종류 $l$은 하나도 줄지 않은 채 모집단만 하나 줄었으므로, $i'$번째가 종류 $l$일 확률이 오히려 조금 올라간다. 앞의 것이 $n$개, 뒤의 것이 $n(n-1)$개이므로
 
     $$
-    \operatorname{Cov}(X_j, X_l) = -np_jp_l - n(n-1)\frac{p_jp_l}{M-1}
+    \operatorname{Cov}(X_j, X_l) = -np_jp_l + n(n-1)\frac{p_jp_l}{M-1}
+    = -n\,p_jp_l\left(1 - \frac{n-1}{M-1}\right)
     = -n\,p_jp_l\,\frac{M-n}{M-1}
     \qquad (j \ne l)
     $$

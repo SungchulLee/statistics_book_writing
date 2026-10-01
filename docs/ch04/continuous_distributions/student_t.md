@@ -42,9 +42,9 @@ $E[V] = d$이므로 $V/d$는 평균이 1이다. 즉 $\sqrt{V/d}$는 **평균적�
 
 ## 밀도
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 1. t 분포의 밀도 { .dfn }
+### 정리 1. t 분포의 밀도 { .thm }
 
 $T \sim t_d$의 밀도는
 
@@ -119,12 +119,12 @@ $$
 | 평균 | $d \le 1$ | 존재하지 않음 |
 | 분산 | $d > 2$ | $\dfrac{d}{d-2}$ |
 | 분산 | $1 < d \le 2$ | $\infty$ |
-| 적률 $E[|T|^k]$ | $k < d$ | 유한 |
+| 적률 $E[\lvert T\rvert^k]$ | $k < d$ | 유한 |
 | MGF | — | **존재하지 않음** |
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 2. t 분포의 분산 { .dfn }
+### 정리 2. t 분포의 분산 { .thm }
 
 $T \sim t_d$이고 $d > 2$이면
 
@@ -204,9 +204,9 @@ $$
 
 ### 자유도가 무한대로 갈 때: 표준정규분포
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 3. 정규분포로의 수렴 { .dfn }
+### 정리 3. 정규분포로의 수렴 { .thm }
 
 모든 $t$에 대해
 
@@ -284,9 +284,11 @@ $$
 
 ### 자유도에 따른 밀도
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 자유도에 따른 t 밀도와 정규밀도 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자유도에 따른 t 밀도와 정규밀도
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -314,13 +316,13 @@ plt.show()
 
 ![자유도에 따른 t 밀도](./img/student_t_265.png)
 
-</div>
-
 ### 정의대로 만들어 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. Z를 카이제곱으로 나누면 t가 나오는가 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Z를 카이제곱으로 나누면 t가 나오는가
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -361,13 +363,13 @@ max |t|  : 20.8
 
 ![정의로 만든 t 표본과 t 밀도](./img/student_t_299.png)
 
-</div>
-
 ### 분산과 분위수 확인
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 분산 d/(d-2)와 임계값 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 분산 d/(d-2)와 임계값
+
+</div>
 
 ```python
 from scipy import stats
@@ -391,8 +393,6 @@ print(f"{'inf':>5}  {1.0:>14.4f}  {stats.norm.ppf(0.975):>9.4f}")
 ```
 
 분산과 임계값이 나란히 1과 1.96으로 내려간다. 자유도 3에서 분산이 3이나 된다는 점이 눈에 띈다. 작은 표본에서 $t$ 임계값이 훌쩍 커지는 까닭이다.
-
-</div>
 
 ---
 
@@ -603,7 +603,7 @@ $t$ 분포를 정규 척도혼합으로 보는 관점을 써서, 꼬리가 두�
 
     이다. 조건부평균이 항상 0이므로 둘째 항이 사라지고, 분산은 순전히 **척도의 평균**에서 온다.
 
-    꼬리가 두꺼워지는 것은 분산의 크기가 아니라 **섞였다는 사실 자체**에서 나온다. 분산이 $w$인 정규분포들을 여러 개 섞으면, 큰 $w$를 가진 성분이 극단값을 만들어 내고 작은 $w$를 가진 성분이 가운데를 높인다. 그 결과 같은 분산을 가진 단일 정규분포보다 **가운데가 뾰족하고 꼬리가 두꺼운** 모양이 된다. 실제로 $t_5$를 분산이 같은 정규분포와 겹쳐 그리면 곡선이 세 번 교차한다.
+    꼬리가 두꺼워지는 것은 분산의 크기가 아니라 **섞였다는 사실 자체**에서 나온다. 분산이 $w$인 정규분포들을 여러 개 섞으면, 큰 $w$를 가진 성분이 극단값을 만들어 내고 작은 $w$를 가진 성분이 가운데를 높인다. 그 결과 같은 분산을 가진 단일 정규분포보다 **가운데가 뾰족하고 꼬리가 두꺼운** 모양이 된다. 실제로 $t_5$를 분산이 같은 정규분포와 겹쳐 그리면 곡선이 네 번 교차한다($\pm 0.90$과 $\pm 3.29$ 근처).
 
     이 관점은 실무에서 곧바로 쓰인다. 금융 수익률의 변동성이 시기마다 다르다는 사실(변동성 군집)을 "분산이 확률변수"로 모형화하면, 조건부로는 정규여도 주변분포는 꼬리가 두꺼운 $t$ 꼴이 된다. GARCH 모형이나 확률변동성 모형이 정규 오차를 쓰면서도 두꺼운 꼬리를 설명하는 원리가 이것이다. 혼합이 꼬리를 만든다.
 

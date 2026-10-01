@@ -134,15 +134,18 @@ $$
     $$
 
     상승일 수의 기댓값: $E[Y] = 10 \times 0.6 = 6$.
+
 ---
 
 ## Python: PMF, CDF, 표본추출
 
 ### PMF와 CDF
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 이항분포의 확률질량함수와 분포함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이항분포의 확률질량함수와 분포함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -168,13 +171,13 @@ plt.show()
 
 ![베르누이분포와 이항분포](./img/binomial_125.png)
 
-</div>
-
 ### 모수에 따른 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 모수에 따른 이항분포 비교 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 모수에 따른 이항분포 비교
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -199,13 +202,13 @@ plt.show()
 
 ![베르누이분포와 이항분포](./img/binomial_151.png)
 
-</div>
-
 ### 표본추출과 검증
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 이항 표본추출과 검증 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이항 표본추출과 검증
+
+</div>
 
 ```python
 import numpy as np
@@ -226,8 +229,6 @@ Theoretical mean: 6.0000,  Sample mean: 6.0030
 Theoretical var:  2.4000,  Sample var:  2.3861
 ```
 
-</div>
-
 ---
 
 ## 이항분포의 정규근사
@@ -238,7 +239,7 @@ $$
 Y \sim \text{Binomial}(n, p) \;\approx\; N\big(np, \, np(1-p)\big)
 $$
 
-연속성 수정을 적용하면 $P(Y \leq k) \approx \mathcal{N}\left(\frac{k + 0.5 - np}{\sqrt{np(1-p)}}\right)$이다.
+연속성 수정을 적용하면 $P(Y \leq k) \approx \Phi\!\left(\frac{k + 0.5 - np}{\sqrt{np(1-p)}}\right)$이다(여기서 $\Phi$는 표준정규분포의 누적분포함수다).
 
 ### 언제 쓸 수 있는가: 5와 10
 
@@ -283,9 +284,11 @@ $np = 5$에서 **모양은 이미 쓸 만하다.** 누적확률의 오차가 최
 
     위 표에서 $np = 10$일 때도 포함률이 93~96%로 95%에 정확히 앉지 않는다는 점에 주의할 것. 문턱값을 올리는 것만으로는 왈드 구간의 결함이 사라지지 않는다. 구간이 중요한 상황이라면 문턱값을 따지기보다 애초에 더 나은 구간을 쓰는 편이 낫다. 윌슨 구간이나 아그레스티–쿨 구간이 그것이며, 5.5절과 8장에서 다룬다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 이항분포의 정규근사 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 이항분포의 정규근사
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -309,8 +312,6 @@ plt.show()
 ```
 
 ![베르누이분포와 이항분포](./img/binomial_186.png)
-
-</div>
 
 ---
 
@@ -388,7 +389,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**연속성 수정을 적용한 정규근사.** Binomial(100, 0.4)에 대해 연속성 수정을 적용한 경우와 적용하지 않은 경우 각각 정규근사로 $P(35 \le Y \le 45)$를 구하라. 정확한 이항 값(0.7287)과 비교하라.
+**연속성 수정을 적용한 정규근사.** Binomial(100, 0.4)에 대해 연속성 수정을 적용한 경우와 적용하지 않은 경우 각각 정규근사로 $P(35 \le Y \le 45)$를 구하라. 정확한 이항 값(0.7386)과 비교하라.
 
 </div>
 
@@ -401,7 +402,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
     P(35 \le Y \le 45) \approx \Phi\!\left(\frac{45 - 40}{4.899}\right) - \Phi\!\left(\frac{35 - 40}{4.899}\right) = \Phi(1.021) - \Phi(-1.021) = 0.8463 - 0.1537 = 0.6926
     $$
 
-    오차: $|0.6926 - 0.7287| = 0.036$.
+    오차: $|0.6926 - 0.7386| = 0.046$.
 
     **연속성 수정을 적용하면:**
 
@@ -409,7 +410,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
     P(35 \le Y \le 45) \approx \Phi\!\left(\frac{45.5 - 40}{4.899}\right) - \Phi\!\left(\frac{34.5 - 40}{4.899}\right) = \Phi(1.122) - \Phi(-1.122) = 0.8691 - 0.1309 = 0.7382
     $$
 
-    오차: $|0.7382 - 0.7287| = 0.010$ — 세 배 작다.
+    오차: $|0.7382 - 0.7386| = 0.0004$ — 수정하지 않았을 때의 100분의 1 수준이다.
 
     이산분포를 연속분포로 근사할 때는 항상 연속성 수정을 사용하라.
 

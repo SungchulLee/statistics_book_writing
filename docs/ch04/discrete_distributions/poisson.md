@@ -96,7 +96,7 @@ $$
 
     **경험 법칙:** $n \geq 20$이고 $p \leq 0.05$일 때(더 보수적으로는 $n \geq 100$이고 $np \leq 10$일 때) 포아송 근사를 사용한다.
 
-    ---
+---
 
 ## 포아송분포로 모이는 세 갈래
 
@@ -105,12 +105,12 @@ $$
 | 출발점 | 조건 | 도착점 |
 |---|---|---|
 | $B(n, p)$ | $n \to \infty$, $p \to 0$, $np \to \lambda$ | $\text{Poisson}(\lambda)$ |
-| $\text{HG}(n, N, M)$ | $M \to \infty$, $nN/M \to \lambda$ | $\text{Poisson}(\lambda)$ |
+| $\text{HG}(n, N, M)$ | $M, n, N \to \infty$, $nN/M \to \lambda$ | $\text{Poisson}(\lambda)$ |
 | $\text{NB}(r, p)$ | $r \to \infty$, $p \to 1$, $r(1-p)/p \to \lambda$ | $\text{Poisson}(\lambda)$ |
 
 초기하분포가 포아송분포로 가는 길은 두 극한을 이어 붙인 것이다. 모집단이 커지면 비복원과 복원의 차이가 사라져 이항분포가 되고, 거기서 다시 희귀사건 극한을 타면 포아송분포가 된다.
 
-세 줄에 공통된 것은 **"기회는 아주 많고 각 기회의 확률은 아주 작은데 그 곱이 적당하다"**는 구조다. 출발점이 무엇이든 이 구조에 놓이면 같은 분포가 나온다. 4.2절에서 볼 중심극한정리가 "독립인 것을 많이 더하면 정규분포"라는 보편성을 말하듯, 이것은 "드문 것을 많이 세면 포아송"이라는 보편성이다.
+세 줄에 공통된 것은 **"기회는 아주 많고 각 기회의 확률은 아주 작은데 그 곱이 적당하다"**는 구조다. 출발점이 무엇이든 이 구조에 놓이면 같은 분포가 나온다. 3.5절에서 본 중심극한정리가 "독립인 것을 많이 더하면 정규분포"라는 보편성을 말하듯, 이것은 "드문 것을 많이 세면 포아송"이라는 보편성이다.
 
 ---
 
@@ -149,15 +149,18 @@ $$
     $$
     P(X \leq 2) = \sum_{k=0}^{2} \frac{e^{-3} \cdot 3^k}{k!} = e^{-3}(1 + 3 + 4.5) = 0.0498 \cdot 8.5 = 0.4232
     $$
+
 ---
 
 ## Python: PMF, CDF, 표본추출
 
 ### PMF와 CDF
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 포아송분포의 확률질량함수와 분포함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 포아송분포의 확률질량함수와 분포함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -181,13 +184,13 @@ plt.show()
 
 ![포아송분포](./img/poisson_124.png)
 
-</div>
-
 ### 비율에 따른 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 비율모수에 따른 포아송 비교 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비율모수에 따른 포아송 비교
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -210,13 +213,13 @@ plt.show()
 
 ![포아송분포](./img/poisson_144.png)
 
-</div>
-
 ### 이항 극한으로서의 포아송분포
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 이항분포의 극한으로서의 포아송 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이항분포의 극한으로서의 포아송
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -245,13 +248,13 @@ plt.show()
 
 ![포아송분포](./img/poisson_161.png)
 
-</div>
-
 ### 표본추출과 평균–분산 점검
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 포아송의 평균과 분산이 같음을 확인 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 포아송의 평균과 분산이 같음을 확인
+
+</div>
 
 ```python
 import numpy as np
@@ -278,8 +281,6 @@ Theoretical var:  7,  Sample var:  7.0213
 Mean ≈ Var: True
 ```
 
-</div>
-
 ---
 
 ## 사슬을 닫으며: 네 이산분포 한눈에
@@ -293,14 +294,16 @@ Mean ≈ Var: True
 | 기하 | 첫 성공까지의 시행 수 | 확률 $p$ |
 | 초기하 | 비복원 추출에서의 성공 수 | 모집단 구성과 뽑는 수 |
 
-- **이항과 초기하의 갈림길은 복원 여부다.** 모집단이 뽑는 수보다 훨씬 크면($n/M\le0.1$) 초기하가 이항에 가까워지므로 실무에서는 이항으로 근사한다.
+- **이항과 초기하의 갈림길은 복원 여부다.** 모집단이 뽑는 수보다 훨씬 크면($n/M\le0.05$) 초기하가 이항에 가까워지므로 실무에서는 이항으로 근사한다.
 - **이항과 포아송.** $n$ 이 크고 $p$ 가 작으며 $np=\lambda$ 가 중간 정도면 이항이 포아송으로 간다. 드문 사건을 셀 때 포아송이 등장하는 이유다.
 - **기하분포의 무기억성.** 지금까지 실패했다는 사실이 앞으로 몇 번 더 해야 하는지에 아무 정보도 주지 않는다. 연속형 대응물이 지수분포다.
 - **평균과 분산의 관계가 분포를 식별해 준다.** 이항은 분산이 평균보다 작고($np(1-p)<np$), 포아송은 같으며, 자료에서 분산이 평균보다 크면(과산포) 음이항 같은 다른 모형이 필요하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 네 이산분포 한눈에 보기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 네 이산분포 한눈에 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -356,8 +359,6 @@ plt.show()
 
 ![네 이산분포 한눈에 보기](./img/four_discrete_95.png)
 
-</div>
-
 ---
 
 ## 연습문제
@@ -392,7 +393,7 @@ plt.show()
 
     (c) $P(X = 0) \approx e^{-2} = 0.135$. $P(X = 1) \approx 2 e^{-2} = 0.271$. $P(X \ge 4) = 1 - e^{-2}(1 + 2 + 2 + 4/3) \approx 0.143$.
 
-    정확한 이항 계산은 $P(X = 2) \approx 0.272$를 주는데 포아송 근사는 $0.271$이다. 소수점 셋째 자리까지 일치하며, 이 영역에서 포아송 근사가 매우 잘 작동함을 보여 준다.
+    정확한 이항 계산은 $P(X = 2) \approx 0.2712$를 주는데 포아송 근사는 $0.2707$이다. 소수점 셋째 자리까지 일치하며, 이 영역에서 포아송 근사가 매우 잘 작동함을 보여 준다.
 
 <div class="drillbox" markdown>
 
@@ -535,7 +536,7 @@ plt.show()
 
     두 구간이 꽤 다르다. 왈드 구간은 대칭이라 아래로 너무 길고 위로 너무 짧다. 포아송분포는 오른쪽으로 치우쳐 있으므로 $\lambda$의 구간도 위로 더 길어야 하는데 그 비대칭을 담지 못한다. 사고가 12건이면 그래도 나은 편이고, 관측이 2~3건이면 왈드 구간의 하한이 **음수**가 되어 아예 쓸 수 없다.
 
-    정확 구간의 근거는 앞 절 지수분포에서 본 카이제곱-감마 관계다. $P(X \ge x \mid \lambda) = P(\chi^2_{2x} \le 2\lambda)$라는 항등식에서 나오며, 실제로 위 하한에서 $P(X \ge 12) = 0.025$, 상한에서 $P(X \le 12) = 0.025$임을 확인할 수 있다. 정확하다는 대가로 실제 포함확률이 0.95보다 **크게** 나오는 보수성이 있는데, 이산분포에서 정확 구간의 피할 수 없는 성질이다.
+    정확 구간의 근거는 4.2절 지수분포에서 볼 카이제곱-감마 관계다. $P(X \ge x \mid \lambda) = P(\chi^2_{2x} \le 2\lambda)$라는 항등식에서 나오며, 실제로 위 하한에서 $P(X \ge 12) = 0.025$, 상한에서 $P(X \le 12) = 0.025$임을 확인할 수 있다. 정확하다는 대가로 실제 포함확률이 0.95보다 **크게** 나오는 보수성이 있는데, 이산분포에서 정확 구간의 피할 수 없는 성질이다.
 
 <div class="drillbox" markdown>
 

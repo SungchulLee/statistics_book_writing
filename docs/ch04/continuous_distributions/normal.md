@@ -211,9 +211,11 @@ $$
 
 ### 밀도함수와 분포함수
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 정규분포의 밀도함수와 분포함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포의 밀도함수와 분포함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -238,13 +240,13 @@ plt.show()
 
 ![정규분포](./img/normal_155.png)
 
-</div>
-
 ### 분포함수를 두 축에서 읽기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 분포함수와 밀도함수를 두 축에 함께 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분포함수와 밀도함수를 두 축에 함께 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -289,8 +291,6 @@ plt.show()
 
 ![정규 누적분포함수와 분위수](./img/normal_cdf_19.png)
 
-</div>
-
 #### 표준정규분포의 주요 CDF 값
 
 | $x$ | $\mathcal{N}(x) = P(Z \le x)$ |
@@ -307,9 +307,11 @@ plt.show()
 
 ### 분위수 (ppf)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 백분위점 함수로 분위수 구하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 백분위점 함수로 분위수 구하기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -346,8 +348,6 @@ plt.show()
 
 ![정규분포의 백분위점 함수 (분위수 함수)](./img/normal_ppf_17.png)
 
-</div>
-
 #### 표준정규분포의 흔한 분위수
 
 | $q$ | $\mathcal{N}^{-1}(q)$ | 용도 |
@@ -362,9 +362,11 @@ plt.show()
 
 ### 생존함수 (sf)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 생존함수로 오른쪽 꼬리 보기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 생존함수로 오른쪽 꼬리 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -403,15 +405,15 @@ plt.show()
 
 ![정규분포의 생존함수](./img/normal_sf_17.png)
 
-</div>
-
 #### 생존함수를 쓰는 이유
 
 상단꼬리 확률이 극단적으로 작을 때 $1 - F(x)$를 직접 계산하면 $F(x)$가 1에 매우 가까워 부동소수점 상쇄가 일어날 수 있다. 전용 메서드 `sf()`는 꼬리 확률을 직접 계산하여 이 문제를 피한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 생존함수가 수치적으로 더 정확한 이유 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 생존함수가 수치적으로 더 정확한 이유
+
+</div>
 
 ```python
 from scipy import stats
@@ -442,8 +444,6 @@ x= 12:  1-cdf = 0.000000e+00   sf = 1.776482e-33
 
 원인은 배정밀도 부동소수점이 1 근처에서 약 $10^{-16}$ 간격으로만 값을 구별할 수 있다는 데 있다. $\Phi(10) = 1 - 7.6 \times 10^{-24}$은 그 간격보다 훨씬 1에 가까우므로 **컴퓨터 안에서는 그냥 1로 저장된다.** 1에서 1을 빼면 0이다.
 
-</div>
-
 !!! danger "꼬리 확률에는 언제나 `sf`를 써라"
     $p$-값 계산이 대표적이다. $p$-값은 본질적으로 꼬리 확률이므로 `1 - cdf`로 구하면 아주 작은 $p$-값이 0으로 보고된다. 유전체학처럼 $p < 10^{-20}$을 다루는 분야에서는 치명적이다.
 
@@ -452,9 +452,11 @@ x= 12:  1-cdf = 0.000000e+00   sf = 1.776482e-33
 
 ### 표본추출과 추정된 PDF
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 정규 표본과 추정된 밀도 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 정규 표본과 추정된 밀도
+
+</div>
 
 ```python
 import numpy as np
@@ -477,13 +479,13 @@ plt.show()
 
 ![정규분포](./img/normal_173.png)
 
-</div>
-
 ### 68–95–99.7 규칙 확인
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 68-95-99.7 규칙 확인 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 68-95-99.7 규칙 확인
+
+</div>
 
 ```python
 import pandas as pd
@@ -509,15 +511,15 @@ Within 2σ: 95.00%
 Within 3σ: 98.66%
 ```
 
-</div>
-
 ---
 
 ### 곡선 아래 넓이 칠하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 8. 정규곡선 아래 영역 색칠하기 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 정규곡선 아래 영역 색칠하기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -562,19 +564,19 @@ P(Z ≥ 1.2) = 0.1151
 P(-2.1 ≤ Z ≤ 1.2) = 0.8671
 ```
 
-</div>
-
 ---
 
 ### 난수 생성 (rvs)과 시드 고정
 
-`rvs(size=n)`로 표본을 뽑는다. 예제 6에서 보았듯 표본의 히스토그램은 이론 밀도로 수렴하는데, 그 이유는 간단하다. $x_0$을 중심으로 폭이 $\Delta x$인 구간에 들어갈 기대 비율이 근사적으로 $f(x_0)\,\Delta x$이므로, `density=True`로 정규화한 히스토그램의 높이가 곧 $f(x_0)$의 추정값이 된다. 큰수의 법칙에 의해 $n \to \infty$에서 참 밀도로 수렴한다.
+`rvs(size=n)`로 표본을 뽑는다. 보기 6에서 보았듯 표본의 히스토그램은 이론 밀도로 수렴하는데, 그 이유는 간단하다. $x_0$을 중심으로 폭이 $\Delta x$인 구간에 들어갈 기대 비율이 근사적으로 $f(x_0)\,\Delta x$이므로, `density=True`로 정규화한 히스토그램의 높이가 곧 $f(x_0)$의 추정값이 된다. 큰수의 법칙에 의해 $n \to \infty$에서 참 밀도로 수렴한다.
 
 `scipy.stats`는 NumPy의 난수 생성기를 사용하므로 `np.random.seed()`를 설정하면 재현성이 보장된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 9. 난수 시드 고정하기 { .eg }
+**보기 9.** <span class="diff easy" title="쉬움"></span> 난수 시드 고정하기
+
+</div>
 
 ```python
 import numpy as np
@@ -592,9 +594,7 @@ print(samples)  # 시드가 42면 언제나 같은 값이 나온다
   1.57921282  0.76743473 -0.46947439  0.54256004]
 ```
 
-요즘 NumPy가 권하는 방식은 전역 시드 대신 생성기 객체를 만드는 것이다. `rng = np.random.default_rng(42)`로 두고 `stats.norm.rvs(size=10, random_state=rng)`처럼 넘기면, 전역 상태를 건드리지 않아 다른 코드와 간섭하지 않고 병렬 실행에서도 안전하다. 이 책의 예제는 짧은 시연이라 `np.random.seed`를 그대로 쓴 곳이 많지만, 실제 분석 코드에서는 `default_rng` 쪽을 권한다.
-
-</div>
+요즘 NumPy가 권하는 방식은 전역 시드 대신 생성기 객체를 만드는 것이다. `rng = np.random.default_rng(42)`로 두고 `stats.norm.rvs(size=10, random_state=rng)`처럼 넘기면, 전역 상태를 건드리지 않아 다른 코드와 간섭하지 않고 병렬 실행에서도 안전하다. 이 책의 보기는 짧은 시연이라 `np.random.seed`를 그대로 쓴 곳이 많지만, 실제 분석 코드에서는 `default_rng` 쪽을 권한다.
 
 ---
 
@@ -648,9 +648,11 @@ $$
 
 소득·주가·생존시간·입자 크기처럼 "반드시 양수이고 오른쪽으로 긴 꼬리를 가진" 자료에 로그정규가 기본 모형으로 쓰이는 이유가 이것이다. 7장(비정규 자료)과 14장(변환)에서 이 분포가 계속 등장한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 10. 로그 척도의 표준편차에 따른 모양 { .eg }
+**보기 10.** <span class="diff easy" title="쉬움"></span> 로그 척도의 표준편차에 따른 모양
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -683,8 +685,6 @@ plt.show()
 ![로그 척도의 표준편차에 따른 로그정규분포](./img/lognormal_pdf_27.png)
 
 $\sigma$가 커질수록 최빈값 $e^{-\sigma^2}$은 0 쪽으로 밀리고 평균 $e^{\sigma^2/2}$은 오른쪽으로 달아난다. 중앙값만 1에 붙박여 있다.
-
-</div>
 
 ---
 
@@ -1496,7 +1496,7 @@ $Z_1, Z_2, \dots$가 독립이고 같은 분포를 따르는 양의 확률변수
 </div>
 
 ??? success "풀이"
-    $\ln Y \mid \mathbf{x} \sim N(\mathbf{x}^\top\boldsymbol\beta, \sigma^2)$이므로 $Y \mid \mathbf{x}$는 로그정규분포를 따른다. 연습문제 2에 따라 그 중앙값이 $e^{\mathbf{x}^\top\boldsymbol\beta}$이다. 즉 지수를 그냥 되돌린 값은 **조건부 중앙값**의 추정치이지 조건부 평균이 아니다.
+    $\ln Y \mid \mathbf{x} \sim N(\mathbf{x}^\top\boldsymbol\beta, \sigma^2)$이므로 $Y \mid \mathbf{x}$는 로그정규분포를 따른다. 연습문제 21에 따라 그 중앙값이 $e^{\mathbf{x}^\top\boldsymbol\beta}$이다. 즉 지수를 그냥 되돌린 값은 **조건부 중앙값**의 추정치이지 조건부 평균이 아니다.
 
     조건부 평균은
 

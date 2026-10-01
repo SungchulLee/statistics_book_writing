@@ -44,9 +44,9 @@ $(Z_1, \ldots, Z_d)$는 $d$차원 공간에 찍힌 표준정규 점이고, $Q$�
 
 먼저 제곱 하나짜리를 직접 계산한다. 나머지는 여기에 더하기만 하면 된다.
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 1. 표준정규의 제곱이 갖는 밀도 { .dfn }
+### 정리 1. 표준정규의 제곱이 갖는 밀도 { .thm }
 
 $Z \sim N(0, 1)$이면 $Q = Z^2$의 밀도는
 
@@ -96,9 +96,9 @@ $$
 
 이 MGF를 가진 분포의 밀도가 다음 식이다.
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 2. 카이제곱 밀도 { .dfn }
+### 정리 2. 카이제곱 밀도 { .thm }
 
 $Q \sim \chi^2_d$의 밀도는
 
@@ -149,9 +149,9 @@ $$
 | 왜도 | $\sqrt{8/d}$ |
 | MGF | $(1-2t)^{-d/2}$, $t < 1/2$ |
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 보조정리. 표준정규분포의 짝수 적률 { .dfn }
+### 보조정리. 표준정규분포의 짝수 적률 { .thm }
 
 $Z \sim N(0,1)$이면 홀수 차수의 적률은 모두 $0$이고, 짝수 차수는
 
@@ -199,9 +199,9 @@ $$
 
     이고, 홀수 차수의 적률은 피적분함수가 기함수라 모두 0이다. $\square$
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 3. 카이제곱의 평균과 분산 { .dfn }
+### 정리 3. 카이제곱의 평균과 분산 { .thm }
 
 $X \sim \chi^2_d$이면
 
@@ -233,9 +233,9 @@ $$
 
 ### 가법성
 
-<div class="defn" markdown>
+<div class="thmbox" markdown>
 
-### 정리 4. 카이제곱의 가법성 { .dfn }
+### 정리 4. 카이제곱의 가법성 { .thm }
 
 $Q_1 \sim \chi^2_{d_1}$과 $Q_2 \sim \chi^2_{d_2}$가 독립이면
 
@@ -314,9 +314,11 @@ $$
 
 ### 자유도에 따른 밀도
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 자유도에 따른 카이제곱 밀도 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자유도에 따른 카이제곱 밀도
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -342,13 +344,13 @@ plt.show()
 
 ![자유도에 따른 카이제곱 밀도](./img/chi_square_257.png)
 
-</div>
-
 ### 평균과 최빈값이 갈라져 있다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 평균과 최빈값을 함께 그리기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균과 최빈값을 함께 그리기
+
+</div>
 
 ```python
 import numpy as np
@@ -381,13 +383,13 @@ plt.show()
 
 ![Chi-square Distribution — PDF](./img/chi_square_pdf_32.png)
 
-</div>
-
 ### 정의대로 만들어 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 정규 제곱합이 정말 카이제곱인가 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정규 제곱합이 정말 카이제곱인가
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -424,13 +426,13 @@ sample var  10.022 (theory 10)
 
 ![정규 제곱합과 카이제곱 밀도](./img/chi_square_289.png)
 
-</div>
-
 ### 감마·지수와 같음을 확인하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 세 가지 이름, 같은 분포 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 가지 이름, 같은 분포
+
+</div>
 
 ```python
 import numpy as np
@@ -456,13 +458,13 @@ chi2(2) : [0.3894   0.303265 0.18394  0.067668]
 expon   : [0.3894   0.303265 0.18394  0.067668]
 ```
 
-</div>
-
 ### 큰 자유도에서의 정규근사
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 자유도가 커지면 대칭에 가까워진다 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 자유도가 커지면 대칭에 가까워진다
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -488,8 +490,6 @@ plt.show()
 ```
 
 ![표준화한 카이제곱과 표준정규](./img/chi_square_364.png)
-
-</div>
 
 ---
 
@@ -680,7 +680,7 @@ $Q \sim \chi^2_{10}$의 95백분위점은 18.307이다. 세 가지 근사로 이
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-$Z_1, Z_2$가 독립인 표준정규일 때, $R^2 = Z_1^2 + Z_2^2$과 각도 $\Theta = \arctan(Z_2/Z_1)$이 서로 독립이고 각각 $\text{Exp}(1/2)$와 $U(0, 2\pi)$를 따름을 보여라.
+$Z_1, Z_2$가 독립인 표준정규일 때, 극좌표 $Z_1 = R\cos\Theta$, $Z_2 = R\sin\Theta$($R \ge 0$, $\Theta \in [0, 2\pi)$)로 쓰면 $R^2 = Z_1^2 + Z_2^2$과 각도 $\Theta$가 서로 독립이고 각각 $\text{Exp}(1/2)$와 $U(0, 2\pi)$를 따름을 보여라.
 
 </div>
 
@@ -930,6 +930,8 @@ $Z_1, Z_2$가 독립인 표준정규일 때, $R^2 = Z_1^2 + Z_2^2$과 각도 $\T
     **표본크기 설계에 바로 쓸 수 있다.** 검정력 0.80을 원하면 $\lambda \approx 10.9$가 필요하고, 여기서는 $\lambda = n \times 0.02$이므로 $n \approx 545$다.
 
     **$\lambda/n$이 효과크기다.** 위 예에서 $\sum_j(p^{(1)}_j-p^{(0)}_j)^2/p^{(0)}_j = 0.02$이며 코헨의 $w = \sqrt{0.02} = 0.141$로 "작은 효과"에 해당한다. 작은 효과를 잡으려면 큰 표본이 필요하다는 것이 $\lambda \propto n$의 실무적 번역이다.
+
+---
 
 ## 정리하며
 

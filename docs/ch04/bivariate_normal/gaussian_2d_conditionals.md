@@ -27,9 +27,11 @@ $$
 
 ## 코드
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 이변량 정규분포의 조건부분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이변량 정규분포의 조건부분포
+
+</div>
 
 ```python
 import numpy as np
@@ -45,7 +47,7 @@ def bivariate_gaussian_pdf(x, y, rho):
 def conditional_pdf(x0, y, rho):
     """X = x0 으로 조건을 걸었을 때 Y의 분포.
 
-    이변량 정규분포의 핵심 성질 두 가지가 여기 들어 있다.
+    이변량 정규분포의 핵심 성질 세 가지가 여기 들어 있다.
       1. 조건부분포도 **정규분포**다. (다른 분포에서는 일반적으로 성립하지 않는다.)
       2. 조건부 평균은 x0에 **선형**으로 의존한다: mu = rho * x0.
          이것이 선형회귀가 왜 정규분포 가정과 잘 맞는지의 뿌리다.
@@ -98,8 +100,6 @@ plt.show()
 ```
 
 ![2차원 정규조건부분포](./img/gaussian_2d_conditionals_30.png)
-
-</div>
 
 ---
 

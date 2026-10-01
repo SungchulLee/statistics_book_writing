@@ -27,9 +27,11 @@ $$
 
 ## 코드
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 공분산행렬에 따른 이변량 정규분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공분산행렬에 따른 이변량 정규분포
+
+</div>
 
 ```python
 import numpy as np
@@ -82,8 +84,6 @@ plt.show()
 
 ![Bivariate Normal: 3D Surface (top) and Contour (bottom)](./img/bivariate_normal_30.png)
 
-</div>
-
 ---
 
 ## 해석
@@ -122,15 +122,12 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}4&2.8\\2.8&4\end{pmatrix}$인 이변량 �
     $\rho = 0$이면 공분산행렬이 대각행렬 $\boldsymbol{\Sigma} = \text{diag}(\sigma_1^2, \sigma_2^2)$이다. 그러면:
 
     $$
-    f(x_1, x_2) = \frac{1}{2\pi\sigma_1\sigma_2}\exp\!\left(-\frac{x_1^2}{2\sigma_1^2} - \frac{x_2^2}{2\sigma_2^2}\right) = f_1(x_1)\cdot f_2(x_2)
+    f(x_1, x_2) = \frac{1}{2\pi\sigma_1\sigma_2}\exp\!\left(-\frac{(x_1-\mu_1)^2}{2\sigma_1^2} - \frac{(x_2-\mu_2)^2}{2\sigma_2^2}\right) = f_1(x_1)\cdot f_2(x_2)
     $$
 
-    결합밀도가 주변밀도의 곱으로 인수분해되므로 $X_1$과 $X_2$는 독립이다.
+    결합밀도가 주변밀도의 곱으로 인수분해되므로 $X_1$과 $X_2$는 독립이다. $\square$
 
-    !!! warning "이변량 정규분포에서만"
-        무상관성이 독립성을 함의하는 것은 이변량 정규분포에서**만** 성립한다. 일반적으로 무상관인 확률변수도 의존적일 수 있다.
-
-    $\square$
+    **일반적으로는 성립하지 않는다.** [3.4절 독립성과 무상관성의 차이](../../ch03/rv/independence_vs_zero_corr.md)에서 보았듯 무상관인 확률변수가 의존적인 예는 얼마든지 있다. 이변량 정규분포는 그 함의가 되살아나는 특수한 경우이며, 결정적인 것은 $(X_1, X_2)$가 **결합**정규라는 가정이다. 주변분포가 각각 정규인 것만으로는 부족하다는 것을 연습문제 10이 보여 준다.
 
 <div class="drillbox" markdown>
 
@@ -379,7 +376,7 @@ $X \sim N(0,1)$이고 $S$가 $X$와 독립이며 $\pm1$을 확률 $1/2$씩 취�
 
 - **모양은 전적으로 $\boldsymbol\Sigma$ 가 정한다.** 등밀도 등고선이 타원이고, $\rho=0$ 이면 축에 나란한 타원(원), $\rho\ne0$ 이면 기울어진 타원이다. $|\rho|$ 가 1 에 가까울수록 타원이 납작해진다.
 - **지수 안의 $(\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)$ 가 마할라노비스 거리의 제곱**이다. 상관을 고려한 거리이며, 이 값이 일정한 곳이 곧 등고선이다.
-- **다변량 정규에서만 무상관이 독립을 함의한다.** $\rho=0$ 이면 밀도가 두 일변량 밀도의 곱으로 쪼개진다. 일반 분포에서는 성립하지 않는 특별한 성질이다(3장 독립 문서 참조).
+- **결합정규이면 무상관이 곧 독립이다.** $\rho=0$ 이면 밀도가 두 일변량 밀도의 곱으로 쪼개진다. 일반 분포에서는 성립하지 않는 특별한 성질이며([3.4절 독립성과 무상관성의 차이](../../ch03/rv/independence_vs_zero_corr.md)), 주변분포가 각각 정규인 것만으로는 부족하고 **결합**정규여야 한다.
 - **$\boldsymbol\Sigma$ 는 양정치여야 한다.** 그렇지 않으면 역행렬도 밀도도 존재하지 않으며, 상관계수를 임의로 정할 수 없는 이유가 그것이다.
 
 이어지는 두 절이 이 분포를 두 방향에서 해부한다. **조건부분포**는 한 변수를 고정했을 때 남는 분포를 보고, **고유분해**는 타원의 축을 직접 찾는다.

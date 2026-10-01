@@ -95,9 +95,11 @@ $$
 
 ## Python: PMF와 표본추출
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 음이항분포의 SciPy 판본 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 음이항분포의 SciPy 판본
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -123,13 +125,13 @@ plt.show()
 
 ![음이항분포의 SciPy 판본](./img/geometric_151.png)
 
-</div>
-
 ### r이 커지면 모양이 바뀐다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 성공 횟수 r에 따른 모양 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 성공 횟수 r에 따른 모양
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -154,13 +156,13 @@ plt.show()
 
 ![성공 횟수 r에 따른 음이항분포](./img/negative_binomial_118.png)
 
-</div>
-
 ### 기하 확률변수를 더해서 만들어 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 정의대로 만들면 정말 음이항인가 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정의대로 만들면 정말 음이항인가
+
+</div>
 
 ```python
 import numpy as np
@@ -188,8 +190,6 @@ P(K=10): 표본 0.0624,  이론 0.0620
 ```
 
 기하분포 $r$개의 합이 음이항분포라는 사실이 세 수치에서 모두 확인된다.
-
-</div>
 
 ---
 
@@ -576,7 +576,7 @@ $$
 
     **$r = 2$에서 $r/Z$의 편향이 $+0.115$나 된다.** 참값 $0.3$을 $0.41$로 읽는 것이니 38% 과대추정이다. $r$이 커지면 편향이 줄지만 사라지지는 않는다. 반면 $\tilde p$는 모든 $r$에서 소수점 셋째 자리까지 $0.300$이다.
 
-    **$r \ge 2$가 필요한 이유.** $r = 1$이면 $\tilde p = 0/(Z-1) = 0$으로 쓸모가 없다. 실제로 $r = 1$(기하분포)일 때는 $p$의 불편추정량이 **아예 존재하지 않는다.** 한 번의 관측으로 성공확률을 편향 없이 추정하는 것은 불가능하며, 이것이 7장에서 다룰 불편추정량의 존재 문제의 간단한 예다.
+    **$r \ge 2$가 필요한 이유.** $r = 1$이면 $\tilde p = 0/(Z-1) = 0$으로 쓸모가 없다. $r = 1$(기하분포)에서 $p$의 불편추정량이 없는 것은 아니지만, **쓸 만한 것이 없다.** $E[\delta(Z)] = \sum_{k\ge1}\delta(k)p\,q^{k-1} = p$가 모든 $p$에서 성립하려면 멱급수의 계수를 맞추어야 하므로 $\delta(1) = 1$, $\delta(k) = 0\ (k \ge 2)$뿐이다. 즉 유일한 불편추정량은 지시함수 $\mathbb{1}\{Z = 1\}$이고, 이것은 $0$ 아니면 $1$만 내놓는다. **불편성만으로는 좋은 추정량이 보장되지 않는다**는 것을 보여 주는 표준적인 예이며, 6장의 추정량 품질 논의와 이어진다.
 
     **역표본추출이 쓰이는 자리.** 희귀사건의 비율을 추정할 때 $n$을 먼저 정하면 성공이 하나도 안 나와 $\hat p = 0$이 되는 사고가 난다. "성공 $r$건이 모일 때까지" 관측하면 그 일이 원천적으로 일어나지 않고, 덤으로 위의 불편추정량까지 얻는다. 감염병 감시나 희귀 결함 검사에서 쓰는 설계이며, 연습문제 8의 정지규칙 논의와 바로 이어진다.
 

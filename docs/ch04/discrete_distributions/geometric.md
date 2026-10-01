@@ -100,7 +100,7 @@ $$
 
     **해석:** 이미 $s$번의 시행 동안 성공하지 못했다고 해도, 앞으로 최소 $t$번 더 기다릴 확률은 처음부터 새로 시작하는 것과 같다. 과거의 실패는 미래의 성공에 관한 정보를 전혀 담고 있지 않다.
 
-    ---
+---
 
 ## 문제
 
@@ -119,15 +119,18 @@ $$
     $$
     P(X = 5) = (1 - 0.3)^{5-1} \cdot 0.3 = (0.7)^4 \cdot 0.3 = 0.2401 \cdot 0.3 = 0.0720
     $$
+
 ---
 
 ## Python: PMF, CDF, 표본추출
 
 ### 기하분포
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 기하분포의 확률질량함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기하분포의 확률질량함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -154,13 +157,13 @@ plt.show()
 
 ![기하분포의 확률질량함수와 분포함수](./img/geometric_131.png)
 
-</div>
-
 ### 무기억성 확인하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 기하분포의 무기억성 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기하분포의 무기억성
+
+</div>
 
 ```python
 import numpy as np
@@ -190,13 +193,13 @@ P(X>3+3|X>3) = 0.3430,  P(X>3) = 0.3433
 P(X>3+5|X>3) = 0.1690,  P(X>5) = 0.1681
 ```
 
-</div>
-
 ### 모수에 따른 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 성공확률에 따른 기하분포 비교 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 성공확률에 따른 기하분포 비교
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -216,8 +219,6 @@ plt.show()
 ```
 
 ![성공확률에 따른 기하분포 비교](./img/geometric_188.png)
-
-</div>
 
 ---
 
