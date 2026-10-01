@@ -27,9 +27,11 @@ $$
 다음 스크립트는 $\rho = 0.8$인 퇴플리츠 상관구조 $\Sigma_{ij} = \rho^{|i-j|}$를 갖는 설명변수
 $p = 20$개와 관측치 $n = 200$개를 생성한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 상관된 설명변수 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 상관된 설명변수 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -63,15 +65,15 @@ X_scaled = scaler.fit_transform(X)
 
 20개 계수 중 5개만 0이 아니므로 참 구조는 희소하다.
 
-</div>
-
 ## 코드: 교차검증 적합
 
 각 방법은 scikit-learn에 내장된 교차검증으로 최적 $\lambda$(엘라스틱넷은 $\alpha$까지)를 고른다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 세 방법을 교차검증으로 적합 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 세 방법을 교차검증으로 적합
+
+</div>
 
 ```python
 from sklearn.linear_model import RidgeCV, LassoCV, ElasticNetCV
@@ -93,8 +95,6 @@ enet_cv = ElasticNetCV(
 enet_cv.fit(X_scaled, y)
 ```
 
-</div>
-
 !!! warning "`alpha`라는 이름의 두 가지 의미"
     scikit-learn에서 `Ridge`/`Lasso`/`ElasticNet`의 `alpha`는 이 절의 $\lambda$에 해당하고,
     `ElasticNetCV`의 `l1_ratio`가 이 절의 $\alpha$에 해당한다. 게다가 `Ridge`의 목적함수는
@@ -112,9 +112,11 @@ enet_cv.fit(X_scaled, y)
 - **라쏘**는 많은 계수를 정확히 0으로 만들어 참 희소 구조를 상당히 잘 되찾는다.
 - **엘라스틱넷**은 라쏘와 비슷하게 행동하지만 상관된 설명변수를 몇 개 더 남기는 경향이 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 계수를 나란히 그리기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 계수를 나란히 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -144,8 +146,6 @@ plt.show()
 
 ![정칙화 방법의 계수 비교](./img/reg_compare_97.png)
 
-</div>
-
 ## 정칙화 경로
 
 계수 크기를 $\log_{10}(\lambda)$의 함수로 그리면 축소 행동이 뚜렷이 드러난다.
@@ -154,9 +154,11 @@ plt.show()
 - **라쏘 경로:** 계수가 축소되다가 서로 다른 $\lambda$ 문턱에서 정확히 0이 되며, 경로가 조각별
   선형이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 능형과 라쏘의 경로 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 능형과 라쏘의 경로
+
+</div>
 
 ```python
 from sklearn.linear_model import Ridge, Lasso
@@ -180,8 +182,6 @@ for a in alphas_lasso:
 lasso_coefs = np.array(lasso_coefs)
 ```
 
-</div>
-
 ## 축소 연산자
 
 정규직교 계획($X^\top X = I$)에서는 세 방법이 OLS 추정치 $\hat{\beta}^{\text{OLS}}$에 적용되는
@@ -193,9 +193,11 @@ $$
 \hat{\beta}_j^{\text{Hard}} = \hat{\beta}_j^{\text{OLS}} \cdot \mathbf{1}(|\hat{\beta}_j^{\text{OLS}}| > \lambda).
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 축소 연산자 그리기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 축소 연산자 그리기
+
+</div>
 
 ```python
 def plot_shrinkage_operators(lam=1.0):
@@ -233,8 +235,6 @@ plot_shrinkage_operators()
 여기서 경성 문턱은 문턱값을 $\lambda$로 두고 그린 것이다. 연습문제 1에서 보듯이, 벌점
 $\lambda\cdot\mathbf{1}(\beta_j \ne 0)$에서 유도되는 경성 문턱의 문턱값은 $\sqrt{2\lambda}$다.
 두 그림은 문턱 위치만 다를 뿐 모양은 같다.
-
-</div>
 
 ## 편향-분산 절충
 

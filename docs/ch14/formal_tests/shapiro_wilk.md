@@ -63,9 +63,11 @@ Shapiro-Wilk 검정통계량 $W$는 다음 단계로 계산한다.
 - $p$값 $\leq \alpha$이면 $H_0$을 기각한다(자료가 정규분포를 따르지 않는다).
 - $p$값 $> \alpha$이면 $H_0$을 기각하지 못한다(자료가 정규분포를 따를 수 있다).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. Shapiro-Wilk 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Shapiro-Wilk 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -100,8 +102,6 @@ Fail to reject H_0: The data is normally distributed.
 $W = 0.9986$이 1에 매우 가깝고 $p = 0.591$이므로 정규성을 기각하지 못한다. 자료를 실제로 정규분포에서 생성했으므로 기대한 결과이다.
 
 정리하면, Shapiro-Wilk 검정은 정렬된 표본자료와 미리 계산된 가중치로 검정통계량 $W$를 구해 자료가 정규분포에서 왔을 가능성을 판정한다. 특히 작거나 중간 크기의 표본에서 가장 강력한 정규성 검정 가운데 하나로 평가된다.
-
-</div>
 
 ## 연습문제
 

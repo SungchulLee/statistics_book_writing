@@ -80,9 +80,11 @@ $\alpha = 0.05$에서 $H_0: p_{\text{대면}} = p_{\text{온라인}}$을 검정�
 - **상한 신뢰한계**: 신뢰수준 $1 - \alpha$에서 $\theta < U$는 검정 $H_0: \theta \geq \theta_0$ 대 $H_a: \theta < \theta_0$에 대응한다.
 - **하한 신뢰한계**: 신뢰수준 $1 - \alpha$에서 $\theta > L$은 검정 $H_0: \theta \leq \theta_0$ 대 $H_a: \theta > \theta_0$에 대응한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 신뢰구간과 검정이 같은 답을 준다 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 신뢰구간과 검정이 같은 답을 준다
+
+</div>
 
 ```python
 import numpy as np
@@ -122,8 +124,6 @@ Both methods agree: True
 두 접근이 같은 결론에 이른다. $z = 1$은 임계값 1.96에 못 미치고, 같은 이유로 $\mu_0 = 50$이 구간 $(48.08, 55.92)$ 안에 있다.
 
 여기서 구간이 검정보다 하나 더 말해 준다는 점을 짚어 둘 만하다. 검정은 "50을 배제할 수 없다"까지만 말하지만, 구간은 48.08에서 55.92까지가 모두 배제되지 않는다고 말한다. 기각하지 못했다는 결과를 "차이가 없다"로 읽으면 안 되는 이유가 이것이다. 자료는 $\mu = 55$ 역시 배제하지 못한다.
-
-</div>
 
 ## 연습문제
 

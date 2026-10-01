@@ -119,9 +119,11 @@ $$
 
 D'Agostino와 Pearson의 변환이 하는 일이 바로 이것이다. 표준오차로 나누는 것만으로는 **중심과 퍼짐**밖에 맞출 수 없다. 변환은 그 위에 비대칭까지 바로잡아 통계량의 모양 자체를 정규 쪽으로 옮긴다. $K^2 = Z_1^2 + Z_2^2$이 $\chi^2_2$을 따른다는 말은 $Z_1$과 $Z_2$가 각각 표준정규라는 전제 위에 서 있으므로, 이 교정 없이는 $K^2$의 $p$값도 믿을 수 없다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. K-제곱이 두 검정의 합임을 확인하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> K-제곱이 두 검정의 합임을 확인하기
+
+</div>
 
 ```python
 import numpy as np
@@ -159,8 +161,6 @@ Fail to reject H_0: The data is normally distributed.
 ```
 
 `normaltest`의 통계량이 두 z 점수의 제곱합과 정확히 일치함을 확인할 수 있다. 이것이 $K^2 = Z_{\text{skewness}}^2 + Z_{\text{kurtosis}}^2$의 정의이다.
-
-</div>
 
 ## 응용
 

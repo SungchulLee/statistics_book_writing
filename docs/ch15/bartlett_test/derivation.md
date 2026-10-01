@@ -133,9 +133,11 @@ $$
 
 ## Python 검증
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 요약값만으로 통계량 만들기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 요약값만으로 통계량 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -180,8 +182,6 @@ Correction factor C: 1.0513
 Test statistic T: 0.7670
 P-value: 0.6815
 ```
-
-</div>
 
 
 ## 연습문제
@@ -314,7 +314,7 @@ Bartlett 보정이 실제로 유한표본 크기를 개선하는지 모의실험
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-본문 예제에서 집단 2의 분산을 $S_2^2 = 8.1$에서 점점 키워가며 $T$가 임계값 $5.991$을 넘는 지점을 찾아라. 이것이 Bartlett 검정의 검정력에 대해 무엇을 말해 주는가?
+본문 보기에서 집단 2의 분산을 $S_2^2 = 8.1$에서 점점 키워가며 $T$가 임계값 $5.991$을 넘는 지점을 찾아라. 이것이 Bartlett 검정의 검정력에 대해 무엇을 말해 주는가?
 
 </div>
 

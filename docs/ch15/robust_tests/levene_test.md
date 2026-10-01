@@ -43,9 +43,11 @@ $$
 
 SciPy는 `scipy.stats.levene`을 직접 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 분산 차이를 키워 가며 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산 차이를 키워 가며
+
+</div>
 
 ```python
 import numpy as np
@@ -73,11 +75,11 @@ sigma_y=1.20  W=2.8187  p=0.095
 
 `center` 인자가 중심화 방식을 조절한다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 판본의 차이
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 두 판본의 차이 { .eg }
 
 ```python
 # 중앙값 중심 — Brown-Forsythe 이며 scipy 의 기본값이다.
@@ -86,8 +88,6 @@ stat, pval = stats.levene(x, y, center='median')
 # 평균 중심 — Levene 의 원래 형태. center 를 명시해야 이쪽이 된다.
 stat, pval = stats.levene(x, y, center='mean')
 ```
-
-</div>
 
 !!! danger "`center='trimmed'`는 권하지 않는다"
     SciPy는 10% 절사평균 중심화도 제공하지만, 15.5절 [Brown-Forsythe 검정](./brown_forsythe.md)에서 측정했듯 **완전한 정규 자료에서도 제1종 오류율이 0.12~0.19까지 부풀려진다.**

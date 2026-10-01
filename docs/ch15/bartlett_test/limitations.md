@@ -55,9 +55,11 @@ $$
 
 ### 재현 코드
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 모집단 모양에 따른 오류율 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 오류율
+
+</div>
 
 ```python
 import numpy as np
@@ -103,8 +105,6 @@ for name, gen in cases:
 ```
 
 위 표의 수치가 그대로 재현된다. 지수분포 $0.379$, 균등분포 $0.002$로 양방향의 왜곡이 모두 극심하다.
-
-</div>
 
 ## F 검정과의 비교
 

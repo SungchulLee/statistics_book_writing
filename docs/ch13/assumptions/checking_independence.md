@@ -33,9 +33,11 @@ $$
 
 이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -68,8 +70,6 @@ R^2 = 0.7813
 ```
 
 기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
-
-</div>
 
 ## 2. 자기상관을 위한 Durbin-Watson 검정
 
@@ -110,9 +110,11 @@ $$
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. Durbin-Watson 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Durbin-Watson 검정
+
+</div>
 
 ```python
 from statsmodels.stats.stattools import durbin_watson
@@ -142,8 +144,6 @@ $d = 2.16$으로 2에 가까워 자기상관의 증거가 없다. 관측값을 �
 | $DW < 1.5$ | 양의 자기상관 (독립성 위배) |
 | $DW > 2.5$ | 음의 자기상관 (독립성 위배) |
 
-</div>
-
 ## 3. 패턴 탐지를 위한 잔차그림
 
 **잔차그림**은 독립성 가정을 확인하는 또 하나의 효과적인 도구이다. 잔차를 (시계열 자료에서는) 시간에 대해, (횡단면 자료에서는) 자료 수집 순서에 대해 그리면 종속을 시사하는 패턴을 눈으로 확인할 수 있다.
@@ -155,9 +155,11 @@ $d = 2.16$으로 2에 가까워 자기상관의 증거가 없다. 관측값을 �
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 순서에 대한 잔차 그림 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 순서에 대한 잔차 그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -190,8 +192,6 @@ plt.show()
 | 부호가 번갈아 나타남 | 음의 자기상관 |
 | 같은 부호가 이어짐 | 양의 자기상관 |
 
-</div>
-
 ## 4. 고차 자기상관을 위한 Breusch-Godfrey 검정
 
 **Breusch-Godfrey 검정**은 Durbin-Watson 검정의 확장으로, (1차만이 아니라) 고차 자기상관을 탐지하는 데 더 유연하다. 자기상관이 인접 관측값을 넘어 이어진다고 의심될 때 유용하다.
@@ -217,9 +217,11 @@ $$
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. Breusch-Godfrey 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> Breusch-Godfrey 검정
+
+</div>
 
 ```python
 from statsmodels.stats.diagnostic import acorr_breusch_godfrey
@@ -251,8 +253,6 @@ Breusch-Godfrey 검정도 $p = 0.45$로 자기상관의 증거를 찾지 못한�
 - 고차 자기상관(시차 2, 3 등)을 탐지할 수 있다.
 - 시차 종속변수를 설명변수로 쓴 모형에서도 쓸 수 있다(이 경우 DW 검정은 타당하지 않다).
 - 더 일반적이고 유연하다.
-
-</div>
 
 ## 5. 자료 수집 과정 살피기
 

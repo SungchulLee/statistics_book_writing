@@ -46,9 +46,11 @@ $$
 
 $\rho > 0$(양의 짝 내 상관)이면 $D$의 분산이 $\sigma_X^2 + \sigma_Y^2$보다 **줄어든다**. 이것이 짝짓기의 통계적 이점이다: 피험자 간 변동성의 상당 부분이 상쇄되어 신뢰구간이 좁아진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 대응표본 구간 모의실험 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 대응표본 구간 모의실험
+
+</div>
 
 ```python
 import numpy as np
@@ -115,13 +117,13 @@ print(f"Paired {method} coverage: {coverage_pct:.1f}%")
 Paired t coverage: 95.0%
 ```
 
-</div>
-
 ### 구간의 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 구간 100개를 한 그림에 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+
+</div>
 
 ```python
 # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
@@ -147,8 +149,6 @@ plt.show()
 여기 쓰인 설정에서 $\sigma_D = \sqrt{1 + 1.44 - 1.44} = 1.00$이다. $\rho = 0.6$이라는 상관 덕분에 $\sigma_X^2 + \sigma_Y^2$의 상당 부분이 상쇄되었다. 같은 자료를 짝을 무시하고 다뤘다면 산포가 1.562가 되어 구간이 1.56배 넓어졌을 것이다.
 
 `rho`를 0.0이나 $-0.3$으로 바꿔 다시 돌려 보면 구간이 눈에 띄게 넓어진다. 포함확률은 그대로 95% 근처를 유지한다. 상관은 구간의 **정확성**이 아니라 **정밀도**를 바꾼다.
-
-</div>
 
 ## 해석
 

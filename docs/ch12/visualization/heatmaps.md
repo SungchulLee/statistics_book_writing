@@ -8,13 +8,15 @@
 
 ## 상관행렬의 기본 열지도
 
-### 금융 예제: S&P 500 상장지수펀드(ETF)
+### 금융 보기: S&P 500 상장지수펀드(ETF)
 
 상장지수펀드(ETF)는 넓은 시장 구간을 추종한다. 섹터 ETF 사이의 상관을 살펴보면 보유 자산이 독립적으로 움직이는지 함께 움직이는지, 즉 분산투자 정도를 평가할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. S&P 500 ETF 상관 열지도 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> S&P 500 ETF 상관 열지도
+
+</div>
 
 ```python
 import pandas as pd
@@ -55,8 +57,6 @@ plt.show()
 
 대부분의 칸이 붉은 계열이라는 점이 포트폴리오 관점에서 중요하다. 섹터 ETF들이 서로 양의 상관을 갖고 함께 움직이므로 분산 효과가 생각만큼 크지 않다.
 
-</div>
-
 ### 열지도 해석하기
 
 열지도는 다음을 드러낸다:
@@ -76,9 +76,11 @@ plt.show()
 
 열지도 칸에 수치를 넣으면 해석에 도움이 된다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 값을 표시한 열지도 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 값을 표시한 열지도
+
+</div>
 
 ```python
 import pandas as pd
@@ -120,8 +122,6 @@ plt.show()
 - SPY(S&P 500 전체 시장)는 예상대로 QQQ(기술 비중이 큰 나스닥), DIA(대형주)와 높은 상관을 보인다
 - GLD(금)는 주식형 ETF와 상관이 낮거나 음인 경우가 많아 헤지 수단이 된다
 
-</div>
-
 ---
 
 ## 큰 상관행렬 다루기
@@ -132,9 +132,11 @@ plt.show()
 
 계층적 군집화로 비슷한 변수를 묶는다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 군집화로 순서 다시 매기기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 군집화로 순서 다시 매기기
+
+</div>
 
 ```python
 import pandas as pd
@@ -164,15 +166,15 @@ plt.show()
 
 군집화는 강하게 상관된 변수들이 붙어 있도록 행과 열을 재정렬하여 상관행렬의 블록 구조를 드러낸다.
 
-</div>
-
 ### 2. 부분집합 선택
 
 관심 있는 변수의 부분집합만 고른다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 부분집합만 보기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 부분집합만 보기
+
+</div>
 
 ```python
 # 종목이 많으면 열지도가 읽히지 않는다. 업종 펀드만 열 개로 좁힌다.
@@ -190,17 +192,17 @@ plt.show()
 
 변수를 추려 내면 각 칸이 커져 값을 읽기 쉬워진다. 변수가 20개를 넘으면 전체 행렬보다 이런 부분집합이 실용적이다.
 
-</div>
-
 ---
 
 ## 회색조 열지도 (인쇄용)
 
 흑백으로 출판하거나 인쇄 제약이 있을 때에는 회색조 색상표를 쓰고 시각적 단서를 더한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 회색조 열지도 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 회색조 열지도
+
+</div>
 
 ```python
 import pandas as pd
@@ -224,8 +226,6 @@ plt.show()
 ![회색조 열지도](./img/heatmaps_158.png)
 
 색맹 독자나 흑백 인쇄를 고려하면 명도만으로 구분되는 회색조가 안전하다. 다만 부호를 구분하기 어려워지므로 값을 함께 적어 주는 편이 좋다.
-
-</div>
 
 ---
 

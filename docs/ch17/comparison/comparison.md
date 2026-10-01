@@ -48,7 +48,7 @@
 
 ---
 
-## 실전 예제: 평균차 검정
+## 실전 보기: 평균차 검정
 
 ### 붓스트랩 접근
 
@@ -56,9 +56,11 @@
 2. 각 붓스트랩 표본에서 평균차를 계산한다.
 3. 평균차의 **신뢰구간**을 추정한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 붓스트랩으로 구간 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 붓스트랩으로 구간 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -87,8 +89,6 @@ print(f"Bootstrap 95% CI for mean difference: ({ci[0]:.2f}, {ci[1]:.2f})")
 Bootstrap 95% CI for mean difference: (1.20, 4.80)
 ```
 
-</div>
-
 ### 순열 접근
 
 1. 두 집단을 하나의 자료로 합친다.
@@ -96,9 +96,11 @@ Bootstrap 95% CI for mean difference: (1.20, 4.80)
 3. 각 순열에서 평균차를 계산한다.
 4. 관측 평균차를 순열된 차이들의 분포와 비교하여 **$p$값**을 구한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 순열로 p-값 구하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 순열로 p-값 구하기
+
+</div>
 
 ```python
 import numpy as np, itertools
@@ -125,9 +127,7 @@ print(f"Exact permutation p-value: {p_value:.4f}")   # 0.0397
 Exact permutation p-value: 0.0397
 ```
 
-</div>
-
-!!! danger "이 예제에서 두 방법이 심각하게 어긋난다"
+!!! danger "이 보기에서 두 방법이 심각하게 어긋난다"
     | 방법 | 결과 |
     |:---|:---|
     | 정확 순열 $p$값 | $0.0397$ |
@@ -201,7 +201,7 @@ Exact permutation p-value: 0.0397
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-위 예제에서 붓스트랩 신뢰구간 $[1.20, 4.80]$과 순열 $p$값 $0.0397$이 어긋났다.
+위 보기에서 붓스트랩 신뢰구간 $[1.20, 4.80]$과 순열 $p$값 $0.0397$이 어긋났다.
 
 **(a)** 순열검정을 역변환하여 평균차의 $95$% 신뢰구간을 구하고 붓스트랩 구간·Welch 구간과 비교하라.
 

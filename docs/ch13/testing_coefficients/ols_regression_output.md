@@ -40,9 +40,11 @@ $\beta_j$의 95% 신뢰구간은 $\hat{\beta}_j \pm t^*_{n-k,\,0.025} \cdot \mat
 
 ### 정규방정식으로 OLS 적합하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. OLS 적합 함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> OLS 적합 함수
+
+</div>
 
 ```python
 import numpy as np
@@ -63,13 +65,13 @@ def fit_ols(X, y):
     return beta_hat, s, cov_matrix
 ```
 
-</div>
-
 ### 회귀표 만들기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 회귀 출력표 만들기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 회귀 출력표 만들기
+
+</div>
 
 ```python
 def regression_table(beta_hat, s, cov_matrix, n, k, var_names):
@@ -95,13 +97,13 @@ def regression_table(beta_hat, s, cov_matrix, n, k, var_names):
               f"CI=({ci_lo:.3f}, {ci_hi:.3f})")
 ```
 
-</div>
-
 ### Advertising 자료에서 실행하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 광고 자료에 적용하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 광고 자료에 적용하기
+
+</div>
 
 ```python
 import pandas as pd
@@ -138,8 +140,6 @@ Newspaper   coef=-0.0030  SE=0.007  t=-0.428  p=0.669  CI=(-0.017, 0.011)
 요약표의 각 열을 따로 꺼내 인쇄했다. 계수, 표준오차, $t$, p-값, 신뢰구간이 어떻게 맞물리는지 한 줄로 볼 수 있다.
 
 출력($n = 140$, $k = 4$):
-
-</div>
 
 ```text
 Intercept   coef=3.0451  SE=0.391  t=7.782   p=0.000  CI=(2.271, 3.819)

@@ -12,9 +12,11 @@ $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
 
 전형적인 주식 모수($\mu = 8\%$, $\sigma = 20\%$)에서는 추정 대상에 비해 표준오차가 크다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 기대수익률의 정밀도 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기대수익률의 정밀도
+
+</div>
 
 ```python
 import numpy as np
@@ -52,16 +54,16 @@ T=  50 years  SE=2.83%  95% CI=[2.46%, 13.54%]  Width=11.09%
 T= 100 years  SE=2.00%  95% CI=[4.08%, 11.92%]  Width=7.84%
 ```
 
-</div>
-
 !!! danger "근본적인 문제"
     자료가 10년치이면 평균 수익률의 95% 신뢰구간이 대략 $[-4.4\%, 20.4\%]$로, 0을 포함할 만큼 넓다. 50년치 자료에서도 표준오차가 2.8%로, 기대수익률을 0과 구분하기에 겨우 충분한 정도이다.
 
 다음 모의실험은 10년치와 50년치 월별 자료로 추정한 연간 수익률의 분포를 보여준다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 추정값의 분포 — 10년과 50년 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 추정값의 분포 — 10년과 50년
+
+</div>
 
 ```python
 def return_precision_simulation(seed=42):
@@ -97,8 +99,6 @@ return_precision_simulation()
 
 ![Distribution of Expected Return Estimates](./img/return_estimation_40.png)
 
-</div>
-
 ## Sharpe 비율의 불확실성
 
 **Sharpe 비율** $\text{SR} = \mu/\sigma$(또는 초과수익률을 변동성으로 나눈 값)는 위험조정 성과의 표준적인 측도이다. 그 추정 불확실성은 대략:
@@ -107,9 +107,11 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 
 여기서 $T$는 기간의 수이다. 연간 Sharpe 비율이 0.5 근처이면 $t$-통계량 2를 얻는 데 대략 18년이 필요하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 샤프비율의 불확실성 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 샤프비율의 불확실성
+
+</div>
 
 ```python
 def sharpe_ratio_uncertainty(seed=42):
@@ -149,8 +151,6 @@ T= 20 years  E[SR]=0.501  SD(SR)=0.226  P(SR<0)=1.2%
 T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
 ```
 
-</div>
-
 !!! note "펀드 평가에 대한 함의"
     자료가 3년치뿐이면 참 Sharpe 비율이 0.5인 펀드도 추정 Sharpe 비율이 *음수*로 나올 확률이 약 20%이다. 10년치라도 참값 주위의 표준편차가 약 0.3이다. 실력 있는 운용자와 그렇지 않은 운용자를 믿을 만하게 구분하려면 수십 년치 자료가 필요하다.
 
@@ -161,9 +161,11 @@ T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
 - **짧은 구간** (5–21일): 최근 변화에 민감하지만 잡음이 많다
 - **긴 구간** (126–252일): 매끄럽지만 뒤늦다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 실현변동성과 창의 길이 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 실현변동성과 창의 길이
+
+</div>
 
 ```python
 def realized_volatility_windows(seed=42):
@@ -208,8 +210,6 @@ realized_volatility_windows()
 
 ![Realized Volatility: Window Size Comparison](./img/return_estimation_128.png)
 
-</div>
-
 !!! info "실무 지침"
     유일하게 "옳은" 구간은 없다. 실무자들은 단기 위험관리에는 21일(월간) 구간을, 전략적 자산배분에는 252일(연간) 구간을 흔히 쓴다. 더 정교한 접근(지수가중, GARCH 모형)은 이 맞바꿈을 더 명시적으로 다룬다.
 
@@ -222,9 +222,11 @@ realized_volatility_windows()
 | 일별 → 연간 | $\mu_a = \mu_d \times 252$ | $\sigma_a = \sigma_d \times \sqrt{252}$ | $\text{SR}_a = \text{SR}_d \times \sqrt{252}$ |
 | 월별 → 연간 | $\mu_a = \mu_m \times 12$ | $\sigma_a = \sigma_m \times \sqrt{12}$ | $\text{SR}_a = \text{SR}_m \times \sqrt{12}$ |
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 연율화 관례 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 연율화 관례
+
+</div>
 
 ```python
 def annualization_conventions():
@@ -253,8 +255,6 @@ Annualized (252 trading days):
   sigma_annual = 19.05%
   SR_annual   = 0.397
 ```
-
-</div>
 
 !!! warning "i.i.d. 가정"
     연율화 공식은 수익률이 i.i.d.라고 가정한다. 수익률의 자기상관(모멘텀이나 평균회귀)과 변동성 군집(GARCH 효과)은 단순한 $\sqrt{T}$ 축척 규칙을 무너뜨린다. 실무에서는 유용한 근사이지만 그 한계를 인식하고 써야 한다.

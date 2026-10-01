@@ -12,9 +12,11 @@ $$\bar{X}_n \xrightarrow{\text{a.s.}} \mu \quad (n \to \infty)$$
 
 즉 확률 1로 누적평균이 $\mu$로 수렴한다. 다음 모의실험은 네 가지 분포에서 독립적인 20개 수열의 누적평균을 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 여러 경로로 보는 강대수의 법칙 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 여러 경로로 보는 강대수의 법칙
+
+</div>
 
 ```python
 import numpy as np
@@ -64,8 +66,6 @@ consistency_visualization()
 
 ![일치성과 수렴](./img/consistency_convergence_15.png)
 
-</div>
-
 !!! tip "그림에서 보이는 양상"
     모집단 분포와 무관하게, $n$이 커지면 20개의 표본경로가 모두 빨간 점선($\mu$)으로 수렴한다. 강대수의법칙이 작동하는 모습이다.
 
@@ -77,9 +77,11 @@ $$\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)$$
 
 동등하게, 큰 $n$에 대해 $\bar{X}_n \approx N(\mu, \sigma^2/n)$이다. 분산이 유한한 **모든** 모집단 분포에서 성립한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 모집단 넷으로 보는 중심극한정리 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 모집단 넷으로 보는 중심극한정리
+
+</div>
 
 ```python
 from scipy import stats
@@ -130,8 +132,6 @@ clt_demonstration()
 
 ![Central Limit Theorem](./img/consistency_convergence_60.png)
 
-</div>
-
 !!! note "정규성으로의 수렴 속도"
     대칭인 분포(Normal, Uniform)는 정규성에 빨리 도달한다. 치우친 분포(Exponential, $p$가 0.5에서 먼 Bernoulli)는 더 큰 $n$이 필요하다. $n = 30$쯤이면 대부분의 분포에서 정규근사가 충분하다.
 
@@ -143,9 +143,11 @@ $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \text{에 대해}$$
 
 코시 관측값을 더 많이 평균해도 전혀 나아지지 않는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 코시분포에서 무너지는 수렴 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 코시분포에서 무너지는 수렴
+
+</div>
 
 ```python
 def cauchy_failure(seed=42):
@@ -188,8 +190,6 @@ cauchy_failure()
 
 ![Normal: Converges](./img/consistency_convergence_106.png)
 
-</div>
-
 !!! warning "대수의법칙에는 유한한 평균이 필요하다"
     코시의 표본평균은 $n$이 아무리 커도 불규칙하게 떠돈다. 그러나 표본 **중앙값**은 유한한 평균을 요구하지 않으므로 코시 위치모수에 대해 일치한다.
 
@@ -201,9 +201,11 @@ $$\text{Var}(\bar{X}) \approx \frac{\sigma^2}{n} \cdot \frac{1 + \rho}{1 - \rho}
 
 양의 자기상관은 분산을 **부풀리고**, 음의 자기상관은 **줄인다**.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 자기상관이 표준오차에 미치는 영향 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 자기상관이 표준오차에 미치는 영향
+
+</div>
 
 ```python
 def autocorrelation_effect(n=100, n_sim=30_000, seed=42):
@@ -250,8 +252,6 @@ autocorrelation_effect()
 ρ= 0.95  Var(X̄)=0.311792  σ²/n=0.010000  Ratio=31.18
 ```
 
-</div>
-
 !!! danger "금융 시계열"
     금융 수익률은 변동성에 양의 자기상관을 보이는 경우가 많다(수익률 자체에도 약한 자기상관이 있을 때가 있다). 이 종속성을 무시하면 표본평균의 불확실성을 낮춰 잡게 되어 신뢰구간이 너무 좁아지고 가설검정이 너무 관대해진다.
 
@@ -261,9 +261,11 @@ autocorrelation_effect()
 
 $$P(\bar{X}_T > r_f) = \mathcal{N}\left(\frac{\mu - r_f}{\sigma / \sqrt{T}}\right)$$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 초과수익을 확인하는 데 필요한 기간 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 초과수익을 확인하는 데 필요한 기간
+
+</div>
 
 ```python
 def estimation_horizon_analysis(seed=42):
@@ -295,8 +297,6 @@ estimation_horizon_analysis()
   90% power: ~73 years of data needed
   95% power: ~1 years of data needed
 ```
-
-</div>
 
 ## 해석
 

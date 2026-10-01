@@ -53,9 +53,11 @@ $$
 (\bar{X}_1 - \bar{X}_2) \pm z_{\alpha/2} \times \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 두 평균 차이의 신뢰구간 계산 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 평균 차이의 신뢰구간 계산
+
+</div>
 
 ```python
 import numpy as np
@@ -95,15 +97,13 @@ confidence_interval = (0.22892977648461788, 19.77107022351538)
 
 구간이 0을 아슬아슬하게 벗어난다. 점추정값은 차이가 10이라고 말하지만, 구간은 0.23만큼 작을 수도 19.77만큼 클 수도 있다고 말한다. "차이가 있다"까지는 말할 수 있어도 "얼마나 있다"는 거의 말하지 못하는 자료다.
 
-</div>
-
 ---
 
 ## 보기
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 평균 차이의 95% 신뢰구간 (Welch). 독립인 두 표본: 표본 1은 $n_1 = 30$, $\bar{X}_1 = 100$, $s_1 = 15$이고, 표본 2는 $n_2 = 25$, $\bar{X}_2 = 90$, $s_2 = 20$이다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균 차이의 95% 신뢰구간 (Welch). 독립인 두 표본: 표본 1은 $n_1 = 30$, $\bar{X}_1 = 100$, $s_1 = 15$이고, 표본 2는 $n_2 = 25$, $\bar{X}_2 = 90$, $s_2 = 20$이다.
 
 </div>
 
@@ -134,9 +134,11 @@ confidence_interval = (0.22892977648461788, 19.77107022351538)
 
 ## 모의실험: 이표본 평균 신뢰구간의 포함확률
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 네 방법의 포함확률 비교 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 네 방법의 포함확률 비교
+
+</div>
 
 ```python
 #!/usr/bin/env python3
@@ -225,8 +227,6 @@ if __name__ == "__main__":
 ![100 Two-Sample Mean CIs (welch) | n1=12, n2=10, CL=95%](./img/ci_mu_diff_123.png)
 
 포함확률 97.0%로 명목값을 달성한다(100회 모의실험의 표준오차가 2.2%p이므로 95%와 구별되지 않는다). `method`를 `"pooled"`나 `"z_plugin"`으로 바꿔 같은 자료에 다시 돌려 보면 방법마다 어디서 무너지는지 볼 수 있다.
-
-</div>
 
 ---
 

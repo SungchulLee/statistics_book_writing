@@ -16,11 +16,13 @@ Q-Q 그림은 자산 수익률이 정규성에서 벗어나는 정도를 진단�
 
 ## 실제 예: Netflix(NFLX) 로그수익률
 
-Netflix 주식은 정규가 아닌 금융 수익률의 훌륭한 사례이다. 다음 예제는 종가로 계산한 일간 로그수익률을 쓴다.
+Netflix 주식은 정규가 아닌 금융 수익률의 훌륭한 사례이다. 다음 보기는 종가로 계산한 일간 로그수익률을 쓴다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 넷플릭스 수익률의 Q-Q 그림 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 넷플릭스 수익률의 Q-Q 그림
+
+</div>
 
 ```python
 import numpy as np
@@ -50,8 +52,6 @@ plt.show()
 
 ![일간 로그수익률의 Q-Q 그림](./img/qq_plots_financial_21.png)
 
-</div>
-
 ## 금융 자료의 Q-Q 그림 해석
 
 ### 완전한 정규성
@@ -64,9 +64,11 @@ plt.show()
 
 **시각적 특징:** Q-Q 그림이 오른쪽 꼬리에서 "위로 휘고" 왼쪽 꼬리에서 "아래로 휜다". 그래서 S자 패턴이 만들어진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 히스토그램과 Q-Q 그림 견주기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 히스토그램과 Q-Q 그림 견주기
+
+</div>
 
 ```python
 import numpy as np
@@ -110,8 +112,6 @@ plt.show()
 
 ![두꺼운 꼬리의 분포 모양과 Q-Q 그림](./img/qq_plots_financial_61.png)
 
-</div>
-
 ## 비정규성을 무시할 때의 결과
 
 ### 꼬리 위험의 과소평가
@@ -128,9 +128,11 @@ plt.show()
 
 ## 실전 절차: 수익률 분포 진단하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 수익률 진단 네 단계 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 수익률 진단 네 단계
+
+</div>
 
 ```python
 import numpy as np
@@ -190,8 +192,6 @@ Anderson-Darling statistic: 3.6529
 
 ![수익률의 정규성 진단 패널](./img/qq_plots_financial_114.png)
 
-</div>
-
 !!! warning "`stats.anderson`은 p값을 돌려주지 않는다"
     `stats.anderson`은 `(statistic, critical_values, significance_level)` 세 값을 담은 결과 객체를 돌려준다. `_, p_ad = stats.anderson(...)`처럼 두 값으로 풀면 `ValueError: too many values to unpack`이 난다. 검정통계량을 임계값과 직접 비교해야 한다.
 
@@ -206,9 +206,11 @@ Anderson-Darling statistic: 3.6529
 
 정규분포 대신 스튜던트 $t$ 분포나 일반화 쌍곡분포를 적합한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 대안 분포 적합하기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 대안 분포 적합하기
+
+</div>
 
 ```python
 from scipy.stats import t as student_t
@@ -226,8 +228,6 @@ Fitted df: 6.68 (lower df → heavier tails)
 ```
 
 위 자료에 적용하면 추정된 자유도가 $6.68$로, 자료를 생성한 참값 6에 가깝다.
-
-</div>
 
 ### 2. 비모수 방법
 

@@ -63,7 +63,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 비료 자료의 Dunn 사후검정. [Kruskal-Wallis](kruskal_wallis.md) 절의 비료 예제를 이어 보자. Kruskal-Wallis 검정이 $H = 11.816$, $p = 0.0027$로 $H_0$을 기각했다. 세 집단은 다음과 같았다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비료 자료의 Dunn 사후검정. [Kruskal-Wallis](kruskal_wallis.md) 절의 비료 보기를 이어 보자. Kruskal-Wallis 검정이 $H = 11.816$, $p = 0.0027$로 $H_0$을 기각했다. 세 집단은 다음과 같았다.
 
 - 비료 A: $n_1 = 5$, $\bar{R}_A = 7.7$
 - 비료 B: $n_2 = 5$, $\bar{R}_B = 13.0$
@@ -118,7 +118,7 @@ $N = 15$이고 쌍별 비교는 $m = 3$개이다.
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-비료 예제에서 Bonferroni 보정 대신 Holm 보정과 Benjamini-Hochberg 보정을 적용하면 결과가 어떻게 달라지는가? 세 보정을 모두 계산하고 비교하라.
+비료 보기에서 Bonferroni 보정 대신 Holm 보정과 Benjamini-Hochberg 보정을 적용하면 결과가 어떻게 달라지는가? 세 보정을 모두 계산하고 비교하라.
 
 </div>
 

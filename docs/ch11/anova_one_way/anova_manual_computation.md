@@ -24,9 +24,11 @@ $$
 
 다음 함수는 분산분석의 모든 양을 처음부터 계산한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 분산분석표 직접 계산하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산분석표 직접 계산하기
+
+</div>
 
 ```python
 import numpy as np
@@ -76,13 +78,13 @@ F   = 4.8461, p = 0.0159
 
 SSE가 SST의 세 배 가까이 크지만 자유도로 나누고 나면(2 대 27) MST가 MSE의 다섯 배가 된다. 분산분석에서 제곱합 자체가 아니라 **자유도로 나눈 평균제곱**을 비교하는 이유다.
 
-</div>
-
 scipy로 확인하는 것은 한 줄이면 된다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. scipy 결과와 맞춰 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> scipy 결과와 맞춰 보기
+
+</div>
 
 ```python
 # 손으로 구한 값과 맞는지 확인한다. 한 줄이면 되는 계산을 굳이 풀어 쓴 까닭은
@@ -98,8 +100,6 @@ scipy: F = 4.8461, p = 0.0159
 ```
 
 두 방식이 동일한 $F$와 $p$-값을 주어 수동 계산이 맞음을 확인해 준다.
-
-</div>
 
 손으로 계산한 네 숫자가 실제로 무엇을 재고 있는지 그림으로 확인해 두자. 왼쪽은 관측값 30개 각각을 **전체평균에서 집단평균까지**(파랑)와 **집단평균에서 관측값까지**(주황) 두 토막으로 쪼갠 것이다.
 
@@ -121,9 +121,11 @@ $$
 
 이다. $|\bar{y}_i - \bar{y}_j| > \text{LSD}$이면 그 쌍을 수준 $\alpha$에서 유의하게 다르다고 선언한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. Fisher LSD 사후비교 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Fisher LSD 사후비교
+
+</div>
 
 ```python
 from itertools import combinations
@@ -165,8 +167,6 @@ trt1 vs trt2   diff = 0.8650  LSD = 0.5720  True
 전역 검정은 $p = 0.0159$로 기각했는데 쌍별로 보면 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어, 서로 간의 차이가 각각과 대조군의 차이보다 큰 것이다.
 
 집단 크기가 모두 10으로 같아 LSD 문턱도 0.5720 하나로 같다. 크기가 다르면 쌍마다 문턱이 달라진다.
-
-</div>
 
 ## 해석
 
@@ -235,7 +235,7 @@ trt1 vs trt2   diff = 0.8650  LSD = 0.5720  True
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-키 예제에서 덴마크 집단의 크기가 $n = 30$이 아니라 $n = 5$라고 하자. 균형인 경우와 비교해 네덜란드 대 덴마크의 LSD 문턱은 어떻게 달라지는가?
+키 보기에서 덴마크 집단의 크기가 $n = 30$이 아니라 $n = 5$라고 하자. 균형인 경우와 비교해 네덜란드 대 덴마크의 LSD 문턱은 어떻게 달라지는가?
 
 </div>
 
@@ -273,7 +273,7 @@ $\text{MST}$가 $\sigma^2$의 불편추정값이 되는 조건은 무엇인가? 
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-예제의 PlantGrowth 자료에 **피셔 LSD**를 실제로 적용하고, 다중비교 보정을 한 결과와 비교하라.
+보기의 PlantGrowth 자료에 **피셔 LSD**를 실제로 적용하고, 다중비교 보정을 한 결과와 비교하라.
 
 </div>
 
@@ -491,7 +491,7 @@ $\text{MST}$가 $\sigma^2$의 불편추정값이 되는 조건은 무엇인가? 
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-일원배치 분산분석이 **더미변수 회귀와 같다**는 것을 예제 자료로 확인하라.
+일원배치 분산분석이 **더미변수 회귀와 같다**는 것을 보기 자료로 확인하라.
 
 </div>
 

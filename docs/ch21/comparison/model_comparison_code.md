@@ -96,9 +96,11 @@ $$
 3. **콕스-스넬 잔차**: 모형이 옳으면 콕스-스넬 잔차가 지수(1) 분포를 따른다. 잔차의 위험에 대한
    넬슨-알렌 추정치를 잔차 자체에 대해 그리면 45도 직선에 가까워야 한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. Cox-Snell 잔차 진단 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Cox-Snell 잔차 진단
+
+</div>
 
 ```python
 import numpy as np
@@ -136,8 +138,6 @@ cox_snell_diagnostic(rng.exponential(1.0, 200))
 ![Cox-Snell 잔차 진단 그림](./img/model_comparison_code_99.png)
 
 모형이 옳을 때의 모습이다. 점들이 45도선을 따라 놓인다. 실제 자료에서 점들이 이 선에서 체계적으로 벗어나면 모형 설정이 잘못되었다는 뜻이다.
-
-</div>
 
 ## 실무적 작업 흐름
 

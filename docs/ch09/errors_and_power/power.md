@@ -36,9 +36,11 @@ $\alpha$를 키우면(예: 0.01에서 0.05로) $H_0$을 기각하기 쉬워져 �
 
 연구를 수행하기 전에, 예상되는 효과크기를 원하는 검정력과 유의수준으로 탐지하는 데 필요한 최소 표본크기를 검정력 분석으로 정한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 필요한 표본크기 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 필요한 표본크기 구하기
+
+</div>
 
 ```python
 from scipy import stats
@@ -71,8 +73,6 @@ Required sample size: 32
 
 $(1.96 + 0.8416)^2 / 0.5^2 = 31.4$를 올림한 값이다. 효과크기가 분모에서 제곱되므로 효과가 절반이면 표본은 네 배가 된다.
 
-</div>
-
 ### 사후 검정력 분석
 
 연구를 마친 뒤 관측된 효과크기, 표본크기, 유의수준으로 달성된 검정력을 계산할 수 있다. 그러나 유의하지 않은 결과에 대한 사후 검정력 분석은 p-값을 넘는 정보를 거의 주지 않으므로 일반적으로 권장되지 않는다.
@@ -81,9 +81,11 @@ $(1.96 + 0.8416)^2 / 0.5^2 = 31.4$를 올림한 값이다. 효과크기가 분�
 
 $H_0$과 $H_a$ 아래의 분포를 함께 그리면 검정력을 이해할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 검정력을 그림으로 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 검정력을 그림으로 보기
+
+</div>
 
 ```python
 import numpy as np
@@ -134,8 +136,6 @@ plot_power(mu_0=50, mu_a=52, sigma=10, n=25)
 
 이 설정에서 검정력은 0.259밖에 안 된다. 참 평균이 정말 52인데도 네 번 중 세 번은 $H_0$을 기각하지 못한다는 뜻이다. 두 곡선이 겹치는 정도가 곧 검정의 무력함이다. $n$을 키우면 두 곡선이 모두 좁아지면서 겹침이 줄고 빨간 영역이 커진다.
 
-</div>
-
 ## 검정력, 표본크기, 효과크기의 관계
 
 | 효과크기 | 필요한 $n$ (이표본, 집단당, 검정력 = 0.80, $\alpha$ = 0.05) |
@@ -152,9 +152,11 @@ Statsmodels는 여러 검정 유형에 대한 검정력 분석 함수를 폭넓�
 
 ### 일표본 t-검정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 일표본 t-검정의 검정력 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 일표본 t-검정의 검정력
+
+</div>
 
 ```python
 from statsmodels.stats.power import TTestPower
@@ -190,13 +192,13 @@ One-sample t-test:
 
 73명이 필요한데 50명만 모으면 검정력이 0.80에서 0.64로 떨어진다. 표본을 32% 줄였을 뿐인데 효과를 놓칠 확률은 20%에서 36%로 거의 두 배가 된다.
 
-</div>
-
 ### 이표본 t-검정 (독립표본)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 이표본 t-검정의 검정력 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 이표본 t-검정의 검정력
+
+</div>
 
 ```python
 from statsmodels.stats.power import TTestIndPower
@@ -248,13 +250,13 @@ Two-sample t-test (2:1 ratio):
 
 배분이 균등에서 멀어질수록 **총** 표본이 늘어난다. 같은 검정력에 1:1은 128명, 1:2는 144명이 든다. 한쪽 집단을 모으기 쉽다고 해서 그쪽만 키우면 전체 비용이 오히려 커질 수 있다. 작은 쪽 집단이 병목이기 때문이다.
 
-</div>
-
 ### 비율에 대한 검정 (A/B 검정)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 비율 검정의 검정력 — A/B 검정 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 비율 검정의 검정력 — A/B 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -298,13 +300,13 @@ A/B Test (Proportions):
 
 집단당 5,488명, 합쳐서 약 11,000명이 필요하다. 전환율이 낮으면 표본이 이렇게 커진다. 1.1%의 기저율에서는 집단당 5,488명이라도 전환이 60건 남짓에 불과하기 때문이다. 웹 실험이 몇 주씩 걸리는 이유가 여기 있다.
 
-</div>
-
 ### 일원분산분석
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 일원분산분석의 검정력 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 일원분산분석의 검정력
+
+</div>
 
 ```python
 from statsmodels.stats.power import FTestAnovaPower
@@ -336,13 +338,13 @@ One-way ANOVA (4 groups):
 
 주의할 점은 Cohen의 $f$와 $d$가 다른 척도라는 것이다. $f = 0.25$는 ANOVA에서 "중간"이지만 $d = 0.5$와 같은 뜻이 아니다. 두 집단만 있을 때 $f = d/2$이므로 $f = 0.25$는 $d = 0.5$에 대응한다. 그런데도 집단당 179명이 필요한 것은 집단이 넷이라 비교해야 할 것이 많아졌기 때문이다.
 
-</div>
-
 ### 검정력 곡선: 표본크기와 검정력의 관계
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 표본크기와 검정력의 곡선 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 표본크기와 검정력의 곡선
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -381,13 +383,13 @@ plt.show()
 
 세 곡선의 간격도 눈여겨보라. $d = 0.8$은 15명이면 되고 $d = 0.5$는 34명, $d = 0.2$는 199명이다. 효과크기가 4분의 1로 줄면 표본은 열세 배가 된다. 작은 효과를 탐지하는 일은 표본이 곧 예산이다.
 
-</div>
-
 ### 검정력 분석의 작업 흐름
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 8. 연구 설계 작업 흐름 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 연구 설계 작업 흐름
+
+</div>
 
 ```python
 def design_study(test_type, effect_size, alpha=0.05, power=0.80,
@@ -454,8 +456,6 @@ total_sample_size............. 128
 ```
 
 이런 표를 연구계획서에 그대로 옮겨 적을 수 있다. 검정력 분석에서 정작 어려운 부분은 계산이 아니라 `effect_size`에 넣을 값을 정하는 일이다. 선행 연구, 예비조사, 또는 "이보다 작으면 실무적으로 의미가 없다"는 기준 중 하나를 근거로 삼아야 하며, 그 근거를 함께 적어 두는 것이 좋다.
-
-</div>
 
 ## 연습문제
 

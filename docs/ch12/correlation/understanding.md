@@ -22,9 +22,11 @@
 
 다음 코드는 양의 상관계수를 점점 키우며 이변량 정규 표본의 산점도를 그려, $\rho$가 커질수록 점구름이 직선 주위로 좁아지는 모습을 보인다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 양의 상관 시각화 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 양의 상관 시각화
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -75,17 +77,17 @@ if __name__ == "__main__":
 
 두 변수가 함께 커진다. 점들이 왼쪽 아래에서 오른쪽 위로 향하는 띠를 이룬다.
 
-</div>
-
 ---
 
 ## 음의 상관 시각화
 
 마찬가지로 음의 상관계수는 아래로 기우는 점구름을 만든다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 음의 상관 시각화 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 음의 상관 시각화
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -124,17 +126,17 @@ if __name__ == "__main__":
 
 한 변수가 커지면 다른 변수가 작아진다. 띠의 방향만 반대일 뿐 구조는 같다.
 
-</div>
-
 ---
 
 ## 전체 스펙트럼: 강한 음에서 강한 양까지
 
 모든 상관값을 한 행에 놓으면 전체 연속체가 드러난다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 강한 음에서 강한 양까지 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 강한 음에서 강한 양까지
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -175,8 +177,6 @@ if __name__ == "__main__":
 $r$이 $-1$에서 $+1$로 갈수록 구름이 좁은 타원으로 조여든다. $r = 0$ 근처에서는 방향을 알아볼 수 없는 둥근 구름이고, $|r|$이 커질수록 직선에 가까워진다.
 
 $r$의 부호는 기울기의 방향을, 크기는 흩어짐의 정도를 나타낸다는 것이 이 그림 하나에 담겨 있다.
-
-</div>
 
 ---
 
@@ -242,9 +242,11 @@ $$
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 키와 몸무게 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 키와 몸무게
+
+</div>
 
 실제 자료에서 볼 수 있는 고전적인 양의 상관이다.
 
@@ -434,8 +436,6 @@ if __name__ == "__main__":
 ![회귀직선을 포함한 산점도](./img/understanding_361.png)
 
 회귀직선을 얹으면 상관의 방향과 강도를 눈으로 가늠하기 쉬워진다. 다만 직선의 **기울기**는 상관계수가 아니다. 기울기는 두 변수의 단위와 산포에 의존하고, 상관계수는 그것을 표준화해 없앤 값이다.
-
-</div>
 
 ## 상관의 중요성
 

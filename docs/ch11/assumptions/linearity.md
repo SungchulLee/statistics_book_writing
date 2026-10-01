@@ -14,9 +14,11 @@ $$
 
 ## 설정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -63,17 +65,17 @@ covariate 계수 = 0.3275
 
 공변량을 더한 만큼 집단평균이 위로 올라갔고 산포도 커졌다. 공변량의 계수 추정값 0.3275는 참값 0.4를 향하지만 관측값 60개로는 이 정도 오차가 남는다.
 
-</div>
-
 ## 확인 방법
 
 ### 산점도
 
 (공분산분석처럼) 연속형 공변량이 있으면 종속변수를 각 공변량에 대해 집단별 색으로 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 집단별 산점도 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 집단별 산점도
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -98,15 +100,15 @@ plt.show()
 - 각 집단 안의 **선형 추세**는 선형성 가정을 확인해 준다.
 - **휘어진 패턴**은 다항 항이나 다른 모형이 필요할 수 있는 비선형 관계를 시사한다.
 
-</div>
-
 ### 잔차 그림
 
 잔차를 독립변수(또는 적합값)에 대해 그린 그림에는 체계적인 패턴이 없어야 한다. 0 주위의 무작위한 흩어짐이 선형성을 확인해 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 잔차 대 적합값 그림 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 잔차 대 적합값 그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -129,8 +131,6 @@ plt.show()
 - **무작위한 흩어짐:** 선형성이 만족된다.
 - **곡률:** 휘어진 패턴은 다항 항이나 비선형 모형이 필요함을 시사한다.
 - **뚜렷한 군집:** 추가적인 집단 변수가 필요함을 나타낼 수 있다.
-
-</div>
 
 ## 선형성이 어긋날 때
 

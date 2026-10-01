@@ -48,9 +48,11 @@ $H_{(1)}, \ldots, H_{(k)}$를 모두 기각한다. 독립일 때 이 절차는 F
 
 ### FWER 증가 곡선
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 검정 수에 따른 FWER { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 검정 수에 따른 FWER
+
+</div>
 
 ```python
 import numpy as np
@@ -75,8 +77,6 @@ alpha=0.001, m=100: FWER=0.0952
 
 검정 100개를 $\alpha = 0.05$로 하면 거짓 양성이 하나도 없을 확률이 0.6%에 불과하다. $\alpha$를 0.001까지 낮춰야 FWER이 10% 아래로 내려온다. 이것이 Bonferroni가 하는 일이고, 동시에 Bonferroni가 검정력을 잃는 이유이기도 하다.
 
-</div>
-
 ### 네 방법을 같은 자료에 적용하면
 
 아래 모의실험을 돌리기 전에 결과가 어떤 모습인지 먼저 보자. 가설 100개 중 20개에 실제 효과가 있는 자료를 3천 번 만들어 네 방법을 모두 적용했다.
@@ -91,9 +91,11 @@ alpha=0.001, m=100: FWER=0.0952
 
 ### 보정을 적용한 다중검정 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 보정을 적용한 다중검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 보정을 적용한 다중검정
+
+</div>
 
 ```python
 from scipy import stats
@@ -148,13 +150,13 @@ BH가 참 신호 200개 중 133개를 찾아내는 동안 Bonferroni는 28개만
 
 Holm이 Bonferroni와 결과가 같다는 점도 눈에 띈다. Holm은 이론적으로 언제나 Bonferroni 이상으로 강력하지만, 신호가 아주 강한 몇 개뿐일 때는 실질적인 차이가 나타나지 않는다.
 
-</div>
-
 ### 재표본추출 기반 FDR 추정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 재표본으로 FDR 추정하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 재표본으로 FDR 추정하기
+
+</div>
 
 ```python
 def resampling_fdr(X_group1, X_group2, n_permutations=500):
@@ -193,8 +195,6 @@ def resampling_fdr(X_group1, X_group2, n_permutations=500):
 t-분포도 정규성 가정도 쓰지 않는다는 것이 이 방법의 요점이다. 귀무분포를 자료 자체에서 만들어 내므로, 검정통계량의 분포를 모르거나 특징이 서로 상관되어 있을 때도 쓸 수 있다.
 
 이 알고리즘은 각 문턱을 넘는 순열 검정통계량의 개수를 세어 관측된 기각 수로 나누며, 가능한 모든 절단값에서 FDR 추정값을 준다.
-
-</div>
 
 ## 해석
 

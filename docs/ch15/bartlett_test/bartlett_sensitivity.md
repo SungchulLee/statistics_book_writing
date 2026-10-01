@@ -22,9 +22,11 @@ $$
 
 올바르게 보정되어 있다면 모든 검정이 약 5%로 기각해야 한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 치우친 자료에서의 거짓 양성률 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 치우친 자료에서의 거짓 양성률
+
+</div>
 
 ```python
 import numpy as np
@@ -84,8 +86,6 @@ False-positive rates under skewed (lognormal) data:
   Levene (mean)  : 0.2470
   Fligner-Killeen: 0.1028
 ```
-
-</div>
 
 ## 해석
 

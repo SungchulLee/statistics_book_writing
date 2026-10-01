@@ -21,9 +21,11 @@ $$
 
 다음 함수가 원자료에서 카플란-마이어 생존곡선을 계산한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 카플란-마이어 추정 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 카플란-마이어 추정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -69,8 +71,6 @@ def kaplan_meier(times, censored):
 
     return np.array(t_list), np.array(s_list)
 ```
-
-</div>
 
 !!! warning "이 코드의 `censored`는 $\delta$와 부호가 반대다"
     이 페이지의 코드는 `censored == 1`이 절단, `censored == 0`이 사건을 뜻한다. 이 장의 본문
@@ -130,9 +130,11 @@ $$
 
 이며 $O_1 = \sum d_{1j}$, $E_1 = \sum e_{1j}$, $V_1 = \sum v_j$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 로그순위 검정 구현 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로그순위 검정 구현
+
+</div>
 
 ```python
 from scipy import stats
@@ -180,15 +182,15 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
 이 구현은 합쳐진 각 사건시간을 순회하며 집단 1의 관측 사건 수, 기대 사건 수, 분산을 누적한 뒤
 카이제곱 통계량을 계산한다.
 
-</div>
-
 ## 모의실험과 시각화
 
 다음 코드는 사건율이 다른 두 집단의 생존자료를 모의로 생성하고 카플란-마이어 곡선을 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 두 집단의 생존곡선 그리기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 두 집단의 생존곡선 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -228,8 +230,6 @@ plt.show()
 
 집단 1은 평균 20인 지수분포에서(사건이 느림), 집단 2는 평균 12에서(사건이 빠름) 뽑았다. 각
 집단의 약 20%가 무작위로 절단되었다.
-
-</div>
 
 !!! note "이 코드의 절단은 사건시간과 독립이 아니다"
     `censored_1 = (np.random.rand(n1) < 0.2)`는 관측된 시간과 **무관하게** 20%를 절단으로

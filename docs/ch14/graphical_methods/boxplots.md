@@ -8,9 +8,11 @@
 
 ## 정규분포의 상자그림
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 정규분포의 상자그림 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포의 상자그림
+
+</div>
 
 ```python
 import numpy as np
@@ -53,13 +55,13 @@ if __name__ == "__main__":
 
 정규분포 자료에서는 상자그림이 대칭이다. 중앙값 선이 상자 가운데에 놓이고 수염이 양쪽으로 거의 같게 뻗는다.
 
-</div>
-
 ## 지수분포의 상자그림
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 지수분포의 상자그림 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포의 상자그림
+
+</div>
 
 ```python
 import numpy as np
@@ -98,13 +100,13 @@ if __name__ == "__main__":
 
 지수 자료에서는 상자그림이 뚜렷하게 비대칭이다. 오른쪽 수염이 왼쪽보다 훨씬 길게 뻗고 오른쪽에 이상점이 여럿 나타나 강한 양의 치우침을 나타낸다.
 
-</div>
-
 ## 카이제곱분포의 상자그림
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 카이제곱분포의 상자그림 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 카이제곱분포의 상자그림
+
+</div>
 
 ```python
 import numpy as np
@@ -142,8 +144,6 @@ if __name__ == "__main__":
 ![카이제곱 자료의 가로 상자그림](./img/boxplots_83.png)
 
 자유도 10인 카이제곱 자료는 상자그림에서 중간 정도의 오른쪽 치우침을 보인다. 중앙값이 상자 안에서 왼쪽으로 치우쳐 있고 오른쪽 수염이 왼쪽보다 길다.
-
-</div>
 
 ## 시각적 방법의 한계
 

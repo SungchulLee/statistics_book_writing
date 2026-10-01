@@ -50,7 +50,7 @@ $n$개의 i.i.d. 관측값에서 전체 Fisher 정보량은 $I_n(\theta) = nI(\t
 
     MLE는 점근적으로 효율적이며 그 분산이 CRLB를 달성한다.
 
-## 해석적 예제
+## 해석적 보기
 
 ### 정규분포의 평균
 
@@ -107,9 +107,11 @@ Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법�
 1. **점수 분산법**: $f(x; \theta)$에서 $X_1, \ldots, X_N$을 표본추출하고 각 점에서 점수를 계산한 뒤 $I(\theta) \approx \text{Var}(\{S_i\})$로 추정한다.
 2. **유한차분법**: 점수를 $S(\theta) \approx [\log f(X; \theta + \delta) - \log f(X; \theta - \delta)]/(2\delta)$로 근사한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 피셔 정보량을 수치로 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 피셔 정보량을 수치로 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -162,8 +164,6 @@ Normal mean Fisher information:
   Theoretical: I(mu) = 0.250000
 ```
 
-</div>
-
 ![점수의 분산이 곧 정보량이다](./img/score_variance_information.png)
 
 왼쪽이 위 코드가 계산한 점수값들의 분포다. 두 가지가 눈에 띈다. **중심이 0**이고($E[s] = 0$은 정칙 조건 아래에서 언제나 성립한다), 그 **퍼짐이 곧 정보량**이다. 평균이 0이므로 분산과 2차 적률이 같아져 `np.var(score)` 한 줄로 $I(\theta)$가 나온다.
@@ -176,9 +176,11 @@ Normal mean Fisher information:
 
 정규분포의 평균에 대해 표본평균이 CRLB를 달성하는지 확인할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 표본평균이 하한에 도달함을 확인하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 표본평균이 하한에 도달함을 확인하기
+
+</div>
 
 ```python
 import numpy as np
@@ -215,8 +217,6 @@ Ratio            = 0.9847
 Var(median) = 0.121813
 Efficiency of median = 0.6567
 ```
-
-</div>
 
 !!! note "중앙값의 효율"
     정규분포에서 평균 대비 중앙값의 점근 상대효율은 $2/\pi \approx 0.637$이다. 중앙값은 자료가 담은 정보의 약 64%만 사용한다.

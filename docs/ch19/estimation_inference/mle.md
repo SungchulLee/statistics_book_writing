@@ -146,9 +146,11 @@ IRLS는 보통 적은 반복으로 수렴하며, 많은 고전적 로지스틱 �
 
 ### 자료 적재
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료 읽기
+
+</div>
 
 ```python
 import pandas as pd
@@ -170,13 +172,13 @@ def load_data(seed=1):
     return x_train, x_test, y_train, y_test
 ```
 
-</div>
-
 ### 모형 클래스
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 로지스틱 회귀 직접 구현 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로지스틱 회귀 직접 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -243,13 +245,13 @@ class LogisticRegression:
             self.theta -= self.lr * self.gradient()
 ```
 
-</div>
-
 ### 학습
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 직접 구현으로 적합하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 직접 구현으로 적합하기
+
+</div>
 
 ```python
 # 직접 구현한 모형으로 적합한다. 학습률이 작고 반복이 10만 번이라 시간이 걸린다.
@@ -262,15 +264,15 @@ y_pred = model.predict(x_test)
 y_prob = model.predict_proba(x_test)
 ```
 
-</div>
-
 ## 구현: scikit-learn으로 하는 로지스틱 회귀
 
 비교를 위해 같은 작업을 `sklearn`으로 하면 다음과 같다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. sklearn 으로 같은 일 하기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> sklearn 으로 같은 일 하기
+
+</div>
 
 ```python
 # 같은 일을 sklearn 으로 하면 세 줄이면 된다. lbfgs 는 기울기뿐 아니라
@@ -287,8 +289,6 @@ y_prob = model.predict_proba(x_test)[:, 1]
 scikit-learn의 `LogisticRegression`은 기본적으로 L-BFGS(준뉴턴법)를 쓰는데, 헤세행렬을 명시적으로
 만들거나 역행렬을 구하지 않고 근사한다. 자료가 작을 때는 `solver='newton-cg'` 옵션이 정확한
 뉴턴 단계를 밟으며, 이는 IRLS와 동등하다.
-
-</div>
 
 ## 연습문제
 

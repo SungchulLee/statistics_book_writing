@@ -111,9 +111,11 @@ $$
 
     $\chi^2_{0.95, 1} = 3.841$과 비교하면 $3.252 < 3.841$이므로 기각하지 못한다($p = 0.0714$).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Fligner-Killeen 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Fligner-Killeen 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -151,8 +153,6 @@ Bartlett:        9.1010, p = 0.0026
 세 검정의 $p$값이 로버스트성의 순서와 정확히 반대이다. Bartlett($0.0026$) < Brown-Forsythe($0.0531$) < Fligner-Killeen($0.0714$). 로버스트할수록 이 자료에서 보수적이다.
 
 표본분산의 비가 $84.5/1.7 = 50$배인데도 로버스트 검정들이 기각하지 못한다는 점에 주목하라. 집단 2의 산포가 대부분 극단값 두 개(8과 30)에서 오는데, 순위·중앙값 기반 검정은 그것을 "관측값 두 개가 멀다"로만 셀 뿐 "50배 멀다"로 세지 않기 때문이다. 각 집단 $n = 5$로는 관측값 두 개의 정보가 유의성에 도달하지 못한다.
-
-</div>
 
 ## 강점과 한계
 
@@ -286,7 +286,7 @@ Fligner-Killeen 검정은 오염이 심하다고 의심되거나 자료의 정�
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-본문 예제에서 표본분산 비가 50배인데도 Fligner-Killeen이 기각하지 못했다. 이것이 이 검정의 결함인지, 아니면 올바른 동작인지 논하라.
+본문 보기에서 표본분산 비가 50배인데도 Fligner-Killeen이 기각하지 못했다. 이것이 이 검정의 결함인지, 아니면 올바른 동작인지 논하라.
 
 </div>
 

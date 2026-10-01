@@ -14,9 +14,11 @@ $$E[\bar{X}] = \mu$$
 
 다음 모의실험은 100,000번의 반복에서 $\bar{X}$를 계산하고 그 평균이 참 평균에 가까운지 확인하여 여섯 가지 분포에서 이를 검증한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 분포를 바꿔 가며 확인하는 불편성 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분포를 바꿔 가며 확인하는 불편성
+
+</div>
 
 ```python
 import numpy as np
@@ -59,8 +61,6 @@ Bernoulli(0.4)         True μ=0.4000  E[X̄]=0.4009  Bias=0.000895
 Chi²(df=5)             True μ=5.0000  E[X̄]=5.0006  Bias=0.000617
 ```
 
-</div>
-
 !!! tip "핵심"
     모든 편향이 (몬테카를로 잡음 범위 안에서) 무시할 만큼 작아, 시험한 모든 분포에서 $E[\bar{X}] = \mu$임이 확인된다.
 
@@ -74,9 +74,11 @@ $\bar{X}$가 불편이므로 평균제곱오차는 분산과 같다:
 
 $$\text{MSE}(\bar{X}) = \text{Bias}^2 + \text{Var}(\bar{X}) = 0 + \frac{\sigma^2}{n} = \frac{\sigma^2}{n}$$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 분산과 평균제곱오차 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분산과 평균제곱오차
+
+</div>
 
 ```python
 def verify_variance_and_mse(mu=10.0, sigma=3.0, n_sim=100_000, seed=42):
@@ -116,8 +118,6 @@ n= 100  Var(X̄)=0.090037  σ²/n=0.090000  MSE=0.090038  SE=0.300062  σ/√n=0
 n= 500  Var(X̄)=0.018063  σ²/n=0.018000  MSE=0.018063  SE=0.134397  σ/√n=0.134164
 ```
 
-</div>
-
 ## 효율 비교
 
 표본평균은 정규 자료에서 가장 효율적인 위치추정량이지만 꼬리가 두꺼운 분포에서는 그렇지 않다. $\bar{X}$ 대비 추정량 $T$의 **상대효율**은:
@@ -126,9 +126,11 @@ $$\text{RE}(T, \bar{X}) = \frac{\text{MSE}(\bar{X})}{\text{MSE}(T)}$$
 
 $\text{RE} > 1$이면 대안 $T$가 *더* 효율적이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 모집단에 따라 뒤바뀌는 효율 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 모집단에 따라 뒤바뀌는 효율
+
+</div>
 
 ```python
 from scipy import stats
@@ -196,8 +198,6 @@ Contaminated Normal:
   Trim20%      MSE=0.049119  Rel.Eff.=7.4065
 ```
 
-</div>
-
 !!! note "평균이 지는 경우"
     $t(3)$이나 오염된 정규처럼 꼬리가 두꺼운 분포에서는 절사평균과 중앙값이 표본평균보다 평균제곱오차가 작다. 이상점에 민감한 평균은 이런 상황에서 비효율적이다.
 
@@ -209,9 +209,11 @@ $$w_i = \frac{1/\sigma_i^2}{\sum_{j=1}^k 1/\sigma_j^2}, \qquad \bar{X}_w = \sum_
 
 이 가중치는 기댓값이 참 평균이 되는 모든 가중평균 중에서 $\text{Var}(\bar{X}_w)$를 최소화한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 역분산 가중평균 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 역분산 가중평균
+
+</div>
 
 ```python
 def weighted_mean_demo(mu=5.0, n_sim=50_000, seed=42):
@@ -253,15 +255,15 @@ IV-Weighted: Var=0.190153  MSE=0.190153
 Variance reduction: 96.3%
 ```
 
-</div>
-
 ## 표준오차의 수렴 속도
 
 로그-로그 그래프에서 표준오차 $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$은 기울기 $-1/2$인 직선으로 나타나며, $O(1/\sqrt{n})$ 수렴 속도를 확인해 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 표준오차의 수렴 속도 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 표준오차의 수렴 속도
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -296,8 +298,6 @@ convergence_rate_plot()
 ```
 
 ![Convergence Rate of Sample Mean](./img/sample_mean_properties_151.png)
-
-</div>
 
 ## 해석
 

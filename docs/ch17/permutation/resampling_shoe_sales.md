@@ -26,9 +26,11 @@ $$
 
 이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 판매량 자료 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 판매량 자료
+
+</div>
 
 ```python
 import numpy as np
@@ -50,8 +52,6 @@ Before mean: 23.75
 After  mean: 26.00
 Difference:  2.25
 ```
-
-</div>
 
 !!! warning "이 자료는 사실 대응자료이다"
     같은 $12$주를 전후로 측정했으므로 주별로 짝지어져 있다. 아래의 비대응 순열검정은 이 구조를 무시한다.
@@ -77,9 +77,11 @@ $$
 
 최적화가 판매를 늘릴 것으로(줄이는 것이 아니라) 기대하므로 단측검정이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 순열검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 순열검정
+
+</div>
 
 ```python
 def permutation_test(before, after, n_perm=199_999, rng=None):
@@ -106,8 +108,6 @@ def permutation_test(before, after, n_perm=199_999, rng=None):
 | Welch $t$ 검정(양측) | 0.293 |
 
 **기각하지 못한다.** $2.25$켤레의 증가는 우연으로 충분히 설명된다. 이 자료의 주간 변동이 크기 때문이다(표준편차 $5.56$과 $4.61$).
-
-</div>
 
 위 경고에서 말한 대로 이 자료는 대응자료이다. 짝을 무시한 대가가 얼마인지 그림으로 확인해 보자.
 
@@ -155,9 +155,11 @@ $$
 \text{CI}_{1-\alpha} = \left[q_{\alpha/2},\;\; q_{1-\alpha/2}\right]
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 붓스트랩 신뢰구간 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 붓스트랩 신뢰구간
+
+</div>
 
 ```python
 def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
@@ -180,8 +182,6 @@ def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
 | 95% | $[-1.83,\ 5.92]$ | 7.75 |
 
 붓스트랩 표준오차는 $1.994$이다. **두 구간 모두 $0$을 포함한다.** 순열검정이 기각하지 못한 것과 일관된다.
-
-</div>
 
 ---
 

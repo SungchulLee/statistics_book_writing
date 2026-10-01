@@ -45,9 +45,11 @@ $$\begin{array}{lll}
 
 #### statsmodels로 구현하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 1. 모형이 잘 맞을 때의 잔차 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모형이 잘 맞을 때의 잔차
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -92,8 +94,6 @@ plt.show()
 
 0을 중심으로 고르게 흩어진 띠. 이것이 기준선이며, 아래 그림들과 비교해 읽는다.
 
-</div>
-
 #### 그림 해석
 
 1. **무작위 흩어짐**: 잔차가 0 주위에 무작위로 흩어져 있으면 선형성 가정이 성립함을 시사한다.
@@ -104,9 +104,11 @@ plt.show()
 
 자료가 실제로 선형이고 선형모형을 적합하면 잔차가 일정한 분산으로 무작위로 흩어진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 회귀·잔차 그림 함수 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 회귀·잔차 그림 함수
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -159,15 +161,15 @@ plot_regression_and_residuals(x, y, y_pred)
 
 오른쪽으로 갈수록 퍼지는 깔때기 모양이다.
 
-</div>
-
 ### 나쁜 경우: 다항 자료에 선형모형
 
 자료가 다항 관계를 갖는데 선형모형만 적합하면 잔차에 뚜렷한 곡선 패턴이 나타난다. 선형성이 위배되었다는 신호이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 이차 자료를 직선으로 맞추면 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이차 자료를 직선으로 맞추면
+
+</div>
 
 ```python
 def generate_data(n=50, noise_level=3.0, d=1, seed=0):
@@ -190,15 +192,15 @@ plot_regression_and_residuals(x, y, y_pred)
 
 잔차가 U자를 그린다. 모형이 선형인데 자료가 곡선이면 이런 패턴이 나온다.
 
-</div>
-
 #### 선형 대 이차 잔차 비교
 
 모형 오설정을 더 잘 진단하려면 경쟁 모형들의 잔차를 직접 비교하는 것이 유용하다. 이차 관계를 따르는 자료를 생각하자.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 4. 평활선으로 본 굽은 잔차 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 평활선으로 본 굽은 잔차
+
+</div>
 
 ```python
 import numpy as np
@@ -286,15 +288,15 @@ $R^2 = 0.083$이라는 값 자체보다, **잔차 그림이 그 원인을 알려
 
 **핵심 통찰**: 잔차를 지나는 LOWESS(국소가중 산점도 평활) 평활곡선이 위배 패턴을 뚜렷이 드러낸다. 선형모형에서는 이 곡선이 0 아래로 내려갔다가 위로 올라가며, 체계적인 과소예측과 과대예측이 일어나고 있음을 나타낸다. 이차 모형의 잔차는 무작위로 흩어져 비선형성의 형태가 제대로 포착되었음을 보여준다. $R^2$가 0.083에서 0.953으로 뛰고 잔차제곱합이 1530.56에서 77.72로 20분의 1 수준이 되는 것이 그 차이를 수치로 보여준다.
 
-</div>
-
 ### 해결: 다항회귀
 
 참 자료생성과정에 맞추어 다항 특성을 추가하면 잔차의 패턴이 해소된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 다항회귀로 고치기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 다항회귀로 고치기
+
+</div>
 
 ```python
 def perform_regression(x, y, d=1):
@@ -318,8 +320,6 @@ plot_regression_and_residuals(x, y, y_pred)
 
 표준편차 단위로 바꾸면 $\pm 2$, $\pm 3$ 기준선과 곧바로 비교할 수 있다.
 
-</div>
-
 !!! tip "참고"
     [Transforming nonlinear data (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/transforming-nonlinear-data)
 
@@ -327,9 +327,11 @@ plot_regression_and_residuals(x, y, y_pred)
 
 척도-위치 그림은 표준화 잔차 절댓값의 제곱근을 적합값에 대해 그려 **등분산성**을 확인한다. 그림 전체에 걸쳐 폭이 일정하면 상수분산을 뒷받침한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 척도-위치 그림까지 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 척도-위치 그림까지
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -383,8 +385,6 @@ plt.show()
 ![잔차 진단 종합](./img/residuals_270.png)
 
 네 그림을 함께 보면 어느 가정이 어디서 깨지는지 한눈에 들어온다.
-
-</div>
 
 ### 왜 제곱근을 쓰는가
 

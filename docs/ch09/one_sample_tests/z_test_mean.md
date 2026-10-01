@@ -77,13 +77,13 @@ $p$-값은 $H_0$이 참이라는 가정 아래 관측값 $z_{\text{obs}}$만큼 
 
 | 대립가설 | p-값 공식 |
 |---|---|
-| $H_1\colon \mu \neq \mu_0$ | $p = 2\,P(Z > \|z_{\text{obs}}\|) = 2\bigl[1 - \mathcal{N}(\|z_{\text{obs}}\|)\bigr]$ |
+| $H_1\colon \mu \neq \mu_0$ | $p = 2\,P(Z > \lvert z_{\text{obs}}\rvert) = 2\bigl[1 - \mathcal{N}(\lvert z_{\text{obs}}\rvert)\bigr]$ |
 | $H_1\colon \mu > \mu_0$ | $p = P(Z > z_{\text{obs}}) = 1 - \mathcal{N}(z_{\text{obs}})$ |
 | $H_1\colon \mu < \mu_0$ | $p = P(Z < z_{\text{obs}}) = \mathcal{N}(z_{\text{obs}})$ |
 
 $p < \alpha$이면 $H_0$을 기각한다.
 
-## 풀이 예제
+## 풀이 보기
 
 한 배터리 제조사의 생산라인은 (수년간의 품질관리 자료에서 확립된) 충전 중량의 표준편차가 $\sigma = 3$ 그램으로 알려져 있다. 목표 평균 중량은 $\mu_0 = 50$ 그램이다. 검사자가 배터리 $n = 36$개를 무작위로 뽑아 $\bar{x} = 49.1$ 그램을 얻었다. $\alpha = 0.05$에서 평균 중량이 50 그램과 다른지 검정하라.
 

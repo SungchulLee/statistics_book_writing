@@ -51,9 +51,11 @@ $$
 
 ### 직접 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. McNemar 검정 직접 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> McNemar 검정 직접 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -89,13 +91,13 @@ def mcnemar_test(table):
     return chi2, p_value
 ```
 
-</div>
-
 ### 검정 실행
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 치료 전후 자료로 검정하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 치료 전후 자료로 검정하기
+
+</div>
 
 ```python
 # 치료 전후의 질병 상태. 같은 사람을 두 번 관찰한 대응자료다.
@@ -124,19 +126,17 @@ p-value      = 5.4501e-06
 Reject H0: significant change after treatment (alpha = 0.05).
 ```
 
-**이 예제의 주요 값:**
+**이 보기의 주요 값:**
 
 - 불일치 쌍의 도수: $b = 121$, $c = 59$.
 - 통계량은 양성에서 음성으로 바뀐 121명이 음성에서 양성으로 바뀐 59명과 유의하게 다른지를 검정한다.
 - $\chi^2 = (|121-59| - 1)^2 / 180 = 61^2/180 \approx 20.67$이고 p-값은 약 $5.4 \times 10^{-6}$이다.
 
-</div>
-
 ## 해석
 
 McNemar 검정에서는 불일치 쌍만이 의미를 갖는다. 일치 쌍($a$와 $d$)은 변화의 차이에 대해 아무 정보도 주지 않는다.
 
-질병 예제에서:
+질병 보기에서:
 
 - $b = 121$명이 호전되었다(양성 → 음성).
 - $c = 59$명이 악화되었다(음성 → 양성).
@@ -234,7 +234,7 @@ $b + c$가 작을 때(가령 25 미만) McNemar 검정의 카이제곱 근사가
     ```python
     from scipy import stats
 
-    b, c = 121, 59            # 위 예제의 불일치 쌍
+    b, c = 121, 59            # 위 보기의 불일치 쌍
     n_discordant = b + c
     p_exact = stats.binomtest(b, n_discordant, 0.5).pvalue
     print(f"exact p = {p_exact:.4e}")

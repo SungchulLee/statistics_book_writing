@@ -33,9 +33,11 @@
 
     분자·분모의 $+1$은 관측된 배열 자신을 세는 것이다. 이것이 검정의 크기를 $\alpha$ 이하로 보장한다([기초](foundations.md) 연습문제 2 참조).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 웹페이지 A/B 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 웹페이지 A/B 검정
+
+</div>
 
 #### 자료
 
@@ -144,11 +146,11 @@ plt.show()
 
 ![이표본 순열검정의 귀무분포](./img/two_sample_103.png)
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> A/B 전환율 검정
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. A/B 전환율 검정 { .eg }
 
 이진 결과(전환 = 1, 비전환 = 0)에서도 순열검정은 똑같이 작동한다.
 
@@ -195,8 +197,6 @@ A/B test p-value: 0.6785
 !!! tip "이진 자료에서는 재표집이 필요 없다"
     이 상황의 순열분포는 **초기하분포**로 정확히 알려져 있다. 즉 이 순열검정은 Fisher 정확검정과 같은 것이며, `stats.fisher_exact`가 근사 없이 $p = 0.6811$을 곧바로 준다. 자세한 계산은 [기초](foundations.md) 연습문제 4에 있다.
 
-</div>
-
 ## 모수적 검정과의 비교
 
 ### 이표본 순열검정 대 t 검정
@@ -219,9 +219,11 @@ A/B test p-value: 0.6785
 
 ### 결과 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 순열검정과 t 검정 견주기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 순열검정과 t 검정 견주기
+
+</div>
 
 ```python
 from scipy import stats
@@ -240,8 +242,6 @@ print(f"Permutation test p-value: {p_val:.4f}")
 Welch's t-test p-value: 0.3204
 Permutation test p-value: 0.3307
 ```
-
-</div>
 
 ## 장점
 

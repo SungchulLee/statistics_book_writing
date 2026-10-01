@@ -12,9 +12,11 @@ $$
 P(p \leq t \mid H_0) = t \quad \text{for } t \in [0,1].
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 표본을 몰래 늘려 가며 보기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표본을 몰래 늘려 가며 보기
+
+</div>
 
 ```python
 import numpy as np
@@ -47,8 +49,6 @@ False positive rate: 0.0508  (expected: 0.05)
 
 p-값의 히스토그램은 사실상 평평하여 $H_0$ 아래의 균등성을 확인해 준다.
 
-</div>
-
 ## 여러 결과변수 중 골라 쓰기
 
 연구자가 독립인 결과변수 $k$개를 검정하고 가장 작은 p-값만 보고하면, $H_0$ 아래에서 "유의한" 결과를 적어도 하나 찾을 확률은
@@ -65,9 +65,11 @@ $$
 
 거짓 양성 비율이 5%에서 64%로 뛴다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 결과변수를 여러 개 재기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 결과변수를 여러 개 재기
+
+</div>
 
 ```python
 n_outcomes = 20
@@ -99,15 +101,15 @@ Cherry-pick rate: 0.6580  (theoretical: 0.6415)
 
 여기서 결정적인 것은 20개를 검정했다는 사실 자체가 아니라 **그중 하나만 보고한다는 점**이다. 20개를 모두 보고하고 보정했다면 문제가 없다.
 
-</div>
-
 ## 임의 중단
 
 또 다른 형태의 p-해킹은 자료를 모으는 동안 반복해서 들여다보다가 $p < 0.05$가 되는 즉시 멈추는 것이다. 각각의 들여다보기가 타당한 검정을 쓰더라도 순차적인 엿보기가 전체 거짓 양성 비율을 부풀린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. p-해킹의 결과 모으기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> p-해킹의 결과 모으기
+
+</div>
 
 ```python
 n_experiments = 1000
@@ -139,13 +141,11 @@ print(f"Optional stopping rate: {stop_rate:.4f}")
 Optional stopping rate: 0.2380
 ```
 
-역시 두 집단이 같은 분포에서 나온 자료인데 24%가 "유의하다"고 나온다. 각각의 검정은 완전히 정당했고 어떤 자료도 버리지 않았다는 점이 이 예제를 불편하게 만든다. 문제는 오직 **언제 멈출지를 자료를 보고 정했다**는 데 있다.
+역시 두 집단이 같은 분포에서 나온 자료인데 24%가 "유의하다"고 나온다. 각각의 검정은 완전히 정당했고 어떤 자료도 버리지 않았다는 점이 이 보기를 불편하게 만든다. 문제는 오직 **언제 멈출지를 자료를 보고 정했다**는 데 있다.
 
 임상시험에서 중간분석을 할 때 알파 소비 함수 같은 형식적 절차를 반드시 쓰는 이유가 이것이다.
 
 (200개까지 10개마다 확인하여) 최대 20번 엿보면 거짓 양성 비율이 20%를 넘을 수 있다.
-
-</div>
 
 ![엿보면서 멈추면](./img/optional_stopping.png)
 

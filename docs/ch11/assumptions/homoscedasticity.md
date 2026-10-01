@@ -10,9 +10,11 @@
 
 ## 설정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -52,8 +54,6 @@ F = 23.7708, p = 0.0000
 
 표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
 
-</div>
-
 ## 확인 방법
 
 ### Levene 검정
@@ -62,9 +62,11 @@ Levene 검정은 모분산이 집단 사이에서 같다는 귀무가설을 평�
 
 집단 중앙값(또는 평균)으로부터의 절대편차를 계산한 뒤 그 편차에 일원배치 분산분석을 수행하는 방식으로 작동한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. Levene 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Levene 검정
+
+</div>
 
 ```python
 from scipy.stats import levene
@@ -91,15 +93,15 @@ $p = 0.67$로 등분산을 기각하지 못한다. 그런데 이 자료는 표�
 
 결과가 유의하면($p < 0.05$) 등분산 가정이 어긋났음을 나타낸다. Levene 검정과 관련된 로버스트 분산 검정의 자세한 내용은 [로버스트 분산 검정](../../ch15/robust_tests/levene.md)을 보라.
 
-</div>
-
 ### Bartlett 검정
 
 Bartlett 검정은 분산의 동질성에 대한 또 다른 검정이다. 자료가 정말로 정규일 때 균일최강력 검정이지만 정규성 이탈에 매우 민감하여 실제 자료에서는 Levene 검정보다 덜 실용적이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. Bartlett 검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Bartlett 검정
+
+</div>
 
 ```python
 from scipy.stats import bartlett
@@ -119,8 +121,6 @@ Bartlett's Test: chi2 = 1.3880, p-value = 0.4996
 Bartlett도 기각하지 못한다. 자료가 정규분포에서 나왔으므로 Bartlett이 Levene보다 유리한 상황인데도 그렇다. 표본크기가 문제다.
 
 Bartlett 검정의 전체 논의는 [Bartlett 검정](../../ch15/bartlett_test/bartlett_test.md)을 보라.
-
-</div>
 
 ### 두 집단의 등분산 F-검정
 
@@ -153,9 +153,11 @@ $$
 
 시각적 진단으로 잔차를 적합값(예측된 집단 평균)에 대해 그린다. 등분산성이 성립하면 모든 적합값에서 잔차의 흩어짐이 대체로 일정해야 한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 잔차 대 적합값 그림 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 잔차 대 적합값 그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -180,8 +182,6 @@ plt.show()
 
 - **깔때기 모양:** 넓어지거나 좁아지는 패턴은 이분산을 나타낸다.
 - **일정한 띠:** 모든 적합값에서 잔차가 0을 중심으로 고르게 흩어져 있으면 등분산성을 확인해 준다.
-
-</div>
 
 ## 등분산성이 어긋날 때
 

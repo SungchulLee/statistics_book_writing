@@ -19,9 +19,11 @@ $$
 
 을 자유도 $\text{df} = k - 1$로 계산한다. 여기서 $k$는 범주의 개수이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. scipy로 적합도 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> scipy로 적합도 검정
+
+</div>
 
 ```python
 from scipy import stats
@@ -59,20 +61,20 @@ p_value = 0.07243975703425146
 | `f_exp` | 기대도수 배열(`f_obs`와 합이 같아야 한다). 생략하면 균등분포를 가정한다. |
 | `ddof` | 자유도 조정. 기본값은 0이며 $\text{df} = k - 1$이 된다. 자료로부터 모수를 추정했다면 그에 맞게 설정한다. |
 
-**이 예제의 출력:**
+**이 보기의 출력:**
 
 - `chi_square_statistic = 5.25`
 - `p_value = 0.07249...`
-
-</div>
 
 ## f_exp를 생략해도 되는 경우
 
 귀무가설이 균등분포를 지정한다면 `f_exp`를 아예 생략해도 된다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 기대도수를 생략하는 경우 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기대도수를 생략하는 경우
+
+</div>
 
 ```python
 statistic, p = stats.chisquare(f_obs=[4, 13, 7])
@@ -87,15 +89,15 @@ statistic = 5.25, p = 0.07243975703425146
 
 SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$은 전체 도수, $k$는 `f_obs`의 길이이다. 앞의 결과와 완전히 같다.
 
-</div>
-
 ## 균등하지 않은 기대 비율
 
 귀무가설이 서로 다른 비율 $p_1, p_2, \ldots, p_k$를 지정하면 기대도수를 $E_i = n \cdot p_i$로 계산하여 명시적으로 넘긴다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 기대 비율이 균등하지 않을 때 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 기대 비율이 균등하지 않을 때
+
+</div>
 
 ```python
 n = 300
@@ -115,11 +117,9 @@ stat = 1.3889, pval = 0.4994
 
 관측 비율이 43.3%, 28.3%, 28.3%로 가설의 40%, 30%, 30%에 가까워 기각하지 못한다($p = 0.50$).
 
-</div>
-
 ## 해석
 
-가위바위보 예제에서 이 함수는 $\chi^2 = 5.25$와 $p \approx 0.0725$를 준다. 유의수준 $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 경기 결과가 균등분포에서 벗어난다는 증거가 충분하지 않다.
+가위바위보 보기에서 이 함수는 $\chi^2 = 5.25$와 $p \approx 0.0725$를 준다. 유의수준 $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 경기 결과가 균등분포에서 벗어난다는 증거가 충분하지 않다.
 
 `scipy.stats.chisquare` 함수는 수동 계산을 얇게 감싼 것이다. 주된 장점은 간결함과 계산 실수의 여지가 줄어든다는 점이다.
 

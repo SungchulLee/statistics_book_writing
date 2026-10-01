@@ -56,9 +56,11 @@ $k = 0$이면 하한을 0으로, $k = n$이면 상한을 1로 두는 관례를 �
 
 ### CSV에서 자료 읽기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. CSV에서 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> CSV에서 자료 읽기
+
+</div>
 
 ```python
 import csv
@@ -101,13 +103,13 @@ print(f"n = {len(y)}, k = {int(y.sum())}, p_hat = {y.mean()}")
 n = 10, k = 3, p_hat = 0.3
 ```
 
-</div>
-
 ### 신뢰구간의 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 비율 신뢰구간 계산기 — 네 방법 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간 계산기 — 네 방법
+
+</div>
 
 ```python
 import math
@@ -172,8 +174,6 @@ print(f"99% Clopper-Pearson CI: ({lo:.4f}, {hi:.4f})")
 ```
 
 두 구간의 신뢰수준이 다르므로 너비를 곧바로 비교할 수는 없다. 같은 95%로 맞추면 Wilson이 $(0.1430, 0.3741)$, Clopper–Pearson이 $(0.1306, 0.3817)$로 후자가 약 9% 넓다. 이것이 "모든 $p$에서 95% 아래로 내려가지 않는다"는 보장의 값이다.
-
-</div>
 
 ![네 방법의 구간 비교와, 최소 포함확률 대 평균 너비의 맞바꿈 그림](./img/four_methods_tradeoff.png)
 

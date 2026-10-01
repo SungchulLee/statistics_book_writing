@@ -218,12 +218,14 @@ $C_{FN} = C_{FP}$라는 특수한 가정에 해당하는 한 점일 뿐임이 �
 
 ## 설정
 
-아래 예제는 모두 같은 자료를 쓴다. 양성(연체) 비율이 약 19%인 자료를 만들고
+아래 보기는 모두 같은 자료를 쓴다. 양성(연체) 비율이 약 19%인 자료를 만들고
 훈련자료로 로지스틱 회귀를 적합해 검정자료의 예측확률 `y_prob`을 얻는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 불균형 자료와 예측확률 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 불균형 자료와 예측확률
+
+</div>
 
 ```python
 import numpy as np
@@ -255,13 +257,13 @@ print(f"예측확률 범위 = [{y_prob.min():.3f}, {y_prob.max():.3f}]")
 예측확률 범위 = [0.002, 0.978]
 ```
 
+### 파이썬 보기
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 문턱값에 따른 측도 변화
+
 </div>
-
-### 파이썬 예제
-
-<div class="codebox" markdown>
-
-#### 예제 2. 문턱값에 따른 측도 변화 { .eg }
 
 ```python
 from sklearn.metrics import (confusion_matrix, precision_score,
@@ -294,13 +296,13 @@ Threshold 0.7: Precision=0.889, Recall=0.088, F1=0.161
 Threshold 0.8: Precision=0.900, Recall=0.050, F1=0.094
 ```
 
-</div>
-
 ### ROC 곡선과 유든의 J
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. Youden의 J로 문턱 고르기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Youden의 J로 문턱 고르기
+
+</div>
 
 ```python
 import numpy as np
@@ -326,8 +328,6 @@ print(f"Optimal threshold (Youden's J): {optimal_threshold:.3f}")
 AUC: 0.8163
 Optimal threshold (Youden's J): 0.176
 ```
-
-</div>
 
 ## 문턱 조율의 주요 성질
 
@@ -356,7 +356,7 @@ $$\hat{y} = \begin{cases} 1 & \text{if } P_{\text{LDA}}(Y=1|\mathbf{x}) \geq 0.5
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-위 대출 예제에서 세 문턱 각각의 F1 점수와 유든의 J를 계산하라. 어느 문턱이 각 기준에서
+위 대출 보기에서 세 문턱 각각의 F1 점수와 유든의 J를 계산하라. 어느 문턱이 각 기준에서
 최적인가?
 
 </div>

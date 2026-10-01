@@ -118,11 +118,13 @@ $B = \operatorname{diag}(\hat p_i(1-\hat p_i))$가 0으로 가고, $(A^TBA)^{-1}
 수십 배) 사건 수가 적거나 분리가 의심되면, 왈드의 큰 p-값은 "효과가 없다"가 아니라 "근사가
 깨졌다"는 신호일 수 있다. 그럴 때는 반드시 LRT나 프로파일 가능도 구간으로 확인해야 한다.
 
-## 파이썬 예제
+## 파이썬 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Wald 검정과 가능도비 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Wald 검정과 가능도비 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -193,8 +195,6 @@ x3            -0.1287      0.103     -1.249      0.212      -0.331       0.073
 Wald z = -1.2493, z^2 = 1.5608, p = 0.2115
 LRT  = 1.5719, p = 0.2099
 ```
-
-</div>
 
 
 ## 연습문제

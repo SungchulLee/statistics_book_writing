@@ -57,9 +57,11 @@ Breusch-Pagan 검정은 잔차의 분산이 모형의 독립변수와 관련되�
 
 **Python 구현:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 회귀에서의 등분산 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 회귀에서의 등분산 검정
+
+</div>
 
 ```python
 import statsmodels.api as sm
@@ -95,8 +97,6 @@ Breusch-Pagan F  = 0.0648, p = 0.8055
 - $p$값이 0.05보다 크면 귀무가설을 기각하지 못하고 잔차가 등분산과 일관된다고 본다.
 
 여기서는 $p = 0.777$로 기각하지 못한다. 다만 $n = 10$으로 매우 작아 검정력이 사실상 없으므로, **"등분산성이 확인되었다"가 아니라 "이 자료로는 판정할 수 없다"**가 옳은 결론이다.
-
-</div>
 
 ### 이분산의 해결책
 
@@ -135,9 +135,11 @@ Levene 검정은 분산분석의 등분산 가정을 확인하는 데 자주 쓰
 
 **Python 구현:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 평균이 달라도 분산이 같으면 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균이 달라도 분산이 같으면
+
+</div>
 
 ```python
 import numpy as np
@@ -167,9 +169,7 @@ Levene's test statistic: 0.0
 P-value: 1.0
 ```
 
-</div>
-
-!!! note "이 예제 자료는 퇴화되어 있다"
+!!! note "이 보기 자료는 퇴화되어 있다"
     세 집단이 모두 등차수열 $\{a, a+2, a+4, a+6, a+8\}$의 형태이므로 **표본분산이 정확히 10으로 동일**하다. 중앙값으로부터의 절대편차도 세 집단 모두 $\{4, 2, 0, 2, 4\}$로 같다.
 
     그래서 Levene 통계량이 **정확히 0**, $p$값이 **정확히 1**이 된다. 검정을 시연하는 자료로는 적절하지 않다. 분산 차이가 있는 자료를 쓰려면 예컨대 `group3 = [26, 31, 36, 41, 46]`처럼 간격을 바꾸면 된다.
@@ -227,9 +227,11 @@ Levene 검정이 이분산을 시사하면 집단 간 등분산을 가정하지 
 
 **Welch 분산분석의 Python 구현:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. Welch 분산분석 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Welch 분산분석
+
+</div>
 
 ```python
 import numpy as np
@@ -269,8 +271,6 @@ Classical ANOVA: F_onewayResult(statistic=91.0, pvalue=3.2507247912312294e-05)
 **해석:**
 
 Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균을 비교하는 F 통계량과 $p$값을 제공한다. $p$값이 0.05보다 작으면 집단평균에 유의한 차이가 있다고 결론짓는다.
-
-</div>
 
 ---
 
@@ -337,7 +337,7 @@ Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균�
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-본문의 Levene 예제 자료가 왜 퇴화되어 있는지 보이고, 분산 차이가 있는 자료로 바꾸어 검정을 다시 수행하라.
+본문의 Levene 보기 자료가 왜 퇴화되어 있는지 보이고, 분산 차이가 있는 자료로 바꾸어 검정을 다시 수행하라.
 
 </div>
 
@@ -393,7 +393,7 @@ Welch 분산분석은 집단 간 등분산을 가정하지 않고 집단평균�
 
     (평균 중심과 중앙값 중심 Levene의 결과가 완전히 같다. 다섯 개 등차수열에서는 평균과 중앙값이 일치하기 때문이다.)
 
-    **교육적 함의.** 예제 자료를 만들 때는 (1) 보이려는 현상이 실제로 존재하는지, (2) 그것을 탐지할 만한 표본크기인지 확인해야 한다. 등차수열처럼 규칙적인 자료는 의도치 않은 퇴화를 낳기 쉽다. $\square$
+    **교육적 함의.** 보기 자료를 만들 때는 (1) 보이려는 현상이 실제로 존재하는지, (2) 그것을 탐지할 만한 표본크기인지 확인해야 한다. 등차수열처럼 규칙적인 자료는 의도치 않은 퇴화를 낳기 쉽다. $\square$
 
 <div class="drillbox" markdown>
 

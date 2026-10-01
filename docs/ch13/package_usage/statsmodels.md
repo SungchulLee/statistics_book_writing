@@ -8,9 +8,11 @@
 
 최소제곱 회귀의 핵심 인터페이스는 `statsmodels.api.OLS`이다. 이 클래스는 사용자가 설명변수 행렬에 상수(절편) 열을 명시적으로 추가할 것을 요구한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. OLS 적합과 출력표 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> OLS 적합과 출력표
+
+</div>
 
 ```python
 import numpy as np
@@ -91,8 +93,6 @@ Notes:
 
 `sm.add_constant(X)` 함수는 설명변수 행렬 앞에 1로 채운 열을 붙인다. 이는 모형 $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \varepsilon$의 절편항 $\beta_0$에 대응한다.
 
-</div>
-
 !!! warning "상수를 빠뜨리면"
     `sm.add_constant()`를 호출하지 않고 `X`를 그대로 넘기면 모형이 원점을 지나는 회귀(절편 없음)를 적합한다. 이는 거의 언제나 원하는 바가 아니다. 절편을 의도적으로 없앨 특별한 이유가 없다면 항상 상수를 추가하라.
 
@@ -153,9 +153,11 @@ p값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지
 
 `statsmodels`의 식 API는 `patsy` 식을 이용해 R과 비슷한 문법을 제공한다. 이 인터페이스는 절편을 자동으로 추가하고 범주형 변수를 알아서 처리한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 수식 API { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 수식 API
+
+</div>
 
 ```python
 import pandas as pd
@@ -210,8 +212,6 @@ Notes:
 
 식 `'y ~ x1 + x2'`는 모형 $y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \varepsilon$을 지정한다. 절편은 기본으로 포함된다. 없애려면 `'y ~ x1 + x2 - 1'`을 쓴다.
 
-</div>
-
 ### 식 문법
 
 | 식 | 모형 |
@@ -230,9 +230,11 @@ Notes:
 
 적합된 `results` 객체는 이후 분석에 필요한 모든 양을 담고 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 결과에서 값 꺼내기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 결과에서 값 꺼내기
+
+</div>
 
 ```python
 # 적합 결과에서 꺼낼 수 있는 것들을 한자리에 모았다.
@@ -280,17 +282,17 @@ BIC: 169.41290695211777
 
 `params`, `bse`, `pvalues`, `conf_int()`로 요약표의 각 열을 배열로 꺼낼 수 있다. 보고서를 자동 생성하거나 여러 모형을 비교할 때 이 접근이 필요하다.
 
-</div>
-
 ---
 
 ## 5. 진단 메서드
 
 `results` 객체는 모형 진단을 위한 메서드를 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 진단 도구들 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 진단 도구들
+
+</div>
 
 ```python
 # 진단 도구가 갖춰져 있다는 점이 statsmodels 를 쓰는 큰 이유다.
@@ -326,8 +328,6 @@ VIF for variable 2: 1.00
 ```
 
 Breusch-Pagan과 Jarque-Bera 모두 기각하지 못하고 VIF도 1.00이다. 자료를 가정에 맞게 만들었으니 당연한 결과이며, 진단 도구가 제대로 작동한다는 확인이기도 하다.
-
-</div>
 
 !!! note "VIF 반복문에서 상수 열은 건너뛴다"
     `X_with_const`의 0번 열은 절편을 위한 상수이다. 여기에 `variance_inflation_factor`를 호출해도 오류는 나지 않지만 그 값에는 아무 의미가 없다. 위 코드처럼 `range(1, ...)`로 시작해 실제 설명변수만 다루어야 한다.

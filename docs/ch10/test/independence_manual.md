@@ -41,9 +41,11 @@ $$
 
 ### 기대도수 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 기대도수 계산 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기대도수 계산
+
+</div>
 
 ```python
 import numpy as np
@@ -81,13 +83,13 @@ print("열합 일치:", np.allclose(E.sum(axis=0), demo.sum(axis=0)))
 
 `keepdims=True` 인자는 2차원 모양을 유지하여 행렬 곱 `row_totals @ col_totals`이 $r \times c$ 기대도수 행렬로 올바르게 계산되도록 한다.
 
-</div>
-
 ### 전체 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 독립성 검정 손계산 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 독립성 검정 손계산
+
+</div>
 
 ```python
 # 행이 한 변수의 수준, 열이 다른 변수의 수준이다.
@@ -115,13 +117,13 @@ p_value = 0.27%
 
 `scipy.stats.chi2_contingency`에 같은 표를 넣어도 같은 값이 나온다. 다만 그 함수는 $2 \times 2$ 표에 한해 Yates 연속성 보정을 기본으로 적용하므로, 이 $3 \times 2$ 표에서만 결과가 일치한다.
 
-</div>
-
 ### 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 검정 결과를 그림으로 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 검정 결과를 그림으로
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -160,8 +162,6 @@ plt.show()
 ![카이제곱 분포와 p-값](./img/independence_manual_78.png)
 
 칠해진 오른쪽 꼬리가 p-값 0.27%다. 자유도 2인 카이제곱분포에서 11.81은 오른쪽으로 한참 벗어난 값이다.
-
-</div>
 
 ## 해석
 

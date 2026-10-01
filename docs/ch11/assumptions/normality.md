@@ -8,9 +8,11 @@
 
 ## 설정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -50,8 +52,6 @@ F = 23.7708, p = 0.0000
 
 표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
 
-</div>
-
 ## 확인 방법
 
 ### Q-Q 그림 (분위수-분위수 그림)
@@ -62,9 +62,11 @@ Q-Q 그림은 관측된 잔차의 분위수를 정규분포의 이론적 분위�
 - 체계적인 **S자** 곡선은 치우침을 시사한다.
 - 양 극단의 몇몇 점이 벗어나는 것은 자연스러운 표집 변동을 반영한 것일 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. Q-Q 그림 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Q-Q 그림
+
+</div>
 
 ```python
 import statsmodels.api as sm
@@ -81,8 +83,6 @@ plt.show()
 
 점들이 기준선을 잘 따른다. 양쪽 꼬리에서 한두 점이 살짝 벗어나지만 $n = 60$에서 이 정도는 표집 변동으로 볼 만하다.
 
-</div>
-
 ### Shapiro-Wilk 검정
 
 Shapiro-Wilk 검정은 자료가 정규분포에서 추출되었다는 귀무가설을 평가한다. 결과가 유의하면($p < 0.05$) 정규성으로부터의 이탈을 시사한다.
@@ -93,9 +93,11 @@ $$
 
 여기서 $x_{(i)}$는 정렬된 표본값이고, $a_i$는 정규분포에서 크기 $n$인 표본의 순서통계량의 평균, 분산, 공분산으로부터 만들어지는 상수이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. Shapiro-Wilk 검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Shapiro-Wilk 검정
+
+</div>
 
 ```python
 from scipy.stats import shapiro
@@ -114,8 +116,6 @@ Shapiro-Wilk Test: W = 0.9870, p-value = 0.7711
 
 $p = 0.77$로 정규성에 반하는 증거가 없다. 자료를 실제로 정규분포에서 만들었으니 당연한 결과이며, 검정이 제대로 작동한다는 확인이기도 하다.
 
-</div>
-
 !!! warning "표본크기에 대한 민감성"
     Shapiro-Wilk 검정은 표본이 크면 지나치게 민감해져 사소한 이탈까지 통계적으로 유의하다고 표시할 수 있다. 반대로 표본이 작으면 의미 있는 이탈을 탐지할 검정력이 부족할 수 있다. 형식적 검정은 언제나 시각적 검토(Q-Q 그림, 히스토그램)와 함께 쓰라.
 
@@ -123,9 +123,11 @@ $p = 0.77$로 정규성에 반하는 증거가 없다. 자료를 실제로 정�
 
 잔차를 히스토그램으로 그리면 분포의 모양을 빠르게 시각적으로 평가할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 잔차의 히스토그램 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 잔차의 히스토그램
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -148,8 +150,6 @@ plt.show()
 - **치우침:** 분포가 0을 중심으로 대칭이 아니다.
 - **두꺼운 꼬리(첨도):** 정규성 아래에서 기대되는 것보다 극단값이 많다.
 - **이봉성:** 봉우리가 둘이면 빠뜨린 집단 변수가 있음을 시사할 수 있다.
-
-</div>
 
 ## 정규성이 어긋날 때
 

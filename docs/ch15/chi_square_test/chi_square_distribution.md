@@ -43,9 +43,11 @@ $$
 
 ### PDF와 CDF
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 카이제곱 분포의 밀도와 분포함수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 카이제곱 분포의 밀도와 분포함수
+
+</div>
 
 ```python
 import numpy as np
@@ -68,15 +70,15 @@ plt.show()
 
 ![자유도 5인 카이제곱 분포의 PDF와 CDF](./img/chi_square_distribution_44.png)
 
-</div>
-
 ### 표집과 정규분포로부터의 구성
 
 다음 코드는 $\chi^2(d)$에서 직접 표집한 결과와 표준정규 제곱 $d$개의 합을 비교하여 정의를 확인한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 정규 제곱합으로 만들어 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규 제곱합으로 만들어 보기
+
+</div>
 
 ```python
 df, seed = 5, 1
@@ -105,8 +107,6 @@ plt.show()
 ```
 
 ![직접 표집과 $Z^2$ 합 구성의 비교](./img/chi_square_distribution_65.png)
-
-</div>
 
 ## 해석
 

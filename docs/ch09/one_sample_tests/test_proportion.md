@@ -36,9 +36,11 @@ $$
 
 **정확한 이항검정:** 정규근사 없이 이항분포 $\text{Bin}(n, p_0)$에서 p-값을 직접 계산한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 일표본 비율 검정 계산기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 비율 검정 계산기
+
+</div>
 
 ```python
 from scipy.stats import norm, binomtest
@@ -70,11 +72,11 @@ def test_prop_one_sample(k, n, p0=0.5, method="score",
     return z, p, (p < alpha), "score z-test"
 ```
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 비율 검정
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 일표본 비율 검정 { .eg }
 
 ```python
 stat, p, reject, label = test_prop_one_sample(
@@ -99,8 +101,6 @@ exact binomial stat: None p: 0.47974220659401984 reject: False
 두 p-값이 0.4795와 0.4797로 거의 같다. $n p_0 = 10$과 $n(1-p_0) = 40$으로 검정에 요구되는 [보수적 기준](../../ch04/discrete_distributions/binomial.md#언제-쓸-수-있는가-5와-10) $\ge 10$을 턱걸이로 만족하기 때문이다.
 
 이 일치를 일반적인 것으로 받아들이면 곤란하다. $k = 2$, $n = 10$, $p_0 = 0.5$처럼 표본이 작고 비율이 극단적인 경우로 바꿔 보면 점수 검정이 0.0578, 정확검정이 0.1094로 두 배 가까이 벌어진다. 5% 기준을 놓고 결론이 갈리는 자리다. 이항분포를 직접 쓸 수 있을 때는 정확검정 쪽이 안전하다.
-
-</div>
 
 ### 해석
 

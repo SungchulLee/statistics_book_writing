@@ -11,9 +11,11 @@
 
 ## 1  자료 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. MNIST 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> MNIST 자료 읽기
+
+</div>
 
 ```python
 import torch
@@ -55,8 +57,6 @@ train 60000, test 10000
 
 ![MNIST 표본 이미지](./img/mnist_14.png)
 
-</div>
-
 ---
 
 ## 2  단일 선형층(소프트맥스 회귀)
@@ -64,9 +64,11 @@ train 60000, test 10000
 가장 단순한 모형이다. 이미지를 펼친 뒤 선형변환 하나를 적용하고 소프트맥스를 씌운다
 (`CrossEntropyLoss`가 소프트맥스를 내부에서 처리한다).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 선형 모형 학습 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 선형 모형 학습
+
+</div>
 
 ```python
 import torch.nn as nn
@@ -137,8 +139,6 @@ Test accuracy: 92.03%
 
 **전형적인 검정 정확도: 약 92%.**
 
-</div>
-
 !!! note "`forward`가 로짓을 반환한다"
     `SimpleMNIST.forward`는 소프트맥스를 적용하지 않고 **로짓**을 그대로 반환한다. 이는
     실수가 아니라 올바른 설계다. `nn.CrossEntropyLoss`는 내부에서 log-softmax와 음의 로그가능도를
@@ -156,9 +156,11 @@ Test accuracy: 92.03%
 같은 이미지 묶음에 대한 예측을 학습 전후로 시각화하면, 모형이 무작위 추측에서 의미 있는 분류로
 옮겨 가는 과정을 볼 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 학습 전후 예측 비교 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 학습 전후 예측 비교
+
+</div>
 
 ```python
 def show_images(images, true_labels, pred_labels, title):
@@ -189,17 +191,17 @@ show_images(fixed_images, fixed_labels, preds, "After Training")
 
 학습 전에는 예측이 사실상 무작위지만, 다섯 세대만 지나도 대부분의 숫자를 맞힌다.
 
-</div>
-
 ---
 
 ## 4  간단한 CNN
 
 합성곱층 두 개를 추가하면 정확도가 크게 개선된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 합성곱 신경망 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 합성곱 신경망
+
+</div>
 
 ```python
 import torch.nn.functional as F
@@ -250,8 +252,6 @@ Epoch 5, Loss: 0.0320
 
 **전형적인 검정 정확도: 약 98--99%.**
 
-</div>
-
 ---
 
 ## 5  PyTorch 소프트맥스 회귀(전체 파이프라인)
@@ -260,9 +260,11 @@ Epoch 5, Loss: 0.0320
 
 ### 모형
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 되쓰기 좋게 만든 모형 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 되쓰기 좋게 만든 모형
+
+</div>
 
 ```python
 class Net(nn.Module):
@@ -276,13 +278,13 @@ class Net(nn.Module):
         return self.layer(torch.flatten(x, 1))
 ```
 
-</div>
-
 ### 학습
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 학습 반복문 함수 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 학습 반복문 함수
+
+</div>
 
 ```python
 def train(model, loader, criterion, optimizer, epochs=2, device='cpu'):
@@ -303,13 +305,13 @@ def train(model, loader, criterion, optimizer, epochs=2, device='cpu'):
                 running_loss = 0.0
 ```
 
-</div>
-
 ### 평가
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 정확도 계산 함수 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 정확도 계산 함수
+
+</div>
 
 ```python
 def compute_accuracy(model, loader, classes, device='cpu'):
@@ -339,13 +341,13 @@ def compute_accuracy(model, loader, classes, device='cpu'):
         print(f'  {c}: {100 * class_correct[c] / class_total[c]:.1f}%')
 ```
 
-</div>
-
 ### 저장과 적재
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 8. 모형 저장과 적재 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 모형 저장과 적재
+
+</div>
 
 ```python
 from pathlib import Path
@@ -369,8 +371,6 @@ print("적재한 모형이 원본과 동일한가:", same)
 ```
 적재한 모형이 원본과 동일한가: True
 ```
-
-</div>
 
 ---
 

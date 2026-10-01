@@ -47,9 +47,11 @@ $$
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 분산비의 붓스트랩 구간 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산비의 붓스트랩 구간
+
+</div>
 
 ```python
 import numpy as np
@@ -89,13 +91,13 @@ def bootstrap_varratio(x1, x2, B=2000, seed=None):
     return float(stat_obs), ci, p_two
 ```
 
-</div>
-
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 붓스트랩 분산 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 분산 검정
+
+</div>
 
 ```python
 x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
@@ -130,8 +132,6 @@ Bootstrap p-value: 0.1892
 $p$값은 **귀무값과 견주어야** 한다. 초록 실선이 $\log 1 = 0$이고, 그 오른쪽 넓이의 두 배가 $p = 0.1892$이다. 반면 빨간 점선인 관측값과 견주면 $p = 0.9860$이 나온다. 관측값이 자기 분포의 한가운데 있으니 당연한 결과이고, **자료가 무엇이든 이 값은 늘 1 근처**다. 분산비가 9배인 자료에서도 이 공식은 기각하지 않는다.
 
 기억할 규칙은 하나다. **붓스트랩 분포가 어디에 중심을 두고 있는지 먼저 확인하라.** 집단 안에서 재표집했다면 중심은 관측값이고, 그 분포는 구간추정에 쓴다. 귀무가설을 강제한 재표집(중심화 후 합치기)이라면 중심은 귀무값이고, 그 분포는 $p$값에 쓴다. 두 용도를 섞으면 여기서 본 것 같은 무의미한 숫자가 나온다.
-
-</div>
 
 ## 해석
 

@@ -9,7 +9,7 @@ $\lambda$를 고르고, OLS 및 능형회귀와 성능을 비교하며, 라쏘�
 
 !!! note "자료 파일"
     아래 코드는 King County 주택 매매 자료(탭 구분 CSV)를 인터넷에서 직접 읽는다.
-    13장의 주택 자료 예제와 같은 파일이므로 별도로 내려받아 둘 필요는 없지만,
+    13장의 주택 자료 보기와 같은 파일이므로 별도로 내려받아 둘 필요는 없지만,
     실행하려면 네트워크 연결이 필요하다.
 
 ## 문제 설정
@@ -25,9 +25,11 @@ $$
 
 ## 코드: 자료 적재와 준비
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 주택 자료와 표준화 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 주택 자료와 표준화
+
+</div>
 
 ```python
 import numpy as np
@@ -61,13 +63,13 @@ X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns)
 $L_1$ 벌점 $\lambda\|\beta\|_1$은 모든 계수를 동등하게 벌하므로 표준화가 필수적이다. 표준화하지
 않으면 단위가 다른 변수들이 서로 다른 정도로 벌을 받게 된다.
 
-</div>
-
 ## 코드: OLS 기준선
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 기준선 — 최소제곱 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기준선 — 최소제곱
+
+</div>
 
 ```python
 # 기준선이 될 최소제곱. 변수를 하나도 버리지 않으므로 계수가 전부 살아 있다.
@@ -83,15 +85,15 @@ n_nonzero_ols = np.sum(np.abs(ols_model.coef_) > 1e-8)
 
 OLS는 모든 특성을 0이 아닌 계수로 유지하며, 정칙화하지 않은 기준선 역할을 한다.
 
-</div>
-
 ## 코드: 정칙화 경로
 
 로그 등간격 $\lambda$ 100개에 대해 라쏘를 적합하고 각 계수의 변화를 추적한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 라쏘 정칙화 경로 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 라쏘 정칙화 경로
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -113,13 +115,13 @@ n_features_selected = (np.abs(lasso_coefs) > 1e-8).sum(axis=1)
 정칙화 경로는 $\lambda$가 작아짐에 따라 특성들이 어떤 순서로 모형에 들어오는지 보여준다. 먼저
 등장하는 특성일수록 강한 예측변수다.
 
-</div>
-
 ## 코드: 교차검증으로 람다 선택
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 교차검증으로 고른 라쏘 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 교차검증으로 고른 라쏘
+
+</div>
 
 ```python
 # LassoCV 가 교차검증으로 alpha 를 스스로 고른다. 격자를 직접 주면
@@ -135,13 +137,13 @@ n_nonzero_lasso = np.sum(np.abs(lasso_cv.coef_) > 1e-8)
 
 5-겹 교차검증 절차가 각 $\lambda$를 평가하여 평균 MSE가 가장 낮은 값을 고른다.
 
-</div>
-
 ## 코드: 모형 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 능형회귀와 견주기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 능형회귀와 견주기
+
+</div>
 
 ```python
 # 같은 자료에 능형회귀를 적용해 견준다. 능형은 계수를 0 으로 만들지
@@ -154,8 +156,6 @@ ridge_pred = ridge_cv.predict(X_scaled)
 ridge_rmse = np.sqrt(mean_squared_error(y, ridge_pred))
 ridge_r2 = r2_score(y, ridge_pred)
 ```
-
-</div>
 
 ## 시각화
 
@@ -376,4 +376,4 @@ $\min \|y - X\beta\|_2^2$ subject to $\|\beta\|_1 \le t$의 제약 경계 $t$ �
 - **어느 변수가 먼저 들어오는지가 정보다.** 경로의 왼쪽에서 일찍 $0$ 을 벗어나는 변수가 반응과 가장 강하게 연관된 것이며, 변수 중요도의 한 읽기다.
 - **실제 자료는 공선성이 많다.** 면적과 방 수처럼 상관된 변수들이 있으면 라쏘의 선택이 불안정해진다.
 
-다음 절 **엘라스틱넷 예제**로 넘어간다.
+다음 절 **엘라스틱넷 보기**로 넘어간다.

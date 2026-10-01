@@ -30,9 +30,11 @@ $$
 | D'Agostino $K^2$ | $K^2 = Z_1^2 + Z_2^2$ (왜도 + 첨도) | $\chi^2_2$ (점근적) |
 | Anderson-Darling | $A^2 = -n - \sum \frac{2i-1}{n}[\ln F_0(X_{(i)}) + \ln(1-F_0(X_{(n+1-i)}))]$ | 표로 정리된 임계값 |
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Q-Q 그림과 검정을 함께 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Q-Q 그림과 검정을 함께
+
+</div>
 
 ```python
 import numpy as np
@@ -87,8 +89,6 @@ Anderson-Darling: A^2 = 0.6894
 ```
 
 ![자료의 Q-Q 그림](./img/qq_plot_basic_35.png)
-
-</div>
 
 ## 해석
 

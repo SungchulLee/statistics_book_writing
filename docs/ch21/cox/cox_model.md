@@ -144,9 +144,11 @@ $$
 
 ## 구현 스케치
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 부분로그가능도 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 부분로그가능도 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -194,8 +196,6 @@ def partial_log_likelihood(beta, X, times, events):
 
 이 구현은 대상을 시간 내림차순으로 정렬하여, 누적합으로 각 사건시간의 부분가능도 분모를
 효율적으로 계산한다.
-
-</div>
 
 !!! warning "이 스케치는 동점을 처리하지 않는다"
     누적합 방식은 시간이 모두 서로 다를 때만 정확하다. 같은 시점에 여러 사건이 있으면 브레슬로나

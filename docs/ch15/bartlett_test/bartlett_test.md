@@ -71,9 +71,11 @@ Bartlett 검정은 정규성 가정의 위반에 로버스트하지 않다. 자�
 
 ### SciPy 이용
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. Bartlett 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Bartlett 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -110,13 +112,13 @@ Fail to reject H0: no significant difference in variances.
 
 세 집단의 표본분산은 $2.839$, $6.000$, $2.839$이다. 최대·최소 비가 $2.1$로 꽤 크지만 각 집단 $n = 8$로는 유의하지 않다.
 
-</div>
-
 ### 직접 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 통계량을 정의대로 구하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 통계량을 정의대로 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -193,8 +195,6 @@ P-value: 0.5202
 
 SciPy 결과와 정확히 일치한다. 보정인자가 $1.0635$로 통계량을 약 6% 줄인다는 점도 확인할 수 있다.
 
-</div>
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -269,7 +269,7 @@ Bartlett 통계량의 분자가 항상 음이 아님을 산술평균-기하평�
     |---|---|---|---|---|
     | $C$ | 1.0635 | 1.0234 | 1.0091 | 1.0022 |
 
-    본문 예제는 $k = 3$, $n = 8$이므로 $C = 1 + \frac{4}{9 \times 7} = 1.0635$이며, 직접 계산 결과와 일치한다.
+    본문 보기는 $k = 3$, $n = 8$이므로 $C = 1 + \frac{4}{9 \times 7} = 1.0635$이며, 직접 계산 결과와 일치한다.
 
     **왜 필요한가.** 보정하지 않은 통계량 $-2\ln\Lambda$는 **점근적으로만** $\chi^2_{k-1}$을 따른다. 유한표본에서는 그 평균이 $k-1$보다 크다. Bartlett은 평균이 정확히 $k-1$이 되도록 $C$로 나누는 보정을 찾아냈다.
 
@@ -280,7 +280,7 @@ Bartlett 통계량의 분자가 항상 음이 아님을 산술평균-기하평�
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-본문 예제의 자료에 Bartlett, Levene, Brown-Forsythe, Fligner-Killeen 검정을 모두 적용하고 결과를 비교하라.
+본문 보기의 자료에 Bartlett, Levene, Brown-Forsythe, Fligner-Killeen 검정을 모두 적용하고 결과를 비교하라.
 
 </div>
 

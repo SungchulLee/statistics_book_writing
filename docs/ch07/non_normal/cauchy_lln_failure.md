@@ -24,9 +24,11 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
 
 누적평균 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$은 정규 자료와 코시 자료에서 놀랄 만큼 다른 거동을 보인다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 코시와 정규의 표본평균 경로 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 코시와 정규의 표본평균 경로
+
+</div>
 
 ```python
 import numpy as np
@@ -84,8 +86,6 @@ plt.show()
 
 ![Cauchy: Sample Mean Trajectories](./img/cauchy_lln_failure_27.png)
 
-</div>
-
 !!! note "수렴과 비수렴"
     정규분포(오른쪽 그림)에서는 $n$이 커지면 20개 궤적이 모두 눈에 띄게 0으로 수렴한다. Cauchy(왼쪽 그림)에서는 궤적이 계속 불규칙하게 떠돈다 — $n$이 커진 뒤에도 이따금 나타나는 극단 관측값이 누적평균을 "초기화"해 버린다.
 
@@ -93,9 +93,11 @@ plt.show()
 
 정규분포에서는 $n$이 커질수록 $\bar{X}_n$의 표본분포가 좁아진다(중심극한정리에 의해 표준편차가 $1/\sqrt{n}$이다). 코시에서는 $\bar{X}_n$의 분포가 전혀 좁아지지 **않는다**.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 표본크기를 키워도 좁아지지 않는 분포 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 표본크기를 키워도 좁아지지 않는 분포
+
+</div>
 
 ```python
 from scipy import stats
@@ -139,8 +141,6 @@ plt.show()
 
 ![코시에서 대수의법칙의 실패](./img/cauchy_lln_failure_80.png)
 
-</div>
-
 !!! warning "코시분포는 집중되지 않는다"
     $n = 10{,}000$에서 정규 표본평균의 분포는 0에 뾰족하게 모여들지만(표준편차 $= 0.01$), 코시 표본평균의 분포는 $n = 100$일 때와 사실상 똑같아 보인다. 코시 자료를 더 많이 평균해도 도움이 되지 않는다.
 
@@ -148,9 +148,11 @@ plt.show()
 
 코시 분위수를 정규 분위수와 비교하는 **Q-Q 그림**은 코시 꼬리가 얼마나 극단적으로 두꺼운지 드러낸다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. Q-Q 그림으로 보는 두꺼운 꼬리 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Q-Q 그림으로 보는 두꺼운 꼬리
+
+</div>
 
 ```python
 # Q-Q 그림은 자료의 분위수를 정규분포의 분위수와 짝지어 찍는다.
@@ -167,8 +169,6 @@ plt.show()
 ![Cauchy vs Normal Q-Q Plot](./img/cauchy_lln_failure_119.png)
 
 특유의 S자(또는 하키스틱) 모양은 코시가 정규분포보다 훨씬 극단적인 값을 만들어낸다는 것을 보여준다.
-
-</div>
 
 ## 평균이 실패하는 이유: 특성함수를 통한 증명
 

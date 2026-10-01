@@ -111,9 +111,11 @@ $$
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 독립인 두 상관의 비교 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 독립인 두 상관의 비교
+
+</div>
 
 ```python
 import numpy as np
@@ -150,8 +152,6 @@ Two-sided p-value = 0.0743
 Fisher의 $z$ 변환이 하는 일도 숫자로 드러난다. $r = 0.65$가 $z = 0.775$로, $r = 0.40$이 $z = 0.424$로 바뀌는데, 이 변환 뒤에야 분산이 $1/(n-3)$으로 $r$에 의존하지 않게 되어 정규근사를 쓸 수 있다.
 
 종속인 상관의 비교에는 `pingouin` 라이브러리의 `pingouin.corr`가 겹치는 상관 비교 옵션을 제공하고, R의 `cocor` 패키지가 다양한 비교 검정을 제공한다.
-
-</div>
 
 ---
 

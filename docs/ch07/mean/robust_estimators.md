@@ -14,9 +14,11 @@ $$\bar{X}_\alpha = \frac{1}{n - 2k}\sum_{i=k+1}^{n-k} X_{(i)}$$
 
 여기서 $k = \lfloor n\alpha \rfloor$이고 $X_{(i)}$는 $i$번째 순서통계량이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 절사평균 구현하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 절사평균 구현하기
+
+</div>
 
 ```python
 import numpy as np
@@ -48,8 +50,6 @@ print(f"중앙값       {np.median(data):9.2f}   <- 100% 절단평균인 셈")
 중앙값            5.50   <- 100% 절단평균인 셈
 ```
 
-</div>
-
 ### 가중평균과 가중중앙값
 
 **가중평균**은 관측값마다 다른 중요도를 부여한다:
@@ -58,9 +58,11 @@ $$\bar{X}_w = \frac{\sum_{i=1}^n w_i X_i}{\sum_{i=1}^n w_i}$$
 
 **가중중앙값**은 양쪽의 누적 가중치가 각각 50%를 넘지 않게 하는 값 $m$이다. 가중평균보다 로버스트하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 가중평균과 가중중앙값 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 가중평균과 가중중앙값
+
+</div>
 
 ```python
 def weighted_mean(data, weights):
@@ -90,8 +92,6 @@ print(f"가중중앙값 {weighted_median(data, weights):8.2f}   <- 버틴다")
 가중중앙값     4.00   <- 버틴다
 ```
 
-</div>
-
 ## 척도추정량
 
 ### 중앙값 절대편차
@@ -102,9 +102,11 @@ $$\text{MAD} = \text{median}(|X_i - \text{median}(X)|)$$
 
 정규 자료에서 $\text{MAD} \approx 0.6745\sigma$이므로 $\hat{\sigma}_{\text{MAD}} = 1.4826 \times \text{MAD}$가 $\sigma$의 일치추정량이 된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 중앙값 절대편차 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 중앙값 절대편차
+
+</div>
 
 ```python
 def mad(data):
@@ -131,8 +133,6 @@ for name, d in [("깨끗한 자료", clean), ("이상치 1개 추가", dirty)]:
 이상치 1개 추가        표준편차  5.059   1.4826*MAD  1.063
 ```
 
-</div>
-
 ### 사분위수범위
 
 **IQR**(사분위수범위)은 또 다른 로버스트 척도이다:
@@ -145,9 +145,11 @@ $$\text{IQR} = Q_3 - Q_1$$
 
 다음 코드는 깨끗한 정규 자료와 극단 이상점으로 오염된 자료에서 위치·척도 추정량을 비교한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 오염 아래에서 측도 견주기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 오염 아래에서 측도 견주기
+
+</div>
 
 ```python
 np.random.seed(42)
@@ -194,8 +196,6 @@ Contaminated data (n = 105):
   MAD              = 5.61
 ```
 
-</div>
-
 !!! note "이상점의 영향"
     관측값 105개 중 이상점 5개가 평균을 2 남짓 옮기고(약 50에서 약 52로) 표준편차는 네 배 넘게 키운다. 반면 중앙값, 절사평균, IQR, MAD는 거의 영향을 받지 않는다.
 
@@ -203,9 +203,11 @@ Contaminated data (n = 105):
 
 붕괴 과정을 시각화하기 위해, 깨끗한 관측값 100개에 이상점(값 = 300)을 하나씩 늘려 가며 각 추정량을 추적한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 오염을 늘려 가며 보는 붕괴점 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 오염을 늘려 가며 보는 붕괴점
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -252,8 +254,6 @@ plt.show()
 ```
 
 ![Location Estimators vs Outlier Count](./img/robust_estimators_181.png)
-
-</div>
 
 ## 붕괴점
 

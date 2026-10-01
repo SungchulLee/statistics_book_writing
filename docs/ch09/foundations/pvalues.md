@@ -211,7 +211,7 @@ p-값과 미리 정한 유의수준에 따라 다음과 같이 판정한다:
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-**모의실험 기반 p-값.** 채식주의자 예제로 보여라.
+**모의실험 기반 p-값.** 채식주의자 보기로 보여라.
 
 </div>
 

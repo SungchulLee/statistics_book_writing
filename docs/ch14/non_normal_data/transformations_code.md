@@ -22,9 +22,11 @@ $$
 
 $X \sim \text{Lognormal}(\mu, \sigma^2)$이면 $Y \sim \mathcal{N}(\mu, \sigma^2)$가 정확히 성립한다. 분포가 정확히 대수정규가 아니더라도 로그 변환은 왜도를 크게 줄이는 경우가 많다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 로그 변환 전후의 왜도 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 로그 변환 전후의 왜도
+
+</div>
 
 ```python
 import numpy as np
@@ -60,8 +62,6 @@ After:  skewness = 0.2933
 
 왜도가 $3.54$에서 $0.29$로 떨어졌다. 사실상 대칭이 되었다.
 
-</div>
-
 ## 제곱근 변환
 
 계수 자료나 아래로 0에 의해 유계인 자료에는 제곱근 변환
@@ -89,9 +89,11 @@ $$
 
 최적 $\lambda$는 최대가능도로 고른다. SciPy의 `stats.boxcox`는 변환된 자료와 적합된 $\lambda$를 반환한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. Box-Cox가 고르는 lambda { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Box-Cox가 고르는 lambda
+
+</div>
 
 ```python
 import numpy as np
@@ -119,8 +121,6 @@ After  Box-Cox: skewness = -0.0018
 ```
 
 자료가 대수정규이므로 참 최적값은 $\lambda = 0$(로그 변환)이고, 최대가능도 추정값 $-0.126$은 표집변동 범위 안에서 이를 잘 회복한다. $\hat{\lambda} \approx 0$이면 Box-Cox는 로그로, $\hat{\lambda} \approx 0.5$이면 제곱근으로 환원된다.
-
-</div>
 
 ## 해석
 

@@ -161,9 +161,11 @@ $\alpha = 0.05$에서 전환율이 다른지 검정하라.
 
     **6단계: 판정한다.** $p \approx 0.114 > 0.05 = \alpha$이므로 $H_0$을 기각하지 못한다. 5% 유의수준에서 두 페이지 디자인의 전환율이 다르다고 결론지을 증거가 부족하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 두 비율의 z 검정 구현 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 비율의 z 검정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -209,7 +211,7 @@ def two_proportion_z_test(x1, n1, x2, n2, alternative="two-sided"):
     return z_stat, p_value
 
 
-# 예제: A/B 검정
+# 보기: A/B 검정
 z, p = two_proportion_z_test(45, 500, 58, 480, alternative="two-sided")
 print(f"z = {z:.3f}, p-value = {p:.3f}")
 
@@ -228,8 +230,6 @@ z = -4.975, p-value = 0.00000
 전환율 9.0%와 12.1%로 3.1%p 차이인데, 방문자 1,000명 남짓으로는 기각하지 못한다. 같은 차이를 10,000명으로 보면 $p$가 $10^{-6}$ 수준까지 떨어진다.
 
 A/B 검정에서 표본크기 계획이 왜 중요한지 보여주는 예다. 실험을 너무 일찍 멈추면 실재하는 3%p 개선을 "차이 없음"으로 결론짓게 된다.
-
-</div>
 
 ## 신뢰구간과의 관계
 

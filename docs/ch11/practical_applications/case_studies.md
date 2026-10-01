@@ -1,18 +1,20 @@
 # 분산분석의 실무 응용
 
-이 절에서는 Python으로 분산분석의 가정 검정과 진단을 보여주는 완결된 예제를 제시한다. 각 사례 연구는 전체 흐름을 따른다: 모형 적합, 가정 확인, 위반 사항 처리.
+이 절에서는 Python으로 분산분석의 가정 검정과 진단을 보여주는 완결된 보기를 제시한다. 각 사례 연구는 전체 흐름을 따른다: 모형 적합, 가정 확인, 위반 사항 처리.
 
 ## 사례 연구 1: 붓꽃 종 (식물 형태)
 
 ### 배경
 
-고전적인 붓꽃(Iris) 자료를 써서 두 종(versicolor와 virginica) 사이에 꽃받침 길이가 유의하게 다른지 검정한다. 이 예제는 분산분석의 전체 진단 흐름을 보여준다.
+고전적인 붓꽃(Iris) 자료를 써서 두 종(versicolor와 virginica) 사이에 꽃받침 길이가 유의하게 다른지 검정한다. 이 보기는 분산분석의 전체 진단 흐름을 보여준다.
 
 ### 1단계: 자료 적재와 모형 적합
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 사례 1 — 자료와 모형 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 사례 1 — 자료와 모형
+
+</div>
 
 ```python
 import pandas as pd
@@ -40,13 +42,13 @@ Residual  32.8680  98.0        NaN           NaN
 
 $F = 31.7$, $p = 1.7 \times 10^{-7}$로 두 종의 꽃받침 길이가 다르다는 결론이 압도적이다. 집단당 50개씩이라 검정력이 넉넉하다.
 
-</div>
-
 ### 2단계: 정규성 확인
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 사례 1 — 정규성 확인 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 사례 1 — 정규성 확인
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -72,13 +74,13 @@ Shapiro-Wilk Test: W = 0.9831, p-value = 0.2285
 
 $p = 0.23$으로 정규성에 반하는 증거가 없고, Q-Q 그림의 점들도 기준선을 잘 따른다.
 
-</div>
-
 ### 3단계: 등분산성 확인
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 사례 1 — 등분산성 확인 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 사례 1 — 등분산성 확인
+
+</div>
 
 ```python
 from scipy.stats import levene
@@ -98,13 +100,13 @@ Levene's Test: F = 1.0245, p-value = 0.3139
 
 $p = 0.31$로 등분산도 기각되지 않는다. 두 가정이 모두 무난하므로 표준 분산분석 결과를 그대로 쓸 수 있다.
 
-</div>
-
 ### 4단계: 독립성 확인 (잔차 그림)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 사례 1 — 잔차 그림 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 사례 1 — 잔차 그림
+
+</div>
 
 ```python
 # 일원배치에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
@@ -121,8 +123,6 @@ plt.show()
 
 세로 띠가 둘이고 각 띠의 높이가 비슷하다. 등분산 가정이 무난하다는 Levene 검정의 결론과 일치한다.
 
-</div>
-
 ### 해석
 
 정규성과 등분산성이 기각되지 않고(두 검정 모두 p > 0.05) 잔차 그림에 체계적인 패턴이 없으면 분산분석 결과를 자신 있게 해석할 수 있다. 그렇지 않으면 Welch 분산분석이나 Kruskal-Wallis 검정을 고려한다.
@@ -133,13 +133,15 @@ plt.show()
 
 ### 배경
 
-어떤 회사가 세 가지 근무 형태(재택, 사무실, 혼합)에 따라 직원 생산성이 다른지 판정하려 한다. 이 예제는 작은 모의 자료를 쓴다.
+어떤 회사가 세 가지 근무 형태(재택, 사무실, 혼합)에 따라 직원 생산성이 다른지 판정하려 한다. 이 보기는 작은 모의 자료를 쓴다.
 
 ### 1단계: 자료 적재와 모형 적합
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 사례 2 — 자료와 모형 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 사례 2 — 자료와 모형
+
+</div>
 
 ```python
 import pandas as pd
@@ -169,13 +171,13 @@ $F = 0.77$, $p = 0.49$로 기각하지 못한다. 세 형태의 생산성 평균
 
 다만 집단당 5명뿐이라 검정력이 거의 없다시피 하다는 점을 함께 보아야 한다. 잔차 자유도가 12에 불과하므로 이 결과를 "차이가 없다"로 읽으면 안 된다.
 
-</div>
-
 ### 2단계: 가정 확인
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 사례 2 — 가정 확인 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 사례 2 — 가정 확인
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -216,8 +218,6 @@ Levene's Test: p-value = 0.7631
 
 두 검정 모두 기각하지 못한다($p = 0.74$, $p = 0.76$). 그러나 $n = 15$에서 이 검정들의 검정력은 매우 낮아, "가정이 확인되었다"기보다 "확인할 수 없었다"에 가깝다.
 
-</div>
-
 ### 작은 표본에 대한 주의
 
 집단당 관측값이 5개뿐이면 Shapiro-Wilk 검정의 검정력이 낮고 Q-Q 그림도 그다지 유익하지 않을 수 있다. 이런 경우 분산분석은 모집단이 정규라는 가정에 크게 의존하므로 비모수 검정을 함께 수행하는 편이 신중하다.
@@ -232,9 +232,11 @@ Levene's Test: p-value = 0.7631
 
 ### 1단계: 자료 적재와 모형 적합
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 사례 3 — 자료와 모형 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 사례 3 — 자료와 모형
+
+</div>
 
 ```python
 import pandas as pd
@@ -263,13 +265,13 @@ Residual  3.1040  16.0       NaN       NaN
 
 $F = 0.46$, $p = 0.72$로 네 매장의 만족도에 차이가 없다. 집단 간 제곱합 0.27이 잔차 제곱합 3.10에 비해 아주 작다.
 
-</div>
-
 ### 2단계: 가정 확인
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 8. 사례 3 — 가정 확인 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 사례 3 — 가정 확인
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -308,15 +310,15 @@ Levene's Test: p-value = 0.9343
 
 가정 위반의 증거가 없다.
 
-</div>
-
 ### 3단계: 사후분석
 
 분산분석이 유의한 차이를 드러내고 가정도 충족되면 사후 쌍별 비교를 수행한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 9. 사례 3 — 사후분석 { .eg }
+**보기 9.** <span class="diff easy" title="쉬움"></span> 사례 3 — 사후분석
+
+</div>
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -347,8 +349,6 @@ group1 group2 meandiff p-adj  lower  upper reject
 실은 이 단계를 밟지 말았어야 한다. **전역 검정이 기각하지 못했으면 사후검정으로 넘어가지 않는 것이 원칙이다.** 그러지 않으면 다중비교 통제가 무너진다. 여기서는 절차를 보여주기 위해 실행했을 뿐이다.
 
 Tukey의 HSD에 대한 자세한 내용은 [Tukey HSD](../post_hoc/tukey.md)를 보라.
-
-</div>
 
 ---
 

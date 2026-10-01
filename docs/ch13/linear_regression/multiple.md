@@ -30,9 +30,11 @@ $$
 
 ### 무작위 훈련-검정 분할
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 광고 자료로 다중회귀 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 광고 자료로 다중회귀
+
+</div>
 
 ```python
 import pandas as pd
@@ -134,13 +136,13 @@ Model Coefficients: [0.0206 0.0474 0.001 ]
 
 시장 200곳의 광고비와 매출이다.
 
-</div>
-
 ### 결정론적 훈련-검정 분할
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 순서대로 나눈 훈련·시험 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 순서대로 나눈 훈련·시험
+
+</div>
 
 ```python
 import pandas as pd
@@ -206,17 +208,17 @@ Model Coefficients: [0.0183 0.0229 0.0011]
 
 세 계수가 각각 TV 0.0183, 라디오 0.0229, 신문 0.0011이다. 신문의 계수가 사실상 0이다.
 
-</div>
-
 ## statsmodels로 구현하기
 
 `statsmodels` 라이브러리는 p값, 신뢰구간, 진단검정을 포함한 풍부한 통계 출력을 제공한다. scikit-learn과의 자세한 비교는 [패키지 비교](../package_usage/comparison.md)를 보라.
 
 ### Sales ~ TV + Radio + Newspaper
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 세 매체를 모두 넣은 모형 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 세 매체를 모두 넣은 모형
+
+</div>
 
 ```python
 import pandas as pd
@@ -312,13 +314,13 @@ TV와 라디오의 계수는 강하게 유의하지만 신문은 $p = 0.86$으�
 
 단순회귀에서는 신문 광고도 매출과 상관이 있었는데(0.23) 다중회귀에서는 사라진다. 신문 광고가 라디오 광고와 함께 집행되는 경향이 있어, 라디오를 모형에 넣으면 신문이 따로 설명할 것이 남지 않기 때문이다.
 
-</div>
-
 ### Sales ~ TV + Radio
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 신문을 뺀 모형 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 신문을 뺀 모형
+
+</div>
 
 ```python
 # 신문을 뺀 모형. R^2 가 거의 줄지 않는다. 신문 광고가 설명하는 몫이
@@ -364,13 +366,13 @@ Notes:
 
 신문 광고를 뺀 모형이다. $R^2$가 세 변수 모형과 사실상 같다. 신문 광고의 계수가 유의하지 않았던 것과 일치한다.
 
-</div>
-
 ### Sales ~ TV + Radio + TV:Radio
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 교호작용을 넣은 모형 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 교호작용을 넣은 모형
+
+</div>
 
 ```python
 # 이번에는 교호작용을 넣는다. statsmodels 의 수식에서 콜론이 교호작용 항이다.
@@ -419,8 +421,6 @@ strong multicollinearity or other numerical problems.
 
 교호작용을 넣은 모형의 $R^2$가 0.968로 넣지 않은 모형(0.897)보다 훨씬 높다. TV와 라디오가 함께 쓰일 때 상승효과가 있다는 뜻이다.
 
-</div>
-
 ## statsmodels 출력 읽기
 
 `model.summary()` 출력은 몇 개의 중요한 부분으로 이루어진다.
@@ -447,7 +447,7 @@ strong multicollinearity or other numerical problems.
 - **Skew와 Kurtosis**: 잔차 분포의 모양을 기술한다.
 - **Condition Number**: 다중공선성의 측도. 30을 넘으면 문제가 있을 수 있다.
 
-## 모형 비교 예제
+## 모형 비교 보기
 
 Advertising 자료에서 세 모형을 비교한다(앞 절과 같이 처음 140개 관측값을 훈련자료로 쓴다).
 

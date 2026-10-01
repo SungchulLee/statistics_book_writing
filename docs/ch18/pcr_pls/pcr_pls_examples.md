@@ -1,4 +1,4 @@
-# 주성분회귀와 부분최소제곱 예제
+# 주성분회귀와 부분최소제곱 보기
 
 ## 개요
 
@@ -59,9 +59,11 @@ PLS는 다음과 같은 상황에서 PCR을 능가하는 경향이 있다.
 
 ## 코드: 자료 적재와 OLS 기준선
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 주택 자료와 최소제곱 기준선 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 주택 자료와 최소제곱 기준선
+
+</div>
 
 ```python
 import numpy as np
@@ -91,13 +93,13 @@ ols_r2 = r2_score(y, ols_model.predict(X_scaled))
 ols_rmse = np.sqrt(mean_squared_error(y, ols_model.predict(X_scaled)))
 ```
 
-</div>
-
 ## 코드: 교차검증을 곁들인 PCR
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 주성분회귀 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 주성분회귀
+
+</div>
 
 ```python
 from sklearn.decomposition import PCA
@@ -130,8 +132,6 @@ pcr_cv_rmse = np.sqrt(pcr_mse_scores[M_opt_pcr - 1])
 
 설명분산의 스크리 그림을 보면 $X$의 변동 대부분을 몇 개의 성분이 포착하는지 가늠할 수 있다.
 
-</div>
-
 !!! warning "이 코드의 자료 누설"
     위 코드는 `PCA()`를 전체 자료에 한 번 적합한 뒤 그 성분으로 교차검증한다. 주성분이 검증
     겹의 정보를 이미 반영하므로 CV 오차가 낙관적으로 편향된다. 엄밀하게 하려면 표준화와 PCA를
@@ -139,9 +139,11 @@ pcr_cv_rmse = np.sqrt(pcr_mse_scores[M_opt_pcr - 1])
 
 ## 코드: 교차검증을 곁들인 PLS
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 부분최소제곱 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 부분최소제곱
+
+</div>
 
 ```python
 from sklearn.cross_decomposition import PLSRegression
@@ -162,13 +164,13 @@ M_opt_pls = np.argmin(pls_mse_scores) + 1
 pls_cv_rmse = np.sqrt(pls_mse_scores[M_opt_pls - 1])
 ```
 
-</div>
-
 ## 코드: 비교용 능형회귀
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 능형회귀와 견주기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 능형회귀와 견주기
+
+</div>
 
 ```python
 from sklearn.linear_model import RidgeCV
@@ -181,8 +183,6 @@ ridge_cv.fit(X_scaled, y)
 ridge_r2 = r2_score(y, ridge_cv.predict(X_scaled))
 ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 ```
-
-</div>
 
 ## 모형 비교
 
@@ -273,7 +273,7 @@ ridge_rmse = np.sqrt(mean_squared_error(y, ridge_cv.predict(X_scaled)))
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span> 주택 예제에서 최적 PCR이 $p = 9$개 중 $M = 7$개 성분을 쓴다고 하자. 이는 자료에
+**연습문제 3.** <span class="diff med" title="중간"></span> 주택 보기에서 최적 PCR이 $p = 9$개 중 $M = 7$개 성분을 쓴다고 하자. 이는 자료에
 대해 무엇을 말해 주는가? PLS는 더 많은 성분을 필요로 할까, 더 적은 성분을 필요로 할까?
 
 </div>

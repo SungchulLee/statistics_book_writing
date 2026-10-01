@@ -8,9 +8,11 @@
 
 `LinearRegression` 클래스는 최소제곱으로 모형 $Y = \mathbf{X}\boldsymbol{\beta} + \varepsilon$을 적합한다. `statsmodels`와 달리 절편을 기본으로 자동 추가한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 모형 적합과 계수 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모형 적합과 계수
+
+</div>
 
 ```python
 import numpy as np
@@ -46,17 +48,17 @@ scikit-learn은 절편을 `intercept_`에, 기울기를 `coef_`에 따로 담는
 
 적합된 모형은 절편을 `model.intercept_`에, 기울기 계수를 `model.coef_`에 저장한다. `X`에 1로 채운 열이 필요하지 않다는 점에 유의하라. `fit_intercept=True`(기본값)일 때 절편은 내부에서 처리된다.
 
-</div>
-
 ---
 
 ## 2. 예측
 
 `predict` 메서드는 새 자료의 적합값을 계산한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 예측하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 예측하기
+
+</div>
 
 ```python
 y_pred_train = model.predict(X)
@@ -77,17 +79,17 @@ Predictions: [5.84872133 3.3265745 ]
 
 `predict`의 입력은 훈련자료와 열의 개수가 같아야 한다. 각 행이 새로운 관측값이며 출력은 예측값의 벡터 $\hat{y} = \hat{\beta}_0 + \mathbf{X}_{\text{new}} \hat{\boldsymbol{\beta}}$이다.
 
-</div>
-
 ---
 
 ## 3. 모형 성능 평가
 
 `score` 메서드는 주어진 자료에서의 $R^2$를 돌려준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 결정계수 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 결정계수
+
+</div>
 
 ```python
 # 회귀 모형의 score 는 R^2 다. 분류 모형이면 정확도를 돌려준다.
@@ -105,11 +107,11 @@ R-squared (training): 0.9706
 
 다른 척도가 필요하면 `sklearn.metrics`를 쓴다.
 
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> 여러 성능 측도
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 4. 여러 성능 측도 { .eg }
 
 ```python
 from sklearn.metrics import mean_absolute_error, mean_squared_error, root_mean_squared_error
@@ -137,8 +139,6 @@ RMSE: 0.5268
 
 MAE 0.42, RMSE 0.53이다. RMSE가 MAE보다 큰 것은 언제나 성립한다. 제곱이 큰 오차에 더 큰 가중치를 주기 때문이며, 두 값의 차이가 벌어질수록 오차 분포에 꼬리가 있다는 신호다.
 
-</div>
-
 !!! note "`root_mean_squared_error`는 scikit-learn 1.4부터"
     이 함수는 scikit-learn 1.4에서 추가되었다. 더 낮은 버전에서는 `mean_squared_error(y, y_pred, squared=False)`를 쓰거나 `np.sqrt(mean_squared_error(...))`로 직접 계산한다.
 
@@ -148,9 +148,11 @@ MAE 0.42, RMSE 0.53이다. RMSE가 MAE보다 큰 것은 언제나 성립한다. 
 
 표본 밖 성능을 추정하려면 적합하기 전에 자료를 나눈다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 훈련·시험 나누기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 훈련·시험 나누기
+
+</div>
 
 ```python
 from sklearn.model_selection import train_test_split
@@ -177,17 +179,17 @@ R-squared (test): 0.9855
 
 검정 $R^2$는 모형이 적합 과정에서 검정자료를 보지 않았으므로 훈련 $R^2$보다 예측 성능을 정직하게 추정한다.
 
-</div>
-
 ---
 
 ## 5. 교차검증
 
 scikit-learn은 훈련-검정 분할의 반복을 자동화하는 교차검증 도구를 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 교차검증 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 교차검증
+
+</div>
 
 ```python
 from sklearn.model_selection import cross_val_score
@@ -214,8 +216,6 @@ Std CV R-squared: 0.0054
 
 `scoring` 인자는 scikit-learn의 어떤 채점기도 받는다. 회귀에서 흔한 선택은 `'r2'`, `'neg_mean_squared_error'`, `'neg_mean_absolute_error'`이다. "neg" 접두사가 붙는 것은 점수가 높을수록 좋다는 scikit-learn의 관례 때문이며, 그래서 오차 척도에 음수를 붙인다.
 
-</div>
-
 ### 왜 한 번 나누는 것으로는 부족한가
 
 ![훈련 점수, 한 번 분할, 교차검증의 세 분포](./img/train_vs_cv.png)
@@ -226,7 +226,7 @@ Std CV R-squared: 0.0054
 
 차이는 폭에 있다. 오른쪽 막대가 각 방식의 오차(추정값 빼기 실제값)를 정리한 것이다. 평균 오차는 훈련이 $+0.029$, 한 번 분할과 교차검증이 각각 $-0.019$로 비슷하다. 그런데 오차의 표준편차가 훈련 $0.036$, 한 번 분할 $0.085$, 교차검증 $0.044$로 **한 번 분할이 교차검증의 두 배 가까이 흔들린다.** 검정자료가 $50$개뿐이라 그 $50$개를 어떻게 뽑았느냐에 점수가 크게 좌우되기 때문이다. 교차검증은 모든 관측값을 한 번씩 검증에 쓰고 다섯 점수를 평균하므로 그 운을 상쇄한다.
 
-그래서 `train_test_split` 한 번으로 얻은 점수를 모형의 성능이라고 보고하는 것은 위험하다. 운이 좋으면 실제보다 $0.1$ 높게, 나쁘면 $0.1$ 낮게 나올 수 있다. 모형 둘을 비교할 때는 특히 그렇다. **차이가 우연인지 실제인지 구별하려면 겹마다의 점수 흩어짐까지 보아야 하고**, 위 예제가 `cv_scores.std()`를 함께 찍는 이유가 여기에 있다.
+그래서 `train_test_split` 한 번으로 얻은 점수를 모형의 성능이라고 보고하는 것은 위험하다. 운이 좋으면 실제보다 $0.1$ 높게, 나쁘면 $0.1$ 낮게 나올 수 있다. 모형 둘을 비교할 때는 특히 그렇다. **차이가 우연인지 실제인지 구별하려면 겹마다의 점수 흩어짐까지 보아야 하고**, 위 보기가 `cv_scores.std()`를 함께 찍는 이유가 여기에 있다.
 
 ---
 
@@ -234,9 +234,11 @@ Std CV R-squared: 0.0054
 
 파이프라인은 전처리와 모형화 단계를 하나의 객체로 엮어, 훈련과 예측에서 변환이 일관되게 적용되도록 보장한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 7. 파이프라인 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 파이프라인
+
+</div>
 
 ```python
 from sklearn.pipeline import Pipeline
@@ -265,8 +267,6 @@ Pipeline R-squared (test): 0.9858
 파이프라인을 거친 시험 $R^2$가 0.9858로, 앞서 수동으로 표준화한 결과와 사실상 같다. 선형회귀에서 표준화는 예측 성능을 바꾸지 않는다. 계수의 해석과 규제(ridge, lasso)에서 의미가 생긴다.
 
 이 파이프라인은 먼저 각 설명변수를 평균 0, 분산 1로 표준화하고, 다음으로 (교호작용 항을 포함한) 다항 특성을 만들고, 마지막으로 선형회귀를 적합한다. 파이프라인 전체를 `cross_val_score`에 넘겨 교차검증으로 평가할 수 있다.
-
-</div>
 
 !!! note "파이프라인이 중요한 이유"
     파이프라인 없이 작업하면 전체 자료로 계산한 훈련 통계량으로 검정자료를 표준화하거나 변환하는 실수(자료 누출)를 저지르기 쉽다. 파이프라인은 각 변환 단계를 그 시점에 사용 가능한 자료에만 적용하여 이를 막아 준다.

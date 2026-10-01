@@ -36,9 +36,11 @@ $$
 
 실무에서 이 계산이 중요한 경우는 드물다. **같은 사람을 두 번 재면 $\rho$는 대개 $0.5$를 훌쩍 넘기 때문이다.** 다만 "짝지을 수 있으니 짝짓는다"가 언제나 옳은 것은 아니며, 짝짓기가 느슨할수록(예컨대 나이만 맞춘 대조군) 이득이 줄어든다는 점은 기억해 둘 만하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 대응표본 평균 검정 계산기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 대응표본 평균 검정 계산기
+
+</div>
 
 ```python
 import math
@@ -63,11 +65,11 @@ def test_paired_mean(n, dbar, sd_d, mu_d0=0.0,
     return t, p, (p < alpha)
 ```
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 대응 평균 검정
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 대응 평균 검정 { .eg }
 
 ```python
 t_stat, p, reject = test_paired_mean(
@@ -92,8 +94,6 @@ t: 1.259673314595547 p: 0.11692909002235807 reject: False
 첫 줄의 $p = 0.883$은 "증거가 아주 약하다"가 아니라 **자료가 대립가설과 반대 방향**이라는 뜻이다. $\bar D = 0.4 > 0$인데 $H_1\colon \mu_D < 0$을 검정했으니 그럴 수밖에 없다. 단측검정에서 p-값이 0.5를 넘으면 언제나 이 상황이다.
 
 방향을 맞춘 둘째 줄도 $p = 0.117$로 기각하지 못한다. 12쌍으로는 표준편차 1.1 대비 0.4의 차이를 가려낼 수 없다.
-
-</div>
 
 ### 해석
 

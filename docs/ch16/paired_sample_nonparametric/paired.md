@@ -127,9 +127,11 @@ $$Z = \frac{W^+ - \frac{n(n+1)}{4}}{\sqrt{\frac{n(n+1)(2n+1)}{24}}}$$
 
 ### 파이썬 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 부호순위검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 부호순위검정
+
+</div>
 
 ```python
 import numpy as np
@@ -163,8 +165,6 @@ P-value: 0.001953125
 Reject the null hypothesis: Significant improvement in scores.
 ```
 
-</div>
-
 ---
 
 ## 대응 부호검정
@@ -178,9 +178,11 @@ Wilcoxon 부호순위검정의 대칭성 가정이 깨질 때는 **대응 부호
 3. $H_0$ 아래에서 각 차이가 양수일 확률과 음수일 확률이 같으므로 $n_+ \sim \text{Binomial}(n, 0.5)$이다.
 4. 이항분포로 $p$값을 계산한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 같은 자료에 부호검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 같은 자료에 부호검정
+
+</div>
 
 ```python
 from scipy.stats import binom
@@ -210,8 +212,6 @@ print(f"P-value: {p_value:.6f}")          # 0.001953
 n+ = 10, n- = 0
 P-value: 0.001953
 ```
-
-</div>
 
 !!! warning "$2 \times$ 규칙은 1을 넘을 수 있다"
     $2 \times P(S \le W)$는 $W$가 $n/2$에 가까우면 1을 넘는다. 예를 들어 $n = 10$, $W = 5$이면 $2 \times 0.6230 = 1.246$이다. 반드시 1로 자르거나 `scipy.stats.binomtest`를 쓰는 편이 안전하다.
@@ -254,7 +254,7 @@ P-value: 0.001953
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-교수법 예제 자료에서 네 가지 검정(대응 $t$, Wilcoxon 정확·근사, 부호검정)의 $p$값을 모두 계산하고, 왜 부호검정이 Wilcoxon과 같은 값을 내는지 설명하라.
+교수법 보기 자료에서 네 가지 검정(대응 $t$, Wilcoxon 정확·근사, 부호검정)의 $p$값을 모두 계산하고, 왜 부호검정이 Wilcoxon과 같은 값을 내는지 설명하라.
 
 </div>
 
@@ -391,7 +391,7 @@ $n = 10$일 때 Wilcoxon 부호순위검정의 양측 임계값이 왜 $8$인지
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-교수법 예제에서 모든 차이가 양수인 것은 우연이 아닐 수 있다. 이 자료가 실제로 정규 차이에서 나왔다면 $n = 10$에서 모두 같은 부호일 확률은 얼마인가? 관측된 차이의 분포는 무엇을 시사하는가?
+교수법 보기에서 모든 차이가 양수인 것은 우연이 아닐 수 있다. 이 자료가 실제로 정규 차이에서 나왔다면 $n = 10$에서 모두 같은 부호일 확률은 얼마인가? 관측된 차이의 분포는 무엇을 시사하는가?
 
 </div>
 

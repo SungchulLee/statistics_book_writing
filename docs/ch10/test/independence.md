@@ -163,9 +163,11 @@ $$\text{두 변수는 독립이 아니다.}$$
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 없이)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 정의대로 계산한 독립성 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정의대로 계산한 독립성 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -244,13 +246,13 @@ p_value = 0.27%
 
 ![카이제곱 분포와 p-값](./img/independence_161.png)
 
-</div>
-
 ### Python 구현 (`scipy.stats.chi2_contingency` 사용)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. scipy로 계산한 독립성 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> scipy로 계산한 독립성 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -319,13 +321,13 @@ expected_counts
 
 기대도수의 마지막 행이 13.4와 14.6으로 5는 넘지만 넉넉하지는 않다. 카이제곱 근사가 아슬아슬하게 통하는 경계다.
 
-</div>
-
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 더 긴 손과 더 긴 발 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 더 긴 손과 더 긴 발
+
+</div>
 
 > **출처**: [Khan Academy — Chi-Square Test Association Independence](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-association-independence)
 
@@ -455,13 +457,13 @@ p_value   = 1.78%
 
 기대도수 중 가장 작은 값이 5.5로 경험칙 $E_{ij} \ge 5$를 겨우 만족한다는 점은 짚어 두어야 한다. 관측값이 100개뿐이고 칸이 9개라 칸당 평균 11개에 불과하다. 이보다 표가 크거나 자료가 적으면 카이제곱 근사 대신 Fisher의 정확검정이나 몬테카를로 방법을 고려해야 한다.
 
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> 기대도수 계산의 상세
+
 </div>
 
-<div class="codebox" markdown>
-
-### 예제 4. 기대도수 계산의 상세 { .eg }
-
-이 예제는 더 큰 분할표에 대해 기대도수 계산을 처음부터 끝까지 단계별로 보여준다.
+이 보기는 더 큰 분할표에 대해 기대도수 계산을 처음부터 끝까지 단계별로 보여준다.
 
 ```python
 """
@@ -621,8 +623,6 @@ We do not have enough evidence to reject the null hypothesis that X and Y are in
 
 $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. 자유도가 8이라 통계량 14.98이 그리 크지 않은 것으로 취급된다는 점도 눈여겨보라. 자유도가 2였다면 같은 통계량의 p-값이 0.0006이었을 것이다. **칸이 많은 표는 그만큼 우연한 어긋남도 많아진다.**
 
-</div>
-
 ## 4. 재표본추출 기반 카이제곱 검정
 
 표본이 작거나 기대 칸 도수가 낮은 상황, 또는 분포에 의존하지 않는 접근을 원할 때, 순열/재표본추출 기반 카이제곱 검정은 점근적 카이제곱 분포의 대안이 된다.
@@ -639,7 +639,7 @@ $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 헤드라인 클릭률 (A/B 검정). 헤드라인 세 개를 사용자에게 보여주고 클릭 여부를 측정한다. 디지털 마케팅의 A/B 검정에서 흔한 상황이다.
+**보기 5.** <span class="diff easy" title="쉬움"></span> 헤드라인 클릭률 (A/B 검정). 헤드라인 세 개를 사용자에게 보여주고 클릭 여부를 측정한다. 디지털 마케팅의 A/B 검정에서 흔한 상황이다.
 
 **관측 자료:**
 
@@ -683,9 +683,11 @@ $p = 0.0595$로 5% 기준을 아슬아슬하게 넘어 기각하지 못한다. �
 
 ### 재표본추출 접근 (비복원)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 재표본추출로 하는 검정 — 비복원 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 재표본추출로 하는 검정 — 비복원
+
+</div>
 
 ```python
 def chi2_stat(observed, expected):
@@ -746,15 +748,15 @@ Resampling p-value: 0.4750
 
 상자에 클릭 34개와 비클릭 2,966개를 넣고 뒤섞은 뒤 1,000명씩 세 묶음으로 나눈다. 이것이 "헤드라인이 아무 영향도 주지 않는" 세상이며, 그 세상에서 카이제곱이 관측값 1.67 이상으로 나오는 비율이 곧 p-값이다.
 
-</div>
-
 ### 재표본추출 접근 (복원)
 
 대신 상자에서 복원추출할 수도 있다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 재표본추출로 하는 검정 — 복원 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 재표본추출로 하는 검정 — 복원
+
+</div>
 
 ```python
 def sample_with_replacement(box):
@@ -783,13 +785,13 @@ Resampling (with replacement) p-value: 0.6745
 
 비복원의 0.475보다 눈에 띄게 크다. 복원추출에서는 전체 클릭 수가 34로 고정되지 않고 그 자체로 흔들리기 때문에 귀무분포가 더 퍼지고, 같은 관측값이 덜 극단적으로 보인다. 어느 쪽이 맞는가는 무엇을 고정된 것으로 볼지에 달려 있다. 전체 클릭 수를 주어진 것으로 본다면 비복원이 맞다.
 
-</div>
-
 ### 비교: 재표본추출 대 모수적 방법
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 재표본추출과 모수적 방법의 비교 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 재표본추출과 모수적 방법의 비교
+
+</div>
 
 ```python
 # 모수적 카이제곱 검정
@@ -815,13 +817,13 @@ Resampling (with repl): p-value: 0.6745
 
 세 헤드라인의 클릭률 차이(1.4% 대 0.8%)를 이 표본으로는 가려낼 수 없다는 것이 결론이다. 이런 크기의 차이를 잡으려면 앞 장의 검정력 계산이 말해 주듯 집단당 수천 명이 필요하다.
 
-</div>
-
 ### 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 8. 두 재표본 분포 그리기 { .eg }
+**보기 9.** <span class="diff easy" title="쉬움"></span> 두 재표본 분포 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -857,8 +859,6 @@ plt.show()
 두 히스토그램 모두 오른쪽으로 길게 늘어진 모양이고 빨간 선(관측값 1.67)이 분포의 한가운데쯤에 있다. 관측된 표가 "우연히 나올 법한" 범위 안에 있다는 뜻이다.
 
 왼쪽(비복원)이 오른쪽(복원)보다 좁다는 것도 보인다. 전체 클릭 수를 34로 고정하면 그만큼 변동이 줄기 때문이며, 이것이 두 p-값 차이의 이유다.
-
-</div>
 
 ### 재표본추출 카이제곱의 장점
 

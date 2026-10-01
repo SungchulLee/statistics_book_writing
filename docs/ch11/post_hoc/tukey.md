@@ -26,9 +26,11 @@
 
 셋 이상의 집단이 있는 자료에서 평균 사이에 유의한 차이가 있는지 검정한다고 하자.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 1. 1단계 — 일원배치 분산분석 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 일원배치 분산분석
+
+</div>
 
 ```python
 import pandas as pd
@@ -57,15 +59,15 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
 전역 검정이 $p = 0.0159$로 기각한다. 이제 어느 쌍이 다른지 찾을 차례다.
 
-</div>
-
 #### 2단계: Tukey의 HSD를 이용한 사후검정
 
 일원배치 분산분석이 유의하면 Tukey의 HSD로 어느 집단 쌍이 유의하게 다른지 찾을 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 2. 2단계 — Tukey HSD { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — Tukey HSD
+
+</div>
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -98,15 +100,15 @@ group1 group2 meandiff p-adj   lower  upper  reject
 - **p-adj**: 각 쌍별 비교의 조정 p-값.
 - **reject**: 각 쌍에 대해 귀무가설(차이 없음)을 기각했는지를 나타내는 불리언.
 
-</div>
-
 #### 3단계: Bonferroni 보정 (Tukey HSD의 대안)
 
 더 보수적인 접근으로, 유의수준을 비교 횟수로 나누는 Bonferroni 보정을 쓸 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 3. 3단계 — 본페로니 보정과의 비교 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 본페로니 보정과의 비교
+
+</div>
 
 ```python
 from statsmodels.stats.multitest import multipletests
@@ -152,8 +154,6 @@ Tukey와 결론은 같지만 보정 p-값이 다르다. trt1 대 trt2가 Tukey�
 
 보정 전 p-값이 Tukey의 `p-adj`와도 다르다는 점에 주의하라. 여기서는 쌍마다 두 집단의 자료만으로 $t$-검정을 하지만, Tukey는 세 집단 전체에서 얻은 합동 MSE를 쓴다. 자유도가 18 대 27로 달라진다.
 
-</div>
-
 투키의 임계값이 어디서 오는지는 **최대 차이의 귀무분포**를 직접 그려 보면 분명해진다. 세 집단의 평균이 모두 같은 자료($k = 3$, 각 $n = 10$)를 6만 번 만들고, 매번 세 쌍 가운데 가장 큰 $|t|$를 기록했다.
 
 ![투키의 임계값은 최대 |t| 의 귀무분포에서 나온다](./img/tukey_studentized_range.png)
@@ -172,9 +172,11 @@ Scheffé 검정은 쌍별이 아닌 비교나 대비를 검정하는 데 적합�
 
 ## 2. scipy.stats.tukey_hsd
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. scipy의 tukey_hsd 로 신뢰구간까지 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> scipy의 tukey_hsd 로 신뢰구간까지
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -285,8 +287,6 @@ Comparison    Lower CI   Upper CI
 
 결과 자체는 statsmodels의 Tukey HSD와 정확히 같다. `(1 - 2)`의 차이 $-0.865$, $p = 0.012$, 구간 $(-1.556, -0.174)$가 앞의 표와 일치한다.
 
-</div>
-
 ### 출력 해석
 
 이 표는 세 집단(집단 0, 1, 2로 표기)에 대한 Tukey의 HSD 쌍별 비교 결과를 95% 신뢰구간과 함께 보여준다.
@@ -366,9 +366,11 @@ Tukey의 HSD 결과는 95% 신뢰수준에서 집단 1과 집단 2 사이에 통
 
 #### 1단계: 이원배치 분산분석 수행
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 5. 1단계 — 이원배치 분산분석 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 1단계 — 이원배치 분산분석
+
+</div>
 
 ```python
 import pandas as pd
@@ -397,13 +399,13 @@ Residual         54.0   712.106000    13.187148        NaN           NaN
 
 두 주효과와 교호작용이 모두 유의하다. 교호작용이 유의하다는 것은 주효과를 단독으로 해석하기 전에 조심하라는 신호다.
 
-</div>
-
 #### 2단계: 주효과에 대한 사후검정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 6. 2단계 — 주효과 사후검정 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 2단계 — 주효과 사후검정
+
+</div>
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -443,13 +445,13 @@ group1 group2 meandiff p-adj  lower  upper reject
 
 용량은 세 수준이 서로 모두 다르지만, 보충제는 $p = 0.060$으로 유의하지 않다. 분산분석표에서 `C(supp)`가 $p = 0.00023$이었던 것과 어긋나 보이는데, 이 Tukey가 용량을 무시하고 OJ 30개와 VC 30개를 통째로 비교하기 때문이다. 용량이 만드는 큰 변동이 잡음으로 남아 보충제의 차이를 덮는다.
 
-</div>
-
 #### 3단계: 교호작용 효과에 대한 사후검정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 7. 3단계 — 교호작용 사후검정 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 3단계 — 교호작용 사후검정
+
+</div>
 
 ```python
 # 두 요인을 붙여 하나의 요인으로 만든다. 이러면 여섯 칸을 서로 견줄 수 있다.
@@ -489,15 +491,15 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 같은 용량끼리 비교한 세 줄(`OJ_0.5 VC_0.5`, `OJ_1.0 VC_1.0`, `OJ_2.0 VC_2.0`)을 보면 차이가 각각 $-5.25$($p = 0.024$), $-5.93$($p = 0.007$), $-0.08$($p = 1.000$)이다. 낮은 용량에서는 OJ가 앞서지만 용량 2.0에서는 차이가 사라진다. 이것이 교호작용의 내용이다.
 
-</div>
-
 #### 4단계: 단순 효과 분석 (교호작용 사후검정의 대안)
 
 교호작용 효과가 유의하면 **단순 효과 분석**으로 다른 요인의 각 수준에서 한 요인의 효과를 살펴 자세히 나눠 볼 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 8. 4단계 — 단순효과 분석 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 4단계 — 단순효과 분석
+
+</div>
 
 ```python
 # 단순효과 분석: 보충제를 하나로 고정해 두고 투여량 효과만 본다.
@@ -558,8 +560,6 @@ group1 group2 meandiff p-adj  lower   upper  reject
 단순 효과 분석이 교호작용을 가장 또렷하게 보여준다. OJ 안에서는 용량 1.0과 2.0의 차이가 $p = 0.131$로 유의하지 않은 반면, VC 안에서는 같은 비교가 $p < 0.001$로 강하게 유의하다.
 
 즉 **용량을 0.5에서 1.0으로 올리는 것은 두 보충제 모두에서 효과가 있지만, 1.0에서 2.0으로 더 올리는 것은 VC에서만 효과가 있다.** 교호작용 항의 $p = 0.022$가 요약한 것이 이 이야기다.
-
-</div>
 
 ### D. 단계 요약
 

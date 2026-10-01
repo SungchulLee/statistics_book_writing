@@ -57,9 +57,11 @@ $$
 
 ### 재현 코드
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 모집단 모양에 따른 오류율 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 오류율
+
+</div>
 
 ```python
 import numpy as np
@@ -102,8 +104,6 @@ for name, gen in cases:
 ```
 
 위 표의 값이 재현된다. 정규 $0.053$은 명목값에 맞지만 지수분포는 $0.267$, 균등분포는 $0.005$로 크게 벗어난다.
-
-</div>
 
 ## 모의실험이 보여주는 패턴
 

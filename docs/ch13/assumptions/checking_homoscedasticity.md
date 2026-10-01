@@ -27,9 +27,11 @@ $$
 
 이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -63,8 +65,6 @@ R^2 = 0.7813
 
 기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
 
-</div>
-
 ## 2. 잔차-적합값 그림
 
 **잔차-적합값 그림**은 등분산성을 시각적으로 확인하는 가장 흔하고 효과적인 방법이다. 이 그림으로 잔차의 흩어짐에 체계적인 패턴이 있는지 볼 수 있다.
@@ -77,9 +77,11 @@ R^2 = 0.7813
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 잔차 대 적합값 그림 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 잔차 대 적합값 그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -106,8 +108,6 @@ plt.show()
 
 - **등분산성:** 잔차가 수평선(0) 주위에 일정한 폭으로 무작위로 흩어져 있으면 등분산성이 성립할 가능성이 높다.
 - **이분산:** 잔차의 흩어짐이 적합값에 따라 커지거나 작아지면(예: 깔때기 모양) 이분산을 나타낸다.
-
-</div>
 
 ## 3. Breusch-Pagan 검정
 
@@ -136,9 +136,11 @@ $$
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. Breusch-Pagan 검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Breusch-Pagan 검정
+
+</div>
 
 ```python
 from statsmodels.stats.diagnostic import het_breuschpagan
@@ -168,8 +170,6 @@ Breusch-Pagan 검정이 $p < 0.0001$로 등분산을 강하게 기각한다. 오
 - **p값 > 0.05:** 이분산의 유의한 증거가 없다.
 - **p값 < 0.05:** 이분산의 유의한 증거가 있으며 등분산성 가정의 위배를 나타낸다.
 
-</div>
-
 ## 4. White 검정
 
 **White 검정**은 이분산뿐 아니라 비선형성을 포함한 더 일반적인 형태의 모형 오설정까지 확인하는 통계검정이다.
@@ -192,9 +192,11 @@ $$
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. White 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> White 검정
+
+</div>
 
 ```python
 from statsmodels.stats.diagnostic import het_white
@@ -223,8 +225,6 @@ White 검정도 $p < 0.0001$로 등분산을 기각한다. Breusch-Pagan이 이�
 - **p값 > 0.05:** 이분산이나 다른 오설정의 유의한 증거가 없다.
 - **p값 < 0.05:** 이분산이나 다른 모형 문제의 유의한 증거가 있다.
 
-</div>
-
 ## 5. 척도-위치 그림
 
 **척도-위치 그림**(산포-위치 그림)은 이분산을 탐지하는 또 하나의 유용한 시각화이다. 표준화 잔차의 절댓값의 제곱근을 적합값에 대해 그린다.
@@ -239,9 +239,11 @@ White 검정도 $p < 0.0001$로 등분산을 기각한다. Breusch-Pagan이 이�
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 척도-위치 그림 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 척도-위치 그림
+
+</div>
 
 ```python
 import numpy as np
@@ -270,8 +272,6 @@ plt.show()
 ![척도-위치 그림](./img/checking_homoscedasticity_183.png)
 
 $\sqrt{|표준화 잔차|}$를 적합값에 대해 그린 것이다. 오른쪽으로 갈수록 점들이 위로 올라가는 추세가 뚜렷해 이분산을 확인해 준다.
-
-</div>
 
 !!! note "내부 스튜던트화 잔차"
     위 코드는 잔차를 그 표본표준편차로 나누는 간단한 표준화를 쓴다. 엄밀한 표준화는 지렛대를 반영한 $e_i / (s\sqrt{1 - h_{ii}})$이며 `model.get_influence().resid_studentized_internal`로 얻을 수 있다. 지렛대가 큰 관측값이 있으면 두 방식의 차이가 커진다.

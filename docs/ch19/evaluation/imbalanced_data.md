@@ -24,9 +24,11 @@
 아래 코드는 모두 같은 자료를 쓴다. 연체율이 약 19%인 대출자료를 만들고
 훈련·검증·검정으로 나눈다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 불균형 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 불균형 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -63,8 +65,6 @@ n = 4000, 연체율 = 0.191
 train 2250, val 750, test 1000
 ```
 
-</div>
-
 ## 전략 1: 가중을 통한 조정
 
 한 가지 접근은 학습 시 **소수 범주 오류의 비용(가중치)을 키우는** 것이다.
@@ -100,9 +100,11 @@ $$
 
 scikit-learn에서는 다음과 같다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 범주 가중값 주기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 범주 가중값 주기
+
+</div>
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -138,8 +140,6 @@ print("가중 적용 예측 연체율:", model.predict(X_val).mean().round(4))
 
 - 적절한 가중비를 골라야 한다
 - **확률 추정의 보정을 무너뜨린다.** 아래 경고와 연습문제 2를 보라
-
-</div>
 
 ## 전략 2: 재표집
 
@@ -197,9 +197,11 @@ Oversampled: 81,105 paid off + 81,105 default (via replication)
 
 ### SMOTE를 적용한 대출 자료
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. SMOTE 로 늘리기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> SMOTE 로 늘리기
+
+</div>
 
 ```python
 from imblearn.over_sampling import SMOTE
@@ -238,17 +240,17 @@ SMOTE 후: n = 3642, 연체율 = 0.500
 - 연속형 특성을 전제한다(이산형·범주형은 변형이 필요하다)
 - **다른 재표집과 마찬가지로 보정을 무너뜨린다**
 
-</div>
-
 ### SMOTE의 변형
 
 - **BorderlineSMOTE:** 결정경계 근처의 소수 범주 표본에 집중한다
 - **ADASYN:** 학습하기 어려운 소수 범주 사례에 더 많은 표본을 만든다
 - **SVMSMOTE:** SVM 결정경계를 이용해 합성 표본 생성을 유도한다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. BorderlineSMOTE 와 ADASYN { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> BorderlineSMOTE 와 ADASYN
+
+</div>
 
 ```python
 from imblearn.over_sampling import BorderlineSMOTE, ADASYN
@@ -270,8 +272,6 @@ print(f"ADASYN:          n = {len(y_ad)}, 연체율 = {y_ad.mean():.3f}")
 BorderlineSMOTE: n = 3642, 연체율 = 0.500
 ADASYN:          n = 3635, 연체율 = 0.499
 ```
-
-</div>
 
 ## 전략 4: 문턱 조정
 
@@ -298,7 +298,7 @@ ADASYN:          n = 3635, 연체율 = 0.499
 
 ### 가중이 바꾸는 것과 바꾸지 못하는 것
 
-위 경고를 그림으로 확인해 보자. 예제 1의 자료(연체율 $19.1\%$)에 예제 2의 가중을 그대로
+위 경고를 그림으로 확인해 보자. 보기 1의 자료(연체율 $19.1\%$)에 보기 2의 가중을 그대로
 적용한 모형과, 아무 조정도 하지 않은 모형을 검증자료에서 비교한 것이다.
 
 ![가중을 줘도 ROC는 그대로이고 예측확률 분포만 밀리는 모습](./img/imbalance_auc_brier.png)
@@ -346,9 +346,11 @@ $0.200$으로 실제값과 거의 같다. 즉 조정하지 않은 모형이 이�
    재표집을 고려한다. 그 경우에도 예측확률을 쓰기 전에 절편을 보정한다.
 5. **원래 불균형을 유지한 검정자료에서** 정밀도-재현율 곡선과 ROC 곡선으로 평가한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 권장 절차 — 확률 추정과 비용 문턱 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 권장 절차 — 확률 추정과 비용 문턱
+
+</div>
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -381,8 +383,6 @@ y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
 AUC  : 0.8369258418681812
 Brier: 0.111258445223284
 ```
-
-</div>
 
 ## 연습문제
 

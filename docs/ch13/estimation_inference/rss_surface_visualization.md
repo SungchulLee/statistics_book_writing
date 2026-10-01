@@ -28,9 +28,11 @@ $$
 
 ### 자료 생성과 모형 적합
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 자료와 최소제곱해 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료와 최소제곱해
+
+</div>
 
 ```python
 import numpy as np
@@ -57,13 +59,13 @@ beta_1 = model.coef_[0]
 
 $X$를 중심화만 했으므로($\bar{x} = 0$) 절편은 `Sales`의 평균과 같다. 적합 결과는 $\hat{\beta}_0 = 14.0506$, $\hat{\beta}_1 = 0.046935$이다.
 
-</div>
-
 ### RSS 곡면 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. RSS 격자 계산 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> RSS 격자 계산
+
+</div>
 
 ```python
 # 최적해 둘레로 격자를 깔고 칸마다 잔차제곱합을 계산한다.
@@ -79,13 +81,13 @@ for i in range(B0_mesh.shape[0]):
         RSS[i, j] = np.sum((Sales - y_pred) ** 2)
 ```
 
-</div>
-
 ### 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 등고선과 곡면으로 보기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 등고선과 곡면으로 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -116,8 +118,6 @@ plt.show()
 ![RSS 곡면](./img/rss_surface_visualization_71.png)
 
 $(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것이 최소제곱 문제가 볼록이라는 사실을 눈으로 보여준다. 국소 최소점이 없으므로 해가 유일하다.
-
-</div>
 
 ## 해석
 

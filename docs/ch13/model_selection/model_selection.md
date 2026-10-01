@@ -34,9 +34,11 @@ $$
 
 ### 정보기준 함수
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. AIC와 BIC 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> AIC와 BIC 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -54,13 +56,13 @@ def bic(n, rss, k):
     return n * np.log(rss / n) + k * np.log(n)
 ```
 
-</div>
-
 ### 교차검증 MSE
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 교차검증 구현 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 교차검증 구현
+
+</div>
 
 ```python
 def cv_mse(X, y, folds=5):
@@ -85,13 +87,13 @@ def cv_mse(X, y, folds=5):
     return np.mean(mses)
 ```
 
-</div>
-
 ### 전진 선택
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 전진선택으로 변수 고르기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 전진선택으로 변수 고르기
+
+</div>
 
 ```python
 # 여덟 변수 중 앞의 셋만 실제로 쓰이고 나머지 다섯은 계수가 0 이다.
@@ -129,8 +131,6 @@ for step in range(p_total):
     aic_history.append(aic(n, rss, k))
     bic_history.append(bic(n, rss, k))
 ```
-
-</div>
 
 ### 결과
 

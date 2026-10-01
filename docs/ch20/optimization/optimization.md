@@ -89,9 +89,11 @@ $$
 
 ### 모형 함수
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 순전파와 역전파 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 순전파와 역전파 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -140,8 +142,6 @@ def back_propagation(x, y, h, y_hat, w_o):
     return w_h_grad, b_h_grad, w_o_grad, b_o_grad
 ```
 
-</div>
-
 !!! danger "이 코드에는 교육적 목적의 결함이 세 가지 있다"
     위 구현은 기울기 유도를 그대로 옮긴 것이라 읽기 쉽지만, 그대로 돌리기에는 문제가 있다.
     각각을 연습문제에서 다룬다.
@@ -155,9 +155,11 @@ def back_propagation(x, y, h, y_hat, w_o):
 
 ### 미니배치 학습 루프
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 학습 반복문 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 학습 반복문
+
+</div>
 
 ```python
 def run_train_loop(x_train, y_train, y_train_cls,
@@ -200,13 +202,13 @@ def run_train_loop(x_train, y_train, y_train_cls,
     return w_h, b_h, w_o, b_o, loss_trace, accuracy_trace
 ```
 
-</div>
-
 ### 자료 적재
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. MNIST 자료 읽기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> MNIST 자료 읽기
+
+</div>
 
 ```python
 import numpy as np
@@ -243,15 +245,15 @@ print(x_train.shape, y_train.shape, x_test.shape)
 (60000, 784) (60000, 10) (10000, 784)
 ```
 
-</div>
-
 ## 경사하강의 시각화
 
 $L(x)=x^2$에 대한 경사하강을 간단히 시각화하면 다음과 같다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 경사하강법을 가장 단순한 함수에서 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 경사하강법을 가장 단순한 함수에서
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -280,8 +282,6 @@ plt.show()
 ```
 
 ![경사하강의 자취](./img/optimization_203.png)
-
-</div>
 
 ## 연습문제
 
@@ -405,7 +405,7 @@ $\mathbf{H}\odot(1-\mathbf{H})\odot[(\hat{\mathbf{Y}}-\mathbf{Y})\mathbf{W}^{oT}
 
     MNIST와 비슷한 희소 입력으로 모의실험하면 실제로 다음을 얻는다.
 
-    | 초기화 | $\operatorname{sd}(z^h)$ | 평균 $h(1-h)$ | $|z^h| > 6$인 비율 |
+    | 초기화 | $\operatorname{sd}(z^h)$ | 평균 $h(1-h)$ | $\lvert z^h\rvert > 6$인 비율 |
     |---|---|---|---|
     | `randn(784, 100)` | $7.10$ | $0.054$ | $0.397$ |
     | `randn(784, 100)/np.sqrt(784)` | $0.26$ | $0.246$ | $0.000$ |

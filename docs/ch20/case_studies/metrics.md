@@ -40,9 +40,11 @@ $C\times C$ 혼동행렬 $M$의 원소 $M_{jk}$는 참 범주가 $j$이고 예�
 
 ## scikit-learn으로 구현하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 손글씨 숫자 분류와 혼동행렬 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 손글씨 숫자 분류와 혼동행렬
+
+</div>
 
 ```python
 from sklearn.datasets import load_digits
@@ -102,8 +104,6 @@ weighted avg       0.97      0.97      0.97       360
 검정 정확도는 $0.9722$다. 혼동행렬을 보면 오류가 매우 드물게 흩어져 있고, 가장 흔한 오류는
 8을 5로 예측한 2건, 그다음이 각각 1건인 $0 \to 4$, $1 \to 4$, $3 \to 8$, $5 \to 1$ 등이다.
 
-</div>
-
 !!! note "`load_digits`는 MNIST가 아니다"
     scikit-learn의 `load_digits`는 $8 \times 8$ 화소의 저해상도 손글씨 숫자 1,797장이고,
     MNIST는 $28 \times 28$ 화소 70,000장이다. 특성 차원이 64 대 784로 훨씬 작아 로지스틱 회귀만으로도
@@ -115,9 +115,11 @@ weighted avg       0.97      0.97      0.97       360
 잘못 분류된 이미지를 살펴보면 모형의 한계를 이해하고 특성공학이나 구조 개선의 방향을 잡을 수
 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 틀린 예측 들여다보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 틀린 예측 들여다보기
+
+</div>
 
 ```python
 import numpy as np
@@ -149,22 +151,22 @@ draw_10_wrong_preds(x_test, y_test, y_pred, shape=(8, 8))
 
 ![잘못 분류된 숫자 이미지](./img/metrics_109.png)
 
-</div>
-
 !!! warning "이 함수는 MNIST 전용이며 두 가지 결함이 있다"
     1. `reshape((28, 28))`이 하드코딩되어 있어 위의 `load_digits` 자료($8 \times 8$)에는
        쓸 수 없다. `int(np.sqrt(x_test.shape[1]))`로 계산하거나 인자로 받아야 한다.
     2. `while` 루프에 경계 검사가 없다. 오분류가 10개 미만이면 `idx`가 배열 끝을 넘어
-       `IndexError`가 난다. 위 `load_digits` 예제에서 오분류는 정확히 10건이라 아슬아슬하게
+       `IndexError`가 난다. 위 `load_digits` 보기에서 오분류는 정확히 10건이라 아슬아슬하게
        통과하지만, 모형이 조금만 더 좋아지면 곧바로 깨진다. 미리
        `wrong = np.where(y_test_cls != y_pred_cls)[0]`로 색인을 모은 뒤
        `wrong[:10]`을 쓰는 편이 안전하다.
 
 ## 학습 곡선 그리기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 손실과 정확도 곡선 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 손실과 정확도 곡선
+
+</div>
 
 ```python
 def draw_loss_and_accuracy(loss_trace, accuracy_trace):
@@ -181,8 +183,6 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
     plt.tight_layout()
     plt.show()
 ```
-
-</div>
 
 ## 연습문제
 
@@ -295,7 +295,7 @@ def draw_loss_and_accuracy(loss_trace, accuracy_trace):
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-`load_digits` 예제에서 로지스틱 회귀가 $97.2\%$의 정확도를 낸다. 같은 모형을 MNIST에 적용하면
+`load_digits` 보기에서 로지스틱 회귀가 $97.2\%$의 정확도를 낸다. 같은 모형을 MNIST에 적용하면
 왜 정확도가 더 낮게 나오는가? 두 결과를 비교할 수 있는가?
 
 </div>

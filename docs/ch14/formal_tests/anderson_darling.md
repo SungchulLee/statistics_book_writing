@@ -67,9 +67,11 @@ $$
 
 ## `stats.anderson`을 이용한 Python 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 기각값 표로 판정하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기각값 표로 판정하기
+
+</div>
 
 ```python
 import numpy as np
@@ -110,8 +112,6 @@ At 1.0% significance level: Fail to reject H_0. The data is normally distributed
 
 임계값은 $[0.574, 0.653, 0.784, 0.914, 1.088]$이며 $A^2 = 0.243$은 그 가운데 가장 작은 값보다도 작다. 어떤 유의수준에서도 정규성을 기각하지 않는다.
 
-</div>
-
 ---
 
 ## `stats.anderson`에서 p값을 얻을 수 있는가
@@ -130,9 +130,11 @@ Anderson-Darling 검정은 각 유의수준(정규분포의 경우 15%, 10%, 5%,
 
 `statsmodels` 라이브러리가 근사 $p$값을 함께 제공하는 구현을 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. p-값으로 판정하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> p-값으로 판정하기
+
+</div>
 
 ```python
 import numpy as np
@@ -162,13 +164,13 @@ Anderson-Darling Test: Statistic=0.2432179174634257, p-value=0.7659878263029309
 - 어떤 유의수준의 임계값보다 검정통계량이 **작으면** $p$값이 그 유의수준보다 **크다**.
 - 임계값보다 검정통계량이 **크면** $p$값이 그 유의수준보다 **작다**.
 
-</div>
-
 ### `normal_ad`를 이용한 Python 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 치우친 자료에 적용 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 치우친 자료에 적용
+
+</div>
 
 ```python
 import numpy as np
@@ -200,8 +202,6 @@ Fail to reject H_0: The data is normally distributed.
 ```
 
 통계량은 `stats.anderson`과 정확히 같고, 여기에 근사 $p$값 $0.766$이 더해진다.
-
-</div>
 
 ---
 

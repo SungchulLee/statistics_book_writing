@@ -40,9 +40,11 @@ $$
 
 `simulate_f` 함수는 각 정규분포에서 집단을 뽑고 반복마다 분산분석 F-통계량을 계산한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. F 통계량의 귀무분포 모의실험 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> F 통계량의 귀무분포 모의실험
+
+</div>
 
 ```python
 import numpy as np
@@ -63,13 +65,13 @@ def simulate_f(mu, sigma, sizes, n_sim=1000):
     return np.array(F_vals), np.array(p_vals)
 ```
 
-</div>
-
 각 시나리오마다 임계값과 경험적 기각률을 계산한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 집단 차이를 키워 가며 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 집단 차이를 키워 가며 보기
+
+</div>
 
 ```python
 scenarios = [
@@ -107,8 +109,6 @@ for name, mu, sigma, sizes in scenarios:
 셋째와 넷째 줄을 비교하면 표본크기의 힘이 드러난다. 평균과 분산이 완전히 같은데 집단당 10명에서는 검정력이 7.1%, 5,000명에서는 100%다. 검정력은 효과크기가 아니라 효과크기와 표본크기의 조합에서 나온다.
 
 둘째 줄의 4.9%도 눈여겨보라. 평균이 3, 3.1, 2.9로 **실제로 다르지만** 차이가 표준편차 6에 비해 너무 작아 귀무 시나리오와 구별되지 않는다.
-
-</div>
 
 ## 해석
 

@@ -26,9 +26,11 @@ $$
 
 귀무가설 아래에서는 모든 평균이 같다. 대립가설 아래에서는 집단 $G_3$이 2만큼 위로 이동한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 모의실험 설계 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모의실험 설계
+
+</div>
 
 ```python
 import numpy as np
@@ -64,15 +66,15 @@ print(f"single run p-value (null) = {simulate_once(null=True):.4f}")
 single run p-value (null) = 0.4545
 ```
 
-</div>
-
 ## 모의실험 실행
 
 각 시나리오(귀무와 대립)마다 많은 반복을 생성하여 $\alpha = 0.05$에서의 기각률을 추정한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 제1종 오류율과 검정력 재기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 제1종 오류율과 검정력 재기
+
+</div>
 
 ```python
 def run(n_sims=500, alpha=0.05):
@@ -102,8 +104,6 @@ Estimated Power:        0.100
 제1종 오류가 0.047로 명목 0.05와 어긋나지 않는다(모의실험 표준오차 0.013). 분산비가 6배나 되고 표본크기도 10, 18, 7로 제각각인데도 Welch가 오류율을 지켜 낸다.
 
 검정력 0.100은 처참하다. $G_3$을 2만큼 올렸지만 그 집단의 표준편차가 6이고 표본이 7개뿐이라 신호가 잡음에 묻힌다. **오류율을 지키는 것과 효과를 찾아내는 것은 다른 문제다.**
-
-</div>
 
 ## 핵심 값
 

@@ -19,9 +19,11 @@
 
 가장 간단한 진단은 설명변수 사이의 쌍별 상관을 살피는 것이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 상관행렬로 훑어보기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 상관행렬로 훑어보기
+
+</div>
 
 ```python
 import numpy as np
@@ -70,8 +72,6 @@ AveRooms와 AveBedrms가 0.848, Latitude와 Longitude가 $-0.925$로 강하게 �
 
 **한계**: 쌍별 상관은 두 변수 사이의 관계만 포착한다. 변수 셋 이상이 얽혀 있으면 쌍별 상관이 크지 않아도 다중공선성이 존재할 수 있다. 이런 이유로 두 변수 사이의 단순 상관을 뜻하는 **공선성**과 여러 변수가 얽힌 **다중공선성**을 구분한다.
 
-</div>
-
 ---
 
 ### 방법 2: 분산팽창인자(VIF)
@@ -97,9 +97,11 @@ $$
 
 #### statsmodels 사용하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 2. VIF 계산 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> VIF 계산
+
+</div>
 
 ```python
 import statsmodels.api as sm
@@ -129,15 +131,15 @@ print(vif_data)
 
 Latitude와 Longitude의 VIF가 8을 넘는다. 캘리포니아의 지리적 모양 때문에 위도와 경도가 강하게 상관되어 있다.
 
-</div>
-
 #### VIF를 직접 계산하기
 
 VIF가 어떻게 계산되는지 이해하면 더 깊은 통찰을 얻을 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 3. VIF를 정의대로 직접 구하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> VIF를 정의대로 직접 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -199,8 +201,6 @@ VIF를 직접 계산해 확인했다. $\text{VIF}_j = 1/(1 - R_j^2)$이므로, �
 
 **출력**:
 
-</div>
-
 ```text
 Manual VIF Calculation:
 ============================================================
@@ -224,9 +224,11 @@ Longitude   :  R² = 0.8747,  VIF =    7.98
 
 두 설명변수가 강하게 상관되어 있으면 하나를 뺀다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 대책 1 — 변수 빼기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 대책 1 — 변수 빼기
+
+</div>
 
 ```python
 # 대책 1: 얽힌 변수를 빼 버린다. 가장 간단하지만, 뺀 변수가 실제로
@@ -237,15 +239,15 @@ X_reduced = sm.add_constant(df[features_reduced])
 model_reduced = sm.OLS(y, X_reduced).fit()
 ```
 
-</div>
-
 ### 방법 2: 상관된 설명변수 결합
 
 상관된 변수들로 합성 지표를 만든다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 대책 2 — 변수 합치기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 대책 2 — 변수 합치기
+
+</div>
 
 ```python
 # 대책 2: 얽힌 변수를 하나로 합친다. 여기서는 위도와 경도를 평균 내
@@ -253,15 +255,15 @@ model_reduced = sm.OLS(y, X_reduced).fit()
 df['Location'] = (df['Latitude'] + df['Longitude']) / 2
 ```
 
-</div>
-
 ### 방법 3: 정칙화(릿지 회귀 또는 라쏘 회귀)
 
 계수를 축소하는 벌점 기반 방법을 쓴다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 대책 3 — 능형회귀와 라쏘 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 대책 3 — 능형회귀와 라쏘
+
+</div>
 
 ```python
 from sklearn.linear_model import Ridge, Lasso
@@ -287,15 +289,15 @@ print(lasso.coef_)
 
 OLS 계수와 릿지 계수를 비교한 것이다. 공선성이 있으면 OLS 계수가 크게 흔들리는 반면 릿지는 0 쪽으로 줄여 안정시킨다.
 
-</div>
-
 ### 방법 4: 주성분분석(PCA)
 
 상관된 설명변수를 서로 무상관인 주성분으로 변환한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 대책 4 — 주성분회귀 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 대책 4 — 주성분회귀
+
+</div>
 
 ```python
 from sklearn.decomposition import PCA
@@ -318,8 +320,6 @@ Explained variance ratio: [0.85492016 0.06636584 0.05359929]
 ```
 
 주성분 셋이 분산의 85.5%, 6.6%, 5.4%를 설명한다. 첫 성분에 집중되어 있다는 것이 원래 변수들이 서로 강하게 얽혀 있다는 신호다.
-
-</div>
 
 ---
 

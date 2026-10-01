@@ -1,4 +1,4 @@
-# 능형회귀 예제
+# 능형회귀 보기
 
 ## 개요
 
@@ -46,9 +46,11 @@ $\lambda$가 크면 분산은 작지만 편향이 크다. 최적의 $\lambda$는
 $\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값과의 거리가 어디에서 가장
 작아지는지를 본다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 람다에 따른 축소와 편향-분산 절충 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 람다에 따른 축소와 편향-분산 절충
+
+</div>
 
 ```python
 import numpy as np
@@ -94,8 +96,6 @@ for lam in [0.1, 1.0, 10.0, 100.0]:
 $\lambda = 0$인 최소제곱보다 $\lambda = 1$쪽이 참값에 더 가깝다. 편향을 조금 받아들이는
 대가로 분산을 크게 줄인 결과이며, 이것이 편향-분산 절충이다. 다만 $\lambda$를 더 키우면
 편향이 커져 다시 멀어진다.
-
-</div>
 
 ![계수 크기는 단조감소하지만 참값과의 거리는 U자를 그린다](./img/shrink_vs_accuracy.png)
 

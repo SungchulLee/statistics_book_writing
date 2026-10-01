@@ -80,9 +80,11 @@ $$
       - 두 집단 $\to$ Mann--Whitney $U$ 또는 Wilcoxon 순위합.
       - 셋 이상 $\to$ Kruskal--Wallis $H$ (또는 추가 로버스트성이 필요하면 Mood 중앙값검정).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 여러 검정을 함께 적용하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 여러 검정을 함께 적용하기
+
+</div>
 
 아래 코드는 같은 대응자료에 여러 검정을 적용하여 $p$값을 직접 비교한다.
 
@@ -143,8 +145,6 @@ Rank-sum test:      Z = 1.4725, p = 0.1409
 
     대응자료를 독립표본으로 분석하면 개인차가 모두 잡음으로 들어가 검정력을 크게
     잃는다. 여기서는 그 손실이 $p$값 16배로 나타났다.
-
-</div>
 
 ![대응 구조를 살린 그림과 버린 그림의 비교](./img/paired_structure_lost.png)
 

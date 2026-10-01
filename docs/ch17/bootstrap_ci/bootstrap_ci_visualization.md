@@ -16,9 +16,11 @@ $$
 
 이다. $c = 20{,}000$, $\lambda^{-1} = 50{,}000$(척도모수)이면 참 평균이 약 \$70,000이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 치우친 소득 모집단 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 치우친 소득 모집단 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -47,8 +49,6 @@ sample = rng.choice(population, size=20, replace=False)
 69525.69401218835 54541.90941528454
 ```
 
-</div>
-
 ## 붓스트랩 표집분포
 
 크기 $n$인 표본에서 **복원추출**로 $B$개의 붓스트랩 재표본을 만들고 각각의 평균을 계산한다.
@@ -59,9 +59,11 @@ $$
 
 집합 $\{\bar x^{*(1)}, \ldots, \bar x^{*(B)}\}$이 $\bar x$의 표집분포를 근사한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 붓스트랩 표집분포 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 표집분포
+
+</div>
 
 ```python
 def bootstrap_sampling_distribution(sample, n_bootstrap=20_000, rng=None):
@@ -75,8 +77,6 @@ def bootstrap_sampling_distribution(sample, n_bootstrap=20_000, rng=None):
     n = len(sample)
     return sample[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
 ```
-
-</div>
 
 ## 여러 신뢰수준에서의 신뢰구간
 
@@ -94,9 +94,11 @@ $$
 | 95% | 2.5번째 | 97.5번째 |
 | 99% | 0.5번째 | 99.5번째 |
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 여러 신뢰수준의 구간 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 여러 신뢰수준의 구간
+
+</div>
 
 ```python
 def compute_confidence_intervals(bootstrap_dist):
@@ -119,8 +121,6 @@ def compute_confidence_intervals(bootstrap_dist):
 | 90% | $[53{,}056,\ 85{,}605]$ | 32{,}549 |
 | 95% | $[50{,}887,\ 89{,}280]$ | 38{,}393 |
 | 99% | $[47{,}207,\ 97{,}410]$ | 50{,}203 |
-
-</div>
 
 ## 신뢰도와 정밀도의 절충
 
@@ -150,9 +150,11 @@ $$
 \widehat{\text{coverage}} = \frac{1}{N}\sum_{i=1}^{N}\mathbf{1}\!\bigl(\mu \in \text{CI}_i\bigr)
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 포함확률 모의실험 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 포함확률 모의실험
+
+</div>
 
 ```python
 def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
@@ -172,8 +174,6 @@ def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
 ```
 
 지수 소득 자료에 $n = 20$을 쓰면 백분위수 $95$% 구간의 실제 포함확률이 **$0.900$**으로 명목값에 크게 못 미친다. 분포의 왜도 때문이다. 표본크기를 늘리거나 BCa 보정을 쓰면 개선되지만, 연습문제 2에서 보듯 $n = 20$에서는 BCa도 큰 도움이 되지 않는다.
-
-</div>
 
 ## 표본 하나와 2000개의 표본
 
@@ -352,7 +352,7 @@ $$
 
     이다. **신뢰구간 끝점이 표준오차보다 $3.8$배 불안정하다.** 같은 절대 정밀도를 얻으려면 $3.78^2 = 14$배의 재표집이 필요하다. [수렴](../comparison/convergence.md) 연습문제 2에서 이 비를 모의실험으로 확인했다($3.7$--$3.8$).
 
-    **이 페이지가 $B = 20{,}000$을 쓴 이유.** $B = 500$에서 끝점의 몬테카를로 오차 $0.120\,\text{SE}$는 구간 폭의 $3$%이다. 소득 예제에서 이는 약 \$1,200의 자의성을 뜻하며 보고하기에 너무 크다.
+    **이 페이지가 $B = 20{,}000$을 쓴 이유.** $B = 500$에서 끝점의 몬테카를로 오차 $0.120\,\text{SE}$는 구간 폭의 $3$%이다. 소득 보기에서 이는 약 \$1,200의 자의성을 뜻하며 보고하기에 너무 크다.
 
 <div class="drillbox" markdown>
 

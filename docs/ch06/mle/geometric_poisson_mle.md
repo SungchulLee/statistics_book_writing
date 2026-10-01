@@ -38,9 +38,11 @@ $$
 
 ### 시연
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 기하분포의 MLE { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기하분포의 MLE
+
+</div>
 
 ```python
 import numpy as np
@@ -86,15 +88,15 @@ Test RMSE -- parametric: 0.00996
 Test RMSE -- nonparametric: 0.01164
 ```
 
-</div>
-
 ### 로그가능도 곡면
 
 로그가능도는 $p$에 대해 오목한 함수이며 유일한 전역 최댓값이 있음을 확인해 준다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 기하분포 로그가능도 곡면 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기하분포 로그가능도 곡면
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -128,8 +130,6 @@ plt.show()
 ```
 
 ![Geometric: Log-Likelihood Surface](./img/geometric_poisson_mle_80.png)
-
-</div>
 
 ## 포아송분포의 MLE
 
@@ -167,9 +167,11 @@ $$
 
 ### 시연
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 포아송분포의 MLE { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 포아송분포의 MLE
+
+</div>
 
 ```python
 from scipy import stats
@@ -215,13 +217,13 @@ Test RMSE -- parametric: 0.01882
 Test RMSE -- nonparametric: 0.03342
 ```
 
-</div>
-
 ### 모수적 적합과 비모수적 적합의 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 모수적 적합과 비모수적 적합의 비교 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 모수적 적합과 비모수적 적합의 비교
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -253,8 +255,6 @@ plt.show()
 ```
 
 ![Poisson: Train Fit](./img/geometric_poisson_mle_195.png)
-
-</div>
 
 ## 해석
 

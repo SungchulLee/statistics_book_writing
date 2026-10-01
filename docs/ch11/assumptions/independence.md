@@ -12,9 +12,11 @@
 
 ## 설정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -54,8 +56,6 @@ F = 23.7708, p = 0.0000
 
 표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
 
-</div>
-
 ## 확인 방법
 
 ### 연구 설계 검토
@@ -86,9 +86,11 @@ $$
 - $d < 2$: 양의 자기상관(인접한 잔차가 비슷한 경향).
 - $d > 2$: 음의 자기상관(인접한 잔차의 부호가 번갈아 나타나는 경향).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. Durbin-Watson 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Durbin-Watson 검정
+
+</div>
 
 ```python
 from statsmodels.stats.stattools import durbin_watson
@@ -108,15 +110,15 @@ Durbin-Watson Statistic: 2.1101
 
 $d = 2.11$로 2에 가까워 자기상관의 증거가 없다. 자료를 서로 독립으로 생성했으니 기대한 결과다.
 
-</div>
-
 ### 순서에 대한 잔차 그림
 
 자료에 자연스러운 순서(예: 수집 시각)가 있으면 그 순서에 대해 잔차를 그려 의존을 시사하는 패턴을 찾을 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 순서에 대한 잔차 그림 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 순서에 대한 잔차 그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -142,8 +144,6 @@ plt.show()
 - **추세:** 체계적인 증가나 감소는 시간 효과를 시사한다.
 - **주기:** 주기적인 패턴은 자기상관을 나타낸다.
 - **군집:** 비슷한 잔차의 무리는 블록 효과를 시사한다.
-
-</div>
 
 ## 독립성이 어긋날 때
 

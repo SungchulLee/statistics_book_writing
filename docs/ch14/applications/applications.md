@@ -17,9 +17,11 @@
 
 이표본 $t$ 검정은 각 표본 안의 자료가 정규분포를 따른다고 가정한다. $t$ 검정을 수행하기 전에 두 집단의 정규성을 확인하는 것이 필수적이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. t 검정 전에 정규성 확인하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> t 검정 전에 정규성 확인하기
+
+</div>
 
 ```python
 import numpy as np
@@ -54,8 +56,6 @@ Two-sample t-test: p-value=0.09856078338184512
 
 한 집단이라도 정규성 검정을 통과하지 못하면 **Mann-Whitney U 검정** 같은 비모수 대안을 써야 한다.
 
-</div>
-
 !!! warning "정규성 검정 결과로 분석을 분기하는 것의 위험"
     위 코드처럼 "정규성 검정을 통과하면 $t$ 검정, 아니면 비모수 검정"으로 자동 분기하는 것은 널리 쓰이는 관행이지만 문제가 있다. 최종 검정의 선택이 같은 자료에 의존하게 되어 실제 제1종 오류율이 명목값에서 벗어난다. 실무에서는 사전에 분석 방법을 정하거나, 두 결과를 모두 보고하는 편이 낫다.
 
@@ -63,9 +63,11 @@ Two-sample t-test: p-value=0.09856078338184512
 
 선형회귀에서는 잔차(관측값과 예측값의 차이)가 정규분포를 따른다고 가정한다. 잔차에 정규성 검정을 적용하여 이 가정이 성립하는지 확인할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 회귀 잔차의 정규성 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 회귀 잔차의 정규성
+
+</div>
 
 ```python
 import numpy as np
@@ -112,15 +114,15 @@ Residuals are normally distributed.
 
 잔차가 정규분포를 따르지 않으면 회귀분석 결과를 믿기 어려워질 수 있으며, 변수변환이나 대안 회귀모형 같은 교정 조치가 필요할 수 있다.
 
-</div>
-
 ## 사례 3: 분산분석의 정규성
 
 **분산분석**은 집단들에 걸친 자료의 잔차가 정규분포를 따른다고 가정한다. 이 가정이 위배되면 분산분석의 결과가 오도할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 분산분석의 정규성 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 분산분석의 정규성
+
+</div>
 
 ```python
 import numpy as np
@@ -157,8 +159,6 @@ ANOVA test: p-value=0.039981492411499175
 세 집단의 Shapiro-Wilk $p$값은 각각 $0.525$, $0.909$, $0.720$으로 모두 정규성 확인을 통과하고, 분산분석은 $p = 0.040$으로 5% 수준에서 집단 평균의 차이를 탐지한다.
 
 분산분석을 적용하기 전에 Shapiro-Wilk 검정으로 각 집단의 자료가 정규분포를 따르는지 확인한다. 한 집단 이상이 검정을 통과하지 못하면 **Kruskal-Wallis 검정** 같은 비모수 대안이 더 적절할 수 있다.
-
-</div>
 
 ## 결론
 

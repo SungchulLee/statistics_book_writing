@@ -34,9 +34,11 @@
 
 `seaborn` 라이브러리의 `pairplot` 함수는 최소한의 코드로 출판 수준의 쌍 그림을 만들어 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Seaborn 기본 쌍그림 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Seaborn 기본 쌍그림
+
+</div>
 
 ```python
 import seaborn as sns
@@ -61,8 +63,6 @@ plt.show()
 - 각 대각 패널은 종별로 나눈 주변분포의 커널밀도추정(KDE)을 보여준다.
 - `hue` 인자는 범주형 변수로 점에 색을 입혀 집단마다 관계가 다른지 드러낸다.
 
-</div>
-
 ---
 
 ## 쌍 그림 꾸미기
@@ -71,9 +71,11 @@ plt.show()
 
 열이 많은 자료에서 모든 쌍을 그리면 격자가 지나치게 복잡해진다. 변수의 부분집합을 고른다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 볼 변수만 고르기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 볼 변수만 고르기
+
+</div>
 
 ```python
 import seaborn as sns
@@ -96,15 +98,15 @@ plt.show()
 
 변수가 많으면 쌍 그림이 $p^2$개의 칸으로 늘어나 읽을 수 없게 된다. 관심 있는 변수를 먼저 추리는 것이 실용적이다.
 
-</div>
-
 ### 그림에 상관계수 표시하기
 
 각 패널에 상관 수치를 넣으면 산점도가 시각적으로 보여주는 것을 수치로 확인할 수 있다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 칸마다 상관계수 적기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 칸마다 상관계수 적기
+
+</div>
 
 ```python
 import seaborn as sns
@@ -137,8 +139,6 @@ plt.show()
 위쪽 삼각형에 상관계수를 적어 두면 그림과 숫자를 한자리에서 볼 수 있다. 산점도가 보여주는 모양과 계수가 요약한 값을 함께 보는 것이 요령이다.
 
 이 형태는 아래쪽 삼각형에 산점도를, 대각선에 히스토그램을, 위쪽 삼각형에 Pearson $r$ 값을 표시한다.
-
-</div>
 
 ---
 

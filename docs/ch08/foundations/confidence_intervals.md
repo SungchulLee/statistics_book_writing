@@ -24,9 +24,11 @@ $$
 \bar{X} \pm t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 평균의 신뢰구간 — z와 t { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 평균의 신뢰구간 — z와 t
+
+</div>
 
 ```python
 import numpy as np
@@ -70,8 +72,6 @@ scipy t.interval: (121.21, 126.59)
 
 $\sigma = 6$을 안다고 가정한 z-구간과, $s = 5.74$를 자료에서 추정해 쓴 t-구간의 너비가 거의 같다($\pm 2.63$ 대 $\pm 2.69$). $n = 20$에서는 $t_{0.025,\,19} = 2.093$이 $z_{0.025} = 1.960$과 크게 다르지 않고, $s$가 $\sigma$보다 조금 작게 나온 것이 임계값 차이를 거의 상쇄했기 때문이다. $n$이 작아지면 이 균형이 깨진다.
 
-</div>
-
 ## 비율의 신뢰구간
 
 비율 $\hat{p} = x / n$에 대한 **Wald 구간**은
@@ -91,9 +91,11 @@ $$
 
 **Agresti–Coull 구간**은 가상의 성공과 실패를 $z^2/2$개씩 더한 뒤, 보정된 개수 $\tilde{n} = n + z^2$과 $\tilde{p} = (x + z^2/2) / \tilde{n}$에 Wald 공식을 적용한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 비율의 신뢰구간 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비율의 신뢰구간
+
+</div>
 
 ```python
 x, n = 84, 200
@@ -132,8 +134,6 @@ Agresti-Coull: (0.3537, 0.4893)
 
 $n = 200$이고 $\hat p = 0.42$로 극단적이지 않아 세 구간이 거의 겹친다. Wilson과 Agresti–Coull은 소수점 넷째 자리까지 같다. 두 구간의 중심이 $z^2$만큼 보정된 같은 값이고, 너비를 계산하는 방식만 다르기 때문이다. 차이는 $n$이 작거나 $\hat p$가 0 또는 1에 가까울 때 드러난다.
 
-</div>
-
 ## 분산의 신뢰구간
 
 자료가 정규모집단에서 나왔다는 가정 아래 추축량 $(n-1)S^2 / \sigma^2$은 자유도 $n - 1$인 카이제곱분포를 따른다. 그 결과 $\sigma^2$의 $(1-\alpha)100\%$ 신뢰구간은
@@ -143,9 +143,11 @@ $$
       \frac{(n-1)s^2}{\chi^2_{\alpha/2,\,n-1}}\right)
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 분산의 신뢰구간 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 분산의 신뢰구간
+
+</div>
 
 ```python
 data = np.array([120, 125, 118, 130, 122, 128, 115, 135, 121, 126])   # 앞의 20개 중 10개
@@ -175,8 +177,6 @@ print(f"95% CI for sigma:   ({ci_sd[0]:.2f}, {ci_sd[1]:.2f})")
 
 $n = 10$에서 $\sigma^2$의 구간은 위쪽 끝이 아래쪽 끝의 일곱 배다. 카이제곱분포가 오른쪽으로 길게 늘어져 있어 구간이 $s^2$을 중심으로 대칭이 아니며, 분산은 평균보다 훨씬 추정하기 어렵다는 뜻이다.
 
-</div>
-
 ## 평균 차이에 대한 이표본 신뢰구간
 
 ### Welch의 t-구간 (분산이 다른 경우)
@@ -201,9 +201,11 @@ $$
 (\bar{X}_1 - \bar{X}_2) \;\pm\; t_{\alpha/2,\,n_1+n_2-2} \cdot s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 두 평균 차이의 신뢰구간 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 두 평균 차이의 신뢰구간
+
+</div>
 
 ```python
 group_a = np.array([12, 15, 11, 14, 13, 16, 10, 15, 12, 14])
@@ -236,15 +238,15 @@ Welch CI: (-6.71, -3.09)
 
 구간이 통째로 음수쪽에 있어 0을 담지 않는다. B군의 평균이 A군보다 3에서 7 정도 높다고 읽으며, 이는 유의수준 5%에서 $\mu_1 = \mu_2$를 기각하는 것과 같은 말이다(9장).
 
-</div>
-
 ## 포함확률 모의실험
 
 포함확률 모의실험은 표본을 여러 번 뽑아 각각에서 신뢰구간을 만들고 참 모수를 담은 비율을 기록한다. 경험적 포함확률은 명목 신뢰수준에 가까워야 한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 포함확률 모의실험 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 포함확률 모의실험
+
+</div>
 
 ```python
 np.random.seed(42)
@@ -287,8 +289,6 @@ n=100: z-coverage=0.946  t-coverage=0.949
 
 $n = 5$에서 잘못된 z-구간의 포함확률은 95%가 아니라 87.6%다. 스무 번에 한 번 놓친다고 믿고 있지만 실제로는 여덟 번에 한 번 놓친다. $t$-구간은 같은 자료로 0.953을 낸다. 모의실험 오차는 $\sqrt{0.95 \times 0.05 / 10000} \approx 0.002$이므로 표의 셋째 자리 흔들림은 그 범위 안이다.
 
-</div>
-
 ## 해석
 
 - $n$이 작으면 $\sigma$ 자리에 $s$를 넣은 z-구간은 **포함확률이 부족하다**: 경험적 포함확률이 95% 아래로 떨어진다. $t$-구간은 $t$-분포의 더 큰 임계값을 써서 이를 바로잡는다.
@@ -310,9 +310,11 @@ $$
 n = \left\lceil \left(\frac{z_{\alpha/2}}{2E}\right)^2 \right\rceil
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 필요한 표본크기 구하기 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 필요한 표본크기 구하기
+
+</div>
 
 ```python
 sigma_est = 15
@@ -344,8 +346,6 @@ for E in [1, 2, 3, 5]:
 ```
 
 $E$가 분모에서 제곱되므로 오차한계를 절반으로 줄이려면 표본을 네 배 모아야 한다($E = 2$의 217개 대 $E = 1$의 865개). 반면 신뢰수준을 95%에서 99%로 올리는 값은 그보다 싸다(217개 → 374개). 정밀도가 신뢰수준보다 비싸다.
-
-</div>
 
 ## 연습문제
 

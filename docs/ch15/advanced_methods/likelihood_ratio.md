@@ -152,9 +152,11 @@ Bartlett 검정이 올바른 기준분포를 쓴다는 것이 확인된다.
 
     **5단계.** $\chi^2_{0.95, 1} = 3.841$과 비교한다. $0.733 < 3.841$이므로 $H_0$을 기각하지 못한다($p = 0.392$).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 가능도비 검정과 Bartlett 보정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 가능도비 검정과 Bartlett 보정
+
+</div>
 
 ```python
 import numpy as np
@@ -200,8 +202,6 @@ Correction factor: 1.0327
 Bartlett statistic (corrected): 0.7332
 P-value: 0.3919
 ```
-
-</div>
 
 
 ## 연습문제

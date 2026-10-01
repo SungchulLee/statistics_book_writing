@@ -140,9 +140,11 @@ $$
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 가위바위보 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 가위바위보
+
+</div>
 
 > **출처**: [Khan Academy — Goodness of Fit Example](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-goodness-fit/v/goodness-of-fit-example)
 
@@ -293,8 +295,6 @@ p_value = 0.07243975703425146
 
 수동 계산과 정확히 같다.
 
-</div>
-
 ## 문제 B: 조작된 주사위?
 
 <div class="probox" markdown>
@@ -324,9 +324,11 @@ p_value = 0.07243975703425146
 
 눈 3이 60번 중 17번 나온 것을 보고 일표본 비율 z-검정을 시도할 수도 있다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 범주별로 따로 검정하면 안 되는 이유 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 범주별로 따로 검정하면 안 되는 이유
+
+</div>
 
 ```python
 import numpy as np
@@ -359,8 +361,6 @@ p_value   = 1.53%
 
 성급하다. 각 행에 대해 비슷한 검정을 할 수 있고, 행이 많으면 언젠가는 아주 작은 p-값을 보게 된다. 러시안 룰렛과 같아서, 계속하다 보면 주사위가 공정하더라도 조만간 아주 작은 p-값을 만나게 된다. 따라서 한 범주만 보는 검정으로 주사위가 조작되었다고 결론지을 수 없다. **모든 범주를 동시에** 고려하는 검정이 필요하다.
 
-</div>
-
 ### 가설
 
 $$
@@ -373,9 +373,11 @@ $$
 
 ### 검정통계량
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 적합도 검정통계량 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 적합도 검정통계량
+
+</div>
 
 ```python
 import numpy as np
@@ -397,8 +399,6 @@ if __name__ == "__main__":
 ```
 statistic = 10.4
 ```
-
-</div>
 
 ### 기각역
 
@@ -447,9 +447,11 @@ $$\text{주사위는 조작되지 않았다.}$$
 
 ### Python 구현 (`scipy.stats.chisquare` 없이)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 정의대로 계산한 적합도 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 정의대로 계산한 적합도 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -520,13 +522,13 @@ $p = 0.0647$로 5% 수준에서 기각하지 못한다. 눈 3만 따로 보았�
 
 어느 쪽이 옳은가? 여섯 눈을 함께 보는 쪽이다. "눈 3이 많이 나왔다"는 것은 자료를 보고 고른 사실이며, 그 고르는 행위가 이미 여섯 번의 검정을 한 것과 같기 때문이다. 앞 장의 p-해킹과 같은 문제다.
 
-</div>
-
 ### Python 구현 (`scipy.stats.chisquare` 사용)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. scipy로 계산한 적합도 검정 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> scipy로 계산한 적합도 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -588,8 +590,6 @@ p_value    = 6.47%
 ![카이제곱 분포와 p-값](./img/gof_451.png)
 
 `chisquare`가 수동 계산과 같은 값을 준다.
-
-</div>
 
 ## 연습문제
 

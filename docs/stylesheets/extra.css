@@ -36,17 +36,17 @@
 }
 
 /* ===================================================================
-   블록 상자 체계 — 정의 · 정리 · 예제 · 보기 · 문제 · 연습문제
+   블록 상자 체계 — 정의 · 정리 · 보기 · 문제 · 연습문제
 
      회색 상자(.defn)    정의
      보라 상자(.thmbox)  정리, 바로 아래 ??? proof "증명" 이 붙는다
-     파랑 상자(.codebox) 예제 — 돌려 보는 코드 시연
      초록 상자           보기(.exbox) · 문제(.probox) · 연습문제(.drillbox)
                          와 거기 딸린 ??? success "풀이"
+                         보기는 상자에 제목 한 줄만 담고, 코드·그림은 상자 밖에 둔다
 
    ── 값을 바꾸려면 아래 :root 한 곳만 고치면 된다 ──────────────────
    상자 규칙은 색을 `--box-accent` 로 받는 틀 하나뿐이고, 각 상자는 자기
-   색만 그 틀에 넘긴다. 그래서 색·두께·여백을 바꾸면 여섯 상자가 한꺼번에
+   색만 그 틀에 넘긴다. 그래서 색·두께·여백을 바꾸면 다섯 상자가 한꺼번에
    따라 바뀐다. 본문 마크다운은 건드릴 필요가 없다.
 
    색을 `#rrggbb` 가 아니라 `R, G, B` 세 값으로 적어 둔 이유는, 같은 색을
@@ -59,7 +59,6 @@
     /* ── 블록 색 (R, G, B) ── */
     --box-defn: 122, 122, 140;      /* 정의   회색 */
     --box-thm: 112, 72, 196;        /* 정리   보라 */
-    --box-code: 43, 108, 176;       /* 예제   파랑 */
     --box-work: 46, 158, 79;        /* 보기·문제·연습문제 초록 */
 
     /* ── 상자 모양 ── */
@@ -82,7 +81,7 @@
     --diff-med: 227, 160, 8;        /* 중간   노랑 */
     --diff-hard: 217, 59, 43;       /* 어려움 빨강 */
 
-    /* ── 상자 안 제목(정리·예제)의 글자 ── */
+    /* ── 상자 안 제목(정의·정리)의 글자 ── */
     --boxhead-size: 1em;
     --boxhead-weight: 700;
 
@@ -100,10 +99,9 @@
 }
 
 /* ── 상자 틀 하나 ──────────────────────────────────────────────────
-   여섯 상자가 이 규칙 하나를 함께 쓰고, 색만 --box-accent 로 받는다. */
+   다섯 상자가 이 규칙 하나를 함께 쓰고, 색만 --box-accent 로 받는다. */
 .md-typeset .defn,
 .md-typeset .thmbox,
-.md-typeset .codebox,
 .md-typeset .exbox,
 .md-typeset .probox,
 .md-typeset .drillbox {
@@ -117,7 +115,6 @@
 
 .md-typeset .defn > :first-child,
 .md-typeset .thmbox > :first-child,
-.md-typeset .codebox > :first-child,
 .md-typeset .exbox > :first-child,
 .md-typeset .probox > :first-child,
 .md-typeset .drillbox > :first-child {
@@ -126,7 +123,6 @@
 
 .md-typeset .defn > :last-child,
 .md-typeset .thmbox > :last-child,
-.md-typeset .codebox > :last-child,
 .md-typeset .exbox > :last-child,
 .md-typeset .probox > :last-child,
 .md-typeset .drillbox > :last-child {
@@ -140,10 +136,6 @@
 
 .md-typeset .thmbox {
     --box-accent: var(--box-thm);
-}
-
-.md-typeset .codebox {
-    --box-accent: var(--box-code);
 }
 
 .md-typeset .exbox,
@@ -185,21 +177,15 @@
 }
 
 /* ── 상자 안 제목 ──────────────────────────────────────────────────
-   정의·정리·예제는 오른쪽 목차에서 바로 갈 수 있도록 제목(h3)으로 적되,
+   정의·정리는 오른쪽 목차에서 바로 갈 수 있도록 제목(h3)으로 적되,
    본문에서는 다른 블록과 같은 크기의 굵은 도입어처럼 보이게 한다.
    헤딩이므로 제목에 LaTeX 를 쓰지 않는다 — MathJax 가 목차를 처리하지 않아
    `\(n\)` 같은 날글자가 그대로 보인다.
    정의 상자는 `.defn`, 그 안의 제목은 `.dfn` 이다. 같은 이름을 쓰면
    상자 규칙이 제목에도 걸려 제목이 상자처럼 그려진다.
    보기·문제·연습문제는 레퍼런스와 같이 굵은 도입어로 적는다(헤딩이 아니다). */
-/* 페이지 전체를 종합하는 예제는 마지막 절에 딸린 것처럼 보이지 않도록
-   `##` 로 적는다. 보이는 모양은 `###` 짜리와 같다. */
-.md-typeset h2.eg,
 .md-typeset h3.dfn,
-.md-typeset h3.thm,
-.md-typeset h3.eg,
-.md-typeset h4.eg,
-.md-typeset h5.eg {
+.md-typeset h3.thm {
     font-size: var(--boxhead-size);
     font-weight: var(--boxhead-weight);
     line-height: 1.6;

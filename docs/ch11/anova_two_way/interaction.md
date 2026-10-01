@@ -76,9 +76,11 @@ F-통계량을 F-분포표의 임계값과 비교하거나 p-값을 쓴다.
 
 ### statsmodels: 교호작용 그림과 분산분석
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 교호작용 그림과 이원배치 분산분석 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 교호작용 그림과 이원배치 분산분석
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -137,8 +139,6 @@ Residual         54.0   712.106000    13.187148        NaN           NaN
 
 ![교호작용 그림](./img/interaction_79.png)
 
-</div>
-
 ### 출력 해석
 
 **교호작용 그림**: 용량이 0.5에서 2.0으로 커질수록 두 보충제 모두에서 치아 길이가 대체로 늘어난다. 낮은 용량(0.5와 1.0)에서는 "OJ"가 "VC"보다 뚜렷하게 긴 치아 길이를 낳는다. 가장 높은 용량(2.0)에서는 그 차이가 훨씬 작다. 두 선이 평행하지 않다는 점이 **교호작용 효과**의 가능성을 시사한다.
@@ -156,9 +156,11 @@ Residual         54.0   712.106000    13.187148        NaN           NaN
 
 ### Tukey의 HSD를 이용한 사후검정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. Tukey HSD로 하는 사후검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Tukey HSD로 하는 사후검정
+
+</div>
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -240,9 +242,7 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 **교호작용 사후검정의 핵심 결과**: 낮은 용량에서는 OJ가 VC보다 유의하게 긴 치아 성장을 낳는 경향이 있다. 가장 높은 용량(2.0)에서는 두 보충제의 효과가 비슷하다(OJ_2.0 대 VC_2.0: 평균차 = 0.08, p = 1.0).
 
-</div>
-
-## 3. 예제: 교수법과 학습시간에 따른 시험 점수
+## 3. 보기: 교수법과 학습시간에 따른 시험 점수
 
 <div class="probox" markdown>
 
@@ -294,9 +294,11 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
     - **요인 B(학습시간)**: $F_B = 72.25$, $p = 0.0011$로 0.01에서 유의하다. 학습시간이 시험 점수에 유의한 효과를 갖는다.
     - **교호작용 (A × B)**: $F_{AB} = 0.25$, $p = 0.6433$으로 유의하지 않다. 교수법과 학습시간 사이에 유의한 교호작용이 없다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 2x2 설계의 이원배치 분산분석 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 2x2 설계의 이원배치 분산분석
+
+</div>
 
 ```python
 import pandas as pd
@@ -333,8 +335,6 @@ Residual                          4.0     8.0      2.0    NaN       NaN
 ```
 
 손계산한 표와 정확히 일치한다. 잔차 자유도가 4밖에 안 된다는 점은 눈여겨볼 만하다. 관측값 8개로 모수 4개(전체평균, 두 주효과, 교호작용)를 추정했기 때문이다. 이렇게 자유도가 작으면 F-검정의 검정력이 매우 낮아, 교호작용의 $p = 0.64$를 "교호작용이 없다"는 증거로 읽으면 안 된다.
-
-</div>
 
 ### R 코드
 

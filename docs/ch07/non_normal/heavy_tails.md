@@ -64,9 +64,11 @@ $$\text{초과첨도} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$
 
 ## 시각적 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 정규와 두꺼운 꼬리를 네 그림으로 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규와 두꺼운 꼬리를 네 그림으로
+
+</div>
 
 ```python
 import numpy as np
@@ -139,8 +141,6 @@ Heavy-Tailed (t) Distribution:
 
 ![Normal Distribution](./img/heavy_tails_67.png)
 
-</div>
-
 ## 평균의 로버스트한 대안
 
 꼬리가 두꺼운 자료에서는 다음 대안을 고려하라.
@@ -150,9 +150,11 @@ Heavy-Tailed (t) Distribution:
 - **효율**: 정규 자료에서는 평균보다 효율이 낮지만, 꼬리가 두꺼운 자료에서는 비슷하다
 - **추론**: 표준오차와 신뢰구간에는 붓스트랩을 쓴다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 중앙값의 표준오차를 붓스트랩으로 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 중앙값의 표준오차를 붓스트랩으로
+
+</div>
 
 ```python
 import numpy as np
@@ -175,8 +177,6 @@ print(f"Median: {original_median:.4f} ± {se_median:.4f}")
 Median: 0.2379 ± 0.1549
 ```
 
-</div>
-
 ### 2. 절사평균
 평균을 계산하기 전에 양쪽 꼬리에서 일정 비율을 제거한다:
 
@@ -184,9 +184,11 @@ $$\bar{X}_{\text{trim}, \alpha} = \frac{1}{n(1-2\alpha)} \sum_{i=\lceil n\alpha 
 
 여기서 $X_{(i)}$는 순서통계량이고 $\alpha$는 절사비율이다(예: 10%이면 0.1).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 절사평균 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 절사평균
+
+</div>
 
 ```python
 import numpy as np
@@ -210,14 +212,14 @@ print(f"10% 절단평균 {mean_trim10:7.4f}")
 10% 절단평균 -0.1366
 ```
 
-</div>
-
 ### 3. 윈저화 평균
 극단값을 버리는 대신 $\alpha$-분위수로 대체한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 윈저화 평균 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 윈저화 평균
+
+</div>
 
 ```python
 import numpy as np
@@ -248,14 +250,14 @@ print(f"윈저화 평균    {winsorize_mean(data, alpha=0.1):7.4f}")
 윈저화 평균    -0.1292
 ```
 
-</div>
-
 ### 4. M-추정량 (Huber 추정량)
 작은 오차에서는 이차식, 큰 오차에서는 절댓값으로 넘어가는 손실함수를 써서 극단값의 가중치를 매끄럽게 낮춘다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. Huber M-추정량 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> Huber M-추정량
+
+</div>
 
 ```python
 import numpy as np
@@ -281,13 +283,13 @@ Huber 위치추정: -0.1366
 Huber 척도추정: 1.0812
 ```
 
-</div>
-
 ## 추정량의 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 다섯 추정량 견주기 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 다섯 추정량 견주기
+
+</div>
 
 ```python
 import numpy as np
@@ -320,8 +322,6 @@ Estimator Comparison (Population mean = 0):
   Winsorized mean:     -0.0318
   Huber's estimator:   -0.0369
 ```
-
-</div>
 
 ## 연습문제
 

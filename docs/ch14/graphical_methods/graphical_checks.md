@@ -22,9 +22,11 @@ $$
 
 히스토그램 막대가 $\hat{f}$와 가깝게 맞으면 자료가 정규성과 일관된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 히스토그램에 정규곡선 겹치기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 히스토그램에 정규곡선 겹치기
+
+</div>
 
 ```python
 import numpy as np
@@ -53,8 +55,6 @@ plt.show()
 ```
 
 ![히스토그램과 적합된 정규밀도](./img/graphical_checks_27.png)
-
-</div>
 
 ## 커널밀도추정
 

@@ -90,7 +90,7 @@ $$
 를 추정한다. 가중벡터 $\mathbf{w}_1, \ldots, \mathbf{w}_C$와 편향 $b_1, \ldots, b_C$의 모음이
 특성공간에 $C$개의 선형 결정경계를 정의한다.
 
-??? example "예제: 3범주 OvR"
+??? example "보기: 3범주 OvR"
     범주 세 개(A, B, C)와 훈련 사례 $n = 300$개(범주당 100개), 특성 $p = 2$개를 생각하자.
 
     **학습.** 세 개의 이항 로지스틱 회귀를 적합한다.
@@ -142,9 +142,11 @@ $0.452$, 평균이 $0.339$에 그친다. 그림에서 B의 무리 전체가 주�
 
 `sklearn.multiclass.OneVsRestClassifier` 래퍼는 어떤 이항 분류기에든 OvR을 적용한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 일대다 전략 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일대다 전략
+
+</div>
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -173,8 +175,6 @@ print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
 이항 분류기 개수: 3
 검정 정확도: 0.9333
 ```
-
-</div>
 
 !!! warning "`LogisticRegression`의 기본값은 OvR이 아니다"
     `LogisticRegression`이 기본으로 OvR을 쓴다는 서술을 자주 보게 되지만, 이는 오래된

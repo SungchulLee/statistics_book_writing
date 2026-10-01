@@ -14,9 +14,11 @@ $$
 
 이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 자료와 자유도 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료와 자유도
+
+</div>
 
 ```python
 import pandas as pd
@@ -47,8 +49,6 @@ trt2      10  5.526  0.4426
 
 집단당 10개씩 균형 설계다. 표본표준편차가 0.44에서 0.79까지 1.8배 차이 나는데, 이 정도는 등분산 가정을 크게 흔들지 않는다(자세한 확인은 Levene 검정 페이지 참조).
 
-</div>
-
 ## 분산분석 수행
 
 SciPy의 `f_oneway`는 각 집단을 별도의 배열로 받아 $F$-통계량과 $p$-값을 돌려준다:
@@ -57,9 +57,11 @@ $$
 F = \frac{MSB}{MSW} = \frac{SSB / (k-1)}{SSW / (N-k)}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 분산분석 수행 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분산분석 수행
+
+</div>
 
 ```python
 # F 는 집단 사이의 분산을 집단 안의 분산으로 나눈 값이다. 1 에 가까우면
@@ -76,15 +78,15 @@ F = 4.8461, p = 0.0159
 
 $H_0: \mu_{\text{ctrl}} = \mu_{\text{trt1}} = \mu_{\text{trt2}}$ 아래에서 통계량은 $F \sim F_{2,27}$이다.
 
-</div>
-
 ## 시각화: 상자그림
 
 상자그림은 각 집단의 중앙값, 사분위범위, 이상점을 보여주어 집단의 중심과 흩어짐이 다른지 즉시 감을 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 상자그림으로 보기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 상자그림으로 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -104,15 +106,15 @@ plt.show()
 
 세 상자가 서로 겹친다. trt2가 가장 높고 trt1이 가장 낮지만 상자들이 나란히 놓일 만큼 가깝다. $p = 0.016$이 "압도적"이 아니라 "그럭저럭 유의한" 정도인 이유가 그림에 그대로 나타난다.
 
-</div>
-
 ## 시각화: 관측된 꼬리를 표시한 F-분포
 
 $F_{2,27}$의 밀도함수를 그리고 관측된 $F$-통계량 너머의 넓이를 색칠하면 $p$-값을 기하적으로 해석할 수 있다. 그 넓이는 $H_0$ 아래에서 그만큼 또는 그보다 극단적인 $F$ 값을 관측할 확률이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. F 분포와 관측된 꼬리 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> F 분포와 관측된 꼬리
+
+</div>
 
 ```python
 import numpy as np
@@ -143,8 +145,6 @@ p = P(F_{2,27} \ge F_{\text{obs}})
 $$
 
 에 해당한다.
-
-</div>
 
 ## 해석
 

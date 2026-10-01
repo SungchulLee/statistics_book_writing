@@ -38,9 +38,11 @@ $p_{ij}^{\text{Bonf}} < \alpha$이면 그 칸을 유의하다고 표시한다.
 
 ### 잔차와 조정 p-값 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 잔차로 어느 칸이 어긋났는지 찾기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 잔차로 어느 칸이 어긋났는지 찾기
+
+</div>
 
 ```python
 import numpy as np
@@ -96,13 +98,13 @@ Bonferroni-adjusted per-cell p-values:
 
 여기서 Bonferroni는 상당히 보수적이기도 하다. 잔차들은 서로 독립이 아니라 주변 합계 제약으로 묶여 있으므로(제곱합이 카이제곱 통계량으로 고정된다) 12로 곱하는 것은 필요 이상이다.
 
-</div>
-
 ### 열지도 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 잔차를 열지도로 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 잔차를 열지도로 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -117,7 +119,7 @@ plt.colorbar(im, ax=ax, shrink=0.8)
 # 본페로니 보정 뒤에도 유의한 칸에 표시를 남긴다
 for i in range(observed.shape[0]):
     for j in range(observed.shape[1]):
-        # 보정 후 유의한 칸에만 별표를 붙인다. 이 예제에서는 하나도 없다.
+        # 보정 후 유의한 칸에만 별표를 붙인다. 이 보기에서는 하나도 없다.
         mark = "*" if reject[i, j] else ""
         ax.text(j, i, f"{resid[i, j]:.2f}{mark}",
                 ha="center", va="center", fontsize=10)
@@ -131,8 +133,6 @@ plt.show()
 색으로 어느 칸이 기대보다 많고 적은지 한눈에 보인다. 모집단 2의 범주 3이 가장 밝고(+2.42), 모집단 3의 범주 3이 가장 어둡다(−1.73). 즉 범주 3의 선호가 모집단에 따라 갈리는 것이 이 표의 주된 구조다.
 
 `*`로 표시된 칸은 Bonferroni 보정 후에도 통계적으로 유의한 칸이다. 색의 변화 덕분에 어느 칸의 잔차가 가장 크게 양(과다 대표)이거나 음(과소 대표)인지 쉽게 알아볼 수 있다.
-
-</div>
 
 ## 해석
 
@@ -286,7 +286,7 @@ $\sum_{i,j} R_{ij}^2 = \chi^2$, 즉 카이제곱 통계량이 표준화 잔차 �
 
     **답이 분명하다. 조정 잔차만 $N(0,1)$이다.**
 
-    | | 표준편차 | $|\cdot|>1.96$ 비율 |
+    | | 표준편차 | $\lvert \cdot\rvert>1.96$ 비율 |
     |---|---|---|
     | 표준화 잔차 $R$ | **0.716** | 0.0062 |
     | 조정 잔차 $R^{\text{adj}}$ | **0.999** | **0.0494** |
@@ -323,7 +323,7 @@ $\sum_{i,j} R_{ij}^2 = \chi^2$, 즉 카이제곱 통계량이 표준화 잔차 �
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff hard" title="어려움"></span>
-예제 1은 표준화 잔차에 본페로니 보정을 적용해 **유의한 칸이 없다**는 결론을 얻었다. 조정 잔차로 다시 하면 결론이 달라지는지 확인하라.
+보기 1은 표준화 잔차에 본페로니 보정을 적용해 **유의한 칸이 없다**는 결론을 얻었다. 조정 잔차로 다시 하면 결론이 달라지는지 확인하라.
 
 </div>
 
@@ -404,7 +404,7 @@ $\sum_{i,j} R_{ij}^2 = \chi^2$, 즉 카이제곱 통계량이 표준화 잔차 �
     3. **다중비교 보정**을 적용한다(칸이 $rc$개).
     4. 살아남은 칸을 **원 도수와 함께** 보고한다.
 
-    **2번을 빠뜨리는 것이 이 페이지 예제의 문제**였다. 코드가 짧아 보이지만 분모에 $(1-R_i/n)(1-C_j/n)$을 넣는 한 줄이 결론을 바꾼다.
+    **2번을 빠뜨리는 것이 이 페이지 보기의 문제**였다. 코드가 짧아 보이지만 분모에 $(1-R_i/n)(1-C_j/n)$을 넣는 한 줄이 결론을 바꾼다.
 
 <div class="drillbox" markdown>
 

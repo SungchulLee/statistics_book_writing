@@ -52,9 +52,11 @@ $$
 P(\sqrt{n}\, D_n \leq t) \to 1 - 2\sum_{k=1}^{\infty} (-1)^{k-1} e^{-2k^2 t^2}.
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 모수를 못박은 KS 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모수를 못박은 KS 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -84,8 +86,6 @@ n = 250
 KS one-sample vs N(0,1): D = 0.0354, p = 0.9013
 => Fail to reject H0 at alpha = 0.05.
 ```
-
-</div>
 
 ## Lilliefors 문제
 

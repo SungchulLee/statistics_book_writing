@@ -138,9 +138,11 @@ CV 오차가 최소인 lambda 선택
 
 ### 그림 1: 계수 대 λ
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 라쏘 정칙화 경로 그리기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 라쏘 정칙화 경로 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -188,8 +190,6 @@ plt.show()
 ![라쏘 정칙화 경로](./img/regularization_path_141.png)
 
 이 그림이 드러내는 것은 각 $\lambda$에서 어떤 변수가 활성인지(변수선택), 계수가 어떻게 변하는지(축소 방향), 변수가 들어오는 순서와 시점(희소성)이다.
-
-</div>
 
 ### 그림 2: 교차검증 오차
 

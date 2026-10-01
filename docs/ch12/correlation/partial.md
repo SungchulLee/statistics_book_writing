@@ -105,9 +105,11 @@ $$
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 아이스크림과 익사 사고 — 부분상관 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 아이스크림과 익사 사고 — 부분상관
+
+</div>
 
 ```python
 import numpy as np
@@ -151,8 +153,6 @@ $X$(아이스크림 판매)와 $Y$(익사 사고)의 상관이 0.719인데, $Z$(
 교란변수의 작동 방식을 수치로 보여주는 가장 짧은 예다.
 
 전용 함수로는 `pingouin` 라이브러리의 `pingouin.partial_corr`가 있으며 신뢰구간과 p-값도 함께 계산해 준다.
-
-</div>
 
 ---
 

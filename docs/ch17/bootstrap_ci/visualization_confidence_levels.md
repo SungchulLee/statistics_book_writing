@@ -19,11 +19,13 @@ $$[\hat{F}_{\alpha/2}^*, \, \hat{F}_{1-\alpha/2}^*]$$
 
 이며 $\hat{F}_q^*$는 붓스트랩 분포의 $q$번째 분위수이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 평균 소득의 붓스트랩 신뢰구간 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 평균 소득의 붓스트랩 신뢰구간
 
-이 예제는 대출 자료로 평균 소득의 90%와 95% 신뢰구간을 만든다.
+</div>
+
+이 보기는 대출 자료로 평균 소득의 90%와 95% 신뢰구간을 만든다.
 
 ```python
 import numpy as np
@@ -126,8 +128,6 @@ plt.show()
 
 ![신뢰수준에 따른 붓스트랩 신뢰구간](./img/visualization_confidence_levels_68.png)
 
-</div>
-
 ## 시각화에서 얻는 핵심 통찰
 
 ### 1. 신뢰수준과 구간 폭
@@ -140,7 +140,7 @@ plt.show()
 - 신뢰수준이 높을수록 → 구간이 넓어진다(정밀도가 낮아진다).
 - 신뢰수준이 낮을수록 → 구간이 좁아진다(정밀도가 높아진다).
 
-이 예제에서 90% 구간의 폭은 $\$40{,}749$, 95% 구간의 폭은 $\$48{,}519$로 19% 넓다.
+이 보기에서 90% 구간의 폭은 $\$40{,}749$, 95% 구간의 폭은 $\$48{,}519$로 19% 넓다.
 
 ### 2. "95% 신뢰"가 실제로 뜻하는 것
 
@@ -150,9 +150,11 @@ plt.show()
 
 주어진 표본 하나에 대해서는 참 모수가 구간 안에 있거나 없거나 둘 중 하나이다. 확률은 **절차**에 있는 것이지 특정 구간에 있는 것이 아니다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 포함확률을 직접 세어 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 포함확률을 직접 세어 보기
+
+</div>
 
 ```python
 # "95% 신뢰"는 한 번 만든 구간에 대한 확률이 아니라, 같은 절차를 되풀이할
@@ -184,8 +186,6 @@ print(f"Coverage across {n_simulations} simulations: {100*np.mean(ci_covers):.1f
 Coverage across 2000 simulations: 90.9%
 ```
 
-</div>
-
 !!! warning "$n = 20$에서 실제 포함확률은 95%가 아니다"
     모의실험 결과가 $90.6\%$이다. 명목값 $95\%$보다 $4.4$%p 낮다.
 
@@ -211,9 +211,11 @@ Coverage across 2000 simulations: 90.9%
 
 **백분위수법**(분위수를 직접 쓰는 것)은 단순하지만 치우친 분포에서 편향될 수 있다. 성능을 높이려면
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 백분위수법과 BCa { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 백분위수법과 BCa
+
+</div>
 
 ```python
 # 백분위수법 — 가장 간단하고 앞에서 쓴 방법이다.
@@ -231,8 +233,6 @@ result = bootstrap((original_sample,), statistic, n_resamples=5000,
                    method='bca', vectorized=True)
 ci_bca = result.confidence_interval
 ```
-
-</div>
 
 !!! note "`scipy.stats.bootstrap`의 인자"
     `scipy.stats.bootstrap`은 기본적으로 `vectorized=True`를 가정하고 통계량 함수에 `axis` 인자를 넘긴다. `np.mean`처럼 `axis`를 받는 함수는 그대로 쓸 수 있지만, 직접 정의한 함수라면 `axis` 인자를 처리하거나 `vectorized=False`를 명시해야 한다.

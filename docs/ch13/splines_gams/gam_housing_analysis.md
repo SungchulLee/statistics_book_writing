@@ -49,9 +49,11 @@ GAM이 실제로 무엇을 되찾는지 보려면 정답을 아는 자료가 편
 
 ## 자료
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 주택 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 주택 자료 읽기
+
+</div>
 
 ```python
 import pandas as pd
@@ -72,13 +74,13 @@ print(f"98105 지역 {len(house_98105)}건")
 
 98105 지역 313건이다. 아래에서 선형, 다항, 스플라인, GAM을 같은 자료에 적용해 비교한다.
 
-</div>
-
 ### 선형 모형과 다항 모형
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 선형 모형과 다항 모형 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 선형 모형과 다항 모형
+
+</div>
 
 ```python
 import numpy as np
@@ -102,13 +104,13 @@ formula_poly = ('AdjSalePrice ~ SqFtTotLiving + np.power(SqFtTotLiving, 2) + '
 result_poly = smf.ols(formula=formula_poly, data=house_98105).fit()
 ```
 
-</div>
-
 ### statsmodels로 만드는 GAM
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. statsmodels로 GAM 적합 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> statsmodels로 GAM 적합
+
+</div>
 
 ```python
 from statsmodels.gam.api import GLMGam, BSplines
@@ -130,13 +132,13 @@ res_sm = gam_sm.fit()
 
 `alpha`를 모두 0으로 두었으므로 평활 벌점이 없는 회귀 스플라인이다. 매끄러움은 오직 `df`(기저함수의 개수)로만 조절된다.
 
-</div>
-
 ### pyGAM으로 만드는 GAM
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. pygam으로 GAM 적합 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> pygam으로 GAM 적합
+
+</div>
 
 ```python
 from pygam import LinearGAM, s, l
@@ -156,8 +158,6 @@ gam_py = LinearGAM(
 # alpha 를 손으로 정한 것과 대비된다.
 gam_py.gridsearch(X_gam, y_gam)
 ```
-
-</div>
 
 ## 해석
 

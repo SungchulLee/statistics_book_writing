@@ -52,9 +52,11 @@ $$
 
 보수적이다: 실제 포함확률이 적어도 $(1-\alpha)100\%$이지만 구간이 넓어지는 경향이 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 비율 신뢰구간 모의실험 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간 모의실험
+
+</div>
 
 ```python
 import numpy as np
@@ -113,13 +115,13 @@ wilson coverage: 96.0%
 
 같은 자료(같은 시드)에 `method`만 바꿔 세어 보면 Wald 91.0%, Agresti–Coull 96.0%, Clopper–Pearson 99.0%가 된다. Wald만 명목값 아래로 내려가고, Clopper–Pearson은 보수적인 만큼 위로 넘친다.
 
-</div>
-
 ### 구간의 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 구간 100개를 한 그림에 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+
+</div>
 
 ```python
 # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
@@ -146,8 +148,6 @@ plt.show()
 Wald가 91%로 떨어지는 이유는 $k$별로 따져 보면 분명하다. 이 100개 표본 중 $k = 1$인 것이 8개인데, 그 경우 Wald 구간은 $(0, 0.146)$으로 참값 0.2에 닿지 못한다. 반면 Wilson 구간은 중심이 0.5 쪽으로 당겨져 $(0.009, 0.236)$이 되어 참값을 담는다. 여기에 $k = 0$인 표본 하나를 더해 Wald는 9번 실패한다. $k = 0$에서는 Wald 구간이 $\hat p = 0$ 때문에 표준오차가 0이 되어 점 하나로 무너진다.
 
 Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 차이는 "$\hat p$가 작은 쪽에서 구간이 0 쪽으로 쏠리는가"에서 갈린다.
-
-</div>
 
 ## 해석
 

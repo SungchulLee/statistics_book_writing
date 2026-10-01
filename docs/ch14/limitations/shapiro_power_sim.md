@@ -32,9 +32,11 @@ $$
 \widehat{\text{Power}}(n) = \frac{\text{기각 횟수}}{M}.
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Shapiro-Wilk 검정력 곡선 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Shapiro-Wilk 검정력 곡선
+
+</div>
 
 ```python
 import numpy as np
@@ -88,8 +90,6 @@ n = 300: power = 1.000
 ```
 
 ![표본크기에 따른 검정력](./img/shapiro_power_sim_37.png)
-
-</div>
 
 ## 검정력 곡선 읽기
 

@@ -38,9 +38,11 @@ $$
 \alpha_j = \Phi\!\left(z_0 + \frac{z_0 + z_{\alpha_j}}{1 - a(z_0 + z_{\alpha_j})}\right)
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 세 가지 붓스트랩 신뢰구간 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 가지 붓스트랩 신뢰구간
+
+</div>
 
 ```python
 import numpy as np
@@ -68,8 +70,6 @@ def bootstrap_ci_demo(data, B=10_000, alpha=0.05, rng=None):
         "basic":      (2*theta_hat - hi_q, 2*theta_hat - lo_q),
     }
 ```
-
-</div>
 
 ## 붓스트랩 포함확률 모의실험
 
@@ -103,9 +103,11 @@ $\text{Exp}(3)$에서 $n = 30$을 뽑은 결과($M = 3{,}000$, $B = 2{,}000$):
 
 순열검정은 두 표본을 합치고 라벨을 섞어 각 순열에서 검정통계량을 계산한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 이표본 순열검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 순열검정
+
+</div>
 
 ```python
 def permutation_test_two_sample(x, y, B=9999, stat_func=None, rng=None):
@@ -130,8 +132,6 @@ def permutation_test_two_sample(x, y, B=9999, stat_func=None, rng=None):
 
 처치군 대 대조군 자료에 적용하면 순열 $p$값이 대개 Welch $t$ 검정의 $p$값과 가깝다. **다만 분산이 다르고 표본이 불균형하면 그렇지 않다**(연습문제 2).
 
-</div>
-
 ## 상관에 대한 순열검정
 
 $H_0\colon \rho = 0$을 검정하려면 한 변수를 고정한 채 다른 변수를 순열한다.
@@ -140,9 +140,11 @@ $$
 p = \frac{\#\bigl\{b : |r^{(\pi_b)}| \ge |r_{\text{obs}}|\bigr\} + 1}{B + 1}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 상관에 대한 순열검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 상관에 대한 순열검정
+
+</div>
 
 ```python
 def permutation_test_correlation(x, y, B=9999, rng=None):
@@ -159,8 +161,6 @@ def permutation_test_correlation(x, y, B=9999, rng=None):
     return r_obs, (count + 1) / (B + 1)
 ```
 
-</div>
-
 ## 대응 순열검정 (부호 뒤집기)
 
 대응자료 $(x_i, y_i)$에서 차이 $d_i = x_i - y_i$는 $H_0$ 아래에서 $0$에 대해 대칭이어야 한다. 부호를 무작위로 뒤집는다.
@@ -169,9 +169,11 @@ $$
 T^{(\pi)} = \frac{1}{n}\sum_{i=1}^{n} s_i\,d_i, \qquad s_i \in \{-1, +1\} \text{ 균등}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 대응 순열검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 대응 순열검정
+
+</div>
 
 ```python
 def paired_permutation_test(x, y, B=9999, rng=None):
@@ -189,8 +191,6 @@ def paired_permutation_test(x, y, B=9999, rng=None):
     return t_obs, ((np.abs(t_perm) >= abs(t_obs)).sum() + 1) / (B + 1)
 ```
 
-</div>
-
 ## 붓스트랩과 순열: 나란히
 
 두 재표집 전략은 서로 다른 질문에 답한다.
@@ -204,9 +204,11 @@ def paired_permutation_test(x, y, B=9999, rng=None):
 
 같은 이표본 비교에 둘 다 적용했을 때, $0$을 제외하는 붓스트랩 신뢰구간과 같은 $\alpha$에서 기각하는 순열검정은 **대개** 일치한다. 어긋나는 경우는 연습문제 4에서 다룬다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 붓스트랩과 순열 나란히 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 붓스트랩과 순열 나란히
+
+</div>
 
 ```python
 def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
@@ -227,8 +229,6 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
     _, p_perm = permutation_test_two_sample(x, y, B=B, rng=rng)
     return diff_obs, ci, p_perm
 ```
-
-</div>
 
 ## 순열검정에서 통계량 선택이 결정적인 이유
 
@@ -365,7 +365,7 @@ def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
     !!! tip "실무 규칙"
         이표본 순열검정에서 **표본크기가 다르면 항상 스튜던트화 통계량을 쓴다.** 균형 설계($n_x = n_y$)에서는 두 버전이 사실상 같으므로 스튜던트화를 기본값으로 삼아도 잃을 것이 없다.
 
-        SciPy의 `stats.permutation_test`는 통계량을 사용자가 지정하게 되어 있다. 기본 예제들이 평균차를 쓰지만, 불균형 자료에서는 Welch $t$를 넘겨야 한다.
+        SciPy의 `stats.permutation_test`는 통계량을 사용자가 지정하게 되어 있다. 기본 보기들이 평균차를 쓰지만, 불균형 자료에서는 Welch $t$를 넘겨야 한다.
 
 <div class="drillbox" markdown>
 

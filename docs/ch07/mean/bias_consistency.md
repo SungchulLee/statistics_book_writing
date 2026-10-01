@@ -164,8 +164,8 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
 | 성질 | 결과 | 조건 |
 |----------|--------|-----------|
 | 불편성 | $E[\bar{X}] = \mu$ | $E[X_i] = \mu$ |
-| 일치성 (WLLN) | $\bar{X}_n \xrightarrow{p} \mu$ | i.i.d., $E[|X|] < \infty$ |
-| 강일치성 (SLLN) | $\bar{X}_n \to \mu$ a.s. | i.i.d., $E[|X|] < \infty$ |
+| 일치성 (WLLN) | $\bar{X}_n \xrightarrow{p} \mu$ | i.i.d., $E[\lvert X \rvert] < \infty$ |
+| 강일치성 (SLLN) | $\bar{X}_n \to \mu$ a.s. | i.i.d., $E[\lvert X \rvert] < \infty$ |
 | 평균제곱오차 속도 | $O(1/n)$ | $\text{Var}(X) < \infty$ |
 | 표준오차 속도 | $O(1/\sqrt{n})$ | $\text{Var}(X) < \infty$ |
 | 중심극한정리 | $\sqrt{n}(\bar{X}-\mu)/\sigma \to N(0,1)$ | i.i.d., $\text{Var}(X) < \infty$ |

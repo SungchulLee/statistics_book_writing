@@ -116,9 +116,11 @@ $$
 
     유의수준 5%에서 모분산이 15와 다르다고 결론지을 만한 증거가 충분하지 않다($p = 0.429$).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 요약값으로 하는 분산 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 요약값으로 하는 분산 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -160,8 +162,6 @@ Critical values: [9.591, 34.170]
 P-value: 0.4290
 Fail to reject H0: insufficient evidence of a difference.
 ```
-
-</div>
 
 
 ## 연습문제

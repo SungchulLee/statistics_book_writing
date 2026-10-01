@@ -44,9 +44,11 @@ $$
 
 $n \le 0.10 N$이면 이 수정은 무시할 만하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 세 방법으로 만든 평균 신뢰구간 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 방법으로 만든 평균 신뢰구간
+
+</div>
 
 ```python
 import numpy as np
@@ -107,13 +109,13 @@ t-interval coverage: 96.0%
 
 100회만 돌렸으므로 이 값 자체의 표준오차가 $\sqrt{0.95 \times 0.05/100} \approx 2.2$%p다. 96.0%는 95%와 구별되지 않는다.
 
-</div>
-
 ### 구간의 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 구간 100개를 한 그림에 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+
+</div>
 
 ```python
 # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
@@ -139,8 +141,6 @@ plt.show()
 가로선 하나가 표본 하나의 신뢰구간이고 세로 점선이 참값 $\mu = 0$이다. 놓친 넷만 빨간색이다.
 
 너비가 제각각인 것이 $t$-구간의 특징이다. 너비는 $s$에 비례하는데 $n = 10$에서 $s$는 표본마다 크게 흔들린다. 실패한 구간들을 보면 $\bar x$가 0에서 멀리 떨어져 있을 뿐 아니라 그 표본의 $s$가 그 거리를 덮을 만큼 크지 않았던 경우들이다.
-
-</div>
 
 ## 해석
 

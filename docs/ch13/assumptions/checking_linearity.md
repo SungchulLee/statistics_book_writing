@@ -6,9 +6,11 @@
 
 이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -42,8 +44,6 @@ R^2 = 0.7813
 
 기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
 
-</div>
-
 ## 1. 산점도를 이용한 시각적 점검
 
 **산점도**는 선형성을 확인하는 가장 간단하고 직관적인 방법이다. 각 독립변수를 종속변수에 대해 그려 관계가 직선처럼 보이는지 눈으로 확인할 수 있다.
@@ -56,9 +56,11 @@ R^2 = 0.7813
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 산점도로 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 산점도로 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -81,8 +83,6 @@ plt.show()
 - 직선 패턴은 선형성 가정이 충족되었을 가능성이 높음을 나타낸다.
 - 곡선, 군집, 그 밖의 비선형 패턴은 선형성 가정의 위배 가능성을 시사한다.
 
-</div>
-
 ## 2. 잔차그림
 
 **잔차그림**은 선형성을 확인하는 또 하나의 강력한 도구이다. 잔차는 관측값과 회귀모형이 예측한 값의 차이이다. 잔차를 예측값에 대해 그리면 선형성 가정이 성립하는지 평가할 수 있다.
@@ -95,9 +95,11 @@ plt.show()
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 잔차 그림으로 보기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 잔차 그림으로 보기
+
+</div>
 
 ```python
 import statsmodels.api as sm
@@ -129,8 +131,6 @@ plt.show()
 - **무작위 흩어짐:** 잔차가 뚜렷한 패턴 없이 0 주위에 무작위로 흩어져 있으면 선형성 가정이 충족되었을 가능성이 높다.
 - **잔차의 패턴:** 잔차에 곡선 패턴, 체계적인 군집, 그 밖의 구조가 있으면 비선형성을 나타내며 선형모형이 적절하지 않을 수 있음을 시사한다.
 
-</div>
-
 ## 3. 성분+잔차 그림(부분잔차 그림)
 
 **성분+잔차(CPR) 그림**은 **부분잔차 그림**이라고도 하며, 잔차그림의 개념을 확장하여 다중회귀에서 개별 설명변수의 선형성을 평가하게 해 준다.
@@ -153,9 +153,11 @@ $$
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 성분-잔차 그림 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 성분-잔차 그림
+
+</div>
 
 ```python
 import statsmodels.api as sm
@@ -175,8 +177,6 @@ plt.show()
 ![성분+잔차 그림](./img/checking_linearity_125.png)
 
 부분잔차가 직선을 따라 놓이면 그 설명변수에 대한 선형성이 뒷받침된다.
-
-</div>
 
 !!! note "`plot_ccpr`와 `plot_partregress`는 다르다"
     성분+잔차(부분잔차) 그림은 `plot_ccpr`이다. 이름이 비슷한 `plot_partregress`는 **부분회귀 그림**(추가변수 그림)으로, $Y$를 나머지 설명변수에 회귀시킨 잔차를 $X_j$를 나머지 설명변수에 회귀시킨 잔차에 대해 그린 것이다. 둘 다 유용하지만 서로 다른 그림이며, `plot_partregress`의 인자 이름도 `exog`가 아니라 `exog_i`이다.
@@ -214,9 +214,11 @@ $$
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 이차항을 넣어 견주기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 이차항을 넣어 견주기
+
+</div>
 
 ```python
 import numpy as np
@@ -255,8 +257,6 @@ AIC: 선형 549.02  →  이차 549.08
 
 - **적합 개선:** 다항 모형이 적합을 유의하게 개선하면(예: $R^2$ 상승, 제곱항 계수가 유의) 원래 관계가 비선형이었음을 시사한다.
 - **개선 없음:** 유의한 개선이 없으면 원래의 선형성 가정이 여전히 타당할 수 있다.
-
-</div>
 
 ## 선형성 진단 요약
 

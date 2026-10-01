@@ -14,9 +14,11 @@
 $C \times C$ 혼동행렬 $\mathbf{M}$의 원소 $M_{jk}$는 참 범주가 $j$이고 예측 범주가 $k$인 관측치의
 수다. 완벽한 분류기는 대각행렬을 만든다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 혼동행렬 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 혼동행렬 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -46,11 +48,11 @@ def confusion_matrix(y_true, y_pred, C):
 
 작은 3범주 문제로 예를 들면 다음과 같다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 작은 예로 확인
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 작은 예로 확인 { .eg }
 
 ```python
 # 범주마다 셋씩, 그중 둘을 맞힌 자료다. 아래 측도들을 손으로 따라가며
@@ -73,8 +75,6 @@ print(M)
  [1 0 2]]
 ```
 
-</div>
-
 ---
 
 ## 전체 정확도
@@ -85,9 +85,11 @@ $$
 \text{Accuracy} = \frac{\operatorname{tr}(\mathbf{M})}{n} = \frac{\sum_{c=0}^{C-1} M_{cc}}{\sum_{j,k} M_{jk}}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 전체 정확도 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 전체 정확도
+
+</div>
 
 ```python
 def accuracy(M):
@@ -103,8 +105,6 @@ print(f"Accuracy: {accuracy(M):.4f}")
 ```
 Accuracy: 0.6667
 ```
-
-</div>
 
 ---
 
@@ -126,9 +126,11 @@ $$
 정밀도는 범주 $c$로 예측한 것 중 옳은 비율(열 방향)이고, 재현율은 실제 범주 $c$인 관측치 중
 옳게 식별한 비율(행 방향)이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 범주별 정밀도·재현율·F1 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 범주별 정밀도·재현율·F1
+
+</div>
 
 ```python
 def per_class_metrics(M):
@@ -168,8 +170,6 @@ Class 1: Prec=0.667  Rec=0.667  F1=0.667
 Class 2: Prec=0.667  Rec=0.667  F1=0.667
 ```
 
-</div>
-
 ---
 
 ## 거시평균과 미시평균
@@ -189,9 +189,11 @@ $$
 
 단일 이름표 문제에서는 미시평균 정밀도와 미시평균 재현율이 같고 그 값이 정확도와 같다(연습문제 2).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 거시평균과 미시평균 F1 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 거시평균과 미시평균 F1
+
+</div>
 
 ```python
 def macro_f1(M):
@@ -235,8 +237,6 @@ Macro F1: 0.6667
 Micro F1: 0.6667
 ```
 
-</div>
-
 ---
 
 ## scikit-learn과의 검증
@@ -244,9 +244,11 @@ Micro F1: 0.6667
 붓꽃 자료에 소프트맥스 회귀 모형을 학습시키고, 직접 만든 지표를 scikit-learn의
 `classification_report`와 비교한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 붓꽃 자료로 sklearn 과 맞춰 보기 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 붓꽃 자료로 sklearn 과 맞춰 보기
+
+</div>
 
 ```python
 from sklearn.datasets import load_iris
@@ -310,12 +312,10 @@ Our Micro F1:  1.0000
 $\operatorname{diag}(19, 13, 13)$이 되고, 거시 F1과 미시 F1이 모두 $1.0000$이다. 두 구현의
 출력이 일치하여 구현의 정확성이 확인된다.
 
-</div>
-
 !!! note "완벽한 결과는 검증에 좋은 사례가 아니다"
     혼동행렬이 대각행렬이면 모든 지표가 1이 되므로, 거시평균과 미시평균의 **차이**를 확인할 수
     없고 구현의 미묘한 버그도 드러나지 않는다. 검증할 때는 오분류가 섞인 사례를 쓰는 편이 낫다.
-    위의 3범주 장난감 예제(정확도 $0.6667$)나 연습문제 1의 4범주 행렬이 그런 용도에 적합하다.
+    위의 3범주 장난감 보기(정확도 $0.6667$)나 연습문제 1의 4범주 행렬이 그런 용도에 적합하다.
 
 !!! note "`multi_class='multinomial'`은 더 이상 필요하지 않다"
     이 인자는 scikit-learn 0.22부터 기본값 `'auto'`가 다항 방식을 고르므로 불필요해졌고,
@@ -327,9 +327,11 @@ $\operatorname{diag}(19, 13, 13)$이 되고, 거시 F1과 미시 F1이 모두 $1
 
 열지도로 그리면 체계적인 오분류 양상을 쉽게 찾을 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 7. 혼동행렬 열지도 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 혼동행렬 열지도
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -367,8 +369,6 @@ plot_confusion_matrix(M_ours, class_names=iris.target_names)
 ```
 
 ![혼동행렬](./img/multiclass_metrics_228.png)
-
-</div>
 
 ---
 

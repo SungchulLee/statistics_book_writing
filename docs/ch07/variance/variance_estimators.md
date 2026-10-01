@@ -24,9 +24,11 @@ $$\text{SS} = \sum_{i=1}^n (X_i - \bar{X})^2$$
 
 $$E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2 \implies \text{Bias} = -\frac{\sigma^2}{n}$$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 편향이 정확히 얼마인지 확인하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 편향이 정확히 얼마인지 확인하기
+
+</div>
 
 ```python
 import numpy as np
@@ -62,8 +64,6 @@ n= 100  E[S̃²]=8.9087  (n-1)/n·σ²=8.9100  Bias=-0.0913  -σ²/n=-0.0900
 n= 500  E[S̃²]=8.9833  (n-1)/n·σ²=8.9820  Bias=-0.0167  -σ²/n=-0.0180
 ```
 
-</div>
-
 !!! note "편향은 n이 커지면 줄어든다"
     $n = 3$에서 편향은 $-\sigma^2/3 = -3.0$으로 참 분산의 33%이다. $n = 500$이면 편향이 $-0.018$로 무시할 만하다. 편향은 작은 표본에서 가장 중요하다.
 
@@ -71,9 +71,11 @@ n= 500  E[S̃²]=8.9833  (n-1)/n·σ²=8.9820  Bias=-0.0167  -σ²/n=-0.0180
 
 불편추정량($1/(n-1)$)은 평균제곱오차를 최소화하지 **않는다**. 정규성 아래에서 평균제곱오차가 최적인 추정량은 $1/(n+1)$을 쓰며, 작은 편향을 대가로 더 큰 분산 감소를 얻는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 세 추정량의 MSE { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 세 추정량의 MSE
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -106,8 +108,6 @@ three_estimators_mse()
 
 ![MSE of Variance Estimators (Normal Population)](./img/variance_estimators_51.png)
 
-</div>
-
 !!! info "편향–분산 맞바꿈"
     평균제곱오차 최적 추정량은 편향되어 있음에도 모든 $n$에서 평균제곱오차가 가장 작다. 편향–분산 맞바꿈을 깔끔하게 보여주는 예이다: 때로는 작은 편향을 받아들이는 편이 전체 추정오차를 줄인다.
 
@@ -119,9 +119,11 @@ $$\sum_{i=1}^n (X_i - \bar{X}) = 0$$
 
 이 편차들 가운데 $n - 1$개만이 독립적으로 자유롭게 변할 수 있다. 자유도로 나누는 것은 $\bar{X}$가 $\mu$보다 자료에 가까워 제곱합이 체계적으로 작아진다는 사실을 보정한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 자유도가 n-1인 이유 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 자유도가 n-1인 이유
+
+</div>
 
 ```python
 def degrees_of_freedom_intuition(seed=42):
@@ -177,8 +179,6 @@ $$\sum_{i=1}^n (X_i - \mu)^2 = \sum_{i=1}^n (X_i - \bar{X})^2 + n(\bar{X} - \mu)
 
 $E[n(\bar{X} - \mu)^2] = \sigma^2$이므로, $\bar{X}$로부터의 편차는 평균적으로 정확히 $\sigma^2$만큼 $\mu$로부터의 편차를 과소평가한다.
 
-</div>
-
 ## 평균을 아는 경우와 모르는 경우
 
 참 평균 $\mu$가 알려져 있으면 다음을 쓸 수 있다:
@@ -187,9 +187,11 @@ $$\hat{\sigma}^2_{\text{known}} = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2$$
 
 이 추정량은 불편이며 $\mu$를 추정하느라 자유도를 잃지 않으므로 $S^2$보다 **분산이 작다**.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 평균을 알 때와 모를 때 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 평균을 알 때와 모를 때
+
+</div>
 
 ```python
 def known_vs_unknown_mean(sigma=3.0, n_sim=100_000, seed=42):
@@ -226,15 +228,15 @@ n=  50  MSE(known μ)=3.2328  MSE(unknown)=3.2001  Ratio=0.990
 n= 100  MSE(known μ)=1.6033  MSE(unknown)=1.5968  Ratio=0.996
 ```
 
-</div>
-
 ## 금융 응용: 변동성 추정
 
 금융에서 변동성은 보통 수익률의 연율화된 표준편차로 추정한다. 분모의 선택($n$이냐 $n-1$이냐)은 추정 구간이 짧을수록 중요해진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 금융 응용 — 변동성 추정 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 금융 응용 — 변동성 추정
+
+</div>
 
 ```python
 def volatility_estimation_finance(seed=42):
@@ -275,8 +277,6 @@ Window=  63  Vol(1/n)=19.75%  Vol(1/(n-1))=19.91%  Diff=0.80%
 Window= 126  Vol(1/n)=19.87%  Vol(1/(n-1))=19.95%  Diff=0.40%
 Window= 252  Vol(1/n)=19.94%  Vol(1/(n-1))=19.98%  Diff=0.20%
 ```
-
-</div>
 
 !!! warning "짧은 구간은 차이를 키운다"
     5일 구간에서는 Bessel 수정 변동성이 소박한 추정값보다 대략 12% 높다. 분기(63일) 이상의 구간에서는 차이가 무시할 만하다. 실무에서는 많은 금융 응용이 기본적으로 $n-1$을 쓴다.
@@ -517,8 +517,8 @@ $k$개 집단의 분산이 같은지 검정하는 방법들을 정리하고, 각
     |---|---|---|---|
     | $F$ 검정(2집단) | $s_1^2/s_2^2$ | **매우 높음** | 쓰지 말 것 |
     | 바틀렛 | 분산들의 로그 가중합 | **매우 높음** | 정규 확신 시에만 |
-    | 르빈 | $|x_{ij}-\bar x_i|$에 분산분석 | 낮음 | 좋음 |
-    | 브라운-포사이드 | $|x_{ij}-\tilde x_i|$에 분산분석 | **가장 낮음** | **기본값** |
+    | 르빈 | $\lvert x_{ij}-\bar x_i\rvert$에 분산분석 | 낮음 | 좋음 |
+    | 브라운-포사이드 | $\lvert x_{ij}-\tilde x_i\rvert$에 분산분석 | **가장 낮음** | **기본값** |
     | 플리그너-킬린 | 순위 기반 | 매우 낮음 | 비모수 대안 |
 
     **왜 $F$와 바틀렛이 취약한가.** 둘 다 $\operatorname{Var}(S^2)=2\sigma^4/(n-1)$을 전제하는데, 앞서 본 대로 실제 분산은 $(\gamma_2+2)/2$배다. 첨도가 6이면 네 배이므로 검정통계량이 그만큼 부풀려진다.

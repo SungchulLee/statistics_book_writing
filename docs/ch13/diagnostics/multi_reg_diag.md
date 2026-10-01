@@ -49,9 +49,11 @@ $n > e^2 \approx 7.4$이면 BIC가 AIC보다 모형 복잡도에 더 무거운 �
 
 ### 적합과 VIF 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. VIF로 다중공선성 보기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> VIF로 다중공선성 보기
+
+</div>
 
 ```python
 import numpy as np
@@ -95,13 +97,13 @@ print(vif_data)
 
 세 설명변수 모두 VIF가 1에 가까워 다중공선성 문제가 없다. 이 모형의 $R^2$는 $0.4808$이다.
 
-</div>
-
 ### 잔차 분석
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 잔차 진단 그림 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 잔차 진단 그림
+
+</div>
 
 ```python
 y_pred = model.predict(X)
@@ -129,13 +131,13 @@ plt.show()
 
 이 잔차는 왜도 $1.256$, 첨도 $5.965$로 오른쪽으로 치우치고 꼬리가 두껍다. 반응변수 `PRICE`가 $5.00001$(50만 달러)에서 절단되어 있어(전체의 4.7%) 위쪽에 눈에 띄는 수평 띠가 나타나는 것도 확인할 수 있다.
 
-</div>
-
 ### AIC와 BIC를 이용한 모형선택
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. AIC·BIC로 모형 고르기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> AIC·BIC로 모형 고르기
+
+</div>
 
 ```python
 # 변수를 늘려 가며 네 모형을 견준다. R^2 는 변수를 더하면 반드시 오르므로
@@ -165,8 +167,6 @@ Model 4: AIC=45265.5, BIC=45337.0, R2=0.6062
 ```
 
 여덟 개 특성을 모두 쓴 Model 4가 AIC와 BIC 모두에서 압도적으로 낫다($\Delta\text{AIC} \approx 5700$). $R^2$도 0.48에서 0.61로 크게 오른다.
-
-</div>
 
 ## 해석
 

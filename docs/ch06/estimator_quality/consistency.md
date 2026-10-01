@@ -308,8 +308,8 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
     | 조건 | 일치성 | 중심극한정리 | 실무 |
     |---|---|---|---|
     | $\operatorname{Var}<\infty$ | ✓ | ✓ | 표준 방법 |
-    | $E|X|<\infty$, $\operatorname{Var}=\infty$ | ✓ | ✗ | 구간·검정 불가. 분위수 사용 |
-    | $E|X|=\infty$ | ✗ | ✗ | 평균 자체가 무의미 |
+    | $E\lvert X\rvert<\infty$, $\operatorname{Var}=\infty$ | ✓ | ✗ | 구간·검정 불가. 분위수 사용 |
+    | $E\lvert X\rvert=\infty$ | ✗ | ✗ | 평균 자체가 무의미 |
 
     **실무 권고.** 꼬리가 두꺼워 보이는 자료에서는 **적률이 존재하는지 먼저 확인**한다. 로그-로그 생존함수 그림의 기울기로 꼬리 지수 $\alpha$를 어림하고, $\alpha \le 2$이면 평균 기반 추론을 접고 분위수나 강건 통계량으로 옮긴다.
 

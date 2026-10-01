@@ -44,9 +44,11 @@ $$
 
 양측 $p$값은 $p = 2\,\Phi(-|Z_2|)$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 꼬리만 두꺼운 자료의 첨도 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 꼬리만 두꺼운 자료의 첨도 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -80,8 +82,6 @@ Sample excess kurtosis (Fisher) g2 = 1.0493
 D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
 => Evidence of non-normal kurtosis (departing from normality).
 ```
-
-</div>
 
 ## 해석
 

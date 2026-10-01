@@ -45,9 +45,11 @@ David Justice는 1995년과 1996년 **각각** Derek Jeter보다 타율이 높�
 | E | 191 | **28%** | 393 | 24% |
 | F | 373 | 6% | 341 | **7%** |
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. UC 버클리 입학 자료의 생태학적 오류 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> UC 버클리 입학 자료의 생태학적 오류
+
+</div>
 
 ```python
 import pandas as pd
@@ -69,7 +71,7 @@ def main():
     prob_female_admitted = (df.n_female * df.p_female).sum() / df.n_female.sum()
 
     # 학과별 합격률을 지원자 수로 가중평균한다.
-    # 단순평균이 아니라 가중평균인 것이 이 예제의 핵심이다.
+    # 단순평균이 아니라 가중평균인 것이 이 보기의 핵심이다.
     print(f"Overall male admission rate:   {prob_male_admitted:.2%}")
     print(f"Overall female admission rate: {prob_female_admitted:.2%}")
 
@@ -89,8 +91,6 @@ Overall female admission rate: 30.33%
 모순이 아니라 가중치의 문제다. 여성 지원자는 합격률이 낮은 학과(C, E, F)에 몰려 있고 남성은 합격률이 높은 학과(A, B)에 몰려 있다. 집단 수준의 비율이 개인 수준의 관계를 뒤집어 보여주는 것이며, 이것이 Simpson의 역설이자 생태학적 오류의 대표적인 예다.
 
 이 여섯 전공을 합친 수준에서는 남성의 합격률이 훨씬 높아 보인다(44% 대 30%). 그러나 학과별로 살펴보면 대부분의 학과에서 여성이 같거나 더 높은 비율로 합격했다. 여성이 전체 합격률이 낮은 경쟁적인 학과(C, D, E, F)에 불균형하게 많이 지원했기 때문에 역설이 생긴다.
-
-</div>
 
 ![학과별로 보면 여섯 중 네 곳에서 여성 합격률이 높은데 합친 점만 반대편에 있다](./img/berkeley_levels.png)
 

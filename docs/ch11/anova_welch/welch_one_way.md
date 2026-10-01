@@ -125,9 +125,11 @@ $$
 
 Welch 분산분석이 유의한 차이를 찾으면, 등분산이나 동일 표본크기를 가정하지 않는 **Games-Howell 검정** 같은 사후검정을 쓴다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. Games-Howell 사후검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Games-Howell 사후검정
+
+</div>
 
 ```python
 # Games-Howell 사후검정. Tukey HSD와 달리 쌍마다 자유도를 따로 계산한다.
@@ -147,8 +149,6 @@ B C 21.3333 32.0000 -10.6667 1.7638  -6.0474 4.9154 0.0044 -3.7514
 세 쌍이 모두 유의하다. `df` 열이 쌍마다 2.88, 4.08, 4.92로 다르다는 점이 Games-Howell의 특징이다. Tukey HSD라면 세 비교 모두 같은 자유도 $N - k = 7$을 썼을 것이다.
 
 `hedges` 열은 효과크기(Hedges의 $g$)다. $-4$에서 $-7.6$이라는 값은 통상적인 기준의 "큼"($0.8$)을 한참 넘는다. 집단 간 차이가 집단 내 산포보다 훨씬 크다는 뜻이며, 관측값이 10개뿐인데도 $p$가 이렇게 작은 이유이기도 하다.
-
-</div>
 
 ## 8. 장점
 

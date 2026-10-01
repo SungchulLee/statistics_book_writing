@@ -6,9 +6,11 @@
 
 ## 설정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -54,8 +56,6 @@ F = 16.1314, p = 0.0000
 
 이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
 
-</div>
-
 ## 단계별 접근
 
 1. **원인 파악:** 앞 절들에서 설명한 진단 도구로 어느 가정이 어느 정도로 어긋났는지 판정한다.
@@ -69,9 +69,11 @@ F = 16.1314, p = 0.0000
 
 정규성 가정이 어긋날 때 Kruskal-Wallis 검정은 일원배치 분산분석의 비모수 대안이 된다. 집단 사이에서 평균 대신 중앙값(더 정확히는 평균 순위)을 비교하며 잔차의 정규성을 가정하지 않는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. Kruskal-Wallis 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Kruskal-Wallis 검정
+
+</div>
 
 ```python
 from scipy.stats import kruskal
@@ -92,8 +94,6 @@ Kruskal-Wallis: H = 26.0698, p-value = 0.0000
 
 Kruskal-Wallis 검정은 이상점이나 치우친 분포에 덜 민감하지만, 분포의 모양이 같고 위치만 다르다고 가정한다. 자세한 내용은 [Kruskal-Wallis 검정](../../ch16/multi_group_nonparametric/kruskal_wallis.md)을 보라.
 
-</div>
-
 ## 자료 변환
 
 변환은 자료의 척도를 바꾸어 정규성과 등분산성 위반을 한꺼번에 다룰 수 있다.
@@ -106,9 +106,11 @@ $$
 Y' = \log(Y) \quad \text{or} \quad Y' = \log(Y + c) \text{ if } Y \text{ contains zeros}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 로그 변환 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 로그 변환
+
+</div>
 
 ```python
 import numpy as np
@@ -132,8 +134,6 @@ C      2.5159  0.1460
 
 로그를 취하니 집단별 표준편차가 0.090, 0.092, 0.146으로 좁혀졌다. 원래 척도에서는 0.87, 1.03, 2.08이었다. 분산이 평균과 함께 커지는 자료에서 로그 변환이 등분산성을 회복시키는 전형적인 모습이다.
 
-</div>
-
 ### 제곱근 변환
 
 포아송 계열 분포를 따르는 도수 자료에 유용하다:
@@ -142,9 +142,11 @@ $$
 Y' = \sqrt{Y}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 제곱근 변환 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 제곱근 변환
+
+</div>
 
 ```python
 # 제곱근 변환은 로그보다 약하게 편다. 도수 자료처럼 분산이 평균에 비례하는
@@ -165,8 +167,6 @@ C      3.5274  0.2735
 
 제곱근 변환은 로그보다 약하게 작용한다. 표준편차가 0.140, 0.154, 0.274로 여전히 두 배 가까이 벌어져 있다. 변환의 세기는 로그 > 제곱근 순이며, 자료의 치우침 정도에 맞춰 골라야 한다.
 
-</div>
-
 ### Box-Cox 변환
 
 $\lambda$로 모수화된 거듭제곱 변환의 족으로, 정규성에 가장 가까워지도록 $\lambda$를 최적화할 수 있다:
@@ -175,9 +175,11 @@ $$
 Y'(\lambda) = \begin{cases} \frac{Y^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\ \log(Y) & \text{if } \lambda = 0 \end{cases}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. Box-Cox 변환 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> Box-Cox 변환
+
+</div>
 
 ```python
 from scipy.stats import boxcox
@@ -197,8 +199,6 @@ $\lambda = -1.54$는 로그 변환($\lambda = 0$)보다도 훨씬 강한 변환�
 
 이 값을 그대로 받아들이기 전에 멈춰야 한다. $\lambda = -1.54$로 변환한 값은 $-1/Y^{1.54}$에 가까워 해석이 거의 불가능하다. **변환이 이상점 하나에 끌려가고 있다면, 그 이상점을 먼저 조사하는 것이 순서다.**
 
-</div>
-
 !!! note "변환 후의 해석"
     자료를 변환하면 분산분석은 원래 평균이 아니라 변환된 평균에 관한 가설을 검정한다. 결과를 해석하고 보고할 때 주의하라. 가능하면 추정값을 역변환하고, 어떤 척도에서 분석했는지 분명히 밝혀야 한다.
 
@@ -208,9 +208,11 @@ $\lambda = -1.54$는 로그 변환($\lambda = 0$)보다도 훨씬 강한 변환�
 
 Welch 분산분석은 집단 사이의 등분산을 가정하지 않는다. Welch-Satterthwaite 근사로 F-검정의 자유도를 조정한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. Welch 분산분석 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> Welch 분산분석
+
+</div>
 
 ```python
 from scipy.stats import f_oneway
@@ -233,15 +235,15 @@ print(welch_result)
 
 전체 논의는 [Welch의 일원배치 분산분석](../anova_welch/welch_one_way.md)을 보라.
 
-</div>
-
 ### 로버스트 추정량
 
 Huber나 M-추정량 같은 방법은 이상점에 덜 민감한 분산분석 유사 결과를 준다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 로버스트 추정량 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 로버스트 추정량
+
+</div>
 
 ```python
 import statsmodels.api as sm
@@ -272,8 +274,6 @@ OLS로 적합하면 집단 C의 계수가 2.546인데 로버스트 추정은 2.2
 
 표준오차도 눈여겨보라. 로버스트 추정의 0.321은 OLS의 0.452보다 작다. 이상점을 통제하면 추정이 오히려 정밀해진다.
 
-</div>
-
 ## 순열검정
 
 순열검정은 분포에 대한 가정을 최소한으로만 둔다. 작동 방식은 다음과 같다:
@@ -283,9 +283,11 @@ OLS로 적합하면 집단 C의 계수가 2.546인데 로버스트 추정은 2.2
 3. 각 순열마다 F-통계량을 다시 계산한다.
 4. 관측된 F-통계량을 순열분포와 비교한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 8. 순열검정 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 순열검정
+
+</div>
 
 ```python
 import numpy as np
@@ -325,8 +327,6 @@ Permutation test p-value: 0.0000
 
 자세한 내용은 [순열검정](../../ch17/permutation/foundations.md)을 보라.
 
-</div>
-
 ## 위반별 처방 요약
 
 | 위반 | 권장 처방 |
@@ -347,7 +347,7 @@ Permutation test p-value: 0.0000
 
 **순열검정이 왜 듣지 않는지**가 특히 중요하다. 순열검정은 "집단 표시를 뒤섞어도 분포가 같다"는 교환가능성을 귀무가설로 삼는데, 분산이 다르면 평균이 같아도 분포가 같지 않으므로 **귀무가설 자체가 이미 거짓**이다. 분포에 대한 가정을 하지 않는다는 말이 어떤 위반에도 로버스트하다는 뜻은 아니다. 순열검정이 고치는 것은 정규성이지 등분산이 아니다.
 
-**변환이 듣지 않는 이유**도 같은 맥락이다. 로그 변환은 *분산이 평균에 비례해 커질 때* 등분산을 회복시킨다. 위 예제 3에서 표준편차가 $0.87,\ 1.03,\ 2.08$에서 $0.090,\ 0.092,\ 0.146$으로 좁혀진 것이 그 경우다. 그러나 여기 셋째·넷째 줄은 세 집단의 평균이 모두 $20$으로 같고 분산만 다르다. 평균이 같으면 어떤 단조변환도 그 자리에서 거의 선형이므로 분산비가 그대로 남는다. **"분산이 다르다"를 보자마자 변환부터 떠올리는 습관은 위험하다.** 분산이 평균과 함께 움직이는지를 먼저 보아야 한다.
+**변환이 듣지 않는 이유**도 같은 맥락이다. 로그 변환은 *분산이 평균에 비례해 커질 때* 등분산을 회복시킨다. 위 보기 3에서 표준편차가 $0.87,\ 1.03,\ 2.08$에서 $0.090,\ 0.092,\ 0.146$으로 좁혀진 것이 그 경우다. 그러나 여기 셋째·넷째 줄은 세 집단의 평균이 모두 $20$으로 같고 분산만 다르다. 평균이 같으면 어떤 단조변환도 그 자리에서 거의 선형이므로 분산비가 그대로 남는다. **"분산이 다르다"를 보자마자 변환부터 떠올리는 습관은 위험하다.** 분산이 평균과 함께 움직이는지를 먼저 보아야 한다.
 
 ## 연습문제
 

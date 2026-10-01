@@ -128,9 +128,11 @@ Pearson 상관은 평균과 표준편차에 기반하는데, 이들 자체가 �
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Pearson 상관계수 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Pearson 상관계수 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -168,8 +170,6 @@ SciPy r = 0.9996, p-value = 0.000000
 마지막 줄이 이상점의 위력이다. $r = 0.9996$이 점 하나를 더하자 0.4180으로 떨어졌다. 관측값 11개 중 하나가 상관계수를 절반 넘게 깎아냈다.
 
 `scipy.stats.pearsonr` 함수는 표본상관과 함께 귀무가설 $H_0\!: \rho = 0$에 대한 양측 p-값을 돌려준다. 이 가설검정의 자세한 내용은 [Pearson의 r 검정](../correlation_test/test_pearson.md)을 보라.
-
-</div>
 
 ---
 

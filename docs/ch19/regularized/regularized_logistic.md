@@ -39,9 +39,11 @@ $$
 
 이다. L2 벌점은 모든 계수를 0 쪽으로 축소하지만 어느 것도 정확히 0으로 만들지 않는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. L2 벌점 로지스틱 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> L2 벌점 로지스틱
+
+</div>
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -77,8 +79,6 @@ Ridge coefficients: [ 1.346 -1.162  0.955 -0.593 -0.031 -0.187 -0.009 -0.243  0.
 $(1.5, -1.0, 0.8, -0.5, 0.3)$과 비교하면 강한 신호 네 개는 잘 잡아냈지만 가장 약한 신호
 $0.3$은 부호까지 틀렸다. 잡음변수 15개의 계수는 절댓값이 최대 $0.398$로, 0이 아니지만 작다.
 
-</div>
-
 ## L1 정칙화(라쏘)
 
 라쏘 로지스틱 회귀는 제곱 벌점 대신 절댓값 노름을 쓴다.
@@ -92,9 +92,11 @@ $$
 L1 벌점은 **희소성**을 유도한다. 충분히 작은 계수는 정확히 0으로 밀려나 자동으로 변수선택이
 이루어진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. L1 벌점 로지스틱 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> L1 벌점 로지스틱
+
+</div>
 
 ```python
 # L1 벌점은 lbfgs 로 풀 수 없다. 0 에서 미분이 되지 않기 때문이며,
@@ -118,8 +120,6 @@ Non-zero coefficients: 17 / 20
 전체로는 20개 중 **17개**가 0이 아니다. 즉 $C = 1.0$에서는 아직 벌점이 약해 잡음변수 대부분이
 살아남는다.
 
-</div>
-
 ## 엘라스틱넷
 
 엘라스틱넷은 배합모수 $\alpha \in [0,1]$(scikit-learn에서는 `l1_ratio`)로 L1과 L2 벌점을
@@ -133,9 +133,11 @@ $\alpha = 0$이면 능형, $\alpha = 1$이면 라쏘가 된다. 상관된 특성
 단독이라면 각 집단에서 하나만 고르지만, L2 성분이 상관된 설명변수들끼리 가중치를 나누어 갖도록
 유도하기 때문이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 엘라스틱넷 로지스틱 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 엘라스틱넷 로지스틱
+
+</div>
 
 ```python
 # 엘라스틱넷은 l1_ratio 로 두 벌점의 배합비를 정한다. 0.5 면 절반씩이다.
@@ -156,16 +158,16 @@ Elastic Net coefficients: [ 1.342 -1.153  0.947 -0.585 -0.012 -0.172  0.    -0.2
 앞 다섯 개는 $(1.342,\ -1.153,\ 0.947,\ -0.585,\ -0.012)$이고 0이 아닌 계수는 19개다. 예상대로
 능형(20개)과 라쏘(17개) 사이에 놓인다.
 
-</div>
-
 ## 정칙화 강도의 영향
 
 $C$가 커지면(정칙화가 약해지면) 추정치가 벌점 없는 MLE에 가까워지고, $C$가 작아지면
 (정칙화가 강해지면) 계수가 0 쪽으로 축소된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 계수 경로 그리기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 계수 경로 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -198,15 +200,15 @@ plt.show()
 
 ![릿지 로지스틱 회귀의 계수 경로](./img/regularized_logistic_119.png)
 
-</div>
-
 ## 교차검증으로 C 조율하기
 
 scikit-learn은 $C$ 격자 위에서 교차검증을 수행하는 `LogisticRegressionCV`를 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 교차검증으로 C 고르기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 교차검증으로 C 고르기
+
+</div>
 
 ```python
 from sklearn.linear_model import LogisticRegressionCV
@@ -230,8 +232,6 @@ Best CV accuracy: 0.7450
 ```
 
 결과는 최적 $C = 1.6238$, 교차검증 정확도 $0.7450$이다.
-
-</div>
 
 !!! note "`scores_`의 키에 주의"
     `model_cv.scores_`는 범주 이름표를 키로 하는 딕셔너리다. 위 코드의 `scores_[1]`은 이름표가
@@ -409,7 +409,7 @@ L1 벌점은 희소한 해를 만드는데 L2 벌점은 그렇지 않은 이유�
 
     이는 연습문제 1의 $C = 0.1$ 결과와 사실상 같은 지점이다. 눈여겨볼 것은, 교차검증이
     **정확도**를 기준으로 골랐는데도 여기서는 매우 희소한 모형을 선택했다는 점이다. 18장의
-    회귀 예제에서 교차검증이 늘 지나치게 조밀한 모형을 고르던 것과 대비된다.
+    회귀 보기에서 교차검증이 늘 지나치게 조밀한 모형을 고르던 것과 대비된다.
 
     차이의 원인은 기준의 성질이다. 정확도는 **계단함수**라 예측 이름표가 바뀌지 않는 한
     잡음변수를 하나 더 넣어도 값이 전혀 변하지 않는다. 반면 이탈도나 로그손실은 연속적이라

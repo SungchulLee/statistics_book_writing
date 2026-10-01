@@ -79,7 +79,7 @@ $$
     \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2} \qquad \square
     $$
 
-    ---
+---
 
 ## 2. 주어진 점에서의 반응의 기댓값
 
@@ -137,7 +137,7 @@ $$
     \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
     $$
 
-    ---
+---
 
 ## 3. 주어진 점에서의 반응(예측)
 
@@ -188,7 +188,7 @@ $$
     \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
     $$
 
-    ---
+---
 
 ## 요약 비교
 

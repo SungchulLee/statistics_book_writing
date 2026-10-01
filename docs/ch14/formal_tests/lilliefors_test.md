@@ -37,9 +37,11 @@ Lilliefors 검정은 모수 추정을 포함한 상태에서 $D_n$의 귀무분�
     p \approx \frac{1}{B} \sum_{b=1}^{B} \mathbf{1}(D_b^* \geq D_{\text{obs}}).
     $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Lilliefors 검정 직접 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Lilliefors 검정 직접 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -95,8 +97,6 @@ Lilliefors KS D = 0.1391, bootstrap p = 0.0000
 ```
 
 붓스트랩 $p$값이 정확히 0이라는 것은 1,500번의 붓스트랩 표본 중 $D_{\text{obs}} = 0.1391$ 이상을 낸 것이 하나도 없었다는 뜻이다. 붓스트랩 귀무분포의 95백분위수는 $0.0509$로, 관측값이 그 세 배에 가깝다. 정확한 $p$값을 알 수는 없고 $p < 1/1500$이라고만 말할 수 있다.
-
-</div>
 
 ## 붓스트랩이 작동하는 이유
 

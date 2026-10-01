@@ -297,7 +297,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-**실용적인 축소 예제.** $n$명을 조사한 여론조사에서 $\hat p = X/n$을 얻었다. 어떤 목표값 $p_0$(예: 0.5)에 대해 축소추정량 $\hat p_{\text{shr}} = w \hat p + (1 - w) p_0$을 생각하자. (참 $p$가 $p_0$과 같다고 가정하고) 최적의 $w$를 구하라.
+**실용적인 축소 보기.** $n$명을 조사한 여론조사에서 $\hat p = X/n$을 얻었다. 어떤 목표값 $p_0$(예: 0.5)에 대해 축소추정량 $\hat p_{\text{shr}} = w \hat p + (1 - w) p_0$을 생각하자. (참 $p$가 $p_0$과 같다고 가정하고) 최적의 $w$를 구하라.
 
 </div>
 
@@ -345,7 +345,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
     | 손실함수 | 최적 추정값 |
     |---|---|
     | 제곱오차 $(\theta-a)^2$ | 사후**평균** |
-    | 절대오차 $|\theta-a|$ | 사후**중앙값** |
+    | 절대오차 $\lvert \theta-a\rvert$ | 사후**중앙값** |
     | 0-1 손실 | 사후**최빈값**(MAP) |
     | 비대칭 선형(핀볼) $\rho_\tau$ | 사후 **$\tau$ 분위수** |
 

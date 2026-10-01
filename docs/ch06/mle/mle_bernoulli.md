@@ -67,9 +67,11 @@ $$
 
 ## 로그가능도 곡선 그려 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 베르누이 로그가능도와 MLE { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이 로그가능도와 MLE
+
+</div>
 
 ```python
 import numpy as np
@@ -193,8 +195,6 @@ Max log-likelihood: -57.3074
 ```
 
 ![베르누이분포의 MLE](./img/mle_bernoulli_70.png)
-
-</div>
 
 ## 연습문제
 

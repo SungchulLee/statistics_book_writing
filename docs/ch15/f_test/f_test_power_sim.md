@@ -36,9 +36,11 @@ $$
 
 $\hat{\beta}$의 표준오차는 $\sqrt{\hat{\beta}(1-\hat{\beta})/B}$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. F 검정의 검정력 모의실험 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> F 검정의 검정력 모의실험
+
+</div>
 
 ```python
 import numpy as np
@@ -91,11 +93,11 @@ Estimated power: 0.506 (SE: 0.007)
 
 검정력이 표본크기에 따라 어떻게 변하는지 살펴보려면
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 표본크기에 따른 검정력
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 표본크기에 따른 검정력 { .eg }
 
 ```python
 # 이번에는 차이를 1.5 배로 줄이고 n 을 키워 간다. 쓸 만한 검정력을 얻으려면
@@ -114,8 +116,6 @@ n1=n2= 30: power = 0.573
 n1=n2= 50: power = 0.809
 n1=n2=100: power = 0.977
 ```
-
-</div>
 
 ## 해석
 
@@ -301,7 +301,7 @@ n1=n2=100: power = 0.977
 
     검정력이 1에 가까울수록 필요한 반복이 급격히 줄어든다. 연습문제 1의 표에서 검정력 $1.000$으로 나온 칸들은 적은 반복으로도 확인할 수 있었다.
 
-    **본문 예제의 확인.** $\hat{\beta} = 0.506$, $B = 5000$이면 $\text{SE} = \sqrt{0.506 \times 0.494/5000} = 0.00707$이고 95% 구간이 $0.506 \pm 0.014$이다. $\pm 0.01$ 목표에는 조금 부족하므로 $B = 10{,}000$이 필요하다. $\square$
+    **본문 보기의 확인.** $\hat{\beta} = 0.506$, $B = 5000$이면 $\text{SE} = \sqrt{0.506 \times 0.494/5000} = 0.00707$이고 95% 구간이 $0.506 \pm 0.014$이다. $\pm 0.01$ 목표에는 조금 부족하므로 $B = 10{,}000$이 필요하다. $\square$
 
 <div class="drillbox" markdown>
 

@@ -15,9 +15,11 @@ MNIST는 손글씨 숫자(0--9)의 회색조 이미지로 훈련 60,000장과 �
 각 이미지는 $28 \times 28$ 화소다. 과제는 $C = 10$인 다범주 분류이고, 정규화 후 각 화소값은
 $[0, 1]$에 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. MNIST 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> MNIST 자료 읽기
+
+</div>
 
 ```python
 import torch
@@ -53,17 +55,17 @@ Test samples:     10000
 Image shape:      torch.Size([1, 28, 28])
 ```
 
-</div>
-
 ---
 
 ## 표본 이미지 시각화
 
 모형화에 앞서 자료를 살펴보는 일이 필수적이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 자료 눈으로 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 자료 눈으로 보기
+
+</div>
 
 ```python
 # 모형을 세우기 전에 자료를 눈으로 본다. 어떤 자료인지도 모르고 학습부터
@@ -80,8 +82,6 @@ plt.show()
 
 ![MNIST 표본 이미지](./img/mnist_classification_47.png)
 
-</div>
-
 ---
 
 ## 모형 1 --- 소프트맥스 회귀(단일 선형층)
@@ -95,9 +95,11 @@ $$
 
 여기서 $\mathbf{W} \in \mathbb{R}^{10 \times 784}$이고 $\mathbf{b} \in \mathbb{R}^{10}$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 소프트맥스 회귀 모형 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 소프트맥스 회귀 모형
+
+</div>
 
 ```python
 import torch.nn as nn
@@ -120,17 +122,17 @@ class SoftmaxRegression(nn.Module):
 PyTorch의 `nn.CrossEntropyLoss`는 log-softmax와 음의 로그가능도를 수치적으로 안정한 하나의
 연산으로 결합한다. 따라서 모형의 `forward`는 확률이 아니라 **로짓**을 반환해야 한다.
 
-</div>
-
 ---
 
 ## 학습 루프
 
 학습 루프는 세 모형이 공유한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 학습 함수 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 학습 함수
+
+</div>
 
 ```python
 def train_model(model, train_loader, epochs=5, lr=0.1):
@@ -161,11 +163,11 @@ def train_model(model, train_loader, epochs=5, lr=0.1):
 
 소프트맥스 회귀 모형을 학습시킨다.
 
+<div class="exbox" markdown>
+
+**보기 5.** <span class="diff easy" title="쉬움"></span> 선형 모형 학습
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 5. 선형 모형 학습 { .eg }
 
 ```python
 # 1번: 선형 모형. 아래 두 모형과 견줄 기준선이다.
@@ -183,15 +185,15 @@ Epoch 4/5, Loss: 0.3025
 Epoch 5/5, Loss: 0.2948
 ```
 
-</div>
-
 ---
 
 ## 평가
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 평가 함수 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 평가 함수
+
+</div>
 
 ```python
 def evaluate(model, test_loader):
@@ -243,8 +245,6 @@ Overall accuracy: 92.15%
 
 **전형적인 결과: 검정 정확도 약 92%.**
 
-</div>
-
 ---
 
 ## 모형 2 --- 이층 순방향 신경망
@@ -255,9 +255,11 @@ $$
 \mathbf{h} = \operatorname{ReLU}(\mathbf{W}_1 \mathbf{x} + \mathbf{b}_1), \qquad \mathbf{z} = \mathbf{W}_2 \mathbf{h} + \mathbf{b}_2
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 7. 은닉층 하나짜리 신경망 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 은닉층 하나짜리 신경망
+
+</div>
 
 ```python
 class TwoLayerNet(nn.Module):
@@ -306,17 +308,17 @@ Overall accuracy: 96.86%
 **전형적인 결과: 검정 정확도 약 97%.** 은닉층이 원시 화소값보다 판별력이 높은 획의 양상과
 곡선을 학습한다.
 
-</div>
-
 ---
 
 ## 모형 3 --- 합성곱 신경망
 
 CNN은 국소 수용영역과 가중치 공유를 통해 이미지의 공간 구조를 활용한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 8. 합성곱 신경망 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 합성곱 신경망
+
+</div>
 
 ```python
 import torch.nn.functional as F
@@ -370,8 +372,6 @@ Overall accuracy: 96.80%
 **전형적인 결과: 검정 정확도 약 98--99%.** 합성곱층은 위치와 무관하게 국소 양상(모서리, 꼭짓점,
 고리)을 검출하므로 이미지 자료에 매우 효과적이다.
 
-</div>
-
 ---
 
 ## 모형 비교
@@ -397,9 +397,11 @@ CNN의 모수 개수가 이층 신경망보다 훨씬 적은데도 정확도는 
 
 세 모형의 손실 곡선을 함께 그리면 수렴 양상을 볼 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 9. 세 모형의 학습 곡선 { .eg }
+**보기 9.** <span class="diff easy" title="쉬움"></span> 세 모형의 학습 곡선
+
+</div>
 
 ```python
 # 세 모형의 학습 곡선을 겹쳐 그린다. 구조가 복잡할수록 같은 세대에서
@@ -418,17 +420,17 @@ plt.show()
 
 ![훈련 손실 비교](./img/mnist_classification_241.png)
 
-</div>
-
 ---
 
 ## 혼동행렬 시각화
 
 CNN의 혼동행렬은 모형이 여전히 헷갈려 하는 숫자 쌍을 드러낸다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 10. 혼동행렬 그리기 { .eg }
+**보기 10.** <span class="diff easy" title="쉬움"></span> 혼동행렬 그리기
+
+</div>
 
 ```python
 import numpy as np
@@ -463,8 +465,6 @@ plt.show()
 ![CNN의 혼동행렬](./img/mnist_classification_260.png)
 
 흔한 혼동으로는 4와 9(둘 다 오른쪽에 세로획이 있다), 3과 5(위쪽 곡선이 비슷하다)가 있다.
-
-</div>
 
 ---
 

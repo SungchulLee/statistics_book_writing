@@ -43,9 +43,11 @@ $$
 
 다음 모의실험이 이 결과들을 경험적으로 확인해 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 분산추정량 셋의 MSE 비교 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산추정량 셋의 MSE 비교
+
+</div>
 
 ```python
 import numpy as np
@@ -94,8 +96,6 @@ Bessel (n-1)        bias=+0.0057  var=3.5933  MSE=3.5934
 MSE-opt (n+1)       bias=-0.7226  var=2.4054  MSE=2.9276
 ```
 
-</div>
-
 ![분산추정량 셋의 MSE](./img/variance_estimator_mse.png)
 
 왼쪽 막대가 위 표의 MSE를 두 조각으로 나눈 것이다. 세 추정량은 **같은 제곱합을 무엇으로 나누는가**만 다르므로, 나누는 수를 키우면 분산이 줄고 편향이 커진다. 셋 중 어느 것도 두 조각을 동시에 줄이지 못하며, 합이 가장 작은 것은 가운데가 아니라 오른쪽이다.
@@ -119,9 +119,11 @@ $$
 \lambda^* = \frac{\mu^2}{\mu^2 + \sigma^2/n}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 축소추정량의 MSE { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 축소추정량의 MSE
+
+</div>
 
 ```python
 import numpy as np
@@ -162,8 +164,6 @@ MSE at lambda=1 (unbiased): 0.2000
 MSE at lambda*:             0.1957
 ```
 
-</div>
-
 ## 정규분포의 MLE
 
 $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$에 대해 MLE는 닫힌 형태의 해를 갖는다:
@@ -178,9 +178,11 @@ $$
 -\ell(\mu, \sigma^2) = \frac{n}{2}\log(2\pi\sigma^2) + \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 정규분포 모수의 최대가능도추정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정규분포 모수의 최대가능도추정
+
+</div>
 
 ```python
 import numpy as np
@@ -220,8 +222,6 @@ Closed-form: mu = 4.8995, sigma^2 = 2.3888
 Numerical:   mu = 4.8995, sigma^2 = 2.3889
 ```
 
-</div>
-
 ## 감마분포에서 MLE와 적률법
 
 $E[X] = \alpha\beta$이고 $\text{Var}(X) = \alpha\beta^2$인 $X \sim \text{Gamma}(\alpha, \beta)$에 대해 적률법 추정량은:
@@ -232,9 +232,11 @@ $$
 
 MLE는 닫힌 형태가 없어 수치 최적화가 필요하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 감마분포에서 MLE와 적률법 비교 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 감마분포에서 MLE와 적률법 비교
+
+</div>
 
 ```python
 import numpy as np
@@ -279,8 +281,6 @@ MLE: bias=+0.0399, MSE=0.088900
 MoM: bias=+0.0616, MSE=0.129929
 ```
 
-</div>
-
 !!! success "평균제곱오차에서 MLE의 승리"
     감마분포에서 $\alpha$와 $\beta$ 모두에 대해 MLE의 평균제곱오차가 적률법보다 작다. 점근이론과 일치하는 결과이다. MLE는 (Cramér–Rao 한계를 달성하여) 효율적인 반면 적률법은 일반적으로 그렇지 않다.
 
@@ -294,9 +294,11 @@ $$
 
 여기서 $I(\theta)$는 Fisher 정보량이다. $N(\mu, \sigma^2)$의 평균을 추정할 때 CRLB는 $\sigma^2/n$이고 표본평균이 이 한계를 정확히 달성한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 크라메르-라오 하한 확인 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 크라메르-라오 하한 확인
+
+</div>
 
 ```python
 import numpy as np
@@ -332,8 +334,6 @@ CRLB = sigma^2/n = 0.080000
 Var(X_bar)       = 0.078777  (ratio to CRLB: 0.9847)
 Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 ```
-
-</div>
 
 ## 해석
 
@@ -561,7 +561,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
     |---|---|
     | $-\ln f(x;\theta)$ | 최대가능도 |
     | $(x-\theta)^2$ | 최소제곱(평균) |
-    | $|x-\theta|$ | 중앙값 |
+    | $\lvert x-\theta\rvert$ | 중앙값 |
     | $\rho_\tau$ (핀볼 손실) | $\tau$ 분위수 |
     | 후버 $\rho$ | 강건 위치 추정 |
     | $-\ln f - \ln\pi(\theta)/n$ | MAP |
@@ -589,7 +589,7 @@ Var(median)      = 0.121813  (ratio to CRLB: 1.5227)
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-예제 1의 분산추정량 세 가지($n$, $n-1$, $n+1$로 나누는 것)를 **정규가 아닌 모집단**에서 비교하면 순위가 달라질 수 있다. 왜 그런지 설명하고 어떻게 확인할지 적어라.
+보기 1의 분산추정량 세 가지($n$, $n-1$, $n+1$로 나누는 것)를 **정규가 아닌 모집단**에서 비교하면 순위가 달라질 수 있다. 왜 그런지 설명하고 어떻게 확인할지 적어라.
 
 </div>
 

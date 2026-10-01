@@ -79,7 +79,7 @@ $$
 
 ---
 
-## 계산 예제
+## 계산 보기
 
 다섯 개의 짝지어진 관측값을 생각하자:
 
@@ -139,9 +139,11 @@ $$
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Kendall의 타우 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Kendall의 타우 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -174,8 +176,6 @@ Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우
 관측값이 5개뿐이라 두 p-값 모두 유의하지 않다.
 
 `scipy.stats.kendalltau` 함수는 기본으로 타우-b를 계산한다. 가설검정의 자세한 내용은 [Kendall의 타우 검정](../correlation_test/test_kendall.md)을 보라.
-
-</div>
 
 ---
 

@@ -15,9 +15,11 @@
 
 검정이 잘 보정되어 있다면 분포와 무관하게 기각률이 0.05에 가까워야 한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 모집단 모양에 따른 제1종 오류율 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 제1종 오류율
+
+</div>
 
 ```python
 import numpy as np
@@ -59,8 +61,6 @@ for dist in ["normal", "lognormal"]:
 Type I error (median-centered) under normal: 0.0370
 Type I error (median-centered) under lognormal: 0.0374
 ```
-
-</div>
 
 ## 해석
 

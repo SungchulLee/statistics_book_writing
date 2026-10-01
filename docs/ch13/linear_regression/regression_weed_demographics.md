@@ -39,9 +39,11 @@ $|r|$가 큰 설명변수가 회귀모형의 후보가 된다. 다만 상관은 
 
 ### 자료와 훈련/검정 분할
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 자료 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -108,13 +110,13 @@ max         17314422.21           66081.79           0.95  297.57
 
 50개 주 가운데 42개로 학습하고 8개로 검정한다. 인구가 56만에서 1,731만까지 30배 차이가 나는 것이 눈에 띈다. 이렇게 치우친 변수는 로그 변환을 고려할 만하다.
 
-</div>
-
 ### 단변량 회귀
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 단변량 모형 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 단변량 모형
+
+</div>
 
 ```python
 # 먼저 인구 하나만 넣은 단변량 모형으로 기준선을 잡는다.
@@ -132,13 +134,13 @@ print(f"단변량 RMSE = {rmse1:.2f}")
 
 인구만 쓴 단변량 모형의 검정 RMSE가 12.50이다. 아래 다변량 모형과 비교할 기준선이다.
 
-</div>
-
 ### statsmodels를 이용한 다변량 회귀
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 다변량 모형 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 다변량 모형
+
+</div>
 
 ```python
 # 변수를 셋으로 늘려 RMSE 가 실제로 줄어드는지 본다.
@@ -170,8 +172,6 @@ percent_white        32.0081     17.538      1.825      0.076      -3.496      6
 
 검정 RMSE는 다변량 12.89로 단변량 12.50보다 오히려 **나쁘다**. 훈련 자료에서는 변수를 더할수록 적합이 좋아지지만, 보지 않은 자료에서는 그렇지 않을 수 있다는 것을 보여주는 예다.
 
-</div>
-
 ### 계수의 크기는 무엇을 뜻하는가
 
 ![날것의 계수와 1표준편차 효과](./img/coef_scale_vs_effect.png)
@@ -184,9 +184,11 @@ $t$ 값이 이 재척도화와 **무관하다**는 점도 함께 보아 두자. 
 
 ### 예측 표
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 주별 예측오차 보기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 주별 예측오차 보기
+
+</div>
 
 ```python
 # 주별로 실제값과 예측값을 나란히 놓아 어느 주에서 크게 빗나갔는지 본다.
@@ -215,8 +217,6 @@ state_47  231.03     242.62 -11.59
 ```
 
 검정용 8개 주의 실제값과 예측값이다. 오차가 $-11.6$에서 $+21.1$까지 흩어져 있다. RMSE 12.89가 이 오차들을 하나의 숫자로 요약한 값이다.
-
-</div>
 
 ## 해석
 

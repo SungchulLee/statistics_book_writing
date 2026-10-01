@@ -32,9 +32,11 @@ $$
 
 세 페이지가 공유하는 King County(시애틀) 주택 매매 자료를 읽는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 주택 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 주택 자료 읽기
+
+</div>
 
 ```python
 import pandas as pd
@@ -65,13 +67,13 @@ max      11644855.0        10740.0   2015.0
 
 22,687건이다. 가격이 3,368달러에서 1,164만 달러까지 퍼져 있어 오른쪽으로 크게 치우친 자료다.
 
-</div>
-
 ### pd.cut으로 계단함수 만들기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 계단함수 회귀 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 계단함수 회귀
+
+</div>
 
 ```python
 import numpy as np
@@ -117,8 +119,6 @@ R^2 = 0.0283
 
 **계단함수의 값어치가 여기 있다.** 선형 모형이라면 "나이가 들수록 싸진다" 같은 단조 관계만 잡아낼 수 있지만, 계단함수는 U자 모양을 그대로 담는다. 물론 $R^2 = 0.028$로 설명력 자체는 낮다.
 
-</div>
-
 ### 직선이 못 하는 일과, 구간을 몇 개로 나눌 것인가
 
 ![직선과 계단함수의 대비, 그리고 구간 개수의 절충](./img/step_function_bins.png)
@@ -134,9 +134,11 @@ R^2 = 0.0283
 
 ### 구간 개수 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 구간 수를 바꿔 가며 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 구간 수를 바꿔 가며
+
+</div>
 
 ```python
 # 구간을 몇 개로 나눌지가 이 방법의 유일한 조절값이다. 늘리면 R^2 는
@@ -171,13 +173,13 @@ print(pd.DataFrame(results).round(4).to_string(index=False))
 
 구간을 늘리면 모수가 늘어 훈련 자료에 대한 적합은 반드시 좋아진다. 그런데도 이만큼밖에 오르지 않는다는 것은 주택 나이 하나로 가격을 설명하는 데 한계가 있다는 뜻이다.
 
-</div>
-
 ### 다른 방법과의 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 직선·다항식과 견주기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 직선·다항식과 견주기
+
+</div>
 
 ```python
 # 견줄 기준선 둘. 직선과 3차 다항식이다.
@@ -187,8 +189,6 @@ linear_model.fit(df[['age']].values, df['price'])
 X_poly = np.column_stack([df['age'] ** i for i in range(1, 4)])
 poly_model = LinearRegression().fit(X_poly, df['price'])
 ```
-
-</div>
 
 ## 해석
 

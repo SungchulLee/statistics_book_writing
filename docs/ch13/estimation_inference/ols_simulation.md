@@ -50,9 +50,11 @@ $$
 
 ### 핵심 함수
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 최소제곱의 행렬 연산 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 최소제곱의 행렬 연산
+
+</div>
 
 ```python
 import numpy as np
@@ -87,13 +89,13 @@ def anova_decomposition(y, X, beta_hat):
     return TSS, ESS, RSS
 ```
 
-</div>
-
 ### 몬테카를로 검증
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 몬테카를로로 확인하는 불편성 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 몬테카를로로 확인하는 불편성
+
+</div>
 
 ```python
 def monte_carlo(n=100, beta_true=[2, 3, -1], sigma=1.0, n_sim=5000):
@@ -134,8 +136,6 @@ beta_2: true=-1, MC mean=-0.9994, MC std=0.1442
 Monte Carlo 평균이 참값 $(2, 3, -1)$에 소수점 셋째 자리까지 맞는다. OLS가 불편추정량이라는 것을 모의실험으로 확인한 셈이다.
 
 $n = 200$, $\sigma = 2$일 때 몬테카를로 표준편차는 세 계수 모두 $0.15$ 근처가 되며, 이는 이론값 $\sigma/\sqrt{n} = 2/\sqrt{200} = 0.1414$와 잘 맞는다(설명변수가 표준정규이므로 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 대각원소가 대략 $1/n$이다).
-
-</div>
 
 ## 모의실험이 보여 주는 것
 

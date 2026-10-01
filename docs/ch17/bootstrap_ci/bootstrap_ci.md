@@ -18,9 +18,11 @@ $$
 
 이다. 여기서 $\hat\theta^*_q$는 붓스트랩 분포의 $q$번째 분위수이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 백분위수법 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 백분위수법
+
+</div>
 
 ```python
 def bootstrap_percentile_ci(data, statistic, n_boot=10_000, alpha=0.05, rng=None):
@@ -42,8 +44,6 @@ def bootstrap_percentile_ci(data, statistic, n_boot=10_000, alpha=0.05, rng=None
 
 단순하고 직관적이지만 붓스트랩 분포가 편향되거나 치우쳐 있으면 포함확률이 명목값에 못 미칠 수 있다.
 
-</div>
-
 ## 기본(역백분위수)법
 
 기본법은 붓스트랩 분포로 $\hat\theta - \theta$의 산포를 추정한 뒤 구간을 뒤집는다. $\hat\theta$를 표본통계량이라 할 때
@@ -52,9 +52,11 @@ $$
 \text{CI}_{\text{basic}} = \bigl[2\hat\theta - \hat\theta^*_{1 - \alpha/2},\;2\hat\theta - \hat\theta^*_{\alpha/2}\bigr]
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 기본(역백분위수)법 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기본(역백분위수)법
+
+</div>
 
 ```python
 def bootstrap_basic_ci(data, statistic, boot_stats, alpha=0.05):
@@ -72,8 +74,6 @@ def bootstrap_basic_ci(data, statistic, boot_stats, alpha=0.05):
 ```
 
 핵심 착상은 붓스트랩이 $\hat\theta$를 과대추정한다면 분위수를 $\hat\theta$에 대해 반사시켜 보정한다는 것이다.
-
-</div>
 
 ## BCa법 (편향보정 가속)
 
@@ -100,9 +100,11 @@ $$
 
 이다. $\hat\theta_{(i)}$는 관측 $i$를 뺀 잭나이프 반복값이고 $\bar\theta_{(\cdot)}$는 잭나이프 반복값들의 평균이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. BCa법 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> BCa법
+
+</div>
 
 ```python
 def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
@@ -140,15 +142,15 @@ def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
     return lo, hi, z0, a
 ```
 
-</div>
-
 ## 포아송 자료에 적용하기
 
 참 비율 $\lambda = 3.5$인 포아송분포에서 $n = 80$개를 뽑는다. 포아송분포는 이산이고 오른쪽으로 치우쳐 있어 붓스트랩 방법의 좋은 시험대이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 세 방법을 포아송 자료에 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 방법을 포아송 자료에
+
+</div>
 
 ```python
 import numpy as np
@@ -190,8 +192,6 @@ for name, (lo, hi) in [("백분위수", (lo_p, hi_p)), ("기본", (lo_b, hi_b)),
 
 **기본법이 백분위수법보다 정확히 $0.0125$만큼 왼쪽으로 옮겨져 있다.** 이는 붓스트랩 분포의 중심 $3.4375$가 $\hat\theta = 3.425$보다 $0.0125$ 크기 때문이다. 두 구간의 **폭은 항상 같다**. 기본법은 위치만 반사할 뿐 폭을 바꾸지 않는다.
 
-</div>
-
 ## 기본법은 무엇을 뒤집는가
 
 폭이 같고 위치만 옮겨진다는 사실은 기본법의 정의를 한 줄 고쳐 쓰면 바로 보인다. $[2\hat\theta - \hat\theta^*_{(1-\alpha/2)},\ 2\hat\theta - \hat\theta^*_{(\alpha/2)}]$는 **$\hat\theta$ 축에 대해 뒤집은 분포 $2\hat\theta - \hat\theta^*$에서 읽은 백분위수 구간**과 정확히 같다.
@@ -202,7 +202,7 @@ $\text{Exp}(1)$에서 $n = 30$을 뽑아 평균을 재면 $\hat\theta = 1.1845$�
 
 옮겨진 거리가 어디서 오는지도 그림에 표시해 두었다. 백분위수 구간의 **중점**이 $1.221$로 $\hat\theta$보다 $0.037$ 오른쪽에 있고, 반사하면 그만큼 왼쪽으로 가서 중점이 $1.148$이 된다. 두 구간은 정확히 $2 \times 0.037 = 0.074$만큼 어긋난다. 표본평균의 붓스트랩은 애초에 편향이 없으므로($E^*[\bar{x}^*] = \bar{x}$), 이 어긋남을 만드는 것은 편향이 아니라 **분포의 치우침**이다. 오른쪽 꼬리가 길면 분위수의 중점이 중심보다 오른쪽으로 밀리고, 기본법은 그 밀림을 반대쪽으로 되돌린다.
 
-그래서 두 방법 중 어느 쪽을 쓸지는 "붓스트랩 분포가 치우쳤는가"가 아니라 **"참 표본분포가 같은 방향으로 치우쳤는가"**로 정해진다. 같은 방향이면 백분위수가 옳고, 반대 방향이면 기본법이 옳다. 위 포아송 예제처럼 $n$이 크고 통계량이 얌전하면 중점과 $\hat\theta$의 거리가 $0.0125$로 작아져 둘 중 무엇을 골라도 차이가 없다.
+그래서 두 방법 중 어느 쪽을 쓸지는 "붓스트랩 분포가 치우쳤는가"가 아니라 **"참 표본분포가 같은 방향으로 치우쳤는가"**로 정해진다. 같은 방향이면 백분위수가 옳고, 반대 방향이면 기본법이 옳다. 위 포아송 보기처럼 $n$이 크고 통계량이 얌전하면 중점과 $\hat\theta$의 거리가 $0.0125$로 작아져 둘 중 무엇을 골라도 차이가 없다.
 
 ## 해석
 
@@ -295,7 +295,7 @@ $\text{Exp}(1)$에서 $n = 30$을 뽑아 평균을 재면 $\hat\theta = 1.1845$�
 
     $\square$
 
-    포아송 예제가 이 성질의 근사적 확인이다. $z_0 = -0.027$, $a = 0.013$으로 둘 다 $0$에 가까워 BCa 구간이 백분위수 구간과 소수 넷째 자리까지 일치했다.
+    포아송 보기가 이 성질의 근사적 확인이다. $z_0 = -0.027$, $a = 0.013$으로 둘 다 $0$에 가까워 BCa 구간이 백분위수 구간과 소수 넷째 자리까지 일치했다.
 
 <div class="drillbox" markdown>
 

@@ -23,9 +23,11 @@ $$
 p = \frac{\#\bigl\{b : |T^{(\pi_b)}| \ge |T_{\text{obs}}|\bigr\} + 1}{B + 1}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 이표본 순열검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이표본 순열검정
+
+</div>
 
 ```python
 import numpy as np
@@ -46,8 +48,6 @@ def perm_test_two_sample(x, y, n_perm=9999, rng=None):
     return obs_diff, p_value, perm_diffs
 ```
 
-</div>
-
 ## 다집단 순열검정
 
 크기 $n_1, \ldots, n_k$인 $k$개 집단에 대해, 분산분석에 대응하는 순열검정은 **집단평균들의 분산**을 검정통계량으로 쓴다.
@@ -62,9 +62,11 @@ $$
 p = \frac{\#\bigl\{b : T^{(\pi_b)} \ge T_{\text{obs}}\bigr\} + 1}{B + 1}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 다집단 순열검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 다집단 순열검정
+
+</div>
 
 ```python
 def perm_test_multi_group(groups, n_perm=9999, rng=None):
@@ -92,8 +94,6 @@ def perm_test_multi_group(groups, n_perm=9999, rng=None):
     return obs_var, p_value, perm_vars
 ```
 
-</div>
-
 ## 비율에 대한 순열검정
 
 이진 결과(전환 여부)를 갖는 A/B 검정에서, 집단 A는 $n_A$명 중 $c_A$명이 전환하고 집단 B는 $n_B$명 중 $c_B$명이 전환했다. 관측된 전환율 차이는
@@ -104,9 +104,11 @@ $$
 
 이다. 길이 $n_A + n_B$의 이진 벡터에 $c_A + c_B$개의 $1$(총 전환 수)을 넣고 섞은 뒤 나눈다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 비율에 대한 순열검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 비율에 대한 순열검정
+
+</div>
 
 ```python
 def perm_test_proportion(n_a, conv_a, n_b, conv_b, n_perm=9999, rng=None):
@@ -130,13 +132,13 @@ def perm_test_proportion(n_a, conv_a, n_b, conv_b, n_perm=9999, rng=None):
     return obs_diff, p_value, perm_diffs
 ```
 
+## 실행 보기
+
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> 난수 준비
+
 </div>
-
-## 실행 예제
-
-<div class="codebox" markdown>
-
-### 예제 4. 난수 준비 { .eg }
 
 ```python
 # 자료를 만드는 난수와 순열에 쓰는 난수를 따로 둔다. 이래야 자료를 그대로
@@ -145,15 +147,15 @@ rng_data = np.random.default_rng(11)
 rng = np.random.default_rng(3)
 ```
 
-</div>
-
 ### 이표본: 페이지 체류시간
 
 두 웹페이지를 비교한다. 페이지 A는 $N(120, 30^2)$에서 $n = 36$개, 페이지 B는 $N(135, 30^2)$에서 $n = 40$개이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 체류시간 비교 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 체류시간 비교
+
+</div>
 
 ```python
 # 두 페이지의 체류시간. 참 평균이 15 만큼 다르다.
@@ -172,15 +174,15 @@ print(page_a.mean(), page_b.mean(), diff, p)
 
 Welch $t$ 검정은 $p = 0.0003$을 준다. 두 방법 모두 $15$단위 이동을 확실히 탐지한다.
 
-</div>
-
 ### 다집단: 네 개의 처치군
 
 각 $30$개 관측을 갖는 네 집단을 평균 $160, 170, 155, 180$, 표준편차 $25$인 정규분포에서 생성한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 네 처치군 비교 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 네 처치군 비교
+
+</div>
 
 ```python
 # 네 처치군. 참 평균이 모두 다르다.
@@ -198,8 +200,6 @@ print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
 
 일원분산분석은 $F = 3.715$, $p = 0.0135$를 준다. 순열검정의 $0.0140$과 사실상 같다.
 
-</div>
-
 이 일치는 우연이 아니다. 세 칸으로 나누어 보면 이유가 드러난다.
 
 ![네 집단의 자료, 집단평균 분산의 귀무분포, 그리고 F 와의 관계](./img/group_variance_test.png)
@@ -214,9 +214,11 @@ print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
 
 대조군은 $23{,}739$명 중 $200$명 전환, 처치군은 $22{,}588$명 중 $182$명 전환이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 전환율 비교 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 전환율 비교
+
+</div>
 
 ```python
 # 전환율 A/B 검정. 표본이 2만 이상인데 전환은 200 안팎이라 전환율이
@@ -232,8 +234,6 @@ print(diff_ab)      # 0.000368
 ```
 
 전환율 차이 $0.0368$%p는 유의하지 않다. Fisher 정확검정이 $p = 0.6811$, 카이제곱 검정이 $p = 0.6996$을 준다.
-
-</div>
 
 ## 해석
 
@@ -338,13 +338,13 @@ print(diff_ab)      # 0.000368
 
     | 통계량 | 귀무가설 아래 | 대립가설 아래 | $p$값 |
     |:---|:---|:---|:---|
-    | $\bar x - \bar y$ | $0$ 근처 | 양이나 음 | 양측($|\cdot|$) |
+    | $\bar x - \bar y$ | $0$ 근처 | 양이나 음 | 양측($\lvert \cdot\rvert$) |
     | $\text{Var}(\bar x_1, \ldots, \bar x_k)$ | 작다 | 크다 | 단측(위쪽) |
     | $F$ 통계량 | $1$ 근처 | 크다 | 단측(위쪽) |
     | $\chi^2$ 통계량 | 작다 | 크다 | 단측(위쪽) |
-    | $\log(s_1^2/s_2^2)$ | $0$ 근처 | 양이나 음 | 양측($|\cdot|$) |
+    | $\log(s_1^2/s_2^2)$ | $0$ 근처 | 양이나 음 | 양측($\lvert \cdot\rvert$) |
 
-    분산분석의 $F$ 통계량과 여기서 쓴 평균들의 분산은 사실상 같은 정보를 담는다. 실행 예제에서 두 $p$값이 $0.0140$과 $0.0135$로 일치한 이유이다.
+    분산분석의 $F$ 통계량과 여기서 쓴 평균들의 분산은 사실상 같은 정보를 담는다. 실행 보기에서 두 $p$값이 $0.0140$과 $0.0135$로 일치한 이유이다.
 
     **차이가 나는 지점.** 집단 크기가 다르면 두 통계량이 달라진다. $\text{Var}(\bar x_i)$는 각 집단평균을 똑같이 취급하지만 $F$ 통계량은 집단 크기로 가중한다. 불균형 설계에서는 가중된 버전
 
@@ -356,7 +356,7 @@ print(diff_ab)      # 0.000368
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span> 전환율 예제는 $23{,}739$명과 $22{,}588$명을 쓴다. 이렇게 표본이 크면 중심극한정리에 의해 순열분포가 정규분포에 가까울 것이다. 순열된 차이들의 히스토그램에 정규밀도를 겹쳐 그려 경험적으로 확인하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 전환율 보기는 $23{,}739$명과 $22{,}588$명을 쓴다. 이렇게 표본이 크면 중심극한정리에 의해 순열분포가 정규분포에 가까울 것이다. 순열된 차이들의 히스토그램에 정규밀도를 겹쳐 그려 경험적으로 확인하라.
 
 </div>
 
@@ -405,7 +405,7 @@ print(diff_ab)      # 0.000368
 
     **정규 근사가 좋은 이유와 한계.** 여기서는 $E[X] = 186$으로 충분히 크지만, 이진 자료의 정규 근사는 기대 셀 도수가 작으면 무너진다. 경험칙은 모든 기대 셀 도수가 $5$ 이상이어야 한다는 것이다.
 
-    이 예제는 전환 수 $382$가 전체 $46{,}327$의 $0.8$%에 불과하므로 **희귀사건**에 가깝다. 그럼에도 절대 개수가 크므로 정규 근사가 작동한다. 전환이 $10$건 정도였다면 포아송 근사나 정확검정을 써야 한다.
+    이 보기는 전환 수 $382$가 전체 $46{,}327$의 $0.8$%에 불과하므로 **희귀사건**에 가깝다. 그럼에도 절대 개수가 크므로 정규 근사가 작동한다. 전환이 $10$건 정도였다면 포아송 근사나 정확검정을 써야 한다.
 
 <div class="drillbox" markdown>
 

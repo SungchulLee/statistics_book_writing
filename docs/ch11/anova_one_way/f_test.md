@@ -129,9 +129,11 @@ $$
 
 #### scipy.stats.f_oneway
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 1. scipy로 하는 일원배치 분산분석 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> scipy로 하는 일원배치 분산분석
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -209,15 +211,15 @@ P-Value = 0.0159
 
 왼쪽 상자그림에서 세 집단이 서로 겹치고, 오른쪽 F-분포에서 관측값 4.85 오른쪽의 붉은 넓이가 p-값 1.59%다.
 
-</div>
-
 ### B. Statsmodels
 
 #### statsmodels.formula.api.ols와 statsmodels.stats.anova.anova_lm
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 2. statsmodels로 하는 일원배치 분산분석 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> statsmodels로 하는 일원배치 분산분석
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -293,9 +295,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
 `f_oneway`가 F와 p 두 값만 주는 데 비해 `anova_lm`은 제곱합과 자유도까지 담은 분산분석표를 준다. F와 p는 앞과 정확히 같다.
 
-</div>
-
-## 3. 예제: 음료 종류에 따른 반응시간
+## 3. 보기: 음료 종류에 따른 반응시간
 
 <div class="probox" markdown>
 
@@ -532,7 +532,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
     붉게 칠한 오른쪽 꼬리가 p-값 2.81%다. 반올림한 4.88을 넣었으므로 앞의 정확한 계산이 준 0.0284와 미세하게 다르다.
 
-    ---
+---
 
 ## 4. 순열 기반 일원배치 분산분석
 
@@ -563,9 +563,11 @@ $$
 
 네 웹페이지의 체류시간을 검정한다고 하자:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 네 웹페이지의 체류시간 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 네 웹페이지의 체류시간
+
+</div>
 
 ```python
 import numpy as np
@@ -647,8 +649,6 @@ Conclusion: Fail to reject H0
 
 여기서 순열이 하는 일을 다시 새겨 두자. 페이지 표시를 무작위로 뒤섞는 것은 "페이지가 아무 영향도 주지 않는" 세상을 만드는 일이고, 그 세상에서 평균들이 이만큼 흩어지는 일이 얼마나 흔한지를 세는 것이 p-값이다. $F$-분포도 정규성도 쓰지 않는다.
 
-</div>
-
 ### 접근 2: F-통계량을 이용한 순열검정
 
 분산 기반 접근이 직관적이기는 하지만, 모수적 분산분석과 더 직접 비교하려면 F-통계량을 검정통계량으로 쓸 수도 있다.
@@ -672,9 +672,11 @@ $$
 p\text{-value} = \frac{\#\{F_b \geq F_{\text{obs}}\}}{B}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 집단평균 분산을 통계량으로 쓴 순열검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 집단평균 분산을 통계량으로 쓴 순열검정
+
+</div>
 
 ```python
 from scipy import stats
@@ -720,15 +722,15 @@ p-value: 0.3550
 
 앞의 분산 기반 순열검정이 준 0.3673과 가깝다. 두 검정통계량이 다르지만 같은 정보를 다르게 요약할 뿐이기 때문이다. 실제로 집단 크기가 모두 같으면 집단평균의 분산과 $F$는 단조 관계라 순위가 같고, 순열 p-값도 모의실험 오차 범위에서 일치한다.
 
-</div>
-
 ### 비교: 순열검정 대 모수적 분산분석
 
 모수적 가정이 성립하면 두 접근이 비슷한 결과를 준다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 순열검정과 모수적 분산분석의 비교 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 순열검정과 모수적 분산분석의 비교
+
+</div>
 
 ```python
 # 모수적 분산분석. 순열검정 결과와 견준다.
@@ -760,8 +762,6 @@ p-value: 0.3673
 모수적 분산분석의 0.3718과 순열검정의 0.3673이 거의 같다. 자료가 정규성에서 크게 벗어나지 않으면 두 방법이 같은 답을 준다는 뜻이다.
 
 순열검정의 값어치는 이렇게 가정이 성립할 때가 아니라 깨질 때 드러난다. 그리고 여기처럼 두 방법이 일치하는 것을 확인하는 일 자체가 모수적 가정에 대한 하나의 점검이 된다.
-
-</div>
 
 ### 순열 분산분석의 장점
 

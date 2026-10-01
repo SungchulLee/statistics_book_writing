@@ -24,9 +24,11 @@ $$
 X' = \frac{X^\lambda - 1}{\lambda}, \quad \lambda \neq 0
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 로그 변환과 Box-Cox 변환 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 로그 변환과 Box-Cox 변환
+
+</div>
 
 ```python
 import numpy as np
@@ -71,8 +73,6 @@ plt.show()
 | Box-Cox 변환 ($\hat\lambda = -0.41$) | **0.0747** |
 
 원자료의 왜도 2.05가 로그 변환으로 0.49까지, 최대가능도로 $\lambda$를 고르는 Box-Cox 변환으로는 0.07까지 줄어든다. 이런 변환은 자료를 더 대칭적이고 정규에 가깝게 만들어 모수적 검정에 적합하게 해 준다.
-
-</div>
 
 ## 연습문제
 

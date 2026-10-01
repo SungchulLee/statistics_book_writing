@@ -51,9 +51,11 @@ Kolmogorov-Smirnov 검정통계량 $D$는 표본의 경험적 CDF와 기준분�
 
 K-S 검정은 분포의 중심위치와 모양의 차이를 탐지하는 데 효과적이다. 다만 Anderson-Darling 검정 같은 방법에 비해 꼬리에서의 이탈에는 덜 민감하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. KS 검정의 함정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> KS 검정의 함정
+
+</div>
 
 ```python
 import numpy as np
@@ -87,8 +89,6 @@ else:
 Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.8547733408587939
 Fail to reject H_0: The data is normally distributed.
 ```
-
-</div>
 
 !!! warning "이 코드는 사실 타당한 K-S 검정이 아니다"
     위 코드는 **자료에서 추정한** 평균과 표준편차로 자료를 표준화한 뒤 표준 K-S 임계값을 쓴다. 표준화가 경험적 CDF를 이론적 CDF 쪽으로 인위적으로 끌어당기므로 $D$가 작아지고 $p$값이 지나치게 커진다. 곧 검정이 보수적이 되어 검정력을 잃는다. 이것이 바로 다음 절의 Lilliefors 검정이 필요한 이유이다.
@@ -132,9 +132,11 @@ SciPy의 `stats.kstest` 함수는 **Kolmogorov-Smirnov(K-S) 검정**을 수행�
 | **모수 추정** | 추정된 모수를 위해 설계되지 않음 | 추정된 모수에 맞게 조정됨 |
 | **SciPy 구현** | 있음 (`stats.kstest`) | SciPy에는 직접 구현 없음 |
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. KS와 Lilliefors 견주기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> KS와 Lilliefors 견주기
+
+</div>
 
 ```python
 import numpy as np
@@ -175,8 +177,6 @@ Fail to reject H_0: The data is normally distributed.
 ```
 
 두 검정통계량은 거의 같지만($0.01903$ 대 $0.01913$) **$p$값이 다르다**($0.855$ 대 $0.582$). Lilliefors가 모수 추정을 반영한 다른 귀무분포를 쓰기 때문이다. 여기서는 자료가 실제로 정규이므로 두 검정 모두 기각하지 않지만, 자료가 정규가 아니라면 Lilliefors 쪽이 훨씬 먼저 이를 잡아낸다.
-
-</div>
 
 ---
 

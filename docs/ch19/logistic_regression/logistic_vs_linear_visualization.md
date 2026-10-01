@@ -17,9 +17,11 @@ $$
 P(\text{Default} = 1 \mid \text{Balance}) = \frac{1}{1 + \exp\!\bigl(-({\text{Balance}} - 1250)/300\bigr)}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -40,8 +42,6 @@ X_test = np.linspace(balance.min(), balance.max(), 300).reshape(-1, 1)
 
 참 계수는 기울기 $1/300 = 0.003333$, 절편 $-1250/300 = -4.1667$이다.
 
-</div>
-
 ## 이항 자료에 대한 선형회귀
 
 선형회귀는 이항 결과를 연속변수로 취급하여
@@ -53,9 +53,11 @@ $$
 를 최소제곱으로 적합한다. 직선은 무한히 뻗어 나가므로, Balance가 충분히 크거나 작으면 예측값이
 필연적으로 $[0,1]$ 밖으로 나간다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 선형회귀로 맞추면 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 선형회귀로 맞추면
+
+</div>
 
 ```python
 # 0/1 반응에 선형회귀를 씌우면 예측값이 0 아래나 1 위로 나간다.
@@ -78,8 +80,6 @@ Linear predictions range: [-0.102, 1.107]
 $[-0.102,\ 1.107]$이다. 즉 관측된 잔액 범위 안에서도 예측값이 음수가 되거나 1을 넘는다.
 $X_{\text{test}}$ 격자점의 **17.7%**가 $[0,1]$ 밖에 놓인다.
 
-</div>
-
 ## 이항 자료에 대한 로지스틱 회귀
 
 로지스틱 회귀는 시그모이드 함수를 통해 확률을 모형화한다.
@@ -90,9 +90,11 @@ $$
 
 이렇게 하면 어떤 입력에 대해서도 $\hat{p} \in (0,1)$이 보장된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 로지스틱으로 맞추면 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 로지스틱으로 맞추면
+
+</div>
 
 ```python
 # 로지스틱은 시그모이드를 거치므로 예측값이 언제나 (0, 1) 안에 머문다.
@@ -113,8 +115,6 @@ Logistic predictions range: [0.019, 0.981]
 적합 결과는 $\hat\beta_0 = -3.9790$, $\hat\beta_1 = 0.003212$로 참값
 $(-4.1667,\ 0.003333)$에 가깝고, 예측 범위는 $[0.019,\ 0.981]$로 안전하게 $(0,1)$ 안에 있다.
 
-</div>
-
 !!! note "여기서는 기본 L2 벌점이 사실상 아무 일도 하지 않는다"
     scikit-learn의 기본값 `C=1.0`은 L2 벌점을 건다. 그런데 이 자료에서 벌점을 완전히 끄고
     (`penalty=None`) 적합해도 계수는 소수점 넷째 자리까지 똑같은 $(-3.9790,\ 0.003212)$가
@@ -124,9 +124,11 @@ $(-4.1667,\ 0.003333)$에 가깝고, 예측 범위는 $[0.019,\ 0.981]$로 안�
 
 ## 나란히 시각화하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 두 결과를 나란히 그리기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 두 결과를 나란히 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -168,8 +170,6 @@ plt.show()
 
 ![이항 자료에 대한 선형회귀와 로지스틱 회귀](./img/logistic_vs_linear_visualization_93.png)
 
-</div>
-
 ## 오즈비 해석
 
 로지스틱 모형은 오즈비를 통해 해석 가능한 요약을 준다. Balance가 한 단위 늘면 연체 오즈에
@@ -179,9 +179,11 @@ $$
 \text{Odds Ratio} = e^{\hat\beta_1}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 오즈비로 읽기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 오즈비로 읽기
+
+</div>
 
 ```python
 # 계수가 아주 작으므로 1 달러당 오즈비는 1 에 가깝다. 이럴 때는 단위를
@@ -205,8 +207,6 @@ $37.88\%$ 증가한다. **오즈비는 설명변수의 단위에 의존하므로
 
 선형회귀에는 이에 대응하는 확률적 해석이 없다. 기울기는 $x$ 한 단위 증가당 $\hat{y}$의
 변화량을 주지만, $\hat{y}$가 확률이라는 보장이 없다.
-
-</div>
 
 ## 해석
 

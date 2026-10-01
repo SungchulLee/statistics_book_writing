@@ -54,9 +54,11 @@ $$
 
 다음 함수는 양측 F-검정을 구현한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 등분산 F 검정 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 등분산 F 검정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -79,13 +81,13 @@ def f_test(data_0, data_1):
     return statistic, p_value
 ```
 
-예제는 $X \sim N(0, 1)$과 여러 $\sigma_Y$ 값에 대한 $Y \sim N(1, \sigma_Y)$을 생성한다:
+보기는 $X \sim N(0, 1)$과 여러 $\sigma_Y$ 값에 대한 $Y \sim N(1, \sigma_Y)$을 생성한다:
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 검정 실행
 
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 검정 실행 { .eg }
 
 ```python
 # Bartlett 검정과 같은 설정으로 돌려 두 검정의 p-값을 견주어 볼 수 있다.
@@ -119,8 +121,6 @@ p-값이 앞의 Bartlett 검정과 소수점 셋째 자리까지 같다. 우연�
 | 1.10 | 0.826 | 0.345 |
 | 1.15 | 0.756 | 0.166 |
 | 1.20 | 0.694 | 0.071 |
-
-</div>
 
 ## 해석
 

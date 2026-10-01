@@ -14,9 +14,11 @@ $$
 
 여기서 $\mu$는 기대 일별 수익률, $\sigma$는 일별 변동성, $\varepsilon_t$는 표준화된 혁신항이다. 정규 모형에서는 $\varepsilon_t \sim \mathcal{N}(0,1)$이다. 두꺼운 꼬리 모형에서는 자유도 $\nu$인 $\varepsilon_t \sim t_\nu$이다. 주식 수익률에 대한 실증연구는 대체로 $\nu$를 3~8 범위에서 찾으며, 이는 정규분포보다 상당히 두꺼운 꼬리를 뜻한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 두 수익률의 요약통계 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 수익률의 요약통계
+
+</div>
 
 ```python
 import numpy as np
@@ -47,8 +49,6 @@ Normal: mean=0.001176, std=0.014823, skew=0.0329, excess_kurt=0.0513, JB p=0.748
 Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB p=6.062e-115
 ```
 
-</div>
-
 !!! warning "`scale` 모수는 표준편차가 아니다"
     두 계열의 표준편차가 $0.0148$과 $0.0186$으로 25% 차이가 난다. 둘 다 `scale=0.015`로 생성했는데도 그렇다.
 
@@ -66,9 +66,11 @@ Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB 
 
 두 수익률 계열을 비교하면 Q-Q 그림의 진단력이 분명해진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 두 수익률의 Q-Q 그림 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 수익률의 Q-Q 그림
+
+</div>
 
 ```python
 import numpy as np
@@ -102,8 +104,6 @@ plt.show()
 **두꺼운 꼬리 수익률:** Q-Q 그림이 특징적인 S자를 보인다. 왼쪽 아래 점들이 선 아래로 휘고(정규가 예측하는 것보다 극단적인 손실) 오른쪽 위 점들이 선 위로 휜다(더 극단적인 이익). 이 S자 패턴이 고첨(두꺼운 꼬리) 분포의 특징이다.
 
 Q-Q 그림은 **척도에 불변**이라는 점이 유용하다. 앞의 경고에서 지적한 변동성 차이는 적합선의 기울기에만 영향을 주고 S자 모양 자체는 순수하게 꼬리의 성질을 반영한다.
-
-</div>
 
 ## 꼬리 위험의 함의
 

@@ -68,9 +68,11 @@ $x_1, \ldots, x_n$이 정규분포에서 온 것으로 보이고 표본분산 $s
 
 정규모형 아래에서 $s^2$의 정확한 표준오차는 $\sigma^2\sqrt{2/(n-1)}$이다. 모수적 붓스트랩은 이 알려진 결과를 가깝게 근사해야 하며, 이는 절차를 점검하는 유용한 검산이 된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 모수적 붓스트랩과 비모수적 붓스트랩 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모수적 붓스트랩과 비모수적 붓스트랩
+
+</div>
 
 ```python
 import numpy as np
@@ -103,11 +105,9 @@ print("비모수 :", round(npb.std(ddof=1), 4))              # 0.8708
 
 세 값이 잘 일치한다. 자료가 실제로 정규이므로 두 붓스트랩이 모두 옳게 작동한다.
 
-</div>
-
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 지수모형. 대기시간을 $x_1, \ldots, x_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$로 모형화하고 평균 $\mu = 1/\lambda$의 신뢰구간을 구하려 한다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수모형. 대기시간을 $x_1, \ldots, x_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$로 모형화하고 평균 $\mu = 1/\lambda$의 신뢰구간을 구하려 한다.
 
 </div>
 
@@ -219,7 +219,7 @@ $\text{Exp}(1)$ 자료에서 90번째 백분위수의 신뢰구간을 (a) 올바
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-정규모형 예제에서 모수적 붓스트랩이 이론값 $\sigma^2\sqrt{2/(n-1)}$을 잘 재현하는 것을 확인했다. 자료가 정규가 아니면 어떻게 되는가? $t(5)$ 자료에서 같은 비교를 하라.
+정규모형 보기에서 모수적 붓스트랩이 이론값 $\sigma^2\sqrt{2/(n-1)}$을 잘 재현하는 것을 확인했다. 자료가 정규가 아니면 어떻게 되는가? $t(5)$ 자료에서 같은 비교를 하라.
 
 </div>
 

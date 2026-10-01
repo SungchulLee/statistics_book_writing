@@ -32,9 +32,11 @@
 
 여기서 $\delta$는 수치 안정성을 위한 작은 상수이다. 너비와 높이의 비가 이심률을 정하고, 회전각이 양의 상관과 음의 상관을 구별한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 타원으로 상관행렬 그리기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 타원으로 상관행렬 그리기
+
+</div>
 
 ```python
 import numpy as np
@@ -87,17 +89,17 @@ def plot_corr_ellipses(data, figsize=None, **kwargs):
     return ec, ax
 ```
 
-</div>
-
 ---
 
-## 모의 자료 예제
+## 모의 자료 보기
 
 상관된 변수 다섯 개를 만들어 타원 그림으로 상관 구조를 시각화한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 업종 수익률 자료로 그려 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 업종 수익률 자료로 그려 보기
+
+</div>
 
 ```python
 np.random.seed(42)
@@ -130,8 +132,6 @@ plt.show()
 ![이변량 정규분포의 등고선](./img/correlation_ellipses_82.png)
 
 밀도의 등고선이 타원이라는 것이 이변량 정규분포의 정의적 성질이다.
-
-</div>
 
 ---
 

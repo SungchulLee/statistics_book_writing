@@ -22,9 +22,11 @@ $p$값은 대립가설에 따라 달라진다.
 
 다음 코드는 두 표본에서 F 통계량을 계산하고 $F(d_1, d_2)$ 밀도와 양쪽 꼬리 영역을 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 관측된 F를 그림에 얹기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 관측된 F를 그림에 얹기
+
+</div>
 
 ```python
 import numpy as np
@@ -68,11 +70,11 @@ plt.show()
 
 $p$값을 명시적으로 계산하려면
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 양측 p-값 계산
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 양측 p-값 계산 { .eg }
 
 ```python
 # 두 꼬리 중 작은 쪽을 두 배 해 양측 p-값을 만든다. F 분포가 대칭이
@@ -97,8 +99,6 @@ Left-tail  p-value: 0.1724
 Right-tail p-value: 0.8276
 Two-sided  p-value: 0.3448
 ```
-
-</div>
 
 ## 해석
 
@@ -207,7 +207,7 @@ Two-sided  p-value: 0.3448
 
     양측 $p$값에서는 정규분포처럼 대칭인 분포에서 하듯 한쪽 꼬리 면적을 단순히 두 배 할 수 없다. 대신 $p = 2\min(P(F \le F_{\text{obs}}), P(F \ge F_{\text{obs}}))$를 쓴다. 작은 쪽 꼬리를 골라 두 배 하는 것이다. 이렇게 하면 검정이 타당해지지만, 기각역이 $F$ 척도에서 1을 중심으로 대칭이 아니게 된다.
 
-    **로그 척도에서는 대칭이 회복된다.** $d_1 = d_2 = d$일 때 역수 성질 $1/F \sim F(d,d)$에 의해 $\ln F$의 분포가 0을 중심으로 **정확히 대칭**이다. 본문 예제에서 $d_1 = d_2 = 7$이므로
+    **로그 척도에서는 대칭이 회복된다.** $d_1 = d_2 = d$일 때 역수 성질 $1/F \sim F(d,d)$에 의해 $\ln F$의 분포가 0을 중심으로 **정확히 대칭**이다. 본문 보기에서 $d_1 = d_2 = 7$이므로
 
     $$
     P(F \le 0.4732) = P(F \ge 1/0.4732) = P(F \ge 2.1132) = 0.1724

@@ -18,9 +18,11 @@ $$
 
 ### 단일 실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 동전 던지기 한 번의 실험 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 동전 던지기 한 번의 실험
+
+</div>
 
 ```python
 import numpy as np
@@ -49,13 +51,13 @@ print([single_experiment() for _ in range(10)])
 
 공정한 동전에서 앞면은 15 언저리를 오간다. 관측된 24가 이 범위에서 얼마나 떨어져 있는지가 이 검정의 전부다.
 
-</div>
-
 ### 반복 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 모의실험 되풀이하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 모의실험 되풀이하기
+
+</div>
 
 ```python
 def simulate_coin_tosses(n_simulations=NUM_SIMULATIONS,
@@ -84,13 +86,13 @@ Percentage: 0.0710%
 
 10만 번 중 71번이다. 모의실험 p-값은 0.00071이 된다.
 
-</div>
-
 ### 정확한 값과의 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 정확한 값과 견주기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정확한 값과 견주기
+
+</div>
 
 ```python
 from scipy.stats import binom
@@ -109,13 +111,13 @@ Exact binomial P(X >= 24): 0.000715
 
 모의실험의 0.00071과 정확한 값 0.000715가 소수점 넷째 자리까지 맞는다. 모의실험 p-값의 표준오차가 $\sqrt{0.0007 \times 0.9993/100000} \approx 0.000084$이므로 이 정도 일치는 기대할 만하다(연습문제 3).
 
-</div>
-
 ### 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 결과를 히스토그램으로 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 결과를 히스토그램으로
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -139,8 +141,6 @@ plt.show()
 ![Coin Toss Simulation (100,000 runs)](./img/coin_toss_simulation_100.png)
 
 히스토그램이 15를 중심으로 모여 있고 빨간 선이 그은 24는 오른쪽 꼬리 저 끝에 있다. 막대 높이가 눈에 보이지 않을 만큼 낮은 영역이다. p-값이란 결국 이 빨간 선 오른쪽에 있는 막대들의 넓이 비율이다.
-
-</div>
 
 ### 해석
 

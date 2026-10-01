@@ -82,9 +82,11 @@ Jarque-Bera 검정통계량 $JB$는 귀무가설 아래에서 자유도 2인 카
 - **$JB$ 통계량이 크면** 자료의 왜도나 첨도(또는 둘 다)가 정규분포에서 유의하게 벗어났다는 뜻이다.
 - **$JB$ 통계량이 작으면** 표본자료의 왜도와 첨도가 정규분포와 일관된다는 뜻이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. JB 통계량을 정의대로 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> JB 통계량을 정의대로 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -126,8 +128,6 @@ Fail to reject H_0: The data is normally distributed.
 ```
 
 손으로 계산한 값이 `scipy.stats.jarque_bera`와 정확히 일치한다. `stats.kurtosis`가 이미 **초과**첨도 $K-3$을 돌려주므로 코드에서 `kurtosis_value**2 / 4`가 공식의 $(K-3)^2/4$에 해당한다는 점에 유의하라.
-
-</div>
 
 ## 카이제곱 근사는 얼마나 맞는가
 

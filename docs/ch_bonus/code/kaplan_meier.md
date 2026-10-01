@@ -19,9 +19,11 @@ $$
 이다. 여기서 $t_{(1)} < t_{(2)} < \cdots < t_{(K)}$는 서로 다른 사건시간이고, $d_j$는
 $t_{(j)}$의 사건 수, $n_j$는 $t_{(j)}$ 직전에 위험에 있는 대상 수다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 카플란-마이어 추정 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 카플란-마이어 추정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -68,8 +70,6 @@ def kaplan_meier(times, censored):
 
     return np.array(t_list), np.array(s_list)
 ```
-
-</div>
 
 !!! warning "이 코드의 `censored`는 사건이 0이다"
     `censored == 1`이 절단, `censored == 0`이 사건을 뜻한다. `lifelines`의
@@ -123,9 +123,11 @@ $$
 
 이며 $O_1 = \sum d_{1j}$, $E_1 = \sum e_{1j}$, $V_1 = \sum v_j$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 로그순위 검정 구현 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로그순위 검정 구현
+
+</div>
 
 ```python
 from scipy import stats
@@ -175,15 +177,15 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
 이 구현은 두 집단의 사건시간을 합친 뒤 각 사건시간을 순회하며 집단 1의 관측 사건 수, 기대
 사건 수, 분산을 누적한다.
 
-</div>
-
 ## 모의실험과 시각화
 
 다음 코드는 모의자료를 생성하고 카플란-마이어 곡선을 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 전체 실행 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 전체 실행
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -239,8 +241,6 @@ Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
 집단 1은 $\text{Exp}(\lambda = 1/20)$에서, 집단 2는 $\text{Exp}(\lambda = 1/12)$에서
 뽑았고 각 집단에 약 20%의 무작위 절단이 있다. 곡선의 시각적 분리와 로그순위 p-값을 함께 보면
 생존 차이가 통계적으로 유의한지 알 수 있다.
-
-</div>
 
 ## 해석
 

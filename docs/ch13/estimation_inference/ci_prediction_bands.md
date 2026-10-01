@@ -30,9 +30,11 @@ $$
 
 ### 자료 생성
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -45,13 +47,13 @@ def generate_data(n, sigma, seed=0):
     return x, y
 ```
 
-</div>
-
 ### 회귀직선 추정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 회귀직선 추정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 회귀직선 추정
+
+</div>
 
 ```python
 def estimate_regression_line(x, y):
@@ -70,13 +72,13 @@ def estimate_regression_line(x, y):
     return y_hat, beta_hat, y_bar, x_bar
 ```
 
-</div>
-
 ### 잔차분산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 잔차분산 구하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 잔차분산 구하기
+
+</div>
 
 ```python
 def calculate_residual_variance(y, y_hat, n):
@@ -90,13 +92,13 @@ def calculate_residual_variance(y, y_hat, n):
     return s_square, s
 ```
 
-</div>
-
 ### 신뢰구간과 예측구간
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 두 구간 계산 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 두 구간 계산
+
+</div>
 
 ```python
 from scipy import stats
@@ -124,8 +126,6 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
 
     return x0, lower, upper, lower2, upper2
 ```
-
-</div>
 
 ## 해석
 

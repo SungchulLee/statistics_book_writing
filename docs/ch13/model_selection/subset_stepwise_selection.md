@@ -32,9 +32,11 @@
 
 ### 자료 생성
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 실험용 자료 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 실험용 자료
+
+</div>
 
 ```python
 import numpy as np
@@ -49,13 +51,13 @@ y = X @ true_beta + np.random.normal(0, 2, n)
 names = [f"x{i+1}" for i in range(p)]
 ```
 
-</div>
-
 ### 최량 부분집합 선택
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 최적 부분집합 선택 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 최적 부분집합 선택
+
+</div>
 
 ```python
 from itertools import combinations
@@ -81,13 +83,13 @@ def best_subset(X, y, max_k=None):
     return results
 ```
 
-</div>
-
 ### 전진 단계적 선택
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 전진 단계선택 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 전진 단계선택
+
+</div>
 
 ```python
 def forward_stepwise(X, y):
@@ -113,13 +115,13 @@ def forward_stepwise(X, y):
     return results
 ```
 
-</div>
-
 ### 후진 단계적 선택
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 후진 단계선택 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 후진 단계선택
+
+</div>
 
 ```python
 def backward_stepwise(X, y):
@@ -147,13 +149,11 @@ def backward_stepwise(X, y):
     return results
 ```
 
-</div>
-
 ## 세 방법은 얼마나 자주 갈라지는가
 
 ![같은 실험을 400번 되풀이했을 때 세 방법의 선택](./img/three_methods_agree.png)
 
-한 번의 자료에서 세 방법이 같은 답을 냈다는 것만으로는 부족하다. 위 예제와 같은 구조($p = 8$, 앞의 넷만 참 계수가 $0$이 아님)를 유지하되 조건을 조금 어렵게 만들어 $400$번 되풀이했다. 표본을 $n = 60$으로 줄이고 넷째 계수를 $\beta_4 = 0.6$으로 약하게 두었으며, 잡음 변수 $x_5$를 $x_4$와 상관 $0.75$가 되도록 만들어 세 방법이 헷갈릴 여지를 주었다. 크기 $4$ 모형을 고르게 했다.
+한 번의 자료에서 세 방법이 같은 답을 냈다는 것만으로는 부족하다. 위 보기와 같은 구조($p = 8$, 앞의 넷만 참 계수가 $0$이 아님)를 유지하되 조건을 조금 어렵게 만들어 $400$번 되풀이했다. 표본을 $n = 60$으로 줄이고 넷째 계수를 $\beta_4 = 0.6$으로 약하게 두었으며, 잡음 변수 $x_5$를 $x_4$와 상관 $0.75$가 되도록 만들어 세 방법이 헷갈릴 여지를 주었다. 크기 $4$ 모형을 고르게 했다.
 
 왼쪽이 변수별로 뽑힌 비율이다. 신호가 뚜렷한 $x_1, x_2, x_3$은 세 방법 모두 **$400$번 중 $400$번** 집어넣었다(전진선택이 $x_2$를 한 번 놓친 $0.998$이 유일한 예외다). 반면 $x_4$는 $0.65$에 그치고, 그 자리를 $x_5$가 $0.18$, 나머지 잡음 변수들이 각각 $0.05$ 안팎으로 차지한다. $x_5$가 유독 자주 끼어드는 것은 $x_4$와 상관되어 있어 그 역할을 대신할 수 있기 때문이다. **약한 신호를 찾아내는 일이 선택법의 진짜 시험대**라는 것을 이 막대들이 보여 준다.
 

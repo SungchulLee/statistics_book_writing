@@ -39,9 +39,11 @@ $$
 
 ## 단계별 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 공분산과 상관을 단계별로 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 공분산과 상관을 단계별로 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -75,8 +77,6 @@ def pearson_r_step_by_step(x, y):
     return cov / (sx * sy)
 ```
 
-</div>
-
 ---
 
 ## 자료 생성
@@ -90,9 +90,11 @@ $$
 
 여기서 $\text{trend}_t$는 48주에 걸쳐 0에서 $-12$까지 선형으로 감소하고, $\varepsilon_t^{(\text{CA})} \sim \mathcal{N}(0, 0.5^2)$, $\varepsilon_t^{(\text{NY})} \sim \mathcal{N}(0, 0.6^2)$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 가격 자료 만들기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 가격 자료 만들기
+
+</div>
 
 ```python
 np.random.seed(42)
@@ -105,15 +107,15 @@ CA = 248.0 + trend + np.random.normal(0, 0.5, WEEKS)
 NY = 350.0 + trend * 0.8 + np.random.normal(0, 0.6, WEEKS)
 ```
 
-</div>
-
 ---
 
 ## 계산과 검증
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 라이브러리 결과와 맞춰 보기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 라이브러리 결과와 맞춰 보기
+
+</div>
 
 ```python
 import pandas as pd
@@ -148,17 +150,17 @@ numpy corr  = 0.9753
 
 세 방법이 모두 같은 값을 내놓으므로 밑바닥부터 만든 구현이 옳음을 확인할 수 있다.
 
-</div>
-
 ---
 
 ## 시각화
 
 세 개의 패널이 이야기 전체를 들려준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 세 그림으로 이해하기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 그림으로 이해하기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -200,8 +202,6 @@ plt.show()
 ![공분산의 시각적 분해](./img/covariance_from_scratch_129.png)
 
 세 번째 그림에서 두 계열이 나란히 내려가는 것이 보인다. 이 공통 추세가 곧 상관의 원천이다.
-
-</div>
 
 ---
 

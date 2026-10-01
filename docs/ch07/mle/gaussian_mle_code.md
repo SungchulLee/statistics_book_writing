@@ -18,9 +18,11 @@ $$\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
 유의: 분산의 MLE는 $n-1$이 아니라 $n$으로 나눈다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 해석적 MLE와 수치적 MLE { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 해석적 MLE와 수치적 MLE
+
+</div>
 
 ```python
 import numpy as np
@@ -64,8 +66,6 @@ Analytical: mu=5.182422, sigma²=2.313780
 Numerical:  mu=5.182447, sigma²=2.313763
 ```
 
-</div>
-
 !!! tip "일치"
     해석적 해와 수치해가 소수점 아래 여러 자리까지 일치하여 닫힌 형태 유도가 확인된다.
 
@@ -73,9 +73,11 @@ Numerical:  mu=5.182447, sigma²=2.313763
 
 로그가능도는 $(\hat{\mu}, \hat{\sigma}^2)$에서 유일한 최댓값을 갖는 매끄러운 오목 곡면을 이룬다. 프로파일 가능도를 쓰면 각 모수를 따로 시각화할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 로그가능도 곡면과 단면 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로그가능도 곡면과 단면
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -137,8 +139,6 @@ loglikelihood_surface()
 
 ![Log-Likelihood Contours](./img/gaussian_mle_code_56.png)
 
-</div>
-
 ## 유한표본 편향
 
 평균의 MLE $\hat{\mu}$은 불편이지만 분산의 MLE $\hat{\sigma}^2_{\text{MLE}}$은 아래로 편향되어 있다:
@@ -147,9 +147,11 @@ $$E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$$
 
 편향은 $-\sigma^2/n$으로 $n \to \infty$일 때 사라진다(따라서 MLE는 점근적으로 불편이다).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 유한표본에서의 편향 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 유한표본에서의 편향
+
+</div>
 
 ```python
 def finite_sample_bias(n_sim=200_000, seed=42):
@@ -185,8 +187,6 @@ n= 100  E[sigma²_MLE]=8.9087  E[S²]=8.9987  Bias(MLE)=-0.0913
 n= 500  E[sigma²_MLE]=8.9833  E[S²]=9.0013  Bias(MLE)=-0.0167
 ```
 
-</div>
-
 ## Fisher 정보량과 Cramer-Rao 하한
 
 $N(\mu, \sigma^2)$의 **Fisher 정보행렬**은:
@@ -199,9 +199,11 @@ $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \qquad \text{Var}(\hat{\sigma}^
 
 평균의 MLE는 CRLB를 정확히 달성한다. 분산의 MLE는 점근적으로 도달한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 피셔 정보량과 크라메르-라오 하한 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 피셔 정보량과 크라메르-라오 하한
+
+</div>
 
 ```python
 def fisher_information_crlb(sigma=3.0, n_sim=100_000, seed=42):
@@ -245,8 +247,6 @@ For sigma²: CRLB = 2*sigma⁴/n
   n= 500  Var(sigma²_hat)=0.321909  CRLB=0.324000  Ratio=0.9935
 ```
 
-</div>
-
 !!! info "효율성"
     비 $\text{Var}/\text{CRLB}$는 $\hat{\mu}$에서 정확히 1이고(모든 표본크기에서 효율적이다), $\hat{\sigma}^2$에서는 $n \to \infty$일 때 1로 수렴한다(점근적으로 효율적이다).
 
@@ -260,9 +260,11 @@ For sigma²: CRLB = 2*sigma⁴/n
 | $\mu$ | $\sigma$를 모름 | $t$-구간 | $\frac{\bar{X}-\mu}{S/\sqrt{n}} \sim t_{n-1}$ |
 | $\sigma^2$ | $\mu$를 모름 | $\chi^2$-구간 | $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ |
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 신뢰구간의 포함확률 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 신뢰구간의 포함확률
+
+</div>
 
 ```python
 def confidence_interval_coverage(seed=42):
@@ -311,8 +313,6 @@ t-interval (mu, sigma unknown): 95.1% (target: 95.0%)
 chi²-interval (sigma²):        95.0% (target: 95.0%)
 ```
 
-</div>
-
 !!! success "포함확률이 맞는다"
     세 구간 모두 명목 95% 포함확률을 달성하여 이론적 유도가 확인된다.
 
@@ -324,9 +324,11 @@ $$\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$$
 
 여기서 $z_\alpha = \mathcal{N}^{-1}(\alpha)$는 정규분위수이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 금융 응용 — VaR 추정 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 금융 응용 — VaR 추정
+
+</div>
 
 ```python
 def var_estimation_finance(seed=42):
@@ -366,8 +368,6 @@ alpha=0.025  Parametric VaR=2.557%  Historical VaR=3.182%  Ratio=1.244
 alpha=0.050  Parametric VaR=2.143%  Historical VaR=2.186%  Ratio=1.020
 alpha=0.100  Parametric VaR=1.665%  Historical VaR=1.536%  Ratio=0.923
 ```
-
-</div>
 
 !!! warning "모형 위험"
     참 수익률 분포의 꼬리가 (금융에서 흔하듯) 정규보다 두꺼우면 Gaussian VaR는 꼬리 위험을 **과소평가**한다. 1% 수준의 역사적 VaR가 대개 모수적 VaR보다 크며, 이는 참 분포의 두꺼운 꼬리를 반영한다.

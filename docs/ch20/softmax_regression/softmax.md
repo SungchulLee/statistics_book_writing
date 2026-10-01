@@ -94,9 +94,11 @@ $(0.3556,\ 0.3383,\ 0.3061)$로 빨간 점, 즉 중심 $(1/3, 1/3, 1/3)$에 다�
 
 ## NumPy 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 소프트맥스 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 소프트맥스 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -114,8 +116,6 @@ def softmax(z):
 ```
 
 `np.max`를 빼는 것은 평행이동 불변성 덕분에 결과를 바꾸지 않으면서 `np.exp`의 오버플로를 막는다.
-
-</div>
 
 ## 연습문제
 

@@ -47,9 +47,11 @@ $H_0$(등분산) 아래에서 이 보조회귀의 검정통계량 $nR^2$은 $\ch
 
 King County(시애틀) 주택 매매 자료에서 우편번호 98105 지역만 골라 쓴다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 주택 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 주택 자료 읽기
+
+</div>
 
 ```python
 import pandas as pd
@@ -81,13 +83,13 @@ max       3013254.0         5570.0       9.0
 
 98105 지역 313건이다. 가격이 12만에서 301만 달러까지 25배 차이가 나고 표준편차가 평균의 절반이 넘는다. 이렇게 퍼진 자료에서는 이분산과 영향점이 함께 나타나기 쉽다.
 
-</div>
-
 ### 기준 모형과 영향 진단
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 영향점 진단량 구하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 영향점 진단량 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -139,8 +141,6 @@ Cook 거리 최댓값 = 0.5608 (관측 152)
 
 Cook 거리가 문턱 0.0128을 넘는 관측값이 20개이고, 그중 152번이 0.5608로 압도적이다.
 
-</div>
-
 ### 지렛대와 잔차 가운데 무엇이 문제인가
 
 Cook 거리가 큰 관측값 20건을 찾았는데, 그 20건이 왜 문제인지를 이해하려면 세 진단량이 어떻게 맞물리는지 보아야 한다.
@@ -161,9 +161,11 @@ Cook 거리가 큰 관측값 20건을 찾았는데, 그 20건이 왜 문제인�
 
 ### 영향점 제거의 효과
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 영향점을 빼고 다시 적합 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 영향점을 빼고 다시 적합
+
+</div>
 
 ```python
 # 문턱을 넘는 관측값을 빼고 다시 적합해 계수가 얼마나 달라지는지 본다.
@@ -204,13 +206,13 @@ R^2: 0.7954 -> 0.8415
 
 이만큼 움직인다는 것 자체가 보고해야 할 사실이다. 그렇다고 20건을 그냥 버려서는 안 된다. Cook 거리가 큰 관측값은 자료 오류일 수도, 정말로 특이한 거래(예: 재건축 예정 부지)일 수도 있으므로 개별적으로 확인해야 한다.
 
-</div>
-
 ### 이분산 검정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 등분산 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 등분산 검정
+
+</div>
 
 ```python
 from statsmodels.stats.diagnostic import het_breuschpagan
@@ -228,8 +230,6 @@ Breusch-Pagan p-value: 0.0000
 ```
 
 $p < 0.0001$로 등분산을 강하게 기각한다. 주택 가격 자료에서 흔한 일이다. 비싼 집일수록 가격의 변동폭도 커지기 때문이며, 로그 변환이나 로버스트 표준오차가 표준적인 처방이다.
-
-</div>
 
 ## 해석
 

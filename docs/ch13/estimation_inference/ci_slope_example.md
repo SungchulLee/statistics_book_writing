@@ -1,4 +1,4 @@
-# 기울기의 신뢰구간 (카페인 예제)
+# 기울기의 신뢰구간 (카페인 보기)
 
 ## 개요
 
@@ -28,9 +28,11 @@ $$
 
 다음 코드는 카페인 연구에서 기울기의 95% 신뢰구간을 계산한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 기울기의 신뢰구간 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기울기의 신뢰구간
+
+</div>
 
 ```python
 from scipy import stats
@@ -76,8 +78,6 @@ Margin of error: 0.1198
 ```
 
 자유도가 $n - 2 = 18$이므로 $t^* = 2.1009$다. 정규분포의 1.96보다 큰 이 값이 $\sigma$를 추정한 대가다.
-
-</div>
 
 ## 해석
 

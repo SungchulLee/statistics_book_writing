@@ -16,9 +16,11 @@ $$
 
 모형선택을 위해 차수 $d = 1, 2, \ldots, 10$인 다항회귀 모형을 적합하고 각 교차검증 방법이 추정한 검정 MSE를 비교한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 모의자료와 다항 파이프라인 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모의자료와 다항 파이프라인
+
+</div>
 
 ```python
 import numpy as np
@@ -48,8 +50,6 @@ X, y = generate_data(n=200)
 degrees = range(1, 11)
 ```
 
-</div>
-
 ---
 
 ## 방법 1: 검증집합 방법
@@ -64,9 +64,11 @@ $$
 
 **단점**: 어떤 관측이 훈련집합과 검정집합에 들어가는지에 따라 결과가 달라지므로 추정값의 분산이 크다. 다른 무작위 분할로 반복하면 다른 답이 나온다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 검증집합 방법 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 검증집합 방법
+
+</div>
 
 ```python
 def validation_set_mse(X, y, degrees, n_splits=10, rng=None):
@@ -96,8 +98,6 @@ $$
 
 로 $3$부터 $10$까지 흩어진다(표준편차 $2.32$). **같은 자료, 같은 방법인데 분할의 난수만 바꾸어 얻은 결과이다.** 이것이 검증집합 방법의 근본적 문제이다.
 
-</div>
-
 ---
 
 ## 방법 2: 하나 남기기 교차검증 (LOOCV)
@@ -114,9 +114,11 @@ $$
 
 **단점**: 계산이 비싸다($n$번의 모형 적합). 다만 선형모형에는 지름길 공식이 있다(연습문제 1).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 하나빼기 교차검증 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 하나빼기 교차검증
+
+</div>
 
 ```python
 from sklearn.model_selection import cross_val_score, LeaveOneOut
@@ -138,8 +140,6 @@ print(f"Best degree (LOOCV): {int(np.argmin(loocv_mses)) + 1}")
 ```
 Best degree (LOOCV): 6
 ```
-
-</div>
 
 !!! note "소요 시간을 출력에 싣지 않은 이유"
     LOOCV의 요점 가운데 하나는 **비싸다**는 것이므로 시간을 재는 것 자체는
@@ -168,9 +168,11 @@ $$
 
 **편향-분산 절충**: $k$가 작으면 편향이 크지만(겹당 훈련자료가 적다) 분산이 작다. $k$가 크면 편향이 작지만 훈련집합끼리 많이 겹쳐 분산이 커진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. k겹 교차검증 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> k겹 교차검증
+
+</div>
 
 ```python
 from sklearn.model_selection import KFold
@@ -192,8 +194,6 @@ for k in (5, 10):
 Best degree (5-fold): 6
 Best degree (10-fold): 6
 ```
-
-</div>
 
 ---
 
@@ -462,7 +462,7 @@ $$
 
     평가할 후보 차수의 개수를 $D$라 하자.
 
-    - **검증집합**(단일 분할): $D$번의 모형 적합. $m$번 반복 분할이면 $mD$번. 예제에서 $m = 10$, $D = 10$이므로 $100$번.
+    - **검증집합**(단일 분할): $D$번의 모형 적합. $m$번 반복 분할이면 $mD$번. 보기에서 $m = 10$, $D = 10$이므로 $100$번.
     - **$k$-겹 교차검증**: $kD$번. 10-겹에 $D = 10$이면 $100$번, 5-겹이면 $50$번.
     - **LOOCV**: $nD$번. $n = 200$, $D = 10$이면 $2000$번.
 

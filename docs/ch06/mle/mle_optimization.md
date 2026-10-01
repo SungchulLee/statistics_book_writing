@@ -1,4 +1,4 @@
-# 최대가능도 최적화 예제
+# 최대가능도 최적화 보기
 
 ## 개요
 
@@ -28,9 +28,11 @@ $$
 
 가장 단순한 최적화 전략은 후보값 격자에서 $\ell(\theta)$를 평가하는 것이다. 모수가 하나나 둘일 때 실행 가능하며 가능도 곡면을 시각화하는 데 유용하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 격자탐색으로 MLE 찾기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 격자탐색으로 MLE 찾기
+
+</div>
 
 ```python
 import numpy as np
@@ -70,8 +72,6 @@ Grid search MLE: mu_hat = 4.8998
 Closed-form MLE: mu_hat = 4.8995
 ```
 
-</div>
-
 ## 기울기 기반 최적화
 
 모수가 여럿인 문제에서는 기울기 기반 방법이 필수적이다. (로그가능도의 기울기인) **점수함수**는:
@@ -92,9 +92,11 @@ $$
 
 이렇게 하면 제약 문제가 제약 없는 문제로 바뀐다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 재모수화로 제약 없애기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 재모수화로 제약 없애기
+
+</div>
 
 ```python
 import numpy as np
@@ -144,8 +146,6 @@ Numerical MLE: mu = 4.8995, sigma^2 = 2.3888
 Closed-form:   mu = 4.8995, sigma^2 = 2.3888
 ```
 
-</div>
-
 ## Newton-Raphson 방법
 
 Newton-Raphson 방법은 (Hessian이라는) 2계 정보를 사용하여 더 빠르게 수렴한다:
@@ -175,9 +175,11 @@ $$
 
 볼록하지 않은 가능도(예: 혼합모형)에서는 최적화 결과가 출발점에 의존할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 출발값에 따른 수렴 위치 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 출발값에 따른 수렴 위치
+
+</div>
 
 ```python
 import numpy as np
@@ -215,8 +217,6 @@ Start 1: pi=0.374, mu1=0.154, mu2=3.900, nll=402.58
 Start 2: pi=0.626, mu1=3.900, mu2=0.154, nll=402.58
 Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
 ```
-
-</div>
 
 ## 해석
 

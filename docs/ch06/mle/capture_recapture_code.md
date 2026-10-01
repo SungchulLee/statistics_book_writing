@@ -54,9 +54,11 @@ $$
 
 ## 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 포획-재포획 MLE 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 포획-재포획 MLE 구현
+
+</div>
 
 ```python
 from scipy import special
@@ -105,9 +107,7 @@ MLE of N: 33
 Lincoln-Petersen estimate: 33
 ```
 
-</div>
-
-탐색한 가능도를 그대로 그리면 이렇다. 오른쪽은 아래 예제 2의 수치다.
+탐색한 가능도를 그대로 그리면 이렇다. 오른쪽은 아래 보기 2의 수치다.
 
 ![개체군 크기에 대한 가능도](./img/capture_recapture_likelihood.png)
 
@@ -118,9 +118,11 @@ Lincoln-Petersen estimate: 33
 !!! note "$cr/t$ 가 정수이면 최대가 둘이다"
     오른쪽 그림에서 $\hat N = 14$와 $15$의 가능도가 **정확히 같다.** $c = 5$, $r = 6$, $t = 2$이면 $cr/t = 15$로 딱 떨어지는데, 이런 경우 $\lfloor cr/t \rfloor$와 그보다 하나 작은 값이 함께 최대가 된다. 위 코드처럼 `max`로 찾으면 먼저 만나는 $14$가 나오고, 닫힌 형태 공식을 쓰면 $15$가 나온다. 둘 다 MLE이므로 어느 쪽도 틀리지 않았다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 포획–재포획 최대가능도 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 포획–재포획 최대가능도
+
+</div>
 
 어떤 야생동물 생물학자가 새 $c = 5$마리를 잡아 표지하고 놓아 준 뒤, 나중에 $r = 6$마리를 재포획했더니 그중 $t = 2$마리가 표지되어 있었다고 하자.
 
@@ -144,8 +146,6 @@ Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이
 
 봉우리 자체도 그리 뾰족하지 않다. 가능도가 꼭대기의 절반 이상인 구간이 $10$부터 $30$까지이므로, 관측 여섯 마리로 개체군 크기를 정밀하게 잡아내기는 어렵다.
 
-</div>
-
 ## 추정량의 성질
 
 !!! note "Lincoln-Petersen 추정량의 편향"
@@ -165,9 +165,11 @@ Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이
 - $t$가 작으면(예: $t = 1$) 추정을 신뢰할 수 없고 가능도함수가 평평하다.
 - $t = 0$이면 MLE가 정의되지 않는다(개체군이 얼마든지 클 수 있다).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 재포획 결과에 따른 민감도 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 재포획 결과에 따른 민감도
+
+</div>
 
 ```python
 from scipy import special
@@ -212,8 +214,6 @@ c = 10, r = 10
    9     11     11.1
   10     10     10.0
 ```
-
-</div>
 
 ## 해석
 

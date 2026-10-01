@@ -35,9 +35,11 @@ $$
 | $H_1{:}\; \text{median}(D) > 0$ | $1 - \Phi(Z)$ |
 | $H_1{:}\; \text{median}(D) < 0$ | $\Phi(Z)$ |
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 부호검정 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 부호검정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -80,11 +82,9 @@ def sign_test(paired_data, test_type="two-sided"):
     return z, p_value
 ```
 
-</div>
-
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 학생의 처치 전후 점수. 학생 15명을 처치 프로그램 전후에 측정했다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 학생의 처치 전후 점수. 학생 15명을 처치 프로그램 전후에 측정했다.
 
 </div>
 
@@ -168,14 +168,14 @@ $-3, +1, -2, 0, -4, -1, +2, -5$이다. 정확 이항분포로 $\alpha = 0.05$에
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span> 학생 자료 예제에서 $H_1{:}\; \text{median}(D) > 0$(처치가 점수를
+**연습문제 2.** <span class="diff med" title="중간"></span> 학생 자료 보기에서 $H_1{:}\; \text{median}(D) > 0$(처치가 점수를
 높인다)인 단측검정으로 부호검정을 다시 수행하라. $\alpha = 0.05$에서 결론을 밝혀라.
 
 </div>
 
 ??? success "풀이"
 
-    예제에서 $n_+ = 10$, $n = 12$, $\hat{p} = 10/12 \approx 0.833$,
+    보기에서 $n_+ = 10$, $n = 12$, $\hat{p} = 10/12 \approx 0.833$,
     $Z \approx 2.309$였다.
 
     단측(greater) 대립가설의 $p$값은

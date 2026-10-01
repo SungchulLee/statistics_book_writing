@@ -100,9 +100,11 @@ $W > F_{1-\alpha,\, k-1,\, N-k}$이면 $H_0$을 기각한다.
 
 변환 하나로 왜 로버스트해지는지도 여기서 보인다. 원자료 쪽 질문은 편차를 **제곱**해서 다루므로 4차 적률(첨도)에 매여 있었다. 오른쪽 질문은 $Z$의 **평균**을 다루므로 1차 적률 문제다. 평균에는 중심극한정리라는 보호막이 있다. 분산 검정을 평균 검정으로 바꾼 것이 레빈의 아이디어 전부이며, 그 한 번의 치환이 정규성 가정을 떼어 낸다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Levene 검정 — 중심의 선택 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Levene 검정 — 중심의 선택
+
+</div>
 
 ```python
 import numpy as np
@@ -137,8 +139,6 @@ Levene's W statistic (mean-centered):   5.0152, p = 0.0261
 Brown-Forsythe (median-centered):       3.4305, p = 0.0663
 Levene (mean): reject H0 - variances differ.
 ```
-
-</div>
 
 !!! warning "중심의 선택이 결론을 바꾼다"
     같은 자료에서 평균 중심 Levene은 $p = 0.026$으로 기각하고 중앙값 중심 Brown-Forsythe는 $p = 0.066$으로 기각하지 못한다. 5% 문턱을 사이에 두고 결론이 갈린다.
@@ -239,7 +239,7 @@ Levene 검정으로 세 집단의 점수 분산이 같은지 판정하라.
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-본문 예제에서 평균 중심 Levene($p = 0.026$)과 중앙값 중심 Brown-Forsythe($p = 0.066$)의 결론이 갈렸다. 어느 쪽을 신뢰해야 하는지 판단하고, 그 판단의 근거를 제시하라.
+본문 보기에서 평균 중심 Levene($p = 0.026$)과 중앙값 중심 Brown-Forsythe($p = 0.066$)의 결론이 갈렸다. 어느 쪽을 신뢰해야 하는지 판단하고, 그 판단의 근거를 제시하라.
 
 </div>
 

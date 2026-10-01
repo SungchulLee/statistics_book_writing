@@ -167,9 +167,11 @@ $$
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 점이연상관과 파이계수 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 점이연상관과 파이계수
+
+</div>
 
 ```python
 import numpy as np
@@ -205,8 +207,6 @@ Phi coefficient  = 0.3015
 점이연 상관과 Pearson 상관이 **정확히 같다**. 점이연 상관은 별개의 공식이 아니라, 한 변수가 0/1일 때의 Pearson 상관에 붙인 이름일 뿐이다.
 
 파이 계수도 마찬가지로 두 이진 변수에 대한 Pearson 상관과 같다. 값이 0.30으로 작은 것은 다른 자료($2 \times 2$ 표)를 쓰기 때문이지 계수의 성질 때문이 아니다.
-
-</div>
 
 ---
 

@@ -18,9 +18,11 @@ $$
 
 중심화 단계가 결정적이다. 재표집된 자료의 평균이 평균적으로 $\mu_0$이 되게 하여 붓스트랩 세계에서 귀무가설을 강제한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 일표본 붓스트랩 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 붓스트랩 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -46,8 +48,6 @@ def bootstrap_mean_test(data, mu_0=0, n_boot=10_000, rng=None):
     return obs_mean, p_value, boot_means
 ```
 
-</div>
-
 !!! note "$+1$ 보정"
     분자와 분모의 $+1$은 관측된 자료 자신을 하나의 재표본으로 세는 것이다. 이 보정이 없으면 $p$값이 정확히 $0$이 될 수 있고, 검정의 크기가 명목수준을 미세하게 넘는다([대응 순열검정](../permutation/paired.md) 연습문제 3 참조).
 
@@ -60,9 +60,11 @@ $H_0\colon \mu_x = \mu_y$를 검정하기 위해 두 표본을 합치고 합친 
 3. 각 반복에서 평균차 $\bar x^{*(b)} - \bar y^{*(b)}$를 **계산한다**.
 4. 관측 차이만큼 극단적인 붓스트랩 차이의 비율이 **$p$값**이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 이표본 붓스트랩 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 붓스트랩 검정
+
+</div>
 
 ```python
 def bootstrap_two_sample(x, y, n_boot=10_000, rng=None):
@@ -80,8 +82,6 @@ def bootstrap_two_sample(x, y, n_boot=10_000, rng=None):
     p_value = ((np.abs(boot_diffs) >= abs(obs_diff)).sum() + 1) / (n_boot + 1)
     return obs_diff, p_value, boot_diffs
 ```
-
-</div>
 
 !!! warning "합치기는 등분산도 가정한다"
     합쳐진 자료에서 재표집하면 두 집단이 같은 분산을 갖게 된다. 두 집단의 분산이 실제로 다르고 표본크기가 불균형하면 이 검정의 제1종 오류율이 무너진다. 그때는 각 집단을 자기 평균으로 중심화한 뒤 **따로** 재표집해야 한다([두 평균에 대한 붓스트랩 검정](./two_means.md) 참조).
@@ -102,9 +102,11 @@ $$
 
 이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 중앙값의 표준오차와 편향 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 중앙값의 표준오차와 편향
+
+</div>
 
 ```python
 def bootstrap_se_median(data, n_boot=10_000, rng=None):
@@ -121,15 +123,15 @@ def bootstrap_se_median(data, n_boot=10_000, rng=None):
     return se, bias, boot_medians
 ```
 
-</div>
-
 ## 시연
 
 세 방법을 모의자료에 적용한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 세 검정 실행 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 검정 실행
+
+</div>
 
 ```python
 import numpy as np
@@ -169,8 +171,6 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 | 이표본 | $\bar{x} - \bar{y} = 4.151$, $p = 0.0518$ | Welch $t$ 검정 $p = 0.0504$ |
 | 중앙값 SE | $\tilde{x} = 31{,}508$, $\widehat{\text{SE}} = 1{,}912$ | 닫힌 형태 없음 |
 
-</div>
-
 ## 귀무분포를 어디서 얻는가
 
 앞의 두 검정은 코드 한 줄씩만 다르다. 하나는 자료를 **옮기고**, 다른 하나는 두 표본을 **합친다**. 둘 다 같은 목적을 갖는다. 재표집을 시작하기 전에 귀무가설이 참인 세계를 만드는 것이다.
@@ -186,7 +186,7 @@ print(np.median(income), se_med, bias)   # 31508  1912  269
 ## 해석
 
 - **일표본 붓스트랩 검정**은 자료 평균이 $5$에서 멀 때 $H_0\colon \mu = 5$을 기각한다. 자료가 지수분포이므로(정규가 아니므로) 붓스트랩 접근은 $t$ 분포에 대한 의존을 피한다. 여기서는 $n = 50$이 충분히 커서 두 $p$값이 $0.0001$ 이내로 일치한다.
-- **이표본 붓스트랩 검정**은 두 정규 모집단 사이의 $4$단위 이동을 탐지한다. 정규성이 성립하면 $p$값이 이표본 $t$ 검정의 것과 대개 가깝다($0.0518$ 대 $0.0504$). 이 예제는 $\alpha = 0.05$ 문턱 바로 위에 걸려 있어, 두 방법 모두 "기각하지 못한다"는 같은 결론을 준다.
+- **이표본 붓스트랩 검정**은 두 정규 모집단 사이의 $4$단위 이동을 탐지한다. 정규성이 성립하면 $p$값이 이표본 $t$ 검정의 것과 대개 가깝다($0.0518$ 대 $0.0504$). 이 보기는 $\alpha = 0.05$ 문턱 바로 위에 걸려 있어, 두 방법 모두 "기각하지 못한다"는 같은 결론을 준다.
 - **중앙값의 붓스트랩 표준오차**는 로그정규 같은 치우친 분포에서 특히 유용하다. 이 경우 $\text{SE}(\text{median})$에 대한 간단한 공식이 없으므로 붓스트랩이 사실상 유일한 선택이다.
 
 일반 원리: 모수적 가정이 성립하면 붓스트랩과 고전적 검정이 일치한다. 가정이 깨지면 붓스트랩이 대개 더 믿을 만하다.

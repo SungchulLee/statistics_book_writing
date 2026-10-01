@@ -18,9 +18,11 @@ $$
 \bar{x} < \mu_0 - t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}} \quad \text{or} \quad \bar{x} > \mu_0 + t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}.
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 기각역과 검정통계량 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기각역과 검정통계량
+
+</div>
 
 ```python
 import numpy as np
@@ -61,15 +63,15 @@ Rejection boundaries: 171.04 and 172.96
 
 주목할 것은 기각역의 좁기다. $n = 250$이라 표준오차가 0.49 cm밖에 안 되고, 그래서 표본평균이 172에서 1 cm만 벗어나도 기각된다. 표본이 크면 실질적으로 사소한 차이도 통계적으로 유의해진다.
 
-</div>
-
 ### 시각화
 
 위쪽 그림은 $H_0$ 아래 $\bar{X}$의 표본분포를 센티미터 단위로 보여주며 꼬리의 기각역을 색칠한다. 아래쪽 그림은 같은 검정을 $t$-통계량 척도로 보여주며 기각역은 단순히 $|t| > t_{\text{crit}}$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 기각역 그리기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기각역 그리기
+
+</div>
 
 ```python
 # 기각역은 자료를 보기 전에 정해지는 영역이다. 관측된 통계량이 칠해진
@@ -97,8 +99,6 @@ plt.show()
 
 이 그림은 $t$ 척도라 자유도만 알면 자료와 무관하게 언제나 같은 모양이다. 자료가 하는 일은 파란 점선을 어디에 놓을지 정하는 것뿐이다.
 
-</div>
-
 ## 단측검정
 
 ### 좌측검정
@@ -117,9 +117,11 @@ $$
 t > t_{\alpha,\, n-1}.
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 기각값 구하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 기각값 구하기
+
+</div>
 
 ```python
 df = 100
@@ -145,8 +147,6 @@ Right-tailed critical value: 1.6602
 $t$-분포의 대칭성에 의해 $t_{\alpha,\,\text{df}} = -t_{1-\alpha,\,\text{df}}$이다.
 
 같은 자유도의 양측 임계값 $t_{0.025,\,100} = 1.9840$과 비교해 보라. 단측검정의 임계값 1.6602가 더 안쪽에 있어 넘기 쉽다. 이것이 단측검정의 검정력 이득이고, 그 대가는 반대 방향의 효과를 아예 보지 못한다는 것이다.
-
-</div>
 
 ## 해석
 

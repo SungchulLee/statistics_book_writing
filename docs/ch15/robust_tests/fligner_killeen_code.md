@@ -44,9 +44,11 @@ $$
 
 SciPy는 `scipy.stats.fligner`로 직접 구현을 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 세 집단에 적용하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 집단에 적용하기
+
+</div>
 
 ```python
 import numpy as np
@@ -66,8 +68,6 @@ print(f"Fligner-Killeen X2 = {X2:.6f}, p-value = {p:.6f}")
 ```text
 Fligner-Killeen X2 = 2.550715, p-value = 0.279331
 ```
-
-</div>
 
 이 한 줄의 출력이 어떻게 나왔는지 세 단계를 그대로 그려 보자.
 
@@ -275,7 +275,7 @@ Fligner-Killeen 검정이 가장 로버스트하지만 엄격한 정규성 아�
 
         실무적 함의: 60개월 수익률로 추정한 변동성에도 상당한 불확실성이 있다. 15.2절 연습문제 1에서 보았듯 $n = 100$에서도 표준편차의 95% 신뢰구간 폭이 1.32배이다. 변동성 추정값을 소수점 두 자리까지 신뢰해서는 안 된다.
 
-        그리고 이 예제는 정규분포에서 생성했지만, 실제 월별 수익률은 꼬리가 두껍다(15.7절). 실제 자료라면 Fligner-Killeen을 쓰는 것이 더욱 정당하다. $\square$
+        그리고 이 보기는 정규분포에서 생성했지만, 실제 월별 수익률은 꼬리가 두껍다(15.7절). 실제 자료라면 Fligner-Killeen을 쓰는 것이 더욱 정당하다. $\square$
 
 <div class="drillbox" markdown>
 

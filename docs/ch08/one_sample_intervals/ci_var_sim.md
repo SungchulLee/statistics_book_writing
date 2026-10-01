@@ -38,9 +38,11 @@ $$
 
 이 구간은 **자료가 정규분포를 따를 때에만 정확하다**. (중심극한정리의 도움을 받는) 평균의 신뢰구간과 달리, 카이제곱 분산 구간은 $n$이 커져도 비정규성에 로버스트해지지 않는다. 치우치거나 꼬리가 두꺼운 자료에는 $\sigma^2$에 대한 붓스트랩 신뢰구간을 고려하라.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 분산 신뢰구간 모의실험 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산 신뢰구간 모의실험
+
+</div>
 
 ```python
 import numpy as np
@@ -86,13 +88,13 @@ Coverage: 95.0%, Failures: 5
 
 $n = 12$밖에 안 되지만 포함확률이 명목값과 정확히 맞는다. 근사가 아니라 정확한 분포 결과이기 때문이다. 단, 이것은 자료가 **정규**일 때의 이야기다(연습문제 3 참조).
 
-</div>
-
 ### 구간의 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 구간 100개를 한 그림에 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+
+</div>
 
 ```python
 # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
@@ -115,8 +117,6 @@ plt.show()
 ![100 Chi-square Variance CIs | n=12, CL=95%](./img/ci_var_sim_81.png)
 
 각 구간의 점이 $s^2$이다. 점이 구간 한가운데가 아니라 왼쪽에 치우쳐 있다는 것이 이 구간의 특징이다. 평균의 $t$-구간에서는 점이 언제나 정확히 가운데였다.
-
-</div>
 
 ## 해석
 

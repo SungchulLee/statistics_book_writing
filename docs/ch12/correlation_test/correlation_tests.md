@@ -10,9 +10,11 @@
 
 ### `global_name_space.py`
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 설정 모듈 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 설정 모듈
+
+</div>
 
 ```python
 import argparse
@@ -30,13 +32,13 @@ np.random.seed(ARGS.seed)
 ARGS.size = 1000
 ```
 
-</div>
-
 ### `load_data.py`
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 자료 적재 모듈 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 자료 적재 모듈
+
+</div>
 
 ```python
 import numpy as np
@@ -71,8 +73,6 @@ def load_data(data_type=0):
 - **자료 1**: 단조 비선형 — Pearson은 선형성을 재므로 관계를 과소평가할 수 있지만 (단조성을 재는) Spearman과 Kendall은 이를 탐지해야 한다.
 - **자료 2**: 비단조(사인) — 관계가 주기적이고 단조도 선형도 아니므로 모든 상관 측도가 약해야 한다.
 
-</div>
-
 ---
 
 ## Pearson 상관 검정
@@ -81,9 +81,11 @@ def load_data(data_type=0):
 
 Pearson의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설 $H_0: \rho = 0$ 아래에서 검정통계량은 자유도 $n-2$인 $t$-분포를 따른다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. Pearson 상관 검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Pearson 상관 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -113,8 +115,6 @@ if __name__ == "__main__":
 
 **언제 쓰는가**: 두 변수가 모두 연속형이고 **선형** 관계를 예상할 때. Pearson의 $r$은 이상점에 민감하며 p-값이 정확하려면 이변량 정규성을 가정한다.
 
-</div>
-
 ---
 
 ## Spearman 순위상관 검정
@@ -124,9 +124,11 @@ if __name__ == "__main__":
 
 Spearman의 $\rho_s$는 두 변수 사이의 **단조** 관계를 잰다. 원자료 값이 아니라 순위에 Pearson의 $r$을 적용하여 계산한다. 그래서 이상점에 로버스트하고 비선형이지만 단조인 관계에도 적용할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. Spearman 순위상관 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> Spearman 순위상관 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -156,8 +158,6 @@ if __name__ == "__main__":
 
 **언제 쓰는가**: 관계가 단조일 수 있으나 반드시 선형은 아닐 때, 또는 자료에 이상점이 있거나 순서형일 때.
 
-</div>
-
 ---
 
 ## Kendall의 타우
@@ -172,9 +172,11 @@ $$
 \tau = \frac{(\text{number of concordant pairs}) - (\text{number of discordant pairs})}{\binom{n}{2}}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. Kendall의 타우 검정 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> Kendall의 타우 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -204,8 +206,6 @@ Kendall의 $\tau$는 세 자료 모두에서 Spearman과 같은 방향을 가리
 
 **언제 쓰는가**: Spearman의 $\rho_s$와 비슷한 상황이지만, 표본이 작거나 쌍별 일치에 기반한 더 해석하기 쉬운 측도를 원할 때 선호된다.
 
-</div>
-
 ---
 
 ## 세 검정의 비교
@@ -221,9 +221,11 @@ Kendall의 $\tau$는 세 자료 모두에서 Spearman과 같은 방향을 가리
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 나이와 소득 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 나이와 소득
+
+</div>
 
 **문제**: $\alpha = 0.05$에서 나이와 소득이 관련되어 있는지 검정하라.
 
@@ -276,8 +278,6 @@ Kendall's tau: coef = 1.0000,  p-value = 0.0000
 지수 관계라 단조이지만 선형은 아니다. 순위만 보는 Spearman과 Kendall이 정확히 1.0을 주는 반면 Pearson은 0.9923에 그친다.
 
 **해석**: 모든 p-값이 $\alpha = 0.05$보다 훨씬 작으므로 $H_0: \rho = 0$을 기각하고 이 표본에서 나이와 소득 사이에 통계적으로 유의한 양의 관계가 있다고 결론짓는다. 다만 이것이 인과관계를 확립하지는 않는다. 경력, 학력, 업종 같은 교란요인이 두 변수 모두에 영향을 줄 수 있다.
-
-</div>
 
 ## 연습문제
 

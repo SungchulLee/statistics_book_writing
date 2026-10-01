@@ -25,9 +25,11 @@ $$
 
 ## 1단계: 모형 적합
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 1단계 — 모형 적합 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 모형 적합
+
+</div>
 
 ```python
 import pandas as pd
@@ -60,15 +62,15 @@ Residual          712.106000  54.0        NaN           NaN
 
 제II형 제곱합은 각 주효과를 다른 주효과로 조정하되 교호작용은 무시하고 검정한다. 설계가 균형이거나 거의 균형일 때 권장된다.
 
-</div>
-
 ## 2단계: 주효과에 대한 Tukey HSD
 
 사후검정은 한 요인의 어느 수준이 다른지 찾아낸다. 각 주효과에 대해 Tukey HSD를 따로 수행한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 2단계 — 주효과 사후검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — 주효과 사후검정
+
+</div>
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -101,15 +103,15 @@ group1 group2 meandiff p-adj  lower  upper reject
 
 모순이 아니다. 분산분석은 용량을 모형에 넣은 채 보충제 효과를 보지만, 이 Tukey는 용량을 무시하고 OJ 30개와 VC 30개를 통째로 비교한다. 용량이 만드는 큰 변동이 잡음으로 남아 보충제의 차이를 덮는 것이다. **주효과의 사후검정은 다른 요인을 무시한다**는 점을 잊으면 이런 표를 잘못 읽게 된다.
 
-</div>
-
 ## 3단계: 교호작용에 대한 Tukey HSD
 
 $a \times b$개의 칸 평균을 모두 비교하려면 결합 집단 변수를 만들어 교호작용 칸에 Tukey HSD를 수행한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 3단계 — 교호작용 사후검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 교호작용 사후검정
+
+</div>
 
 ```python
 # 교호작용이 유의하면 주효과만으로는 부족하다. 두 요인을 붙여 만든 여섯 칸을
@@ -155,15 +157,15 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 칸이 $a \times b = 2 \times 3 = 6$개이므로 쌍별 비교는 $\binom{6}{2} = 15$개이다. Tukey 절차는 이 15개 전체에 걸쳐 가족단위 오류율을 동시에 통제한다.
 
-</div>
-
 ## 4단계: 교호작용 그림
 
 교호작용 그림은 한 요인을 가로축에 두고 다른 요인의 각 수준을 별도의 선으로 그려 칸 평균을 보여준다. 선이 평행하지 않으면 교호작용을 시사한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 4단계 — 교호작용 그림 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 4단계 — 교호작용 그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -184,8 +186,6 @@ plt.show()
 ![교호작용 그림](./img/twoway_pipeline_70.png)
 
 앞의 표에서 읽은 것이 그림 하나에 담긴다. 두 선이 왼쪽에서는 벌어져 있다가 용량 2.0에서 만난다. 선이 교차하지 않으므로 순서형 교호작용이며, OJ가 VC보다 나쁜 구간은 없다.
-
-</div>
 
 ## 해석
 

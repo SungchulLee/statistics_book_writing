@@ -54,9 +54,11 @@ $\mu_R$과 $\sigma_R$ 공식만 보면 무엇을 재는지 감이 잘 오지 않
 
 다음 파이썬 함수는 정규근사를 이용한 런 검정을 구현한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 런 검정 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 런 검정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -86,11 +88,9 @@ def runs_test(data):
     return statistic, p_value
 ```
 
-</div>
-
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 뭉친 수열. 뭉침이 심한 수열은 런이 매우 적다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 뭉친 수열. 뭉침이 심한 수열은 런이 매우 적다.
 
 </div>
 
@@ -104,7 +104,7 @@ def runs_test(data):
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 지나치게 교대하는 수열. 빈번한 교대 역시 무작위성으로부터의 이탈이다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 지나치게 교대하는 수열. 빈번한 교대 역시 무작위성으로부터의 이탈이다.
 
 </div>
 
@@ -188,7 +188,7 @@ $R = \dfrac{N_+ + N_- + 1 - \sum_{i=1}^{N-1} x_i\,x_{i+1}}{2}$임을 증명하�
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff easy" title="쉬움"></span> 위 "지나치게 교대하는 수열" 예제의 자료로 런 검정 통계량과 $p$값을
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 위 "지나치게 교대하는 수열" 보기의 자료로 런 검정 통계량과 $p$값을
 파이썬에서 계산하라. $\alpha = 0.05$에서 귀무가설이 기각되는지 확인하라.
 
 </div>

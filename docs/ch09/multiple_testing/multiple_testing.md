@@ -52,9 +52,11 @@ $$
 
 가설 $H_{0,(1)}, \dots, H_{0,(k)}$를 모두 기각한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 효과가 없어도 유의한 결과는 나온다 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 효과가 없어도 유의한 결과는 나온다
+
+</div>
 
 ```python
 import numpy as np
@@ -80,15 +82,15 @@ Sample mean: -0.1038
 Sample std:  0.9082
 ```
 
-</div>
-
-아래 예제에서 쓸 시드를 여기서 고정한다.
+아래 보기에서 쓸 시드를 여기서 고정한다.
 
 ### `statsmodels`로 보정 적용하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. statsmodels 로 보정하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> statsmodels 로 보정하기
+
+</div>
 
 ```python
 from statsmodels.stats.multitest import multipletests
@@ -134,8 +136,6 @@ Rejections (BH):          5
 - **BH**는 정확히 5개를 기각한다. 이 예에서는 진짜 신호 5개와 정확히 일치한다.
 
 Bonferroni가 "안전하다"는 것은 거짓 양성을 막는다는 뜻일 뿐, 놓치는 것에 대해서는 아무 보호도 해 주지 않는다. 검정이 수천 개인 유전체 연구 같은 상황에서 BH를 기본으로 쓰는 이유가 여기 있다.
-
-</div>
 
 ### 해석
 

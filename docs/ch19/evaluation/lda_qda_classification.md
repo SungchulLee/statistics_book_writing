@@ -81,9 +81,11 @@ $$
 **시나리오 B(다른 공분산):** 범주 0은 $\boldsymbol\Sigma_0 = \begin{pmatrix} 1 & 0 \\ 0 & 0.3 \end{pmatrix}$,
 범주 1은 $\boldsymbol\Sigma_1 = \begin{pmatrix} 0.3 & 0 \\ 0 & 2 \end{pmatrix}$를 갖는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 두 가지 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 가지 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -118,8 +120,6 @@ def generate_diff_cov(n_per_class=200):
     return X, y
 ```
 
-</div>
-
 !!! warning "난수 씨앗이 함수 밖에 있다"
     `np.random.seed(42)`는 모듈 수준에서 한 번만 호출되고 생성 함수 안에는 없다. 따라서 두
     함수를 호출하는 **순서와 횟수**가 생성되는 자료를 바꾼다. 아래 분류기 비교 블록에서
@@ -129,9 +129,11 @@ def generate_diff_cov(n_per_class=200):
 
 ## 분류기 적합과 비교
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 네 분류기의 교차검증 정확도 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 네 분류기의 교차검증 정확도
+
+</div>
 
 ```python
 from sklearn.discriminant_analysis import (
@@ -188,13 +190,13 @@ for scenario_name, (X, y) in [
 | 나이브 베이즈 | $0.8800$ | $0.8475$ |
 | 로지스틱 회귀 | $0.8850$ | $0.8600$ |
 
-</div>
-
 ## 결정경계 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 결정경계 그리기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 결정경계 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -247,8 +249,6 @@ plt.show()
 
 그림에서 확인할 것은 정확도 숫자가 아니라 **경계의 모양**이다. LDA와 로지스틱 회귀는 직선을,
 QDA는 곡선을, 나이브 베이즈는 축에 정렬된 곡선을 그린다.
-
-</div>
 
 ## 해석
 

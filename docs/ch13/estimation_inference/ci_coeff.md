@@ -81,9 +81,11 @@ $S = 1.532$, $R^2 = 31.3\%$
 !!! note "$S$와 $R^2$는 이 문제에 쓰이지 않는다"
     기울기의 신뢰구간은 $\hat{\beta}_1$과 그 표준오차만으로 계산된다. $S$와 $R^2$는 참고용 수치이다. 다만 이 둘은 서로 무관하지 않다. $t = 2.862$, $\text{df} = 18$에서 $R^2 = t^2/(t^2 + \text{df}) = 8.19/26.19 = 0.313$이므로, 출력표의 $R^2$는 반드시 31.3%가 되어야 한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 출력표만으로 신뢰구간 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 출력표만으로 신뢰구간 만들기
+
+</div>
 
 ```python
 from scipy import stats
@@ -119,8 +121,6 @@ if __name__ == "__main__":
 
 **출력**:
 
-</div>
-
 ```text
 95% confidence interval of the slope
 0.1640 ± 0.1198
@@ -130,13 +130,15 @@ if __name__ == "__main__":
 
 ## 시각화: 신뢰띠와 예측띠
 
-다음 예제는 인공 회귀자료를 생성하고 평균반응에 대한 95% 신뢰구간(안쪽 띠)과 개별 관측값에 대한 95% 예측구간(바깥쪽 띠)을 함께 그린다.
+다음 보기는 인공 회귀자료를 생성하고 평균반응에 대한 95% 신뢰구간(안쪽 띠)과 개별 관측값에 대한 95% 예측구간(바깥쪽 띠)을 함께 그린다.
 
 ### 준비
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 필요한 라이브러리 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 필요한 라이브러리
+
+</div>
 
 ```python
 import numpy as np
@@ -144,13 +146,13 @@ import matplotlib.pyplot as plt
 from scipy import stats
 ```
 
-</div>
-
 ### 자료 생성
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 자료 만들기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 자료 만들기
+
+</div>
 
 ```python
 def generate_data(n, sigma, seed=0):
@@ -172,13 +174,13 @@ def generate_data(n, sigma, seed=0):
     return x, y
 ```
 
-</div>
-
 ### 회귀 추정
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 회귀직선 추정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 회귀직선 추정
+
+</div>
 
 ```python
 def estimate_regression_line(x, y):
@@ -203,13 +205,13 @@ def estimate_regression_line(x, y):
     return y_hat, beta_hat, y_bar, x_bar
 ```
 
-</div>
-
 ### 잔차분산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 잔차분산 구하기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 잔차분산 구하기
+
+</div>
 
 ```python
 def calculate_residual_variance(y, y_hat, n):
@@ -223,13 +225,13 @@ def calculate_residual_variance(y, y_hat, n):
     return s_square, s
 ```
 
-</div>
-
 ### 신뢰구간과 예측구간
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 신뢰구간과 예측구간 계산 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 신뢰구간과 예측구간 계산
+
+</div>
 
 ```python
 def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
@@ -268,13 +270,13 @@ def confidence_intervals(x, y_hat, beta_hat, x_bar, y_bar, n, s):
     return x0, lower, upper, lower2, upper2
 ```
 
-</div>
-
 ### 그리기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 두 구간 그리기 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 두 구간 그리기
+
+</div>
 
 ```python
 def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
@@ -301,13 +303,13 @@ def plot_intervals(x, y, y_hat, x0, lower, upper, lower2, upper2):
     plt.show()
 ```
 
+### 전체 보기
+
+<div class="exbox" markdown>
+
+**보기 8.** <span class="diff easy" title="쉬움"></span> 전체 실행
+
 </div>
-
-### 전체 예제
-
-<div class="codebox" markdown>
-
-#### 예제 8. 전체 실행 { .eg }
 
 ```python
 n = 100
@@ -344,8 +346,6 @@ Estimated s²: 9.7087
 참 $\sigma^2 = 9$를 $s^2 = 9.71$로 추정했다. $s^2$은 불편추정량이지만 표본 하나에서 이 정도 오차는 정상이다. 자유도가 $n - 2$인 것은 회귀에서 모수 두 개(절편과 기울기)를 추정했기 때문이다.
 
 왼쪽 패널은 평균반응의 신뢰띠를 보여준다. $\bar{x}$에서 가장 좁은 특징적인 "나비넥타이" 모양에 주목하라. 오른쪽 패널은 개별 관측값의 변동까지 반영한 더 넓은 예측띠를 보여준다.
-
-</div>
 
 ## 연습문제
 

@@ -52,9 +52,11 @@ $$
 
 이 열거가 가능한 범위가 곧 정확검정을 쓸 수 있는 범위이다. $n' = 6$이면 $64$가지, $n' = 20$이면 약 $100$만 가지로 여전히 즉시 계산되지만 $n' = 50$이면 $10^{15}$가지가 되어 동적계획법이나 정규근사로 넘어가야 한다. SciPy가 $n' \le 25$에서 기본적으로 `method="exact"`를 쓰는 것이 이 경계선이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 부호순위검정 — 대응표본 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 부호순위검정 — 대응표본
+
+</div>
 
 ```python
 import numpy as np
@@ -86,8 +88,6 @@ print(f"W = {statistic}, p = {p_value:.4f}")
 W = 11.0, p = 0.0086
 ```
 
-</div>
-
 !!! warning "`mode=`가 아니라 `method=`이다"
     SciPy 1.9에서 `wilcoxon`의 `mode` 인자가 `method`로 이름이 바뀌었고 옛 이름은
     이후 제거되었다. 또 반환되는 `statistic`은 $W^+$가 아니라
@@ -116,9 +116,11 @@ $$
 
 은 점근적으로 표준정규를 따른다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 순위합검정 — 독립표본 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 순위합검정 — 독립표본
+
+</div>
 
 ```python
 from scipy import stats
@@ -141,10 +143,8 @@ print(f"Z = {statistic:.4f}, p = {p_value:.4f}")
 Z = 0.7303, p = 0.4652
 ```
 
-</div>
-
 !!! danger "대응자료에 순위합검정을 쓰지 말 것"
-    부호순위검정 예제의 학생 자료를 두 열로 쪼개어 `ranksums`에 넣으면
+    부호순위검정 보기의 학생 자료를 두 열로 쪼개어 `ranksums`에 넣으면
     $Z = 1.472$, $p = 0.141$이 나온다. 부호순위검정의 $p = 0.0086$과 비교하면
     16배이다.
 

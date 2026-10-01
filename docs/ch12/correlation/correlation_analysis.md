@@ -42,9 +42,11 @@ $$
 
 여기서 $x_i \sim \text{Uniform}(10, 60)$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 이변량 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이변량 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -59,17 +61,17 @@ noise = np.random.normal(0, 8, n)
 y = 0.8 * x + 5 + noise
 ```
 
-</div>
-
 ---
 
 ## 상관계수 계산
 
 SciPy는 각 측도에 대한 함수를 제공하며 계수와 함께 연관이 없다는 귀무가설 아래의 p-값을 돌려준다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 세 상관계수 구하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 세 상관계수 구하기
+
+</div>
 
 ```python
 # 세 측도를 함께 구한다. 관계가 선형이고 이상치가 없으면 셋이 비슷하게 나온다.
@@ -93,17 +95,17 @@ Kendall  tau = 0.6420  (p = 2.54e-25)
 
 세 계수가 0.82, 0.84, 0.64로 다르다. Kendall이 유독 작은 것은 척도가 달라서이며, 강도가 약하다는 뜻이 아니다.
 
-</div>
-
 ---
 
 ## 순위 동등성 확인
 
 유용한 항등식: Spearman의 $\rho_s$는 순위 변환된 자료로 계산한 Pearson $r$과 같다. 수치로 확인해 보자:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 순위에 대한 피어슨이 스피어만이다 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 순위에 대한 피어슨이 스피어만이다
+
+</div>
 
 ```python
 # Spearman 은 "순위에 대한 Pearson"이라는 정의를 그대로 확인한다.
@@ -122,17 +124,17 @@ Spearman rho       = 0.8363
 
 순위로 바꾼 뒤 계산한 Pearson 상관이 Spearman과 정확히 같다. Spearman은 별개의 공식이 아니라 **순위에 적용한 Pearson**이라는 정의를 수치로 확인한 것이다.
 
-</div>
-
 ---
 
 ## 회귀직선을 포함한 산점도
 
 산점도에 보통최소제곱(OLS) 회귀직선을 겹쳐 그리면 선형모형이 적절한지 시각적으로 확인할 수 있다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 회귀직선을 얹은 산점도 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 회귀직선을 얹은 산점도
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -156,8 +158,6 @@ plt.show()
 ![세 상관계수의 비교](./img/correlation_analysis_92.png)
 
 산점도에 세 계수를 함께 적어 두면 어떤 모양에서 값이 갈리는지 볼 수 있다.
-
-</div>
 
 ---
 
@@ -242,7 +242,7 @@ Spearman의 $\rho_s > 0.9$이면서 Pearson의 $r < 0.5$인 $n = 100$개 자료�
     Spearman rho = 0.9821
     ```
 
-    Pearson 0.856과 Spearman 0.982의 차이가 이 예제의 요점이다. 관계가 단조이지만 곡선이면 순위 기반 계수가 더 큰 값을 준다.
+    Pearson 0.856과 Spearman 0.982의 차이가 이 보기의 요점이다. 관계가 단조이지만 곡선이면 순위 기반 계수가 더 큰 값을 준다.
 
     지수 관계는 강하게 단조이지만($\rho_s$가 높다) 선형에서 멀어 Pearson의 $r$이 상당히 낮다. Pearson은 선형 연관만 포착하고 Spearman은 어떤 단조 관계든 포착함을 보여준다. $\square$
 

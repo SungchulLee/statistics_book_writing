@@ -44,9 +44,11 @@ $$
 
 다음 함수는 이 검정을 처음부터 구현한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 분산에 대한 카이제곱 검정 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산에 대한 카이제곱 검정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -68,13 +70,13 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
     return statistic, p_value
 ```
 
+보기는 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$에 대해 $N(1, \sigma_Y^2)$에서 표본을 생성하고 $H_0: \sigma^2 = 1$을 검정한다:
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 검정 실행
+
 </div>
-
-예제는 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$에 대해 $N(1, \sigma_Y^2)$에서 표본을 생성하고 $H_0: \sigma^2 = 1$을 검정한다:
-
-<div class="codebox" markdown>
-
-### 예제 2. 검정 실행 { .eg }
 
 ```python
 seed = 1
@@ -113,8 +115,6 @@ p-값이 단조롭지 않다는 점이 눈에 띈다. $\sigma_Y$가 1.00일 때 
 | 1.10 | 0.958 | 94.80 | 0.799 |
 | 1.15 | 1.047 | 103.62 | 0.711 |
 | 1.20 | 1.140 | 112.82 | 0.324 |
-
-</div>
 
 ## 해석
 

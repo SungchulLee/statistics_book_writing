@@ -31,9 +31,11 @@ $n$개 관측값의 표본이 주어졌을 때:
 붓스트랩 분포: {θ₁*, θ₂*, ..., θ_B*}
 ```
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 중앙값의 붓스트랩 분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 중앙값의 붓스트랩 분포
+
+</div>
 
 자료에 이상치가 있거나 정규분포가 아닐 때 중앙값이 특히 유용하다. 평균과 달리 중앙값에는 표준오차의 **간단한 공식이 없다**. 붓스트랩이 이 문제를 깔끔하게 푼다.
 
@@ -106,8 +108,6 @@ plt.show()
 
 ![표본중앙값의 붓스트랩 분포](./img/resampling_method_77.png)
 
-</div>
-
 ## 붓스트랩 결과의 해석
 
 ### 표준오차
@@ -124,7 +124,7 @@ $$SE(\text{median}) \approx \text{std}(\{\theta_1^*, \theta_2^*, \ldots, \theta_
 
 $$\text{Bias} = E[\text{추정량}] - \text{참 모수} \approx \text{mean}(\text{붓스트랩 분포}) - \text{원래 통계량}$$
 
-위 예제에서 편향은 $+\$37$로 표준오차 $\$756$의 5%에 불과하다. 중앙값 추정량이 사실상 불편임을 시사한다.
+위 보기에서 편향은 $+\$37$로 표준오차 $\$756$의 5%에 불과하다. 중앙값 추정량이 사실상 불편임을 시사한다.
 
 !!! note "편향이 작다는 것을 어떻게 판단하는가"
     편향의 절대적 크기가 아니라 **표준오차 대비 크기**를 본다. $|\widehat{\text{Bias}}| / \widehat{\text{SE}} < 0.25$이면 무시할 만하다는 것이 흔한 경험칙이다. 여기서는 $37/756 = 0.05$로 그 기준을 크게 밑돈다.
@@ -192,9 +192,11 @@ $$\text{Bias} = E[\text{추정량}] - \text{참 모수} \approx \text{mean}(\tex
 
 극단 분위수(예: 99번째 백분위수)에는 $B \geq 5000$.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 반복 횟수 B가 주는 차이 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 반복 횟수 B가 주는 차이
+
+</div>
 
 ```python
 # 붓스트랩 반복 횟수 B 를 늘리면 추정이 안정된다. 다만 B 는 붓스트랩
@@ -226,8 +228,6 @@ B =  5000: SE = $   759.5
 
 $B = 100$과 $B = 5000$의 차이가 8%에 불과하다. 표준오차만 필요하다면 $B$를 크게 할 이유가 별로 없다.
 
-</div>
-
 ### 계산비용
 
 현대의 컴퓨터는 표준적인 통계량에 대해 10{,}000회 붓스트랩을 쉽게 처리한다. 복잡한 모형 적합처럼 계산이 무거운 작업에서는 $B = 500$으로 시작하고 필요하면 늘린다.
@@ -250,9 +250,11 @@ $B = 100$과 $B = 5000$의 차이가 8%에 불과하다. 표준오차만 필요�
 
 시계열이나 군집자료에 쓴다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 블록 붓스트랩 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 블록 붓스트랩
+
+</div>
 
 ```python
 def block_bootstrap(data, block_size, n_bootstrap, rng=None):
@@ -274,8 +276,6 @@ def block_bootstrap(data, block_size, n_bootstrap, rng=None):
     return np.array(samples)
 ```
 
-</div>
-
 !!! note "고정 블록 대 이동 블록"
     위 구현은 **이동 블록**(moving-block) 붓스트랩으로, 블록의 시작점을 임의의 위치에서 뽑는다. 자료를 겹치지 않는 고정 블록으로 미리 자르고 그 블록들을 재표집하는 방식도 있지만, 마지막 블록의 길이가 다를 수 있고 블록 경계가 고정되어 정보를 잃는다. 이동 블록이 대체로 낫다.
 
@@ -283,9 +283,11 @@ def block_bootstrap(data, block_size, n_bootstrap, rng=None):
 
 일부 통계량에서 더 정확한 신뢰구간을 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 백분위수-t 붓스트랩 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 백분위수-t 붓스트랩
+
+</div>
 
 ```python
 import numpy as np
@@ -328,14 +330,12 @@ percentile  CI = (1.6498, 3.0813)
 
 분위수의 순서가 뒤바뀐 것처럼 보이는데 이는 실수가 아니다. $t^* = (\hat\theta^* - \hat\theta)/\widehat{\text{SE}}^*$의 **상위** 분위수가 신뢰구간의 **하한**에 대응한다. 자세한 내용은 [붓스트랩-t 방법](../bootstrap_ci/bootstrap_t.md)에서 다룬다.
 
-</div>
-
 ## 연습문제
 
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-소득자료 예제에서 중앙값의 붓스트랩 표준오차 $\$756$을 얻었다. 같은 자료에서 **평균**의 붓스트랩 표준오차를 계산하고, 이론값 $s/\sqrt{n}$과 비교하라. 어느 통계량의 표준오차가 더 큰가?
+소득자료 보기에서 중앙값의 붓스트랩 표준오차 $\$756$을 얻었다. 같은 자료에서 **평균**의 붓스트랩 표준오차를 계산하고, 이론값 $s/\sqrt{n}$과 비교하라. 어느 통계량의 표준오차가 더 큰가?
 
 </div>
 

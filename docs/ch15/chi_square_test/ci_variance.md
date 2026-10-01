@@ -122,9 +122,11 @@ $n \to \infty$이면 이 비가 1로 가고 구간이 점추정값 $S^2$으로 �
 
 $\sigma^2$의 신뢰구간과 카이제곱 검정은 쌍대 절차이다. 값 $\sigma_0^2$이 $100(1-\alpha)\%$ 신뢰구간 밖에 있을 필요충분조건은 카이제곱 검정이 유의수준 $\alpha$에서 $H_0\colon \sigma^2 = \sigma_0^2$을 기각하는 것이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 분산과 표준편차의 신뢰구간 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분산과 표준편차의 신뢰구간
+
+</div>
 
 ```python
 import numpy as np
@@ -160,8 +162,6 @@ print(f"95% CI for std dev:  ({ci_sd_lower:.2f}, {ci_sd_upper:.2f})")
 95% CI for variance: (73.16, 232.24)
 95% CI for std dev:  (8.55, 15.24)
 ```
-
-</div>
 
 
 ## 연습문제
@@ -322,7 +322,7 @@ $n \in \{10, 25, 50, 100, 500, 1000\}$에 대해 95% 신뢰구간의 폭 비율�
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-신뢰구간과 가설검정의 쌍대성을 15.2절 예제로 확인하라. $n = 25$, $s^2 = 0.05$일 때 95% 신뢰구간을 구하고, 이 구간에 포함되지 않는 $\sigma_0^2$ 값에 대해서만 양측 카이제곱 검정이 $\alpha = 0.05$에서 기각함을 보여라.
+신뢰구간과 가설검정의 쌍대성을 15.2절 보기로 확인하라. $n = 25$, $s^2 = 0.05$일 때 95% 신뢰구간을 구하고, 이 구간에 포함되지 않는 $\sigma_0^2$ 값에 대해서만 양측 카이제곱 검정이 $\alpha = 0.05$에서 기각함을 보여라.
 
 </div>
 

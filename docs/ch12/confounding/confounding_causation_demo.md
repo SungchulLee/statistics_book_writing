@@ -20,9 +20,11 @@ $$
 
 $Y$는 오직 $C$에만 의존하므로 $T$가 $Y$에 미치는 참 인과효과는 0이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 교란된 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 교란된 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -56,8 +58,6 @@ corr(T, Y) = 0.5282   (참 인과효과는 0)
 
 $T$와 $Y$의 상관이 0.53이나 되지만 $T$는 $Y$에 아무 영향도 주지 않는다. 오직 $C$를 공유할 뿐이다.
 
-</div>
-
 ### 짧은 회귀와 긴 회귀
 
 **짧은 회귀**($C$를 빠뜨린 회귀)는 $Y$를 $T$에만 회귀시킨다.
@@ -72,9 +72,11 @@ $$
 Y = \alpha + \beta_T^{\text{long}} T + \beta_C C + u
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 짧은 회귀와 긴 회귀 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 짧은 회귀와 긴 회귀
+
+</div>
 
 ```python
 def compute_regressions(t, c, y):
@@ -114,8 +116,6 @@ long_beta_C  =   1.0915
 
 $T$에 아무런 인과효과가 없는데도 짧은 회귀는 $\beta_T^{\text{short}} = 0.777$이라는 압도적으로 유의한 기울기를 내놓는다. 긴 회귀는 $\beta_T^{\text{long}} \approx 0$을 올바르게 추정한다.
 
-</div>
-
 ### 부분회귀(Frisch-Waugh-Lovell)
 
 이와 동등한 방법으로, $T$와 $Y$를 각각 $C$에 회귀시켜 잔차를 얻은 뒤 그 잔차끼리 회귀시킬 수 있다.
@@ -128,9 +128,11 @@ $$
 \beta_T^{\text{long}} = \frac{\text{Cov}(e_T, e_Y)}{\text{Var}(e_T)}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 부분회귀로 같은 값 얻기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 부분회귀로 같은 값 얻기
+
+</div>
 
 ```python
 # Frisch-Waugh-Lovell 정리: T 와 Y 에서 각각 C 로 설명되는 몫을 걷어 낸 뒤
@@ -149,8 +151,6 @@ slope_partial = -0.1000
 ```
 
 이렇게 얻은 `slope_partial`은 $-0.1000$으로 긴 회귀의 $\beta_T^{\text{long}}$과 소수점 넷째 자리까지 일치한다. **Frisch-Waugh-Lovell 정리**가 작동하는 모습이다. 긴 회귀에서 $T$의 계수는 $e_Y$를 $e_T$에 회귀시킨 기울기와 같다.
-
-</div>
 
 ---
 
@@ -172,9 +172,11 @@ $$
 
 참 처치효과는 $+5$이지만, 중증 환자는 전반적으로 결과가 나쁘다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 심슨의 역설과 층화 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 심슨의 역설과 층화
+
+</div>
 
 ```python
 def simpson_paradox_demo(n=1000):
@@ -204,8 +206,6 @@ def simpson_paradox_demo(n=1000):
 
     return ate_naive, ate_mild, ate_severe, ate_adjusted
 ```
-
-</div>
 
 ### 역설
 
@@ -380,7 +380,7 @@ Simpson의 역설 시연에서 처치 배정이 중증도와 독립이라면(즉
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-Simpson의 역설 예제를 중증도 세 수준(경증, 중등증, 중증)으로 확장하고 처치확률을 각각 0.2, 0.5, 0.8로 두어라. 역설이 여전히 일어남을 보이고 층화한 ATE를 계산하라.
+Simpson의 역설 보기를 중증도 세 수준(경증, 중등증, 중증)으로 확장하고 처치확률을 각각 0.2, 0.5, 0.8로 두어라. 역설이 여전히 일어남을 보이고 층화한 ATE를 계산하라.
 
 </div>
 

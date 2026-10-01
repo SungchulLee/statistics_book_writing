@@ -32,11 +32,13 @@ $$ z = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
 - 단측(큼): $p\text{-값} = P(Z \geq z)$
 - 단측(작음): $p\text{-값} = P(Z \leq z)$
 
-### E. 예제
+### E. 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 두 비율의 차이 — 간단한 예 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 비율의 차이 — 간단한 예
+
+</div>
 
 ```python
 import numpy as np
@@ -62,8 +64,6 @@ p value   : 0.2583
 ```
 
 출생아 수 평균이 1.85와 1.65로 0.2 차이지만 개인차(표준편차 1.3, 1.2)가 커서 기각하지 못한다.
-
-</div>
 
 ---
 
@@ -95,17 +95,17 @@ $$ s_p = \sqrt{\frac{(n_1 - 1) s_1^2 + (n_2 - 1) s_2^2}{n_1 + n_2 - 2}} $$
 - **단측(큼)**: $t > t_{\alpha, n_1+n_2-2}$이면 $H_0$을 기각한다.
 - **단측(작음)**: $t < -t_{\alpha, n_1+n_2-2}$이면 $H_0$을 기각한다.
 
-### D. 예제
+### D. 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 급여의 성별 격차 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 급여의 성별 격차
+
+</div>
 
 시장조사자들이 남성 관리자와 여성 관리자의 평균 급여를 비교한다.
 
 $$H_0 : \mu_{\text{men}} = \mu_{\text{women}} \quad\text{vs}\quad H_1: \mu_{\text{men}} > \mu_{\text{women}}$$
-
-</div>
 
 | | 밭 A | 밭 B |
 |:---:|:---:|:---:|
@@ -115,9 +115,11 @@ $$H_0 : \mu_{\text{men}} = \mu_{\text{women}} \quad\text{vs}\quad H_1: \mu_{\tex
 
 $$H_0 : \mu_A = \mu_B \quad\text{vs}\quad H_1: \mu_A \neq \mu_B$$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 서로 다른 두 밭의 토마토 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 서로 다른 두 밭의 토마토
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -161,8 +163,6 @@ Reject H_0
 
 자유도가 33.79로 정수가 아니다. Welch 자유도는 근사값이라 정수일 이유가 없다. 합동 검정이었다면 $n_1 + n_2 - 2 = 44$였을 것이고, 분산이 달라 정보량을 보수적으로 잡은 결과가 이 차이다.
 
-</div>
-
 | | France | Switzerland |
 |:---:|:---:|:---:|
 | 평균 | 1.85 | 1.65 |
@@ -171,9 +171,11 @@ Reject H_0
 
 합동분산을 쓰면:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 출생아 수 — 프랑스와 스위스 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 출생아 수 — 프랑스와 스위스
+
+</div>
 
 ```python
 X_1_bar, X_2_bar = 1.85, 1.65
@@ -202,11 +204,11 @@ p_value   = 0.2596
 
 같은 자료의 앞선 $z$-검정과 통계량이 1.1305로 정확히 같고 p-값만 0.2583에서 0.2596으로 바뀌었다. 자유도 198이면 $t$가 정규분포와 거의 구별되지 않기 때문이다.
 
+<div class="exbox" markdown>
+
+**보기 5.** <span class="diff easy" title="쉬움"></span> 두 품종의 배 (Bosc와 Anjou)
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 5. 두 품종의 배 (Bosc와 Anjou) { .eg }
 
 | | Bosc | Anjou |
 |:---:|:---:|:---:|
@@ -215,8 +217,6 @@ p_value   = 0.2596
 | n | 65 | 65 |
 
 $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44$, 즉 $(-2.44, 10.44)$이다. 신뢰구간이 0을 포함하므로 $\alpha = 0.01$에서 $H_0$을 기각하지 못한다.
-
-</div>
 
 ---
 
@@ -238,9 +238,11 @@ $$df = \frac{\left( \frac{s_1^2}{n_1} + \frac{s_2^2}{n_2} \right)^2}{\frac{\left
 - 두 집단의 표본크기가 크게 다를 때.
 - 모분산을 모를 때.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 합동 t-검정 구현 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 합동 t-검정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -271,8 +273,6 @@ Reject H0: The means are significantly different.
 ```
 
 두 팀의 평균이 121.4와 135.0으로 13.6 차이인데 팀 안의 산포는 표준편차 4 남짓이라 $t$가 $-9.44$까지 간다. 집단 간 차이가 집단 안 산포보다 훨씬 크면 표본이 작아도 분명하게 갈린다.
-
-</div>
 
 ### 표준 이표본 t-검정과의 비교
 
@@ -306,7 +306,7 @@ $$\hat{p}_{\text{pool}} = \frac{x_1 + x_2}{n_1 + n_2}$$
 
 $$z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}_{\text{pool}} (1 - \hat{p}_{\text{pool}}) \left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$$
 
-### C. 예제
+### C. 보기
 
 | | A 지구 | B 지구 | 합계 |
 |:---:|:---:|:---:|:---:|
@@ -315,9 +315,11 @@ $$z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}_{\text{pool}} (1 - \hat{p}_{\te
 
 $$H_0 : p_A = p_B \quad\text{vs}\quad H_1: p_A \neq p_B$$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 새 법률에 대한 지지 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 새 법률에 대한 지지
+
+</div>
 
 ```python
 import numpy as np
@@ -353,21 +355,21 @@ Fail to reject H_0
 
 지지율이 58%와 52%로 6%p 차이인데도 기각하지 못한다. 지구당 100명으로는 이 정도 차이를 가려낼 수 없다. 비율의 차이를 검정하려면 평균의 차이보다 훨씬 큰 표본이 필요하다.
 
+<div class="exbox" markdown>
+
+**보기 8.** <span class="diff easy" title="쉬움"></span> Derrick의 지지율
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 8. Derrick의 지지율 { .eg }
 
 Derrick은 총리 지지율이 11월보다 12월에 낮은지 검정한다.
 
 $$H_0 : p_{\text{Nov}} = p_{\text{Dec}} \quad\text{vs}\quad H_1: p_{\text{Nov}} > p_{\text{Dec}}$$
 
+<div class="exbox" markdown>
+
+**보기 9.** <span class="diff easy" title="쉬움"></span> 10센트와 5센트 동전
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 9. 10센트와 5센트 동전 { .eg }
 
 Kiley는 10센트 동전과 5센트 동전이 앞면을 보일 가능성이 같은지 검정한다.
 
@@ -377,11 +379,11 @@ $$H_0 : p_{\text{Dime}} = p_{\text{Nickel}} \quad\text{vs}\quad H_1: p_{\text{Di
 
 $$H_0 : p_{2000} = p_{2015} \quad\text{vs}\quad H_1: p_{2000} < p_{2015}$$
 
+<div class="exbox" markdown>
+
+**보기 10.** <span class="diff easy" title="쉬움"></span> 근시 비율의 변화
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 10. 근시 비율의 변화 { .eg }
 
 ```python
 n_2000, n_2015 = 400, 600
@@ -415,13 +417,13 @@ $p = 0.0533$으로 0.05를 아슬아슬하게 넘겨 기각하지 못한다. 유
 
 이런 경계 사례를 "효과가 없다"로 읽으면 안 된다. 0.0533과 0.0467 사이에 실질적인 차이는 없다. 기각 여부라는 이분법 대신 신뢰구간과 효과크기를 함께 보고하는 편이 낫다.
 
-</div>
-
 수의사들이 수컷 고양이 259마리 중 24마리, 암컷 241마리 중 14마리가 이환된 자료로 $H_0: p_{\text{male}} = p_{\text{female}}$ 대 $H_1: p_{\text{male}} > p_{\text{female}}$을 검정한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 11. 고양이 질병 — 암수 비교 { .eg }
+**보기 11.** <span class="diff easy" title="쉬움"></span> 고양이 질병 — 암수 비교
+
+</div>
 
 ```python
 # 두 비율이 같다는 귀무가설 아래에서는 둘을 합쳐 하나의 비율로 보는 것이
@@ -447,15 +449,13 @@ p_value = 0.0725
 
 이환율이 9.3%와 5.8%로 수컷 쪽이 1.6배 높지만 $p = 0.0725$로 기각하지 못한다. 이환된 개체가 24마리와 14마리뿐이라, 500마리를 조사했어도 비교의 정밀도를 좌우하는 것은 전체 개체 수가 아니라 이 사건 수다.
 
+<div class="exbox" markdown>
+
+**보기 12.** <span class="diff easy" title="쉬움"></span> 대면 수업과 온라인 수업
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 12. 대면 수업과 온라인 수업 { .eg }
 
 $p_{\text{대면}} - p_{\text{온라인}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다. 구간이 0을 포함하므로 $H_0: p_{\text{대면}} = p_{\text{온라인}}$을 기각하지 못한다.
-
-</div>
 
 ---
 

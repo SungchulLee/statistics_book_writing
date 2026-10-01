@@ -28,9 +28,11 @@ $$
 
 을 표준정규분포와 비교한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 순위합검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 순위합검정
+
+</div>
 
 ```python
 from scipy import stats
@@ -51,8 +53,6 @@ print(f"Z = {stat:.4f}, p = {p:.2%}")
 Z = 0.7303, p = 46.52%
 ```
 
-</div>
-
 ## Wilcoxon 부호순위검정
 
 **대응**자료에서는 부호순위검정이 절대차이 $|D_i|$에 순위를 매기고 원래 부호를 붙인 뒤
@@ -67,9 +67,11 @@ $$
 
 이며 $n'$은 0이 아닌 차이의 개수이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 부호순위검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 부호순위검정
+
+</div>
 
 ```python
 from scipy import stats
@@ -97,8 +99,6 @@ print(f"W = {stat}, p = {p:.4f}")
 W = 11.0, p = 0.0086
 ```
 
-</div>
-
 !!! danger "같은 자료에 두 검정을 섞어 쓰지 말 것"
     위 대응자료를 두 열로 쪼개어 `ranksums`에 넣으면 $Z = 1.472$, $p = 0.141$이 나온다.
     부호순위검정의 $p = 0.0086$과 16배 차이가 난다.
@@ -118,9 +118,11 @@ $$
 순위합과는 $U = W - m(m+1)/2$로 연결되므로 두 검정은 동치이다.
 SciPy 구현은 **동점**을 동점 보정 분산과 연속성 보정 정규근사로 처리한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. Mann-Whitney U 검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Mann-Whitney U 검정
+
+</div>
 
 ```python
 from scipy import stats
@@ -140,8 +142,6 @@ print(f"U = {stat}, p = {p:.2%}")
 U = 49.0, p = 0.53%
 ```
 
-</div>
-
 ## Kruskal--Wallis H 검정
 
 Kruskal--Wallis 검정은 순위합의 발상을 $k \geq 2$개의 독립집단으로 확장한다.
@@ -154,9 +154,11 @@ $$
 을 계산한다. $R_j$는 집단 $j$의 순위합, $n_j$는 집단 크기이다. $H_0$(모든 집단이 같은
 모집단에서 왔다) 아래에서 $H$는 근사적으로 $\chi^2_{k-1}$을 따른다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. Kruskal-Wallis 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> Kruskal-Wallis 검정
+
+</div>
 
 ```python
 from scipy import stats
@@ -178,17 +180,17 @@ print(f"H = {stat:.4f}, p = {p:.2%}")
 H = 7.6480, p = 2.18%
 ```
 
-</div>
-
 ## Mood 중앙값검정
 
 Mood 중앙값검정은 Kruskal--Wallis의 더 간단한 대안이다. 모든 관측값의 **전체 중앙값**을
 계산하고, 각 관측값을 그 중앙값보다 위인지 아래인지로 분류하여 $2 \times k$ 분할표를
 만든다. 이 표에 카이제곱 검정을 적용하여 집단들의 중앙값이 같은지 판정한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 중앙값 검정 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 중앙값 검정
+
+</div>
 
 ```python
 from scipy import stats
@@ -220,8 +222,6 @@ Contingency table:
  [11  5 10]]
 p-value = 0.1261
 ```
-
-</div>
 
 !!! note "같은 자료에서 두 검정의 결론이 갈린다"
     Kruskal--Wallis는 $p = 0.0218$로 기각하지만 Mood 중앙값검정은 $p = 0.1261$로
@@ -390,7 +390,7 @@ Kruskal--Wallis $H$ 통계량을 손으로 계산하라.
     "위"라는 이진 부호를 받는다. Kruskal--Wallis에서는 이상치의 극단적 순위가 그
     집단의 순위합을 부풀려 결과를 왜곡할 수 있다.
 
-    본문 예제가 이 대비를 보여 준다. Kruskal--Wallis는 $p = 0.0218$로 기각하고
+    본문 보기가 이 대비를 보여 준다. Kruskal--Wallis는 $p = 0.0218$로 기각하고
     Mood 검정은 $p = 0.1261$로 기각하지 못한다.
 
     !!! warning "로버스트성의 한계"
@@ -405,7 +405,7 @@ Kruskal--Wallis $H$ 통계량을 손으로 계산하라.
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff easy" title="쉬움"></span> 위 코드 예제의 Mann--Whitney 자료로 $U = W - m(m+1)/2$를 손으로
+**연습문제 4.** <span class="diff easy" title="쉬움"></span> 위 코드 보기의 Mann--Whitney 자료로 $U = W - m(m+1)/2$를 손으로
 확인하라. $W$는 `data0`의 순위합이고 $m = 16$이다.
 
 </div>

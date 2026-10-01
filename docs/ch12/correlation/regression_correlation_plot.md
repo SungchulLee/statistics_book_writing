@@ -33,9 +33,11 @@ $$
 
 기울기와 오차 척도를 달리한 여덟 가지 설정에서 자료를 생성한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 기울기와 잡음을 바꿔 가며 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기울기와 잡음을 바꿔 가며
+
+</div>
 
 ```python
 import numpy as np
@@ -69,8 +71,6 @@ def generate(beta1, beta2, error_scale, n=DATA_SIZE):
 
 앞의 네 설정은 $\sigma = 1$로 고정하고 기울기를 바꾸며, 뒤의 네 설정은 $\beta_2 = 3$으로 고정하고 잡음을 키운다.
 
-</div>
-
 !!! note "$X$의 산포에 주목하라"
     `np.random.randint(1, n, n)`은 $1$부터 $99$까지의 정수를 뽑으므로 $\sigma_X \approx 28.6$으로 **매우 크다**. 위 공식에서 $\sigma_X$는 기울기와 곱해져 신호의 크기를 결정하므로, 이 큰 산포가 아래 결과 전체를 좌우한다.
 
@@ -78,9 +78,11 @@ def generate(beta1, beta2, error_scale, n=DATA_SIZE):
 
 ## 패널 그림 그리기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 여덟 칸을 한눈에 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 여덟 칸을 한눈에
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -111,8 +113,6 @@ plt.show()
 ![산점도와 회귀직선](./img/regression_correlation_plot_71.png)
 
 직선은 조건부 평균을, 점들의 흩어짐은 그 주위의 산포를 나타낸다.
-
-</div>
 
 ---
 

@@ -110,9 +110,11 @@ Spearman의 $r_s$ 검정은 다음을 요구한다:
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Spearman 상관 검정과 손계산 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Spearman 상관 검정과 손계산
+
+</div>
 
 ```python
 import numpy as np
@@ -147,8 +149,6 @@ Manual p     = 0.0202
 scipy의 p-값과 $t$ 근사로 손계산한 값이 소수점 넷째 자리까지 같다. Spearman 검정의 p-값이 자유도 $n-2$인 $t$-분포에서 나온다는 것을 확인해 준다.
 
 `scipy.stats.spearmanr` 함수는 표본이 크면 t 근사를 쓰며 동점도 처리한다.
-
-</div>
 
 ---
 

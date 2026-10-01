@@ -20,9 +20,11 @@ $$
 T = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} \sim t_{n-1}.
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 일표본 t-검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 t-검정
+
+</div>
 
 ```python
 import numpy as np
@@ -49,13 +51,13 @@ Decision: Reject H0
 
 표본평균은 498.65로 주장값 500에서 1.35g 모자란다. 자료의 산포에 비하면 우연으로 보기 어려운 차이라 5% 수준에서 기각한다.
 
-</div>
-
 **단측** 검정 $H_1\colon \mu < \mu_0$에서는 검정통계량이 대립가설 방향에 있을 때 양측 p-값을 2로 나눈다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 단측 p-값 구하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 단측 p-값 구하기
+
+</div>
 
 ```python
 # 통계량이 대립가설 쪽(여기서는 음수)이면 양측 p-값을 반으로 나눈다.
@@ -71,13 +73,13 @@ print(f"one-sided p (H1: mu < 500) = {p_one_sided:.4f}")
 one-sided p (H1: mu < 500) = 0.0213
 ```
 
-</div>
-
 ### 직접 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 검정통계량 직접 계산 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 검정통계량 직접 계산
+
+</div>
 
 ```python
 n = len(data)
@@ -98,8 +100,6 @@ t = -2.1739, p = 0.0426
 
 scipy가 돌려준 값과 소수점 아래까지 같다.
 
-</div>
-
 ## 비율에 대한 일표본 검정
 
 $\hat{p} = x/n$으로 $H_0\colon p = p_0$을 검정할 때 Wald 검정통계량은
@@ -108,9 +108,11 @@ $$
 Z = \frac{\hat{p} - p_0}{\sqrt{p_0(1 - p_0)/n}} \;\dot\sim\; N(0,1).
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 비율에 대한 일표본 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 비율에 대한 일표본 검정
+
+</div>
 
 ```python
 from statsmodels.stats.proportion import proportions_ztest
@@ -141,8 +143,6 @@ statsmodels: z = 0.5955, p = 0.5515
 
 두 결과가 다르다는 점이 중요하다. `proportions_ztest`는 표준오차를 $\hat p$로 계산하는 반면 위의 수동 계산은 $p_0$을 쓴다. 어느 쪽도 틀린 것은 아니지만, 교과서의 공식은 대개 $p_0$ 쪽이다. 어느 규약을 쓰는지 모르고 결과만 옮기면 보고한 z가 재현되지 않는다.
 
-</div>
-
 ## 이표본 t-검정
 
 두 모집단에서 얻은 독립표본에 대해 귀무가설은 $H_0\colon \mu_1 = \mu_2$이다. **Welch의 t-검정**(분산이 다른 경우)은
@@ -153,9 +153,11 @@ $$
 
 를 쓰며 자유도는 Welch–Satterthwaite 근사로 계산한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 이표본 t-검정 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 이표본 t-검정
+
+</div>
 
 ```python
 drug_a = np.array([5.2, 4.8, 6.1, 5.5, 4.9, 5.7, 5.3, 6.0, 5.1, 5.4])
@@ -178,8 +180,6 @@ Pooled: t = 7.4628, p = 0.000001
 
 $n_1 = n_2$이고 두 표본의 분산이 비슷하면 두 방법이 사실상 같은 답을 준다. 통계량은 아예 같고 자유도만 18과 17.8로 조금 다르다. 표본크기가 다르고 분산도 다를 때 비로소 둘이 갈라진다.
 
-</div>
-
 ## 대응 t-검정
 
 관측값이 자연스러운 쌍을 이룰 때(예: 전후 측정) 차이 $D_i = X_i^{(\text{after})} - X_i^{(\text{before})}$를 계산하고 $H_0\colon \mu_D = 0$을 검정한다:
@@ -188,9 +188,11 @@ $$
 T = \frac{\bar{D}}{S_D / \sqrt{n}} \sim t_{n-1}.
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 대응 t-검정 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 대응 t-검정
+
+</div>
 
 ```python
 before = np.array([145, 150, 138, 155, 142, 148, 136, 152, 140, 146])
@@ -219,9 +221,7 @@ ttest_ind:   t = -2.5841, p = 0.01871524
 
 앞의 두 줄이 완전히 같다. 대응 $t$-검정은 별개의 방법이 아니라 차이에 대한 일표본 검정 그 자체다.
 
-세 번째 줄이 이 예제의 핵심이다. 같은 자료를 짝만 무시하고 분석하면 $t$가 $-18.2$에서 $-2.6$으로, $p$가 $2 \times 10^{-8}$에서 0.019로 뛴다. 사람마다 혈압 수준이 136에서 155까지 흩어져 있어 그 개인차가 처리 효과를 덮어 버리기 때문이다. 여기서는 두 검정 모두 5% 수준에서 기각하지만, 효과가 조금만 작았다면 짝을 무시한 쪽은 놓쳤을 것이다.
-
-</div>
+세 번째 줄이 이 보기의 핵심이다. 같은 자료를 짝만 무시하고 분석하면 $t$가 $-18.2$에서 $-2.6$으로, $p$가 $2 \times 10^{-8}$에서 0.019로 뛴다. 사람마다 혈압 수준이 136에서 155까지 흩어져 있어 그 개인차가 처리 효과를 덮어 버리기 때문이다. 여기서는 두 검정 모두 5% 수준에서 기각하지만, 효과가 조금만 작았다면 짝을 무시한 쪽은 놓쳤을 것이다.
 
 ## 검정력 분석
 
@@ -231,9 +231,11 @@ $$
 \text{Power} = 1 - \beta = P(\text{reject } H_0 \mid H_1 \text{ true}).
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 7. 검정력 분석 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 검정력 분석
+
+</div>
 
 ```python
 from statsmodels.stats.power import TTestPower, TTestIndPower
@@ -263,15 +265,15 @@ two-sample n per group = 63.8
 
 올림하면 일표본은 73개, 이표본은 집단당 64개(합계 128개)다. 효과크기가 0.33에서 0.5로 **커졌는데도** 전체 표본이 더 필요하다. 이표본 문제에서는 평균을 두 개 추정해야 해서 차이의 표준오차가 그만큼 커지기 때문이다.
 
-</div>
-
 ## 신뢰구간과 검정의 쌍대성
 
 수준 $\alpha$의 양측검정이 $H_0\colon \mu = \mu_0$을 기각하지 못할 필요충분조건은 $\mu_0$이 $100(1-\alpha)\%$ 신뢰구간 안에 있는 것이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 8. 신뢰구간과 검정의 쌍대성 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 신뢰구간과 검정의 쌍대성
+
+</div>
 
 ```python
 data = np.array([52, 48, 55, 50, 47, 53, 49, 51, 54, 46])
@@ -312,8 +314,6 @@ for mu0 in [48, 49, 50, 51, 52, 53]:
 `reject` 열과 `in CI` 열이 여섯 줄 모두에서 정확히 반대다. 신뢰구간 $(48.33, 52.67)$ 밖에 있는 48과 53만 기각된다.
 
 p-값이 구간의 중심 $\bar x = 50.5$를 기준으로 대칭인 것도 눈여겨볼 만하다. 49와 52가 둘 다 0.1516, 48과 53이 둘 다 0.0282다. 두 값이 $\bar x$에서 같은 거리에 있기 때문이다. 신뢰구간은 이런 검정들을 $\mu_0$에 대해 전부 돌려 놓고 기각되지 않는 값만 모아 놓은 것과 같다.
-
-</div>
 
 ### 해석
 

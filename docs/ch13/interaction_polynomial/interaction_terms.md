@@ -75,11 +75,13 @@ $\beta_1 + \beta_3 X_2$라는 식이 그림으로는 무엇인지 보자. 참 �
 
     $\beta_3 > 0$이면 잠을 더 잘수록 공부의 이득이 커진다. $\beta_3 < 0$이면 적게 자는 학생에게는 공부를 더 해도 수익체감이 나타난다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 교호작용 항 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 교호작용 항
 
-두 예제에서 쓸 자료를 먼저 읽는다. ISLR 교재의 Advertising과 Credit이다.
+</div>
+
+두 보기에서 쓸 자료를 먼저 읽는다. ISLR 교재의 Advertising과 Credit이다.
 
 ```python
 import pandas as pd
@@ -123,11 +125,11 @@ Advertising은 시장 200곳의 광고비와 매출, Credit은 400명의 소득�
 
 Credit 자료에서 학생의 평균 잔액이 877달러로 비학생의 480달러보다 훨씬 높은데 소득은 비슷하다는 점을 눈여겨보라. 아래 교호작용 모형이 이 차이를 어떻게 나누는지 볼 것이다.
 
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 마케팅 효과 (TV와 Radio)
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 마케팅 효과 (TV와 Radio) { .eg }
 
 광고 분석의 고전적 예는 TV와 Radio 광고 지출이 매출에 미치는 영향이다. 주효과만 있는 모형은 각 매체가 독립적인 효과를 갖는다고 가정한다.
 
@@ -182,11 +184,11 @@ $R^2$도 0.968로, 교호작용 없는 모형(0.897)보다 크게 높다.
 !!! warning "`statsmodels.api`에는 소문자 `ols`가 없다"
     식 인터페이스는 `statsmodels.formula.api`(관례적으로 `smf`)에 있다. `statsmodels.api`(관례적으로 `sm`)에는 배열을 받는 대문자 `sm.OLS`만 있으므로 `sm.ols(...)`를 호출하면 `AttributeError`가 난다.
 
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> 소득과 학생 여부의 교호작용
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 3. 소득과 학생 여부의 교호작용 { .eg }
 
 신용카드 잔액이 소득과 학생 여부에 어떻게 의존하는지 살피는 모형을 생각하자. **질적 변수**(학생: 예/아니오)가 연속변수(소득)와 교호작용할 수 있다.
 
@@ -234,8 +236,6 @@ R^2 = 0.2799
 `C(Student)[T.Yes]`라는 이름은 patsy가 No를 기준(reference)으로 삼았다는 뜻이다. 기준 수준이 무엇인지 확인하지 않으면 계수의 부호를 거꾸로 읽게 된다.
 
 이런 교호작용을 시각화하면 흔히 기울기가 다른 두 회귀직선(집단마다 하나씩)이 나타나며, Income이 Balance에 미치는 차별적 효과를 보여준다.
-
-</div>
 
 ## 고차 및 다원 교호작용
 

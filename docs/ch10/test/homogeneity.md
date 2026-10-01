@@ -107,9 +107,11 @@ $$
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 없이)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 정의대로 계산한 동질성 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정의대로 계산한 동질성 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -195,13 +197,13 @@ $\chi^2 = 212.94$는 자유도 8인 카이제곱분포에서 사실상 불가능
 
 관측값이 3,500개가 넘어 검정력이 아주 높다는 점도 함께 보아야 한다. 어느 나라가 어떻게 다른지는 이 검정이 알려주지 않으므로, 표준화 잔차를 따로 살펴야 한다.
 
-</div>
-
 ### Python 구현 (`scipy.stats.chi2_contingency` 사용)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. scipy로 계산한 동질성 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> scipy로 계산한 동질성 검정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -263,15 +265,15 @@ p_value   = 0.00%
 
 `chi2_contingency`가 수동 계산과 같은 값을 준다.
 
-</div>
-
 ### 동질적인 경우와의 비교
 
 동질적인 분포가 어떻게 보이는지 보이기 위해, 원자료를 나라들 사이에 분포가 비슷한 경우와 비교해 보자:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 동질적인 자료와 견주기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 동질적인 자료와 견주기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -313,13 +315,13 @@ p_value   = 99.75%
 
 앞의 자료와 대비된다. 나라별 분포가 거의 같으면 통계량이 1.10까지 떨어지고 p-값은 99.75%가 된다. 자유도 8인 카이제곱분포의 평균이 8이므로, 1.10은 오히려 "지나치게 잘 맞는" 축에 든다.
 
-</div>
-
 ### 두 나라 비교 (US 대 Canada)
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 두 나라만 비교하기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 두 나라만 비교하기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -357,13 +359,13 @@ expected
 
 $p = 0.0195$로 여전히 5% 수준에서는 기각하지만, 1% 수준에서는 기각하지 못한다. 기대도수 중 가장 작은 값이 10.55로 경험칙을 만족한다.
 
-</div>
-
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 좋아하는 과목과 주로 쓰는 손 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 좋아하는 과목과 주로 쓰는 손
+
+</div>
 
 > **출처**: [Khan Academy — Chi-Square Test Homogeneity](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-homogeneity)
 
@@ -446,8 +448,6 @@ Expected frequencies:
 관측값이 100개뿐인데도 강하게 기각된다. STEM에서 오른손잡이가 기대 24에 대해 30, 인문학에서 왼손잡이가 기대 16에 대해 25로 어긋남이 크기 때문이다.
 
 기대도수가 모두 정수로 딱 떨어진 것은 우연이 아니다. 행 합계가 40, 40, 20이고 열 합계가 60, 40이며 총합이 100이라 $R_i C_j / n$이 언제나 정수가 된다.
-
-</div>
 
 ## 연습문제
 

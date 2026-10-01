@@ -34,9 +34,11 @@ $$
 
 이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 중앙값의 붓스트랩 분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 중앙값의 붓스트랩 분포
+
+</div>
 
 ```python
 import numpy as np
@@ -51,8 +53,6 @@ def bootstrap_median(data, n_bootstrap=10_000, rng=None):
     n = len(data)
     return np.median(data[rng.integers(0, n, (n_bootstrap, n))], axis=1)
 ```
-
-</div>
 
 ## 중앙값과 평균의 비교
 
@@ -78,9 +78,11 @@ $\text{LogNormal}(10.5, 0.8^2)$에서 $n = 200$을 뽑은 예:
 
     소득·의료비·보험금처럼 치우친 자료에서는 중앙값이 **로버스트하면서 동시에 더 정밀하다**. 절충이 아니라 순수한 이득이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 평균과 견주기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균과 견주기
+
+</div>
 
 ```python
 def bootstrap_mean(data, n_bootstrap=10_000, rng=None):
@@ -89,8 +91,6 @@ def bootstrap_mean(data, n_bootstrap=10_000, rng=None):
     n = len(data)
     return data[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
 ```
-
-</div>
 
 ## 이상값에 대한 로버스트성
 
@@ -111,9 +111,11 @@ $$
 
 반면 평균의 영향함수는 $\text{IF}(x; \bar F, F) = x - \mu$로 유계가 아니다. 이상값 하나가 평균을 임의로 멀리 옮길 수 있지만 중앙값은 최대 $1/(2f(m))$만큼만 움직인다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 이상치 하나가 바꾸는 것 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이상치 하나가 바꾸는 것
+
+</div>
 
 ```python
 def robustness_comparison(data, outlier=1_000_000):
@@ -129,8 +131,6 @@ def robustness_comparison(data, outlier=1_000_000):
           f"{(np.median(with_out) - np.median(data)) / np.median(data) * 100:.2f}%")
 ```
 
-</div>
-
 ## 중앙값의 붓스트랩 신뢰구간
 
 백분위수법이 직관적인 신뢰구간을 준다.
@@ -139,9 +139,11 @@ $$
 \text{CI}_{1-\alpha} = \bigl[\tilde x^*_{\alpha/2},\;\tilde x^*_{1-\alpha/2}\bigr]
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 여러 신뢰수준의 구간 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 여러 신뢰수준의 구간
+
+</div>
 
 ```python
 def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
@@ -157,8 +159,6 @@ def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
 ```
 
 신뢰수준이 높을수록 구간이 넓어져 신뢰도와 정밀도의 절충을 반영한다.
-
-</div>
 
 ## 중앙값의 붓스트랩 분포는 계단이다
 
@@ -393,7 +393,7 @@ $\text{LogNormal}(10.5, 0.8^2)$에서 $n = 51$인 소득 자료를 뽑아 같은
     **신뢰구간의 폭에서 흥미로운 반전이 있다.** 오염 전에는 중앙값 구간($21{,}130$)이 평균 구간($16{,}975$)보다 **넓었다**. $n = 30$은 작아서 중앙값의 이산성 문제가 크기 때문이다. 오염 후에는 완전히 뒤집혀 중앙값 구간이 평균 구간의 $1.5$%에 불과하다.
 
     !!! tip "이상값을 어떻게 다룰 것인가"
-        이 예제의 결론은 "중앙값을 써라"가 아니다. 다음 순서로 판단해야 한다.
+        이 보기의 결론은 "중앙값을 써라"가 아니다. 다음 순서로 판단해야 한다.
 
         1. **이상값이 오류인가 실제인가.** $10^7$의 소득이 입력 오류라면 고쳐야 한다. 실제 억만장자라면 자료의 일부이다.
         2. **어떤 질문에 답하려는가.** "총 소득세 수입"을 알고 싶다면 평균이 옳다. 억만장자가 실제로 큰 몫을 차지한다. "전형적인 가구의 형편"을 알고 싶다면 중앙값이 옳다.

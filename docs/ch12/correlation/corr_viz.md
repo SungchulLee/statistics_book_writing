@@ -16,9 +16,11 @@ $$
 
 여기서 $\varepsilon$과 $\varepsilon'$은 독립인 표준정규이다. 구성상 $x_1$과 $x_2$는 강한 양의 상관을, $x_1$과 $x_3$은 약한 음의 상관을 가지며 $x_4$는 나머지와 독립이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 상관 구조를 가진 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 상관 구조를 가진 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -40,8 +42,6 @@ data = np.column_stack([x1, x2, x3, x4])
 labels = ['X1', 'X2', 'X3', 'X4']
 ```
 
-</div>
-
 ---
 
 ## 상관행렬
@@ -54,9 +54,11 @@ $$
 
 대각 성분은 언제나 $R_{ii} = 1$이고 이 행렬은 양반정치이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 상관행렬 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 상관행렬
+
+</div>
 
 ```python
 # rowvar=False 는 "행이 관측, 열이 변수"라는 뜻이다. 기본값은 그 반대이므로
@@ -64,17 +66,17 @@ $$
 corr_matrix = np.corrcoef(data, rowvar=False)
 ```
 
-</div>
-
 ---
 
 ## 상관 열지도
 
 열지도는 $\mathbf{R}$의 각 성분을 발산형 색 척도로 부호화한다. 보통 파랑이 음의 상관, 빨강이 양의 상관, 0 근처가 흰색이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 상관 열지도 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 상관 열지도
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -105,8 +107,6 @@ plt.show()
 
 열지도를 보면 $X_1$과 $X_2$가 강한 양의 상관(진한 빨강), $X_1$과 $X_3$이 약한 음의 상관(연한 파랑)을 가지며 $X_4$는 사실상 어느 변수와도 무상관임이 즉시 드러난다.
 
-</div>
-
 변수 쌍마다 산점도를 그려 놓으면 상관행렬의 숫자가 어떤 모양에서 나왔는지 확인할 수 있다.
 
 ---
@@ -115,9 +115,11 @@ plt.show()
 
 산점도 행렬은 모든 쌍별 산점도를 격자에 표시하고 대각선에는 일변량 히스토그램을 둔다. 주변분포와 이변량 관계를 완전하게 시각 요약해 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 산점도 행렬 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 산점도 행렬
+
+</div>
 
 ```python
 # 열지도는 숫자 하나로 요약하지만 산점도 행렬은 관계의 모양을 보여 준다.
@@ -150,8 +152,6 @@ plt.show()
 $|r|$이 커질수록 점구름이 좁은 타원으로 조여든다.
 
 산점도 행렬은 열지도가 보여주지 못하는 것들, 즉 비선형 관계, 이상점, 군집, 주변분포의 모양을 드러낸다.
-
-</div>
 
 ---
 

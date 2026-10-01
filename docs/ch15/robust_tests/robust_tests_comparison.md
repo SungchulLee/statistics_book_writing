@@ -33,9 +33,11 @@ $$
 
 다음 모의실험은 집단분산이 모두 같은 치우친(대수정규) 분포에서 네 검정의 거짓 양성률을 비교한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 네 검정의 거짓 양성률 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 네 검정의 거짓 양성률
+
+</div>
 
 ```python
 import numpy as np
@@ -84,11 +86,11 @@ Fligner-Killeen     : false-positive rate = 0.1140
 
 분산이 실제로 다른 정규 자료에서의 검정력 비교는 다음과 같다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 네 검정의 검정력
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 네 검정의 검정력 { .eg }
 
 ```python
 # 2부: 검정력. 이번에는 정규모집단이고 표준편차를 1, 1.5, 2 로 실제로
@@ -130,8 +132,6 @@ Levene (mean)       : power = 0.8490
 Brown-Forsythe      : power = 0.8155
 Fligner-Killeen     : power = 0.7810
 ```
-
-</div>
 
 ## 해석
 

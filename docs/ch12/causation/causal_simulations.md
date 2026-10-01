@@ -20,9 +20,11 @@ $$
 
 $Z$가 참 공통원인인 자료를 생성한다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 교란변수가 만드는 가짜 상관 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 교란변수가 만드는 가짜 상관
+
+</div>
 
 ```python
 import numpy as np
@@ -40,8 +42,6 @@ Y = 0.8 * Z + np.random.randn(n) * 0.5
 
 여기서 $Y$는 $X$가 아니라 $Z$에만 의존하지만, 둘 다 $Z$에 이끌리므로 $X$와 $Y$는 상관된 것처럼 보인다.
 
-</div>
-
 ### 부분상관
 
 교란 효과를 제거하기 위해 $Z$가 주어졌을 때 $X$와 $Y$의 **부분상관**을 계산한다:
@@ -50,9 +50,11 @@ $$
 r_{XY \cdot Z} = \frac{r_{XY} - r_{XZ}\, r_{YZ}}{\sqrt{(1 - r_{XZ}^2)(1 - r_{YZ}^2)}}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 부분상관으로 걷어 내기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 부분상관으로 걷어 내기
+
+</div>
 
 ```python
 # 부분상관은 Z 로 설명되는 몫을 X 와 Y 에서 걷어 낸 뒤의 상관이다.
@@ -78,8 +80,6 @@ $Z$를 통제하면 $r$이 0.651에서 0.052로 떨어진다. 관측된 상관�
 
 $Z$를 통제하면 $X$와 $Y$의 연관이 거의 사라져, 관측된 상관이 전적으로 교란요인 때문이었음을 확인해 준다.
 
-</div>
-
 ---
 
 ## Simpson의 역설
@@ -96,9 +96,11 @@ $$
 
 기준 수준이 다른 두 하위집단을 만든다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 심슨의 역설 — 자료 만들기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 심슨의 역설 — 자료 만들기
+
+</div>
 
 ```python
 rng = np.random.default_rng(42)
@@ -113,13 +115,13 @@ x_b = rng.uniform(25, 50, n_b)
 y_b = -0.4 * x_b + 45 + rng.normal(0, 2, n_b)
 ```
 
-</div>
-
 각 하위집단 안에서는 $X$가 커질수록 $Y$가 작아진다(기울기 $= -0.4$). 그러나 집단 B는 절편도 크고 $X$ 값도 크므로 자료를 합치면 전체 추세가 양이 된다:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 합친 상관과 집단별 상관 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 합친 상관과 집단별 상관
+
+</div>
 
 ```python
 # 합친 상관과 집단별 상관의 부호가 갈리는 것을 확인한다. 이것이 심슨의 역설이다.
@@ -145,13 +147,13 @@ Subgroup B r = -0.825
 
 전체로 보면 $r = +0.32$인데 두 부분집단 안에서는 각각 $-0.74$와 $-0.83$이다. 부호가 뒤집히는 것이 Simpson 역설의 정의적 특징이다.
 
-</div>
-
 ### 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 역설을 그림으로 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 역설을 그림으로
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -177,8 +179,6 @@ plt.show()
 ![교란과 부분집단](./img/causal_simulations_101.png)
 
 부분집단마다 색을 달리해 그리면 전체 추세와 집단 내 추세가 어긋나는 것이 보인다.
-
-</div>
 
 ---
 
@@ -236,7 +236,7 @@ $Z \sim \mathcal{N}(0, 1)$, $X = 0.9Z + \varepsilon_X$, $Y = 0.3Z + \varepsilon_
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-하위집단이 (둘이 아니라) 셋인 Simpson 역설 예제를 구성하라. 각 하위집단 안에서 $X$에 대한 $Y$의 기울기가 $+2$이지만 집계 기울기는 음수여야 한다. 결과를 그려라.
+하위집단이 (둘이 아니라) 셋인 Simpson 역설 보기를 구성하라. 각 하위집단 안에서 $X$에 대한 $Y$의 기울기가 $+2$이지만 집계 기울기는 음수여야 한다. 결과를 그려라.
 
 </div>
 
@@ -343,7 +343,7 @@ Simpson 역설 모의실험에서 두 하위집단의 절편을 같게 하고 �
 
     집단 A에서 $r = +0.83$, 집단 B에서 $-0.83$, 합치면 $-0.02$다. 두 집단의 상관이 부호까지 반대라 합칠 때 서로를 지워 버린다.
 
-    앞의 예제(합치면 상관이 생기는 경우)와 방향이 반대라는 점이 중요하다. 집단을 합치는 것은 상관을 만들 수도, 없앨 수도, 뒤집을 수도 있다.
+    앞의 보기(합치면 상관이 생기는 경우)와 방향이 반대라는 점이 중요하다. 집단을 합치는 것은 상관을 만들 수도, 없앨 수도, 뒤집을 수도 있다.
 
     두 하위집단의 절편과 $X$ 범위가 같고 기울기의 부호만 반대이면 집계 상관은 거의 0이 된다. 양의 관계와 음의 관계가 서로 상쇄되기 때문이다. 엄밀히 말하면 (부호가 뒤집히지 않으므로) Simpson의 역설은 아니지만, 이질적인 집단을 섞으면 실제 집단 내 효과가 완전히 가려질 수 있음을 보여준다. $\square$
 

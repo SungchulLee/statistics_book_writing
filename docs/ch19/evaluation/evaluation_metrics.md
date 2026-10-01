@@ -20,9 +20,11 @@ N(0.35,\; 0.25^2) & \text{if } y_i = 0
 \end{cases}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -39,8 +41,6 @@ scores = np.concatenate([
 scores = np.clip(scores, 0, 1)
 ```
 
-</div>
-
 ## 혼동행렬
 
 주어진 문턱 $\tau$에서 $s_i \geq \tau$이면 양성($\hat{y} = 1$), 아니면 음성으로 분류한다.
@@ -51,9 +51,11 @@ scores = np.clip(scores, 0, 1)
 | **실제 음성** | TN | FP |
 | **실제 양성** | FN | TP |
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 혼동행렬 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 혼동행렬
+
+</div>
 
 ```python
 def confusion_matrix(y_true, y_pred):
@@ -72,8 +74,6 @@ cm = confusion_matrix(y_true, y_pred)
 ```
 
 $\tau = 0.5$에서 TN $= 129$, FP $= 51$, FN $= 30$, TP $= 90$이다.
-
-</div>
 
 ## 정밀도, 재현율, F1 점수
 
@@ -94,9 +94,11 @@ $$
 \text{Accuracy} = \frac{\text{TP} + \text{TN}}{n}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 정밀도·재현율·F1 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정밀도·재현율·F1
+
+</div>
 
 ```python
 def precision_recall_f1(y_true, y_pred):
@@ -122,8 +124,6 @@ accuracy = np.mean(y_true == y_pred)
 정밀도보다 높은 것은 문턱 $0.5$가 음성 분포의 중심($0.35$)보다 양성 분포의 중심($0.65$)에서
 더 멀어, 음성 쪽에서 위양성이 많이 나오기 때문이다.
 
-</div>
-
 ## ROC 곡선 직접 만들기
 
 ROC 곡선은 문턱 $\tau$를 최대 점수에서 최소 점수까지 낮추며 FPR에 대한 TPR을 그린다.
@@ -133,9 +133,11 @@ $$
 \text{FPR}(\tau) = \frac{\text{FP}(\tau)}{\text{FP}(\tau) + \text{TN}(\tau)}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. ROC 곡선 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> ROC 곡선
+
+</div>
 
 ```python
 def roc_curve(y_true, scores):
@@ -160,8 +162,6 @@ def roc_curve(y_true, scores):
 
 fpr, tpr, thresholds = roc_curve(y_true, scores)
 ```
-
-</div>
 
 !!! warning "반환되는 배열의 길이가 다르다"
     `fpr_list`와 `tpr_list`는 $(0,0)$으로 시작하므로 `thresholds`보다 원소가 하나 많다. 이
@@ -188,9 +188,11 @@ $$
   \bigl(\text{FPR}_i - \text{FPR}_{i-1}\bigr)
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. AUC 계산 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> AUC 계산
+
+</div>
 
 ```python
 def auc_trapezoid(fpr, tpr):
@@ -216,8 +218,6 @@ AUC = 0.7935
 
 이 구현은 AUC $= 0.7935$를 주는데, `sklearn.metrics.roc_auc_score`는 $0.7931$을 준다.
 
-</div>
-
 !!! note "미세한 차이는 동점 때문이다"
     `np.clip(scores, 0, 1)` 때문에 점수 $0$에 13개, $1$에 11개의 관측치가 몰려 **동점**이
     생겼다. 만-휘트니 해석에서 동점은 절반씩 나누어야 하지만, 위 구현은
@@ -234,9 +234,11 @@ AUC = 0.7935
 2. 양성과 음성 범주의 **점수 분포**와 세로선으로 표시한 문턱
 3. AUC를 표기한 **ROC 곡선**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 세 그림으로 보기 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 세 그림으로 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -273,8 +275,6 @@ plt.show()
 ```
 
 ![혼동행렬·점수분포·ROC 곡선](./img/evaluation_metrics_183.png)
-
-</div>
 
 ## 해석
 

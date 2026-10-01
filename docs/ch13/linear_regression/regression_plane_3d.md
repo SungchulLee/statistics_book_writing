@@ -24,9 +24,11 @@ $$
 
 ### 자료 생성과 적합
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 설명변수 둘인 자료와 적합 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 설명변수 둘인 자료와 적합
+
+</div>
 
 ```python
 import numpy as np
@@ -50,13 +52,13 @@ beta_1 = model.coef_[0]  # Radio
 beta_2 = model.coef_[1]  # TV
 ```
 
-</div>
-
 ### 회귀평면 격자 만들기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 회귀평면 격자 만들기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 회귀평면 격자 만들기
+
+</div>
 
 ```python
 # 평면을 그리려면 두 축의 격자를 만들고 칸마다 적합값을 계산한다.
@@ -67,13 +69,13 @@ Radio_mesh, TV_mesh = np.meshgrid(Radio_range, TV_range)
 Sales_mesh = beta_0 + beta_1 * Radio_mesh + beta_2 * TV_mesh
 ```
 
-</div>
-
 ### 3차원 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 평면과 잔차를 3차원으로 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 평면과 잔차를 3차원으로
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -106,8 +108,6 @@ plt.show()
 ![회귀평면](./img/regression_plane_3d_62.png)
 
 설명변수가 둘이면 회귀직선이 아니라 회귀**평면**이 된다. 점들이 평면 위아래로 흩어진 거리가 잔차다.
-
-</div>
 
 ## 해석
 

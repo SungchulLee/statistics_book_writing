@@ -56,9 +56,11 @@ $$
 
 아래 함수는 분산에 대한 일표본 카이제곱 검정을 구현한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 분산에 대한 카이제곱 검정 구현 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산에 대한 카이제곱 검정 구현
+
+</div>
 
 ```python
 import numpy as np
@@ -86,11 +88,11 @@ def chi2_test_for_variance(data, sigma2_0=1.0):
 
 전형적인 사용법은 참 표준편차를 바꿔가며 자료를 생성하고 검정이 $\sigma_0^2 = 1$로부터의 이탈을 탐지하는지 확인하는 것이다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분산을 키워 가며 검정하기
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 분산을 키워 가며 검정하기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -114,8 +116,6 @@ sigma=1.10  s=1.1143  T=122.92  p=0.104
 sigma=1.15  s=1.1649  T=134.34  p=0.021
 sigma=1.20  s=1.2156  T=146.28  p=0.003
 ```
-
-</div>
 
 ## 해석
 

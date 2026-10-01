@@ -20,9 +20,11 @@ $$
 
 여기서 $x_i$는 $[1,10]$에서 균등하게 뽑은 공부 시간이고 $\varepsilon_i \sim N(0,1)$이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 자료 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -41,8 +43,6 @@ X = hours_studied.reshape(-1, 1)
 y = passed
 ```
 
-</div>
-
 !!! note "이 자료는 로지스틱 모형을 정확히 따르지 않는다"
     선형예측자에 $0.3\varepsilon_i$가 더해져 있으므로, $x$만 관측하는 분석자의 관점에서
     $P(Y=1\mid x)$는 로지스틱 함수들의 혼합이지 로지스틱 함수 자체가 아니다. 이런 관측되지
@@ -58,9 +58,11 @@ $$
 \log\frac{P(Y=1\mid x)}{1-P(Y=1\mid x)} = \hat\beta_0 + \hat\beta_1\,x
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. sklearn 으로 적합 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> sklearn 으로 적합
+
+</div>
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -96,16 +98,16 @@ Test accuracy:  0.833
 
 출력은 절편 $-2.9986$, 기울기 $0.7099$, 훈련 정확도 $0.805$, 검정 정확도 $0.833$이다.
 
-</div>
-
 ## statsmodels로 추론하기
 
 statsmodels는 최대가능도 추정을 통해 표준오차, 왈드 검정, 신뢰구간을 제공한다(기본적으로 벌점을
 주지 않는다).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. statsmodels 로 추론까지 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> statsmodels 로 추론까지
+
+</div>
 
 ```python
 import statsmodels.api as sm
@@ -149,8 +151,6 @@ x1             0.7572      0.083      9.130      0.000       0.595       0.920
 ==============================================================================
 ```
 
-</div>
-
 !!! warning "두 결과를 나란히 비교하기 전에"
     위 statsmodels 코드는 **전체 자료 300건**에 적합하지만 scikit-learn 코드는 **훈련자료
     210건**에만 적합했다. 계수가 다르게 나오는 것($-3.2519$ 대 $-2.9986$)은 알고리즘 차이가
@@ -175,9 +175,11 @@ $$
 
 공부 시간이 한 단위 늘면 합격 오즈에 $e^{\hat\beta_1}$이 곱해진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 오즈비와 신뢰구간 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 오즈비와 신뢰구간
+
+</div>
 
 ```python
 import numpy as np
@@ -205,8 +207,6 @@ Odds Ratios:
 신뢰구간은 $(1.8124,\ 2.5087)$이다. 즉 공부 시간 한 시간마다 합격 오즈가 약 두 배가 된다.
 구간이 1을 포함하지 않으므로 효과는 유의하다.
 
-</div>
-
 ### 가능도비 검정
 
 가능도비 검정은 적합모형을 영모형(절편만)과 비교한다.
@@ -216,9 +216,11 @@ $$
 \;\sim\; \chi^2_1
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 가능도비 검정 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 가능도비 검정
+
+</div>
 
 ```python
 # 절편만 있는 모형과 견준다. 선형회귀의 F 검정에 해당하는 자리다.
@@ -235,8 +237,6 @@ Likelihood Ratio Test: chi2 = 152.5683, p = 0.000000
 ```
 
 결과는 $\Lambda = 152.57$, $p = 4.8 \times 10^{-35}$로 영가설을 압도적으로 기각한다.
-
-</div>
 
 ## 혼동행렬과 분류 보고서
 
@@ -258,9 +258,11 @@ $$
 F_1 = \frac{2\,\text{Precision}\cdot\text{Recall}}{\text{Precision}+\text{Recall}}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 혼동행렬과 네 측도 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 혼동행렬과 네 측도
+
+</div>
 
 ```python
 from sklearn.metrics import (confusion_matrix, classification_report,
@@ -304,8 +306,6 @@ weighted avg       0.83      0.83      0.83        90
 검정자료 90건에서 TN $= 30$, FP $= 7$, FN $= 8$, TP $= 45$이고, 정확도 $0.833$,
 정밀도 $0.865$, 재현율 $0.849$, $F_1 = 0.857$이다.
 
-</div>
-
 ## ROC 곡선과 AUC
 
 ROC 곡선은 문턱을 변화시키며 FPR에 대한 TPR을 그린다. 곡선 아래 면적(AUC)이 판별력을 요약한다.
@@ -314,9 +314,11 @@ $$
 \text{AUC} = \int_0^1 \text{TPR}\bigl(\text{FPR}\bigr)\,d(\text{FPR})
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 7. ROC 와 AUC { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> ROC 와 AUC
+
+</div>
 
 ```python
 from sklearn.metrics import roc_curve, roc_auc_score
@@ -335,8 +337,6 @@ AUC = 0.9001
 
 AUC $= 0.9001$로, 설명변수가 단 하나인 모형치고는 매우 좋은 판별력이다.
 
-</div>
-
 ## 정밀도-재현율 곡선
 
 양성 범주가 드물 때는 정밀도-재현율 곡선이 ROC 곡선보다 유용한 정보를 주는 경우가 많다. 평균
@@ -346,9 +346,11 @@ $$
 \text{AP} = \sum_{k} (R_k - R_{k-1})\,P_k
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 8. 정밀도-재현율 곡선 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 정밀도-재현율 곡선
+
+</div>
 
 ```python
 from sklearn.metrics import precision_recall_curve, average_precision_score
@@ -370,16 +372,16 @@ Average Precision = 0.9272
 AP $= 0.9272$이다. 이 자료는 검정자료의 양성 비율이 $53/90 = 0.589$로 오히려 양성이 다수이므로,
 AP의 무작위 기준선도 $0.589$로 높다는 점을 함께 보아야 한다.
 
-</div>
-
 ## 문턱 선택
 
 기본 문턱 $\tau = 0.5$가 항상 최적인 것은 아니다. **유든의 J 통계량**은
 $J = \text{TPR} - \text{FPR}$를 최대화하는 문턱을 고른다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 9. Youden의 J로 문턱 고르기 { .eg }
+**보기 9.** <span class="diff easy" title="쉬움"></span> Youden의 J로 문턱 고르기
+
+</div>
 
 ```python
 # Youden 의 J 로 문턱을 고른다. 두 오류의 비용이 같다고 볼 때의 선택이다.
@@ -401,11 +403,11 @@ Optimal threshold (Youden's J): 0.716
 
 아래 코드는 문턱에 따라 정확도, 정밀도, 재현율, $F_1$이 어떻게 변하는지 보여준다.
 
+<div class="exbox" markdown>
+
+**보기 10.** <span class="diff easy" title="쉬움"></span> 문턱값에 따른 측도 변화
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 10. 문턱값에 따른 측도 변화 { .eg }
 
 ```python
 # 문턱을 바꿔 가며 네 측도가 어떻게 움직이는지 한 표로 본다.
@@ -438,11 +440,9 @@ tau=0.7  Acc=0.856  Prec=0.935  Rec=0.811  F1=0.869
 | 0.6 | $0.844$ | $0.898$ | $0.830$ | $0.863$ |
 | 0.7 | $0.856$ | $0.935$ | $0.811$ | $0.869$ |
 
-</div>
-
 ## 한 모형, 여러 읽기
 
-예제 2부터 예제 10까지 숫자가 쉬지 않고 쏟아졌다. 정확도 $0.833$, 정밀도 $0.865$, 재현율
+보기 2부터 보기 10까지 숫자가 쉬지 않고 쏟아졌다. 정확도 $0.833$, 정밀도 $0.865$, 재현율
 $0.849$, $F_1 = 0.857$, AUC $0.9001$, AP $0.9272$, 최적 문턱 $0.716$. 이것들이 서로 다른
 모형에 대한 평가처럼 보이기 쉽지만, 사실은 **모두 하나의 적합된 곡선**에서 나온 값이다. 아래
 그림이 그 곡선과, 그 위에서 문턱이 하는 일을 보여준다.
@@ -457,7 +457,7 @@ $\tau = 0.716$은 $x = 5.52$에서 선을 긋는다. 두 선 사이에 있는 �
 
 오른쪽은 그 세로선을 왼쪽 끝에서 오른쪽 끝까지 쓸어 보면서 기록한 궤적이다. $\tau = 0.5$에서는
 TPR $0.849$, FPR $0.189$에 서 있고, $\tau = 0.716$으로 올리면 TPR이 $0.811$로 조금 내려가는
-대신 FPR이 $0.054$까지 떨어진다. 예제 10의 표에서 $\tau$를 $0.3$에서 $0.7$로 올릴 때 정밀도가
+대신 FPR이 $0.054$까지 떨어진다. 보기 10의 표에서 $\tau$를 $0.3$에서 $0.7$로 올릴 때 정밀도가
 $0.721 \to 0.935$로 오르고 재현율이 $0.925 \to 0.811$로 내려간 것이 바로 이 곡선을 왼쪽 아래로
 따라 내려간 기록이다.
 

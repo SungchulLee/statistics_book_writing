@@ -117,9 +117,11 @@ F 분포는 여러 다른 분포와 연결된다.
 
     이 통계량은 귀무가설 아래에서 $F_{15, 20}$을 따른다. $F_{15,20}$의 평균은 $20/18 \approx 1.111$이다. 관측값 1.607은 평균보다 크지만 임계값 $F_{0.975}(15, 20) = 2.573$($\alpha = 0.05$ 양측)과 비교해야 한다. $1.607 < 2.573$이므로 $H_0$을 기각하지 못한다($p = 0.318$).
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. F 분포의 성질과 기각값 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> F 분포의 성질과 기각값
+
+</div>
 
 ```python
 from scipy import stats
@@ -154,8 +156,6 @@ Critical values: [0.363, 2.573]
 F-statistic: 1.607
 P-value: 0.3184
 ```
-
-</div>
 
 
 ## 연습문제

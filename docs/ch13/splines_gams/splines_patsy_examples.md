@@ -46,9 +46,11 @@ $$
 
 세 페이지가 공유하는 King County(시애틀) 주택 매매 자료를 읽는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 주택 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 주택 자료 읽기
+
+</div>
 
 ```python
 import pandas as pd
@@ -79,13 +81,13 @@ max      11644855.0        10740.0   2015.0
 
 주택 22,687건이다. 건축연도가 1900년부터 2015년까지 걸쳐 있어 스플라인으로 나이-가격 관계를 살피기에 적당하다.
 
-</div>
-
 ### B-스플라인 회귀
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. B-스플라인 기저 만들기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> B-스플라인 기저 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -107,13 +109,13 @@ bs_model = LinearRegression().fit(bs_design, df['price'])
 bs_r2 = r2_score(df['price'], bs_model.predict(bs_design))
 ```
 
-</div>
-
 ### 사용자 지정 매듭을 쓰는 B-스플라인
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 매듭 자리를 직접 정하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 매듭 자리를 직접 정하기
+
+</div>
 
 ```python
 # 매듭 자리를 직접 정할 수도 있다. 관계가 꺾인다고 볼 만한 근거가 있으면
@@ -126,13 +128,13 @@ bs_custom_design = dmatrix(
 bs_custom_model = LinearRegression().fit(bs_custom_design, df['price'])
 ```
 
-</div>
-
 ### 자연 스플라인
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 자연 3차 스플라인 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 자연 3차 스플라인
+
+</div>
 
 ```python
 # 자연 3차 스플라인. 양 끝에서 직선이 되도록 묶어 두어, 자료가 드문
@@ -143,13 +145,13 @@ cs_model = LinearRegression().fit(cs_design, df['price'])
 cs_r2 = r2_score(df['price'], cs_model.predict(cs_design))
 ```
 
-</div>
-
 ### 격자에서의 예측
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 예측할 때 기저 재사용하기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 예측할 때 기저 재사용하기
+
+</div>
 
 ```python
 age_grid = np.linspace(df['age'].min(), df['age'].max(), 300)
@@ -163,8 +165,6 @@ bs_pred = bs_model.predict(np.asarray(bs_grid))
 cs_grid = build_design_matrices([cs_design.design_info], {"age": age_grid})[0]
 cs_pred = cs_model.predict(np.asarray(cs_grid))
 ```
-
-</div>
 
 !!! warning "새 자료에 `dmatrix`를 다시 부르면 안 된다"
     식 문자열로 `dmatrix`를 다시 호출하면 patsy가 **새로 넘긴 자료로 매듭을 다시 계산한다**. 그러면 훈련에 쓴 기저와 다른 기저가 만들어져 계수가 엉뚱한 기저에 곱해진다. 반드시 원래 설계행렬의 `design_info`를 `build_design_matrices`에 넘겨 같은 매듭을 재사용해야 한다.

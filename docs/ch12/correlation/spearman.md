@@ -130,9 +130,11 @@ Pearson을 쓸 때:
 
 ---
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 단조 곡선에서의 Spearman { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 단조 곡선에서의 Spearman
+
+</div>
 
 ```python
 import numpy as np
@@ -164,8 +166,6 @@ $y = e^x$은 완전한 **단조** 관계지만 선형은 아니다. Spearman은 
 이것이 두 계수의 차이를 가장 선명하게 보여주는 예다. "관계가 있는가"를 묻는다면 Spearman이, "직선 관계가 있는가"를 묻는다면 Pearson이 맞는 도구다.
 
 `scipy.stats.spearmanr` 함수는 중간순위를 써서 동점을 자동으로 처리한다. 가설검정의 자세한 내용은 [Spearman의 rho 검정](../correlation_test/test_spearman.md)을 보라.
-
-</div>
 
 ---
 

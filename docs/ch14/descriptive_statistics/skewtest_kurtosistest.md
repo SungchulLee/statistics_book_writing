@@ -29,9 +29,11 @@
 
 왜도 검정은 대칭성을 가정하는 모수적 통계 방법(특정 형태의 $t$ 검정이나 분산분석 등)으로 자료를 분석할 수 있는지 평가할 때 실용적이다. 자료가 치우쳤다고 결론지으면 자료를 변환하거나(예: 로그나 Box-Cox 변환) 대칭성을 가정하지 않는 비모수 방법을 써야 할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 왜도 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 왜도 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -70,8 +72,6 @@ Fail to reject H_0: The data is symmetrically distributed (no significant skewne
 
 정규 자료이므로 왜도가 $0.0339$로 0에 가깝고 $p = 0.66$으로 기각하지 못한다. 기대한 대로이다.
 
-</div>
-
 ---
 
 ## 첨도 검정
@@ -103,9 +103,11 @@ Fail to reject H_0: The data is symmetrically distributed (no significant skewne
 
 정규 첨도를 가정하는 모수적 방법($t$ 검정, 분산분석 등)이 적절한지 평가할 때 첨도 검정을 쓴다. 첨도 검정이 자료의 꼬리가 유의하게 두껍거나 얇다고 나타내면 변환(로그나 Box-Cox 변환)이나 비모수 방법이 필요할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 첨도 검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 첨도 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -139,8 +141,6 @@ Kurtosis: -0.0468
 Kurtosis Test: Statistic=-0.1980, p-value=0.8431
 Fail to reject H_0: The data has normal kurtosis.
 ```
-
-</div>
 
 ---
 

@@ -122,9 +122,11 @@ $$
 로그정규 위험은 **비단조**다. 처음에 증가했다가 감소한다. 그래서 위험이 중간 시점에 정점을
 이룬 뒤 내려가는 현상(예: 수술 후 회복, 특정 질병의 재발 양상)에 적합하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 세 모수적 생존모형의 로그가능도 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 모수적 생존모형의 로그가능도
+
+</div>
 
 ```python
 import numpy as np
@@ -177,8 +179,6 @@ def neg_loglik_lognormal(params, times, events):
 각 함수는 표준 최소화 루틴을 쓸 수 있도록 음의 로그가능도를 계산한다. 사건 지시자
 `events[i]`는 관측된 사건이면 1, 절단이면 0이다. 절단된 대상은 생존함수 항 $\ln S(t_i)$을
 통해 기여한다.
-
-</div>
 
 !!! note "$\varepsilon = 10^{-15}$ 보정에 대하여"
     코드의 `times + 1e-15`는 $t_i = 0$일 때 $\log 0$을 피하기 위한 것이다. 생존시간이 엄밀히

@@ -26,9 +26,11 @@ $$
 
 이 페이지의 진단은 모두 아래 자료와 모형 하나를 놓고 수행한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 진단에 쓸 모형 준비 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+
+</div>
 
 ```python
 import numpy as np
@@ -62,8 +64,6 @@ R^2 = 0.7813
 
 기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
 
-</div>
-
 ## 2. 잔차의 히스토그램
 
 정규성을 평가하는 가장 간단한 방법 하나는 **잔차의 히스토그램**을 그리는 것이다. 이 시각적 점검으로 잔차가 대략 정규분포를 따르는지 판단할 수 있다.
@@ -76,9 +76,11 @@ R^2 = 0.7813
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 잔차의 히스토그램 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 잔차의 히스토그램
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -113,8 +115,6 @@ plt.show()
 - **정규성:** 히스토그램이 0을 중심으로 대칭인 종 모양 곡선을 닮아야 한다.
 - **비정규성:** 히스토그램이 치우쳐 있거나, 봉우리가 여럿이거나(다봉), 지나치게 평평하거나(저첨), 지나치게 뾰족하면(고첨) 잔차가 정규분포를 따르지 않을 수 있다.
 
-</div>
-
 ## 3. Q-Q 그림(분위수-분위수 그림)
 
 **Q-Q 그림**은 정규성을 평가하는 더 정밀한 시각적 도구이다. 잔차의 분위수를 표준정규분포의 분위수와 비교한다.
@@ -134,9 +134,11 @@ plt.show()
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. Q-Q 그림 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Q-Q 그림
+
+</div>
 
 ```python
 import scipy.stats as stats
@@ -171,8 +173,6 @@ plt.show()
 | 양쪽 끝이 위로 휨 | 오른쪽으로 치우친 분포 |
 | 양쪽 끝이 아래로 휨 | 왼쪽으로 치우친 분포 |
 
-</div>
-
 ## 4. Shapiro-Wilk 검정
 
 **Shapiro-Wilk 검정**은 잔차의 정규성을 검정하기 위해 특별히 고안된 통계검정이다. 정규성에서의 이탈을 탐지하는 가장 강력한 검정 가운데 하나이다.
@@ -198,9 +198,11 @@ $$
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. Shapiro-Wilk 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> Shapiro-Wilk 검정
+
+</div>
 
 ```python
 from scipy.stats import shapiro
@@ -236,8 +238,6 @@ Shapiro-Wilk가 $p = 0.15$로 정규성을 기각하지 못한다. 오차를 정
 
 **참고:** 대부분의 구현에서 Shapiro-Wilk 검정은 표본크기 $n \leq 5000$으로 제한된다.
 
-</div>
-
 ## 5. Anderson-Darling 검정
 
 **Anderson-Darling 검정**은 분포의 꼬리에서의 이탈에 특히 민감한 통계검정으로, 잔차의 정규성 확인에 좋은 선택이다.
@@ -260,9 +260,11 @@ $$
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. Anderson-Darling 검정 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> Anderson-Darling 검정
+
+</div>
 
 ```python
 from scipy.stats import anderson
@@ -300,8 +302,6 @@ Anderson-Darling은 유의수준 15%와 10%에서는 기각하고 5% 이하에�
 - 검정통계량이 주어진 유의수준의 임계값보다 **작으면** $H_0$을 기각하지 못한다. 잔차가 정규성과 일치한다.
 - 검정통계량이 임계값보다 **크면** $H_0$을 기각한다. 그 유의수준에서 잔차가 정규분포를 따르지 않는다.
 
-</div>
-
 ## 6. Jarque-Bera 검정
 
 **Jarque-Bera 검정**은 잔차의 왜도와 첨도가 정규분포의 것과 일치하는지를 검정하는 적합도 검정이다.
@@ -328,9 +328,11 @@ $H_0$(정규성) 아래에서 $JB \sim \chi^2(2)$이다.
 
 **예시:**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. Jarque-Bera 검정 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> Jarque-Bera 검정
+
+</div>
 
 ```python
 from statsmodels.stats.stattools import jarque_bera
@@ -364,8 +366,6 @@ Jarque-Bera도 $p = 0.45$로 기각하지 못한다. 왜도 $-0.05$는 0에 가�
 
 - **p값 > 0.05:** 왜도나 첨도에서 비정규성의 유의한 증거가 없다.
 - **p값 < 0.05:** 비정규성의 유의한 증거가 있으며 가정 위배 가능성을 시사한다.
-
-</div>
 
 ## 정규성 검정의 비교
 

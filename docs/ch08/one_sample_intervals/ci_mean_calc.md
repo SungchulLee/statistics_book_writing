@@ -26,9 +26,11 @@ $t$-분포는 표준정규보다 꼬리가 두꺼우므로 모든 유한한 $n$�
 
 ### CSV에서 자료 읽기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. CSV에서 자료 읽기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> CSV에서 자료 읽기
+
+</div>
 
 ```python
 import csv
@@ -71,13 +73,13 @@ print(x, x.mean())
 [12. 15. 14. 10. 13. 16.] 13.333333333333334
 ```
 
-</div>
-
 ### 신뢰구간의 계산
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 평균 신뢰구간 계산기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균 신뢰구간 계산기
+
+</div>
 
 ```python
 import math
@@ -130,8 +132,6 @@ print(f"95% z-interval: ({lo:.4f}, {hi:.4f})")
 ```
 
 두 구간의 너비 차이($\pm 0.454$ 대 $\pm 0.392$)는 두 원인이 겹친 결과다. 임계값이 $t_{0.025,\,24} = 2.064$ 대 $z_{0.025} = 1.960$으로 다르고, 산포도 $s = 1.1$ 대 $\sigma = 1.0$으로 다르다. 임계값만 놓고 보면 차이는 5% 남짓이다.
-
-</div>
 
 ![두 구간을 수직선에 나란히 놓은 그림과 오차한계 차이를 두 몫으로 쪼갠 막대](./img/width_decomposition.png)
 

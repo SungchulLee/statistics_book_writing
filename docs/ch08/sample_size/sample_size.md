@@ -46,9 +46,11 @@ $$
 n = \left\lceil \frac{z_{\alpha/2}^2 \, p_0(1 - p_0)}{E^2} \right\rceil
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 표본크기가 오차한계를 어떻게 줄이는가 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표본크기가 오차한계를 어떻게 줄이는가
+
+</div>
 
 ```python
 import numpy as np
@@ -104,8 +106,6 @@ Sample size for proportion (conservative p=0.5):
 ```
 
 비율 쪽 표를 보면 여론조사가 왜 대개 표본 1,000명 남짓인지 알 수 있다. 95% 신뢰수준에서 오차한계 $\pm 3$%p를 맞추는 데 1,068명이 필요하고, 이를 $\pm 1$%p로 조이려면 9,604명이 필요하다. 아홉 배의 비용으로 정밀도를 세 배 얻는 셈이다.
-
-</div>
 
 ![계획값 p에 따른 표본크기 포물선과, 참 시그마가 빗나갔을 때 달성되는 오차한계](./img/planning_inputs.png)
 

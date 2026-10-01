@@ -114,9 +114,11 @@ $$d = \frac{\bar{X}_1 - \bar{X}_2}{S_p}$$
 - $0.5 \leq |d| < 0.8$: 중간 효과
 - $|d| \geq 0.8$: 큰 효과
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 웹페이지 A/B 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 웹페이지 A/B 검정
+
+</div>
 
 새로 디자인한 웹페이지(페이지 B)에서 사용자가 기존 버전(페이지 A)보다 더 오래 머무는지 검정한다고 하자:
 
@@ -165,18 +167,18 @@ $p = 0.32$로 기각하지 못하지만 Cohen의 $d = 0.46$은 "작은~중간" �
 
 두 집단의 표준편차가 15.08과 6.70으로 두 배 넘게 차이 난다는 점도 눈여겨보라. 합동 $t$-검정이 가정하는 등분산과는 거리가 멀어서, 여기서 Welch를 쓴 것은 형식이 아니라 필요다.
 
-</div>
-
 ### scipy.stats 사용
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. scipy 로 이표본 t-검정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> scipy 로 이표본 t-검정
+
+</div>
 
 ```python
 from scipy import stats
 
-group1, group2 = page_a, page_b          # 위 예제의 자료를 그대로 쓴다
+group1, group2 = page_a, page_b          # 위 보기의 자료를 그대로 쓴다
 
 # Welch t-검정 (권장). 등분산을 가정하지 않는다.
 t_welch, p_welch = stats.ttest_ind(group1, group2, equal_var=False)
@@ -209,13 +211,13 @@ $n_1 = n_2$이면 두 방법의 **통계량이 정확히 같다**. 표본크기�
 
 분산이 이렇게 다른데도 두 검정이 비슷한 답을 주는 것은 표본크기가 같기 때문이다. $n$까지 달랐다면 합동 검정이 크게 어긋났을 것이다.
 
-</div>
-
 ### statsmodels 사용
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. statsmodels 로 이표본 t-검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> statsmodels 로 이표본 t-검정
+
+</div>
 
 ```python
 import statsmodels.api as sm
@@ -235,8 +237,6 @@ t = -1.0350, p = 0.3204, df = 12.4246
 ```
 
 Welch 자유도가 12.42다. $n_1 + n_2 - 2 = 18$보다 눈에 띄게 작다. 한쪽 분산이 다른 쪽의 다섯 배라 실효 정보량이 그만큼 줄어든 것이다.
-
-</div>
 
 ## 가정
 

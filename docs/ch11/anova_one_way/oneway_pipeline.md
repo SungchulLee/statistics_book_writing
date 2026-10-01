@@ -2,7 +2,7 @@
 
 ## 개요
 
-이 페이지는 모형 적합부터 사후검정과 시각화까지 이어지는 완전한 일원배치 분산분석 파이프라인을 보여준다. statsmodels로 분산분석 모형을 적합하고, 쌍별 비교를 위해 Tukey의 HSD를 수행하고, Bonferroni 보정을 적용한 쌍별 Welch $t$-검정을 수행하며, 상자그림으로 요약한다. 전체에 걸쳐 PlantGrowth 자료를 예제로 쓴다.
+이 페이지는 모형 적합부터 사후검정과 시각화까지 이어지는 완전한 일원배치 분산분석 파이프라인을 보여준다. statsmodels로 분산분석 모형을 적합하고, 쌍별 비교를 위해 Tukey의 HSD를 수행하고, Bonferroni 보정을 적용한 쌍별 Welch $t$-검정을 수행하며, 상자그림으로 요약한다. 전체에 걸쳐 PlantGrowth 자료를 보기로 쓴다.
 
 ## 1단계: 일원배치 분산분석 모형 적합
 
@@ -14,9 +14,11 @@ $$
 
 을 $H_A$(적어도 하나의 $\mu_i$가 다르다)에 대해 검정한다. statsmodels의 수식 인터페이스에서는 요인을 `C()`로 감싸 범주형 변수임을 나타낸다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 1단계 — 모형 적합 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 모형 적합
+
+</div>
 
 ```python
 import pandas as pd
@@ -45,8 +47,6 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
 분산분석표는 집단 간 제곱합($SSB$), 집단 내 제곱합($SSW$), $F$-통계량, $p$-값을 보고한다. $p < \alpha$이면 $H_0$을 기각한다.
 
-</div>
-
 ## 2단계: Tukey HSD 사후검정
 
 분산분석이 기각되면 Tukey의 정직유의차가 가족단위 오류율을 통제하면서 어느 쌍이 다른지 찾아낸다. 집단당 관측값이 $n$개인 균형 설계에서는
@@ -57,9 +57,11 @@ $$
 
 이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 2단계 — Tukey HSD { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — Tukey HSD
+
+</div>
 
 ```python
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
@@ -87,8 +89,6 @@ group1 group2 meandiff p-adj   lower  upper  reject
 
 `reject` 열은 신뢰구간이 0을 담는지와 정확히 맞물린다. trt1 대 trt2의 구간 $(0.174, 1.556)$만 0을 담지 않는다.
 
-</div>
-
 ## 3단계: Bonferroni 보정을 적용한 쌍별 Welch t-검정
 
 집단 사이의 분산이 다를 수 있으면 등분산을 가정하지 않는 Welch $t$-검정을 쓴다. Bonferroni 보정은 각 보정 전 $p$-값에 $m = \binom{k}{2}$를 곱한다:
@@ -97,9 +97,11 @@ $$
 p_{\text{adj}} = \min\!\bigl(m \cdot p_{\text{raw}},\; 1\bigr)
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 3단계 — 본페로니 보정 쌍별 비교 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 본페로니 보정 쌍별 비교
+
+</div>
 
 ```python
 from itertools import combinations
@@ -134,15 +136,15 @@ Tukey와 결론은 같지만(trt1 대 trt2만 유의) 보정 p-값은 0.0279로 
 
 ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 후 0.1437이 된다. 비교를 세 번 한다는 사실이 이만큼의 대가를 요구한다.
 
-</div>
-
 ## 4단계: 시각화
 
 상자그림은 집단 분포를 빠르게 시각적으로 비교하게 해 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 4단계 — 상자그림 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 4단계 — 상자그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -162,8 +164,6 @@ plt.show()
 ![집단별 상자그림](./img/oneway_pipeline_83.png)
 
 trt1의 상자가 가장 낮고 넓으며, trt2가 가장 높고 좁다. 두 상자가 겹치는 부분이 거의 없다는 것이 Tukey 검정이 이 쌍만 잡아낸 이유다. ctrl의 상자는 두 처리 사이에 걸쳐 있어 어느 쪽과도 뚜렷이 갈리지 않는다.
-
-</div>
 
 ## 해석
 

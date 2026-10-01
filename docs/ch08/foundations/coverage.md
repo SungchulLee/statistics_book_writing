@@ -174,9 +174,11 @@ $$
 
 ### 평균 신뢰구간 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 평균 신뢰구간의 포함확률 모의실험 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 평균 신뢰구간의 포함확률 모의실험
+
+</div>
 
 ```python
 #!/usr/bin/env python3
@@ -294,13 +296,13 @@ if __name__ == "__main__":
 
 구간의 **너비가 저마다 다르다**는 점이 눈에 띈다. $\sigma$를 모를 때는 너비가 $s$에 비례하는데 $s$ 자체가 표본마다 흔들리기 때문이다. 앞의 `--method z_known`으로 바꾸면 너비가 모두 같아진다.
 
-</div>
-
 ### 비율 신뢰구간 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 비율 신뢰구간의 포함확률 모의실험 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간의 포함확률 모의실험
+
+</div>
 
 ```python
 #!/usr/bin/env python3
@@ -389,8 +391,6 @@ $n = 20$, $p = 0.2$인 Wald 구간의 포함확률은 91%다. 명목값 95%에 �
 - 구간이 취할 수 있는 위치가 몇 가지뿐이다. $k$가 정수이므로 $\hat p$는 $0, 0.05, 0.10, \ldots$ 스무 한 가지 값만 갖는다. 이 이산성 때문에 비율의 포함확률은 $n$을 키워도 매끄럽게 95%로 가지 않고 톱니처럼 오르내린다.
 
 `method`만 바꾸고 같은 자료(같은 시드)로 다시 세면 실패 개수가 Wald 9개, Wilson 4개, Agresti–Coull 4개, Clopper–Pearson 1개가 된다. Clopper–Pearson이 가장 적게 실패하는 것은 더 좋아서가 아니라 **보수적**이어서다. 이산성 때문에 절대 95% 아래로 내려가지 않도록 구간을 넉넉히 잡으며, 그 대가로 구간이 넓다.
-
-</div>
 
 ## 연습문제
 

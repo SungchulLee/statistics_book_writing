@@ -73,9 +73,11 @@ $$U = \min(U_1, U_2)$$
 
 ### 파이썬 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. Mann-Whitney U 검정 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Mann-Whitney U 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -126,8 +128,6 @@ Mean rank Group B: 5.8
 Reject H0: Significant difference between groups.
 Group A tends to have larger values.
 ```
-
-</div>
 
 !!! warning "`argsort(argsort(x))`는 동점을 처리하지 못한다"
     순위를 구할 때 `np.argsort(np.argsort(x)) + 1`을 쓰는 코드를 흔히 본다. 동점이 없으면 맞지만, 동점이 있으면 **중간순위 대신 임의의 순서**를 배정한다.
@@ -195,7 +195,7 @@ $$\chi^2 = \sum \frac{(O - E)^2}{E}$$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 집단 중앙값 비교. **상황**: 두 학생 집단의 중앙값 시험점수를 비교한다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 집단 중앙값 비교. **상황**: 두 학생 집단의 중앙값 시험점수를 비교한다.
 
 - 집단 A: $[50, 55, 60, 65, 70]$
 - 집단 B: $[45, 50, 55, 60, 65]$
@@ -204,9 +204,11 @@ $$\chi^2 = \sum \frac{(O - E)^2}{E}$$
 
 ### 파이썬 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. Mood의 중앙값 검정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> Mood의 중앙값 검정
+
+</div>
 
 ```python
 import numpy as np
@@ -268,8 +270,6 @@ Contingency Table:
  [2 3]]
 ```
 
-</div>
-
 !!! warning "SciPy는 $2\times2$ 표에 Yates 보정을 기본으로 적용한다"
     `chi2_contingency`의 `correction` 인자는 $2 \times 2$ 표에서 **기본값이 `True`**이다. 위 자료에서 Yates 보정을 적용하면 $\chi^2 = 0$, $p = 1$이 되고, 적용하지 않으면 $\chi^2 = 0.4$, $p = 0.527$이 된다.
 
@@ -311,9 +311,11 @@ $H_0$ 아래에서 $H$는 근사적으로 자유도 $k - 1$인 $\chi^2$ 분포�
 
 ### 파이썬 구현
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. Kruskal-Wallis 검정 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> Kruskal-Wallis 검정
+
+</div>
 
 ```python
 from scipy.stats import kruskal
@@ -343,8 +345,6 @@ H statistic: 9.4136
 P-value: 0.0090
 Reject H0: At least one group differs significantly.
 ```
-
-</div>
 
 ### 사후검정
 
@@ -516,7 +516,7 @@ Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-본문의 Mann-Whitney 예제에서 SciPy의 기본 $p$값($0.000440$)과 정확 $p$값($7.58 \times 10^{-5}$)이 6배 가까이 차이 난다. 왜 이렇게 큰가?
+본문의 Mann-Whitney 보기에서 SciPy의 기본 $p$값($0.000440$)과 정확 $p$값($7.58 \times 10^{-5}$)이 6배 가까이 차이 난다. 왜 이렇게 큰가?
 
 </div>
 

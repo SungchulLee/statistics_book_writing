@@ -20,9 +20,11 @@ $$
 순진한 구현은 `np.exp(z)`를 그대로 계산하지만 로짓이 크면 넘친다. **로그-합-지수 기법**은
 소프트맥스의 평행이동 불변성을 이용해 지수화 전에 $\max_k z_k$를 뺀다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 수치적으로 안정한 소프트맥스 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 수치적으로 안정한 소프트맥스
+
+</div>
 
 ```python
 import numpy as np
@@ -41,11 +43,11 @@ def softmax(z):
 
 로짓 벡터 $\mathbf{z} = (2, 1, -1)^\top$로 구현을 확인할 수 있다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로짓에서 확률로
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 로짓에서 확률로 { .eg }
 
 ```python
 # 로짓의 차이가 확률의 비를 정한다. 2 와 1 의 차이가 1 이므로 첫 확률이
@@ -61,8 +63,6 @@ print(softmax(z))
 [[0.70538451 0.25949646 0.03511903]]
 ```
 
-</div>
-
 ---
 
 ## 교차엔트로피 손실
@@ -77,9 +77,11 @@ $$
 이다. $\mathbf{Y}$의 각 행이 원-핫이므로 참 범주에 해당하는 항만 살아남는다. 작은 상수
 $\varepsilon$이 $\log(0)$을 막는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 교차엔트로피 손실 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 교차엔트로피 손실
+
+</div>
 
 ```python
 def cross_entropy_loss(Y, Y_hat, eps=1e-12):
@@ -97,8 +99,6 @@ def cross_entropy_loss(Y, Y_hat, eps=1e-12):
     n = Y.shape[0]
     return -np.sum(Y * np.log(Y_hat + eps)) / n
 ```
-
-</div>
 
 !!! warning "$\varepsilon$ 보정은 손실값만 보호한다"
     이 $\varepsilon$ 기법은 `nan`을 막아 주지만 목적함수를 미세하게 바꾼다. 확신에 찬 오답의
@@ -127,9 +127,11 @@ $$
 \frac{\partial J}{\partial \mathbf{b}} = \frac{1}{n} \sum_{i=1}^{n} (\hat{\mathbf{y}}_i - \mathbf{y}_i)
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 기울기 계산 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 기울기 계산
+
+</div>
 
 ```python
 def compute_gradients(X, Y, Y_hat):
@@ -146,8 +148,6 @@ def compute_gradients(X, Y, Y_hat):
     return dW, db
 ```
 
-</div>
-
 ---
 
 ## 원-핫 부호화
@@ -155,9 +155,11 @@ def compute_gradients(X, Y, Y_hat):
 훈련 이름표 $y_i \in \{0, 1, \ldots, C-1\}$을 원-핫 벡터로 바꿔야 한다. 이름표가 $y_i = k$이면
 원-핫 벡터는 위치 $k$에 1, 나머지에 0을 갖는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 원-핫 변환 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 원-핫 변환
+
+</div>
 
 ```python
 def one_hot(y, C):
@@ -172,17 +174,17 @@ def one_hot(y, C):
     return Y
 ```
 
-</div>
-
 ---
 
 ## 전부 합치기 --- 학습 루프
 
 이제 구성요소들을 모아 완전한 경사하강 학습 루프를 만든다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 붓꽃 자료로 학습하기 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 붓꽃 자료로 학습하기
+
+</div>
 
 ```python
 from sklearn.datasets import load_iris
@@ -239,17 +241,17 @@ Final training loss: 0.1326
 
 최종 훈련 손실은 $0.1326$이다.
 
-</div>
-
 ---
 
 ## 평가
 
 학습 후 검정자료에 대한 예측을 계산하고 정확도를 보고한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 7. 시험 정확도 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 시험 정확도
+
+</div>
 
 ```python
 # 시험자료에서의 정확도. 가장 큰 확률을 가진 범주를 고른다.
@@ -270,8 +272,6 @@ Test accuracy: 1.0000
 분리되어 있어 완벽한 분류가 드물지 않다. 다만 45개에서의 $100\%$는 참 정확도가 $100\%$라는
 뜻이 아니다. 95% 신뢰구간(윌슨 구간)은 대략 $[92\%,\ 100\%]$로 여전히 넓다.
 
-</div>
-
 ---
 
 ## scikit-learn과의 검증
@@ -279,9 +279,11 @@ Test accuracy: 1.0000
 직접 만든 구현을 scikit-learn의 `LogisticRegression`(다범주 문제에서 소프트맥스를 사용)과
 비교하면 유용한 검산이 된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 8. sklearn 과 맞춰 보기 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> sklearn 과 맞춰 보기
+
+</div>
 
 ```python
 from sklearn.linear_model import LogisticRegression
@@ -299,8 +301,6 @@ scikit-learn accuracy: 1.0000
 ```
 
 scikit-learn도 $1.0000$을 내어 두 구현이 일치한다.
-
-</div>
 
 !!! note "`multi_class='multinomial'`은 더 이상 필요하지 않다"
     예전 코드에서는 `LogisticRegression(multi_class='multinomial', ...)`처럼 명시하는 것이

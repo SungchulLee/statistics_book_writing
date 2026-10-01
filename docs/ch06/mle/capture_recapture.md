@@ -119,9 +119,11 @@ $$
 - **개방 개체군**: Jolly-Seber 모형 같은 확장은 개체가 들어오고 나갈 수 있는 개체군을 다룰 수 있다.
 - **포획확률이 다른 경우**: Lincoln-Petersen 추정량이나 로지스틱 회귀 같은 모형으로 포획확률의 변동을 보정할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 포획-재포획으로 모집단 크기 추정하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 포획-재포획으로 모집단 크기 추정하기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -212,8 +214,6 @@ MLE n: 14
 ```
 
 ![Capture-Recapture MLE for Population Size](./img/capture_recapture_124.png)
-
-</div>
 
 ## 연습문제
 

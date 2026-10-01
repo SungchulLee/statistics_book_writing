@@ -132,9 +132,11 @@ $$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) c_{jk}, \qquad \text{벌점: } \lambda
 
 `statsmodels.gam` 모듈이 GAM 적합을 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. statsmodels로 GAM 적합 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> statsmodels로 GAM 적합
+
+</div>
 
 ```python
 import numpy as np
@@ -200,15 +202,15 @@ x2_s1          0.0997      0.059      1.704      0.088      -0.015       0.214
 
 계수 표를 보면 스플라인 기저마다 계수가 하나씩 붙어 있다. GAM의 계수는 개별적으로 해석하는 것이 아니라 **합쳐서 하나의 곡선**으로 읽어야 한다.
 
-</div>
-
 ### pyGAM 사용하기
 
 `pygam` 라이브러리는 격자탐색으로 람다를 자동 선택해 주는 더 친절한 인터페이스를 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. pygam과 부분의존도 그림 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> pygam과 부분의존도 그림
+
+</div>
 
 ```python
 from pygam import LinearGAM, s, l
@@ -276,8 +278,6 @@ None
 
 이것이 회귀 스플라인과 평활 스플라인의 차이다. 앞의 계단함수나 B-스플라인에서는 자유도를 사람이 골랐지만, 여기서는 벌점의 세기 $\lambda$가 자료로부터 정해진다.
 
-</div>
-
 !!! note "`partial_dependence`의 반환값"
     `width`(또는 `quantiles`)를 주면 `partial_dependence`는 부분의존값과 신뢰구간의 **쌍**을 돌려준다. 신뢰구간은 모양이 $(n, 2)$인 배열이므로 위처럼 `pdep, confi = ...`로 풀어서 `confi[:, 0]`, `confi[:, 1]`을 쓴다. 반환값을 `[1]`, `[2]`로 색인하면 `IndexError`가 난다. 격자를 만드는 `generate_X_grid`도 별도 함수가 아니라 모형 객체의 메서드이다.
 
@@ -339,13 +339,15 @@ None
 
 ---
 
-## 실전 예제: 주택 가격
+## 실전 보기: 주택 가격
 
 여러 특성으로 집값을 예측한다고 하자. GAM은 설명변수마다 다른 정도의 매끄러움을 허용한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 주택 자료에 GAM 적용 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 주택 자료에 GAM 적용
+
+</div>
 
 ```python
 from pygam import LinearGAM, s, l
@@ -431,8 +433,6 @@ Predicted price: $915,154
 ![pyGAM 적합 결과](./img/generalized_additive_models_267.png)
 
 부분 의존 그림이 각 설명변수의 기여를 따로 보여준다. GAM의 강점이 바로 이 해석 가능성이다. 비선형이면서도 변수별 효과를 하나씩 떼어 볼 수 있다.
-
-</div>
 
 ---
 

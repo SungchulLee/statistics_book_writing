@@ -30,9 +30,11 @@
 
 6. **그린다.** $(q_i, x_{(i)})$를 산점으로, 적합선 $y = \hat{\mu} + \hat{\sigma}\, q$를, 음영 영역 $[L_i, U_i]$를 표시한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Q-Q 그림에 95% 띠 얹기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> Q-Q 그림에 95% 띠 얹기
+
+</div>
 
 ```python
 import numpy as np
@@ -82,8 +84,6 @@ qq_with_band(x, B=600, seed=7)
 ```
 
 ![신뢰띠를 포함한 Q-Q 그림](./img/qq_confidence_band_35.png)
-
-</div>
 
 ## 점별 띠와 동시 띠
 
