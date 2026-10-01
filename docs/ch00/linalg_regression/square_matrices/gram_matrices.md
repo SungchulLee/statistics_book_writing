@@ -57,6 +57,55 @@ $$
 
     **회귀에 대한 귀결.** 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$이 존재하고 유일할 필요충분조건은 $\mathbf{X}^T\mathbf{X}$가 양정치인 것이며, 이는 예측변수 열들이 일차독립일 때에 한해 성립한다.
 
+!!! warning "「그람 행렬은 양정치다」는 틀린 말이다"
+    정리 1 과 정리 2 의 차이를 뭉개면 안 된다. $\mathbf{X}^T\mathbf{X}$는 **언제나** 양반정치이지만, 양정치인 것은 $\mathbf{X}$의 열이 일차독립일 때에 **한해서**다. 열이 하나라도 다른 열들의 선형결합이면 그 결합계수 $\mathbf{c} \ne \mathbf{0}$에 대해 $\mathbf{X}\mathbf{c} = \mathbf{0}$이므로 $\mathbf{c}^T(\mathbf{X}^T\mathbf{X})\mathbf{c} = 0$이고, $\mathbf{X}^T\mathbf{X}$는 고윳값 0 을 갖는 **특이행렬**이 된다. $\det(\mathbf{X}^T\mathbf{X}) = 0$이니 역행렬이 없고 정규방정식의 해가 유일하지 않다.
+
+    회귀에서 **완전 공선성**이 치명적인 이유가 정확히 이것이다. 이를테면 $k$개 수준을 갖는 범주형 변수의 모든 수준에 지시변수를 주면서 절편까지 넣으면 지시변수들의 합이 절편 열 $\mathbf{1}$과 같아져 열이 종속이 되고($\mathbf{c} = (1, -1, \dots, -1)^T$가 영공간에 들어간다), $(\mathbf{X}^T\mathbf{X})^{-1}$이 존재하지 않는다. 이른바 더미변수 함정이다. **거의** 공선인 경우는 역행렬이 존재하기는 하지만 최소고윳값이 0 에 가까워 추정이 불안정해지며, 이것이 아래에서 다루는 다중공선성이다.
+
+## 계수 보존
+
+특이해질 수 있다고 해서 그람 행렬이 정보를 잃는 것은 아니다. $\mathbf{X}^T\mathbf{X}$의 계수는 $\mathbf{X}$의 계수를 정확히 그대로 물려받는다.
+
+<div class="thmbox" markdown>
+
+### 정리 3. 계수 보존 { .thm }
+
+임의의 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대해
+
+$$
+\ker(\mathbf{X}^T\mathbf{X}) = \ker(\mathbf{X}), \qquad \operatorname{rank}(\mathbf{X}^T\mathbf{X}) = \operatorname{rank}(\mathbf{X})
+$$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    두 영공간이 같음을 보인다.
+
+    $(\subseteq)$ $\mathbf{X}\mathbf{v} = \mathbf{0}$이면 $\mathbf{X}^T\mathbf{X}\mathbf{v} = \mathbf{X}^T\mathbf{0} = \mathbf{0}$이므로 $\ker(\mathbf{X}) \subseteq \ker(\mathbf{X}^T\mathbf{X})$이다.
+
+    $(\supseteq)$ $\mathbf{X}^T\mathbf{X}\mathbf{v} = \mathbf{0}$이라 하자. 양변에 왼쪽에서 $\mathbf{v}^T$를 곱하면
+
+    $$
+    0 = \mathbf{v}^T\mathbf{X}^T\mathbf{X}\mathbf{v} = \lVert\mathbf{X}\mathbf{v}\rVert^2
+    $$
+
+    이고, 노름이 0 인 실벡터는 영벡터뿐이므로 $\mathbf{X}\mathbf{v} = \mathbf{0}$이다.
+
+    두 행렬 모두 열의 개수가 $p$로 같으므로 계수–퇴화차수 정리를 쓰면
+
+    $$
+    \operatorname{rank}(\mathbf{X}^T\mathbf{X}) = p - \dim\ker(\mathbf{X}^T\mathbf{X}) = p - \dim\ker(\mathbf{X}) = \operatorname{rank}(\mathbf{X})
+    $$
+
+    이다. $\square$
+
+    이 증명은 $(\supseteq)$ 단계에서 **실행렬**임을 썼다. 복소행렬에서는 $\mathbf{X}^T\mathbf{X}$가 아니라 켤레전치를 쓴 $\mathbf{X}^*\mathbf{X}$에 대해서만 성립한다. 열벡터 $\mathbf{X} = (1, i)^T$를 잡으면 $\mathbf{X}^T\mathbf{X} = 1 + i^2 = 0$이라 계수가 $1$에서 $0$으로 떨어진다.
+
+정리 2 와 정리 3 은 같은 사실의 두 얼굴이다. $\operatorname{rank}(\mathbf{X}) = p$이면 $\operatorname{rank}(\mathbf{X}^T\mathbf{X}) = p$라 $p \times p$ 행렬이 가역이고, $\operatorname{rank}(\mathbf{X}) < p$이면 계수가 정확히 그만큼 부족해 특이행렬이 된다. 정리 3 이 덧붙여 주는 것은 **얼마나** 부족한지까지 알려 준다는 점이다. 계수가 $r$인 $\mathbf{X}$에 대해 $\mathbf{X}^T\mathbf{X}$는 양의 고윳값을 정확히 $r$개, 0 인 고윳값을 정확히 $p - r$개 갖는다.
+
 ## 그람 행렬의 고윳값
 
 $\mathbf{G} = \mathbf{X}^T\mathbf{X}$가 대칭 양반정치이므로 그 고윳값 $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$은 모두 음이 아니다. 이 고윳값들은 $\mathbf{X}$의 **특이값**의 제곱이다. $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^T$가 특이값분해(SVD)라면
@@ -159,11 +208,15 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 </div>
 
 ??? success "풀이"
+    직접 곱하면
+
     $$
     \mathbf{X}^T\mathbf{X} = \begin{pmatrix} 1 & 1 & 1 \\ 2 & 3 & 5 \end{pmatrix}\begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix} = \begin{pmatrix} 3 & 10 \\ 10 & 38 \end{pmatrix}
     $$
 
-    대칭성은 $(\mathbf{X}^T\mathbf{X})^T = \mathbf{X}^T\mathbf{X}$로부터 곧바로 따라온다. 양정치성의 경우 선행 소행렬식이 $3 > 0$이고 $\det = 3 \times 38 - 10^2 = 114 - 100 = 14 > 0$이므로 $\mathbf{X}^T\mathbf{X}$는 양정치다. 동등하게 $\mathbf{X}$의 계수가 2이므로(두 열이 일차독립이므로) $\mathbf{X}^T\mathbf{X}$가 양정치다.
+    이다.
+
+    대칭성은 $(\mathbf{X}^T\mathbf{X})^T = \mathbf{X}^T\mathbf{X}$로부터 곧바로 따라온다. 양정치성의 경우 선행 주소행렬식이 $3 > 0$이고 $\det = 3 \times 38 - 10^2 = 114 - 100 = 14 > 0$이므로 $\mathbf{X}^T\mathbf{X}$는 양정치다. 동등하게 $\mathbf{X}$의 계수가 2이므로(두 열이 일차독립이므로) $\mathbf{X}^T\mathbf{X}$가 양정치다.
 
 <div class="drillbox" markdown>
 
@@ -442,35 +495,54 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-임의의 실행렬 $\mathbf{X}$에 대해 $\operatorname{rank}(\mathbf{X}^T\mathbf{X}) = \operatorname{rank}(\mathbf{X})$임을 증명하라.
+임의의 실행렬 $\mathbf{X}$에 대해 $\operatorname{Col}(\mathbf{X}^T\mathbf{X}) = \operatorname{Col}(\mathbf{X}^T)$임을 증명하라(정리 3 을 써도 된다). 이로부터 정규방정식 $\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^T\mathbf{y}$가 $\mathbf{X}$의 계수와 무관하게 **언제나 해를 갖는다**는 결론을 끌어내고, 완전 공선성이 있을 때 그 해가 어떻게 되는지 수치로 확인하라.
 
 </div>
 
 ??? success "풀이"
-    두 행렬의 **영공간이 같음**을 보이면 충분하다. 계수-퇴화차수 정리에 의해 영공간의 차원이 같으면 계수도 같기 때문이다(두 행렬 모두 열의 개수가 $p$로 같다).
+    $(\subseteq)$ $\mathbf{X}^T\mathbf{X}\mathbf{v} = \mathbf{X}^T(\mathbf{X}\mathbf{v})$이므로 $\operatorname{Col}(\mathbf{X}^T\mathbf{X}) \subseteq \operatorname{Col}(\mathbf{X}^T)$은 곧바로 나온다.
 
-    $(\subseteq)$ $\mathbf{X}\mathbf{v} = \mathbf{0}$이면 $\mathbf{X}^T\mathbf{X}\mathbf{v} = \mathbf{X}^T\mathbf{0} = \mathbf{0}$이다.
+    $(\supseteq)$ 차원을 센다. 정리 3 에 의해 $\dim\operatorname{Col}(\mathbf{X}^T\mathbf{X}) = \operatorname{rank}(\mathbf{X}^T\mathbf{X}) = \operatorname{rank}(\mathbf{X}) = \operatorname{rank}(\mathbf{X}^T) = \dim\operatorname{Col}(\mathbf{X}^T)$이다. 포함관계가 있고 차원이 같은 두 부분공간은 같으므로 결론이 따라 나온다.
 
-    $(\supseteq)$ $\mathbf{X}^T\mathbf{X}\mathbf{v} = \mathbf{0}$이라 하자. 양변에 왼쪽에서 $\mathbf{v}^T$를 곱하면
+    **정규방정식은 언제나 무모순이다.** $\mathbf{X}^T\mathbf{y} \in \operatorname{Col}(\mathbf{X}^T) = \operatorname{Col}(\mathbf{X}^T\mathbf{X})$이므로 $\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^T\mathbf{y}$를 만족하는 $\boldsymbol{\beta}$가 적어도 하나 존재한다. 완전 열계수일 때에만 그것이 **유일**하다(정리 2). 계수가 $r < p$이면 해집합은 $\ker(\mathbf{X})$ 방향으로 $p - r$차원만큼 평행이동한 아핀 집합이 되고, 적합값 $\hat{\mathbf{y}} = \mathbf{X}\boldsymbol{\beta}$는 어느 해를 택해도 같다.
 
-    $$
-    0 = \mathbf{v}^T\mathbf{X}^T\mathbf{X}\mathbf{v} = \lVert\mathbf{X}\mathbf{v}\rVert^2
-    $$
+    ```python
+    import numpy as np
 
-    이고, 노름이 0인 벡터는 영벡터뿐이므로 $\mathbf{X}\mathbf{v} = \mathbf{0}$이다.
+    X = np.array([[1., 2., 3.], [1., 0., 1.], [1., 1., 2.], [1., 3., 4.]])  # 3열 = 1열 + 2열
+    y = np.array([6., 2., 4., 8.])
+    G, b = X.T @ X, X.T @ y
 
-    따라서 $\ker(\mathbf{X}^T\mathbf{X}) = \ker(\mathbf{X})$이고
+    print("rank(X) =", np.linalg.matrix_rank(X), "  rank(X^T X) =", np.linalg.matrix_rank(G))
+    print("X^T X 의 고윳값:", np.linalg.eigvalsh(G).round(6))
+    print("X^T y 가 Col(X^T X) 안에 있는가:",
+          np.linalg.matrix_rank(G) == np.linalg.matrix_rank(np.column_stack([G, b])))
 
-    $$
-    \operatorname{rank}(\mathbf{X}^T\mathbf{X}) = p - \dim\ker(\mathbf{X}^T\mathbf{X}) = p - \dim\ker(\mathbf{X}) = \operatorname{rank}(\mathbf{X})
-    $$
+    beta_min = np.linalg.lstsq(G, b, rcond=None)[0]           # 최소노름 해
+    beta_alt = beta_min + 5.0 * np.array([1., 1., -1.])        # ker(X) 방향으로 밀어낸 다른 해
+    print("\n해 1:", beta_min.round(6), " 잔차", round(np.linalg.norm(G @ beta_min - b), 10))
+    print("해 2:", beta_alt.round(6), " 잔차", round(np.linalg.norm(G @ beta_alt - b), 10))
+    print("두 해의 적합값이 같은가:", np.allclose(X @ beta_min, X @ beta_alt))
+    ```
 
-    이다.
+    출력:
 
-    **주의.** 이 증명은 **실행렬**에서만 성립한다. 복소행렬에서는 $\mathbf{X}^T\mathbf{X}$ 대신 켤레전치를 쓴 $\mathbf{X}^*\mathbf{X}$를 써야 한다. 열벡터 $\mathbf{X} = \begin{pmatrix} 1 \\ i \end{pmatrix}$를 잡으면 $\mathbf{X}^T\mathbf{X} = 1 + i^2 = 0$이므로 계수가 $1$에서 $0$으로 떨어진다. $\square$
+    ```
+    rank(X) = 2   rank(X^T X) = 2
+    X^T X 의 고윳값: [-0.        1.284367 46.715633]
+    X^T y 가 Col(X^T X) 안에 있는가: True
+
+    해 1: [0.666667 0.666667 1.333333]  잔차 0.0
+    해 2: [ 5.666667  5.666667 -3.666667]  잔차 0.0
+    두 해의 적합값이 같은가: True
+    ```
+
+    계수가 3 에서 2 로 떨어져 고윳값 하나가 0 이 되었지만, 정규방정식은 여전히 무모순이다. 서로 다른 두 해가 **같은 적합값**을 주는 것이 핵심이다. 추정 불가능한 것은 $\boldsymbol{\beta}$ 자체이고 $\mathbf{X}\boldsymbol{\beta}$는 여전히 유일하게 추정된다. 회귀에서 완전 공선성이 있을 때 "개별 계수는 해석할 수 없지만 예측은 할 수 있다"고 말하는 근거가 이것이다.
+
+    **복소행렬에서는 다르다.** 정리 3 의 증명이 실행렬임을 썼으므로 이 모든 논의도 실행렬에 한한다. 열벡터 $\mathbf{X} = (1, i)^T$를 잡으면 $\mathbf{X}^T\mathbf{X} = 1 + i^2 = 0$이라 계수가 $1$에서 $0$으로 떨어지고, 켤레전치를 쓴 $\mathbf{X}^*\mathbf{X} = 1 + \lvert i\rvert^2 = 2$만이 계수를 보존한다. $\square$
 
 ---
 
 ## 정리하며
 
-그람 행렬 $\mathbf{X}^T\mathbf{X}$는 $\mathbf{X}$의 열들 사이의 모든 쌍의 내적을 대칭 양반정치행렬에 모은다. 열들이 일차독립일 때에 한해 양정치가 되며, 이것이 최소제곱해가 유일하기 위한 조건이다. 그람 행렬의 고윳값은 조건수를 통해 회귀의 수치적 안정성을 좌우하고, 그 비대각 구조가 예측변수들 사이의 상관을 잰다.
+그람 행렬 $\mathbf{X}^T\mathbf{X}$는 $\mathbf{X}$의 열들 사이의 모든 쌍의 내적을 대칭 양반정치행렬에 모은다. **언제나** 양반정치이지만 양정치가 되는 것은 열들이 일차독립일 때에 **한해서**이며, 이것이 최소제곱해가 유일하기 위한 조건이다. 열이 종속이면 $\mathbf{X}^T\mathbf{X}$는 특이행렬이 되고, 이것이 완전 공선성이 회귀를 막아 세우는 지점이다. 계수는 언제나 보존되어 $\operatorname{rank}(\mathbf{X}^T\mathbf{X}) = \operatorname{rank}(\mathbf{X})$다. 그람 행렬의 고윳값은 조건수를 통해 회귀의 수치적 안정성을 좌우하고, 그 비대각 구조가 예측변수들 사이의 상관을 잰다.

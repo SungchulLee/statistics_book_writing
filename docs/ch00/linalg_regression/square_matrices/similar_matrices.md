@@ -48,22 +48,25 @@ $$
 
 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathbf{B}$는 다음 성질을 공유한다.
 
-1. **고윳값**(대수적 중복도 포함)
-2. **특성다항식**: $\det(\mathbf{B} - \lambda\mathbf{I}) = \det(\mathbf{A} - \lambda\mathbf{I})$
+1. **특성다항식**: $\det(\mathbf{B} - \lambda\mathbf{I}) = \det(\mathbf{A} - \lambda\mathbf{I})$
+2. **고윳값**: $\mathbb{C}$ 안에서 대수적 중복도까지 포함해 같다
 3. **대각합**: $\operatorname{tr}(\mathbf{B}) = \operatorname{tr}(\mathbf{A})$
 4. **행렬식**: $\det(\mathbf{B}) = \det(\mathbf{A})$
 5. **계수**: $\operatorname{rank}(\mathbf{B}) = \operatorname{rank}(\mathbf{A})$
 6. **최소다항식**
+7. **각 고윳값의 기하적 중복도**: $\dim\ker(\mathbf{B} - \lambda\mathbf{I}) = \dim\ker(\mathbf{A} - \lambda\mathbf{I})$
 
 </div>
 
-??? proof "증명 개요 (특성다항식)"
+!!! warning "중복도를 세는 규약"
+    2번에서 고윳값을 $\mathbb{C}$ 안에서 센다는 점이 중요하다. 실수 성분의 행렬도 실수 고윳값을 갖지 않을 수 있다(예: 회전행렬 $\begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$의 고윳값은 $\pm i$다). 3번과 4번이 고윳값의 합·곱으로 설명되는 것도 복소 고윳값을 중복도까지 모두 셀 때뿐이다. 자세한 것은 다음다음 쪽 "대각합과 고윳값"에서 다룬다.
 
+??? proof "증명"
 
-    $\mathbf{B}$의 특성다항식은
+    **1 (특성다항식).** $\lambda\mathbf{I} = \mathbf{P}^{-1}(\lambda\mathbf{I})\mathbf{P}$이므로
 
     $$
-    \det(\mathbf{B} - \lambda\mathbf{I}) = \det(\mathbf{P}^{-1}\mathbf{A}\mathbf{P} - \lambda\mathbf{P}^{-1}\mathbf{I}\mathbf{P})
+    \det(\mathbf{B} - \lambda\mathbf{I}) = \det\!\bigl(\mathbf{P}^{-1}\mathbf{A}\mathbf{P} - \mathbf{P}^{-1}(\lambda\mathbf{I})\mathbf{P}\bigr)
     $$
 
     이다. 왼쪽에서 $\mathbf{P}^{-1}$을, 오른쪽에서 $\mathbf{P}$를 묶어내면
@@ -72,22 +75,75 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathb
     = \det\!\bigl(\mathbf{P}^{-1}(\mathbf{A} - \lambda\mathbf{I})\mathbf{P}\bigr) = \det(\mathbf{P}^{-1})\,\det(\mathbf{A} - \lambda\mathbf{I})\,\det(\mathbf{P})
     $$
 
-    이다. $\det(\mathbf{P}^{-1})\det(\mathbf{P}) = 1$이므로 두 특성다항식이 같다. 고윳값은 특성다항식의 근이므로 고윳값도 일치한다. 대각합은 (중복도를 포함한) 고윳값의 합이고 행렬식은 그 곱이므로 둘 다 불변이다. $\square$
+    이고, $\det(\mathbf{P}^{-1})\det(\mathbf{P}) = \det(\mathbf{P}^{-1}\mathbf{P}) = 1$이므로 두 특성다항식이 같다.
 
-??? proof "증명 개요 (계수)"
+    **2 (고윳값).** 고윳값은 특성다항식의 근이고 대수적 중복도는 그 근의 중복도이므로, 1번에서 곧바로 따라 나온다.
 
+    **3 (대각합).** 대각합의 순환 성질 $\operatorname{tr}(\mathbf{X}\mathbf{Y}) = \operatorname{tr}(\mathbf{Y}\mathbf{X})$를 $\mathbf{X} = \mathbf{P}^{-1}$, $\mathbf{Y} = \mathbf{A}\mathbf{P}$에 적용하면
 
-    가역인 $\mathbf{P}$에 대해 사상 $\mathbf{x} \mapsto \mathbf{P}\mathbf{x}$는 $\mathbb{R}^n$ 위의 전단사다. 따라서 $\dim(\operatorname{col}(\mathbf{B})) = \dim(\operatorname{col}(\mathbf{P}^{-1}\mathbf{A}\mathbf{P})) = \dim(\operatorname{col}(\mathbf{A}))$이다. $\square$
+    $$
+    \operatorname{tr}(\mathbf{B}) = \operatorname{tr}(\mathbf{P}^{-1}(\mathbf{A}\mathbf{P})) = \operatorname{tr}((\mathbf{A}\mathbf{P})\mathbf{P}^{-1}) = \operatorname{tr}(\mathbf{A})
+    $$
+
+    이다(연습문제 2).
+
+    **4 (행렬식).** $\det$의 곱셈성에서 $\det(\mathbf{B}) = \det(\mathbf{P}^{-1})\det(\mathbf{A})\det(\mathbf{P}) = \det(\mathbf{A})$이다. 1번의 특성다항식에 $\lambda = 0$을 넣어도 같은 결론이 나온다.
+
+    **5 (계수).** $\mathbf{P}$가 가역이면 $\operatorname{col}(\mathbf{A}\mathbf{P}) = \operatorname{col}(\mathbf{A})$이다($\mathbf{P}$의 열이 $\mathbb{R}^n$을 생성하므로 $\mathbf{A}\mathbf{P}$의 열이 $\mathbf{A}$의 열과 같은 공간을 생성한다). 또 $\operatorname{col}(\mathbf{P}^{-1}\mathbf{M}) = \mathbf{P}^{-1}\operatorname{col}(\mathbf{M})$이고 $\mathbf{P}^{-1}$은 동형사상이므로 차원을 바꾸지 않는다. 두 단계를 합치면
+
+    $$
+    \operatorname{rank}(\mathbf{B}) = \dim \mathbf{P}^{-1}\operatorname{col}(\mathbf{A}\mathbf{P}) = \dim\operatorname{col}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})
+    $$
+
+    이다.
+
+    **6 (최소다항식).** 임의의 다항식 $f$에 대해 $f(\mathbf{B}) = \mathbf{P}^{-1}f(\mathbf{A})\mathbf{P}$이다(연습문제 6). 따라서 $f(\mathbf{A}) = \mathbf{O}$와 $f(\mathbf{B}) = \mathbf{O}$가 동등하므로, $\mathbf{A}$를 없애는 다항식 전체와 $\mathbf{B}$를 없애는 다항식 전체가 같은 집합이고, 그중 최고차항의 계수가 1인 최소 차수 원소도 같다.
+
+    **7 (기하적 중복도).** $\mathbf{B} - \lambda\mathbf{I} = \mathbf{P}^{-1}(\mathbf{A} - \lambda\mathbf{I})\mathbf{P}$이므로 5번을 $\mathbf{A} - \lambda\mathbf{I}$에 적용하면 계수가 같고, 따라서 차원정리에 의해 영공간의 차원도 같다. $\square$
+
+### 닮음의 완전 불변량
+
+정리 1 의 목록은 길지만 어느 것도 닮음류를 **완전히** 결정하지는 못한다. 완전 불변량은 하나 더 위에 있다.
+
+<div class="thmbox" markdown>
+
+### 정리 2. 조르당 형은 닮음의 완전 불변량 { .thm }
+
+$\mathbf{A}, \mathbf{B} \in \mathbb{C}^{n \times n}$에 대해, $\mathbf{A}$와 $\mathbf{B}$가 닮을 필요충분조건은 둘의 조르당 표준형이 (조르당 블록의 순서를 무시하고) 같은 것이다.
+
+</div>
+
+??? proof "증명"
+
+    $(\Rightarrow)$ 조르당 표준형 정리에 의해 $\mathbf{A} = \mathbf{S}\mathbf{J}\mathbf{S}^{-1}$인 가역 $\mathbf{S}$와 조르당 형 $\mathbf{J}$가 존재한다. $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{R} = \mathbf{S}^{-1}\mathbf{P}$로 두고
+
+    $$
+    \mathbf{B} = \mathbf{P}^{-1}\mathbf{S}\mathbf{J}\mathbf{S}^{-1}\mathbf{P} = \mathbf{R}^{-1}\mathbf{J}\mathbf{R}
+    $$
+
+    이므로 $\mathbf{B}$도 같은 $\mathbf{J}$와 닮는다. 조르당 형의 유일성(블록의 순서 제외)에 의해 $\mathbf{B}$의 조르당 형은 $\mathbf{J}$다.
+
+    $(\Leftarrow)$ 둘 다 같은 $\mathbf{J}$와 닮으면, 닮음이 동치관계(위의 대칭성과 추이성)이므로 서로 닮는다. $\square$
+
+!!! danger "정리 1 의 역은 거짓이다"
+    특성다항식이(따라서 고윳값·대각합·행렬식이 모두) 같아도 닮은 것은 아니다. 가장 짧은 반례는
+
+    $$
+    \mathbf{N} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \qquad \mathbf{O} = \begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix}
+    $$
+
+    이다. 둘 다 특성다항식이 $\lambda^2$이고 $\operatorname{tr} = \det = 0$이다. 그러나 $\operatorname{rank}(\mathbf{N}) = 1 \neq 0 = \operatorname{rank}(\mathbf{O})$이므로 정리 1 의 5번에 걸려 닮을 수 없다. 계수까지 맞춰 놓아도 여전히 부족하다. 연습문제 3 의 $2\mathbf{I}$와 $\begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$는 특성다항식·대각합·행렬식·계수가 모두 같지만 기하적 중복도가 달라 닮지 않는다.
 
 ## 불변량이 아닌 성질
 
 모든 행렬 성질이 닮음에서 보존되는 것은 아니다. 특히 다음과 같다.
 
-- **대칭성**은 불변이 아니다. 대칭행렬이 대칭이 아닌 행렬과 닮을 수 있다(기저변환행렬 $\mathbf{P}$가 직교행렬일 필요는 없다).
-- **양정치성**은 일반적인 닮음에서 불변이 아니다. 다만 양정치성의 고윳값에 의한 특성화는 불변이다.
+- **고유벡터**는 불변이 아니다. 고윳값은 공유하지만 고유벡터는 공유하지 않는다. $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이면 $\mathbf{B}(\mathbf{P}^{-1}\mathbf{v}) = \mathbf{P}^{-1}\mathbf{A}\mathbf{v} = \lambda(\mathbf{P}^{-1}\mathbf{v})$이므로, $\mathbf{B}$의 고유벡터는 $\mathbf{A}$의 고유벡터를 $\mathbf{P}^{-1}$로 옮긴 것이다. 고유공간은 **대응**되지만 같지는 않다. 고윳값은 변환의 성질이고 고유벡터는 좌표의 성질이기 때문이다.
+- **대칭성**은 불변이 아니다. 대칭행렬이 대칭이 아닌 행렬과 닮을 수 있다(연습문제 7). 기저변환행렬 $\mathbf{P}$가 직교행렬일 필요는 없다.
+- **양정치성**은 불변이 아니다. 여기서 양정치성은 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0$인 것을 말한다. $\mathbf{A} = \operatorname{diag}(1, 100)$과 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$을 잡으면 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 1 & -99 \\ 0 & 100 \end{pmatrix}$인데, $\mathbf{x} = (1, t)^T$에서 $\mathbf{x}^T\mathbf{B}\mathbf{x} = 1 - 99t + 100t^2$이고 이 이차식의 판별식 $99^2 - 400 > 0$이라 어떤 $t$에서 음수가 된다. **고윳값이 모두 양수라는 성질은 불변이지만, 이차형식의 부호는 불변이 아니다.** 둘이 동등해지는 것은 행렬이 대칭일 때뿐이다(이 절의 "양정치행렬" 쪽).
 - **개별 성분**은 당연히 바뀐다.
 
-기저변환행렬 $\mathbf{P}$를 직교행렬($\mathbf{P}^T = \mathbf{P}^{-1}$)로 제한하면, 그 결과인 **직교닮음** $\mathbf{B} = \mathbf{P}^T\mathbf{A}\mathbf{P}$는 대칭성을 보존한다. 스펙트럼 정리가 직교대각화를 내놓는 이유가 여기에 있다.
+기저변환행렬 $\mathbf{P}$를 직교행렬($\mathbf{P}^T = \mathbf{P}^{-1}$)로 제한하면, 그 결과인 **직교닮음** $\mathbf{B} = \mathbf{P}^T\mathbf{A}\mathbf{P}$는 대칭성을 보존한다(연습문제 8). 스펙트럼 정리가 직교대각화를 내놓는 이유가 여기에 있다.
 
 ## 예
 
@@ -149,7 +205,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 ??? success "풀이"
     두 행렬 모두 고윳값이 $\lambda_1 = 1$과 $\lambda_2 = 3$이다($\mathbf{B}$는 이 값들을 대각에 갖는 대각행렬이고, $\mathbf{A}$는 이 값들을 대각에 갖는 상삼각행렬이다).
 
-    $\mathbf{A}$의 고유벡터는 $\lambda = 1$에 대해 $\mathbf{v}_1 = (1, 0)^T$이고, $\lambda = 3$에 대해서는 $(A - 3I)\mathbf{v} = 0$을 풀어 $\mathbf{v}_2 = (1, 1)^T$이다.
+    $\mathbf{A}$의 고유벡터는 $\lambda = 1$에 대해 $\mathbf{v}_1 = (1, 0)^T$이고, $\lambda = 3$에 대해서는 $(\mathbf{A} - 3\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀어 $\mathbf{v}_2 = (1, 1)^T$이다.
 
     $\mathbf{B}$의 대각이 $\{3, 1\}$ 순서이므로 $\lambda = 3$의 고유벡터가 첫 열에 오도록 고유벡터를 열로 배열한다: $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$, $\mathbf{P}^{-1} = \begin{pmatrix} 0 & 1 \\ 1 & -1 \end{pmatrix}$.
 
@@ -303,7 +359,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에
 
     이다. 가운데 등식에서 $\mathbf{P}^{-1}$과 $\mathbf{P}$를 합의 밖으로 묶어낼 수 있는 것이 핵심이다.
 
-    **따름정리.** $f(\mathbf{A}) = \mathbf{O}$이면 $f(\mathbf{B}) = \mathbf{P}^{-1}\mathbf{O}\mathbf{P} = \mathbf{O}$이다. 곧 **최소다항식이 닮음 불변량**이라는 사실(본문 정리의 6번)이 여기서 따라 나온다.
+    **따름정리.** $f(\mathbf{A}) = \mathbf{O}$이면 $f(\mathbf{B}) = \mathbf{P}^{-1}\mathbf{O}\mathbf{P} = \mathbf{O}$이다. 곧 **최소다항식이 닮음 불변량**이라는 사실(정리 1 의 6번)이 여기서 따라 나온다.
 
     이 성질은 다항식을 넘어 수렴하는 멱급수에도 그대로 확장된다. 예컨대 행렬 지수함수는 $e^{\mathbf{B}} = \mathbf{P}^{-1}e^{\mathbf{A}}\mathbf{P}$를 만족한다. $\square$
 
@@ -482,4 +538,8 @@ $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^T\ma
 
 ## 정리하며
 
-두 행렬이 서로 다른 기저에서 같은 선형변환을 나타낼 때 이 둘은 닮았다. 닮은 행렬은 좌표계의 선택에서만 다를 뿐, 고윳값·대각합·행렬식·계수·특성다항식 등 변환의 본질적 성질을 모두 공유한다. 다음 주제인 대각화가 가장 중요한 특수한 경우다. 행렬이 대각이 되는 기저를 찾아 계산과 해석을 단순하게 만드는 것이다.
+두 행렬이 서로 다른 기저에서 같은 선형변환을 나타낼 때 이 둘은 닮았다. 닮은 행렬은 좌표계의 선택에서만 다를 뿐, 특성다항식·고윳값·대각합·행렬식·계수·최소다항식·기하적 중복도 등 변환의 본질적 성질을 모두 공유한다. 반면 **고유벡터·대칭성·양정치성은 공유하지 않는다.** 고유벡터는 $\mathbf{P}^{-1}$로 옮겨지고, 대칭성과 이차형식의 부호는 기저를 직교가 아닌 방향으로 비틀면 깨진다.
+
+역은 성립하지 않는다는 점도 기억해 둘 만하다. 정리 1 의 불변량이 모두 일치해도 닮았다고 결론지을 수 없고, 닮음류를 완전히 결정하는 것은 조르당 형이다(정리 2).
+
+다음 주제인 대각화가 가장 중요한 특수한 경우다. 행렬이 대각이 되는 기저를 찾아 계산과 해석을 단순하게 만드는 것이다.

@@ -16,7 +16,7 @@ $$
 
 </div>
 
-단위행렬 $\mathbf{I}$와 영행렬 $\mathbf{0}$은 자명하게 멱등이다. 흥미로운 경우는 사영행렬에서 나오는데, 이들은 멱등이면서 $\mathbf{I}$도 $\mathbf{0}$도 아니다.
+단위행렬 $\mathbf{I}$와 영행렬 $\mathbf{0}$은 자명하게 멱등이다. 흥미로운 경우는 $\mathbf{I}$도 $\mathbf{0}$도 아닌 멱등행렬이며, 이들이 바로 **사영**이다. 다만 여기서 곧바로 갈라지는 길이 하나 있다. 멱등성만으로는 사영이 **직교**사영임을 보장하지 못하고, 그러려면 대칭성이 따로 필요하다. 정리 3 에서 이 점을 정확히 짚는다.
 
 ## 멱등행렬의 고윳값
 
@@ -54,7 +54,7 @@ $$
 
 ??? proof "증명"
 
-    대각합은 (중복도를 포함한) 고윳값의 합과 같다. 고윳값이 0 아니면 1이므로 대각합은 $1$의 개수를 세는 셈이고, 이는 고윳값 1의 고유공간의 차원과 같다. 멱등행렬에서 이 고유공간은 정확히 열공간이므로(연습문제 1) 그 차원이 계수와 같다. $\square$
+    대각합은 (대수적 중복도를 포함한) 고윳값의 합과 같다. 정리 1 에 의해 고윳값이 0 아니면 1이므로 대각합은 고윳값 $1$의 **대수적** 중복도를 세는 셈이다. 그런데 멱등행렬은 대각화 가능하므로(아래 「대각화 가능성」) 대수적 중복도와 기하적 중복도가 일치하고, 따라서 그 수는 고윳값 1의 고유공간의 차원과 같다. 멱등행렬에서 이 고유공간은 정확히 열공간이므로(연습문제 1) 그 차원이 계수와 같다. $\square$
 
     이 항등식은 직접적인 통계적 해석을 갖는다. 모자 행렬의 대각합은 추정된 모수의 개수와 같고, 잔차생성행렬의 대각합은 잔차 자유도와 같다.
 
@@ -90,7 +90,13 @@ $$
 
 ### 열공간은 고정점의 집합이다
 
-벡터 $\mathbf{x}$가 멱등행렬 $\mathbf{A}$의 열공간에 속할 필요충분조건은 $\mathbf{A}\mathbf{x} = \mathbf{x}$인 것이다. 열공간은 정확히 고윳값 1의 고유공간이고, 영공간은 고윳값 0의 고유공간이다. 이 둘이 함께 $\mathbb{R}^n$을 분해한다.
+벡터 $\mathbf{x}$가 멱등행렬 $\mathbf{A}$의 열공간에 속할 필요충분조건은 $\mathbf{A}\mathbf{x} = \mathbf{x}$인 것이다. 열공간은 정확히 고윳값 1의 고유공간이고, 영공간은 고윳값 0의 고유공간이다. 이 둘이 $\mathbb{R}^n$을 **직합**으로 분해한다.
+
+$$
+\mathbb{R}^n = \operatorname{Col}(\mathbf{A}) \oplus \ker(\mathbf{A})
+$$
+
+여기서 "직합"은 두 부분공간이 $\{\mathbf{0}\}$에서만 만나고 합쳐서 $\mathbb{R}^n$이 된다는 뜻일 뿐이다. **두 부분공간이 서로 직교한다는 뜻은 아니다.** 직교성은 대칭성을 더해야 나오며, 그것이 정리 3 이다.
 
 ### 대각화 가능성
 
@@ -99,6 +105,70 @@ $$
 ### 교환되는 멱등행렬의 곱
 
 $\mathbf{A}$와 $\mathbf{B}$가 멱등이고 $\mathbf{A}\mathbf{B} = \mathbf{B}\mathbf{A}$이면 $\mathbf{A}\mathbf{B}$도 멱등이다. (교환성이 없으면 성립하지 않을 수 있다.)
+
+## 멱등과 직교사영은 같은 말이 아니다
+
+멱등행렬을 통틀어 "사영행렬"이라 부르는 것은 맞지만, 회귀에서 실제로 쓰는 것은 그보다 좁은 **직교**사영이다. 둘을 가르는 것이 대칭성이다.
+
+<div class="thmbox" markdown>
+
+### 정리 3. 직교사영은 대칭인 멱등행렬뿐이다 { .thm }
+
+$\mathbf{A} \in \mathbb{R}^{n \times n}$이 멱등이라 하자. 그러면
+
+$$
+\ker(\mathbf{A}) = \operatorname{Col}(\mathbf{A})^\perp
+\quad\Longleftrightarrow\quad
+\mathbf{A} = \mathbf{A}^T
+$$
+
+이다. 즉 멱등행렬이 자기 열공간 위로의 **직교**사영일 필요충분조건은 그것이 대칭인 것이다.
+
+</div>
+
+??? proof "증명"
+
+    ($\Leftarrow$) $\mathbf{A} = \mathbf{A}^T$라 하자. $\mathbf{u} \in \operatorname{Col}(\mathbf{A})$이면 $\mathbf{u} = \mathbf{A}\mathbf{w}$로 쓸 수 있고, $\mathbf{v} \in \ker(\mathbf{A})$이면
+
+    $$
+    \mathbf{u}^T\mathbf{v} = (\mathbf{A}\mathbf{w})^T\mathbf{v} = \mathbf{w}^T\mathbf{A}^T\mathbf{v} = \mathbf{w}^T\mathbf{A}\mathbf{v} = 0
+    $$
+
+    이다. 따라서 $\ker(\mathbf{A}) \subseteq \operatorname{Col}(\mathbf{A})^\perp$이고, 계수–퇴화차수 정리에 의해 두 공간의 차원이 모두 $n - \operatorname{rank}(\mathbf{A})$이므로 실은 같다.
+
+    ($\Rightarrow$) $\ker(\mathbf{A}) \subseteq \operatorname{Col}(\mathbf{A})^\perp$라 하자. 임의의 $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$에 대해 $\mathbf{x} = \mathbf{A}\mathbf{x} + (\mathbf{I}-\mathbf{A})\mathbf{x}$로 쪼개면 $\mathbf{A}\mathbf{x} \in \operatorname{Col}(\mathbf{A})$이고 $(\mathbf{I}-\mathbf{A})\mathbf{x} \in \ker(\mathbf{A})$이므로($\mathbf{A}(\mathbf{I}-\mathbf{A}) = \mathbf{A} - \mathbf{A}^2 = \mathbf{0}$) 두 조각은 직교한다. 그러면
+
+    $$
+    \mathbf{x}^T\mathbf{A}\mathbf{y} = (\mathbf{A}\mathbf{x})^T(\mathbf{A}\mathbf{y}) + \bigl((\mathbf{I}-\mathbf{A})\mathbf{x}\bigr)^T(\mathbf{A}\mathbf{y}) = (\mathbf{A}\mathbf{x})^T(\mathbf{A}\mathbf{y})
+    $$
+
+    이고, 같은 계산을 $\mathbf{y}$ 쪽에 적용하면
+
+    $$
+    \mathbf{x}^T\mathbf{A}^T\mathbf{y} = (\mathbf{A}\mathbf{x})^T\mathbf{y} = (\mathbf{A}\mathbf{x})^T(\mathbf{A}\mathbf{y}) + (\mathbf{A}\mathbf{x})^T(\mathbf{I}-\mathbf{A})\mathbf{y} = (\mathbf{A}\mathbf{x})^T(\mathbf{A}\mathbf{y})
+    $$
+
+    이다. 곧 모든 $\mathbf{x}, \mathbf{y}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{y} = \mathbf{x}^T\mathbf{A}^T\mathbf{y}$이므로 $\mathbf{A} = \mathbf{A}^T$다. $\square$
+
+대칭이 아닌 멱등행렬은 실제로 존재한다. 연습문제 3 의
+
+$$
+\mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}
+$$
+
+은 멱등이지만 $\operatorname{Col}(\mathbf{A}) = \operatorname{span}\{(1,0)^T\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^T\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗사영**이라 하며, 0.3절의 「사영행렬」과 「직교사영행렬」에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
+
+| | 멱등 $\mathbf{A}^2 = \mathbf{A}$ | 멱등 **그리고** 대칭 |
+|---|---|---|
+| 이름 | 사영(빗사영을 포함) | 직교사영 |
+| 고윳값 | $0$ 또는 $1$ | $0$ 또는 $1$ |
+| $\operatorname{tr} = \operatorname{rank}$ | 성립 | 성립 |
+| $\ker(\mathbf{A}) \perp \operatorname{Col}(\mathbf{A})$ | 일반적으로 거짓 | 성립 |
+| 최근접점을 준다 | 아니다 | 그렇다(최소제곱) |
+| 제곱합의 피타고라스 분해 | 아니다 | 그렇다 |
+| $\mathbf{y} \sim N(\mathbf{0},\sigma^2\mathbf{I})$에서 $\mathbf{y}^T\mathbf{A}\mathbf{y}/\sigma^2 \sim \chi^2_{\operatorname{rank}\mathbf{A}}$ | 아니다 | 그렇다(연습문제 10) |
+
+마지막 두 줄이 핵심이다. 이 쪽에서 앞서 적은 분산분석 분해 $\|\mathbf{y}\|^2 = \|\mathbf{H}\mathbf{y}\|^2 + \|\mathbf{M}\mathbf{y}\|^2$과 카이제곱 자유도 계산은 $\mathbf{H}$가 멱등인 것만으로는 성립하지 않고 **대칭이기도 해야** 성립한다. 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$가 대칭이라는 사실(연습문제 4)이 그래서 형식적인 확인이 아니다.
 
 ## 예
 
@@ -438,4 +508,4 @@ $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수
 
 ## 정리하며
 
-멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다. 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이다. 회귀에서 모자 행렬과 잔차생성행렬이 모두 멱등이며, 그 대각합이 F-검정, t-검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.
+멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며(정리 1), 대각화 가능하고, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다(정리 2). 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이며 $\mathbb{R}^n = \operatorname{Col}(\mathbf{A}) \oplus \ker(\mathbf{A})$이다. 그러나 이 직합이 **직교**분해가 되는 것은 $\mathbf{A}$가 대칭일 때뿐이다(정리 3). 회귀에서 모자 행렬과 잔차생성행렬은 멱등이면서 대칭이므로 직교사영이고, 그래서 제곱합이 피타고라스식으로 쪼개지며 대각합이 F-검정, t-검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.

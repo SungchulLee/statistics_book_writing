@@ -37,6 +37,79 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 
 이 책은 객체지향 형태만 쓴다. pyplot 형태는 `plt.subplots`, `plt.show`, `plt.savefig`에만 남겨 둔다.
 
+## 이 책의 그림 규약
+
+이 책의 그림은 한글 이름표를 달고, 정해진 팔레트를 쓰고, 같은 방식으로 저장된다. 모든 그림 코드가 아래 머리글로 시작하므로 그대로 베껴 쓰면 된다. 뒤의 보기와 연습문제에서는 지면을 아끼려고 이 머리글을 되풀이하지 않지만, **직접 실행할 때는 반드시 앞에 붙여야 한다.** 붙이지 않으면 그림 속 한글이 모두 네모(□)로 나온다.
+
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 그림 머리글과 저장 규약
+
+</div>
+
+```python
+"""이 책의 모든 그림 코드가 공유하는 머리글."""
+
+import matplotlib
+matplotlib.use("Agg")          # 창을 띄우지 않고 파일로만 그린다
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호(U+2212)가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
+
+# 이 책이 쓰는 팔레트. 같은 뜻에는 언제나 같은 색을 쓴다.
+INK = "#37474F"                              # 글자, 축, 기준선
+BLUE, BLUE_L = "#1565C0", "#DCEBFB"          # 주된 계열과 그 채움색
+ORANGE, ORANGE_L = "#E65100", "#FFE0B2"      # 대조 계열
+GREEN, GREEN_L = "#33691E", "#C5E1A5"        # 셋째 계열
+PURPLE = "#6A1B9A"                           # 넷째 계열
+MUTED = "#90A4AE"                            # 참고선, 배경 요소
+RED = "#D32F2F"                              # 경고, 기각역
+
+x = np.linspace(-3.5, 3.5, 400)
+pdf = np.exp(-x ** 2 / 2) / np.sqrt(2 * np.pi)
+
+fig, ax = plt.subplots(figsize=(6, 3.2))
+ax.fill_between(x, 0, pdf, color=BLUE_L)
+ax.plot(x, pdf, color=BLUE, lw=2, label="표준정규 밀도")
+ax.axvline(-1.96, color=RED, lw=1.2, ls="--")
+ax.axvline(1.96, color=RED, lw=1.2, ls="--", label="$\\pm 1.96$")
+ax.set_xlabel("표준화 점수 $z$")     # 한글은 반드시 $...$ 밖에 둔다
+ax.set_ylabel("밀도")
+ax.spines[["top", "right"]].set_visible(False)
+ax.legend(frameon=False)
+fig.savefig("figure_conventions.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
+```
+
+![이 책의 그림 규약을 따른 표준정규 밀도](./img/matplotlib_basics_conventions.png)
+
+저장 인수 세 개가 모두 필요하다. `dpi=170`은 화면과 인쇄 모두에서 또렷한 해상도이고, `facecolor="white"`가 없으면 어두운 배경의 문서에서 축 이름표가 보이지 않으며, `bbox_inches="tight"`가 없으면 가장자리에 쓸데없는 흰 여백이 남는다.
+
+!!! warning "mathtext 는 한글을 그리지 못한다"
+    Matplotlib의 수식 엔진(mathtext)은 `$...$` 안의 글자를 수학 글꼴로 바꾸어 그리는데,
+    그 글꼴에는 한글 글리프가 없다. 그래서 `ax.set_title(r"$평균 \mu$")`는 오류도 경고도
+    없이 **네모 상자**를 찍는다. 한글은 언제나 `$...$` **밖에** 두어라.
+
+    ```text
+    나쁨:  ax.set_xlabel("$표본크기 n$")
+    좋음:  ax.set_xlabel("표본크기 $n$")
+    ```
+
+    mathtext는 LaTeX의 부분집합일 뿐이라는 점도 함께 기억하라. 다음 둘은 `ValueError`를 던진다.
+
+    - `$\sqrt n$` — 중괄호를 생략할 수 없다. `$\sqrt{n}$`으로 써야 한다.
+    - `$\begin{pmatrix} \dots \end{pmatrix}$` — `\begin{...}` 환경을 아예 모른다.
+      그림 안에 행렬을 넣어야 한다면 표 형태로 직접 그리거나 본문으로 빼라.
+
+    마지막으로 `axes.unicode_minus = False`를 빠뜨리면, 음수 눈금의 유니코드 빼기 기호
+    U+2212가 한글 글꼴에 없어 `Glyph 8722 missing from current font` 경고와 함께 네모로
+    찍힌다. 이 설정은 빼기 기호를 평범한 ASCII 하이픈으로 바꾸어 그 문제를 없앤다.
+
 ## 통계를 위한 핵심 그림 유형
 
 | 그림 | 메서드 | 쓰임새 |
@@ -50,9 +123,11 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 
 ## 사용자화의 핵심
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. Axes 사용자화와 저장 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Axes 사용자화와 저장
+
+</div>
 
 ```python
 # 그림을 손보는 일은 거의 전부 Axes 객체의 메서드로 이루어진다.
@@ -65,20 +140,20 @@ ax.grid(True, alpha=0.3)        # 격자는 옅게. 자료보다 튀면 안 된�
 ax.legend(loc="best", frameon=False)
 fig.tight_layout()              # 축 이름표가 잘리지 않도록 여백을 맞춘다
 # bbox_inches="tight" 를 주어야 저장본에서도 이름표가 잘리지 않는다.
-fig.savefig("figure.png", dpi=150, bbox_inches="tight")
+fig.savefig("figure.png", dpi=170, facecolor="white", bbox_inches="tight")
 ```
 
-`tight_layout`은 여러 패널이 있는 그림에서 축 이름표가 잘리거나 겹치는 것을 막는다. `dpi=150`이면 화면과 대부분의 인쇄 용도에 충분하고, `dpi=300`은 최종 출판용이 아니라면 과하다.
-
-</div>
+`tight_layout`은 여러 패널이 있는 그림에서 축 이름표가 잘리거나 겹치는 것을 막는다. 해상도는 앞 절에서 정한 대로 `dpi=170`을 쓴다. 화면과 대부분의 인쇄 용도에 충분하며, `dpi=300`은 최종 출판용이 아니라면 과하다.
 
 ## pandas와의 연동
 
 DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. pandas 그림 메서드로 세 패널 그리기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> pandas 그림 메서드로 세 패널 그리기
+
+</div>
 
 ```python
 """DataFrame 이 자체로 갖고 있는 그림 메서드로 세 패널을 한 번에 그린다."""
@@ -108,11 +183,11 @@ plt.show()
 
 빠르게 탐색할 때 편리하다. 최종 그림에서는 Matplotlib을 직접 호출하는 편이 더 세밀하게 제어할 수 있다.
 
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> Matplotlib으로 기본 시각화하기
+
 </div>
-
-<div class="codebox" markdown>
-
-## 예제 3. Matplotlib으로 기본 시각화하기 { .eg }
 
 ```python
 import numpy as np
@@ -146,8 +221,6 @@ plt.show()
 ![히스토그램과 Q-Q 그림](./img/matplotlib_basics_92.png)
 
 히스토그램은 적합도를 눈으로 확인하게 해주고, Q-Q 그림은 직선에서 벗어나는 정도를 보여줌으로써 분석적으로 확인하게 해준다. 통계적인 그림은 이 둘 중 하나 없이는 완성되는 일이 드물다.
-
-</div>
 
 ## 연습문제
 
@@ -297,16 +370,22 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff easy" title="쉬움"></span>
-연습문제 5의 그림을 여백 없이 200 DPI PNG로 디스크에 저장하라. `bbox_inches="tight"` 인수는 무엇을 하며 언제 중요한가?
+연습문제 5의 그림을 이 책의 저장 규약대로 디스크에 저장하라. `dpi`, `facecolor`, `bbox_inches` 세 인수는 각각 무엇을 하며 언제 중요한가?
 
 </div>
 
 ??? success "풀이"
     ```python
-    fig.savefig("residuals.png", dpi=200, bbox_inches="tight")
+    fig.savefig("residuals.png", dpi=170, facecolor="white", bbox_inches="tight")
     ```
 
-    `dpi=200`은 래스터화 해상도를 조절한다. `bbox_inches="tight"`는 가장자리의 빈 여백을 제외하도록 그림의 경계 상자를 다시 계산한다. 그림을 다른 문서(LaTeX, 워드, 슬라이드)에 끼워 넣을 때 가장 중요하다. 이 옵션이 없으면 savefig가 쓰이지 않은 공간까지 포함한 캔버스 전체를 저장하여, 삽입된 이미지에 보기 싫은 흰 테두리가 생긴다. `dpi=200, bbox_inches="tight"` 조합이 이 책에 실리는 그림의 권장 기본값이다.
+    `dpi=170`은 래스터화 해상도를 조절한다. 값이 작으면 글자가 뭉개지고 크면 파일만 무거워지는데, $170$이 화면과 인쇄 사이의 타협점이라 이 책의 기본값이다.
+
+    `facecolor="white"`는 그림 바깥 여백의 배경색을 흰색으로 못 박는다. 이것이 없으면 저장본의 배경이 `figure.facecolor` 기본값을 따르는데, 어두운 배경의 문서나 투명 배경으로 저장한 경우 검은 축 이름표가 보이지 않게 된다.
+
+    `bbox_inches="tight"`는 가장자리의 빈 여백을 제외하도록 그림의 경계 상자를 다시 계산한다. 그림을 다른 문서(LaTeX, 워드, 슬라이드)에 끼워 넣을 때 가장 중요하다. 이 옵션이 없으면 savefig가 쓰이지 않은 공간까지 포함한 캔버스 전체를 저장하여, 삽입된 이미지에 보기 싫은 흰 테두리가 생긴다.
+
+    `dpi=170, facecolor="white", bbox_inches="tight"` 세 인수를 묶은 것이 이 책에 실리는 모든 그림의 저장 규약이다.
 
 <div class="drillbox" markdown>
 
@@ -352,7 +431,7 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     출력:
 
     ```
-    정규 N(0,1): 첨도   0.03   |z| > 3 인 관측  2개
+             정규 N(0,1): 첨도   0.03   |z| > 3 인 관측  2개
          t(3) — 두꺼운 꼬리: 첨도   3.42   |z| > 3 인 관측  5개
     ```
 
@@ -491,7 +570,7 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-관측이 수만 개인 산점도는 점이 겹쳐 쌓여 밀도를 볼 수 없다. 이 **과대plotting** 문제를 세 가지 방법으로 해결하고, 색지도 선택이 왜 중요한지 설명하라.
+관측이 수만 개인 산점도는 점이 겹쳐 쌓여 밀도를 볼 수 없다. 이 **과대그림(overplotting)** 문제를 세 가지 방법으로 해결하고, 색지도 선택이 왜 중요한지 설명하라.
 
 </div>
 
@@ -535,7 +614,7 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     관측 50,000개,  상관계수 0.7087
     ```
 
-    ![과대plotting 해결 방법 네 가지](./img/matplotlib_basics_446.png)
+    ![과대그림 문제와 세 가지 해결책](./img/matplotlib_basics_446.png)
 
     **세 가지 처방.**
 
@@ -558,6 +637,7 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 이 절은 그림을 **읽고 고칠 수 있는 객체**로 다루는 법을 익혔다.
 
 - **두 가지 API.** `plt.*` 는 현재 그림에 암묵적으로 작용하고, `fig, ax = plt.subplots()` 는 그림과 축을 명시적으로 잡는다. **여러 개의 축을 다루는 순간 후자만이 통한다.** 이 책의 그림은 모두 후자를 쓴다.
+- **그림 규약.** `matplotlib.use("Agg")`, 한글 글꼴 지정과 `axes.unicode_minus = False`, 정해진 팔레트, 그리고 `dpi=170, facecolor="white", bbox_inches="tight"` 로 저장하기. **한글은 `$...$` 밖에 둔다** — mathtext 에는 한글 글리프가 없다. 이 책의 모든 그림 코드가 이 머리글로 시작한다.
 - **그림 유형과 쓰임새.** 한 변수의 분포는 히스토그램, 두 변수의 관계는 산점도, 집단 비교는 상자그림, 정규성 진단은 Q-Q 그림이다. **무엇을 묻고 있는지가 그림을 고른다.**
 - **`density=True`.** 히스토그램의 세로축을 밀도로 바꾸면 이론적 확률밀도함수를 같은 축에 겹쳐 그릴 수 있다. 4장에서 분포를 확인할 때 계속 쓰는 수법이다.
 - **pandas 와의 연동.** `df.plot(ax=ax)` 로 두 세계를 잇되, 세밀한 조정은 축 객체에서 한다.

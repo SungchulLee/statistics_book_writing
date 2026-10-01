@@ -1,6 +1,6 @@
 # 대각화 가능 행렬의 대각형
 
-행렬에 적용할 수 있는 모든 닮음변환 가운데 가장 유용한 결과는 대각행렬이다. 대각화 가능한 행렬은 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 분해되며, 이 덕분에 거듭제곱, 지수함수, 이차형식의 계산이 간단해진다. 통계에서 공분산행렬은 대칭이므로 언제나 대각화 가능하고, 그 대각형이 주성분을 드러낸다. 이 절에서는 대각화 가능성을 정의하고 핵심 존재 정리를 진술한 뒤 계산 방법을 보인다.
+행렬에 적용할 수 있는 모든 닮음변환 가운데 가장 유용한 결과는 대각행렬이다. 대각화 가능한 행렬은 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 분해되며, 이 덕분에 거듭제곱, 지수함수, 이차형식의 계산이 간단해진다. 통계에서 공분산행렬은 대칭이므로 언제나 대각화 가능하고, 그 대각형이 주성분을 드러낸다. 이 쪽에서는 대각화 가능성을 정의하고 정확한 판정 정리를 증명한 뒤 계산 방법을 보인다.
 
 <div class="defn" markdown>
 
@@ -24,13 +24,13 @@ $\mathbf{P}$의 열은 $\mathbf{A}$의 고유벡터이고, $\boldsymbol{\Lambda}
 
 ### 정리 1. 대각화 가능성의 판정 { .thm }
 
-행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대각화 가능할 필요충분조건은 일차독립인 고유벡터를 $n$개 갖는 것이다.
+행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이 (실수 위에서) 대각화 가능할 필요충분조건은 $\mathbb{R}^n$의 기저를 이루는 고유벡터 $n$개를 갖는 것, 곧 일차독립인 실수 고유벡터를 $n$개 갖는 것이다.
 
 </div>
 
-??? proof "증명 개요"
+??? proof "증명"
 
-    $\mathbf{A}$가 일차독립인 고유벡터 $\mathbf{v}_1, \dots, \mathbf{v}_n$을 가지면 이들을 $\mathbf{P}$의 열로 놓는다. 그러면 $\mathbf{P}$는 (열들이 일차독립이므로) 가역이고, 고윳값 관계에 의해
+    $(\Leftarrow)$ $\mathbf{A}$가 일차독립인 고유벡터 $\mathbf{v}_1, \dots, \mathbf{v}_n$을 가지면 이들을 $\mathbf{P}$의 열로 놓는다. 그러면 $\mathbf{P}$는 (열들이 일차독립이므로) 가역이고, 고윳값 관계에 의해
 
     $$
     \mathbf{A}\mathbf{P} = \mathbf{A}(\mathbf{v}_1 \mid \cdots \mid \mathbf{v}_n) = (\lambda_1\mathbf{v}_1 \mid \cdots \mid \lambda_n\mathbf{v}_n) = \mathbf{P}\boldsymbol{\Lambda}
@@ -38,19 +38,126 @@ $\mathbf{P}$의 열은 $\mathbf{A}$의 고유벡터이고, $\boldsymbol{\Lambda}
 
     이다. 양변 왼쪽에 $\mathbf{P}^{-1}$을 곱하면 $\boldsymbol{\Lambda} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$를 얻는다.
 
-    역으로 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이면 $\mathbf{A}\mathbf{P} = \mathbf{P}\boldsymbol{\Lambda}$이므로 $\mathbf{P}$의 각 열은 $\mathbf{A}$의 고유벡터다. $\mathbf{P}$가 가역이므로 이 $n$개의 고유벡터는 일차독립이다. $\square$
+    $(\Rightarrow)$ $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이면 $\mathbf{A}\mathbf{P} = \mathbf{P}\boldsymbol{\Lambda}$이므로 $\mathbf{P}$의 제 $i$ 열 $\mathbf{p}_i$는 $\mathbf{A}\mathbf{p}_i = \lambda_i\mathbf{p}_i$를 만족한다. $\mathbf{P}$가 가역이므로 $\mathbf{p}_i \neq \mathbf{0}$이고(따라서 고유벡터가 맞다) 이 $n$개의 열은 일차독립이다. $\square$
+
+!!! warning "실수 대각화와 복소수 대각화는 다르다"
+    정의 1 은 $\mathbf{P}$를 **실**가역행렬로 제한했다. 이 제한을 놓치면 정리 1 이 거짓이 된다. 회전행렬
+
+    $$
+    \mathbf{R} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}
+    $$
+
+    을 보자. 특성다항식은 $\lambda^2 + 1$이라 실수 근이 없다. 실수 고유벡터가 하나도 없으므로 $\mathbf{R}$는 실수 위에서 대각화 가능하지 않다. 기하적으로도 당연하다. $90^\circ$ 회전은 어떤 방향도 제자리에 두지 않는다.
+
+    그런데 $\mathbb{C}$ 위에서는 고윳값이 $\pm i$로 서로 다르고 고유벡터 $(1, \mp i)^T$가 $\mathbb{C}^2$의 기저를 이루므로 $\mathbf{R}$는 **복소수 위에서 대각화 가능하다.** 이 책에서 "대각화 가능"이라고만 쓰면 실수 위에서를 뜻하며, 복소수를 허용할 때는 그렇다고 밝힌다. 다행히 통계에 나오는 행렬은 거의 다 실대칭이라 이 구분이 문제되지 않는다.
+
+### 필요충분조건 — 중복도
+
+정리 1 은 쓸모가 있지만 고유벡터를 다 구해 봐야 판정이 되는 형태다. 특성다항식만 보고 판정하는 형태로 바꿔 쓸 수 있다.
+
+<div class="defn" markdown>
+
+### 정의 2. 대수적 중복도와 기하적 중복도 { .dfn }
+
+$\mathbf{A}$의 고윳값 $\lambda_0$에 대해
+
+- **대수적 중복도** $m_a(\lambda_0)$는 특성다항식에서 인수 $(\lambda - \lambda_0)$가 나타나는 차수다.
+- **기하적 중복도** $m_g(\lambda_0)$는 고유공간의 차원 $\dim\ker(\mathbf{A} - \lambda_0\mathbf{I})$다.
+
+</div>
+
+판정 정리를 세우는 데 보조 결과 두 개가 필요하다.
+
+<div class="thmbox" markdown>
+
+### 보조정리 1. 서로 다른 고윳값의 고유벡터는 일차독립 { .thm }
+
+$\lambda_1, \dots, \lambda_r$이 $\mathbf{A}$의 서로 다른 고윳값이고 각 $i$에 대해 $\mathbf{w}_i \in \ker(\mathbf{A} - \lambda_i\mathbf{I})$라 하자. 그러면
+
+$$
+\mathbf{w}_1 + \cdots + \mathbf{w}_r = \mathbf{0} \ \Longrightarrow\ \mathbf{w}_1 = \cdots = \mathbf{w}_r = \mathbf{0}
+$$
+
+이다. 따라서 고유공간들의 합은 직합이고, 각 고유공간에서 기저를 뽑아 모두 합치면 일차독립인 벡터 $\sum_{i=1}^r m_g(\lambda_i)$개를 얻는다.
+
+</div>
+
+??? proof "증명"
+
+    $r$에 대한 귀납법을 쓴다. $r = 1$이면 자명하다.
+
+    $r - 1$개까지 성립한다고 하고 $\mathbf{w}_1 + \cdots + \mathbf{w}_r = \mathbf{0}$이라 하자. 양변에 $\mathbf{A} - \lambda_r\mathbf{I}$를 곱하면 $(\mathbf{A} - \lambda_r\mathbf{I})\mathbf{w}_r = \mathbf{0}$이라 마지막 항이 사라지고, $i < r$에 대해서는 $(\mathbf{A} - \lambda_r\mathbf{I})\mathbf{w}_i = (\lambda_i - \lambda_r)\mathbf{w}_i$이므로
+
+    $$
+    \sum_{i=1}^{r-1} (\lambda_i - \lambda_r)\mathbf{w}_i = \mathbf{0}
+    $$
+
+    이 남는다. 각 항 $(\lambda_i - \lambda_r)\mathbf{w}_i$는 여전히 $\ker(\mathbf{A} - \lambda_i\mathbf{I})$에 들어 있으므로 귀납가정을 적용하면 $(\lambda_i - \lambda_r)\mathbf{w}_i = \mathbf{0}$이고, $\lambda_i \neq \lambda_r$이므로 $i < r$에 대해 $\mathbf{w}_i = \mathbf{0}$이다. 처음 식에 넣으면 $\mathbf{w}_r = \mathbf{0}$이다.
+
+    뒤쪽 주장: 각 고유공간 $\ker(\mathbf{A} - \lambda_i\mathbf{I})$에서 기저를 뽑아 모은 벡터들의 일차결합이 $\mathbf{0}$이면, 같은 고유공간에서 온 항끼리 묶은 부분합 $\mathbf{w}_i$들이 $\sum_i \mathbf{w}_i = \mathbf{0}$을 만족한다. 방금 보인 것에 의해 모든 $\mathbf{w}_i = \mathbf{0}$이고, 각 $i$의 기저가 일차독립이므로 계수가 모두 0 이다. $\square$
+
+<div class="thmbox" markdown>
+
+### 보조정리 2. 중복도 부등식 { .thm }
+
+$\mathbf{A}$의 모든 고윳값 $\lambda_0$에 대해 $1 \le m_g(\lambda_0) \le m_a(\lambda_0)$이다.
+
+</div>
+
+??? proof "증명"
+
+    $\lambda_0$가 고윳값이면 $\mathbf{A} - \lambda_0\mathbf{I}$가 특이행렬이므로 영공간이 자명하지 않아 $m_g \ge 1$이다.
+
+    $m_g = g$라 하고 고유공간의 기저 $\mathbf{v}_1, \dots, \mathbf{v}_g$를 잡아 전체 공간의 기저로 확장한 뒤 그 기저벡터들을 열로 쌓아 가역행렬 $\mathbf{S}$를 만든다. $\mathbf{A}\mathbf{v}_j = \lambda_0\mathbf{v}_j$이므로 $\mathbf{S}^{-1}\mathbf{A}\mathbf{S}$의 처음 $g$개 열은 $\lambda_0\mathbf{e}_j$가 되고, 따라서
+
+    $$
+    \mathbf{S}^{-1}\mathbf{A}\mathbf{S} = \begin{pmatrix} \lambda_0\mathbf{I}_g & \mathbf{C} \\ \mathbf{O} & \mathbf{D} \end{pmatrix}
+    $$
+
+    꼴의 블록상삼각행렬이 된다. 블록상삼각행렬의 행렬식은 대각 블록의 행렬식의 곱이므로
+
+    $$
+    \det(\mathbf{S}^{-1}\mathbf{A}\mathbf{S} - \lambda\mathbf{I}) = (\lambda_0 - \lambda)^g \det(\mathbf{D} - \lambda\mathbf{I}_{n-g})
+    $$
+
+    이다. 닮음은 특성다항식을 보존하므로(앞 쪽 "닮은 행렬" 정리 1) 이것이 $\mathbf{A}$의 특성다항식이고, 여기에 인수 $(\lambda - \lambda_0)$가 적어도 $g$번 들어 있다. 곧 $m_a \ge g = m_g$다. $\square$
+
+<div class="thmbox" markdown>
+
+### 정리 2. 중복도에 의한 판정 { .thm }
+
+$\mathbf{A} \in \mathbb{R}^{n \times n}$이 (실수 위에서) 대각화 가능할 필요충분조건은 다음 두 가지가 모두 성립하는 것이다.
+
+1. 특성다항식이 $\mathbb{R}$ 위에서 완전히 인수분해된다(모든 고윳값이 실수다).
+2. **모든** 고윳값 $\lambda_0$에서 $m_g(\lambda_0) = m_a(\lambda_0)$이다.
+
+복소수 위에서 대각화할 때는 1번이 대수학의 기본정리로 자동 성립하므로 2번만 조건으로 남는다.
+
+</div>
+
+??? proof "증명"
+
+    서로 다른 고윳값을 $\lambda_1, \dots, \lambda_r$이라 하자. 보조정리 1 에 의해 $\mathbf{A}$의 일차독립인 고유벡터의 최대 개수는 정확히 $\sum_{i=1}^r m_g(\lambda_i)$다. 한편 특성다항식의 차수가 $n$이므로 언제나 $\sum_{i=1}^r m_a(\lambda_i) \le n$이고, 등호는 1번이 성립할 때다.
+
+    $(\Leftarrow)$ 1번에서 $\sum_i m_a(\lambda_i) = n$이고 2번에서 $\sum_i m_g(\lambda_i) = \sum_i m_a(\lambda_i) = n$이므로, 일차독립인 실수 고유벡터가 $n$개 있다. 정리 1 에 의해 대각화 가능하다.
+
+    $(\Rightarrow)$ 대각화 가능하면 $\boldsymbol{\Lambda} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 실대각행렬이고 닮음이 특성다항식을 보존하므로 $\det(\mathbf{A} - \lambda\mathbf{I}) = \prod_{j=1}^n (\lambda_j - \lambda)$가 실수 일차식의 곱으로 쪼개져 1번이 성립한다. 또 정리 1 에 의해 일차독립인 고유벡터가 $n$개이므로 $\sum_i m_g(\lambda_i) = n = \sum_i m_a(\lambda_i)$이다. 보조정리 2 에서 항마다 $m_g(\lambda_i) \le m_a(\lambda_i)$인데 합이 같으므로 항마다 등호여야 한다. $\square$
 
 ### 충분조건
 
-대각화 가능성을 보장하는 중요한 충분조건이 몇 가지 있다.
+정리 2 가 정확한 판정이지만, 실제로는 다음 두 충분조건만으로 끝나는 경우가 많다.
 
-- **서로 다른 고윳값.** $\mathbf{A}$가 서로 다른 고윳값을 $n$개 가지면 대응하는 고유벡터들이 일차독립이므로 $\mathbf{A}$는 대각화 가능하다.
+- **서로 다른 실수 고윳값.** $\mathbf{A}$가 서로 다른 **실수** 고윳값을 $n$개 가지면 각 고윳값의 두 중복도가 모두 1 이므로 정리 2 의 두 조건이 성립한다. 대응하는 고유벡터들은 보조정리 1 에 의해 일차독립이다.
 - **대칭행렬.** 모든 실대칭행렬은 대각화 가능하다(스펙트럼 정리). 나아가 고유벡터를 정규직교로 고를 수 있으므로 $\mathbf{P}$가 직교행렬이 된다.
-- **대수적 중복도와 기하적 중복도가 일치.** 각 고윳값 $\lambda_i$에 대해 기하적 중복도(고유공간의 차원)가 대수적 중복도(특성다항식의 근으로서의 중복도)와 같다.
+
+!!! danger "충분조건일 뿐 필요조건이 아니다"
+    "고윳값이 서로 다르다"는 조건은 한쪽 방향으로만 쓸 수 있다. 항등행렬 $\mathbf{I}_n$은 고윳값이 $\lambda = 1$ 하나뿐이지만(대수적 중복도 $n$) 이미 대각행렬이므로 당연히 대각화 가능하다. 더 일반적으로 모든 실대칭행렬이 고윳값을 겹쳐 가지면서도 대각화 가능하다. 통계에 나오는 행렬 가운데 고윳값이 겹치는 경우가 오히려 흔하다는 점을 기억해 두면 좋다. 모자 행렬 $\mathbf{H}$의 고윳값은 0 과 1 두 개뿐이다.
+
+    반대로, 고윳값이 겹치면 대각화가 **깨질 수 있을 뿐** 반드시 깨지는 것도 아니다. 실제 판정은 언제나 정리 2 의 2번, 곧 겹친 고윳값에서 기하적 중복도가 대수적 중복도를 따라오는지를 보는 것이다.
 
 ## 거듭제곱과 지수
 
-대각형은 행렬의 거듭제곱을 극적으로 단순화한다.
+이제 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 대각화 가능하다고 하자. 대각형은 행렬의 거듭제곱을 극적으로 단순화한다.
 
 $$
 \mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1} = \mathbf{P}\operatorname{diag}(\lambda_1^k, \dots, \lambda_n^k)\mathbf{P}^{-1}
@@ -114,7 +221,9 @@ $$
 \mathbf{A} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}
 $$
 
-은 대수적 중복도가 2인 중복 고윳값 $\lambda = 2$를 갖지만, 고유공간 $\ker(\mathbf{A} - 2\mathbf{I}) = \operatorname{span}\{(1, 0)^T\}$의 차원은 1이다(기하적 중복도 1). 일차독립인 고유벡터가 하나뿐이므로 $\mathbf{A}$는 대각화 가능하지 않다. 이런 행렬은 대각형까지는 못 가고 조르당 표준형이라 부르는 준대각형까지만 갈 수 있는데, 다행히 통계에서 다루는 행렬은 거의 모두 대칭이고 대칭행렬은 언제나 대각화 가능하다.
+은 대수적 중복도가 2인 중복 고윳값 $\lambda = 2$를 갖지만, 고유공간 $\ker(\mathbf{A} - 2\mathbf{I}) = \operatorname{span}\{(1, 0)^T\}$의 차원은 1이다(기하적 중복도 1). 정리 2 의 2번이 깨지므로 $\mathbf{A}$는 대각화 가능하지 않다.
+
+앞의 회전행렬과는 실패의 종류가 다르다는 점을 짚어 두자. 회전행렬은 고윳값이 실수가 아니어서 실패했을 뿐 $\mathbb{C}$ 위에서는 대각화되지만, 이 행렬은 고윳값이 실수인데도 고유벡터가 모자라 **복소수를 허용해도 대각화되지 않는다.** 중복도 계산이 $\mathbb{C}$ 위에서도 그대로여서 $m_g = 1 < 2 = m_a$이기 때문이다. 이런 행렬은 대각형까지는 못 가고 조르당 표준형이라 부르는 준대각형까지만 갈 수 있는데, 다행히 통계에서 다루는 행렬은 거의 모두 대칭이고 대칭행렬은 언제나 대각화 가능하다.
 
 ## 통계와의 연결
 
@@ -233,17 +342,12 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-대각화 가능성의 판정 기준은 "모든 고윳값에서 기하적 중복도 $=$ 대수적 중복도"이다. 두 중복도를 정의하고, 서로 다른 예를 하나씩 들어라.
+정리 2 의 2번 조건("모든 고윳값에서 기하적 중복도 $=$ 대수적 중복도")이 성립하는 예와 깨지는 예를 하나씩 들고, 수치로 확인하라.
 
 </div>
 
 ??? success "풀이"
-    고윳값 $\lambda$에 대해
-
-    - **대수적 중복도**: 특성다항식에서 인수 $(\lambda - \lambda_0)$가 나타나는 차수
-    - **기하적 중복도**: 고유공간의 차원 $\dim\ker(\mathbf{A} - \lambda_0\mathbf{I})$
-
-    언제나 (기하적) $\le$ (대수적)이며, **모든** 고윳값에서 등호가 성립할 때에 한해 대각화 가능하다. 고유벡터를 충분히 모아야 기저를 만들 수 있기 때문이다.
+    보조정리 2 에 의해 언제나 $m_g \le m_a$이며, 정리 2 에 따라 (고윳값이 모두 실수일 때) **모든** 고윳값에서 등호가 성립할 때에 한해 대각화 가능하다. 고유벡터를 충분히 모아야 기저를 만들 수 있기 때문이다.
 
     **두 중복도가 같은 예:** $\mathbf{I}_2$는 $\lambda = 1$의 대수적 중복도가 2이고, $\ker(\mathbf{I}-\mathbf{I}) = \mathbb{R}^2$이므로 기하적 중복도도 2다. 이미 대각행렬이다.
 
@@ -268,11 +372,13 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
     출력:
 
     ```
-    I: 고윳값 [1. 1.], 기하적 중복도 = 2
+          I: 고윳값 [1. 1.], 기하적 중복도 = 2
      Jordan: 고윳값 [2. 2.], 기하적 중복도 = 1
     ```
 
-    **고윳값이 서로 다르면** 각 고유공간이 최소 1차원이고 합이 $n$이어야 하므로 자동으로 모두 1차원이 되어 대각화가 보장된다. 이것이 본문의 충분조건이다. 다만 **필요조건은 아니다.** $\mathbf{I}$가 반례다. $\square$
+    **고윳값이 서로 다르면** 각 고윳값의 대수적 중복도가 1 이고 보조정리 2 의 $1 \le m_g \le m_a$에서 $m_g = m_a = 1$이 되어 대각화가 보장된다. 이것이 본문의 충분조건이다. 다만 **필요조건은 아니다.** 위의 $\mathbf{I}_2$가 바로 반례다. 고윳값이 하나로 겹쳐 있는데도 대각화 가능하다.
+
+    반대 방향의 함정도 하나 더 있다. 고윳값이 **서로 다르기만** 해서는 실수 대각화가 보장되지 않는다. 회전행렬의 두 고윳값 $\pm i$는 서로 다르지만 실수가 아니어서 정리 2 의 1번이 깨진다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -420,7 +526,7 @@ $\mathbf{A}$가 대각화 가능하고 고윳값이 모두 $|\lambda_i| < 1$이�
 </div>
 
 ??? success "풀이"
-    $\mathbf{A}^n = \mathbf{P}\boldsymbol{\Lambda}^n\mathbf{P}^{-1}$이고 $\boldsymbol{\Lambda}^n = \operatorname{diag}(\lambda_1^n, \dots, \lambda_p^n)$이다. 모든 $|\lambda_i| < 1$이면 $\lambda_i^n \to 0$이므로 $\boldsymbol{\Lambda}^n \to \mathbf{O}$이고, 따라서
+    $\mathbf{A}^n = \mathbf{P}\boldsymbol{\Lambda}^n\mathbf{P}^{-1}$이고 $\boldsymbol{\Lambda}^n = \operatorname{diag}(\lambda_1^n, \dots, \lambda_m^n)$이다(여기서 $m$은 $\mathbf{A}$의 크기이고 $n$은 거듭제곱의 지수다). 모든 $|\lambda_i| < 1$이면 $\lambda_i^n \to 0$이므로 $\boldsymbol{\Lambda}^n \to \mathbf{O}$이고, 따라서
 
     $$
     \mathbf{A}^n = \mathbf{P}\boldsymbol{\Lambda}^n\mathbf{P}^{-1} \to \mathbf{P}\mathbf{O}\mathbf{P}^{-1} = \mathbf{O}
@@ -465,4 +571,4 @@ $\mathbf{A}$가 대각화 가능하고 고윳값이 모두 $|\lambda_i| < 1$이�
 
 ## 정리하며
 
-행렬이 일차독립인 고유벡터를 $n$개 온전히 가질 때 대각화 가능하며, 그때 분해 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이 성립한다. 이 분해는 행렬 연산을 고윳값에 대한 스칼라 연산으로 환원한다. 모든 공분산행렬을 포함한 대칭행렬은 언제나 대각화 가능하며, 그래서 고유분해가 통계 이론의 기본 도구가 된다. 다음 절에서는 이 분해가 곧바로 내주는 결과 하나를 본다. 대각합이 고윳값의 합과 같다는 사실인데, 모자 행렬의 대각합이 추정된 모수의 개수를 세어 주는 것이 바로 이 등식 덕분이다.
+행렬이 일차독립인 실수 고유벡터를 $n$개 온전히 가질 때 실수 위에서 대각화 가능하며(정리 1), 그때 분해 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$이 성립한다. 중복도로 옮겨 쓰면 판정은 "고윳값이 모두 실수이고 모든 고윳값에서 기하적 중복도 $=$ 대수적 중복도"다(정리 2). "고윳값이 서로 다르다"는 익숙한 조건은 충분조건일 뿐이며, 항등행렬이 그 역의 반례다. 이 분해는 행렬 연산을 고윳값에 대한 스칼라 연산으로 환원한다. 모든 공분산행렬을 포함한 대칭행렬은 언제나 대각화 가능하며, 그래서 고유분해가 통계 이론의 기본 도구가 된다. 다음 쪽에서는 이 분해가 곧바로 내주는 결과 하나를 본다. 대각합이 고윳값의 합과 같다는 사실인데, 모자 행렬의 대각합이 추정된 모수의 개수를 세어 주는 것이 바로 이 등식 덕분이다.

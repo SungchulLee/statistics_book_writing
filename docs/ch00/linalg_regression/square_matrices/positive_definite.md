@@ -36,18 +36,57 @@
 
 </div>
 
-??? proof "증명 개요 (고윳값에 의한 특성화)"
+??? proof "증명"
 
-
-    스펙트럼 정리에 의해 직교행렬 $\mathbf{Q}$에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이다. $\mathbf{z} = \mathbf{Q}^T\mathbf{x}$로 두면($\mathbf{Q}$가 직교행렬이므로 전단사다)
+    **(1) $\Leftrightarrow$ (2).** 스펙트럼 정리에 의해 직교행렬 $\mathbf{Q}$에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이다. $\mathbf{z} = \mathbf{Q}^T\mathbf{x}$로 두면($\mathbf{Q}$가 직교행렬이므로 $\mathbf{x} \mapsto \mathbf{z}$는 전단사이고 $\mathbf{x} \ne \mathbf{0} \iff \mathbf{z} \ne \mathbf{0}$이다)
 
     $$
     \mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{z}^T\boldsymbol{\Lambda}\mathbf{z} = \sum_{i=1}^n \lambda_i z_i^2
     $$
 
-    이다. 이것이 모든 $\mathbf{z} \neq \mathbf{0}$에 대해 양수일 필요충분조건은 모든 $\lambda_i > 0$인 것이다. $\square$
+    이다. 이것이 모든 $\mathbf{z} \neq \mathbf{0}$에 대해 양수일 필요충분조건은 모든 $\lambda_i > 0$인 것이다($\mathbf{z} = \mathbf{e}_i$를 넣으면 각 $\lambda_i > 0$이 필요하고, 역은 각 항이 음이 아니며 적어도 하나가 양수라는 데서 나온다).
 
-    **양반정치성**의 경우 위 조건들에서 고윳값과 선행 소행렬식에 대한 조건이 "$\geq 0$"으로 완화되고, 조건 (5)에서는 $\mathbf{B}$가 계수 부족이어도 된다.
+    **(1) $\Rightarrow$ (3).** $k$를 고정하고 $\mathbf{y} \in \mathbb{R}^k$, $\mathbf{y} \ne \mathbf{0}$을 잡아 $\mathbf{x} = (\mathbf{y}^T, \mathbf{0}^T)^T \in \mathbb{R}^n$으로 늘리면 $\mathbf{x} \ne \mathbf{0}$이고 $\mathbf{y}^T\mathbf{A}_k\mathbf{y} = \mathbf{x}^T\mathbf{A}\mathbf{x} > 0$이다. 곧 $\mathbf{A}_k \succ 0$이고, 이미 보인 (2)에 의해 $\mathbf{A}_k$의 고윳값이 모두 양수이므로 $\det(\mathbf{A}_k) > 0$이다.
+
+    **(3) $\Rightarrow$ (1).** $n$에 대한 귀납법. $n = 1$이면 $\det(\mathbf{A}_1) = a_{11} > 0$이 곧 결론이다. $n - 1$까지 성립한다고 하자. $\mathbf{A}$를
+
+    $$
+    \mathbf{A} = \begin{pmatrix} \mathbf{A}_{n-1} & \mathbf{b} \\ \mathbf{b}^T & c \end{pmatrix}
+    $$
+
+    로 분할한다. $\mathbf{A}_{n-1}$의 선행 주소행렬식은 $\mathbf{A}$의 것과 같으므로 귀납가정에 의해 $\mathbf{A}_{n-1} \succ 0$이고, 특히 가역이다. 슈어 여인수 $s = c - \mathbf{b}^T\mathbf{A}_{n-1}^{-1}\mathbf{b}$에 대해 블록 행렬식 공식이 $\det(\mathbf{A}) = \det(\mathbf{A}_{n-1})\, s$를 주므로 $\det(\mathbf{A}) > 0$과 $\det(\mathbf{A}_{n-1}) > 0$에서 $s > 0$이다. 이제 $\mathbf{x} = (\mathbf{u}^T, t)^T$에 대해 제곱을 완성하면
+
+    $$
+    \mathbf{x}^T\mathbf{A}\mathbf{x} = (\mathbf{u} + t\,\mathbf{A}_{n-1}^{-1}\mathbf{b})^T\mathbf{A}_{n-1}(\mathbf{u} + t\,\mathbf{A}_{n-1}^{-1}\mathbf{b}) + s\,t^2
+    $$
+
+    이다. 두 항이 모두 음이 아니고, 합이 0이면 $t = 0$이고 이어서 $\mathbf{u} = \mathbf{0}$이므로 $\mathbf{x} = \mathbf{0}$이다. 따라서 $\mathbf{A} \succ 0$이다.
+
+    **(2) $\Rightarrow$ (4).** 역시 위 분할과 귀납법을 쓴다. $\mathbf{A}_{n-1} = \mathbf{L}_{n-1}\mathbf{L}_{n-1}^T$을 이미 얻었다고 하고 $\mathbf{L}_{n-1}\boldsymbol{\ell} = \mathbf{b}$를 풀면($\mathbf{L}_{n-1}$은 대각이 양수인 삼각행렬이라 가역이다) $c - \boldsymbol{\ell}^T\boldsymbol{\ell} = c - \mathbf{b}^T\mathbf{A}_{n-1}^{-1}\mathbf{b} = s > 0$이므로
+
+    $$
+    \mathbf{L} = \begin{pmatrix} \mathbf{L}_{n-1} & \mathbf{0} \\ \boldsymbol{\ell}^T & \sqrt{s} \end{pmatrix}
+    $$
+
+    이 대각 성분이 양수인 하삼각행렬이고 $\mathbf{L}\mathbf{L}^T = \mathbf{A}$다. 유일성은 같은 귀납 단계에서 나온다. $\boldsymbol{\ell}$은 가역행렬 $\mathbf{L}_{n-1}$에 의해 유일하게 결정되고, 마지막 대각 성분은 $\sqrt{s} > 0$으로 부호까지 정해진다.
+
+    **(4) $\Rightarrow$ (5).** $\mathbf{B} = \mathbf{L}^T$로 두면 된다. $\mathbf{L}$의 대각 성분이 모두 0이 아니므로 $\mathbf{B}$는 가역이다.
+
+    **(5) $\Rightarrow$ (1).** $\mathbf{B}$가 가역이므로 $\mathbf{x} \ne \mathbf{0}$이면 $\mathbf{B}\mathbf{x} \ne \mathbf{0}$이고
+
+    $$
+    \mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{x}^T\mathbf{B}^T\mathbf{B}\mathbf{x} = \lVert\mathbf{B}\mathbf{x}\rVert^2 > 0
+    $$
+
+    이다. 이로써 (1) $\Leftrightarrow$ (2), (1) $\Leftrightarrow$ (3), (2) $\Rightarrow$ (4) $\Rightarrow$ (5) $\Rightarrow$ (1)의 고리가 닫혀 다섯 조건이 모두 동치다. $\square$
+
+!!! warning "양반정치는 *선행* 주소행렬식으로 판정되지 않는다"
+    정리 1 의 조건들을 양반정치로 옮길 때 부등호만 완화하면 된다고 생각하기 쉽지만, 조건마다 사정이 다르다.
+
+    - **조건 2 는 그대로 옮겨간다.** $\mathbf{A} \succeq 0$일 필요충분조건은 모든 고윳값이 $\lambda_i \ge 0$인 것이다. 위 증명의 (1) $\Leftrightarrow$ (2) 논법에서 부등호만 바꾸면 된다.
+    - **조건 3 은 옮겨가지 않는다.** $\mathbf{A} = \operatorname{diag}(0, -1)$의 선행 주소행렬식은 $\det(\mathbf{A}_1) = 0$, $\det(\mathbf{A}_2) = 0$으로 둘 다 $\ge 0$이지만 $\mathbf{A}$는 양반정치가 아니다. $\mathbf{x} = (0, 1)^T$에서 $\mathbf{x}^T\mathbf{A}\mathbf{x} = -1 < 0$이고 고윳값이 $0, -1$이다. 올바른 판정법은 **모든 주소행렬식** — 행과 열에서 같은 첨자 집합을 골라 만든 $2^n - 1$개의 부분행렬식 — 이 $\ge 0$인 것이다. 위 예에서는 첨자 $\{2\}$를 고른 주소행렬식 $-1 < 0$이 걸러낸다. 선행 주소행렬식만으로 충분한 것은 **엄격한** 부등호(실베스터 판정법)일 때뿐이다.
+    - **조건 4 는 유일성을 잃는다.** 양반정치행렬도 대각 성분이 음이 아닌 하삼각행렬 $\mathbf{L}$로 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$을 만들 수 있지만, 대각에 0 이 나타나면 $\mathbf{L}$이 유일하지 않다. $\mathbf{A} = \operatorname{diag}(0, 1)$의 경우 임의의 $t \in [-1, 1]$에 대해 $\mathbf{L} = \begin{pmatrix} 0 & 0 \\ t & \sqrt{1 - t^2}\end{pmatrix}$이 모두 $\mathbf{L}\mathbf{L}^T = \mathbf{A}$를 만족한다. 유일한 촐레스키 분해는 엄격한 양정치성에 딸린 것이다.
+    - **조건 5 는 완화가 통한다.** $\mathbf{A} \succeq 0$일 필요충분조건은 $\mathbf{A} = \mathbf{B}^T\mathbf{B}$인 (계수 부족이어도 되는) 행렬 $\mathbf{B}$가 존재하는 것이다. 이것이 바로 다음 쪽의 그람 행렬 이야기다.
 
 ### 그림으로 보기
 
@@ -93,7 +132,7 @@ $$
 
 **고윳값 확인:** 고윳값은 $\lambda^2 - 9\lambda + 16 = 0$을 만족하므로 $\lambda = (9 \pm \sqrt{17})/2$이다. 둘 다 양수이므로(대략 6.56과 2.44) $\mathbf{A} \succ 0$이다.
 
-**선행 소행렬식:** $\det(\mathbf{A}_1) = 4 > 0$이고 $\det(\mathbf{A}_2) = 16 > 0$이다. 둘 다 양수이므로 양정치성이 확인된다.
+**선행 주소행렬식:** $\det(\mathbf{A}_1) = 4 > 0$이고 $\det(\mathbf{A}_2) = 16 > 0$이다. 둘 다 양수이므로 양정치성이 확인된다.
 
 **촐레스키 분해:** $\mathbf{L}$에 대해 푼다.
 
@@ -164,17 +203,17 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-선행 소행렬식 기준을 이용해 $\mathbf{A} = \begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix}$이 양정치인지 판정하라.
+선행 주소행렬식 기준을 이용해 $\mathbf{A} = \begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix}$이 양정치인지 판정하라.
 
 </div>
 
 ??? success "풀이"
-    선행 소행렬식은 다음과 같다.
+    선행 주소행렬식은 다음과 같다.
 
-    - 첫 번째 선행 소행렬식: $a_{11} = 4 > 0$
-    - 두 번째 선행 소행렬식: $\det(\mathbf{A}) = 4 \times 3 - 2 \times 2 = 12 - 4 = 8 > 0$
+    - 첫 번째 선행 주소행렬식: $a_{11} = 4 > 0$
+    - 두 번째 선행 주소행렬식: $\det(\mathbf{A}) = 4 \times 3 - 2 \times 2 = 12 - 4 = 8 > 0$
 
-    모든 선행 소행렬식이 엄격히 양수이므로 $\mathbf{A}$는 양정치다. 동등하게 고윳값은 $\lambda = \frac{7 \pm \sqrt{49 - 32}}{2} = \frac{7 \pm \sqrt{17}}{2}$이며 둘 다 양수다.
+    모든 선행 주소행렬식이 엄격히 양수이므로 $\mathbf{A}$는 양정치다. 동등하게 고윳값은 $\lambda = \frac{7 \pm \sqrt{49 - 32}}{2} = \frac{7 \pm \sqrt{17}}{2}$이며 둘 다 양수다.
 
 <div class="drillbox" markdown>
 
@@ -496,4 +535,4 @@ $\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^T\mathbf{X}$가 �
 
 ## 정리하며
 
-양정치성은 이차형식이 엄격히 양수임을 보장하는 행렬의 성질이며, 이는 가역성, 잘 정의된 밀도, 유일한 최소제곱해로 이어진다. 핵심적인 동치 특성화들 — 양의 고윳값, 양의 선행 소행렬식, 촐레스키 분해의 존재 — 은 서로 다른 계산적·이론적 도구를 제공한다. 통계에서 $\boldsymbol{\Sigma}$의 양정치성이 다변량 정규분포를 떠받치고, $\mathbf{X}^T\mathbf{X}$의 양정치성이 최소제곱추정량의 존재를 보장한다.
+양정치성은 이차형식이 엄격히 양수임을 보장하는 행렬의 성질이며, 이는 가역성, 잘 정의된 밀도, 유일한 최소제곱해로 이어진다. 핵심적인 동치 특성화들 — 양의 고윳값, 양의 선행 주소행렬식, 촐레스키 분해의 존재 — 은 서로 다른 계산적·이론적 도구를 제공한다. 통계에서 $\boldsymbol{\Sigma}$의 양정치성이 다변량 정규분포를 떠받치고, $\mathbf{X}^T\mathbf{X}$의 양정치성이 최소제곱추정량의 존재를 보장한다.

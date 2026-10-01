@@ -133,6 +133,29 @@ $$
 
 </div>
 
+??? proof "증명"
+
+    먼저 사영의 기본 성질을 하나 적어 둔다. $\mathbf{P}$가 멱등이고 $\mathbf{v} \in \operatorname{col}(\mathbf{P})$이면 어떤 $\mathbf{u}$에 대해 $\mathbf{v} = \mathbf{P}\mathbf{u}$이므로
+
+    $$
+    \mathbf{P}\mathbf{v} = \mathbf{P}^2\mathbf{u} = \mathbf{P}\mathbf{u} = \mathbf{v}
+    $$
+
+    이다. 즉 **사영은 자기 치역의 벡터를 그대로 둔다.**
+
+    **존재.** $\mathbb{R}^n = \mathcal{V} \oplus \mathcal{W}$가 직합이므로 각 $\mathbf{x} \in \mathbb{R}^n$은 $\mathbf{x} = \mathbf{v} + \mathbf{w}$($\mathbf{v} \in \mathcal{V}$, $\mathbf{w} \in \mathcal{W}$)로 **유일하게** 쪼개진다. 이 유일한 조각을 써서 $\mathbf{P}\mathbf{x} := \mathbf{v}$로 정의한다. 분해가 유일하므로 $\mathbf{x} \mapsto \mathbf{v}$는 잘 정의되고 선형이다. 또
+
+    - $\mathbf{v} \in \mathcal{V}$의 분해는 $\mathbf{v} = \mathbf{v} + \mathbf{0}$이므로 $\mathbf{P}\mathbf{v} = \mathbf{v}$이고, 따라서 $\mathbf{P}^2 = \mathbf{P}$이며 $\operatorname{col}(\mathbf{P}) = \mathcal{V}$이다.
+    - $\mathbf{P}\mathbf{x} = \mathbf{0}$일 필요충분조건은 $\mathbf{v} = \mathbf{0}$, 곧 $\mathbf{x} = \mathbf{w} \in \mathcal{W}$이므로 $\ker(\mathbf{P}) = \mathcal{W}$이다.
+
+    **유일성.** $\mathbf{P}_1$, $\mathbf{P}_2$가 모두 조건을 만족한다고 하자. $\mathbf{x} = \mathbf{v} + \mathbf{w}$로 쪼개면 위의 기본 성질에서 $\mathbf{P}_i\mathbf{v} = \mathbf{v}$이고 $\ker(\mathbf{P}_i) = \mathcal{W}$에서 $\mathbf{P}_i\mathbf{w} = \mathbf{0}$이므로
+
+    $$
+    \mathbf{P}_1\mathbf{x} = \mathbf{v} = \mathbf{P}_2\mathbf{x}
+    $$
+
+    가 모든 $\mathbf{x}$에 대해 성립한다. 따라서 $\mathbf{P}_1 = \mathbf{P}_2$이다. $\square$
+
 이는 목표 부분공간 $\mathcal{V}$만 지정해서는 사영이 유일하게 결정되지 않음을 뜻한다. 눌러 없애는 방향 $\mathcal{W}$도 함께 지정해야 한다. $\mathcal{W} = \mathcal{V}^\perp$일 때 그 사영은 직교사영이 되고, 이 특수한 경우에는 $\mathcal{V}$만으로 사영이 결정된다.
 
 ## 통계와의 연결
@@ -425,7 +448,7 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
     C1 = [0. 0. 0. 0. 0.]  (1 은 영공간에 있다)
     ```
 
-    **자유도의 기원.** $\operatorname{tr}(\mathbf{C}) = n - 1$이 표본분산에서 $n-1$로 나누는 이유의 기하적 설명이다. 중심화된 잔차 벡터는 $n$차원이 아니라 $n-1$차원 부분공간에 놓인다. $\square$
+    **자유도의 기원.** $\operatorname{tr}(\mathbf{C}) = n - 1$이 표본분산에서 $n-1$로 나누는 이유의 기하적 설명이다. 중심화된 잔차 벡터는 $n$차원이 아니라 $n-1$차원 부분공간에 놓인다. [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 기댓값 계산으로 확인하는데, 이 쪽의 $\operatorname{tr}(\mathbf{C}) = n-1$이 같은 사실의 기하적 판본이다. 회귀로 넘어가면 $\mathbf{C}$ 자리에 $\mathbf{I} - \mathbf{H}$가 들어가고 $n-1$이 $n-p$로 바뀐다. $\square$
 
 <div class="drillbox" markdown>
 

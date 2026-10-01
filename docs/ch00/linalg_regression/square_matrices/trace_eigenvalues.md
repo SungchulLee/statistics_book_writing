@@ -1,6 +1,6 @@
 # 대각합과 고윳값
 
-행렬의 대각합 — 대각 성분의 합 — 은 계산하기 가장 쉬운 행렬 관련 양 중 하나다. 그런데도 깊은 정보를 담고 있다. 임의의 정사각행렬에서 대각합은 고윳값의 합과 같다. 이 연결은 통계에 끊임없이 등장한다. 공분산행렬의 대각합은 총분산을 주고, 모자 행렬의 대각합은 추정된 모수의 개수를 주며, 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$의 기댓값은 $\operatorname{tr}(\mathbf{A})$로 표현할 수 있다. 이 절에서는 대각합과 고윳값의 관계, 그리고 그 핵심 성질을 전개한다.
+행렬의 대각합 — 대각 성분의 합 — 은 계산하기 가장 쉬운 행렬 관련 양 중 하나다. 그런데도 깊은 정보를 담고 있다. 임의의 정사각행렬에서 대각합은 고윳값의 합과 같다. 이 연결은 통계에 끊임없이 등장한다. 공분산행렬의 대각합은 총분산을 주고, 모자 행렬의 대각합은 추정된 모수의 개수를 주며, 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$의 기댓값은 $\operatorname{tr}(\mathbf{A})$로 표현할 수 있다. 이 쪽에서는 대각합과 고윳값의 관계, 그리고 그 핵심 성질을 전개한다.
 
 ## 정의와 기본 성질
 
@@ -40,11 +40,13 @@ $$
 \operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})
 $$
 
-더 일반적으로, 곱이 정의되도록 차원이 맞는 행렬 $\mathbf{A}_1, \dots, \mathbf{A}_k$에 대해
+더 일반적으로, 곱 $\mathbf{A}_1\mathbf{A}_2\cdots\mathbf{A}_k$가 정의되고 정사각이 되도록 차원이 맞는 행렬들에 대해
 
 $$
 \operatorname{tr}(\mathbf{A}_1\mathbf{A}_2\cdots\mathbf{A}_k) = \operatorname{tr}(\mathbf{A}_k\mathbf{A}_1\cdots\mathbf{A}_{k-1})
 $$
+
+이다. 곧 **순환 이동**만 허용된다.
 
 </div>
 
@@ -56,10 +58,38 @@ $$
     \operatorname{tr}(\mathbf{A}\mathbf{B}) = \sum_{i=1}^m [\mathbf{A}\mathbf{B}]_{ii} = \sum_{i=1}^m \sum_{j=1}^n a_{ij}b_{ji} = \sum_{j=1}^n \sum_{i=1}^m b_{ji}a_{ij} = \sum_{j=1}^n [\mathbf{B}\mathbf{A}]_{jj} = \operatorname{tr}(\mathbf{B}\mathbf{A})
     $$
 
-    이다. 일반적인 경우는 마지막 행렬을 첫 번째와 묶어 귀납법으로 따라온다. $\square$
+    이다. 일반적인 경우는 귀납법도 필요 없다. $\mathbf{A} = \mathbf{A}_1\cdots\mathbf{A}_{k-1}$, $\mathbf{B} = \mathbf{A}_k$로 묶어 두 행렬의 경우를 한 번 적용하면
 
-!!! warning "주의: 순환일 뿐 임의의 치환이 아니다"
-    순환 성질은 인자들의 순환 치환만 허용한다: $\operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{C}\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{C}\mathbf{A})$. 임의의 재배열은 **허용되지 않는다**. 일반적으로 $\operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) \neq \operatorname{tr}(\mathbf{A}\mathbf{C}\mathbf{B})$이다.
+    $$
+    \operatorname{tr}(\mathbf{A}_1\cdots\mathbf{A}_{k-1}\mathbf{A}_k) = \operatorname{tr}(\mathbf{A}_k\mathbf{A}_1\cdots\mathbf{A}_{k-1})
+    $$
+
+    이 바로 나온다. 이 한 칸 이동을 반복하면 모든 순환 이동을 얻는다. $\square$
+
+!!! danger "순환 이동만 된다. 임의의 재배열은 안 된다"
+    순환 성질은 인자들의 **순환 이동**만 허용한다.
+
+    $$
+    \operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{C}\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{C}\mathbf{A})
+    $$
+
+    그러나 $\operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{A}\mathbf{C}\mathbf{B})$는 **거짓이다.** $\mathbf{A}\mathbf{C}\mathbf{B}$는 $\mathbf{A}\mathbf{B}\mathbf{C}$의 순환 이동이 아니라 두 인자를 맞바꾼 것이라 순환 성질이 닿지 않는다. 반례가 $2 \times 2$에서도 쉽게 나온다.
+
+    $$
+    \mathbf{A} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}, \quad
+    \mathbf{B} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \quad
+    \mathbf{C} = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}
+    $$
+
+    을 잡으면 $\mathbf{B}\mathbf{C} = \mathbf{A}$이고 $\mathbf{C}\mathbf{B} = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}$이므로
+
+    $$
+    \operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{A}\mathbf{A}) = 1,
+    \qquad
+    \operatorname{tr}(\mathbf{A}\mathbf{C}\mathbf{B}) = \operatorname{tr}\!\begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix} = 0
+    $$
+
+    이다. 실제 증명에서 이 함정에 자주 걸리므로, 인자를 옮길 때는 언제나 **맨 끝을 맨 앞으로** 또는 그 반대로만 움직인다고 기억하는 것이 안전하다.
 
 ### 전치
 
@@ -95,7 +125,7 @@ $$
 
 </div>
 
-??? proof "증명 — 특성다항식으로"
+??? proof "증명"
 
     $\mathbf{A}$의 특성다항식은
 
@@ -103,7 +133,13 @@ $$
     p(\lambda) = \det(\lambda\mathbf{I} - \mathbf{A}) = \lambda^n - (\operatorname{tr}\mathbf{A})\lambda^{n-1} + \cdots + (-1)^n\det(\mathbf{A})
     $$
 
-    이다. $\lambda^{n-1}$의 계수는 두 가지 방식으로 계산할 수 있다. $\det(\lambda\mathbf{I} - \mathbf{A})$의 여인수 전개에서 $n-1$개의 대각항의 곱을 얻는 유일한 방법은 대각 성분 $(\lambda - a_{ii})$ 중 하나만 빼고 모두 고르는 것이며, 그 결과 계수가 $-(a_{11} + \cdots + a_{nn}) = -\operatorname{tr}(\mathbf{A})$가 된다.
+    이다. 오른쪽 등식을 확인해 두자. 행렬식의 정의(순열에 대한 합)에서 항등순열이 아닌 순열은 대각이 아닌 성분을 적어도 두 개 포함하므로 $\lambda$를 최대 $n-2$개만 내놓는다. 따라서 $\lambda^n$과 $\lambda^{n-1}$의 계수는 항등순열의 항
+
+    $$
+    \prod_{i=1}^n (\lambda - a_{ii})
+    $$
+
+    에서만 나온다. 이 곱을 전개하면 $\lambda^{n-1}$의 계수가 $-(a_{11} + \cdots + a_{nn}) = -\operatorname{tr}(\mathbf{A})$다.
 
     한편 특성다항식을 근으로 인수분해하면
 
@@ -115,9 +151,9 @@ $$
 
     두 표현을 같다고 놓으면 $\operatorname{tr}(\mathbf{A}) = \lambda_1 + \lambda_2 + \cdots + \lambda_n$이다. $\square$
 
-??? proof "다른 증명 — 닮음으로"
+??? proof "다른 증명"
 
-    ($\mathbf{A}$가 대각화 가능한 경우)
+    $\mathbf{A}$가 (복소수 위에서) 대각화 가능한 경우에만 통하는 짧은 논법이다.
 
     대각합은 닮음 불변량이다. 순환 성질에 의해
 
@@ -125,7 +161,9 @@ $$
     \operatorname{tr}(\mathbf{P}^{-1}\mathbf{A}\mathbf{P}) = \operatorname{tr}(\mathbf{A}\mathbf{P}\mathbf{P}^{-1}) = \operatorname{tr}(\mathbf{A})
     $$
 
-    이기 때문이다. $\mathbf{A}$가 대각화 가능하면 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \boldsymbol{\Lambda}$이고 $\boldsymbol{\Lambda}$의 대각 성분이 바로 고윳값이므로 $\operatorname{tr}(\mathbf{A}) = \operatorname{tr}(\boldsymbol{\Lambda}) = \sum_i \lambda_i$이다. 위의 특성다항식 증명과 달리 이 논법은 대각화 가능한 행렬에만 통하지만, 통계에서 만나는 행렬은 대부분 대칭이어서 늘 대각화 가능하다.
+    이기 때문이다. $\mathbf{A}$가 대각화 가능하면 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \boldsymbol{\Lambda}$이고 $\boldsymbol{\Lambda}$의 대각 성분이 바로 고윳값이므로 $\operatorname{tr}(\mathbf{A}) = \operatorname{tr}(\boldsymbol{\Lambda}) = \sum_i \lambda_i$이다.
+
+    위의 특성다항식 증명과 달리 이 논법은 대각화 가능한 행렬에만 통한다. 앞 쪽에서 본 $\begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$ 같은 행렬에는 쓸 수 없고, 그래도 정리 2 는 성립한다($\operatorname{tr} = 4 = 2 + 2$). 다행히 통계에서 만나는 행렬은 대부분 대칭이어서 늘 대각화 가능하다. $\square$
 
 ## 행렬식은 고윳값의 곱과 같다
 
@@ -135,7 +173,7 @@ $$
 
 ### 정리 3. 행렬식과 고윳값의 항등식 { .thm }
 
-고윳값이 $\lambda_1, \dots, \lambda_n$인 같은 행렬 $\mathbf{A}$에 대해
+정리 2 와 같은 규약으로(대수적 중복도를 세어, 복소수일 수도 있는) 고윳값이 $\lambda_1, \dots, \lambda_n$인 행렬 $\mathbf{A}$에 대해
 
 $$
 \det(\mathbf{A}) = \prod_{i=1}^n \lambda_i
@@ -145,7 +183,13 @@ $$
 
 ??? proof "증명"
 
-    특성다항식에서 $\lambda = 0$으로 두면 $\det(-\mathbf{A}) = (-1)^n\det(\mathbf{A}) = (-\lambda_1)(-\lambda_2)\cdots(-\lambda_n) = (-1)^n\prod_i\lambda_i$이다. $\square$
+    대수학의 기본정리에 의해 $\mathbb{C}$ 위에서 $p(\lambda) = \det(\lambda\mathbf{I} - \mathbf{A}) = \prod_{i=1}^n(\lambda - \lambda_i)$로 인수분해된다. 양변에 $\lambda = 0$을 넣으면
+
+    $$
+    \det(-\mathbf{A}) = \prod_{i=1}^n(-\lambda_i)
+    $$
+
+    이고, 왼쪽은 $(-1)^n\det(\mathbf{A})$, 오른쪽은 $(-1)^n\prod_i\lambda_i$다. $(-1)^n$을 약분하면 결론이 나온다. $\square$
 
 ## 예
 
@@ -185,9 +229,9 @@ $$
 
 이다. 여기서 $\sigma_{ii} = \operatorname{Var}(X_i)$이고 $\lambda_1, \dots, \lambda_p$는 고윳값(각 주성분 방향의 분산)이다. 대각합–고윳값 항등식은 총분산이 주변분산으로 계산하든 주성분 분산으로 계산하든 같다는 것을 보여준다.
 
-### 모자 행렬과 실효 모수 개수
+### 모자 행렬과 유효 모수 개수
 
-$\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$일 때 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$인 선형회귀에서 모자 행렬 $\mathbf{H}$는 멱등이므로($\mathbf{H}^2 = \mathbf{H}$) 고윳값이 0 아니면 1이다. 대각합은
+계획행렬 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수($\operatorname{rank}(\mathbf{X}) = p$)라고 하자. 그러면 $\mathbf{X}^T\mathbf{X}$가 가역이고 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$가 정의되어 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 된다. $\mathbf{H}$는 대칭이고 멱등이므로($\mathbf{H}^2 = \mathbf{H}$) 고윳값이 0 아니면 1이다. 대각합은
 
 $$
 \operatorname{tr}(\mathbf{H}) = (\text{고윳값이 } 1 \text{인 것의 개수}) = \operatorname{rank}(\mathbf{X}) = p
@@ -252,7 +296,7 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$의 대각합이 (절편을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
+$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수라 하자. 순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$의 대각합이 (절편을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
 
 </div>
 
@@ -263,7 +307,9 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
     \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\bigl(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\bigr) = \operatorname{tr}\bigl(\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
     $$
 
-    순환 재배열이 $\mathbf{X}^T$를 오른쪽에서 왼쪽으로 옮겨 $p \times p$ 단위행렬을 만들어낸다. 이 결과는 $n$이나 $\mathbf{X}$의 구체적인 성분과 무관하게 성립한다.
+    순환 이동이 $\mathbf{X}^T$를 맨 뒤에서 맨 앞으로 옮겨 $p \times p$ 단위행렬을 만들어낸다. 이 결과는 $n$이나 $\mathbf{X}$의 구체적인 성분과 무관하게 성립한다.
+
+    완전 열계수 가정이 어디에 쓰였는지 짚어 두자. 그 가정 없이는 $\mathbf{X}^T\mathbf{X}$가 가역이 아니어서 $\mathbf{H}$ 자체가 정의되지 않는다. 계수가 $r < p$인 경우에는 일반화 역행렬을 써서 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{+}\mathbf{X}^T$로 정의하며, 그때는 $\operatorname{tr}(\mathbf{H}) = r$이 된다.
 
 <div class="drillbox" markdown>
 
@@ -543,10 +589,14 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 
     $\lambda = 0$이면 $\operatorname{tr} = p = 5$로 보통최소제곱과 같고, $\lambda$가 커질수록 값이 줄어 $\lambda \to \infty$에서 0으로 간다.
 
-    이 값을 **실효 자유도**라 부른다. 능형회귀는 모수를 $5$개 그대로 두지만 벌점이 각 방향을 $d_j^2/(d_j^2+\lambda)$만큼 축소하므로, 모형이 실제로 쓰는 자유도는 그보다 작다. 특이값이 작은 방향(공선성이 심한 방향)일수록 더 강하게 축소된다는 점도 식에서 바로 읽힌다. 18장에서 이 양이 모형 선택 기준에 쓰인다. $\square$
+    이 값을 **유효자유도**라 부른다. 능형회귀는 모수를 $5$개 그대로 두지만 벌점이 각 방향을 $d_j^2/(d_j^2+\lambda)$만큼 축소하므로, 모형이 실제로 쓰는 자유도는 그보다 작다. 특이값이 작은 방향(공선성이 심한 방향)일수록 더 강하게 축소된다는 점도 식에서 바로 읽힌다. 18장에서 이 양이 모형 선택 기준에 쓰인다. $\square$
 
 ---
 
 ## 정리하며
 
-대각합은 선형이고 닮음에 불변인 범함수이며 고윳값의 합과 같다. 그 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$은 통계적 증명에서 행렬식을 다룰 때 쓰이는 일꾼 항등식이다. 통계에서 대각합은 공분산행렬의 대각 성분(주변분산)을 그 고윳값(주성분 분산)과 연결하고, 사영에서 실효 모수의 개수를 세며, 이차형식의 기댓값을 계산한다.
+대각합은 선형이고 닮음에 불변인 범함수이며 고윳값의 합과 같다. 짝을 이루는 항등식 $\det(\mathbf{A}) = \prod_i \lambda_i$도 함께 기억해 둘 만하다. 두 항등식 모두 **복소 고윳값을 대수적 중복도까지 세어야** 성립한다. 실행렬이라도 고윳값이 실수라는 보장은 없고(회전행렬), 겹친 고윳값은 겹친 횟수만큼 세어야 한다.
+
+순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$은 행렬을 다루는 통계적 증명에서 가장 자주 손이 가는 일꾼 항등식이다. 다만 **순환 이동만** 허용된다는 점을 잊지 말아야 한다. $\operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{A}\mathbf{C}\mathbf{B})$는 거짓이다.
+
+통계에서 대각합은 공분산행렬의 대각 성분(주변분산)을 그 고윳값(주성분 분산)과 연결하고, 사영에서 유효 모수의 개수를 세며, 이차형식의 기댓값을 계산한다.

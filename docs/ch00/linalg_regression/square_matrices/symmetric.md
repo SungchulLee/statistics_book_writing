@@ -40,10 +40,9 @@ $$
 
 </div>
 
-??? proof "증명 개요 (고윳값이 실수임)"
+??? proof "증명"
 
-
-    $\lambda \in \mathbb{C}$가 고유벡터 $\mathbf{v} \ne \mathbf{0}$을 갖는 고윳값이라 하자. 그러면 $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이다. $\mathbf{A}$가 실대칭이므로 켤레전치를 취하면
+    **(1) 고윳값이 실수다.** $\lambda \in \mathbb{C}$가 고유벡터 $\mathbf{v} \ne \mathbf{0}$(성분이 복소수일 수 있다)을 갖는 고윳값이라 하자. 그러면 $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이다. $\mathbf{A}$가 실대칭이므로 켤레전치를 취하면
 
     $$
     \overline{\mathbf{v}}^T \mathbf{A} = \overline{\lambda}\, \overline{\mathbf{v}}^T
@@ -55,20 +54,32 @@ $$
     \lambda\, \overline{\mathbf{v}}^T \mathbf{v} = \overline{\mathbf{v}}^T \mathbf{A}\mathbf{v} = \overline{\lambda}\, \overline{\mathbf{v}}^T \mathbf{v}
     $$
 
-    이다. $\overline{\mathbf{v}}^T \mathbf{v} = \|\mathbf{v}\|^2 > 0$이므로 $\lambda = \overline{\lambda}$, 즉 $\lambda \in \mathbb{R}$이다. $\square$
+    이다. $\overline{\mathbf{v}}^T \mathbf{v} = \|\mathbf{v}\|^2 > 0$이므로 $\lambda = \overline{\lambda}$, 즉 $\lambda \in \mathbb{R}$이다. 고윳값이 실수이면 $(\mathbf{A} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}$이 실계수 연립방정식이므로 **실수** 고유벡터를 골라잡을 수 있다.
 
-??? proof "증명 개요 (고유벡터의 직교성)"
-
-
-    $\alpha \ne \beta$에 대해 $\mathbf{A}\mathbf{u} = \alpha\mathbf{u}$, $\mathbf{A}\mathbf{v} = \beta\mathbf{v}$라 하자. 그러면
+    **(2) 서로 다른 고윳값의 고유벡터는 직교한다.** $\alpha \ne \beta$에 대해 $\mathbf{A}\mathbf{u} = \alpha\mathbf{u}$, $\mathbf{A}\mathbf{v} = \beta\mathbf{v}$라 하자. 그러면
 
     $$
     \alpha\, \mathbf{u}^T\mathbf{v} = (\mathbf{A}\mathbf{u})^T \mathbf{v} = \mathbf{u}^T \mathbf{A}^T \mathbf{v} = \mathbf{u}^T \mathbf{A}\mathbf{v} = \beta\, \mathbf{u}^T \mathbf{v}
     $$
 
-    이다. 따라서 $(\alpha - \beta)\mathbf{u}^T\mathbf{v} = 0$이고 $\alpha \ne \beta$이므로 $\mathbf{u}^T\mathbf{v} = 0$이다. $\square$
+    이다. 따라서 $(\alpha - \beta)\mathbf{u}^T\mathbf{v} = 0$이고 $\alpha \ne \beta$이므로 $\mathbf{u}^T\mathbf{v} = 0$이다.
 
-    중복 고윳값의 경우 각 고유공간 안에서 그람–슈미트를 적용하면 정규직교기저를 얻는다. 이 기저들을 이어 붙이면 $\mathbf{Q}$가 만들어진다.
+    **(3) 정규직교 고유기저가 존재한다.** 고윳값이 중복되면 (2)만으로는 부족하다. 서로 다른 고윳값이 $n$개가 아닐 수 있기 때문이다. $n$에 대한 귀납법으로 직접 만든다.
+
+    $n = 1$이면 자명하다. $n - 1$까지 성립한다고 하자. 대수학의 기본정리에 의해 특성다항식은 근을 가지므로, (1)에 의해 실수 고윳값 $\lambda_1$과 그에 대응하는 단위 실벡터 $\mathbf{q}_1$이 존재한다. 부분공간 $\mathcal{W} = \{\mathbf{w} : \mathbf{q}_1^T\mathbf{w} = 0\}$은 차원이 $n-1$이고, $\mathbf{A}$에 의해 **불변**이다. $\mathbf{w} \in \mathcal{W}$이면 대칭성에 의해
+
+    $$
+    \mathbf{q}_1^T(\mathbf{A}\mathbf{w}) = (\mathbf{A}\mathbf{q}_1)^T\mathbf{w} = \lambda_1 \mathbf{q}_1^T\mathbf{w} = 0
+    $$
+
+    이므로 $\mathbf{A}\mathbf{w} \in \mathcal{W}$이기 때문이다. $\mathcal{W}$의 정규직교기저를 열로 갖는 $n \times (n-1)$ 행렬을 $\mathbf{W}$라 하면($\mathbf{W}^T\mathbf{W} = \mathbf{I}_{n-1}$), $\mathcal{W}$ 위에서의 $\mathbf{A}$의 표현 $\mathbf{A}' = \mathbf{W}^T\mathbf{A}\mathbf{W}$는 $(n-1) \times (n-1)$ 대칭행렬이다($\mathbf{A}'^T = \mathbf{W}^T\mathbf{A}^T\mathbf{W} = \mathbf{A}'$). 귀납가정에 의해 $\mathbf{A}'$은 정규직교 고유기저를 갖는다. $\mathbf{A}'\mathbf{v} = \mu\mathbf{v}$이면 $\mathbf{q} = \mathbf{W}\mathbf{v}$가 $\mathbf{A}$의 고유벡터가 되는데, 불변성에 의해 $\mathbf{A}\mathbf{q} \in \mathcal{W}$이므로 $\mathbf{A}\mathbf{q} = \mathbf{W}\mathbf{W}^T\mathbf{A}\mathbf{W}\mathbf{v} = \mathbf{W}(\mu\mathbf{v}) = \mu\mathbf{q}$이기 때문이다. $\mathbf{W}$가 정규직교이므로 이렇게 얻은 $\mathbf{q}_2, \dots, \mathbf{q}_n$도 정규직교다. $\mathbf{q}_1$은 $\mathcal{W}$에 직교하므로 이들 모두와 직교하고, 따라서 $\mathbf{Q} = (\mathbf{q}_1 \mid \cdots \mid \mathbf{q}_n)$이 직교행렬이며 $\mathbf{A}\mathbf{Q} = \mathbf{Q}\boldsymbol{\Lambda}$, 곧 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이다. $\square$
+
+    귀납법 대신 이렇게 정리해도 된다. 서로 다른 고윳값의 고유공간들은 (2)에 의해 서로 직교하므로, 각 고유공간 안에서 그람–슈미트를 돌려 정규직교기저를 얻고 그것들을 이어 붙이면 $\mathbf{Q}$가 된다(연습문제 6). 다만 이 방식은 각 고유공간의 차원이 고윳값의 대수적 중복도와 같다는 사실 — 곧 대칭행렬이 대각화 가능하다는 사실 — 을 따로 확보해야 하므로, 위 귀납법이 더 자족적이다.
+
+!!! note "직교성이 결론의 일부다"
+    "대칭이면 대각화 가능하다"는 것만으로는 스펙트럼 정리를 다 말한 것이 아니다. 대각화 가능성은 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$인 가역 $\mathbf{P}$의 존재만 주장하지만, 스펙트럼 정리는 그 $\mathbf{P}$를 **직교행렬**로 잡을 수 있다고 말한다. 뒤에서 쓰는 것은 거의 전부 이 직교성이다. $\mathbf{Q}^{-1} = \mathbf{Q}^T$이므로 역행렬을 계산할 필요가 없고, $\mathbf{z} = \mathbf{Q}^T\mathbf{x}$가 길이와 각을 보존하므로 $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$가 유지되며(0.4절의 이차형식과 카이제곱분포), 주성분들이 무상관이 된다.
+
+    실대칭이라는 가정도 결론에 실제로 필요하다. 복소행렬에서는 대칭($\mathbf{A} = \mathbf{A}^T$)이 아니라 **에르미트**($\mathbf{A} = \overline{\mathbf{A}}^T = \mathbf{A}^*$)가 옳은 조건이다. 복소대칭행렬 $\mathbf{A} = \begin{pmatrix} 1 & i \\ i & -1 \end{pmatrix}$은 $\mathbf{A}^2 = \mathbf{0}$이므로 고윳값이 $0$뿐이고 $\mathbf{A} \ne \mathbf{0}$이라 대각화조차 되지 않는다. 반면 에르미트행렬은 언제나 실수 고윳값과 유니터리 고유기저($\mathbf{A} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{U}^*$, $\mathbf{U}^*\mathbf{U} = \mathbf{I}$)를 갖는다. 위 증명의 (1)에서 이미 켤레를 썼다는 점이 그 힌트다. 이 책에서 다루는 공분산행렬·그람 행렬·사영행렬은 모두 실행렬이므로 실대칭판으로 충분하다.
 
 ### 그림으로 보기
 

@@ -8,21 +8,23 @@
 
 ### 정의 1. 카이제곱분포 { .dfn }
 
-$Z_1, Z_2, \dots, Z_k$가 독립인 표준정규 확률변수($Z_i \sim N(0,1)$)이면
+$Z_1, Z_2, \dots, Z_d$가 독립인 표준정규 확률변수($Z_i \sim N(0,1)$)이면
 
 $$
-Q = \sum_{i=1}^k Z_i^2 \sim \chi^2_k
+Q = \sum_{i=1}^d Z_i^2 \sim \chi^2_d
 $$
 
-이다. 이 분포는 **자유도**가 $k$다. 벡터 표기로는 $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_k)$이면 $\mathbf{z}^T\mathbf{z} \sim \chi^2_k$이다.
+이다. 이 분포는 **자유도**가 $d$다. 벡터 표기로는 $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_d)$이면 $\mathbf{z}^T\mathbf{z} \sim \chi^2_d$이다.
 
 </div>
 
-핵심 성질:
+핵심 성질([4.2절 카이제곱분포](../../../ch04/continuous_distributions/chi_square.md)에서 증명한다):
 
-- $E[Q] = k$이고 $\operatorname{Var}(Q) = 2k$
-- $Q_1 \sim \chi^2_{k_1}$과 $Q_2 \sim \chi^2_{k_2}$가 독립이면 $Q_1 + Q_2 \sim \chi^2_{k_1 + k_2}$
-- 카이제곱분포는 감마분포의 특수한 경우다: $\chi^2_k = \text{Gamma}(k/2, 2)$
+- $E[Q] = d$이고 $\operatorname{Var}(Q) = 2d$
+- $Q_1 \sim \chi^2_{d_1}$과 $Q_2 \sim \chi^2_{d_2}$가 독립이면 $Q_1 + Q_2 \sim \chi^2_{d_1 + d_2}$
+- 카이제곱분포는 감마분포의 특수한 경우다. $\chi^2_d$는 형상 $d/2$, 척도 $2$인 감마분포다.
+
+자유도를 나타내는 기호로는 이 책의 관례대로 $d$를 쓴다. 다만 이 쪽에서는 자유도가 거의 언제나 어떤 사영행렬의 **계수**로 나타나므로, 그 문맥에서는 $r$(rank)이나 $n - p$처럼 계수를 직접 가리키는 기호를 쓴다.
 
 ## 정규벡터의 이차형식
 
@@ -76,7 +78,7 @@ $$
 
 오른쪽 그림이 그 차이를 보인다. $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_6)$을 $400{,}000$번 뽑아 세 이차형식의 밀도를 추정했다. 평균은 셋 다 $3$에 맞는다($2.9963$, $2.9984$, $2.9964$). 그런데 분산은 $5.9628$, $2.9987$, $8.0361$로 갈라지며, 이는 $2\operatorname{tr}(\mathbf{A}^2)$의 이론값 $6$, $3$, $8.08$과 각각 일치한다. $\chi^2_3$ 곡선(점선) 위에 정확히 얹히는 것은 $\mathbf{A}_1$뿐이다. $\mathbf{A}_2$의 이차형식은 $\tfrac{1}{2}\chi^2_6$이라 더 좁고, $\mathbf{A}_3$은 무거운 고윳값 하나가 끌고 가서 더 넓다.
 
-이 그림은 다음 절의 정리 2가 왜 **필요충분**조건인지를 미리 보여 준다. $\chi^2_k$는 평균이 $k$이고 분산이 $2k$이므로 분산이 평균의 정확히 두 배다. 고윳값이 0과 1만으로 이루어져 있으면 $\operatorname{tr}(\mathbf{A}^2) = \operatorname{tr}(\mathbf{A})$이라 이 관계가 저절로 성립하지만, 고윳값이 그 밖으로 나가는 순간 $\operatorname{tr}(\mathbf{A}^2) \neq \operatorname{tr}(\mathbf{A})$이 되어 관계가 깨진다. 위 세 쌍 $(3, 6)$, $(3, 3)$, $(3, 8.08)$에서 카이제곱이 될 수 있는 것은 첫 번째뿐이다. 멱등성은 편리한 충분조건이 아니라 빠져나갈 구멍이 없는 조건이다.
+이 그림은 아래 정리 2가 왜 **필요충분**조건인지를 미리 보여 준다. $\chi^2_d$는 평균이 $d$이고 분산이 $2d$이므로 분산이 평균의 정확히 두 배다. 고윳값이 0과 1만으로 이루어져 있으면 $\operatorname{tr}(\mathbf{A}^2) = \operatorname{tr}(\mathbf{A})$이라 이 관계가 저절로 성립하지만, 고윳값이 그 밖으로 나가는 순간 $\operatorname{tr}(\mathbf{A}^2) \neq \operatorname{tr}(\mathbf{A})$이 되어 관계가 깨진다. 위 세 쌍 $(3, 6)$, $(3, 3)$, $(3, 8.08)$에서 카이제곱이 될 수 있는 것은 첫 번째뿐이다. 멱등성은 편리한 충분조건이 아니라 빠져나갈 구멍이 없는 조건이다.
 
 ## 일반적인 필요충분조건
 
@@ -84,15 +86,39 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 2. 코크런 조건 { .thm }
+### 정리 2. 이차형식이 카이제곱이 되기 위한 필요충분조건 { .thm }
 
 $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고 $\mathbf{A}$가 대칭인 $n \times n$ 행렬이라 하자. $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2 \sim \chi^2_r$일 필요충분조건은 $\mathbf{A}$가 $\operatorname{rank}(\mathbf{A}) = r$인 멱등행렬인 것이다.
 
 </div>
 
-??? proof "증명 개요 — 필요성"
+??? proof "증명"
 
-    $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2 \sim \chi^2_r$이면 적률생성함수가 $\chi^2_r$의 것과 일치해야 한다. $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2$의 적률생성함수는 $\prod_{i=1}^n(1 - 2\lambda_i t)^{-1/2}$이고 $\chi^2_r$의 것은 $(1 - 2t)^{-r/2}$이다. 이 둘이 같으려면 정확히 $r$개의 고윳값이 1이고 나머지가 0이어야 하며, 이는 $\mathbf{A}$가 계수 $r$인 멱등행렬이라는 뜻이다. $\square$
+    $\mathbf{u} = \mathbf{z}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\mathbf{z}^T\mathbf{A}\mathbf{z}/\sigma^2 = \mathbf{u}^T\mathbf{A}\mathbf{u}$이므로 $\sigma^2 = 1$인 경우만 보면 된다.
+
+    **충분성**은 정리 1이 이미 준다.
+
+    **필요성.** 연습문제 2에서 보듯 $\mathbf{u}^T\mathbf{A}\mathbf{u}$의 적률생성함수는 0의 어떤 근방에서
+
+    $$
+    M(t) = \prod_{i=1}^n(1 - 2\lambda_i t)^{-1/2}
+    $$
+
+    이고, $\chi^2_r$의 것은 $(1 - 2t)^{-r/2}$이다. 두 함수가 0의 근방에서 같으면 제곱해서 역수를 취한 두 다항식
+
+    $$
+    \prod_{i=1}^n(1 - 2\lambda_i t) = (1 - 2t)^{r}
+    $$
+
+    이 0의 근방에서 일치하고, 다항식은 무한히 많은 점에서 일치하면 계수까지 같으므로 근의 중복도까지 같다. 오른쪽의 근은 $t = 1/2$ 하나뿐이고 중복도가 $r$이므로, $\lambda_i$ 가운데 정확히 $r$개가 $1$이고 나머지 $n - r$개가 $0$이다. 대칭행렬의 고윳값이 $0$ 아니면 $1$이면 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$에서 $\boldsymbol{\Lambda}^2 = \boldsymbol{\Lambda}$이므로 $\mathbf{A}^2 = \mathbf{A}$이고, 계수는 0이 아닌 고윳값의 개수인 $r$이다. $\square$
+
+    **대칭성을 빼면 거짓이다.** 정리 1과 정리 2 모두 $\mathbf{A}$의 대칭성을 전제로 한다. 대칭이 아닌 멱등행렬 $\mathbf{A} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$을 보자. $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_2)$에 대해
+
+    $$
+    \mathbf{z}^T\mathbf{A}\mathbf{z} = Z_1^2 - Z_1Z_2
+    $$
+
+    인데, 이 값은 음수가 될 수 있으므로($Z_1 = 1$, $Z_2 = 2$이면 $-1$) 절대로 카이제곱분포를 따를 수 없다. 대칭인 부분만 남긴 $\tfrac{1}{2}(\mathbf{A} + \mathbf{A}^T)$은 고윳값이 $\tfrac{1 \pm \sqrt2}{2}$로 $\{0,1\}$ 밖에 있어 멱등이 아니다. **멱등성만으로는 부족하고 대칭성이 함께 있어야 한다.**
 
 ## 이차형식의 독립성
 
@@ -103,16 +129,26 @@ $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고 $\mathbf{A}$가 대�
 $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고 $\mathbf{A}$와 $\mathbf{B}$가 대칭인 $n \times n$ 행렬이라 하자. 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$와 $\mathbf{z}^T\mathbf{B}\mathbf{z}$가 **독립**일 필요충분조건은
 
 $$
-\mathbf{A}\mathbf{B} = \mathbf{0}
+\mathbf{A}\mathbf{B} = \mathbf{O}
 $$
 
 인 것이다.
 
 </div>
 
-??? proof "증명 개요"
+??? proof "증명"
 
-    $(\mathbf{z}^T\mathbf{A}\mathbf{z}, \mathbf{z}^T\mathbf{B}\mathbf{z})$의 결합 적률생성함수가 주변 적률생성함수의 곱으로 인수분해될 필요충분조건이 $\mathbf{A}\mathbf{B} = \mathbf{0}$이다. $\mathbf{A}$와 $\mathbf{B}$를 동시에 대각화해 보면 알 수 있다. 조건 $\mathbf{A}\mathbf{B} = \mathbf{0}$은 두 이차형식이 독립인 $W_i^2$ 항들의 서로 겹치지 않는 부분집합만을 포함하도록 보장한다. $\square$
+    **충분성.** $\mathbf{A}$와 $\mathbf{B}$가 대칭이고 $\mathbf{A}\mathbf{B} = \mathbf{O}$이면 $\mathbf{B}\mathbf{A} = (\mathbf{A}\mathbf{B})^T = \mathbf{O}$이므로 두 행렬은 교환한다. 교환하는 대칭행렬은 **동시에 대각화**되므로 하나의 직교행렬 $\mathbf{Q}$로 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}_A\mathbf{Q}^T$, $\mathbf{B} = \mathbf{Q}\boldsymbol{\Lambda}_B\mathbf{Q}^T$로 쓸 수 있고, $\mathbf{A}\mathbf{B} = \mathbf{O}$은 $\boldsymbol{\Lambda}_A\boldsymbol{\Lambda}_B = \mathbf{O}$, 곧 각 $i$에 대해 $\lambda_i^A$와 $\lambda_i^B$ 중 적어도 하나가 0이라는 뜻이다. $\mathbf{w} = \mathbf{Q}^T\mathbf{z}$로 두면
+
+    $$
+    \mathbf{z}^T\mathbf{A}\mathbf{z} = \sum_i \lambda_i^A W_i^2, \qquad \mathbf{z}^T\mathbf{B}\mathbf{z} = \sum_i \lambda_i^B W_i^2
+    $$
+
+    이 되어 두 합은 독립인 $W_i^2$ 항들의 **서로 겹치지 않는** 부분집합만 쓴다. 따라서 독립이다.
+
+    **필요성**은 결합 적률생성함수가 주변 적률생성함수의 곱으로 인수분해될 조건을 따져 얻는데, 이 방향은 생각보다 까다로워 크레이그–사카모토 정리라는 이름으로 따로 다루어진다(초기에 발표된 증명 몇 개가 실제로 틀렸다). 이 책에서 쓰는 것은 충분성 방향뿐이므로 필요성은 인용에 그친다. $\square$
+
+    조건에서 $\mathbf{A}$와 $\mathbf{B}$가 **둘 다 대칭**이라는 가정이 빠지면 위 논법이 무너진다. 대칭이 아니면 $\mathbf{A}\mathbf{B} = \mathbf{O}$에서 $\mathbf{B}\mathbf{A} = \mathbf{O}$이 따라 나오지 않으므로 동시대각화를 쓸 수 없다.
 
 ## 코크런 정리
 
@@ -122,15 +158,52 @@ $$
 
 ### 정리 4. 코크런 정리 { .thm }
 
-$\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고
+$\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$이고 $\mathbf{A}_1, \dots, \mathbf{A}_k$가 $\operatorname{rank}(\mathbf{A}_i) = r_i$인 대칭행렬이라 하자. **모든** $\mathbf{z} \in \mathbb{R}^n$에 대해
 
 $$
 \mathbf{z}^T\mathbf{z} = \mathbf{z}^T\mathbf{A}_1\mathbf{z} + \mathbf{z}^T\mathbf{A}_2\mathbf{z} + \cdots + \mathbf{z}^T\mathbf{A}_k\mathbf{z}
+\qquad\text{즉}\qquad \mathbf{A}_1 + \cdots + \mathbf{A}_k = \mathbf{I}_n
 $$
 
-이라 하자. 여기서 $\mathbf{A}_1, \dots, \mathbf{A}_k$는 $\operatorname{rank}(\mathbf{A}_i) = r_i$이고 $r_1 + r_2 + \cdots + r_k = n$인 대칭 양반정치행렬이다. 그러면 이차형식 $\mathbf{z}^T\mathbf{A}_1\mathbf{z}/\sigma^2, \dots, \mathbf{z}^T\mathbf{A}_k\mathbf{z}/\sigma^2$은 서로 독립이고 $\mathbf{z}^T\mathbf{A}_i\mathbf{z}/\sigma^2 \sim \chi^2_{r_i}$이다.
+이고 $r_1 + r_2 + \cdots + r_k = n$이면, 각 $\mathbf{A}_i$는 멱등이고 $i \neq j$에 대해 $\mathbf{A}_i\mathbf{A}_j = \mathbf{O}$이다. 따라서 이차형식 $\mathbf{z}^T\mathbf{A}_1\mathbf{z}/\sigma^2, \dots, \mathbf{z}^T\mathbf{A}_k\mathbf{z}/\sigma^2$은 서로 독립이고 $\mathbf{z}^T\mathbf{A}_i\mathbf{z}/\sigma^2 \sim \chi^2_{r_i}$이다.
 
 </div>
+
+??? proof "증명"
+
+    **두 가정이 각각 어디에 쓰이는지**가 이 증명의 뼈대다. $\sum_i \mathbf{A}_i = \mathbf{I}_n$은 계수의 합이 적어도 $n$이 되도록 강제하고, $\sum_i r_i = n$은 그 합이 넘치지 않도록 못 박는다. 둘이 맞물릴 때만 멱등성이 나온다.
+
+    **1단계: 멱등성과 곱의 소멸.** $\mathcal{V}_i = \operatorname{col}(\mathbf{A}_i)$라 두자($\dim\mathcal{V}_i = r_i$). $\sum_i \mathbf{A}_i = \mathbf{I}$이므로 임의의 $\mathbf{x}$가 $\mathbf{x} = \sum_i \mathbf{A}_i\mathbf{x}$로 쓰이고, 따라서
+
+    $$
+    \mathbb{R}^n = \mathcal{V}_1 + \mathcal{V}_2 + \cdots + \mathcal{V}_k
+    $$
+
+    이다. 그런데 차원의 합이 $\sum_i r_i = n$으로 딱 맞으므로 이 합은 차원을 낭비할 여유가 없다. 곧 **직합**이다.
+
+    $$
+    \mathbb{R}^n = \mathcal{V}_1 \oplus \cdots \oplus \mathcal{V}_k
+    $$
+
+    $\mathbf{v} \in \mathcal{V}_j$를 잡으면 $\mathbf{v} = \sum_i \mathbf{A}_i\mathbf{v}$인데, 왼쪽은 $\mathcal{V}_j$의 원소이고 $\mathbf{A}_i\mathbf{v} \in \mathcal{V}_i$이므로 직합 분해의 유일성에서 $\mathbf{A}_j\mathbf{v} = \mathbf{v}$이고 $i \neq j$이면 $\mathbf{A}_i\mathbf{v} = \mathbf{0}$이다. $\mathbf{v}$가 $\mathcal{V}_j = \operatorname{col}(\mathbf{A}_j)$에서 임의였으므로
+
+    $$
+    \mathbf{A}_j^2 = \mathbf{A}_j, \qquad \mathbf{A}_i\mathbf{A}_j = \mathbf{O} \quad (i \neq j)
+    $$
+
+    을 얻는다.
+
+    **2단계: 분포.** 각 $\mathbf{A}_i$가 대칭 멱등이고 계수가 $r_i$이므로 정리 1에 의해 $\mathbf{z}^T\mathbf{A}_i\mathbf{z}/\sigma^2 \sim \chi^2_{r_i}$이다.
+
+    **3단계: 상호 독립.** $i \neq j$에 대해 $\mathbf{A}_i\mathbf{A}_j = \mathbf{O} = \mathbf{A}_j\mathbf{A}_i$이므로 $\mathbf{A}_1, \dots, \mathbf{A}_k$는 서로 교환하는 대칭행렬이고, 따라서 **하나의** 직교행렬 $\mathbf{Q}$로 동시에 대각화된다. $\mathbf{w} = \mathbf{Q}^T\mathbf{z}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 각 이차형식은
+
+    $$
+    \frac{\mathbf{z}^T\mathbf{A}_i\mathbf{z}}{\sigma^2} = \sum_{j \in S_i} W_j^2
+    $$
+
+    꼴이 된다. 여기서 $S_i$는 $\mathbf{A}_i$의 고윳값이 1인 좌표들의 집합이고 $|S_i| = r_i$다. $\mathbf{A}_i\mathbf{A}_j = \mathbf{O}$은 $S_i \cap S_j = \varnothing$을 뜻하며 $\sum_i r_i = n$이므로 $S_1, \dots, S_k$는 $\{1, \dots, n\}$의 분할이다. 곧 $k$개의 이차형식이 독립인 $W_1^2, \dots, W_n^2$을 **겹치지도 남기지도 않고** 갈라 쓴다. 서로 다른 좌표의 함수들이므로 $k$개 전부가 상호 독립이다. $\square$
+
+    **자유도의 덧셈이 여기서 나온다.** 결론의 $\sum_i r_i = n$은 "총제곱합의 자유도 $n$이 조각들의 자유도로 정확히 나뉜다"는 말이고, 분산분석표의 자유도 열이 세로로 더해져 총자유도가 되는 것이 바로 이 항등식이다.
 
 코크런 정리는 분산분석 F-검정을 떠받치는 이론적 원동력이다. 회귀제곱합과 잔차제곱합이 ($\sigma^2$으로 나눈 뒤) 독립인 카이제곱 확률변수임을 보장하며, 이것이 F-통계량을 구성하는 데 필요하다.
 
@@ -156,6 +229,18 @@ $$
 s^2 = \frac{\text{SSE}}{n - p}, \qquad E[s^2] = \sigma^2
 $$
 
+여기서 자유도가 $n - p$인 까닭을 한 줄로 요약하면 이렇다. **잔차는 $(\mathbf{I} - \mathbf{H})\mathbf{y}$이고 그 계수가 $n - p$이므로 $E[\text{SSE}] = (n-p)\sigma^2$이다**(연습문제 5). 나누는 수는 잔차의 개수 $n$이 아니라 잔차가 놓인 부분공간의 차원 $n-p$다.
+
+### 5.1절과 같은 구조다
+
+이 논리는 새로운 것이 아니다. [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 보일 때 쓴 것과 **같은 계산**이며, 절편만 있는 모형($\mathbf{X} = \mathbf{1}$, $p = 1$)이 바로 그 경우다. 이때 $\mathbf{H} = \tfrac{1}{n}\mathbf{J}$이고 $\mathbf{I} - \mathbf{H}$는 중심화행렬 $\mathbf{C}$이므로
+
+$$
+\text{SSE} = \mathbf{y}^T\mathbf{C}\mathbf{y} = \sum_i (Y_i - \bar{Y})^2, \qquad n - p = n - 1
+$$
+
+이고 $s^2 = \text{SSE}/(n-1) = S^2$이다. 5.1절이 기댓값을 직접 계산해 얻은 $n-1$과 이 쪽이 대각합으로 얻은 $n-p$는 같은 사실의 두 판본이며, 회귀는 $\mathbf{1}$ 하나 대신 $\mathbf{X}$의 열 $p$개를 쓰느라 $1$ 대신 $p$를 잃는 것일 뿐이다. 자유도 $n-1$이 $\chi^2$의 자유도로 나타나는 것도 [4.2절 정규분포](../../../ch04/continuous_distributions/normal.md)의 연습문제 7에서 직교변환으로 이미 확인했다. 그쪽의 직교행렬 $\mathbf{Q}$가 여기서는 $\mathbf{C}$의 스펙트럼 분해에 해당한다.
+
 ## 비중심 카이제곱분포
 
 $\boldsymbol{\mu} \neq \mathbf{0}$인 $\mathbf{z} \sim N(\boldsymbol{\mu}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이면, 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$는 **비중심 카이제곱분포**를 따른다.
@@ -164,7 +249,13 @@ $$
 \mathbf{z}^T\mathbf{A}\mathbf{z} \sim \chi^2_r(\delta)
 $$
 
-여기서 비중심 모수는 $\delta = \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}$이다. 비중심 카이제곱분포는 F-검정의 검정력 계산과 대립가설 아래에서 회귀제곱합의 분포에 등장한다.
+여기서 비중심 모수는 $\delta = \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}$이다. 분산이 $\sigma^2$인 판으로 옮기면, $\mathbf{y} \sim N(\boldsymbol{\mu}, \sigma^2\mathbf{I}_n)$에 대해 $\mathbf{z} = \mathbf{y}/\sigma \sim N(\boldsymbol{\mu}/\sigma, \mathbf{I}_n)$이므로
+
+$$
+\frac{\mathbf{y}^T\mathbf{A}\mathbf{y}}{\sigma^2} \sim \chi^2_r(\delta), \qquad \delta = \frac{\boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}}{\sigma^2}
+$$
+
+이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $\delta = 0$이 되어 중심 카이제곱으로 돌아간다. 비중심 카이제곱분포는 F-검정의 검정력 계산과 대립가설 아래에서 회귀제곱합의 분포에 등장한다(연습문제 6).
 
 ## 연습문제
 
@@ -230,7 +321,9 @@ $\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I}_n)$이라 �
 
     독립성은 크레이그 정리에서 따라온다: $\mathbf{H}\mathbf{M} = \mathbf{H}(\mathbf{I} - \mathbf{H}) = \mathbf{H} - \mathbf{H}^2 = \mathbf{0}$. $\square$
 
-    이것이 바로 전체 F-검정의 설정이다. $H_0$ 아래에서 $F = (\mathrm{SSR}/p)/(\mathrm{SSE}/(n-p)) \sim F_{p, n-p}$이다.
+    따라서 이 $H_0$ 아래에서 $F = (\mathrm{SSR}/p)/(\mathrm{SSE}/(n-p)) \sim F_{p, n-p}$이다.
+
+    **다만 이것은 통상의 "전체 F-검정"이 아니다.** 여기서 검정한 $H_0$은 절편까지 포함해 $\boldsymbol{\beta}$의 **모든** 성분이 0이라는 가설이다. 실무에서 회귀표에 찍히는 전체 F-검정은 절편은 남겨 두고 기울기만 0인지를 묻는 가설이므로, $\mathbf{H}$ 자리에 $\mathbf{H} - \tfrac{1}{n}\mathbf{J}$(절편만 있는 모형의 사영을 걷어낸 것)가 들어가 자유도가 $p$가 아니라 $p - 1$이 된다. 연습문제 10에서 그 쪽을 다룬다.
 
 <div class="drillbox" markdown>
 
@@ -244,11 +337,13 @@ $\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2\mathbf{I}_n)$이라 �
 
     코크런 정리의 가정 확인:
 
-    - $\mathbf{A}_1 + \mathbf{A}_2 = \mathbf{H} + (\mathbf{I} - \mathbf{H}) = \mathbf{I}$. ✓
-    - 각 $\mathbf{A}_i$가 대칭 양반정치다. ✓
+    - 각 $\mathbf{A}_i$가 대칭이다. ✓
+    - 모든 $\mathbf{y}$에 대해 분해가 성립한다. 곧 $\mathbf{A}_1 + \mathbf{A}_2 = \mathbf{H} + (\mathbf{I} - \mathbf{H}) = \mathbf{I}$. ✓
     - $\operatorname{rank}(\mathbf{A}_1) + \operatorname{rank}(\mathbf{A}_2) = p + (n - p) = n$. ✓
 
-    결론($\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$ 아래에서): $\mathbf{y}^T\mathbf{H}\mathbf{y}/\sigma^2 \sim \chi^2_p$이고 $\mathbf{y}^T(\mathbf{I} - \mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$이며 둘은 독립이다. $\square$
+    결론($\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$ 아래에서): $\mathbf{y}^T\mathbf{H}\mathbf{y}/\sigma^2 \sim \chi^2_p$이고 $\mathbf{y}^T(\mathbf{I} - \mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$이며 둘은 독립이다.
+
+    **가정을 하나만 빼 보면 왜 둘 다 필요한지 보인다.** $\mathbf{A}_1 = \tfrac{1}{2}\mathbf{I}$, $\mathbf{A}_2 = \tfrac{1}{2}\mathbf{I}$로 두면 $\mathbf{A}_1 + \mathbf{A}_2 = \mathbf{I}$는 성립하지만 $r_1 + r_2 = 2n \neq n$이다. 실제로 $\mathbf{y}^T\mathbf{A}_1\mathbf{y}/\sigma^2 = \tfrac{1}{2}\chi^2_n$은 카이제곱이 아니고 두 조각은 완전히 종속이다. 거꾸로 $\mathbf{A}_1 = \mathbf{H}$, $\mathbf{A}_2 = \mathbf{H}' \ne \mathbf{I} - \mathbf{H}$처럼 계수의 합만 $n$으로 맞추어도 $\sum_i \mathbf{A}_i = \mathbf{I}$가 깨지면 독립성이 사라진다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -380,7 +475,13 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 
     로 $\chi^2_r$의 분산과 정확히 일치한다. 평균도 $\operatorname{tr}(\mathbf{A}) = r$이다.
 
-    **거꾸로 읽으면 유용하다.** 이차형식이 카이제곱이 **아닌** 경우에도 평균과 분산은 이 공식으로 계산된다. 그래서 근사적으로 $\chi^2$에 맞추는 새터스웨이트 근사가 가능하다. 자유도를 $\nu = 2(\operatorname{tr}\mathbf{A})^2/\operatorname{tr}(\mathbf{A}^2)$로 잡으면 평균과 분산이 맞아떨어진다. 웰치 $t$ 검정의 자유도가 정수가 아닌 이유가 여기에 있다. $\square$
+    **거꾸로 읽으면 유용하다.** 이차형식이 카이제곱이 **아닌** 경우에도 평균과 분산은 이 공식으로 계산된다. 그래서 근사적으로 척도조정된 카이제곱 $c\,\chi^2_d$에 맞추는 새터스웨이트 근사가 가능하다. $c\,\chi^2_d$의 평균은 $cd$, 분산은 $2c^2d$이므로 이를 $\operatorname{tr}(\mathbf{A})$와 $2\operatorname{tr}(\mathbf{A}^2)$에 맞추면
+
+    $$
+    d = \frac{(\operatorname{tr}\mathbf{A})^2}{\operatorname{tr}(\mathbf{A}^2)}, \qquad c = \frac{\operatorname{tr}(\mathbf{A}^2)}{\operatorname{tr}(\mathbf{A})}
+    $$
+
+    이다. 위 코드의 $\mathbf{M}$이면 $\operatorname{tr}\mathbf{M} = 9$, $\operatorname{tr}(\mathbf{M}^2) = 19$이므로 $d = 81/19 = 4.263$, $c = 19/9 = 2.111$이고, 실제로 $cd = 9$와 $2c^2d = 38$로 평균과 분산이 맞아떨어진다. $\mathbf{A}$가 계수 $r$인 멱등행렬이면 $\operatorname{tr}\mathbf{A} = \operatorname{tr}(\mathbf{A}^2) = r$이므로 $d = r$, $c = 1$이 되어 근사가 정확한 $\chi^2_r$로 환원된다. 웰치 $t$ 검정의 자유도가 정수가 아닌 이유가 여기에 있다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -476,4 +577,4 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 대칭이면
 
 ## 정리하며
 
-이차형식의 카이제곱분포는 사영행렬의 멱등 구조 위에 서 있다. $\mathbf{z}$가 표준정규이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬일 때 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$는 자유도 $r$인 카이제곱을 따른다. 크레이그 정리가 독립성 조건($\mathbf{A}\mathbf{B} = \mathbf{0}$)을 주고, 코크런 정리가 총제곱합의 분해에 대해 이 결과들을 통합한다. 이 결과들이 선형회귀 틀에서 F-검정, t-검정, 분산분석의 이론적 토대를 제공한다.
+이차형식의 카이제곱분포는 사영행렬의 멱등 구조 위에 서 있다. $\mathbf{z}$가 표준정규이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬일 때 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$는 자유도 $r$인 카이제곱을 따른다. 크레이그 정리가 독립성 조건($\mathbf{A}\mathbf{B} = \mathbf{O}$)을 주고, 코크런 정리가 총제곱합의 분해에 대해 이 결과들을 통합한다. 이 결과들이 선형회귀 틀에서 F-검정, t-검정, 분산분석의 이론적 토대를 제공한다.

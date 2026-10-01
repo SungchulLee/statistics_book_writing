@@ -15,9 +15,11 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 
 ## 불러오기와 살펴보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 자료를 불러와 훑어보기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료를 불러와 훑어보기
+
+</div>
 
 ```python
 """표를 만들어 크기·자료형·요약통계를 훑어보는 첫 단계를 보인다."""
@@ -44,7 +46,7 @@ print(demo.describe().round(2))   # 개수·평균·표준편차·최솟값·사
 출력:
 
 ```
-treatment      x  outcome
+  treatment      x  outcome
 0      drug  12.61     53.3
 1      drug  11.89     58.3
 2      drug    NaN     49.0
@@ -68,8 +70,6 @@ max    12.61    60.90
 
 `read_csv`는 `parse_dates`, `dtype`, `na_values`, `usecols`, `chunksize`를 받는다. 자료 품질 문제는 대부분 나중이 아니라 불러오는 시점에 처리하는 것이 가장 좋다.
 
-</div>
-
 ## 행과 열 선택하기
 
 반드시 구별해야 할 서로 독립적인 연산이 셋 있다.
@@ -85,9 +85,11 @@ max    12.61    60.90
 
 ## 결측값 정제
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 결측값 세고 메우기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 결측값 세고 메우기
+
+</div>
 
 ```python
 print(demo.isna().sum())              # 열마다 결측이 몇 개인지
@@ -114,15 +116,15 @@ dtype: int64
 
 "옳은" 대체 전략이란 없다. 무엇을 고를지(삭제, 평균, 중앙값, 모형 기반, 다중대체)는 결측 기제에 달려 있다. pandas는 도구를 줄 뿐 결정은 사용자에게 맡긴다.
 
-</div>
-
 ## 그룹화: 분할–적용–결합
 
 pandas에서 가장 강력한 하나의 패턴이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 집단별 요약 — 분할·적용·결합 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 집단별 요약 — 분할·적용·결합
+
+</div>
 
 ```python
 # 분할(treatment 로 나누고) — 적용(집계 함수를 걸고) — 결합(하나의 표로 모은다)
@@ -132,15 +134,13 @@ print(demo.groupby("treatment")["outcome"].agg(["count", "mean", "std"]).round(2
 출력:
 
 ```
-count   mean   std
+           count   mean   std
 treatment                    
 control        6  51.75  6.69
 drug           6  50.22  5.52
 ```
 
 `groupby`는 `"treatment"`의 서로 다른 값에 따라 자료를 분할하고, 각 그룹 안에서 `"outcome"`에 지정된 집계를 적용한 뒤, 결과를 깔끔한 DataFrame으로 결합한다. 탐색적 분석과 확증적 분석의 일꾼이다. 여러 키(`groupby(["a", "b"])`)와 사용자 정의 집계(`agg(my_func)`)로 이 패턴을 일반화할 수 있다.
-
-</div>
 
 ![groupby의 분할 적용 결합](./img/groupby_split_apply_combine.png)
 
@@ -163,9 +163,11 @@ drug           6  50.22  5.52
 
 기본값이 `ddof=0`인 NumPy와 다르다는 점에 유의하라. pandas와 NumPy의 결과가 $(n-1)/n$배만큼 어긋난다면 이유는 바로 이것이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-## 예제 4. pandas로 자료 다루기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> pandas로 자료 다루기
+
+</div>
 
 ```python
 import numpy as np
@@ -200,7 +202,7 @@ print("\nPivot:\n", df.pivot_table(values="value", index="group",
 출력:
 
 ```
-count   mean    std
+       count   mean    std
 group                     
 A         58  50.17  10.20
 B         72  49.72   9.83
@@ -220,8 +222,6 @@ A        55.4  50.1  48.6  46.9
 B        50.5  53.6  48.0  48.0
 C        48.8  48.0  50.1  50.0
 ```
-
-</div>
 
 ## 연습문제
 
@@ -246,7 +246,7 @@ C        48.8  48.0  50.1  50.0
     출력:
 
     ```
-    name  score  passed
+        name  score  passed
     0  Alice     92    True
     2  Carol     88    True
     4    Eve     95    True
@@ -278,7 +278,7 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
     출력:
 
     ```
-    n  mean  var  range
+           n  mean  var  range
     group                     
     A      2   2.0  2.0      2
     B      3   5.0  9.0      6
@@ -346,13 +346,13 @@ x,y,z
     출력:
 
     ```
-    x      y      z
+           x      y      z
     x  1.000  0.906  1.000
     y  0.906  1.000  0.906
     z  1.000  0.906  1.000
     ```
 
-    중앙값 대체는 평균 대체보다 이상치에 강건하지만, 결측이 정보를 담고 있을 때는 여전히 분산과 상관을 왜곡한다. 실제 분석에서는 모형 기반 대체나 다중대체가 낫다. 제12장을 보라.
+    중앙값 대체는 평균 대체보다 이상치에 강건하지만, 결측이 정보를 담고 있을 때는 여전히 분산과 상관을 왜곡한다. 실제 분석에서는 모형 기반 대체나 다중대체가 낫다. 결측 기제(MCAR·MAR·MNAR)와 그에 따른 처리는 1.4절 "편향과 무응답"과 7.1절에서 다룬다.
 
 <div class="drillbox" markdown>
 
@@ -408,7 +408,7 @@ x,y,z
     출력:
 
     ```
-    id   x    y     _merge
+       id   x    y     _merge
     0   1  10  NaN  left_only
     1   2  20    b       both
     2   3  30    c       both
