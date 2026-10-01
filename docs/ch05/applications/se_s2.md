@@ -70,9 +70,11 @@ $$
 
 이 계산이 맞는지는 직접 확인해 볼 수 있다. 표준오차란 표집분포의 표준편차이므로, $S^2$ 값을 잔뜩 모아 그 표준편차를 재면 그것이 곧 표준오차다. 다음 코드는 Uniform(0, 1) 모집단에서 $n = 5$로 $S^2$ 값을 10,000개 모의실험하고 추정된 평균과 표준오차를 함께 시각화한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 표본분산의 표준오차 모의실험 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표본분산의 표준오차 모의실험
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -121,8 +123,6 @@ Standard Error of S^2:   0.0425
 ```
 
 ![Sampling Distribution of S^2](./img/se_s2_55.png)
-
-</div>
 
 ## 해석
 

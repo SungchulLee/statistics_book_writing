@@ -22,9 +22,11 @@ $t_d$의 분산이 $d/(d-2)$라는 4.2절의 결과에도 같은 이야기가 �
 
 꼬리가 두껍다고 했지만 두 밀도곡선을 나란히 그려 놓으면 차이가 거의 보이지 않는다. 밀도가 큰 가운데 부분이 눈을 끌어서다. 아래 그림은 왼쪽에 전체를, 오른쪽에 오른쪽 꼬리만 확대해서 보여 준다. 검정에서 판단이 갈리는 곳은 언제나 후자다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. t 분포의 두꺼운 꼬리 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> t 분포의 두꺼운 꼬리
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -55,8 +57,6 @@ plt.show()
 ![Full PDF](./img/student_t_61.png)
 
 왼쪽에서는 두 곡선이 겹쳐 보이지만 오른쪽 확대에서는 $t(10)$이 정규분포 위로 또렷이 올라앉아 있다. 자유도가 10이나 되는데도 그렇다.
-
-</div>
 
 ## 왜 하필 t인가
 
@@ -114,9 +114,11 @@ $$
 
 아래 모의실험은 이 결론을 눈으로 확인한다. $N(0, 10^2)$에서 크기 10짜리 표본을 1만 번 뽑아 매번 분모에 참값 10이 아니라 표본표준편차를 넣은 비를 계산하고, 그 히스토그램에 $t_9$ 밀도를 겹쳐 놓는다. 분모에 참값을 넣었다면 히스토그램이 표준정규를 따랐을 것이다. 한 글자를 바꾼 대가가 곡선의 차이로 나타난다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 왜 t 분포가 필요한가 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 왜 t 분포가 필요한가
+
+</div>
 
 ```python
 import numpy as np
@@ -148,8 +150,6 @@ plt.show()
 ```
 
 ![스튜던트 t 분포](./img/student_t_118.png)
-
-</div>
 
 ## 임계값
 

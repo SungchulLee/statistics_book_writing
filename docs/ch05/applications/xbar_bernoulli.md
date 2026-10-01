@@ -60,9 +60,11 @@ $$
 
 다음 코드는 여러 $p$ 값에 대해 베르누이 모집단에서 크기 $n = 100$인 표본을 뽑아 $\hat{p}$의 표본분포를 모의실험하고 이론적 정규근사를 겹쳐 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 베르누이 모집단에서 표본평균의 표집분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이 모집단에서 표본평균의 표집분포
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -113,8 +115,6 @@ plt.show()
 ```
 
 ![성공확률에 따른 표본비율의 표집분포](./img/xbar_bernoulli_60.png)
-
-</div>
 
 ## 네 패널이 말해 주는 것
 

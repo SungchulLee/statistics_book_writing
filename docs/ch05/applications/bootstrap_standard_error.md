@@ -40,9 +40,11 @@ $B$가 크면 두 방식이 거의 같은 답을 준다.
 
 다음 코드는 31개의 가격 관측값 표본에 고전적 방법과 붓스트랩 방법을 모두 적용한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 붓스트랩으로 표준오차 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 붓스트랩으로 표준오차 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -103,15 +105,15 @@ Squared-error SE:   0.1810
 
 남은 차이는 두 몫이다. 하나는 재표집 1만 번이 만들어 낸 우연이고, 다른 하나는 붓스트랩 쪽이 체계적으로 $\sqrt{(n-1)/n} = 0.984$배 작게 나오는 데서 온다. 뒤의 것은 우연이 아니라 극한값 자체의 성질이며, 연습문제 5가 그 까닭을 밝힌다.
 
-</div>
-
 ## 시각화
 
 붓스트랩이 만들어 낸 것이 무엇인지는 그림으로 보는 편이 빠르다. 왼쪽은 재표본 1만 개의 평균이 이루는 분포이고, 이 히스토그램의 **폭**이 곧 붓스트랩 표준오차다. 오른쪽은 쓰는 자료를 늘려 갈 때 고전적 표준오차가 어떻게 움직이는지를 그린 것이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 붓스트랩 분포 시각화 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 분포 시각화
+
+</div>
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
@@ -150,8 +152,6 @@ plt.show()
 ```
 
 ![Standard Error Shrinks Like 1/sqrt(n)](./img/bootstrap_standard_error_91.png)
-
-</div>
 
 ## 해석
 
@@ -205,7 +205,7 @@ plt.show()
     \text{SE} = \frac{s}{\sqrt{n}} = \frac{1.032}{\sqrt{31}} = \frac{1.032}{5.568} \approx 0.185
     $$
 
-    예제 1이 찍은 `Classical SE: 0.1854`와 맞는다. $\square$
+    보기 1이 찍은 `Classical SE: 0.1854`와 맞는다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -306,7 +306,7 @@ plt.show()
 
     이는 $n$이 크면 $s/\sqrt{n}$에 매우 가깝다($\sqrt{(n-1)/n}$배만큼 다르다). 이 작은 차이는 붓스트랩 세계의 분산 $\text{Var}^*(x_j^*)$가 편차제곱합을 $n-1$이 아니라 $n$으로 나눈 값이라는 데서 오며, $n \to \infty$일 때 사라진다.
 
-    **복제값들의 표준편차를 $\text{ddof}=1$로 계산해도 이 차이는 없어지지 않는다.** $\text{ddof}$는 $B$개의 복제값을 평균 내는 쪽의 보정이라 유한한 $B$에서의 치우침만 손볼 뿐, $B \to \infty$ 극한값은 $\text{ddof}$와 무관하게 $s\sqrt{n-1}/n$이다. 예제 1이 바로 그 확인이다. $\text{ddof}=1$로 계산한 붓스트랩 값이 $0.1834$로, 고전 값 $0.1854$가 아니라 $1.0320 \times \sqrt{30}/31 = 0.1823$ 쪽에 앉는다. $\square$
+    **복제값들의 표준편차를 $\text{ddof}=1$로 계산해도 이 차이는 없어지지 않는다.** $\text{ddof}$는 $B$개의 복제값을 평균 내는 쪽의 보정이라 유한한 $B$에서의 치우침만 손볼 뿐, $B \to \infty$ 극한값은 $\text{ddof}$와 무관하게 $s\sqrt{n-1}/n$이다. 보기 1이 바로 그 확인이다. $\text{ddof}=1$로 계산한 붓스트랩 값이 $0.1834$로, 고전 값 $0.1854$가 아니라 $1.0320 \times \sqrt{30}/31 = 0.1823$ 쪽에 앉는다. $\square$
 
 <div class="drillbox" markdown>
 

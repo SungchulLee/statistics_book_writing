@@ -162,9 +162,11 @@ $$
 
 같은 실험을 두 모집단에서 되풀이한다. 크기 10짜리 표본을 1만 번 뽑아 그때마다 $S^2$을 기록하고 그 분포를 그리는 것이다. 먼저 정규모집단이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 정규모집단에서 표본분산의 표집분포 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 정규모집단에서 표본분산의 표집분포
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -209,15 +211,15 @@ plt.show()
 
 ![Population Distribution (Normal)](./img/sample_variance_156.png)
 
-</div>
-
 위 패널의 모집단은 좌우대칭인데 아래 패널의 $S^2$ 분포는 오른쪽으로 꼬리를 끈다. 분산이 음수가 될 수 없어 왼쪽이 0에서 막히는 반면 오른쪽은 열려 있기 때문이며, 표본평균의 표집분포가 대칭이었던 것과 대비된다. 중심은 참값 1 근처에 놓여 불편성을 확인해 준다.
 
 다음은 치우친 모집단이다. 대출 신청자의 소득 자료로, 오른쪽으로 길게 늘어진 전형적인 소득 분포다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 치우친 모집단에서 표본분산의 표집분포 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 치우친 모집단에서 표본분산의 표집분포
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -257,8 +259,6 @@ plt.show()
 ```
 
 ![치우친 소득 모집단과 표본분산의 표집분포](./img/sample_variance_228.png)
-
-</div>
 
 소득 모집단은 꼬리가 두꺼워 첨도가 크다. 앞에서 본 배율 $(\beta_2-1)/2$가 그만큼 크게 작용하므로 $S^2$의 퍼짐도 정규모집단에서보다 훨씬 커지고, 카이제곱 공식이 주는 값은 더 이상 맞지 않는다. 모집단의 모양이 $\bar{X}$의 표집분포에는 거의 흔적을 남기지 않았지만 $S^2$에는 고스란히 남는 것이다.
 

@@ -113,9 +113,11 @@ $$
 
 아래 코드는 네 가지 서로 다른 모집단(Normal, Exponential, Chi-squared, Uniform)에서 각각 $n = 100$으로 $S^2$의 표본분포를 모의실험하고 이론적 카이제곱 밀도를 겹쳐 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 모집단 모양에 따른 표본분산의 표집분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 표본분산의 표집분포
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -178,8 +180,6 @@ plt.show()
 ```
 
 ![S-squared의 표본분포 (Normal)](./img/s2_normal_61.png)
-
-</div>
 
 ## 해석
 

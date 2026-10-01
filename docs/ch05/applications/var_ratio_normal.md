@@ -37,9 +37,11 @@ $$
 
 ## 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 정규모집단에서 분산비의 표집분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규모집단에서 분산비의 표집분포
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -79,11 +81,11 @@ plt.show()
 
 히스토그램과 빨간 곡선이 **거의 구별되지 않는다.** 다음 쪽의 같은 그림과 견주어 보면 차이가 분명해진다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 네 가지를 수치로 확인
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 2. 네 가지를 수치로 확인 { .eg }
 
 ```python
 import numpy as np
@@ -116,8 +118,6 @@ for n1, n2 in [(20, 20), (15, 25), (10, 40)]:
 ```
 
 네 열이 모두 이론값과 맞는다. KS 거리가 0.003 수준인데 이는 10만 번 모의실험의 **모의오차 수준**이다($1/\sqrt{B} = 0.0032$). 오류율이 0.050, 포함률이 0.950으로 명목 수준과 일치한다.
-
-</div>
 
 ## 해석
 
@@ -154,7 +154,7 @@ for n1, n2 in [(20, 20), (15, 25), (10, 40)]:
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff easy" title="쉬움"></span>
-예제 2에서 KS 거리 0.003이 "모의오차 수준"이라는 말의 뜻을 설명하라. 모의실험 횟수를 100배로 늘리면 이 값이 어떻게 되겠는가?
+보기 2에서 KS 거리 0.003이 "모의오차 수준"이라는 말의 뜻을 설명하라. 모의실험 횟수를 100배로 늘리면 이 값이 어떻게 되겠는가?
 
 </div>
 

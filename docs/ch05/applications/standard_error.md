@@ -159,9 +159,11 @@ $$
 
 물론 현실에서 표본은 한 번밖에 뽑지 못하므로 이렇게 할 수 없다. 그래서 $s/\sqrt n$이라는 공식을 쓰는 것이고, 이 모의실험은 그 공식이 무엇을 대신하고 있는지를 눈으로 보여 주는 장치다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 표준오차를 한 파일로 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표준오차를 한 파일로 구하기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -232,15 +234,15 @@ if __name__ == "__main__":
 
 ![표본평균의 표집분포](./img/se_xbar_single_file.png)
 
-</div>
-
 ## 같은 코드를 파일 둘로 나눈다면
 
-위 예제는 한 덩어리로 실행하는 형태였다. 실제 프로젝트에서는 설정과 본문을 파일로 나누는 편이 낫다. 아래 두 블록은 **두 개의 `.py` 파일**을 각각 적은 것이므로, 문서에서 이어 붙여 실행할 수는 없다. 같은 디렉터리에 저장한 뒤 `python standard_error_of_x_bar.py --seed 7` 처럼 실행한다.
+위 보기는 한 덩어리로 실행하는 형태였다. 실제 프로젝트에서는 설정과 본문을 파일로 나누는 편이 낫다. 아래 두 블록은 **두 개의 `.py` 파일**을 각각 적은 것이므로, 문서에서 이어 붙여 실행할 수는 없다. 같은 디렉터리에 저장한 뒤 `python standard_error_of_x_bar.py --seed 7` 처럼 실행한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 공유 설정 모듈 — `global_name_space.py` { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 공유 설정 모듈 — `global_name_space.py`
+
+</div>
 
 ```python
 import argparse
@@ -268,13 +270,13 @@ plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
 plt.rcParams['axes.unicode_minus'] = False
 ```
 
+이제 본문 쪽이다. `standard_error_of_x_bar.py`는 보기 1과 계산이 같다. 달라진 곳은 두 군데다. 시드를 직접 고정하는 대신 `global_name_space`를 가져오고, 그리는 부분을 `draw()`로 떼어 놓았다. 뒤에서 같은 그림을 $S^2$에 대해 한 번 더 그릴 것이므로 미리 나누어 둔 것이다.
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표준오차를 그림에 표시하기 — `standard_error_of_x_bar.py`
+
 </div>
-
-이제 본문 쪽이다. `standard_error_of_x_bar.py`는 예제 1과 계산이 같다. 달라진 곳은 두 군데다. 시드를 직접 고정하는 대신 `global_name_space`를 가져오고, 그리는 부분을 `draw()`로 떼어 놓았다. 뒤에서 같은 그림을 $S^2$에 대해 한 번 더 그릴 것이므로 미리 나누어 둔 것이다.
-
-<div class="codebox" markdown>
-
-#### 예제 3. 표준오차를 그림에 표시하기 — `standard_error_of_x_bar.py` { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -345,17 +347,17 @@ if __name__ == "__main__":
 
 ![표본평균의 표집분포 — 모듈 버전](./img/se_xbar_module.png)
 
-예제 1과 계산이 같은데 값이 조금 다르다. 시드가 다르기 때문이다(예제 1은 0, 여기서는 `global_name_space.py`의 기본값 1). 두 결과가 모두 참값 $\mu = 0.5$와 $\sigma/\sqrt5 = 0.1291$ 근처에 있으며, 그 흔들림 자체가 모의실험 오차다.
-
-</div>
+보기 1과 계산이 같은데 값이 조금 다르다. 시드가 다르기 때문이다(보기 1은 0, 여기서는 `global_name_space.py`의 기본값 1). 두 결과가 모두 참값 $\mu = 0.5$와 $\sigma/\sqrt5 = 0.1291$ 근처에 있으며, 그 흔들림 자체가 모의실험 오차다.
 
 ## 분산에도 표준오차가 있다
 
 표준오차는 평균만의 것이 아니다. 표본마다 값이 달라지는 양이면 무엇이든 표본분포를 갖고, 따라서 표준오차를 갖는다. 같은 실험을 $S^2$에 대해 되풀이해 보자. 파일 이름은 `standard_error_of_s_square.py`이고, 앞 파일에서 `draw()`를 그대로 가져다 쓴다. 바뀌는 것은 표본평균 대신 표본분산을 기록한다는 것 하나뿐이며, 그래서 파일이 열 줄 남짓으로 끝난다. 그런데도 나오는 그림의 모양은 사뭇 다르다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 분산의 표준오차도 같은 방법으로 — `standard_error_of_s_square.py` { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 분산의 표준오차도 같은 방법으로 — `standard_error_of_s_square.py`
+
+</div>
 
 ```python
 import numpy as np
@@ -402,8 +404,6 @@ $$
     `x.var()`와 `x.std()**2`는 $n$으로 나눈 **편향추정량**을 준다. $S^2$을 원하면 `x.var(ddof=1)`이라고 명시해야 한다. 위 코드에서 `ddof=1`을 빼면 평균이 0.0841이 아니라 $\frac{n-1}{n}\sigma^2 = 0.0667$로 나와 불편성이 깨진 것처럼 보인다.
 
     $n = 5$처럼 작은 표본에서는 이 차이가 20%나 된다. pandas의 `.var()`는 반대로 기본값이 `ddof=1`이므로, 두 라이브러리를 섞어 쓸 때 특히 조심해야 한다.
-
-</div>
 
 ## 연습문제
 
@@ -759,6 +759,6 @@ $$
 
 표준오차가 이 책 전체에서 되풀이되는 것은 $(\hat\theta-\theta)/\mathrm{SE}(\hat\theta)$라는 표준화 형태 때문이다. $z$ 통계량도, $t$ 통계량도, 회귀계수의 검정통계량도 모두 이 꼴이며 분모에 놓인 것은 언제나 표준오차다. 표본평균에서 그 분모는 $\sigma/\sqrt n$이고, $\sigma$를 모르면 $s/\sqrt n$으로 바꿔 쓴다. 그 대체가 $t$ 분포를 불러온다.
 
-표준오차를 갖는 것은 평균만이 아니다. $S^2$에도 표준오차가 있고, 예제 4에서 보았듯 그 값은 모집단의 4차적률에 의존한다. 분산의 추정은 평균의 추정보다 훨씬 꼬리에 민감하다는 뜻이다.
+표준오차를 갖는 것은 평균만이 아니다. $S^2$에도 표준오차가 있고, 보기 4에서 보았듯 그 값은 모집단의 4차적률에 의존한다. 분산의 추정은 평균의 추정보다 훨씬 꼬리에 민감하다는 뜻이다.
 
 다음 쪽 **붓스트랩 표준오차**로 넘어간다. 이론 공식이 없거나 가정을 믿기 어려울 때 자료에서 직접 표준오차를 만들어 내는 방법이다. 그다음 5.4절부터는 통계량을 하나씩 잡아 그 표본분포를 이론과 모의실험으로 살펴본다.

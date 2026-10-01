@@ -145,9 +145,11 @@ $$
 
 ## 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 격자 전체의 실제 오류율 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 격자 전체의 실제 오류율
+
+</div>
 
 ```python
 import numpy as np
@@ -202,11 +204,11 @@ sigma1/sigma2  (n1, n2)   pooled t   Welch t   mean nu
 
 첫 세 줄이 등분산 기준선이다. 두 검정이 모두 0.05를 지킨다. 아래로 내려가면서 합동 $t$의 값이 좌우로 벌어지는데, **Welch 열은 아홉 칸 모두 0.048에서 0.052 사이**에 머문다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 격자를 그림으로
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 2. 격자를 그림으로 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -221,7 +223,7 @@ xs = np.arange(len(sizes))
 for ax, r in zip(axes, ratios):
     pool, welch = [], []
     for n1, n2 in sizes:
-        rp, rw, nu = error_rates(n1, n2, r, 1.0)     # 예제 1의 함수
+        rp, rw, nu = error_rates(n1, n2, r, 1.0)     # 보기 1의 함수
         pool.append(rp)
         welch.append(rw)
     ax.bar(xs - 0.19, pool, 0.36, color="#c44e52", edgecolor="white", label="pooled $t$")
@@ -246,11 +248,11 @@ plt.show()
 
 왼쪽 패널(등분산)에서는 여섯 개의 막대가 모두 점선 위에 나란히 있다. 오른쪽으로 갈수록 빨간 막대만 튀어 오르거나 주저앉고 파란 막대는 점선에 붙어 있다. **파란 막대가 아홉 칸 내내 같은 높이라는 것**이 이 그림의 요점이다.
 
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표본을 키워도 사라지지 않는다
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 3. 표본을 키워도 사라지지 않는다 { .eg }
 
 ```python
 import numpy as np
@@ -260,7 +262,7 @@ rng = np.random.default_rng(1)
 B = 50_000
 alpha = 0.05
 
-# error_rates 는 예제 1과 같다(생략).
+# error_rates 는 보기 1과 같다(생략).
 
 print("sigma1/sigma2 = 4,  n1 : n2 = 1 : 4 를 유지하며 표본을 키운다")
 print(" (n1,  n2)    pooled t   Welch t   mean nu")
@@ -304,11 +306,11 @@ $$
 
 반대 방향도 마찬가지다. $4:1$ 배치의 오류율은 0.001 근처에 머물다 극한 0.0004로 간다. **검정이 사실상 아무것도 기각하지 않는다.**
 
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> 등분산일 때 Welch를 쓰는 비용
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 4. 등분산일 때 Welch를 쓰는 비용 { .eg }
 
 ```python
 import numpy as np
@@ -354,8 +356,6 @@ for n in (5, 10, 20, 50):
 
 **잃는 것은 이만큼이고 얻는 것은 0.291 대 0.050이다.** 저울이 한쪽으로 완전히 기운다.
 
-</div>
-
 ## 해석
 
 !!! note "주요 관찰"
@@ -371,7 +371,7 @@ for n in (5, 10, 20, 50):
 
     - **예비검정의 검정력이 낮다.** 표본이 작을 때 $F$ 검정은 $\sigma_1/\sigma_2 = 2$ 정도를 잘 잡아내지 못한다. 그런데 합동 $t$가 위험해지는 것이 바로 그 소표본·불균형 상황이다. 필요할 때 경보가 울리지 않는다.
     - **전체 유의수준이 왜곡된다.** 자료를 보고 검정을 고르면 최종 절차의 실제 오류율은 두 검정 어느 쪽의 것도 아니다. 조건부 선택이 만든 제3의 절차이며, 그 성질은 아무도 보장하지 않는다.
-    - **얻는 것이 없다.** 예제 4가 보여 주듯 등분산이 맞을 때 Welch의 손해는 무시할 만하다. 위험을 감수하고 고를 이유가 없다.
+    - **얻는 것이 없다.** 보기 4가 보여 주듯 등분산이 맞을 때 Welch의 손해는 무시할 만하다. 위험을 감수하고 고를 이유가 없다.
 
     그래서 현대의 권고는 단순하다. **두 표본 평균 비교에는 언제나 Welch를 먼저 놓는다.** R의 `t.test()`가 `var.equal = FALSE`를 기본값으로 두는 이유이며, 기본값이 합동 $t$인 SciPy의 `ttest_ind`에 `equal_var=False`를 명시하라고 권하는 이유이기도 하다.
 
@@ -565,7 +565,7 @@ Satterthwaite의 자유도 공식을 적률맞춤으로 유도하라. $V = S_1^2
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-$n_1 = c_1 N$, $n_2 = c_2 N$으로 두고 $N \to \infty$를 취해 배율 $R$의 극한이 $N$에 의존하지 않음을 보여라. $c_1:c_2 = 1:4$, $\sigma_1:\sigma_2 = 4:1$에서 극한값과 대응하는 오류율을 계산하고 예제 3의 표와 견주어라.
+$n_1 = c_1 N$, $n_2 = c_2 N$으로 두고 $N \to \infty$를 취해 배율 $R$의 극한이 $N$에 의존하지 않음을 보여라. $c_1:c_2 = 1:4$, $\sigma_1:\sigma_2 = 4:1$에서 극한값과 대응하는 오류율을 계산하고 보기 3의 표와 견주어라.
 
 </div>
 
@@ -603,7 +603,7 @@ $n_1 = c_1 N$, $n_2 = c_2 N$으로 두고 $N \to \infty$를 취해 배율 $R$의
     P(|Z| > 1.96 \times 0.5547) = P(|Z| > 1.087) = 0.277
     $$
 
-    이다. 예제 3의 표에서 0.292, 0.286, 0.282, 0.275로 이 값 근처로 다가가고 있다. **0.05로 가지 않는다.**
+    이다. 보기 3의 표에서 0.292, 0.286, 0.282, 0.275로 이 값 근처로 다가가고 있다. **0.05로 가지 않는다.**
 
     반대 배치 $c_1:c_2 = 4:1$이면 $R \to 3.25$이고 오류율의 극한은 $P(|Z| > 1.96\times1.803) = 0.0004$다. 표의 0.001, 0.001, 0.001, 0.000과 맞는다.
 

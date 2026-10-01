@@ -176,9 +176,11 @@ $$
 
 아래 코드는 이 쪽의 주장을 그림 한 장으로 요약한다. 위 패널에는 막대 두 개뿐인 베르누이 모집단을, 아래 패널에는 거기서 크기 1000인 표본을 1만 번 뽑아 얻은 $\hat{p}$의 분포를 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 표본비율의 표집분포 모의실험 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표본비율의 표집분포 모의실험
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -220,8 +222,6 @@ plt.show()
 ```
 
 ![베르누이 모집단과 표본비율의 표집분포](./img/sample_proportion_183.png)
-
-</div>
 
 ## 근사를 버려야 할 때
 

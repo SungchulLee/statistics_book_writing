@@ -161,9 +161,11 @@ $$
 
 이것을 눈으로 확인해 보자. 0부터 32까지 번호가 적힌 탁구공 33개를 항아리에 넣는다. 개수가 홀수라 모집단 중앙값이 정확히 16으로 떨어진다. 여기서 다섯 개를 비복원으로 뽑아 그 중앙값을 적는 일을 50번 되풀이한다. 표본중앙값은 모집단 중앙값의 불편추정량일까.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 탁구공으로 보는 불편성 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 탁구공으로 보는 불편성
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -180,7 +182,7 @@ def main():
 
     # 크기 5짜리 표본을 50번 뽑아 그때마다 표본중앙값을 기록한다.
     # 표본이 달라지면 중앙값도 달라진다는 것,
-    # 즉 **통계량이 확률변수라는 것**이 이 예제의 전부다.
+    # 즉 **통계량이 확률변수라는 것**이 이 보기의 전부다.
     data = []
     for _ in range(num_samples):
         sample = np.random.choice(balls, size=5, replace=False)
@@ -225,8 +227,6 @@ Mean of sample medians: 16.44
 점들이 16을 중심으로 좌우로 퍼져 있다. 평균을 내면 16.44가 나오는데, 참값 16과 정확히 같지는 않다. 그렇다고 편향의 증거는 아니다. 표본중앙값 하나의 표준편차가 5.83이므로 50번 되풀이해 얻은 평균의 표준오차는 $5.83/\sqrt{50} = 0.82$이고, 16.44는 16에서 겨우 0.53 표준오차 떨어져 있다. 50번을 20만 번으로 늘리면 평균이 16.006으로 내려앉는다.
 
 한 가지 더 눈에 띄는 것이 있다. 점들이 가로축의 아무 데나 찍히지 않고 **정수 자리에만** 찍힌다. 공에 정수만 적혀 있고 다섯 개 중 가운데 값을 고르므로 표본중앙값도 정수일 수밖에 없다. 통계량의 분포는 이렇게 모집단의 성격을 물려받는다.
-
-</div>
 
 ## 좋은 추정량을 어떻게 만드는가
 
@@ -285,61 +285,118 @@ L(p) = \prod_{i=1}^m p^{x^{(i)}}(1-p)^{1-x^{(i)}}, \qquad
 \ell(p) = \sum_{i=1}^m \left[ x^{(i)} \log p + (1-x^{(i)})\log(1-p) \right]
 $$
 
-로그가능도를 $p$에 대해 미분해 0으로 두면 답은 표본비율이다.
+앞면이 나온 횟수를 $k = \sum_{i=1}^m x^{(i)}$라 두면 로그가능도가 한 줄로 줄어든다.
 
 $$
-\hat{p} = \frac{1}{m}\sum_{i=1}^m x^{(i)}
+\ell(p) = k \log p + (m - k)\log(1-p)
 $$
 
-동전을 100번 던져 앞면이 70번 나왔다면 $\hat p = 0.7$이다. 너무 당연해 보이는 답이지만, 그 당연함이 최대가능도라는 원리에서 유도된 것이라는 점이 요점이다. 아래 코드는 이 유도를 눈으로 확인한다. $p$의 후보를 0.01부터 0.99까지 늘어놓고 각각의 로그가능도를 계산해, 그 곡선의 꼭대기가 정말 표본비율에 놓이는지 본다.
+이것을 가장 크게 만드는 $p$를 찾는 일이 남았다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 베르누이 모수의 최대가능도추정 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 베르누이 모수의 최대가능도추정. $X_1, \ldots, X_m$을 독립인 $\text{Bernoulli}(p)$로 관측해 $1$이 $k$번 나왔다.
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+**(1)** $p$의 최대가능도추정값을 해석적으로 구하시오.
 
-np.random.seed(1)
-p_true = 0.7
-n_samples = 100
-
-# 참 p = 0.7 인 동전을 100번 던진다. 물론 실제로는 이 값을 모른다.
-coins = np.random.binomial(n=1, p=p_true, size=n_samples)
-
-# p의 후보를 0.01부터 0.99까지 100개 늘어놓고 각각의 로그가능도를 잰다.
-# 가능도는 "이 p라면 관측된 자료가 나올 확률이 얼마인가"이고,
-# 각 던짐이 독립이므로 확률을 모두 곱해야 한다.
-# 곱을 그대로 다루면 100번 곱하는 사이 값이 0으로 언더플로되므로
-# 로그를 취해 **합**으로 바꾼다. 이것이 로그가능도를 쓰는 실용적 이유다.
-#   앞면(coins=1)이면 log(p), 뒷면(coins=0)이면 log(1-p) 를 더한다.
-ps = np.linspace(0.01, 0.99, 100)
-log_likelihoods = np.array([
-    np.sum(coins * np.log(p) + (1 - coins) * np.log(1 - p))
-    for p in ps
-])
-
-# 최대가능도추정: 가능도를 가장 크게 만드는 p를 고른다.
-# 로그는 단조증가 함수이므로 로그가능도를 최대화하는 것과 결과가 같다.
-# 여기서는 격자에서 찾지만, 해석적으로 풀면 p-hat = 표본비율이 나온다.
-idx = np.argmax(log_likelihoods)
-mle_p = ps[idx]
-
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(ps, log_likelihoods, label="Log-likelihood")
-ax.axvline(mle_p, color='r', linestyle='--', label=f"MLE: p = {mle_p:.2f}")
-ax.legend(loc="lower right")
-ax.set_xlabel("Probability (p)")
-ax.set_ylabel("Log-likelihood")
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-plt.show()
-```
-
-![확률변수로서의 통계량](./img/statistics_as_rv_192.png)
+**(2)** 참값 $p = 0.7$인 동전을 $m = 100$번 던진 자료로 로그가능도 곡선을 그려, (1)의 답이 그 봉우리에 놓이는지 확인하시오.
 
 </div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** $0 < p < 1$에서 미분하면
+
+    $$
+    \ell'(p) = \frac{k}{p} - \frac{m-k}{1-p}
+    $$
+
+    이고, $\ell'(p) = 0$은 $k(1-p) = (m-k)p$, 곧 $k = mp$를 준다. 따라서
+
+    $$
+    \hat p = \frac{k}{m} = \frac{1}{m}\sum_{i=1}^m x^{(i)}
+    $$
+
+    이다. 이 정류점이 최대임은 이계도함수가 보여 준다.
+
+    $$
+    \ell''(p) = -\frac{k}{p^2} - \frac{m-k}{(1-p)^2} < 0
+    $$
+
+    $\ell$이 $(0,1)$에서 위로 오목하므로 정류점은 하나뿐이고 그것이 최대다. 끝점도 따로 볼 필요가 없다. $k = 0$이면 $\ell(p) = m\log(1-p)$가 감소함수라 $\hat p = 0$, $k = m$이면 증가함수라 $\hat p = 1$이어서 $\hat p = k/m$이 그대로 성립한다.
+
+    **최대가능도추정량이 표본비율이다.** 너무 당연해 보이는 답이지만, 그 당연함이 원리 하나에서 유도되었다는 것이 요점이다.
+
+    **(2) 수치적으로.** $p$의 후보를 격자에 늘어놓고 각각의 로그가능도를 재어 가장 큰 곳을 찾는다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    np.random.seed(1)
+    p_true, m = 0.7, 100
+
+    # 참 p = 0.7 인 동전을 100번 던진다. 물론 실제로는 이 값을 모른다.
+    coins = np.random.binomial(n=1, p=p_true, size=m)
+    k = coins.sum()
+
+    # 로그가능도는 k log p + (m-k) log(1-p) 로 줄어든다. 확률을 100번 곱하면
+    # 0 으로 언더플로되므로 로그를 취해 합으로 바꾼다.
+    ps = np.linspace(0.01, 0.99, 100)
+    loglik = k * np.log(ps) + (m - k) * np.log(1 - ps)
+
+    grid_mle = ps[np.argmax(loglik)]   # 격자가 고른 최대점
+    exact_mle = k / m                  # (1) 에서 해석적으로 구한 값
+
+    print(f"앞면 k = {k},  m = {m}")
+    print(f"해석적  p-hat = k/m = {exact_mle:.4f}")
+    print(f"격자 최대점         = {grid_mle:.4f}  (격자 간격 {ps[1] - ps[0]:.4f})")
+
+    fig, (ax, az) = plt.subplots(1, 2, figsize=(12, 3.2),
+                                 gridspec_kw={"width_ratios": [1.6, 1]})
+
+    for a in (ax, az):
+        a.plot(ps, loglik, color="#1565C0", lw=1.8, zorder=1)
+        a.axvline(exact_mle, color="#D32F2F", ls="--", lw=1.6, zorder=3)
+        a.axvline(grid_mle, color="#E65100", ls="-", lw=1.6, zorder=2)
+        a.set_xlabel("$p$")
+        a.spines[["top", "right"]].set_visible(False)
+
+    ax.set_ylabel("로그가능도 $\\ell(p)$")
+    ax.set_title("로그가능도 곡선 전체", fontsize=11)
+
+    # 오른쪽: 봉우리를 확대해 격자가 띄엄띄엄하다는 것을 보인다.
+    az.plot(ps, loglik, "o", ms=5, color="#1565C0", zorder=1)
+    az.set_xlim(exact_mle - 0.035, exact_mle + 0.035)
+    sel = np.abs(ps - exact_mle) < 0.045
+    az.set_ylim(loglik[sel].min(), loglik[sel].max() + 0.05)
+    az.set_title("봉우리 확대 — 격자점은 띄엄띄엄하다", fontsize=11)
+    az.plot([], [], color="#D32F2F", ls="--", lw=1.6,
+            label=f"해석적 $\\hat p = k/m = {exact_mle:.4f}$")
+    az.plot([], [], color="#E65100", ls="-", lw=1.6,
+            label=f"격자 최대점 $= {grid_mle:.4f}$")
+    az.legend(loc="lower center", fontsize=9)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    앞면 k = 74,  m = 100
+    해석적  p-hat = k/m = 0.7400
+    격자 최대점         = 0.7425  (격자 간격 0.0099)
+    ```
+
+    ![베르누이 로그가능도와 최대가능도추정값](./img/statistics_as_rv_192.png)
+
+    왼쪽 곡선의 봉우리가 해석적 답과 같은 자리에 있다. 오른쪽은 그 봉우리를 확대한 것인데, 격자가 고른 $0.7425$가 해석적 답 $0.7400$에서 한 칸 비껴나 있다. 격자 간격이 $0.0099$여서 $0.74$가 후보에 아예 없기 때문이다. **해석적으로 푼 답은 정확하고, 격자 탐색은 격자만큼만 정확하다.**
+
+    모수가 하나뿐인 이 문제에서는 격자를 쓸 이유가 없다. 그러나 미분해서 손으로 풀 수 없는 모형에서는 이런 수치 탐색이 유일한 길이 되며, 그때는 격자 대신 기울기를 따라 올라가는 방법을 쓴다. 6장의 최대가능도 최적화가 그 이야기다.
 
 ### 모집단 크기를 추정할 때
 
@@ -361,9 +418,11 @@ $$
 
 아래 코드는 이 추정을 격자에서 직접 확인한다. $N$을 하나씩 바꿔 가며 가능도를 계산해 어디서 최대가 되는지 본다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 포획-재포획의 최대가능도추정 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 포획-재포획의 최대가능도추정
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -422,8 +481,6 @@ MLE of N: 199
 격자에서 찾은 답이 200이 아니라 199다. $N$이 정수라서 가능도가 계단처럼 값을 갖고, 그 꼭대기가 비례식이 주는 200 바로 옆에 놓이기 때문이다. 이런 어긋남은 모수가 이산일 때 흔하며, 비례식 $\hat N = Mn/m$은 정확한 최댓값이 아니라 그 근처를 가리키는 편리한 공식으로 보는 것이 맞다.
 
 곡선이 봉우리 주위에서 **아주 평평하다**는 점도 중요하다. $N$이 150이든 300이든 가능도가 크게 다르지 않다. 표시된 물고기 10마리라는 적은 정보로는 개체수를 정밀하게 못 맞힌다는 뜻이고, 실제 생태 조사에서 재포획 수를 늘리려 애쓰는 이유다.
-
-</div>
 
 연습문제에서는 이 절차를 직접 밟아 본다. 포획–재포획과 베르누이·정규의 최대가능도를 손으로 유도하고, 불편성과 일치성이 어떻게 다른지, 그리고 불편성을 포기하면 오히려 오차가 줄어드는 경우가 있는지까지 따져 본다.
 

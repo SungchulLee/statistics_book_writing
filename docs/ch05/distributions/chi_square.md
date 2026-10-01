@@ -76,9 +76,11 @@ $n$을 키우면 무슨 일이 일어나는지 나누어 보자. $(n-1)S^2/\sigm
 
 말로 한 이야기를 눈으로 보자. 먼저 정규모집단이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 정규모집단에서 표본분산의 분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규모집단에서 표본분산의 분포
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -108,13 +110,13 @@ plt.show()
 
 히스토그램과 $\chi^2_9$ 곡선이 빈틈없이 겹친다. 근사가 아니라 정확한 결과이니 당연한 일이다.
 
-</div>
-
 이제 코드에서 **딱 한 줄**만 바꾼다. 모집단을 정규에서 지수로 갈아 끼우고 나머지는 그대로 둔다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 정규가 아닌 모집단에서는 어떻게 되는가 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규가 아닌 모집단에서는 어떻게 되는가
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -145,8 +147,6 @@ plt.show()
 ![지수모집단에서 (n-1)S²의 분포와 카이제곱 곡선](./img/chi_square_279.png)
 
 히스토그램이 빨간 곡선을 크게 벗어난다. 왼쪽으로는 더 몰려 있고 오른쪽으로는 곡선 밖까지 길게 뻗는다. 앞 절에서 표본평균이 지수 모집단에서도 얌전히 종 모양으로 수렴하던 것과 견주어 보라. 모집단을 바꾼 것은 똑같은데 한쪽은 아무 일도 없었고 다른 쪽은 무너졌다. 평균 계열과 분산 계열의 차이가 이것이다.
-
-</div>
 
 ## 임계값
 

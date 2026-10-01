@@ -93,9 +93,11 @@ $$
 
 ## 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 포함률 곡선 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 포함률 곡선
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -158,16 +160,16 @@ plt.show()
 
 **오른쪽 패널.** $p = 0.1$을 고정하고 $n$을 1씩 늘렸다. 두 곡선 모두 매끄럽지 않다. 왈드는 톱니의 골이 깊어 $n = 30$에서 0.81까지 떨어지고, 바로 앞 $n = 29$에서는 0.947이었다. $n = 200$에서도 0.93 근처를 오르내리며 0.95에 닿지 못한다. 윌슨은 진동하되 진폭이 작고 대체로 0.95 위에 머문다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 대표값을 표로 정리한다
+
 </div>
-
-<div class="codebox" markdown>
-
-#### 예제 2. 대표값을 표로 정리한다 { .eg }
 
 ```python
 import numpy as np
 
-# coverage() 는 예제 1 과 같다. 난수열을 처음부터 다시 쓰려고 rng 를 새로 만든다.
+# coverage() 는 보기 1 과 같다. 난수열을 처음부터 다시 쓰려고 rng 를 새로 만든다.
 rng = np.random.default_rng(1)
 
 print("n = 40 고정")
@@ -214,8 +216,6 @@ p = 0.1 고정
 아래쪽 표에서 $n = 29 \to 30$의 낙차(0.9466 → 0.8093)가 톱니의 크기를 보여 준다. 표본을 하나 더 얻고 포함률 14퍼센트포인트를 잃었다.
 
 $n = 200$에서도 왈드가 0.9267이다. **표본을 다섯 배로 늘려도 0.95에 도달하지 못한다.**
-
-</div>
 
 ## 해석
 
@@ -497,7 +497,7 @@ $\hat p = 0$일 때 윌슨 구간이 $\left[0,\ \dfrac{z^2}{n+z^2}\right]$임을
     출력:
 
     ```
-         방법      평균 포함률      최소 포함률       평균 폭
+           방법       평균 포함률       최소 포함률       평균 폭
          Wald       0.8998       0.3310     0.2388
        Wilson       0.9508       0.9283     0.2382
            AC       0.9576       0.9382     0.2451

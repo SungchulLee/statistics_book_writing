@@ -45,9 +45,11 @@ $$
 
 앞 쪽과 똑같은 그림을 이번에는 지수 모집단에서 그린다. 맨 위는 모집단, 가운데는 거기서 뽑은 **표본 하나**, 맨 아래는 그런 표본을 1만 번 뽑아 얻은 표본평균들의 분포다. 세 패널의 가로 눈금을 같게 묶어 두었으므로 퍼짐을 눈으로 직접 견줄 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 지수 모집단에서 표본평균의 표집분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 지수 모집단에서 표본평균의 표집분포
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -94,8 +96,6 @@ plt.show()
 ```
 
 ![Population Distribution (Exponential)](./img/xbar_exponential_40.png)
-
-</div>
 
 ## 해석
 
