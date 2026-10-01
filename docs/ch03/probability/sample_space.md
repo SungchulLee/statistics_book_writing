@@ -94,35 +94,70 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 표본공간을 나열해 사건의 확률 세기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표본공간을 나열해 사건의 확률 세기. 공정한 동전 세 개를 던진다.
+
+**(1)** $|\Omega|$와 사건 $A$ = "앞면이 정확히 두 번"의 확률을 세어서 구하고, 동전 $n$개에서 앞면이 $k$번일 확률을 일반식으로 적으시오.
+
+**(2)** 표본공간을 실제로 나열해 (1)을 확인하시오. 이 나열이 $n$이 커져도 쓸 수 있는 방법인지 말하시오.
 
 </div>
 
-```python
-from itertools import product
+??? success "풀이"
 
-# 동전 세 번 던지기의 표본공간
-sample_space = list(product(['H', 'T'], repeat=3))
-print(f"Sample space size: {len(sample_space)}")
-print(f"Sample space: {sample_space}")
+    **(1) 해석적으로.** 동전마다 결과가 두 가지이고 세 동전이 서로 무관하므로 결과의 수는 자리마다 두 가지를 곱한 것이다.
 
-# 사건: 앞면이 정확히 두 번
-event_2_heads = [s for s in sample_space if s.count('H') == 2]
-print(f"\nEvent (2 heads): {event_2_heads}")
-print(f"P(2 heads) = {len(event_2_heads)}/{len(sample_space)} = {len(event_2_heads)/len(sample_space):.4f}")
-```
+    $$
+    |\Omega| = 2 \times 2 \times 2 = 2^3 = 8
+    $$
 
-출력:
+    공정한 동전이면 여덟 결과의 무게가 모두 같으므로 $P(\omega) = 1/8$이고, 정리 2의 등가중 꼴 $P(A) = |A|/|\Omega|$를 쓸 수 있다. 남은 일은 $|A|$를 세는 것이다. 앞면이 들어갈 **자리 두 개를 세 자리에서 고르는** 가짓수이므로
 
-```
-Sample space size: 8
-Sample space: [('H', 'H', 'H'), ('H', 'H', 'T'), ('H', 'T', 'H'), ('H', 'T', 'T'), ('T', 'H', 'H'), ('T', 'H', 'T'), ('T', 'T', 'H'), ('T', 'T', 'T')]
+    $$
+    |A| = \binom{3}{2} = 3, \qquad P(A) = \frac{3}{8} = 0.375
+    $$
 
-Event (2 heads): [('H', 'H', 'T'), ('H', 'T', 'H'), ('T', 'H', 'H')]
-P(2 heads) = 3/8 = 0.3750
-```
+    이다. 같은 셈을 동전 $n$개로 밀면
 
-코드가 하는 일이 정확히 정리 2다. 표본공간을 만들고, 사건에 해당하는 결과를 고르고, 개수를 센다.
+    $$
+    P(\text{앞면이 } k \text{번}) = \frac{\binom{n}{k}}{2^n}
+    $$
+
+    이 된다. 분자가 "앞면 자리를 고르는 방법의 수", 분모가 "전체 결과의 수"다.
+
+    **(2) 나열해서.** 코드가 하는 일이 정확히 정리 2다. 표본공간을 만들고, 사건에 해당하는 결과를 고르고, 개수를 센다.
+
+    ```python
+    from itertools import product
+    from math import comb
+
+    # 동전 세 번 던지기의 표본공간
+    sample_space = list(product(['H', 'T'], repeat=3))
+    print(f"Sample space size: {len(sample_space)}")
+    print(f"Sample space: {sample_space}")
+
+    # 사건: 앞면이 정확히 두 번
+    event_2_heads = [s for s in sample_space if s.count('H') == 2]
+    print(f"\nEvent (2 heads): {event_2_heads}")
+    print(f"P(2 heads) = {len(event_2_heads)}/{len(sample_space)} = {len(event_2_heads)/len(sample_space):.4f}")
+
+    # (1)의 일반식과 맞는지 본다. 세지 않고 조합으로 바로 구한 값이다.
+    print(f"C(3,2)/2^3  = {comb(3, 2)}/{2**3} = {comb(3, 2)/2**3:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Sample space size: 8
+    Sample space: [('H', 'H', 'H'), ('H', 'H', 'T'), ('H', 'T', 'H'), ('H', 'T', 'T'), ('T', 'H', 'H'), ('T', 'H', 'T'), ('T', 'T', 'H'), ('T', 'T', 'T')]
+
+    Event (2 heads): [('H', 'H', 'T'), ('H', 'T', 'H'), ('T', 'H', 'H')]
+    P(2 heads) = 3/8 = 0.3750
+    C(3,2)/2^3  = 3/8 = 0.3750
+    ```
+
+    나열이 $8$개를 내놓고 그중 $3$개를 골라 $0.3750$을 주었다. 조합으로 바로 센 $\binom{3}{2}/2^3$도 같은 $0.3750$이다. **두 길이 맞는다.**
+
+    **다만 나열은 $n$이 조금만 커져도 쓸 수 없다.** 결과의 수가 $2^n$이므로 $n = 20$이면 $1{,}048{,}576$개, $n = 50$이면 $10^{15}$개를 넘는다. 목록을 메모리에 담는 일 자체가 불가능해진다. 그런데 (1)의 일반식은 $n$이 얼마든 분자와 분모를 한 번 계산하면 끝난다. **표본공간을 다 적는 것은 확률을 정의하는 방법이지 계산하는 방법이 아니다.** 이 일반식에 이름을 붙인 것이 4장의 이항분포다.
 
 ## 3. 표본공간의 크기가 확률의 성격을 바꾼다
 

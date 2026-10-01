@@ -58,48 +58,83 @@ $B$에 배정된 전체 확률 가운데 $A$에도 속하는 부분의 비율이
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 주사위로 조건부확률 확인하기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 주사위로 조건부확률 확인하기. 보기 2의 $A$ = "합이 8", $B$ = "첫 주사위가 3"을 10만 번 모의실험으로 세어 본다.
+
+**(1)** 10만 번 중 $B$가 일어나는 횟수의 기댓값은 얼마인가. 그 횟수로 나눈 비율 추정값의 **몬테카를로 표준오차**를 적으시오.
+
+**(2)** 모의실험으로 $P(A \mid B)$를 세어 보기 2의 $1/6$과 견주고, 차이가 (1)의 오차로 설명되는지 판정하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def conditional_probability_simulation(n_simulations=100_000):
-    """주사위 두 개로 조건부확률을 모의실험한다.
+    **(1) 이론값.** 보기 2에서 $P(A \mid B) = 1/6 = 0.16667$이다. 조건부확률을 세는 일은 **$B$가 일어난 시행만 모아 놓고** 그 안에서 $A$의 비율을 재는 것이므로, 유효 표본크기는 10만이 아니라 $B$가 일어난 횟수다. 그 횟수는 $\text{Binomial}(100000, 1/6)$을 따르므로
 
-    조건부확률을 계산하는 대신 **직접 세어 본다.**
-    P(A|B) = (A와 B가 모두 일어난 횟수) / (B가 일어난 횟수)
-    라는 정의를 그대로 코드로 옮긴 것이다.
-    """
-    np.random.seed(42)
+    $$
+    E[n_B] = \frac{100000}{6} = 16667, \qquad
+    \operatorname{sd}(n_B) = \sqrt{100000 \cdot \tfrac16 \cdot \tfrac56} = 118
+    $$
 
-    # randint(1, 7)은 1 이상 7 미만, 즉 1~6을 뽑는다
-    die1 = np.random.randint(1, 7, size=n_simulations)
-    die2 = np.random.randint(1, 7, size=n_simulations)
-    total = die1 + die2
+    이다. $n_B$를 고정하고 보면 추정값 $\hat p = n_{A \cap B}/n_B$는 성공확률 $1/6$인 $n_B$번의 시행에서 나온 비율이므로
 
-    # 여기가 조건부확률의 핵심이다. 표본공간을 "첫 주사위가 3인 시행"으로 좁힌다.
-    mask_B = die1 == 3                            # 조건 B가 성립한 시행들
-    mask_A_and_B = (die1 == 3) & (total == 8)     # 그중 A도 성립한 시행들
+    $$
+    \operatorname{se}(\hat p) = \sqrt{\frac{p(1-p)}{n_B}}
+    = \sqrt{\frac{(1/6)(5/6)}{16667}} = 0.00289
+    $$
 
-    # 전체 10만이 아니라 **좁혀진 표본공간의 크기**로 나눈다.
-    # 이 한 줄이 P(A|B) = P(A∩B)/P(B) 를 실행한 것이다.
-    p_conditional = mask_A_and_B.sum() / mask_B.sum()
-    print(f"Simulated P(sum=8 | die1=3) = {p_conditional:.4f}")
-    print(f"Theoretical P(sum=8 | die1=3) = {1/6:.4f}")
+    다. **셋째 자리까지만 믿을 수 있다는 뜻이다.** 10만 번을 돌렸는데도 그런데, 분모가 10만이 아니라 1만 6천이기 때문이다. 조건을 좁히면 자료도 그만큼 줄어든다.
 
-conditional_probability_simulation()
-```
+    **(2) 모의실험.** 코드가 하는 일이 정의 그대로임에 주목하라. `mask_B`로 표본공간을 좁히고, 그 안에서 $A$가 일어난 비율을 센다.
 
-출력:
+    ```python
+    import numpy as np
 
-```
-Simulated P(sum=8 | die1=3) = 0.1705
-Theoretical P(sum=8 | die1=3) = 0.1667
-```
+    def conditional_probability_simulation(n_simulations=100_000):
+        """주사위 두 개로 조건부확률을 모의실험한다.
 
-코드가 하는 일이 정의 그대로임에 주목하라. `mask_B`로 표본공간을 좁히고, 그 안에서 $A$가 일어난 비율을 센다.
+        조건부확률을 계산하는 대신 **직접 세어 본다.**
+        P(A|B) = (A와 B가 모두 일어난 횟수) / (B가 일어난 횟수)
+        라는 정의를 그대로 코드로 옮긴 것이다.
+        """
+        np.random.seed(42)
+
+        # randint(1, 7)은 1 이상 7 미만, 즉 1~6을 뽑는다
+        die1 = np.random.randint(1, 7, size=n_simulations)
+        die2 = np.random.randint(1, 7, size=n_simulations)
+        total = die1 + die2
+
+        # 여기가 조건부확률의 핵심이다. 표본공간을 "첫 주사위가 3인 시행"으로 좁힌다.
+        mask_B = die1 == 3                            # 조건 B가 성립한 시행들
+        mask_A_and_B = (die1 == 3) & (total == 8)     # 그중 A도 성립한 시행들
+
+        # 전체 10만이 아니라 **좁혀진 표본공간의 크기**로 나눈다.
+        # 이 한 줄이 P(A|B) = P(A∩B)/P(B) 를 실행한 것이다.
+        p_conditional = mask_A_and_B.sum() / mask_B.sum()
+        print(f"Simulated P(sum=8 | die1=3) = {p_conditional:.4f}")
+        print(f"Theoretical P(sum=8 | die1=3) = {1/6:.4f}")
+
+        # 분모가 몇인지, 그래서 오차가 얼마인지 함께 본다.
+        n_B, n_AB = int(mask_B.sum()), int(mask_A_and_B.sum())
+        se = np.sqrt((1/6) * (5/6) / n_B)
+        print(f"n_B = {n_B:,} (기댓값 {n_simulations/6:,.0f}),  n_AB = {n_AB:,}")
+        print(f"se = {se:.5f},  차이 = {p_conditional - 1/6:+.5f}"
+              f"  ({(p_conditional - 1/6) / se:+.2f} se)")
+
+    conditional_probability_simulation()
+    ```
+
+    출력:
+
+    ```
+    Simulated P(sum=8 | die1=3) = 0.1705
+    Theoretical P(sum=8 | die1=3) = 0.1667
+    n_B = 16,390 (기댓값 16,667),  n_AB = 2,795
+    se = 0.00291,  차이 = +0.00386  (+1.33 se)
+    ```
+
+    **맞는다.** 모의값 $0.1705$가 참값 $0.16667$에서 $+0.0039$ 어긋나 있는데, 그것은 표준오차 $0.0029$의 $1.33$배다. 이 정도 어긋남은 열 번에 두 번쯤 나오는 흔한 일이다. 참값이 소수 셋째 자리에서 비껴 보이는 것은 **난수 때문이지 식이 틀려서가 아니다.**
+
+    $n_B = 16{,}390$이 기댓값 $16{,}667$보다 $277$ 작은 것도 같은 성질이다. $\operatorname{sd}(n_B) = 118$이므로 $-2.3$ 표준편차에 해당한다. 조건 $B$ 자체가 몇 번 일어나는지도 난수에 맡긴 양이며, 이 변동이 다시 $\hat p$의 분모를 흔든다.
 
 ## 2. 두 단계 시행과 확률나무
 
@@ -235,50 +270,93 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 전확률의 법칙 모의실험
+**보기 6.** <span class="diff easy" title="쉬움"></span> 전확률의 법칙 모의실험. 보기 5의 설정을 100만 명에게 적용한다.
+
+**(1)** 전확률의 법칙이 예측하는 $P(\text{양성})$과 **두 경로 각각의 기여**를 적고, 100만 명 모의실험에서 양성률 추정값의 몬테카를로 표준오차를 구하시오.
+
+**(2)** 모의실험으로 (1)의 세 수를 모두 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def medical_test_simulation(n_people=1_000_000):
-    """전확률의 법칙을 100만 명 모의실험으로 확인한다."""
-    np.random.seed(42)
+    **(1) 이론값.** 보기 5에서 이미 계산했다. 경로가 둘이고 각 경로의 무게는 "그 시나리오의 확률 × 그 시나리오 안에서 양성일 확률"이다.
 
-    prevalence = 0.01            # 유병률 P(질병) = 1%
-    sensitivity = 0.95           # 민감도 P(양성|질병) = 95%
-    false_positive_rate = 0.10   # 위양성률 P(양성|건강) = 10%
+    $$
+    \underbrace{0.95 \times 0.01}_{\text{참양성 } 0.00950}
+    \; + \;
+    \underbrace{0.10 \times 0.99}_{\text{거짓양성 } 0.09900}
+    \; = \; 0.10850
+    $$
 
-    # 1단계: 100만 명 각자가 질병을 가졌는지 정한다(확률 1%)
-    has_disease = np.random.rand(n_people) < prevalence
+    모의실험은 이 **세 수를 따로따로** 재현해야 한다. 합만 맞고 쪼갠 몫이 틀리면 우연히 맞은 것이다.
 
-    # 2단계: 검사 결과를 정한다. 여기서 확률이 사람에 따라 달라진다.
-    # np.where(조건, 참일 때, 거짓일 때) 로 두 경우를 한 번에 처리한다.
-    #   질병이 있으면 95% 확률로 양성
-    #   건강하면    10% 확률로 양성
-    test_positive = np.where(
-        has_disease,
-        np.random.rand(n_people) < sensitivity,
-        np.random.rand(n_people) < false_positive_rate
-    )
+    양성 여부는 사람마다 독립인 베르누이 시행이므로 100만 명에서 양성률 추정값의 표준오차는
 
-    # 전체 양성률. 전확률의 법칙이 예측하는 값과 맞는지 아래에서 비교한다.
-    #   P(양성) = P(양성|질병)P(질병) + P(양성|건강)P(건강)
-    #           = 0.95*0.01 + 0.10*0.99 = 0.1085
-    p_positive = test_positive.mean()
-    print(f"Simulated P(positive) = {p_positive:.4f}")
-    print(f"Theoretical P(positive) = {0.1085:.4f}")
+    $$
+    \operatorname{se} = \sqrt{\frac{0.1085 \times 0.8915}{10^6}} = 0.00031
+    $$
 
-medical_test_simulation()
-```
+    이다. 소수 **넷째 자리까지** 맞아야 하고, 그 이상을 기대해서는 안 된다.
 
-출력:
+    **(2) 모의실험.**
 
-```
-Simulated P(positive) = 0.1085
-Theoretical P(positive) = 0.1085
-```
+    ```python
+    import numpy as np
+
+    def medical_test_simulation(n_people=1_000_000):
+        """전확률의 법칙을 100만 명 모의실험으로 확인한다."""
+        np.random.seed(42)
+
+        prevalence = 0.01            # 유병률 P(질병) = 1%
+        sensitivity = 0.95           # 민감도 P(양성|질병) = 95%
+        false_positive_rate = 0.10   # 위양성률 P(양성|건강) = 10%
+
+        # 1단계: 100만 명 각자가 질병을 가졌는지 정한다(확률 1%)
+        has_disease = np.random.rand(n_people) < prevalence
+
+        # 2단계: 검사 결과를 정한다. 여기서 확률이 사람에 따라 달라진다.
+        # np.where(조건, 참일 때, 거짓일 때) 로 두 경우를 한 번에 처리한다.
+        #   질병이 있으면 95% 확률로 양성
+        #   건강하면    10% 확률로 양성
+        test_positive = np.where(
+            has_disease,
+            np.random.rand(n_people) < sensitivity,
+            np.random.rand(n_people) < false_positive_rate
+        )
+
+        # 전체 양성률. 전확률의 법칙이 예측하는 값과 맞는지 아래에서 비교한다.
+        #   P(양성) = P(양성|질병)P(질병) + P(양성|건강)P(건강)
+        #           = 0.95*0.01 + 0.10*0.99 = 0.1085
+        p_positive = test_positive.mean()
+        print(f"Simulated P(positive) = {p_positive:.4f}")
+        print(f"Theoretical P(positive) = {0.1085:.4f}")
+
+        # 합만이 아니라 두 경로를 따로 재어 본다.
+        tp = (has_disease & test_positive).mean()        # 질병이면서 양성
+        fp = (~has_disease & test_positive).mean()       # 건강하면서 양성
+        se = np.sqrt(0.1085 * (1 - 0.1085) / n_people)
+        print(f"  참양성   {tp:.5f} (이론 0.00950)")
+        print(f"  거짓양성 {fp:.5f} (이론 0.09900)")
+        print(f"  합       {tp + fp:.5f} (이론 0.10850),  se = {se:.5f},"
+              f"  차이 = {p_positive - 0.1085:+.5f}")
+
+    medical_test_simulation()
+    ```
+
+    출력:
+
+    ```
+    Simulated P(positive) = 0.1085
+    Theoretical P(positive) = 0.1085
+      참양성   0.00950 (이론 0.00950)
+      거짓양성 0.09903 (이론 0.09900)
+      합       0.10853 (이론 0.10850),  se = 0.00031,  차이 = +0.00004
+    ```
+
+    **세 수가 모두 맞는다.** 합이 $0.10853$으로 이론값에서 $+0.00004$ 어긋나 있고 이는 표준오차 $0.00031$의 $0.1$배에 지나지 않는다. 쪼갠 몫도 참양성 $0.00950$, 거짓양성 $0.09903$으로 각각 $0.00950$과 $0.09900$에 붙어 있다.
+
+    **거짓양성이 참양성의 10.4배**라는 것도 모의실험에서 그대로 읽힌다. 전확률의 법칙은 이 두 덩어리를 더하는 일이고, 다음 절의 베이즈 정리는 거꾸로 **합에서 첫째 덩어리가 차지하는 몫**을 묻는다. 그 몫이 $0.00950/0.10853 = 0.0875$이며, 그것이 보기 5의 경고가 가리키던 수다.
 
 ## 연습문제
 

@@ -97,112 +97,168 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 같은 모의실험을 두 배율로 보기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 같은 모의실험을 두 배율로 보기. 네 모집단($\text{Uniform}(0,1)$, $\text{Exp}(1)$, $\text{LogNormal}(0, 0.75)$, $\text{Bernoulli}(0.3)$)에서 열 개의 $n$에 대해 같은 $\bar X_n$을 두 줄로 그린다. 윗줄은 배율 없이, 아랫줄은 $\sqrt n/\sigma$를 곱해서.
+
+**(1)** 아랫줄의 $Z_n = \sqrt n(\bar X_n - \mu)/\sigma$의 평균과 표준편차가 $n$과 모집단에 **무관하게** 얼마여야 하는지 적으시오. 윗줄의 확률은 어떤 값을 향해 가는가.
+
+**(2)** 네 모집단의 도착 순서를 콜모고로프–스미르노프 거리로 매기시오. 베르누이에서 그 거리가 더 내려가지 않는 까닭은 무엇인가.
 
 </div>
 
-정리 2를 코드로 확인하는 가장 곧은 길은 **같은 $\bar X_n$을 두 번 그리는 것**이다. 한 번은 그대로, 한 번은 $\sqrt n / \sigma$를 곱해서. 앞 절 큰수의 법칙에서 쓴 코드에 둘째 줄을 덧붙이면 된다.
+??? success "풀이"
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+    **(1) 아랫줄의 눈금은 정확히 고정되어 있다.** 표준화는 평균을 빼고 표준편차로 나누는 일이므로, 정리 1의 분산 계산만으로
 
-N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
-M = 10_000                    # 되풀이 횟수
-EPS = 0.2                     # ε (σ 단위)
+    $$
+    E[Z_n] = 0, \qquad
+    \operatorname{sd}(Z_n) = \frac{\operatorname{sd}(\bar X_n)}{\sigma/\sqrt n} = 1
+    $$
 
-# 이름 -> (표본추출기, 평균 μ, 표준편차 σ, 라벨, 이산인가)
-DISTRIBUTIONS = {
-    "uniform": (lambda rng, s: rng.uniform(0, 1, s),
-                0.5, np.sqrt(1 / 12), "Uniform(0,1)", False),
-    "exponential": (lambda rng, s: rng.exponential(1.0, s),
-                    1.0, 1.0, "Exponential(1)", False),
-    "lognormal": (lambda rng, s: rng.lognormal(0, 0.75, s),
-                  np.exp(0.75**2 / 2),
-                  np.sqrt((np.exp(0.75**2) - 1) * np.exp(0.75**2)),
-                  "LogNormal(0, 0.75)", False),
-    "bernoulli": (lambda rng, s: rng.binomial(1, 0.3, s).astype(float),
-                  0.3, np.sqrt(0.3 * 0.7), "Bernoulli(0.3)", True),
-}
+    이 모든 $n$에서, 네 모집단 모두에서 **등식으로** 성립한다. 중심극한정리도 정규성도 쓰지 않았다. 그러므로 아랫줄에서 확인할 것은 폭이 아니라 **모양**이다. 폭이 1인 것은 그릴 것도 없이 참이고, 종 모양이 남는다는 것만이 새 정보다.
 
+    윗줄의 확률 $P(|\bar X_n - \mu| > 0.2\sigma)$는 $0$으로 가야 한다(정리 2). 가는 길의 어림값은 정규근사로
 
-def lln_and_clt(dist):
-    sampler, mu, sigma, label, discrete = DISTRIBUTIONS[dist]
-    rng = np.random.default_rng(2026)
-    eps = EPS * sigma
-    X = sampler(rng, (M, max(N_LIST)))    # 가장 큰 n 으로 한 번만 뽑는다
+    $$
+    2\big(1 - \Phi(0.2\sqrt n)\big) = 0.655 \ (n = 5), \qquad 0.157 \ (n = 50)
+    $$
 
-    fig, axes = plt.subplots(2, 10, figsize=(22, 7.5), constrained_layout=True)
-    lo, hi = np.percentile(X[:, :min(N_LIST)].mean(axis=1), [0.5, 99.5])
-    pad = 0.1 * (hi - lo)
-    lln_bins = np.linspace(lo - pad, hi + pad, 60)
-    z_grid, z_bins = np.linspace(-4, 4, 400), np.linspace(-4, 4, 50)
+    이다. 지수분포에서 이 확률의 **정확한** 값은 큰수의 법칙 쪽 보기 1에서 감마분포로 구한 $0.6562$와 $0.1547$이다.
 
-    for j, n in enumerate(N_LIST):
-        xbar = X[:, :n].mean(axis=1)
+    **(2) 모의실험.** 정리 2를 코드로 확인하는 가장 곧은 길은 **같은 $\bar X_n$을 두 번 그리는 것**이다. 한 번은 그대로, 한 번은 $\sqrt n / \sigma$를 곱해서. 앞 절 큰수의 법칙에서 쓴 코드에 둘째 줄을 덧붙이면 된다.
 
-        # 정수값 분포에서는 X̄_n 이 격자 k/n 위에만 있다.
-        # 격자점마다 막대 하나를 두어야 밀도로 읽을 수 있다.
-        if discrete:
-            s = np.rint(X[:, :n].sum(axis=1))
-            lln_bins = (np.arange(s.min(), s.max() + 2) - 0.5) / n
-            z_bins = np.sqrt(n) * (lln_bins - mu) / sigma
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
 
-        # 윗줄 — 배율을 주지 않으면 μ 로 오그라든다 (큰수의 법칙)
-        ax = axes[0, j]
-        ax.hist(xbar, bins=lln_bins, density=True, color="tab:blue",
-                alpha=0.6, edgecolor="white", linewidth=0.3)
-        ax.axvline(mu, color="red", lw=2)
-        ax.axvspan(mu - eps, mu + eps, color="orange", alpha=0.18)
-        p_out = np.mean(np.abs(xbar - mu) > eps)
-        ax.set_title(f"n = {n}\n"
-                     rf"$\hat P(|\bar X_n-\mu|>\varepsilon)$ = {p_out:.3f}")
-        ax.set_xlim(lo - pad, hi + pad)
+    N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+    M = 10_000                    # 되풀이 횟수
+    EPS = 0.2                     # ε (σ 단위)
 
-        # 아랫줄 — √n/σ 를 곱해 확대하면 모양이 남는다 (중심극한정리)
-        ax = axes[1, j]
-        z = np.sqrt(n) * (xbar - mu) / sigma
-        ax.hist(z, bins=z_bins, density=True, color="tab:green",
-                alpha=0.6, edgecolor="white", linewidth=0.3)
-        ax.plot(z_grid, stats.norm.pdf(z_grid), "k-", lw=2)
-        ax.set_title(f"n = {n}\nKS = {stats.kstest(z, 'norm').statistic:.3f},"
-                     f"  skew = {stats.skew(z):.2f}")
-        ax.set_xlim(-4, 4)
-
-    fig.suptitle(f"Weak LLN (top) and CLT (bottom) for {label}")
-    plt.show()
+    # 이름 -> (표본추출기, 평균 μ, 표준편차 σ, 라벨, 이산인가)
+    DISTRIBUTIONS = {
+        "uniform": (lambda rng, s: rng.uniform(0, 1, s),
+                    0.5, np.sqrt(1 / 12), "Uniform(0,1)", False),
+        "exponential": (lambda rng, s: rng.exponential(1.0, s),
+                        1.0, 1.0, "Exponential(1)", False),
+        "lognormal": (lambda rng, s: rng.lognormal(0, 0.75, s),
+                      np.exp(0.75**2 / 2),
+                      np.sqrt((np.exp(0.75**2) - 1) * np.exp(0.75**2)),
+                      "LogNormal(0, 0.75)", False),
+        "bernoulli": (lambda rng, s: rng.binomial(1, 0.3, s).astype(float),
+                      0.3, np.sqrt(0.3 * 0.7), "Bernoulli(0.3)", True),
+    }
 
 
-for name in DISTRIBUTIONS:
-    lln_and_clt(name)
-```
+    def lln_and_clt(dist):
+        sampler, mu, sigma, label, discrete = DISTRIBUTIONS[dist]
+        rng = np.random.default_rng(2026)
+        eps = EPS * sigma
+        X = sampler(rng, (M, max(N_LIST)))    # 가장 큰 n 으로 한 번만 뽑는다
 
-**균등분포 — 이미 거의 정규다.**
+        fig, axes = plt.subplots(2, 10, figsize=(22, 7.5), constrained_layout=True)
+        lo, hi = np.percentile(X[:, :min(N_LIST)].mean(axis=1), [0.5, 99.5])
+        pad = 0.1 * (hi - lo)
+        lln_bins = np.linspace(lo - pad, hi + pad, 60)
+        z_grid, z_bins = np.linspace(-4, 4, 400), np.linspace(-4, 4, 50)
 
-![균등분포](./img/lln_clt_uniform.png)
+        for j, n in enumerate(N_LIST):
+            xbar = X[:, :n].mean(axis=1)
 
-**지수분포 — 치우침이 남아 있다가 천천히 펴진다.**
+            # 정수값 분포에서는 X̄_n 이 격자 k/n 위에만 있다.
+            # 격자점마다 막대 하나를 두어야 밀도로 읽을 수 있다.
+            if discrete:
+                s = np.rint(X[:, :n].sum(axis=1))
+                lln_bins = (np.arange(s.min(), s.max() + 2) - 0.5) / n
+                z_bins = np.sqrt(n) * (lln_bins - mu) / sigma
 
-![지수분포](./img/lln_clt_exponential.png)
+            # 윗줄 — 배율을 주지 않으면 μ 로 오그라든다 (큰수의 법칙)
+            ax = axes[0, j]
+            ax.hist(xbar, bins=lln_bins, density=True, color="tab:blue",
+                    alpha=0.6, edgecolor="white", linewidth=0.3)
+            ax.axvline(mu, color="red", lw=2)
+            ax.axvspan(mu - eps, mu + eps, color="orange", alpha=0.18)
+            p_out = np.mean(np.abs(xbar - mu) > eps)
+            ax.set_title(f"n = {n}\n"
+                         rf"$\hat P(|\bar X_n-\mu|>\varepsilon)$ = {p_out:.3f}")
+            ax.set_xlim(lo - pad, hi + pad)
 
-**로그정규분포 — 같은 $n$에서 가장 느리다.**
+            # 아랫줄 — √n/σ 를 곱해 확대하면 모양이 남는다 (중심극한정리)
+            ax = axes[1, j]
+            z = np.sqrt(n) * (xbar - mu) / sigma
+            ax.hist(z, bins=z_bins, density=True, color="tab:green",
+                    alpha=0.6, edgecolor="white", linewidth=0.3)
+            ax.plot(z_grid, stats.norm.pdf(z_grid), "k-", lw=2)
+            ax.set_title(f"n = {n}\nKS = {stats.kstest(z, 'norm').statistic:.3f},"
+                         f"  skew = {stats.skew(z):.2f}")
+            ax.set_xlim(-4, 4)
 
-![로그정규분포](./img/lln_clt_lognormal.png)
+        fig.suptitle(f"Weak LLN (top) and CLT (bottom) for {label}")
+        plt.show()
 
-**베르누이분포 — 값이 격자 위에만 있다.**
 
-![베르누이분포](./img/lln_clt_bernoulli.png)
+    for name in DISTRIBUTIONS:
+        lln_and_clt(name)
+    ```
 
-**네 그림 모두 윗줄과 아랫줄이 같은 $\bar X_n$을 담고 있다.** 새로 뽑은 표본도, 새로 한 계산도 없다. 위의 두 눈금 그림을 네 분포에 대해 열 개의 $n$으로 펼쳐 놓은 것일 뿐이다.
+    **균등분포 — 이미 거의 정규다.**
 
-**윗줄은 눈금을 고정한 얼굴이다.** 분포가 무엇이든 파란 히스토그램이 $\mu$ 둘레로 오그라들고 $\hat P(|\bar X_n - \mu| > \varepsilon)$가 줄어든다. 큰수의 법칙이 말하는 것은 여기까지이고, 얻는 정보는 "편차가 0으로 간다"는 사실 하나다.
+    ![균등분포](./img/lln_clt_uniform.png)
 
-**아랫줄은 눈금을 $\sqrt n / \sigma$배로 당긴 얼굴이다.** 사라지던 편차를 꼭 그만큼 확대해서 보면 아무것도 남지 않거나 발산하지 않고 **네 경우 모두 같은 종 모양이 남는다.** 같은 동전의 다른 면이며, 뒤집어 놓고 보아야만 보이는 것이 정규분포다.
+    **지수분포 — 치우침이 남아 있다가 천천히 펴진다.**
 
-수렴 속도는 분포마다 다르다. $n = 5$에서 KS 거리가 균등 $0.019$, 지수 $0.057$, 로그정규 $0.083$이고, $n = 50$에서는 각각 $0.018$, $0.029$, $0.030$이다. **치우친 분포일수록 늦게 도착할 뿐 도착하지 않는 것은 아니다.** 치우침(skew)이 지수분포에서 $0.95 \to 0.32$로, 로그정규에서 $1.62 \to 0.41$로 줄어드는 것이 그 과정이다.
+    ![지수분포](./img/lln_clt_exponential.png)
 
-베르누이는 다른 이유로 뒤처진다. $\bar X_n$이 격자 $k/n$ 위에만 있으므로 히스토그램이 매끄러운 곡선이 될 수 없고, KS 거리가 $n = 35$ 이후 $0.08$ 근처에서 더 내려가지 않는다. **이것은 수렴이 멈춘 것이 아니라 이산성이 남긴 계단이며**, 이 절 뒤의 [베리–에센 정리](berry_esseen.md) 페이지가 그 계단의 크기를 정확히 재고 연속성 보정으로 어떻게 다루는지 다룬다. $n = 5$에서 윗줄의 확률이 정확히 $1.000$인 것도 같은 이산성 때문이다. 이때 $\bar X_5$가 가질 수 있는 값은 $0, 0.2, 0.4, \ldots$뿐이라 $\mu = 0.3$에서 최소 $0.1$은 떨어지는데, $\varepsilon = 0.2\sigma = 0.092$가 그보다 좁다.
+    **로그정규분포 — 같은 $n$에서 가장 느리다.**
+
+    ![로그정규분포](./img/lln_clt_lognormal.png)
+
+    **베르누이분포 — 값이 격자 위에만 있다.**
+
+    ![베르누이분포](./img/lln_clt_bernoulli.png)
+
+    칸의 제목에 흩어져 있는 수를 한자리에 모아 본다. 위 코드와 같은 씨앗으로 같은 표본을 다시 뽑는 것이므로 그림의 제목과 같은 값이 나온다.
+
+    ```python
+    for name, (sampler, mu, sigma, label, _) in DISTRIBUTIONS.items():
+        rng = np.random.default_rng(2026)
+        X = sampler(rng, (M, max(N_LIST)))
+        for n in (5, 50):
+            xbar = X[:, :n].mean(axis=1)
+            z = np.sqrt(n) * (xbar - mu) / sigma
+            print(f"{label:<18} n = {n:>2}   "
+                  f"P_out = {np.mean(np.abs(xbar - mu) > EPS * sigma):.3f}   "
+                  f"sd(Z) = {z.std(ddof=1):.3f}   "
+                  f"skew = {stats.skew(z):+.2f}   "
+                  f"KS = {stats.kstest(z, 'norm').statistic:.3f}")
+    ```
+
+    출력:
+
+    ```
+    Uniform(0,1)       n =  5   P_out = 0.673   sd(Z) = 1.008   skew = +0.03   KS = 0.019
+    Uniform(0,1)       n = 50   P_out = 0.164   sd(Z) = 1.005   skew = +0.04   KS = 0.018
+    Exponential(1)     n =  5   P_out = 0.661   sd(Z) = 1.007   skew = +0.95   KS = 0.057
+    Exponential(1)     n = 50   P_out = 0.147   sd(Z) = 0.987   skew = +0.32   KS = 0.029
+    LogNormal(0, 0.75) n =  5   P_out = 0.632   sd(Z) = 1.004   skew = +1.62   KS = 0.083
+    LogNormal(0, 0.75) n = 50   P_out = 0.149   sd(Z) = 0.986   skew = +0.41   KS = 0.029
+    Bernoulli(0.3)     n =  5   P_out = 1.000   sd(Z) = 1.012   skew = +0.46   KS = 0.228
+    Bernoulli(0.3)     n = 50   P_out = 0.170   sd(Z) = 1.009   skew = +0.15   KS = 0.085
+    ```
+
+    **(1)의 두 예측이 맞는다.** `sd(Z)`가 여덟 경우 모두 $0.986$에서 $1.012$ 사이에 있다. 1만 개로 표준편차를 재는 일의 몬테카를로 오차가 $1/\sqrt{2 \times 10000} = 0.7\%$이므로 어긋남이 그 두 배 안이다. 윗줄의 확률도 연속인 세 모집단에서 $n = 5$에 $0.63$–$0.67$, $n = 50$에 $0.15$–$0.16$으로 정규근사의 $0.655$와 $0.157$ 둘레에 모여 있다.
+
+    **네 그림 모두 윗줄과 아랫줄이 같은 $\bar X_n$을 담고 있다.** 새로 뽑은 표본도, 새로 한 계산도 없다. 위의 두 눈금 그림을 네 분포에 대해 열 개의 $n$으로 펼쳐 놓은 것일 뿐이다.
+
+    **윗줄은 눈금을 고정한 얼굴이다.** 분포가 무엇이든 파란 히스토그램이 $\mu$ 둘레로 오그라들고 $\hat P(|\bar X_n - \mu| > \varepsilon)$가 줄어든다. 큰수의 법칙이 말하는 것은 여기까지이고, 얻는 정보는 "편차가 0으로 간다"는 사실 하나다.
+
+    **아랫줄은 눈금을 $\sqrt n / \sigma$배로 당긴 얼굴이다.** 사라지던 편차를 꼭 그만큼 확대해서 보면 아무것도 남지 않거나 발산하지 않고 **네 경우 모두 같은 종 모양이 남는다.** 같은 동전의 다른 면이며, 뒤집어 놓고 보아야만 보이는 것이 정규분포다.
+
+    **도착 순서는 KS 거리가 매긴다.** $n = 5$에서 균등 $0.019$, 지수 $0.057$, 로그정규 $0.083$이고, $n = 50$에서는 각각 $0.018$, $0.029$, $0.029$다. **치우친 분포일수록 늦게 도착할 뿐 도착하지 않는 것은 아니다.** 치우침(skew)이 지수분포에서 $0.95 \to 0.32$로, 로그정규에서 $1.62 \to 0.41$로 줄어드는 것이 그 과정이며, 둘 다 대략 $1/\sqrt n$의 속도다($\sqrt{50/5} = 3.16$배 줄어야 하고 실제로 $3.0$배, $4.0$배 줄었다).
+
+    **베르누이는 다른 이유로 뒤처진다.** $\bar X_n$이 격자 $k/n$ 위에만 있으므로 히스토그램이 매끄러운 곡선이 될 수 없고, KS 거리가 $n = 35$ 이후 $0.082$–$0.085$에서 더 내려가지 않는다. 격자분포의 누적분포함수는 계단이어서, 연속인 정규분포와의 KS 거리가 **가장 큰 도약의 절반**보다 작아질 수 없기 때문이다. $n = 50$, $p = 0.3$에서 가장 큰 확률질량이 $P(S_{50} = 15) = 0.1223$이므로 그 하한이 $0.061$이고, 관측된 $0.085$가 그 위에 놓인다. **이것은 수렴이 멈춘 것이 아니라 이산성이 남긴 계단이며**, 이 절 뒤의 [베리–에센 정리](berry_esseen.md) 페이지가 그 계단의 크기를 정확히 재고 연속성 보정으로 어떻게 다루는지 다룬다.
+
+    $n = 5$에서 베르누이 윗줄의 확률이 정확히 $1.000$인 것도 같은 이산성 때문이다. 이때 $\bar X_5$가 가질 수 있는 값은 $0, 0.2, 0.4, \ldots$뿐이라 $\mu = 0.3$에서 최소 $0.1$은 떨어지는데, $\varepsilon = 0.2\sigma = 0.092$가 그보다 좁다. **한 번도 띠 안에 들어올 수 없는 것이고, 모의실험의 우연이 아니다.**
 
 ## 3. 모양의 수렴과 폭의 수축은 별개의 예측이다
 
@@ -262,140 +318,221 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 폭의 등식은 n = 2 에서도 맞는다
+**보기 2.** <span class="diff easy" title="쉬움"></span> 폭의 등식은 n = 2 에서도 맞는다. $\text{Uniform}(0,1)$에서 크기 $n = 2, 10, 100$인 표본을 각각 2000번 뽑아 표본평균의 표준편차를 잰다.
+
+**(1)** $\operatorname{sd}(\bar X_n)$의 이론값을 세 $n$에서 적고, 이 등식이 왜 $n = 2$에서도 정확한지 말하시오.
+
+**(2)** 2000번으로 표준편차를 재면 그 추정값의 몬테카를로 오차는 얼마인가. 모의실험이 (1)을 그 오차 안에서 재현하는지 확인하시오.
 
 </div>
 
-**먼저 폭부터 확인한다.** 정리 3의 등식 쪽은 $n$이 작아도 맞아야 한다.
+??? success "풀이"
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+    **(1) 이론값.** $\text{Uniform}(0,1)$은 $\sigma^2 = 1/12$이므로 $\sigma = 1/\sqrt{12} = 0.288675$이고
 
-np.random.seed(42)
-N_REPS = 2000
+    $$
+    \operatorname{sd}(\bar X_n) = \frac{\sigma}{\sqrt n}
+    = 0.204124 \ (n = 2), \quad 0.091287 \ (n = 10), \quad 0.028868 \ (n = 100)
+    $$
 
-def sample_means(dist_rvs, sample_sizes, n_reps=N_REPS):
-    """표본 크기마다 n_reps개의 표본을 뽑아 각 표본평균을 모아 돌려준다.
+    이다. **$n = 2$에서도 어림이 아니라 등식이다.** 정리 3의 증명이 쓴 것은 $\operatorname{Var}(\sum X_i) = \sum \operatorname{Var}(X_i)$ 하나뿐이고, 그 성질에는 무상관성과 유한한 분산만 필요하다. 정규성도, 극한도, $n$이 크다는 가정도 들어가지 않았다. 그러므로 히스토그램의 **모양**이 아직 종이 아니어도 **폭**은 처음부터 맞다.
 
-    dist_rvs 는 "크기 n을 받아 표본을 돌려주는 함수"다.
-    이렇게 함수를 인자로 받아 두면 균등·베르누이·감마 등
-    어떤 모집단에도 같은 코드를 쓸 수 있다.
+    **(2) 모의실험이 재현할 수 있는 정밀도.** 표본표준편차는 그 자체로 흔들리는 양이다. 크기 $B$인 표본에서 표준편차를 재면 그 추정값의 표준오차가 대략 $\operatorname{sd}/\sqrt{2B}$이므로, $B = 2000$에서
 
-    돌려주는 results[n] 이 X-bar_n 의 표본분포 근사(2000개)다.
-    """
-    results = {}
-    for n in sample_sizes:
-        means = np.array([dist_rvs(n).mean() for _ in range(n_reps)])
-        results[n] = means
-    return results
+    $$
+    \frac{0.204124}{\sqrt{4000}} = 0.00323, \qquad 0.00144, \qquad 0.00046
+    $$
+
+    이다. 곧 $n = 2$에서는 소수 **셋째 자리까지만** 맞을 수 있고, 넷째 자리가 다른 것은 어긋남이 아니다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(42)
+    N_REPS = 2000
+
+    def sample_means(dist_rvs, sample_sizes, n_reps=N_REPS):
+        """표본 크기마다 n_reps개의 표본을 뽑아 각 표본평균을 모아 돌려준다.
+
+        dist_rvs 는 "크기 n을 받아 표본을 돌려주는 함수"다.
+        이렇게 함수를 인자로 받아 두면 균등·베르누이·감마 등
+        어떤 모집단에도 같은 코드를 쓸 수 있다.
+
+        돌려주는 results[n] 이 X-bar_n 의 표본분포 근사(2000개)다.
+        """
+        results = {}
+        for n in sample_sizes:
+            means = np.array([dist_rvs(n).mean() for _ in range(n_reps)])
+            results[n] = means
+        return results
 
 
-# 균등분포 U(0,1)로 시험해 본다. 모평균 0.5, 모분산 1/12.
-# 중심극한정리는 X-bar_n 의 표준편차가 sigma/sqrt(n) 이라고 예측한다.
-demo = sample_means(lambda n: np.random.uniform(0, 1, n), [2, 10, 100])
-sigma = (1 / 12) ** 0.5
-for n, means in demo.items():
-    print(f"n = {n:>3}: 평균 {means.mean():.4f}  "
-          f"표준편차 {means.std():.4f}  (이론 {sigma / n**0.5:.4f})")
-```
+    # 균등분포 U(0,1)로 시험해 본다. 모평균 0.5, 모분산 1/12.
+    # 중심극한정리는 X-bar_n 의 표준편차가 sigma/sqrt(n) 이라고 예측한다.
+    demo = sample_means(lambda n: np.random.uniform(0, 1, n), [2, 10, 100])
+    sigma = (1 / 12) ** 0.5
+    for n, means in demo.items():
+        theory = sigma / n**0.5
+        print(f"n = {n:>3}: 평균 {means.mean():.4f}  "
+              f"표준편차 {means.std():.4f}  (이론 {theory:.4f},"
+              f"  몬테카를로 오차 {theory / (2 * N_REPS)**0.5:.4f})")
+    ```
 
-출력:
+    출력:
 
-```
-n =   2: 평균 0.4975  표준편차 0.2050  (이론 0.2041)
-n =  10: 평균 0.5022  표준편차 0.0911  (이론 0.0913)
-n = 100: 평균 0.5002  표준편차 0.0288  (이론 0.0289)
-```
+    ```
+    n =   2: 평균 0.4975  표준편차 0.2050  (이론 0.2041,  몬테카를로 오차 0.0032)
+    n =  10: 평균 0.5022  표준편차 0.0911  (이론 0.0913,  몬테카를로 오차 0.0014)
+    n = 100: 평균 0.5002  표준편차 0.0288  (이론 0.0289,  몬테카를로 오차 0.0005)
+    ```
 
-`results[n]`의 각 항목이 $\bar X_n$의 한 실현값이다. 2000개를 그리면 표본분포의 근사가 된다.
+    `results[n]`의 각 항목이 $\bar X_n$의 한 실현값이다. 2000개를 그리면 표본분포의 근사가 된다.
 
-**소수 셋째 자리까지 맞는다.** $n = 2$에서 $0.2050$ 대 이론값 $0.2041$이다. 모양이 아직 종이 아닌 $n = 2$에서도 폭은 이미 정확하다.
+    **세 줄 모두 맞는다.** $n = 2$에서 $0.2050$ 대 이론값 $0.2041$이니 차이가 $+0.0009$, 곧 몬테카를로 오차 $0.0032$의 $0.3$배다. $n = 10$은 $-0.0002$($-0.1$배), $n = 100$은 $-0.0001$($-0.1$배)이다. 평균 쪽도 $0.4975$가 $0.5$에서 $-0.0025$ 떨어져 있는데 평균의 표준오차가 $0.2041/\sqrt{2000} = 0.0046$이므로 $-0.5$배다.
+
+    **모양이 아직 종이 아닌 $n = 2$에서도 폭은 이미 정확하다.** 두 수의 평균이 만드는 분포는 삼각형이어서 종 모양과는 거리가 멀지만, 그 삼각형의 표준편차는 $\sigma/\sqrt 2$로 정확하다. **중심극한정리가 새로 말해 주는 것은 폭이 아니라 모양 쪽**이라는 정리 3의 요점이 이 한 줄에 들어 있다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 세 모집단에서 모집단의 흔적이 씻겨 나가는 과정
+**보기 3.** <span class="diff easy" title="쉬움"></span> 세 모집단에서 모집단의 흔적이 씻겨 나가는 과정. 앞의 표에 적은 세 모집단 Uniform(2, 8), Beta(6, 2), Gamma(6, 1)에서 $n = 2, 10, 100$으로 표본평균 2000개씩을 모아 모집단 밀도와 함께 $4 \times 3$ 격자로 그린다.
+
+**(1)** 세 모집단의 $\sigma$와 왜도 $\gamma$를 적고, 그로부터 $\bar X_n$의 표준편차와 왜도의 이론값을 아홉 칸에 대해 적으시오.
+
+**(2)** 그려서 확인하고, 어느 열이 가장 느린지와 그 느림이 어디서 읽히는지 말하시오.
 
 </div>
 
-**이제 모양을 본다.** 앞 보기와 같은 `sample_means`를 써서 세 모집단에 대해 $n$을 키워 가며 그린다.
+??? success "풀이"
 
-```python
-sample_sizes = [2, 10, 100]
+    **(1) 폭은 $1/\sqrt n$, 치우침도 $1/\sqrt n$이다.** 독립인 $n$개의 평균에 대해 표준편차는 $\sigma/\sqrt n$이고(정리 3), 왜도는
 
-# 모양이 서로 전혀 다른 모집단 셋을 준비한다.
-# 각 항목은 표본을 뽑는 함수(rvs)와 모집단 밀도를 그릴 정보를 담는다.
-#   Uniform: 평평하다        (봉우리가 없음)
-#   Beta   : 왼쪽으로 치우침  (유계)
-#   Gamma  : 오른쪽으로 치우침 (유계가 아님)
-# 세 모집단이 이렇게 다른데도 표본평균은 모두 종 모양으로 간다는 것이 요점이다.
-distributions = {
-    "Uniform(2, 8)": {
-        "rvs": lambda n: np.random.uniform(2, 8, n),
-        "color": "tomato",
-        "pop_x": np.linspace(2, 8, 200),
-        "pop_pdf": lambda x: np.ones_like(x) / 6,
-    },
-    "Beta(6, 2)": {
-        "rvs": lambda n: stats.beta.rvs(6, 2, size=n),
-        "color": "seagreen",
-        "pop_x": np.linspace(0, 1, 200),
-        "pop_pdf": lambda x: stats.beta.pdf(x, 6, 2),
-    },
-    "Gamma(6, 1)": {
-        "rvs": lambda n: stats.gamma.rvs(6, size=n),
-        "color": "steelblue",
-        "pop_x": np.linspace(0, 25, 200),
-        "pop_pdf": lambda x: stats.gamma.pdf(x, 6),
-    },
-}
+    $$
+    \operatorname{skew}(\bar X_n) = \frac{\gamma}{\sqrt n}
+    $$
 
-n_dists = len(distributions)
-# 격자 구성: 열 = 모집단, 행 = (모집단 자체, n=2, n=10, n=100)
-# 세로로 내려가며 읽으면 "n이 커질수록 어떻게 변하는가"가 보이고,
-# 가로로 읽으면 "모집단이 달라도 결과가 같은가"가 보인다.
-n_rows = 1 + len(sample_sizes)
-fig, axes = plt.subplots(n_rows, n_dists, figsize=(6 * n_dists, 4 * n_rows))
+    이다. 3차 중심적률이 합에서 더해지고($n\mu_3$) 그것을 $(\sigma\sqrt n)^3$으로 나누기 때문이다. 세 모집단의 모수는 이렇다.
 
-for col, (name, d) in enumerate(distributions.items()):
-    c = d["color"]
+    | 모집단 | $\sigma$ | $\gamma$ |
+    |:---|---:|---:|
+    | Uniform(2, 8) | 1.7321 | 0 |
+    | Beta(6, 2) | 0.1443 | $-0.6928$ |
+    | Gamma(6, 1) | 2.4495 | $+0.8165$ |
 
-    # 0행: 모집단의 밀도함수. 셋이 얼마나 다른지 먼저 확인한다.
-    ax = axes[0, col]
-    ax.plot(d["pop_x"], d["pop_pdf"](d["pop_x"]), lw=3, color=c)
-    ax.fill_between(d["pop_x"], d["pop_pdf"](d["pop_x"]), alpha=0.3, color=c)
-    ax.set_title(name, fontsize=14, fontweight="bold")
-    if col == 0:
-        ax.set_ylabel("Population PDF", fontsize=11)
+    베타의 왜도는 $2(b-a)\sqrt{a+b+1}\big/\big((a+b+2)\sqrt{ab}\big)$에 $a = 6$, $b = 2$를 넣은 것이고 감마는 $2/\sqrt{k} = 2/\sqrt6$이다. 여기서 아홉 칸의 이론값이 나온다.
 
-    # 1~3행: 표본평균의 표집분포.
-    # 앞서 정의한 sample_means 로 각 n마다 2000개의 표본평균을 얻는다.
-    means_dict = sample_means(d["rvs"], sample_sizes)
-    for row, n in enumerate(sample_sizes, start=1):
-        ax = axes[row, col]
-        ax.hist(means_dict[n], bins=30, color=c, alpha=0.5,
-                edgecolor="white", density=True)
-        ax.set_title(f"n = {n}", fontsize=11)
+    | 모집단 | $n$ | $\operatorname{sd}(\bar X_n)$ | $\operatorname{skew}(\bar X_n)$ |
+    |:---|---:|---:|---:|
+    | Uniform(2, 8) | 2 / 10 / 100 | 1.2247 / 0.5477 / 0.1732 | 0 / 0 / 0 |
+    | Beta(6, 2) | 2 / 10 / 100 | 0.1021 / 0.0456 / 0.0144 | $-0.490$ / $-0.219$ / $-0.069$ |
+    | Gamma(6, 1) | 2 / 10 / 100 | 1.7321 / 0.7746 / 0.2449 | $+0.577$ / $+0.258$ / $+0.082$ |
+
+    **(2) 모의실험.** 이제 모양을 본다. 앞 보기와 같은 `sample_means`를 써서 세 모집단에 대해 $n$을 키워 가며 그린다(앞 보기의 `sample_means`, `np`, `stats`, `plt`를 그대로 이어받는다).
+
+    ```python
+    sample_sizes = [2, 10, 100]
+
+    # 모양이 서로 전혀 다른 모집단 셋을 준비한다.
+    # 각 항목은 표본을 뽑는 함수(rvs)와 모집단 밀도를 그릴 정보를 담는다.
+    #   Uniform: 평평하다        (봉우리가 없음)
+    #   Beta   : 왼쪽으로 치우침  (유계)
+    #   Gamma  : 오른쪽으로 치우침 (유계가 아님)
+    # 세 모집단이 이렇게 다른데도 표본평균은 모두 종 모양으로 간다는 것이 요점이다.
+    distributions = {
+        "Uniform(2, 8)": {
+            "rvs": lambda n: np.random.uniform(2, 8, n),
+            "color": "tomato",
+            "pop_x": np.linspace(2, 8, 200),
+            "pop_pdf": lambda x: np.ones_like(x) / 6,
+            "sd": 3 ** 0.5, "skew": 0.0,
+        },
+        "Beta(6, 2)": {
+            "rvs": lambda n: stats.beta.rvs(6, 2, size=n),
+            "color": "seagreen",
+            "pop_x": np.linspace(0, 1, 200),
+            "pop_pdf": lambda x: stats.beta.pdf(x, 6, 2),
+            "sd": stats.beta.std(6, 2), "skew": float(stats.beta.stats(6, 2, moments="s")),
+        },
+        "Gamma(6, 1)": {
+            "rvs": lambda n: stats.gamma.rvs(6, size=n),
+            "color": "steelblue",
+            "pop_x": np.linspace(0, 25, 200),
+            "pop_pdf": lambda x: stats.gamma.pdf(x, 6),
+            "sd": 6 ** 0.5, "skew": 2 / 6 ** 0.5,
+        },
+    }
+
+    n_dists = len(distributions)
+    # 격자 구성: 열 = 모집단, 행 = (모집단 자체, n=2, n=10, n=100)
+    # 세로로 내려가며 읽으면 "n이 커질수록 어떻게 변하는가"가 보이고,
+    # 가로로 읽으면 "모집단이 달라도 결과가 같은가"가 보인다.
+    n_rows = 1 + len(sample_sizes)
+    fig, axes = plt.subplots(n_rows, n_dists, figsize=(6 * n_dists, 4 * n_rows))
+
+    for col, (name, d) in enumerate(distributions.items()):
+        c = d["color"]
+
+        # 0행: 모집단의 밀도함수. 셋이 얼마나 다른지 먼저 확인한다.
+        ax = axes[0, col]
+        ax.plot(d["pop_x"], d["pop_pdf"](d["pop_x"]), lw=3, color=c)
+        ax.fill_between(d["pop_x"], d["pop_pdf"](d["pop_x"]), alpha=0.3, color=c)
+        ax.set_title(name, fontsize=14, fontweight="bold")
         if col == 0:
-            ax.set_ylabel(f"Sampling Dist (n={n})", fontsize=10)
+            ax.set_ylabel("Population PDF", fontsize=11)
 
-plt.suptitle("Central Limit Theorem: Sampling Distribution of x̄",
-             fontsize=15, y=1.01)
-plt.tight_layout()
-plt.show()
-```
+        # 1~3행: 표본평균의 표집분포.
+        # 앞서 정의한 sample_means 로 각 n마다 2000개의 표본평균을 얻는다.
+        means_dict = sample_means(d["rvs"], sample_sizes)
+        for row, n in enumerate(sample_sizes, start=1):
+            ax = axes[row, col]
+            ax.hist(means_dict[n], bins=30, color=c, alpha=0.5,
+                    edgecolor="white", density=True)
+            ax.set_title(f"n = {n}", fontsize=11)
+            if col == 0:
+                ax.set_ylabel(f"Sampling Dist (n={n})", fontsize=10)
 
-![Central Limit Theorem: Sampling Distribution of x̄](./img/clt_three_populations.png)
+            # 폭과 모양을 이론값과 나란히 적어 둔다.
+            # 폭은 sigma/sqrt(n) 으로 등식이고, 왜도는 gamma/sqrt(n) 으로 줄어든다.
+            m = means_dict[n]
+            print(f"{name:<14} n = {n:>3}:  표준편차 {m.std(ddof=1):.4f}"
+                  f" (이론 {d['sd'] / n**0.5:.4f})"
+                  f"   왜도 {stats.skew(m):+.3f} (이론 {d['skew'] / n**0.5:+.3f})")
 
-그림은 $4 \times 3$ 격자다. 맨 윗줄이 모집단, 나머지 세 줄이 $n = 2, 10, 100$의 표본분포다. 줄을 따라 내려가며 읽으면 수렴이 보인다.
+    plt.suptitle("Central Limit Theorem: Sampling Distribution of x̄",
+                 fontsize=15, y=1.01)
+    plt.tight_layout()
+    plt.show()
+    ```
 
-- **맨 윗줄.** 세 모집단이 눈에 띄게 비정규다. 평평하고, 왼쪽으로 치우쳤고, 오른쪽으로 치우쳤다.
-- **$n = 2$.** 표본분포가 여전히 모집단의 모양을 반영한다. 관측 두 개의 평균으로는 거의 매끄러워지지 않는다.
-- **$n = 10$.** 종 모양에 눈에 띄게 가까워지지만, 감마분포 쪽에는 오른쪽 치우침이 남아 있다.
-- **$n = 100$.** 세 열이 모두 근사적으로 정규다. 모집단이 무엇이었는지 알아볼 수 없다.
+    출력:
 
-**감마분포 열이 가장 느리다.** 왜도가 클수록 수렴이 느리기 때문이며, 이 절 뒤의 [베리–에센 정리](berry_esseen.md)가 그 지연의 크기를 $\rho/\sigma^3$으로 정확히 잰다.
+    ```
+    Uniform(2, 8)  n =   2:  표준편차 1.2230 (이론 1.2247)   왜도 -0.074 (이론 +0.000)
+    Uniform(2, 8)  n =  10:  표준편차 0.5580 (이론 0.5477)   왜도 +0.012 (이론 +0.000)
+    Uniform(2, 8)  n = 100:  표준편차 0.1748 (이론 0.1732)   왜도 +0.055 (이론 +0.000)
+    Beta(6, 2)     n =   2:  표준편차 0.1058 (이론 0.1021)   왜도 -0.578 (이론 -0.490)
+    Beta(6, 2)     n =  10:  표준편차 0.0463 (이론 0.0456)   왜도 -0.189 (이론 -0.219)
+    Beta(6, 2)     n = 100:  표준편차 0.0146 (이론 0.0144)   왜도 -0.197 (이론 -0.069)
+    Gamma(6, 1)    n =   2:  표준편차 1.7247 (이론 1.7321)   왜도 +0.511 (이론 +0.577)
+    Gamma(6, 1)    n =  10:  표준편차 0.7902 (이론 0.7746)   왜도 +0.181 (이론 +0.258)
+    Gamma(6, 1)    n = 100:  표준편차 0.2404 (이론 0.2449)   왜도 +0.032 (이론 +0.082)
+    ```
+
+    ![Central Limit Theorem: Sampling Distribution of x̄](./img/clt_three_populations.png)
+
+    그림은 $4 \times 3$ 격자다. 맨 윗줄이 모집단, 나머지 세 줄이 $n = 2, 10, 100$의 표본분포다. 줄을 따라 내려가며 읽으면 수렴이 보인다.
+
+    - **맨 윗줄.** 세 모집단이 눈에 띄게 비정규다. 평평하고, 왼쪽으로 치우쳤고, 오른쪽으로 치우쳤다.
+    - **$n = 2$.** 표본분포가 여전히 모집단의 모양을 반영한다. 관측 두 개의 평균으로는 거의 매끄러워지지 않는다.
+    - **$n = 10$.** 종 모양에 눈에 띄게 가까워지지만, 감마분포 쪽에는 오른쪽 치우침이 남아 있다.
+    - **$n = 100$.** 세 열이 모두 근사적으로 정규다. 모집단이 무엇이었는지 알아볼 수 없다.
+
+    **표준편차 아홉 칸이 모두 맞는다.** 이론값과의 차이가 최대 $1.9\%$(Uniform, $n = 10$)이고, 2000개로 표준편차를 재는 일의 몬테카를로 오차가 $1/\sqrt{4000} = 1.6\%$이므로 그 규모 안이다.
+
+    **왜도는 그보다 성급하게 읽어서는 안 된다.** 2000개로 표본왜도를 재면 표준오차가 대략 $\sqrt{6/2000} = 0.055$다. 그 자로 보면 아홉 칸 가운데 여덟 칸이 2 표준오차 안에서 이론값과 맞고, 어긋나는 한 칸은 Beta의 $n = 100$이다. 관측 $-0.197$ 대 이론 $-0.069$로 $2.4$ 표준오차 차이다. 같은 모의실험을 씨앗만 바꾸어 되풀이하면 $-0.095$, $-0.179$, $-0.024$, $-0.076$, $-0.145$가 나오고 40번 평균이 $-0.072$로 이론값에 붙으므로, **체계적 차이가 아니라 몬테카를로 오차다.** 표본왜도는 3차 적률이어서 같은 표본크기로도 표준편차보다 훨씬 거칠게 추정된다.
+
+    **가장 느린 열은 감마다.** $n = 10$에서 표본왜도가 $+0.181$로 눈에 보일 만큼 남아 있고, 베타의 $|{-0.189}|$와 비슷하지만 부호가 반대여서 그림에서는 오른쪽 꼬리로 나타난다. 균등 열은 왜도가 처음부터 $0$이라 $n = 2$의 삼각형만 지나면 바로 종 모양이 된다. **$\gamma$가 클수록 늦게 도착한다**는 것이 이 표의 요점이며, 이 절 뒤의 [베리–에센 정리](berry_esseen.md)가 그 지연의 크기를 $\gamma$의 사촌인 $\rho/\sigma^3$으로 정확히 잰다.
 
 ## 4. 언제 써도 되는가
 

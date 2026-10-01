@@ -77,53 +77,93 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 콜모고로프 공리를 수치로 확인하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 콜모고로프 공리를 수치로 확인하기. 주사위 두 개의 무게 목록을 놓는다. 공정한 쪽은 $(\tfrac16, \ldots, \tfrac16)$이고 기운 쪽은 $(0.1, 0.1, 0.1, 0.1, 0.1, 0.5)$다.
+
+**(1)** 결과마다 무게 $p_1, \ldots, p_6 \ge 0$을 달고 $P(A) = \sum_{i \in A} p_i$로 정의하면 공리 (3)이 **저절로** 성립함을 보이시오. 그래서 코드가 확인할 것이 둘뿐인 까닭을 말하시오.
+
+**(2)** 기운 주사위에서 $P(\text{짝수})$와 그 여집합의 확률을 공리만으로 계산하고, 두 목록이 공리를 만족하는지 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def verify_axioms(probabilities):
-    """이산 확률분포가 콜모고로프의 세 공리를 만족하는지 확인한다."""
-    # 공리 1: 확률은 0 과 1 사이다
-    assert all(0 <= p <= 1 for p in probabilities), "Range violated"
+    **(1) 가법성은 가정이 아니라 합의 성질이다.** 무게 목록 $p_1, \ldots, p_6$에서 출발해 $P(A) = \sum_{i \in A} p_i$로 정의했다고 하자. $A$와 $B$가 서로소이면 $A \cup B$에 속한 첨자의 모임은 $A$의 첨자와 $B$의 첨자를 겹침 없이 이어 붙인 것이므로
 
-    # 공리 2: 전체 확률이 1 이다
-    #   P(공집합) = 0 은 따로 확인할 것이 없다. 공집합에 속한 결과가 하나도
-    #   없으므로 무게의 합이 빈 합, 즉 0 이기 때문이다.
-    total = sum(probabilities)
-    assert np.isclose(total, 1.0), f"Normalization violated: total = {total}"
+    $$
+    P(A \cup B) = \sum_{i \in A \cup B} p_i = \sum_{i \in A} p_i + \sum_{i \in B} p_i = P(A) + P(B)
+    $$
 
-    # 공리 3: 서로소 사건의 확률은 더해진다(만드는 방식으로 이미 보장된다)
-    print("All axioms satisfied!")
-    print(f"  Total probability: {total:.4f}")
-    print(f"  Min probability:   {min(probabilities):.4f}")
-    print(f"  Max probability:   {max(probabilities):.4f}")
+    이다. 유한개든 가산무한개든 같다. 항이 모두 음이 아니어서 급수가 절대수렴하므로 항의 순서를 바꾸어 묶어도 합이 변하지 않기 때문이다. $P(\emptyset) = 0$도 같은 자리에서 나온다. 공집합에 속한 첨자가 하나도 없으므로 빈 합, 곧 $0$이다.
 
-# 공정한 주사위
-fair_die = [1/6] * 6
-verify_axioms(fair_die)
+    그러므로 **무게로 확률을 만드는 순간 공리 (3)과 $P(\emptyset) = 0$은 공짜로 따라온다.** 남는 것은 무게 자체에 대한 두 조건뿐이다.
 
-# 한쪽으로 기운 주사위
-loaded_die = [0.1, 0.1, 0.1, 0.1, 0.1, 0.5]
-verify_axioms(loaded_die)
-```
+    $$
+    p_i \ge 0 \ \text{(모든 } i\text{)}, \qquad \sum_{i=1}^{6} p_i = 1
+    $$
 
-출력:
+    코드의 단언문이 정확히 이 둘이고, 셋째 공리에 주석만 달려 있는 이유가 이것이다.
 
-```
-All axioms satisfied!
-  Total probability: 1.0000
-  Min probability:   0.1667
-  Max probability:   0.1667
-All axioms satisfied!
-  Total probability: 1.0000
-  Min probability:   0.1000
-  Max probability:   0.5000
-```
+    **(2) 기운 주사위.** 짝수는 $\{2, 4, 6\}$이므로 무게를 더하면 된다.
 
-찌그러진 주사위도 공리를 만족한다는 점에 주목하라. 공리는 확률이 **공정할 것**을 요구하지 않는다.
+    $$
+    P(\{2,4,6\}) = 0.1 + 0.1 + 0.5 = 0.7
+    $$
+
+    여집합은 정리 2의 여집합 규칙으로 $1 - 0.7 = 0.3$이고, 직접 더해도 $0.1 + 0.1 + 0.1 = 0.3$으로 같다. 둘의 합이 $1$인 것이 정규화 공리다.
+
+    ```python
+    import numpy as np
+
+    def verify_axioms(probabilities):
+        """이산 확률분포가 콜모고로프의 세 공리를 만족하는지 확인한다."""
+        # 공리 1: 확률은 0 과 1 사이다
+        assert all(0 <= p <= 1 for p in probabilities), "Range violated"
+
+        # 공리 2: 전체 확률이 1 이다
+        #   P(공집합) = 0 은 따로 확인할 것이 없다. 공집합에 속한 결과가 하나도
+        #   없으므로 무게의 합이 빈 합, 즉 0 이기 때문이다.
+        total = sum(probabilities)
+        assert np.isclose(total, 1.0), f"Normalization violated: total = {total}"
+
+        # 공리 3: 서로소 사건의 확률은 더해진다(만드는 방식으로 이미 보장된다)
+        print("All axioms satisfied!")
+        print(f"  Total probability: {total:.4f}")
+        print(f"  Min probability:   {min(probabilities):.4f}")
+        print(f"  Max probability:   {max(probabilities):.4f}")
+
+    # 공정한 주사위
+    fair_die = [1/6] * 6
+    verify_axioms(fair_die)
+
+    # 한쪽으로 기운 주사위
+    loaded_die = [0.1, 0.1, 0.1, 0.1, 0.1, 0.5]
+    verify_axioms(loaded_die)
+
+    # 사건의 확률은 무게를 더한 것이다. 짝수는 {2, 4, 6} 이므로 2, 4, 6번 칸.
+    for name, probs in [("fair  ", fair_die), ("loaded", loaded_die)]:
+        p_even = probs[1] + probs[3] + probs[5]
+        print(f"{name}: P(even) = {p_even:.4f},  P(odd) = {1 - p_even:.4f},"
+              f"  sum = {p_even + (1 - p_even):.4f}")
+    ```
+
+    출력:
+
+    ```
+    All axioms satisfied!
+      Total probability: 1.0000
+      Min probability:   0.1667
+      Max probability:   0.1667
+    All axioms satisfied!
+      Total probability: 1.0000
+      Min probability:   0.1000
+      Max probability:   0.5000
+    fair  : P(even) = 0.5000,  P(odd) = 0.5000,  sum = 1.0000
+    loaded: P(even) = 0.7000,  P(odd) = 0.3000,  sum = 1.0000
+    ```
+
+    손으로 더한 $0.7$과 $0.3$이 코드의 마지막 줄과 같고, 두 목록 모두 단언문을 통과했다. **두 길이 맞는다.**
+
+    **찌그러진 주사위도 공리를 만족한다는 점에 주목하라.** 공리는 확률이 **공정할 것**을 요구하지 않는다. 기운 쪽의 무게가 $0.1$에서 $0.5$까지 다섯 배 차이 나지만 음이 아니고 합이 $1$이면 그것으로 충분하다. 공리가 걸러 내는 것은 "불공정한 주사위"가 아니라 "무게가 음수이거나 합이 $1$이 아닌 목록"이다.
 
 ## 2. 세 줄에서 나머지가 따라 나온다
 

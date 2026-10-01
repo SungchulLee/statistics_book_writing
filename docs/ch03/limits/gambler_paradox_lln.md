@@ -34,53 +34,106 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 상트페테르부르크 게임의 표본평균
+**보기 1.** <span class="diff easy" title="쉬움"></span> 상트페테르부르크 게임의 표본평균. $n$ 라운드를 묶어 표본평균을 내는 일을 100번씩 되풀이하며 $n$을 10에서 1만까지 키운다.
+
+**(1)** 이 게임에 큰수의 법칙을 쓸 수 있는가. $\bar X_n$은 어디로 가는가. 수렴할 값이 없다면 **무엇을 눈금으로 삼아** 커지는 속도를 재겠는가.
+
+**(2)** 모의실험으로 (1)의 눈금이 맞는지 확인하시오. 출력의 "최댓값" 열이 들쭉날쭉한 까닭은 무엇인가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 큰수의 법칙은 적용되지 않는다.** 정리 1에서 $E[X] = \infty$이므로 $\bar X_n$이 수렴할 유한한 값 자체가 없다. "조금 나빠진다"가 아니라 **수렴의 대상이 없다**는 뜻이다.
 
-def st_petersburg_sample_means(n_max=10_000, tries=100, n_grid=200):
-    """상트페테르부르크 게임: 처음 앞면이 k번째에 나오면 2^k 을 받는다.
+    그렇다고 아무 말도 할 수 없는 것은 아니다. $X \ge 0$이고 $E[X] = \infty$이면 강한 법칙의 꼴이 뒤집혀
 
-    상금이 2^k 이고 그 확률이 (1/2)^k 이므로 각 항의 기여가 1이고,
-    항이 무한히 많아 E[X] = 1 + 1 + 1 + ... = 무한대다.
-    기댓값이 없으므로 대수의 법칙이 성립하지 않는다.
-    """
-    # 표본 크기를 로그 눈금으로 200개 잡는다(10부터 n_max까지).
-    # 로그 눈금이라야 "n이 10배가 될 때마다" 무슨 일이 생기는지 보인다.
-    n_vals = np.unique(np.logspace(1, np.log10(n_max), n_grid).astype(int))
-    results = []
-    for n in n_vals:
-        # 기하분포: 처음 성공(앞면)까지의 시행 횟수 k
-        flips = np.random.geometric(0.5, size=(n, tries))
-        winnings = 2.0 ** flips              # 상금
-        # 같은 n에 대해 tries(=100)번 독립적으로 되풀이해 표본평균을 낸다.
-        # 100개의 평균이 얼마나 흩어지는지가 이 그림의 핵심이다.
-        means = winnings.mean(axis=0)
-        results.append((n, means))
-    return results
+    $$
+    \bar X_n \longrightarrow \infty \qquad (\text{확률 } 1)
+    $$
 
-infinite_results = st_petersburg_sample_means()
+    이 된다. **표본평균은 한 값에 머물지 않고 끝없이 커진다.** 그런데 모의실험에서 보이는 수가 5, 10, 17처럼 작은 것은 발산이 지독히 느리기 때문이다. 속도를 재는 눈금은 정리 2가 알려 준다. 상금을 $2^m$에서 자르면 기댓값이 $m + 1$이 되는데, $n$ 라운드를 치는 동안 실제로 겪는 가장 긴 뒷면 연속은 대략 $\log_2 n$이므로 **$n$ 라운드의 게임은 사실상 $m \approx \log_2 n$에서 잘린 게임**이고 그 평균은 $\log_2 n$ 규모여야 한다. 실제로
 
-# n이 커져도 표본평균이 한 값으로 모이지 않는다는 것을 숫자로 확인한다.
-for n, means in [infinite_results[0], infinite_results[len(infinite_results)//2],
-                 infinite_results[-1]]:
-    print(f"n = {n:>6,}: 표본평균 100개의 중앙값 {np.median(means):8.1f}, "
-          f"최댓값 {means.max():10.1f}")
-```
+    $$
+    \frac{\bar X_n}{\log_2 n} \xrightarrow{\;P\;} 1
+    $$
 
-출력:
+    임이 알려져 있다(페러의 약한 법칙, 아래 연습문제 8). 그러므로 **$n$을 두 배로 늘릴 때마다 표본평균이 1씩 올라가는 것**이 이 게임의 "정상"이다.
 
-```
-n =     10: 표본평균 100개의 중앙값      5.8, 최댓값      415.4
-n =    396: 표본평균 100개의 중앙값     10.2, 최댓값     1340.6
-n = 10,000: 표본평균 100개의 중앙값     16.9, 최댓값      223.0
-```
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+
+    def st_petersburg_sample_means(n_max=10_000, tries=100, n_grid=200):
+        """상트페테르부르크 게임: 처음 앞면이 k번째에 나오면 2^k 을 받는다.
+
+        상금이 2^k 이고 그 확률이 (1/2)^k 이므로 각 항의 기여가 1이고,
+        항이 무한히 많아 E[X] = 1 + 1 + 1 + ... = 무한대다.
+        기댓값이 없으므로 대수의 법칙이 성립하지 않는다.
+        """
+        # 표본 크기를 로그 눈금으로 200개 잡는다(10부터 n_max까지).
+        # 로그 눈금이라야 "n이 10배가 될 때마다" 무슨 일이 생기는지 보인다.
+        n_vals = np.unique(np.logspace(1, np.log10(n_max), n_grid).astype(int))
+        results = []
+        for n in n_vals:
+            # 기하분포: 처음 성공(앞면)까지의 시행 횟수 k
+            flips = np.random.geometric(0.5, size=(n, tries))
+            winnings = 2.0 ** flips              # 상금
+            # 같은 n에 대해 tries(=100)번 독립적으로 되풀이해 표본평균을 낸다.
+            # 100개의 평균이 얼마나 흩어지는지가 이 그림의 핵심이다.
+            means = winnings.mean(axis=0)
+            results.append((n, means))
+        return results
+
+    infinite_results = st_petersburg_sample_means()
+
+    # n이 커져도 표본평균이 한 값으로 모이지 않는다는 것을 숫자로 확인한다.
+    for n, means in [infinite_results[0], infinite_results[len(infinite_results)//2],
+                     infinite_results[-1]]:
+        print(f"n = {n:>6,}: 표본평균 100개의 중앙값 {np.median(means):8.1f}, "
+              f"최댓값 {means.max():10.1f}")
+    ```
+
+    출력:
+
+    ```
+    n =     10: 표본평균 100개의 중앙값      5.8, 최댓값      415.4
+    n =    396: 표본평균 100개의 중앙값     10.2, 최댓값     1340.6
+    n = 10,000: 표본평균 100개의 중앙값     16.9, 최댓값      223.0
+    ```
+
+    중앙값이 $5.8 \to 10.2 \to 16.9$로 **올라간다.** 수렴하는 수열의 모습이 아니다. (1)의 눈금으로 재어 보려면 $\log_2 n$과 나란히 놓아야 하는데, 100개의 중앙값 하나는 그 자체로 많이 흔들리므로 로그 격자의 200개 점을 구간별로 모아 재는 편이 낫다.
+
+    ```python
+    # 위에서 만든 infinite_results 를 그대로 이어받는다.
+    for lo, hi in [(10, 20), (95, 105), (950, 1050), (9000, 10_000)]:
+        sel = [(n, m) for n, m in infinite_results if lo <= n <= hi]
+        pooled = np.concatenate([m for _, m in sel])
+        nbar = np.mean([n for n, _ in sel])
+        q10, q50, q90 = np.percentile(pooled, [10, 50, 90])
+        print(f"n ~ {nbar:>7.0f} (격자 {len(sel):>2}개):  log2 n = {np.log2(nbar):5.2f}"
+              f"   중앙값 {q50:6.2f}   비 {q50 / np.log2(nbar):.2f}"
+              f"   10~90% {q10:6.2f}–{q90:6.2f} ({q90/q10:.2f}배)")
+    ```
+
+    출력:
+
+    ```
+    n ~      15 (격자 11개):  log2 n =  3.91   중앙값   6.42   비 1.64   10~90%   3.50– 19.18 (5.48배)
+    n ~     100 (격자  4개):  log2 n =  6.64   중앙값   9.75   비 1.47   10~90%   5.96– 22.72 (3.81배)
+    n ~    1012 (격자  3개):  log2 n =  9.98   중앙값  12.48   비 1.25   10~90%   9.19– 24.56 (2.67배)
+    n ~    9500 (격자  4개):  log2 n = 13.21   중앙값  15.66   비 1.18   10~90%  12.41– 32.62 (2.63배)
+    ```
+
+    **눈금이 맞는다.** 중앙값을 $\log_2 n$으로 나눈 비가 $1.64 \to 1.47 \to 1.25 \to 1.18$로 단조 감소하며 $1$로 다가간다. 다만 $n = 10^4$에서도 아직 $1.18$이다. **수렴이 이토록 느린 것은 이 역설의 성질 자체**이며, 평균을 "충분히 많이 되풀이하면 안정된다"고 말할 수 없는 까닭이다.
+
+    **"최댓값" 열이 들쭉날쭉한 것은 결함이 아니라 결론이다.** $415 \to 1341 \to 223$으로 단조도 아니고 안정되지도 않는다. 100개 표본평균의 최댓값은 꼬리를 그대로 물려받으므로 그 자체가 무한한 기댓값을 갖는 양이고, 실행마다 자릿수로 달라진다. $n = 10{,}000$에서 최댓값이 가장 작게 나온 것도 우연이다. **꼬리가 두꺼운 자료에서 최댓값은 추정량이 아니다.**
+
+    $10\%$–$90\%$ 구간의 폭도 같은 이야기를 한다. 비가 $5.48 \to 2.63$으로 좁아지다가 멈춘다. 상대적인 퍼짐이 아주 천천히 줄어들기는 하지만, **중심이 계속 위로 밀려 올라가므로 어떤 값으로도 모여들지 않는다.**
 
 ## 2. 상한 하나가 모든 것을 바꾼다
 
@@ -102,93 +155,176 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 상금에 상한을 두면 평균이 안정된다
+**보기 2.** <span class="diff easy" title="쉬움"></span> 상금에 상한을 두면 평균이 안정된다. 정리 2의 절단 게임($\min(2^k, 1024)$)에서 같은 모의실험을 되풀이한다.
+
+**(1)** $E[Y] = 11$에 더해 $\operatorname{Var}(Y)$를 계산하고, $\operatorname{sd}(\bar Y_n)$의 이론값을 $n = 10, 396, 10000$에서 적으시오.
+
+**(2)** 모의실험으로 확인하시오. $n = 10$에서 **중앙값이 5.50**인데 기댓값이 11인 것은 모순이 아닌가.
 
 </div>
 
-```python
-def bounded_game_sample_means(n_max=10_000, tries=100, n_grid=200):
-    """같은 게임이되 상금을 2^10 = 1024 로 잘라 낸다.
+??? success "풀이"
 
-    이 한 줄의 차이로 E[X]가 유한해지고, 대수의 법칙이 되살아난다.
-    상금이 유계이면 기댓값이 반드시 존재하기 때문이다.
-    """
-    n_vals = np.unique(np.logspace(1, np.log10(n_max), n_grid).astype(int))
-    results = []
-    for n in n_vals:
-        flips = np.random.geometric(0.5, size=(n, tries))
-        # 위 함수와 다른 곳은 이 minimum 한 군데뿐이다
-        winnings = np.minimum(2.0 ** flips, 1024.0)
-        means = winnings.mean(axis=0)
-        results.append((n, means))
-    return results
+    **(1) 2차 적률까지.** $Y = \min(2^k, 1024)$이고 $P(k) = 2^{-k}$이므로, 정리 2에서 $E[Y] = 11$을 구한 것과 같은 방식으로 제곱의 기댓값을 구한다. $k \le 10$에서는 $Y^2 = 4^k$이고 $k \ge 11$에서는 $Y^2 = 1024^2$이다.
 
-bounded_results = bounded_game_sample_means()
+    $$
+    E[Y^2] = \sum_{k=1}^{10} 4^k \left(\tfrac12\right)^k + 1024^2 \sum_{k=11}^{\infty}\left(\tfrac12\right)^k
+    = \sum_{k=1}^{10} 2^k + \frac{1024^2}{1024}
+    = 2046 + 1024 = 3070
+    $$
 
-# 이번에는 n이 커질수록 100개의 표본평균이 한 값으로 모여든다.
-# 흩어짐(표준편차)이 줄어드는지 보라.
-for n, means in [bounded_results[0], bounded_results[len(bounded_results)//2],
-                 bounded_results[-1]]:
-    print(f"n = {n:>6,}: 표본평균 100개의 중앙값 {np.median(means):7.2f}, "
-          f"표준편차 {means.std():7.2f}")
-```
+    따라서
 
-출력:
+    $$
+    \operatorname{Var}(Y) = 3070 - 11^2 = 2949, \qquad \sigma = \sqrt{2949} = 54.3047
+    $$
 
-```
-n =     10: 표본평균 100개의 중앙값    5.50, 표준편차   17.34
-n =    396: 표본평균 100개의 중앙값   10.50, 표준편차    2.61
-n = 10,000: 표본평균 100개의 중앙값   11.01, 표준편차    0.59
-```
+    이다. **기댓값이 11인데 표준편차가 54다.** 상한을 두어 유한해졌을 뿐이고 분포는 여전히 극단적으로 치우쳐 있다. 정리 1의 $\operatorname{sd}(\bar Y_n) = \sigma/\sqrt n$을 쓰면
+
+    | $n$ | 10 | 396 | 10000 |
+    |---:|---:|---:|---:|
+    | $\operatorname{sd}(\bar Y_n)$ | 17.173 | 2.729 | 0.543 |
+
+    이다. 100개의 표본평균으로 이 표준편차를 재면 추정값의 상대오차가 대략 $1/\sqrt{2 \times 100} = 7\%$이므로, 셋째 자리까지 맞을 것을 기대해서는 안 된다.
+
+    **(2) 모의실험.**
+
+    ```python
+    def bounded_game_sample_means(n_max=10_000, tries=100, n_grid=200):
+        """같은 게임이되 상금을 2^10 = 1024 로 잘라 낸다.
+
+        이 한 줄의 차이로 E[X]가 유한해지고, 대수의 법칙이 되살아난다.
+        상금이 유계이면 기댓값이 반드시 존재하기 때문이다.
+        """
+        n_vals = np.unique(np.logspace(1, np.log10(n_max), n_grid).astype(int))
+        results = []
+        for n in n_vals:
+            flips = np.random.geometric(0.5, size=(n, tries))
+            # 위 함수와 다른 곳은 이 minimum 한 군데뿐이다
+            winnings = np.minimum(2.0 ** flips, 1024.0)
+            means = winnings.mean(axis=0)
+            results.append((n, means))
+        return results
+
+    bounded_results = bounded_game_sample_means()
+
+    # 이번에는 n이 커질수록 100개의 표본평균이 한 값으로 모여든다.
+    # 흩어짐(표준편차)이 줄어드는지 보라.
+    for n, means in [bounded_results[0], bounded_results[len(bounded_results)//2],
+                     bounded_results[-1]]:
+        print(f"n = {n:>6,}: 표본평균 100개의 중앙값 {np.median(means):7.2f}, "
+              f"표준편차 {means.std():7.2f}")
+    ```
+
+    출력:
+
+    ```
+    n =     10: 표본평균 100개의 중앙값    5.50, 표준편차   17.34
+    n =    396: 표본평균 100개의 중앙값   10.50, 표준편차    2.61
+    n = 10,000: 표본평균 100개의 중앙값   11.01, 표준편차    0.59
+    ```
+
+    **세 표준편차가 모두 맞는다.** 이론 $17.173$ / $2.729$ / $0.543$에 대해 모의 $17.34$ / $2.61$ / $0.59$이고, 상대차가 $+1.0\%$, $-4.4\%$, $+8.7\%$다. 100개로 표준편차를 재는 일의 상대오차 $7\%$에 견주면 각각 $0.1$, $-0.6$, $+1.2$ 표준오차에 해당한다. 보기 1의 게임과 달리 **퍼짐이 $\sqrt n$에 반비례해 정확히 줄어든다.** $n$이 $10$에서 $10{,}000$으로 1000배가 되는 동안 표준편차가 $17.3$에서 $0.59$로 $29$배 줄었고, $\sqrt{1000} = 31.6$이 그 값이다.
+
+    **중앙값 5.50은 모순이 아니다.** 기댓값과 중앙값이 다를 수 있다는 것, 그리고 $n$이 작을 때는 **아주** 다르다는 것이 요점이다. $Y$의 3차 적률까지 구하면
+
+    $$
+    E[Y^3] = \sum_{k=1}^{10} 4^k + \frac{1024^3}{1024} = 1{,}398{,}100 + 1{,}048{,}576 = 2{,}446{,}676
+    $$
+
+    이고 중심적률 $\mu_3 = E[Y^3] - 3\mu E[Y^2] + 2\mu^3 = 2{,}348{,}028$이므로 왜도가
+
+    $$
+    \gamma = \frac{\mu_3}{\sigma^3} = \frac{2{,}348{,}028}{54.3047^3} = 14.66
+    $$
+
+    이다. 표본평균의 왜도는 $\gamma/\sqrt n$이므로 $n = 10$에서 $4.64$, $n = 10{,}000$에서 $0.147$이다. **$n = 10$의 표본평균 분포는 왜도가 4.6인 극단적으로 치우친 분포**여서 대부분의 실행이 작은 값을 주고 드문 실행이 큰 값을 준다. 그 "드문 실행"이 상한 상금 $1024$를 한 번이라도 맞은 경우이며, 10라운드에서 그 확률이 $1 - (1 - 2^{-10})^{10} = 0.0097$로 백 번에 한 번이다. 중앙값은 그 드문 경우를 보지 못하고, 기댓값은 그 드문 경우가 만든다.
+
+    $n = 10{,}000$에서는 왜도가 $0.147$로 거의 사라지고 중앙값 $11.01$이 기댓값 $11$과 만난다. **큰수의 법칙이 되살아난 모습이 이것이다.**
 
 두 게임을 나란히 그리면 차이가 분명하다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 절단 전후의 표본평균 비교
+**보기 3.** <span class="diff easy" title="쉬움"></span> 절단 전후의 표본평균 비교. 두 게임의 표본평균 구름을 왼쪽(로그–로그)과 오른쪽(반로그)에 나란히 그린다.
+
+**(1)** 두 구름의 **상대 폭**($10\%$ 분위수와 $90\%$ 분위수의 비)을 $n$에 따라 재면 무엇이 다른가. 그려 보고 수치로 답하시오.
+
+**(2)** 왼쪽 칸이 **가리고 있는 것**은 무엇인가. 이 그림만으로 "수렴하지 않는다"를 보일 수 있는가.
 
 </div>
 
-```python
-fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+??? success "풀이"
 
-# 왼쪽 패널: 기댓값이 무한한 게임 — 발산
-ax = axes[0]
-for n, means in infinite_results:
-    # 각 n마다 100개의 표본평균을 세로로 흩뿌린다.
-    # n이 커져도 이 흩어짐이 좁아지지 않는 것이 핵심이다.
-    # 세로축도 로그(loglog)로 두어야 큰 값들이 화면에 들어온다.
-    ax.loglog(n * np.ones(len(means)), means, ".", color="black", ms=2, alpha=0.5)
-ax.set_xlabel("n (number of rounds)")
-ax.set_ylabel("Sample mean of winnings")
-ax.set_title("St. Petersburg Game (E[X] = ∞)\nSample mean does NOT converge")
+    유도할 답이 있는 문제가 아니다. **두 그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 이 보기의 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다. 아래 코드는 보기 1의 `infinite_results`와 보기 2의 `bounded_results`를 그대로 이어받는다.
 
-# 오른쪽 패널: 기댓값이 유한한 게임 — 수렴
-ax = axes[1]
-for n, means in bounded_results:
-    # 이쪽은 세로축을 로그로 하지 않는다(semilogx). 값이 좁은 범위에 모이기 때문이다.
-    # n이 커질수록 점들이 깔때기처럼 한 선으로 좁아진다. 이것이 큰수의 법칙이다.
-    ax.semilogx(n * np.ones(len(means)), means, ".", color="steelblue", ms=2, alpha=0.5)
+    ```python
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-# 이론적 기댓값. 상금이 2^10 에서 잘리므로
-#   E[X] = (k=1..10 각각 1씩) + 1024 * P(k > 10) = 10 + 1 = 11
-true_mean = 11.0
-ax.axhline(true_mean, color="red", linestyle="--", lw=2,
-           label=f"E[X] = {true_mean:.1f}")
-ax.set_xlabel("n (number of rounds)")
-ax.set_ylabel("Sample mean of winnings")
-ax.set_title("Bounded Game (E[X] < ∞)\nSample mean converges (LLN)")
-ax.legend()
+    # 왼쪽 패널: 기댓값이 무한한 게임 — 발산
+    ax = axes[0]
+    for n, means in infinite_results:
+        # 각 n마다 100개의 표본평균을 세로로 흩뿌린다.
+        # n이 커져도 이 흩어짐이 좁아지지 않는 것이 핵심이다.
+        # 세로축도 로그(loglog)로 두어야 큰 값들이 화면에 들어온다.
+        ax.loglog(n * np.ones(len(means)), means, ".", color="black", ms=2, alpha=0.5)
+    ax.set_xlabel("n (number of rounds)")
+    ax.set_ylabel("Sample mean of winnings")
+    ax.set_title("St. Petersburg Game (E[X] = ∞)\nSample mean does NOT converge")
 
-plt.tight_layout()
-plt.show()
-```
+    # 오른쪽 패널: 기댓값이 유한한 게임 — 수렴
+    ax = axes[1]
+    for n, means in bounded_results:
+        # 이쪽은 세로축을 로그로 하지 않는다(semilogx). 값이 좁은 범위에 모이기 때문이다.
+        # n이 커질수록 점들이 깔때기처럼 한 선으로 좁아진다. 이것이 큰수의 법칙이다.
+        ax.semilogx(n * np.ones(len(means)), means, ".", color="steelblue", ms=2, alpha=0.5)
 
-![도박사의 역설: 큰수의 법칙이 실패할 때](./img/gambler_paradox_lln_82.png)
+    # 이론적 기댓값. 상금이 2^10 에서 잘리므로
+    #   E[X] = (k=1..10 각각 1씩) + 1024 * P(k > 10) = 10 + 1 = 11
+    true_mean = 11.0
+    ax.axhline(true_mean, color="red", linestyle="--", lw=2,
+               label=f"E[X] = {true_mean:.1f}")
+    ax.set_xlabel("n (number of rounds)")
+    ax.set_ylabel("Sample mean of winnings")
+    ax.set_title("Bounded Game (E[X] < ∞)\nSample mean converges (LLN)")
+    ax.legend()
 
-**왼쪽(무한한 평균).** 표본평균의 구름이 $n$이 커져도 좁아지지 **않는다.** 로그–로그 척도에서 오히려 계속 퍼진다. $n = 10{,}000$에서도 실행마다 평균이 크게 다르다. 표본평균이 일치추정량이 아니라는 뜻이다.
+    plt.tight_layout()
+    plt.show()
+    ```
 
-**오른쪽(유한한 평균).** 구름이 빨간 선 $E[X] = 11$ 주위로 **수축한다.** $n = 10{,}000$쯤이면 100번의 실행이 사실상 모두 11 근처에 모인다.
+    ![도박사의 역설: 큰수의 법칙이 실패할 때](./img/gambler_paradox_lln_82.png)
+
+    **(1) 왼쪽은 폭이 멈추고 오른쪽은 조여든다.** 눈으로 본 것을 분위수로 재면 이렇다.
+
+    ```python
+    for tag, res in [("E = 무한", infinite_results), ("E = 11  ", bounded_results)]:
+        row = []
+        for lo, hi in [(10, 20), (95, 105), (950, 1050), (9000, 10_000)]:
+            pooled = np.concatenate([m for n, m in res if lo <= n <= hi])
+            q10, q50, q90 = np.percentile(pooled, [10, 50, 90])
+            row.append(f"중앙값 {q50:6.2f} 폭 {q90/q10:4.2f}배")
+        print(f"{tag}  " + " | ".join(row))
+    ```
+
+    출력:
+
+    ```
+    E = 무한  중앙값   6.42 폭 5.48배 | 중앙값   9.75 폭 3.81배 | 중앙값  12.48 폭 2.67배 | 중앙값  15.66 폭 2.63배
+    E = 11    중앙값   6.73 폭 5.55배 | 중앙값   8.80 폭 3.31배 | 중앙값  10.67 폭 1.46배 | 중앙값  11.02 폭 1.14배
+    ```
+
+    두 줄의 출발점은 거의 같다($5.48$배 대 $5.55$배). 갈라지는 것은 그 뒤다. **오른쪽 게임은 폭이 $1.14$배까지 조여들고 중심이 $11$에 멈춘다.** 점들이 깔때기처럼 빨간 선으로 모여드는 것이 그림에서 보이는 그대로다. **왼쪽 게임은 폭이 $2.6$배에서 더 내려가지 않고 중심이 $6.4 \to 15.7$로 계속 올라간다.** 상대적인 퍼짐이 아주 천천히 줄기는 하지만 멈출 자리가 없으므로, 어떤 값으로도 수렴하지 않는다. $n = 10{,}000$에서도 실행에 따라 평균이 $12$에서 $33$ 사이에 흩어지고 꼬리는 그보다 훨씬 위까지 간다.
+
+    **(2) 왼쪽 칸이 가리는 것이 셋 있다.**
+
+    첫째, **세로축이 로그라 중심의 상승이 눌려 보인다.** 중앙값은 $\log_2 n$처럼 자라므로 로그 세로축에서는 $\log\log n$ 꼴이 되어 거의 평평하다. 구름이 "그 자리에 머무는" 것처럼 보이지만 실제로는 $6.4$에서 $15.7$로 $2.4$배 올라갔다. 그림만 보고 "수렴하는 것 같다"고 읽으면 정확히 반대로 읽는 것이다.
+
+    둘째, **점이 겹쳐 밀도를 읽을 수 없다.** 격자 200개에 실행 100개이므로 점이 2만 개인데 모두 같은 크기와 색이다. 구름의 어디가 두꺼운지 알 수 없고, 따라서 분포가 꼬리만 무거운지 전체가 넓은지 구별되지 않는다. 그 구별을 해 주는 것이 위에서 찍은 분위수다.
+
+    셋째, **위쪽 끝의 점 하나가 꼬리 전체를 대표하는데 그 높이가 실행마다 달라진다.** 보기 1에서 본 최댓값 $415 \to 1341 \to 223$이 그것이다. 그림을 다시 그리면 그 점의 높이가 자릿수로 바뀐다.
+
+    **그리고 이 그림으로 "수렴하지 않는다"를 보일 수는 없다.** $n = 10{,}000$까지 폭이 좁아지지 않았다는 것은 유한한 구간에서의 관찰일 뿐이고, 더 밀면 좁아질지 아닐지는 그림이 답하지 못한다. 답은 정리 1에 있다. $E[X] = \infty$이므로 **수렴할 값 자체가 없다.** 그림은 그 사실의 삽화이지 증거가 아니다.
 
 !!! warning "유한한 평균은 선택 사항이 아니다"
     큰수의 법칙을 "평균은 수렴한다"고 외우면 이 사례에서 틀린다. 평균은 **모평균이 존재하고 유한할 때에만** 수렴한다.

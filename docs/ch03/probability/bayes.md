@@ -201,93 +201,211 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 베이즈 정리로 사후확률 구하기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 베이즈 정리로 사후확률 구하기. 보기 3과 같은 설정이다. 유병률 $1\%$, 민감도 $95\%$, 특이도 $90\%$.
+
+**(1)** 사후확률을 **오즈와 가능도비**로 다시 유도해 보기 3의 $0.0876$과 같은 값이 나오는지 보이시오.
+
+**(2)** 민감도를 $100\%$까지 올리면 사후확률이 얼마가 되는가. 정리 3의 상한과 견주시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def bayes_theorem(prior, likelihood, evidence):
-    """베이즈 정리:  사후 = (가능도 x 사전) / 증거
+    **(1) 오즈로 다시 쓰기.** 베이즈 정리의 분자와 분모를 $P(+ \mid D^c)P(D^c)$로 나누면 분모의 둘째 항이 $1$이 되고 식이 셋의 곱으로 갈라진다. $D$ = 질병, $+$ = 양성이라 두고
 
-    P(H|E) = P(E|H) P(H) / P(E)
-    """
-    posterior = (likelihood * prior) / evidence
-    return posterior
+    $$
+    \frac{P(D \mid +)}{P(D^c \mid +)}
+    = \underbrace{\frac{P(D)}{P(D^c)}}_{\text{사전오즈}} \times \underbrace{\frac{P(+ \mid D)}{P(+ \mid D^c)}}_{\text{가능도비}}
+    $$
 
-# 의학 진단 보기
-prior_disease = 0.01         # 사전확률 P(질병) = 유병률 1%
-sensitivity = 0.95           # 가능도 P(양성|질병) = 95%
-specificity = 0.90           # 특이도 P(음성|건강) = 90%
-false_positive_rate = 1 - specificity     # P(양성|건강) = 10%
+    를 얻는다. **사후오즈 = 사전오즈 × 가능도비**다. 수를 넣으면
 
-# 분모(증거) P(양성)은 전확률의 법칙으로 구한다.
-# 두 경로 — 질병이면서 양성, 건강하면서 양성 — 를 더한다.
-p_positive = sensitivity * prior_disease + false_positive_rate * (1 - prior_disease)
+    $$
+    \text{사전오즈} = \frac{0.01}{0.99} = \frac{1}{99} = 0.010101, \qquad
+    \text{LR} = \frac{0.95}{0.10} = 9.5
+    $$
 
-# 이 분모가 베이즈 정리의 핵심이다. 건강한 사람이 99%나 되므로
-# 위양성 10%가 만들어 내는 양성자 수가 진짜 환자보다 훨씬 많아진다.
-posterior = bayes_theorem(prior_disease, sensitivity, p_positive)
+    이므로 사후오즈가 $9.5/99 = 0.095960$이고, 오즈를 확률로 되돌리면
 
-print(f"P(disease | positive) = {posterior:.4f}")
-print(f"Despite a 95% sensitive test, only {posterior*100:.1f}% of positives truly have the disease.")
-```
+    $$
+    P(D \mid +) = \frac{0.095960}{1 + 0.095960} = 0.087558
+    $$
 
-출력:
+    이다. 보기 3에서 분수 $0.0095/0.1085$로 구한 값과 같다.
 
-```
-P(disease | positive) = 0.0876
-Despite a 95% sensitive test, only 8.8% of positives truly have the disease.
-```
+    **이 꼴이 기저율의 지배를 한눈에 설명한다.** 검사가 가져오는 정보는 가능도비 $9.5$ 한 개뿐이고, 그것은 오즈를 **곱셈으로** 9.5배 올린다. 그런데 사전오즈가 $1/99$로 워낙 작아서 9.5배를 해도 $1$에 미치지 못한다. 사후확률이 $50\%$를 넘으려면 사후오즈가 $1$을 넘어야 하고, 그러려면 사전오즈가 $1/9.5$보다 커야 한다.
+
+    **(2) 민감도를 올려도.** 가능도비를 가장 크게 만드는 것은 $P(+ \mid D) = 1$인 완벽한 검사이고, 그때 $\text{LR} = 1/0.10 = 10$이다. 사후오즈는 $10/99 = 0.101010$, 사후확률은
+
+    $$
+    \frac{0.101010}{1.101010} = 0.091743
+    $$
+
+    이다. 정리 3의 상한 $\varepsilon/(\varepsilon + \beta(1-\varepsilon)) = 0.01/(0.01 + 0.1 \times 0.99) = 0.091743$과 정확히 같다. 그 상한이 $\alpha = 1$에서 달성된다고 한 것이 이것이다. **민감도를 $95\%$에서 $100\%$로 끌어올려 얻는 것은 $8.76\%$에서 $9.17\%$로, $0.4$퍼센트포인트뿐이다.**
+
+    ```python
+    import numpy as np
+
+    def bayes_theorem(prior, likelihood, evidence):
+        """베이즈 정리:  사후 = (가능도 x 사전) / 증거
+
+        P(H|E) = P(E|H) P(H) / P(E)
+        """
+        posterior = (likelihood * prior) / evidence
+        return posterior
+
+    # 의학 진단 보기
+    prior_disease = 0.01         # 사전확률 P(질병) = 유병률 1%
+    sensitivity = 0.95           # 가능도 P(양성|질병) = 95%
+    specificity = 0.90           # 특이도 P(음성|건강) = 90%
+    false_positive_rate = 1 - specificity     # P(양성|건강) = 10%
+
+    # 분모(증거) P(양성)은 전확률의 법칙으로 구한다.
+    # 두 경로 — 질병이면서 양성, 건강하면서 양성 — 를 더한다.
+    p_positive = sensitivity * prior_disease + false_positive_rate * (1 - prior_disease)
+
+    # 이 분모가 베이즈 정리의 핵심이다. 건강한 사람이 99%나 되므로
+    # 위양성 10%가 만들어 내는 양성자 수가 진짜 환자보다 훨씬 많아진다.
+    posterior = bayes_theorem(prior_disease, sensitivity, p_positive)
+
+    print(f"P(disease | positive) = {posterior:.4f}")
+    print(f"Despite a 95% sensitive test, only {posterior*100:.1f}% of positives truly have the disease.")
+
+    # (1) 오즈 꼴로 다시 계산해 같은 값이 나오는지 본다.
+    prior_odds = prior_disease / (1 - prior_disease)
+    lr = sensitivity / false_positive_rate          # 가능도비
+    post_odds = prior_odds * lr
+    print(f"prior odds = {prior_odds:.6f},  LR = {lr:.2f},  post odds = {post_odds:.6f}")
+    print(f"posterior from odds = {post_odds / (1 + post_odds):.6f}")
+
+    # (2) 민감도를 1 로 올리면 가능도비가 10 이 된다. 정리 3의 상한이다.
+    best_odds = prior_odds * (1.0 / false_positive_rate)
+    print(f"sensitivity -> 1.0 : LR = {1.0/false_positive_rate:.2f},"
+          f"  posterior = {best_odds / (1 + best_odds):.6f}")
+    ```
+
+    출력:
+
+    ```
+    P(disease | positive) = 0.0876
+    Despite a 95% sensitive test, only 8.8% of positives truly have the disease.
+    prior odds = 0.010101,  LR = 9.50,  post odds = 0.095960
+    posterior from odds = 0.087558
+    sensitivity -> 1.0 : LR = 10.00,  posterior = 0.091743
+    ```
+
+    오즈로 돌아 나온 $0.087558$이 분수로 바로 구한 $0.0876$과 같고, 완벽한 검사의 $0.091743$이 정리 3의 상한과 소수 여섯째 자리까지 같다. **세 길이 모두 맞는다.**
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 유병률이 사후확률을 지배한다
+**보기 5.** <span class="diff easy" title="쉬움"></span> 유병률이 사후확률을 지배한다. 검사 성능은 민감도 $95\%$, 특이도 $90\%$로 고정하고 유병률만 $0.1\%$에서 $50\%$까지 바꾸며 사후확률을 그린다.
+
+**(1)** 곡선이 $50\%$ 선을 넘는 유병률을 해석적으로 구하시오.
+
+**(2)** 유병률이 $0$에 가까울 때 곡선의 기울기는 얼마인가. 그려서 (1)과 (2)를 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-def bayes_update_visualization():
-    """검사 성능은 그대로 두고 **유병률만** 바꿔 가며 사후확률을 그린다.
+    **(1) 임계 유병률.** 유병률을 $\pi$, 민감도를 $\alpha$, 위양성률을 $\beta = 1 - \text{특이도}$라 두면
 
-    "같은 검사, 같은 양성 결과인데 사후확률이 왜 달라지는가"에 답하는 그림이다.
-    답은 분모에 있다. 유병률이 낮을수록 건강한 사람이 만들어 내는
-    위양성이 분모를 지배해 사후확률을 끌어내린다.
-    """
-    prevalences = np.linspace(0.001, 0.5, 200)   # 0.1%부터 50%까지
-    sensitivity = 0.95      # 검사 성능은 끝까지 고정
-    specificity = 0.90
+    $$
+    P(D \mid +) = \frac{\alpha \pi}{\alpha \pi + \beta(1 - \pi)}
+    $$
 
-    posteriors = []
-    for prev in prevalences:
-        # 분모: 전확률의 법칙
-        p_pos = sensitivity * prev + (1 - specificity) * (1 - prev)
-        # 분자: 질병이면서 양성
-        post = (sensitivity * prev) / p_pos
-        posteriors.append(post)
+    이다. 이 값이 $1/2$이 되는 것은 분자가 분모의 절반일 때, 곧 두 경로의 무게가 같을 때다.
 
-    fig, ax = plt.subplots(figsize=(12, 4))
-    ax.plot(prevalences * 100, np.array(posteriors) * 100, lw=2)
-    ax.set_xlabel('Prevalence (%)')
-    ax.set_ylabel('P(Disease | Positive) (%)')
-    ax.set_title("Bayes' Theorem: Posterior vs. Prevalence")
-    # 50% 기준선. 이 선을 넘어야 "양성이면 아플 가능성이 더 크다"고 말할 수 있다.
-    ax.axhline(y=50, color='r', linestyle='--', alpha=0.5, label='50% threshold')
-    ax.legend()
-    ax.spines[['top', 'right']].set_visible(False)
-    plt.tight_layout()
-    plt.show()
+    $$
+    \alpha \pi = \beta (1 - \pi)
+    \quad\Longleftrightarrow\quad
+    \pi^\ast = \frac{\beta}{\alpha + \beta}
+    $$
 
-bayes_update_visualization()
-```
+    수를 넣으면
 
-![Bayes](./img/bayes_136.png)
+    $$
+    \pi^\ast = \frac{0.10}{0.95 + 0.10} = \frac{0.10}{1.05} = 0.095238
+    $$
 
-곡선이 처음에 가파르게 오르는 것에 주목하라. 사후확률이 50%를 넘으려면 유병률이 상당히 높아야 한다. 검사 성능을 올리는 것보다 **검사 대상을 좁히는 것**이 효과적인 이유다.
+    이다. **유병률이 $9.52\%$를 넘어야 비로소 "양성이면 아플 가능성이 더 크다"고 말할 수 있다.** 보기 4의 오즈 꼴로 보면 같은 조건이 더 짧게 적힌다. 사후오즈가 $1$을 넘으려면 사전오즈가 $1/\text{LR} = 1/9.5$보다 커야 하고, $\pi/(1-\pi) = 1/9.5$에서 $\pi = 1/10.5 = 0.095238$이 나온다.
+
+    **(2) 원점에서의 기울기는 가능도비다.** $\pi \to 0$이면 분모의 $\alpha\pi$가 $\beta$에 비해 무시할 만해지므로
+
+    $$
+    P(D \mid +) \approx \frac{\alpha \pi}{\beta} = \frac{0.95}{0.10}\,\pi = 9.5\,\pi
+    $$
+
+    이다. 곧 **드문 병에서는 사후확률이 유병률의 가능도비 배**다. 유병률 $1\%$를 넣으면 $0.095$가 나오는데 정확한 값은 $0.0876$이다. 분모에서 빼먹은 $\alpha\pi = 0.0095$ 때문에 어림이 $8\%$쯤 크게 나온 것이고, $\pi$가 작아질수록 이 차이는 사라진다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def bayes_update_visualization():
+        """검사 성능은 그대로 두고 **유병률만** 바꿔 가며 사후확률을 그린다.
+
+        "같은 검사, 같은 양성 결과인데 사후확률이 왜 달라지는가"에 답하는 그림이다.
+        답은 분모에 있다. 유병률이 낮을수록 건강한 사람이 만들어 내는
+        위양성이 분모를 지배해 사후확률을 끌어내린다.
+        """
+        prevalences = np.linspace(0.001, 0.5, 200)   # 0.1%부터 50%까지
+        sensitivity = 0.95      # 검사 성능은 끝까지 고정
+        specificity = 0.90
+
+        posteriors = []
+        for prev in prevalences:
+            # 분모: 전확률의 법칙
+            p_pos = sensitivity * prev + (1 - specificity) * (1 - prev)
+            # 분자: 질병이면서 양성
+            post = (sensitivity * prev) / p_pos
+            posteriors.append(post)
+        posteriors = np.array(posteriors)
+
+        # 곡선이 50% 선을 넘는 첫 격자점과 (1)의 해석적 임계값을 견준다.
+        i = int(np.argmax(posteriors >= 0.5))
+        print(f"격자가 50%를 넘는 첫 유병률 = {prevalences[i]:.5f}"
+              f"  (사후확률 {posteriors[i]:.4f})")
+        print(f"해석적 임계 유병률         = "
+              f"{(1 - specificity) / (sensitivity + 1 - specificity):.5f}")
+        print(f"격자 간격                  = {prevalences[1] - prevalences[0]:.5f}")
+
+        # (2) 원점 근처의 기울기. 어림은 LR x 유병률 이다.
+        exact_1pct = sensitivity * 0.01 / (sensitivity * 0.01 + (1 - specificity) * 0.99)
+        print(f"유병률 1%: 정확 {exact_1pct:.5f},  어림 9.5 x 0.01 = "
+              f"{sensitivity / (1 - specificity) * 0.01:.5f}")
+
+        fig, ax = plt.subplots(figsize=(12, 4))
+        ax.plot(prevalences * 100, np.array(posteriors) * 100, lw=2)
+        ax.set_xlabel('Prevalence (%)')
+        ax.set_ylabel('P(Disease | Positive) (%)')
+        ax.set_title("Bayes' Theorem: Posterior vs. Prevalence")
+        # 50% 기준선. 이 선을 넘어야 "양성이면 아플 가능성이 더 크다"고 말할 수 있다.
+        ax.axhline(y=50, color='r', linestyle='--', alpha=0.5, label='50% threshold')
+        ax.legend()
+        ax.spines[['top', 'right']].set_visible(False)
+        plt.tight_layout()
+        plt.show()
+
+    bayes_update_visualization()
+    ```
+
+    출력:
+
+    ```
+    격자가 50%를 넘는 첫 유병률 = 0.09629  (사후확률 0.5030)
+    해석적 임계 유병률         = 0.09524
+    격자 간격                  = 0.00251
+    유병률 1%: 정확 0.08756,  어림 9.5 x 0.01 = 0.09500
+    ```
+
+    ![Bayes](./img/bayes_136.png)
+
+    **곡선이 처음에 가파르게 오르는 것**이 (2)의 기울기 $9.5$다. 왼쪽 끝에서 유병률 $1\%$에 사후확률 $8.76\%$이니 거의 열 배로 올라가 있고, 어림값 $9.50\%$와의 차이도 그 자리에서 읽힌다.
+
+    빨간 $50\%$ 선과 곡선이 만나는 자리가 (1)의 $9.52\%$다. 격자가 고른 첫 교차점은 $0.09629$인데 해석적 답은 $0.09524$다. 격자 간격이 $0.00251$이라 $0.09524$가 후보에 아예 없기 때문이며, **해석적으로 푼 답은 정확하고 격자 탐색은 격자만큼만 정확하다.**
+
+    그림의 모양에서 읽을 실무적 결론은 이것이다. 가로축 왼쪽 $10\%$ 구간에서 곡선이 $0$에서 $50\%$까지 치솟고 나머지 $40\%$ 구간은 완만하다. **검사 성능을 올리는 것보다 검사 대상을 좁히는 것이 효과적**인 이유가 여기 있다. 보기 4에서 보았듯 민감도를 $100\%$로 올려도 유병률 $1\%$에서는 $9.17\%$가 한계인데, 위험군을 골라 유병률을 $10\%$로 만들면 같은 검사가 $51\%$를 준다.
 
 ## 연습문제
 

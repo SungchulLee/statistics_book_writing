@@ -74,73 +74,136 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 확률이 0으로 가는 모습
+**보기 1.** <span class="diff easy" title="쉬움"></span> 확률이 0으로 가는 모습. $\text{Exp}(1)$에서 크기 $n$인 표본을 1만 번씩 뽑아 $\bar X_n$의 분포를 열 개의 $n$에 대해 그린다. $\varepsilon = 0.2\sigma = 0.2$로 둔다.
+
+**(1)** 정리 2가 "0으로 간다"고 말하는 확률 $P(|\bar X_n - \mu| > \varepsilon)$의 **정확한 값**을 적으시오. 정리 1의 증명에 나온 체비쇼프 경계와도 견주시오.
+
+**(2)** 모의실험이 (1)을 재현하는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
-M = 10_000                    # 되풀이 횟수
-EPS = 0.2                     # ε (σ 단위)
+    **(1) 정확한 값이 있다.** $\text{Exp}(1)$은 $\mu = \sigma = 1$이고, 독립인 지수확률변수 $n$개의 합은 $\text{Gamma}(n, 1)$을 따른다. 따라서 $n\bar X_n \sim \text{Gamma}(n,1)$이고 벗어날 확률이 닫힌 꼴로 적힌다.
 
-rng = np.random.default_rng(2026)
-mu, sigma = 1.0, 1.0          # Exponential(1) 의 평균과 표준편차
-eps = EPS * sigma
+    $$
+    P(|\bar X_n - 1| > 0.2)
+    = P\big(G_n < 0.8n\big) + P\big(G_n > 1.2n\big),
+    \qquad G_n \sim \text{Gamma}(n, 1)
+    $$
 
-# 가장 큰 n 으로 한 번만 뽑고 앞쪽 n 개 열을 각 칸에 쓴다.
-# 표본이 중첩되므로 칸끼리 다른 것은 오직 n 뿐이다.
-X = rng.exponential(1.0, (M, max(N_LIST)))
+    두 개의 어림값도 함께 적어 둔다. 정리 1의 증명에 나온 체비쇼프 경계는
 
-lo, hi = np.percentile(X[:, :min(N_LIST)].mean(axis=1), [0.5, 99.5])
-pad = 0.1 * (hi - lo)
-bins = np.linspace(lo - pad, hi + pad, 60)
+    $$
+    P(|\bar X_n - \mu| \ge \varepsilon) \le \frac{\sigma^2}{n\varepsilon^2} = \frac{25}{n}
+    $$
 
-probs = []
-fig, axes = plt.subplots(1, 10, figsize=(22, 4), constrained_layout=True)
-for ax, n in zip(axes, N_LIST):
-    xbar = X[:, :n].mean(axis=1)          # 크기 n 인 표본 M 개의 평균
-    ax.hist(xbar, bins=bins, density=True, color="tab:blue", alpha=0.6,
-            edgecolor="white", linewidth=0.3)
-    ax.axvline(mu, color="red", lw=2, label=r"$\mu$")
-    ax.axvspan(mu - eps, mu + eps, color="orange", alpha=0.18,
-               label=r"$\mu\pm\varepsilon$")
+    이고, 중심극한정리를 미리 써서 정규근사를 하면 $2\big(1 - \Phi(0.2\sqrt n)\big)$이다. 세 수가 $n = 5$와 $n = 50$에서 이렇게 갈린다.
 
-    # 정리 2가 "0으로 간다"고 말하는 바로 그 확률을 세어 본다.
-    p_out = np.mean(np.abs(xbar - mu) > eps)
-    probs.append(p_out)
-    ax.set_title(f"n = {n}\n"
-                 rf"$\hat P(|\bar X_n-\mu|>\varepsilon)$ = {p_out:.3f}",
-                 fontsize=11)
-    ax.set_xlim(bins[0], bins[-1])
-    ax.set_xlabel(r"$\bar X_n$")
-axes[0].set_ylabel("density of $\\bar X_n$")
-axes[0].legend(fontsize=9, loc="upper right")
-plt.show()
+    | $n$ | 정확(감마) | 정규근사 | 체비쇼프 경계 |
+    |---:|---:|---:|---:|
+    | 5 | 0.6562 | 0.6547 | 5.000 |
+    | 50 | 0.1547 | 0.1573 | 0.500 |
 
-# 정리 2가 0으로 간다고 말하는 그 확률만 따로 모아 본다.
-for i in range(5):
-    print(f"n = {N_LIST[i]:>2} : {probs[i]:.3f}      "
-          f"n = {N_LIST[i + 5]:>2} : {probs[i + 5]:.3f}")
-```
+    **체비쇼프 경계는 $n = 25$까지 $1$ 이상이어서 아무것도 말해 주지 않고**, $n = 50$에서도 참값의 $3.2$배다. 평균과 분산만 쓰고 분포를 보지 않은 대가다. 반면 정규근사는 $n = 5$에서도 소수 둘째 자리까지 맞는다.
 
-출력:
+    **(2) 모의실험.**
 
-```
-n =  5 : 0.661      n = 30 : 0.269
-n = 10 : 0.522      n = 35 : 0.229
-n = 15 : 0.434      n = 40 : 0.198
-n = 20 : 0.370      n = 45 : 0.169
-n = 25 : 0.312      n = 50 : 0.147
-```
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-![약한 큰수의 법칙 — 표본평균의 분포가 오그라든다](./img/wlln_exponential.png)
+    N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+    M = 10_000                    # 되풀이 횟수
+    EPS = 0.2                     # ε (σ 단위)
 
-칸마다 파란 히스토그램이 좁아지고, 주황 띠($\mu \pm \varepsilon$) 밖으로 나가는 몫이 $0.661$에서 $0.147$로 줄어든다. **이 수열이 0으로 간다는 것이 정리 2의 전부다.**
+    rng = np.random.default_rng(2026)
+    mu, sigma = 1.0, 1.0          # Exponential(1) 의 평균과 표준편차
+    eps = EPS * sigma
 
-두 가지를 짚어 두자. 첫째, **$n = 50$에서도 그 확률이 $0.147$이다.** 여전히 일곱 번에 한 번꼴로 $\varepsilon$ 밖에 떨어진다. 정리는 극한을 말할 뿐 "충분히 큰 $n$"이 얼마인지는 말해 주지 않으며, $\varepsilon$을 좁게 잡을수록 그 $n$은 커진다. 둘째, **줄어드는 속도가 느리다.** $n$을 10배로 키우는 동안 확률은 4.5배밖에 줄지 않았는데, 이는 $\bar X_n$의 퍼짐이 $1/\sqrt n$로만 줄기 때문이다.
+    # 가장 큰 n 으로 한 번만 뽑고 앞쪽 n 개 열을 각 칸에 쓴다.
+    # 표본이 중첩되므로 칸끼리 다른 것은 오직 n 뿐이다.
+    X = rng.exponential(1.0, (M, max(N_LIST)))
+
+    lo, hi = np.percentile(X[:, :min(N_LIST)].mean(axis=1), [0.5, 99.5])
+    pad = 0.1 * (hi - lo)
+    bins = np.linspace(lo - pad, hi + pad, 60)
+
+    probs = []
+    fig, axes = plt.subplots(1, 10, figsize=(22, 4), constrained_layout=True)
+    for ax, n in zip(axes, N_LIST):
+        xbar = X[:, :n].mean(axis=1)          # 크기 n 인 표본 M 개의 평균
+        ax.hist(xbar, bins=bins, density=True, color="tab:blue", alpha=0.6,
+                edgecolor="white", linewidth=0.3)
+        ax.axvline(mu, color="red", lw=2, label=r"$\mu$")
+        ax.axvspan(mu - eps, mu + eps, color="orange", alpha=0.18,
+                   label=r"$\mu\pm\varepsilon$")
+
+        # 정리 2가 "0으로 간다"고 말하는 바로 그 확률을 세어 본다.
+        p_out = np.mean(np.abs(xbar - mu) > eps)
+        probs.append(p_out)
+        ax.set_title(f"n = {n}\n"
+                     rf"$\hat P(|\bar X_n-\mu|>\varepsilon)$ = {p_out:.3f}",
+                     fontsize=11)
+        ax.set_xlim(bins[0], bins[-1])
+        ax.set_xlabel(r"$\bar X_n$")
+    axes[0].set_ylabel("density of $\\bar X_n$")
+    axes[0].legend(fontsize=9, loc="upper right")
+    plt.show()
+
+    # 정리 2가 0으로 간다고 말하는 그 확률만 따로 모아 본다.
+    for i in range(5):
+        print(f"n = {N_LIST[i]:>2} : {probs[i]:.3f}      "
+              f"n = {N_LIST[i + 5]:>2} : {probs[i + 5]:.3f}")
+    ```
+
+    출력:
+
+    ```
+    n =  5 : 0.661      n = 30 : 0.269
+    n = 10 : 0.522      n = 35 : 0.229
+    n = 15 : 0.434      n = 40 : 0.198
+    n = 20 : 0.370      n = 45 : 0.169
+    n = 25 : 0.312      n = 50 : 0.147
+    ```
+
+    ![약한 큰수의 법칙 — 표본평균의 분포가 오그라든다](./img/wlln_exponential.png)
+
+    칸마다 파란 히스토그램이 좁아지고, 주황 띠($\mu \pm \varepsilon$) 밖으로 나가는 몫이 $0.661$에서 $0.147$로 줄어든다. **이 수열이 0으로 간다는 것이 정리 2의 전부다.**
+
+    (1)의 세 수와 나란히 놓아 본다. 위 코드의 `probs`를 그대로 이어받는다.
+
+    ```python
+    from scipy import stats
+
+    print(" n   정확(감마)  정규근사  체비쇼프   모의     차이/se")
+    for n, p in zip(N_LIST, probs):
+        exact = (stats.gamma.cdf((mu - eps) * n, n)
+                 + stats.gamma.sf((mu + eps) * n, n))
+        se = np.sqrt(exact * (1 - exact) / M)      # 모의값의 몬테카를로 오차
+        print(f"{n:3d}    {exact:.4f}     {2 * stats.norm.sf(eps * np.sqrt(n)):.4f}"
+              f"   {sigma**2 / (n * eps**2):7.3f}   {p:.3f}   {(p - exact) / se:+5.2f}")
+    ```
+
+    출력:
+
+    ```
+     n   정확(감마)  정규근사  체비쇼프   모의     차이/se
+      5    0.6562     0.6547     5.000   0.661   +1.03
+     10    0.5258     0.5271     2.500   0.522   -0.77
+     15    0.4361     0.4386     1.667   0.434   -0.45
+     20    0.3680     0.3711     1.250   0.370   +0.41
+     25    0.3140     0.3173     1.000   0.312   -0.39
+     30    0.2700     0.2733     0.833   0.269   -0.18
+     35    0.2335     0.2367     0.714   0.229   -1.19
+     40    0.2029     0.2059     0.625   0.198   -1.11
+     45    0.1769     0.1797     0.556   0.169   -2.10
+     50    0.1547     0.1573     0.500   0.147   -2.17
+    ```
+
+    **열 칸 모두 맞는다.** 모의값이 정확값에서 최대 $2.2$ 표준오차 떨어져 있다. 다만 마지막 두 줄이 한쪽으로 쏠린 것은 우연이 아니다. 이 모의실험은 **1만 × 50 행렬 하나를 뽑아 앞쪽 $n$개 열만 잘라 쓰므로** 열 칸이 같은 난수를 공유하고, 그래서 오차들이 서로 독립이 아니라 강하게 상관되어 있다. 한 칸이 아래로 쏠리면 옆 칸도 따라 쏠린다. 칸마다 표본을 새로 뽑으면 이 쏠림이 사라진다.
+
+    두 가지를 짚어 두자. 첫째, **$n = 50$에서도 그 확률이 $0.147$이다.** 여전히 일곱 번에 한 번꼴로 $\varepsilon$ 밖에 떨어진다. 정리는 극한을 말할 뿐 "충분히 큰 $n$"이 얼마인지는 말해 주지 않으며, $\varepsilon$을 좁게 잡을수록 그 $n$은 커진다. 둘째, **줄어드는 속도가 느리다.** $n$을 10배로 키우는 동안 확률은 4.5배밖에 줄지 않았는데, 이는 $\bar X_n$의 퍼짐이 $1/\sqrt n$로만 줄기 때문이다.
 
 둘째 관찰은 이 절을 넘어간다. 히스토그램이 오그라드는 **속도**가 $1/\sqrt n$으로 정해져 있다면, 눈금을 그 속도에 맞추어 $\sqrt n$배씩 당겨 가며 보면 어떻게 될까. 오그라드는 것과 당기는 것이 정확히 상쇄되어 **무엇인가가 남는다.** 그 남는 것이 [중심극한정리](clt.md)의 정규분포이며, 그 쪽에서 이 히스토그램에 눈금 두 벌을 달아 확인한다. **두 정리는 별개의 사실이 아니라 같은 그림을 다른 자로 읽은 것이다.**
 
@@ -191,46 +254,93 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 표본경로 하나를 끝까지 따라가면
+**보기 2.** <span class="diff easy" title="쉬움"></span> 표본경로 하나를 끝까지 따라가면. 공정한 주사위를 1만 번 굴려 매 시점의 누적평균 $\bar X_n$을 기록한다.
+
+**(1)** 참 기댓값과 $\operatorname{sd}(\bar X_n)$의 이론값을 $n = 10, 10^2, 10^3, 10^4$에서 적으시오.
+
+**(2)** 경로를 그려 (1)을 확인하시오. 누적평균이 $3.5$로 모여드는 동안 **누적합의 편차** $S_n - 3.5n$은 어떻게 되는가.
 
 </div>
 
-강한 법칙이 말하는 대상은 **경로 하나**이므로, 확인하는 방법도 보기 1과 다르다. 표본을 여러 번 뽑는 것이 아니라 실험 하나를 길게 이어 가며 그 수열이 어디로 가는지 본다.
+??? success "풀이"
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+    **(1) 이론값.** 주사위 한 번의 평균과 분산은 손으로 계산된다.
 
-np.random.seed(42)
+    $$
+    \mu = \frac{1 + 2 + \cdots + 6}{6} = 3.5, \qquad
+    \sigma^2 = \frac{1}{6}\sum_{k=1}^{6}(k - 3.5)^2 = \frac{35}{12}
+    $$
 
-# 주사위를 1만 번 굴리고 "여태까지의 평균"을 매 시점 기록한다.
-n_rolls = 10_000
-rolls = np.random.randint(1, 7, size=n_rolls)
+    이므로 $\sigma = \sqrt{35/12} = 1.70783$이다. 정리 1에 따라 $\operatorname{sd}(\bar X_n) = \sigma/\sqrt n$이다.
 
-# cumsum(누적합)을 1, 2, 3, ... 로 나누면 각 시점까지의 평균이 된다.
-# running_avg[k] = 처음 k+1번의 평균
-# 반복문 없이 한 줄로 1만 개의 평균을 얻는 요령이다.
-running_avg = np.cumsum(rolls) / np.arange(1, n_rolls + 1)
+    | $n$ | 10 | $10^2$ | $10^3$ | $10^4$ |
+    |---:|---:|---:|---:|---:|
+    | $\operatorname{sd}(\bar X_n)$ | 0.5401 | 0.1708 | 0.0540 | 0.0171 |
 
-fig, ax = plt.subplots(figsize=(12, 4))
-ax.plot(running_avg, alpha=0.8, label='Running Average')
-# 참 기댓값 (1+2+3+4+5+6)/6 = 3.5. 큰수의 법칙은 곡선이 이 선에 붙는다고 말한다.
-ax.axhline(y=3.5, color='r', linestyle='--', label='E[X] = 3.5')
-ax.set_xlabel('Number of Rolls')
-ax.set_ylabel('Sample Mean')
-ax.set_title('Law of Large Numbers: Fair Die')
-ax.legend()
-ax.spines[['top', 'right']].set_visible(False)
-plt.show()
-```
+    **(2) 모의실험.** 강한 법칙이 말하는 대상은 **경로 하나**이므로, 확인하는 방법도 보기 1과 다르다. 표본을 여러 번 뽑는 것이 아니라 실험 하나를 길게 이어 가며 그 수열이 어디로 가는지 본다.
 
-![Law of Large Numbers: Fair Die](./img/lln_61.png)
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-초반에는 크게 출렁이다가 점차 3.5에 붙는다. 출렁임의 폭이 $1/\sqrt n$으로 줄어드는 것이 눈에 보인다.
+    np.random.seed(42)
+
+    # 주사위를 1만 번 굴리고 "여태까지의 평균"을 매 시점 기록한다.
+    n_rolls = 10_000
+    rolls = np.random.randint(1, 7, size=n_rolls)
+
+    # cumsum(누적합)을 1, 2, 3, ... 로 나누면 각 시점까지의 평균이 된다.
+    # running_avg[k] = 처음 k+1번의 평균
+    # 반복문 없이 한 줄로 1만 개의 평균을 얻는 요령이다.
+    running_avg = np.cumsum(rolls) / np.arange(1, n_rolls + 1)
+
+    fig, ax = plt.subplots(figsize=(12, 4))
+    ax.plot(running_avg, alpha=0.8, label='Running Average')
+    # 참 기댓값 (1+2+3+4+5+6)/6 = 3.5. 큰수의 법칙은 곡선이 이 선에 붙는다고 말한다.
+    ax.axhline(y=3.5, color='r', linestyle='--', label='E[X] = 3.5')
+    ax.set_xlabel('Number of Rolls')
+    ax.set_ylabel('Sample Mean')
+    ax.set_title('Law of Large Numbers: Fair Die')
+    ax.legend()
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.show()
+
+    # 그림에서 눈으로 재던 것을 수로 적는다.
+    sigma = np.sqrt(35 / 12)
+    for k in (10, 100, 1_000, 10_000):
+        dev = running_avg[k - 1] - 3.5
+        print(f"n = {k:>6,}: 누적평균 {running_avg[k-1]:.4f}  편차 {dev:+.4f}"
+              f"  이론 sd {sigma / np.sqrt(k):.4f}  편차/sd {dev / (sigma / np.sqrt(k)):+.2f}")
+
+    # 누적합 쪽은 어떻게 되는가. S_n - 3.5n 은 줄지 않는다.
+    dev_sum = np.cumsum(rolls) - 3.5 * np.arange(1, n_rolls + 1)
+    k = int(np.abs(dev_sum).argmax())
+    print(f"|S_n - 3.5n| 의 최댓값 = {abs(dev_sum[k]):.0f}  (n = {k+1:,}),"
+          f"  sigma*sqrt(n) = {sigma * np.sqrt(k + 1):.0f}")
+    out = np.where(np.abs(running_avg - 3.5) > 0.05)[0]
+    print(f"3.5 +- 0.05 띠를 마지막으로 벗어난 때 n = {out[-1] + 1:,}")
+    ```
+
+    출력:
+
+    ```
+    n =     10: 누적평균 3.8000  편차 +0.3000  이론 sd 0.5401  편차/sd +0.56
+    n =    100: 누적평균 3.6900  편차 +0.1900  이론 sd 0.1708  편차/sd +1.11
+    n =  1,000: 누적평균 3.4570  편차 -0.0430  이론 sd 0.0540  편차/sd -0.80
+    n = 10,000: 누적평균 3.4999  편차 -0.0001  이론 sd 0.0171  편차/sd -0.01
+    |S_n - 3.5n| 의 최댓값 = 134  (n = 6,730),  sigma*sqrt(n) = 140
+    3.5 +- 0.05 띠를 마지막으로 벗어난 때 n = 663
+    ```
+
+    ![Law of Large Numbers: Fair Die](./img/lln_61.png)
+
+    초반에는 크게 출렁이다가 점차 3.5에 붙는다. **출렁임의 폭이 $1/\sqrt n$으로 줄어드는 것이 눈에 보이고**, 네 시점에서 편차를 이론 표준편차로 나눈 값이 $+0.56$, $+1.11$, $-0.80$, $-0.01$로 모두 1 규모 안에 있다. 곡선이 $3.5$에 붙는 속도가 정리 1이 약속한 그 속도다. $n = 663$ 이후로는 $3.5 \pm 0.05$ 띠를 한 번도 벗어나지 않는데, 강한 법칙이 "어느 시점 이후로는 영영 $\varepsilon$ 안에 머문다"고 한 것의 모습이다.
+
+    **그런데 누적합 쪽은 전혀 모여들지 않는다.** $S_n - 3.5n$의 절댓값이 경로를 따라가며 최대 $134$까지 커진다($n = 6{,}730$에서). 그 자리의 $\sigma\sqrt n = 140$과 같은 규모이며, **이 양은 $\sqrt n$으로 커지는 것이 정상이다.** 누적평균이 $0.0001$까지 줄어든 것은 그 편차가 메워졌기 때문이 아니라 $n = 10{,}000$으로 나누어 희석되었기 때문이다. 아래 경고 상자와 다음 쪽의 [도박사의 역설](gambler_paradox_lln.md)이 이 구분을 파고든다.
+
+    **그림 하나로 강한 법칙을 "확인"할 수는 없다**는 점도 분명히 해 두자. 이 경로가 3.5에 붙는 것처럼 보이지만, 거의 확실한 수렴은 **모든 경로의 집합**에 대한 진술이고 그림은 그중 하나를 보여 줄 뿐이다. 유한한 그림으로는 "어느 시점 이후로 영영 $\varepsilon$ 안에 머문다"를 끝까지 볼 수 없다. $n = 663$ 이후 1만까지 안에 머물렀다는 것은 그 구간에서 벗어나지 않았다는 사실일 뿐이다.
 
 **두 보기가 보는 것이 다르다.** 보기 1은 가로축이 $n$이 아니라 $\bar X_n$이었고, 칸마다 표본을 1만 번씩 새로 뽑아 **분포**를 그렸다. 여기서는 표본을 한 번만 뽑되 그것을 1만 번까지 **이어 간** 하나의 수열을 그린다. 약한 법칙은 앞의 그림에서, 강한 법칙은 뒤의 그림에서 읽힌다.
-
-다만 그림 하나로 강한 법칙을 "확인"할 수는 없다는 점도 분명히 해 두자. 이 경로가 3.5에 붙는 것처럼 보이지만, 거의 확실한 수렴은 **모든 경로의 집합**에 대한 진술이고 그림은 그중 하나를 보여 줄 뿐이다. 유한한 그림으로는 "어느 시점 이후로 영영 $\varepsilon$ 안에 머문다"를 끝까지 볼 수 없다.
 
 ## 연습문제
 

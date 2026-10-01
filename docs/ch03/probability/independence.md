@@ -239,43 +239,93 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 동전 두 번 던지기의 독립성 확인
+**보기 4.** <span class="diff easy" title="쉬움"></span> 동전 두 번 던지기의 독립성 확인. 공정한 동전 두 번 던지기를 20만 번 모의실험해 $\hat P(H_1)$, $\hat P(H_2)$, $\hat P(H_1 \cap H_2)$를 센다.
+
+**(1)** 독립이면 세 추정값 사이에 어떤 관계가 성립해야 하는가. 그 **차이** $\hat P(H_1 \cap H_2) - \hat P(H_1)\hat P(H_2)$의 표준오차를 이론으로 구하시오.
+
+**(2)** 모의실험으로 확인하고, 두 값이 소수 넷째 자리까지 같게 나온 것을 어떻게 읽어야 하는지 말하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def simulate_independence(n_simulations=200_000):
-    """동전 두 번 던지기가 독립임을 세어서 확인한다."""
-    np.random.seed(42)
-    flip1 = np.random.randint(0, 2, size=n_simulations)  # 0=뒷면, 1=앞면
-    flip2 = np.random.randint(0, 2, size=n_simulations)
+    **(1) 이론값.** 동전이 공정하고 두 던지기가 독립이면 세 참값은
 
-    # 0/1 배열의 평균이 곧 "1이 나온 비율" = P(앞면) 이다
-    p_A = flip1.mean()
-    p_B = flip2.mean()
+    $$
+    P(H_1) = P(H_2) = \tfrac12, \qquad
+    P(H_1 \cap H_2) = \tfrac12 \cdot \tfrac12 = \tfrac14
+    $$
 
-    # 둘 다 앞면인 비율. 이것이 결합확률 P(A ∩ B) 다.
-    p_AB = ((flip1 == 1) & (flip2 == 1)).mean()
+    이다. 모의실험이 확인할 것은 "$0.25$가 나오는가"가 아니라 **곱 규칙이 성립하는가**, 곧 셋째 추정값이 앞의 두 추정값의 곱과 같은가다. 그래서 보아야 할 양은 차이
 
-    # 독립의 정의는 P(A ∩ B) = P(A)P(B) 다.
-    # 아래 출력에서 마지막 두 줄이 같은 값인지 보면 된다.
+    $$
+    \widehat{\text{Cov}} = \hat P(H_1 \cap H_2) - \hat P(H_1)\hat P(H_2)
+    $$
 
-    print(f"P(H₁) = {p_A:.4f},  P(H₂) = {p_B:.4f}")
-    print(f"P(H₁ ∩ H₂) = {p_AB:.4f}")
-    print(f"P(H₁) × P(H₂) = {p_A * p_B:.4f}")
+    이고, 이것은 지시변수 $X = \mathbf 1_{H_1}$, $Y = \mathbf 1_{H_2}$의 표본공분산이다. 참 공분산은 독립이므로 $0$이다. 그 표준오차는 $X, Y$를 중심화해 보면
 
-simulate_independence()
-```
+    $$
+    \operatorname{Var}(\widehat{\text{Cov}}) \approx \frac{\operatorname{Var}(X)\operatorname{Var}(Y)}{n}
+    = \frac{0.25 \times 0.25}{200000}
+    $$
 
-출력:
+    이므로
 
-```
-P(H₁) = 0.4996,  P(H₂) = 0.5013
-P(H₁ ∩ H₂) = 0.2505
-P(H₁) × P(H₂) = 0.2505
-```
+    $$
+    \operatorname{se}(\widehat{\text{Cov}}) = \frac{0.25}{\sqrt{200000}} = 0.00056
+    $$
+
+    이다. 각 비율 자체의 표준오차는 $\sqrt{0.25/200000} = 0.00112$로 그 두 배다.
+
+    **독립을 수치로 확인한다는 것은 "차이가 $0$이다"를 보이는 일이 아니라 "차이가 $0.00056$ 규모 안에 있다"를 보이는 일이다.** 20만 번으로는 그 이상 말할 수 없다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+
+    def simulate_independence(n_simulations=200_000):
+        """동전 두 번 던지기가 독립임을 세어서 확인한다."""
+        np.random.seed(42)
+        flip1 = np.random.randint(0, 2, size=n_simulations)  # 0=뒷면, 1=앞면
+        flip2 = np.random.randint(0, 2, size=n_simulations)
+
+        # 0/1 배열의 평균이 곧 "1이 나온 비율" = P(앞면) 이다
+        p_A = flip1.mean()
+        p_B = flip2.mean()
+
+        # 둘 다 앞면인 비율. 이것이 결합확률 P(A ∩ B) 다.
+        p_AB = ((flip1 == 1) & (flip2 == 1)).mean()
+
+        # 독립의 정의는 P(A ∩ B) = P(A)P(B) 다.
+        # 아래 출력에서 마지막 두 줄이 같은 값인지 보면 된다.
+
+        print(f"P(H₁) = {p_A:.4f},  P(H₂) = {p_B:.4f}")
+        print(f"P(H₁ ∩ H₂) = {p_AB:.4f}")
+        print(f"P(H₁) × P(H₂) = {p_A * p_B:.4f}")
+
+        # 네 자리에서 멈추지 말고 차이를 직접 재어 (1)의 오차와 견준다.
+        se = 0.25 / np.sqrt(n_simulations)
+        print(f"차이 = {p_AB - p_A * p_B:+.6f},  se = {se:.6f}"
+              f"  ({(p_AB - p_A * p_B) / se:+.2f} se)")
+
+    simulate_independence()
+    ```
+
+    출력:
+
+    ```
+    P(H₁) = 0.4996,  P(H₂) = 0.5013
+    P(H₁ ∩ H₂) = 0.2505
+    P(H₁) × P(H₂) = 0.2505
+    차이 = +0.000028,  se = 0.000559  (+0.05 se)
+    ```
+
+    **맞는다.** 차이가 $+0.000028$로 표준오차의 $0.05$배다. 곱 규칙이 20만 번의 자료가 가려낼 수 있는 한계 안에서 성립한다.
+
+    **다만 넷째 자리까지 같게 나온 것은 운이 좋았던 것이다.** 차이의 표준오차가 $0.00056$이므로 넷째 자리 단위($0.00005$)의 열 배이고, 보통은 $0.2505$ 대 $0.2499$처럼 넷째 자리에서 갈린다. 실제로 씨앗만 바꿔 같은 모의실험을 돌리면 차이가 $-0.00036$, $+0.00044$, $+0.00079$처럼 나온다. **"소수 몇째 자리까지 같다"는 것은 독립의 증거가 아니고, 몇째 자리까지 같아야 하는지를 정해 주는 것이 (1)의 표준오차다.**
+
+    두 변의 추정값이 각각 $0.4996$과 $0.5013$으로 $0.5$에서 $-0.4$, $+1.2$ 표준오차만큼 비껴나 있는 것도 같은 이야기다. 모의실험은 참값을 보여 주지 않고 참값 둘레의 난수를 보여 준다.
 
 ## 연습문제
 

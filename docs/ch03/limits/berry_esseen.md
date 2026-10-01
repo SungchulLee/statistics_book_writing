@@ -143,123 +143,270 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 실제 오차와 베리-에센 상계 비교
+**보기 3.** <span class="diff easy" title="쉬움"></span> 실제 오차와 베리-에센 상계 비교. $\text{Exp}(1)$에서 $n = 5, 30, 100$에 대해 표준화된 표본평균의 누적분포함수와 표준정규 누적분포함수의 차이를 재고 상한과 견준다.
+
+**(1)** 세 $n$에서 상한 $C\rho/(\sigma^3\sqrt n)$을 계산하시오. 지수분포에서는 **실제 오차도 닫힌 꼴로** 다룰 수 있다. $n\bar X_n \sim \text{Gamma}(n,1)$임을 써서 $F_n$을 정확히 적고, 에지워스 전개의 첫 보정항으로 최대 오차를 어림하시오.
+
+**(2)** 정확한 최대 오차, 모의실험이 준 값, 상한을 나란히 놓으시오. 상한은 몇 배 느슨한가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
-plt.rcParams['axes.unicode_minus'] = False
+    **(1) 상한과 실제 오차.** 보기 2에서 $\rho = 12e^{-1} - 2 = 2.414553$이고 $\sigma = 1$이므로 상한은 $C\rho/\sqrt n = 1.146430/\sqrt n$이다. 곧 $0.5127$($n=5$), $0.2093$($n=30$), $0.1146$($n=100$)이다.
 
-def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
-    """실제 오차와 베리-에센 상계를 나란히 그린다.
+    실제 오차 쪽은 어림이 필요하지 않다. 독립인 $\text{Exp}(1)$ $n$개의 합이 $\text{Gamma}(n,1)$이므로 $\bar X_n = 1 + x/\sqrt n$을 합으로 되돌리면
 
-    상계는 "이보다 나쁘지는 않다"는 보장일 뿐이므로,
-    실제 오차가 상계보다 훨씬 작게 나오는 것이 정상이다.
-    """
-    C = 0.4748
-    x_grid = np.linspace(-4, 4, 1000)     # 오차를 재는 x 격자
-    n_sim = 50_000                        # 표본평균을 5만 번 만든다
+    $$
+    F_n(x) = P\!\left(\frac{\bar X_n - 1}{1/\sqrt n} \le x\right)
+    = P\big(\text{Gamma}(n,1) \le n + x\sqrt n\big)
+    $$
 
-    fig, axes = plt.subplots(1, len(sample_sizes), figsize=(12, 3),
-                             sharey=True)
-    fig.suptitle(f'베리–에센: {dist_name}', fontsize=14)
+    이다. 이 함수와 $\Phi$의 차를 $x$에 대해 최대화하면 되고, 그 최댓값이 어디쯤일지는 **에지워스 전개**가 알려 준다. 첫 보정항까지 쓰면
 
-    for ax, n in zip(axes, sample_sizes):
+    $$
+    F_n(x) \approx \Phi(x) - \frac{\gamma}{6\sqrt n}\,(x^2 - 1)\,\varphi(x)
+    $$
+
+    이고 $\text{Exp}(1)$의 왜도는 $\gamma = 2$다. $|(x^2-1)\varphi(x)|$는 $x = 0$에서 $\varphi(0) = 0.398942$로 최대다($x = \pm\sqrt3$에서는 $2\varphi(\sqrt3) = 0.161$에 지나지 않는다). 따라서
+
+    $$
+    \sup_x |F_n(x) - \Phi(x)| \approx \frac{2}{6}\cdot\frac{0.398942}{\sqrt n} = \frac{0.132981}{\sqrt n}
+    $$
+
+    이고, 그 최댓값은 **중앙($x \approx 0$)에서 나타난다.** 꼬리가 아니라 가운데다. 세 $n$에서 $0.05947$, $0.02428$, $0.01330$이다.
+
+    **두 식이 모두 $1/\sqrt n$ 꼴이므로 상한과 실제 오차의 비가 $n$과 무관하게 일정할 것**이라고 미리 말할 수 있다. 그 비는
+
+    $$
+    \frac{1.146430}{0.132981} = 8.62
+    $$
+
+    다. **베리–에센 상한은 지수분포에서 실제 오차의 약 8.6배다.**
+
+    **(2) 모의실험과 정확값.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
+    def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
+        """실제 오차와 베리-에센 상계를 나란히 그린다.
+
+        상계는 "이보다 나쁘지는 않다"는 보장일 뿐이므로,
+        실제 오차가 상계보다 훨씬 작게 나오는 것이 정상이다.
+        """
+        C = 0.4748
+        x_grid = np.linspace(-4, 4, 1000)     # 오차를 재는 x 격자
+        n_sim = 50_000                        # 표본평균을 5만 번 만든다
+
+        fig, axes = plt.subplots(1, len(sample_sizes), figsize=(12, 3),
+                                 sharey=True)
+        fig.suptitle(f'베리–에센: {dist_name}', fontsize=14)
+
+        for ax, n in zip(axes, sample_sizes):
+            np.random.seed(42)
+            # 크기 n인 표본을 5만 개 만들어 각각의 평균을 낸다
+            samples = rvs_fn(size=(n_sim, n))
+            x_bar = samples.mean(axis=1)
+
+            # 표준화: (X-bar - mu) / (sigma/sqrt(n)).
+            # 중심극한정리는 이 z가 N(0,1)로 간다고 말한다.
+            z = (x_bar - mu) / (sigma / np.sqrt(n))
+
+            # 경험적 CDF와 표준정규 CDF의 차이를 x마다 잰다
+            ecdf = np.array([np.mean(z <= x) for x in x_grid])
+            ncdf = stats.norm.cdf(x_grid)
+            actual_error = np.abs(ecdf - ncdf)
+            max_error = actual_error.max()      # 베리-에센이 상한을 주는 대상
+
+            bound = C * rho / (sigma**3 * np.sqrt(n))
+
+            ax.plot(x_grid, actual_error, lw=1.5, label=f'실제 최대오차: {max_error:.4f}')
+            ax.axhline(bound, color='r', linestyle='--', lw=1.5,
+                       label=f'베리–에센 상한: {bound:.4f}')
+            ax.set_title(f'n = {n}')
+            ax.set_xlabel('x')
+            ax.legend(fontsize=8)
+            ax.spines[['top', 'right']].set_visible(False)
+
+        axes[0].set_ylabel(r'$|F_n(x) - \Phi(x)|$')
+        plt.tight_layout()
+        plt.show()
+
+    # Exp(1): 오른쪽으로 치우친 분포
+    berry_esseen_visualization(
+        'Exponential(1)',
+        lambda size: np.random.exponential(1, size),
+        mu=1.0, sigma=1.0, rho=12 / np.e - 2,      # E|X-1|^3 = 12/e - 2
+        sample_sizes=[5, 30, 100]
+    )
+    ```
+
+    ![베리–에센 정리](./img/berry_esseen_101.png)
+
+    그림의 세 칸에서 파란 곡선이 $|F_n(x) - \Phi(x)|$이고 빨간 점선이 상한이다. 파란 곡선의 봉우리가 $x = 0$ 바로 옆에 있고, 빨간 점선은 그보다 한참 위에 떠 있다. (1)의 두 식과 맞는지 수로 확인한다.
+
+    ```python
+    print(" n   상한     정확(감마)  에지워스  모의(5만)  상한/정확")
+    for n in (5, 30, 100):
+        x = np.linspace(-np.sqrt(n), 12, 200_001)
+        exact = np.abs(stats.gamma.cdf(n + x * np.sqrt(n), n)
+                       - stats.norm.cdf(x)).max()
+        edge = (2 / 6) * stats.norm.pdf(0) / np.sqrt(n)     # 에지워스 첫 항
+        bound = 0.4748 * (12 / np.e - 2) / np.sqrt(n)
+
         np.random.seed(42)
-        # 크기 n인 표본을 5만 개 만들어 각각의 평균을 낸다
-        samples = rvs_fn(size=(n_sim, n))
-        x_bar = samples.mean(axis=1)
+        z = (np.random.exponential(1, (50_000, n)).mean(axis=1) - 1) * np.sqrt(n)
+        grid = np.linspace(-4, 4, 1000)
+        mc = np.abs(np.array([np.mean(z <= xx) for xx in grid])
+                    - stats.norm.cdf(grid)).max()
 
-        # 표준화: (X-bar - mu) / (sigma/sqrt(n)).
-        # 중심극한정리는 이 z가 N(0,1)로 간다고 말한다.
-        z = (x_bar - mu) / (sigma / np.sqrt(n))
+        print(f"{n:4d}  {bound:.4f}    {exact:.5f}    {edge:.5f}   {mc:.4f}"
+              f"      {bound/exact:.2f}")
+    ```
 
-        # 경험적 CDF와 표준정규 CDF의 차이를 x마다 잰다
-        ecdf = np.array([np.mean(z <= x) for x in x_grid])
-        ncdf = stats.norm.cdf(x_grid)
-        actual_error = np.abs(ecdf - ncdf)
-        max_error = actual_error.max()      # 베리-에센이 상한을 주는 대상
+    출력:
 
-        bound = C * rho / (sigma**3 * np.sqrt(n))
+    ```
+     n   상한     정확(감마)  에지워스  모의(5만)  상한/정확
+       5  0.5127    0.05963    0.05947   0.0570      8.60
+      30  0.2093    0.02429    0.02428   0.0271      8.62
+     100  0.1146    0.01330    0.01330   0.0141      8.62
+    ```
 
-        ax.plot(x_grid, actual_error, lw=1.5, label=f'실제 최대오차: {max_error:.4f}')
-        ax.axhline(bound, color='r', linestyle='--', lw=1.5,
-                   label=f'베리–에센 상한: {bound:.4f}')
-        ax.set_title(f'n = {n}')
-        ax.set_xlabel('x')
-        ax.legend(fontsize=8)
-        ax.spines[['top', 'right']].set_visible(False)
+    **에지워스 어림과 정확값이 소수 넷째 자리까지 같다.** $n = 5$에서 $0.05963$ 대 $0.05947$, $n = 100$에서는 다섯째 자리까지 같다. (1)에서 유도한 $0.132981/\sqrt n$이 지수분포 정규근사 오차의 **주항**임이 확인된 셈이다.
 
-    axes[0].set_ylabel(r'$|F_n(x) - \Phi(x)|$')
-    plt.tight_layout()
-    plt.show()
+    **모의실험도 맞는다.** 5만 개의 경험적 누적분포함수는 각 점에서 표준오차가 최대 $\sqrt{0.25/50000} = 0.00224$이므로, $0.0570$ 대 $0.05963$($-1.2$ 표준오차), $0.0271$ 대 $0.02429$($+1.2$), $0.0141$ 대 $0.01330$($+0.4$)로 셋 다 그 규모 안이다.
 
-# Exp(1): 오른쪽으로 치우친 분포
-berry_esseen_visualization(
-    'Exponential(1)',
-    lambda size: np.random.exponential(1, size),
-    mu=1.0, sigma=1.0, rho=12 / np.e - 2,      # E|X-1|^3 = 12/e - 2
-    sample_sizes=[5, 30, 100]
-)
-```
-
-![베리–에센 정리](./img/berry_esseen_101.png)
+    **상한은 세 $n$에서 모두 $8.6$배 느슨하다.** (1)에서 예상한 대로 비가 $n$에 거의 의존하지 않는다. $n = 5$에서는 상한이 $0.51$이라 "누적분포함수가 어디서도 51% 이상 틀리지 않는다"는 말이 되는데, 실제 오차는 $6\%$다. **베리–에센 정리는 어떤 분포에서도 성립해야 하므로 보편 상수 $C$와 $\rho/\sigma^3$만으로 최악의 경우를 덮어야 하고, 그 대가가 이 여유다.** 특정 분포를 알고 있다면 에지워스 전개처럼 분포에 맞춘 어림이 훨씬 날카롭다. 상한의 쓸모는 정확함이 아니라 **분포를 몰라도 쓸 수 있다는 점**에 있다.
 
 세 분포의 상한을 $n$의 함수로 겹쳐 그리면 순서가 분명해진다.
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 분포별 정규근사의 수렴 속도
+**보기 4.** <span class="diff easy" title="쉬움"></span> 분포별 정규근사의 수렴 속도. 베르누이(0.5)·균등(0,1)·지수(1)의 베리–에센 상한을 $n = 5$부터 $500$까지 겹쳐 그린다.
+
+**(1)** 세 곡선의 높이 비를 $\rho/\sigma^3$으로 구하시오. 균등분포의 $\rho$는 적분으로 직접 구하시오.
+
+**(2)** 상한이 $0.1$ 이하가 되려면 각각 $n$이 얼마여야 하는가. 그려서 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
-plt.rcParams['axes.unicode_minus'] = False
+    **(1) 곡선의 높이는 $\rho/\sigma^3$ 하나로 정해진다.** 상한이 $\big(C\rho/\sigma^3\big)\cdot n^{-1/2}$이고 $n$ 의존성이 셋 다 같으므로, 세 곡선은 **같은 모양을 세로로 늘인 것**이고 그 배율이 $\rho/\sigma^3$이다.
 
-def convergence_rate_comparison():
-    """분포마다 정규근사가 얼마나 빨리 좋아지는지 비교한다."""
-    C = 0.4748           # 이 쪽의 계산에 쓰는 값. 가장 날카로운 것은 0.4690 이다(정리 1)
-    ns = np.arange(5, 501)
+    베르누이$(0.5)$는 $|X - 0.5| = 0.5$가 항상 성립하므로 $\rho = 0.5^3 = 0.125$이고 $\sigma^3 = 0.5^3 = 0.125$여서
 
-    # 각 분포에 필요한 것은 두 값뿐이다.
-    #   sigma: 표준편차
-    #   rho  : 세 번째 절대적률 E|X - mu|^3
-    # rho/sigma^3 이 클수록(= 비대칭하거나 꼬리가 무거울수록) 수렴이 느리다.
-    distributions = {
-        'Bernoulli(0.5)': {'sigma': np.sqrt(0.25), 'rho': 0.125},
-        'Uniform(0,1)':   {'sigma': 1/np.sqrt(12), 'rho': 1/32},
-        'Exponential(1)': {'sigma': 1.0,            'rho': 12/np.e - 2},
-    }
+    $$
+    \frac{\rho}{\sigma^3} = 1
+    $$
 
-    fig, ax = plt.subplots(figsize=(12, 4))
-    for name, params in distributions.items():
-        # 베리-에센 상계: |F_n(x) - Phi(x)| <= C * rho / (sigma^3 * sqrt(n))
-        # n 의존성이 1/sqrt(n) 뿐이라는 점이 핵심이다.
-        # 오차를 절반으로 줄이려면 표본을 네 배로 늘려야 한다.
-        bounds = C * params['rho'] / (params['sigma']**3 * np.sqrt(ns))
-        ax.plot(ns, bounds, label=name, lw=2)
+    이다. 균등$(0,1)$은 $\mu = 1/2$ 둘레의 대칭성을 써서
 
-    ax.set_xlabel('표본크기 $n$')
-    ax.set_ylabel('베리–에센 상한')
-    ax.set_title('정규분포로의 수렴 속도 — 베리–에센 상한')
-    ax.legend()
-    ax.spines[['top', 'right']].set_visible(False)
-    plt.tight_layout()
-    plt.show()
+    $$
+    \rho = \int_0^1 \left|x - \tfrac12\right|^3 dx
+    = 2\int_0^{1/2} u^3\,du = 2 \cdot \frac{(1/2)^4}{4} = \frac{1}{32} = 0.03125
+    $$
 
-convergence_rate_comparison()
-```
+    이고 $\sigma^3 = 12^{-3/2} = 1/41.569$이므로
 
-![정규분포로의 수렴 속도 — 베리–에센 상한](./img/berry_esseen_187.png)
+    $$
+    \frac{\rho}{\sigma^3} = \frac{41.569}{32} = 1.2990
+    $$
+
+    이다. 지수$(1)$은 보기 2에서 $\rho/\sigma^3 = 2.4146$이었다. 따라서 높이의 비가
+
+    $$
+    1 : 1.299 : 2.415
+    $$
+
+    이고, 상한은 각각 $0.4748/\sqrt n$, $0.6168/\sqrt n$, $1.1464/\sqrt n$이다.
+
+    **(2) 상한을 $0.1$로 끌어내리는 데 드는 $n$.** $C\rho/(\sigma^3\sqrt n) \le 0.1$을 $n$에 대해 풀면
+
+    $$
+    n \;\ge\; \left(\frac{C\rho}{0.1\,\sigma^3}\right)^{2}
+    $$
+
+    이므로 각각 $(4.748)^2 = 22.5$, $(6.168)^2 = 38.0$, $(11.464)^2 = 131.4$이고, 정수로 올리면 $23$, $39$, $132$다. **비가 제곱으로 들어간다.** $\rho/\sigma^3$이 $2.4$배 큰 지수분포에서 필요한 표본이 $2.4^2 = 5.8$배로 늘어난다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
+    def convergence_rate_comparison():
+        """분포마다 정규근사가 얼마나 빨리 좋아지는지 비교한다."""
+        C = 0.4748           # 이 쪽의 계산에 쓰는 값. 가장 날카로운 것은 0.4690 이다(정리 1)
+        ns = np.arange(5, 501)
+
+        # 각 분포에 필요한 것은 두 값뿐이다.
+        #   sigma: 표준편차
+        #   rho  : 세 번째 절대적률 E|X - mu|^3
+        # rho/sigma^3 이 클수록(= 비대칭하거나 꼬리가 무거울수록) 수렴이 느리다.
+        distributions = {
+            'Bernoulli(0.5)': {'sigma': np.sqrt(0.25), 'rho': 0.125},
+            'Uniform(0,1)':   {'sigma': 1/np.sqrt(12), 'rho': 1/32},
+            'Exponential(1)': {'sigma': 1.0,            'rho': 12/np.e - 2},
+        }
+
+        fig, ax = plt.subplots(figsize=(12, 4))
+        for name, params in distributions.items():
+            # 베리-에센 상계: |F_n(x) - Phi(x)| <= C * rho / (sigma^3 * sqrt(n))
+            # n 의존성이 1/sqrt(n) 뿐이라는 점이 핵심이다.
+            # 오차를 절반으로 줄이려면 표본을 네 배로 늘려야 한다.
+            bounds = C * params['rho'] / (params['sigma']**3 * np.sqrt(ns))
+            ax.plot(ns, bounds, label=name, lw=2)
+
+            # 곡선의 높이를 정하는 것은 rho/sigma^3 하나뿐이다.
+            # 상한을 0.1 이하로 만들려면 n >= (C rho / sigma^3 / 0.1)^2 이어야 한다.
+            g = params['rho'] / params['sigma']**3
+            print(f"{name:<16} rho/sigma^3 = {g:.4f}   상한 = {C*g:.4f}/sqrt(n)"
+                  f"   상한 <= 0.1 이 되는 n = {int(np.ceil((C * g / 0.1)**2))}")
+
+        ax.set_xlabel('표본크기 $n$')
+        ax.set_ylabel('베리–에센 상한')
+        ax.set_title('정규분포로의 수렴 속도 — 베리–에센 상한')
+        ax.legend()
+        ax.spines[['top', 'right']].set_visible(False)
+        plt.tight_layout()
+        plt.show()
+
+    convergence_rate_comparison()
+    ```
+
+    출력:
+
+    ```
+    Bernoulli(0.5)   rho/sigma^3 = 1.0000   상한 = 0.4748/sqrt(n)   상한 <= 0.1 이 되는 n = 23
+    Uniform(0,1)     rho/sigma^3 = 1.2990   상한 = 0.6168/sqrt(n)   상한 <= 0.1 이 되는 n = 39
+    Exponential(1)   rho/sigma^3 = 2.4146   상한 = 1.1464/sqrt(n)   상한 <= 0.1 이 되는 n = 132
+    ```
+
+    ![정규분포로의 수렴 속도 — 베리–에센 상한](./img/berry_esseen_187.png)
+
+    **세 수가 (1)과 (2)의 손계산과 모두 맞는다.** 그림에서도 세 곡선이 높이 $0.1$을 지나는 자리가 가로축 $500$ 가운데 왼쪽 $4$분의 $1$ 안에 몰려 있고, 셋의 순서가 베르누이–균등–지수다. 세 곡선이 교차하지 않는다는 점도 눈여겨볼 것이다. 높이의 비가 $n$과 무관하므로 **순서가 모든 $n$에서 같다.**
+
+    가로축을 $500$까지 늘려도 상한이 $0.0212$, $0.0276$, $0.0513$까지만 내려간다. $1/\sqrt n$의 느림이 이것이다. **오차를 절반으로 줄이려면 표본을 네 배로 늘려야 한다.**
+
+    !!! warning "$\rho/\sigma^3$은 정규분포로부터의 거리가 아니다"
+        이 양을 "비정규성의 척도"라 부르지만, 정규분포에서 얼마나 멀리 떨어져 있는지를 재는 거리는 아니다. 표준정규분포 자신의 값을 계산해 보면
+
+        $$
+        \frac{E|Z|^3}{1} = 2\sqrt{\frac{2}{\pi}} = 1.5958
+        $$
+
+        로 베르누이$(0.5)$의 $1$이나 균등분포의 $1.299$보다 **크다.** 그런데 정규모집단에서는 $F_n = \Phi$가 정확히 성립해 실제 오차가 $0$이다.
+
+        모순이 아니다. 베리–에센 부등식은 **상한**이고, 상한이 작으면 오차가 작다는 한 방향만 말한다. 그 역은 성립하지 않는다. 보기 3에서 본 $8.6$배의 여유가 분포마다 다른 것이며, 정규분포에서는 그 여유가 무한히 커진다.
 
 ## 3. 두 정리의 역할 분담
 
