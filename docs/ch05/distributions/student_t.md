@@ -24,39 +24,144 @@ $t_d$의 분산이 $d/(d-2)$라는 4.2절의 결과에도 같은 이야기가 �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> t 분포의 두꺼운 꼬리
+**보기 1.** <span class="diff easy" title="쉬움"></span> t 분포의 두꺼운 꼬리. $t_{10}$의 밀도와 $N(0,1)$의 밀도를 $[-4, 4]$에서 겹쳐 그리고, 오른쪽 꼬리만 확대한 칸을 나란히 둔다.
+
+**(1)** 두 밀도의 비 $f_{t_d}(x)/\varphi(x)$가 $|x|$에 따라 어떻게 움직이는지 유도하고, 두 곡선이 모두 몇 번 만나는지 답하시오.
+
+**(2)** $d = 10$에서 만나는 자리를 수치로 구하고, 그림의 두 칸이 각각 그 자리의 어느 쪽을 보여 주는지 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-fig, (ax_full, ax_tail) = plt.subplots(1, 2, figsize=(12, 3))
-x = np.linspace(-4, 4, 200)
+    **(1) 해석적으로.** 비의 로그를 잡는다. $t_d$의 밀도가 $f_{t_d}(x) = C_d\,(1 + x^2/d)^{-(d+1)/2}$이므로
 
-# 왼쪽: 전체 모습. 두 곡선이 거의 겹쳐 보인다.
-ax_full.plot(x, stats.norm().pdf(x), label='Normal')
-ax_full.plot(x, stats.t(df=10).pdf(x), label='t(10)')
-ax_full.set_title('Full PDF')
-ax_full.legend()
+    $$
+    R(x) = \log\frac{f_{t_d}(x)}{\varphi(x)}
+    = \log\!\left(\sqrt{2\pi}\,C_d\right) - \frac{d+1}{2}\log\!\left(1 + \frac{x^2}{d}\right) + \frac{x^2}{2}
+    $$
 
-# 오른쪽: 꼬리만 확대. x[-50:] 은 x 배열의 마지막 50개, 즉 오른쪽 끝이다.
-# 전체 그림에서는 밀도가 너무 작아 안 보이던 차이가 여기서 드러난다.
-# **꼬리는 언제나 확대해서 봐야 한다.** 검정에서 문제가 되는 곳이 바로 꼬리다.
-ax_tail.plot(x[-50:], stats.norm().pdf(x[-50:]), label='Normal')
-ax_tail.plot(x[-50:], stats.t(df=10).pdf(x[-50:]), label='t(10)')
-ax_tail.set_title('Right Tail (zoomed)')
-ax_tail.legend()
+    이다. $R$은 $x^2$만 통해 $x$에 의존하므로 $u = x^2$로 바꿔 미분한다.
 
-plt.tight_layout()
-plt.show()
-```
+    $$
+    \frac{dR}{du}
+    = -\frac{d+1}{2}\cdot\frac{1/d}{1 + u/d} + \frac12
+    = \frac12\left(1 - \frac{d+1}{d+u}\right)
+    = \frac{u-1}{2(d+u)}
+    $$
 
-![Full PDF](./img/student_t_61.png)
+    분모가 양수이므로 부호는 $u - 1$이 정한다. **비는 $u < 1$에서 줄고 $u > 1$에서 늘며, 최소가 정확히 $|x| = 1$에서 잡힌다.** 자유도가 어떤 값이어도 그 자리는 $1$이다.
 
-왼쪽에서는 두 곡선이 겹쳐 보이지만 오른쪽 확대에서는 $t(10)$이 정규분포 위로 또렷이 올라앉아 있다. 자유도가 10이나 되는데도 그렇다.
+    출발점은 $1$보다 작다. $u = 0$에서
+
+    $$
+    \frac{f_{t_d}(0)}{\varphi(0)}
+    = \frac{\sqrt2\,\Gamma\!\left(\frac{d+1}{2}\right)}{\sqrt d\,\Gamma\!\left(\frac d2\right)}
+    = \frac{E\!\left[\sqrt{\chi^2_d}\right]}{\sqrt d}
+    < \frac{\sqrt{E[\chi^2_d]}}{\sqrt d} = 1
+    $$
+
+    인데, 가운데 등식은 다음 절 연습문제 10에 나오는 $E[\sqrt{\chi^2_d}] = \sqrt2\,\Gamma((d+1)/2)/\Gamma(d/2)$이고, 부등식은 $\sqrt{\cdot}$이 오목하다는 옌센 부등식이다. **$t_d$의 봉우리가 정규분포보다 낮은 몫이 곧 그 절의 편향상수 $c_4$**이며, 같은 옌센 부등식이 두 자리에서 일하고 있는 셈이다.
+
+    끝점은 $1$보다 크다. $x \to \infty$에서 $t$의 꼬리는 $|x|^{-(d+1)}$로 다항식처럼 줄고 정규는 $e^{-x^2/2}$로 줄므로 $R(u) \to +\infty$다.
+
+    그러므로 $R$은 음수에서 출발해 $u = 1$까지 더 내려갔다가 돌아서 $+\infty$로 간다. 영점은 **$u > 1$에 정확히 하나**뿐이다. 그 자리를 $x^* > 1$이라 하면 $x > 0$에서 교차가 한 번이고, 두 밀도가 모두 대칭이므로
+
+    $$
+    \text{교차 횟수} = 2
+    $$
+
+    다. 대칭인 두 밀도가 $0$에서 다르면 교차 횟수는 짝수여야 한다는 것과도 맞는다.
+
+    여기서 미리 못박아 둘 것이 있다. **"꼬리가 두껍다"는 말은 "어디서나 높다"는 뜻이 아니다.** $|x| < x^*$에서는 $t_d$가 정규보다 오히려 **낮다.** 밀도의 총합이 양쪽 다 1이니 어딘가가 높으면 어딘가는 낮아야 하고, 그 낮은 구간이 바로 눈에 잘 띄는 가운데다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    fig, (ax_full, ax_tail) = plt.subplots(1, 2, figsize=(12, 3))
+    x = np.linspace(-4, 4, 200)
+
+    # 왼쪽: 전체 모습. 두 곡선이 거의 겹쳐 보인다.
+    ax_full.plot(x, stats.norm().pdf(x), label='Normal')
+    ax_full.plot(x, stats.t(df=10).pdf(x), label='t(10)')
+    ax_full.set_title('Full PDF')
+    ax_full.legend()
+
+    # 오른쪽: 꼬리만 확대. x[-50:] 은 x 배열의 마지막 50개, 즉 오른쪽 끝이다.
+    # 전체 그림에서는 밀도가 너무 작아 안 보이던 차이가 여기서 드러난다.
+    # **꼬리는 언제나 확대해서 봐야 한다.** 검정에서 문제가 되는 곳이 바로 꼬리다.
+    ax_tail.plot(x[-50:], stats.norm().pdf(x[-50:]), label='Normal')
+    ax_tail.plot(x[-50:], stats.t(df=10).pdf(x[-50:]), label='t(10)')
+    ax_tail.set_title('Right Tail (zoomed)')
+    ax_tail.legend()
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![Full PDF](./img/student_t_61.png)
+
+    왼쪽에서는 두 곡선이 겹쳐 보이지만 오른쪽 확대에서는 $t(10)$이 정규분포 위로 또렷이 올라앉아 있다. 자유도가 10이나 되는데도 그렇다.
+
+    (1)이 유도한 세 가지, 곧 $|x| = 1$의 최소점과 $0$에서의 비와 교차점을 하나씩 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import optimize, special, stats
+
+    d = 10
+    ratio = lambda x: stats.t(d).pdf(x) / stats.norm.pdf(x)
+
+    # 0 에서의 비가 c4 상수와 같다는 등식을 먼저 확인한다.
+    c4 = np.sqrt(2 / d) * special.gamma((d + 1) / 2) / special.gamma(d / 2)
+    print(f"f_t(0)/phi(0) = {ratio(0):.9f},   E[sqrt(chi2_d)]/sqrt(d) = {c4:.9f}")
+
+    # 비가 |x| = 1 에서 최소라는 유도를 격자로 확인한다.
+    xs = np.linspace(0, 3, 30_001)
+    print(f"비가 최소인 곳 = {xs[ratio(xs).argmin()]:.4f},  그때의 비 = {ratio(xs).min():.4f}")
+
+    # 두 밀도가 만나는 곳. 유도에 따르면 |x| > 1 에 하나뿐이다.
+    x_star = optimize.brentq(lambda x: ratio(x) - 1, 1.01, 10)
+    print(f"교차점 x* = {x_star:.4f}  (그림 오른쪽 칸은 {np.linspace(-4, 4, 200)[-50]:.4f} 부터 시작한다)")
+
+    print(f"{'x':>8}{'t(10) 밀도':>13}{'정규 밀도':>13}{'비':>9}")
+    for x in (0.0, 1.0, 1.5928, 2.0302, 3.0, 4.0):
+        print(f"{x:>8.4f}{stats.t(d).pdf(x):>13.6f}{stats.norm.pdf(x):>13.3e}{ratio(x):>9.3f}")
+
+    # 꼬리확률로 옮겨 보면
+    for x in (2.0302, 4.0):
+        print(f"P(X > {x:.4f}):  t(10) {stats.t(d).sf(x):.3e}   정규 {stats.norm.sf(x):.3e}"
+              f"   비 {stats.t(d).sf(x)/stats.norm.sf(x):.2f}")
+    ```
+
+    출력:
+
+    ```
+    f_t(0)/phi(0) = 0.975350077,   E[sqrt(chi2_d)]/sqrt(d) = 0.975350077
+    비가 최소인 곳 = 1.0000,  그때의 비 = 0.9520
+    교차점 x* = 1.5928  (그림 오른쪽 칸은 2.0302 부터 시작한다)
+           x     t(10) 밀도        정규 밀도        비
+      0.0000     0.389108    3.989e-01    0.975
+      1.0000     0.230362    2.420e-01    0.952
+      1.5928     0.112203    1.122e-01    1.000
+      2.0302     0.058303    5.080e-02    1.148
+      3.0000     0.011401    4.432e-03    2.572
+      4.0000     0.002031    1.338e-04   15.176
+    P(X > 2.0302):  t(10) 3.489e-02   정규 2.117e-02   비 1.65
+    P(X > 4.0000):  t(10) 1.259e-03   정규 3.167e-05   비 39.76
+    ```
+
+    **셋 모두 유도와 맞는다.** $0$에서의 비는 아홉째 자리까지 $c_4$와 같고, 격자가 찾은 최소점은 $1.0000$이며, 교차점은 $x^* = 1.5928$ 하나다.
+
+    **그림의 두 칸이 서로 다른 구간을 보여 준다.** 오른쪽 칸은 `x[-50:]`, 곧 $x \ge 2.0302$만 그리는데 이는 교차점 $1.5928$보다 바깥이므로 **전부 $t$가 더 높은 구간**이다. 거기서 비가 $1.148$에서 $15.176$까지 오르니 눈에 보이는 것이 당연하다. 반대로 왼쪽 칸에서 눈길이 가는 봉우리 근처는 $|x| < 1.5928$, 곧 **$t$가 더 낮은 구간**이다. 그 구간에서 비는 $0.952$와 $1$ 사이에만 머문다. 두 곡선이 "겹쳐 보인다"는 인상은 차이가 $5\%$를 넘지 않는다는 사실의 반영이다.
+
+    **왼쪽 칸이 가리는 것이 둘 있다.** 하나는 교차점이다. $x^* = 1.5928$에서 두 밀도가 정확히 같으므로 그 자리에는 볼 것이 아무것도 없고, 그래서 선이 교차하는 모습 자체가 보이지 않는다. 다른 하나는 꼬리의 차이다. $x = 4$에서 비가 $15$배인데도 밀도가 $0.002$와 $0.00013$이라 세로축에서 한 화소도 차지하지 못한다. **배율이 가장 큰 곳이 그림에서 가장 작게 보인다**는 것이 선형 세로축의 성질이다.
+
+    검정에 쓰이는 양으로 옮기면 차이가 더 또렷해진다. 밀도가 아니라 꼬리확률로 재면 $x = 2.0302$에서 $1.65$배, $x = 4$에서 $39.76$배다. 임계값과 $p$값은 모두 이쪽 눈금에서 결정되며, 그래서 자유도 $10$이라는 "꽤 큰" 자유도에서도 $t$를 써야 한다.
 
 ## 왜 하필 t인가
 
@@ -116,40 +221,103 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 왜 t 분포가 필요한가
+**보기 2.** <span class="diff easy" title="쉬움"></span> 왜 t 분포가 필요한가. $N(0, 10^2)$에서 크기 $n = 10$인 표본을 1만 번 뽑아, 분모에 참값 $\sigma = 10$ 대신 표본표준편차 $S$를 넣은 비를 계산한다.
+
+**(1)** 그 비의 표준편차와 $P(|\cdot| > 1.96)$이 얼마가 되어야 하는지, 분모에 $\sigma$를 넣었을 때와 나란히 적으시오.
+
+**(2)** 같은 표본으로 두 비를 모두 계산해 (1)을 확인하고, 임계값 $1.96$을 그대로 쓰면 무엇을 잃는지 말하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
-n, mu, sigma = 10, 0, 10
-n_sim = 10_000
+    **(1) 이론값.** 두 비가 따르는 분포는 둘 다 **정확히** 알려져 있다. 분모에 $\sigma$를 넣으면
 
-# (n, n_sim) 배열이므로 **열 하나가 표본 하나**다. axis=0 으로 집계한다.
-samples = np.random.normal(mu, sigma, (n, n_sim))
-x_bar = samples.mean(axis=0)
-s = samples.std(axis=0, ddof=1)
+    $$
+    Z = \frac{\bar X - \mu}{\sigma/\sqrt n} \sim N(0,1),
+    \qquad
+    \operatorname{sd}(Z) = 1,
+    \qquad
+    P(|Z| > 1.96) = 0.05
+    $$
 
-# t 통계량. 분모에 참 sigma(=10)가 아니라 **표본표준편차 s** 를 넣는 것이 요점이다.
-# sigma를 썼다면 이 값은 정확히 N(0,1)을 따랐을 것이다.
-# s를 쓰면 분모 자체가 흔들리므로 분포가 넓어지고 꼬리가 두꺼워진다.
-# 그 넓어진 정도를 정확히 기술하는 것이 t(n-1) 이다.
-t_stats = (x_bar - mu) / (s / np.sqrt(n))
+    이고, $S$로 갈아 끼우면 본문의 유도대로 $T \sim t_{n-1} = t_9$다. 4.2절의 $\operatorname{Var}(t_d) = d/(d-2)$에 $d = 9$를 넣으면
 
-fig, ax = plt.subplots(figsize=(12, 3))
-bins = np.arange(-6, 6, 0.1)
-ax.hist(t_stats, bins=bins, density=True, alpha=0.7, label=f'Simulated $t_{{{n-1}}}$')
-ax.plot(bins, stats.t(n-1).pdf(bins), '--r', lw=2, label=f'$t_{{{n-1}}}$ PDF')
-ax.legend()
-ax.spines[['top', 'right']].set_visible(False)
-plt.show()
-```
+    $$
+    \operatorname{Var}(T) = \frac{9}{7} = 1.2857,
+    \qquad
+    \operatorname{sd}(T) = \sqrt{\frac97} = 1.1339
+    $$
 
-![스튜던트 t 분포](./img/student_t_118.png)
+    이다. 늘어난 몫 $d/(d-2) - 1 = 2/(d-2) = 2/7 = 0.2857$이 **$\sigma$를 모른 채 추정하느라 치른 값**이며, 이 식이 $d > 2$에서만 뜻을 갖는다는 것도 함께 기억해 둘 일이다(연습문제 8). $d = 9$는 넉넉히 넘으므로 분산이 유한하다.
+
+    꼬리확률은 같은 임계값에서 재어야 비교가 된다.
+
+    $$
+    P(|T_9| > 1.96) = 0.0816
+    $$
+
+    곧 $1.96$으로 양측 $5\%$ 검정을 설계했다고 믿었는데 실제로는 $8.2\%$에서 기각한다. 명목의 $1.63$배다. $t_9$에서 양쪽 $5\%$를 지키는 올바른 임계값은 $t_{9,\,0.975} = 2.2622$로 $1.96$보다 $15.4\%$ 크다(연습문제 9의 표에 같은 수치가 있다).
+
+    **(2) 모의실험.** 아래 코드는 쪽에 있던 것에 비교 줄만 덧붙인 것이다. $Z$는 이미 뽑아 둔 `samples`에서 분모만 바꿔 계산하므로 난수를 새로 쓰지 않고, 따라서 그림도 달라지지 않는다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(0)
+    n, mu, sigma = 10, 0, 10
+    n_sim = 10_000
+
+    # (n, n_sim) 배열이므로 **열 하나가 표본 하나**다. axis=0 으로 집계한다.
+    samples = np.random.normal(mu, sigma, (n, n_sim))
+    x_bar = samples.mean(axis=0)
+    s = samples.std(axis=0, ddof=1)
+
+    # t 통계량. 분모에 참 sigma(=10)가 아니라 **표본표준편차 s** 를 넣는 것이 요점이다.
+    # sigma를 썼다면 이 값은 정확히 N(0,1)을 따랐을 것이다.
+    # s를 쓰면 분모 자체가 흔들리므로 분포가 넓어지고 꼬리가 두꺼워진다.
+    # 그 넓어진 정도를 정확히 기술하는 것이 t(n-1) 이다.
+    t_stats = (x_bar - mu) / (s / np.sqrt(n))
+
+    # **같은 표본**에서 분모만 참 sigma 로 되돌린 것. 비교 대상이다.
+    # 난수를 새로 뽑지 않으므로 아래 그림은 달라지지 않는다.
+    z_stats = (x_bar - mu) / (sigma / np.sqrt(n))
+
+    sd_t = np.sqrt((n - 1) / (n - 3))              # Var(t_d) = d/(d-2)
+    p_t = 2 * stats.t(n - 1).sf(1.959964)
+    print(f"표준편차     : z 이론 1.0000 모의 {z_stats.std(ddof=1):.4f}  |  t 이론 {sd_t:.4f} 모의 {t_stats.std(ddof=1):.4f}")
+    print(f"P(|.| > 1.96): z 이론 0.0500 모의 {np.mean(np.abs(z_stats) > 1.959964):.4f}  |  t 이론 {p_t:.4f} 모의 {np.mean(np.abs(t_stats) > 1.959964):.4f}")
+    print(f"KS 검정 p : t_9 과 맞는가 {stats.kstest(t_stats, 't', args=(n-1,)).pvalue:.4f}"
+          f"   N(0,1) 과 맞는가 {stats.kstest(t_stats, 'norm').pvalue:.2e}")
+    print(f"올바른 임계값 t(9, 0.975) = {stats.t(n-1).ppf(0.975):.4f}")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    bins = np.arange(-6, 6, 0.1)
+    ax.hist(t_stats, bins=bins, density=True, alpha=0.7, label=f'Simulated $t_{{{n-1}}}$')
+    ax.plot(bins, stats.t(n-1).pdf(bins), '--r', lw=2, label=f'$t_{{{n-1}}}$ PDF')
+    ax.legend()
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    표준편차     : z 이론 1.0000 모의 0.9904  |  t 이론 1.1339 모의 1.1300
+    P(|.| > 1.96): z 이론 0.0500 모의 0.0459  |  t 이론 0.0816 모의 0.0826
+    KS 검정 p : t_9 과 맞는가 0.8758   N(0,1) 과 맞는가 6.74e-04
+    올바른 임계값 t(9, 0.975) = 2.2622
+    ```
+
+    ![스튜던트 t 분포](./img/student_t_118.png)
+
+    **네 수치가 모두 이론과 맞는다.** $Z$ 쪽은 $0.9904$와 $0.0459$로 $1$과 $0.05$에 붙고(되풀이 1만 번에서 표준편차의 몬테카를로 오차가 $0.0071$, 비율의 오차가 $0.0022$이니 각각 $1.4$배와 $1.9$배 안이다), $T$ 쪽은 $1.1300$과 $0.0826$으로 이론값 $1.1339$와 $0.0816$에 붙는다. 히스토그램에 겹친 빨간 곡선이 $t_9$ 밀도인데, KS 검정이 $t_9$에 대해 $p = 0.88$을 주고 $N(0,1)$에 대해 $p = 0.00067$을 주어 **그림으로는 닮아 보이는 둘을 가른다.**
+
+    **잃는 것은 유의수준이다.** 분모 한 글자를 $\sigma$에서 $S$로 바꾸었을 뿐인데 표준편차가 $13\%$ 넓어졌고, 그 넓어진 분포에 $1.96$을 그대로 대면 기각률이 $5\%$에서 $8.2\%$로 올라간다. 신뢰구간 쪽으로 옮기면 명목 $95\%$ 구간이 실제로는 $91.8\%$만 담는다는 뜻이고, 연습문제 2의 표에서 $n = 10$ 줄이 바로 이 수치다.
+
+    **그런데 이것은 손실이 아니라 청구서다.** 분포가 $t_9$로 바뀐 것을 알고 임계값을 $2.2622$로 고치면 명목 $5\%$가 정확히 지켜진다. 모집단이 정규이기만 하면 근사가 아니라 등식이기 때문이다. $\sigma$를 모른다는 문제는 이 자리에서 값이 매겨지고 끝난다. 뒤의 두 절에서 볼 $\chi^2$과 $F$에서는 이렇게 끝나지 않는다.
 
 ## 임계값
 
@@ -330,7 +498,7 @@ $t$ 통계량의 표본분포는 모집단의 **왜도**와 **첨도** 가운데
     출력:
 
     ```
-         n     양쪽    오른쪽     왼쪽
+         n       양쪽      오른쪽       왼쪽
         10    0.099    0.014    0.132
         30    0.073    0.022    0.098
        100    0.057    0.032    0.075
@@ -371,7 +539,7 @@ $t$ 통계량의 표본분포는 모집단의 **왜도**와 **첨도** 가운데
     출력:
 
     ```
-         n     양쪽    오른쪽     왼쪽
+         n       양쪽      오른쪽       왼쪽
         10    0.045    0.048    0.048
         30    0.047    0.049    0.049
        100    0.049    0.050    0.049
@@ -427,8 +595,8 @@ $t_d$의 평균과 분산을 구하라. **적률이 존재하지 않는 자유�
 
     ```
         d      Var 이론            모의
-        1         inf  317384.7758
-        2         inf      23.3971
+        1         inf   317384.7758
+        2         inf       23.3971
         3      3.0000        2.9669
         5      1.6667        1.6499
        10      1.2500        1.2435
@@ -469,7 +637,7 @@ $t_d$의 평균과 분산을 구하라. **적률이 존재하지 않는 자유�
     출력:
 
     ```
-         n  t_{n-1,.975}      z 대비
+         n  t_{n-1,.975}        z 대비
          3        4.3027     119.53%
          5        2.7764      41.66%
         10        2.2622      15.42%

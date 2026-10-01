@@ -78,75 +78,221 @@ $n$을 키우면 무슨 일이 일어나는지 나누어 보자. $(n-1)S^2/\sigm
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 정규모집단에서 표본분산의 분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규모집단에서 표본분산의 분포. $N(1, 2^2)$에서 크기 $n = 10$인 표본을 1만 개 뽑아 그때마다 $V = (n-1)S^2/\sigma^2$을 계산한다.
+
+**(1)** $V$의 평균·표준편차·왜도가 얼마가 되어야 하는지 이론으로 적고, 그 값들이 $\mu$와 $\sigma$에 의존하지 않는 까닭을 말하시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-n, n_sim, mu, sigma = 10, 10_000, 1, 2
-# 크기 10짜리 정규 표본을 1만 개 만든다. 행 하나가 표본 하나다.
-samples = stats.norm(loc=mu, scale=sigma).rvs(size=(n_sim, n))
-s = samples.std(axis=1, ddof=1)      # 행마다 표본표준편차(n-1로 나눔)
+    **(1) 이론값.** 모집단이 정규이므로 $V = (n-1)S^2/\sigma^2$은 근사가 아니라 **정확히** $\chi^2_{n-1} = \chi^2_9$을 따른다. 그러면 더 할 일이 없다. 4.2절이 구해 둔 $\chi^2_d$의 적률에 $d = 9$를 넣으면 된다.
 
-# 이 통계량이 정확히 chi^2(n-1) 을 따른다는 것이 정리의 내용이다.
-# mu = 1 을 썼지만 결과는 mu에 의존하지 않는다.
-# S^2 이 편차만 쓰므로 위치가 상쇄되기 때문이다.
-data = (n - 1) * s**2 / sigma**2
+    $$
+    E[V] = d = 9,
+    \qquad
+    \operatorname{sd}(V) = \sqrt{2d} = \sqrt{18} = 4.2426,
+    \qquad
+    \text{왜도}(V) = \sqrt{8/d} = 0.9428
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
-_, bins, _ = ax.hist(data, bins=100, density=True, alpha=0.7)
-ax.plot(bins, stats.chi2(n-1).pdf(bins), '--r', lw=3, label='χ²(n-1) PDF')
-ax.set_title('(n-1)S²/σ² from Normal Population → χ² Exact')
-ax.legend()
-ax.spines[['top', 'right']].set_visible(False)
-plt.show()
-```
+    $S^2$ 쪽으로 옮겨 적으면 $E[S^2] = \sigma^2 = 4$이고
 
-![(n-1)S²/σ² from Normal Population → χ² Exact](./img/chi_square_179.png)
+    $$
+    \operatorname{Var}(S^2) = \frac{\sigma^4}{(n-1)^2}\operatorname{Var}(V) = \frac{2\sigma^4}{n-1} = \frac{32}{9} = 3.5556
+    $$
 
-히스토그램과 $\chi^2_9$ 곡선이 빈틈없이 겹친다. 근사가 아니라 정확한 결과이니 당연한 일이다.
+    이다. 왜도가 $0.94$나 된다는 것도 새겨 둘 만하다. $n = 10$에서 $S^2$의 표본분포는 **대칭이 아니며**, 그것이 $\sigma^2$의 신뢰구간이 $s^2$을 중심으로 대칭이 아닌 까닭이다(연습문제 3).
+
+    **두 모수가 왜 사라지는가.** $\mu$는 $S^2$이 편차 $X_i - \bar X$만 쓰기 때문에 지워진다. 모든 관측값에 같은 수를 더하면 $X_i$와 $\bar X$가 나란히 밀려 편차가 그대로 남는다. $\sigma$는 식이 이미 $\sigma^2$으로 나누어져 있어 약분된다. 그러므로 $V$의 분포를 정하는 것은 $n$ 하나뿐이다. 코드가 $\mu = 1$, $\sigma = 2$라는 특정한 값을 쓴 것은 결과가 그 값에 매이지 않음을 드러내려는 선택이고, 아무 값을 넣어도 같은 그림이 나온다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    n, n_sim, mu, sigma = 10, 10_000, 1, 2
+    # 크기 10짜리 정규 표본을 1만 개 만든다. 행 하나가 표본 하나다.
+    samples = stats.norm(loc=mu, scale=sigma).rvs(size=(n_sim, n))
+    s = samples.std(axis=1, ddof=1)      # 행마다 표본표준편차(n-1로 나눔)
+
+    # 이 통계량이 정확히 chi^2(n-1) 을 따른다는 것이 정리의 내용이다.
+    # mu = 1 을 썼지만 결과는 mu에 의존하지 않는다.
+    # S^2 이 편차만 쓰므로 위치가 상쇄되기 때문이다.
+    data = (n - 1) * s**2 / sigma**2
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    _, bins, _ = ax.hist(data, bins=100, density=True, alpha=0.7)
+    ax.plot(bins, stats.chi2(n-1).pdf(bins), '--r', lw=3, label='χ²(n-1) PDF')
+    ax.set_title('(n-1)S²/σ² from Normal Population → χ² Exact')
+    ax.legend()
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.show()
+    ```
+
+    ![(n-1)S²/σ² from Normal Population → χ² Exact](./img/chi_square_179.png)
+
+    히스토그램과 $\chi^2_9$ 곡선이 빈틈없이 겹친다. 근사가 아니라 정확한 결과이니 당연한 일이다.
+
+    그러나 그림만으로는 "겹친다"가 어느 정도인지 말할 수 없으니 적률을 직접 재어 본다. 위 블록은 난수 씨앗을 고정하지 않아 돌릴 때마다 히스토그램이 조금씩 달라지므로, 수치를 맞추려면 씨앗을 박아야 한다. 적률의 몬테카를로 오차를 줄이려 되풀이도 20만 번으로 늘린다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    n, B, mu, sigma = 10, 200_000, 1, 2
+    d = n - 1
+
+    # 위 그림과 같은 설정이지만 씨앗을 고정하고 되풀이를 20만 번으로 늘려 수치를 잰다.
+    s = rng.normal(mu, sigma, size=(B, n)).std(axis=1, ddof=1)
+    V = (n - 1) * s**2 / sigma**2
+
+    print(f"E[V]    이론 {d}        모의 {V.mean():.4f}   (MC 오차 {V.std(ddof=1)/np.sqrt(B):.4f})")
+    print(f"sd(V)   이론 {np.sqrt(2*d):.4f}   모의 {V.std(ddof=1):.4f}")
+    print(f"왜도    이론 {np.sqrt(8/d):.4f}   모의 {stats.skew(V):.4f}")
+    print(f"P(V > {stats.chi2(d).ppf(0.95):.3f})  이론 0.0500   모의 {np.mean(V > stats.chi2(d).ppf(0.95)):.4f}")
+    print(f"KS 검정 p = {stats.kstest(V, 'chi2', args=(d,)).pvalue:.4f}")
+
+    # mu 를 1 에서 1000 으로 바꿔도 분포가 그대로인지 확인한다.
+    V2 = (n - 1) * rng.normal(1000, sigma, size=(B, n)).std(axis=1, ddof=1) ** 2 / sigma**2
+    print(f"mu = 1000 으로 바꾸면   E[V] {V2.mean():.4f}   sd(V) {V2.std(ddof=1):.4f}")
+    ```
+
+    출력:
+
+    ```
+    E[V]    이론 9        모의 8.9982   (MC 오차 0.0095)
+    sd(V)   이론 4.2426   모의 4.2511
+    왜도    이론 0.9428   모의 0.9670
+    P(V > 16.919)  이론 0.0500   모의 0.0502
+    KS 검정 p = 0.7181
+    mu = 1000 으로 바꾸면   E[V] 8.9949   sd(V) 4.2462
+    ```
+
+    **세 적률이 모두 맞는다.** 평균 $8.9982$는 이론값 $9$에서 몬테카를로 오차 $0.0095$의 $0.2$배만큼 떨어져 있고, 표준편차 $4.2511$도 이론값 $4.2426$에 붙는다. 꼬리확률 $0.0502$는 명목 $0.05$와 사실상 같다. 왜도 $0.9670$만 이론값 $0.9428$보다 조금 큰데, 왜도는 3차 적률이라 몬테카를로 오차가 $0.011$쯤이어서 그 두 배 안이다. 씨앗을 열두 개 바꿔 평균하면 $0.9411$로 내려앉으니 체계적 차이가 아니다. 분포 전체를 한꺼번에 묻는 KS 검정의 $p = 0.72$가 같은 말을 한다. **$\chi^2_9$과 구별되지 않는다.**
+
+    맨 아랫줄이 (1)의 둘째 물음에 답한다. $\mu$를 $1$에서 $1000$으로 옮겨도 $E[V] = 8.9949$, $\operatorname{sd}(V) = 4.2462$로 조금도 달라지지 않는다. $\sigma$ 쪽은 식에서 이미 나누어 없앴으므로 따로 확인할 것도 없다.
 
 이제 코드에서 **딱 한 줄**만 바꾼다. 모집단을 정규에서 지수로 갈아 끼우고 나머지는 그대로 둔다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 정규가 아닌 모집단에서는 어떻게 되는가
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규가 아닌 모집단에서는 어떻게 되는가. 앞 보기의 코드에서 모집단만 $N(1, 2^2)$에서 $\text{Exp}(1)$로 갈아 끼우고 나머지는 그대로 둔다. $\text{Exp}(1)$은 $\sigma^2 = 1$이라 척도조정조차 필요 없다.
+
+**(1)** 이번에는 $V = (n-1)S^2/\sigma^2$의 평균과 표준편차가 얼마가 되어야 하는지 적으시오. 둘 가운데 $\chi^2_9$과 어긋나는 것은 어느 쪽인가.
+
+**(2)** 모의실험으로 확인하고, 그 어긋남이 명목 95% 구간에 무엇을 하는지 재시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-n, n_sim = 10, 10_000
-# 앞 모의실험과 **한 곳만** 다르다. 모집단을 정규에서 지수로 바꿨다.
-# 나머지 코드는 그대로다.
-samples = stats.expon().rvs(size=(n_sim, n))
-s = samples.std(axis=1, ddof=1)
-# Exp(1)의 분산이 1이므로 sigma^2으로 나눌 필요가 없다.
-data = (n - 1) * s**2
+    **(1) 이론값.** 둘을 갈라 보아야 한다. 먼저 **중심은 멀쩡하다.**
 
-# 지수분포는 오른쪽으로 크게 치우쳐 4차 적률이 크다.
-# 그 결과 S^2 의 분포가 카이제곱보다 훨씬 무거운 꼬리를 갖게 되어
-# 아래 그림에서 히스토그램이 빨간 곡선 밖으로 크게 벗어난다.
+    $$
+    E[V] = \frac{n-1}{\sigma^2}\,E[S^2] = \frac{n-1}{\sigma^2}\cdot\sigma^2 = 9
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
-_, bins, _ = ax.hist(data, bins=100, density=True, alpha=0.7)
-ax.plot(bins, stats.chi2(n-1).pdf(bins), '--r', lw=3, label='χ²(n-1) PDF')
-ax.set_title('(n-1)S²/σ² from Exponential Population → χ² Approximation Fails')
-ax.legend()
-ax.spines[['top', 'right']].set_visible(False)
-plt.show()
-```
+    5.1절에서 증명한 $E[S^2] = \sigma^2$은 i.i.d.와 유한한 분산만 요구하고 정규성은 요구하지 않는다. 그러므로 지수모집단에서도 $E[V]$는 $\chi^2_9$의 평균과 **정확히** 같다.
 
-![지수모집단에서 (n-1)S²의 분포와 카이제곱 곡선](./img/chi_square_279.png)
+    **어긋나는 것은 폭이다.** 본문의
 
-히스토그램이 빨간 곡선을 크게 벗어난다. 왼쪽으로는 더 몰려 있고 오른쪽으로는 곡선 밖까지 길게 뻗는다. 앞 절에서 표본평균이 지수 모집단에서도 얌전히 종 모양으로 수렴하던 것과 견주어 보라. 모집단을 바꾼 것은 똑같은데 한쪽은 아무 일도 없었고 다른 쪽은 무너졌다. 평균 계열과 분산 계열의 차이가 이것이다.
+    $$
+    \operatorname{Var}(S^2) = \frac{1}{n}\left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4
+    $$
+
+    에 $n = 10$, $\beta_2 = 9$, $\sigma^2 = 1$을 넣으면 $\operatorname{Var}(S^2) = \frac{1}{10}\!\left(9 - \frac79\right) = \frac{74}{90} = 0.8222$이고
+
+    $$
+    \operatorname{Var}(V) = (n-1)^2\operatorname{Var}(S^2) = 81 \times 0.8222 = 66.6
+    $$
+
+    이다. $\chi^2_9$이 믿는 값은 $2d = 18$이므로 배율이
+
+    $$
+    \frac{66.6}{18} = 3.7 = \frac{n-1}{2n}\left(\beta_2 - \frac{n-3}{n-1}\right)
+    $$
+
+    다. 표준편차로 옮기면 $\sqrt{66.6} = 8.1609$ 대 $\sqrt{18} = 4.2426$으로 $1.92$배다. 연습문제 5가 구하는 극한 배율 $(\beta_2-1)/2 = 4$에는 아직 못 미치는데, 그 차이는 유한한 $n$에서 오는 것이고 $n$을 키우면 $4$로 **올라간다.** 좋아지는 쪽이 아니라 나빠지는 쪽으로 올라간다는 것이 이 절의 주제다.
+
+    한 줄로 줄이면 **중심은 정확히 맞고 폭만 틀리다.** 불편성은 정규성을 묻지 않지만 표본분포는 묻기 때문이다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    n, n_sim = 10, 10_000
+    # 앞 모의실험과 **한 곳만** 다르다. 모집단을 정규에서 지수로 바꿨다.
+    # 나머지 코드는 그대로다.
+    samples = stats.expon().rvs(size=(n_sim, n))
+    s = samples.std(axis=1, ddof=1)
+    # Exp(1)의 분산이 1이므로 sigma^2으로 나눌 필요가 없다.
+    data = (n - 1) * s**2
+
+    # 지수분포는 오른쪽으로 크게 치우쳐 4차 적률이 크다.
+    # 그 결과 S^2 의 분포가 카이제곱보다 훨씬 무거운 꼬리를 갖게 되어
+    # 아래 그림에서 히스토그램이 빨간 곡선 밖으로 크게 벗어난다.
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    _, bins, _ = ax.hist(data, bins=100, density=True, alpha=0.7)
+    ax.plot(bins, stats.chi2(n-1).pdf(bins), '--r', lw=3, label='χ²(n-1) PDF')
+    ax.set_title('(n-1)S²/σ² from Exponential Population → χ² Approximation Fails')
+    ax.legend()
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.show()
+    ```
+
+    ![지수모집단에서 (n-1)S²의 분포와 카이제곱 곡선](./img/chi_square_279.png)
+
+    히스토그램이 빨간 곡선을 크게 벗어난다. 왼쪽으로는 더 몰려 있고 오른쪽으로는 곡선 밖까지 길게 뻗는다. 앞 절에서 표본평균이 지수 모집단에서도 얌전히 종 모양으로 수렴하던 것과 견주어 보라. 모집단을 바꾼 것은 똑같은데 한쪽은 아무 일도 없었고 다른 쪽은 무너졌다. 평균 계열과 분산 계열의 차이가 이것이다.
+
+    (1)의 두 수치를 그림에서 읽어 낼 수는 없으니 다시 씨앗을 박고 재어 본다. 이 블록도 앞 보기와 같은 이유로 되풀이를 20만 번으로 늘렸다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    n, B = 10, 200_000
+    d, beta2 = n - 1, 9.0                  # Exp(1) 의 첨도는 9 다
+
+    V = d * rng.exponential(size=(B, n)).var(axis=1, ddof=1)
+
+    # 일반 모집단의 Var(S^2) = (1/n)(beta2 - (n-3)/(n-1)) sigma^4 에서 온 값이다.
+    var_th = d**2 * (beta2 - (n - 3) / (n - 1)) / n
+    print(f"E[V]    카이제곱 {d}        이론 {d}        모의 {V.mean():.4f}")
+    print(f"sd(V)   카이제곱 {np.sqrt(2*d):.4f}   이론 {np.sqrt(var_th):.4f}   모의 {V.std(ddof=1):.4f}")
+    print(f"배율    Var(V) / {2*d} = {var_th/(2*d):.2f}   (극한 (beta2-1)/2 = {(beta2-1)/2:.1f})")
+    print(f"중앙값  카이제곱 {stats.chi2(d).median():.4f}             모의 {np.median(V):.4f}")
+
+    lo, hi = stats.chi2(d).ppf([0.025, 0.975])
+    print(f"명목 95% 구간 [{lo:.3f}, {hi:.3f}] 밖 = {np.mean((V < lo) | (V > hi)):.4f}"
+          f"   (아래로 {np.mean(V < lo):.4f}, 위로 {np.mean(V > hi):.4f})")
+    ```
+
+    출력:
+
+    ```
+    E[V]    카이제곱 9        이론 9        모의 9.0027
+    sd(V)   카이제곱 4.2426   이론 8.1609   모의 8.1568
+    배율    Var(V) / 18 = 3.70   (극한 (beta2-1)/2 = 4.0)
+    중앙값  카이제곱 8.3428             모의 6.6685
+    명목 95% 구간 [2.700, 19.023] 밖 = 0.2322   (아래로 0.1413, 위로 0.0909)
+    ```
+
+    **예측한 대로 갈린다.** 평균 $9.0027$은 $\chi^2_9$의 $9$와 맞고, 표준편차 $8.1568$은 $\chi^2_9$의 $4.2426$이 아니라 (1)이 계산한 $8.1609$와 맞는다. **중심은 같은 자리에 둔 채 폭만 $1.92$배 넓은 분포**인 것이다.
+
+    평균이 같은데 중앙값이 $6.67$ 대 $8.34$로 크게 아래에 있다는 것이 그림의 "왼쪽으로 몰려 있다"의 정체다. 평균을 제자리에 붙들어 두면서 몸통을 왼쪽으로 옮기려면 오른쪽 꼬리가 아주 멀리까지 뻗어야 하고, 그래서 두 어긋남이 한 그림에 함께 나타난다.
+
+    **구간으로 옮기면 명목 5%가 실제 23.2%다.** 아래로 $14.1\%$, 위로 $9.1\%$로 양쪽이 고르게 어긋나지도 않는다. 연습문제 6이 같은 지수모집단·같은 $n = 10$에서 $0.233$을 얻은 것이 이 수치이고, 그 문제는 $n$을 키우면 이 값이 연습문제 5의 극한 $1 - 0.673 = 0.327$을 향해 **올라간다**는 것까지 보인다. 여기서 재어 둘 것은 그 출발점 하나다.
 
 ## 임계값
 
