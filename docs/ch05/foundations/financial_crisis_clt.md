@@ -71,136 +71,227 @@ $\theta$를 적분해 없애면 둘째 모형에서 $D$의 분포를 손으로 �
 
 ## 모의실험으로 확인한다
 
-표의 세 숫자를 모의실험으로 직접 만들어 보자. 아래 코드는 두 모형에서 각각 50만 번의 시나리오를 돌리고, 거기에 위기 이전의 위험 모형이 쓰던 정규근사를 나란히 놓는다.
+표의 세 숫자를 모의실험으로 직접 만들어 보자. 두 모형에서 각각 50만 번의 시나리오를 돌리고, 거기에 위기 이전의 위험 모형이 쓰던 정규근사를 나란히 놓는다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 부도의 독립 여부에 따른 손실 분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 부도의 독립 여부에 따른 손실 분포. 대출 $n = 100$건에서 부도 건수 $D$가 90건을 넘을 확률을 세 모형으로 견준다.
+
+**(1)** 위에 적은 주변 PMF $P(D = d) = 2(d+1)/[(n+1)(n+2)]$를 써서 의존 모형의 $P(D > 90)$을 **정확히** 구하시오.
+
+**(2)** 두 모형에서 각각 50만 번의 시나리오를 돌려 (1)을 확인하시오. 독립 모형과 정규근사가 모두 $0.000000$을 찍었다면 그 두 개의 $0$을 같은 뜻으로 읽어도 되는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** 주변 PMF가 $d$의 일차식이라 꼬리 합이 등차수열의 합으로 끝난다. $n = 100$이므로 $(n+1)(n+2) = 101 \times 102 = 10302$이고
 
-n = 100          # 대출 100건
-p = 2 / 3        # 각 건의 부도확률
-n_sims = 500_000
+    $$
+    P(D > 90) = \sum_{d=91}^{100} \frac{2(d+1)}{10302}
+    = \frac{2}{10302}\sum_{e=92}^{101} e
+    = \frac{2}{10302}\cdot\frac{(92+101)\times 10}{2}
+    = \frac{1930}{10302}
+    $$
 
-# 경우 1: 부도가 서로 독립. 이항분포 그대로다.
-d_indep = np.random.binomial(n, p, size=n_sims)
+    이다. 약분하면 $965/5151 = 0.187342$다. PMF 자체의 유도는 아래 연습문제 2에 있으므로 여기서는 쓰기만 했다.
 
-# 경우 2: 공통 위험요인이 있다.
-# 매 시나리오마다 부도확률 theta 를 먼저 뽑고, 그 theta로 100건을 던진다.
-# Beta(2,1)의 평균이 2/3 이므로 **평균 부도확률은 경우 1과 완전히 같다.**
-# 달라지는 것은 오직 "모든 대출이 같은 theta를 공유한다"는 점뿐이다.
-thetas = np.random.beta(2, 1, size=n_sims)
-d_dep = np.array([np.random.binomial(n, th) for th in thetas])
+    견줄 두 값도 손으로 적을 수 있다. 독립 모형은 이항 꼬리라
 
-# 꼬리 확률을 세 방법으로 비교한다.
-# 평균은 셋 다 같은데 꼬리는 전혀 다르다는 것이 이 보기의 요점이다.
-threshold = 90
-p_indep = np.mean(d_indep > threshold)
-p_dep = np.mean(d_dep > threshold)
-# 중심극한정리에 기댄 정규근사. 위기 이전 모형이 쓰던 방식이다.
-p_gauss = 1 - stats.norm.cdf(threshold, n * p, np.sqrt(n * p * (1 - p)))
+    $$
+    P(D > 90) = \sum_{d=91}^{100}\binom{100}{d}\left(\frac23\right)^{d}\left(\frac13\right)^{100-d}
+    = 1.129\times 10^{-8}
+    $$
 
-print(f"P(D > {threshold}):")
-print(f"  Independent:     {p_indep:.6f}")
-print(f"  Gaussian approx: {p_gauss:.6f}")
-print(f"  Dependent:       {p_dep:.6f}")
-```
+    이고, 정규근사는 $E[D] = 200/3$, $\operatorname{sd}(D) = \sqrt{200/9} = 4.7140$이므로
 
-출력:
+    $$
+    z = \frac{90 - 200/3}{4.7140} = 4.9497,
+    \qquad 1 - \Phi(4.9497) = 3.715\times 10^{-7}
+    $$
 
-```
-P(D > 90):
-  Independent:     0.000000
-  Gaussian approx: 0.000000
-  Dependent:       0.187854
-```
+    이다. **세 값이 $10^{-8}$, $10^{-7}$, $10^{-1}$로 일곱 자릿수에 걸쳐 흩어진다.**
 
-독립 모형과 정규근사는 50만 번을 돌려도 90건 초과가 **한 번도** 나오지 않아 0.000000을 찍었다. 같은 평균을 쓴 의존 모형은 0.187854, 곧 다섯 번에 한 번꼴로 그 일이 일어났다.
+    **(2) 수치적으로.**
 
-## 중앙은 겹치고 꼬리에서 갈라진다
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(42)
+
+    n = 100          # 대출 100건
+    p = 2 / 3        # 각 건의 부도확률
+    n_sims = 500_000
+
+    # 경우 1: 부도가 서로 독립. 이항분포 그대로다.
+    d_indep = np.random.binomial(n, p, size=n_sims)
+
+    # 경우 2: 공통 위험요인이 있다.
+    # 매 시나리오마다 부도확률 theta 를 먼저 뽑고, 그 theta로 100건을 던진다.
+    # Beta(2,1)의 평균이 2/3 이므로 **평균 부도확률은 경우 1과 완전히 같다.**
+    # 달라지는 것은 오직 "모든 대출이 같은 theta를 공유한다"는 점뿐이다.
+    thetas = np.random.beta(2, 1, size=n_sims)
+    d_dep = np.array([np.random.binomial(n, th) for th in thetas])
+
+    # 꼬리 확률을 세 방법으로 비교한다.
+    # 평균은 셋 다 같은데 꼬리는 전혀 다르다는 것이 이 보기의 요점이다.
+    threshold = 90
+    p_indep = np.mean(d_indep > threshold)
+    p_dep = np.mean(d_dep > threshold)
+    # 중심극한정리에 기댄 정규근사. 위기 이전 모형이 쓰던 방식이다.
+    p_gauss = 1 - stats.norm.cdf(threshold, n * p, np.sqrt(n * p * (1 - p)))
+
+    print(f"P(D > {threshold}):")
+    print(f"  Independent:     {p_indep:.6f}")
+    print(f"  Gaussian approx: {p_gauss:.6f}")
+    print(f"  Dependent:       {p_dep:.6f}")
+
+    # (1) 에서 구한 정확한 값과 맞춰 본다.
+    # 의존 모형은 주변 PMF 가 d 의 일차식이라 꼬리 합이 닫힌 꼴로 나온다.
+    dd = np.arange(threshold + 1, n + 1)
+    p_dep_exact = np.sum(2 * (dd + 1) / ((n + 1) * (n + 2)))
+    p_indep_exact = 1 - stats.binom.cdf(threshold, n, p)
+    print(f"\nP(D > {threshold}) 정확한 값:")
+    print(f"  Independent:     {p_indep_exact:.3e}")
+    print(f"  Gaussian approx: {p_gauss:.3e}")
+    print(f"  Dependent:       {p_dep_exact:.6f}")
+
+    # 50만 번으로 볼 수 있는 가장 작은 확률은 1/500000 = 2e-6 이다.
+    print(f"\n50만 번에서 기대되는 발생 횟수: 독립 {p_indep_exact * n_sims:.4f}회, 정규 {p_gauss * n_sims:.4f}회")
+    print(f"독립 모형 50만 번의 최대 부도 건수 = {d_indep.max()}")
+    ```
+
+    출력:
+
+    ```
+    P(D > 90):
+      Independent:     0.000000
+      Gaussian approx: 0.000000
+      Dependent:       0.187854
+
+    P(D > 90) 정확한 값:
+      Independent:     1.129e-08
+      Gaussian approx: 3.715e-07
+      Dependent:       0.187342
+
+    50만 번에서 기대되는 발생 횟수: 독립 0.0056회, 정규 0.1858회
+    독립 모형 50만 번의 최대 부도 건수 = 88
+    ```
+
+    **의존 모형이 (1)과 맞는다.** 모의값 $0.187854$와 정확값 $0.187342$의 차이가 $0.000512$인데, 50만 번 모의실험의 몬테카를로 표준오차가 $\sqrt{0.1873 \times 0.8127/500000} = 0.000552$이므로 $0.93$ 표준오차 차이다. 들어맞는다.
+
+    **그런데 두 개의 $0.000000$은 서로 다른 뜻이다.** 하나씩 보아야 한다.
+
+    독립 모형의 $0$은 **진짜 0**, 곧 50만 번 가운데 90건 초과가 한 번도 나오지 않았다는 셈이다. 실제로 50만 번의 최대 부도 건수가 $88$이었으니 문턱에 닿지도 못했다. 그러나 참값이 0이라는 뜻은 아니다. 참값 $1.129 \times 10^{-8}$에 50만을 곱하면 기대 발생 횟수가 $0.0056$회이므로, **한 번도 나오지 않는 것이 당연한 결과**다. 모의실험 50만 번이 분간할 수 있는 가장 작은 확률은 $1/500000 = 2\times 10^{-6}$이고 참값은 그보다 두 자릿수 아래에 있다.
+
+    정규근사의 $0$은 성격이 전혀 다르다. `p_gauss`는 모의실험이 아니라 정규 꼬리를 **정확히 계산한** $3.715\times 10^{-7}$이며, 소수점 여섯 자리로 반올림하는 `.6f` 서식이 그것을 $0.000000$으로 찍었을 뿐이다. 출력 형식이 만들어 낸 0이다.
+
+    **보고된 숫자의 자릿수가 그 숫자가 담은 정보를 가린다**는 것이 여기서 얻을 교훈이다. $0.000000$ 세 글자만 보고는 "일어나지 않았다", "확률이 0이다", "작아서 안 보인다"를 구별할 수 없다. 꼬리를 다룰 때 지수 표기를 쓰고 기대 발생 횟수를 함께 적어야 하는 이유다.
+
+    같은 평균을 쓴 의존 모형은 $0.187854$, 곧 다섯 번에 한 번꼴로 그 일이 일어났다. 평균 부도확률은 한 치도 건드리지 않았는데 꼬리확률이 독립 모형의 **1,700만 배**다.
+
+## 분포를 통째로 그려 본다
 
 숫자만으로는 무슨 일이 벌어졌는지 손에 잡히지 않으니 분포를 직접 그려 본다. 왼쪽에 세 분포 전체를, 가운데에 꼬리만 확대해서, 오른쪽에 의존성의 정체인 공통 위험요인 $\theta$의 분포를 놓는다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 세 분포를 나란히 보기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 세 분포를 나란히 보기. 보기 1의 모의실험 결과를 세 칸으로 그린다. 왼쪽에 세 분포 전체, 가운데에 $d \ge 80$인 꼬리만 확대한 것, 오른쪽에 공통 위험요인 $\theta$의 사전분포를 놓는다.
+
+**(1)** 왼쪽 칸에서 **포개져 보이는 두 곡선**은 어느 것인가. 나머지 하나는 왜 거기에 끼지 못하는가.
+
+**(2)** 왼쪽 칸이 **가리고 있는 것**은 무엇이며, 가운데 칸으로 옮겨 가야 비로소 보이는 것은 무엇인가. 오른쪽 칸은 그 모두를 어떻게 설명하는가.
 
 </div>
 
-```python
-fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+??? success "풀이"
 
-# 왼쪽: 세 분포 전체.
-# 가운데(평균 근처)에서는 셋이 거의 겹쳐 보인다.
-# 그래서 평균만 보고 모형을 고르면 차이를 알아채지 못한다.
-ax = axes[0]
-bins = np.arange(-0.5, n + 1.5, 1)
-ax.hist(d_dep, bins=bins, density=True, alpha=0.5, color="tomato",
-        label="Dependent (MC)")
-d_vals = np.arange(0, n + 1)
-ax.plot(d_vals, stats.binom.pmf(d_vals, n, p), "o", color="black",
-        ms=3, label="Independent")
-x_norm = np.linspace(0, n, 300)
-ax.plot(x_norm, stats.norm.pdf(x_norm, n * p, np.sqrt(n * p * (1 - p))),
-        "--", color="gray", lw=3, label="Gaussian approx")
-ax.set_xlabel("Number of defaults")
-ax.set_ylabel("Probability")
-ax.set_title("Default Distributions")
-ax.legend()
+    유도할 답이 있는 문제가 아니다. **그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 이 보기의 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다. 아래 코드는 보기 1의 `d_indep`, `d_dep`, `n`, `p`를 그대로 이어받는다.
 
-# 가운데: 꼬리만 확대(80건 이상).
-# 여기서 세 분포가 완전히 갈라진다. 독립 가정과 정규근사는 사실상 0을 주고,
-# 종속 모형만 무시할 수 없는 확률을 준다.
-# **위험은 언제나 꼬리에 있다.**
-ax = axes[1]
-tail = range(80, n + 1)
-mc_tail = [np.mean(d_dep == d) for d in tail]
-ax.bar(list(tail), mc_tail, color="tomato", alpha=0.7, label="Dependent")
-ax.plot(list(tail), stats.binom.pmf(list(tail), n, p), "ko-",
-        ms=4, label="Independent")
-ax.set_xlabel("Number of defaults")
-ax.set_title("Tail Risk (d >= 80)")
-ax.legend()
+    ```python
+    # 그림에서 읽을 수치를 미리 찍어 둔다.
+    print(f"d=67  독립 {stats.binom.pmf(67, n, p):.5f}  정규 {stats.norm.pdf(67, n * p, np.sqrt(n * p * (1 - p))):.5f}  의존 {2 * 68 / 10302:.5f}")
+    print(f"의존 PMF  d=0 {2 * 1 / 10302:.6f}  ->  d=100 {2 * 101 / 10302:.6f}")
+    print(f"P(D >= 80)  의존 {np.mean(d_dep >= 80):.5f}  독립 {1 - stats.binom.cdf(79, n, p):.5f}")
+    print(f"P(theta > 0.9) = {1 - stats.beta.cdf(0.9, 2, 1):.3f}")
 
-# 오른쪽: 공통 위험요인 theta의 분포.
-# 이 분포가 넓다는 것이 종속성의 정체다.
-# theta가 우연히 0.95쯤 나오는 시나리오에서는 100건이 거의 다 부도난다.
-# 독립 모형에는 그런 시나리오 자체가 존재하지 않는다.
-ax = axes[2]
-theta_grid = np.linspace(0, 1, 300)
-ax.plot(theta_grid, stats.beta.pdf(theta_grid, 2, 1), lw=2.5,
-        label="Beta(2, 1)")
-ax.axvline(p, color="red", linestyle="--", label=f"E[theta] = {p:.3f}")
-ax.set_xlabel("theta")
-ax.set_ylabel("Density")
-ax.set_title("Prior on Shared Risk Factor")
-ax.legend()
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 
-plt.tight_layout()
-plt.show()
-```
+    # 왼쪽: 세 분포 전체.
+    # 독립과 정규근사는 평균 근처에서 서로 포개지고, 의존 모형만 전 구간에 깔린다.
+    ax = axes[0]
+    bins = np.arange(-0.5, n + 1.5, 1)
+    ax.hist(d_dep, bins=bins, density=True, alpha=0.5, color="tomato",
+            label="Dependent (MC)")
+    d_vals = np.arange(0, n + 1)
+    ax.plot(d_vals, stats.binom.pmf(d_vals, n, p), "o", color="black",
+            ms=3, label="Independent")
+    x_norm = np.linspace(0, n, 300)
+    ax.plot(x_norm, stats.norm.pdf(x_norm, n * p, np.sqrt(n * p * (1 - p))),
+            "--", color="gray", lw=3, label="Gaussian approx")
+    ax.set_xlabel("Number of defaults")
+    ax.set_ylabel("Probability")
+    ax.set_title("Default Distributions")
+    ax.legend()
 
-![Default Distributions](./img/financial_crisis_clt_118.png)
+    # 가운데: 꼬리만 확대(80건 이상).
+    # 왼쪽 칸의 선형 세로축에서는 이 구간이 통째로 바닥에 눌려 보이지 않는다.
+    # 독립 가정은 사실상 0을 주고, 종속 모형만 무시할 수 없는 확률을 준다.
+    # **위험은 언제나 꼬리에 있다.**
+    ax = axes[1]
+    tail = range(80, n + 1)
+    mc_tail = [np.mean(d_dep == d) for d in tail]
+    ax.bar(list(tail), mc_tail, color="tomato", alpha=0.7, label="Dependent")
+    ax.plot(list(tail), stats.binom.pmf(list(tail), n, p), "ko-",
+            ms=4, label="Independent")
+    ax.set_xlabel("Number of defaults")
+    ax.set_title("Tail Risk (d >= 80)")
+    ax.legend()
 
-## 그림이 말하는 것
+    # 오른쪽: 공통 위험요인 theta의 분포.
+    # 이 분포가 넓다는 것이 종속성의 정체다.
+    # theta가 우연히 0.95쯤 나오는 시나리오에서는 100건이 거의 다 부도난다.
+    # 독립 모형에는 그런 시나리오 자체가 존재하지 않는다.
+    ax = axes[2]
+    theta_grid = np.linspace(0, 1, 300)
+    ax.plot(theta_grid, stats.beta.pdf(theta_grid, 2, 1), lw=2.5,
+            label="Beta(2, 1)")
+    ax.axvline(p, color="red", linestyle="--", label=f"E[theta] = {p:.3f}")
+    ax.set_xlabel("theta")
+    ax.set_ylabel("Density")
+    ax.set_title("Prior on Shared Risk Factor")
+    ax.legend()
 
-왼쪽 그림에서 독립 모형은 예상대로 평균 $n\theta = 200/3 \approx 66.7$ 주위에 좁게 모여 있고, 정규근사 곡선이 그 위에 거의 포개진다. 독립 가정 안에서는 중심극한정리가 훌륭하게 일을 해내는 것이다. 문제는 의존 모형이다. 이쪽은 봉우리랄 것이 없이 $D$의 전 구간에 확률이 깔려 있고, 앞서 계산한 대로 오른쪽으로 갈수록 오히려 조금씩 높아진다.
+    plt.tight_layout()
+    plt.show()
+    ```
 
-세 분포가 중앙 부근에서 서로 겹쳐 보인다는 점이 이 그림에서 가장 위험한 대목이다. 평균 근처의 자료만 들여다보아서는 어느 모형을 쓰고 있는지 알아차릴 수 없다. 가운데 그림처럼 80건 이상만 확대해야 비로소 셋이 완전히 갈라진다. 독립 가정과 정규근사는 사실상 0을 주고, 의존 모형만 무시할 수 없는 확률을 준다.
+    출력:
 
-오른쪽 그림이 그 차이의 출처다. 공통 위험요인 $\theta$의 분포가 $2/3$ 한 점에 박혀 있지 않고 $[0, 1]$ 전체에 퍼져 있다. $\text{Beta}(2,1)$은 $\theta > 0.9$에 약 19%라는 무시할 수 없는 확률을 주므로, 그해의 부도확률이 0.95쯤으로 뽑히는 시나리오가 실제로 존재하고 그런 해에는 100건이 거의 다 부도난다. 독립 모형에는 그런 시나리오 자체가 없다.
+    ```
+    d=67  독립 0.08438  정규 0.08442  의존 0.01320
+    의존 PMF  d=0 0.000194  ->  d=100 0.019608
+    P(D >= 80)  의존 0.37163  독립 0.00237
+    P(theta > 0.9) = 0.190
+    ```
+
+    ![Default Distributions](./img/financial_crisis_clt_118.png)
+
+    **(1) 포개지는 둘은 독립 모형과 정규근사다.** 독립 모형은 예상대로 평균 $n\theta = 200/3 \approx 66.7$ 주위에 좁게 모여 있고, 정규근사 곡선이 그 위에 거의 그대로 얹힌다. 봉우리에서 재면 이항 $0.08438$ 대 정규 $0.08442$로 상대차가 $0.04\%$다. **독립 가정 안에서는 중심극한정리가 훌륭하게 일을 해낸다.**
+
+    끼지 못하는 것은 의존 모형이다. 봉우리랄 것이 없이 $D$의 전 구간에 얇게 깔려 있고, 주변 PMF가 $2(d+1)/10302$라 $d$가 커질수록 **오히려 높아진다.** $d = 0$에서 $0.000194$, $d = 100$에서 $0.019608$로 101배다. 같은 $d = 67$에서 높이가 $0.01320$이니 독립 모형의 $0.08438$에 견주어 $6.4$분의 1에 지나지 않는다. 그러므로 **"세 분포가 중앙에서 겹친다"고 읽으면 안 된다.** 겹치는 것은 분포가 아니라 평균이다. 셋 다 $E[D] = 200/3 \approx 66.7$이고, 그래서 평균만 보고하면 세 모형을 구별할 수 없다.
+
+    **(2) 왼쪽 칸이 가리는 것은 꼬리다.** 세로축이 선형이라 $0$부터 $0.08$까지를 한 화면에 담는데, 독립 모형의 $P(D > 90) = 1.1\times 10^{-8}$은 봉우리 높이의 1억 분의 1이라 한 화소도 차지하지 못한다. 왼쪽 칸만 보면 독립 모형의 꼬리가 **정확히 0인지 아주 작은지 분간할 길이 없다.** 선형 축은 꼬리를 보여 주는 도구가 아니며, 보려면 로그 축을 쓰거나 가운데 칸처럼 구간을 좁혀야 한다.
+
+    가운데 칸이 그 일을 한다. $d \ge 80$으로 좁히면 의존 모형의 막대가 $0.0156$에서 $0.0197$까지 꾸준히 올라가는 동안 독립 모형은 $d = 80$의 $0.00126$에서 $d = 90$의 $4.2\times 10^{-8}$로 내려앉는다. 구간 전체를 더하면 $P(D \ge 80)$이 의존 $0.372$ 대 독립 $0.00237$로 **150배 넘게** 차이가 난다. 다만 이 칸도 모든 것을 보여 주지는 않는다. **정규근사 곡선이 여기에는 아예 그려져 있지 않으므로**, 세 모형이 꼬리에서 어떻게 갈라지는지를 이 칸 하나에서 읽을 수는 없다. 그 비교는 보기 1의 수치로 돌아가야 한다.
+
+    **오른쪽 칸이 그 모두의 출처다.** 공통 위험요인 $\theta$의 분포가 $2/3$ 한 점(빨간 점선)에 박혀 있지 않고 $[0,1]$ 전체에 퍼져 있다. $\text{Beta}(2,1)$은 $\theta > 0.9$에 $1 - 0.9^2 = 0.190$이라는 무시할 수 없는 확률을 주므로, 그해의 부도확률이 $0.95$쯤으로 뽑히는 시나리오가 실제로 존재하고 그런 해에는 100건이 거의 다 부도난다. 왼쪽 칸에서 의존 모형이 오른쪽 끝까지 깔려 있는 이유가 이것이다. 독립 모형은 이 칸이 빨간 점선 한 점으로 쪼그라든 경우이고, **그런 해가 아예 존재하지 않는다.**
 
 !!! note "주요 관찰"
 
-    평균만으로는 두 모형을 구별할 수 없다. 셋 다 $E[D] = 200/3 \approx 66.7$이고 중앙 부근의 모양도 비슷하다. 차이는 오직 꼬리에서 드러나며, 정규근사는 독립 모형과는 잘 맞지만 의존 모형의 두꺼운 꼬리를 전혀 포착하지 못한다. **모형을 중앙 적합도로만 검증하면 정확히 이 실패를 놓친다.**
+    평균만으로는 세 모형을 구별할 수 없다. 셋 다 $E[D] = 200/3 \approx 66.7$이다. 그러나 분포는 전혀 다르며, 특히 꼬리에서 자릿수로 갈라진다. 정규근사는 독립 모형의 중심을 $0.04\%$ 안에서 맞히지만(꼬리에서는 $33$배쯤 크게 준다) 의존 모형의 두꺼운 꼬리는 자릿수째로 놓친다. **모형을 평균이나 중앙 적합도로만 검증하면 정확히 이 실패를 놓친다.**
 
 ### 이것이 금융에서 왜 중요한가
 
@@ -407,7 +498,7 @@ $P(D \ge 90)$을 세 모형(독립, 의존, 정규근사)에서 각각 구하고
 
     **자릿수가 여섯 개 넘게 벌어진다.** 정규근사는 "천만 번에 한 번", 의존 모형은 "다섯 번에 한 번"이라고 말한다.
 
-    세 모형의 **평균은 모두 $200/3 \approx 66.7$로 똑같다.** 평균만 보고서는 어느 모형을 쓰든 차이를 알 수 없고, 실제로 보기 2의 왼쪽 그림에서 세 분포가 중앙 부근에서 거의 겹쳐 보인다. 차이는 오직 꼬리에서 드러난다.
+    세 모형의 **평균은 모두 $200/3 \approx 66.7$로 똑같다.** 평균만 보고서는 어느 모형을 쓰든 차이를 알 수 없다. 다만 보기 2의 왼쪽 그림에서 겹쳐 보이는 것은 **독립 모형과 정규근사 둘뿐**이고($d = 67$에서 $0.08438$ 대 $0.08442$), 의존 모형은 같은 자리에서 $0.01320$으로 $6.4$분의 1이다. 겹치는 것은 분포가 아니라 평균이며, 독립과 정규 사이의 차이는 꼬리에서 드러난다.
 
     한 가지 더 눈여겨볼 점은 정규근사가 독립 이항보다도 꼬리를 **크게** 준다는 것이다. 이항분포는 지지집합이 $[0,100]$으로 유계인데 정규분포는 그렇지 않아서다. 그러나 이 차이는 의존성이 만든 차이에 견주면 무의미하다. **근사의 정확도를 다듬는 것보다 모형의 구조를 바로잡는 것이 비교할 수 없이 중요하다.**
 

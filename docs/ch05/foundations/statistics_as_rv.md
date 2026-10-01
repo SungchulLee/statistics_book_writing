@@ -159,74 +159,155 @@ $$
 
     순서를 기억해 두면 좋다. **먼저 치우치지 않게 모으고, 그다음에 추정한다.** 이 절의 모든 논의는 첫 단계가 지켜졌다는 전제 위에 있다.
 
-이것을 눈으로 확인해 보자. 0부터 32까지 번호가 적힌 탁구공 33개를 항아리에 넣는다. 개수가 홀수라 모집단 중앙값이 정확히 16으로 떨어진다. 여기서 다섯 개를 비복원으로 뽑아 그 중앙값을 적는 일을 50번 되풀이한다. 표본중앙값은 모집단 중앙값의 불편추정량일까.
+위 정리는 평균과 분산을 다루었다. 그렇다면 중앙값은 어떨까. 모집단이 작고 대칭이면 이 물음을 끝까지 손으로 따라갈 수 있다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 탁구공으로 보는 불편성
+**보기 1.** <span class="diff easy" title="쉬움"></span> 탁구공으로 보는 불편성. 0부터 32까지 번호가 적힌 탁구공 33개가 항아리에 들어 있다. 개수가 홀수라 모집단 중앙값이 정확히 16으로 떨어진다. 여기서 다섯 개를 비복원으로 뽑아 그 중앙값 $\text{Med}$를 적는다.
+
+**(1)** $\text{Med}$가 모집단 중앙값 16의 불편추정량임을 보이고 $\operatorname{sd}(\text{Med})$를 구하시오.
+
+**(2)** 뽑기를 50번 되풀이해 얻은 중앙값들의 평균은 16.44였다. 참값 16과 어긋난다. 이것을 편향의 증거로 읽어야 하는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-np.random.seed(0)
-num_samples = 50
+    **(1) 해석적으로.** 불편성은 **대칭성만으로** 나온다. 공에 적힌 수를 뒤집는 사상 $b \mapsto 32 - b$는 모집단 $\{0, 1, \dots, 32\}$를 자기 자신으로 옮기는 일대일 대응이므로, 어떤 표본 $S$를 뽑을 확률과 뒤집은 표본 $32 - S$를 뽑을 확률이 같다. 그런데 중앙값은 이 뒤집기를 그대로 따라간다.
 
-def main():
-    # 모집단: 0부터 32까지 번호가 붙은 공 33개.
-    # 개수가 홀수이므로 참 중앙값이 정확히 16으로 딱 떨어진다.
-    balls = np.arange(33)
-    print(f"Population median: {np.median(balls)}")
+    $$
+    \text{Med}(32 - S) = 32 - \text{Med}(S)
+    $$
 
-    # 크기 5짜리 표본을 50번 뽑아 그때마다 표본중앙값을 기록한다.
-    # 표본이 달라지면 중앙값도 달라진다는 것,
-    # 즉 **통계량이 확률변수라는 것**이 이 보기의 전부다.
-    data = []
-    for _ in range(num_samples):
-        sample = np.random.choice(balls, size=5, replace=False)
-        data.append(np.median(sample))
+    따라서 $\text{Med}$와 $32 - \text{Med}$는 **같은 분포**를 갖고, 양변의 기댓값을 취하면 $E[\text{Med}] = 32 - E[\text{Med}]$, 곧
 
-    print(f"Mean of sample medians: {np.mean(data):.2f}")
+    $$
+    E[\text{Med}] = 16
+    $$
 
-    # 값마다 몇 번 나왔는지 센다. 표본이 50개뿐이라 히스토그램보다
-    # 점그림이 낫다(2.5절에서 본 대로 자료가 적을 때의 선택이다).
-    data_dict = {}
-    for num in data:
-        data_dict[num] = data_dict.get(num, 0) + 1
+    이다. 근사가 아니라 정확한 등식이며, 중앙값이라는 사실조차 쓰지 않았다. 뒤집기와 함께 움직이는 통계량이면 무엇이든 같은 논증이 통한다.
 
-    fig, ax = plt.subplots(figsize=(12, 3))
-    # 같은 값을 세로로 쌓아 점그림을 만든다
-    for num, freq in data_dict.items():
-        ax.plot([num] * freq, range(1, freq + 1), 'ok')
-    # 참 중앙값 16. 점들이 이 선 주위에 흩어지는지 확인한다.
-    ax.plot([16, 16], [0, 5], "--r", alpha=0.3, label="True median")
-    ax.legend()
-    ax.set_title('Simulation-Based Distribution of Sample Median')
-    ax.set_xlabel('Sample Median')
-    ax.set_ylabel('Number of Samples')
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    plt.show()
+    퍼짐은 분포를 직접 적어야 나온다. 중앙값이 $m$이려면 뽑힌 다섯 개 가운데 $m$보다 작은 것이 둘, 큰 것이 둘이어야 하므로
 
-if __name__ == "__main__":
-    main()
-```
+    $$
+    P(\text{Med} = m) = \frac{\binom{m}{2}\binom{32-m}{2}}{\binom{33}{5}},
+    \qquad m = 2, 3, \dots, 30
+    $$
 
-출력:
+    이다. 이 분포로 계산하면 $\operatorname{Var}(\text{Med}) = 34$가 딱 떨어져
 
-```
-Population median: 16.0
-Mean of sample medians: 16.44
-```
+    $$
+    \operatorname{sd}(\text{Med}) = \sqrt{34} = 5.8310
+    $$
 
-![Simulation-Based Distribution of Sample Median](./img/statistics_as_rv_81.png)
+    이다. 견주어 둘 것이 하나 있다. 같은 표본에서 **표본평균**을 쓰면 모분산이 $\sigma^2 = (33^2-1)/12 = 90.67$이고 비복원이므로 유한모집단 수정이 붙어
 
-점들이 16을 중심으로 좌우로 퍼져 있다. 평균을 내면 16.44가 나오는데, 참값 16과 정확히 같지는 않다. 그렇다고 편향의 증거는 아니다. 표본중앙값 하나의 표준편차가 5.83이므로 50번 되풀이해 얻은 평균의 표준오차는 $5.83/\sqrt{50} = 0.82$이고, 16.44는 16에서 겨우 0.53 표준오차 떨어져 있다. 50번을 20만 번으로 늘리면 평균이 16.006으로 내려앉는다.
+    $$
+    \operatorname{Var}(\bar X) = \frac{\sigma^2}{5}\cdot\frac{33-5}{33-1} = 15.87,
+    \qquad \operatorname{sd}(\bar X) = 3.9833
+    $$
 
-한 가지 더 눈에 띄는 것이 있다. 점들이 가로축의 아무 데나 찍히지 않고 **정수 자리에만** 찍힌다. 공에 정수만 적혀 있고 다섯 개 중 가운데 값을 고르므로 표본중앙값도 정수일 수밖에 없다. 통계량의 분포는 이렇게 모집단의 성격을 물려받는다.
+    이다. 둘 다 불편인데 중앙값 쪽이 $1.46$배 더 흔들린다. **불편성은 추정량을 고르는 기준이 되지 못한다**는 것을 여기서 이미 볼 수 있다.
+
+    **(2) 수치적으로.** 정확한 분포를 완전열거로 얻고, 그 옆에 50번 모의실험을 나란히 둔다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from math import comb
+
+    np.random.seed(0)
+    num_samples = 50
+
+    def exact_median_pmf():
+        """크기 5짜리 비복원표본에서 표본중앙값의 **정확한** 분포.
+
+        중앙값이 m이려면 m보다 작은 공 2개와 큰 공 2개가 함께 뽑혀야 하므로
+        확률이 C(m,2)C(32-m,2)/C(33,5)이다. 모의실험이 아니라 완전열거다.
+        """
+        total = comb(33, 5)
+        return {m: comb(m, 2) * comb(32 - m, 2) / total for m in range(2, 31)}
+
+    def main():
+        # 모집단: 0부터 32까지 번호가 붙은 공 33개.
+        # 개수가 홀수이므로 참 중앙값이 정확히 16으로 딱 떨어진다.
+        balls = np.arange(33)
+        print(f"모집단 중앙값 = {np.median(balls)}")
+
+        pmf = exact_median_pmf()
+        exact_mean = sum(m * q for m, q in pmf.items())
+        exact_sd = sum((m - exact_mean) ** 2 * q for m, q in pmf.items()) ** 0.5
+        print(f"정확한 E[Med] = {exact_mean:.6f},  sd(Med) = {exact_sd:.6f}")
+
+        # 크기 5짜리 표본을 50번 뽑아 그때마다 표본중앙값을 기록한다.
+        # 표본이 달라지면 중앙값도 달라진다는 것,
+        # 즉 **통계량이 확률변수라는 것**이 이 보기의 전부다.
+        data = []
+        for _ in range(num_samples):
+            sample = np.random.choice(balls, size=5, replace=False)
+            data.append(np.median(sample))
+
+        se = exact_sd / np.sqrt(num_samples)
+        print(f"50회 표본중앙값의 평균 = {np.mean(data):.2f}")
+        print(f"  그 평균의 표준오차 = {se:.4f},  z = {(np.mean(data) - 16) / se:+.3f}")
+
+        # 되풀이를 20만 번으로 늘려 본다. 같은 표본에서 표본평균도 함께 기록해
+        # 중앙값과 평균 가운데 어느 쪽이 덜 흔들리는지 견준다.
+        meds, means = [], []
+        for _ in range(200_000):
+            sample = np.random.choice(balls, size=5, replace=False)
+            meds.append(np.median(sample))
+            means.append(sample.mean())
+        var_pop = (33 ** 2 - 1) / 12                            # 0..32 의 모분산
+        sd_mean = (var_pop / 5 * (33 - 5) / (33 - 1)) ** 0.5    # 유한모집단 수정 포함
+        print(f"20만회 표본중앙값의 평균   = {np.mean(meds):.6f}")
+        print(f"20만회 표본중앙값의 표준편차 = {np.std(meds, ddof=1):.4f}  (정확값 {exact_sd:.4f})")
+        print(f"20만회 표본평균의 표준편차   = {np.std(means, ddof=1):.4f}  (정확값 {sd_mean:.4f})")
+
+        # 값마다 몇 번 나왔는지 센다. 표본이 50개뿐이라 히스토그램보다
+        # 점그림이 낫다(2.5절에서 본 대로 자료가 적을 때의 선택이다).
+        data_dict = {}
+        for num in data:
+            data_dict[num] = data_dict.get(num, 0) + 1
+
+        fig, ax = plt.subplots(figsize=(12, 3))
+        # 같은 값을 세로로 쌓아 점그림을 만든다
+        for num, freq in data_dict.items():
+            ax.plot([num] * freq, range(1, freq + 1), 'ok')
+        # 참 중앙값 16. 점들이 이 선 주위에 흩어지는지 확인한다.
+        ax.plot([16, 16], [0, 5], "--r", alpha=0.3, label="True median")
+        ax.legend()
+        ax.set_title('Simulation-Based Distribution of Sample Median')
+        ax.set_xlabel('Sample Median')
+        ax.set_ylabel('Number of Samples')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        plt.show()
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    모집단 중앙값 = 16.0
+    정확한 E[Med] = 16.000000,  sd(Med) = 5.830952
+    50회 표본중앙값의 평균 = 16.44
+      그 평균의 표준오차 = 0.8246,  z = +0.534
+    20만회 표본중앙값의 평균   = 16.004935
+    20만회 표본중앙값의 표준편차 = 5.8225  (정확값 5.8310)
+    20만회 표본평균의 표준편차   = 3.9830  (정확값 3.9833)
+    ```
+
+    ![Simulation-Based Distribution of Sample Median](./img/statistics_as_rv_81.png)
+
+    완전열거가 준 $E[\text{Med}] = 16.000000$과 $\operatorname{sd}(\text{Med}) = 5.830952 = \sqrt{34}$가 (1)의 유도와 정확히 맞는다. 20만 번 모의실험의 표준편차 $5.8225$와 $3.9830$도 정확값 $5.8310$, $3.9833$과 맞는다.
+
+    **16.44는 편향의 증거가 아니다.** 되풀이 50번으로 얻은 평균의 표준오차가 $\sqrt{34}/\sqrt{50} = 0.8246$이므로 16.44는 16에서 겨우 $0.53$ 표준오차 떨어져 있다. 50번을 20만 번으로 늘리면 $16.0049$로 내려앉는데, 이때의 표준오차는 $\sqrt{34}/\sqrt{200000} = 0.0130$이니 여전히 참값과 $0.4$ 표준오차 안이다. **되풀이 횟수를 늘려 줄어드는 것은 편향이 아니라 몬테카를로 오차다.** 편향이었다면 20만 번을 돌려도 그 자리에 남아 있었을 것이다.
+
+    그림에서 한 가지 더 눈에 띄는 것이 있다. 점들이 가로축의 아무 데나 찍히지 않고 **정수 자리에만** 찍힌다. 공에 정수만 적혀 있고 다섯 개 중 가운데 값을 고르므로 표본중앙값도 정수일 수밖에 없다. 통계량의 분포는 이렇게 모집단의 성격을 물려받는다.
 
 ## 좋은 추정량을 어떻게 만드는가
 
@@ -408,7 +489,7 @@ $$
 P(m \mid N) = \frac{\binom{M}{m}\binom{N-M}{n-m}}{\binom{N}{n}}
 $$
 
-여기서 자료 $(M, n, m)$은 관측되었고 모르는 것은 $N$뿐이다. 그러니 이 식을 $N$의 함수로 읽고 가장 큰 값을 주는 $N$을 고르면 된다. 그 답은 비례식이 주는 직관과 일치한다. 두 번째 표본에서 표시된 비율 $m/n$이 호수 전체에서 표시된 비율 $M/N$과 같아야 한다고 놓으면
+여기서 자료 $(M, n, m)$은 관측되었고 모르는 것은 $N$뿐이다. 그러니 이 식을 $N$의 함수로 읽고 가장 큰 값을 주는 $N$을 고르면 된다. 비례식이 주는 직관은 이렇다. 두 번째 표본에서 표시된 비율 $m/n$이 호수 전체에서 표시된 비율 $M/N$과 같아야 한다고 놓으면
 
 $$
 \hat{N} = \frac{M \cdot n}{m}
@@ -416,71 +497,146 @@ $$
 
 이다. 50마리에 표시하고 나중에 40마리를 잡았는데 10마리가 표시되어 있었다면 $\hat N = 50 \times 40 / 10 = 200$마리로 추정한다.
 
-아래 코드는 이 추정을 격자에서 직접 확인한다. $N$을 하나씩 바꿔 가며 가능도를 계산해 어디서 최대가 되는지 본다.
+그런데 $N$은 정수이고 $Mn/m$은 대개 정수가 아니다. 가능도를 제대로 최대화하면 무엇이 나오는지 따져 볼 필요가 있다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 포획-재포획의 최대가능도추정
+**보기 3.** <span class="diff easy" title="쉬움"></span> 포획-재포획의 최대가능도추정. 위 초기하확률을 $N$의 함수로 읽어 $L(N) = P(m \mid N)$이라 두자.
+
+**(1)** 가능도비 $L(N)/L(N-1)$을 계산해 최대가능도추정값이 $\hat N = \lfloor Mn/m \rfloor$임을 보이시오. $Mn/m$이 정수일 때는 무슨 일이 일어나는가.
+
+**(2)** $M = 50$, $n = 40$, $m = 10$에서 $N$을 하나씩 바꿔 가며 가능도를 계산하면 최댓값이 200이 아니라 **199**에서 잡힌다. 왜 그런가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from scipy import special
+??? success "풀이"
 
-def prob(n, c, r, t):
-    """포획-재포획의 초기하확률.
+    **(1) 해석적으로.** $N$이 정수라 미분할 수 없으므로 이웃한 두 값의 비를 본다. $L(N) = \binom{M}{m}\binom{N-M}{n-m}\big/\binom{N}{n}$에서 $\binom{M}{m}$은 $N$과 무관하므로 약분되고
 
-    n: 전체 개체수(우리가 추정하려는 미지수)
-    c: 1차에서 잡아 표시한 수
-    r: 2차에서 잡은 수
-    t: 2차에서 잡힌 것 중 표시가 있던 수
+    $$
+    \frac{L(N)}{L(N-1)}
+    = \frac{\binom{N-M}{n-m}}{\binom{N-1-M}{n-m}} \cdot \frac{\binom{N-1}{n}}{\binom{N}{n}}
+    $$
 
-    2차 표본 r마리를 고르는 모든 방법 중,
-    표시된 것 t마리와 안 된 것 r-t마리를 고르는 방법의 비율이다.
-    """
-    return special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
+    이다. $\binom{a}{k}\big/\binom{a-1}{k} = a/(a-k)$를 두 번 쓰면
 
-def capture_recapture(c=50, r=40, t=10):
-    # 가능한 최소 개체수. 표시된 50마리와 2차에서 새로 잡힌 30마리는
-    # 서로 다른 개체이므로 최소 50 + 40 - 10 = 80마리는 있어야 한다.
-    min_n = c + r - t
-    ns = range(min_n, 10 * min_n)
+    $$
+    \frac{L(N)}{L(N-1)} = \frac{N-M}{N-M-n+m} \cdot \frac{N-n}{N}
+    $$
 
-    # n을 바꿔 가며 가능도를 계산한다.
-    # **n은 모수이지 확률변수가 아니다.** 자료 (c, r, t)는 고정해 두고
-    # "어떤 n이 이 자료를 가장 그럴듯하게 만드는가"를 묻는 것이다.
-    probs = [prob(n, c, r, t) for n in ns]
+    을 얻는다. 이 비가 $1$ 이상인 조건을 정리한다. 분모가 양수인 범위에서
 
-    mle_idx = probs.index(max(probs))
-    mle_n = mle_idx + min_n
-    # 직관적인 답 c*r/t = 50*40/10 = 200 과 비교해 보라.
-    print(f"MLE of N: {mle_n}")
-    return list(ns), probs, mle_n
+    $$
+    (N-M)(N-n) \ge N(N-M-n+m)
+    $$
 
-ns, probs, mle_n = capture_recapture()
+    인데, 양변을 펼치면 $N^2$, $-MN$, $-Nn$ 항이 모두 지워지고
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(ns, probs, label='Likelihood')
-ax.axvline(mle_n, color='r', linestyle='--', label=f'MLE: N = {mle_n}')
-ax.set_xlabel('Population Size (N)')
-ax.set_ylabel('Probability')
-ax.set_title('Capture–Recapture: Likelihood vs Population Size')
-ax.legend()
-plt.show()
-```
+    $$
+    Mn \ge Nm, \qquad \text{곧} \qquad N \le \frac{Mn}{m}
+    $$
 
-출력:
+    만 남는다. 즉 $L$은 $N \le Mn/m$까지 오르다가 그 뒤로는 내려간다. 따라서
 
-```
-MLE of N: 199
-```
+    $$
+    \hat N = \left\lfloor \frac{Mn}{m} \right\rfloor
+    $$
 
-![Capture–Recapture: Likelihood vs Population Size](./img/statistics_as_rv_278.png)
+    이다. **비례식이 주는 $Mn/m$에 바닥함수가 붙는다**는 것이 요점이고, 그 까닭은 $N$이 정수라는 것 하나다.
 
-격자에서 찾은 답이 200이 아니라 199다. $N$이 정수라서 가능도가 계단처럼 값을 갖고, 그 꼭대기가 비례식이 주는 200 바로 옆에 놓이기 때문이다. 이런 어긋남은 모수가 이산일 때 흔하며, 비례식 $\hat N = Mn/m$은 정확한 최댓값이 아니라 그 근처를 가리키는 편리한 공식으로 보는 것이 맞다.
+    $Mn/m$이 정수일 때는 특별한 일이 일어난다. $N = Mn/m$에서 위 부등식이 **등호**가 되므로 비가 정확히 $1$, 곧
 
-곡선이 봉우리 주위에서 **아주 평평하다**는 점도 중요하다. $N$이 150이든 300이든 가능도가 크게 다르지 않다. 표시된 물고기 10마리라는 적은 정보로는 개체수를 정밀하게 못 맞힌다는 뜻이고, 실제 생태 조사에서 재포획 수를 늘리려 애쓰는 이유다.
+    $$
+    L\!\left(\frac{Mn}{m}\right) = L\!\left(\frac{Mn}{m} - 1\right)
+    $$
+
+    이다. 최대가능도추정값이 **둘**이고 가능도만으로는 어느 쪽도 고를 수 없다.
+
+    **(2) 수치적으로.** $M = 50$, $n = 40$, $m = 10$은 $Mn/m = 200$으로 나누어떨어지는 바로 그 경우다. 그러므로 $L(199) = L(200)$이고, 코드가 199를 찍는 것은 격자가 성겨서가 아니라 **동점이기 때문**이다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    from fractions import Fraction
+    from math import comb
+    from scipy import special
+
+    def prob(n, c, r, t):
+        """포획-재포획의 초기하확률.
+
+        n: 전체 개체수(우리가 추정하려는 미지수)
+        c: 1차에서 잡아 표시한 수
+        r: 2차에서 잡은 수
+        t: 2차에서 잡힌 것 중 표시가 있던 수
+
+        2차 표본 r마리를 고르는 모든 방법 중,
+        표시된 것 t마리와 안 된 것 r-t마리를 고르는 방법의 비율이다.
+        """
+        return special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
+
+    def exact_prob(n, c, r, t):
+        """같은 확률을 분수로 계산한다. 반올림이 끼어들지 않는다."""
+        return Fraction(comb(n - c, r - t) * comb(c, t), comb(n, r))
+
+    def capture_recapture(c=50, r=40, t=10):
+        # 가능한 최소 개체수. 표시된 50마리와 2차에서 새로 잡힌 30마리는
+        # 서로 다른 개체이므로 최소 50 + 40 - 10 = 80마리는 있어야 한다.
+        min_n = c + r - t
+        ns = range(min_n, 10 * min_n)
+
+        # n을 바꿔 가며 가능도를 계산한다.
+        # **n은 모수이지 확률변수가 아니다.** 자료 (c, r, t)는 고정해 두고
+        # "어떤 n이 이 자료를 가장 그럴듯하게 만드는가"를 묻는 것이다.
+        probs = [prob(n, c, r, t) for n in ns]
+
+        mle_idx = probs.index(max(probs))
+        mle_n = mle_idx + min_n
+        # (1) 에서 유도한 floor(c*r/t) 와 비교해 보라.
+        print(f"c={c}, r={r}, t={t}:  격자 최대점 = {mle_n},  floor(c*r/t) = {c * r // t}")
+        return list(ns), probs, mle_n
+
+    ns, probs, mle_n = capture_recapture()
+
+    # 199 와 200 의 가능도는 **정확히 같다.** 분수로 재면 드러난다.
+    print(f"정확한 L(199) == L(200) ? {exact_prob(199, 50, 40, 10) == exact_prob(200, 50, 40, 10)}")
+    print(f"부동소수점 L(199) - L(200) = {prob(199, 50, 40, 10) - prob(200, 50, 40, 10):+.3e}")
+
+    # t를 11로 바꾸면 c*r/t = 181.8... 이라 나누어떨어지지 않고 최대점이 하나뿐이다.
+    capture_recapture(c=50, r=40, t=11)
+
+    # 봉우리가 얼마나 평평한지 재 본다.
+    for n in (150, 200, 300, 400):
+        print(f"L({n}) / L(200) = {prob(n, 50, 40, 10) / prob(200, 50, 40, 10):.3f}")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.plot(ns, probs, label='Likelihood')
+    ax.axvline(mle_n, color='r', linestyle='--', label=f'MLE: N = {mle_n}')
+    ax.set_xlabel('Population Size (N)')
+    ax.set_ylabel('Probability')
+    ax.set_title('Capture–Recapture: Likelihood vs Population Size')
+    ax.legend()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    c=50, r=40, t=10:  격자 최대점 = 199,  floor(c*r/t) = 200
+    정확한 L(199) == L(200) ? True
+    부동소수점 L(199) - L(200) = +2.665e-15
+    c=50, r=40, t=11:  격자 최대점 = 181,  floor(c*r/t) = 181
+    L(150) / L(200) = 0.424
+    L(200) / L(200) = 1.000
+    L(300) / L(200) = 0.347
+    L(400) / L(200) = 0.071
+    ```
+
+    ![Capture–Recapture: Likelihood vs Population Size](./img/statistics_as_rv_278.png)
+
+    **199가 나온 까닭이 드러났다.** 분수로 재면 $L(199)$와 $L(200)$이 한 치도 다르지 않다. 그런데 부동소수점으로는 $199$ 쪽이 $2.7 \times 10^{-15}$만큼 크게 계산되었고, 설령 비트까지 같았더라도 `max()`와 `index()`는 앞쪽 값을 고르므로 결과는 역시 199였을 것이다. **이 어긋남은 수치의 오차가 아니라 동점이며, 동점이 생긴다는 사실 자체가 (1)의 유도가 예측한 바다.**
+
+    $m$을 11로 바꾸면 $Mn/m = 181.82$라 나누어떨어지지 않고, 격자가 찾은 답 181이 $\lfloor 181.82 \rfloor = 181$과 정확히 맞는다. 바닥함수가 제 몫을 하는 경우다.
+
+    곡선이 봉우리 주위에서 **아주 평평하다**는 점도 중요하다. $N$을 150으로 줄이거나 300으로 늘려도 가능도가 최댓값의 $0.42$배, $0.35$배로 남는다. 표시된 물고기 10마리라는 적은 정보로는 개체수를 정밀하게 못 맞힌다는 뜻이고, 실제 생태 조사에서 재포획 수를 늘리려 애쓰는 이유다.
 
 연습문제에서는 이 절차를 직접 밟아 본다. 포획–재포획과 베르누이·정규의 최대가능도를 손으로 유도하고, 불편성과 일치성이 어떻게 다른지, 그리고 불편성을 포기하면 오히려 오차가 줄어드는 경우가 있는지까지 따져 본다.
 
@@ -496,7 +652,7 @@ MLE of N: 199
 ??? success "풀이"
     (a) $P(m \mid N) = \binom{M}{m} \binom{N - M}{n - m} / \binom{N}{n}$이며 초기하분포이다. 주어진 값을 넣으면 $P(N) = \binom{50}{10}\binom{N-50}{30}/\binom{N}{40}$.
 
-    (b) 로그가능도를 미분하여 풀면 $\hat N = Mn/m = 50 \cdot 40 / 10 = 200$. 이 MLE는 "(모집단에서 표시된 수) × (잡은 총 수) / (잡힌 표시된 수)"라는 직관적인 형태이며, 비례 추론에 해당한다.
+    (b) $N$은 **정수 모수**라 미분할 수 없다. 가능도비 $L(N)/L(N-1)$을 따지면 $N \le Mn/m$까지 오르다가 내려가므로 $\hat N = \lfloor Mn/m \rfloor$이다(보기 3). 여기서는 $Mn/m = 50 \cdot 40 / 10 = 200$이 정수라 $L(199) = L(200)$인 **동점**이고, 둘 다 최대가능도추정값이다. 이 추정량은 "(표시된 수) × (잡은 총 수) / (잡힌 표시된 수)"라는 비례 추론에 해당한다.
 
     포획–재포획은 야생동물 개체수 추정의 기본 방법이다. 변형(폐쇄/개방 모집단, 여러 번의 재포획, 표지 손실)을 통해 풍부한 추정량 계열이 만들어진다.
 
@@ -713,7 +869,7 @@ MLE of N: 199
 
     은 $E[\hat\sigma^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$로 편향되어 있다. 그러나 편향이 $-\sigma^2/n \to 0$이고 분산도 0으로 가므로 $\hat\sigma^2_{\text{MLE}} \xrightarrow{p} \sigma^2$이다. 일치추정량이다.
 
-    다른 예로 연습문제 1의 포획-재포획 추정량 $\hat N = Mn/m$도 유한표본에서 편향되어 있지만 일치이다.
+    다른 예로 포획-재포획 추정량 $\hat N = Mn/m$은 일치이지만 **기댓값이 아예 존재하지 않는다.** $P(m = 0) > 0$이라 $Mn/m$이 정의되지 않는 표본이 양의 확률로 나오기 때문이다($M = 50$, $n = 40$, $N = 200$에서 $P(m=0) \approx 2.2 \times 10^{-6}$). 편향을 따지기 전에 기댓값부터 없는 셈이며, 분모에 $1$을 더한 채프먼 추정량 $\hat N_C = (M+1)(n+1)/(m+1) - 1$을 쓰는 까닭이 그것이다.
 
     **정리.** 두 성질은 서로 독립적이다.
 

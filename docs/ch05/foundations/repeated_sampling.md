@@ -40,74 +40,123 @@
 
 ## 평평한 모집단에서 시작한다
 
+가장 치우침이 없는 모집단부터 본다. 0과 1 사이에 고르게 퍼진 균등분포다.
+
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 균등 모집단에서 반복추출
+**보기 1.** <span class="diff easy" title="쉬움"></span> 균등 모집단에서 반복추출. $\text{Uniform}(0,1)$에서 뽑아 만든 모집단 1만 개에서 $n = 5$씩 비복원으로 뽑아 표본평균을 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** $\bar X$의 평균과 표준편차가 얼마가 되어야 하는지 이론으로 적으시오.
+
+**(2)** 모의실험으로 (1)을 확인하고, 맨 아래 칸의 히스토그램이 왜 모집단처럼 평평하지 않은지 설명하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
-np.random.seed(1)
+    **(1) 이론값.** $\text{Uniform}(0,1)$은 $\mu = 1/2$이고
 
-# 모집단 크기, 표본크기, 반복 횟수를 정한다.
-sample_size = 5        # Size of a single random sample
-n_samples = 10_000     # Number of samples to draw for the sampling distribution
-n_population = 10_000  # Size of the population to simulate
+    $$
+    \sigma^2 = \frac{1}{12}, \qquad \sigma = \frac{1}{\sqrt{12}} = 0.28868
+    $$
 
-def plot_distributions():
-    """
-    Generates a plot showing the population distribution, sample distribution,
-    and sampling distribution.
-    """
-    # 균등분포에서 큰 모집단을 만든다. 1만 개면 사실상 무한 모집단으로 본다.
-    population = np.random.uniform(size=(n_population,))
+    이다. $\bar X$의 중심과 폭은 모집단의 **모양과 무관하게** 정해진다.
 
-    # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
-    single_sample = np.random.choice(population, size=sample_size, replace=False)
+    $$
+    E[\bar X] = \mu = 0.5, \qquad
+    \operatorname{sd}(\bar X) = \frac{\sigma}{\sqrt{n}} = \frac{1}{\sqrt{60}} = 0.12910
+    $$
 
-    # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
-    sample_means = [
-        np.mean(np.random.choice(population, size=sample_size, replace=False))
-        for _ in range(n_samples)
-    ]
+    비복원으로 뽑으므로 엄밀하게는 유한모집단 수정이 붙지만 $\sqrt{(10000-5)/9999} = 0.9998$이라 보이지 않는다.
 
-    # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
-    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+    모양은 다르다. 균등분포는 왜도가 0이라 $\bar X$도 대칭이고, 다섯 개의 합은 어윈-홀 분포(4차 조각별 다항식)여서 $n = 5$만으로도 이미 종 모양에 가깝다. 아래 연습문제 4가 이 분포를 정규근사와 견준다.
 
-    # 첫째 칸: 모집단의 모양.
-    ax0.hist(population, bins=np.linspace(0, 1, 100))
-    ax0.set_title('Population Distribution', fontsize=20)
+    **(2) 모의실험.**
 
-    # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
-    ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
-    ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
 
-    # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
-    ax2.hist(sample_means, bins=np.linspace(0, 1, 100))
-    ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
+    # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
+    np.random.seed(1)
 
-    # 축 이름과 간격을 다듬는다.
-    for ax in (ax0, ax1, ax2):
-        ax.spines['left'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        ax.spines['bottom'].set_position('zero')
-        ax.set_yticks([])
+    # 모집단 크기, 표본크기, 반복 횟수를 정한다.
+    sample_size = 5        # Size of a single random sample
+    n_samples = 10_000     # Number of samples to draw for the sampling distribution
+    n_population = 10_000  # Size of the population to simulate
 
-    plt.tight_layout()
-    plt.show()
+    def plot_distributions():
+        """
+        Generates a plot showing the population distribution, sample distribution,
+        and sampling distribution.
+        """
+        # 균등분포에서 큰 모집단을 만든다. 1만 개면 사실상 무한 모집단으로 본다.
+        population = np.random.uniform(size=(n_population,))
 
-if __name__ == "__main__":
-    plot_distributions()
-```
+        # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
+        single_sample = np.random.choice(population, size=sample_size, replace=False)
 
-![Population Distribution](./img/repeated_sampling_61.png)
+        # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
+        sample_means = [
+            np.mean(np.random.choice(population, size=sample_size, replace=False))
+            for _ in range(n_samples)
+        ]
 
-세 칸을 위에서 아래로 훑어보라. 모집단은 0과 1 사이에 고르게 퍼진 평평한 모양이고, 가운데의 표본 다섯 개도 그 구간 아무 데나 흩어져 있다. 그런데 맨 아래 칸의 표본평균들은 평평하지도 않고 넓지도 않다. 종 모양이며 0.5 언저리에 훨씬 좁게 모여 있다. 모집단에서 물려받지 않은 모양이 통계량의 층에서 새로 생겨난 것이고, 중심극한정리를 미리 엿보는 셈이다.
+        # 이론값과 모의값을 나란히 둔다. 비복원으로 뽑으므로 직접 겨냥하는 것은
+        # Uniform(0,1) 자체가 아니라 **실현된 유한모집단 1만 개**의 평균과 표준편차다.
+        mu_pop, sd_pop = population.mean(), population.std()
+        se = sd_pop / np.sqrt(sample_size)
+        print(f"Uniform(0,1) 이론   평균 = 0.5000,  sigma/sqrt(n) = {1 / np.sqrt(12 * sample_size):.4f}")
+        print(f"실현 모집단 1만 개  평균 = {mu_pop:.4f},  s/sqrt(n)     = {se:.4f}")
+        print(f"모의 1만 회         평균 = {np.mean(sample_means):.4f},  표준편차      = {np.std(sample_means, ddof=1):.4f}")
+        print(f"모의 평균의 몬테카를로 오차 = {se / np.sqrt(n_samples):.4f}")
+
+        # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
+        fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+
+        # 첫째 칸: 모집단의 모양.
+        ax0.hist(population, bins=np.linspace(0, 1, 100))
+        ax0.set_title('Population Distribution', fontsize=20)
+
+        # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
+        ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
+        ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
+
+        # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
+        ax2.hist(sample_means, bins=np.linspace(0, 1, 100))
+        ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
+
+        # 축 이름과 간격을 다듬는다.
+        for ax in (ax0, ax1, ax2):
+            ax.spines['left'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['top'].set_visible(False)
+            ax.spines['bottom'].set_position('zero')
+            ax.set_yticks([])
+
+        plt.tight_layout()
+        plt.show()
+
+    if __name__ == "__main__":
+        plot_distributions()
+    ```
+
+    출력:
+
+    ```
+    Uniform(0,1) 이론   평균 = 0.5000,  sigma/sqrt(n) = 0.1291
+    실현 모집단 1만 개  평균 = 0.4980,  s/sqrt(n)     = 0.1287
+    모의 1만 회         평균 = 0.4993,  표준편차      = 0.1268
+    모의 평균의 몬테카를로 오차 = 0.0013
+    ```
+
+    ![Population Distribution](./img/repeated_sampling_61.png)
+
+    **세 줄을 세로로 읽는 것이 요령이다.** 가운데 줄이 왜 따로 있는지부터 보자. 모집단은 $\text{Uniform}(0,1)$ 자체가 아니라 거기서 뽑아 **실현된 1만 개**이고, 그 평균이 $0.4980$으로 $0.5$에서 조금 비껴나 있다. 1만 개를 뽑을 때의 표집오차가 $\sigma/\sqrt{10000} = 0.0029$이므로 $0.7$ 표집오차만큼 어긋난 것이다. 비복원추출의 $\bar X$가 겨냥하는 것은 이 $0.4980$이지 $0.5$가 아니다.
+
+    셋째 줄이 둘째 줄을 재현하는지 보면 된다. 모의 평균 $0.4993$은 $0.4980$에서 몬테카를로 오차 $0.0013$의 1배만큼 떨어져 있어 잘 맞는다. 모의 표준편차 $0.1268$은 이론값 $0.1287$보다 $1.4\%$ 작은데, 표준편차 자체의 몬테카를로 오차가 대략 $\mathrm{SE}/\sqrt{2B} = 0.0009$이므로 두 배쯤 어긋난 셈이다. 되풀이를 5만 번으로 늘리면 $0.1290$, 20만 번으로 늘리면 $0.1286$이 되어 이론값으로 수렴한다. **체계적 차이가 아니라 몬테카를로 오차다.**
+
+    그림의 세 칸을 위에서 아래로 훑어보라. 모집단은 0과 1 사이에 고르게 퍼진 평평한 모양이고, 가운데의 표본 다섯 개도 그 구간 아무 데나 흩어져 있다. 그런데 맨 아래 칸의 표본평균들은 평평하지도 않고 넓지도 않다. 종 모양이며 $0.5$ 언저리에 $\sqrt{5} = 2.24$배 좁게 모여 있다. **모집단에서 물려받지 않은 모양이 통계량의 층에서 새로 생겨난 것**이고, 중심극한정리를 미리 엿보는 셈이다.
 
 ## 치우친 모집단에서도 같은 일이 일어난다
 
@@ -115,73 +164,118 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 지수 모집단에서 반복추출
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수 모집단에서 반복추출. $\text{Exp}(1)$에서 뽑아 만든 모집단 1만 개에서 $n = 30$씩 비복원으로 뽑아 표본평균을 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** $\bar X$의 평균, 표준편차, **왜도**가 각각 얼마가 되어야 하는지 이론으로 적으시오.
+
+**(2)** 모의실험으로 확인하고, $n = 30$에서 중심극한정리가 "끝났다"고 말할 수 있는지 판정하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
-np.random.seed(1)
+    **(1) 이론값.** $\text{Exp}(1)$은 $\mu = 1$, $\sigma = 1$이므로
 
-# 모집단 크기, 표본크기, 반복 횟수를 정한다.
-sample_size = 30
-n_samples = 10_000
-n_population = 10_000
+    $$
+    E[\bar X] = 1, \qquad
+    \operatorname{sd}(\bar X) = \frac{1}{\sqrt{30}} = 0.18257
+    $$
 
-def plot_distributions():
-    """
-    Generates a plot showing the population distribution, sample distribution,
-    and sampling distribution for an exponential population.
-    """
-    # 지수분포에서 큰 모집단을 만든다. 오른쪽으로 길게 늘어진 모양이다.
-    population = stats.expon().rvs((n_population,))
+    이다. 치우친 모집단이어도 이 두 값은 균등 때와 똑같은 공식에서 나온다. **중심과 폭은 모집단의 모양을 전혀 보지 않는다.**
 
-    # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
-    single_sample = np.random.choice(population, size=sample_size, replace=False)
+    달라지는 것은 모양이다. 독립인 합의 3차 중심적률은 더해지고 분산도 더해지므로 왜도는 $\sqrt{n}$으로 줄어든다(아래 연습문제 9).
 
-    # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
-    sample_means = [
-        np.mean(np.random.choice(population, size=sample_size, replace=False))
-        for _ in range(n_samples)
-    ]
+    $$
+    \text{왜도}(\bar X) = \frac{\text{왜도}(X)}{\sqrt{n}} = \frac{2}{\sqrt{30}} = 0.36515
+    $$
 
-    # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
-    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+    $0$이 아니다. 정규분포라면 왜도가 0이어야 하므로, $n = 30$에서 치우침이 **줄기는 했으나 사라지지는 않았다**는 예측이다.
 
-    # 첫째 칸: 모집단의 모양.
-    _, bins, _ = ax0.hist(population, bins=100)
-    ax0.set_title('Population Distribution', fontsize=20)
+    **(2) 모의실험.**
 
-    # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
-    ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
-    ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
 
-    # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
-    ax2.hist(sample_means, bins=bins)
-    ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
+    # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
+    np.random.seed(1)
 
-    # 축 이름과 간격을 다듬는다.
-    for ax in (ax0, ax1, ax2):
-        ax.spines['left'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        ax.spines['bottom'].set_position('zero')
-        ax.set_yticks([])
+    # 모집단 크기, 표본크기, 반복 횟수를 정한다.
+    sample_size = 30
+    n_samples = 10_000
+    n_population = 10_000
 
-    plt.tight_layout()
-    plt.show()
+    def plot_distributions():
+        """
+        Generates a plot showing the population distribution, sample distribution,
+        and sampling distribution for an exponential population.
+        """
+        # 지수분포에서 큰 모집단을 만든다. 오른쪽으로 길게 늘어진 모양이다.
+        population = stats.expon().rvs((n_population,))
 
-if __name__ == "__main__":
-    plot_distributions()
-```
+        # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
+        single_sample = np.random.choice(population, size=sample_size, replace=False)
 
-![Population Distribution](./img/repeated_sampling_124.png)
+        # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
+        sample_means = [
+            np.mean(np.random.choice(population, size=sample_size, replace=False))
+            for _ in range(n_samples)
+        ]
 
-맨 위 칸의 모집단은 0 근처에 몰려 있고 오른쪽으로 꼬리가 길게 뻗어 누가 보아도 정규분포와 거리가 멀다. 그런데 $n = 30$에서 표본평균들은 다시 근사적으로 정규분포다. 치우친 모집단에서 출발했는데도 통계량의 층에서는 치우침이 대부분 씻겨 나갔다. 중심극한정리가 작동하는 모습이 이것이다.
+        # 중심·폭·모양을 한 줄씩 맞춰 본다. 기준은 실현된 유한모집단이다.
+        mu_pop, sd_pop = population.mean(), population.std()
+        se = sd_pop / np.sqrt(sample_size)
+        sk_pop = stats.skew(population)
+        print(f"Exp(1) 이론        평균 = 1.0000,  sigma/sqrt(n) = {1 / np.sqrt(sample_size):.4f},  왜도 = {2 / np.sqrt(sample_size):.4f}")
+        print(f"실현 모집단 1만 개 평균 = {mu_pop:.4f},  s/sqrt(n)     = {se:.4f},  왜도 = {sk_pop / np.sqrt(sample_size):.4f}")
+        print(f"모의 1만 회        평균 = {np.mean(sample_means):.4f},  표준편차      = {np.std(sample_means, ddof=1):.4f},  왜도 = {stats.skew(sample_means):.4f}")
+
+        # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
+        fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+
+        # 첫째 칸: 모집단의 모양.
+        _, bins, _ = ax0.hist(population, bins=100)
+        ax0.set_title('Population Distribution', fontsize=20)
+
+        # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
+        ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
+        ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
+
+        # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
+        ax2.hist(sample_means, bins=bins)
+        ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
+
+        # 축 이름과 간격을 다듬는다.
+        for ax in (ax0, ax1, ax2):
+            ax.spines['left'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['top'].set_visible(False)
+            ax.spines['bottom'].set_position('zero')
+            ax.set_yticks([])
+
+        plt.tight_layout()
+        plt.show()
+
+    if __name__ == "__main__":
+        plot_distributions()
+    ```
+
+    출력:
+
+    ```
+    Exp(1) 이론        평균 = 1.0000,  sigma/sqrt(n) = 0.1826,  왜도 = 0.3651
+    실현 모집단 1만 개 평균 = 0.9885,  s/sqrt(n)     = 0.1791,  왜도 = 0.3505
+    모의 1만 회        평균 = 0.9869,  표준편차      = 0.1776,  왜도 = 0.3347
+    ```
+
+    ![Population Distribution](./img/repeated_sampling_124.png)
+
+    세 줄이 줄줄이 맞는다. 모의 평균 $0.9869$는 실현 모집단의 $0.9885$에서 몬테카를로 오차 $0.0018$의 0.9배만큼 떨어져 있고, 모의 표준편차 $0.1776$도 $0.1791$과 $0.8\%$ 안에서 맞는다. 명목 이론값 $1.0000$과 $0.1826$에서 비껴난 것은 모집단 1만 개를 뽑을 때 들어온 표집오차 $1/\sqrt{10000} = 0.01$ 때문이며, $0.9885$는 그 오차의 1.2배 안에 있다.
+
+    **왜도가 이 보기의 알맹이다.** 모집단의 왜도가 $1.92$였으니 이론은 $1.92/\sqrt{30} = 0.3505$를 예측했고, 모의값은 $0.3347$이 나왔다. 왜도 추정의 몬테카를로 오차가 대략 $\sqrt{6/B} = 0.0245$이므로 $0.65$ 표준오차 차이다. **예측이 맞았다.**
+
+    맨 위 칸의 모집단은 0 근처에 몰려 있고 오른쪽으로 꼬리가 길게 뻗어 누가 보아도 정규분포와 거리가 멀다. 맨 아래 칸의 표본평균들은 겉보기에 종 모양이다. 치우침이 $1.92$에서 $0.33$으로 여섯 배 가까이 씻겨 나갔다. 그러나 **$0$은 아니다.** 눈으로는 정규분포와 구별되지 않아도 꼬리에서는 여전히 어긋나며, 그 어긋남이 신뢰구간의 포함률에 어떻게 나타나는지를 아래 연습문제 9가 다룬다. $n = 30$은 중심극한정리가 작동하기 시작한 지점이지 끝난 지점이 아니다.
 
 ## 값이 둘뿐인 모집단에서도 마찬가지다
 
@@ -189,73 +283,127 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 베르누이 모집단에서 반복추출
+**보기 3.** <span class="diff easy" title="쉬움"></span> 베르누이 모집단에서 반복추출. $\text{Bernoulli}(0.3)$에서 뽑아 만든 모집단 1만 개에서 $n = 30$씩 비복원으로 뽑아 표본평균을 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** $\bar X$의 평균, 표준편차, 왜도를 이론으로 적고, $\bar X$가 **가질 수 있는 값**이 무엇인지 쓰시오.
+
+**(2)** 모의실험으로 확인하고, 앞의 두 보기와 달리 끝까지 남는 것이 무엇인지 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
-np.random.seed(1)
+    **(1) 이론값.** $\text{Bernoulli}(p)$는 $\mu = p$, $\sigma^2 = p(1-p)$이므로 $p = 0.3$에서 $\sigma = \sqrt{0.21} = 0.45826$이고
 
-# 모집단 크기, 표본크기, 반복 횟수를 정한다.
-sample_size = 30
-n_samples = 10_000
-n_population = 10_000
+    $$
+    E[\bar X] = 0.3, \qquad
+    \operatorname{sd}(\bar X) = \sqrt{\frac{p(1-p)}{n}} = \sqrt{\frac{0.21}{30}} = 0.08367
+    $$
 
-def plot_distributions():
-    """
-    Generates a plot showing the population distribution, sample distribution,
-    and sampling distribution for a Bernoulli population.
-    """
-    # 베르누이 모집단을 만든다. 값은 0과 1 둘뿐이다.
-    population = stats.binom(n=1, p=0.3).rvs((n_population,))
+    이다. 베르누이의 왜도는
 
-    # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
-    single_sample = np.random.choice(population, size=sample_size, replace=False)
+    $$
+    \text{왜도}(X) = \frac{1-2p}{\sqrt{p(1-p)}} = \frac{0.4}{0.45826} = 0.87287
+    $$
 
-    # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
-    sample_means = [
-        np.mean(np.random.choice(population, size=sample_size, replace=False))
-        for _ in range(n_samples)
-    ]
+    이므로 $\text{왜도}(\bar X) = 0.87287/\sqrt{30} = 0.15936$이다. 지수 때의 $0.365$보다 작으니 모양은 더 빨리 정규에 다가간다.
 
-    # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
-    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+    그런데 **모집단의 성질 하나는 공식으로 지워지지 않는다.** 표본 30개가 모두 0 아니면 1이므로 그 합이 $0, 1, \dots, 30$ 중 하나이고, 따라서
 
-    # 첫째 칸: 모집단의 모양.
-    _, bins, _ = ax0.hist(population, bins=100)
-    ax0.set_title('Population Distribution', fontsize=20)
+    $$
+    \bar X \in \left\{\frac{0}{30}, \frac{1}{30}, \frac{2}{30}, \dots, \frac{30}{30}\right\}
+    $$
 
-    # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
-    ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
-    ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
+    이다. 가질 수 있는 값이 31개뿐인 **이산**확률변수다. 정규분포는 연속이므로 이 점에서는 아무리 $n$을 키워도 둘이 같아지지 않는다.
 
-    # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
-    ax2.hist(sample_means, bins=10)
-    ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
+    **(2) 모의실험.**
 
-    # 축 이름과 간격을 다듬는다.
-    for ax in (ax0, ax1, ax2):
-        ax.spines['left'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        ax.spines['bottom'].set_position('zero')
-        ax.set_yticks([])
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
 
-    plt.tight_layout()
-    plt.show()
+    # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
+    np.random.seed(1)
 
-if __name__ == "__main__":
-    plot_distributions()
-```
+    # 모집단 크기, 표본크기, 반복 횟수를 정한다.
+    sample_size = 30
+    n_samples = 10_000
+    n_population = 10_000
 
-![Population Distribution](./img/repeated_sampling_188.png)
+    def plot_distributions():
+        """
+        Generates a plot showing the population distribution, sample distribution,
+        and sampling distribution for a Bernoulli population.
+        """
+        # 베르누이 모집단을 만든다. 값은 0과 1 둘뿐이다.
+        population = stats.binom(n=1, p=0.3).rvs((n_population,))
 
-위 칸의 모집단은 막대 두 개가 전부이고, 가운데 칸의 표본 30개도 0 아니면 1이라 점이 두 자리에만 겹쳐 찍힌다. 그런데 아래 칸의 표본평균들은 0.3 근처에 종 모양으로 모여 있다. 여기서도 모집단의 모양은 사라졌다. 다만 표본평균이 가질 수 있는 값이 $0/30, 1/30, 2/30, \dots$뿐이라 히스토그램이 여전히 띄엄띄엄하다. 모집단에서 물려받은 **이산성**만은 끝까지 남는 것이며, 5.5절에서 $\hat p$를 다룰 때 다시 문제가 된다.
+        # 모집단에서 표본 하나를 뽑는다. 가운데 패널에 그릴 자료다.
+        single_sample = np.random.choice(population, size=sample_size, replace=False)
+
+        # 같은 일을 여러 번 되풀이하며 그때마다 표본평균을 기록한다.
+        sample_means = [
+            np.mean(np.random.choice(population, size=sample_size, replace=False))
+            for _ in range(n_samples)
+        ]
+
+        # 중심·폭·모양에 더해, 표본평균이 실제로 어떤 값들을 가졌는지도 센다.
+        mu_pop, sd_pop = population.mean(), population.std()
+        se = sd_pop / np.sqrt(sample_size)
+        sk_pop = stats.skew(population)
+        print(f"Bernoulli(0.3) 이론 평균 = 0.3000,  sigma/sqrt(n) = {np.sqrt(0.3 * 0.7 / sample_size):.4f},  왜도 = {0.4 / np.sqrt(0.21) / np.sqrt(sample_size):.4f}")
+        print(f"실현 모집단 1만 개  평균 = {mu_pop:.4f},  s/sqrt(n)     = {se:.4f},  왜도 = {sk_pop / np.sqrt(sample_size):.4f}")
+        print(f"모의 1만 회         평균 = {np.mean(sample_means):.4f},  표준편차      = {np.std(sample_means, ddof=1):.4f},  왜도 = {stats.skew(sample_means):.4f}")
+        ks = np.unique(np.round(np.array(sample_means) * sample_size).astype(int))
+        print(f"표본평균이 실제로 가진 값은 k/30 꼴,  k = {ks.min()} .. {ks.max()} 의 {len(ks)}가지")
+
+        # 세 칸을 위아래로 놓는다. 모집단 → 표본 하나 → 표집분포 순이다.
+        fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+
+        # 첫째 칸: 모집단의 모양.
+        _, bins, _ = ax0.hist(population, bins=100)
+        ax0.set_title('Population Distribution', fontsize=20)
+
+        # 둘째 칸: 표본 하나를 점으로 흩뿌린다.
+        ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
+        ax1.set_title(f'Sample Distribution of {sample_size} Samples', fontsize=20)
+
+        # 셋째 칸: 표본평균들의 히스토그램, 곧 표집분포다.
+        ax2.hist(sample_means, bins=10)
+        ax2.set_title('Sampling Distribution of $\\bar{X}$', fontsize=20)
+
+        # 축 이름과 간격을 다듬는다.
+        for ax in (ax0, ax1, ax2):
+            ax.spines['left'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['top'].set_visible(False)
+            ax.spines['bottom'].set_position('zero')
+            ax.set_yticks([])
+
+        plt.tight_layout()
+        plt.show()
+
+    if __name__ == "__main__":
+        plot_distributions()
+    ```
+
+    출력:
+
+    ```
+    Bernoulli(0.3) 이론 평균 = 0.3000,  sigma/sqrt(n) = 0.0837,  왜도 = 0.1594
+    실현 모집단 1만 개  평균 = 0.2951,  s/sqrt(n)     = 0.0833,  왜도 = 0.1640
+    모의 1만 회         평균 = 0.2953,  표준편차      = 0.0831,  왜도 = 0.1288
+    표본평균이 실제로 가진 값은 k/30 꼴,  k = 1 .. 18 의 18가지
+    ```
+
+    ![Population Distribution](./img/repeated_sampling_188.png)
+
+    **여기서 가운데 줄의 구실이 가장 또렷하게 드러난다.** 모의 평균은 $0.2953$으로 명목값 $0.3$이 아니라 실현 모집단의 $0.2951$과 맞는다. 모의 평균의 몬테카를로 오차가 $0.0833/\sqrt{10000} = 0.0008$이므로 $0.2951$에서는 $0.3$ 표준오차, $0.3$에서는 $6$ 표준오차 떨어져 있다. 모집단 1만 개를 만들 때 1이 $3000$개가 아니라 $2951$개 나왔고, 비복원추출의 $\bar X$는 그 $0.2951$을 겨냥한다. 어긋남의 크기 $0.0049$는 모집단을 만들 때의 표집오차 $\sqrt{0.21/10000} = 0.0046$으로 정확히 설명된다. 표준편차는 $0.0831$로 예측값 $0.0833$과 거의 같고, 왜도는 $0.1288$로 예측값 $0.1640$에서 왜도의 몬테카를로 오차($\approx 0.0245$)의 $1.4$배만큼 떨어져 있다.
+
+    위 칸의 모집단은 막대 두 개가 전부이고, 가운데 칸의 표본 30개도 0 아니면 1이라 점이 두 자리에만 겹쳐 찍힌다. 그런데 아래 칸의 표본평균들은 $0.3$ 근처에 종 모양으로 모여 있다. 여기서도 모집단의 모양은 사라졌다.
+
+    **끝까지 남는 것은 이산성이다.** 1만 번을 돌렸는데 표본평균이 가진 서로 다른 값은 $k/30$ 꼴로 $k = 1$부터 $18$까지 18가지뿐이었다. 그래서 히스토그램이 매끄러운 곡선이 아니라 띄엄띄엄한 막대로 남는다. 평균과 분산과 왜도는 공식이 다스리지만 **값이 놓일 자리는 모집단이 정하며, 중심극한정리는 그것까지 씻어 내지 못한다.** 5.5절에서 $\hat p$의 신뢰구간을 다룰 때 이 이산성이 포함률을 들쭉날쭉하게 만드는 범인으로 다시 나타난다.
 
 ## 유한모집단에서는 근사가 아니라 정확히 셀 수 있다
 
