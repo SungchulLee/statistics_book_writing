@@ -2,7 +2,7 @@
 
 ## 개요
 
-통계적 추론에서 가장 중요한 구분은 **모수(parameter)** — 모집단을 기술하는, 고정되어 있지만 알려지지 않은 양 — 와 **통계량(statistic)** — 표본에서 계산되어 그 모수의 추정값 역할을 하는 양 — 사이의 구분이다. 이 책의 모든 신뢰구간, 가설검정, 회귀계수가 이 구분 위에 서 있다. 이를 잊으면 응용 실무에서 가장 흔한 두 가지 오류를 범하게 된다. 하나는 표본에서 얻은 양을 마치 정확히 아는 값인 것처럼 다루는 것(추정 불확실성을 무시하는 것)이고, 다른 하나는 모수가 확률분포를 갖는 것처럼 다루는 것(베이즈 방법으로만 해소되는 빈도주의적 오류)이다.
+통계적 추론에서 가장 중요한 구분은 **모수(parameter)** — 모집단을 기술하는, 고정되어 있지만 알려지지 않은 양 — 와 **통계량(statistic)** — 표본에서 계산되어 그 모수를 추정하는 데 쓰이는 양 — 사이의 구분이다. 이 책의 모든 신뢰구간, 가설검정, 회귀계수가 이 구분 위에 서 있다. 이를 잊으면 응용 실무에서 가장 흔한 두 가지 오류를 범하게 된다. 하나는 표본에서 얻은 양을 마치 정확히 아는 값인 것처럼 다루는 것(추정 불확실성을 무시하는 것)이고, 다른 하나는 모수가 확률분포를 갖는 것처럼 다루는 것(베이즈 방법으로만 해소되는 빈도주의적 오류)이다.
 
 <div class="defn" markdown>
 
@@ -11,13 +11,27 @@
 | 용어 | 범위 | 표기(대표적) | 알려져 있는가? |
 |---|---|---|---|
 | **모수** | 모집단 | $\mu,\; \sigma^2,\; p,\; \beta,\; \rho$ | 대개 미지 |
-| **통계량** | 표본 | $\bar{x},\; s^2,\; \hat{p},\; \hat{\beta},\; r$ | 자료로부터 계산 가능 |
+| **통계량** | 표본 | $\bar{X},\; S^2,\; \hat{p},\; \hat{\beta},\; r$ | 자료로부터 계산 가능 |
 
 **모수**는 모집단의 고정된 수치적 특성이다. 예를 들어 NYSE 상장 주식 전체의 진짜 연평균 수익률이 그렇다. **통계량**은 표본에서 계산한 대응되는 양이다. 예를 들어 무작위로 고른 NYSE 주식 50종목의 평균 수익률이 그렇다. 모수는 알고 싶은 것이고, 통계량은 손에 쥔 것이다.
 
-표준 관례는 모수에는 그리스 문자를, 그 추정량에는 로마자(흔히 모자 $\hat{}$ 를 씌워서)를 쓰는 것이다. 베이즈 방법은 모수를 사전분포를 갖는 확률변수로 다루어 이 관례를 완화하지만, 이 책의 대부분을 차지하는 빈도주의 관점에서 모수는 우리가 알아내려 하는 고정된 상수다.
+표준 관례는 모수에는 그리스 문자를, 그 추정량에는 라틴 문자(흔히 모자 $\hat{}$ 를 씌워서)를 쓰는 것이다. 여기에 관례 하나가 더 붙는다. **표본을 뽑기 전의 통계량은 확률변수이므로 대문자**($\bar X$, $S^2$)로, **뽑은 뒤 손에 쥔 수 하나는 소문자**($\bar x$, $s^2$)로 쓴다. 표본상관계수만은 관례상 소문자 $r$로 적는 일이 많다. 베이즈 방법은 모수를 사전분포를 갖는 확률변수로 다루어 첫 관례를 완화하지만, 이 책의 대부분을 차지하는 빈도주의 관점에서 모수는 우리가 알아내려 하는 고정된 상수다.
 
 </div>
+
+## 모수 · 추정량 · 추정값
+
+"통계량"이라는 한 낱말 안에 실은 성격이 다른 두 가지가 들어 있다. 계산 **규칙**과 그 규칙이 뱉어낸 **수 하나**다. 모수까지 넣어 셋을 한 번에 갈라 두면 뒤의 모든 논의가 깔끔해진다.
+
+| 낱말 | 무엇인가 | 기호 | 표본이 바뀌면 |
+|:---|:---|:---|:---|
+| **모수** (parameter) | 모집단이 가진 고정된 수. 알고 싶은 것 | $\theta,\; \mu,\; \sigma^2$ | 변하지 않는다 |
+| **추정량** (estimator) | 자료를 받아 수를 내놓는 **함수**, 곧 계산 규칙 | $\hat\theta(\cdot),\; \bar X$ | 규칙은 그대로다 |
+| **추정값** (estimate) | 그 규칙에 자료를 넣어 실제로 나온 **수 하나** | $\hat\theta(\mathbf x),\; \bar x = 68.3$ | 값이 바뀐다 |
+
+**추정량은 확률변수이고 추정값은 수다.** 대문자와 소문자를 갈라 쓰는 이유가 정확히 이것이다. "표본평균의 분포"라고 말할 때는 추정량을 가리키고 "표본평균이 $68.3$"이라고 말할 때는 추정값을 가리킨다. 분포를 갖는 것은 앞의 것뿐이다.
+
+통계량과 추정량의 관계도 여기서 정해진다. 자료로부터 계산할 수만 있으면 무엇이든 **통계량**이고, 그중 **특정 모수를 겨냥해 쓰는 것**을 그 모수의 **추정량**이라 부른다. $\bar X$는 그 자체로는 통계량이지만 $\mu$를 알아내려는 뜻으로 쓸 때는 $\mu$의 추정량이다. 같은 양을 무엇이라 부를지는 쓰임새가 정한다. 이 세 낱말은 [5.1절 확률변수로서의 통계량](../../ch05/foundations/statistics_as_rv.md)이 그림과 함께 다시 다룬다.
 
 ## 이 구분이 중요한 이유
 
@@ -35,23 +49,23 @@
 ### 평균
 
 $$
-\text{Parameter: } \mu = \frac{1}{N}\sum_{i=1}^{N} x_i \qquad\longleftrightarrow\qquad \text{Statistic: } \bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i
+\text{모수: } \mu = \frac{1}{N}\sum_{i=1}^{N} x_i \qquad\longleftrightarrow\qquad \text{통계량: } \bar{X} = \frac{1}{n}\sum_{i=1}^{n} X_i
 $$
 
-표본이 모집단에서 i.i.d.로 뽑혔을 때 $\bar{x}$는 불편이고($\mathbb{E}[\bar{x}] = \mu$) 분산은 $\mathrm{Var}(\bar{x}) = \sigma^2 / n$이다. 표준오차 $\sigma / \sqrt{n}$은 초급 추론에서 가장 많이 쓰이는 양이다.
+표본이 모집단에서 i.i.d.로 뽑혔을 때 $\bar{X}$는 불편이고($\mathbb{E}[\bar{X}] = \mu$) 분산은 $\mathrm{Var}(\bar{X}) = \sigma^2 / n$이다. 표준오차 $\sigma / \sqrt{n}$은 초급 추론에서 가장 많이 쓰이는 양이다.
 
 ### 분산
 
 $$
-\text{Parameter: } \sigma^2 = \frac{1}{N}\sum_{i=1}^{N}(x_i - \mu)^2 \qquad\longleftrightarrow\qquad \text{Statistic: } s^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2
+\text{모수: } \sigma^2 = \frac{1}{N}\sum_{i=1}^{N}(x_i - \mu)^2 \qquad\longleftrightarrow\qquad \text{통계량: } S^2 = \frac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2
 $$
 
-표본분산이 $n - 1$로 나누는 것(베셀 보정)은 바로 $\mathbb{E}[s^2] = \sigma^2$가 되도록 하기 위해서다. $n$으로 나누면 $\sigma^2$을 $(n - 1)/n$배만큼 체계적으로 과소추정하게 되는데, 참값 $\mu$ 대신 (제곱편차의 합을 최소화하는 값인) $\bar{x}$를 대입함으로써 자유도 하나를 "써버렸기" 때문이다.
+표본분산이 $n - 1$로 나누는 것(베셀 보정)은 바로 $\mathbb{E}[S^2] = \sigma^2$가 되도록 하기 위해서다. $n$으로 나누면 $\sigma^2$을 $(n - 1)/n$배만큼 체계적으로 과소추정하게 되는데, 참값 $\mu$ 대신 (제곱편차의 합을 최소화하는 값인) $\bar{X}$를 대입함으로써 자유도 하나를 "써버렸기" 때문이다.
 
 ### 비율
 
 $$
-\text{Parameter: } p \qquad\longleftrightarrow\qquad \text{Statistic: } \hat{p} = \frac{\#\text{ successes in sample}}{n}
+\text{모수: } p \qquad\longleftrightarrow\qquad \text{통계량: } \hat{p} = \frac{\text{표본 안의 성공 횟수}}{n}
 $$
 
 이항 자료에서 $\hat{p}$는 불편이고 $\mathrm{Var}(\hat{p}) = p(1-p)/n$이며, $p = 1/2$에서 최대가 된다(비율 추정이 가장 어려운 경우).
@@ -59,30 +73,45 @@ $$
 ### 회귀계수
 
 $$
-\text{Parameter: } \beta_1 \qquad\longleftrightarrow\qquad \text{Statistic: } \hat{\beta}_1 = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2}
+\text{모수: } \beta_1 \qquad\longleftrightarrow\qquad \text{통계량: } \hat{\beta}_1 = \frac{\sum (x_i - \bar{x})(Y_i - \bar{Y})}{\sum (x_i - \bar{x})^2}
 $$
 
 표준 가정 아래에서 $\hat{\beta}_1$은 불편이고 분산은 $\sigma^2 / \sum(x_i - \bar{x})^2$이다. 분모를 보면 $x$가 더 넓게 퍼져 있을수록 기울기 추정이 더 정밀해지는 이유를 알 수 있는데, 이것이 실험 설계의 밑바탕에 있는 원리다.
 
-## 표집 변동성
+## 표본 변동성과 표본분포
 
 통계량은 무작위 표본에서 계산되므로 그 자체가 확률변수다. 다시 표집하면 다른 값이 나온다. 크기 $n$인 가능한 모든 표본에 걸친 통계량의 분포를 그 통계량의 **표본분포(sampling distribution)** 라 한다. 우리가 끊임없이 인용하게 될 두 가지 특징은 다음과 같다.
 
-- **표준오차** — 표본분포의 표준편차. 평균의 경우 $\mathrm{SE}(\bar{x}) = \sigma/\sqrt{n}$.
+- **표준오차** — 표본분포의 표준편차. 평균의 경우 $\mathrm{SE}(\bar{X}) = \sigma/\sqrt{n}$.
 - **표집편향** — 모수로부터의 체계적 어긋남으로, 흔히 비무작위 표집에서 생긴다.
 
-중심극한정리에 따르면 $n$이 클 때 $\bar{x}$의 표본분포는 모집단의 모양과 무관하게 근사적으로 $N(\mu, \sigma^2/n)$이다. 이 하나의 사실이 대부분의 대표본 신뢰구간을 뒷받침한다.
+중심극한정리에 따르면 $n$이 클 때 $\bar{X}$의 표본분포는 모집단의 모양과 무관하게 근사적으로 $N(\mu, \sigma^2/n)$이다. 이 하나의 사실이 대부분의 대표본 신뢰구간을 뒷받침한다.
+
+!!! note "이름이 닮은 세 분포를 섞지 말 것"
+    **모집단분포**는 개별 관측값 $X$가 모집단 안에서 흩어진 모양이고, **한 표본의 분포**는 실제로 손에 쥔 자료 $x_1, \dots, x_n$이 흩어진 모양이며, **표본분포**는 같은 크기의 표본을 되풀이해 뽑을 때 통계량 $\hat\theta$가 흩어지는 모양이다.
+
+    앞의 둘은 값 하나가 점 하나지만, 셋째는 **표본 하나가 점 하나**라는 점에서 층이 다르다. 셋 가운데 실제로 관측되는 것은 둘째뿐이고, 알고 싶은 것은 첫째이며, 그 사이를 이어 주는 것이 셋째다. 세 분포를 나란히 그린 그림은 [5.1절 반복추출 개념](../../ch05/foundations/repeated_sampling.md)에 있다.
 
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 표본평균의 표집분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표본평균의 표본분포
+
+</div>
 
 ```python
-"""표본평균의 표집분포를 눈으로 확인한다."""
+"""표본평균의 표본분포를 눈으로 확인한다."""
 
+import matplotlib
+matplotlib.use("Agg")
 import numpy as np
 import matplotlib.pyplot as plt
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 rng = np.random.default_rng(0)
 
@@ -93,7 +122,7 @@ sigma_true = 15
 population = rng.normal(mu_true, sigma_true, size=500_000)
 
 # === 표본을 5000번 되풀이해 뽑고, 그때마다 표본평균을 기록한다 ===
-# 이것이 이 예제의 핵심이다. 현실에서는 표본을 한 번만 뽑으므로
+# 이것이 이 보기의 핵심이다. 현실에서는 표본을 한 번만 뽑으므로
 # 표본평균도 하나뿐이다. 여기서는 "만약 다시 뽑는다면 얼마가 나올까"를
 # 5000번 되풀이해 그 분포를 직접 만들어 본다.
 n = 50                # 표본 하나의 크기
@@ -103,37 +132,40 @@ sample_means = np.array([
     for _ in range(num_samples)
 ])
 
-# === 표집분포에서 두 가지를 확인한다 ===
+# === 표본분포에서 두 가지를 확인한다 ===
 #   (1) 중심: 표본평균들의 평균이 참 mu와 같은가?  -> 불편성
 #   (2) 퍼짐: 그 표준편차가 이론값 sigma/sqrt(n)과 맞는가? -> 표준오차 공식
-print(f"True μ:                {mu_true}")
-print(f"Mean of sample means:  {sample_means.mean():.3f}")
-print(f"Theoretical SE:        {sigma_true / np.sqrt(n):.3f}")
-print(f"Observed SE:           {sample_means.std(ddof=1):.3f}")
+print(f"참 모평균 mu:      {mu_true}")
+print(f"표본평균들의 평균: {sample_means.mean():.3f}")
+print(f"이론 표준오차:     {sigma_true / np.sqrt(n):.3f}")
+print(f"관측 표준오차:     {sample_means.std(ddof=1):.3f}")
 
 # 5000개의 표본평균을 히스토그램으로 그린다.
-# 모집단이 정규분포이므로 표집분포도 정규분포이며, 참 mu를 중심으로 대칭이다.
+# 모집단이 정규분포이므로 표본분포도 정규분포이며, 참 mu를 중심으로 대칭이다.
 fig, ax = plt.subplots(figsize=(8, 3))
-ax.hist(sample_means, bins=40, density=True, alpha=0.7, edgecolor="black")
-ax.axvline(mu_true, color="red", lw=2, label=fr"$\mu = {mu_true}$")   # 참값 표시
-ax.set_xlabel("Sample mean")
-ax.set_ylabel("Density")
-ax.set_title(rf"Sampling distribution of $\bar{{x}}$ (n={n})")
+ax.hist(sample_means, bins=40, density=True, alpha=0.75,
+        color="#1565C0", edgecolor="white")
+ax.axvline(mu_true, color="#D32F2F", lw=2,
+           label=r"참 모평균 $\mu = 100$")      # 참값 표시
+ax.set_xlabel("표본평균")
+ax.set_ylabel("밀도")
+ax.set_title("표본평균의 표본분포 (n = 50)")
 ax.legend()
 fig.tight_layout()
-plt.show()
+fig.savefig("sampling_distribution_mean.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 ```
 
 출력:
 
 ```
-True μ:                100
-Mean of sample means:  99.969
-Theoretical SE:        2.121
-Observed SE:           2.097
+참 모평균 mu:      100
+표본평균들의 평균: 99.969
+이론 표준오차:     2.121
+관측 표준오차:     2.097
 ```
 
-![표본평균의 표집분포](./img/sampling_distribution_mean.png)
+![표본평균의 표본분포](./img/sampling_distribution_mean.png)
 
 숫자와 그림이 같은 말을 한다.
 
@@ -141,8 +173,6 @@ Observed SE:           2.097
 - **퍼짐.** 이론값 $\sigma/\sqrt{n} = 15/\sqrt{50} = 2.121$과 관측값 2.097이 거의 맞는다.
 
 주목할 것은 **모집단의 표준편차가 15인데 표본평균들의 표준편차는 2.1**이라는 점이다. 개별 관측값보다 표본평균이 일곱 배쯤 덜 흔들린다. 이 축소가 $1/\sqrt{n}$ 배이며, 통계적 추론이 가능한 이유 자체다.
-
-</div>
 
 ## 연습문제
 
@@ -171,7 +201,7 @@ Observed SE:           2.097
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-베셀 보정을 적용한 표본분산이 불편임을 보여라. 즉 $s^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar X)^2$이고 $X_1, \dots, X_n$이 평균 $\mu$, 분산 $\sigma^2$의 i.i.d.일 때 $\mathbb{E}[s^2] = \sigma^2$임을 보여라.
+베셀 보정을 적용한 표본분산이 불편임을 보여라. 즉 $S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar X)^2$이고 $X_1, \dots, X_n$이 평균 $\mu$, 분산 $\sigma^2$의 i.i.d.일 때 $\mathbb{E}[S^2] = \sigma^2$임을 보여라.
 
 </div>
 
@@ -188,9 +218,9 @@ Observed SE:           2.097
     \mathbb{E}\!\left[\sum_i (X_i - \bar{X})^2\right] = n\sigma^2 + n\mu^2 - \sigma^2 - n\mu^2 = (n-1)\sigma^2
     $$
 
-    따라서 $\mathbb{E}[s^2] = \frac{(n-1)\sigma^2}{n-1} = \sigma^2$이다. $\square$
+    따라서 $\mathbb{E}[S^2] = \frac{(n-1)\sigma^2}{n-1} = \sigma^2$이다. $\square$
 
-    대신 $n$으로 나누면 $\mathbb{E}[\tilde s^2] = \frac{n-1}{n}\sigma^2$가 되어 체계적으로 과소추정하는 추정량이 되며, 특히 $n$이 작을 때 해롭다.
+    대신 $n$으로 나누면 $\mathbb{E}[\tilde S^2] = \frac{n-1}{n}\sigma^2$가 되어 체계적으로 과소추정하는 추정량이 되며, 특히 $n$이 작을 때 해롭다.
 
 <div class="drillbox" markdown>
 
@@ -250,22 +280,22 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
     정규 i.i.d. 표본에서 $\sigma^2$을 추정하는 경우를 생각하자. 최대가능도추정량(MLE)은 $n - 1$이 아니라 $n$으로 나눈다.
 
     $$
-    \tilde s^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar X)^2
+    \tilde S^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar X)^2
     $$
 
-    이는 편향되어 있다: $\mathbb{E}[\tilde s^2] = \frac{n-1}{n}\sigma^2$. 그러나 분산은 불편추정량 $s^2$보다 작다. 계산하면
+    이는 편향되어 있다: $\mathbb{E}[\tilde S^2] = \frac{n-1}{n}\sigma^2$. 그러나 분산은 불편추정량 $S^2$보다 작다. 계산하면
 
     $$
-    \mathrm{MSE}(\tilde s^2) = \mathrm{Var}(\tilde s^2) + \mathrm{bias}(\tilde s^2)^2 = \frac{2(n-1)\sigma^4}{n^2} + \left(\frac{\sigma^2}{n}\right)^{\!2} = \frac{(2n-1)\sigma^4}{n^2}
+    \mathrm{MSE}(\tilde S^2) = \mathrm{Var}(\tilde S^2) + \mathrm{bias}(\tilde S^2)^2 = \frac{2(n-1)\sigma^4}{n^2} + \left(\frac{\sigma^2}{n}\right)^{\!2} = \frac{(2n-1)\sigma^4}{n^2}
     $$
 
     이고,
 
     $$
-    \mathrm{MSE}(s^2) = \mathrm{Var}(s^2) = \frac{2\sigma^4}{n-1} = \frac{2\sigma^4 n}{n(n-1)}
+    \mathrm{MSE}(S^2) = \mathrm{Var}(S^2) = \frac{2\sigma^4}{n-1} = \frac{2\sigma^4 n}{n(n-1)}
     $$
 
-    이다. 유한한 $n$에 대해 $\mathrm{MSE}(\tilde s^2) < \mathrm{MSE}(s^2)$ — MLE는 편향되어 있음에도 MSE가 더 작다.
+    이다. 유한한 $n$에 대해 $\mathrm{MSE}(\tilde S^2) < \mathrm{MSE}(S^2)$ — MLE는 편향되어 있음에도 MSE가 더 작다.
 
     일반적인 교훈은 이것이다: **편향은 분산과 맞바꿔진다.** 축소추정량(제임스–스타인, 능형회귀)은 약간의 편향을 감수하고 분산을 크게 줄임으로써 이 사실을 활용한다. 편향이 언제나 나쁜 것은 아니며, 2차원 정확도 예산에서 조절할 수 있는 하나의 손잡이일 뿐이다.
 
@@ -321,7 +351,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
     출력:
 
     ```
-    분모        평균        편향        분산       MSE    이론 MSE
+        분모        평균        편향        분산       MSE    이론 MSE
        n-1    0.9996   -0.0004    0.2866    0.2866    0.2857
          n    0.8747   -0.1253    0.2194    0.2351    0.2344
        n+1    0.7775   -0.2225    0.1733    0.2229    0.2222
@@ -334,14 +364,14 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
     - 이 결과는 **정규성에 의존한다.** $\operatorname{Var}(SS)$ 계산에 정규분포의 4차 적률이 들어갔다. 꼬리가 두꺼운 분포에서는 최적 $c$가 달라진다.
     - MSE는 **여러 기준 중 하나일 뿐이다.** 손실함수를 바꾸면 최적값도 바뀐다.
     - 불편성은 **합쳐질 때 보존된다.** 여러 집단의 분산 추정값을 합동(pooled)하거나 분산분석 표를 만들 때, 불편추정량들의 합은 여전히 불편이다. 편향된 추정량은 편향이 누적된다.
-    - $s^2$은 $\chi^2$ 분포와 깔끔하게 맞물려 $t$ 검정과 $F$ 검정이 정확히 성립한다.
+    - $S^2$은 $\chi^2$ 분포와 깔끔하게 맞물려 $t$ 검정과 $F$ 검정이 정확히 성립한다.
 
     **교훈은 MSE의 승자를 찾는 것이 아니다.** "최적의 추정량"이라는 말이 반드시 **어떤 기준에 대해** 최적인지를 밝혀야만 뜻을 갖는다는 것이다. 기준을 바꾸면 답도 바뀐다. $\square$
 
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-중심극한정리는 **표본평균**에 대한 정리다. 다른 통계량의 표본분포는 어떻게 생겼는가? $\bar{X}$, $s^2$, 표본최댓값의 표본분포를 $n$을 키워 가며 비교하라.
+중심극한정리는 **표본평균**에 대한 정리다. 다른 통계량의 표본분포는 어떻게 생겼는가? $\bar{X}$, $S^2$, 표본최댓값의 표본분포를 $n$을 키워 가며 비교하라.
 
 </div>
 
@@ -368,7 +398,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
     출력:
 
     ```
-    n      통계량        평균       표준편차       왜도       첨도
+         n      통계량        평균       표준편차       왜도       첨도
         10     Xbar    0.0008     0.3156   -0.006   -0.016
         10      s^2    0.9983     0.4710    0.937    1.292
         10      최댓값    1.5378     0.5874    0.413    0.345
@@ -389,7 +419,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 
     **$\bar{X}$** — 어떤 $n$에서도 왜도와 첨도가 $0$이다. 모집단이 정규이므로 $\bar{X}$도 정확히 정규다. 표준편차는 $1/\sqrt{n}$대로 $0.316 \to 0.100 \to 0.032$.
 
-    **$s^2$** — 오른쪽으로 치우쳐 있다. 왜도가 $0.937 \to 0.280 \to 0.090$으로 $\sqrt{8/(n-1)}$과 정확히 맞는다. $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$이고 카이제곱분포가 치우쳐 있기 때문이다. **다만 치우침이 $0$으로 가므로** $s^2$도 결국 정규에 가까워진다. 이것이 중심극한정리의 확장판이 적용되는 경우다.
+    **$S^2$** — 오른쪽으로 치우쳐 있다. 왜도가 $0.937 \to 0.280 \to 0.090$으로 $\sqrt{8/(n-1)}$과 정확히 맞는다. $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이고 카이제곱분포가 치우쳐 있기 때문이다. **다만 치우침이 $0$으로 가므로** $S^2$도 결국 정규에 가까워진다. 이것이 중심극한정리의 확장판이 적용되는 경우다.
 
     **최댓값** — 완전히 다르다. 왜도가 줄기는커녕 $0.413 \to 0.668 \to 0.789$로 **커진다.** 표준편차도 $0.587 \to 0.430 \to 0.352$로 느릿느릿 줄 뿐이다($\bar{X}$처럼 $1/\sqrt{n}$이 아니라 대략 $1/\log n$이다).
 
@@ -410,7 +440,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 ??? success "풀이"
     **(a) 불편이지만 일치성 없음: 첫 관측값만 쓰기.** $\hat\mu = X_1$로 두면 $\mathbb{E}[X_1] = \mu$이므로 불편이다. 그러나 $\operatorname{Var}(X_1) = \sigma^2$이 $n$과 무관하므로 자료를 아무리 모아도 정밀해지지 않는다.
 
-    **(b) 편향이지만 일치성 있음: 최대가능도 분산.** $\tilde s^2 = \frac{1}{n}\sum(X_i-\bar X)^2$는 편향이 $-\sigma^2/n$이지만, 이 편향이 $n \to \infty$에서 $0$으로 가고 분산도 $0$으로 가므로 일치성을 갖는다.
+    **(b) 편향이지만 일치성 있음: 최대가능도 분산.** $\tilde S^2 = \frac{1}{n}\sum(X_i-\bar X)^2$는 편향이 $-\sigma^2/n$이지만, 이 편향이 $n \to \infty$에서 $0$으로 가고 분산도 $0$으로 가므로 일치성을 갖는다.
 
     ```python
     import numpy as np
@@ -513,7 +543,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
     출력:
 
     ```
-    n   E[1/Xbar]      1/mu       델타 근사       실제 편향
+         n   E[1/Xbar]      1/mu       델타 근사       실제 편향
          5    0.207046  0.200000    0.206400   +0.007046
         20    0.201690  0.200000    0.201600   +0.001690
        100    0.200307  0.200000    0.200320   +0.000307
@@ -522,7 +552,7 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 
     편향이 언제나 양수이고, $n \ge 20$부터는 델타 근사가 소수점 다섯째 자리까지 맞는다. 편향이 $1/n$의 속도로 줄어드는 것도 확인된다.
 
-    **일반 원리.** $\hat\theta$이 $\theta$의 불편추정량이어도 $g(\hat\theta)$은 $g$가 비선형인 한 $g(\theta)$의 불편추정량이 아니다. 편향의 부호는 $g$의 볼록성이 정한다. $g$가 볼록이면 위로, 오목이면 아래로 치우친다(연습문제 10, 앞 절의 $\mathbb{E}[s] < \sigma$가 오목한 경우다).
+    **일반 원리.** $\hat\theta$이 $\theta$의 불편추정량이어도 $g(\hat\theta)$은 $g$가 비선형인 한 $g(\theta)$의 불편추정량이 아니다. 편향의 부호는 $g$의 볼록성이 정한다. $g$가 볼록이면 위로, 오목이면 아래로 치우친다(앞 절 [모집단과 표본](./population_sample.md)의 연습문제 10에 나온 $\mathbb{E}[S] < \sigma$가 오목한 경우다).
 
     **어디서 문제가 되는가.**
 
@@ -536,7 +566,10 @@ $\mathrm{Bernoulli}(p)$에서 뽑은 크기 $n$의 i.i.d. 표본에 대해 표�
 
 ## 정리하며
 
-- 모수는 모집단을 기술하고, 통계량은 표본을 기술한다.
+- 모수는 모집단을 기술하고, 통계량은 표본을 기술한다. 모수는 그리스 문자, 통계량은 라틴 문자로 쓰며, 뽑기 전의 확률변수는 대문자($\bar X$, $S^2$), 뽑은 뒤의 값 하나는 소문자($\bar x$, $s^2$)다.
+- **모수 · 추정량 · 추정값**은 셋이 다른 것이다. 모수는 고정된 미지수, 추정량은 자료를 받아 수를 내놓는 함수, 추정값은 그 함수가 뱉어낸 수 하나다. 분포를 갖는 것은 추정량뿐이다.
 - 통계량은 확률변수이며, 그 표본분포가 자료에서 추론으로 건너가는 다리다.
 - 추정량의 유용성은 편향, 분산, 일치성으로 판단한다.
 - 표준오차는 $1/\sqrt{n}$으로 줄어든다 — 표본 크기를 네 배로 늘려야 표준오차가 절반이 된다.
+
+다음 절 [**교란과 인과관계**](./confounding_causation.md)는 시선을 옮긴다. 지금까지는 하나의 양을 얼마나 잘 추정하는가를 물었다면, 다음 절은 두 양이 함께 움직인다는 관측에서 무엇을 말할 수 있고 무엇을 말할 수 없는지를 묻는다. 표본분포 자체를 본격적으로 다루는 곳은 [5.1절 확률변수로서의 통계량](../../ch05/foundations/statistics_as_rv.md)이다.
