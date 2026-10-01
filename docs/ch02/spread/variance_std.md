@@ -32,9 +32,11 @@ $$
 s^2 \ (\text{또는 } \sigma^2) = \frac{1}{n}\sum_{i=1}^{n} (x_i - \bar{x})^2
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 편차에서 분산까지 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 편차에서 분산까지
+
+</div>
 
 ```python
 import numpy as np
@@ -62,8 +64,6 @@ print("표준편차       :", np.sqrt((dev ** 2).mean()))
 ```
 
 편차의 합이 정확히 $0$이다. 절댓값이나 제곱을 거친 뒤에야 뜻이 있는 수가 나온다.
-
-</div>
 
 ### 그런데 왜 절댓값이 아니라 제곱을 쓰는가
 
@@ -127,9 +127,11 @@ $$
 
 ### 파이썬에서 분산 계산하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 분산 구하기 — ddof 의 뜻 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분산 구하기 — ddof 의 뜻
+
+</div>
 
 ```python
 import numpy as np
@@ -151,8 +153,6 @@ print(f"표본분산 (ddof=1): {sample_variance}")
 모분산 (ddof=0): 1.0833333333333333
 표본분산 (ddof=1): 1.3
 ```
-
-</div>
 
 ### 해석
 
@@ -192,9 +192,11 @@ $$
 
 ### 파이썬에서 표준편차 계산하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 표준편차 구하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표준편차 구하기
+
+</div>
 
 ```python
 import numpy as np
@@ -216,8 +218,6 @@ print(f"표본표준편차 (ddof=1): {sample_std}")
 모표준편차 (ddof=0): 1.0408329997330663
 표본표준편차 (ddof=1): 1.140175425099138
 ```
-
-</div>
 
 ### 응용
 
@@ -250,9 +250,11 @@ $$
 Z = \frac{x - \mu}{\sigma}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. Z-점수로 다른 시험 견주기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> Z-점수로 다른 시험 견주기
+
+</div>
 
 ```python
 # 두 시험은 평균도 표준편차도 다르다. 원점수만으로는 견줄 수 없다.
@@ -274,8 +276,6 @@ for name, e in [("중간고사", midterm), ("기말고사", final)]:
 ```
 
 중간고사의 $70$점이 기말의 $95$점보다 상대적으로 더 좋은 성적이다. 원점수는 $25$점이나 낮지만, 중간은 평균보다 $1$ 표준편차 위에 있고 기말은 $0.75$ 표준편차 위에 있기 때문이다.
-
-</div>
 
 Z-점수는 단위가 없다. 키(cm)와 몸무게(kg)처럼 단위가 아예 다른 변수도 Z-점수로 바꾸면 같은 자 위에서 견줄 수 있다. 이 성질 때문에 Z-점수는 이후 여러 곳에서 쓰인다.
 
@@ -657,7 +657,7 @@ $s$는 $\sigma$의 추정값이며 그 자체가 확률변수다. 표본이 얼�
 
     - **분포를 전혀 모를 때의 안전한 진술.** "적어도 $75\%$가 $\pm 2\sigma$ 안에 있다"는 언제나 참이다.
     - **이론적 도구.** 큰수의 약법칙 증명이 체비셰프에서 나온다. $\operatorname{Var}(\bar{X}) = \sigma^2/n \to 0$이므로 $P(\lvert\bar{X}-\mu\rvert>\varepsilon) \le \sigma^2/(n\varepsilon^2) \to 0$이다.
-    - **더 강한 가정이 있으면 더 좋은 부등식이 있다.** 단봉이면 반슈타인–체비셰프($k=3$에서 $95.1\%$), 유계이면 회프딩, 정규이면 정확한 값을 쓸 수 있다.
+    - **더 강한 가정이 있으면 더 좋은 부등식이 있다.** 단봉이면 비소찬스키–페투닌 부등식($k=3$에서 $95.1\%$), 유계이면 회프딩, 정규이면 정확한 값을 쓸 수 있다.
 
     **표에서 지수분포를 눈여겨보라.** $k=1$에서 $0.865$로 정규($0.683$)보다 높은데, 이는 치우친 분포에서 $\pm k\sigma$ 구간이 비대칭 분포에 잘 맞지 않기 때문이다. **치우친 자료에 $\mu \pm k\sigma$를 쓰는 것 자체가 부적절하며**, 그런 경우에는 분위수를 보고하는 것이 옳다. $\square$
 

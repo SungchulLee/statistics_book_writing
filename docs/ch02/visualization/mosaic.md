@@ -10,24 +10,26 @@
 
 두 범주형 변수의 조합마다 개수를 센 표다. **분할표(contingency table)** 라고도 한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 이원 도수분포표 만들기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이원 도수분포표 만들기
+
+</div>
 
 ```python
 import pandas as pd
 
 # 네 조합의 개수를 그대로 펼쳐 원자료 형태로 만든다.
 #   SUV·사고 28명 / 비SUV·사고 35명 / SUV·무사고 97명 / 비SUV·무사고 104명
-data = {'SUV':      28*['yes'] + 35*['no']  + 97*['yes'] + 104*['no'],
-        'Accident': 28*['yes'] + 35*['yes'] + 97*['no']  + 104*['no']}
+data = {'SUV': 28*['예'] + 35*['아니오'] + 97*['예'] + 104*['아니오'],
+        '사고': 28*['예'] + 35*['예']    + 97*['아니오'] + 104*['아니오']}
 df = pd.DataFrame(data)
 
 # crosstab이 두 범주형 변수를 교차하여 도수를 센다
-dg = pd.crosstab(df.SUV, df.Accident, rownames=['SUV'], colnames=['Accident'])
+dg = pd.crosstab(df.SUV, df.사고, rownames=['SUV'], colnames=['사고'])
 
-dg.loc['TOTAL', :] = dg.sum()        # 열 방향 합계를 맨 아래 줄에 추가
-dg.loc[:, 'TOTAL'] = dg.sum(axis=1)  # 행 방향 합계를 맨 오른쪽 열에 추가
+dg.loc['합계', :] = dg.sum()         # 열 방향 합계를 맨 아래 줄에 추가
+dg.loc[:, '합계'] = dg.sum(axis=1)   # 행 방향 합계를 맨 오른쪽 열에 추가
 dg = dg.astype(int)                  # 합계를 더하며 실수가 되었으므로 정수로 되돌린다
 print(dg)
 ```
@@ -35,43 +37,41 @@ print(dg)
 출력:
 
 ```
-Accident   no  yes  TOTAL
-SUV
-no        104   35    139
-yes        97   28    125
-TOTAL     201   63    264
+사고   아니오   예   합계
+SUV              
+아니오  104  35  139
+예     97  28  125
+합계   201  63  264
 ```
 
-행과 열의 이름이 알파벳 순으로 정렬되어 `no`가 먼저 온다는 점에 주의하라. 오른쪽 아래 264는 전체 인원이다.
-
-</div>
+행과 열의 이름이 가나다 순으로 정렬되어 `아니오`가 먼저 온다는 점에 주의하라. 오른쪽 아래 264는 전체 인원이다.
 
 ### 상대도수분포표
 
 모든 칸을 전체로 나누면 비율이 된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 상대도수분포표 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 상대도수분포표
+
+</div>
 
 ```python
 # 모든 칸을 전체 합으로 나누면 상대도수분포표가 된다.
 # 모자이크 그림은 바로 이 비율을 넓이로 옮겨 그린 것이다.
-dh = dg / dg.loc['TOTAL', 'TOTAL']
+dh = dg / dg.loc['합계', '합계']
 print(dh)
 ```
 
 출력:
 
 ```
-Accident        no       yes     TOTAL
-SUV
-no        0.393939  0.132576  0.526515
-yes       0.367424  0.106061  0.473485
-TOTAL     0.761364  0.238636  1.000000
+사고        아니오         예        합계
+SUV                              
+아니오  0.393939  0.132576  0.526515
+예    0.367424  0.106061  0.473485
+합계   0.761364  0.238636  1.000000
 ```
-
-</div>
 
 ### 표에서 세 가지 확률을 읽는다
 
@@ -95,27 +95,29 @@ $$
 
 표의 각 칸을 도수에 비례하는 넓이의 사각형으로 그린다. **전체 넓이가 전체 도수**이고, 각 사각형의 넓이가 그 칸의 도수다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 모자이크 그림 그리기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 모자이크 그림 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
 from statsmodels.graphics.mosaicplot import mosaic
 
-data = {'SUV':      28*['yes'] + 35*['no']  + 97*['yes'] + 104*['no'],
-        'Accident': 28*['yes'] + 35*['yes'] + 97*['no']  + 104*['no']}
+data = {'SUV': 28*['예'] + 35*['아니오'] + 97*['예'] + 104*['아니오'],
+        '사고': 28*['예'] + 35*['예']    + 97*['아니오'] + 104*['아니오']}
 df = pd.DataFrame(data)
 
 fig, ax = plt.subplots(figsize=(7, 4.5))
 
 # 변수를 준 순서대로 나눈다.
-#   첫 변수(SUV)      -> 세로로 분할. 열의 너비가 그 범주의 비율
-#   두 번째(Accident) -> 각 열 안에서 가로로 분할. 조건부확률이 높이가 된다
+#   첫 변수(SUV)   -> 세로로 분할. 열의 너비가 그 범주의 비율
+#   두 번째(사고)  -> 각 열 안에서 가로로 분할. 조건부확률이 높이가 된다
 # gap은 사각형 사이의 간격
-mosaic(df, ['SUV', 'Accident'], ax=ax, gap=0.02,
-       title='Mosaic Plot: SUV vs Accident')
+mosaic(df, ['SUV', '사고'], ax=ax, gap=0.02,
+       title='모자이크 그림: SUV와 사고')
 plt.tight_layout()
 plt.show()
 ```
@@ -130,15 +132,15 @@ plt.show()
 
 **모자이크 그림은 곱셈 규칙을 그림으로 옮긴 것이다.** 결합확률 = 주변확률 × 조건부확률이 넓이 = 너비 × 높이가 된다.
 
-</div>
-
 ## 3. 독립이면 분할선이 나란해진다
 
 모자이크 그림의 가장 큰 쓸모는 여기에 있다. 두 변수가 독립인지가 **한눈에** 보인다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 독립이면 분할선이 나란해진다 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 독립이면 분할선이 나란해진다
+
+</div>
 
 ```python
 import numpy as np
@@ -150,28 +152,28 @@ rng = np.random.default_rng(7)
 n = 400
 
 # --- 독립: Y가 X와 무관하게 생성된다 ---
-A = rng.choice(['yes', 'no'], n, p=[.5, .5])
-B = rng.choice(['yes', 'no'], n, p=[.3, .7])
+A = rng.choice(['예', '아니오'], n, p=[.5, .5])
+B = rng.choice(['예', '아니오'], n, p=[.3, .7])
 df_indep = pd.DataFrame({'X': A, 'Y': B})
 
-# --- 종속: X가 yes면 Y가 yes일 확률이 크게 높아진다 ---
-A2 = rng.choice(['yes', 'no'], n, p=[.5, .5])
-B2 = np.where(A2 == 'yes',
-              rng.choice(['yes', 'no'], n, p=[.7, .3]),
-              rng.choice(['yes', 'no'], n, p=[.1, .9]))
+# --- 종속: X가 '예'면 Y가 '예'일 확률이 크게 높아진다 ---
+A2 = rng.choice(['예', '아니오'], n, p=[.5, .5])
+B2 = np.where(A2 == '예',
+              rng.choice(['예', '아니오'], n, p=[.7, .3]),
+              rng.choice(['예', '아니오'], n, p=[.1, .9]))
 df_dep = pd.DataFrame({'X': A2, 'Y': B2})
 
 for name, d in [('독립', df_indep), ('종속', df_dep)]:
     ct = pd.crosstab(d.X, d.Y)
     print(f"=== {name} ===")
     print(ct)
-    print("P(Y=yes | X=no) =", round(ct.loc['no', 'yes'] / ct.loc['no'].sum(), 3))
-    print("P(Y=yes | X=yes)=", round(ct.loc['yes', 'yes'] / ct.loc['yes'].sum(), 3))
+    print("P(Y=예 | X=아니오) =", round(ct.loc['아니오', '예'] / ct.loc['아니오'].sum(), 3))
+    print("P(Y=예 | X=예)    =", round(ct.loc['예', '예'] / ct.loc['예'].sum(), 3))
     print()
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
-mosaic(df_indep, ['X', 'Y'], ax=axes[0], gap=0.02, title='Independent')
-mosaic(df_dep,   ['X', 'Y'], ax=axes[1], gap=0.02, title='Dependent')
+mosaic(df_indep, ['X', 'Y'], ax=axes[0], gap=0.02, title='독립')
+mosaic(df_dep,   ['X', 'Y'], ax=axes[1], gap=0.02, title='종속')
 plt.tight_layout()
 plt.show()
 ```
@@ -180,29 +182,27 @@ plt.show()
 
 ```
 === 독립 ===
-Y     no  yes
-X
-no   149   61
-yes  132   58
-P(Y=yes | X=no) = 0.29
-P(Y=yes | X=yes)= 0.305
+Y    아니오   예
+X           
+아니오  149  61
+예    132  58
+P(Y=예 | X=아니오) = 0.29
+P(Y=예 | X=예)    = 0.305
 
 === 종속 ===
-Y     no  yes
-X
-no   178   16
-yes   61  145
-P(Y=yes | X=no) = 0.082
-P(Y=yes | X=yes)= 0.704
+Y    아니오    예
+X            
+아니오  178   16
+예     61  145
+P(Y=예 | X=아니오) = 0.082
+P(Y=예 | X=예)    = 0.704
 ```
 
 ![독립과 종속의 모자이크 비교](./img/mosaic_indep_vs_dep.png)
 
 **왼쪽(독립).** 두 열의 가로 분할선이 거의 같은 높이에 있다. 조건부확률이 0.290과 0.305로 사실상 같기 때문이다. $X$를 알아도 $Y$에 대한 예측이 달라지지 않는다.
 
-**오른쪽(종속).** 분할선이 뚜렷하게 어긋나 있다. $X = \text{no}$일 때 0.082, $X = \text{yes}$일 때 0.704로 여덟 배 넘게 차이 난다.
-
-</div>
+**오른쪽(종속).** 분할선이 뚜렷하게 어긋나 있다. $X = \text{아니오}$일 때 0.082, $X = \text{예}$일 때 0.704로 여덟 배 넘게 차이 난다.
 
 !!! tip "분할선의 어긋남이 곧 종속성이다"
     3장에서 독립을 $P(Y \mid X) = P(Y)$로 정의했다. **$X$의 값이 무엇이든 $Y$의 조건부확률이 같다**는 뜻이다.
@@ -214,7 +214,7 @@ P(Y=yes | X=yes)= 0.704
 
     이 대응 덕분에 표의 숫자를 계산하기 전에 그림만 보고도 판단할 수 있다. 어긋남의 정도를 형식적으로 검정하는 것이 10장의 **카이제곱 독립성 검정**이다.
 
-    앞의 SUV 예제로 돌아가면, 두 열의 분할선이 거의 같은 높이였다. SUV 여부와 사고 사이에 뚜렷한 관계가 보이지 않는다는 뜻이다. 실제로 $P(\text{사고} \mid \text{SUV}) = 0.224$이고 $P(\text{사고} \mid \text{비SUV}) = 35/139 = 0.252$로 비슷하다.
+    앞의 SUV 보기로 돌아가면, 두 열의 분할선이 거의 같은 높이였다. SUV 여부와 사고 사이에 뚜렷한 관계가 보이지 않는다는 뜻이다. 실제로 $P(\text{사고} \mid \text{SUV}) = 0.224$이고 $P(\text{사고} \mid \text{비SUV}) = 35/139 = 0.252$로 비슷하다.
 
 ## 연습문제
 
@@ -243,7 +243,7 @@ P(Y=yes | X=yes)= 0.704
     이다. 처리 A가 주어졌을 때 호전될 **조건부확률**은
 
     $$
-    P(\text{Improved} \mid \text{Treatment A}) = \frac{60}{100} = 0.60
+    P(\text{호전됨} \mid \text{처리 A}) = \frac{60}{100} = 0.60
     $$
 
     이다.
@@ -397,7 +397,7 @@ P(Y=yes | X=yes)= 0.704
     출력:
 
     ```
-    성공   실패
+             성공   실패
     소규모 병원   45   15
     대규모 병원  180  120
 
@@ -466,7 +466,7 @@ P(Y=yes | X=yes)= 0.704
     출력:
 
     ```
-    층    치료       성공률     환자 수
+             층    치료       성공률     환자 수
          작은 결석     A    0.9310       87
          작은 결석     B    0.8667      270
           큰 결석     A    0.7300      263
@@ -487,7 +487,7 @@ P(Y=yes | X=yes)= 0.704
 
     **모자이크 그림의 강점이 여기 있다.** 세 번째 변수를 **추가 분할축**으로 넣을 수 있으므로, 같은 그림 안에서 층별 비교가 가능하다. `statsmodels` 의 `mosaic` 은 다중 인덱스를 받아 여러 단계로 분할한다.
 
-    **주의할 점.** 주변화한 표의 카이제곱 $p$ 값이 $0.15$로 유의하지 않다. 즉 **"차이가 없다"는 결론에 이를 수도 있는데, 층별로 보면 두 층 모두에서 A가 낫다.** 주변화가 정보를 지운 정도가 아니라 방향까지 바꾼 것이다.
+    **주의할 점.** 주변화한 표의 카이제곱 $p$ 값이 $0.13$으로 유의하지 않다. 즉 **"차이가 없다"는 결론에 이를 수도 있는데, 층별로 보면 두 층 모두에서 A가 낫다.** 주변화가 정보를 지운 정도가 아니라 방향까지 바꾼 것이다.
 
     **일반 원리.** $2\times2$ 표를 볼 때는 언제나 **"이 표가 무엇을 주변화한 결과인가"** 를 물어야 한다. 층화 변수가 있다면 층별 표를 함께 보아야 하며, 그것이 1장에서 본 교란 보정의 가장 단순한 형태다. $\square$
 
@@ -591,7 +591,7 @@ P(Y=yes | X=yes)= 0.704
     출력:
 
     ```
-    매우 불만  불만  보통  만족  매우 만족
+         매우 불만  불만  보통  만족  매우 만족
     20대     30  40  50  30     10
     30대     20  35  55  45     20
     40대     10  25  60  60     35
@@ -615,7 +615,7 @@ P(Y=yes | X=yes)= 0.704
 
     - **발산형 색지도가 자연스럽다.** "보통"을 중심으로 불만 쪽은 빨강, 만족 쪽은 파랑으로 하면 순서와 방향이 색으로도 전달된다.
     - **"보통"을 기준으로 정렬하는 변형**이 있다. 리커트 자료 전용 그림에서 중립 응답을 가운데 놓고 좌우로 뻗게 그리면, 긍정과 부정의 균형이 한눈에 보인다.
-    - **상위 $k$ 비율을 함께 보고하라.** 위 출력의 "만족 이상" 비율이 $0.25 \to 0.72$로 오르는 것이 핵심 발견인데, 모자이크 그림에서는 여러 칸을 눈으로 합쳐야 알 수 있다.
+    - **상위 $k$ 비율을 함께 보고하라.** 위 출력의 "만족 이상" 비율이 $0.25 \to 0.65$로 오르는 것이 핵심 발견인데, 모자이크 그림에서는 여러 칸을 눈으로 합쳐야 알 수 있다.
 
     **순서가 없는 범주라면.** 값으로 정렬하되 **모든 그림에서 같은 순서**를 쓴다. 여러 모자이크를 비교할 때 순서가 다르면 대조가 불가능하다.
 

@@ -6,9 +6,11 @@
 
 ## 1. 두 방식을 나란히
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 산점도와 육각구간그림 견주기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 산점도와 육각구간그림 견주기
+
+</div>
 
 ```python
 import numpy as np
@@ -25,16 +27,16 @@ fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 #   gridsize=30  가로 방향으로 육각형을 30개 놓는다 (많을수록 잘게 나뉨)
 #   mincnt=1     점이 하나도 없는 칸은 그리지 않는다 (배경이 흰색으로 남음)
 hb = axes[0].hexbin(x, y, gridsize=30, cmap='viridis', mincnt=1)
-axes[0].set_title("hexbin (hexagonal bins)")
-plt.colorbar(hb, ax=axes[0])
+axes[0].set_title("hexbin — 육각형 칸")
+plt.colorbar(hb, ax=axes[0], label="개수")
 
 # hist2d: 평면을 정사각형 격자로 나눈다.
 #   bins=30   가로·세로 각각 30등분 -> 900개의 칸
 #   cmin=1    개수가 1 미만인 칸은 그리지 않는다 (mincnt와 같은 역할)
 # hist2d는 (도수, x경계, y경계, 이미지)를 돌려주므로 [3]번이 색막대용 객체다
 h = axes[1].hist2d(x, y, bins=30, cmap='viridis', cmin=1)
-axes[1].set_title("hist2d (square bins)")
-plt.colorbar(h[3], ax=axes[1])
+axes[1].set_title("hist2d — 사각형 칸")
+plt.colorbar(h[3], ax=axes[1], label="개수")
 
 for ax in axes:
     ax.set_xlabel('x')
@@ -45,11 +47,9 @@ plt.show()
 
 ![hexbin과 hist2d의 비교](./img/hexbin_vs_hist2d.png)
 
-두 그림 모두 같은 것을 말한다. 중심이 원점 부근에 있고, 좌하에서 우상으로 기울어진 타원 모양으로 퍼져 있으며, 가장 진한 칸에 250~300개가 들어 있다.
+두 그림 모두 같은 것을 말한다. 중심이 원점 부근에 있고, 좌하에서 우상으로 기울어진 타원 모양으로 퍼져 있으며, 가장 진한 칸에 수백 개가 들어 있다(육각형은 270개, 사각형은 320개다 — 칸 모양이 다르므로 최댓값도 다르다).
 
 **색막대(colorbar)가 핵심이다.** 산점도에 투명도를 주면 "여기가 더 진하다"까지만 알 수 있지만, 이 그림들은 **"여기는 270개, 저기는 50개"** 라고 숫자로 읽게 해 준다. 밀도가 눈금 있는 양이 되는 것이다.
-
-</div>
 
 ## 2. 왜 육각형인가
 
@@ -62,7 +62,7 @@ plt.show()
 **셋째, 원을 더 잘 근사한다.** 같은 넓이의 정사각형보다 정육각형이 원에 가깝다. 밀도가 등방적일 때(어느 방향으로도 비슷하게 퍼져 있을 때) 육각형 칸이 더 자연스럽다.
 
 !!! note "실무에서는 차이가 크지 않다"
-    위 세 이유는 모두 타당하지만, **자료가 충분히 많고 칸이 충분히 잘면 두 그림의 결론은 같다.** 위 예제에서 어느 쪽을 봐도 "중심은 원점, 양의 상관, 타원형"이라는 판단은 달라지지 않는다.
+    위 세 이유는 모두 타당하지만, **자료가 충분히 많고 칸이 충분히 잘면 두 그림의 결론은 같다.** 위 보기에서 어느 쪽을 봐도 "중심은 원점, 양의 상관, 타원형"이라는 판단은 달라지지 않는다.
 
     hexbin을 권하는 실용적인 이유는 오히려 **matplotlib에서 쓰기 편하다**는 것이다. `mincnt`, `bins='log'`(로그 눈금 색), `C`와 `reduce_C_function`(개수 대신 다른 값을 집계) 같은 옵션이 잘 갖춰져 있다.
 
@@ -73,7 +73,7 @@ plt.show()
 - **너무 크면**(칸이 잘면) 각 칸에 점이 한둘뿐이라 색이 거의 균일해지고, 산점도로 되돌아간 것과 같아진다.
 - **너무 작으면**(칸이 굵으면) 서너 개의 큰 덩어리만 남아 구조가 뭉개진다.
 
-경험적으로 **가장 진한 칸에 수십에서 수백 개**가 들어가도록 잡으면 무난하다. 위 예제는 $n = 20{,}000$에 `gridsize=30`이고 최대 칸이 270개 남짓이다.
+경험적으로 **가장 진한 칸에 수십에서 수백 개**가 들어가도록 잡으면 무난하다. 위 보기는 $n = 20{,}000$에 `gridsize=30`이고 최대 칸이 270개 남짓이다.
 
 **칸 크기를 두세 가지로 바꿔 가며 그려 보는 것이 정석이다.** 어느 크기에서나 보이는 구조는 실제 구조이고, 특정 크기에서만 나타나는 봉우리는 의심해야 한다.
 
@@ -105,12 +105,12 @@ plt.show()
 
 ## 4. 실제 자료: 두 수익률의 결합분포
 
-앞의 예제는 모두 모의 자료였다. 이제 **실제로 내려받은 자료**에 같은 도구를 써 보자. 주가지수와 개별 종목의 일별 수익률은 2차원 히스토그램이 잘 맞는 소재다. 관측이 수백 개 있고, 두 변수가 같은 단위(퍼센트)이며, 둘 사이에 관계가 있으리라 짐작되기 때문이다.
+앞의 보기는 모두 모의 자료였다. 이제 **실제로 내려받은 자료**에 같은 도구를 써 보자. 주가지수와 개별 종목의 일별 수익률은 2차원 히스토그램이 잘 맞는 소재다. 관측이 수백 개 있고, 두 변수가 같은 단위(퍼센트)이며, 둘 사이에 관계가 있으리라 짐작되기 때문이다.
 
 여기서는 한 걸음 더 나아가, **관측된 히스토그램 위에 모형을 겹쳐 놓는다.** 2차원 정규분포를 자료에 맞춘 뒤 그 확률밀도의 등고선을 히스토그램 위에 그리면, **모형이 자료를 어디서 잘 맞히고 어디서 틀리는지**가 한 그림에 드러난다.
 
-!!! note "외부 자료를 쓰는 예제에 대하여"
-    선그림 절에서 말했듯 **네트워크에 의존하는 예제는 재현성이 약하다.** 여기서는 세 가지로 그 문제를 줄였다.
+!!! note "외부 자료를 쓰는 보기에 대하여"
+    뒤의 선그림 절에서 다시 짚겠지만 **네트워크에 의존하는 보기는 재현성이 약하다.** 여기서는 세 가지로 그 문제를 줄였다.
 
     - **기간을 날짜로 고정했다.** `datetime.now()`가 아니라 `2025-09-01 ~ 2026-09-01`이므로, 과거 자료가 수정되지 않는 한 언제 실행해도 같은 값이 나온다.
     - **한 번 받은 자료를 `datasets/stocks/`에 저장한다.** 두 번째 실행부터는 네트워크를 쓰지 않는다.
@@ -120,9 +120,11 @@ plt.show()
 
     **자료를 받지 못해도 이 절의 내용은 따라갈 수 있다.** 중요한 것은 특정 종목의 수치가 아니라 **관측과 모형을 겹쳐 보는 방법**이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 주가 자료를 내려받아 일별 수익률 만들기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 주가 자료를 내려받아 일별 수익률 만들기
+
+</div>
 
 ```python
 import warnings
@@ -213,11 +215,11 @@ AAPL    +0.1427    1.5832  -7.3539  +4.8407
 
 **상관계수 0.37은 생각보다 낮다.** 애플은 지수에서 큰 비중을 차지하므로 더 높으리라 기대하기 쉽지만, 이 12개월 동안에는 종목 고유의 움직임이 컸다. 상관계수 하나만으로는 여기까지가 전부이고, **두 변수가 어떤 모양으로 함께 흩어져 있는지**는 그림을 봐야 한다.
 
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 2차원 히스토그램에 2차원 정규 PDF 겹치기
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 3. 2차원 히스토그램에 2차원 정규 PDF 겹치기 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -252,8 +254,8 @@ fig, axes = plt.subplots(1, 3, figsize=(16.5, 4.8))
 # ── 왼쪽: 관측 자료의 2차원 히스토그램 ──────────────────────────────
 # cmin=1 은 비어 있는 칸을 그리지 않는다(흰색으로 남긴다).
 h = axes[0].hist2d(x, y, bins=35, cmap="Blues", cmin=1)
-axes[0].set_title("2D histogram (observed)")
-fig.colorbar(h[3], ax=axes[0], label="count")
+axes[0].set_title("2차원 히스토그램 (관측)")
+fig.colorbar(h[3], ax=axes[0], label="개수")
 
 # ── 가운데: 적합된 모형의 확률밀도 ──────────────────────────────────
 cf = axes[1].contourf(GX, GY, Z, levels=20, cmap="RdYlBu_r", alpha=0.85)
@@ -261,9 +263,9 @@ cl = axes[1].contour(GX, GY, Z, levels=10, colors="black",
                      alpha=0.35, linewidths=0.7)
 axes[1].clabel(cl, inline=True, fontsize=7, fmt="%.3f")
 axes[1].scatter(*mu, color="darkred", s=140, marker="X", edgecolors="black",
-                linewidth=1.5, zorder=5, label="mean")
-axes[1].set_title("fitted 2D normal PDF (model)")
-fig.colorbar(cf, ax=axes[1], label="density")
+                linewidth=1.5, zorder=5, label="평균")
+axes[1].set_title("적합된 2차원 정규 확률밀도 (모형)")
+fig.colorbar(cf, ax=axes[1], label="확률밀도")
 axes[1].legend(loc="upper left")
 
 # ── 오른쪽: 둘을 겹쳐서 ─────────────────────────────────────────────
@@ -273,17 +275,17 @@ co = axes[2].contour(GX, GY, Z, levels=12, colors="red",
                      alpha=0.8, linewidths=1.2)
 axes[2].clabel(co, inline=True, fontsize=7, fmt="%.3f")
 axes[2].scatter(*mu, color="red", s=140, marker="X", edgecolors="darkred",
-                linewidth=2, zorder=5, label="mean")
-axes[2].set_title("overlay (red = model)")
-fig.colorbar(h2[3], ax=axes[2], label="count")
+                linewidth=2, zorder=5, label="평균")
+axes[2].set_title("겹쳐 그리기 (빨강 = 모형)")
+fig.colorbar(h2[3], ax=axes[2], label="개수")
 axes[2].legend(loc="upper left")
 
 for ax in axes:
-    ax.set_xlabel("S&P 500 daily return (%)")
-    ax.set_ylabel("AAPL daily return (%)")
+    ax.set_xlabel("S&P 500 일별 수익률 (%)")
+    ax.set_ylabel("AAPL 일별 수익률 (%)")
     ax.grid(alpha=0.2)
 
-fig.suptitle("S&P 500 vs AAPL daily returns, 2025-09 ~ 2026-08", y=1.02)
+fig.suptitle("S&P 500 과 AAPL 의 일별 수익률, 2025-09 ~ 2026-08", y=1.02)
 fig.tight_layout()
 plt.show()
 ```
@@ -317,11 +319,11 @@ plt.show()
 
 **이것이 겹쳐 그리기의 값어치다.** 모형만 보거나 자료만 봐서는 알 수 없고, 같은 축 위에 포개 놓아야 보인다.
 
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> 칸이 너무 잘다
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 4. 칸이 너무 잘다 { .eg }
 
 앞 그림의 왼쪽 색막대를 다시 보면 최댓값이 **6**이다. 3절의 기준("가장 진한 칸에 수십에서 수백 개")에 한참 못 미친다. 거래일이 250일뿐인데 `bins=35`로 나누면 칸이 $35^2 = 1225$개라 **칸이 관측보다 다섯 배 많다.**
 
@@ -336,23 +338,23 @@ for b in [35, 20, 12, 8]:
 fig, axes = plt.subplots(1, 3, figsize=(16.5, 4.5))
 
 h1 = axes[0].hist2d(x, y, bins=35, cmap="Blues", cmin=1)
-axes[0].set_title("bins=35  (too fine)")
-fig.colorbar(h1[3], ax=axes[0], label="count")
+axes[0].set_title("bins=35 — 칸이 너무 잘다")
+fig.colorbar(h1[3], ax=axes[0], label="개수")
 
 h2 = axes[1].hist2d(x, y, bins=12, cmap="Blues", cmin=1)
-axes[1].set_title("bins=12  (readable)")
-fig.colorbar(h2[3], ax=axes[1], label="count")
+axes[1].set_title("bins=12 — 읽을 만하다")
+fig.colorbar(h2[3], ax=axes[1], label="개수")
 
 # hexbin 은 같은 자료를 육각형 칸으로 덮는다.
 hb = axes[2].hexbin(x, y, gridsize=12, cmap="Blues", mincnt=1)
 axes[2].set_title("hexbin, gridsize=12")
-fig.colorbar(hb, ax=axes[2], label="count")
+fig.colorbar(hb, ax=axes[2], label="개수")
 
 for ax in axes:
-    ax.set_xlabel("S&P 500 daily return (%)")
-    ax.set_ylabel("AAPL daily return (%)")
+    ax.set_xlabel("S&P 500 일별 수익률 (%)")
+    ax.set_ylabel("AAPL 일별 수익률 (%)")
     ax.grid(alpha=0.2)
-fig.suptitle("Same 250 days, three bin choices", y=1.02)
+fig.suptitle("같은 250일, 세 가지 칸 크기", y=1.02)
 fig.tight_layout()
 plt.show()
 ```
@@ -388,13 +390,13 @@ $$
 
 **hexbin이 같은 `gridsize`에서 더 매끄럽다.** 오른쪽 그림은 육각형 칸이 서로 물려 있어 중심의 덩어리가 한 덩어리로 보인다. 가운데 사각 격자에서는 같은 덩어리가 계단처럼 각져 보인다. 2절에서 말한 육각형의 장점이 **표본이 적을 때 특히 두드러진다.**
 
-**그러나 예제 3의 결론은 바뀌지 않는다.** 칸을 어떻게 잡든 중심은 원점 부근이고 기울기는 양수이며 아래쪽에 멀리 떨어진 날들이 있다. **여러 칸 크기에서 살아남는 구조가 실제 구조**라는 3절의 원칙이 여기서 확인된다.
+**그러나 보기 3의 결론은 바뀌지 않는다.** 칸을 어떻게 잡든 중심은 원점 부근이고 기울기는 양수이며 아래쪽에 멀리 떨어진 날들이 있다. **여러 칸 크기에서 살아남는 구조가 실제 구조**라는 3절의 원칙이 여기서 확인된다.
+
+<div class="exbox" markdown>
+
+**보기 5.** <span class="diff easy" title="쉬움"></span> 정규 가정은 어디서 깨지는가
 
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 5. 정규 가정은 어디서 깨지는가 { .eg }
 
 겹쳐 그린 그림이 "아래쪽이 안 맞는 것 같다"고 말했다. 이제 그것을 **수치로** 확인한다.
 
@@ -432,12 +434,12 @@ print(f"99% 타원 밖 관측 비율 {np.mean(D2 > stats.chi2.ppf(0.99, 2)):.4f}
 # ── 꼬리 확률: 모형과 실제가 얼마나 다른가 ──────────────────────────
 # 두 자산이 "함께 크게 빠지는 날"이 투자자에게 가장 중요한데,
 # 2차원 정규분포가 그 확률을 제대로 맞히는지 직접 세어 본다.
-# 모형 확률은 이 분포에서 대량으로 뽑아 비율로 근사한다.
-sim = np.random.default_rng(0).multivariate_normal(mu, S, 2_000_000)
+# 모형 확률은 결합 CDF 로 바로 구한다. 모의실험으로 근사하면
+# 배율이 표본오차 때문에 몇 %씩 흔들리므로 정확한 값을 쓰는 편이 낫다.
 print(f"\n{'사건':>26s}{'실제':>9s}{'모형':>9s}{'배율':>8s}")
 for lab, thr in [("둘 다 -1% 아래", -1.0), ("둘 다 -2% 아래", -2.0)]:
     emp = np.mean((x < thr) & (y < thr))
-    mod = np.mean((sim[:, 0] < thr) & (sim[:, 1] < thr))
+    mod = model.cdf([thr, thr])
     print(f"{lab:>26s}{emp:>9.4f}{mod:>9.4f}{emp / mod:>8.2f}")
 
 # ── 주변분포의 첨도 ─────────────────────────────────────────────────
@@ -452,9 +454,9 @@ fig, axes = plt.subplots(1, 3, figsize=(16.5, 4.5))
 axes[0].scatter(q_theory, D2_sorted, s=14, alpha=0.7, color="steelblue")
 lim = max(q_theory.max(), D2_sorted.max()) * 1.05
 axes[0].plot([0, lim], [0, lim], "r--", lw=1.5, label="y = x")
-axes[0].set_xlabel("chi-square(2) quantile")
-axes[0].set_ylabel("observed $D^2$")
-axes[0].set_title("Mahalanobis QQ plot")
+axes[0].set_xlabel("자유도 2인 카이제곱 분위수")
+axes[0].set_ylabel("관측된 $D^2$")
+axes[0].set_title("마할라노비스 QQ 그림")
 axes[0].legend()
 
 # 95% 타원을 자료 위에 직접 그려 본다.
@@ -464,24 +466,26 @@ circle = np.column_stack([np.cos(theta), np.sin(theta)])
 L = np.linalg.cholesky(S)
 for lvl, c in [(0.50, "tab:green"), (0.95, "tab:orange"), (0.99, "tab:red")]:
     e = mu + (circle * np.sqrt(stats.chi2.ppf(lvl, 2))) @ L.T
-    axes[1].plot(e[:, 0], e[:, 1], color=c, lw=1.8, label=f"{lvl:.0%} ellipse")
+    axes[1].plot(e[:, 0], e[:, 1], color=c, lw=1.8, label=f"{lvl:.0%} 타원")
 outside = D2 > stats.chi2.ppf(0.95, 2)
 axes[1].scatter(x[~outside], y[~outside], s=12, alpha=0.5, color="steelblue")
 axes[1].scatter(x[outside], y[outside], s=28, color="crimson",
-                edgecolors="black", linewidth=0.4, label="outside 95%")
-axes[1].set_xlabel("S&P 500 daily return (%)")
-axes[1].set_ylabel("AAPL daily return (%)")
-axes[1].set_title("data with model ellipses")
+                edgecolors="black", linewidth=0.4, label="95% 타원 밖")
+axes[1].set_xlabel("S&P 500 일별 수익률 (%)")
+axes[1].set_ylabel("AAPL 일별 수익률 (%)")
+axes[1].set_title("자료와 모형의 등고선 타원")
 axes[1].legend(fontsize=8)
 
 # 주변분포의 정규 QQ 그림 (AAPL)
+# probplot 은 축 이름을 영어로 붙이므로 그린 뒤에 덮어쓴다.
 stats.probplot(y, dist="norm", plot=axes[2])
-axes[2].set_title("AAPL marginal normal QQ")
+axes[2].set_title("AAPL 주변분포의 정규 QQ 그림")
+axes[2].set_xlabel("이론 분위수"); axes[2].set_ylabel("관측 분위수")
 axes[2].get_lines()[0].set_markersize(4)
 
 for ax in axes:
     ax.grid(alpha=0.2)
-fig.suptitle("Is the 2D normal a good fit?", y=1.02)
+fig.suptitle("2차원 정규분포는 잘 맞는가?", y=1.02)
 fig.tight_layout()
 plt.show()
 ```
@@ -496,8 +500,8 @@ D² 최댓값    29.8324
 99% 타원 밖 관측 비율 0.0280 (이론 0.01)
 
                         사건       실제       모형      배율
-                둘 다 -1% 아래   0.0440   0.0429    1.02
-                둘 다 -2% 아래   0.0080   0.0019    4.30
+                둘 다 -1% 아래   0.0440   0.0434    1.01
+                둘 다 -2% 아래   0.0080   0.0019    4.18
 
 초과첨도 (정규분포는 0)
   S&P 500   +1.2193   왜도 -0.2340
@@ -520,11 +524,13 @@ D² 최댓값    29.8324
 **꼬리 확률의 차이가 실무에서 가장 중요하다.**
 
 ```text
-둘 다 -1% 아래로 빠지는 날   →  실제 4.40%,  모형 4.29%   (배율 1.02)
-둘 다 -2% 아래로 빠지는 날   →  실제 0.80%,  모형 0.19%   (배율 4.30)
+둘 다 -1% 아래로 빠지는 날   →  실제 4.40%,  모형 4.34%   (배율 1.01)
+둘 다 -2% 아래로 빠지는 날   →  실제 0.80%,  모형 0.19%   (배율 4.18)
 ```
 
-**평범한 하락은 모형이 정확히 맞히고, 큰 동반 하락은 4.3배 과소평가한다.** 위험 관리에서 알고 싶은 것이 정확히 후자이므로, **가장 알고 싶은 곳에서 가장 크게 틀리는** 셈이다.
+**평범한 하락은 모형이 정확히 맞히고, 큰 동반 하락은 4.2배 과소평가한다.** 위험 관리에서 알고 싶은 것이 정확히 후자이므로, **가장 알고 싶은 곳에서 가장 크게 틀리는** 셈이다.
+
+다만 **"실제 0.80%"는 250일 가운데 단 이틀**에서 나온 값이다. 꼬리 사건은 원래 관측이 적어 이런 배율이 정밀할 수 없다. $4.2$라는 수는 **방향과 크기의 자릿수**를 말해 줄 뿐이며, 두꺼운 꼬리를 진지하게 재려면 표본 기간을 훨씬 길게 잡아야 한다.
 
 **원인은 주변분포의 두꺼운 꼬리다.** 초과첨도가 S&P 500은 $+1.22$, AAPL은 $+3.02$다. 정규분포라면 0이어야 한다. 오른쪽 QQ 그림에서 AAPL의 아래쪽 점 대여섯 개가 직선에서 크게 벗어나 있는 것이 그 $-7.35\%$ 같은 날들이다.
 
@@ -533,7 +539,7 @@ D² 최댓값    29.8324
 !!! warning "적합이 잘 되었다는 말의 뜻"
     평균 로그가능도가 $-3.0041$이라는 숫자 하나만 보고 "모형이 잘 맞았다"고 할 수는 없다. **비교 대상이 없는 가능도 값은 아무것도 말하지 않는다.**
 
-    적합도는 **모형이 말한 것과 자료가 한 것을 직접 맞대어** 판단해야 한다. 이 예제에서 쓴 세 가지가 표준적인 방법이다.
+    적합도는 **모형이 말한 것과 자료가 한 것을 직접 맞대어** 판단해야 한다. 이 보기에서 쓴 세 가지가 표준적인 방법이다.
 
     - $D^2$의 QQ 그림 — 결합분포의 모양 전체
     - 타원 밖 관측 비율 — 명목 수준과 실제의 일치
@@ -542,8 +548,6 @@ D² 최댓값    29.8324
     셋째가 가장 중요하다. 모형은 **쓰려는 용도에서** 평가해야 한다.
 
 **그렇다면 2차원 정규분포는 쓸모없는가.** 그렇지 않다. 중심 부근의 자료 95%에 대해서는 잘 맞고, 상관 구조와 산포를 간결하게 요약한다. 다만 **꼬리를 물을 때는 다른 도구**가 필요하다 — 자유도가 작은 다변량 $t$ 분포, 코퓰러, 또는 극단값 이론이 그런 도구다.
-
-</div>
 
 ## 연습문제
 
@@ -563,7 +567,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
 
     **고치는 법.** `gridsize`를 크게 줄인다. 목표는 **가장 진한 칸에 수십~수백 개**가 들어가는 것이다.
 
-    $n = 20{,}000$이고 자료가 대략 타원 모양으로 퍼져 있다면, 칸이 대략 500~1500개일 때 평균적으로 칸당 13~40개가 된다. 육각형 칸 수가 `gridsize`의 제곱에 비례하므로 `gridsize`는 **25~40** 정도가 적당하다. 실제로 앞 예제에서 `gridsize=30`으로 최대 칸이 270개 남짓이었다.
+    $n = 20{,}000$이고 자료가 대략 타원 모양으로 퍼져 있다면, 칸이 대략 500~1500개일 때 평균적으로 칸당 13~40개가 된다. 육각형 칸 수가 `gridsize`의 제곱에 비례하므로 `gridsize`는 **25~40** 정도가 적당하다. 실제로 앞 보기에서 `gridsize=30`으로 최대 칸이 270개 남짓이었다.
 
     **점검하는 법.** 색막대의 최댓값을 본다. 그것이 한 자리 수라면 칸이 너무 잔 것이다.
 
@@ -655,7 +659,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
     출력:
 
     ```
-    gridsize       칸 수      최대 칸         평균(빈칸 제외)
+      gridsize       칸 수      최대 칸         평균(빈칸 제외)
             10       116      2327            307.69
             30      1068       270             44.44
             60      4175        81             14.37
@@ -752,7 +756,7 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
     | **제곱근**(`PowerNorm(0.5)`) | 로그가 지나칠 때의 절충 |
     | **분위수 기반** | 순위만 중요할 때 |
 
-    **주의.** 로그 척도는 앞 절 선그림 연습문제 9에서와 같은 위험을 갖는다. **독자가 로그임을 인지하지 못하면 밀도 차이를 크게 과소평가한다.** 색막대에 로그임을 명시하고 눈금을 원래 단위($1, 10, 100$)로 적어야 한다.
+    **주의.** 로그 척도는 뒤의 선그림 연습문제 9에서와 같은 위험을 갖는다. **독자가 로그임을 인지하지 못하면 밀도 차이를 크게 과소평가한다.** 색막대에 로그임을 명시하고 눈금을 원래 단위($1, 10, 100$)로 적어야 한다.
 
     또한 로그는 $0$을 표현하지 못하므로 빈 칸은 그려지지 않는데, 이는 오히려 자연스럽다. $\square$
 
@@ -967,12 +971,12 @@ hexbin으로 **두 집단을 비교**하려면 어떻게 해야 하는가? 나�
 
     **첫째, 표본 크기가 다르면 색이 비교되지 않는다.** A는 $20000$개, B는 $5000$개이므로 같은 색척도에서 B가 통째로 옅게 보인다. 이는 밀도의 차이가 아니라 **표본 크기의 차이**다.
 
-    **둘째, 사람은 두 그림을 눈으로 빼지 못한다.** 앞 절 오차막대 연습문제 4에서 "두 구간을 눈으로 비교하는 것"이 실패한 것과 같은 이유다.
+    **둘째, 사람은 두 그림을 눈으로 빼지 못한다.** 8장 오차막대 그림 연습문제 4에서 "두 구간을 눈으로 비교하는 것"이 실패한 것과 같은 이유다.
 
     **대안: 차이 지도.**
 
     - **각각을 밀도로 정규화한 뒤 빼라.** 그러면 표본 크기 차이가 사라진다.
-    - **발산형 색지도를 쓰고 중심을 $0$에 맞춰라**(`vmin=-m, vmax=m`). matplotlib 문서 연습문제 10의 조언 그대로다.
+    - **발산형 색지도를 쓰고 중심을 $0$에 맞춰라**(`vmin=-m, vmax=m`). 0장 matplotlib 문서 연습문제 10의 조언 그대로다.
     - **차이의 불확실성을 고려하라.** 점이 적은 칸에서는 차이도 불안정하다(연습문제 7).
 
     **더 나은 방법.** 밀도 비의 로그 $\log(p_A/p_B)$를 그리면 비율 해석이 가능하고 대칭적이다. 다만 한쪽이 $0$인 칸을 따로 처리해야 한다.
@@ -1070,7 +1074,7 @@ hexbin과 이 장의 다른 이변량 도구들을 **하나의 결정 규칙**�
     출력:
 
     ```
-    n                       권장 도구                            이유
+           n                       권장 도구                            이유
           50                         산점도                     모든 점이 보인다
          500                   산점도 + 투명도                      겹침이 시작된다
        5,000             hexbin 또는 alpha                       겹침이 심하다
@@ -1117,6 +1121,6 @@ hexbin과 이 장의 다른 이변량 도구들을 **하나의 결정 규칙**�
 - 육각형이 사각형보다 이웃 거리가 고르고 격자무늬가 덜 생기지만, 실무적 차이는 크지 않다.
 - **칸 크기가 유일한 선택**이며, 몇 가지로 바꿔 가며 그려 보는 것이 정석이다.
 - `C` 인자를 쓰면 개수 대신 다른 값의 평균을 그릴 수 있는데, 이때는 표본이 적은 칸을 조심해야 한다.
-- **관측 히스토그램 위에 모형의 확률밀도를 겹쳐 그리면** 모형이 어디서 맞고 어디서 틀리는지가 한 그림에 드러난다. 주가 수익률 예제에서 2차원 정규분포는 중심은 잘 맞혔지만 **동반 급락 확률을 4.3배 과소평가**했다.
+- **관측 히스토그램 위에 모형의 확률밀도를 겹쳐 그리면** 모형이 어디서 맞고 어디서 틀리는지가 한 그림에 드러난다. 주가 수익률 보기에서 2차원 정규분포는 중심은 잘 맞혔지만 **동반 급락 확률을 4.2배 과소평가**했다.
 
 다음 절의 **쌍그림**은 변수가 셋 이상일 때로 넘어간다. 모든 변수 쌍의 산점도를 격자로 늘어놓아 한눈에 훑는 도구다.

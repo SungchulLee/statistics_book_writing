@@ -8,9 +8,11 @@
 
 넓이만 정해져 있고 모양은 자유다. **어떻게 놓느냐가 읽기 쉬운 정도를 좌우한다.**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 제곱화 배치 알고리즘 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 제곱화 배치 알고리즘
+
+</div>
 
 가장 널리 쓰이는 방법은 **제곱화(squarified)** 배치다. 사각형의 **가로세로비를 되도록 1에 가깝게** 유지한다. 길쭉한 조각은 넓이를 가늠하기 어렵기 때문이다.
 
@@ -103,11 +105,11 @@ print(f"넓이 합 {sum(w * h for _, _, w, h in R):.6f}")
 
 **가로세로비는 1.36~2.78로 대체로 정사각형에 가깝다.** 가장 작은 값(1)이 2.78로 가장 길쭉한데, **작은 조각일수록 모양을 맞추기 어렵다**는 것이 이 알고리즘의 알려진 한계다.
 
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 배치 규칙을 바꾸면
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 2. 배치 규칙을 바꾸면 { .eg }
 
 가장 단순한 배치는 **한 방향으로만 차례로 자르는** 방법이다(slice-and-dice). 구현이 쉽고 **순서가 보존**된다는 장점이 있다.
 
@@ -136,8 +138,8 @@ rng = np.random.default_rng(3)
 vals = sorted(np.round(rng.pareto(1.1, 24) * 10 + 1, 1), reverse=True)
 
 fig, ax = plt.subplots(1, 3, figsize=(16, 4.4))
-for a, (R, title) in zip(ax, [(slice_dice(vals, 0, 0, 10, 6), "slice-and-dice"),
-                              (squarify(vals, 0, 0, 10, 6), "squarified")]):
+for a, (R, title) in zip(ax, [(slice_dice(vals, 0, 0, 10, 6), "슬라이스-앤-다이스"),
+                              (squarify(vals, 0, 0, 10, 6), "제곱화")]):
     ratios = [max(w / h, h / w) for _, _, w, h in R]
     cm = plt.get_cmap("Blues")
     for v_, (x0, y0, w, h) in zip(vals, R):
@@ -146,18 +148,18 @@ for a, (R, title) in zip(ax, [(slice_dice(vals, 0, 0, 10, 6), "slice-and-dice"),
                     edgecolor="white", linewidth=1.2))
     a.set_xlim(0, 10); a.set_ylim(0, 6)
     a.set_xticks([]); a.set_yticks([])
-    a.set_title(f"{title}\nmedian aspect ratio {np.median(ratios):.2f}, "
-                f"worst {max(ratios):.1f}")
+    a.set_title(f"{title}\n가로세로비 중앙값 {np.median(ratios):.2f}, "
+                f"최악 {max(ratios):.1f}")
 
 r1 = [max(w / h, h / w) for _, _, w, h in slice_dice(vals, 0, 0, 10, 6)]
 r2 = [max(w / h, h / w) for _, _, w, h in squarify(vals, 0, 0, 10, 6)]
-ax[2].boxplot([r1, r2], labels=["slice-and-dice", "squarified"])
+ax[2].boxplot([r1, r2], labels=["슬라이스-앤-다이스", "제곱화"])
 ax[2].set_yscale("log")
-ax[2].axhline(1, color="red", ls="--", lw=1, label="ideal = 1")
-ax[2].set_ylabel("aspect ratio (log)"); ax[2].set_title("aspect ratios")
+ax[2].axhline(1, color="red", ls="--", lw=1, label="이상적인 값 = 1")
+ax[2].set_ylabel("가로세로비 (로그 눈금)"); ax[2].set_title("가로세로비 분포")
 ax[2].legend(); ax[2].grid(alpha=0.25)
 
-fig.suptitle("Same 24 values, two layout rules", y=1.02)
+fig.suptitle("같은 24개 값, 두 가지 배치 규칙", y=1.02)
 fig.tight_layout()
 plt.show()
 
@@ -185,15 +187,15 @@ squarified:     중앙값 1.29, 최악 2.3
 
 **그래도 slice-and-dice에는 쓸모가 있다.** **순서가 보존**되므로 시간 순서나 크기 순위를 유지해야 할 때 쓴다. 제곱화 배치는 **인접 관계가 뒤죽박죽**이 되어 순서 정보를 잃는다.
 
-</div>
-
 ## 2. 모자이크 그림과 무엇이 다른가
 
 둘 다 화면을 사각형으로 채우고 **넓이로 크기를 나타낸다.** 그래서 겉모습이 비슷하다. 그러나 **받는 자료와 넓이의 뜻이 다르다.**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 같은 사각형, 다른 일 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 같은 사각형, 다른 일
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -217,9 +219,9 @@ for i, (w, row) in enumerate(zip(colw, tab)):
         y += h
     x += w
 ax[0].set_xlim(0, 1); ax[0].set_ylim(0, 1)
-ax[0].set_title("mosaic plot\n(area = cell frequency)")
-ax[0].set_xlabel("width = row marginal")
-ax[0].set_ylabel("height = conditional prob.")
+ax[0].set_title("모자이크 그림\n(넓이 = 칸의 도수)")
+ax[0].set_xlabel("너비 = 행의 주변확률")
+ax[0].set_ylabel("높이 = 조건부확률")
 
 # ── (2) 트리맵: 값의 목록을 받는다 ────────────────────────────────
 v = sorted([6, 6, 4, 3, 2, 2, 1], reverse=True)
@@ -232,17 +234,17 @@ for val, (x0, y0, w, h) in zip(v, R):
     ax[1].text(x0 + w / 2, y0 + h / 2, str(val),
                ha="center", va="center", fontweight="bold")
 ax[1].set_xlim(0, 6); ax[1].set_ylim(0, 4)
-ax[1].set_title("treemap\n(area = value, squarified)")
+ax[1].set_title("트리맵\n(넓이 = 값, 제곱화 배치)")
 ax[1].set_xticks([]); ax[1].set_yticks([])
 
 # ── (3) 같은 값을 막대로 ─────────────────────────────────────────
 ax[2].bar(range(len(v)), v,
           color=[cmap(0.25 + 0.5 * z / max(v)) for z in v], edgecolor="black")
-ax[2].set_title("bar chart\n(length = value)")
+ax[2].set_title("막대그림\n(길이 = 값)")
 ax[2].set_xticks(range(len(v))); ax[2].set_xticklabels([str(z) for z in v])
-ax[2].set_ylabel("value")
+ax[2].set_ylabel("값")
 
-fig.suptitle("Rectangles everywhere — but the inputs are different", y=1.02)
+fig.suptitle("어디나 사각형이지만 받는 자료가 다르다", y=1.02)
 fig.tight_layout()
 plt.show()
 ```
@@ -275,13 +277,13 @@ plt.show()
 
 **트리맵은 정밀한 비교가 아니라 훑어보기를 위한 도구**다. 이 구분이 이 절 전체를 관통한다.
 
-</div>
-
 그런데 두 그림이 **아주 무관한 것도 아니다.** 둘 다 **직사각형을 재귀적으로 쪼개 화면을 채운다**는 점에서 같은 가족이다. 그 관계를 정확히 짚어 두면 앞의 표가 왜 그렇게 되는지도 설명된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 모자이크 그림은 슬라이스-앤-다이스 트리맵이다 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 모자이크 그림은 슬라이스-앤-다이스 트리맵이다
+
+</div>
 
 **주장.** 분할표를 계층으로 보고(행 $\to$ 열), 잎의 값을 칸의 도수로 두고, **방향을 번갈아 가며 1절의 `slice_dice`를 두 번 적용하면 모자이크 그림이 그대로 나온다.**
 
@@ -359,17 +361,17 @@ $$
 | **슬라이스-앤-다이스** | **있다**(주변·조건부확률) | **나쁘다** |
 | **제곱화** | **없다** | **좋다** |
 
-**이 맞바꿈이 1절 예제 2의 수치를 설명한다.** 슬라이스-앤-다이스의 가로세로비 중앙값이 49.10이었다. **모자이크 그림이 작은 표에만 쓰이는 이유가 이것이다.** $2\times2$나 $3\times4$까지는 칸이 읽을 만하지만, 범주가 수십 개면 실오라기가 된다.
+**이 맞바꿈이 1절 보기 2의 수치를 설명한다.** 슬라이스-앤-다이스의 가로세로비 중앙값이 49.10이었다. **모자이크 그림이 작은 표에만 쓰이는 이유가 이것이다.** $2\times2$나 $3\times4$까지는 칸이 읽을 만하지만, 범주가 수십 개면 실오라기가 된다.
 
 **거꾸로, 시황 지도에 모자이크식 배치를 쓸 수 없는 이유**도 같다. 65종목을 슬라이스-앤-다이스로 자르면 세로줄 65개가 되어 아무것도 안 보인다.
 
-</div>
-
 ## 3. 실제 자료: 시가총액 지도
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 대형주 65종목의 시가총액과 등락률 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 대형주 65종목의 시가총액과 등락률
+
+</div>
 
 ```python
 import warnings
@@ -444,11 +446,11 @@ print(f"넓이 비 {s.iloc[0]['w'] / s.iloc[-1]['w']:.1f}배")
 
 **동시에 이것이 문제이기도 하다.** 넓이가 93배 차이 나면 **작은 칸의 넓이를 서로 비교하는 일은 사실상 불가능**하다. 1픽셀 대 2픽셀의 차이를 눈이 구별하지 못한다.
 
+<div class="exbox" markdown>
+
+**보기 6.** <span class="diff easy" title="쉬움"></span> 업종별로 묶은 시장 지도
+
 </div>
-
-<div class="codebox" markdown>
-
-### 예제 6. 업종별로 묶은 시장 지도 { .eg }
 
 ```python
 import matplotlib.pyplot as plt
@@ -497,13 +499,14 @@ for sec, (gx, gy, gw, gh), items in layout:
                     fontsize=min(9, 4 + (w * h) ** 0.19))
     ax.add_patch(plt.Rectangle((gx, gy), gw, gh, fill=False,
                  edgecolor="black", linewidth=2.2))
-    SHORT = {"Communication Services": "Comm. Svcs",
-             "Consumer Discretionary": "Cons. Disc.",
-             "Consumer Staples": "Cons. Staples",
-             "Real Estate": "Real Est.", "Technology": "Technology"}
+    SHORT = {"Technology": "기술", "Communication Services": "통신 서비스",
+             "Consumer Discretionary": "경기소비재", "Consumer Staples": "필수소비재",
+             "Financials": "금융", "Healthcare": "헬스케어",
+             "Industrials": "산업재", "Energy": "에너지",
+             "Utilities": "유틸리티", "Real Estate": "부동산", "Materials": "소재"}
     lab = SHORT.get(sec, sec)
     if gw < 12:
-        lab = lab[:9]
+        lab = lab[:5]
     ax.text(gx + 0.5, gy + gh - 1.2, lab, fontsize=8.2, fontweight="bold",
             va="top", ha="left", clip_on=True,
             bbox=dict(boxstyle="square,pad=0.15", fc="white", ec="none", alpha=0.85))
@@ -512,8 +515,8 @@ ax.set_xlim(0, 100); ax.set_ylim(0, 62)
 ax.set_xticks([]); ax.set_yticks([]); ax.set_aspect("equal")
 sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm); sm.set_array([])
 cb = fig.colorbar(sm, ax=ax, fraction=0.03, pad=0.01)
-cb.set_label(f"daily change (%), clipped at ±{CLIP:.0f}")
-ax.set_title("65 US large caps: area = market cap, color = daily change\n"
+cb.set_label(f"일별 등락률 (%), ±{CLIP:.0f}%에서 자름")
+ax.set_title("미국 대형주 65종목: 넓이 = 시가총액, 색 = 일별 등락률\n"
              f"{d['date_prev'].iloc[0]} → {d['date_last'].iloc[0]}", fontsize=12)
 fig.tight_layout()
 plt.show()
@@ -539,15 +542,15 @@ plt.show()
 
     **색을 자르는 것(clipping)도 선택이다.** 여기서는 $\pm3\%$에서 잘랐는데, 이 값을 바꾸면 그림의 인상이 크게 달라진다. **자른 사실과 그 값을 반드시 밝혀야 한다.**
 
-</div>
-
 ## 4. 눈이 세는 것과 지수가 재는 것
 
 여기서부터가 이 절의 핵심이다. **시장 지도를 보고 "오늘 시장이 어땠나"를 판단할 때, 사람의 눈과 지수는 서로 다른 것을 계산한다.**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 7. 초록 칸의 개수와 지수의 등락은 다르다 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 초록 칸의 개수와 지수의 등락은 다르다
+
+</div>
 
 ```python
 up = (d["chg"] > 0).sum()
@@ -633,8 +636,6 @@ $$
 
 **에너지 업종의 두 값이 3배 차이다.** 시총가중 $+1.90\%$인데 동일가중은 $+0.63\%$다. 네 종목뿐인 작은 묶음에서도 가중 방식이 결론을 크게 바꾼다. 연습문제 5에서 한 종목씩 뜯어본다.
 
-</div>
-
 ## 5. 트리맵이 잘 못하는 일
 
 **트리맵은 훑어보기 도구이지 비교 도구가 아니다.** 한계를 정리하면 이렇다.
@@ -671,7 +672,7 @@ $$
 트리맵은 **수량 하나를 넓이로, 계층을 중첩으로 나타내는 그림**이다.
 
 - **모자이크 그림과 다르다.** 모자이크는 분할표를 받아 너비·높이에 각각 확률의 뜻을 주지만, 트리맵은 **넓이만 뜻이 있고 위치와 모양은 알고리즘의 산물**이다.
-- **그러나 남남은 아니다.** 모자이크 그림은 **교차분류를 계층으로 삼고 방향을 번갈아 슬라이스-앤-다이스를 적용한 트리맵**과 좌표까지 정확히 같다(예제 4). 너비·높이의 확률 해석은 **그 배치 규칙이 주는 것**이고, 제곱화는 모양을 얻는 대신 그것을 버린다.
+- **그러나 남남은 아니다.** 모자이크 그림은 **교차분류를 계층으로 삼고 방향을 번갈아 슬라이스-앤-다이스를 적용한 트리맵**과 좌표까지 정확히 같다(보기 4). 너비·높이의 확률 해석은 **그 배치 규칙이 주는 것**이고, 제곱화는 모양을 얻는 대신 그것을 버린다.
 - **배치 규칙이 읽기 쉬운 정도를 좌우한다.** 같은 24개 값에서 가로세로비 중앙값이 49.10(slice-and-dice) 대 1.29(제곱화)로 **38배** 차이가 났다.
 - **넓이는 지각 서열 5위**다. 훑어보기에는 좋지만 **정밀한 비교에는 부적합**하다.
 - **두 변수를 함께 담을 수 있다.** 넓이에 시가총액, 색에 등락률을 실으면 시장 지도가 된다.
@@ -686,7 +687,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-예제 2의 `squarify`가 **넓이를 정확히 보존하는지**, 그리고 **사각형이 겹치거나 빈틈을 남기지 않는지** 확인하는 검사를 작성하라.
+보기 2의 `squarify`가 **넓이를 정확히 보존하는지**, 그리고 **사각형이 겹치거나 빈틈을 남기지 않는지** 확인하는 검사를 작성하라.
 
 </div>
 
@@ -722,7 +723,7 @@ $$
 
     rng = np.random.default_rng(0)
     cases = {
-        "예제 1의 값": [6, 6, 4, 3, 2, 2, 1],
+        "보기 1의 값": [6, 6, 4, 3, 2, 2, 1],
         "모두 같은 값": [5] * 12,
         "극단적 편중": [1000, 1, 1, 1, 1],
         "무작위 50개": list(rng.random(50) * 100 + 0.1),
@@ -736,14 +737,14 @@ $$
 
     ```text
                 경우       넓이 오차       덮기 오차       최대 겹침
-           예제 1의 값    0.00e+00    0.00e+00    0.00e+00
+           보기 1의 값    0.00e+00    0.00e+00    0.00e+00
            모두 같은 값    0.00e+00    0.00e+00    0.00e+00
             극단적 편중    0.00e+00    0.00e+00    0.00e+00
            무작위 50개    2.22e-16    7.11e-15    0.00e+00
               한 개뿐    0.00e+00    0.00e+00    0.00e+00
     ```
 
-    **다섯 경우 모두 통과한다.** 오차가 $10^{-13}$ 이하로 부동소수 정밀도 수준이고, **겹침은 정확히 0**이다.
+    **다섯 경우 모두 통과한다.** 오차가 $10^{-14}$ 이하로 부동소수 정밀도 수준이고, **겹침은 정확히 0**이다.
 
     | 성질 | 왜 중요한가 |
     |---|---|
@@ -751,7 +752,7 @@ $$
     | **전체 덮기** | 빈틈이 있으면 비율이 틀려 보인다 |
     | **겹침 없음** | 겹치면 넓이가 이중으로 세어진다 |
 
-    **"극단적 편중" 경우가 가장 까다롭다.** 1000 대 1이라 작은 칸의 넓이가 전체의 $1/1004$다. 그런데도 오차가 $2.3\times10^{-13}$이다.
+    **"극단적 편중" 경우가 가장 까다롭다.** 1000 대 1이라 작은 칸의 넓이가 전체의 $1/1004$다. 그런데도 세 오차가 모두 정확히 $0$이다.
 
     **시각화 코드를 믿기 전에 이런 검사를 해 보는 습관**이 중요하다. 넓이가 미묘하게 틀린 트리맵은 **눈으로 알아챌 수 없다.** $\square$
 
@@ -812,7 +813,7 @@ $$
     | 10배 | 5.01배 | **49.9%** |
     | **93배** | **23.87배** | **74.3%** |
 
-    **예제 5의 NVDA 대 NKE가 93배**인데, 눈으로는 **24배 정도로 느껴진다.** 실제 격차의 4분의 1이다.
+    **보기 5의 NVDA 대 NKE가 93배**인데, 눈으로는 **24배 정도로 느껴진다.** 실제 격차의 4분의 1이다.
 
     **막대그림이라면 왜곡이 없다.** 길이의 지수가 1.0에 가깝기 때문이다.
 
@@ -921,7 +922,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff hard" title="어려움"></span>
-예제 7에서 "지도는 빨강인데 지수는 상승"이 가능하다고 했다. 그런 상황을 **실제로 만들어** 얼마나 극단적일 수 있는지 보여라.
+보기 7에서 "지도는 빨강인데 지수는 상승"이 가능하다고 했다. 그런 상황을 **실제로 만들어** 얼마나 극단적일 수 있는지 보여라.
 
 </div>
 
@@ -930,7 +931,7 @@ $$
     import numpy as np
     import pandas as pd
 
-    # 예제 5의 실제 시가총액 분포를 그대로 쓰고 등락률만 바꿔 본다.
+    # 보기 5의 실제 시가총액 분포를 그대로 쓰고 등락률만 바꿔 본다.
     w = d["w"].to_numpy()
     order = np.argsort(-w)                 # 큰 것부터
 
@@ -981,17 +982,17 @@ $$
 
     | 시나리오 | 오른 종목 | 동일가중 | 시총가중 |
     |---|---|---|---|
-    | **상위 3종목만 상승** | **4.6%** | $-0.200$ | $\mathbf{+1.625}$ |
-    | **상위 1종목만 폭등** | **1.5%** | $-0.557$ | $\mathbf{+1.131}$ |
-    | **소형주만 상승** | **92.3%** | $\mathbf{+1.615}$ | $-0.610$ |
+    | **상위 3종목만 상승** | **4.6%** | $-0.200$ | $\mathbf{+1.628}$ |
+    | **상위 1종목만 폭등** | **1.5%** | $-0.557$ | $\mathbf{+1.127}$ |
+    | **소형주만 상승** | **92.3%** | $\mathbf{+1.615}$ | $-0.389$ |
 
     **"상위 1종목만 폭등" 시나리오가 가장 극적이다.** 65종목 중 **한 종목만 올랐는데**(1.5%) **지수는 $+1.13\%$ 상승**한다.
 
     **지도를 보면 온통 빨강이다.** 초록 넓이가 12.2%뿐이다. 그런데 뉴스에는 "지수 1.1% 상승"이 나온다.
 
-    **반대 경우도 성립한다.** "소형주만 상승"에서는 **92.3%의 종목이 올랐는데 지수는 $-0.61\%$** 하락이다. 지도가 온통 초록인데 지수는 내린다.
+    **반대 경우도 성립한다.** "소형주만 상승"에서는 **92.3%의 종목이 올랐는데 지수는 $-0.39\%$** 하락이다. 지도가 온통 초록인데 지수는 내린다.
 
-    **이것이 실제로 일어나는 현상**이다. 지수 상위 몇 종목의 비중이 커질수록 갈라짐이 잦아진다. 예제 5에서 **6종목이 넓이의 절반**이었으므로 이 자료의 집중도면 충분히 가능하다.
+    **이것이 실제로 일어나는 현상**이다. 지수 상위 몇 종목의 비중이 커질수록 갈라짐이 잦아진다. 보기 5에서 **6종목이 넓이의 절반**이었으므로 이 자료의 집중도면 충분히 가능하다.
 
     **트리맵 자체는 거짓말하지 않는다.** 넓이는 정확하고, 넓이 가중 평균이 곧 지수다. **문제는 읽는 사람이 넓이가 아니라 개수를 센다는 것**이다.
 
@@ -1004,7 +1005,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-예제 7에서 에너지 업종의 시총가중 등락($+1.90\%$)과 동일가중($+0.63\%$)이 3배 차이였다. 한 종목씩 뜯어 그 이유를 밝혀라.
+보기 7에서 에너지 업종의 시총가중 등락($+1.90\%$)과 동일가중($+0.63\%$)이 3배 차이였다. 한 종목씩 뜯어 그 이유를 밝혀라.
 
 </div>
 
@@ -1426,7 +1427,7 @@ $$
 
     **문제 넷.**
 
-    1. **테두리가 자료를 먹는다.** 157개 사각형에 각각 테두리를 그리면, 작은 칸에서는 **테두리 면적이 내부 면적보다 커진다.**
+    1. **테두리가 자료를 먹는다.** 100개 사각형에 각각 테두리를 그리면, 작은 칸에서는 **테두리 면적이 내부 면적보다 커진다.**
     2. **단계를 구별할 시각적 수단이 부족하다.** 테두리 두께만으로 3단계를 구분하려면 0.8 / 2.2 / 3.0처럼 촘촘해져 눈에 잘 안 들어온다.
     3. **넓이의 의미가 흐려진다.** "이 칸이 큰 것은 업종이 커서인가, 규모 구간이 커서인가, 종목이 커서인가"를 분해할 수 없다.
     4. **라벨을 넣을 자리가 없다.** 2단계에서도 넓이 45 미만 칸은 글씨를 뺐다.

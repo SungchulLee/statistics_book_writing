@@ -30,19 +30,21 @@
 
 한 범주형 변수의 도수를 그린다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 기본 막대그림 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기본 막대그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
 
 data = {
-    'Courses': ('Language', 'History', 'Geometry', 'Chemistry', 'Physics'),
-    'Number of Teachers': (7, 3, 9, 1, 2)
+    '과목': ('국어', '역사', '기하', '화학', '물리'),
+    '교사 수': (7, 3, 9, 1, 2)
 }
-df = pd.DataFrame(data).set_index('Courses')
+df = pd.DataFrame(data).set_index('과목')
 
 fig, ax = plt.subplots(figsize=(12, 3))
 
@@ -50,11 +52,11 @@ fig, ax = plt.subplots(figsize=(12, 3))
 # height      막대의 높이 = 나타내려는 값
 # tick_label  각 위치에 표시할 범주 이름
 # width       막대 폭. 1.0이면 서로 붙고, 0.5면 절반 간격이 생긴다
-ax.bar(x=range(len(df)), height=df["Number of Teachers"],
+ax.bar(x=range(len(df)), height=df["교사 수"],
        tick_label=df.index, width=0.5)
-ax.set_xlabel('Courses')
-ax.set_ylabel('Number of Teachers')
-ax.set_title("Favorite Courses of Teachers")
+ax.set_xlabel('과목')
+ax.set_ylabel('교사 수')
+ax.set_title("교사들이 좋아하는 과목")
 # 위·오른쪽 테두리를 지우면 자료 자체에 눈이 집중된다
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
@@ -63,35 +65,34 @@ plt.show()
 
 ![단일 집단 막대그림](./img/gc_bar_simple.png)
 
-</div>
-
 ### 순서가 없는 범주는 정렬하라
 
 과목 사이에는 자연스러운 순서가 없다. 이런 경우 **값이 큰 순서로 정렬**하면 읽기가 훨씬 쉬워진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 순서가 없는 범주는 정렬한다 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 순서가 없는 범주는 정렬한다
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
 
-df = pd.DataFrame({'Course': ['Language', 'History', 'Geometry',
-                              'Chemistry', 'Physics'],
-                   'Teachers': [7, 3, 9, 1, 2]})
+df = pd.DataFrame({'과목': ['국어', '역사', '기하', '화학', '물리'],
+                   '교사 수': [7, 3, 9, 1, 2]})
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 3.5))
 
 # 왼쪽: 자료에 적힌 순서 그대로
-ax1.bar(df['Course'], df['Teachers'], width=0.5, color='steelblue')
-ax1.set_title("Unsorted")
-ax1.set_ylabel("Number of Teachers")
+ax1.bar(df['과목'], df['교사 수'], width=0.5, color='steelblue')
+ax1.set_title("정렬하지 않음")
+ax1.set_ylabel("교사 수")
 
 # 오른쪽: 값이 큰 순서로 정렬
-df_sorted = df.sort_values('Teachers', ascending=False)
-ax2.bar(df_sorted['Course'], df_sorted['Teachers'], width=0.5, color='steelblue')
-ax2.set_title("Sorted by value")
+df_sorted = df.sort_values('교사 수', ascending=False)
+ax2.bar(df_sorted['과목'], df_sorted['교사 수'], width=0.5, color='steelblue')
+ax2.set_title("값 순으로 정렬")
 
 for ax in (ax1, ax2):
     ax.spines[['top', 'right']].set_visible(False)
@@ -103,27 +104,27 @@ plt.show()
 
 왼쪽에서 "두 번째로 많은 과목이 무엇인가"를 답하려면 막대 높이를 하나씩 견주어야 한다. 오른쪽에서는 두 번째 막대를 보면 끝이다.
 
-</div>
-
 **다만 범주에 자연스러운 순서가 있으면 정렬하지 않는다.** 요일, 월, 나이 구간, 신용등급 A–G 같은 것들은 원래 순서를 지켜야 한다. 순서를 바꾸면 추세가 사라진다.
 
 ### 이름이 길면 가로 막대
 
 범주 이름이 길면 가로축에서 글자가 겹치거나 기울어진다. 막대를 눕히면 이름을 가로로 편하게 읽을 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 이름이 길면 가로 막대 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이름이 길면 가로 막대
+
+</div>
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 3))
 
-df_sorted = df.sort_values('Teachers')     # 가로 막대는 아래에서 위로 쌓이므로
+df_sorted = df.sort_values('교사 수')       # 가로 막대는 아래에서 위로 쌓이므로
                                            # 오름차순으로 정렬해야 위가 가장 크다
-ax.barh(df_sorted['Course'], df_sorted['Teachers'],
+ax.barh(df_sorted['과목'], df_sorted['교사 수'],
         color='steelblue', height=0.6)
-ax.set_xlabel("Number of Teachers")
-ax.set_title("Horizontal Bar Chart")
+ax.set_xlabel("교사 수")
+ax.set_title("가로 막대그림")
 ax.spines[['top', 'right']].set_visible(False)
 plt.tight_layout()
 plt.show()
@@ -131,15 +132,15 @@ plt.show()
 
 ![가로 막대그림](./img/bar_horizontal.png)
 
-</div>
-
 ## 2. 묶음 막대그림
 
 집단마다 여러 값을 비교할 때 쓴다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 묶음 막대그림 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 묶음 막대그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -147,11 +148,11 @@ import numpy as np
 import pandas as pd
 
 data = {
-    'Student': ['Brandon', 'Vanessa', 'Daniel', 'Kevin', 'William'],
-    'Midterm': [85, 60, 60, 65, 100],
-    'Final': [90, 90, 65, 80, 95]
+    '학생': ['Brandon', 'Vanessa', 'Daniel', 'Kevin', 'William'],
+    '중간고사': [85, 60, 60, 65, 100],
+    '기말고사': [90, 90, 65, 80, 95]
 }
-df = pd.DataFrame(data).set_index('Student')
+df = pd.DataFrame(data).set_index('학생')
 
 positions = np.arange(len(df))   # 학생마다 기준 위치 0, 1, 2, 3, 4
 width = 0.3                      # 막대 하나의 폭
@@ -161,14 +162,14 @@ fig, ax = plt.subplots(figsize=(12, 3))
 # 묶음 막대의 요령: 기준 위치에서 좌우로 반 폭씩 밀어 놓는다.
 #   중간고사는 왼쪽(-width/2), 기말고사는 오른쪽(+width/2)
 # 이렇게 하면 두 막대가 겹치지 않으면서 같은 학생끼리 붙어 있게 된다.
-ax.bar(positions - width / 2, df['Midterm'], width=width, label="Midterm")
-ax.bar(positions + width / 2, df['Final'], width=width, label="Final")
+ax.bar(positions - width / 2, df['중간고사'], width=width, label="중간고사")
+ax.bar(positions + width / 2, df['기말고사'], width=width, label="기말고사")
 ax.set_xticks(positions)
 ax.set_xticklabels(df.index)
-ax.set_xlabel("Student")
-ax.set_ylabel("Scores")
-ax.set_title("Midterm and Final Scores")
-ax.legend(title="Exam Type")
+ax.set_xlabel("학생")
+ax.set_ylabel("점수")
+ax.set_title("중간고사와 기말고사 점수")
+ax.legend(title="시험 종류")
 ax.spines['right'].set_visible(False)
 ax.spines['top'].set_visible(False)
 plt.show()
@@ -178,25 +179,25 @@ plt.show()
 
 **묶음 막대는 개별 값을 비교할 때** 쓴다. 학생별로 중간고사와 기말고사를 나란히 놓아, Vanessa가 60에서 90으로 크게 올랐다는 사실이 곧바로 보인다.
 
-</div>
-
 막대가 모두 같은 바닥(0)에서 출발하므로 어떤 두 막대든 길이를 견줄 수 있다. 이것이 다음 절의 누적 막대와 갈리는 지점이다.
 
 ## 3. 분할(누적) 막대그림
 
 각 범주가 무엇으로 구성되어 있는지 보여 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 분할 막대그림 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 분할 막대그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 
-labels = ("Yes", "No")
+labels = ("있음", "없음")
 counts = (np.array([95, 90, 40]), np.array([5, 10, 60]))
-age_groups = ("Adults", "Children", "Infants")
+age_groups = ("성인", "어린이", "영아")
 
 fig, ax = plt.subplots(figsize=(6, 3))
 
@@ -209,11 +210,11 @@ for label, count in zip(labels, counts):
            tick_label=age_groups, label=label)
     bottom += count          # 다음 막대의 출발점을 위로 올린다
 
-ax.set_title("Has Antibodies?")
+ax.set_title("항체를 가지고 있는가?")
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 # bbox_to_anchor로 범례를 그림 바깥 오른쪽에 내보낸다
-ax.legend(title="Response", loc="center left", bbox_to_anchor=(1.0, 0.5))
+ax.legend(title="응답", loc="center left", bbox_to_anchor=(1.0, 0.5))
 plt.tight_layout()
 plt.show()
 ```
@@ -221,8 +222,6 @@ plt.show()
 ![분할(누적) 막대그림](./img/gc_bar_stacked.png)
 
 **누적 막대는 구성비를 볼 때** 쓴다. 세 집단 모두 전체 높이가 100으로 같아, 영아 집단만 항체 보유 비율이 40%로 낮다는 점이 바로 드러난다.
-
-</div>
 
 !!! warning "맨 아래 조각만 정확히 비교할 수 있다"
     누적 막대에는 구조적 한계가 있다. **아래쪽 조각은 시작점이 모두 0으로 같아 길이를 견주기 쉽지만, 위쪽 조각은 시작점이 제각각이라 눈으로 비교하기 어렵다.**
@@ -235,9 +234,11 @@ plt.show()
 
 막대그림은 길이로 크기를 나타내므로, **세로축이 반드시 0에서 시작해야 한다.** 축을 잘라 내면 길이의 비율이 값의 비율과 달라진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. y축을 자르면 생기는 일 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> y축을 자르면 생기는 일
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -265,9 +266,7 @@ plt.show()
 
 ![축을 자르면 생기는 왜곡](./img/bar_axis_truncation.png)
 
-같은 자료다. 왼쪽에서 네 값은 거의 같아 보이고, 실제로도 그렇다(102에서 108, 6% 차이). 오른쪽에서는 D가 A의 **세 배**처럼 보인다.
-
-</div>
+같은 자료다. 왼쪽에서 네 값은 거의 같아 보이고, 실제로도 그렇다(102에서 108, 6% 차이). 오른쪽에서는 눈에 보이는 막대 길이가 각각 2와 8이 되어 D가 A의 **네 배**처럼 보인다.
 
 **선그림에서는 축을 잘라도 된다.** 선그림은 위치와 기울기로 읽으므로 기준선이 0일 필요가 없다. 그러나 막대그림은 길이로 읽으므로 잘린 축이 곧 거짓말이 된다.
 
@@ -508,7 +507,7 @@ plt.show()
     출력:
 
     ```
-    집단       평균      표준편차      중앙값      IQR
+          집단       평균      표준편차      중앙값      IQR
           대칭    49.64     10.20    49.23    13.86
          치우침    49.85     10.01    47.21    10.55
           이봉    49.89     15.62    50.06    30.04
@@ -634,7 +633,7 @@ plt.show()
     출력:
 
     ```
-    연도       A       B       합계      A 비율
+        연도       A       B       합계      A 비율
       2021     200     600      800    0.2500
       2022     260     700      960    0.2708
       2023     340     820     1160    0.2931

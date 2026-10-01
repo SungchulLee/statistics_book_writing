@@ -1,4 +1,4 @@
-# IQR과 강건 측도
+# 사분위범위와 강건 측도
 
 ## 개요
 
@@ -15,7 +15,7 @@
 범위는 가장 단순한 흩어짐의 측도로, 최댓값과 최솟값의 차이다.
 
 $$
-\text{Range} = \text{Max} - \text{Min}
+\text{범위} = \text{최댓값} - \text{최솟값}
 $$
 
 </div>
@@ -26,9 +26,11 @@ $$
 
 ### 범위 계산하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 범위 구하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 범위 구하기
+
+</div>
 
 ```python
 import pandas as pd
@@ -52,8 +54,6 @@ data_range = 195000
 최솟값 4,000  최댓값 199,000
 관측값 50,000개 중 단 2개가 이 값을 정한다
 ```
-
-</div>
 
 ### 한계
 
@@ -81,15 +81,24 @@ $$
 
 ### IQR과 표준편차: 소득 자료
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. IQR 과 표준편차 견주기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> IQR 과 표준편차 견주기
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
 df = pd.read_csv(url)
@@ -109,28 +118,35 @@ fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
 # 왼쪽: 평균 ± 표준편차.
 # 소득은 오른쪽으로 치우쳐 있어 평균이 봉우리보다 오른쪽에 놓이고,
 # "평균 - 표준편차"가 자료가 별로 없는 곳을 가리킨다.
-ax1.hist(df['x'], bins=30, density=True, alpha=0.3, color='skyblue')
-ax1.axvline(mean_income, color='blue', linestyle='--', label='mean')
-ax1.axvline(mean_income - std_dev, color='red', linestyle='--', label='mean - std')
-ax1.axvline(mean_income + std_dev, color='red', linestyle='--', label='mean + std')
-ax1.legend()
-ax1.set_title("Mean and Std Dev")
+ax1.hist(df['x'], bins=30, density=True, color="#DCEBFB", edgecolor="white")
+ax1.axvline(mean_income, color="#1565C0", linestyle='--', lw=2, label="평균")
+ax1.axvline(mean_income - std_dev, color="#D32F2F", linestyle='--', lw=2,
+            label="평균 - 표준편차")
+ax1.axvline(mean_income + std_dev, color="#E65100", linestyle='--', lw=2,
+            label="평균 + 표준편차")
+ax1.legend(fontsize=8)
+ax1.set_title("평균과 표준편차")
+ax1.set_xlabel("소득 (달러)")
+ax1.set_ylabel("밀도")
 
 # 가운데: 중앙값과 사분위수.
 # Q1과 Q3 사이가 정확히 자료의 가운데 50%이며, 치우침에 흔들리지 않는다.
-ax2.hist(df['x'], bins=30, density=True, alpha=0.3, color='skyblue')
-ax2.axvline(median_income, color='blue', linestyle='--', label='median')
-ax2.axvline(q1, color='red', linestyle='--', label='Q1')
-ax2.axvline(q3, color='red', linestyle='--', label='Q3')
-ax2.legend()
-ax2.set_title("Median and Quartiles")
+ax2.hist(df['x'], bins=30, density=True, color="#DCEBFB", edgecolor="white")
+ax2.axvline(median_income, color="#1565C0", linestyle='--', lw=2, label="중앙값")
+ax2.axvline(q1, color="#D32F2F", linestyle='--', lw=2, label="$Q_1$")
+ax2.axvline(q3, color="#E65100", linestyle='--', lw=2, label="$Q_3$")
+ax2.legend(fontsize=8)
+ax2.set_title("중앙값과 사분위수")
+ax2.set_xlabel("소득 (달러)")
+ax2.set_ylabel("밀도")
 
 # 오른쪽: 같은 사분위수를 상자그림으로 옮긴 것
-ax3.boxplot(df['x'], vert=True, patch_artist=True)
-ax3.set_title("Boxplot")
+ax3.boxplot(df['x'], vert=True, patch_artist=True, labels=["소득"])
+ax3.set_title("상자그림")
+ax3.set_ylabel("소득 (달러)")
 
-plt.tight_layout()
-plt.show()
+fig.tight_layout()
+fig.savefig("robust_63.png", dpi=170, facecolor="white", bbox_inches="tight")
 
 # 두 짝의 숫자를 나란히 찍어 비교한다
 print(f"평균   {mean_income:>9,.0f}   표준편차 {std_dev:>9,.0f}")
@@ -148,15 +164,15 @@ print(f"평균 - 표준편차 = {mean_income - std_dev:>9,.0f}   "
 평균 - 표준편차 =    35,888   (최솟값 4,000보다 큰가? 예)
 ```
 
-![Mean and Std Dev](./img/robust_63.png)
-
-</div>
+![평균·표준편차와 중앙값·사분위수 비교](./img/robust_63.png)
 
 ### 사분위수 계산하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 사분위수 구하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 사분위수 구하기
+
+</div>
 
 ```python
 import pandas as pd
@@ -186,8 +202,6 @@ q3 = 85000.0
 IQR = 40,000
 ```
 
-</div>
-
 ---
 
 ## 3. 백분위수
@@ -211,7 +225,7 @@ $$
 ### 백분위수와 중앙값
 
 $$
-\text{Median} = Q_2 = D_5 = P_{50}
+\text{중앙값} = Q_2 = D_5 = P_{50}
 $$
 
 ---
@@ -254,11 +268,25 @@ $$
 ??? success "풀이"
     **범위:** $80 - 2 = 78$.
 
-    **IQR:** 정렬된 값이 $n = 10$개이므로 아래쪽 절반은 $\{2, 4, 5, 7, 8\}$, 위쪽 절반은 $\{9, 11, 13, 15, 80\}$이다. 따라서 $Q_1 = 5$, $Q_3 = 13$이고 $\text{IQR} = 13 - 5 = 8$이다.
+    **IQR:** 정렬된 값이 $n = 10$개이므로 아래쪽 절반은 $\{2, 4, 5, 7, 8\}$, 위쪽 절반은 $\{9, 11, 13, 15, 80\}$이다. 각 절반의 중앙값을 취하면 $Q_1 = 5$, $Q_3 = 13$이고 $\text{IQR} = 13 - 5 = 8$이다.
 
-    **표준편차:** 평균은 $\bar{x} = (2+4+5+7+8+9+11+13+15+80)/10 = 154/10 = 15.4$이다. 제곱편차의 합은 $(2-15.4)^2 + \cdots + (80-15.4)^2 = 179.56 + 129.96 + 108.16 + 70.56 + 54.76 + 40.96 + 19.36 + 5.76 + 0.16 + 4177.16 = 4786.4$이다. 따라서 $s = \sqrt{4786.4/9} \approx \sqrt{531.8} \approx 23.06$이다.
+    **표준편차:** 평균은 $\bar{x} = (2+4+5+7+8+9+11+13+15+80)/10 = 154/10 = 15.4$이다. 제곱편차의 합은 $(2-15.4)^2 + \cdots + (80-15.4)^2 = 179.56 + 129.96 + 108.16 + 70.56 + 54.76 + 40.96 + 19.36 + 5.76 + 0.16 + 4173.16 = 4782.4$이다. 따라서 $s = \sqrt{4782.4/9} \approx \sqrt{531.38} \approx 23.05$이다.
 
-    **범위**가 가장 극적으로 영향받는다(이상치가 없었다면 13이었을 것이 78이 되었다). **표준편차**도 크게 부풀려진다(이상치가 없으면 대략 4.2인데 23.06이 되었다). **IQR**은 자료 가운데 50%에만 의존하므로 이상치의 영향을 받지 않는다.
+    **범위**가 가장 극적으로 영향받는다(이상치가 없었다면 13이었을 것이 78이 되었다). **표준편차**도 크게 부풀려진다(이상치가 없으면 대략 4.27인데 23.05가 되었다). **IQR**은 자료 가운데 50%에만 의존하므로 이상치의 영향을 받지 않는다.
+
+    **사분위수는 계산 방법에 따라 달라진다.** 위에서 쓴 것은 아래·위 절반의 중앙값을 취하는 튜키 방식이다. `numpy` 와 `pandas` 의 기본값은 선형보간이라 같은 자료에서 $Q_1 = 5.5$, $Q_3 = 12.5$, $\text{IQR} = 7$이 나온다.
+
+    ```python
+    import numpy as np
+
+    print(np.percentile([2, 4, 5, 7, 8, 9, 11, 13, 15, 80], [25, 75]))
+    ```
+
+    ```
+    [ 5.5 12.5]
+    ```
+
+    어느 쪽도 틀린 것이 아니라 **정의가 다를 뿐**이다. 자료가 적을수록 차이가 커지고, $1.5 \times \text{IQR}$ 울타리로 이상치를 판정할 때 결론이 갈릴 수 있으므로 어느 방법을 썼는지 밝혀야 한다. `np.percentile` 의 `method=` 인자로 아홉 가지 정의를 고를 수 있다.
 
 <div class="drillbox" markdown>
 
@@ -339,14 +367,14 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 ??? success "풀이"
     $Y \sim N(\mu, \sigma^2)$에 대해 $X = \exp(Y)$이면 $X$는 평균이 $e^{\mu + \sigma^2/2}$이고 분산이 $(e^{\sigma^2} - 1) e^{2\mu + \sigma^2}$인 로그정규분포를 따른다.
 
-    분산은 대략 $e^{\sigma^2}$처럼 커지는데, $\sigma$가 중간 정도만 되어도 아주 커질 수 있다(예: $\sigma = 2$이면 분산 배율이 $\sim 54$). IQR은 로그정규분포의 25번째와 75번째 백분위수에만 의존하며 이는 $\exp(\mu \pm 0.6745\sigma)$이다. 따라서 IQR은 $\sigma$의 지수에 선형으로 커져 분산보다 훨씬 느리게 증가한다.
+    분산은 대략 $e^{2\sigma^2}$처럼 커지는데, $\sigma$가 중간 정도만 되어도 아주 커질 수 있다(예: $\sigma = 2$이면 $e^{\sigma^2} - 1 \approx 54$라는 배율이 $e^{2\mu+\sigma^2}$에 다시 곱해진다). IQR은 로그정규분포의 25번째와 75번째 백분위수에만 의존하며 이는 $\exp(\mu \pm 0.6745\sigma)$이다. 따라서 IQR은 $e^{0.6745\sigma}$ 정도로만 커져 표준편차보다 훨씬 느리게 증가한다.
 
     **구체적인 예:** $\mu = 0$, $\sigma = 2$일 때
 
-    - $X$의 평균 $\approx 7.39$, 분산 $\approx 401$, 표준편차 $\approx 20$.
-    - $Q_1 \approx 0.259$, $Q_3 \approx 3.86$, IQR $\approx 3.6$.
+    - $X$의 평균 $\approx 7.39$, 분산 $= (e^4 - 1)e^4 \approx 2926$, 표준편차 $\approx 54.1$.
+    - $Q_1 \approx 0.259$, $Q_3 \approx 3.85$, IQR $\approx 3.59$.
 
-    표준편차가 IQR의 약 $5.5$배다. "평균 $\pm$ 표준편차"를 $7.4 \pm 20$으로 보고하는 것은 오도한다. 그 구간이 양의 확률변수에는 불가능한 음수를 포함하고, 표준편차가 전형적인 척도가 아니라 긴 오른쪽 꼬리에 지배되기 때문이다.
+    표준편차가 IQR의 약 $15$배다. "평균 $\pm$ 표준편차"를 $7.4 \pm 54$로 보고하는 것은 오도한다. 그 구간이 양의 확률변수에는 불가능한 음수를 포함하고, 표준편차가 전형적인 척도가 아니라 긴 오른쪽 꼬리에 지배되기 때문이다.
 
     **치우친 자료의 보고 권고:** 평균 ± 표준편차 대신 언제나 **중앙값 + IQR**을, 더 나아가 **중앙값 + 10번째 및 90번째 백분위수**를 보고하라. 여러 분야(소득 보고, 약물동태학, 지진 규모)가 정확히 이 이유로 로그 척도에서 작업한다.
 
@@ -596,11 +624,11 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
 
     | 분포 | 표준편차 | IQR | 비 |
     |---|---|---|---|
-    | $\text{LN}(0, 0.5)$ | $0.605$ | $0.688$ | $0.88$ |
-    | $\text{LN}(0, 1.0)$ | $2.163$ | $1.452$ | $1.49$ |
-    | $\text{LN}(0, 1.5)$ | $\mathbf{8.781}$ | $2.389$ | $\mathbf{3.68}$ |
+    | $\text{LN}(0, 0.5)$ | $0.604$ | $0.686$ | $0.88$ |
+    | $\text{LN}(0, 1.0)$ | $2.166$ | $1.457$ | $1.49$ |
+    | $\text{LN}(0, 1.5)$ | $\mathbf{8.951}$ | $2.385$ | $\mathbf{3.75}$ |
 
-    정규분포라면 $\sigma/\mathrm{IQR} = 1/1.349 = 0.74$인데, $\text{LN}(0,1.5)$에서는 $3.68$로 **다섯 배**다.
+    정규분포라면 $\sigma/\mathrm{IQR} = 1/1.349 = 0.74$인데, $\text{LN}(0,1.5)$에서는 $3.75$로 **다섯 배**다.
 
     **왜인가.** 표준편차는 편차의 제곱을 평균하므로 오른쪽 꼬리의 드문 큰 값이 압도적으로 기여한다. 앞 절에서 본 첨도의 $4$제곱 문제와 같은 구조다. IQR은 가운데 $50\%$만 보므로 꼬리에 무감각하다.
 

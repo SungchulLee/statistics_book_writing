@@ -1,8 +1,8 @@
-# 경험적 누적분포함수와 분위수
+# 경험적 분포와 분위수-분위수 그림
 
 ## 개요
 
-**경험적 누적분포함수(ECDF)** 와 **분위수**는 히스토그램의 구간 너비 민감성을 피하면서 분포를 서로 보완적으로 바라보는 두 관점을 제공한다. ECDF는 각 자료값을 그 값 이하인 관측값의 비율로 보내어 계단함수를 만들며, 표본 크기가 커지면 참된 누적분포함수로 수렴한다. 분위수는 이 관계를 뒤집어 "자료의 주어진 비율이 어떤 값 아래에 떨어지는가?"에 답한다.
+**경험적 누적분포함수(ECDF)** 와 **분위수**는 히스토그램의 구간 너비 민감성을 피하면서 분포를 서로 보완적으로 바라보는 두 관점을 제공한다. ECDF는 각 자료값을 그 값 이하인 관측값의 비율로 보내어 계단함수를 만들며, 표본 크기가 커지면 참된 누적분포함수로 수렴한다. 분위수는 이 관계를 뒤집어 "자료의 주어진 비율이 어떤 값 아래에 떨어지는가?"에 답한다. 이 절의 뒷부분에서는 두 관점을 합쳐, 관측된 분위수를 이론 분포의 분위수에 맞대어 그리는 **분위수-분위수 그림**(Q-Q 그림)을 분포 가정의 시각적 진단 도구로 쓴다.
 
 ## 경험적 누적분포함수
 
@@ -22,14 +22,24 @@ $$
 
 ECDF를 모수적 누적분포함수와 비교하는 것은 분포 가정을 평가하는 강력한 진단이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 경험적 누적분포함수와 이론적 누적분포함수 겹쳐 보기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 경험적 누적분포함수와 이론적 누적분포함수 겹쳐 보기
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 np.random.seed(1)
 x = 4 + np.random.normal(0, 1.5, 100)     # 평균 4, 표준편차 1.5의 정규 표본 100개
@@ -47,13 +57,17 @@ fig, ax = plt.subplots(figsize=(12, 3))
 # ax.ecdf 가 경험적 누적분포함수를 그린다.
 # 자료점마다 1/n 씩 올라가는 계단함수이며, 여기서는 n=100 이라 계단이 촘촘해
 # 매끄러운 곡선처럼 보인다.
-ax.ecdf(x, ls="-", c="r", label="Empirical CDF")
+ax.ecdf(x, ls="-", c="#D32F2F", label="경험적 누적분포함수")
 
 # 같은 자료에 적합한 정규분포의 이론적 CDF를 겹친다.
 # 두 곡선의 벌어짐이 곧 "정규분포 가정이 얼마나 맞는가"이다.
-ax.plot(x, cdf, "-b", label="Theoretical CDF")
+ax.plot(x, cdf, "-", c="#1565C0", label="적합된 정규분포의 누적분포함수")
+ax.set_xlabel("관측값")
+ax.set_ylabel("누적 비율")
+ax.set_title("경험적 누적분포함수와 이론적 누적분포함수")
 ax.legend()
-plt.show()
+ax.spines[["top", "right"]].set_visible(False)
+fig.savefig("ecdf_25.png", dpi=170, facecolor="white", bbox_inches="tight")
 
 # 두 곡선의 최대 수직거리가 콜모고로프-스미르노프 통계량 D 다.
 # 이 눈대중을 형식적 검정으로 만든 것이 KS 검정이다.
@@ -69,22 +83,27 @@ print(f"KS 검정 p값     = {pval:.4f}")
 KS 검정 p값     = 0.9863
 ```
 
-![경험적 누적분포함수와 분위수](./img/ecdf_25.png)
+![경험적 누적분포함수와 이론적 누적분포함수](./img/ecdf_25.png)
 
 경험적 곡선과 이론적 곡선이 가깝게 겹치면 모수 모형이 잘 맞는 것이다. 체계적으로 벗어나면 왜도, 두꺼운 꼬리, 또는 다봉성을 나타낸다.
 
-</div>
-
 ### 누적분포함수와 확률밀도함수 나란히 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 누적분포함수와 확률밀도함수의 관계 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 누적분포함수와 확률밀도함수의 관계
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
+
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 loc = 1        # 평균
 scale = 2      # 표준편차
@@ -97,10 +116,14 @@ pdf = normal.pdf(x)     # 밀도함수: 각 점에서의 "빽빽함"
 cdf = normal.cdf(x)     # 분포함수: 그 점까지 누적된 확률
 
 fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(x, pdf, "-b", label="PDF")
-ax.plot(x, cdf, "-r", label="CDF")
+ax.plot(x, pdf, "-", c="#1565C0", label="확률밀도함수")
+ax.plot(x, cdf, "-", c="#D32F2F", label="누적분포함수")
+ax.set_xlabel("$x$")
+ax.set_ylabel("밀도 / 누적 확률")
+ax.set_title("정규분포의 확률밀도함수와 누적분포함수")
 ax.legend()
-plt.show()
+ax.spines[["top", "right"]].set_visible(False)
+fig.savefig("ecdf_50.png", dpi=170, facecolor="white", bbox_inches="tight")
 
 # 두 함수의 관계를 숫자로 확인한다.
 #   CDF는 PDF를 적분한 것이므로 평균에서 정확히 0.5,
@@ -118,11 +141,9 @@ PDF 최댓값    = 0.1995  (x = 0.99)
 P(|X-mu|<3s)  = 0.9973
 ```
 
-![경험적 누적분포함수와 분위수](./img/ecdf_50.png)
+![정규분포의 확률밀도함수와 누적분포함수](./img/ecdf_50.png)
 
 확률밀도함수는 밀도가 어디에 몰려 있는지 보여주고, 누적분포함수는 누적 확률을 보여준다. 둘을 함께 보면 분포의 완전한 그림이 나온다.
-
-</div>
 
 ## 분위수, 백분위수, 사분위수
 
@@ -136,9 +157,9 @@ $p$번째 **백분위수** $P_p$는 자료의 $p\%$가 그 아래에 떨어지�
 
 $$
 \begin{array}{llll}
-\text{First Quartile} & Q_1 &=& P_{25} \\
-\text{Second Quartile} & Q_2 &=& P_{50} \\
-\text{Third Quartile} & Q_3 &=& P_{75} \\
+\text{제1사분위수} & Q_1 &=& P_{25} \\
+\text{제2사분위수} & Q_2 &=& P_{50} \\
+\text{제3사분위수} & Q_3 &=& P_{75} \\
 \end{array}
 $$
 
@@ -153,16 +174,18 @@ $$
 ### 중앙값과의 관계
 
 $$
-\text{Median} = Q_2 = D_5 = P_{50}
+\text{중앙값} = Q_2 = D_5 = P_{50}
 $$
 
 ## 파이썬에서 분위수 계산하기
 
 흔히 쓰는 세 가지 방법이 모두 같은 결과를 낸다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 세 라이브러리의 분위수 함수 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 세 라이브러리의 분위수 함수
+
+</div>
 
 ```python
 import pandas as pd
@@ -187,19 +210,24 @@ np.percentile(df.x.values, 75) = 12.0
 stats.scoreatpercentile(df.x.values, 75) = 12.0
 ```
 
-</div>
-
 ## 스타벅스 음료의 당 함량
 
 영양학자들이 스타벅스 음료 32종의 당 함량(그램)을 측정했다. 누적상대도수 그래프를 이용하면 다음과 같다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 누적상대도수 곡선에서 백분위수 읽기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 누적상대도수 곡선에서 백분위수 읽기
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import numpy as np
 import matplotlib.pyplot as plt
+
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 # 당 함량을 5g 간격으로 끊고, 각 지점까지 누적된 비율을 기록한 자료다.
 # y가 단조 증가하고 마지막이 1.0으로 끝나는 것이 누적상대도수의 성질이다.
@@ -207,13 +235,14 @@ x = np.arange(0, 55, 5)
 y = [0, 0.1, 0.1, 0.2, 0.3, 0.5, 0.6, 0.6, 0.8, 0.9, 1.0]
 
 fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(x, y, '-o')                          # 점을 찍고 이어 그린다
-ax.set_xlabel("Sugar Content (g)")
-ax.set_ylabel("Cumulative Relative Frequency")
+ax.plot(x, y, '-o', c="#1565C0")             # 점을 찍고 이어 그린다
+ax.set_xlabel("당 함량 (g)")
+ax.set_ylabel("누적 상대도수")
+ax.set_title("스타벅스 음료 32종의 당 함량 누적상대도수 곡선")
 # y 눈금을 0.1 간격으로 촘촘히 두어야 백분위수를 눈으로 읽을 수 있다
 ax.set_yticks(np.arange(0, 1.1, 0.1))
 ax.grid()                                    # 격자가 있어야 가로세로로 읽어 나가기 쉽다
-plt.show()
+fig.savefig("ecdf_138.png", dpi=170, facecolor="white", bbox_inches="tight")
 
 # 그림에서 눈으로 읽는 값을 코드로도 구해 본다.
 # 누적비율 y에서 가로로 이동해 곡선을 만나는 x가 그 백분위수다.
@@ -229,31 +258,36 @@ P50 = 25.0 g
 P75 = 38.8 g
 ```
 
-![경험적 누적분포함수와 분위수](./img/ecdf_138.png)
+![스타벅스 음료의 당 함량 누적상대도수 곡선](./img/ecdf_138.png)
 
 **질문과 답:**
 
 1. 당이 15그램인 커피는 대략 **20번째 백분위수**에 해당한다.
 2. **중앙값**(50번째 백분위수)은 대략 **25그램**이다.
-3. $Q_1 \approx 17.5$ g, $Q_3 \approx 38.5$ g이므로 $\text{IQR} = Q_3 - Q_1 \approx 21$ g이다.
-
-</div>
+3. $Q_1 \approx 17.5$ g, $Q_3 \approx 38.8$ g이므로 $\text{IQR} = Q_3 - Q_1 \approx 21.3$ g이다.
 
 ## 다섯 수치 요약
 
 다섯 수치 요약은 분포의 핵심 분위수를 담는다.
 
 $$
-\text{Min} \quad Q_1 \quad \text{Median} \quad Q_3 \quad \text{Max}
+\text{최솟값} \quad Q_1 \quad \text{중앙값} \quad Q_3 \quad \text{최댓값}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 다섯 수치 요약과 상자그림 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 다섯 수치 요약과 상자그림
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import numpy as np
 import matplotlib.pyplot as plt
+
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 data = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
 
@@ -265,10 +299,13 @@ for label, q in quantiles.items():
 
 # 상자그림은 이 다섯 수를 그림으로 옮긴 것이다. 상자의 위아래가 Q3와 Q1,
 # 가운데 선이 중앙값이며, 수염 밖에 찍히는 점이 이상치 후보다.
-fig, ax = plt.subplots(figsize=(2, 3))
+fig, ax = plt.subplots(figsize=(3, 4))
 ax.boxplot(data)
-ax.set_title("Boxplot of Data")
-plt.show()
+ax.set_xticks([1])
+ax.set_xticklabels(["자료"])
+ax.set_ylabel("관측값")
+ax.set_title("다섯 수치 요약의 상자그림")
+fig.savefig("ecdf_216.png", dpi=170, facecolor="white", bbox_inches="tight")
 ```
 
 출력:
@@ -281,7 +318,9 @@ Q3     : 2.0
 Max    : 8
 ```
 
-</div>
+![다섯 수치 요약의 상자그림](./img/ecdf_216.png)
+
+**최댓값 $8$이 수염 밖에 점으로 찍힌다.** $Q_3 + 1.5 \times \text{IQR} = 2 + 1.5 \times 2 = 5$이므로 $8$은 이상치 후보로 분류된다. 다섯 수치 요약의 "최댓값"과 상자그림의 "위쪽 수염 끝"이 같지 않은 이유가 이것이다.
 
 ## Q-Q 그림: 분위수 대 분위수 비교
 
@@ -289,92 +328,109 @@ Max    : 8
 
 ### 정규분포에 대한 Q-Q 그림
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. Q-Q 그림을 그리는 함수 만들기 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> Q-Q 그림을 그리는 함수 만들기
+
+</div>
 
 ```python
 """표본의 분위수를 이론 분포의 분위수에 맞대어 그리는 Q-Q 그림을 만든다."""
+import matplotlib
+matplotlib.use("Agg")
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 
-def plot_qq(data, dist="norm", sparams=(), figsize=(12, 3)):
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
+
+def plot_qq(data, dist="norm", sparams=(), title="", fname="qq.png",
+            figsize=(12, 3)):
     """자료를 dist 의 분위수에 대해 그린다. 점이 직선 위에 놓이면 그 분포에 맞는다."""
     fig, ax = plt.subplots(figsize=figsize)
     # sparams 는 분포의 모양모수다. 정규처럼 위치·척도만 있는 분포는 비워 두면
     # probplot 이 자료에서 추정한다. 카이제곱처럼 모양모수가 있으면 넘겨야 한다.
     stats.probplot(data, dist=dist, sparams=sparams, plot=ax)
+    ax.get_lines()[0].set_color("#1565C0")     # 자료점
+    ax.get_lines()[1].set_color("#D32F2F")     # 기준선
     ax.spines[["top", "right"]].set_visible(False)
-    ax.set_title('Q-Q Plot')
-    ax.set_xlabel('Theoretical Quantiles')
-    ax.set_ylabel('Ordered Values')
-    plt.show()
+    ax.set_title(title)
+    ax.set_xlabel("이론 분포의 분위수")
+    ax.set_ylabel("정렬된 관측값")
+    fig.savefig(fname, dpi=170, facecolor="white", bbox_inches="tight")
 
 np.random.seed(0)
 sample_data = np.random.normal(loc=0, scale=1, size=1000)
-plot_qq(sample_data, dist="norm")    # 정규 자료를 정규에 맞댄다 — 직선이 나온다
+# 정규 자료를 정규에 맞댄다 — 직선이 나온다
+plot_qq(sample_data, dist="norm",
+        title="정규 자료를 정규 분위수에 맞댄 Q-Q 그림",
+        fname="ecdf_262.png")
 ```
 
-![Q-Q Plot](./img/ecdf_262.png)
-
-</div>
+![정규 자료를 정규 분위수에 맞댄 Q-Q 그림](./img/ecdf_262.png)
 
 ### 지수분포에 대한 Q-Q 그림
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 지수 자료를 지수 분위수에 맞대기 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 지수 자료를 지수 분위수에 맞대기
+
+</div>
 
 ```python
 # 지수분포는 오른쪽으로 심하게 치우쳐 있다. 그래도 지수 분위수에 맞대면 직선이 된다.
 # Q-Q 그림이 보는 것은 치우침 자체가 아니라 "가정한 분포와 얼마나 맞는가"이다.
 np.random.seed(0)
 sample_data = np.random.exponential(scale=1, size=1000)
-plot_qq(sample_data, dist="expon")
+plot_qq(sample_data, dist="expon",
+        title="지수 자료를 지수 분위수에 맞댄 Q-Q 그림",
+        fname="ecdf_285.png")
 ```
 
 ![지수분포에 대한 Q-Q 그림](./img/ecdf_285.png)
 
-</div>
-
 ### 카이제곱분포에 대한 Q-Q 그림
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 8. 모양모수가 있는 분포의 Q-Q 그림 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 모양모수가 있는 분포의 Q-Q 그림
+
+</div>
 
 ```python
 # 카이제곱은 자유도라는 모양모수가 있으므로 sparams=(10,) 으로 알려 주어야 한다.
 # 이 값을 틀리게 주면 자료가 맞는 분포에서 왔더라도 직선에서 벗어난다.
 np.random.seed(0)
 sample_data = np.random.chisquare(df=10, size=1000)
-plot_qq(sample_data, dist="chi2", sparams=(10,))
+plot_qq(sample_data, dist="chi2", sparams=(10,),
+        title="카이제곱 자료를 카이제곱 분위수에 맞댄 Q-Q 그림",
+        fname="ecdf_293.png")
 ```
 
 ![카이제곱분포에 대한 Q-Q 그림](./img/ecdf_293.png)
-
-</div>
 
 ### 진단적 활용: 카이제곱 자료를 정규 Q-Q 그림에 그리기
 
 카이제곱 자료를 정규분포 기준으로 그리면 체계적인 휘어짐이 오른쪽 치우침을 드러내어, 정규 모형이 부적절함을 확인해 준다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 9. 분포를 잘못 가정했을 때의 Q-Q 그림 { .eg }
+**보기 9.** <span class="diff easy" title="쉬움"></span> 분포를 잘못 가정했을 때의 Q-Q 그림
+
+</div>
 
 ```python
 # 같은 카이제곱 자료를 이번에는 정규 분위수에 맞댄다.
 # 오른쪽 끝이 직선 위로 휘어 오르는 것이 "정규보다 오른쪽 꼬리가 두껍다"는 신호다.
 np.random.seed(0)
 sample_data = np.random.chisquare(df=10, size=1000)
-plot_qq(sample_data, dist="norm")
+plot_qq(sample_data, dist="norm",
+        title="카이제곱 자료를 정규 분위수에 맞댄 Q-Q 그림 (잘못된 가정)",
+        fname="ecdf_240.png")
 ```
 
-![경험적 누적분포함수와 분위수](./img/ecdf_240.png)
-
-</div>
+![카이제곱 자료를 정규 분위수에 맞댄 Q-Q 그림](./img/ecdf_240.png)
 
 ## 연습문제
 
@@ -396,7 +452,7 @@ plot_qq(sample_data, dist="norm")
 
     (b) $\hat F(5) = 3/5 = 0.6$(5 이하인 값이 셋), $\hat F(6) = 3/5 = 0.6$(5와 7 사이에 값이 없다).
 
-    (c) 50번째 백분위수는 $\hat F(x) \ge 0.5$인 가장 작은 $x$이므로 $x = 5$다.
+    (c) 50번째 백분위수는 $\hat F(x) \ge 0.5$인 가장 작은 $x$이므로 $x = 5$다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -414,7 +470,7 @@ plot_qq(sample_data, dist="norm")
 
     임을 말한다. 이 수렴은 점별이 아니라 모든 $x$에 걸쳐 *균등*하다. 바로 이 덕분에 ECDF가 범용 분포 추정량 역할을 할 수 있다. $F$의 어떤 연속적인 통계량(중앙값, IQR, 왜도 등)이든 $\hat F_n$의 대응되는 대입 통계량으로 일치성 있게 추정할 수 있다.
 
-    **드보레츠키–키퍼–울포위츠(DKW) 부등식**이 그 속도를 정량화한다: $P(\sup_x |\hat F_n - F| > \varepsilon) \le 2 e^{-2n\varepsilon^2}$. $n = 100$이면 최악의 경우 차이가 확률 $\ge 0.96$으로 $\le 0.1$이다. 비모수 추정량치고는 빠르다.
+    **드보레츠키–키퍼–울포위츠(DKW) 부등식**이 그 속도를 정량화한다: $P(\sup_x |\hat F_n - F| > \varepsilon) \le 2 e^{-2n\varepsilon^2}$. $n = 100$이면 최악의 경우 차이가 확률 $\ge 0.96$으로 $\le 0.1$이다. 비모수 추정량치고는 빠르다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -428,7 +484,7 @@ plot_qq(sample_data, dist="norm")
 
     **히스토그램의 장점:** (1) 보통의 독자에게 더 직관적이다 — "자료가 주로 어디에 있는가?" (2) ECDF가 y축 $[0, 1]$ 범위에 걸쳐 평평하게 만들어 버리는 밀도(봉우리, 최빈값, 빈틈)를 강조한다. (3) 다봉성을 즉시 드러낸다. (4) 논문과 대시보드에서 표준이다.
 
-    실무적으로는 적합도 검정과 분포 비교에는 **ECDF**를, 모양을 시각적으로 전달하는 데는 **히스토그램**(또는 커널밀도추정)을 쓴다.
+    실무적으로는 적합도 검정과 분포 비교에는 **ECDF**를, 모양을 시각적으로 전달하는 데는 **히스토그램**(또는 커널밀도추정)을 쓴다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -445,7 +501,7 @@ plot_qq(sample_data, dist="norm")
     - 아주 어려운 시험에서 85%를 받은 학생은 99번째 백분위수일 수 있다(대부분이 더 못했으므로).
     - 아주 쉬운 시험에서 85%를 받은 학생은 30번째 백분위수일 수 있다(대부분이 더 잘했으므로).
 
-    백분위 순위는 특정 시험판의 난이도에 불변이므로 표준화 시험에서 흔히 쓰인다. 연도나 시험 형식을 넘나드는 비교는 재규준화를 거친 뒤 원점수가 아니라 백분위수를 사용한다.
+    백분위 순위는 특정 시험판의 난이도에 불변이므로 표준화 시험에서 흔히 쓰인다. 연도나 시험 형식을 넘나드는 비교는 재규준화를 거친 뒤 원점수가 아니라 백분위수를 사용한다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -459,7 +515,7 @@ plot_qq(sample_data, dist="norm")
 
     **귀무분포:** $F_0$이 완전히 지정되어 있으면 $D_n$의 분포는 $F_0$ 자체가 아니라 오직 $n$에만 의존한다. 이것이 K-S의 **분포무관(distribution-free)** 성질이다. 귀무가설 아래에서 $F_0(X)$가 $[0, 1]$ 위의 균등분포를 따르므로, 원래의 $F_0$이 무엇이든 $D_n$은 사실상 균등분포로부터의 차이를 재는 셈이다. 덕분에 어떤 연속인 기준 분포에도 같은 임계값을 쓸 수 있다.
 
-    **단서:** $F_0$의 모수를 같은 자료에서 추정했다면(예: 표본에서 추정한 $\hat\mu, \hat\sigma$로 정규성을 검정하는 경우) 이 검정은 더 이상 분포무관이 아니다. 그런 상황에서는 **릴리포스 검정**이나 **샤피로–윌크** 검정이 적절하다.
+    **단서:** $F_0$의 모수를 같은 자료에서 추정했다면(예: 표본에서 추정한 $\hat\mu, \hat\sigma$로 정규성을 검정하는 경우) 이 검정은 더 이상 분포무관이 아니다. 그런 상황에서는 **릴리포스 검정**이나 **샤피로–윌크** 검정이 적절하다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -477,7 +533,7 @@ plot_qq(sample_data, dist="norm")
 
     (d) **꼬리에서만 벗어남**: 자료의 대부분은 잘 모형화되지만 극단 관측값이 맞지 않는다. 꼬리가 두껍거나(기준보다 극단값이 많음, 예: $t$ 분포) 오염 과정에서 온 이상치일 수 있다. 여러 표본을 살펴보거나 본체에 대해서만 강건 분석을 수행하여 구별한다.
 
-    Q-Q 그림은 적합도 $p$-값 하나보다 더 유익하다. 모형이 실패했는지 *여부*만이 아니라 *어디서* 실패하는지를 보여주기 때문이다.
+    Q-Q 그림은 적합도 $p$-값 하나보다 더 유익하다. 모형이 실패했는지 *여부*만이 아니라 *어디서* 실패하는지를 보여주기 때문이다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -646,7 +702,9 @@ plot_qq(sample_data, dist="norm")
         print(f"  {t}보다 작은 비율:  A {(a < t).mean():.4f}   B {(b < t).mean():.4f}")
     ```
 
-    ```text
+    출력:
+
+    ```
                   중앙값      Q1      Q3     IQR
     A           99.62   96.47  103.40    6.93
     B           99.71   89.81  110.01   20.21
@@ -713,7 +771,7 @@ plot_qq(sample_data, dist="norm")
     A: 평균 50.17  표준편차 5.05
     B: 평균 53.44  표준편차 11.92
 
-         기준값    F_A(x)    F_B(x)     기준 미만이 많은 쪽
+         기준값    F_A(x)    F_B(x)           기준 미만이 많은 쪽
           35     0.003     0.062               B
           45     0.135     0.230               B
           50     0.495     0.362               A

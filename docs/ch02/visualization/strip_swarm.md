@@ -8,15 +8,23 @@
 
 같은 자료를 상자그림만, 스트립 그림만, 상자+스웜으로 그려 비교한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 스트립·스웜·상자그림 견주기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 스트립·스웜·상자그림 견주기
+
+</div>
 
 ```python
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
 
 rng = np.random.default_rng(1)
 
@@ -31,12 +39,12 @@ fig, axes = plt.subplots(1, 3, figsize=(13, 3.8), sharey=True)
 
 # (1) 상자그림만: 다섯 숫자 요약
 sns.boxplot(data=d, x='group', y='value', ax=axes[0], color='lightgray')
-axes[0].set_title("Box plot only")
+axes[0].set_title("상자그림만")
 
 # (2) 스트립 그림: 원자료 점만. jitter가 가로로 흔들어 겹침을 푼다.
 #     jitter=0.25 는 범주 폭의 ±25% 범위에서 무작위로 민다는 뜻
 sns.stripplot(data=d, x='group', y='value', ax=axes[1], jitter=0.25, alpha=.7)
-axes[1].set_title("Strip plot (jittered)")
+axes[1].set_title("스트립 그림 (지터)")
 
 # (3) 상자 + 스웜: 요약과 원자료를 겹친다.
 #     showfliers=False 로 상자그림의 이상치 점을 끈다.
@@ -44,7 +52,11 @@ axes[1].set_title("Strip plot (jittered)")
 sns.boxplot(data=d, x='group', y='value', ax=axes[2],
             color='lightgray', showfliers=False)
 sns.swarmplot(data=d, x='group', y='value', ax=axes[2], size=4)
-axes[2].set_title("Box + swarm")
+axes[2].set_title("상자 + 스웜")
+
+for a in axes:
+    a.set_xlabel("집단")
+axes[0].set_ylabel("값")
 
 plt.tight_layout()
 plt.show()
@@ -68,11 +80,9 @@ C      6.63    6.80  0.82
 
 **왼쪽(상자그림만).** B가 가장 높고 A가 가장 낮다. B에 이상치 하나가 아래쪽에 있다. 여기까지가 전부다.
 
-**가운데(스트립 그림).** 각 집단이 18개라는 것이 눈에 보인다. 상자그림에서는 알 수 없던 사실이다. B의 점들이 아래쪽 3.7부터 위쪽 9.6까지 넓게 흩어져 있고, C는 훨씬 좁게 뭉쳐 있다.
+**가운데(스트립 그림).** 각 집단이 18개라는 것이 눈에 보인다. 상자그림에서는 알 수 없던 사실이다. B의 점들이 아래쪽 3.7부터 위쪽 9.5까지 넓게 흩어져 있고, C는 4.9에서 8.0 사이로 훨씬 좁게 뭉쳐 있다.
 
 **오른쪽(상자+스웜).** 둘을 합쳤다. 상자가 중심과 사분위수를 알려 주고, 점들이 실제 분포와 표본 크기를 알려 준다.
-
-</div>
 
 ## 2. 스트립과 스웜의 차이
 
@@ -83,7 +93,7 @@ C      6.63    6.80  0.82
 | **스트립 그림** (`stripplot`) | 가로로 **무작위**하게 민다(지터) | 실행할 때마다 점 위치가 달라진다. 점이 많아도 그려진다. |
 | **스웜 그림** (`swarmplot`) | 가로로 **결정적**으로 밀어 겹치지 않게 배치 | 실행 결과가 항상 같다. 점이 많으면 옆으로 너무 퍼지거나 경고가 난다. |
 
-스웜 그림의 모양 자체가 정보다. **가로 폭이 그 값 근처의 밀도에 비례**하므로, 바이올린 그림과 비슷하게 분포의 모양을 보여 준다. 위 그림 오른쪽에서 C의 6~7 부근이 옆으로 가장 넓다.
+스웜 그림의 모양 자체가 정보다. **가로 폭이 그 값 근처의 밀도에 비례**하므로, 바이올린 그림과 비슷하게 분포의 모양을 보여 준다. 위 그림 오른쪽에서 스웜이 가장 넓게 벌어지는 자리는 **A의 5.4–5.7 부근**으로, 그 좁은 높이 안에 점 일곱 개가 들어 있다. A의 표준편차가 0.70으로 셋 중 가장 작아 점이 가장 빽빽하게 모이기 때문이다. 반대로 가장 퍼진 B는 어느 높이에서도 점이 셋을 넘지 않아 스웜이 가늘다. **가로 폭은 집단의 퍼짐이 아니라 그 값 근처의 밀도를 나타낸다**는 점에 주의하라.
 
 !!! tip "언제 무엇을 쓰는가"
     - **$n \lesssim 30$**: 스웜 그림. 점이 겹치지 않고 예쁘게 배치되며 모양도 보인다.
@@ -119,7 +129,7 @@ C      6.63    6.80  0.82
 </div>
 
 ??? success "풀이"
-    **다른 것은 퍼짐이다.** 표준편차가 B는 1.47, C는 0.82로 B가 거의 두 배 크다. 스트립 그림에서 B의 점들은 3.7에서 9.6까지 넓게 흩어져 있고, C는 4.9에서 8.0 사이에 모여 있다.
+    **다른 것은 퍼짐이다.** 표준편차가 B는 1.47, C는 0.82로 B가 거의 두 배 크다. 스트립 그림에서 B의 점들은 3.7에서 9.5까지 넓게 흩어져 있고, C는 4.9에서 8.0 사이에 모여 있다.
 
     **상자그림만으로도 부분적으로는 알 수 있었다.** 상자(사분위범위)의 높이가 B에서 더 크고, 수염도 더 길다. 아래쪽 이상치 하나도 표시된다.
 
@@ -205,7 +215,7 @@ C      6.63    6.80  0.82
     출력:
 
     ```
-    n       그림 크기      그려진 점        경고 메시지
+         n       그림 크기      그려진 점        경고 메시지
        600      (2, 3)        600   51.2% of the points cannot be placed
       2000      (2, 3)       2000   78.1% of the points cannot be placed
       2000      (6, 4)       2000   34.8% of the points cannot be placed
@@ -297,6 +307,10 @@ C      6.63    6.80  0.82
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
     rng = np.random.default_rng(11)
     control = np.array([4.9, 5.1, 5.0, 4.8, 5.2, 5.0, 4.9, 5.1])
     treated = np.array([5.0, 5.1, 4.9, 5.2, 5.0, 4.8, 9.8, 5.1])   # 한 개체만 크게 반응
@@ -332,7 +346,7 @@ C      6.63    6.80  0.82
 
     ![n=8 에서 막대와 점의 차이](./img/strip_swarm_275.png)
 
-    **막대 그림에서는 두 평균이 비슷하고 오차막대가 겹친다.** 저자의 "차이가 없다"는 결론이 그럴듯해 보인다.
+    **막대 그림에서는 두 막대의 높이 차이가 작아 보이고 오차막대가 (가까스로) 겹친다.** 대조군은 $5.000 \pm 0.046$이라 $[4.954,\ 5.046]$, 처리군은 $5.613 \pm 0.600$이라 $[5.013,\ 6.213]$으로, 두 구간이 $5.013$–$5.046$ 사이에서 살짝 포개진다. 저자의 "차이가 없다"는 결론이 그럴듯해 보인다.
 
     **점을 찍으면 전혀 다른 이야기가 나온다.** 처리군의 일곱 개체는 대조군과 구별되지 않고, **단 한 개체만 $9.8$로 크게 반응했다.** 이는 "효과가 없다"도 "효과가 있다"도 아니고 **"일부 개체만 반응한다"** 는 제3의 가능성이다.
 
@@ -358,6 +372,10 @@ C      6.63    6.80  0.82
     import numpy as np
     import matplotlib.pyplot as plt
     import seaborn as sns
+
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(5)
     groups = ["A", "B", "C"]
@@ -391,7 +409,7 @@ C      6.63    6.80  0.82
     출력:
 
     ```
-    A: n=25  중앙값 4.75  이상치로 표시될 점 0개
+      A: n=25  중앙값 4.75  이상치로 표시될 점 0개
       B: n=25  중앙값 1.63  이상치로 표시될 점 0개
       C: n=25  중앙값 6.08  이상치로 표시될 점 0개
     ```
@@ -425,6 +443,10 @@ C      6.63    6.80  0.82
     import matplotlib.pyplot as plt
     import seaborn as sns
 
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
     rng = np.random.default_rng(9)
     n = 120
     true = rng.normal(50, 12, n)
@@ -450,7 +472,7 @@ C      6.63    6.80  0.82
     출력:
 
     ```
-    원자료: 서로 다른 값 120개 / 120개   중앙값 49.99   IQR 16.82
+               원자료: 서로 다른 값 120개 / 120개   중앙값 49.99   IQR 16.82
           5 단위 반올림: 서로 다른 값  13개 / 120개   중앙값 50.00   IQR 20.00
        30~70 에서 절단: 서로 다른 값 109개 / 120개   중앙값 49.99   IQR 16.82
     ```
@@ -487,6 +509,10 @@ C      6.63    6.80  0.82
     import matplotlib.pyplot as plt
     import seaborn as sns
 
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
     rng = np.random.default_rng(7)
     sizes = [8, 40, 300]
     data = [rng.normal(5, 1.5, n) for n in sizes]
@@ -511,7 +537,7 @@ C      6.63    6.80  0.82
     출력:
 
     ```
-    n=  8: 평균 4.829  SE 0.393  95% CI 반폭 0.770  범위 3.51~7.01
+      n=  8: 평균 4.829  SE 0.393  95% CI 반폭 0.770  범위 3.51~7.01
       n= 40: 평균 4.434  SE 0.206  95% CI 반폭 0.404  범위 1.22~7.04
       n=300: 평균 4.899  SE 0.081  95% CI 반폭 0.158  범위 0.12~8.37
     ```

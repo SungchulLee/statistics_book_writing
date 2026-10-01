@@ -14,10 +14,10 @@
 
 $$
 \begin{array}{lllll}
-\text{Population Mean} && \mu &=& \displaystyle\frac{\sum_{i=1}^N x_i}{N} \\[10pt]
-\text{Sample Mean} && \bar{x} &=& \displaystyle\frac{\sum_{i=1}^n x_i}{n} \\[10pt]
-\text{Expected Value} && \mathbb{E}[X] &=& \displaystyle\sum_i x_i \, \mathbb{P}(X = x_i) \quad \text{(discrete)} \\[6pt]
-&&& =& \displaystyle\int_{-\infty}^{\infty} x \, f_X(x) \, dx \quad \text{(continuous)}
+\text{모평균} && \mu &=& \displaystyle\frac{\sum_{i=1}^N x_i}{N} \\[10pt]
+\text{표본평균} && \bar{x} &=& \displaystyle\frac{\sum_{i=1}^n x_i}{n} \\[10pt]
+\text{기댓값} && \mathbb{E}[X] &=& \displaystyle\sum_i x_i \, \mathbb{P}(X = x_i) \quad \text{(이산)} \\[6pt]
+&&& =& \displaystyle\int_{-\infty}^{\infty} x \, f_X(x) \, dx \quad \text{(연속)}
 \end{array}
 $$
 
@@ -39,15 +39,25 @@ $$
 
 즉 평균은 자료의 "무게중심"이다.
 
-### 평균: 소득 예제
+### 평균: 소득 보기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 소득 자료의 평균 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 소득 자료의 평균
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
 loans_data = pd.read_csv(url)
@@ -57,23 +67,21 @@ mean_income = loans_data['x'].mean()
 fig, ax = plt.subplots(figsize=(12, 3))
 # density=True 라서 y축이 밀도다. 소득 자료의 밀도는 1e-5 규모이므로
 # 아래 세로선의 높이 1.6e-5 도 그 눈금에 맞춘 값이다.
-ax.hist(loans_data['x'], bins=20, density=True, alpha=0.3,
-        color='blue', edgecolor='black')
+ax.hist(loans_data['x'], bins=20, density=True, alpha=0.35,
+        color="#1565C0", edgecolor="white")
 # 평균 위치에 세로선을 긋는다. (x, x)와 (0, 높이)를 이어 그린 것이다.
-ax.plot([mean_income, mean_income], [0, 1.6e-5], '--c',
-        alpha=0.7, label="Mean")
+ax.plot([mean_income, mean_income], [0, 1.6e-5], "--",
+        color="#E65100", lw=2, label="평균")
 ax.legend()
-ax.set_title("Histogram of Income Data with Mean Indicator")
-ax.set_xlabel("Income")
-ax.set_ylabel("Density")
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-plt.show()
+ax.set_title("소득 자료의 히스토그램과 평균")
+ax.set_xlabel("소득 (달러)")
+ax.set_ylabel("밀도")
+ax.spines[["top", "right"]].set_visible(False)
+fig.savefig("mean_median_mode_44.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 ```
 
-![Histogram of Income Data with Mean Indicator](./img/mean_median_mode_44.png)
-
-</div>
+![소득 자료의 히스토그램과 평균](./img/mean_median_mode_44.png)
 
 ---
 
@@ -95,13 +103,20 @@ plt.show()
 
 ### 중앙값 대 평균: 소득 자료
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 소득 자료에서 중앙값과 평균 견주기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 소득 자료에서 중앙값과 평균 견주기
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import pandas as pd
 import matplotlib.pyplot as plt
+
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
 loans_data = pd.read_csv(url)
@@ -113,19 +128,19 @@ mean_income = loans_data['x'].mean()
 median_income = loans_data['x'].median()
 
 fig, ax = plt.subplots(figsize=(12, 3))
-ax.hist(loans_data['x'], bins=20, density=True, alpha=0.3,
-        color='blue', edgecolor='black')
-ax.plot([mean_income, mean_income], [0, 1.6e-5], '--c',
-        alpha=0.7, label="Mean")
-ax.plot([median_income, median_income], [0, 1.6e-5], '--r',
-        alpha=0.7, label="Median")
+ax.hist(loans_data['x'], bins=20, density=True, alpha=0.35,
+        color="#1565C0", edgecolor="white")
+ax.plot([mean_income, mean_income], [0, 1.6e-5], "--",
+        color="#E65100", lw=2, label="평균")
+ax.plot([median_income, median_income], [0, 1.6e-5], "--",
+        color="#33691E", lw=2, label="중앙값")
 ax.legend()
-ax.set_title("Histogram of Income Data with Mean and Median")
-ax.set_xlabel("Income")
-ax.set_ylabel("Density")
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-plt.show()
+ax.set_title("소득 자료의 히스토그램과 평균, 중앙값")
+ax.set_xlabel("소득 (달러)")
+ax.set_ylabel("밀도")
+ax.spines[["top", "right"]].set_visible(False)
+fig.savefig("mean_median_mode_87.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 
 print(f"평균   {mean_income:>9,.0f}")
 print(f"중앙값 {median_income:>9,.0f}")
@@ -140,22 +155,27 @@ print(f"차이   {mean_income - median_income:>9,.0f}  (양수 = 오른쪽 치�
 차이       6,761  (양수 = 오른쪽 치우침)
 ```
 
-![Histogram of Income Data with Mean and Median](./img/mean_median_mode_87.png)
-
-</div>
+![소득 자료의 히스토그램과 평균, 중앙값](./img/mean_median_mode_87.png)
 
 ### 중앙값은 이상치에 강건하다
 
 중앙값은 평균보다 극단값의 영향을 훨씬 덜 받는다. 소득 자료에 이상치를 추가해 보면 이를 확인할 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 이상치가 평균과 중앙값에 미치는 영향 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이상치가 평균과 중앙값에 미치는 영향
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
 loans_data = pd.read_csv(url)
@@ -166,23 +186,29 @@ mean_income = income_data.mean()
 median_income = np.median(income_data)
 
 fig, (hist_ax, box_ax) = plt.subplots(1, 2, figsize=(12, 3))
-plt.suptitle("Original Income Data", fontsize=20)
+fig.suptitle("원자료", fontsize=16)
 
 n, bin_edges, _ = hist_ax.hist(income_data, bins=20, density=True, alpha=0.5,
-                                color='skyblue')
-hist_ax.plot([mean_income, mean_income], [0, n.max()], '--b', label='Mean')
-hist_ax.plot([median_income, median_income], [0, n.max()], '--r', label='Median')
+                                color="#DCEBFB", edgecolor="#1565C0")
+hist_ax.plot([mean_income, mean_income], [0, n.max()], "--",
+             color="#E65100", lw=2, label="평균")
+hist_ax.plot([median_income, median_income], [0, n.max()], "--",
+             color="#33691E", lw=2, label="중앙값")
 hist_ax.legend()
-hist_ax.set_title("Histogram")
+hist_ax.set_title("히스토그램")
+hist_ax.set_xlabel("소득 (달러)")
+hist_ax.set_ylabel("밀도")
 
 box_ax.boxplot(income_data, vert=False, patch_artist=True)
-box_ax.set_title("Boxplot")
+box_ax.set_title("상자그림")
+box_ax.set_xlabel("소득 (달러)")
 
 for ax in (hist_ax, box_ax):
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    ax.spines[["top", "right"]].set_visible(False)
 
-plt.show()
+fig.tight_layout()
+fig.savefig("mean_median_mode_117_0.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 
 # --- 2부: 이상치를 넣는다 ---
 # 5만 개 자료에 2천만 달러짜리 20개를 더한다. 전체의 0.04%에 불과하다.
@@ -194,23 +220,32 @@ mean_outliers = data_with_outliers.mean()
 median_outliers = np.median(data_with_outliers)
 
 fig, (hist_ax, box_ax) = plt.subplots(1, 2, figsize=(12, 3))
-plt.suptitle("Income Data with Outliers", fontsize=20)
+fig.suptitle("이상치를 넣은 뒤", fontsize=16)
 
+# 구간 경계를 원자료와 똑같이 맞춘다. 그래야 두 히스토그램을 나란히 견줄 수 있다.
+# 이상치는 이 구간 밖이라 막대로는 보이지 않고, 평균선의 이동으로만 드러난다.
 n, bin_edges, _ = hist_ax.hist(data_with_outliers, bins=bin_edges,
-                                density=True, alpha=0.5, color='skyblue')
-hist_ax.plot([mean_outliers, mean_outliers], [0, n.max()], '--b', label='Mean')
-hist_ax.plot([median_outliers, median_outliers], [0, n.max()], '--r', label='Median')
+                                density=True, alpha=0.5,
+                                color="#DCEBFB", edgecolor="#1565C0")
+hist_ax.plot([mean_outliers, mean_outliers], [0, n.max()], "--",
+             color="#E65100", lw=2, label="평균")
+hist_ax.plot([median_outliers, median_outliers], [0, n.max()], "--",
+             color="#33691E", lw=2, label="중앙값")
 hist_ax.legend()
-hist_ax.set_title("Histogram")
+hist_ax.set_title("히스토그램")
+hist_ax.set_xlabel("소득 (달러)")
+hist_ax.set_ylabel("밀도")
 
 box_ax.boxplot(data_with_outliers, vert=False, patch_artist=True)
-box_ax.set_title("Boxplot")
+box_ax.set_title("상자그림")
+box_ax.set_xlabel("소득 (달러)")
 
 for ax in (hist_ax, box_ax):
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    ax.spines[["top", "right"]].set_visible(False)
 
-plt.show()
+fig.tight_layout()
+fig.savefig("mean_median_mode_117_1.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 
 # 이상치 20개(전체의 0.04%)가 두 측도를 각각 얼마나 움직였는가
 print(f"{'':10}{'원자료':>14}{'이상치 추가 후':>18}{'변화율':>10}")
@@ -228,13 +263,11 @@ print(f"{'중앙값':10}{median_income:>14,.0f}{median_outliers:>18,.0f}"
 중앙값               62,000            62,000     0.0%
 ```
 
-![Original Income Data](./img/mean_median_mode_117_0.png)
+![원자료의 히스토그램과 상자그림](./img/mean_median_mode_117_0.png)
 
-![Original Income Data](./img/mean_median_mode_117_1.png)
+![이상치를 넣은 뒤의 히스토그램과 상자그림](./img/mean_median_mode_117_1.png)
 
 이상치를 넣으면 평균은 극적으로 이동하지만 중앙값은 거의 변하지 않는다.
-
-</div>
 
 ### 중앙값이 선호되는 실제 사례
 
@@ -268,9 +301,11 @@ $$
 
 미국 주별 인구 자료로 평균, 10% 절단평균, 중앙값을 비교한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 절사평균과 중앙값 — 주 인구 자료 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 절사평균과 중앙값 — 주 인구 자료
+
+</div>
 
 ```python
 import pandas as pd
@@ -303,8 +338,6 @@ print(f"중앙값     : {median_pop:,.0f}")
 
 절단평균은 중간 지대를 차지한다. 극단값(캘리포니아의 3700만 인구)의 영향을 평균보다 덜 받으면서도 중앙값보다 많은 자료를 사용한다. 꼬리를 완전히 무시하지 않으면서 적당한 수준의 강건성을 원할 때 유용하다.
 
-</div>
-
 ### 절단평균을 쓸 때
 
 - **적당한 강건성:** 이상치에 저항하고 싶지만 자료를 완전히 버리고 싶지는 않을 때.
@@ -329,9 +362,11 @@ $$
 
 전국 살인율을 계산할 때 인구가 많은 주가 평균에 더 크게 반영되어야 한다. 주의 인구를 가중치로 쓴다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 주 인구로 가중한 살인율 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 주 인구로 가중한 살인율
+
+</div>
 
 ```python
 import pandas as pd
@@ -360,15 +395,15 @@ print(f"가중평균 살인율: {weighted_mean:.3f}")
 
 인구가 많은 주(캘리포니아, 텍사스, 플로리다, 뉴욕)의 살인율이 작은 주보다 높은 경향이 있어 가중평균이 더 크다. 가중하지 않은 평균은 몬태나(인구 99만)와 캘리포니아(인구 3700만)를 동등하게 취급하는데, 가중평균이 이 왜곡을 바로잡는다.
 
-</div>
-
 ### 가중중앙값
 
 **가중중앙값**은 누적 가중치가 전체 가중치의 50%에 도달하는 값이다. 가중평균과 달리 전용 함수가 필요하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 가중중앙값 구하기 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 가중중앙값 구하기
+
+</div>
 
 ```python
 import pandas as pd
@@ -405,8 +440,6 @@ Unweighted Median: 4.0
 Weighted Median: 4.4
 ```
 
-</div>
-
 ### 가중 통계량을 쓸 때
 
 **금융 자료:** 포트폴리오 수익률은 자산 가치로 가중한다.
@@ -425,9 +458,11 @@ Weighted Median: 4.4
 
 ### 파이썬에서 최빈값 계산하기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 최빈값 구하기 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 최빈값 구하기
+
+</div>
 
 ```python
 import statistics
@@ -444,13 +479,13 @@ print(f"{mode = }")  # mode = 2
 mode = 2
 ```
 
-</div>
-
 최빈값이 여럿인 자료의 경우:
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 8. 최빈값이 둘일 때 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 최빈값이 둘일 때
+
+</div>
 
 ```python
 import statistics
@@ -473,8 +508,6 @@ print(f"{modes = }")  # [2, 3]
 mode = 2
 modes = [2, 3]
 ```
-
-</div>
 
 ---
 
@@ -711,14 +744,14 @@ $\bar{x} = \sum f_i m_i / \sum f_i$와 $s^2 = \sum f_i (m_i - \bar{x})^2 / (n - 
     | 분포 | Var(평균) | Var(중앙값) | 중앙값 효율 |
     |---|---|---|---|
     | 정규 | $0.0400$ | $0.0618$ | $0.648$ |
-    | $t(3)$ | $0.1204$ | $0.0754$ | $1.598$ |
-    | 코시 | $436847$ | $0.1116$ | $3.9 \times 10^{6}$ |
+    | $t(3)$ | $0.1203$ | $0.0751$ | $1.600$ |
+    | 코시 | $145970$ | $0.1113$ | $1.3 \times 10^{6}$ |
 
     **정규분포에서 중앙값은 평균보다 나쁘다.** 효율 $0.648$은 이론값 $2/\pi = 0.637$과 맞으며, **중앙값으로 같은 정밀도를 얻으려면 표본이 약 $1.57$배 필요하다**는 뜻이다. 자료가 정말 정규라면 평균을 쓰는 것이 옳다.
 
     **$t(3)$에서 이미 역전된다.** 자유도 $3$은 분산이 존재하는 정도의 가벼운 두꺼운 꼬리인데도 중앙값이 $1.6$배 낫다.
 
-    **코시에서는 비교가 무의미해진다.** 평균의 분산이 $436847$인데, 이는 유한한 값이 아니라 **코시분포의 평균이 존재하지 않기 때문에** 나온 수치다. 표본을 아무리 키워도 표본평균은 수렴하지 않는다(코시의 표본평균은 원래 코시분포와 같은 분포를 갖는다). 중앙값은 멀쩡히 작동한다.
+    **코시에서는 비교가 무의미해진다.** 평균의 분산이 $145970$인데, 이는 유한한 값이 아니라 **코시분포의 평균이 존재하지 않기 때문에** 나온 수치다. 표본을 아무리 키워도 표본평균은 수렴하지 않는다(코시의 표본평균은 원래 코시분포와 같은 분포를 갖는다). 중앙값은 멀쩡히 작동한다.
 
     **$25\%$ 절단평균이 세 상황 모두에서 좋은 절충이다.** 정규에서 $0.0471$로 평균($0.0400$)에 가깝고, $t(3)$과 코시에서는 중앙값보다도 낫다.
 

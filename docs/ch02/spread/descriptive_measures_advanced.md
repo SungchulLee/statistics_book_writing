@@ -16,26 +16,34 @@
 
 **문제 1.** <span class="diff med" title="중간"></span>
 
-수익률의 열 $r_1, r_2, \ldots, r_T$에 대해 산술평균
+수익률의 열 $r_1, r_2, \ldots, r_T$를 하나의 "평균 수익률"로 요약하려 한다. 산술평균
+
+$$
+\bar{r} = \frac{1}{T} \sum_{t=1}^{T} r_t
+$$
+
+을 쓰면 무엇이 잘못되는가? 올바른 요약은 무엇인가?
 
 </div>
 
 ??? success "풀이"
-    $$
-    \bar{r} = \frac{1}{T} \sum_{t=1}^{T} r_t
-    $$
+    산술평균은 수익률이 변동하기만 하면 복리 성장률을 **과대평가한다.** 수익률은 더해지는 것이 아니라 곱해지기 때문이다. $T$기 뒤의 자산 배수는 $\prod_t (1 + r_t)$이지 $(1 + \bar{r})^T$가 아니다.
 
-    은 수익률이 변동하기만 하면 복리 성장률을 과대평가한다. 올바른 측도는 **기하평균**이다.
+    올바른 측도는 **기하평균**이다.
 
     $$
     r_g = \left(\prod_{t=1}^{T} (1 + r_t)\right)^{1/T} - 1
     $$
 
+    이렇게 정의하면 $(1 + r_g)^T = \prod_t (1 + r_t)$가 정확히 성립하므로, $r_g$는 "매기 같은 수익률을 냈다면 실제와 똑같은 결과에 이르렀을 그 수익률"이다. AM $\ge$ GM 부등식(연습문제 5)에 의해 언제나 $r_g \le \bar{r}$이고, 등호는 모든 $r_t$가 같을 때만 성립한다.
+
 ### 코드
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 1. 산술평균과 기하평균 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 산술평균과 기하평균
+
+</div>
 
 ```python
 import numpy as np
@@ -67,8 +75,6 @@ Geometric  mean: -0.0143  (-1.43%)
 Compound value of 1 USD: 0.9173
 Using geo mean:          0.9173
 ```
-
-</div>
 
 ### 해석
 
@@ -112,13 +118,23 @@ $$
 
 ### 코드
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 체비쇼프 부등식 그리기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 체비쇼프 부등식 그리기
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import numpy as np
 import matplotlib.pyplot as plt
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 수식 글꼴에는 한글 글리프가 없으므로 한글은 $...$ 밖에 둔다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 def chebyshev(k):
     """평균에서 k 표준편차 안에 들어가는 자료의 최소 비율."""
@@ -129,20 +145,20 @@ z_vals = np.arange(1.1, 10, 0.1)
 cheb_vals = [chebyshev(z) for z in z_vals]
 
 fig, ax = plt.subplots(figsize=(7, 4))
-ax.plot(z_vals, cheb_vals, lw=2, color="seagreen")
-ax.set_xlabel("k (표준편차의 배수)")
-ax.set_ylabel("최소 비율")
-ax.set_title("체비쇼프 부등식: 1 - 1/k²")
-ax.axhline(0.75, color="grey", linestyle=":", alpha=0.5)
-ax.annotate("k=2: ≥ 75%", (2, 0.75), fontsize=9,
+ax.plot(z_vals, cheb_vals, lw=2, color="#33691E")
+ax.set_xlabel("$k$ (표준편차의 배수)")
+ax.set_ylabel(r"$k\sigma$ 안에 있는 최소 비율")
+ax.set_title("체비쇼프 부등식의 하한 $1 - 1/k^2$")
+ax.axhline(0.75, color="#90A4AE", linestyle=":", alpha=0.8)
+ax.annotate("$k = 2$ 에서 75% 이상", (2, 0.75), fontsize=9,
             xytext=(4, 0.6), arrowprops=dict(arrowstyle="->"))
-plt.tight_layout()
-plt.show()
+ax.spines[["top", "right"]].set_visible(False)
+fig.tight_layout()
+fig.savefig("descriptive_measures_advanced_97.png", dpi=170,
+            facecolor="white", bbox_inches="tight")
 ```
 
-![Chebyshev](./img/descriptive_measures_advanced_97.png)
-
-</div>
+![체비쇼프 부등식이 보장하는 최소 비율](./img/descriptive_measures_advanced_97.png)
 
 ### 해석
 
@@ -170,13 +186,20 @@ $$
 
 모집단에서 크기 100인 표본을 10,000번 뽑아 각 추정량의 평균을 참 분산과 비교하여 불편성을 확인한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 표본분산의 편향 모의실험 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표본분산의 편향 모의실험
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import numpy as np
 import matplotlib.pyplot as plt
+
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 np.random.seed(42)
 
@@ -210,32 +233,35 @@ print(f"불편 추정 평균 (ddof=1): {unbiased_vars.mean():.4f}")
 불편 추정 평균 (ddof=1): 95.8643
 ```
 
-</div>
-
 ### 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 두 추정량의 분포 겹쳐 보기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 두 추정량의 분포 겹쳐 보기
+
+</div>
 
 ```python
 # 두 추정값의 분포를 겹쳐 그리고 참값 자리에 세로선을 긋는다.
 # 두 분포의 모양은 같고 위치만 조금 다르다. 그 차이가 편향이다.
 fig, ax = plt.subplots(figsize=(8, 4))
-ax.hist(biased_vars, bins=40, alpha=0.5, label="편향 (ddof=0)", density=True)
-ax.hist(unbiased_vars, bins=40, alpha=0.5, label="불편 (ddof=1)", density=True)
-ax.axvline(pop_var, color="red", linestyle="--", lw=2,
-           label=f"참값 σ² = {pop_var:.1f}")
+ax.hist(biased_vars, bins=40, alpha=0.55, color="#1565C0",
+        label="편향 (ddof=0)", density=True)
+ax.hist(unbiased_vars, bins=40, alpha=0.55, color="#E65100",
+        label="불편 (ddof=1)", density=True)
+ax.axvline(pop_var, color="#D32F2F", linestyle="--", lw=2,
+           label=f"참값 $\\sigma^2$ = {pop_var:.1f}")
 ax.set_xlabel("분산 추정값")
-ax.set_title("모분산과 표본분산")
+ax.set_ylabel("밀도")
+ax.set_title("모분산과 표본분산의 추정값 분포")
 ax.legend(fontsize=8)
-plt.tight_layout()
-plt.show()
+ax.spines[["top", "right"]].set_visible(False)
+fig.tight_layout()
+fig.savefig("descriptive_measures_advanced_179.png", dpi=170,
+            facecolor="white", bbox_inches="tight")
 ```
 
-![Population vs Sample Variance](./img/descriptive_measures_advanced_179.png)
-
-</div>
+![편향 추정량과 불편 추정량의 분포 비교](./img/descriptive_measures_advanced_179.png)
 
 ### 해석
 
@@ -296,7 +322,7 @@ plt.show()
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-예제 3의 모의실험은 $n = 100$ 하나만 보았다. **$n$을 바꿔 가며 반복**해서, `ddof=0` 이 참값을 얼마나 과소추정하는지 $n$의 함수로 나타내라. 언제부터 무시해도 되는가?
+보기 3의 모의실험은 $n = 100$ 하나만 보았다. **$n$을 바꿔 가며 반복**해서, `ddof=0` 이 참값을 얼마나 과소추정하는지 $n$의 함수로 나타내라. 언제부터 무시해도 되는가?
 
 </div>
 
@@ -546,7 +572,7 @@ plt.show()
     | 추가 가정 | 한계($k = 3$) |
     |---|---|
     | 없음 (체비쇼프) | $0.1111$ |
-    | 단봉·대칭 (반슈타인) | $0.0494$ |
+    | 단봉 (비소찬스키–페투닌) | $0.0494$ |
     | 유계 지지 (회프딩) | 지지 폭에 의존 |
     | 정규 | $0.0027$ |
 

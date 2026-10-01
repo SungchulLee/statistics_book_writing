@@ -17,9 +17,11 @@
 
 ## 1. 절단점 21에서 시작한다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 스물한 살을 기준으로 나누면 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 스물한 살을 기준으로 나누면
+
+</div>
 
 ```python
 import warnings
@@ -103,32 +105,46 @@ Age_Group
 
 **이 $+6.60$%포인트가 우연으로 설명되는지**는 6절에서 짚는다. 미리 말해 두면 **우연으로 설명될 수 있는 크기**다.
 
-</div>
-
 ## 2. 같은 표를 네 가지로 그리면
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 그림도 "관계가 약하다"고 말한다 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 그림도 "관계가 약하다"고 말한다
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
+
+KO = [f"{CUT}세 미만", f"{CUT}세 이상"]
+DIED, LIVED = "#90A4AE", "#1565C0"
 
 fig, ax = plt.subplots(2, 2, figsize=(13, 9))
 
 # (1) 도수 -- 두 집단의 크기가 크게 다르다 (180 대 534)
 sns.countplot(data=d, x="Age_Group", hue="Survived", order=ORDER,
-              ax=ax[0, 0], palette="Set2")
-ax[0, 0].set_title(f"(1) count by age group (cutoff {CUT})")
-ax[0, 0].set_xlabel("age group"); ax[0, 0].set_ylabel("count")
+              ax=ax[0, 0], palette=[DIED, LIVED])
+ax[0, 0].set_title(f"(1) 나이 집단별 도수 (절단점 {CUT}세)")
+ax[0, 0].set_xlabel("나이 집단"); ax[0, 0].set_ylabel("사람 수")
+ax[0, 0].set_xticks([0, 1]); ax[0, 0].set_xticklabels(KO)
+ax[0, 0].legend(["사망", "생존"], title="생존 여부")
 
 # (2) 생존율 -- 막대 두 개의 높이가 비슷하다
 rate = d.groupby("Age_Group")["Survived"].mean().reindex(ORDER) * 100
-rate.plot(kind="bar", ax=ax[0, 1], color=["coral", "skyblue"],
+rate.plot(kind="bar", ax=ax[0, 1], color=["#E65100", "#1565C0"],
           edgecolor="black", width=0.7)
-ax[0, 1].set_title(f"(2) survival rate (%) (cutoff {CUT})")
-ax[0, 1].set_xlabel("age group"); ax[0, 1].set_ylabel("survival rate (%)")
+ax[0, 1].set_title(f"(2) 나이 집단별 생존율 (%) (절단점 {CUT}세)")
+ax[0, 1].set_xlabel("나이 집단"); ax[0, 1].set_ylabel("생존율 (%)")
+ax[0, 1].set_xticks([0, 1]); ax[0, 1].set_xticklabels(KO)
 ax[0, 1].tick_params(axis="x", rotation=0)
 ax[0, 1].grid(True, alpha=0.3, axis="y"); ax[0, 1].set_ylim(0, 60)
 for i, v in enumerate(rate):
@@ -136,27 +152,31 @@ for i, v in enumerate(rate):
 
 # (3) 누적 막대
 tab.plot(kind="bar", stacked=True, ax=ax[1, 0],
-         color=["indianred", "seagreen"], edgecolor="black", width=0.7)
-ax[1, 0].set_title("(3) stacked count")
-ax[1, 0].set_xlabel("age group"); ax[1, 0].set_ylabel("count")
+         color=["#D32F2F", "#33691E"], edgecolor="black", width=0.7)
+ax[1, 0].set_title("(3) 누적 막대 (도수)")
+ax[1, 0].set_xlabel("나이 집단"); ax[1, 0].set_ylabel("사람 수")
+ax[1, 0].set_xticks([0, 1]); ax[1, 0].set_xticklabels(KO)
 ax[1, 0].tick_params(axis="x", rotation=0)
-ax[1, 0].legend(["did not survive", "survived"], title="Survived")
+ax[1, 0].legend(["사망", "생존"], title="생존 여부")
 
 # (4) 비율 열지도 -- 색 범위를 0~1 로 고정한다
 prop = pd.crosstab(d["Age_Group"], d["Survived"],
                    normalize="index").reindex(ORDER)
 sns.heatmap(prop, annot=True, fmt=".2%", cmap="Blues", ax=ax[1, 1],
-            vmin=0, vmax=1, cbar_kws={"label": "proportion"},
+            vmin=0, vmax=1, cbar_kws={"label": "비율"},
             linewidths=2, linecolor="black")
-ax[1, 1].set_title("(4) proportion heatmap")
-ax[1, 1].set_xlabel("Survived (0=no, 1=yes)"); ax[1, 1].set_ylabel("age group")
+ax[1, 1].set_title("(4) 비율 열지도")
+ax[1, 1].set_xlabel("생존 여부"); ax[1, 1].set_ylabel("나이 집단")
+ax[1, 1].set_xticklabels(["사망", "생존"])
+ax[1, 1].set_yticklabels(KO, rotation=0)
 
-fig.suptitle(f"Titanic: survival vs age group, cutoff {CUT}", y=1.00)
+fig.suptitle(f"타이타닉: 나이 집단과 생존, 절단점 {CUT}세", y=1.00)
 fig.tight_layout()
-plt.show()
+fig.savefig("titanic_age21_four.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 ```
 
-![절단점 21에서 그린 네 가지 그림](./img/titanic_age21_four.png)
+![절단점 21세에서 그린 네 가지 그림](./img/titanic_age21_four.png)
 
 **네 그림 모두 "차이가 거의 없다"고 말한다.** (2)의 막대 두 개는 45.6%와 39.0%로 눈에 띄게 다르지 않고, (4)의 네 칸은 색이 비슷하다.
 
@@ -164,39 +184,43 @@ plt.show()
 
 **(1)이 중요한 정보를 준다.** 두 집단의 크기가 180명과 534명으로 3배 차이다. 어린 쪽 표본이 작으므로 **그쪽 생존율의 불확실성이 크다.** 비율 그림 (2)만 보면 이 사실이 사라진다.
 
-</div>
-
 ## 3. 자르기 전에 나이를 그대로 본다
 
 분할표를 만드는 순간 나이는 0과 1이 된다. 그 전에 **원래 분포**를 보는 것이 순서다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 두 집단의 나이 분포는 거의 겹친다 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 두 집단의 나이 분포는 거의 겹친다
+
+</div>
 
 ```python
 fig, ax = plt.subplots(1, 2, figsize=(13, 4.6))
+PALETTE = ["#E65100", "#33691E"]          # 사망 / 생존
 
 # 생존/사망 각각의 나이 분포를 겹쳐 그린다.
 sns.histplot(data=d, x="Age", hue="Survived", kde=True, ax=ax[0],
-             palette="Set2", bins=30)
-ax[0].axvline(CUT, color="red", ls="--", lw=2)
-ax[0].text(CUT + 1, ax[0].get_ylim()[1] * 0.92, f"cutoff {CUT}",
-           color="red", fontweight="bold")
-ax[0].set_title("age distribution by survival")
-ax[0].set_xlabel("age (years)")
+             palette=PALETTE, bins=30)
+ax[0].axvline(CUT, color="#D32F2F", ls="--", lw=2)
+ax[0].text(CUT + 1, ax[0].get_ylim()[1] * 0.92, f"절단점 {CUT}세",
+           color="#D32F2F", fontweight="bold")
+ax[0].set_title("생존 여부별 나이 분포")
+ax[0].set_xlabel("나이 (세)"); ax[0].set_ylabel("사람 수")
+ax[0].legend(["생존", "사망"], title="생존 여부")
 
 sns.boxplot(data=d, x="Survived", y="Age", ax=ax[1], hue="Survived",
-            palette="Set2", legend=False)
-ax[1].axhline(CUT, color="red", ls="--", lw=2)
-ax[1].text(1.35, CUT + 1.5, f"cutoff {CUT}", color="red", fontweight="bold")
-ax[1].set_title("age by survival (box plot)")
-ax[1].set_xlabel("Survived (0=no, 1=yes)"); ax[1].set_ylabel("age (years)")
+            palette=PALETTE, legend=False)
+ax[1].axhline(CUT, color="#D32F2F", ls="--", lw=2)
+ax[1].text(1.35, CUT + 1.5, f"절단점 {CUT}세", color="#D32F2F",
+           fontweight="bold")
+ax[1].set_title("생존 여부별 나이 상자그림")
+ax[1].set_xlabel("생존 여부"); ax[1].set_ylabel("나이 (세)")
 ax[1].set_xticks([0, 1])
-ax[1].set_xticklabels(["did not survive", "survived"])
+ax[1].set_xticklabels(["사망", "생존"])
 
 fig.tight_layout()
-plt.show()
+fig.savefig("titanic_age_dist.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 
 # 그림이 말하는 것을 수치로도 확인한다.
 print(f"{'':14s}{'n':>6s}{'평균':>8s}{'중앙값':>8s}{'Q1':>7s}{'Q3':>7s}")
@@ -222,15 +246,15 @@ for lab, v in [("사망", d.loc[d["Survived"] == 0, "Age"]),
 
 **히스토그램이 상자그림보다 많은 것을 말한 사례**다. 요약통계가 같아도 분포가 다를 수 있다는 것을 [히스토그램과 밀도 그림](histograms.md) 절에서 다루었다.
 
-</div>
-
 ## 4. 절단점을 바꾸면 결론이 바뀐다
 
 21은 어디서 왔는가. **아무 데서도 오지 않았다.** 미국 음주 연령이기도 하고 성년의 기준이기도 하지만, 1912년 타이타닉에는 아무 의미가 없는 숫자다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 가능한 모든 절단점을 훑어본다 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 가능한 모든 절단점을 훑어본다
+
+</div>
 
 ```python
 age = d["Age"].to_numpy()
@@ -284,7 +308,7 @@ print(f"차이가 10%포인트를 넘는 절단점 "
 차이가 10%포인트를 넘는 절단점 29개 / 64개
 ```
 
-**같은 자료에서 생존율 차이가 $+46$%포인트부터 $-0.01$%포인트까지 나온다.**
+**같은 자료에서 생존율 차이가 $+46$%포인트부터 $+0.02$%포인트까지 나온다.**
 
 | 절단점 | 생존율 차이 | 오즈비 | 읽히는 이야기 |
 |---|---|---|---|
@@ -295,19 +319,19 @@ print(f"차이가 10%포인트를 넘는 절단점 "
 | **30세** | **$+0.0002$** | **1.00** | **차이가 전혀 없음** |
 | 65세 | $+0.3202$ | 6.98 | 큰 차이 |
 
-**30세에서는 두 집단의 생존율이 0.4062와 0.4061로 소수점 넷째 자리까지 같다.** 오즈비가 1.0007이다. 30세를 기준으로 나누면 나이는 생존과 **완벽하게 무관**해 보인다.
+**30세에서는 두 집단의 생존율이 0.4062와 0.4061로 소수점 셋째 자리까지 같다.** 오즈비가 1.0008이다. 30세를 기준으로 나누면 나이는 생존과 **완벽하게 무관**해 보인다.
 
 **큰 차이가 양 끝에 몰려 있다.** 어린 쪽과 아주 나이 든 쪽이다. 가운데는 전부 차이가 거의 없다.
 
 **절단점을 옮기는 것만으로 "오즈비 6.98"과 "오즈비 1.00"을 둘 다 얻을 수 있다.** 자료는 하나도 바뀌지 않았다.
 
-</div>
-
 ## 5. 왜 그런가 — 관계가 단조가 아니다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 나이와 생존의 실제 모양 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 나이와 생존의 실제 모양
+
+</div>
 
 ```python
 fig, ax = plt.subplots(1, 2, figsize=(12, 4.8))
@@ -315,11 +339,13 @@ fig, ax = plt.subplots(1, 2, figsize=(12, 4.8))
 dif = [sur[age < c].mean() - sur[age >= c].mean() for c in CUTS]
 
 # (1) 절단점에 따른 생존율 차이
-ax[0].plot(CUTS, dif, "o-", ms=4, color="seagreen")
-ax[0].axhline(0, color="black", lw=1)
-ax[0].axvline(21, color="darkorange", ls=":", lw=2, label="cutoff 21")
-ax[0].set_xlabel("age cutoff"); ax[0].set_ylabel("rate(<c) - rate(>=c)")
-ax[0].set_title("survival-rate gap by cutoff")
+ax[0].plot(CUTS, dif, "o-", ms=4, color="#33691E")
+ax[0].axhline(0, color="#37474F", lw=1)
+ax[0].axvline(21, color="#E65100", ls=":", lw=2, label="절단점 21세")
+ax[0].set_xlabel("나이 절단점 $c$ (세)")
+# mathtext 는 \ge 를 모른다. \geq 로 써야 한다.
+ax[0].set_ylabel("생존율 차이  $r(<c) - r(\\geq c)$")
+ax[0].set_title("절단점에 따른 생존율 차이")
 ax[0].legend(); ax[0].grid(alpha=0.25)
 
 # (2) 5년 구간별 생존율 -- 자르지 않고 본 실제 모양
@@ -330,21 +356,22 @@ for i in range(len(edges) - 1):
     if m.sum() >= 5:
         mid.append((edges[i] + edges[i + 1]) / 2)
         rt.append(sur[m].mean()); cnt.append(m.sum())
-ax[1].plot(mid, rt, "o-", color="crimson", ms=6)
+ax[1].plot(mid, rt, "o-", color="#6A1B9A", ms=6)
 for x_, y_, n_ in zip(mid, rt, cnt):        # 각 점 위에 표본 크기를 적는다
     ax[1].annotate(f"{n_}", (x_, y_), textcoords="offset points",
-                   xytext=(0, 7), ha="center", fontsize=7, color="gray")
-ax[1].axhline(sur.mean(), color="black", ls="--", lw=1,
-              label=f"overall {sur.mean():.3f}")
-ax[1].axvline(21, color="darkorange", ls=":", lw=2, label="cutoff 21")
-ax[1].set_xlabel("age (5-year bins, n above each point)")
-ax[1].set_ylabel("survival rate")
-ax[1].set_title("the relationship is NOT monotone")
+                   xytext=(0, 7), ha="center", fontsize=7, color="#90A4AE")
+ax[1].axhline(sur.mean(), color="#37474F", ls="--", lw=1,
+              label=f"전체 생존율 {sur.mean():.3f}")
+ax[1].axvline(21, color="#E65100", ls=":", lw=2, label="절단점 21세")
+ax[1].set_xlabel("나이 (5년 구간, 점 위의 수는 구간별 인원)")
+ax[1].set_ylabel("생존율")
+ax[1].set_title("관계가 단조가 아니다")
 ax[1].legend(); ax[1].grid(alpha=0.25)
 
-fig.suptitle("One free parameter, many conclusions", y=1.02)
+fig.suptitle("자유로운 모수 하나, 여러 개의 결론", y=1.02)
 fig.tight_layout()
-plt.show()
+fig.savefig("titanic_cutoff_sweep.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 
 # 10년 단위로 묶어 숫자로도 본다.
 g = d.groupby(pd.cut(d["Age"], [0, 10, 20, 30, 40, 50, 60, 81],
@@ -392,8 +419,6 @@ $$
 
 **왼쪽 그림의 U자 모양이 이 모든 것을 요약한다.** 절단점을 양 끝으로 밀수록 차이가 커지고, 가운데(30세 근처)에서 정확히 0이 된다.
 
-</div>
-
 ## 6. "가장 좋은" 절단점을 고르면
 
 ### 그전에 — "차이가 있다"는 것을 어떻게 정하는가
@@ -428,7 +453,7 @@ $$
     | 20세 | 0.025 | 0.031 |
     | 21세 | **0.119** | **0.141** |
 
-    **판정은 어느 쪽이든 같다.** 이 책이 보정 없는 값을 쓰는 이유는 $\chi^2=n\varphi^2$ 같은 대수적 관계가 보정 없는 통계량에서만 성립하기 때문이다. 자세한 것은 [독립성 검정 - 타이타닉 생존과 성별](../../ch10/test/independence_titanic.md) 절 예제 3에 있다.
+    **판정은 어느 쪽이든 같다.** 이 책이 보정 없는 값을 쓰는 이유는 $\chi^2=n\varphi^2$ 같은 대수적 관계가 보정 없는 통계량에서만 성립하기 때문이다. 자세한 것은 [독립성 검정 - 타이타닉 생존과 성별](../../ch10/test/independence_titanic.md) 절 보기 3에 있다.
 
 ### 재판이 하는 일과 같다
 
@@ -519,7 +544,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-예제 4에서 30세 절단점의 $\chi^2$이 0.000이었다. **생존율이 정확히 같아지는 절단점**이 존재함을 설명하고, 그런 절단점을 모두 찾아라.
+보기 4에서 30세 절단점의 $\chi^2$이 0.000이었다. **생존율이 정확히 같아지는 절단점**이 존재함을 설명하고, 그런 절단점을 모두 찾아라.
 
 </div>
 
@@ -692,7 +717,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-예제 3에서 두 집단의 나이 중앙값이 28.00세로 같았다. 이것이 "나이 차이가 없다"는 뜻인가?
+보기 3에서 두 집단의 나이 중앙값이 28.00세로 같았다. 이것이 "나이 차이가 없다"는 뜻인가?
 
 </div>
 
@@ -911,7 +936,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
 
     | 가정 | 차이 | 오즈비 | 읽히는 이야기 |
     |---|---|---|---|
-    | 결측자 전부 21세 미만 | $\mathbf{-0.0141}$ | 0.94 | **어린 쪽이 오히려 덜 살아남음** |
+    | 결측자 전부 21세 미만 | $\mathbf{-0.0142}$ | 0.94 | **어린 쪽이 오히려 덜 살아남음** |
     | 관측 자료만(실제 분석) | $+0.0660$ | 1.31 | 어린 쪽이 조금 더 살아남음 |
     | 결측자 전부 21세 이상 | $\mathbf{+0.0899}$ | 1.45 | 어린 쪽이 더 살아남음 |
 
@@ -1072,7 +1097,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
 
     그렇다고 운임을 잘라도 된다는 뜻은 아니다. 부호는 유지되지만 **효과의 크기는 여전히 절단점에 따라 두 배 가까이 달라지고**($0.23$ 대 $0.42$), 무엇보다 운임을 두 덩어리로 줄이면 "$10$달러와 $500$달러가 같은 칸"이 되는 정보 손실은 그대로다.
 
-    **실무적 요령 하나.** 자를지 말지 고민될 때는 **모든 절단점을 훑어 부호와 크기가 안정적인지 먼저 보라.** 위 코드 몇 줄이면 된다. 안정적이면 이분화가 최소한 결론을 뒤집지는 않고, 불안정하면 자르지 말아야 한다는 강한 신호다.
+    **실무적 요령 하나.** 자를지 말지 고민될 때는 **모든 절단점을 훑어 부호와 크기가 안정적인지 먼저 보라.** 위 코드 몇 줄이면 된다. 안정적이면 이분화가 최소한 결론을 뒤집지는 않고, 불안정하면 자르지 말아야 한다는 강한 신호다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -1136,7 +1161,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
 
     - **구간별 $n$을 반드시 함께 보고한다.** 위 출력처럼 생존율 옆에 $n$을 적으면 $11$명짜리 칸을 오해할 수 없다.
     - **작은 칸은 합친다.** $64$세 이상이 $11$명이면 $48$세 이상과 묶는 편이 낫다.
-    - **어느 쪽이든 자의적이라는 사실은 바뀌지 않는다.** 연습문제 6의 결론대로, 구간 방식을 자료를 보고 고르면 절단점 하나를 고르는 것과 같은 문제가 생긴다.
+    - **어느 쪽이든 자의적이라는 사실은 바뀌지 않는다.** 연습문제 6의 결론대로, 구간 방식을 자료를 보고 고르면 절단점 하나를 고르는 것과 같은 문제가 생긴다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -1209,7 +1234,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
 
     본문 6절이 "$52\%$의 확률로 유의한 절단점이 발견된다"고 한 것과 같은 현상을 **안정성**의 각도에서 본 것이다. 유의성만 부풀려지는 것이 아니라 **어느 절단점이 최선인지조차 자료를 조금만 흔들면 바뀐다.**
 
-    **실무에서 쓰는 방어.** 절단점을 꼭 골라야 한다면 이 재표본 실험을 함께 돌려 **선택의 안정성을 보고**하라. 위처럼 두 봉우리로 갈리면 "최적 절단점 $2$세"라는 보고는 성립하지 않는다. 17장의 부트스트랩이 이런 절차의 일반형이다.
+    **실무에서 쓰는 방어.** 절단점을 꼭 골라야 한다면 이 재표본 실험을 함께 돌려 **선택의 안정성을 보고**하라. 위처럼 두 봉우리로 갈리면 "최적 절단점 $2$세"라는 보고는 성립하지 않는다. 17장의 부트스트랩이 이런 절차의 일반형이다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -1264,4 +1289,4 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
     - **끝부분이 불안정하다.** 나이가 아주 어리거나 많은 쪽은 창이 한쪽으로만 채워져 값이 흔들린다. 연습문제 9에서 본 극단 구간 문제가 여기서도 나타난다.
     - **가로축이 나이가 아니라 순위다.** 나이 순으로 정렬해 이동평균했으므로 창의 실제 나이 폭이 구간마다 다르다. $20$대에는 사람이 많아 창이 좁은 나이 범위를 덮고, $60$대에는 넓은 범위를 덮는다. 연습문제 8의 분위수 구간과 같은 성질이다.
 
-    **더 나은 도구가 있다.** LOWESS 같은 국소회귀나, 13장의 **스플라인**은 같은 일을 하되 끝부분 처리와 매끄러움 조절이 훨씬 정교하다. 나이처럼 비단조인 변수를 회귀에 넣을 때 표준적인 선택이며, 이분화는 그 목록의 맨 아래에 있다.
+    **더 나은 도구가 있다.** LOWESS 같은 국소회귀나, 13장의 **스플라인**은 같은 일을 하되 끝부분 처리와 매끄러움 조절이 훨씬 정교하다. 나이처럼 비단조인 변수를 회귀에 넣을 때 표준적인 선택이며, 이분화는 그 목록의 맨 아래에 있다. $\square$

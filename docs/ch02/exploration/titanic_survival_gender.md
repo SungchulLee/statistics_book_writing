@@ -17,9 +17,11 @@
 
 ## 1. 자료와 첫 점검
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 자료를 불러오고 결측부터 확인하기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료를 불러오고 결측부터 확인하기
+
+</div>
 
 ```python
 import warnings
@@ -80,15 +82,15 @@ Survived
 
 **성별 부호화는 자의적이다.** 남성을 1로 둘 수도 여성을 1로 둘 수도 있고, 어느 쪽을 골라도 분석의 내용은 같다. 다만 **상관계수의 부호가 뒤집힌다.** 바로 다음에서 이 점이 문제가 된다.
 
-</div>
-
 ## 2. 상관계수 하나로 요약하면
 
 두 변수가 모두 0과 1뿐이지만, 피어슨 상관계수를 계산하는 데는 아무 문제가 없다. 공식이 요구하는 것은 두 수치 변수일 뿐이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 두 이진 변수의 상관은 파이 계수다 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 이진 변수의 상관은 파이 계수다
+
+</div>
 
 ```python
 # Survived 와 Sex_int 는 둘 다 0/1 이지만 피어슨 공식은 그대로 적용된다.
@@ -134,13 +136,13 @@ Sex_int    -0.5434   1.0000
 
     최댓값을 구하는 식과 주변 비율에 따라 그것이 어떻게 달라지는지는 [점이연 상관과 파이 계수](../../ch12/correlation/special_cases.md), [효과크기와 Cramér의 V](../../ch10/practice/effect_size.md) 절에서 다룬다.
 
-</div>
-
 ## 3. 분할표가 훨씬 많이 말한다
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 분할표, 생존율, 오즈비 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 분할표, 생존율, 오즈비
+
+</div>
 
 ```python
 # margins=True 를 주면 행·열의 합계가 함께 나온다.
@@ -215,8 +217,6 @@ $$
 
 **전체 생존율 38.38%는 여기서 아무 쓸모가 없다.** 두 집단의 값이 74%와 19%인데 그 평균을 말하는 것은 **양쪽 어느 쪽도 설명하지 않는 수**다.
 
-</div>
-
 ## 4. 이 차이는 우연일 수 있는가
 
 여성 74.20%, 남성 18.89%. 55.31%포인트의 차이다.
@@ -238,32 +238,47 @@ $$
 
 ## 5. 같은 표를 네 가지로 그리기
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 네 가지 그림이 각각 다른 것을 강조한다 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 네 가지 그림이 각각 다른 것을 강조한다
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
 
 # 네 칸에서 성별 순서를 하나로 고정한다.
 # 칸마다 순서가 다르면 독자가 같은 그림 안에서 두 번 방향을 바꿔 읽어야 한다.
 ORDER = ["female", "male"]
+KO = ["여성", "남성"]
+DIED, LIVED = "#90A4AE", "#1565C0"       # 사망 / 생존
 
 fig, axes = plt.subplots(2, 2, figsize=(13, 9))
 
 # (1) 도수 -- 집단 크기가 다르다는 사실이 보인다
 sns.countplot(data=df, x="Sex", hue="Survived", order=ORDER,
-              ax=axes[0, 0], palette="Set2")
-axes[0, 0].set_title("(1) count by gender")
-axes[0, 0].set_xlabel("gender"); axes[0, 0].set_ylabel("count")
+              ax=axes[0, 0], palette=[DIED, LIVED])
+axes[0, 0].set_title("(1) 성별 도수")
+axes[0, 0].set_xlabel("성별"); axes[0, 0].set_ylabel("사람 수")
+axes[0, 0].set_xticks([0, 1]); axes[0, 0].set_xticklabels(KO)
+axes[0, 0].legend(["사망", "생존"], title="생존 여부")
 
 # (2) 생존율 -- 집단 크기를 지우고 비율만 남긴다
 rate = df.groupby("Sex")["Survived"].mean().reindex(ORDER) * 100
-rate.plot(kind="bar", ax=axes[0, 1], color=["coral", "skyblue"],
+rate.plot(kind="bar", ax=axes[0, 1], color=["#E65100", "#1565C0"],
           edgecolor="black")
-axes[0, 1].set_title("(2) survival rate (%)")
-axes[0, 1].set_xlabel("gender"); axes[0, 1].set_ylabel("survival rate (%)")
+axes[0, 1].set_title("(2) 성별 생존율 (%)")
+axes[0, 1].set_xlabel("성별"); axes[0, 1].set_ylabel("생존율 (%)")
+axes[0, 1].set_xticks([0, 1]); axes[0, 1].set_xticklabels(KO)
 axes[0, 1].tick_params(axis="x", rotation=0)
 axes[0, 1].grid(True, alpha=0.3, axis="y"); axes[0, 1].set_ylim(0, 85)
 for i, v in enumerate(rate):                     # 막대 위에 값을 적어 준다
@@ -272,26 +287,30 @@ for i, v in enumerate(rate):                     # 막대 위에 값을 적어 �
 # (3) 누적 막대 -- 집단 크기와 구성비를 한 막대에 함께 담는다
 tab_o = pd.crosstab(df["Sex"], df["Survived"]).reindex(ORDER)
 tab_o.plot(kind="bar", stacked=True, ax=axes[1, 0],
-           color=["indianred", "seagreen"], edgecolor="black")
-axes[1, 0].set_title("(3) stacked count")
-axes[1, 0].set_xlabel("gender"); axes[1, 0].set_ylabel("count")
+           color=["#D32F2F", "#33691E"], edgecolor="black")
+axes[1, 0].set_title("(3) 누적 막대 (도수)")
+axes[1, 0].set_xlabel("성별"); axes[1, 0].set_ylabel("사람 수")
+axes[1, 0].set_xticks([0, 1]); axes[1, 0].set_xticklabels(KO)
 axes[1, 0].tick_params(axis="x", rotation=0)
-axes[1, 0].legend(["did not survive", "survived"], title="Survived")
+axes[1, 0].legend(["사망", "생존"], title="생존 여부")
 
 # (4) 비율 열지도 -- 네 칸의 수를 그대로 읽게 한다
 # vmin/vmax 를 0과 1로 고정해야 색의 진하기가 비율과 맞는다.
 prop = pd.crosstab(df["Sex"], df["Survived"],
                    normalize="index").reindex(ORDER)
 sns.heatmap(prop, annot=True, fmt=".2%", cmap="Blues", ax=axes[1, 1],
-            vmin=0, vmax=1, cbar_kws={"label": "proportion"},
+            vmin=0, vmax=1, cbar_kws={"label": "비율"},
             linewidths=1, linecolor="black")
-axes[1, 1].set_title("(4) proportion heatmap")
-axes[1, 1].set_xlabel("Survived (0=no, 1=yes)")
-axes[1, 1].set_ylabel("gender")
+axes[1, 1].set_title("(4) 비율 열지도")
+axes[1, 1].set_xlabel("생존 여부")
+axes[1, 1].set_ylabel("성별")
+axes[1, 1].set_xticklabels(["사망", "생존"])
+axes[1, 1].set_yticklabels(KO, rotation=0)
 
-fig.suptitle("Titanic: one 2x2 table, four views", y=1.00)
+fig.suptitle("타이타닉: 하나의 2×2 표를 네 가지로 그리기", y=1.00)
 fig.tight_layout()
-plt.show()
+fig.savefig("titanic_gender_four.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 ```
 
 ![같은 분할표를 네 가지로 그린 그림](./img/titanic_gender_four.png)
@@ -313,15 +332,15 @@ plt.show()
 
 **색 선택에 관하여.** 열지도에 `RdYlGn`(빨강-노랑-초록)을 쓰는 관행이 있는데, **적록색각 이상이 있는 독자에게는 읽히지 않는다.** 남성의 8% 정도가 여기에 해당하므로, 파랑 계열이나 명도 차가 뚜렷한 색표를 쓰는 편이 안전하다.
 
-</div>
-
 ## 6. 쌍그림은 왜 잘 안 되는가
 
 여러 변수를 한꺼번에 훑을 때는 쌍그림이 표준 도구다. 여기에도 써 보자. 나이까지 넣어 세 변수를 본다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 이진 변수에 쌍그림을 쓰면 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 이진 변수에 쌍그림을 쓰면
+
+</div>
 
 ```python
 sub = df[["Survived", "Age", "Sex_int"]]
@@ -341,10 +360,17 @@ print(f"나이가 기록된 승객의 남성 비율 {df.loc[~miss, 'Sex_int'].me
 print(f"나이가 빠진 승객의 남성 비율   {df.loc[miss, 'Sex_int'].mean():.4f}")
 
 g = sns.pairplot(sub, diag_kind="hist",
-                 plot_kws={"alpha": 0.6, "s": 18},
-                 diag_kws={"bins": 30})
-g.figure.suptitle("pairplot: Survived, Age, Sex_int", y=1.01)
-plt.show()
+                 plot_kws={"alpha": 0.6, "s": 18, "color": "#1565C0"},
+                 diag_kws={"bins": 30, "color": "#1565C0"})
+
+# 축 이름은 열 이름에서 오므로 그림에 쓸 한글 이름으로 바꿔 준다.
+KOREAN = ["생존 여부 (0/1)", "나이 (세)", "성별 (1=남성)"]
+for i, name in enumerate(KOREAN):
+    g.axes[-1, i].set_xlabel(name)
+    g.axes[i, 0].set_ylabel(name)
+g.figure.suptitle("쌍그림: 생존 여부 · 나이 · 성별", y=1.01)
+g.figure.savefig("titanic_pairplot.png", dpi=170, facecolor="white",
+                 bbox_inches="tight")
 ```
 
 ```text
@@ -377,8 +403,6 @@ Age 결측 177명
 **쌍그림은 연속형 변수를 위한 도구다.** 이진·범주형 변수에는 이 절의 5절에서 쓴 도구들 — 분할표, 막대그림, 모자이크 그림 — 이 맞는다. 자세한 논의는 [쌍그림](../visualization/pair_plots.md) 절에 있다.
 
 **그래도 `Age` 칸 하나는 쓸모가 있다.** 대각선의 나이 히스토그램은 20대에 봉우리가 있고 오른쪽으로 긴 꼬리를 가진 모양을 보여 준다. **세 변수 중 연속형인 하나에 대해서만 쌍그림이 제 일을 한 것이다.**
-
-</div>
 
 ## 7. 다섯 가지 요약을 나란히
 
@@ -425,7 +449,7 @@ Age 결측 177명
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-예제 3의 분할표에서 **행 기준 백분율**과 **열 기준 백분율**, **전체 기준 백분율**을 각각 계산하고, 세 가지가 답하는 질문이 어떻게 다른지 말하라.
+보기 3의 분할표에서 **행 기준 백분율**과 **열 기준 백분율**, **전체 기준 백분율**을 각각 계산하고, 세 가지가 답하는 질문이 어떻게 다른지 말하라.
 
 </div>
 
@@ -590,7 +614,7 @@ $$
     | 오즈비 | $1$ | 0.0810 |
     | $\varphi$ | $0$ | $-0.5434$ |
 
-    **오즈비 0.0810의 역수가 12.35**로, 예제 3에서 구한 값이다(표의 행 순서가 반대라 역수로 나왔다). 행과 열의 순서를 어떻게 잡느냐에 따라 $\text{OR}$이 $12.35$로도 $1/12.35$로도 나오므로, **어느 쪽을 분자로 두었는지 반드시 밝혀야 한다.**
+    **오즈비 0.0810의 역수가 12.35**로, 보기 3에서 구한 값이다(표의 행 순서가 반대라 역수로 나왔다). 행과 열의 순서를 어떻게 잡느냐에 따라 $\text{OR}$이 $12.35$로도 $1/12.35$로도 나오므로, **어느 쪽을 분자로 두었는지 반드시 밝혀야 한다.**
 
     **모자이크 그림이 이 사실을 눈으로 보여 준다.** $ad=bc$이면 두 열의 분할선 높이가 같아져 **선이 일직선으로 이어진다.** [모자이크 그림](../visualization/mosaic.md) 절의 3번에서 다룬 내용이다. $\square$
 
@@ -883,7 +907,7 @@ $$
     | 크기가 일정한가(교호작용) | **아니다** — 위험차 0.36~0.76 |
     | 층이 결과와 관련되는가 | 그렇다 — 등급별 생존율이 크게 다르다 |
 
-    **왜 방향이 안 뒤집혔는데도 층화해야 하는가.** 층화해 보기 **전에는** 뒤집히는지 알 수 없기 때문이다. 심슨의 역설은 드물지만 일어나며, 일어나면 결론이 정반대가 된다. 12장에서 교란을 본격적으로 다루는데, 그때 쓰는 첫 번째 도구가 바로 이 층화표다.
+    **왜 방향이 안 뒤집혔는데도 층화해야 하는가.** 층화해 보기 **전에는** 뒤집히는지 알 수 없기 때문이다. 심슨의 역설은 드물지만 일어나며, 일어나면 결론이 정반대가 된다. 12장에서 교란을 본격적으로 다루는데, 그때 쓰는 첫 번째 도구가 바로 이 층화표다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -918,7 +942,7 @@ $$
     | 위험 요인의 강도 | **상대위험도** (기저율과 무관한 비교) |
     | 회귀·연구 간 통합 | **오즈비** (연습문제 8) |
 
-    **언론에서 상대위험도만 쓰는 것이 문제가 되는 지점이 여기다.** "이 습관이 위험을 두 배로 높인다"는 문장은 기저 위험이 $0.001$이면 $0.002$가 된다는 뜻일 수 있다. **상대위험도는 반드시 기저율과 함께 보고해야 한다.** 위 표에서도 3등석의 상대위험도 $3.69$만 떼어 내면 "3등석 여성이 가장 유리했다"로 읽히지만, 실제 생존율은 50%로 1등석 여성 96.8%의 절반에 불과하다.
+    **언론에서 상대위험도만 쓰는 것이 문제가 되는 지점이 여기다.** "이 습관이 위험을 두 배로 높인다"는 문장은 기저 위험이 $0.001$이면 $0.002$가 된다는 뜻일 수 있다. **상대위험도는 반드시 기저율과 함께 보고해야 한다.** 위 표에서도 3등석의 상대위험도 $3.69$만 떼어 내면 "3등석 여성이 가장 유리했다"로 읽히지만, 실제 생존율은 50%로 1등석 여성 96.8%의 절반에 불과하다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -976,7 +1000,7 @@ $$
 
     그런데 오즈비는 그대로다. **결과를 기준으로 표본을 뽑아도 오즈비는 모집단의 오즈비를 그대로 추정한다.** 역학에서 오즈비가 표준 지표가 된 이유가 이것이며, 로지스틱 회귀의 계수가 로그 오즈비인 것도 같은 맥락이다(19장).
 
-    **대가도 있다.** 연습문제 7에서 본 대로 오즈비는 직관적으로 읽기 어렵고, 기저율이 높으면 상대위험도와 크게 벌어진다. 여기서도 오즈비 $12.35$ 대 상대위험도 $3.93$으로 세 배 넘게 차이 난다. **"불변성"과 "읽기 쉬움"을 맞바꾼 지표**다.
+    **대가도 있다.** 연습문제 7에서 본 대로 오즈비는 직관적으로 읽기 어렵고, 기저율이 높으면 상대위험도와 크게 벌어진다. 여기서도 오즈비 $12.35$ 대 상대위험도 $3.93$으로 세 배 넘게 차이 난다. **"불변성"과 "읽기 쉬움"을 맞바꾼 지표**다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -1038,7 +1062,7 @@ $$
     | 상대위험도 | 그렇다 — 기저율에 따라 상한이 달라진다 |
     | 오즈비 | **아니다** — $0$에서 $\infty$까지 자유롭다 |
 
-    보정하려면 $\varphi / \varphi_{\max}$를 쓰는 방법이 있고(크레이머의 $V$와 같은 발상), 애초에 오즈비를 쓰는 방법이 있다. 어느 쪽이든 **$\varphi$를 단독으로 보고하면 안 되고 주변 비율을 함께 적어야 한다**는 연습문제 5의 지침이 여기서 근거를 얻는다.
+    보정하려면 $\varphi / \varphi_{\max}$를 쓰는 방법이 있고(크레이머의 $V$와 같은 발상), 애초에 오즈비를 쓰는 방법이 있다. 어느 쪽이든 **$\varphi$를 단독으로 보고하면 안 되고 주변 비율을 함께 적어야 한다**는 연습문제 5의 지침이 여기서 근거를 얻는다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -1090,4 +1114,4 @@ $$
     - **나이 결측 $177$명을 버렸다.** 연습문제 3에서 이 결측이 무작위가 아님을 보았으므로, 위 수치는 "나이가 기록된 $714$명"에 대한 것이다.
     - **어린이 표본이 작다.** 여아 $39$명, 남아 $39$명뿐이라 $61.5\%$와 $53.8\%$의 차이는 우연으로도 충분히 설명될 수 있다. 탐색 단계에서는 "격차가 작아 보인다"까지만 말하고, 그 차이가 우연인지 따지는 일은 [10장](../../ch10/test/independence_titanic.md)의 몫이다.
 
-    연습문제 6이 **객실등급**으로 층화한 것과 같은 작업을 **나이**로 한 셈이다. 둘을 함께 놓으면 생존을 가른 변수가 하나가 아니라 셋(성별·등급·나이)이었음이 드러나며, 이 셋을 동시에 다루는 방법이 13장의 회귀와 19장의 로지스틱 회귀다.
+    연습문제 6이 **객실등급**으로 층화한 것과 같은 작업을 **나이**로 한 셈이다. 둘을 함께 놓으면 생존을 가른 변수가 하나가 아니라 셋(성별·등급·나이)이었음이 드러나며, 이 셋을 동시에 다루는 방법이 13장의 회귀와 19장의 로지스틱 회귀다. $\square$

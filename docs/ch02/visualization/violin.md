@@ -14,15 +14,23 @@
 
 ## 기본 바이올린 그림
 
-상자그림이 무엇을 놓치는지 보려면, **요약통계량은 거의 같은데 모양은 전혀 다른** 두 자료를 나란히 놓으면 된다.
+상자그림이 무엇을 놓치는지 보려면, **중심은 거의 같은데 모양은 전혀 다른** 두 자료를 나란히 놓으면 된다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 기본 바이올린 그림 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기본 바이올린 그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
 
 np.random.seed(0)
 
@@ -33,8 +41,8 @@ data_1 = np.concatenate([np.random.normal(0, 1, 500),
                          np.random.normal(5, 1, 500)])
 
 # --- 자료 2: 봉우리가 하나인 분포 -----------------------------------
-# 평균과 퍼짐을 자료 1과 비슷하게 맞춘다. 요약통계량으로는
-# 두 자료를 구별하기 어렵게 만드는 것이 목적이다.
+# 중심을 자료 1과 같은 2.5 에 맞춘다. 중심만 보아서는
+# 두 자료를 구별할 수 없게 만드는 것이 목적이다.
 data_2 = np.random.normal(2.5, 2, 1000)
 
 # 요약통계량을 먼저 확인한다. 상자그림이 그리는 것이 바로 이 수들이다.
@@ -49,14 +57,18 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
 # 좌우로 펼쳐진 폭이 그 높이에서의 커널밀도추정값이다.
 # showmeans / showmedians 로 평균선과 중앙값선을 함께 표시한다.
 ax1.violinplot([data_1, data_2], showmeans=True, showmedians=True)
-ax1.set_title("Violin Plot")
+ax1.set_title("바이올린 그림")
 ax1.set_xticks([1, 2])
-ax1.set_xticklabels(["Bimodal", "Unimodal"])
+ax1.set_xticklabels(["이봉", "단봉"])
 
 # --- 오른쪽: 같은 자료의 상자그림 -----------------------------------
 # 다섯 수치 요약과 이상치만 그린다. 밀도 정보는 버려진다.
-ax2.boxplot([data_1, data_2], labels=["Bimodal", "Unimodal"])
-ax2.set_title("Box Plot")
+# 이름표는 boxplot 인자(labels= / tick_labels=)가 버전마다 달라지므로
+# 축에 직접 달아 두면 버전에 상관없이 동작한다.
+ax2.boxplot([data_1, data_2])
+ax2.set_xticks([1, 2])
+ax2.set_xticklabels(["이봉", "단봉"])
+ax2.set_title("상자그림")
 
 plt.tight_layout()
 plt.show()
@@ -71,25 +83,32 @@ data_2 (단봉): 평균 2.53, 중앙값 2.55, 표준편차 1.94, IQR [1.19, 3.75
 
 ![바이올린 그림과 상자그림의 비교](./img/violin_vs_box_bimodal.png)
 
-**중앙값이 2.40과 2.55로 거의 같다.** 상자그림(오른쪽)만 보면 두 자료가 비슷한 분포처럼 보인다. 그런데 바이올린 그림(왼쪽)을 보면 왼쪽 자료가 **가운데가 잘록한 두 덩어리**임이 한눈에 드러난다.
+**중심이 거의 같다.** 평균이 2.45와 2.53, 중앙값이 2.40과 2.55다. 상자그림(오른쪽)이 알려 주는 것은 여기에 퍼짐이 더해진 정도가 전부다. 이봉 자료의 상자가 더 길다는 것($\text{IQR}$가 $4.98$ 대 $2.56$)은 보이지만, **왜 더 긴지**는 말해 주지 않는다. 퍼짐이 큰 단봉 분포여도 똑같은 상자가 나온다.
+
+그런데 바이올린 그림(왼쪽)을 보면 이봉 자료가 **가운데가 잘록한 두 덩어리**임이 한눈에 드러난다.
 
 이 차이가 중요한 이유는 실질적이다. 왼쪽 자료에서 "평균 근처인 2.5"는 가장 흔한 값이 아니라 **가장 드문 값**이다. 상자그림은 이 사실을 전혀 알려 주지 않는다.
-
-</div>
 
 ## Seaborn으로 그리는 바이올린 그림
 
 Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. Seaborn 으로 그리는 바이올린 그림 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> Seaborn 으로 그리는 바이올린 그림
+
+</div>
 
 ```python
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
+
+# 자료를 인터넷에서 내려받으므로 실행에 연결이 필요하다.
 url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
 df = pd.read_csv(url)
 
@@ -105,9 +124,15 @@ fig, ax = plt.subplots(figsize=(10, 4))
 # split=True : 두 색을 하나의 바이올린 좌우에 붙여 그린다.
 #              범주가 정확히 둘일 때만 쓸 수 있고, 같은 등급 안에서
 #              남녀를 곧바로 견주어 볼 수 있게 해 준다.
-sns.violinplot(data=df, x="Pclass", y="Age", hue="Sex",
-               split=True, ax=ax)
-ax.set_title("Age Distribution by Class and Sex (Titanic)")
+# 범례에 한글이 나오도록 값 자체를 한글로 바꾼 열을 따로 만든다.
+# ax.legend(labels=[...]) 로 이름만 갈아 끼우면 색과 이름이 어긋날 위험이 있다.
+df["성별"] = df["Sex"].map({"male": "남성", "female": "여성"})
+
+sns.violinplot(data=df, x="Pclass", y="Age", hue="성별",
+               hue_order=["여성", "남성"], split=True, ax=ax)
+ax.set_title("객실 등급과 성별에 따른 나이 분포 (타이타닉)")
+ax.set_xlabel("객실 등급")
+ax.set_ylabel("나이 (세)")
 plt.show()
 ```
 
@@ -131,13 +156,14 @@ Pclass Sex
 그림에서 읽히는 것이 표보다 많다.
 
 - **등급이 낮아질수록 젊어진다.** 중앙값이 1등급 35–40세, 2등급 28–30세, 3등급 21.5–25세로 내려간다.
-- **3등급에 어린이가 몰려 있다.** 아래쪽 0–10세 구간이 3등급에서만 불룩하다. 표의 중앙값과 평균만으로는 보이지 않는 특징이다.
-- **1등급은 퍼짐이 넓다.** 위로 70대까지 이어지는 반면 3등급은 60대에서 거의 끊긴다.
+- **2·3등급 아래쪽에 어린이 혹이 있다.** 나이가 알려진 승객 가운데 10세 이하의 비율이 1등급 $3/186 = 1.6\%$, 2등급 $17/173 = 9.8\%$, 3등급 $44/355 = 12.4\%$다. 그래서 0–10세 구간이 2등급과 3등급에서 불룩하고 1등급에서는 거의 평평하다. 표의 중앙값과 평균만으로는 보이지 않는 특징이다.
+- **위쪽 꼬리는 1등급이 가장 두껍다.** 최고령이 1등급 80세, 2등급 70세, 3등급 74세이고 65세 이상이 각각 6명, 2명, 3명이다. 다만 세 바이올린의 세로 길이 차이가 크지 않은 것은 KDE가 꼬리를 매끄럽게 늘여 놓기 때문이며, 바이올린의 끝을 자료의 최댓값으로 읽어서는 안 된다.
 - **모든 등급에서 남성이 조금 더 나이가 많다.** 다만 그 차이는 등급 간 차이보다 훨씬 작다.
 
-세 번째 항목이 바이올린 그림의 값어치를 잘 보여 준다. 3등급의 어린이 무리는 분포에 **작은 두 번째 봉우리**를 만드는데, 상자그림이라면 그저 아래쪽 수염이 길어질 뿐이라 놓치기 쉽다.
+두 번째 항목이 바이올린 그림의 값어치를 잘 보여 준다. 어린이 무리는 분포에 **작은 두 번째 봉우리**를 만드는데, 상자그림이라면 그저 아래쪽 수염이 길어질 뿐이라 놓치기 쉽다.
 
-</div>
+!!! warning "이 그림의 바이올린은 0세 아래까지 뻗어 있다"
+    세 바이올린 모두 아래쪽 끝이 음수 나이까지 내려가 있다. 나이는 $0$ 이상인 양인데도 그렇다. KDE가 관측값 주위에 커널을 대칭으로 놓기 때문에 생기는 **경계 인공물**이며, `seaborn.violinplot(..., cut=0)` 으로 자료 범위 밖을 잘라내야 한다. 자세한 내용과 더 나은 교정법은 연습문제 9에서 다룬다.
 
 ## 바이올린 그림을 쓸 때
 
@@ -153,19 +179,30 @@ Pclass Sex
 </div>
 
 ??? success "풀이"
-    (a) 두 자료 모두:
+    (a) 두 자료 모두 $n = 9$이고 평균과 중앙값이 $7$로 같다. 다섯 수치 요약은 다르다.
 
     | | T1 | T2 |
     |---|---|---|
     | 최솟값 | 5 | 3 |
-    | $Q_1$ | 6 | 6 |
+    | $Q_1$ | 6 | **7** |
     | 중앙값 | 7 | 7 |
-    | $Q_3$ | 8 | 8 |
+    | $Q_3$ | 8 | **7** |
     | 최댓값 | 9 | 11 |
+    | $\text{IQR}$ | 2 | **0** |
+    | 표준편차 | 1.22 | 2.24 |
 
-    (b) 상자가 동일하고 수염 길이만 다르다. 두 상자그림은 매우 비슷해 보인다.
+    $Q_1$과 $Q_3$을 손으로 구해 보면 이유가 보인다. T2를 정렬하면 $3, 5, 7, 7, 7, 7, 7, 9, 11$인데, 아래쪽 절반에도 위쪽 절반에도 $7$이 가득하다. 그래서 **어떤 분위수 규약을 쓰든**(`numpy` 의 선형보간, 투키의 hinge, `pandas.describe()` 가 모두 같은 답을 준다) $Q_1 = Q_3 = 7$이고 $\text{IQR} = 0$이다.
 
-    (c) 바이올린 그림은 처리 2가 7에서 날카롭게 솟아 있음을(아홉 값 중 다섯이 7) 드러내는 반면, 처리 1은 $[5, 9]$에 걸쳐 대체로 균일한 밀도를 갖는다. 두 분포는 중심과 퍼짐이 거의 같지만 모양이 매우 다르다. 상자그림은 이를 보지 못하지만 바이올린 그림은 즉시 눈에 띄게 만든다.
+    (b) **아니다. 두 상자그림은 전혀 다르게 보인다.**
+
+    - T1은 $[6, 8]$의 정상적인 상자에 중앙값 선이 가운데 있고, 수염이 $5$와 $9$까지 뻗으며 이상치가 없다.
+    - T2는 $\text{IQR} = 0$이므로 **상자가 납작하게 찌그러져 $7$에서 선 하나가 된다.** 울타리도 $Q_1 - 1.5 \times 0 = 7$과 $Q_3 + 1.5 \times 0 = 7$로 겹치므로 수염이 뻗을 자리가 없고, $3, 5, 9, 11$ **네 값이 모두 이상치로 찍힌다.**
+
+    아홉 개 중 넷이 이상치라는 판정은 물론 터무니없다. $1.5 \times \text{IQR}$ 규칙이 **동점이 많아 $\text{IQR}$가 $0$에 가까운 자료에서 무너지는 것**이며, 표본이 작을 때 흔히 생긴다.
+
+    (c) 바이올린 그림은 T2가 $7$에서 날카롭게 솟아 있음을(아홉 값 중 다섯이 $7$) 드러내는 반면, T1은 $5$–$9$에 걸쳐 $1, 2, 3, 2, 1$의 완만한 삼각형 모양임을 보여 준다. **중심은 둘 다 $7$인데 퍼짐의 성격이 전혀 다르다.** T2는 가운데에 몰린 덩어리와 양쪽으로 흩어진 네 점으로 이루어져 있다.
+
+    **다만 $n = 9$에서는 바이올린도 믿을 것이 못 된다.** 관측이 아홉 개뿐이면 KDE의 굴곡 대부분이 평활의 산물이다(연습문제 7). 이 자료의 정직한 그림은 **점 아홉 개를 그대로 찍는 것**이다.
 
 <div class="drillbox" markdown>
 
@@ -281,6 +318,10 @@ Pclass Sex
     import matplotlib.pyplot as plt
     from scipy.stats import gaussian_kde
 
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
     rng = np.random.default_rng(0)
 
     def n_modes(x):
@@ -343,50 +384,63 @@ Pclass Sex
     import matplotlib.pyplot as plt
     from scipy.stats import gaussian_kde
 
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
     rng = np.random.default_rng(1)
     x = np.concatenate([rng.normal(-2, 0.7, 150), rng.normal(2, 0.7, 150)])
     grid = np.linspace(-6, 6, 800)
 
-    bandwidths = [0.08, 0.2, "scott", 0.8]
-    fig, axes = plt.subplots(1, 4, figsize=(14, 3.6), sharey=True)
-    for ax, bw in zip(axes, bandwidths):
+    # 주의: gaussian_kde 의 bw_method 에 넣는 수는 대역폭 h 가 아니라 '계수'다.
+    # 실제 대역폭은 h = 계수 x 자료의 표준편차 이므로, 아래에서 h 를 따로 계산한다.
+    factors = [0.08, 0.2, "scott", 0.8, 1.2]
+    sd = x.std(ddof=1)
+
+    fig, axes = plt.subplots(1, 5, figsize=(16, 3.6), sharey=True)
+    for ax, bw in zip(axes, factors):
         kde = gaussian_kde(x, bw_method=bw)
         d = kde(grid)
         ax.fill_betweenx(grid, -d, d, alpha=0.6)
         peaks = sum(1 for i in range(1, len(d) - 1) if d[i] > d[i - 1] and d[i] > d[i + 1])
-        label = f"h={bw}" if bw != "scott" else f"scott (h={kde.factor * x.std(ddof=1):.3f})"
-        ax.set_title(f"{label}\n봉우리 {peaks}개", fontsize=9)
+        ax.set_title(f"계수 {bw}  (h={kde.factor * sd:.2f})\n봉우리 {peaks}개", fontsize=9)
         ax.set_xticks([])
     axes[0].set_ylabel("값")
     fig.tight_layout()
     plt.show()
 
-    for bw in bandwidths:
+    print(f"자료의 표준편차 {sd:.3f}")
+    for bw in factors:
         kde = gaussian_kde(x, bw_method=bw)
         d = kde(grid)
         peaks = sum(1 for i in range(1, len(d) - 1) if d[i] > d[i - 1] and d[i] > d[i + 1])
-        print(f"대역폭 {str(bw):>7}: 봉우리 {peaks}개")
+        print(f"계수 {str(bw):>7}  ->  대역폭 h={kde.factor * sd:.3f}: 봉우리 {peaks}개")
     ```
 
     출력:
 
     ```
-    대역폭    0.08: 봉우리 5개
-    대역폭     0.2: 봉우리 2개
-    대역폭   scott: 봉우리 2개
-    대역폭     0.8: 봉우리 2개
+    자료의 표준편차 2.091
+    계수    0.08  ->  대역폭 h=0.167: 봉우리 5개
+    계수     0.2  ->  대역폭 h=0.418: 봉우리 2개
+    계수   scott  ->  대역폭 h=0.668: 봉우리 2개
+    계수     0.8  ->  대역폭 h=1.672: 봉우리 2개
+    계수     1.2  ->  대역폭 h=2.509: 봉우리 1개
     ```
 
     ![대역폭에 따른 바이올린의 변화](./img/violin_313.png)
 
-    **같은 자료가 대역폭에 따라 전혀 다른 이야기를 한다.** 참 분포는 봉우리가 둘인 혼합인데, 너무 좁으면 여러 개의 가짜 봉우리가, 너무 넓으면 하나로 뭉개진 봉우리가 나온다.
+    **같은 자료가 대역폭에 따라 전혀 다른 이야기를 한다.** 참 분포는 봉우리가 둘인 혼합인데, 너무 좁으면 여러 개의 가짜 봉우리가, 충분히 넓히면 하나로 뭉개진 봉우리가 나온다.
 
-    | 대역폭 | 결과 |
-    |---|---|
-    | $h = 0.08$ (과소평활) | 잡음이 봉우리로 보인다 |
-    | $h = 0.2$ | 참 구조가 드러난다 |
-    | 스콧 (자동) | 대개 적절하다 |
-    | $h = 0.8$ (과대평활) | 두 봉우리가 하나로 합쳐진다 |
+    | 계수 | 실제 대역폭 $h$ | 봉우리 | 결과 |
+    |---|---|---|---|
+    | $0.08$ (과소평활) | $0.17$ | $5$ | 잡음이 봉우리로 보인다 |
+    | $0.2$ | $0.42$ | $2$ | 참 구조가 드러난다 |
+    | 스콧 (자동) | $0.67$ | $2$ | 대개 적절하다 |
+    | $0.8$ (과대평활) | $1.67$ | $2$ | 봉우리는 아직 둘이지만 골이 얕아지고, 자료가 없는 $\pm 6$ 근처까지 번진다 |
+    | $1.2$ (심한 과대평활) | $2.51$ | $1$ | 두 봉우리가 마침내 하나로 합쳐진다 |
+
+    **두 봉우리를 지우려면 생각보다 넓혀야 한다.** 두 성분의 중심이 $\pm 2$로 떨어져 있으므로, 계수 $0.8$($h = 1.67$)에서도 골은 남는다. 참 구조를 완전히 지우는 데 계수 $1.2$($h = 2.51$)가 필요하다는 사실 자체가 과대평활의 위험을 말해 준다. **모양이 사라지기 전에 먼저 왜곡되기 때문이다.**
 
     **이것이 히스토그램의 구간 개수 문제와 정확히 같다**(히스토그램 문서 연습문제 9). 편향–분산 맞바꿈이며, 좁으면 분산이 크고 넓으면 편향이 크다. 최적 대역폭도 마찬가지로 $n^{-1/5}$에 비례한다(히스토그램의 $n^{-1/3}$과 다른 것은 커널이 더 매끄럽기 때문이다).
 
@@ -406,6 +460,10 @@ Pclass Sex
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy.stats import gaussian_kde
+
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(2)
     x = rng.exponential(1.0, 800)                  # 반드시 0 이상인 자료
@@ -476,6 +534,10 @@ Pclass Sex
     import matplotlib.pyplot as plt
     from scipy.stats import gaussian_kde
 
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
     rng = np.random.default_rng(0)
     likert = rng.choice([1, 2, 3, 4, 5], 3000, p=[.05, .15, .40, .30, .10]).astype(float)
     grid = np.linspace(-1, 7, 800)
@@ -509,7 +571,7 @@ Pclass Sex
 
     ![이산 자료에 바이올린을 쓰면 안 되는 이유](./img/violin_438.png)
 
-    **KDE가 $1$ 미만에 $2.3\%$, $5$ 초과에 $4.9\%$의 질량을 배정한다.** 응답이 $1$부터 $5$까지의 정수뿐인데 그렇다. 그림은 "$0.5$점을 준 사람"과 "$5.5$점을 준 사람"이 있는 것처럼 보인다.
+    **KDE가 $1$ 미만에 $2.6\%$, $5$ 초과에 $4.7\%$의 질량을 배정한다.** 응답이 $1$부터 $5$까지의 정수뿐인데 그렇다. 그림은 "$0.5$점을 준 사람"과 "$5.5$점을 준 사람"이 있는 것처럼 보인다.
 
     봉우리도 $5$개로 나오는데, 이는 다섯 개의 이산 수준을 각각 봉우리로 그린 것이다. **"분포에 봉우리가 다섯 개"라는 해석은 완전히 잘못된 것이다.**
 

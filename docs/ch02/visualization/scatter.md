@@ -6,9 +6,11 @@
 
 Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. plot 과 scatter 의 차이 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> plot 과 scatter 의 차이
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -30,13 +32,13 @@ color_values = stats.uniform().rvs(size=num_samples)
 #   markersize=10  모든 점의 크기가 10
 #   mec/mfc/mew    테두리색(red) / 채움색(blue) / 테두리굵기(3)
 ax_plot.plot(x, y, 'o', markersize=10, mec="red", mfc="blue", mew=3)
-ax_plot.set_title("Standard Plot\nFixed Marker Size")
+ax_plot.set_title("ax.plot\n마커 크기가 모두 같다")
 
 # ax.scatter: 점마다 다른 값을 줄 수 있다.
 #   s=배열  점마다 크기가 다르다  -> 세 번째 변수를 크기로 표현
 #   c=배열  점마다 색이 다르다    -> 네 번째 변수를 색으로 표현
 ax_scatter.scatter(x, y, s=point_sizes, c=color_values)
-ax_scatter.set_title("Scatter Plot\nVariable Marker Size")
+ax_scatter.set_title("ax.scatter\n마커 크기와 색이 점마다 다르다")
 
 for ax in (ax_plot, ax_scatter):
     ax.set_xticks([])
@@ -53,8 +55,6 @@ plt.show()
 
 같은 10개 점을 그렸는데 오른쪽 그림은 **네 개의 변수**를 담는다. 가로축, 세로축, 점의 크기, 점의 색이다.
 
-</div>
-
 !!! warning "크기와 색은 보조 정보에만"
     앞서 원그래프 절에서 본 시각 부호화의 정확도 순위를 떠올려 보자. **위치**가 가장 정확하고 **넓이**와 **색의 진하기**가 가장 부정확하다.
 
@@ -66,9 +66,11 @@ plt.show()
 
 점이 많아지면 산점도는 검은 덩어리가 된다. 이것을 **과밀(overplotting)** 이라 한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 점이 뭉칠 때 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 점이 뭉칠 때
+
+</div>
 
 ```python
 import numpy as np
@@ -83,18 +85,18 @@ fig, axes = plt.subplots(1, 3, figsize=(13, 4))
 
 # (1) 그냥 그리면 가운데가 다 뭉개진다
 axes[0].scatter(x, y, s=6)
-axes[0].set_title(f"Scatter, n={n:,}\n(overplotted)")
+axes[0].set_title(f"산점도, n={n:,}\n(과밀)")
 
 # (2) 투명도. alpha=0.03이면 점 하나가 3%만 진하다.
 #     같은 자리에 33개쯤 겹쳐야 완전히 진해지므로 밀도가 진하기로 드러난다.
 axes[1].scatter(x, y, s=6, alpha=0.03)
-axes[1].set_title("Scatter with alpha=0.03")
+axes[1].set_title("산점도 + 투명도 alpha=0.03")
 
 # (3) hexbin: 평면을 육각형으로 나누고 각 칸의 개수를 색으로 나타낸다.
 #     mincnt=1 은 점이 하나도 없는 칸을 그리지 않는다는 뜻
 hb = axes[2].hexbin(x, y, gridsize=40, cmap='Blues', mincnt=1)
-axes[2].set_title("Hexbin")
-plt.colorbar(hb, ax=axes[2], label='count')
+axes[2].set_title("육각형 구간 그림")
+plt.colorbar(hb, ax=axes[2], label='개수')
 
 for ax in axes:
     ax.set_xlabel('x')
@@ -113,15 +115,15 @@ plt.show()
 
 **오른쪽.** 육각형 구간으로 나누어 개수를 색으로 나타냈다. 밀도가 **눈금 있는 색으로** 표현되므로 "여기는 160개, 저기는 20개"라고 읽을 수 있다. 투명도는 그 정도를 알 수 없다.
 
-</div>
-
 ## 3. 이산값과 지터
 
 또 다른 과밀은 값이 **이산**일 때 생긴다. 5점 척도 설문처럼 값이 몇 가지뿐이면 점이 정확히 같은 자리에 겹친다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 이산값과 지터 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이산값과 지터
+
+</div>
 
 ```python
 import numpy as np
@@ -137,16 +139,16 @@ fig, (a, b) = plt.subplots(1, 2, figsize=(12, 4))
 
 # 그냥 그리면 300개가 25개 자리에 완전히 포개진다
 a.scatter(xs, ys, s=20)
-a.set_title("Discrete data: points overlap exactly")
-a.set_xlabel("rating x")
-a.set_ylabel("rating y")
+a.set_title("이산 자료 — 점이 정확히 포개진다")
+a.set_xlabel("평점 x")
+a.set_ylabel("평점 y")
 
 # 지터: 각 점을 ±0.2 범위에서 무작위로 민다.
 # 값을 바꾸는 것이므로 그림 설명에 반드시 밝혀야 한다.
 b.scatter(xs + rng.uniform(-.2, .2, 300),
           ys + rng.uniform(-.2, .2, 300), s=20, alpha=.5)
-b.set_title("With jitter and transparency")
-b.set_xlabel("rating x")
+b.set_title("지터와 투명도를 준 뒤")
+b.set_xlabel("평점 x")
 
 for ax in (a, b):
     ax.spines[['top', 'right']].set_visible(False)
@@ -159,8 +161,6 @@ plt.show()
 **왼쪽 그림에는 300개의 점이 있지만 25개만 보인다.** 각 자리에 몇 개가 겹쳤는지 전혀 알 수 없다. 이 그림만 보면 25개 조합이 모두 똑같이 흔하다고 오해하게 된다.
 
 **오른쪽**은 각 점을 조금씩 흔들었다. 이제 각 자리의 점 뭉치 크기가 도수를 나타낸다.
-
-</div>
 
 !!! danger "지터는 자료를 바꾸는 일이다"
     지터는 **없는 값을 만들어 낸다.** 오른쪽 그림에는 평점 3.87 같은 점이 있지만, 실제 자료에 그런 값은 없다.
@@ -327,9 +327,11 @@ plt.show()
     y = np.sin(x / 1.2) * 0.5 + 0.08 * x + rng.normal(0, 0.08, len(x))
 
     fig, axes = plt.subplots(3, 1, figsize=(9, 7))
-    for ax, ratio, title in [(axes[0], 0.05, "납작하다 — 진동이 안 보인다"),
-                             (axes[1], 0.25, "적절하다 — 진동과 추세가 함께 보인다"),
-                             (axes[2], 1.0, "높다 — 추세만 보이고 진동이 뭉갠다")]:
+    # set_aspect(r) 은 "y 한 눈금이 x 한 눈금의 r 배 길이"라는 뜻이다.
+    # 따라서 자료의 기울기 s 는 화면에서 r*s 로 보인다.
+    for ax, ratio, title in [(axes[0], 0.1, "너무 납작하다 — 진동이 보이지 않는다"),
+                             (axes[1], 1.37, "45도로 눕혔다 — 진동과 추세가 함께 보인다"),
+                             (axes[2], 12.0, "너무 높다 — 선분이 수직에 가까워 구별이 안 된다")]:
         ax.plot(x, y, lw=0.9)
         ax.set_aspect(ratio)
         ax.set_title(title, fontsize=9)
@@ -338,24 +340,33 @@ plt.show()
 
     slopes = np.abs(np.diff(y) / np.diff(x))
     print(f"국소 기울기의 중앙값 {np.median(slopes):.4f}")
-    print(f"기울기 중앙값을 45도로 만드는 가로세로 비율 ≈ {np.median(slopes):.4f}")
+    # 화면 기울기가 1(=45도)이 되려면 r * s = 1, 즉 r = 1/s 여야 한다.
+    print(f"기울기 중앙값을 45도로 만드는 가로세로 비율 ≈ {1 / np.median(slopes):.4f}")
     ```
 
     출력:
 
     ```
     국소 기울기의 중앙값 0.7276
-    기울기 중앙값을 45도로 만드는 가로세로 비율 ≈ 0.7276
+    기울기 중앙값을 45도로 만드는 가로세로 비율 ≈ 1.3743
     ```
 
     ![가로세로 비율에 따라 달라지는 산점도](./img/scatter_291.png)
 
     **클리블랜드의 원칙**은 그림의 **국소 기울기 중앙값이 $45^\circ$가 되도록** 가로세로 비율을 정하라는 것이다. 사람의 눈은 기울기의 차이를 $45^\circ$ 근처에서 가장 잘 구별하기 때문이다.
 
-    - **너무 납작하면** 모든 선분이 수평에 가까워 변화가 보이지 않는다.
-    - **너무 높으면** 모든 선분이 수직에 가까워 역시 구별이 안 된다.
+    위 자료의 국소 기울기 중앙값은 $0.7276$이다. `set_aspect(r)` 는 화면 기울기를 $r \times 0.7276$으로 만드므로, $45^\circ$가 되려면
 
-    **이것이 그림의 결론을 바꾼다.** 위 자료에는 느린 상승 추세와 빠른 진동이 함께 있는데, 납작하게 그리면 추세만, 높게 그리면 진동만 보인다. **두 특징을 함께 보려면 중간이 필요하다.**
+    $$
+    r = \frac{1}{0.7276} \approx 1.3743
+    $$
+
+    이어야 한다. **기울기 자체($0.7276$)가 아니라 그 역수가 답이라는 점**을 놓치기 쉽다.
+
+    - **너무 납작하면**($r = 0.1$) 모든 선분이 수평에 가까워 변화가 보이지 않는다.
+    - **너무 높으면**($r = 12$) 모든 선분이 수직에 가까워 역시 구별이 안 된다.
+
+    **이것이 그림의 결론을 바꾼다.** 위 자료에는 느린 상승 추세와 빠른 진동이 함께 있는데, 납작하게 그리면 둘 다 사라지고 높게 그리면 진동이 뭉개진다. **두 특징을 함께 보려면 $45^\circ$ 근처가 필요하다.**
 
     **주의할 점.**
 
@@ -363,7 +374,7 @@ plt.show()
     - **여러 패널을 나란히 놓을 때는 축 범위를 맞춰라.** 비율이 다르면 패널 간 기울기 비교가 무의미해진다.
     - **시계열에서 특히 중요하다.** 주가 그래프의 "급등"과 "완만한 상승"은 종종 가로세로 비율의 차이일 뿐이다.
 
-    이는 앞 절 matplotlib 문서 연습문제 9의 축 왜곡과 같은 부류의 문제다. **축을 어떻게 잡느냐가 곧 주장이다.** $\square$
+    이는 0장 matplotlib 문서 연습문제 9의 축 왜곡과 같은 부류의 문제다. **축을 어떻게 잡느냐가 곧 주장이다.** $\square$
 
 <div class="drillbox" markdown>
 
@@ -376,6 +387,7 @@ plt.show()
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+    import matplotlib.ticker as mticker
 
     rng = np.random.default_rng(4)
     n = 1500
@@ -392,6 +404,11 @@ plt.show()
     axes[1].scatter(x, y, s=8, alpha=0.4)
     axes[1].set_xscale("log"); axes[1].set_yscale("log")
     axes[1].set_title("양로그 축 — 관계가 직선으로 펴진다", fontsize=10)
+    # 로그 축의 기본 눈금표는 $10^{-2}$ 꼴의 수식이라 한글 글꼴에서 음수 기호가
+    # 깨진다. 눈금을 평범한 숫자로 찍으면 그 문제도 없고 읽기도 쉽다.
+    plain = mticker.FuncFormatter(lambda v, _: f"{v:g}")
+    axes[1].xaxis.set_major_formatter(plain)
+    axes[1].yaxis.set_major_formatter(plain)
     for ax in axes:
         ax.set_xlabel("x"); ax.set_ylabel("y")
     fig.tight_layout()
@@ -412,9 +429,9 @@ plt.show()
 
     ![치우친 자료의 선형 축과 양로그 축](./img/scatter_342.png)
 
-    **선형 축에서는 관측의 $90\%$가 화면 폭의 $2\%$ 안에 뭉친다.** 나머지 $10\%$가 축 범위를 통째로 차지해 버리기 때문이다. 관계가 있는지 없는지조차 알 수 없다.
+    **선형 축에서는 관측의 $90\%$가 화면 폭의 $6\%$ 안에 뭉친다.** 나머지 $10\%$가 축 범위를 통째로 차지해 버리기 때문이다. 관계가 있는지 없는지조차 알 수 없다.
 
-    **양로그 축에서는 멱함수 관계가 직선이 된다.** 기울기가 참 지수 $0.8$을 정확히 되찾는다(앞 절 matplotlib 문서 연습문제 8과 같은 원리).
+    **양로그 축에서는 멱함수 관계가 직선이 된다.** 기울기가 참 지수 $0.8$을 정확히 되찾는다(0장 matplotlib 문서 연습문제 8과 같은 원리).
 
     **대가를 정확히 알아야 한다.**
 
@@ -488,7 +505,7 @@ plt.show()
 
     - **평활 폭을 여러 개로 그려 보라.** 모든 폭에서 나타나는 특징만 믿는다. 히스토그램의 구간 개수, KDE의 대역폭과 같은 조언이다.
     - **신뢰띠를 함께 그려라.** `seaborn.regplot` 이나 `lowess` 는 부트스트랩 신뢰띠를 제공한다. 띠가 직선을 포함하면 굴곡의 증거가 약하다.
-    - **양 끝을 의심하라.** 평활은 경계 근처에서 이웃이 한쪽밖에 없어 불안정하다. 위 그림에서도 양 끝의 굴곡이 가장 크다.
+    - **양 끝을 의심하라.** 평활은 경계 근처에서 이웃이 한쪽밖에 없어 불안정하다. 위 자료에서 `span=0.3`과 `span=0.9`의 최대 이탈($0.427$과 $0.125$)이 모두 **왼쪽 끝**에서 나온다.
     - **모형으로 검정하라.** 곡선이 정말 필요한지 궁금하면 선형모형과 스플라인 모형을 비교하는 것이 그림보다 확실하다.
 
     **그럼에도 평활은 유용하다.** 관계가 비선형인지 눈으로 확인하는 데 이만한 도구가 없다. 요점은 **평활 곡선을 결론이 아니라 가설로 다루는 것**이다. $\square$
@@ -542,14 +559,14 @@ plt.show()
     출력:
 
     ```
-    자료        상관      x 평균      x 표준편차      x 초과첨도
+              자료        상관      x 평균      x 표준편차      x 초과첨도
             A 정규   +0.6954    +0.008      1.0065     -0.0772
          B 두 덩어리   +0.6940    +0.010      1.0086     -1.2763
     ```
 
     ![상관과 주변분포는 같고 결합 구조가 다른 두 자료](./img/scatter_470.png)
 
-    **상관도 주변 평균·표준편차도 사실상 같다**($r = 0.695$ 대 $0.703$, 표준편차 $1.007$ 대 $1.000$). 그런데 A는 하나의 타원형 구름이고 B는 대각선상의 **두 덩어리**다.
+    **상관도 주변 평균·표준편차도 사실상 같다**($r = 0.695$ 대 $0.694$, 표준편차 $1.007$ 대 $1.009$). 그런데 A는 하나의 타원형 구름이고 B는 대각선상의 **두 덩어리**다.
 
     **초과첨도가 유일하게 차이를 잡아낸다**($-0.077$ 대 $-1.287$). 이봉 분포는 첨도가 음수로 크게 내려가기 때문이다(왜도·첨도 문서 연습문제 7의 균등분포와 같은 방향).
 
@@ -635,7 +652,7 @@ plt.show()
     **대안.**
 
     - **면 나누기(faceting).** 세 번째 변수를 몇 개 구간으로 나누어 작은 그림 여러 개로 그린다. 위치 부호화를 유지하므로 가장 정확하다.
-    - **색으로 부호화하되 순서형만.** 연속값을 색으로 쓰면 정확한 비교는 불가능하지만 **패턴**은 보인다. 지각적으로 균등한 색지도를 써야 한다(matplotlib 문서 연습문제 10).
+    - **색으로 부호화하되 순서형만.** 연속값을 색으로 쓰면 정확한 비교는 불가능하지만 **패턴**은 보인다. 지각적으로 균등한 색지도를 써야 한다(0장 matplotlib 문서 연습문제 10).
     - **크기는 정말 대략적인 정보에만.** 인구, 매출처럼 "대충 큰 것과 작은 것"만 구별하면 되는 경우에 한한다.
     - **크기 범례를 반드시 넣어라.** 독자가 넓이를 값으로 되돌릴 유일한 수단이다. $\square$
 

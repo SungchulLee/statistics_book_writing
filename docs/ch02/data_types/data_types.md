@@ -77,9 +77,11 @@ Statistical data
 
 다음 코드가 이 표의 핵심을 보여 준다. 같은 순서형 응답에 서로 다른 두 부호화를 주면 중앙값과 최빈값은 그대로지만 평균은 달라진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 만족도 응답에 평균을 쓸 수 있는가 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 만족도 응답에 평균을 쓸 수 있는가
+
+</div>
 
 ```python
 import numpy as np
@@ -110,54 +112,70 @@ print(f"최빈 범주: {levels[np.bincount(answers).argmax()]}")
 
 평균만 바뀌고 중앙값과 최빈값은 그대로다. **순서형 자료를 요약할 때 중앙값을 쓰는 이유가 이것이다.**
 
-</div>
-
 세 종류를 나란히 그리면 차이가 분명해진다. **명목형은 막대의 순서를 바꿔도 아무것도 잃지 않지만, 순서형은 순서를 지켜야 하고, 수치형은 축 자체가 눈금을 갖는다.**
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 자료 종류에 따라 달라지는 그림 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 자료 종류에 따라 달라지는 그림
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
+
+BLUE, ORANGE, GREEN = "#1565C0", "#E65100", "#33691E"
 
 rng = np.random.default_rng(0)
 fig, axes = plt.subplots(1, 3, figsize=(13, 3.2))
 
 # (1) 명목형 - 막대 순서에 뜻이 없다
 blood = ["A", "B", "AB", "O"]
-axes[0].bar(blood, [34, 27, 11, 28])
-axes[0].set_title("Nominal: blood type")
+axes[0].bar(blood, [34, 27, 11, 28], color=BLUE)
+axes[0].set_title("명목형: 혈액형")
+axes[0].set_xlabel("혈액형")
+axes[0].set_ylabel("사람 수")
 
 # (2) 순서형 - 막대 순서를 지켜야 한다
-axes[1].bar(range(5), [5, 10, 30, 40, 15])
+axes[1].bar(range(5), [5, 10, 30, 40, 15], color=ORANGE)
 axes[1].set_xticks(range(5))
-axes[1].set_xticklabels(["--", "-", "0", "+", "++"])
-axes[1].set_title("Ordinal: satisfaction")
+axes[1].set_xticklabels(["매우 불만", "불만", "보통", "만족", "매우 만족"])
+axes[1].set_title("순서형: 만족도")
+axes[1].set_xlabel("만족도")
+axes[1].set_ylabel("사람 수")
 
 # (3) 연속형 - 가로축이 눈금을 갖는 수직선이다
-axes[2].hist(rng.normal(170, 8, 500), bins=25, edgecolor="white")
-axes[2].set_xlabel("height (cm)")
-axes[2].set_title("Continuous: height")
+axes[2].hist(rng.normal(170, 8, 500), bins=25, color=GREEN, edgecolor="white")
+axes[2].set_title("연속형: 키")
+axes[2].set_xlabel("키 (cm)")
+axes[2].set_ylabel("사람 수")
 
 for ax in axes:
     ax.spines[["top", "right"]].set_visible(False)
-plt.tight_layout()
-plt.show()
+fig.tight_layout()
+fig.savefig("data_types_101.png", dpi=170, facecolor="white",
+            bbox_inches="tight")
 ```
 
 ![명목형·순서형·연속형 자료의 대표적 그림](./img/data_types_101.png)
-
-</div>
 
 ### pandas에서 순서를 자료에 새겨 넣기
 
 파이썬에서 순서형을 그냥 문자열로 두면 순서 정보가 사라진다. `pandas`의 순서 있는 범주형(ordered categorical)을 쓰면 순서가 자료구조 자체에 들어간다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. pandas 에 순서를 새겨 넣기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> pandas 에 순서를 새겨 넣기
+
+</div>
 
 ```python
 import numpy as np
@@ -188,8 +206,6 @@ print("중앙값      :", levels[int(np.median(s_ord.cat.codes))])
 
 문자열로 두면 가나다순으로 정렬되어 뜻이 없다. 순서형으로 선언하면 정렬과 비교가 우리가 의도한 순서를 따른다.
 
-</div>
-
 !!! warning "pandas는 순서형에 `median()`을 제공하지 않는다"
     순서를 아는 자료이므로 중앙값이 잘 정의되는데도, `s_ord.median()`은
 
@@ -214,9 +230,11 @@ print("중앙값      :", levels[int(np.median(s_ord.cat.codes))])
 
 **원핫 부호화**(one-hot encoding)가 표준적인 해법이다. 범주가 $k$개면 0/1 값을 갖는 열 $k$개를 만들고, 자기 범주에 해당하는 열만 1로 둔다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 원핫 부호화와 범주 사이의 거리 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 원핫 부호화와 범주 사이의 거리
+
+</div>
 
 ```python
 import pandas as pd
@@ -236,7 +254,7 @@ print("원핫에서 모든 서로 다른 범주 쌍의 거리^2 =",
 출력:
 
 ```
-bt_A  bt_AB  bt_B  bt_O
+   bt_A  bt_AB  bt_B  bt_O
 0     1      0     0     0
 1     0      0     0     1
 2     0      1     0     0
@@ -249,8 +267,6 @@ bt_A  bt_AB  bt_B  bt_O
 ```
 
 정수 부호화에서는 A와 O의 거리가 A와 B의 거리보다 세 배 크다. 원핫에서는 **서로 다른 범주라면 어느 쌍이든 거리가 같다**. 이것이 명목형이 본래 뜻하는 바다.
-
-</div>
 
 !!! note "그렇다면 순서형은?"
     순서형에는 순서가 실제로 있으므로 정수 부호화가 원핫보다 나을 때가 많다. 순서 정보를 버리지 않기 때문이다. 다만 이때도 **간격이 같다는 가정**은 여전히 남는다(2절의 주의 참조).
@@ -277,9 +293,11 @@ Stevens(1946)의 고전적인 분류는 수치형을 다시 둘로 나눈다. **
 
 **비율척도**에는 참된 0이 있어 비가 뜻을 갖는다. 키 $180\,\text{cm}$는 $90\,\text{cm}$의 두 배가 맞다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 섭씨와 화씨 — 간격척도와 비율척도 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 섭씨와 화씨 — 간격척도와 비율척도
+
+</div>
 
 ```python
 # 섭씨 -> 화씨는 순서와 간격은 보존하지만 비는 보존하지 않는다
@@ -305,8 +323,6 @@ print(f"켈빈: 비 = {k2 / k1:.4f},  랭킨: 비 = {r2 / r1:.4f}")
 
 같은 온도인데 단위만 바꾸면 "몇 배"가 $2.000$에서 $1.360$으로 달라진다. **구간척도에서 비를 계산하면 안 되는 이유**가 이것이다. 반면 절대온도에서는 단위를 바꿔도 비가 그대로다.
 
-</div>
-
 ## 5. 오늘날의 자료: 이미지, 소리, 텍스트
 
 지금까지의 분류는 **표(table)로 정리되는 자료**를 전제한다. 행이 관측 개체이고 열이 변수인 형태다. 그러나 오늘날 다루는 자료의 상당 부분은 그런 모양이 아니다.
@@ -330,9 +346,11 @@ print(f"켈빈: 비 = {k2 / k1:.4f},  랭킨: 비 = {r2 / r1:.4f}")
 
 **(3) 변수가 관측보다 훨씬 많다.** $224 \times 224$ 컬러 이미지 한 장은 변수 $224 \times 224 \times 3 = 150{,}528$개인 관측 하나다. 사진 1,000장을 모아도 $n = 1000$, $p = 150{,}528$으로 $p \gg n$이다. 18장의 정칙화가 필요해지는 전형적인 상황이다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 이미지·소리·텍스트도 숫자 배열이다 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 이미지·소리·텍스트도 숫자 배열이다
+
+</div>
 
 ```python
 import numpy as np
@@ -371,8 +389,6 @@ print(f"정수 부호화: {[vocab.index(w) for w in tokens]}")
 ```
 
 마지막 줄의 정수 부호화를 보라. `자료`가 $8$, `종류`가 $9$로 부호화되었다고 해서 두 단어 사이에 크기 관계가 있는 것이 아니다. **명목형을 정수로 바꾼 것일 뿐이며, 그 정수의 평균은 아무 뜻이 없다.** 현대의 기계학습이 단어를 정수 대신 **임베딩 벡터**로 바꾸는 이유가 바로 이것이다. 임베딩은 명목형 범주를 수치형 벡터로 옮기되, 그 벡터 사이의 거리가 뜻을 갖도록 학습된 표현이다.
-
-</div>
 
 !!! note "그래서 이 장의 내용이 쓸모없어지는가"
     그렇지 않다. 이유는 두 가지다.
@@ -660,7 +676,7 @@ $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 
     출력:
 
     ```
-    lambda       표본평균       표본분산      분산/평균
+      lambda       표본평균       표본분산      분산/평균
          1.0      0.998      1.002     1.0034
          5.0      5.001      4.987     0.9971
         20.0     19.993     19.965     0.9986
@@ -915,7 +931,7 @@ $256 \times 256$ 컬러 이미지 $500$장을 모아 각 이미지를 하나의 
 
     **흔한 사고.** 범죄 발생 시각, 응급실 내원 시각, 출생 시각의 "평균"을 그냥 구하면 거의 언제나 낮 시간이 나온다. 밤에 몰린 자료가 자정을 사이에 두고 갈라지기 때문이다. 요일을 $1\sim7$로 부호화해 평균을 내는 것도 같은 오류이며, 결과는 늘 수요일 근처가 된다.
 
-    **본문의 틀에 어떻게 넣을 것인가.** 순환형은 **구간척도도 비율척도도 아니다.** 차이가 뜻을 갖지만(두 시각 사이의 간격) 그 차이가 **경로에 따라 둘**이고(시계방향·반시계방향), 절대영점이 없을 뿐 아니라 **어디를 영점으로 잡아도 무방하다.** 본문 $6$절의 실전 절차에 한 줄을 더한다면 **"이 변수의 최댓값과 최솟값이 실제로는 이웃인가?"** 를 묻는 것이다. 답이 그렇다면 순환형이고, 평균·분산·상관을 전부 다른 공식으로 구해야 한다.
+    **본문의 틀에 어떻게 넣을 것인가.** 순환형은 **구간척도도 비율척도도 아니다.** 차이가 뜻을 갖지만(두 시각 사이의 간격) 그 차이가 **경로에 따라 둘**이고(시계방향·반시계방향), 절대영점이 없을 뿐 아니라 **어디를 영점으로 잡아도 무방하다.** 본문 $6$절의 실전 절차에 한 줄을 더한다면 **"이 변수의 최댓값과 최솟값이 실제로는 이웃인가?"** 를 묻는 것이다. 답이 그렇다면 순환형이고, 평균·분산·상관을 전부 다른 공식으로 구해야 한다. $\square$
 
 ---
 

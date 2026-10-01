@@ -12,11 +12,15 @@
 
 캘리포니아(CA)와 뉴욕(NY)의 고품질 대마에 대한 48개월치 월별 가격 관측값을 다룬다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 캘리포니아와 뉴욕의 가격 자료 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 캘리포니아와 뉴욕의 가격 자료
+
+</div>
 
 ```python
+import matplotlib
+matplotlib.use("Agg")
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -46,8 +50,6 @@ NY_PRICES = np.array([
 
 두 계열 모두 48개월에 걸쳐 꾸준한 하락 추세를 보이며, 뉴욕 가격이 캘리포니아 가격보다 일관되게 높다.
 
-</div>
-
 ---
 
 ## 2. 평균
@@ -58,9 +60,11 @@ $$
 \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 평균 직접 구현하기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균 직접 구현하기
+
+</div>
 
 ```python
 def mean_from_scratch(data):
@@ -81,8 +85,6 @@ print(f"pandas   : {pd.Series(CA_PRICES).mean():.4f}")
 pandas   : 242.3102
 ```
 
-</div>
-
 ---
 
 ## 3. 중앙값
@@ -97,9 +99,11 @@ x_{(m+1)} & \text{if } n = 2m + 1 \\[4pt]
 \end{cases}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 중앙값 직접 구현하기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 중앙값 직접 구현하기
+
+</div>
 
 ```python
 def median_from_scratch(data):
@@ -123,17 +127,17 @@ print(f"pandas   : {pd.Series(CA_PRICES).median():.4f}")
 pandas   : 242.0150
 ```
 
-</div>
-
 ---
 
 ## 4. 최빈값
 
 최빈값은 가장 자주 나타나는 값이다. 연속 자료에서는 먼저 값을 정해진 정밀도로 반올림한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 4. 최빈값 직접 구현하기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 최빈값 직접 구현하기
+
+</div>
 
 ```python
 def mode_from_scratch(data, decimals=1):
@@ -156,8 +160,6 @@ decimals=1: 최빈값 = 248.6
 decimals=2: 최빈값 = 236.56
 ```
 
-</div>
-
 !!! note "연속 자료의 최빈값"
     연속 자료에는 정확히 같은 값이 반복되는 일이 드물다. 최빈값을 계산하기 전에 반올림이나 구간화가 필요하며, 그 결과는 선택한 반올림 정밀도에 따라 달라진다.
 
@@ -177,9 +179,11 @@ $$
 s = \sqrt{s^2}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 5. 분산과 표준편차 직접 구현하기 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 분산과 표준편차 직접 구현하기
+
+</div>
 
 ```python
 def variance_from_scratch(data):
@@ -214,8 +218,6 @@ numpy 기본(ddof=0): 13.4693  <- 다르다
 numpy ddof=1      : 13.7559
 ```
 
-</div>
-
 ---
 
 ## 6. 공분산과 상관
@@ -232,9 +234,11 @@ $$
 r = \frac{\text{Cov}(X, Y)}{s_X \, s_Y}
 $$
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 6. 공분산과 상관 직접 구현하기 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 공분산과 상관 직접 구현하기
+
+</div>
 
 ```python
 def covariance_from_scratch(x, y):
@@ -269,17 +273,17 @@ print(f"Cov(CA, CA) = {covariance_from_scratch(CA_PRICES, CA_PRICES):.4f}"
 Cov(CA, CA) = 13.7559  =  Var(CA) = 13.7559
 ```
 
-</div>
-
 ---
 
 ## 7. 결과와 확인
 
 직접 구현한 함수를 캘리포니아 자료에 실행하고 pandas로 확인한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 7. 직접 구현과 numpy 결과 맞춰 보기 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 직접 구현과 numpy 결과 맞춰 보기
+
+</div>
 
 ```python
 data = CA_PRICES
@@ -328,8 +332,6 @@ std           3.708895      3.708895   -8.88e-16
 
 상관이 $r = 0.9970$으로 1에 매우 가깝다. 두 계열이 같은 기간에 비슷하게 꾸준한 하락 추세를 따랐기 때문이다.
 
-</div>
-
 !!! warning "$r$이 1에 가깝다고 두 지역이 서로 영향을 준 것은 아니다"
     두 계열 모두 **시간에 따라 단조 감소**한다. 시간이라는 공통 추세가 두 변수를 함께 끌어내리므로 상관이 저절로 커진다. 1장에서 본 교란과 같은 구조다.
 
@@ -337,41 +339,49 @@ std           3.708895      3.708895   -8.88e-16
 
 ## 8. 시각화
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 8. 세 그림으로 요약하기 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 세 그림으로 요약하기
+
+</div>
 
 ```python
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 축 이름의 "달러"도 한글이므로 $...$ 밖에 두어야 한다.
+plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+plt.rcParams["axes.unicode_minus"] = False
+
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
 # 왼쪽: 히스토그램에 평균과 중앙값을 세로선으로 얹는다.
-axes[0].hist(data, bins=15, edgecolor="white", alpha=0.7)
-axes[0].axvline(m, color="red", linestyle="--", label=f"Mean {m:.1f}")
-axes[0].axvline(med, color="blue", linestyle=":", label=f"Median {med:.1f}")
+axes[0].hist(data, bins=15, color="#DCEBFB", edgecolor="#1565C0", alpha=0.9)
+axes[0].axvline(m, color="#E65100", linestyle="--", lw=2, label=f"평균 {m:.1f}")
+axes[0].axvline(med, color="#33691E", linestyle=":", lw=2, label=f"중앙값 {med:.1f}")
 axes[0].set_title("캘리포니아 가격 분포")
-axes[0].set_xlabel("가격 ($)")
+axes[0].set_xlabel("가격 (달러)")
+axes[0].set_ylabel("도수")
 axes[0].legend(fontsize=8)
 
 # 가운데: 같은 자료의 상자그림. 다섯 수치 요약을 한 눈에 보여 준다.
-axes[1].boxplot(data, vert=True)
+axes[1].boxplot(data, vert=True, labels=["캘리포니아"])
 axes[1].set_title("상자그림 — 캘리포니아")
-axes[1].set_ylabel("가격 ($)")
+axes[1].set_ylabel("가격 (달러)")
 
 # 오른쪽: 두 주의 가격을 짝지어 찍는다. 점이 직선에 가까울수록 상관이 크다.
-axes[2].scatter(CA_PRICES, NY_PRICES, alpha=0.6)
-axes[2].set_xlabel("캘리포니아 ($)")
-axes[2].set_ylabel("뉴욕 ($)")
-axes[2].set_title(f"캘리포니아 대 뉴욕  (r = {corr:.3f})")
+axes[2].scatter(CA_PRICES, NY_PRICES, alpha=0.7, color="#1565C0")
+axes[2].set_xlabel("캘리포니아 가격 (달러)")
+axes[2].set_ylabel("뉴욕 가격 (달러)")
+axes[2].set_title(f"캘리포니아 대 뉴욕  ($r$ = {corr:.3f})")
 
-plt.tight_layout()
-plt.show()
+fig.tight_layout()
+fig.savefig("descriptive_stats_weed_prices_180.png", dpi=170,
+            facecolor="white", bbox_inches="tight")
 ```
 
-![CA HighQ Price Distribution](./img/descriptive_stats_weed_prices_180.png)
+![캘리포니아 가격의 분포와 뉴욕 가격과의 산점도](./img/descriptive_stats_weed_prices_180.png)
 
 왼쪽 패널은 대체로 균등한 분포를 보여준다(가격이 꾸준히 하락하므로 각 가격 수준을 대략 한 번씩 지난다). 오른쪽 패널의 촘촘한 선형 산점이 거의 완벽한 상관을 확인해 준다.
-
-</div>
 
 ---
 
@@ -420,13 +430,13 @@ plt.show()
     \text{Cov}(X, Y) = \frac{-0.002456 - 0.009022 - 0.001956}{2} = \frac{-0.013434}{2} \approx -0.006717
     $$
 
-    표준편차는 $s_X \approx 0.07937$, $s_Y \approx 0.08386$이다.
+    표준편차는 $s_X \approx 0.08145$, $s_Y \approx 0.08386$이다($n - 1 = 2$로 나눈 표본표준편차).
 
     $$
-    r = \frac{-0.006717}{0.07937 \times 0.08386} \approx -1.009
+    r = \frac{-0.006717}{0.08145 \times 0.08386} \approx -0.983
     $$
 
-    반올림 오차 때문에 $|r|$이 1을 살짝 넘는다. 정확한 산술로 계산하면 (이 작은 자료를 구성한 방식상) 세 점이 정확히 한 직선 위에 있으므로 $r = -1.0$이다. 완벽한 음의 상관은 두 수익률이 정확히 반대 방향으로 움직임을 뜻한다.
+    $r$이 $-1$에 매우 가깝지만 정확히 $-1$은 아니다. 세 점이 한 직선 위에 놓여 있지 않기 때문이다(점 1과 2를 잇는 기울기는 $-0.933$, 점 2와 3을 잇는 기울기는 $-1.154$다). $r = -1$이려면 어떤 $b < 0$에 대해 $y_i = a + b x_i$가 **모든** $i$에서 성립해야 한다. 여기서는 한 주식이 오르면 다른 주식이 거의 예외 없이 내려가는 강한 음의 선형관계일 뿐이다.
 
 <div class="drillbox" markdown>
 
@@ -473,10 +483,10 @@ plt.show()
     이므로 표본분산은
 
     $$
-    s^2 = \frac{b^2}{n-1}\sum_{i=1}^n \left(\frac{n+1}{2} - i\right)^2 = \frac{b^2}{n-1} \cdot \frac{n(n+1)}{12} \cdot (n-1) \cdot \frac{1}{n-1}
+    s^2 = \frac{b^2}{n-1}\sum_{i=1}^n \left(\frac{n+1}{2} - i\right)^2
     $$
 
-    이다. $\sum_{i=1}^n \left(\frac{n+1}{2} - i\right)^2 = \frac{n(n^2 - 1)}{12}$을 이용해 정리하면
+    이다. $\sum_{i=1}^n \left(\frac{n+1}{2} - i\right)^2 = \frac{n(n^2 - 1)}{12}$을 이용하고 $n^2 - 1 = (n-1)(n+1)$로 인수분해하면
 
     $$
     s^2 = \frac{b^2 \cdot n(n^2 - 1)}{12(n - 1)} = \frac{b^2 \, n(n+1)}{12}
@@ -487,17 +497,18 @@ plt.show()
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff easy" title="쉬움"></span>
-**변동계수** $\mathrm{CV} = s/\bar x$는 상대적 퍼짐을 재는 단위 없는 측도다. 위의 CA 가격은 $\bar x \approx 244$, $s \approx 9$이고 오리건(OR) 가격은 $\bar x \approx 209$, $s \approx 5$다. 각각의 CV를 계산하고 어느 주의 가격 변동성이 *상대적으로* 더 큰지 설명하라.
+**변동계수** $\mathrm{CV} = s/\bar x$는 상대적 퍼짐을 재는 단위 없는 측도다. 위의 캘리포니아 가격은 $\bar x \approx 242.31$, $s \approx 3.71$이고 뉴욕 가격은 $\bar x \approx 344.58$, $s \approx 3.54$다. 각각의 CV를 계산하고 어느 주의 가격 변동성이 *상대적으로* 더 큰지 설명하라.
 
 </div>
 
 ??? success "풀이"
-    캘리포니아: $\mathrm{CV}_{\mathrm{CA}} = 9/244 \approx 0.037 = 3.7\%$.
-    오리건: $\mathrm{CV}_{\mathrm{OR}} = 5/209 \approx 0.024 = 2.4\%$.
+    캘리포니아: $\mathrm{CV}_{\mathrm{CA}} = 3.71/242.31 \approx 0.0153 = 1.53\%$.
 
-    캘리포니아의 상대적 변동성이 더 크다(3.7% 대 2.4%). 전형적인 가격에 대한 비율로 보면 캘리포니아 가격이 오리건보다 더 많이 오르내린다는 뜻이다.
+    뉴욕: $\mathrm{CV}_{\mathrm{NY}} = 3.54/344.58 \approx 0.0103 = 1.03\%$.
 
-    **여기서 CV가 중요한 이유:** 절대 표준편차($9 vs. 5$)를 비교하면 CA 가격이 "더 변동성이 크다"고 볼 수 있지만, 이는 부분적으로 CA 가격이 애초에 더 높기 때문이다. 평균으로 나누면 가격 수준이 정규화되어 상대적 변동성이 드러난다. CV는 가격 척도가 다른 시장, 나라, 시대에 걸쳐 변동성을 비교할 때 특히 유용하다.
+    캘리포니아의 상대적 변동성이 **뉴욕의 약 1.5배**다.
+
+    **여기서 CV가 중요한 이유:** 절대 표준편차만 보면 두 주가 거의 같다($3.71$ 대 $3.54$). 그러나 뉴욕 가격은 애초에 $100$달러가량 높은 수준에서 움직이므로, 같은 $3.5$달러의 흔들림이 전체 가격에서 차지하는 몫은 더 작다. 평균으로 나누면 가격 수준이 정규화되어 상대적 변동성이 드러난다. CV는 가격 척도가 다른 시장, 나라, 시대에 걸쳐 변동성을 비교할 때 특히 유용하다.
 
     **단서:** CV는 $\bar x > 0$인 엄격히 양의 자료에 대해서만 잘 정의된다. 음수가 될 수 있는 자료(수익률, 변화량)에는 표준편차나 다른 유계가 아닌 척도 측도를 쓴다.
 
@@ -575,12 +586,12 @@ plt.show()
     - **공적분을 검정한다.** 두 계열이 진짜 장기 관계를 갖는지 형식적으로 확인한다.
     - **자기상관을 반영한 표준오차를 쓴다.** 뉴이–웨스트 표준오차 등.
 
-    **이 절의 가격 자료에 대입하면.** CA와 OR의 가격이 둘 다 시간에 따라 감소하고 있다면, 그 상관의 상당 부분은 **공통된 추세**에서 온다. "두 주의 가격이 함께 움직인다"고 결론짓기 전에 추세를 제거하고 다시 계산해야 한다. $\square$
+    **이 절의 가격 자료에 대입하면.** 캘리포니아와 뉴욕의 가격이 둘 다 시간에 따라 감소하고 있으므로, $r = 0.997$의 상당 부분은 **공통된 추세**에서 온다. "두 주의 가격이 함께 움직인다"고 결론짓기 전에 추세를 제거하고 다시 계산해야 한다. $\square$
 
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-연습문제 7이 상관이 비선형 관계를 놓친다는 것을 보였다면, 더 극적인 예가 있다. **안스콤의 사중주**를 재현하고 무엇을 시사하는지 논하라.
+연습문제 6이 상관이 비선형 관계를 놓친다는 것을 보였다면, 더 극적인 예가 있다. **안스콤의 사중주**를 재현하고 무엇을 시사하는지 논하라.
 
 </div>
 
@@ -700,9 +711,9 @@ plt.show()
     - **회귀계수도 감쇠한다.** 설명변수에 측정오차가 있으면 기울기가 $R_X$배로 축소된다(상관은 $\sqrt{R_X}$배). 이를 **회귀 희석**이라 하며, 계량경제학에서 도구변수를 쓰는 고전적 이유 중 하나다(1장 연습문제 10).
     - **$Y$의 측정오차는 상관은 낮추지만 회귀 기울기는 편향시키지 않는다.** 오차가 잡음으로 들어갈 뿐이기 때문이다. **어느 변수에 오차가 있는지가 중요하다.**
 
-    **이 절의 가격 자료에 대입하면.** 보고된 가격이 실제 거래가의 잡음 섞인 측정이라면, CA와 OR 가격의 상관은 참값보다 작게 나온다. 즉 **"상관이 생각보다 낮다"는 관찰의 원인이 실제 관계의 약함이 아니라 측정의 조악함일 수 있다.**
+    **이 절의 가격 자료에 대입하면.** 보고된 가격이 실제 거래가의 잡음 섞인 측정이라면, 캘리포니아와 뉴욕 가격의 상관은 참값보다 작게 나온다. 즉 **"상관이 생각보다 낮다"는 관찰의 원인이 실제 관계의 약함이 아니라 측정의 조악함일 수 있다.**
 
-    앞 문제들과 합치면 상관을 해석할 때 물어야 할 것이 셋으로 정리된다. **비선형인가(연습문제 7), 추세가 만든 것인가(연습문제 8), 측정오차로 눌린 것인가(이 문제).** 그리고 언제나 **그림을 먼저 그려라**(연습문제 9). $\square$
+    앞 문제들과 합치면 상관을 해석할 때 물어야 할 것이 셋으로 정리된다. **비선형인가(연습문제 6), 추세가 만든 것인가(연습문제 7), 측정오차로 눌린 것인가(이 문제).** 그리고 언제나 **그림을 먼저 그려라**(연습문제 8). $\square$
 
 <div class="drillbox" markdown>
 

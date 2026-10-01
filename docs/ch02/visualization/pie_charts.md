@@ -6,9 +6,11 @@
 
 ## 1. 기본 원그래프
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 기본 원그래프 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기본 원그래프
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -38,38 +40,38 @@ plt.show()
 
 형식 문자열 `autopct='%1.1f%%'`는 각 조각에 백분율을 소수점 한 자리까지 표시한다. 마지막 `%%`는 퍼센트 기호 자체를 뜻한다.
 
-</div>
-
 **원그래프는 자동으로 비율을 계산한다.** 값을 그대로 주면 합으로 나누어 각도를 정한다. 따라서 원그래프는 언제나 "전체 = 100%"를 전제하며, 합이 의미 없는 자료에는 쓸 수 없다.
 
 ## 2. 왜 막대그림이 나은가
 
 같은 자료를 두 방식으로 그려 놓고 물어보자.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 원그래프와 막대그림 견주기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 원그래프와 막대그림 견주기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 
 sizes = [215, 130, 245, 210]
-labels = ['Apples', 'Bananas', 'Cherries', 'Dates']
+labels = ['사과', '바나나', '체리', '대추야자']
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
 
 # 왼쪽: 원그래프. 백분율 숫자를 일부러 빼고 각도만 남긴다.
 ax1.pie(sizes, labels=labels, startangle=140, counterclock=True,
         colors=['gold', 'yellowgreen', 'lightcoral', 'lightskyblue'])
-ax1.set_title("Pie Chart")
+ax1.set_title("원그래프")
 
 # 오른쪽: 같은 자료를 정렬한 막대그림
 order = np.argsort(sizes)[::-1]
 ax2.bar([labels[i] for i in order], [sizes[i] for i in order],
         color='steelblue', width=0.55)
-ax2.set_title("Bar Chart (same data, sorted)")
-ax2.set_ylabel("Count")
+ax2.set_title("막대그림 (같은 자료, 정렬함)")
+ax2.set_ylabel("개수")
 ax2.spines[['top', 'right']].set_visible(False)
 
 plt.tight_layout()
@@ -78,11 +80,9 @@ plt.show()
 
 ![원그래프와 막대그림의 비교](./img/pie_vs_bar.png)
 
-**왼쪽 그림에서 Apples와 Dates 중 어느 쪽이 큰가?** 실제 값은 215와 210으로 Apples가 조금 크다. 각도로 판단할 수 있는가? 거의 불가능하다.
+**왼쪽 그림에서 사과와 대추야자 중 어느 쪽이 큰가?** 실제 값은 215와 210으로 사과가 조금 크다. 각도로 판단할 수 있는가? 거의 불가능하다.
 
 오른쪽에서는 막대 끝의 높이를 비교하면 끝이다. 순서도 정렬해 두었으니 1위부터 4위까지가 한눈에 들어온다.
-
-</div>
 
 !!! warning "사람은 각도와 넓이를 잘 비교하지 못한다"
     시각적 부호화(visual encoding)의 정확도에는 순서가 있다. Cleveland와 McGill의 실험 이래 널리 받아들여지는 순위는 대략 다음과 같다.
@@ -112,9 +112,11 @@ plt.show()
 
 가운데를 비운 형태다. 빈 공간에 총계나 핵심 숫자를 넣을 수 있다는 실용적 이점이 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 도넛 그래프 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 도넛 그래프
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -135,8 +137,6 @@ plt.show()
 ![도넛 그래프](./img/pie_donut.png)
 
 읽기 쉬움의 관점에서는 원그래프와 다를 바 없다. 가운데를 비웠으니 넓이 단서가 줄어 오히려 조금 나빠진다는 지적도 있다.
-
-</div>
 
 !!! danger "3차원 원그래프는 쓰지 말 것"
     입체로 기울여 그린 원그래프는 **앞쪽 조각이 실제보다 커 보인다.** 원근 때문에 앞쪽 조각의 보이는 넓이가 부풀려지기 때문이다.
@@ -264,11 +264,11 @@ plt.show()
 
     ax1.pie(values, labels=labels, autopct='%1.0f%%', startangle=90)
     ax1.axis('equal')
-    ax1.set_title("Pie: 3위와 4위를 구별할 수 있는가?")
+    ax1.set_title("원그래프: 3위와 4위를 구별할 수 있는가?")
 
     order = np.argsort(values)                      # 가로 막대는 아래에서 위로 쌓인다
     ax2.barh(np.array(labels)[order], values[order])
-    ax2.set_title("Sorted bar: 순위가 그대로 보인다")
+    ax2.set_title("정렬한 막대: 순위가 그대로 보인다")
     ax2.spines[["top", "right"]].set_visible(False)
 
     plt.tight_layout()
@@ -364,7 +364,7 @@ plt.show()
         sub.pie(pct[i], startangle=90)
         sub.set_title(g, fontsize=9)
     ax1.axis("off")
-    ax1.set_title("Four pies", pad=30)
+    ax1.set_title("원그래프 넷", pad=30)
 
     # 100% 누적 가로 막대: 추세가 한눈에 보인다
     left = np.zeros(len(groups))
@@ -374,7 +374,7 @@ plt.show()
     ax2.set_xlim(0, 100)
     ax2.set_xlabel("%")
     ax2.legend(ncol=3, loc="lower right", bbox_to_anchor=(1.0, -0.42))
-    ax2.set_title("100% stacked bar")
+    ax2.set_title("100% 누적 막대")
 
     plt.tight_layout()
     plt.show()

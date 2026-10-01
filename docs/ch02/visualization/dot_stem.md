@@ -10,12 +10,20 @@
 
 값마다 점을 하나씩 찍되, 같은 값이면 위로 쌓는다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 점그림 그리기 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 점그림 그리기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
+
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
 
 data = [5, 7, 5, 9, 7, 7, 6, 9, 9, 9, 10, 12, 12, 7]
 
@@ -32,9 +40,9 @@ fig, ax = plt.subplots(figsize=(12, 3))
 for age, freq in age_freq.items():
     ax.plot([age] * freq, range(1, freq + 1), 'ok')
 
-ax.set_xlabel('Ages')
-ax.set_ylabel('Number of Students')
-ax.set_title("Ages of Students in Class")
+ax.set_xlabel('나이 (세)')
+ax.set_ylabel('학생 수')
+ax.set_title("학급 학생들의 나이")
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.set_yticks([0, 1, 2, 3, 4])
@@ -54,8 +62,6 @@ print(dict(sorted(age_freq.items())))
 
 7세가 네 명, 9세가 네 명으로 가장 많고 나머지는 한둘씩이다. 8세와 11세는 한 명도 없다.
 
-</div>
-
 **히스토그램과 견주었을 때의 이점.**
 
 - **구간을 정할 필요가 없다.** 히스토그램은 구간 폭을 어떻게 잡느냐에 따라 봉우리가 하나로도 둘로도 보인다. 점그림에는 그런 선택이 없다.
@@ -70,9 +76,11 @@ print(dict(sorted(age_freq.items())))
 
 직접 만들어 보면 원리가 분명해진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 줄기잎그림 직접 만들기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 줄기잎그림 직접 만들기
+
+</div>
 
 ```python
 from collections import defaultdict
@@ -119,8 +127,6 @@ print(stem_leaf(scores))
 
 옆으로 누운 히스토그램처럼 읽으면 된다. 70대가 다섯 명으로 가장 많고, 50대는 한 명도 없다.
 
-</div>
-
 **히스토그램과 결정적으로 다른 점은 원자료가 남아 있다는 것이다.** 잎을 읽으면 70, 70, 72, 73, 75라는 실제 점수를 그대로 복원할 수 있다. 히스토그램은 "70~80 구간에 다섯 명"까지만 알려 주고 값은 버린다.
 
 !!! note "빈 줄기를 빼지 마라"
@@ -154,7 +160,7 @@ print(stem_leaf(scores))
 - 줄기가 **너무 적으면**(단위가 큼) 한 줄에 잎이 너무 많이 몰려 모양이 뭉개진다.
 - 줄기가 **너무 많으면**(단위가 작음) 각 줄에 잎이 하나둘뿐이라 모양이 보이지 않는다.
 
-경험적으로 줄기가 **5~15개** 정도일 때 읽기 좋다. 위 예제는 8개다.
+경험적으로 줄기가 **5~15개** 정도일 때 읽기 좋다. 위 보기는 8개다.
 
 줄기가 너무 적을 때 흔히 쓰는 요령이 **줄기 쪼개기**다. 각 줄기를 잎 0–4와 잎 5–9의 두 줄로 나눈다.
 
@@ -344,7 +350,7 @@ print(stem_leaf(scores))
     출력:
 
     ```
-    A 반 | 줄기 | B 반
+                             A 반 | 줄기 | B 반
                                9 |  4   | 
                                4 |  5   | 
                9 9 8 8 7 7 6 4 3 |  6   | 1 8
@@ -374,7 +380,7 @@ print(stem_leaf(scores))
 
     **한계도 분명하다.** $n$이 수십을 넘으면 잎이 줄을 넘어가고, 집단이 셋 이상이면 등을 맞댈 수가 없다. 그리고 고정폭 글꼴이 아니면 정렬이 깨진다.
 
-    **왜 여전히 배우는가.** 컴퓨터 없이 손으로 그릴 수 있는 유일한 분포 그림이고, **원자료를 보존한다**는 성질이 이 장에서 반복해 강조한 원칙과 정확히 맞기 때문이다. 앞 절 스트립 그림이 같은 목적을 현대적으로 수행한다. $\square$
+    **왜 여전히 배우는가.** 컴퓨터 없이 손으로 그릴 수 있는 유일한 분포 그림이고, **원자료를 보존한다**는 성질이 이 장에서 반복해 강조한 원칙과 정확히 맞기 때문이다. 뒤에 나올 스트립 그림이 같은 목적을 현대적으로 수행한다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -402,7 +408,7 @@ print(stem_leaf(scores))
     출력:
 
     ```
-    n       줄기당 잎        점그림 겹침        히스토그램 칸당
+          n       줄기당 잎        점그림 겹침        히스토그램 칸당
          15         3.8           1.2             3.8
          40         6.7           1.6             6.7
         100        14.3           2.8            14.3
@@ -429,7 +435,7 @@ print(stem_leaf(scores))
     n \lesssim 50: \text{줄기잎·점그림} \quad\to\quad 50 \lesssim n \lesssim 500: \text{히스토그램·점그림} \quad\to\quad n \gtrsim 500: \text{히스토그램·KDE·ECDF}
     $$
 
-    앞 절들에서 본 상자그림·바이올린·스웜의 순서와 같은 구조다. **$n$이 작으면 자료를 보여 주고, 크면 요약한다.** $\square$
+    뒤에 이어지는 상자그림·바이올린·스웜의 순서와 같은 구조다. **$n$이 작으면 자료를 보여 주고, 크면 요약한다.** $\square$
 
 <div class="drillbox" markdown>
 
@@ -442,6 +448,10 @@ print(stem_leaf(scores))
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(5)
 
@@ -563,7 +573,7 @@ print(stem_leaf(scores))
     | 마지막 줄기에 잎이 몰림 | 상한에서의 절단 |
     | 잎이 정확히 반복 | 중복 입력, 대체값 |
 
-    **이것이 줄기잎그림이 여전히 살아 있는 이유다.** 앞 절 스트립 그림 연습문제 8에서 점 그림이 같은 일을 한다고 했는데, 줄기잎은 **끝자리를 명시적으로 보여 준다**는 점에서 한 걸음 더 나아간다. 자릿수 쏠림 진단에는 줄기잎이 가장 직접적인 도구다.
+    **이것이 줄기잎그림이 여전히 살아 있는 이유다.** 뒤에 나올 스트립 그림 연습문제 8에서 점 그림이 같은 일을 하는데, 줄기잎은 **끝자리를 명시적으로 보여 준다**는 점에서 한 걸음 더 나아간다. 자릿수 쏠림 진단에는 줄기잎이 가장 직접적인 도구다.
 
     **실무 습관.** 새 자료를 받으면 $n$이 작을 때 줄기잎그림을, 클 때 끝자리 도수표를 만들어 보라. 몇 초면 되고, 측정·기록 과정의 문제를 조기에 잡아낸다. $\square$
 
@@ -671,7 +681,7 @@ print(stem_leaf(scores))
     - **컴퓨터 없이.** 현장에서 손으로 자료를 정리할 때.
     - **교육.** 분위수·중앙값·분포 모양을 한 그림에서 설명할 수 있다.
 
-    **점그림(윌킨슨)은 줄기잎의 현대적 계승자다.** 같은 정보를 보여 주면서 글꼴 제약이 없고, 값이 연속이어도 된다. 앞 절 스트립·스웜이 이를 집단 비교로 확장한 것이다.
+    **점그림(윌킨슨)은 줄기잎의 현대적 계승자다.** 같은 정보를 보여 주면서 글꼴 제약이 없고, 값이 연속이어도 된다. 뒤 절의 스트립·스웜이 이를 집단 비교로 확장한 것이다.
 
     **클리블랜드 점그림은 별개의 도구이며, 막대그림을 대체할 만하다**(연습문제 7). 오히려 활용도가 늘고 있다.
 

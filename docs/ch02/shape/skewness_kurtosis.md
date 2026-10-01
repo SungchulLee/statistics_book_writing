@@ -18,9 +18,11 @@
 
 성분들이 같은 위치를 중심으로 한다면 분포의 혼합에서도 대칭인 모양이 나올 수 있다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-##### 예제 1. 대칭이면서 꼬리가 두꺼운 혼합분포 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 대칭이면서 꼬리가 두꺼운 혼합분포
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -62,17 +64,17 @@ if __name__ == "__main__":
 
 ![왜도와 첨도](./img/skewness_kurtosis_21.png)
 
-</div>
-
 ### 치우친 분포
 
 **치우친(skewed)** 분포는 자료가 한쪽으로 더 길게 뻗는다.
 
 **오른쪽 치우침(양의 왜도):** 꼬리가 오른쪽으로 뻗는다. 평균 > 중앙값 > 최빈값. 예: 소득 분포.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 2. 오른쪽으로 치우친 분포 만들기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 오른쪽으로 치우친 분포 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -82,7 +84,7 @@ import matplotlib.pyplot as plt
 def generate_and_plot_right_skewed_distribution(seed: int = 0):
     """중심을 오른쪽으로만 옮긴 덩어리를 덧붙인다.
 
-    앞 예제와 달리 scale이 아니라 loc를 바꾼다.
+    앞 보기와 달리 scale이 아니라 loc를 바꾼다.
     0, +2, +4 로 오른쪽에만 덩어리를 놓으므로 오른쪽 꼬리가 길어진다.
     """
     np.random.seed(seed)
@@ -112,13 +114,13 @@ if __name__ == "__main__":
 
 ![왜도와 첨도](./img/skewness_kurtosis_47.png)
 
-</div>
-
 **왼쪽 치우침(음의 왜도):** 꼬리가 왼쪽으로 뻗는다. 평균 < 중앙값 < 최빈값. 예: 은퇴 연령.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 3. 왼쪽으로 치우친 분포 만들기 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 왼쪽으로 치우친 분포 만들기
+
+</div>
 
 ```python
 import numpy as np
@@ -154,8 +156,6 @@ if __name__ == "__main__":
 
 ![왜도와 첨도](./img/skewness_kurtosis_69.png)
 
-</div>
-
 ---
 
 ## 2. 상자그림으로 왜도 알아보기
@@ -164,19 +164,21 @@ if __name__ == "__main__":
 
 $$
 \begin{array}{lll}
-\text{Left\_Box} > \text{Right\_Box} &\Rightarrow& \text{Skew to Left} \\
-\text{Left\_Box} < \text{Right\_Box} &\Rightarrow& \text{Skew to Right} \\
-\text{Left\_Box} = \text{Right\_Box},\; \text{Left\_Whisker} > \text{Right\_Whisker} &\Rightarrow& \text{Skew to Left} \\
-\text{Left\_Box} = \text{Right\_Box},\; \text{Left\_Whisker} < \text{Right\_Whisker} &\Rightarrow& \text{Skew to Right} \\
-\text{Left\_Box} = \text{Right\_Box},\; \text{Left\_Whisker} = \text{Right\_Whisker} &\Rightarrow& \text{Symmetric} \\
+\text{왼쪽 상자} > \text{오른쪽 상자} &\Rightarrow& \text{왼쪽으로 치우침} \\
+\text{왼쪽 상자} < \text{오른쪽 상자} &\Rightarrow& \text{오른쪽으로 치우침} \\
+\text{왼쪽 상자} = \text{오른쪽 상자},\; \text{왼쪽 수염} > \text{오른쪽 수염} &\Rightarrow& \text{왼쪽으로 치우침} \\
+\text{왼쪽 상자} = \text{오른쪽 상자},\; \text{왼쪽 수염} < \text{오른쪽 수염} &\Rightarrow& \text{오른쪽으로 치우침} \\
+\text{왼쪽 상자} = \text{오른쪽 상자},\; \text{왼쪽 수염} = \text{오른쪽 수염} &\Rightarrow& \text{대칭} \\
 \end{array}
 $$
 
 ### 상자그림: 대칭 분포
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 4. 히스토그램과 상자그림을 나란히 보기 { .eg }
+**보기 4.** <span class="diff easy" title="쉬움"></span> 히스토그램과 상자그림을 나란히 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
@@ -186,7 +188,7 @@ import scipy.stats as stats
 def generate_and_plot_histogram_and_box_plot_mixed_distribution(seed: int = 0):
     """같은 자료를 히스토그램과 상자그림으로 나란히 본다.
 
-    자료는 첫 예제와 같은 대칭·두꺼운꼬리 혼합분포다.
+    자료는 첫 보기와 같은 대칭·두꺼운꼬리 혼합분포다.
     두 그림을 위아래로 붙여 x축을 눈으로 맞추면,
     히스토그램의 꼬리가 상자그림에서 어떻게 "이상치 점"으로 바뀌는지 보인다.
     """
@@ -198,9 +200,9 @@ def generate_and_plot_histogram_and_box_plot_mixed_distribution(seed: int = 0):
 
     fig, (ax_hist, ax_box) = plt.subplots(2, 1, figsize=(12, 6))
     ax_hist.hist(combined, density=True, bins=30)
-    ax_hist.set_title('Histogram of Combined Data (Density)')
+    ax_hist.set_title("합친 자료의 히스토그램 (밀도)")
     ax_box.boxplot(combined, vert=False)          # vert=False 로 눕혀 위 그림과 축을 맞춘다
-    ax_box.set_title('Boxplot of Combined Data')
+    ax_box.set_title("합친 자료의 상자그림")
     plt.tight_layout()
     plt.show()
 
@@ -224,15 +226,15 @@ IQR = 1.565,  울타리 밖 점 63개 / 1300개 (4.8%)
 정규분포라면 약 0.7% 이므로, 이보다 많으면 꼬리가 두꺼운 것이다.
 ```
 
-![Histogram of Combined Data (Density)](./img/skewness_kurtosis_107.png)
-
-</div>
+![대칭·두꺼운꼬리 혼합분포의 히스토그램과 상자그림](./img/skewness_kurtosis_107.png)
 
 ### 상자그림: 오른쪽으로 치우친 분포
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 5. 오른쪽 치우침이 상자그림에 드러나는 모습 { .eg }
+**보기 5.** <span class="diff easy" title="쉬움"></span> 오른쪽 치우침이 상자그림에 드러나는 모습
+
+</div>
 
 ```python
 import numpy as np
@@ -242,8 +244,9 @@ import matplotlib.pyplot as plt
 def generate_and_plot_histogram_and_box_plot_right_skewed(seed: int = 0):
     """오른쪽으로 치우친 자료를 히스토그램과 상자그림으로 나란히 본다.
 
-    상자그림에서 치우침은 세 가지로 드러난다. 중앙값 선이 상자 아래쪽으로
-    밀리고, 위쪽 수염이 아래쪽보다 길어지며, 이상치 점이 위쪽에만 몰린다.
+    눕힌 상자그림에서 치우침은 세 가지로 드러난다. 중앙값 선이 상자의
+    왼쪽(작은 값 쪽)으로 밀리고, 오른쪽 수염이 왼쪽보다 길어지며,
+    이상치 점이 오른쪽에만 찍힌다.
     """
     np.random.seed(seed)
     main_data = stats.norm().rvs(1_000)
@@ -253,9 +256,9 @@ def generate_and_plot_histogram_and_box_plot_right_skewed(seed: int = 0):
 
     fig, (ax_hist, ax_box) = plt.subplots(2, 1, figsize=(12, 6))
     ax_hist.hist(combined, density=True, bins=30)
-    ax_hist.set_title('Histogram of Combined Data (Density)')
+    ax_hist.set_title("합친 자료의 히스토그램 (밀도)")
     ax_box.boxplot(combined, vert=False)      # 눕혀야 위 히스토그램과 x축이 맞는다
-    ax_box.set_title('Boxplot of Combined Data')
+    ax_box.set_title("합친 자료의 상자그림")
     plt.tight_layout()
     plt.show()
 
@@ -263,15 +266,15 @@ if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_right_skewed()
 ```
 
-![Histogram of Combined Data (Density)](./img/skewness_kurtosis_133.png)
-
-</div>
+![오른쪽으로 치우친 분포의 히스토그램과 상자그림](./img/skewness_kurtosis_133.png)
 
 ### 상자그림: 왼쪽으로 치우친 분포
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 6. 왼쪽 치우침이 상자그림에 드러나는 모습 { .eg }
+**보기 6.** <span class="diff easy" title="쉬움"></span> 왼쪽 치우침이 상자그림에 드러나는 모습
+
+</div>
 
 ```python
 import numpy as np
@@ -281,8 +284,8 @@ import matplotlib.pyplot as plt
 def generate_and_plot_histogram_and_box_plot_left_skewed(seed: int = 0):
     """왼쪽으로 치우친 자료를 히스토그램과 상자그림으로 나란히 본다.
 
-    앞 예제를 좌우로 뒤집은 것이다. 중앙값 선이 상자 위쪽으로 밀리고,
-    아래쪽 수염이 길어지며, 이상치 점이 아래쪽에만 몰린다.
+    앞 보기를 좌우로 뒤집은 것이다. 중앙값 선이 상자의 오른쪽(큰 값 쪽)으로
+    밀리고, 왼쪽 수염이 오른쪽보다 길어지며, 이상치 점이 왼쪽에만 찍힌다.
     """
     np.random.seed(seed)
     main_data = stats.norm().rvs(1_000)
@@ -292,9 +295,9 @@ def generate_and_plot_histogram_and_box_plot_left_skewed(seed: int = 0):
 
     fig, (ax_hist, ax_box) = plt.subplots(2, 1, figsize=(12, 6))
     ax_hist.hist(combined, density=True, bins=30)
-    ax_hist.set_title('Histogram of Combined Data (Density)')
+    ax_hist.set_title("합친 자료의 히스토그램 (밀도)")
     ax_box.boxplot(combined, vert=False)      # 눕혀야 위 히스토그램과 x축이 맞는다
-    ax_box.set_title('Boxplot of Combined Data')
+    ax_box.set_title("합친 자료의 상자그림")
     plt.tight_layout()
     plt.show()
 
@@ -302,9 +305,7 @@ if __name__ == "__main__":
     generate_and_plot_histogram_and_box_plot_left_skewed()
 ```
 
-![Histogram of Combined Data (Density)](./img/skewness_kurtosis_159.png)
-
-</div>
+![왼쪽으로 치우친 분포의 히스토그램과 상자그림](./img/skewness_kurtosis_159.png)
 
 ---
 
@@ -324,11 +325,33 @@ $$
 
 </div>
 
+!!! note "어느 왜도인가 — $g_1$과 $G_1$"
+
+    위 표본 공식의 $s$는 **$n$으로 나눈** 표준편차 $\sqrt{m_2}$다. 즉 이 책에서 표본왜도라고 쓰는 것은
+
+    $$
+    g_1 = \frac{m_3}{m_2^{3/2}}, \qquad m_k = \frac{1}{n}\sum_{i=1}^{n}(x_i - \bar{x})^k
+    $$
+
+    이며, `scipy.stats.skew(x)`의 기본값(`bias=True`)과 `scipy.stats.describe(x).skewness`가 돌려주는 값이다. 이 페이지의 모든 왜도 수치는 이 $g_1$이다.
+
+    편향을 보정한 판본도 널리 쓰인다.
+
+    $$
+    G_1 = \frac{\sqrt{n(n-1)}}{n-2}\,g_1
+    $$
+
+    `scipy.stats.skew(x, bias=False)`와 pandas의 `Series.skew()`가 이 $G_1$을 준다. 표본이 작으면 차이가 크다. 연습문제 1의 자료 $\{1,2,3,4,10\}$에서 $g_1 = 1.138$이지만 $G_1 = 1.697$이다.
+
+    첨도도 똑같이 갈린다. 비보정 $b_2 = m_4/m_2^2$와 보정된 $G_2$가 다르고, 여기에 3을 빼느냐(초과첨도) 마느냐가 겹친다. `scipy.stats.kurtosis`는 기본이 `bias=True`이면서 동시에 `fisher=True`이므로 **비보정 초과첨도**를 준다. 같은 자료 $\{1,2,3,4,10\}$의 초과첨도는 비보정 $-0.212$, 보정 $3.152$로 부호조차 다르다. 남의 표에서 왜도·첨도를 읽을 때는 **보정 여부와 초과 여부를 함께** 확인해야 한다.
+
 ### 왜도 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 7. 덩어리 개수로 왜도를 조절하기 { .eg }
+**보기 7.** <span class="diff easy" title="쉬움"></span> 덩어리 개수로 왜도를 조절하기
+
+</div>
 
 ```python
 import numpy as np
@@ -366,10 +389,10 @@ def plot_distribution_with_normal_fit(data, mean, std_dev, skewness, title):
     치우친 자료에서는 정규곡선이 봉우리를 지나치고 꼬리 쪽에서 벌어진다.
     """
     fig, ax = plt.subplots(figsize=(12, 3))
-    _, bins, _ = ax.hist(data, density=True, bins=100, label="Samples")
+    _, bins, _ = ax.hist(data, density=True, bins=100, label="표본")
     normal_pdf = stats.norm(loc=mean, scale=std_dev).pdf(bins)
-    ax.plot(bins, normal_pdf, "--r", label="Normal PDF")
-    ax.set_title(f"{title}\nSkewness = {skewness:.4f}")
+    ax.plot(bins, normal_pdf, "--r", label="정규분포 밀도")
+    ax.set_title(f"{title}\n왜도 = {skewness:.4f}")
     ax.legend()
     ax.spines["left"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -386,11 +409,11 @@ def main():
     mean, std_dev, skewness = calculate_statistics(samples)
 
     if right_size > left_size:
-        title = "Right-Skewed Distribution"
+        title = "오른쪽으로 치우친 분포"
     elif right_size < left_size:
-        title = "Left-Skewed Distribution"
+        title = "왼쪽으로 치우친 분포"
     else:
-        title = "Symmetric Distribution"
+        title = "대칭 분포"
 
     plot_distribution_with_normal_fit(samples, mean, std_dev, skewness, title)
 
@@ -407,7 +430,7 @@ if __name__ == "__main__":
 출력:
 
 ```
-Symmetric Distribution
+대칭 분포
   평균   -0.0093
   표준편차 1.5661
   왜도   +0.0456
@@ -415,8 +438,6 @@ Symmetric Distribution
 ```
 
 ![왜도 모의실험: 정규분포 적합과의 비교](./img/skewness_kurtosis_199.png)
-
-</div>
 
 ---
 
@@ -449,15 +470,17 @@ $$
 
     쓰임이 갈린다. **정규를 0으로 놓고 "얼마나 벗어났는가"를 말할 때는 $\gamma_2$**가 편하다. `scipy.stats.kurtosis`가 기본으로 돌려주는 것도 이 값이다. 반면 **비율이나 배율을 적을 때는 $\beta_2$**가 깔끔한 경우가 있다. 5장에서 만날 배율 $(\beta_2-1)/2$가 그런 예로, 정규분포를 넣으면 정확히 1이 된다. 같은 양을 $\gamma_2$로 적으면 $(\gamma_2+2)/2$다.
 
-    첨도에 $\kappa$를 쓰는 책도 있으나 이 책은 쓰지 않는다. $\kappa_n$을 **$n$차 누율**의 기호로 쓰기 때문이며(3.3절 적률생성함수), 실제로 $\gamma_1 = \kappa_3/\kappa_2^{3/2}$이고 $\gamma_2 = \kappa_4/\kappa_2^2$이다. 초과첨도에서 3을 빼는 것이 임의의 보정이 아니라, 누율로 옮겨 놓으면 정규분포에서 원래 0인 양이라는 뜻이다.
+    첨도에 $\kappa$를 쓰는 책도 있으나 이 책은 쓰지 않는다. $\kappa_n$을 **$n$차 누율**의 기호로 쓰기 때문이며(3.4절 적률생성함수), 실제로 $\gamma_1 = \kappa_3/\kappa_2^{3/2}$이고 $\gamma_2 = \kappa_4/\kappa_2^2$이다. 초과첨도에서 3을 빼는 것이 임의의 보정이 아니라, 누율로 옮겨 놓으면 정규분포에서 원래 0인 양이라는 뜻이다.
 
 </div>
 
 ### 첨도 모의실험
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 8. 뾰족한 봉우리로 첨도를 올리기 { .eg }
+**보기 8.** <span class="diff easy" title="쉬움"></span> 뾰족한 봉우리로 첨도를 올리기
+
+</div>
 
 ```python
 import numpy as np
@@ -489,10 +512,10 @@ def calculate_statistics(data):
 
 def plot_distribution_with_normal_fit(data, mean, std_dev, excess_kurtosis, title):
     fig, ax = plt.subplots(figsize=(12, 3))
-    _, bins, _ = ax.hist(data, density=True, bins=100, label="Sample Data")
+    _, bins, _ = ax.hist(data, density=True, bins=100, label="표본")
     normal_pdf = stats.norm(loc=mean, scale=std_dev).pdf(bins)
-    ax.plot(bins, normal_pdf, "--r", label="Normal PDF")
-    ax.set_title(f"{title}\nExcess Kurtosis = {excess_kurtosis:.4f}")
+    ax.plot(bins, normal_pdf, "--r", label="정규분포 밀도")
+    ax.set_title(f"{title}\n초과첨도 = {excess_kurtosis:.4f}")
     ax.legend()
     ax.spines["left"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -508,11 +531,11 @@ def main():
     mean, std_dev, skewness, kurtosis, excess_kurtosis = calculate_statistics(data)
 
     if excess_kurtosis > 0:
-        title = "Leptokurtic Distribution"
+        title = "급첨 분포"
     elif excess_kurtosis < 0:
-        title = "Platykurtic Distribution"
+        title = "평첨 분포"
     else:
-        title = "Mesokurtic Distribution"
+        title = "중첨 분포"
 
     plot_distribution_with_normal_fit(data, mean, std_dev, excess_kurtosis, title)
 
@@ -528,7 +551,7 @@ if __name__ == "__main__":
 출력:
 
 ```
-Leptokurtic Distribution
+급첨 분포
   왜도       +0.0231  (좌우 대칭이므로 0 근처)
   첨도       3.1053
   초과첨도   +0.1053  (정규분포는 0)
@@ -536,15 +559,15 @@ Leptokurtic Distribution
 
 ![첨도 모의실험: 정규분포 적합과의 비교](./img/skewness_kurtosis_275.png)
 
-</div>
-
 ### 파이썬에서 첨도 계산하기
 
 SciPy는 초과첨도를 직접 계산해 주는 편리한 함수를 제공한다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-#### 예제 9. scipy 의 첨도 함수 비교 { .eg }
+**보기 9.** <span class="diff easy" title="쉬움"></span> scipy 의 첨도 함수 비교
+
+</div>
 
 ```python
 from scipy import stats
@@ -570,8 +593,6 @@ print(stats.kurtosis(data, fisher=False), "  <- 3을 빼지 않은 값")
 ```
 
 표본이 10,000개인데도 참값 0에서 눈에 띄게 벗어난다. **첨도는 네제곱을 쓰기 때문에 추정이 매우 불안정하다.** 표본이 작으면 훨씬 크게 흔들리므로, 첨도 하나만 보고 꼬리의 두께를 단정해서는 안 된다.
-
-</div>
 
 ---
 
@@ -609,7 +630,9 @@ $\{1, 2, 3, 4, 10\}$에 대해 (a) 표본평균과 표준편차, (b) 모집단 �
 
     **자료 B:** $m_2 = 84/9 = 28/3$, $m_4 = 1764/9 = 196$. 초과첨도 $= 196 / (28/3)^2 - 3 = 196 \cdot 9 / 784 - 3 = 2.25 - 3 = -0.75$.
 
-    **같은 이유:** 첨도는 비 $m_4 / m_2^2$, 즉 *표준화된* 4차 적률이다. 자료 B는 값이 평균에서 더 멀리 있지만(범위 1–11 대 4–8) $m_2$도 그에 비례해 크다. 첨도는 *그 분포 자신의 분산에 상대적인* 꼬리의 두께를 재므로, 모든 관측값에 상수를 곱해도 첨도는 변하지 않는다. 두 자료는 척도를 제외하면 같은 *모양*이다.
+    **같은 이유:** 첨도는 비 $m_4 / m_2^2$, 즉 *표준화된* 4차 적률이다. 자료 B는 값이 평균에서 훨씬 멀리 퍼져 있지만(범위 1–11 대 4–8) $m_2$도 그만큼 커져서 비가 그대로다. 첨도는 *그 분포 자신의 분산에 상대적인* 꼬리의 두께를 재므로, 퍼짐의 절대 크기는 애초에 보이지 않는다.
+
+    **다만 두 자료가 같은 *모양*이어서 같은 값이 나온 것은 아니다.** B는 A를 상수배 한 것이 아니다. A의 편차는 $(-2,-1,-1,0,0,0,1,1,2)$이고 B의 편차는 $(-5,-4,-1,0,0,0,1,4,5)$인데, $-5 = c\cdot(-2)$에서 $c = 2.5$, $-4 = c\cdot(-1)$에서 $c = 4$로 어긋난다. 표준화하면 A는 $(\pm 1.732, \pm 0.866, 0,0,0)$, B는 $(\pm 1.637, \pm 1.309, \pm 0.327, 0,0,0)$로 서로 다른 분포다. 첨도가 같은 것은 **표준화된 4차 적률 하나가 우연히 일치**한 것이지 모양이 같다는 뜻이 아니다. 요약통계량 하나가 같다고 분포가 같은 것은 아니라는 흔한 교훈이 여기에도 적용된다.
 
 <div class="drillbox" markdown>
 
@@ -633,7 +656,7 @@ $\{1, 2, 3, 4, 10\}$에 대해 (a) 표본평균과 표준편차, (b) 모집단 �
 
     이다. 왜도는 **아핀 불변**이다. 분포의 위치나 척도가 아니라 모양에만 의존한다. 모양이 같은 두 분포(예: 모든 정규분포)는 모수 $(\mu, \sigma)$와 무관하게 같은 왜도를 갖는다. 이 불변성 덕분에 왜도로 단위가 다른 자료들을 비교할 수 있다.
 
-    마찬가지로 **4차 표준화 적률**(첨도)도 아핀 불변이며, 연습문제 2의 A와 B가 퍼짐이 다른데도 초과첨도가 같게 나오는 이유가 이것이다.
+    마찬가지로 **4차 표준화 적률**(첨도)도 아핀 불변이다. 그래서 자료의 단위를 바꾸어도 첨도는 변하지 않는다. 다만 불변성이 말해 주는 것은 "아핀변환으로 이어진 두 자료는 같은 값을 갖는다"일 뿐, 그 역은 아니다. 연습문제 2의 A와 B는 아핀변환 관계가 아닌데도 초과첨도가 같았다.
 
 <div class="drillbox" markdown>
 
@@ -688,13 +711,13 @@ $\{1, 2, 3, 4, 10\}$에 대해 (a) 표본평균과 표준편차, (b) 모집단 �
 </div>
 
 ??? success "풀이"
-    정규 i.i.d. 표본에서 표본 왜도의 점근 표준오차는
+    정규 i.i.d. 표본에서 (편향보정한) 표본 왜도의 표준오차는
 
     $$
-    \mathrm{SE}(g_1) \approx \sqrt{\frac{6 n (n-1)}{(n-2)(n+1)(n+3)}} \approx \sqrt{\frac{6}{n}}
+    \mathrm{SE}(G_1) = \sqrt{\frac{6 n (n-1)}{(n-2)(n+1)(n+3)}} \approx \sqrt{\frac{6}{n}}
     $$
 
-    이다. 정규분포의 왜도에서 벗어났다는 증거가 되려면 표본 왜도가 $|g_1| > 2 \cdot \mathrm{SE}$여야 한다. 값은 다음과 같다.
+    이다. 왼쪽 등식은 $G_1$에 대해 정확하고, $\sqrt{6/n}$은 그 값을 조금 위로 잡는 어림이다($n = 20$에서 $0.512$ 대 $0.548$). 보정하지 않은 $g_1$의 표준오차는 이보다 약간 작다(모의실험으로 $n = 20$에서 $0.473$). 정규분포의 왜도에서 벗어났다는 증거가 되려면 표본 왜도가 $2 \cdot \mathrm{SE}$를 넘어야 한다. 값은 다음과 같다.
 
     | $n$ | 근사 표준오차 | "유의" 기준 |
     |---|---|---|
@@ -734,7 +757,7 @@ $\{1, 2, 3, 4, 10\}$에 대해 (a) 표본평균과 표준편차, (b) 모집단 �
     출력:
 
     ```
-    분포       분산       초과첨도     |X|<0.5 비율      |X|>3 비율
+            분포       분산       초과첨도     |X|<0.5 비율      |X|>3 비율
             정규   1.0028    -0.0013         0.3816       0.00280
             혼합   1.0000    12.9937         0.4908       0.01710
             균등   0.9986    -1.1986         0.2891       0.00000
@@ -815,7 +838,7 @@ $\{1, 2, 3, 4, 10\}$에 대해 (a) 표본평균과 표준편차, (b) 모집단 �
     출력:
 
     ```
-    분포       고전 왜도       보울리        초과첨도       무어스
+          분포       고전 왜도       보울리        초과첨도       무어스
           정규     -0.0053    0.0031      0.0061    1.2293
           지수      2.0017    0.2618      5.9660    1.2995
         t(5)      0.0248   -0.0030      9.7070    1.3262
@@ -956,7 +979,7 @@ $$
     출력:
 
     ```
-        n    상한 (n-2)/sqrt(n-1)        가장 치우친 표본의 g1
+        n      상한 (n-2)/sqrt(n-1)             가장 치우친 표본의 g1
         3                  0.7071                    0.7071
         4                  1.1547                    1.1547
         5                  1.5000                    1.5000

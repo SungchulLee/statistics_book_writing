@@ -15,14 +15,22 @@
 
 ## 기본 상자그림: 타이타닉 승객의 나이
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 1. 타이타닉 승객 나이의 상자그림 { .eg }
+**보기 1.** <span class="diff easy" title="쉬움"></span> 타이타닉 승객 나이의 상자그림
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
 import pandas as pd
 
+# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
+
+# 자료를 인터넷에서 내려받으므로 실행에 연결이 필요하다.
 url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
 df = pd.read_csv(url, index_col='PassengerId')
 
@@ -33,13 +41,15 @@ fig, ax = plt.subplots(figsize=(5, 3))
 # 결측값(Age가 비어 있는 177명)은 pandas가 알아서 제외한다.
 df['Age'].plot(kind='box', ax=ax, vert=False)
 
-ax.set_title("Horizontal Boxplot of Passenger Ages on Titanic")
-ax.set_xlabel("Age")
+ax.set_title("타이타닉 승객 나이의 가로 상자그림")
+ax.set_xlabel("나이 (세)")
 # 상자와 수염 자체에 눈이 가도록 불필요한 테두리를 지운다
 ax.spines[["top", "left", "right"]].set_visible(False)
 plt.show()
 
-# 그림에 그려진 다섯 숫자를 그대로 확인해 본다
+# 상자를 이루는 세 숫자(Q1, 중앙값, Q3)와 자료의 최솟값·최댓값을 확인한다.
+# 주의: min 과 max 는 '수염의 끝'이 아니다. 수염은 울타리 안의 가장 극단적인
+# 자료점까지만 뻗고, 그 바깥은 이상치 점으로 따로 찍힌다.
 print(df['Age'].describe()[['min', '25%', '50%', '75%', 'max']].round(2))
 ```
 
@@ -54,9 +64,19 @@ max    80.00
 Name: Age, dtype: float64
 ```
 
-![Horizontal_Boxplot_of_Passenger_Ages_on_Titanic](./img/Horizontal_Boxplot_of_Passenger_Ages_on_Titanic.png)
+![타이타닉 승객 나이의 가로 상자그림](./img/Horizontal_Boxplot_of_Passenger_Ages_on_Titanic.png)
 
-</div>
+**출력의 다섯 수와 그림을 하나씩 맞춰 보면 한 가지가 어긋난다.** 상자의 왼쪽 끝 $20.12$, 가운데 선 $28.00$, 오른쪽 끝 $38.00$은 그림에서 그대로 읽힌다. 그런데 **오른쪽 수염은 `max`인 $80$까지 가지 않는다.**
+
+반올림하지 않은 값으로 $Q_1 = 20.125$, $Q_3 = 38.000$이므로 $\text{IQR} = 17.875$이고, 위쪽 울타리는
+
+$$
+Q_3 + 1.5 \times \text{IQR} = 38.000 + 26.813 = 64.813
+$$
+
+이다. 수염은 이 울타리 **안쪽의 가장 큰 자료값**인 $64$세에서 멈춘다. $65$세 이상인 $11$명($65, 65, 65, 66, 70, 70, 70.5, 71, 71, 74, 80$)이 그 너머에 점으로 찍힌 것이다. 아래쪽 울타리는 $20.125 - 26.813 = -6.688$로 음수이므로 아래쪽에는 이상치가 없고, 왼쪽 수염이 `min`인 $0.42$까지 그대로 간다.
+
+**`describe()`의 `min`·`max`를 수염의 끝으로 읽으면 안 된다.** 수염의 끝은 "울타리 지점" 자체도 아니고 "자료의 최솟값·최댓값"도 아니며, **울타리 안에 들어오는 실제 자료점 가운데 가장 바깥의 것**이다. 여기서도 $64.813$이 아니라 $64$에서 멈춘다.
 
 ## 상자그림에서 왜도 알아보기
 
@@ -64,26 +84,34 @@ Name: Age, dtype: float64
 
 $$
 \begin{array}{lll}
-\text{Left_Box} > \text{Right_Box} &\Rightarrow& \text{Left-skewed} \\
-\text{Left_Box} < \text{Right_Box} &\Rightarrow& \text{Right-skewed} \\
-\text{Boxes equal, Left_Whisker} > \text{Right_Whisker} &\Rightarrow& \text{Left-skewed} \\
-\text{Boxes equal, Left_Whisker} < \text{Right_Whisker} &\Rightarrow& \text{Right-skewed} \\
-\text{Both equal} &\Rightarrow& \text{Symmetric} \\
+\text{왼쪽 상자} > \text{오른쪽 상자} &\Rightarrow& \text{왼쪽으로 치우침} \\
+\text{왼쪽 상자} < \text{오른쪽 상자} &\Rightarrow& \text{오른쪽으로 치우침} \\
+\text{상자가 같고, 왼쪽 수염} > \text{오른쪽 수염} &\Rightarrow& \text{왼쪽으로 치우침} \\
+\text{상자가 같고, 왼쪽 수염} < \text{오른쪽 수염} &\Rightarrow& \text{오른쪽으로 치우침} \\
+\text{둘 다 같음} &\Rightarrow& \text{대칭} \\
 \end{array}
 $$
+
+여기서 "왼쪽 상자"는 $Q_2 - Q_1$, "오른쪽 상자"는 $Q_3 - Q_2$를 뜻한다(가로로 눕혀 그린 상자그림 기준).
 
 ## 히스토그램과 상자그림을 함께 보기
 
 히스토그램을 상자그림과 나란히 놓으면 모양과 요약통계량의 연결이 분명해진다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 2. 히스토그램과 상자그림을 함께 보기 { .eg }
+**보기 2.** <span class="diff easy" title="쉬움"></span> 히스토그램과 상자그림을 함께 보기
+
+</div>
 
 ```python
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
+
+# 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
 
 np.random.seed(0)
 
@@ -103,11 +131,11 @@ fig, (ax_hist, ax_box) = plt.subplots(2, 1, figsize=(12, 6))
 
 # 위: 히스토그램. 분포의 모양이 그대로 보인다.
 ax_hist.hist(combined, density=True, bins=30)
-ax_hist.set_title('Histogram of Right-Skewed Data')
+ax_hist.set_title('오른쪽으로 치우친 자료의 히스토그램')
 
 # 아래: 같은 자료의 상자그림. 다섯 숫자로 압축된 모습이다.
 ax_box.boxplot(combined, vert=False)
-ax_box.set_title('Boxplot of Right-Skewed Data')
+ax_box.set_title('같은 자료의 상자그림')
 
 plt.tight_layout()
 plt.show()
@@ -128,23 +156,28 @@ Q2-Q1 = 0.794   Q3-Q2 = 1.098  (오른쪽이 길다)
 
 ![Right_Skewed_Data](./img/Right_Skewed_Data.png)
 
-</div>
-
 ## 비교 상자그림
 
 상자그림은 집단 간 분포를 비교할 때 가장 강력하다.
 
-<div class="codebox" markdown>
+<div class="exbox" markdown>
 
-### 예제 3. 집단별 비교 상자그림 { .eg }
+**보기 3.** <span class="diff easy" title="쉬움"></span> 집단별 비교 상자그림
+
+</div>
 
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
 
-# 표본 크기를 10^4, 5*10^4, 10^5 로 늘려 가며 얻은 몬테카를로 추정 오차.
-# 표본이 커질수록 오차가 0 주위로 좁아지는 것을 보이려고,
-# 같은 모양의 자료에 0.5, 0.25를 곱해 퍼짐을 줄였다.
+# 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+plt.rcParams['axes.unicode_minus'] = False
+
+# 표본 크기를 10^4, 5*10^4, 10^5 로 늘려 가며 얻은 몬테카를로 추정 오차를 흉내 낸 자료다.
+# 표본이 커질수록 퍼짐이 줄어드는 모습을 만들기 위해 비슷한 값들의 묶음에
+# 0.5, 0.25를 곱했다. 극단값은 일부러 서로 다르게 두어, 표본이 커져도
+# 이상치는 남을 수 있다는 점을 보인다.
 data_a = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
 data_b = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, -8]) * 0.5
 data_c = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 10, -7]) * 0.25
@@ -160,15 +193,15 @@ ax.boxplot([data_a, data_b, data_c])
 # 버전에 상관없이 동작한다.
 ax.set_xticklabels(["$10^4$", "$5 \\cdot 10^4$", "$10^5$"])
 
-# 비교 기준선. 이론값(FIM Delta = 1)을 가로선으로 깔아 두면
+# 비교 기준선. 이론값 1을 가로선으로 깔아 두면
 # 각 상자가 그 선을 얼마나 감싸는지 눈으로 볼 수 있다.
 ax.plot([0, 1, 2, 3, 4], [1, 1, 1, 1, 1],
-        label="FIM Delta", linestyle="--", color="r", alpha=0.7)
+        label="이론값 = 1", linestyle="--", color="r", alpha=0.7)
 
 ax.legend()
 ax.set_ylim(-10.0, 10.0)      # 세 상자를 같은 눈금에 두어야 비교가 성립한다
-ax.set_xlabel('Number of Samples')
-ax.set_ylabel('MC Delta')
+ax.set_xlabel('표본 크기')
+ax.set_ylabel('몬테카를로 추정값')
 plt.show()
 
 # 퍼짐이 실제로 줄어드는지 IQR로 확인한다
@@ -186,8 +219,6 @@ for name, d in [("10^4", data_a), ("5*10^4", data_b), ("10^5", data_c)]:
 ```
 
 ![Comparative_Box_Plots](./img/Comparative_Box_Plots.png)
-
-</div>
 
 ## 연습문제
 
@@ -311,6 +342,10 @@ X반의 시험 점수 상자그림은 중앙값 75, $Q_1 = 65$, $Q_3 = 85$, 아�
     import numpy as np
     import matplotlib.pyplot as plt
 
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
     rng = np.random.default_rng(0)
     n = 2000
     unimodal = rng.normal(0, 1, n)
@@ -328,14 +363,17 @@ X반의 시험 점수 상자그림은 중앙값 75, $Q_1 = 65$, $Q_3 = 85$, 아�
     fig, axes = plt.subplots(1, 3, figsize=(13, 4))
     axes[0].boxplot([unimodal, bimodal])
     axes[0].set_xticklabels(["단봉", "이봉"])
-    axes[0].set_title("상자그림 — 거의 구별되지 않는다", fontsize=10)
+    axes[0].set_title("상자그림 — 상자가 거의 같다", fontsize=10)
 
     axes[1].violinplot([unimodal, bimodal], showmedians=True)
     axes[1].set_xticks([1, 2]); axes[1].set_xticklabels(["단봉", "이봉"])
     axes[1].set_title("바이올린 — 구조가 드러난다", fontsize=10)
 
+    # 점이 2000개면 너무 빽빽하므로 5개마다 하나씩 400개만 뽑아 찍는다.
+    # 앞에서 400개를 잘라 쓰면 이봉 자료의 '앞쪽 봉우리'만 뽑히므로 안 된다.
     for i, (label, x) in enumerate([("단봉", unimodal), ("이봉", bimodal)]):
-        axes[2].scatter(np.full(400, i + 1) + rng.normal(0, 0.06, 400), x[:400],
+        sub = x[::5]
+        axes[2].scatter(np.full(len(sub), i + 1) + rng.normal(0, 0.06, len(sub)), sub,
                         s=4, alpha=0.3)
     axes[2].set_xticks([1, 2]); axes[2].set_xticklabels(["단봉", "이봉"])
     axes[2].set_title("점 흩뿌리기 — 원자료를 그대로", fontsize=10)
@@ -353,7 +391,7 @@ X반의 시험 점수 상자그림은 중앙값 75, $Q_1 = 65$, $Q_3 = 85$, 아�
 
     ![같은 다섯 수치 요약, 다른 분포](./img/boxplots_280.png)
 
-    **상자가 거의 같다.** $Q_1$, 중앙값, $Q_3$가 $-0.49, 0, 0.51$과 $-0.51, 0, 0.49$로 사실상 구별되지 않는다.
+    **상자가 거의 같다.** $Q_1$, 중앙값, $Q_3$가 $-0.49, 0, 0.51$과 $-0.51, 0, 0.49$로 사실상 구별되지 않는다. (수염과 이상치는 다르다. 단봉 쪽은 꼬리가 길어 수염이 $\pm 2$ 가까이 뻗고 이상치도 여럿 찍히는 반면, 이봉 쪽은 최솟값 $-0.82$·최댓값 $0.83$이라 수염이 짧고 이상치가 없다. 그러나 **중심과 퍼짐을 읽는 부분인 상자는 구별되지 않는다.**)
 
     그런데 왼쪽 자료는 **하나의 봉우리**를 갖고 오른쪽은 **두 개의 뚜렷이 분리된 덩어리**를 갖는다. 오른쪽 자료에는 중앙값 근처에 관측이 거의 없다. **상자그림이 표시하는 "중앙값"이 실제로는 자료가 가장 드문 지점이다.**
 
@@ -400,7 +438,7 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
     출력:
 
     ```
-    분포       표시 비율        위쪽       아래쪽
+            분포       표시 비율        위쪽       아래쪽
             정규      0.0071    0.0035    0.0036
             지수      0.0481    0.0481    0.0000
           로그정규      0.0774    0.0774    0.0000
@@ -411,7 +449,7 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
     | 분포 | 표시 비율 | 위쪽 | 아래쪽 |
     |---|---|---|---|
     | 정규 | $0.0071$ | $0.0035$ | $0.0036$ |
-    | 지수 | $0.0482$ | $0.0482$ | $0.0000$ |
+    | 지수 | $0.0481$ | $0.0481$ | $0.0000$ |
     | 로그정규 | $\mathbf{0.0774}$ | $\mathbf{0.0774}$ | $0.0000$ |
 
     로그정규에서는 관측의 **$7.7\%$가 "이상치"로 표시된다.** 정규분포 기준($0.7\%$)의 **$11$배**이고, 단 하나도 오류가 아니다. 그저 분포가 오른쪽으로 긴 꼬리를 갖는 것뿐이다.
@@ -492,6 +530,10 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
     import numpy as np
     import matplotlib.pyplot as plt
 
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+
     rng = np.random.default_rng(7)
     fig, ax = plt.subplots(1, 2, figsize=(10, 4.4))
 
@@ -503,10 +545,10 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
         for med in bp["medians"]:
             med.set_color("crimson"); med.set_linewidth(2)
         ratio = 1.57 / np.sqrt(n) / 0.5
-        ax[k].set_title(f"n = {n}   (notch half-width / box half-height = {ratio:.2f})")
-        ax[k].set_xlabel("group"); ax[k].grid(alpha=0.25, axis="y")
-    ax[0].set_ylabel("value")
-    fig.suptitle("When n is small the notch folds past the box: the hourglass", y=1.00)
+        ax[k].set_title(f"n = {n}   (노치 반폭 / 상자 반높이 = {ratio:.2f})")
+        ax[k].set_xlabel("집단"); ax[k].grid(alpha=0.25, axis="y")
+    ax[0].set_ylabel("값")
+    fig.suptitle("표본이 작으면 노치가 상자를 넘어 접힌다 — 모래시계 모양", y=1.00)
     fig.tight_layout()
     plt.show()
     ```
@@ -536,6 +578,10 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(5)
     groups = {"A (n=8)": rng.normal(10, 2, 8),
@@ -576,7 +622,7 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
 
     ![가변 너비·노치·점을 더한 상자그림](./img/boxplots_488.png)
 
-    **세 집단은 같은 모집단에서 나왔다.** 그런데 보통 상자그림에서는 세 상자가 서로 다른 크기와 위치로 그려져 **다른 집단처럼 보인다.** $n=8$인 집단의 중앙값 표준오차는 $n=500$인 집단의 여덟 배가 넘는데, 그림에는 그 정보가 없다.
+    **세 집단은 같은 모집단에서 나왔다.** 그런데 보통 상자그림에서는 세 상자가 서로 다른 크기와 위치로 그려져 **다른 집단처럼 보인다.** $n=8$인 집단의 중앙값 표준오차는 $0.697$로 $n=500$인 집단의 $0.109$보다 여섯 배 넘게 크지만($0.697/0.109 = 6.4$), 그림에는 그 정보가 없다.
 
     **왜 위험한가.**
 
@@ -596,7 +642,7 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
 
     **가장 실용적인 조합**은 위 오른쪽 그림처럼 **가변 너비 + 노치 + 점**이다. $n$이 작은 집단은 상자가 좁고 노치가 넓고 점이 몇 개 없으므로, **세 가지 신호가 모두 "이 집단은 증거가 약하다"고 말한다.**
 
-    **원칙.** 그림은 **확실성의 정도까지 전달해야 한다.** 같은 굵기의 상자 세 개를 나란히 그리는 것은 세 추정값이 똑같이 믿을 만하다고 암시하는 것이며, 대개 사실이 아니다. 다음 절의 오차막대에서 같은 주제가 이어진다. $\square$
+    **원칙.** 그림은 **확실성의 정도까지 전달해야 한다.** 같은 굵기의 상자 세 개를 나란히 그리는 것은 세 추정값이 똑같이 믿을 만하다고 암시하는 것이며, 대개 사실이 아니다. [오차막대 그림](../../ch08/foundations/error_bars.md) 절에서 같은 주제가 이어진다. $\square$
 
 ---
 
