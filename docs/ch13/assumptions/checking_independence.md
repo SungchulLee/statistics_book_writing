@@ -345,6 +345,9 @@ $$
     import numpy as np
     from statsmodels.stats.stattools import durbin_watson
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 잔차를 시간 순서대로 잇는다. 위아래로 무작위하게 오가야 하고, 같은 쪽에
     # 여러 점이 몰려 다니면 독립이 깨진 것이다.
     plt.plot(X, model.resid)

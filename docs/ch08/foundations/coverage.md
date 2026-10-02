@@ -245,6 +245,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy.stats import norm, t
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
 
     def finite_population_correction(n: int, N: int | None) -> float:
         """유한모집단 수정 인자 sqrt((N-n)/(N-1)). N 을 주지 않으면 1.0 을 돌려준다.
@@ -399,6 +402,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy.stats import norm, beta
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     rng_seed = 42        # 아래 그림을 재현하려면 고정한다
     n_simulations = 100

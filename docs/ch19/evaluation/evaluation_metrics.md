@@ -617,6 +617,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
 
     # 왼쪽: 혼동행렬

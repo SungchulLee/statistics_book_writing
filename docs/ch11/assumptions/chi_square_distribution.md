@@ -105,6 +105,9 @@ $$
     import scipy.stats as stats
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 자유도 5 인 카이제곱의 밀도함수와 분포함수를 겹쳐 그린다.
     # 값이 0 이상에서만 정의되고 오른쪽으로 길게 늘어진 모양임을 확인한다.
     df = 5

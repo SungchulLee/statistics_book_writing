@@ -175,6 +175,9 @@ $$
     from math import comb
     from scipy import special
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def prob(n, c, r, t):
         """
         Calculate the probability of capturing 't' tagged birds in a recapture

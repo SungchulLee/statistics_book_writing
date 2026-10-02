@@ -25,6 +25,9 @@
     import matplotlib.pyplot as plt
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
         """Q-Q 그림을 그린다.
 
@@ -143,6 +146,9 @@
     import matplotlib.pyplot as plt
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
         """Q-Q 그림을 그린다.
 
@@ -240,6 +246,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
     import scipy.stats as stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
         """Q-Q 그림을 그린다.

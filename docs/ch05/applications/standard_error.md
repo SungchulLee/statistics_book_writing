@@ -366,6 +366,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 이 import 는 ARGS 라는 이름이 필요해서가 아니다. global_name_space 를 불러오는
     # 순간 그 파일의 np.random.seed(ARGS.seed) 와 글꼴 설정이 실행된다.
     # 즉 "가져오는 것" 자체가 설정을 적용하는 일이다.

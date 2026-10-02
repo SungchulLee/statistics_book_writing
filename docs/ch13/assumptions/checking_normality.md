@@ -189,6 +189,9 @@ $$
     import numpy as np
     from scipy.stats import norm, skew, kurtosis
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 정규성은 자료가 아니라 잔차에 요구되는 가정이다. 게다가 계수 추정의
     # 불편성에는 필요 없고, 작은 표본에서 t 검정과 신뢰구간을 쓰기 위해 필요하다.
     residuals = model.resid
@@ -310,6 +313,9 @@ $$
     ```python
     import scipy.stats as stats
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     residuals = model.resid
 

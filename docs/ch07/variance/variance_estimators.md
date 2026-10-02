@@ -206,6 +206,9 @@ $$E[\tilde{S}^2] = \frac{n-1}{n}\sigma^2 \implies \text{Bias} = -\frac{\sigma^2}
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
         """나누는 수만 다른 세 추정량의 MSE 를 표본크기의 함수로 그린다."""
         rng = np.random.default_rng(seed)

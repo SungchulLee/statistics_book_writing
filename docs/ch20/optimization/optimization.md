@@ -542,6 +542,9 @@ $L(x)=x^2$에 대한 경사하강을 간단히 시각화하면 다음과 같다.
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 경사하강법이 무엇을 하는지 가장 단순한 함수에서 본다. L(x) = x^2 의
     # 기울기는 2x 이므로, 갱신식은 x ← x - lr*2x = (1 - 2*lr)x 가 된다.
     # lr 이 0.5 보다 크면 이 비가 -1 보다 작아져 발산한다 — 학습률이 크면

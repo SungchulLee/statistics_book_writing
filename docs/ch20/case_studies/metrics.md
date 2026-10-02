@@ -186,6 +186,9 @@ $C\times C$ 혼동행렬 $M$의 원소 $M_{jk}$는 참 범주가 $j$이고 예�
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def draw_10_wrong_preds(x_test, y_test_cls, y_pred_cls, shape=(28, 28), k=10):
         """틀리게 예측한 사례를 앞에서부터 k개 보인다."""
         wrong = np.flatnonzero(y_test_cls != y_pred_cls)[:k]
@@ -268,6 +271,9 @@ $C\times C$ 혼동행렬 $M$의 원소 $M_{jk}$는 참 범주가 $j$이고 예�
     import numpy as np
     from sklearn.datasets import load_digits
     from sklearn.model_selection import train_test_split
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def draw_loss_and_accuracy(loss_trace, accuracy_trace):
         """세대마다의 손실과 정확도를 나란히 그린다.

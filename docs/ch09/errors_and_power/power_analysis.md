@@ -357,6 +357,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 효과가 작을수록 같은 검정력에 필요한 표본이 가파르게 늘어난다.
     # d=0.2 곡선이 0.8 에 닿는 자리를 d=0.8 곡선의 그것과 견주어 보면 된다.
     ns = np.arange(10, 500)

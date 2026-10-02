@@ -265,6 +265,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 그림에서 읽을 수치를 미리 찍어 둔다.
     counts = np.bincount(head_counts, minlength=TOTAL_TOSSES + 1)
     print(f"모의 평균 {head_counts.mean():.4f}  표준편차 {head_counts.std(ddof=1):.4f}"

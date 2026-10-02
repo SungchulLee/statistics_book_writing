@@ -1119,6 +1119,9 @@ $P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(42)
     mean = [0, 0]
     cov = [[1, 0.8], [0.8, 1]]      # 상관 0.8

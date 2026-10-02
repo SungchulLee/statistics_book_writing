@@ -211,6 +211,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(1)
 
     population = stats.norm().rvs(100_000)
@@ -321,6 +324,9 @@ $$
     import numpy as np
     import pandas as pd
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(1)
 

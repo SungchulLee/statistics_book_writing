@@ -190,6 +190,9 @@ $H_0$과 $H_a$ 아래의 분포를 함께 그리면 검정력을 이해할 수 �
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_power(mu_0, mu_a, sigma, n, alpha=0.05):
         """단측 z 검정의 검정력을 그림으로 보인다.
 
@@ -747,6 +750,9 @@ $$
 
     ```python
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # 효과크기를 세 가지로 두고 표본크기에 따른 검정력을 그린다.
     # 세 곡선이 모두 위로 볼록하다는 점이 중요하다. 표본을 늘릴수록 얻는 것이

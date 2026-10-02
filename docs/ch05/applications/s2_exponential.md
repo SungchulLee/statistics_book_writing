@@ -118,6 +118,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     rng = np.random.default_rng(1)
 
     beta2, mu3, sigma2_true = 9.0, 2.0, 1.0

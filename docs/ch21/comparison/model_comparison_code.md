@@ -134,6 +134,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def cox_snell_diagnostic(residuals):
         """Cox-Snell 잔차 진단 그림.
 

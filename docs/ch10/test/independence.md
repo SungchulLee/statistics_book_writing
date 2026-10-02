@@ -258,6 +258,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def compute_expected(observed_counts):
         """관측도수로부터 독립 아래의 기대도수를 계산한다.
 

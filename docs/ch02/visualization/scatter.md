@@ -644,6 +644,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     rng = np.random.default_rng(3)
     x = np.linspace(0, 30, 300)
     y = np.sin(x / 1.2) * 0.5 + 0.08 * x + rng.normal(0, 0.08, len(x))
@@ -779,6 +782,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     rng = np.random.default_rng(6)
     n = 200
     x = np.sort(rng.uniform(0, 10, n))
@@ -855,6 +861,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(7)
     n = 3000

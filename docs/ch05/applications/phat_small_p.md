@@ -139,6 +139,9 @@ $p = 0.1$은 어느 쪽에도 딱 맞지 않는 어중간한 자리다. 아래 �
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     n = 100
 
     print("   p    np   왜도    1/sqrt(np)   P(p^=0) 정확 / 포아송   정규가 음수에 흘리는 확률")

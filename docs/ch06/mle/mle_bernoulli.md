@@ -135,6 +135,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
     seed = 1
     np.random.seed(seed)

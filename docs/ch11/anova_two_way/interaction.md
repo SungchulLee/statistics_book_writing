@@ -142,6 +142,9 @@ $$
     from statsmodels.stats.anova import anova_lm
     from statsmodels.graphics.factorplots import interaction_plot
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def load_data():
         """ToothGrowth 자료를 읽는다. 보충제 종류와 투여량, 그리고 치아 길이다."""
         url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv'

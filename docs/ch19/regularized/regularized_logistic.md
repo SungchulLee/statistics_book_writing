@@ -401,6 +401,9 @@ $C$가 커지면(정칙화가 약해지면) 추정치가 벌점 없는 MLE에 �
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # C 를 키우며 계수 경로를 그린다. 참으로 쓰인 다섯 변수는 굵게, 나머지는
     # 흐리게 그려 어느 쪽이 먼저 살아나는지 보이게 한다.
     C_values = np.logspace(-3, 3, 50)

@@ -170,6 +170,9 @@ $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
         """정규모집단에서 (n-1)S^2/sigma^2 이 카이제곱을 따름을 확인한다.
 

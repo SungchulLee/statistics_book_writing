@@ -156,6 +156,9 @@ $$
     유도할 답이 있는 문제가 아니다. **그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 이 보기의 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 기각역은 자료를 보기 전에 정해지는 영역이다. 관측된 통계량이 칠해진
     # 구역 안에 떨어지면 기각한다. p-값 방식과 결론은 언제나 같다.
     x_t = np.linspace(-5, 5, 300)

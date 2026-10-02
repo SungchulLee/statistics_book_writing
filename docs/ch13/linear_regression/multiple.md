@@ -73,6 +73,9 @@ $$
     from sklearn.model_selection import train_test_split
     from sklearn.linear_model import LinearRegression
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 광고비와 매출 자료. TV·라디오·신문 광고비와 매출이 들어 있다.
     url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3, 4])
@@ -424,6 +427,9 @@ $$
     import pandas as pd
     import statsmodels.formula.api as sm
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
 
     def print_summary(res):

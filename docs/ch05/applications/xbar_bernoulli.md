@@ -109,6 +109,9 @@ $$
     import numpy as np
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(1)
 
     n_population = 10_000

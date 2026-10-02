@@ -119,6 +119,9 @@ $$
     import numpy as np
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 왼쪽에 PDF, 오른쪽에 CDF, 가운데에는 둘의 관계를 나타내는 화살표를 놓는다.
     fig, (ax_pdf, ax_arrow, ax_cdf) = plt.subplots(1, 3, figsize=(12, 3))
 
@@ -410,6 +413,9 @@ $$
     import numpy as np
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     fig, ax = plt.subplots(figsize=(12, 3))
     ax.set_xlim(-3, 3)
     ax.set_ylim(-0.2, 1.1)
@@ -544,6 +550,9 @@ $$
     import numpy as np
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(0)
 
     # 역변환 표집: 균등난수만 있으면 어떤 분포든 만들어 낼 수 있다.
@@ -661,6 +670,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
     import scipy.stats as stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(42)
     data = stats.norm.rvs(size=200)      # 표준정규에서 200개

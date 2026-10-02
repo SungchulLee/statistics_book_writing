@@ -284,6 +284,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(42)
     n = 100_000
     X = np.random.normal(0, 1, n)
@@ -724,6 +727,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(42)
     n = 100_000

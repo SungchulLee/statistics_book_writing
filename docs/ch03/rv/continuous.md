@@ -92,6 +92,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     mu = 185       # 평균 대기시간(초)
     sigma = 11     # 표준편차
 

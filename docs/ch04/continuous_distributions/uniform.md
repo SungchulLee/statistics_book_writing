@@ -210,6 +210,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     a, b = 2, 8
     # 구간 바깥까지 그려야 "밖에서는 0"이라는 사실이 그림에 드러난다
     x = np.linspace(a - 1, b + 1, 300)

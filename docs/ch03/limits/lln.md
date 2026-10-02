@@ -113,6 +113,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     N_LIST = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
     M = 10_000                    # 되풀이 횟수
     EPS = 0.2                     # ε (σ 단위)
@@ -282,6 +285,9 @@ $$
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(42)
 

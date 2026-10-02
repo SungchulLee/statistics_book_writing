@@ -103,6 +103,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def bivariate_gaussian_pdf(x, y, rho):
         """표준화된 이변량 정규분포의 밀도. 두 주변분포가 모두 N(0,1)이고
         상관계수만 rho 인 경우다."""

@@ -209,6 +209,9 @@ $n = 12$로 분산을 추정한다는 것이 이 정도로 막연한 일이다. 
     import matplotlib.pyplot as plt
     from scipy.stats import chi2
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     rng_seed = 42        # 아래 그림을 재현하려면 고정한다
     n_simulations = 100
     n_samples = 12

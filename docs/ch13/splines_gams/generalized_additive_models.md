@@ -367,6 +367,9 @@ $$f_j(X_j) = \sum_{k=1}^{K_j} b_{jk}(X_j) c_{jk}, \qquad \text{벌점: } \lambda
     ```python
     from pygam import LinearGAM, s, l
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # x0 에만 스플라인을 씌우고 나머지는 선형으로 둔다.
     gam = LinearGAM(s(0, n_splines=12) + l(1) + l(2))
 

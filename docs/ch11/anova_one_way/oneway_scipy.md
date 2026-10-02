@@ -286,6 +286,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 상자그림이 실제로 그리는 수들을 먼저 찍어 둔다.
     names = ['ctrl', 'trt1', 'trt2']
     groups = [ctrl, trt1, trt2]
@@ -429,6 +432,9 @@ $$
 
     ```python
     import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # 자유도는 (집단 수 - 1, 전체 수 - 집단 수) = (2, 27) 이다.
     m = 27

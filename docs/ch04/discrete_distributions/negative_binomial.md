@@ -159,6 +159,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # scipy의 음이항분포는 **실패 횟수**를 세는 판본이다.
     # nbinom(r, p).pmf(k) = "r번째 성공이 나오기까지 실패가 k번 일어날 확률"
     # 따라서 총 시행 횟수는 k + r 이고, x가 0부터 시작한다.

@@ -216,6 +216,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 발산형 색지도를 쓰고 vmin/vmax 를 -1 과 1 로 못박는다. 이래야 흰색이
     # 정확히 0 에 놓여, 색만 보고도 부호와 세기를 읽을 수 있다.
     k = data.shape[1]
@@ -298,6 +301,9 @@ $$
     **(2) 수치적으로.** 그림을 그리고 쌍마다 축 비를 재어 공식과 맞춰 본다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 열지도는 숫자 하나로 요약하지만 산점도 행렬은 관계의 모양을 보여 준다.
     # 상관계수가 같아도 모양이 다를 수 있으므로 둘을 함께 본다.
     # 대각선에는 그 변수 자신의 분포를 그린다.

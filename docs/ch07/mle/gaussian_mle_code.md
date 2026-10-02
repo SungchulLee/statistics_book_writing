@@ -195,6 +195,9 @@ $$\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def loglikelihood_surface(seed=42):
         """로그가능도를 등고선과 두 단면으로 그려 최댓값의 자리를 눈으로 본다.
 

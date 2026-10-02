@@ -358,6 +358,9 @@ $$
     import matplotlib.pyplot as plt
     from matplotlib.colors import ListedColormap
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_decision_boundary(ax, clf, X, y, title):
         """결정경계를 격자로 칠하고 그 위에 자료를 흩뿌린다.
 

@@ -28,6 +28,9 @@
     import seaborn as sns
     import warnings
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_horizontal_boxplot(data, figsize=(12, 1)):
         """가로로 누운 상자그림을 그린다.
 
@@ -142,6 +145,9 @@
     import matplotlib.pyplot as plt
     import seaborn as sns
     import warnings
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def plot_horizontal_boxplot(data, figsize=(12, 1)):
         """가로로 누운 상자그림을 그린다.
@@ -289,6 +295,9 @@
     import matplotlib.pyplot as plt
     import seaborn as sns
     import warnings
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def plot_horizontal_boxplot(data, figsize=(12, 1)):
         """가로로 누운 상자그림을 그린다.

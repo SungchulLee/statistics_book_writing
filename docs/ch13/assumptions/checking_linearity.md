@@ -157,6 +157,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 설명변수가 하나뿐이면 산점도가 선형성을 보는 가장 곧은 방법이다.
     # 변수가 여럿이면 다른 변수의 효과가 섞이므로 아래 잔차 그림으로 가야 한다.
     plt.scatter(X, Y)

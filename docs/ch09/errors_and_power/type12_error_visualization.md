@@ -100,6 +100,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     null_loc = 0
     alt_loc = 3
     alpha = 0.05

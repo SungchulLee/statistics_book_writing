@@ -60,6 +60,9 @@
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def qq_with_band(x, B=800, seed=42):
         """Q-Q 그림에 모의실험으로 만든 95% 띠를 얹는다.
 

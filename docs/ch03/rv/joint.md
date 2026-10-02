@@ -390,6 +390,9 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
     import matplotlib.pyplot as plt
     from scipy import integrate
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     x = np.linspace(0, 1, 200)
     y = np.linspace(0, 1, 200)
     X, Y = np.meshgrid(x, y)
@@ -498,6 +501,9 @@ $$
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(42)
     mean = [0, 0]

@@ -515,6 +515,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     x = np.array([2, 3, 3, 7, 9], float)
     xs = np.sort(x)
     n = len(xs)

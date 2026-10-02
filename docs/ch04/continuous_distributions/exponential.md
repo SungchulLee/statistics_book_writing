@@ -877,6 +877,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(42)
     lam = 3.0        # 단위 시간당 평균 3회 발생
     n_events = 50

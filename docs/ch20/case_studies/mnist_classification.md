@@ -123,6 +123,9 @@ $[0, 1]$에 있다.
     `nrow=8`이므로 네 줄 여덟 칸으로 이 순서대로 놓인다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 모형을 세우기 전에 자료를 눈으로 본다. 어떤 자료인지도 모르고 학습부터
     # 돌리는 것은 통계에서든 기계학습에서든 좋지 않은 습관이다.
     images, labels = next(iter(test_loader))
@@ -717,6 +720,9 @@ CNN의 모수 개수가 이층 신경망보다 훨씬 적은데도 정확도는 
     유도할 식이 있는 문제가 아니다. **그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 전부다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 세 모형의 학습 곡선을 겹쳐 그린다. 구조가 복잡할수록 같은 세대에서
     # 손실이 더 낮게 내려간다.
     fig, ax = plt.subplots(figsize=(8, 4))
@@ -784,6 +790,9 @@ CNN의 혼동행렬은 모형이 여전히 헷갈려 하는 숫자 쌍을 드러
 
     ```python
     import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def get_predictions(model, loader):
         """자료 전체의 참 이름표와 예측을 모은다. 혼동행렬을 만들기 위함이다."""

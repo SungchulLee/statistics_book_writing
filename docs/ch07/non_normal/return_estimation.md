@@ -142,6 +142,9 @@ $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
     모의실험으로 두 답을 확인한다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def return_precision_simulation(seed=42):
         """앞 표의 숫자를 그림으로 옮긴다. 10년과 50년을 나란히 놓았다.
 
@@ -373,6 +376,9 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
     그림을 그린 뒤 (2)의 두 비용을 수로 재어 본다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def realized_volatility_windows(seed=42):
         """변동성을 재는 창의 길이가 바꾸는 것 — 민감도와 잡음의 맞바꿈.
 

@@ -135,6 +135,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     rng = np.random.default_rng(1)
     z, REP = 1.96, 100_000
 

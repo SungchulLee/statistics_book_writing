@@ -70,6 +70,9 @@
     import seaborn as sns
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     df = sns.load_dataset("iris")
 
     # 쌍그림은 수치형 열을 모두 짝지어 격자로 그린다. hue 로 품종을 나누면
@@ -270,6 +273,9 @@
     import seaborn as sns
     import matplotlib.pyplot as plt
     import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     df = sns.load_dataset("iris")
     numeric_cols = ["sepal_length", "sepal_width", "petal_length", "petal_width"]

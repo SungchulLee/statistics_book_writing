@@ -155,6 +155,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     p = 0.3
 
     print("n = 5 의 점질량 전부:")

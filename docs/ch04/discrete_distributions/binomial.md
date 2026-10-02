@@ -192,6 +192,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     n, p = 10, 0.6                # 시행 10번, 각 시행의 성공확률 0.6
     x = np.arange(0, n + 1)       # 가능한 성공 횟수 0~10
 

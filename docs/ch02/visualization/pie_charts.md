@@ -468,6 +468,9 @@
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     fig, axes = plt.subplots(1, 2, figsize=(7, 3))
     for ax, sizes in zip(axes, ([3, 1, 1], [0.6, 0.2, 0.2])):
         wedges, _, _ = ax.pie(sizes, autopct='%1.1f%%')

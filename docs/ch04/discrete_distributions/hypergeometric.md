@@ -306,6 +306,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     pop, succ, draw = 52, 13, 5      # M=52장, N=13장이 스페이드, n=5장 추출
     x = np.arange(0, draw + 1)       # 가능한 성공 횟수 0~5
 

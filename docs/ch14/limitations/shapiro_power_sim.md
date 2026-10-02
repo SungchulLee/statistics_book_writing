@@ -49,6 +49,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def power_for_n(n, sims=500, sigma_ln=0.6, alpha=0.05, seed=0):
         """주어진 표본크기에서 Shapiro-Wilk 검정의 검정력을 모의실험으로 잰다.
 

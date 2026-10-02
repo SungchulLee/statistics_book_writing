@@ -89,6 +89,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy.stats import multivariate_normal
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 공분산행렬 [[var_X, cov], [cov, var_Y]] 를 네 가지로 바꿔 가며 본다.
     # 분산이 4일 때 rho = cov/4 이므로 cov = 2.8 이면 rho = 0.7 이다.
     #   1) 비대각이 0     -> 독립. 등고선이 원이 된다.

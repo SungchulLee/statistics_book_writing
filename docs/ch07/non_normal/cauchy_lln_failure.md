@@ -78,6 +78,9 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(42)
 
     def sample_mean_trajectories(dist, n_max=10_000, n_tries=20):
@@ -218,6 +221,9 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
 
     ```python
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def sample_mean_distributions(dist, n_vals, n_reps=10_000):
         """표본크기별로 표본평균의 분포를 만든다.

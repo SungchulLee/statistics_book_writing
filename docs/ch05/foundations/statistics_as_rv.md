@@ -216,6 +216,9 @@ $$
     import numpy as np
     from math import comb
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(0)
     num_samples = 50
 
@@ -559,6 +562,9 @@ $$
     from fractions import Fraction
     from math import comb
     from scipy import special
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def prob(n, c, r, t):
         """포획-재포획의 초기하확률.

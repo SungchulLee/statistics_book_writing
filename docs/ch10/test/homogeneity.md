@@ -173,6 +173,9 @@ $$
     import numpy as np
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def compute_expected(observed):
         """행과 열이 무관하다는 가정 아래 기대도수를 구한다.
 
@@ -318,6 +321,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
     import scipy.stats as stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def main():
         """같은 계산을 scipy 의 chi2_contingency 로 대신한다."""

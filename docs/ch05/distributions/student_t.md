@@ -266,6 +266,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(0)
     n, mu, sigma = 10, 0, 10
     n_sim = 10_000

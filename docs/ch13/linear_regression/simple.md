@@ -48,6 +48,9 @@ $$
     import numpy as np
     import pandas as pd
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 인터넷에서 자료를 읽는다
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
@@ -148,6 +151,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
     import pandas as pd
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
@@ -260,6 +266,9 @@ $$
     import pandas as pd
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def add_vertical_reference_line(axis, x_position, y_min, y_max, line_style, line_color='k', line_label=None):
         """주어진 축에 세로 기준선을 긋는다."""
         axis.plot([x_position, x_position], [y_min, y_max], linestyle=line_style, color=line_color, label=line_label)
@@ -364,6 +373,9 @@ $$
     import numpy as np
     import pandas as pd
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def add_horizontal_reference_line(axis, y_position, x_min, x_max, line_style, line_color='k', line_label=None):
         """주어진 축에 가로 기준선을 긋는다."""
@@ -513,6 +525,9 @@ $$
     import matplotlib.pyplot as plt
     import pandas as pd
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
@@ -649,6 +664,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
     import pandas as pd
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
@@ -794,6 +812,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
     import pandas as pd
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
@@ -960,6 +981,9 @@ $$
     import numpy as np
     import pandas as pd
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
@@ -1110,6 +1134,9 @@ $$
     import numpy as np
     import pandas as pd
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
@@ -1249,6 +1276,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
     import pandas as pd
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.

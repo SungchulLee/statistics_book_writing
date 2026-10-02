@@ -238,6 +238,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_pmf(values, probabilities, title="PMF"):
         """확률질량함수를 막대그림으로 그린다.
 

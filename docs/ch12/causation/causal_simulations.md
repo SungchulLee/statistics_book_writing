@@ -521,6 +521,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 점을 집단별로 다른 표식으로 찍고, 그 위에 합친 자료의 회귀직선을 얹는다.
     # 직선의 기울기가 각 무리의 기울기와 반대 방향인 것이 한눈에 보인다.
     fig, ax = plt.subplots(figsize=(8, 5))

@@ -398,6 +398,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(0)
 
     # 1집단: 사건이 늦게 일어난다(평균 20). 20%는 중도절단된다.

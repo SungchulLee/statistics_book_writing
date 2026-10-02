@@ -659,6 +659,9 @@ $$\text{주사위는 조작되지 않았다.}$$
     import numpy as np
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def main():
         """적합도 검정통계량을 정의대로 구하고 p-값을 그림으로 보인다."""
         # 주사위를 60번 굴린 결과라고 하자. 고른 주사위라면 눈마다 10번씩 나온다.
@@ -747,6 +750,9 @@ $$\text{주사위는 조작되지 않았다.}$$
     import matplotlib.pyplot as plt
     import numpy as np
     import scipy.stats as stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def main():
         """앞의 손계산을 scipy 한 줄로 대신한다. 값이 같아야 한다."""

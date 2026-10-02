@@ -47,6 +47,9 @@ $$\bar{X}_n \xrightarrow{\text{a.s.}} \mu \quad (n \to \infty)$$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def consistency_visualization(seed=42):
         """표본크기를 키워 가며 표본평균이 참 평균으로 수렴하는 경로를 그린다.
 
@@ -232,6 +235,9 @@ $$\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)$$
     ```python
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def clt_demonstration(seed=42):
         """모집단 넷과 표본크기 셋을 격자로 놓고 중심극한정리를 확인한다.
 
@@ -372,6 +378,9 @@ $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \text{에 대해}$$
     **(2) 모의실험.** 먼저 그림으로 경로를 본다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def cauchy_failure(seed=42):
         """평균이 없는 분포에서는 대수의 법칙이 무너짐을 보인다.
 

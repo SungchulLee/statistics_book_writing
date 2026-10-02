@@ -654,6 +654,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_confusion_matrix(M, class_names=None):
         """혼동행렬을 열지도로 그린다.
 

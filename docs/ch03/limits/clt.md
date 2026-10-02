@@ -431,6 +431,9 @@ $$
     **(2) 모의실험.** 이제 모양을 본다. 앞 보기와 같은 `sample_means`를 써서 세 모집단에 대해 $n$을 키워 가며 그린다(앞 보기의 `sample_means`, `np`, `stats`, `plt`를 그대로 이어받는다).
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     sample_sizes = [2, 10, 100]
 
     # 모양이 서로 전혀 다른 모집단 셋을 준비한다.
@@ -744,6 +747,9 @@ $X_i$가 분산 $\sigma^2$인 i.i.d.일 때 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     rng = np.random.default_rng(0)
     dists = [("Uniform(0,1)", stats.uniform), ("Exponential(1)", stats.expon),
              ("Lognormal(0,1)", stats.lognorm(1.0)),
@@ -936,6 +942,9 @@ $X_i$가 분산 $\sigma^2$인 i.i.d.일 때 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(0)
     dists = [("Uniform(0,1)", stats.uniform), ("Exponential(1)", stats.expon),

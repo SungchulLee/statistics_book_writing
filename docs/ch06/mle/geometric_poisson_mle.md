@@ -197,6 +197,9 @@ $$
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # numpy의 geometric은 "첫 성공까지의 시행 수"(1부터)를 준다.
     # 여기서 쓰는 판본은 "첫 성공 이전의 실패 수"(0부터)이므로 1을 뺀다.
     # 성공확률을 1 - 0.12 로 준 것은, 이 절의 theta 가 numpy의 p와

@@ -342,6 +342,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def bayes_update_visualization():
         """검사 성능은 그대로 두고 **유병률만** 바꿔 가며 사후확률을 그린다.
 

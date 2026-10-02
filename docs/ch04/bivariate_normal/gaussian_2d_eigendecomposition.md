@@ -116,6 +116,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def bivariate_normal_pdf(X, Y, inv_Sigma, det_Sigma):
         """평균이 0인 이변량 정규분포의 밀도를 정의대로 계산한다.
 

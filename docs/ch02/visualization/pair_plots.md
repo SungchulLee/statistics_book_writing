@@ -589,6 +589,9 @@ $k$가 커지면 다음 중 하나로 간다.
     import matplotlib.pyplot as plt
     import seaborn as sns
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     rng = np.random.default_rng(2)
     n = 300
     df = pd.DataFrame({

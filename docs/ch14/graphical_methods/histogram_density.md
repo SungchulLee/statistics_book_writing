@@ -29,6 +29,9 @@
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_histogram_with_density(data, figsize=(12, 3)):
         """히스토그램에 적합한 정규 확률밀도함수를 겹쳐 그린다.
 
@@ -179,6 +182,9 @@
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_histogram_with_density(data, figsize=(12, 3)):
         """히스토그램에 적합한 정규 확률밀도함수를 겹쳐 그린다.
 
@@ -287,6 +293,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def plot_histogram_with_density(data, figsize=(12, 3)):
         """히스토그램에 적합한 정규 확률밀도함수를 겹쳐 그린다.

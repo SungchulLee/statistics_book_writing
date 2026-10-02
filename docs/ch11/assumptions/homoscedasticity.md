@@ -470,6 +470,9 @@ $$
     import matplotlib.pyplot as plt
     import pandas as pd
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 그림에서 읽으려는 것을 먼저 수로 적어 둔다.
     e, g = model.resid, data["group"]
     tab = pd.DataFrame({

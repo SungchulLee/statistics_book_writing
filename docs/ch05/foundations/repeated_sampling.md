@@ -77,6 +77,9 @@
     import matplotlib.pyplot as plt
     import numpy as np
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
     np.random.seed(1)
 
@@ -197,6 +200,9 @@
     import matplotlib.pyplot as plt
     import numpy as np
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
     np.random.seed(1)
@@ -322,6 +328,9 @@
     import matplotlib.pyplot as plt
     import numpy as np
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
     np.random.seed(1)

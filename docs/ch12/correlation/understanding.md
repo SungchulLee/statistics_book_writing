@@ -103,6 +103,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(0)
 
     def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
@@ -299,6 +302,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(0)
 
     def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
@@ -447,6 +453,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(0)
 

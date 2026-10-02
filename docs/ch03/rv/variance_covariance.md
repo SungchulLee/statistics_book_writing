@@ -274,6 +274,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def demonstrate_correlation():
         """무상관이 독립을 뜻하지 않는다는 것을 보인다."""
         np.random.seed(42)
@@ -425,6 +428,9 @@ $$
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     def portfolio_variance_demo():
         """분산투자의 이득이 상관계수에 어떻게 달려 있는지 보인다."""

@@ -193,6 +193,9 @@ $$
     from statsmodels.formula.api import ols
     from statsmodels.stats.anova import anova_lm
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 그림에서 읽으려는 것을 먼저 수로 적어 둔다.
     print(f"{'기울기':>8s} {'표준오차':>9s} {'상관 r':>8s} {'x 범위':>16s}  집단")
     for name, d in data.groupby("group"):
@@ -331,6 +334,9 @@ $$
     import numpy as np
     import pandas as pd
     from statsmodels.formula.api import ols
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     # 그림에서 읽으려는 것을 먼저 수로 적어 둔다.
     def read_curve(v, e, label):

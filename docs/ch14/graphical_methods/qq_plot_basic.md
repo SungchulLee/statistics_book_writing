@@ -49,6 +49,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 정규 150개에 자유도 3 인 t 를 50개 섞었다. 가운데는 정규 같지만
     # 꼬리만 두꺼운 자료다.
     rng = np.random.default_rng(0)

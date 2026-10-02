@@ -51,6 +51,9 @@ $p$값은 대립가설에 따라 달라진다.
     import matplotlib.pyplot as plt
     from scipy.stats import f
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     sample1 = [12, 15, 14, 10, 13, 14, 12, 11]
     sample2 = [22, 25, 20, 18, 24, 23, 19, 21]
 

@@ -63,6 +63,9 @@
     import seaborn as sns
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 자료는 "Practical Statistics for Data Scientists" 저장소에서 바로 읽는다.
     SP500 = ("https://raw.githubusercontent.com/gedeck/"
              "practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/")
@@ -208,6 +211,9 @@
     import seaborn as sns
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 앞과 같은 자료다.
     # 자료는 "Practical Statistics for Data Scientists" 저장소에서 바로 읽는다.
     SP500 = ("https://raw.githubusercontent.com/gedeck/"
@@ -331,6 +337,9 @@
     from scipy.cluster.hierarchy import dendrogram, linkage
     from scipy.spatial.distance import squareform
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 상관이 비슷한 종목끼리 이웃하도록 순서를 다시 매긴다. 1 - r 을 거리로
     # 삼으면 상관이 높을수록 가까운 것이 되어 군집화에 바로 쓸 수 있다.
     corr_matrix = etfs.corr()
@@ -441,6 +450,9 @@
     로 $17$ 종목일 때의 $2.27$ 보다도 나빠진다. 이것은 세상이 나빠져서가 아니라 **분산에 도움이 되는 종목만 골라 뺐기 때문**이다. 추려서 그린 열지도는 읽기 쉬워진 대신 **무엇을 뺐는지 전혀 보이지 않는다.** 뺀 목록을 그림 밖에 적어 두는 수밖에 없다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 종목이 많으면 열지도가 읽히지 않는다. 업종 펀드만 열 개로 좁힌다.
     sector_etfs = ['XLI', 'QQQ', 'XLE', 'XLY', 'XLU', 'XLB', 'XLV', 'XLP', 'XLF', 'XLK']
     subset_corr = corr_matrix.loc[sector_etfs, sector_etfs]
@@ -539,6 +551,9 @@
     import numpy as np
     import seaborn as sns
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     corr_matrix = etfs.corr()
 

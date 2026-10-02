@@ -403,6 +403,9 @@ $$
     import numpy as np
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     mu, sigma = 1, 2
     x = np.linspace(mu - 3 * sigma, mu + 3 * sigma, 400)
 
@@ -570,6 +573,9 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
     import scipy.stats as stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
     mu, sigma = 0, 1
     prob = 0.975      # 95% 신뢰구간의 한쪽 끝. 양쪽 꼬리에 2.5%씩 남긴다.

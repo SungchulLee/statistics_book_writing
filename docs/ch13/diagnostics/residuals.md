@@ -218,6 +218,9 @@ $$\begin{array}{lll}
     import numpy as np
     from sklearn.linear_model import LinearRegression
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def generate_data(n=50, noise_level=3.0, seed=0):
         """기울기 2 의 직선 자료를 만든다. noise_level 로 잡음 크기를 조절한다."""
         np.random.seed(seed)

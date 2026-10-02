@@ -435,6 +435,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     def plot_mgf_comparison():
         """분포 넷의 적률생성함수를 한 그림에 겹쳐 그린다.
 

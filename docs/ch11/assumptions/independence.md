@@ -457,6 +457,9 @@ $$
     from scipy import stats
     from statsmodels.stats.stattools import durbin_watson
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 그림에서 읽으려는 세 가지를 먼저 수로 적어 둔다.
     e = model.resid.values
     idx = np.arange(len(e))

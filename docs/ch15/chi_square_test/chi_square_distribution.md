@@ -104,6 +104,9 @@ $$
     import scipy.stats as stats
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     # 자유도 5 인 카이제곱의 밀도와 분포함수. 0 이상에서만 정의되고
     # 오른쪽으로 길게 늘어져 있다.
     df = 5
@@ -223,6 +226,9 @@ $$
     **(2) 수치적으로.** 그림만으로는 "비슷해 보인다"에서 멈추므로 적률과 적합도검정을 함께 찍는다.
 
     ```python
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     df, seed = 5, 1
 
     # 방법 1: scipy 의 생성기를 그대로 쓴다.

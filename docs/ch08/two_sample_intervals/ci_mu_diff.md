@@ -315,6 +315,9 @@ $$
     import matplotlib.pyplot as plt
     from scipy.stats import t, norm
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     rng_seed = 42        # 아래 그림을 재현하려면 고정한다
     n_simulations = 100
     n1, n2 = 12, 10

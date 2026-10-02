@@ -219,6 +219,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(1)
 
     # 모집단은 0과 1 두 값뿐인 베르누이다. binom(n=1)이 곧 베르누이다.

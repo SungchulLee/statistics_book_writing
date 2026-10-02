@@ -91,6 +91,9 @@
     from matplotlib.collections import EllipseCollection
     from matplotlib.colors import Normalize
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
 
     def plot_corr_ellipses(data, figsize=None, **kwargs):
         """상관행렬을 타원 격자로 그린다.

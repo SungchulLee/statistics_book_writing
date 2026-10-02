@@ -124,6 +124,9 @@ $$
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
     np.random.seed(0)
 
     # 크기 5짜리 균등표본을 1만 번 뽑아 그때마다 S^2 을 기록한다.
