@@ -19,13 +19,17 @@ FENCE = re.compile(r"^(\s*)```(\w*)\s*$")
 RUNNER = r'''
 import contextlib, io, sys, warnings
 warnings.filterwarnings("ignore")
+_pre_path, _tgt_path = sys.argv[1], sys.argv[2]
+# 쪽의 코드가 argparse 를 쓰면 우리 argv 를 자기 인자로 읽어 죽는다.
+# (ch05 standard_error.md 가 바로 그 위험을 가르친다.) 깨끗이 비워 준다.
+sys.argv = ["block"]
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as _p
 _p.show = lambda *a, **k: None
 _g = {"__name__": "__main__"}
-_prefix = open(sys.argv[1], encoding="utf-8").read()
-_target = open(sys.argv[2], encoding="utf-8").read()
+_prefix = open(_pre_path, encoding="utf-8").read()
+_target = open(_tgt_path, encoding="utf-8").read()
 if _prefix.strip():
     with contextlib.redirect_stdout(io.StringIO()):
         try:

@@ -371,10 +371,6 @@ $$
     # 즉 "가져오는 것" 자체가 설정을 적용하는 일이다.
     from global_name_space import ARGS
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
-    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
-
-
     def draw(values, name, symbol, ymax, ytop, xlim):
         """표집분포의 히스토그램에 평균선과 ±1 표준오차를 그린다.
 
