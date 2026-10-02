@@ -24,66 +24,210 @@ ECDF를 모수적 누적분포함수와 비교하는 것은 분포 가정을 평
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 경험적 누적분포함수와 이론적 누적분포함수 겹쳐 보기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 경험적 곡선은 참된 곡선에서 얼마나 벌어질 수 있는가. 평균 $4$, 표준편차 $1.5$인 정규모집단에서 $n = 100$을 뽑아 ECDF를 그리고 적합된 정규 누적분포함수와 겹쳐 본다.
+
+**(1)** $\hat F_n$의 뜀의 크기가 정확히 $1/n$임을 보이고, 최대 수직거리 $D = \sup_x \lvert \hat F_n(x) - F(x)\rvert$가 **순서통계량 $n$개에서만** 계산되는 유한한 최댓값임을 보이시오.
+
+**(2)** 드보레츠키–키퍼–볼포위츠(DKW) 부등식에서 $\alpha = 0.05$, $n = 100$인 신뢰띠의 폭 $\varepsilon$을 구하고, 콜모고로프 극한분포가 주는 폭과 견주시오. 두 수가 같아지는 것이 우연인가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 정의
 
-np.random.seed(1)
-x = 4 + np.random.normal(0, 1.5, 100)     # 평균 4, 표준편차 1.5의 정규 표본 100개
+    $$
+    \hat F_n(x) = \frac1n \sum_{i=1}^n \mathbf 1(x_i \le x)
+    $$
 
-# 표본에서 모수를 추정한다. 참값(4, 1.5)이 아니라 자료에서 잰 값을 쓴다.
-loc = x.mean()
-scale = x.std()
+    에서 분자는 **정수**이므로 $\hat F_n$이 가질 수 있는 값은 $0, \tfrac1n, \tfrac2n, \dots, 1$뿐이다. 자료점이 아닌 곳에서는 지시함수가 하나도 바뀌지 않으므로 $\hat F_n$이 상수이고, 점 $t$를 지날 때는 $t$와 같은 관측값의 개수만큼 분자가 뛴다. 그러니 뜀의 크기는
 
-# 이론적 CDF는 x가 정렬되어 있어야 선으로 이어 그릴 수 있다
-x.sort()
-cdf = stats.norm(loc=loc, scale=scale).cdf(x)
+    $$
+    \hat F_n(t) - \hat F_n(t^-) = \frac{\#\{i : x_i = t\}}{n}
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
+    이다. 연속분포에서 뽑았으면 동점이 생길 확률이 0이므로 모든 뜀이 **정확히 $1/n$**이고, 동점이 $k$개 모이면 그 자리만 $k/n$이 된다.
 
-# ax.ecdf 가 경험적 누적분포함수를 그린다.
-# 자료점마다 1/n 씩 올라가는 계단함수이며, 여기서는 n=100 이라 계단이 촘촘해
-# 매끄러운 곡선처럼 보인다.
-ax.ecdf(x, ls="-", c="#D32F2F", label="경험적 누적분포함수")
+    $D$도 같은 계단 구조에서 나온다. 순서통계량을 $x_{(1)} \le \cdots \le x_{(n)}$이라 두면 반열린구간 $[x_{(i)}, x_{(i+1)})$에서 $\hat F_n \equiv i/n$으로 납작한데 $F$는 그 위에서 비감소다. 그러므로 $\hat F_n - F$는 이 구간의 **왼쪽 끝**에서 가장 크고, $F - \hat F_n$은 $x_{(i)}$에 **왼쪽에서 다가갈 때** 가장 크다. 곧
 
-# 같은 자료에 적합한 정규분포의 이론적 CDF를 겹친다.
-# 두 곡선의 벌어짐이 곧 "정규분포 가정이 얼마나 맞는가"이다.
-ax.plot(x, cdf, "-", c="#1565C0", label="적합된 정규분포의 누적분포함수")
-ax.set_xlabel("관측값")
-ax.set_ylabel("누적 비율")
-ax.set_title("경험적 누적분포함수와 이론적 누적분포함수")
-ax.legend()
-ax.spines[["top", "right"]].set_visible(False)
-fig.savefig("ecdf_25.png", dpi=170, facecolor="white", bbox_inches="tight")
+    $$
+    D^+ = \max_{1 \le i \le n}\left(\frac{i}{n} - F(x_{(i)})\right),
+    \qquad
+    D^- = \max_{1 \le i \le n}\left(F(x_{(i)}) - \frac{i-1}{n}\right),
+    \qquad
+    D = \max(D^+, D^-)
+    $$
 
-# 두 곡선의 최대 수직거리가 콜모고로프-스미르노프 통계량 D 다.
-# 이 눈대중을 형식적 검정으로 만든 것이 KS 검정이다.
-D, pval = stats.kstest(x, stats.norm(loc=loc, scale=scale).cdf)
-print(f"최대 수직거리 D = {D:.4f}")
-print(f"KS 검정 p값     = {pval:.4f}")
-```
+    이다. **상한이 최댓값으로 바뀌었다.** 실수 전체를 훑는 대신 $n$개의 점만 보면 되고, 이것이 KS 검정이 실제로 계산하는 식이다.
 
-출력:
+    **(2) 해석적으로.** DKW 부등식은 모든 연속 $F$에 대해
 
-```
-최대 수직거리 D = 0.0438
-KS 검정 p값     = 0.9863
-```
+    $$
+    P\big(\sup_x \lvert \hat F_n(x) - F(x)\rvert > \varepsilon\big) \;\le\; 2e^{-2n\varepsilon^2}
+    $$
 
-![경험적 누적분포함수와 이론적 누적분포함수](./img/ecdf_25.png)
+    을 준다. **오른변에 $F$가 들어 있지 않다.** 그래서 오른변을 $\alpha$로 두고 풀면 분포를 몰라도 쓸 수 있는 띠의 폭
+
+    $$
+    \varepsilon = \sqrt{\frac{\ln(2/\alpha)}{2n}}
+    $$
+
+    이 나온다. $n = 100$, $\alpha = 0.05$이면 $\ln 40 = 3.688879$이므로
+
+    $$
+    \varepsilon = \sqrt{\frac{3.688879}{200}} = \sqrt{0.01844440} = 0.1358102
+    $$
+
+    다. 한편 콜모고로프 극한정리는 $\sqrt n\, D \to K$이고
+
+    $$
+    P(K \le t) = 1 - 2\sum_{k=1}^{\infty} (-1)^{k-1} e^{-2k^2 t^2}
+    $$
+
+    임을 말한다. $K$의 $95$분위가 $t_{0.95} = 1.358099$이므로 이 쪽 띠는 $1.358099/\sqrt{100} = 0.1358099$다. **두 수가 소수 여섯째 자리까지 같다.**
+
+    우연이 아니다. 위 급수의 꼬리 $P(K > t) = 2\sum_k (-1)^{k-1}e^{-2k^2t^2}$에서 **첫 항이 바로 $2e^{-2t^2}$**, 곧 DKW의 오른변이다. $t = 1.358$에서 둘째 항은 $-2e^{-8t^2} = -7.8\times 10^{-7}$에 지나지 않으므로 두 식이 같은 수를 줄 수밖에 없다. **DKW 부등식은 콜모고로프 꼬리급수를 첫 항에서 끊은 것이고, 그것을 모든 $n$에 대해 참이 되도록 부등식으로 만든 것이다.**
+
+    **(3) 수치적으로.**
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    np.random.seed(1)
+    x = 4 + np.random.normal(0, 1.5, 100)     # 평균 4, 표준편차 1.5의 정규 표본 100개
+
+    # 표본에서 모수를 추정한다. 참값(4, 1.5)이 아니라 자료에서 잰 값을 쓴다.
+    loc = x.mean()
+    scale = x.std()
+
+    # 이론적 CDF는 x가 정렬되어 있어야 선으로 이어 그릴 수 있다
+    x.sort()
+    cdf = stats.norm(loc=loc, scale=scale).cdf(x)
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+
+    # ax.ecdf 가 경험적 누적분포함수를 그린다.
+    # 자료점마다 1/n 씩 올라가는 계단함수이며, 여기서는 n=100 이라 계단이 촘촘해
+    # 매끄러운 곡선처럼 보인다.
+    ax.ecdf(x, ls="-", c="#D32F2F", label="경험적 누적분포함수")
+
+    # 같은 자료에 적합한 정규분포의 이론적 CDF를 겹친다.
+    # 두 곡선의 벌어짐이 곧 "정규분포 가정이 얼마나 맞는가"이다.
+    ax.plot(x, cdf, "-", c="#1565C0", label="적합된 정규분포의 누적분포함수")
+    ax.set_xlabel("관측값")
+    ax.set_ylabel("누적 비율")
+    ax.set_title("경험적 누적분포함수와 이론적 누적분포함수")
+    ax.legend()
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.savefig("ecdf_25.png", dpi=170, facecolor="white", bbox_inches="tight")
+
+    # --- (1) 뜀의 크기가 정말 1/n 인가 ---
+    n = len(x)
+    print(f"n = {n},  서로 다른 값의 개수 = {len(np.unique(x))}")
+    print(f"뜀의 크기로 나타난 값 = {np.unique(np.round(np.diff(np.arange(1, n + 1) / n), 12))}")
+
+    # --- (1) D 를 순서통계량만으로 계산한다 ---
+    # [x_(i), x_(i+1)) 에서 ECDF 는 i/n 으로 납작하고 F 는 올라가므로
+    # 위로 벌어지는 최대는 왼쪽 끝, 아래로 벌어지는 최대는 왼쪽 끝 바로 앞에서 난다.
+    i = np.arange(1, n + 1)
+    Dplus = (i / n - cdf).max()
+    Dminus = (cdf - (i - 1) / n).max()
+    print(f"D+ = {Dplus:.6f}  (i = {(i / n - cdf).argmax() + 1}번째 순서통계량)")
+    print(f"D- = {Dminus:.6f}  (i = {(cdf - (i - 1) / n).argmax() + 1}번째 순서통계량)")
+
+    # 두 곡선의 최대 수직거리가 콜모고로프-스미르노프 통계량 D 다.
+    # 이 눈대중을 형식적 검정으로 만든 것이 KS 검정이다.
+    D, pval = stats.kstest(x, stats.norm(loc=loc, scale=scale).cdf)
+    print(f"최대 수직거리 D = {D:.4f}   (손으로 구한 max(D+, D-) = {max(Dplus, Dminus):.4f})")
+    print(f"KS 검정 p값     = {pval:.4f}")
+
+    # --- (2) 두 경로가 주는 신뢰띠 폭 ---
+    alpha = 0.05
+    eps_dkw = np.sqrt(np.log(2 / alpha) / (2 * n))          # DKW 부등식
+    t95 = stats.kstwobign.ppf(0.95)                          # 콜모고로프 극한분포의 95분위
+    print(f"\nDKW 띠        eps = {eps_dkw:.7f}")
+    print(f"콜모고로프 띠 eps = {t95 / np.sqrt(n):.7f}   (t_0.95 = {t95:.6f})")
+    # DKW 의 오른변은 콜모고로프 꼬리급수의 첫 항이다. 둘째 항의 크기를 재 보면
+    # 왜 두 수가 소수 여섯째 자리까지 같은지 알 수 있다.
+    print(f"  첫 항 2exp(-2t^2)   = {2 * np.exp(-2 * t95 ** 2):.8f}")
+    print(f"  둘째 항 -2exp(-8t^2) = {-2 * np.exp(-8 * t95 ** 2):.2e}")
+    print(f"  콜모고로프 꼬리 정확값 = {stats.kstwobign.sf(t95):.8f}")
+
+    # 유한한 n 에서의 정확한 포함률은 kstwo 가 준다 (극한이 아니라 n=100 의 분포다).
+    print(f"n = {n} 에서 정확한 포함률 = {stats.kstwo.cdf(eps_dkw, n):.6f}")
+
+    # --- (2) 모의실험으로 포함률을 재고, 분포에 무관함도 함께 본다 ---
+    rng = np.random.default_rng(0)
+    reps = 2000
+    for name, draw, F in (
+            ("정규", lambda m: rng.normal(4, 1.5, size=(m, n)), stats.norm(4, 1.5).cdf),
+            ("지수", lambda m: rng.exponential(1.0, size=(m, n)), stats.expon(scale=1.0).cdf),
+    ):
+        s = np.sort(draw(reps), axis=1)
+        Fv = F(s)
+        sup = np.maximum((i / n - Fv).max(axis=1), (Fv - (i - 1) / n).max(axis=1))
+        cov = (sup <= eps_dkw).mean()
+        print(f"{name}모집단 포함률 = {cov:.4f} +- {np.sqrt(cov * (1 - cov) / reps):.4f}  "
+              f"(평균 sup = {sup.mean():.4f})")
+
+    # --- 신뢰띠 그림 ---
+    ecdf_y = i / n
+    fig, ax = plt.subplots(figsize=(12, 3.2))
+    ax.step(x, ecdf_y, where="post", c="#D32F2F", label="경험적 누적분포함수")
+    ax.fill_between(x, np.clip(ecdf_y - eps_dkw, 0, 1), np.clip(ecdf_y + eps_dkw, 0, 1),
+                    step="post", color="#DCEBFB", label="DKW 신뢰띠 (95%)")
+    ax.plot(x, cdf, "-", c="#1565C0", label="적합된 정규분포의 누적분포함수")
+    ax.set_xlabel("관측값")
+    ax.set_ylabel("누적 비율")
+    ax.set_title("경험적 누적분포함수의 DKW 신뢰띠")
+    ax.legend(loc="upper left")
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.savefig("ecdf_dkw.png", dpi=170, facecolor="white", bbox_inches="tight")
+    ```
+
+    출력:
+
+    ```
+    n = 100,  서로 다른 값의 개수 = 100
+    뜀의 크기로 나타난 값 = [0.01]
+    D+ = 0.043818  (i = 44번째 순서통계량)
+    D- = 0.037042  (i = 6번째 순서통계량)
+    최대 수직거리 D = 0.0438   (손으로 구한 max(D+, D-) = 0.0438)
+    KS 검정 p값     = 0.9863
+
+    DKW 띠        eps = 0.1358102
+    콜모고로프 띠 eps = 0.1358099   (t_0.95 = 1.358099)
+      첫 항 2exp(-2t^2)   = 0.05000078
+      둘째 항 -2exp(-8t^2) = -7.81e-07
+      콜모고로프 꼬리 정확값 = 0.05000000
+    n = 100 에서 정확한 포함률 = 0.954666
+    정규모집단 포함률 = 0.9480 +- 0.0050  (평균 sup = 0.0854)
+    지수모집단 포함률 = 0.9560 +- 0.0046  (평균 sup = 0.0850)
+    ```
+
+    ![경험적 누적분포함수와 이론적 누적분포함수](./img/ecdf_25.png)
+
+    ![경험적 누적분포함수의 DKW 신뢰띠](./img/ecdf_dkw.png)
+
+    뜀의 크기로 나타난 값이 $0.01 = 1/100$ 하나뿐이고 서로 다른 값이 100개다. (1)의 첫 주장이 확인되었다. 순서통계량만으로 구한 $\max(D^+, D^-) = 0.0438$도 `kstest` 가 준 $D = 0.0438$과 맞고, 최대가 나는 자리는 $44$번째 순서통계량이다.
+
+    (2)의 두 수도 $0.1358102$와 $0.1358099$로 맞는다. 급수의 첫 항이 $0.05000078$, 둘째 항이 $-7.81\times10^{-7}$이라 합이 $0.05000000$이 되는 과정이 그대로 보인다.
+
+    **포함률은 보수적이기는 하되 아주 조금만 그렇다.** $n = 100$에서의 정확한 값이 $0.9547$로 명목 $0.95$보다 $0.005$쯤 높을 뿐이다. DKW가 콜모고로프 꼬리의 **첫 항**이어서 띠 자체는 사실상 정확하고, 남은 $0.005$는 $n = 100$이 아직 극한이 아니라서 생긴다. 모의실험 2000회가 준 $0.9480 \pm 0.0050$과 $0.9560 \pm 0.0046$은 둘 다 $0.9547$에서 한두 몬테카를로 표준오차 안이다.
+
+    분포에 무관하다는 주장도 확인된다. 정규에서 잰 $\sup$의 평균이 $0.0854$, 지수에서 잰 것이 $0.0850$으로 사실상 같다. **$F$가 연속이기만 하면 $\sup_x\lvert\hat F_n - F\rvert$의 분포는 $F$에 전혀 의존하지 않는다** — $F(X_i)$가 균등분포를 따르므로 문제가 언제나 균등분포 하나로 환원되기 때문이다.
+
+    띠 그림에서 적합된 정규곡선이 처음부터 끝까지 띠 안에 들어 있다. $D = 0.0438 < 0.1358$이니 당연한 일이고, KS 검정의 $p$값 $0.9863$이 같은 말을 수로 한 것이다.
 
 경험적 곡선과 이론적 곡선이 가깝게 겹치면 모수 모형이 잘 맞는 것이다. 체계적으로 벗어나면 왜도, 두꺼운 꼬리, 또는 다봉성을 나타낸다.
 
@@ -91,59 +235,158 @@ KS 검정 p값     = 0.9863
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 누적분포함수와 확률밀도함수의 관계
+**보기 2.** <span class="diff easy" title="쉬움"></span> 밀도가 가장 높은 자리에서 ECDF가 가장 흔들린다. $N(1, 2^2)$의 밀도함수와 분포함수를 겹쳐 그린다.
+
+**(1)** $F(\mu) = \tfrac12$임을, 그리고 $f$의 최댓값이 $x = \mu$에서 $1/(\sigma\sqrt{2\pi})$임을 보이시오. $P(\lvert X - \mu\rvert < 3\sigma)$도 구하시오.
+
+**(2)** 같은 모집단에서 $n = 100$을 뽑는다. 점 $t$를 하나 고정했을 때 $\hat F_n(t)$의 분포·평균·분산은 무엇이며, 분산이 가장 큰 $t$는 어디인가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 두 함수를 잇는 것은 미적분학의 기본정리다.
 
-loc = 1        # 평균
-scale = 2      # 표준편차
-normal = stats.norm(loc=loc, scale=scale)
+    $$
+    F(x) = \int_{-\infty}^{x} f(u)\,du
+    \quad\Longrightarrow\quad
+    F'(x) = f(x)
+    $$
 
-# 평균에서 좌우 3 표준편차까지를 촘촘히 훑는다.
-# 정규분포는 이 범위에 확률의 99.7%가 들어 있다.
-x = np.linspace(loc - 3 * scale, loc + 3 * scale, 1_000)
-pdf = normal.pdf(x)     # 밀도함수: 각 점에서의 "빽빽함"
-cdf = normal.cdf(x)     # 분포함수: 그 점까지 누적된 확률
+    **밀도는 분포함수의 기울기다.** 그러니 밀도가 봉우리인 곳에서 분포함수가 가장 가파르다는 말은 따로 증명할 것이 없는 같은 말이다.
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(x, pdf, "-", c="#1565C0", label="확률밀도함수")
-ax.plot(x, cdf, "-", c="#D32F2F", label="누적분포함수")
-ax.set_xlabel("$x$")
-ax.set_ylabel("밀도 / 누적 확률")
-ax.set_title("정규분포의 확률밀도함수와 누적분포함수")
-ax.legend()
-ax.spines[["top", "right"]].set_visible(False)
-fig.savefig("ecdf_50.png", dpi=170, facecolor="white", bbox_inches="tight")
+    정규밀도는 $\mu$에 대해 대칭이므로 $f(\mu + u) = f(\mu - u)$다. 치환적분 $u \mapsto 2\mu - u$를 쓰면
 
-# 두 함수의 관계를 숫자로 확인한다.
-#   CDF는 PDF를 적분한 것이므로 평균에서 정확히 0.5,
-#   PDF가 최대인 곳(평균)에서 CDF의 기울기가 가장 가파르다.
-print(f"CDF(평균)     = {normal.cdf(loc):.4f}")
-print(f"PDF 최댓값    = {pdf.max():.4f}  (x = {x[pdf.argmax()]:.2f})")
-print(f"P(|X-mu|<3s)  = {normal.cdf(loc+3*scale) - normal.cdf(loc-3*scale):.4f}")
-```
+    $$
+    F(\mu) = \int_{-\infty}^{\mu} f(u)\,du = \int_{\mu}^{\infty} f(u)\,du = 1 - F(\mu)
+    $$
 
-출력:
+    이므로 $F(\mu) = \tfrac12$이다.
 
-```
-CDF(평균)     = 0.5000
-PDF 최댓값    = 0.1995  (x = 0.99)
-P(|X-mu|<3s)  = 0.9973
-```
+    봉우리의 자리와 높이는 미분해서 얻는다. $f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/(2\sigma^2)}$에서
 
-![정규분포의 확률밀도함수와 누적분포함수](./img/ecdf_50.png)
+    $$
+    f'(x) = -\frac{x-\mu}{\sigma^2}\, f(x)
+    $$
 
-확률밀도함수는 밀도가 어디에 몰려 있는지 보여주고, 누적분포함수는 누적 확률을 보여준다. 둘을 함께 보면 분포의 완전한 그림이 나온다.
+    인데 $f > 0$이므로 $f'(x) = 0$인 곳은 $x = \mu$ 하나뿐이고, 거기서 $f''(\mu) = -f(\mu)/\sigma^2 < 0$이니 최대다. 높이는 지수가 $0$이 되어
+
+    $$
+    f(\mu) = \frac{1}{\sigma\sqrt{2\pi}} = \frac{1}{2\sqrt{2\pi}} = 0.1994711
+    $$
+
+    이다. 마지막으로 $Z = (X-\mu)/\sigma$로 표준화하면
+
+    $$
+    P(\lvert X - \mu\rvert < 3\sigma) = P(\lvert Z\rvert < 3) = 2\Phi(3) - 1 = 0.9973002
+    $$
+
+    다.
+
+    **(2) 해석적으로.** $t$를 고정하면 지시함수 $\mathbf 1(X_i \le t)$는 성공확률 $F(t)$인 베르누이 시행이고, $X_i$가 독립이므로 이들의 합이 이항분포를 따른다.
+
+    $$
+    n\hat F_n(t) \sim \mathrm{Bin}\big(n,\, F(t)\big)
+    $$
+
+    여기서 모든 것이 바로 나온다.
+
+    $$
+    E[\hat F_n(t)] = \frac{nF(t)}{n} = F(t),
+    \qquad
+    \operatorname{Var}[\hat F_n(t)] = \frac{nF(t)(1-F(t))}{n^2} = \frac{F(t)\big(1-F(t)\big)}{n}
+    $$
+
+    **$\hat F_n(t)$는 각 점에서 $F(t)$의 불편추정량이다.** 퍼짐 쪽을 보면 $p(1-p)$가 $p = \tfrac12$에서 최대이므로 분산은 $F(t) = \tfrac12$인 곳, 곧 **중앙값(여기서는 $t = \mu = 1$)에서 가장 크다**. 그 자리가 바로 밀도의 봉우리이니 **밀도가 가장 높은 곳에서 ECDF가 가장 흔들린다**. $n = 100$에서 그 최대 표준편차는
+
+    $$
+    \sqrt{\frac{1/2 \cdot 1/2}{100}} = \frac{1}{2\sqrt{100}} = 0.05
+    $$
+
+    이고, $t = -1$과 $t = 3$($F = 0.158655$와 $0.841345$)에서는 $\sqrt{0.133484/100} = 0.036535$로 줄어든다. **꼬리에서는 ECDF가 덜 흔들린다.**
+
+    **(3) 수치적으로.**
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    loc = 1        # 평균
+    scale = 2      # 표준편차
+    normal = stats.norm(loc=loc, scale=scale)
+
+    # 평균에서 좌우 3 표준편차까지를 촘촘히 훑는다.
+    # 정규분포는 이 범위에 확률의 99.7%가 들어 있다.
+    x = np.linspace(loc - 3 * scale, loc + 3 * scale, 1_000)
+    pdf = normal.pdf(x)     # 밀도함수: 각 점에서의 "빽빽함"
+    cdf = normal.cdf(x)     # 분포함수: 그 점까지 누적된 확률
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.plot(x, pdf, "-", c="#1565C0", label="확률밀도함수")
+    ax.plot(x, cdf, "-", c="#D32F2F", label="누적분포함수")
+    ax.set_xlabel("$x$")
+    ax.set_ylabel("밀도 / 누적 확률")
+    ax.set_title("정규분포의 확률밀도함수와 누적분포함수")
+    ax.legend()
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.savefig("ecdf_50.png", dpi=170, facecolor="white", bbox_inches="tight")
+
+    # 두 함수의 관계를 숫자로 확인한다.
+    #   CDF는 PDF를 적분한 것이므로 평균에서 정확히 0.5,
+    #   PDF가 최대인 곳(평균)에서 CDF의 기울기가 가장 가파르다.
+    print(f"CDF(평균)     = {normal.cdf(loc):.4f}")
+    print(f"PDF 최댓값    = {pdf.max():.4f}  (x = {x[pdf.argmax()]:.2f})")
+    print(f"P(|X-mu|<3s)  = {normal.cdf(loc+3*scale) - normal.cdf(loc-3*scale):.4f}")
+
+    # 격자가 평균을 비켜 간다. 봉우리의 "자리"는 격자만큼만 정확하다.
+    print(f"  이론 최댓값 1/(s*sqrt(2pi)) = {1 / (scale * np.sqrt(2 * np.pi)):.6f}")
+    print(f"  격자 간격 = {x[1] - x[0]:.6f},  평균 1 에 가장 가까운 격자점 = {x[np.abs(x - loc).argmin()]:.6f}")
+
+    # --- 같은 모집단에서 n=100 을 뽑아 ECDF 의 한 점을 재 본다 ---
+    # 점 t 를 고정하면 n*Fhat(t) ~ Bin(n, F(t)) 이므로
+    #   E[Fhat(t)] = F(t),  Var[Fhat(t)] = F(t)(1-F(t))/n
+    # 이고 분산은 F = 1/2, 곧 t = 평균에서 가장 크다.
+    n, reps = 100, 20_000
+    rng = np.random.default_rng(2)
+    sample = rng.normal(loc, scale, size=(reps, n))
+    print("\n  t     F(t)     E[Fhat] 실측   sd 이론    sd 실측")
+    for t in (-1.0, 1.0, 3.0):
+        Ft = normal.cdf(t)
+        hat = (sample <= t).mean(axis=1)
+        print(f"{t:5.1f}  {Ft:.6f}  {hat.mean():.6f}    "
+              f"{np.sqrt(Ft * (1 - Ft) / n):.6f}  {hat.std(ddof=1):.6f}")
+    ```
+
+    출력:
+
+    ```
+    CDF(평균)     = 0.5000
+    PDF 최댓값    = 0.1995  (x = 0.99)
+    P(|X-mu|<3s)  = 0.9973
+      이론 최댓값 1/(s*sqrt(2pi)) = 0.199471
+      격자 간격 = 0.012012,  평균 1 에 가장 가까운 격자점 = 0.993994
+
+      t     F(t)     E[Fhat] 실측   sd 이론    sd 실측
+     -1.0  0.158655  0.158431    0.036535  0.036318
+      1.0  0.500000  0.499498    0.050000  0.050071
+      3.0  0.841345  0.841218    0.036535  0.036537
+    ```
+
+    ![정규분포의 확률밀도함수와 누적분포함수](./img/ecdf_50.png)
+
+    (1)의 세 값이 그대로 나온다. $F(\mu) = 0.5000$, 최댓값 $0.1995 = 0.1994711$의 반올림, $P(\lvert X-\mu\rvert<3\sigma) = 0.9973$이다.
+
+    **다만 봉우리의 자리가 $x = 0.99$로 찍힌다.** 참값은 $\mu = 1$이다. `linspace` 가 $[-5, 7]$을 $999$등분해 격자 간격이 $0.012012$인데 $1$이 격자에 올라 있지 않아, 가장 가까운 격자점이 $0.993994$이기 때문이다. **높이는 맞고 자리만 틀렸다**는 점이 재미있다. 봉우리에서 $f' = 0$이므로 $0.006$만큼 빗나가도 높이의 손실이 $\tfrac12 \lvert f''(\mu)\rvert (0.006)^2 \approx 9\times 10^{-7}$에 지나지 않는 반면, 자리는 격자만큼만 정확하다. 격자 탐색으로 최대를 찾을 때 늘 따라다니는 성질이다.
+
+    (2)도 맞는다. 세 점에서 $E[\hat F_n(t)]$의 실측값이 $F(t)$와 소수 셋째 자리까지 맞아 **불편성**이 확인되고, 표준편차는 $t = 1$에서 $0.050071$(이론 $0.05$)로 가장 크며 양쪽 꼬리에서 $0.0363$으로 줄어든다. 되풀이 $R = 20{,}000$회에서 표준편차 추정의 몬테카를로 오차는 $\mathrm{sd}/\sqrt{2(R-1)} = 0.00018$ 정도인데, $t = -1$에서 실측 $0.036318$과 이론 $0.036535$의 차가 $0.00022$로 그 $1.2$배다. **어긋남이 아니라 되풀이 횟수가 남긴 흔들림이다.**
+
+    확률밀도함수는 밀도가 어디에 몰려 있는지 보여주고, 누적분포함수는 누적 확률을 보여준다. 둘을 함께 보면 분포의 완전한 그림이 나온다.
 
 ## 분위수, 백분위수, 사분위수
 
@@ -183,32 +426,103 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 세 라이브러리의 분위수 함수
+**보기 3.** <span class="diff easy" title="쉬움"></span> 세 라이브러리가 같은 답을 주는 까닭과, 같은 자료에서 사분위수가 달라지는 까닭. 자료는 $\{4, 4, 6, 7, 10, 11, 12, 14, 15\}$다.
+
+**(1)** `pandas`, `numpy`, `scipy`가 모두 $P_{75} = 12$를 주는 것은 셋이 쓰는 기본 보간식이 같기 때문이다. 그 식을 적고, 이 자료에서 보간이 **일어나지 않는** 까닭을 보이시오.
+
+**(2)** 보간법을 바꾸면 $Q_1$, $Q_3$, IQR이 얼마나 움직이는가. 그 움직임이 상자그림의 울타리 자리까지 바꾸는지 확인하시오.
 
 </div>
 
-```python
-import pandas as pd
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-data = {'x': [4, 4, 6, 7, 10, 11, 12, 14, 15]}
-df = pd.DataFrame(data)
+    **(1) 해석적으로.** 세 함수의 기본값은 모두 Hyndman–Fan 의 7형, `numpy` 의 이름으로는 `method="linear"` 다. 이 방식은 순서통계량 $x_{(i)}$를 확률 $\frac{i-1}{n-1}$에 놓고 그 사이를 직선으로 잇는다. 그러므로 확률 $p$의 분위수는 **가상 지표**
 
-# 같은 75번째 백분위수를 세 라이브러리로 구한다. 인자의 단위가 서로 다르다.
-# 기본 보간법이 셋 다 선형이라 값은 일치한다.
-print(f"{df.x.quantile(0.75) = }")                   # pandas: 비율 [0, 1]
-print(f"{np.percentile(df.x.values, 75) = }")        # numpy: 백분율 [0, 100]
-print(f"{stats.scoreatpercentile(df.x.values, 75) = }")   # scipy: 백분율 [0, 100]
-```
+    $$
+    h = (n-1)p + 1
+    $$
 
-출력:
+    를 두고
 
-```
-df.x.quantile(0.75) = 12.0
-np.percentile(df.x.values, 75) = 12.0
-stats.scoreatpercentile(df.x.values, 75) = 12.0
-```
+    $$
+    Q(p) = x_{(\lfloor h \rfloor)} + \big(h - \lfloor h \rfloor\big)\left(x_{(\lceil h \rceil)} - x_{(\lfloor h \rfloor)}\right)
+    $$
+
+    로 정한다. 이 자료는 $n = 9$라 $h = 8p + 1$이고
+
+    $$
+    p = 0.25 \Rightarrow h = 3, \qquad
+    p = 0.50 \Rightarrow h = 5, \qquad
+    p = 0.75 \Rightarrow h = 7
+    $$
+
+    로 셋 다 **정수로 떨어진다.** $h - \lfloor h\rfloor = 0$이므로 보간항이 사라지고 답이 그냥 순서통계량 자신, 곧 $x_{(3)} = 6$, $x_{(5)} = 10$, $x_{(7)} = 12$다. 세 라이브러리가 같은 값을 주는 것은 이 자료가 운이 좋아서가 아니라 **$n - 1 = 8$이 $4$로 나누어떨어지기** 때문이다.
+
+    **(2) 해석적으로.** 보간법의 차이는 "$x_{(i)}$를 어느 확률에 놓는가"의 차이다. 7형은 $\frac{i-1}{n-1}$에 놓지만, 1형(`inverted_cdf`)은 보간 없이 ECDF의 역을 그대로 쓰고, 6형(`weibull`)은 $\frac{i}{n+1}$, 5형(`hazen`)은 $\frac{i-0.5}{n}$에 놓는다. $n$이 작을수록 이 자리들이 서로 멀어지므로 $n = 9$에서는 차이가 눈에 띄게 커진다. **어느 하나가 틀린 것이 아니다.**
+
+    **(3) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    import numpy as np
+    from scipy import stats
+
+    data = {'x': [4, 4, 6, 7, 10, 11, 12, 14, 15]}
+    df = pd.DataFrame(data)
+
+    # 같은 75번째 백분위수를 세 라이브러리로 구한다. 인자의 단위가 서로 다르다.
+    # 기본 보간법이 셋 다 선형이라 값은 일치한다.
+    print(f"{df.x.quantile(0.75) = }")                   # pandas: 비율 [0, 1]
+    print(f"{np.percentile(df.x.values, 75) = }")        # numpy: 백분율 [0, 100]
+    print(f"{stats.scoreatpercentile(df.x.values, 75) = }")   # scipy: 백분율 [0, 100]
+
+    # 셋이 같은 이유는 모두 같은 보간법("linear", Hyndman-Fan 7형)을 쓰기 때문이다.
+    # 가상 지표 h = (n-1)p + 1 이 정수로 떨어지면 보간이 일어나지 않는다.
+    s = np.sort(df.x.values)
+    n = len(s)
+    for p in (0.25, 0.50, 0.75):
+        h = (n - 1) * p + 1
+        print(f"p = {p:.2f}:  h = (n-1)p+1 = {h:.1f}  ->  x_({int(h)}) = {s[int(h) - 1]}")
+
+    # --- 보간법을 바꾸면 사분위수가 달라진다 ---
+    # numpy 는 Hyndman-Fan 의 아홉 가지를 모두 제공한다. 어느 것도 틀리지 않았다.
+    methods = ["inverted_cdf", "averaged_inverted_cdf", "closest_observation",
+               "interpolated_inverted_cdf", "hazen", "weibull", "linear",
+               "median_unbiased", "normal_unbiased"]
+    print(f"\n{'method':26s} {'Q1':>6s} {'Med':>6s} {'Q3':>6s} {'IQR':>6s}   위쪽 울타리")
+    for m in methods:
+        q1, q2, q3 = (np.percentile(s, p, method=m) for p in (25, 50, 75))
+        iqr = q3 - q1
+        print(f"{m:26s} {q1:6.3f} {q2:6.3f} {q3:6.3f} {iqr:6.3f}   {q3 + 1.5 * iqr:7.3f}")
+    ```
+
+    출력:
+
+    ```
+    df.x.quantile(0.75) = 12.0
+    np.percentile(df.x.values, 75) = 12.0
+    stats.scoreatpercentile(df.x.values, 75) = 12.0
+    p = 0.25:  h = (n-1)p+1 = 3.0  ->  x_(3) = 6
+    p = 0.50:  h = (n-1)p+1 = 5.0  ->  x_(5) = 10
+    p = 0.75:  h = (n-1)p+1 = 7.0  ->  x_(7) = 12
+
+    method                         Q1    Med     Q3    IQR   위쪽 울타리
+    inverted_cdf                6.000 10.000 12.000  6.000    21.000
+    averaged_inverted_cdf       6.000 10.000 12.000  6.000    21.000
+    closest_observation         4.000 10.000 12.000  8.000    24.000
+    interpolated_inverted_cdf   4.500  8.500 11.750  7.250    22.625
+    hazen                       5.500 10.000 12.500  7.000    23.000
+    weibull                     5.000 10.000 13.000  8.000    25.000
+    linear                      6.000 10.000 12.000  6.000    21.000
+    median_unbiased             5.333 10.000 12.667  7.333    23.667
+    normal_unbiased             5.375 10.000 12.625  7.250    23.500
+    ```
+
+    (1)이 그대로 확인된다. $h$가 $3, 5, 7$로 정수가 되어 보간이 일어나지 않고, 세 라이브러리의 답이 모두 $x_{(7)} = 12$다.
+
+    (2)의 답은 **꽤 많이 움직인다**이다. 같은 아홉 개의 수인데 $Q_1$이 $4.000$부터 $6.000$까지, $Q_3$가 $11.750$부터 $13.000$까지, IQR이 $6.000$부터 $8.000$까지 간다. IQR의 최대와 최소는 $33\%$ 차이다. 중앙값만은 자료 개수가 홀수라 대부분 $x_{(5)} = 10$으로 고정되는데, 4형(`interpolated_inverted_cdf`)만 $h = np = 4.5$를 써서 $x_{(4)}$와 $x_{(5)}$ 사이의 $8.5$를 준다.
+
+    **이 차이는 상자그림까지 간다.** 위쪽 울타리 $Q_3 + 1.5\,\mathrm{IQR}$이 $21.000$에서 $25.000$까지 움직이므로, 값이 $22$인 관측값 하나가 있었다면 **어떤 방식에서는 이상치로 찍히고 어떤 방식에서는 수염 안에 들어온다.** $n$이 크면 아홉 방식이 서로 가까워져 이 문제가 사라지지만, $n$이 열 안팎일 때는 "어느 방식을 썼는가"를 밝혀 적는 편이 안전하다.
 
 ## 스타벅스 음료의 당 함량
 
@@ -216,49 +530,121 @@ stats.scoreatpercentile(df.x.values, 75) = 12.0
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 누적상대도수 곡선에서 백분위수 읽기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 누적상대도수 곡선에서 백분위수 읽기. 당 함량을 $5$g 간격으로 끊고 각 지점까지 누적된 비율을 적은 자료다.
+
+**(1)** 누적상대도수 곡선에서 $Q_1$, 중앙값, $Q_3$를 **손으로** 읽는 식을 적고 세 값을 구하시오.
+
+**(2)** 이 곡선에는 평평한 구간이 둘 있다. 거기서 백분위수를 읽으면 어떤 일이 생기는가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 곡선은 점 $(x_k, y_k)$들을 직선으로 이은 것이므로, 확률 $p$가 든 구간의 양 끝만 알면 비례식으로 읽힌다. $y_k \le p \le y_{k+1}$인 $k$를 찾아
 
-# 당 함량을 5g 간격으로 끊고, 각 지점까지 누적된 비율을 기록한 자료다.
-# y가 단조 증가하고 마지막이 1.0으로 끝나는 것이 누적상대도수의 성질이다.
-x = np.arange(0, 55, 5)
-y = [0, 0.1, 0.1, 0.2, 0.3, 0.5, 0.6, 0.6, 0.8, 0.9, 1.0]
+    $$
+    P_p = x_k + (x_{k+1} - x_k)\,\frac{p - y_k}{y_{k+1} - y_k}
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(x, y, '-o', c="#1565C0")             # 점을 찍고 이어 그린다
-ax.set_xlabel("당 함량 (g)")
-ax.set_ylabel("누적 상대도수")
-ax.set_title("스타벅스 음료 32종의 당 함량 누적상대도수 곡선")
-# y 눈금을 0.1 간격으로 촘촘히 두어야 백분위수를 눈으로 읽을 수 있다
-ax.set_yticks(np.arange(0, 1.1, 0.1))
-ax.grid()                                    # 격자가 있어야 가로세로로 읽어 나가기 쉽다
-fig.savefig("ecdf_138.png", dpi=170, facecolor="white", bbox_inches="tight")
+    이다. 세 값을 차례로 넣는다.
 
-# 그림에서 눈으로 읽는 값을 코드로도 구해 본다.
-# 누적비율 y에서 가로로 이동해 곡선을 만나는 x가 그 백분위수다.
-for p_ in (0.25, 0.50, 0.75):
-    print(f"P{int(p_*100)} = {np.interp(p_, y, x):.1f} g")
-```
+    $$
+    Q_1 = 15 + 5\cdot\frac{0.25 - 0.20}{0.30 - 0.20} = 15 + 2.5 = 17.5
+    $$
 
-출력:
+    $$
+    \text{중앙값} = 20 + 5\cdot\frac{0.50 - 0.30}{0.50 - 0.30} = 20 + 5 = 25.0
+    $$
 
-```
-P25 = 17.5 g
-P50 = 25.0 g
-P75 = 38.8 g
-```
+    $$
+    Q_3 = 35 + 5\cdot\frac{0.75 - 0.60}{0.80 - 0.60} = 35 + 3.75 = 38.75
+    $$
 
-![스타벅스 음료의 당 함량 누적상대도수 곡선](./img/ecdf_138.png)
+    따라서 $\mathrm{IQR} = 38.75 - 17.5 = 21.25$ g이다. 중앙값 쪽은 $p = 0.5$가 마침 구간의 오른쪽 끝 $y_5 = 0.5$와 같아 보간항이 $1$이 되어 $x_5 = 25$가 그대로 나왔다.
+
+    **(2) 해석적으로.** $y$가 $5$g 지점과 $10$g 지점에서 모두 $0.1$이고, $30$g와 $35$g에서 모두 $0.6$이다. 그 구간에 관측값이 하나도 없다는 뜻이고, 따라서 **$F(x) = 0.1$인 $x$가 $[5, 10]$ 전체**다. 역함수가 하나로 정해지지 않는다.
+
+    분위수를 정의할 때 쓰는 표준 규약은 하한
+
+    $$
+    Q(p) = \inf\{x : F(x) \ge p\}
+    $$
+
+    이고, 이것은 평평한 구간의 **왼쪽 끝**인 $5$와 $30$을 고른다. 반면 `np.interp` 는 같은 $x$값에 두 $y$가 겹칠 때 마지막 것을 집으므로 **오른쪽 끝**인 $10$과 $35$를 준다. $p = 0.25, 0.50, 0.75$는 평평한 구간에 걸리지 않아 (1)의 답에는 영향이 없지만, $p = 0.1$이나 $p = 0.6$을 묻는 순간 두 규약이 $5$g씩 어긋난다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    # 당 함량을 5g 간격으로 끊고, 각 지점까지 누적된 비율을 기록한 자료다.
+    # y가 단조 증가하고 마지막이 1.0으로 끝나는 것이 누적상대도수의 성질이다.
+    x = np.arange(0, 55, 5)
+    y = [0, 0.1, 0.1, 0.2, 0.3, 0.5, 0.6, 0.6, 0.8, 0.9, 1.0]
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.plot(x, y, '-o', c="#1565C0")             # 점을 찍고 이어 그린다
+    ax.set_xlabel("당 함량 (g)")
+    ax.set_ylabel("누적 상대도수")
+    ax.set_title("스타벅스 음료 32종의 당 함량 누적상대도수 곡선")
+    # y 눈금을 0.1 간격으로 촘촘히 두어야 백분위수를 눈으로 읽을 수 있다
+    ax.set_yticks(np.arange(0, 1.1, 0.1))
+    ax.grid()                                    # 격자가 있어야 가로세로로 읽어 나가기 쉽다
+    fig.savefig("ecdf_138.png", dpi=170, facecolor="white", bbox_inches="tight")
+
+    # 그림에서 눈으로 읽는 값을 코드로도 구해 본다.
+    # 누적비율 y에서 가로로 이동해 곡선을 만나는 x가 그 백분위수다.
+    for p_ in (0.25, 0.50, 0.75):
+        print(f"P{int(p_*100)} = {np.interp(p_, y, x):.1f} g")
+
+    # 손으로 푼 식과 맞는지 확인한다. p 가 든 구간의 양 끝 (x_k, y_k), (x_{k+1}, y_{k+1}) 에서
+    #   P_p = x_k + (x_{k+1} - x_k) * (p - y_k) / (y_{k+1} - y_k)
+    y = np.asarray(y, float)
+    for p_ in (0.25, 0.50, 0.75):
+        k = int(np.searchsorted(y, p_, side="left")) - 1
+        hand = x[k] + (x[k + 1] - x[k]) * (p_ - y[k]) / (y[k + 1] - y[k])
+        print(f"  손으로: x_{k} = {x[k]}, y_{k} = {y[k]:.1f} -> P{int(p_*100)} = {hand:.2f} g")
+    print(f"IQR = {np.interp(0.75, y, x) - np.interp(0.25, y, x):.2f} g")
+    print(f"당 15 g 인 음료의 누적비율 = {np.interp(15, x, y):.2f}")
+
+    # 평평한 구간에서는 역이 하나로 정해지지 않는다.
+    # y 가 0.1 인 구간이 [5, 10], 0.6 인 구간이 [30, 35] 다.
+    for p_ in (0.1, 0.6):
+        lo = x[np.flatnonzero(y == p_)[0]]
+        hi = x[np.flatnonzero(y == p_)[-1]]
+        print(f"F(x) = {p_} 인 x 의 범위 = [{lo}, {hi}],  "
+              f"np.interp 의 답 = {np.interp(p_, y, x):.1f},  "
+              f"inf 규약의 답 = {lo}")
+    ```
+
+    출력:
+
+    ```
+    P25 = 17.5 g
+    P50 = 25.0 g
+    P75 = 38.8 g
+      손으로: x_3 = 15, y_3 = 0.2 -> P25 = 17.50 g
+      손으로: x_4 = 20, y_4 = 0.3 -> P50 = 25.00 g
+      손으로: x_7 = 35, y_7 = 0.6 -> P75 = 38.75 g
+    IQR = 21.25 g
+    당 15 g 인 음료의 누적비율 = 0.20
+    F(x) = 0.1 인 x 의 범위 = [5, 10],  np.interp 의 답 = 10.0,  inf 규약의 답 = 5
+    F(x) = 0.6 인 x 의 범위 = [30, 35],  np.interp 의 답 = 35.0,  inf 규약의 답 = 30
+    ```
+
+    ![스타벅스 음료의 당 함량 누적상대도수 곡선](./img/ecdf_138.png)
+
+    손으로 구한 $17.50$, $25.00$, $38.75$가 `np.interp` 의 답과 그대로 맞는다. 출력의 첫 줄이 $38.8$로 보이는 것은 소수 한 자리로 반올림한 것뿐이다.
+
+    (2)도 확인된다. 평평한 두 구간에서 `np.interp` 가 $10$과 $35$를, $\inf$ 규약이 $5$와 $30$을 준다. **$5$g 차이가 규약 하나에서 나온다.**
+
+    한 가지 더 밝혀 둘 것이 있다. 이 곡선은 원자료 $32$개가 아니라 **$5$g 급간으로 묶은 요약**이다. 급간 안에서 자료가 고르게 퍼져 있다고 **가정하고** 직선으로 이었으므로, 위에서 읽은 $Q_1 = 17.5$는 원자료로 다시 계산한 값과 꼭 같지는 않다. 급간을 쓰는 한 피할 수 없는 근사이며, 바로 이 근사를 없애려고 이 쪽 앞머리의 ECDF가 급간 대신 자료점마다 계단을 놓는다.
 
 **질문과 답:**
 
@@ -276,51 +662,132 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 다섯 수치 요약과 상자그림
+**보기 5.** <span class="diff easy" title="쉬움"></span> 다섯 수치 요약과 상자그림. 관측값 $17$개 $\{1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8\}$를 쓴다.
+
+**(1)** 세 사분위수를 **보간 없이** 구할 수 있음을 보이고, 울타리 $Q_1 - 1.5\,\mathrm{IQR}$과 $Q_3 + 1.5\,\mathrm{IQR}$, 그리고 두 수염의 끝을 구하시오.
+
+**(2)** 다섯 수치 요약의 "최댓값"과 상자그림의 "위쪽 수염 끝"이 왜 다른가. 이 상자그림이 **가리는 것**은 무엇인가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 정렬하면
 
-data = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
+    $$
+    -2,\, -1,\, 0,\, 0,\, 0,\, 0,\, 1,\, 1,\, 1,\, 1,\, 2,\, 2,\, 2,\, 3,\, 4,\, 5,\, 8
+    $$
 
-# 다섯 수치 요약은 최소·Q1·중앙값·Q3·최대다. 모두 분위수이므로 q 만 바꿔 부른다.
-quantiles = {"Min": 0, "Q1": 0.25, "Median": 0.5, "Q3": 0.75, "Max": 1}
+    이고 $n = 17$이다. 보기 3의 가상 지표 $h = (n-1)p + 1 = 16p + 1$을 쓰면
 
-for label, q in quantiles.items():
-    print(f"{label:6} : {np.quantile(data, q)}")
+    $$
+    p = 0.25 \Rightarrow h = 5, \qquad
+    p = 0.50 \Rightarrow h = 9, \qquad
+    p = 0.75 \Rightarrow h = 13
+    $$
 
-# 상자그림은 이 다섯 수를 그림으로 옮긴 것이다. 상자의 위아래가 Q3와 Q1,
-# 가운데 선이 중앙값이며, 수염 밖에 찍히는 점이 이상치 후보다.
-fig, ax = plt.subplots(figsize=(3, 4))
-ax.boxplot(data)
-ax.set_xticks([1])
-ax.set_xticklabels(["자료"])
-ax.set_ylabel("관측값")
-ax.set_title("다섯 수치 요약의 상자그림")
-fig.savefig("ecdf_216.png", dpi=170, facecolor="white", bbox_inches="tight")
-```
+    으로 **셋 다 정수**다. $n - 1 = 16$이 $4$로 나누어떨어지기 때문이고, 그래서 보간이 전혀 일어나지 않는다.
 
-출력:
+    $$
+    Q_1 = x_{(5)} = 0, \qquad
+    Q_2 = x_{(9)} = 1, \qquad
+    Q_3 = x_{(13)} = 2
+    $$
 
-```
-Min    : -2
-Q1     : 0.0
-Median : 1.0
-Q3     : 2.0
-Max    : 8
-```
+    따라서 $\mathrm{IQR} = 2 - 0 = 2$이고 울타리는
 
-![다섯 수치 요약의 상자그림](./img/ecdf_216.png)
+    $$
+    Q_1 - 1.5\,\mathrm{IQR} = 0 - 3 = -3,
+    \qquad
+    Q_3 + 1.5\,\mathrm{IQR} = 2 + 3 = 5
+    $$
 
-**최댓값 $8$이 수염 밖에 점으로 찍힌다.** $Q_3 + 1.5 \times \text{IQR} = 2 + 1.5 \times 2 = 5$이므로 $8$은 이상치 후보로 분류된다. 다섯 수치 요약의 "최댓값"과 상자그림의 "위쪽 수염 끝"이 같지 않은 이유가 이것이다.
+    다. 수염은 울타리까지 뻗는 것이 아니라 **울타리 안에 있는 가장 바깥 관측값**까지 뻗는다. 아래쪽은 $-3$ 이상인 값 가운데 가장 작은 $-2$, 위쪽은 $5$ 이하인 값 가운데 가장 큰 $5$다. 울타리 밖에 남는 것은 $8$ 하나뿐이다.
+
+    **(2) 해석적으로.** 다섯 수치 요약의 최댓값은 $8$인데 위쪽 수염은 $5$에서 멈춘다. 둘이 다른 이유는 **상자그림이 다섯 수치 요약을 그대로 그린 그림이 아니기** 때문이다. 투키가 수염의 길이를 $1.5\,\mathrm{IQR}$로 자른 뒤 그 밖의 점을 따로 찍도록 바꾸었고, 그래서 상자그림은 "다섯 수치 요약 + 이상치 규칙"이다. 최댓값이 울타리 안에 들면 두 값이 같아지고, 밖으로 나가면 이렇게 갈라진다.
+
+    가리는 것은 **자료의 생김새**다. 상자그림은 $Q_1 = 0$, $Q_2 = 1$, $Q_3 = 2$만 말할 뿐, 그 안에 $0$이 네 개, $1$이 네 개, $2$가 세 개로 **값이 정수에 뭉쳐 있다**는 사실은 전혀 보이지 않는다. 같은 다섯 수치 요약을 갖는 연속적인 자료와 구별되지 않는다. 봉우리가 둘인 자료도 마찬가지로 하나의 상자로 뭉개진다. 흩어짐을 보려면 점그림이나 벌떼그림을 겹쳐야 한다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    data = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
+
+    # 다섯 수치 요약은 최소·Q1·중앙값·Q3·최대다. 모두 분위수이므로 q 만 바꿔 부른다.
+    quantiles = {"Min": 0, "Q1": 0.25, "Median": 0.5, "Q3": 0.75, "Max": 1}
+
+    for label, q in quantiles.items():
+        print(f"{label:6} : {np.quantile(data, q)}")
+
+    # 상자그림은 이 다섯 수를 그림으로 옮긴 것이다. 상자의 위아래가 Q3와 Q1,
+    # 가운데 선이 중앙값이며, 수염 밖에 찍히는 점이 이상치 후보다.
+    fig, ax = plt.subplots(figsize=(3, 4))
+    ax.boxplot(data)
+    ax.set_xticks([1])
+    ax.set_xticklabels(["자료"])
+    ax.set_ylabel("관측값")
+    ax.set_title("다섯 수치 요약의 상자그림")
+    fig.savefig("ecdf_216.png", dpi=170, facecolor="white", bbox_inches="tight")
+
+    # --- 세 사분위수가 보간 없이 순서통계량에 그대로 떨어지는지 확인한다 ---
+    s = np.sort(data)
+    n = len(s)
+    print(f"\n정렬: {list(s)}")
+    for p in (0.25, 0.50, 0.75):
+        h = (n - 1) * p + 1
+        print(f"  p = {p:.2f}: h = (n-1)p+1 = {h:.1f} -> x_({int(h)}) = {s[int(h) - 1]}")
+
+    # --- 울타리와 수염 끝 ---
+    q1, q3 = np.quantile(data, 0.25), np.quantile(data, 0.75)
+    iqr = q3 - q1
+    lo, hi = q1 - 1.5 * iqr, q3 + 1.5 * iqr
+    print(f"\nIQR = {iqr}, 울타리 = [{lo}, {hi}]")
+    print(f"  아래 수염 끝 = {s[s >= lo].min()},  위 수염 끝 = {s[s <= hi].max()}")
+    print(f"  이상치 후보 = {list(s[(s < lo) | (s > hi)])}")
+
+    # --- 상자그림이 가리는 것 ---
+    vals, cnt = np.unique(s, return_counts=True)
+    print(f"\n값과 도수: {dict(zip(vals.tolist(), cnt.tolist()))}")
+    print(f"  평균 = {data.mean():.4f},  중앙값 = {np.median(data)}")
+    ```
+
+    출력:
+
+    ```
+    Min    : -2
+    Q1     : 0.0
+    Median : 1.0
+    Q3     : 2.0
+    Max    : 8
+
+    정렬: [-2, -1, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 4, 5, 8]
+      p = 0.25: h = (n-1)p+1 = 5.0 -> x_(5) = 0
+      p = 0.50: h = (n-1)p+1 = 9.0 -> x_(9) = 1
+      p = 0.75: h = (n-1)p+1 = 13.0 -> x_(13) = 2
+
+    IQR = 2.0, 울타리 = [-3.0, 5.0]
+      아래 수염 끝 = -2,  위 수염 끝 = 5
+      이상치 후보 = [8]
+
+    값과 도수: {-2: 1, -1: 1, 0: 4, 1: 4, 2: 3, 3: 1, 4: 1, 5: 1, 8: 1}
+      평균 = 1.5882,  중앙값 = 1.0
+    ```
+
+    ![다섯 수치 요약의 상자그림](./img/ecdf_216.png)
+
+    (1)이 그대로 맞는다. $h$가 $5, 9, 13$으로 정수가 되어 $Q_1 = 0$, $Q_2 = 1$, $Q_3 = 2$이고, 울타리 $[-3, 5]$ 안의 가장 바깥 값이 $-2$와 $5$이며 $8$만 밖에 남는다.
+
+    **최댓값 $8$이 수염 밖에 점으로 찍힌다.** $Q_3 + 1.5 \times \text{IQR} = 2 + 1.5 \times 2 = 5$이므로 $8$은 이상치 후보로 분류된다. 다섯 수치 요약의 "최댓값"과 상자그림의 "위쪽 수염 끝"이 같지 않은 이유가 이것이다.
+
+    (2)에서 말한 뭉침도 도수표에 드러난다. $17$개 가운데 $11$개가 $0, 1, 2$ 세 값에 몰려 있는데 **상자그림에는 그 자취가 전혀 없다.** 평균 $1.588$이 중앙값 $1$보다 큰 것은 $8$ 하나가 끌어올린 결과다. 이상치 규칙이 $8$을 따로 찍어 준 덕분에 그 사실만은 그림에서도 읽을 수 있다.
 
 ## Q-Q 그림: 분위수 대 분위수 비교
 
@@ -330,85 +797,276 @@ Max    : 8
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> Q-Q 그림을 그리는 함수 만들기
+**보기 6.** <span class="diff easy" title="쉬움"></span> Q-Q 그림을 그리는 함수를 만들고 기준선의 정체를 밝힌다. $N(0,1)$에서 $1000$개를 뽑아 정규 분위수에 맞댄다.
+
+**(1)** `scipy.stats.probplot` 이 가로축에 놓는 수는 무엇인가. 기준선의 **절편이 표본평균과 정확히 같아지는** 까닭을 보이고 기울기의 식을 적으시오.
+
+**(2)** 그 두 식이 실제로 성립하는지 확인하고, 기울기와 절편이 각각 무엇을 추정하는지 말하시오.
 
 </div>
 
-```python
-"""표본의 분위수를 이론 분포의 분위수에 맞대어 그리는 Q-Q 그림을 만든다."""
-import matplotlib
-matplotlib.use("Agg")
-import numpy as np
-import matplotlib.pyplot as plt
-import scipy.stats as stats
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** Q-Q 그림의 가로축은 **자리잡기 확률**을 기준분포의 분위수함수에 넣은 값이다. `probplot` 은 $n$개의 확률
 
-def plot_qq(data, dist="norm", sparams=(), title="", fname="qq.png",
-            figsize=(12, 3)):
-    """자료를 dist 의 분위수에 대해 그린다. 점이 직선 위에 놓이면 그 분포에 맞는다."""
-    fig, ax = plt.subplots(figsize=figsize)
-    # sparams 는 분포의 모양모수다. 정규처럼 위치·척도만 있는 분포는 비워 두면
-    # probplot 이 자료에서 추정한다. 카이제곱처럼 모양모수가 있으면 넘겨야 한다.
-    stats.probplot(data, dist=dist, sparams=sparams, plot=ax)
-    ax.get_lines()[0].set_color("#1565C0")     # 자료점
-    ax.get_lines()[1].set_color("#D32F2F")     # 기준선
-    ax.spines[["top", "right"]].set_visible(False)
-    ax.set_title(title)
-    ax.set_xlabel("이론 분포의 분위수")
-    ax.set_ylabel("정렬된 관측값")
-    fig.savefig(fname, dpi=170, facecolor="white", bbox_inches="tight")
+    $$
+    p_i = \frac{i - 0.3175}{n + 0.365} \quad (1 < i < n),
+    \qquad
+    p_1 = 1 - 0.5^{1/n},
+    \qquad
+    p_n = 0.5^{1/n}
+    $$
 
-np.random.seed(0)
-sample_data = np.random.normal(loc=0, scale=1, size=1000)
-# 정규 자료를 정규에 맞댄다 — 직선이 나온다
-plot_qq(sample_data, dist="norm",
-        title="정규 자료를 정규 분위수에 맞댄 Q-Q 그림",
-        fname="ecdf_262.png")
-```
+    을 쓰고, 정규 기준에서는 $m_i = \Phi^{-1}(p_i)$를 $i$번째 순서통계량 $x_{(i)}$에 짝지어 점 $(m_i, x_{(i)})$를 찍는다.
 
-![정규 자료를 정규 분위수에 맞댄 Q-Q 그림](./img/ecdf_262.png)
+    이 자리잡기는 **좌우대칭**이다. 가운데 항에서
+
+    $$
+    p_i + p_{n+1-i} = \frac{(i - 0.3175) + (n+1-i-0.3175)}{n + 0.365} = \frac{n + 0.365}{n + 0.365} = 1
+    $$
+
+    이고 양 끝에서도 $p_1 + p_n = (1 - 0.5^{1/n}) + 0.5^{1/n} = 1$이다. $\Phi^{-1}(1-p) = -\Phi^{-1}(p)$이므로 $m_{n+1-i} = -m_i$, 따라서
+
+    $$
+    \bar m = \frac1n \sum_i m_i = 0
+    $$
+
+    이다. 기준선은 $x_{(i)}$를 $m_i$ 위로 최소제곱 적합한 직선이고, 최소제곱의 절편은 언제나 $a = \bar y - b\,\bar x$인데 여기서는 $\bar x = \bar m = 0$이므로
+
+    $$
+    a = \bar y = \frac1n\sum_i x_{(i)} = \bar x_{\text{표본}}
+    $$
+
+    **절편이 표본평균과 정확히 같다.** 기울기도 $\bar m = 0$ 덕분에 간단해진다.
+
+    $$
+    b = \frac{\sum_i (m_i - \bar m)(x_{(i)} - \bar y)}{\sum_i (m_i - \bar m)^2} = \frac{\sum_i m_i\, x_{(i)}}{\sum_i m_i^2}
+    $$
+
+    자료가 $N(\mu, \sigma^2)$에서 왔다면 $x_{(i)} \approx \mu + \sigma m_i$이므로 $b \approx \sigma$, $a \approx \mu$다. **기울기는 척도를, 절편은 위치를 추정한다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    """표본의 분위수를 이론 분포의 분위수에 맞대어 그리는 Q-Q 그림을 만든다."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    def plot_qq(data, dist="norm", sparams=(), title="", fname="qq.png",
+                figsize=(12, 3)):
+        """자료를 dist 의 분위수에 대해 그린다. 점이 직선 위에 놓이면 그 분포에 맞는다."""
+        fig, ax = plt.subplots(figsize=figsize)
+        # sparams 는 분포의 모양모수다. 정규처럼 위치·척도만 있는 분포는 비워 두면
+        # probplot 이 자료에서 추정한다. 카이제곱처럼 모양모수가 있으면 넘겨야 한다.
+        stats.probplot(data, dist=dist, sparams=sparams, plot=ax)
+        ax.get_lines()[0].set_color("#1565C0")     # 자료점
+        ax.get_lines()[1].set_color("#D32F2F")     # 기준선
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.set_title(title)
+        ax.set_xlabel("이론 분포의 분위수")
+        ax.set_ylabel("정렬된 관측값")
+        fig.savefig(fname, dpi=170, facecolor="white", bbox_inches="tight")
+
+    np.random.seed(0)
+    sample_data = np.random.normal(loc=0, scale=1, size=1000)
+    # 정규 자료를 정규에 맞댄다 — 직선이 나온다
+    plot_qq(sample_data, dist="norm",
+            title="정규 자료를 정규 분위수에 맞댄 Q-Q 그림",
+            fname="ecdf_262.png")
+
+    # --- 가로축에 놓이는 값과 기준선의 정체를 확인한다 ---
+    (osm, osr), (slope, intercept, r) = stats.probplot(sample_data, dist="norm")
+    n = len(sample_data)
+    i = np.arange(1, n + 1)
+    pp = (i - 0.3175) / (n + 0.365)       # scipy 가 쓰는 자리잡기(plotting position)
+    pp[0] = 1 - 0.5 ** (1 / n)
+    pp[-1] = 0.5 ** (1 / n)
+    print(f"osm 이 Phi^(-1)(p_i) 와 같은가: {np.allclose(osm, stats.norm.ppf(pp))}")
+    print(f"p_i + p_(n+1-i) = 1 인가: {np.allclose(pp + pp[::-1], 1)}")
+    print(f"osm 의 평균 = {osm.mean():.3e}  (대칭이므로 0)")
+    print(f"기울기 {slope:.6f}  <-  sum(m*y)/sum(m^2) = {(osm * osr).sum() / (osm ** 2).sum():.6f}")
+    print(f"절편   {intercept:.6f}  <-  표본평균        = {osr.mean():.6f}")
+    print(f"표본표준편차 = {sample_data.std(ddof=1):.6f},  r = {r:.6f},  r^2 = {r * r:.6f}")
+    ```
+
+    출력:
+
+    ```
+    osm 이 Phi^(-1)(p_i) 와 같은가: True
+    p_i + p_(n+1-i) = 1 인가: True
+    osm 의 평균 = 5.684e-17  (대칭이므로 0)
+    기울기 0.989271  <-  sum(m*y)/sum(m^2) = 0.989271
+    절편   -0.045257  <-  표본평균        = -0.045257
+    표본표준편차 = 0.987527,  r = 0.999482,  r^2 = 0.998965
+    ```
+
+    ![정규 자료를 정규 분위수에 맞댄 Q-Q 그림](./img/ecdf_262.png)
+
+    (1)의 세 주장이 모두 확인된다. 가로축이 정말 $\Phi^{-1}(p_i)$이고, 자리잡기 확률이 $p_i + p_{n+1-i} = 1$로 대칭이며, 그 결과 $\bar m$이 $5.7\times10^{-17}$ — 곧 부동소수점의 $0$ — 이다.
+
+    그래서 절편 $-0.045257$이 표본평균과 **소수점 아래 끝까지** 같고, 기울기 $0.989271$도 $\sum m_i x_{(i)} / \sum m_i^2$와 정확히 같다. 참값 $\mu = 0$, $\sigma = 1$과 견주면 절편 $-0.0453$, 기울기 $0.9893$으로 둘 다 가깝다. 기울기가 표본표준편차 $0.987527$과 **똑같지는 않다**는 점도 눈여겨볼 만하다. 최소제곱 기울기는 $b = r\, s_x / s_m$이고 $s_m$이 $1$보다 조금 작기 때문이다.
+
+    $r^2 = 0.998965$는 "점들이 직선에 얼마나 잘 붙어 있는가"를 한 수로 요약한 것이다. 다음 보기들에서 가정이 틀어질 때 이 수가 어떻게 떨어지는지 보게 된다.
 
 ### 지수분포에 대한 Q-Q 그림
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> 지수 자료를 지수 분위수에 맞대기
+**보기 7.** <span class="diff easy" title="쉬움"></span> 왜도가 $2$인 자료가 직선을 그린다. 표준지수분포에서 $1000$개를 뽑아 지수 분위수에 맞댄다.
+
+**(1)** 지수분포의 분위수함수를 구하고, `probplot` 이 가로축에 놓을 값을 적으시오. 이때 기준선의 절편이 표본평균과 같아지는가.
+
+**(2)** 치우침이 심한 자료가 직선을 그리는 것이 모순이 아님을 설명하시오.
 
 </div>
 
-```python
-# 지수분포는 오른쪽으로 심하게 치우쳐 있다. 그래도 지수 분위수에 맞대면 직선이 된다.
-# Q-Q 그림이 보는 것은 치우침 자체가 아니라 "가정한 분포와 얼마나 맞는가"이다.
-np.random.seed(0)
-sample_data = np.random.exponential(scale=1, size=1000)
-plot_qq(sample_data, dist="expon",
-        title="지수 자료를 지수 분위수에 맞댄 Q-Q 그림",
-        fname="ecdf_285.png")
-```
+??? success "풀이"
 
-![지수분포에 대한 Q-Q 그림](./img/ecdf_285.png)
+    **(1) 해석적으로.** 척도 $\beta$인 지수분포는 $F(x) = 1 - e^{-x/\beta}$ ($x \ge 0$)이므로 $p = 1 - e^{-x/\beta}$를 $x$에 대해 풀면
+
+    $$
+    F^{-1}(p) = -\beta\ln(1-p)
+    $$
+
+    다. `probplot` 에 `sparams` 를 주지 않으면 표준지수($\beta = 1$, 위치 $0$)를 기준으로 삼으므로 가로축에 놓이는 값은
+
+    $$
+    m_i = -\ln(1 - p_i)
+    $$
+
+    이고 $p_i$는 보기 6과 같은 자리잡기 확률이다.
+
+    절편은 이번에는 표본평균과 같지 **않다.** 보기 6에서 절편이 표본평균이 된 것은 $\bar m = 0$이었기 때문인데, 지수 분위수는 모두 양수라 $\bar m > 0$이다. 실제로
+
+    $$
+    \bar m = \frac1n\sum_i \big(-\ln(1-p_i)\big) \approx 1
+    $$
+
+    (표준지수의 평균이 $1$이므로) 이어서, 최소제곱의 항등식 $a = \bar y - b\,\bar m$이 그대로 쓰이되 보정항 $b\,\bar m \approx 1$이 빠진다. 자료가 $\mathrm{Exp}(\beta)$에서 왔으면 $x_{(i)} \approx \beta m_i$이므로 **기울기는 척도 $\beta$를, 절편은 위치모수 $0$을 겨냥한다.**
+
+    **(2) 해석적으로.** 지수분포의 왜도는 $2$로 꽤 크다. 그런데도 점들이 직선에 놓이는 것은 Q-Q 그림이 재는 것이 **치우침 자체가 아니라 가정한 기준분포와의 모양 일치**이기 때문이다. 가로축이 이미 같은 만큼 치우쳐 있으므로 두 치우침이 서로 상쇄된다. 정규 기준으로 그렸다면 같은 자료가 크게 휘었을 것이고, 그 비교가 다음 보기들의 주제다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    # 지수분포는 오른쪽으로 심하게 치우쳐 있다. 그래도 지수 분위수에 맞대면 직선이 된다.
+    # Q-Q 그림이 보는 것은 치우침 자체가 아니라 "가정한 분포와 얼마나 맞는가"이다.
+    np.random.seed(0)
+    sample_data = np.random.exponential(scale=1, size=1000)
+    plot_qq(sample_data, dist="expon",
+            title="지수 자료를 지수 분위수에 맞댄 Q-Q 그림",
+            fname="ecdf_285.png")
+
+    (osm_e, osr_e), (slope_e, inter_e, r_e) = stats.probplot(sample_data, dist="expon")
+    print(f"osm 이 -ln(1-p_i) 와 같은가: {np.allclose(osm_e, -np.log(1 - pp))}")
+    print(f"기울기 {slope_e:.6f} (척도 1 을 겨냥),  절편 {inter_e:.6f} (위치 0 을 겨냥)")
+    print(f"절편 = ybar - b*mbar = {osr_e.mean() - slope_e * osm_e.mean():.6f}  "
+          f"(osm 평균 = {osm_e.mean():.6f} 이라 0 이 아니다)")
+    print(f"r^2 = {r_e * r_e:.6f}   <- 정규/정규의 {r * r:.6f} 보다 낮다")
+    print(f"표본 왜도 = {stats.skew(sample_data):.4f}  (지수의 이론 왜도 = 2)")
+    ```
+
+    출력:
+
+    ```
+    osm 이 -ln(1-p_i) 와 같은가: True
+    기울기 1.034924 (척도 1 을 겨냥),  절편 -0.029782 (위치 0 을 겨냥)
+    절편 = ybar - b*mbar = -0.029782  (osm 평균 = 0.998453 이라 0 이 아니다)
+    r^2 = 0.995440   <- 정규/정규의 0.998965 보다 낮다
+    표본 왜도 = 2.0526  (지수의 이론 왜도 = 2)
+    ```
+
+    ![지수분포에 대한 Q-Q 그림](./img/ecdf_285.png)
+
+    가로축이 정말 $-\ln(1-p_i)$다. 기울기 $1.0349$가 참 척도 $1$을, 절편 $-0.0298$이 참 위치 $0$을 겨냥한다.
+
+    절편에 대한 (1)의 예측도 맞는다. $\bar m = 0.998453$으로 $0$이 아니고, 최소제곱 항등식 $a = \bar y - b\bar m$이 소수 여섯째 자리까지 실제 절편과 같다. **$\bar m = 0$이었던 정규 기준에서만 절편이 표본평균이 된다.**
+
+    (2)도 확인된다. 표본 왜도가 $2.0526$으로 이론값 $2$에 가까운데도 점들은 직선 위에 놓인다. 다만 $r^2 = 0.9954$로 정규/정규의 $0.9990$보다 낮다. 어긋남이 아니다. 지수분포의 오른쪽 꼬리가 길어 가장 큰 순서통계량 몇 개가 크게 흔들리기 때문이며, 그림에서도 오른쪽 끝의 점들이 직선에서 제일 많이 벗어나 있다. **꼬리가 긴 기준분포에서는 $r^2$가 조금 낮게 나오는 것이 정상이다.**
 
 ### 카이제곱분포에 대한 Q-Q 그림
 
 <div class="exbox" markdown>
 
-**보기 8.** <span class="diff easy" title="쉬움"></span> 모양모수가 있는 분포의 Q-Q 그림
+**보기 8.** <span class="diff easy" title="쉬움"></span> 자유도를 알려 주어야 하는 까닭. $\chi^2_{10}$에서 $1000$개를 뽑아 카이제곱 분위수에 맞댄다.
+
+**(1)** 정규나 지수와 달리 카이제곱에서는 모양모수를 `sparams` 로 **넘겨 주어야** 한다. 그 까닭을 분포족의 성질로 설명하시오.
+
+**(2)** 자유도를 $5$, $10$, $20$으로 잘못/바르게 주었을 때 기준선의 기울기와 절편이 어떻게 달라지는지 예측하고 확인하시오.
 
 </div>
 
-```python
-# 카이제곱은 자유도라는 모양모수가 있으므로 sparams=(10,) 으로 알려 주어야 한다.
-# 이 값을 틀리게 주면 자료가 맞는 분포에서 왔더라도 직선에서 벗어난다.
-np.random.seed(0)
-sample_data = np.random.chisquare(df=10, size=1000)
-plot_qq(sample_data, dist="chi2", sparams=(10,),
-        title="카이제곱 자료를 카이제곱 분위수에 맞댄 Q-Q 그림",
-        fname="ecdf_293.png")
-```
+??? success "풀이"
 
-![카이제곱분포에 대한 Q-Q 그림](./img/ecdf_293.png)
+    **(1) 해석적으로.** 정규분포족 $N(\mu, \sigma^2)$은 **위치-척도족**이다. $X = \mu + \sigma Z$이므로 어느 정규분포의 분위수도 표준정규의 분위수를 $a + b\,(\cdot)$ 꼴로 바꾼 것이고, 그래서 $\mu$와 $\sigma$를 모르더라도 기준선의 절편과 기울기로 **흡수해 버릴 수** 있다. 지수분포족 $\mathrm{Exp}(\beta)$도 척도족이라 사정이 같다.
+
+    카이제곱족은 그렇지 않다. $\chi^2_{d}$와 $\chi^2_{d'}$는 $d \ne d'$일 때 아무리 $a$와 $b$를 골라도 $a + bX$로 서로 옮겨지지 않는다. 왜도만 보아도 알 수 있다.
+
+    $$
+    \mathrm{skew}(\chi^2_d) = \sqrt{\frac{8}{d}}
+    $$
+
+    인데 왜도는 위치·척도 변환으로 변하지 않는 양이므로, $d$가 다르면 아무리 늘이고 옮겨도 겹칠 수 없다. **그러므로 $d$는 기준선이 흡수할 수 없고 바깥에서 지정해 주어야 한다.**
+
+    **(2) 해석적으로.** 자유도를 $d'$로 주면 가로축에 $\chi^2_{d'}$의 분위수 $m_i$가 놓인다. 최소제곱의 두 항등식
+
+    $$
+    b = r\,\frac{s_y}{s_m}, \qquad a = \bar y - b\,\bar m
+    $$
+
+    은 기준이 무엇이든 언제나 성립한다. $m_i$가 $\chi^2_{d'}$의 분위수이므로 $\bar m \approx d'$, $s_m \approx \sqrt{2d'}$다. 자료 쪽은 $\bar y = 9.9224$, $s_y = 4.2814$이므로
+
+    $$
+    b \approx \frac{4.2814}{\sqrt{2d'}},
+    \qquad
+    a \approx 9.9224 - b\,d'
+    $$
+
+    를 예상한다. $d' = 5, 10, 20$에 넣으면 $b \approx 1.354,\ 0.957,\ 0.677$이고 $a \approx 3.15,\ 0.35,\ -3.62$다. **바르게 준 $d' = 10$에서만 기울기가 $1$, 절편이 $0$에 가깝다.**
+
+    **(3) 수치적으로.**
+
+    ```python
+    # 카이제곱은 자유도라는 모양모수가 있으므로 sparams=(10,) 으로 알려 주어야 한다.
+    # 이 값을 틀리게 주면 자료가 맞는 분포에서 왔더라도 직선에서 벗어난다.
+    np.random.seed(0)
+    sample_data = np.random.chisquare(df=10, size=1000)
+    plot_qq(sample_data, dist="chi2", sparams=(10,),
+            title="카이제곱 자료를 카이제곱 분위수에 맞댄 Q-Q 그림",
+            fname="ecdf_293.png")
+
+    sy = sample_data.std(ddof=1)
+    print(f"표본평균 {sample_data.mean():.4f} (이론 10),  표본표준편차 {sy:.4f} (이론 sqrt(20) = {np.sqrt(20):.4f})")
+    print(f"{'가정한 df':>10s} {'기울기':>8s} {'절편':>9s} {'ybar-b*mbar':>12s} {'sy/sd(osm)':>11s} {'r^2':>9s}")
+    for d in (5, 10, 20):
+        (m, yv), (b, a, rv) = stats.probplot(sample_data, dist="chi2", sparams=(d,))
+        print(f"{d:10d} {b:8.4f} {a:9.4f} {yv.mean() - b * m.mean():12.4f} "
+              f"{sy / m.std(ddof=1):11.4f} {rv * rv:9.6f}")
+    ```
+
+    출력:
+
+    ```
+    표본평균 9.9224 (이론 10),  표본표준편차 4.2814 (이론 sqrt(20) = 4.4721)
+        가정한 df      기울기        절편  ybar-b*mbar  sy/sd(osm)       r^2
+             5   1.3537    3.1583       3.1583      1.3600  0.990753
+            10   0.9598    0.3281       0.3281      0.9607  0.998152
+            20   0.6772   -3.6194      -3.6194      0.6789  0.995051
+    ```
+
+    ![카이제곱분포에 대한 Q-Q 그림](./img/ecdf_293.png)
+
+    예측한 $b \approx 1.354,\ 0.957,\ 0.677$에 대해 실제 기울기가 $1.3537$, $0.9598$, $0.6772$로 맞는다. 절편 예측 $3.15,\ 0.35,\ -3.62$도 실제 $3.1583$, $0.3281$, $-3.6194$와 맞는다. 표의 `ybar-b*mbar` 열이 `절편` 열과 **한 자리도 다르지 않은** 것은 $a = \bar y - b\bar m$이 최소제곱의 항등식이기 때문이다.
+
+    `sy/sd(osm)` 열이 기울기보다 아주 조금씩 큰 것도 식대로다. $b = r\,s_y/s_m$인데 $r$이 $0.995$에서 $0.999$ 사이라 그만큼 줄어든다.
+
+    **자유도가 맞는 $d' = 10$에서 $r^2 = 0.998152$로 가장 높다.** 틀린 $5$에서 $0.990753$, $20$에서 $0.995051$로 떨어진다. 자료는 바뀌지 않았고 **기준만 바꾸었는데** 적합도가 달라진 것이다. $d'$를 자료에서 추정하지 않고 손으로 넣는 한, Q-Q 그림이 "맞는다"고 말해 주는 범위는 넣어 준 $d'$가 옳았을 때에 한한다.
 
 ### 진단적 활용: 카이제곱 자료를 정규 Q-Q 그림에 그리기
 
@@ -416,21 +1074,87 @@ plot_qq(sample_data, dist="chi2", sparams=(10,),
 
 <div class="exbox" markdown>
 
-**보기 9.** <span class="diff easy" title="쉬움"></span> 분포를 잘못 가정했을 때의 Q-Q 그림
+**보기 9.** <span class="diff easy" title="쉬움"></span> 같은 $\chi^2_{10}$ 자료를 이번에는 정규 분위수에 맞댄다.
+
+**(1)** 점들이 어느 쪽으로 휘는지 **왜도의 부호**로 예측하고, 기준선의 절편이 무엇이 될지 말하시오.
+
+**(2)** 평균과 표준편차를 맞춘 정규 표본과 이 자료의 ECDF를 직접 견주면 차이가 잡히는가. 콜모고로프–스미르노프 두 표본 통계량으로 확인하시오.
 
 </div>
 
-```python
-# 같은 카이제곱 자료를 이번에는 정규 분위수에 맞댄다.
-# 오른쪽 끝이 직선 위로 휘어 오르는 것이 "정규보다 오른쪽 꼬리가 두껍다"는 신호다.
-np.random.seed(0)
-sample_data = np.random.chisquare(df=10, size=1000)
-plot_qq(sample_data, dist="norm",
-        title="카이제곱 자료를 정규 분위수에 맞댄 Q-Q 그림 (잘못된 가정)",
-        fname="ecdf_240.png")
-```
+??? success "풀이"
 
-![카이제곱 자료를 정규 분위수에 맞댄 Q-Q 그림](./img/ecdf_240.png)
+    **(1) 해석적으로.** $\chi^2_d$의 왜도는 $\sqrt{8/d}$이므로 $d = 10$에서
+
+    $$
+    \mathrm{skew} = \sqrt{0.8} = 0.8944 > 0
+    $$
+
+    이고 초과첨도는 $12/d = 1.2 > 0$이다. **오른쪽 꼬리가 정규보다 길고 두껍다.** 그러므로 큰 쪽 순서통계량이 정규 분위수가 예상하는 것보다 더 크게 나오고, 오른쪽 끝에서 점들이 기준선 **위로** 휘어 오른다. 왼쪽은 $\chi^2$가 $0$에서 끊겨 있어 정규가 예상하는 만큼 내려가지 못하므로 점들이 기준선 **위에** 머문다. 가운데가 아래로 처지고 양 끝이 올라가는 모양, 곧 **아래로 볼록한 휘어짐**이다.
+
+    절편은 보기 6에서 본 대로다. 정규 기준에서는 $\bar m = 0$이므로 기준이 얼마나 틀렸든 절편은 **언제나 표본평균**이다. 여기서는 $9.9224$가 될 것이다.
+
+    **(2) 해석적으로.** ECDF는 구간을 고를 필요가 없으므로 두 표본을 바로 포갤 수 있고, 그 최대 수직거리
+
+    $$
+    D = \sup_x \lvert \hat F_{n_1}(x) - \hat G_{n_2}(x)\rvert
+    $$
+
+    가 두 표본 콜모고로프–스미르노프 통계량이다. 보기 1에서처럼 $\sup$는 두 표본을 합친 점들에서만 보면 되니 유한한 최댓값이다. 다만 **위치와 척도를 맞춘 뒤의 차이는 모양 차이뿐**이고, $D$는 분포 전체에서 가장 크게 벌어진 한 곳만 보는 통계량이므로 그런 차이에는 둔할 수 있다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    # 같은 카이제곱 자료를 이번에는 정규 분위수에 맞댄다.
+    # 오른쪽 끝이 직선 위로 휘어 오르는 것이 "정규보다 오른쪽 꼬리가 두껍다"는 신호다.
+    np.random.seed(0)
+    sample_data = np.random.chisquare(df=10, size=1000)
+    plot_qq(sample_data, dist="norm",
+            title="카이제곱 자료를 정규 분위수에 맞댄 Q-Q 그림 (잘못된 가정)",
+            fname="ecdf_240.png")
+
+    (m9, y9), (b9, a9, r9) = stats.probplot(sample_data, dist="norm")
+    print(f"정규 기준선: 기울기 {b9:.4f}, 절편 {a9:.4f} (= 표본평균 {sample_data.mean():.4f})")
+    print(f"  r^2 = {r9 * r9:.6f}   <- 올바른 카이제곱 기준의 0.998152 보다 낮다")
+    print(f"  왜도 {stats.skew(sample_data):.4f} (이론 sqrt(8/10) = {np.sqrt(0.8):.4f}),  "
+          f"초과첨도 {stats.kurtosis(sample_data):.4f} (이론 12/10 = 1.2)")
+    # 가장 큰 잔차가 어디서 나는지 본다
+    res = y9 - (a9 + b9 * m9)
+    print(f"  기준선에서 가장 멀리 벗어난 점: 잔차 {res.max():.3f} (가장 큰 관측값 쪽), "
+          f"{res.min():.3f} (왼쪽 꼬리 쪽)")
+
+    # --- ECDF 는 구간을 고르지 않으므로 두 표본을 바로 견줄 수 있다 ---
+    rng = np.random.default_rng(7)
+    normal_like = rng.normal(sample_data.mean(), sy, 1000)
+    pool = np.sort(np.concatenate([sample_data, normal_like]))
+    F1 = np.searchsorted(np.sort(sample_data), pool, side="right") / len(sample_data)
+    F2 = np.searchsorted(np.sort(normal_like), pool, side="right") / len(normal_like)
+    res2 = stats.ks_2samp(sample_data, normal_like)
+    print(f"\n두 ECDF 의 최대 수직거리 = {np.abs(F1 - F2).max():.6f}")
+    print(f"  ks_2samp 가 준 D = {res2.statistic:.6f},  p = {res2.pvalue:.4f}")
+    ```
+
+    출력:
+
+    ```
+    정규 기준선: 기울기 4.2003, 절편 9.9224 (= 표본평균 9.9224)
+      r^2 = 0.958102   <- 올바른 카이제곱 기준의 0.998152 보다 낮다
+      왜도 0.8519 (이론 sqrt(8/10) = 0.8944),  초과첨도 0.8951 (이론 12/10 = 1.2)
+      기준선에서 가장 멀리 벗어난 점: 잔차 5.171 (가장 큰 관측값 쪽), -0.590 (왼쪽 꼬리 쪽)
+
+    두 ECDF 의 최대 수직거리 = 0.051000
+      ks_2samp 가 준 D = 0.051000,  p = 0.1484
+    ```
+
+    ![카이제곱 자료를 정규 분위수에 맞댄 Q-Q 그림](./img/ecdf_240.png)
+
+    (1)이 맞는다. 절편 $9.9224$가 표본평균과 정확히 같고, $r^2$가 $0.998152$(올바른 기준)에서 $0.958102$(정규 기준)로 떨어진다. 가장 큰 잔차 $+5.171$이 **가장 큰 관측값 쪽**에서 나고 왼쪽 꼬리의 잔차는 $-0.590$에 그친다. 오른쪽 꼬리가 휘어 오르는 모양이 수로도 드러난다.
+
+    표본 왜도 $0.8519$는 이론 $0.8944$보다 $5\%$쯤 작고 초과첨도 $0.8951$은 이론 $1.2$보다 $25\%$ 작다. 어긋남이 아니다. 왜도와 첨도의 표본추정량은 $n = 1000$에서도 흔들림이 커서 표준오차가 각각 $\sqrt{6/n} = 0.077$, $\sqrt{24/n} = 0.155$ 수준이고, 두 차이가 각각 $0.55$와 $2.0$ 표준오차다. 고차 적률일수록 수렴이 느리다.
+
+    **(2)의 답은 "거의 잡히지 않는다"이다.** 손으로 구한 최대 수직거리 $0.051000$이 `ks_2samp` 와 소수점 끝까지 맞지만, 그 $p$값이 $0.1484$로 **유의하지 않다.** $1000$개씩이나 되는 두 표본인데도 그렇다. 평균과 표준편차를 맞춰 버리면 남는 것은 모양 차이뿐이고, KS 통계량은 두 ECDF가 가장 크게 벌어진 **한 점**만 보기 때문에 그런 차이를 잘 못 잡는다. 반면 Q-Q 그림은 $1000$개의 순서통계량을 **전부** 기준과 맞대므로 같은 차이를 또렷이 보여 준다.
+
+    여기에 이 절의 두 도구가 어떻게 나뉘는지가 있다. **ECDF와 KS는 구간을 고르지 않아도 되는 대신 모양의 어긋남에 둔하고, Q-Q 그림은 수치 요약 하나를 주지 않는 대신 어긋남이 어느 분위에서 생기는지를 보여 준다.** 둘을 함께 보는 편이 낫다.
 
 ## 연습문제
 

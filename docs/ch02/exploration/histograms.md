@@ -16,74 +16,194 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 밀도를 겹쳐 그린 히스토그램
+**보기 1.** <span class="diff easy" title="쉬움"></span> `density=True` 로 그린 막대의 높이는 무엇을 추정하는가. $N(5, 10^2)$에서 $10{,}000$개를 뽑아 구간 $100$개로 그린다.
+
+**(1)** 구간 $[a_j, b_j)$ 막대의 높이 $h_j$에 대해 $E[h_j]$와 $\operatorname{Var}(h_j)$를 구하시오. 봉우리가 있는 구간에서 $E[h_j]$가 $f$의 **봉우리 값보다 작은** 까닭을 보이고 그 크기를 어림하시오.
+
+**(2)** 표본평균 $4.816$과 표본표준편차 $9.876$이 참값 $5$, $10$과 어긋나는가. 구간 $100$개는 적절한 선택인가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import scipy.stats as stats
-import numpy as np
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 구간이 모두 같은 너비 $w$라 하자. 관측값 하나가 $j$번째 구간에 들어갈 확률은
 
-np.random.seed(0)      # scipy의 rvs 도 numpy의 전역 난수를 쓴다.
-                       # 시드를 고정해야 아래 출력이 재현된다.
+    $$
+    p_j = \int_{a_j}^{b_j} f(u)\,du
+    $$
 
-samples = 10_000
-x = stats.norm(loc=5, scale=10).rvs(samples)     # 평균 5, 표준편차 10의 정규분포
+    이고 관측값이 독립이므로 그 구간의 도수는 $C_j \sim \mathrm{Bin}(n, p_j)$다. `density=True` 가 그리는 높이는 $h_j = C_j/(nw)$이므로
 
-fig, ax = plt.subplots(figsize=(12, 3))
+    $$
+    E[h_j] = \frac{np_j}{nw} = \frac{p_j}{w} = \frac1w\int_{a_j}^{b_j} f(u)\,du,
+    \qquad
+    \operatorname{Var}(h_j) = \frac{p_j(1-p_j)}{n w^2}
+    $$
 
-# density=True 로 넓이의 합이 1이 되게 정규화한다.
-# 이렇게 해야 확률밀도함수와 같은 눈금 위에 놓여 겹쳐 그릴 수 있다.
-# hist는 (도수, 구간경계, 막대객체)를 돌려주므로 가운데만 받아 둔다.
-_, bins, _ = ax.hist(x, bins=100, density=True, color="#1565C0",
-                     label="히스토그램 (구간 100개)")
+    이다. **높이가 추정하는 것은 구간 가운데에서의 $f$ 값이 아니라 구간 위 $f$의 평균이다.** 여기서 넓이의 성질도 바로 나온다.
 
-# 표본에서 추정한 모수로 정규 밀도함수를 만든다.
-# 참값(5, 10)이 아니라 표본에서 잰 값을 쓴다는 점이 중요하다.
-# 실제 분석에서는 참값을 모르기 때문이다.
-x_mean = x.mean()
-x_std = x.std(ddof=1)
-pdf = stats.norm(loc=x_mean, scale=x_std).pdf(bins)
+    $$
+    \sum_j w\, h_j = \sum_j \frac{C_j}{n} = 1
+    $$
 
-# 적합된 밀도곡선을 겹쳐 그린다.
-# 한글은 $...$ 바깥에 둔다. 수식 글꼴에는 한글 글리프가 없다.
-ax.plot(bins, pdf, "-", color="#D32F2F", linewidth=2,
-        label="적합된 정규 밀도")
-ax.set_xlabel("관측값")
-ax.set_ylabel("밀도")
-ax.set_title("정규 표본 10,000개의 히스토그램과 적합된 밀도곡선")
-ax.legend()
-ax.spines[["top", "right"]].set_visible(False)
-fig.savefig("histograms_17.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
+    **합이 1인 것은 높이가 아니라 넓이다.**
 
-print(f"표본평균   {x_mean:.3f}  (참값 5)")
-print(f"표본표준편차 {x_std:.3f}  (참값 10)")
-```
+    둘의 차이를 테일러 전개로 재 보자. 구간의 가운데를 $c_j$라 두고 $u = c_j + t$로 바꾸면
 
-출력:
+    $$
+    \frac1w\int_{-w/2}^{w/2}\Big(f(c_j) + f'(c_j)t + \tfrac12 f''(c_j)t^2 + \cdots\Big)dt
+    = f(c_j) + \frac{w^2}{24}f''(c_j) + O(w^4)
+    $$
 
-```
-표본평균   4.816  (참값 5)
-표본표준편차 9.876  (참값 10)
-```
+    이다. 홀수 차수 항은 대칭이라 사라진다. **봉우리에서는 $f$가 위로 오목해 $f'' < 0$이므로 $E[h_j] < f(c_j)$이고**, 그 모자람이 구간 너비의 제곱에 비례한다. 이것이 연습문제 9의 MISE에서 치우침 항을 만드는 바로 그 양이다.
 
-![정규 표본의 히스토그램과 적합된 밀도곡선](./img/histograms_17.png)
+    정규밀도의 이계도함수는
 
-**핵심 사항:**
+    $$
+    f''(u) = f(u)\left(\frac{(u-\mu)^2}{\sigma^4} - \frac{1}{\sigma^2}\right)
+    $$
 
-- `density=True`는 전체 넓이가 1이 되도록 히스토그램을 정규화하여 y축이 원자료의 개수가 아니라 확률밀도를 나타내게 한다.
-- 빨간 곡선은 표본평균과 표본표준편차로 적합한 정규분포의 확률밀도함수다.
-- 표본 10,000개와 구간 100개로 그리면 히스토그램이 이론적 밀도를 아주 가깝게 따라간다.
+    이므로 봉우리 근처($u \approx \mu = 5$, $\sigma = 10$)에서 $f'' \approx -f(\mu)/100 = -3.989\times10^{-4}$다. 구간 너비가 $w = 0.7542$이면 치우침은
+
+    $$
+    \frac{w^2}{24}f''(c) \approx \frac{0.5688}{24}\times(-3.989\times10^{-4}) = -9.45\times10^{-6}
+    $$
+
+    로 $f(\mu) = 0.03989$의 $0.024\%$에 지나지 않는다.
+
+    흔들림 쪽은 사정이 다르다. 상대적 크기는
+
+    $$
+    \frac{\operatorname{sd}(h_j)}{E[h_j]} = \sqrt{\frac{1-p_j}{n p_j}}
+    $$
+
+    인데 $p_j \approx 0.0301$, $n = 10^4$이므로 $\sqrt{0.9699/301} = 0.0568$, 곧 $5.7\%$다. **치우침보다 $240$배 크다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+    import numpy as np
+
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    np.random.seed(0)      # scipy의 rvs 도 numpy의 전역 난수를 쓴다.
+                           # 시드를 고정해야 아래 출력이 재현된다.
+
+    samples = 10_000
+    x = stats.norm(loc=5, scale=10).rvs(samples)     # 평균 5, 표준편차 10의 정규분포
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+
+    # density=True 로 넓이의 합이 1이 되게 정규화한다.
+    # 이렇게 해야 확률밀도함수와 같은 눈금 위에 놓여 겹쳐 그릴 수 있다.
+    # hist는 (도수, 구간경계, 막대객체)를 돌려주므로 가운데만 받아 둔다.
+    _, bins, _ = ax.hist(x, bins=100, density=True, color="#1565C0",
+                         label="히스토그램 (구간 100개)")
+
+    # 표본에서 추정한 모수로 정규 밀도함수를 만든다.
+    # 참값(5, 10)이 아니라 표본에서 잰 값을 쓴다는 점이 중요하다.
+    # 실제 분석에서는 참값을 모르기 때문이다.
+    x_mean = x.mean()
+    x_std = x.std(ddof=1)
+    pdf = stats.norm(loc=x_mean, scale=x_std).pdf(bins)
+
+    # 적합된 밀도곡선을 겹쳐 그린다.
+    # 한글은 $...$ 바깥에 둔다. 수식 글꼴에는 한글 글리프가 없다.
+    ax.plot(bins, pdf, "-", color="#D32F2F", linewidth=2,
+            label="적합된 정규 밀도")
+    ax.set_xlabel("관측값")
+    ax.set_ylabel("밀도")
+    ax.set_title("정규 표본 10,000개의 히스토그램과 적합된 밀도곡선")
+    ax.legend()
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.savefig("histograms_17.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    print(f"표본평균   {x_mean:.3f}  (참값 5)")
+    print(f"표본표준편차 {x_std:.3f}  (참값 10)")
+
+    # --- 두 추정값이 참값과 어긋나는가. 표준오차로 잰다 ---
+    se_mean = 10 / np.sqrt(samples)
+    se_sd = 10 / np.sqrt(2 * samples)
+    print(f"  평균:   SE = {se_mean:.4f},  z = {(x_mean - 5) / se_mean:+.3f}")
+    print(f"  표준편차: SE = {se_sd:.4f},  z = {(x_std - 10) / se_sd:+.3f}")
+
+    # --- 막대 넓이의 합이 1 인가 (높이의 합이 아니다) ---
+    dens, edges = np.histogram(x, bins=100, density=True)
+    cnt, _ = np.histogram(x, bins=100)
+    w = edges[1] - edges[0]
+    print(f"\n구간 너비 w = {w:.6f},  넓이의 합 = {(dens * w).sum():.12f},  높이의 합 = {dens.sum():.4f}")
+
+    # --- 평균이 든 구간에서 높이의 기댓값과 흔들림 ---
+    F = stats.norm(5, 10)
+    j = int(np.searchsorted(edges, 5)) - 1
+    p = F.cdf(edges[j + 1]) - F.cdf(edges[j])
+    c = (edges[j] + edges[j + 1]) / 2
+    print(f"평균이 든 구간 [{edges[j]:.4f}, {edges[j + 1]:.4f}),  가운데 c = {c:.4f}")
+    print(f"  p = {p:.6f},  E[도수] = {samples * p:.2f},  sd(도수) = {np.sqrt(samples * p * (1 - p)):.2f},"
+          f"  실제 도수 = {cnt[j]}")
+    print(f"  E[높이] = p/w = {p / w:.8f},  실제 높이 = {dens[j]:.8f}")
+    print(f"  f(c)    =       {F.pdf(c):.8f}")
+    # 테일러 전개: (1/w)∫f = f(c) + (w^2/24) f''(c) + ...
+    fpp = F.pdf(c) * ((c - 5) ** 2 / 10 ** 4 - 1 / 10 ** 2)
+    print(f"  차이 E[높이] - f(c) = {p / w - F.pdf(c):.4e},  예측 (w^2/24)f''(c) = {w ** 2 / 24 * fpp:.4e}")
+    print(f"  구간당 상대 잡음 = {np.sqrt((1 - p) / (samples * p)):.4f},"
+          f"  상대 치우침 = {abs(p / w - F.pdf(c)) / F.pdf(c):.6f}")
+    print(f"  가장 높은 막대 = {dens.max():.6f}  (참 봉우리 1/(10*sqrt(2pi)) = {1 / (10 * np.sqrt(2 * np.pi)):.6f})")
+
+    # --- 구간 100 개는 적절한가 ---
+    iqr = np.subtract(*np.percentile(x, [75, 25]))
+    rng_ = x.max() - x.min()
+    print(f"\n스콧 h = {3.49 * x_std * samples ** (-1 / 3):.4f} -> 구간 {rng_ / (3.49 * x_std * samples ** (-1 / 3)):.1f}개")
+    print(f"FD   h = {2 * iqr * samples ** (-1 / 3):.4f} -> 구간 {rng_ / (2 * iqr * samples ** (-1 / 3)):.1f}개")
+    print(f"스터지스 k = 1 + log2(n) = {1 + np.log2(samples):.1f}개")
+    ```
+
+    출력:
+
+    ```
+    표본평균   4.816  (참값 5)
+    표본표준편차 9.876  (참값 10)
+      평균:   SE = 0.1000,  z = -1.843
+      표준편차: SE = 0.0707,  z = -1.753
+
+    구간 너비 w = 0.754176,  넓이의 합 = 1.000000000000,  높이의 합 = 1.3260
+    평균이 든 구간 [4.5536, 5.3078),  가운데 c = 4.9307
+      p = 0.030079,  E[도수] = 300.79,  sd(도수) = 17.08,  실제 도수 = 330
+      E[높이] = p/w = 0.03988382,  실제 높이 = 0.04375636
+      f(c)    =       0.03989327
+      차이 E[높이] - f(c) = -9.4519e-06,  예측 (w^2/24)f''(c) = -9.4539e-06
+      구간당 상대 잡음 = 0.0568,  상대 치우침 = 0.000237
+      가장 높은 막대 = 0.045347  (참 봉우리 1/(10*sqrt(2pi)) = 0.039894)
+
+    스콧 h = 1.5998 -> 구간 47.1개
+    FD   h = 1.2400 -> 구간 60.8개
+    스터지스 k = 1 + log2(n) = 14.3개
+    ```
+
+    ![정규 표본의 히스토그램과 적합된 밀도곡선](./img/histograms_17.png)
+
+    **(1)의 치우침 공식이 세 자리까지 맞는다.** 실제 차이 $-9.4519\times10^{-6}$과 예측 $(w^2/24)f''(c) = -9.4539\times10^{-6}$이다. 넓이의 합도 $1.000000000000$인 반면 **높이의 합은 $1.3260$으로 $1$이 아니다.** 높이를 더해서는 안 된다는 것이 이렇게 드러난다.
+
+    흔들림도 예측대로다. 평균이 든 구간의 기대도수가 $300.79$, 표준편차가 $17.08$인데 실제로 $330$이 들어왔다($+1.71$ 표준편차). 상대 잡음 $5.68\%$가 상대 치우침 $0.024\%$를 완전히 압도한다. 가장 높은 막대가 $0.045347$로 참 봉우리 $0.039894$보다 $14\%$나 높이 솟은 것도 전부 잡음이다.
+
+    **(2) 두 추정값은 어긋나지 않는다.** 표본평균 $4.816$은 참값 $5$에서 $1.84$ 표준오차, 표본표준편차 $9.876$은 $1.75$ 표준오차 떨어져 있다. $10{,}000$개를 뽑아도 평균의 표준오차가 $\sigma/\sqrt n = 0.1$이나 되므로 이 정도 차이는 흔하다.
+
+    **구간 $100$개는 다소 많다.** 스콧이 $47$개, 프리드먼–다이어코니스가 $61$개를 권한다(스터지스는 $14$개로 크게 모자라며, 그 까닭은 연습문제 9에 있다). 구간을 $100$개로 쪼갰으니 치우침은 더 줄었지만 구간마다 $5.7\%$씩 흔들리게 되었고, 그 흔들림이 그림의 톱니로 보인다. **구간 수는 치우침과 분산 사이의 맞바꿈이고, 여기서는 분산 쪽으로 치우친 선택이다.**
+
+    **그 밖에 확인할 것:**
+
+    - `density=True`는 전체 넓이가 1이 되도록 히스토그램을 정규화하여 y축이 원자료의 개수가 아니라 확률밀도를 나타내게 한다.
+    - 빨간 곡선은 표본평균과 표본표준편차로 적합한 정규분포의 확률밀도함수다.
+    - 표본 10,000개와 구간 100개로 그리면 히스토그램이 이론적 밀도를 아주 가깝게 따라간다.
 
 ## 실제 자료의 히스토그램: 소득 분포
 
@@ -91,74 +211,155 @@ print(f"표본표준편차 {x_std:.3f}  (참값 10)")
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 소득 분포에 정규곡선 겹쳐 보기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규 적합이 **소득이 음수인 사람**을 몇 명이나 만들어 내는가. 대출 신청자 소득 $50{,}000$건에 같은 평균·표준편차의 정규곡선을 겹쳐 본다.
+
+**(1)** 적합된 정규분포가 $x < 0$에 주는 확률을 구하고, 그것을 사람 수로 옮기시오. 자료의 실제 최솟값과 견주시오.
+
+**(2)** 이 자료에 스터지스 규칙을 쓰면 구간이 몇 개인가. 프리드먼–다이어코니스가 권하는 수와 견주고 그 차이의 까닭을 말하시오.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import pandas as pd
-from scipy import stats
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 적합된 분포는 $N(\mu, \sigma^2)$이고 자료에서 $\mu = 68{,}760.5$, $\sigma = 32{,}872.0$이다. 소득이 음수일 확률은 표준화해서
 
-def plot_loan_income_distribution():
-    """대출 신청자 소득의 히스토그램에 정규분포를 겹쳐 그린다.
+    $$
+    P(X < 0) = \Phi\!\left(\frac{0 - \mu}{\sigma}\right) = \Phi(-2.0918) = 0.018230
+    $$
 
-    앞 보기와 코드 구조는 같지만 결론이 정반대다.
-    앞에서는 곡선이 히스토그램에 잘 맞았고, 여기서는 맞지 않는다.
-    """
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
-    df = pd.read_csv(url)
+    이다. $50{,}000$명에 곱하면 **$911$명**이다. 그런데 자료의 실제 최솟값은 $4{,}000$달러이고 음수인 사람은 **한 명도 없다.**
 
-    # 소득의 평균과 표준편차. 이 둘만으로 정규분포가 결정된다.
-    mean_income = df['x'].mean()
-    std_dev_income = df['x'].std()
+    이것이 "정규 적합이 맞지 않는다"의 가장 날카로운 형태다. 적합이 자료의 모양을 조금 잘못 그린 정도가 아니라 **있을 수 없는 영역에 전체의 $1.8\%$를 배정한다.** 소득처럼 $0$ 아래로 내려갈 수 없는 변수에 좌우대칭인 분포를 씌운 결과이며, 치우침이 클수록 이 누출이 커진다.
 
-    fig, ax = plt.subplots(figsize=(15, 4))
-    _, bins, _ = ax.hist(df['x'], bins=30, density=True,
-                         color='#DCEBFB', edgecolor='#1565C0',
-                         label='소득 히스토그램')
+    **(2) 해석적으로.** 스터지스 규칙은 구간 **개수**를 $k = 1 + \log_2 n$으로 정한다. $n = 50{,}000$이면
 
-    # 같은 평균·표준편차를 갖는 정규분포를 겹쳐 그린다.
-    # 두 곡선이 어긋나는 방식이 곧 "자료가 정규분포와 어떻게 다른가"를 말해 준다.
-    norm_pdf = stats.norm(loc=mean_income, scale=std_dev_income).pdf(bins)
-    ax.plot(bins, norm_pdf, "--", color="#D32F2F", lw=2,
-            label='같은 평균·표준편차의 정규분포')
+    $$
+    k = 1 + \log_2 50000 = 1 + 15.61 = 16.6
+    $$
 
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.set_title('대출 신청자 소득의 분포와 정규 적합')
-    ax.set_xlabel('소득 (달러)')
-    ax.set_ylabel('밀도')
-    ax.legend()
-    fig.savefig("histograms_46.png", dpi=170, facecolor="white",
-                bbox_inches="tight")
+    곧 $17$개쯤이다. 범위가 $195{,}000$달러이므로 구간 하나가 약 $11{,}700$달러를 덮는다.
 
-    # 치우침을 숫자로 확인한다.
-    # 오른쪽으로 치우치면 평균이 중앙값보다 크고 왜도가 양수다.
-    print(f"평균   {mean_income:,.0f}")
-    print(f"중앙값 {df['x'].median():,.0f}")
-    print(f"왜도   {stats.skew(df['x']):.3f}  (0이면 대칭)")
+    프리드먼–다이어코니스는 너비를 정한다. $\mathrm{IQR} = 40{,}000$, $n^{1/3} = 36.8$이므로
 
-if __name__ == "__main__":
-    plot_loan_income_distribution()
-```
+    $$
+    h = \frac{2\,\mathrm{IQR}}{n^{1/3}} = \frac{80{,}000}{36.8} = 2{,}172
+    $$
 
-출력:
+    로 구간이 약 $90$개다. **스터지스의 다섯 배가 넘는다.**
 
-```
-평균   68,761
-중앙값 62,000
-왜도   1.049  (0이면 대칭)
-```
+    까닭은 두 규칙이 $n$에 대해 자라는 속도가 다르다는 데 있다. 최적 구간 수는 $\text{범위}/h^{*} \propto n^{1/3}$으로 자라야 하는데(연습문제 9) 스터지스는 $\log_2 n$으로만 자란다. $n = 50{,}000$에서 $n^{1/3} = 36.8$인 반면 $\log_2 n = 15.6$이니 이미 두 배 넘게 벌어졌고, $n$이 더 커지면 격차가 계속 벌어진다. 게다가 스터지스는 자료가 **대칭에 가깝다**는 전제 위에 서 있어, 오른쪽 꼬리가 긴 이 자료에서는 꼬리 쪽 구조를 통째로 뭉갠다.
 
-![대출 신청자 소득의 분포와 정규 적합](./img/histograms_46.png)
+    **(3) 수치적으로.**
 
-히스토그램과 정규곡선이 어긋나는 모습이 오른쪽 치우침을 드러낸다. 고소득자의 긴 꼬리가 적합된 정규분포를 오른쪽으로 끌어당긴다.
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    def plot_loan_income_distribution():
+        """대출 신청자 소득의 히스토그램에 정규분포를 겹쳐 그린다.
+
+        앞 보기와 코드 구조는 같지만 결론이 정반대다.
+        앞에서는 곡선이 히스토그램에 잘 맞았고, 여기서는 맞지 않는다.
+        """
+        url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+        df = pd.read_csv(url)
+
+        # 소득의 평균과 표준편차. 이 둘만으로 정규분포가 결정된다.
+        mean_income = df['x'].mean()
+        std_dev_income = df['x'].std()
+
+        fig, ax = plt.subplots(figsize=(15, 4))
+        _, bins, _ = ax.hist(df['x'], bins=30, density=True,
+                             color='#DCEBFB', edgecolor='#1565C0',
+                             label='소득 히스토그램')
+
+        # 같은 평균·표준편차를 갖는 정규분포를 겹쳐 그린다.
+        # 두 곡선이 어긋나는 방식이 곧 "자료가 정규분포와 어떻게 다른가"를 말해 준다.
+        norm_pdf = stats.norm(loc=mean_income, scale=std_dev_income).pdf(bins)
+        ax.plot(bins, norm_pdf, "--", color="#D32F2F", lw=2,
+                label='같은 평균·표준편차의 정규분포')
+
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.set_title('대출 신청자 소득의 분포와 정규 적합')
+        ax.set_xlabel('소득 (달러)')
+        ax.set_ylabel('밀도')
+        ax.legend()
+        fig.savefig("histograms_46.png", dpi=170, facecolor="white",
+                    bbox_inches="tight")
+
+        # 치우침을 숫자로 확인한다.
+        # 오른쪽으로 치우치면 평균이 중앙값보다 크고 왜도가 양수다.
+        print(f"평균   {mean_income:,.0f}")
+        print(f"중앙값 {df['x'].median():,.0f}")
+        print(f"왜도   {stats.skew(df['x']):.3f}  (0이면 대칭)")
+
+        # --- 적합된 정규분포가 음수 소득에 주는 확률 ---
+        n = len(df)
+        z0 = (0 - mean_income) / std_dev_income
+        p_neg = stats.norm(loc=mean_income, scale=std_dev_income).cdf(0)
+        print(f"\nn = {n:,},  표준편차 {std_dev_income:,.0f}")
+        print(f"정규 적합이 소득 < 0 에 주는 확률 = Phi({z0:.4f}) = {p_neg:.6f}"
+              f"  -> {n * p_neg:,.0f} 명")
+        print(f"  자료의 실제 최솟값 = {df['x'].min():,}  (음수인 사람 {int((df['x'] < 0).sum())} 명)")
+
+        # --- 피어슨의 둘째 왜도계수도 같은 방향을 가리킨다 ---
+        pearson2 = 3 * (mean_income - df['x'].median()) / std_dev_income
+        print(f"  피어슨 둘째 왜도계수 3(mean-median)/s = {pearson2:.4f}")
+
+        # --- 구간 개수: 스터지스는 이 자료에서 얼마나 모자라는가 ---
+        iqr = np.subtract(*np.percentile(df['x'], [75, 25]))
+        span = df['x'].max() - df['x'].min()
+        sturges = 1 + np.log2(n)
+        fd_h = 2 * iqr * n ** (-1 / 3)
+        scott_h = 3.49 * std_dev_income * n ** (-1 / 3)
+        print(f"\nIQR = {iqr:,.0f},  범위 = {span:,.0f},  n^(1/3) = {n ** (1 / 3):.1f}")
+        print(f"  스터지스 k = 1 + log2(n) = {sturges:.1f} 개  (너비 {span / sturges:,.0f})")
+        print(f"  FD       h = {fd_h:,.0f}  ->  {span / fd_h:.1f} 개")
+        print(f"  스콧     h = {scott_h:,.0f}  ->  {span / scott_h:.1f} 개")
+        print(f"  numpy bins='auto' 가 고른 구간 수 = {len(np.histogram_bin_edges(df['x'], bins='auto')) - 1}")
+
+    if __name__ == "__main__":
+        plot_loan_income_distribution()
+    ```
+
+    출력:
+
+    ```
+    평균   68,761
+    중앙값 62,000
+    왜도   1.049  (0이면 대칭)
+
+    n = 50,000,  표준편차 32,872
+    정규 적합이 소득 < 0 에 주는 확률 = Phi(-2.0918) = 0.018230  -> 911 명
+      자료의 실제 최솟값 = 4,000  (음수인 사람 0 명)
+      피어슨 둘째 왜도계수 3(mean-median)/s = 0.6170
+
+    IQR = 40,000,  범위 = 195,000,  n^(1/3) = 36.8
+      스터지스 k = 1 + log2(n) = 16.6 개  (너비 11,740)
+      FD       h = 2,172  ->  89.8 개
+      스콧     h = 3,114  ->  62.6 개
+      numpy bins='auto' 가 고른 구간 수 = 90
+    ```
+
+    ![대출 신청자 소득의 분포와 정규 적합](./img/histograms_46.png)
+
+    (1)의 두 수가 그대로 확인된다. $\Phi(-2.0918) = 0.018230$이고 사람 수로는 $911$명인데, 자료의 최솟값이 $4{,}000$달러이고 음수인 사람은 $0$명이다. **적합된 모형이 자료가 결코 갈 수 없는 곳에 전체의 $1.8\%$를 보냈다.**
+
+    치우침은 세 가지로 모두 같은 말을 한다. 평균 $68{,}761$이 중앙값 $62{,}000$보다 크고, 적률 왜도가 $1.049$, 피어슨 둘째 왜도계수가 $0.617$로 셋 다 양수다. 두 왜도계수의 크기가 다른 것은 **서로 다른 양을 재기 때문**이지 어느 하나가 틀려서가 아니다. 적률 왜도는 세제곱을 쓰므로 꼬리의 몇몇 큰 값에 민감하고, 피어슨 쪽은 평균과 중앙값의 간격만 보므로 둔하다.
+
+    (2)의 예측도 맞는다. 스터지스가 $16.6$개, FD가 $89.8$개를 권해 **$5.4$배 차이**다. 스콧은 $62.6$개로 그 사이에 있는데, 표준편차 $32{,}872$가 긴 오른쪽 꼬리에 부풀려져 FD보다 넓은 구간을 내놓는다. **IQR을 쓰는 FD가 치우친 자료에서 더 믿을 만하다**는 말의 뜻이 이것이다. `numpy` 의 `bins='auto'` 는 FD와 스터지스 중 큰 쪽을 골라 $90$개를 준다.
+
+    **위 그림이 쓴 구간 $30$개는 그 사이의 타협이다.** FD가 권하는 $90$개보다 적어 꼬리의 잔구조는 묻히지만, 정규곡선과의 어긋남을 보여 주는 데에는 모자라지 않는다.
+
+    히스토그램과 정규곡선이 어긋나는 모습이 오른쪽 치우침을 드러낸다. 고소득자의 긴 꼬리가 적합된 정규분포를 오른쪽으로 끌어당긴다.
 
 ## 여러 패널의 히스토그램: 주택 자료
 
@@ -166,73 +367,138 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 주택 자료 아홉 변수를 한꺼번에
+**보기 3.** <span class="diff easy" title="쉬움"></span> 아홉 개의 히스토그램을 한눈에 훑으면 무엇이 보이는가. 캘리포니아 주택 자료의 수치형 변수 아홉 개를 $3\times3$ 격자에 그린다.
+
+**(1)** 그려 보고, 자료를 모형에 넣기 전에 반드시 알아야 할 **세 가지 이상**을 수치와 함께 읽어 내시오.
+
+**(2)** 이 격자가 **보여 주지 못하는 것**은 무엇인가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import os
-import pandas as pd
-import tarfile
-import urllib.request
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    이 보기는 유도할 식이 없다. **그림에서 무엇을 읽어야 하는가**가 전부다.
 
-# 캘리포니아 주택 자료. 구역마다 소득·집값·방 수 등 아홉 개 변수가 들어 있다.
-DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
-HOUSING_PATH = os.path.join("datasets", "housing")
-HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
+    **(1) 그림이 말하는 것.**
 
-def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
-    """압축 파일을 내려받아 풀어 둔다. 이미 받아 두었으면 다시 받지 않는다."""
-    if not os.path.isdir(housing_path):
-        os.makedirs(housing_path)
-    tgz_path = os.path.join(housing_path, "housing.tgz")
-    urllib.request.urlretrieve(housing_url, tgz_path)
-    with tarfile.open(tgz_path) as housing_tgz:
-        housing_tgz.extractall(path=housing_path)
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import os
+    import pandas as pd
+    import tarfile
+    import urllib.request
 
-def load_housing_data(housing_path=HOUSING_PATH):
-    """풀어 둔 csv 를 자료틀로 읽는다."""
-    csv_path = os.path.join(housing_path, "housing.csv")
-    return pd.read_csv(csv_path)
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
-fetch_housing_data()
-df = load_housing_data()
+    # 캘리포니아 주택 자료. 구역마다 소득·집값·방 수 등 아홉 개 변수가 들어 있다.
+    DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
+    HOUSING_PATH = os.path.join("datasets", "housing")
+    HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
 
-# 3×3 격자에 아홉 변수를 한꺼번에 그린다. 자료를 처음 만났을 때
-# 어느 변수가 치우쳤는지, 어디가 잘렸는지 한눈에 훑는 방법이다.
-fig, axes = plt.subplots(3, 3, figsize=(12, 9))
-df.hist(bins=50, ax=axes, color="#1565C0")
+    def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
+        """압축 파일을 내려받아 풀어 둔다. 이미 받아 두었으면 다시 받지 않는다."""
+        if not os.path.isdir(housing_path):
+            os.makedirs(housing_path)
+        tgz_path = os.path.join(housing_path, "housing.tgz")
+        urllib.request.urlretrieve(housing_url, tgz_path)
+        with tarfile.open(tgz_path) as housing_tgz:
+            housing_tgz.extractall(path=housing_path)
 
-# 열 이름은 영어이므로 그림에 쓸 한글 이름을 따로 준비한다.
-KOREAN = {
-    "longitude": "경도", "latitude": "위도",
-    "housing_median_age": "주택 연식 중앙값 (년)",
-    "total_rooms": "구역의 방 수", "total_bedrooms": "구역의 침실 수",
-    "population": "구역 인구", "households": "구역 가구 수",
-    "median_income": "소득 중앙값 (만 달러)",
-    "median_house_value": "집값 중앙값 (달러)",
-}
+    def load_housing_data(housing_path=HOUSING_PATH):
+        """풀어 둔 csv 를 자료틀로 읽는다."""
+        csv_path = os.path.join(housing_path, "housing.csv")
+        return pd.read_csv(csv_path)
 
-# 격자를 1차원으로 펴서 아홉 축을 차례로 다듬는다.
-for ax in axes.reshape((-1,)):
-    ax.set_title(KOREAN.get(ax.get_title(), ax.get_title()), fontsize=10)
-    ax.set_ylabel("구역 수", fontsize=9)
-    ax.grid(False)
-    ax.spines[["top", "right"]].set_visible(False)
+    fetch_housing_data()
+    df = load_housing_data()
 
-fig.suptitle("캘리포니아 주택 자료 아홉 변수의 히스토그램")
-fig.tight_layout()
-fig.savefig("histograms_83.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
-```
+    # 3×3 격자에 아홉 변수를 한꺼번에 그린다. 자료를 처음 만났을 때
+    # 어느 변수가 치우쳤는지, 어디가 잘렸는지 한눈에 훑는 방법이다.
+    fig, axes = plt.subplots(3, 3, figsize=(12, 9))
+    df.hist(bins=50, ax=axes, color="#1565C0")
 
-![캘리포니아 주택 자료 아홉 변수의 히스토그램](./img/histograms_83.png)
+    # 열 이름은 영어이므로 그림에 쓸 한글 이름을 따로 준비한다.
+    KOREAN = {
+        "longitude": "경도", "latitude": "위도",
+        "housing_median_age": "주택 연식 중앙값 (년)",
+        "total_rooms": "구역의 방 수", "total_bedrooms": "구역의 침실 수",
+        "population": "구역 인구", "households": "구역 가구 수",
+        "median_income": "소득 중앙값 (만 달러)",
+        "median_house_value": "집값 중앙값 (달러)",
+    }
+
+    # 격자를 1차원으로 펴서 아홉 축을 차례로 다듬는다.
+    for ax in axes.reshape((-1,)):
+        ax.set_title(KOREAN.get(ax.get_title(), ax.get_title()), fontsize=10)
+        ax.set_ylabel("구역 수", fontsize=9)
+        ax.grid(False)
+        ax.spines[["top", "right"]].set_visible(False)
+
+    fig.suptitle("캘리포니아 주택 자료 아홉 변수의 히스토그램")
+    fig.tight_layout()
+    fig.savefig("histograms_83.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    # --- 눈으로 읽은 것을 수로 확인한다 ---
+    # 그림에서 오른쪽 끝에 솟은 막대는 "잘린 자료"의 흔적이다.
+    # 몇 개가 거기 쌓여 있는지는 그림이 말해 주지 않으므로 직접 센다.
+    from scipy import stats
+
+    num = df.select_dtypes("number")
+    print(f"구역 {len(df):,} 개,  수치형 변수 {num.shape[1]} 개")
+    for c in num.columns:
+        s = num[c]
+        at_max = int((s == s.max()).sum())
+        print(f"  {KOREAN[c]}")
+        print(f"      결측 {int(s.isna().sum()):>4},  왜도 {stats.skew(s.dropna()):>7.3f},"
+              f"  최댓값 {s.max():>12,.4f} 에 쌓인 구역 {at_max:>5,d} ({100 * at_max / len(s):5.2f}%)")
+    ```
+
+    출력:
+
+    ```
+    구역 20,640 개,  수치형 변수 9 개
+      경도
+          결측    0,  왜도  -0.298,  최댓값    -114.3100 에 쌓인 구역     1 ( 0.00%)
+      위도
+          결측    0,  왜도   0.466,  최댓값      41.9500 에 쌓인 구역     2 ( 0.01%)
+      주택 연식 중앙값 (년)
+          결측    0,  왜도   0.060,  최댓값      52.0000 에 쌓인 구역 1,273 ( 6.17%)
+      구역의 방 수
+          결측    0,  왜도   4.147,  최댓값  39,320.0000 에 쌓인 구역     1 ( 0.00%)
+      구역의 침실 수
+          결측  207,  왜도   3.459,  최댓값   6,445.0000 에 쌓인 구역     1 ( 0.00%)
+      구역 인구
+          결측    0,  왜도   4.935,  최댓값  35,682.0000 에 쌓인 구역     1 ( 0.00%)
+      구역 가구 수
+          결측    0,  왜도   3.410,  최댓값   6,082.0000 에 쌓인 구역     1 ( 0.00%)
+      소득 중앙값 (만 달러)
+          결측    0,  왜도   1.647,  최댓값      15.0001 에 쌓인 구역    49 ( 0.24%)
+      집값 중앙값 (달러)
+          결측    0,  왜도   0.978,  최댓값 500,001.0000 에 쌓인 구역   965 ( 4.68%)
+    ```
+
+    ![캘리포니아 주택 자료 아홉 변수의 히스토그램](./img/histograms_83.png)
+
+    **읽어 낼 것 ①: 두 변수가 위에서 잘려 있다.** 집값 중앙값의 오른쪽 끝에 홀로 솟은 막대는 **$500{,}001$달러에 $965$개 구역($4.68\%$)이 쌓인 것**이다. 주택 연식도 $52$년에 $1{,}273$개 구역($6.17\%$)이 몰려 있다. 소득 중앙값도 $15.0001$에 $49$개가 걸려 있다. 자연 현상이 이렇게 한 값에 몰릴 리 없으니 **조사 과정에서 상한을 두고 그 위를 모두 상한값으로 기록한 것**이다. 집값을 예측하는 모형을 만든다면 $50$만 달러 위를 결코 맞힐 수 없다는 뜻이고, 그 구역들을 빼거나 따로 다루어야 한다.
+
+    **읽어 낼 것 ②: 네 변수가 심하게 오른쪽으로 치우쳤다.** 구역 인구의 왜도가 $4.935$, 방 수가 $4.147$, 침실 수가 $3.459$, 가구 수가 $3.410$이다. 모두 "구역 전체의 합"이라 구역 크기에 따라 자릿수가 달라지는 양이며, 그림에서도 왼쪽 끝에 거의 전부가 몰리고 오른쪽으로 긴 꼬리가 뻗는다. 로그를 취하거나 가구 수로 나눈 비율(가구당 방 수 등)로 바꾸는 것이 보통의 처방이다.
+
+    **읽어 낼 것 ③: 침실 수에 결측이 $207$개 있다.** $1.00\%$다. **히스토그램은 이것을 조용히 빼고 그린다.** 그림만 보아서는 침실 수 칸이 다른 칸보다 $207$개 적은 자료로 그려졌다는 사실을 알 수 없다.
+
+    **읽어 낼 것 ④: 경도와 위도가 이봉이다.** 경도는 $-122$ 근처와 $-118$ 근처에, 위도는 $34$ 근처와 $37.8$ 근처에 봉우리가 있다. 샌프란시스코만과 로스앤젤레스 두 대도시권이다. 두 변수의 왜도가 각각 $-0.298$, $0.466$로 $0$에 가깝지만 **왜도가 작다는 것이 종 모양이라는 뜻은 아니다.**
+
+    **읽어 낼 것 ⑤: 소득의 단위가 수상하다.** 가로축이 $0.5$에서 $15$까지다. 달러가 아니라 **만 달러 단위로 눈금을 바꾼 값**이며, 이런 것은 그림만 보아서는 알 수 없고 자료 설명서를 읽어야 안다.
+
+    **(2) 이 격자가 보여 주지 못하는 것.**
+
+    - **변수 사이의 관계.** 아홉 개를 따로따로 그렸으므로 소득이 높은 구역의 집값이 높은지, 방이 많은 구역이 사람도 많은지는 전혀 알 수 없다. 산점도 행렬이나 상관행렬이 필요하다.
+    - **공간 구조.** 경도와 위도를 따로 그리면 "두 봉우리"까지는 보이지만 **지도 위의 모양**은 사라진다. 두 변수를 함께 산점도로 찍어야 캘리포니아의 윤곽이 나타난다.
+    - **꼬리 안의 구조.** 치우친 네 변수는 거의 모든 질량이 첫 몇 구간에 들어가 버려 **구간 $50$개 가운데 쓸모 있는 것이 대여섯 개뿐**이다. 로그 눈금으로 다시 그려야 꼬리가 보인다.
+    - **결측의 유형.** 침실 수의 결측 $207$개가 무작위로 흩어진 것인지 특정 지역에 몰린 것인지는 히스토그램이 답할 수 없다.
 
 ## 범주형에 가까운 자료의 히스토그램: 타이타닉
 
@@ -240,65 +506,144 @@ fig.savefig("histograms_83.png", dpi=170, facecolor="white",
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 타이타닉 자료의 히스토그램
+**보기 4.** <span class="diff easy" title="쉬움"></span> 종류가 섞인 다섯 변수를 히스토그램으로 훑는다. 타이타닉 승객 $891$명의 성별·생존 여부·나이·객실등급을 한 줄에 나란히 그린다.
+
+**(1)** 이진 변수 `Survived` 칸의 세로축 높이를 식으로 쓰고, 구간을 $10$개에서 $20$개로 바꾸면 그 높이가 어떻게 되는지 **미리** 말하시오. 그 수에 정보가 담겨 있는가.
+
+**(2)** 나이 칸에는 몇 명이 그려졌는가. 구간을 $10$개로 할 때와 $20$개로 할 때 봉우리가 몇 개로 세어지는가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import pandas as pd
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** `Survived` 는 $0$과 $1$만 갖는다. `hist` 는 자료의 범위 $[0, 1]$을 $k$등분하므로 구간 너비가 $w = 1/k$이고, **$0$들은 전부 첫 구간에, $1$들은 전부 마지막 구간에** 들어간다. 가운데 $k-2$개 구간은 비어 있다. `density=True` 의 높이는 비율을 너비로 나눈 것이므로
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url, index_col='PassengerId')
+    $$
+    h_{\text{첫}} = \frac{\hat p_0}{w} = k\,\hat p_0,
+    \qquad
+    h_{\text{끝}} = \frac{\hat p_1}{w} = k\,\hat p_1
+    $$
 
-# 다섯 변수를 한 줄에 나란히 그린다.
-# 자료를 처음 받았을 때 모든 변수를 한눈에 훑는 표준적인 방법이다.
-fig, axes = plt.subplots(1, 5, figsize=(13, 3))
-columns = ("Sex", "Survived", "Age", "Pclass", "Age")
-titles = ("성별 (명목형)", "생존 여부 (이진형)", "나이 (연속형)",
-          "객실등급 (순서형)", "나이 (구간 20개)")
-bins = (10, 10, 10, 10, 20)
+    이다. $\hat p_0 = 549/891 = 0.616162$, $\hat p_1 = 0.383838$이므로
 
-for ax, col, title, b in zip(axes, columns, titles, bins):
-    # 변수 유형이 섞여 있다는 점에 주목하라.
-    #   Sex      문자열 범주형 -> 히스토그램이 사실상 막대그림이 된다
-    #   Survived 0/1 이진형    -> 막대 두 개
-    #   Pclass   1/2/3 순서형  -> 막대 세 개
-    #   Age      연속형        -> 진짜 히스토그램
-    # 범주형에 히스토그램을 쓰는 것은 원칙적으로 맞지 않지만,
-    # 탐색 단계에서 빠르게 훑을 때는 흔히 이렇게 한다.
-    ax.hist(df[col], bins=b, density=True, color="#DCEBFB",
-            edgecolor="#1565C0")
-    ax.set_title(title, fontsize=10)
-    ax.set_ylabel("밀도", fontsize=9)
-    ax.spines[["top", "right"]].set_visible(False)
+    $$
+    k = 10: \quad 6.1616, \ 3.8384
+    \qquad\Longrightarrow\qquad
+    k = 20: \quad 12.3232, \ 7.6768
+    $$
 
-fig.suptitle("타이타닉 자료: 종류가 섞인 다섯 변수를 히스토그램으로 훑기")
-fig.tight_layout()
-fig.savefig("histograms_115.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
+    **구간 수를 두 배로 하면 높이도 정확히 두 배가 된다.** 세로축의 수는 자료가 아니라 **내가 고른 $k$**를 반영한다. 뜻이 있는 것은 비율 $0.6162$와 $0.3838$뿐이고, 그 둘은 막대그림으로 그리는 편이 옳다.
 
-print(df[["Sex", "Survived", "Age", "Pclass"]].dtypes)
-```
+    **(2) 수치적으로.**
 
-출력:
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
 
-```
-Sex          object
-Survived      int64
-Age         float64
-Pclass        int64
-dtype: object
-```
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
-![종류가 섞인 다섯 변수의 히스토그램](./img/histograms_115.png)
+    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    df = pd.read_csv(url, index_col='PassengerId')
 
-**맨 왼쪽 두 칸은 히스토그램이 아니라 막대그림이다.** `Sex`는 값이 두 개뿐이고 `Survived`도 0과 1뿐이라 "구간을 나눈다"는 개념이 성립하지 않는다. `Pclass`도 1·2·3 세 값뿐이다. **가로축의 거리가 뜻을 갖는 것은 `Age` 칸뿐**이며, 그래서 오른쪽 두 칸만이 진짜 분포의 모양(20대의 봉우리, 오른쪽으로 긴 꼬리)을 보여 준다.
+    # 다섯 변수를 한 줄에 나란히 그린다.
+    # 자료를 처음 받았을 때 모든 변수를 한눈에 훑는 표준적인 방법이다.
+    fig, axes = plt.subplots(1, 5, figsize=(13, 3))
+    columns = ("Sex", "Survived", "Age", "Pclass", "Age")
+    titles = ("성별 (명목형)", "생존 여부 (이진형)", "나이 (연속형)",
+              "객실등급 (순서형)", "나이 (구간 20개)")
+    bins = (10, 10, 10, 10, 20)
+
+    for ax, col, title, b in zip(axes, columns, titles, bins):
+        # 변수 유형이 섞여 있다는 점에 주목하라.
+        #   Sex      문자열 범주형 -> 히스토그램이 사실상 막대그림이 된다
+        #   Survived 0/1 이진형    -> 막대 두 개
+        #   Pclass   1/2/3 순서형  -> 막대 세 개
+        #   Age      연속형        -> 진짜 히스토그램
+        # 범주형에 히스토그램을 쓰는 것은 원칙적으로 맞지 않지만,
+        # 탐색 단계에서 빠르게 훑을 때는 흔히 이렇게 한다.
+        ax.hist(df[col], bins=b, density=True, color="#DCEBFB",
+                edgecolor="#1565C0")
+        ax.set_title(title, fontsize=10)
+        ax.set_ylabel("밀도", fontsize=9)
+        ax.spines[["top", "right"]].set_visible(False)
+
+    fig.suptitle("타이타닉 자료: 종류가 섞인 다섯 변수를 히스토그램으로 훑기")
+    fig.tight_layout()
+    fig.savefig("histograms_115.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    print(df[["Sex", "Survived", "Age", "Pclass"]].dtypes)
+
+    # --- 이진 변수에 density=True 를 쓰면 높이가 무엇이 되는가 ---
+    # 0/1 자료를 [0,1] 위에서 k 등분하면 0 은 첫 구간, 1 은 마지막 구간에 모인다.
+    # 그 높이는 비율/너비 = k x 비율이므로 k 를 바꾸면 그대로 따라 변한다.
+    p0 = (df.Survived == 0).mean()
+    p1 = (df.Survived == 1).mean()
+    print(f"\n사망 비율 {p0:.6f},  생존 비율 {p1:.6f}")
+    for k in (10, 20):
+        h, e = np.histogram(df.Survived, bins=k, density=True)
+        nz = [round(v, 4) for v in h if v > 0]
+        print(f"  구간 {k:2d}개 (너비 {e[1] - e[0]:.4f}): 0 이 아닌 높이 {nz}"
+              f"   예측 {k * p0:.4f}, {k * p1:.4f}")
+
+    # --- 나이: 몇 명이 그림에서 빠졌는가 ---
+    age = df.Age
+    print(f"\n전체 {len(df)} 명 중 나이 결측 {int(age.isna().sum())} 명"
+          f" ({100 * age.isna().mean():.2f}%) — 히스토그램은 말없이 빼고 그린다")
+    a = age.dropna()
+    print(f"  그려진 자료 {len(a)} 명,  범위 [{a.min()}, {a.max()}],  "
+          f"평균 {a.mean():.4f},  중앙값 {a.median()}")
+
+    # --- 구간 수를 바꾸면 봉우리가 몇 개로 세어지는가 ---
+    def count_modes(x, k):
+        """구간 k 개로 끊었을 때 지역 최대인 구간의 가운데 값을 돌려준다."""
+        h, e = np.histogram(x, bins=k)
+        mid = (e[:-1] + e[1:]) / 2
+        out = []
+        for i in range(k):
+            left = h[i - 1] if i > 0 else -1
+            right = h[i + 1] if i < k - 1 else -1
+            if h[i] > left and h[i] > right:
+                out.append(round(mid[i], 2))
+        return out
+
+    for k in (10, 20):
+        peaks = count_modes(a, k)
+        print(f"  구간 {k:2d}개: 봉우리 {len(peaks)} 개 — 나이 {peaks}")
+    ```
+
+    출력:
+
+    ```
+    Sex          object
+    Survived      int64
+    Age         float64
+    Pclass        int64
+    dtype: object
+
+    사망 비율 0.616162,  생존 비율 0.383838
+      구간 10개 (너비 0.1000): 0 이 아닌 높이 [6.1616, 3.8384]   예측 6.1616, 3.8384
+      구간 20개 (너비 0.0500): 0 이 아닌 높이 [12.3232, 7.6768]   예측 12.3232, 7.6768
+
+    전체 891 명 중 나이 결측 177 명 (19.87%) — 히스토그램은 말없이 빼고 그린다
+      그려진 자료 714 명,  범위 [0.42, 80.0],  평균 29.6991,  중앙값 28.0
+      구간 10개: 봉우리 2 개 — 나이 [4.4, 20.32]
+      구간 20개: 봉우리 3 개 — 나이 [2.41, 22.3, 70.05]
+    ```
+
+    ![종류가 섞인 다섯 변수의 히스토그램](./img/histograms_115.png)
+
+    (1)의 예측이 네 수 모두 맞는다. 구간을 $10$개에서 $20$개로 늘리자 높이가 $6.1616 \to 12.3232$, $3.8384 \to 7.6768$로 **정확히 두 배**가 되었다. 세로축의 "밀도"라는 이름이 여기서는 아무것도 뜻하지 않는다.
+
+    **맨 왼쪽 두 칸은 히스토그램이 아니라 막대그림이다.** `Sex`는 값이 두 개뿐이고 `Survived`도 0과 1뿐이라 "구간을 나눈다"는 개념이 성립하지 않는다. `Pclass`도 1·2·3 세 값뿐이다. **가로축의 거리가 뜻을 갖는 것은 `Age` 칸뿐**이며, 그래서 오른쪽 두 칸만이 진짜 분포의 모양(20대의 봉우리, 오른쪽으로 긴 꼬리)을 보여 준다.
+
+    (2)의 첫째 답은 **$714$명**이다. $891$명 가운데 $177$명($19.87\%$)의 나이가 비어 있고 `hist` 는 그 사실을 알리지 않고 빼고 그린다. 그림만 보면 $891$명을 다 그린 줄 안다. 나이 결측이 생존과 무관하지 않다면([절단점 하나가 결론을 바꾼다](./titanic_age_cutoff.md)에서 다룬다) 이 그림은 **치우친 부분집합**을 보여 주고 있는 셈이다.
+
+    둘째 답이 이 보기의 요점이다. **구간 $10$개에서는 봉우리가 $2$개, $20$개에서는 $3$개로 세어진다.** 자료는 그대로인데 세어지는 봉우리 수가 달라진다. $10$개로 끊으면 $4.4$세와 $20.3$세에 봉우리가 서고, $20$개로 끊으면 $2.4$세·$22.3$세·$70.1$세 셋이 된다. 마지막 $70.1$세는 노인이 몇 명 몰린 작은 혹으로, 구간이 넓을 때는 이웃에 흡수되어 보이지 않았다. **"이 분포는 몇 봉우리인가"는 히스토그램만으로는 답할 수 없는 물음**이며, 구간 수와 구간 시작점(연습문제 7)을 바꿔 가며 살아남는 봉우리만 믿어야 한다.
 
 ## 사용자화한 히스토그램: 도수분포표에서 밀도 히스토그램으로
 
@@ -324,62 +669,146 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 폭이 다른 계급의 밀도 히스토그램
+**보기 5.** <span class="diff easy" title="쉬움"></span> 백분율이 같은 두 계급의 막대가 두 배 차이로 그려진다. 위 도수분포표로 밀도 히스토그램을 그린다.
+
+**(1)** 막대 높이의 식을 유도하고 열한 계급의 높이를 모두 구하시오. 넓이의 합은 얼마인가.
+
+**(2)** $10{,}000$–$15{,}000$과 $15{,}000$–$25{,}000$은 둘 다 $26\%$인데 막대 높이가 왜 다른가. $4{,}000$–$5{,}000$($5\%$)과 $7{,}000$–$10{,}000$($15\%$)은 왜 같은가. 높이를 백분율로 그렸다면 그림이 어떻게 달라지는가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 히스토그램이 지켜야 할 규칙은 하나다. **막대의 넓이가 그 계급의 비율이어야 한다.** 계급 $i$의 폭을 $w_i$, 백분율을 $P_i$, 높이를 $h_i$라 하면
 
-def compute_bins_widths_heights():
-    """계급의 폭이 제각각인 도수분포표에서 막대의 높이를 구한다.
+    $$
+    w_i h_i = P_i
+    \qquad\Longrightarrow\qquad
+    h_i = \frac{P_i}{w_i}
+    $$
 
-    폭이 다르면 도수를 그대로 높이로 쓸 수 없다. 넓이가 비율을 나타내야
-    하므로 높이는 비율을 폭으로 나눈 값, 곧 밀도가 된다.
-    """
-    bins = [0, 1_000, 2_000, 3_000, 4_000, 5_000,
-            6_000, 7_000, 10_000, 15_000, 25_000, 50_000]
-    widths = [right - left for left, right in zip(bins[:-1], bins[1:])]
-    percents = [1, 2, 3, 4, 5, 5, 5, 15, 26, 26, 8]
-    heights = [p / w for w, p in zip(widths, percents)]
-    return bins, widths, heights
+    이다. 높이의 단위는 "달러당 백분율"이 되고, 아래 표에서는 읽기 쉽도록 $1{,}000$달러당으로 적는다. 넓이의 합은
 
-def draw_line(start, end, ax):
-    """두 점을 잇는 검은 선분 하나."""
-    ax.plot([start[0], end[0]], [start[1], end[1]], '-k')
+    $$
+    \sum_i w_i h_i = \sum_i P_i = 100
+    $$
 
-def draw_box(x_left, x_right, height, ax):
-    """막대 하나를 네 선분으로 직접 그린다."""
-    draw_line([x_left, 0], [x_right, 0], ax)
-    draw_line([x_right, 0], [x_right, height], ax)
-    draw_line([x_right, height], [x_left, height], ax)
-    draw_line([x_left, height], [x_left, 0], ax)
+    이다. 백분율로 적었으므로 $1$이 아니라 $100$이고, 비율로 적었다면 $1$이 된다. **어느 쪽이든 합이 되는 것은 높이가 아니라 넓이다.**
 
-def main():
-    """계급마다 폭과 높이가 다른 막대를 이어 붙여 히스토그램을 만든다."""
-    bins, widths, heights = compute_bins_widths_heights()
-    fig, ax = plt.subplots(figsize=(12, 3))
-    for x_left, x_right, height in zip(bins[:-1], bins[1:], heights):
-        draw_box(x_left, x_right, height, ax)
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    ax.set_xlabel("소득 수준 (달러)")
-    ax.set_ylabel("밀도 (달러당 백분율)")
-    ax.set_title("폭이 다른 계급의 밀도 히스토그램 — 넓이가 백분율이다")
-    fig.savefig("histograms_164.png", dpi=170, facecolor="white",
-                bbox_inches="tight")
+    **(2) 해석적으로.** $h_i = P_i/w_i$에 그대로 넣으면 된다.
 
-if __name__ == "__main__":
-    main()
-```
+    $$
+    \frac{26}{5{,}000} = 0.0052,
+    \qquad
+    \frac{26}{10{,}000} = 0.0026
+    $$
 
-![폭이 다른 계급의 밀도 히스토그램](./img/histograms_164.png)
+    로 정확히 절반이다. 백분율이 같아도 **뒤 계급이 두 배 넓으므로** 같은 넓이를 만들려면 높이가 절반이어야 한다. 반대로
+
+    $$
+    \frac{5}{1{,}000} = 0.005,
+    \qquad
+    \frac{15}{3{,}000} = 0.005
+    $$
+
+    는 백분율이 세 배인데 폭도 세 배라 높이가 같다. **폭이 다른 계급에서는 높이를 서로 견줄 수 없고, 견주어야 할 것은 넓이다.**
+
+    높이를 백분율로 그렸다면 그림이 완전히 달라진다. 맨 끝 $25{,}000$–$50{,}000$ 계급은 $8\%$뿐인데 가로축의 절반을 차지하는 막대가 되고, $0$–$1{,}000$ 계급($1\%$)과 거의 같은 높이로 그려진다. 보는 사람은 "고소득자가 매우 많다"고 읽을 것이다. 올바른 밀도로 그리면 그 막대의 높이는 $0.32$로 **가장 낮다.**
+
+    **(3) 수치적으로.**
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    def compute_bins_widths_heights():
+        """계급의 폭이 제각각인 도수분포표에서 막대의 높이를 구한다.
+
+        폭이 다르면 도수를 그대로 높이로 쓸 수 없다. 넓이가 비율을 나타내야
+        하므로 높이는 비율을 폭으로 나눈 값, 곧 밀도가 된다.
+        """
+        bins = [0, 1_000, 2_000, 3_000, 4_000, 5_000,
+                6_000, 7_000, 10_000, 15_000, 25_000, 50_000]
+        widths = [right - left for left, right in zip(bins[:-1], bins[1:])]
+        percents = [1, 2, 3, 4, 5, 5, 5, 15, 26, 26, 8]
+        heights = [p / w for w, p in zip(widths, percents)]
+        return bins, widths, heights
+
+    def draw_line(start, end, ax):
+        """두 점을 잇는 검은 선분 하나."""
+        ax.plot([start[0], end[0]], [start[1], end[1]], '-k')
+
+    def draw_box(x_left, x_right, height, ax):
+        """막대 하나를 네 선분으로 직접 그린다."""
+        draw_line([x_left, 0], [x_right, 0], ax)
+        draw_line([x_right, 0], [x_right, height], ax)
+        draw_line([x_right, height], [x_left, height], ax)
+        draw_line([x_left, height], [x_left, 0], ax)
+
+    def main():
+        """계급마다 폭과 높이가 다른 막대를 이어 붙여 히스토그램을 만든다."""
+        bins, widths, heights = compute_bins_widths_heights()
+        fig, ax = plt.subplots(figsize=(12, 3))
+        for x_left, x_right, height in zip(bins[:-1], bins[1:], heights):
+            draw_box(x_left, x_right, height, ax)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.set_xlabel("소득 수준 (달러)")
+        ax.set_ylabel("밀도 (달러당 백분율)")
+        ax.set_title("폭이 다른 계급의 밀도 히스토그램 — 넓이가 백분율이다")
+        fig.savefig("histograms_164.png", dpi=170, facecolor="white",
+                    bbox_inches="tight")
+
+        # 폭·백분율·높이·넓이를 한 표로 적어 본다.
+        # 넓이 열의 합이 100 이 되는지가 이 보기의 전부다.
+        percents = [1, 2, 3, 4, 5, 5, 5, 15, 26, 26, 8]
+        print(f"{'계급':>18}{'폭':>8}{'백분율':>7}{'높이(1000달러당 %)':>20}{'넓이':>7}")
+        for lo, hi, w, p, h in zip(bins[:-1], bins[1:], widths, percents, heights):
+            print(f"{lo:>7,}-{hi:<9,}{w:>8,}{p:>6}{1000 * h:>14.4f}{w * h:>12.1f}")
+        print(f"{'합계':>18}{'':>8}{sum(percents):>6}{'':>14}"
+              f"{sum(w * h for w, h in zip(widths, heights)):>12.1f}")
+        print(f"\n가장 높은 막대 = {1000 * max(heights):.2f}  "
+              f"({bins[heights.index(max(heights))]:,}"
+              f"-{bins[heights.index(max(heights)) + 1]:,} 달러)")
+        print(f"백분율이 가장 큰 계급 = {max(percents)}%  (두 곳)")
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+                    계급       폭    백분율       높이(1000달러당 %)     넓이
+          0-1,000       1,000     1        1.0000         1.0
+      1,000-2,000       1,000     2        2.0000         2.0
+      2,000-3,000       1,000     3        3.0000         3.0
+      3,000-4,000       1,000     4        4.0000         4.0
+      4,000-5,000       1,000     5        5.0000         5.0
+      5,000-6,000       1,000     5        5.0000         5.0
+      6,000-7,000       1,000     5        5.0000         5.0
+      7,000-10,000      3,000    15        5.0000        15.0
+     10,000-15,000      5,000    26        5.2000        26.0
+     15,000-25,000     10,000    26        2.6000        26.0
+     25,000-50,000     25,000     8        0.3200         8.0
+                    합계           100                     100.0
+
+    가장 높은 막대 = 5.20  (10,000-15,000 달러)
+    백분율이 가장 큰 계급 = 26%  (두 곳)
+    ```
+
+    ![폭이 다른 계급의 밀도 히스토그램](./img/histograms_164.png)
+
+    표가 (1)과 (2)를 한꺼번에 확인해 준다. 넓이 열의 합이 정확히 $100.0$이고, $26\%$인 두 계급의 높이가 $5.20$과 $2.60$으로 **정확히 두 배** 차이이며, $5\%$와 $15\%$인 두 계급은 높이가 $5.00$으로 **같다.**
+
+    **가장 높은 막대와 백분율이 가장 큰 계급이 다르다**는 점도 눈여겨볼 만하다. 높이가 가장 큰 것은 $10{,}000$–$15{,}000$ 하나지만 백분율이 가장 큰 계급은 $26\%$인 **두 곳**이다. 그림에서 "제일 높은 막대"를 "제일 사람이 많은 구간"으로 읽으면 틀린다.
+
+    맨 끝 계급 $25{,}000$–$50{,}000$이 가장 낮은 $0.32$로 그려진 것도 올바르다. $8\%$가 $25{,}000$달러 너비에 얇게 퍼져 있다는 뜻이고, 그 얇음이 바로 소득 분포의 오른쪽 꼬리다.
 
 ## 구간 개수 정하기
 

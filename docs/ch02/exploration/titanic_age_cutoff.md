@@ -19,76 +19,180 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 스물한 살을 기준으로 나누면
+**보기 1.** <span class="diff easy" title="쉬움"></span> 스물한 살을 기준으로 나누면. 나이가 기록된 $714$명을 $21$세에서 둘로 가른다.
+
+**(1)** 두 집단의 생존율과 그 차이, 오즈비를 **유리수로** 구하시오.
+
+**(2)** 어린 쪽의 비율을 $\pi$, 전체 생존율을 $\bar y$라 할 때 파이 계수가
+
+$$
+\varphi = \frac{\sqrt{\pi(1-\pi)}}{\sqrt{\bar y(1-\bar y)}}\;\big(r_{<c} - r_{\ge c}\big)
+$$
+
+임을 보이시오. 이 식이 이 절 전체를 설명한다.
 
 </div>
 
-```python
-import warnings
-warnings.filterwarnings("ignore")
+??? success "풀이"
 
-import numpy as np
-import pandas as pd
+    **(1) 해석적으로.** 네 칸의 도수가 어린 쪽 생존 $82$·사망 $98$, 나이 든 쪽 생존 $208$·사망 $326$이다. 그러므로
 
-URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-       "datasets/master/titanic.csv")
-df = pd.read_csv(URL, index_col="PassengerId")
+    $$
+    r_{<21} = \frac{82}{180} = \frac{41}{90} = 0.455556,
+    \qquad
+    r_{\ge 21} = \frac{208}{534} = \frac{104}{267} = 0.389513
+    $$
 
-# 나이가 없는 177명은 이 절의 분석에서 아예 쓸 수 없다.
-# 앞 절 연습문제 3에서 보았듯 이들은 무작위로 빠진 것이 아니다.
-d = df.dropna(subset=["Age"]).copy()
-print(f"전체 {len(df)}명 중 나이가 있는 {len(d)}명으로 분석한다")
-print(f"나이 범위 {d['Age'].min():.2f} ~ {d['Age'].max():.2f}세\n")
+    이고 차이는 $0.066042$다. 오즈비는 대각선 곱의 비이므로
 
-CUT = 21                                   # ← 이 한 줄이 이 절의 주제다
-d["Age_Group"] = np.where(d["Age"] < CUT, f"<{CUT}", f">={CUT}")
-ORDER = [f"<{CUT}", f">={CUT}"]
+    $$
+    \mathrm{OR} = \frac{82 \times 326}{98 \times 208} = \frac{26732}{20384} = \frac{6683}{5096} = 1.311421
+    $$
 
-tab = pd.crosstab(d["Age_Group"], d["Survived"]).reindex(ORDER)
-print("도수")
-print(tab.to_string())
+    이다.
 
-pct = pd.crosstab(d["Age_Group"], d["Survived"],
-                  normalize="index").reindex(ORDER) * 100
-print("\n집단 안에서의 생존율 (%)")
-print(pct.round(2).to_string())
+    **(2) 해석적으로.** $X = \mathbf 1(\text{나이} < c)$, $Y = $ 생존 여부로 둔다. 둘 다 $0/1$이므로 앞 절 보기 2에서처럼 평균이 곧 비율이고 분산이 $p(1-p)$다.
 
-lo = d["Age"] < CUT
-r_lo, r_hi = d.loc[lo, "Survived"].mean(), d.loc[~lo, "Survived"].mean()
-print(f"\n{CUT}세 미만 {lo.sum():3d}명  생존율 {r_lo:.4f}")
-print(f"{CUT}세 이상 {(~lo).sum():3d}명  생존율 {r_hi:.4f}")
-print(f"차이 {r_lo - r_hi:+.4f}")
+    $$
+    \bar X = \pi, \qquad \bar Y = \bar y, \qquad \overline{XY} = \pi\, r_{<c}
+    $$
 
-print(f"\n상관계수(파이) {np.corrcoef(d['Survived'], lo.astype(int))[0, 1]:+.4f}")
+    (마지막 식은 $XY = 1$인 사람이 "어리고 살아남은" 사람뿐이기 때문이다.) 그러므로 공분산이
 
-a, b = tab.iloc[0, 1], tab.iloc[0, 0]      # 어린 쪽 생존/사망
-c, e = tab.iloc[1, 1], tab.iloc[1, 0]      # 나이 든 쪽 생존/사망
-print(f"오즈비 {(a * e) / (b * c):.4f}")
-```
+    $$
+    \overline{XY} - \bar X\bar Y = \pi\,r_{<c} - \pi\,\bar y = \pi\,(r_{<c} - \bar y)
+    $$
 
-```text
-전체 891명 중 나이가 있는 714명으로 분석한다
-나이 범위 0.42 ~ 80.00세
+    인데, 전체 생존율이 두 집단의 가중평균 $\bar y = \pi r_{<c} + (1-\pi) r_{\ge c}$이므로
 
-도수
-Survived     0    1
-Age_Group          
-<21         98   82
->=21       326  208
+    $$
+    r_{<c} - \bar y = r_{<c} - \pi r_{<c} - (1-\pi) r_{\ge c} = (1-\pi)\big(r_{<c} - r_{\ge c}\big)
+    $$
 
-집단 안에서의 생존율 (%)
-Survived       0      1
-Age_Group              
-<21        54.44  45.56
->=21       61.05  38.95
+    이다. 둘을 합치면 공분산이 깔끔해진다.
 
-21세 미만 180명  생존율 0.4556
-21세 이상 534명  생존율 0.3895
-차이 +0.0660
+    $$
+    \operatorname{Cov}(X, Y) = \pi(1-\pi)\,\Delta,
+    \qquad \Delta := r_{<c} - r_{\ge c}
+    $$
 
-상관계수(파이) +0.0584
-오즈비 1.3114
-```
+    표준편차는 $s_X = \sqrt{\pi(1-\pi)}$, $s_Y = \sqrt{\bar y(1-\bar y)}$이므로
+
+    $$
+    \varphi = \frac{\pi(1-\pi)\,\Delta}{\sqrt{\pi(1-\pi)}\,\sqrt{\bar y(1-\bar y)}}
+    = \frac{\sqrt{\pi(1-\pi)}}{\sqrt{\bar y(1-\bar y)}}\;\Delta
+    $$
+
+    를 얻는다.
+
+    **이 식이 이 절의 열쇠다.** $\varphi$는 생존율 차이 $\Delta$를 그대로 쓰지 않고 **$\sqrt{\pi(1-\pi)}$만큼 줄여서** 쓴다. 절단점을 양 끝으로 밀면 $\pi$가 $0$이나 $1$에 가까워져 이 계수가 $0$으로 내려가므로, **$\Delta$가 아무리 커도 $\varphi$는 커지지 않는다.** 4절에서 "차이가 $46$%포인트"인 절단점이 나오는데도 연관이 강해 보이지 않는 까닭이 바로 이것이다.
+
+    수를 넣어 보면 $\pi = 180/714 = 0.252101$, $\bar y = 0.406162$이므로
+
+    $$
+    \varphi = \frac{\sqrt{0.252101 \times 0.747899}}{\sqrt{0.406162 \times 0.593838}} \times 0.066042
+    = \frac{0.434219}{0.491116} \times 0.066042 = 0.058391
+    $$
+
+    이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import warnings
+    warnings.filterwarnings("ignore")
+
+    import numpy as np
+    import pandas as pd
+
+    URL = ("https://raw.githubusercontent.com/datasciencedojo/"
+           "datasets/master/titanic.csv")
+    df = pd.read_csv(URL, index_col="PassengerId")
+
+    # 나이가 없는 177명은 이 절의 분석에서 아예 쓸 수 없다.
+    # 앞 절 연습문제 3에서 보았듯 이들은 무작위로 빠진 것이 아니다.
+    d = df.dropna(subset=["Age"]).copy()
+    print(f"전체 {len(df)}명 중 나이가 있는 {len(d)}명으로 분석한다")
+    print(f"나이 범위 {d['Age'].min():.2f} ~ {d['Age'].max():.2f}세\n")
+
+    CUT = 21                                   # ← 이 한 줄이 이 절의 주제다
+    d["Age_Group"] = np.where(d["Age"] < CUT, f"<{CUT}", f">={CUT}")
+    ORDER = [f"<{CUT}", f">={CUT}"]
+
+    tab = pd.crosstab(d["Age_Group"], d["Survived"]).reindex(ORDER)
+    print("도수")
+    print(tab.to_string())
+
+    pct = pd.crosstab(d["Age_Group"], d["Survived"],
+                      normalize="index").reindex(ORDER) * 100
+    print("\n집단 안에서의 생존율 (%)")
+    print(pct.round(2).to_string())
+
+    lo = d["Age"] < CUT
+    r_lo, r_hi = d.loc[lo, "Survived"].mean(), d.loc[~lo, "Survived"].mean()
+    print(f"\n{CUT}세 미만 {lo.sum():3d}명  생존율 {r_lo:.4f}")
+    print(f"{CUT}세 이상 {(~lo).sum():3d}명  생존율 {r_hi:.4f}")
+    print(f"차이 {r_lo - r_hi:+.4f}")
+
+    print(f"\n상관계수(파이) {np.corrcoef(d['Survived'], lo.astype(int))[0, 1]:+.4f}")
+
+    a, b = tab.iloc[0, 1], tab.iloc[0, 0]      # 어린 쪽 생존/사망
+    c, e = tab.iloc[1, 1], tab.iloc[1, 0]      # 나이 든 쪽 생존/사망
+    print(f"오즈비 {(a * e) / (b * c):.4f}")
+
+    # --- 파이 계수를 생존율 차이로부터 다시 만들어 본다 ---
+    # phi = sqrt(pi(1-pi)) / sqrt(ybar(1-ybar)) * (r_lo - r_hi),  pi = 어린 쪽 비율
+    n = len(d)
+    pi = lo.sum() / n
+    ybar = d["Survived"].mean()
+    print(f"\npi = {lo.sum()}/{n} = {pi:.6f},  ybar = {ybar:.6f}")
+    print(f"  sqrt(pi(1-pi))       = {np.sqrt(pi * (1 - pi)):.6f}")
+    print(f"  sqrt(ybar(1-ybar))   = {np.sqrt(ybar * (1 - ybar)):.6f}")
+    print(f"  차이 Delta           = {r_lo - r_hi:.6f}")
+    print(f"  식이 주는 phi        = {np.sqrt(pi * (1 - pi)) / np.sqrt(ybar * (1 - ybar)) * (r_lo - r_hi):.6f}")
+    print(f"  numpy 가 준 phi      = {np.corrcoef(d['Survived'], lo.astype(int))[0, 1]:.6f}")
+    print(f"  오즈비를 유리수로     = {a * e}/{b * c} = {(a * e) / (b * c):.6f}")
+    ```
+
+    ```text
+    전체 891명 중 나이가 있는 714명으로 분석한다
+    나이 범위 0.42 ~ 80.00세
+
+    도수
+    Survived     0    1
+    Age_Group          
+    <21         98   82
+    >=21       326  208
+
+    집단 안에서의 생존율 (%)
+    Survived       0      1
+    Age_Group              
+    <21        54.44  45.56
+    >=21       61.05  38.95
+
+    21세 미만 180명  생존율 0.4556
+    21세 이상 534명  생존율 0.3895
+    차이 +0.0660
+
+    상관계수(파이) +0.0584
+    오즈비 1.3114
+
+    pi = 180/714 = 0.252101,  ybar = 0.406162
+      sqrt(pi(1-pi))       = 0.434219
+      sqrt(ybar(1-ybar))   = 0.491116
+      차이 Delta           = 0.066042
+      식이 주는 phi        = 0.058391
+      numpy 가 준 phi      = 0.058391
+      오즈비를 유리수로     = 26732/20384 = 1.311421
+    ```
+
+    (1)의 유리수 값이 그대로 나온다. $41/90 = 0.4556$, $104/267 = 0.3895$, $6683/5096 = 1.3114$다.
+
+    (2)의 항등식도 소수 여섯째 자리까지 맞는다. 손으로 세운 식이 $0.058391$을 주고 `numpy` 의 상관계수도 $0.058391$이다.
+
+    **줄어드는 계수 $\sqrt{\pi(1-\pi)}/\sqrt{\bar y(1-\bar y)} = 0.434219/0.491116 = 0.884$**를 눈여겨보라. 여기서는 $\pi = 0.25$라 계수가 아직 $1$에 가깝지만, 절단점을 $2$세로 옮기면 $\pi = 0.0196$이 되어 계수가 $0.283$까지 떨어진다. **같은 $\Delta$라도 절단점이 끝으로 갈수록 $\varphi$가 작아진다.** 4절에서 그 효과를 직접 보게 된다.
+
+    자료가 $891$명이 아니라 $714$명인 것도 기억해 두어야 한다. 나이가 빠진 $177$명은 **무작위로 빠진 것이 아니고**(앞 절 보기 5에서 보았다) 생존율이 $0.2938$로 낮다. 이들을 어떻게 다루느냐가 답을 바꾸는지는 보기 3에서 수로 확인한다.
 
 **차이가 거의 없다.**
 
@@ -109,80 +213,124 @@ Age_Group
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 그림도 "관계가 약하다"고 말한다
+**보기 2.** <span class="diff easy" title="쉬움"></span> 그림도 "관계가 약하다"고 말한다. 절단점 $21$세의 표를 도수 막대, 생존율 막대, 누적 막대, 비율 열지도로 그린다.
+
+**(1)** 네 그림을 그리고 각각이 말하는 것을 수치와 함께 적으시오.
+
+**(2)** 생존율 막대의 세로축을 $[0, 60]$ 대신 $[38, 46]$으로 잘라 놓으면 **그려지는 막대 높이의 비**가 얼마에서 얼마로 바뀌는가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import seaborn as sns
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    유도할 식은 없다. **네 그림이 같은 네 수에서 나왔는데 무엇을 보여 주는가**가 이 보기의 몫이다.
 
-KO = [f"{CUT}세 미만", f"{CUT}세 이상"]
-DIED, LIVED = "#90A4AE", "#1565C0"
+    **(2) 해석적으로.** 세로축이 $[\ell, h]$일 때 값 $v$인 막대가 그림에서 차지하는 높이의 비율은 $(v - \ell)/(h - \ell)$이다. 두 생존율 $45.56\%$와 $38.95\%$에 넣으면
 
-fig, ax = plt.subplots(2, 2, figsize=(13, 9))
+    $$
+    [\ell, h] = [0, 60]: \quad \frac{45.56}{60} = 0.759, \quad \frac{38.95}{60} = 0.649
+    \quad\Longrightarrow\quad \text{비 } 1.17
+    $$
 
-# (1) 도수 -- 두 집단의 크기가 크게 다르다 (180 대 534)
-sns.countplot(data=d, x="Age_Group", hue="Survived", order=ORDER,
-              ax=ax[0, 0], palette=[DIED, LIVED])
-ax[0, 0].set_title(f"(1) 나이 집단별 도수 (절단점 {CUT}세)")
-ax[0, 0].set_xlabel("나이 집단"); ax[0, 0].set_ylabel("사람 수")
-ax[0, 0].set_xticks([0, 1]); ax[0, 0].set_xticklabels(KO)
-ax[0, 0].legend(["사망", "생존"], title="생존 여부")
+    $$
+    [\ell, h] = [38, 46]: \quad \frac{7.56}{8} = 0.944, \quad \frac{0.95}{8} = 0.119
+    \quad\Longrightarrow\quad \text{비 } 7.94
+    $$
 
-# (2) 생존율 -- 막대 두 개의 높이가 비슷하다
-rate = d.groupby("Age_Group")["Survived"].mean().reindex(ORDER) * 100
-rate.plot(kind="bar", ax=ax[0, 1], color=["#E65100", "#1565C0"],
-          edgecolor="black", width=0.7)
-ax[0, 1].set_title(f"(2) 나이 집단별 생존율 (%) (절단점 {CUT}세)")
-ax[0, 1].set_xlabel("나이 집단"); ax[0, 1].set_ylabel("생존율 (%)")
-ax[0, 1].set_xticks([0, 1]); ax[0, 1].set_xticklabels(KO)
-ax[0, 1].tick_params(axis="x", rotation=0)
-ax[0, 1].grid(True, alpha=0.3, axis="y"); ax[0, 1].set_ylim(0, 60)
-for i, v in enumerate(rate):
-    ax[0, 1].text(i, v + 1.5, f"{v:.1f}%", ha="center", fontweight="bold")
+    이다. **$1.17$배가 $7.94$배로 보이게 된다.** 자료는 한 글자도 바뀌지 않았고 축의 아래끝만 $0$에서 $38$로 옮겼다. 막대의 길이가 값에 비례하려면 아래끝이 $0$이어야 하고, 그렇지 않으면 길이의 비가 값의 비와 아무 관계가 없어진다.
 
-# (3) 누적 막대
-tab.plot(kind="bar", stacked=True, ax=ax[1, 0],
-         color=["#D32F2F", "#33691E"], edgecolor="black", width=0.7)
-ax[1, 0].set_title("(3) 누적 막대 (도수)")
-ax[1, 0].set_xlabel("나이 집단"); ax[1, 0].set_ylabel("사람 수")
-ax[1, 0].set_xticks([0, 1]); ax[1, 0].set_xticklabels(KO)
-ax[1, 0].tick_params(axis="x", rotation=0)
-ax[1, 0].legend(["사망", "생존"], title="생존 여부")
+    **(1) 수치적으로.**
 
-# (4) 비율 열지도 -- 색 범위를 0~1 로 고정한다
-prop = pd.crosstab(d["Age_Group"], d["Survived"],
-                   normalize="index").reindex(ORDER)
-sns.heatmap(prop, annot=True, fmt=".2%", cmap="Blues", ax=ax[1, 1],
-            vmin=0, vmax=1, cbar_kws={"label": "비율"},
-            linewidths=2, linecolor="black")
-ax[1, 1].set_title("(4) 비율 열지도")
-ax[1, 1].set_xlabel("생존 여부"); ax[1, 1].set_ylabel("나이 집단")
-ax[1, 1].set_xticklabels(["사망", "생존"])
-ax[1, 1].set_yticklabels(KO, rotation=0)
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
-fig.suptitle(f"타이타닉: 나이 집단과 생존, 절단점 {CUT}세", y=1.00)
-fig.tight_layout()
-fig.savefig("titanic_age21_four.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
-```
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
-![절단점 21세에서 그린 네 가지 그림](./img/titanic_age21_four.png)
+    KO = [f"{CUT}세 미만", f"{CUT}세 이상"]
+    DIED, LIVED = "#90A4AE", "#1565C0"
 
-**네 그림 모두 "차이가 거의 없다"고 말한다.** (2)의 막대 두 개는 45.6%와 39.0%로 눈에 띄게 다르지 않고, (4)의 네 칸은 색이 비슷하다.
+    fig, ax = plt.subplots(2, 2, figsize=(13, 9))
 
-**그런데 (2)의 세로축이 0에서 60까지다.** 만약 이 축을 38에서 46으로 잘라 놓으면 **똑같은 자료가 극적인 차이로 보인다.** 막대그림의 세로축은 반드시 0에서 시작해야 한다는 원칙이 여기서 실질적으로 작동한다.
+    # (1) 도수 -- 두 집단의 크기가 크게 다르다 (180 대 534)
+    sns.countplot(data=d, x="Age_Group", hue="Survived", order=ORDER,
+                  ax=ax[0, 0], palette=[DIED, LIVED])
+    ax[0, 0].set_title(f"(1) 나이 집단별 도수 (절단점 {CUT}세)")
+    ax[0, 0].set_xlabel("나이 집단"); ax[0, 0].set_ylabel("사람 수")
+    ax[0, 0].set_xticks([0, 1]); ax[0, 0].set_xticklabels(KO)
+    ax[0, 0].legend(["사망", "생존"], title="생존 여부")
 
-**(1)이 중요한 정보를 준다.** 두 집단의 크기가 180명과 534명으로 3배 차이다. 어린 쪽 표본이 작으므로 **그쪽 생존율의 불확실성이 크다.** 비율 그림 (2)만 보면 이 사실이 사라진다.
+    # (2) 생존율 -- 막대 두 개의 높이가 비슷하다
+    rate = d.groupby("Age_Group")["Survived"].mean().reindex(ORDER) * 100
+    rate.plot(kind="bar", ax=ax[0, 1], color=["#E65100", "#1565C0"],
+              edgecolor="black", width=0.7)
+    ax[0, 1].set_title(f"(2) 나이 집단별 생존율 (%) (절단점 {CUT}세)")
+    ax[0, 1].set_xlabel("나이 집단"); ax[0, 1].set_ylabel("생존율 (%)")
+    ax[0, 1].set_xticks([0, 1]); ax[0, 1].set_xticklabels(KO)
+    ax[0, 1].tick_params(axis="x", rotation=0)
+    ax[0, 1].grid(True, alpha=0.3, axis="y"); ax[0, 1].set_ylim(0, 60)
+    for i, v in enumerate(rate):
+        ax[0, 1].text(i, v + 1.5, f"{v:.1f}%", ha="center", fontweight="bold")
+
+    # (3) 누적 막대
+    tab.plot(kind="bar", stacked=True, ax=ax[1, 0],
+             color=["#D32F2F", "#33691E"], edgecolor="black", width=0.7)
+    ax[1, 0].set_title("(3) 누적 막대 (도수)")
+    ax[1, 0].set_xlabel("나이 집단"); ax[1, 0].set_ylabel("사람 수")
+    ax[1, 0].set_xticks([0, 1]); ax[1, 0].set_xticklabels(KO)
+    ax[1, 0].tick_params(axis="x", rotation=0)
+    ax[1, 0].legend(["사망", "생존"], title="생존 여부")
+
+    # (4) 비율 열지도 -- 색 범위를 0~1 로 고정한다
+    prop = pd.crosstab(d["Age_Group"], d["Survived"],
+                       normalize="index").reindex(ORDER)
+    sns.heatmap(prop, annot=True, fmt=".2%", cmap="Blues", ax=ax[1, 1],
+                vmin=0, vmax=1, cbar_kws={"label": "비율"},
+                linewidths=2, linecolor="black")
+    ax[1, 1].set_title("(4) 비율 열지도")
+    ax[1, 1].set_xlabel("생존 여부"); ax[1, 1].set_ylabel("나이 집단")
+    ax[1, 1].set_xticklabels(["사망", "생존"])
+    ax[1, 1].set_yticklabels(KO, rotation=0)
+
+    fig.suptitle(f"타이타닉: 나이 집단과 생존, 절단점 {CUT}세", y=1.00)
+    fig.tight_layout()
+    fig.savefig("titanic_age21_four.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    # --- 세로축을 자르면 막대 높이의 비가 어떻게 바뀌는가 ---
+    for lohi in [(0, 60), (38, 46)]:
+        l, h = lohi
+        h1 = (rate.iloc[0] - l) / (h - l)
+        h2 = (rate.iloc[1] - l) / (h - l)
+        print(f"세로축 [{l}, {h}]: 그려지는 높이 {h1:.4f} 대 {h2:.4f},  비 {h1 / h2:.2f}")
+    print(f"생존율 자체의 비 = {rate.iloc[0] / rate.iloc[1]:.4f}")
+    print(f"\n두 집단의 크기 {int(tab.iloc[0].sum())}명 대 {int(tab.iloc[1].sum())}명 "
+          f"({tab.iloc[1].sum() / tab.iloc[0].sum():.2f} 배)")
+    ```
+
+    ```text
+    세로축 [0, 60]: 그려지는 높이 0.7593 대 0.6492,  비 1.17
+    세로축 [38, 46]: 그려지는 높이 0.9444 대 0.1189,  비 7.94
+    생존율 자체의 비 = 1.1696
+
+    두 집단의 크기 180명 대 534명 (2.97 배)
+    ```
+
+    ![절단점 21세에서 그린 네 가지 그림](./img/titanic_age21_four.png)
+
+    **네 그림 모두 "차이가 거의 없다"고 말한다.** (2)의 막대 두 개는 45.6%와 39.0%로 눈에 띄게 다르지 않고, (4)의 네 칸은 색이 비슷하다.
+
+    **(2)의 예측이 확인된다.** 세로축 $[0, 60]$에서는 그려지는 높이의 비가 $1.17$로 생존율 자체의 비 $1.1696$과 거의 같다. 축을 $[38, 46]$으로 자르면 그 비가 $7.94$가 된다. **똑같은 자료가 극적인 차이로 보인다.** 막대그림의 세로축은 반드시 $0$에서 시작해야 한다는 원칙이 여기서 실질적으로 작동한다.
+
+    **(1)번 그림이 중요한 정보를 준다.** 두 집단의 크기가 $180$명과 $534$명으로 $2.97$배 차이다. 어린 쪽 표본이 작으므로 **그쪽 생존율의 불확실성이 크다.** 비율 그림 (2)만 보면 이 사실이 사라진다.
+
+    **(4)번 열지도가 가리는 것도 같은 것이다.** 네 칸이 $54.44\%$, $45.56\%$, $61.05\%$, $38.95\%$로 정확하게 적혀 있지만, 그 비율이 각각 몇 명에서 나온 것인지는 어디에도 없다. 색의 진하기도 $n$을 반영하지 않는다.
 
 ## 3. 자르기 전에 나이를 그대로 본다
 
@@ -190,61 +338,153 @@ fig.savefig("titanic_age21_four.png", dpi=170, facecolor="white",
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 두 집단의 나이 분포는 거의 겹친다
+**보기 3.** <span class="diff easy" title="쉬움"></span> 자르기 전에 나이를 그대로 본다. 생존자와 사망자의 나이 분포를 히스토그램과 상자그림으로 겹쳐 본다.
+
+**(1)** 두 집단의 다섯 수치 요약은 거의 같다. 그런데 평균은 $2.28$세 차이가 난다. **그 차이가 어느 나이대에서 오는지** 밝히시오.
+
+**(2)** 상자그림이 그 사실을 놓치는 까닭을 울타리 위치로 설명하시오.
+
+**(3)** 나이가 빠진 $177$명을 **버리는 대신 메우면** 보기 1의 답이 바뀌는가.
 
 </div>
 
-```python
-fig, ax = plt.subplots(1, 2, figsize=(13, 4.6))
-PALETTE = ["#E65100", "#33691E"]          # 사망 / 생존
+??? success "풀이"
 
-# 생존/사망 각각의 나이 분포를 겹쳐 그린다.
-sns.histplot(data=d, x="Age", hue="Survived", kde=True, ax=ax[0],
-             palette=PALETTE, bins=30)
-ax[0].axvline(CUT, color="#D32F2F", ls="--", lw=2)
-ax[0].text(CUT + 1, ax[0].get_ylim()[1] * 0.92, f"절단점 {CUT}세",
-           color="#D32F2F", fontweight="bold")
-ax[0].set_title("생존 여부별 나이 분포")
-ax[0].set_xlabel("나이 (세)"); ax[0].set_ylabel("사람 수")
-ax[0].legend(["생존", "사망"], title="생존 여부")
+    **(1)·(2) 해석적으로.** 평균은 모든 관측값에 같은 무게를 주므로, 한쪽 끝에 몰린 작은 덩어리도 **그 크기만큼** 평균을 움직인다. 반면 중앙값과 사분위수는 **순위**만 보므로 꼬리 쪽 덩어리를 거의 느끼지 못한다. 두 집단의 중앙값이 둘 다 $28.00$세인데 평균이 $2.28$세 벌어져 있다면, 차이를 만든 것은 가운데가 아니라 **꼬리**다.
 
-sns.boxplot(data=d, x="Survived", y="Age", ax=ax[1], hue="Survived",
-            palette=PALETTE, legend=False)
-ax[1].axhline(CUT, color="#D32F2F", ls="--", lw=2)
-ax[1].text(1.35, CUT + 1.5, f"절단점 {CUT}세", color="#D32F2F",
-           fontweight="bold")
-ax[1].set_title("생존 여부별 나이 상자그림")
-ax[1].set_xlabel("생존 여부"); ax[1].set_ylabel("나이 (세)")
-ax[1].set_xticks([0, 1])
-ax[1].set_xticklabels(["사망", "생존"])
+    상자그림이 그리는 것은 다섯 수와 울타리뿐이다. 아래쪽 울타리는 $Q_1 - 1.5\,\mathrm{IQR}$인데 두 집단 모두
 
-fig.tight_layout()
-fig.savefig("titanic_age_dist.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
+    $$
+    Q_1 - 1.5(Q_3 - Q_1) = 21 - 1.5 \times 18 = -6.00
+    \quad\text{(사망)},
+    \qquad
+    19 - 1.5 \times 17 = -6.50
+    \quad\text{(생존)}
+    $$
 
-# 그림이 말하는 것을 수치로도 확인한다.
-print(f"{'':14s}{'n':>6s}{'평균':>8s}{'중앙값':>8s}{'Q1':>7s}{'Q3':>7s}")
-for lab, v in [("사망", d.loc[d["Survived"] == 0, "Age"]),
-               ("생존", d.loc[d["Survived"] == 1, "Age"])]:
-    print(f"{lab:14s}{len(v):>6d}{v.mean():>8.2f}{v.median():>8.2f}"
-          f"{v.quantile(.25):>7.2f}{v.quantile(.75):>7.2f}")
-```
+    로 **음수**다. 나이는 음수가 될 수 없으므로 **아래쪽 이상치가 원리적으로 하나도 찍히지 않는다.** 어린아이들은 전부 수염 안에 들어가 사라진다. 상자그림이 어린아이 덩어리를 놓치는 것이 우연이 아니라 **구조적**인 것이다.
 
-![나이 분포와 상자그림](./img/titanic_age_dist.png)
+    **(3) 해석적으로.** 결측을 메우는 흔한 방법들 — 전체 중앙값, 전체 평균, 성별·등급별 중앙값 — 이 주는 값은 모두 $21$세보다 크다. 성별·등급별 중앙값 가운데 가장 작은 것이 3등실 여성의 $21.5$세다. 그러므로 **어떤 방법을 쓰든 메워진 $177$명은 전원 "$21$세 이상" 칸으로 간다.** 그들의 생존율이 $0.2938$로 낮으므로 $r_{\ge 21}$이 내려가고 차이 $\Delta$는 **커질** 수밖에 없다.
 
-```text
-                   n      평균     중앙값     Q1     Q3
-사망               424   30.63   28.00  21.00  39.00
-생존               290   28.34   28.00  19.00  36.00
-```
+    **(4) 수치적으로.**
 
-**두 분포가 거의 포개진다.** 중앙값이 둘 다 28.00세로 같고, 평균은 30.63세와 28.34세로 2.3세 차이다. 상자그림의 두 상자가 거의 같은 높이에 있다.
+    ```python
+    fig, ax = plt.subplots(1, 2, figsize=(13, 4.6))
+    PALETTE = ["#E65100", "#33691E"]          # 사망 / 생존
 
-**그런데 히스토그램의 왼쪽 끝이 다르다.** 0~10세 구간에서 초록(생존)이 주황(사망)보다 높다. **어린아이들은 살아남았다.** 이 봉우리가 이 절의 나머지를 지배한다.
+    # 생존/사망 각각의 나이 분포를 겹쳐 그린다.
+    sns.histplot(data=d, x="Age", hue="Survived", kde=True, ax=ax[0],
+                 palette=PALETTE, bins=30)
+    ax[0].axvline(CUT, color="#D32F2F", ls="--", lw=2)
+    ax[0].text(CUT + 1, ax[0].get_ylim()[1] * 0.92, f"절단점 {CUT}세",
+               color="#D32F2F", fontweight="bold")
+    ax[0].set_title("생존 여부별 나이 분포")
+    ax[0].set_xlabel("나이 (세)"); ax[0].set_ylabel("사람 수")
+    ax[0].legend(["생존", "사망"], title="생존 여부")
 
-**상자그림은 이 사실을 놓친다.** 상자그림은 사분위수만 보이므로 **분포의 한쪽 끝에 있는 작은 덩어리**를 표현하지 못한다. 아래 수염 끝이 조금 다를 뿐이다.
+    sns.boxplot(data=d, x="Survived", y="Age", ax=ax[1], hue="Survived",
+                palette=PALETTE, legend=False)
+    ax[1].axhline(CUT, color="#D32F2F", ls="--", lw=2)
+    ax[1].text(1.35, CUT + 1.5, f"절단점 {CUT}세", color="#D32F2F",
+               fontweight="bold")
+    ax[1].set_title("생존 여부별 나이 상자그림")
+    ax[1].set_xlabel("생존 여부"); ax[1].set_ylabel("나이 (세)")
+    ax[1].set_xticks([0, 1])
+    ax[1].set_xticklabels(["사망", "생존"])
 
-**히스토그램이 상자그림보다 많은 것을 말한 사례**다. 요약통계가 같아도 분포가 다를 수 있다는 것을 [히스토그램과 밀도 그림](histograms.md) 절에서 다루었다.
+    fig.tight_layout()
+    fig.savefig("titanic_age_dist.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    # 그림이 말하는 것을 수치로도 확인한다.
+    print(f"{'':14s}{'n':>6s}{'평균':>8s}{'중앙값':>8s}{'Q1':>7s}{'Q3':>7s}")
+    for lab, v in [("사망", d.loc[d["Survived"] == 0, "Age"]),
+                   ("생존", d.loc[d["Survived"] == 1, "Age"])]:
+        print(f"{lab:14s}{len(v):>6d}{v.mean():>8.2f}{v.median():>8.2f}"
+              f"{v.quantile(.25):>7.2f}{v.quantile(.75):>7.2f}")
+
+    # --- 상자그림의 수염과 울타리: 어린아이는 이상치로도 찍히지 않는다 ---
+    print("\n상자그림이 그리는 것 (울타리 = Q1-1.5IQR, Q3+1.5IQR)")
+    for lab, v in [("사망", d.loc[d["Survived"] == 0, "Age"]),
+                   ("생존", d.loc[d["Survived"] == 1, "Age"])]:
+        q1, q3 = v.quantile(.25), v.quantile(.75)
+        iqr = q3 - q1
+        print(f"  {lab}: 최솟값 {v.min():5.2f},  아래 울타리 {q1 - 1.5 * iqr:6.2f}"
+              f"  ->  아래쪽 이상치 {int((v < q1 - 1.5 * iqr).sum())}명")
+
+    # --- 평균 차이가 어디서 오는가 ---
+    m0 = d["Survived"] == 0
+    dm = d.loc[~m0, "Age"].mean() - d.loc[m0, "Age"].mean()
+    sp = np.sqrt(((m0.sum() - 1) * d.loc[m0, "Age"].var()
+                  + ((~m0).sum() - 1) * d.loc[~m0, "Age"].var()) / (len(d) - 2))
+    print(f"\n평균 차이 (생존 - 사망) = {dm:+.4f}세,  합동 표준편차 {sp:.4f},  표준화 차이 {dm / sp:+.4f}")
+    big = d[d["Age"] >= 10]
+    m0b = big["Survived"] == 0
+    print(f"  10세 미만 {int((d['Age'] < 10).sum())}명을 빼면 평균 차이 = "
+          f"{big.loc[~m0b, 'Age'].mean() - big.loc[m0b, 'Age'].mean():+.4f}세")
+    print(f"  10세 미만의 생존율 {d.loc[d['Age'] < 10, 'Survived'].mean():.4f}"
+          f"  (전체 {d['Survived'].mean():.4f})")
+    print(f"  생존자 중 10세 미만 비율 {(d.loc[~m0, 'Age'] < 10).mean():.4f},"
+          f"  사망자 중 {(d.loc[m0, 'Age'] < 10).mean():.4f}")
+
+    # --- 결측 177명을 버리는 대신 메우면 답이 바뀌는가 ---
+    def cut21(age, sur, tag):
+        m = age < CUT
+        a, b = sur[m].sum(), m.sum() - sur[m].sum()
+        c, e = sur[~m].sum(), (~m).sum() - sur[~m].sum()
+        print(f"  {tag:26s} n={len(age):3d}  n<21={m.sum():3d}  r<={sur[m].mean():.4f}"
+              f"  r>={sur[~m].mean():.4f}  차 {sur[m].mean() - sur[~m].mean():+.4f}"
+              f"  OR {(a * e) / (b * c):.4f}")
+
+    print("\n결측 177명을 어떻게 다루는가")
+    cut21(d["Age"].to_numpy(), d["Survived"].to_numpy(), "(ㄱ) 버린다")
+    med = d["Age"].median()
+    cut21(df["Age"].fillna(med).to_numpy(), df["Survived"].to_numpy(),
+          f"(ㄴ) 중앙값 {med:.1f} 로 메운다")
+    by = df.groupby(["Sex", "Pclass"])["Age"].transform(lambda s: s.fillna(s.median()))
+    cut21(by.to_numpy(), df["Survived"].to_numpy(), "(ㄷ) 성별·등급 중앙값")
+    print(f"  성별·등급 중앙값은 모두 21세 이상이라 메운 177명이 전원 '21세 이상' 으로 간다")
+    print(f"  중앙값으로 메우면 28.0세인 사람이 {int((d['Age'] == med).sum())}명에서 "
+          f"{int((df['Age'].fillna(med) == med).sum())}명으로 늘어난다")
+    ```
+
+    ![나이 분포와 상자그림](./img/titanic_age_dist.png)
+
+    ```text
+                       n      평균     중앙값     Q1     Q3
+    사망               424   30.63   28.00  21.00  39.00
+    생존               290   28.34   28.00  19.00  36.00
+
+    상자그림이 그리는 것 (울타리 = Q1-1.5IQR, Q3+1.5IQR)
+      사망: 최솟값  1.00,  아래 울타리  -6.00  ->  아래쪽 이상치 0명
+      생존: 최솟값  0.42,  아래 울타리  -6.50  ->  아래쪽 이상치 0명
+
+    평균 차이 (생존 - 사망) = -2.2825세,  합동 표준편차 14.4933,  표준화 차이 -0.1575
+      10세 미만 62명을 빼면 평균 차이 = -0.0680세
+      10세 미만의 생존율 0.6129  (전체 0.4062)
+      생존자 중 10세 미만 비율 0.1310,  사망자 중 0.0566
+
+    결측 177명을 어떻게 다루는가
+      (ㄱ) 버린다                    n=714  n<21=180  r<=0.4556  r>=0.3895  차 +0.0660  OR 1.3114
+      (ㄴ) 중앙값 28.0 로 메운다         n=891  n<21=180  r<=0.4556  r>=0.3657  차 +0.0899  OR 1.4514
+      (ㄷ) 성별·등급 중앙값              n=891  n<21=180  r<=0.4556  r>=0.3657  차 +0.0899  OR 1.4514
+      성별·등급 중앙값은 모두 21세 이상이라 메운 177명이 전원 '21세 이상' 으로 간다
+      중앙값으로 메우면 28.0세인 사람이 25명에서 202명으로 늘어난다
+    ```
+
+    **두 분포가 거의 포개진다.** 중앙값이 둘 다 28.00세로 같고, 평균은 30.63세와 28.34세로 2.3세 차이다. 상자그림의 두 상자가 거의 같은 높이에 있다.
+
+    **(1)의 답은 "전부 10세 미만에서 온다"이다.** 그것도 아슬아슬한 수준이 아니라 거의 전부다. $10$세 미만 $62$명을 빼고 다시 재면 평균 차이가 $-2.2825$세에서 $-0.0680$세로 **$97\%$ 사라진다.** 그 $62$명의 생존율이 $0.6129$로 전체 $0.4062$보다 훨씬 높고, 생존자의 $13.10\%$가 $10$세 미만인 반면 사망자는 $5.66\%$뿐이기 때문이다.
+
+    표준화 차이로 보면 $-0.158$에 지나지 않는다. **"평균 나이가 2.3세 다르다"는 요약은 사실상 아무 정보가 없는 말**이고, 실제 정보는 전부 꼬리에 있다.
+
+    **(2)의 답도 수가 보여 준다.** 아래 울타리가 $-6.00$과 $-6.50$으로 음수여서 **아래쪽 이상치가 양쪽 모두 $0$명**이다. 나이는 음수가 될 수 없으니 이 상자그림에서는 **아무리 어린 아이도 이상치로 찍힐 수 없다.** 히스토그램의 왼쪽 끝에서 초록(생존)이 주황(사망)보다 높게 솟은 그 덩어리가 상자그림에서는 완전히 사라진다.
+
+    **히스토그램이 상자그림보다 많은 것을 말한 사례**다. 요약통계가 같아도 분포가 다를 수 있다는 것을 [히스토그램과 밀도 그림](histograms.md) 절에서 다루었다.
+
+    **(3)의 답은 "바뀐다"이다.** 생존율 차이가 $+0.0660$에서 $+0.0899$로 $36\%$ 커지고 오즈비가 $1.3114$에서 $1.4514$로 오른다. 세 가지 메우기 방법이 **똑같은 답**을 주는데, 이는 (3)의 예측대로 어느 방법도 메운 사람을 $21$세 미만으로 보내지 못하기 때문이다. $177$명 전원이 생존율 낮은 쪽 칸에 더해지니 차이가 커지는 방향으로만 움직인다.
+
+    **메우기가 답을 "고쳐 준" 것이 아니라는 점을 분명히 해 두어야 한다.** 중앙값으로 메우면 $28.0$세인 사람이 $25$명에서 $202$명으로 **여덟 배**가 되어, 보기 3이 그린 바로 그 분포에 없던 뾰족한 봉우리가 생긴다. 분포를 보려고 그린 그림이 메우기 때문에 망가지는 것이다. **결측을 버릴지 메울지는 결과를 바꾸는 선택이며, 절단점과 마찬가지로 분석자가 정한다.**
 
 ## 4. 절단점을 바꾸면 결론이 바뀐다
 
@@ -252,61 +492,163 @@ for lab, v in [("사망", d.loc[d["Survived"] == 0, "Age"]),
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 가능한 모든 절단점을 훑어본다
+**보기 4.** <span class="diff easy" title="쉬움"></span> 가능한 모든 절단점을 훑어본다. 양쪽에 $10$명 이상 남는 절단점 $64$개를 전부 시험한다.
+
+**(1)** 생존율 차이가 절단점에만 의존하는 두 양으로 적힘을 보이시오. 곧
+
+$$
+\Delta(c) = r_{<c} - r_{\ge c} = \frac{r_{<c} - \bar y}{1 - \pi(c)}
+$$
+
+임을 보이고, 절단점이 **끝으로 갈수록 $\Delta$가 커지는** 까닭을 말하시오.
+
+**(2)** 그렇다면 "차이가 가장 큰 절단점"과 "연관이 가장 센(= $\lvert\varphi\rvert$가 가장 큰) 절단점"은 같은가.
 
 </div>
 
-```python
-age = d["Age"].to_numpy()
-sur = d["Survived"].to_numpy()
+??? success "풀이"
 
-# 양쪽에 최소 10명은 남는 절단점만 고려한다.
-CUTS = [c for c in range(1, 80)
-        if (age < c).sum() >= 10 and (age >= c).sum() >= 10]
-print(f"검사 대상 절단점 {len(CUTS)}개 ({CUTS[0]}세 ~ {CUTS[-1]}세)\n")
+    **(1) 해석적으로.** 보기 1에서 이미 절반을 했다. 전체 생존율이 가중평균
 
-print(f"{'절단점':>7s}{'n<c':>6s}{'n>=c':>6s}{'생존율<':>9s}"
-      f"{'생존율>=':>10s}{'차이':>9s}{'오즈비':>9s}")
-gaps = []
-for c in CUTS:
-    m = age < c
-    lo_r, hi_r = sur[m].mean(), sur[~m].mean()
-    gaps.append((c, lo_r - hi_r))
-    if c % 5 == 0:                           # 5세 간격만 출력한다
-        odds = (lo_r / (1 - lo_r)) / (hi_r / (1 - hi_r))
-        print(f"{c:>7d}{m.sum():>6d}{(~m).sum():>6d}{lo_r:>9.4f}"
-              f"{hi_r:>10.4f}{lo_r - hi_r:>+9.4f}{odds:>9.4f}")
+    $$
+    \bar y = \pi\, r_{<c} + (1-\pi)\, r_{\ge c}
+    $$
 
-wide = max(gaps, key=lambda z: z[1])
-narrow = min(gaps, key=lambda z: abs(z[1]))
-print(f"\n차이가 가장 큰 절단점:   {wide[0]}세, {wide[1]:+.4f}")
-print(f"차이가 가장 작은 절단점: {narrow[0]}세, {narrow[1]:+.4f}")
-print(f"차이가 10%포인트를 넘는 절단점 "
-      f"{sum(1 for c, g in gaps if abs(g) > 0.10)}개 / {len(CUTS)}개")
-```
+    이므로 $r_{\ge c}$를 풀어내면
 
-```text
-검사 대상 절단점 64개 (2세 ~ 65세)
+    $$
+    r_{\ge c} = \frac{\bar y - \pi\, r_{<c}}{1 - \pi}
+    $$
 
-    절단점   n<c  n>=c     생존율<     생존율>=       차이      오즈비
-      5    40   674   0.6750    0.3902  +0.2848   3.2457
-     10    62   652   0.6129    0.3865  +0.2264   2.5132
-     15    78   636   0.5769    0.3852  +0.1917   2.1763
-     20   164   550   0.4817    0.3836  +0.0981   1.4932
-     25   278   436   0.4245    0.3945  +0.0300   1.1320
-     30   384   330   0.4062    0.4061  +0.0002   1.0008
-     35   479   235   0.4092    0.4000  +0.0092   1.0389
-     40   551   163   0.4156    0.3742  +0.0414   1.1892
-     45   599   115   0.4124    0.3739  +0.0384   1.1749
-     50   640    74   0.4109    0.3649  +0.0461   1.2144
-     55   672    42   0.4122    0.3095  +0.1027   1.5644
-     60   688    26   0.4113    0.2692  +0.1421   1.8966
-     65   703    11   0.4111    0.0909  +0.3202   6.9807
+    이고, 따라서
 
-차이가 가장 큰 절단점:   2세, +0.4600
-차이가 가장 작은 절단점: 30세, +0.0002
-차이가 10%포인트를 넘는 절단점 29개 / 64개
-```
+    $$
+    \Delta(c) = r_{<c} - \frac{\bar y - \pi r_{<c}}{1-\pi}
+    = \frac{(1-\pi)r_{<c} - \bar y + \pi r_{<c}}{1-\pi}
+    = \frac{r_{<c} - \bar y}{1 - \pi(c)}
+    $$
+
+    이다. **$\bar y$는 절단점과 무관한 상수**이므로, $\Delta$를 움직이는 것은 두 가지뿐이다. 어린 쪽 집단의 생존율이 전체에서 얼마나 벗어나 있는가($r_{<c} - \bar y$)와, 그 집단이 얼마나 작은가($1-\pi$).
+
+    여기서 **$\Delta$가 끝에서 커지는 까닭**이 드러난다. 절단점을 왼쪽 끝으로 밀면 $\pi \to 0$이므로 분모 $1-\pi \to 1$이고 $\Delta \approx r_{<c} - \bar y$인데, 작은 집단일수록 평균에서 멀리 떨어질 수 있다. 반대로 오른쪽 끝으로 밀면 $\pi \to 1$이라 분모가 $0$으로 가면서 **아주 작은 $r_{<c} - \bar y$도 크게 증폭된다.** $c = 65$에서 $r_{<65} - \bar y$가 $0.0049$밖에 안 되는데 $\Delta$가 $0.3202$인 것이 그 예다.
+
+    **(2) 해석적으로.** 같지 않다. 보기 1의 항등식
+
+    $$
+    \varphi(c) = \sqrt{\frac{\pi(1-\pi)}{\bar y(1-\bar y)}}\;\Delta(c)
+    $$
+
+    에 (1)을 넣으면 분모의 $1-\pi$가 일부 약분되어
+
+    $$
+    \varphi(c) = \sqrt{\frac{\pi}{(1-\pi)\,\bar y(1-\bar y)}}\;\big(r_{<c} - \bar y\big)
+    $$
+
+    가 된다. $\Delta$를 키우는 요인($1-\pi$가 작음)과 $\varphi$를 키우는 요인이 **서로 다르게 작동한다.** 왼쪽 끝에서는 $\pi \to 0$이 $\varphi$를 눌러 버리므로, $\Delta$가 가장 큰 절단점이 $\varphi$도 가장 크게 하리라는 보장이 없다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    age = d["Age"].to_numpy()
+    sur = d["Survived"].to_numpy()
+
+    # 양쪽에 최소 10명은 남는 절단점만 고려한다.
+    CUTS = [c for c in range(1, 80)
+            if (age < c).sum() >= 10 and (age >= c).sum() >= 10]
+    print(f"검사 대상 절단점 {len(CUTS)}개 ({CUTS[0]}세 ~ {CUTS[-1]}세)\n")
+
+    print(f"{'절단점':>7s}{'n<c':>6s}{'n>=c':>6s}{'생존율<':>9s}"
+          f"{'생존율>=':>10s}{'차이':>9s}{'오즈비':>9s}")
+    gaps = []
+    for c in CUTS:
+        m = age < c
+        lo_r, hi_r = sur[m].mean(), sur[~m].mean()
+        gaps.append((c, lo_r - hi_r))
+        if c % 5 == 0:                           # 5세 간격만 출력한다
+            odds = (lo_r / (1 - lo_r)) / (hi_r / (1 - hi_r))
+            print(f"{c:>7d}{m.sum():>6d}{(~m).sum():>6d}{lo_r:>9.4f}"
+                  f"{hi_r:>10.4f}{lo_r - hi_r:>+9.4f}{odds:>9.4f}")
+
+    wide = max(gaps, key=lambda z: z[1])
+    narrow = min(gaps, key=lambda z: abs(z[1]))
+    print(f"\n차이가 가장 큰 절단점:   {wide[0]}세, {wide[1]:+.4f}")
+    print(f"차이가 가장 작은 절단점: {narrow[0]}세, {narrow[1]:+.4f}")
+    print(f"차이가 10%포인트를 넘는 절단점 "
+          f"{sum(1 for c, g in gaps if abs(g) > 0.10)}개 / {len(CUTS)}개")
+
+    # --- Delta 를 ybar 와 pi 만으로 다시 쓴다 ---
+    # Delta(c) = (r_<c - ybar) / (1 - pi(c)),  pi(c) = (age<c) 의 비율
+    # phi(c)   = sqrt(pi(1-pi)/(ybar(1-ybar))) * Delta(c)
+    ybar = sur.mean()
+    print(f"\n{'c':>4}{'pi':>9}{'r<c':>9}{'Delta':>10}{'(r<c-y)/(1-pi)':>17}{'phi':>9}{'numpy phi':>11}")
+    for c in (2, 5, 21, 30, 65):
+        m = age < c
+        pi = m.mean()
+        dl = sur[m].mean() - sur[~m].mean()
+        ph = np.sqrt(pi * (1 - pi) / (ybar * (1 - ybar))) * dl
+        print(f"{c:>4}{pi:>9.4f}{sur[m].mean():>9.4f}{dl:>+10.4f}"
+              f"{(sur[m].mean() - ybar) / (1 - pi):>+17.4f}{ph:>+9.4f}"
+              f"{np.corrcoef(sur, m.astype(int))[0, 1]:>+11.4f}")
+
+    # --- 차이가 가장 큰 절단점과 연관이 가장 센 절단점은 다르다 ---
+    rows = []
+    for c in CUTS:
+        m = age < c
+        pi = m.mean()
+        dl = sur[m].mean() - sur[~m].mean()
+        rows.append((c, pi, dl, np.sqrt(pi * (1 - pi) / (ybar * (1 - ybar))) * dl))
+    bd = max(rows, key=lambda z: abs(z[2]))
+    bp = max(rows, key=lambda z: abs(z[3]))
+    print(f"\n|Delta| 가 가장 큰 절단점: {bd[0]}세  pi={bd[1]:.4f}  Delta={bd[2]:+.4f}  phi={bd[3]:+.4f}")
+    print(f"|phi|   가 가장 큰 절단점: {bp[0]}세  pi={bp[1]:.4f}  Delta={bp[2]:+.4f}  phi={bp[3]:+.4f}")
+    print("|phi| 상위 다섯:", [(c, round(p, 4)) for c, _, _, p in sorted(rows, key=lambda z: -abs(z[3]))[:5]])
+    print("|Delta| 상위 다섯:", [(c, round(g, 4)) for c, _, g, _ in sorted(rows, key=lambda z: -abs(z[2]))[:5]])
+    ```
+
+    ```text
+    검사 대상 절단점 64개 (2세 ~ 65세)
+
+        절단점   n<c  n>=c     생존율<     생존율>=       차이      오즈비
+          5    40   674   0.6750    0.3902  +0.2848   3.2457
+         10    62   652   0.6129    0.3865  +0.2264   2.5132
+         15    78   636   0.5769    0.3852  +0.1917   2.1763
+         20   164   550   0.4817    0.3836  +0.0981   1.4932
+         25   278   436   0.4245    0.3945  +0.0300   1.1320
+         30   384   330   0.4062    0.4061  +0.0002   1.0008
+         35   479   235   0.4092    0.4000  +0.0092   1.0389
+         40   551   163   0.4156    0.3742  +0.0414   1.1892
+         45   599   115   0.4124    0.3739  +0.0384   1.1749
+         50   640    74   0.4109    0.3649  +0.0461   1.2144
+         55   672    42   0.4122    0.3095  +0.1027   1.5644
+         60   688    26   0.4113    0.2692  +0.1421   1.8966
+         65   703    11   0.4111    0.0909  +0.3202   6.9807
+
+    차이가 가장 큰 절단점:   2세, +0.4600
+    차이가 가장 작은 절단점: 30세, +0.0002
+    차이가 10%포인트를 넘는 절단점 29개 / 64개
+
+       c       pi      r<c     Delta   (r<c-y)/(1-pi)      phi  numpy phi
+       2   0.0196   0.8571   +0.4600          +0.4600  +0.1299    +0.1299
+       5   0.0560   0.6750   +0.2848          +0.2848  +0.1334    +0.1334
+      21   0.2521   0.4556   +0.0660          +0.0660  +0.0584    +0.0584
+      30   0.5378   0.4062   +0.0002          +0.0002  +0.0002    +0.0002
+      65   0.9846   0.4111   +0.3202          +0.3202  +0.0803    +0.0803
+
+    |Delta| 가 가장 큰 절단점: 2세  pi=0.0196  Delta=+0.4600  phi=+0.1299
+    |phi|   가 가장 큰 절단점: 7세  pi=0.0658  Delta=+0.3168  phi=+0.1600
+    |phi| 상위 다섯: [(7, 0.16), (6, 0.1557), (8, 0.153), (9, 0.1517), (16, 0.136)]
+    |Delta| 상위 다섯: [(2, 0.46), (64, 0.3353), (65, 0.3202), (6, 0.318), (7, 0.3168)]
+    ```
+
+    (1)의 항등식이 다섯 절단점 모두에서 소수 넷째 자리까지 `Delta` 열과 같다. $\varphi$ 쪽도 손으로 세운 식과 `numpy` 의 상관계수가 일치한다.
+
+    $c = 30$에서 차이가 $+0.0002$로 거의 $0$인 것도 식이 설명해 준다. **$r_{<30} = 0.4062$가 전체 생존율 $\bar y = 0.4062$와 사실상 같기 때문**이다. 분자가 $0$이면 분모가 무엇이든 $\Delta$가 $0$이다. "$30$세에서 나이는 생존과 완벽히 무관하다"는 인상은 자료의 성질이 아니라 **$30$세 아래 집단의 평균이 마침 전체 평균과 같다**는 사실일 뿐이다.
+
+    **(2)의 답은 "같지 않다"이다.** $\lvert\Delta\rvert$가 가장 큰 절단점은 $2$세($\Delta = +0.4600$)인데, 그때 $\varphi$는 $+0.1299$에 지나지 않는다. $\lvert\varphi\rvert$가 가장 큰 절단점은 **$7$세**($\varphi = +0.1600$)이고 그때 $\Delta$는 $+0.3168$로 더 작다. 두 순위가 아예 다르다. $\lvert\varphi\rvert$ 상위는 $7, 6, 8, 9, 16$세로 모여 있는 반면 $\lvert\Delta\rvert$ 상위는 $2, 64, 65, 6, 7$세로 양 끝에 흩어져 있다.
+
+    까닭은 $c = 2$에서 어린 쪽이 **$14$명뿐**이라는 데 있다. $\pi = 0.0196$이면 $\sqrt{\pi/(1-\pi)} = 0.141$이라 $\varphi$가 크게 눌린다. **"차이가 46%포인트"라는 말은 $14$명의 생존율이 $0.857$이었다는 말이고, 그것만으로 강한 연관이라 할 수 없다.** 어느 요약을 쓰느냐에 따라 "가장 좋은 절단점"이 달라지며, 이것 또한 분석자의 선택이다.
+
+    (참고로 $\lvert\varphi\rvert$를 최대로 하는 $7$세가 [p-해킹 시연 - 타이타닉 절단점 탐색](../../ch09/multiple_testing/p_hacking_titanic_cutoff.md) 절에서 "탐색으로 고른 절단점"으로 쓰이는 값이다.)
 
 **같은 자료에서 생존율 차이가 $+46$%포인트부터 $+0.02$%포인트까지 나온다.**
 
@@ -329,95 +671,138 @@ print(f"차이가 10%포인트를 넘는 절단점 "
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 나이와 생존의 실제 모양
+**보기 5.** <span class="diff easy" title="쉬움"></span> 나이와 생존의 실제 모양. 절단점에 따른 차이 곡선과 $5$년 구간별 생존율을 나란히 그린다.
+
+**(1)** $10$년 구간별 생존율을 보고, 관계가 **단조가 아님**을 보이시오.
+
+**(2)** $21$세 미만 집단의 생존율 $0.4556$을 $10$세 미만과 $10$–$21$세의 **가중평균**으로 분해하여, $21$세가 왜 하필 나쁜 자리인지 수로 설명하시오.
 
 </div>
 
-```python
-fig, ax = plt.subplots(1, 2, figsize=(12, 4.8))
+??? success "풀이"
 
-dif = [sur[age < c].mean() - sur[age >= c].mean() for c in CUTS]
+    **(2) 해석적으로.** 보기 1에서 쓴 가중평균을 한 번 더 쓴다. $21$세 미만을 $10$세에서 다시 가르면
 
-# (1) 절단점에 따른 생존율 차이
-ax[0].plot(CUTS, dif, "o-", ms=4, color="#33691E")
-ax[0].axhline(0, color="#37474F", lw=1)
-ax[0].axvline(21, color="#E65100", ls=":", lw=2, label="절단점 21세")
-ax[0].set_xlabel("나이 절단점 $c$ (세)")
-# mathtext 는 \ge 를 모른다. \geq 로 써야 한다.
-ax[0].set_ylabel("생존율 차이  $r(<c) - r(\\geq c)$")
-ax[0].set_title("절단점에 따른 생존율 차이")
-ax[0].legend(); ax[0].grid(alpha=0.25)
+    $$
+    r_{<21} = \frac{n_{<10}}{n_{<21}}\, r_{<10} + \frac{n_{[10,21)}}{n_{<21}}\, r_{[10,21)}
+    $$
 
-# (2) 5년 구간별 생존율 -- 자르지 않고 본 실제 모양
-edges = np.arange(0, 85, 5)
-mid, rt, cnt = [], [], []
-for i in range(len(edges) - 1):
-    m = (age >= edges[i]) & (age < edges[i + 1])
-    if m.sum() >= 5:
-        mid.append((edges[i] + edges[i + 1]) / 2)
-        rt.append(sur[m].mean()); cnt.append(m.sum())
-ax[1].plot(mid, rt, "o-", color="#6A1B9A", ms=6)
-for x_, y_, n_ in zip(mid, rt, cnt):        # 각 점 위에 표본 크기를 적는다
-    ax[1].annotate(f"{n_}", (x_, y_), textcoords="offset points",
-                   xytext=(0, 7), ha="center", fontsize=7, color="#90A4AE")
-ax[1].axhline(sur.mean(), color="#37474F", ls="--", lw=1,
-              label=f"전체 생존율 {sur.mean():.3f}")
-ax[1].axvline(21, color="#E65100", ls=":", lw=2, label="절단점 21세")
-ax[1].set_xlabel("나이 (5년 구간, 점 위의 수는 구간별 인원)")
-ax[1].set_ylabel("생존율")
-ax[1].set_title("관계가 단조가 아니다")
-ax[1].legend(); ax[1].grid(alpha=0.25)
+    이다. 그런데 두 조각의 생존율이 $0.6129$와 $0.3729$로 **아주 다르다.** 앞 조각은 전체 평균 $0.4062$보다 훨씬 높고 뒤 조각은 낮다. 섞으면 서로 상쇄되어 가운데 어딘가가 나온다.
 
-fig.suptitle("자유로운 모수 하나, 여러 개의 결론", y=1.02)
-fig.tight_layout()
-fig.savefig("titanic_cutoff_sweep.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
+    실제로 $n_{<10} = 62$, $n_{[10,21)} = 118$이므로 무게가 $0.3444$와 $0.6556$이고
 
-# 10년 단위로 묶어 숫자로도 본다.
-g = d.groupby(pd.cut(d["Age"], [0, 10, 20, 30, 40, 50, 60, 81],
-                     right=False))["Survived"].agg(["count", "sum", "mean"])
-print(g.round(4).to_string())
-```
+    $$
+    0.3444 \times 0.6129 + 0.6556 \times 0.3729 = 0.4556
+    $$
 
-![절단점 훑기와 비단조 관계](./img/titanic_cutoff_sweep.png)
+    이다. **$10$세 미만의 강한 신호가 $10$–$21$세의 약한 신호에 묻혀 $0.613$이 $0.456$으로 희석된다.** 절단점을 $10$세 근처에 두면 앞 조각만 분리되어 신호가 살아나고, $21$세에 두면 두 조각이 섞여 버린다.
 
-```text
-          count  sum    mean
-Age                         
-[0, 10)      62   38  0.6129
-[10, 20)    102   41  0.4020
-[20, 30)    220   77  0.3500
-[30, 40)    167   73  0.4371
-[40, 50)     89   34  0.3820
-[50, 60)     48   20  0.4167
-[60, 81)     26    7  0.2692
-```
+    **(1)·(2) 수치적으로.**
 
-**관계가 단조가 아니다.**
+    ```python
+    fig, ax = plt.subplots(1, 2, figsize=(12, 4.8))
 
-$$
-0.613\;\longrightarrow\;0.402\;\longrightarrow\;\mathbf{0.350}\;\longrightarrow\;0.437
-\;\longrightarrow\;0.382\;\longrightarrow\;0.417\;\longrightarrow\;\mathbf{0.269}
-$$
+    dif = [sur[age < c].mean() - sur[age >= c].mean() for c in CUTS]
 
-**내려갔다가 올라갔다가 다시 내려간다.** 10세 미만이 0.613으로 가장 높고, 20대가 0.350으로 바닥이고, 60세 이상이 0.269로 다시 낮다.
+    # (1) 절단점에 따른 생존율 차이
+    ax[0].plot(CUTS, dif, "o-", ms=4, color="#33691E")
+    ax[0].axhline(0, color="#37474F", lw=1)
+    ax[0].axvline(21, color="#E65100", ls=":", lw=2, label="절단점 21세")
+    ax[0].set_xlabel("나이 절단점 $c$ (세)")
+    # mathtext 는 \ge 를 모른다. \geq 로 써야 한다.
+    ax[0].set_ylabel("생존율 차이  $r(<c) - r(\\geq c)$")
+    ax[0].set_title("절단점에 따른 생존율 차이")
+    ax[0].legend(); ax[0].grid(alpha=0.25)
 
-**단 하나의 절단점으로는 이런 모양을 잡을 수 없다.** 절단점 하나는 자료를 "왼쪽 평균 대 오른쪽 평균"으로만 요약하는데, **왼쪽에 높은 값과 낮은 값이 섞여 있으면 서로 상쇄**된다.
+    # (2) 5년 구간별 생존율 -- 자르지 않고 본 실제 모양
+    edges = np.arange(0, 85, 5)
+    mid, rt, cnt = [], [], []
+    for i in range(len(edges) - 1):
+        m = (age >= edges[i]) & (age < edges[i + 1])
+        if m.sum() >= 5:
+            mid.append((edges[i] + edges[i + 1]) / 2)
+            rt.append(sur[m].mean()); cnt.append(m.sum())
+    ax[1].plot(mid, rt, "o-", color="#6A1B9A", ms=6)
+    for x_, y_, n_ in zip(mid, rt, cnt):        # 각 점 위에 표본 크기를 적는다
+        ax[1].annotate(f"{n_}", (x_, y_), textcoords="offset points",
+                       xytext=(0, 7), ha="center", fontsize=7, color="#90A4AE")
+    ax[1].axhline(sur.mean(), color="#37474F", ls="--", lw=1,
+                  label=f"전체 생존율 {sur.mean():.3f}")
+    ax[1].axvline(21, color="#E65100", ls=":", lw=2, label="절단점 21세")
+    ax[1].set_xlabel("나이 (5년 구간, 점 위의 수는 구간별 인원)")
+    ax[1].set_ylabel("생존율")
+    ax[1].set_title("관계가 단조가 아니다")
+    ax[1].legend(); ax[1].grid(alpha=0.25)
 
-**21세가 하필 가장 나쁜 자리다.**
+    fig.suptitle("자유로운 모수 하나, 여러 개의 결론", y=1.02)
+    fig.tight_layout()
+    fig.savefig("titanic_cutoff_sweep.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
 
-```text
-21세 미만 = [0~10세의 0.613]  +  [10~20세의 0.402]  -> 섞여서 0.456
-21세 이상 = 20대부터 60대까지 대체로 0.35~0.44   -> 0.390
+    # 10년 단위로 묶어 숫자로도 본다.
+    g = d.groupby(pd.cut(d["Age"], [0, 10, 20, 30, 40, 50, 60, 81],
+                         right=False))["Survived"].agg(["count", "sum", "mean"])
+    print(g.round(4).to_string())
 
-두 평균이 비슷해진다 -> 차이 +0.066
-```
+    # --- 21세 미만의 생존율을 두 조각의 가중평균으로 분해한다 ---
+    m1 = age < 10
+    m2 = (age >= 10) & (age < 21)
+    w1 = m1.sum() / (m1 | m2).sum()
+    print(f"\n10세 미만   n={m1.sum():3d}  생존 {int(sur[m1].sum()):3d}  r={sur[m1].mean():.6f}")
+    print(f"10~21세     n={m2.sum():3d}  생존 {int(sur[m2].sum()):3d}  r={sur[m2].mean():.6f}")
+    print(f"  가중평균 {w1:.6f}*{sur[m1].mean():.6f} + {1 - w1:.6f}*{sur[m2].mean():.6f}"
+          f" = {w1 * sur[m1].mean() + (1 - w1) * sur[m2].mean():.6f}")
+    print(f"  실제 21세 미만 생존율                                      = {sur[m1 | m2].mean():.6f}")
+    print(f"  전체 생존율 ybar = {sur.mean():.6f}")
+    ```
 
-**어린 쪽 절단점에서 차이가 가장 커지는 이유**도 같다. 5세 미만은 거의 전부 어린아이라 생존율이 높고, 그 위는 전부 섞여 있다. **어린아이 효과를 가장 순수하게 분리하는 자리**가 그쪽이다.
+    ![절단점 훑기와 비단조 관계](./img/titanic_cutoff_sweep.png)
 
-**64~65세에서 차이가 다시 커지는 것은 반대쪽 끝**이다. 노인의 생존율이 낮아서다. 다만 65세 이상이 11명뿐이므로 **이 값은 매우 불안정**하다. 오른쪽 그림에서 그 점 위에 적힌 표본 크기가 그 사실을 알려 준다.
+    ```text
+              count  sum    mean
+    Age                         
+    [0, 10)      62   38  0.6129
+    [10, 20)    102   41  0.4020
+    [20, 30)    220   77  0.3500
+    [30, 40)    167   73  0.4371
+    [40, 50)     89   34  0.3820
+    [50, 60)     48   20  0.4167
+    [60, 81)     26    7  0.2692
 
-**왼쪽 그림의 U자 모양이 이 모든 것을 요약한다.** 절단점을 양 끝으로 밀수록 차이가 커지고, 가운데(30세 근처)에서 정확히 0이 된다.
+    10세 미만   n= 62  생존  38  r=0.612903
+    10~21세     n=118  생존  44  r=0.372881
+      가중평균 0.344444*0.612903 + 0.655556*0.372881 = 0.455556
+      실제 21세 미만 생존율                                      = 0.455556
+      전체 생존율 ybar = 0.406162
+    ```
+
+    **관계가 단조가 아니다.**
+
+    $$
+    0.613\;\longrightarrow\;0.402\;\longrightarrow\;\mathbf{0.350}\;\longrightarrow\;0.437
+    \;\longrightarrow\;0.382\;\longrightarrow\;0.417\;\longrightarrow\;\mathbf{0.269}
+    $$
+
+    **내려갔다가 올라갔다가 다시 내려간다.** 10세 미만이 0.613으로 가장 높고, 20대가 0.350으로 바닥이고, 60세 이상이 0.269로 다시 낮다.
+
+    **단 하나의 절단점으로는 이런 모양을 잡을 수 없다.** 절단점 하나는 자료를 "왼쪽 평균 대 오른쪽 평균"으로만 요약하는데, **왼쪽에 높은 값과 낮은 값이 섞여 있으면 서로 상쇄**된다.
+
+    **21세가 하필 가장 나쁜 자리다.**
+
+    ```text
+    21세 미만 = [0~10세의 0.613]  +  [10~20세의 0.402]  -> 섞여서 0.456
+    21세 이상 = 20대부터 60대까지 대체로 0.35~0.44   -> 0.390
+
+    두 평균이 비슷해진다 -> 차이 +0.066
+    ```
+
+    (2)의 분해가 그것을 소수 여섯째 자리까지 확인해 준다. $0.344444 \times 0.612903 + 0.655556 \times 0.372881 = 0.455556$이다. **$10$세 미만의 $0.613$이 $10$–$21$세의 $0.373$과 섞여 $0.456$으로 주저앉았고**, 그 값이 전체 평균 $0.4062$에서 겨우 $0.049$ 떨어져 있다. 보기 4의 식 $\Delta = (r_{<c} - \bar y)/(1-\pi)$에 넣으면 $0.049394/0.747899 = 0.0660$이다.
+
+    **어린 쪽 절단점에서 차이가 가장 커지는 이유**도 같다. 5세 미만은 거의 전부 어린아이라 생존율이 높고, 그 위는 전부 섞여 있다. **어린아이 효과를 가장 순수하게 분리하는 자리**가 그쪽이다.
+
+    **64~65세에서 차이가 다시 커지는 것은 반대쪽 끝**이다. 노인의 생존율이 낮아서다. 다만 65세 이상이 11명뿐이므로 **이 값은 매우 불안정**하다. 오른쪽 그림에서 그 점 위에 적힌 표본 크기가 그 사실을 알려 준다.
+
+    **왼쪽 그림의 U자 모양이 이 모든 것을 요약한다.** 절단점을 양 끝으로 밀수록 차이가 커지고, 가운데(30세 근처)에서 정확히 0이 된다.
 
 ## 6. "가장 좋은" 절단점을 고르면
 

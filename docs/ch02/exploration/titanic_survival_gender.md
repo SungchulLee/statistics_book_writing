@@ -19,66 +19,128 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 자료를 불러오고 결측부터 확인하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 전체 생존율 $38.38\%$는 어디서 오는가. 타이타닉 승객 $891$명의 명부를 읽고 결측부터 센다.
+
+**(1)** 여성의 생존율은 $74.20\%$, 남성은 $18.89\%$다. 전체 생존율 $38.38\%$를 이 두 수로부터 만들어 내시오. 두 수의 산술평균 $46.55\%$가 **아닌** 까닭은 무엇인가.
+
+**(2)** 결측이 있는 변수를 모두 찾고, 이 절의 2–5절과 6절이 각각 몇 명으로 이루어지는지 말하시오.
 
 </div>
 
-```python
-import warnings
-warnings.filterwarnings("ignore")
+??? success "풀이"
 
-import numpy as np
-import pandas as pd
+    **(1) 해석적으로.** 생존 여부 $y_i \in \{0, 1\}$의 평균은 그대로 생존율이다. 합을 성별로 갈라 쓰면
 
-# 타이타닉 승객 명부. index_col 로 승객번호를 색인으로 삼는다.
-URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-       "datasets/master/titanic.csv")
-df = pd.read_csv(URL, index_col="PassengerId")
+    $$
+    \bar y = \frac1n\sum_{i=1}^{n} y_i
+    = \frac1n\left(\sum_{i \in F} y_i + \sum_{i \in M} y_i\right)
+    = \frac{n_F}{n}\,\bar y_F + \frac{n_M}{n}\,\bar y_M
+    $$
 
-print(f"승객 {df.shape[0]}명, 변수 {df.shape[1]}개\n")
+    이다. **전체 비율은 집단별 비율의 가중평균이고, 가중치는 집단의 크기 비율**이다. 넣어 보면
 
-# 무엇이든 하기 전에 결측부터 센다.
-# 결측이 있는 변수를 모르고 분석하면 n 이 조용히 줄어든다.
-na = df.isna().sum()
-print("결측이 있는 변수")
-for name, cnt in na[na > 0].items():
-    print(f"  {name:9s} {cnt:4d}개  ({cnt / len(df):.1%})")
+    $$
+    \frac{314}{891}(0.742038) + \frac{577}{891}(0.188908)
+    = 0.352413 \times 0.742038 + 0.647587 \times 0.188908
+    = 0.383838
+    $$
 
-# 성별을 0/1 로 부호화한다. 1=남성, 0=여성 으로 정했다.
-# 이 선택이 뒤에 나올 상관계수의 '부호'를 정한다는 점을 기억해 두자.
-df["Sex_int"] = (df["Sex"] == "male").astype(int)
+    이다.
 
-print(f"\n성별 분포")
-print(df["Sex"].value_counts().to_string())
-print(f"\n생존 분포 (0=사망, 1=생존)")
-print(df["Survived"].value_counts().sort_index().to_string())
-print(f"\n전체 생존율 {df['Survived'].mean():.4f}")
-```
+    산술평균 $\tfrac12(0.742038 + 0.188908) = 0.465473$이 아닌 이유는 명백하다. **그 값은 $n_F = n_M$일 때에만 맞는다.** 여기서는 남성이 $64.76\%$로 다수이므로 가중평균이 남성 쪽 값으로 끌려간다. 실제로 $0.3838$은 $0.1889$에서 $0.195$, $0.7420$에서 $0.358$ 떨어져 있어 남성 쪽에 훨씬 가깝다.
 
-```text
-승객 891명, 변수 11개
+    집단 크기가 다를 때 집단별 비율을 단순평균하는 것은 흔한 실수이고, 뒤에 나올 심슨의 역설도 이 가중치가 층마다 달라질 때 생긴다.
 
-결측이 있는 변수
-  Age        177개  (19.9%)
-  Cabin      687개  (77.1%)
-  Embarked     2개  (0.2%)
+    **(2) 수치적으로.**
 
-성별 분포
-Sex
-male      577
-female    314
+    ```python
+    import warnings
+    warnings.filterwarnings("ignore")
 
-생존 분포 (0=사망, 1=생존)
-Survived
-0    549
-1    342
+    import numpy as np
+    import pandas as pd
 
-전체 생존율 0.3838
-```
+    # 타이타닉 승객 명부. index_col 로 승객번호를 색인으로 삼는다.
+    URL = ("https://raw.githubusercontent.com/datasciencedojo/"
+           "datasets/master/titanic.csv")
+    df = pd.read_csv(URL, index_col="PassengerId")
 
-**결측을 먼저 세는 것이 습관이 되어야 한다.** `Age`가 177개(19.9%) 비어 있는데, 이 사실을 모르고 나이를 쓰는 분석을 하면 **표본이 891명에서 714명으로 조용히 줄어든다.** 6절에서 실제로 그런 일이 일어난다.
+    print(f"승객 {df.shape[0]}명, 변수 {df.shape[1]}개\n")
 
-**이 절의 주된 질문에는 결측이 없다.** `Survived`와 `Sex`는 891명 모두 기록되어 있으므로, 5절까지는 전수를 쓴다.
+    # 무엇이든 하기 전에 결측부터 센다.
+    # 결측이 있는 변수를 모르고 분석하면 n 이 조용히 줄어든다.
+    na = df.isna().sum()
+    print("결측이 있는 변수")
+    for name, cnt in na[na > 0].items():
+        print(f"  {name:9s} {cnt:4d}개  ({cnt / len(df):.1%})")
+
+    # 성별을 0/1 로 부호화한다. 1=남성, 0=여성 으로 정했다.
+    # 이 선택이 뒤에 나올 상관계수의 '부호'를 정한다는 점을 기억해 두자.
+    df["Sex_int"] = (df["Sex"] == "male").astype(int)
+
+    print(f"\n성별 분포")
+    print(df["Sex"].value_counts().to_string())
+    print(f"\n생존 분포 (0=사망, 1=생존)")
+    print(df["Survived"].value_counts().sort_index().to_string())
+    print(f"\n전체 생존율 {df['Survived'].mean():.4f}")
+
+    # --- 전체 생존율은 두 집단 생존율의 가중평균이다 ---
+    n = len(df)
+    n_f = int((df["Sex"] == "female").sum())
+    n_m = int((df["Sex"] == "male").sum())
+    r_f = df.loc[df["Sex"] == "female", "Survived"].mean()
+    r_m = df.loc[df["Sex"] == "male", "Survived"].mean()
+    print(f"\n여성 {n_f}명 생존율 {r_f:.6f},  남성 {n_m}명 생존율 {r_m:.6f}")
+    print(f"  가중치 {n_f}/{n} = {n_f / n:.6f},  {n_m}/{n} = {n_m / n:.6f}")
+    print(f"  가중평균 {n_f / n:.6f}*{r_f:.6f} + {n_m / n:.6f}*{r_m:.6f} = {n_f / n * r_f + n_m / n * r_m:.6f}")
+    print(f"  실제 전체 생존율                                    = {df['Survived'].mean():.6f}")
+    print(f"  두 생존율의 산술평균 (틀린 계산)                      = {(r_f + r_m) / 2:.6f}")
+
+    # --- 이 절의 주된 분석에 쓰이는 사람 수 ---
+    print(f"\nSurvived 결측 {int(df['Survived'].isna().sum())}개, "
+          f"Sex 결측 {int(df['Sex'].isna().sum())}개"
+          f"  ->  2~5절은 {int(df[['Survived', 'Sex']].dropna().shape[0])}명 전원을 쓴다")
+    print(f"Age 결측 {int(df['Age'].isna().sum())}개 ({df['Age'].isna().mean():.4%})"
+          f"  ->  나이를 쓰는 6절은 {int(df['Age'].notna().sum())}명으로 줄어든다")
+    ```
+
+    ```text
+    승객 891명, 변수 11개
+
+    결측이 있는 변수
+      Age        177개  (19.9%)
+      Cabin      687개  (77.1%)
+      Embarked     2개  (0.2%)
+
+    성별 분포
+    Sex
+    male      577
+    female    314
+
+    생존 분포 (0=사망, 1=생존)
+    Survived
+    0    549
+    1    342
+
+    전체 생존율 0.3838
+
+    여성 314명 생존율 0.742038,  남성 577명 생존율 0.188908
+      가중치 314/891 = 0.352413,  577/891 = 0.647587
+      가중평균 0.352413*0.742038 + 0.647587*0.188908 = 0.383838
+      실제 전체 생존율                                    = 0.383838
+      두 생존율의 산술평균 (틀린 계산)                      = 0.465473
+
+    Survived 결측 0개, Sex 결측 0개  ->  2~5절은 891명 전원을 쓴다
+    Age 결측 177개 (19.8653%)  ->  나이를 쓰는 6절은 714명으로 줄어든다
+    ```
+
+    가중평균이 소수 여섯째 자리까지 실제 전체 생존율과 같다. 산술평균 $0.465473$은 $0.08$이나 벗어난다.
+
+    **결측을 먼저 세는 것이 습관이 되어야 한다.** `Age`가 177개(19.9%) 비어 있는데, 이 사실을 모르고 나이를 쓰는 분석을 하면 **표본이 891명에서 714명으로 조용히 줄어든다.** 6절에서 실제로 그런 일이 일어난다.
+
+    **이 절의 주된 질문에는 결측이 없다.** `Survived`와 `Sex`는 891명 모두 기록되어 있으므로, 5절까지는 전수를 쓴다.
+
+    `Cabin` 의 결측률 $77.1\%$는 더 심한데, 이 절에서는 쓰지 않으므로 문제가 되지 않는다. **변수마다 결측률이 다르다는 것이 요점이다.** "결측을 지운 뒤 분석한다"고 한 줄로 끝내면 어느 변수를 쓰느냐에 따라 $n$이 달라진다. 성별과 생존만 쓰면 $891$명, 나이까지 쓰면 $714$명, 열한 변수를 모두 요구하면 $183$명만 남는다.
 
 **성별 부호화는 자의적이다.** 남성을 1로 둘 수도 여성을 1로 둘 수도 있고, 어느 쪽을 골라도 분석의 내용은 같다. 다만 **상관계수의 부호가 뒤집힌다.** 바로 다음에서 이 점이 문제가 된다.
 
@@ -88,36 +150,149 @@ Survived
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 두 이진 변수의 상관은 파이 계수다
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 이진 변수의 상관은 네 칸의 도수만으로 적힌다. `Survived` 와 `Sex_int`(1=남성)의 피어슨 상관을 구한다.
+
+**(1)** 두 $0/1$ 변수의 피어슨 상관계수가 $2\times2$ 표의 네 도수 $n_{11}, n_{10}, n_{01}, n_{00}$만으로 적히는 식을 유도하고, 그 식으로 손수 계산해 `numpy` 의 답과 맞추시오.
+
+**(2)** 네 주변도수(남 $577$, 여 $314$, 생존 $342$, 사망 $549$)를 **그대로 둔 채** $\lvert\varphi\rvert$를 가장 크게 만드는 표를 찾고 그 값을 구하시오. 관측된 $0.5434$는 그 최댓값의 몇 퍼센트인가.
 
 </div>
 
-```python
-# Survived 와 Sex_int 는 둘 다 0/1 이지만 피어슨 공식은 그대로 적용된다.
-corr = df[["Survived", "Sex_int"]].corr()
-print(corr.round(4).to_string())
+??? success "풀이"
 
-r = corr.loc["Survived", "Sex_int"]
-print(f"\n상관계수 {r:.4f}")
+    **(1) 해석적으로.** $X$를 성별($1$=남성), $Y$를 생존 여부로 두고 네 칸의 도수를 $n_{xy}$라 하자. $X$와 $Y$가 $0$ 아니면 $1$이므로 **$X^2 = X$, $Y^2 = Y$, $XY = \mathbf 1(X=1, Y=1)$** 이라는 성질을 쓸 수 있다. 그러면 표본평균이 그대로 비율이 되고
 
-# 부호를 뒤집어 보면 -- 부호화만 바꾸었을 뿐인데 부호가 바뀐다.
-df["Sex_female"] = (df["Sex"] == "female").astype(int)
-print(f"\n1=남성 으로 부호화: r = {np.corrcoef(df['Survived'], df['Sex_int'])[0, 1]:+.4f}")
-print(f"1=여성 으로 부호화: r = {np.corrcoef(df['Survived'], df['Sex_female'])[0, 1]:+.4f}")
-```
+    $$
+    \bar X = \frac{n_{11}+n_{10}}{n},
+    \qquad
+    \bar Y = \frac{n_{11}+n_{01}}{n},
+    \qquad
+    \overline{XY} = \frac{n_{11}}{n}
+    $$
 
-```text
-          Survived  Sex_int
-Survived    1.0000  -0.5434
-Sex_int    -0.5434   1.0000
+    이다. 분산은 $\overline{X^2} - \bar X^2 = \bar X(1-\bar X)$이므로
 
-상관계수 -0.5434
+    $$
+    s_X^2 = \frac{(n_{11}+n_{10})(n_{01}+n_{00})}{n^2},
+    \qquad
+    s_Y^2 = \frac{(n_{11}+n_{01})(n_{10}+n_{00})}{n^2}
+    $$
 
-1=남성 으로 부호화: r = -0.5434
-1=여성 으로 부호화: r = +0.5434
-```
+    이고 공분산은
 
-**두 이진 변수의 피어슨 상관에는 파이 계수라는 이름이 따로 붙어 있다.** 기호로는 $\varphi$로 쓴다. 이름만 다를 뿐 계산은 지금 한 그대로다.
+    $$
+    \overline{XY} - \bar X\,\bar Y
+    = \frac{n_{11}}{n} - \frac{(n_{11}+n_{10})(n_{11}+n_{01})}{n^2}
+    = \frac{n_{11}n_{00} - n_{10}n_{01}}{n^2}
+    $$
+
+    이다. 마지막 등식은 $n_{11}n = n_{11}(n_{11}+n_{10}+n_{01}+n_{00})$을 펼쳐 정리하면 나온다. 세 식을 모으면 $n^2$이 모두 약분되어
+
+    $$
+    \varphi = \frac{n_{11}n_{00} - n_{10}n_{01}}{\sqrt{(n_{11}+n_{10})(n_{01}+n_{00})(n_{11}+n_{01})(n_{10}+n_{00})}}
+    $$
+
+    를 얻는다. 분모가 네 **주변도수의 곱**이라는 점이 뒤에 쓰인다. 분산을 $n$으로 나누든 $n-1$로 나누든 분자와 분모에서 같이 약분되므로 결과가 같다는 것도 확인해 둘 만하다.
+
+    자료를 넣으면 $n_{11}=109$(남·생존), $n_{10}=468$(남·사망), $n_{01}=233$(여·생존), $n_{00}=81$(여·사망)이므로
+
+    $$
+    \varphi = \frac{109\cdot 81 - 468\cdot 233}{\sqrt{577\cdot 314\cdot 342\cdot 549}}
+    = \frac{8829 - 109044}{184438.658974}
+    = \frac{-100215}{184438.658974}
+    = -0.543351
+    $$
+
+    **(2) 해석적으로.** 분모는 주변도수만으로 정해지므로 고정이다. 따라서 $\lvert\varphi\rvert$를 키우려면 **분자 $\lvert n_{11}n_{00} - n_{10}n_{01}\rvert$를 키우면 된다.** 주변도수가 고정된 $2\times2$ 표는 자유도가 $1$이므로 칸 하나만 정하면 나머지가 따라오고, 분자는 그 하나의 **일차함수**다. 그러니 최댓값은 가능한 범위의 **끝점**에서 난다.
+
+    여성이 $314$명, 생존자가 $342$명이라 $314 < 342$이므로 "여성이 모두 살아남은" 표가 가능하다. 그때
+
+    $$
+    n_{01} = 314,\quad n_{00} = 0,\quad n_{11} = 342 - 314 = 28,\quad n_{10} = 577 - 28 = 549
+    $$
+
+    이고
+
+    $$
+    \varphi_{\max} = \frac{28\cdot 0 - 549\cdot 314}{184438.658974}
+    = \frac{-172386}{184438.658974} = -0.934652
+    $$
+
+    다. **완전한 연관인데도 $-1$이 아니다.** 주변비율이 서로 다르면($35.2\%$ 대 $38.4\%$) 어떤 표로도 $\pm1$에 닿을 수 없기 때문이다. 관측값은
+
+    $$
+    \frac{0.543351}{0.934652} = 0.581341
+    $$
+
+    곧 **도달 가능한 최댓값의 $58.1\%$**다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    # Survived 와 Sex_int 는 둘 다 0/1 이지만 피어슨 공식은 그대로 적용된다.
+    corr = df[["Survived", "Sex_int"]].corr()
+    print(corr.round(4).to_string())
+
+    r = corr.loc["Survived", "Sex_int"]
+    print(f"\n상관계수 {r:.4f}")
+
+    # 부호를 뒤집어 보면 -- 부호화만 바꾸었을 뿐인데 부호가 바뀐다.
+    df["Sex_female"] = (df["Sex"] == "female").astype(int)
+    print(f"\n1=남성 으로 부호화: r = {np.corrcoef(df['Survived'], df['Sex_int'])[0, 1]:+.4f}")
+    print(f"1=여성 으로 부호화: r = {np.corrcoef(df['Survived'], df['Sex_female'])[0, 1]:+.4f}")
+
+    # --- 도수만으로 적은 파이 계수 ---
+    # X = Sex_int (1=남성), Y = Survived 로 두고 네 칸의 도수를 센다.
+    n11 = int(((df.Sex_int == 1) & (df.Survived == 1)).sum())   # 남성·생존
+    n10 = int(((df.Sex_int == 1) & (df.Survived == 0)).sum())   # 남성·사망
+    n01 = int(((df.Sex_int == 0) & (df.Survived == 1)).sum())   # 여성·생존
+    n00 = int(((df.Sex_int == 0) & (df.Survived == 0)).sum())   # 여성·사망
+    n = n11 + n10 + n01 + n00
+    num = n11 * n00 - n10 * n01
+    den = np.sqrt((n11 + n10) * (n01 + n00) * (n11 + n01) * (n10 + n00))
+    print(f"\n네 칸 도수  n11={n11}, n10={n10}, n01={n01}, n00={n00}  (합 {n})")
+    print(f"분자 {n11}*{n00} - {n10}*{n01} = {num}")
+    print(f"분모 sqrt({n11 + n10}*{n01 + n00}*{n11 + n01}*{n10 + n00}) = {den:.6f}")
+    print(f"phi = {num / den:.6f}   (numpy 의 상관계수 {np.corrcoef(df['Survived'], df['Sex_int'])[0, 1]:.6f})")
+
+    # --- 주변도수를 고정한 채 |phi| 를 가장 크게 만드는 표 ---
+    # 남성 577, 여성 314, 생존 342, 사망 549 를 그대로 두고 네 칸만 바꾼다.
+    R1, C1 = n11 + n10, n11 + n01
+    best = None
+    for k11 in range(max(0, R1 + C1 - n), min(R1, C1) + 1):
+        k10, k01, k00 = R1 - k11, C1 - k11, n - R1 - C1 + k11
+        ph = (k11 * k00 - k10 * k01) / np.sqrt((k11 + k10) * (k01 + k00) * (k11 + k01) * (k10 + k00))
+        if best is None or abs(ph) > abs(best[0]):
+            best = (ph, k11, k10, k01, k00)
+    print(f"\n|phi| 가 가장 큰 표: 남성·생존 {best[1]}, 남성·사망 {best[2]}, "
+          f"여성·생존 {best[3]}, 여성·사망 {best[4]}")
+    print(f"  그때 phi = {best[0]:.6f}")
+    print(f"  관측 |phi| / 최댓값 = {abs(num / den) / abs(best[0]):.6f}")
+    ```
+
+    ```text
+              Survived  Sex_int
+    Survived    1.0000  -0.5434
+    Sex_int    -0.5434   1.0000
+
+    상관계수 -0.5434
+
+    1=남성 으로 부호화: r = -0.5434
+    1=여성 으로 부호화: r = +0.5434
+
+    네 칸 도수  n11=109, n10=468, n01=233, n00=81  (합 891)
+    분자 109*81 - 468*233 = -100215
+    분모 sqrt(577*314*342*549) = 184438.658974
+    phi = -0.543351   (numpy 의 상관계수 -0.543351)
+
+    |phi| 가 가장 큰 표: 남성·생존 28, 남성·사망 549, 여성·생존 314, 여성·사망 0
+      그때 phi = -0.934652
+      관측 |phi| / 최댓값 = 0.581341
+    ```
+
+    손으로 구한 $-100215/184438.658974 = -0.543351$이 `numpy` 의 답과 소수 여섯째 자리까지 같다. 끝점에서 최대가 난다는 (2)의 논증도 맞는다. 모든 가능한 표를 전부 훑어 보아도 $\lvert\varphi\rvert$가 가장 큰 것은 **여성·사망 칸이 $0$인 표** 하나이고, 그때 $\varphi = -0.934652$다.
+
+    **두 이진 변수의 피어슨 상관에는 파이 계수라는 이름이 따로 붙어 있다.** 기호로는 $\varphi$로 쓴다. 이름만 다를 뿐 계산은 지금 한 그대로다.
 
 **그런데 $-0.5434$라는 숫자가 무엇을 말하는가.**
 
@@ -140,60 +315,177 @@ Sex_int    -0.5434   1.0000
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 분할표, 생존율, 오즈비
+**보기 3.** <span class="diff easy" title="쉬움"></span> 같은 표에서 나온 세 "격차"가 서로 다른 수를 준다. $2\times2$ 분할표에서 비율차·위험비·오즈비를 구한다.
+
+**(1)** 세 측도를 **유리수로** 구하고, 위험비와 오즈비를 잇는 정확한 관계식을 적으시오.
+
+**(2)** 결과를 "생존" 대신 "사망"으로 바꾸거나 행과 열을 맞바꾸면 세 수가 각각 어떻게 되는가. **바뀌지 않는 것은 무엇인가.**
+
+**(3)** 객실 등급으로 층화하면 성별의 효과가 뒤집히는가.
 
 </div>
 
-```python
-# margins=True 를 주면 행·열의 합계가 함께 나온다.
-print("도수")
-print(pd.crosstab(df["Sex"], df["Survived"], margins=True).to_string())
+??? success "풀이"
 
-# normalize="index" 는 '각 행의 합이 1이 되도록' 나눈다.
-# 즉 성별 안에서의 생존율이다. 무엇을 무엇으로 나누는지가 핵심이다.
-pct = pd.crosstab(df["Sex"], df["Survived"], normalize="index") * 100
-print("\n성별 안에서의 생존율 (%)")
-print(pct.round(2).to_string())
+    표의 네 칸을 이름 붙여 둔다. 여성 생존 $a = 233$, 여성 사망 $b = 81$, 남성 생존 $c = 109$, 남성 사망 $d = 468$이다.
 
-f_rate = pct.loc["female", 1]
-m_rate = pct.loc["male", 1]
-print(f"\n여성 생존율 {f_rate:.2f}%")
-print(f"남성 생존율 {m_rate:.2f}%")
-print(f"차이       {f_rate - m_rate:.2f}%포인트")
-print(f"비(위험비)  {f_rate / m_rate:.4f}배")
+    **(1) 해석적으로.** 두 생존율이
 
-# 오즈비: (여성의 생존 오즈) / (남성의 생존 오즈)
-tab = pd.crosstab(df["Sex"], df["Survived"])         # 도수만 담은 표
-a = tab.loc["female", 1]; b = tab.loc["female", 0]   # 여성 생존 / 사망
-c = tab.loc["male", 1];   d = tab.loc["male", 0]     # 남성 생존 / 사망
-print(f"\n여성 오즈 {a}/{b} = {a / b:.4f}")
-print(f"남성 오즈 {c}/{d} = {c / d:.4f}")
-print(f"오즈비    {(a * d) / (b * c):.4f}")
-```
+    $$
+    p_F = \frac{a}{a+b} = \frac{233}{314} = 0.742038,
+    \qquad
+    p_M = \frac{c}{c+d} = \frac{109}{577} = 0.188908
+    $$
 
-```text
-도수
-Survived    0    1  All
-Sex                    
-female     81  233  314
-male      468  109  577
-All       549  342  891
+    이므로 세 측도는 다음과 같다.
 
-성별 안에서의 생존율 (%)
-Survived      0      1
-Sex                   
-female    25.80  74.20
-male      81.11  18.89
+    $$
+    \text{비율차} = p_F - p_M = 0.553130
+    $$
 
-여성 생존율 74.20%
-남성 생존율 18.89%
-차이       55.31%포인트
-비(위험비)  3.9280배
+    $$
+    \text{위험비} = \frac{p_F}{p_M} = \frac{233 \times 577}{314 \times 109} = \frac{134441}{34226} = 3.928037
+    $$
 
-여성 오즈 233/81 = 2.8765
-남성 오즈 109/468 = 0.2329
-오즈비    12.3507
-```
+    $$
+    \text{오즈비} = \frac{a/b}{c/d} = \frac{ad}{bc} = \frac{233 \times 468}{81 \times 109} = \frac{109044}{8829} = \frac{12116}{981} = 12.350663
+    $$
+
+    둘을 잇는 관계식은 정의에서 바로 나온다.
+
+    $$
+    \text{오즈비}
+    = \frac{p_F/(1-p_F)}{p_M/(1-p_M)}
+    = \frac{p_F}{p_M}\cdot\frac{1-p_M}{1-p_F}
+    = \text{위험비} \times \frac{1-p_M}{1-p_F}
+    $$
+
+    보정계수가 $\dfrac{1-p_M}{1-p_F} = \dfrac{0.811092}{0.257962} = 3.144233$이고, 과연 $3.928037 \times 3.144233 = 12.350663$이다. **두 생존율이 모두 $0$에 가까우면 보정계수가 $1$에 가까워져 오즈비와 위험비가 거의 같아진다.** 여기서는 $p_F = 0.74$나 되므로 크게 벌어진다.
+
+    **"몇 배 더 살아남았다"에 해당하는 것은 위험비 $3.93$**이고, 오즈비 $12.35$를 그렇게 옮기면 틀린다.
+
+    **(2) 해석적으로.** 오즈비를 네 도수로 쓰면 $\mathrm{OR} = ad/(bc)$로, **대각선 곱의 비**다.
+
+    - **행과 열을 맞바꾸면** 표가 전치되어 $b$와 $c$가 서로 자리를 바꾼다. 그런데 $bc = cb$이므로 **오즈비는 변하지 않는다.**
+    - **결과를 "사망"으로 바꾸면** 두 열이 서로 바뀌어 $\mathrm{OR}' = bc/(ad) = 1/\mathrm{OR}$이다. 곧 **역수**가 된다.
+
+    위험비는 그렇지 않다. $\mathrm{RR} = \dfrac{a/(a+b)}{c/(c+d)}$의 분모에 **행 합계**가 들어 있어 전치하면 열 합계로 바뀐다. 사망을 결과로 보면 $\dfrac{b/(a+b)}{d/(c+d)}$가 되는데 이것은 $1/\mathrm{RR}$과 **같지 않다.** 실제로 $1/3.928037 = 0.254580$인 반면 사망의 위험비는 $0.318043$이다.
+
+    **오즈비가 표를 어떻게 돌려 놓아도 같은 크기를 준다**는 이 성질이, 환자-대조군 연구나 로지스틱 회귀에서 오즈비를 쓰는 이유다. 어느 변수를 "원인"으로 두었는지가 값을 바꾸지 않는다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    # margins=True 를 주면 행·열의 합계가 함께 나온다.
+    print("도수")
+    print(pd.crosstab(df["Sex"], df["Survived"], margins=True).to_string())
+
+    # normalize="index" 는 '각 행의 합이 1이 되도록' 나눈다.
+    # 즉 성별 안에서의 생존율이다. 무엇을 무엇으로 나누는지가 핵심이다.
+    pct = pd.crosstab(df["Sex"], df["Survived"], normalize="index") * 100
+    print("\n성별 안에서의 생존율 (%)")
+    print(pct.round(2).to_string())
+
+    f_rate = pct.loc["female", 1]
+    m_rate = pct.loc["male", 1]
+    print(f"\n여성 생존율 {f_rate:.2f}%")
+    print(f"남성 생존율 {m_rate:.2f}%")
+    print(f"차이       {f_rate - m_rate:.2f}%포인트")
+    print(f"비(위험비)  {f_rate / m_rate:.4f}배")
+
+    # 오즈비: (여성의 생존 오즈) / (남성의 생존 오즈)
+    tab = pd.crosstab(df["Sex"], df["Survived"])         # 도수만 담은 표
+    a = tab.loc["female", 1]; b = tab.loc["female", 0]   # 여성 생존 / 사망
+    c = tab.loc["male", 1];   d = tab.loc["male", 0]     # 남성 생존 / 사망
+    print(f"\n여성 오즈 {a}/{b} = {a / b:.4f}")
+    print(f"남성 오즈 {c}/{d} = {c / d:.4f}")
+    print(f"오즈비    {(a * d) / (b * c):.4f}")
+
+    # --- 결과를 '사망' 으로 바꾸거나 행과 열을 맞바꾸면 ---
+    pf, pm = a / (a + b), c / (c + d)
+    print(f"\n결과를 '생존' 으로 볼 때:  위험비 {pf / pm:.6f},  오즈비 {(a * d) / (b * c):.6f}")
+    print(f"결과를 '사망' 으로 볼 때:  위험비 {(1 - pf) / (1 - pm):.6f},  오즈비 {(b * c) / (a * d):.6f}")
+    print(f"  오즈비의 역수 1/{(a * d) / (b * c):.6f} = {(b * c) / (a * d):.6f}  <- 같다")
+    print(f"  위험비의 역수 1/{pf / pm:.6f} = {pm / pf:.6f}  <- 다르다")
+    qa, qb = a / (a + c), b / (b + d)         # 생존자 중 여성 / 사망자 중 여성
+    print(f"\n행과 열을 맞바꾸어 '여성인가' 를 결과로 보면")
+    print(f"  생존자 중 여성 {a}/{a + c} = {qa:.6f},  사망자 중 여성 {b}/{b + d} = {qb:.6f}")
+    print(f"  전치 위험비 {qa / qb:.6f}  <- 3.928037 과 다르다")
+    print(f"  전치 오즈비 {(a * d) / (c * b):.6f}  <- 12.350663 과 같다")
+
+    # --- 객실 등급으로 층화하면 뒤집히는가 ---
+    print(f"\n{'등급':>4}{'n':>6}{'여성 생존율':>12}{'남성 생존율':>12}{'비율차':>9}{'오즈비':>10}")
+    mh_num = mh_den = 0.0
+    for k, g in df.groupby("Pclass"):
+        t = pd.crosstab(g["Sex"], g["Survived"])
+        aa, bb = t.loc["female", 1], t.loc["female", 0]
+        cc, dd = t.loc["male", 1], t.loc["male", 0]
+        tot = aa + bb + cc + dd
+        pfk, pmk = aa / (aa + bb), cc / (cc + dd)
+        print(f"{k:>4}{tot:>6}{pfk:>12.4f}{pmk:>12.4f}{pfk - pmk:>+9.4f}{(aa * dd) / (bb * cc):>10.4f}")
+        mh_num += aa * dd / tot
+        mh_den += bb * cc / tot
+    print(f"{'전체':>4}{len(df):>6}{pf:>12.4f}{pm:>12.4f}{pf - pm:>+9.4f}{(a * d) / (b * c):>10.4f}")
+    print(f"\n멘텔-헨첼 요약 오즈비 = {mh_num / mh_den:.4f}")
+    print(pd.crosstab(df["Pclass"], df["Sex"]).to_string())
+    ```
+
+    ```text
+    도수
+    Survived    0    1  All
+    Sex
+    female     81  233  314
+    male      468  109  577
+    All       549  342  891
+
+    성별 안에서의 생존율 (%)
+    Survived      0      1
+    Sex
+    female    25.80  74.20
+    male      81.11  18.89
+
+    여성 생존율 74.20%
+    남성 생존율 18.89%
+    차이       55.31%포인트
+    비(위험비)  3.9280배
+
+    여성 오즈 233/81 = 2.8765
+    남성 오즈 109/468 = 0.2329
+    오즈비    12.3507
+
+    결과를 '생존' 으로 볼 때:  위험비 3.928037,  오즈비 12.350663
+    결과를 '사망' 으로 볼 때:  위험비 0.318043,  오즈비 0.080967
+      오즈비의 역수 1/12.350663 = 0.080967  <- 같다
+      위험비의 역수 1/3.928037 = 0.254580  <- 다르다
+
+    행과 열을 맞바꾸어 '여성인가' 를 결과로 보면
+      생존자 중 여성 233/342 = 0.681287,  사망자 중 여성 81/549 = 0.147541
+      전치 위험비 4.617609  <- 3.928037 과 다르다
+      전치 오즈비 12.350663  <- 12.350663 과 같다
+
+      등급     n      여성 생존율      남성 생존율      비율차       오즈비
+       1   216      0.9681      0.3689  +0.5992   51.9037
+       2   184      0.9211      0.1574  +0.7636   62.4510
+       3   491      0.5000      0.1354  +0.3646    6.3830
+      전체   891      0.7420      0.1889  +0.5531   12.3507
+
+    멘텔-헨첼 요약 오즈비 = 13.7586
+    Sex     female  male
+    Pclass
+    1           94   122
+    2           76   108
+    3          144   347
+    ```
+
+    (1)의 세 값이 그대로 나온다. 비율차 $0.5531$, 위험비 $3.9280$, 오즈비 $12.3507$이다.
+
+    (2)도 예측대로다. **오즈비는 전치해도 $12.350663$으로 한 자리도 바뀌지 않고**, 결과를 사망으로 바꾸면 정확히 역수 $0.080967$이 된다. 위험비는 전치하면 $3.928037$에서 $4.617609$로 달라지고, 사망의 위험비 $0.318043$은 역수 $0.254580$과 다르다. **"여성이 남성의 몇 배로 살아남았는가"는 어느 변수를 결과로 두느냐에 따라 답이 달라지지만, 오즈비는 그렇지 않다.**
+
+    **(3)의 답은 "뒤집히지 않는다"이다.** 세 등급 모두 여성의 생존율이 남성보다 높고, 층별 오즈비가 $51.90$, $62.45$, $6.38$로 전부 $1$보다 훨씬 크다. **심슨의 역설은 일어나지 않았다.** 없는 역설을 지어내지 않는 것이 중요하므로 분명히 적어 둔다.
+
+    다만 **층화가 아무 효과도 없었던 것은 아니다.** 등급은 성별과 생존 양쪽에 얽혀 있다. 3등실은 $491$명으로 가장 크고 그중 남성이 $347$명($70.7\%$)으로 몰려 있으며, 등급별 전체 생존율도 $62.96\%$, $47.28\%$, $24.24\%$로 크게 다르다. 그래서 층별 오즈비가 $6.38$에서 $62.45$까지 열 배 가까이 흔들린다. **성별의 효과가 등급마다 다르다**는 뜻이고, 이것은 역설이 아니라 **효과의 수정**이다.
+
+    층별 오즈비를 하나로 묶은 멘텔–헨첼 요약값 $13.76$이 전체 오즈비 $12.35$보다 크다는 점도 눈여겨볼 만하다. 전체 오즈비는 층별 오즈비들의 평균이 **아니며**, 이 성질을 오즈비의 **비붕괴성**이라 한다. 층화와 검정을 갖추어 이 자료를 끝까지 다루는 것은 [독립성 검정 - 타이타닉 생존과 성별](../../ch10/test/independence_titanic.md) 절이다.
 
 **이제 비로소 말할 수 있는 것이 생겼다.**
 
@@ -240,97 +532,147 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 네 가지 그림이 각각 다른 것을 강조한다
+**보기 4.** <span class="diff easy" title="쉬움"></span> 같은 $2\times2$ 표를 네 가지로 그린다. 도수 막대, 생존율 막대, 누적 막대, 비율 열지도다.
+
+**(1)** 네 그림을 그리고, 각각이 **잘 보여 주는 것**과 **가리는 것**을 수치와 함께 적으시오.
+
+**(2)** 이 절의 질문 — "얼마나 차이 나는가" — 에는 어느 그림이 맞는가. 그 그림 하나만 보아서는 안 되는 까닭은 무엇인가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import seaborn as sns
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    이 보기도 유도할 식이 없다. **네 그림이 같은 네 수에서 나왔는데 무엇을 앞세우는가**가 전부다.
 
-# 네 칸에서 성별 순서를 하나로 고정한다.
-# 칸마다 순서가 다르면 독자가 같은 그림 안에서 두 번 방향을 바꿔 읽어야 한다.
-ORDER = ["female", "male"]
-KO = ["여성", "남성"]
-DIED, LIVED = "#90A4AE", "#1565C0"       # 사망 / 생존
+    **(1) 수치적으로.**
 
-fig, axes = plt.subplots(2, 2, figsize=(13, 9))
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
-# (1) 도수 -- 집단 크기가 다르다는 사실이 보인다
-sns.countplot(data=df, x="Sex", hue="Survived", order=ORDER,
-              ax=axes[0, 0], palette=[DIED, LIVED])
-axes[0, 0].set_title("(1) 성별 도수")
-axes[0, 0].set_xlabel("성별"); axes[0, 0].set_ylabel("사람 수")
-axes[0, 0].set_xticks([0, 1]); axes[0, 0].set_xticklabels(KO)
-axes[0, 0].legend(["사망", "생존"], title="생존 여부")
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
-# (2) 생존율 -- 집단 크기를 지우고 비율만 남긴다
-rate = df.groupby("Sex")["Survived"].mean().reindex(ORDER) * 100
-rate.plot(kind="bar", ax=axes[0, 1], color=["#E65100", "#1565C0"],
-          edgecolor="black")
-axes[0, 1].set_title("(2) 성별 생존율 (%)")
-axes[0, 1].set_xlabel("성별"); axes[0, 1].set_ylabel("생존율 (%)")
-axes[0, 1].set_xticks([0, 1]); axes[0, 1].set_xticklabels(KO)
-axes[0, 1].tick_params(axis="x", rotation=0)
-axes[0, 1].grid(True, alpha=0.3, axis="y"); axes[0, 1].set_ylim(0, 85)
-for i, v in enumerate(rate):                     # 막대 위에 값을 적어 준다
-    axes[0, 1].text(i, v + 2, f"{v:.1f}%", ha="center", fontweight="bold")
+    # 네 칸에서 성별 순서를 하나로 고정한다.
+    # 칸마다 순서가 다르면 독자가 같은 그림 안에서 두 번 방향을 바꿔 읽어야 한다.
+    ORDER = ["female", "male"]
+    KO = ["여성", "남성"]
+    DIED, LIVED = "#90A4AE", "#1565C0"       # 사망 / 생존
 
-# (3) 누적 막대 -- 집단 크기와 구성비를 한 막대에 함께 담는다
-tab_o = pd.crosstab(df["Sex"], df["Survived"]).reindex(ORDER)
-tab_o.plot(kind="bar", stacked=True, ax=axes[1, 0],
-           color=["#D32F2F", "#33691E"], edgecolor="black")
-axes[1, 0].set_title("(3) 누적 막대 (도수)")
-axes[1, 0].set_xlabel("성별"); axes[1, 0].set_ylabel("사람 수")
-axes[1, 0].set_xticks([0, 1]); axes[1, 0].set_xticklabels(KO)
-axes[1, 0].tick_params(axis="x", rotation=0)
-axes[1, 0].legend(["사망", "생존"], title="생존 여부")
+    fig, axes = plt.subplots(2, 2, figsize=(13, 9))
 
-# (4) 비율 열지도 -- 네 칸의 수를 그대로 읽게 한다
-# vmin/vmax 를 0과 1로 고정해야 색의 진하기가 비율과 맞는다.
-prop = pd.crosstab(df["Sex"], df["Survived"],
-                   normalize="index").reindex(ORDER)
-sns.heatmap(prop, annot=True, fmt=".2%", cmap="Blues", ax=axes[1, 1],
-            vmin=0, vmax=1, cbar_kws={"label": "비율"},
-            linewidths=1, linecolor="black")
-axes[1, 1].set_title("(4) 비율 열지도")
-axes[1, 1].set_xlabel("생존 여부")
-axes[1, 1].set_ylabel("성별")
-axes[1, 1].set_xticklabels(["사망", "생존"])
-axes[1, 1].set_yticklabels(KO, rotation=0)
+    # (1) 도수 -- 집단 크기가 다르다는 사실이 보인다
+    sns.countplot(data=df, x="Sex", hue="Survived", order=ORDER,
+                  ax=axes[0, 0], palette=[DIED, LIVED])
+    axes[0, 0].set_title("(1) 성별 도수")
+    axes[0, 0].set_xlabel("성별"); axes[0, 0].set_ylabel("사람 수")
+    axes[0, 0].set_xticks([0, 1]); axes[0, 0].set_xticklabels(KO)
+    axes[0, 0].legend(["사망", "생존"], title="생존 여부")
 
-fig.suptitle("타이타닉: 하나의 2×2 표를 네 가지로 그리기", y=1.00)
-fig.tight_layout()
-fig.savefig("titanic_gender_four.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
-```
+    # (2) 생존율 -- 집단 크기를 지우고 비율만 남긴다
+    rate = df.groupby("Sex")["Survived"].mean().reindex(ORDER) * 100
+    rate.plot(kind="bar", ax=axes[0, 1], color=["#E65100", "#1565C0"],
+              edgecolor="black")
+    axes[0, 1].set_title("(2) 성별 생존율 (%)")
+    axes[0, 1].set_xlabel("성별"); axes[0, 1].set_ylabel("생존율 (%)")
+    axes[0, 1].set_xticks([0, 1]); axes[0, 1].set_xticklabels(KO)
+    axes[0, 1].tick_params(axis="x", rotation=0)
+    axes[0, 1].grid(True, alpha=0.3, axis="y"); axes[0, 1].set_ylim(0, 85)
+    for i, v in enumerate(rate):                     # 막대 위에 값을 적어 준다
+        axes[0, 1].text(i, v + 2, f"{v:.1f}%", ha="center", fontweight="bold")
 
-![같은 분할표를 네 가지로 그린 그림](./img/titanic_gender_four.png)
+    # (3) 누적 막대 -- 집단 크기와 구성비를 한 막대에 함께 담는다
+    tab_o = pd.crosstab(df["Sex"], df["Survived"]).reindex(ORDER)
+    tab_o.plot(kind="bar", stacked=True, ax=axes[1, 0],
+               color=["#D32F2F", "#33691E"], edgecolor="black")
+    axes[1, 0].set_title("(3) 누적 막대 (도수)")
+    axes[1, 0].set_xlabel("성별"); axes[1, 0].set_ylabel("사람 수")
+    axes[1, 0].set_xticks([0, 1]); axes[1, 0].set_xticklabels(KO)
+    axes[1, 0].tick_params(axis="x", rotation=0)
+    axes[1, 0].legend(["사망", "생존"], title="생존 여부")
 
-**네 그림이 같은 표에서 나왔는데 강조점이 다르다.**
+    # (4) 비율 열지도 -- 네 칸의 수를 그대로 읽게 한다
+    # vmin/vmax 를 0과 1로 고정해야 색의 진하기가 비율과 맞는다.
+    prop = pd.crosstab(df["Sex"], df["Survived"],
+                       normalize="index").reindex(ORDER)
+    sns.heatmap(prop, annot=True, fmt=".2%", cmap="Blues", ax=axes[1, 1],
+                vmin=0, vmax=1, cbar_kws={"label": "비율"},
+                linewidths=1, linecolor="black")
+    axes[1, 1].set_title("(4) 비율 열지도")
+    axes[1, 1].set_xlabel("생존 여부")
+    axes[1, 1].set_ylabel("성별")
+    axes[1, 1].set_xticklabels(["사망", "생존"])
+    axes[1, 1].set_yticklabels(KO, rotation=0)
 
-| 그림 | 잘 보이는 것 | 가려지는 것 |
-|---|---|---|
-| (1) 도수 | **집단 크기가 다르다**(남 577, 여 314) | 비율 비교가 어렵다 |
-| (2) 생존율 | **74.2% 대 18.9%** | 표본 크기가 사라진다 |
-| (3) 누적 | 크기와 구성을 함께 | 위쪽 조각의 길이 비교가 어렵다 |
-| (4) 열지도 | 네 수를 **정확히** | 크기 감각이 없다 |
+    fig.suptitle("타이타닉: 하나의 2×2 표를 네 가지로 그리기", y=1.00)
+    fig.tight_layout()
+    fig.savefig("titanic_gender_four.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
 
-**질문이 "얼마나 차이 나는가"이면 (2)가 답한다.** 이 절의 질문에는 (2)가 가장 곧바른 그림이다.
+    # --- 네 그림이 각각 무엇을 수로 보여 주는지 적어 둔다 ---
+    print("(1) 도수 그림이 보여 주는 것")
+    for s in ORDER:
+        print(f"    {s:6s} 사망 {tab_o.loc[s, 0]:3d}, 생존 {tab_o.loc[s, 1]:3d}, 합 {tab_o.loc[s].sum():3d}")
+    print(f"    남성이 여성의 {tab_o.loc['male'].sum() / tab_o.loc['female'].sum():.4f} 배")
 
-**그러나 (2)만 보면 위험하다.** 비율만 남기고 $n$을 지우므로, **여성이 3명뿐이어도 똑같은 그림**이 나온다. (1)이나 (3)을 함께 놓아 표본 크기를 함께 보여야 한다.
+    print("\n(2) 생존율 그림이 보여 주는 것")
+    print(f"    여성 {rate['female']:.2f}%, 남성 {rate['male']:.2f}%, 차 {rate['female'] - rate['male']:.2f}%포인트")
+    print(f"    이 그림은 n 을 지운다. 여성이 3 명이고 2 명 살아남아도 막대 높이는 "
+          f"{200 / 3:.2f}% 로 거의 같아 보인다")
 
-**누적 막대 (3)의 약점은 위쪽 조각이다.** 아래 조각(사망)은 모두 바닥에서 시작하므로 길이를 비교하기 쉽지만, 위 조각(생존)은 시작점이 제각각이라 눈으로 견주기 어렵다. 이것이 누적 막대의 일반적인 한계다.
+    print("\n(3) 누적 막대의 약점: 위 조각의 시작점이 다르다")
+    for s in ORDER:
+        print(f"    {s:6s} 생존 조각이 {tab_o.loc[s, 0]:3d} 에서 시작해 {tab_o.loc[s].sum():3d} 에서 끝난다"
+              f"  (길이 {tab_o.loc[s, 1]:3d})")
 
-**색 선택에 관하여.** 열지도에 `RdYlGn`(빨강-노랑-초록)을 쓰는 관행이 있는데, **적록색각 이상이 있는 독자에게는 읽히지 않는다.** 남성의 8% 정도가 여기에 해당하므로, 파랑 계열이나 명도 차가 뚜렷한 색표를 쓰는 편이 안전하다.
+    print("\n(4) 열지도가 보여 주는 네 수 (행 기준 비율)")
+    print(prop.round(4).to_string())
+    ```
+
+    ```text
+    (1) 도수 그림이 보여 주는 것
+        female 사망  81, 생존 233, 합 314
+        male   사망 468, 생존 109, 합 577
+        남성이 여성의 1.8376 배
+
+    (2) 생존율 그림이 보여 주는 것
+        여성 74.20%, 남성 18.89%, 차 55.31%포인트
+        이 그림은 n 을 지운다. 여성이 3 명이고 2 명 살아남아도 막대 높이는 66.67% 로 거의 같아 보인다
+
+    (3) 누적 막대의 약점: 위 조각의 시작점이 다르다
+        female 생존 조각이  81 에서 시작해 314 에서 끝난다  (길이 233)
+        male   생존 조각이 468 에서 시작해 577 에서 끝난다  (길이 109)
+
+    (4) 열지도가 보여 주는 네 수 (행 기준 비율)
+    Survived       0       1
+    Sex
+    female    0.2580  0.7420
+    male      0.8111  0.1889
+    ```
+
+    ![같은 분할표를 네 가지로 그린 그림](./img/titanic_gender_four.png)
+
+    **네 그림이 같은 표에서 나왔는데 강조점이 다르다.**
+
+    | 그림 | 잘 보이는 것 | 가려지는 것 |
+    |---|---|---|
+    | (1) 도수 | **집단 크기가 다르다**(남 577, 여 314, $1.84$배) | 비율 비교가 어렵다 |
+    | (2) 생존율 | **74.20% 대 18.89%** | 표본 크기가 사라진다 |
+    | (3) 누적 | 크기와 구성을 함께 | 위쪽 조각의 길이 비교가 어렵다 |
+    | (4) 열지도 | 네 수를 **정확히** | 크기 감각이 없다 |
+
+    **(2) 질문이 "얼마나 차이 나는가"이면 (2)번 그림이 답한다.** $74.20\%$와 $18.89\%$, 그 차 $55.31$%포인트가 막대 위에 그대로 적혀 있다. 이 절의 질문에는 이 그림이 가장 곧바르다.
+
+    **그러나 (2)번만 보면 위험하다.** 비율만 남기고 $n$을 지우기 때문이다. 여성이 $3$명뿐이고 그중 $2$명이 살아남았어도 막대 높이는 $66.67\%$로 **눈으로는 거의 구별되지 않는다.** $314$명에서 나온 $74.20\%$와 $3$명에서 나온 $66.67\%$는 믿을 만한 정도가 전혀 다른데, 그림이 그 차이를 전혀 말해 주지 않는다. (1)이나 (3)을 함께 놓아 표본 크기를 함께 보여야 한다.
+
+    **누적 막대 (3)의 약점은 위쪽 조각이다.** 출력이 그것을 수로 보인다. 여성의 생존 조각은 $81$에서 시작해 $314$에서 끝나고 남성의 생존 조각은 $468$에서 시작해 $577$에서 끝난다. **길이는 $233$과 $109$인데 바닥이 $387$만큼 어긋나 있어** 눈으로 견줄 수가 없다. 아래 조각(사망)은 둘 다 $0$에서 시작하므로 쉽게 비교된다. 이것이 누적 막대의 일반적인 한계이며, 그래서 **가장 중요한 범주를 바닥에 놓는 것**이 요령이다.
+
+    **색 선택에 관하여.** 열지도에 `RdYlGn`(빨강-노랑-초록)을 쓰는 관행이 있는데, **적록색각 이상이 있는 독자에게는 읽히지 않는다.** 남성의 8% 정도가 여기에 해당하므로, 파랑 계열이나 명도 차가 뚜렷한 색표를 쓰는 편이 안전하다.
 
 ## 6. 쌍그림은 왜 잘 안 되는가
 
@@ -338,67 +680,156 @@ fig.savefig("titanic_gender_four.png", dpi=170, facecolor="white",
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 이진 변수에 쌍그림을 쓰면
+**보기 5.** <span class="diff easy" title="쉬움"></span> 쌍그림이 두 번 실패한다. 생존 여부·나이·성별 세 변수에 쌍그림을 그린다.
+
+**(1)** `Survived`–`Sex_int` 칸에는 서로 다른 점이 몇 개 찍히는가. $891$개의 관측은 어떻게 되는가.
+
+**(2)** 쌍그림이 쓰는 $714$명과 버려지는 $177$명의 생존율을 견주고, **전체 생존율 $0.3838$을 그 둘로부터 되살리시오.** 결측이 무작위로 생긴 것인가.
 
 </div>
 
-```python
-sub = df[["Survived", "Age", "Sex_int"]]
+??? success "풀이"
 
-# seaborn 은 결측이 있는 행을 말없이 버린다. 몇 명이 남는지 직접 센다.
-print(f"원래 {len(sub)}명")
-print(f"Age 결측 {sub['Age'].isna().sum()}명")
-print(f"쌍그림에 실제로 쓰이는 관측 {sub.dropna().shape[0]}명")
-print(f"  -> 전체의 {sub.dropna().shape[0] / len(sub):.1%}")
+    **(1) 해석적으로.** 산점도의 한 점은 $(x_i, y_i)$ 쌍이다. `Sex_int` 가 $\{0,1\}$, `Survived` 가 $\{0,1\}$이므로 가능한 쌍이
 
-# 버려진 177명이 남은 714명과 다른 사람들인지 확인한다.
-# 무작위로 빠진 것이 아니라면 결과가 편향된다.
-miss = sub["Age"].isna()
-print(f"\n나이가 기록된 승객의 생존율   {df.loc[~miss, 'Survived'].mean():.4f}")
-print(f"나이가 빠진 승객의 생존율     {df.loc[miss, 'Survived'].mean():.4f}")
-print(f"나이가 기록된 승객의 남성 비율 {df.loc[~miss, 'Sex_int'].mean():.4f}")
-print(f"나이가 빠진 승객의 남성 비율   {df.loc[miss, 'Sex_int'].mean():.4f}")
+    $$
+    \{0,1\} \times \{0,1\} = \{(0,0), (0,1), (1,0), (1,1)\}
+    $$
 
-g = sns.pairplot(sub, diag_kind="hist",
-                 plot_kws={"alpha": 0.6, "s": 18, "color": "#1565C0"},
-                 diag_kws={"bins": 30, "color": "#1565C0"})
+    **네 개뿐**이다. $891$개의 관측이 이 네 자리에 겹쳐 쌓이므로 한 자리에 평균 $891/4 = 222.8$명이 포개진다. 투명도(`alpha`)를 아무리 조절해도 네 점은 네 점이고, **어느 칸에 몇 명이 있는지는 산점도에서 읽을 수 없다.** 분할표가 네 수를 그대로 주는 것과 대조된다.
 
-# 축 이름은 열 이름에서 오므로 그림에 쓸 한글 이름으로 바꿔 준다.
-KOREAN = ["생존 여부 (0/1)", "나이 (세)", "성별 (1=남성)"]
-for i, name in enumerate(KOREAN):
-    g.axes[-1, i].set_xlabel(name)
-    g.axes[i, 0].set_ylabel(name)
-g.figure.suptitle("쌍그림: 생존 여부 · 나이 · 성별", y=1.01)
-g.figure.savefig("titanic_pairplot.png", dpi=170, facecolor="white",
-                 bbox_inches="tight")
-```
+    **(2) 해석적으로.** 보기 1의 분해를 결측 여부로 다시 쓰면 된다. 관측군의 비중을 $\lambda = 714/891 = 0.801347$이라 두면
 
-```text
-원래 891명
-Age 결측 177명
-쌍그림에 실제로 쓰이는 관측 714명
-  -> 전체의 80.1%
+    $$
+    \bar y = \lambda\,\bar y_{\text{관측}} + (1-\lambda)\,\bar y_{\text{결측}}
+    $$
 
-나이가 기록된 승객의 생존율   0.4062
-나이가 빠진 승객의 생존율     0.2938
-나이가 기록된 승객의 남성 비율 0.6345
-나이가 빠진 승객의 남성 비율   0.7006
-```
+    이고, 넣어 보면
 
-![쌍그림: 이진 변수에서는 칸이 점 몇 개로 무너진다](./img/titanic_pairplot.png)
+    $$
+    0.801347 \times 0.406162 + 0.198653 \times 0.293785 = 0.383838
+    $$
 
-**쌍그림이 여기서 두 번 실패한다.**
+    로 전체 생존율과 맞는다. **쌍그림이 보여 주는 $0.4062$는 전체의 $0.3838$이 아니다.** 결측군의 생존율 $0.2938$이 끌어내린 몫이 빠졌기 때문이다.
 
-**첫째, 이진 변수의 산점도는 그림이 아니다.** `Survived`와 `Sex_int`의 칸을 보면 **점이 네 개**다. 891명의 자료가 네 점으로 겹쳐 버렸다. 나머지 칸들도 두 줄로 늘어선 띠일 뿐이어서, 띠의 길이는 나이의 범위를 말하지만 **어느 쪽에 사람이 많은지는 전혀 보이지 않는다.**
+    결측이 무작위였다면 두 생존율이 같았을 것이다($\bar y_{\text{관측}} = \bar y_{\text{결측}} = \bar y$). 실제로는 $11.2$%포인트 벌어져 있으므로 **무작위 결측이 아니다.**
 
-**둘째, 177명이 조용히 사라졌다.** 그리고 사라진 사람들이 무작위가 아니다.
+    **(3) 수치적으로.**
 
-| | 생존율 | 남성 비율 |
-|---|---|---|
-| 나이가 **기록된** 714명 | 0.4062 | 0.6345 |
-| 나이가 **빠진** 177명 | **0.2938** | **0.7006** |
+    ```python
+    sub = df[["Survived", "Age", "Sex_int"]]
 
-**나이가 기록되지 않은 승객은 남성 비율이 높고 생존율이 낮다.** 무작위 결측이 아니므로, 이 714명으로 얻은 결론을 891명 전체에 그대로 옮길 수 없다.
+    # seaborn 은 결측이 있는 행을 말없이 버린다. 몇 명이 남는지 직접 센다.
+    print(f"원래 {len(sub)}명")
+    print(f"Age 결측 {sub['Age'].isna().sum()}명")
+    print(f"쌍그림에 실제로 쓰이는 관측 {sub.dropna().shape[0]}명")
+    print(f"  -> 전체의 {sub.dropna().shape[0] / len(sub):.1%}")
+
+    # 버려진 177명이 남은 714명과 다른 사람들인지 확인한다.
+    # 무작위로 빠진 것이 아니라면 결과가 편향된다.
+    miss = sub["Age"].isna()
+    print(f"\n나이가 기록된 승객의 생존율   {df.loc[~miss, 'Survived'].mean():.4f}")
+    print(f"나이가 빠진 승객의 생존율     {df.loc[miss, 'Survived'].mean():.4f}")
+    print(f"나이가 기록된 승객의 남성 비율 {df.loc[~miss, 'Sex_int'].mean():.4f}")
+    print(f"나이가 빠진 승객의 남성 비율   {df.loc[miss, 'Sex_int'].mean():.4f}")
+
+    g = sns.pairplot(sub, diag_kind="hist",
+                     plot_kws={"alpha": 0.6, "s": 18, "color": "#1565C0"},
+                     diag_kws={"bins": 30, "color": "#1565C0"})
+
+    # 축 이름은 열 이름에서 오므로 그림에 쓸 한글 이름으로 바꿔 준다.
+    KOREAN = ["생존 여부 (0/1)", "나이 (세)", "성별 (1=남성)"]
+    for i, name in enumerate(KOREAN):
+        g.axes[-1, i].set_xlabel(name)
+        g.axes[i, 0].set_ylabel(name)
+    g.figure.suptitle("쌍그림: 생존 여부 · 나이 · 성별", y=1.01)
+    g.figure.savefig("titanic_pairplot.png", dpi=170, facecolor="white",
+                     bbox_inches="tight")
+
+    # --- 이진 변수끼리의 산점도에는 점이 몇 개나 찍히는가 ---
+    pts = sub[["Sex_int", "Survived"]].drop_duplicates()
+    print(f"\nSex_int x Survived 칸에 찍히는 서로 다른 점 = {len(pts)}개")
+    print(f"  관측 {len(sub)}개가 점 {len(pts)}개 자리에 겹친다 (한 자리에 평균 {len(sub) / len(pts):.1f}명)")
+    print(pd.crosstab(df["Sex_int"], df["Survived"]).to_string())
+
+    # --- 전체 생존율은 관측군과 결측군의 가중평균이다 ---
+    lam = (~miss).mean()
+    print(f"\n관측군 비중 lambda = {int((~miss).sum())}/{len(df)} = {lam:.6f}")
+    print(f"  {lam:.6f}*{df.loc[~miss, 'Survived'].mean():.6f} + "
+          f"{1 - lam:.6f}*{df.loc[miss, 'Survived'].mean():.6f} = "
+          f"{lam * df.loc[~miss, 'Survived'].mean() + (1 - lam) * df.loc[miss, 'Survived'].mean():.6f}")
+    print(f"  전체 생존율                                        = {df['Survived'].mean():.6f}")
+
+    # --- 결측이 무작위가 아닌 까닭: 등급별로 결측률이 다르다 ---
+    print("\n객실 등급별 나이 결측률과 등급 안에서의 생존율")
+    print(f"{'등급':>4}{'인원':>6}{'결측':>6}{'결측률':>9}"
+          f"{'관측군 생존율':>14}{'결측군 생존율':>14}")
+    std = 0.0
+    for k, g in df.groupby("Pclass"):
+        gm = g["Age"].isna()
+        print(f"{k:>4}{len(g):>6}{int(gm.sum()):>6}{gm.mean():>9.2%}"
+              f"{g.loc[~gm, 'Survived'].mean():>14.4f}{g.loc[gm, 'Survived'].mean():>14.4f}")
+        # 결측군이 관측군의 등급별 생존율을 따랐다면 얼마였을까 (직접표준화)
+        std += int(gm.sum()) * g.loc[~gm, "Survived"].mean()
+    std /= int(miss.sum())
+    gap = df.loc[~miss, "Survived"].mean() - df.loc[miss, "Survived"].mean()
+    print(f"\n결측군이 등급별로 관측군과 같은 생존율을 가졌다면 {std:.4f} 이었을 것")
+    print(f"  실제 격차 {gap:.4f} 가운데 등급 구성으로 설명되는 몫 "
+          f"{(df.loc[~miss, 'Survived'].mean() - std) / gap:.1%}")
+    ```
+
+    ```text
+    원래 891명
+    Age 결측 177명
+    쌍그림에 실제로 쓰이는 관측 714명
+      -> 전체의 80.1%
+
+    나이가 기록된 승객의 생존율   0.4062
+    나이가 빠진 승객의 생존율     0.2938
+    나이가 기록된 승객의 남성 비율 0.6345
+    나이가 빠진 승객의 남성 비율   0.7006
+
+    Sex_int x Survived 칸에 찍히는 서로 다른 점 = 4개
+      관측 891개가 점 4개 자리에 겹친다 (한 자리에 평균 222.8명)
+    Survived    0    1
+    Sex_int
+    0          81  233
+    1         468  109
+
+    관측군 비중 lambda = 714/891 = 0.801347
+      0.801347*0.406162 + 0.198653*0.293785 = 0.383838
+      전체 생존율                                        = 0.383838
+
+    객실 등급별 나이 결측률과 등급 안에서의 생존율
+      등급    인원    결측      결측률       관측군 생존율       결측군 생존율
+       1   216    30   13.89%        0.6559        0.4667
+       2   184    11    5.98%        0.4798        0.3636
+       3   491   136   27.70%        0.2394        0.2500
+
+    결측군이 등급별로 관측군과 같은 생존율을 가졌다면 0.3250 이었을 것
+      실제 격차 0.1124 가운데 등급 구성으로 설명되는 몫 72.3%
+    ```
+
+    ![쌍그림: 이진 변수에서는 칸이 점 몇 개로 무너진다](./img/titanic_pairplot.png)
+
+    **쌍그림이 여기서 두 번 실패한다.**
+
+    **첫째, 이진 변수의 산점도는 그림이 아니다.** (1)이 예측한 대로 서로 다른 점이 **네 개**이고, $891$개의 관측이 한 자리에 평균 $222.8$개씩 포개졌다. 나머지 칸들도 두 줄로 늘어선 띠일 뿐이어서, 띠의 길이는 나이의 범위를 말하지만 **어느 쪽에 사람이 많은지는 전혀 보이지 않는다.** 바로 아래 출력한 분할표가 네 수를 그대로 알려 주는 것과 견주어 보라.
+
+    **둘째, 177명이 조용히 사라졌다.** 그리고 사라진 사람들이 무작위가 아니다.
+
+    | | 생존율 | 남성 비율 |
+    |---|---|---|
+    | 나이가 **기록된** 714명 | 0.4062 | 0.6345 |
+    | 나이가 **빠진** 177명 | **0.2938** | **0.7006** |
+
+    **나이가 기록되지 않은 승객은 남성 비율이 높고 생존율이 낮다.** 가중평균이 $0.383838$로 전체 생존율과 정확히 맞는 것이 (2)의 분해를 확인해 준다. 무작위 결측이 아니므로, 이 714명으로 얻은 결론을 891명 전체에 그대로 옮길 수 없다.
+
+    **왜 무작위가 아닌지도 자료가 말해 준다.** 나이 결측률이 1등실 $13.89\%$, 2등실 $5.98\%$인데 3등실은 $27.70\%$다. 그런데 3등실은 생존율이 가장 낮으므로, 결측군에 3등실 승객이 몰리는 것만으로 결측군의 생존율이 내려간다.
+
+    얼마나 설명되는지는 **직접표준화**로 잴 수 있다. 결측군 $177$명이 등급별로 관측군과 같은 생존율을 가졌다면 그 평균은 $0.3250$이었을 것이다. 관측군의 $0.4062$와 비교하면 $0.0812$가 **등급 구성만으로** 벌어진 몫이고, 이는 실제 격차 $0.1124$의 **$72.3\%$**다. 나머지 $28\%$는 등급 안에서도 남는 차이다. 실제로 1등실에서는 관측군 $0.6559$ 대 결측군 $0.4667$, 2등실에서는 $0.4798$ 대 $0.3636$으로 여전히 벌어져 있다(다만 두 등급의 결측은 $30$명과 $11$명뿐이다). 3등실에서는 $0.2394$ 대 $0.2500$으로 거의 같다.
+
+    **그러므로 "등급 때문이다"가 대부분을 설명하되 전부는 아니다.** 결측을 그냥 지우는 처리는 이만큼의 치우침을 들여온다.
 
 **쌍그림은 연속형 변수를 위한 도구다.** 이진·범주형 변수에는 이 절의 5절에서 쓴 도구들 — 분할표, 막대그림, 모자이크 그림 — 이 맞는다. 자세한 논의는 [쌍그림](../visualization/pair_plots.md) 절에 있다.
 
@@ -888,9 +1319,9 @@ $$
 
     ```
      Pclass       여성생존율       남성생존율       위험차       상대위험도       오즈비      n
-          1      0.9681      0.3689   +0.5992      2.6246     51.9037    216
-          2      0.9211      0.1574   +0.7636      5.8514     62.4510    184
-          3      0.5000      0.1354   +0.3646      3.6915      6.3830    491
+          1      0.9681      0.3689   +0.5992      2.6246   51.9037    216
+          2      0.9211      0.1574   +0.7636      5.8514   62.4510    184
+          3      0.5000      0.1354   +0.3646      3.6915    6.3830    491
     ```
 
     **성별 효과는 세 등급 모두에서 같은 방향으로 유지된다.** 여성의 생존율이 어느 등급에서나 남성보다 높으며, 방향이 뒤집히는 **심슨의 역설은 일어나지 않았다.** 전체 위험차 $+0.5531$이 등급별 $+0.60$, $+0.76$, $+0.36$ 사이에 놓여 있는 것도 일관적이다.
