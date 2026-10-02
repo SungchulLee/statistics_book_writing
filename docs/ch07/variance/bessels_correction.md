@@ -12,49 +12,103 @@ $$E[S^2] = \sigma^2$$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 네 분포에서 확인하는 불편성
+**보기 1.** <span class="diff easy" title="쉬움"></span> 네 분포에서 확인하는 불편성. 참 분산을 맞추어 놓은 네 모집단($N(0,16)$, $\text{Exp}(4)$, $\text{Uniform}$, $\chi^2_{16}$)에서 $n = 20$씩 뽑아 $S^2$을 20만 번 기록한다.
+
+**(1)** $E[S^2] = \sigma^2$이 **모집단의 모양과 무관하게** 성립하는 까닭을 적으시오.
+
+**(2)** 네 줄의 "편향"이 각각 얼마만큼 흔들릴지 미리 구하고, 출력이 그 안에 드는지 판정하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def unbiasedness_across_distributions(n_sim=200_000, seed=42):
-    """베셀 보정의 불편성이 모집단 모양과 무관함을 네 분포에서 확인한다."""
-    rng = np.random.default_rng(seed)
-    sigma = 4.0
-    sigma2 = sigma**2
-    n = 20
+    **(1) 해석적으로.** 증명의 뼈대는 항등식
 
-    # 모양이 전혀 다른 분포 넷을 준비하되 **참 분산이 얼마인지 알 수 있게** 맞춘다.
-    #   Exp(scale=s)     의 분산은 s^2
-    #   Uniform(0, 2s√3) 의 분산은 (2s√3)^2/12 = s^2
-    #   Chi²(df=k)       의 분산은 2k
-    # 베셀 보정의 불편성은 정규성을 전혀 요구하지 않으므로,
-    # 네 경우 모두 편향이 0에 가깝게 나와야 한다.
-    # (반면 뒤에 나오는 카이제곱 분포 결과는 정규성이 꼭 필요하다.)
-    distributions = {
-        f'Normal(0, {sigma2})':    (lambda: rng.normal(0, sigma, n), sigma2),
-        f'Exp(scale={sigma})':     (lambda: rng.exponential(sigma, n), sigma2),
-        f'Uniform':                (lambda: rng.uniform(0, 2*sigma*np.sqrt(3), n), sigma2),
-        f'Chi²(df={int(sigma2)})': (lambda: rng.chisquare(int(sigma2), n), 2*sigma2),
-    }
+    $$
+    \sum_i (X_i - \bar X)^2 = \sum_i (X_i - \mu)^2 - n(\bar X - \mu)^2
+    $$
 
-    for name, (sampler, true_var) in distributions.items():
-        s2_vals = np.array([np.var(sampler(), ddof=1) for _ in range(n_sim)])
-        print(f"{name:<25} True σ²={true_var:.2f}  "
-              f"E[S²]={s2_vals.mean():.4f}  Bias={s2_vals.mean()-true_var:.4f}")
-unbiasedness_across_distributions()
-```
+    하나이고, 양변의 기댓값을 취하면 $n\sigma^2 - \sigma^2 = (n-1)\sigma^2$이 된다. **이 계산은 [5.1절의 증명 상자](../../ch05/foundations/statistics_as_rv.md)에 한 줄씩 적혀 있으므로 여기서 되풀이하지 않는다.**
 
-출력:
+    되풀이하지 않는 대신 **무엇을 썼는지**만 짚어 두자. 쓴 것은 두 가지다.
 
-```
-Normal(0, 16.0)           True σ²=16.00  E[S²]=15.9995  Bias=-0.0005
-Exp(scale=4.0)            True σ²=16.00  E[S²]=15.9970  Bias=-0.0030
-Uniform                   True σ²=16.00  E[S²]=16.0088  Bias=0.0088
-Chi²(df=16)               True σ²=32.00  E[S²]=32.0208  Bias=0.0208
-```
+    - $E[(X_i - \mu)^2] = \sigma^2$ — 분산의 정의.
+    - $\operatorname{Var}(\bar X) = \sigma^2/n$ — 독립성.
+
+    분포의 모양은 어디에도 들어오지 않는다. 치우쳤든, 이산이든, 꼬리가 두껍든 **분산만 유한하면** $E[S^2] = \sigma^2$이다. (뒤의 보기 2가 다루는 $\chi^2$ 분포 결과는 사정이 전혀 다르다. 그쪽은 정규성이 꼭 필요하다.)
+
+    **(2) 흔들림의 크기.** 모의 편향의 표준오차는 $\operatorname{sd}(S^2)/\sqrt B$이고, $S^2$의 분산은 모집단의 **4차 적률**에 달려 있다.
+
+    $$
+    \operatorname{Var}(S^2) = \frac{1}{n}\left(\mu_4 - \frac{n-3}{n-1}\sigma^4\right),
+    \qquad \mu_4 = (\gamma_2 + 3)\,\sigma^4
+    $$
+
+    여기서 $\gamma_2$가 초과첨도다. **불편성은 모양과 무관하지만 정밀도는 모양에 크게 달려 있다**는 것이 요점이며, 네 모집단의 $\gamma_2$가 각각 $0$, $6$, $-1.2$, $12/16 = 0.75$다.
+
+    | 모집단 | $\sigma^2$ | $\gamma_2$ | $\operatorname{Var}(S^2)$ | 몬테카를로 표준오차 |
+    |:---|---:|---:|---:|---:|
+    | $N(0, 16)$ | $16$ | $0$ | $26.95$ | $0.0116$ |
+    | $\text{Exp}(4)$ | $16$ | $6$ | $103.75$ | $0.0228$ |
+    | $\text{Uniform}$ | $16$ | $-1.2$ | $11.59$ | $0.0076$ |
+    | $\chi^2_{16}$ | $32$ | $0.75$ | $146.19$ | $0.0270$ |
+
+    모의실험과 맞춰 본다.
+
+    ```python
+    import numpy as np
+
+    def unbiasedness_across_distributions(n_sim=200_000, seed=42):
+        """베셀 보정의 불편성이 모집단 모양과 무관함을 네 분포에서 확인한다."""
+        rng = np.random.default_rng(seed)
+        sigma = 4.0
+        sigma2 = sigma**2
+        n = 20
+
+        # 모양이 전혀 다른 분포 넷을 준비하되 **참 분산이 얼마인지 알 수 있게** 맞춘다.
+        #   Exp(scale=s)     의 분산은 s^2
+        #   Uniform(0, 2s√3) 의 분산은 (2s√3)^2/12 = s^2
+        #   Chi²(df=k)       의 분산은 2k
+        # 베셀 보정의 불편성은 정규성을 전혀 요구하지 않으므로,
+        # 네 경우 모두 편향이 0에 가깝게 나와야 한다.
+        # (반면 뒤에 나오는 카이제곱 분포 결과는 정규성이 꼭 필요하다.)
+        distributions = {
+            f'Normal(0, {sigma2})':    (lambda: rng.normal(0, sigma, n), sigma2),
+            f'Exp(scale={sigma})':     (lambda: rng.exponential(sigma, n), sigma2),
+            f'Uniform':                (lambda: rng.uniform(0, 2*sigma*np.sqrt(3), n), sigma2),
+            f'Chi²(df={int(sigma2)})': (lambda: rng.chisquare(int(sigma2), n), 2*sigma2),
+        }
+
+        for name, (sampler, true_var) in distributions.items():
+            s2_vals = np.array([np.var(sampler(), ddof=1) for _ in range(n_sim)])
+            print(f"{name:<25} True σ²={true_var:.2f}  "
+                  f"E[S²]={s2_vals.mean():.4f}  Bias={s2_vals.mean()-true_var:.4f}")
+    unbiasedness_across_distributions()
+    ```
+
+    출력:
+
+    ```
+    Normal(0, 16.0)           True σ²=16.00  E[S²]=15.9995  Bias=-0.0005
+    Exp(scale=4.0)            True σ²=16.00  E[S²]=15.9970  Bias=-0.0030
+    Uniform                   True σ²=16.00  E[S²]=16.0088  Bias=0.0088
+    Chi²(df=16)               True σ²=32.00  E[S²]=32.0208  Bias=0.0208
+    ```
+
+    (2)의 자로 재면 네 줄이 모두 들어온다.
+
+    | 모집단 | 모의 편향 | 몬테카를로 표준오차 | $z$ |
+    |:---|---:|---:|---:|
+    | $N(0, 16)$ | $-0.0005$ | $0.0116$ | $-0.04$ |
+    | $\text{Exp}(4)$ | $-0.0030$ | $0.0228$ | $-0.13$ |
+    | $\text{Uniform}$ | $+0.0088$ | $0.0076$ | $+1.16$ |
+    | $\chi^2_{16}$ | $+0.0208$ | $0.0270$ | $+0.77$ |
+
+    **네 줄 모두 $1.2$ 표준오차 안이고, 어느 모집단에서도 치우침의 흔적이 없다.**
+
+    겉보기 수와 자를 뒤바꿔 읽지 않도록 조심해야 한다. 가장 큰 편향 $0.0208$은 $\chi^2_{16}$에서 나왔는데 자로 재면 $0.77$에 지나지 않고, 그보다 작은 $0.0088$이 균등분포에서는 $1.16$이다. **균등분포가 가장 정밀한 까닭은 초과첨도가 $-1.2$로 음수여서 꼬리가 짧기 때문**이고, 지수분포가 가장 엉성해 보이지 않는 까닭은 $\sigma^2$이 같은 $16$이기 때문이다.
+
+    세 번째 열이 이 쪽에서 가장 쓸모 있는 수다. $\operatorname{Var}(S^2)$가 $11.6$에서 $146$까지 **열세 배**나 벌어진다. 모든 모집단에서 $S^2$이 똑같이 불편이지만, **똑같이 믿을 만하지는 않다.** 분산을 추정할 때 4차 적률이 조용히 뒤에서 모든 것을 정하고 있다.
 
 !!! tip "분포와 무관한 결과"
     $E[S^2] = \sigma^2$의 증명은 항등식 $\sum(X_i - \bar{X})^2 = \sum(X_i - \mu)^2 - n(\bar{X} - \mu)^2$과 기댓값의 선형성만 쓴다. 분산이 유한하다는 것 외에 분포에 대한 가정은 필요 없다.
@@ -69,45 +123,109 @@ $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 카이제곱분포 확인
+**보기 2.** <span class="diff easy" title="쉬움"></span> 카이제곱분포 확인. $N(0, 3^2)$에서 $n = 5, 10, 25, 50$씩 뽑아 $(n-1)S^2/\sigma^2$을 10만 번 기록하고 $\chi^2_{n-1}$ 밀도를 겹쳐 그린다.
+
+**(1)** 이 통계량의 평균·분산·왜도를 $n$의 함수로 적으시오. 거기서 $\operatorname{Var}(S^2)$를 끌어내시오.
+
+**(2)** 그림이 네 칸에서 어떻게 달라 보여야 하는지 (1)로 설명하고, 수로 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
-    """정규모집단에서 (n-1)S^2/sigma^2 이 카이제곱을 따름을 확인한다.
+    **(1) 해석적으로.** $X_i \sim N(\mu,\sigma^2)$이면 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이고, 자유도 $k$인 카이제곱의 적률은 잘 알려져 있다.
 
-    앞 보기와 달리 여기서는 정규성이 꼭 필요하다. 불편성은 모든 분포에서
-    성립하지만, 분포의 모양까지 알려면 모집단이 정규여야 한다.
-    """
-    rng = np.random.default_rng(seed)
-    sample_sizes = [5, 10, 25, 50]
+    $$
+    E[\chi^2_k] = k,
+    \qquad
+    \operatorname{Var}(\chi^2_k) = 2k,
+    \qquad
+    \operatorname{skew}(\chi^2_k) = \sqrt{\frac{8}{k}}
+    $$
 
-    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-    for ax, n in zip(axes.flat, sample_sizes):
-        samples = rng.normal(0, sigma, (n_sim, n))
-        s2 = np.var(samples, axis=1, ddof=1)
-        # (n-1)S^2/sigma^2 을 만들면 sigma가 약분되어 사라진다.
-        # 그래서 이 통계량의 분포는 자유도 n-1 하나로만 결정되며,
-        # sigma를 몰라도 이것으로 검정과 신뢰구간을 만들 수 있다.
-        # 이런 성질을 갖는 양을 추축량(pivotal quantity)이라 한다.
-        chi2_vals = (n - 1) * s2 / sigma**2
+    $k = n-1$을 넣으면 네 칸의 이론값이 바로 나온다.
 
-        ax.hist(chi2_vals, bins=80, density=True, alpha=0.6, color='steelblue')
-        x = np.linspace(0, stats.chi2.ppf(0.999, n-1), 200)
-        ax.plot(x, stats.chi2.pdf(x, n-1), 'r-', linewidth=2, label=f'chi²(df={n-1})')
-        ax.set_title(f'n = {n}')
-        ax.legend()
-    plt.suptitle('(n-1)S²/σ² ~ chi²(n-1) for Normal Data')
-    plt.tight_layout()
-    plt.show()
-chi_squared_verification()
-```
+    | $n$ | 평균 $n-1$ | 분산 $2(n-1)$ | 왜도 $\sqrt{8/(n-1)}$ |
+    |---:|---:|---:|---:|
+    | $5$ | $4$ | $8$ | $1.4142$ |
+    | $10$ | $9$ | $18$ | $0.9428$ |
+    | $25$ | $24$ | $48$ | $0.5774$ |
+    | $50$ | $49$ | $98$ | $0.4041$ |
 
-![(n-1)S²/σ² ~ chi²(n-1) for Normal Data](./img/bessels_correction_47.png)
+    $S^2$으로 되돌리면 $S^2 = \dfrac{\sigma^2}{n-1}\chi^2_{n-1}$이므로
+
+    $$
+    E[S^2] = \frac{\sigma^2}{n-1}(n-1) = \sigma^2,
+    \qquad
+    \operatorname{Var}(S^2) = \frac{\sigma^4}{(n-1)^2}\cdot 2(n-1) = \frac{2\sigma^4}{n-1}
+    $$
+
+    다. **불편성이 여기서는 덤으로 따라 나온다.** 보기 1에서는 분포 가정 없이 힘들여 얻은 것을 정규성 하나로 공짜로 얻는 셈인데, 그 대신 정규가 아니면 이 줄은 통째로 쓸 수 없다.
+
+    **(2) 그림이 어떻게 달라 보여야 하는가.** 왜도가 $\sqrt{8/(n-1)}$이므로 $n$이 커지면 **$1/\sqrt n$ 속도로 대칭에 가까워진다.** $n = 5$ 칸은 왜도 $1.41$로 오른쪽으로 길게 끌리고, $n = 50$ 칸은 $0.40$으로 거의 종 모양이어야 한다. 동시에 가로 눈금이 $0$–$20$에서 $0$–$100$으로 **옮겨 가고 넓어진다**($\sigma$가 약분되므로 $\sigma = 3$은 그림에 아무 영향도 주지 않는다).
+
+    그림을 그리면서 세 적률을 함께 잰다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):
+        """정규모집단에서 (n-1)S^2/sigma^2 이 카이제곱을 따름을 확인한다.
+
+        앞 보기와 달리 여기서는 정규성이 꼭 필요하다. 불편성은 모든 분포에서
+        성립하지만, 분포의 모양까지 알려면 모집단이 정규여야 한다.
+        """
+        rng = np.random.default_rng(seed)
+        sample_sizes = [5, 10, 25, 50]
+
+        fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+        print(f"{'n':>4} {'모의 평균':>9} {'n-1':>5} {'모의 분산':>9} {'2(n-1)':>7} "
+              f"{'모의 왜도':>9} {'√(8/(n-1))':>11}")
+        for ax, n in zip(axes.flat, sample_sizes):
+            samples = rng.normal(0, sigma, (n_sim, n))
+            s2 = np.var(samples, axis=1, ddof=1)
+            # (n-1)S^2/sigma^2 을 만들면 sigma가 약분되어 사라진다.
+            # 그래서 이 통계량의 분포는 자유도 n-1 하나로만 결정되며,
+            # sigma를 몰라도 이것으로 검정과 신뢰구간을 만들 수 있다.
+            # 이런 성질을 갖는 양을 추축량(pivotal quantity)이라 한다.
+            chi2_vals = (n - 1) * s2 / sigma**2
+
+            ax.hist(chi2_vals, bins=80, density=True, alpha=0.6, color='steelblue')
+            x = np.linspace(0, stats.chi2.ppf(0.999, n-1), 200)
+            ax.plot(x, stats.chi2.pdf(x, n-1), 'r-', linewidth=2, label=f'chi²(df={n-1})')
+            ax.set_title(f'n = {n}')
+            ax.legend()
+            # 눈으로 겹쳐 보는 대신 세 적률을 이론값과 맞춰 둔다.
+            print(f"{n:>4} {chi2_vals.mean():>9.4f} {n-1:>5} {chi2_vals.var(ddof=1):>9.4f} {2*(n-1):>7} "
+                  f"{stats.skew(chi2_vals):>9.4f} {np.sqrt(8/(n-1)):>11.4f}")
+        plt.suptitle('(n-1)S²/σ² ~ chi²(n-1) for Normal Data')
+        plt.tight_layout()
+        plt.show()
+    chi_squared_verification()
+    ```
+
+    출력:
+
+    ```
+       n     모의 평균   n-1     모의 분산  2(n-1)     모의 왜도  √(8/(n-1))
+       5    4.0037     4    8.0681       8    1.4272      1.4142
+      10    9.0012     9   18.0701      18    0.9415      0.9428
+      25   23.9858    24   47.6345      48    0.5643      0.5774
+      50   48.9677    49   97.7039      98    0.4161      0.4041
+    ```
+
+    ![(n-1)S²/σ² ~ chi²(n-1) for Normal Data](./img/bessels_correction_47.png)
+
+    **열두 칸이 모두 (1)과 맞는다.** 평균은 $4.0037$, $9.0012$, $23.9858$, $48.9677$로 $4$, $9$, $24$, $49$ 둘레에 있다. 10만 번에서 평균의 몬테카를로 표준오차가 $\sqrt{2(n-1)/10^5}$이므로 $n = 50$에서 $0.031$이고, $48.9677$은 $1.0$ 표준오차 거리다.
+
+    분산은 $8.07$, $18.07$, $47.63$, $97.70$으로 $8$, $18$, $48$, $98$ 둘레다. 분산의 상대 몬테카를로 오차가 $\sqrt{2/10^5} = 0.45\%$인데(카이제곱은 정규보다 꼬리가 두꺼워 실제로는 이보다 조금 크다) 가장 멀리 간 $n = 50$의 $-0.30\%$도 그 안이다.
+
+    **왜도 열이 가장 또렷하다.** $1.4272 \to 0.9415 \to 0.5643 \to 0.4161$이 이론값 $1.4142 \to 0.9428 \to 0.5774 \to 0.4041$을 따라간다. 10만 번에서 왜도의 표준오차가 $\sqrt{6/10^5} = 0.0077$이므로 네 어긋남이 각각 $+1.7$, $-0.2$, $-1.7$, $+1.5$ 표준오차다.
+
+    그림에서도 이 수가 그대로 보인다. 왼쪽 위 칸($n=5$)은 왼쪽 벽에 붙어 오른쪽으로 길게 끌리고, 오른쪽 아래 칸($n=50$)은 거의 대칭인 종 모양이다. 네 칸 모두 붉은 곡선이 히스토그램 위에 정확히 얹혀 있다.
+
+    **$\sigma = 3$이 네 칸 어디에도 나타나지 않는다는 점이 중요하다.** $(n-1)S^2/\sigma^2$에서 $\sigma$가 약분되어 분포가 자유도 하나로만 정해지기 때문이고, 이것이 코드 주석이 말하는 **추축량**의 뜻이다. 모르는 $\sigma$가 통계량의 분포에서 사라지므로 $\sigma$를 모른 채로도 구간을 만들 수 있다.
 
 카이제곱분포로부터 곧바로 다음을 얻는다:
 
@@ -119,43 +237,95 @@ $$E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 표본평균과 표본분산의 독립성
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표본평균과 표본분산의 독립성. $N(5, 3^2)$와 $\text{Exp}(\text{scale} = 3)$에서 $n = 20$씩 뽑아 $\operatorname{corr}(\bar X, S^2)$를 10만 번 되풀이로 잰다.
+
+**(1)** $\operatorname{Cov}(\bar X, S^2)$를 일반 분포에 대해 유도하시오. 거기서 정규와 지수의 상관계수를 **수로** 예측하시오.
+
+**(2)** 출력과 맞추시오. 상관이 $0$인 것과 독립인 것은 같은 말인가.
 
 </div>
 
-```python
-def independence_xbar_s2(sigma=3.0, n_sim=100_000, seed=42):
-    """X-bar 와 S^2 의 독립이 정규분포만의 성질임을 보인다.
+??? success "풀이"
 
-    t 통계량은 분자에 X-bar, 분모에 S 를 둔다. 둘이 독립이라야 그 비의
-    분포를 t 로 말할 수 있다. 정규모집단이 아니면 이 전제가 깨진다.
-    """
-    rng = np.random.default_rng(seed)
-    n = 20
+    **(1) 해석적으로.** 평균을 $0$으로 옮겨도 두 통계량이 바뀌지 않으므로 $\mu = 0$으로 두자. $\operatorname{Cov}(\bar X, S^2) = E[\bar X S^2]$이고, 보기 1의 항등식에서 $(n-1)S^2 = \sum_i X_i^2 - n\bar X^2$이므로
 
-    # 정규모집단: 상관이 0 이다. 게다가 정규에서는 무상관이 곧 독립이다.
-    samp_n = rng.normal(5, sigma, (n_sim, n))
-    xbar_n = samp_n.mean(axis=1)
-    s2_n   = np.var(samp_n, axis=1, ddof=1)
-    corr_n = np.corrcoef(xbar_n, s2_n)[0, 1]
+    $$
+    (n-1)E[\bar X S^2]
+    = E\!\left[\bar X \sum_i X_i^2\right] - n\,E[\bar X^3]
+    $$
 
-    # 지수모집단: 상관이 0 이 아니다. 평균이 큰 표본일수록 퍼짐도 크다.
-    samp_e = rng.exponential(sigma, (n_sim, n))
-    xbar_e = samp_e.mean(axis=1)
-    s2_e   = np.var(samp_e, axis=1, ddof=1)
-    corr_e = np.corrcoef(xbar_e, s2_e)[0, 1]
+    이다. 두 항을 따로 센다. 앞 항은 $\bar X = \frac1n\sum_j X_j$를 넣어 펼치면 $j = i$인 $n$개 항만 $E[X^3] = \mu_3$를 남기고 나머지는 독립성과 $E[X] = 0$에서 사라지므로 $\frac1n \cdot n\mu_3 = \mu_3$다. 뒤 항은 $\bar X$의 3차 중심적률이 $\mu_3/n^2$이므로 $n \cdot \mu_3/n^2 = \mu_3/n$이다. 따라서
 
-    print(f"Normal:      Corr(X̄, S²) = {corr_n:.6f}  (≈ 0)")
-    print(f"Exponential: Corr(X̄, S²) = {corr_e:.6f}  (≠ 0)")
-independence_xbar_s2()
-```
+    $$
+    (n-1)E[\bar X S^2] = \mu_3 - \frac{\mu_3}{n} = \frac{n-1}{n}\mu_3
+    \quad\Longrightarrow\quad
+    \boxed{\;\operatorname{Cov}(\bar X, S^2) = \frac{\mu_3}{n}\;}
+    $$
 
-출력:
+    **공분산이 모집단의 3차 중심적률 하나로 정해진다.** 그러므로
 
-```
-Normal:      Corr(X̄, S²) = 0.005076  (≈ 0)
-Exponential: Corr(X̄, S²) = 0.700128  (≠ 0)
-```
+    - **대칭분포**($\mu_3 = 0$): 언제나 $\operatorname{Cov}(\bar X, S^2) = 0$. 정규뿐 아니라 균등·$t$·라플라스도 그렇다.
+    - **치우친 분포**: $\mu_3 \ne 0$이므로 상관이 남는다. 지수분포는 $\mu_3 = 2\theta^3 > 0$이라 **양의 상관**이고, 평균이 큰 표본일수록 퍼짐도 크다는 뜻이다.
+
+    상관계수를 수로 내려면 두 분산이 더 필요하다. $\operatorname{Var}(\bar X) = \sigma^2/n$이고 보기 1의 $\operatorname{Var}(S^2)$ 식을 쓴다. $\theta = 3$인 지수분포는 $\sigma^2 = 9$, $\mu_3 = 2\theta^3 = 54$, $\mu_4 = 9\sigma^4 = 729$이므로 $n = 20$에서
+
+    $$
+    \operatorname{Cov} = \frac{54}{20} = 2.7,
+    \quad
+    \operatorname{Var}(\bar X) = 0.45,
+    \quad
+    \operatorname{Var}(S^2) = \frac{1}{20}\left(729 - \frac{17}{19}\cdot 81\right) = 32.826
+    $$
+
+    $$
+    \operatorname{corr}(\bar X, S^2) = \frac{2.7}{\sqrt{0.45 \times 32.826}} = 0.7025
+    $$
+
+    정규는 $\mu_3 = 0$이므로 **정확히 $0$**이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    def independence_xbar_s2(sigma=3.0, n_sim=100_000, seed=42):
+        """X-bar 와 S^2 의 독립이 정규분포만의 성질임을 보인다.
+
+        t 통계량은 분자에 X-bar, 분모에 S 를 둔다. 둘이 독립이라야 그 비의
+        분포를 t 로 말할 수 있다. 정규모집단이 아니면 이 전제가 깨진다.
+        """
+        rng = np.random.default_rng(seed)
+        n = 20
+
+        # 정규모집단: 상관이 0 이다. 게다가 정규에서는 무상관이 곧 독립이다.
+        samp_n = rng.normal(5, sigma, (n_sim, n))
+        xbar_n = samp_n.mean(axis=1)
+        s2_n   = np.var(samp_n, axis=1, ddof=1)
+        corr_n = np.corrcoef(xbar_n, s2_n)[0, 1]
+
+        # 지수모집단: 상관이 0 이 아니다. 평균이 큰 표본일수록 퍼짐도 크다.
+        samp_e = rng.exponential(sigma, (n_sim, n))
+        xbar_e = samp_e.mean(axis=1)
+        s2_e   = np.var(samp_e, axis=1, ddof=1)
+        corr_e = np.corrcoef(xbar_e, s2_e)[0, 1]
+
+        print(f"Normal:      Corr(X̄, S²) = {corr_n:.6f}  (≈ 0)")
+        print(f"Exponential: Corr(X̄, S²) = {corr_e:.6f}  (≠ 0)")
+    independence_xbar_s2()
+    ```
+
+    출력:
+
+    ```
+    Normal:      Corr(X̄, S²) = 0.005076  (≈ 0)
+    Exponential: Corr(X̄, S²) = 0.700128  (≠ 0)
+    ```
+
+    **지수 쪽 예측이 셋째 자리까지 맞는다.** $0.700128$ 대 $0.7025$다. 10만 번에서 상관계수의 표준오차가 $(1 - r^2)/\sqrt{B} = 0.51/316 = 0.0016$이므로 $-1.5$ 표준오차 거리다. 정규 쪽 $0.005076$도 참값 $0$에서 $1.6$ 표준오차($1/\sqrt{B} = 0.0032$) 안이다.
+
+    **(2)의 둘째 물음이 이 보기의 핵심이다.** 상관이 $0$인 것과 독립인 것은 **같은 말이 아니다.** 상관은 **선형** 관계만 재므로, 상관이 $0$이어도 얼마든지 세게 종속일 수 있다. 위 유도가 보인 것은 "대칭분포이면 $\operatorname{Cov}(\bar X, S^2) = 0$"뿐이고, 그것은 균등분포에서도 $t$ 분포에서도 성립한다. 그런데 **$\bar X$와 $S^2$이 실제로 독립인 것은 정규분포뿐이다.**
+
+    까닭은 기하에 있다. 정규표본 $\mathbf X$를 $n$차원 벡터로 보면 그 분포가 **회전불변**이고, $\bar X$는 $\mathbf 1$ 방향의 사영, $S^2$은 그에 직교하는 $(n-1)$차원 부분공간에서의 길이다. 회전불변인 분포에서는 직교하는 두 성분이 독립이 되며, 이것이 코크런 정리이고 아래 연습문제 1의 분해이기도 하다. **직교가 곧 독립이 되는 분포는 정규뿐**이다.
+
+    그래서 균등분포처럼 대칭이지만 정규가 아닌 모집단에서는 상관이 $0$으로 나오는데도 $t$ 통계량이 정확히 $t$ 분포를 따르지 않는다. **$t$ 분포의 유도에 필요한 것은 무상관이 아니라 독립이다.**
 
 !!! note "왜 중요한가"
     $\bar{X}$와 $S^2$의 독립성이 $t$-분포의 유도를 가능하게 한다. $t$-통계량 $T = \frac{\bar{X} - \mu}{S/\sqrt{n}}$은 (정규와 관련된) $\bar{X} - \mu$와 (카이제곱과 관련된) $S$의 비이다. 독립성이 이 비가 $t$-분포를 따르도록 보장한다.
@@ -174,42 +344,130 @@ $$c_4(n) = \sqrt{\frac{2}{n-1}} \cdot \frac{\Gamma(n/2)}{\Gamma((n-1)/2)}$$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 표준편차의 편향과 보정상수
+**보기 4.** <span class="diff easy" title="쉬움"></span> 표준편차의 편향과 보정상수. $N(0, 3^2)$에서 $n$을 $3$에서 $500$까지 바꾸며 $S$를 20만 번 기록하고 $c_4$로 나눈 값과 견준다.
+
+**(1)** $E[S] = c_4(n)\,\sigma$를 보기 2의 카이제곱 결과로부터 유도하시오. $n$이 크면 편향이 얼마나 빨리 사라지는가.
+
+**(2)** 출력의 마지막 줄에서 $c_4 = \texttt{nan}$이 나왔다. $n = 500$에서 $c_4$가 존재하지 않는 것인가.
 
 </div>
 
-```python
-from scipy.special import gamma as gamma_func
+??? success "풀이"
 
-def std_deviation_bias(sigma=3.0, n_sim=200_000, seed=42):
-    """S^2 은 불편인데 S 는 왜 불편이 아닌지, 보정상수 c4 까지 확인한다."""
-    rng = np.random.default_rng(seed)
-    sample_sizes = [3, 5, 10, 20, 50, 100, 500]
+    **(1) 해석적으로.** 보기 2에서 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이므로
 
-    for n in sample_sizes:
-        samples = rng.normal(0, sigma, (n_sim, n))
-        # S^2 은 불편이지만 그 제곱근 S 는 불편이 아니다.
-        # 제곱근이 오목함수라 옌센 부등식 E[√X] < √E[X] 가 성립하기 때문이며,
-        # 따라서 S 는 sigma 를 **과소추정**한다.
-        # "불편성은 변환에 대해 보존되지 않는다"는 일반 원리의 사례다.
-        s = np.std(samples, axis=1, ddof=1)
-        c4 = np.sqrt(2 / (n - 1)) * gamma_func(n / 2) / gamma_func((n - 1) / 2)
-        print(f"n={n:>4}  E[S]={s.mean():.4f}  σ={sigma:.4f}  "
-              f"Bias={s.mean()-sigma:.4f}  c₄={c4:.4f}  E[S/c₄]={(s/c4).mean():.4f}")
-std_deviation_bias()
-```
+    $$
+    S = \frac{\sigma}{\sqrt{n-1}}\sqrt{\chi^2_{n-1}}
+    $$
 
-출력:
+    이다. 자유도 $k$인 카이제곱의 제곱근, 곧 카이분포의 평균은 밀도를 직접 적분해 얻는다.
 
-```
-n=   3  E[S]=2.6576  σ=3.0000  Bias=-0.3424  c₄=0.8862  E[S/c₄]=2.9987
-n=   5  E[S]=2.8190  σ=3.0000  Bias=-0.1810  c₄=0.9400  E[S/c₄]=2.9990
-n=  10  E[S]=2.9169  σ=3.0000  Bias=-0.0831  c₄=0.9727  E[S/c₄]=2.9989
-n=  20  E[S]=2.9599  σ=3.0000  Bias=-0.0401  c₄=0.9869  E[S/c₄]=2.9991
-n=  50  E[S]=2.9844  σ=3.0000  Bias=-0.0156  c₄=0.9949  E[S/c₄]=2.9996
-n= 100  E[S]=2.9922  σ=3.0000  Bias=-0.0078  c₄=0.9975  E[S/c₄]=2.9998
-n= 500  E[S]=2.9987  σ=3.0000  Bias=-0.0013  c₄=nan  E[S/c₄]=nan
-```
+    $$
+    E\!\left[\sqrt{\chi^2_k}\right]
+    = \int_0^\infty \sqrt{x}\,\frac{x^{k/2-1}e^{-x/2}}{2^{k/2}\Gamma(k/2)}\,dx
+    = \sqrt{2}\,\frac{\Gamma\!\left(\frac{k+1}{2}\right)}{\Gamma\!\left(\frac{k}{2}\right)}
+    $$
+
+    적분은 $x^{(k+1)/2 - 1}$을 감마적분으로 읽으면 끝난다. $k = n-1$을 넣으면
+
+    $$
+    E[S] = \frac{\sigma}{\sqrt{n-1}}\cdot\sqrt2\,\frac{\Gamma(n/2)}{\Gamma\!\left(\frac{n-1}{2}\right)}
+    = \underbrace{\sqrt{\frac{2}{n-1}}\,\frac{\Gamma(n/2)}{\Gamma\!\left(\frac{n-1}{2}\right)}}_{c_4(n)}\;\sigma
+    $$
+
+    다. **$c_4 < 1$임은 적분을 하지 않고도 알 수 있다.** $\sqrt{\cdot}$가 **엄밀히 오목**하고 $S^2$이 상수가 아니므로 옌센 부등식이 엄밀한 부등호로 성립한다.
+
+    $$
+    E[S] = E\!\left[\sqrt{S^2}\right] < \sqrt{E[S^2]} = \sigma
+    $$
+
+    **$S$는 언제나 $\sigma$를 과소추정한다.** 그리고 이것은 "불편성이 변환에 보존되지 않는다"는 일반 사실의 한 보기다. $S^2$이 $\sigma^2$에 불편이어도 $g(S^2)$이 $g(\sigma^2)$에 불편일 까닭은 $g$가 선형일 때뿐이다.
+
+    편향이 사라지는 속도는 감마함수의 점근전개가 준다.
+
+    $$
+    c_4(n) = 1 - \frac{1}{4n} + O(n^{-2}),
+    \qquad
+    c_4(n) \approx \frac{4(n-1)}{4n-3}
+    $$
+
+    뒤의 간단한 꼴이 실용적으로 아주 정확하다. $n = 10$에서 $0.972973$ 대 참값 $0.972659$이고, $n = 100$부터는 소수 다섯째 자리까지 맞는다. **편향이 $1/(4n)$으로 줄므로 $n = 25$면 $1\%$, $n = 250$이면 $0.1\%$**다.
+
+    이 $c_4$는 [4.2절 $t$ 분포](../../ch04/continuous_distributions/student_t.md)에 나오는 $\Gamma$ 비와 같은 식구다. $t$ 통계량이 $\bar X$를 $S$로 나누어 만들어지므로, $S$의 분포에서 나온 감마 비가 $t$ 밀도의 상수로 그대로 옮겨 간다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from scipy.special import gamma as gamma_func
+
+    def std_deviation_bias(sigma=3.0, n_sim=200_000, seed=42):
+        """S^2 은 불편인데 S 는 왜 불편이 아닌지, 보정상수 c4 까지 확인한다."""
+        rng = np.random.default_rng(seed)
+        sample_sizes = [3, 5, 10, 20, 50, 100, 500]
+
+        for n in sample_sizes:
+            samples = rng.normal(0, sigma, (n_sim, n))
+            # S^2 은 불편이지만 그 제곱근 S 는 불편이 아니다.
+            # 제곱근이 오목함수라 옌센 부등식 E[√X] < √E[X] 가 성립하기 때문이며,
+            # 따라서 S 는 sigma 를 **과소추정**한다.
+            # "불편성은 변환에 대해 보존되지 않는다"는 일반 원리의 사례다.
+            s = np.std(samples, axis=1, ddof=1)
+            c4 = np.sqrt(2 / (n - 1)) * gamma_func(n / 2) / gamma_func((n - 1) / 2)
+            print(f"n={n:>4}  E[S]={s.mean():.4f}  σ={sigma:.4f}  "
+                  f"Bias={s.mean()-sigma:.4f}  c₄={c4:.4f}  E[S/c₄]={(s/c4).mean():.4f}")
+    std_deviation_bias()
+    ```
+
+    출력:
+
+    ```
+    n=   3  E[S]=2.6576  σ=3.0000  Bias=-0.3424  c₄=0.8862  E[S/c₄]=2.9987
+    n=   5  E[S]=2.8190  σ=3.0000  Bias=-0.1810  c₄=0.9400  E[S/c₄]=2.9990
+    n=  10  E[S]=2.9169  σ=3.0000  Bias=-0.0831  c₄=0.9727  E[S/c₄]=2.9989
+    n=  20  E[S]=2.9599  σ=3.0000  Bias=-0.0401  c₄=0.9869  E[S/c₄]=2.9991
+    n=  50  E[S]=2.9844  σ=3.0000  Bias=-0.0156  c₄=0.9949  E[S/c₄]=2.9996
+    n= 100  E[S]=2.9922  σ=3.0000  Bias=-0.0078  c₄=0.9975  E[S/c₄]=2.9998
+    n= 500  E[S]=2.9987  σ=3.0000  Bias=-0.0013  c₄=nan  E[S/c₄]=nan
+    ```
+
+    여섯 줄은 (1)과 깨끗하게 맞는다. $E[S]$가 $2.6576 \to 2.9987$로 올라오고, 이론값 $c_4\sigma$가 $0.886227 \times 3 = 2.6587$, $0.939986 \times 3 = 2.8200$, $\ldots$로 각각 소수 둘째 자리까지 맞는다. $E[S/c_4]$ 열은 여섯 줄 모두 $2.9987$–$2.9998$로 $\sigma = 3$을 맞힌다. **$S/c_4$가 $\sigma$의 불편추정량이라는 것이 확인되었다.**
+
+    **마지막 줄의 $\texttt{nan}$은 통계가 아니라 부동소수점의 사고다.** $c_4(500)$은 멀쩡히 존재하고 값이 $0.999499$다. 코드가 $\Gamma(250)$을 직접 계산하려다 넘친 것뿐이다.
+
+    ```python
+    # Γ 를 직접 부르지 말고 로그감마의 차를 지수로 되돌린다.
+    from scipy.special import gammaln
+
+    def c4_safe(n):
+        return np.sqrt(2 / (n - 1)) * np.exp(gammaln(n / 2) - gammaln((n - 1) / 2))
+
+    print(f"{'n':>5} {'gamma 로':>10} {'gammaln 로':>11} {'4(n-1)/(4n-3)':>14}")
+    for n in (3, 20, 100, 342, 343, 344, 500):
+        direct = np.sqrt(2 / (n - 1)) * gamma_func(n / 2) / gamma_func((n - 1) / 2)
+        print(f"{n:>5} {direct:>10.6f} {c4_safe(n):>11.6f} {4*(n-1)/(4*n-3):>14.6f}")
+    print(f"Γ(250) 의 자릿수 = {gammaln(250)/np.log(10):.0f}, "
+          f"float64 가 담을 수 있는 자릿수 = 308")
+    ```
+
+    출력:
+
+    ```
+        n    gamma 로   gammaln 로  4(n-1)/(4n-3)
+        3   0.886227    0.886227       0.888889
+       20   0.986934    0.986934       0.987013
+      100   0.997478    0.997478       0.997481
+      342   0.999267    0.999267       0.999267
+      343   0.999269    0.999269       0.999270
+      344        inf    0.999271       0.999272
+      500        nan    0.999499       0.999499
+    Γ(250) 의 자릿수 = 490, float64 가 담을 수 있는 자릿수 = 308
+    ```
+
+    **$n = 343$까지는 멀쩡하다가 $344$에서 갑자기 무너진다.** $\Gamma(x)$는 $x \approx 171.6$에서 `float64`의 한계 $1.8 \times 10^{308}$을 넘으므로, $n/2 > 171.6$ 곧 $n > 343$에서 분자가 $\infty$가 된다. $n = 344$에서는 분자만 넘쳐 $\infty$가 나오고, $n = 500$에서는 분모도 함께 넘쳐 $\infty/\infty = \texttt{nan}$이 된다. $\Gamma(250)$은 자릿수가 $490$이라 **담을 그릇이 없을 뿐 값이 없는 것이 아니다.**
+
+    고치는 법은 한 줄이다. **큰 수의 비를 구할 때는 로그에서 빼고 지수로 되돌린다.** $\exp(\ln\Gamma(a) - \ln\Gamma(b))$는 중간에 $10^{490}$을 만들지 않으므로 넘칠 일이 없다. 셋째 열의 간단한 어림 $4(n-1)/(4n-3)$도 $n \ge 100$에서는 소수 다섯째 자리까지 같으니, 급할 때는 그것으로도 충분하다.
+
+    **그리고 이 사고가 조용하다는 점이 가장 나쁘다.** $\texttt{nan}$은 예외를 던지지 않고 표 한 칸에 앉아 있다가, 그 값으로 나눈 결과까지 $\texttt{nan}$으로 물들였다. 여섯 줄이 맞았다고 일곱째 줄을 믿으면 안 된다는 것이 보기 5(소프트웨어 기본값)와 함께 읽을 교훈이다.
 
 !!! warning "편향은 작은 표본에서 가장 크다"
     $n = 3$이면 $c_4 \approx 0.886$이므로 $E[S] \approx 0.886\sigma$ — 표준편차를 약 11% 과소추정한다. $n = 50$이면 편향이 0.5% 미만이다.
@@ -220,29 +478,110 @@ n= 500  E[S]=2.9987  σ=3.0000  Bias=-0.0013  c₄=nan  E[S/c₄]=nan
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 소프트웨어 기본값의 함정
+**보기 5.** <span class="diff easy" title="쉬움"></span> 소프트웨어 기본값의 함정. 자료 $\{2, 4, 4, 4, 5, 5, 7, 9\}$를 `np.var` 의 기본값과 `ddof=1` 로 각각 요약한다.
+
+**(1)** 두 값을 손으로 구하시오. 분산에서 몇 퍼센트, 표준편차에서 몇 퍼센트 차이가 나는가.
+
+**(2)** 그 차이가 $n$에 따라 어떻게 줄어드는지 적고, 몇 개부터 무시해도 되는지 판단하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# numpy 와 pandas 의 기본값이 서로 다르다는 것이 여기서 걸리는 지점이다.
-# np.var 는 ddof=0 (n으로 나눔), pandas 의 .var() 는 ddof=1 이 기본이다.
-# 같은 자료를 두 도구로 요약하면 다른 숫자가 나오는 흔한 함정이다.
-data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
-n = len(data)
+    **(1) 해석적으로.** $n = 8$이고 합이 $2+4+4+4+5+5+7+9 = 40$이므로 $\bar x = 5$다. 제곱합은
 
-print(f"np.var(data)          = {np.var(data):.4f}  <- divides by n={n}  (BIASED)")
-print(f"np.var(data, ddof=1)  = {np.var(data, ddof=1):.4f}  <- divides by n-1={n-1}  (UNBIASED)")
-```
+    $$
+    \sum (x_i - 5)^2 = 9 + 1 + 1 + 1 + 0 + 0 + 4 + 16 = 32
+    $$
 
-출력:
+    이고, 분모만 바꾸면 된다.
 
-```
-np.var(data)          = 4.0000  <- divides by n=8  (BIASED)
-np.var(data, ddof=1)  = 4.5714  <- divides by n-1=7  (UNBIASED)
-```
+    $$
+    \texttt{ddof=0}:\ \frac{32}{8} = 4,
+    \qquad
+    \texttt{ddof=1}:\ \frac{32}{7} = 4.5714
+    $$
+
+    두 값의 비는 언제나 $\dfrac{n}{n-1}$이다. 여기서는 $8/7 = 1.1429$이므로 **분산이 $14.3\%$ 차이** 난다. 표준편차는 그 제곱근이므로
+
+    $$
+    \sqrt{4} = 2,
+    \qquad
+    \sqrt{32/7} = 2.1381,
+    \qquad
+    \sqrt{8/7} = 1.0690
+    $$
+
+    로 **$6.9\%$ 차이**다. 제곱근을 거치면 차이가 대략 절반으로 줄어든다.
+
+    **(2) $n$에 따른 감소.** 상대 차이가
+
+    $$
+    \frac{n}{n-1} - 1 = \frac{1}{n-1}
+    \qquad(\text{분산}),
+    \qquad
+    \sqrt{\frac{n}{n-1}} - 1 \approx \frac{1}{2n}
+    \qquad(\text{표준편차})
+    $$
+
+    이므로 $1/n$로 줄어든다. $n = 8$에서 $14.3\%$·$6.9\%$, $n = 30$에서 $3.4\%$·$1.7\%$, $n = 100$에서 $1.0\%$·$0.5\%$, $n = 1000$에서 $0.1\%$·$0.05\%$다.
+
+    **"몇 개부터 무시해도 되는가"에는 보편적인 답이 없다.** 기준은 $n$이 아니라 **그 차이가 다른 불확실성에 견주어 작은가**여야 한다. 보기 4에서 보았듯 $S$ 자체의 상대 표준오차가 정규자료에서 대략 $1/\sqrt{2n}$이므로, 두 값을 견주면
+
+    $$
+    \frac{\text{두 분모의 차이}}{S \text{ 의 표준오차}}
+    \approx \frac{1/(2n)}{1/\sqrt{2n}} = \frac{1}{\sqrt{2n}}
+    $$
+
+    로 **언제나 $S$ 자체의 흔들림보다 작다.** $n = 8$에서도 $6.9\%$ 대 $25\%$다. 그러니 한 번의 추정값만 놓고 보면 어느 쪽을 써도 큰일이 나지 않는다.
+
+    **문제는 다른 데 있다.** 두 도구가 같은 자료에 다른 수를 내놓으면 **결과를 재현할 수 없고**, $n$으로 나눈 값을 여러 자료에 걸쳐 되풀이해 쓰면 **체계적으로 낮은 쪽으로 쌓인다.** 흔들림은 평균 내면 지워지지만 편향은 지워지지 않는다. 그래서 답은 "$n$이 작을 때만 조심하라"가 아니라 **"언제나 `ddof` 를 명시하라"**다.
+
+    코드로 확인한다.
+
+    ```python
+    import numpy as np
+
+    # numpy 와 pandas 의 기본값이 서로 다르다는 것이 여기서 걸리는 지점이다.
+    # np.var 는 ddof=0 (n으로 나눔), pandas 의 .var() 는 ddof=1 이 기본이다.
+    # 같은 자료를 두 도구로 요약하면 다른 숫자가 나오는 흔한 함정이다.
+    data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+    n = len(data)
+
+    print(f"np.var(data)          = {np.var(data):.4f}  <- divides by n={n}  (BIASED)")
+    print(f"np.var(data, ddof=1)  = {np.var(data, ddof=1):.4f}  <- divides by n-1={n-1}  (UNBIASED)")
+    ```
+
+    출력:
+
+    ```
+    np.var(data)          = 4.0000  <- divides by n=8  (BIASED)
+    np.var(data, ddof=1)  = 4.5714  <- divides by n-1=7  (UNBIASED)
+    ```
+
+    **(1)의 두 값이 그대로 나왔다.** 이 자료는 $\texttt{ddof=0}$ 쪽이 $4$로 딱 떨어지게 꾸며져 있어 교과서 예제로 자주 쓰이는데, **그 깔끔한 $4$가 바로 편향된 쪽**이라는 점이 얄궂다.
+
+    ```python
+    # 두 분모의 차이를 n 에 따라 적고, S 자체의 흔들림과 견준다.
+    print(f"{'n':>6} {'분산 차이':>9} {'표준편차 차이':>12} {'S 의 상대 표준오차':>16}")
+    for n in (8, 30, 100, 1000):
+        print(f"{n:>6} {(n/(n-1)-1)*100:>8.2f}% {(np.sqrt(n/(n-1))-1)*100:>11.2f}% "
+              f"{1/np.sqrt(2*n)*100:>15.1f}%")
+    ```
+
+    출력:
+
+    ```
+         n     분산 차이      표준편차 차이      S 의 상대 표준오차
+         8    14.29%        6.90%            25.0%
+        30     3.45%        1.71%            12.9%
+       100     1.01%        0.50%             7.1%
+      1000     0.10%        0.05%             2.2%
+    ```
+
+    **네 줄 모두 마지막 열이 가장 크다.** $n = 8$에서 두 분모의 차이가 $6.9\%$인데 $S$ 자체는 $25\%$씩 흔들리고, $n = 1000$에서도 $0.05\%$ 대 $2.2\%$다. 비가 $1/\sqrt{2n}$이므로 **$n$이 커질수록 오히려 더 벌어진다.** 한 번의 값만 보면 분모 선택은 언제나 잡음에 묻힌다.
+
+    그러니 $\texttt{ddof}$ 를 명시해야 하는 이유는 "그 수가 많이 달라서"가 아니라 **"달라졌다는 사실을 아무도 알려 주지 않아서"**다.
 
 !!! danger "분모를 항상 확인하라"
     NumPy의 기본값은 `ddof=0`(편향)인 반면 R과 pandas의 기본값은 `ddof=1`(불편)이다. NumPy로 표본분산을 계산할 때는 항상 `ddof=1`을 명시하라.
@@ -253,46 +592,133 @@ np.var(data, ddof=1)  = 4.5714  <- divides by n-1=7  (UNBIASED)
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 금융 응용 — 추적오차
+**보기 6.** <span class="diff easy" title="쉬움"></span> 금융 응용 — 추적오차. 참 월별 추적오차가 $1\%$인 펀드의 $3$년치($n = 36$) 초과수익률로 연율화 추적오차를 추정하는 일을 5만 번 되풀이하고, 분모를 $n$으로 둘 때와 $n-1$로 둘 때를 견준다.
+
+**(1)** 두 추정량의 **기댓값·편향·표준편차·평균제곱오차**를 모두 해석적으로 구하시오.
+
+**(2)** 출력에서 편향은 $\texttt{ddof=1}$ 쪽이 세 배 작은데 RMSE 는 두 쪽이 $0.413\%$로 **같다.** 우연인가.
 
 </div>
 
-```python
-def tracking_error_estimation(seed=42):
-    """추적오차 추정에서 ddof 선택이 실제로 얼마나 차이를 내는지 본다.
+??? success "풀이"
 
-    추적오차는 펀드 수익률과 지수 수익률의 차이가 갖는 표준편차다. 3년치
-    월별 자료면 n=36 이라 두 분모의 차이가 눈에 띄는 크기로 남는다.
-    편향이 작은 쪽과 RMSE 가 작은 쪽이 갈리는 점도 함께 본다.
-    """
-    rng = np.random.default_rng(seed)
-    n_months = 36            # 3년치 월별 자료
-    te_true_monthly = 0.01
-    te_true_annual = te_true_monthly * np.sqrt(12)
-    n_sim = 50_000
+    **(1) 해석적으로.** 추정량이 둘 다 $S$의 상수배다. $\texttt{ddof=1}$ 쪽을 $S$라 하면
 
-    te_n, te_n1 = [], []
-    for _ in range(n_sim):
-        excess = rng.normal(0.002, te_true_monthly, n_months)
-        te_n.append(np.std(excess, ddof=0) * np.sqrt(12))
-        te_n1.append(np.std(excess, ddof=1) * np.sqrt(12))
+    $$
+    S_{\texttt{ddof=0}} = \sqrt{\frac{n-1}{n}}\;S
+    $$
 
-    te_n, te_n1 = np.array(te_n), np.array(te_n1)
-    for name, est in [('ddof=0', te_n), ('ddof=1', te_n1)]:
-        print(f"{name:<10} Mean={est.mean()*100:.3f}%  "
-              f"Bias={(est.mean()-te_true_annual)*100:.3f}%  "
-              f"RMSE={np.sqrt(np.mean((est-te_true_annual)**2))*100:.3f}%")
-    print(f"True TE: {te_true_annual*100:.3f}%")
-tracking_error_estimation()
-```
+    이므로, 둘을 한꺼번에 $a S$로 두고 $a$만 다르게 하면 된다. 여기서 $a = 1$ 또는 $a = \sqrt{35/36} = 0.986013$이다. 연율화는 $\sqrt{12}$를 곱하는 것이고 참값은 $\sigma_a = 0.01\sqrt{12} = 3.4641\%$다.
 
-출력:
+    보기 4에서 $E[S] = c_4\sigma$이고 보기 1에서 $E[S^2] = \sigma^2$이므로
 
-```
-ddof=0     Mean=3.392%  Bias=-0.072%  RMSE=0.413%
-ddof=1     Mean=3.440%  Bias=-0.024%  RMSE=0.413%
-True TE: 3.464%
-```
+    $$
+    E[aS] = a\,c_4\,\sigma,
+    \qquad
+    \operatorname{Var}(aS) = a^2\sigma^2\left(1 - c_4^2\right)
+    $$
+
+    다. 편향과 평균제곱오차를 한 줄로 묶으면 깔끔한 꼴이 나온다.
+
+    $$
+    \operatorname{MSE}(aS)
+    = a^2\sigma^2 - 2a c_4\sigma^2 + \sigma^2
+    = \sigma^2\left[(a - c_4)^2 + 1 - c_4^2\right]
+    $$
+
+    **$a$가 $c_4$에서 얼마나 떨어져 있는지만 보는 식**이다. $n = 36$에서 $c_4(36) = 0.992884$이므로
+
+    | 배수 $a$ | $E[\widehat{\mathrm{TE}}]$ | 편향 | $\operatorname{sd}$ | RMSE |
+    |:---|---:|---:|---:|---:|
+    | $\sqrt{35/36} = 0.986013$ ($\texttt{ddof=0}$) | $3.391\%$ | $-0.073\%$ | $0.407\%$ | $0.413\%$ |
+    | $1$ ($\texttt{ddof=1}$) | $3.439\%$ | $-0.025\%$ | $0.413\%$ | $0.413\%$ |
+    | $c_4 = 0.992884$ (MSE 최소) | $3.415\%$ | $-0.049\%$ | $0.410\%$ | $0.413\%$ |
+
+    **(2)의 답이 이 표 안에 있다. 우연이 아니다.** MSE 식이 $(a - c_4)^2$에만 달려 있고
+
+    $$
+    c_4 \approx 1 - \frac{1}{4n},
+    \qquad
+    \sqrt{\frac{n-1}{n}} \approx 1 - \frac{1}{2n}
+    $$
+
+    이므로 **$c_4$가 두 후보의 거의 정확한 한가운데에 있다.** $n = 36$에서 재면 $(1 - c_4)^2 = 5.06\times10^{-5}$이고 $(0.986013 - c_4)^2 = 4.72\times10^{-5}$로 $7\%$밖에 다르지 않다. 두 거리가 거의 같으니 MSE 도 거의 같고, 소수 셋째 자리에서는 아예 구별되지 않는다.
+
+    그리고 세 번째 줄이 덧붙이는 것이 있다. **MSE 를 가장 작게 하는 배수는 $a = c_4$**, 곧 $c_4 S$이며 이는 $\sigma$를 **더 낮추어** 잡는 추정량이다. 그 RMSE 조차 $0.413\%$라 나머지 둘과 다르지 않다. $(a-c_4)^2$ 항이 $1 - c_4^2 = 0.0142$에 견주어 $300$배 작기 때문이고, **$n = 36$쯤 되면 분모를 어떻게 고르든 추적오차 추정의 품질은 $S$ 자체의 흔들림이 정한다.**
+
+    모의실험과 맞춰 본다.
+
+    ```python
+    def tracking_error_estimation(seed=42):
+        """추적오차 추정에서 ddof 선택이 실제로 얼마나 차이를 내는지 본다.
+
+        추적오차는 펀드 수익률과 지수 수익률의 차이가 갖는 표준편차다. 3년치
+        월별 자료면 n=36 이라 두 분모의 차이가 눈에 띄는 크기로 남는다.
+        편향이 작은 쪽과 RMSE 가 작은 쪽이 갈리는 점도 함께 본다.
+        """
+        rng = np.random.default_rng(seed)
+        n_months = 36            # 3년치 월별 자료
+        te_true_monthly = 0.01
+        te_true_annual = te_true_monthly * np.sqrt(12)
+        n_sim = 50_000
+
+        te_n, te_n1 = [], []
+        for _ in range(n_sim):
+            excess = rng.normal(0.002, te_true_monthly, n_months)
+            te_n.append(np.std(excess, ddof=0) * np.sqrt(12))
+            te_n1.append(np.std(excess, ddof=1) * np.sqrt(12))
+
+        te_n, te_n1 = np.array(te_n), np.array(te_n1)
+        for name, est in [('ddof=0', te_n), ('ddof=1', te_n1)]:
+            print(f"{name:<10} Mean={est.mean()*100:.3f}%  "
+                  f"Bias={(est.mean()-te_true_annual)*100:.3f}%  "
+                  f"RMSE={np.sqrt(np.mean((est-te_true_annual)**2))*100:.3f}%")
+        print(f"True TE: {te_true_annual*100:.3f}%")
+    tracking_error_estimation()
+    ```
+
+    출력:
+
+    ```
+    ddof=0     Mean=3.392%  Bias=-0.072%  RMSE=0.413%
+    ddof=1     Mean=3.440%  Bias=-0.024%  RMSE=0.413%
+    True TE: 3.464%
+    ```
+
+    **(1)의 표와 네 수가 모두 맞는다.** 평균 $3.392\%$ 대 이론 $3.391\%$, $3.440\%$ 대 $3.439\%$이고, RMSE 는 양쪽 $0.413\%$로 이론과 소수 셋째 자리까지 같다. 5만 번에서 평균의 몬테카를로 표준오차가 $0.413/\sqrt{50000} = 0.0018\%$이므로 $0.001\%$의 어긋남은 $0.5$ 표준오차다.
+
+    ```python
+    # (1) 의 MSE 식이 맞는지, 배수 a 를 바꿔 가며 직접 확인한다.
+    from scipy.special import gammaln
+
+    n, sig, ann = 36, 0.01, np.sqrt(12)
+    c = np.sqrt(2/(n-1)) * np.exp(gammaln(n/2) - gammaln((n-1)/2))
+    true = sig * ann
+    print(f"c4(36) = {c:.6f},  √(35/36) = {np.sqrt((n-1)/n):.6f},  참 TE = {true*100:.3f}%")
+    print(f"{'배수 a':>10} {'E[TE]':>9} {'편향':>9} {'sd':>8} {'RMSE':>8} {'(a-c4)²':>10}")
+    for name, a in [("√(35/36)", np.sqrt((n-1)/n)), ("1", 1.0), ("c4", c)]:
+        mean = a * c * true
+        bias = mean - true
+        sd = a * true * np.sqrt(1 - c**2)
+        print(f"{name:>10} {mean*100:>8.3f}% {bias*100:>+8.3f}% {sd*100:>7.3f}% "
+              f"{np.sqrt(bias**2 + sd**2)*100:>7.3f}% {(a-c)**2:>10.2e}")
+    ```
+
+    출력:
+
+    ```
+    c4(36) = 0.992884,  √(35/36) = 0.986013,  참 TE = 3.464%
+          배수 a     E[TE]        편향       sd     RMSE    (a-c4)²
+      √(35/36)    3.391%   -0.073%   0.407%   0.413%   4.72e-05
+             1    3.439%   -0.025%   0.413%   0.413%   5.06e-05
+            c4    3.415%   -0.049%   0.410%   0.413%   0.00e+00
+    ```
+
+    마지막 열이 (2)의 답을 그림처럼 보여 준다. $\texttt{ddof=0}$ 과 $\texttt{ddof=1}$ 의 $(a - c_4)^2$가 $4.72$와 $5.06$으로 거의 같고, **그래서 세 RMSE 가 모두 $0.413\%$다.**
+
+    **그러니 분모 논쟁은 이 자리에서 실속이 없다.** 셋 다 참값을 $0.4\%$p 안팎으로 빗나가는데, 그 $0.4\%$p는 어느 분모를 골라서 생긴 것이 아니라 **$36$개월이 짧아서** 생긴 것이다. 참 추적오차가 $3.46\%$인데 추정값이 $3.46 \pm 0.41\%$로 나오니, 추적오차 $3.0\%$인 펀드와 $3.9\%$인 펀드를 $3$년 성과로는 가를 수 없다.
+
+    **그럼에도 $\texttt{ddof=1}$ 을 쓰는 까닭은 편향 쪽에 있다.** 펀드 수백 개의 추적오차를 모두 $\texttt{ddof=0}$ 으로 재면 흩어짐은 평균 내어 지워지지만 $-0.073\%$p의 치우침은 그대로 남아, **업계 전체의 추적오차가 체계적으로 낮게 보고된다.** 한 펀드를 볼 때는 어느 쪽이든 괜찮고, 많은 펀드를 모을 때는 그렇지 않다.
 
 ## 해석
 

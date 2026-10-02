@@ -66,80 +66,134 @@ $$\text{초과첨도} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 정규와 두꺼운 꼬리를 네 그림으로
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규와 두꺼운 꼬리를 네 그림으로. 척도를 $0.02$로 맞춘 $N(0, 0.02^2)$와 $t_6$에서 각각 5000개를 뽑아 히스토그램과 Q-Q 그림을 그리고 표본 초과첨도를 잰다.
+
+**(1)** 두 모집단의 **참** 초과첨도를 적으시오. 정규 쪽 표본값은 얼마만큼 흔들리는가.
+
+**(2)** 출력의 $t_6$ 쪽 표본 초과첨도는 $1.78$인데 참값의 절반을 조금 넘는다. $n = 5000$이면 적은 표본도 아니다. 무엇이 잘못되었는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 이론값.** $t_\nu$의 초과첨도는 $\nu > 4$에서
 
-# 두 자료는 중심도 척도모수도 같다. 다른 것은 꼬리의 두께뿐이다.
-normal_returns = np.random.normal(loc=0, scale=0.02, size=5000)
-heavy_tailed_returns = stats.t.rvs(df=6, scale=0.02, size=5000)
+    $$
+    \operatorname{Kurt}_{\text{초과}}(t_\nu) = \frac{6}{\nu - 4}
+    $$
 
-fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    이므로 $\nu = 6$에서 **$3$**이다. 정규는 정의상 $0$이다. 첨도는 척도불변이므로 $0.02$를 곱한 것이 이 값을 바꾸지 않는다.
 
-# 윗줄: 히스토그램. 가운데만 보면 두 분포는 거의 구별되지 않는다.
-# 차이는 그림의 양끝, 자료가 드문 자리에 숨어 있다.
-ax = axes[0, 0]
-ax.hist(normal_returns, bins=50, alpha=0.6, label='Normal', color='blue', density=True)
-x = np.linspace(-0.08, 0.08, 200)
-ax.plot(x, stats.norm.pdf(x, 0, 0.02), 'b-', linewidth=2, label='Normal PDF')
-ax.set_title('Normal Distribution', fontsize=12, fontweight='bold')
-ax.set_xlabel('Return')
-ax.set_ylabel('Density')
-ax.legend()
-ax.spines[['top', 'right']].set_visible(False)
+    다만 두 자료의 **폭**이 꼭 같지는 않다는 점은 짚어 두어야 한다. 같게 맞춘 것은 척도모수 $0.02$이고, $t_6$의 분산은 $\nu/(\nu-2) = 1.5$배라
 
-ax = axes[0, 1]
-ax.hist(heavy_tailed_returns, bins=50, alpha=0.6, label='Heavy-tailed', color='red', density=True)
-x = np.linspace(-0.08, 0.08, 200)
-ax.plot(x, stats.t.pdf(x, df=6, loc=0, scale=0.02), 'r-', linewidth=2, label="Student's t PDF")
-ax.set_title("Heavy-Tailed (Student's t) Distribution", fontsize=12, fontweight='bold')
-ax.set_xlabel('Return')
-ax.set_ylabel('Density')
-ax.legend()
-ax.spines[['top', 'right']].set_visible(False)
+    $$
+    \operatorname{sd}(t_6 \text{ 쪽}) = 0.02\sqrt{1.5} = 0.0245
+    $$
 
-# 아랫줄: Q-Q 그림. 히스토그램이 감추는 꼬리를 드러내려고 쓴다.
-# 두꺼운 꼬리는 양끝이 직선에서 S 자로 벌어지는 모습으로 나타난다.
-ax = axes[1, 0]
-stats.probplot(normal_returns, dist="norm", plot=ax)
-ax.set_title('Q-Q Plot: Normal Data', fontsize=12, fontweight='bold')
-ax.spines[['top', 'right']].set_visible(False)
+    로 정규 쪽 $0.02$보다 $22\%$ 넓다. 그래서 그림 위쪽의 두 히스토그램은 가로 범위가 다르다. **가운데 봉우리는 $t$ 쪽이 더 높고 꼬리도 더 길다**는 것이 두꺼운 꼬리의 전형적인 모습이다.
 
-ax = axes[1, 1]
-stats.probplot(heavy_tailed_returns, dist="norm", plot=ax)
-ax.set_title('Q-Q Plot: Heavy-Tailed Data', fontsize=12, fontweight='bold')
-ax.spines[['top', 'right']].set_visible(False)
+    정규자료에서 표본 초과첨도의 표준오차는 $n$이 크면
 
-plt.tight_layout()
-plt.show()
+    $$
+    \operatorname{sd}(\hat g_2) \approx \sqrt{\frac{24}{n}} = \sqrt{\frac{24}{5000}} = 0.0693
+    $$
 
-# 초과첨도는 정규분포를 0 으로 두고 잰 꼬리의 두께다. 자유도 6 인 t 는
-# 이론값이 3 이고, 정규 쪽은 표본 흔들림만큼만 0 에서 벗어난다.
-print("Normal Distribution:")
-print(f"  Excess Kurtosis: {stats.kurtosis(normal_returns):.2f}")
-print()
-print("Heavy-Tailed (t) Distribution:")
-print(f"  Excess Kurtosis: {stats.kurtosis(heavy_tailed_returns):.2f}")
-```
+    이다. 출력의 $0.04$는 $0.6$ 표준오차 거리로 잘 맞는다.
 
-출력:
+    **$t_6$ 쪽에는 이 자가 없다.** 표본첨도의 표준오차를 구하려면 $E[X^8]$이 필요한데, $t_\nu$는 $\nu$차 이상의 적률이 **존재하지 않는다.** $\nu = 6$이면 $E[X^6]$부터 발산하므로 표본 초과첨도의 분산 자체가 무한하다. 첨도는 ($E[X^4]$가 유한하므로) 여전히 $3$으로 **일치**하지만, 그 수렴에 $\sqrt n$ 속도도 정규 극한도 없다.
 
-```
-Normal Distribution:
-  Excess Kurtosis: 0.04
+    **(2) 수치적으로.** 그러니 $1.78$이 얼마나 이상한 값인지는 모의실험으로 분포를 직접 그려 보아야 한다.
 
-Heavy-Tailed (t) Distribution:
-  Excess Kurtosis: 1.78
-```
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
 
-![Normal Distribution](./img/heavy_tails_67.png)
+    np.random.seed(42)
+
+    # 두 자료는 중심도 척도모수도 같다. 다른 것은 꼬리의 두께뿐이다.
+    normal_returns = np.random.normal(loc=0, scale=0.02, size=5000)
+    heavy_tailed_returns = stats.t.rvs(df=6, scale=0.02, size=5000)
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+
+    # 윗줄: 히스토그램. 가운데만 보면 두 분포는 거의 구별되지 않는다.
+    # 차이는 그림의 양끝, 자료가 드문 자리에 숨어 있다.
+    ax = axes[0, 0]
+    ax.hist(normal_returns, bins=50, alpha=0.6, label='Normal', color='blue', density=True)
+    x = np.linspace(-0.08, 0.08, 200)
+    ax.plot(x, stats.norm.pdf(x, 0, 0.02), 'b-', linewidth=2, label='Normal PDF')
+    ax.set_title('Normal Distribution', fontsize=12, fontweight='bold')
+    ax.set_xlabel('Return')
+    ax.set_ylabel('Density')
+    ax.legend()
+    ax.spines[['top', 'right']].set_visible(False)
+
+    ax = axes[0, 1]
+    ax.hist(heavy_tailed_returns, bins=50, alpha=0.6, label='Heavy-tailed', color='red', density=True)
+    x = np.linspace(-0.08, 0.08, 200)
+    ax.plot(x, stats.t.pdf(x, df=6, loc=0, scale=0.02), 'r-', linewidth=2, label="Student's t PDF")
+    ax.set_title("Heavy-Tailed (Student's t) Distribution", fontsize=12, fontweight='bold')
+    ax.set_xlabel('Return')
+    ax.set_ylabel('Density')
+    ax.legend()
+    ax.spines[['top', 'right']].set_visible(False)
+
+    # 아랫줄: Q-Q 그림. 히스토그램이 감추는 꼬리를 드러내려고 쓴다.
+    # 두꺼운 꼬리는 양끝이 직선에서 S 자로 벌어지는 모습으로 나타난다.
+    ax = axes[1, 0]
+    stats.probplot(normal_returns, dist="norm", plot=ax)
+    ax.set_title('Q-Q Plot: Normal Data', fontsize=12, fontweight='bold')
+    ax.spines[['top', 'right']].set_visible(False)
+
+    ax = axes[1, 1]
+    stats.probplot(heavy_tailed_returns, dist="norm", plot=ax)
+    ax.set_title('Q-Q Plot: Heavy-Tailed Data', fontsize=12, fontweight='bold')
+    ax.spines[['top', 'right']].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()
+
+    # 초과첨도는 정규분포를 0 으로 두고 잰 꼬리의 두께다. 자유도 6 인 t 는
+    # 이론값이 3 이고, 정규 쪽은 표본 흔들림만큼만 0 에서 벗어난다.
+    print("Normal Distribution:")
+    print(f"  Excess Kurtosis: {stats.kurtosis(normal_returns):.2f}")
+    print()
+    print("Heavy-Tailed (t) Distribution:")
+    print(f"  Excess Kurtosis: {stats.kurtosis(heavy_tailed_returns):.2f}")
+    ```
+
+    출력:
+
+    ```
+    Normal Distribution:
+      Excess Kurtosis: 0.04
+
+    Heavy-Tailed (t) Distribution:
+      Excess Kurtosis: 1.78
+    ```
+
+    ![Normal Distribution](./img/heavy_tails_67.png)
+
+    같은 모의실험을 4000번 되풀이해 $t_6$, $n = 5000$에서 표본 초과첨도가 어떻게 흩어지는지 재면 이렇다.
+
+    | 통계량 | 값 |
+    |:---|---:|
+    | 참값 | $3.00$ |
+    | 모의 중앙값 | $2.42$ |
+    | 모의 평균 | $2.85$ |
+    | $5$–$95\%$ 구간 | $1.57$–$5.18$ |
+    | 4000번 중 최댓값 | $55.5$ |
+    | $P(\hat g_2 < 3)$ | $0.733$ |
+    | $P(\hat g_2 < 1.78)$ | $0.137$ |
+
+    **(2)의 물음에 답하면, 아무것도 잘못되지 않았다.** $n = 5000$에서도 표본 초과첨도가 참값 $3$보다 작게 나올 확률이 $73\%$다. $1.78$은 아래쪽 $14\%$ 자리라 전혀 드문 값이 아니다. 중앙값이 $2.42$인데 평균이 $2.85$이고 최댓값이 $55.5$까지 치솟는 분포, 곧 **대부분의 표본은 참값을 밑돌고 드문 표본 몇 개가 평균을 끌어올리는** 꼴이다.
+
+    까닭은 (1)에서 적은 그대로다. 표본 초과첨도는 네제곱의 평균을 쓰는데, 꼬리가 두꺼운 분포에서 네제곱은 **가장 큰 관측값 하나에 거의 전부 좌우된다.** 그 하나가 평범하면 첨도가 작게, 하나가 유난하면 터무니없이 크게 나온다. 표본평균으로 추정할 때의 코시 상황이 $4$차 적률 층에서 되풀이되는 셈이다.
+
+    **그래서 표본첨도로 꼬리 두께를 재는 것은 나쁜 방법이다.** 그림 아랫줄의 Q-Q 그림이 훨씬 낫다. 오른쪽 아래 판은 양끝이 직선에서 S 자로 크게 벌어져 두꺼운 꼬리를 한눈에 보여 주고, 그 판단에는 네제곱이 들어가지 않는다. **꼬리를 보려면 꼬리를 보아야 하고, 꼬리를 요약한 수 하나로 보면 안 된다.**
+
+    위쪽 두 히스토그램을 견주어 보라. $-0.05$에서 $0.05$ 사이의 몸통만 보면 두 분포는 **종 모양 하나로 보인다.** 차이는 밀도가 $0$에 바싹 붙어 눈에 띄지 않는 양끝에 있다. 오른쪽 판의 $0.15$ 언저리에 거의 보이지 않게 깔린 막대들이 그것이고, 정규 쪽에서 같은 자리는 $7.5$ 표준편차 밖이라 5000개로는 결코 나오지 않는다. **꼬리 문제가 번번이 눈을 피해 가는 까닭이 이 그림에 있다.**
 
 ## 평균의 로버스트한 대안
 
@@ -152,30 +206,91 @@ Heavy-Tailed (t) Distribution:
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 중앙값의 표준오차를 붓스트랩으로
+**보기 2.** <span class="diff easy" title="쉬움"></span> 중앙값의 표준오차를 붓스트랩으로. $t_5$에서 $n = 100$을 뽑아 중앙값을 구하고, 복원추출 1000번으로 그 표준오차를 추정한다.
+
+**(1)** 중앙값의 표준오차를 **이론으로** 구하시오. 표본평균의 표준오차와 견주면 어느 쪽이 작은가.
+
+**(2)** 붓스트랩이 내놓은 $0.1549$는 (1)의 값보다 $18\%$ 크다. 붓스트랩이 치우쳐 있는가.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.utils import resample
+??? success "풀이"
 
-data = stats.t.rvs(df=5, size=100)
-original_median = np.median(data)
+    **(1) 이론값.** 표본중앙값의 점근분포는 밀도의 중앙값 자리 높이 하나로 정해진다.
 
-# 중앙값에는 표본평균의 sigma/sqrt(n) 같은 간단한 표준오차 공식이 없다.
-# 대신 자료에서 복원추출로 재표본을 1000번 만들어 그때마다 중앙값을 구한다.
-# 그 1000개의 표준편차가 곧 중앙값의 표준오차 추정값이다.
-bootstrap_medians = [np.median(resample(data)) for _ in range(1000)]
-se_median = np.std(bootstrap_medians)
-print(f"Median: {original_median:.4f} ± {se_median:.4f}")
-```
+    $$
+    \sqrt n\,(\tilde X - m) \xrightarrow{d} N\!\left(0, \frac{1}{4f(m)^2}\right),
+    \qquad
+    \operatorname{SE}(\tilde X) \approx \frac{1}{2f(m)\sqrt n}
+    $$
 
-출력:
+    $t_\nu$의 밀도를 $0$에서 재면
 
-```
-Median: 0.2379 ± 0.1549
-```
+    $$
+    f_\nu(0) = \frac{\Gamma\!\left(\frac{\nu+1}{2}\right)}{\sqrt{\nu\pi}\;\Gamma\!\left(\frac{\nu}{2}\right)},
+    \qquad
+    f_5(0) = \frac{\Gamma(3)}{\sqrt{5\pi}\,\Gamma(5/2)} = 0.37961
+    $$
+
+    이므로
+
+    $$
+    \operatorname{SE}(\tilde X) \approx \frac{1}{2(0.37961)\sqrt{100}} = 0.13172
+    $$
+
+    다. 견줄 것은 표본평균이다. $t_5$의 분산이 $\nu/(\nu-2) = 5/3$이므로
+
+    $$
+    \operatorname{SE}(\bar X) = \sqrt{\frac{5/3}{100}} = 0.12910
+    $$
+
+    **거의 같고 평균 쪽이 아주 조금 작다.** 상대효율을 적으면
+
+    $$
+    \mathrm{ARE}(\tilde X, \bar X) = \sigma^2 \cdot 4 f(0)^2 = \frac53 \times 4(0.37961)^2 = 0.9607
+    $$
+
+    이다. 정규에서 $0.637$이던 것이 $t_5$에서는 $0.961$까지 올라온다. **꼬리가 조금만 두꺼워져도 중앙값이 평균을 거의 따라잡는다**는 것이 이 쪽의 요지이고, $\nu$를 더 낮추면 곧 추월한다($t_3$에서 $1.62$, 코시에서 $\infty$).
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.utils import resample
+
+    data = stats.t.rvs(df=5, size=100)
+    original_median = np.median(data)
+
+    # 중앙값에는 표본평균의 sigma/sqrt(n) 같은 간단한 표준오차 공식이 없다.
+    # 대신 자료에서 복원추출로 재표본을 1000번 만들어 그때마다 중앙값을 구한다.
+    # 그 1000개의 표준편차가 곧 중앙값의 표준오차 추정값이다.
+    bootstrap_medians = [np.median(resample(data)) for _ in range(1000)]
+    se_median = np.std(bootstrap_medians)
+    print(f"Median: {original_median:.4f} ± {se_median:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Median: 0.2379 ± 0.1549
+    ```
+
+    **$0.1549$가 $0.1317$보다 큰 것을 보고 "붓스트랩이 치우쳤다"고 말하려면 먼저 그 추정값 자체가 얼마나 흔들리는지 알아야 한다.** $t_5$에서 $n = 100$을 새로 뽑아 같은 붓스트랩을 2000번 되풀이해 재면
+
+    | 양 | 값 |
+    |:---|---:|
+    | 점근 $\operatorname{SE}(\tilde X)$ | $0.1317$ |
+    | 모의로 잰 참 $\operatorname{sd}(\tilde X)$ | $0.1316$ |
+    | 붓스트랩 추정값의 평균 | $0.1340$ |
+    | 붓스트랩 추정값의 표준편차 | $0.0294$ |
+    | 붓스트랩 추정값의 $5$–$95\%$ | $0.0912$–$0.1865$ |
+    | $0.1549$ 이상이 나올 확률 | $0.227$ |
+
+    이다. **점근 공식이 맞는다.** 모의로 잰 참 표준편차 $0.1316$이 공식의 $0.1317$과 소수 넷째 자리까지 맞는다.
+
+    **붓스트랩도 거의 치우치지 않았다.** 추정값의 평균이 $0.1340$으로 참값보다 $1.8\%$ 높을 뿐이다. 문제는 치우침이 아니라 **흩어짐**이다. 표준편차가 $0.0294$로 참값의 $22\%$이고, $5$–$95\%$ 구간이 $0.091$에서 $0.187$까지 벌어진다. 이 분포에서 $0.1549$는 위쪽 $23\%$ 자리라 조금도 이상하지 않다.
+
+    **(2)의 답은 "치우치지 않았고, 다만 중앙값의 붓스트랩 표준오차가 원래 아주 불안정하다"이다.** 까닭은 중앙값이 **매끄럽지 않은** 통계량이기 때문이다. 재표집할 때 중앙값이 가질 수 있는 값은 원자료의 순서통계량 몇 개뿐이라 붓스트랩 분포가 이산적이고 성기다. 같은 $t_5$ 자료에서 표본평균의 표준오차 $s/\sqrt n$을 재면 상대 흔들림이 $12.1\%$로 중앙값 쪽의 절반이다(정규자료라면 $1/\sqrt{2(n-1)} = 7.1\%$까지 내려간다). **중앙값의 표준오차를 소수 셋째 자리까지 보고하는 것은 있지도 않은 정밀도를 적는 일이다.**
 
 ### 2. 절사평균
 평균을 계산하기 전에 양쪽 꼬리에서 일정 비율을 제거한다:
@@ -186,142 +301,391 @@ $$\bar{X}_{\text{trim}, \alpha} = \frac{1}{n(1-2\alpha)} \sum_{i=\lceil n\alpha 
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 절사평균
+**보기 3.** <span class="diff easy" title="쉬움"></span> 절사평균. $t_5$에서 $n = 100$을 뽑아($\text{seed} = 42$) 표본평균과 $10\%$ 절사평균을 견준다. 참 중심은 $0$이다.
+
+**(1)** 두 추정량 모두 $0$을 겨냥한다. 같은 표본에서 **둘의 차이**가 얼마만큼 벌어지는 것이 보통인지 적으시오.
+
+**(2)** 출력에서 둘의 차이가 $0.0299 - (-0.1366) = 0.1665$다. (1)의 자로 보면 큰 값인데, 그 까닭이 어디에 있는지 자료에서 찾으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
-from scipy.stats import trim_mean
+??? success "풀이"
 
-np.random.seed(42)
-data = stats.t.rvs(df=5, size=100)      # 자유도 5의 t분포. 꼬리가 두껍다.
+    **(1) 이론값.** 두 추정량 각각의 표준오차는 (보기 2에서와 같은 방식으로) $\operatorname{SE}(\bar X) = \sqrt{(5/3)/100} = 0.1291$이고, $10\%$ 절사평균 쪽은 $t_5$에서 모의로 재면 $0.1167$이다(절사평균의 상대효율이 $1.23$이라 평균보다 **좁다**).
 
-# proportiontocut=0.1 은 **양쪽 각각** 10%를 잘라 낸다는 뜻이다.
-# 즉 전체의 20%가 버려지고 가운데 80%만 평균에 들어간다.
-mean_trim10 = trim_mean(data, 0.1)
-print(f"표본평균     {np.mean(data):7.4f}")
-print(f"10% 절단평균 {mean_trim10:7.4f}")
-```
+    그런데 물음은 둘의 **차이**다. 같은 표본에서 계산하므로 둘이 세게 양의 상관을 갖고, 차이의 표준편차는 각각보다 훨씬 작다. $t_5$, $n = 100$에서 4만 번 모의로 재면
 
-출력:
+    $$
+    \operatorname{sd}(\bar X - \bar X_{0.1}) = 0.0493,
+    \qquad
+    5\text{–}95\% = -0.080 \sim 0.079
+    $$
 
-```
-표본평균      0.0299
-10% 절단평균 -0.1366
-```
+    이다. **차이가 $\pm 0.08$ 안에 들어오는 것이 보통**이라는 뜻이다. 덧붙여 이 차이의 분포는 초과첨도가 $1.9$로 정규가 아니며, 꼬리가 길어 $|차이|$가 $0.1665$를 넘을 확률이 $0.0035$다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from scipy.stats import trim_mean
+
+    np.random.seed(42)
+    data = stats.t.rvs(df=5, size=100)      # 자유도 5의 t분포. 꼬리가 두껍다.
+
+    # proportiontocut=0.1 은 **양쪽 각각** 10%를 잘라 낸다는 뜻이다.
+    # 즉 전체의 20%가 버려지고 가운데 80%만 평균에 들어간다.
+    mean_trim10 = trim_mean(data, 0.1)
+    print(f"표본평균     {np.mean(data):7.4f}")
+    print(f"10% 절단평균 {mean_trim10:7.4f}")
+    ```
+
+    출력:
+
+    ```
+    표본평균      0.0299
+    10% 절단평균 -0.1366
+    ```
+
+    차이 $0.1665$는 (1)이 준 자로 재면 $290$번에 한 번쯤 나오는 값이다. **그러니 자료를 열어 범인을 찾아야 한다.**
+
+    ```python
+    # 정렬해 양끝을 들여다본다. 절사평균과 평균을 갈라놓은 것이 무엇인가.
+    s = np.sort(data)
+    print("가장 작은 다섯 개:", np.round(s[:5], 3))
+    print("가장 큰 다섯 개:  ", np.round(s[-5:], 3))
+    print(f"최댓값 {s[-1]:.3f} 하나가 평균에 보태는 양 = {s[-1] / 100:.4f}")
+    print(f"최댓값 하나만 빼고 낸 평균 = {s[:-1].mean():.4f}   (10% 절사평균 {mean_trim10:.4f})")
+    p = stats.t.sf(s[-1], 5)
+    print(f"t5 에서 P(X > {s[-1]:.3f}) = {p:.3e},  n=100 에 하나라도 들어올 확률 = {1 - (1 - p)**100:.4f}")
+    print(f"분산이 같은 정규 N(0, 5/3) 이라면 P = {stats.norm.sf(s[-1], scale=np.sqrt(5/3)):.3e}")
+    ```
+
+    출력:
+
+    ```
+    가장 작은 다섯 개: [-2.711 -2.325 -2.178 -2.117 -2.11 ]
+    가장 큰 다섯 개:   [ 1.937  2.084  3.339  4.971 14.658]
+    최댓값 14.658 하나가 평균에 보태는 양 = 0.1466
+    최댓값 하나만 빼고 낸 평균 = -0.1179   (10% 절사평균 -0.1366)
+    t5 에서 P(X > 14.658) = 1.335e-05,  n=100 에 하나라도 들어올 확률 = 0.0013
+    분산이 같은 정규 N(0, 5/3) 이라면 P = 3.551e-30
+    ```
+
+    **범인은 $14.658$ 하나다.** 이 값 하나가 평균에 $14.658/100 = 0.1466$을 보태므로, $0.1665$라는 차이의 $88\%$가 관측값 **한 개**에서 왔다. 실제로 이것만 빼고 평균을 내면 $-0.1179$로 절사평균 $-0.1366$ 바로 옆에 선다.
+
+    자료의 나머지는 평범하다. 아래쪽 다섯 개가 $-2.7$까지이고 위쪽은 $14.658$을 빼면 $4.971$까지다. **$14.658$은 두 번째로 큰 값의 세 배**이고, 분산이 같은 정규분포였다면 $10^{-30}$의 확률이라 우주가 끝날 때까지 한 번도 안 나올 값이다. $t_5$에서는 $n = 100$에 그런 값이 들어올 확률이 $0.13\%$로 작기는 해도 **일어날 수 있는 일**이다.
+
+    **(2)의 답이 이것이고, 동시에 이 쪽 전체의 요지이기도 하다.** 꼬리가 두꺼운 자료에서 표본평균은 대개 멀쩡하다가 이따금 관측값 하나에 통째로 끌려간다. 절사평균은 그 하나를 창 밖으로 내보내므로 $290$번 가운데 $289$번은 평균과 거의 같은 값을 주고, 나머지 한 번에서 값을 한다. **보험료가 싸고 보상이 큰 쪽이다.**
 
 ### 3. 윈저화 평균
 극단값을 버리는 대신 $\alpha$-분위수로 대체한다:
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 윈저화 평균
+**보기 4.** <span class="diff easy" title="쉬움"></span> 윈저화 평균. 보기 3과 **같은 자료**에서 양끝 $10\%$를 버리는 대신 $10\%$·$90\%$ 분위수로 눌러 평균을 낸다.
+
+**(1)** 윈저화 평균을 절사평균과 두 분위수만으로 적는 **정확한 항등식**을 세우시오.
+
+**(2)** 그 항등식으로 출력의 $-0.1292$를 재현하시오. 윈저화 평균이 절사평균보다 큰 쪽으로 나온 까닭은 무엇인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def winsorize_mean(data, alpha=0.1):
-    """꼬리를 잘라 내는 대신 분위수 값으로 **바꿔치기**한 뒤 평균을 낸다.
+    **(1) 해석적으로.** $n = 100$, $\alpha = 0.1$이면 아래로 눌리는 점이 $10$개, 위로 눌리는 점이 $10$개이고 가운데 $80$개는 그대로다. 눌린 값은 각각 $q_{0.1}$과 $q_{0.9}$이므로
 
-    절단평균과의 차이는 표본 크기다.
-    절단은 관측값을 버려 n이 줄지만, 윈저화는 값만 바꾸고 개수는 그대로 둔다.
-    "극단값도 방향 정보는 담고 있다"고 볼 때 윈저화가 낫다.
-    """
-    lower = np.quantile(data, alpha)
-    upper = np.quantile(data, 1 - alpha)
-    winsorized = np.clip(data, lower, upper)   # 범위 밖 값을 경계로 눌러 준다
-    return np.mean(winsorized)
+    $$
+    \bar X_{\text{win}}
+    = \frac{1}{100}\left[\sum_{i=11}^{90} x_{(i)} + 10\,q_{0.1} + 10\,q_{0.9}\right]
+    $$
 
-np.random.seed(42)
-data = stats.t.rvs(df=5, size=100)
-print(f"표본평균       {np.mean(data):7.4f}")
-print(f"윈저화 평균    {winsorize_mean(data, alpha=0.1):7.4f}")
-```
+    이다. 그런데 대괄호 안의 첫 항은 절사평균의 정의에서 $80\,\bar X_{0.1}$이므로
 
-출력:
+    $$
+    \boxed{\;\bar X_{\text{win}} = (1-2\alpha)\,\bar X_{\alpha} + \alpha\,q_{\alpha} + \alpha\,q_{1-\alpha}\;}
+    = 0.8\,\bar X_{0.1} + 0.1\,q_{0.1} + 0.1\,q_{0.9}
+    $$
 
-```
-표본평균        0.0299
-윈저화 평균    -0.1292
-```
+    다. **윈저화 평균은 절사평균과 두 분위수의 가중평균**이며, 가중치가 각각 $80\%$, $10\%$, $10\%$다. 근사가 아니라 등식이다.
+
+    여기서 두 방법의 성격 차이도 바로 읽힌다. 절사는 양끝 $20$개를 통째로 버리고 $80$개만 쓰므로 **$n$이 줄고**, 윈저화는 값만 바꾸고 개수를 지키므로 **$n$이 그대로다.** 그래서 윈저화 평균은 절사평균보다 조금 덜 로버스트하고 조금 더 효율적이다. $t_5$, $n = 100$에서 모의로 재면 상대효율이 절사 $1.23$ 대 윈저화 $1.15$다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def winsorize_mean(data, alpha=0.1):
+        """꼬리를 잘라 내는 대신 분위수 값으로 **바꿔치기**한 뒤 평균을 낸다.
+
+        절단평균과의 차이는 표본 크기다.
+        절단은 관측값을 버려 n이 줄지만, 윈저화는 값만 바꾸고 개수는 그대로 둔다.
+        "극단값도 방향 정보는 담고 있다"고 볼 때 윈저화가 낫다.
+        """
+        lower = np.quantile(data, alpha)
+        upper = np.quantile(data, 1 - alpha)
+        winsorized = np.clip(data, lower, upper)   # 범위 밖 값을 경계로 눌러 준다
+        return np.mean(winsorized)
+
+    np.random.seed(42)
+    data = stats.t.rvs(df=5, size=100)
+    print(f"표본평균       {np.mean(data):7.4f}")
+    print(f"윈저화 평균    {winsorize_mean(data, alpha=0.1):7.4f}")
+    ```
+
+    출력:
+
+    ```
+    표본평균        0.0299
+    윈저화 평균    -0.1292
+    ```
+
+    (1)의 항등식을 그대로 재현해 본다.
+
+    ```python
+    # 윈저화 평균 = 0.8 * 절사평균 + 0.1 * q(0.1) + 0.1 * q(0.9) 인지 확인한다.
+    from scipy.stats import trim_mean
+
+    lo, hi = np.quantile(data, 0.1), np.quantile(data, 0.9)
+    tm = trim_mean(data, 0.1)
+    print(f"q(0.1) = {lo:.6f},  q(0.9) = {hi:.6f}")
+    print(f"아래로 눌린 개수 {np.sum(data < lo)}, 위로 눌린 개수 {np.sum(data > hi)}")
+    print(f"0.8*({tm:.6f}) + 0.1*({lo:.6f}) + 0.1*({hi:.6f})"
+          f" = {0.8 * tm + 0.1 * lo + 0.1 * hi:.6f}")
+    print(f"winsorize_mean 이 준 값               = {winsorize_mean(data, 0.1):.6f}")
+    ```
+
+    출력:
+
+    ```
+    q(0.1) = -1.539234,  q(0.9) = 1.339518
+    아래로 눌린 개수 10, 위로 눌린 개수 10
+    0.8*(-0.136577) + 0.1*(-1.539234) + 0.1*(1.339518) = -0.129233
+    winsorize_mean 이 준 값               = -0.129233
+    ```
+
+    **항등식이 소수 여섯째 자리까지 맞는다.**
+
+    **(2)의 둘째 물음에 답하면, 두 분위수가 대칭이 아니기 때문이다.** $q_{0.1} = -1.5392$이고 $q_{0.9} = +1.3395$라 둘의 평균이 $-0.0999$인데, 이것이 절사평균 $-0.1366$보다 **크다.** 항등식이 말하는 대로 윈저화 평균은 이 둘을 $8 : 2$로 섞은 값이므로
+
+    $$
+    0.8(-0.1366) + 0.2(-0.0999) = -0.1293
+    $$
+
+    으로 절사평균보다 $0.0073$ 위로 올라간다. 자료가 왼쪽으로 조금 더 퍼져 있다는 사실이 윈저화 평균에만 들어온 것이고, **버리는 대신 눌러 담는 쪽은 꼬리의 방향 정보를 조금 남긴다**는 말의 뜻이 이것이다.
+
+    $t_5$, $n = 100$에서 두 값의 차이는 보통 $\operatorname{sd} = 0.0237$만큼 벌어지므로 여기서 본 $0.0073$은 오히려 작은 편이다. **보기 3에서 표본평균이 절사평균과 $0.1665$나 어긋났던 것과 견주어 보라.** $14.658$은 윈저화에서도 $q_{0.9} = 1.3395$로 눌려 들어오므로 아무 해를 끼치지 못했다.
 
 ### 4. M-추정량 (Huber 추정량)
 작은 오차에서는 이차식, 큰 오차에서는 절댓값으로 넘어가는 손실함수를 써서 극단값의 가중치를 매끄럽게 낮춘다:
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> Huber M-추정량
+**보기 5.** <span class="diff easy" title="쉬움"></span> Huber M-추정량. 보기 3·4와 **같은 자료**에 조율상수 $c = 1.5$인 Huber 추정량을 적용해 위치와 척도를 동시에 구한다.
+
+**(1)** Huber 추정량이 푸는 방정식을 적고, 그것이 평균과 중앙값 사이 어디에 놓이는 추정량인지 설명하시오.
+
+**(2)** 출력의 위치추정값 $-0.1366$은 보기 3의 $10\%$ 절사평균과 **소수 넷째 자리까지 같다.** 두 추정량이 같은 것인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
-# Huber 추정량은 scipy가 아니라 statsmodels에 있다.
-from statsmodels.robust.scale import huber
+??? success "풀이"
 
-np.random.seed(42)
-data = stats.t.rvs(df=5, size=100)
+    **(1) 해석적으로.** Huber 추정량은 위치 $\hat\mu$와 척도 $\hat s$를 함께 다음 두 방정식으로 정한다.
 
-# 위치와 척도를 **동시에** 반복 추정해 돌려준다.
-# 조율모수 t의 기본값은 1.5이며, 이는 표준화 잔차가 1.5를 넘는 관측값부터
-# 가중치를 낮추기 시작한다는 뜻이다. 작을수록 로버스트하지만 효율이 떨어진다.
-loc, scale = huber(data)
-print(f"Huber 위치추정: {loc:.4f}")
-print(f"Huber 척도추정: {scale:.4f}")
-```
+    $$
+    \sum_{i=1}^n \psi_c\!\left(\frac{x_i - \hat\mu}{\hat s}\right) = 0,
+    \qquad
+    \psi_c(u) = \max\!\big(-c,\ \min(c,\ u)\big)
+    $$
 
-출력:
+    $\psi_c$는 $|u| \le c$에서 $u$ 그대로이고 그 밖에서는 $\pm c$로 **눕는다.** 이것이 전부다.
 
-```
-Huber 위치추정: -0.1366
-Huber 척도추정: 1.0812
-```
+    양끝을 보면 정체가 드러난다.
+
+    - $c \to \infty$이면 $\psi(u) = u$라 방정식이 $\sum (x_i - \hat\mu) = 0$, 곧 **표본평균**이다.
+    - $c \to 0$이면 $\psi(u) \to c\,\operatorname{sign}(u)$라 방정식이 $\sum \operatorname{sign}(x_i - \hat\mu) = 0$, 곧 **표본중앙값**이다.
+
+    **$c$는 평균과 중앙값 사이를 잇는 손잡이**이고, 기본값 $1.5$는 정규자료에서 효율 $95\%$쯤을 남기도록 잡은 값이다. 가중치의 꼴로 다시 적으면 $\hat\mu = \sum w_i x_i / \sum w_i$에서
+
+    $$
+    w_i = \min\!\left(1,\ \frac{c\,\hat s}{|x_i - \hat\mu|}\right)
+    $$
+
+    이다. 중심에서 $c\hat s$ 안에 있는 점은 가중치 $1$을 온전히 받고, 밖으로 나간 점은 **거리에 반비례해** 가중치가 깎인다. 절사평균이 안팎을 $1$과 $0$으로 딱 가르는 데 비해 **Huber 는 매끄럽게 깎는다**는 것이 차이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    # Huber 추정량은 scipy가 아니라 statsmodels에 있다.
+    from statsmodels.robust.scale import huber
+
+    np.random.seed(42)
+    data = stats.t.rvs(df=5, size=100)
+
+    # 위치와 척도를 **동시에** 반복 추정해 돌려준다.
+    # 조율모수 t의 기본값은 1.5이며, 이는 표준화 잔차가 1.5를 넘는 관측값부터
+    # 가중치를 낮추기 시작한다는 뜻이다. 작을수록 로버스트하지만 효율이 떨어진다.
+    loc, scale = huber(data)
+    print(f"Huber 위치추정: {loc:.4f}")
+    print(f"Huber 척도추정: {scale:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Huber 위치추정: -0.1366
+    Huber 척도추정: 1.0812
+    ```
+
+    자릿수를 늘려 두 값을 직접 맞대 본다.
+
+    ```python
+    # 정말 같은가. 소수 여덟째 자리까지 펴 본다.
+    from scipy.stats import trim_mean
+
+    loc, scale = huber(data)
+    tm = trim_mean(data, 0.1)
+    print(f"Huber 위치   = {float(loc):.8f}")
+    print(f"10% 절사평균 = {tm:.8f}")
+    print(f"차이         = {float(loc) - tm:.2e}")
+    # 이상치 14.658 이 받은 가중치. 중심에서 c*s 밖이므로 1 보다 작다.
+    w = np.minimum(1.0, 1.5 * float(scale) / np.abs(data - float(loc)))
+    print(f"가중치가 1 보다 작은 관측값 수 = {np.sum(w < 1)} / {len(data)}")
+    print(f"최댓값 14.658 의 가중치       = {w[np.argmax(data)]:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Huber 위치   = -0.13656260
+    10% 절사평균 = -0.13657721
+    차이         = 1.46e-05
+    가중치가 1 보다 작은 관측값 수 = 14 / 100
+    최댓값 14.658 의 가중치       = 0.1096
+    ```
+
+    **(2)의 답은 "아니다"이다.** 두 추정량은 **정의부터 다르다.** Huber 는 $100$개 가운데 $14$개의 가중치를 거리에 따라 조금씩 깎았고, 절사평균은 $20$개를 한꺼번에 버렸다. 손대는 관측값의 수도 다르고 손대는 방식도 다르다. 네 자리까지 같아 보인 것은 이 표본에서의 우연이고, 실제 차이는 $1.46 \times 10^{-5}$다.
+
+    그 우연이 얼마나 우연인지도 재어 둘 만하다. $t_5$, $n = 100$에서 두 추정량의 차이는 보통 $\operatorname{sd} = 0.0078$만큼 벌어진다. 여기서 본 $1.46 \times 10^{-5}$는 그 $500$분의 $1$이라 $1\%$도 되지 않는 확률로 일어나는 겹침이다. **소수 몇 자리가 같다는 사실만으로 두 방법이 같다고 결론지으면 안 된다**는 좋은 본보기다.
+
+    마지막 줄이 Huber 의 성격을 가장 잘 보여 준다. 이 쪽을 내내 괴롭힌 $14.658$이 가중치 $0.1096$만 받았다. **버려지지도, 온전히 들어오지도 않았다.** $14.658$이 아니라 사실상 $14.658 \times 0.11 = 1.6$짜리 관측값으로 셈에 들어간 셈이고, 그래서 Huber 위치추정값이 절사평균과 같은 자리에 섰다.
+
+    척도추정값 $1.0812$도 읽어 둘 값이다. 같은 자료의 표본표준편차는 $1.8884$인데, 그 차이가 거의 전부 $14.658$ 하나에서 온다. $t_5$의 이론 표준편차가 $\sqrt{5/3} = 1.291$이므로 **Huber 척도는 $\sigma$가 아니라 중심부의 퍼짐을 재는 양**이고(정규자료에서 $\sigma$에 맞도록 보정되어 있다), $s = 1.8884$보다 $1.291$ 쪽에 훨씬 가깝다.
 
 ## 추정량의 비교
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 다섯 추정량 견주기
+**보기 6.** <span class="diff easy" title="쉬움"></span> 다섯 추정량 견주기. $t_5$에서 $n = 500$을 뽑아 평균·중앙값·$10\%$ 절사평균·윈저화 평균·Huber 추정량을 모두 계산한다. 참 중심은 $0$이다.
+
+**(1)** 다섯 추정량의 표준오차와 표본평균 대비 상대효율을 $n = 500$에서 적으시오.
+
+**(2)** 출력의 다섯 값은 $-0.0406$에서 $+0.0058$까지 $0.046$의 폭에 흩어져 있다. 이 폭이 (1)과 어울리는가. 그리고 **한 번의 값으로는 어느 추정량이 나은지 말할 수 없다**는 것을 보이시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
-from scipy.stats import trim_mean
-from statsmodels.robust.scale import huber
+??? success "풀이"
 
-np.random.seed(42)
-# 자유도 5의 t분포. 평균은 0이지만 꼬리가 정규분포보다 훨씬 두껍다.
-data = stats.t.rvs(df=5, loc=0, scale=1, size=500)
+    **(1) 이론과 모의.** 앞 보기들에서 평균과 중앙값은 닫힌 꼴로 나왔다.
 
-# 다섯 추정량 모두 같은 모수(위치 0)를 겨냥한다.
-# n = 500 으로 넉넉하므로 다섯 값이 모두 0 근처에 모인다.
-# 이들의 차이는 한 번의 값이 아니라 **되풀이했을 때의 흩어짐**에서 드러난다.
-print("Estimator Comparison (Population mean = 0):")
-print(f"  Sample mean:         {np.mean(data):7.4f}")
-print(f"  Median:              {np.median(data):7.4f}")
-print(f"  10% Trimmed mean:    {trim_mean(data, 0.1):7.4f}")
-print(f"  Winsorized mean:     {winsorize_mean(data, 0.1):7.4f}")
-print(f"  Huber's estimator:   {huber(data)[0]:7.4f}")
-```
+    $$
+    \operatorname{SE}(\bar X) = \sqrt{\frac{5/3}{500}} = 0.05774,
+    \qquad
+    \operatorname{SE}(\tilde X) \approx \frac{1}{2(0.37961)\sqrt{500}} = 0.05890
+    $$
 
-출력:
+    나머지 셋은 닫힌 꼴이 번거로우므로 $t_5$에서 8000번 모의로 재어 적는다.
 
-```
-Estimator Comparison (Population mean = 0):
-  Sample mean:         -0.0009
-  Median:               0.0058
-  10% Trimmed mean:    -0.0406
-  Winsorized mean:     -0.0318
-  Huber's estimator:   -0.0369
-```
+    | 추정량 | $\operatorname{SE}$ | 상대효율 |
+    |:---|---:|---:|
+    | 표본평균 | $0.0574$ | $1.000$ |
+    | 중앙값 | $0.0587$ | $0.956$ |
+    | $10\%$ 절사평균 | $0.0518$ | $1.227$ |
+    | 윈저화 평균 | $0.0536$ | $1.144$ |
+    | Huber | $0.0521$ | $1.215$ |
+
+    (모의가 준 평균 $0.0574$·중앙값 $0.0587$이 위의 닫힌 꼴 $0.05774$·$0.05890$과 셋째 자리까지 맞는다.)
+
+    **셋이 표본평균을 이긴다.** $t_5$에서 $10\%$ 절사평균이 가장 좋아 평균보다 $23\%$ 효율적이고, Huber 가 바싹 뒤따르며, 윈저화가 그다음이다. 중앙값은 $0.956$으로 평균에 아주 조금 못 미친다. **"꼬리가 두꺼우면 중앙값"이라는 흔한 조언은 $t_5$ 정도에서는 아직 이르다.** 상대효율 $\frac{\nu}{\nu-2}\cdot 4f_\nu(0)^2$를 $\nu$의 함수로 풀면 $1$이 되는 자리가 $\nu = 4.68$이므로, **중앙값이 평균을 이기려면 $\nu$가 $4.68$보다 작아야 한다**($\nu = 4$에서 $1.13$, $\nu = 3$에서 $1.62$).
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from scipy.stats import trim_mean
+    from statsmodels.robust.scale import huber
+
+    np.random.seed(42)
+    # 자유도 5의 t분포. 평균은 0이지만 꼬리가 정규분포보다 훨씬 두껍다.
+    data = stats.t.rvs(df=5, loc=0, scale=1, size=500)
+
+    # 다섯 추정량 모두 같은 모수(위치 0)를 겨냥한다.
+    # n = 500 으로 넉넉하므로 다섯 값이 모두 0 근처에 모인다.
+    # 이들의 차이는 한 번의 값이 아니라 **되풀이했을 때의 흩어짐**에서 드러난다.
+    print("Estimator Comparison (Population mean = 0):")
+    print(f"  Sample mean:         {np.mean(data):7.4f}")
+    print(f"  Median:              {np.median(data):7.4f}")
+    print(f"  10% Trimmed mean:    {trim_mean(data, 0.1):7.4f}")
+    print(f"  Winsorized mean:     {winsorize_mean(data, 0.1):7.4f}")
+    print(f"  Huber's estimator:   {huber(data)[0]:7.4f}")
+    ```
+
+    출력:
+
+    ```
+    Estimator Comparison (Population mean = 0):
+      Sample mean:         -0.0009
+      Median:               0.0058
+      10% Trimmed mean:    -0.0406
+      Winsorized mean:     -0.0318
+      Huber's estimator:   -0.0369
+    ```
+
+    (1)의 표준오차로 다섯 값을 재어 본다.
+
+    ```python
+    # 다섯 값을 (1) 의 표준오차로 나누어, 참값 0 에서 몇 표준오차인지 본다.
+    est = {'표본평균': np.mean(data), '중앙값': np.median(data),
+           '10% 절사': trim_mean(data, 0.1), '윈저화': winsorize_mean(data, 0.1),
+           'Huber': float(huber(data)[0])}
+    se = {'표본평균': 0.0574, '중앙값': 0.0587, '10% 절사': 0.0518,
+          '윈저화': 0.0536, 'Huber': 0.0521}
+    print(f"{'추정량':<10} {'값':>9} {'SE':>8} {'z = 값/SE':>10}")
+    for k, v in est.items():
+        print(f"{k:<10} {v:>9.4f} {se[k]:>8.4f} {v / se[k]:>10.2f}")
+    print(f"\n다섯 값의 폭 = {max(est.values()) - min(est.values()):.4f}")
+    print(f"최댓값 {data.max():.3f} 하나가 평균에 보태는 양 = {data.max() / 500:.4f}")
+    print(f"그 하나를 뺀 평균 = {np.sort(data)[:-1].mean():.4f}")
+    ```
+
+    출력:
+
+    ```
+    추정량                값       SE   z = 값/SE
+    표본평균         -0.0009   0.0574      -0.02
+    중앙값           0.0058   0.0587       0.10
+    10% 절사       -0.0406   0.0518      -0.78
+    윈저화          -0.0318   0.0536      -0.59
+    Huber        -0.0369   0.0521      -0.71
+
+    다섯 값의 폭 = 0.0464
+    최댓값 14.658 하나가 평균에 보태는 양 = 0.0293
+    그 하나를 뺀 평균 = -0.0303
+    ```
+
+    **다섯 값 모두 참값 $0$에서 $1$ 표준오차 안이다.** 가장 멀리 간 절사평균이 $-0.78$이다. 그리고 다섯 값이 벌어진 폭 $0.0464$는 **표준오차 하나의 크기($0.052$–$0.059$)보다도 작다.** 같은 표본에서 계산한 다섯 수는 서로 세게 상관되어 있으므로, 이 정도 폭은 어울리고도 남는다.
+
+    **(2)의 둘째 물음이 중요하다.** 한 번의 값만 보면 $-0.0009$인 표본평균이 참값 $0$에 가장 가까워 "평균이 가장 좋다"고 말하고 싶어진다. **그 결론은 틀렸다.** (1)의 표가 말하듯 $t_5$에서는 절사평균과 Huber 가 평균보다 $20\%$ 이상 효율적이고, 평균이 여기서 운 좋게 맞았을 뿐이다.
+
+    실제로 그 운이 어디서 왔는지도 보인다. 마지막 두 줄이 그것이다. 이 $500$개 표본에도 보기 3의 $14.658$이 들어 있고(같은 씨앗의 앞부분이다), 그 하나가 평균에 $+0.0293$을 보탠다. 그것을 빼면 평균은 $-0.0303$으로 **다른 네 추정량 쪽으로 옮겨 간다.** 말하자면 표본평균은 아래로 치우쳐 있던 자료를 이상치 하나가 위로 밀어 올려 우연히 $0$에 닿은 것이다.
+
+    **추정량을 고르는 일은 한 번의 값이 아니라 되풀이했을 때의 흩어짐으로 결정된다.** 이 쪽의 여섯 보기가 모두 그 한 가지를 되풀이해 말하고 있다. 자료 하나를 손에 들고 다섯 수를 나란히 놓는 것은 **진단**에는 쓸모가 있지만(크게 벌어지면 꼬리나 이상치를 의심하라) **선택**의 근거는 되지 못한다.
 
 ## 연습문제
 

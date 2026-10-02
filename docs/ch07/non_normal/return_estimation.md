@@ -14,45 +14,82 @@ $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 기대수익률의 정밀도
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기대수익률의 정밀도. 참 기대수익률 연 $8\%$, 변동성 연 $20\%$인 주식을 $T$년 관측한다.
+
+**(1)** $95\%$ 신뢰구간이 $0$을 **배제하려면** $T$가 얼마여야 하는지 구하시오.
+
+**(2)** 추정값을 참값의 $\pm 10\%$ 안으로, 곧 $[7.2\%, 8.8\%]$로 좁히려면 몇 년이 필요한가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-def expected_return_precision(seed=42):
-    """기대수익률을 몇 %까지 좁힐 수 있는지 자료 기간별로 계산한다.
+    **(1) 해석적으로.** $\hat\mu \sim N(\mu, \sigma^2/T)$이므로 구간은 $\hat\mu \pm 1.96\,\sigma/\sqrt T$다. 중심이 참값 $\mu$에 있다고 보고 아래끝이 $0$을 넘으려면
 
-    변동성 20%에 자료 10년이면 표준오차만 6%가 넘는다. 추정하려는 값이 8%인데
-    오차가 그만큼이니, 자료를 한 사람의 평생만큼 모아도 답은 흐릿하다.
-    """
-    rng = np.random.default_rng(seed)
-    mu_annual = 0.08      # 참 기대수익률 연 8%
-    sigma_annual = 0.20   # 변동성 연 20%
+    $$
+    \mu - 1.96\frac{\sigma}{\sqrt T} > 0
+    \quad\Longleftrightarrow\quad
+    T > \left(\frac{1.96\,\sigma}{\mu}\right)^2
+    = \left(\frac{1.96 \times 0.20}{0.08}\right)^2 = 4.9^2 = 24.01
+    $$
 
-    years = [5, 10, 20, 30, 50, 100]
-    for T in years:
-        se = sigma_annual / np.sqrt(T)
-        lo = mu_annual - 1.96 * se
-        hi = mu_annual + 1.96 * se
-        print(f"T={T:>4} years  SE={se*100:.2f}%  "
-              f"95% CI=[{lo*100:.2f}%, {hi*100:.2f}%]  Width={2*1.96*se*100:.2f}%")
-expected_return_precision()
-```
+    이므로 **$T = 25$년**이다. 괄호 안의 $\sigma/\mu = 2.5$가 **잡음 대 신호 비**이고, 필요한 햇수가 그 **제곱**으로 들어온다는 것이 이 식의 전부다.
 
-출력:
+    **(2)** 같은 식에서 반폭을 $0.1\mu$로 두면
 
-```
-T=   5 years  SE=8.94%  95% CI=[-9.53%, 25.53%]  Width=35.06%
-T=  10 years  SE=6.32%  95% CI=[-4.40%, 20.40%]  Width=24.79%
-T=  20 years  SE=4.47%  95% CI=[-0.77%, 16.77%]  Width=17.53%
-T=  30 years  SE=3.65%  95% CI=[0.84%, 15.16%]  Width=14.31%
-T=  50 years  SE=2.83%  95% CI=[2.46%, 13.54%]  Width=11.09%
-T= 100 years  SE=2.00%  95% CI=[4.08%, 11.92%]  Width=7.84%
-```
+    $$
+    1.96\frac{\sigma}{\sqrt T} \le 0.1\mu
+    \quad\Longleftrightarrow\quad
+    T \ge \left(\frac{19.6\,\sigma}{\mu}\right)^2 = (19.6 \times 2.5)^2 = 49^2 = 2401
+    $$
+
+    **$2401$년**이다. 구간을 $10$배 좁히려면 햇수가 $100$배 든다. 신뢰구간을 떼고 표준오차만 $\mu$의 $10\%$ 아래로 내리는 더 느슨한 기준으로 재어도 $T = (2.5/0.1)^2 = 625$년이다.
+
+    **이것이 금융 통계학의 근본 사실이다.** 주식시장이 믿을 만한 자료를 남긴 기간 전체가 $100$년 남짓인데, 그 $100$년을 다 써도 기대수익률의 표준오차가 $2\%$다. **기대수익률은 "정밀하게 추정하기 어려운 양"이 아니라 "사람의 시간 규모에서는 추정할 수 없는 양"에 가깝다.**
+
+    표를 찍어 두 답이 들어맞는 자리를 확인한다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    def expected_return_precision(seed=42):
+        """기대수익률을 몇 %까지 좁힐 수 있는지 자료 기간별로 계산한다.
+
+        변동성 20%에 자료 10년이면 표준오차만 6%가 넘는다. 추정하려는 값이 8%인데
+        오차가 그만큼이니, 자료를 한 사람의 평생만큼 모아도 답은 흐릿하다.
+        """
+        rng = np.random.default_rng(seed)
+        mu_annual = 0.08      # 참 기대수익률 연 8%
+        sigma_annual = 0.20   # 변동성 연 20%
+
+        years = [5, 10, 20, 30, 50, 100]
+        for T in years:
+            se = sigma_annual / np.sqrt(T)
+            lo = mu_annual - 1.96 * se
+            hi = mu_annual + 1.96 * se
+            print(f"T={T:>4} years  SE={se*100:.2f}%  "
+                  f"95% CI=[{lo*100:.2f}%, {hi*100:.2f}%]  Width={2*1.96*se*100:.2f}%")
+    expected_return_precision()
+    ```
+
+    출력:
+
+    ```
+    T=   5 years  SE=8.94%  95% CI=[-9.53%, 25.53%]  Width=35.06%
+    T=  10 years  SE=6.32%  95% CI=[-4.40%, 20.40%]  Width=24.79%
+    T=  20 years  SE=4.47%  95% CI=[-0.77%, 16.77%]  Width=17.53%
+    T=  30 years  SE=3.65%  95% CI=[0.84%, 15.16%]  Width=14.31%
+    T=  50 years  SE=2.83%  95% CI=[2.46%, 13.54%]  Width=11.09%
+    T= 100 years  SE=2.00%  95% CI=[4.08%, 11.92%]  Width=7.84%
+    ```
+
+    **(1)의 $T = 25$가 표에서 확인된다.** $T = 20$ 줄의 아래끝이 $-0.77\%$로 아직 $0$ 아래이고, $T = 30$ 줄에서 $+0.84\%$로 올라선다. 두 줄 사이 어딘가에서 넘어가는데 (1)이 그 자리를 $24.01$로 짚었다.
+
+    (2)의 답도 같은 표에서 읽을 수 있다. 목표 폭 $1.6\%$는 $T = 100$의 폭 $7.84\%$보다도 **다섯 배 좁다.** 폭이 $1/\sqrt T$로 줄므로 $7.84/1.6 = 4.9$배 더 좁히려면 햇수를 $4.9^2 = 24$배, 곧 $2400$년으로 늘려야 한다.
+
+    표를 세로로 읽으면 $1/\sqrt T$ 법칙이 그대로 보인다. $T$가 $5$년에서 $20$년으로 **네 배** 되자 표준오차가 $8.94\%$에서 $4.47\%$로 정확히 절반이 되었다. **오차를 반으로 줄이는 값은 언제나 자료를 네 배 모으는 것**이고, 자료가 시간으로만 늘어나는 금융에서는 그 값이 다른 어느 분야보다 비싸다.
 
 !!! danger "근본적인 문제"
     자료가 10년치이면 평균 수익률의 95% 신뢰구간이 대략 $[-4.4\%, 20.4\%]$로, 0을 포함할 만큼 넓다. 50년치 자료에서도 표준오차가 2.8%로, 기대수익률을 0과 구분하기에 겨우 충분한 정도이다.
@@ -61,43 +98,98 @@ T= 100 years  SE=2.00%  95% CI=[4.08%, 11.92%]  Width=7.84%
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 추정값의 분포 — 10년과 50년
+**보기 2.** <span class="diff easy" title="쉬움"></span> 추정값의 분포 — 10년과 50년. 참값 $\mu = 8\%$, $\sigma = 20\%$인 **월별** 수익률을 $10$년치($120$개)와 $50$년치($600$개) 만들어 연율화한 추정값을 2만 번 기록한다.
+
+**(1)** 추정값이 **음수로 나올 확률**을 두 기간에 대해 구하시오.
+
+**(2)** 월별 자료를 쓰면 관측값이 $12$배 많아진다. 그만큼 $\hat\mu$가 정밀해지는가.
 
 </div>
 
-```python
-def return_precision_simulation(seed=42):
-    """앞 표의 숫자를 그림으로 옮긴다. 10년과 50년을 나란히 놓았다.
+??? success "풀이"
 
-    10년 쪽 히스토그램은 0 을 한참 넘어 왼쪽까지 퍼져 있다. 참 수익률이
-    양수여도 10년을 관측한 결과가 음수로 나오는 일이 드물지 않다는 뜻이다.
-    """
-    rng = np.random.default_rng(seed)
-    mu_annual, sigma_annual = 0.08, 0.20
-    n_sim = 20_000
+    **(1) 해석적으로.** 연율화한 추정값은 $\hat\mu_a \sim N(0.08,\ 0.20^2/T)$이므로
 
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
-    for ax, T, title in [(axes[0], 10, '10 Years'), (axes[1], 50, '50 Years')]:
-        # 월별 자료로 바꾼다. 평균은 12 로 나누고 변동성은 sqrt(12) 로 나눈다.
-        # 평균은 기간에 비례해 쌓이고 표준편차는 그 제곱근으로만 쌓이기 때문이다.
-        n_m = T * 12
-        mu_m = mu_annual / 12
-        sig_m = sigma_annual / np.sqrt(12)
-        ests = np.array([rng.normal(mu_m, sig_m, n_m).mean() * 12
-                         for _ in range(n_sim)])
-        ax.hist(ests, bins=60, density=True, alpha=0.6, color='steelblue')
-        ax.axvline(mu_annual, color='red', ls='--', lw=2, label=f'True mu = {mu_annual*100:.0f}%')
-        ax.axvline(0, color='gray', ls=':', alpha=0.5)
-        ax.set_xlabel('Estimated Annual Return')
-        ax.set_title(f'{title} of Monthly Data')
-        ax.legend()
-    plt.suptitle('Distribution of Expected Return Estimates')
-    plt.tight_layout()
-    plt.show()
-return_precision_simulation()
-```
+    $$
+    P(\hat\mu_a < 0) = \Phi\!\left(\frac{0 - \mu}{\sigma/\sqrt T}\right) = \Phi\!\left(-\frac{\mu}{\sigma}\sqrt T\right) = \Phi(-0.4\sqrt T)
+    $$
 
-![Distribution of Expected Return Estimates](./img/return_estimation_40.png)
+    이다. $\mu/\sigma = 0.4$가 연간 샤프비율이고, **음수가 나올 확률은 그것과 $\sqrt T$의 곱 하나로 정해진다.**
+
+    $$
+    T = 10:\ \Phi(-1.2649) = 0.1030,
+    \qquad
+    T = 50:\ \Phi(-2.8284) = 0.0023
+    $$
+
+    **$10$년을 관측하고도 열 번에 한 번은 "이 자산은 돈을 잃었다"는 결론이 나온다.** 참으로 연 $8\%$를 버는 자산인데도 그렇다.
+
+    **(2) 아니다. 전혀 정밀해지지 않는다.** 월별 모수는 $\mu_m = \mu/12$, $\sigma_m = \sigma/\sqrt{12}$이고 관측값이 $n = 12T$개이므로, 연율화한 추정량의 표준오차는
+
+    $$
+    12 \times \frac{\sigma_m}{\sqrt{12T}}
+    = 12 \times \frac{\sigma/\sqrt{12}}{\sqrt{12T}}
+    = \frac{12\,\sigma}{12\sqrt T}
+    = \frac{\sigma}{\sqrt T}
+    $$
+
+    로 **연별 자료를 쓸 때와 똑같다.** $12$라는 수가 남김없이 약분된다. 일별 자료를 써서 $252T$개를 모아도 결과는 같다.
+
+    까닭은 한 줄이다. **평균을 추정할 때 쓰이는 정보는 관측 횟수가 아니라 관측 기간의 총 길이다.** 월별 수익률의 평균은 결국 $(\text{마지막 가격} - \text{첫 가격})$을 기간으로 나눈 것이라, 중간을 아무리 촘촘히 쪼개도 양 끝이 그대로이면 더 알아낼 것이 없다.
+
+    **변동성은 사정이 정반대다.** $\hat\sigma$의 상대 표준오차는 $1/\sqrt{2n}$이라 **관측 횟수**에 달려 있으므로, 일별로 쪼개면 $\sqrt{252}$배 정밀해진다. $10$년치로 재면 $\hat\mu$의 상대오차가 $79\%$인데 $\hat\sigma$의 상대오차는 $1/\sqrt{2 \times 2520} = 1.4\%$다. **위험 모형이 수익률 예측보다 믿을 만한 이유가 이 비대칭이다.**
+
+    모의실험으로 두 답을 확인한다.
+
+    ```python
+    def return_precision_simulation(seed=42):
+        """앞 표의 숫자를 그림으로 옮긴다. 10년과 50년을 나란히 놓았다.
+
+        10년 쪽 히스토그램은 0 을 한참 넘어 왼쪽까지 퍼져 있다. 참 수익률이
+        양수여도 10년을 관측한 결과가 음수로 나오는 일이 드물지 않다는 뜻이다.
+        """
+        rng = np.random.default_rng(seed)
+        mu_annual, sigma_annual = 0.08, 0.20
+        n_sim = 20_000
+
+        fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+        for ax, T, title in [(axes[0], 10, '10 Years'), (axes[1], 50, '50 Years')]:
+            # 월별 자료로 바꾼다. 평균은 12 로 나누고 변동성은 sqrt(12) 로 나눈다.
+            # 평균은 기간에 비례해 쌓이고 표준편차는 그 제곱근으로만 쌓이기 때문이다.
+            n_m = T * 12
+            mu_m = mu_annual / 12
+            sig_m = sigma_annual / np.sqrt(12)
+            ests = np.array([rng.normal(mu_m, sig_m, n_m).mean() * 12
+                             for _ in range(n_sim)])
+            ax.hist(ests, bins=60, density=True, alpha=0.6, color='steelblue')
+            ax.axvline(mu_annual, color='red', ls='--', lw=2, label=f'True mu = {mu_annual*100:.0f}%')
+            ax.axvline(0, color='gray', ls=':', alpha=0.5)
+            ax.set_xlabel('Estimated Annual Return')
+            ax.set_title(f'{title} of Monthly Data')
+            ax.legend()
+            # 월별로 모아도 SE 가 sigma/sqrt(T) 그대로인지, 음수 비율이 이론과 맞는지 본다.
+            print(f"T={T:>2}년: 모의 SE={ests.std(ddof=1):.5f}  σ/√T={sigma_annual/np.sqrt(T):.5f}   "
+                  f"P(음수) 모의={np.mean(ests<0):.4f}  이론={stats.norm.cdf(-0.4*np.sqrt(T)):.4f}")
+        plt.suptitle('Distribution of Expected Return Estimates')
+        plt.tight_layout()
+        plt.show()
+    return_precision_simulation()
+    ```
+
+    출력:
+
+    ```
+    T=10년: 모의 SE=0.06292  σ/√T=0.06325   P(음수) 모의=0.1008  이론=0.1030
+    T=50년: 모의 SE=0.02822  σ/√T=0.02828   P(음수) 모의=0.0022  이론=0.0023
+    ```
+
+    ![Distribution of Expected Return Estimates](./img/return_estimation_40.png)
+
+    **(2)의 답이 숫자로 확인된다.** 월별 자료 $120$개로 추정했는데 모의 표준오차가 $0.06292$로 **연별 공식 $\sigma/\sqrt{10} = 0.06325$와 같다.** $50$년 쪽도 $0.02822$ 대 $0.02828$이다. 두 줄 모두 상대오차가 $0.5\%$ 안인데, 2만 번으로 표준편차를 잴 때의 몬테카를로 오차가 $1/\sqrt{2 \times 20000} = 0.5\%$이므로 꼭 맞는 크기다. **관측값을 $12$배로 늘렸는데 정밀도가 한 자리도 좋아지지 않았다.**
+
+    음수 비율도 (1)과 맞는다. $10$년에서 $10.08\%$ 대 이론 $10.30\%$, $50$년에서 $0.22\%$ 대 $0.23\%$다. 비율의 몬테카를로 표준오차가 $\sqrt{0.103 \times 0.897/20000} = 0.21\%$이므로 $10$년 줄의 $0.22\%p$ 차이는 $1$ 표준오차다.
+
+    그림의 두 판을 견주면 같은 이야기가 눈에 보인다. 왼쪽 히스토그램은 회색 점선($0$)을 한참 넘어 왼쪽까지 퍼져 있고, 오른쪽은 $0$에 거의 닿지 않는다. **두 판의 폭 비는 $\sqrt{50/10} = 2.24$**이며, $40$년을 더 기다려 얻는 것이 고작 그만큼이다.
 
 ## Sharpe 비율의 불확실성
 
@@ -109,47 +201,118 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 샤프비율의 불확실성
+**보기 3.** <span class="diff easy" title="쉬움"></span> 샤프비율의 불확실성. 참 연간 샤프비율이 $0.5$인 전략($\mu = 8\%$, $\sigma = 16\%$)의 월별 수익률을 $T$년치 만들어 샤프비율을 추정하는 일을 3만 번 되풀이한다.
+
+**(1)** 추정 샤프비율이 **음수로 나올 확률**을 $T$의 함수로 **정확히** 구하시오.
+
+**(2)** 위 본문의 공식 $\operatorname{SE}(\widehat{\mathrm{SR}}) \approx \sqrt{(1 + \mathrm{SR}^2/2)/T}$에서 $\mathrm{SR}$에 **연간** 값 $0.5$를 넣을 것인가 **월간** 값을 넣을 것인가. 출력으로 판정하시오.
 
 </div>
 
-```python
-def sharpe_ratio_uncertainty(seed=42):
-    """샤프비율 추정값이 얼마나 흔들리는지, 음수로 나올 확률은 얼마인지 본다.
+??? success "풀이"
 
-    샤프비율이 참으로 0.5 인 좋은 전략이라도, 3년치 성과만 보면 음수로
-    보일 확률이 제법 된다. 짧은 성과 기록으로 운용자를 고르기 어려운 이유다.
-    """
-    rng = np.random.default_rng(seed)
-    true_sr = 0.5
-    mu_annual = 0.08
-    # 샤프비율 = 평균/변동성 이므로 변동성은 이렇게 거꾸로 정해진다.
-    sigma_annual = mu_annual / true_sr
-    n_sim = 30_000
+    **(1) 해석적으로.** 샤프비율 추정값은 $\widehat{\mathrm{SR}} = \bar r / \hat\sigma$이고 분모는 **언제나 양수**다. 따라서
 
-    horizons = [3, 5, 10, 20, 50]
-    for T in horizons:
-        n_m = T * 12
-        mu_m, sig_m = mu_annual / 12, sigma_annual / np.sqrt(12)
-        sr_ests = []
-        for _ in range(n_sim):
-            r = rng.normal(mu_m, sig_m, n_m)
-            sr_ests.append(r.mean() / r.std() * np.sqrt(12))
-        sr_ests = np.array(sr_ests)
-        print(f"T={T:>3} years  E[SR]={sr_ests.mean():.3f}  "
-              f"SD(SR)={sr_ests.std():.3f}  P(SR<0)={( sr_ests < 0).mean():.1%}")
-sharpe_ratio_uncertainty()
-```
+    $$
+    \widehat{\mathrm{SR}} < 0
+    \iff
+    \bar r < 0
+    $$
 
-출력:
+    이다. 분모가 아무 역할도 하지 않으므로 보기 2의 계산이 그대로 쓰인다.
 
-```
-T=  3 years  E[SR]=0.518  SD(SR)=0.604  P(SR<0)=19.1%
-T=  5 years  E[SR]=0.514  SD(SR)=0.461  P(SR<0)=12.9%
-T= 10 years  E[SR]=0.507  SD(SR)=0.323  P(SR<0)=5.7%
-T= 20 years  E[SR]=0.501  SD(SR)=0.226  P(SR<0)=1.2%
-T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
-```
+    $$
+    P(\widehat{\mathrm{SR}} < 0) = P(\bar r < 0) = \Phi\!\left(-\frac{\mu}{\sigma}\sqrt T\right) = \Phi(-0.5\sqrt T)
+    $$
+
+    **근사가 아니라 정확한 값**이다(수익률이 정규라는 가정 아래에서). 수를 넣으면
+
+    | $T$ | $-0.5\sqrt T$ | $P(\widehat{\mathrm{SR}} < 0)$ |
+    |---:|---:|---:|
+    | $3$ | $-0.866$ | $0.1932$ |
+    | $5$ | $-1.118$ | $0.1318$ |
+    | $10$ | $-1.581$ | $0.0569$ |
+    | $20$ | $-2.236$ | $0.0127$ |
+    | $50$ | $-3.536$ | $0.0002$ |
+
+    **(2) 어느 $\mathrm{SR}$을 넣을 것인가.** 델타 방법이 주는 식은 **관측 단위**에 대한 것이다. 월별 관측값 $n = 12T$개로 월간 샤프비율을 추정하면
+
+    $$
+    \operatorname{SE}(\widehat{\mathrm{SR}}_m) \approx \sqrt{\frac{1 + \mathrm{SR}_m^2/2}{12T}}
+    $$
+
+    이고, 연율화는 $\sqrt{12}$를 곱하는 것이므로
+
+    $$
+    \operatorname{SE}(\widehat{\mathrm{SR}}_a) \approx \sqrt{12}\,\sqrt{\frac{1 + \mathrm{SR}_m^2/2}{12T}}
+    = \sqrt{\frac{1 + \mathrm{SR}_m^2/2}{T}}
+    $$
+
+    다. **$T$는 햇수로 남지만 괄호 안의 $\mathrm{SR}$은 월간 값 $\mathrm{SR}_m = 0.5/\sqrt{12} = 0.1443$이어야 한다.** 연간 값 $0.5$를 그대로 넣는 것은 흔한 잘못이고, 두 답이 꽤 다르다.
+
+    $$
+    \text{연간 넣기: } \sqrt{\frac{1.125}{T}} = \frac{1.0607}{\sqrt T},
+    \qquad
+    \text{월간 넣기: } \sqrt{\frac{1.01042}{T}} = \frac{1.0052}{\sqrt T}
+    $$
+
+    모의실험이 판정해 준다.
+
+    ```python
+    def sharpe_ratio_uncertainty(seed=42):
+        """샤프비율 추정값이 얼마나 흔들리는지, 음수로 나올 확률은 얼마인지 본다.
+
+        샤프비율이 참으로 0.5 인 좋은 전략이라도, 3년치 성과만 보면 음수로
+        보일 확률이 제법 된다. 짧은 성과 기록으로 운용자를 고르기 어려운 이유다.
+        """
+        rng = np.random.default_rng(seed)
+        true_sr = 0.5
+        mu_annual = 0.08
+        # 샤프비율 = 평균/변동성 이므로 변동성은 이렇게 거꾸로 정해진다.
+        sigma_annual = mu_annual / true_sr
+        n_sim = 30_000
+
+        horizons = [3, 5, 10, 20, 50]
+        for T in horizons:
+            n_m = T * 12
+            mu_m, sig_m = mu_annual / 12, sigma_annual / np.sqrt(12)
+            sr_ests = []
+            for _ in range(n_sim):
+                r = rng.normal(mu_m, sig_m, n_m)
+                sr_ests.append(r.mean() / r.std() * np.sqrt(12))
+            sr_ests = np.array(sr_ests)
+            print(f"T={T:>3} years  E[SR]={sr_ests.mean():.3f}  "
+                  f"SD(SR)={sr_ests.std():.3f}  P(SR<0)={( sr_ests < 0).mean():.1%}")
+    sharpe_ratio_uncertainty()
+    ```
+
+    출력:
+
+    ```
+    T=  3 years  E[SR]=0.518  SD(SR)=0.604  P(SR<0)=19.1%
+    T=  5 years  E[SR]=0.514  SD(SR)=0.461  P(SR<0)=12.9%
+    T= 10 years  E[SR]=0.507  SD(SR)=0.323  P(SR<0)=5.7%
+    T= 20 years  E[SR]=0.501  SD(SR)=0.226  P(SR<0)=1.2%
+    T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
+    ```
+
+    음수 확률부터 보자. $19.1\%$, $12.9\%$, $5.7\%$, $1.2\%$, $0.0\%$가 (1)의 $19.32\%$, $13.18\%$, $5.69\%$, $1.27\%$, $0.02\%$와 모두 맞는다. 3만 번에서 비율의 몬테카를로 표준오차가 가장 큰 $T = 3$에서도 $0.23\%$p이므로 $19.1$ 대 $19.32$는 $1$ 표준오차 안이다. **근사 없이 유도한 식이라 당연히 맞아야 하고, 실제로 맞는다.**
+
+    (2)의 판정은 $\operatorname{SD}$ 열이 한다.
+
+    | $T$ | 모의 $\operatorname{SD}$ | 연간 $\mathrm{SR}$ 넣기 | 어긋남 | 월간 $\mathrm{SR}$ 넣기 | 어긋남 |
+    |---:|---:|---:|---:|---:|---:|
+    | $3$ | $0.604$ | $0.6124$ | $+1.4\%$ | $0.5803$ | $-3.9\%$ |
+    | $5$ | $0.461$ | $0.4743$ | $+2.9\%$ | $0.4495$ | $-2.5\%$ |
+    | $10$ | $0.323$ | $0.3354$ | $+3.8\%$ | $0.3179$ | $-1.6\%$ |
+    | $20$ | $0.226$ | $0.2372$ | $+4.9\%$ | $0.2248$ | $-0.5\%$ |
+    | $50$ | $0.143$ | $0.1500$ | $+4.9\%$ | $0.1422$ | $-0.6\%$ |
+
+    **$T$가 커질수록 월간 넣기가 이긴다.** $T = 20$과 $50$에서 월간 쪽 어긋남이 $0.5\%$ 안으로 들어오는 동안 연간 쪽은 $4.9\%$에 머문다. 점근 공식은 $T$가 클 때 맞아야 하는 식이므로, 이 두 줄이 판정을 내린다. **(2)의 답은 "월간 값을 넣어야 한다"이다.**
+
+    반대로 $T = 3$에서는 연간 넣기가 더 가까워 보인다($+1.4\%$ 대 $-3.9\%$). 이것을 연간 넣기가 옳다는 증거로 읽으면 안 된다. **$T = 3$은 델타 방법 자체가 못 미더운 영역**이고, 거기서 공식이 참값보다 작게 나오는 유한표본 효과가 연간 넣기의 과대평가와 **우연히 상쇄**된 것이다. 되풀이를 20만 번으로 늘려 참 $\operatorname{SD}$를 다시 재면 $T = 3$에서 $0.6075$, $T = 10$에서 $0.3223$, $T = 50$에서 $0.1426$으로, 큰 $T$에서 월간 넣기와 셋째 자리까지 맞는다.
+
+    $\operatorname{E}[\widehat{\mathrm{SR}}]$ 열도 읽어 둘 것이 있다. $0.518 \to 0.514 \to 0.507 \to 0.501 \to 0.502$로 **참값 $0.5$ 위에서 내려온다.** 짧은 기록일수록 샤프비율이 **부풀려 보고된다**는 뜻이고, 운용 성과를 짧은 구간으로 자랑하는 쪽에 유리한 방향의 편향이다. 분모 $\hat\sigma$가 작게 나온 표본에서 $\widehat{\mathrm{SR}}$이 크게 튀는, 비선형 함수에 옌센 부등식이 걸린 전형적인 꼴이다.
 
 !!! note "펀드 평가에 대한 함의"
     자료가 3년치뿐이면 참 Sharpe 비율이 0.5인 펀드도 추정 Sharpe 비율이 *음수*로 나올 확률이 약 20%이다. 10년치라도 참값 주위의 표준편차가 약 0.3이다. 실력 있는 운용자와 그렇지 않은 운용자를 믿을 만하게 구분하려면 수십 년치 자료가 필요하다.
@@ -163,52 +326,136 @@ T= 50 years  E[SR]=0.502  SD(SR)=0.143  P(SR<0)=0.0%
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 실현변동성과 창의 길이
+**보기 4.** <span class="diff easy" title="쉬움"></span> 실현변동성과 창의 길이. $\omega = 10^{-5}$, $\alpha = 0.08$, $\beta = 0.90$인 GARCH(1,1)로 $756$ 거래일을 만들고, $21$일·$63$일·$252$일 창으로 실현변동성을 재어 참 변동성과 겹쳐 그린다.
+
+**(1)** 이 GARCH 과정의 **무조건 연변동성**과 충격의 **반감기**를 구하시오.
+
+**(2)** 창 길이 $w$마다 **잡음**과 **지연**이 각각 얼마인지 적고, 셋 가운데 어느 창이 어느 쪽에 발목을 잡히는지 가리시오.
 
 </div>
 
-```python
-def realized_volatility_windows(seed=42):
-    """변동성을 재는 창의 길이가 바꾸는 것 — 민감도와 잡음의 맞바꿈.
+??? success "풀이"
 
-    짧은 창은 변동성의 변화를 빨리 따라가지만 들쭉날쭉하고, 긴 창은
-    매끄럽지만 뒤늦게 반응한다. 어느 쪽도 공짜가 아니다.
-    """
-    rng = np.random.default_rng(seed)
+    **(1) 해석적으로.** GARCH(1,1) $\sigma_t^2 = \omega + \alpha r_{t-1}^2 + \beta\sigma_{t-1}^2$에서 기댓값을 취하면 $E[\sigma^2] = \omega + (\alpha+\beta)E[\sigma^2]$이므로
 
-    # GARCH(1,1): 오늘의 변동성이 어제의 충격과 어제의 변동성에 함께 기댄다.
-    # 실제 수익률처럼 변동성이 뭉쳐 다니는 자료를 만들기 위한 모형이다.
-    T = 756  # 3년치 거래일
-    omega, alpha, beta = 0.00001, 0.08, 0.90
-    sigma2 = np.zeros(T)
-    returns = np.zeros(T)
+    $$
+    \sigma^2_{\text{무조건}} = \frac{\omega}{1 - \alpha - \beta}
+    = \frac{10^{-5}}{0.02} = 5 \times 10^{-4}
+    $$
+
+    이고, 일변동성이 $\sqrt{5\times10^{-4}} = 0.02236$, 연율화하면
+
+    $$
+    0.02236\sqrt{252} = 0.355 = 35.5\%
+    $$
+
+    다. 충격은 $(\alpha+\beta)^k$로 식으므로 반감기는
+
+    $$
+    k_{1/2} = \frac{\ln 0.5}{\ln(\alpha+\beta)} = \frac{\ln 0.5}{\ln 0.98} = 34.3\ \text{거래일}
+    $$
+
+    이다. $\alpha + \beta = 0.98$이라는 높은 지속성이 **변동성 군집**을 만드는 장치이고, 실제 주식자료에서 흔히 추정되는 값이기도 하다.
+
+    **(2) 잡음과 지연.** 두 비용이 창 길이에 **반대 방향**으로 달린다.
+
+    - **잡음.** 변동성이 창 안에서 일정하다면 $w$개로 잰 표준편차의 상대 표준오차가 $1/\sqrt{2(w-1)}$이다.
+    - **지연.** 창은 **과거 $w$일의 평균**을 보므로 그 무게중심이 $(w-1)/2$일 전에 있다. 이것을 (1)의 반감기 $34.3$일과 견주어야 한다.
+
+    | 창 $w$ | 잡음 $1/\sqrt{2(w-1)}$ | 지연 $(w-1)/2$ | 반감기 대비 |
+    |---:|---:|---:|---:|
+    | $21$ | $15.8\%$ | $10$일 | $0.29$배 |
+    | $63$ | $9.0\%$ | $31$일 | $0.90$배 |
+    | $252$ | $4.5\%$ | $126$일 | $3.7$배 |
+
+    **$21$일 창은 잡음에, $252$일 창은 지연에 발목이 잡힌다.** $63$일 창은 지연이 반감기와 비슷해 둘 사이 어딘가다. 표를 보면 창을 네 배 늘려 얻는 것(잡음 $15.8 \to 9.0\%$)보다 잃는 것(지연 $10 \to 31$일)이 크다는 것도 읽힌다.
+
+    그림을 그린 뒤 (2)의 두 비용을 수로 재어 본다.
+
+    ```python
+    def realized_volatility_windows(seed=42):
+        """변동성을 재는 창의 길이가 바꾸는 것 — 민감도와 잡음의 맞바꿈.
+
+        짧은 창은 변동성의 변화를 빨리 따라가지만 들쭉날쭉하고, 긴 창은
+        매끄럽지만 뒤늦게 반응한다. 어느 쪽도 공짜가 아니다.
+        """
+        rng = np.random.default_rng(seed)
+
+        # GARCH(1,1): 오늘의 변동성이 어제의 충격과 어제의 변동성에 함께 기댄다.
+        # 실제 수익률처럼 변동성이 뭉쳐 다니는 자료를 만들기 위한 모형이다.
+        T = 756  # 3년치 거래일
+        omega, alpha, beta = 0.00001, 0.08, 0.90
+        sigma2 = np.zeros(T)
+        returns = np.zeros(T)
+        sigma2[0] = omega / (1 - alpha - beta)
+        for t in range(1, T):
+            sigma2[t] = omega + alpha * returns[t-1]**2 + beta * sigma2[t-1]
+            returns[t] = rng.normal(0, np.sqrt(sigma2[t]))
+
+        windows = [5, 10, 21, 63, 126, 252]
+
+        fig, ax = plt.subplots(figsize=(12, 5))
+        true_vol = np.sqrt(sigma2 * 252) * 100
+        ax.plot(true_vol, 'k-', alpha=0.3, lw=0.8, label='True vol (GARCH)')
+
+        # 창 길이를 한 달·한 분기·한 해로 두고 같은 자료에 굴린다.
+        for w, color in zip([21, 63, 252], ['blue', 'red', 'green']):
+            rv = np.array([np.std(returns[max(0,t-w):t], ddof=1) * np.sqrt(252) * 100
+                           for t in range(w, T)])
+            ax.plot(range(w, T), rv, color=color, alpha=0.7, lw=0.8, label=f'{w}d window')
+
+        ax.set_xlabel('Trading Day')
+        ax.set_ylabel('Annualized Vol (%)')
+        ax.set_title('Realized Volatility: Window Size Comparison')
+        ax.legend()
+        plt.tight_layout()
+        plt.show()
+    realized_volatility_windows()
+    ```
+
+    ![Realized Volatility: Window Size Comparison](./img/return_estimation_128.png)
+
+    ```python
+    # (2) 의 두 비용을 따로 잰다.
+    # 잡음 = 그 창 안의 **평균** 변동성 대비 오차,  지연 = **당일** 참 변동성과의 상관.
+    rng = np.random.default_rng(42)
+    T, omega, alpha, beta = 756, 0.00001, 0.08, 0.90
+    sigma2 = np.zeros(T); returns = np.zeros(T)
     sigma2[0] = omega / (1 - alpha - beta)
     for t in range(1, T):
         sigma2[t] = omega + alpha * returns[t-1]**2 + beta * sigma2[t-1]
         returns[t] = rng.normal(0, np.sqrt(sigma2[t]))
-
-    windows = [5, 10, 21, 63, 126, 252]
-
-    fig, ax = plt.subplots(figsize=(12, 5))
     true_vol = np.sqrt(sigma2 * 252) * 100
-    ax.plot(true_vol, 'k-', alpha=0.3, lw=0.8, label='True vol (GARCH)')
-
-    # 창 길이를 한 달·한 분기·한 해로 두고 같은 자료에 굴린다.
-    for w, color in zip([21, 63, 252], ['blue', 'red', 'green']):
+    print(f"참 변동성: 평균 {true_vol.mean():.1f}%  범위 {true_vol.min():.1f}~{true_vol.max():.1f}%"
+          f"  (무조건 {np.sqrt(omega/(1-alpha-beta)*252)*100:.1f}%)")
+    print(f"{'창':>5} {'잡음(창 평균 대비)':>14} {'1/√(2(w-1))':>12} {'당일 참값과의 상관':>14}")
+    for w in (21, 63, 252):
         rv = np.array([np.std(returns[max(0,t-w):t], ddof=1) * np.sqrt(252) * 100
                        for t in range(w, T)])
-        ax.plot(range(w, T), rv, color=color, alpha=0.7, lw=0.8, label=f'{w}d window')
+        inwin = np.array([np.sqrt(sigma2[t-w:t].mean() * 252) * 100 for t in range(w, T)])
+        print(f"{w:>5} {((rv-inwin)/inwin).std(ddof=1)*100:>13.1f}% "
+              f"{1/np.sqrt(2*(w-1))*100:>11.1f}% {np.corrcoef(rv, true_vol[w:T])[0,1]:>14.3f}")
+    ```
 
-    ax.set_xlabel('Trading Day')
-    ax.set_ylabel('Annualized Vol (%)')
-    ax.set_title('Realized Volatility: Window Size Comparison')
-    ax.legend()
-    plt.tight_layout()
-    plt.show()
-realized_volatility_windows()
-```
+    출력:
 
-![Realized Volatility: Window Size Comparison](./img/return_estimation_128.png)
+    ```
+    참 변동성: 평균 32.0%  범위 18.7~55.2%  (무조건 35.5%)
+        창    잡음(창 평균 대비)  1/√(2(w-1))     당일 참값과의 상관
+       21          15.1%        15.8%          0.915
+       63           8.9%         9.0%          0.701
+      252           1.4%         4.5%         -0.036
+    ```
+
+    **(1)의 무조건 변동성 $35.5\%$가 확인된다.** 이 경로의 평균이 $32.0\%$로 그보다 조금 낮은데, $756$일은 반감기 $34$일의 $22$배에 지나지 않아 **무조건 평균을 재기에 짧은 구간**이기 때문이다.
+
+    **잡음 열이 (2)의 예측과 맞는다.** $21$일에서 $15.1\%$ 대 $15.8\%$, $63$일에서 $8.9\%$ 대 $9.0\%$다. $252$일 줄의 $1.4\%$는 예측 $4.5\%$보다 훨씬 작은데, $756$일 자료에서 $252$일 창은 $504$개뿐이고 그마저 거의 완전히 겹쳐 있어 **이 수치 자체가 표본오차를 제대로 재지 못한다.** 큰 쪽으로도 작은 쪽으로도 믿을 값이 아니므로 따로 읽지 않는 편이 낫다.
+
+    **지연의 대가는 마지막 열에 그대로 드러난다.** 오늘의 참 변동성과의 상관이 $21$일에서 $0.915$, $63$일에서 $0.701$, $252$일에서 $-0.036$이다. **$252$일 창은 오늘의 변동성에 대해 아무것도 말해 주지 않는다.** (2)에서 그 지연 $126$일이 반감기의 $3.7$배라고 적었으니, 충격이 $2^{3.7} = 13$배 식은 뒤의 정보를 보고 있는 셈이다.
+
+    그림이 같은 이야기를 한다. 파란 선($21$일)은 회색 선(참값)의 봉우리와 골을 거의 그대로 따라가되 들쭉날쭉하고, 빨간 선($63$일)은 매끄러운 대신 한 달쯤 늦게 따라온다. 초록 선($252$일)은 $27$–$36\%$ 사이에서 거의 평평해 참값이 $19\%$에서 $55\%$를 오가는 동안 **아무 반응도 하지 않는다.**
+
+    **그러므로 "매끄러운 쪽이 정확하다"는 직관은 틀렸다.** 초록 선이 가장 매끄럽지만 가장 쓸모없다. 잡음을 없앤 대가로 신호까지 없앴기 때문이고, 이것이 편향–분산 맞바꿈이 실무에 드러난 모습이다.
 
 !!! info "실무 지침"
     유일하게 "옳은" 구간은 없다. 실무자들은 단기 위험관리에는 21일(월간) 구간을, 전략적 자산배분에는 252일(연간) 구간을 흔히 쓴다. 더 정교한 접근(지수가중, GARCH 모형)은 이 맞바꿈을 더 명시적으로 다룬다.
@@ -224,37 +471,95 @@ realized_volatility_windows()
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 연율화 관례
+**보기 5.** <span class="diff easy" title="쉬움"></span> 연율화 관례. 일별 평균 수익률 $\mu_d = 0.03\%$, 일별 변동성 $\sigma_d = 1.2\%$를 연 단위로 옮긴다.
+
+**(1)** 평균에는 $252$를, 변동성에는 $\sqrt{252}$를 곱하는 까닭을 유도하고 세 연율화 값을 손으로 구하시오.
+
+**(2)** 수익률에 자기상관 $\rho$가 있으면 이 관례가 어떻게 어긋나는가. $\rho = \pm 0.05$에서 변동성이 몇 배 빗나가는지 적으시오.
 
 </div>
 
-```python
-def annualization_conventions():
-    """일별 값을 연 단위로 옮기는 관례를 한자리에 모은다.
+??? success "풀이"
 
-    평균은 252 를 곱하고 변동성은 sqrt(252) 를 곱한다. 서로 다른 수를 쓰는
-    까닭에 샤프비율에는 sqrt(252) 가 남는다.
-    """
-    mu_d = 0.0003     # 일별 평균 수익률
-    sigma_d = 0.012   # 일별 변동성
+    **(1) 해석적으로.** 연수익률을 일수익률의 합 $R_a = \sum_{t=1}^{252} r_t$로 보고, $r_t$가 i.i.d.라 하자. 기댓값은 **독립성 없이** 선형성만으로 더해지고
 
-    print(f"Daily: mu = {mu_d*100:.4f}%, sigma = {sigma_d*100:.4f}%")
-    print(f"Annualized (252 trading days):")
-    print(f"  mu_annual   = {mu_d*252*100:.2f}%")
-    print(f"  sigma_annual = {sigma_d*np.sqrt(252)*100:.2f}%")
-    print(f"  SR_annual   = {mu_d/sigma_d*np.sqrt(252):.3f}")
-annualization_conventions()
-```
+    $$
+    E[R_a] = 252\,\mu_d = 252 \times 0.0003 = 0.0756 = 7.56\%
+    $$
 
-출력:
+    분산은 **독립성을 써서** 더해진다.
 
-```
-Daily: mu = 0.0300%, sigma = 1.2000%
-Annualized (252 trading days):
-  mu_annual   = 7.56%
-  sigma_annual = 19.05%
-  SR_annual   = 0.397
-```
+    $$
+    \operatorname{Var}(R_a) = 252\,\sigma_d^2
+    \quad\Longrightarrow\quad
+    \sigma_a = \sqrt{252}\,\sigma_d = 15.87451 \times 0.012 = 0.190494 = 19.05\%
+    $$
+
+    **$252$와 $\sqrt{252}$가 갈리는 지점이 여기다.** 평균은 기간에 비례해 쌓이고 표준편차는 그 제곱근으로만 쌓인다. 샤프비율은 둘의 비이므로 남는 것이 $\sqrt{252}$다.
+
+    $$
+    \mathrm{SR}_a = \frac{252\,\mu_d}{\sqrt{252}\,\sigma_d} = \sqrt{252}\,\frac{\mu_d}{\sigma_d}
+    = 15.87451 \times \frac{0.0003}{0.012} = 15.87451 \times 0.025 = 0.39686
+    $$
+
+    **일간 샤프비율 $0.025$가 연간으로는 $0.397$이 된다.** 기간을 늘리면 샤프비율이 $\sqrt T$로 좋아 보인다는 것인데, 이것이 분포가 좋아져서가 아니라 **단위를 바꾼 것일 뿐**임을 잊으면 안 된다.
+
+    **(2) 자기상관이 있으면.** 분산의 가법성이 깨진다. 수익률이 AR(1) $\rho$를 따르면 [7.1절에서 유도한](../mean/consistency_convergence.md) 대로 합의 분산이
+
+    $$
+    \operatorname{Var}(R_a) \approx 252\,\sigma_d^2 \cdot \frac{1+\rho}{1-\rho}
+    \quad\Longrightarrow\quad
+    \sigma_a \approx \sqrt{252}\,\sigma_d\sqrt{\frac{1+\rho}{1-\rho}}
+    $$
+
+    이 되어 보정 배수 $\sqrt{(1+\rho)/(1-\rho)}$가 붙는다.
+
+    | $\rho$ | 배수 | $\sqrt{252}$ 관례의 어긋남 |
+    |---:|---:|:---|
+    | $+0.10$ | $1.1055$ | $10.6\%$ **과소**평가 |
+    | $+0.05$ | $1.0513$ | $5.1\%$ 과소평가 |
+    | $0$ | $1$ | 정확 |
+    | $-0.05$ | $0.9512$ | $4.9\%$ **과대**평가 |
+
+    **$\rho = 0.05$면 관례가 변동성을 $5\%$ 낮춰 잡는다.** 일별 수익률의 자기상관이 그 정도인 자산은 드물지 않고, 특히 유동성이 낮은 자산이나 평가가격을 쓰는 사모·부동산 자료에서는 $\rho$가 $0.2$를 넘기도 한다. 그런 자료에서 $\sqrt{252}$ 관례는 변동성을 심하게 낮춰 잡고, 그 결과 샤프비율은 거꾸로 부풀려진다.
+
+    **평균 쪽에는 이런 문제가 없다.** $E[R_a] = 252\mu_d$는 독립성을 전혀 쓰지 않았으므로 자기상관이 있어도 그대로 성립한다. **깨지는 것은 언제나 분산 쪽**이다.
+
+    코드로 확인한다.
+
+    ```python
+    def annualization_conventions():
+        """일별 값을 연 단위로 옮기는 관례를 한자리에 모은다.
+
+        평균은 252 를 곱하고 변동성은 sqrt(252) 를 곱한다. 서로 다른 수를 쓰는
+        까닭에 샤프비율에는 sqrt(252) 가 남는다.
+        """
+        mu_d = 0.0003     # 일별 평균 수익률
+        sigma_d = 0.012   # 일별 변동성
+
+        print(f"Daily: mu = {mu_d*100:.4f}%, sigma = {sigma_d*100:.4f}%")
+        print(f"Annualized (252 trading days):")
+        print(f"  mu_annual   = {mu_d*252*100:.2f}%")
+        print(f"  sigma_annual = {sigma_d*np.sqrt(252)*100:.2f}%")
+        print(f"  SR_annual   = {mu_d/sigma_d*np.sqrt(252):.3f}")
+    annualization_conventions()
+    ```
+
+    출력:
+
+    ```
+    Daily: mu = 0.0300%, sigma = 1.2000%
+    Annualized (252 trading days):
+      mu_annual   = 7.56%
+      sigma_annual = 19.05%
+      SR_annual   = 0.397
+    ```
+
+    **세 값이 (1)과 소수 둘째 자리까지 맞는다.** $7.56\%$, $19.05\%$, $0.397$이다.
+
+    눈여겨볼 것은 $\mu_a$와 $\sigma_a$의 **비**다. 일별로는 $0.03\%$ 대 $1.2\%$라 변동성이 평균의 $40$배인데, 연 단위로는 $7.56\%$ 대 $19.05\%$로 $2.5$배까지 줄었다. **기간을 늘리면 신호 대 잡음 비가 $\sqrt T$로 좋아진다**는 것을 숫자로 본 것이고, 보기 1에서 "필요한 햇수가 $(\sigma/\mu)^2$에 비례한다"고 적은 것과 같은 사실의 뒷면이다.
+
+    $\sqrt{252} = 15.87$이라는 수가 금융 코드 곳곳에 상수로 박혀 있다. 그 정체가 **"분산이 더해진다"는 한 줄**임을 기억해 두면, (2)에서 보았듯 그 한 줄이 성립하지 않는 자리에서 무엇이 틀어지는지도 함께 보인다.
 
 !!! warning "i.i.d. 가정"
     연율화 공식은 수익률이 i.i.d.라고 가정한다. 수익률의 자기상관(모멘텀이나 평균회귀)과 변동성 군집(GARCH 효과)은 단순한 $\sqrt{T}$ 축척 규칙을 무너뜨린다. 실무에서는 유용한 근사이지만 그 한계를 인식하고 써야 한다.

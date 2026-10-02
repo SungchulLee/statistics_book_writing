@@ -26,65 +26,139 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 코시와 정규의 표본평균 경로
+**보기 1.** <span class="diff easy" title="쉬움"></span> 코시와 정규의 표본평균 경로. 표준코시와 표준정규에서 누적평균 $\bar X_n$의 경로를 $n = 1$만까지 $20$개씩 그린다.
+
+**(1)** 코시 경로에서 $\bar X_n$이 한 걸음에 $\delta$ 이상 **뛰는 횟수**가 $n = 1$에서 $N$까지 평균 몇 번인지 추정하시오. 그 수가 $N \to \infty$에서 어떻게 되는가.
+
+**(2)** $\delta = 1$과 $\delta = 5$에 대해 (1)의 예측을 모의실험과 맞추고, 같은 수를 정규 쪽에서도 세시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** 한 걸음의 변화는 정확히
 
-def sample_mean_trajectories(dist, n_max=10_000, n_tries=20):
-    """누적 표본평균의 경로를 n_tries개 만든다.
+    $$
+    \bar X_n - \bar X_{n-1}
+    = \frac{X_n - \bar X_{n-1}}{n}
+    $$
 
-    코시분포는 평균이 존재하지 않으므로 큰수의 법칙이 성립하지 않는다.
-    경로가 수렴하지 않고 계속 튀는 모습을 정규분포와 나란히 놓고 본다.
-    """
-    trajectories = []
-    for _ in range(n_tries):
-        if dist == "cauchy":
-            data = np.random.standard_cauchy(n_max)
-        else:
-            data = np.random.standard_normal(n_max)
-        running_mean = np.cumsum(data) / np.arange(1, n_max + 1)
-        trajectories.append(running_mean)
-    return trajectories
+    이다. $n$이 크면 $\bar X_{n-1}$은 $O(1)$이고 $X_n$만 커질 수 있으므로, 걸음이 $\delta$ 이상이려면 대략 $|X_n| \ge n\delta$여야 한다. 코시의 꼬리는
 
-n_max = 10_000
-ns = np.arange(1, n_max + 1)
+    $$
+    P(|X| > t) = 1 - \frac{2}{\pi}\arctan t \;\sim\; \frac{2}{\pi t}
+    \qquad (t \to \infty)
+    $$
 
-cauchy_traj = sample_mean_trajectories("cauchy", n_max)
-normal_traj = sample_mean_trajectories("normal", n_max)
+    이므로 $n$번째 걸음이 큰 도약일 확률이 $\approx \dfrac{2}{\pi n \delta}$다. 기대 횟수는 이것을 더한 것이고,
 
-fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    $$
+    E[\#\{n \le N : |\Delta \bar X_n| \ge \delta\}]
+    \;\approx\; \sum_{n=1}^{N} \frac{2}{\pi n \delta}
+    \;\approx\; \frac{2}{\pi\delta}\ln N
+    $$
 
-ax = axes[0]
-for traj in cauchy_traj:
-    # [-50, 50]으로 잘라 낸다. 코시 경로는 수백, 수천까지 튀어 올라
-    # 그대로 그리면 나머지가 한 줄로 뭉개진다.
-    # **잘라 냈다는 것 자체가 코시분포의 성질을 말해 준다.**
-    clipped = np.clip(traj, -50, 50)
-    ax.semilogx(ns, clipped, lw=0.7, alpha=0.6)
-ax.axhline(0, color="red", linestyle="--", lw=2)
-ax.set_xlabel("n"); ax.set_ylabel("Sample mean")
-ax.set_title("Cauchy: Sample Mean Trajectories")
-ax.set_ylim(-50, 50)
+    이다. **조화급수라 발산한다.** $N \to \infty$에서 기대 횟수가 무한이므로, 아무리 큰 $\delta$를 잡아도 **크기 $\delta$ 이상의 도약이 영원히 되풀이된다.**
 
-ax = axes[1]
-for traj in normal_traj:
-    ax.semilogx(ns, traj, lw=0.7, alpha=0.6)
-ax.axhline(0, color="red", linestyle="--", lw=2)
-ax.set_xlabel("n"); ax.set_ylabel("Sample mean")
-ax.set_title("Normal: Sample Mean Trajectories")
-ax.set_ylim(-1, 1)
+    이것이 "수렴하지 않는다"의 가장 구체적인 모습이다. 수렴하는 수열이라면 어느 지점 뒤로는 크기 $\delta$의 걸음이 유한 번만 나와야 한다. 코시의 누적평균은 그렇지 않다. 다만 $\ln N$이 워낙 천천히 자라므로($N$을 $10$배 늘려야 $\ln N$이 $2.3$ 늘어난다) **도약이 드물어 보일 뿐이고, 드문 것과 없는 것은 다르다.**
 
-plt.tight_layout()
-plt.show()
-```
+    $N = 10^4$에서 수를 넣으면
 
-![Cauchy: Sample Mean Trajectories](./img/cauchy_lln_failure_27.png)
+    $$
+    \delta = 1:\ \frac{2}{\pi}\ln 10^4 = \frac{2 \times 9.2103}{\pi} = 5.86,
+    \qquad
+    \delta = 5:\ \frac{5.86}{5} = 1.17
+    $$
+
+    이다. 정규 쪽에서 같은 계산을 하면 $P(|X| \ge n) = 2\Phi(-n)$이 $n$에 대해 **지수보다도 빠르게** 작아져 합이 유한하고, 그나마 거의 전부가 $n = 1, 2, 3$에서 온다. 큰 $n$에서는 사실상 $0$이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+
+    def sample_mean_trajectories(dist, n_max=10_000, n_tries=20):
+        """누적 표본평균의 경로를 n_tries개 만든다.
+
+        코시분포는 평균이 존재하지 않으므로 큰수의 법칙이 성립하지 않는다.
+        경로가 수렴하지 않고 계속 튀는 모습을 정규분포와 나란히 놓고 본다.
+        """
+        trajectories = []
+        for _ in range(n_tries):
+            if dist == "cauchy":
+                data = np.random.standard_cauchy(n_max)
+            else:
+                data = np.random.standard_normal(n_max)
+            running_mean = np.cumsum(data) / np.arange(1, n_max + 1)
+            trajectories.append(running_mean)
+        return trajectories
+
+    n_max = 10_000
+    ns = np.arange(1, n_max + 1)
+
+    cauchy_traj = sample_mean_trajectories("cauchy", n_max)
+    normal_traj = sample_mean_trajectories("normal", n_max)
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+    ax = axes[0]
+    for traj in cauchy_traj:
+        # [-50, 50]으로 잘라 낸다. 코시 경로는 수백, 수천까지 튀어 올라
+        # 그대로 그리면 나머지가 한 줄로 뭉개진다.
+        # **잘라 냈다는 것 자체가 코시분포의 성질을 말해 준다.**
+        clipped = np.clip(traj, -50, 50)
+        ax.semilogx(ns, clipped, lw=0.7, alpha=0.6)
+    ax.axhline(0, color="red", linestyle="--", lw=2)
+    ax.set_xlabel("n"); ax.set_ylabel("Sample mean")
+    ax.set_title("Cauchy: Sample Mean Trajectories")
+    ax.set_ylim(-50, 50)
+
+    ax = axes[1]
+    for traj in normal_traj:
+        ax.semilogx(ns, traj, lw=0.7, alpha=0.6)
+    ax.axhline(0, color="red", linestyle="--", lw=2)
+    ax.set_xlabel("n"); ax.set_ylabel("Sample mean")
+    ax.set_title("Normal: Sample Mean Trajectories")
+    ax.set_ylim(-1, 1)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![Cauchy: Sample Mean Trajectories](./img/cauchy_lln_failure_27.png)
+
+    그림에서 코시 판을 $\pm 50$으로 잘라 냈다는 사실 자체가 이미 결론의 일부다. 실제로 이 $20$개 경로 가운데 $|\bar X_n|$이 $73.7$까지 올라간 것이 있다. **"수렴하는 수열"의 그림에는 눈금을 잘라 낼 일이 생기지 않는다.**
+
+    (1)의 도약 횟수를 직접 센다.
+
+    ```python
+    # (1) 의 예측: 크기 delta 이상의 도약이 N 걸음 동안 평균 (2/(pi*delta)) ln N 번.
+    C = np.array(cauchy_traj)
+    Nm = np.array(normal_traj)
+    print(f"코시 20경로의 |X-bar| 최댓값 = {np.abs(C).max():.1f}  (그림은 ±50 에서 잘렸다)")
+    for d in (1.0, 5.0):
+        jc = np.sum(np.abs(np.diff(C, axis=1)) >= d, axis=1)
+        jn = np.sum(np.abs(np.diff(Nm, axis=1)) >= d, axis=1)
+        print(f"크기>={d} 도약:  코시 경로당 {jc.mean():.2f}개  "
+              f"(이론 {2/(np.pi*d)*np.log(n_max):.2f})   정규 경로당 {jn.mean():.2f}개")
+    ```
+
+    출력:
+
+    ```
+    코시 20경로의 |X-bar| 최댓값 = 73.7  (그림은 ±50 에서 잘렸다)
+    크기>=1.0 도약:  코시 경로당 6.10개  (이론 5.86)   정규 경로당 0.25개
+    크기>=5.0 도약:  코시 경로당 1.00개  (이론 1.17)   정규 경로당 0.00개
+    ```
+
+    **예측이 맞는다.** $\delta = 1$에서 $6.10$ 대 $5.86$, $\delta = 5$에서 $1.00$ 대 $1.17$이다. 경로가 $20$개뿐이라 셈의 표준오차가 작지 않다. 포아송 어림으로 $\sqrt{5.86/20} = 0.54$와 $\sqrt{1.17/20} = 0.24$이므로 두 어긋남이 각각 $0.4$, $0.7$ 표준오차다.
+
+    정규 쪽은 $\delta = 1$에서 경로당 $0.25$개, $\delta = 5$에서 $0$개다. 그 $0.25$개마저 모두 $n$이 한 자리일 때 일어난 것이고(그때는 $|X_n| \ge n$이 어렵지 않다), **$n$이 조금만 커지면 정규 경로는 다시는 크게 뛰지 않는다.** 이것이 수렴의 모습이다.
+
+    **두 판의 세로 눈금을 견주는 것으로 정리된다.** 정규 판은 $\pm 1$이고 코시 판은 $\pm 50$인데, $n$이 $1$만에 이르렀을 때 정규 쪽 폭은 $1/\sqrt{10^4} = 0.01$로 줄어 있고 코시 쪽 폭은 처음 그대로다. **"느리게 좁아진다"와 "전혀 좁아지지 않는다"의 차이**이며, 다음 보기가 그것을 분포로 확인한다.
 
 !!! note "수렴과 비수렴"
     정규분포(오른쪽 그림)에서는 $n$이 커지면 20개 궤적이 모두 눈에 띄게 0으로 수렴한다. Cauchy(왼쪽 그림)에서는 궤적이 계속 불규칙하게 떠돈다 — $n$이 커진 뒤에도 이따금 나타나는 극단 관측값이 누적평균을 "초기화"해 버린다.
@@ -95,51 +169,123 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 표본크기를 키워도 좁아지지 않는 분포
+**보기 2.** <span class="diff easy" title="쉬움"></span> 표본크기를 키워도 좁아지지 않는 분포. $n = 100$, $1000$, $10^4$마다 코시와 정규에서 표본평균을 1만 개씩 만들어 히스토그램을 나란히 그린다.
+
+**(1)** 세 칸에서 코시 $\bar X_n$의 사분위수범위와 $P(|\bar X_n| > 1)$, $P(|\bar X_n| > 20)$을 **정확히** 적으시오. 정규 쪽 표준편차도 함께 적으시오.
+
+**(2)** 코시 쪽은 $\pm 20$으로 잘라 그렸고 가로축은 $\pm 5$로 잘랐다. **그림에 보이지 않는 자료가 얼마나 되는가.**
 
 </div>
 
-```python
-from scipy import stats
+??? success "풀이"
 
-def sample_mean_distributions(dist, n_vals, n_reps=10_000):
-    """표본크기별로 표본평균의 분포를 만든다.
+    **(1) 해석적으로.** 아래 본문이 특성함수로 보이듯 **모든 $n$에서** $\bar X_n \sim \text{Cauchy}(0,1)$이다. 표준코시의 분포함수가 $F(x) = \frac12 + \frac1\pi\arctan x$이므로
 
-    앞 그림이 한 경로가 시간에 따라 어떻게 움직이는지를 보였다면, 여기서는
-    같은 크기의 표본을 만 번 뽑아 표본평균이 어디에 흩어지는지를 본다.
-    """
-    results = {}
+    $$
+    F(x) = 0.75 \iff \arctan x = \frac{\pi}{4} \iff x = 1
+    $$
+
+    로 사분위수가 $\mp 1$, 곧 $\mathrm{IQR} = 2$다. 꼬리확률도 바로 나온다.
+
+    $$
+    P(|\bar X_n| > t) = 1 - \frac{2}{\pi}\arctan t
+    \;\Longrightarrow\;
+    P(|\bar X_n| > 1) = \tfrac12,
+    \quad
+    P(|\bar X_n| > 20) = 0.0318
+    $$
+
+    **$n$이 식 어디에도 들어오지 않는다.** 반면 정규는 $\bar X_n \sim N(0, 1/n)$이라 $\operatorname{sd} = 1/\sqrt n$으로
+
+    $$
+    n = 100:\ 0.1000,
+    \qquad
+    n = 1000:\ 0.0316,
+    \qquad
+    n = 10^4:\ 0.0100
+    $$
+
+    이다. **$n$을 $100$배 키우는 동안 한쪽은 열 배 좁아지고 다른 쪽은 그대로다.**
+
+    **(2) 보이지 않는 자료.** 코드가 두 번 자른다.
+
+    - `np.clip(..., -20, 20)`: $|\bar X_n| > 20$인 값이 경계에 쌓인다. (1)에서 $3.18\%$다.
+    - `ax.set_xlim(-5, 5)`: $|\bar X_n| > 5$인 값이 화면 밖으로 나간다. $1 - \frac2\pi\arctan 5 = 0.1257$이므로 **$12.6\%$**다.
+
+    곧 **코시 히스토그램은 자료의 여덟 개 중 하나를 그리지 않고 있다.** 정규 쪽에서 같은 자리 밖으로 나가는 자료는 $n = 100$에서도 $|z| > 50$에 해당해 사실상 $0$이다. **보이는 그림이 두 분포를 공평하게 다루고 있지 않다**는 점을 알고 보아야 한다.
+
+    모의실험으로 확인한다.
+
+    ```python
+    from scipy import stats
+
+    def sample_mean_distributions(dist, n_vals, n_reps=10_000):
+        """표본크기별로 표본평균의 분포를 만든다.
+
+        앞 그림이 한 경로가 시간에 따라 어떻게 움직이는지를 보였다면, 여기서는
+        같은 크기의 표본을 만 번 뽑아 표본평균이 어디에 흩어지는지를 본다.
+        """
+        results = {}
+        for n in n_vals:
+            if dist == "cauchy":
+                data = np.random.standard_cauchy((n_reps, n))
+            else:
+                data = np.random.standard_normal((n_reps, n))
+            results[n] = data.mean(axis=1)
+        return results
+
+    # n 을 100 배로 키워도 코시 쪽 히스토그램은 좁아지지 않는다.
+    # 코시 표본평균의 분포가 원래 분포와 똑같은 코시이기 때문이다.
+    # 표본을 늘리는 일이 아무 보탬이 되지 않는 드문 경우다.
+    n_vals = [100, 1000, 10_000]
+    cauchy_dists = sample_mean_distributions("cauchy", n_vals)
+    normal_dists = sample_mean_distributions("normal", n_vals)
+
+    fig, axes = plt.subplots(1, 3, figsize=(17, 4))
+    for col, n in enumerate(n_vals):
+        ax = axes[col]
+        c_means = np.clip(cauchy_dists[n], -20, 20)
+        n_means = normal_dists[n]
+        ax.hist(c_means, bins=80, density=True, alpha=0.6, color="coral", label="Cauchy")
+        ax.hist(n_means, bins=50, density=True, alpha=0.6, color="steelblue", label="Normal")
+        ax.set_title(f"Sample Mean Distribution (n = {n})")
+        ax.set_xlabel("Sample mean value")
+        ax.set_xlim(-5, 5)
+        ax.legend()
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![코시에서 대수의법칙의 실패](./img/cauchy_lln_failure_80.png)
+
+    ```python
+    # (1) 의 세 수가 n 과 무관한지, 정규 쪽은 1/sqrt(n) 으로 줄어드는지 잰다.
     for n in n_vals:
-        if dist == "cauchy":
-            data = np.random.standard_cauchy((n_reps, n))
-        else:
-            data = np.random.standard_normal((n_reps, n))
-        results[n] = data.mean(axis=1)
-    return results
+        c, m = cauchy_dists[n], normal_dists[n]
+        q1, q3 = np.percentile(c, [25, 75])
+        print(f"n={n:>6}  코시 IQR={q3-q1:.3f}  P(|.|>1)={np.mean(np.abs(c)>1):.4f}"
+              f"  P(|.|>20)={np.mean(np.abs(c)>20):.4f}  P(|.|>5)={np.mean(np.abs(c)>5):.4f}"
+              f"  |  정규 sd={m.std(ddof=1):.5f} (이론 {1/np.sqrt(n):.5f})")
+    print(f"이론 (코시, 모든 n): IQR=2.000  P(|.|>1)=0.5000  "
+          f"P(|.|>20)={1-2/np.pi*np.arctan(20):.4f}  P(|.|>5)={1-2/np.pi*np.arctan(5):.4f}")
+    ```
 
-# n 을 100 배로 키워도 코시 쪽 히스토그램은 좁아지지 않는다.
-# 코시 표본평균의 분포가 원래 분포와 똑같은 코시이기 때문이다.
-# 표본을 늘리는 일이 아무 보탬이 되지 않는 드문 경우다.
-n_vals = [100, 1000, 10_000]
-cauchy_dists = sample_mean_distributions("cauchy", n_vals)
-normal_dists = sample_mean_distributions("normal", n_vals)
+    출력:
 
-fig, axes = plt.subplots(1, 3, figsize=(17, 4))
-for col, n in enumerate(n_vals):
-    ax = axes[col]
-    c_means = np.clip(cauchy_dists[n], -20, 20)
-    n_means = normal_dists[n]
-    ax.hist(c_means, bins=80, density=True, alpha=0.6, color="coral", label="Cauchy")
-    ax.hist(n_means, bins=50, density=True, alpha=0.6, color="steelblue", label="Normal")
-    ax.set_title(f"Sample Mean Distribution (n = {n})")
-    ax.set_xlabel("Sample mean value")
-    ax.set_xlim(-5, 5)
-    ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    ```
+    n=   100  코시 IQR=1.984  P(|.|>1)=0.4983  P(|.|>20)=0.0317  P(|.|>5)=0.1225  |  정규 sd=0.10026 (이론 0.10000)
+    n=  1000  코시 IQR=2.074  P(|.|>1)=0.5108  P(|.|>20)=0.0326  P(|.|>5)=0.1260  |  정규 sd=0.03191 (이론 0.03162)
+    n= 10000  코시 IQR=1.970  P(|.|>1)=0.4970  P(|.|>20)=0.0310  P(|.|>5)=0.1269  |  정규 sd=0.01010 (이론 0.01000)
+    이론 (코시, 모든 n): IQR=2.000  P(|.|>1)=0.5000  P(|.|>20)=0.0318  P(|.|>5)=0.1257
+    ```
 
-![코시에서 대수의법칙의 실패](./img/cauchy_lln_failure_80.png)
+    **코시 네 열이 세 줄 내내 꼼짝도 하지 않는다.** IQR 이 $1.97$–$2.07$, $P(|\cdot|>1)$이 $0.497$–$0.511$, $P(|\cdot|>20)$이 $0.031$–$0.033$, $P(|\cdot|>5)$가 $0.123$–$0.127$이다. (1)이 적은 $2$, $0.5$, $0.0318$, $0.1257$ 둘레를 벗어나지 않는다. 1만 번에서 비율의 몬테카를로 표준오차가 $P = 0.5$에서 $0.005$, $P = 0.032$에서 $0.0018$이므로 모든 어긋남이 $2$ 표준오차 안이다.
+
+    **정규 쪽은 같은 세 줄에서 $0.1003 \to 0.0319 \to 0.0101$로 열 배 좁아졌고** 이론값 $0.1$, $0.0316$, $0.0100$과 셋째 자리까지 맞는다.
+
+    (2)에 대한 답도 마지막 열이 준다. $P(|\bar X_n| > 5)$가 $12.6\%$이므로 **코시 자료의 여덟 개 중 하나가 그림 밖에 있다.** 그런데도 그림 안에서 코시 히스토그램이 세 칸 모두 똑같아 보인다는 것이 요지이고, 사실 **그림 밖에 있는 $12.6\%$ 역시 세 칸에서 똑같다.**
+
+    정규 히스토그램이 칸마다 뾰족해지는 것과 견주어 보라. $n = 10^4$ 칸에서 정규 밀도는 $0$에서 $\sqrt{n}/\sqrt{2\pi} = 39.9$까지 치솟는데 코시 밀도는 $1/\pi = 0.318$ 그대로다. **봉우리 높이의 비가 $125$배**이며, 그래서 세 칸 모두 코시 쪽은 바닥에 깔린 넓은 띠로만 보인다.
 
 !!! warning "코시분포는 집중되지 않는다"
     $n = 10{,}000$에서 정규 표본평균의 분포는 0에 뾰족하게 모여들지만(표준편차 $= 0.01$), 코시 표본평균의 분포는 $n = 100$일 때와 사실상 똑같아 보인다. 코시 자료를 더 많이 평균해도 도움이 되지 않는다.
@@ -150,25 +296,88 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Q-Q 그림으로 보는 두꺼운 꼬리
+**보기 3.** <span class="diff easy" title="쉬움"></span> Q-Q 그림으로 보는 두꺼운 꼬리. 표준코시에서 $1000$개를 뽑아 정규 Q-Q 그림을 그린다.
+
+**(1)** 이 그림의 **세로 눈금이 얼마까지 벌어질지** 미리 예측하시오. 가장 큰 관측값이 어디쯤 놓이는가.
+
+**(2)** 그림을 그려 (1)을 확인하고, **이 그림이 가리는 것**이 무엇인지 적으시오.
 
 </div>
 
-```python
-# Q-Q 그림은 자료의 분위수를 정규분포의 분위수와 짝지어 찍는다.
-# 정규자료라면 점들이 직선에 놓인다. 코시 자료는 양끝이 위아래로 크게
-# 휘어 올라가는데, 그 휘어짐이 곧 두꺼운 꼬리의 눈에 보이는 모습이다.
-cauchy_sample = np.random.standard_cauchy(1000)
-fig, ax = plt.subplots(figsize=(6, 6))
-stats.probplot(cauchy_sample, dist="norm", plot=ax)
-ax.set_title("Cauchy vs Normal Q-Q Plot")
-plt.tight_layout()
-plt.show()
-```
+??? success "풀이"
 
-![Cauchy vs Normal Q-Q Plot](./img/cauchy_lln_failure_119.png)
+    **(1) 해석적으로.** Q-Q 그림의 세로 눈금은 자료의 최솟값과 최댓값이 정한다. $n$개 표본의 최댓값 $X_{(n)}$은 분포함수가 $F(x)^n$이므로 그 **중앙값**이
 
-특유의 S자(또는 하키스틱) 모양은 코시가 정규분포보다 훨씬 극단적인 값을 만들어낸다는 것을 보여준다.
+    $$
+    F(x)^n = \tfrac12
+    \quad\Longleftrightarrow\quad
+    x = F^{-1}\!\left(2^{-1/n}\right)
+    $$
+
+    에서 결정된다. $n = 1000$이면 $2^{-1/1000} = 0.999307$이고, 표준코시의 분위수함수 $F^{-1}(p) = \tan\!\big(\pi(p - \tfrac12)\big)$에서
+
+    $$
+    \max \text{의 중앙값} = \tan\!\big(\pi \times 0.499307\big) = 459
+    $$
+
+    이다. 정규자료였다면 같은 계산이 $\Phi^{-1}(0.999307) = 3.20$을 준다. **세로 눈금이 수백까지 벌어지리라 예상해야 하고, 정규라면 $\pm 3.5$면 넉넉하다.**
+
+    가로 눈금은 그대로다. Q-Q 그림의 가로축은 언제나 정규 분위수이므로 $n = 1000$에서 $\pm 3.2$ 남짓이다. 두 축의 눈금 차이가 $100$배를 넘는다는 것이 이 그림의 모양을 거의 다 정한다. 같은 자리의 분위수를 직접 견주면
+
+    $$
+    p = 1 - \tfrac{1}{1001} = 0.99900 \ \text{에서}\quad
+    \frac{F^{-1}_{\text{코시}}(p)}{\Phi^{-1}(p)} = \frac{318.6}{3.09} = 103
+    $$
+
+    이다. **가장 바깥 점 하나가 정규 자료였을 자리의 $100$배 밖에 찍힌다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    # Q-Q 그림은 자료의 분위수를 정규분포의 분위수와 짝지어 찍는다.
+    # 정규자료라면 점들이 직선에 놓인다. 코시 자료는 양끝이 위아래로 크게
+    # 휘어 올라가는데, 그 휘어짐이 곧 두꺼운 꼬리의 눈에 보이는 모습이다.
+    cauchy_sample = np.random.standard_cauchy(1000)
+    fig, ax = plt.subplots(figsize=(6, 6))
+    stats.probplot(cauchy_sample, dist="norm", plot=ax)
+    ax.set_title("Cauchy vs Normal Q-Q Plot")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![Cauchy vs Normal Q-Q Plot](./img/cauchy_lln_failure_119.png)
+
+    ```python
+    # (1) 의 예측과 맞춰 본다. 그림의 세로 범위와 '몸통'이 차지하는 몫을 잰다.
+    print(f"표본 1000개:  최솟값 {cauchy_sample.min():.1f}   최댓값 {cauchy_sample.max():.1f}")
+    print(f"max 의 중앙값 예측: 코시 {stats.cauchy.ppf(0.5**(1/1000)):.0f}, "
+          f"정규라면 {stats.norm.ppf(0.5**(1/1000)):.2f}")
+    half = max(abs(cauchy_sample.min()), abs(cauchy_sample.max()))
+    print(f"가운데 99% 가 들어가는 구간 = ±{stats.cauchy.ppf(0.995):.1f}"
+          f"  ->  세로 눈금 ±{half:.0f} 의 {stats.cauchy.ppf(0.995)/half*100:.1f}%")
+    print(f"가운데 99% 안에 든 점의 개수 = {np.sum(np.abs(cauchy_sample) <= stats.cauchy.ppf(0.995))}")
+    ```
+
+    출력:
+
+    ```
+    표본 1000개:  최솟값 -1350.7   최댓값 897.9
+    max 의 중앙값 예측: 코시 459, 정규라면 3.20
+    가운데 99% 가 들어가는 구간 = ±63.7  ->  세로 눈금 ±1351 의 4.7%
+    가운데 99% 안에 든 점의 개수 = 989
+    ```
+
+    **(1)의 예측이 자릿수로 맞는다.** 최댓값 $897.9$와 최솟값 $-1350.7$이 예측한 "수백" 규모이고, 중앙값 $459$를 중심으로 $2$–$3$배 안에 있다. 최댓값의 분포 자체가 코시라 그 정도 흔들림은 당연하다. 정규자료였다면 $3.2$ 언저리였을 자리다.
+
+    **(2)의 둘째 물음 — 이 그림이 가리는 것.** 마지막 두 줄이 답이다. 자료의 가운데 $99\%$, 곧 $1000$점 가운데 $989$점이 $\pm 63.7$ 안에 들어 있는데, 그 구간은 세로 눈금 $\pm 1351$의 **$4.7\%$**에 지나지 않는다. 그림에서 그 $989$점은 $0$ 근처에 **납작한 띠 하나**로 뭉개져 있고, 눈에 보이는 것은 양끝의 점 여남은 개뿐이다.
+
+    그러므로 이 Q-Q 그림에서 **읽을 수 있는 것과 읽을 수 없는 것**을 갈라야 한다.
+
+    - **읽을 수 있는 것.** 꼬리가 정규보다 비교할 수 없이 두껍다. 양끝 점들이 붉은 기준선에서 위아래로 수백만큼 떨어져 있고, 그 어긋남이 **바깥으로 갈수록 급격히 커진다.** 두꺼운 꼬리의 전형적인 모습이다.
+    - **읽을 수 없는 것.** 분포의 중심이 어디인지, 몸통이 대칭인지, 중앙값 둘레의 밀도가 어떤 모양인지는 **전혀 보이지 않는다.** 그 정보는 모두 $4.7\%$ 띠 안에 눌려 있다.
+    - **덧붙여 오해하기 쉬운 것.** 그림에서 아래쪽 점들이 위쪽보다 멀리 나가 있어 왼쪽으로 치우친 분포처럼 보인다. 그러나 표준코시는 **완전히 대칭**이고, 이것은 양끝 점 몇 개의 우연일 뿐이다. 꼬리가 두꺼운 분포에서 **극단 몇 점으로 비대칭을 판단하면 안 된다.**
+
+    몸통을 보려면 세로축을 잘라 다시 그리거나, 로그 눈금을 쓰거나, 아예 코시 분위수를 가로축에 놓아야 한다. **Q-Q 그림은 꼬리를 보여 주려고 몸통을 내주는 도구**이고, 그 거래를 알고 써야 한다.
 
 ## 평균이 실패하는 이유: 특성함수를 통한 증명
 
