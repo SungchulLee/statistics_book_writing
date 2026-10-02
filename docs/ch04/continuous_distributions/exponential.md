@@ -30,17 +30,36 @@ $$
 
 </div>
 
-### CDF
+<div class="thmbox" markdown>
+
+### 정리 1. 누적분포함수와 생존함수 { .thm }
+
+$X \sim \text{Exp}(\lambda)$이면 $x \geq 0$에 대해
 
 $$
-F(x) = 1 - e^{-\lambda x}, \quad x \geq 0
+F(x) = 1 - e^{-\lambda x}, \qquad S(x) = P(X > x) = e^{-\lambda x}
 $$
 
-### 생존함수
+이다. $x < 0$이면 $F(x) = 0$, $S(x) = 1$이다.
 
-$$
-S(x) = P(X > x) = e^{-\lambda x}
-$$
+</div>
+
+??? proof "증명"
+
+    밀도를 $0$부터 $x$까지 적분한다.
+
+    $$
+    F(x) = \int_0^x \lambda e^{-\lambda t}\,dt = \left[-e^{-\lambda t}\right]_0^x = 1 - e^{-\lambda x}
+    $$
+
+    생존함수는 그 여사건의 확률이므로
+
+    $$
+    S(x) = P(X > x) = 1 - F(x) = e^{-\lambda x} \qquad \square
+    $$
+
+지수분포는 **생존함수가 더 간단한** 드문 분포다. 뒤에서 무기억성을 따질 때도
+$F$ 가 아니라 $S$ 를 들고 계산한다.
 
 ---
 
@@ -48,7 +67,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 1. 지수분포의 평균·분산·중앙값 { .thm }
+### 정리 2. 지수분포의 평균·분산·중앙값 { .thm }
 
 $X \sim \text{Exp}(\lambda)$이면
 
@@ -99,7 +118,7 @@ $\text{평균} = \text{표준편차} = 1/\lambda$라는 점에 주목하라. 지
 
 <div class="thmbox" markdown>
 
-### 정리 2. 지수분포의 무기억성 { .thm }
+### 정리 3. 지수분포의 무기억성 { .thm }
 
 $X \sim \text{Exp}(\lambda)$이면 모든 $s, t \geq 0$에 대해
 
@@ -176,7 +195,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 3. 최솟값도 지수분포다 { .thm }
+### 정리 4. 최솟값도 지수분포다 { .thm }
 
 $X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이면
 
