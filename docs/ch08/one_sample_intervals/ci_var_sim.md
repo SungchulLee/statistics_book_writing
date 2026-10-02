@@ -40,51 +40,114 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 분산 신뢰구간 모의실험
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산 신뢰구간 모의실험. $n = 12$, $\sigma = 2$인 정규모집단에서 $\sigma^2$의 $95\%$ 카이제곱 구간을 $100$개 만든다.
+
+**(1)** 이 모의실험으로 **포함률**을 재는 것이 뜻이 있는가. 뜻이 없다면 무엇을 재야 하는가. 구간의 **기대 폭**을 닫힌 꼴로 구하고 $n = 12$, $\sigma^2 = 4$에서 계산하시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import chi2
+??? success "풀이"
 
-np.random.seed(42)          # 아래 출력과 그림을 재현하려면 고정한다
+    **(1) 포함률은 잴 것이 못 된다.** 추축량 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ 때문에 포함률은 **정확히** $0.95$이고 이것은 $n$과 $\mu$, $\sigma$에 전혀 의존하지 않는다. 모의실험이 $0.95$를 재현해도 새로 알게 되는 것이 없고, $0.93$이 나오면 그것은 되풀이 $100$회의 몬테카를로 잡음일 뿐이다.
 
-n_simulations = 100
-n_samples = 12
-mu, sigma = 0.0, 2.0
-alpha = 0.05
+    **잴 것은 폭이다.** 포함률이 고정되어 있으므로 이 구간의 쓸모를 가르는 것은 **얼마나 좁은가** 하나뿐이다. 폭은
 
-true_var = sigma**2
-df = n_samples - 1
-# 임계값은 표본과 무관하므로 반복문 밖에서 한 번만 구한다.
-# 자유도만으로 정해지는 값이기 때문이다.
-chi2_lo = chi2.ppf(alpha / 2, df=df)
-chi2_hi = chi2.ppf(1 - alpha / 2, df=df)
+    $$
+    \text{폭} = \frac{(n-1)S^2}{\ell} - \frac{(n-1)S^2}{u}
+    = (n-1)S^2\left(\frac{1}{\ell} - \frac{1}{u}\right)
+    $$
 
-lowers = np.empty(n_simulations)
-uppers = np.empty(n_simulations)
-centers = np.empty(n_simulations)
+    로 $S^2$에 **정비례**한다($\ell = \chi^2_{0.025,\,n-1}$, $u = \chi^2_{0.975,\,n-1}$). $S^2$이 $\sigma^2$의 **불편추정량**이므로 $E[S^2] = \sigma^2$이고, 따라서 기대 폭은 닫힌 꼴로 나온다.
 
-for i in range(n_simulations):
-    x = np.random.normal(loc=mu, scale=sigma, size=n_samples)
-    s2 = x.var(ddof=1)
-    lowers[i] = df * s2 / chi2_hi
-    uppers[i] = df * s2 / chi2_lo
-    centers[i] = s2
+    $$
+    E[\text{폭}] = (n-1)\sigma^2\left(\frac{1}{\ell} - \frac{1}{u}\right)
+    $$
 
-covered = (lowers <= true_var) & (true_var <= uppers)
-n_fail = int((~covered).sum())
-coverage_pct = 100.0 * covered.mean()
-print(f"Coverage: {coverage_pct:.1f}%, Failures: {n_fail}")
-```
+    $n = 12$이면 $\ell = 3.81575$, $u = 21.92005$ 이므로
 
-출력:
+    $$
+    E[\text{폭}] = 11 \times 4 \times \left(\frac{1}{3.81575} - \frac{1}{21.92005}\right)
+    = 44 \times 0.2164514 = 9.52386
+    $$
 
-```
-Coverage: 95.0%, Failures: 5
-```
+    이다. **추정하려는 값 $\sigma^2 = 4$의 $2.38$배**다. 폭의 표준편차도 같은 식에서 나온다. $\operatorname{SD}(S^2) = \sigma^2\sqrt{2/(n-1)}$ 이므로
+
+    $$
+    \operatorname{SD}(\text{폭}) = 9.52386 \times \sqrt{\frac{2}{11}} = 4.06091
+    $$
+
+    로, 폭 자체가 크게 흔들린다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import chi2
+
+    np.random.seed(42)          # 아래 출력과 그림을 재현하려면 고정한다
+
+    n_simulations = 100
+    n_samples = 12
+    mu, sigma = 0.0, 2.0
+    alpha = 0.05
+
+    true_var = sigma**2
+    df = n_samples - 1
+    # 임계값은 표본과 무관하므로 반복문 밖에서 한 번만 구한다.
+    # 자유도만으로 정해지는 값이기 때문이다.
+    chi2_lo = chi2.ppf(alpha / 2, df=df)
+    chi2_hi = chi2.ppf(1 - alpha / 2, df=df)
+
+    lowers = np.empty(n_simulations)
+    uppers = np.empty(n_simulations)
+    centers = np.empty(n_simulations)
+
+    for i in range(n_simulations):
+        x = np.random.normal(loc=mu, scale=sigma, size=n_samples)
+        s2 = x.var(ddof=1)
+        lowers[i] = df * s2 / chi2_hi
+        uppers[i] = df * s2 / chi2_lo
+        centers[i] = s2
+
+    covered = (lowers <= true_var) & (true_var <= uppers)
+    n_fail = int((~covered).sum())
+    coverage_pct = 100.0 * covered.mean()
+    print(f"Coverage: {coverage_pct:.1f}%, Failures: {n_fail}")
+
+    # (1) 잴 것은 폭이다. 기대 폭은 E[S^2] = sigma^2 에서 닫힌 꼴로 나온다.
+    widths = uppers - lowers
+    exp_w = df * true_var * (1 / chi2_lo - 1 / chi2_hi)
+    print(f"기대 폭 (이론)  {exp_w:.5f}    표준편차 (이론) {exp_w * np.sqrt(2 / df):.5f}")
+    print(f"평균 폭 (모의)  {widths.mean():.5f}    표준편차 (모의) {widths.std(ddof=1):.5f}")
+    print(f"폭 최소 {widths.min():.4f}  중앙값 {np.median(widths):.4f}  최대 {widths.max():.4f}")
+    print(f"참값 4 와 8 을 동시에 담는 구간 {int(((lowers <= 4) & (8 <= uppers)).sum())} 개")
+    print(f"참값 2 와 8 을 동시에 담는 구간 {int(((lowers <= 2) & (8 <= uppers)).sum())} 개")
+    ```
+
+    출력:
+
+    ```
+    Coverage: 95.0%, Failures: 5
+    기대 폭 (이론)  9.52386    표준편차 (이론) 4.06099
+    평균 폭 (모의)  9.35875    표준편차 (모의) 4.08747
+    폭 최소 2.5049  중앙값 9.0140  최대 24.7756
+    참값 4 와 8 을 동시에 담는 구간 69 개
+    참값 2 와 8 을 동시에 담는 구간 26 개
+    ```
+
+    **기대 폭이 맞는다.** 이론값 $9.52386$ 과 모의 평균 $9.35875$ 의 차이는 $0.165$인데, 폭의 표준편차가 $4.06$ 이므로 $100$개 평균의 몬테카를로 표준오차는 $4.06/\sqrt{100} = 0.406$ 이다. **$0.41$ 표준오차 안**이다. 폭의 표준편차도 이론 $4.06099$ 대 모의 $4.08747$ 로 맞는다.
+
+    **포함률은 $95.0\%$가 나왔지만 이것은 확인이 아니다.** (1)에서 말한 대로 참값이 $0.95$임을 이미 알고 있고, $100$회의 표준오차가 $0.0218$ 이라 $93$개나 $97$개가 나왔어도 똑같이 "맞는다"고 했을 것이다.
+
+    **폭이 말해 주는 것이 훨씬 아프다.** 평균 폭 $9.36$ 은 추정하려는 $\sigma^2 = 4$ 의 **$2.3$배**이고, 가장 넓은 구간은 $24.78$ 로 참값의 여섯 배가 넘는다. 구체적으로 보면
+
+    - $100$개 중 **$69$개가 $4$와 $8$을 동시에 담는다.** 곧 열에 일곱은 "분산이 두 배인가"조차 가르지 못한다.
+    - $100$개 중 **$26$개가 $2$와 $8$을 동시에 담는다.** 넷에 하나는 **네 배** 차이도 가르지 못한다.
+
+    **포함률이 정확히 $0.95$라는 것과 구간이 쓸모 있다는 것은 전혀 다른 말이다.** $n = 12$로 분산을 추정하는 일은 이 정도로 막연하며, 그 사실은 포함률이 아니라 폭에만 나타난다.
 
 $n = 12$밖에 안 되지만 포함확률이 명목값과 정확히 맞는다. 근사가 아니라 정확한 분포 결과이기 때문이다. 단, 이것은 자료가 **정규**일 때의 이야기다(연습문제 3 참조).
 
@@ -92,29 +155,70 @@ $n = 12$밖에 안 되지만 포함확률이 명목값과 정확히 맞는다. �
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에. 앞 보기의 구간 $100$개를 가로선 하나씩으로 그리고, 각 선 위에 그 표본의 $s^2$을 점으로 찍는다.
+
+**(1)** 그림을 그리고, 점이 선의 가운데에 있지 **않은** 까닭을 수와 함께 말하시오. 평균의 $t$-구간 그림과 무엇이 다른가.
+
+**(2)** 이 그림이 $\sigma$ 척도에서는 어떻게 보이겠는가. 척도를 바꾸면 비대칭이 사라지는가.
 
 </div>
 
-```python
-# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
-# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
-# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
-fig, ax = plt.subplots(figsize=(12, 12))
-for i in range(n_simulations):
-    color = "k" if covered[i] else "r"
-    ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
-    ax.plot(centers[i], i, marker="o", ms=3, color=color)
+??? success "풀이"
 
-ax.axvline(true_var, linestyle="--", linewidth=1.5, color="r")
-ax.set_title(f"{n_simulations} Chi-square Variance CIs | n={n_samples}, CL=95%")
-ax.set_yticks([])
-ax.set_xlabel("Variance")
-plt.tight_layout()
-plt.show()
-```
+    **(1) 그림.**
 
-![100 Chi-square Variance CIs | n=12, CL=95%](./img/ci_var_sim_81.png)
+    ```python
+    # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+    # 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+    # 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
+    fig, ax = plt.subplots(figsize=(12, 12))
+    for i in range(n_simulations):
+        color = "k" if covered[i] else "r"
+        ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
+        ax.plot(centers[i], i, marker="o", ms=3, color=color)
+
+    ax.axvline(true_var, linestyle="--", linewidth=1.5, color="r")
+    ax.set_title(f"{n_simulations} Chi-square Variance CIs | n={n_samples}, CL=95%")
+    ax.set_yticks([])
+    ax.set_xlabel("Variance")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![100 Chi-square Variance CIs | n=12, CL=95%](./img/ci_var_sim_81.png)
+
+    **(1) 점이 왼쪽에 치우친다.** 점은 $s^2$이고 구간의 두 끝은 $s^2$에 각각 $(n-1)/u$와 $(n-1)/\ell$을 곱한 값이다. $n = 12$에서 그 두 배율이
+
+    $$
+    \frac{n-1}{u} = \frac{11}{21.92005} = 0.50182,
+    \qquad
+    \frac{n-1}{\ell} = \frac{11}{3.81575} = 2.88279
+    $$
+
+    이다. 점에서 왼쪽 끝까지는 $s^2$의 $1 - 0.50182 = 0.49818$배, 오른쪽 끝까지는 $2.88279 - 1 = 1.88279$배다. **오른쪽이 $3.78$배 멀다.** 어느 표본에서든 같은 비이므로 $100$개 선이 모두 똑같이 치우쳐 있다.
+
+    까닭은 $\chi^2_{11}$이 오른쪽으로 늘어져 있다는 것 하나다. $S^2$이 참값보다 **크게** 나오는 쪽의 폭이 넓으므로, 그것을 되돌려 $\sigma^2$을 가두려면 오른쪽에 자리를 더 내주어야 한다.
+
+    **평균의 $t$-구간 그림과 두 가지가 다르다.**
+
+    | | 평균의 $t$-구간 | 분산의 카이제곱 구간 |
+    |---|---|---|
+    | 점의 위치 | 언제나 **정확히 가운데** | 왼쪽으로 치우침(오른쪽이 $3.78$배 멀다) |
+    | 중심과 폭 | **독립**($\bar X \perp S$) | 완전히 묶임(둘 다 $s^2$이 정한다) |
+
+    둘째 줄이 그림에서 눈에 띄는 모습이다. 오른쪽으로 멀리 간 선은 **반드시 길고**, 왼쪽에 몰린 선은 **반드시 짧다.** 평균의 그림에서는 길고 짧은 선이 참값 양쪽에 고르게 섞여 있었다.
+
+    **(2) $\sigma$ 척도에서는 비대칭이 줄되 사라지지 않는다.** 양 끝에 제곱근을 취하면 배율도 제곱근이 되어
+
+    $$
+    \sqrt{0.50182} = 0.70840,
+    \qquad
+    \sqrt{2.88279} = 1.69788
+    $$
+
+    이다. 점($s$)에서 왼쪽까지가 $s$의 $0.29160$배, 오른쪽까지가 $0.69788$배로 **오른쪽이 $2.39$배 멀다.** $\sigma^2$ 척도의 $3.78$배보다 완화되었지만 여전히 $1$이 아니다.
+
+    **제곱근이 비대칭을 줄이는 것은 로그가 아니기 때문이다.** 배율의 비는 $\sigma^2$ 척도에서 $2.88279/0.50182 = 5.745$, $\sigma$ 척도에서 그 제곱근인 $2.397$ 이다. 어떤 거듭제곱을 취해도 이 비는 $1$이 되지 않고 $1$에 가까워질 뿐이다. **비대칭은 척도의 문제가 아니라 $\chi^2_{11}$ 자체가 치우쳐 있다는 사실의 문제다.** $n$을 키워 $\chi^2_{n-1}$이 대칭에 가까워져야 비로소 사라진다.
 
 각 구간의 점이 $s^2$이다. 점이 구간 한가운데가 아니라 왼쪽에 치우쳐 있다는 것이 이 구간의 특징이다. 평균의 $t$-구간에서는 점이 언제나 정확히 가운데였다.
 

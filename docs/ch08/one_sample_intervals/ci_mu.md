@@ -47,37 +47,89 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 z 신뢰구간 계산
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 $z$ 신뢰구간 계산. 크기 $n = 40$인 확률표본에서 $\bar x = 85$를 얻었고 모표준편차가 $\sigma = 12$로 알려져 있다.
+
+**(1)** $\mu$의 $95\%$ 신뢰구간을 구하시오. 임계값으로 $z_{0.95}$가 아니라 $z_{0.975}$를 쓰는 까닭과, 표준오차를 $\sigma$가 아니라 $\sigma/\sqrt n$으로 쓰는 까닭을 밝히시오.
+
+**(2)** 같은 오차한계를 **절반**으로 줄이려면 $n$을 얼마로 해야 하는가. 코드로 (1)과 (2)를 확인하시오.
 
 </div>
 
-```python
-import scipy.stats as stats
-import numpy as np
+??? success "풀이"
 
-# 주어진 자료
-n = 40
-sample_mean = 85
-sigma = 12          # 알고 있는 모표준편차
-confidence_level = 0.95
+    **(1) 구간.** $\alpha = 0.05$이므로 $z_{\alpha/2} = z_{0.025} = 1.95996$이다. 표준오차와 오차한계는
 
-# 임계값. 0.95가 아니라 1 - 0.05/2 = 0.975를 넣는다.
-# 양쪽 꼬리에 alpha/2씩 나눠 주기 때문이다.
-z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
+    $$
+    \text{SE} = \frac{\sigma}{\sqrt n} = \frac{12}{\sqrt{40}} = 1.89737,
+    \qquad
+    \text{MOE} = 1.95996 \times 1.89737 = 3.71877
+    $$
 
-# 표준오차는 자료의 산포가 아니라 **표본평균**의 산포다. sqrt(n)으로 나눈다.
-standard_error = sigma / np.sqrt(n)
-margin_of_error = z_critical * standard_error
+    이고 구간은
 
-confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
-print(f"{confidence_interval = }")
-```
+    $$
+    85 \pm 3.71877 = (81.2812,\ 88.7188)
+    $$
 
-출력:
+    이다.
 
-```
-confidence_interval = (81.28122980617263, 88.71877019382737)
-```
+    **왜 $0.975$ 분위수인가.** 구하려는 것은 $P(-c \le Z \le c) = 0.95$를 만족하는 $c$다. 남는 확률 $0.05$가 **양쪽 꼬리에 절반씩** 놓이므로 위쪽 꼬리가 $0.025$이고, 따라서 $c$는 누적확률 $1 - 0.025 = 0.975$인 자리다. `norm.ppf(0.95) = 1.645`를 쓰면 한쪽 꼬리만 $5\%$로 둔 것이라 **단측** $95\%$ 구간이 되고, 양측으로 읽으면 실제 신뢰수준이 $90\%$로 떨어진다. 이것이 신뢰구간 코드에서 가장 흔한 한 줄 오류다.
+
+    **왜 $\sqrt n$으로 나누는가.** 구간이 재는 것은 관측값 하나의 산포가 아니라 **$\bar X$의 산포**다. 독립인 관측값에서 $\operatorname{Var}(\bar X) = \sigma^2/n$이므로 $\text{SD}(\bar X) = \sigma/\sqrt n$이다. $\sigma = 12$를 그대로 쓰면 구간이 $\sqrt{40} = 6.32$배 넓어진다.
+
+    **(2) 오차한계는 $1/\sqrt n$에 비례한다.** $\text{MOE}(n) = z\sigma/\sqrt n$이므로
+
+    $$
+    \frac{\text{MOE}(n')}{\text{MOE}(n)} = \sqrt{\frac{n}{n'}} = \frac12
+    \;\Longrightarrow\; n' = 4n = 160
+    $$
+
+    이다. **절반으로 줄이려면 네 배가 든다.** 자료 수집 비용이 $n$에 비례한다면 정밀도 한 자리를 더 얻는 값이 네 배라는 뜻이다.
+
+    **확인.**
+
+    ```python
+    import scipy.stats as stats
+    import numpy as np
+
+    # 주어진 자료
+    n = 40
+    sample_mean = 85
+    sigma = 12          # 알고 있는 모표준편차
+    confidence_level = 0.95
+
+    # 임계값. 0.95가 아니라 1 - 0.05/2 = 0.975를 넣는다.
+    # 양쪽 꼬리에 alpha/2씩 나눠 주기 때문이다.
+    z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
+
+    # 표준오차는 자료의 산포가 아니라 **표본평균**의 산포다. sqrt(n)으로 나눈다.
+    standard_error = sigma / np.sqrt(n)
+    margin_of_error = z_critical * standard_error
+
+    confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
+    print(f"{z_critical = :.5f}")
+    print(f"{standard_error = :.5f}, {margin_of_error = :.5f}")
+    print(f"{confidence_interval = }")
+
+    # (2) 오차한계를 절반으로 줄이려면 n 을 네 배로 한다.
+    for m in (40, 160):
+        moe = z_critical * sigma / np.sqrt(m)
+        print(f"n = {m:>4}:  MOE = {moe:.5f}")
+    ```
+
+    출력:
+
+    ```
+    z_critical = 1.95996
+    standard_error = 1.89737, margin_of_error = 3.71877
+    confidence_interval = (81.28122980617263, 88.71877019382737)
+    n =   40:  MOE = 3.71877
+    n =  160:  MOE = 1.85939
+    ```
+
+    **손 계산과 맞는다.** $z = 1.95996$, $\text{SE} = 1.89737$, $\text{MOE} = 3.71877$, 구간 $(81.2812,\ 88.7188)$ 이 모두 (1)과 같다. $n = 160$의 오차한계 $1.85939$ 는 $3.71877/2 = 1.85939$ 로 **정확히 절반**이다.
+
+    임계값을 $1.96$ 으로 반올림해 써도 답은 거의 같다. $1.96 \times 1.89737 = 3.71884$ 이고 구간이 $(81.2812,\ 88.7188)$ 로, 반올림의 영향이 소수 넷째 자리에서야 나타난다.
 
 ---
 
@@ -116,37 +168,95 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 t 신뢰구간 계산
+**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 $t$ 신뢰구간 계산. 크기 $n = 25$인 확률표본에서 $\bar x = 50$, $s = 8$을 얻었다. 모표준편차는 모른다.
+
+**(1)** $\mu$의 $95\%$ $t$-구간을 구하시오. 자유도가 $n$이 아니라 $n - 1$인 까닭을 밝히시오.
+
+**(2)** $\sigma$를 모른다는 사실의 **값**을 재시오. 곧 같은 $\bar x$와 같은 산포에 $z$ 임계값을 썼다면 구간의 폭이 몇 배였겠는지 구하고, 그 비가 $n$에 따라 어떻게 변하는지 $n = 5,\ 10,\ 25,\ 100$에서 계산하시오.
 
 </div>
 
-```python
-import scipy.stats as stats
-import numpy as np
+??? success "풀이"
 
-# 주어진 자료
-n = 25
-sample_mean = 50
-sample_std = 8      # 모표준편차가 아니라 자료에서 얻은 표본표준편차
-confidence_level = 0.95
+    **(1) 구간.** 자유도는 $n - 1 = 24$이고 $t_{0.025,\,24} = 2.06390$이다.
 
-# 앞의 z-구간과 달라지는 곳은 여기 한 줄뿐이다.
-# 자유도가 n-1인 것은 편차를 참 평균이 아니라 x_bar에서 쟀기 때문이다.
-degrees_of_freedom = n - 1
-t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, degrees_of_freedom)
+    $$
+    \text{SE} = \frac{s}{\sqrt n} = \frac{8}{5} = 1.6,
+    \qquad
+    \text{MOE} = 2.06390 \times 1.6 = 3.30224
+    $$
 
-standard_error = sample_std / np.sqrt(n)
-margin_of_error = t_critical * standard_error
+    $$
+    50 \pm 3.30224 = (46.6978,\ 53.3022)
+    $$
 
-confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
-print(f"{confidence_interval = }")
-```
+    **왜 자유도가 $n - 1$인가.** $s^2$이 편차를 참 평균 $\mu$가 아니라 **표본평균 $\bar x$에서** 재기 때문이다. $n$개의 편차 $x_i - \bar x$는 항상 $\sum (x_i - \bar x) = 0$이라는 **하나의 선형제약**을 만족하므로, 자유롭게 움직이는 것은 $n - 1$개뿐이다. 그 결과 $(n-1)s^2/\sigma^2 \sim \chi^2_{n-1}$이고 $t$의 자유도가 $n - 1$이 된다. 자유도를 $n$으로 잘못 주면 임계값이 $2.06390$ 대신 $2.05954$가 되어 구간이 **조용히 좁아진다.** 오류 메시지가 나지 않으므로 더 위험하다.
 
-출력:
+    **(2) $\sigma$를 모르는 값은 임계값의 비다.** 두 구간의 $\text{SE}$가 같으므로 폭의 비가 곧 임계값의 비다.
 
-```
-confidence_interval = (46.697762301395166, 53.302237698604834)
-```
+    $$
+    \frac{\text{폭}_t}{\text{폭}_z} = \frac{t_{0.025,\,n-1}}{z_{0.025}}
+    $$
+
+    $n = 25$에서 $2.06390/1.95996 = 1.05303$ 으로 **$5.3\%$ 넓다.** 이 비는 $n$에 대해 단조감소한다.
+
+    | $n$ | $t_{0.025,\,n-1}$ | $t/z$ |
+    |---|---|---|
+    | $5$ | $2.77645$ | $1.41658$ |
+    | $10$ | $2.26216$ | $1.15418$ |
+    | $25$ | $2.06390$ | $1.05303$ |
+    | $100$ | $1.98422$ | $1.01237$ |
+
+    **처음 몇 개의 관측값이 압도적으로 비싸다.** $n = 5$에서는 $42\%$를 더 치러야 하지만 $n = 100$에서는 $1.2\%$다. 거꾸로 읽으면, $n$이 작은데 $z$를 쓰면 구간이 $1/1.41658 = 0.706$배로 **$30\%$ 가까이 좁아지고** 그 좁아진 구간은 약속한 $95\%$를 지키지 못한다.
+
+    **확인.**
+
+    ```python
+    import scipy.stats as stats
+    import numpy as np
+
+    # 주어진 자료
+    n = 25
+    sample_mean = 50
+    sample_std = 8      # 모표준편차가 아니라 자료에서 얻은 표본표준편차
+    confidence_level = 0.95
+
+    # 앞의 z-구간과 달라지는 곳은 여기 한 줄뿐이다.
+    # 자유도가 n-1인 것은 편차를 참 평균이 아니라 x_bar에서 쟀기 때문이다.
+    degrees_of_freedom = n - 1
+    t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, degrees_of_freedom)
+
+    standard_error = sample_std / np.sqrt(n)
+    margin_of_error = t_critical * standard_error
+
+    confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
+    print(f"{t_critical = :.5f}, {standard_error = :.5f}, {margin_of_error = :.5f}")
+    print(f"{confidence_interval = }")
+
+    # (2) sigma 를 모르는 값: 같은 SE 에서 임계값의 비가 곧 폭의 비다.
+    z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
+    print(f"\n{'n':>5}{'t*':>10}{'t*/z*':>10}")
+    for m in (5, 10, 25, 100):
+        tm = stats.t.ppf(1 - (1 - confidence_level) / 2, m - 1)
+        print(f"{m:>5}{tm:>10.5f}{tm / z_critical:>10.5f}")
+    ```
+
+    출력:
+
+    ```
+    t_critical = 2.06390, standard_error = 1.60000, margin_of_error = 3.30224
+    confidence_interval = (46.697762301395166, 53.302237698604834)
+
+        n        t*     t*/z*
+        5   2.77645   1.41658
+       10   2.26216   1.15418
+       25   2.06390   1.05303
+      100   1.98422   1.01237
+    ```
+
+    **(1)과 (2)가 모두 맞는다.** 임계값 $2.06390$, 표준오차 $1.6$, 오차한계 $3.30224$, 구간 $(46.6978,\ 53.3022)$ 가 손 계산과 같고, 표의 네 비도 그대로 재현된다.
+
+    **다만 이 수들이 보장하는 것은 폭뿐이다.** $t$-구간의 포함률은 모집단이 정규라는 가정 아래 정확히 $0.95$다. $n = 5$의 $1.41658$배라는 값은 "정규모집단에서 $\sigma$를 모르는 대가"이지, 모집단이 크게 치우쳐 있을 때의 대가가 아니다. 그쪽은 임계값이 아니라 **포함률**이 무너지는 문제이며 [평균 신뢰구간의 포함확률 모의실험](./ci_mean_sim.md)에서 다룬다.
 
 $t_{0.025,\,24} = 2.0639$로 $z_{0.025} = 1.9600$보다 5.3% 크다. 같은 $\bar x$와 같은 산포에서 구간이 그만큼 넓어지며, 이것이 $\sigma$를 모른다는 사실의 값이다.
 

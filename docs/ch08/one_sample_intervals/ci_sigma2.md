@@ -54,45 +54,106 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 분산의 신뢰구간 계산
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산의 신뢰구간 계산. 정규모집단에서 크기 $n = 12$인 표본을 뽑아 $s^2$을 얻었다.
+
+**(1)** 추축량에서 $\sigma^2$의 $95\%$ 신뢰구간을 유도하시오. **큰** 임계값이 아래끝의 분모로 가는 까닭을 밝히고, 상한과 하한의 **비**가 자료와 무관한 상수임을 보이시오.
+
+**(2)** 참 $\sigma = 2$인 모집단에서 표본 하나를 뽑아 구간을 만들고 (1)의 비를 확인하시오. $\sigma$의 구간은 어떻게 얻는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import chi2
+??? success "풀이"
 
-n = 12
-sigma = 2.0        # 참 모표준편차 (모의실험용이므로 답을 알고 있다)
-alpha = 0.05
+    **(1) 추축량을 뒤집는다.** 정규표본에서
 
-rng = np.random.default_rng(42)
-x = rng.normal(loc=0, scale=sigma, size=n)
+    $$
+    W = \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
+    $$
 
-# ddof=1이 필수다. 베셀 보정을 빼면 s²이 아래로 편향되어
-# 구간 전체가 왼쪽으로 밀린다.
-s2 = x.var(ddof=1)
-df = n - 1
+    이고 이 분포는 $\mu$에도 $\sigma$에도 의존하지 않는다. 자유도 $n-1 = 11$의 하위·상위 $2.5\%$ 임계값을 $\ell = \chi^2_{0.025,\,11}$, $u = \chi^2_{0.975,\,11}$ 이라 하면
 
-chi2_lo = chi2(df=df).ppf(alpha / 2.0)
-chi2_hi = chi2(df=df).ppf(1 - alpha / 2.0)
+    $$
+    P\!\left(\ell \le \frac{(n-1)S^2}{\sigma^2} \le u\right) = 0.95
+    $$
 
-# 큰 임계값이 아래끝의 분모로 간다.
-# (n-1)s²/σ² 이 두 임계값 사이에 있다는 부등식을 σ²에 대해 풀면
-# σ²이 분모로 내려가 대소가 뒤집히기 때문이다.
-ci_lower = df * s2 / chi2_hi
-ci_upper = df * s2 / chi2_lo
+    이다. 안쪽을 $\sigma^2$에 대해 푼다. 세 양이 모두 양수이므로 역수를 취할 수 있고, **역수를 취하면 부등호가 뒤집힌다.**
 
-print(f"95% CI for σ²: ({ci_lower:.4f}, {ci_upper:.4f})")
-print(f"95% CI for σ:  ({np.sqrt(ci_lower):.4f}, {np.sqrt(ci_upper):.4f})")
-```
+    $$
+    \frac{\ell}{(n-1)S^2} \le \frac{1}{\sigma^2} \le \frac{u}{(n-1)S^2}
+    \;\Longrightarrow\;
+    \frac{(n-1)S^2}{u} \le \sigma^2 \le \frac{(n-1)S^2}{\ell}
+    $$
 
-출력:
+    **그래서 큰 임계값 $u$가 아래끝의 분모로 간다.** $\sigma^2$이 추축량의 **분모**에 있다는 것이 유일한 이유이며, 평균의 구간과 모양이 달라지는 지점이 바로 여기다.
 
-```
-95% CI for σ²: (1.8443, 10.5947)
-95% CI for σ:  (1.3580, 3.2549)
-```
+    **비가 상수다.** 상한을 하한으로 나누면 $S^2$이 통째로 약분된다.
+
+    $$
+    \frac{\text{상한}}{\text{하한}}
+    = \frac{(n-1)s^2/\ell}{(n-1)s^2/u}
+    = \frac{u}{\ell}
+    $$
+
+    $n = 12$에서 $u/\ell = 21.92005/3.81575 = 5.74463$ 이다. **자료를 보기도 전에 정해지는 값**이며 $n$에만 달렸다. 평균의 $t$-구간은 $\bar x$를 가운데 두고 **차**가 $s$에 비례했는데, 분산의 구간은 $s^2$에 **곱해지는** 구조라 비가 고정된다. 폭 자체는 $(n-1)s^2(1/\ell - 1/u)$ 로 $s^2$에 정비례한다.
+
+    **(2) 표본 하나.**
+
+    ```python
+    import numpy as np
+    from scipy.stats import chi2
+
+    n = 12
+    sigma = 2.0        # 참 모표준편차 (모의실험용이므로 답을 알고 있다)
+    alpha = 0.05
+
+    rng = np.random.default_rng(42)
+    x = rng.normal(loc=0, scale=sigma, size=n)
+
+    # ddof=1이 필수다. 베셀 보정을 빼면 s²이 아래로 편향되어
+    # 구간 전체가 왼쪽으로 밀린다.
+    s2 = x.var(ddof=1)
+    df = n - 1
+
+    chi2_lo = chi2(df=df).ppf(alpha / 2.0)
+    chi2_hi = chi2(df=df).ppf(1 - alpha / 2.0)
+
+    # 큰 임계값이 아래끝의 분모로 간다.
+    # (n-1)s²/σ² 이 두 임계값 사이에 있다는 부등식을 σ²에 대해 풀면
+    # σ²이 분모로 내려가 대소가 뒤집히기 때문이다.
+    ci_lower = df * s2 / chi2_hi
+    ci_upper = df * s2 / chi2_lo
+
+    print(f"s2 = {s2:.4f},  chi2_lo = {chi2_lo:.5f},  chi2_hi = {chi2_hi:.5f}")
+    print(f"95% CI for σ²: ({ci_lower:.4f}, {ci_upper:.4f})")
+    print(f"95% CI for σ:  ({np.sqrt(ci_lower):.4f}, {np.sqrt(ci_upper):.4f})")
+
+    # (1) 상한/하한의 비는 s2 와 무관하게 chi2_hi / chi2_lo 다.
+    print(f"\n구간의 비 = {ci_upper / ci_lower:.5f}   chi2_hi/chi2_lo = {chi2_hi / chi2_lo:.5f}")
+    print(f"σ 척도에서의 비 = {np.sqrt(ci_upper / ci_lower):.5f}")
+    ```
+
+    출력:
+
+    ```
+    s2 = 3.6752,  chi2_lo = 3.81575,  chi2_hi = 21.92005
+    95% CI for σ²: (1.8443, 10.5947)
+    95% CI for σ:  (1.3580, 3.2549)
+
+    구간의 비 = 5.74463   chi2_hi/chi2_lo = 5.74463
+    σ 척도에서의 비 = 2.39680
+    ```
+
+    **(1)의 비가 그대로 나온다.** 구간의 상한/하한 $10.5947/1.8443 = 5.74463$ 이 $u/\ell = 21.92005/3.81575 = 5.74463$ 과 소수 다섯째 자리까지 같다. $s^2 = 3.6752$ 가 무엇이든 이 비는 바뀌지 않는다.
+
+    **참값 $\sigma^2 = 4$가 구간 안에 있다.** 다만 구간 $(1.8443,\ 10.5947)$ 이 $s^2 = 3.6752$ 를 가운데 두지 않는다. 왼쪽으로 $1.83$, 오른쪽으로 $6.92$ 다. 카이제곱분포가 오른쪽으로 늘어져 있으므로 $S^2$이 참값보다 **크게** 나오는 쪽의 여지를 더 많이 남겨야 하기 때문이다.
+
+    **$\sigma$의 구간은 제곱근을 취하면 된다.** $\sigma > 0$에서 $\sigma \mapsto \sigma^2$ 이 **순증가**이므로
+
+    $$
+    \sigma^2 \in [L,\ U] \iff \sigma \in [\sqrt L,\ \sqrt U]
+    $$
+
+    로 두 사건이 **같다.** 사건이 같으니 확률도 같고, 따라서 $(\sqrt{1.8443},\ \sqrt{10.5947}) = (1.3580,\ 3.2549)$ 가 $\sigma$의 $95\%$ 구간이다. 비는 $\sqrt{5.74463} = 2.3968$ 로 줄어든다. **단조변환은 신뢰구간을 그대로 옮긴다.** 평균의 구간에서 보았던 아핀변환 불변성과 같은 이치이고, 거기서와 달리 여기서는 변환이 비선형이라 구간의 모양(비대칭의 정도)이 달라진다.
 
 참값 $\sigma^2 = 4$가 구간 안에 있지만 구간이 대단히 넓다. 위끝이 아래끝의 5.7배이며, $s^2 = 3.68$을 중심으로 대칭도 아니다. 카이제곱분포가 오른쪽으로 늘어져 있는 탓이다. $\sigma$의 척도에서는 제곱근을 취한 만큼 비대칭이 완화되어 $(1.36, 3.25)$가 된다.
 
@@ -106,86 +167,156 @@ $n = 12$로 분산을 추정한다는 것이 이 정도로 막연한 일이다. 
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 분산 신뢰구간의 포함확률
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분산 신뢰구간의 포함확률. $n = 12$, $\sigma = 2$인 **정규**모집단에서 $\sigma^2$의 $95\%$ 카이제곱 구간을 $100$개 만든다.
+
+**(1)** 이 구간의 포함확률을 구하시오. 근사인가 정확인가. $n$에 의존하는가.
+
+**(2)** $100$개를 그리고, 실패한 구간들의 **모양**에서 무엇이 읽히는지 수와 함께 말하시오.
+
+**(3)** 모집단이 정규가 아니면 포함률이 얼마가 되는가. 표본을 키우면 나아지는가.
 
 </div>
 
-```python
-#!/usr/bin/env python3
-"""분산 신뢰구간을 100번 만들어 참 분산을 몇 번이나 담는지 센다.
+??? success "풀이"
 
-(n-1)S^2/sigma^2 이 카이제곱을 따른다는 사실에서 구간이 나온다. 평균의
-구간과 달리 좌우가 대칭이 아니므로 양쪽 기각값을 따로 구해야 한다.
-"""
+    **(1) 정규모집단에서는 정확히 $0.95$다.** 구간이 $\sigma^2$을 담는 사건은 앞 보기의 유도에 의해
 
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import chi2
+    $$
+    \frac{(n-1)S^2}{u} \le \sigma^2 \le \frac{(n-1)S^2}{\ell}
+    \iff \ell \le W \le u,
+    \qquad W = \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
+    $$
 
-rng_seed = 42        # 아래 그림을 재현하려면 고정한다
-n_simulations = 100
-n_samples = 12
-mu = 0.0
-sigma = 2.0
-alpha = 0.05
-report_sigma_not_sigma2 = False  # True로 두면 σ² 대신 σ의 구간을 그린다
+    과 **같은 사건**이다. $\ell$과 $u$가 $\chi^2_{n-1}$의 $2.5$·$97.5$ 백분위수이므로
 
+    $$
+    P(\ell \le W \le u) = 0.975 - 0.025 = 0.95
+    $$
 
-def main():
-    if rng_seed is not None:
-        np.random.seed(rng_seed)
+    이다. **근사가 아니라 정확한 값**이고, $n \ge 2$인 모든 $n$과 모든 $\mu$, $\sigma$에서 그렇다. $W$가 추축량이라서다. 평균의 $t$-구간과 같은 구조이며, 중심극한정리가 들어설 자리가 없다.
 
-    true_var = sigma**2
-    lowers = np.empty(n_simulations)
-    uppers = np.empty(n_simulations)
-    centers = np.empty(n_simulations)
+    **(2) 그림.**
 
-    df = n_samples - 1
-    chi2_lo = chi2(df=df).ppf(alpha / 2.0)
-    chi2_hi = chi2(df=df).ppf(1 - alpha / 2.0)
+    ```python
+    #!/usr/bin/env python3
+    """분산 신뢰구간을 100번 만들어 참 분산을 몇 번이나 담는지 센다.
 
-    for i in range(n_simulations):
-        x = np.random.normal(loc=mu, scale=sigma, size=n_samples)
-        s2 = x.var(ddof=1)
-        lowers[i] = df * s2 / chi2_hi
-        uppers[i] = df * s2 / chi2_lo
-        centers[i] = s2
+    (n-1)S^2/sigma^2 이 카이제곱을 따른다는 사실에서 구간이 나온다. 평균의
+    구간과 달리 좌우가 대칭이 아니므로 양쪽 기각값을 따로 구해야 한다.
+    """
 
-    covered = (lowers <= true_var) & (true_var <= uppers)
-    n_fail = int((~covered).sum())
-    coverage_pct = 100.0 * covered.mean()
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import chi2
 
-    if report_sigma_not_sigma2:
-        lowers, uppers, centers = np.sqrt(lowers), np.sqrt(uppers), np.sqrt(centers)
-        true_ref = np.sqrt(true_var)
-        x_label = "Standard Deviation (σ)"
-    else:
-        true_ref = true_var
-        x_label = "Variance (σ²)"
-
-    fig, ax = plt.subplots(figsize=(12, 12))
-    for i in range(n_simulations):
-        color = "k" if covered[i] else "r"
-        ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
-        ax.plot(centers[i], i, marker="o", ms=3, color=color)
-
-    ax.axvline(true_ref, linestyle="--", linewidth=1.5, color="r")
-    ax.set_title(
-        f"{n_simulations} Chi-square CIs | n={n_samples}, df={df}, "
-        f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
-    ax.set_yticks([])
-    for sp in ["left", "right", "top"]:
-        ax.spines[sp].set_visible(False)
-    ax.set_xlabel(x_label)
-    plt.tight_layout()
-    plt.show()
+    rng_seed = 42        # 아래 그림을 재현하려면 고정한다
+    n_simulations = 100
+    n_samples = 12
+    mu = 0.0
+    sigma = 2.0
+    alpha = 0.05
+    report_sigma_not_sigma2 = False  # True로 두면 σ² 대신 σ의 구간을 그린다
 
 
-if __name__ == "__main__":
-    main()
-```
+    def main():
+        if rng_seed is not None:
+            np.random.seed(rng_seed)
 
-![100 Chi-square CIs | n=12, df=11, CL=95%](./img/ci_sigma2_103.png)
+        true_var = sigma**2
+        lowers = np.empty(n_simulations)
+        uppers = np.empty(n_simulations)
+        centers = np.empty(n_simulations)
+
+        df = n_samples - 1
+        chi2_lo = chi2(df=df).ppf(alpha / 2.0)
+        chi2_hi = chi2(df=df).ppf(1 - alpha / 2.0)
+
+        for i in range(n_simulations):
+            x = np.random.normal(loc=mu, scale=sigma, size=n_samples)
+            s2 = x.var(ddof=1)
+            lowers[i] = df * s2 / chi2_hi
+            uppers[i] = df * s2 / chi2_lo
+            centers[i] = s2
+
+        covered = (lowers <= true_var) & (true_var <= uppers)
+        n_fail = int((~covered).sum())
+        coverage_pct = 100.0 * covered.mean()
+
+        if report_sigma_not_sigma2:
+            lowers, uppers, centers = np.sqrt(lowers), np.sqrt(uppers), np.sqrt(centers)
+            true_ref = np.sqrt(true_var)
+            x_label = "Standard Deviation (σ)"
+        else:
+            true_ref = true_var
+            x_label = "Variance (σ²)"
+
+        fig, ax = plt.subplots(figsize=(12, 12))
+        for i in range(n_simulations):
+            color = "k" if covered[i] else "r"
+            ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
+            ax.plot(centers[i], i, marker="o", ms=3, color=color)
+
+        ax.axvline(true_ref, linestyle="--", linewidth=1.5, color="r")
+        ax.set_title(
+            f"{n_simulations} Chi-square CIs | n={n_samples}, df={df}, "
+            f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
+        ax.set_yticks([])
+        for sp in ["left", "right", "top"]:
+            ax.spines[sp].set_visible(False)
+        ax.set_xlabel(x_label)
+        plt.tight_layout()
+        plt.show()
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    ![100 Chi-square CIs | n=12, df=11, CL=95%](./img/ci_sigma2_103.png)
+
+    **$100$개 가운데 $95$개가 담았다.** (1)의 $0.95$와 맞는다. 되풀이 $100$회의 표준오차가 $0.0218$이므로 이 일치는 **운이 좋은 것**이고, $93$개나 $97$개가 나왔더라도 똑같이 (1)과 맞는다고 보아야 한다.
+
+    **읽히는 것 하나 — 점이 가운데에 없다.** 각 선의 점이 $s^2$인데, 구간의 왼쪽에 치우쳐 있다. 앞 보기에서 본 대로 하한까지가 $(n-1)s^2(1/u)$ 만큼, 상한까지가 $(n-1)s^2(1/\ell)$ 만큼이라 오른쪽이 $u/\ell = 5.74$ 배 멀다.
+
+    **읽히는 것 둘 — 실패가 양쪽으로 갈리되 모양이 다르다.** 실패한 다섯 중 **셋은 구간이 통째로 참값 오른쪽**(하한 $> 4$)에 있고 **둘은 왼쪽**(상한 $< 4$)에 있다. 그런데 오른쪽으로 빠진 세 구간의 폭이
+
+    $$
+    19.90, \quad 20.34, \quad 24.78
+    $$
+
+    로, $100$개 전체의 폭 중앙값 $9.01$의 두 배를 넘는다(가장 좁은 구간은 $2.51$이다). 폭이 $s^2$에 **정비례**하므로 $s^2$이 우연히 크게 나오면 구간이 오른쪽으로 밀리는 **동시에** 길어진다. 왼쪽으로 빠진 구간은 반대로 짧다.
+
+    **이것이 분산 구간의 고유한 성질이다.** 평균의 $t$-구간에서는 중심과 폭이 **독립**이었다($\bar X \perp S$). 분산 구간에서는 중심 노릇을 하는 $s^2$이 폭도 함께 정하므로 둘이 완전히 묶여 있다. 그래서 "크게 틀린 구간은 길고, 작게 틀린 구간은 짧다"는 비대칭이 생긴다.
+
+    **(3) 정규성이 무너지면 포함률도 무너진다.** 구간이 쓰는 유일한 사실은 $W = (n-1)S^2/\sigma^2$이 $\chi^2_{n-1}$을 따른다는 것인데, 이것은 정규모집단에서만 참이다. 비정규 모집단에서 $S^2$의 흔들림을 재는 양은 모집단의 **첨도** $\beta_2$이고, 5장에서 유도한 대로
+
+    $$
+    \operatorname{Var}(S^2) \approx \frac{(\beta_2 - 1)\sigma^4}{n},
+    \qquad
+    r = \frac{\beta_2 - 1}{2}
+    $$
+
+    이다. $r$는 "카이제곱 모형이 예측하는 분산"에 대한 실제 분산의 **배율**이고, $n \to \infty$에서 명목 $95\%$ 구간의 포함률은
+
+    $$
+    2\Phi\!\left(\frac{1.95996}{\sqrt r}\right) - 1
+    $$
+
+    로 수렴한다. 유도와 수치 확인은 [분산의 표본분포 — 균등모집단](../../ch05/applications/s2_uniform.md)의 보기 2에 있으므로 여기서는 결과만 쓴다.
+
+    | 모집단 | $\beta_2$ | $r$ | 극한 포함률 |
+    |---|---|---|---|
+    | 균등 | $1.8$ | $0.4$ | $0.9981$ |
+    | **정규** | $3$ | $1$ | $\mathbf{0.95}$ |
+    | 라플라스 | $6$ | $2.5$ | $0.7849$ |
+    | 지수 | $9$ | $4$ | $0.6729$ |
+    | $t_5$ | $9$ | $4$ | $0.6729$ |
+
+    **표본을 키워도 낫지 않는다.** 이 값들은 $n \to \infty$의 **극한**이다. 되풀이 $5$만 회로 확인하면 지수모집단에서 $n = 25,\ 200,\ 2000$의 포함률이 $0.724,\ 0.686,\ 0.675$ 로 $0.673$ 쪽으로 **내려가고**, 균등모집단에서는 $0.997,\ 0.998,\ 0.998$ 로 $0.998$에 붙어 있다. 꼬리가 두꺼울수록 $r$가 커져 구간이 **실제보다 좁아지고**, 꼬리가 가벼우면 반대로 지나치게 넓어진다.
+
+    $t_5$는 수렴이 특히 느리다. 같은 모의에서 $n = 2000$일 때가 아직 $0.724$다. $t_5$의 $4$차 적률은 유한하지만 $8$차 적률이 발산해 $S^2$의 흔들림 자체가 잘 안정되지 않기 때문이다. **극한값이 $0.673$이라는 것과 그 값에 $n = 2000$에서도 닿지 못한다는 것이 둘 다 참이다.**
+
+    **평균의 구간과 결정적으로 다른 점이 여기다.** $\bar X$는 중심극한정리가 모집단 모양을 지워 주므로 $n$을 키우면 $t$-구간이 어떤 모집단에서든 $0.95$로 간다. $S^2$에는 그런 보호가 없다. $S^2$의 분포 **모양**은 $n$이 커지면 정규로 가지만 그 **폭**은 끝까지 첨도에 매여 있다. 그래서 비정규가 의심되면 카이제곱 구간을 버리고 붓스트랩이나 보넷 구간을 써야 한다(연습문제 7).
 
 포함확률은 95.0%로 명목값과 정확히 맞는다. 근사가 아니라 정확한 분포 결과이므로 정규자료에서는 $n$이 작아도 어긋나지 않는다.
 

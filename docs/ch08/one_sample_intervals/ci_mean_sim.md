@@ -46,66 +46,123 @@ $n \le 0.10 N$이면 이 수정은 무시할 만하다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 세 방법으로 만든 평균 신뢰구간
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 방법으로 만든 평균 신뢰구간. 정규모집단 $N(\mu, \sigma^2)$에서 크기 $n$인 표본을 뽑아 위의 세 구간을 만든다.
+
+**(1)** $t$-구간의 포함확률을 구하시오. 그 값이 $n$, $\mu$, $\sigma$에 의존하는가. 이어서 $s$를 꽂고 $z$ 임계값을 쓴 구간의 포함확률을 닫힌 꼴로 적고 $n = 10$에서 계산하시오.
+
+**(2)** $n = 10$, $\mu = 0$, $\sigma = 1$에서 $t$-구간을 $100$개 만들어 참값을 담은 개수를 세시오. 그 개수로 (1)의 답을 확인할 수 있는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import norm, t
+??? success "풀이"
 
-def finite_population_correction(n, N):
-    """유한모집단 수정 인자. N을 주지 않으면 1.0(수정 없음)."""
-    if N is None:
-        return 1.0
-    return float(np.sqrt((N - n) / (N - 1)))
+    **(1) $t$-구간의 포함확률은 정확히 $0.95$다.** 정규표본에서
 
-def compute_intervals(xbar, s, n, alpha, method, sigma_known=None, N=None):
-    """z_known, z_plugin, t 세 방법의 구간 끝점을 한꺼번에 계산한다.
+    $$
+    T = \frac{\bar X - \mu}{S/\sqrt n} \sim t_{n-1}
+    $$
 
-    xbar와 s가 배열이면 구간도 배열로 나온다.
-    모의실험에서 표본 만 개를 한 번에 처리하려고 이렇게 짰다.
-    """
-    fpc = finite_population_correction(n, N)
-    if method == "z_known":
-        z_star = norm.ppf(1 - alpha / 2)
-        se = sigma_known / np.sqrt(n) * fpc
-        moe = z_star * se
-    elif method == "z_plugin":
-        z_star = norm.ppf(1 - alpha / 2)
-        se = (s / np.sqrt(n)) * fpc
-        moe = z_star * se
-    else:  # t
-        df = n - 1
-        t_star = t.ppf(1 - alpha / 2, df=df)
-        se = (s / np.sqrt(n)) * fpc
-        moe = t_star * se
-    # z_plugin과 t의 차이는 임계값 한 자리뿐이다. 표준오차는 완전히 같다.
-    return xbar - moe, xbar + moe
+    이다. 그런데 $t$-구간이 $\mu$를 담는다는 것은
 
-# 모의실험 설정. 그림으로 보기 좋게 100회만 돌린다.
-# (포함확률을 정확히 재려면 아래 연습문제처럼 10,000회가 필요하다.)
-rng = np.random.default_rng(42)
-n_sim, n, mu, sigma, alpha = 100, 10, 0.0, 1.0, 0.05
+    $$
+    \bar X - t_{\alpha/2,\,n-1}\frac{S}{\sqrt n} \le \mu \le \bar X + t_{\alpha/2,\,n-1}\frac{S}{\sqrt n}
+    \iff |T| \le t_{\alpha/2,\,n-1}
+    $$
 
-# 행 하나가 표본 하나. axis=1로 요약하면 표본별 통계량이 한 번에 나온다.
-X = rng.normal(loc=mu, scale=sigma, size=(n_sim, n))
-xbar = X.mean(axis=1)
-s = X.std(axis=1, ddof=1)
+    과 **같은 사건**이다. 그러므로 포함확률은
 
-lower, upper = compute_intervals(xbar, s, n, alpha, method="t")
-covered = (lower <= mu) & (mu <= upper)
-coverage_pct = 100.0 * covered.mean()
+    $$
+    P\big(|T| \le t_{\alpha/2,\,n-1}\big) = 1 - \alpha = 0.95
+    $$
 
-print(f"t-interval coverage: {coverage_pct:.1f}%")
-```
+    이고, 이것은 $n \ge 2$인 **모든** $n$과 **모든** $\mu$, $\sigma$에서 성립한다. $T$가 **추축량**(pivotal quantity)이라서 그렇다. 분포에 $\mu$도 $\sigma$도 남지 않으므로 모르는 값이 들어설 자리가 없다.
 
-출력:
+    **따라서 이 쪽에서 $t$-구간에 대해 모의실험으로 알아낼 것은 포함확률이 아니다.** 포함확률은 이미 정확히 알고, 모의실험이 할 일은 그 값을 재확인하는 것과 **폭**이 표본마다 얼마나 흔들리는지 보는 것뿐이다.
 
-```
-t-interval coverage: 96.0%
-```
+    **$s$를 꽂은 $z$-구간은 다르다.** 이 구간이 $\mu$를 담는 사건은 $|T| \le z_{\alpha/2}$인데, $T$는 여전히 $t_{n-1}$을 따른다. 그러므로 포함확률은
+
+    $$
+    P\big(|t_{n-1}| \le z_{\alpha/2}\big) = 2F_{t_{n-1}}(1.95996) - 1
+    $$
+
+    로 $n$에만 의존하는 **닫힌 꼴**이다. $n = 10$이면 $F_{t_9}$를 써서
+
+    $$
+    2F_{t_9}(1.95996) - 1 = 0.91835
+    $$
+
+    이다. 명목 $0.95$인데 $0.918$이다. $n = 5$에서는 $0.878$, $n = 30$에서도 $0.940$이다. **임계값 한 자리를 $t$에서 $z$로 바꾼 것만으로 모자란 포함확률이 생긴다.**
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import norm, t
+
+    def finite_population_correction(n, N):
+        """유한모집단 수정 인자. N을 주지 않으면 1.0(수정 없음)."""
+        if N is None:
+            return 1.0
+        return float(np.sqrt((N - n) / (N - 1)))
+
+    def compute_intervals(xbar, s, n, alpha, method, sigma_known=None, N=None):
+        """z_known, z_plugin, t 세 방법의 구간 끝점을 한꺼번에 계산한다.
+
+        xbar와 s가 배열이면 구간도 배열로 나온다.
+        모의실험에서 표본 만 개를 한 번에 처리하려고 이렇게 짰다.
+        """
+        fpc = finite_population_correction(n, N)
+        if method == "z_known":
+            z_star = norm.ppf(1 - alpha / 2)
+            se = sigma_known / np.sqrt(n) * fpc
+            moe = z_star * se
+        elif method == "z_plugin":
+            z_star = norm.ppf(1 - alpha / 2)
+            se = (s / np.sqrt(n)) * fpc
+            moe = z_star * se
+        else:  # t
+            df = n - 1
+            t_star = t.ppf(1 - alpha / 2, df=df)
+            se = (s / np.sqrt(n)) * fpc
+            moe = t_star * se
+        # z_plugin과 t의 차이는 임계값 한 자리뿐이다. 표준오차는 완전히 같다.
+        return xbar - moe, xbar + moe
+
+    # 모의실험 설정. 그림으로 보기 좋게 100회만 돌린다.
+    # (포함확률을 정확히 재려면 아래 연습문제처럼 10,000회가 필요하다.)
+    rng = np.random.default_rng(42)
+    n_sim, n, mu, sigma, alpha = 100, 10, 0.0, 1.0, 0.05
+
+    # 행 하나가 표본 하나. axis=1로 요약하면 표본별 통계량이 한 번에 나온다.
+    X = rng.normal(loc=mu, scale=sigma, size=(n_sim, n))
+    xbar = X.mean(axis=1)
+    s = X.std(axis=1, ddof=1)
+
+    lower, upper = compute_intervals(xbar, s, n, alpha, method="t")
+    covered = (lower <= mu) & (mu <= upper)
+    coverage_pct = 100.0 * covered.mean()
+
+    print(f"t-interval coverage: {coverage_pct:.1f}%")
+    ```
+
+    출력:
+
+    ```
+    t-interval coverage: 96.0%
+    ```
+
+    **$100$개 가운데 $96$개가 담았다.** (1)의 답은 정확히 $0.95$이므로 기대 개수가 $95$개인데 하나 더 나왔다.
+
+    **이 개수로는 (1)을 확인할 수 없다.** 담은 개수가 $\text{Binomial}(100,\ 0.95)$를 따르므로 비율의 표준오차가
+
+    $$
+    \sqrt{\frac{0.95 \times 0.05}{100}} = 0.0218
+    $$
+
+    이다. $0.96$과 $0.95$의 거리가 $0.01$로 표준오차의 **절반(0.46배)** 도 안 된다. 되풀이 $100$회는 $0.95$와 $0.96$을 구별하지 못한다. 거꾸로 $z$-구간의 $0.918$과는 $1.5$ 표준오차 떨어져 있으니 그 차이는 $100$회로도 겨우 보인다. **$0.95$ 근처의 차이를 재려면 되풀이를 만 번 단위로 올려야 하고**, 뒤의 연습문제들이 그렇게 한다.
+
+    **그러므로 이 모의실험의 쓸모는 포함률을 "재는" 데 있지 않다.** 포함률은 추축량이 이미 정확히 주었다. 모의실험이 보여 주는 것은 그 $95$개와 $5$개가 **어떤 모양으로** 갈라지는가이고, 그것이 다음 보기의 그림이다.
 
 100회만 돌렸으므로 이 값 자체의 표준오차가 $\sqrt{0.95 \times 0.05/100} \approx 2.2$%p다. 96.0%는 95%와 구별되지 않는다.
 
@@ -113,30 +170,75 @@ t-interval coverage: 96.0%
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에. 앞 보기에서 만든 $t$-구간 $100$개를 가로선 하나씩으로 그리고, 참값을 놓친 것만 빨갛게 칠한다.
+
+**(1)** 그림을 그리고 무엇이 읽히는지 수와 함께 말하시오. 구간의 **폭**이 제각각인 까닭과, 참값을 놓친 구간들의 공통점을 밝히시오.
+
+**(2)** 이 그림이 **가리는** 것은 무엇인가.
 
 </div>
 
-```python
-# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
-# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
-# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
-fig, ax = plt.subplots(figsize=(12, 12))
-for i in range(n_sim):
-    color = "k" if covered[i] else "r"
-    ax.plot([lower[i], upper[i]], [i, i], lw=2, color=color)
-    ax.plot(xbar[i], i, marker="o", ms=3, color=color)
+??? success "풀이"
 
-ax.axvline(mu, linestyle="--", linewidth=1.5, color="r")
-n_fail = int((~covered).sum())
-ax.set_title(f"{n_sim} t CIs | n={n}, CL=95% | Fail={n_fail} (Coverage ~ {coverage_pct:.1f}%)")
-ax.set_yticks([])
-ax.set_xlabel("Mean value")
-plt.tight_layout()
-plt.show()
-```
+    **(1) 그림.**
 
-![100 t CIs | n=10, CL=95%](./img/ci_mean_sim_95.png)
+    ```python
+    # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+    # 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+    # 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
+    fig, ax = plt.subplots(figsize=(12, 12))
+    for i in range(n_sim):
+        color = "k" if covered[i] else "r"
+        ax.plot([lower[i], upper[i]], [i, i], lw=2, color=color)
+        ax.plot(xbar[i], i, marker="o", ms=3, color=color)
+
+    ax.axvline(mu, linestyle="--", linewidth=1.5, color="r")
+    n_fail = int((~covered).sum())
+    ax.set_title(f"{n_sim} t CIs | n={n}, CL=95% | Fail={n_fail} (Coverage ~ {coverage_pct:.1f}%)")
+    ax.set_yticks([])
+    ax.set_xlabel("Mean value")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![100 t CIs | n=10, CL=95%](./img/ci_mean_sim_95.png)
+
+    **읽히는 것 하나 — 실패가 넷이다.** 빨간 선을 세는 일이 곧 포함률을 재는 일이다. 다만 앞 보기에서 보았듯 $4$와 $5$의 차이는 되풀이 $100$회의 잡음 안에 있다.
+
+    **읽히는 것 둘 — 폭은 중심과 따로 움직인다.** 구간의 폭이
+
+    $$
+    2\,t_{0.025,\,9}\,\frac{S}{\sqrt{10}} = 2 \times 2.26216 \times \frac{S}{3.16228} = 1.43096\,S
+    $$
+
+    로 $S$ **하나에만** 비례한다. $n = 10$에서 $S$가 크게 흔들리므로 폭도 흔들린다. 실제로 $100$개의 폭은 최소 $0.6292$, 중앙값 $1.3756$, 최대 $2.4561$ 로 **최대가 최소의 $3.90$배**다. 평균 폭 $1.3782$는 이론값
+
+    $$
+    E[\text{폭}] = 1.43096 \cdot E[S] = 1.43096 \cdot c_4 \sigma,
+    \qquad c_4 = \sqrt{\frac{2}{n-1}}\,\frac{\Gamma(n/2)}{\Gamma((n-1)/2)} = 0.97266
+    $$
+
+    곧 $1.3916$과 $1\%$ 안에서 맞는다($100$개 평균이므로 이 정도 차이는 몬테카를로 오차다).
+
+    **읽히는 것 셋 — 실패의 조건은 "$\bar x$가 멀다"가 아니다.** 구간이 $\mu$를 놓치는 것은 $|T| > 2.26216$ 과 **정확히 같은 사건**이다($T = \bar x/(s/\sqrt{10})$). 네 실패의 $T$는
+
+    $$
+    -2.317, \quad -2.939, \quad 2.288, \quad 3.753
+    $$
+
+    로 모두 임계값 밖이고, 담은 $96$개 가운데 $|T|$가 가장 큰 것이 $2.243$ 으로 임계값 안이다. **빗금 하나로 깔끔히 갈린다.**
+
+    $\bar x$ 하나로는 갈리지 않는다. 실패한 네 표본의 $|\bar x|$는 $0.590$–$0.896$ 인데, 담은 표본 가운데도 $|\bar x|$가 이보다 큰 것이 있다. $s$ 하나로도 갈리지 않는다. 실패한 네 표본의 $s$는 $0.805,\ 0.964,\ 1.159,\ 0.636$ 으로 셋은 중앙값 $0.961$보다 작지만 **하나는 더 크다.** 갈리는 것은 둘의 **비**다.
+
+    **중심과 폭이 독립이라는 것도 그림에서 보인다.** 정규표본에서 $\bar X$와 $S$가 독립이므로 "중심이 멀리 간 구간이 특히 짧다"는 경향이 없어야 한다. $|\bar x|$와 폭의 표본상관이 $0.084$로 $0$과 구별되지 않는다. 긴 선과 짧은 선이 참값 양쪽에 고르게 섞여 있는 것이 그 모습이다.
+
+    **(2) 이 그림이 가리는 것.**
+
+    **첫째, 색칠은 참값을 알 때만 할 수 있다.** 실제 자료에서는 자기 구간이 검정인지 빨강인지 **알 길이 없다.** 그림의 교육적 힘이 바로 실무에서 쓸 수 없는 정보에서 나온다. "내 구간이 $95\%$ 확률로 $\mu$를 담는다"가 아니라 "이런 구간을 $100$번 만들면 $95$번쯤 담는다"인 까닭이 여기 있다.
+
+    **둘째, 포함률의 참값이 보이지 않는다.** $4$개 실패를 보고 "$0.96$이구나" 할 수 없다. 참값은 모의실험이 아니라 (1)의 추축량 논증이 준 $0.95$다.
+
+    **셋째, 정규성 의존이 보이지 않는다.** $t$-구간의 포함률이 정확히 $0.95$인 것은 모집단이 정규라는 가정에서 나왔다. 치우친 모집단에서도 이 그림은 똑같이 그려지며 실패 개수도 비슷하게 나올 수 있는데, 그때 달라지는 것은 **실패가 한쪽으로 쏠린다**는 점이다. 여기서는 $T$가 음수인 실패 둘, 양수인 실패 둘로 균형이 맞아 있다. 그 쏠림은 선의 개수가 아니라 선의 **방향**을 세어야 보인다.
 
 가로선 하나가 표본 하나의 신뢰구간이고 세로 점선이 참값 $\mu = 0$이다. 놓친 넷만 빨간색이다.
 

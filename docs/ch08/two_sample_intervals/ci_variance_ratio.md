@@ -41,45 +41,102 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 분산비의 신뢰구간 계산
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산비의 신뢰구간 계산. 정규모집단 둘에서 $n_1 = 15$, $n_2 = 12$ 인 표본을 뽑는다. 참값은 $\sigma_1 = 1.0$, $\sigma_2 = 1.5$ 이므로 $\theta = \sigma_1^2/\sigma_2^2 = 1/2.25 = 0.4444$ 다.
+
+**(1)** 추축량에서 $\theta$ 의 $95\%$ 구간을 유도하시오. **큰** $F$ 임계값이 아래끝의 분모로 가는 까닭을 밝히고, 상한과 하한의 **비**가 자료와 무관한 상수임을 보이시오.
+
+**(2)** 표본 하나로 구간을 만들어 확인하시오. 두 자유도의 **순서**를 뒤바꾸면 무슨 일이 일어나는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import f
+??? success "풀이"
 
-n1, n2 = 15, 12
-alpha = 0.05
+    **(1) 추축량을 뒤집는다.** 두 모집단이 정규이고 독립이면
 
-# 참 분산비는 1/1.5² = 0.444다. 답을 알고 있는 상태에서 구간을 본다.
-rng = np.random.default_rng(42)
-x = rng.normal(loc=0, scale=1.0, size=n1)
-y = rng.normal(loc=0, scale=1.5, size=n2)
+    $$
+    \frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2}
+    = \frac{R}{\theta} \sim F_{n_1-1,\,n_2-1},
+    \qquad R = \frac{S_1^2}{S_2^2},\quad \theta = \frac{\sigma_1^2}{\sigma_2^2}
+    $$
 
-s1_sq = x.var(ddof=1)
-s2_sq = y.var(ddof=1)
-rhat = s1_sq / s2_sq
+    이고 이 분포는 $\sigma_1$, $\sigma_2$ 에 의존하지 않는다. $F_{\text{lo}} = F_{0.025,\,14,\,11}$, $F_{\text{hi}} = F_{0.975,\,14,\,11}$ 로 두면
 
-# F분포는 두 자유도의 **순서**가 중요하다. dfn이 분자, dfd가 분모다.
-# 두 표본의 크기가 다르므로 여기서 뒤바꾸면 조용히 틀린 답이 나온다.
-df1, df2 = n1 - 1, n2 - 1
-F_lo = f(dfn=df1, dfd=df2).ppf(alpha / 2.0)
-F_hi = f(dfn=df1, dfd=df2).ppf(1 - alpha / 2.0)
+    $$
+    P\!\left(F_{\text{lo}} \le \frac{R}{\theta} \le F_{\text{hi}}\right) = 0.95
+    $$
 
-# 여기서도 큰 임계값이 아래끝의 분모로 간다.
-# (s1²/s2²)/(σ1²/σ2²) ~ F 를 σ1²/σ2² 에 대해 풀면 대소가 뒤집히기 때문이다.
-ci_lower = rhat / F_hi
-ci_upper = rhat / F_lo
+    이다. 안쪽을 $\theta$ 에 대해 푼다. 세 양이 모두 양수이므로 역수를 취할 수 있고 **부등호가 뒤집힌다.**
 
-print(f"95% CI for σ₁²/σ₂²: ({ci_lower:.4f}, {ci_upper:.4f})")
-```
+    $$
+    \frac{R}{F_{\text{hi}}} \le \theta \le \frac{R}{F_{\text{lo}}}
+    $$
 
-출력:
+    **그래서 큰 임계값이 아래끝의 분모로 간다.** $\theta$ 가 추축량의 **분모**에 있다는 것이 유일한 까닭이며, 분산의 카이제곱 구간에서 본 것과 같은 구조다.
 
-```
-95% CI for σ₁²/σ₂²: (0.2396, 2.4903)
-```
+    **비가 상수다.** 상한을 하한으로 나누면 $R$ 이 약분된다.
+
+    $$
+    \frac{\text{상한}}{\text{하한}} = \frac{F_{\text{hi}}}{F_{\text{lo}}}
+    = \frac{3.35881}{0.32314} = 10.39414
+    $$
+
+    **자료를 보기도 전에 정해진다.** 두 자유도만의 함수이며, $n_1 = 15$, $n_2 = 12$ 로 분산비를 추정하면 **상한이 하한의 열 배를 넘는 구간밖에 얻을 수 없다**는 뜻이다.
+
+    **(2) 표본 하나.** 뒤의 코드가 $s_1^2 = 0.84576$, $s_2^2 = 1.05097$, $R = 0.80474$ 를 주므로
+
+    $$
+    \left(\frac{0.80474}{3.35881},\ \frac{0.80474}{0.32314}\right) = (0.2396,\ 2.4903)
+    $$
+
+    이다. 참값 $0.4444$ 를 담는다. 그러나 **$1$ 도 담는다.** 실제로는 $\sigma_2$ 가 $\sigma_1$ 의 $1.5$배인데도 "두 분산이 같다"는 값을 배제하지 못한다.
+
+    **자유도를 뒤바꾸면 조용히 틀린다.** $F$ 분포는 분자 자유도와 분모 자유도의 **순서**가 중요하다. $(14, 11)$ 대신 $(11, 14)$ 를 쓰면 임계값이 $0.29772$ 와 $3.09459$ 가 되어 구간이
+
+    $$
+    (0.2600,\ 2.7030)
+    $$
+
+    이 된다. 폭의 비는 $10.39414$ 로 **똑같은데**(두 자유도를 맞바꿔도 $F_{\text{hi}}/F_{\text{lo}}$ 는 변하지 않는다) 구간 전체가 $1.085$ 배 오른쪽으로 밀린다. **참값을 여전히 담으므로 오류가 드러나지 않는다.** 두 표본의 크기가 같으면 아예 차이가 없고, 크기 차이가 클수록 어긋남이 커진다. 오류 메시지가 나지 않는 종류의 실수라 더 위험하다.
+
+    **(3) 확인.**
+
+    ```python
+    import numpy as np
+    from scipy.stats import f
+
+    n1, n2 = 15, 12
+    alpha = 0.05
+
+    # 참 분산비는 1/1.5² = 0.444다. 답을 알고 있는 상태에서 구간을 본다.
+    rng = np.random.default_rng(42)
+    x = rng.normal(loc=0, scale=1.0, size=n1)
+    y = rng.normal(loc=0, scale=1.5, size=n2)
+
+    s1_sq = x.var(ddof=1)
+    s2_sq = y.var(ddof=1)
+    rhat = s1_sq / s2_sq
+
+    # F분포는 두 자유도의 **순서**가 중요하다. dfn이 분자, dfd가 분모다.
+    # 두 표본의 크기가 다르므로 여기서 뒤바꾸면 조용히 틀린 답이 나온다.
+    df1, df2 = n1 - 1, n2 - 1
+    F_lo = f(dfn=df1, dfd=df2).ppf(alpha / 2.0)
+    F_hi = f(dfn=df1, dfd=df2).ppf(1 - alpha / 2.0)
+
+    # 여기서도 큰 임계값이 아래끝의 분모로 간다.
+    # (s1²/s2²)/(σ1²/σ2²) ~ F 를 σ1²/σ2² 에 대해 풀면 대소가 뒤집히기 때문이다.
+    ci_lower = rhat / F_hi
+    ci_upper = rhat / F_lo
+
+    print(f"95% CI for σ₁²/σ₂²: ({ci_lower:.4f}, {ci_upper:.4f})")
+    ```
+
+    출력:
+
+    ```
+    95% CI for σ₁²/σ₂²: (0.2396, 2.4903)
+    ```
+
+    **(1)·(2)와 맞는다.** 구간 $(0.2396,\ 2.4903)$ 이고 상한/하한이 $2.4903/0.2396 = 10.394$ 로 $F_{\text{hi}}/F_{\text{lo}}$ 와 같다.
 
 참값 0.444를 담기는 하지만 위끝이 아래끝의 열 배다. 구간이 1을 넉넉히 담고 있으므로 "두 분산이 같다"는 가설조차 배제하지 못한다. 실제로는 $\sigma_2$가 $\sigma_1$의 1.5배인데도 그렇다. 분산 하나를 추정하는 것도 어려운데 그 비를 추정하는 일은 훨씬 더 어렵다.
 
@@ -89,82 +146,129 @@ print(f"95% CI for σ₁²/σ₂²: ({ci_lower:.4f}, {ci_upper:.4f})")
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> F 구간의 포함확률
+**보기 2.** <span class="diff easy" title="쉬움"></span> $F$ 구간의 포함확률. 같은 설정($n_1 = 15$, $n_2 = 12$, $\sigma_1 = 1$, $\sigma_2 = 1.5$)에서 $95\%$ 구간을 $100$개 만든다.
+
+**(1)** 정규모집단에서 이 구간의 포함확률은 얼마인가. 근사인가 정확인가. 그렇다면 이 모의실험으로 **잴 것**은 무엇인가.
+
+**(2)** 그림을 그리고, 구간 하나가 유독 길게 뻗는 까닭을 말하시오. $\log\theta$ 척도에서는 어떻게 보이겠는가.
+
+**(3)** $100$개 가운데 **$1$ 을 담는** 구간이 몇 개인가. 그 수가 실무에 주는 경고는 무엇인가.
 
 </div>
 
-```python
-#!/usr/bin/env python3
-"""두 분산의 비에 대한 F 신뢰구간을 100번 만들어 포함확률을 확인한다.
+??? success "풀이"
 
-두 표본분산의 비가 F 분포를 따른다는 사실에서 구간이 나온다. 이 방법은
-정규성에 특히 민감해서, 모집단이 정규가 아니면 포함확률이 크게 어긋난다.
-"""
+    **(1) 정확히 $0.95$다.** 구간이 $\theta$ 를 담는 사건은 (1)의 유도에 의해 $F_{\text{lo}} \le R/\theta \le F_{\text{hi}}$ 와 **같은 사건**이고, $R/\theta$ 가 정확히 $F_{14,11}$ 을 따르며 $F_{\text{lo}}, F_{\text{hi}}$ 가 그 분포의 $2.5$·$97.5$ 백분위수다. 따라서 확률이 $0.975 - 0.025 = 0.95$ 다. 근사가 아니고 $n_1, n_2, \sigma_1, \sigma_2$ 에 의존하지 않는다.
 
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import f
+    **그러므로 잴 것은 포함률이 아니라 폭이다.** 그런데 이 구간의 폭에는 특이한 성질이 있다. 앞 보기에서 본 대로 **상한/하한이 $10.39414$ 로 고정**이므로
 
-rng_seed = 42        # 아래 그림을 재현하려면 고정한다
-n_simulations = 100
-n1, n2 = 15, 12
-mu1, mu2 = 0.0, 0.0
-sigma1, sigma2 = 1.0, 1.5
-alpha = 0.05
+    $$
+    \log(\text{상한}) - \log(\text{하한}) = \log 10.39414 = 2.3412
+    $$
 
+    로 **$\log\theta$ 척도에서는 폭이 상수**다. 표본마다 달라지는 것은 위치($\log R$)뿐이다.
 
-def main():
-    if rng_seed is not None:
-        np.random.seed(rng_seed)
+    **(2) 그림.**
 
-    theta_true = (sigma1**2) / (sigma2**2)
-    df1, df2 = n1 - 1, n2 - 1
+    ```python
+    #!/usr/bin/env python3
+    """두 분산의 비에 대한 F 신뢰구간을 100번 만들어 포함확률을 확인한다.
 
-    lowers = np.empty(n_simulations)
-    uppers = np.empty(n_simulations)
-    centers = np.empty(n_simulations)
+    두 표본분산의 비가 F 분포를 따른다는 사실에서 구간이 나온다. 이 방법은
+    정규성에 특히 민감해서, 모집단이 정규가 아니면 포함확률이 크게 어긋난다.
+    """
 
-    F_lo = f(dfn=df1, dfd=df2).ppf(alpha / 2.0)
-    F_hi = f(dfn=df1, dfd=df2).ppf(1 - alpha / 2.0)
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import f
 
-    for i in range(n_simulations):
-        x = np.random.normal(loc=mu1, scale=sigma1, size=n1)
-        y = np.random.normal(loc=mu2, scale=sigma2, size=n2)
-        s1_sq = x.var(ddof=1)
-        s2_sq = y.var(ddof=1)
-        rhat = s1_sq / s2_sq
-        lowers[i] = rhat / F_hi
-        uppers[i] = rhat / F_lo
-        centers[i] = rhat
-
-    covered = (lowers <= theta_true) & (theta_true <= uppers)
-    n_fail = (~covered).sum()
-    coverage_pct = 100.0 * covered.mean()
-
-    fig, ax = plt.subplots(figsize=(12, 12))
-    for i in range(n_simulations):
-        color = "k" if covered[i] else "r"
-        ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
-        ax.plot(centers[i], i, marker="o", ms=3, color=color)
-
-    ax.axvline(theta_true, linestyle="--", linewidth=1.5, color="r")
-    ax.set_title(
-        f"{n_simulations} F-intervals for σ₁²/σ₂² | n1={n1}, n2={n2}, "
-        f"df=({df1},{df2}), CL={int((1 - alpha) * 100)}% | "
-        f"Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
-    ax.set_yticks([])
-    for sp in ["left", "right", "top"]:
-        ax.spines[sp].set_visible(False)
-    ax.set_xlabel("θ = σ₁² / σ₂²")
-    plt.tight_layout()
-    plt.show()
+    rng_seed = 42        # 아래 그림을 재현하려면 고정한다
+    n_simulations = 100
+    n1, n2 = 15, 12
+    mu1, mu2 = 0.0, 0.0
+    sigma1, sigma2 = 1.0, 1.5
+    alpha = 0.05
 
 
-if __name__ == "__main__":
-    main()
-```
+    def main():
+        if rng_seed is not None:
+            np.random.seed(rng_seed)
 
-![100 F-intervals for σ₁²/σ₂² | n1=15, n2=12, CL=95%](./img/ci_variance_ratio_74.png)
+        theta_true = (sigma1**2) / (sigma2**2)
+        df1, df2 = n1 - 1, n2 - 1
+
+        lowers = np.empty(n_simulations)
+        uppers = np.empty(n_simulations)
+        centers = np.empty(n_simulations)
+
+        F_lo = f(dfn=df1, dfd=df2).ppf(alpha / 2.0)
+        F_hi = f(dfn=df1, dfd=df2).ppf(1 - alpha / 2.0)
+
+        for i in range(n_simulations):
+            x = np.random.normal(loc=mu1, scale=sigma1, size=n1)
+            y = np.random.normal(loc=mu2, scale=sigma2, size=n2)
+            s1_sq = x.var(ddof=1)
+            s2_sq = y.var(ddof=1)
+            rhat = s1_sq / s2_sq
+            lowers[i] = rhat / F_hi
+            uppers[i] = rhat / F_lo
+            centers[i] = rhat
+
+        covered = (lowers <= theta_true) & (theta_true <= uppers)
+        n_fail = (~covered).sum()
+        coverage_pct = 100.0 * covered.mean()
+
+        fig, ax = plt.subplots(figsize=(12, 12))
+        for i in range(n_simulations):
+            color = "k" if covered[i] else "r"
+            ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
+            ax.plot(centers[i], i, marker="o", ms=3, color=color)
+
+        ax.axvline(theta_true, linestyle="--", linewidth=1.5, color="r")
+        ax.set_title(
+            f"{n_simulations} F-intervals for σ₁²/σ₂² | n1={n1}, n2={n2}, "
+            f"df=({df1},{df2}), CL={int((1 - alpha) * 100)}% | "
+            f"Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
+        ax.set_yticks([])
+        for sp in ["left", "right", "top"]:
+            ax.spines[sp].set_visible(False)
+        ax.set_xlabel("θ = σ₁² / σ₂²")
+        plt.tight_layout()
+        plt.show()
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    ![100 F-intervals for σ₁²/σ₂² | n1=15, n2=12, CL=95%](./img/ci_variance_ratio_74.png)
+
+    **실패가 셋이다.** (1)의 $0.95$ 에서 기대 실패가 다섯인데 셋이 나왔고, $100$회의 표준오차 $0.0218$ 안이다. 재확인일 뿐 새로 알게 되는 것은 없다.
+
+    **한 구간이 유독 길다.** $100$개의 폭이 최소 $0.2817$, 중앙값 $1.2452$, 최대 $13.1024$ 로 **최대가 최소의 $46$배**다. 그런데 (1)에서 본 대로 상한/하한은 모두 $10.394$ 로 **같다.** 모순이 아니다. 폭은
+
+    $$
+    \text{상한} - \text{하한} = R\left(\frac{1}{F_{\text{lo}}} - \frac{1}{F_{\text{hi}}}\right)
+    $$
+
+    로 $R = s_1^2/s_2^2$ 에 **정비례**하므로, 어떤 표본에서 $R$ 이 우연히 크게 나오면 구간이 통째로 오른쪽으로 밀리는 **동시에** 길어진다. 가장 긴 구간은 그 $R$ 이 중앙값의 $10$배쯤 되었다는 뜻이다.
+
+    **$\log\theta$ 척도에서는 이 왜곡이 사라진다.** 로그를 취하면
+
+    $$
+    \log(\text{상한}) - \log(\text{하한}) = \log\frac{F_{\text{hi}}}{F_{\text{lo}}} = 2.3412
+    $$
+
+    로 **$100$개 모두 길이가 같은 막대**가 되고, 움직이는 것은 중심 $\log R$ 뿐이다. 그림이 훨씬 읽기 쉬워진다. $\theta$ 가 비율이라 아래로는 $0$ 이라는 벽에 눌리고 위로는 열려 있는데, 로그가 그 비대칭을 없앤다.
+
+    **(3) $100$개 중 $74$개가 $1$ 을 담는다.** 참 비율이 $0.444$, 곧 표준편차로 **$1.5$배** 차이인데도 네 번 중 세 번은 등분산을 배제하지 못한다.
+
+    **실무에 주는 경고는 분명하다.** "먼저 등분산 검정을 하고 그 결과로 합동 $t$ 와 웰치 중에 고른다"는 절차가 여기서 무너진다. $n_1 = 15$, $n_2 = 12$ 쯤의 표본에서 등분산 검정이 기각하지 못했다는 것은
+
+    - "분산이 같다"는 뜻이 **아니라**
+    - "표본이 작아 $1.5$배 차이도 못 가린다"는 뜻일 때가 많다.
+
+    그런데 그 "기각하지 못함"을 근거로 합동 $t$ 를 고르면, 분산이 실제로 다를 때 포함률이 무너진다. **검정을 거쳐 방법을 고르지 말고 처음부터 웰치를 쓰는 것**이 간단하고 안전하다. 웰치가 치르는 값은 자유도 약간뿐이다.
 
 포함확률 97.0%로 명목값을 달성한다. 그런데 구간의 모양이 눈에 띈다. 대부분은 0 근처에서 2 언저리까지 뻗지만, 하나는 오른쪽 끝이 14를 넘는다. 그 표본에서 우연히 $s_1^2/s_2^2$이 크게 나오자 구간이 통째로 오른쪽으로 밀리며 길이까지 폭발한 것이다.
 

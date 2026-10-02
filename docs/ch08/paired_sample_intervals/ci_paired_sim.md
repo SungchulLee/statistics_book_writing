@@ -48,103 +48,204 @@ $\rho > 0$(양의 짝 내 상관)이면 $D$의 분산이 $\sigma_X^2 + \sigma_Y^
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 대응표본 구간 모의실험
+**보기 1.** <span class="diff easy" title="쉬움"></span> 대응표본 구간 모의실험. 짝 안의 두 측정이 $\sigma_X = 1.0$, $\sigma_Y = 1.2$, 상관 $\rho$ 인 이변량정규를 따르고 $\mu_X - \mu_Y = 0.5$, $n = 12$ 다.
+
+**(1)** 세 방법($t$, $\sigma_D$ 를 아는 $z$, $s_D$ 를 꽂은 $z$)의 포함률을 닫힌 꼴로 적으시오. $\rho$ 에 의존하는가.
+
+**(2)** $\rho = -0.3,\ 0,\ 0.6,\ 0.9$ 에서 $\sigma_D$ 와 $t$-구간의 **기대 폭**을 구하시오.
+
+**(3)** 모의실험으로 (1)과 (2)를 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import t, norm
+??? success "풀이"
 
-n_simulations = 100
-n = 12
-mu_x, mu_y = 0.5, 0.0
-sigma_x, sigma_y = 1.0, 1.2
-rho = 0.6
-alpha = 0.05
-method = "t"  # 't' | 'z_known' | 'z_plugin'
+    **(1) 짝을 지으면 일표본 문제가 된다.** $D_i = X_i - Y_i$ 가 서로 독립인 정규확률변수이고
 
-rng = np.random.default_rng(42)      # 아래 출력과 그림을 재현하려면 고정한다
+    $$
+    D_i \sim N\!\left(\mu_X - \mu_Y,\ \sigma_D^2\right),
+    \qquad \sigma_D^2 = \sigma_X^2 + \sigma_Y^2 - 2\rho\sigma_X\sigma_Y
+    $$
 
-delta_true = mu_x - mu_y
-var_d_true = sigma_x**2 + sigma_y**2 - 2 * rho * sigma_x * sigma_y
-sigma_d_true = np.sqrt(var_d_true)
+    이다. 짝 안의 상관은 **$\sigma_D$ 라는 수 하나에 전부 흡수되고** 그 뒤로는 자취를 감춘다. 그러므로
 
-# 상관이 있는 짝 (X, Y)를 만들어야 하므로 공분산행렬을 세우고
-# Cholesky 분해 L을 쓴다. 독립인 표준정규 z에 L을 곱하면
-# 공분산이 Sigma인 자료가 된다. Cov(Lz) = L L^T = Sigma 이기 때문이다.
-cov = rho * sigma_x * sigma_y
-Sigma = np.array([[sigma_x**2, cov], [cov, sigma_y**2]])
-L = np.linalg.cholesky(Sigma)
+    | 방법 | 포함률 | $\rho$ 에 의존하는가 |
+    |---|---|---|
+    | $t$ | 정확히 $0.95$ | **아니다** |
+    | $z$-known | 정확히 $0.95$ | **아니다** |
+    | $z$-plugin | $2F_{t_{11}}(1.96) - 1 = 0.92418$ | **아니다** |
 
-df = n - 1
-t_star = t.ppf(1 - alpha / 2, df=df)
-z_star = norm.ppf(1 - alpha / 2)
+    세 값 모두 $\rho$ 와 무관하다. $t$ 는 추축량 $(\bar D - \mu_D)/(S_D/\sqrt n) \sim t_{n-1}$ 때문에, $z$-known 은 $\bar D$ 가 정확히 정규이고 표준오차가 상수이기 때문에, $z$-plugin 은 담는 사건이 $|t_{11}| \le 1.96$ 이기 때문이다.
 
-lowers = np.empty(n_simulations)
-uppers = np.empty(n_simulations)
-centers = np.empty(n_simulations)
+    **$z$-plugin 만 $0.95$ 에 못 미친다.** $n = 12$ 에서 $t_{0.025,\,11} = 2.20099$ 인데 $1.96$ 을 쓰니 구간이 $11\%$ 좁다.
 
-for i in range(n_simulations):
-    z_vals = rng.standard_normal(size=(2, n))
-    xy = (L @ z_vals).T
-    x = xy[:, 0] + mu_x
-    y = xy[:, 1] + mu_y
-    d = x - y
-    dbar = d.mean()
-    s_d = d.std(ddof=1)
+    **(2) 상관은 폭만 바꾼다.** $t$-구간의 폭은 $2t_{0.025,\,11}S_D/\sqrt{12} = 1.27074\,S_D$ 이고 $E[S_D] = c_4\sigma_D$ 이므로($n = 12$ 에서 $c_4 = 0.97756$)
 
-    if method == "t":
-        se, crit = s_d / np.sqrt(n), t_star
-    elif method == "z_known":
-        se, crit = sigma_d_true / np.sqrt(n), z_star
-    else:
-        se, crit = s_d / np.sqrt(n), z_star
+    $$
+    E[\text{폭}] = 1.27074 \times 0.97756 \times \sigma_D = 1.24222\,\sigma_D
+    $$
 
-    lowers[i] = dbar - crit * se
-    uppers[i] = dbar + crit * se
-    centers[i] = dbar
+    다. $\sigma_D = \sqrt{2.44 - 2.4\rho}$ 이므로
 
-covered = (lowers <= delta_true) & (delta_true <= uppers)
-coverage_pct = 100.0 * covered.mean()
-print(f"Paired {method} coverage: {coverage_pct:.1f}%")
-```
+    | $\rho$ | $\sigma_D$ | 기대 폭 |
+    |---|---|---|
+    | $-0.3$ | $1.77764$ | $2.20822$ |
+    | $0$ | $1.56205$ | $1.94041$ |
+    | $0.6$ | $1.00000$ | $1.24222$ |
+    | $0.9$ | $0.52915$ | $0.65732$ |
 
-출력:
+    **$\rho$ 가 $-0.3$ 에서 $0.9$ 로 가는 동안 폭이 $3.4$배 줄어든다.** 그런데 (1)에 따르면 **포함률은 넷 모두 정확히 $0.95$ 다.** 상관은 구간의 **정확성**이 아니라 **정밀도**를 바꾼다. 음의 상관이면 짝짓기가 오히려 손해라는 것도 이 표에서 보인다.
 
-```
-Paired t coverage: 95.0%
-```
+    **(3) 확인.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import t, norm
+    from scipy.special import gammaln
+
+    n_simulations = 100
+    n = 12
+    mu_x, mu_y = 0.5, 0.0
+    sigma_x, sigma_y = 1.0, 1.2
+    rho = 0.6
+    alpha = 0.05
+    method = "t"  # 't' | 'z_known' | 'z_plugin'
+
+    rng = np.random.default_rng(42)      # 아래 출력과 그림을 재현하려면 고정한다
+
+    delta_true = mu_x - mu_y
+    var_d_true = sigma_x**2 + sigma_y**2 - 2 * rho * sigma_x * sigma_y
+    sigma_d_true = np.sqrt(var_d_true)
+
+    # 상관이 있는 짝 (X, Y)를 만들어야 하므로 공분산행렬을 세우고
+    # Cholesky 분해 L을 쓴다. 독립인 표준정규 z에 L을 곱하면
+    # 공분산이 Sigma인 자료가 된다. Cov(Lz) = L L^T = Sigma 이기 때문이다.
+    cov = rho * sigma_x * sigma_y
+    Sigma = np.array([[sigma_x**2, cov], [cov, sigma_y**2]])
+    L = np.linalg.cholesky(Sigma)
+
+    df = n - 1
+    t_star = t.ppf(1 - alpha / 2, df=df)
+    z_star = norm.ppf(1 - alpha / 2)
+
+    lowers = np.empty(n_simulations)
+    uppers = np.empty(n_simulations)
+    centers = np.empty(n_simulations)
+
+    for i in range(n_simulations):
+        z_vals = rng.standard_normal(size=(2, n))
+        xy = (L @ z_vals).T
+        x = xy[:, 0] + mu_x
+        y = xy[:, 1] + mu_y
+        d = x - y
+        dbar = d.mean()
+        s_d = d.std(ddof=1)
+
+        if method == "t":
+            se, crit = s_d / np.sqrt(n), t_star
+        elif method == "z_known":
+            se, crit = sigma_d_true / np.sqrt(n), z_star
+        else:
+            se, crit = s_d / np.sqrt(n), z_star
+
+        lowers[i] = dbar - crit * se
+        uppers[i] = dbar + crit * se
+        centers[i] = dbar
+
+    covered = (lowers <= delta_true) & (delta_true <= uppers)
+    coverage_pct = 100.0 * covered.mean()
+    print(f"Paired {method} coverage: {coverage_pct:.1f}%")
+
+    # (2) rho 를 바꾸면 폭만 달라지고 포함률은 그대로다.
+    print(f"\n{'rho':>6}{'sigma_D':>10}{'기대폭':>10}{'모의 평균폭':>12}{'포함':>6}")
+    for r in (-0.3, 0.0, 0.6, 0.9):
+        sd_r = np.sqrt(sigma_x**2 + sigma_y**2 - 2 * r * sigma_x * sigma_y)
+        Lr = np.linalg.cholesky(np.array([[sigma_x**2, r * sigma_x * sigma_y],
+                                          [r * sigma_x * sigma_y, sigma_y**2]]))
+        rng_r = np.random.default_rng(42)
+        hit, wsum = 0, 0.0
+        for _ in range(n_simulations):
+            d_r = (Lr @ rng_r.standard_normal((2, n))).T
+            d_r = (d_r[:, 0] + mu_x) - (d_r[:, 1] + mu_y)
+            half = t_star * d_r.std(ddof=1) / np.sqrt(n)
+            hit += abs(d_r.mean() - delta_true) <= half
+            wsum += 2 * half
+        # 기대 폭 = 2 t* c4 sigma_D / sqrt(n),  c4 = E[S]/sigma
+        c4 = np.exp(gammaln(n / 2) - gammaln((n - 1) / 2)) * np.sqrt(2 / (n - 1))
+        exp_w = 2 * t_star * c4 * sd_r / np.sqrt(n)
+        print(f"{r:>6.1f}{sd_r:>10.5f}{exp_w:>10.5f}{wsum / n_simulations:>12.5f}{hit:>6d}")
+    ```
+
+    출력:
+
+    ```
+    Paired t coverage: 95.0%
+
+       rho   sigma_D       기대폭      모의 평균폭    포함
+      -0.3   1.77764   2.20822     2.13020    95
+       0.0   1.56205   1.94041     1.88188    94
+       0.6   1.00000   1.24222     1.23565    95
+       0.9   0.52915   0.65732     0.67048    98
+    ```
+
+    **(1)과 (2)가 모두 맞는다.** $\sigma_D$ 와 기대 폭이 손으로 구한 표와 같고, 모의 평균 폭도 $2$–$3\%$ 안에서 따라온다($100$개 평균이므로 이 정도는 몬테카를로 오차다).
+
+    **포함 개수가 $95,\ 94,\ 95,\ 98$ 로 $\rho$ 에 따라 추세를 보이지 않는다.** 참값은 넷 모두 정확히 $0.95$ 이고, $100$회의 표준오차가 $0.0218$ 이므로 가장 벗어난 $98$ 도 $1.4$ 표준오차 안이다. **상관이 $-0.3$ 에서 $0.9$ 로 가면서 폭은 $3.4$배 줄었지만 포함률은 제자리다.**
+
+    **이것이 짝짓기를 보는 바른 눈이다.** 짝지어도 안 지어도 구간은 약속한 $95\%$ 를 지킨다. 달라지는 것은 **그 약속을 얼마나 좁은 구간으로 지키는가** 하나뿐이다.
 
 ### 구간의 시각화
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에. 앞 보기의 대응 $t$-구간 $100$개를 가로선 하나씩으로 그린다. 참값은 $\mu_D = 0.5$ 다.
+
+**(1)** 그림을 그리고 무엇이 읽히는지 수와 함께 말하시오.
+
+**(2)** 이 그림이 짝짓기의 **이득**을 보여 주는가.
 
 </div>
 
-```python
-# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
-# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
-# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
-fig, ax = plt.subplots(figsize=(12, 12))
-for i in range(n_simulations):
-    color = "k" if covered[i] else "r"
-    ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
-    ax.plot(centers[i], i, marker="o", ms=3, color=color)
+??? success "풀이"
 
-ax.axvline(delta_true, linestyle="--", linewidth=1.5, color="r")
-n_fail = int((~covered).sum())
-ax.set_title(f"{n_simulations} Paired {method} CIs | n={n}, rho={rho}, CL=95%")
-ax.set_yticks([])
-ax.set_xlabel("Mean difference")
-plt.tight_layout()
-plt.show()
-```
+    **(1) 그림.**
 
-![100 Paired t CIs | n=12, rho=0.6, CL=95%](./img/ci_paired_sim_110.png)
+    ```python
+    # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+    # 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+    # 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
+    fig, ax = plt.subplots(figsize=(12, 12))
+    for i in range(n_simulations):
+        color = "k" if covered[i] else "r"
+        ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
+        ax.plot(centers[i], i, marker="o", ms=3, color=color)
+
+    ax.axvline(delta_true, linestyle="--", linewidth=1.5, color="r")
+    n_fail = int((~covered).sum())
+    ax.set_title(f"{n_simulations} Paired {method} CIs | n={n}, rho={rho}, CL=95%")
+    ax.set_yticks([])
+    ax.set_xlabel("Mean difference")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![100 Paired t CIs | n=12, rho=0.6, CL=95%](./img/ci_paired_sim_110.png)
+
+    **읽히는 것 셋.**
+
+    **첫째, 실패가 다섯이다.** $100$개 중 $95$개가 참값 $0.5$ 를 담았다. (1)의 참값 $0.95$ 와 맞지만, 앞서 보았듯 이 일치는 되풀이 $100$회로 확인된 것이 아니라 추축량이 보장한 것이다.
+
+    **둘째, 폭이 $0.644$ 에서 $1.964$ 까지 $3.05$배 널뛴다.** 폭이 $1.27074\,s_D$ 로 $s_D$ 하나에만 비례하고 $n = 12$ 에서 $s_D$ 가 크게 흔들리기 때문이다. 평균 폭 $1.2356$ 은 (2)의 기대값 $1.24222$ 와 $0.5\%$ 차이다.
+
+    **셋째, $100$개 중 $58$개가 $0$ 을 담는다.** 참 차이가 $0.5$ 이고 참 표준오차가 $1/\sqrt{12} = 0.2887$ 이므로 $\mu_D/\text{SE} = 1.73$ 인데, $0$ 을 배제하려면 $2.2$배쯤이 필요하다. 짝짓기로 폭을 $1.47$배 줄이고도 절반 넘는 표본에서 "차이가 없을 수도 있다"가 된다. **짝짓기는 도움이 되지만 작은 $n$ 을 메워 주지는 못한다.**
+
+    **(2) 이 그림은 짝짓기의 이득을 보여 주지 않는다.** 그려진 $100$개는 모두 **짝짓기를 이미 쓴** 구간이다. 같은 자료를 짝 없이 다뤘다면 선이 더 길어졌겠지만, **그 비교 대상이 그림에 없다.** 이득을 보려면 두 가지 중 하나를 해야 한다.
+
+    - 같은 자료의 독립 이표본 구간을 **겹쳐 그린다.**
+    - $\rho$ 를 바꿔 가며 폭을 재어 (2)의 표를 만든다.
+
+    더 근본적으로, 짝짓기의 이득은 **빨간 선의 개수에 전혀 나타나지 않는다.** 포함률은 $\rho$ 와 무관하게 $0.95$ 이기 때문이다. 이득은 오직 **선의 길이**에 있고, 길이를 눈으로 재려면 비교할 다른 그림이 있어야 한다.
 
 여기 쓰인 설정에서 $\sigma_D = \sqrt{1 + 1.44 - 1.44} = 1.00$이다. $\rho = 0.6$이라는 상관 덕분에 $\sigma_X^2 + \sigma_Y^2$의 상당 부분이 상쇄되었다. 같은 자료를 짝을 무시하고 다뤘다면 산포가 1.562가 되어 구간이 1.56배 넓어졌을 것이다.
 

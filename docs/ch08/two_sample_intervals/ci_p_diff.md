@@ -46,37 +46,88 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 비율 차이의 신뢰구간 계산
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 비율 차이의 신뢰구간 계산. 독립인 두 표본에서 $n_1 = 200$ 중 $x_1 = 120$, $n_2 = 250$ 중 $x_2 = 130$ 이 성공했다.
+
+**(1)** $p_1 - p_2$ 의 왈드 $95\%$ 구간을 구하고 타당성 조건을 확인하시오. 표준오차에 **합동비율**을 쓰지 않는 까닭을 밝히시오.
+
+**(2)** 구간이 $0$ 을 담는다. 이것을 "두 비율이 같다"로 읽어도 되는가.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-n1, n2 = 200, 250
-x1, x2 = 120, 130
-confidence_level = 0.95
+    **(1) 구간.** $\hat p_1 = 120/200 = 0.60$, $\hat p_2 = 130/250 = 0.52$ 이고, 두 표본이 독립이므로 **분산이 더해진다.**
 
-p1 = x1 / n1
-p2 = x2 / n2
+    $$
+    \text{SE} = \sqrt{\frac{0.60 \times 0.40}{200} + \frac{0.52 \times 0.48}{250}}
+    = \sqrt{0.0012 + 0.0009984} = \sqrt{0.0021984} = 0.0468871
+    $$
 
-# 두 표본이 독립이므로 분산이 더해진다.
-# 여기서는 두 비율을 **따로** 추정해 넣는다. 검정에서 쓰는 합동비율은
-# "두 비율이 같다"는 귀무가설 아래의 계산이라 신뢰구간에는 맞지 않는다.
-standard_error = np.sqrt((p1 * (1 - p1) / n1) + (p2 * (1 - p2) / n2))
-z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
-margin_of_error = z_critical * standard_error
+    $$
+    (0.60 - 0.52) \pm 1.95996 \times 0.0468871 = 0.08 \pm 0.0918970 = (-0.0118970,\ 0.1718970)
+    $$
 
-confidence_interval = ((p1 - p2) - margin_of_error, (p1 - p2) + margin_of_error)
-print(f"{confidence_interval = }")
-```
+    **타당성 조건을 넉넉히 만족한다.** 네 수가 모두 $10$ 이상이다.
 
-출력:
+    $$
+    n_1\hat p_1 = 120, \quad n_1(1-\hat p_1) = 80, \quad
+    n_2\hat p_2 = 130, \quad n_2(1-\hat p_2) = 120
+    $$
 
-```
-confidence_interval = (-0.011897024279429055, 0.171897024279429)
-```
+    **합동비율을 쓰지 않는 까닭.** 합동비율
+
+    $$
+    \bar p = \frac{x_1 + x_2}{n_1 + n_2} = \frac{250}{450} = 0.5556
+    $$
+
+    은 **"$p_1 = p_2$ 다"라는 귀무가설 아래에서** 공통의 $p$ 를 추정한 값이다. 신뢰구간은 그런 가설을 세우지 않고 차이를 **추정**하는 일이므로, 각 집단의 비율을 따로 꽂아야 한다. 합동비율을 쓰면
+
+    $$
+    \sqrt{\bar p(1-\bar p)\left(\frac1{n_1} + \frac1{n_2}\right)} = 0.0471405
+    $$
+
+    로 여기서는 $0.5\%$ 밖에 차이 나지 않지만, **그 수가 답하는 질문이 다르다.** 그것은 검정통계량의 분모이지 추정값의 표준오차가 아니다. 두 비율이 크게 다르면 수치 차이도 커진다.
+
+    **(2) 안 된다.** 구간이 $0$ 을 담는 것은 "차이가 $0$ 이라는 값이 이 자료와 어긋나지 않는다"는 뜻이지 "차이가 $0$ 이다"가 아니다. **같은 구간이 $0.17$ 도 담고 있다.**
+
+    폭이 $0.1838$ 이므로 이 자료는
+
+    - "두 비율이 같다"는 주장과
+    - "한쪽이 $17$퍼센트포인트 높다"는 주장을
+
+    **동시에 허용한다.** 자료가 가진 정보의 전부는 "차이가 $-1.2$퍼센트포인트와 $17.2$퍼센트포인트 사이"라는 것이며, 그 범위가 실무적으로 너무 넓어 쓸모가 없다면 답은 "차이가 없다"가 아니라 **"표본이 모자란다"**이다.
+
+    **(3) 확인.**
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    n1, n2 = 200, 250
+    x1, x2 = 120, 130
+    confidence_level = 0.95
+
+    p1 = x1 / n1
+    p2 = x2 / n2
+
+    # 두 표본이 독립이므로 분산이 더해진다.
+    # 여기서는 두 비율을 **따로** 추정해 넣는다. 검정에서 쓰는 합동비율은
+    # "두 비율이 같다"는 귀무가설 아래의 계산이라 신뢰구간에는 맞지 않는다.
+    standard_error = np.sqrt((p1 * (1 - p1) / n1) + (p2 * (1 - p2) / n2))
+    z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
+    margin_of_error = z_critical * standard_error
+
+    confidence_interval = ((p1 - p2) - margin_of_error, (p1 - p2) + margin_of_error)
+    print(f"{confidence_interval = }")
+    ```
+
+    출력:
+
+    ```
+    confidence_interval = (-0.011897024279429055, 0.171897024279429)
+    ```
+
+    **(1)과 맞는다.** 구간 $(-0.0119,\ 0.1719)$ 이고 폭이 $0.1838$ 이다. $0$ 과 $0.17$ 이 둘 다 구간 안에 있다는 (2)의 지적이 이 수에서 바로 보인다.
 
 ---
 
@@ -157,100 +208,166 @@ $p_N - p_S$의 90% 신뢰구간을 구성하라.
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 세 방법의 포함확률 비교
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 방법의 포함확률 비교. $n_1 = 50$, $p_1 = 0.60$ 과 $n_2 = 40$, $p_2 = 0.50$ 에서 명목 $95\%$ 구간을 만든다. 참 차이는 $\Delta = 0.10$ 이다.
+
+**(1)** 이 설정에서 포함률과 기대 폭을 **모의실험 없이** 정확히 구할 수 있는가. 가능하다면 그 식을 적고 왈드와 뉴컴을 계산하시오.
+
+**(2)** 뉴컴이 두 윌슨 구간을 **제곱합**으로 합치는 까닭을 수로 보이시오. 양끝을 그냥 빼면 ($[L_1 - U_2,\ U_1 - L_2]$) 어떻게 되는가.
+
+**(3)** 그림을 그리고, $100$개 가운데 $0$ 을 담는 구간의 수가 뜻하는 바를 말하시오.
 
 </div>
 
-```python
-#!/usr/bin/env python3
-"""두 비율 차이의 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+??? success "풀이"
 
-Wald 는 식이 가장 간단하지만 비율이 0 이나 1 에 가까우면 포함확률이
-명목수준에 한참 못 미친다. Newcombe 는 그 약점을 고친 방법이다.
-"""
+    **(1) 이중 유한합으로 정확히 계산된다.** $k_1$ 은 $n_1+1 = 51$ 가지, $k_2$ 는 $n_2+1 = 41$ 가지이고 두 표본이 독립이므로, 가능한 결과는 $51 \times 41 = 2091$ 가지뿐이다. 구간은 $(k_1, k_2)$ 의 함수이므로
 
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import norm, beta
+    $$
+    C = \sum_{k_1=0}^{n_1}\sum_{k_2=0}^{n_2}
+    \binom{n_1}{k_1}p_1^{k_1}q_1^{n_1-k_1}
+    \binom{n_2}{k_2}p_2^{k_2}q_2^{n_2-k_2}\,
+    \mathbf 1\{\Delta \in I(k_1,k_2)\}
+    $$
 
-rng_seed = 42        # 아래 그림을 재현하려면 고정한다
-n_simulations = 100
-n1, n2 = 50, 40
-p1_true, p2_true = 0.60, 0.50
-alpha = 0.05
-method = "newcombe"  # 'newcombe' | 'wald' | 'cp'
+    로 끝이다. 기대 폭도 지시함수 자리에 폭을 넣으면 같은 합으로 나온다.
 
+    | 방법 | 정확 포함률 | 기대 폭 |
+    |---|---|---|
+    | 왈드 | $0.94273$ | $0.40727$ |
+    | **뉴컴** | $0.94771$ | $0.39150$ |
 
-def main():
-    if rng_seed is not None:
-        np.random.seed(rng_seed)
+    **뉴컴이 포함률은 높으면서 폭은 좁다.** 일표본에서 윌슨이 왈드를 이긴 것과 같은 모습이며, 여기서도 **아무 대가 없이 개선된다.** 둘 다 명목 $0.95$ 를 조금 밑도는데, 이항 자료에서 포함률이 정확히 $0.95$ 인 방법은 없다는 이산성의 결과다.
 
-    delta_true = p1_true - p2_true
-    z = norm.ppf(1 - alpha / 2.0)
-    lowers = np.empty(n_simulations)
-    uppers = np.empty(n_simulations)
-    centers = np.empty(n_simulations)
+    **(2) 독립인 두 오차는 피타고라스로 합쳐진다.** $\hat p_1 - \hat p_2$ 가 아래로 벗어나는 최악은 $\hat p_1$ 이 $L_1$ 까지 내려가고 $\hat p_2$ 가 $U_2$ 까지 올라가는 경우인데, **그 둘이 동시에 일어날 확률은 작다.** 두 오차가 독립이므로 합쳐진 오차의 크기는 합이 아니라 제곱합의 제곱근이다. 그래서 뉴컴은
 
-    for i in range(n_simulations):
-        k1 = np.random.binomial(n1, p1_true)
-        k2 = np.random.binomial(n2, p2_true)
-        p1hat, p2hat = k1 / n1, k2 / n2
-        centers[i] = p1hat - p2hat
+    $$
+    \sqrt{(\hat p_1 - L_1)^2 + (U_2 - \hat p_2)^2}
+    $$
 
-        if method == "wald":
-            se = np.sqrt(p1hat * (1 - p1hat) / n1 + p2hat * (1 - p2hat) / n2)
-            lo, hi = centers[i] - z * se, centers[i] + z * se
-        elif method == "newcombe":
-            # 집단마다 Wilson 구간을 구한다.
-            denom1 = 1 + z**2 / n1
-            center1 = (p1hat + z**2 / (2 * n1)) / denom1
-            half1 = z * np.sqrt(p1hat * (1 - p1hat) / n1 + z**2 / (4 * n1**2)) / denom1
-            L1, U1 = center1 - half1, center1 + half1
-            denom2 = 1 + z**2 / n2
-            center2 = (p2hat + z**2 / (2 * n2)) / denom2
-            half2 = z * np.sqrt(p2hat * (1 - p2hat) / n2 + z**2 / (4 * n2**2)) / denom2
-            L2, U2 = center2 - half2, center2 + half2
-            # 두 구간을 **제곱합**으로 합친다. L1 - U2 처럼 양끝을 그냥 빼면
-            # 두 집단이 동시에 최악으로 어긋나는 경우를 가정하는 셈이라
-            # 구간이 지나치게 넓어진다(아래 설명 참조).
-            lo = (p1hat - p2hat) - np.sqrt((p1hat - L1)**2 + (U2 - p2hat)**2)
-            hi = (p1hat - p2hat) + np.sqrt((U1 - p1hat)**2 + (p2hat - L2)**2)
-        elif method == "cp":
-            L1 = 0.0 if k1 == 0 else beta.ppf(alpha / 2.0, k1, n1 - k1 + 1)
-            U1 = 1.0 if k1 == n1 else beta.ppf(1 - alpha / 2.0, k1 + 1, n1 - k1)
-            L2 = 0.0 if k2 == 0 else beta.ppf(alpha / 2.0, k2, n2 - k2 + 1)
-            U2 = 1.0 if k2 == n2 else beta.ppf(1 - alpha / 2.0, k2 + 1, n2 - k2)
-            lo, hi = L1 - U2, U1 - L2
+    를 쓴다. 두 오차의 크기가 비슷하면 이 값은 단순히 더한 것의 $1/\sqrt2 = 0.707$ 배다.
 
-        lowers[i] = max(-1.0, lo)
-        uppers[i] = min(1.0, hi)
+    **양끝을 그냥 빼면 그 $\sqrt2$ 를 고스란히 잃는다.** 같은 윌슨 끝점으로 $[L_1 - U_2,\ U_1 - L_2]$ 를 쓰면 정확 포함률이 $0.99452$, 기대 폭이 $0.55212$ 다. 폭의 비가
 
-    covered = (lowers <= delta_true) & (delta_true <= uppers)
-    n_fail = int((~covered).sum())
-    coverage_pct = 100.0 * covered.mean()
+    $$
+    \frac{0.55212}{0.39150} = 1.4103 \approx \sqrt2 = 1.4142
+    $$
 
-    fig, ax = plt.subplots(figsize=(12, 12))
-    for i in range(n_simulations):
-        color = "k" if covered[i] else "r"
-        ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
-        ax.plot(centers[i], i, marker="o", ms=3, color=color)
-    ax.axvline(delta_true, linestyle="--", linewidth=1.5, color="r")
-    ax.set_title(
-        f"{n_simulations} Δ=p1−p2 CIs ({method.title()}) | n1={n1}, n2={n2}, "
-        f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
-    ax.set_yticks([])
-    for sp in ["left", "right", "top"]:
-        ax.spines[sp].set_visible(False)
-    ax.set_xlabel("Δ = p1 − p2")
-    plt.tight_layout()
-    plt.show()
+    로 **예측한 $\sqrt2$ 와 거의 정확히 같다.** 두 집단의 오차 크기가 비슷해 최악의 비가 그대로 나타난 것이다.
+
+    **명목보다 높은 포함률은 공짜가 아니다.** $0.9945$ 는 $0.95$ 를 $4.5$퍼센트포인트 넘지만 그 값을 폭 $41\%$ 로 치른다. 구간이 넓어진 만큼 결론이 무뎌진다.
+
+    **(3) 그림.**
+
+    ```python
+    #!/usr/bin/env python3
+    """두 비율 차이의 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+
+    Wald 는 식이 가장 간단하지만 비율이 0 이나 1 에 가까우면 포함확률이
+    명목수준에 한참 못 미친다. Newcombe 는 그 약점을 고친 방법이다.
+    """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import norm, beta
+
+    rng_seed = 42        # 아래 그림을 재현하려면 고정한다
+    n_simulations = 100
+    n1, n2 = 50, 40
+    p1_true, p2_true = 0.60, 0.50
+    alpha = 0.05
+    method = "newcombe"  # 'newcombe' | 'wald' | 'cp'
 
 
-if __name__ == "__main__":
-    main()
-```
+    def main():
+        if rng_seed is not None:
+            np.random.seed(rng_seed)
 
-![100 Δ=p1−p2 CIs (Newcombe) | n1=50, n2=40, CL=95%](./img/ci_p_diff_149.png)
+        delta_true = p1_true - p2_true
+        z = norm.ppf(1 - alpha / 2.0)
+        lowers = np.empty(n_simulations)
+        uppers = np.empty(n_simulations)
+        centers = np.empty(n_simulations)
+
+        for i in range(n_simulations):
+            k1 = np.random.binomial(n1, p1_true)
+            k2 = np.random.binomial(n2, p2_true)
+            p1hat, p2hat = k1 / n1, k2 / n2
+            centers[i] = p1hat - p2hat
+
+            if method == "wald":
+                se = np.sqrt(p1hat * (1 - p1hat) / n1 + p2hat * (1 - p2hat) / n2)
+                lo, hi = centers[i] - z * se, centers[i] + z * se
+            elif method == "newcombe":
+                # 집단마다 Wilson 구간을 구한다.
+                denom1 = 1 + z**2 / n1
+                center1 = (p1hat + z**2 / (2 * n1)) / denom1
+                half1 = z * np.sqrt(p1hat * (1 - p1hat) / n1 + z**2 / (4 * n1**2)) / denom1
+                L1, U1 = center1 - half1, center1 + half1
+                denom2 = 1 + z**2 / n2
+                center2 = (p2hat + z**2 / (2 * n2)) / denom2
+                half2 = z * np.sqrt(p2hat * (1 - p2hat) / n2 + z**2 / (4 * n2**2)) / denom2
+                L2, U2 = center2 - half2, center2 + half2
+                # 두 구간을 **제곱합**으로 합친다. L1 - U2 처럼 양끝을 그냥 빼면
+                # 두 집단이 동시에 최악으로 어긋나는 경우를 가정하는 셈이라
+                # 구간이 지나치게 넓어진다(아래 설명 참조).
+                lo = (p1hat - p2hat) - np.sqrt((p1hat - L1)**2 + (U2 - p2hat)**2)
+                hi = (p1hat - p2hat) + np.sqrt((U1 - p1hat)**2 + (p2hat - L2)**2)
+            elif method == "cp":
+                L1 = 0.0 if k1 == 0 else beta.ppf(alpha / 2.0, k1, n1 - k1 + 1)
+                U1 = 1.0 if k1 == n1 else beta.ppf(1 - alpha / 2.0, k1 + 1, n1 - k1)
+                L2 = 0.0 if k2 == 0 else beta.ppf(alpha / 2.0, k2, n2 - k2 + 1)
+                U2 = 1.0 if k2 == n2 else beta.ppf(1 - alpha / 2.0, k2 + 1, n2 - k2)
+                lo, hi = L1 - U2, U1 - L2
+
+            lowers[i] = max(-1.0, lo)
+            uppers[i] = min(1.0, hi)
+
+        covered = (lowers <= delta_true) & (delta_true <= uppers)
+        n_fail = int((~covered).sum())
+        coverage_pct = 100.0 * covered.mean()
+
+        fig, ax = plt.subplots(figsize=(12, 12))
+        for i in range(n_simulations):
+            color = "k" if covered[i] else "r"
+            ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
+            ax.plot(centers[i], i, marker="o", ms=3, color=color)
+        ax.axvline(delta_true, linestyle="--", linewidth=1.5, color="r")
+        ax.set_title(
+            f"{n_simulations} Δ=p1−p2 CIs ({method.title()}) | n1={n1}, n2={n2}, "
+            f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
+        ax.set_yticks([])
+        for sp in ["left", "right", "top"]:
+            ax.spines[sp].set_visible(False)
+        ax.set_xlabel("Δ = p1 − p2")
+        plt.tight_layout()
+        plt.show()
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    ![100 Δ=p1−p2 CIs (Newcombe) | n1=50, n2=40, CL=95%](./img/ci_p_diff_149.png)
+
+    **실패가 하나다.** (1)의 참값 $0.94771$ 에서 기대 실패가 $5.2$ 개인데 하나가 나왔다. 되풀이 $100$회의 표준오차가 $0.0222$ 이므로 $0.99$ 와 $0.9477$ 의 차이는 $1.9$ 표준오차이고, **이 그림으로 (1)의 값을 확인할 수는 없다.**
+
+    **$100$개 가운데 $81$개가 $0$ 을 담는다.** 참 차이가 $0.10$ 으로 **분명히 있는데도** 다섯에 넷은 "차이가 없을 수도 있다"고 말한다. 까닭은 차이의 크기에 견준 표준오차다.
+
+    $$
+    \text{SE} = \sqrt{\frac{0.6 \times 0.4}{50} + \frac{0.5 \times 0.5}{40}} = 0.10512,
+    \qquad
+    \frac{\Delta}{\text{SE}} = \frac{0.10}{0.10512} = 0.95
+    $$
+
+    **참 차이가 표준오차 하나 크기다.** 구간이 $0$ 을 배제하려면 관측된 차이가 표준오차의 $2$배쯤 되어야 하는데, 참값이 $0.95$배 자리에 있으니 대부분의 표본에서 문턱을 넘지 못한다.
+
+    **비율의 차이는 평균의 차이보다 훨씬 큰 표본을 요구한다.** 비율은 $[0,1]$ 안에 갇혀 있어 차이가 커 봐야 $1$ 인데, 표준오차는 $\sqrt{p(1-p)/n}$ 로 $p$ 가 $1/2$ 근처면 $0.5/\sqrt n$ 에 가깝다. $10$퍼센트포인트 차이를 가리려면 $\Delta/\text{SE} \ge 2$ 가 되도록
+
+    $$
+    n \gtrsim \left(\frac{2 \times 0.5\sqrt2}{0.10}\right)^2 \approx 200
+    $$
+
+    쯤이 집단마다 필요하다. 여기 $n_1 = 50$, $n_2 = 40$ 은 그 $1/4$ 에 지나지 않는다.
 
 100회 중 실패 1회다. 100회짜리 모의실험으로는 방법을 가릴 수 없으니 반복을 20,000회로 늘려 실제 포함확률을 재면 Newcombe 94.8%, Wald 94.4%가 나온다. 둘 다 명목값을 조금 밑돌지만 Newcombe가 낫다.
 

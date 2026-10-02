@@ -54,64 +54,162 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간 모의실험
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간 모의실험. $n = 20$, 참값 $p = 0.2$, 명목 $95\%$에서 네 방법을 비교한다. 되풀이는 $100$회다.
+
+**(1)** 네 방법의 포함률을 **모의실험 없이** 정확히 구하시오. 그리고 왈드와 윌슨의 차이가 어느 $k$에서 생기는지 밝히시오.
+
+**(2)** 되풀이 $100$회의 모의 포함률을 (1)과 나란히 두고, 차이가 몬테카를로 오차로 설명되는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import norm, beta
+??? success "풀이"
 
-np.random.seed(42)          # 아래 출력과 그림을 재현하려면 고정한다
+    **(1) 포함률은 유한합이다.** $n = 20$이면 $k$가 가질 수 있는 값은 $0, 1, \ldots, 20$의 스물한 가지뿐이고, 구간은 $k$의 함수다. 그러므로 각 방법에 대해 **$p = 0.2$를 담는 $k$의 집합** $S$를 구하고 그 점질량을 더하면 끝이다.
 
-n_simulations = 100
-n = 20
-p_true = 0.20
-alpha = 0.05
-method = "wilson"  # 'wald' | 'wilson' | 'ac' | 'cp'
+    $$
+    C = \sum_{k \in S} \binom{20}{k} (0.2)^k (0.8)^{20-k}
+    $$
 
-# 표본을 만들 필요가 없다. 필요한 것은 성공 횟수 k 하나뿐이므로
-# 0/1을 n개 뽑는 대신 이항분포에서 k를 바로 뽑는다.
-k = np.random.binomial(n=n, p=p_true, size=n_simulations)
-phat = k / n
-z = norm.ppf(1 - alpha / 2)
+    네 집합을 실제로 구하면 다음과 같다.
 
-lower = np.empty(n_simulations)
-upper = np.empty(n_simulations)
+    | 방법 | $p = 0.2$를 담는 $k$ | 포함률 |
+    |---|---|---|
+    | 왈드 | $\{2, 3, \ldots, 8\}$ | $0.92084$ |
+    | 윌슨 | $\{1, 2, \ldots, 7\}$ | $0.95633$ |
+    | 아그레스티–쿨 | $\{1, 2, \ldots, 7\}$ | $0.95633$ |
+    | 클로퍼–피어슨 | $\{1, 2, \ldots, 8\}$ | $0.97849$ |
 
-for i, ki in enumerate(k):
-    p = ki / n
-    if method == "wald":
-        se = np.sqrt(p * (1 - p) / n)
-        lo, hi = p - z * se, p + z * se
-    elif method == "wilson":
-        denom = 1 + z**2 / n
-        center = (p + z**2 / (2 * n)) / denom
-        half = z * np.sqrt(p * (1 - p) / n + z**2 / (4 * n**2)) / denom
-        lo, hi = center - half, center + half
-    elif method == "ac":
-        n_tilde = n + z**2
-        p_tilde = (ki + 0.5 * z**2) / n_tilde
-        se_tilde = np.sqrt(p_tilde * (1 - p_tilde) / n_tilde)
-        lo, hi = p_tilde - z * se_tilde, p_tilde + z * se_tilde
-    else:  # cp
-        lo = 0.0 if ki == 0 else beta.ppf(alpha / 2, ki, n - ki + 1)
-        hi = 1.0 if ki == n else beta.ppf(1 - alpha / 2, ki + 1, n - ki)
+    **왈드와 윌슨의 차이는 두 개의 $k$에서 나온다.** 집합을 비교하면 왈드는 $k = 1$을 **잃고** $k = 8$을 **얻는다.** 그 두 점질량이
 
-    lower[i] = max(0.0, lo)
-    upper[i] = min(1.0, hi)
+    $$
+    P(X = 1) = \binom{20}{1}(0.2)(0.8)^{19} = 0.05765,
+    \qquad
+    P(X = 8) = 0.02216
+    $$
 
-covered = (lower <= p_true) & (p_true <= upper)
-coverage_pct = 100.0 * covered.mean()
-print(f"{method} coverage: {coverage_pct:.1f}%")
-```
+    이므로
 
-출력:
+    $$
+    0.95633 - 0.05765 + 0.02216 = 0.92084
+    $$
 
-```
-wilson coverage: 96.0%
-```
+    로 **정확히 맞아떨어진다.** $k = 1$에서 왈드 구간은 $(0,\ 0.1455)$ 로 $0.2$에 닿지 못하는데, 윌슨은 중심이 $1/2$ 쪽으로 당겨져 $(0.0089,\ 0.2361)$ 이 되어 담는다. 잃는 쪽이 얻는 쪽보다 $2.6$배 무거워 왈드가 진다.
+
+    **클로퍼–피어슨은 윌슨에 $k = 8$만 더한 것이다.** $0.95633 + 0.02216 = 0.97849$ 다. 명목 $0.95$를 **위로** $2.8$퍼센트포인트 넘는데, 이것이 "보수적"이라는 말의 정확한 뜻이다.
+
+    **윌슨과 아그레스티–쿨은 포함률이 같다.** 두 구간은 중심이 같고 폭만 아그레스티–쿨이 조금 넓은데, 이 자리에서는 그 추가 폭이 새로운 $k$를 **하나도** 들여오지 못했다. 포함률이 $k$ 단위로만 움직이므로 폭의 차이가 집합을 바꾸지 못하면 포함률도 바뀌지 않는다. **이산성이 두 방법을 똑같이 만든 것이고, $n$이나 $p$가 조금만 달라져도 갈라진다.**
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import norm, beta
+
+    np.random.seed(42)          # 아래 출력과 그림을 재현하려면 고정한다
+
+    n_simulations = 100
+    n = 20
+    p_true = 0.20
+    alpha = 0.05
+    method = "wilson"  # 'wald' | 'wilson' | 'ac' | 'cp'
+
+    # 표본을 만들 필요가 없다. 필요한 것은 성공 횟수 k 하나뿐이므로
+    # 0/1을 n개 뽑는 대신 이항분포에서 k를 바로 뽑는다.
+    k = np.random.binomial(n=n, p=p_true, size=n_simulations)
+    phat = k / n
+    z = norm.ppf(1 - alpha / 2)
+
+    lower = np.empty(n_simulations)
+    upper = np.empty(n_simulations)
+
+    for i, ki in enumerate(k):
+        p = ki / n
+        if method == "wald":
+            se = np.sqrt(p * (1 - p) / n)
+            lo, hi = p - z * se, p + z * se
+        elif method == "wilson":
+            denom = 1 + z**2 / n
+            center = (p + z**2 / (2 * n)) / denom
+            half = z * np.sqrt(p * (1 - p) / n + z**2 / (4 * n**2)) / denom
+            lo, hi = center - half, center + half
+        elif method == "ac":
+            n_tilde = n + z**2
+            p_tilde = (ki + 0.5 * z**2) / n_tilde
+            se_tilde = np.sqrt(p_tilde * (1 - p_tilde) / n_tilde)
+            lo, hi = p_tilde - z * se_tilde, p_tilde + z * se_tilde
+        else:  # cp
+            lo = 0.0 if ki == 0 else beta.ppf(alpha / 2, ki, n - ki + 1)
+            hi = 1.0 if ki == n else beta.ppf(1 - alpha / 2, ki + 1, n - ki)
+
+        lower[i] = max(0.0, lo)
+        upper[i] = min(1.0, hi)
+
+    covered = (lower <= p_true) & (p_true <= upper)
+    coverage_pct = 100.0 * covered.mean()
+    print(f"{method} coverage: {coverage_pct:.1f}%")
+
+
+    # (1) 포함률은 유한합이다. k 가 21가지뿐이므로 담는 k 를 모아 더하면 끝이다.
+    from scipy.stats import binom
+
+
+    def interval(ki, which):
+        """성공 횟수 ki 하나에서 네 방법의 구간 끝점을 돌려준다."""
+        p = ki / n
+        if which == "wald":
+            se = np.sqrt(p * (1 - p) / n)
+            lo, hi = p - z * se, p + z * se
+        elif which == "wilson":
+            denom = 1 + z**2 / n
+            center = (p + z**2 / (2 * n)) / denom
+            half = z * np.sqrt(p * (1 - p) / n + z**2 / (4 * n**2)) / denom
+            lo, hi = center - half, center + half
+        elif which == "ac":
+            n_tilde = n + z**2
+            p_tilde = (ki + 0.5 * z**2) / n_tilde
+            se_tilde = np.sqrt(p_tilde * (1 - p_tilde) / n_tilde)
+            lo, hi = p_tilde - z * se_tilde, p_tilde + z * se_tilde
+        else:
+            lo = 0.0 if ki == 0 else beta.ppf(alpha / 2, ki, n - ki + 1)
+            hi = 1.0 if ki == n else beta.ppf(1 - alpha / 2, ki + 1, n - ki)
+        return max(0.0, lo), min(1.0, hi)
+
+
+    def covers(ki, which):
+        lo, hi = interval(ki, which)
+        return lo <= p_true <= hi
+
+
+    print()
+    print(f"{'방법':<8}{'담는 k':<12}{'정확':>9}{'모의':>8}{'차이/MC오차':>10}")
+    for m in ("wald", "wilson", "ac", "cp"):
+        S = [ki for ki in range(n + 1) if covers(ki, m)]
+        exact = sum(binom.pmf(ki, n, p_true) for ki in S)
+        sim = np.mean([covers(ki, m) for ki in k])
+        se_mc = np.sqrt(exact * (1 - exact) / n_simulations)
+        print(f"{m:<8}{f'{S[0]}..{S[-1]}':<12}{exact:>9.5f}{sim:>8.2f}{abs(sim - exact) / se_mc:>10.2f}")
+    ```
+
+    출력:
+
+    ```
+    wilson coverage: 96.0%
+
+    방법      담는 k               정확      모의   차이/MC오차
+    wald    2..8          0.92084    0.91      0.40
+    wilson  1..7          0.95633    0.96      0.18
+    ac      1..7          0.95633    0.96      0.18
+    cp      1..8          0.97849    0.99      0.79
+    ```
+
+    **네 정확값이 (1)의 표와 같다.** 담는 $k$의 범위도 $2..8$, $1..7$, $1..7$, $1..8$ 로 손으로 구한 집합과 같다.
+
+    **모의와 정확이 모두 몬테카를로 오차 안에서 맞는다.** 마지막 열이 $|\text{모의} - \text{정확}|$ 을 그 자리의 몬테카를로 표준오차로 나눈 값인데, 네 방법 모두 $0.79$ 이하다. $1$ 표준오차를 넘는 것이 하나도 없다.
+
+    **그러나 $100$회로 읽을 수 있는 것은 순서뿐이다.** 모의가 준 $0.91 / 0.96 / 0.96 / 0.99$ 는 정확값 $0.9208 / 0.9563 / 0.9563 / 0.9785$ 의 **차례는 바르게** 재현했지만 자릿수는 믿을 수 없다. $0.95$ 근처에서 되풀이 $100$회의 표준오차가 $0.02$라서 소수 둘째 자리가 통째로 흔들린다. 포함률을 **값으로** 말하려면 정확 계산을 하거나 되풀이를 만 번 단위로 올려야 한다.
+
+    **윌슨과 아그레스티–쿨은 모의에서도 한 글자도 다르지 않다.** 둘이 같은 $k$ 집합을 담으므로 **같은 표본에서는 언제나 같이 맞고 같이 틀린다.** 모의실험을 아무리 늘려도 이 자리에서는 두 방법이 갈라지지 않는다.
 
 같은 자료(같은 시드)에 `method`만 바꿔 세어 보면 Wald 91.0%, Agresti–Coull 96.0%, Clopper–Pearson 99.0%가 된다. Wald만 명목값 아래로 내려가고, Clopper–Pearson은 보수적인 만큼 위로 넘친다.
 
@@ -119,29 +217,63 @@ wilson coverage: 96.0%
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에. 앞 보기에서 만든 윌슨 구간 $100$개를 가로선 하나씩으로 그리고, 참값을 놓친 것만 빨갛게 칠한다.
+
+**(1)** 그림을 그리고 무엇이 읽히는지 수와 함께 말하시오. 선이 **몇 자리에만** 나타나는 까닭을 밝히시오.
+
+**(2)** 이 그림에서 **왈드** 구간의 실패를 읽을 수 있는가. 그 밖에 이 그림이 가리는 것은 무엇인가.
 
 </div>
 
-```python
-# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
-# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
-# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
-fig, ax = plt.subplots(figsize=(12, 12))
-for i in range(n_simulations):
-    color = "k" if covered[i] else "r"
-    ax.plot([lower[i], upper[i]], [i, i], lw=2, color=color)
-    ax.plot(phat[i], i, marker="o", ms=3, color=color)
+??? success "풀이"
 
-ax.axvline(p_true, linestyle="--", linewidth=1.5)
-ax.set_title(f"{n_simulations} {method.upper()} CIs | n={n}, p={p_true}, CL=95%")
-ax.set_yticks([])
-ax.set_xlabel("Proportion value")
-plt.tight_layout()
-plt.show()
-```
+    **(1) 그림.**
 
-![100 WILSON CIs | n=20, p=0.2, CL=95%](./img/ci_prop_sim_108.png)
+    ```python
+    # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+    # 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+    # 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
+    fig, ax = plt.subplots(figsize=(12, 12))
+    for i in range(n_simulations):
+        color = "k" if covered[i] else "r"
+        ax.plot([lower[i], upper[i]], [i, i], lw=2, color=color)
+        ax.plot(phat[i], i, marker="o", ms=3, color=color)
+
+    ax.axvline(p_true, linestyle="--", linewidth=1.5)
+    ax.set_title(f"{n_simulations} {method.upper()} CIs | n={n}, p={p_true}, CL=95%")
+    ax.set_yticks([])
+    ax.set_xlabel("Proportion value")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![100 WILSON CIs | n=20, p=0.2, CL=95%](./img/ci_prop_sim_108.png)
+
+    **읽히는 것 하나 — 선이 아홉 자리에만 있다.** $k$가 정수이므로 $\hat p = k/n$이 $0,\ 0.05,\ 0.10,\ \ldots$ 의 스물한 가지 값만 가질 수 있고, 구간은 $k$의 함수이므로 **같은 $k$가 나온 표본은 완전히 같은 구간을 만든다.** 이 $100$개 표본에 실제로 나온 $k$는 아홉 가지뿐이다.
+
+    | $k$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+    |---|---|---|---|---|---|---|---|---|---|
+    | 표본 수 | 1 | 8 | 19 | 18 | 21 | 16 | 9 | 5 | 3 |
+
+    그림에 선이 $100$개 그려져 있지만 **서로 다른 선은 아홉 개**다. 나머지는 겹쳐 그린 것이다.
+
+    **읽히는 것 둘 — 빨간 선이 넷이고, 그 정체가 분명하다.** 맨 왼쪽의 짧은 빨간 선 하나가 $k = 0$의 구간 $(0,\ 0.1611)$ 이고, $0.219$ 에서 시작하는 긴 빨간 선 셋이 $k = 8$의 구간 $(0.2188,\ 0.6134)$ 다. 앞 보기에서 구한 "윌슨이 담는 $k$는 $\{1, \ldots, 7\}$" 과 **정확히 맞는다.** $k = 0$은 위에서 못 미치고 $k = 8$은 아래에서 넘어선다.
+
+    **읽히는 것 셋 — 폭이 $k$와 함께 넓어진다.** 윌슨 구간의 폭은
+
+    $$
+    k = 0:\ 0.1611, \quad 2:\ 0.2732, \quad 4:\ 0.3354, \quad 6:\ 0.3735, \quad 8:\ 0.3946
+    $$
+
+    로 $\hat p$이 $1/2$에 가까울수록 넓다. $\hat p(1-\hat p)$가 $1/2$에서 최대이기 때문이다. $k = 0$에서도 폭이 $0.1611$ 로 **남아 있다**는 점이 중요하다. 같은 자리에서 왈드 구간은 $(0,\ 0)$ 한 점으로 무너진다.
+
+    **(2) 왈드의 실패는 이 그림에 없다.** 그려진 것은 윌슨 구간이므로, 왈드가 $k = 1$의 여덟 표본에서 실패한다는 사실은 이 그림의 어디에도 나타나지 않는다. 다만 $k$별 도수를 **셀 수는** 있으므로, 앞 보기에서 구한 "왈드가 담는 $k$는 $\{2,\ldots,8\}$" 과 맞추면 왈드의 실패가 $1 + 8 = 9$개임을 **계산해 낼** 수는 있다. 그림이 보여 주는 것이 아니라 그림에서 센 수와 다른 계산을 합쳐야 나오는 값이다.
+
+    **그 밖에 가리는 것 셋.**
+
+    1. **포함률의 참값.** 빨간 선이 넷이라고 해서 포함률이 $0.96$인 것이 아니다. 참값은 $0.95633$이고, 그것은 이 그림이 아니라 유한합이 준다.
+    2. **표본의 다양성.** 선이 $100$개 그려져 있어 $100$가지 결과처럼 보이지만 실제로는 아홉 가지다. **그림이 자료의 풍부함을 과장한다.**
+    3. **색칠에 필요한 정보.** 검정인지 빨강인지는 참값 $p = 0.2$를 알아야 정할 수 있다. 실제 자료에서는 그 선이 어느 색인지 알 길이 없다.
 
 구간이 몇 가지 위치에만 나타나는 것은 $k$가 정수여서 $\hat p$가 $0, 0.05, 0.10, \ldots$ 스물한 가지 값밖에 갖지 못하기 때문이다. 같은 $k$가 나온 표본들은 완전히 같은 구간을 만든다.
 

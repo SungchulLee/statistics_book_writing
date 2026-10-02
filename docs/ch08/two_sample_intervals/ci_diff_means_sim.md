@@ -54,70 +54,135 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 평균 차이 구간 모의실험
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 평균 차이 구간 모의실험. 두 정규모집단이 $\mu_1 = 0$, $\sigma_1 = 1.0$ 과 $\mu_2 = 0.5$, $\sigma_2 = 1.5$ 이고, 표본크기는 $n_1 = 12$, $n_2 = 10$ 이다. **작은 표본 쪽의 분산이 더 크다.** 네 방법으로 명목 $95\%$ 구간을 만든다.
+
+**(1)** 네 방법 가운데 포함률이 **정확히** $0.95$ 인 것은 어느 것인가. 나머지는 어느 쪽으로 어긋나겠는가. 합동 $t$ 가 이 설정에서 특히 위험한 까닭을 **수로** 보이시오.
+
+**(2)** 되풀이 $100$회의 모의실험으로 네 방법의 우열을 가릴 수 있는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import t, norm
+??? success "풀이"
 
-np.random.seed(42)          # 아래 출력과 그림을 재현하려면 고정한다
+    **(1) $z$-known 만 정확하다.** 두 모분산을 알면 표준오차
 
-n_simulations = 100
-# 표본크기도 분산도 서로 다르게 잡았다. 이런 설정에서 합동 t가 무너지고
-# Welch가 버티는지 보려는 것이다.
-n1, n2 = 12, 10
-mu1, mu2 = 0.0, 0.5
-sigma1, sigma2 = 1.0, 1.5
-alpha = 0.05
-method = "welch"  # 'welch' | 'pooled' | 'z_known' | 'z_plugin'
+    $$
+    \sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}
+    = \sqrt{\frac{1}{12} + \frac{2.25}{10}} = \sqrt{0.30833} = 0.55528
+    $$
 
-delta_true = mu1 - mu2
-lowers = np.empty(n_simulations)
-uppers = np.empty(n_simulations)
-centers = np.empty(n_simulations)
+    이 **상수**이고 $\bar X_1 - \bar X_2$ 가 정확히 정규이므로 포함률이 $2\Phi(1.96) - 1 = 0.95$ 다. 나머지 셋은 분산을 추정하므로 사정이 다르다.
 
-for i in range(n_simulations):
-    x = np.random.normal(mu1, sigma1, n1)
-    y = np.random.normal(mu2, sigma2, n2)
-    xbar, ybar = x.mean(), y.mean()
-    s1, s2 = x.std(ddof=1), y.std(ddof=1)
-    diff_hat = xbar - ybar
-    centers[i] = diff_hat
+    **합동 $t$ 는 아래로 어긋난다.** 합동분산의 기댓값은 자유도 가중평균이다.
 
-    if method == "welch":
-        se = np.sqrt(s1**2 / n1 + s2**2 / n2)
-        num = (s1**2 / n1 + s2**2 / n2)**2
-        den = (s1**2 / n1)**2 / (n1 - 1) + (s2**2 / n2)**2 / (n2 - 1)
-        df = num / den
-        crit = t.ppf(1 - alpha / 2, df=df)
-    elif method == "pooled":
-        df = n1 + n2 - 2
-        sp2 = ((n1 - 1) * s1**2 + (n2 - 1) * s2**2) / df
-        se = np.sqrt(sp2 * (1 / n1 + 1 / n2))
-        crit = t.ppf(1 - alpha / 2, df=df)
-    elif method == "z_known":
-        se = np.sqrt(sigma1**2 / n1 + sigma2**2 / n2)
-        crit = norm.ppf(1 - alpha / 2)
-    else:  # z_plugin
-        se = np.sqrt(s1**2 / n1 + s2**2 / n2)
-        crit = norm.ppf(1 - alpha / 2)
+    $$
+    E[S_p^2] = \frac{(n_1-1)\sigma_1^2 + (n_2-1)\sigma_2^2}{n_1+n_2-2}
+    = \frac{11 \times 1 + 9 \times 2.25}{20} = 1.5625
+    $$
 
-    lowers[i] = diff_hat - crit * se
-    uppers[i] = diff_hat + crit * se
+    이것으로 만든 표준오차의 제곱은
 
-covered = (lowers <= delta_true) & (delta_true <= uppers)
-coverage_pct = 100.0 * covered.mean()
-print(f"{method} coverage: {coverage_pct:.1f}%")
-```
+    $$
+    E[S_p^2]\left(\frac1{n_1} + \frac1{n_2}\right)
+    = 1.5625 \times 0.18333 = 0.28646
+    $$
 
-출력:
+    인데 **참값은 $0.30833$ 이다.** 비가 $0.9291$ 이므로 표준오차를 평균적으로 $\sqrt{0.9291} = 0.9639$ 배, 곧 **$3.6\%$ 작게** 잡는다. 구간이 그만큼 좁아지니 포함률이 $0.95$ 아래로 내려간다.
 
-```
-welch coverage: 97.0%
-```
+    **까닭은 가중치의 방향이다.** 합동분산은 자유도가 큰 쪽($n_1 - 1 = 11$, 곧 **작은 분산** 쪽)에 더 큰 가중을 준다. 그런데 차이의 분산 $\sigma_1^2/n_1 + \sigma_2^2/n_2$ 에서는 **$n$ 이 작은 쪽**($n_2 = 10$, 곧 **큰 분산** 쪽)이 더 큰 몫을 차지한다. 두 가중이 **반대 방향**이라 과소추정이 생긴다. 큰 분산이 큰 표본에 붙어 있었다면 부호가 뒤집혀 합동 $t$ 가 오히려 보수적이 된다.
+
+    **$s$ 를 꽂은 $z$ 는 더 아래로 어긋난다.** 표준오차는 웰치와 **같은데** 임계값만 $t$ 에서 $z$ 로 줄였다. 웰치의 자유도가 평균 $15.4$ 쯤이므로
+
+    $$
+    \frac{z_{0.025}}{t_{0.025,\,15.4}} = \frac{1.95996}{2.12628} = 0.9218
+    $$
+
+    로 구간이 $8\%$ 좁다. 넷 가운데 가장 나쁠 것으로 예상된다.
+
+    **웰치는 근사지만 좋은 근사다.** 새터스웨이트 자유도는 $S_1^2/n_1 + S_2^2/n_2$ 를 척도화한 카이제곱으로 **적률을 맞춰** 근사한 것이라 정확하지는 않다. 다만 어긋남이 매우 작다.
+
+    **(2) 되풀이 $100$회로는 가릴 수 없다.** 포함률 $0.95$ 근처에서 $100$회의 몬테카를로 표준오차가 $0.0218$ 인데, 네 방법의 **참값 차이가 그보다 작거나 비슷하다.** 되풀이 $200$만 회로 재면 이렇다.
+
+    | 방법 | 포함률 | 기대 폭 |
+    |---|---|---|
+    | 웰치 | $0.9499$ | $2.3333$ |
+    | 합동 $t$ | $0.9399$ | $2.2012$ |
+    | $z$-known | $0.9498$ | $2.1766$ |
+    | $z$-plugin | $0.9317$ | $2.1418$ |
+
+    (몬테카를로 표준오차 $0.0002$.) **$z$-known 이 $0.9498$ 로 (1)의 예측 $0.95$ 와 맞고, 웰치가 $0.9499$ 로 그에 붙어 있다.** 합동 $t$ 는 $0.9399$ 로 $1$퍼센트포인트 모자라고 $z$-plugin 은 $0.9317$ 로 $1.8$퍼센트포인트 모자라, 예측한 방향과 순서가 모두 맞는다.
+
+    그런데 가장 큰 차이인 웰치와 $z$-plugin 사이의 $0.018$ 조차 $100$회 오차 $0.0218$ 보다 **작다.**
+
+    **(3) 확인.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import t, norm
+
+    np.random.seed(42)          # 아래 출력과 그림을 재현하려면 고정한다
+
+    n_simulations = 100
+    # 표본크기도 분산도 서로 다르게 잡았다. 이런 설정에서 합동 t가 무너지고
+    # Welch가 버티는지 보려는 것이다.
+    n1, n2 = 12, 10
+    mu1, mu2 = 0.0, 0.5
+    sigma1, sigma2 = 1.0, 1.5
+    alpha = 0.05
+    method = "welch"  # 'welch' | 'pooled' | 'z_known' | 'z_plugin'
+
+    delta_true = mu1 - mu2
+    lowers = np.empty(n_simulations)
+    uppers = np.empty(n_simulations)
+    centers = np.empty(n_simulations)
+
+    for i in range(n_simulations):
+        x = np.random.normal(mu1, sigma1, n1)
+        y = np.random.normal(mu2, sigma2, n2)
+        xbar, ybar = x.mean(), y.mean()
+        s1, s2 = x.std(ddof=1), y.std(ddof=1)
+        diff_hat = xbar - ybar
+        centers[i] = diff_hat
+
+        if method == "welch":
+            se = np.sqrt(s1**2 / n1 + s2**2 / n2)
+            num = (s1**2 / n1 + s2**2 / n2)**2
+            den = (s1**2 / n1)**2 / (n1 - 1) + (s2**2 / n2)**2 / (n2 - 1)
+            df = num / den
+            crit = t.ppf(1 - alpha / 2, df=df)
+        elif method == "pooled":
+            df = n1 + n2 - 2
+            sp2 = ((n1 - 1) * s1**2 + (n2 - 1) * s2**2) / df
+            se = np.sqrt(sp2 * (1 / n1 + 1 / n2))
+            crit = t.ppf(1 - alpha / 2, df=df)
+        elif method == "z_known":
+            se = np.sqrt(sigma1**2 / n1 + sigma2**2 / n2)
+            crit = norm.ppf(1 - alpha / 2)
+        else:  # z_plugin
+            se = np.sqrt(s1**2 / n1 + s2**2 / n2)
+            crit = norm.ppf(1 - alpha / 2)
+
+        lowers[i] = diff_hat - crit * se
+        uppers[i] = diff_hat + crit * se
+
+    covered = (lowers <= delta_true) & (delta_true <= uppers)
+    coverage_pct = 100.0 * covered.mean()
+    print(f"{method} coverage: {coverage_pct:.1f}%")
+    ```
+
+    출력:
+
+    ```
+    welch coverage: 97.0%
+    ```
+
+    **$100$회가 (1)의 순서를 뒤집는다.** 같은 자료에 `method` 만 바꾸면 웰치 $97\%$, 합동 $t$ $95\%$, $z$-known $94\%$, $z$-plugin $93\%$ 가 나온다. 참값은 차례로 $0.9499,\ 0.9399,\ 0.9498,\ 0.9317$ 이므로
+
+    - 웰치가 참값보다 $2$퍼센트포인트 높게 나왔고($0.92$ 표준오차),
+    - **합동 $t$ 가 $z$-known 보다 높게 나왔다** — 참값은 반대다.
+
+    되풀이가 모자라면 **순서조차 믿을 수 없다.** 여기서 모의실험이 할 수 있는 일은 "네 방법이 $0.95$ 근처에 있다"는 것까지이고, 그 안의 순위는 (1)의 유도나 $40$만 회짜리 모의실험이 정해야 한다.
 
 같은 자료에 `method`만 바꾸면 합동 $t$ 95%, $z$-known 94%, $z$-plugin 93%가 나온다. 다만 100회짜리 모의실험의 표준오차가 2.2%p나 되므로 이 차이를 방법의 우열로 읽으면 안 된다. 방법 사이의 진짜 차이를 보려면 아래 연습문제 3처럼 10,000회가 필요하다.
 
@@ -125,30 +190,60 @@ welch coverage: 97.0%
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에
+**보기 2.** <span class="diff easy" title="쉬움"></span> 구간 100개를 한 그림에. 앞 보기의 웰치 구간 $100$개를 가로선 하나씩으로 그린다. 참값은 $\mu_1 - \mu_2 = -0.5$ 다.
+
+**(1)** 그림을 그리고, 구간의 폭이 평균의 일표본 그림보다 더 심하게 널뛰는 까닭을 말하시오.
+
+**(2)** 이 $100$개 가운데 **$0$ 을 담는** 구간이 몇 개인가. 그 수가 뜻하는 바는 무엇인가.
 
 </div>
 
-```python
-# 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
-# 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
-# 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
-fig, ax = plt.subplots(figsize=(12, 12))
-for i in range(n_simulations):
-    color = "k" if covered[i] else "r"
-    ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
-    ax.plot(centers[i], i, marker="o", ms=3, color=color)
+??? success "풀이"
 
-ax.axvline(delta_true, linestyle="--", linewidth=1.5)
-n_fail = int((~covered).sum())
-ax.set_title(f"{n_simulations} {method} CIs | n1={n1}, n2={n2}, CL=95%")
-ax.set_yticks([])
-ax.set_xlabel("Difference of means")
-plt.tight_layout()
-plt.show()
-```
+    **(1) 그림.**
 
-![100 welch CIs | n1=12, n2=10, CL=95%](./img/ci_diff_means_sim_114.png)
+    ```python
+    # 구간 하나를 가로선 하나로 그린다. 참값을 담은 구간은 검정, 놓친 구간은
+    # 빨강이다. 세로 점선이 참값이고, 빨간 선이 몇 개인지 세는 것이 곧 포함확률을
+    # 재는 일이다. 구간마다 길이가 다른 까닭은 표본마다 s 가 다르기 때문이다.
+    fig, ax = plt.subplots(figsize=(12, 12))
+    for i in range(n_simulations):
+        color = "k" if covered[i] else "r"
+        ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
+        ax.plot(centers[i], i, marker="o", ms=3, color=color)
+
+    ax.axvline(delta_true, linestyle="--", linewidth=1.5)
+    n_fail = int((~covered).sum())
+    ax.set_title(f"{n_simulations} {method} CIs | n1={n1}, n2={n2}, CL=95%")
+    ax.set_yticks([])
+    ax.set_xlabel("Difference of means")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![100 welch CIs | n1=12, n2=10, CL=95%](./img/ci_diff_means_sim_114.png)
+
+    **폭이 $1.559$ 에서 $4.024$ 까지, $2.58$배 널뛴다.** 일표본 $t$-구간보다 심한 데는 세 가지 까닭이 있다.
+
+    **첫째, 흔들리는 양이 둘이다.** 폭이 $2t_{\alpha/2,\,\nu}\sqrt{s_1^2/n_1 + s_2^2/n_2}$ 인데 $s_1$ 과 $s_2$ 가 **각각** 흔들린다. 일표본에서는 $s$ 하나였다.
+
+    **둘째, 임계값까지 흔들린다.** 새터스웨이트 자유도 $\nu$ 가 $s_1, s_2$ 의 함수이므로 $t_{0.025,\,\nu}$ 도 표본마다 달라진다. 일표본에서는 임계값이 $n$ 하나로 정해지는 **상수**였다. 여기서 $\nu$ 의 평균은 $15.4$ 인데, 두 분산의 비가 극단으로 가면 $\nu$ 가 $\min(n_1, n_2) - 1 = 9$ 까지 내려가고 그때 임계값이 $2.26$ 으로 뛴다.
+
+    **셋째, 작은 표본에 큰 분산이 붙어 있다.** $s_2$ 의 상대적 흔들림이 $1/\sqrt{2(n_2-1)} = 0.236$ 으로 큰데, 그 $s_2$ 가 폭에서 차지하는 몫이 $0.225/0.30833 = 73\%$ 다. 가장 불안정한 양이 가장 큰 몫을 쥐고 있다.
+
+    **실패는 셋이다.** 참값 $0.95$ 에서 기대 실패가 다섯인데 셋이 나왔고, $100$회의 표준오차 $0.0218$ 안이다.
+
+    **(2) $100$개 중 $89$개가 $0$ 을 담는다.** 참 차이가 $-0.5$ 로 **분명히 존재하는데도** 열에 아홉은 "차이가 없다"는 값을 배제하지 못한다.
+
+    까닭은 차이의 크기에 견준 표준오차다. 참 표준오차가 $0.55528$ 이므로
+
+    $$
+    \frac{\lvert \mu_1 - \mu_2 \rvert}{\text{SE}} = \frac{0.5}{0.55528} = 0.90
+    $$
+
+    로, **참 차이가 표준오차 하나에도 못 미친다.** 구간이 $0$ 을 배제하려면 관측된 차이가 표준오차의 $2.1$배쯤 되어야 하는데 참값이 $0.90$배 자리에 있으니, 대부분의 표본에서 그 문턱을 넘지 못한다.
+
+    **포함률이 좋은 것과 쓸모가 있는 것은 별개다.** 이 구간들은 $97\%$ 가 참값을 담았으니 약속을 지켰다. 그런데 $89\%$ 는 "차이가 $0$ 일 수도 있다"고 말한다. 둘 다 참이다. **구간은 정직하게 넓은 것이고, 넓은 까닭은 표본이 작은 것이다.** 고치는 길은 방법을 바꾸는 것이 아니라 $n$ 을 키우는 것이다.
 
 참값은 $\mu_1 - \mu_2 = -0.5$(세로 점선)이다. 구간의 폭이 1.56에서 4.02까지 두 배 넘게 널을 뛰는데, $s_1$과 $s_2$ 두 개가 동시에 흔들리는 데다 $n_2 = 10$으로 작아 그 흔들림이 크기 때문이다.
 

@@ -44,37 +44,95 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 대응표본 평균 차이의 신뢰구간
+**보기 1.** <span class="diff easy" title="쉬움"></span> 대응표본 평균 차이의 신뢰구간. 같은 사람 $10$명에게서 처리 전후를 재어 차이 $d_i$ 를 얻었다.
+
+$$
+5,\ 3,\ 4,\ -2,\ 0,\ 6,\ -1,\ 2,\ 3,\ 4
+$$
+
+**(1)** $\mu_d$ 의 $95\%$ 신뢰구간을 손으로 구하시오. 관측값이 $20$개인데 자유도가 $9$ 인 까닭을 밝히시오.
+
+**(2)** 짝짓기가 주는 이득을 식으로 적으시오. 이 자료에서 그 이득을 **수로** 계산할 수 있는가.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-# 대응자료는 짝마다 차이를 먼저 만들고 나면
-# 그 뒤로는 **일표본** 문제와 완전히 같아진다.
-# 두 집단의 분산이나 상관을 따로 다룰 필요가 없다.
-differences = np.array([5, 3, 4, -2, 0, 6, -1, 2, 3, 4])
-n = len(differences)          # 관측값 20개가 아니라 짝 10개다
-confidence_level = 0.95
+    **(1) 차이를 만들면 일표본 문제가 된다.** 합이 $24$ 이므로 $\bar d = 2.4$ 이고, 편차의 제곱합이
 
-mean_diff = np.mean(differences)
-std_diff = np.std(differences, ddof=1)
-standard_error = std_diff / np.sqrt(n)
+    $$
+    2.6^2 + 0.6^2 + 1.6^2 + 4.4^2 + 2.4^2 + 3.6^2 + 3.4^2 + 0.4^2 + 0.6^2 + 1.6^2 = 62.4
+    $$
 
-t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, n - 1)   # df = 짝의 개수 - 1
-margin_of_error = t_critical * standard_error
+    이므로
 
-confidence_interval = (mean_diff - margin_of_error, mean_diff + margin_of_error)
-print(f"{confidence_interval = }")
-```
+    $$
+    s_d^2 = \frac{62.4}{9} = 6.93333, \qquad s_d = 2.63312,
+    \qquad \text{SE} = \frac{2.63312}{\sqrt{10}} = 0.83267
+    $$
 
-출력:
+    이다. $t_{0.025,\,9} = 2.26216$ 이므로
 
-```
-confidence_interval = (0.5163777394551403, 4.28362226054486)
-```
+    $$
+    2.4 \pm 2.26216 \times 0.83267 = 2.4 \pm 1.88362 = (0.5164,\ 4.2836)
+    $$
+
+    **구간이 $0$ 을 담지 않는다.** 처리 전후에 차이가 있다는 증거다.
+
+    **자유도가 $9$ 인 까닭.** 숫자는 $20$개지만 **독립인 정보 단위는 짝 $10$개**다. 짝 안의 두 측정은 같은 사람에게서 나와 강하게 상관되어 있으므로 서로 다른 정보가 아니다. 차이를 만드는 순간 표본은 크기 $10$ 인 일표본이 되고, 그중 하나를 $\bar d$ 를 쓰느라 잃어 $n - 1 = 9$ 다.
+
+    이것을 "$20$개 관측"으로 세어 자유도를 $18$ 이나 $19$ 로 잡으면 임계값이 작아져 구간이 **조용히 좁아진다.** 짝 자료에서 가장 흔한 실수다.
+
+    **(2) 이득은 상관에서 온다.** 차의 분산이
+
+    $$
+    \operatorname{Var}(X - Y) = \sigma_X^2 + \sigma_Y^2 - 2\rho\,\sigma_X\sigma_Y
+    $$
+
+    이므로 $\rho > 0$ 이면 $2\rho\sigma_X\sigma_Y$ 만큼 **깎인다.** 같은 자료를 짝을 무시하고 독립 이표본으로 다루면 $\sigma_X^2 + \sigma_Y^2$ 를 쓰는 셈이니, 표준오차의 비가
+
+    $$
+    \sqrt{\frac{\sigma_X^2 + \sigma_Y^2}{\sigma_X^2 + \sigma_Y^2 - 2\rho\sigma_X\sigma_Y}}
+    \;\overset{\sigma_X = \sigma_Y}{=}\; \frac{1}{\sqrt{1-\rho}}
+    $$
+
+    다. 등분산이면 $\rho = 0.5$ 에서 $1.41$배, $\rho = 0.8$ 에서 $2.24$배 좁아진다. **짝짓기의 이득은 전부 이 한 항에 있다.**
+
+    **그런데 이 자료로는 그 이득을 계산할 수 없다.** 주어진 것이 차이 $d_i$ 열 개뿐이고 원래의 짝 $(x_i, y_i)$ 가 없다. $\rho$ 를 알려면 두 열이 모두 있어야 한다. $s_d = 2.63312$ 하나로는 $\sigma_X$, $\sigma_Y$, $\rho$ 의 어떤 조합에서 나온 값인지 가릴 수 없다.
+
+    **보고 지침이 여기서 나온다.** 대응자료를 보고할 때는 차이의 요약만 적지 말고 **두 측정의 표준편차와 상관(또는 원자료)** 을 함께 적는다. 그래야 읽는 사람이 짝짓기가 실제로 얼마나 벌어 주었는지 되짚을 수 있고, 뒤이은 연구가 표본크기를 계획할 수 있다.
+
+    **(3) 확인.**
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    # 대응자료는 짝마다 차이를 먼저 만들고 나면
+    # 그 뒤로는 **일표본** 문제와 완전히 같아진다.
+    # 두 집단의 분산이나 상관을 따로 다룰 필요가 없다.
+    differences = np.array([5, 3, 4, -2, 0, 6, -1, 2, 3, 4])
+    n = len(differences)          # 관측값 20개가 아니라 짝 10개다
+    confidence_level = 0.95
+
+    mean_diff = np.mean(differences)
+    std_diff = np.std(differences, ddof=1)
+    standard_error = std_diff / np.sqrt(n)
+
+    t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, n - 1)   # df = 짝의 개수 - 1
+    margin_of_error = t_critical * standard_error
+
+    confidence_interval = (mean_diff - margin_of_error, mean_diff + margin_of_error)
+    print(f"{confidence_interval = }")
+    ```
+
+    출력:
+
+    ```
+    confidence_interval = (0.5163777394551403, 4.28362226054486)
+    ```
+
+    **(1)과 맞는다.** 구간 $(0.5164,\ 4.2836)$ 이다. 코드에서 `n = len(differences)` 가 $10$ 이고 `df = n - 1` 이 $9$ 인 것이 (1)에서 따진 자유도이며, **관측값 $20$개가 아니라 짝 $10$개를 세는 자리**다.
 
 구간이 0을 담지 않으므로 치료 전후에 차이가 있다는 증거가 된다.
 
@@ -243,97 +301,162 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 대응표본 신뢰구간의 포함확률
+**보기 5.** <span class="diff easy" title="쉬움"></span> 대응표본 신뢰구간의 포함확률. 짝 안의 두 측정이 $\sigma_X = 1.0$, $\sigma_Y = 1.2$, 상관 $\rho = 0.6$ 인 이변량정규를 따르고 $\mu_X - \mu_Y = 0.5$ 다. 짝의 개수는 $n = 12$, 명목 $95\%$ 다.
+
+**(1)** $\sigma_D$ 를 구하시오. 대응 $t$-구간의 포함확률은 얼마인가.
+
+**(2)** 같은 자료를 짝을 **무시하고** 독립 이표본으로 다루면 구간이 얼마나 넓어지는가. 표준오차의 비와 **폭의 비**를 각각 구하시오.
+
+**(3)** 짝짓기가 언제 손해가 되는가. $n = 12$, 등분산에서 손익분기 $\rho$ 를 구하시오.
 
 </div>
 
-```python
-#!/usr/bin/env python3
-"""대응표본 평균 차이의 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+??? success "풀이"
 
-짝마다 차이를 먼저 구하고 나면 일표본 문제가 된다. 짝지음이 없애 주는
-개체 간 변동이 구간을 얼마나 좁히는지 함께 본다.
-"""
+    **(1) 상관이 분산을 깎는다.**
 
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import t, norm
+    $$
+    \sigma_D = \sqrt{\sigma_X^2 + \sigma_Y^2 - 2\rho\sigma_X\sigma_Y}
+    = \sqrt{1 + 1.44 - 2(0.6)(1.0)(1.2)}
+    = \sqrt{2.44 - 1.44} = 1.00
+    $$
 
-rng_seed = 42        # 아래 그림을 재현하려면 고정한다
-n_simulations = 100
-n = 12
-mu_x, mu_y = 0.5, 0.0
-sigma_x, sigma_y = 1.0, 1.2
-rho = 0.6
-alpha = 0.05
-method = "t"  # 't' | 'z_known' | 'z_plugin'
+    이다. 차이 $D_i = X_i - Y_i$ 는 정규이고 서로 독립이므로, 차이에 $t$-구간을 적용한 것은 **일표본 $t$-구간**이다. 따라서 포함확률은 추축량에 의해 **정확히 $0.95$** 이고 $n$ 과 $\rho$ 에 의존하지 않는다.
 
+    **(2) 표준오차의 비는 $1.56$, 폭의 비는 $1.47$ 이다.** 짝을 무시하면 $\sqrt{\sigma_X^2 + \sigma_Y^2} = \sqrt{2.44} = 1.56205$ 를 쓰게 되므로
 
-def main():
-    rng = np.random.default_rng(rng_seed)
-    delta_true = mu_x - mu_y
-    var_d_true = sigma_x**2 + sigma_y**2 - 2 * rho * sigma_x * sigma_y
-    sigma_d_true = np.sqrt(max(var_d_true, 0.0))
+    $$
+    \frac{\text{SE}_{\text{독립}}}{\text{SE}_{\text{짝}}} = \frac{1.56205}{1.00} = 1.56205
+    $$
 
-    cov = rho * sigma_x * sigma_y
-    Sigma = np.array([[sigma_x**2, cov], [cov, sigma_y**2]])
-    L = np.linalg.cholesky(Sigma)
+    **그러나 폭의 비는 이보다 작다.** 짝을 무시하면 자유도가 $n - 1 = 11$ 에서 $2n - 2 = 22$ 로 **늘어나** 임계값이 $2.20099$ 에서 $2.07387$ 로 줄기 때문이다.
 
-    df = n - 1
-    t_star = t.ppf(1 - alpha / 2.0, df=df)
-    z_star = norm.ppf(1 - alpha / 2.0)
+    $$
+    \frac{\text{폭}_{\text{독립}}}{\text{폭}_{\text{짝}}}
+    = \frac{2.07387 \times 1.56205/\sqrt{12}}{2.20099 \times 1.00/\sqrt{12}}
+    = \frac{1.87032}{1.27074} = 1.47184
+    $$
 
-    lowers = np.empty(n_simulations)
-    uppers = np.empty(n_simulations)
-    centers = np.empty(n_simulations)
+    **짝짓기는 상관을 얻는 대신 자유도를 내준다.** 여기서는 $\rho = 0.6$ 이 커서 이득이 압도하지만 그 둘이 겨루고 있다는 사실이 (3)의 질문으로 이어진다.
 
-    for i in range(n_simulations):
-        z = rng.standard_normal(size=(2, n))
-        xy = (L @ z).T
-        x = xy[:, 0] + mu_x
-        y = xy[:, 1] + mu_y
-        d = x - y
-        dbar = d.mean()
-        s_d = d.std(ddof=1)
+    **(3) 손익분기는 $\rho = 0.112$ 다.** 등분산 $\sigma_X = \sigma_Y = \sigma$ 라 하면 $\sigma_D = \sigma\sqrt{2-2\rho}$ 이고 독립 쪽은 $\sigma\sqrt2$ 이므로, 두 폭이 같아지는 조건은
 
-        if method == "t":
-            se, crit = s_d / np.sqrt(n), t_star
-        elif method == "z_known":
-            se, crit = sigma_d_true / np.sqrt(n), z_star
-        else:
-            se, crit = s_d / np.sqrt(n), z_star
+    $$
+    t_{0.025,\,2n-2}\,\sigma\sqrt2 = t_{0.025,\,n-1}\,\sigma\sqrt{2-2\rho}
+    \iff \sqrt{1-\rho} = \frac{t_{0.025,\,2n-2}}{t_{0.025,\,n-1}}
+    $$
 
-        lowers[i] = dbar - crit * se
-        uppers[i] = dbar + crit * se
-        centers[i] = dbar
+    이다. $n = 12$ 에서 오른쪽이 $2.07387/2.20099 = 0.94225$ 이므로
 
-    covered = (lowers <= delta_true) & (delta_true <= uppers)
-    n_fail = int((~covered).sum())
-    coverage_pct = 100.0 * covered.mean()
+    $$
+    \rho^\ast = 1 - 0.94225^2 = 0.1122
+    $$
 
-    fig, ax = plt.subplots(figsize=(12, 12))
-    for i in range(n_simulations):
-        color = "k" if covered[i] else "r"
-        ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
-        ax.plot(centers[i], i, marker="o", ms=3, color=color)
+    다. **$\rho$ 가 $0.112$ 보다 크면 짝짓기가 이기고 작으면 진다.** 몇 가지 $\rho$ 에서 폭의 비(독립/짝)는 이렇다.
 
-    ax.axvline(delta_true, linestyle="--", linewidth=1.5, color="r")
-    ax.set_title(
-        f"{n_simulations} Paired {method} CIs for μ_D | n={n}, ρ={rho:.2f}, "
-        f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
-    ax.set_yticks([])
-    for sp in ["left", "right", "top"]:
-        ax.spines[sp].set_visible(False)
-    ax.set_xlabel("μ_D = μ_X − μ_Y")
-    plt.tight_layout()
-    plt.show()
+    | $\rho$ | $0$ | $0.1$ | $0.1122$ | $0.2$ | $0.5$ | $0.8$ |
+    |---|---|---|---|---|---|---|
+    | 폭의 비 | $0.942$ | $0.993$ | $1.000$ | $1.054$ | $1.333$ | $2.107$ |
+
+    $\rho = 0$ 이면 짝지은 쪽이 오히려 $6\%$ 넓다. 자유도만 절반으로 잃고 얻는 것이 없기 때문이다.
+
+    **실무에서 문턱이 낮다는 점이 중요하다.** $0.112$ 는 매우 약한 상관이고, 같은 개체를 두 번 재는 설계라면 거의 언제나 넘는다. **그러므로 짝지을 수 있으면 짝지어라.** 다만 문턱은 $n$ 에 따라 달라진다. $n$ 이 커지면 두 임계값이 모두 $1.96$ 으로 수렴해 $\rho^\ast \to 0$ 이 되므로, 큰 표본에서는 상관이 조금만 있어도 짝짓기가 이긴다.
+
+    **(4) 그림.**
+
+    ```python
+    #!/usr/bin/env python3
+    """대응표본 평균 차이의 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+
+    짝마다 차이를 먼저 구하고 나면 일표본 문제가 된다. 짝지음이 없애 주는
+    개체 간 변동이 구간을 얼마나 좁히는지 함께 본다.
+    """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import t, norm
+
+    rng_seed = 42        # 아래 그림을 재현하려면 고정한다
+    n_simulations = 100
+    n = 12
+    mu_x, mu_y = 0.5, 0.0
+    sigma_x, sigma_y = 1.0, 1.2
+    rho = 0.6
+    alpha = 0.05
+    method = "t"  # 't' | 'z_known' | 'z_plugin'
 
 
-if __name__ == "__main__":
-    main()
-```
+    def main():
+        rng = np.random.default_rng(rng_seed)
+        delta_true = mu_x - mu_y
+        var_d_true = sigma_x**2 + sigma_y**2 - 2 * rho * sigma_x * sigma_y
+        sigma_d_true = np.sqrt(max(var_d_true, 0.0))
 
-![100 Paired t CIs for μ_D | n=12, ρ=0.60, CL=95%](./img/ci_mu_paired_232.png)
+        cov = rho * sigma_x * sigma_y
+        Sigma = np.array([[sigma_x**2, cov], [cov, sigma_y**2]])
+        L = np.linalg.cholesky(Sigma)
+
+        df = n - 1
+        t_star = t.ppf(1 - alpha / 2.0, df=df)
+        z_star = norm.ppf(1 - alpha / 2.0)
+
+        lowers = np.empty(n_simulations)
+        uppers = np.empty(n_simulations)
+        centers = np.empty(n_simulations)
+
+        for i in range(n_simulations):
+            z = rng.standard_normal(size=(2, n))
+            xy = (L @ z).T
+            x = xy[:, 0] + mu_x
+            y = xy[:, 1] + mu_y
+            d = x - y
+            dbar = d.mean()
+            s_d = d.std(ddof=1)
+
+            if method == "t":
+                se, crit = s_d / np.sqrt(n), t_star
+            elif method == "z_known":
+                se, crit = sigma_d_true / np.sqrt(n), z_star
+            else:
+                se, crit = s_d / np.sqrt(n), z_star
+
+            lowers[i] = dbar - crit * se
+            uppers[i] = dbar + crit * se
+            centers[i] = dbar
+
+        covered = (lowers <= delta_true) & (delta_true <= uppers)
+        n_fail = int((~covered).sum())
+        coverage_pct = 100.0 * covered.mean()
+
+        fig, ax = plt.subplots(figsize=(12, 12))
+        for i in range(n_simulations):
+            color = "k" if covered[i] else "r"
+            ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
+            ax.plot(centers[i], i, marker="o", ms=3, color=color)
+
+        ax.axvline(delta_true, linestyle="--", linewidth=1.5, color="r")
+        ax.set_title(
+            f"{n_simulations} Paired {method} CIs for μ_D | n={n}, ρ={rho:.2f}, "
+            f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
+        ax.set_yticks([])
+        for sp in ["left", "right", "top"]:
+            ax.spines[sp].set_visible(False)
+        ax.set_xlabel("μ_D = μ_X − μ_Y")
+        plt.tight_layout()
+        plt.show()
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    ![100 Paired t CIs for μ_D | n=12, ρ=0.60, CL=95%](./img/ci_mu_paired_232.png)
+
+    **$100$개 중 $95$개가 담았다.** (1)의 참값 $0.95$ 와 맞지만, $100$회의 표준오차가 $0.0218$ 이므로 이 일치는 운이 좋은 것이다. 포함률은 추축량이 이미 정했고 모의실험이 보여 주는 것은 구간의 **모양**이다.
+
+    **폭이 제각각이다.** 폭이 $2t_{0.025,\,11}s_D/\sqrt{12} = 1.27074\,s_D$ 로 $s_D$ 하나에만 비례하는데, $n = 12$ 에서 $s_D$ 가 크게 흔들린다. $\sigma_D = 1$ 이므로 평균 폭은 $1.27074 \times c_4 = 1.24$ 쯤이다.
+
+    **그림이 보여 주지 않는 것이 (2)의 이득이다.** 여기 그려진 구간들은 짝짓기를 **이미 쓴** 결과다. 같은 자료를 짝 없이 다뤘다면 모든 선이 $1.47$배 길어졌을 텐데, 그 비교는 그림에 없고 (2)의 계산에만 있다. 짝짓기의 값은 "구간이 참값을 담는가"가 아니라 "얼마나 좁은가"에 나타나며, **포함률은 둘 중 어느 쪽에서도 $0.95$ 로 같다.**
 
 포함확률 95.0%로 명목값과 맞는다.
 

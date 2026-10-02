@@ -176,121 +176,176 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 평균 신뢰구간의 포함확률 모의실험
+**보기 1.** <span class="diff easy" title="쉬움"></span> 평균 신뢰구간의 포함확률 모의실험. $N(0, 1)$에서 크기 $n = 10$인 표본을 $100$번 뽑아 세 방법($\sigma$를 아는 $z$, $s$를 꽂은 $z$, $t$)으로 명목 $95\%$ 구간을 만든다. 스크립트는 유한모집단 수정(FPC)도 받는다.
+
+**(1)** 세 방법 가운데 포함률이 **정확히** $0.95$인 것은 어느 것인가. 나머지의 포함률을 닫힌 꼴로 적으시오.
+
+**(2)** FPC 인자 $\sqrt{(N-n)/(N-1)}$ 는 어디서 오는가. "$n \le 0.1N$ 이면 무시해도 된다"는 관행이 **안전한** 까닭을 수로 보이시오.
+
+**(3)** 기본 설정으로 $100$개를 그리고 무엇이 읽히는지 말하시오. `--method z_known` 으로 바꾸면 그림이 어떻게 달라지는가.
 
 </div>
 
-```python
-#!/usr/bin/env python3
-"""평균 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+??? success "풀이"
 
-sigma 를 아는 z, sigma 자리에 s 를 꽂아 넣은 z, 그리고 t 세 가지다.
-가운데 방법이 왜 명목수준에 못 미치는지가 이 모의실험의 요점이다.
+    **(1) 두 방법이 정확히 $0.95$다.** 정규표본에서
 
-Usage:
-    python mean_ci_simulation.py --method t --n-sim 100 --n 10 --alpha 0.05
-    python mean_ci_simulation.py --method z_known --sigma 1.0
-    python mean_ci_simulation.py --method z_plugin --N 500  # with FPC
-"""
+    $$
+    \frac{\bar X - \mu}{\sigma/\sqrt n} \sim N(0,1),
+    \qquad
+    T = \frac{\bar X - \mu}{S/\sqrt n} \sim t_{n-1}
+    $$
 
-import argparse
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import norm, t
+    이고 각 구간이 $\mu$를 담는 사건은 차례로 $|Z| \le 1.95996$, $|T| \le t_{0.025,\,9}$ 이다. 둘 다 정의상 확률이 $0.95$이고, $n$에도 $\mu$, $\sigma$에도 의존하지 않는다.
 
+    **$s$를 꽂은 $z$-구간만 다르다.** 이 구간이 담는 사건은 $|T| \le 1.96$ 인데 $T$는 여전히 $t_9$를 따른다. 그러므로
 
-def finite_population_correction(n: int, N: int | None) -> float:
-    """유한모집단 수정 인자 sqrt((N-n)/(N-1)). N 을 주지 않으면 1.0 을 돌려준다.
+    $$
+    2F_{t_9}(1.96) - 1 = 0.9184
+    $$
 
-        표본이 모집단의 상당 부분을 차지하면 표준오차가 공식보다 작아진다.
-        그 몫을 되돌리는 인자다.
-        """
-    if N is None:
-        return 1.0
-    if N <= 1 or n >= N:
-        raise ValueError("FPC requires N > 1 and n < N.")
-    return float(np.sqrt((N - n) / (N - 1)))
+    로 명목보다 $3.2$퍼센트포인트 모자란다. $s$가 흔들리는 양인데 임계값을 상수처럼 고정했기 때문이다.
 
+    **(2) FPC는 비복원추출에서 나온다.** 크기 $N$인 유한모집단에서 **비복원**으로 $n$개를 뽑으면 관측값이 독립이 아니다. 이때
 
-def simulate_data(n_sim: int, n: int, mu: float, sigma: float, rng) -> np.ndarray:
-    """모양 (n_sim, n) 인 배열을 돌려준다. 행 하나가 표본 하나다."""
-    return rng.normal(loc=mu, scale=sigma, size=(n_sim, n))
+    $$
+    \operatorname{Var}(\bar X) = \frac{\sigma^2}{n} \cdot \frac{N-n}{N-1}
+    $$
 
+    이 되고, 표준오차에 곱해지는 $\sqrt{(N-n)/(N-1)}$ 가 FPC다. 극단을 보면 뜻이 분명하다. $n = N$ 이면 인자가 $0$ 이 되는데, 모집단을 통째로 뽑았으니 $\bar X$ 가 곧 모평균이라 **흔들림이 없다**. $N \to \infty$ 면 인자가 $1$ 로 가서 복원추출과 같아진다.
 
-def compute_intervals(xbar, s, n, alpha, method, sigma_known=None, N=None):
-    fpc = finite_population_correction(n, N)
-    if method == "z_known":
-        if sigma_known is None:
-            raise ValueError("z_known requires sigma_known.")
-        z_star = norm.ppf(1 - alpha / 2.0)
-        se = sigma_known / np.sqrt(n) * fpc
-        moe = z_star * se
-    elif method == "z_plugin":
-        z_star = norm.ppf(1 - alpha / 2.0)
-        se = (s / np.sqrt(n)) * fpc
-        moe = z_star * se
-    elif method == "t":
-        df = n - 1
-        t_star = t.ppf(1 - alpha / 2.0, df=df)
-        se = (s / np.sqrt(n)) * fpc
-        moe = t_star * se
-    else:
-        raise ValueError(f"Unknown method: {method}")
-    return xbar - moe, xbar + moe
+    **$0.1N$ 규칙이 안전한 까닭.** FPC는 언제나 $1$ 이하이므로, **무시하면 표준오차를 실제보다 크게 잡는다.** 곧 구간이 필요보다 넓어지고 포함률은 명목 **위**로 간다. 아래로 내려가는 일이 없다.
 
+    | $n/N$ | FPC | 무시했을 때 폭의 배수 |
+    |---|---|---|
+    | $0.01$ | $0.99499$ | $1.005$ |
+    | $0.05$ | $0.97468$ | $1.026$ |
+    | $0.10$ | $0.94869$ | $1.054$ |
+    | $0.50$ | $0.70711$ | $1.414$ |
 
-def plot_intervals(ax, lower, upper, xbar, covered, mu, title):
-    for i in range(len(xbar)):
-        color = "k" if covered[i] else "r"
-        ax.plot([lower[i], upper[i]], [i, i], lw=2, color=color)
-        ax.plot(xbar[i], i, marker="o", ms=3, color=color)
-    ax.axvline(mu, linestyle="--", linewidth=1.5, color="r")
-    ax.set_title(title, fontsize=12)
-    ax.set_yticks([])
-    for sp in ["left", "right", "top"]:
-        ax.spines[sp].set_visible(False)
-    ax.set_xlabel("Mean value")
+    $n = 0.1N$ 에서도 구간이 $5.4\%$ 넓어지는 데 그친다. **틀리되 안전한 쪽으로 틀리고 그 크기가 작다** — 이것이 관행의 전부다. 반대로 $n = 0.5N$ 이면 $41\%$ 나 넓어지므로 더는 무시할 수 없다.
+
+    **(3) 그림.**
+
+    ```python
+    #!/usr/bin/env python3
+    """평균 신뢰구간을 세 방법으로 만들어 포함확률을 비교한다.
+
+    sigma 를 아는 z, sigma 자리에 s 를 꽂아 넣은 z, 그리고 t 세 가지다.
+    가운데 방법이 왜 명목수준에 못 미치는지가 이 모의실험의 요점이다.
+
+    Usage:
+        python mean_ci_simulation.py --method t --n-sim 100 --n 10 --alpha 0.05
+        python mean_ci_simulation.py --method z_known --sigma 1.0
+        python mean_ci_simulation.py --method z_plugin --N 500  # with FPC
+    """
+
+    import argparse
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import norm, t
 
 
-def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--method", choices=["z_known", "z_plugin", "t"], default="t")
-    p.add_argument("--rng-seed", type=int, default=42)   # 아래 그림을 재현하려면 고정한다
-    p.add_argument("--n-sim", type=int, default=100)
-    p.add_argument("--n", type=int, default=10)
-    p.add_argument("--mu", type=float, default=0.0)
-    p.add_argument("--sigma", type=float, default=1.0)
-    p.add_argument("--alpha", type=float, default=0.05)
-    p.add_argument("--N", type=int, default=None)
-    args, _ = p.parse_known_args()
+    def finite_population_correction(n: int, N: int | None) -> float:
+        """유한모집단 수정 인자 sqrt((N-n)/(N-1)). N 을 주지 않으면 1.0 을 돌려준다.
 
-    rng = np.random.default_rng(args.rng_seed)
-    X = simulate_data(args.n_sim, args.n, args.mu, args.sigma, rng)
-    xbar = X.mean(axis=1)
-    s = X.std(axis=1, ddof=1)
-
-    lower, upper = compute_intervals(
-        xbar, s, args.n, args.alpha, args.method,
-        sigma_known=args.sigma if args.method == "z_known" else None, N=args.N
-    )
-    covered = (lower <= args.mu) & (args.mu <= upper)
-    n_fail = int((~covered).sum())
-    coverage_pct = 100.0 * covered.mean()
-
-    fig, ax = plt.subplots(figsize=(12, 12))
-    title = (f"{args.n_sim} {args.method} CIs | n={args.n}, "
-             f"CL={int((1 - args.alpha) * 100)}% | "
-             f"Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
-    plot_intervals(ax, lower, upper, xbar, covered, args.mu, title)
-    plt.tight_layout()
-    plt.show()
+            표본이 모집단의 상당 부분을 차지하면 표준오차가 공식보다 작아진다.
+            그 몫을 되돌리는 인자다.
+            """
+        if N is None:
+            return 1.0
+        if N <= 1 or n >= N:
+            raise ValueError("FPC requires N > 1 and n < N.")
+        return float(np.sqrt((N - n) / (N - 1)))
 
 
-if __name__ == "__main__":
-    main()
-```
+    def simulate_data(n_sim: int, n: int, mu: float, sigma: float, rng) -> np.ndarray:
+        """모양 (n_sim, n) 인 배열을 돌려준다. 행 하나가 표본 하나다."""
+        return rng.normal(loc=mu, scale=sigma, size=(n_sim, n))
 
-![100 t CIs | n=10, CL=95%](./img/coverage_177.png)
+
+    def compute_intervals(xbar, s, n, alpha, method, sigma_known=None, N=None):
+        fpc = finite_population_correction(n, N)
+        if method == "z_known":
+            if sigma_known is None:
+                raise ValueError("z_known requires sigma_known.")
+            z_star = norm.ppf(1 - alpha / 2.0)
+            se = sigma_known / np.sqrt(n) * fpc
+            moe = z_star * se
+        elif method == "z_plugin":
+            z_star = norm.ppf(1 - alpha / 2.0)
+            se = (s / np.sqrt(n)) * fpc
+            moe = z_star * se
+        elif method == "t":
+            df = n - 1
+            t_star = t.ppf(1 - alpha / 2.0, df=df)
+            se = (s / np.sqrt(n)) * fpc
+            moe = t_star * se
+        else:
+            raise ValueError(f"Unknown method: {method}")
+        return xbar - moe, xbar + moe
+
+
+    def plot_intervals(ax, lower, upper, xbar, covered, mu, title):
+        for i in range(len(xbar)):
+            color = "k" if covered[i] else "r"
+            ax.plot([lower[i], upper[i]], [i, i], lw=2, color=color)
+            ax.plot(xbar[i], i, marker="o", ms=3, color=color)
+        ax.axvline(mu, linestyle="--", linewidth=1.5, color="r")
+        ax.set_title(title, fontsize=12)
+        ax.set_yticks([])
+        for sp in ["left", "right", "top"]:
+            ax.spines[sp].set_visible(False)
+        ax.set_xlabel("Mean value")
+
+
+    def main():
+        p = argparse.ArgumentParser()
+        p.add_argument("--method", choices=["z_known", "z_plugin", "t"], default="t")
+        p.add_argument("--rng-seed", type=int, default=42)   # 아래 그림을 재현하려면 고정한다
+        p.add_argument("--n-sim", type=int, default=100)
+        p.add_argument("--n", type=int, default=10)
+        p.add_argument("--mu", type=float, default=0.0)
+        p.add_argument("--sigma", type=float, default=1.0)
+        p.add_argument("--alpha", type=float, default=0.05)
+        p.add_argument("--N", type=int, default=None)
+        args, _ = p.parse_known_args()
+
+        rng = np.random.default_rng(args.rng_seed)
+        X = simulate_data(args.n_sim, args.n, args.mu, args.sigma, rng)
+        xbar = X.mean(axis=1)
+        s = X.std(axis=1, ddof=1)
+
+        lower, upper = compute_intervals(
+            xbar, s, args.n, args.alpha, args.method,
+            sigma_known=args.sigma if args.method == "z_known" else None, N=args.N
+        )
+        covered = (lower <= args.mu) & (args.mu <= upper)
+        n_fail = int((~covered).sum())
+        coverage_pct = 100.0 * covered.mean()
+
+        fig, ax = plt.subplots(figsize=(12, 12))
+        title = (f"{args.n_sim} {args.method} CIs | n={args.n}, "
+                 f"CL={int((1 - args.alpha) * 100)}% | "
+                 f"Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
+        plot_intervals(ax, lower, upper, xbar, covered, args.mu, title)
+        plt.tight_layout()
+        plt.show()
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    ![100 t CIs | n=10, CL=95%](./img/coverage_177.png)
+
+    **실패가 넷이다.** (1)의 답이 $0.95$ 이므로 기대 실패는 다섯인데 넷이 나왔다. 되풀이 $100$회의 표준오차가 $0.0218$ 이라 $0.96$ 과 $0.95$ 의 차이는 $0.46$ 표준오차에 지나지 않는다. **이 그림으로 $0.95$를 "확인"할 수는 없다.** 확인은 (1)의 추축량 논증이 이미 했다.
+
+    **폭이 제각각이라는 것이 눈에 띈다.** $t$-구간의 폭은 $2t_{0.025,\,9}\,s/\sqrt{10} = 1.43096\,s$ 로 $s$ 하나에만 비례하는데, $n = 10$ 에서 $s$ 가 크게 흔들린다. 이 $100$개의 폭은 최소 $0.6292$, 최대 $2.4561$ 로 **최대가 최소의 $3.9$배**다.
+
+    **`--method z_known` 으로 바꾸면 폭이 모두 같아진다.** 표준오차가 $\sigma/\sqrt n = 1/\sqrt{10}$ 으로 **표본과 무관한 상수**가 되기 때문이다. 폭은 전부 $2 \times 1.95996/\sqrt{10} = 1.2396$ 이고, 같은 자료에서 실패도 넷으로 같다. 그때 그림이 보여 주는 것은 오직 중심 $\bar x$ 의 흩어짐뿐이다.
+
+    **$s$를 꽂은 $z$-구간으로 바꾸면 실패가 여덟로 는다.** 같은 $100$개 표본에서 $t$ 의 네 개가 여덟 개가 된다. 폭이 전부 $t/z = 1.154$ 분의 일로 줄었기 때문이다. (1)에서 구한 $0.9184$ 가 이 모습이다.
 
 가로선 하나가 표본 하나에서 얻은 신뢰구간이고, 세로 점선이 참 평균이다. 참값을 놓친 구간만 빨간색이다. 기본 설정($t$-구간, $n = 10$, 100회)에서 실패는 4개, 즉 포함확률 96%로 명목 95%에 가깝다.
 
@@ -300,90 +355,133 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간의 포함확률 모의실험
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간의 포함확률 모의실험. $n = 20$, 참값 $p = 0.2$ 에서 명목 $95\%$ 왈드 구간을 $100$개 만든다.
+
+**(1)** $\hat p = 0$ 일 때 왈드 구간이 무엇이 되는지 보이고, 이 설정에서 그런 표본이 나올 확률을 구하시오.
+
+**(2)** 그림을 그려 무엇이 읽히는지 말하시오.
+
+**(3)** 같은 자료에 네 방법을 돌리면 실패가 각각 $9,\ 4,\ 4,\ 1$ 개다. 클로퍼–피어슨이 가장 적게 실패하므로 가장 좋은 방법인가.
 
 </div>
 
-```python
-#!/usr/bin/env python3
-"""비율 신뢰구간을 네 방법으로 만들어 포함확률을 비교한다.
+??? success "풀이"
 
-Wald 는 교과서에 가장 먼저 나오지만 실제 포함확률이 가장 나쁘다.
-Wilson 과 Agresti-Coull 이 그 대안이고, Clopper-Pearson 은 보수적이다.
+    **(1) 왈드 구간이 한 점으로 무너진다.** $\hat p = 0$ 이면 추정된 표준오차가
 
-Usage:
-    python proportion_ci_simulation.py  # defaults to Wald
-"""
+    $$
+    \sqrt{\frac{0 \times 1}{n}} = 0
+    $$
 
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import norm, beta
+    이라 구간이 $[0,\ 0]$ 이다. "$p$ 는 정확히 $0$ 이다"라고 주장하는 셈이며, $p > 0$ 인 모집단에서는 **결코** 참값을 담지 못한다. 그런 표본이 나올 확률은
 
-rng_seed = 42        # 아래 그림을 재현하려면 고정한다
-n_simulations = 100
-n = 20
-p_true = 0.20
-alpha = 0.05
-method = "wald"  # 'wald' | 'wilson' | 'ac' | 'cp'
+    $$
+    P(X = 0) = (1 - 0.2)^{20} = 0.8^{20} = 0.011529
+    $$
 
+    로 $100$개 표본에서 기댓값이 $1.15$ 개다.
 
-def main():
-    if rng_seed is not None:
-        np.random.seed(rng_seed)
+    **다만 여기서는 이것이 실패의 전부가 아니다.** 왈드 포함률의 상한은 $1 - 0.011529 = 0.98847$ 인데 실제 포함률은 $0.92084$ 다. 차이는 $k = 1$ 에서 온다. 그때 구간이 $(0,\ 0.1455)$ 로 $p = 0.2$ 에 닿지 못하고, $P(X = 1) = 0.05765$ 다. 두 가지를 더하면 $0.011529 + 0.05765 = 0.06918$ 로 $1 - 0.92084 = 0.07916$ 에 가깝고, 나머지는 $k \ge 9$ 에서 온다.
 
-    k = np.random.binomial(n=n, p=p_true, size=n_simulations)
-    phat = k / n
-    lower = np.empty(n_simulations)
-    upper = np.empty(n_simulations)
-    z = norm.ppf(1 - alpha / 2.0)
+    **(2) 그림.**
 
-    for i, ki in enumerate(k):
-        p = ki / n
-        if method == "wald":
-            se = np.sqrt(p * (1 - p) / n)
-            lo, hi = p - z * se, p + z * se
-        elif method == "wilson":
-            denom = 1 + z**2 / n
-            center = (p + z**2 / (2 * n)) / denom
-            half = z * np.sqrt(p * (1 - p) / n + z**2 / (4 * n**2)) / denom
-            lo, hi = center - half, center + half
-        elif method == "ac":
-            n_tilde = n + z**2
-            p_tilde = (ki + 0.5 * z**2) / n_tilde
-            se_tilde = np.sqrt(p_tilde * (1 - p_tilde) / n_tilde)
-            lo, hi = p_tilde - z * se_tilde, p_tilde + z * se_tilde
-        elif method == "cp":
-            lo = 0.0 if ki == 0 else beta.ppf(alpha / 2.0, ki, n - ki + 1)
-            hi = 1.0 if ki == n else beta.ppf(1 - alpha / 2.0, ki + 1, n - ki)
-        lower[i] = max(0.0, lo)
-        upper[i] = min(1.0, hi)
+    ```python
+    #!/usr/bin/env python3
+    """비율 신뢰구간을 네 방법으로 만들어 포함확률을 비교한다.
 
-    covered = (lower <= p_true) & (p_true <= upper)
-    n_fail = int((~covered).sum())
-    coverage_pct = 100.0 * covered.mean()
+    Wald 는 교과서에 가장 먼저 나오지만 실제 포함확률이 가장 나쁘다.
+    Wilson 과 Agresti-Coull 이 그 대안이고, Clopper-Pearson 은 보수적이다.
 
-    fig, ax = plt.subplots(figsize=(12, 12))
-    for i in range(n_simulations):
-        color = "k" if covered[i] else "r"
-        ax.plot([lower[i], upper[i]], [i, i], lw=2, color=color)
-        ax.plot(phat[i], i, marker="o", ms=3, color=color)
-    ax.axvline(p_true, linestyle="--", linewidth=1.5)
-    ax.set_title(
-        f"{n_simulations} {method.upper()} Proportion CIs | n={n}, p={p_true:.3f}, "
-        f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
-    ax.set_yticks([])
-    for sp in ["left", "right", "top"]:
-        ax.spines[sp].set_visible(False)
-    ax.set_xlabel("Proportion value")
-    plt.tight_layout()
-    plt.show()
+    Usage:
+        python proportion_ci_simulation.py  # defaults to Wald
+    """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import norm, beta
+
+    rng_seed = 42        # 아래 그림을 재현하려면 고정한다
+    n_simulations = 100
+    n = 20
+    p_true = 0.20
+    alpha = 0.05
+    method = "wald"  # 'wald' | 'wilson' | 'ac' | 'cp'
 
 
-if __name__ == "__main__":
-    main()
-```
+    def main():
+        if rng_seed is not None:
+            np.random.seed(rng_seed)
 
-![100 WALD Proportion CIs | n=20, p=0.200, CL=95%](./img/coverage_283.png)
+        k = np.random.binomial(n=n, p=p_true, size=n_simulations)
+        phat = k / n
+        lower = np.empty(n_simulations)
+        upper = np.empty(n_simulations)
+        z = norm.ppf(1 - alpha / 2.0)
+
+        for i, ki in enumerate(k):
+            p = ki / n
+            if method == "wald":
+                se = np.sqrt(p * (1 - p) / n)
+                lo, hi = p - z * se, p + z * se
+            elif method == "wilson":
+                denom = 1 + z**2 / n
+                center = (p + z**2 / (2 * n)) / denom
+                half = z * np.sqrt(p * (1 - p) / n + z**2 / (4 * n**2)) / denom
+                lo, hi = center - half, center + half
+            elif method == "ac":
+                n_tilde = n + z**2
+                p_tilde = (ki + 0.5 * z**2) / n_tilde
+                se_tilde = np.sqrt(p_tilde * (1 - p_tilde) / n_tilde)
+                lo, hi = p_tilde - z * se_tilde, p_tilde + z * se_tilde
+            elif method == "cp":
+                lo = 0.0 if ki == 0 else beta.ppf(alpha / 2.0, ki, n - ki + 1)
+                hi = 1.0 if ki == n else beta.ppf(1 - alpha / 2.0, ki + 1, n - ki)
+            lower[i] = max(0.0, lo)
+            upper[i] = min(1.0, hi)
+
+        covered = (lower <= p_true) & (p_true <= upper)
+        n_fail = int((~covered).sum())
+        coverage_pct = 100.0 * covered.mean()
+
+        fig, ax = plt.subplots(figsize=(12, 12))
+        for i in range(n_simulations):
+            color = "k" if covered[i] else "r"
+            ax.plot([lower[i], upper[i]], [i, i], lw=2, color=color)
+            ax.plot(phat[i], i, marker="o", ms=3, color=color)
+        ax.axvline(p_true, linestyle="--", linewidth=1.5)
+        ax.set_title(
+            f"{n_simulations} {method.upper()} Proportion CIs | n={n}, p={p_true:.3f}, "
+            f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
+        ax.set_yticks([])
+        for sp in ["left", "right", "top"]:
+            ax.spines[sp].set_visible(False)
+        ax.set_xlabel("Proportion value")
+        plt.tight_layout()
+        plt.show()
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    ![100 WALD Proportion CIs | n=20, p=0.200, CL=95%](./img/coverage_283.png)
+
+    **읽히는 것 둘.** 첫째, 맨 왼쪽에 **길이가 $0$ 인 구간**이 하나 있다. (1)에서 본 $k = 0$ 인 표본이고, 기댓값 $1.15$ 개에 실제 $1$ 개다. 둘째, 선이 놓이는 자리가 몇 군데뿐이다. $k$ 가 정수라 $\hat p$ 이 $0,\ 0.05,\ 0.10,\ \ldots$ 의 스물한 가지 값만 갖고, 같은 $k$ 는 완전히 같은 구간을 만든다.
+
+    **(3) 실패 개수로 방법을 고르면 안 된다.** 네 방법의 **정확한** 포함률과 기대 폭을 유한합으로 계산하면 이렇다.
+
+    | 방법 | 실패(이 $100$개) | 정확 포함률 | 기대 폭 |
+    |---|---|---|---|
+    | 왈드 | $9$ | $0.92084$ | $0.32628$ |
+    | **윌슨** | $4$ | $0.95633$ | $0.32562$ |
+    | 아그레스티–쿨 | $4$ | $0.95633$ | $0.33880$ |
+    | 클로퍼–피어슨 | $1$ | $0.97849$ | $0.36713$ |
+
+    **클로퍼–피어슨이 적게 실패하는 것은 더 좋아서가 아니다.** 포함률이 $0.97849$ 로 명목 $0.95$ 를 **$2.8$퍼센트포인트 넘는다.** $95\%$ 라고 적고 $97.8\%$ 를 담는다는 것은 구간이 **필요보다 넓다**는 뜻이고, 실제로 기대 폭이 윌슨보다 $12.7\%$ 크다. 적게 실패한 값을 폭으로 치른 것이다.
+
+    **명목 수준에 가장 가까운 것은 윌슨이다.** $0.95633$ 으로 $0.95$ 를 $0.6$퍼센트포인트만 넘고, 기대 폭은 네 방법 가운데 **가장 좁다.** 왈드보다도 좁으면서 포함률은 $0.921$ 에서 $0.956$ 으로 오른다 — **아무 대가 없이 개선된다.**
+
+    **그러므로 기준은 "실패가 적은가"가 아니다.** 포함률이 명목에 가까운가(윌슨), 그리고 어떤 $p$ 에서도 명목 아래로 내려가지 않는가(클로퍼–피어슨) 두 가지이며, 둘 중 어느 것을 고를지는 통계가 아니라 쓰임이 정한다. 왈드는 두 기준 어느 쪽에서도 고를 이유가 없다.
 
 $n = 20$, $p = 0.2$인 Wald 구간의 포함확률은 91%다. 명목값 95%에 못 미친다. 그림에서 두 가지가 보인다.
 

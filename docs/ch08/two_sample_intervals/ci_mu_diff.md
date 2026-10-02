@@ -55,45 +55,161 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 평균 차이의 신뢰구간 계산
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 평균 차이의 신뢰구간 계산. 독립인 두 표본에서 $n_1 = 30$, $\bar x_1 = 100$, $s_1 = 15$ 와 $n_2 = 25$, $\bar x_2 = 90$, $s_2 = 20$ 을 얻었다.
+
+**(1)** $\mu_1 - \mu_2$ 의 웰치 $95\%$ 구간을 구하시오. 두 표준오차를 더하지 않고 **분산**을 더하는 까닭을 밝히고, 표준편차를 더했다면 얼마나 틀렸을지 수로 보이시오.
+
+**(2)** 새터스웨이트 자유도가 가질 수 있는 **범위**를 구하시오. 웰치의 자유도가 합동 $t$ 의 자유도 $n_1 + n_2 - 2$ 를 **결코 넘지 못함**을 보이고, 등호가 성립하는 자리를 밝히시오.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-n1, n2 = 30, 25
-mean1, mean2 = 100, 90
-s1, s2 = 15, 20
-confidence_level = 0.95
+    **(1) 분산이 더해진다.** 두 표본이 독립이므로
 
-# 두 표본이 독립이므로 분산이 더해진다.
-# 표준편차가 아니라 **분산**을 더한 뒤 제곱근이라는 점에 주의.
-standard_error = np.sqrt((s1**2 / n1) + (s2**2 / n2))
+    $$
+    \operatorname{Var}(\bar X_1 - \bar X_2)
+    = \operatorname{Var}(\bar X_1) + \operatorname{Var}(\bar X_2)
+    = \frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}
+    $$
 
-# Welch-Satterthwaite 자유도. 정수가 아니어도 scipy는 받아 준다.
-# 두 표본의 정보량을 하나로 합치는 근사이며, 한쪽 분산이 압도하면
-# 그쪽 표본의 자유도 쪽으로 끌려간다.
-df = ((s1**2 / n1) + (s2**2 / n2))**2 / (
-    ((s1**2 / n1)**2 / (n1 - 1)) + ((s2**2 / n2)**2 / (n2 - 1))
-)
+    이고(차를 빼도 분산은 **더해진다**), 표본값을 넣으면
 
-t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, df)
-margin_of_error = t_critical * standard_error
+    $$
+    \text{SE} = \sqrt{\frac{225}{30} + \frac{400}{25}} = \sqrt{7.5 + 16} = \sqrt{23.5} = 4.84768
+    $$
 
-confidence_interval = (
-    (mean1 - mean2) - margin_of_error,
-    (mean1 - mean2) + margin_of_error,
-)
-print(f"{confidence_interval = }")
-```
+    이다. **표준편차를 더하면 틀린다.** 가법성이 있는 것은 분산이지 표준편차가 아니다. 더해 보면
 
-출력:
+    $$
+    \sqrt{7.5} + \sqrt{16} = 2.73861 + 4 = 6.73861
+    $$
 
-```
-confidence_interval = (0.22892977648461788, 19.77107022351538)
-```
+    로 참값보다 $39\%$ 크다. 구간이 그만큼 넓어지므로 **틀리되 보수적인 쪽**이지만, 틀린 것은 틀린 것이다.
+
+    자유도는
+
+    $$
+    \nu = \frac{(7.5 + 16)^2}{\frac{7.5^2}{29} + \frac{16^2}{24}}
+    = \frac{552.25}{1.93966 + 10.66667} = \frac{552.25}{12.60632} = 43.8074
+    $$
+
+    이고 $t_{0.025,\,43.8074} = 2.01562$ 이므로
+
+    $$
+    (100 - 90) \pm 2.01562 \times 4.84768 = 10 \pm 9.77107 = (0.2289,\ 19.7711)
+    $$
+
+    **구간이 $0$ 을 아슬아슬하게 벗어난다.** 점추정값은 차이가 $10$ 이라 하지만 구간은 $0.23$ 일 수도 $19.77$ 일 수도 있다고 말한다. **"차이가 있다"까지는 말할 수 있어도 "얼마나 있다"는 거의 말하지 못하는 자료다.**
+
+    **(2) 자유도의 범위.** $a = s_1^2/n_1$, $b = s_2^2/n_2$ 로 두면
+
+    $$
+    \nu = \frac{(a+b)^2}{\dfrac{a^2}{n_1-1} + \dfrac{b^2}{n_2-1}}
+    $$
+
+    이다.
+
+    **위 끝 — 코시–슈바르츠.** 두 벡터 $\left(\sqrt{n_1-1},\ \sqrt{n_2-1}\right)$ 과 $\left(\dfrac{a}{\sqrt{n_1-1}},\ \dfrac{b}{\sqrt{n_2-1}}\right)$ 에 코시–슈바르츠를 쓰면
+
+    $$
+    (a+b)^2 \le \big((n_1-1) + (n_2-1)\big)\left(\frac{a^2}{n_1-1} + \frac{b^2}{n_2-1}\right)
+    $$
+
+    이므로
+
+    $$
+    \nu \le n_1 + n_2 - 2 = 53
+    $$
+
+    이고, 등호는 두 벡터가 평행할 때, 곧
+
+    $$
+    \frac{a}{n_1-1} = \frac{b}{n_2-1}
+    \iff \frac{s_1^2}{s_2^2} = \frac{(n_1-1)n_1}{(n_2-1)n_2} = \frac{29 \times 30}{24 \times 25} = 1.45
+    $$
+
+    곧 $s_1/s_2 = 1.2042$ 일 때뿐이다. **웰치의 자유도는 절대로 합동 $t$ 의 자유도를 넘지 못한다.** $\square$
+
+    **아래 끝.** $s_1/s_2 \to 0$ 이면 $a \to 0$ 이라 $\nu \to n_2 - 1 = 24$ 이고, $s_1/s_2 \to \infty$ 면 $\nu \to n_1 - 1 = 29$ 다. 따라서
+
+    $$
+    24 \le \nu \le 53
+    $$
+
+    이다. 이 자료는 $s_1/s_2 = 0.75$ 이므로 $\nu = 43.81$ 로 범위의 가운데쯤에 있다.
+
+    **뜻.** 웰치는 등분산을 가정하지 않는 대가로 **자유도를 내놓는다.** 그 대가를 수로 보면, 같은 자료의 합동 구간이 $(0.5259,\ 19.4741)$ 로 웰치보다 폭이 $3.0\%$ 좁다. 등분산이 참이면 이 $3\%$ 가 공짜로 얻는 정밀도이고, 거짓이면 그만큼 **틀린 자리에 놓인 좁음**이다. 두 구간 모두 $0$ 을 배제하므로 여기서는 결론이 갈리지 않는다.
+
+    **(3) 확인.**
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    n1, n2 = 30, 25
+    mean1, mean2 = 100, 90
+    s1, s2 = 15, 20
+    confidence_level = 0.95
+
+    # 두 표본이 독립이므로 분산이 더해진다.
+    # 표준편차가 아니라 **분산**을 더한 뒤 제곱근이라는 점에 주의.
+    standard_error = np.sqrt((s1**2 / n1) + (s2**2 / n2))
+
+    # Welch-Satterthwaite 자유도. 정수가 아니어도 scipy는 받아 준다.
+    # 두 표본의 정보량을 하나로 합치는 근사이며, 한쪽 분산이 압도하면
+    # 그쪽 표본의 자유도 쪽으로 끌려간다.
+    df = ((s1**2 / n1) + (s2**2 / n2))**2 / (
+        ((s1**2 / n1)**2 / (n1 - 1)) + ((s2**2 / n2)**2 / (n2 - 1))
+    )
+
+    t_critical = stats.t.ppf(1 - (1 - confidence_level) / 2, df)
+    margin_of_error = t_critical * standard_error
+
+    confidence_interval = (
+        (mean1 - mean2) - margin_of_error,
+        (mean1 - mean2) + margin_of_error,
+    )
+    print(f"{standard_error = :.5f},  {df = :.4f},  {t_critical = :.5f}")
+    print(f"{confidence_interval = }")
+
+    # (2) 자유도의 위 끝은 n1+n2-2 다. s1/s2 를 훑어 확인한다.
+    print(f"\n{'s1/s2':>7}{'df':>10}")
+    for r in (0.01, 0.75, 1.2042, 2.0, 100.0):
+        a, b = (r * s2) ** 2 / n1, s2**2 / n2
+        print(f"{r:>7.4f}{(a + b) ** 2 / (a**2 / (n1 - 1) + b**2 / (n2 - 1)):>10.4f}")
+    print(f"n1-1 = {n1 - 1}, n2-1 = {n2 - 1}, n1+n2-2 = {n1 + n2 - 2}")
+
+    # 같은 자료의 합동 t 구간
+    sp2 = ((n1 - 1) * s1**2 + (n2 - 1) * s2**2) / (n1 + n2 - 2)
+    se_p = np.sqrt(sp2 * (1 / n1 + 1 / n2))
+    t_p = stats.t.ppf(0.975, n1 + n2 - 2)
+    print(f"\n합동 t 구간 ({10 - t_p * se_p:.4f}, {10 + t_p * se_p:.4f})"
+          f"   폭의 비 {2 * t_p * se_p / (2 * margin_of_error):.4f}")
+    ```
+
+    출력:
+
+    ```
+    standard_error = 4.84768,  df = 43.8074,  t_critical = 2.01562
+    confidence_interval = (0.22892977648461788, 19.77107022351538)
+
+      s1/s2        df
+     0.0100   24.0040
+     0.7500   43.8074
+     1.2042   53.0000
+     2.0000   44.2029
+    100.0000   29.0070
+    n1-1 = 29, n2-1 = 24, n1+n2-2 = 53
+
+    합동 t 구간 (0.5259, 19.4741)   폭의 비 0.9696
+    ```
+
+    **(1)과 맞는다.** $\text{SE} = 4.84768$, $\nu = 43.8074$, 구간 $(0.2289,\ 19.7711)$ 이다.
+
+    **(2)도 맞는다.** $s_1/s_2$ 를 훑으면 자유도가 $s_1/s_2 = 1.2042$ 에서 정확히 $53.0000 = n_1+n_2-2$ 로 **꼭짓점을 찍고**, 양쪽으로 가면서 $24$($s_1/s_2 \to 0$)와 $29$($s_1/s_2 \to \infty$)로 내려간다. 코시–슈바르츠가 준 위 끝과 등호 조건이 그대로 나타난다.
+
+    합동 구간의 폭이 웰치의 $0.9696$ 배로 $3.0\%$ 좁고, 두 구간 모두 $0$ 을 배제한다.
 
 구간이 0을 아슬아슬하게 벗어난다. 점추정값은 차이가 10이라고 말하지만, 구간은 0.23만큼 작을 수도 19.77만큼 클 수도 있다고 말한다. "차이가 있다"까지는 말할 수 있어도 "얼마나 있다"는 거의 말하지 못하는 자료다.
 
@@ -136,95 +252,148 @@ confidence_interval = (0.22892977648461788, 19.77107022351538)
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 네 방법의 포함확률 비교
+**보기 3.** <span class="diff easy" title="쉬움"></span> 네 방법의 포함확률 비교. $\mu_1 = 0$, $\sigma_1 = 1.0$, $n_1 = 12$ 와 $\mu_2 = 0.5$, $\sigma_2 = 1.5$, $n_2 = 10$ 에서 명목 $95\%$ 구간을 $100$개씩 만든다. 스크립트는 한 번에 한 방법만 돌린다.
+
+**(1)** 이 설정으로 "네 방법의 비교"가 되는가. 웰치와 합동 $t$ 의 포함률 차이가 참으로 $0.010$ 일 때, 그 차이를 가리려면 되풀이가 몇 번 필요한지 구하시오.
+
+**(2)** 네 방법을 **같은 표본**에 돌리면 필요한 되풀이가 얼마나 줄어드는가.
+
+**(3)** 그림을 그려 무엇이 읽히는지 말하시오.
 
 </div>
 
-```python
-#!/usr/bin/env python3
-"""두 평균의 차이에 대한 신뢰구간을 네 방법으로 만들어 포함확률을 비교한다.
+??? success "풀이"
 
-Welch 는 두 분산이 다를 수 있다고 보고, 합동(pooled)은 같다고 본다.
-분산이 실제로 다를 때 합동 방법의 포함확률이 어떻게 무너지는지가 요점이다.
-"""
+    **(1) $100$회로는 비교가 되지 않는다.** 포함률 $p$ 의 추정값은 되풀이 $M$ 회에서 표준오차 $\sqrt{p(1-p)/M}$ 를 갖는다. $p \approx 0.95$ 이면 $M = 100$ 에서 $0.0218$ 이다. 가리려는 차이가 $0.010$ 이므로 **오차가 차이의 두 배**다.
 
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import t, norm
+    차이의 $95\%$ 구간이 $0$ 을 벗어나려면, 두 방법을 **따로** 돌릴 때 차이의 표준오차가
 
-rng_seed = 42        # 아래 그림을 재현하려면 고정한다
-n_simulations = 100
-n1, n2 = 12, 10
-mu1, mu2 = 0.0, 0.5
-sigma1, sigma2 = 1.0, 1.5
-alpha = 0.05
-method = "welch"  # 'welch' | 'pooled' | 'z_known' | 'z_plugin'
+    $$
+    \text{SE}_{\text{차이}} = \sqrt{\frac{p_1(1-p_1) + p_2(1-p_2)}{M}}
+    = \frac{0.3082}{\sqrt M}
+    $$
 
+    이고 $2 \times 1.96 \times \text{SE}_{\text{차이}} < 0.010$ 을 풀면
 
-def main():
-    if rng_seed is not None:
-        np.random.seed(rng_seed)
+    $$
+    M > \left(\frac{2 \times 1.96 \times 0.3082}{0.010}\right)^2 = 16{,}000
+    $$
 
-    delta_true = mu1 - mu2
-    lowers = np.empty(n_simulations)
-    uppers = np.empty(n_simulations)
-    centers = np.empty(n_simulations)
+    쯤이다. **$100$회의 $160$배가 필요하다.**
 
-    for i in range(n_simulations):
-        x = np.random.normal(loc=mu1, scale=sigma1, size=n1)
-        y = np.random.normal(loc=mu2, scale=sigma2, size=n2)
-        xbar, ybar = x.mean(), y.mean()
-        s1, s2 = x.std(ddof=1), y.std(ddof=1)
-        diff_hat = xbar - ybar
-        centers[i] = diff_hat
+    **(2) 같은 표본을 쓰면 짝지은 비교가 된다.** 표본 하나에 네 방법을 모두 적용하면, 그 표본이 유난히 극단적이었던 효과가 네 방법에 **똑같이** 실린다. 그 공통 부분이 차에서 빠지므로 차이의 분산이 크게 줄어든다.
 
-        if method == "welch":
-            se = np.sqrt(s1**2 / n1 + s2**2 / n2)
-            num = (s1**2 / n1 + s2**2 / n2) ** 2
-            den = (s1**2 / n1) ** 2 / (n1 - 1) + (s2**2 / n2) ** 2 / (n2 - 1)
-            df = num / den
-            crit = t.ppf(1 - alpha / 2.0, df=df)
-        elif method == "pooled":
-            df = n1 + n2 - 2
-            sp2 = ((n1 - 1) * s1**2 + (n2 - 1) * s2**2) / df
-            se = np.sqrt(sp2 * (1.0 / n1 + 1.0 / n2))
-            crit = t.ppf(1 - alpha / 2.0, df=df)
-        elif method == "z_known":
-            se = np.sqrt(sigma1**2 / n1 + sigma2**2 / n2)
-            crit = norm.ppf(1 - alpha / 2.0)
-        else:  # z_plugin
-            se = np.sqrt(s1**2 / n1 + s2**2 / n2)
-            crit = norm.ppf(1 - alpha / 2.0)
+    실제로 웰치와 합동 $t$ 의 포함 지시함수 차 $\mathbf 1_W - \mathbf 1_P$ 는 두 방법의 판정이 갈릴 때만 $0$ 이 아닌데, 그 일이 일어나는 비율이
 
-        lowers[i] = diff_hat - crit * se
-        uppers[i] = diff_hat + crit * se
+    $$
+    P(W \text{만 담음}) = 0.0104, \qquad P(P \text{만 담음}) = 0.0005
+    $$
 
-    covered = (lowers <= delta_true) & (delta_true <= uppers)
-    n_fail = int((~covered).sum())
-    coverage_pct = 100.0 * covered.mean()
+    로 합쳐 $1.1\%$ 뿐이다. 그래서 차의 표준편차가 $0.1039$ 로 **따로 돌릴 때의 $0.3082$ 보다 세 배 작다.** 필요한 되풀이는
 
-    fig, ax = plt.subplots(figsize=(12, 12))
-    for i in range(n_simulations):
-        color = "k" if covered[i] else "r"
-        ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
-        ax.plot(centers[i], i, marker="o", ms=3, color=color)
-    ax.axvline(delta_true, linestyle="--", linewidth=1.5)
-    ax.set_title(
-        f"{n_simulations} Two-Sample Mean CIs ({method}) | n1={n1}, n2={n2}, "
-        f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
-    ax.set_yticks([])
-    for sp in ["left", "right", "top"]:
-        ax.spines[sp].set_visible(False)
-    ax.set_xlabel("Δ = μ₁ − μ₂")
-    plt.tight_layout()
-    plt.show()
+    $$
+    M > \left(\frac{2 \times 1.96 \times 0.1039}{0.010}\right)^2 = 1{,}700
+    $$
+
+    으로 **약 $1/10$ 로 줄어든다.**
+
+    **이것이 짝짓기의 일반 원리다.** 같은 표본에 여러 방법을 돌리면 표본의 변동이 공통인자가 되어 상쇄된다. 8.4절의 대응표본 설계가 같은 이치이며, 거기서는 짝지은 **사람**이 공통인자다.
+
+    **참값은 되풀이 $200$만 회로 이렇다.** 웰치 $0.9499$, 합동 $t$ $0.9399$, $z$-known $0.9498$, $z$-plugin $0.9317$(몬테카를로 표준오차 $0.0002$). 웰치와 합동 $t$ 의 차이가 $0.0100$ 으로 (1)에서 가정한 값과 맞는다.
+
+    **(3) 그림.**
+
+    ```python
+    #!/usr/bin/env python3
+    """두 평균의 차이에 대한 신뢰구간을 네 방법으로 만들어 포함확률을 비교한다.
+
+    Welch 는 두 분산이 다를 수 있다고 보고, 합동(pooled)은 같다고 본다.
+    분산이 실제로 다를 때 합동 방법의 포함확률이 어떻게 무너지는지가 요점이다.
+    """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import t, norm
+
+    rng_seed = 42        # 아래 그림을 재현하려면 고정한다
+    n_simulations = 100
+    n1, n2 = 12, 10
+    mu1, mu2 = 0.0, 0.5
+    sigma1, sigma2 = 1.0, 1.5
+    alpha = 0.05
+    method = "welch"  # 'welch' | 'pooled' | 'z_known' | 'z_plugin'
 
 
-if __name__ == "__main__":
-    main()
-```
+    def main():
+        if rng_seed is not None:
+            np.random.seed(rng_seed)
 
-![100 Two-Sample Mean CIs (welch) | n1=12, n2=10, CL=95%](./img/ci_mu_diff_123.png)
+        delta_true = mu1 - mu2
+        lowers = np.empty(n_simulations)
+        uppers = np.empty(n_simulations)
+        centers = np.empty(n_simulations)
+
+        for i in range(n_simulations):
+            x = np.random.normal(loc=mu1, scale=sigma1, size=n1)
+            y = np.random.normal(loc=mu2, scale=sigma2, size=n2)
+            xbar, ybar = x.mean(), y.mean()
+            s1, s2 = x.std(ddof=1), y.std(ddof=1)
+            diff_hat = xbar - ybar
+            centers[i] = diff_hat
+
+            if method == "welch":
+                se = np.sqrt(s1**2 / n1 + s2**2 / n2)
+                num = (s1**2 / n1 + s2**2 / n2) ** 2
+                den = (s1**2 / n1) ** 2 / (n1 - 1) + (s2**2 / n2) ** 2 / (n2 - 1)
+                df = num / den
+                crit = t.ppf(1 - alpha / 2.0, df=df)
+            elif method == "pooled":
+                df = n1 + n2 - 2
+                sp2 = ((n1 - 1) * s1**2 + (n2 - 1) * s2**2) / df
+                se = np.sqrt(sp2 * (1.0 / n1 + 1.0 / n2))
+                crit = t.ppf(1 - alpha / 2.0, df=df)
+            elif method == "z_known":
+                se = np.sqrt(sigma1**2 / n1 + sigma2**2 / n2)
+                crit = norm.ppf(1 - alpha / 2.0)
+            else:  # z_plugin
+                se = np.sqrt(s1**2 / n1 + s2**2 / n2)
+                crit = norm.ppf(1 - alpha / 2.0)
+
+            lowers[i] = diff_hat - crit * se
+            uppers[i] = diff_hat + crit * se
+
+        covered = (lowers <= delta_true) & (delta_true <= uppers)
+        n_fail = int((~covered).sum())
+        coverage_pct = 100.0 * covered.mean()
+
+        fig, ax = plt.subplots(figsize=(12, 12))
+        for i in range(n_simulations):
+            color = "k" if covered[i] else "r"
+            ax.plot([lowers[i], uppers[i]], [i, i], lw=2, color=color)
+            ax.plot(centers[i], i, marker="o", ms=3, color=color)
+        ax.axvline(delta_true, linestyle="--", linewidth=1.5)
+        ax.set_title(
+            f"{n_simulations} Two-Sample Mean CIs ({method}) | n1={n1}, n2={n2}, "
+            f"CL={int((1 - alpha) * 100)}% | Fail={n_fail} (Coverage ≈ {coverage_pct:.1f}%)")
+        ax.set_yticks([])
+        for sp in ["left", "right", "top"]:
+            ax.spines[sp].set_visible(False)
+        ax.set_xlabel("Δ = μ₁ − μ₂")
+        plt.tight_layout()
+        plt.show()
+
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    ![100 Two-Sample Mean CIs (welch) | n1=12, n2=10, CL=95%](./img/ci_mu_diff_123.png)
+
+    **실패가 셋이다.** 참값 $0.9499$ 에서 기대 실패가 다섯인데 셋이 나왔고, $100$회의 표준오차 $0.0218$ 안이다.
+
+    **폭이 $1.559$ 에서 $4.024$ 까지 $2.58$배 널뛴다.** 일표본 그림보다 심한데, 흔들리는 양이 $s_1$, $s_2$ 둘인 데다 **임계값까지 흔들리기** 때문이다. 새터스웨이트 자유도가 표본마다 달라지므로 $t_{0.025,\,\nu}$ 가 상수가 아니다. 이 $100$개에서 $\nu$ 가 $9.49$ 에서 $19.99$ 까지 오가고, 그에 따라 임계값이 $2.0861$ 에서 $2.2446$ 까지 움직인다.
+
+    **그러나 이 그림은 (1)(2)의 비교에 쓸 수 없다.** 그려진 것은 웰치 하나뿐이고, 실패 개수 $3$ 과 참값 $0.9499$ 의 거리는 되풀이 $100$회의 잡음 안에 있다. **그림은 구간이 어떻게 생겼는지를 보여 주지 포함률이 얼마인지를 말해 주지 않는다.**
 
 포함확률 97.0%로 명목값을 달성한다(100회 모의실험의 표준오차가 2.2%p이므로 95%와 구별되지 않는다). `method`를 `"pooled"`나 `"z_plugin"`으로 바꿔 같은 자료에 다시 돌려 보면 방법마다 어디서 무너지는지 볼 수 있다.
 

@@ -58,120 +58,236 @@ $k = 0$이면 하한을 0으로, $k = n$이면 상한을 1로 두는 관례를 �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> CSV에서 자료 읽기
+**보기 1.** <span class="diff easy" title="쉬움"></span> CSV에서 자료 읽기. 베르누이 자료가 담긴 CSV 파일에 `1,0,0,1,0` 과 `1,0,0,0,0` 두 줄이 적혀 있다.
+
+**(1)** 표본크기 $n$, 성공 횟수 $k$, 표본비율 $\hat p$를 구하시오.
+
+**(2)** 0/1 값을 읽는 함수를 만들어 (1)을 확인하시오. 함수가 `0` 과 `1` 이 아닌 값을 만났을 때 **끊어야 하는** 까닭을 구체적인 예로 보이시오.
 
 </div>
 
-```python
-import csv
-import numpy as np
+??? success "풀이"
 
-def load_data(csv_path):
-    """비율 추정을 위해 CSV에서 0/1 값을 읽는다."""
-    arr = []
-    with open(csv_path, "r", newline="") as f:
-        reader = csv.reader(f)
-        for row in reader:
-            for item in row:
-                item = item.strip()
-                if item:
-                    v = float(item)
-                    # 0과 1 외의 값이 섞이면 여기서 끊는다.
-                    # 그냥 두면 sum()이 성공 횟수가 아니게 되어
-                    # p_hat이 1을 넘는 식으로 조용히 망가진다.
-                    if v not in (0, 1):
-                        raise ValueError("CSV must contain only 0/1 values.")
-                    arr.append(v)
-    if len(arr) == 0:
-        raise ValueError("No values found in CSV.")
-    return np.array(arr, dtype=float)
+    **(1) 세는 것이 전부다.** 값은 열 개이므로 $n = 10$이고, $1$인 것이 세 개이므로 $k = 3$, 따라서
+
+    $$
+    \hat p = \frac{k}{n} = \frac{3}{10} = 0.3
+    $$
+
+    이다. 비율 자료의 요약은 $(n, k)$ **두 수로 끝난다.** 평균의 구간에서는 $\bar x$와 $s$를 따로 구해야 했지만, 베르누이에서는 분산 $p(1-p)$가 평균에 딸려 오므로 표준오차까지 이 두 수에서 나온다. 그러므로 원자료를 읽는 일의 전부는 **이 두 수를 바르게 세는 것**이다.
+
+    **(2) 구현과 확인.**
+
+    ```python
+    import csv
+    import numpy as np
+
+    def load_data(csv_path):
+        """비율 추정을 위해 CSV에서 0/1 값을 읽는다."""
+        arr = []
+        with open(csv_path, "r", newline="") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                for item in row:
+                    item = item.strip()
+                    if item:
+                        v = float(item)
+                        # 0과 1 외의 값이 섞이면 여기서 끊는다.
+                        # 그냥 두면 sum()이 성공 횟수가 아니게 되어
+                        # p_hat이 1을 넘는 식으로 조용히 망가진다.
+                        if v not in (0, 1):
+                            raise ValueError("CSV must contain only 0/1 values.")
+                        arr.append(v)
+        if len(arr) == 0:
+            raise ValueError("No values found in CSV.")
+        return np.array(arr, dtype=float)
 
 
-# 임시 파일로 확인한다. 성공 횟수 k와 표본크기 n만 있으면 구간을 만들 수 있다.
-import tempfile, os
-with tempfile.TemporaryDirectory() as d:
-    path = os.path.join(d, "bernoulli.csv")
-    with open(path, "w") as f:
-        f.write("1,0,0,1,0\n1,0,0,0,0\n")
-    y = load_data(path)
-print(f"n = {len(y)}, k = {int(y.sum())}, p_hat = {y.mean()}")
-```
+    # 임시 파일로 확인한다. 성공 횟수 k와 표본크기 n만 있으면 구간을 만들 수 있다.
+    import tempfile, os
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, "bernoulli.csv")
+        with open(path, "w") as f:
+            f.write("1,0,0,1,0\n1,0,0,0,0\n")
+        y = load_data(path)
+    print(f"n = {len(y)}, k = {int(y.sum())}, p_hat = {y.mean()}")
+    ```
 
-출력:
+    출력:
 
-```
-n = 10, k = 3, p_hat = 0.3
-```
+    ```
+    n = 10, k = 3, p_hat = 0.3
+    ```
+
+    **(1)과 맞는다.** $n = 10$, $k = 3$, $\hat p = 0.3$ 이다. 줄을 어떻게 나누었든 값의 개수와 합만 세므로 결과가 같다.
+
+    **0/1 이 아닌 값에서 끊어야 하는 까닭.** 이 함수가 하는 일은 결국 `len` 과 `sum` 두 가지인데, **`sum` 이 성공 횟수라는 보장은 값이 0/1 일 때만 성립한다.** 다른 값이 섞이면 조용히 틀린다.
+
+    - 값 하나가 `2` 라면 $k = 4$, $\hat p = 0.4$ 가 된다. **그럴듯한 수라서 알아챌 길이 없다.**
+    - 결측을 `99` 로 코딩한 자료가 섞이면 $k = 102$, $\hat p = 10.2$ 가 된다. 이때 표준오차 안의 $\hat p(1-\hat p) = 10.2 \times (-9.2) = -93.84$ 가 **음수**가 되어 $\sqrt{\cdot}$ 가 `nan` 을 준다. 구간이 `(nan, nan)` 으로 나오므로 그나마 눈에 띈다.
+
+    **눈에 띄는 쪽이 운이 좋은 경우다.** 첫째 예처럼 틀린 값이 유효 범위 안에 떨어지면 끝까지 아무 신호가 없다. 그래서 검사를 계산 뒤가 아니라 **읽는 자리**에 둔다.
 
 ### 신뢰구간의 계산
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간 계산기 — 네 방법
+**보기 2.** <span class="diff easy" title="쉬움"></span> 비율 신뢰구간 계산기 — 네 방법. 시행 $n = 50$번에서 성공이 $k = 12$번 나왔다.
+
+**(1)** 네 구간을 $95\%$에서 모두 계산하시오. 윌슨 구간과 아그레스티–쿨 구간의 **중심이 정확히 같다**는 것을 보이고, 두 구간이 갈라지는 곳이 어디인지 닫힌 꼴로 적으시오.
+
+**(2)** 네 구간의 폭을 비교하시오. "보수적인 구간이 넓다"는 통념이 어디까지 맞는가.
 
 </div>
 
-```python
-import math
-from scipy.stats import norm, beta
+??? success "풀이"
 
-def ci_proportion(k, n, method="wilson", cl=0.95):
-    """모비율에 대한 일표본 신뢰구간. 네 가지 방법을 한 함수에 모았다.
+    **(1) 네 구간.** $\hat p = 12/50 = 0.24$, $z = 1.95996$, $z^2 = 3.84146$, $\tilde n = n + z^2 = 53.84146$ 이다.
 
-    기본값이 wald가 아니라 wilson인 것에 주의하라.
-    Wald는 교과서에 먼저 나오지만 실무 기본값으로 삼을 만한 방법이 아니다.
+    **왈드.** $\text{SE} = \sqrt{0.24 \times 0.76/50} = 0.0603987$, $\text{MOE} = 0.1183793$ 이므로 $(0.1216,\ 0.3584)$.
 
-    k : 성공 횟수
-    n : 표본크기
-    method : 'wald', 'wilson', 'ac', 'cp'
-    cl : 신뢰수준 (기본 0.95)
-    """
-    alpha = 1 - cl
-    z = norm.ppf(1 - alpha / 2)
-    phat = k / n
+    **윌슨.** 중심과 반폭이
 
-    if method == "wald":
-        se = math.sqrt(phat * (1 - phat) / n)
-        lo = phat - z * se
-        hi = phat + z * se
-    elif method == "wilson":
-        denom = 1 + z * z / n
-        center = (phat + z * z / (2 * n)) / denom
-        half = z * math.sqrt(phat * (1 - phat) / n + z * z / (4 * n * n)) / denom
-        lo, hi = center - half, center + half
-    elif method == "ac":
-        n_tilde = n + z * z
-        p_tilde = (k + 0.5 * z * z) / n_tilde
-        se_tilde = math.sqrt(p_tilde * (1 - p_tilde) / n_tilde)
-        lo = p_tilde - z * se_tilde
-        hi = p_tilde + z * se_tilde
-    else:  # cp (Clopper-Pearson)
-        # 정규근사를 아예 쓰지 않고 이항분포를 직접 뒤집는다.
-        # Beta가 나오는 것은 이항 꼬리확률과 Beta 누적분포가 같은 식이기 때문이다.
-        # k=0이나 k=n이면 한쪽 Beta의 모수가 0이 되어 정의되지 않으므로 관례를 따른다.
-        lo = 0.0 if k == 0 else beta.ppf(alpha / 2, k, n - k + 1)
-        hi = 1.0 if k == n else beta.ppf(1 - alpha / 2, k + 1, n - k)
+    $$
+    \frac{\hat p + \frac{z^2}{2n}}{1 + \frac{z^2}{n}} = 0.2585504,
+    \qquad
+    \frac{z}{1+\frac{z^2}{n}}\sqrt{\frac{\hat p(1-\hat p)}{n} + \frac{z^2}{4n^2}} = 0.1155750
+    $$
 
-    # Wald는 끝점이 [0,1]을 벗어날 수 있다. 나머지 셋은 그럴 일이 없다.
-    lo = max(0.0, lo)
-    hi = min(1.0, hi)
-    return lo, hi
+    이므로 $(0.1430,\ 0.3741)$.
 
-# 50번 중 12번 성공에 대한 95% Wilson 구간
-lo, hi = ci_proportion(k=12, n=50, method="wilson", cl=0.95)
-print(f"95% Wilson CI: ({lo:.4f}, {hi:.4f})")
+    **아그레스티–쿨.** $\tilde p = (k + z^2/2)/\tilde n = 13.92073/53.84146 = 0.2585504$, 반폭 $z\sqrt{\tilde p(1-\tilde p)/\tilde n} = 0.1169475$ 이므로 $(0.1416,\ 0.3755)$.
 
-# 같은 자료의 99% Clopper-Pearson 구간
-lo, hi = ci_proportion(k=12, n=50, method="cp", cl=0.99)
-print(f"99% Clopper-Pearson CI: ({lo:.4f}, {hi:.4f})")
-```
+    **클로퍼–피어슨.** $\text{Beta}(0.025;\ 12,\ 39) = 0.1306$, $\text{Beta}(0.975;\ 13,\ 38) = 0.3817$ 이므로 $(0.1306,\ 0.3817)$.
 
-출력:
+    **중심이 같은 것은 우연이 아니다.** 윌슨 중심의 분자와 분모에 $n$을 곱하면
 
-```
-95% Wilson CI: (0.1430, 0.3741)
-99% Clopper-Pearson CI: (0.1056, 0.4255)
-```
+    $$
+    \frac{\hat p + \frac{z^2}{2n}}{1 + \frac{z^2}{n}}
+    = \frac{n\hat p + \frac{z^2}{2}}{n + z^2}
+    = \frac{k + \frac{z^2}{2}}{\tilde n}
+    = \tilde p
+    $$
+
+    로 아그레스티–쿨의 $\tilde p$와 **같은 식**이다. 둘 다 성공 $z^2/2 = 1.92$회와 실패 $1.92$회를 가상으로 더한 비율이고, $95\%$에서 이것을 $2$로 반올림한 것이 "plus-four" 규칙이다.
+
+    **갈라지는 곳은 반폭 하나뿐이다.** 두 반폭을 같은 분모 $\tilde n$으로 정리하면
+
+    $$
+    \text{윌슨 반폭} = \frac{z}{\tilde n}\sqrt{\frac{k(n-k)}{n} + \frac{z^2}{4}},
+    \qquad
+    \text{AC 반폭} = \frac{z}{\tilde n}\sqrt{\frac{(k+\frac{z^2}{2})(n-k+\frac{z^2}{2})}{\tilde n}}
+    $$
+
+    이다(윌슨 쪽은 $\frac{z}{1+z^2/n} = \frac{zn}{\tilde n}$ 임을 쓰고 $n$을 근호 안으로 넣으면 나온다). 근호 안을 비교하면 $10.0804$ 대 $10.3211$ 로 **아그레스티–쿨이 조금 크다.** 윌슨은 산포를 관측된 $k$로 재고, 아그레스티–쿨은 $1/2$ 쪽으로 당겨진 $\tilde p$로 재기 때문이다. $\tilde p$가 $0.5$에 더 가까우므로 $\tilde p(1-\tilde p)$가 더 크다.
+
+    **(2) 폭.** 네 구간의 폭은
+
+    | 방법 | 구간 | 폭 | 윌슨 대비 |
+    |---|---|---|---|
+    | 왈드 | $(0.1216,\ 0.3584)$ | $0.2368$ | $1.024$ |
+    | **윌슨** | $(0.1430,\ 0.3741)$ | $0.2312$ | 기준 |
+    | 아그레스티–쿨 | $(0.1416,\ 0.3755)$ | $0.2339$ | $1.012$ |
+    | 클로퍼–피어슨 | $(0.1306,\ 0.3817)$ | $0.2511$ | $1.086$ |
+
+    **통념이 맞는 것은 클로퍼–피어슨뿐이다.** 폭이 윌슨보다 $8.6\%$ 넓고, 그 대가로 모든 $p$에서 포함률 $0.95$ 이상을 **보장**한다. 여기서는 "보수적 = 넓다"가 성립한다.
+
+    **왈드는 통념에 맞지 않는다.** 포함률이 가장 나쁜데 폭은 윌슨보다 $2.4\%$ **넓다.** 좁아서 부정확한 것이 아니라 **엉뚱한 자리에 놓여서** 부정확하다는 뜻이다.
+
+    다만 왈드가 언제나 더 넓은 것은 아니다. 두 폭의 비를 풀면 $n = 50$에서 $\hat p$가
+
+    $$
+    0.1400 \le \hat p \le 0.8600
+    $$
+
+    일 때 윌슨이 더 좁고, 그 **바깥에서만** 왈드가 좁아진다. 그런데 그 바깥이 바로 $\sqrt{\hat p(1-\hat p)}$가 작아져 왈드가 무너지는 자리다. **왈드가 좁아지는 곳과 왈드가 실패하는 곳이 같은 곳이다.**
+
+    **확인.**
+
+    ```python
+    import math
+    from scipy.stats import norm, beta
+
+    def ci_proportion(k, n, method="wilson", cl=0.95):
+        """모비율에 대한 일표본 신뢰구간. 네 가지 방법을 한 함수에 모았다.
+
+        기본값이 wald가 아니라 wilson인 것에 주의하라.
+        Wald는 교과서에 먼저 나오지만 실무 기본값으로 삼을 만한 방법이 아니다.
+
+        k : 성공 횟수
+        n : 표본크기
+        method : 'wald', 'wilson', 'ac', 'cp'
+        cl : 신뢰수준 (기본 0.95)
+        """
+        alpha = 1 - cl
+        z = norm.ppf(1 - alpha / 2)
+        phat = k / n
+
+        if method == "wald":
+            se = math.sqrt(phat * (1 - phat) / n)
+            lo = phat - z * se
+            hi = phat + z * se
+        elif method == "wilson":
+            denom = 1 + z * z / n
+            center = (phat + z * z / (2 * n)) / denom
+            half = z * math.sqrt(phat * (1 - phat) / n + z * z / (4 * n * n)) / denom
+            lo, hi = center - half, center + half
+        elif method == "ac":
+            n_tilde = n + z * z
+            p_tilde = (k + 0.5 * z * z) / n_tilde
+            se_tilde = math.sqrt(p_tilde * (1 - p_tilde) / n_tilde)
+            lo = p_tilde - z * se_tilde
+            hi = p_tilde + z * se_tilde
+        else:  # cp (Clopper-Pearson)
+            # 정규근사를 아예 쓰지 않고 이항분포를 직접 뒤집는다.
+            # Beta가 나오는 것은 이항 꼬리확률과 Beta 누적분포가 같은 식이기 때문이다.
+            # k=0이나 k=n이면 한쪽 Beta의 모수가 0이 되어 정의되지 않으므로 관례를 따른다.
+            lo = 0.0 if k == 0 else beta.ppf(alpha / 2, k, n - k + 1)
+            hi = 1.0 if k == n else beta.ppf(1 - alpha / 2, k + 1, n - k)
+
+        # Wald는 끝점이 [0,1]을 벗어날 수 있다. 나머지 셋은 그럴 일이 없다.
+        lo = max(0.0, lo)
+        hi = min(1.0, hi)
+        return lo, hi
+
+    # 50번 중 12번 성공에 대한 95% Wilson 구간
+    lo, hi = ci_proportion(k=12, n=50, method="wilson", cl=0.95)
+    print(f"95% Wilson CI: ({lo:.4f}, {hi:.4f})")
+
+    # 같은 자료의 99% Clopper-Pearson 구간
+    lo, hi = ci_proportion(k=12, n=50, method="cp", cl=0.99)
+    print(f"99% Clopper-Pearson CI: ({lo:.4f}, {hi:.4f})")
+
+    # (1),(2) 신뢰수준을 95%로 맞추고 네 방법을 나란히 둔다.
+    print()
+    print(f"{'방법':>6}{'하한':>10}{'상한':>10}{'중심':>10}{'폭':>10}{'윌슨대비':>10}")
+    base = None
+    for name in ("wald", "wilson", "ac", "cp"):
+        lo, hi = ci_proportion(k=12, n=50, method=name, cl=0.95)
+        if name == "wilson":
+            base = hi - lo
+    for name in ("wald", "wilson", "ac", "cp"):
+        lo, hi = ci_proportion(k=12, n=50, method=name, cl=0.95)
+        print(f"{name:>6}{lo:>10.4f}{hi:>10.4f}{(lo + hi) / 2:>10.7f}"
+              f"{hi - lo:>10.4f}{(hi - lo) / base:>10.3f}")
+    ```
+
+    출력:
+
+    ```
+    95% Wilson CI: (0.1430, 0.3741)
+    99% Clopper-Pearson CI: (0.1056, 0.4255)
+
+        방법        하한        상한        중심         폭      윌슨대비
+      wald    0.1216    0.3584 0.2400000    0.2368     1.024
+    wilson    0.1430    0.3741 0.2585504    0.2312     1.000
+        ac    0.1416    0.3755 0.2585504    0.2339     1.012
+        cp    0.1306    0.3817 0.2561503    0.2511     1.086
+    ```
+
+    **(1)과 (2)가 모두 맞는다.** 네 구간의 끝점과 폭이 손 계산과 같고, 윌슨과 아그레스티–쿨의 중심이 소수 일곱째 자리까지 **$0.2585504$ 로 같다.** 왈드의 중심만 $\hat p = 0.24$ 그대로다. 클로퍼–피어슨의 중심 $0.2562$ 는 셋 중 어느 것과도 다른데, 이 구간은 중심을 먼저 정하고 폭을 더하는 꼴로 만들어진 것이 아니라 **양쪽 꼬리를 따로 뒤집어** 만든 것이라 대칭일 이유가 없기 때문이다.
+
+    폭의 비도 표와 같다. 왈드 $1.024$, 아그레스티–쿨 $1.012$, 클로퍼–피어슨 $1.086$ 이다.
 
 두 구간의 신뢰수준이 다르므로 너비를 곧바로 비교할 수는 없다. 같은 95%로 맞추면 Wilson이 $(0.1430, 0.3741)$, Clopper–Pearson이 $(0.1306, 0.3817)$로 후자가 약 9% 넓다. 이것이 "모든 $p$에서 95% 아래로 내려가지 않는다"는 보장의 값이다.
 

@@ -36,35 +36,119 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 비율의 신뢰구간 계산
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비율의 신뢰구간 계산. 크기 $n = 200$인 확률표본에서 성공이 $x = 120$번 나왔다.
+
+**(1)** $p$의 왈드 $95\%$ 신뢰구간을 구하시오. 평균의 구간과 달리 산포를 **따로** 추정하지 않아도 되는 까닭을 밝히고, 타당성 조건을 확인하시오.
+
+**(2)** 이 구간에는 "명목 $95\%$"라고 적혀 있다. 참값이 $p = 0.6$이고 $n = 200$일 때 **실제** 포함률을 모의실험 없이 정확히 구하시오.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-n = 200          # 표본크기
-x = 120          # 성공 횟수
-confidence_level = 0.95
+    **(1) 구간.** $\hat p = 120/200 = 0.6$이고 $z_{0.025} = 1.95996$이다.
 
-p_hat = x / n
-z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
-# 평균의 구간과 달리 여기서는 산포를 따로 추정하지 않는다.
-# Bernoulli 분포에서는 분산 p(1-p)가 평균 p에 딸려 오기 때문이다.
-# 그래서 p_hat 하나로 중심과 너비가 모두 정해진다.
-standard_error = np.sqrt((p_hat * (1 - p_hat)) / n)
-margin_of_error = z_critical * standard_error
-confidence_interval = (p_hat - margin_of_error, p_hat + margin_of_error)
+    $$
+    \text{SE} = \sqrt{\frac{\hat p(1-\hat p)}{n}} = \sqrt{\frac{0.6 \times 0.4}{200}} = \sqrt{0.0012} = 0.0346410
+    $$
 
-print(f"{confidence_interval = }")
-```
+    $$
+    \text{MOE} = 1.95996 \times 0.0346410 = 0.0678951,
+    \qquad (0.5321049,\ 0.6678951)
+    $$
 
-출력:
+    **왜 산포를 따로 추정하지 않는가.** 베르누이 분포에는 모수가 **하나뿐**이다. $X \sim \text{Bernoulli}(p)$이면
 
-```
-confidence_interval = (0.5321048559554297, 0.6678951440445703)
-```
+    $$
+    E[X] = p, \qquad \operatorname{Var}(X) = p(1-p)
+    $$
+
+    로 **분산이 평균에 딸려 온다.** 그래서 $\hat p$ 하나가 구간의 중심과 폭을 모두 정한다. 정규모집단에서는 $\mu$와 $\sigma^2$이 **따로 움직이는 두 모수**라 $\bar x$ 말고 $s$를 하나 더 추정해야 했고, 그 추정의 대가로 $t$ 임계값을 치렀다. 비율에는 치를 대가가 없어 보인다.
+
+    **그러나 공짜가 아니다.** 분산을 따로 추정하지 않는 대신, 표준오차 안의 $p$ 자리에 **추정값 $\hat p$을 꽂았다.** 그 꽂기가 $\hat p$이 극단일 때 구간을 무너뜨린다. 여기서는 그 일이 일어나지 않는다는 것이 타당성 조건이다.
+
+    $$
+    n\hat p = 120 \ge 10, \qquad n(1-\hat p) = 80 \ge 10
+    $$
+
+    보수적 기준 $10$을 넉넉히 만족한다.
+
+    **(2) 포함률은 유한합이므로 정확히 계산된다.** $\hat p$이 가질 수 있는 값은 $k/n$ 꼴의 $n+1$개뿐이고 각 값의 확률은 이항 확률질량함수가 준다. 구간이 참값을 덮는지는 $k$만 보면 정해지므로
+
+    $$
+    C(n, p) = \sum_{k=0}^{n} \binom nk p^k (1-p)^{n-k}\,
+    \mathbf 1\!\left\{\, p \in I\!\left(\tfrac kn\right) \right\}
+    $$
+
+    이다. **모의실험이 필요 없다.** 아래 코드가 이 합을 그대로 계산한다.
+
+    **확인.**
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    n = 200          # 표본크기
+    x = 120          # 성공 횟수
+    confidence_level = 0.95
+
+    p_hat = x / n
+    z_critical = stats.norm.ppf(1 - (1 - confidence_level) / 2)
+    # 평균의 구간과 달리 여기서는 산포를 따로 추정하지 않는다.
+    # Bernoulli 분포에서는 분산 p(1-p)가 평균 p에 딸려 오기 때문이다.
+    # 그래서 p_hat 하나로 중심과 너비가 모두 정해진다.
+    standard_error = np.sqrt((p_hat * (1 - p_hat)) / n)
+    margin_of_error = z_critical * standard_error
+    confidence_interval = (p_hat - margin_of_error, p_hat + margin_of_error)
+
+    print(f"{p_hat = }, {standard_error = :.7f}, {margin_of_error = :.7f}")
+    print(f"{confidence_interval = }")
+
+
+    # (2) 포함률은 유한합이다. 열거해서 더하면 끝이다.
+    def exact_coverage(n, p, z):
+        k = np.arange(n + 1)
+        ph = k / n
+        pmf = stats.binom.pmf(k, n, p)
+        half = z * np.sqrt(ph * (1 - ph) / n)
+        return pmf[(ph - half <= p) & (p <= ph + half)].sum()
+
+
+    print("\n참값 p = 0.6 에서 명목 95% 왈드 구간의 정확한 포함률")
+    for m in (198, 199, 200, 201, 202, 205):
+        print(f"  n = {m}:  {exact_coverage(m, 0.6, z_critical):.5f}")
+    ```
+
+    출력:
+
+    ```
+    p_hat = 0.6, standard_error = 0.0346410, margin_of_error = 0.0678951
+    confidence_interval = (0.5321048559554297, 0.6678951440445703)
+
+    참값 p = 0.6 에서 명목 95% 왈드 구간의 정확한 포함률
+      n = 198:  0.94077
+      n = 199:  0.94920
+      n = 200:  0.94895
+      n = 201:  0.94756
+      n = 202:  0.94771
+      n = 205:  0.95386
+    ```
+
+    **(1)과 맞는다.** $\hat p = 0.6$, $\text{SE} = 0.0346410$, $\text{MOE} = 0.0678951$, 구간 $(0.5321049,\ 0.6678951)$ 이 손 계산과 같다.
+
+    **(2)의 답은 $0.95$가 아니라 $0.94895$다.** 타당성 조건을 넉넉히 만족하고 $p = 0.6$이 경계에서 멀며 $n$이 $200$인데도, 명목 $95\%$ 구간이 실제로는 $94.90\%$를 담는다. 모자라는 $0.00105$는 작지만 **잡음이 아니다.** 이 값은 모의실험이 아니라 유한합으로 구한 것이라 몬테카를로 오차가 아예 없다.
+
+    **더 눈에 띄는 것은 $n$에 대한 움직임이다.** $n$을 $198$에서 $205$까지 하나씩 올리는 동안 포함률이
+
+    $$
+    0.94077 \to 0.94920 \to 0.94895 \to 0.94756 \to 0.94771 \to \cdots \to 0.95386
+    $$
+
+    으로 **오르내린다.** $n = 198$에서 $199$로 하나 늘렸을 뿐인데 $0.0084$ 올랐고, 다시 $200$에서 $201$로 가며 내렸다. **포함률은 $n$의 증가함수가 아니다.**
+
+    까닭은 위 합의 지시함수에 있다. $n$이 하나 늘면 격자 $k/n$ 전체가 조금씩 움직이고, 그러다 어떤 $k$의 구간이 $p = 0.6$을 담던 상태에서 담지 못하는 상태로 **갑자기** 넘어간다. 그 $k$의 점질량이 통째로 합에서 빠지거나 들어온다. $\hat p$이 **이산**이라서 생기는 일이며, $n$을 키운다고 사라지지 않고 톱니가 잘아질 뿐이다.
+
+    이 쪽에서 다루는 $p = 0.6$, $n = 200$은 왈드 구간에 **가장 유리한** 자리다. $p$가 극단으로 가면 사정이 훨씬 나빠지며, 그 모습은 아래 그림과 [비율 신뢰구간의 실제 포함률](../../ch05/applications/phat_wald_wilson.md)에서 본다.
 
 타당성 조건 $n\hat p = 120 \ge 10$과 $n(1-\hat p) = 80 \ge 10$을 넉넉히 만족하므로 보수적 기준으로 보아도 Wald 구간을 써도 되는 경우다.
 

@@ -15,56 +15,113 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 같은 자료, 세 가지 오차막대
+**보기 1.** <span class="diff easy" title="쉬움"></span> 같은 자료, 세 가지 오차막대. 네 집단 A, B, C, D 를 각각 $n = 10,\ 30,\ 100,\ 300$ 개씩 관측했다. 모표준편차는 네 집단 모두 $\sigma = 3$ 이다. **똑같은 자료**에 오차막대를 $\pm 1\,\text{SD}$, $\pm 1\,\text{SE}$, $95\%$ 신뢰구간 세 가지로 그린다.
+
+**(1)** 그리기 전에 예측하시오. 세 막대의 길이는 $n$ 에 따라 각각 어떻게 달라지는가. 세 길이 사이의 비를 닫힌 꼴로 적으시오.
+
+**(2)** 세 그림을 그리고 (1)을 수로 확인하시오. 같은 자료인데도 세 그림이 다른 인상을 주는 자리를 집단 A 와 B 로 짚으시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-rng = np.random.default_rng(42)
+    **(1) 셋은 서로 다른 것을 잰다.**
 
-# 네 집단. 표본 크기만 10, 30, 100, 300으로 다르다.
-# 모집단의 표준편차는 모두 3으로 같게 두었다.
-gs = ['A', 'B', 'C', 'D']
-data = {g: rng.normal(m, s, n_) for g, m, s, n_ in
-        zip(gs, [10, 12, 11, 13], [3, 3, 3, 3], [10, 30, 100, 300])}
+    | | 계산 | 재는 것 | $n \to \infty$ |
+    |---|---|---|---|
+    | SD | $s$ | **개별 관측값**의 퍼짐 | $\sigma$ 로 간다(줄지 않는다) |
+    | SE | $s/\sqrt n$ | **표본평균**의 퍼짐 | $0$ 으로 간다 |
+    | $95\%$ CI | $1.96\,s/\sqrt n$ | 모평균이 있을 법한 범위 | $0$ 으로 간다 |
 
-means = np.array([data[g].mean() for g in gs])
-sds   = np.array([data[g].std(ddof=1) for g in gs])   # 표본표준편차 (ddof=1)
-ns    = np.array([len(data[g]) for g in gs])
+    **SD는 $n$ 과 무관하다.** $S$ 는 $\sigma$ 를 추정하는 양이고 $\sigma$ 는 모집단의 성질이다. 자료를 더 모은다고 개별 값들이 덜 퍼지지는 않는다. $n$ 이 커지면서 달라지는 것은 $S$ 의 **흔들림**뿐으로, $\operatorname{SD}(S) \approx \sigma/\sqrt{2(n-1)}$ 가 $n = 10$ 에서 $0.71$, $n = 300$ 에서 $0.12$ 다. 값이 아니라 정확도가 좋아진다.
 
-ses = sds / np.sqrt(ns)     # 표준오차 = SD / sqrt(n)
-cis = 1.96 * ses            # 95% 신뢰구간의 반폭 (정규근사)
+    **세 길이의 비는 이렇다.**
 
-fig, axes = plt.subplots(1, 3, figsize=(13, 3.8), sharey=True)
+    $$
+    \frac{\text{SD}}{\text{SE}} = \sqrt n,
+    \qquad
+    \frac{\text{CI}}{\text{SE}} = 1.96
+    $$
 
-# 같은 평균, 같은 자료. 오차막대의 정의만 바꾼다.
-for ax, err, name in zip(axes, [sds, ses, cis], ["±1 SD", "±1 SE", "95% CI"]):
-    # yerr에 준 값만큼 위아래로 막대가 뻗는다. capsize는 끝의 가로선 길이
-    ax.errorbar(gs, means, yerr=err, fmt='o', capsize=5, color='steelblue', ms=7)
-    ax.set_title(f"Error bars = {name}")
-    ax.spines[['top', 'right']].set_visible(False)
+    앞의 비는 $n$ 에 따라 커지고, **뒤의 비는 $n$ 과 무관한 상수 $1.96$ 이다.** 그러므로 SE 막대와 CI 막대는 모양이 같고 길이만 두 배 가까이 다르다. SE 막대를 보고 "$\pm 1\,\text{SE}$ 면 $68\%$ 쯤"이라 읽는 습관이 위험한 까닭이 여기 있다. $95\%$ 를 보려면 두 배로 늘려야 한다.
 
-axes[0].set_ylabel("Mean")
-plt.tight_layout()
-plt.show()
+    **(2) 그리고 확인한다.**
 
-for g, m, s, e, c, nn in zip(gs, means, sds, ses, cis, ns):
-    print(f"  {g}: n={nn:3d}  mean={m:5.2f}  SD={s:4.2f}  SE={e:4.2f}  95%CI=±{c:4.2f}")
-```
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-출력:
+    rng = np.random.default_rng(42)
 
-```
-  A: n= 10  mean= 8.99  SD=2.80  SE=0.89  95%CI=±1.74
-  B: n= 30  mean=12.49  SD=2.29  SE=0.42  95%CI=±0.82
-  C: n=100  mean=10.82  SD=2.60  SE=0.26  95%CI=±0.51
-  D: n=300  mean=12.94  SD=3.00  SE=0.17  95%CI=±0.34
-```
+    # 네 집단. 표본 크기만 10, 30, 100, 300으로 다르다.
+    # 모집단의 표준편차는 모두 3으로 같게 두었다.
+    gs = ['A', 'B', 'C', 'D']
+    data = {g: rng.normal(m, s, n_) for g, m, s, n_ in
+            zip(gs, [10, 12, 11, 13], [3, 3, 3, 3], [10, 30, 100, 300])}
 
-![세 가지 오차막대의 비교](./img/error_bars.png)
+    means = np.array([data[g].mean() for g in gs])
+    sds   = np.array([data[g].std(ddof=1) for g in gs])   # 표본표준편차 (ddof=1)
+    ns    = np.array([len(data[g]) for g in gs])
+
+    ses = sds / np.sqrt(ns)     # 표준오차 = SD / sqrt(n)
+    cis = 1.96 * ses            # 95% 신뢰구간의 반폭 (정규근사)
+
+    fig, axes = plt.subplots(1, 3, figsize=(13, 3.8), sharey=True)
+
+    # 같은 평균, 같은 자료. 오차막대의 정의만 바꾼다.
+    for ax, err, name in zip(axes, [sds, ses, cis], ["±1 SD", "±1 SE", "95% CI"]):
+        # yerr에 준 값만큼 위아래로 막대가 뻗는다. capsize는 끝의 가로선 길이
+        ax.errorbar(gs, means, yerr=err, fmt='o', capsize=5, color='steelblue', ms=7)
+        ax.set_title(f"Error bars = {name}")
+        ax.spines[['top', 'right']].set_visible(False)
+
+    axes[0].set_ylabel("Mean")
+    plt.tight_layout()
+    plt.show()
+
+    for g, m, s, e, c, nn in zip(gs, means, sds, ses, cis, ns):
+        print(f"  {g}: n={nn:3d}  mean={m:5.2f}  SD={s:4.2f}  SE={e:4.2f}  95%CI=±{c:4.2f}")
+    ```
+
+    출력:
+
+    ```
+      A: n= 10  mean= 8.99  SD=2.80  SE=0.89  95%CI=±1.74
+      B: n= 30  mean=12.49  SD=2.29  SE=0.42  95%CI=±0.82
+      C: n=100  mean=10.82  SD=2.60  SE=0.26  95%CI=±0.51
+      D: n=300  mean=12.94  SD=3.00  SE=0.17  95%CI=±0.34
+    ```
+
+    ![세 가지 오차막대의 비교](./img/error_bars.png)
+
+    **(1)이 그대로 맞는다.** 네 집단에서 $\text{SD}/\text{SE}$ 를 계산하면
+
+    $$
+    3.1623,\quad 5.4772,\quad 10.0000,\quad 17.3205
+    $$
+
+    로 $\sqrt{10},\ \sqrt{30},\ \sqrt{100},\ \sqrt{300}$ 과 **소수 넷째 자리까지 같다.** $\text{CI}/\text{SE}$ 는 네 집단 모두 정확히 $1.9600$ 이다.
+
+    **SD는 $n$ 과 함께 움직이지 않는다.** $2.80,\ 2.29,\ 2.60,\ 3.00$ 으로 표본크기가 서른 배 차이 나는데도 모두 $3$ 근처를 맴돈다. 추세가 없다. B 의 $2.29$ 가 유독 작은데, $n = 30$ 에서 $S$ 의 표준편차가 $0.39$ 쯤이므로 $\sigma = 3$ 에서 $1.8$ 표준편차 떨어진 값이다. **드물지만 일어나는 일**이고 $n$ 탓이 아니다.
+
+    **SE와 CI는 $n$ 과 함께 줄어든다.** $0.89 \to 0.42 \to 0.26 \to 0.17$ 이다. $n$ 이 $10$ 에서 $300$ 으로 $30$ 배 커지는 동안 SE 는 $\sqrt{30} = 5.48$ 분의 일이 되었다($0.8856/0.1733 = 5.11$ — $S$ 자체가 흔들린 만큼 $5.48$ 에서 벗어난다).
+
+    **A 와 B 에서 인상이 뒤집힌다.** 같은 자료인데 막대의 정의만 바꾸면 이렇게 된다.
+
+    | 막대 | A | B | 겹치는가 |
+    |---|---|---|---|
+    | $\pm 1\,\text{SD}$ | $[6.19,\ 11.79]$ | $[10.20,\ 14.78]$ | **겹친다**($1.59$ 폭) |
+    | $95\%$ CI | $[7.26,\ 10.73]$ | $[11.67,\ 13.31]$ | 겹치지 않는다 |
+
+    "막대가 겹치니 차이가 없다"는 습관대로 읽으면 **왼쪽 그림에서는 차이가 없고 오른쪽 그림에서는 차이가 있다**는 반대 결론이 나온다. 자료는 하나다.
+
+    **어느 쪽이 맞는가는 차이의 구간이 정한다.** $\bar x_A - \bar x_B = -3.4953$ 이고
+
+    $$
+    \text{SE}_{\text{차이}} = \sqrt{0.8856^2 + 0.4180^2} = 0.9793
+    $$
+
+    이므로 차이의 $95\%$ 구간은 $-3.4953 \pm 1.96 \times 0.9793 = (-5.41,\ -1.58)$ 이다. **$0$ 을 담지 않는다.** CI 그림 쪽의 읽기가 맞았지만, 그것은 **우연히** 맞은 것이다. 막대의 겹침은 차이의 구간과 같은 양이 아니며, 제대로 하려면 위처럼 차이 자체의 구간을 계산해야 한다.
 
 **점의 위치는 세 그림에서 모두 같다.** 달라지는 것은 막대의 길이뿐인데, 그림이 주는 인상은 완전히 다르다.
 

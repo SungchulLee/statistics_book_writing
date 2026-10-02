@@ -28,108 +28,179 @@ $t$-분포는 표준정규보다 꼬리가 두꺼우므로 모든 유한한 $n$�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> CSV에서 자료 읽기
+**보기 1.** <span class="diff easy" title="쉬움"></span> CSV에서 자료 읽기. 한 CSV 파일에 값이 `12`, `15`, `14` 로 한 줄에 하나씩 적힌 뒤 **빈 줄**이 하나 있고, 그다음 줄에 `10,13,16` 이 쉼표로 묶여 적혀 있다. 이 파일 전체를 표본 하나로 본다.
+
+**(1)** 표본크기 $n$과 표본평균 $\bar x$를 구하시오.
+
+**(2)** 줄을 어떻게 나누었든 같은 표본을 돌려주는 읽기 함수를 만들어 (1)을 확인하시오. 빈 칸을 건너뛰어야 하는 까닭과, 수치가 하나도 없을 때 함수가 무엇을 해야 하는지 밝히시오.
 
 </div>
 
-```python
-import csv
-import numpy as np
+??? success "풀이"
 
-def load_data(csv_path):
-    """CSV에서 수치값을 모두 읽어 1차원 배열로 돌려준다.
+    **(1) 줄 구조는 표본이 아니다.** 값은 여섯 개이므로 $n = 6$이고
 
-    행 하나에 값이 하나든 여럿이든 상관없이 모두 같은 표본으로 본다.
-    빈 칸을 건너뛰는 것은 CSV 끝의 빈 줄이나 후행 쉼표 때문이다.
-    """
-    arr = []
-    with open(csv_path, "r", newline="") as f:
-        reader = csv.reader(f)
-        for row in reader:
-            for item in row:
-                item = item.strip()
-                if item:
-                    arr.append(float(item))
-    if len(arr) == 0:
-        # 빈 배열을 그냥 돌려주면 평균이 nan이 되어 원인을 찾기 어렵다.
-        # 읽는 쪽에서 바로 알아채도록 여기서 끊는다.
-        raise ValueError("No numeric values found in CSV.")
-    return np.array(arr, dtype=float)
+    $$
+    \bar x = \frac{12 + 15 + 14 + 10 + 13 + 16}{6} = \frac{80}{6} = \frac{40}{3} = 13.3\overline{3}
+    $$
+
+    이다. 줄바꿈과 쉼표는 **파일의 서식**일 뿐 표본의 구조가 아니다. 그러므로 읽기 함수가 지켜야 할 성질은 하나다. **값의 다중집합만 보존하고 줄 구조는 버린다.**
+
+    **(2) 구현과 확인.**
+
+    ```python
+    import csv
+    import numpy as np
+
+    def load_data(csv_path):
+        """CSV에서 수치값을 모두 읽어 1차원 배열로 돌려준다.
+
+        행 하나에 값이 하나든 여럿이든 상관없이 모두 같은 표본으로 본다.
+        빈 칸을 건너뛰는 것은 CSV 끝의 빈 줄이나 후행 쉼표 때문이다.
+        """
+        arr = []
+        with open(csv_path, "r", newline="") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                for item in row:
+                    item = item.strip()
+                    if item:
+                        arr.append(float(item))
+        if len(arr) == 0:
+            # 빈 배열을 그냥 돌려주면 평균이 nan이 되어 원인을 찾기 어렵다.
+            # 읽는 쪽에서 바로 알아채도록 여기서 끊는다.
+            raise ValueError("No numeric values found in CSV.")
+        return np.array(arr, dtype=float)
 
 
-# 임시 파일로 동작을 확인한다. 값 배치가 달라도 결과는 같다.
-import tempfile, os
-with tempfile.TemporaryDirectory() as d:
-    path = os.path.join(d, "data.csv")
-    with open(path, "w") as f:
-        f.write("12\n15\n14\n\n10,13,16\n")     # 한 줄에 하나, 빈 줄, 한 줄에 셋
-    x = load_data(path)
-print(x, x.mean())
-```
+    # 임시 파일로 동작을 확인한다. 값 배치가 달라도 결과는 같다.
+    import tempfile, os
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, "data.csv")
+        with open(path, "w") as f:
+            f.write("12\n15\n14\n\n10,13,16\n")     # 한 줄에 하나, 빈 줄, 한 줄에 셋
+        x = load_data(path)
+    print(x, x.mean())
+    ```
 
-출력:
+    출력:
 
-```
-[12. 15. 14. 10. 13. 16.] 13.333333333333334
-```
+    ```
+    [12. 15. 14. 10. 13. 16.] 13.333333333333334
+    ```
+
+    **(1)과 맞는다.** 배열의 길이가 $6$이고 평균이 $13.333333333333334$로, $40/3$을 배정도 부동소수점으로 가장 가깝게 적은 수다($40/3$은 이진법으로 유한소수가 아니므로 마지막 자리에 $4$가 남는다).
+
+    **빈 칸을 건너뛰는 까닭.** `csv.reader` 는 파일 끝의 빈 줄이나 후행 쉼표를 빈 문자열 `''` 로 넘겨준다. 걸러 내지 않으면 `float('')` 이 `ValueError` 를 던져 **자료가 아니라 서식 때문에** 읽기가 실패한다. 이 보기의 입력에 빈 줄을 일부러 넣은 것이 그 확인이다.
+
+    **수치가 하나도 없으면 끊어야 한다.** 빈 배열을 그대로 돌려주면 `arr.mean()` 이 `nan` 을 주고 그 `nan` 이 표준오차를 거쳐 구간의 양 끝까지 번진다. 끝에 가서는 `(nan, nan)` 만 보일 뿐 원인이 "파일을 잘못 지정했다"였는지 "열 이름이 달랐다"였는지 알 수 없다. **실패는 번지기 전에 끊는다.**
 
 ### 신뢰구간의 계산
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 평균 신뢰구간 계산기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균 신뢰구간 계산기. 어떤 표본에서 요약통계량 $n = 25$, $\bar x = 3.2$, $s = 1.1$ 을 얻었다. 비교를 위해, 같은 자리에서 모표준편차가 $\sigma = 1.0$ 으로 알려져 있었다면 어떠했을지도 함께 본다.
+
+**(1)** $95\%$ $t$-구간과 $95\%$ $z$-구간을 손으로 계산하시오. 두 오차한계의 차이를 **임계값 몫**과 **산포 몫**으로 쪼개고, 그 쪼개기가 순서에 의존하는지 밝히시오.
+
+**(2)** 원자료가 아니라 요약통계량만 받는 함수를 만들어 (1)을 확인하시오.
 
 </div>
 
-```python
-import math
-from scipy.stats import norm, t
+??? success "풀이"
 
-def ci_mean(n, xbar, s=None, known_sigma=None, method="t", cl=0.95):
-    """모평균에 대한 일표본 신뢰구간.
+    **(1) 구조는 하나다.** 두 구간 모두 "추정값 $\pm$ 임계값 $\times$ 표준오차" 꼴이고, 다른 것은 **임계값**과 **산포** 둘뿐이다.
 
-    원자료가 아니라 **요약통계량만** 받는다. 신뢰구간을 만드는 데
-    필요한 것은 n, xbar, 그리고 산포 하나뿐이기 때문이다.
-    논문에 실린 표만 있어도 구간을 다시 만들 수 있다는 뜻이다.
+    $z$-구간은 $z_{0.025} = 1.95996$, $\text{SE} = \sigma/\sqrt n = 1.0/5 = 0.2$ 이므로
 
-    n : 표본크기
-    xbar : 표본평균
-    s : 표본표준편차 (t-구간에 필요)
-    known_sigma : 알고 있는 모표준편차 (z-구간에 필요)
-    method : 't' 또는 'z'
-    cl : 신뢰수준 (기본 0.95)
-    """
-    alpha = 1 - cl
+    $$
+    \text{MOE}_z = 1.95996 \times 0.2 = 0.39199,
+    \qquad (2.80801,\ 3.59199)
+    $$
 
-    if method == "z":
-        se = known_sigma / math.sqrt(n)
-        z_star = norm.ppf(1 - alpha / 2)
-        moe = z_star * se
-    else:
-        se = s / math.sqrt(n)
-        df = n - 1                              # xbar를 쓰느라 하나를 잃는다
-        t_star = t.ppf(1 - alpha / 2, df=df)
-        moe = t_star * se
+    $t$-구간은 자유도 $n - 1 = 24$, $t_{0.025,\,24} = 2.06390$, $\text{SE} = s/\sqrt n = 1.1/5 = 0.22$ 이므로
 
-    # 두 갈래가 다른 것은 임계값과 산포뿐이다.
-    # 구조는 언제나 "추정값 ± 임계값 × 표준오차"로 같다.
-    return xbar - moe, xbar + moe
+    $$
+    \text{MOE}_t = 2.06390 \times 0.22 = 0.45406,
+    \qquad (2.74594,\ 3.65406)
+    $$
 
-# 요약통계량에서 바로 t-구간
-lo, hi = ci_mean(n=25, xbar=3.2, s=1.1, method="t", cl=0.95)
-print(f"95% t-interval: ({lo:.4f}, {hi:.4f})")
+    **차이를 쪼갠다.** 전체 증가분은 $0.45406 - 0.39199 = 0.06206$ 이다. 한 번에 하나씩만 바꾼다.
 
-# sigma를 아는 경우의 z-구간. 비교를 위해 s보다 작은 sigma=1.0을 넣었다.
-lo, hi = ci_mean(n=25, xbar=3.2, known_sigma=1.0, method="z", cl=0.95)
-print(f"95% z-interval: ({lo:.4f}, {hi:.4f})")
-```
+    $$
+    \underbrace{(2.06390 - 1.95996) \times 0.2}_{\text{임계값 몫} \;=\; 0.02079}
+    \;+\;
+    \underbrace{2.06390 \times (0.22 - 0.2)}_{\text{산포 몫} \;=\; 0.04128}
+    \;=\; 0.06206
+    $$
 
-출력:
+    **산포 몫이 전체의 $66.5\%$** 다. "$t$-분포를 썼으니 넓어졌다"는 설명이 절반도 안 된다는 뜻이다. 임계값의 비는 $t/z = 1.05303$ 로 $5.3\%$ 에 불과하다.
 
-```
-95% t-interval: (2.7459, 3.6541)
-95% z-interval: (2.8080, 3.5920)
-```
+    **쪼개기는 순서에 의존한다.** 산포를 먼저 바꾸면 산포 몫이 $1.95996 \times 0.02 = 0.03920$, 임계값 몫이 $0.02287$ 이 되어 두 몫의 크기가 뒤바뀐다. 합만 $0.06206$ 으로 같다. 오차한계가 두 인자의 **곱**이기 때문이고, 그래서 순서에 무관한 쪼개기는 곱으로 적는 것이다.
+
+    $$
+    \frac{\text{MOE}_t}{\text{MOE}_z}
+    = \frac{t_{0.025,\,24}}{z_{0.025}} \cdot \frac{s}{\sigma}
+    = 1.05303 \times 1.1 = 1.15833
+    $$
+
+    이 꼴에서는 임계값 인자 $1.053$ 과 산포 인자 $1.100$ 을 어느 쪽부터 읽어도 같다.
+
+    **(2) 요약통계량만 받는 계산기.**
+
+    ```python
+    import math
+    from scipy.stats import norm, t
+
+    def ci_mean(n, xbar, s=None, known_sigma=None, method="t", cl=0.95):
+        """모평균에 대한 일표본 신뢰구간.
+
+        원자료가 아니라 **요약통계량만** 받는다. 신뢰구간을 만드는 데
+        필요한 것은 n, xbar, 그리고 산포 하나뿐이기 때문이다.
+        논문에 실린 표만 있어도 구간을 다시 만들 수 있다는 뜻이다.
+
+        n : 표본크기
+        xbar : 표본평균
+        s : 표본표준편차 (t-구간에 필요)
+        known_sigma : 알고 있는 모표준편차 (z-구간에 필요)
+        method : 't' 또는 'z'
+        cl : 신뢰수준 (기본 0.95)
+        """
+        alpha = 1 - cl
+
+        if method == "z":
+            se = known_sigma / math.sqrt(n)
+            z_star = norm.ppf(1 - alpha / 2)
+            moe = z_star * se
+        else:
+            se = s / math.sqrt(n)
+            df = n - 1                              # xbar를 쓰느라 하나를 잃는다
+            t_star = t.ppf(1 - alpha / 2, df=df)
+            moe = t_star * se
+
+        # 두 갈래가 다른 것은 임계값과 산포뿐이다.
+        # 구조는 언제나 "추정값 ± 임계값 × 표준오차"로 같다.
+        return xbar - moe, xbar + moe
+
+    # 요약통계량에서 바로 t-구간
+    lo, hi = ci_mean(n=25, xbar=3.2, s=1.1, method="t", cl=0.95)
+    print(f"95% t-interval: ({lo:.4f}, {hi:.4f})")
+
+    # sigma를 아는 경우의 z-구간. 비교를 위해 s보다 작은 sigma=1.0을 넣었다.
+    lo, hi = ci_mean(n=25, xbar=3.2, known_sigma=1.0, method="z", cl=0.95)
+    print(f"95% z-interval: ({lo:.4f}, {hi:.4f})")
+    ```
+
+    출력:
+
+    ```
+    95% t-interval: (2.7459, 3.6541)
+    95% z-interval: (2.8080, 3.5920)
+    ```
+
+    **(1)의 손 계산과 맞는다.** $t$-구간 $(2.7459,\ 3.6541)$, $z$-구간 $(2.8080,\ 3.5920)$ 으로 소수 넷째 자리까지 같다. 쪼갠 두 몫 $0.0208 + 0.0413 = 0.0621$ 도 전체 증가분과 같다.
+
+    **함수가 `known_sigma` 와 `s` 를 다른 인자로 받는 까닭.** 두 값은 단위도 같고 크기도 비슷해 하나의 인자로 받고 `method` 로만 갈라도 코드는 돈다. 그러나 **$\sigma$ 는 자료 밖에서 주어진 상수**이고 **$s$ 는 이 표본에서 계산된 통계량**이다. 구간을 고르는 기준은 두 구간의 폭이 아니라 그 하나, **$\sigma$ 를 정말로 아는가**다. 인자를 나누어 둔 것은 그 구별을 호출하는 쪽에서 매번 선언하게 만들기 위한 것이다.
 
 두 구간의 너비 차이($\pm 0.454$ 대 $\pm 0.392$)는 두 원인이 겹친 결과다. 임계값이 $t_{0.025,\,24} = 2.064$ 대 $z_{0.025} = 1.960$으로 다르고, 산포도 $s = 1.1$ 대 $\sigma = 1.0$으로 다르다. 임계값만 놓고 보면 차이는 5% 남짓이다.
 
