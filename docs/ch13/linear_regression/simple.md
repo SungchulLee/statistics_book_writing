@@ -35,7 +35,7 @@ $$
 
 **(1)** 산점도에서 읽히는 관계의 **방향과 세기**를 말하고, 상관계수로 그것을 수치화하시오. 산점도가 **보여 주지 못하는 것**은 무엇인가.
 
-**(2)** 그림의 축이름은 `Height (inches)`, `Weight (pounds)`이다. 표본평균이 키 $177.7$, 몸무게 $78.1$로 나오는데 이 축이름이 옳은가.
+**(2)** 그림의 축이름은 `Height (cm)`, `Weight (kg)`이다. 표본평균과 범위를 보고 이 **단위가 자료와 맞는지** 확인하시오. 만약 축이름이 `inches`, `pounds`였다면 무엇이 모순인가. 단위를 잘못 적으면 뒤에서 구할 기울기 $\hat\beta_1$의 해석이 어떻게 달라지는가.
 
 </div>
 
@@ -81,8 +81,8 @@ $$
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.plot(male_height_weight_data.Height, male_height_weight_data.Weight, '.k', label='Data Points')
 
-    ax.set_xlabel('Height (inches)', fontsize=15)
-    ax.set_ylabel('Weight (pounds)', fontsize=15)
+    ax.set_xlabel('Height (cm)', fontsize=15)
+    ax.set_ylabel('Weight (kg)', fontsize=15)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.legend()
@@ -104,9 +104,11 @@ $$
 
     **산점도가 보여 주지 못하는 것은 세 가지다.** 첫째, **겹친 점을 셀 수 없다.** 키가 $0.1$ 단위로 기록되어 있어 같은 자리에 여러 사람이 찍히는데 그림에서는 한 점으로 보인다. 둘째, **조건부 퍼짐이 일정한지** 눈으로는 가늠되지 않는다. 등분산 가정을 확인하려면 잔차 대 적합값 그림이 필요하고, 그것이 이 장 뒤쪽 진단의 몫이다. 셋째, **직선이 적절한 요약인지**를 산점도만으로는 판정할 수 없다. 여기서는 직선이 무리가 없어 보이지만 이는 눈대중이다.
 
-    **(2) 축이름이 틀렸다.** `bdims` 의 `hgt` 는 **센티미터**이고 `wgt` 는 **킬로그램**이다. 실제로 평균이 $177.75$, 표준편차가 $7.18$인데, 이를 인치로 읽으면 평균 키가 $4.5\,\text{m}$가 되어 말이 되지 않는다. 몸무게도 $78.1$을 파운드로 읽으면 성인 남성 평균이 $35\,\text{kg}$이라는 뜻이 된다. 자료를 읽어 들이는 주석("`hgt(cm), wgt(kg)`")은 옳게 적혀 있으므로, **축이름만 원본 코드에서 고쳐지지 않은 채 남은 것이다.** 올바른 축이름은 `Height (cm)`, `Weight (kg)`이다.
+    **(2) 단위가 맞는다.** `bdims` 의 `hgt` 는 **센티미터**이고 `wgt` 는 **킬로그램**이며, 평균 $177.75$와 $78.14$가 성인 남성의 값으로 자연스럽다.
 
-    이 어긋남은 사소해 보이지만 회귀에서는 치명적이다. 기울기는 **단위가 있는 양**이어서, 뒤에서 구할 $\hat\beta_1 = 0.7826$은 "키 $1\,\text{cm}$마다 몸무게 $0.78\,\text{kg}$"이라는 뜻이다. 축이름대로 "인치마다 파운드"로 읽으면 같은 숫자가 전혀 다른 주장이 된다. **단위를 잃은 기울기는 해석할 수 없다.** 아래 보기들의 그림도 모두 같은 축이름을 쓰고 있으니, 읽을 때 cm 와 kg 로 바꿔 읽어야 한다.
+    **인치·파운드였다면 두 군데가 한꺼번에 무너진다.** 키 평균 $177.75$를 인치로 읽으면 $177.75 \times 2.54 = 451.5\,\text{cm}$, 곧 **$4.5\,\text{m}$**가 되어 말이 되지 않는다. 몸무게 $78.14$를 파운드로 읽으면 $78.14 \times 0.4536 = 35.4\,\text{kg}$으로, 평균 키가 $4.5\,\text{m}$인 사람이 $35\,\text{kg}$이라는 뜻이 된다. **두 축을 따로 보아도 틀리고 함께 보면 더 틀린다.** 자료를 받자마자 평균과 범위를 상식과 맞추어 보는 습관이 이런 것을 걸러 낸다.
+
+    이 확인이 사소해 보이지만 회귀에서는 치명적이다. 기울기는 **단위가 있는 양**이어서, 뒤에서 구할 $\hat\beta_1 = 0.7826$은 "키 $1\,\text{cm}$마다 몸무게 $0.78\,\text{kg}$"이라는 뜻이다. 같은 숫자를 "인치마다 파운드"로 읽으면 $\text{kg}/\text{cm}$ 로는 $0.7826 \times 0.4536/2.54 = 0.1398$ 에 해당해 **실제의 $1/5.6$** 이 된다. **단위를 잃은 기울기는 해석할 수 없다.**
 
 ### 평균점
 
@@ -183,8 +185,8 @@ $$
     ax.plot(male_height_weight_data.Height, male_height_weight_data.Weight, '.k', label='Data Points')
     ax.plot([mean_height], [mean_weight], 'ro', markersize=15, label="Point of Averages")
 
-    ax.set_xlabel('Height (inches)', fontsize=15)
-    ax.set_ylabel('Weight (pounds)', fontsize=15)
+    ax.set_xlabel('Height (cm)', fontsize=15)
+    ax.set_ylabel('Weight (kg)', fontsize=15)
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.legend()
@@ -301,8 +303,8 @@ $$
         male_height_weight_data.Weight.min(), male_height_weight_data.Weight.max(),
         '--', 'k')
 
-    axis.set_xlabel('Height (inches)', fontsize=15)
-    axis.set_ylabel('Weight (pounds)', fontsize=15)
+    axis.set_xlabel('Height (cm)', fontsize=15)
+    axis.set_ylabel('Weight (kg)', fontsize=15)
     axis.spines['top'].set_visible(False)
     axis.spines['right'].set_visible(False)
     axis.legend()
@@ -408,8 +410,8 @@ $$
         male_height_weight_data.Height.min(), male_height_weight_data.Height.max(),
         '--', 'k')
 
-    axis.set_xlabel('Height (inches)', fontsize=15)
-    axis.set_ylabel('Weight (pounds)', fontsize=15)
+    axis.set_xlabel('Height (cm)', fontsize=15)
+    axis.set_ylabel('Weight (kg)', fontsize=15)
     axis.spines['top'].set_visible(False)
     axis.spines['right'].set_visible(False)
     axis.legend()
@@ -575,8 +577,8 @@ $$
         [mean_height + 1.1 * std_dev_height, mean_weight + 0.3 * std_dev_weight],
         fontsize=35, color="red")
 
-    axis.set_xlabel('Height (inches)', fontsize=15)
-    axis.set_ylabel('Weight (pounds)', fontsize=15)
+    axis.set_xlabel('Height (cm)', fontsize=15)
+    axis.set_ylabel('Weight (kg)', fontsize=15)
     axis.spines['top'].set_visible(False)
     axis.spines['right'].set_visible(False)
     axis.legend(fontsize=15)
@@ -708,8 +710,8 @@ $$
         [mean_height + 1.1 * std_dev_height, mean_weight - 0.5 * std_dev_weight],
         fontsize=35, color="red")
 
-    axis.set_xlabel('Height (inches)', fontsize=15)
-    axis.set_ylabel('Weight (pounds)', fontsize=15)
+    axis.set_xlabel('Height (cm)', fontsize=15)
+    axis.set_ylabel('Weight (kg)', fontsize=15)
     axis.spines['top'].set_visible(False)
     axis.spines['right'].set_visible(False)
     axis.legend(fontsize=15)
@@ -849,8 +851,8 @@ $$
         [mean_height + 1.1 * std_dev_height, mean_weight + 0.3 * std_dev_weight],
         fontsize=35, color="b")
 
-    axis.set_xlabel('Height (inches)', fontsize=15)
-    axis.set_ylabel('Weight (pounds)', fontsize=15)
+    axis.set_xlabel('Height (cm)', fontsize=15)
+    axis.set_ylabel('Weight (kg)', fontsize=15)
     axis.spines['top'].set_visible(False)
     axis.spines['right'].set_visible(False)
     axis.legend(fontsize=15)
@@ -1032,8 +1034,8 @@ $$
         [mean_height + 0.1 * std_dev_height, mean_weight + 1.2 * std_dev_weight],
         fontsize=35, color="r")
 
-    axis.set_xlabel('Height (inches)', fontsize=15)
-    axis.set_ylabel('Weight (pounds)', fontsize=15)
+    axis.set_xlabel('Height (cm)', fontsize=15)
+    axis.set_ylabel('Weight (kg)', fontsize=15)
     axis.legend(fontsize=15)
     axis.spines['top'].set_visible(False)
     axis.spines['right'].set_visible(False)
@@ -1172,8 +1174,8 @@ $$
         [mean_height + 1.1 * std_dev_height, mean_weight + 0.3 * std_dev_weight],
         fontsize=35, color="b")
 
-    axis.set_xlabel('Height (inches)', fontsize=15)
-    axis.set_ylabel('Weight (pounds)', fontsize=15)
+    axis.set_xlabel('Height (cm)', fontsize=15)
+    axis.set_ylabel('Weight (kg)', fontsize=15)
     axis.spines['top'].set_visible(False)
     axis.spines['right'].set_visible(False)
     axis.legend(fontsize=15)
@@ -1318,8 +1320,8 @@ $$
         [mean_height + 0.1 * std_dev_height, mean_weight + 1.2 * std_dev_weight],
         fontsize=35, color="r")
 
-    axis.set_xlabel('Height (inches)', fontsize=15)
-    axis.set_ylabel('Weight (pounds)', fontsize=15)
+    axis.set_xlabel('Height (cm)', fontsize=15)
+    axis.set_ylabel('Weight (kg)', fontsize=15)
     axis.legend(fontsize=15)
     axis.spines['top'].set_visible(False)
     axis.spines['right'].set_visible(False)
