@@ -26,45 +26,98 @@ Brown-Forsythe 검정은 집단평균을 집단중앙값으로 바꾸어 치우�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 정규성 확인 뒤 로버스트 대안으로
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규성 확인 뒤 로버스트 대안으로. 집단당 8 개짜리 두 표본에 샤피로–윌크를 돌린 뒤 위 표의 세 검정을 적용한다.
+
+**(1)** `levene(x1, x2)` 를 **아무 인자 없이** 부르면 위 표의 어느 줄이 돌아가는가. 함수 서명에서 확인하고, 셋 가운데 어느 둘이 **똑같은 수**를 주어야 하는지 밝히시오.
+
+**(2)** F 검정까지 넣어 네 $p$ 값을 견주시오. 샤피로–윌크의 $p = 0.86$, $0.93$ 을 "정규성이 확인되었다"로 읽으면 안 되는 까닭을 $n = 8$ 에서의 **검정력 수치**로 밝히시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import levene, fligner, shapiro
+??? success "풀이"
 
-x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
-x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
+    **(1) 기본값은 `'median'` 이다.** `scipy.stats.levene` 의 `center` 기본값이 `'median'` 이므로 아무 인자도 주지 않은 `levene(x1, x2)` 는 표의 둘째 줄, 곧 **Brown-Forsythe 검정**이다. 원래의 Levene(1960) 검정을 돌리려면 `center='mean'` 을 **명시해야** 한다.
 
-# 1단계: F 검정은 정규성에 매우 민감하므로 먼저 그것부터 확인한다.
-# 다만 n=8 로 작아 검정력이 낮다 — 기각되지 않았다고 정규라는 뜻은 아니다.
-W1, p1 = shapiro(x1)
-W2, p2 = shapiro(x2)
-print(f"Shapiro-Wilk x1: W={W1:.4f}, p={p1:.4f}")
-print(f"Shapiro-Wilk x2: W={W2:.4f}, p={p2:.4f}")
+    따라서 `levene(x1, x2)` 와 `levene(x1, x2, center='median')` 은 같은 계산을 하므로 통계량과 $p$ 값이 소수점 끝자리까지 같아야 한다. 이 책에서 "Levene 검정"이라 적을 때도 실제로 돌아가는 것은 중앙값 기준임을 기억해 두라.
 
-# 2단계: 로버스트 대안 셋을 돌린다. 평균 중심 Levene, 중앙값 중심
-# Brown-Forsythe, 순위를 쓰는 Fligner-Killeen 순으로 더 로버스트해진다.
-Wm, pm = levene(x1, x2, center='mean')
-print(f"Levene (mean-centered):           W={Wm:.4f}, p={pm:.6f}")
+    중심이 무엇이든 집단이 둘뿐이면 변환값 $Z_{ij} = \lvert y_{ij} - c_i \rvert$ 에 대한 일원분산분석이므로 통계량이 $F(1, N-2) = F(1, 14)$ 를 참조한다. 중심의 선택이 참조분포를 바꾸지는 않는다. **바뀌는 것은 $Z$ 의 값뿐**이고, 그래서 치우친 자료에서 두 선택이 크게 갈린다(11.5절 [Levene 검정](../../ch11/assumptions/levene_test.md) 보기 1).
 
-Wmed, pmed = levene(x1, x2, center='median')
-print(f"Brown-Forsythe (median-centered): W={Wmed:.4f}, p={pmed:.6f}")
+    **(2) 돌려서 견준다.**
 
-X2, pF = fligner(x1, x2)
-print(f"Fligner-Killeen:                  X2={X2:.4f}, p={pF:.6f}")
-```
+    ```python
+    import inspect
+    import numpy as np
+    from scipy.stats import levene, fligner, shapiro, f
 
-출력:
+    print("levene 의 center 기본값 =", inspect.signature(levene).parameters["center"].default)
 
-```text
-Shapiro-Wilk x1: W=0.9657, p=0.8619
-Shapiro-Wilk x2: W=0.9749, p=0.9332
-Levene (mean-centered):           W=1.4831, p=0.243425
-Brown-Forsythe (median-centered): W=1.4706, p=0.245320
-Fligner-Killeen:                  X2=1.6063, p=0.205015
-```
+    x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
+    x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
+
+    # 1단계: F 검정은 정규성에 매우 민감하므로 먼저 그것부터 확인한다.
+    # 다만 n=8 로 작아 검정력이 낮다 — 기각되지 않았다고 정규라는 뜻은 아니다.
+    W1, p1 = shapiro(x1)
+    W2, p2 = shapiro(x2)
+    print(f"Shapiro-Wilk x1: W={W1:.4f}, p={p1:.4f}")
+    print(f"Shapiro-Wilk x2: W={W2:.4f}, p={p2:.4f}")
+
+    # 2단계: F 검정과 로버스트 대안 셋을 나란히 둔다. 평균 중심 Levene,
+    # 중앙값 중심 Brown-Forsythe, 순위를 쓰는 Fligner-Killeen 순으로
+    # 더 로버스트해진다.
+    F = x1.var(ddof=1) / x2.var(ddof=1)
+    pF_test = 2 * min(f.cdf(F, 7, 7), f.sf(F, 7, 7))
+    print(f"F 검정:                           F={F:.4f}, p={pF_test:.6f}")
+
+    Wm, pm = levene(x1, x2, center='mean')
+    print(f"Levene (mean-centered):           W={Wm:.4f}, p={pm:.6f}")
+
+    Wmed, pmed = levene(x1, x2, center='median')
+    print(f"Brown-Forsythe (median-centered): W={Wmed:.4f}, p={pmed:.6f}")
+
+    Wdef, pdef = levene(x1, x2)
+    print(f"levene(x1, x2)  — 인자 없이:      W={Wdef:.4f}, p={pdef:.6f}")
+
+    X2, pFK = fligner(x1, x2)
+    print(f"Fligner-Killeen:                  X2={X2:.4f}, p={pFK:.6f}")
+
+    # n=8 에서 샤피로-윌크가 비정규를 잡아내는 비율
+    rng = np.random.default_rng(5)
+    B, n, alpha = 20_000, 8, 0.05
+    print(f"\n샤피로-윌크의 검정력 (n={n}, 반복 {B:,}회, alpha={alpha})")
+    for name, draw in [("정규", lambda: rng.normal(size=n)),
+                       ("t_5", lambda: rng.standard_t(5, size=n)),
+                       ("지수", lambda: rng.exponential(size=n))]:
+        rej = sum(shapiro(draw()).pvalue < alpha for _ in range(B))
+        print(f"  {name} 모집단: {rej / B:.3f}")
+    ```
+
+    출력:
+
+    ```text
+    levene 의 center 기본값 = median
+    Shapiro-Wilk x1: W=0.9657, p=0.8619
+    Shapiro-Wilk x2: W=0.9749, p=0.9332
+    F 검정:                           F=0.4732, p=0.344772
+    Levene (mean-centered):           W=1.4831, p=0.243425
+    Brown-Forsythe (median-centered): W=1.4706, p=0.245320
+    levene(x1, x2)  — 인자 없이:      W=1.4706, p=0.245320
+    Fligner-Killeen:                  X2=1.6063, p=0.205015
+
+    샤피로-윌크의 검정력 (n=8, 반복 20,000회, alpha=0.05)
+      정규 모집단: 0.052
+      t_5 모집단: 0.094
+      지수 모집단: 0.331
+    ```
+
+    **(1)의 예측대로다.** 서명이 `median` 을 돌려주고, `levene(x1, x2)` 가 `center='median'` 과 똑같이 $W = 1.4706$, $p = 0.245320$ 을 준다. 인자를 명시하지 않은 호출이 Brown-Forsythe 였다는 것이 이 한 줄로 확인된다.
+
+    **네 $p$ 값이 모두 $0.2$ 와 $0.35$ 사이다.** $0.3448$(F), $0.2434$(Levene), $0.2453$(Brown-Forsythe), $0.2050$(Fligner-Killeen). 어느 것으로도 기각하지 못한다. 눈여겨볼 것은 **로버스트 검정들이 F 검정보다 오히려 작은 $p$ 를 주었다**는 점이다. 로버스트한 절차가 언제나 더 보수적이라는 생각은 틀렸다. 여기서는 세 로버스트 검정이 서로 $0.04$ 안에서 모여 있고 F 검정 하나가 떨어져 있다.
+
+    **샤피로–윌크의 $p$ 가 크다는 것은 아무 뜻도 아니다.** $n = 8$ 에서 재어 보니 **정규 모집단에서 $0.052$, $t_5$ 에서 $0.094$, 지수에서 $0.331$** 이다. 정규일 때가 $0.052$ 이니 $t_5$ 의 $0.094$ 는 명목수준의 **두 배도 안 된다.** 이 표본크기로는 정규와 $t_5$ 를 사실상 구별하지 못한다는 뜻이다. 가장 극단적으로 치우친 지수조차 열 번에 세 번만 잡는다. (본문 그림이 읽은 $0.346$ 과 가까운 자리이며, 모의실험 설정이 달라 셋째 자리는 어긋난다.)
+
+    그러므로 $p = 0.8619$, $p = 0.9332$ 는 "정규가 맞다"가 아니라 **"이 자료로는 어떤 이탈도 탐지할 수 없다"** 로 읽어야 한다. 증거의 부재를 부재의 증거로 바꿔치기하지 않으려면 그렇다.
+
+    그리고 하필 **샤피로–윌크가 가장 못 잡는 이탈이 꼬리의 두께**인데, 15.3절이 보인 대로 F 검정을 망가뜨리는 주범이 바로 그 꼬리의 두께다. 정규성 검정이 통과시켰다는 사실은 F 검정을 쓸 면허가 되지 못한다.
 
 ## 해석
 

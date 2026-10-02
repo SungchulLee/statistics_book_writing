@@ -102,43 +102,183 @@ $W > F_{1-\alpha,\, k-1,\, N-k}$이면 $H_0$을 기각한다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Levene 검정 — 중심의 선택
+**보기 2.** <span class="diff easy" title="쉬움"></span> Levene 검정 — 중심의 선택. 보기 1 의 세 집단에 평균 중심과 중앙값 중심을 둘 다 적용한다.
+
+**(1)** 두 중심에 대해 $W$ 를 **정의대로 손으로 조립**하고, 두 값의 비를 $\dfrac{\mathrm{SS}_{\text{between}}\text{의 몫}}{\ }\times\dfrac{\ }{\mathrm{SS}_{\text{within}}\text{의 몫}}$ 으로 쪼개어 **분자와 분모 가운데 어느 쪽이 결론을 뒤집는지** 밝히시오.
+
+**(2)** SciPy 와 맞추어 보고, 중앙값으로 바꿀 때 분모가 커지는 까닭을 집단 2 와 3 의 편차에서 읽으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 2번 집단만 퍼짐이 크다.
-group1 = [10, 12, 14, 11, 13]
-group2 = [20, 28, 22, 35, 25]
-group3 = [15, 16, 14, 17, 15]
+    **(1) 손으로 조립한다.** 두 중심 모두 집단크기가 $n_i = 5$, $N = 15$, $k = 3$ 이므로
 
-# Levene 의 원래 형태는 평균을 중심으로 쓴다. 각 값에서 제 집단의 평균을
-# 뺀 절대편차에 분산분석을 돌리는 것이다.
-stat, p_value = stats.levene(group1, group2, group3, center='mean')
-print(f"Levene's W statistic (mean-centered):   {stat:.4f}, p = {p_value:.4f}")
+    $$
+    W = \frac{(N-k)\,\mathrm{SS}_{\text{between}}}{(k-1)\,\mathrm{SS}_{\text{within}}} = \frac{12\,\mathrm{SS}_{\text{between}}}{2\,\mathrm{SS}_{\text{within}}}
+    $$
 
-# 중앙값을 중심으로 쓰면 Brown-Forsythe 가 되고, 이것이 scipy 의 기본값이다.
-# 이름이 levene 이라 평균 중심이 기본이라고 오해하기 쉽다.
-stat_m, p_m = stats.levene(group1, group2, group3, center='median')
-print(f"Brown-Forsythe (median-centered):       {stat_m:.4f}, p = {p_m:.4f}")
+    이고, 두 중심의 차이는 $Z_{ij}$ 가 무엇이냐에만 있다.
 
-alpha = 0.05
-if p_value < alpha:
-    print("Levene (mean): reject H0 - variances differ.")
-else:
-    print("Levene (mean): fail to reject H0.")
-```
+    **평균 중심.** 집단평균이 $12.0,\ 26.0,\ 15.4$ 이므로 절대편차와 그 집단평균이
 
-출력:
+    | 집단 | $Z_{ij}$ | $\bar Z_i$ |
+    |:---|:---|---:|
+    | 1 | $2,\,0,\,2,\,1,\,1$ | $1.20$ |
+    | 2 | $6,\,2,\,4,\,9,\,1$ | $4.40$ |
+    | 3 | $0.4,\,0.6,\,1.4,\,1.6,\,0.4$ | $0.88$ |
 
-```text
-Levene's W statistic (mean-centered):   5.0152, p = 0.0261
-Brown-Forsythe (median-centered):       3.4305, p = 0.0663
-Levene (mean): reject H0 - variances differ.
-```
+    이고 전체평균이 $\bar Z = 2.16$ 이다. 따라서
+
+    $$
+    \mathrm{SS}_{\text{between}} = 5\bigl[(1.20-2.16)^2+(4.40-2.16)^2+(0.88-2.16)^2\bigr] = 5(7.5776) = 37.888
+    $$
+
+    이고 집단내 제곱합은 $2.800 + 41.200 + 1.328 = 45.328$ 이다. 그러므로
+
+    $$
+    W_{\text{평균}} = \frac{12 \times 37.888}{2 \times 45.328} = \frac{454.656}{90.656} = 5.015178
+    $$
+
+    **중앙값 중심.** 집단중앙값이 $12,\ 25,\ 15$ 이므로
+
+    | 집단 | $Z_{ij}$ | $\bar Z_i$ |
+    |:---|:---|---:|
+    | 1 | $2,\,0,\,2,\,1,\,1$ | $1.20$ |
+    | 2 | $5,\,3,\,3,\,10,\,0$ | $4.20$ |
+    | 3 | $0,\,1,\,1,\,2,\,0$ | $0.80$ |
+
+    이고 $\bar Z = 6.2/3 = 2.066667$ 이다. 집단간은 $5(6.906667) = 34.533333$, 집단내는 $2.800 + 54.800 + 2.800 = 60.400$ 이므로
+
+    $$
+    W_{\text{중앙값}} = \frac{12 \times 34.533333}{2 \times 60.400} = \frac{414.4}{120.8} = 3.430464
+    $$
+
+    **비를 쪼갠다.** $W$ 는 비이므로 두 판본의 몫도 분자의 몫과 분모의 몫으로 깔끔히 갈라진다.
+
+    $$
+    \frac{W_{\text{평균}}}{W_{\text{중앙값}}}
+    = \underbrace{\frac{37.888}{34.5333}}_{1.0971}\times\underbrace{\frac{60.400}{45.328}}_{1.3325}
+    = 1.4620
+    $$
+
+    **분모 쪽이 세 배 넘게 세다.** 분자는 $9.7\%$ 만 움직이는데 분모는 $33.3\%$ 움직인다. 중심을 중앙값으로 바꾸어 $W$ 가 $5.02$ 에서 $3.43$ 으로 떨어지는 일의 대부분은 **집단내 변동이 커진 데서** 온다.
+
+    분자가 줄어드는 쪽은 예상할 수 있었다. 중앙값은 $\sum_j \lvert y_{ij} - c\rvert$ 를 최소화하므로 $\bar Z_i$ 가 중앙값에서 가장 작고(11.5절 보기 1 이 볼록성으로 유도해 두었다), 실제로 $4.40 \to 4.20$, $0.88 \to 0.80$ 으로 세 집단 모두 줄거나 그대로다. $\bar Z_i$ 들이 전체적으로 작아지면 그 흩어짐도 줄어들기 쉽다.
+
+    **그러나 분모에는 그런 보증이 없다.** 중앙값이 최소화하는 것은 $Z$ 의 **합**이고, 분모는 $Z$ 의 **집단내 제곱합**이다. 최소화되는 양과 분모는 다른 양이므로 부등식이 넘어오지 않으며, 여기서는 오히려 커졌다. 이것이 "$W$ 는 비이므로 $\bar Z$ 의 부등식을 물려받지 않는다"는 말의 구체적인 모습이다.
+
+    **(2) 확인한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 2번 집단만 퍼짐이 크다.
+    group1 = [10, 12, 14, 11, 13]
+    group2 = [20, 28, 22, 35, 25]
+    group3 = [15, 16, 14, 17, 15]
+    groups = [np.array(g, dtype=float) for g in (group1, group2, group3)]
+
+
+    def levene_by_hand(groups, center):
+        """W 를 정의대로 조립하고 분자·분모를 따로 돌려준다."""
+        Z = [np.abs(g - center(g)) for g in groups]
+        n = np.array([len(z) for z in Z])
+        zbar = np.array([z.mean() for z in Z])
+        N, k = n.sum(), len(Z)
+        grand = np.concatenate(Z).mean()
+        ss_between = (n * (zbar - grand) ** 2).sum()
+        ss_within = sum(((z - z.mean()) ** 2).sum() for z in Z)
+        W = (N - k) * ss_between / ((k - 1) * ss_within)
+        return W, zbar, grand, ss_between, ss_within
+
+
+    res = {}
+    for name, center in [("mean", np.mean), ("median", np.median)]:
+        W, zbar, grand, sb, sw = levene_by_hand(groups, center)
+        res[name] = (W, sb, sw)
+        print(f"[{name:>6} 중심]")
+        print(f"  Z 의 집단평균 = {np.round(zbar, 4)},  전체평균 = {grand:.6f}")
+        print(f"  SS_between = {sb:.6f}   SS_within = {sw:.6f}")
+        print(f"  W = 12 * {sb:.6f} / (2 * {sw:.6f}) = {W:.6f}")
+
+    # Levene 의 원래 형태는 평균을 중심으로 쓴다. 각 값에서 제 집단의 평균을
+    # 뺀 절대편차에 분산분석을 돌리는 것이다.
+    stat, p_value = stats.levene(group1, group2, group3, center='mean')
+    print(f"\nLevene's W statistic (mean-centered):   {stat:.4f}, p = {p_value:.4f}")
+
+    # 중앙값을 중심으로 쓰면 Brown-Forsythe 가 되고, 이것이 scipy 의 기본값이다.
+    # 이름이 levene 이라 평균 중심이 기본이라고 오해하기 쉽다.
+    stat_m, p_m = stats.levene(group1, group2, group3, center='median')
+    print(f"Brown-Forsythe (median-centered):       {stat_m:.4f}, p = {p_m:.4f}")
+
+    alpha = 0.05
+    if p_value < alpha:
+        print("Levene (mean): reject H0 - variances differ.")
+    else:
+        print("Levene (mean): fail to reject H0.")
+
+    # 손 계산과 scipy 가 맞는지, 그리고 비를 분자·분모로 쪼갠다.
+    Wm, sbm, swm = res["mean"]
+    Wd, sbd, swd = res["median"]
+    print(f"\n손 계산과 scipy 의 차: 평균 {abs(Wm - stat):.2e},  중앙값 {abs(Wd - stat_m):.2e}")
+    print(f"W(평균)/W(중앙값) = {Wm / Wd:.6f}")
+    print(f"  분자 몫 SS_b(평균)/SS_b(중앙값) = {sbm / sbd:.6f}   (중앙값 쪽이 {100 * (1 - sbd / sbm):.1f}% 작다)")
+    print(f"  분모 몫 SS_w(중앙값)/SS_w(평균) = {swd / swm:.6f}   (중앙값 쪽이 {100 * (swd / swm - 1):.1f}% 크다)")
+    print(f"  두 몫의 곱 = {(sbm / sbd) * (swd / swm):.6f}")
+    crit = stats.f(2, 12).ppf(0.95)
+    print(f"\nF(0.95; 2, 12) = {crit:.4f}  ->  평균 {Wm:.4f} 는 넘고, 중앙값 {Wd:.4f} 는 못 넘는다")
+
+    # 집단 2 와 3 의 편차를 중심별로 나란히 본다.
+    print()
+    for i in (1, 2):
+        g = groups[i]
+        zm, zd = np.abs(g - g.mean()), np.abs(g - np.median(g))
+        print(f"집단 {i + 1}: 평균 {g.mean():.2f} / 중앙값 {np.median(g):.2f}")
+        print(f"   |x - 평균|   = {np.sort(zm)}  평균 {zm.mean():.3f}  SS {((zm - zm.mean()) ** 2).sum():.3f}")
+        print(f"   |x - 중앙값| = {np.sort(zd)}  평균 {zd.mean():.3f}  SS {((zd - zd.mean()) ** 2).sum():.3f}")
+    ```
+
+    출력:
+
+    ```text
+    [  mean 중심]
+      Z 의 집단평균 = [1.2  4.4  0.88],  전체평균 = 2.160000
+      SS_between = 37.888000   SS_within = 45.328000
+      W = 12 * 37.888000 / (2 * 45.328000) = 5.015178
+    [median 중심]
+      Z 의 집단평균 = [1.2 4.2 0.8],  전체평균 = 2.066667
+      SS_between = 34.533333   SS_within = 60.400000
+      W = 12 * 34.533333 / (2 * 60.400000) = 3.430464
+
+    Levene's W statistic (mean-centered):   5.0152, p = 0.0261
+    Brown-Forsythe (median-centered):       3.4305, p = 0.0663
+    Levene (mean): reject H0 - variances differ.
+
+    손 계산과 scipy 의 차: 평균 0.00e+00,  중앙값 0.00e+00
+    W(평균)/W(중앙값) = 1.461954
+      분자 몫 SS_b(평균)/SS_b(중앙값) = 1.097143   (중앙값 쪽이 8.9% 작다)
+      분모 몫 SS_w(중앙값)/SS_w(평균) = 1.332510   (중앙값 쪽이 33.3% 크다)
+      두 몫의 곱 = 1.461954
+
+    F(0.95; 2, 12) = 3.8853  ->  평균 5.0152 는 넘고, 중앙값 3.4305 는 못 넘는다
+
+    집단 2: 평균 26.00 / 중앙값 25.00
+       |x - 평균|   = [1. 2. 4. 6. 9.]  평균 4.400  SS 41.200
+       |x - 중앙값| = [ 0.  3.  3.  5. 10.]  평균 4.200  SS 54.800
+    집단 3: 평균 15.40 / 중앙값 15.00
+       |x - 평균|   = [0.4 0.4 0.6 1.4 1.6]  평균 0.880  SS 1.328
+       |x - 중앙값| = [0. 0. 1. 1. 2.]  평균 0.800  SS 2.800
+    ```
+
+    **손 계산과 SciPy 가 완전히 같다.** 차가 두 경우 모두 `0.00e+00` 이다. 그리고 두 몫의 곱 $1.097143 \times 1.332510 = 1.461954$ 가 $W$ 의 비와 소수 여섯째 자리까지 맞는다. 비를 분자와 분모로 쪼갠 계산이 맞다는 뜻이다.
+
+    **분모가 커지는 까닭이 마지막 두 덩어리에 보인다.** 집단 2 에서 중심을 $26.0$ 에서 $25.0$ 으로 옮기면 편차가 $(1,2,4,6,9)$ 에서 $(0,3,3,5,10)$ 으로 바뀐다. 평균은 $4.40$ 에서 $4.20$ 으로 **줄었는데** 제곱합은 $41.2$ 에서 $54.8$ 로 $33\%$ 늘었다. 중앙값 $25$ 가 관측값 하나와 겹쳐 편차 $0$ 이 강제로 생기고, 동시에 가장 먼 $35$ 의 편차가 $9$ 에서 $10$ 으로 벌어지기 때문이다. **양 끝이 동시에 밀려 나가므로 평균은 줄고 산포는 커진다.** 집단 3 도 같다. 편차가 $(0.4,0.4,0.6,1.4,1.6)$ 에서 $(0,0,1,1,2)$ 로 바뀌며 평균은 $0.88 \to 0.80$, 제곱합은 $1.328 \to 2.800$ 으로 두 배가 된다.
+
+    관측값 개수가 홀수이면 중앙값이 언제나 관측값 하나와 같으므로 $Z_{ij} = 0$ 이 반드시 하나 생긴다. $n_i = 5$ 처럼 작은 집단에서는 그 한 칸이 $Z$ 의 산포에 미치는 몫이 $1/5$ 이라 분모를 눈에 띄게 흔든다. **이 보기에서 결론이 갈리는 것은 집단 2 의 치우침만의 일이 아니라, 집단당 다섯 개라는 표본크기의 일이기도 하다.**
+
+    임계값으로 읽으면 간명하다. $F(0.95;\,2,\,12) = 3.8853$ 을 평균 판 $5.0152$ 는 넘고 중앙값 판 $3.4305$ 는 넘지 못한다. 두 값이 임계값을 사이에 두고 양쪽에 있으니 결론이 갈린다. 다만 **어느 쪽이 "옳은" 답인지를 이 자료가 말해 주지는 않는다.** 그 판단은 연습문제 3 이 다룬다.
 
 !!! warning "중심의 선택이 결론을 바꾼다"
     같은 자료에서 평균 중심 Levene은 $p = 0.026$으로 기각하고 중앙값 중심 Brown-Forsythe는 $p = 0.066$으로 기각하지 못한다. 5% 문턱을 사이에 두고 결론이 갈린다.

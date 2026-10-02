@@ -113,42 +113,173 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Fligner-Killeen 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> Fligner-Killeen 검정. 보기 1 의 두 집단에 세 검정을 나란히 돌린다. 집단 2 의 표본분산이 집단 1 의 $50$ 배다.
+
+**(1)** 동점이 없을 때 정규점수의 **다중집합이 자료와 무관하게 $N$ 하나로 정해짐**을 보이고, 그로부터 분모 $V^2$ 와 전체평균 $\bar a$ 가 상수임을 결론하시오. 이어서 $n_1 = n_2 = 5$ 인 이 설계에서 FK 의 $p$ 값이 **아무리 자료가 극단적이어도 내려갈 수 없는 바닥**을 구하시오.
+
+**(2)** 집단 2 의 값 $30$ 을 $300,\ 3000,\ 300000$ 으로 키우며 세 검정의 반응을 보시오. 브라운–포사이드의 $W$ 가 가는 극한값을 손으로 구하고 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 2번 집단의 퍼짐이 훨씬 크다.
-group1 = [10, 12, 11, 13, 10]
-group2 = [8, 25, 15, 30, 12]
+    **(1) 점수는 자료를 보지 않는다.** 3단계의 점수함수는 순위만 받는다.
 
-print("variances:", round(np.var(group1, ddof=1), 2),
-      round(np.var(group2, ddof=1), 2))
+    $$
+    a_{ij} = \Phi^{-1}\!\left(\frac12 + \frac{R_{ij}}{2(N+1)}\right)
+    $$
 
-# Fligner-Killeen 은 값을 순위로 바꾼 뒤 정규점수를 매겨 계산한다.
-# 원래 값의 크기가 아예 셈에 들어가지 않으므로 이상치가 통계량을
-# 끌고 갈 수 없다. 세 검정 중 가장 로버스트한 까닭이다.
-stat, p_value = stats.fligner(group1, group2)
-print(f"Fligner-Killeen: {stat:.4f}, p = {p_value:.4f}")
+    동점이 없으면 $N$ 개의 순위 $R_{ij}$ 는 $1, 2, \ldots, N$ 의 **순열**이므로, 모든 점수를 모은 다중집합은
 
-# 다른 두 검정과 견준다.
-s_bf, p_bf = stats.levene(group1, group2, center='median')
-s_b, p_b = stats.bartlett(group1, group2)
-print(f"Brown-Forsythe:  {s_bf:.4f}, p = {p_bf:.4f}")
-print(f"Bartlett:        {s_b:.4f}, p = {p_b:.4f}")
-```
+    $$
+    \left\{\Phi^{-1}\!\left(\tfrac12 + \tfrac{r}{2(N+1)}\right) : r = 1, \ldots, N\right\}
+    $$
 
-출력:
+    로 $N$ 하나에 의해 정해진다. **자료가 정하는 것은 "어느 점수가 어느 집단에 가는가"뿐이다.** 따라서 전체평균
 
-```text
-variances: 1.7 84.5
-Fligner-Killeen: 3.2515, p = 0.0714
-Brown-Forsythe:  5.1429, p = 0.0531
-Bartlett:        9.1010, p = 0.0026
-```
+    $$
+    \bar a = \frac1N\sum_{r=1}^{N} \Phi^{-1}\!\left(\tfrac12 + \tfrac{r}{2(N+1)}\right),
+    \qquad
+    V^2 = \frac{1}{N-1}\sum_{r=1}^{N}\bigl(a_{(r)} - \bar a\bigr)^2
+    $$
+
+    도 **상수**다. 모집단이 정규든 코시든 로그정규든 같은 수다. 이것이 플리그너–킬린이 거의 분포무관한 까닭의 핵심이며, 브라운–포사이드와 결정적으로 갈리는 지점이다. 브라운–포사이드의 분모는 $Z$ 의 실제 크기에서 계산되므로 자료에 따라 얼마든지 커질 수 있다.
+
+    점수에는 **상한**도 따라온다. 가장 큰 순위 $r = N$ 이 받는 점수가
+
+    $$
+    a_{\max} = \Phi^{-1}\!\left(\frac12 + \frac{N}{2(N+1)}\right)
+    $$
+
+    이고 $N = 10$ 에서 $\Phi^{-1}(0.9545) = 1.6906$ 이다. 편차가 $15$ 든 $15{,}000$ 든 **같은 수를 받는다.**
+
+    **$p$ 값의 바닥.** $\bar a$ 와 $V^2$ 가 상수이고 집단 크기도 정해져 있으므로
+
+    $$
+    \chi^2_{\text{FK}} = \frac{\sum_i n_i(\bar a_i - \bar a)^2}{V^2}
+    $$
+
+    에서 자유로운 것은 **쪼개기뿐**이다. $N = 10$ 을 $5{+}5$ 로 나누는 방법이 $\binom{10}{5} = 252$ 가지이고, 그 가운데 통계량을 가장 크게 하는 것은 한 집단이 작은 점수 다섯 개를, 다른 집단이 큰 점수 다섯 개를 몰아 받는 쪼개기다. 그때의 값이 FK 가 이 설계에서 **낼 수 있는 최대값**이고, 그 $p$ 값이 **낼 수 있는 최소값**이다. 아래에서 $252$ 가지를 모두 세어 확인한다.
+
+    **(2) 돌린다.**
+
+    ```python
+    import itertools
+
+    import numpy as np
+    from scipy import stats
+
+    # 2번 집단의 퍼짐이 훨씬 크다.
+    group1 = [10, 12, 11, 13, 10]
+    group2 = [8, 25, 15, 30, 12]
+
+    print("variances:", round(np.var(group1, ddof=1), 2),
+          round(np.var(group2, ddof=1), 2))
+
+    # Fligner-Killeen 은 값을 순위로 바꾼 뒤 정규점수를 매겨 계산한다.
+    # 원래 값의 크기가 아예 셈에 들어가지 않으므로 이상치가 통계량을
+    # 끌고 갈 수 없다. 세 검정 중 가장 로버스트한 까닭이다.
+    stat, p_value = stats.fligner(group1, group2)
+    print(f"Fligner-Killeen: {stat:.4f}, p = {p_value:.4f}")
+
+    # 다른 두 검정과 견준다.
+    s_bf, p_bf = stats.levene(group1, group2, center='median')
+    s_b, p_b = stats.bartlett(group1, group2)
+    print(f"Brown-Forsythe:  {s_bf:.4f}, p = {p_bf:.4f}")
+    print(f"Bartlett:        {s_b:.4f}, p = {p_b:.4f}")
+
+    # (1) 점수의 상한과 p 값의 바닥. 동점이 없을 때 점수는 N 만으로 정해진다.
+    N = 10
+    r = np.arange(1, N + 1)
+    a = stats.norm.ppf(0.5 + r / (2 * (N + 1)))
+    print(f"\nN = {N}, 동점 없을 때의 점수 = {np.round(a, 4)}")
+    print(f"  최대 점수 = Phi^-1(0.5 + {N}/{2 * (N + 1)}) = {a[-1]:.4f}  (상한)")
+    abar, V2 = a.mean(), a.var(ddof=1)
+    print(f"  abar = {abar:.6f},  V^2 = {V2:.6f}   (자료가 아니라 N 이 정한다)")
+
+    best, split = -1.0, None
+    for idx in itertools.combinations(range(N), 5):
+        A = a[list(idx)]
+        B = a[[i for i in range(N) if i not in idx]]
+        X2 = (5 * (A.mean() - abar) ** 2 + 5 * (B.mean() - abar) ** 2) / V2
+        if X2 > best:
+            best, split = X2, idx
+    print(f"  252 가지 쪼개기 가운데 최대 X^2 = {best:.6f} (순위 {[i + 1 for i in split]} 가 한 집단)")
+    print(f"  그때의 p = {stats.chi2(1).sf(best):.6f}   <- n=(5,5) 에서 FK 의 p 값 바닥")
+    print(f"  chi2(0.95, 1) = {stats.chi2(1).ppf(0.95):.4f}")
+
+    # (2) 집단 2 의 30 을 키워 간다. 중앙값 15 는 그대로이므로 순위도 그대로다.
+    print(f"\n{'30 대신':>10}{'var(g2)':>16}{'FK stat':>11}{'FK p':>10}"
+          f"{'BF W':>10}{'BF p':>9}{'Bartlett p':>13}")
+    for big in (30, 300, 3000, 300000):
+        g2 = [8, 25, 15, big, 12]
+        fk = stats.fligner(group1, g2)
+        bf = stats.levene(group1, g2, center='median')
+        ba = stats.bartlett(group1, g2)
+        print(f"{big:>10}{np.var(g2, ddof=1):>16.1f}{fk.statistic:>11.6f}{fk.pvalue:>10.6f}"
+              f"{bf.statistic:>10.4f}{bf.pvalue:>9.4f}{ba.pvalue:>13.3e}")
+
+    # 순위가 정말 바뀌지 않는가.
+    for big in (30, 300000):
+        Z = np.concatenate([np.abs(np.array(g, dtype=float) - np.median(g))
+                            for g in (group1, [8, 25, 15, big, 12])])
+        print(f"  big={big:>7}  편차의 순위 = {stats.rankdata(Z)}")
+    ```
+
+    출력:
+
+    ```text
+    variances: 1.7 84.5
+    Fligner-Killeen: 3.2515, p = 0.0714
+    Brown-Forsythe:  5.1429, p = 0.0531
+    Bartlett:        9.1010, p = 0.0026
+
+    N = 10, 동점 없을 때의 점수 = [0.1142 0.2299 0.3488 0.4728 0.6046 0.7479 0.9085 1.0968 1.3352 1.6906]
+      최대 점수 = Phi^-1(0.5 + 10/22) = 1.6906  (상한)
+      abar = 0.754912,  V^2 = 0.256235   (자료가 아니라 N 이 정한다)
+      252 가지 쪼개기 가운데 최대 X^2 = 6.271519 (순위 [1, 2, 3, 4, 5] 가 한 집단)
+      그때의 p = 0.012269   <- n=(5,5) 에서 FK 의 p 값 바닥
+      chi2(0.95, 1) = 3.8415
+
+         30 대신         var(g2)    FK stat      FK p      BF W     BF p   Bartlett p
+            30            84.5   3.251534  0.071357    5.1429   0.0531    2.555e-03
+           300         16284.5   3.251534  0.071357    1.1469   0.3154    1.441e-07
+          3000       1782084.5   3.251534  0.071357    1.0135   0.3436    2.732e-11
+        300000   17998200084.5   3.251534  0.071357    1.0001   0.3466    1.590e-18
+      big=     30  편차의 순위 = [ 4.   4.   1.5  6.   4.   8.   9.   1.5 10.   7. ]
+      big= 300000  편차의 순위 = [ 4.   4.   1.5  6.   4.   8.   9.   1.5 10.   7. ]
+    ```
+
+    **(1)의 바닥이 $p = 0.0123$ 이다.** $252$ 가지를 모두 세어 보니 최대 $\chi^2_{\text{FK}} = 6.2715$ 이고 그 쪼개기가 순위 $1$–$5$ 를 한 집단에 몰아 준 경우다. 예상한 대로다. **$n = (5,5)$ 에서 FK 는 자료가 어떻든 $p < 0.0123$ 을 줄 수 없다.** $\chi^2_{0.95,1} = 3.8415$ 보다는 크므로 기각 자체는 가능하지만, 자료가 "완벽하게 갈린" 극단에서도 $p$ 가 $0.012$ 에 머문다. 순위 기반 검정의 검정력이 왜 낮은지가 이 한 숫자에 다 들어 있다. 실제 이 자료는 $3.2515$ 로 최대값의 절반을 조금 넘겼을 뿐이다.
+
+    (유보 하나. 이 자료에는 동점이 있다. 두 집단 모두 $n_i = 5$ 로 홀수라 중앙값이 관측값과 겹쳐 편차 $0$ 이 둘 생기고, 순위가 $1.5, 1.5$ 로 평균순위가 된다. 그래서 실제 $V^2$ 는 $0.2524$ 로 동점 없을 때의 $0.256235$ 와 조금 다르다. 바닥 $0.0123$ 은 **동점이 없는 경우**의 값이다.)
+
+    **(2) FK 는 한 자리도 움직이지 않는다.** 집단 2 의 표본분산이 $84.5$ 에서 $1.8\times10^{10}$ 으로 **여덟 자릿수** 커지는데 FK 통계량은 $3.251534$, $p$ 는 $0.071357$ 로 소수 여섯째 자리까지 똑같다. 마지막 두 줄이 그 까닭이다. 중앙값은 $15$ 로 그대로이므로 편차는 $(7, 10, 0, \text{거대}, 3)$ 이 되고, "거대"가 여전히 가장 큰 하나이므로 **순위 벡터가 글자 하나 바뀌지 않는다.** 순위가 같으면 점수가 같고, 점수가 같으면 통계량이 같다. (1)에서 점수가 $N$ 만의 함수라고 한 것이 바로 이 모습이다.
+
+    **바틀렛은 자릿수째로 무너진다.** $p$ 가 $2.6\times10^{-3} \to 1.4\times10^{-7} \to 2.7\times10^{-11} \to 1.6\times10^{-18}$ 이다. 관측값 **하나**를 키운 것인데 "분산이 다르다"는 확신이 $10^{15}$ 배 세진다. 제곱편차를 쓰므로 그 한 점이 통계량을 지배한다.
+
+    **브라운–포사이드는 오히려 거꾸로 간다.** $W$ 가 $5.1429$ 에서 $1.1469 \to 1.0135 \to 1.0001$ 로 **$1$ 로 수렴하고** $p$ 가 $0.0531$ 에서 $0.3466$ 으로 올라간다. 손으로 유도할 수 있다. 큰 값을 $M$, 그 편차를 $D = M - 15$ 라 쓰면 $Z_2 = (7, 10, 0, D, 3)$ 이고 $Z_1 = (1,1,0,2,1)$ 이다. $D \to \infty$ 에서
+
+    $$
+    \bar Z_2 = 4 + \frac D5, \qquad
+    S_2 = \sum_j (Z_{2j} - \bar Z_2)^2 \to 4\left(\frac D5\right)^2 + \left(\frac{4D}{5}\right)^2 = \frac{20D^2}{25} = 0.8 D^2
+    $$
+
+    이고, $\bar Z_1 = 1$, $S_1 = 2$ 는 상수다. 전체평균이 $\bar Z = 2.5 + D/10$ 이므로 두 집단의 편차가 각각 $\mp(1.5 + D/10)$ 이고
+
+    $$
+    \mathrm{SS}_{\text{between}} = 5\left(\frac{D}{10}\right)^2 \cdot 2 \to 0.1 D^2
+    $$
+
+    이다. $N = 10$, $k = 2$ 를 넣으면
+
+    $$
+    W = \frac{8\,\mathrm{SS}_{\text{between}}}{\mathrm{SS}_{\text{within}}} \longrightarrow \frac{8 \times 0.1 D^2}{2 + 0.8 D^2} \longrightarrow \frac{0.8}{0.8} = 1
+    $$
+
+    **분자와 분모가 둘 다 $D^2$ 으로 커지면서 비가 $1$ 로 고정된다.** $M = 300000$ 에서 $W = 1.0001$ 이니 유도한 극한과 맞는다. 중앙값 중심화가 이상점의 오염을 그 한 점에 가두지만, 그 한 점이 **분모에도 들어가** 신호를 함께 지워 버린다는 뜻이다.
+
+    **세 검정이 세 방향으로 간다.** 같은 조작에 바틀렛은 폭발하고, 브라운–포사이드는 무디어지고, 플리그너–킬린은 꿈쩍하지 않는다. "로버스트"가 한 가지 뜻이 아님을 보여 주는 표다. FK 의 무감각은 순위에서 오므로 **설계된** 것이고, BF 의 무감각은 분모가 커진 결과라 **우연한** 것이다.
 
 세 검정의 $p$값이 로버스트성의 순서와 정확히 반대이다. Bartlett($0.0026$) < Brown-Forsythe($0.0531$) < Fligner-Killeen($0.0714$). 로버스트할수록 이 자료에서 보수적이다.
 

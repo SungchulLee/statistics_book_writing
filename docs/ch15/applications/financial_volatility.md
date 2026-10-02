@@ -130,53 +130,163 @@ $r_t^2$의 자기상관은 이 장의 모든 분산 검정이 요구하는 독�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 변동성 변화 검정하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 변동성 변화 검정하기. $t_5$ 수익률 $60$일씩 두 기간을 만들되 참 변동성을 $1.8\%$와 $2.4\%$로 **정말 다르게** 두고, F 검정·Brown-Forsythe·Fligner-Killeen 을 나란히 돌린다.
+
+**(1)** $t_5$의 첨도를 구하고, 5.3절의 극한 오류율 공식으로 이 자료에서 F 검정의 **극한 크기**를 계산하시오. 표본을 키우면 그 값이 $0.05$로 수렴하는가?
+
+**(2)** 세 검정을 돌려 $p$값을 견주고, F 검정이 증거를 몇 배 과장하는지 적으시오. 또 (1)의 극한값을 모의실험으로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(42)
+    **(1) 첨도 하나가 극한 크기를 정한다.** $t_\nu$ 분포의 첨도는 $\nu > 4$에서
 
-# t(5) 의 표준편차는 sqrt(5/3) 이다. 목표 변동성을 정확히 맞추려면
-# 이 값으로 나눠야 한다. 이러면 달라지는 것은 꼬리 두께뿐이다.
-scale_correction = np.sqrt(5 / 3)
+    $$
+    \beta_2(t_\nu) = 3 + \frac{6}{\nu - 4}
+    $$
 
-# 1구간: 일변동성 1.8%
-returns_before = rng.standard_t(df=5, size=60) * 0.018 / scale_correction
+    이므로 $\nu = 5$이면 $\beta_2 = 9$, 초과첨도가 $6$이다. 위 표가 말하는 "$t_5$ 수익률(초과첨도 6)"이 이것이다. ($\nu = 5$라 네 번째 적률이 **겨우** 존재한다. $\nu \le 4$이면 첨도가 무한대가 되어 아래 계산 자체가 성립하지 않는다.)
 
-# 2구간: 일변동성 2.4%. 실제로 분산이 달라진 자료다.
-returns_after = rng.standard_t(df=5, size=60) * 0.024 / scale_correction
+    5.3절이 유도해 둔 것을 가져온다. 델타법으로 $\operatorname{Var}(\log S^2) \approx (\beta_2-1)/n$이고 두 표본이 독립이므로
 
-print(f"sample sd: {returns_before.std(ddof=1):.5f}, "
-      f"{returns_after.std(ddof=1):.5f}")
+    $$
+    \operatorname{Var}\!\left(\log \frac{S_1^2}{S_2^2}\right) \approx (\beta_2-1)\left(\frac{1}{n_1}+\frac{1}{n_2}\right)
+    $$
 
-# 중앙값을 중심으로 쓰므로 꼬리가 두꺼운 자료에서도 버틴다.
-bf_stat, bf_p = stats.levene(returns_before, returns_after, center='median')
-print(f"Brown-Forsythe:  W = {bf_stat:.4f}, p = {bf_p:.4f}")
+    인데, F 검정은 이 값을 정규 이론의 $2\left(\frac1{n_1}+\frac1{n_2}\right)$로 믿는다. 그러므로 **참 산포가 믿는 산포의 $\sqrt{(\beta_2-1)/2}$배**다. $\beta_2 = 9$를 넣으면
 
-# 순위만 쓰는 검정이라 셋 중 가장 로버스트하다.
-fk_stat, fk_p = stats.fligner(returns_before, returns_after)
-print(f"Fligner-Killeen: H = {fk_stat:.4f}, p = {fk_p:.4f}")
+    $$
+    \sqrt{\frac{9-1}{2}} = 2
+    $$
 
-# F 검정은 정규성에 매우 민감하다. 수익률처럼 꼬리가 두꺼운 자료에서는
-# 분산이 같아도 자주 기각해 버리므로 쓰지 않는 편이 낫다.
-f_stat = np.var(returns_before, ddof=1) / np.var(returns_after, ddof=1)
-f_p = 2 * min(stats.f.cdf(f_stat, 59, 59), stats.f.sf(f_stat, 59, 59))
-print(f"F-test:          F = {f_stat:.4f}, p = {f_p:.4g} "
-      f"(unreliable for heavy-tailed data)")
-```
+    로 정확히 **두 배**다. 임계값이 참 산포 단위로는 $\pm 1.96/2 = \pm 0.98$만큼만 뻗으므로
 
-출력:
+    $$
+    \text{극한 크기} = 2\left[1 - \Phi\!\left(1.96\sqrt{\frac{2}{\beta_2-1}}\right)\right]
+    = 2\left[1 - \Phi(0.98)\right] = 0.327
+    $$
 
-```text
-sample sd: 0.01504, 0.02611
-Brown-Forsythe:  W = 5.4046, p = 0.0218
-Fligner-Killeen: H = 3.2325, p = 0.0722
-F-test:          F = 0.3317, p = 3.791e-05 (unreliable for heavy-tailed data)
-```
+    이다. 5.3절의 표에서 $\beta_2 = 9$인 지수분포 줄에 적힌 $0.327$과 같은 수이고, 그래야 한다. **극한 오류율은 첨도만의 함수**이므로 분포 모양이 달라도 첨도가 같으면 같은 값이 나온다.
+
+    **$0.05$로 수렴하지 않는다. 오히려 올라간다.** 위 식에 $n$이 아예 들어 있지 않다는 것이 요점이다. 임계값도 $1/\sqrt n$로 줄고 참 산포도 $1/\sqrt n$로 줄어 둘의 비가 처음부터 끝까지 $2$로 고정되기 때문이다. 작은 $n$에서는 $F$ 분포 자체가 넓어 왜곡이 가려지므로, 실제 크기는 **아래에서 위로 올라가** $0.327$에 다가간다. 연습문제 1 이 $n = 60$에서 잰 $0.195$는 극한값이 아니라 그 도중의 한 점이다.
+
+    **(2) 먼저 자료 한 벌로 세 검정을 견준다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(42)
+
+    # t(5) 의 표준편차는 sqrt(5/3) 이다. 목표 변동성을 정확히 맞추려면
+    # 이 값으로 나눠야 한다. 이러면 달라지는 것은 꼬리 두께뿐이다.
+    scale_correction = np.sqrt(5 / 3)
+
+    # 1구간: 일변동성 1.8%
+    returns_before = rng.standard_t(df=5, size=60) * 0.018 / scale_correction
+
+    # 2구간: 일변동성 2.4%. 실제로 분산이 달라진 자료다.
+    returns_after = rng.standard_t(df=5, size=60) * 0.024 / scale_correction
+
+    print(f"sample sd: {returns_before.std(ddof=1):.5f}, "
+          f"{returns_after.std(ddof=1):.5f}")
+
+    # 중앙값을 중심으로 쓰므로 꼬리가 두꺼운 자료에서도 버틴다.
+    bf_stat, bf_p = stats.levene(returns_before, returns_after, center='median')
+    print(f"Brown-Forsythe:  W = {bf_stat:.4f}, p = {bf_p:.4f}")
+
+    # 순위만 쓰는 검정이라 셋 중 가장 로버스트하다.
+    fk_stat, fk_p = stats.fligner(returns_before, returns_after)
+    print(f"Fligner-Killeen: H = {fk_stat:.4f}, p = {fk_p:.4f}")
+
+    # F 검정은 정규성에 매우 민감하다. 수익률처럼 꼬리가 두꺼운 자료에서는
+    # 분산이 같아도 자주 기각해 버리므로 쓰지 않는 편이 낫다.
+    f_stat = np.var(returns_before, ddof=1) / np.var(returns_after, ddof=1)
+    f_p = 2 * min(stats.f.cdf(f_stat, 59, 59), stats.f.sf(f_stat, 59, 59))
+    print(f"F-test:          F = {f_stat:.4f}, p = {f_p:.4g} "
+          f"(unreliable for heavy-tailed data)")
+    ```
+
+    출력:
+
+    ```text
+    sample sd: 0.01504, 0.02611
+    Brown-Forsythe:  W = 5.4046, p = 0.0218
+    Fligner-Killeen: H = 3.2325, p = 0.0722
+    F-test:          F = 0.3317, p = 3.791e-05 (unreliable for heavy-tailed data)
+    ```
+
+    **세 $p$값이 자릿수째로 갈린다.** F 검정 $3.791\times10^{-5}$, Brown-Forsythe $0.0218$, Fligner-Killeen $0.0722$다. 비로 적으면 F 검정이 Brown-Forsythe 보다 **$575$배**, Fligner-Killeen 보다 $1900$배 작은 $p$값을 준다. **F 검정이 증거를 500배 넘게 과장한다.** 이 자료에는 실제로 변동성 차이가 있으므로($1.8\%$ 대 $2.4\%$, 분산비 $1.78$배) 기각 자체는 옳지만, 그 확신의 정도가 완전히 부풀려져 있다.
+
+    (1)이 왜 그런지 말해 준다. **$\log F$의 참 산포가 F 검정이 믿는 것의 두 배**이므로, F 검정은 관측된 $\log F$를 실제보다 두 배 멀리 있는 것으로 읽는다. 정규 꼬리에서 $z$를 두 배로 읽으면 $p$값은 자릿수로 줄어든다. Brown-Forsythe 와 Fligner-Killeen 은 산포의 크기를 자료에서 다시 읽어 내므로 속지 않는다.
+
+    **이제 (1)의 극한값 $0.327$을 확인한다.** 참 변동성을 두 기간에 **같게** 두고 $n$을 키우며 실제 크기를 잰다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # (1) 극한 크기를 식으로 먼저 적는다. t_5 의 첨도는 3 + 6/(nu-4) = 9 다.
+    beta2 = 3 + 6 / (5 - 4)
+    c = stats.norm.isf(0.025) * np.sqrt(2 / (beta2 - 1))
+    print(f"t_5 의 첨도 beta2 = {beta2:.1f}   (초과첨도 {beta2 - 3:.1f})")
+    print(f"산포 배율 sqrt((beta2-1)/2) = {np.sqrt((beta2 - 1) / 2):.3f}")
+    print(f"1.96*sqrt(2/(beta2-1)) = {c:.4f}   ->  극한 크기 = {2 * stats.norm.sf(c):.4f}")
+
+
+    def bf_p2(A, B):
+        """두 표본에 대한 중앙값 중심 Levene(= Brown-Forsythe) p-값을 벡터화.
+        scipy.stats.levene(a, b, center='median') 와 같은 값을 준다."""
+        Z = [np.abs(X - np.median(X, axis=1, keepdims=True)) for X in (A, B)]
+        n1, n2 = A.shape[1], B.shape[1]
+        m = [z.mean(axis=1) for z in Z]
+        gm = (n1 * m[0] + n2 * m[1]) / (n1 + n2)
+        msb = n1 * (m[0] - gm) ** 2 + n2 * (m[1] - gm) ** 2
+        msw = (((Z[0] - m[0][:, None]) ** 2).sum(axis=1)
+               + ((Z[1] - m[1][:, None]) ** 2).sum(axis=1)) / (n1 + n2 - 2)
+        return stats.f.sf(msb / msw, 1, n1 + n2 - 2)
+
+
+    # (2) 표본을 키우며 두 검정의 실제 크기를 잰다. 참 변동성은 두 기간이 같다.
+    rng = np.random.default_rng(11)
+    print(f"\n{'n':>6}{'R':>8}{'F-test':>10}{'Brown-Forsythe':>17}")
+    for n, R in [(60, 20_000), (250, 20_000), (1000, 10_000), (4000, 4_000)]:
+        A = rng.standard_t(5, size=(R, n))
+        B = rng.standard_t(5, size=(R, n))
+        F = A.var(axis=1, ddof=1) / B.var(axis=1, ddof=1)
+        d = stats.f(n - 1, n - 1)
+        p_f = 2 * np.minimum(d.cdf(F), d.sf(F))
+        print(f"{n:>6}{R:>8}{np.mean(p_f < 0.05):>10.4f}{np.mean(bf_p2(A, B) < 0.05):>17.4f}")
+    ```
+
+    출력:
+
+    ```text
+    t_5 의 첨도 beta2 = 9.0   (초과첨도 6.0)
+    산포 배율 sqrt((beta2-1)/2) = 2.000
+    1.96*sqrt(2/(beta2-1)) = 0.9800   ->  극한 크기 = 0.3271
+
+         n       R    F-test   Brown-Forsythe
+        60   20000    0.2028           0.0474
+       250   20000    0.2399           0.0481
+      1000   10000    0.2696           0.0499
+      4000    4000    0.2755           0.0493
+    ```
+
+    **(1)의 예측이 그대로 보인다.** 산포 배율이 정확히 $2.000$이고 극한 크기가 $0.3271$이다. 그리고 모의실험한 F 검정의 크기가
+
+    $$
+    0.2028 \;\to\; 0.2399 \;\to\; 0.2696 \;\to\; 0.2755
+    $$
+
+    으로 $n$을 $60$에서 $4000$까지 키우는 동안 **단조증가**한다. 표본을 $67$배 늘렸는데 거짓 양성률이 $0.20$에서 $0.28$로 올라갔다. **표본을 키우면 더 나빠진다.** 연습문제 1 의 $n = 60$ 값 $0.1948$은 이 수열의 첫 점이고(여기서는 $0.2028$, 씨앗과 반복 횟수가 달라 생긴 차이이며 $R = 20000$에서 표준오차 $0.0028$이니 두 표준오차 안이다), 끝점은 $0.05$가 아니라 $0.327$이다.
+
+    수렴이 느린 것도 눈여겨볼 만하다. $n = 4000$에서도 아직 $0.276$으로 극한값에서 $0.05$나 떨어져 있다. 델타근사의 오차가 $1/\sqrt n$로만 줄기 때문이다. 그러나 **방향은 처음부터 끝까지 한쪽**이다.
+
+    **Brown-Forsythe 는 네 경우 모두 $0.047$–$0.050$으로 명목값에 붙어 있다.** 같은 $t_5$ 자료, 같은 표본크기인데 한쪽은 $n$과 함께 망가지고 한쪽은 꿈쩍하지 않는다. 15.6절이 보일 붓스트랩 검정도 같은 이유로 버틴다. **"분산 검정에는 중심극한정리의 보호가 없다"는 말은 고전적 검정에만 해당하는 말이고, 그 보호를 자료에서 직접 만들어 내는 것이 로버스트 검정이 하는 일이다.**
+
+    다만 이 결론은 **독립성을 전제로 한 것**이다. 아래의 변동성 군집 상자가 그 전제가 깨지면 Brown-Forsythe 도 $0.297$까지 무너짐을 보인다.
 
 !!! warning "`standard_t(df)*scale`의 표준편차는 `scale`이 아니다"
     원래 코드는 `rng.standard_t(df=5, size=60) * 0.018`로 "일별 변동성 1.8%"를 만들려 했지만, $t_5$의 표준편차가 $\sqrt{5/3} = 1.291$이므로 실제 표준편차는 $0.018 \times 1.291 = 0.0232$, 곧 **2.3%**이다.
@@ -184,8 +294,6 @@ F-test:          F = 0.3317, p = 3.791e-05 (unreliable for heavy-tailed data)
     위 코드는 `/ np.sqrt(5/3)`으로 이를 보정했다. 14장 금융 수익률 페이지에서 지적한 것과 같은 함정이다.
 
     (분산 **비**는 척도에 불변이므로 검정통계량과 $p$값은 보정 전후가 같다. 보정은 "1.8%"라는 서술을 자료와 일치시키기 위한 것이다.)
-
-세 검정의 $p$값이 크게 다르다는 점에 주목하라. F 검정 $3.8 \times 10^{-5}$, Brown-Forsythe $0.022$, Fligner-Killeen $0.072$이다. **F 검정이 증거를 500배 이상 과장한다.** 이 자료에서 실제로 변동성 차이가 있으므로(생성 시 1.33배 비율을 넣었다) 기각 자체는 옳지만, 그 확신의 정도가 완전히 부풀려져 있다.
 
 ## 연습문제
 

@@ -101,46 +101,177 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Brown-Forsythe 검정과 세 방법 비교
+**보기 2.** <span class="diff easy" title="쉬움"></span> Brown-Forsythe 검정과 세 방법 비교. 보기 1 의 세 집단에 중앙값 중심·평균 중심·Bartlett 을 모두 적용한다.
+
+**(1)** 세 집단의 평균과 중앙값을 구해 **두 중심이 갈리는 집단이 하나뿐**임을 확인하고, 그로부터 두 Levene 판본의 $W$ 가 왜 소수 셋째 자리에서만 다를지 예측하시오. 모든 집단에서 두 중심이 같다면 두 $W$ 가 **정확히** 같아야 함도 보이시오.
+
+**(2)** Bartlett 통계량을 **정의대로 손으로 조립**해 SciPy 와 맞추고, 그 $p$ 값이 로버스트 검정의 $p$ 값보다 백 배 작은 까닭을 두 통계량이 보는 **신호와 잡음**에서 찾으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 2번 집단만 유난히 퍼져 있다. 5 와 30 처럼 멀리 떨어진 값이 섞여 있어
-# 평균 중심 방법이 흔들리기 좋은 자료다.
-group1 = [8, 10, 12, 9, 11]
-group2 = [5, 30, 18, 22, 15]
-group3 = [14, 16, 15, 17, 14]
+    **(1) 두 중심이 갈리는 집단을 찾는다.** 손으로 더해 보면 된다.
 
-print("variances:", [round(np.var(g, ddof=1), 2)
-                     for g in (group1, group2, group3)])
+    | 집단 | 자료 | 평균 | 중앙값 |
+    |:---|:---|---:|---:|
+    | 1 | $8, 10, 12, 9, 11$ | $50/5 = 10.0$ | $10$ |
+    | 2 | $5, 30, 18, 22, 15$ | $90/5 = 18.0$ | $18$ |
+    | 3 | $14, 16, 15, 17, 14$ | $76/5 = 15.2$ | $15$ |
 
-# Brown-Forsythe 는 각 값에서 제 집단의 중앙값을 뺀 절대편차에 분산분석을
-# 돌린다. 중심을 평균이 아니라 중앙값으로 잡는 것이 전부인데, 그 한 가지
-# 차이로 치우친 자료와 이상치에 훨씬 잘 버틴다.
-stat, p_value = stats.levene(group1, group2, group3, center='median')
-print(f"Brown-Forsythe W*:      {stat:.4f}, p = {p_value:.4f}")
+    **집단 1 과 2 에서는 평균과 중앙값이 완전히 같고, 집단 3 에서만 $0.2$ 어긋난다.** 집단 1 은 $\{8,9,10,11,12\}$ 로 대칭이고, 집단 2 는 $5$ 와 $30$ 이 중앙값 $18$ 양쪽에서 $-13$ 과 $+12$ 로 거의 맞물려 상쇄된다. 집단 3 만 $14$ 가 두 번 나와 평균이 중앙값보다 조금 위로 올라간다.
 
-# 원래 Levene 은 평균을 중심으로 쓴다. 이상치에 끌려간다.
-s_m, p_m = stats.levene(group1, group2, group3, center='mean')
-print(f"Levene (mean-centered): {s_m:.4f}, p = {p_m:.4f}")
+    **그러므로 두 판본의 $Z$ 는 열다섯 개 가운데 다섯 개만, 그것도 $0.2$ 씩만 다르다.** 집단 1·2 의 열 개는 글자 그대로 같은 수다. 분자도 분모도 거의 같은 값으로 조립되니 $W$ 가 소수 셋째 자리에서만 갈릴 것이다.
 
-# Bartlett 은 정규성을 전제하므로 이런 자료에서 가장 많이 어긋난다.
-s_b, p_b = stats.bartlett(group1, group2, group3)
-print(f"Bartlett:               {s_b:.4f}, p = {p_b:.6f}")
-```
+    **모든 집단에서 두 중심이 같다면 정확히 같다.** 이것은 어림이 아니라 항등식이다. $\bar X_i = \tilde X_i$ 가 모든 $i$ 에서 성립하면
 
-출력:
+    $$
+    Z_{ij}^{(\text{Levene})} = \lvert X_{ij} - \bar X_i\rvert = \lvert X_{ij} - \tilde X_i\rvert = Z_{ij}^{(\text{BF})}
+    $$
 
-```text
-variances: [2.5, 84.5, 1.7]
-Brown-Forsythe W*:      4.0754, p = 0.0446
-Levene (mean-centered): 4.0610, p = 0.0450
-Bartlett:               15.3946, p = 0.000454
-```
+    로 **입력 자료 자체가 같아진다.** 두 검정은 그 뒤로 똑같은 일원분산분석을 하므로 $W = W^*$ 다. 두 판본의 차이는 통계량의 꼴에 있지 않고 오직 **중심의 추정값에** 있다는 뜻이다.
+
+    **(2) Bartlett 통계량의 꼴.** 합동분산을 $s_p^2 = \sum_i \nu_i s_i^2 / \sum_i \nu_i$ ($\nu_i = n_i - 1$) 이라 쓰면
+
+    $$
+    T = \frac{\bigl(\sum_i \nu_i\bigr)\ln s_p^2 - \sum_i \nu_i \ln s_i^2}{C},
+    \qquad
+    C = 1 + \frac{1}{3(k-1)}\left[\sum_i \frac{1}{\nu_i} - \frac{1}{\sum_i \nu_i}\right]
+    $$
+
+    이고 $H_0$ 아래에서 $T \;\dot\sim\; \chi^2_{k-1}$ 이다. 여기서 $\nu_i = 4$, $\sum \nu_i = 12$, $k = 3$ 이므로
+
+    $$
+    C = 1 + \frac{1}{6}\left[\frac34 - \frac1{12}\right] = 1 + \frac{1}{6}\cdot\frac23 = \frac{10}{9} = 1.111111
+    $$
+
+    이다. **$T$ 가 로그분산의 산포를 재고 있다는 것이 요점이다.** 산술평균의 로그와 로그의 가중평균의 차이이므로 산술–기하 평균 부등식에 의해 분자가 늘 음이 아니고, 분산들이 흩어질수록 커진다.
+
+    **확인한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 2번 집단만 유난히 퍼져 있다. 5 와 30 처럼 멀리 떨어진 값이 섞여 있어
+    # 평균 중심 방법이 흔들리기 좋은 자료다.
+    group1 = [8, 10, 12, 9, 11]
+    group2 = [5, 30, 18, 22, 15]
+    group3 = [14, 16, 15, 17, 14]
+
+    print("variances:", [round(np.var(g, ddof=1), 2)
+                         for g in (group1, group2, group3)])
+
+    # (1) 어느 집단에서 평균과 중앙값이 갈리는가.
+    print(f"\n{'집단':>5}{'평균':>9}{'중앙값':>9}{'차':>8}")
+    for i, g in enumerate((group1, group2, group3), start=1):
+        a = np.array(g, dtype=float)
+        print(f"{i:>5}{a.mean():>9.2f}{np.median(a):>9.2f}{a.mean() - np.median(a):>8.2f}")
+
+    # Brown-Forsythe 는 각 값에서 제 집단의 중앙값을 뺀 절대편차에 분산분석을
+    # 돌린다. 중심을 평균이 아니라 중앙값으로 잡는 것이 전부인데, 그 한 가지
+    # 차이로 치우친 자료와 이상치에 훨씬 잘 버틴다.
+    stat, p_value = stats.levene(group1, group2, group3, center='median')
+    print(f"\nBrown-Forsythe W*:      {stat:.4f}, p = {p_value:.4f}")
+
+    # 원래 Levene 은 평균을 중심으로 쓴다. 이상치에 끌려간다.
+    s_m, p_m = stats.levene(group1, group2, group3, center='mean')
+    print(f"Levene (mean-centered): {s_m:.4f}, p = {p_m:.4f}")
+
+    # Bartlett 은 정규성을 전제하므로 이런 자료에서 가장 많이 어긋난다.
+    s_b, p_b = stats.bartlett(group1, group2, group3)
+    print(f"Bartlett:               {s_b:.4f}, p = {p_b:.6f}")
+
+    # 집단 3 의 다섯째 값만 14 -> 13 으로 바꾸면 세 집단 모두 평균 = 중앙값이 된다.
+    group3b = [14, 16, 15, 17, 13]
+    print(f"\n집단 3 을 {group3b} 로 바꾸면 "
+          f"평균 {np.mean(group3b):.1f} = 중앙값 {np.median(group3b):.1f}")
+    a = stats.levene(group1, group2, group3b, center='median')[0]
+    b = stats.levene(group1, group2, group3b, center='mean')[0]
+    print(f"  W*(중앙값) = {a:.12f}")
+    print(f"  W (평균)   = {b:.12f}   차 = {abs(a - b):.2e}")
+
+    # (2) Bartlett 통계량을 정의대로 조립한다.
+    groups = [np.array(g, dtype=float) for g in (group1, group2, group3)]
+    nu = np.array([len(g) - 1 for g in groups])
+    s2 = np.array([g.var(ddof=1) for g in groups])
+    N, k = sum(len(g) for g in groups), len(groups)
+    sp2 = (nu * s2).sum() / nu.sum()
+    num = nu.sum() * np.log(sp2) - (nu * np.log(s2)).sum()
+    C = 1 + ((1 / nu).sum() - 1 / nu.sum()) / (3 * (k - 1))
+    print(f"\n합동분산 s_p^2 = {sp2:.6f}")
+    print(f"분자 = {nu.sum()} * ln(s_p^2) - sum nu_i ln(s_i^2) = {num:.6f}")
+    print(f"보정계수 C = {C:.6f}")
+    print(f"T = {num:.6f} / {C:.6f} = {num / C:.6f}   (scipy {s_b:.6f}, 차 {abs(num / C - s_b):.1e})")
+    print(f"p = chi2(2).sf(T) = {stats.chi2(k - 1).sf(num / C):.6e}")
+
+    # 두 검정이 보는 '신호'의 척도가 다르다.
+    Z = [np.abs(g - np.median(g)) for g in groups]
+    zbar = np.array([z.mean() for z in Z])
+    print(f"\n표본분산        {np.round(s2, 2)}   최대/최소 = {s2.max() / s2.min():.2f}")
+    print(f"Zbar (중앙값)   {np.round(zbar, 2)}   최대/최소 = {zbar.max() / zbar.min():.2f}")
+    print(f"  로그 폭:  ln(분산비) = {np.log(s2.max() / s2.min()):.4f},  "
+          f"ln(Zbar 비) = {np.log(zbar.max() / zbar.min()):.4f}")
+    print(f"  sqrt(분산비) = {np.sqrt(s2.max() / s2.min()):.4f}  (Zbar 비 {zbar.max() / zbar.min():.4f} 과 견주라)")
+    ss_w = sum(((z - z.mean()) ** 2).sum() for z in Z)
+    print(f"\nBF 의 분모 SS_within(Z) = {ss_w:.3f}  "
+          f"(집단별 {[round(((z - z.mean()) ** 2).sum(), 2) for z in Z]})")
+    n_i = np.array([len(z) for z in Z])
+    grand = np.concatenate(Z).mean()
+    ss_b = (n_i * (zbar - grand) ** 2).sum()
+    print(f"BF 의 분자 SS_between(Z) = {ss_b:.4f}  ->  W* = 12*{ss_b:.4f}/(2*{ss_w:.1f}) = {12 * ss_b / (2 * ss_w):.4f}")
+    print(f"집단 2 가 분모에서 차지하는 몫 = {((Z[1] - Z[1].mean()) ** 2).sum() / ss_w:.4f}")
+    print(f"F(0.95; 2, 12) = {stats.f(2, 12).ppf(0.95):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    variances: [2.5, 84.5, 1.7]
+
+       집단       평균      중앙값       차
+        1    10.00    10.00    0.00
+        2    18.00    18.00    0.00
+        3    15.20    15.00    0.20
+
+    Brown-Forsythe W*:      4.0754, p = 0.0446
+    Levene (mean-centered): 4.0610, p = 0.0450
+    Bartlett:               15.3946, p = 0.000454
+
+    집단 3 을 [14, 16, 15, 17, 13] 로 바꾸면 평균 15.0 = 중앙값 15.0
+      W*(중앙값) = 3.896253602305
+      W (평균)   = 3.896253602305   차 = 0.00e+00
+
+    합동분산 s_p^2 = 29.566667
+    분자 = 12 * ln(s_p^2) - sum nu_i ln(s_i^2) = 17.105089
+    보정계수 C = 1.111111
+    T = 17.105089 / 1.111111 = 15.394580   (scipy 15.394580, 차 0.0e+00)
+    p = chi2(2).sf(T) = 4.540560e-04
+
+    표본분산        [ 2.5 84.5  1.7]   최대/최소 = 49.71
+    Zbar (중앙값)   [1.2 6.4 1. ]   최대/최소 = 6.40
+      로그 폭:  ln(분산비) = 3.9061,  ln(Zbar 비) = 1.8563
+      sqrt(분산비) = 7.0502  (Zbar 비 6.4000 과 견주라)
+
+    BF 의 분모 SS_within(Z) = 138.000  (집단별 [2.8, 133.2, 2.0])
+    BF 의 분자 SS_between(Z) = 93.7333  ->  W* = 12*93.7333/(2*138.0) = 4.0754
+    집단 2 가 분모에서 차지하는 몫 = 0.9652
+    F(0.95; 2, 12) = 3.8853
+    ```
+
+    **(1)의 두 주장이 모두 맞는다.** 집단 3 만 $0.2$ 어긋나고, 그 결과 $W^* = 4.0754$ 와 $W = 4.0610$ 이 소수 셋째 자리에서 갈린다($p$ 는 $0.0446$ 대 $0.0450$). 그리고 집단 3 의 다섯째 값만 $14$ 에서 $13$ 으로 바꾸어 세 집단 모두 평균과 중앙값을 맞추면 두 통계량이 $3.896253602305$ 로 **소수 열두째 자리까지 같다.** 차가 `0.00e+00` 이니 같은 자료에 같은 계산을 한 것이다.
+
+    **손으로 조립한 Bartlett 이 SciPy 와 정확히 맞는다.** $s_p^2 = 29.566667$, 분자 $17.105089$, $C = 10/9$, $T = 15.394580$ 이고 차가 `0.0e+00` 이다. $p = 4.54\times10^{-4}$ 도 재현된다.
+
+    **왜 Bartlett 의 $p$ 가 백 배 작은가.** 두 가지가 겹친다.
+
+    *첫째, 신호의 척도가 다르다.* Bartlett 이 보는 양은 로그분산의 산포이고, 최대·최소 분산비가 $49.71$ 이므로 $\ln 49.71 = 3.906$ 만큼 벌어져 있다. Brown-Forsythe 가 보는 양은 $\bar Z_i$ 의 산포인데, $\bar Z$ 는 $\sigma$ 에 비례하는 양이므로 같은 상황이 **제곱근 척도**로 눌려 $\ln 6.40 = 1.856$ 밖에 안 된다. **로그 눈금에서 신호가 절반으로 줄어든다.** 참고로 $\sqrt{49.71} = 7.05$ 인데 관측된 $\bar Z$ 비는 $6.40$ 이다. 둘이 완전히 같지 않은 것은 $E[\bar Z] = \sigma\sqrt{2/\pi}$ 라는 비례가 **정규모집단에서만** 성립하기 때문이고, 집단 2 는 $5$ 와 $30$ 이 끌어당기는 정규와 거리가 먼 자료다.
+
+    *둘째, 분모가 스스로를 무디게 한다.* Brown-Forsythe 의 분모 $\mathrm{SS}_{\text{within}}(Z) = 138.0$ 가운데 **$133.2$, 곧 $96.5\%$ 가 집단 2 혼자서 낸다.** 집단 2 의 중앙값 편차가 $(13, 12, 0, 4, 3)$ 으로 그 자체가 크게 흩어져 있기 때문이다. **분산이 크다고 말하려는 집단이 바로 그 주장을 가릴 잡음까지 공급한다.** Bartlett 의 기준분포 $\chi^2_2$ 에는 이런 자료에서 추정한 분모가 없다. 정규성을 가정하는 대가로 분모의 흔들림을 이론으로 대체해 버린 것이다.
+
+    그래서 $W^* = 4.0754$ 가 임계값 $F(0.95;\,2,\,12) = 3.8853$ 을 간신히 넘고, Bartlett 은 $\chi^2_{0.95,2} = 5.99$ 를 두 배 반 넘게 넘는다. **같은 자료가 한쪽에서는 "겨우 유의", 다른 쪽에서는 "압도적 유의"가 된다.**
+
+    믿을 수 있는가는 다른 문제다. 집단 2 의 표본분산 $84.5$ 는 $5$ 와 $30$ 두 값이 만든 것이고, 그런 자료에 정규성을 가정한 $\chi^2$ 기준분포를 들이대는 것이 Bartlett 이 하는 일이다. **$p = 0.00045$ 라는 자릿수는 정규성이 참일 때만 그 자릿수다.** 15.4절이 측정한 대로 Bartlett 은 꼬리가 무거운 자료에서 등분산인데도 기각하며, 로그정규에서 크기 $0.677$ 이 관측된 적이 있다. 이 자료가 그만큼 나쁜지는 $n_i = 5$ 로 판정할 길이 없다.
 
 !!! note "이 보기에서는 중앙값과 평균의 차이가 없다"
     집단 2의 중앙값과 평균이 모두 **18**로 우연히 일치한다($\{5,15,18,22,30\}$의 평균 = $90/5$ = 18). 그래서 Brown-Forsythe($4.0754$)와 Levene($4.0610$)의 결과가 사실상 같다. 이 자료는 중앙값 중심화의 이점을 보여주지 못한다. 이점이 실제로 드러나는 상황은 연습문제 2에서 다룬다.

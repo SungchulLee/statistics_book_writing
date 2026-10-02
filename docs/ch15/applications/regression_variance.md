@@ -133,62 +133,210 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이분산 진단과 로버스트 표준오차
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이분산 진단과 로버스트 표준오차. $y_i = 3 + 2x_i + \varepsilon_i$에서 $\varepsilon_i = x_i z_i$, $z_i \overset{\text{iid}}{\sim} N(0,1)$으로 두어 $\operatorname{Var}(\varepsilon_i) = x_i^2$이 되게 한다. $x_i \sim U(1,10)$, $n = 100$이다.
+
+**(1)** 참 공분산행렬 $\operatorname{Var}(\hat{\boldsymbol\beta}) = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol\Omega\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}$에 이 자료의 $\boldsymbol\Omega$를 넣어, **모수를 하나도 추정하지 않고** 참 표준오차를 설계행렬만으로 계산하시오. OLS 공식 $s^2(\mathbf{X}'\mathbf{X})^{-1}$이 겨누는 값도 구해 두 값의 비를 적으시오.
+
+**(2)** 오차만 다시 뽑아 반복하여 ① 계수가 불편인지 ② 어느 표준오차가 참값을 맞히는지 ③ 명목 $95\%$ 구간의 실제 포함률을 재시오. 절편과 기울기에서 **어긋나는 방향이 서로 반대**임을 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
-import statsmodels.api as sm
-from statsmodels.stats.diagnostic import het_breuschpagan, het_white
+??? success "풀이"
 
-rng = np.random.default_rng(42)
-n = 100
-X = rng.uniform(1, 10, size=n)
+    **(1) 참값은 설계행렬만으로 정해진다.** $\hat{\boldsymbol\beta} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}$에 $\mathbf{Y} = \mathbf{X}\boldsymbol\beta + \boldsymbol\varepsilon$을 넣으면
 
-# 잡음에 X 를 곱해 분산이 X 에 비례해 커지도록 만든다. 전형적인 이분산이다.
-epsilon = rng.normal(0, 1, size=n) * X
-Y = 3 + 2 * X + epsilon
+    $$
+    \hat{\boldsymbol\beta} - \boldsymbol\beta = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol\varepsilon
+    $$
 
-X_with_const = sm.add_constant(X)
-model = sm.OLS(Y, X_with_const).fit()
-residuals = model.resid
+    이다. $E[\boldsymbol\varepsilon \mid \mathbf{X}] = \mathbf{0}$이므로 **이 줄에서 이미 불편성이 끝난다.** 오차의 분산 구조가 어떻든 상관없다. 분산을 재면
 
-# Breusch-Pagan 은 분산이 설명변수의 선형함수로 커지는 경우를 잘 잡는다.
-bp_stat, bp_p, bp_f, bp_fp = het_breuschpagan(residuals, X_with_const)
-print(f"Breusch-Pagan: LM = {bp_stat:.4f}, p = {bp_p:.6f}")
+    $$
+    \operatorname{Var}(\hat{\boldsymbol\beta} \mid \mathbf{X})
+    = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}' \boldsymbol\Omega \mathbf{X} (\mathbf{X}'\mathbf{X})^{-1},
+    \qquad \boldsymbol\Omega = \operatorname{Var}(\boldsymbol\varepsilon \mid \mathbf{X})
+    $$
 
-# White 는 제곱항과 교차항까지 넣어 비선형 형태의 이분산도 잡는다.
-w_stat, w_p, w_f, w_fp = het_white(residuals, X_with_const)
-print(f"White:         LM = {w_stat:.4f}, p = {w_p:.6f}")
+    이고, 이 자료에서는 $\varepsilon_i = x_i z_i$이므로
 
-# 이분산이 있어도 계수 추정값 자체는 여전히 불편이다. 망가지는 것은
-# 표준오차다. HC3 로버스트 표준오차는 이분산을 셈에 넣어 계산하므로,
-# 모형을 바꾸지 않고도 추론을 바로잡을 수 있다.
-# 아래 출력에서 계수는 그대로이고 표준오차와 t 값만 달라지는 것을 본다.
-robust_model = model.get_robustcov_results(cov_type='HC3')
-print(f"\ncoefficients:      {np.round(model.params, 4)}")
-print(f"OLS std errors:    {np.round(model.bse, 4)}")
-print(f"Robust std errors: {np.round(robust_model.bse, 4)}")
-print(f"OLS t-values:      {np.round(model.tvalues, 3)}")
-print(f"Robust t-values:   {np.round(robust_model.tvalues, 3)}")
-```
+    $$
+    \boldsymbol\Omega = \operatorname{diag}(x_1^2, \ldots, x_n^2)
+    $$
 
-출력:
+    으로 **완전히 알려져 있다.** 그러므로 참 표준오차를 추정 없이 수로 적을 수 있다. 단순회귀에서는 손으로도 쓸 수 있다.
 
-```text
-Breusch-Pagan: LM = 14.2174, p = 0.000163
-White:         LM = 14.7165, p = 0.000637
+    $$
+    \operatorname{Var}(\hat\beta_1 \mid \mathbf{X}) = \frac{\sum_i (x_i - \bar x)^2 x_i^2}{\left[\sum_i (x_i-\bar x)^2\right]^2}
+    $$
 
-coefficients:      [3.1523 1.9672]
-OLS std errors:    [1.5014 0.254 ]
-Robust std errors: [1.0664 0.2719]
-OLS t-values:      [2.1   7.746]
-Robust t-values:   [2.956 7.235]
-```
+    **OLS 공식이 겨누는 값은 다르다.** OLS는 $\boldsymbol\Omega = \sigma^2\mathbf{I}$로 믿고 $\sigma^2$을 $s^2 = \mathbf{e}'\mathbf{e}/(n-2)$로 추정한다. $\mathbf{e} = (\mathbf{I}-\mathbf{H})\boldsymbol\varepsilon$이므로
 
-두 검정 모두 이분산을 강하게 탐지한다. 자료를 $\operatorname{Var}(\varepsilon_i) \propto X_i^2$이 되도록 생성했으므로 당연한 결과이다.
+    $$
+    E[\mathbf{e}'\mathbf{e}] = E[\boldsymbol\varepsilon'(\mathbf{I}-\mathbf{H})\boldsymbol\varepsilon] = \operatorname{tr}\!\left[(\mathbf{I}-\mathbf{H})\boldsymbol\Omega\right]
+    \quad\Longrightarrow\quad
+    E[s^2] = \frac{1}{n-2}\sum_i (1-h_{ii})\,\sigma_i^2
+    $$
+
+    이다. 곧 $s^2$은 $\sigma_i^2$들을 지렛대로 가중한 **평균 하나**로 수렴한다. 등분산이면 $\operatorname{tr}(\mathbf{I}-\mathbf{H}) = n-2$라 정확히 $\sigma^2$이 되지만, 이분산이면 **스칼라 하나로 대각이 다른 $\boldsymbol\Omega$를 흉내 내야 한다.**
+
+    여기에 문제의 핵심이 있다. OLS 표준오차는 참 표준오차에 **공통 배수**를 곱한 꼴
+
+    $$
+    \widehat{\operatorname{SE}}_{\text{OLS}}(\hat\beta_j) \;\approx\; \sqrt{E[s^2]\cdot\left[(\mathbf{X}'\mathbf{X})^{-1}\right]_{jj}}
+    $$
+
+    인데 참값은 $\sqrt{\left[(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\boldsymbol\Omega\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\right]_{jj}}$이다. **고를 수 있는 수가 하나뿐이므로 여러 계수를 동시에 맞힐 수 없고, 어느 쪽으로 틀릴지도 정해져 있지 않다.** 연습문제 2 가 지렛대와 잔차의 상관으로 설명한 것이 이 대수의 내용이다.
+
+    **(2) 수치로 확인한다.** 설계행렬 $\mathbf{X}$는 보기의 것을 그대로 고정하고 오차만 4000번 다시 뽑는다. $\mathbf{X}$를 고정하는 것은 위의 모든 식이 $\mathbf{X}$에 조건을 건 식이기 때문이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    import statsmodels.api as sm
+    from statsmodels.stats.diagnostic import het_breuschpagan, het_white
+
+    rng = np.random.default_rng(42)
+    n = 100
+    X = rng.uniform(1, 10, size=n)
+
+    # 잡음에 X 를 곱해 분산이 X 에 비례해 커지도록 만든다. 전형적인 이분산이다.
+    epsilon = rng.normal(0, 1, size=n) * X
+    Y = 3 + 2 * X + epsilon
+
+    X_with_const = sm.add_constant(X)
+    model = sm.OLS(Y, X_with_const).fit()
+    residuals = model.resid
+
+    # Breusch-Pagan 은 분산이 설명변수의 선형함수로 커지는 경우를 잘 잡는다.
+    bp_stat, bp_p, bp_f, bp_fp = het_breuschpagan(residuals, X_with_const)
+    print(f"Breusch-Pagan: LM = {bp_stat:.4f}, p = {bp_p:.6f}")
+
+    # White 는 제곱항과 교차항까지 넣어 비선형 형태의 이분산도 잡는다.
+    w_stat, w_p, w_f, w_fp = het_white(residuals, X_with_const)
+    print(f"White:         LM = {w_stat:.4f}, p = {w_p:.6f}")
+
+    # 이분산이 있어도 계수 추정값 자체는 여전히 불편이다. 망가지는 것은
+    # 표준오차다. HC3 로버스트 표준오차는 이분산을 셈에 넣어 계산하므로,
+    # 모형을 바꾸지 않고도 추론을 바로잡을 수 있다.
+    # 아래 출력에서 계수는 그대로이고 표준오차와 t 값만 달라지는 것을 본다.
+    robust_model = model.get_robustcov_results(cov_type='HC3')
+    print(f"\ncoefficients:      {np.round(model.params, 4)}")
+    print(f"OLS std errors:    {np.round(model.bse, 4)}")
+    print(f"Robust std errors: {np.round(robust_model.bse, 4)}")
+    print(f"OLS t-values:      {np.round(model.tvalues, 3)}")
+    print(f"Robust t-values:   {np.round(robust_model.tvalues, 3)}")
+    ```
+
+    출력:
+
+    ```text
+    Breusch-Pagan: LM = 14.2174, p = 0.000163
+    White:         LM = 14.7165, p = 0.000637
+
+    coefficients:      [3.1523 1.9672]
+    OLS std errors:    [1.5014 0.254 ]
+    Robust std errors: [1.0664 0.2719]
+    OLS t-values:      [2.1   7.746]
+    Robust t-values:   [2.956 7.235]
+    ```
+
+    두 검정 모두 이분산을 강하게 탐지한다($p = 0.00016$과 $p = 0.00064$). 자료를 $\operatorname{Var}(\varepsilon_i) \propto X_i^2$이 되도록 생성했으므로 당연한 결과이다. 그런데 **이 한 벌만 보면 어느 표준오차가 옳은지 알 수 없다.** $1.5014$와 $1.0664$ 가운데 무엇이 참값에 가까운가. (1)의 식과 반복추출이 그 답을 준다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    import statsmodels.api as sm
+
+    # 위 보기의 설계행렬을 그대로 쓴다. X 는 고정하고 오차만 다시 뽑는다.
+    rng = np.random.default_rng(42)
+    n = 100
+    X = rng.uniform(1, 10, size=n)
+    Xc = sm.add_constant(X)
+
+    # (1) 참 공분산행렬을 설계행렬만으로 정확히 계산한다.
+    #     Var(eps_i) = X_i^2 이므로 Omega = diag(X^2) 다. 모수 추정이 전혀 없다.
+    XtX_inv = np.linalg.inv(Xc.T @ Xc)
+    Omega = np.diag(X ** 2)
+    V_true = XtX_inv @ Xc.T @ Omega @ Xc @ XtX_inv
+    se_true = np.sqrt(np.diag(V_true))
+
+    # OLS 공식이 겨누는 값:  sigma^2 (X'X)^-1 에서 sigma^2 을 s^2 으로 바꾼 것.
+    # E[s^2] = tr((I-H) Omega)/(n-2) 이므로 그것을 넣는다.
+    H = Xc @ XtX_inv @ Xc.T
+    Es2 = np.trace((np.eye(n) - H) @ Omega) / (n - 2)
+    se_ols_target = np.sqrt(Es2 * np.diag(XtX_inv))
+
+    print(f"참 표준오차 (샌드위치)      : {np.round(se_true, 4)}")
+    print(f"OLS 공식이 겨누는 값        : {np.round(se_ols_target, 4)}   (E[s^2] = {Es2:.3f})")
+    print(f"비 (OLS 겨냥 / 참)          : {np.round(se_ols_target / se_true, 4)}")
+
+    # (2) 4000 번 반복해 실제 표준편차·표준오차·포함률을 잰다.
+    R = 4000
+    beta = np.array([3.0, 2.0])
+    rng2 = np.random.default_rng(7)
+    b = np.empty((R, 2))
+    se_o = np.empty((R, 2))
+    se_r = np.empty((R, 2))
+    for r in range(R):
+        Y = beta[0] + beta[1] * X + rng2.normal(0, 1, n) * X
+        m = sm.OLS(Y, Xc).fit()
+        b[r] = m.params
+        se_o[r] = m.bse
+        se_r[r] = m.get_robustcov_results(cov_type="HC3").bse
+
+    print(f"\n반복 {R} 회 (X 고정, 오차만 다시 뽑음)")
+    print(f"계수의 평균                 : {np.round(b.mean(axis=0), 4)}   참값 [3. 2.]")
+    print(f"계수의 평균 - 참값          : {np.round(b.mean(axis=0) - beta, 4)}"
+          f"   (몬테카를로 표준오차 {np.round(b.std(axis=0, ddof=1) / np.sqrt(R), 4)})")
+    print(f"계수의 실제 표준편차        : {np.round(b.std(axis=0, ddof=1), 4)}")
+    print(f"  참 표준오차 (1)           : {np.round(se_true, 4)}")
+    print(f"OLS 표준오차의 평균         : {np.round(se_o.mean(axis=0), 4)}")
+    print(f"HC3 표준오차의 평균         : {np.round(se_r.mean(axis=0), 4)}")
+
+    t = stats.t(n - 2).ppf(0.975)
+    for name, se in [("OLS", se_o), ("HC3", se_r)]:
+        cov = np.mean(np.abs(b - beta) <= t * se, axis=0)
+        print(f"명목 95% 구간의 포함률 ({name})  : {np.round(cov, 4)}")
+    ```
+
+    출력:
+
+    ```text
+    참 표준오차 (샌드위치)      : [1.0367 0.2543]
+    OLS 공식이 겨누는 값        : [1.4257 0.2412]   (E[s^2] = 34.913)
+    비 (OLS 겨냥 / 참)          : [1.3752 0.9481]
+
+    반복 4000 회 (X 고정, 오차만 다시 뽑음)
+    계수의 평균                 : [2.9915 2.0019]   참값 [3. 2.]
+    계수의 평균 - 참값          : [-0.0085  0.0019]   (몬테카를로 표준오차 [0.0165 0.0041])
+    계수의 실제 표준편차        : [1.0404 0.2565]
+      참 표준오차 (1)           : [1.0367 0.2543]
+    OLS 표준오차의 평균         : [1.4176 0.2398]
+    HC3 표준오차의 평균         : [1.0434 0.2547]
+    명목 95% 구간의 포함률 (OLS)  : [0.9922 0.937 ]
+    명목 95% 구간의 포함률 (HC3)  : [0.952  0.9452]
+    ```
+
+    **① 계수는 불편이다.** 평균이 $(2.9915,\ 2.0019)$로 참값 $(3, 2)$에서 $(-0.0085,\ 0.0019)$만큼 떨어져 있고, 몬테카를로 표준오차가 $(0.0165,\ 0.0041)$이다. 두 편차 모두 **한 표준오차 안**이라 $0$과 구별되지 않는다. 이분산이 뚜렷한 자료인데도 그렇다. (1)의 한 줄 유도가 말한 대로다.
+
+    **② 참값을 맞히는 것은 HC3 뿐이다.** 반복추출로 잰 $\hat\beta$의 실제 표준편차가 $(1.0404,\ 0.2565)$이고 (1)이 설계행렬만으로 계산한 참 표준오차가 $(1.0367,\ 0.2543)$이다. **모수 추정 없이 적은 식이 모의실험과 소수 셋째 자리까지 맞는다.** 그리고
+
+    | | 절편 | 기울기 |
+    |:---|---:|---:|
+    | 참 표준오차 | $1.0367$ | $0.2543$ |
+    | OLS 표준오차의 평균 | $1.4176$ | $0.2398$ |
+    | HC3 표준오차의 평균 | $1.0434$ | $0.2547$ |
+
+    **HC3 는 두 계수 모두 맞히고 OLS 는 두 계수 모두 틀린다.** (1)에서 예측한 OLS 의 겨냥값 $(1.4257,\ 0.2412)$도 관측된 평균 $(1.4176,\ 0.2398)$과 맞는다(제곱근을 먼저 취해 평균하므로 Jensen 부등식으로 조금 작게 나온다).
+
+    **③ 어긋나는 방향이 서로 반대다.** 비 $(1.3752,\ 0.9481)$이 그 말이다. OLS 는 **절편의 표준오차를 $38\%$ 과대**, **기울기의 표준오차를 $5\%$ 과소**평가한다. 그 결과 포함률이
+
+    - OLS: 절편 $0.9922$(과대포함, 구간이 너무 넓다), 기울기 $0.9370$(과소포함, 구간이 너무 좁다)
+    - HC3: 절편 $0.9520$, 기울기 $0.9452$ — 둘 다 명목 $0.95$
+
+    가 된다. **같은 자료, 같은 적합인데 한 계수는 지나치게 보수적이고 다른 계수는 지나치게 자신만만하다.** (1)에서 본 대로 OLS 에는 고를 수 있는 수가 $E[s^2] = 34.913$ 하나뿐이므로 두 계수를 동시에 맞힐 길이 없다. 아래 상자와 연습문제 2 가 그 방향이 왜 계수마다 다른지를 지렛대로 설명한다.
+
+    **그러므로 "로버스트 표준오차는 보수적"이 아니라 "로버스트 표준오차는 옳다"가 맞는 말이다.** 기울기에서는 커지고 절편에서는 작아졌는데, 두 변화 모두 참값 쪽으로의 이동이었다.
 
 !!! note "로버스트 표준오차가 항상 커지는 것은 아니다"
     흔한 오해는 "로버스트 표준오차는 OLS보다 크다"는 것이다. 위 출력에서 **절편의 표준오차는 오히려 줄었다**($1.501 \to 1.066$). 기울기의 표준오차만 커졌다($0.254 \to 0.272$).

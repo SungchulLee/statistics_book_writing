@@ -52,42 +52,168 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 사후분포에서 분산 뽑는 함수
+**보기 1.** <span class="diff easy" title="쉬움"></span> 사후분포에서 분산 뽑는 함수. 위의 갱신식을 그대로 옮기고, 기본 초모수를 $\kappa_0 = 10^{-6}$, $\alpha_0 = \beta_0 = 10^{-2}$ 로 두어 거의 정보를 주지 않는 사전분포를 쓴다.
+
+**(1)** 이 기본값에서 사후분포가 **거의** $\text{Inv-Gamma}(n/2,\, S/2)$ 임을 보이고, 그 극한에서 추축량이 $S/\sigma^2 \sim \chi^2_n$ 이 됨을 보이시오. 빈도주의는 같은 자리에 $\chi^2_{n-1}$ 을 쓴다. 신용구간이 신뢰구간보다 **좁은** 까닭이 이것임을 밝히시오.
+
+**(2)** `x1` 에 함수를 적용해 사전분포의 기여가 실제로 얼마나 작은지 수로 보이고, 신용구간과 신뢰구간의 로그 폭을 견주시오. $\alpha_0 = -1/2$ 로 두면 둘이 정확히 같아지는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import invgamma
+??? success "풀이"
 
-def posterior_params(x, m0=0.0, k0=1e-6, a0=1e-2, b0=1e-2):
-    """정규-역감마 켤레모형의 사후 모수를 구한다.
+    **(1) 기본값에서 사전분포는 거의 사라진다.** 사후 초모수는
 
-    기본값은 거의 정보를 주지 않는 사전분포다(k0, a0, b0 가 모두 작다).
-    이러면 사후분포가 자료에 거의 전적으로 맡겨진다.
-    """
-    x = np.asarray(x, dtype=float)
-    n = x.size
-    xbar = x.mean()
-    S = np.sum((x - xbar)**2)
-    k_n = k0 + n
-    m_n = (k0 * m0 + n * xbar) / k_n
-    a_n = a0 + n / 2.0
-    b_n = b0 + 0.5 * (S + (k0 * n / k_n) * (xbar - m0)**2)
-    return m_n, k_n, a_n, b_n
+    $$
+    \alpha_n = \alpha_0 + \frac n2, \qquad
+    \beta_n = \beta_0 + \frac12\left(S + \frac{\kappa_0 n}{\kappa_0 + n}(\bar x - m_0)^2\right)
+    $$
 
-def draw_posterior_sigma2(x, n_draws=10000, rng=None):
-    """분산의 사후분포에서 표본을 뽑는다.
+    이다. $\kappa_0 = 10^{-6}$ 이므로 $\dfrac{\kappa_0 n}{\kappa_0 + n} \approx \kappa_0 = 10^{-6}$ 이고, 평균 항은 $\tfrac12 \cdot 10^{-6}(\bar x - m_0)^2$ 로 $\bar x$ 가 10 남짓일 때 $10^{-4}$ 수준이다. $\alpha_0 = \beta_0 = 10^{-2}$ 도 작다. 그러므로
 
-    평균을 적분해 없앤 sigma^2 의 주변 사후분포가 역감마가 된다.
-    그래서 MCMC 없이 바로 뽑을 수 있다.
-    """
-    if rng is None:
-        rng = np.random.default_rng()
-    m_n, k_n, a_n, b_n = posterior_params(x)
-    sig2 = invgamma(a=a_n, scale=b_n).rvs(size=n_draws, random_state=rng)
-    return sig2
-```
+    $$
+    \alpha_n \approx \frac n2, \qquad \beta_n \approx \frac S2
+    $$
+
+    이고, 사후분포는 **거의** $\text{Inv-Gamma}(n/2,\, S/2)$ 다.
+
+    **추축량을 꺼내면 자유도가 드러난다.** $V \sim \text{Inv-Gamma}(a, b)$ 이면 $1/V \sim \text{Gamma}(a, \text{rate } b)$ 이고 척도를 두 배로 바꾸면 $2b/V \sim \text{Gamma}(a, \text{rate } \tfrac12) = \chi^2_{2a}$ 이므로
+
+    $$
+    \frac{2\beta_n}{\sigma^2} \;\sim\; \chi^2_{2\alpha_n}
+    $$
+
+    이다. 무정보 극한 $\alpha_n = n/2$, $\beta_n = S/2$ 를 넣으면
+
+    $$
+    \frac{S}{\sigma^2} \;\sim\; \chi^2_{n}
+    $$
+
+    이 된다. **빈도주의는 같은 $S$ 를 놓고 $S/\sigma^2 \sim \chi^2_{n-1}$ 을 쓴다.** 15.2절이 유도한 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ 이 그것이고, $S = (n-1)s^2$ 이니 같은 양이다. **같은 자료에 자유도만 하나 다른 두 분포를 들이대는 것**이다.
+
+    자유도가 하나 큰 쪽이 상대적으로 좁다. 구간의 꼴이 양쪽 모두
+
+    $$
+    \left(\frac{S}{\chi^2_{0.975,\,d}},\; \frac{S}{\chi^2_{0.025,\,d}}\right)
+    $$
+
+    이므로 **상한과 하한의 비가 $\chi^2_{0.975,d}/\chi^2_{0.025,d}$ 로 자료와 무관**하고($S$ 가 약분된다 — 8장이 다룬 사실이다), 이 비는 $d$ 가 커질수록 작아진다. 그래서 $d = n$ 쪽이 $d = n-1$ 쪽보다 좁다. 로그 척도의 폭이 바로 이 비의 로그다.
+
+    까닭은 모형이 다른 데 있다. 이 쪽의 사전분포는 $\mu \mid \sigma^2 \sim \mathcal N(m_0, \sigma^2/\kappa_0)$ 라는 **결합** 켤레 사전분포이고, $\kappa_0 \to 0$ 극한은 $p(\mu,\sigma^2) \propto (\sigma^2)^{-\alpha_0-3/2}$ 에 해당해 표준 제프리스 사전분포 $1/\sigma^2$ 와 다르다. $(\sigma^2)^{-1/2}$ 하나가 더 붙어 있고, 그것이 자유도 하나로 나타난다. **빈도주의와 맞추려면** $\alpha_n = (n-1)/2$ 가 되게 $\alpha_0 = -1/2$ 로 두면 된다(부적절 사전분포이지만 사후분포는 적절하다).
+
+    **(2) 수치적으로.** `x1` 에 함수를 적용한다.
+
+    ```python
+    import numpy as np
+    from scipy.stats import invgamma
+
+    def posterior_params(x, m0=0.0, k0=1e-6, a0=1e-2, b0=1e-2):
+        """정규-역감마 켤레모형의 사후 모수를 구한다.
+
+        기본값은 거의 정보를 주지 않는 사전분포다(k0, a0, b0 가 모두 작다).
+        이러면 사후분포가 자료에 거의 전적으로 맡겨진다.
+        """
+        x = np.asarray(x, dtype=float)
+        n = x.size
+        xbar = x.mean()
+        S = np.sum((x - xbar)**2)
+        k_n = k0 + n
+        m_n = (k0 * m0 + n * xbar) / k_n
+        a_n = a0 + n / 2.0
+        b_n = b0 + 0.5 * (S + (k0 * n / k_n) * (xbar - m0)**2)
+        return m_n, k_n, a_n, b_n
+
+    def draw_posterior_sigma2(x, n_draws=10000, rng=None):
+        """분산의 사후분포에서 표본을 뽑는다.
+
+        평균을 적분해 없앤 sigma^2 의 주변 사후분포가 역감마가 된다.
+        그래서 MCMC 없이 바로 뽑을 수 있다.
+        """
+        if rng is None:
+            rng = np.random.default_rng()
+        m_n, k_n, a_n, b_n = posterior_params(x)
+        sig2 = invgamma(a=a_n, scale=b_n).rvs(size=n_draws, random_state=rng)
+        return sig2
+
+    # === 사전분포의 기여가 얼마나 작은가 ===
+    from scipy.stats import chi2
+
+    x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
+    n = x1.size
+    S = np.sum((x1 - x1.mean()) ** 2)
+    m_n, k_n, a_n, b_n = posterior_params(x1)
+
+    print(f"n = {n},  xbar = {x1.mean():.4f},  S = {S:.4f},  s^2 = {x1.var(ddof=1):.4f}")
+    print(f"a_n = {a_n:.4f}   (무정보 극한 n/2 = {n / 2:.4f})")
+    print(f"b_n = {b_n:.6f}   (무정보 극한 S/2 = {S / 2:.6f})")
+    print(f"  b0 가 더한 것        = {1e-2:.6f}")
+    print(f"  평균 항이 더한 것    = {0.5 * (1e-6 * n / k_n) * x1.mean() ** 2:.3e}")
+    print(f"  둘을 합쳐 b_n 의 {100 * (b_n - S / 2) / b_n:.4f} %")
+
+    # === 추축량: 2 b_n / sigma^2 ~ chi2(2 a_n) 인가 ===
+    lo, hi = invgamma(a=a_n, scale=b_n).ppf([0.025, 0.975])
+    piv = 2 * b_n / chi2(2 * a_n).ppf([0.975, 0.025])
+    print(f"\n역감마 분위수로  : ({lo:.6f}, {hi:.6f})")
+    print(f"2b_n/chi2(2a_n) 로: ({piv[0]:.6f}, {piv[1]:.6f})")
+
+    # === 신용구간 대 빈도주의 신뢰구간 ===
+    f_lo, f_hi = S / chi2(n - 1).ppf([0.975, 0.025])
+    print(f"\n95% 신용구간      = ({lo:.3f}, {hi:.3f})      상한/하한 = {hi / lo:.4f}")
+    print(f"95% 신뢰구간      = ({f_lo:.3f}, {f_hi:.3f})     상한/하한 = {f_hi / f_lo:.4f}")
+    print(f"로그 폭           = {np.log(hi / lo):.4f} 대 {np.log(f_hi / f_lo):.4f}"
+          f"   -> {100 * (1 - np.log(hi / lo) / np.log(f_hi / f_lo)):.1f} % 좁다")
+    print(f"자유도 비교: 2a_n = {2 * a_n:.2f}  대  n-1 = {n - 1}")
+    print(f"chi2 분위수 비 (자료와 무관): {chi2(2 * a_n).ppf(0.975) / chi2(2 * a_n).ppf(0.025):.4f}"
+          f"  대  {chi2(n - 1).ppf(0.975) / chi2(n - 1).ppf(0.025):.4f}")
+
+    # === a0 = -1/2 로 두면 빈도주의와 정확히 같아진다 ===
+    g_lo, g_hi = invgamma(a=(n - 1) / 2, scale=S / 2).ppf([0.025, 0.975])
+    print(f"\na0 = -1/2 (a_n = (n-1)/2) 신용구간 = ({g_lo:.6f}, {g_hi:.6f})")
+    print(f"빈도주의 신뢰구간                  = ({f_lo:.6f}, {f_hi:.6f})")
+    print(f"차 = {abs(g_lo - f_lo):.3e}, {abs(g_hi - f_hi):.3e}")
+
+    # === 함수가 제대로 도는지 ===
+    rng = np.random.default_rng(0)
+    d = draw_posterior_sigma2(x1, n_draws=200_000, rng=rng)
+    print(f"\n사후표본 20 만 개:  평균 {d.mean():.4f} (닫힌 꼴 {b_n / (a_n - 1):.4f}),  "
+          f"중앙값 {np.median(d):.4f} (닫힌 꼴 {invgamma(a=a_n, scale=b_n).ppf(0.5):.4f})")
+    ```
+
+    출력:
+
+    ```text
+    n = 8,  xbar = 12.6250,  S = 19.8750,  s^2 = 2.8393
+    a_n = 4.0100   (무정보 극한 n/2 = 4.0000)
+    b_n = 9.947580   (무정보 극한 S/2 = 9.937500)
+      b0 가 더한 것        = 0.010000
+      평균 항이 더한 것    = 7.970e-05
+      둘을 합쳐 b_n 의 0.1013 %
+
+    역감마 분위수로  : (1.132684, 9.085126)
+    2b_n/chi2(2a_n) 로: (1.132684, 9.085126)
+
+    95% 신용구간      = (1.133, 9.085)      상한/하한 = 8.0209
+    95% 신뢰구간      = (1.241, 11.761)     상한/하한 = 9.4757
+    로그 폭           = 2.0820 대 2.2487   -> 7.4 % 좁다
+    자유도 비교: 2a_n = 8.02  대  n-1 = 7
+    chi2 분위수 비 (자료와 무관): 8.0209  대  9.4757
+
+    a0 = -1/2 (a_n = (n-1)/2) 신용구간 = (1.241197, 11.761265)
+    빈도주의 신뢰구간                  = (1.241197, 11.761265)
+    차 = 0.000e+00, 0.000e+00
+
+    사후표본 20 만 개:  평균 3.2993 (닫힌 꼴 3.3048),  중앙값 2.6953 (닫힌 꼴 2.7016)
+    ```
+
+    **사전분포의 기여는 $0.1\%$ 다.** $\beta_n = 9.947580$ 가운데 $S/2 = 9.937500$ 이 자료 몫이고, $\beta_0 = 0.01$ 과 평균 항 $7.97\times10^{-5}$ 를 합친 $0.0101$ 이 사전분포 몫이다. $\alpha_n$ 도 $4.0100$ 으로 $n/2 = 4$ 에 거의 같다. **"무정보"라는 말이 수로 확인된다.**
+
+    **추축량이 정확히 맞는다.** 역감마 분위수로 잡은 구간 $(1.132684,\, 9.085126)$ 과 $2\beta_n/\chi^2_{2\alpha_n}$ 로 잡은 구간이 소수점 여섯째 자리까지 같다. (1)의 $2\beta_n/\sigma^2 \sim \chi^2_{2\alpha_n}$ 이 확인된 것이다.
+
+    **자유도 하나가 $7.4\%$ 의 폭 차이를 만든다.** 신용구간의 상한/하한 비가 $8.0209$, 신뢰구간은 $9.4757$ 이고 둘 다 $\chi^2$ 분위수의 비라 **자료와 무관**하다. 로그 폭이 $2.0820$ 대 $2.2487$ 로 신용구간이 $7.4\%$ 좁다. 자유도가 $8.02$ 대 $7$ 이니 $15\%$ 더 많은 "정보"를 쓴 셈이고, 그 정보는 자료에서 온 것이 아니라 $\kappa_0 \to 0$ 극한이 숨겨 들여온 $(\sigma^2)^{-1/2}$ 에서 왔다.
+
+    **$\alpha_0 = -1/2$ 가 그 어긋남을 정확히 지운다.** $\alpha_n = (n-1)/2 = 3.5$ 로 두면 신용구간이 $(1.241197,\, 11.761265)$ 로 빈도주의 신뢰구간과 **차가 정확히 $0$** 이다. 자유도 하나가 두 접근을 가르는 전부였다는 뜻이다.
+
+    마지막 줄은 함수가 제대로 도는지 본 것이다. 사후표본 20 만 개의 평균 $3.2993$ 과 중앙값 $2.6953$ 이 닫힌 꼴 $\beta_n/(\alpha_n-1) = 3.3048$ 과 $2.7016$ 에 맞는다.
 
 ---
 
@@ -103,44 +229,153 @@ $\rho$의 95% 신용구간이 1을 제외하면 분산이 다르다는 증거가
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 두 분산비의 사후분포
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 분산비의 사후분포. 집단당 $n = 8$ 인 두 표본의 사후분포에서 각각 2 만 개를 뽑아 비 $\rho = \sigma_1^2/\sigma_2^2$ 를 만든다.
+
+**(1)** 두 집단의 $\alpha_n$ 이 같으면 $\rho$ 의 사후분포가 $\dfrac{\beta_{n,1}}{\beta_{n,2}} F(2\alpha_n, 2\alpha_n)$ 임을 보이시오. 그것으로 사후중앙값·사후평균·신용구간·$P(\rho>1)$ 을 닫힌 꼴로 적고, **사후중앙값이 표본분산의 비와 거의 같은** 까닭을 밝히시오.
+
+**(2)** 모의실험이 그 닫힌 꼴을 재현하는지 확인하고, $P(\rho>1)$ 을 $F$ 검정의 단측 $p$ 값과 견주시오. 사후평균과 사후중앙값이 어긋나는 크기는 얼마인가.
 
 </div>
 
-```python
-x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
-x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
+??? success "풀이"
 
-# 두 집단의 사후표본을 각각 뽑아 나눈다. 이 비의 분포가 곧 분산비의
-# 사후분포다. 빈도주의 F 검정이 p-값 하나를 주는 자리에서, 베이즈 쪽은
-# "비가 1 보다 클 확률"을 그대로 셈할 수 있다.
-rng = np.random.default_rng(0)
-s1 = draw_posterior_sigma2(x1, n_draws=20000, rng=rng)
-s2 = draw_posterior_sigma2(x2, n_draws=20000, rng=rng)
-ratio = s1 / s2
+    **(1) 비의 사후분포는 척도를 바꾼 F 분포다.** 보기 1 에서 $2\beta_{n,i}/\sigma_i^2 \sim \chi^2_{2\alpha_{n,i}}$ 임을 보았다. 두 집단이 독립이고 $\alpha_{n,1} = \alpha_{n,2} = \alpha_n$ 이면 $\sigma_i^2 = 2\beta_{n,i}/W_i$, $W_i \sim \chi^2_{2\alpha_n}$ 이므로
 
-print(f"Sample variances:           {np.var(x1, ddof=1):.4f}, "
-      f"{np.var(x2, ddof=1):.4f}")
-print(f"Posterior mean of sigma1^2: {s1.mean():.3f}")
-print(f"Posterior mean of sigma2^2: {s2.mean():.3f}")
-print(f"Posterior mean of ratio:    {ratio.mean():.3f}")
-print(f"95% credible interval:      ({np.percentile(ratio, 2.5):.3f}, "
-      f"{np.percentile(ratio, 97.5):.3f})")
-print(f"P(sigma1^2 > sigma2^2):     {np.mean(ratio > 1.0):.4f}")
-```
+    $$
+    \rho = \frac{\sigma_1^2}{\sigma_2^2}
+    = \frac{\beta_{n,1}}{\beta_{n,2}}\cdot\frac{W_2}{W_1}
+    = \frac{\beta_{n,1}}{\beta_{n,2}}\cdot\frac{W_2/(2\alpha_n)}{W_1/(2\alpha_n)}
+    \;\sim\; \frac{\beta_{n,1}}{\beta_{n,2}}\, F(2\alpha_n,\, 2\alpha_n)
+    $$
 
-출력:
+    이다. 두 자유도가 같은 F 분포는 역수에 대해 닫혀 있어 중앙값이 정확히 1 이므로
 
-```text
-Sample variances:           2.8393, 6.0000
-Posterior mean of sigma1^2: 3.317
-Posterior mean of sigma2^2: 6.956
-Posterior mean of ratio:    0.634
-95% credible interval:      (0.106, 2.074)
-P(sigma1^2 > sigma2^2):     0.1573
-```
+    $$
+    \operatorname{median}(\rho) = \frac{\beta_{n,1}}{\beta_{n,2}},
+    \qquad
+    \text{신용구간} = \frac{\beta_{n,1}}{\beta_{n,2}}\Bigl[F_{0.025},\; F_{0.975}\Bigr],
+    \qquad
+    P(\rho > 1) = P\!\left(F > \frac{\beta_{n,2}}{\beta_{n,1}}\right)
+    $$
 
-신용구간 $(0.106, 2.074)$가 1을 포함하므로 등분산과 일관된다. $P(\sigma_1^2 > \sigma_2^2 \mid \text{자료}) = 0.157$이므로 집단 1의 분산이 더 작을 가능성이 84%이지만 확정하기에는 부족하다.
+    이다. 사후평균은 독립성과 $E[1/V] = \alpha/\beta$ (역감마의 역수가 감마이므로)에서
+
+    $$
+    E[\rho] = E[\sigma_1^2]\,E\!\left[\frac{1}{\sigma_2^2}\right]
+    = \frac{\beta_{n,1}}{\alpha_n - 1}\cdot\frac{\alpha_n}{\beta_{n,2}}
+    = \frac{\alpha_n}{\alpha_n - 1}\cdot\frac{\beta_{n,1}}{\beta_{n,2}}
+    $$
+
+    가 된다. **평균이 중앙값의 $\dfrac{\alpha_n}{\alpha_n-1}$ 배**라는 깔끔한 꼴이다. $\alpha_n = 4.01$ 이면 $4.01/3.01 = 1.3322$ 배다. 이 배율이 1 이 아닌 것이 곧 사후분포의 치우침이며, $n$ 이 작을수록 커진다.
+
+    **중앙값이 표본분산의 비와 거의 같은 까닭.** 보기 1 에서 본 대로 무정보 기본값에서 $\beta_{n,i} \approx S_i/2$ 이므로
+
+    $$
+    \operatorname{median}(\rho) = \frac{\beta_{n,1}}{\beta_{n,2}} \approx \frac{S_1/2}{S_2/2}
+    = \frac{S_1}{S_2} = \frac{(n-1)s_1^2}{(n-1)s_2^2} = \frac{s_1^2}{s_2^2}
+    $$
+
+    다. 두 집단의 $n$ 이 같아 $n-1$ 이 약분되고, 사전분포의 $\beta_0$ 는 분자와 분모에 똑같이 더해지므로 비에 거의 영향을 주지 않는다. **사후중앙값은 자료가 주는 비를 거의 그대로 돌려준다.** 보고해야 할 것이 "비가 얼마인가"라면 평균이 아니라 중앙값이다.
+
+    **(2) 수치적으로.** 아래 코드는 보기 1 의 `posterior_params` 와 `draw_posterior_sigma2` 를 그대로 이어받는다.
+
+    ```python
+    x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
+    x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
+
+    # 두 집단의 사후표본을 각각 뽑아 나눈다. 이 비의 분포가 곧 분산비의
+    # 사후분포다. 빈도주의 F 검정이 p-값 하나를 주는 자리에서, 베이즈 쪽은
+    # "비가 1 보다 클 확률"을 그대로 셈할 수 있다.
+    rng = np.random.default_rng(0)
+    s1 = draw_posterior_sigma2(x1, n_draws=20000, rng=rng)
+    s2 = draw_posterior_sigma2(x2, n_draws=20000, rng=rng)
+    ratio = s1 / s2
+
+    print(f"Sample variances:           {np.var(x1, ddof=1):.4f}, "
+          f"{np.var(x2, ddof=1):.4f}")
+    print(f"Posterior mean of sigma1^2: {s1.mean():.3f}")
+    print(f"Posterior mean of sigma2^2: {s2.mean():.3f}")
+    print(f"Posterior mean of ratio:    {ratio.mean():.3f}")
+    print(f"95% credible interval:      ({np.percentile(ratio, 2.5):.3f}, "
+          f"{np.percentile(ratio, 97.5):.3f})")
+    print(f"P(sigma1^2 > sigma2^2):     {np.mean(ratio > 1.0):.4f}")
+
+    # === 닫힌 꼴과 맞춰 본다 ===
+    from scipy.stats import f as f_dist
+
+    _, _, a1, b1 = posterior_params(x1)
+    _, _, a2, b2 = posterior_params(x2)
+    assert a1 == a2, "두 집단의 a_n 이 같아야 F 로 적힌다"
+    Fd = f_dist(2 * a1, 2 * a2)
+    sc = b1 / b2
+
+    print(f"\na_n = {a1:.4f} (두 집단 공통),  b_n = {b1:.6f}, {b2:.6f}")
+    print(f"rho ~ (b1/b2) x F(2a,2a) = {sc:.6f} x F({2 * a1:.2f},{2 * a2:.2f})")
+    print("                닫힌 꼴    모의 2만개")
+    for name, closed, mc in (
+            ("median    ", sc * Fd.ppf(0.5), np.median(ratio)),
+            ("mean      ", (b1 / (a1 - 1)) * (a2 / b2), ratio.mean()),
+            ("q(0.025)  ", sc * Fd.ppf(0.025), np.percentile(ratio, 2.5)),
+            ("q(0.975)  ", sc * Fd.ppf(0.975), np.percentile(ratio, 97.5)),
+            ("P(rho>1)  ", Fd.sf(b2 / b1), np.mean(ratio > 1))):
+        print(f"  {name}  {closed:10.6f}  {mc:12.6f}")
+
+    print(f"\n표본분산의 비 s1^2/s2^2 = {np.var(x1, ddof=1) / np.var(x2, ddof=1):.6f}")
+    print(f"사후중앙값 b1/b2        = {sc:.6f}   (차 {abs(sc - np.var(x1, ddof=1) / np.var(x2, ddof=1)):.2e})")
+    print(f"평균/중앙값 = {((b1 / (a1 - 1)) * (a2 / b2)) / sc:.4f} 배")
+
+    # === 빈도주의 F 검정과 견준다 ===
+    n = x1.size
+    Fs = np.var(x1, ddof=1) / np.var(x2, ddof=1)
+    p_two = 2 * min(f_dist(n - 1, n - 1).cdf(Fs), f_dist(n - 1, n - 1).sf(Fs))
+    fl, fh = Fs / f_dist(n - 1, n - 1).ppf([0.975, 0.025])
+    print(f"\nF 검정: F = {Fs:.4f}, 양측 p = {p_two:.4f}, 단측(하단) p = {p_two / 2:.4f}")
+    print(f"  P(rho > 1) = {Fd.sf(b2 / b1):.4f}  <- 단측 p 와 견주라")
+    print(f"빈도주의 신뢰구간 = ({fl:.6f}, {fh:.6f})   로그 폭 {np.log(fh / fl):.4f}")
+    print(f"베이즈 신용구간   = ({sc * Fd.ppf(0.025):.6f}, {sc * Fd.ppf(0.975):.6f})"
+          f"   로그 폭 {np.log(Fd.ppf(0.975) / Fd.ppf(0.025)):.4f}")
+    print(f"  -> {100 * (1 - np.log(Fd.ppf(0.975) / Fd.ppf(0.025)) / np.log(fh / fl)):.1f} % 좁다")
+    ```
+
+    출력:
+
+    ```text
+    Sample variances:           2.8393, 6.0000
+    Posterior mean of sigma1^2: 3.317
+    Posterior mean of sigma2^2: 6.956
+    Posterior mean of ratio:    0.634
+    95% credible interval:      (0.106, 2.074)
+    P(sigma1^2 > sigma2^2):     0.1573
+
+    a_n = 4.0100 (두 집단 공통),  b_n = 9.947580, 21.010231
+    rho ~ (b1/b2) x F(2a,2a) = 0.473464 x F(8.02,8.02)
+                    닫힌 꼴    모의 2만개
+      median        0.473464      0.477285
+      mean          0.630760      0.633695
+      q(0.025)      0.107025      0.106483
+      q(0.975)      2.094531      2.073990
+      P(rho>1)      0.155034      0.157350
+
+    표본분산의 비 s1^2/s2^2 = 0.473214
+    사후중앙값 b1/b2        = 0.473464   (차 2.49e-04)
+    평균/중앙값 = 1.3322 배
+
+    F 검정: F = 0.4732, 양측 p = 0.3448, 단측(하단) p = 0.1724
+      P(rho > 1) = 0.1550  <- 단측 p 와 견주라
+    빈도주의 신뢰구간 = (0.094739, 2.363662)   로그 폭 3.2168
+    베이즈 신용구간   = (0.107025, 2.094531)   로그 폭 2.9740
+      -> 7.5 % 좁다
+    ```
+
+    **닫힌 꼴과 모의실험이 맞는다.** 중앙값 $0.473464$ 대 $0.477285$, 평균 $0.630760$ 대 $0.633695$, $P(\rho>1)$ $0.155034$ 대 $0.157350$ 이다. 꼬리 분위수는 $0.107025$ 대 $0.106483$ 과 $2.094531$ 대 $2.073990$ 인데, 2 만 개로 $97.5\%$ 분위수를 재면 표준오차가 $\sqrt{0.975 \cdot 0.025/20000}\,/\,f(x_{0.975}) = 0.032$ 이므로 $0.021$ 차이는 그 안이다. 아래쪽 분위수의 표준오차는 $0.0017$ 이고 차는 $0.0005$ 다. $P(\rho>1)$ 의 표준오차는 $0.0026$ 이고 차는 $0.0023$ 이다. **모두 몬테카를로 오차로 설명된다.**
+
+    **중앙값이 표본분산의 비와 사실상 같다.** $s_1^2/s_2^2 = 0.473214$, 사후중앙값 $\beta_{n,1}/\beta_{n,2} = 0.473464$ 로 차가 $2.5\times10^{-4}$ 다. (1)에서 $\beta_0$ 가 분자와 분모에 똑같이 더해져 약분된다고 한 것이 확인되었다.
+
+    **평균과 중앙값은 $1.3322$ 배 어긋난다.** (1)이 예측한 $\alpha_n/(\alpha_n-1) = 4.01/3.01 = 1.3322$ 와 소수점 넷째 자리까지 같다. 쪽에서 보고한 "사후평균 $0.634$"는 $\rho$ 의 대표값이 아니라 꼬리까지 포함한 무게중심이며, 자료가 말하는 비는 $0.473$ 이다. **$n = 8$ 에서 어느 요약값을 쓰느냐가 $33\%$ 를 가른다.**
+
+    **판정은 같다.** 신용구간 $(0.107,\, 2.095)$ 가 1 을 담으므로 등분산과 일관되고, $F$ 검정도 양측 $p = 0.3448$ 로 기각하지 못한다. $P(\rho>1) = 0.1550$ 이 $F$ 검정의 단측 $p$ 값 $0.1724$ 와 가까운 것도 우연이 아니다(연습문제 3 과 같은 대응이다). 둘의 차 $0.017$ 은 자유도 $8.02$ 대 $7$ 에서 온다. 신용구간이 신뢰구간보다 로그 폭으로 $7.5\%$ 좁은 것도 같은 까닭이며, 보기 1 에서 한 집단에 대해 본 $7.4\%$ 와 같은 현상이다.
+
+    $P(\sigma_1^2 > \sigma_2^2 \mid \text{자료}) = 0.155$ 이니 집단 1 의 분산이 더 작을 사후확률이 $0.845$ 다. 방향은 뚜렷하지만 확정하기에는 부족하다.
 
 !!! warning "사후평균이 표본분산보다 크다"
     표본분산은 $2.839$와 $6.000$인데 사후평균은 $3.317$과 $6.956$이다. 각각 17%와 16% 크다.

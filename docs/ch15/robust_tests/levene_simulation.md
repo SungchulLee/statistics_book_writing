@@ -17,50 +17,163 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 제1종 오류율
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 제1종 오류율. 세 집단을 **같은 모집단**에서 뽑아($H_0$ 이 참이다) 중앙값 중심 Levene 검정을 $5000$ 번 돌린다. 집단당 $n = 20$, $\alpha = 0.05$ 다.
+
+**(1)** 이론이 예측하는 기각률은 얼마인가. $B = 5000$ 번 반복의 **몬테카를로 표준오차**를 계산하고, "로버스트하다"는 주장이 이 표에서 어떤 모습으로 나타나야 하는지 미리 적으시오.
+
+**(2)** 돌려서 확인하고, 두 수치의 차이가 몬테카를로 오차 안인지 **수로 판정**하시오. 명목값 $0.05$ 와의 거리도 같은 자로 재시오. 또 모집단을 다섯으로 늘려 Bartlett 과 나란히 두고, 두 검정의 **크기가 흔들리는 폭**을 견주시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import levene
+??? success "풀이"
 
-rng = np.random.default_rng(0)
+    **(1) 이론값은 명목값 그대로다.** 세 집단이 같은 모집단에서 나왔으니 $\sigma_1^2 = \sigma_2^2 = \sigma_3^2$ 이고 $H_0$ 이 참이다. 검정이 제대로 보정되어 있다면
 
-def simulate_once(n=20, dist="normal"):
-    """주어진 분포에서 세 집단을 만들어 검정하고 p-값을 돌려준다.
+    $$
+    P(\text{기각} \mid H_0) = \alpha = 0.05
+    $$
 
-    셋 다 같은 모수를 쓰므로 분산은 참으로 같다. 그러니 기각 비율이
-    0.05 근처로 나와야 옳다.
-    """
-    if dist == "normal":
-        g1 = rng.normal(0, 1.0, size=n)
-        g2 = rng.normal(0, 1.0, size=n)
-        g3 = rng.normal(0, 1.0, size=n)
-    else:
-        g1 = rng.lognormal(0, 1.0, size=n)
-        g2 = rng.lognormal(0, 1.0, size=n)
-        g3 = rng.lognormal(0, 1.0, size=n)
-    _, p = levene(g1, g2, g3, center='median')
-    return p
+    여야 한다. 여기에 **모집단이 무엇인지는 들어오지 않는다.** 그것이 이 모의실험이 묻는 것이다.
 
-# 정규와 로그정규에서 각각 돌려 본다. Bartlett 이라면 로그정규에서
-# 오류율이 크게 부풀지만, 중앙값 중심 방법은 0.05 근처를 지킨다.
-alpha = 0.05
-n_sims = 5000
+    **몬테카를로 표준오차.** 기각 여부는 베르누이 시행이고 $B$ 번의 반복이 독립이므로 기각률 $\hat p$ 의 표준오차는
 
-for dist in ["normal", "lognormal"]:
-    pvals = [simulate_once(20, dist) for _ in range(n_sims)]
-    type1 = np.mean(np.array(pvals) < alpha)
-    print(f"Type I error (median-centered) under {dist}: {type1:.4f}")
-```
+    $$
+    \mathrm{SE}(\hat p) = \sqrt{\frac{p(1-p)}{B}},
+    \qquad
+    p = 0.05,\; B = 5000 \;\Longrightarrow\; \mathrm{SE} = \sqrt{\frac{0.05 \times 0.95}{5000}} = 0.00308
+    $$
 
-출력:
+    이다. 그러므로 **$0.05$ 에서 $\pm 0.006$ 바깥의 값은 우연으로 설명되지 않는다.** 두 모집단의 기각률 차이를 재려면 두 분산을 더해야 하므로 그 표준오차는 $\sqrt2$ 배인 $0.0044$ 쯤이다.
 
-```text
-Type I error (median-centered) under normal: 0.0370
-Type I error (median-centered) under lognormal: 0.0374
-```
+    **"로버스트하다"가 무슨 모습이어야 하는가.** 두 가지를 구별해 두어야 한다.
+
+    - **크기가 명목값과 같다** — 두 수치가 모두 $0.05 \pm 0.006$ 안에 있어야 한다.
+    - **크기가 모집단에 의존하지 않는다** — 두 수치의 **차이**가 $0$ 과 구별되지 않아야 한다.
+
+    둘은 다른 주장이고, 로버스트성이 뜻하는 것은 **뒤쪽**이다. 모집단을 완전히 바꾸었는데도 성능이 그대로라는 것이 로버스트성이며, 그 성능이 명목값과 정확히 같은지는 별개의 문제다.
+
+    대조군이 왜 필요한지도 여기서 분명해진다. 분산 검정에는 **중심극한정리의 보호가 없다.** 5.3절은 정규성이 깨지면 $F$ 검정의 극한 오류율이 모집단 첨도 $\beta_2$ 만의 함수
+
+    $$
+    2\left[1-\Phi\!\left(1.96\sqrt{\frac{2}{\beta_2-1}}\right)\right]
+    $$
+
+    로 가고 **표본을 키워도 낫지 않는다**는 것까지 유도해 두었다(정규 $0.050$, 균등 $0.002$, 지수 $0.327$, 로그정규 $0.794$). 모집단이 바뀌면 크기가 바뀌는 것이 정규 이론 검정의 기본 성질이라는 뜻이다. 로버스트 검정의 표가 그 성질에서 벗어나는지를 보는 것이 이 보기의 전부다.
+
+    **(2) 돌린다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from scipy.stats import levene
+
+    rng = np.random.default_rng(0)
+
+
+    def simulate_once(n=20, dist="normal"):
+        """주어진 분포에서 세 집단을 만들어 검정하고 p-값을 돌려준다.
+
+        셋 다 같은 모수를 쓰므로 분산은 참으로 같다. 그러니 기각 비율이
+        0.05 근처로 나와야 옳다.
+        """
+        if dist == "normal":
+            g1 = rng.normal(0, 1.0, size=n)
+            g2 = rng.normal(0, 1.0, size=n)
+            g3 = rng.normal(0, 1.0, size=n)
+        else:
+            g1 = rng.lognormal(0, 1.0, size=n)
+            g2 = rng.lognormal(0, 1.0, size=n)
+            g3 = rng.lognormal(0, 1.0, size=n)
+        _, p = levene(g1, g2, g3, center='median')
+        return p
+
+
+    # 정규와 로그정규에서 각각 돌려 본다. Bartlett 이라면 로그정규에서
+    # 오류율이 크게 부풀지만, 중앙값 중심 방법은 0.05 근처를 지킨다.
+    alpha = 0.05
+    n_sims = 5000
+
+    rate = {}
+    for dist in ["normal", "lognormal"]:
+        pvals = [simulate_once(20, dist) for _ in range(n_sims)]
+        type1 = np.mean(np.array(pvals) < alpha)
+        rate[dist] = type1
+        print(f"Type I error (median-centered) under {dist}: {type1:.4f}")
+
+    # (1) 의 두 자로 잰다. 명목값과의 거리, 그리고 두 수치 사이의 거리.
+    print(f"\n몬테카를로 표준오차 (p = 0.05, B = {n_sims}): "
+          f"{np.sqrt(0.05 * 0.95 / n_sims):.5f}")
+    for dist in ["normal", "lognormal"]:
+        p = rate[dist]
+        se = np.sqrt(p * (1 - p) / n_sims)
+        print(f"  {dist:>10}: {p:.4f}  SE {se:.5f}  "
+              f"->  0.05 로부터 {(p - 0.05) / se:+.2f} SE")
+    d = rate["lognormal"] - rate["normal"]
+    se_d = np.sqrt(sum(rate[k] * (1 - rate[k]) / n_sims for k in rate))
+    print(f"  두 수치의 차 {d:+.4f},  그 SE {se_d:.5f}  ->  {d / se_d:+.2f} SE")
+
+    # 모집단을 다섯으로 늘려 Bartlett 과 나란히 둔다. 같은 자료, 같은 반복수.
+    rng2 = np.random.default_rng(7)
+    n = 20
+    pops = [
+        ("정규 N(0,1)", lambda m: rng2.normal(0, 1, (m, n)), 3.0),
+        ("균등 U(0,1)", lambda m: rng2.uniform(0, 1, (m, n)), 1.8),
+        ("지수 Exp(1)", lambda m: rng2.exponential(1, (m, n)), 9.0),
+        ("t(5)", lambda m: rng2.standard_t(5, (m, n)), 9.0),
+        ("로그정규 LN(0,1)", lambda m: rng2.lognormal(0, 1, (m, n)), 113.94),
+    ]
+
+    print(f"\n{'모집단':>18}{'beta2':>9}{'BF 크기':>10}{'Bartlett':>10}")
+    bf, ba = [], []
+    for name, draw, b2 in pops:
+        A, B, C = draw(n_sims), draw(n_sims), draw(n_sims)
+        r_bf = r_ba = 0
+        for i in range(n_sims):
+            g = (A[i], B[i], C[i])
+            if stats.levene(*g, center="median")[1] < alpha:
+                r_bf += 1
+            if stats.bartlett(*g)[1] < alpha:
+                r_ba += 1
+        bf.append(r_bf / n_sims)
+        ba.append(r_ba / n_sims)
+        print(f"{name:>18}{b2:>9.1f}{r_bf / n_sims:>10.4f}{r_ba / n_sims:>10.4f}")
+    print(f"{'폭 (최대 - 최소)':>27}{max(bf) - min(bf):>10.4f}{max(ba) - min(ba):>10.4f}")
+    ```
+
+    출력:
+
+    ```text
+    Type I error (median-centered) under normal: 0.0370
+    Type I error (median-centered) under lognormal: 0.0374
+
+    몬테카를로 표준오차 (p = 0.05, B = 5000): 0.00308
+          normal: 0.0370  SE 0.00267  ->  0.05 로부터 -4.87 SE
+       lognormal: 0.0374  SE 0.00268  ->  0.05 로부터 -4.70 SE
+      두 수치의 차 +0.0004,  그 SE 0.00379  ->  +0.11 SE
+
+                   모집단    beta2     BF 크기  Bartlett
+             정규 N(0,1)      3.0    0.0370    0.0518
+             균등 U(0,1)      1.8    0.0286    0.0032
+             지수 Exp(1)      9.0    0.0458    0.3922
+                  t(5)      9.0    0.0422    0.2280
+          로그정규 LN(0,1)    113.9    0.0382    0.6866
+                    폭 (최대 - 최소)    0.0172    0.6834
+    ```
+
+    **(1)에서 구별해 둔 두 주장이 서로 다른 답을 받는다.**
+
+    **모집단 의존성은 없다.** 두 수치의 차가 $+0.0004$ 이고 그 표준오차가 $0.00379$ 이므로 $+0.11$ 표준오차다. 모집단을 $N(0,1)$ 에서 왜도 $6.185$ 의 로그정규로 통째로 갈아 끼웠는데 **크기가 전혀 움직이지 않았다.** 이것이 로버스트성의 정확한 모습이다.
+
+    **그러나 크기가 명목값과 같지는 않다.** 두 수치가 $0.05$ 에서 각각 $-4.87$, $-4.70$ 표준오차 떨어져 있다. 몬테카를로 오차로 설명할 수 있는 거리가 아니므로 **이 보수성은 실재한다.** $0.037$ 은 $0.05$ 의 $74\%$ 다. 유한표본에서 중앙값을 추정하는 데 쓴 자유도가 $F(2, 57)$ 이라는 기준분포에 반영되지 않아 생기는 것이며, 연습문제 2 에서 $n$ 을 키우면 $0.0378 \to 0.0462$ 로 명목선을 향해 올라가는 것이 그 증거다. **근사 오차이지 모형 오설정이 아니다.**
+
+    **다섯 모집단 표가 그 대조를 완성한다.** 첨도가 $1.8$ 에서 $113.9$ 까지, 예순 배 넘게 벌어지는 다섯 모집단에서
+
+    - 중앙값 중심 Levene 의 크기는 $0.0286$ 에서 $0.0458$ 사이, **폭 $0.017$**
+    - Bartlett 의 크기는 $0.0032$ 에서 $0.6866$ 사이, **폭 $0.683$**
+
+    이다. **폭의 비가 사십 배다.** Bartlett 은 정규에서 $0.0518$ 로 정확하지만 균등에서 $0.0032$ 로 지나치게 보수적이고 로그정규에서 $0.6866$ 으로 폭발한다. 등분산인 세 집단의 $69\%$ 에서 "분산이 다르다"고 답한다는 뜻이다. 15.4절이 같은 조건에서 $0.675$ 를 보고했고 이 쪽의 $0.6866$ 과 몬테카를로 오차 안에서 맞는다.
+
+    표에 한 가지 유보가 있다. **지수와 $t(5)$ 는 첨도가 둘 다 $\beta_2 = 9$ 인데 Bartlett 의 크기가 $0.3922$ 와 $0.2280$ 으로 다르다.** 첨도만으로 크기가 정해진다는 것은 $n \to \infty$ 의 이야기이고, $n = 20$ 에서는 아직 거기에 이르지 않았다. 특히 $t(5)$ 는 4차 적률이 간신히 존재하는 정도여서 표본첨도가 표본마다 크게 흔들리고 수렴이 느리다. **이 표는 "$n = 20$ 에서 이렇다"는 측정이며 극한값이 아니다.**
 
 ## 해석
 

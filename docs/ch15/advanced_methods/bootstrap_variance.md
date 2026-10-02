@@ -118,62 +118,214 @@ $k > 2$개 집단에 대해 붓스트랩 접근은 자연스럽게 일반화된�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 붓스트랩 등분산 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 붓스트랩 등분산 검정. 집단당 $n = 8$, 중심화한 잔차를 합쳐 만든 풀에서 재표집해 $|\log F^*|$ 의 귀무분포를 만든다.
+
+**(1)** $n_1 = n_2$ 이면 $\log F^*$ 의 분포가 **0 에 대하여 정확히 대칭**임을 보이시오. 따라서 $|\log F^*| \ge |\log F_{\text{obs}}|$ 로 세는 것이 올바른 양측 $p$ 값이다.
+
+**(2)** 두 집단의 분산이 다를 때 **풀의 첨도가 부풀려짐**을 보이고, 잔차의 분산 $v_1, v_2$ 와 첨도 $\kappa_1, \kappa_2$ 로 풀의 첨도를 적으시오. $\kappa_1 = \kappa_2$ 이면 그 부풀림이 $r = v_1/v_2$ 만의 함수임을 밝히고, 그것이 $p$ 값을 F 검정보다 크게 만드는 과정을 수로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def bootstrap_variance_test(x, y, B=10000, seed=42):
-    """두 분산이 같은지를 붓스트랩으로 검정한다.
+    **(1) 대칭성은 교환가능성에서 나온다.** 중심화한 잔차를 합쳐 만든 풀의 경험분포를 $\hat F$ 라 쓰자. 두 붓스트랩 표본 `boot1`, `boot2` 는 **같은** $\hat F$ 에서 복원추출한 것이고 서로 독립이며, $n_1 = n_2 = n$ 이라 크기까지 같다. 그러므로 쌍 $(\text{boot1}, \text{boot2})$ 와 $(\text{boot2}, \text{boot1})$ 의 결합분포가 같고, 뒤의 쌍이 주는 통계량은
 
-    귀무가설 아래에서의 분포를 얻으려면 두 집단이 같은 분포에서 나온
-    상태를 만들어야 한다. 집단마다 중심을 맞춘 뒤 하나로 합치는 것이
-    그 방법이다.
-    """
-    rng = np.random.default_rng(seed)
-    n1, n2 = len(x), len(y)
+    $$
+    \log \frac{S^2(\text{boot2})}{S^2(\text{boot1})} = -\log F^*
+    $$
 
-    # 관측된 분산비
-    f_obs = np.var(x, ddof=1) / np.var(y, ddof=1)
+    이므로
 
-    # 중심만 맞추고 퍼짐은 그대로 둔다. 이렇게 합쳐야 "분산이 같다"는
-    # 상태를 흉내 낼 수 있다.
-    x_centered = x - np.mean(x)
-    y_centered = y - np.mean(y)
-    pool = np.concatenate([x_centered, y_centered])
+    $$
+    \log F^* \;\overset{d}{=}\; -\log F^*
+    $$
 
-    # 비의 로그를 쓰는 까닭은 대칭을 얻기 위해서다. F 와 1/F 이 같은 크기의
-    # 이탈로 세어져야 양측검정이 제대로 된다.
-    count = 0
-    for _ in range(B):
-        boot1 = rng.choice(pool, size=n1, replace=True)
-        boot2 = rng.choice(pool, size=n2, replace=True)
-        f_boot = np.var(boot1, ddof=1) / np.var(boot2, ddof=1)
-        if abs(np.log(f_boot)) >= abs(np.log(f_obs)):
-            count += 1
+    이다. **0 에 대하여 정확히 대칭**이다. 그래서 $E[\log F^*] = 0$, 중앙값도 $0$ 이고, 양쪽 꼬리가 같은 확률을 가지므로
 
-    p_value = count / B
-    return f_obs, p_value
+    $$
+    p = \frac1B\sum_b \mathbf 1\!\left(|\log F_b^*| \ge |\log F_{\text{obs}}|\right)
+    $$
 
-# 보기
-x = np.array([10, 12, 14, 11, 13, 15, 12, 10])
-y = np.array([20, 28, 22, 35, 25, 18, 30, 22])
+    가 양쪽 꼬리를 한꺼번에 세는 올바른 양측 $p$ 값이 된다. 로그를 씌우는 까닭도 이것이다. $F$ 눈금에서 $|F^* - 1|$ 로 세면 $F = 2$ 와 $F = 0.5$ 가 다른 이탈로 세어져 대칭이 깨진다.
 
-f_stat, p_val = bootstrap_variance_test(x, y)
-print(f"Sample variances: {np.var(x, ddof=1):.3f}, {np.var(y, ddof=1):.3f}")
-print(f"Variance ratio: {f_stat:.4f}")
-print(f"Bootstrap p-value: {p_val:.4f}")
-```
+    **여기서는 귀무값과 관측값 둘 다 쓴다는 점을 짚어 두자.** 15.6절 [붓스트랩 분산 검정](bootstrap_var_test.md)의 재표집은 집단 **안에서** 하므로 분포의 중심이 관측값이었고, 그래서 $p$ 값을 귀무값 1 과 견주어야 했다. 여기는 풀에서 뽑으므로 분포의 중심이 **귀무값**이고, 그래서 관측값과 견주는 것이 옳다. **어느 쪽이 맞는지는 공식이 아니라 분포가 어디에 중심을 두는지가 정한다.**
 
-출력:
+    **(2) 합치면 첨도가 부풀려진다.** 두 집단의 크기가 같고 잔차가 각각 평균 0 이므로, 풀의 적률은 두 집단 적률의 산술평균이다. 잔차의 분산을 $v_i$, 첨도를 $\kappa_i$ 라 하면 $i$ 집단의 4 차 적률이 $\kappa_i v_i^2$ 이므로
 
-```text
-Sample variances: 3.268, 32.286
-Variance ratio: 0.1012
-Bootstrap p-value: 0.0206
-```
+    $$
+    m_2^{\text{pool}} = \frac{v_1 + v_2}{2},
+    \qquad
+    m_4^{\text{pool}} = \frac{\kappa_1 v_1^2 + \kappa_2 v_2^2}{2}
+    $$
+
+    이고, 따라서
+
+    $$
+    \beta_2^{\text{pool}} = \frac{m_4^{\text{pool}}}{\bigl(m_2^{\text{pool}}\bigr)^2}
+    = \frac{2\left(\kappa_1 v_1^2 + \kappa_2 v_2^2\right)}{(v_1+v_2)^2}
+    $$
+
+    이다. $\kappa_1 = \kappa_2 = \kappa$ 인 경우를 보면 $r = v_1/v_2$ 로 쓸 때
+
+    $$
+    \beta_2^{\text{pool}} = \kappa \cdot \frac{2(r^2+1)}{(r+1)^2}
+    $$
+
+    가 되어, **부풀림이 $r$ 만의 함수**다. 이 배율은 $r = 1$ 에서 최솟값 $1$ 을 갖고 ($(r-1)^2 \ge 0$ 에서 $2(r^2+1) \ge (r+1)^2$), $r \to 0$ 이나 $r \to \infty$ 에서 $2$ 로 간다. **등분산이 아닌 두 집단을 합치면 풀의 첨도가 최대 두 배까지 올라간다.**
+
+    그 결과가 검정에 하는 일은 분명하다. 분산비의 산포는 첨도와 함께 커지므로 **귀무분포가 넓어지고, 넓은 자로 재면 같은 관측값이 덜 극단적으로 보인다.** 곧 이 검정은 $H_1$ 이 참일 때 스스로 기각선을 밀어내므로 **검정력을 깎아먹는다.** 앞의 "합치기가 항상 무해하지는 않다"는 경고의 정량판이 이것이다.
+
+    **수로 확인한다.**
+
+    ```python
+    import numpy as np
+
+    def bootstrap_variance_test(x, y, B=10000, seed=42):
+        """두 분산이 같은지를 붓스트랩으로 검정한다.
+
+        귀무가설 아래에서의 분포를 얻으려면 두 집단이 같은 분포에서 나온
+        상태를 만들어야 한다. 집단마다 중심을 맞춘 뒤 하나로 합치는 것이
+        그 방법이다.
+        """
+        rng = np.random.default_rng(seed)
+        n1, n2 = len(x), len(y)
+
+        # 관측된 분산비
+        f_obs = np.var(x, ddof=1) / np.var(y, ddof=1)
+
+        # 중심만 맞추고 퍼짐은 그대로 둔다. 이렇게 합쳐야 "분산이 같다"는
+        # 상태를 흉내 낼 수 있다.
+        x_centered = x - np.mean(x)
+        y_centered = y - np.mean(y)
+        pool = np.concatenate([x_centered, y_centered])
+
+        # 비의 로그를 쓰는 까닭은 대칭을 얻기 위해서다. F 와 1/F 이 같은 크기의
+        # 이탈로 세어져야 양측검정이 제대로 된다.
+        count = 0
+        for _ in range(B):
+            boot1 = rng.choice(pool, size=n1, replace=True)
+            boot2 = rng.choice(pool, size=n2, replace=True)
+            f_boot = np.var(boot1, ddof=1) / np.var(boot2, ddof=1)
+            if abs(np.log(f_boot)) >= abs(np.log(f_obs)):
+                count += 1
+
+        p_value = count / B
+        return f_obs, p_value
+
+    # 보기
+    x = np.array([10, 12, 14, 11, 13, 15, 12, 10])
+    y = np.array([20, 28, 22, 35, 25, 18, 30, 22])
+
+    f_stat, p_val = bootstrap_variance_test(x, y)
+    print(f"Sample variances: {np.var(x, ddof=1):.3f}, {np.var(y, ddof=1):.3f}")
+    print(f"Variance ratio: {f_stat:.4f}")
+    print(f"Bootstrap p-value: {p_val:.4f}")
+
+    # ===== (1) 대칭성과 풀의 첨도 =====
+    from scipy.special import polygamma
+    from scipy.stats import f as f_dist
+
+    def emp_kurtosis(v):
+        v = np.asarray(v, float)
+        m = v.mean()
+        return ((v - m) ** 4).mean() / (((v - m) ** 2).mean()) ** 2
+
+    rx, ry = x - x.mean(), y - y.mean()
+    v1, v2 = rx.var(ddof=0), ry.var(ddof=0)
+    k1, k2 = emp_kurtosis(rx), emp_kurtosis(ry)
+    pool = np.concatenate([rx, ry])
+    r = v1 / v2
+
+    print(f"\n--- (1) 풀의 첨도 ---")
+    print(f"잔차의 분산  v1 = {v1:.6f},  v2 = {v2:.6f},   r = v1/v2 = {r:.6f}")
+    print(f"잔차의 첨도  k1 = {k1:.6f},  k2 = {k2:.6f}")
+    formula = 2 * (k1 * v1**2 + k2 * v2**2) / (v1 + v2) ** 2
+    print(f"풀의 첨도  직접 계산 = {emp_kurtosis(pool):.6f}")
+    print(f"           공식      = {formula:.6f}   (차 {abs(emp_kurtosis(pool) - formula):.2e})")
+
+    # 등분산이었다면? y 잔차를 x 잔차의 척도로 되돌려 같은 일을 한다.
+    pool_eq = np.concatenate([rx, ry * np.sqrt(v1 / v2)])
+    print(f"등분산이면 풀의 첨도 = {emp_kurtosis(pool_eq):.6f}   (= (k1+k2)/2 = {(k1 + k2) / 2:.6f})")
+    print(f"부풀림 = {emp_kurtosis(pool) / emp_kurtosis(pool_eq):.4f} 배")
+    print(f"k1 = k2 일 때의 배율 공식 2(r^2+1)/(r+1)^2 = {2 * (r * r + 1) / (r + 1) ** 2:.4f}")
+    print("  r 에 따른 그 배율 (1 에서 최소, 양 끝에서 2 로)")
+    for rr in (1.0, 0.5, 0.2, r, 0.05):
+        print(f"    r = {rr:<9.6f} -> {2 * (rr * rr + 1) / (rr + 1) ** 2:.4f}")
+
+    # ===== (2) 그 부풀림이 귀무분포와 p 값에 하는 일 =====
+    rng = np.random.default_rng(42)
+    B, n = 10000, len(x)
+    lf = np.empty(B)
+    for b in range(B):
+        b1 = rng.choice(pool, size=n, replace=True)
+        b2 = rng.choice(pool, size=n, replace=True)
+        lf[b] = np.log(b1.var(ddof=1) / b2.var(ddof=1))
+
+    sd_norm = np.sqrt(2 * polygamma(1, (n - 1) / 2))
+    print(f"\n--- (2) 귀무분포의 폭 ---")
+    print(f"붓스트랩 귀무분포:  평균 {lf.mean():+.4f}  중앙값 {np.median(lf):+.4f}"
+          f"  (대칭이면 둘 다 0, 몬테카를로 오차 +-{lf.std(ddof=1) / np.sqrt(B):.4f})")
+    print(f"붓스트랩 SD(log F*)            = {lf.std(ddof=1):.4f}")
+    print(f"정규이론 SD = sqrt(2 psi'(3.5)) = {sd_norm:.4f}   (정확한 값)")
+    print(f"  붓스트랩이 {100 * (lf.std(ddof=1) / sd_norm - 1):.1f} % 넓다")
+    print(f"델타 공식 sqrt(2(k_pool-1)/n)   = {np.sqrt(2 * (emp_kurtosis(pool) - 1) / n):.4f}"
+          f"   (n=8 에서는 믿을 수 없다)")
+
+    fobs = np.log(f_stat)
+    c_boot = np.percentile(np.abs(lf), 95)
+    c_norm = abs(np.log(f_dist(n - 1, n - 1).ppf(0.025)))
+    print(f"\n5% 기각선 |log F|:  붓스트랩 {c_boot:.4f}   정규이론 {c_norm:.4f}")
+    print(f"관측값 |log F_obs| = {abs(fobs):.4f}  ->  둘 다 넘는다")
+    p_f = 2 * min(f_dist(n - 1, n - 1).cdf(f_stat), f_dist(n - 1, n - 1).sf(f_stat))
+    print(f"p 값:  붓스트랩 {np.mean(np.abs(lf) >= abs(fobs)):.4f}   F 검정 {p_f:.4f}"
+          f"   비 {np.mean(np.abs(lf) >= abs(fobs)) / p_f:.2f} 배")
+    ```
+
+    출력:
+
+    ```text
+    Sample variances: 3.268, 32.286
+    Variance ratio: 0.1012
+    Bootstrap p-value: 0.0206
+
+    --- (1) 풀의 첨도 ---
+    잔차의 분산  v1 = 2.859375,  v2 = 28.250000,   r = v1/v2 = 0.101217
+    잔차의 첨도  k1 = 1.890442,  k2 = 2.176208
+    풀의 첨도  직접 계산 = 3.621034
+               공식      = 3.621034   (차 0.00e+00)
+    등분산이면 풀의 첨도 = 2.033325   (= (k1+k2)/2 = 2.033325)
+    부풀림 = 1.7808 배
+    k1 = k2 일 때의 배율 공식 2(r^2+1)/(r+1)^2 = 1.6661
+      r 에 따른 그 배율 (1 에서 최소, 양 끝에서 2 로)
+        r = 1.000000  -> 1.0000
+        r = 0.500000  -> 1.1111
+        r = 0.200000  -> 1.4444
+        r = 0.101217  -> 1.6661
+        r = 0.050000  -> 1.8186
+
+    --- (2) 귀무분포의 폭 ---
+    붓스트랩 귀무분포:  평균 +0.0008  중앙값 +0.0151  (대칭이면 둘 다 0, 몬테카를로 오차 +-0.0098)
+    붓스트랩 SD(log F*)            = 0.9844
+    정규이론 SD = sqrt(2 psi'(3.5)) = 0.8128   (정확한 값)
+      붓스트랩이 21.1 % 넓다
+    델타 공식 sqrt(2(k_pool-1)/n)   = 0.8095   (n=8 에서는 믿을 수 없다)
+
+    5% 기각선 |log F|:  붓스트랩 1.9187   정규이론 1.6084
+    관측값 |log F_obs| = 2.2905  ->  둘 다 넘는다
+    p 값:  붓스트랩 0.0206   F 검정 0.0073   비 2.83 배
+    ```
+
+    **(1)의 대칭성이 확인된다.** 붓스트랩 귀무분포의 평균이 $+0.0008$ 로 몬테카를로 오차 $\pm0.0098$ 안에 있고 중앙값도 $+0.0151$ 로 거의 $0$ 이다. 분포 자체는 (1)에서 보았듯 정확히 대칭이고, 남은 흔들림은 $B = 10000$ 에서 오는 것뿐이다.
+
+    **(2)의 첨도 공식이 정확히 맞는다.** 풀의 첨도를 직접 계산한 $3.621034$ 와 $2(\kappa_1 v_1^2 + \kappa_2 v_2^2)/(v_1+v_2)^2$ 가 **차 $0$** 으로 같다. 그리고 두 집단의 분산이 같았다면 풀의 첨도가 $(\kappa_1+\kappa_2)/2 = 2.033325$ 였을 것이므로, 분산비 $r = 0.101$ 이 첨도를 **$1.78$ 배** 부풀린 셈이다.
+
+    $\kappa_1 = \kappa_2$ 를 가정한 배율 공식은 $r = 0.101$ 에서 $1.6661$ 을 준다. 실제 $1.7808$ 보다 조금 작은데, 이 자료는 $\kappa_1 = 1.890$ 과 $\kappa_2 = 2.176$ 으로 서로 다르고 **분산이 큰 쪽($v_2$)이 $m_4$ 를 지배**하므로 그쪽의 더 큰 첨도가 더 무겁게 셈되기 때문이다. 배율 표를 보면 $r = 1$ 에서 $1.0000$, $r = 0.2$ 에서 $1.4444$, $r = 0.05$ 에서 $1.8186$ 으로 $2$ 를 향해 올라간다.
+
+    **그 부풀림이 귀무분포를 넓혔다.** 붓스트랩 $\operatorname{SD}(\log F^*) = 0.9844$ 가 정규이론의 정확한 값 $\sqrt{2\psi'(3.5)} = 0.8128$ 보다 $21\%$ 크다. 그래서 $5\%$ 기각선이 $|\log F| = 1.9187$ 로 정규이론의 $1.6084$ 보다 $19\%$ 멀리 밀려 있다. **관측값 $|\log F_{\text{obs}}| = 2.2905$ 는 두 선을 다 넘지만, 선이 멀어진 만큼 $p$ 값이 커졌다.** 붓스트랩 $0.0206$ 이 F 검정 $0.0073$ 의 $2.83$ 배다.
+
+    (델타 공식에 풀의 첨도를 넣으면 $0.8095$ 가 나와 실제 $0.9844$ 보다 $18\%$ 작다. 5.3절의 델타 결과는 $n \to \infty$ 근사이고 $n = 8$ 은 그 영역이 아니다. **방향만 쓰고 값은 쓰지 말아야 한다.**)
+
+    **그래서 이 $p$ 값 차이를 "붓스트랩이 더 보수적"이라고만 읽으면 안 된다.** 이 자료의 분산비가 10 배라서 풀이 과분산된 것이고, 등분산이 참일 때는 이 부풀림이 일어나지 않는다. 앞 절 그림에서 정규 자료의 크기가 $0.0465$ 대 $0.0475$ 로 두 검정이 사실상 같았던 것이 그 증거다. **부풀림은 $H_0$ 아래의 크기를 망치는 것이 아니라 $H_1$ 아래의 검정력을 깎는다.** 모양이 크게 다르다고 의심되면 앞의 경고가 권한 스튜던트화 붓스트랩을 쓰라.
 
 같은 자료에 다른 검정을 적용하면 F 검정은 $p = 0.0073$, Brown-Forsythe는 $p = 0.0272$이다. 세 검정 모두 5% 수준에서 기각하지만 $p$값이 네 배 차이 난다. 붓스트랩 결과가 두 값 사이에 놓인다는 점이 시사적이다. F 검정만큼 낙관적이지도, Brown-Forsythe만큼 보수적이지도 않다.
 

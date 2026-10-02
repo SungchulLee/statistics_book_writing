@@ -35,103 +35,325 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 네 검정의 거짓 양성률
+**보기 1.** <span class="diff easy" title="쉬움"></span> 네 검정의 거짓 양성률. 세 집단을 모두 $\text{Lognormal}(0,1)$ 에서 $n = 30$ 씩 뽑으므로 분산이 참으로 같다. 반복 $2000$ 회, $\alpha = 0.05$ 다.
+
+**(1)** 이론값과 반복 $2000$ 회의 **몬테카를로 표준오차**를 적고, 바틀렛 통계량의 극한분포를 $\operatorname{Var}(S^2) \approx \sigma^4(\beta_2-1)/n$ 에서 유도해 **극한 크기**를 계산하시오. 정규모집단에서 $\alpha$ 가 나오는지로 검산하시오.
+
+**(2)** 모의실험으로 확인하고, $n$ 을 키워 가며 세 검정 가운데 **나아지는 것**과 **나빠지는 것**을 가르시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 1부: 제1종 오류율. 세 집단을 모두 같은 로그정규에서 뽑으므로 분산은
-# 참으로 같다. 기각 비율이 0.05 를 크게 넘는 검정은 정규성에 매여 있다는 뜻이다.
-rng = np.random.default_rng(42)
-n_sims, n, alpha = 2000, 30, 0.05
-results = {"Bartlett": 0, "Levene (mean)": 0,
-           "Brown-Forsythe": 0, "Fligner-Killeen": 0}
+    **(1) 이론값은 $0.05$ 다.** 세 집단이 같은 모집단에서 나왔으니 $H_0$ 이 참이고, 보정이 제대로 된 검정이라면 명목값만큼만 기각해야 한다. 반복 $B = 2000$ 회의 표준오차는
 
-for _ in range(n_sims):
-    g1 = rng.lognormal(0, 1, n)
-    g2 = rng.lognormal(0, 1, n)
-    g3 = rng.lognormal(0, 1, n)
+    $$
+    \mathrm{SE} = \sqrt{\frac{0.05 \times 0.95}{2000}} = 0.00487
+    $$
 
-    _, p = stats.bartlett(g1, g2, g3)
-    if p < alpha:
-        results["Bartlett"] += 1
+    이므로 $0.05 \pm 0.010$ 바깥의 값은 우연이 아니다.
 
-    _, p = stats.levene(g1, g2, g3, center='mean')
-    if p < alpha:
-        results["Levene (mean)"] += 1
+    **바틀렛의 극한 크기를 유도한다.** 집단크기가 모두 $n$ 이라 하고 $\nu = n-1$ 이라 쓰자. $s_i^2 = \sigma^2(1+u_i)$ 로 두면 $E[u_i] = 0$ 이고 5.2절·5.6절의 결과
 
-    _, p = stats.levene(g1, g2, g3, center='median')
-    if p < alpha:
-        results["Brown-Forsythe"] += 1
+    $$
+    \operatorname{Var}(S^2) \approx \frac{\sigma^4(\beta_2-1)}{n}
+    \quad\Longrightarrow\quad
+    \operatorname{Var}(u_i) \approx \frac{\beta_2-1}{n}
+    $$
 
-    _, p = stats.fligner(g1, g2, g3)
-    if p < alpha:
-        results["Fligner-Killeen"] += 1
+    이다. 합동분산은 $s_p^2 = \sigma^2(1+\bar u)$ 이므로 바틀렛 통계량의 분자가
 
-for name, count in results.items():
-    print(f"{name:20s}: false-positive rate = {count/n_sims:.4f}")
-```
+    $$
+    \nu\sum_{i=1}^{k}\bigl[\ln(1+\bar u) - \ln(1+u_i)\bigr]
+    $$
 
-출력:
+    이고, $\ln(1+x) = x - \tfrac{x^2}{2} + O(x^3)$ 을 넣으면 일차항이 $k\bar u - \sum_i u_i = 0$ 으로 **통째로 사라진다.** 남는 이차항은
 
-```text
-Bartlett            : false-positive rate = 0.7320
-Levene (mean)       : false-positive rate = 0.2605
-Brown-Forsythe      : false-positive rate = 0.0295
-Fligner-Killeen     : false-positive rate = 0.1140
-```
+    $$
+    \nu\left[\frac{\sum_i u_i^2 - k\bar u^2}{2}\right] = \frac{\nu}{2}\sum_{i=1}^{k}(u_i - \bar u)^2
+    $$
+
+    다. $u_i$ 가 독립이고 $n$ 이 크면 근사적으로 정규이므로 $\sum_i (u_i-\bar u)^2 \approx \dfrac{\beta_2-1}{n}\chi^2_{k-1}$ 이고, 보정계수는 $C \to 1$ 이다. 따라서
+
+    $$
+    T \;\longrightarrow\; \frac{\beta_2-1}{2}\,\chi^2_{k-1}
+    $$
+
+    가 된다. **정규 이론은 이 배율을 $1$ 로 믿는다.** $\beta_2 = 3$ 일 때 $(\beta_2-1)/2 = 1$ 이기 때문이다. 그러므로 극한 크기는
+
+    $$
+    P\!\left(\frac{\beta_2-1}{2}\chi^2_{k-1} > \chi^2_{1-\alpha,\,k-1}\right)
+    = P\!\left(\chi^2_{k-1} > \frac{2\,\chi^2_{1-\alpha,\,k-1}}{\beta_2-1}\right)
+    $$
+
+    이고 **$n$ 이 아예 들어 있지 않다.** 5.3절이 $F$ 검정에 대해 유도한
+
+    $$
+    2\left[1-\Phi\!\left(1.96\sqrt{\frac{2}{\beta_2-1}}\right)\right]
+    $$
+
+    와 같은 구조다. 임계값은 정규 이론이 정하고 실제 산포는 첨도가 정하며, 둘의 비가 $n$ 과 무관하게 고정된다. **분산 검정에는 중심극한정리의 보호가 없다.**
+
+    **검산.** $\beta_2 = 3$ 을 넣으면 $2/(\beta_2-1) = 1$ 이라 $P(\chi^2_{k-1} > \chi^2_{1-\alpha,k-1}) = \alpha$ 가 정확히 나온다.
+
+    **로그정규에 넣으면.** $\text{LogN}(0,\sigma^2)$ 의 첨도는 $\beta_2 = e^{4\sigma^2} + 2e^{3\sigma^2} + 3e^{2\sigma^2} - 3$ 이고 $\sigma = 1$ 에서
+
+    $$
+    \beta_2 = e^4 + 2e^3 + 3e^2 - 3 = 113.94
+    $$
+
+    다. $k = 3$, $\alpha = 0.05$ 이면 $\chi^2_{0.95,2} = 5.9915$ 이므로 극한 크기가 $P(\chi^2_2 > 2 \times 5.9915/112.94) = P(\chi^2_2 > 0.1061) = 0.9483$ 이다. **$n$ 을 아무리 키워도 등분산인 세 집단의 $95\%$ 에서 "분산이 다르다"고 답하는 쪽으로 간다.**
+
+    **(2) 돌린다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 1부: 제1종 오류율. 세 집단을 모두 같은 로그정규에서 뽑으므로 분산은
+    # 참으로 같다. 기각 비율이 0.05 를 크게 넘는 검정은 정규성에 매여 있다는 뜻이다.
+    rng = np.random.default_rng(42)
+    n_sims, n, alpha = 2000, 30, 0.05
+    results = {"Bartlett": 0, "Levene (mean)": 0,
+               "Brown-Forsythe": 0, "Fligner-Killeen": 0}
+
+    for _ in range(n_sims):
+        g1 = rng.lognormal(0, 1, n)
+        g2 = rng.lognormal(0, 1, n)
+        g3 = rng.lognormal(0, 1, n)
+
+        _, p = stats.bartlett(g1, g2, g3)
+        if p < alpha:
+            results["Bartlett"] += 1
+
+        _, p = stats.levene(g1, g2, g3, center='mean')
+        if p < alpha:
+            results["Levene (mean)"] += 1
+
+        _, p = stats.levene(g1, g2, g3, center='median')
+        if p < alpha:
+            results["Brown-Forsythe"] += 1
+
+        _, p = stats.fligner(g1, g2, g3)
+        if p < alpha:
+            results["Fligner-Killeen"] += 1
+
+    for name, count in results.items():
+        print(f"{name:20s}: false-positive rate = {count/n_sims:.4f}")
+
+    # ---- (1) 몬테카를로 오차로 재고, 바틀렛의 극한값을 계산한다 ----
+    # 반복 2000 회이므로 0.05 근처의 표준오차는 sqrt(.05*.95/2000) = 0.0049 다.
+    print(f"\n명목 0.05, 반복 {n_sims} 회의 몬테카를로 표준오차 = "
+          f"{np.sqrt(0.05 * 0.95 / n_sims):.5f}")
+    print(f"{'검정':>18}{'크기':>9}{'SE':>9}{'0.05 로부터':>14}{'명목의 배수':>12}")
+    for name, count in results.items():
+        r = count / n_sims
+        se = np.sqrt(r * (1 - r) / n_sims)
+        print(f"{name:>18}{r:>9.4f}{se:>9.5f}{(r - 0.05) / se:>11.1f} SE{r / 0.05:>12.2f}")
+
+    # 로그정규(0,1) 의 첨도와, 그것이 정하는 바틀렛의 극한 크기
+    b2 = np.exp(4) + 2 * np.exp(3) + 3 * np.exp(2) - 3
+    crit = stats.chi2(2).ppf(1 - alpha)
+    print(f"\n로그정규(0,1) 의 첨도 beta_2 = {b2:.4f}")
+    print(f"예측: T / ((beta_2-1)/2) -> chi2_2 이므로 E[T] -> beta_2 - 1 = {b2 - 1:.2f}")
+    print(f"극한 크기 = P(chi2_2 > 2 * {crit:.4f} / (beta_2 - 1)) = "
+          f"{stats.chi2(2).sf(2 * crit / (b2 - 1)):.4f}")
+    print(f"검산 (정규, beta_2 = 3): P(chi2_2 > 2*{crit:.4f}/2) = "
+          f"{stats.chi2(2).sf(2 * crit / 2):.4f}")
+
+    # ---- (2) 표본을 키우면 나아지는가. 세 검정을 n 으로 훑는다 ----
+    # rng 와 따로 쓰는 생성기여야 위쪽 출력이 바뀌지 않는다.
+    rng_b = np.random.default_rng(2024)
+    B = 2000
+    print(f"\n로그정규 세 집단, 등분산, 반복 {B} 회")
+    print(f"{'n':>6}{'Bartlett':>20}{'Brown-Forsythe':>22}{'Fligner-Killeen':>22}")
+    for nn in (30, 120, 480):
+        rej = {"ba": 0, "bf": 0, "fk": 0}
+        for _ in range(B):
+            g = [rng_b.lognormal(0, 1, nn) for _ in range(3)]
+            rej["ba"] += stats.bartlett(*g)[1] < alpha
+            rej["bf"] += stats.levene(*g, center='median')[1] < alpha
+            rej["fk"] += stats.fligner(*g)[1] < alpha
+        cells = ""
+        for k in ("ba", "bf", "fk"):
+            r = rej[k] / B
+            cells += f"{r:>14.4f} (SE {np.sqrt(r * (1 - r) / B):.4f})"
+        print(f"{nn:>6}{cells}")
+    ```
+
+    출력:
+
+    ```text
+    Bartlett            : false-positive rate = 0.7320
+    Levene (mean)       : false-positive rate = 0.2605
+    Brown-Forsythe      : false-positive rate = 0.0295
+    Fligner-Killeen     : false-positive rate = 0.1140
+
+    명목 0.05, 반복 2000 회의 몬테카를로 표준오차 = 0.00487
+                    검정       크기       SE      0.05 로부터      명목의 배수
+              Bartlett   0.7320  0.00990       68.9 SE       14.64
+         Levene (mean)   0.2605  0.00981       21.4 SE        5.21
+        Brown-Forsythe   0.0295  0.00378       -5.4 SE        0.59
+       Fligner-Killeen   0.1140  0.00711        9.0 SE        2.28
+
+    로그정규(0,1) 의 첨도 beta_2 = 113.9364
+    예측: T / ((beta_2-1)/2) -> chi2_2 이므로 E[T] -> beta_2 - 1 = 112.94
+    극한 크기 = P(chi2_2 > 2 * 5.9915 / (beta_2 - 1)) = 0.9483
+    검산 (정규, beta_2 = 3): P(chi2_2 > 2*5.9915/2) = 0.0500
+
+    로그정규 세 집단, 등분산, 반복 2000 회
+         n            Bartlett        Brown-Forsythe       Fligner-Killeen
+        30        0.7145 (SE 0.0101)        0.0400 (SE 0.0044)        0.1150 (SE 0.0071)
+       120        0.8025 (SE 0.0089)        0.0430 (SE 0.0045)        0.1495 (SE 0.0080)
+       480        0.8715 (SE 0.0075)        0.0450 (SE 0.0046)        0.1700 (SE 0.0084)
+    ```
+
+    **검산이 먼저 통과한다.** $\beta_2 = 3$ 을 넣은 극한 크기가 정확히 $0.0500$ 이다. 유도한 식이 정규모집단에서 명목값을 되돌려 주므로 꼴이 맞다.
+
+    **네 수치를 몬테카를로 자로 재면.** 바틀렛은 $0.05$ 에서 $68.9$ 표준오차, Levene(평균)은 $21.4$ 표준오차 위에 있다. 우연일 가능성이 없다. 플리그너–킬린은 $9.0$ 표준오차 위로 **명목값의 $2.28$ 배**, 브라운–포사이드만 $-5.4$ 표준오차로 **아래쪽**에 있다. 넷 가운데 거짓 양성을 만들지 않는 것이 하나뿐이다.
+
+    **$n$ 을 키우면 셋이 세 방향으로 갈린다.**
+
+    - **바틀렛: $0.7145 \to 0.8025 \to 0.8715$.** 표본을 열여섯 배 키웠는데 더 나빠진다. (1)에서 유도한 극한 $0.9483$ 을 향해 올라가고 있다. 수렴이 느린 것은 로그정규의 4차 적률이 $e^8 \approx 2981$ 로 거대해 $u_i$ 의 정규근사가 늦기 때문이다. **이것이 "표본이 크니 괜찮겠지"가 정규성 가정에 통하지 않는다는 말의 수치다.**
+    - **브라운–포사이드: $0.0400 \to 0.0430 \to 0.0450$.** 명목선 $0.05$ 를 향해 **아래에서 올라간다.** 기준분포가 옳고 유한표본에서만 조금 어긋나는 것이므로 $n$ 이 고쳐 준다. 이것이 **근사 오차**다.
+    - **플리그너–킬린: $0.1150 \to 0.1495 \to 0.1700$.** 명목선에서 **멀어진다.** $n = 30$ 과 $n = 480$ 의 차가 $0.055$ 이고 두 표준오차를 합쳐도 $0.011$ 이니 다섯 배 넘는 거리다. 우연이 아니다.
+
+    마지막 줄은 이 쪽 본문(아래)의 설명을 한 걸음 더 밀어 준다. 본문은 플리그너–킬린의 $\chi^2_{k-1}$ 근사가 부정확해진다고 적었는데, **그 부정확이 표본을 키워도 사라지지 않는다.** 중심이 중앙값이라 안전한데도 그렇다. 편차 $\lvert X_{ij} - \tilde X_i\rvert$ 자체가 극단적으로 치우쳐 있으면 어느 집단이 상위 순위를 몰아 차지하는 변동이 $n$ 과 함께 줄지 않는다는 뜻이고, 성격으로는 바틀렛 쪽(모형 오설정)에 가깝다. 다만 크기가 $0.17$ 과 $0.87$ 로 자릿수가 다르다.
 
 분산이 실제로 다른 정규 자료에서의 검정력 비교는 다음과 같다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 네 검정의 검정력
+**보기 2.** <span class="diff easy" title="쉬움"></span> 네 검정의 검정력. 이번에는 **정규**모집단이고 표준편차를 $1,\ 1.5,\ 2$ 로 실제로 다르게 두었다. 같은 $n = 30$, 반복 $2000$ 회다.
+
+**(1)** 네 검정의 검정력 **순서를 돌려 보기 전에** 예측하고 근거를 밝히시오. 반복 $2000$ 회에서 검정력 $0.85$ 쯤의 몬테카를로 표준오차도 적으시오.
+
+**(2)** 확인하고, **이 표를 근거로 검정을 고르면 안 되는** 까닭 두 가지를 수치로 보이시오. 하나는 보기 1 의 표와 모집단이 다르다는 것이고, 다른 하나는 이 표의 간격 가운데 일부가 **검정력 차이가 아니라 크기 차이**라는 것이다.
 
 </div>
 
-```python
-# 2부: 검정력. 이번에는 정규모집단이고 표준편차를 1, 1.5, 2 로 실제로
-# 다르게 두었다. 오류율만 보고 검정을 고를 수 없는 까닭이 여기 있다 —
-# 보수적인 검정은 오류율은 낮지만 차이도 잘 못 잡는다.
-results_power = {"Bartlett": 0, "Levene (mean)": 0,
-                 "Brown-Forsythe": 0, "Fligner-Killeen": 0}
+??? success "풀이"
 
-for _ in range(n_sims):
-    g1 = rng.normal(0, 1.0, n)
-    g2 = rng.normal(0, 1.5, n)
-    g3 = rng.normal(0, 2.0, n)
+    **(1) 순서는 미리 정해진다.** 네 검정이 자료에서 쓰는 정보의 양이 사다리를 이룬다.
 
-    _, p = stats.bartlett(g1, g2, g3)
-    if p < alpha:
-        results_power["Bartlett"] += 1
+    | 검정 | 보는 양 | 버리는 것 |
+    |:---|:---|:---|
+    | Bartlett | $\ln s_i^2$ | 없음 (정규모형의 충분통계량) |
+    | Levene (평균) | $\lvert x_{ij} - \bar x_i\rvert$ | 제곱 척도 |
+    | Brown-Forsythe | $\lvert x_{ij} - \tilde x_i\rvert$ | 제곱 척도 + 평균의 효율 |
+    | Fligner-Killeen | 편차의 순위 | 위의 모두 + 크기 정보 |
 
-    _, p = stats.levene(g1, g2, g3, center='mean')
-    if p < alpha:
-        results_power["Levene (mean)"] += 1
+    바틀렛은 정규모형의 **가능도비 검정**이다. $(\bar x_i, s_i^2)$ 가 정규모형의 충분통계량이므로 자료에 든 분산 정보를 하나도 버리지 않는다. 그 아래로 내려갈 때마다 정보를 한 겹씩 내놓는다. 그러므로 **자료가 정말 정규일 때**는
 
-    _, p = stats.levene(g1, g2, g3, center='median')
-    if p < alpha:
-        results_power["Brown-Forsythe"] += 1
+    $$
+    \text{Bartlett} > \text{Levene(평균)} > \text{Brown-Forsythe} > \text{Fligner-Killeen}
+    $$
 
-    _, p = stats.fligner(g1, g2, g3)
-    if p < alpha:
-        results_power["Fligner-Killeen"] += 1
+    순서를 예측한다. 보기 1 에서 이 사다리가 거꾸로 작동하는 것을 보았으니, 같은 사다리가 정규에서는 바로 작동하는지 확인하는 셈이다.
 
-for name, count in results_power.items():
-    print(f"{name:20s}: power = {count/n_sims:.4f}")
-```
+    **몬테카를로 표준오차.** $p = 0.85$, $B = 2000$ 에서
 
-출력:
+    $$
+    \mathrm{SE} = \sqrt{\frac{0.85 \times 0.15}{2000}} = 0.00798
+    $$
 
-```text
-Bartlett            : power = 0.9215
-Levene (mean)       : power = 0.8490
-Brown-Forsythe      : power = 0.8155
-Fligner-Killeen     : power = 0.7810
-```
+    이므로 **$0.016$ 보다 작은 간격은 읽어서는 안 된다.**
+
+    **(2) 돌린다.** 아래 코드는 보기 1 의 `rng`, `n_sims`, `n`, `alpha` 를 그대로 이어받는다.
+
+    ```python
+    # 2부: 검정력. 이번에는 정규모집단이고 표준편차를 1, 1.5, 2 로 실제로
+    # 다르게 두었다. 오류율만 보고 검정을 고를 수 없는 까닭이 여기 있다 —
+    # 보수적인 검정은 오류율은 낮지만 차이도 잘 못 잡는다.
+    results_power = {"Bartlett": 0, "Levene (mean)": 0,
+                     "Brown-Forsythe": 0, "Fligner-Killeen": 0}
+
+    for _ in range(n_sims):
+        g1 = rng.normal(0, 1.0, n)
+        g2 = rng.normal(0, 1.5, n)
+        g3 = rng.normal(0, 2.0, n)
+
+        _, p = stats.bartlett(g1, g2, g3)
+        if p < alpha:
+            results_power["Bartlett"] += 1
+
+        _, p = stats.levene(g1, g2, g3, center='mean')
+        if p < alpha:
+            results_power["Levene (mean)"] += 1
+
+        _, p = stats.levene(g1, g2, g3, center='median')
+        if p < alpha:
+            results_power["Brown-Forsythe"] += 1
+
+        _, p = stats.fligner(g1, g2, g3)
+        if p < alpha:
+            results_power["Fligner-Killeen"] += 1
+
+    for name, count in results_power.items():
+        print(f"{name:20s}: power = {count/n_sims:.4f}")
+
+    # ---- 크기를 맞춘 뒤의 검정력. 따로 쓰는 생성기여야 위쪽이 바뀌지 않는다 ----
+    # 정규 H0 에서 각 검정의 p-값 5% 분위수를 문턱으로 다시 잡으면, 네 검정의
+    # 실제 크기가 정확히 0.05 가 된다. 그 문턱으로 검정력을 다시 센다.
+    rng_c = np.random.default_rng(777)
+    names = ["Bartlett", "Levene (mean)", "Brown-Forsythe", "Fligner-Killeen"]
+
+
+    def four_pvalues(g):
+        return [stats.bartlett(*g)[1],
+                stats.levene(*g, center='mean')[1],
+                stats.levene(*g, center='median')[1],
+                stats.fligner(*g)[1]]
+
+
+    P0 = np.array([four_pvalues([rng_c.normal(0, 1, n) for _ in range(3)])
+                   for _ in range(n_sims)])                      # 정규 H0
+    P1 = np.array([four_pvalues([rng_c.normal(0, s, n) for s in (1.0, 1.5, 2.0)])
+                   for _ in range(n_sims)])                      # 정규 H1
+    thresh = np.quantile(P0, alpha, axis=0)
+
+    print(f"\n{'검정':>18}{'정규 크기':>11}{'보정 문턱':>11}{'명목 검정력':>13}{'보정 검정력':>13}")
+    for i, nm in enumerate(names):
+        size = (P0[:, i] < alpha).mean()
+        pw = (P1[:, i] < alpha).mean()
+        pw_cal = (P1[:, i] < thresh[i]).mean()
+        print(f"{nm:>18}{size:>11.4f}{thresh[i]:>11.4f}{pw:>13.4f}{pw_cal:>13.4f}")
+    print(f"\n검정력 0.85 쯤의 몬테카를로 표준오차 = "
+          f"{np.sqrt(0.85 * 0.15 / n_sims):.5f}")
+    ```
+
+    출력:
+
+    ```text
+    Bartlett            : power = 0.9215
+    Levene (mean)       : power = 0.8490
+    Brown-Forsythe      : power = 0.8155
+    Fligner-Killeen     : power = 0.7810
+
+                    검정      정규 크기      보정 문턱       명목 검정력       보정 검정력
+              Bartlett     0.0485     0.0511       0.9220       0.9240
+         Levene (mean)     0.0515     0.0471       0.8505       0.8450
+        Brown-Forsythe     0.0420     0.0597       0.8185       0.8480
+       Fligner-Killeen     0.0420     0.0613       0.7845       0.8160
+
+    검정력 0.85 쯤의 몬테카를로 표준오차 = 0.00798
+    ```
+
+    **(1)의 예측이 맞는다.** $0.9215 > 0.8490 > 0.8155 > 0.7810$ 으로 사다리 순서 그대로다. 이웃한 간격이 $0.0725$, $0.0335$, $0.0345$ 이고 표준오차가 $0.008$ 이니 세 간격 모두 우연이 아니다. **정규 자료에서는 정보를 버린 만큼 정확히 손해를 본다.**
+
+    새로 돌린 둘째 표의 명목 검정력 $0.9220,\ 0.8505,\ 0.8185,\ 0.7845$ 도 첫 표와 $0.005$ 안에서 맞는다. 씨앗이 다른 두 번의 모의실험이 같은 답을 주었으니 수치가 안정적이다.
+
+    **첫째 까닭: 두 표의 모집단이 다르다.** 보기 1 의 크기는 **로그정규**에서, 이 쪽의 검정력은 **정규**에서 쟀다. 둘째 표의 "정규 크기" 칸이 그 사실을 드러낸다. 네 검정이 정규 자료에서는 $0.0420$–$0.0515$ 로 모두 명목값을 지킨다. 바틀렛의 $0.0485$ 가 옳은 크기이므로 그 $0.9215$ 는 **정직하게 번 검정력**이다. 문제는 실제 자료가 정규가 아닐 때이고, 그때 바틀렛의 크기는 $0.7320$ 이 된다. **검정력은 크기가 맞는다는 조건 아래에서만 뜻이 있는 수**이며, 두 표를 나란히 두고 "검정력이 높으니 바틀렛"이라고 읽는 것은 조건을 지운 읽기다.
+
+    **둘째 까닭: 간격의 일부가 검정력이 아니라 크기다.** 브라운–포사이드와 플리그너–킬린은 정규에서도 $0.0420$ 으로 조금 보수적이다. 문턱을 정규 $H_0$ 의 $p$ 값 $5\%$ 분위수로 다시 잡으면 네 검정의 크기가 정확히 $0.05$ 가 되는데, 그 문턱이 바틀렛은 $0.0511$ 로 거의 그대로인 반면 브라운–포사이드는 $0.0597$, 플리그너–킬린은 $0.0613$ 으로 느슨해진다. 그렇게 크기를 맞추면
+
+    - 브라운–포사이드 $0.8185 \to 0.8480$ (**$+0.030$**)
+    - 플리그너–킬린 $0.7845 \to 0.8160$ (**$+0.032$**)
+    - 바틀렛 $0.9220 \to 0.9240$, Levene(평균) $0.8505 \to 0.8450$ (둘 다 표준오차 안)
+
+    이다. **브라운–포사이드의 검정력 손실 가운데 $0.030$ 은 정보를 버린 값이 아니라 그저 보수적이었던 값이다.** 바틀렛에 대한 열세가 $0.104$ 에서 $0.076$ 으로 줄고, Levene(평균)과는 $0.8480$ 대 $0.8450$ 으로 **사실상 같아진다**(차 $0.003$, 표준오차 $0.008$ 안이라 구별할 수 없다).
+
+    **그러므로 이 쪽이 네 검정에 매기는 값은 이렇다.** 정규 자료에서 바틀렛의 우위는 실재하고 $0.076$ 쯤이다. 그러나 브라운–포사이드가 로버스트 셋 가운데 검정력을 가장 적게 잃는다는 사실은 **크기를 맞추고 나서야** 보인다. 그리고 선택의 근거는 결국 보기 1 의 표다. 로그정규에서 $0.7320$ 과 $0.0295$ 의 차이는 검정력 $0.076$ 으로 메울 수 있는 크기가 아니다. **크기가 깨진 검정의 검정력은 숫자로서 뜻이 없다.**
 
 ## 해석
 

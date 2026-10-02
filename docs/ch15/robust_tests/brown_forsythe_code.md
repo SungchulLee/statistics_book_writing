@@ -58,37 +58,160 @@ SciPy에서는 함수 호출 한 번으로 끝난다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 중앙값 중심과 평균 중심
+**보기 1.** <span class="diff easy" title="쉬움"></span> 중앙값 중심과 평균 중심. 집단당 $n = 8$, 세 집단의 위치는 크게 다르고 퍼짐은 비슷한 자료다.
+
+**(1)** $g_3$ 가 $g_1$ 의 **평행이동**임을 확인하고, 그로부터 $W$ 가 네 수 $\bar z_1, \bar z_2, S_1, S_2$ 로만 적히는 닫힌 꼴임을 유도하시오. 여기서 $S_i = \sum_j (z_{ij} - \bar z_i)^2$ 이다.
+
+**(2)** 두 판본에서 **분자가 정확히 같고 분모만 다름**을 보이고 그 까닭을 밝히시오. 두 $W$ 의 비를 분모만으로 예측하고 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import levene
+??? success "풀이"
 
-# 세 집단의 평균은 크게 다르지만 퍼짐은 거의 같다.
-g1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
-g2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
-g3 = np.array([32, 35, 34, 30, 33, 34, 32, 31], dtype=float)
+    **(1) $g_3 = g_1 + 20$ 이다.** 여덟 쌍을 하나씩 빼 보면 전부 $20$ 이다. 평행이동은 중심(평균이든 중앙값이든)도 같이 $20$ 만큼 옮기므로 **절대편차가 글자 그대로 같아진다.**
 
-print("variances:", [round(np.var(g, ddof=1), 4) for g in (g1, g2, g3)])
+    $$
+    z_{3j} = \lvert (x_{1j}+20) - (c_1 + 20)\rvert = \lvert x_{1j} - c_1\rvert = z_{1j}
+    $$
 
-# scipy 에는 brown_forsythe 라는 함수가 따로 없다. levene 에
-# center='median' 을 주는 것이 곧 Brown-Forsythe 이고, 이것이 기본값이다.
-W, p = levene(g1, g2, g3, center='median')
-print(f"Brown-Forsythe W = {W:.6f}, p-value = {p:.6f}")
+    그러므로 $\bar z_3 = \bar z_1$, $S_3 = S_1$ 이고, **세 집단 문제가 두 집단의 정보로 줄어든다.**
 
-W_mean, p_mean = levene(g1, g2, g3, center='mean')
-print(f"Levene (mean)  W = {W_mean:.6f}, p-value = {p_mean:.6f}")
-```
+    **닫힌 꼴.** $\bar z_1 = \bar z_3 = a$, $\bar z_2 = b$, $n_i = 8$, $N = 24$, $k = 3$ 이라 쓰자. 전체평균이 $\bar z = (2a+b)/3$ 이므로 세 집단의 편차가
 
-출력:
+    $$
+    a - \bar z = \frac{a-b}{3}\;(\text{두 번}), \qquad b - \bar z = \frac{2(b-a)}{3}
+    $$
 
-```text
-variances: [2.8393, 6.0, 2.8393]
-Brown-Forsythe W = 1.107595, p-value = 0.348894
-Levene (mean)  W = 1.121795, p-value = 0.344444
-```
+    이고 집단간 제곱합은
+
+    $$
+    \mathrm{SS}_{\text{between}} = 8\left[2\cdot\frac{(a-b)^2}{9} + \frac{4(a-b)^2}{9}\right] = 8(a-b)^2\cdot\frac69 = \frac{16}{3}(a-b)^2
+    $$
+
+    이다. 집단내 제곱합은 $S_1 + S_2 + S_3 = 2S_1 + S_2$ 이므로
+
+    $$
+    W = \frac{(N-k)\,\mathrm{SS}_{\text{between}}}{(k-1)\,\mathrm{SS}_{\text{within}}}
+    = \frac{21 \cdot \frac{16}{3}(a-b)^2}{2\,(2S_1+S_2)}
+    = \frac{56\,(a-b)^2}{2S_1 + S_2}
+    $$
+
+    를 얻는다. **네 수만 알면 $W$ 가 정해진다.**
+
+    **(2) 분자가 왜 같은가.** 분자는 $a$ 와 $b$ 로만 만들어지므로, 두 중심에서 $a$ 와 $b$ 가 같으면 분자도 같다. 두 가지 우연이 겹쳐 그렇게 된다.
+
+    *$b$ 가 같은 까닭.* $g_2$ 를 정렬하면 $18, 19, \ldots, 25$ 로 연속한 여덟 정수라 **평균과 중앙값이 둘 다 $21.5$** 다. 중심이 같으니 $z_{2j}$ 자체가 같고 $b$ 도 $S_2$ 도 같다.
+
+    *$a$ 가 같은 까닭.* 이쪽은 더 섬세하다. $g_1$ 의 중앙값은 $12.5$, 평균은 $12.625$ 로 **다르다.** 그런데 $g(c) = \sum_j \lvert x_{1j} - c\rvert$ 는 볼록·조각선형이고 $n$ 이 짝수이므로 최소점이 한 점이 아니라 구간 $[x_{(4)}, x_{(5)}] = [12, 13]$ 이다(11.5절 보기 1 의 유도). **평균 $12.625$ 가 그 구간 안에 든다.** 그러므로
+
+    $$
+    \sum_j \lvert x_{1j} - 12.5\rvert = \sum_j \lvert x_{1j} - 12.625\rvert = 11
+    $$
+
+    이고 $a = 11/8 = 1.375$ 가 두 중심에서 같다. 개별 $z_{1j}$ 는 다른데 **합이 같다.**
+
+    **그러므로 차이는 분모에만 남는다.** $S_1$ 은 $z_{1j}$ 의 산포이므로 개별 값이 바뀌면 달라진다. 두 $W$ 의 비는
+
+    $$
+    \frac{W_{\text{평균}}}{W_{\text{중앙값}}} = \frac{2S_1^{(\text{중앙값})} + S_2}{2S_1^{(\text{평균})} + S_2}
+    $$
+
+    로 **분모만의 비**가 된다.
+
+    **확인한다.**
+
+    ```python
+    import numpy as np
+    from scipy.stats import levene
+
+    # 세 집단의 평균은 크게 다르지만 퍼짐은 거의 같다.
+    g1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
+    g2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
+    g3 = np.array([32, 35, 34, 30, 33, 34, 32, 31], dtype=float)
+
+    print("variances:", [round(np.var(g, ddof=1), 4) for g in (g1, g2, g3)])
+
+    # scipy 에는 brown_forsythe 라는 함수가 따로 없다. levene 에
+    # center='median' 을 주는 것이 곧 Brown-Forsythe 이고, 이것이 기본값이다.
+    W, p = levene(g1, g2, g3, center='median')
+    print(f"Brown-Forsythe W = {W:.6f}, p-value = {p:.6f}")
+
+    W_mean, p_mean = levene(g1, g2, g3, center='mean')
+    print(f"Levene (mean)  W = {W_mean:.6f}, p-value = {p_mean:.6f}")
+
+    # (1) g3 가 g1 의 평행이동인가.
+    print(f"\ng3 - g1 = {g3 - g1}   ->  g3 = g1 + {int((g3 - g1)[0])} 인가: "
+          f"{np.all(g3 - g1 == 20)}")
+
+    # (1)(2) 닫힌 꼴 W = 56 (zbar1 - zbar2)^2 / (2 S1 + S2) 를 두 중심에서 조립한다.
+    print(f"\n{'중심':>7}{'zbar1':>9}{'zbar2':>9}{'S1':>9}{'S2':>9}"
+          f"{'분자 56(dz)^2':>15}{'분모 2S1+S2':>13}{'W':>11}")
+    for name, c in [("median", np.median), ("mean", np.mean)]:
+        z1, z2, z3 = (np.abs(g - c(g)) for g in (g1, g2, g3))
+        assert np.array_equal(z1, z3)          # g3 = g1 + 20 이므로 편차가 같다
+        a, b = z1.mean(), z2.mean()
+        S1 = ((z1 - a) ** 2).sum()
+        S2 = ((z2 - b) ** 2).sum()
+        num, den = 56 * (a - b) ** 2, 2 * S1 + S2
+        print(f"{name:>7}{a:>9.4f}{b:>9.4f}{S1:>9.4f}{S2:>9.4f}"
+              f"{num:>15.5f}{den:>13.4f}{num / den:>11.6f}")
+
+    # 왜 zbar1 이 두 중심에서 같은가. 중앙값이 sum|y-c| 를 최소화하는 구간을 본다.
+    s = np.sort(g1)
+    print(f"\ng1 정렬 = {s}")
+    print(f"  중앙값 = {np.median(g1):.3f},  평균 = {g1.mean():.3f}")
+    print(f"  최소화 구간 [x_(4), x_(5)] = [{s[3]:.0f}, {s[4]:.0f}] 에 평균이 드는가: "
+          f"{s[3] <= g1.mean() <= s[4]}")
+    for c in (s[3], np.median(g1), g1.mean(), s[4]):
+        print(f"    c = {c:7.3f}  ->  sum|g1 - c| = {np.abs(g1 - c).sum():.6f}")
+    print(f"\ng2 의 평균 {g2.mean():.3f} = 중앙값 {np.median(g2):.3f} 인가: "
+          f"{g2.mean() == np.median(g2)}")
+
+    # (2) 분자가 같으니 두 W 의 비는 분모의 비와 같아야 한다.
+    print(f"\nW(mean)/W(median) = {W_mean / W:.6f}")
+    print(f"분모의 비 19.75/19.50 = {19.75 / 19.50:.6f}")
+    ```
+
+    출력:
+
+    ```text
+    variances: [2.8393, 6.0, 2.8393]
+    Brown-Forsythe W = 1.107595, p-value = 0.348894
+    Levene (mean)  W = 1.121795, p-value = 0.344444
+
+    g3 - g1 = [20. 20. 20. 20. 20. 20. 20. 20.]   ->  g3 = g1 + 20 인가: True
+
+         중심    zbar1    zbar2       S1       S2    분자 56(dz)^2    분모 2S1+S2          W
+     median   1.3750   2.0000   4.8750  10.0000       21.87500      19.7500   1.107595
+       mean   1.3750   2.0000   4.7500  10.0000       21.87500      19.5000   1.121795
+
+    g1 정렬 = [10. 11. 12. 12. 13. 14. 14. 15.]
+      중앙값 = 12.500,  평균 = 12.625
+      최소화 구간 [x_(4), x_(5)] = [12, 13] 에 평균이 드는가: True
+        c =  12.000  ->  sum|g1 - c| = 11.000000
+        c =  12.500  ->  sum|g1 - c| = 11.000000
+        c =  12.625  ->  sum|g1 - c| = 11.000000
+        c =  13.000  ->  sum|g1 - c| = 11.000000
+
+    g2 의 평균 21.500 = 중앙값 21.500 인가: True
+
+    W(mean)/W(median) = 1.012821
+    분모의 비 19.75/19.50 = 1.012821
+    ```
+
+    **닫힌 꼴이 SciPy 와 소수 여섯째 자리까지 맞는다.** 네 수 $(a, b, S_1, S_2)$ 만으로 조립한 $W$ 가 중앙값 쪽 $1.107595$, 평균 쪽 $1.121795$ 로 `levene` 의 값과 같다. 손으로 따라가면
+
+    $$
+    W_{\text{중앙값}} = \frac{56\,(1.375 - 2.0)^2}{2(4.875)+10} = \frac{21.875}{19.75} = 1.107595
+    $$
+
+    이다. `assert np.array_equal(z1, z3)` 가 통과한 것이 $g_3 = g_1 + 20$ 의 결과를 확인해 준다.
+
+    **(2)의 예측이 모두 맞는다.** 분자가 두 중심에서 $21.87500$ 으로 **완전히 같고**, $S_2 = 10.0000$ 도 같다. 달라진 것은 $S_1$ 하나, $4.8750$ 대 $4.7500$ 뿐이다. 그래서 분모가 $19.75$ 대 $19.50$ 이 되고 $W$ 의 비가 $1.012821$, 분모의 비 $19.75/19.50 = 1.012821$ 과 소수 여섯째 자리까지 같다.
+
+    **$\sum_j \lvert g_1 - c\rvert$ 가 네 점에서 모두 정확히 $11$ 이라는 줄이 (2)의 핵심이다.** $c = 12,\ 12.5,\ 12.625,\ 13$ 어디서 재도 같다. 짝수 표본에서 최소점이 구간이라는 사실이 눈에 보이는 꼴이며, 평균이 그 구간 안에 들어 있었다는 우연 덕분에 분자가 보존되었다. **평균이 $[12, 13]$ 밖으로 나가면 $a$ 가 커지고 분자까지 달라진다.**
+
+    **$S_1$ 쪽이 중앙값에서 더 크다는 것도 눈여겨볼 만하다.** $4.875 > 4.750$ 이다. 중앙값은 $z$ 의 **합**을 최소화하지만 $z$ 의 **산포**는 최소화하지 않으며, 여기서는 오히려 키웠다. 그 결과 중앙값 판의 $W$ 가 더 작고 $p$ 값이 더 크다($0.348894$ 대 $0.344444$). 로버스트성의 대가인 검정력 손실이 이 자료에서는 $p$ 값 소수 셋째 자리만큼이다.
 
 ---
 

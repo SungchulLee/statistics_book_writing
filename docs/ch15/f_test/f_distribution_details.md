@@ -119,43 +119,115 @@ F 분포는 여러 다른 분포와 연결된다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> F 분포의 성질과 기각값
+**보기 2.** <span class="diff easy" title="쉬움"></span> F 분포의 성질과 기각값. 보기 1 의 설정 $d_1 = 15$, $d_2 = 20$, $F_{\text{obs}} = 45/28$ 을 그대로 쓴다.
+
+**(1)** $F(15,20)$ 의 평균과 분산을 닫힌 꼴로 구하고, **상단 분위수만 실린 표**로 하단 임계값 $F_{0.025}(15,20)$ 을 얻는 법을 보이시오.
+
+**(2)** 코드로 확인하시오. 관측값 $1.607$ 이 평균 $1.111$ 보다 큰데도 기각하지 못하는 까닭을 **분산의 크기로** 설명하시오.
 
 </div>
 
-```python
-from scipy import stats
+??? success "풀이"
 
-# 분자와 분모의 자유도
-d1, d2 = 15, 20
+    **(1) 평균과 분산.** 평균은 연습문제 1 에서 유도한다.
 
-# F 분포의 평균은 d2/(d2-2) 로 1 보다 조금 크다. 분산비의 분포이므로
-# 아래로는 0 에서 막히고 위로는 열려 있어 오른쪽으로 치우친 탓이다.
-print(f"Mean: {stats.f.mean(d1, d2):.4f}")
-print(f"Variance: {stats.f.var(d1, d2):.4f}")
+    $$
+    E[F] = \frac{d_2}{d_2 - 2} = \frac{20}{18} = 1.1111 \qquad (d_2 > 2)
+    $$
 
-alpha = 0.05
-f_lower = stats.f.ppf(alpha / 2, d1, d2)
-f_upper = stats.f.ppf(1 - alpha / 2, d1, d2)
-print(f"Critical values: [{f_lower:.3f}, {f_upper:.3f}]")
+    분산은 $d_2 > 4$ 에서
 
-# 두 표본분산의 비. 큰 쪽을 분자에 두면 오른쪽 꼬리만 보면 되지만,
-# 여기서는 순서를 정해 놓고 양측으로 계산한다.
-f_stat = 45 / 28
-p_value = 2 * min(stats.f.cdf(f_stat, d1, d2), stats.f.sf(f_stat, d1, d2))
-print(f"F-statistic: {f_stat:.3f}")
-print(f"P-value: {p_value:.4f}")
-```
+    $$
+    \operatorname{Var}(F) = \frac{2 d_2^2 (d_1 + d_2 - 2)}{d_1 (d_2-2)^2 (d_2-4)}
+    = \frac{2 \cdot 400 \cdot 33}{15 \cdot 324 \cdot 16}
+    = \frac{26400}{77760} = 0.339506
+    $$
 
-출력:
+    이다. 표준편차로는 $\sqrt{0.339506} = 0.5827$ 이다. **평균은 $d_1$ 에 의존하지 않지만 분산은 의존한다** — 분자 자유도가 작을수록 분자가 불안정해 비가 더 흔들린다.
 
-```text
-Mean: 1.1111
-Variance: 0.3395
-Critical values: [0.363, 2.573]
-F-statistic: 1.607
-P-value: 0.3184
-```
+    **하단 임계값은 상단 분위수 하나로 얻는다.** 역수 성질 $1/F \sim F(d_2,d_1)$ 에서
+
+    $$
+    \alpha = P\bigl(F(d_1,d_2) \le F_\alpha(d_1,d_2)\bigr)
+    = P\!\left(F(d_2,d_1) \ge \frac{1}{F_\alpha(d_1,d_2)}\right)
+    $$
+
+    이므로 $1/F_\alpha(d_1,d_2)$ 가 $F(d_2,d_1)$ 의 상단 $\alpha$ 점, 곧
+
+    $$
+    F_\alpha(d_1,d_2) = \frac{1}{F_{1-\alpha}(d_2,d_1)}
+    $$
+
+    이다. 여기서는 $F_{0.025}(15,20) = 1/F_{0.975}(20,15)$ 이고, **자유도의 순서가 뒤바뀐다**는 데 주의해야 한다. 옛 표에 상단 분위수만 실려 있어도 양측검정을 할 수 있었던 것이 이 덕분이다.
+
+    **(2) 확인한다.**
+
+    ```python
+    from scipy import stats
+
+    # 분자와 분모의 자유도
+    d1, d2 = 15, 20
+
+    # F 분포의 평균은 d2/(d2-2) 로 1 보다 조금 크다. 분산비의 분포이므로
+    # 아래로는 0 에서 막히고 위로는 열려 있어 오른쪽으로 치우친 탓이다.
+    print(f"Mean: {stats.f.mean(d1, d2):.4f}")
+    print(f"Variance: {stats.f.var(d1, d2):.4f}")
+
+    alpha = 0.05
+    f_lower = stats.f.ppf(alpha / 2, d1, d2)
+    f_upper = stats.f.ppf(1 - alpha / 2, d1, d2)
+    print(f"Critical values: [{f_lower:.3f}, {f_upper:.3f}]")
+
+    # 두 표본분산의 비. 큰 쪽을 분자에 두면 오른쪽 꼬리만 보면 되지만,
+    # 여기서는 순서를 정해 놓고 양측으로 계산한다.
+    f_stat = 45 / 28
+    p_value = 2 * min(stats.f.cdf(f_stat, d1, d2), stats.f.sf(f_stat, d1, d2))
+    print(f"F-statistic: {f_stat:.3f}")
+    print(f"P-value: {p_value:.4f}")
+
+    # (1) 의 닫힌 꼴과 맞춰 본다.
+    mean_formula = d2 / (d2 - 2)
+    var_formula = 2 * d2**2 * (d1 + d2 - 2) / (d1 * (d2 - 2) ** 2 * (d2 - 4))
+    print(f"\n공식 평균 d2/(d2-2)                       = {mean_formula:.6f}")
+    print(f"공식 분산 2 d2^2 (d1+d2-2) / (d1 (d2-2)^2 (d2-4)) = {var_formula:.6f}")
+
+    # 하단 임계값을 상단 분위수만으로 얻는다: F_a(d1,d2) = 1 / F_{1-a}(d2,d1)
+    upper_swapped = stats.f.ppf(1 - alpha / 2, d2, d1)      # 자유도를 뒤바꾼 상단 분위수
+    print(f"\nF_0.975(20,15)      = {upper_swapped:.6f}")
+    print(f"1 / F_0.975(20,15)  = {1 / upper_swapped:.6f}")
+    print(f"F_0.025(15,20)      = {f_lower:.6f}")
+
+    # 관측값이 평균에서 몇 표준편차 떨어져 있는가
+    sd = var_formula**0.5
+    print(f"\n표준편차 = {sd:.4f}")
+    print(f"(F_obs - 평균)/표준편차 = {(f_stat - mean_formula) / sd:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    Mean: 1.1111
+    Variance: 0.3395
+    Critical values: [0.363, 2.573]
+    F-statistic: 1.607
+    P-value: 0.3184
+
+    공식 평균 d2/(d2-2)                       = 1.111111
+    공식 분산 2 d2^2 (d1+d2-2) / (d1 (d2-2)^2 (d2-4)) = 0.339506
+
+    F_0.975(20,15)      = 2.755902
+    1 / F_0.975(20,15)  = 0.362858
+    F_0.025(15,20)      = 0.362858
+
+    표준편차 = 0.5827
+    (F_obs - 평균)/표준편차 = 0.8513
+    ```
+
+    **세 가지가 모두 맞는다.** 공식 평균 $1.111111$ 과 분산 $0.339506$ 이 `scipy` 의 $1.1111$, $0.3395$ 와 같고, $1/F_{0.975}(20,15) = 0.362858$ 이 $F_{0.025}(15,20) = 0.362858$ 과 소수 여섯째 자리까지 같다.
+
+    **기각하지 못하는 까닭은 분산이 크기 때문이다.** 표준편차가 $0.5827$ 인데 관측값은 평균에서 겨우 $0.85$ 표준편차 떨어져 있다. 정규분포라면 $0.85$ 표준편차는 흔하디흔한 자리다. 채택역 $[0.363,\ 2.573]$ 을 같은 눈금으로 재면 평균에서 아래로 $1.28$, 위로 $2.51$ 표준편차까지 뻗어 있으니 $0.85$ 는 한참 안쪽이다. $p = 0.3184$ 가 그 말이다.
+
+    **"관측값이 평균보다 크다"는 것은 아무 증거도 아니다.** $F$ 분포의 평균 $1.111$ 자체가 1 보다 크고(오른쪽 치우침 때문이다), 그 주위의 산포는 그보다 훨씬 크다. **판정은 언제나 평균이 아니라 임계값으로** 해야 한다.
 
 
 ## 연습문제

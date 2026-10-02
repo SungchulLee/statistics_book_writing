@@ -57,52 +57,238 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 오류율
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 오류율. 위 표의 일곱 모집단에서 세 집단($k = 3$)을 **같은 분포**에서 뽑아 $H_0$ 를 참으로 만들고 실제 기각률을 센다.
+
+**(1)** 연습문제 2 의 $\operatorname{Var}(\ln S^2) \approx (\beta_2 - 1)/\nu$ 에서 출발하여($\beta_2 = \gamma_2 + 3$ 은 첨도), 등표본 $n_i = n$ 에서 $n \to \infty$ 일 때
+
+$$
+T \;\longrightarrow\; \frac{\beta_2 - 1}{2}\,\chi^2_{k-1}
+$$
+
+임을 보이고, 명목 $\alpha$ 검정의 **극한 오류율**을 $\beta_2$ 와 $k$ 의 식으로 적으시오. 이 식이 $k = 2$ 에서 5.3절의 식으로 줄어드는지 확인하시오.
+
+**(2)** 본문 표를 재현하고, $n$ 을 $20$ 에서 $1280$ 까지 키우며 오류율이 (1)의 극한값으로 가는지 보시오. 오류율이 **올라갈지 내려갈지** 미리 짚으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 모집단마다 세 집단을 같은 분포에서 뽑으므로 분산은 언제나 참으로 같다.
-# 그러니 아래 비율은 모두 0.05 여야 옳다. 실제로는 분포의 꼬리가 두꺼울수록
-# 훨씬 커진다 — Bartlett 검정이 정규성에 얼마나 매여 있는지를 보여 준다.
-rng = np.random.default_rng(2)
-n, k, R, alpha = 20, 3, 20000, 0.05
+    **(1) 통계량을 등분산점 주위에서 두 번 펼친다.** 표본크기가 모두 같다고 하자. 그러면 $S_p^2$ 이 산술평균이다. 참 공통분산을 $\sigma^2$ 이라 쓰고
 
-def contaminated(m):
-    """90%는 N(0,1), 10%는 N(0,9) 에서 나오는 오염 정규분포."""
-    u = rng.random(m)
-    return np.where(u < 0.9, rng.normal(0, 1, m), rng.normal(0, 3, m))
+    $$
+    S_i^2 = \sigma^2 (1 + u_i), \qquad u_i = \frac{S_i^2}{\sigma^2} - 1
+    $$
 
-cases = [
-    ("Normal",         lambda: rng.normal(0, 1, n)),
-    ("t(10)",          lambda: rng.standard_t(10, n)),
-    ("chi2(4)",        lambda: rng.chisquare(4, n)),
-    ("t(5)",           lambda: rng.standard_t(5, n)),
-    ("Exponential",    lambda: rng.exponential(1, n)),
-    ("Contaminated N", lambda: contaminated(n)),
-    ("Uniform",        lambda: rng.uniform(0, 1, n)),
-]
+    로 두면 $E[u_i] = 0$ 이고, 15.1절의 $\operatorname{Var}(S^2) \approx \sigma^4(\beta_2-1)/n$ 에서
 
-for name, gen in cases:
-    rej = sum(stats.bartlett(*[gen() for _ in range(k)])[1] < alpha
-              for _ in range(R))
-    print(f"{name:>16}: {rej / R:.4f}")
-```
+    $$
+    \tau^2 := \operatorname{Var}(u_i) \approx \frac{\beta_2 - 1}{\nu}
+    $$
 
-출력:
+    이다($\nu = n-1$). 분자를 $\sigma^2$ 으로 정리하면 $\ln \sigma^2$ 이 상쇄되어
 
-```
-          Normal: 0.0488
-           t(10): 0.1116
-         chi2(4): 0.2387
-            t(5): 0.2193
-     Exponential: 0.3790
-  Contaminated N: 0.3331
-         Uniform: 0.0022
-```
+    $$
+    -2\ln\Lambda = \nu\left[k \ln(1 + \bar u) - \sum_{i=1}^k \ln(1 + u_i)\right]
+    $$
+
+    만 남는다($\bar u = \frac1k\sum_i u_i$). $\ln(1+x) = x - \frac{x^2}{2} + O(x^3)$ 을 넣으면
+
+    $$
+    -2\ln\Lambda = \nu\left[\Bigl(k\bar u - \sum_i u_i\Bigr)
+    + \frac12\Bigl(\sum_i u_i^2 - k \bar u^2\Bigr)\right] + O(u^3)
+    $$
+
+    인데 **일차항이 통째로 사라진다**($k\bar u = \sum_i u_i$ 이므로). 남는 이차항은 제곱합의 항등식 $\sum_i u_i^2 - k\bar u^2 = \sum_i (u_i - \bar u)^2$ 에 의해
+
+    $$
+    -2\ln\Lambda \approx \frac{\nu}{2}\sum_{i=1}^k (u_i - \bar u)^2
+    $$
+
+    이다. **이것이 바틀렛 통계량의 정체다.** 일차항이 사라지므로 통계량은 $u_i$ 들의 **흩어짐**만 본다. 연습문제 1·2 가 말한 "모든 분산이 같을 때만 0" 이 여기서는 "$u_i$ 가 모두 같을 때만 0" 으로 나타난다.
+
+    **이제 극한분포가 읽힌다.** $u_i$ 는 독립이고 각각 평균 $0$, 분산 $\tau^2$ 이며 $n \to \infty$ 에서 $S_i^2$ 의 중심극한정리에 의해 근사적으로 정규다. 독립 정규 $k$ 개의 중심화 제곱합은 $\tau^2 \chi^2_{k-1}$ 이므로
+
+    $$
+    -2\ln\Lambda \;\longrightarrow\; \frac{\nu}{2}\cdot \tau^2 \cdot \chi^2_{k-1}
+    = \frac{\nu}{2}\cdot\frac{\beta_2-1}{\nu}\cdot \chi^2_{k-1}
+    = \frac{\beta_2-1}{2}\,\chi^2_{k-1}
+    $$
+
+    이고, $C \to 1$ 이므로 $T$ 도 같은 극한을 갖는다.
+
+    **$\nu$ 가 약분되었다.** 이것이 이 유도의 핵심이다. 통계량의 크기를 정하는 $\nu/2$ 와 $u_i$ 의 분산 $(\beta_2-1)/\nu$ 가 서로 상쇄되어 **표본크기가 식에서 사라진다.** 남는 것은 배율 $(\beta_2-1)/2$ 하나뿐이고, 그것은 모집단 첨도만의 함수다.
+
+    **극한 오류율.** 기각 조건 $T > \chi^2_{1-\alpha,\,k-1}$ 을 극한분포에 넣으면
+
+    $$
+    \text{극한 오류율} = P\!\left(\chi^2_{k-1} > \frac{2\,\chi^2_{1-\alpha,\,k-1}}{\beta_2 - 1}\right)
+    $$
+
+    이다. 정규($\beta_2 = 3$)를 넣으면 분모가 $2$ 라 임계값이 제자리로 돌아와 정확히 $\alpha$ 가 나오는 것이 검산이다.
+
+    **배율 $(\beta_2-1)/2$ 가 5.3절의 그것과 똑같다.** 5.3절은 두 표본 분산비에 대해 $\operatorname{Var}(\log F)$ 가 정규 가정의 믿음보다 $(\beta_2-1)/2$ 배 넓어진다는 것을 유도했다. 바틀렛에서도 같은 배율이 나오며, $k = 2$ 로 두면 두 식이 **같은 식**이 된다.
+
+    $$
+    P\!\left(\chi^2_1 > \frac{2(1.96)^2}{\beta_2-1}\right)
+    = P\!\left(\lvert Z\rvert > 1.96\sqrt{\frac{2}{\beta_2-1}}\right)
+    = 2\left[1 - \Phi\!\left(1.96\sqrt{\frac{2}{\beta_2-1}}\right)\right]
+    $$
+
+    $\chi^2_1$ 이 $Z^2$ 이라는 것만 쓰면 바로 나온다. **그러므로 분산 검정이 중심극한정리의 보호를 받지 못한다는 5.3절의 결론이 $k$ 개 집단으로 그대로 확장된다.** 표본을 키워도 오류율은 $\alpha$ 로 돌아오지 않고 각자의 상수로 간다.
+
+    **(2) 방향부터 짚는다.** $\beta_2 - 1 > 2$(두꺼운 꼬리)이면 배율이 1 보다 커서 $T$ 가 기준분포보다 넓게 퍼지므로 오류율이 $\alpha$ 보다 크다. $\beta_2 - 1 < 2$(균등)이면 반대다. 그리고 작은 $n$ 에서는 위 전개의 $O(u^3)$ 항과 $u_i$ 의 비정규성이 아직 살아 있어 극한에 못 미치므로, **꼬리가 무거운 쪽은 아래에서 위로 올라가고 균등은 위에서 아래로 내려가야** 한다.
+
+    먼저 본문 표를 재현한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 모집단마다 세 집단을 같은 분포에서 뽑으므로 분산은 언제나 참으로 같다.
+    # 그러니 아래 비율은 모두 0.05 여야 옳다. 실제로는 분포의 꼬리가 두꺼울수록
+    # 훨씬 커진다 — Bartlett 검정이 정규성에 얼마나 매여 있는지를 보여 준다.
+    rng = np.random.default_rng(2)
+    n, k, R, alpha = 20, 3, 20000, 0.05
+
+    def contaminated(m):
+        """90%는 N(0,1), 10%는 N(0,9) 에서 나오는 오염 정규분포."""
+        u = rng.random(m)
+        return np.where(u < 0.9, rng.normal(0, 1, m), rng.normal(0, 3, m))
+
+    cases = [
+        ("Normal",         lambda: rng.normal(0, 1, n)),
+        ("t(10)",          lambda: rng.standard_t(10, n)),
+        ("chi2(4)",        lambda: rng.chisquare(4, n)),
+        ("t(5)",           lambda: rng.standard_t(5, n)),
+        ("Exponential",    lambda: rng.exponential(1, n)),
+        ("Contaminated N", lambda: contaminated(n)),
+        ("Uniform",        lambda: rng.uniform(0, 1, n)),
+    ]
+
+    for name, gen in cases:
+        rej = sum(stats.bartlett(*[gen() for _ in range(k)])[1] < alpha
+                  for _ in range(R))
+        print(f"{name:>16}: {rej / R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+              Normal: 0.0488
+               t(10): 0.1116
+             chi2(4): 0.2387
+                t(5): 0.2193
+         Exponential: 0.3790
+      Contaminated N: 0.3331
+             Uniform: 0.0022
+    ```
+
+    **본문 표가 그대로 나온다.** 지수분포 $0.3790$, 오염 정규 $0.3331$, $\chi^2_4$ $0.2387$, $t_5$ $0.2193$, $t_{10}$ $0.1116$, 정규 $0.0488$, 균등 $0.0022$ 다. **일곱 모집단 모두 분산이 참으로 같은데도** 기각률이 $0.002$ 에서 $0.379$ 까지 벌어진다.
+
+    이제 (1)의 극한식과 견주며 $n$ 을 키운다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 극한 오류율 예측:  크기 -> P( chi2_{k-1} > 2 * chi2_{0.95,k-1} / (beta2 - 1) )
+    k, alpha = 3, 0.05
+    crit = stats.chi2.ppf(1 - alpha, k - 1)
+
+
+    def limit_size(beta2_minus_1):
+        return stats.chi2.sf(2 * crit / beta2_minus_1, k - 1)
+
+
+    spec = [("Uniform", -1.2), ("Normal", 0.0), ("t(10)", 1.0), ("chi2(4)", 3.0),
+            ("Contaminated N", 5.3), ("t(5)", 6.0), ("Exponential", 6.0)]
+
+    # k=2 로 두면 5.3절의 식 2[1 - Phi(1.96 sqrt(2/(beta2-1)))] 과 같아야 한다.
+    c1 = stats.chi2.ppf(0.95, 1)
+    print("k=2 로 줄이면 5.3절의 네 수가 되는가")
+    for nm, b2 in [("정규", 3.0), ("균등", 1.8), ("지수", 9.0), ("로그정규", 113.94)]:
+        mine = stats.chi2.sf(2 * c1 / (b2 - 1), 1)
+        ref = 2 * stats.norm.sf(1.96 * np.sqrt(2 / (b2 - 1)))
+        print(f"  {nm:>6}  beta2={b2:>7.2f}   내 식 {mine:.4f}   5.3절 식 {ref:.4f}")
+
+    rng = np.random.default_rng(5)
+    draw = {
+        "Uniform":        lambda s: rng.uniform(0, 1, s),
+        "Normal":         lambda s: rng.normal(0, 1, s),
+        "t(10)":          lambda s: rng.standard_t(10, s),
+        "chi2(4)":        lambda s: rng.chisquare(4, s),
+        "Contaminated N": lambda s: np.where(rng.random(s) < 0.9,
+                                             rng.normal(0, 1, s), rng.normal(0, 3, s)),
+        "t(5)":           lambda s: rng.standard_t(5, s),
+        "Exponential":    lambda s: rng.exponential(1, s),
+    }
+
+    M, CH = 10_000, 500            # 반복 수와 한 번에 처리할 묶음 크기
+    ns = (20, 80, 320, 1280)
+    print(f"\n표본을 키우면 오류율이 극한값으로 올라간다 (반복 {M}, k=3, alpha=0.05)")
+    print(f"{'분포':>16}" + "".join(f"{f'n={n}':>9}" for n in ns) + f"{'극한 예측':>11}")
+    for nm, g2 in spec:
+        row = []
+        for n in ns:
+            C = 1 + (k + 1) / (3 * k * (n - 1))
+            hits = 0
+            for _ in range(M // CH):
+                S = draw[nm]((CH, k, n)).var(axis=2, ddof=1)
+                T = k * (n - 1) * np.log(S.mean(axis=1)
+                                         / np.exp(np.log(S).mean(axis=1))) / C
+                hits += int(np.sum(T > crit))
+            row.append(hits / M)
+        print(f"{nm:>16}" + "".join(f"{r:>9.4f}" for r in row)
+              + f"{limit_size(g2 + 2):>11.4f}")
+    print(f"\n몬테카를로 표준오차: 크기 0.05 근처 {np.sqrt(0.05 * 0.95 / M):.4f}, "
+          f"0.45 근처 {np.sqrt(0.45 * 0.55 / M):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    k=2 로 줄이면 5.3절의 네 수가 되는가
+          정규  beta2=   3.00   내 식 0.0500   5.3절 식 0.0500
+          균등  beta2=   1.80   내 식 0.0019   5.3절 식 0.0019
+          지수  beta2=   9.00   내 식 0.3271   5.3절 식 0.3271
+        로그정규  beta2= 113.94   내 식 0.7942   5.3절 식 0.7942
+
+    표본을 키우면 오류율이 극한값으로 올라간다 (반복 10000, k=3, alpha=0.05)
+                  분포     n=20     n=80    n=320   n=1280      극한 예측
+             Uniform   0.0027   0.0006   0.0006   0.0003     0.0006
+              Normal   0.0497   0.0492   0.0476   0.0501     0.0500
+               t(10)   0.1076   0.1285   0.1359   0.1293     0.1357
+             chi2(4)   0.2313   0.2774   0.2976   0.3011     0.3017
+      Contaminated N   0.3327   0.4136   0.4415   0.4455     0.4401
+                t(5)   0.2233   0.2950   0.3477   0.3900     0.4729
+         Exponential   0.3859   0.4485   0.4565   0.4633     0.4729
+
+    몬테카를로 표준오차: 크기 0.05 근처 0.0022, 0.45 근처 0.0050
+    ```
+
+    **$k = 2$ 로 줄이면 5.3절의 네 수가 정확히 나온다.** 정규 $0.0500$, 균등 $0.0019$, 지수 $0.3271$, 로그정규 $0.7942$ 로 두 식이 소수점 넷째 자리까지 같다. (1)에서 대수로 보인 것이 수로도 확인되었다. **5.3절이 두 표본 분산비에 대해 유도한 식은 바틀렛의 $k=2$ 특수경우였던 것이다.**
+
+    **극한 예측이 여섯 모집단에서 맞는다.** $n$ 을 $20 \to 80 \to 320 \to 1280$ 으로 키우면
+
+    | 모집단 | $n=20$ | $n=1280$ | 극한 예측 |
+    |:---|---:|---:|---:|
+    | 균등 | 0.0027 | 0.0003 | 0.0006 |
+    | 정규 | 0.0497 | 0.0501 | 0.0500 |
+    | $t_{10}$ | 0.1076 | 0.1293 | 0.1357 |
+    | $\chi^2_4$ | 0.2313 | 0.3011 | 0.3017 |
+    | 오염 정규 | 0.3327 | 0.4455 | 0.4401 |
+    | 지수 | 0.3859 | 0.4633 | 0.4729 |
+
+    **(2)에서 짚은 방향이 그대로다.** 정규만 $0.05$ 에 수평으로 머물고, 꼬리가 무거운 넷은 모두 **아래에서 위로 올라가** 각자의 극한값에 닿으며, 균등은 $0.0027$ 에서 $0.0006$ 으로 **내려간다.** $\chi^2_4$ 가 $0.3011$ 대 예측 $0.3017$, 오염 정규가 $0.4455$ 대 $0.4401$ 로 몬테카를로 표준오차 $0.005$ 안에서 맞는다. 균등의 $0.0003$ 과 $0.0006$ 도 그 수준에서는 표준오차가 $0.0002$ 라 어긋남이 아니다.
+
+    **표본을 키워도 낫지 않는다. 오히려 나빠진다.** 표의 모든 비정규 행이 $n$ 과 함께 명목값에서 **멀어진다.** 평균에 대한 검정이라면 중심극한정리가 $n$ 과 함께 구원해 주지만, 분산 검정에서는 통계량의 크기와 요동이 같은 비율로 커져 둘의 비가 고정된다. (1)에서 $\nu$ 가 약분된 것이 그 말이다. **"표본이 크니 괜찮다"는 변명이 분산 검정에는 통하지 않는다.**
+
+    **$t_5$ 하나만 극한에 닿지 못했다.** $n = 1280$ 에서 $0.3900$ 인데 예측은 $0.4729$ 다. 이 어긋남은 유도가 틀린 것이 아니라 **수렴이 느린 것**이다. 위 유도는 $u_i = S_i^2/\sigma^2 - 1$ 이 근사적으로 정규라는 데 기대고, 그 중심극한정리가 듣기 위해서는 $S^2$ 의 분산, 곧 모집단의 **4차 적률**이 필요하다. $t_5$ 는 4차 적률이 겨우 존재하는 분포다($t_d$ 의 $m$ 차 적률은 $m < d$ 에서만 존재하므로 $t_5$ 는 4차까지만 있다). $\operatorname{Var}(S^2)$ 자체의 요동을 재려면 8차 적률이 필요한데 그것이 무한이라, $u_i$ 가 정규에 다가가는 속도가 극단적으로 느리다. 같은 $\gamma_2 = 6$ 인 지수분포는 모든 적률이 유한해서 $n = 1280$ 에 이미 $0.4633$ 으로 예측에 거의 닿았다.
+
+    **이것이 본문에서 "첨도만으로 다 설명되지는 않는다"고 한 대목의 정확한 사정이다.** $t_5$ 와 지수분포는 $\gamma_2$ 가 같으므로 **극한값은 같다.** 유한표본에서 갈리는 것은 그 극한에 다가가는 속도이며, 속도는 첨도보다 높은 적률과 치우침이 정한다. 그러므로 본문 그림의 점들이 한 줄로 늘어선 것은 $n = 20$ 이라는 특정 표본크기에서의 모습이고, $n$ 이 커지면 $t_5$ 점이 지수분포 점 쪽으로 올라붙는다.
+
+    **실무적 결론은 더 날카로워진다.** 바틀렛을 쓰려면 첨도를 알아야 하는데, 첨도는 4차 적률이라 표본에서 믿을 만하게 추정되지 않는다. 게다가 방금 본 대로 **첨도를 정확히 안다 해도** 유한표본의 오류율을 맞히기에는 부족하다($t_5$ 와 지수분포가 그 반례다). 확인할 수 없는 것에 두 겹으로 기대고 있는 검정이며, 15.5절의 로버스트 검정을 기본값으로 삼으라는 권고가 여기서 나온다.
+
 
 위 표의 수치가 그대로 재현된다. 지수분포 $0.379$, 균등분포 $0.002$로 양방향의 왜곡이 모두 극심하다.
 

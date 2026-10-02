@@ -107,64 +107,233 @@
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 사전검정을 거치는 절차의 문제
+**보기 2.** <span class="diff easy" title="쉬움"></span> 사전검정을 거치는 절차의 문제. 사전검정이 기각하지 못하면 표준 분산분석을, 기각하면 Welch 분산분석을 쓰는 두 단계 절차를 생각한다. 집단 $k = 4$개, 집단당 $n = 15$, 평균은 모두 같아 $H_0$이 참이다.
+
+**(1)** 사전검정이 본 검정과 **독립이라면** 두 단계 절차의 실제 크기가 두 전략의 크기의 **볼록결합**임을 보이고 그 가중치가 무엇인지 밝히시오. 이로부터 두 단계 절차가 "항상 Welch"만큼 좋아지는 조건은 무엇인가.
+
+**(2)** 모의실험으로 그 예측을 확인하시오. 예측이 어긋나는 곳에서 **사전검정을 통과한 표본이 무엇에 대해 치우쳐 있는지** 찾고, 그 치우침이 표준 분산분석의 $F$를 어느 방향으로 미는지 밝히시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def welch_anova(groups):
-    """Welch 의 일원배치 분산분석. (F, df1, df2, p) 를 돌려준다.
+    **(1) 두 단계 절차의 크기는 정확히 적을 수 있다.** 사전검정이 기각하는 사건을 $A$, 표준 분산분석이 기각하는 사건을 $S$, Welch가 기각하는 사건을 $W$라 하자. 두 단계 절차는 $A^c$에서 표준을 쓰고 $A$에서 Welch를 쓰므로, 그 기각사건은
 
-    등분산을 가정하지 않는다. 집단마다 분산의 역수로 가중해 평균을 내고,
-    분모 자유도를 실수로 조정한다.
-    """
-    k = len(groups)
-    n = np.array([len(g) for g in groups])
-    m = np.array([g.mean() for g in groups])
-    v = np.array([g.var(ddof=1) for g in groups])
-    w = n / v
-    m_w = np.sum(w * m) / np.sum(w)
-    A = np.sum(w * (m - m_w) ** 2) / (k - 1)
-    lam = np.sum((1 - w / np.sum(w)) ** 2 / (n - 1)) / (k ** 2 - 1)
-    F = A / (1 + 2 * (k - 2) * lam)
-    df2 = 1 / (3 * lam)
-    return F, k - 1, df2, stats.f.sf(F, k - 1, df2)
+    $$
+    (A^c \cap S) \;\cup\; (A \cap W)
+    $$
 
-# 네 집단 모두 표준편차가 5 로 같다. 곧 등분산이 참인 자료다.
-rng = np.random.default_rng(42)
-g1 = rng.normal(50, 5, size=15)
-g2 = rng.normal(55, 5, size=15)
-g3 = rng.normal(52, 5, size=15)
-g4 = rng.normal(48, 5, size=15)
-groups = [g1, g2, g3, g4]
+    이고 두 덩어리가 서로 배반이므로
 
-# 1단계: 등분산 사전검정. 그런데 이 절차 자체가 문제를 안고 있다.
-# 자료를 보고 다음 검정을 고르면, 최종 결과의 제1종 오류율이 명목수준을
-# 넘어선다. 사전검정 없이 처음부터 Welch 를 쓰라는 권고가 나오는 까닭이다.
-bf_stat, bf_p = stats.levene(*groups, center='median')
-print(f"Brown-Forsythe: W = {bf_stat:.4f}, p = {bf_p:.4f}")
+    $$
+    \alpha_2 = P(A^c \cap S) + P(A \cap W)
+    $$
 
-# 2단계: 두 분산분석을 모두 돌려 견준다. 등분산이 참인 자료에서는
-# Welch 가 잃는 것이 거의 없다. 그래서 그냥 Welch 를 쓰면 된다.
-f_std, p_std = stats.f_oneway(*groups)
-f_w, df1, df2, p_w = welch_anova(groups)
-print(f"Standard ANOVA: F = {f_std:.4f}, p = {p_std:.6f}")
-print(f"Welch ANOVA:    F = {f_w:.4f}, df = ({df1}, {df2:.2f}), "
-      f"p = {p_w:.6f}")
-```
+    이다. **여기까지는 가정 없이 정확하다.** 이제 사전검정이 본 검정과 독립이라고 **가정하면** 두 교집합이 쪼개져
 
-출력:
+    $$
+    \alpha_2 = P(A^c)P(S) + P(A)P(W) = (1-\pi)\,\alpha_{\text{std}} + \pi\,\alpha_W,
+    \qquad \pi = P(A)
+    $$
 
-```text
-Brown-Forsythe: W = 0.4728, p = 0.7025
-Standard ANOVA: F = 8.1365, p = 0.000138
-Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
-```
+    가 된다. 곧 **두 크기의 볼록결합이고 가중치는 사전검정의 기각률 $\pi$**다. 분산이 정말 같으면 $\pi$는 사전검정의 크기($\approx \alpha_{\text{pre}} = 0.05$)이고, 분산이 다르면 $\pi$는 사전검정의 **검정력**이다.
 
-자료를 등분산으로 생성했으므로 Brown-Forsythe가 기각하지 않고($p = 0.70$) 두 분산분석의 결과도 사실상 같다($p = 0.000138$ 대 $0.000112$). Welch의 분모 자유도가 $44$에서 $30.81$로 줄었는데도 결론이 바뀌지 않는다.
+    볼록결합은 늘 두 끝점 사이에 놓이므로 결론이 둘 나온다.
+
+    $$
+    \min(\alpha_{\text{std}},\, \alpha_W) \;\le\; \alpha_2 \;\le\; \max(\alpha_{\text{std}},\, \alpha_W)
+    $$
+
+    **첫째, 두 단계 절차는 결코 두 전략 바깥으로 나가지 않는다.** 어느 쪽에 가까운지는 $\pi$ 하나가 정한다. **둘째, $\alpha_2 = \alpha_W$가 되려면 $\pi = 1$, 곧 사전검정이 이분산을 빠짐없이 탐지해야 한다.** 그런데 분산 검정의 검정력은 차이가 작을 때 낮다. 그러므로 차이가 작아 표준 분산분석이 **조금** 부푸는 상황에서는 $\pi$가 작아 두 단계 절차가 표준 분산분석 쪽으로 끌려가고, 차이가 커서 $\pi \approx 1$이 되는 상황에서만 Welch를 따라간다. 본문이 "사전검정이 가장 필요한 상황에서 가장 도움이 되지 않는다"고 적은 것이 이 식 한 줄에 들어 있다.
+
+    사전검정의 선택이 왜 중요한지도 여기서 보인다. **가중치가 $\pi$ 하나이므로 사전검정이 엉뚱한 것에 반응하면 가중치가 통째로 엉뚱해진다.** Bartlett처럼 정규성에 기대는 사전검정은 분산이 같아도 모집단 모양만으로 기각하므로 $\pi$가 올라가고, 그 극한값이 첨도만의 함수라 **표본을 키워도 낫지 않는다.** 5.3절이 그 계산을 해 두었다.
+
+    **(2) 먼저 한 벌로 손풀기.** 등분산이 참인 자료 한 벌에 두 분산분석을 모두 돌려 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def welch_anova(groups):
+        """Welch 의 일원배치 분산분석. (F, df1, df2, p) 를 돌려준다.
+
+        등분산을 가정하지 않는다. 집단마다 분산의 역수로 가중해 평균을 내고,
+        분모 자유도를 실수로 조정한다.
+        """
+        k = len(groups)
+        n = np.array([len(g) for g in groups])
+        m = np.array([g.mean() for g in groups])
+        v = np.array([g.var(ddof=1) for g in groups])
+        w = n / v
+        m_w = np.sum(w * m) / np.sum(w)
+        A = np.sum(w * (m - m_w) ** 2) / (k - 1)
+        lam = np.sum((1 - w / np.sum(w)) ** 2 / (n - 1)) / (k ** 2 - 1)
+        F = A / (1 + 2 * (k - 2) * lam)
+        df2 = 1 / (3 * lam)
+        return F, k - 1, df2, stats.f.sf(F, k - 1, df2)
+
+    # 네 집단 모두 표준편차가 5 로 같다. 곧 등분산이 참인 자료다.
+    rng = np.random.default_rng(42)
+    g1 = rng.normal(50, 5, size=15)
+    g2 = rng.normal(55, 5, size=15)
+    g3 = rng.normal(52, 5, size=15)
+    g4 = rng.normal(48, 5, size=15)
+    groups = [g1, g2, g3, g4]
+
+    # 1단계: 등분산 사전검정. 그런데 이 절차 자체가 문제를 안고 있다.
+    # 자료를 보고 다음 검정을 고르면, 최종 결과의 제1종 오류율이 명목수준을
+    # 넘어선다. 사전검정 없이 처음부터 Welch 를 쓰라는 권고가 나오는 까닭이다.
+    bf_stat, bf_p = stats.levene(*groups, center='median')
+    print(f"Brown-Forsythe: W = {bf_stat:.4f}, p = {bf_p:.4f}")
+
+    # 2단계: 두 분산분석을 모두 돌려 견준다. 등분산이 참인 자료에서는
+    # Welch 가 잃는 것이 거의 없다. 그래서 그냥 Welch 를 쓰면 된다.
+    f_std, p_std = stats.f_oneway(*groups)
+    f_w, df1, df2, p_w = welch_anova(groups)
+    print(f"Standard ANOVA: F = {f_std:.4f}, p = {p_std:.6f}")
+    print(f"Welch ANOVA:    F = {f_w:.4f}, df = ({df1}, {df2:.2f}), "
+          f"p = {p_w:.6f}")
+    ```
+
+    출력:
+
+    ```text
+    Brown-Forsythe: W = 0.4728, p = 0.7025
+    Standard ANOVA: F = 8.1365, p = 0.000138
+    Welch ANOVA:    F = 9.7514, df = (3, 30.81), p = 0.000112
+    ```
+
+    자료를 등분산으로 생성했으므로 Brown-Forsythe가 기각하지 않고($p = 0.70$) 두 분산분석의 결과도 사실상 같다($p = 0.000138$ 대 $0.000112$). Welch의 분모 자유도가 $44$에서 $30.81$로 줄었는데도 결론이 바뀌지 않는다. **한 벌로는 아무 문제도 보이지 않는다.** 문제는 같은 절차를 되풀이할 때 비로소 드러난다.
+
+    **(1)의 예측을 20만 번으로 확인한다.** 반복 횟수를 늘리려면 `scipy` 함수를 한 벌씩 부르는 대신 세 검정을 모두 벡터화해야 한다. 아래 세 함수는 한 벌 자료에서 `stats.levene(..., center='median')`, `stats.f_oneway`, 위의 `welch_anova`와 같은 값을 준다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+
+    def anova_p(Y):
+        """균형자료 (R, k, n) 에 대한 표준 일원분산분석 p-값을 한꺼번에."""
+        R, k, n = Y.shape
+        m = Y.mean(axis=2)
+        gm = Y.reshape(R, -1).mean(axis=1)
+        msb = n * ((m - gm[:, None]) ** 2).sum(axis=1) / (k - 1)
+        mse = Y.var(axis=2, ddof=1).mean(axis=1)   # 균형자료에서는 합동분산 = 평균
+        return stats.f.sf(msb / mse, k - 1, k * (n - 1)), msb, mse
+
+
+    def bf_p(Y):
+        """Brown-Forsythe = 중앙값 중심 Levene. |y - median| 에 분산분석을 돌린다.
+        scipy.stats.levene 의 center 기본값이 'median' 이므로 그것과 같은 검정이다."""
+        return anova_p(np.abs(Y - np.median(Y, axis=2, keepdims=True)))[0]
+
+
+    def welch_p(Y):
+        R, k, n = Y.shape
+        m, v = Y.mean(axis=2), Y.var(axis=2, ddof=1)
+        w = n / v
+        sw = w.sum(axis=1)
+        m_w = (w * m).sum(axis=1) / sw
+        A = (w * (m - m_w[:, None]) ** 2).sum(axis=1) / (k - 1)
+        lam = ((1 - w / sw[:, None]) ** 2 / (n - 1)).sum(axis=1) / (k ** 2 - 1)
+        return stats.f.sf(A / (1 + 2 * (k - 2) * lam), k - 1, 1 / (3 * lam))
+
+
+    rng = np.random.default_rng(1)
+    R, n, alpha = 200_000, 15, 0.05
+
+    for sds in [(5, 5, 5, 5), (5, 5, 5, 10), (2, 4, 6, 10)]:
+        sd = np.array(sds, float)
+        k = len(sd)
+        # 평균이 모두 0 이므로 H0 이 참이다. 기각하면 모두 1종오류다.
+        Y = rng.normal(0, 1, size=(R, k, n)) * sd[None, :, None]
+
+        pre = bf_p(Y)
+        p_std, msb, mse = anova_p(Y)
+        p_w = welch_p(Y)
+
+        A = pre <= alpha                      # 사전검정이 기각한 표본
+        pi = A.mean()
+        a_std, a_w = (p_std < alpha).mean(), (p_w < alpha).mean()
+        a_two = np.where(A, p_w < alpha, p_std < alpha).mean()
+        pred = (1 - pi) * a_std + pi * a_w     # (1) 의 볼록결합
+
+        v = Y.var(axis=2, ddof=1)
+        ratio = v.max(axis=1) / v.min(axis=1)
+
+        print(f"sd = {sds}")
+        print(f"   사전검정 기각률 pi      = {pi:.4f}")
+        print(f"   항상 표준 분산분석      = {a_std:.4f}")
+        print(f"   항상 Welch              = {a_w:.4f}")
+        print(f"   두 단계 (실제)          = {a_two:.4f}")
+        print(f"   두 단계 (독립가정 예측) = {pred:.4f}      차 = {a_two - pred:+.4f}")
+        print(f"   P(표준이 기각 | 사전검정 통과) = {(p_std < alpha)[~A].mean():.4f}"
+              f"   (무조건 {a_std:.4f})")
+        print(f"   E[MSB]  전체 {msb.mean():7.2f}  ->  통과 {msb[~A].mean():7.2f}"
+              f"   ({msb[~A].mean() / msb.mean():.3f} 배)")
+        print(f"   E[MSE]  전체 {mse.mean():7.2f}  ->  통과 {mse[~A].mean():7.2f}"
+              f"   ({mse[~A].mean() / mse.mean():.3f} 배)")
+        print(f"   E[s^2_max/s^2_min] 전체 {ratio.mean():6.2f}  ->  통과 {ratio[~A].mean():6.2f}")
+    ```
+
+    출력:
+
+    ```text
+    sd = (5, 5, 5, 5)
+       사전검정 기각률 pi      = 0.0276
+       항상 표준 분산분석      = 0.0488
+       항상 Welch              = 0.0493
+       두 단계 (실제)          = 0.0498
+       두 단계 (독립가정 예측) = 0.0488      차 = +0.0010
+       P(표준이 기각 | 사전검정 통과) = 0.0487   (무조건 0.0488)
+       E[MSB]  전체   24.90  ->  통과   24.89   (1.000 배)
+       E[MSE]  전체   25.00  ->  통과   25.00   (1.000 배)
+       E[s^2_max/s^2_min] 전체   2.39  ->  통과   2.32
+    sd = (5, 5, 5, 10)
+       사전검정 기각률 pi      = 0.6108
+       항상 표준 분산분석      = 0.0663
+       항상 Welch              = 0.0492
+       두 단계 (실제)          = 0.0617
+       두 단계 (독립가정 예측) = 0.0559      차 = +0.0059
+       P(표준이 기각 | 사전검정 통과) = 0.0861   (무조건 0.0663)
+       E[MSB]  전체   43.55  ->  통과   43.58   (1.001 배)
+       E[MSE]  전체   43.72  ->  통과   38.84   (0.888 배)
+       E[s^2_max/s^2_min] 전체   6.38  ->  통과   4.01
+    sd = (2, 4, 6, 10)
+       사전검정 기각률 pi      = 0.9798
+       항상 표준 분산분석      = 0.0777
+       항상 Welch              = 0.0512
+       두 단계 (실제)          = 0.0524
+       두 단계 (독립가정 예측) = 0.0518      차 = +0.0007
+       P(표준이 기각 | 사전검정 통과) = 0.1477   (무조건 0.0777)
+       E[MSB]  전체   39.04  ->  통과   39.29   (1.006 배)
+       E[MSE]  전체   39.01  ->  통과   28.47   (0.730 배)
+       E[s^2_max/s^2_min] 전체  29.29  ->  통과  11.93
+    ```
+
+    **볼록결합이 두 경우에는 맞고 한 경우에는 틀린다.** 등분산 $(5,5,5,5)$에서 예측 $0.0488$ 대 실제 $0.0498$, 차 $+0.0010$이다. 20만 번에서 기각률의 표준오차가 $\sqrt{0.05 \times 0.95/200000} = 0.0005$이니 두 표준오차 안이다. $(2,4,6,10)$에서도 예측 $0.0518$ 대 실제 $0.0524$로 맞는다. 여기서는 $\pi = 0.9798$이라 **가중치가 거의 전부 Welch로 가므로 조건부 치우침이 들어갈 틈이 없다.**
+
+    어긋나는 것은 가운데 경우다. $(5,5,5,10)$에서 예측 $0.0559$인데 실제가 $0.0617$로 $+0.0059$, 곧 **열두 표준오차**만큼 크다. 몬테카를로 오차가 아니다. (1)에서 쓴 독립 가정이 틀렸다는 뜻이다.
+
+    **치우침의 정체는 한 줄에 드러난다.** 표준 분산분석이 기각할 확률이 무조건으로는 $0.0663$인데, **사전검정을 통과한 표본만 보면 $0.0861$로 올라간다.** $(2,4,6,10)$에서는 $0.0777$에서 $0.1477$로 거의 두 배다. 사전검정의 "안심하라"는 신호가 도움이 되지 않는 정도가 아니라 **거꾸로 간다.** 사전검정이 통과시킨 표본에서 표준 분산분석이 **더** 많이 틀린다.
+
+    **왜 그런가.** 마지막 세 줄이 답이다. 사전검정을 통과한 표본에서
+
+    - $E[\text{MSB}]$는 $1.001$배, $1.006$배로 **꿈쩍하지 않는다.**
+    - $E[\text{MSE}]$는 $0.888$배, $0.730$배로 **줄어든다.**
+    - $E[s^2_{\max}/s^2_{\min}]$이 $6.38 \to 4.01$, $29.29 \to 11.93$으로 **줄어든다.**
+
+    셋째 줄이 선택의 흔적이다. 사전검정은 표본분산들이 **비슷해 보이는** 표본만 남기므로, 참 분산이 가장 큰 집단의 $s_k^2$이 우연히 작게 나온 표본을 골라낸다. 그러면 그 $s_k^2$을 섞어 만든 $\text{MSE}$가 작아진다. **그런데 집단평균이 흔들리는 폭은 표본분산이 아니라 참 분산 $\sigma_i^2$이 정한다.** 그래서 분자 $\text{MSB}$는 그대로 남고 분모만 작아져
+
+    $$
+    F = \frac{\text{MSB}}{\text{MSE}}
+    $$
+
+    가 위로 밀린다. 사전검정은 $\text{MSE}$가 참 분산들을 대표하는지 묻는 것이 아니라 **표본분산들이 서로 닮았는지**만 묻기 때문에, 바로 $\text{MSE}$가 작게 나온 표본을 통과시킨다.
+
+    **조건부 표본은 더 이상 무작위 표본이 아니다.** 위 논쟁 3번의 "조건부 편향"이 이것이고, (1)의 독립 가정이 깨지는 자리도 이것이다. 그리고 그 어긋남의 방향이 **나쁜 쪽**이다. 두 단계 절차의 실제 크기가 볼록결합 예측보다 높다.
+
+    마지막으로 수치를 맞춰 둔다. 아래 연습문제 1과 본문 표는 같은 설정을 5,000번 돌려 $(0.0634,\ 0.0440,\ 0.0568)$ 등을 얻었다. 5,000번에서 표준오차는 $\sqrt{0.05\times0.95/5000} = 0.0031$이고, 위 20만 번 값과의 차이는 세 설정 아홉 숫자 모두 **두 표준오차 안**이다. 20만 번은 같은 그림을 더 또렷하게 만들었을 뿐이며, 볼록결합과의 어긋남은 5,000번에서는 오차에 묻혀 보이지 않았던 것이다.
 
 ## 연습문제
 

@@ -118,51 +118,178 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 요약값으로 하는 분산 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 요약값으로 하는 분산 검정. 보기 1 의 자료($n = 21$, $S^2 = 18.5$, $\sigma_0^2 = 15$, $\alpha = 0.05$)를 원자료 없이 요약값만으로 코드에 넣는다.
+
+**(1)** 임계값을 **$S^2$ 의 눈금으로 되돌려** 채택역을 $S^2$ 의 구간으로 적고, 관측값 $18.5$ 가 경계에서 얼마나 떨어져 있는지 구하시오. 이 구간이 $S^2 = 18.5$ 의 신뢰구간과 어떻게 맞물리는가.
+
+**(2)** 이 판정이 정규성에 얼마나 기대고 있는지 재시오. 비정규 모집단에서 명목 $5\%$ 검정의 실제 크기를 모의실험으로 구하고, **$n$ 을 키우면 $0.05$ 로 돌아오는지** 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-n = 21
-s_squared = 18.5
-sigma_0_squared = 15
-alpha = 0.05
+    **(1) 임계값을 $S^2$ 의 눈금으로 되돌린다.** 채택역은 $\chi^2_{\alpha/2,\,n-1} \le (n-1)S^2/\sigma_0^2 \le \chi^2_{1-\alpha/2,\,n-1}$ 이므로, 양변에 $\sigma_0^2/(n-1)$ 을 곱하면
 
-# (n-1)S^2/sigma_0^2 은 귀무가설이 참일 때 자유도 n-1 인 카이제곱을 따른다.
-# 이 검정은 정규성에 매우 민감하다 — 평균에 대한 t 검정과 달리 중심극한정리의
-# 보호를 받지 못하기 때문이다.
-chi2_stat = (n - 1) * s_squared / sigma_0_squared
+    $$
+    \frac{\sigma_0^2\, \chi^2_{\alpha/2,\,n-1}}{n-1} \;\le\; S^2 \;\le\; \frac{\sigma_0^2\, \chi^2_{1-\alpha/2,\,n-1}}{n-1}
+    $$
 
-# 좌우가 대칭이 아니므로 양쪽 기각값을 따로 구한다.
-df = n - 1
-chi2_lower = stats.chi2.ppf(alpha / 2, df)
-chi2_upper = stats.chi2.ppf(1 - alpha / 2, df)
+    이다. **채택역이 $\sigma_0^2$ 의 상수배 구간**이고 그 두 배수 $\chi^2_{\alpha/2}/(n-1)$, $\chi^2_{1-\alpha/2}/(n-1)$ 은 자유도와 $\alpha$ 만으로 정해진다. $n = 21$, $\alpha = 0.05$ 에서 $\chi^2_{0.025,\,20} = 9.5908$, $\chi^2_{0.975,\,20} = 34.1696$ 이므로 배수가 $0.47954$ 와 $1.70848$ 이고
 
-# 양측 p-값은 두 꼬리 넓이 중 작은 쪽을 두 배 한다.
-p_value = 2 * min(stats.chi2.cdf(chi2_stat, df), stats.chi2.sf(chi2_stat, df))
+    $$
+    S^2 \in [15 \times 0.47954,\; 15 \times 1.70848] = [7.1931,\; 25.6272]
+    $$
 
-print(f"Test statistic: {chi2_stat:.3f}")
-print(f"Critical values: [{chi2_lower:.3f}, {chi2_upper:.3f}]")
-print(f"P-value: {p_value:.4f}")
+    이면 기각하지 못한다. 관측된 $18.5$ 는 이 안쪽이고 위쪽 경계까지 $7.1272$ 가 남았다. **표본분산이 $38\%$ 더 커졌어야 기각했다**는 뜻이다($25.6272/18.5 = 1.385$).
 
-if p_value < alpha:
-    print("Reject H0: variance differs from the hypothesized value.")
-else:
-    print("Fail to reject H0: insufficient evidence of a difference.")
-```
+    **신뢰구간과의 맞물림.** 앞 절의 쌍대성이 여기서 그대로 보인다. $S^2 = 18.5$ 의 $95\%$ 신뢰구간은
 
-출력:
+    $$
+    \left(\frac{20 \times 18.5}{34.1696},\; \frac{20 \times 18.5}{9.5908}\right) = (10.8283,\; 38.5787)
+    $$
 
-```text
-Test statistic: 24.667
-Critical values: [9.591, 34.170]
-P-value: 0.4290
-Fail to reject H0: insufficient evidence of a difference.
-```
+    이고 $\sigma_0^2 = 15$ 가 그 안에 있다. 두 진술은 같은 부등식을 어느 쪽 변수로 풀었느냐의 차이일 뿐이다. 채택역은 $\sigma_0^2$ 을 고정하고 $S^2$ 에 대해 푼 것이고, 신뢰구간은 $S^2$ 을 고정하고 $\sigma^2$ 에 대해 푼 것이다.
 
+    **확인한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    n = 21
+    s_squared = 18.5
+    sigma_0_squared = 15
+    alpha = 0.05
+
+    # (n-1)S^2/sigma_0^2 은 귀무가설이 참일 때 자유도 n-1 인 카이제곱을 따른다.
+    # 이 검정은 정규성에 매우 민감하다 — 평균에 대한 t 검정과 달리 중심극한정리의
+    # 보호를 받지 못하기 때문이다.
+    chi2_stat = (n - 1) * s_squared / sigma_0_squared
+
+    # 좌우가 대칭이 아니므로 양쪽 기각값을 따로 구한다.
+    df = n - 1
+    chi2_lower = stats.chi2.ppf(alpha / 2, df)
+    chi2_upper = stats.chi2.ppf(1 - alpha / 2, df)
+
+    # 양측 p-값은 두 꼬리 넓이 중 작은 쪽을 두 배 한다.
+    p_value = 2 * min(stats.chi2.cdf(chi2_stat, df), stats.chi2.sf(chi2_stat, df))
+
+    print(f"Test statistic: {chi2_stat:.3f}")
+    print(f"Critical values: [{chi2_lower:.3f}, {chi2_upper:.3f}]")
+    print(f"P-value: {p_value:.4f}")
+
+    if p_value < alpha:
+        print("Reject H0: variance differs from the hypothesized value.")
+    else:
+        print("Fail to reject H0: insufficient evidence of a difference.")
+
+    # (1) 어떤 S^2 이었다면 기각했을까. 임계값을 S^2 의 눈금으로 되돌린다.
+    s2_lo = sigma_0_squared * chi2_lower / df
+    s2_hi = sigma_0_squared * chi2_upper / df
+    print(f"\nS^2 의 채택역 = [{s2_lo:.4f}, {s2_hi:.4f}]")
+    print(f"  관측된 S^2 = {s_squared}  ->  위쪽 경계까지 {s2_hi - s_squared:.4f} 남았다")
+    print(f"  배수로 보면 sigma_0^2 x [{chi2_lower / df:.5f}, {chi2_upper / df:.5f}]")
+
+    # 쌍대 관계: sigma_0^2 = 15 가 S^2 = 18.5 의 신뢰구간 안에 있는가.
+    ci_lo = df * s_squared / chi2_upper
+    ci_hi = df * s_squared / chi2_lower
+    print(f"\nS^2 = {s_squared} 의 95% 신뢰구간 = ({ci_lo:.4f}, {ci_hi:.4f})")
+    print(f"  sigma_0^2 = {sigma_0_squared} 이 구간 안에 있는가: {ci_lo <= sigma_0_squared <= ci_hi}")
+    ```
+
+    출력:
+
+    ```text
+    Test statistic: 24.667
+    Critical values: [9.591, 34.170]
+    P-value: 0.4290
+    Fail to reject H0: insufficient evidence of a difference.
+
+    S^2 의 채택역 = [7.1931, 25.6272]
+      관측된 S^2 = 18.5  ->  위쪽 경계까지 7.1272 남았다
+      배수로 보면 sigma_0^2 x [0.47954, 1.70848]
+
+    S^2 = 18.5 의 95% 신뢰구간 = (10.8283, 38.5787)
+      sigma_0^2 = 15 이 구간 안에 있는가: True
+    ```
+
+    유도한 채택역 $[7.1931, 25.6272]$ 와 신뢰구간 $(10.8283, 38.5787)$ 이 코드와 맞고, $\sigma_0^2 = 15$ 가 구간 안이라는 판정이 $p = 0.4290 > 0.05$ 와 일치한다.
+
+    **(2) 이 모든 수가 한 줄에 매달려 있다.** 위에서 쓴 것은 $\chi^2_{20}$ 분포뿐이고, 그것은 이 쪽이 유도한 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ 에서 나왔으며, 그 유도는 **첫 단계부터 정규성을 쓴다.** $\sum Z_i^2$ 이 카이제곱이 되려면 $Z_i$ 가 정규여야 하기 때문이다. 정규성이 깨지면 임계값 $9.591$ 과 $34.170$ 이 엉뚱한 자리가 된다.
+
+    **얼마나 엉뚱해지는지는 미리 계산할 수 있다.** 5.3절이 유도한 결과를 빌린다. $n$ 이 크면 $\chi^2_{n-1}$ 의 양측 임계값이 $(n-1)\bigl(1 \pm 1.96\sqrt{2/(n-1)}\bigr)$ 이므로, 검정은 $S^2/\sigma^2$ 의 표준편차를 $\sqrt{2/n}$ 로 **믿고** 기각역을 긋는다. 그런데 참 표준편차는 $\operatorname{Var}(S^2) \approx (\beta_2-1)\sigma^4/n$ 에서 $\sqrt{(\beta_2-1)/n}$ 이다. 기각역이 참 표준편차 단위로는
+
+    $$
+    \frac{1.96\sqrt{2/n}}{\sqrt{(\beta_2-1)/n}} = 1.96\sqrt{\frac{2}{\beta_2-1}}
+    $$
+
+    만큼만 뻗으므로
+
+    $$
+    \text{실제 오류율} \;\longrightarrow\; 2\left[1 - \Phi\!\left(1.96\sqrt{\frac{2}{\beta_2-1}}\right)\right]
+    $$
+
+    가 된다. **$\sqrt n$ 이 분자와 분모에서 함께 약분되어 $n$ 이 사라졌다.** 임계값도 $1/\sqrt n$ 로 줄고 참 산포도 $1/\sqrt n$ 로 줄기 때문이다. 그러므로 이 어긋남은 **표본을 키워도 낫지 않는다.** 남는 것은 모집단 첨도 $\beta_2$ 하나뿐이다.
+
+    **모의실험으로 확인한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(15)
+
+    pops = [
+        ("정규", lambda s: rng.normal(size=s), 1.0, 3.0),
+        ("균등", lambda s: rng.uniform(size=s), 1 / 12, 1.8),
+        ("지수", lambda s: rng.exponential(size=s), 1.0, 9.0),
+        ("로그정규", lambda s: rng.lognormal(0, 1, size=s),
+         (np.exp(1) - 1) * np.exp(1), np.exp(4) + 2 * np.exp(3) + 3 * np.exp(2) - 3),
+    ]
+
+    ns = [21, 100, 1000, 10_000]
+    hdr = "".join(f"{'n=' + str(n):>10}" for n in ns)
+    print(f"{'모집단':>8}{'beta2':>10}{'극한':>9}{hdr}")
+    for name, gen, var0, beta2 in pops:
+        limit = 2 * (1 - stats.norm.cdf(1.96 * np.sqrt(2 / (beta2 - 1))))
+        row = ""
+        for n in ns:
+            lo, hi = stats.chi2.ppf([0.025, 0.975], n - 1)
+            reps = 40_000 if n <= 1000 else 4_000
+            rej = 0
+            done = 0
+            while done < reps:
+                blk = min(2000, reps - done)
+                T = (n - 1) * gen((blk, n)).var(axis=1, ddof=1) / var0
+                rej += np.sum((T < lo) | (T > hi))
+                done += blk
+            row += f"{rej / reps:>10.4f}"
+        print(f"{name:>6}{beta2:>11.3f}{limit:>9.4f}{row}")
+    print("\n반복수: n <= 1000 은 40,000 벌, n = 10,000 은 4,000 벌")
+    print(f"  0.05 근처 몬테카를로 표준오차:  40,000 벌 {np.sqrt(0.05 * 0.95 / 40_000):.4f}"
+          f"   4,000 벌 {np.sqrt(0.05 * 0.95 / 4_000):.4f}")
+    ```
+
+    출력:
+
+    ```text
+         모집단     beta2       극한      n=21     n=100    n=1000   n=10000
+        정규      3.000   0.0500    0.0505    0.0485    0.0499    0.0548
+        균등      1.800   0.0019    0.0040    0.0020    0.0020    0.0013
+        지수      9.000   0.3271    0.2718    0.3087    0.3212    0.3222
+      로그정규    113.936   0.7942    0.5763    0.6553    0.7208    0.7560
+
+    반복수: n <= 1000 은 40,000 벌, n = 10,000 은 4,000 벌
+      0.05 근처 몬테카를로 표준오차:  40,000 벌 0.0011   4,000 벌 0.0034
+    ```
+
+    **정규 줄만 수평이다.** $0.0505$, $0.0485$, $0.0499$, $0.0548$ 로 $n$ 이 $500$ 배 늘어나는 동안 $0.05$ 에 머문다. 마지막 칸이 조금 높아 보이지만 반복이 $4{,}000$ 벌뿐이라 몬테카를로 표준오차가 $0.0034$ 이고, $0.0548$ 은 $0.05$ 에서 $1.4$ 표준오차 떨어진 값이다. 우연으로 설명된다.
+
+    **나머지 셋은 각자의 상수로 간다.** 지수분포는 $0.2718 \to 0.3087 \to 0.3212 \to 0.3222$ 로 극한값 $0.3271$ 에 붙어 간다. 명목 $5\%$ 검정이 실제로는 **세 번에 한 번 꼴로 기각**한다. 균등분포는 반대 방향으로 $0.002$ 에 머물러 지나치게 보수적이다($\beta_2 < 3$ 이라 참 산포가 믿는 것보다 작다). 로그정규는 $0.5763 \to 0.6553 \to 0.7208 \to 0.7560$ 으로 $0.7942$ 를 향해 **계속 올라간다.**
+
+    로그정규가 아직 극한에 닿지 않은 것은 흠이 아니라 예상된 일이다. 위 유도는 $S^2$ 의 정규근사에 기대는데, $\beta_2 = 113.9$ 인 모집단에서 그 근사가 쓸 만해지려면 $n$ 이 아주 커야 한다. **중요한 것은 방향이다.** 네 줄 가운데 $n$ 과 함께 $0.05$ 쪽으로 돌아오는 줄은 **하나도 없다.** 정규는 처음부터 맞고, 나머지 셋은 $n$ 을 키울수록 명목값에서 **더 멀어진다.**
+
+    **이것이 분산 추론과 평균 추론의 갈림길이다.** 평균에 대한 $t$ 검정은 중심극한정리가 비정규성을 씻어 주므로 $n$ 을 키우면 명목 수준에 수렴한다. 분산에는 그런 보호가 없다. 유도의 첫 단계가 정규성이고, 그 단계가 틀리면 **표본크기로는 고칠 수 없다.** 연습문제 4 가 "평균은 맞지만 산포가 틀린다"고 적은 것의 수치적 실물이 이 표다.
 
 ## 연습문제
 

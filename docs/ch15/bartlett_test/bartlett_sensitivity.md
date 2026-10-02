@@ -24,68 +24,174 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 치우친 자료에서의 거짓 양성률
+**보기 1.** <span class="diff easy" title="쉬움"></span> 치우친 자료에서의 거짓 양성률. $\text{Lognormal}(0,1)$ 에서 $k = 3$ 집단을 **같은 모수로** 뽑아($H_0$ 가 참) 각 $n = 20$, 반복 5,000 회로 세 검정의 기각률을 센다.
+
+**(1)** [비정규성 아래의 한계](limitations.md) 보기 1 이 유도한 극한 오류율
+
+$$
+P\!\left(\chi^2_{k-1} > \frac{2\,\chi^2_{1-\alpha,\,k-1}}{\beta_2 - 1}\right)
+$$
+
+에 $\text{Lognormal}(0,1)$ 의 첨도를 넣어 바틀렛의 **극한 거짓 양성률**을 구하시오($\beta_2 = \gamma_2 + 3$, 연습문제 4 가 $\gamma_2 = 110.936$ 을 계산했다).
+
+**(2)** 세 검정의 기각률을 재고, $n$ 을 $20$ 에서 $10{,}000$ 까지 키우며 바틀렛의 기각률이 (1)의 극한값으로 가는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import bartlett, levene, fligner
+??? success "풀이"
 
-rng = np.random.default_rng(0)
+    **(1) 첨도 하나로 극한값이 정해진다.** 연습문제 4 가 구한 $\gamma_2 = 110.936$ 에서
+
+    $$
+    \beta_2 - 1 = \gamma_2 + 2 = 112.936
+    $$
+
+    이고, $\operatorname{Var}(\ln S^2)$ 의 팽창 배율이
+
+    $$
+    \frac{\beta_2 - 1}{2} = \frac{112.936}{2} = 56.47
+    \qquad(\text{표준편차로는 } \sqrt{56.47} = 7.51 \text{ 배})
+    $$
+
+    이다. $k = 3$, $\alpha = 0.05$ 이면 $\chi^2_{0.95,2} = 5.9915$ 이므로 극한 오류율은
+
+    $$
+    P\!\left(\chi^2_2 > \frac{2 \times 5.9915}{112.936}\right)
+    = P\bigl(\chi^2_2 > 0.1061\bigr)
+    = e^{-0.1061/2}
+    = 0.9483
+    $$
+
+    이다(자유도 2 의 카이제곱은 $P(\chi^2_2 > t) = e^{-t/2}$ 이다). **표본을 무한히 키우면 등분산인 로그정규 자료의 $94.8\%$ 에서 "분산이 다르다"고 판정한다는 뜻이다.**
+
+    이 수가 말하는 것을 분명히 해 두자. 임계값 $5.9915$ 가 참 분포에서는 $5.9915/56.47 = 0.1061$ 짜리 분위점에 해당하고, 그것은 $\chi^2_2$ 의 **아래쪽 $5.2\%$** 지점이다($1 - 0.9483 = 0.0517$). 곧 **기각하지 못하는 쪽이 오히려 희귀한 사건**이 된다. 검정이 틀린 것이 아니라 들이대는 자가 56배 짧은 것이다.
+
+    $n = 20$ 에서는 이 극한에 못 미칠 것으로 예상된다. $\ln S^2$ 의 중심극한정리가 듣기까지 멀기 때문이다(그 수렴에는 4차 적률이 필요하고, 로그정규의 고차 적률은 $e^{4\sigma^2}$ 꼴로 폭발한다).
+
+    **(2) 먼저 $n = 20$ 에서 세 검정을 나란히 둔다.**
+
+    ```python
+    import numpy as np
+    from scipy.stats import bartlett, levene, fligner
+
+    rng = np.random.default_rng(0)
 
 
-def simulate_once(n=20, sigmas=(1.0, 1.0, 1.0), skew=True):
-    """치우친 로그정규 또는 정규에서 k 개 집단을 만든다.
+    def simulate_once(n=20, sigmas=(1.0, 1.0, 1.0), skew=True):
+        """치우친 로그정규 또는 정규에서 k 개 집단을 만든다.
 
-    셋 다 같은 sigma 를 주므로 분산은 참으로 같다. 그런데도 자료가
-    치우쳐 있으면 검정이 기각해 버리는지를 보려는 것이다.
-    """
-    if skew:
-        groups = [rng.lognormal(mean=0.0, sigma=s, size=n) for s in sigmas]
-    else:
-        groups = [rng.normal(loc=0.0, scale=s, size=n) for s in sigmas]
-    return groups
-
-
-def trial(n=20, sigmas=(1.0, 1.0, 1.0), skew=True):
-    """한 벌의 모의자료에 세 검정을 모두 돌린다."""
-    g1, g2, g3 = simulate_once(n=n, sigmas=sigmas, skew=skew)
-    _, p_bartlett = bartlett(g1, g2, g3)
-    _, p_levene = levene(g1, g2, g3, center='mean')
-    _, p_fligner = fligner(g1, g2, g3)
-    return p_bartlett, p_levene, p_fligner
+        셋 다 같은 sigma 를 주므로 분산은 참으로 같다. 그런데도 자료가
+        치우쳐 있으면 검정이 기각해 버리는지를 보려는 것이다.
+        """
+        if skew:
+            groups = [rng.lognormal(mean=0.0, sigma=s, size=n) for s in sigmas]
+        else:
+            groups = [rng.normal(loc=0.0, scale=s, size=n) for s in sigmas]
+        return groups
 
 
-# 분산이 참으로 같으므로, 아래 비율은 모두 0.05 근처여야 옳다.
-# Bartlett 만 크게 벗어난다면 그것이 이 검정의 약점이다.
-n_sims, alpha = 5000, 0.05
-ps_b, ps_lv, ps_fl = [], [], []
+    def trial(n=20, sigmas=(1.0, 1.0, 1.0), skew=True):
+        """한 벌의 모의자료에 세 검정을 모두 돌린다."""
+        g1, g2, g3 = simulate_once(n=n, sigmas=sigmas, skew=skew)
+        _, p_bartlett = bartlett(g1, g2, g3)
+        _, p_levene = levene(g1, g2, g3, center='mean')
+        _, p_fligner = fligner(g1, g2, g3)
+        return p_bartlett, p_levene, p_fligner
 
-for _ in range(n_sims):
-    p_b, p_l, p_f = trial(n=20, sigmas=(1.0, 1.0, 1.0), skew=True)
-    ps_b.append(p_b)
-    ps_lv.append(p_l)
-    ps_fl.append(p_f)
 
-fp_b = np.mean(np.array(ps_b) < alpha)
-fp_lv = np.mean(np.array(ps_lv) < alpha)
-fp_fl = np.mean(np.array(ps_fl) < alpha)
+    # 분산이 참으로 같으므로, 아래 비율은 모두 0.05 근처여야 옳다.
+    # Bartlett 만 크게 벗어난다면 그것이 이 검정의 약점이다.
+    n_sims, alpha = 5000, 0.05
+    ps_b, ps_lv, ps_fl = [], [], []
 
-print("False-positive rates under skewed (lognormal) data:")
-print(f"  Bartlett       : {fp_b:.4f}")
-print(f"  Levene (mean)  : {fp_lv:.4f}")
-print(f"  Fligner-Killeen: {fp_fl:.4f}")
-```
+    for _ in range(n_sims):
+        p_b, p_l, p_f = trial(n=20, sigmas=(1.0, 1.0, 1.0), skew=True)
+        ps_b.append(p_b)
+        ps_lv.append(p_l)
+        ps_fl.append(p_f)
 
-출력:
+    fp_b = np.mean(np.array(ps_b) < alpha)
+    fp_lv = np.mean(np.array(ps_lv) < alpha)
+    fp_fl = np.mean(np.array(ps_fl) < alpha)
 
-```text
-False-positive rates under skewed (lognormal) data:
-  Bartlett       : 0.6748
-  Levene (mean)  : 0.2470
-  Fligner-Killeen: 0.1028
-```
+    print("False-positive rates under skewed (lognormal) data:")
+    print(f"  Bartlett       : {fp_b:.4f}")
+    print(f"  Levene (mean)  : {fp_lv:.4f}")
+    print(f"  Fligner-Killeen: {fp_fl:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    False-positive rates under skewed (lognormal) data:
+      Bartlett       : 0.6748
+      Levene (mean)  : 0.2470
+      Fligner-Killeen: 0.1028
+    ```
+
+    **$n = 20$ 에서 세 검정이 모두 명목값을 넘는다.** 바틀렛 $0.6748$, 레빈(평균 중심) $0.2470$, 플리그너–킬린 $0.1028$ 이다. 세 집단의 **모분산은 정확히 같은데도** 그렇다. 명목값의 배수로는 $13.5$, $4.9$, $2.1$ 이다.
+
+    순서가 뜻을 담고 있다. 바틀렛은 $\ln S_i^2$ 을 그대로 쓰므로 첨도가 감쇄 없이 실린다. 레빈(평균 중심)은 $\lvert y_{ij} - \bar y_i \rvert$ 를 쓰는데, 긴 오른쪽 꼬리가 평균을 끌어당겨 중심화가 불안정해진다. 플리그너–킬린은 **순위**로 바꾸므로 꼬리의 크기 자체가 지워져 가장 덜 흔들린다. 그래도 $0.1028$ 로 명목값의 두 배는 된다. 이 극단적 치우침에서는 순위조차 모자라고 **중앙값 중심화**가 결정적이다(아래 경고 상자).
+
+    **이제 $n$ 을 키워 (1)의 극한값과 견준다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    k, alpha = 3, 0.05
+    crit = stats.chi2.ppf(1 - alpha, k - 1)
+
+    # 로그정규(0,1) 의 초과첨도와 그에서 나오는 팽창 배율
+    g2 = np.exp(4) + 2 * np.exp(3) + 3 * np.exp(2) - 6
+    beta2_m1 = g2 + 2                      # = gamma2 + 2 = beta2 - 1
+    print(f"Lognormal(0,1):  gamma2 = {g2:.3f},  beta2 - 1 = {beta2_m1:.3f}")
+    print(f"  Var(ln S^2) 의 팽창 배율 = (beta2-1)/2 = {beta2_m1 / 2:.2f}"
+          f"   (표준편차로는 {np.sqrt(beta2_m1 / 2):.2f} 배)")
+    print(f"  극한 거짓 양성률 = P(chi2_2 > 2*{crit:.4f}/{beta2_m1:.3f})"
+          f" = {stats.chi2.sf(2 * crit / beta2_m1, k - 1):.4f}")
+
+    # 표본을 키우면 그 극한으로 가는가. 반복 2000 회.
+    rng = np.random.default_rng(4)
+    M = 2000
+    print(f"\n{'n':>8}{'Bartlett 거짓 양성률':>24}")
+    for n, ch in [(20, 250), (100, 250), (1000, 100), (10000, 25)]:
+        C = 1 + (k + 1) / (3 * k * (n - 1))
+        hits = 0
+        for _ in range(M // ch):
+            S = rng.lognormal(0, 1, (ch, k, n)).var(axis=2, ddof=1)
+            T = k * (n - 1) * np.log(S.mean(axis=1)
+                                     / np.exp(np.log(S).mean(axis=1))) / C
+            hits += int(np.sum(T > crit))
+        print(f"{n:>8}{hits / M:>24.4f}")
+    print(f"\n반복 {M} 회이므로 몬테카를로 표준오차는 0.67 근처 "
+          f"{np.sqrt(0.67 * 0.33 / M):.4f}, 0.93 근처 {np.sqrt(0.93 * 0.07 / M):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    Lognormal(0,1):  gamma2 = 110.936,  beta2 - 1 = 112.936
+      Var(ln S^2) 의 팽창 배율 = (beta2-1)/2 = 56.47   (표준편차로는 7.51 배)
+      극한 거짓 양성률 = P(chi2_2 > 2*5.9915/112.936) = 0.9483
+
+           n         Bartlett 거짓 양성률
+          20                  0.6655
+         100                  0.8025
+        1000                  0.8890
+       10000                  0.9270
+
+    반복 2000 회이므로 몬테카를로 표준오차는 0.67 근처 0.0105, 0.93 근처 0.0057
+    ```
+
+    **(1)의 예측 방향이 맞는다.** 기각률이 $0.6655 \to 0.8025 \to 0.8890 \to 0.9270$ 으로 **$n$ 과 함께 단조증가하며** 극한값 $0.9483$ 쪽으로 간다. $n = 20$ 의 $0.6655$ 는 위 블록의 $0.6748$ 과 다른 씨앗·다른 반복수(2,000 회)에서 얻은 값인데, 표준오차 $0.0105$ 를 감안하면 두 값의 차 $0.0093$ 은 우연의 범위다.
+
+    **"표본을 키우면 나아진다"가 여기서 완전히 무너진다.** 평균에 대한 검정이라면 중심극한정리가 $n$ 과 함께 구원해 주지만, 분산 검정에서는 통계량의 크기와 그 요동이 같은 비율로 커져 둘의 비가 $(\beta_2-1)/2$ 에 고정된다. 그래서 $n$ 을 500배로 늘려도 오류율이 내려가지 않고 **올라간다.** 연습문제 2 가 $n = 100$ 에서 $0.813$ 을 얻은 것이 이 표의 두 번째 줄이며, 이제 그것이 어디로 향하는 길목인지까지 알게 되었다.
+
+    **아직 극한에 닿지는 않았다.** $n = 10{,}000$ 에서 $0.9270$ 이고 예측은 $0.9483$ 으로 표준오차 $0.0057$ 의 네 배쯤 떨어져 있다. 수렴이 느린 것이지 어긋난 것이 아니다. 위 극한식은 $u_i = S_i^2/\sigma^2 - 1$ 이 근사적으로 정규라는 데 기대고, 그 수렴 속도는 모집단의 고차 적률이 정한다. $\text{Lognormal}(0,1)$ 의 $m$ 차 적률이 $e^{m^2/2}$ 로 폭발하므로($4$ 차가 $e^8 = 2981$, $8$ 차가 $e^{32} \approx 8\times10^{13}$) 이보다 느린 수렴을 찾기도 어렵다. 연습문제 4 가 보인 $\sigma$ 에 대한 지수적 민감도와 같은 뿌리다.
+
+    **그러므로 $0.675$ 는 바닥이 아니라 천장 쪽으로 가는 길의 한 점이다.** "$n = 20$ 이라 작아서 그렇다"는 설명은 틀렸다. 표본이 작은 것이 오히려 피해를 **줄여** 주고 있었다.
+
 
 ## 해석
 

@@ -135,53 +135,159 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 요약값만으로 통계량 만들기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 요약값만으로 통계량 만들기. 보기 1 의 세 집단($n = 10, 12, 8$, $S^2 = 5.2, 8.1, 4.7$)을 원자료 없이 검정한다.
+
+**(1)** 바틀렛 통계량이 **$(n_i, S_i^2)$ 만의 함수**임을 식에서 읽어 내고, 그 결과로 $T$가 분산들의 **공통 척도에 불변**임을 보이시오.
+
+**(2)** (1)을 역으로 쓰면 요약값에 맞는 원자료를 아무렇게나 꾸며도 `scipy` 가 같은 답을 주어야 한다. 확인하시오. 또 넘겨받은 분산이 $\nu_i$ 로 나눈 것인지 $n_i$ 로 나눈 것인지가 언제 문제가 되는지 밝히시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 원자료 없이 집단 크기와 표본분산만으로 통계량을 만들 수 있다.
-n = np.array([10, 12, 8])
-s2 = np.array([5.2, 8.1, 4.7])
-k = len(n)
-nu = n - 1
-N = n.sum()
+    **(1) 식에 원자료가 들어오는 통로가 없다.** 통계량을 다시 적어 보면
 
-# 귀무가설 아래의 공통 분산 추정값
-s2_pooled = np.sum(nu * s2) / np.sum(nu)
+    $$
+    T = \frac{(N-k)\ln S_p^2 - \sum_i \nu_i \ln S_i^2}{C},
+    \qquad
+    S_p^2 = \frac{\sum_i \nu_i S_i^2}{N-k},
+    \qquad
+    C = 1 + \frac{1}{3(k-1)}\left(\sum_i \frac{1}{\nu_i} - \frac{1}{N-k}\right)
+    $$
 
-# 분자는 합동분산의 로그와 각 분산 로그의 가중평균의 차이다.
-# 분산들이 고를수록 0 에 가까워진다.
-numerator = np.sum(nu) * np.log(s2_pooled) - np.sum(nu * np.log(s2))
+    인데 오른쪽에 나오는 것은 $n_i$(따라서 $\nu_i$, $N$, $k$)와 $S_i^2$ 뿐이다. **관측값 $X_{ij}$ 가 어디에도 없다.** 그러므로 논문 표에 집단 크기와 표본분산만 실려 있어도 등분산 검정을 그대로 돌릴 수 있다. 원자료를 구할 필요가 없다.
 
-# 보정인자. 표본이 작을수록 1 보다 눈에 띄게 커져 통계량을 낮춘다.
-C = 1 + (1 / (3 * (k - 1))) * (np.sum(1 / nu) - 1 / np.sum(nu))
+    이것이 우연이 아닌 까닭은 연습문제 1 의 유도에 있다. 정규 로그가능도를 평균에 대해 최적화하고 나면 자료가 $\sum_j (X_{ij} - \bar X_i)^2 = \nu_i S_i^2$ 이라는 형태로만 남는다. 곧 **$(\bar X_i, S_i^2)$ 가 정규모형의 충분통계량**이고, 분산에 관한 가설은 그중 $S_i^2$ 만 쓴다.
 
-# 검정통계량
-T = numerator / C
+    **척도불변성.** 모든 표본분산에 같은 상수 $a > 0$ 을 곱하면 합동분산도 $a S_p^2$ 이 되고, $\sum_i \nu_i = N - k$ 이므로 분자에서
 
-# p-값
-p_value = stats.chi2.sf(T, k - 1)
+    $$
+    (N-k)\ln(aS_p^2) - \sum_i \nu_i \ln(aS_i^2)
+    = (N-k)\ln a + (N-k)\ln S_p^2 - \Bigl(\sum_i \nu_i\Bigr)\ln a - \sum_i \nu_i \ln S_i^2
+    $$
 
-print(f"Pooled variance: {s2_pooled:.4f}")
-print(f"Numerator: {numerator:.4f}")
-print(f"Correction factor C: {C:.4f}")
-print(f"Test statistic T: {T:.4f}")
-print(f"P-value: {p_value:.4f}")
-```
+    에서 $\ln a$ 항이 **정확히 상쇄된다.** $C$ 는 $n_i$ 만의 함수라 애초에 영향을 받지 않는다. 따라서
 
-출력:
+    $$
+    T(a S_1^2, \ldots, a S_k^2) = T(S_1^2, \ldots, S_k^2)
+    $$
 
-```text
-Pooled variance: 6.2519
-Numerator: 0.8063
-Correction factor C: 1.0513
-Test statistic T: 0.7670
-P-value: 0.6815
-```
+    이다. **단위를 바꾸어도(미터를 센티미터로, 원을 달러로) 같은 답이 나온다.** $T$ 가 보는 것은 분산들의 **비**뿐이다.
+
+    **(2) 요약값이 전부라면, 요약값만 맞춘 가짜 자료도 같은 답을 주어야 한다.** 그리고 척도불변성이 하나 더 알려 준다. $n_i$ 가 모두 같으면 $\nu_i/n_i = (n-1)/n$ 이 공통 상수이므로 `ddof=0` 으로 받은 분산을 그대로 넣어도 $T$ 가 **바뀌지 않는다.** 그러나 $n_i$ 가 다르면 $\nu_i/n_i$ 가 집단마다 달라 공통 상수가 아니고, 그때는 $T$ 가 달라진다. 이 자료는 $n = (10, 12, 8)$ 로 불균형이니 영향이 있어야 한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 원자료 없이 집단 크기와 표본분산만으로 통계량을 만들 수 있다.
+    n = np.array([10, 12, 8])
+    s2 = np.array([5.2, 8.1, 4.7])
+    k = len(n)
+    nu = n - 1
+    N = n.sum()
+
+    # 귀무가설 아래의 공통 분산 추정값
+    s2_pooled = np.sum(nu * s2) / np.sum(nu)
+
+    # 분자는 합동분산의 로그와 각 분산 로그의 가중평균의 차이다.
+    # 분산들이 고를수록 0 에 가까워진다.
+    numerator = np.sum(nu) * np.log(s2_pooled) - np.sum(nu * np.log(s2))
+
+    # 보정인자. 표본이 작을수록 1 보다 눈에 띄게 커져 통계량을 낮춘다.
+    C = 1 + (1 / (3 * (k - 1))) * (np.sum(1 / nu) - 1 / np.sum(nu))
+
+    # 검정통계량
+    T = numerator / C
+
+    # p-값
+    p_value = stats.chi2.sf(T, k - 1)
+
+    print(f"Pooled variance: {s2_pooled:.4f}")
+    print(f"Numerator: {numerator:.4f}")
+    print(f"Correction factor C: {C:.4f}")
+    print(f"Test statistic T: {T:.4f}")
+    print(f"P-value: {p_value:.4f}")
+
+
+    def bart_from_summary(n, s2):
+        """(n_i, S_i^2) 만으로 바틀렛 통계량과 p 값을 돌려준다."""
+        n, s2 = np.asarray(n, float), np.asarray(s2, float)
+        k, nu = len(n), np.asarray(n, float) - 1
+        sp2 = np.sum(nu * s2) / np.sum(nu)
+        num = np.sum(nu) * np.log(sp2) - np.sum(nu * np.log(s2))
+        C = 1 + (1 / (3 * (k - 1))) * (np.sum(1 / nu) - 1 / np.sum(nu))
+        return num / C, stats.chi2.sf(num / C, k - 1)
+
+
+    # 요약값에 맞는 원자료를 아무렇게나 만들어 scipy 에 넣어 본다.
+    # 평균을 어디에 두든, 어떤 분포에서 뽑든 분산만 맞추면 같은 값이 나와야 한다.
+    def fake(n, s2, rng, draw):
+        out = []
+        for ni, v in zip(n, s2):
+            z = draw(ni)
+            z = (z - z.mean()) / z.std(ddof=1) * np.sqrt(v)
+            out.append(z + rng.normal() * 10)
+        return out
+
+
+    rng = np.random.default_rng(99)
+    g_norm = fake(n, s2, rng, lambda m: rng.normal(size=m))
+    rng2 = np.random.default_rng(7)
+    g_t3 = [a - 123.0 for a in fake(n, s2, rng2, lambda m: rng2.standard_t(3, size=m))]
+
+    print(f"\n만든 자료의 표본분산: {[round(float(g.var(ddof=1)), 10) for g in g_norm]}")
+    print(f"{'요약값만으로':22}{bart_from_summary(n, s2)[0]:.13f}")
+    print(f"{'정규에서 만든 자료':22}{stats.bartlett(*g_norm).statistic:.13f}")
+    print(f"{'t_3 에서 만든 자료':22}{stats.bartlett(*g_t3).statistic:.13f}")
+
+    # 척도불변성: 분산에 공통 상수를 곱해도 T 가 바뀌지 않는다.
+    print(f"\n분산을 1000배 하면:  T = {bart_from_summary(n, s2 * 1000)[0]:.13f}")
+
+    # ddof 함정. n 으로 나눈 분산을 받아 그대로 넣으면?
+    s2_pop = s2 * nu / n
+    print(f"\nn 으로 나눈 분산 = {np.round(s2_pop, 4)}")
+    print(f"  불균형 n=(10,12,8):  ddof=1 -> T = {bart_from_summary(n, s2)[0]:.4f}"
+          f"   ddof=0 -> T = {bart_from_summary(n, s2_pop)[0]:.4f}")
+    ne = np.array([10, 10, 10])
+    print(f"  균형   n=(10,10,10): ddof=1 -> T = {bart_from_summary(ne, s2)[0]:.13f}")
+    print(f"                       ddof=0 -> T = {bart_from_summary(ne, s2 * 9 / 10)[0]:.13f}")
+    ```
+
+    출력:
+
+    ```text
+    Pooled variance: 6.2519
+    Numerator: 0.8063
+    Correction factor C: 1.0513
+    Test statistic T: 0.7670
+    P-value: 0.6815
+
+    만든 자료의 표본분산: [5.2, 8.1, 4.7]
+    요약값만으로                0.7669773746398
+    정규에서 만든 자료            0.7669773746398
+    t_3 에서 만든 자료          0.7669773746398
+
+    분산을 1000배 하면:  T = 0.7669773746398
+
+    n 으로 나눈 분산 = [4.68   7.425  4.1125]
+      불균형 n=(10,12,8):  ddof=1 -> T = 0.7670   ddof=0 -> T = 0.8743
+      균형   n=(10,10,10): ddof=1 -> T = 0.7478100156592
+                           ddof=0 -> T = 0.7478100156592
+    ```
+
+    **요약값만으로 보기 1 의 손계산이 그대로 재현된다.** 합동분산 $6.2519$, 분자 $0.8063$, 보정인자 $1.0513$, 통계량 $0.7670$, $p$값 $0.6815$ 로 보기 1 의 여섯 단계와 모두 맞는다(보기 1 은 분자를 $0.806$ 까지만 적었다).
+
+    **(2)의 첫 주장이 맞는다.** 표본분산만 $5.2$, $8.1$, $4.7$ 에 맞추어 꾸민 자료를 `scipy.stats.bartlett` 에 넣으면 요약값만으로 구한 값과 소수점 열셋째 자리까지 같은 $0.7669773746398$ 이 나온다. **정규에서 뽑아 만든 것이든 $t_3$ 에서 뽑아 만든 것이든, 평균을 $+10$ 쪽에 두든 $-123$ 에 두든 결과가 같다.** 자료의 모양과 위치를 모두 지워도 통계량이 살아남는다는 뜻이고, 이것이 (1)의 "원자료가 들어오는 통로가 없다"는 말의 실물이다.
+
+    여기에는 반전이 하나 숨어 있다. **통계량은 자료의 모양을 못 보지만, 기준분포 $\chi^2_{k-1}$ 은 자료가 정규라는 가정에서 나왔다.** $t_3$ 에서 만든 자료를 넣어도 같은 $T$ 가 나오지만, 그 자료에 대해 $\chi^2_2$ 가 옳은 기준인지는 전혀 다른 문제다. 위 실험은 분산을 억지로 맞춘 것이라 그 물음에 답하지 않는다. 다음 절 [비정규성 아래의 한계](limitations.md)가 답한다.
+
+    **척도불변성도 확인된다.** 분산 셋을 모두 1000배 해도 $T$ 가 열셋째 자리까지 같다.
+
+    **`ddof` 는 불균형일 때만 문제가 된다.** $n = (10, 12, 8)$ 에서 $n_i$ 로 나눈 분산 $(4.68,\, 7.425,\, 4.1125)$ 를 그대로 넣으면 $T = 0.8743$ 이 되어 올바른 $0.7670$ 보다 $14\%$ 크다. 반면 $n = (10,10,10)$ 으로 균형을 맞추면 두 길이 $0.7478100156592$ 로 **열셋째 자리까지 같다.** 공통 인자 $(n-1)/n = 0.9$ 가 척도불변성에 흡수되기 때문이다.
+
+    **실무적 교훈.** 남의 표에서 분산을 받아 올 때 그것이 $n-1$ 로 나눈 것인지 꼭 확인하라. 균형 설계라면 틀려도 답이 같아서 실수가 드러나지 않고, 불균형 설계에서만 조용히 틀린다. **드러나지 않는 실수가 더 위험하다.**
+
 
 
 ## 연습문제

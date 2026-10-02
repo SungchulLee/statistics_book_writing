@@ -45,49 +45,253 @@ SciPy는 `scipy.stats.levene`을 직접 제공한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 분산 차이를 키워 가며
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산 차이를 키워 가며. 집단당 $n = 100$, $x$ 와 $y$ 에 **같은 씨앗**을 주고 $\sigma_y$ 만 $1.00$ 에서 $1.20$ 까지 키운다. 15.3절의 $F$ 검정·15.4절의 Bartlett 검정과 똑같은 설정이다.
+
+**(1)** 이 설정에서 두 집단의 절대편차가 $Z^y_j = \sigma_y Z^x_j$ 로 **정확히** 비례함을 보이고, 이로부터 $W$ 의 닫힌 꼴을 구하시오. 그 식에서 자료가 어디로 모여 들어가는지 밝히시오.
+
+**(2)** 수치로 확인하고, $\sigma_y = 1$ 에서 $W$ 가 정확히 $0$, $p$ 가 정확히 $1$ 이 되는 까닭을 (1)의 식으로 설명하시오.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-# 앞의 Bartlett·F 검정과 같은 설정이다. 세 검정의 p-값을 견줄 수 있다.
-size, seed = 100, 1
-x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+    **(1) 두 표본이 같은 난수를 공유한다.** `rvs(size, random_state=seed)` 는 씨앗 하나로 정해지는 표준정규 추출값 $z_1, \ldots, z_{100}$ 에 $a + s z_j$ 를 입힌다. 씨앗이 같으므로 두 표본에 들어가는 $z$ 가 **같은 수열**이고
 
-for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
-    y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
-    stat, pval = stats.levene(x, y)   # median-centred by default
-    print(f"sigma_y={scale:.2f}  W={stat:.4f}  p={pval:.3f}")
-```
+    $$
+    x_j = z_j, \qquad y_j = 1 + \sigma_y z_j
+    $$
 
-출력:
+    이다. 중앙값은 증가하는 아핀변환에 대해 동변이므로 $\operatorname{med}(y) = 1 + \sigma_y \operatorname{med}(z)$ 이고, 따라서
 
-```text
-sigma_y=1.00  W=0.0000  p=1.000
-sigma_y=1.05  W=0.2044  p=0.652
-sigma_y=1.10  W=0.7780  p=0.379
-sigma_y=1.15  W=1.6657  p=0.198
-sigma_y=1.20  W=2.8187  p=0.095
-```
+    $$
+    Z^y_j = \lvert y_j - \operatorname{med}(y)\rvert = \lvert \sigma_y (z_j - \operatorname{med}(z))\rvert = \sigma_y \lvert z_j - \operatorname{med}(z)\rvert = \sigma_y Z^x_j
+    $$
+
+    이다. **두 집단의 절대편차가 비례상수 $\sigma_y$ 로 완전히 묶여 있다.** 표집변동이 없다.
+
+    **닫힌 꼴.** $Z = Z^x$, $\bar Z$ 를 그 평균, $S = \sum_j (Z_j - \bar Z)^2$ 이라 쓰자. 집단 1 의 편차는 $Z$, 집단 2 의 편차는 $\sigma_y Z$ 이므로 집단평균이 $\bar Z$ 와 $\sigma_y \bar Z$, 전체평균이 $\tfrac12(1+\sigma_y)\bar Z$ 다. 집단간 제곱합은
+
+    $$
+    \mathrm{SS}_{\text{between}} = n\left(\bar Z - \frac{1+\sigma_y}{2}\bar Z\right)^2 + n\left(\sigma_y \bar Z - \frac{1+\sigma_y}{2}\bar Z\right)^2 = \frac{n \bar Z^2 (\sigma_y-1)^2}{2}
+    $$
+
+    이고, 집단내 제곱합은 척도가 이차로 들어오므로
+
+    $$
+    \mathrm{SS}_{\text{within}} = S + \sigma_y^2 S = (1+\sigma_y^2)\,S
+    $$
+
+    이다. $N = 2n$, $k = 2$ 를 $W$ 의 정의에 넣으면
+
+    $$
+    W = \frac{(2n-2)\cdot \frac{n \bar Z^2(\sigma_y-1)^2}{2}}{1 \cdot (1+\sigma_y^2) S}
+    = \underbrace{\frac{n(n-1)\bar Z^2}{S}}_{c}\cdot \frac{(\sigma_y-1)^2}{1+\sigma_y^2}
+    $$
+
+    를 얻는다. **자료는 상수 $c$ 하나로 접혀 들어가고, $\sigma_y$ 의 역할은 $(\sigma_y-1)^2/(1+\sigma_y^2)$ 라는 함수 하나로 분리된다.** $c$ 는 $x$ 표본의 절대편차만으로 정해지므로 $\sigma_y$ 를 바꾸어도 꿈쩍하지 않는다.
+
+    **(2) $\sigma_y = 1$ 에서 왜 정확히 $0$ 과 $1$ 인가.** 위 식에 $\sigma_y = 1$ 을 넣으면 분자의 $(\sigma_y-1)^2$ 이 $0$ 이므로 $W = 0$ 이다. 어림값이 아니라 **항등적으로** $0$ 이다. 두 집단의 절대편차가 글자 그대로 같은 수열이어서 집단간 변동이 존재하지 않기 때문이다. 그리고 $F(1, 198)$ 의 분포함수가 $0$ 에서 $0$ 이므로 양측이 아닌 상단꼬리 $p$ 값이 $P(F \ge 0) = 1$ 이 된다. 독립 표본에서는 $W = 0$ 이 될 확률이 $0$ 이니 결코 일어나지 않는 일이다.
+
+    **확인한다.**
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    # 앞의 Bartlett·F 검정과 같은 설정이다. 세 검정의 p-값을 견줄 수 있다.
+    size, seed = 100, 1
+    x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+
+    for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
+        y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
+        stat, pval = stats.levene(x, y)   # median-centred by default
+        print(f"sigma_y={scale:.2f}  W={stat:.4f}  p={pval:.3f}")
+
+    # (1) 의 비례관계와 닫힌 꼴을 확인한다. 기본값이 중앙값이므로 Z 도 중앙값 기준.
+    Z = np.abs(x - np.median(x))
+    n = size
+    c = n * (n - 1) * Z.mean() ** 2 / ((Z - Z.mean()) ** 2).sum()
+    print(f"\nc = n(n-1) Zbar^2 / SS(Z) = {c:.6f}")
+
+    print(f"\n{'sigma_y':>8}{'|Zy - s*Zx|max':>17}{'scipy W':>12}{'닫힌 꼴':>12}{'차':>10}")
+    for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
+        y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
+        Zy = np.abs(y - np.median(y))
+        W_sp, _ = stats.levene(x, y, center="median")
+        W_cf = c * (scale - 1) ** 2 / (1 + scale ** 2)
+        print(f"{scale:>8.2f}{np.abs(Zy - scale * Z).max():>17.2e}"
+              f"{W_sp:>12.6f}{W_cf:>12.6f}{abs(W_sp - W_cf):>10.1e}")
+    ```
+
+    출력:
+
+    ```text
+    sigma_y=1.00  W=0.0000  p=1.000
+    sigma_y=1.05  W=0.2044  p=0.652
+    sigma_y=1.10  W=0.7780  p=0.379
+    sigma_y=1.15  W=1.6657  p=0.198
+    sigma_y=1.20  W=2.8187  p=0.095
+
+    c = n(n-1) Zbar^2 / SS(Z) = 171.940898
+
+     sigma_y   |Zy - s*Zx|max     scipy W        닫힌 꼴         차
+        1.00         2.22e-16    0.000000    0.000000   4.3e-30
+        1.05         2.22e-16    0.204448    0.204448   4.7e-16
+        1.10         4.44e-16    0.778013    0.778013   6.7e-16
+        1.15         4.44e-16    1.665735    1.665735   5.1e-15
+        1.20         4.44e-16    2.818703    2.818703   4.4e-16
+    ```
+
+    **비례관계가 비트 단위로 맞는다.** $\lvert Z^y_j - \sigma_y Z^x_j\rvert$ 의 최대값이 $4.4\times10^{-16}$ 로 배정도 반올림 한 칸 수준이다.
+
+    **닫힌 꼴도 맞는다.** $c = 171.940898$ 하나와 함수 $(\sigma_y-1)^2/(1+\sigma_y^2)$ 만으로 네 개의 $W$ 가 전부 재현되고, SciPy 값과의 차가 $5\times10^{-15}$ 이하다. 손으로 $\sigma_y = 1.20$ 을 넣어 보면
+
+    $$
+    171.940898 \times \frac{0.04}{2.44} = 2.818703
+    $$
+
+    이다. **$W$ 를 키우는 것은 표본이 아니라 $\sigma_y$ 하나뿐**임이 식과 수치에서 함께 확인된다.
+
+    한 가지 더. 15.3절의 $F$ 검정에서는 같은 설정의 $F$ 가 정확히 $1/\sigma_y^2$ 였다. 거기서도 자료가 약분되어 사라졌지만, **여기서는 $c$ 라는 자료의 흔적이 남는다.** $F$ 검정은 분자와 분모가 같은 $S_z^2$ 를 쓰므로 통째로 약분되는데, Levene 은 집단간 변동과 집단내 변동이 서로 다른 조합이라 완전히 약분되지 않기 때문이다.
 
 `center` 인자가 중심화 방식을 조절한다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 두 판본의 차이
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 판본의 차이. 보기 1 의 같은 자료에 세 중심(평균·중앙값·$10\%$ 절사평균)을 넣는다.
+
+**(1)** 보기 1 의 유도가 **중심의 선택과 무관하게** 성립함을 보이고, 따라서 세 판본의 $W$ 의 비가 $\sigma_y$ 에 **의존하지 않는 상수**임을 결론하시오. 또 그 상수를 $Z$ 의 변동계수로 적으시오.
+
+**(2)** 세 판본을 돌려 그 비가 정말 $\sigma_y$ 에 무관한지 확인하시오. 이 자료에서 평균 판과 중앙값 판이 거의 같은 까닭은 무엇인가. 그리고 이 설정으로는 **확인할 수 없는** 것이 무엇인가.
 
 </div>
 
-```python
-# 중앙값 중심 — Brown-Forsythe 이며 scipy 의 기본값이다.
-stat, pval = stats.levene(x, y, center='median')
+??? success "풀이"
 
-# 평균 중심 — Levene 의 원래 형태. center 를 명시해야 이쪽이 된다.
-stat, pval = stats.levene(x, y, center='mean')
-```
+    **(1) 세 중심 모두 아핀 동변이다.** 보기 1 의 유도에서 중앙값이라는 사실은 한 곳에만 쓰였다. $y_j = 1 + \sigma_y z_j$ 일 때 중심 $c(\cdot)$ 가
+
+    $$
+    c(y) = 1 + \sigma_y\, c(z)
+    $$
+
+    를 만족한다는 것이다. 평균은 선형이므로 성립하고, 중앙값은 증가하는 아핀변환에 동변이므로 성립하며, 절사평균은 순서를 보존하는 변환이 같은 관측값을 잘라 내므로 역시 성립한다. 그러므로 어느 중심을 쓰든
+
+    $$
+    Z^y_j = \sigma_y Z^x_j
+    $$
+
+    가 그대로 성립하고, 보기 1 의 계산이 글자 하나 바뀌지 않고 되풀이되어
+
+    $$
+    W_{\text{center}} = c_{\text{center}} \cdot \frac{(\sigma_y-1)^2}{1+\sigma_y^2},
+    \qquad
+    c_{\text{center}} = \frac{n(n-1)\bar Z^2}{\sum_j (Z_j-\bar Z)^2}
+    $$
+
+    를 얻는다. **$\sigma_y$ 에 딸린 함수는 세 판본에서 똑같고, 중심의 선택은 상수 $c$ 만 바꾼다.** 따라서
+
+    $$
+    \frac{W_{\text{A}}}{W_{\text{B}}} = \frac{c_{\text{A}}}{c_{\text{B}}}
+    $$
+
+    가 되어 **$\sigma_y$ 와 무관한 상수**다. 이것은 돌려 보기 전에 확인할 수 있는 예측이다.
+
+    **$c$ 를 변동계수로 적으면.** $\sum_j (Z_j - \bar Z)^2 = (n-1)\operatorname{Var}(Z)$ 이므로 $(n-1)$ 이 약분되어
+
+    $$
+    c = \frac{n \bar Z^2}{\operatorname{Var}(Z)} = \frac{n}{\mathrm{CV}(Z)^2},
+    \qquad \mathrm{CV}(Z) = \frac{\operatorname{SD}(Z)}{\bar Z}
+    $$
+
+    이다. **중심의 선택이 $W$ 에 미치는 영향은 오직 하나, 절대편차의 변동계수를 얼마나 줄이는가다.** $\mathrm{CV}(Z)$ 가 작아지면 $c$ 가 커지고 $W$ 도 비례해서 커진다.
+
+    **(2) 돌려서 확인한다.**
+
+    ```python
+    import inspect
+
+    import numpy as np
+    import scipy.stats as stats
+
+    # 기본값이 무엇인지 함수 서명에서 직접 확인한다.
+    print("levene 의 center 기본값 =",
+          inspect.signature(stats.levene).parameters["center"].default)
+
+    size, seed = 100, 1
+    x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+    scales = [1.00, 1.05, 1.10, 1.15, 1.20]
+
+    # 중앙값 중심 — Brown-Forsythe 이며 scipy 의 기본값이다.
+    # 평균 중심 — Levene 의 원래 형태. center 를 명시해야 이쪽이 된다.
+    W = {}
+    for center in ("mean", "median", "trimmed"):
+        kw = {"proportiontocut": 0.1} if center == "trimmed" else {}
+        row = []
+        for scale in scales:
+            y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
+            stat, pval = stats.levene(x, y, center=center, **kw)
+            row.append((stat, pval))
+        W[center] = row
+        cells = "  ".join(f"{s:.4f}/{p:.3f}" for s, p in row)
+        print(f"{center:>8}  {cells}")
+
+    # (1) 의 결론: 세 판본의 비는 sigma_y 와 무관해야 한다.
+    print("\nW 의 비 (sigma_y = 1.05, 1.10, 1.15, 1.20)")
+    for a, b in [("mean", "median"), ("median", "trimmed")]:
+        r = [W[a][i][0] / W[b][i][0] for i in range(1, 5)]
+        print(f"  {a:>6} / {b:<8} " + "  ".join(f"{v:.8f}" for v in r)
+              + f"   폭 = {max(r) - min(r):.1e}")
+
+    # 이 표본에서 평균과 중앙값이 얼마나 가까운가
+    print(f"\nx 의 평균 {x.mean():+.6f},  중앙값 {np.median(x):+.6f},  차 {x.mean() - np.median(x):+.6f}")
+    print(f"x 의 표본왜도 = {stats.skew(x):+.4f}")
+
+    # 절사평균은 표본을 먼저 자른다. 그래서 자유도까지 바뀐다.
+    xt = stats.trimboth(np.sort(x), 0.1)
+    print(f"\n절사 뒤 집단크기 = {len(xt)}  ->  분모 자유도 N-k = {2 * len(xt) - 2} (원래는 198)")
+
+    # c = n / CV(Z)^2 이므로, 중심을 바꾸면 Z 의 변동계수가 바뀌어 W 가 움직인다.
+    print(f"\n{'중심':>8}{'n':>5}{'Zbar':>9}{'sd(Z)':>9}{'CV(Z)':>9}{'c = n/CV^2':>13}")
+    for lbl, xx, ctr in [("median", x, np.median(x)),
+                         ("trimmed", stats.trimboth(np.sort(x), 0.1), None)]:
+        if ctr is None:
+            ctr = xx.mean()
+        Z = np.abs(xx - ctr)
+        cv = Z.std(ddof=1) / Z.mean()
+        print(f"{lbl:>8}{len(xx):>5}{Z.mean():>9.4f}{Z.std(ddof=1):>9.4f}{cv:>9.4f}{len(xx) / cv ** 2:>13.4f}")
+    ```
+
+    출력:
+
+    ```text
+    levene 의 center 기본값 = median
+        mean  0.0000/1.000  0.2045/0.652  0.7780/0.379  1.6658/0.198  2.8188/0.095
+      median  0.0000/1.000  0.2044/0.652  0.7780/0.379  1.6657/0.198  2.8187/0.095
+     trimmed  0.0000/1.000  0.2446/0.622  0.9309/0.336  1.9930/0.160  3.3724/0.068
+
+    W 의 비 (sigma_y = 1.05, 1.10, 1.15, 1.20)
+        mean / median   1.00004257  1.00004257  1.00004257  1.00004257   폭 = 8.4e-15
+      median / trimmed  0.83580724  0.83580724  0.83580724  0.83580724   폭 = 3.7e-15
+
+    x 의 평균 +0.060583,  중앙값 +0.064074,  차 -0.003491
+    x 의 표본왜도 = -0.0045
+
+    절사 뒤 집단크기 = 80  ->  분모 자유도 N-k = 158 (원래는 198)
+
+          중심    n     Zbar    sd(Z)    CV(Z)   c = n/CV^2
+      median  100   0.7051   0.5378   0.7626     171.9409
+     trimmed   80   0.4914   0.3065   0.6236     205.7184
+    ```
+
+    **기본값은 `median` 이다.** 함수 서명이 그렇게 말한다. 그러므로 `levene(x, y)` 라고만 쓰면 **원래의 Levene 검정이 아니라 Brown-Forsythe 검정**이 돌아간다. 보기 1 의 출력이 중앙값 줄과 같은 것이 그 증거다.
+
+    **(1)의 예측이 맞는다.** 네 개의 $\sigma_y$ 에서 비가 소수 여덟째 자리까지 같고, 폭이 $10^{-14}$ 수준이다. 평균 대 중앙값은 $1.00004257$, 중앙값 대 절사평균은 $0.83580724$ 로 고정되어 있다. 중심을 바꾸는 일이 $\sigma_y$ 축을 **휘게 하지 않고 통째로 상수배 하는 것뿐**임이 확인되었다.
+
+    **평균 판과 중앙값 판이 거의 같은 까닭.** 이 표본의 평균이 $+0.060583$, 중앙값이 $+0.064074$ 로 차이가 $0.0035$ 에 지나지 않는다. 표본왜도도 $-0.0045$ 다. $N(0,1)$ 에서 뽑았으니 당연하고, **두 중심이 거의 같으면 두 $Z$ 도 거의 같아 $c$ 가 거의 같다.** 여기서 두 판본의 차이는 $W$ 의 소수 넷째 자리, $p$ 값으로는 세 자리 안쪽이다. 두 판본이 크게 갈리는 것은 치우친 자료에서다. 모분산이 **정확히 같은** 로그정규 세 집단에서 평균 판이 $W = 2.0636$, 중앙값 판이 $W = 0.6888$ 로 갈리는 것을 11.5절 보기 1 이 측정해 두었고, 이 쪽 연습문제 3 의 지수 자료에서는 제1종 오류율이 $0.187$ 대 $0.047$ 로 네 배 차이가 난다.
+
+    **절사평균 판은 $W$ 를 $19.6\%$ 키운다.** $1/0.8358 = 1.1964$ 다. 까닭이 $\mathrm{CV}(Z)$ 표에 있다. 절사는 중심에서 가장 먼 관측값들을 먼저 잘라 내므로 $Z$ 의 산포를 평균보다 더 많이 깎는다. $\mathrm{CV}(Z)$ 가 $0.7626$ 에서 $0.6236$ 으로 줄고, $c = n/\mathrm{CV}^2$ 이 $171.94$ 에서 $205.72$ 로 커진다. 집단당 $n$ 이 $100$ 에서 $80$ 으로 줄어 $c$ 를 깎는 효과가 있는데도 변동계수 쪽이 이겼다. 분모 자유도도 $198$ 에서 $158$ 로 줄어든다. $\sigma_y = 1.20$ 에서 $p$ 가 $0.095$ 에서 $0.068$ 로 내려가는 것이 그 합이다.
+
+    **이 설정으로는 확인할 수 없는 것.** 절사평균 판의 제1종 오류율이다. $\sigma_y = 1.00$ 줄을 보면 세 판본 모두 $W = 0$, $p = 1.000$ 이다. 보기 1 에서 본 대로 $(\sigma_y-1)^2$ 이 $0$ 이면 중심이 무엇이든 $W$ 가 항등적으로 $0$ 이기 때문이다. **같은 씨앗이 표집변동을 없앴으니 "귀무가설이 참일 때 얼마나 자주 기각하는가"를 이 표에서는 읽을 수 없다.** 그것은 독립 표본으로 반복 추출해야 재는 값이고, 아래의 경고 상자가 가리키는 15.5절 [Brown-Forsythe 검정](./brown_forsythe.md)의 모의실험이 그 일을 한다.
 
 !!! danger "`center='trimmed'`는 권하지 않는다"
     SciPy는 10% 절사평균 중심화도 제공하지만, 15.5절 [Brown-Forsythe 검정](./brown_forsythe.md)에서 측정했듯 **완전한 정규 자료에서도 제1종 오류율이 0.12~0.19까지 부풀려진다.**

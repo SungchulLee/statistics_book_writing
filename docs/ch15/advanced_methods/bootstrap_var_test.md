@@ -49,77 +49,308 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 분산비의 붓스트랩 구간
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산비의 붓스트랩 구간. 위의 다섯 단계를 함수 하나로 옮긴다. 신뢰구간은 로그 척도의 백분위로 잡고, $p$ 값은 귀무값 $\log 1 = 0$ 과 견주어 만든다.
+
+**(1)** 이 $p$ 값이 **백분위 신뢰구간을 뒤집은 것**과 동등함을 보이시오. 곧 수준 $1-\alpha$ 구간이 1 을 담지 않을 때 정확히 $p < \alpha$ 다.
+
+**(2)** 마지막 줄의 `min(p_two, 1.0)` 은 F 검정의 $2\min(\text{cdf}, \text{sf})$ 와 달리 **군더더기가 아니다.** 그 까닭을 밝히고, 쪽의 자료에서 (1)의 동등성과 함께 수로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def variance_ratio(x1, x2):
-    """두 표본분산의 비."""
-    return np.var(x1, ddof=1) / np.var(x2, ddof=1)
+    **(1) 두 판정이 같은 사건이다.** 붓스트랩 로그비의 경험분포를 $\hat G$ 라 쓰고
 
-def bootstrap_varratio(x1, x2, B=2000, seed=None):
-    """분산비의 붓스트랩 신뢰구간과 양측 p-값을 구한다.
+    $$
+    L = \hat G^{-1}\!\left(\tfrac\alpha2\right), \qquad
+    U = \hat G^{-1}\!\left(1 - \tfrac\alpha2\right)
+    $$
 
-    F 검정과 달리 정규성을 가정하지 않는다. 각 표본에서 따로 복원추출해
-    비를 다시 구하는 일을 B 번 되풀이한다.
-    """
-    rng = np.random.default_rng(seed)
-    x1 = np.asarray(x1, dtype=float)
-    x2 = np.asarray(x2, dtype=float)
-    n1, n2 = len(x1), len(x2)
-    stat_obs = variance_ratio(x1, x2)
+    를 로그 척도의 백분위 구간 끝점이라 하자. 구간을 되돌린 $(\mathrm e^L, \mathrm e^U)$ 가 1 을 담지 않는다는 것은 $\log$ 가 증가함수이므로 $(L, U)$ 가 0 을 담지 않는다는 것과 같고, 그것은
 
+    $$
+    L > 0 \quad\text{또는}\quad U < 0
+    $$
+
+    이다. 여기서 $L > 0$ 은 0 이하인 붓스트랩 값의 비율이 $\alpha/2$ 에 못 미친다는 뜻이고, 그때는 $\hat G(0) < \alpha/2 \le 1/2$ 이므로 $\min$ 이 아래쪽 꼬리에서 잡혀
+
+    $$
+    p = 2\hat G(0) < \alpha
+    $$
+
+    가 된다. $U < 0$ 인 경우는 위쪽 꼬리에서 같은 계산이 된다. 거꾸로 $p < \alpha$ 이면 두 비율 가운데 작은 쪽이 $\alpha/2$ 에 못 미치므로 해당 끝점이 0 을 넘어선다. **그러므로 두 판정은 같은 사건이고, 이 $p$ 값은 "구간이 1 을 놓치기 시작하는 가장 작은 $\alpha$" 바로 그것이다.**
+
+    유한 $B$ 에서는 경험분위수가 계단이라 **$\alpha$ 가 $p$ 와 정확히 같은 한 칸에서만** 어긋날 수 있다. 부등호가 $p < \alpha$ 로 엄격하기 때문이다. (2)에서 그 한 칸을 눈으로 본다.
+
+    **(2) F 검정에서는 자를 필요가 없었다.** 거기서는 $\text{cdf} + \text{sf} = 1$ 이 정확히 성립해 $\min \le 1/2$ 가 보장되었다. 여기서는 사정이 다르다. 두 비율을 $\hat G(0) = P(\log\hat\theta^* \le 0)$ 과 $1 - P(\log\hat\theta^* < 0) = P(\log\hat\theta^* \ge 0)$ 이라 쓰면
+
+    $$
+    P(\log\hat\theta^* \le 0) + P(\log\hat\theta^* \ge 0)
+    = 1 + P(\log\hat\theta^* = 0)
+    $$
+
+    이다. **귀무값에 정확히 걸리는 붓스트랩 값이 있으면 합이 1 을 넘고**, 그러면 두 비율이 모두 $1/2$ 를 넘는 일이 생길 수 있어 $2\min > 1$ 이 된다. 연속분포라면 $P(=0) = 0$ 이라 걱정할 일이 없지만, **이 쪽의 자료는 정수**다. 표본분산이 유리수이므로 두 붓스트랩 표본의 분산이 정확히 같아지는 일이 실제로 일어난다. 그래서 자르는 줄이 필요하다.
+
+    **수로 확인한다.**
+
+    ```python
+    import numpy as np
+
+    def variance_ratio(x1, x2):
+        """두 표본분산의 비."""
+        return np.var(x1, ddof=1) / np.var(x2, ddof=1)
+
+    def bootstrap_varratio(x1, x2, B=2000, seed=None):
+        """분산비의 붓스트랩 신뢰구간과 양측 p-값을 구한다.
+
+        F 검정과 달리 정규성을 가정하지 않는다. 각 표본에서 따로 복원추출해
+        비를 다시 구하는 일을 B 번 되풀이한다.
+        """
+        rng = np.random.default_rng(seed)
+        x1 = np.asarray(x1, dtype=float)
+        x2 = np.asarray(x2, dtype=float)
+        n1, n2 = len(x1), len(x2)
+        stat_obs = variance_ratio(x1, x2)
+
+        boots = np.empty(B)
+        for b in range(B):
+            b1 = rng.choice(x1, size=n1, replace=True)
+            b2 = rng.choice(x2, size=n2, replace=True)
+            boots[b] = np.log(variance_ratio(b1, b2))
+
+        # 비는 아래로 0, 위로 무한이라 분포가 치우친다. 로그를 씌우면 그 눈금이
+        # 대칭에 가까워지므로 구간을 로그 눈금에서 만든 뒤 되돌린다.
+        lo, hi = np.percentile(boots, [2.5, 97.5])
+        ci = (float(np.exp(lo)), float(np.exp(hi)))
+
+        # p-값은 붓스트랩 분포를 관측값이 아니라 귀무값 log(1)=0 과 견주어
+        # 만든다. 관측값과 견주면 언제나 0.5 근처가 나와 뜻이 없다.
+        p_two = 2 * min(np.mean(boots <= 0.0), np.mean(boots >= 0.0))
+        p_two = float(min(p_two, 1.0))
+
+        return float(stat_obs), ci, p_two
+
+    # === 구간 뒤집기와 p 값이 정말 같은 판정을 주는가 ===
+    x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
+    x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
+
+    # 함수 안의 붓스트랩 값을 다시 만들어 들여다본다 (같은 씨앗, 같은 수열).
+    rng = np.random.default_rng(42)
+    B = 10000
     boots = np.empty(B)
     for b in range(B):
-        b1 = rng.choice(x1, size=n1, replace=True)
-        b2 = rng.choice(x2, size=n2, replace=True)
+        b1 = rng.choice(x1, size=len(x1), replace=True)
+        b2 = rng.choice(x2, size=len(x2), replace=True)
         boots[b] = np.log(variance_ratio(b1, b2))
 
-    # 비는 아래로 0, 위로 무한이라 분포가 치우친다. 로그를 씌우면 그 눈금이
-    # 대칭에 가까워지므로 구간을 로그 눈금에서 만든 뒤 되돌린다.
-    lo, hi = np.percentile(boots, [2.5, 97.5])
-    ci = (float(np.exp(lo)), float(np.exp(hi)))
+    lo_cnt, hi_cnt = np.mean(boots <= 0.0), np.mean(boots >= 0.0)
+    ties = int((boots == 0.0).sum())
+    print(f"P(log theta* <= 0) = {lo_cnt:.4f}")
+    print(f"P(log theta* >= 0) = {hi_cnt:.4f}")
+    print(f"두 비율의 합        = {lo_cnt + hi_cnt:.4f}   (1 + 동점비율)")
+    print(f"정확히 0 인 값      = {ties} 개 / {B}   -> 동점비율 {ties / B:.4f}")
+    print(f"2 x min            = {2 * min(lo_cnt, hi_cnt):.4f}  (자르기 전)")
 
-    # p-값은 붓스트랩 분포를 관측값이 아니라 귀무값 log(1)=0 과 견주어
-    # 만든다. 관측값과 견주면 언제나 0.5 근처가 나와 뜻이 없다.
-    p_two = 2 * min(np.mean(boots <= 0.0), np.mean(boots >= 0.0))
-    p_two = float(min(p_two, 1.0))
+    p = min(2 * min(lo_cnt, hi_cnt), 1.0)
+    print(f"\n   alpha     lower     upper   1 in CI   p<alpha")
+    for a in (0.05, 0.10, 0.15, 0.1892, 0.19, 0.25, 0.40):
+        lo, hi = np.exp(np.percentile(boots, [100 * a / 2, 100 * (1 - a / 2)]))
+        inci = "yes" if lo <= 1.0 <= hi else "no"
+        rej = "yes" if p < a else "no"
+        print(f"{a:>8.4f}{lo:>10.4f}{hi:>10.4f}{inci:>10}{rej:>10}")
+    ```
 
-    return float(stat_obs), ci, p_two
-```
+    출력:
+
+    ```text
+    P(log theta* <= 0) = 0.9118
+    P(log theta* >= 0) = 0.0946
+    두 비율의 합        = 1.0064   (1 + 동점비율)
+    정확히 0 인 값      = 64 개 / 10000   -> 동점비율 0.0064
+    2 x min            = 0.1892  (자르기 전)
+
+       alpha     lower     upper   1 in CI   p<alpha
+      0.0500    0.1345    1.6092       yes        no
+      0.1000    0.1705    1.2526       yes        no
+      0.1500    0.1946    1.0787       yes        no
+      0.1892    0.2113    0.9967        no        no
+      0.1900    0.2117    0.9952        no       yes
+      0.2500    0.2381    0.8930        no       yes
+      0.4000    0.2904    0.7458        no       yes
+    ```
+
+    **동점이 실제로 일어난다.** 두 비율의 합이 $1.0064$ 로 1 을 넘고, 정확히 $\log\hat\theta^* = 0$ 인 붓스트랩 값이 **1 만 개 가운데 64 개**다. 정수 자료라 두 붓스트랩 표본의 분산이 정확히 같아지는 조합이 $0.64\%$ 의 확률로 뽑힌 것이다. (1)에서 예측한 $P(\le 0) + P(\ge 0) = 1 + P(=0)$ 이 $0.9118 + 0.0946 = 1 + 0.0064$ 로 자리 하나까지 맞는다.
+
+    이 자료에서는 $\min$ 이 $0.0946$ 쪽에서 잡혀 $2\min = 0.1892 < 1$ 이므로 자르는 줄이 **실제로 깎지는 않았다.** 그러나 동점비율이 조금 더 크고 두 꼬리가 더 균형 잡힌 자료에서는 $2\min$ 이 1 을 넘는다. **그때를 막아 주는 것이 그 줄이다.** F 검정에서는 같은 줄이 결코 작동하지 않는다는 것과 대조된다.
+
+    **동등성도 확인된다.** $\alpha$ 를 $0.05$ 에서 $0.40$ 까지 올리면 구간이 $1$ 을 담다가 어느 지점에서 놓치고, 바로 그 지점에서 $p < \alpha$ 가 참이 된다. 두 열이 **한 줄만 빼고** 완전히 일치한다. 빠진 한 줄은 $\alpha = 0.1892$, 곧 $\alpha$ 가 $p$ 와 정확히 같은 자리다. 거기서 구간 상한이 $0.9967$ 로 이미 1 을 놓쳤는데 $p < \alpha$ 는 $0.1892 < 0.1892$ 라서 거짓이다. (1)에서 예고한 **엄격 부등호 한 칸**이 바로 이것이며, $\alpha$ 를 $0.19$ 로 한 번만 올리면 두 열이 다시 맞는다.
 
 ---
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 분산 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 분산 검정. 집단당 $n = 8$ 인 자료에 보기 1 의 함수를 $B = 10000$ 으로 적용한다.
+
+**(1)** 붓스트랩 구간과 정규이론 F 구간 가운데 **어느 쪽이 좁을지 미리 짚으시오.** 정규이론의 참 산포 $\operatorname{Var}(\log F(d,d)) = 2\psi'(d/2)$ 를 쓰고, 5.3절의 델타 결과로 붓스트랩이 보는 산포를 **경험 첨도**로 적으시오.
+
+**(2)** 크기 $n$ 인 표본의 경험 첨도에 **천장**이 있음을 보이고 그 값을 구하시오. 그것이 (1)의 답과 연습문제 1 의 포함확률 부족을 어떻게 설명하는가.
 
 </div>
 
-```python
-x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
-x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
+??? success "풀이"
 
-theta_hat, ci, p = bootstrap_varratio(x1, x2, B=10000, seed=42)
-print(f"Observed ratio: {theta_hat:.4f}")
-print(f"95% Bootstrap CI: ({ci[0]:.4f}, {ci[1]:.4f})")
-print(f"Bootstrap p-value: {p:.4f}")
-```
+    **(1) 붓스트랩이 더 좁을 것이다.** 두 구간의 로그 폭은 각자가 믿는 $\log\hat\theta$ 의 산포가 정한다.
 
-출력:
+    **정규이론 쪽은 정확한 값이 있다.** $W \sim \chi^2_d$ 는 $\text{Gamma}(d/2, \text{scale } 2)$ 이고 감마의 로그분산은 척도와 무관하게 $\psi'$ 이므로 $\operatorname{Var}(\log W) = \psi'(d/2)$ 다. $\log F = \log U - \log V + \log(d_2/d_1)$ 이고 두 항이 독립이니
 
-```text
-Observed ratio: 0.4732
-95% Bootstrap CI: (0.1345, 1.6092)
-Bootstrap p-value: 0.1892
-```
+    $$
+    \operatorname{Var}\bigl(\log F(d_1, d_2)\bigr) = \psi'\!\left(\frac{d_1}{2}\right) + \psi'\!\left(\frac{d_2}{2}\right)
+    $$
 
-95% 신뢰구간이 1을 포함하므로 등분산 귀무가설을 기각하지 못한다. $p = 0.189$가 이와 일관된 증거의 척도를 제공한다.
+    이며, $d_1 = d_2 = 7$ 에서 $2\psi'(3.5)$ 다. **근사가 아니라 정확한 값이다.**
 
-(같은 자료에 대한 F 검정의 $p$값은 $0.3448$이다. 붓스트랩이 F 검정보다 작은 $p$값을 냈지만 둘 다 기각하지 않는다.)
+    **붓스트랩 쪽은 경험분포가 정한다.** 5.3절이 유도한 델타 결과
+
+    $$
+    \operatorname{Var}(\log S_i^2) \approx \frac{\beta_2 - 1}{n_i},
+    \qquad
+    \operatorname{Var}\!\left(\log\frac{S_1^2}{S_2^2}\right) \approx \frac{\beta_{2,1}-1}{n_1} + \frac{\beta_{2,2}-1}{n_2}
+    $$
+
+    에서 $\beta_2$ 가 **모집단의** 첨도인데, 붓스트랩은 그 자리에 **원표본의 경험 첨도**를 넣는다. 재표집이 경험분포에서 일어나기 때문이다. 그러므로 정규이론에 대한 산포의 배율이
+
+    $$
+    \sqrt{\frac{\bar\beta_2 - 1}{3 - 1}}
+    $$
+
+    꼴이 되고, **경험 첨도가 3 보다 작으면 붓스트랩 구간이 좁아진다.** 작은 표본에서 경험 첨도가 작게 나오는 경향이 있으므로 좁을 쪽으로 짚는 것이 옳다.
+
+    **(2) 경험 첨도에는 $n$ 이 정한 천장이 있다.** 자료를 표준화해 $\sum z_i = 0$, $\frac1n\sum z_i^2 = 1$ 로 두면 경험 첨도는 $\frac1n\sum z_i^4$ 다. 이것을 그 두 제약 아래에서 최대화한다. 라그랑주 조건은
+
+    $$
+    z_i^3 = \lambda z_i + \mu
+    $$
+
+    인데 삼차방정식의 근이 셋을 넘지 못하므로 **최대점에서 $z_i$ 는 많아도 세 값만 갖는다.** 두 값만 갖는 꼴, 곧 한 점이 $a$ 이고 나머지 $n-1$ 점이 $b$ 인 경우를 풀면 $a + (n-1)b = 0$ 과 $a^2 + (n-1)b^2 = n$ 에서
+
+    $$
+    a = \sqrt{n-1}, \qquad b = -\frac{1}{\sqrt{n-1}}
+    $$
+
+    이고, 그때
+
+    $$
+    \frac1n\sum z_i^4 = \frac{(n-1)^2 + \dfrac{1}{n-1}}{n}
+    = \frac{(n-1)^3 + 1}{n(n-1)}
+    = \frac{n^2 - 3n + 3}{n-1}
+    $$
+
+    이 된다. 마지막 등식은 $(n-1)^3 + 1 = n(n^2-3n+3)$ 이라서 성립한다. **그러므로**
+
+    $$
+    \beta_2^{\text{경험}} \le \frac{n^2-3n+3}{n-1}
+    $$
+
+    이다. $n = 8$ 이면 천장이 $6.14$ 다. **8 개의 점으로는 첨도 $6.14$ 보다 무거운 꼬리를 흉내 낼 수가 없다.** 로그정규의 $\beta_2 = 113.9$ 는 꿈도 못 꾼다. 아래에서 수치 최적화가 이 꼴을 실제로 찾아내는지도 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy.special import polygamma
+    from scipy.stats import f as f_dist
+
+    x1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
+    x2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
+
+    theta_hat, ci, p = bootstrap_varratio(x1, x2, B=10000, seed=42)
+    print(f"Observed ratio: {theta_hat:.4f}")
+    print(f"95% Bootstrap CI: ({ci[0]:.4f}, {ci[1]:.4f})")
+    print(f"Bootstrap p-value: {p:.4f}")
+
+    # === 정규이론 F 구간과 견준다 ===
+    n = len(x1)
+    fl, fh = theta_hat / f_dist(n - 1, n - 1).ppf([0.975, 0.025])
+    p_f = 2 * min(f_dist(n - 1, n - 1).cdf(theta_hat), f_dist(n - 1, n - 1).sf(theta_hat))
+    print(f"\n정규이론 F 구간 : ({fl:.4f}, {fh:.4f})   로그 폭 {np.log(fh / fl):.4f}   p = {p_f:.4f}")
+    print(f"붓스트랩 구간   : ({ci[0]:.4f}, {ci[1]:.4f})   로그 폭 {np.log(ci[1] / ci[0]):.4f}   p = {p:.4f}")
+    print(f"붓스트랩이 {100 * (1 - np.log(ci[1] / ci[0]) / np.log(fh / fl)):.1f} % 좁다")
+
+    # === 왜 좁은가: log theta* 의 산포를 정규이론 참값과 견준다 ===
+    # Var(log F(d,d)) = psi'(d/2) + psi'(d/2) 가 정확한 값이다.
+    v_exact = 2 * polygamma(1, (n - 1) / 2)
+    rng = np.random.default_rng(42)
+    boots = np.empty(10000)
+    for b in range(10000):
+        b1 = rng.choice(x1, size=n, replace=True)
+        b2 = rng.choice(x2, size=n, replace=True)
+        boots[b] = np.log(variance_ratio(b1, b2))
+    sd_boot = boots.std(ddof=1)
+    print(f"\nVar(log F(7,7)) = 2 psi'(3.5) = {v_exact:.6f}  ->  SD = {np.sqrt(v_exact):.4f}  (정확한 값)")
+    print(f"붓스트랩 SD(log theta*)                 = {sd_boot:.4f}")
+    print(f"비 = {sd_boot / np.sqrt(v_exact):.4f}   (붓스트랩이 산포를 그만큼 적게 본다)")
+
+    # === 범인은 경험 첨도다. 그리고 그것에는 n 이 정한 천장이 있다 ===
+    def emp_kurtosis(v):
+        v = np.asarray(v, float); m = v.mean()
+        return ((v - m) ** 4).mean() / (((v - m) ** 2).mean()) ** 2
+
+    k1, k2 = emp_kurtosis(x1), emp_kurtosis(x2)
+    bound = (n * n - 3 * n + 3) / (n - 1)
+    print(f"\n경험 첨도  x1 = {k1:.4f},  x2 = {k2:.4f}   (정규는 3)")
+    print(f"n = {n} 인 표본이 가질 수 있는 최대 첨도 = (n^2-3n+3)/(n-1) = {bound:.4f}")
+    z = np.array([np.sqrt(n - 1)] + [-1 / np.sqrt(n - 1)] * (n - 1))
+    print(f"  그 최대를 내는 꼴: 한 점 {z[0]:+.4f}, 나머지 {n - 1} 점 {z[1]:+.4f}")
+    print(f"  그 꼴의 첨도 = {emp_kurtosis(z):.4f}   (공식과 일치)")
+    print(f"\n5.3절의 델타 공식 SD(log theta) ~ sqrt((k1-1)/n + (k2-1)/n)")
+    print(f"  경험 첨도를 넣으면 {np.sqrt((k1 - 1) / n + (k2 - 1) / n):.4f}")
+    print(f"  정규값 3 을 넣으면 {np.sqrt(2 * (3 - 1) / n):.4f}")
+    print(f"  배율 sqrt((kbar-1)/2) = {np.sqrt(((k1 + k2) / 2 - 1) / 2):.4f}   (관측된 비 {sd_boot / np.sqrt(v_exact):.4f})")
+    for nn in (8, 20, 30, 100):
+        print(f"  n = {nn:>3}: 첨도 천장 {(nn * nn - 3 * nn + 3) / (nn - 1):8.3f}")
+    ```
+
+    출력:
+
+    ```text
+    Observed ratio: 0.4732
+    95% Bootstrap CI: (0.1345, 1.6092)
+    Bootstrap p-value: 0.1892
+
+    정규이론 F 구간 : (0.0947, 2.3637)   로그 폭 3.2168   p = 0.3448
+    붓스트랩 구간   : (0.1345, 1.6092)   로그 폭 2.4816   p = 0.1892
+    붓스트랩이 22.9 % 좁다
+
+    Var(log F(7,7)) = 2 psi'(3.5) = 0.660716  ->  SD = 0.8128  (정확한 값)
+    붓스트랩 SD(log theta*)                 = 0.6136
+    비 = 0.7549   (붓스트랩이 산포를 그만큼 적게 본다)
+
+    경험 첨도  x1 = 1.8985,  x2 = 1.7619   (정규는 3)
+    n = 8 인 표본이 가질 수 있는 최대 첨도 = (n^2-3n+3)/(n-1) = 6.1429
+      그 최대를 내는 꼴: 한 점 +2.6458, 나머지 7 점 -0.3780
+      그 꼴의 첨도 = 6.1429   (공식과 일치)
+
+    5.3절의 델타 공식 SD(log theta) ~ sqrt((k1-1)/n + (k2-1)/n)
+      경험 첨도를 넣으면 0.4556
+      정규값 3 을 넣으면 0.7071
+      배율 sqrt((kbar-1)/2) = 0.6443   (관측된 비 0.7549)
+      n =   8: 첨도 천장    6.143
+      n =  20: 첨도 천장   18.053
+      n =  30: 첨도 천장   28.034
+      n = 100: 첨도 천장   98.010
+    ```
+
+    **(1)의 예측이 맞는다.** 붓스트랩 구간의 로그 폭이 $2.4816$, 정규이론 F 구간이 $3.2168$ 로 **붓스트랩이 $22.9\%$ 좁다.** 산포에서도 같은 이야기가 나온다. 정규이론의 참값 $\operatorname{SD}(\log F(7,7)) = \sqrt{2\psi'(3.5)} = 0.8128$ 에 비해 붓스트랩은 $0.6136$ 으로 $75.5\%$ 만 본다.
+
+    **(2)의 천장 공식도 맞는다.** 한 점을 $+2.6458 = \sqrt7$, 나머지 일곱 점을 $-0.3780 = -1/\sqrt7$ 로 둔 꼴의 경험 첨도가 $6.1429$ 로 공식 $(n^2-3n+3)/(n-1)$ 과 같다. 수치 최적화로 무작위 출발점을 바꿔 가며 최대를 찾아도 같은 값과 같은 꼴이 나온다.
+
+    **그리고 이 자료의 경험 첨도는 천장은커녕 정규값에도 못 미친다.** $1.8985$ 와 $1.7619$ 로 둘 다 3 보다 작다. 8 개씩이라 가장 바깥 관측값이 그렇게 멀지 않기 때문이다. 델타 공식에 이 값을 넣으면 $0.4556$, 정규값 3 을 넣으면 $0.7071$ 이고, 배율 $\sqrt{(\bar\beta_2-1)/2} = 0.6443$ 이 실제로 관측된 비 $0.7549$ 와 같은 방향·비슷한 크기다.
+
+    **다만 델타 공식은 $n = 8$ 에서 정확하지 않다.** 경험 첨도를 넣은 예측 $0.4556$ 이 실제 붓스트랩 산포 $0.6136$ 보다 $26\%$ 작다. 5.3절의 델타 결과는 $n \to \infty$ 의 근사이고 $n = 8$ 은 그 근사가 통하는 영역이 아니다. **그러므로 이 공식은 "왜 좁은가"의 방향과 어림 크기를 주지만 값을 주지는 않는다.** 값은 위의 $2\psi'(3.5)$ 처럼 정확한 식으로 따로 재야 한다.
+
+    **연습문제 1 의 포함확률 부족이 바로 이 현상이다.** 거기서 $n = 30$ 정규 자료의 포함확률이 $0.920$ 으로 명목 $0.95$ 에 못 미쳤다. 구간이 좁으니 덜 덮는 것이다. 천장 표가 왜 $n$ 을 키워야 하는지 말해 준다. $n = 8$ 에서 $6.14$, $n = 30$ 에서 $28.03$, $n = 100$ 에서 $98.01$ 로 천장이 올라간다. **로그정규의 $\beta_2 = 113.9$ 는 $n = 100$ 으로도 담을 수 없다.**
+
+    **그렇다면 붓스트랩은 분산에 대해 잘 듣는가.** 반쯤이다. 연습문제 3 이 재는 대로 지수 자료 $n = 20$ 에서 $F$ 검정의 크기가 $0.270$ 인데 붓스트랩은 $0.089$ 로 훨씬 낫다. 그러나 명목값의 두 배이고, 같은 조건에서 Brown–Forsythe 는 $0.048$ 이다. 까닭이 위의 천장이다. **분산 통계량은 4 차 적률에 의존하고, 작은 표본의 경험분포는 4 차 적률을 구조적으로 작게 본다.** 붓스트랩이 분포 가정을 없애 주기는 하지만 꼬리에 대한 정보를 없는 데서 만들어 내지는 못한다.
+
+    (판정은 두 방법이 같다. $95\%$ 구간 $(0.1345,\, 1.6092)$ 가 1 을 담고 $p = 0.1892$ 이므로 기각하지 못한다. 붓스트랩 $p$ 값이 F 검정의 $0.3448$ 보다 작은 것도 구간이 좁은 것과 같은 일이며, **더 좋은 검정이라는 뜻이 아니라 산포를 적게 본다는 뜻**이다.)
 
 이 1만 개의 붓스트랩 값을 그려 보면 앞의 경고 상자가 말한 함정이 눈에 보인다.
 
