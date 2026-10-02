@@ -12,33 +12,142 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 사례 1 — 자료와 모형
+**보기 1.** <span class="diff easy" title="쉬움"></span> 사례 1 — 자료와 모형. 집단이 둘이면 분산분석은 이표본 $t$-검정의 다른 얼굴이다.
+
+**(1)** 집단이 둘일 때
+
+$$
+\text{SSB} = \frac{n_1 n_2}{n_1+n_2}\left(\bar y_1 - \bar y_2\right)^2
+$$
+
+임을 보이고, 이로부터 $F = t^2$ 임을 유도하시오($t$ 는 합동분산을 쓴 이표본 $t$ 통계량).
+
+**(2)** 두 종의 평균과 표준편차에서 $\text{SSB} = 10.6276$, $F = 31.6875$, $t = -5.6292$ 를 재현하고 $F = t^2$ 을 확인하시오.
+
+**(3)** 효과크기 Cohen의 $d$ 를 구하시오. $p = 1.7\times10^{-7}$ 이라는 압도적인 p-값이 표본크기 덕인가 효과 덕인가.
 
 </div>
 
-```python
-import pandas as pd
-import seaborn as sns
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-# 붓꽃 자료에서 두 품종만 남긴다. 집단이 둘이면 분산분석과 이표본 t-검정이
-# 같은 결론을 주며, F = t^2 이라는 관계도 확인할 수 있다.
-data = sns.load_dataset("iris")
-data = data[data["species"] != "setosa"]
+    **(1) 해석적으로.** $N = n_1+n_2$ 이고 전체평균이
 
-model = ols('sepal_length ~ species', data=data).fit()
-anova_table = sm.stats.anova_lm(model, typ=2)
-print(anova_table)
-```
+    $$
+    \bar y = \frac{n_1\bar y_1 + n_2\bar y_2}{N}
+    $$
 
-출력:
+    이므로
 
-```
-           sum_sq    df          F        PR(>F)
-species   10.6276   1.0  31.687502  1.724856e-07
-Residual  32.8680  98.0        NaN           NaN
-```
+    $$
+    \bar y_1 - \bar y = \frac{n_2(\bar y_1 - \bar y_2)}{N},
+    \qquad
+    \bar y_2 - \bar y = \frac{n_1(\bar y_2 - \bar y_1)}{N}
+    $$
+
+    다. 넣으면 $\Delta = \bar y_1-\bar y_2$ 에 대해
+
+    $$
+    \text{SSB} = n_1\frac{n_2^2\Delta^2}{N^2} + n_2\frac{n_1^2\Delta^2}{N^2}
+    = \frac{n_1n_2(n_2+n_1)}{N^2}\Delta^2
+    = \frac{n_1n_2}{N}\Delta^2
+    $$
+
+    를 얻는다. $\square$
+
+    한편 $k = 2$ 이면 $\text{MSB} = \text{SSB}/1 = \text{SSB}$ 이고 $\text{MSE} = s_p^2$ 이므로
+
+    $$
+    F = \frac{\text{SSB}}{s_p^2}
+    = \frac{\Delta^2}{s_p^2\left(\frac{1}{n_1}+\frac{1}{n_2}\right)}
+    = \left(\frac{\Delta}{s_p\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}\right)^2 = t^2
+    $$
+
+    다($\frac{n_1n_2}{N}$ 의 역수가 $\frac1{n_1}+\frac1{n_2}$ 임을 썼다). 두 검정이 **같은 검정**이다. 다만 $F$ 검정은 언제나 양측이므로, 단측 대립가설을 묻고 싶다면 $t$ 쪽을 써야 한다.
+
+    **(2)–(3) 수치적으로.** 먼저 쪽의 분산분석표다.
+
+    ```python
+    import pandas as pd
+    import seaborn as sns
+    import statsmodels.api as sm
+    from statsmodels.formula.api import ols
+
+    # 붓꽃 자료에서 두 품종만 남긴다. 집단이 둘이면 분산분석과 이표본 t-검정이
+    # 같은 결론을 주며, F = t^2 이라는 관계도 확인할 수 있다.
+    data = sns.load_dataset("iris")
+    data = data[data["species"] != "setosa"]
+
+    model = ols('sepal_length ~ species', data=data).fit()
+    anova_table = sm.stats.anova_lm(model, typ=2)
+    print(anova_table)
+    ```
+
+    출력:
+
+    ```
+               sum_sq    df          F        PR(>F)
+    species   10.6276   1.0  31.687502  1.724856e-07
+    Residual  32.8680  98.0        NaN           NaN
+    ```
+
+    이제 (1)의 두 식을 집단 요약만으로 확인한다.
+
+    ```python
+    import numpy as np
+    import seaborn as sns
+    from scipy import stats
+    from statsmodels.formula.api import ols
+
+    data = sns.load_dataset("iris")
+    data = data[data["species"] != "setosa"]
+    g1 = data[data.species == 'versicolor'].sepal_length.values
+    g2 = data[data.species == 'virginica'].sepal_length.values
+    n1 = n2 = 50
+
+    print(f"versicolor: 평균 {g1.mean():.4f}, 표준편차 {g1.std(ddof=1):.4f}")
+    print(f"virginica : 평균 {g2.mean():.4f}, 표준편차 {g2.std(ddof=1):.4f}")
+    delta = g1.mean() - g2.mean()
+    SSB = n1 * n2 / (n1 + n2) * delta ** 2
+    print(f"\n차이 = {delta:.4f}")
+    print(f"공식 SSB = n1*n2/(n1+n2) * 차이^2 = {SSB:.6f}")
+
+    model = ols('sepal_length ~ species', data=data).fit()
+    MSE = model.mse_resid
+    t = stats.ttest_ind(g1, g2).statistic
+    print(f"MSE = s_p^2 = {MSE:.6f},  s_p = {np.sqrt(MSE):.6f}")
+    print(f"공식 F = SSB/MSE = {SSB / MSE:.6f}")
+    print(f"statsmodels F = {model.fvalue:.6f}")
+    print(f"이표본 t = {t:.6f},  t^2 = {t ** 2:.6f}")
+
+    print(f"\nCohen d = 차이 / s_p = {abs(delta) / np.sqrt(MSE):.4f}")
+    print(f"참고: 집단당 n = 25 였다면 F = {25 / 50 * SSB / MSE:.2f}, "
+          f"p = {stats.f.sf(25 / 50 * SSB / MSE, 1, 48):.2e}")
+    ```
+
+    출력:
+
+    ```
+    versicolor: 평균 5.9360, 표준편차 0.5162
+    virginica : 평균 6.5880, 표준편차 0.6359
+
+    차이 = -0.6520
+    공식 SSB = n1*n2/(n1+n2) * 차이^2 = 10.627600
+    MSE = s_p^2 = 0.335388,  s_p = 0.579127
+    공식 F = SSB/MSE = 31.687502
+    statsmodels F = 31.687502
+    이표본 t = -5.629165,  t^2 = 31.687502
+
+    Cohen d = 차이 / s_p = 1.1258
+    참고: 집단당 n = 25 였다면 F = 15.84, p = 2.32e-04
+    ```
+
+    **$F = 31.687502$ 와 $t^2 = 31.687502$ 가 소수점 여섯째 자리까지 같다.** $\text{SSB}$ 도 $10.6276$ 으로 `anova_lm` 의 `sum_sq` 와 일치한다.
+
+    **(3) 효과크기.** $d = 0.652/0.5791 = 1.1258$ 이다. 관례적인 눈금(작음 $0.2$, 중간 $0.5$, 큼 $0.8$)으로 **"큼"을 한참 넘는다.** 두 종의 평균이 **합동 표준편차의 $1.13$ 배**만큼 떨어져 있다는 뜻이다.
+
+    그러므로 $p = 1.7\times10^{-7}$ 은 **표본크기 덕이 아니라 효과 덕이다.** 마지막 줄이 그 점을 보여 준다. 집단당 $25$ 개만 썼어도 $F = 15.84$, $p = 2.3\times10^{-4}$ 로 여전히 압도적이다. 집단당 $10$ 개쯤이면 겨우 $5\%$ 선에 걸칠 테지만, 이 자료는 그보다 훨씬 많다.
+
+    **이 사례가 뒤의 두 사례와 대비되는 지점이 여기다.** 사례 2·3에서는 $n$ 이 작고 효과도 작아 "기각하지 못함"이 아무 정보를 주지 못하는데, 여기서는 효과가 커서 $n$ 이 넉넉하지 않았어도 같은 결론이 났을 것이다. **$p$-값 하나만으로는 그 둘을 구별할 수 없고, 효과크기를 함께 적어야 구별된다.**
 
 $F = 31.7$, $p = 1.7 \times 10^{-7}$로 두 종의 꽃받침 길이가 다르다는 결론이 압도적이다. 집단당 50개씩이라 검정력이 넉넉하다.
 
@@ -46,31 +155,102 @@ $F = 31.7$, $p = 1.7 \times 10^{-7}$로 두 종의 꽃받침 길이가 다르다
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 사례 1 — 정규성 확인
+**보기 2.** <span class="diff easy" title="쉬움"></span> 사례 1 — 정규성 확인. $p = 0.23$ 으로 기각하지 못했다. 그런데 **기각했다면 무엇이 달라졌을까.**
+
+**(1)** 집단당 $n = 50$ 인 두 집단에서 자료가 정규가 **아닐 때** 고전적 $F$ 검정의 실제 제1종 오류율을 모의실험으로 재시오. 분포는 정규·$t(3)$·지수·로그정규로 하고, 명목 수준은 $0.05$ 다.
+
+**(2)** 같은 설정에서 Shapiro-Wilk 가 비정규성을 **적발하는 비율**을 재시오.
+
+**(3)** 두 열을 나란히 놓고, 이 자료에서 정규성 검정이 어떤 결정에 쓸모가 있는지 밝히시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from scipy.stats import shapiro
+??? success "풀이"
 
-# 정규성은 자료가 아니라 잔차에 요구된다.
-sm.qqplot(model.resid, line='s')
-plt.title("Q-Q Plot of Residuals")
-plt.show()
+    **(1)–(3) 수치적으로.** 먼저 쪽의 검정과 그림이다.
 
-# 표본이 크면 사소한 이탈에도 유의하게 나오므로 그림과 함께 읽는다.
-stat, p_value = shapiro(model.resid)
-print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
-```
+    ```python
+    import matplotlib.pyplot as plt
+    from scipy.stats import shapiro
 
-출력:
+    # 정규성은 자료가 아니라 잔차에 요구된다.
+    sm.qqplot(model.resid, line='s')
+    plt.title("Q-Q Plot of Residuals")
+    plt.show()
 
-```
-Shapiro-Wilk Test: W = 0.9831, p-value = 0.2285
-```
+    # 표본이 크면 사소한 이탈에도 유의하게 나오므로 그림과 함께 읽는다.
+    stat, p_value = shapiro(model.resid)
+    print(f"Shapiro-Wilk Test: W = {stat:.4f}, p-value = {p_value:.4f}")
+    ```
 
-![잔차의 Q-Q 그림](./img/case_studies_29.png)
+    출력:
+
+    ```
+    Shapiro-Wilk Test: W = 0.9831, p-value = 0.2285
+    ```
+
+    ![잔차의 Q-Q 그림](./img/case_studies_29.png)
+
+    이제 정규성이 깨졌을 때 무슨 일이 생기는지 모의실험으로 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(2024)
+    B = 20_000
+    dists = {
+        "정규": lambda n: rng.normal(0, 1, n),
+        "t(3)": lambda n: rng.standard_t(3, n),
+        "지수": lambda n: rng.exponential(1, n),
+        "로그정규": lambda n: np.exp(rng.normal(0, 1, n)),
+    }
+
+    print("집단당 n = 50, 두 집단, 평균이 실제로 같을 때 (명목 0.05)")
+    print(f"{'분포':>10}{'F 검정 오류율':>14}{'Shapiro 기각률':>16}")
+    for lab, f in dists.items():
+        bad_f = bad_s = 0
+        for _ in range(B):
+            a, b = f(50), f(50)
+            bad_f += stats.f_oneway(a, b).pvalue < 0.05
+            resid = np.concatenate([a - a.mean(), b - b.mean()])
+            bad_s += stats.shapiro(resid).pvalue < 0.05
+        print(f"{lab:>10}{bad_f / B:>14.4f}{bad_s / B:>16.4f}")
+    ```
+
+    출력:
+
+    ```
+    집단당 n = 50, 두 집단, 평균이 실제로 같을 때 (명목 0.05)
+            분포      F 검정 오류율     Shapiro 기각률
+            정규        0.0510          0.0478
+          t(3)        0.0493          0.8699
+            지수        0.0501          1.0000
+          로그정규        0.0394          1.0000
+    ```
+
+    **두 열이 전혀 다른 이야기를 한다.**
+
+    | 분포 | $F$ 검정 오류율 | Shapiro 기각률 |
+    |---|---|---|
+    | 정규 | $0.0510$ | $0.0478$ |
+    | $t(3)$ | $0.0493$ | $\mathbf{0.8699}$ |
+    | 지수 | $0.0501$ | $\mathbf{1.0000}$ |
+    | 로그정규 | $\mathbf{0.0394}$ | $\mathbf{1.0000}$ |
+
+    **왼쪽 열이 거의 움직이지 않는다.** 꼬리가 아주 두꺼운 $t(3)$ 에서도, 심하게 치우친 지수분포에서도 $F$ 검정의 실제 오류율이 $0.049$–$0.050$ 으로 명목값을 지킨다. 로그정규에서만 $0.039$ 로 **보수적인 쪽으로** 어긋나는데, 보수적인 어긋남은 거짓 양성을 늘리지 않으므로 덜 위험하다. 까닭은 중심극한정리다. $F$ 검정이 실제로 쓰는 것은 개별 관측값이 아니라 **집단평균**이고, $n = 50$ 이면 집단평균의 분포가 이미 충분히 정규에 가깝다.
+
+    **오른쪽 열은 거의 $1$ 로 치솟는다.** Shapiro-Wilk 는 $n = 100$ 의 잔차에서 $t(3)$ 을 $87\%$, 지수와 로그정규를 $100\%$ 적발한다.
+
+    **(3) 그래서 이 사례에서 정규성 검정은 어떤 결정에도 쓰이지 않는다.** $p = 0.2285$ 로 기각하지 못했지만, 기각했더라도 $F$ 검정을 버릴 이유가 되지 못했을 것이다. 왼쪽 열이 보여 주듯 **이 표본크기에서 $F$ 검정은 정규성을 사실상 요구하지 않기** 때문이다.
+
+    그렇다면 Q-Q 그림을 왜 그리는가. 세 가지 때문이다.
+
+    1. **이상점을 찾으려고.** 분포의 모양이 아니라 한두 점이 문제라면 $F$ 검정도 흔들린다(앞 절의 진단 쪽이 그 경우를 다룬다).
+    2. **모형이 빠뜨린 구조를 보려고.** 잔차가 이봉이면 숨은 집단 변수가 있다는 신호다.
+    3. **$n$ 이 작을 때를 대비해.** 사례 2·3 처럼 집단당 $5$ 개뿐이면 중심극한정리에 기댈 수 없다.
+
+    **곧 그려서 보는 것은 쓸모가 있고, p-값으로 다음 단계를 분기시키는 것은 쓸모가 없다.** 보기 6·8에서 작은 표본일 때 이 이야기가 어떻게 달라지는지 본다.
 
 $p = 0.23$으로 정규성에 반하는 증거가 없고, Q-Q 그림의 점들도 기준선을 잘 따른다.
 
@@ -78,25 +258,108 @@ $p = 0.23$으로 정규성에 반하는 증거가 없고, Q-Q 그림의 점들�
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 사례 1 — 등분산성 확인
+**보기 3.** <span class="diff easy" title="쉬움"></span> 사례 1 — 등분산성 확인. $p = 0.31$ 이지만 **표본 분산비는 이미 $1.52$ 다.**
+
+**(1)** 두 종의 표본표준편차와 그 비를 구하시오. Levene 이 그 크기의 차이를 적발할 확률은 얼마인가(집단당 $n = 50$, 모의실험).
+
+**(2)** 같은 모의실험에서 **고전적 $F$ 검정의 실제 오류율**을 재시오. 집단 크기가 같을 때 이분산이 $F$ 를 얼마나 망가뜨리는가.
+
+**(3)** 합동 $t$ 와 Welch $t$ 를 이 자료에 돌려 보고, 두 통계량이 같은 값을 주는 까닭을 밝히시오. 무엇이 다른가.
 
 </div>
 
-```python
-from scipy.stats import levene
+??? success "풀이"
 
-# Levene 검정으로 두 집단의 분산이 같다고 볼 수 있는지 확인한다.
-group1 = data[data['species'] == 'versicolor']['sepal_length']
-group2 = data[data['species'] == 'virginica']['sepal_length']
-stat, p_value = levene(group1, group2)
-print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
-```
+    **(3) 해석적으로 먼저.** $n_1 = n_2 = n$ 이면 합동분산이 $s_p^2 = \frac{s_1^2+s_2^2}{2}$ 이므로
 
-출력:
+    $$
+    \text{SE}_{\text{합동}} = \sqrt{s_p^2\left(\frac1n+\frac1n\right)} = \sqrt{\frac{s_1^2+s_2^2}{n}}
+    = \sqrt{\frac{s_1^2}{n}+\frac{s_2^2}{n}} = \text{SE}_{\text{Welch}}
+    $$
 
-```
-Levene's Test: F = 1.0245, p-value = 0.3139
-```
+    로 **두 표준오차가 정확히 같다.** 따라서 $t$ 값도 같다. 다른 것은 **자유도뿐**이며, Welch–Satterthwaite 자유도는 $n_1+n_2-2 = 98$ 보다 작거나 같다. 등분산이 깨져도 **균형설계에서는 통계량이 바뀌지 않고 기준분포만 조금 보수적으로 바뀐다** — 이것이 아래 (2)의 모의실험 결과를 미리 설명해 준다.
+
+    **(1)–(2) 수치적으로.** 먼저 쪽의 Levene 검정이다.
+
+    ```python
+    from scipy.stats import levene
+
+    # Levene 검정으로 두 집단의 분산이 같다고 볼 수 있는지 확인한다.
+    group1 = data[data['species'] == 'versicolor']['sepal_length']
+    group2 = data[data['species'] == 'virginica']['sepal_length']
+    stat, p_value = levene(group1, group2)
+    print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Levene's Test: F = 1.0245, p-value = 0.3139
+    ```
+
+    이제 분산비의 크기를 재고, 그 크기가 무엇을 망가뜨리는지 모의실험으로 본다.
+
+    ```python
+    import numpy as np
+    import seaborn as sns
+    from scipy import stats
+
+    data = sns.load_dataset("iris")
+    data = data[data["species"] != "setosa"]
+    g1 = data[data.species == 'versicolor'].sepal_length.values
+    g2 = data[data.species == 'virginica'].sepal_length.values
+    s1, s2 = g1.std(ddof=1), g2.std(ddof=1)
+    print(f"표준편차 {s1:.4f}, {s2:.4f}   비 {s2 / s1:.4f},  분산비 {(s2 / s1) ** 2:.4f}")
+    print(f"Levene  p = {stats.levene(g1, g2).pvalue:.4f}")
+    print(f"Bartlett p = {stats.bartlett(g1, g2).pvalue:.4f}")
+
+    t_pool = stats.ttest_ind(g1, g2)
+    t_welch = stats.ttest_ind(g1, g2, equal_var=False)
+    print(f"\n합동 t = {t_pool.statistic:.6f},  df = 98,       p = {t_pool.pvalue:.3e}")
+    print(f"Welch t = {t_welch.statistic:.6f},  df = {t_welch.df:.4f},  p = {t_welch.pvalue:.3e}")
+
+    rng = np.random.default_rng(55)
+    B = 10_000
+    print(f"\n집단당 n = 50, 평균이 같을 때. sigma = (1, r)")
+    print(f"{'r':>6}{'분산비':>8}{'Levene 적발':>12}{'고전 F 오류율':>14}{'Welch 오류율':>13}")
+    for r in [1.0, 1.2319, 1.5, 2.0, 3.0]:
+        lv = ff = wl = 0
+        for _ in range(B):
+            a, b = rng.normal(0, 1, 50), rng.normal(0, r, 50)
+            lv += stats.levene(a, b).pvalue < 0.05
+            ff += stats.f_oneway(a, b).pvalue < 0.05
+            wl += stats.ttest_ind(a, b, equal_var=False).pvalue < 0.05
+        print(f"{r:>6.4f}{r ** 2:>8.3f}{lv / B:>12.4f}{ff / B:>14.4f}{wl / B:>13.4f}")
+    ```
+
+    출력:
+
+    ```
+    표준편차 0.5162, 0.6359   비 1.2319,  분산비 1.5176
+    Levene  p = 0.3139
+    Bartlett p = 0.1478
+
+    합동 t = -5.629165,  df = 98,       p = 1.725e-07
+    Welch t = -5.629165,  df = 94.0255,  p = 1.866e-07
+
+    집단당 n = 50, 평균이 같을 때. sigma = (1, r)
+         r     분산비   Levene 적발      고전 F 오류율    Welch 오류율
+    1.0000   1.000      0.0460        0.0476       0.0476
+    1.2319   1.518      0.2552        0.0516       0.0516
+    1.5000   2.250      0.7217        0.0507       0.0503
+    2.0000   4.000      0.9924        0.0509       0.0502
+    3.0000   9.000      1.0000        0.0488       0.0469
+    ```
+
+    **(3)의 예고가 맞는다.** 합동 $t$ 와 Welch $t$ 가 $-5.629165$ 로 소수점 여섯째 자리까지 같고, 자유도만 $98$ 대 $94.0255$ 로 다르다. p-값은 $1.725\times10^{-7}$ 대 $1.866\times10^{-7}$ 로 Welch 쪽이 $8\%$ 크다. **등분산을 포기하는 값이 이 자료에서는 자유도 $4$ 어치뿐이다.**
+
+    **(1) Levene 의 검정력.** 표본 분산비가 이미 $1.52$ 인데 $p = 0.3139$ 다. 모의실험의 둘째 줄이 그 까닭을 말해 준다. **모분산비가 정확히 $1.52$ 일 때 Levene 이 그것을 적발할 확률은 $0.26$ 밖에 안 된다.** 넷 중 셋은 놓친다. 그러므로 $p = 0.31$ 은 "분산이 같다"가 아니라 **"이 정도 차이를 잡을 힘이 없다"**로 읽어야 한다. 참고로 Bartlett 은 $p = 0.1478$ 로 조금 더 민감하지만 역시 기각하지 못한다.
+
+    **(2) 그런데 그래도 괜찮다.** 오른쪽 두 열을 보라. 모분산비를 $1$ 에서 $9$ 까지 키워도 **고전적 $F$ 검정의 실제 오류율이 $0.048$–$0.052$ 를 벗어나지 않는다.** Welch 와도 거의 같다. $\sigma$ 가 세 배 차이 나는데도 그렇다.
+
+    까닭은 (3)에서 본 대로다. **균형설계에서는 이분산이 통계량을 바꾸지 못하고 자유도만 건드린다.** 그 자유도 차이가 $n = 50$ 에서는 거의 의미가 없다.
+
+    **그러므로 이 사례에서도 등분산 검정은 어떤 결정에도 쓰이지 않는다.** 결정이 달라지는 것은 **설계가 불균형일 때**이고, 그때는 작은 집단의 분산이 크냐 작냐에 따라 $F$ 가 반대 방향으로 무너진다(진단 절의 처방 그림에서 불균형 이분산의 오류율이 $0.259$ 까지 갔던 것이 그 경우다). 집단 크기를 같게 맞추는 설계 단계의 선택이 사후의 어떤 검정보다 큰 보호 장치다.
 
 $p = 0.31$로 등분산도 기각되지 않는다. 두 가정이 모두 무난하므로 표준 분산분석 결과를 그대로 쓸 수 있다.
 
@@ -104,22 +367,96 @@ $p = 0.31$로 등분산도 기각되지 않는다. 두 가정이 모두 무난�
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 사례 1 — 잔차 그림
+**보기 4.** <span class="diff easy" title="쉬움"></span> 사례 1 — 잔차 그림. 그려 보고 **읽히는 것을 수치와 함께** 적는다.
+
+**(1)** 두 띠의 가로 위치, 각 띠의 잔차 합·최소·최대·표준편차를 구하시오.
+
+**(2)** "두 띠의 높이가 비슷하다"는 쪽의 서술을 수로 뒷받침하거나 수정하시오.
+
+**(3)** 이 그림이 **가리는 것**을 둘 지적하시오. 특히 $100$ 개 관측값이 실제로 몇 개의 서로 다른 값을 갖는지 세어 보시오.
 
 </div>
 
-```python
-# 일원배치에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
-# 각 줄의 퍼짐이 비슷한지를 본다.
-plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
-plt.axhline(y=0, color='r', linestyle='--')
-plt.xlabel('Fitted Values')
-plt.ylabel('Residuals')
-plt.title('Residuals vs. Fitted Values')
-plt.show()
-```
+??? success "풀이"
 
-![잔차 대 적합값](./img/case_studies_56.png)
+    유도할 식이 없는 보기다. **그림에서 실제로 읽히는 것을 수로 적는 것**이 이 보기의 몫이다.
+
+    **수치적으로.** 먼저 그림을 그린다.
+
+    ```python
+    # 일원배치에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
+    # 각 줄의 퍼짐이 비슷한지를 본다.
+    plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
+    plt.axhline(y=0, color='r', linestyle='--')
+    plt.xlabel('Fitted Values')
+    plt.ylabel('Residuals')
+    plt.title('Residuals vs. Fitted Values')
+    plt.show()
+    ```
+
+    ![잔차 대 적합값](./img/case_studies_56.png)
+
+    이제 눈대중 대신 재어 본다.
+
+    ```python
+    import numpy as np
+    import seaborn as sns
+    from statsmodels.formula.api import ols
+
+    data = sns.load_dataset("iris")
+    data = data[data["species"] != "setosa"]
+    model = ols('sepal_length ~ species', data=data).fit()
+    e = model.resid.values
+    fit = model.fittedvalues.values
+    sp = np.array(data.species)
+
+    print(f"서로 다른 적합값 = {np.unique(np.round(fit, 6))}")
+    print(f"\n{'띠':>12}{'합':>11}{'최소':>9}{'최대':>9}{'폭':>8}{'sd(ddof=0)':>12}")
+    for s in ['versicolor', 'virginica']:
+        ei = e[sp == s]
+        print(f"{s:>12}{ei.sum():>11.1e}{ei.min():>9.3f}{ei.max():>9.3f}"
+              f"{ei.max() - ei.min():>8.3f}{ei.std(ddof=0):>12.4f}")
+
+    r = model.get_influence().resid_studentized_internal
+    print(f"\n표준화 잔차: 최대 |r| = {np.abs(r).max():.4f},  |r|>2 인 개수 = {(np.abs(r) > 2).sum()}")
+    print(f"관측값 100 개가 갖는 서로 다른 값의 수 = {len(set(data.sepal_length))}")
+    print(f"  (0.1 눈금으로 기록되어 점이 겹친다)")
+    print(f"두 종이 겹치는 구간 = [{data[data.species == 'virginica'].sepal_length.min():.1f}, "
+          f"{data[data.species == 'versicolor'].sepal_length.max():.1f}]")
+    ```
+
+    출력:
+
+    ```
+    서로 다른 적합값 = [5.936 6.588]
+
+               띠          합       최소       최대       폭  sd(ddof=0)
+      versicolor    4.6e-14   -1.036    1.064   2.100      0.5110
+       virginica    4.4e-14   -1.688    1.312   3.000      0.6295
+
+    표준화 잔차: 최대 |r| = 2.9443,  |r|>2 인 개수 = 2
+    관측값 100 개가 갖는 서로 다른 값의 수 = 28
+      (0.1 눈금으로 기록되어 점이 겹친다)
+    두 종이 겹치는 구간 = [4.9, 7.0]
+    ```
+
+    **(1) 읽히는 것.**
+
+    - 점이 찍히는 가로 좌표는 $5.936$ 과 $6.588$ **두 곳뿐**이다. 적합값이 집단평균 둘이기 때문이다.
+    - 두 띠 모두 잔차 합이 $10^{-14}$ 수준으로 정확히 $0$ 이다. 띠가 $0$ 선에 균형을 맞춰 걸린다.
+    - 띠의 표준편차가 $0.5110$ 과 $0.6295$ 다.
+
+    **(2) "높이가 비슷하다"를 수로 고쳐 적으면.** 표준편차로는 $0.5110$ 대 $0.6295$ 로 **$1.23$ 배**, 폭(최대$-$최소)으로는 $2.100$ 대 $3.000$ 으로 **$1.43$ 배**다. "비슷하다"보다는 **"오른쪽 띠가 눈에 띄게 길지만 결론을 바꿀 만큼은 아니다"**가 정확하다. 보기 3에서 본 대로 균형설계에서 이 정도 차이는 $F$ 검정에 거의 영향을 주지 않는다.
+
+    폭의 비 $1.43$ 이 표준편차의 비 $1.23$ 보다 큰 것도 우연이 아니다. **범위는 양끝 두 점만 쓰므로 표준편차보다 훨씬 요동친다.** $n = 50$ 에서 범위를 보고 흩어짐을 비교하면 과장하기 쉽다. 눈은 띠의 길이를 보지만 검정은 표준편차를 쓴다.
+
+    **(3) 이 그림이 가리는 것 둘.**
+
+    첫째, **점이 겹친다.** $100$ 개 관측값이 실제로 갖는 서로 다른 값은 **$28$ 개뿐**이다. 꽃받침 길이가 $0.1$ 눈금으로 기록되었기 때문이다. 그러므로 그림에 보이는 점 하나가 관측 하나가 아니라 여럿일 수 있고, **띠 안에서 값이 어디에 몰려 있는지는 이 그림으로 알 수 없다.** `alpha=0.6` 이 그 사실을 조금 비춰 주지만 셀 수는 없다. 띠마다 상자그림이나 흔들림(jitter)을 얹어야 보인다.
+
+    둘째, **이상점의 지위를 알려 주지 않는다.** 가장 큰 잔차가 $-1.688$ 인데 그것이 "많이 벗어난 것"인지 판단하려면 $\hat\sigma = 0.5791$ 로 나누어 보아야 한다. 표준화하면 $\lvert r\rvert$ 의 최대가 $2.9443$ 이고 $2$ 를 넘는 것이 $100$ 개 중 둘이다. **$100$ 개 표준정규에서 $\lvert z\rvert > 2$ 가 기대되는 개수가 $4.6$ 개이므로 오히려 적은 편**이며, 걱정할 점이 없다는 결론이 그제야 나온다.
+
+    덧붙여 이 그림은 **독립성을 확인해 주지 못한다.** 쪽의 소제목이 "독립성 확인"이지만 가로축이 관측 순서가 아니라 집단평균이므로, 자료 수집 순서에 따른 상관이 있더라도 이 그림에는 나타나지 않는다. 여기서는 붓꽃 $100$ 포기가 서로 독립이라고 볼 설계상의 근거가 따로 있을 뿐이다.
 
 세로 띠가 둘이고 각 띠의 높이가 비슷하다. 등분산 가정이 무난하다는 Levene 검정의 결론과 일치한다.
 
@@ -139,33 +476,161 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 사례 2 — 자료와 모형
+**보기 5.** <span class="diff easy" title="쉬움"></span> 사례 2 — 자료와 모형. $p = 0.49$ 로 기각하지 못했다. **이 설계로는 무엇을 잡을 수 있었는가.**
+
+**(1)** 대립가설 아래 $F$ 통계량이 비중심모수
+
+$$
+\lambda = \frac{n\sum_i(\mu_i-\bar\mu)^2}{\sigma^2} = N f^2,
+\qquad
+f = \frac{1}{\sigma}\sqrt{\frac{1}{k}\sum_i(\mu_i-\bar\mu)^2}
+$$
+
+인 비중심 $F$ 를 따름을 쓰고, 평균이 $(\mu - d/2,\ \mu,\ \mu + d/2)$ 꼴이면 $f = \dfrac{d}{\sigma\sqrt6}$ 임을 보이시오.
+
+**(2)** $k = 3$, $n = 5$ 에서 검정력이 $0.80$ 이 되는 $f$ 와 그에 대응하는 **끝 두 집단의 평균 차 $d$** 를 구하시오. 합동 표준편차는 $\hat\sigma = 9.20$ 이다.
+
+**(3)** 관측된 효과크기 $\hat f = \sqrt{\text{SSB}/\text{SSE}}$ 를 구하고, 그 크기를 $80\%$ 로 잡으려면 집단당 몇 명이 필요한지 보이시오. $\omega^2$ 도 함께 계산하시오.
 
 </div>
 
-```python
-import pandas as pd
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-# 근무 형태 세 가지에 따른 생산성. 집단마다 다섯 명씩이다.
-data = pd.DataFrame({
-    'productivity': [68, 75, 80, 65, 85, 78, 70, 82, 90, 88, 72, 95, 67, 85, 79],
-    'environment': ['remote']*5 + ['office']*5 + ['hybrid']*5
-})
+    **(1) 해석적으로.** 비중심모수는 $\lambda = \sum_i n_i(\mu_i-\bar\mu)^2/\sigma^2$ 이고 균형설계에서 $n_i = n$ 이므로
 
-model = ols('productivity ~ environment', data=data).fit()
-anova_table = sm.stats.anova_lm(model, typ=2)
-print(anova_table)
-```
+    $$
+    \lambda = \frac{n\sum_i(\mu_i-\bar\mu)^2}{\sigma^2}
+    = nk\cdot\frac{\frac1k\sum_i(\mu_i-\bar\mu)^2}{\sigma^2} = N f^2
+    $$
 
-출력:
+    다. 평균이 $(\mu-d/2,\ \mu,\ \mu+d/2)$ 면 $\bar\mu = \mu$ 이고
 
-```
-             sum_sq    df         F    PR(>F)
-environment   130.0   2.0  0.768019  0.485443
-Residual     1015.6  12.0       NaN       NaN
-```
+    $$
+    \sum_i(\mu_i-\bar\mu)^2 = \frac{d^2}{4} + 0 + \frac{d^2}{4} = \frac{d^2}{2}
+    $$
+
+    이므로 $f^2 = \frac{d^2}{2\cdot 3\sigma^2} = \frac{d^2}{6\sigma^2}$, 곧 $f = \dfrac{d}{\sigma\sqrt6}$ 다. $\square$
+
+    **(2)–(3) 수치적으로.** 먼저 쪽의 분산분석표다.
+
+    ```python
+    import pandas as pd
+    import statsmodels.api as sm
+    from statsmodels.formula.api import ols
+
+    # 근무 형태 세 가지에 따른 생산성. 집단마다 다섯 명씩이다.
+    data = pd.DataFrame({
+        'productivity': [68, 75, 80, 65, 85, 78, 70, 82, 90, 88, 72, 95, 67, 85, 79],
+        'environment': ['remote']*5 + ['office']*5 + ['hybrid']*5
+    })
+
+    model = ols('productivity ~ environment', data=data).fit()
+    anova_table = sm.stats.anova_lm(model, typ=2)
+    print(anova_table)
+    ```
+
+    출력:
+
+    ```
+                 sum_sq    df         F    PR(>F)
+    environment   130.0   2.0  0.768019  0.485443
+    Residual     1015.6  12.0       NaN       NaN
+    ```
+
+    이제 검정력을 계산한다.
+
+    ```python
+    import warnings
+    warnings.filterwarnings("ignore")
+
+    import numpy as np
+    import pandas as pd
+    from scipy import optimize, stats
+
+    data = pd.DataFrame({
+        'productivity': [68, 75, 80, 65, 85, 78, 70, 82, 90, 88, 72, 95, 67, 85, 79],
+        'environment': ['remote'] * 5 + ['office'] * 5 + ['hybrid'] * 5,
+    })
+    n, k = 5, 3
+    N = n * k
+    print(data.groupby('environment', sort=False).productivity.agg(['mean', 'std']).round(3))
+
+    SSB, SSE = 130.0, 1015.6
+    MSE = SSE / (N - k)
+    sigma = np.sqrt(MSE)
+    print(f"\nMSE = {MSE:.4f},  합동 표준편차 = {sigma:.4f}")
+    print(f"관측된 평균의 최대-최소 = {81.6 - 74.6:.1f}")
+    print(f"eta^2 = SSB/SST = {SSB / (SSB + SSE):.4f}")
+    print(f"omega^2 = (SSB - (k-1)MSE)/(SST + MSE) = "
+          f"{(SSB - (k - 1) * MSE) / (SSB + SSE + MSE):.4f}")
+
+    crit = stats.f.ppf(0.95, k - 1, N - k)
+    power = lambda f: stats.ncf.sf(crit, k - 1, N - k, N * f ** 2)
+    print(f"\n임계값 F_0.95(2,12) = {crit:.4f}")
+    print(f"평균이 (mu-d/2, mu, mu+d/2) 꼴이면 f = d/(sigma*sqrt(6))")
+    print(f"{'Cohen f':>9}{'비중심모수':>12}{'검정력':>9}{'끝 두 집단의 차 d':>18}")
+    for f in [0.25, 0.40, 0.60, 0.80, 1.00]:
+        print(f"{f:>9.4f}{N * f ** 2:>12.3f}{power(f):>9.4f}{f * sigma * np.sqrt(6):>18.2f}")
+
+    f80 = optimize.brentq(lambda f: power(f) - 0.80, 0.1, 1.5)
+    print(f"\n검정력 0.80 이 되는 f = {f80:.4f},  그때 d = {f80 * sigma * np.sqrt(6):.2f}")
+    f_obs = np.sqrt(SSB / SSE)
+    print(f"관측된 f = sqrt(SSB/SSE) = {f_obs:.4f},  그 크기에서의 검정력 = {power(f_obs):.4f}")
+
+    for nn in [5, 10, 20, 40, 80]:
+        NN = nn * k
+        c = stats.f.ppf(0.95, k - 1, NN - k)
+        pw = stats.ncf.sf(c, k - 1, NN - k, NN * f_obs ** 2)
+        print(f"  집단당 n = {nn:>3}: 관측 효과크기 f = {f_obs:.4f} 의 검정력 = {pw:.4f}")
+    ```
+
+    출력:
+
+    ```
+                 mean     std
+    environment              
+    remote       74.6   8.264
+    office       81.6   8.050
+    hybrid       79.6  10.991
+
+    MSE = 84.6333,  합동 표준편차 = 9.1996
+    관측된 평균의 최대-최소 = 7.0
+    eta^2 = SSB/SST = 0.1135
+    omega^2 = (SSB - (k-1)MSE)/(SST + MSE) = -0.0319
+
+    임계값 F_0.95(2,12) = 3.8853
+    평균이 (mu-d/2, mu, mu+d/2) 꼴이면 f = d/(sigma*sqrt(6))
+      Cohen f       비중심모수      검정력       끝 두 집단의 차 d
+       0.2500       0.938   0.1095              5.63
+       0.4000       2.400   0.2137              9.01
+       0.6000       5.400   0.4334             13.52
+       0.8000       9.600   0.6827             18.03
+       1.0000      15.000   0.8696             22.53
+
+    검정력 0.80 이 되는 f = 0.9130,  그때 d = 20.57
+    관측된 f = sqrt(SSB/SSE) = 0.3578,  그 크기에서의 검정력 = 0.1786
+      집단당 n =   5: 관측 효과크기 f = 0.3578 의 검정력 = 0.1786
+      집단당 n =  10: 관측 효과크기 f = 0.3578 의 검정력 = 0.3630
+      집단당 n =  20: 관측 효과크기 f = 0.3578 의 검정력 = 0.6741
+      집단당 n =  40: 관측 효과크기 f = 0.3578 의 검정력 = 0.9436
+      집단당 n =  80: 관측 효과크기 f = 0.3578 의 검정력 = 0.9993
+    ```
+
+    **(2) 이 설계가 잡을 수 있는 것.** 검정력 $0.80$ 이 되는 효과크기는 $f = 0.9130$ 이고, 그것은 **끝 두 집단의 생산성이 $20.57$ 점 차이 나는** 경우다. 합동 표준편차가 $9.20$ 이므로 **$2.2$ 표준편차 차이**다.
+
+    그런 차이는 거의 모든 실무 맥락에서 **눈으로도 보이는 크기**다. 통계가 필요 없을 만큼 큰 차이만 잡을 수 있는 설계라는 뜻이다. 실제로 관측된 차이는 $81.6 - 74.6 = 7.0$ 점이고, 표에서 $f = 0.25$–$0.40$ 구간의 검정력이 $0.11$–$0.21$ 에 불과하다.
+
+    **(3) 관측된 효과크기와 필요한 표본.** $\hat f = \sqrt{130/1015.6} = 0.3578$ 로 관례적 눈금에서 "중간보다 조금 작음"에 해당한다. **그 크기가 참이라면 이 설계의 검정력은 $0.1786$** 이다. 다섯 번 중 네 번은 놓친다. 같은 효과를 $80\%$ 로 잡으려면 집단당 $20$ 명($0.674$)과 $40$ 명($0.944$) 사이, 곧 **대략 $25$–$30$ 명**이 필요하다. 현재의 $5$ 명의 다섯 배가 넘는다.
+
+    **$\omega^2 = -0.0319$ 가 음수인 것도 함께 보라.** $\omega^2$ 은 모집단 효과크기를 편향을 줄여 추정한 양인데
+
+    $$
+    \hat\omega^2 = \frac{\text{SSB} - (k-1)\text{MSE}}{\text{SST} + \text{MSE}}
+    $$
+
+    에서 분자가 $130.0 - 2\times84.63 = -39.3$ 으로 음수다. **귀무가설이 참이어도 SSB 의 기댓값이 $(k-1)\sigma^2 = 169.3$ 이므로**, 관측된 $130.0$ 은 "우연만으로 기대되는 것보다도 작은" 집단 간 변동이다. 음수인 $\hat\omega^2$ 은 $0$ 으로 잘라 보고하는 것이 관례이며, **"효과가 있을 수도 있다"는 어떤 신호도 자료에 없다**는 뜻이다. $\eta^2 = 0.1135$ 만 보면 "$11\%$ 를 설명한다"고 오해하기 쉬운데, $\eta^2$ 은 $k-1$ 개의 자유도가 공짜로 가져가는 몫을 빼지 않은 양이다.
+
+    **그러므로 이 사례의 올바른 보고는 이렇다.** "$F(2,12) = 0.77$, $p = 0.49$ 로 차이를 발견하지 못했다. 다만 이 설계는 집단 간 $2.2$ 표준편차($20.6$ 점) 이하의 차이를 $80\%$ 로 잡을 힘이 없으므로, 이 결과를 세 근무 형태의 생산성이 같다는 근거로 쓸 수 없다."
 
 $F = 0.77$, $p = 0.49$로 기각하지 못한다. 세 형태의 생산성 평균이 다르다는 증거가 없다.
 
@@ -175,46 +640,123 @@ $F = 0.77$, $p = 0.49$로 기각하지 못한다. 세 형태의 생산성 평균
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 사례 2 — 가정 확인
+**보기 6.** <span class="diff easy" title="쉬움"></span> 사례 2 — 가정 확인. 쪽의 본문이 "확인되었다기보다 확인할 수 없었다에 가깝다"고 했다. **얼마나 가까운지 재어 본다.**
+
+**(1)** $k = 3$, 집단당 $n = 5$ 인 설계에서 Shapiro-Wilk 를 잔차 $15$ 개에 적용할 때, 자료가 $t(3)$·지수·로그정규일 때의 기각률을 모의실험으로 구하시오.
+
+**(2)** 같은 설계에서 Levene(중앙값)이 $\sigma$ 비 $1.5$, $2$, $3$, $5$ 를 적발하는 비율을 구하시오. **귀무가설이 참일 때의 기각률**도 함께 보고 무엇이 이상한지 밝히시오.
+
+**(3)** 이 자료의 $p = 0.7449$ 와 $p = 0.7631$ 을 어떻게 적어야 하는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from scipy.stats import shapiro, levene
+??? success "풀이"
 
-# 정규성 — 잔차의 Q-Q 그림과 Shapiro-Wilk 검정
-sm.qqplot(model.resid, line='s')
-plt.title("Q-Q Plot of Residuals")
-plt.show()
+    **(1)–(2) 수치적으로.** 먼저 쪽의 두 검정이다.
 
-stat, p_value = shapiro(model.resid)
-print(f"Shapiro-Wilk Test: p-value = {p_value:.4f}")
+    ```python
+    import matplotlib.pyplot as plt
+    from scipy.stats import shapiro, levene
 
-# 등분산성 — Levene 검정
-group1 = data[data['environment'] == 'remote']['productivity']
-group2 = data[data['environment'] == 'office']['productivity']
-group3 = data[data['environment'] == 'hybrid']['productivity']
-stat, p_value = levene(group1, group2, group3)
-print(f"Levene's Test: p-value = {p_value:.4f}")
+    # 정규성 — 잔차의 Q-Q 그림과 Shapiro-Wilk 검정
+    sm.qqplot(model.resid, line='s')
+    plt.title("Q-Q Plot of Residuals")
+    plt.show()
 
-# 독립성 — 잔차 대 적합값 그림
-plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
-plt.axhline(y=0, color='r', linestyle='--')
-plt.xlabel('Fitted Values')
-plt.ylabel('Residuals')
-plt.title('Residuals vs. Fitted Values')
-plt.show()
-```
+    stat, p_value = shapiro(model.resid)
+    print(f"Shapiro-Wilk Test: p-value = {p_value:.4f}")
 
-출력:
+    # 등분산성 — Levene 검정
+    group1 = data[data['environment'] == 'remote']['productivity']
+    group2 = data[data['environment'] == 'office']['productivity']
+    group3 = data[data['environment'] == 'hybrid']['productivity']
+    stat, p_value = levene(group1, group2, group3)
+    print(f"Levene's Test: p-value = {p_value:.4f}")
 
-```
-Shapiro-Wilk Test: p-value = 0.7449
-Levene's Test: p-value = 0.7631
-```
+    # 독립성 — 잔차 대 적합값 그림
+    plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
+    plt.axhline(y=0, color='r', linestyle='--')
+    plt.xlabel('Fitted Values')
+    plt.ylabel('Residuals')
+    plt.title('Residuals vs. Fitted Values')
+    plt.show()
+    ```
 
-![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_96.png)
+    출력:
+
+    ```
+    Shapiro-Wilk Test: p-value = 0.7449
+    Levene's Test: p-value = 0.7631
+    ```
+
+    ![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_96.png)
+
+    이제 이 설계에서 두 검정이 무엇을 할 수 있는지 재어 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(7)
+    B = 20_000
+    n, k = 5, 3
+
+    print(f"집단당 n = {n}, k = {k} (N = {n * k}).  명목 0.05 에서 기각률")
+    print(f"\nShapiro-Wilk 를 잔차 {n * k} 개에 적용")
+    for lab, f in [("정규 (귀무가 참)", lambda m: rng.normal(0, 1, m)),
+                   ("t(3)", lambda m: rng.standard_t(3, m)),
+                   ("지수", lambda m: rng.exponential(1, m)),
+                   ("로그정규", lambda m: np.exp(rng.normal(0, 1, m)))]:
+        c = 0
+        for _ in range(B):
+            gs = [f(n) for _ in range(k)]
+            r = np.concatenate([g - g.mean() for g in gs])
+            c += stats.shapiro(r).pvalue < 0.05
+        print(f"  {lab:>16}: {c / B:.4f}")
+
+    print(f"\nLevene(중앙값) 을 정규자료에 적용, sigma = (1, 1, r)")
+    for r in [1.0, 1.5, 2.0, 3.0, 5.0]:
+        c = sum(stats.levene(rng.normal(0, 1, n), rng.normal(0, 1, n),
+                             rng.normal(0, r, n)).pvalue < 0.05 for _ in range(B))
+        print(f"  sigma 비 r = {r:>4}: {c / B:.4f}")
+    ```
+
+    출력:
+
+    ```
+    집단당 n = 5, k = 3 (N = 15).  명목 0.05 에서 기각률
+
+    Shapiro-Wilk 를 잔차 15 개에 적용
+            정규 (귀무가 참): 0.0410
+                  t(3): 0.1759
+                    지수: 0.3719
+                  로그정규: 0.5527
+
+    Levene(중앙값) 을 정규자료에 적용, sigma = (1, 1, r)
+      sigma 비 r =  1.0: 0.0052
+      sigma 비 r =  1.5: 0.0132
+      sigma 비 r =  2.0: 0.0408
+      sigma 비 r =  3.0: 0.1338
+      sigma 비 r =  5.0: 0.3220
+    ```
+
+    **(1) Shapiro-Wilk 의 검정력.** 잔차가 $15$ 개뿐이면
+
+    | 실제 분포 | 적발률 |
+    |---|---|
+    | $t(3)$ | $0.1759$ |
+    | 지수 | $0.3719$ |
+    | 로그정규 | $0.5527$ |
+
+    다. 보기 2에서 $n = 100$ 일 때 각각 $0.87$, $1.00$, $1.00$ 이었던 것과 견주면 **같은 검정이 아니라고 해도 될 만큼 다르다.** 꼬리가 아주 두꺼운 $t(3)$ 조차 **여섯 번 중 다섯 번은 놓친다.**
+
+    **(2) Levene 은 더 심하다.** 귀무가설이 참일 때 기각률이 $0.0052$ 다. **명목 $0.05$ 의 십분의 일**이다. $Z_{ij} = \lvert y_{ij} - \tilde y_i\rvert$ 를 만들 때 $n = 5$ 의 중앙값을 빼는데, 그 중앙값이 자료의 한 점과 정확히 같아 $Z$ 하나가 반드시 $0$ 이 되는 등 이산적인 성질이 강해져 검정이 극단적으로 보수적이 된다.
+
+    그 보수성의 대가가 검정력이다. $\sigma$ 비가 **$2$ 배(분산비 $4$)여도 적발률이 $0.0408$**, 곧 귀무가설이 참일 때보다 겨우 조금 높다. $\sigma$ 비 $5$ (분산비 $25$)에서도 $0.32$ 다. **이 설계에서 Levene 검정은 사실상 작동하지 않는다.**
+
+    **(3) 그러므로 이렇게 적어야 한다.** "$p = 0.74$ 와 $p = 0.76$ 으로 가정 위반의 증거를 찾지 못했다. 다만 집단당 $n = 5$ 에서 Shapiro-Wilk 는 지수분포조차 $37\%$ 밖에 적발하지 못하고 Levene 은 분산비 $4$ 를 $4\%$ 밖에 적발하지 못하므로, 이 두 p-값은 가정이 성립한다는 근거가 되지 못한다."
+
+    **그래서 작은 표본에서는 검정을 돌리는 것보다 설계와 맥락에 기대는 편이 낫다.** 반응변수가 측정 오차의 합으로 생기는 양인지, 과거 비슷한 자료가 어떤 모양이었는지, 집단 크기를 같게 맞추었는지 — 그런 것들이 $n = 15$ 짜리 p-값 두 개보다 훨씬 많은 것을 말해 준다. 그리고 보기 5에서 보았듯 **이 자료의 진짜 문제는 가정이 아니라 검정력**이다.
 
 두 검정 모두 기각하지 못한다($p = 0.74$, $p = 0.76$). 그러나 $n = 15$에서 이 검정들의 검정력은 매우 낮아, "가정이 확인되었다"기보다 "확인할 수 없었다"에 가깝다.
 
@@ -234,34 +776,133 @@ Levene's Test: p-value = 0.7631
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> 사례 3 — 자료와 모형
+**보기 7.** <span class="diff easy" title="쉬움"></span> 사례 3 — 자료와 모형. $F = 0.46$ 은 **$1$ 보다 작다.** 그것이 무슨 뜻인지 따져 본다.
+
+**(1)** 귀무가설이 참일 때 $E[\text{MSB}] = E[\text{MSE}] = \sigma^2$ 이므로 $F$ 가 $1$ 근처에서 흔들림을 쓰고, 이 자료의 SSB 가 귀무가설 아래 기댓값의 **몇 배**인지 구하시오.
+
+**(2)** $F = 0.456$ 이하가 나올 확률 $\Pr(F_{3,16} \le 0.456)$ 을 구하시오. 작은 $F$ 는 "차이가 없다"의 증거인가, 아니면 흔한 일인가.
+
+**(3)** $\eta^2$ 과 $\omega^2$ 을 계산하고 왜 부호가 다른지 밝히시오. 관측 효과크기에서 이 설계의 검정력은 얼마인가.
 
 </div>
 
-```python
-import pandas as pd
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-# 지점 네 곳의 고객만족도. 지점마다 다섯 건씩이다.
-data = pd.DataFrame({
-    'satisfaction': [4.5, 3.8, 4.7, 4.2, 4.9, 4.1, 3.5, 4.3, 4.8, 3.9,
-                     4.4, 4.0, 3.7, 4.2, 4.6, 4.8, 3.6, 4.3, 4.1, 4.7],
-    'location': ['A']*5 + ['B']*5 + ['C']*5 + ['D']*5
-})
+    **(1) 해석적으로.** 귀무가설 $\mu_1 = \cdots = \mu_k$ 아래에서
 
-model = ols('satisfaction ~ location', data=data).fit()
-anova_table = sm.stats.anova_lm(model, typ=2)
-print(anova_table)
-```
+    $$
+    E[\text{SSB}] = (k-1)\sigma^2,
+    \qquad
+    E[\text{SSE}] = (N-k)\sigma^2
+    $$
 
-출력:
+    이므로 두 평균제곱의 기댓값이 모두 $\sigma^2$ 이고 $F = \text{MSB}/\text{MSE}$ 는 $1$ 언저리에서 흔들린다(정확히는 $E[F] = \frac{N-k}{N-k-2}$ 로 $1$ 보다 조금 크다). 그러므로 **$F < 1$ 은 "집단 간 변동이 우연만으로 기대되는 것보다도 작았다"는 뜻**이지 그 이상이 아니다. $F$ 의 분포가 $0$ 부터 퍼져 있으므로 작은 값도 얼마든지 나온다.
 
-```
-          sum_sq    df         F    PR(>F)
-location  0.2655   3.0  0.456186  0.716615
-Residual  3.1040  16.0       NaN       NaN
-```
+    **(2)–(3) 수치적으로.** 먼저 쪽의 분산분석표다.
+
+    ```python
+    import pandas as pd
+    import statsmodels.api as sm
+    from statsmodels.formula.api import ols
+
+    # 지점 네 곳의 고객만족도. 지점마다 다섯 건씩이다.
+    data = pd.DataFrame({
+        'satisfaction': [4.5, 3.8, 4.7, 4.2, 4.9, 4.1, 3.5, 4.3, 4.8, 3.9,
+                         4.4, 4.0, 3.7, 4.2, 4.6, 4.8, 3.6, 4.3, 4.1, 4.7],
+        'location': ['A']*5 + ['B']*5 + ['C']*5 + ['D']*5
+    })
+
+    model = ols('satisfaction ~ location', data=data).fit()
+    anova_table = sm.stats.anova_lm(model, typ=2)
+    print(anova_table)
+    ```
+
+    출력:
+
+    ```
+              sum_sq    df         F    PR(>F)
+    location  0.2655   3.0  0.456186  0.716615
+    Residual  3.1040  16.0       NaN       NaN
+    ```
+
+    이제 $F < 1$ 이 무슨 뜻인지 재어 본다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    data = pd.DataFrame({
+        'satisfaction': [4.5, 3.8, 4.7, 4.2, 4.9, 4.1, 3.5, 4.3, 4.8, 3.9,
+                         4.4, 4.0, 3.7, 4.2, 4.6, 4.8, 3.6, 4.3, 4.1, 4.7],
+        'location': ['A'] * 5 + ['B'] * 5 + ['C'] * 5 + ['D'] * 5,
+    })
+    n, k = 5, 4
+    N = n * k
+    g = data.groupby('location').satisfaction
+    print(g.agg(['mean', 'std']).round(4))
+
+    SSB = n * ((g.mean().values - data.satisfaction.mean()) ** 2).sum()
+    SSE = sum(((data[data.location == l].satisfaction
+                - data[data.location == l].satisfaction.mean()) ** 2).sum()
+              for l in 'ABCD')
+    MSE = SSE / (N - k)
+    F = (SSB / (k - 1)) / MSE
+    print(f"\nSSB = {SSB:.4f},  SSE = {SSE:.4f},  MSE = {MSE:.6f},  F = {F:.6f}")
+    print(f"귀무가설 아래 SSB 의 기댓값 = (k-1)*sigma^2 = {(k - 1) * MSE:.4f}")
+    print(f"관측된 SSB 는 그 {SSB / ((k - 1) * MSE):.2f} 배")
+    print(f"\neta^2  = SSB/SST                 = {SSB / (SSB + SSE):.4f}")
+    print(f"omega^2 = (SSB-(k-1)MSE)/(SST+MSE) = {(SSB - (k - 1) * MSE) / (SSB + SSE + MSE):.4f}")
+    print(f"\nP(F(3,16) <= {F:.4f}) = {stats.f.cdf(F, k - 1, N - k):.4f}")
+    print(f"곧 귀무가설이 참이어도 이만큼 작은 F 가 나올 확률이 "
+          f"{stats.f.cdf(F, k - 1, N - k):.1%} 다")
+    print(f"평균의 최대-최소 = {g.mean().max() - g.mean().min():.2f},  합동 표준편차 = {np.sqrt(MSE):.4f}")
+    print(f"관측 효과크기 f = sqrt(SSB/SSE) = {np.sqrt(SSB / SSE):.4f}")
+    crit = stats.f.ppf(0.95, k - 1, N - k)
+    print(f"검정력 (관측 f 가 참일 때) = {stats.ncf.sf(crit, k - 1, N - k, N * SSB / SSE):.4f}")
+    ```
+
+    출력:
+
+    ```
+              mean     std
+    location              
+    A         4.42  0.4324
+    B         4.12  0.4817
+    C         4.18  0.3493
+    D         4.30  0.4848
+
+    SSB = 0.2655,  SSE = 3.1040,  MSE = 0.194000,  F = 0.456186
+    귀무가설 아래 SSB 의 기댓값 = (k-1)*sigma^2 = 0.5820
+    관측된 SSB 는 그 0.46 배
+
+    eta^2  = SSB/SST                 = 0.0788
+    omega^2 = (SSB-(k-1)MSE)/(SST+MSE) = -0.0888
+
+    P(F(3,16) <= 0.4562) = 0.2834
+    곧 귀무가설이 참이어도 이만큼 작은 F 가 나올 확률이 28.3% 다
+    평균의 최대-최소 = 0.30,  합동 표준편차 = 0.4405
+    관측 효과크기 f = sqrt(SSB/SSE) = 0.2925
+    검정력 (관측 f 가 참일 때) = 0.1419
+    ```
+
+    **(1) SSB 가 기댓값의 $0.46$ 배다.** 귀무가설 아래 SSB 의 기댓값이 $(k-1)\sigma^2 = 3\times0.194 = 0.582$ 인데 관측값은 $0.2655$ 다. **네 매장의 평균이 "우연만으로 흩어졌을 때보다도 덜 흩어져 있다."**
+
+    **(2) 그런데 그것은 전혀 드문 일이 아니다.** $\Pr(F_{3,16} \le 0.456) = 0.2834$ 이므로 **귀무가설이 참이어도 네 번 중 한 번 넘게** 이만큼 작은 $F$ 가 나온다. 작은 $F$ 를 "차이가 없다는 강한 증거"로 읽고 싶은 유혹이 있지만, $F$ 분포의 왼쪽 꼬리는 두텁다. (분산성분이 음수로 추정되었다는 신호로 쓰는 경우는 있으나, 그것도 **$F$ 가 $1$ 보다 한참 작고 자유도가 클 때**의 이야기다. 여기서는 분모 자유도가 $16$ 뿐이다.)
+
+    **(3) 두 효과크기의 부호가 다르다.**
+
+    $$
+    \eta^2 = \frac{0.2655}{3.3695} = 0.0788,
+    \qquad
+    \omega^2 = \frac{0.2655 - 0.582}{3.3695 + 0.194} = -0.0888
+    $$
+
+    $\eta^2$ 은 "집단이 전체 변동의 $7.9\%$ 를 설명한다"고 말하지만, **그 $7.9\%$ 는 자유도 셋이 공짜로 가져가는 몫보다도 작다.** $\omega^2$ 은 그 몫 $(k-1)\text{MSE} = 0.582$ 를 분자에서 빼므로 음수가 되고, 관례대로 $0$ 으로 잘라 보고한다. **$\eta^2$ 은 언제나 양수이므로 "작은 효과가 있다"고 오해하기 쉽다. 작은 설계에서는 $\omega^2$ 을 함께 적어야 한다.**
+
+    **검정력은 $0.1419$ 다.** 관측된 $\hat f = 0.2925$ 가 참이라 해도 일곱 번 중 한 번만 잡는다. 평균의 최대–최소가 $0.30$ 점인데 합동 표준편차가 $0.4405$ 이므로, 네 매장의 차이는 **개인차의 $0.68$ 배**에 지나지 않는다.
+
+    **그러므로 "네 매장의 만족도에 차이가 없다"는 보고는 과하다.** 이 자료가 말하는 것은 **"$0.3$ 점 정도의 차이라면 매장당 다섯 건으로는 보이지 않는다"**이다. 만족도 $0.3$ 점이 사업적으로 의미 있는 크기인지가 먼저 정해져야 하고, 그렇다면 표본을 늘려야 한다.
 
 $F = 0.46$, $p = 0.72$로 네 매장의 만족도에 차이가 없다. 집단 간 제곱합 0.27이 잔차 제곱합 3.10에 비해 아주 작다.
 
@@ -269,44 +910,134 @@ $F = 0.46$, $p = 0.72$로 네 매장의 만족도에 차이가 없다. 집단 �
 
 <div class="exbox" markdown>
 
-**보기 8.** <span class="diff easy" title="쉬움"></span> 사례 3 — 가정 확인
+**보기 8.** <span class="diff easy" title="쉬움"></span> 사례 3 — 가정 확인. 이번에는 **가정 확인이라는 절차 자체**를 평가한다. 두 검정이 적발하는 위반과 실제로 $F$ 를 망가뜨리는 위반이 같은가.
+
+**(1)** $k = 4$, 집단당 $n = 5$ 에서 네 상황 — 가정이 모두 성립 / 비정규만 / 이분산만 / 둘 다 — 을 만들고, 각각에서 (가) Shapiro-Wilk 적발률, (나) Levene 적발률, (다) **고전적 $F$ 의 실제 제1종 오류율**, (라) 이분산에 로버스트한 검정(`scipy.stats.alexandergovern`)의 오류율을 재시오.
+
+**(2)** "적발률" 열과 "오류율" 열을 맞추어 보고, **적발이 가장 필요한 위반을 가장 못 잡는다**는 것을 보이시오.
+
+**(3)** 이 결과가 권하는 분석 절차를 적으시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from scipy.stats import shapiro, levene
+??? success "풀이"
 
-# 정규성 — 잔차의 Q-Q 그림과 Shapiro-Wilk 검정
-sm.qqplot(model.resid, line='s')
-plt.title("Q-Q Plot of Residuals")
-plt.show()
+    **(1)–(2) 수치적으로.** 먼저 쪽의 두 검정이다.
 
-stat, p_value = shapiro(model.resid)
-print(f"Shapiro-Wilk Test: p-value = {p_value:.4f}")
+    ```python
+    import matplotlib.pyplot as plt
+    from scipy.stats import shapiro, levene
 
-# 등분산성 — Levene 검정
-groups = [data[data['location'] == loc]['satisfaction'] for loc in ['A', 'B', 'C', 'D']]
-stat, p_value = levene(*groups)
-print(f"Levene's Test: p-value = {p_value:.4f}")
+    # 정규성 — 잔차의 Q-Q 그림과 Shapiro-Wilk 검정
+    sm.qqplot(model.resid, line='s')
+    plt.title("Q-Q Plot of Residuals")
+    plt.show()
 
-# 독립성 — 잔차 대 적합값 그림
-plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
-plt.axhline(y=0, color='r', linestyle='--')
-plt.xlabel('Fitted Values')
-plt.ylabel('Residuals')
-plt.title('Residuals vs. Fitted Values')
-plt.show()
-```
+    stat, p_value = shapiro(model.resid)
+    print(f"Shapiro-Wilk Test: p-value = {p_value:.4f}")
 
-출력:
+    # 등분산성 — Levene 검정
+    groups = [data[data['location'] == loc]['satisfaction'] for loc in ['A', 'B', 'C', 'D']]
+    stat, p_value = levene(*groups)
+    print(f"Levene's Test: p-value = {p_value:.4f}")
 
-```
-Shapiro-Wilk Test: p-value = 0.5488
-Levene's Test: p-value = 0.9343
-```
+    # 독립성 — 잔차 대 적합값 그림
+    plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
+    plt.axhline(y=0, color='r', linestyle='--')
+    plt.xlabel('Fitted Values')
+    plt.ylabel('Residuals')
+    plt.title('Residuals vs. Fitted Values')
+    plt.show()
+    ```
 
-![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_156.png)
+    출력:
+
+    ```
+    Shapiro-Wilk Test: p-value = 0.5488
+    Levene's Test: p-value = 0.9343
+    ```
+
+    ![잔차의 Q-Q 그림과 잔차 그림](./img/case_studies_156.png)
+
+    이제 이 절차가 실제로 무엇을 지켜 주는지 모의실험으로 본다.
+
+    ```python
+    import warnings
+    warnings.filterwarnings("ignore")
+
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(99)
+    B = 10_000
+    n, k = 5, 4
+
+    def nrm(s):
+        return lambda: rng.normal(0, s, n)
+
+    def lgn(s):
+        return lambda: s * np.exp(rng.normal(0, 1, n))
+
+    scen = {
+        "가정 모두 성립": [nrm(1)] * 4,
+        "비정규만 (로그정규)": [lgn(1)] * 4,
+        "이분산만 (1,1,1,3)": [nrm(1), nrm(1), nrm(1), nrm(3)],
+        "둘 다": [lgn(1)] * 3 + [lgn(3)],
+    }
+
+    print(f"집단당 n = {n}, k = {k}.  평균은 언제나 같다.  명목 0.05")
+    print(f"{'상황':>20}{'Shapiro':>9}{'Levene':>8}{'둘 중 하나':>11}"
+          f"{'고전 F':>8}{'Welch 류':>10}")
+    for lab, fl in scen.items():
+        a = b = c = d = e = 0
+        for _ in range(B):
+            gs = [f() for f in fl]
+            r = np.concatenate([g - g.mean() for g in gs])
+            s = stats.shapiro(r).pvalue < 0.05
+            l = stats.levene(*gs).pvalue < 0.05
+            a += s
+            b += l
+            c += (s or l)
+            d += stats.f_oneway(*gs).pvalue < 0.05
+            e += stats.alexandergovern(*gs).pvalue < 0.05
+        print(f"{lab:>20}{a / B:>9.4f}{b / B:>8.4f}{c / B:>11.4f}{d / B:>8.4f}{e / B:>10.4f}")
+    ```
+
+    출력:
+
+    ```
+    집단당 n = 5, k = 4.  평균은 언제나 같다.  명목 0.05
+                      상황  Shapiro  Levene     둘 중 하나    고전 F   Welch 류
+                가정 모두 성립   0.0437  0.0036     0.0472  0.0474    0.0463
+             비정규만 (로그정규)   0.6747  0.0205     0.6878  0.0320    0.0361
+          이분산만 (1,1,1,3)   0.3043  0.1749     0.4092  0.0923    0.0468
+                     둘 다   0.7061  0.0831     0.7352  0.2468    0.0953
+    ```
+
+    **(2) 두 묶음의 열이 서로 어긋난다.**
+
+    | 상황 | 두 검정 중 하나라도 적발 | 고전 $F$ 의 오류율 | 적발이 필요한가 |
+    |---|---|---|---|
+    | 가정 모두 성립 | $0.0472$ | $0.0474$ | 필요 없음 — 잘 맞는다 |
+    | 비정규만 | $\mathbf{0.6878}$ | $0.0320$ | **필요 없는데 자주 적발** |
+    | 이분산만 | $0.4092$ | $\mathbf{0.0923}$ | **필요한데 절반 넘게 놓침** |
+    | 둘 다 | $0.7352$ | $\mathbf{0.2468}$ | 필요, 적발은 함 |
+
+    세 가지를 읽을 수 있다.
+
+    첫째, **가정이 모두 성립할 때의 거짓 경보는 $0.047$ 로 낮다.** 두 검정을 함께 돌려도 그렇다. Levene 이 보기 6에서 본 대로 극도로 보수적($0.0036$)이라 둘을 합쳐도 거의 Shapiro 하나의 수준에 머문다.
+
+    둘째, **비정규만 있을 때 $69\%$ 를 적발하는데, 정작 $F$ 는 멀쩡하다.** 오류율이 $0.032$ 로 오히려 보수적이다. 곧 이 적발의 대부분은 **행동으로 옮길 필요가 없는 경보**다. 여기서 "비모수로 바꾸자"고 결정하면 아무 문제도 없던 분석을 바꾸는 셈이다.
+
+    셋째가 가장 중요하다. **고전 $F$ 를 실제로 망가뜨리는 것은 이분산인데($0.0923$, 명목의 거의 두 배), 바로 그것을 Levene 이 $17\%$ 밖에 못 잡는다.** $n = 5$ 라서 그렇다. **적발이 가장 필요한 위반을 가장 못 잡는 것이다.** 둘 다 깨진 마지막 줄에서는 $F$ 의 오류율이 $0.247$ 까지 가는데 — 유의하다고 보고한 넷 중 하나가 거짓인 셈이다 — Levene 은 $8\%$ 만 적발한다.
+
+    **(3) 그래서 권할 절차는 "검정으로 분기하지 않는 것"이다.** 마지막 열을 보라. `alexandergovern`(이분산에 로버스트한 검정)의 오류율이 네 상황에서 $0.046$, $0.036$, $0.047$, $0.095$ 다. 셋째 줄에서 $F$ 의 $0.0923$ 을 $0.0468$ 로 되돌리고, 가정이 성립하는 첫째 줄에서도 $0.0463$ 으로 **아무것도 잃지 않는다.** 곧
+
+    1. **등분산을 가정하지 않는 검정을 처음부터 쓴다.** 검정 결과에 따라 방법을 고르는 두 단계 절차는 선택 자체가 자료에 의존해 오류율을 흐린다.
+    2. **그림은 그린다.** 다만 이상점이나 빠진 구조를 찾기 위해서이지 분기 결정을 위해서가 아니다.
+    3. **p-값 대신 집단별 $s_i$ 와 상자그림을 보고한다.** 사례 3의 네 매장은 $s_i$ 가 $0.43$, $0.48$, $0.35$ , $0.48$ 로 고르다. 이 네 숫자가 Levene 의 $p = 0.9343$ 보다 많은 것을 말해 준다.
+
+    마지막 줄($0.2468$)이 보여 주듯 이것은 사소한 차이가 아니다. **집단당 $5$ 개짜리 설계에서 가정 확인은 보호 장치가 아니라 의식(儀式)에 가깝다.**
 
 가정 위반의 증거가 없다.
 
@@ -316,37 +1047,132 @@ Levene's Test: p-value = 0.9343
 
 <div class="exbox" markdown>
 
-**보기 9.** <span class="diff easy" title="쉬움"></span> 사례 3 — 사후분석
+**보기 9.** <span class="diff easy" title="쉬움"></span> 사례 3 — 사후분석. 전역 검정이 기각하지 못했는데 Tukey 를 돌렸다. **그 대가가 얼마인지 재어 본다.**
+
+**(1)** $k = 4$, 집단당 $n = 5$, 평균이 모두 같을 때 다음 네 절차의 가족단위 오류율을 모의실험으로 구하시오.
+
+| 절차 | 기각 규칙 |
+|---|---|
+| 투키 (전역검정 없이) | $\max_{i<j}\lvert t_{ij}\rvert > q_{0.05,4,16}/\sqrt2$ |
+| 투키 (전역검정 통과 뒤에만) | 위 조건 **그리고** $F > F_{0.95,3,16}$ |
+| LSD (전역검정 없이) | $\max_{i<j}\lvert t_{ij}\rvert > t_{0.975,16}$ |
+| LSD (전역검정 통과 뒤에만) | 위 조건 **그리고** $F > F_{0.95,3,16}$ |
+
+**(2)** 결과에서 **전역검정 관문이 꼭 필요한 절차와 그렇지 않은 절차**를 가르시오.
+
+**(3)** 전역 $F$ 가 기각하지 못했는데 Tukey 가 어떤 쌍을 기각하는 일이 얼마나 자주 일어나는가. 그런 일이 **일어날 수 있다**는 것 자체는 무엇을 뜻하는가.
 
 </div>
 
-```python
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+??? success "풀이"
 
-# 분산분석이 유의했으므로 어느 지점 쌍이 다른지 사후비교로 좁힌다.
-tukey = pairwise_tukeyhsd(data['satisfaction'], data['location'], alpha=0.05)
-print(tukey)
-```
+    **(1)–(3) 수치적으로.** 먼저 쪽의 Tukey 출력이다.
 
-출력:
+    ```python
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
-```
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-=================================================
-group1 group2 meandiff p-adj  lower  upper reject
--------------------------------------------------
-     A      B     -0.3  0.708 -1.097 0.497  False
-     A      C    -0.24 0.8243 -1.037 0.557  False
-     A      D    -0.12 0.9723 -0.917 0.677  False
-     B      C     0.06 0.9963 -0.737 0.857  False
-     B      D     0.18 0.9154 -0.617 0.977  False
-     C      D     0.12 0.9723 -0.677 0.917  False
--------------------------------------------------
-```
+    # 분산분석이 유의했으므로 어느 지점 쌍이 다른지 사후비교로 좁힌다.
+    tukey = pairwise_tukeyhsd(data['satisfaction'], data['location'], alpha=0.05)
+    print(tukey)
+    ```
+
+    출력:
+
+    ```
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    =================================================
+    group1 group2 meandiff p-adj  lower  upper reject
+    -------------------------------------------------
+         A      B     -0.3  0.708 -1.097 0.497  False
+         A      C    -0.24 0.8243 -1.037 0.557  False
+         A      D    -0.12 0.9723 -0.917 0.677  False
+         B      C     0.06 0.9963 -0.737 0.857  False
+         B      D     0.18 0.9154 -0.617 0.977  False
+         C      D     0.12 0.9723 -0.677 0.917  False
+    -------------------------------------------------
+    ```
+
+    이제 네 절차의 가족단위 오류율을 모의실험으로 잰다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(314)
+    B = 20_000
+    n, k = 5, 4
+    N, nu, m = n * k, n * k - k, k * (k - 1) // 2
+    q_c = stats.studentized_range.ppf(0.95, k, nu)
+    t_c = stats.t.ppf(0.975, nu)
+    F_c = stats.f.ppf(0.95, k - 1, nu)
+    print(f"k = {k}, 집단당 n = {n}, nu = {nu}, 쌍 수 m = {m}")
+    print(f"임계값: q(0.95,4,16)/sqrt2 = {q_c / np.sqrt(2):.4f},  t(0.975,16) = {t_c:.4f},  "
+          f"F(0.95,3,16) = {F_c:.4f}")
+
+    cnt = dict(tukey=0, tukey_gated=0, lsd=0, lsd_gated=0, anova=0, tukey_only=0)
+    for _ in range(B):
+        gs = [rng.normal(0, 1, n) for _ in range(k)]
+        mi = np.array([g.mean() for g in gs])
+        MSE = np.mean([g.var(ddof=1) for g in gs])
+        SE = np.sqrt(2 * MSE / n)
+        tmax = max(abs(mi[i] - mi[j]) for i in range(k) for j in range(i + 1, k)) / SE
+        Fv = (n * ((mi - mi.mean()) ** 2).sum() / (k - 1)) / MSE
+        sig_F = Fv > F_c
+        sig_T = tmax > q_c / np.sqrt(2)
+        sig_L = tmax > t_c
+        cnt['anova'] += sig_F
+        cnt['tukey'] += sig_T
+        cnt['tukey_gated'] += (sig_F and sig_T)
+        cnt['lsd'] += sig_L
+        cnt['lsd_gated'] += (sig_F and sig_L)
+        cnt['tukey_only'] += (sig_T and not sig_F)
+
+    print(f"\n평균이 모두 같을 때 (귀무가 참), 명목 0.05")
+    for lab, key in [("전역 F 만", 'anova'), ("투키 (전역검정 없이)", 'tukey'),
+                     ("투키 (전역검정 통과 뒤에만)", 'tukey_gated'),
+                     ("LSD (전역검정 없이)", 'lsd'), ("LSD (전역검정 통과 뒤에만)", 'lsd_gated')]:
+        print(f"  {lab:>26}: {cnt[key] / B:.4f}")
+    print(f"\n전역 F 는 기각하지 못했는데 투키가 어떤 쌍을 기각한 비율 = {cnt['tukey_only'] / B:.4f}")
+    ```
+
+    출력:
+
+    ```
+    k = 4, 집단당 n = 5, nu = 16, 쌍 수 m = 6
+    임계값: q(0.95,4,16)/sqrt2 = 2.8610,  t(0.975,16) = 2.1199,  F(0.95,3,16) = 3.2389
+
+    평균이 모두 같을 때 (귀무가 참), 명목 0.05
+                          전역 F 만: 0.0501
+                    투키 (전역검정 없이): 0.0510
+                투키 (전역검정 통과 뒤에만): 0.0437
+                   LSD (전역검정 없이): 0.1916
+               LSD (전역검정 통과 뒤에만): 0.0501
+
+    전역 F 는 기각하지 못했는데 투키가 어떤 쌍을 기각한 비율 = 0.0073
+    ```
+
+    **(2) 관문이 꼭 필요한 절차와 그렇지 않은 절차가 갈린다.**
+
+    | 절차 | 관문 없이 | 관문 통과 뒤에만 |
+    |---|---|---|
+    | 투키 | $0.0510$ | $0.0437$ |
+    | LSD | $\mathbf{0.1916}$ | $0.0501$ |
+
+    **LSD(보정 없는 쌍별 $t$-검정)에는 관문이 반드시 필요하다.** 그냥 돌리면 가족단위 오류율이 $0.19$ 로 명목의 네 배가 되고, 전역 $F$ 를 앞세우면 $0.0501$ 로 돌아온다. 이것이 Fisher 의 **보호된 LSD**이고, 쪽의 본문이 말하는 "그러지 않으면 다중비교 통제가 무너진다"가 정확히 들어맞는 절차다.
+
+    **반면 투키는 관문 없이도 이미 $0.0510$ 이다.** 스튜던트화 범위분포가 **최댓값의 분포 자체**를 기준으로 삼으므로 전역 검정의 도움 없이 혼자 $\alpha$ 를 지킨다. 관문을 씌우면 $0.0437$ 로 내려가는데, 이는 보호가 아니라 **검정력을 조금 버리는 일**이다.
+
+    그러므로 쪽의 본문은 **절차를 섞어 읽지 않도록 다듬어 읽어야 한다.** "전역 검정이 기각하지 못했으면 사후검정으로 넘어가지 않는다"는 지침 자체는 실무에서 널리 쓰이고 보고의 일관성을 지켜 주지만, **그 근거가 "통제가 무너지기 때문"인 것은 LSD 류에 한정된다.** 투키를 쓸 때 관문을 두는 이유는 오류율이 아니라 ─ 전역 검정과 사후검정이 서로 다른 말을 하는 보고서를 피하려는 ─ 해석상의 편의다.
+
+    **(3) 두 결과가 어긋나는 일은 드물지만 일어난다.** 전역 $F$ 가 기각하지 못했는데 투키가 어떤 쌍을 기각하는 경우가 $0.0073$, 곧 **$137$ 번에 한 번** 꼴이다. 반대 방향(전역은 기각, 투키는 어느 쌍도 기각 못 함)은 훨씬 흔하다. $0.0501$ 중 $0.0437$ 만 투키도 기각하므로 약 $13\%$ 가 그 경우다.
+
+    **어긋남이 가능한 까닭은 두 검정이 다른 것을 재기 때문이다.** 전역 $F$ 는 보기 1(Tukey 쪽)에서 본 대로 **모든 쌍의 제곱차를 합쳐** 재고, 투키는 **가장 큰 쌍 하나**를 본다. 평균 넷이 $(-a, -a, a, a)$ 처럼 둘씩 갈리면 $F$ 가 커지는데 가장 큰 쌍의 차이는 $2a$ 로 그대로다. 거꾸로 하나만 멀찍이 떨어지면 최댓값은 크지만 $F$ 는 덜 커진다. **두 검정이 같은 질문에 답한다고 생각하는 것이 어긋남의 원인**이며, 실제로는 하나가 다른 하나의 요약이 아니다.
+
+    이 자료에서는 그런 미묘함이 없다. 여섯 쌍의 `p-adj` 가 $0.708$ 부터 $0.996$ 까지로 **어느 하나도 $0.1$ 근처에 가지 못한다.** 보기 7에서 본 대로 검정력이 $0.14$ 뿐인 설계이므로, 여섯 비교가 모두 유의하지 않은 것은 자료에 차이가 없어서라기보다 **차이를 볼 힘이 없어서**다.
 
 여섯 비교 중 유의한 것이 하나도 없다. 전역 분산분석이 기각하지 못했으니 당연한 결과다.
 
-실은 이 단계를 밟지 말았어야 한다. **전역 검정이 기각하지 못했으면 사후검정으로 넘어가지 않는 것이 원칙이다.** 그러지 않으면 다중비교 통제가 무너진다. 여기서는 절차를 보여주기 위해 실행했을 뿐이다.
+실은 이 단계를 밟지 말았어야 한다. **전역 검정이 기각하지 못했으면 사후검정으로 넘어가지 않는 것이 관례다.** 다만 그 까닭은 절차마다 다르다 — 보정 없는 LSD 는 관문이 없으면 가족단위 오류율이 $0.19$ 로 무너지지만, **투키는 관문 없이도 $0.05$ 를 지킨다**(관문을 씌우면 오히려 $0.043$ 으로 보수적이 된다). 자세한 것은 보기 9 에 있다. 여기서는 절차를 보여주기 위해 실행했을 뿐이다.
 
 Tukey의 HSD에 대한 자세한 내용은 [Tukey HSD](../post_hoc/tukey.md)를 보라.
 
