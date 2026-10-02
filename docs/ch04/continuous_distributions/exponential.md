@@ -46,6 +46,12 @@ $$
 
 ## 성질
 
+<div class="thmbox" markdown>
+
+### 정리 1. 지수분포의 평균·분산·중앙값 { .thm }
+
+$X \sim \text{Exp}(\lambda)$이면
+
 $$
 \begin{aligned}
 E[X] &= \frac{1}{\lambda} \\[4pt]
@@ -55,23 +61,37 @@ E[X] &= \frac{1}{\lambda} \\[4pt]
 \end{aligned}
 $$
 
-$\text{평균} = \text{표준편차} = 1/\lambda$라는 점에 주목하라. 지수분포의 두드러진 특징이다.
+이다.
 
-### 평균의 유도
+</div>
 
-$$
-E[X] = \int_0^{\infty} x \lambda e^{-\lambda x}\,dx = \left[-x e^{-\lambda x}\right]_0^{\infty} + \int_0^{\infty} e^{-\lambda x}\,dx = \frac{1}{\lambda}
-$$
+??? proof "증명"
 
-### 분산의 유도
+    **평균.** 부분적분을 한 번 쓴다.
 
-$$
-E[X^2] = \int_0^{\infty} x^2 \lambda e^{-\lambda x}\,dx = \frac{2}{\lambda^2}
-$$
+    $$
+    E[X] = \int_0^{\infty} x \lambda e^{-\lambda x}\,dx = \left[-x e^{-\lambda x}\right]_0^{\infty} + \int_0^{\infty} e^{-\lambda x}\,dx = \frac{1}{\lambda}
+    $$
 
-$$
-\text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
-$$
+    **분산.** 같은 방식으로 이차적률을 구한 뒤 평균의 제곱을 뺀다.
+
+    $$
+    E[X^2] = \int_0^{\infty} x^2 \lambda e^{-\lambda x}\,dx = \frac{2}{\lambda^2}
+    $$
+
+    $$
+    \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
+    $$
+
+    **표준편차.** 분산의 양의 제곱근이므로 $\text{SD}(X) = 1/\lambda$다.
+
+    **중앙값.** $F(m) = 1/2$를 풀면 된다. $1 - e^{-\lambda m} = 1/2$에서 $e^{-\lambda m} = 1/2$이고, 양변에 로그를 취하면
+
+    $$
+    m = \frac{\ln 2}{\lambda} \qquad \square
+    $$
+
+$\text{평균} = \text{표준편차} = 1/\lambda$라는 점에 주목하라. 지수분포의 두드러진 특징이다. 중앙값은 평균보다 작다($\ln 2 \approx 0.693$). 오른쪽으로 긴 꼬리가 평균을 끌어올리기 때문이다.
 
 ---
 
@@ -79,7 +99,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 1. 지수분포의 무기억성 { .thm }
+### 정리 2. 지수분포의 무기억성 { .thm }
 
 $X \sim \text{Exp}(\lambda)$이면 모든 $s, t \geq 0$에 대해
 
@@ -156,7 +176,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 2. 최솟값도 지수분포다 { .thm }
+### 정리 3. 최솟값도 지수분포다 { .thm }
 
 $X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이면
 
