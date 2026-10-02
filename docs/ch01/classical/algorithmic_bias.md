@@ -124,106 +124,162 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 알고리즘 편향과 피드백 루프
+**보기 1.** <span class="diff easy" title="쉬움"></span> 알고리즘 편향과 피드백 루프. 두 지역의 참 범죄율이 **똑같이 $10\%$**이고 인구가 각 $1{,}000$명이다. 매 회차에 순찰 $100$을 배분하는데, 검거 기록이 많은 쪽을 우범지역으로 지목해 몰아준다. 출발 기록은 $102$ 대 $100$으로 $2\%$만 다르다. 순찰의 비율 $e$만큼은 두 지역에 반씩 무작위로 배정한다(탐색).
+
+**(1)** 어느 쪽에 얼마를 보내든 **순찰 하루당 검거 건수의 기댓값이 두 지역 모두 똑같이 얼마**인지 구하시오.
+
+**(2)** 탐색률 $e = 0$과 $e = 0.2$에서 $30$회차 뒤의 순찰일수와 모형이 보는 검거 건수 비중을 예측하고, 모의실험과 견주시오.
 
 </div>
 
-두 지역의 실제 범죄율이 **완전히 동일**한데, 초기 검거 기록의 2% 차이만으로 순찰 배분이 어떻게 고착되는지 보여 준다. 모형에는 지역을 차별할 어떤 변수도 들어 있지 않다. 순찰의 일부를 무작위로 배정하는 **탐색**을 넣었을 때 무엇이 달라지는지도 함께 본다.
+??? success "풀이"
 
-```python
-"""되먹임 고리: 범죄율은 같은데 순찰만 한쪽으로 쏠릴 때 무슨 일이 생기는가.
+    **(1) 해석적으로.** 한 회차에서 한 지역의 범죄 건수는 $\text{Bin}(1000,\ 0.10)$이므로 $E[\text{범죄}] = 100$이다. 순찰을 $a$만큼 보내면 각 범죄가 적발될 확률이 $a/100$이고 검거 건수는 $\text{Bin}(\text{범죄},\ a/100)$이므로
 
-    순찰이 많은 곳에서 더 많이 적발되고, 그 기록이 다시 순찰을 늘린다.
-    자료가 현실을 비추는 것이 아니라 현실을 만들어 내는 경우다.
-    """
+    $$
+    E[\text{검거}] = E\big[E[\text{검거} \mid \text{범죄}]\big]
+    = E\!\left[\text{범죄}\cdot\frac{a}{100}\right] = 100\cdot\frac{a}{100} = a
+    $$
 
-import numpy as np
+    다. 따라서 $a > 0$인 한
 
-rng = np.random.default_rng(7)
+    $$
+    E\!\left[\frac{\text{검거}}{\text{순찰}}\right] \approx \frac{a}{a} = 1
+    $$
 
-TRUE_RATE = np.array([0.10, 0.10])   # 두 지역의 참 범죄율. 완전히 같다
-PATROL_TOTAL = 100                   # 매 회차에 배분할 순찰 인력
-POPULATION = 1000                    # 지역당 인구
-ROUNDS = 30
+    로 **두 지역 모두 정확히 1이고 순찰 배분과 무관하다.** 바로 이것이 순찰일당 검거율을 편향되지 않은 신호라 부르는 이유다. 반면 검거 **건수**는 $a$에 정비례하므로 순찰을 몰아준 쪽이 자동으로 커진다. **같은 자료에서 분자만 보면 편향되고 분모로 나누면 편향이 사라진다.**
+
+    $a = 0$이면 분모가 0이라 비율이 정의되지 않는다. 이 `nan` 이 요점이다. 순찰을 한 번도 보내지 않은 지역에 대해서는 **자료 자체가 존재하지 않는다.**
+
+    **(2) 해석적으로.** 탐색률 $e$에서 우범지역으로 지목된 쪽은
+
+    $$
+    100\left[(1-e)\cdot 1 + e\cdot\tfrac12\right] = 100\left(1 - \tfrac e2\right),
+    \qquad
+    \text{다른 쪽} = 100\cdot\frac e2
+    $$
+
+    를 받는다. 출발 기록이 $102 > 100$이라 A가 처음부터 우범지역이 되고, A의 기록은 매 회차 더 빨리 늘어나므로 **지목이 뒤집히지 않는다.** 따라서 $30$회차 뒤의 순찰일수는
+
+    | $e$ | A | B |
+    |:---:|---:|---:|
+    | $0$ | $30\times100 = 3000$ | $0$ |
+    | $0.2$ | $30\times90 = 2700$ | $30\times10 = 300$ |
+
+    이다. 검거 기록은 (1)에서 $E[\text{검거}] = a$이므로 순찰일수만큼 쌓인다. 초기 기록을 더하면
+
+    $$
+    e = 0:\quad \frac{102+3000}{3202} = 96.9\%
+    \qquad
+    e = 0.2:\quad \frac{102+2700}{3202} = 87.5\%
+    $$
+
+    가 모형이 보는 A의 비중이다.
+
+    **(1)(2) 수치적으로.** 두 지역의 실제 범죄율이 **완전히 동일**한데, 초기 검거 기록의 2% 차이만으로 순찰 배분이 어떻게 고착되는지 보여 준다. 모형에는 지역을 차별할 어떤 변수도 들어 있지 않다.
+
+    ```python
+    """되먹임 고리: 범죄율은 같은데 순찰만 한쪽으로 쏠릴 때 무슨 일이 생기는가.
+
+        순찰이 많은 곳에서 더 많이 적발되고, 그 기록이 다시 순찰을 늘린다.
+        자료가 현실을 비추는 것이 아니라 현실을 만들어 내는 경우다.
+        """
+
+    import numpy as np
+
+    rng = np.random.default_rng(7)
+
+    TRUE_RATE = np.array([0.10, 0.10])   # 두 지역의 참 범죄율. 완전히 같다
+    PATROL_TOTAL = 100                   # 매 회차에 배분할 순찰 인력
+    POPULATION = 1000                    # 지역당 인구
+    ROUNDS = 30
 
 
-def simulate(explore):
-    """검거 기록이 많은 쪽에 순찰을 보낸다. explore는 무작위로 배정하는 비율."""
-    # 출발점: 기록이 딱 2% 차이 난다. 우연히 생긴 차이일 뿐 실체가 없다.
-    records = np.array([102.0, 100.0])
-    arrests = np.zeros(2)
-    patrol_days = np.zeros(2)
+    def simulate(explore):
+        """검거 기록이 많은 쪽에 순찰을 보낸다. explore는 무작위로 배정하는 비율."""
+        # 출발점: 기록이 딱 2% 차이 난다. 우연히 생긴 차이일 뿐 실체가 없다.
+        records = np.array([102.0, 100.0])
+        arrests = np.zeros(2)
+        patrol_days = np.zeros(2)
 
-    for _ in range(ROUNDS):
-        # (1) 모형의 예측: 기록이 많은 쪽을 "우범지역"으로 지목한다.
-        #     지역을 식별하는 변수는 어디에도 쓰이지 않는다. 오직 과거 기록뿐이다.
-        hotspot = np.where(records == records.max(), 1.0, 0.0)
+        for _ in range(ROUNDS):
+            # (1) 모형의 예측: 기록이 많은 쪽을 "우범지역"으로 지목한다.
+            #     지역을 식별하는 변수는 어디에도 쓰이지 않는다. 오직 과거 기록뿐이다.
+            hotspot = np.where(records == records.max(), 1.0, 0.0)
 
-        # (2) 배분: (1-explore)만큼은 우범지역에, explore만큼은 두 지역에 반씩.
-        #     explore=0 이면 순찰이 전부 한쪽으로 쏠린다.
-        share = (1 - explore) * hotspot / hotspot.sum() + explore * 0.5
-        patrol = PATROL_TOTAL * share
+            # (2) 배분: (1-explore)만큼은 우범지역에, explore만큼은 두 지역에 반씩.
+            #     explore=0 이면 순찰이 전부 한쪽으로 쏠린다.
+            share = (1 - explore) * hotspot / hotspot.sum() + explore * 0.5
+            patrol = PATROL_TOTAL * share
 
-        # (3) 현실: 두 지역에서 같은 비율(10%)로 범죄가 일어난다.
-        crimes = rng.binomial(POPULATION, TRUE_RATE)
+            # (3) 현실: 두 지역에서 같은 비율(10%)로 범죄가 일어난다.
+            crimes = rng.binomial(POPULATION, TRUE_RATE)
 
-        # (4) 관측: 그중 순찰을 보낸 만큼만 검거된다.
-        #     순찰이 0인 지역에서는 범죄가 일어나도 단 한 건도 기록되지 않는다.
-        caught = rng.binomial(crimes, patrol / PATROL_TOTAL)
+            # (4) 관측: 그중 순찰을 보낸 만큼만 검거된다.
+            #     순찰이 0인 지역에서는 범죄가 일어나도 단 한 건도 기록되지 않는다.
+            caught = rng.binomial(crimes, patrol / PATROL_TOTAL)
 
-        # (5) 되먹임: 오늘의 검거가 내일의 학습자료가 된다.
-        #     여기서 고리가 닫힌다. 순찰 -> 검거 -> 기록 -> 순찰.
-        records = records + caught
-        arrests += caught
-        patrol_days += patrol
+            # (5) 되먹임: 오늘의 검거가 내일의 학습자료가 된다.
+            #     여기서 고리가 닫힌다. 순찰 -> 검거 -> 기록 -> 순찰.
+            records = records + caught
+            arrests += caught
+            patrol_days += patrol
 
-    return records, arrests, patrol_days
+        return records, arrests, patrol_days
 
 
-for explore in (0.0, 0.2):
-    records, arrests, patrol_days = simulate(explore)
+    for explore in (0.0, 0.2):
+        records, arrests, patrol_days = simulate(explore)
 
-    # 모형이 보는 신호: 검거 "건수"의 지역별 비중.
-    # 순찰량에 비례해 부풀려지므로 편향되어 있다.
-    count_share = 100 * records / records.sum()
+        # 모형이 보는 신호: 검거 "건수"의 지역별 비중.
+        # 순찰량에 비례해 부풀려지므로 편향되어 있다.
+        count_share = 100 * records / records.sum()
 
-    # 편향 없는 신호: 순찰 하루당 검거 건수.
-    # 순찰량으로 나누었으므로 순찰 배분의 영향이 지워진다.
-    # 다만 순찰이 0이면 0으로 나눌 수 없어 nan이 된다 — 이 nan이 요점이다.
-    rate = np.divide(arrests, patrol_days, out=np.full(2, np.nan),
-                     where=patrol_days > 0)
+        # 편향 없는 신호: 순찰 하루당 검거 건수.
+        # 순찰량으로 나누었으므로 순찰 배분의 영향이 지워진다.
+        # 다만 순찰이 0이면 0으로 나눌 수 없어 nan이 된다 — 이 nan이 요점이다.
+        rate = np.divide(arrests, patrol_days, out=np.full(2, np.nan),
+                         where=patrol_days > 0)
 
-    print(f"exploration = {explore:.0%}")
-    print(f"  patrol days      A/B : {patrol_days[0]:7.0f} / {patrol_days[1]:.0f}")
-    print(f"  arrest counts    A/B : {count_share[0]:6.1f}% / {count_share[1]:.1f}%"
-          "    <- what the model sees")
-    rate_txt = [f"{r:.3f}" if np.isfinite(r) else "  ?  " for r in rate]
-    print(f"  arrests per patrol   : {rate_txt[0]} / {rate_txt[1]}"
-          "    <- the unbiased signal")
-    print()
-```
+        print(f"exploration = {explore:.0%}")
+        print(f"  patrol days      A/B : {patrol_days[0]:7.0f} / {patrol_days[1]:.0f}")
+        print(f"  arrest counts    A/B : {count_share[0]:6.1f}% / {count_share[1]:.1f}%"
+              "    <- what the model sees")
+        rate_txt = [f"{r:.3f}" if np.isfinite(r) else "  ?  " for r in rate]
+        print(f"  arrests per patrol   : {rate_txt[0]} / {rate_txt[1]}"
+              "    <- the unbiased signal")
+        print()
+    ```
 
-출력:
+    출력:
 
-```
-exploration = 0%
-  patrol days      A/B :    3000 / 0
-  arrest counts    A/B :   96.9% / 3.1%    <- what the model sees
-  arrests per patrol   : 1.003 /   ?      <- the unbiased signal
+    ```
+    exploration = 0%
+      patrol days      A/B :    3000 / 0
+      arrest counts    A/B :   96.9% / 3.1%    <- what the model sees
+      arrests per patrol   : 1.003 /   ?      <- the unbiased signal
 
-exploration = 20%
-  patrol days      A/B :    2700 / 300
-  arrest counts    A/B :   87.8% / 12.2%    <- what the model sees
-  arrests per patrol   : 0.991 / 0.950    <- the unbiased signal
-```
+    exploration = 20%
+      patrol days      A/B :    2700 / 300
+      arrest counts    A/B :   87.8% / 12.2%    <- what the model sees
+      arrests per patrol   : 0.991 / 0.950    <- the unbiased signal
+    ```
 
-출력이 세 가지를 한꺼번에 보여 준다.
+    **예측이 모두 맞는다.** 순찰일수는 $3000/0$과 $2700/300$으로 유도한 값과 정확히 같고(배분이 결정론적이라 오차가 없다), 검거 건수 비중은 $96.9\%$와 $87.8\%$로 예측한 $96.9\%$, $87.5\%$에 맞는다. 둘째 값의 $0.3$%p 차이는 이항 추출의 몬테카를로 오차다.
 
-**탐색이 없을 때(0%).** B구역의 순찰일수가 **0**이 된다. 검거 건수는 96.9% 대 3.1%로 갈라지고, 모형은 A구역이 범죄 지역이라고 확신한다. 그런데 B구역의 순찰일당 검거율은 계산조차 되지 않는다(`?`). 순찰을 한 번도 보내지 않았으므로 **B구역이 실제로 어떤지 알아낼 자료가 시스템 안에 존재하지 않는다.** 반사실이 소멸한 것이다.
+    **순찰일당 검거율은 $1.003$, $0.991$, $0.950$으로 셋 다 이론값 $1$ 근처다.** B구역의 $0.950$이 조금 낮은데, 순찰일수가 $300$뿐이라 표준오차가 $\sqrt{1/300} = 0.058$이다. $1$에서 $0.86$ 표준오차 떨어진 값이니 어긋남이 아니다.
 
-**탐색이 20%일 때.** 검거 건수는 여전히 87.8% 대 12.2%로 크게 치우쳐 있다. 순찰이 여전히 A에 몰리기 때문이다. 그러나 **순찰일당 검거율은 0.991 대 0.950으로 사실상 같다.** 두 지역의 범죄율이 동일하다는 참값이 드러난다.
+    출력이 세 가지를 한꺼번에 보여 준다.
 
-여기서 대응책이 두 겹임이 분명해진다. **무작위 탐색**이 편향되지 않은 관측을 만들어 내고, **건수 대신 노출량당 비율**로 보는 것이 그 관측을 올바르게 읽어 낸다. 둘 중 하나만으로는 부족하다. 탐색 없이 비율만 보면 분모가 0이고, 탐색을 해도 건수만 보면 여전히 87.8% 대 12.2%다.
+    **탐색이 없을 때(0%).** B구역의 순찰일수가 **0**이 된다. 검거 건수는 96.9% 대 3.1%로 갈라지고, 모형은 A구역이 범죄 지역이라고 확신한다. 그런데 B구역의 순찰일당 검거율은 계산조차 되지 않는다(`?`). 순찰을 한 번도 보내지 않았으므로 **B구역이 실제로 어떤지 알아낼 자료가 시스템 안에 존재하지 않는다.** 반사실이 소멸한 것이다.
+
+    **탐색이 20%일 때.** 검거 건수는 여전히 87.8% 대 12.2%로 크게 치우쳐 있다. 순찰이 여전히 A에 몰리기 때문이다. 그러나 **순찰일당 검거율은 0.991 대 0.950으로 사실상 같다.** 두 지역의 범죄율이 동일하다는 참값이 드러난다.
+
+    여기서 대응책이 두 겹임이 분명해진다. **무작위 탐색**이 편향되지 않은 관측을 만들어 내고, **건수 대신 노출량당 비율**로 보는 것이 그 관측을 올바르게 읽어 낸다. 둘 중 하나만으로는 부족하다. 탐색 없이 비율만 보면 분모가 0이고, 탐색을 해도 건수만 보면 여전히 87.8% 대 12.2%다.
+
+
+
+
 
 !!! note "배분 규칙이 루프의 세기를 정한다"
     위 코드는 순찰을 기록이 많은 쪽에 **몰아주는** 핫스팟 방식을 쓴다. 실제 예측 치안 도구가 지도 위에 상위 구역을 표시하는 방식이 이것이다.

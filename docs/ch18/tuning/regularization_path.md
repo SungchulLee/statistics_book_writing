@@ -140,56 +140,104 @@ CV 오차가 최소인 lambda 선택
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 라쏘 정칙화 경로 그리기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 라쏘 정칙화 경로 그리기. 참으로 관련 있는 변수 넷 $(3, -2, 1.5, 1)$과 잡음 변수 여덟, $n = 200$인 자료에서 경로를 그린다.
+
+**(1)** 경로가 시작하는 $\lambda_{\max}$를 하위기울기 조건에서 유도하고, **가장 먼저** 모형에 들어오는 변수가 어느 것인지 말하시오.
+
+**(2)** 경로를 실제로 계산해 (1)을 확인하고, 변수가 들어오는 **순서**가 $\lvert x_j^\top y\rvert$의 순서와 같은지 따지시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.linear_model import lasso_path, LassoCV
+??? success "풀이"
 
-# 예시 자료: 참으로 관련 있는 변수 4개와 잡음 변수 8개
-rng = np.random.default_rng(0)
-n, n_features = 200, 12
-X = rng.normal(0, 1, (n, n_features))
-beta = np.array([3.0, -2.0, 1.5, 1.0] + [0.0] * 8)
-y = X @ beta + rng.normal(0, 1, n)
-feature_names = [f"x{j+1}" for j in range(n_features)]
+    **(1) 해석적으로.** $\beta = 0$이 라쏘의 해일 조건은 모든 $j$에 대해
 
-# lasso_path 는 격자 위의 계수를 한꺼번에 계산한다. 하나씩 적합하는
-# 것보다 훨씬 빠른데, 앞 lambda 의 해를 다음 계산의 출발점으로 쓰기 때문이다.
-lambdas, coefs, _ = lasso_path(X, y, n_alphas=60)
-lasso_coefs = coefs.T                       # (n_lambda, n_features)
-# 교차검증으로 고른 lambda. 그림의 붉은 세로선이 이 자리다.
-lambda_opt = LassoCV(cv=5, random_state=0).fit(X, y).alpha_
-print(f"최적 lambda = {lambda_opt:.4f}, "
-      f"그때 0이 아닌 계수 = {(np.abs(lasso_coefs[np.argmin(np.abs(lambdas - lambda_opt))]) > 1e-9).sum()}개")
+    $$
+    \frac{\lvert x_j^\top y\rvert}{n} \le \lambda
+    $$
 
-# 가로축이 오른쪽에서 왼쪽으로 갈수록 벌점이 약해진다. 가장 먼저 0 에서
-# 떨어져 나오는 선이 그만큼 중요한 변수다.
-fig, ax = plt.subplots(figsize=(10, 6))
-for j in range(n_features):
-    ax.plot(np.log10(lambdas), lasso_coefs[:, j], label=feature_names[j])
+    이다. 목적함수 $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_1$을 $\beta = 0$에서 하위미분하면 $-x_j^\top y/n + \lambda s_j = 0$, $s_j \in [-1,1]$이 나오고, $s_j$를 $[-1,1]$ 안에서 고를 수 있어야 하기 때문이다. 따라서
 
-ax.axvline(np.log10(lambda_opt), color='red', linestyle='--', label='Optimal lambda')
-ax.set_xlabel('log10(Lambda)')
-ax.set_ylabel('Coefficient Value')
-ax.set_title('Lasso Regularization Path')
-ax.legend()
-ax.grid(True, alpha=0.3)
-plt.show()
-```
+    $$
+    \lambda_{\max} = \frac{1}{n}\lVert X^\top y\rVert_\infty = \max_j \frac{\lvert x_j^\top y\rvert}{n}
+    $$
 
-출력:
+    이고, 이 최댓값을 **달성하는** 변수가 $\lambda$를 조금 낮출 때 가장 먼저 조건을 깨고 들어온다. 참 계수가 가장 큰 $x_1$이 그 자리일 것으로 기대된다.
 
-```
-최적 lambda = 0.0589, 그때 0이 아닌 계수 = 6개
-```
+    그 뒤로는 사정이 다르다. 두 번째 변수가 들어오는 조건은 $\lvert x_j^\top y\rvert$가 아니라 **잔차와의 상관** $\lvert x_j^\top(y - X\hat\beta)\rvert$가 $n\lambda$에 닿는 것이다. $x_1$이 들어오면서 잔차가 바뀌었으므로, 둘째부터는 주변상관의 순서와 어긋날 수 있다.
 
-![라쏘 정칙화 경로](./img/regularization_path_141.png)
+    **(2) 수치적으로.**
 
-이 그림이 드러내는 것은 각 $\lambda$에서 어떤 변수가 활성인지(변수선택), 계수가 어떻게 변하는지(축소 방향), 변수가 들어오는 순서와 시점(희소성)이다.
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from sklearn.linear_model import lasso_path, LassoCV
+
+    # 예시 자료: 참으로 관련 있는 변수 4개와 잡음 변수 8개
+    rng = np.random.default_rng(0)
+    n, n_features = 200, 12
+    X = rng.normal(0, 1, (n, n_features))
+    beta = np.array([3.0, -2.0, 1.5, 1.0] + [0.0] * 8)
+    y = X @ beta + rng.normal(0, 1, n)
+    feature_names = [f"x{j+1}" for j in range(n_features)]
+
+    # lasso_path 는 격자 위의 계수를 한꺼번에 계산한다. 하나씩 적합하는
+    # 것보다 훨씬 빠른데, 앞 lambda 의 해를 다음 계산의 출발점으로 쓰기 때문이다.
+    lambdas, coefs, _ = lasso_path(X, y, n_alphas=60)
+    lasso_coefs = coefs.T                       # (n_lambda, n_features)
+    # 교차검증으로 고른 lambda. 그림의 붉은 세로선이 이 자리다.
+    lambda_opt = LassoCV(cv=5, random_state=0).fit(X, y).alpha_
+    print(f"최적 lambda = {lambda_opt:.4f}, "
+          f"그때 0이 아닌 계수 = {(np.abs(lasso_coefs[np.argmin(np.abs(lambdas - lambda_opt))]) > 1e-9).sum()}개")
+
+    # --- (1) 을 확인한다 ---
+    marg = np.abs(X.T @ y) / n
+    print(f"이론 lambda_max = |X'y|_inf/n = {marg.max():.6f}  (달성하는 변수 "
+          f"{feature_names[marg.argmax()]})")
+    print(f"lasso_path 가 쓴 가장 큰 lambda = {lambdas[0]:.6f}")
+
+    entered = []
+    for i in range(len(lambdas)):
+        for j in np.where(np.abs(lasso_coefs[i]) > 1e-12)[0]:
+            if j not in entered:
+                entered.append(j)
+    print("경로에서 들어온 순서:", [feature_names[j] for j in entered])
+    print("주변상관이 큰 순서  :", [feature_names[j] for j in np.argsort(-marg)])
+
+    # 가로축이 오른쪽에서 왼쪽으로 갈수록 벌점이 약해진다. 가장 먼저 0 에서
+    # 떨어져 나오는 선이 그만큼 중요한 변수다.
+    fig, ax = plt.subplots(figsize=(10, 6))
+    for j in range(n_features):
+        ax.plot(np.log10(lambdas), lasso_coefs[:, j], label=feature_names[j])
+
+    ax.axvline(np.log10(lambda_opt), color='red', linestyle='--', label='Optimal lambda')
+    ax.set_xlabel('log10(Lambda)')
+    ax.set_ylabel('Coefficient Value')
+    ax.set_title('Lasso Regularization Path')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    최적 lambda = 0.0589, 그때 0이 아닌 계수 = 6개
+    이론 lambda_max = |X'y|_inf/n = 3.381446  (달성하는 변수 x1)
+    lasso_path 가 쓴 가장 큰 lambda = 3.381446
+    경로에서 들어온 순서: ['x1', 'x2', 'x3', 'x4', 'x6', 'x7', 'x12', 'x8', 'x11', 'x10', 'x5']
+    주변상관이 큰 순서  : ['x1', 'x3', 'x2', 'x4', 'x9', 'x8', 'x6', 'x11', 'x5', 'x12', 'x10', 'x7']
+    ```
+
+    ![라쏘 정칙화 경로](./img/regularization_path_141.png)
+
+    **유도한 $\lambda_{\max}$가 코드와 소수 여섯째 자리까지 같다.** `lasso_path` 가 격자의 출발점으로 쓰는 값이 바로 $\lVert X^\top y\rVert_\infty / n$이기 때문이다. 그 최댓값을 달성하는 변수도 예상대로 $x_1$이고, 그림에서 가장 오른쪽에서 0을 벗어나는 선이 그것이다.
+
+    **둘째 물음의 답은 "아니다"이다.** 경로의 진입 순서는 $x_1, x_2, x_3, x_4, \dots$인데 주변상관의 순서는 $x_1, x_3, x_2, x_4, \dots$로 $x_2$와 $x_3$이 바뀌어 있다. (1)에서 말한 그대로, 첫 변수만 주변상관이 정하고 그다음부터는 **잔차와의 상관**이 정하기 때문이다. $x_3$의 주변상관 $1.7438$이 $x_2$의 $1.7312$보다 컸지만, $x_1$을 모형에 넣고 남은 잔차에 대해서는 순서가 뒤집혔다.
+
+    **"진입 순서가 곧 변수 중요도"라는 흔한 해석은 그래서 조심해서 써야 한다.** 참 계수의 크기가 $3, 2, 1.5, 1$로 뚜렷이 갈리는 이 자료에서조차 둘째와 셋째가 뒤바뀌었다. 잡음변수 $x_6, x_7, x_{12}$가 참 변수 넷 바로 뒤에 들어온다는 점도 함께 보아야 하며, 경로의 왼쪽 끝에 가까운 진입은 신호의 증거로 읽을 수 없다.
+
+    이 그림이 드러내는 것은 각 $\lambda$에서 어떤 변수가 활성인지(변수선택), 계수가 어떻게 변하는지(축소 방향), 변수가 들어오는 순서와 시점(희소성)이다. 반면 **보이지 않는 것**은 각 계수의 불확실성이고, 어느 진입이 재현될지는 이 한 장으로 알 수 없다.
 
 ### 그림 2: 교차검증 오차
 

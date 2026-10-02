@@ -193,50 +193,103 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 편향과 무응답
+**보기 1.** <span class="diff easy" title="쉬움"></span> 편향과 무응답. 만족도 $Y$를 가진 $1$만 명에게 설문을 돌리는데, 응답할 확률이 만족도에 따라 **직선으로** 올라간다. $p(y) = 0.1 + 0.08(y-1)$이므로 $1$점은 $10\%$, $10$점은 $82\%$가 답한다.
+
+**(1)** 응답자 평균과 참 평균의 차이를 닫힌 꼴로 구하시오. 응답확률이 $p(y) = a + by$ 꼴일 때 편향이 무엇으로 결정되는가.
+
+**(2)** 그 식이 예측하는 편향과 모의실험이 내놓는 편향을 견주시오.
 
 </div>
 
-```python
-"""응답 여부가 결과와 상관되면 추정값이 왜곡된다."""
+??? success "풀이"
 
-import numpy as np
+    **(1) 해석적으로.** 응답자 집단에서 $Y$의 평균은 응답확률로 가중한 평균이다.
 
-rng = np.random.default_rng(42)
-n_pop = 10_000
+    $$
+    \mu_R = \frac{E[Y\,p(Y)]}{E[p(Y)]}
+    $$
 
-# 1단계: 모집단 전체의 참 만족도. 평균 5.5의 정규분포를 1~10점으로 자른다.
-# 이 값은 우리가 모의실험에서만 알 수 있다. 현실에서는 관측되지 않는다.
-satisfaction = np.clip(rng.normal(5.5, 2.0, n_pop), 1, 10)
+    분자에 공분산의 정의 $E[Yp(Y)] = \operatorname{Cov}(Y, p(Y)) + \mu\,E[p(Y)]$를 넣으면
 
-# 2단계: 무응답 편향의 핵심 — 응답 확률이 만족도에 따라 달라진다.
-#   만족도 1점: 0.1 + 0.08*0  = 10% 응답
-#   만족도 10점: 0.1 + 0.08*9 = 82% 응답
-# 만족한 사람일수록 설문에 답할 확률이 높다. 실제 고객 설문에서 흔한 양상이다.
-response_prob = 0.1 + 0.08 * (satisfaction - 1)
+    $$
+    \mu_R = \mu + \frac{\operatorname{Cov}\big(Y,\, p(Y)\big)}{E[p(Y)]}
+    $$
 
-# 각자 자기 확률로 동전을 던져 응답 여부를 정한다
-responded = rng.binomial(1, response_prob).astype(bool)
+    이다. **무응답 편향은 응답확률과 결과의 공분산을 응답률로 나눈 값이다.** 이 한 줄이 모든 것을 말한다. 응답확률이 $Y$와 무관하면 공분산이 0이라 편향이 없고, 응답률이 낮을수록 같은 공분산이 더 크게 증폭된다.
 
-# 3단계: 진실과 우리가 보게 될 값을 비교한다.
-#   true_mean   모집단 전체의 평균 (알 수 없는 참값)
-#   biased_mean 응답자만의 평균   (설문 보고서에 실릴 값)
-true_mean = satisfaction.mean()
-biased_mean = satisfaction[responded].mean()
-print(f"True population mean:    {true_mean:.2f}")
-print(f"Biased survey mean:      {biased_mean:.2f}")
-print(f"Bias (overestimate):     {biased_mean - true_mean:+.2f}")
-print(f"Response rate:           {responded.mean():.1%}")
-```
+    응답확률이 $p(y) = a + by$로 직선이면 $\operatorname{Cov}(Y, a+bY) = b\operatorname{Var}(Y)$이고 $E[p(Y)] = a + b\mu$가 곧 응답률 $r$이므로
 
-출력:
+    $$
+    \mu_R - \mu = \frac{b\operatorname{Var}(Y)}{r}
+    $$
 
-```
-True population mean:    5.48
-Biased survey mean:      6.13
-Bias (overestimate):     +0.65
-Response rate:           45.7%
-```
+    가 된다. 여기서는 $p(y) = 0.02 + 0.08y$라 $b = 0.08$이다. **편향이 결과의 분산에 비례한다**는 점을 눈여겨볼 만하다. 모두가 비슷하게 만족한 집단이라면 누가 답하든 상관없지만, 의견이 갈릴수록 누가 답하느냐가 결정적이 된다.
+
+    **(2) 수치적으로.** 아래 코드가 만든 모집단에서 $\operatorname{Var}(Y) = 3.8523$, $E[p(Y)] = 0.4584$이므로 예측 편향은
+
+    $$
+    \frac{0.08\times 3.8523}{0.4584} = 0.6723
+    $$
+
+    이다. 모의실험이 내놓은 편향은 $+0.65$다. 둘의 차이 $0.027$은 응답 여부를 동전으로 정한 데서 오는 몬테카를로 오차다. 응답자가 $4{,}566$명이고 그들의 만족도 표준편차가 대략 $1.8$이므로 응답자 평균의 표준오차가 $1.8/\sqrt{4566} = 0.027$이고, **어긋남이 정확히 그 한 칸이다.**
+
+    응답확률을 그대로 가중치로 써서 "무한히 많이 설문했을 때의 응답자 평균"을 계산하면 $6.1524$가 나오는데, 이는 참값 $5.4801$에 예측 편향 $0.6723$을 더한 값과 정확히 같다. 유도한 식이 맞는다.
+
+    **응답률 $45.7\%$는 나쁘지 않은 숫자처럼 들린다.** 그런데 그 응답이 만족도와 엮여 있으므로 $10$점 만점에 $0.67$점, 곧 참값의 $12\%$가 부풀려졌다. 표본을 $10$만 명으로 늘려도 이 편향은 그대로 남는다. **표본크기는 편향을 줄이지 않는다.**
+
+    ```python
+    """응답 여부가 결과와 상관되면 추정값이 왜곡된다."""
+
+    import numpy as np
+
+    rng = np.random.default_rng(42)
+    n_pop = 10_000
+
+    # 1단계: 모집단 전체의 참 만족도. 평균 5.5의 정규분포를 1~10점으로 자른다.
+    # 이 값은 우리가 모의실험에서만 알 수 있다. 현실에서는 관측되지 않는다.
+    satisfaction = np.clip(rng.normal(5.5, 2.0, n_pop), 1, 10)
+
+    # 2단계: 무응답 편향의 핵심 — 응답 확률이 만족도에 따라 달라진다.
+    #   만족도 1점: 0.1 + 0.08*0  = 10% 응답
+    #   만족도 10점: 0.1 + 0.08*9 = 82% 응답
+    # 만족한 사람일수록 설문에 답할 확률이 높다. 실제 고객 설문에서 흔한 양상이다.
+    response_prob = 0.1 + 0.08 * (satisfaction - 1)
+
+    # 각자 자기 확률로 동전을 던져 응답 여부를 정한다
+    responded = rng.binomial(1, response_prob).astype(bool)
+
+    # 3단계: 진실과 우리가 보게 될 값을 비교한다.
+    #   true_mean   모집단 전체의 평균 (알 수 없는 참값)
+    #   biased_mean 응답자만의 평균   (설문 보고서에 실릴 값)
+    true_mean = satisfaction.mean()
+    biased_mean = satisfaction[responded].mean()
+    print(f"True population mean:    {true_mean:.2f}")
+    print(f"Biased survey mean:      {biased_mean:.2f}")
+    print(f"Bias (overestimate):     {biased_mean - true_mean:+.2f}")
+    print(f"Response rate:           {responded.mean():.1%}")
+
+    # --- (1) 의 공식과 맞추어 본다 ---
+    mu = satisfaction.mean()
+    var = satisfaction.var(ddof=0)
+    r = response_prob.mean()
+    print(f"Var(Y) = {var:.4f},  E[p(Y)] = {r:.4f}")
+    print(f"예측 편향 = b*Var(Y)/E[p] = {0.08 * var / r:.4f}")
+    print(f"공분산 항등식 Cov(Y,p)/E[p] = {np.cov(satisfaction, response_prob, ddof=0)[0, 1] / r:.4f}")
+    print(f"무한표본 응답자 평균 = {(satisfaction * response_prob).sum() / response_prob.sum():.4f}")
+    ```
+
+    출력:
+
+    ```
+    True population mean:    5.48
+    Biased survey mean:      6.13
+    Bias (overestimate):     +0.65
+    Response rate:           45.7%
+    Var(Y) = 3.8523,  E[p(Y)] = 0.4584
+    예측 편향 = b*Var(Y)/E[p] = 0.6723
+    공분산 항등식 Cov(Y,p)/E[p] = 0.6723
+    무한표본 응답자 평균 = 6.1524
+    ```
 
 더 만족한 고객이 더 많이 응답하기 때문에 보고된 평균이 참된 만족도를 과대평가한다. 응답 기제를 모형화하지 않고서는 줄일 수 없는 편향이다.
 

@@ -146,56 +146,162 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 부분로그가능도 구현
+**보기 1.** <span class="diff easy" title="쉬움"></span> 부분로그가능도 구현. 공변량이 하나뿐인 네 명의 자료를 보자.
+
+| 대상 | 시간 | 사건 | $x$ |
+|:---:|:---:|:---:|:---:|
+| A | 4 | 1 | 1 |
+| B | 7 | 0 | 0 |
+| C | 9 | 1 | 0 |
+| D | 12 | 1 | 1 |
+
+**(1)** 부분로그가능도 $\ell(\beta)$를 닫힌 꼴로 적고 $\hat\beta$를 구하시오. 또 $\beta = 0$에서는 $\ell(0) = -\sum_j \ln n_j$($n_j$는 위험집합 크기)임을 보이시오.
+
+**(2)** 모든 공변량에 같은 상수를 더해도 $\ell$이 변하지 않음을 보이고, 이것이 콕스 모형에 절편이 없는 까닭임을 설명하시오. 둘 다 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def partial_log_likelihood(beta, X, times, events):
-    """Cox 모형의 부분로그가능도를 계산한다.
+    **(1) 해석적으로.** 사건은 $t = 4, 9, 12$에서 일어난다. 위험집합은 각각 $\{A,B,C,D\}$, $\{C,D\}$, $\{D\}$다($B$는 $t = 7$에 절단되어 빠진다). 부분로그가능도는
 
-    "부분"이라 부르는 까닭은 기저위험함수를 아예 셈에서 빼기 때문이다.
-    사건이 일어난 시점마다 "그 순간 위험집합에 있던 사람들 중 하필 이
-    사람에게 사건이 일어날 확률"만 곱해 나가면, 기저위험이 분자와 분모에서
-    약분되어 사라진다. 그래서 위험함수의 모양을 가정하지 않고도 계수를
-    추정할 수 있다.
+    $$
+    \ell(\beta) = \sum_{j} \left[\beta x_{(j)} - \ln\!\sum_{l\in\mathcal R_j} e^{\beta x_l}\right]
+    $$
 
-    매개변수
-    --------
-    beta   : 길이 p 인 계수벡터
-    X      : (n, p) 공변량 행렬
-    times  : 관측된 시각
-    events : 사건 지시자 (1 = 사건, 0 = 중도절단)
+    이므로 세 항을 그대로 쓴다.
 
-    돌려주는 값
-    ----------
-    ll : 부분로그가능도 값
-    """
-    # 선형예측자. exp 를 씌운 값이 그 사람의 상대적 위험이 된다.
-    risk_scores = X @ beta
-    exp_scores = np.exp(risk_scores)
+    $$
+    \ell(\beta)
+    = \big[\beta - \ln(2 + 2e^\beta)\big]
+    + \big[0 - \ln(1 + e^\beta)\big]
+    + \big[\beta - \ln e^\beta\big]
+    $$
 
-    # 시각을 내림차순으로 정렬한다. 이러면 누적합이 곧 "그 시점 이후까지
-    # 남아 있는 사람들", 곧 위험집합의 합이 된다.
-    order = np.argsort(-times)
-    sorted_events = events[order]
-    sorted_exp = exp_scores[order]
-    sorted_scores = risk_scores[order]
+    마지막 항은 위험집합에 $D$ 혼자 남아 분자와 분모가 같으므로 **정확히 0이다.** 위험집합의 크기가 1이 되는 시점은 $\beta$에 대한 정보를 전혀 주지 않는다. 정리하면
 
-    # 위험집합의 합을 누적합 한 번으로 얻는다. 시점마다 집합을 다시
-    # 만들면 O(n^2) 이 되는 계산이 O(n log n) 으로 끝난다.
-    cumsum_exp = np.cumsum(sorted_exp)
+    $$
+    \ell(\beta) = \beta - \ln 2 - 2\ln(1 + e^\beta)
+    $$
 
-    # 사건이 관측된 사람만 더한다. 중도절단된 사람은 위험집합에 기여할
-    # 뿐 자기 항을 갖지 않는다.
-    ll = np.sum(sorted_events * (sorted_scores - np.log(cumsum_exp)))
-    return ll
-```
+    이다. 미분하면
 
-이 구현은 대상을 시간 내림차순으로 정렬하여, 누적합으로 각 사건시간의 부분가능도 분모를
-효율적으로 계산한다.
+    $$
+    \ell'(\beta) = 1 - \frac{2e^\beta}{1+e^\beta} = 0
+    \quad\Longrightarrow\quad
+    \frac{e^\beta}{1+e^\beta} = \frac12
+    \quad\Longrightarrow\quad
+    \hat\beta = 0
+    $$
+
+    이고 $\ell''(\beta) = -2e^\beta/(1+e^\beta)^2 < 0$이므로 이 정류점이 최대다. $\ell''(0) = -1/2$이니 왈드 표준오차는 $1/\sqrt{1/2} = 1.414$로, 네 명으로는 아무것도 못 가린다는 말이 된다.
+
+    최댓값은
+
+    $$
+    \ell(0) = 0 - \ln 2 - 2\ln 2 = -3\ln 2 = -2.079442
+    $$
+
+    다. 한편 $\beta = 0$이면 모든 $e^{\beta x_l} = 1$이므로 각 항이 $-\ln n_j$가 되고
+
+    $$
+    \ell(0) = -(\ln 4 + \ln 2 + \ln 1) = -\ln 8 = -3\ln 2
+    $$
+
+    로 같은 값이 나온다. **$\beta = 0$에서의 부분가능도는 "사건을 겪은 사람이 위험집합에서 무작위로 뽑혔을 확률"의 로그일 뿐**이고 공변량 값과 무관하다. 모든 콕스 적합의 출발점이자 가능도비검정의 영모형이 이것이다.
+
+    **(2) 해석적으로.** 공변량을 $x_i \to x_i + c$로 옮기면 각 항의 분자는 $e^{\beta(x_{(j)}+c)} = e^{\beta c}e^{\beta x_{(j)}}$, 분모는 $\sum_l e^{\beta(x_l+c)} = e^{\beta c}\sum_l e^{\beta x_l}$이 되어 **같은 인자 $e^{\beta c}$가 위아래에 똑같이 붙는다.** 비가 변하지 않으므로 $\ell$도 변하지 않는다.
+
+    이 불변성이 뜻하는 바는 분명하다. 모든 사람에게 공통으로 걸리는 효과는 부분가능도에서 **식별되지 않는다.** 절편 $\beta_0$를 모형에 넣는다면 그것은 모두에게 같은 $c$를 더하는 것이므로 아무 영향도 주지 못한다. 공통 효과는 전부 기저위험 $h_0(t)$가 떠맡으며, 그래서 콕스 모형의 선형예측자에는 절편이 없다.
+
+    **(1)(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    def partial_log_likelihood(beta, X, times, events):
+        """Cox 모형의 부분로그가능도를 계산한다.
+
+        "부분"이라 부르는 까닭은 기저위험함수를 아예 셈에서 빼기 때문이다.
+        사건이 일어난 시점마다 "그 순간 위험집합에 있던 사람들 중 하필 이
+        사람에게 사건이 일어날 확률"만 곱해 나가면, 기저위험이 분자와 분모에서
+        약분되어 사라진다. 그래서 위험함수의 모양을 가정하지 않고도 계수를
+        추정할 수 있다.
+
+        매개변수
+        --------
+        beta   : 길이 p 인 계수벡터
+        X      : (n, p) 공변량 행렬
+        times  : 관측된 시각
+        events : 사건 지시자 (1 = 사건, 0 = 중도절단)
+
+        돌려주는 값
+        ----------
+        ll : 부분로그가능도 값
+        """
+        # 선형예측자. exp 를 씌운 값이 그 사람의 상대적 위험이 된다.
+        risk_scores = X @ beta
+        exp_scores = np.exp(risk_scores)
+
+        # 시각을 내림차순으로 정렬한다. 이러면 누적합이 곧 "그 시점 이후까지
+        # 남아 있는 사람들", 곧 위험집합의 합이 된다.
+        order = np.argsort(-times)
+        sorted_events = events[order]
+        sorted_exp = exp_scores[order]
+        sorted_scores = risk_scores[order]
+
+        # 위험집합의 합을 누적합 한 번으로 얻는다. 시점마다 집합을 다시
+        # 만들면 O(n^2) 이 되는 계산이 O(n log n) 으로 끝난다.
+        cumsum_exp = np.cumsum(sorted_exp)
+
+        # 사건이 관측된 사람만 더한다. 중도절단된 사람은 위험집합에 기여할
+        # 뿐 자기 항을 갖지 않는다.
+        ll = np.sum(sorted_events * (sorted_scores - np.log(cumsum_exp)))
+        return ll
+
+    # --- (1) 닫힌 꼴과 맞추어 본다 ---
+    times  = np.array([4., 7., 9., 12.])
+    events = np.array([1, 0, 1, 1])
+    X      = np.array([[1.], [0.], [0.], [1.]])
+
+    for b in (-1.0, -0.5, 0.0, 0.5, 1.0):
+        closed = b - np.log(2) - 2 * np.log(1 + np.exp(b))
+        print(f"beta = {b:+.1f}   코드 {partial_log_likelihood(np.array([b]), X, times, events):.6f}"
+              f"   닫힌 꼴 {closed:.6f}")
+
+    grid = np.linspace(-3, 3, 60001)
+    vals = np.array([partial_log_likelihood(np.array([b]), X, times, events) for b in grid])
+    print(f"격자 최대점 beta = {grid[vals.argmax()]:.4f},  최댓값 {vals.max():.6f}")
+    print(f"-3 ln 2 = {-3 * np.log(2):.6f}")
+
+    # --- (2) 공변량을 통째로 옮겨도 값이 그대로여야 한다 ---
+    for c in (0.0, 5.0, -3.7):
+        print(f"x 에 {c:+.1f} 를 더하면 ll(0.3) = "
+              f"{partial_log_likelihood(np.array([0.3]), X + c, times, events):.9f}")
+    ```
+
+    출력:
+
+    ```
+    beta = -1.0   코드 -2.319671   닫힌 꼴 -2.319671
+    beta = -0.5   코드 -2.141301   닫힌 꼴 -2.141301
+    beta = +0.0   코드 -2.079442   닫힌 꼴 -2.079442
+    beta = +0.5   코드 -2.141301   닫힌 꼴 -2.141301
+    beta = +1.0   코드 -2.319671   닫힌 꼴 -2.319671
+    격자 최대점 beta = 0.0000,  최댓값 -2.079442
+    -3 ln 2 = -2.079442
+    x 에 +0.0 를 더하면 ll(0.3) = -2.101857669
+    x 에 +5.0 를 더하면 ll(0.3) = -2.101857669
+    x 에 -3.7 를 더하면 ll(0.3) = -2.101857669
+    ```
+
+    **다섯 점 모두 닫힌 꼴과 소수 여섯째 자리까지 같다.** 격자 최대점도 $\hat\beta = 0$이고 그 값이 $-3\ln 2 = -2.079442$로 유도와 맞는다.
+
+    공변량을 $+5$만큼 옮기든 $-3.7$만큼 옮기든 $\ell(0.3)$이 소수 아홉째 자리까지 **똑같다.** (2)의 불변성이 확인되었고, 콕스 모형에 절편 자리가 없는 이유가 이 세 줄이다.
+
+    표에서 $\ell(-1) = \ell(+1)$인 것도 눈에 띈다. $\ell(\beta) = \beta - \ln2 - 2\ln(1+e^\beta)$를 정리하면 $-\beta - \ln2 - 2\ln(1+e^{-\beta})$와 같으므로 $\ell$이 **0을 중심으로 대칭**이기 때문이다. 이 자료가 그만큼 균형 잡혀 있다는 뜻이고, 그래서 $\hat\beta$가 정확히 0으로 떨어졌다.
+
+    이 구현은 대상을 시간 내림차순으로 정렬하여, 누적합으로 각 사건시간의 부분가능도 분모를 효율적으로 계산한다.
 
 !!! warning "이 스케치는 동점을 처리하지 않는다"
     누적합 방식은 시간이 모두 서로 다를 때만 정확하다. 같은 시점에 여러 사건이 있으면 브레슬로나

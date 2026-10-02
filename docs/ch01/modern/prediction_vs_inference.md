@@ -75,69 +75,136 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 예측 대 추론
+**보기 1.** <span class="diff easy" title="쉬움"></span> 예측 대 추론. $n = 300$에서 $x_1, x_2 \sim N(0,1)$ 독립이고 $x_3 = 0.8x_1 + N(0,0.5^2)$이다. 참 구조는 $y = 3x_1 - 2x_2 + \varepsilon$($\varepsilon \sim N(0,1)$)로 **$x_3$은 들어 있지 않다.** 같은 자료로 추론과 예측을 각각 해 본다.
+
+**(1)** 세 계수의 표준오차를 이론적으로 구하시오. $x_3$을 넣은 대가가 $x_1$에 어떻게 나타나는가.
+
+**(2)** $200$개로 적합해 $100$개에서 평가할 때 시험 MSE의 기댓값을 구하고, 모의실험과 견주시오.
 
 </div>
 
-```python
-"""같은 자료, 서로 다른 두 목표."""
+??? success "풀이"
 
-import numpy as np
+    **(1) 해석적으로.** 최소제곱 계수의 분산은
 
-rng = np.random.default_rng(42)
-n = 300
-x1 = rng.standard_normal(n)
-x2 = rng.standard_normal(n)
+    $$
+    \operatorname{Var}(\hat\beta_j) = \frac{\sigma^2}{n\operatorname{Var}(x_j)}\cdot\mathrm{VIF}_j,
+    \qquad
+    \mathrm{VIF}_j = \frac{1}{1-R_j^2}
+    $$
 
-# x3는 x1과 상관이 높지만(상관 약 0.85) y에는 아무 인과효과가 없다.
-# 예측에는 도움이 되는데 해석하면 틀리는, 함정 변수다.
-x3 = 0.8 * x1 + rng.normal(0, 0.5, n)
+    이고 $R_j^2$은 $x_j$를 나머지 설명변수에 회귀했을 때의 결정계수다. $x_2$는 다른 둘과 독립이므로 $\mathrm{VIF}_2 = 1$이고
 
-# 참 구조: y = 3*x1 - 2*x2 + 잡음.  x3는 들어 있지 않다.
-y = 3 * x1 - 2 * x2 + rng.standard_normal(n)
+    $$
+    \operatorname{SE}(\hat\beta_2) = \frac{1}{\sqrt{300}} = 0.0577
+    $$
 
-X = np.column_stack([np.ones(n), x1, x2, x3])   # 절편 + 설명변수 3개
+    이다. $x_1$과 $x_3$은 서로 얽혀 있다. $\operatorname{Var}(x_3) = 0.64 + 0.25 = 0.89$이므로
 
-# === 목표 1: 추론 — 각 계수가 얼마이고 얼마나 믿을 만한가 ===
-# 정규방정식 (X'X)b = X'y 를 풀어 최소제곱 추정량을 얻는다.
-beta = np.linalg.solve(X.T @ X, X.T @ y)
-y_hat = X @ beta
+    $$
+    \operatorname{Corr}(x_1, x_3) = \frac{0.8}{\sqrt{0.89}} = 0.8480,
+    \qquad
+    \mathrm{VIF} = \frac{1}{1-0.8480^2} = 3.560
+    $$
 
-# 잔차분산 s^2. 자유도는 n - (계수 개수) = 300 - 4.
-s2 = ((y - y_hat) ** 2).sum() / (n - 4)
+    이다($x_2$가 직교하므로 두 변수 모두 같은 VIF를 갖는다). 따라서
 
-# 계수의 표준오차는 s^2 * (X'X)^{-1} 의 대각원소의 제곱근이다.
-se = np.sqrt(s2 * np.diag(np.linalg.inv(X.T @ X)))
+    $$
+    \operatorname{SE}(\hat\beta_1) = \frac{1}{\sqrt{300}}\sqrt{3.560} = 0.1089,
+    \qquad
+    \operatorname{SE}(\hat\beta_3) = \frac{1}{\sqrt{300 \times 0.89}}\sqrt{3.560} = 0.1155
+    $$
 
-# t = beta / SE. 대략 |t| > 2 면 그 계수가 0이라고 보기 어렵다.
-# 참 구조에 없는 x3의 t가 작게 나오는지 확인해 보라.
-print("Inference:")
-for name, b, s in zip(["intercept", "x1", "x2", "x3"], beta, se):
-    print(f"  {name:>10s}: beta = {b:+.3f}, SE = {s:.3f}, t = {b/s:+.2f}")
+    **$x_3$을 넣은 대가가 $x_1$의 표준오차에 $\sqrt{3.56} = 1.89$배로 찍힌다.** $x_3$은 $y$에 아무 기여도 하지 않으면서 $x_1$의 추정을 두 배 가까이 흐린다. 이것이 공선성의 값이다.
 
-# === 목표 2: 예측 — 새 자료에서 얼마나 잘 맞히는가 ===
-# 300개 중 200개로 학습하고 나머지 100개로 평가한다.
-# 표준오차도 t값도 계산하지 않는다. 관심은 오직 하나, 시험오차다.
-train_idx = rng.choice(n, 200, replace=False)
-test_idx = np.setdiff1d(np.arange(n), train_idx)
-b_train = np.linalg.solve(X[train_idx].T @ X[train_idx], X[train_idx].T @ y[train_idx])
-mse_test = ((y[test_idx] - X[test_idx] @ b_train) ** 2).mean()
-print(f"\nPrediction: test MSE = {mse_test:.3f}")
-```
+    **(2) 해석적으로.** 설명변수 $p = 4$(절편 포함)를 $n = 200$으로 추정하므로
 
-출력:
+    $$
+    E[\text{시험 MSE}] = \sigma^2\left(1 + \frac{p}{n-p-1}\right) = 1 + \frac{4}{195} = 1.0205
+    $$
 
-```
-Inference:
-   intercept: beta = +0.044, SE = 0.057, t = +0.78
-          x1: beta = +3.008, SE = 0.105, t = +28.54
-          x2: beta = -2.101, SE = 0.056, t = -37.41
-          x3: beta = +0.031, SE = 0.113, t = +0.28
+    다. **추정의 웃돈이 $2\%$다.** $x_3$을 빼면 $p = 3$이 되어 $1.0153$으로 내려가지만, 그 차이 $0.005$는 시험자료 $100$개로는 잴 수 없는 크기다($\text{MSE}\sqrt{2/100} = 0.14$).
 
-Prediction: test MSE = 0.942
-```
+    **(1)(2) 수치적으로.**
 
-여기서 $x_3$은 $x_1$과 상관되어 있지만 $y$에 인과효과가 없다는 점에 주목하라. 추론 표에서 $x_3$의 계수는 $+0.031$, $t$ 값은 $+0.28$로 $0$과 구별되지 않는다($x_1$ 너머의 신호를 더하지 않음을 올바르게 짚어낸다). 대가는 $x_1$에서 나타난다. $x_1$의 표준오차가 $0.105$로 $x_2$의 $0.056$보다 두 배 가까이 크다. 상관된 변수를 함께 넣으면 개별 계수의 정밀도가 떨어지는 것이다. 반면 예측 쪽에서는 $x_3$을 빼도 시험 MSE가 $0.942$에서 $0.943$으로 사실상 그대로다. 쓸모없는 변수 하나가 추론에서는 표준오차를 부풀리지만 예측 성적에는 거의 흔적을 남기지 않으며, *인과적* 결론은 어느 쪽에서도 달라지지 않는다.
+    ```python
+    """같은 자료, 서로 다른 두 목표."""
+
+    import numpy as np
+
+    rng = np.random.default_rng(42)
+    n = 300
+    x1 = rng.standard_normal(n)
+    x2 = rng.standard_normal(n)
+
+    # x3는 x1과 상관이 높지만(상관 약 0.85) y에는 아무 인과효과가 없다.
+    # 예측에는 도움이 되는데 해석하면 틀리는, 함정 변수다.
+    x3 = 0.8 * x1 + rng.normal(0, 0.5, n)
+
+    # 참 구조: y = 3*x1 - 2*x2 + 잡음.  x3는 들어 있지 않다.
+    y = 3 * x1 - 2 * x2 + rng.standard_normal(n)
+
+    X = np.column_stack([np.ones(n), x1, x2, x3])   # 절편 + 설명변수 3개
+
+    # === 목표 1: 추론 — 각 계수가 얼마이고 얼마나 믿을 만한가 ===
+    # 정규방정식 (X'X)b = X'y 를 풀어 최소제곱 추정량을 얻는다.
+    beta = np.linalg.solve(X.T @ X, X.T @ y)
+    y_hat = X @ beta
+
+    # 잔차분산 s^2. 자유도는 n - (계수 개수) = 300 - 4.
+    s2 = ((y - y_hat) ** 2).sum() / (n - 4)
+
+    # 계수의 표준오차는 s^2 * (X'X)^{-1} 의 대각원소의 제곱근이다.
+    se = np.sqrt(s2 * np.diag(np.linalg.inv(X.T @ X)))
+
+    # t = beta / SE. 대략 |t| > 2 면 그 계수가 0이라고 보기 어렵다.
+    # 참 구조에 없는 x3의 t가 작게 나오는지 확인해 보라.
+    print("Inference:")
+    for name, b, s in zip(["intercept", "x1", "x2", "x3"], beta, se):
+        print(f"  {name:>10s}: beta = {b:+.3f}, SE = {s:.3f}, t = {b/s:+.2f}")
+
+    # === 목표 2: 예측 — 새 자료에서 얼마나 잘 맞히는가 ===
+    # 300개 중 200개로 학습하고 나머지 100개로 평가한다.
+    # 표준오차도 t값도 계산하지 않는다. 관심은 오직 하나, 시험오차다.
+    train_idx = rng.choice(n, 200, replace=False)
+    test_idx = np.setdiff1d(np.arange(n), train_idx)
+    b_train = np.linalg.solve(X[train_idx].T @ X[train_idx], X[train_idx].T @ y[train_idx])
+    mse_test = ((y[test_idx] - X[test_idx] @ b_train) ** 2).mean()
+    print(f"\nPrediction: test MSE = {mse_test:.3f}")
+
+    # --- (1)(2) 의 이론값 ---
+    r13 = 0.8 / np.sqrt(0.89)
+    vif = 1 / (1 - r13 ** 2)
+    print(f"\n이론 Corr(x1,x3) = {r13:.4f},  VIF = {vif:.4f}")
+    print(f"이론 SE: x1 = {np.sqrt(vif / n):.4f}, x2 = {np.sqrt(1 / n):.4f}, "
+          f"x3 = {np.sqrt(vif / (n * 0.89)):.4f}")
+    print(f"이론 E[시험 MSE] = 1 + 4/(200-4-1) = {1 + 4 / 195:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Inference:
+       intercept: beta = +0.044, SE = 0.057, t = +0.78
+              x1: beta = +3.008, SE = 0.105, t = +28.54
+              x2: beta = -2.101, SE = 0.056, t = -37.41
+              x3: beta = +0.031, SE = 0.113, t = +0.28
+
+    Prediction: test MSE = 0.942
+
+    이론 Corr(x1,x3) = 0.8480,  VIF = 3.5600
+    이론 SE: x1 = 0.1089, x2 = 0.0577, x3 = 0.1155
+    이론 E[시험 MSE] = 1 + 4/(200-4-1) = 1.0205
+    ```
+
+    **세 표준오차가 모두 맞는다.** 이론 $0.1089$ / $0.0577$ / $0.1155$에 관측 $0.105$ / $0.056$ / $0.113$이다. 어긋남은 $s$가 $\sigma = 1$의 추정값($\hat s = 0.978$)이라는 점과, 실현된 $X^\top X$가 모집단 공분산의 $n$배와 꼭 같지는 않다는 점에서 온다. 세 값의 **비**는 이론과 사실상 같다.
+
+    시험 MSE는 이론 $1.0205$에 관측 $0.942$다. $100$개로 잰 MSE의 표준오차가 $\text{MSE}\sqrt{2/100} = 0.14$이므로 $0.55$ 표준오차 차이다.
+
+    여기서 $x_3$은 $x_1$과 상관되어 있지만 $y$에 인과효과가 없다는 점에 주목하라. 추론 표에서 $x_3$의 계수는 $+0.031$, $t$ 값은 $+0.28$로 $0$과 구별되지 않는다($x_1$ 너머의 신호를 더하지 않음을 올바르게 짚어낸다). **대가는 $x_1$에서 나타난다.** (1)에서 유도한 대로 $x_1$의 표준오차가 $x_2$의 $\sqrt{3.56} = 1.89$배로 부풀려졌고, 관측값 $0.105$ 대 $0.056$이 그 비를 그대로 보여 준다.
+
+    반면 예측 쪽에서는 $x_3$을 빼도 시험 MSE의 기댓값이 $1.0205$에서 $1.0153$으로 $0.005$ 줄 뿐이다. **쓸모없는 변수 하나가 추론에서는 표준오차를 두 배 가까이 부풀리지만 예측 성적에는 거의 흔적을 남기지 않는다.** 그리고 *인과적* 결론은 어느 쪽에서도 달라지지 않는다.
+
 
 ## 연습문제
 

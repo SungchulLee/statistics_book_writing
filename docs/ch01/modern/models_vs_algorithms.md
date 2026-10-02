@@ -27,52 +27,123 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 통계 모형 대 학습 알고리즘
+**보기 1.** <span class="diff easy" title="쉬움"></span> 통계 모형 대 학습 알고리즘. 참 자료생성과정이 $y = 3 + 2x - 0.1x^2 + \varepsilon$이고 $x \sim U(0,10)$, $\varepsilon \sim N(0, 2^2)$, $n = 200$이다. 직선과 이차식을 각각 적합한다.
+
+**(1)** 직선은 참 구조를 담지 못한다. 그래도 최소제곱이 수렴하는 **모집단 직선**의 기울기와 절편을 구하시오.
+
+**(2)** 두 모형이 남기는 모집단 MSE를 구하고, 표본 내 MSE 둘을 그것과 견주시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-np.random.seed(42)
-n = 200
-x = np.random.uniform(0, 10, n)
+    **(1) 해석적으로.** 모형이 틀렸어도 최소제곱은 사라지지 않는다. $\{1, x\}$가 뻗는 공간 위로 $E[y \mid x]$를 사영한 것으로 수렴하며, 그 기울기는
 
-# 참 자료생성과정: 이차식이다. 우리는 이것을 알지만 모형은 모른다.
-y = 3 + 2 * x - 0.1 * x**2 + np.random.normal(0, 2, n)
+    $$
+    \beta_1 = \frac{\operatorname{Cov}(x, y)}{\operatorname{Var}(x)}
+    $$
 
-# === 모형 1: 단순 선형회귀 (해석하기 쉬운 통계 모형) ===
-# 설계행렬 X = [1, x]. 첫 열의 1은 절편에 대응한다.
-# 참 구조는 이차인데 직선으로 맞추므로 **편향**이 생긴다.
-X_lin = np.column_stack([np.ones(n), x])
-beta_lin = np.linalg.lstsq(X_lin, y, rcond=None)[0]   # 최소제곱해
-y_pred_lin = X_lin @ beta_lin
-mse_lin = np.mean((y - y_pred_lin)**2)
+    다. $x \sim U(0,10)$에서 $\operatorname{Var}(x) = 100/12 = 8.3333$, $E[x^2] = 33.3333$, $E[x^3] = 250$이므로
 
-# === 모형 2: 이차 다항회귀 (더 유연한 모형) ===
-# 설계행렬에 x^2 열을 더한다. 참 구조를 담을 수 있게 된다.
-# 여전히 "선형"모형이라는 점에 주의하라. 계수에 대해 선형이면 선형모형이다.
-X_poly = np.column_stack([np.ones(n), x, x**2])
-beta_poly = np.linalg.lstsq(X_poly, y, rcond=None)[0]
-y_pred_poly = X_poly @ beta_poly
-mse_poly = np.mean((y - y_pred_poly)**2)
+    $$
+    \operatorname{Cov}(x, x^2) = 250 - 5 \times 33.3333 = 83.333
+    $$
 
-print(f"Linear model MSE:     {mse_lin:.3f}  (coeffs: {beta_lin.round(3)})")
-print(f"Polynomial model MSE: {mse_poly:.3f}  (coeffs: {beta_poly.round(3)})")
-print(f"True: y = 3 + 2x - 0.1x^2 + noise")
-```
+    이고
 
-출력:
+    $$
+    \operatorname{Cov}(x, y) = 2\operatorname{Var}(x) - 0.1\operatorname{Cov}(x, x^2)
+    = 16.667 - 8.333 = 8.333
+    $$
 
-```
-Linear model MSE:     4.069  (coeffs: [4.81  0.991])
-Polynomial model MSE: 3.718  (coeffs: [ 3.504  1.802 -0.082])
-True: y = 3 + 2x - 0.1x^2 + noise
-```
+    따라서
 
-두 가지를 짚고 넘어가야 한다. 첫째, 여기 비교한 둘은 **모두 통계 모형**이다. 이차항을 넣은 쪽도 계수에 대해서는 선형이어서 계수마다 표준오차와 신뢰구간이 그대로 따라 나온다. 학습 알고리즘과의 대비는 다음 절과 연습문제 7에서 본다.
+    $$
+    \beta_1 = \frac{8.333}{8.333} = 1.0000
+    $$
 
-둘째, 위의 MSE는 적합에 쓴 바로 그 자료에서 잰 **표본 내** 값이다. 설명변수를 하나 더 넣으면 표본 내 MSE는 구조가 맞든 틀리든 반드시 줄어들므로, 이 두 숫자만으로 이차식이 낫다고 결론지을 수는 없다. 여기서 이차식의 손을 들어 주는 근거는 MSE 차이가 아니라 **추정된 계수 $(3.504,\ 1.802,\ -0.082)$가 참값 $(3,\ 2,\ -0.1)$ 근처에 있다는 사실**이다. 모형을 고르는 근거로 삼을 수 있는 것은 표본 밖 오차이며, 그 이야기가 이 절의 나머지를 채운다.
+    로 **정확히 1이다.** 참 모형의 선형항 계수가 $2$인데 직선을 고집하면 $1$이 나온다. 이차항이 가진 "오른쪽에서 꺾여 내려가는" 몫이 기울기를 절반으로 끌어내린 것이다. 절편은
+
+    $$
+    \beta_0 = E[y] - \beta_1 E[x] = 9.6667 - 5 = 4.6667
+    $$
+
+    이다. **모형이 틀리면 계수가 참 계수가 아니라 사영의 계수가 된다.** 모수의 해석이 모형에 달려 있다는 말의 뜻이 이것이다.
+
+    **(2) 해석적으로.** 이차식은 참 구조를 담으므로 남는 것이 잡음뿐이고 모집단 MSE가 $\sigma^2 = 4$다.
+
+    직선이 남기는 몫은 그 위에 사영 잔차의 분산이 더해진다. $x^2$을 $\{1,x\}$에 사영하면 기울기가 $\operatorname{Cov}(x,x^2)/\operatorname{Var}(x) = 10$이므로 잔차함수는 $-0.1(x^2 - 10x + \text{상수})$이고
+
+    $$
+    \operatorname{Var}\big(-0.1(x^2-10x)\big)
+    = 0.01\big[\operatorname{Var}(x^2) + 100\operatorname{Var}(x) - 20\operatorname{Cov}(x,x^2)\big]
+    = 0.01 \times 55.556 = 0.5556
+    $$
+
+    다. 따라서 직선의 모집단 MSE는 $4 + 0.5556 = 4.5556$이다. **모형 오지정이 더하는 몫은 $0.56$으로 잡음 $4$의 $14\%$에 지나지 않는다.** 두 모형의 차이가 작은 것은 이차항이 약해서다.
+
+    **(1)(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    np.random.seed(42)
+    n = 200
+    x = np.random.uniform(0, 10, n)
+
+    # 참 자료생성과정: 이차식이다. 우리는 이것을 알지만 모형은 모른다.
+    y = 3 + 2 * x - 0.1 * x**2 + np.random.normal(0, 2, n)
+
+    # === 모형 1: 단순 선형회귀 (해석하기 쉬운 통계 모형) ===
+    # 설계행렬 X = [1, x]. 첫 열의 1은 절편에 대응한다.
+    # 참 구조는 이차인데 직선으로 맞추므로 **편향**이 생긴다.
+    X_lin = np.column_stack([np.ones(n), x])
+    beta_lin = np.linalg.lstsq(X_lin, y, rcond=None)[0]   # 최소제곱해
+    y_pred_lin = X_lin @ beta_lin
+    mse_lin = np.mean((y - y_pred_lin)**2)
+
+    # === 모형 2: 이차 다항회귀 (더 유연한 모형) ===
+    # 설계행렬에 x^2 열을 더한다. 참 구조를 담을 수 있게 된다.
+    # 여전히 "선형"모형이라는 점에 주의하라. 계수에 대해 선형이면 선형모형이다.
+    X_poly = np.column_stack([np.ones(n), x, x**2])
+    beta_poly = np.linalg.lstsq(X_poly, y, rcond=None)[0]
+    y_pred_poly = X_poly @ beta_poly
+    mse_poly = np.mean((y - y_pred_poly)**2)
+
+    print(f"Linear model MSE:     {mse_lin:.3f}  (coeffs: {beta_lin.round(3)})")
+    print(f"Polynomial model MSE: {mse_poly:.3f}  (coeffs: {beta_poly.round(3)})")
+    print(f"True: y = 3 + 2x - 0.1x^2 + noise")
+
+    # --- (1)(2) 의 이론값 ---
+    var_x = 100 / 12
+    Ex2, Ex3, Ex4 = 25 + var_x, 250.0, 2000.0
+    cov_x_x2 = Ex3 - 5 * Ex2
+    slope = (2 * var_x - 0.1 * cov_x_x2) / var_x
+    intercept = (3 + 2 * 5 - 0.1 * Ex2) - slope * 5
+    var_resid = 0.01 * ((Ex4 - Ex2 ** 2) + 100 * var_x - 20 * cov_x_x2)
+    print(f"이론 모집단 직선: 기울기 {slope:.4f}, 절편 {intercept:.4f}")
+    print(f"이론 모집단 MSE: 직선 {4 + var_resid:.4f}, 이차식 {4.0:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Linear model MSE:     4.069  (coeffs: [4.81  0.991])
+    Polynomial model MSE: 3.718  (coeffs: [ 3.504  1.802 -0.082])
+    True: y = 3 + 2x - 0.1x^2 + noise
+    이론 모집단 직선: 기울기 1.0000, 절편 4.6667
+    이론 모집단 MSE: 직선 4.5556, 이차식 4.0000
+    ```
+
+    **유도가 맞는다.** 직선의 추정계수가 $(4.810,\ 0.991)$로 모집단 값 $(4.6667,\ 1.0000)$ 근처에 있다. 기울기 $0.991$이 **참 모형의 $2$가 아니라 사영의 $1$**에 붙어 있다는 점이 중요하다.
+
+    이차식의 계수 $(3.504,\ 1.802,\ -0.082)$는 참값 $(3,\ 2,\ -0.1)$ 근처다. 모형이 옳으므로 계수가 자료생성과정의 계수를 겨냥한다.
+
+    표본 내 MSE는 $4.069$와 $3.718$로 모집단 값 $4.5556$과 $4.0000$보다 **둘 다 작다.** 당연한 일이다. 적합에 쓴 바로 그 자료에서 쟀으므로 모수를 추정한 만큼 낙관적이고, 그 몫이 대략 $(n-p)/n$배다. $n = 200$에서 MSE 추정의 표준오차가 $\text{MSE}\sqrt{2/n} = 0.45$와 $0.40$이므로 두 어긋남 모두 $1$ 표준오차 안이다.
+
+    두 가지를 짚고 넘어가야 한다. 첫째, 여기 비교한 둘은 **모두 통계 모형**이다. 이차항을 넣은 쪽도 계수에 대해서는 선형이어서 계수마다 표준오차와 신뢰구간이 그대로 따라 나온다. 학습 알고리즘과의 대비는 다음 절과 연습문제 7에서 본다.
+
+    둘째, 위의 MSE는 적합에 쓴 바로 그 자료에서 잰 **표본 내** 값이다. 설명변수를 하나 더 넣으면 표본 내 MSE는 구조가 맞든 틀리든 반드시 줄어들므로, 이 두 숫자만으로 이차식이 낫다고 결론지을 수는 없다. 여기서 이차식의 손을 들어 주는 근거는 MSE 차이가 아니라 **추정된 계수 $(3.504,\ 1.802,\ -0.082)$가 참값 $(3,\ 2,\ -0.1)$ 근처에 있다는 사실**이다. 모형을 고르는 근거로 삼을 수 있는 것은 표본 밖 오차이며, 그 이야기가 이 절의 나머지를 채운다.
 
 ## 훈련 구간을 벗어나면 갈린다
 

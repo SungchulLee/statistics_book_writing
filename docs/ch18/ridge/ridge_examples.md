@@ -48,64 +48,144 @@ $\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 람다에 따른 축소와 편향-분산 절충
+**보기 1.** <span class="diff easy" title="쉬움"></span> 람다에 따른 축소와 편향-분산 절충. $n = 40$, $p = 20$이고 참 계수는 앞의 셋만 $(3, -2, 1.5)$이며 잡음은 $N(0,1)$이다. $X$를 고정해 놓고 $\lambda$를 키워 간다.
+
+**(1)** $\lVert\hat\beta^{\text{ridge}}(\lambda)\rVert_2$가 $\lambda$에 대해 **반드시** 감소함을 특이값분해로 보이시오. 참값과의 거리도 그러한가.
+
+**(2)** $E\lVert\hat\beta(\lambda) - \beta\rVert^2$를 편향과 분산으로 나누어 적고, $\lambda = 0$에서의 도함수를 구해 **최소제곱보다 나은 $\lambda > 0$이 반드시 존재함**을 보이시오. 그 값을 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.linear_model import LinearRegression, Ridge
+??? success "풀이"
 
-rng = np.random.default_rng(42)
+    **(1) 해석적으로.** $X = UDV^\top$를 특이값분해라 하면 (연습문제 2에서 유도하듯)
 
-# 설명변수 20개 중 참으로 쓰이는 것은 앞의 셋뿐이다. 관측은 40개로 변수 수에
-# 비해 적어, 최소제곱이 잡음까지 따라가기 좋은 상황이다.
-n, p = 40, 20
-X = rng.normal(size=(n, p))
-beta_true = np.zeros(p)
-beta_true[:3] = [3.0, -2.0, 1.5]
-y = X @ beta_true + rng.normal(0, 1, n)
+    $$
+    \hat\beta^{\text{ridge}}(\lambda) = \sum_{j=1}^p \frac{d_j}{d_j^2+\lambda}\,(u_j^\top y)\,v_j
+    $$
 
-ols = LinearRegression().fit(X, y)
+    이고 $v_j$가 정규직교이므로
 
-# lambda 를 키울수록 계수가 0 쪽으로 줄어든다. 라쏘와 달리 정확히 0 이 되지는
-# 않고 작아지기만 한다. 그래서 능형은 변수를 고르지 못한다.
-print(f"{'lambda':>8}  {'계수의 L2 크기':>14}  {'참값과의 거리':>14}")
-print(f"{0.0:>8.1f}  {np.linalg.norm(ols.coef_):>14.3f}  "
-      f"{np.linalg.norm(ols.coef_ - beta_true):>14.3f}")
-for lam in [0.1, 1.0, 10.0, 100.0]:
-    ridge = Ridge(alpha=lam).fit(X, y)
-    print(f"{lam:>8.1f}  {np.linalg.norm(ridge.coef_):>14.3f}  "
-          f"{np.linalg.norm(ridge.coef_ - beta_true):>14.3f}")
+    $$
+    \lVert\hat\beta^{\text{ridge}}(\lambda)\rVert_2^2
+    = \sum_{j=1}^p \left(\frac{d_j\,u_j^\top y}{d_j^2+\lambda}\right)^2
+    $$
 
-# 참값과의 거리가 lambda=0 일 때보다 중간 어딘가에서 작아진다. 편향을 조금
-# 받아들이는 대가로 분산을 크게 줄인 결과이며, 이것이 편향-분산 절충이다.
-```
+    이다. 각 항의 분모가 $\lambda$에 대해 증가하므로 **모든 항이 따로따로 감소한다.** 합도 감소한다. 여기에 U자가 생길 수 없으며, 이것은 자료와 무관한 항등식 수준의 사실이다.
 
-출력:
+    참값과의 거리는 다르다. $\lambda$가 크면 $\hat\beta \to 0$이고 거리는 $\lVert\beta\rVert = \sqrt{9+4+2.25} = 3.9051$로 올라가므로, 거리가 끝까지 줄어들 수는 없다. (2)에서 보듯 중간에 바닥이 있다.
 
-```
-  lambda       계수의 L2 크기         참값과의 거리
-     0.0           4.202           1.081
-     0.1           4.169           1.048
-     1.0           3.929           0.880
-    10.0           2.891           1.404
-   100.0           1.091           3.026
-```
+    **(2) 해석적으로.** $S = X^\top X$, $A_\lambda = (S+\lambda I)^{-1}$이라 두자. $X$를 고정하면 $\hat\beta = A_\lambda X^\top y$이고 $y = X\beta + \varepsilon$, $\operatorname{Var}(\varepsilon) = \sigma^2 I$이므로
 
-$\lambda = 0$인 최소제곱보다 $\lambda = 1$쪽이 참값에 더 가깝다. 편향을 조금 받아들이는
-대가로 분산을 크게 줄인 결과이며, 이것이 편향-분산 절충이다. 다만 $\lambda$를 더 키우면
-편향이 커져 다시 멀어진다.
+    $$
+    E[\hat\beta] = A_\lambda S\beta,
+    \qquad
+    E[\hat\beta] - \beta = (A_\lambda S - I)\beta = -\lambda A_\lambda \beta
+    $$
 
-![계수 크기는 단조감소하지만 참값과의 거리는 U자를 그린다](./img/shrink_vs_accuracy.png)
+    이다. 마지막 등식은 $A_\lambda S - I = A_\lambda(S + \lambda I - \lambda I) - I = -\lambda A_\lambda$에서 나온다. 분산 쪽은 $\operatorname{Var}(\hat\beta) = \sigma^2 A_\lambda S A_\lambda$이므로
 
-위 표의 다섯 줄을 촘촘한 격자로 채워 그린 것이다. 파란 곡선은 계수벡터의 크기 $\|\hat{\boldsymbol{\beta}}\|_2$, 주황 곡선은 참값과의 거리 $\|\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}\|_2$다. **두 곡선의 모양이 다르다는 것이 이 그림의 전부다.**
+    $$
+    E\lVert\hat\beta(\lambda) - \beta\rVert^2
+    = \underbrace{\lambda^2\,\beta^\top A_\lambda^2 \beta}_{\text{편향}^2}
+    + \underbrace{\sigma^2\operatorname{tr}\!\left(A_\lambda S A_\lambda\right)}_{\text{분산}}
+    $$
 
-파란 곡선은 끝까지 단조감소한다. $4.202$에서 출발해 $\lambda = 100$에서 $1.091$까지, 그리고 그 뒤로도 계속 내려간다. 이것은 정리가 보장하는 성질이다. 능형 문제가 $\|\boldsymbol{\beta}\|^2 \leq t$ 제약과 동등하므로 $\lambda$를 키우면 예산 $t$가 줄고 해의 크기도 줄 수밖에 없다. 여기에는 U자가 있을 수 없다.
+    다. $\lambda = 0$에서 값은 $\sigma^2\operatorname{tr}(S^{-1})$으로 최소제곱의 오차다.
 
-주황 곡선은 다르다. $\lambda = 0.01$에서 $1.081$(OLS와 사실상 같다)로 시작해 $\lambda = 1.76$에서 $0.850$까지 내려갔다가 다시 올라간다. $\lambda = 10$에서 벌써 $1.404$로 OLS보다 나빠지고 $\lambda = 100$에서는 $3.026$이다. 회색 점선으로 그린 OLS 수준 $1.081$과 주황 곡선이 만나는 지점이 $\lambda \approx 5$인데, **그보다 큰 $\lambda$는 손해**라는 뜻이다. 이득이 나는 구간은 생각보다 좁다.
+    이제 $\lambda = 0$에서의 도함수를 본다. 편향항은 $\lambda^2$에 비례하므로 미분하면 $2\lambda(\cdots)$ 꼴이라 $\lambda = 0$에서 **0이다.** 분산항은 $\frac{d}{d\lambda}A_\lambda = -A_\lambda^2$이므로
 
-여기서 실무적 함정 하나가 보인다. 계수가 작아지는 것은 눈에 잘 띄지만 정확도가 나빠지는 것은 눈에 띄지 않는다. $\lambda = 100$에서 계수의 크기는 $1.091$로 "아주 깔끔하게 정리된" 모형처럼 보이는데, 실제로는 참값에서 $3.026$만큼 떨어져 OLS보다 세 배 나쁘다. **계수가 작다는 것은 좋은 모형의 증거가 아니다.** 어디가 바닥인지는 오직 자료로 추정해야 하며, 그 방법이 교차검증이다.
+    $$
+    \frac{d}{d\lambda}\,\sigma^2\operatorname{tr}(A_\lambda S A_\lambda)
+    = -2\sigma^2\operatorname{tr}(A_\lambda^2 S A_\lambda)
+    \;\xrightarrow[\lambda\to 0]{}\;
+    -2\sigma^2\operatorname{tr}(S^{-2}) < 0
+    $$
+
+    이다. **편향은 이차로 자라고 분산은 일차로 줄어든다.** 그러므로 $\lambda = 0$ 바로 오른쪽에서 오차가 반드시 감소하며, 최소제곱보다 나은 $\lambda > 0$이 언제나 존재한다. 이것이 능형회귀의 존재정리이고, 이 보기의 표에서 $\lambda = 1$이 $\lambda = 0$을 이기는 까닭이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression, Ridge
+
+    rng = np.random.default_rng(42)
+
+    # 설명변수 20개 중 참으로 쓰이는 것은 앞의 셋뿐이다. 관측은 40개로 변수 수에
+    # 비해 적어, 최소제곱이 잡음까지 따라가기 좋은 상황이다.
+    n, p = 40, 20
+    X = rng.normal(size=(n, p))
+    beta_true = np.zeros(p)
+    beta_true[:3] = [3.0, -2.0, 1.5]
+    y = X @ beta_true + rng.normal(0, 1, n)
+
+    ols = LinearRegression().fit(X, y)
+
+    # lambda 를 키울수록 계수가 0 쪽으로 줄어든다. 라쏘와 달리 정확히 0 이 되지는
+    # 않고 작아지기만 한다. 그래서 능형은 변수를 고르지 못한다.
+    print(f"{'lambda':>8}  {'계수의 L2 크기':>14}  {'참값과의 거리':>14}")
+    print(f"{0.0:>8.1f}  {np.linalg.norm(ols.coef_):>14.3f}  "
+          f"{np.linalg.norm(ols.coef_ - beta_true):>14.3f}")
+    for lam in [0.1, 1.0, 10.0, 100.0]:
+        ridge = Ridge(alpha=lam).fit(X, y)
+        print(f"{lam:>8.1f}  {np.linalg.norm(ridge.coef_):>14.3f}  "
+              f"{np.linalg.norm(ridge.coef_ - beta_true):>14.3f}")
+
+    # 참값과의 거리가 lambda=0 일 때보다 중간 어딘가에서 작아진다. 편향을 조금
+    # 받아들이는 대가로 분산을 크게 줄인 결과이며, 이것이 편향-분산 절충이다.
+
+    # --- 유도한 기댓값 곡선과 맞춰 본다 (sigma = 1, X 는 고정) ---
+    S = X.T @ X
+
+    def expected_sq_error(lam):
+        """E||beta_hat(lam) - beta||^2 = 편향^2 + 분산.  X 를 고정한 조건부 기댓값."""
+        A = np.linalg.inv(S + lam * np.eye(p))
+        bias2 = lam ** 2 * beta_true @ (A @ A) @ beta_true
+        var = np.trace(A @ S @ A)
+        return bias2, var
+
+    lams = np.logspace(-2, 2, 400)
+    tot = np.array([sum(expected_sq_error(l)) for l in lams])
+    k = tot.argmin()
+    b2, v = expected_sq_error(lams[k])
+    print(f"이론: lambda = 0 에서 E||.||^2 = tr(S^-1) = {np.trace(np.linalg.inv(S)):.4f}")
+    print(f"이론: 최솟값 {tot[k]:.4f} (편향^2 {b2:.4f} + 분산 {v:.4f}) at lambda = {lams[k]:.4f}")
+    print(f"0 에서의 도함수 = -2*tr(S^-2) = {-2 * np.trace(np.linalg.inv(S) @ np.linalg.inv(S)):.4f}  (< 0)")
+
+    grid = np.logspace(-2, 2, 2000)
+    dist = np.array([np.linalg.norm(Ridge(alpha=l).fit(X, y).coef_ - beta_true) for l in grid])
+    print(f"이 표본의 거리 곡선 최솟값 {dist.min():.4f} at lambda = {grid[dist.argmin()]:.4f}")
+    ```
+
+    출력:
+
+    ```
+      lambda       계수의 L2 크기         참값과의 거리
+         0.0           4.202           1.081
+         0.1           4.169           1.048
+         1.0           3.929           0.880
+        10.0           2.891           1.404
+       100.0           1.091           3.026
+    이론: lambda = 0 에서 E||.||^2 = tr(S^-1) = 1.3683
+    이론: 최솟값 1.0621 (편향^2 0.1914 + 분산 0.8707) at lambda = 1.6810
+    0 에서의 도함수 = -2*tr(S^-2) = -0.5116  (< 0)
+    이 표본의 거리 곡선 최솟값 0.8499 at lambda = 1.7584
+    ```
+
+    ![계수 크기는 단조감소하지만 참값과의 거리는 U자를 그린다](./img/shrink_vs_accuracy.png)
+
+    **유도와 코드가 맞는다.** 기댓값 곡선은 $\lambda = 1.6810$에서 바닥을 치고, 이 한 표본의 거리 곡선은 $\lambda = 1.7584$에서 바닥을 친다. 둘이 정확히 같을 이유는 없다. 앞의 것은 $y$에 대한 기댓값이고 뒤의 것은 $y$를 한 번 뽑은 실현값이기 때문이다. 바닥의 **위치**가 가까운 것으로 충분하며, 바닥의 **값**은 $1.0305$(기댓값의 제곱근) 대 $0.8499$로 더 벌어진다. 이 표본이 운 좋게 평균보다 잘 맞은 것이다.
+
+    $\lambda = 0$에서의 도함수가 $-0.5116$으로 음수인 것이 (2)의 결론을 그대로 확인한다. 최적점에서 편향제곱 $0.1914$와 분산 $0.8707$의 합 $1.0621$이 최소제곱의 $1.3683$보다 $22\%$ 작다. **편향 $0.19$를 사서 분산 $0.50$을 깎은 거래다.**
+
+    위 표의 다섯 줄을 촘촘한 격자로 채워 그린 것이 위 그림이다. 파란 곡선은 계수벡터의 크기 $\lVert\hat{\boldsymbol{\beta}}\rVert_2$, 주황 곡선은 참값과의 거리 $\lVert\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}\rVert_2$다. **두 곡선의 모양이 다르다는 것이 이 그림의 전부다.**
+
+    파란 곡선은 끝까지 단조감소한다. $4.202$에서 출발해 $\lambda = 100$에서 $1.091$까지, 그리고 그 뒤로도 계속 내려간다. (1)에서 항별로 보인 그대로이며 여기에는 U자가 있을 수 없다.
+
+    주황 곡선은 다르다. $\lambda = 0.01$에서 $1.081$(OLS와 사실상 같다)로 시작해 $\lambda = 1.76$에서 $0.850$까지 내려갔다가 다시 올라간다. $\lambda = 10$에서 벌써 $1.404$로 OLS보다 나빠지고 $\lambda = 100$에서는 $3.026$이다. 회색 점선으로 그린 OLS 수준 $1.081$과 주황 곡선이 만나는 지점이 $\lambda = 5.51$인데, **그보다 큰 $\lambda$는 손해**라는 뜻이다. 이득이 나는 구간은 생각보다 좁다.
+
+    여기서 실무적 함정 하나가 보인다. 계수가 작아지는 것은 눈에 잘 띄지만 정확도가 나빠지는 것은 눈에 띄지 않는다. $\lambda = 100$에서 계수의 크기는 $1.091$로 "아주 깔끔하게 정리된" 모형처럼 보이는데, 실제로는 참값에서 $3.026$만큼 떨어져 OLS보다 세 배 나쁘다. **계수가 작다는 것은 좋은 모형의 증거가 아니다.** 어디가 바닥인지는 오직 자료로 추정해야 하며, 그 방법이 교차검증이다.
 
 ## 표준화
 

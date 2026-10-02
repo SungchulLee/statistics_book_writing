@@ -199,97 +199,163 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 통제실험
+**보기 1.** <span class="diff easy" title="쉬움"></span> 통제실험. 처리효과를 알고 있는 상태에서 자료를 만들고 되찾아 본다. 그다음 **참 효과는 그대로 둔 채 배정 방식만** 바꾼다. 중증도 $S \sim U(0,10)$이 결과를 $-2S$만큼 떨어뜨리고, 의사가 중증 환자에게 처리를 더 주어 $P(T=1 \mid S) = \sigma(S-5)$가 된다. 참 처리효과는 $+3$이다.
+
+**(1)** 무작위 배정일 때 추정값의 표준오차를 구하시오($n = 200$씩, $\sigma = 8$).
+
+**(2)** 교란된 배정에서 단순 평균차가 수렴하는 값을 구하시오. 참값 $+3$에서 얼마나, 어느 방향으로 벗어나는가.
 
 </div>
 
-무작위 실험의 기본형. 처리효과를 알고 있는 상태에서 자료를 만들고 되찾아 본다.
+??? success "풀이"
 
-```python
-import numpy as np
-from scipy import stats
+    **(1) 해석적으로.** 두 독립 표본평균의 차이이므로
 
-np.random.seed(42)
-n_per_group = 100
-true_effect = 5.0        # 우리가 심어 놓은 참 처리효과. 실제로는 알 수 없는 값이다
+    $$
+    \operatorname{SE}(\bar Y_T - \bar Y_C) = \sigma\sqrt{\frac1n + \frac1n} = 8\sqrt{\frac{2}{200}} = 0.80
+    $$
 
-# 무작위 배정된 실험을 모의생성한다.
-# 두 집단을 같은 분포에서 뽑되 처리군에만 true_effect 만큼을 더한다.
-# 이것이 곧 "무작위 배정"의 수학적 의미다.
-# 배정이 결과와 무관하므로 두 집단은 처리 여부를 빼면 통계적으로 동일하다.
-control = np.random.normal(50, 10, n_per_group)
-treatment = np.random.normal(50 + true_effect, 10, n_per_group)
+    이다. **무작위 배정의 값어치는 이 한 줄에 있다.** 배정이 결과와 독립이므로 단순 평균차가 인과효과의 불편추정이 되고, 그 흔들림의 크기도 $\sigma$와 $n$만으로 정해진다.
 
-# 독립표본 t 검정: 두 집단의 평균이 같다는 귀무가설을 검정한다
-t_stat, p_value = stats.ttest_ind(treatment, control)
+    **(2) 해석적으로.** 교란된 배정에서는 단순 평균차가
 
-# 처리효과의 추정값. 무작위 배정 덕분에 이 단순한 차이가 곧 인과효과의 추정이 된다.
-diff = treatment.mean() - control.mean()
-print(f"Control mean:   {control.mean():.2f}")
-print(f"Treatment mean: {treatment.mean():.2f}")
-print(f"Difference:     {diff:.2f} (true effect = {true_effect})")
-print(f"t-statistic:    {t_stat:.3f}")
-print(f"p-value:        {p_value:.4f}")
-```
+    $$
+    E[Y \mid T=1] - E[Y \mid T=0]
+    = \underbrace{3}_{\text{인과효과}} - 2\big(E[S \mid T=1] - E[S \mid T=0]\big)
+    $$
 
-출력:
+    로 갈린다. 둘째 항이 교란이 만든 몫이다.
 
-```
-Control mean:   48.96
-Treatment mean: 55.22
-Difference:     6.26 (true effect = 5.0)
-t-statistic:    4.755
-p-value:        0.0000
-```
+    $S$가 $5$를 중심으로 대칭이고 $\sigma(s-5) + \sigma(5-s) = 1$이므로 $P(T=1) = 1/2$이고 두 조건부 분포가 서로 거울상이다. 적분하면
 
-같은 참 효과를 두고 무작위 배정과 비무작위(교란된) 배정을 나란히 돌려 보면, 배정 방식 하나가 추정값을 어떻게 바꾸는지 보인다.
+    $$
+    E[S \mid T=1] = \frac{\int_0^{10} s\,\sigma(s-5)\,ds}{\int_0^{10}\sigma(s-5)\,ds} = 7.1871,
+    \qquad
+    E[S \mid T=0] = 2.8129
+    $$
 
-```python
-"""참 효과는 같은데 배정 방식만 다르게 두 번 돌려 본다."""
+    로 차이가 $4.3743$이다. 따라서
 
-import numpy as np
-from scipy import stats
+    $$
+    3 - 2 \times 4.3743 = -5.7485
+    $$
 
-rng = np.random.default_rng(42)
-n = 200
-treatment_effect = 3.0     # 두 경우 모두 참 효과는 +3.0으로 같다
+    **부호가 뒤집힌다.** 처리는 결과를 $3$만큼 **좋게** 하는데 자료는 $5.75$만큼 **나쁘게** 한다고 말한다. 중증 환자가 처리군에 몰려 있기 때문이고, 이 치우침은 표본을 아무리 늘려도 사라지지 않는다.
 
-# === 경우 1: 제대로 무작위 배정한 실험 ===
-# 배정이 환자의 어떤 특성과도 무관하다.
-# 따라서 두 집단은 처리 여부를 빼면 평균적으로 동일하고,
-# 단순한 평균 차이가 곧 인과효과의 불편추정이 된다.
-control = rng.normal(50, 8, n)
-treatment = rng.normal(50 + treatment_effect, 8, n)
-t_stat, p_val = stats.ttest_ind(treatment, control)
-print(f"[Randomized] estimated effect = {treatment.mean() - control.mean():+.2f} "
-      f"(true = {treatment_effect}), p = {p_val:.4f}")
+    **(1)(2) 수치적으로.**
 
-# === 경우 2: 교란된(무작위가 아닌) 배정 ===
-# 중증도라는 교란요인을 넣는다. 0(가벼움)에서 10(심각함)까지.
-severity = rng.uniform(0, 10, 2 * n)
+    ```python
+    import numpy as np
+    from scipy import stats
 
-# 의사가 중증 환자에게 처리를 더 많이 준다 — 현실에서 자연스러운 행동이다.
-# 로지스틱 함수라 중증도 5를 기준으로 처리 확률이 50%를 넘어간다.
-prob_treat = 1 / (1 + np.exp(-(severity - 5)))
-assigned = rng.binomial(1, prob_treat).astype(bool)
+    np.random.seed(42)
+    n_per_group = 100
+    true_effect = 5.0        # 우리가 심어 놓은 참 처리효과. 실제로는 알 수 없는 값이다
 
-# 결과는 두 힘이 겹쳐 결정된다.
-#   -2 * severity      중증일수록 결과가 나쁘다 (교란요인의 직접 효과)
-#   +3 * assigned      처리가 결과를 좋게 한다  (우리가 알고 싶은 참 효과)
-outcome = 50 - 2 * severity + treatment_effect * assigned + rng.normal(0, 5, 2 * n)
+    # 무작위 배정된 실험을 모의생성한다.
+    # 두 집단을 같은 분포에서 뽑되 처리군에만 true_effect 만큼을 더한다.
+    # 이것이 곧 "무작위 배정"의 수학적 의미다.
+    # 배정이 결과와 무관하므로 두 집단은 처리 여부를 빼면 통계적으로 동일하다.
+    control = np.random.normal(50, 10, n_per_group)
+    treatment = np.random.normal(50 + true_effect, 10, n_per_group)
 
-# 이제 무작위 실험에서 하던 대로 단순 평균 차이를 내 본다.
-# 처리군에 중증 환자가 몰려 있으므로 이 값은 인과효과가 아니다.
-est = outcome[assigned].mean() - outcome[~assigned].mean()
-print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
-```
+    # 독립표본 t 검정: 두 집단의 평균이 같다는 귀무가설을 검정한다
+    t_stat, p_value = stats.ttest_ind(treatment, control)
 
-출력:
+    # 처리효과의 추정값. 무작위 배정 덕분에 이 단순한 차이가 곧 인과효과의 추정이 된다.
+    diff = treatment.mean() - control.mean()
+    print(f"Control mean:   {control.mean():.2f}")
+    print(f"Treatment mean: {treatment.mean():.2f}")
+    print(f"Difference:     {diff:.2f} (true effect = {true_effect})")
+    print(f"t-statistic:    {t_stat:.3f}")
+    print(f"p-value:        {p_value:.4f}")
+    ```
 
-```
-[Randomized] estimated effect = +3.40 (true = 3.0), p = 0.0000
-[Confounded] estimated effect = -5.06  (severity confounds)
-```
+    출력:
+
+    ```
+    Control mean:   48.96
+    Treatment mean: 55.22
+    Difference:     6.26 (true effect = 5.0)
+    t-statistic:    4.755
+    p-value:        0.0000
+    ```
+
+    같은 참 효과를 두고 무작위 배정과 비무작위(교란된) 배정을 나란히 돌려 보면, 배정 방식 하나가 추정값을 어떻게 바꾸는지 보인다.
+
+    ```python
+    """참 효과는 같은데 배정 방식만 다르게 두 번 돌려 본다."""
+
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(42)
+    n = 200
+    treatment_effect = 3.0     # 두 경우 모두 참 효과는 +3.0으로 같다
+
+    # === 경우 1: 제대로 무작위 배정한 실험 ===
+    # 배정이 환자의 어떤 특성과도 무관하다.
+    # 따라서 두 집단은 처리 여부를 빼면 평균적으로 동일하고,
+    # 단순한 평균 차이가 곧 인과효과의 불편추정이 된다.
+    control = rng.normal(50, 8, n)
+    treatment = rng.normal(50 + treatment_effect, 8, n)
+    t_stat, p_val = stats.ttest_ind(treatment, control)
+    print(f"[Randomized] estimated effect = {treatment.mean() - control.mean():+.2f} "
+          f"(true = {treatment_effect}), p = {p_val:.4f}")
+
+    # === 경우 2: 교란된(무작위가 아닌) 배정 ===
+    # 중증도라는 교란요인을 넣는다. 0(가벼움)에서 10(심각함)까지.
+    severity = rng.uniform(0, 10, 2 * n)
+
+    # 의사가 중증 환자에게 처리를 더 많이 준다 — 현실에서 자연스러운 행동이다.
+    # 로지스틱 함수라 중증도 5를 기준으로 처리 확률이 50%를 넘어간다.
+    prob_treat = 1 / (1 + np.exp(-(severity - 5)))
+    assigned = rng.binomial(1, prob_treat).astype(bool)
+
+    # 결과는 두 힘이 겹쳐 결정된다.
+    #   -2 * severity      중증일수록 결과가 나쁘다 (교란요인의 직접 효과)
+    #   +3 * assigned      처리가 결과를 좋게 한다  (우리가 알고 싶은 참 효과)
+    outcome = 50 - 2 * severity + treatment_effect * assigned + rng.normal(0, 5, 2 * n)
+
+    # 이제 무작위 실험에서 하던 대로 단순 평균 차이를 내 본다.
+    # 처리군에 중증 환자가 몰려 있으므로 이 값은 인과효과가 아니다.
+    est = outcome[assigned].mean() - outcome[~assigned].mean()
+    print(f"[Confounded] estimated effect = {est:+.2f}  (severity confounds)")
+
+    # --- (2) 의 이론값과 맞추어 본다 ---
+    from scipy.integrate import quad
+
+    sig = lambda u: 1 / (1 + np.exp(-u))
+    den = quad(lambda s: sig(s - 5) / 10, 0, 10)[0]
+    num = quad(lambda s: s * sig(s - 5) / 10, 0, 10)[0]
+    E1, E0 = num / den, (5 - num) / (1 - den)
+    print(f"이론 P(T=1) = {den:.4f},  E[S|T=1] = {E1:.4f},  E[S|T=0] = {E0:.4f}")
+    print(f"이론 교란 추정값 = 3 - 2*({E1 - E0:.4f}) = {3 - 2 * (E1 - E0):+.4f}")
+    print(f"관측 E[S|T=1] = {severity[assigned].mean():.4f},  "
+          f"E[S|T=0] = {severity[~assigned].mean():.4f}")
+    se = np.sqrt(outcome[assigned].var(ddof=1) / assigned.sum()
+                 + outcome[~assigned].var(ddof=1) / (~assigned).sum())
+    print(f"교란 추정값의 SE = {se:.4f};  무작위 쪽 이론 SE = 8*sqrt(2/200) = {8 * np.sqrt(2 / 200):.4f}")
+    ```
+
+    출력:
+
+    ```
+    [Randomized] estimated effect = +3.40 (true = 3.0), p = 0.0000
+    [Confounded] estimated effect = -5.06  (severity confounds)
+    이론 P(T=1) = 0.5000,  E[S|T=1] = 7.1871,  E[S|T=0] = 2.8129
+    이론 교란 추정값 = 3 - 2*(4.3743) = -5.7485
+    관측 E[S|T=1] = 7.2556,  E[S|T=0] = 2.8069
+    교란 추정값의 SE = 0.6766;  무작위 쪽 이론 SE = 8*sqrt(2/200) = 0.8000
+    ```
+
+    **두 예측이 모두 맞는다.** 무작위 쪽 추정값 $+3.40$은 참값 $3$에서 $0.50$ 표준오차($0.80$) 떨어져 있다. 교란 쪽 추정값 $-5.06$은 이론이 말하는 극한 $-5.7485$에서 $1.02$ 표준오차($0.6766$) 안이다.
+
+    조건부 중증도도 이론 $7.1871$ / $2.8129$에 관측 $7.2556$ / $2.8069$로 맞는다. **처리군과 대조군의 평균 중증도가 $4.4$만큼 벌어져 있고**, 그것에 $-2$를 곱한 $-8.7$이 참 효과 $+3$을 눌러 부호를 뒤집었다.
+
+    위쪽 블록의 첫 실험도 같은 자로 읽는다. 참 효과 $5$에 대해 추정값이 $6.26$인데, $\sigma = 10$, $n = 100$이므로 표준오차가 $10\sqrt{2/100} = 1.414$다. **$0.89$ 표준오차 차이이고, $t = 4.755$는 그 추정값을 표준오차로 나눈 값 그대로다.**
+
+    **무작위 배정이 사는 것은 정확도가 아니라 해석이다.** 두 설계 모두 $n$이 $200$으로 같고 교란된 쪽의 표준오차($0.68$)가 오히려 작다. 그런데 한쪽은 참값을 맞히고 다른 쪽은 부호까지 틀린다. 정밀한 오답은 부정확한 정답보다 위험하다.
 
 ## 연습문제
 

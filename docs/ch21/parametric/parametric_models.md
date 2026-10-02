@@ -124,61 +124,152 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 세 모수적 생존모형의 로그가능도
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 모수적 생존모형의 로그가능도. 아래 세 함수는 절단을 포함한 음의 로그가능도를 계산한다.
+
+**(1)** 지수모형의 로그가능도 $\ell(\lambda) = d\ln\lambda - \lambda\sum_i t_i$에서 최대가능도추정량이 $\hat\lambda = d/\sum_i t_i$임을 유도하시오($d$는 사건 수). **절단된 관측도 분모의 총 관찰시간에 들어간다**는 점을 설명하시오.
+
+**(2)** 와이불 로그가능도에 $k = 1$을 넣으면 지수 로그가능도와 **정확히 같아짐**을 식으로 보이고, 둘 다 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy.optimize import minimize
-from scipy.stats import norm
+??? success "풀이"
 
-def neg_loglik_exponential(lam, times, events):
-    """지수모형의 음의 로그가능도.
+    **(1) 해석적으로.** 위험이 상수 $\lambda$이면 $f(t) = \lambda e^{-\lambda t}$, $S(t) = e^{-\lambda t}$다. 사건을 겪은 사람은 $f(t_i)$를, 절단된 사람은 $S(t_i)$를 기여하므로 가능도는
 
-    위험함수가 시간에 관계없이 일정하다고 본다. 가장 단순한 모형이라
-    사건 수와 총 관찰시간만 있으면 되고, MLE 도 그 비로 바로 나온다.
-    """
-    d = events.sum()
-    total_time = times.sum()
-    return -(d * np.log(lam) - lam * total_time)
+    $$
+    L(\lambda) = \prod_{i:\,\delta_i=1}\lambda e^{-\lambda t_i}\;\prod_{i:\,\delta_i=0} e^{-\lambda t_i}
+    = \lambda^{d}\,e^{-\lambda\sum_i t_i}
+    $$
 
-def neg_loglik_weibull(params, times, events):
-    """와이불모형의 음의 로그가능도.
+    이다. **지수항이 두 무리에서 똑같은 꼴이라 전부 합쳐지고, $\lambda$의 거듭제곱만 사건 수 $d$만큼 남는다.** 그래서 자료가 $(d, \sum_i t_i)$ 두 수로 요약된다. 로그를 취하면
 
-    모양모수 k 가 위험함수의 방향을 정한다. k>1 이면 시간이 갈수록 위험이
-    커지고(마모), k<1 이면 작아지며(초기 결함), k=1 이면 지수모형이 된다.
-    지수모형을 특수한 경우로 품고 있는 셈이다.
-    """
-    k, lam = params
-    d = events.sum()
-    ll = (d * np.log(k)
-          - d * k * np.log(lam)
-          + (k - 1) * np.sum(events * np.log(times + 1e-15))
-          - np.sum((times / lam) ** k))
-    return -ll
+    $$
+    \ell(\lambda) = d\ln\lambda - \lambda\sum_i t_i,
+    \qquad
+    \ell'(\lambda) = \frac{d}{\lambda} - \sum_i t_i = 0
+    \quad\Longrightarrow\quad
+    \hat\lambda = \frac{d}{\sum_i t_i}
+    $$
 
-def neg_loglik_lognormal(params, times, events):
-    """로그정규모형의 음의 로그가능도.
+    이고 $\ell''(\lambda) = -d/\lambda^2 < 0$이므로 최대다.
 
-    위험함수가 올랐다가 다시 내려가는 모양이 된다. 수술 직후 위험이 높다가
-    회복하면서 낮아지는 자료처럼, 와이불로는 담기 어려운 경우에 쓴다.
-    """
-    mu, sigma = params
-    # 1e-15 를 더하는 것은 시각이 0 일 때 로그가 발산하는 것을 막기 위함이다.
-    z = (np.log(times + 1e-15) - mu) / sigma
-    # 사건이 관측된 사람은 밀도함수를, 중도절단된 사람은 생존함수(logsf)를
-    # 기여한다. 중도절단 자료를 다루는 가능도의 일반적인 꼴이다.
-    ll = np.sum(
-        events * norm.logpdf(z) - events * np.log(sigma * times + 1e-15)
-        + (1 - events) * norm.logsf(z)
-    )
-    return -ll
-```
+    분모가 관측 수 $n$이 아니라 **총 관찰시간**이라는 점이 핵심이다. 절단된 사람은 분자에 사건을 보태지 않지만 **분모에는 자기가 지켜본 시간만큼 기여한다.** $\hat\lambda$는 "단위 시간당 몇 건이 일어났는가"이고, 이것이 역학에서 말하는 **발생률**이다. 절단을 버리면 분모가 줄어 위험을 과대평가하게 된다.
 
-각 함수는 표준 최소화 루틴을 쓸 수 있도록 음의 로그가능도를 계산한다. 사건 지시자
-`events[i]`는 관측된 사건이면 1, 절단이면 0이다. 절단된 대상은 생존함수 항 $\ln S(t_i)$을
-통해 기여한다.
+    **(2) 해석적으로.** 코드의 와이불 로그가능도에 $k = 1$을 넣는다.
+
+    $$
+    \ell_W(1, \lambda)
+    = d\ln 1 - d\cdot 1\cdot\ln\lambda + (1-1)\sum_i \delta_i\ln t_i - \sum_i\left(\frac{t_i}{\lambda}\right)^1
+    = -d\ln\lambda - \frac{1}{\lambda}\sum_i t_i
+    $$
+
+    이다. 셋째 항의 계수 $k-1$이 0이 되어 통째로 사라진다. 한편 지수 로그가능도에 비율 $\lambda_E = 1/\lambda$를 넣으면
+
+    $$
+    \ell_E\!\left(\frac1\lambda\right)
+    = d\ln\frac1\lambda - \frac{1}{\lambda}\sum_i t_i
+    = -d\ln\lambda - \frac{1}{\lambda}\sum_i t_i
+    $$
+
+    로 **글자 하나까지 같다.** 근사가 아니라 항등식이다. 와이불의 $\lambda$가 척도이고 지수의 $\lambda$가 비율이어서 서로 역수라는 점만 맞추면 된다.
+
+    그래서 두 모형은 **내포 관계**다. 와이불이 모수를 하나 더 쓰면서 $k = 1$에서 지수를 품으므로, $H_0: k = 1$에 대한 가능도비검정을 자유도 1로 할 수 있다.
+
+    **(1)(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy.optimize import minimize
+    from scipy.stats import norm
+
+    def neg_loglik_exponential(lam, times, events):
+        """지수모형의 음의 로그가능도.
+
+        위험함수가 시간에 관계없이 일정하다고 본다. 가장 단순한 모형이라
+        사건 수와 총 관찰시간만 있으면 되고, MLE 도 그 비로 바로 나온다.
+        """
+        d = events.sum()
+        total_time = times.sum()
+        return -(d * np.log(lam) - lam * total_time)
+
+    def neg_loglik_weibull(params, times, events):
+        """와이불모형의 음의 로그가능도.
+
+        모양모수 k 가 위험함수의 방향을 정한다. k>1 이면 시간이 갈수록 위험이
+        커지고(마모), k<1 이면 작아지며(초기 결함), k=1 이면 지수모형이 된다.
+        지수모형을 특수한 경우로 품고 있는 셈이다.
+        """
+        k, lam = params
+        d = events.sum()
+        ll = (d * np.log(k)
+              - d * k * np.log(lam)
+              + (k - 1) * np.sum(events * np.log(times + 1e-15))
+              - np.sum((times / lam) ** k))
+        return -ll
+
+    def neg_loglik_lognormal(params, times, events):
+        """로그정규모형의 음의 로그가능도.
+
+        위험함수가 올랐다가 다시 내려가는 모양이 된다. 수술 직후 위험이 높다가
+        회복하면서 낮아지는 자료처럼, 와이불로는 담기 어려운 경우에 쓴다.
+        """
+        mu, sigma = params
+        # 1e-15 를 더하는 것은 시각이 0 일 때 로그가 발산하는 것을 막기 위함이다.
+        z = (np.log(times + 1e-15) - mu) / sigma
+        # 사건이 관측된 사람은 밀도함수를, 중도절단된 사람은 생존함수(logsf)를
+        # 기여한다. 중도절단 자료를 다루는 가능도의 일반적인 꼴이다.
+        ll = np.sum(
+            events * norm.logpdf(z) - events * np.log(sigma * times + 1e-15)
+            + (1 - events) * norm.logsf(z)
+        )
+        return -ll
+
+    # --- 자료를 만든다. 참 비율 0.1, t = 15 에서 행정절단 ---
+    rng = np.random.default_rng(1)
+    n = 200
+    T = rng.exponential(10.0, n)
+    times = np.minimum(T, 15.0)
+    events = (T <= 15.0).astype(int)
+
+    d, S = events.sum(), times.sum()
+    print(f"n = {n}, 사건 d = {d}, 총 관찰시간 = {S:.4f}")
+    print(f"해석적 lambda_hat = d / sum(t) = {d / S:.6f}   (참값 0.1)")
+
+    res = minimize(neg_loglik_exponential, x0=[0.05], args=(times, events),
+                   bounds=[(1e-8, None)])
+    print(f"수치최적화 lambda_hat = {res.x[0]:.6f},  -ll = {res.fun:.6f}")
+    print(f"해석적 자리의 -ll      = {neg_loglik_exponential(d / S, times, events):.6f}")
+
+    # --- (2) k = 1 에서 두 로그가능도가 같아야 한다 ---
+    for lam_scale in (5.0, 10.0, 23.7):
+        a = neg_loglik_weibull((1.0, lam_scale), times, events)
+        b = neg_loglik_exponential(1.0 / lam_scale, times, events)
+        print(f"  scale={lam_scale}: 와이불(k=1) {a:.9f}   지수(1/scale) {b:.9f}   차 {a - b:.2e}")
+
+    print(f"  SE(lambda_hat) = lambda_hat/sqrt(d) = {(d / S) / np.sqrt(d):.6f},  "
+          f"z = {(0.1 - d / S) / ((d / S) / np.sqrt(d)):+.2f}")
+    ```
+
+    출력:
+
+    ```
+    n = 200, 사건 d = 156, 총 관찰시간 = 1598.9815
+    해석적 lambda_hat = d / sum(t) = 0.097562   (참값 0.1)
+    수치최적화 lambda_hat = 0.097562,  -ll = 519.053513
+    해석적 자리의 -ll      = 519.053513
+      scale=5.0: 와이불(k=1) 570.868604999   지수(1/scale) 570.868604999   차 -1.14e-13
+      scale=10.0: 와이불(k=1) 519.101419837   지수(1/scale) 519.101419837   차 0.00e+00
+      scale=23.7: 와이불(k=1) 561.281679379   지수(1/scale) 561.281679379   차 0.00e+00
+      SE(lambda_hat) = lambda_hat/sqrt(d) = 0.007811,  z = +0.31
+    ```
+
+    **해석적 답과 수치최적화가 소수 여섯째 자리까지 같다.** 두 자리에서의 음의 로그가능도도 $519.053513$으로 일치하니 최적화가 같은 점을 찾았다.
+
+    $\hat\lambda = 0.097562$는 참값 $0.1$에서 $0.31$ 표준오차 떨어져 있다. **표준오차가 $\hat\lambda/\sqrt d$인 것도 (1)에서 나온다.** $\ell''(\lambda) = -d/\lambda^2$이므로 관측정보가 $d/\hat\lambda^2$이고 그 역수의 제곱근이 $\hat\lambda/\sqrt d$다. 정밀도를 정하는 것은 표본크기 $n = 200$이 아니라 **사건 수 $d = 156$**이며, 생존연구에서 "사건 수가 검정력을 정한다"고 말하는 까닭이 이것이다.
+
+    $k = 1$에서 두 로그가능도의 차이가 세 척도 모두 $10^{-13}$ 이하다. **부동소수점 오차 수준이므로 (2)의 항등식이 그대로 확인된다.**
+
+    각 함수는 표준 최소화 루틴을 쓸 수 있도록 음의 로그가능도를 계산한다. 사건 지시자 `events[i]` 는 관측된 사건이면 1, 절단이면 0이다. 절단된 대상은 생존함수 항 $\ln S(t_i)$을 통해 기여한다.
 
 !!! note "$\varepsilon = 10^{-15}$ 보정에 대하여"
     코드의 `times + 1e-15`는 $t_i = 0$일 때 $\log 0$을 피하기 위한 것이다. 생존시간이 엄밀히

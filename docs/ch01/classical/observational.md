@@ -117,67 +117,152 @@ $4{,}000$명의 가상 코호트를 만들었다. 나이가 많을수록 어떤 
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 관찰연구
+**보기 1.** <span class="diff easy" title="쉬움"></span> 관찰연구. 나이가 $20$세부터 $70$세까지 고르게 퍼진 $500$명에서
+
+$$
+\text{운동} = 10 - 0.1\,\text{나이} + \varepsilon_1,
+\qquad
+\text{혈압} = 80 + 0.5\,\text{나이} - 0.3\,\text{운동} + \varepsilon_2
+$$
+
+로 자료를 만든다($\varepsilon_1 \sim N(0,1)$, $\varepsilon_2 \sim N(0,5^2)$). **참 인과효과는 $-0.3$이다.**
+
+**(1)** 나이를 무시했을 때의 상관 $r$과 회귀기울기를 닫힌 꼴로 구하시오.
+
+**(2)** 나이를 통제한 편상관을 구하고, 모의실험이 두 값을 재현하는지 확인하시오.
 
 </div>
 
-```python
-"""관찰연구에서 나이가 교란요인으로 작동하는 모습."""
+??? success "풀이"
 
-import numpy as np
-from scipy import stats
+    **(1) 해석적으로.** $\operatorname{Var}(\text{나이}) = 50^2/12 = 208.333$에서 출발한다.
 
-rng = np.random.default_rng(42)
-n = 500
+    $$
+    \operatorname{Var}(\text{운동}) = 0.01 \times 208.333 + 1 = 3.0833,
+    \qquad
+    \operatorname{Cov}(\text{나이}, \text{운동}) = -0.1 \times 208.333 = -20.833
+    $$
 
-# === 교란요인: 나이 ===
-# 20세부터 70세까지 고르게 퍼져 있다고 두자.
-age = rng.uniform(20, 70, n)
+    혈압과의 공분산은 두 조각으로 갈린다.
 
-# 나이가 두 변수 모두에 화살표를 쏜다 — 이것이 교란의 정의다.
-#   운동량: 나이가 많을수록 줄어든다  (계수 -0.1)
-#   혈압:   나이가 많을수록 올라간다  (계수 +0.5)
-# 그리고 운동은 혈압을 실제로 **낮춘다** (계수 -0.3). 이것이 참 인과효과다.
-exercise = 10 - 0.1 * age + rng.normal(0, 1, n)
-bp = 80 + 0.5 * age - 0.3 * exercise + rng.normal(0, 5, n)
+    $$
+    \operatorname{Cov}(\text{운동}, \text{혈압})
+    = \underbrace{0.5 \times (-20.833)}_{\text{나이를 거친 가짜 경로}} + \underbrace{(-0.3) \times 3.0833}_{\text{참 인과 경로}}
+    = -10.417 - 0.925 = -11.342
+    $$
 
-# === 나이를 무시한 순진한 상관 ===
-# 젊은 사람은 많이 운동하고 혈압이 낮다. 나이 든 사람은 반대다.
-# 나이를 빼놓고 보면 이 두 무리가 만들어 낸 가짜 패턴이 겹쳐 보인다.
-r_naive, _ = stats.pearsonr(exercise, bp)
-print(f"Naive correlation (exercise, BP): r = {r_naive:+.3f}")
-print("  (looks like a huge effect -- but most of it is age)")
+    **가짜 경로가 참 경로의 $11$배다.** 이것이 교란의 크기를 수로 본 것이다.
 
-# === 나이를 통제한 편상관 ===
-def residualize(y, x):
-    """y에서 x로 설명되는 부분을 빼고 남은 잔차를 돌려준다.
+    혈압의 분산은
 
-    y를 x에 단순회귀시킨 뒤 예측값을 빼는 것이다.
-    남은 잔차는 "x의 영향을 제거한 y"라고 읽을 수 있다.
-    """
-    b = np.polyfit(x, y, 1)          # y = b[0]*x + b[1] 로 직선 적합
-    return y - np.polyval(b, x)      # 실제값 - 예측값 = 잔차
+    $$
+    \operatorname{Var}(\text{혈압}) = 0.25\times208.333 + 0.09\times3.0833 - 2(0.5)(0.3)(-20.833) + 25 = 83.611
+    $$
 
-# 운동과 혈압에서 각각 나이의 영향을 뺀 뒤 상관을 낸다.
-# 이것이 "나이가 같은 사람들끼리 비교하면 어떤가"라는 물음에 해당한다.
-r_partial, _ = stats.pearsonr(residualize(exercise, age),
-                              residualize(bp, age))
-print(f"Partial correlation (controlling age): r = {r_partial:+.3f}")
-print("  (what is left is the real, much weaker effect)")
-```
+    이므로
 
-출력:
+    $$
+    r_{\text{순진}} = \frac{-11.342}{\sqrt{3.0833 \times 83.611}} = -0.7064,
+    \qquad
+    \text{기울기} = \frac{-11.342}{3.0833} = -3.678
+    $$
 
-```
-Naive correlation (exercise, BP): r = -0.705
-  (looks like a huge effect -- but most of it is age)
-Partial correlation (controlling age): r = -0.086
-  (what is left is the real, much weaker effect)
-```
+    이다. **참 효과 $-0.3$이 $-3.678$로, 열두 배 넘게 부풀려진다.**
 
-두 숫자를 나란히 읽어야 한다. 부호는 둘 다 음수이고 참 효과의 부호와도 같다. **달라지는 것은 크기다.** 나이를 무시한 $-0.705$는 "운동을 많이 하는 사람의 혈압이 낮다"는 사실을 거의 전부 **나이가 만들어 낸 것**으로 채우고 있다. 나이를 통제하고 남는 $-0.086$이 이 모의자료에 실제로 심어 둔 인과효과에 해당하는 값이다. 회귀계수로 보면 순진한 기울기가 $-3.61$인데 참값은 $-0.3$이니, 열 배 넘게 부풀려진 셈이다.
+    **(2) 해석적으로.** 나이를 빼고 남는 것을 직접 계산한다. 운동의 잔차는 $\varepsilon_1$ 그 자체다. 혈압은 운동을 대입하면
 
-교란은 **부호를 뒤집기도 하고 크기를 부풀리기도 한다.** 앞의 그림 (다)는 부호가 뒤집힌 경우($-5.00$이 $+1.92$로)였고, 여기는 부호는 그대로인 채 크기만 크게 부풀려진 경우다. 후자가 실무에서 훨씬 흔하고, 부호가 맞기 때문에 훨씬 발견하기 어렵다.
+    $$
+    \text{혈압} = 77 + 0.53\,\text{나이} - 0.3\varepsilon_1 + \varepsilon_2
+    $$
+
+    이므로 그 잔차는 $-0.3\varepsilon_1 + \varepsilon_2$다. 따라서
+
+    $$
+    r_{\text{편}} = \frac{\operatorname{Cov}(\varepsilon_1,\, -0.3\varepsilon_1+\varepsilon_2)}{\sqrt{1 \times (0.09+25)}}
+    = \frac{-0.3}{\sqrt{25.09}} = -0.0599
+    $$
+
+    이다. **나이를 통제하면 상관이 $-0.71$에서 $-0.06$으로 떨어진다.** 남은 $-0.06$이 작은 것은 효과가 없어서가 아니라 혈압의 잡음 $\sigma = 5$가 운동의 효과 $0.3 \times 1.76 = 0.53$에 견주어 크기 때문이다. **상관이 작다는 것과 인과효과가 없다는 것은 다른 말이다.**
+
+    **(1)(2) 수치적으로.**
+
+    ```python
+    """관찰연구에서 나이가 교란요인으로 작동하는 모습."""
+
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(42)
+    n = 500
+
+    # === 교란요인: 나이 ===
+    # 20세부터 70세까지 고르게 퍼져 있다고 두자.
+    age = rng.uniform(20, 70, n)
+
+    # 나이가 두 변수 모두에 화살표를 쏜다 — 이것이 교란의 정의다.
+    #   운동량: 나이가 많을수록 줄어든다  (계수 -0.1)
+    #   혈압:   나이가 많을수록 올라간다  (계수 +0.5)
+    # 그리고 운동은 혈압을 실제로 **낮춘다** (계수 -0.3). 이것이 참 인과효과다.
+    exercise = 10 - 0.1 * age + rng.normal(0, 1, n)
+    bp = 80 + 0.5 * age - 0.3 * exercise + rng.normal(0, 5, n)
+
+    # === 나이를 무시한 순진한 상관 ===
+    # 젊은 사람은 많이 운동하고 혈압이 낮다. 나이 든 사람은 반대다.
+    # 나이를 빼놓고 보면 이 두 무리가 만들어 낸 가짜 패턴이 겹쳐 보인다.
+    r_naive, _ = stats.pearsonr(exercise, bp)
+    print(f"Naive correlation (exercise, BP): r = {r_naive:+.3f}")
+    print("  (looks like a huge effect -- but most of it is age)")
+
+    # === 나이를 통제한 편상관 ===
+    def residualize(y, x):
+        """y에서 x로 설명되는 부분을 빼고 남은 잔차를 돌려준다.
+
+        y를 x에 단순회귀시킨 뒤 예측값을 빼는 것이다.
+        남은 잔차는 "x의 영향을 제거한 y"라고 읽을 수 있다.
+        """
+        b = np.polyfit(x, y, 1)          # y = b[0]*x + b[1] 로 직선 적합
+        return y - np.polyval(b, x)      # 실제값 - 예측값 = 잔차
+
+    # 운동과 혈압에서 각각 나이의 영향을 뺀 뒤 상관을 낸다.
+    # 이것이 "나이가 같은 사람들끼리 비교하면 어떤가"라는 물음에 해당한다.
+    r_partial, _ = stats.pearsonr(residualize(exercise, age),
+                                  residualize(bp, age))
+    print(f"Partial correlation (controlling age): r = {r_partial:+.3f}")
+    print("  (what is left is the real, much weaker effect)")
+
+    # --- (1)(2) 의 이론값 ---
+    v_age = (70 - 20) ** 2 / 12
+    v_ex = 0.01 * v_age + 1
+    cov_ae = -0.1 * v_age
+    cov = 0.5 * cov_ae - 0.3 * v_ex
+    v_bp = 0.25 * v_age + 0.09 * v_ex - 0.3 * cov_ae + 25
+    print(f"이론 r_naive   = {cov / np.sqrt(v_ex * v_bp):+.4f},  "
+          f"기울기 = {cov / v_ex:+.4f}")
+    print(f"이론 r_partial = {-0.3 / np.sqrt(0.09 + 25):+.4f}")
+    print(f"관측 기울기    = {np.polyfit(exercise, bp, 1)[0]:+.4f}")
+    ```
+
+    출력:
+
+    ```
+    Naive correlation (exercise, BP): r = -0.705
+      (looks like a huge effect -- but most of it is age)
+    Partial correlation (controlling age): r = -0.086
+      (what is left is the real, much weaker effect)
+    이론 r_naive   = -0.7064,  기울기 = -3.6784
+    이론 r_partial = -0.0599
+    관측 기울기    = -3.6081
+    ```
+
+    **순진한 상관의 이론값 $-0.7064$와 모의값 $-0.705$가 맞는다.** 기울기도 $-3.678$ 대 $-3.608$로 가깝다.
+
+    편상관은 이론 $-0.0599$에 모의 $-0.0858$이다. 어긋나 보이지만 $n = 500$에서 상관의 표준오차가 $(1-r^2)/\sqrt n = 0.0446$이므로 **$0.58$ 표준오차 차이**에 지나지 않는다. 참 효과가 작아 상대오차가 크게 보일 뿐이다.
+
+    두 숫자를 나란히 읽어야 한다. 부호는 둘 다 음수이고 참 효과의 부호와도 같다. **달라지는 것은 크기다.** 나이를 무시한 $-0.705$는 "운동을 많이 하는 사람의 혈압이 낮다"는 사실을 거의 전부 **나이가 만들어 낸 것**으로 채우고 있다. (1)에서 공분산을 두 조각으로 갈라 보았듯 가짜 경로가 참 경로의 $11$배다.
+
+    교란은 **부호를 뒤집기도 하고 크기를 부풀리기도 한다.** 앞의 그림 (다)는 부호가 뒤집힌 경우($-5.00$이 $+1.92$로)였고, 여기는 부호는 그대로인 채 크기만 크게 부풀려진 경우다. 후자가 실무에서 훨씬 흔하고, 부호가 맞기 때문에 훨씬 발견하기 어렵다.
+
+
 
 ## 연습문제
 

@@ -86,58 +86,134 @@ SRS에서 $\mathrm{SE}(\bar y) = \sigma/\sqrt{n}$이다. $n$을 네 배로 하�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 표본조사
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표본조사. 젊은 층 $70\%$(소득 평균 $4$만, 표준편차 $1$만)와 나이 든 층 $30\%$(평균 $7$만, 표준편차 $1.5$만)로 이루어진 $1$만 명에서 $200$명을 뽑는다. 단순무작위추출과 비례 층화추출을 견준다.
+
+**(1)** 두 방법의 표준오차를 이론적으로 구하시오. 총분산의 법칙으로 층내분산과 층간분산을 나누어 계산하고, 층화가 분산을 몇 분의 1로 줄이는지 말하시오.
+
+**(2)** 한 번 뽑은 결과만으로 그 이득을 볼 수 있는가. 되풀이해 확인하시오.
 
 </div>
 
-```python
-"""단순무작위추출과 층화추출을 인공 모집단에서 비교한다."""
+??? success "풀이"
 
-import numpy as np
-import pandas as pd
+    **(1) 해석적으로.** 층의 가중치를 $w_h$, 층평균을 $\mu_h$, 층내 표준편차를 $\sigma_h$라 하자. 총분산의 법칙은
 
-rng = np.random.default_rng(42)
+    $$
+    \sigma^2 = \underbrace{\sum_h w_h\sigma_h^2}_{\text{층내}} + \underbrace{\sum_h w_h(\mu_h - \mu)^2}_{\text{층간}}
+    $$
 
-# === 두 층으로 이루어진 모집단 ===
-# 젊은 층 70%, 나이 든 층 30%. 두 층의 소득 분포가 뚜렷이 다르다.
-#   Young: 평균 4만, 표준편차 1만
-#   Old:   평균 7만, 표준편차 1.5만
-# 층 안에서는 비교적 고르고 층 사이에서 크게 갈리는 이 구조가
-# 층화추출이 이득을 보는 전형적인 상황이다.
-n_pop = 10_000
-stratum = rng.choice(["Young", "Old"], size=n_pop, p=[0.7, 0.3])
-income = np.where(
-    stratum == "Young",
-    rng.normal(40_000, 10_000, n_pop),
-    rng.normal(70_000, 15_000, n_pop),
-)
-pop = pd.DataFrame({"stratum": stratum, "income": income})
-true_mean = pop["income"].mean()      # 추정하려는 참값
+    이다. 전체 평균은 $\mu = 0.7\times 40{,}000 + 0.3\times 70{,}000 = 49{,}000$이고
 
-# === 방법 1: 단순무작위추출(SRS) 200명 ===
-# 층을 무시하고 1만 명 중 200명을 그냥 뽑는다.
-# 표본에 우연히 노년층이 많이(또는 적게) 들어올 수 있고, 그 우연이 추정값을 흔든다.
-srs = pop.sample(200, random_state=1)
+    $$
+    \text{층내} = 0.7\times 10{,}000^2 + 0.3\times 15{,}000^2 = 1.375\times 10^8
+    $$
 
-# === 방법 2: 비례 층화추출 200명 ===
-# 각 층에서 그 층의 모집단 비율만큼 뽑는다: Young 140명, Old 60명.
-# 층의 구성비를 표본에서 고정해 버리므로 "우연히 치우칠" 여지가 사라진다.
-strat = pop.groupby("stratum", group_keys=False).apply(
-    lambda x: x.sample(int(round(200 * len(x) / n_pop)), random_state=1)
-)
+    $$
+    \text{층간} = 0.7\times 9{,}000^2 + 0.3\times 21{,}000^2 = 1.890\times 10^8
+    $$
 
-print(f"True mean:        ${true_mean:,.0f}")
-print(f"SRS estimate:     ${srs['income'].mean():,.0f}")
-print(f"Stratified est.:  ${strat['income'].mean():,.0f}")
-```
+    이므로 $\sigma^2 = 3.265\times 10^8$, $\sigma = 18{,}069$다.
 
-출력:
+    단순무작위추출의 분산은 $\sigma^2/n$이고, **비례 배분한 층화추출의 분산은 층내 몫만 남는다.**
 
-```
-True mean:        $49,092
-SRS estimate:     $49,455
-Stratified est.:  $48,375
-```
+    $$
+    \operatorname{Var}(\bar y_{\text{strat}}) = \frac1n\sum_h w_h\sigma_h^2 = \frac{1.375\times10^8}{200}
+    $$
+
+    층화가 하는 일이 바로 이것이다. **층의 구성비를 표본에서 고정해 버리므로 층간분산이 통째로 사라진다.** 수로 쓰면
+
+    $$
+    \operatorname{SE}_{\text{SRS}} = \sqrt{\frac{3.265\times10^8}{200}} = 1{,}277.7,
+    \qquad
+    \operatorname{SE}_{\text{strat}} = \sqrt{\frac{1.375\times10^8}{200}} = 829.2
+    $$
+
+    이고 분산비(설계효과)는 $1.375/3.265 = 0.4211$이다. **분산이 $42\%$로, 표준오차가 $65\%$로 줄어든다.** 같은 정밀도를 단순무작위추출로 얻으려면 표본이 $1/0.4211 = 2.4$배 필요하다.
+
+    **(2) 해석적으로.** 한 번 뽑아서는 볼 수 없다. 두 방법 모두 **불편**이고 차이는 오직 **흔들림의 크기**에 있으므로, 한 번의 추정값이 참값에 더 가까운지는 운이 정한다. 분산의 차이는 되풀이해야만 드러난다.
+
+    **(1)(2) 수치적으로.**
+
+    ```python
+    """단순무작위추출과 층화추출을 인공 모집단에서 비교한다."""
+
+    import numpy as np
+    import pandas as pd
+
+    rng = np.random.default_rng(42)
+
+    # === 두 층으로 이루어진 모집단 ===
+    # 젊은 층 70%, 나이 든 층 30%. 두 층의 소득 분포가 뚜렷이 다르다.
+    #   Young: 평균 4만, 표준편차 1만
+    #   Old:   평균 7만, 표준편차 1.5만
+    # 층 안에서는 비교적 고르고 층 사이에서 크게 갈리는 이 구조가
+    # 층화추출이 이득을 보는 전형적인 상황이다.
+    n_pop = 10_000
+    stratum = rng.choice(["Young", "Old"], size=n_pop, p=[0.7, 0.3])
+    income = np.where(
+        stratum == "Young",
+        rng.normal(40_000, 10_000, n_pop),
+        rng.normal(70_000, 15_000, n_pop),
+    )
+    pop = pd.DataFrame({"stratum": stratum, "income": income})
+    true_mean = pop["income"].mean()      # 추정하려는 참값
+
+    # === 방법 1: 단순무작위추출(SRS) 200명 ===
+    # 층을 무시하고 1만 명 중 200명을 그냥 뽑는다.
+    # 표본에 우연히 노년층이 많이(또는 적게) 들어올 수 있고, 그 우연이 추정값을 흔든다.
+    srs = pop.sample(200, random_state=1)
+
+    # === 방법 2: 비례 층화추출 200명 ===
+    # 각 층에서 그 층의 모집단 비율만큼 뽑는다: Young 140명, Old 60명.
+    # 층의 구성비를 표본에서 고정해 버리므로 "우연히 치우칠" 여지가 사라진다.
+    strat = pop.groupby("stratum", group_keys=False).apply(
+        lambda x: x.sample(int(round(200 * len(x) / n_pop)), random_state=1)
+    )
+
+    print(f"True mean:        ${true_mean:,.0f}")
+    print(f"SRS estimate:     ${srs['income'].mean():,.0f}")
+    print(f"Stratified est.:  ${strat['income'].mean():,.0f}")
+
+    # --- 되풀이해 두 방법의 흔들림을 잰다 ---
+    w = np.array([0.3, 0.7])                 # Old, Young 의 모집단 비율
+    sd = np.array([15_000.0, 10_000.0])
+    mu = np.array([70_000.0, 40_000.0])
+    mu_bar = (w * mu).sum()
+    within = (w * sd ** 2).sum()
+    between = (w * (mu - mu_bar) ** 2).sum()
+    print(f"이론: 층내분산 {within:,.0f} + 층간분산 {between:,.0f} = 전체분산 {within + between:,.0f}")
+    print(f"이론 SE: SRS {np.sqrt((within + between) / 200):,.1f}, "
+          f"층화 {np.sqrt(within / 200):,.1f},  설계효과 {within / (within + between):.4f}")
+
+    idx_y = np.flatnonzero(pop["stratum"].values == "Young")
+    idx_o = np.flatnonzero(pop["stratum"].values == "Old")
+    inc = pop["income"].values
+    reps = 2000
+    srs_m, str_m = np.empty(reps), np.empty(reps)
+    for r in range(reps):
+        srs_m[r] = inc[rng.choice(n_pop, 200, replace=False)].mean()
+        str_m[r] = 0.7 * inc[rng.choice(idx_y, 140, replace=False)].mean() \
+                 + 0.3 * inc[rng.choice(idx_o, 60, replace=False)].mean()
+    print(f"모의 {reps}회 SE: SRS {srs_m.std(ddof=1):,.1f}, 층화 {str_m.std(ddof=1):,.1f}, "
+          f"비 {str_m.var(ddof=1) / srs_m.var(ddof=1):.4f}")
+    ```
+
+    출력:
+
+    ```
+    True mean:        $49,092
+    SRS estimate:     $49,455
+    Stratified est.:  $48,375
+    이론: 층내분산 137,500,000 + 층간분산 189,000,000 = 전체분산 326,500,000
+    이론 SE: SRS 1,277.7, 층화 829.2,  설계효과 0.4211
+    모의 2000회 SE: SRS 1,283.4, 층화 820.1, 비 0.4084
+    ```
+
+    **이론값이 모의실험과 맞는다.** 되풀이 $2{,}000$회가 준 표준오차가 단순무작위 $1{,}283.4$, 층화 $820.1$로 유도한 $1{,}277.7$과 $829.2$에 가깝다. 표준오차 추정의 몬테카를로 오차가 대략 $\operatorname{SE}/\sqrt{2\times1999} = 20$과 $13$이므로 둘 다 $1$ 표준오차 안이다. 분산비도 $0.4084$ 대 이론 $0.4211$로 맞는다.
+
+    **한 번 뽑은 결과는 아무것도 말해 주지 않는다.** 참값 $49{,}092$에 대해 단순무작위가 $49{,}455$($+363$), 층화가 $48{,}375$($-717$)로 **이번에는 층화 쪽이 더 많이 빗나갔다.** 두 방법 모두 불편이므로 한 번의 어긋남은 운일 뿐이고, 실제로 $\pm1{,}278$과 $\pm829$라는 흔들림 안에서 각각 $0.28$ 표준오차와 $-0.86$ 표준오차에 지나지 않는다. **설계의 이득은 분산에 있지 한 번의 추정값에 있지 않다.**
+
+    유의할 것 하나. 층화의 이득은 전적으로 **층간분산이 얼마나 큰가**에 달려 있다. 여기서는 두 층의 평균이 $4$만과 $7$만으로 크게 갈려 층간분산이 전체의 $58\%$를 차지했다. 층을 나누었는데 층평균이 서로 비슷하다면 층간분산이 0에 가깝고, 층화해도 얻을 것이 없다.
 
 ## 연습문제
 

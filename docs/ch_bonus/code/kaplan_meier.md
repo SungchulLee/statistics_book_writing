@@ -21,55 +21,123 @@ $t_{(j)}$의 사건 수, $n_j$는 $t_{(j)}$ 직전에 위험에 있는 대상 �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 카플란-마이어 추정 구현
+**보기 1.** <span class="diff easy" title="쉬움"></span> 카플란-마이어 추정 구현. 아래 함수는 위험집합을 `np.sum(times >= t_j)` 로 센다.
+
+**(1)** 절단이 **하나도 없으면** 카플란-마이어 추정량이 경험생존함수 $\#\{i : t_i > t\}/n$과 정확히 같아짐을 망원곱으로 보이시오.
+
+**(2)** 같은 시각에 사건과 절단이 함께 있을 때 이 코드가 어느 관례를 쓰는지 밝히고, 연습문제 1의 자료($1,\ 3+,\ 4,\ 5,\ 5+,\ 7,\ 10+,\ 12$)로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def kaplan_meier(times, censored):
-    """카플란-마이어 생존함수 추정값을 구한다.
+    **(1) 해석적으로.** 절단이 없으면 모든 관측이 사건이다. 서로 다른 사건시각을 $t_{(1)} < \cdots < t_{(K)}$라 하고
 
-    사건이 일어난 시점마다 "그 직전까지 살아 있던 사람 중 그 시점을
-    넘긴 비율"을 곱해 나간다. 중도절단된 사람은 절단 시점까지만
-    위험집합에 남아 있다가 조용히 빠진다 — 이것이 중도절단 자료를
-    버리지 않고 쓰는 방법이다.
+    $$
+    n_j = \#\{i : t_i \ge t_{(j)}\},
+    \qquad
+    d_j = \#\{i : t_i = t_{(j)}\}
+    $$
 
-    매개변수
-    --------
-    times    : 관측된 시각(사건 또는 절단)
-    censored : 1 이면 중도절단, 0 이면 사건이 관측됨
+    이라 하자. $t_{(j)}$ 이상인 관측에서 $t_{(j)}$와 정확히 같은 것들을 빼면 $t_{(j+1)}$ 이상인 것만 남으므로
 
-    돌려주는 값
-    ----------
-    t_plot, s_plot : 계단그림에 쓸 시각과 생존확률
-    """
-    order = np.argsort(times)
-    times = times[order]
-    censored = censored[order]
+    $$
+    n_{j+1} = n_j - d_j
+    $$
 
-    event_times = times[censored == 0]
-    unique_events = np.unique(event_times)
+    이다. **절단이 없다는 조건이 하는 일이 바로 이것이다.** 절단이 있으면 사건이 아닌 이유로도 사람이 빠지므로 이 등식이 깨진다.
 
-    n_total = len(times)
-    s = 1.0
-    t_list = [0.0]
-    s_list = [1.0]
+    이제 곱이 망원이 된다.
 
-    for t_j in unique_events:
-        # 위험집합: 그 시점에 아직 사건도 절단도 겪지 않은 사람 수
-        n_at_risk = np.sum(times >= t_j)
-        d_j = np.sum((times == t_j) & (censored == 0))
-        s *= (n_at_risk - d_j) / n_at_risk
-        t_list.append(t_j)
-        s_list.append(s)
+    $$
+    \hat S(t_{(k)}) = \prod_{j=1}^{k}\frac{n_j - d_j}{n_j}
+    = \prod_{j=1}^{k}\frac{n_{j+1}}{n_j}
+    = \frac{n_{k+1}}{n_1}
+    = \frac{\#\{i : t_i > t_{(k)}\}}{n}
+    $$
 
-    t_list.append(times.max())
-    s_list.append(s_list[-1])
+    마지막 등식은 $n_1 = n$이고 $n_{k+1} = \#\{i : t_i \ge t_{(k+1)}\} = \#\{i : t_i > t_{(k)}\}$이기 때문이다. **절단이 없으면 카플란-마이어는 그냥 "아직 안 죽은 사람의 비율"이다.** 곱셈 구조가 필요해지는 것은 오직 절단 때문이다.
 
-    return np.array(t_list), np.array(s_list)
-```
+    **(2) 해석적으로.** 코드는 $n_j$를 `times >= t_j` 로 세므로, 시각 $t_j$에 절단된 사람도 **그 시각의 위험집합에 포함한다.** 곧 "같은 시각의 절단은 사건보다 **뒤에** 일어난 것으로 본다"는 관례다. 절단된 사람이 그 순간까지는 살아 있었다는 정보를 끝까지 쓰는 쪽이며, 생존분석의 표준 관례이기도 하다.
+
+    연습문제 1의 자료에서 $t = 5$가 그 자리다. 사건 하나($t=5$)와 절단 하나($t=5+$)가 같은 시각에 있고, $5$ 이상인 관측은 $5, 5, 7, 10, 12$의 다섯이므로 $n = 5$, $d = 1$이 된다. 절단된 사람을 미리 빼면 $n = 4$가 되어 답이 달라진다.
+
+    **(1)(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    def kaplan_meier(times, censored):
+        """카플란-마이어 생존함수 추정값을 구한다.
+
+        사건이 일어난 시점마다 "그 직전까지 살아 있던 사람 중 그 시점을
+        넘긴 비율"을 곱해 나간다. 중도절단된 사람은 절단 시점까지만
+        위험집합에 남아 있다가 조용히 빠진다 — 이것이 중도절단 자료를
+        버리지 않고 쓰는 방법이다.
+
+        매개변수
+        --------
+        times    : 관측된 시각(사건 또는 절단)
+        censored : 1 이면 중도절단, 0 이면 사건이 관측됨
+
+        돌려주는 값
+        ----------
+        t_plot, s_plot : 계단그림에 쓸 시각과 생존확률
+        """
+        order = np.argsort(times)
+        times = times[order]
+        censored = censored[order]
+
+        event_times = times[censored == 0]
+        unique_events = np.unique(event_times)
+
+        n_total = len(times)
+        s = 1.0
+        t_list = [0.0]
+        s_list = [1.0]
+
+        for t_j in unique_events:
+            # 위험집합: 그 시점에 아직 사건도 절단도 겪지 않은 사람 수
+            n_at_risk = np.sum(times >= t_j)
+            d_j = np.sum((times == t_j) & (censored == 0))
+            s *= (n_at_risk - d_j) / n_at_risk
+            t_list.append(t_j)
+            s_list.append(s)
+
+        t_list.append(times.max())
+        s_list.append(s_list[-1])
+
+        return np.array(t_list), np.array(s_list)
+
+    # --- (1) 절단이 없으면 경험생존함수와 같아야 한다 ---
+    rng = np.random.default_rng(7)
+    tt = np.round(rng.exponential(10, 12), 3)
+    t, s = kaplan_meier(tt, np.zeros(12, dtype=int))
+    emp = np.array([np.mean(tt > x) for x in t])
+    print(f"무절단일 때 KM 과 경험생존함수의 최대 차이 = {np.abs(s - emp).max():.3e}")
+
+    # --- (2) 같은 시각의 사건과 절단 ---
+    times = np.array([1., 3., 4., 5., 5., 7., 10., 12.])
+    censored = np.array([0, 1, 0, 0, 1, 0, 1, 0])
+    t2, s2 = kaplan_meier(times, censored)
+    print("t_plot =", t2)
+    print("s_plot =", np.round(s2, 6))
+    print(f"t = 5 의 위험집합 = {int(np.sum(times >= 5))},  "
+          f"사건 수 = {int(np.sum((times == 5) & (censored == 0)))}")
+    ```
+
+    출력:
+
+    ```
+    무절단일 때 KM 과 경험생존함수의 최대 차이 = 1.110e-16
+    t_plot = [ 0.  1.  4.  5.  7. 12. 12.]
+    s_plot = [1.       0.875    0.729167 0.583333 0.388889 0.       0.      ]
+    t = 5 의 위험집합 = 5,  사건 수 = 1
+    ```
+
+    **절단이 없을 때 두 추정량이 부동소수점 오차($10^{-16}$)까지 같다.** (1)의 망원 논증이 근사가 아니라 항등식임을 확인해 준다.
+
+    연습문제 1의 자료에서도 $\hat S$가 $0.875,\ 0.729167,\ 0.583333,\ 0.388889,\ 0$으로 그 쪽의 표와 정확히 맞고, $t = 5$의 위험집합이 $5$다. **절단된 사람을 포함해 세는 관례가 코드에 그대로 들어 있다.**
 
 !!! warning "이 코드의 `censored`는 사건이 0이다"
     `censored == 1`이 절단, `censored == 0`이 사건을 뜻한다. `lifelines`의
@@ -125,57 +193,130 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 로그순위 검정 구현
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로그순위 검정 구현. 아래 함수는 집단 1의 관측 사건 수 $O_1$, 기대 사건 수 $E_1$, 분산 $V$만 누적해 통계량을 만든다. 집단 2의 양은 전혀 쓰지 않는다.
+
+**(1)** 그래도 괜찮은 까닭을 보이시오. 곧 $O_1 - E_1 = -(O_2 - E_2)$이고 $V$가 두 집단에 대칭임을 보여, **어느 집단을 "1"이라 부르든 $\chi^2$가 같음**을 증명하시오.
+
+**(2)** 두 집단의 자리를 바꾸어 넣어 코드로 확인하시오.
 
 </div>
 
-```python
-from scipy import stats
+??? success "풀이"
 
-def logrank_test(times_1, censored_1, times_2, censored_2):
-    """이표본 로그순위 검정.
+    **(1) 해석적으로.** 각 사건시각 $t_{(j)}$에서
 
-    사건 시점마다 2x2 분할표를 만들어 관측 사건 수와 기대 사건 수를
-    비교한다. 그 차이를 모든 시점에 걸쳐 누적한 것이 통계량이다.
-    두 생존곡선이 같다는 귀무가설 아래에서 자유도 1 인 카이제곱을 따른다.
+    $$
+    e_{1j} + e_{2j} = d_j\cdot\frac{r_{1j}}{r_j} + d_j\cdot\frac{r_{2j}}{r_j}
+    = d_j\cdot\frac{r_{1j}+r_{2j}}{r_j} = d_j = d_{1j} + d_{2j}
+    $$
 
-    돌려주는 값
-    ----------
-    chi2, p_value
-    """
-    event_1 = times_1[censored_1 == 0]
-    event_2 = times_2[censored_2 == 0]
-    all_event_times = np.unique(np.concatenate([event_1, event_2]))
+    이다. **기대 사건 수의 합이 관측 사건 수의 합과 시점마다 정확히 같다.** 모든 $j$에 대해 더하면 $E_1 + E_2 = O_1 + O_2$, 곧
 
-    O1 = 0.0
-    E1 = 0.0
-    V  = 0.0
+    $$
+    (O_1 - E_1) + (O_2 - E_2) = 0
+    $$
 
-    for t_j in all_event_times:
-        r1 = np.sum(times_1 >= t_j)
-        r2 = np.sum(times_2 >= t_j)
-        r  = r1 + r2
+    이다. 두 집단의 "초과 사건 수"는 크기가 같고 부호가 반대이며, 제곱하면 같아진다.
 
-        d1 = np.sum(event_1 == t_j)
-        d2 = np.sum(event_2 == t_j)
-        d  = d1 + d2
+    분산 쪽은 더 쉽다.
 
-        # 두 집단의 생존이 같다면, 그 시점의 사건은 위험집합 크기에
-        # 비례해 나뉘어야 한다. 그것이 기대 사건 수 e1 이다.
-        e1 = r1 * d / r if r > 0 else 0
-        v  = r1 * r2 * d * (r - d) / (r**2 * (r - 1)) if r > 1 else 0
+    $$
+    v_j = \frac{r_{1j}\,r_{2j}\,d_j\,(r_j - d_j)}{r_j^2\,(r_j-1)}
+    $$
 
-        O1 += d1
-        E1 += e1
-        V  += v
+    에서 $r_{1j}$와 $r_{2j}$가 곱으로만 들어가므로 둘을 맞바꾸어도 값이 변하지 않는다. 따라서 $V$도 같고
 
-    chi2 = (O1 - E1)**2 / V if V > 0 else 0
-    p_value = stats.chi2(1).sf(chi2)
-    return chi2, p_value
-```
+    $$
+    \chi^2 = \frac{(O_1-E_1)^2}{V} = \frac{(O_2-E_2)^2}{V}
+    $$
 
-이 구현은 두 집단의 사건시간을 합친 뒤 각 사건시간을 순회하며 집단 1의 관측 사건 수, 기대
-사건 수, 분산을 누적한다.
+    이다. **집단에 1번과 2번 중 어느 이름을 붙이는지는 검정 결과와 무관하다.** 그래서 코드가 한쪽만 누적해도 손해가 없다. 다만 검정은 대칭이어도 **해석은 대칭이 아니다.** $O_1 - E_1$의 **부호**가 어느 집단의 생존이 나은지를 말하므로, 보고할 때는 어느 쪽이 1번인지 반드시 밝혀야 한다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from scipy import stats
+
+    def logrank_test(times_1, censored_1, times_2, censored_2):
+        """이표본 로그순위 검정.
+
+        사건 시점마다 2x2 분할표를 만들어 관측 사건 수와 기대 사건 수를
+        비교한다. 그 차이를 모든 시점에 걸쳐 누적한 것이 통계량이다.
+        두 생존곡선이 같다는 귀무가설 아래에서 자유도 1 인 카이제곱을 따른다.
+
+        돌려주는 값
+        ----------
+        chi2, p_value
+        """
+        event_1 = times_1[censored_1 == 0]
+        event_2 = times_2[censored_2 == 0]
+        all_event_times = np.unique(np.concatenate([event_1, event_2]))
+
+        O1 = 0.0
+        E1 = 0.0
+        V  = 0.0
+
+        for t_j in all_event_times:
+            r1 = np.sum(times_1 >= t_j)
+            r2 = np.sum(times_2 >= t_j)
+            r  = r1 + r2
+
+            d1 = np.sum(event_1 == t_j)
+            d2 = np.sum(event_2 == t_j)
+            d  = d1 + d2
+
+            # 두 집단의 생존이 같다면, 그 시점의 사건은 위험집합 크기에
+            # 비례해 나뉘어야 한다. 그것이 기대 사건 수 e1 이다.
+            e1 = r1 * d / r if r > 0 else 0
+            v  = r1 * r2 * d * (r - d) / (r**2 * (r - 1)) if r > 1 else 0
+
+            O1 += d1
+            E1 += e1
+            V  += v
+
+        chi2 = (O1 - E1)**2 / V if V > 0 else 0
+        p_value = stats.chi2(1).sf(chi2)
+        return chi2, p_value
+
+    # --- (1) 의 대칭성을 확인한다 ---
+    np.random.seed(0)
+    T1 = np.random.exponential(20, 40); C1 = (np.random.rand(40) < 0.2).astype(int)
+    T2 = np.random.exponential(12, 40); C2 = (np.random.rand(40) < 0.2).astype(int)
+
+    a = logrank_test(T1, C1, T2, C2)
+    b = logrank_test(T2, C2, T1, C1)
+    print(f"1-2 순서: chi2 = {a[0]:.9f}")
+    print(f"2-1 순서: chi2 = {b[0]:.9f}")
+
+    def oe(t1, c1, t2, c2):
+        """두 집단의 O - E 를 모두 돌려준다."""
+        e1a, e2a = t1[c1 == 0], t2[c2 == 0]
+        O1 = E1 = O2 = E2 = 0.0
+        for t_j in np.unique(np.concatenate([e1a, e2a])):
+            r1 = np.sum(t1 >= t_j); r2 = np.sum(t2 >= t_j); r = r1 + r2
+            d = np.sum(e1a == t_j) + np.sum(e2a == t_j)
+            O1 += np.sum(e1a == t_j); O2 += np.sum(e2a == t_j)
+            E1 += r1 * d / r;         E2 += r2 * d / r
+        return O1, E1, O2, E2
+
+    O1, E1, O2, E2 = oe(T1, C1, T2, C2)
+    print(f"O1 - E1 = {O1 - E1:+.4f},  O2 - E2 = {O2 - E2:+.4f},  "
+          f"합 = {(O1 - E1) + (O2 - E2):.2e}")
+    ```
+
+    출력:
+
+    ```
+    1-2 순서: chi2 = 12.688859474
+    2-1 순서: chi2 = 12.688859474
+    O1 - E1 = -12.6029,  O2 - E2 = +12.6029,  합 = -3.55e-15
+    ```
+
+    **두 통계량이 소수 아홉째 자리까지 같다.** 그리고 두 집단의 초과 사건 수가 $-12.6029$와 $+12.6029$로 부호만 다르며, 합이 $-3.6\times10^{-15}$로 부동소수점 오차 수준이다. (1)의 두 주장이 모두 확인되었다.
+
+    부호를 읽으면 집단 1에서 사건이 기대보다 $12.6$건 **적게** 일어났다. 집단 1의 생존이 낫다는 뜻이고, 평균 $20$과 $12$인 분포에서 뽑았으니 맞는 방향이다.
+
+    이 구현은 두 집단의 사건시간을 합친 뒤 각 사건시간을 순회하며 집단 1의 관측 사건 수, 기대 사건 수, 분산을 누적한다.
 
 ## 모의실험과 시각화
 
@@ -183,64 +324,111 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 전체 실행
+**보기 3.** <span class="diff easy" title="쉬움"></span> 전체 실행. 평균 $20$과 $12$인 지수분포에서 각각 $40$명을 뽑아 곡선을 그리고 로그순위로 견준다.
+
+**(1)** 같은 자료를 그대로 $k$벌 복제하면 $\chi^2_{\text{LR}}$이 어떻게 되는지 식으로 따지시오. 효과의 크기는 하나도 달라지지 않았는데 $p$ 값은 어떻게 되는가.
+
+**(2)** 실행해 $\chi^2$와 $p$를 구하고, $k = 2$와 $k = 4$에서 (1)의 예측을 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-def main():
-    np.random.seed(0)
+    **(1) 해석적으로.** 자료를 $k$벌 복제하면 모든 시점에서 $r_1 \to kr_1$, $r_2 \to kr_2$, $d \to kd$가 된다. 기대 사건 수는
 
-    # 1집단: 사건이 늦게 일어난다(평균 20). 20%는 중도절단된다.
-    n1 = 40
-    times_1 = np.random.exponential(scale=20, size=n1)
-    censored_1 = (np.random.rand(n1) < 0.2).astype(int)
+    $$
+    e_1 = \frac{r_1 d}{r} \;\longrightarrow\; \frac{(kr_1)(kd)}{kr} = k\,e_1
+    $$
 
-    # 2집단: 사건이 빨리 일어난다(평균 12).
-    n2 = 40
-    times_2 = np.random.exponential(scale=12, size=n2)
-    censored_2 = (np.random.rand(n2) < 0.2).astype(int)
+    로 $k$배가 되고 $O_1$도 $k$배이므로 $O_1 - E_1$이 **$k$배**다. 분산 쪽은 네 인자가 모두 $k$배가 되므로
 
-    t1, s1 = kaplan_meier(times_1, censored_1)
-    t2, s2 = kaplan_meier(times_2, censored_2)
+    $$
+    v = \frac{r_1 r_2 d (r-d)}{r^2(r-1)}
+    \;\longrightarrow\;
+    \frac{(kr_1)(kr_2)(kd)(kr-kd)}{(kr)^2(kr-1)}
+    = k\,v\cdot\frac{k(r-1)}{kr-1}
+    $$
 
-    fig, ax = plt.subplots(figsize=(10, 5))
-    # where="post" 가 계단을 오른쪽으로 뻗게 한다. 생존함수는 사건이
-    # 일어난 순간에 떨어지고 다음 사건까지 평평하므로 이 설정이라야 맞다.
-    ax.step(t1, s1, where="post", linewidth=2, label="Group 1 (slow)")
-    ax.step(t2, s2, where="post", linewidth=2, label="Group 2 (fast)")
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Survival Probability")
-    ax.set_title("Kaplan-Meier Survival Curves")
-    ax.set_ylim(-0.02, 1.05)
-    ax.legend()
-    plt.tight_layout()
-    plt.show()
+    이다. 마지막 인자 $k(r-1)/(kr-1)$은 1보다 **조금 작고** $r$이 크면 1에 가까우므로 $V$는 거의 $k$배다. 따라서
 
-    # 그림으로 본 차이가 통계적으로도 뒷받침되는지 확인한다.
-    chi2, p = logrank_test(times_1, censored_1, times_2, censored_2)
-    print(f"Log-Rank Test:  chi2 = {chi2:.4f},  p = {p:.4f}")
+    $$
+    \chi^2 = \frac{(O_1-E_1)^2}{V}
+    \;\longrightarrow\;
+    \frac{k^2(O_1-E_1)^2}{kV\cdot k(r-1)/(kr-1)}
+    \;\gtrsim\; k\,\chi^2
+    $$
+
+    로 **통계량이 $k$배보다 조금 크게 자란다.**
+
+    자료를 복제해도 두 집단의 생존함수 추정값은 한 치도 달라지지 않는다. 곡선이 같고 중앙값이 같고 위험비가 같다. **바뀐 것은 오직 "표본이 크다"는 주장뿐인데 $p$ 값은 지수적으로 작아진다.** $p$ 값은 효과의 크기가 아니라 효과와 표본크기의 조합을 재며, 로그순위의 $p$만 보고 "차이가 크다"고 말해서는 안 되는 까닭이 이것이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    def main():
+        np.random.seed(0)
+
+        # 1집단: 사건이 늦게 일어난다(평균 20). 20%는 중도절단된다.
+        n1 = 40
+        times_1 = np.random.exponential(scale=20, size=n1)
+        censored_1 = (np.random.rand(n1) < 0.2).astype(int)
+
+        # 2집단: 사건이 빨리 일어난다(평균 12).
+        n2 = 40
+        times_2 = np.random.exponential(scale=12, size=n2)
+        censored_2 = (np.random.rand(n2) < 0.2).astype(int)
+
+        t1, s1 = kaplan_meier(times_1, censored_1)
+        t2, s2 = kaplan_meier(times_2, censored_2)
+
+        fig, ax = plt.subplots(figsize=(10, 5))
+        # where="post" 가 계단을 오른쪽으로 뻗게 한다. 생존함수는 사건이
+        # 일어난 순간에 떨어지고 다음 사건까지 평평하므로 이 설정이라야 맞다.
+        ax.step(t1, s1, where="post", linewidth=2, label="Group 1 (slow)")
+        ax.step(t2, s2, where="post", linewidth=2, label="Group 2 (fast)")
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Survival Probability")
+        ax.set_title("Kaplan-Meier Survival Curves")
+        ax.set_ylim(-0.02, 1.05)
+        ax.legend()
+        plt.tight_layout()
+        plt.show()
+
+        # 그림으로 본 차이가 통계적으로도 뒷받침되는지 확인한다.
+        chi2, p = logrank_test(times_1, censored_1, times_2, censored_2)
+        print(f"Log-Rank Test:  chi2 = {chi2:.4f},  p = {p:.4f}")
+
+        # --- (1) 의 예측: 같은 자료를 k 벌 복제하면 chi2 가 k 배로 자란다 ---
+        for k in (1, 2, 4):
+            c, pp = logrank_test(np.tile(times_1, k), np.tile(censored_1, k),
+                                 np.tile(times_2, k), np.tile(censored_2, k))
+            print(f"  자료를 {k}배로 복제: chi2 = {c:8.4f},  p = {pp:.3e}")
 
 
-if __name__ == "__main__":
-    main()
-```
+    if __name__ == "__main__":
+        main()
+    ```
 
-출력:
+    출력:
 
-```
-Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
-```
+    ```
+    Log-Rank Test:  chi2 = 12.6889,  p = 0.0004
+      자료를 1배로 복제: chi2 =  12.6889,  p = 3.678e-04
+      자료를 2배로 복제: chi2 =  25.7624,  p = 3.861e-07
+      자료를 4배로 복제: chi2 =  51.9042,  p = 5.828e-13
+    ```
 
-![두 집단의 카플란-마이어 생존곡선](./img/kaplan_meier_168.png)
+    ![두 집단의 카플란-마이어 생존곡선](./img/kaplan_meier_168.png)
 
-두 곡선이 뚜렷이 갈리고 로그순위 검정도 $p = 0.0004$로 유의하다. 평균 생존이 20과 12로 다른 두 지수분포에서 뽑았으므로 옳은 판정이다.
+    두 곡선이 뚜렷이 갈리고 로그순위 검정도 $p = 0.0004$로 유의하다. 평균 생존이 20과 12로 다른 두 지수분포에서 뽑았으므로 옳은 판정이다.
 
-집단 1은 $\text{Exp}(\lambda = 1/20)$에서, 집단 2는 $\text{Exp}(\lambda = 1/12)$에서
-뽑았고 각 집단에 약 20%의 무작위 절단이 있다. 곡선의 시각적 분리와 로그순위 p-값을 함께 보면
-생존 차이가 통계적으로 유의한지 알 수 있다.
+    **복제 실험이 (1)의 예측과 맞는다.** $\chi^2$가 $12.6889 \to 25.7624 \to 51.9042$로 각각 $2.031$배와 $4.091$배가 되었다. $k$배보다 조금씩 큰 것까지 유도한 대로이며, 그 초과분은 분산에 붙은 인자 $k(r-1)/(kr-1) < 1$에서 온다.
+
+    **$p$ 값은 $3.7\times10^{-4}$에서 $5.8\times10^{-13}$으로 아홉 자릿수 작아졌다.** 그런데 자료를 복제했을 뿐이므로 생존곡선도, 중앙값도, 위험비도 하나도 달라지지 않았다. 새 정보는 한 조각도 들어오지 않았는데 $p$만 급락한 것이다. **$p$ 값은 효과의 크기가 아니라 "표본이 이만큼 크다면"이라는 가정을 반영한다.** 곡선과 효과크기를 함께 보고해야 하는 이유가 이 세 줄에 있다.
+
+    집단 1은 $\text{Exp}(\lambda = 1/20)$에서, 집단 2는 $\text{Exp}(\lambda = 1/12)$에서 뽑았고 각 집단에 약 20%의 무작위 절단이 있다. 참 위험비는 $(1/20)/(1/12) = 0.6$이다.
 
 ## 해석
 

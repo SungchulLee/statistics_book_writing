@@ -31,65 +31,117 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 비지도학습
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비지도학습. 중심이 $(20,5)$, $(50,30)$, $(80,15)$인 세 군집에서 각각 $100$개씩 뽑아 $300$개를 만든다. 흩어짐은 $x$ 방향 $8$, $y$ 방향 $4$다. **정답 레이블은 알고리즘에게 주지 않고** $K$-평균을 $k = 3$으로 돌린다.
+
+**(1)** 되찾은 중심이 참 중심에서 얼마나 떨어져 있어야 "맞는" 것인지, 그 자를 구하시오.
+
+**(2)** 군집 크기가 $100$씩 나오지 않는다. 몇 개가 잘못 배정되었는지 세고, $K$-평균이 최소화하는 군집내 제곱합(WCSS)을 **참 분할**의 값과 견주시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** 군집 중심의 추정값은 그 군집에 속한 점들의 평균이다. 각 군집이 $100$개이고 흩어짐이 $(\sigma_x, \sigma_y) = (8, 4)$이므로
 
-# === 자료 생성: 군집 3개 ===
-# 각 중심 주위에 100개씩 뿌려 총 300개를 만든다.
-# 어느 점이 어느 군집에서 나왔는지는 우리가 알지만, **알고리즘에게는 주지 않는다.**
-# 정답 레이블이 없다는 것이 비지도학습의 정의다.
-centers = np.array([[20, 5], [50, 30], [80, 15]])
-data = np.vstack([
-    np.random.normal(loc=c, scale=[8, 4], size=(100, 2))
-    for c in centers
-])
+    $$
+    \operatorname{SE}(\bar x) = \frac{8}{\sqrt{100}} = 0.8,
+    \qquad
+    \operatorname{SE}(\bar y) = \frac{4}{\sqrt{100}} = 0.4
+    $$
 
-# === K-평균 직접 구현 ===
-k = 3
+    다. **참 중심에서 이 정도 안이면 맞는 것이다.** 자가 없으면 $19.1$이 $20$에 가까운지 아닌지 말할 수 없다.
 
-# 초기화: 자료점 중 k개를 무작위로 골라 첫 중심으로 삼는다.
-# K-평균은 초기값에 민감해서, 실무에서는 여러 번 돌려 가장 좋은 것을 고른다.
-centroids = data[np.random.choice(len(data), k, replace=False)]
+    **(2) 해석적으로.** 세 중심이 서로 $30$ 이상 떨어져 있고 흩어짐이 $8$이므로 군집은 잘 갈린다. 그래도 경계 근처의 몇 점은 이웃 중심이 더 가까워 잘못 붙는다. 군집 크기가 $100$에서 벗어나는 만큼이 그 흔적이다.
 
-for iteration in range(20):
-    # (1) 배정 단계: 각 점을 가장 가까운 중심에 붙인다.
-    #     data[:, None]은 (300, 1, 2), centroids[None, :]은 (1, 3, 2) 모양이라
-    #     브로드캐스팅으로 (300, 3, 2)가 되고, axis=2로 노름을 내면
-    #     dists[i, j] = i번 점과 j번 중심 사이의 거리가 된다.
-    dists = np.linalg.norm(data[:, None] - centroids[None, :], axis=2)
-    labels = dists.argmin(axis=1)
+    참 분할의 WCSS를 어림해 두면 견줄 자가 생긴다. 각 군집에서 $\sum(x_i-\bar x)^2$의 기댓값이 $(n-1)\sigma_x^2$이므로
 
-    # (2) 갱신 단계: 각 군집에 속한 점들의 평균을 새 중심으로 삼는다.
-    new_centroids = np.array([data[labels == j].mean(axis=0) for j in range(k)])
+    $$
+    E[\mathrm{WCSS}] = 3 \times 99 \times (8^2 + 4^2) = 23{,}760
+    $$
 
-    # (3) 수렴 판정: 중심이 더 이상 움직이지 않으면 끝난다.
-    #     두 단계 모두 군집내 제곱합을 줄이기만 하므로 반드시 수렴한다.
-    #     다만 전역 최소가 아니라 국소 최소일 수 있다.
-    if np.allclose(centroids, new_centroids):
-        break
-    centroids = new_centroids
+    이다. **$K$-평균이 찾은 WCSS는 이 값보다 작아야 한다.** 참 분할도 하나의 후보일 뿐이고, $K$-평균은 WCSS를 더 줄이는 분할이 있으면 그쪽을 고르기 때문이다.
 
-for j in range(k):
-    cluster = data[labels == j]
-    print(f"Cluster {j}: n={len(cluster)}, "
-          f"center=({cluster.mean(0)[0]:.1f}, {cluster.mean(0)[1]:.1f})")
-print(f"Converged in {iteration + 1} iterations")
-```
+    **(1)(2) 수치적으로.**
 
-출력:
+    ```python
+    import numpy as np
 
-```
-Cluster 0: n=101, center=(19.1, 5.3)
-Cluster 1: n=95, center=(50.6, 30.5)
-Cluster 2: n=104, center=(79.2, 14.9)
-Converged in 8 iterations
-```
+    np.random.seed(42)
+
+    # === 자료 생성: 군집 3개 ===
+    # 각 중심 주위에 100개씩 뿌려 총 300개를 만든다.
+    # 어느 점이 어느 군집에서 나왔는지는 우리가 알지만, **알고리즘에게는 주지 않는다.**
+    # 정답 레이블이 없다는 것이 비지도학습의 정의다.
+    centers = np.array([[20, 5], [50, 30], [80, 15]])
+    data = np.vstack([
+        np.random.normal(loc=c, scale=[8, 4], size=(100, 2))
+        for c in centers
+    ])
+
+    # === K-평균 직접 구현 ===
+    k = 3
+
+    # 초기화: 자료점 중 k개를 무작위로 골라 첫 중심으로 삼는다.
+    # K-평균은 초기값에 민감해서, 실무에서는 여러 번 돌려 가장 좋은 것을 고른다.
+    centroids = data[np.random.choice(len(data), k, replace=False)]
+
+    for iteration in range(20):
+        # (1) 배정 단계: 각 점을 가장 가까운 중심에 붙인다.
+        #     data[:, None]은 (300, 1, 2), centroids[None, :]은 (1, 3, 2) 모양이라
+        #     브로드캐스팅으로 (300, 3, 2)가 되고, axis=2로 노름을 내면
+        #     dists[i, j] = i번 점과 j번 중심 사이의 거리가 된다.
+        dists = np.linalg.norm(data[:, None] - centroids[None, :], axis=2)
+        labels = dists.argmin(axis=1)
+
+        # (2) 갱신 단계: 각 군집에 속한 점들의 평균을 새 중심으로 삼는다.
+        new_centroids = np.array([data[labels == j].mean(axis=0) for j in range(k)])
+
+        # (3) 수렴 판정: 중심이 더 이상 움직이지 않으면 끝난다.
+        #     두 단계 모두 군집내 제곱합을 줄이기만 하므로 반드시 수렴한다.
+        #     다만 전역 최소가 아니라 국소 최소일 수 있다.
+        if np.allclose(centroids, new_centroids):
+            break
+        centroids = new_centroids
+
+    for j in range(k):
+        cluster = data[labels == j]
+        print(f"Cluster {j}: n={len(cluster)}, "
+              f"center=({cluster.mean(0)[0]:.1f}, {cluster.mean(0)[1]:.1f})")
+    print(f"Converged in {iteration + 1} iterations")
+
+    # --- (1)(2) 의 자로 재 본다 ---
+    true_label = np.repeat([0, 1, 2], 100)
+    wrong = int((labels != true_label).sum())
+    wcss = sum(((data[labels == j] - centroids[j]) ** 2).sum() for j in range(k))
+    print(f"중심의 표준오차: x = {8 / 10:.1f}, y = {4 / 10:.1f}")
+    for j in range(k):
+        d = data[labels == j].mean(0) - centers[j]
+        print(f"  군집 {j}: 참 중심에서 ({d[0]:+.2f}, {d[1]:+.2f}) "
+              f"= ({d[0] / 0.8:+.2f}, {d[1] / 0.4:+.2f}) 표준오차")
+    print(f"잘못 배정된 점: {wrong} / 300")
+    print(f"WCSS = {wcss:,.0f},  참 분할의 기댓값 = 3*99*(64+16) = {3 * 99 * 80:,.0f}")
+    ```
+
+    출력:
+
+    ```
+    Cluster 0: n=101, center=(19.1, 5.3)
+    Cluster 1: n=95, center=(50.6, 30.5)
+    Cluster 2: n=104, center=(79.2, 14.9)
+    Converged in 8 iterations
+    중심의 표준오차: x = 0.8, y = 0.4
+      군집 0: 참 중심에서 (-0.88, +0.34) = (-1.09, +0.85) 표준오차
+      군집 1: 참 중심에서 (+0.61, +0.45) = (+0.77, +1.13) 표준오차
+      군집 2: 참 중심에서 (-0.82, -0.12) = (-1.03, -0.29) 표준오차
+    잘못 배정된 점: 5 / 300
+    WCSS = 22,006,  참 분할의 기댓값 = 3*99*(64+16) = 23,760
+    ```
+
+    **세 중심이 모두 맞는다.** 참 중심에서의 거리가 $x$ 방향 $-1.09$, $+0.77$, $-1.03$ 표준오차, $y$ 방향 $+0.85$, $+1.13$, $-0.29$ 표준오차로 전부 $1.2$ 안이다. (1)의 자가 없으면 $19.1$이 $20$에 가까운지 말할 수 없었을 것이다.
+
+    군집 크기가 $101$, $95$, $104$로 $100$에서 벗어난 것은 **$5$개 점이 이웃 군집으로 넘어갔기** 때문이다. $300$개 중 $5$개, 곧 $1.7\%$다. 세 중심이 $30$ 넘게 떨어져 있고 흩어짐이 $8$이라 경계가 깨끗한데도 완벽하지는 않다.
+
+    WCSS는 $22{,}006$으로 참 분할의 기댓값 $23{,}760$보다 **$7\%$ 작다.** 예상한 방향이다. $K$-평균은 WCSS를 최소화하므로 경계의 점들을 가까운 중심 쪽으로 옮겨 참 분할보다 더 낮은 값을 만들어 낸다. **WCSS가 더 낮다는 것이 더 옳다는 뜻이 아니다.** 이 사실이 다음 절에서 "$k$를 어떻게 고르는가"를 어렵게 만드는 바로 그 이유다.
 
 ## 정답이 없다는 것
 

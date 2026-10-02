@@ -165,167 +165,202 @@ $t = 120$의 지도에서 문을 통과하는 순간을 생각해 보자. 그 �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 관측만 쓰는 청소기와 지도를 쌓는 청소기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 관측만 쓰는 청소기와 지도를 쌓는 청소기. $11 \times 21$짜리 방이 가운데 칸막이로 둘로 갈려 있고 문이 **한 칸**뿐이다. 로봇은 주변 두 칸까지만 본다. 에이전트 A는 상태를 그 순간의 레이더 화면으로 두고($s_t = o_t$), 에이전트 B는 지금까지 본 것을 지도에 쌓는다($x_t$).
+
+**(1)** 치워야 할 칸이 몇 개이고, 어떤 정책도 넘을 수 없는 **걸음 수의 하한**은 얼마인가.
+
+**(2)** 두 에이전트를 시드 $30$개로 돌려, B의 성적이 그 하한에 얼마나 가까운지와 A가 실패하는 **구조적** 이유를 읽으시오.
 
 </div>
 
-```python
-"""관측은 상태가 아니다: 근거리 레이더를 단 로봇 청소기."""
+??? success "풀이"
 
-import numpy as np
-from collections import deque
+    **(1) 해석적으로.** 바깥 테두리가 벽이므로 안쪽은 $9 \times 19 = 171$칸이다. 가운데 칸막이가 열 번째 열을 막는데 안쪽 $9$칸 중 $1$칸이 문이므로 벽이 $8$칸이다. 따라서 치울 칸은
 
-H, W = 11, 21          # 방의 크기 (세로 11칸, 가로 21칸)
-RADAR = 2              # 로봇은 자기 주변 2칸까지만 볼 수 있다
-MAX_STEPS = 4000       # 이 걸음 수를 넘으면 실패로 친다
-MOVES = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
-STEP_OF = {v: k for k, v in MOVES.items()}      # 변위 -> 행동 이름 (역방향 표)
+    $$
+    171 - 8 = 163
+    $$
 
+    이고 왼쪽 방 $81$칸, 오른쪽 방 $81$칸, 문 $1$칸으로 갈린다.
 
-# === 문 하나로 이어진 두 개의 방 ===
-def make_room():
-    """가장자리는 벽, 가운데 칸막이에 문이 하나 뚫린 방을 만든다."""
-    wall = np.zeros((H, W), dtype=bool)
-    wall[0, :] = wall[-1, :] = wall[:, 0] = wall[:, -1] = True   # 바깥 테두리
-    wall[:, 10] = True                       # 가운데 칸막이
-    wall[5, 10] = False                      # 문 한 칸
-    # 이 구조가 중요하다. 문을 찾아 통과해야만 오른쪽 방을 청소할 수 있다.
-    return wall
+    로봇은 **자기가 서 있는 칸만** 청소한다. 그러므로 $163$칸을 모두 밟아야 하고, 한 걸음에 한 칸만 움직이므로
 
+    $$
+    \text{걸음 수} \ge 163 - 1 = 162
+    $$
 
-def visible(pos):
-    """현재 위치에서 레이더에 잡히는 칸들의 목록. 이것이 관측 o_t 다."""
-    r, c = pos
-    return [(i, j) for i in range(r - RADAR, r + RADAR + 1)
-                   for j in range(c - RADAR, c + RADAR + 1)
-                   if 0 <= i < H and 0 <= j < W]
+    다. 출발 칸은 걸음 없이 밟으므로 $1$을 뺀다. **이 $162$는 방의 모양만으로 정해지는 수이고, 어떤 영리한 정책도 그 아래로 내려갈 수 없다.** 게다가 $162$를 달성하려면 같은 칸을 두 번 밟지 않는 경로가 있어야 하는데, 문이 한 칸뿐이라 왼쪽 방을 완전히 비우고 문을 지나 오른쪽을 비우는 식으로만 가능하다.
 
+    **(2) 수치적으로.** 아래 코드가 두 에이전트를 시드 $30$개로 돌린다.
 
-# === 에이전트 A: 상태 = 지금 이 순간의 레이더 화면. 기억이 없다 ===
-def agent_observation(pos, dirty, known, known_dirty, rng):
-    """s_t = o_t 로 두는 정책. 보이는 것에만 반응한다."""
-    # 레이더 안에 더러운 칸이 있는가?
-    seen = [cell for cell in visible(pos) if dirty[cell]]
-    if seen:
-        # 있으면 그중 가장 가까운 칸(맨해튼 거리) 쪽으로 한 걸음 간다
-        tr, tc = min(seen, key=lambda t: abs(t[0] - pos[0]) + abs(t[1] - pos[1]))
-        options = []
-        if tr < pos[0]: options.append("up")
-        if tr > pos[0]: options.append("down")
-        if tc < pos[1]: options.append("left")
-        if tc > pos[1]: options.append("right")
-        if options:
-            return options[rng.integers(len(options))]
-    # 보이는 범위에 더러운 칸이 없으면 무작위로 헤맨다.
-    # 어디를 이미 청소했는지 기억하지 못하므로 이것 말고는 할 수 있는 게 없다.
-    return list(MOVES)[rng.integers(4)]
+    ```python
+    """관측은 상태가 아니다: 근거리 레이더를 단 로봇 청소기."""
+
+    import numpy as np
+    from collections import deque
+
+    H, W = 11, 21          # 방의 크기 (세로 11칸, 가로 21칸)
+    RADAR = 2              # 로봇은 자기 주변 2칸까지만 볼 수 있다
+    MAX_STEPS = 4000       # 이 걸음 수를 넘으면 실패로 친다
+    MOVES = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
+    STEP_OF = {v: k for k, v in MOVES.items()}      # 변위 -> 행동 이름 (역방향 표)
 
 
-# === 에이전트 B: 상태 = 지금까지 쌓아 올린 지도 ===
-def agent_map(pos, dirty, known, known_dirty, rng):
-    """더럽다고 아는 칸 또는 아직 안 가 본 칸 중 가장 가까운 곳으로 간다.
-
-    너비우선탐색(BFS)으로 최단 경로를 찾는다.
-    핵심은 탐색이 실제 방이 아니라 **로봇이 가진 지도(known)** 위에서 이뤄진다는 것이다.
-    즉 이 정책은 자기가 아는 만큼만 계획할 수 있다.
-    """
-    parent, queue, goal = {pos: None}, deque([pos]), None
-    while queue:
-        cur = queue.popleft()
-        # 목표 조건: 더러운 것으로 기록된 칸이거나(known_dirty),
-        #            아직 한 번도 관측하지 못한 칸이다(known == 0).
-        # 둘째 조건이 탐험을 만들어 낸다. 미지의 영역이 곧 목표가 되기 때문이다.
-        if cur != pos and (known_dirty[cur] or known[cur] == 0):
-            goal = cur
-            break
-        for dr, dc in MOVES.values():
-            nxt = (cur[0] + dr, cur[1] + dc)
-            if (0 <= nxt[0] < H and 0 <= nxt[1] < W
-                    and nxt not in parent and known[nxt] != 2):   # 벽으로 아는 칸은 지나가지 않는다
-                parent[nxt] = cur
-                queue.append(nxt)
-    if goal is None:
-        return list(MOVES)[rng.integers(4)]     # 갈 곳이 없으면(있을 수 없지만) 무작위
-
-    # 찾은 목표에서 부모를 거슬러 올라가 "첫 걸음"이 무엇이었는지 알아낸다
-    cur = goal
-    while parent[cur] != pos:
-        cur = parent[cur]
-    return STEP_OF[(cur[0] - pos[0], cur[1] - pos[1])]
+    # === 문 하나로 이어진 두 개의 방 ===
+    def make_room():
+        """가장자리는 벽, 가운데 칸막이에 문이 하나 뚫린 방을 만든다."""
+        wall = np.zeros((H, W), dtype=bool)
+        wall[0, :] = wall[-1, :] = wall[:, 0] = wall[:, -1] = True   # 바깥 테두리
+        wall[:, 10] = True                       # 가운데 칸막이
+        wall[5, 10] = False                      # 문 한 칸
+        # 이 구조가 중요하다. 문을 찾아 통과해야만 오른쪽 방을 청소할 수 있다.
+        return wall
 
 
-# === 한 번의 에피소드: 방을 다 치우거나 시간이 다할 때까지 ===
-def run(agent, seed):
-    rng = np.random.default_rng(seed)
+    def visible(pos):
+        """현재 위치에서 레이더에 잡히는 칸들의 목록. 이것이 관측 o_t 다."""
+        r, c = pos
+        return [(i, j) for i in range(r - RADAR, r + RADAR + 1)
+                       for j in range(c - RADAR, c + RADAR + 1)
+                       if 0 <= i < H and 0 <= j < W]
+
+
+    # === 에이전트 A: 상태 = 지금 이 순간의 레이더 화면. 기억이 없다 ===
+    def agent_observation(pos, dirty, known, known_dirty, rng):
+        """s_t = o_t 로 두는 정책. 보이는 것에만 반응한다."""
+        # 레이더 안에 더러운 칸이 있는가?
+        seen = [cell for cell in visible(pos) if dirty[cell]]
+        if seen:
+            # 있으면 그중 가장 가까운 칸(맨해튼 거리) 쪽으로 한 걸음 간다
+            tr, tc = min(seen, key=lambda t: abs(t[0] - pos[0]) + abs(t[1] - pos[1]))
+            options = []
+            if tr < pos[0]: options.append("up")
+            if tr > pos[0]: options.append("down")
+            if tc < pos[1]: options.append("left")
+            if tc > pos[1]: options.append("right")
+            if options:
+                return options[rng.integers(len(options))]
+        # 보이는 범위에 더러운 칸이 없으면 무작위로 헤맨다.
+        # 어디를 이미 청소했는지 기억하지 못하므로 이것 말고는 할 수 있는 게 없다.
+        return list(MOVES)[rng.integers(4)]
+
+
+    # === 에이전트 B: 상태 = 지금까지 쌓아 올린 지도 ===
+    def agent_map(pos, dirty, known, known_dirty, rng):
+        """더럽다고 아는 칸 또는 아직 안 가 본 칸 중 가장 가까운 곳으로 간다.
+
+        너비우선탐색(BFS)으로 최단 경로를 찾는다.
+        핵심은 탐색이 실제 방이 아니라 **로봇이 가진 지도(known)** 위에서 이뤄진다는 것이다.
+        즉 이 정책은 자기가 아는 만큼만 계획할 수 있다.
+        """
+        parent, queue, goal = {pos: None}, deque([pos]), None
+        while queue:
+            cur = queue.popleft()
+            # 목표 조건: 더러운 것으로 기록된 칸이거나(known_dirty),
+            #            아직 한 번도 관측하지 못한 칸이다(known == 0).
+            # 둘째 조건이 탐험을 만들어 낸다. 미지의 영역이 곧 목표가 되기 때문이다.
+            if cur != pos and (known_dirty[cur] or known[cur] == 0):
+                goal = cur
+                break
+            for dr, dc in MOVES.values():
+                nxt = (cur[0] + dr, cur[1] + dc)
+                if (0 <= nxt[0] < H and 0 <= nxt[1] < W
+                        and nxt not in parent and known[nxt] != 2):   # 벽으로 아는 칸은 지나가지 않는다
+                    parent[nxt] = cur
+                    queue.append(nxt)
+        if goal is None:
+            return list(MOVES)[rng.integers(4)]     # 갈 곳이 없으면(있을 수 없지만) 무작위
+
+        # 찾은 목표에서 부모를 거슬러 올라가 "첫 걸음"이 무엇이었는지 알아낸다
+        cur = goal
+        while parent[cur] != pos:
+            cur = parent[cur]
+        return STEP_OF[(cur[0] - pos[0], cur[1] - pos[1])]
+
+
+    # === 한 번의 에피소드: 방을 다 치우거나 시간이 다할 때까지 ===
+    def run(agent, seed):
+        rng = np.random.default_rng(seed)
+        wall = make_room()
+        dirty = ~wall.copy()          # 벽이 아닌 모든 칸이 처음엔 더럽다
+        total = dirty.sum()
+        pos = (1, 1)                  # 왼쪽 위 구석에서 출발
+
+        # 로봇이 **자기 머릿속에** 들고 있는 지도. 이것이 상태 x_t 다.
+        #   known:       0 = 모름, 1 = 빈 칸, 2 = 벽
+        #   known_dirty: 더럽다고 기록해 둔 칸
+        # 처음에는 전부 0, 즉 아무것도 모르는 채로 시작한다.
+        known = np.zeros((H, W), np.int8)
+        known_dirty = np.zeros((H, W), bool)
+
+        for step in range(1, MAX_STEPS + 1):
+            dirty[pos] = False                                   # 발밑을 청소한다
+
+            # 상태 갱신 x_{t+1} = f(x_t, a_t, o_{t+1}).
+            # 새 관측이 들어오면 지도를 덮어쓴다. 이 한 줄이 A와 B를 가르는 전부다.
+            for cell in visible(pos):                            # o_t 가 도착
+                known[cell] = 2 if wall[cell] else 1
+                known_dirty[cell] = dirty[cell]
+
+            if not dirty.any():
+                return step, 1.0                                 # 방을 다 치웠다
+
+            # 정책이 행동 a_t 를 고르고, 벽이 아니면 이동한다
+            dr, dc = MOVES[agent(pos, dirty, known, known_dirty, rng)]
+            nxt = (pos[0] + dr, pos[1] + dc)
+            if not wall[nxt]:
+                pos = nxt
+
+        # 시간이 다했다. 얼마나 치웠는지(청소율)를 함께 돌려준다.
+        return MAX_STEPS, 1 - dirty.sum() / total
+
+
+    for label, agent in [("s = o  (radar only) ", agent_observation),
+                         ("x = accumulated map ", agent_map)]:
+        results = [run(agent, seed) for seed in range(30)]
+        steps = np.array([r[0] for r in results])
+        coverage = np.array([r[1] for r in results])
+        finished = coverage >= 1.0
+        median = np.median(steps[finished]) if finished.any() else float("nan")
+        print(f"{label}: finished {finished.mean():4.0%} of runs | "
+              f"median steps {median:6.0f} | mean coverage {coverage.mean():6.1%}")
+
+    # --- (1) 의 하한을 확인한다 ---
     wall = make_room()
-    dirty = ~wall.copy()          # 벽이 아닌 모든 칸이 처음엔 더럽다
-    total = dirty.sum()
-    pos = (1, 1)                  # 왼쪽 위 구석에서 출발
+    n_free = int((~wall).sum())
+    print(f"치울 칸 {n_free}개 (왼쪽 {int((~wall[1:10, 1:10]).sum())}, "
+          f"오른쪽 {int((~wall[1:10, 11:20]).sum())}, 문 1),  걸음 수 하한 {n_free - 1}")
+    ```
 
-    # 로봇이 **자기 머릿속에** 들고 있는 지도. 이것이 상태 x_t 다.
-    #   known:       0 = 모름, 1 = 빈 칸, 2 = 벽
-    #   known_dirty: 더럽다고 기록해 둔 칸
-    # 처음에는 전부 0, 즉 아무것도 모르는 채로 시작한다.
-    known = np.zeros((H, W), np.int8)
-    known_dirty = np.zeros((H, W), bool)
+    출력:
 
-    for step in range(1, MAX_STEPS + 1):
-        dirty[pos] = False                                   # 발밑을 청소한다
+    ```
+    s = o  (radar only) : finished  27% of runs | median steps    342 | mean coverage  83.8%
+    x = accumulated map : finished 100% of runs | median steps    171 | mean coverage 100.0%
+    치울 칸 163개 (왼쪽 81, 오른쪽 81, 문 1),  걸음 수 하한 162
+    ```
 
-        # 상태 갱신 x_{t+1} = f(x_t, a_t, o_{t+1}).
-        # 새 관측이 들어오면 지도를 덮어쓴다. 이 한 줄이 A와 B를 가르는 전부다.
-        for cell in visible(pos):                            # o_t 가 도착
-            known[cell] = 2 if wall[cell] else 1
-            known_dirty[cell] = dirty[cell]
+    **지도를 쌓는 청소기의 중앙값 $171$걸음은 하한 $162$보다 겨우 $9$걸음 많다.** $5.6\%$의 낭비다. 부분적인 관측만 가지고, 방의 모양을 미리 알지도 못한 채, 사실상 최적에 가까운 경로를 그린 셈이다.
 
-        if not dirty.any():
-            return step, 1.0                                 # 방을 다 치웠다
+    관측만 쓰는 청소기는 $30$번 중 $8$번만 완주했고($27\%$), 평균 $16\%$의 바닥을 못 치운 채 $4{,}000$걸음을 다 썼다. **$4{,}000$은 하한의 $25$배다.** 시간이 모자란 것이 아니다.
 
-        # 정책이 행동 a_t 를 고르고, 벽이 아니면 이동한다
-        dr, dc = MOVES[agent(pos, dirty, known, known_dirty, rng)]
-        nxt = (pos[0] + dr, pos[1] + dc)
-        if not wall[nxt]:
-            pos = nxt
+    **두 청소기의 센서 성능은 완전히 같다.** 둘 다 주변 $5 \times 5 = 25$칸을 보고, 알고리즘의 정교함도 문제가 아니다. 차이는 오직 하나, 들어온 관측을 **버리는가 쌓는가**이다.
 
-    # 시간이 다했다. 얼마나 치웠는지(청소율)를 함께 돌려준다.
-    return MAX_STEPS, 1 - dirty.sum() / total
+    난수 시드 30개에 대한 결과를 표로 옮기면 이렇다.
 
+    | 상태로 쓰는 것 | 청소를 마친 시행 | 완료까지 걸음 수(중앙값) | 평균 청소율 |
+    |:---|---:|---:|---:|
+    | $s_t = o_t$ (레이더만) | **27%** | 342 | 83.8% |
+    | $x_t = $ 누적 지도 | **100%** | **171** | **100%** |
 
-for label, agent in [("s = o  (radar only) ", agent_observation),
-                     ("x = accumulated map ", agent_map)]:
-    results = [run(agent, seed) for seed in range(30)]
-    steps = np.array([r[0] for r in results])
-    coverage = np.array([r[1] for r in results])
-    finished = coverage >= 1.0
-    median = np.median(steps[finished]) if finished.any() else float("nan")
-    print(f"{label}: finished {finished.mean():4.0%} of runs | "
-          f"median steps {median:6.0f} | mean coverage {coverage.mean():6.1%}")
-```
+    !!! note "관측만 쓰는 청소기는 왜 옆방을 못 찾는가"
+        실패의 핵심은 걸음 수가 아니라 **구조**다. 에이전트 A는 눈앞에 더러운 칸이 보이지 않으면 무작위로 움직인다. 문은 폭이 한 칸이므로 무작위 걸음이 그 지점을 정확히 통과할 확률은 매우 낮다. 게다가 통과하더라도 자기가 통과했다는 사실을 **기억하지 못한다.**
 
-출력:
+        평균 청소율 $83.8\%$라는 숫자가 이 구조를 그대로 가리킨다. 왼쪽 방이 전체의 $81/163 = 49.7\%$이므로, 왼쪽을 다 치우고 오른쪽을 전혀 못 치우면 $50\%$다. $83.8\%$는 그보다 높으니 문을 통과하기는 한다. 다만 통과한 뒤에도 기억이 없어 오른쪽을 끝내지 못한다.
 
-```
-s = o  (radar only) : finished  27% of runs | median steps    342 | mean coverage  83.8%
-x = accumulated map : finished 100% of runs | median steps    171 | mean coverage 100.0%
-```
+        이 구조는 1.4절 **알고리즘 편향과 피드백 루프**에서 볼 것과 정확히 같다. 거기서는 예측 치안 모형이 B구역에 순찰을 보내지 않아 B구역의 자료가 영영 생기지 않았다. 여기서는 청소기가 오른쪽 방에 가지 않아 오른쪽 방의 자료가 영영 생기지 않는다. **가지 않은 곳은 배울 수 없고, 배우지 못하면 갈 이유도 생기지 않는다.**
 
-난수 시드 30개에 대한 결과다.
-
-| 상태로 쓰는 것 | 청소를 마친 시행 | 완료까지 걸음 수(중앙값) | 평균 청소율 |
-|:---|---:|---:|---:|
-| $s_t = o_t$ (레이더만) | **27%** | 342 | 83.8% |
-| $x_t = $ 누적 지도 | **100%** | **171** | **100%** |
-
-지도를 쌓는 청소기는 **모든 시행에서 방을 끝까지 청소했고 걸음 수는 절반**이다. 관측만 쓰는 청소기는 30번 중 8번만 완주했고, 평균 16%의 바닥을 못 치운 채 시간이 끝났다.
-
-두 청소기의 센서 성능은 **완전히 같다.** 알고리즘의 정교함도 문제가 아니다. 차이는 오직 하나, 들어온 관측을 **버리는가 쌓는가**이다.
-
-!!! note "관측만 쓰는 청소기는 왜 옆방을 못 찾는가"
-    실패의 핵심은 걸음 수가 아니라 **구조**다. 에이전트 A는 눈앞에 더러운 칸이 보이지 않으면 무작위로 움직인다. 문은 폭이 한 칸이므로 무작위 걸음이 그 지점을 정확히 통과할 확률은 매우 낮다. 게다가 통과하더라도 자기가 통과했다는 사실을 **기억하지 못한다.**
-
-    이 구조는 1.4절 **알고리즘 편향과 피드백 루프**에서 볼 것과 정확히 같다. 거기서는 예측 치안 모형이 B구역에 순찰을 보내지 않아 B구역의 자료가 영영 생기지 않았다. 여기서는 청소기가 오른쪽 방에 가지 않아 오른쪽 방의 자료가 영영 생기지 않는다. **가지 않은 곳은 배울 수 없고, 배우지 못하면 갈 이유도 생기지 않는다.**
-
-    차이는 의도에 있다. 강화학습은 이 문제를 알고 있으므로 **탐색을 설계에 명시적으로 넣는다.** 에이전트 B가 `?` 칸을 목표로 삼는 것이 바로 그 장치다. 배포된 예측 모형에는 대개 그 장치가 없다.
+        차이는 의도에 있다. 강화학습은 이 문제를 알고 있으므로 **탐색을 설계에 명시적으로 넣는다.** 에이전트 B가 `?` 칸을 목표로 삼는 것이 바로 그 장치다. 배포된 예측 모형에는 대개 그 장치가 없다.
 
 ## 다른 패러다임과의 비교
 
@@ -386,53 +421,108 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 엡실론-탐욕으로 다중 슬롯머신 풀기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 엡실론-탐욕으로 다중 슬롯머신 풀기. 팔이 다섯이고 참 평균이 $(1.0,\ 1.5,\ 2.0,\ 1.2,\ 0.8)$이다. $\epsilon = 0.1$로 $1{,}000$번 당긴다.
+
+**(1)** 추정이 충분히 정확해진 뒤 **최적 팔을 고를 확률**과 **한 번당 기대 보상**을 구하시오. 거기서 한 걸음당 **후회**(최적 대비 손해)는 얼마인가.
+
+**(2)** 모의실험이 그 값들을 재현하는지 확인하고, 각 팔의 추정값이 참값과 맞는지 표준오차로 재시오.
 
 </div>
 
-```python
-"""엡실론-탐욕 전략으로 다중 슬롯머신을 1000번 당겨 본다."""
-import numpy as np
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** 엡실론-탐욕은 확률 $1-\epsilon$로 추정값이 가장 큰 팔을, 확률 $\epsilon$로 다섯 팔 가운데 하나를 **균등하게** 고른다. 추정이 자리를 잡아 탐욕적 선택이 참 최적 팔(3번, 평균 $2.0$)을 가리킨다면
 
-# 팔 5개. 참 평균은 우리만 알고 에이전트는 모른다.
-true_means = [1.0, 1.5, 2.0, 1.2, 0.8]
-n_arms = len(true_means)
-n_steps = 1000
-epsilon = 0.1  # 10%는 무작위로 탐색하고, 90%는 지금까지 가장 나은 팔을 쓴다
+    $$
+    P(\text{최적 팔}) = (1-\epsilon) + \frac{\epsilon}{5} = 0.9 + 0.02 = 0.92
+    $$
 
-Q = np.zeros(n_arms)       # 각 팔의 가치 추정값
-N = np.zeros(n_arms)       # 각 팔을 당긴 횟수
-rewards = []
+    다. **탐색을 $10\%$ 섞어도 그중 $5$분의 1은 우연히 최적 팔로 돌아오므로 $0.90$이 아니라 $0.92$다.**
 
-for t in range(n_steps):
-    if np.random.rand() < epsilon:
-        action = np.random.randint(n_arms)  # 탐색: 아무 팔이나
-    else:
-        action = np.argmax(Q)               # 활용: 추정값이 가장 큰 팔
+    한 번당 기대 보상은 모든 팔의 기여를 더한다. 비최적 팔 각각이 $\epsilon/5 = 0.02$의 확률을 가지므로
 
-    reward = np.random.normal(true_means[action], 1.0)
-    N[action] += 1
-    # 지난 보상을 다 들고 있다가 평균을 다시 내지 않고 한 걸음씩 고쳐 나간다.
-    # Q + (보상 - Q)/N 은 지금까지 받은 보상의 평균과 정확히 같다.
-    Q[action] += (reward - Q[action]) / N[action]
-    rewards.append(reward)
+    $$
+    E[\text{보상}] = (1-\epsilon)\mu^* + \frac{\epsilon}{5}\sum_{j}\mu_j
+    = 0.9 \times 2.0 + 0.02 \times 6.5 = 1.80 + 0.13 = 1.93
+    $$
 
-print("Estimated values:", np.round(Q, 2))
-print("True means:      ", true_means)
-print(f"Average reward:   {np.mean(rewards):.2f}")
-print(f"Best arm chosen:  {np.argmax(N)} (pulled {int(N[np.argmax(N)])} times)")
-```
+    이다. 최적 팔만 계속 당기면 $2.0$이므로 한 걸음당 **후회**는
 
-출력:
+    $$
+    2.0 - 1.93 = 0.07
+    $$
 
-```
-Estimated values: [0.83 1.41 2.04 1.14 0.61]
-True means:       [1.0, 1.5, 2.0, 1.2, 0.8]
-Average reward:   1.93
-Best arm chosen:  2 (pulled 903 times)
-```
+    이고 $1{,}000$걸음이면 누적 후회가 $70$이다. **$\epsilon$을 고정해 두면 후회가 걸음 수에 비례해 영원히 쌓인다.** 이미 답을 알고 난 뒤에도 $10\%$를 계속 버리기 때문이며, $\epsilon$을 시간에 따라 줄이는 방법이 쓰이는 이유다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    """엡실론-탐욕 전략으로 다중 슬롯머신을 1000번 당겨 본다."""
+    import numpy as np
+
+    np.random.seed(42)
+
+    # 팔 5개. 참 평균은 우리만 알고 에이전트는 모른다.
+    true_means = [1.0, 1.5, 2.0, 1.2, 0.8]
+    n_arms = len(true_means)
+    n_steps = 1000
+    epsilon = 0.1  # 10%는 무작위로 탐색하고, 90%는 지금까지 가장 나은 팔을 쓴다
+
+    Q = np.zeros(n_arms)       # 각 팔의 가치 추정값
+    N = np.zeros(n_arms)       # 각 팔을 당긴 횟수
+    rewards = []
+
+    for t in range(n_steps):
+        if np.random.rand() < epsilon:
+            action = np.random.randint(n_arms)  # 탐색: 아무 팔이나
+        else:
+            action = np.argmax(Q)               # 활용: 추정값이 가장 큰 팔
+
+        reward = np.random.normal(true_means[action], 1.0)
+        N[action] += 1
+        # 지난 보상을 다 들고 있다가 평균을 다시 내지 않고 한 걸음씩 고쳐 나간다.
+        # Q + (보상 - Q)/N 은 지금까지 받은 보상의 평균과 정확히 같다.
+        Q[action] += (reward - Q[action]) / N[action]
+        rewards.append(reward)
+
+    print("Estimated values:", np.round(Q, 2))
+    print("True means:      ", true_means)
+    print(f"Average reward:   {np.mean(rewards):.2f}")
+    print(f"Best arm chosen:  {np.argmax(N)} (pulled {int(N[np.argmax(N)])} times)")
+
+    # --- (1) 의 이론값과 맞추어 본다 ---
+    p_best = (1 - epsilon) + epsilon / n_arms
+    ev = (1 - epsilon) * max(true_means) + epsilon / n_arms * sum(true_means)
+    sd_count = np.sqrt(n_steps * p_best * (1 - p_best))
+    print(f"\n이론 최적 팔 선택확률 = {p_best:.2f},  기대 횟수 {p_best * n_steps:.0f} "
+          f"(SD {sd_count:.1f}),  실제 {int(N[2])}")
+    print(f"이론 한 번당 기대 보상 = {ev:.3f},  한 걸음당 후회 = {max(true_means) - ev:.2f}, "
+          f"1000걸음 누적 후회 = {(max(true_means) - ev) * n_steps:.0f}")
+    print(f"각 팔을 당긴 횟수: {N.astype(int)}")
+    print(f"Q 의 표준오차 1/sqrt(N): {np.round(1 / np.sqrt(N), 3)}")
+    print(f"z = (Q - 참값)/SE:      {np.round((Q - np.array(true_means)) * np.sqrt(N), 2)}")
+    ```
+
+    출력:
+
+    ```
+    Estimated values: [0.83 1.41 2.04 1.14 0.61]
+    True means:       [1.0, 1.5, 2.0, 1.2, 0.8]
+    Average reward:   1.93
+    Best arm chosen:  2 (pulled 903 times)
+
+    이론 최적 팔 선택확률 = 0.92,  기대 횟수 920 (SD 8.6),  실제 903
+    이론 한 번당 기대 보상 = 1.930,  한 걸음당 후회 = 0.07, 1000걸음 누적 후회 = 70
+    각 팔을 당긴 횟수: [ 35  20 903  21  21]
+    Q 의 표준오차 1/sqrt(N): [0.169 0.224 0.033 0.218 0.218]
+    z = (Q - 참값)/SE:      [-1.01 -0.39  1.16 -0.26 -0.86]
+    ```
+
+    **한 번당 기대 보상이 이론 $1.930$에 모의 $1.935$로 맞는다.** 보상의 표준편차가 $1$이므로 $1{,}000$번 평균의 표준오차가 $0.032$이고, 어긋남 $0.005$는 그 $6$분의 1이다.
+
+    최적 팔을 당긴 횟수는 $903$회로 이론 $920$회보다 $17$회 적다. 표준편차가 $8.6$이니 $2.0$ 표준편차 차이인데, 이는 **초반의 학습 구간** 때문이다. $Q$가 전부 $0$에서 출발하므로 처음 몇십 번은 아직 어느 팔이 좋은지 모른 채 당긴다. 실제로 다른 네 팔이 $20$~$35$회씩 당겨졌고, 그 가운데 순수한 탐색 몫은 각각 평균 $20$회($1000 \times 0.02$)다. 1번 팔만 $35$회로 튀어나온 것이 초기 탐색의 흔적이다.
+
+    **다섯 추정값이 모두 참값과 맞는다.** $z$ 값이 $-1.01$, $-0.39$, $+1.16$, $-0.26$, $-0.86$으로 전부 $1.2$ 안이다. 눈여겨볼 것은 **정밀도의 불균형**이다. 최적 팔의 표준오차가 $0.033$인 반면 나머지는 $0.17$~$0.22$로 여섯 배 크다. 엡실론-탐욕은 좋은 팔을 정밀하게 알고 나쁜 팔은 대충 아는 데 자원을 쓰며, **그것이 목적에 맞는 배분이다.** 나쁜 팔의 값을 정확히 아는 일은 보상에 보탬이 되지 않는다.
 
 ## 연습문제
 

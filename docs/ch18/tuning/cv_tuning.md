@@ -50,66 +50,115 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 교차검증과 1-표준오차 규칙
+**보기 1.** <span class="diff easy" title="쉬움"></span> 교차검증과 1-표준오차 규칙. $n = 100$, $p = 20$이고 참 계수는 앞의 셋만 $(3, -2, 1.5)$, 잡음은 $N(0,1)$이다. 라쏘의 $\lambda$를 $10^{0.5}$에서 $10^{-2.5}$까지 25점으로 훑으며 $5$-겹 교차검증을 한다.
+
+**(1)** 이 자료에서 교차검증 곡선이 **내려갈 수 없는 바닥**과 **올라갈 수 있는 천장**을 각각 수로 구하시오.
+
+**(2)** 교차검증을 실제로 돌려 (1)의 두 값을 확인하고, 최소 규칙과 1-표준오차 규칙이 고른 모형을 견주시오.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.linear_model import Lasso
-from sklearn.model_selection import KFold
+??? success "풀이"
 
-rng = np.random.default_rng(42)
+    **(1) 해석적으로.** 새 관측 $(x_0, y_0)$에서 $y_0 = x_0^\top\beta + \varepsilon_0$이고 $\varepsilon_0$은 훈련자료와 독립이다. 어떤 추정량 $\hat\beta$를 쓰든
 
-# 참으로 쓰이는 변수는 앞의 셋뿐이고 나머지 열일곱은 잡음이다.
-n, p = 100, 20
-X = rng.normal(size=(n, p))
-beta_true = np.zeros(p)
-beta_true[:3] = [3.0, -2.0, 1.5]
-y = X @ beta_true + rng.normal(0, 1, n)
+    $$
+    E\!\left[(y_0 - x_0^\top\hat\beta)^2\right]
+    = E\!\left[(\varepsilon_0 + x_0^\top(\beta - \hat\beta))^2\right]
+    = \sigma^2 + E\!\left[(x_0^\top(\beta-\hat\beta))^2\right]
+    \;\ge\; \sigma^2
+    $$
 
-# lambda 격자는 로그 눈금으로 잡는다. 벌점의 효과가 곱셈으로 작동하므로
-# 등간격보다 등비간격이 알맞다.
-lambdas = np.logspace(0.5, -2.5, 25)
+    이다. 교차항은 $\varepsilon_0$이 $\hat\beta$와 독립이고 평균이 0이라 사라진다. **바닥은 $\sigma^2 = 1$이고, 이는 $\beta$를 완벽히 알아도 줄일 수 없는 몫이다.**
 
-kf = KFold(n_splits=5, shuffle=True, random_state=0)
+    천장은 반대쪽 끝에 있다. $\lambda \ge \lambda_{\max} = \lVert X^\top y\rVert_\infty / n$이면 라쏘 해가 영벡터이므로(연습문제 1) 예측값이 절편뿐이고, 그때의 예측오차는 $y$의 분산 $\operatorname{Var}(y) = \beta^\top\Sigma\beta + \sigma^2$이 된다. 설계가 독립 표준정규이므로 $\Sigma = I$이고
 
-# 겹마다의 MSE 를 따로 남긴다. 평균만 구하면 1-표준오차 규칙을 쓸 수 없다.
-fold_mse = np.zeros((5, len(lambdas)))
-for k, (tr, va) in enumerate(kf.split(X)):
-    for i, lam in enumerate(lambdas):
-        model = Lasso(alpha=lam, max_iter=10000).fit(X[tr], y[tr])
-        fold_mse[k, i] = np.mean((y[va] - model.predict(X[va])) ** 2)
+    $$
+    \operatorname{Var}(y) \approx 3^2 + (-2)^2 + 1.5^2 + 1 = 17.25
+    $$
 
-cv_mean = fold_mse.mean(axis=0)
-cv_se = fold_mse.std(axis=0, ddof=1) / np.sqrt(5)
+    다. **격자의 왼쪽 끝은 영모형, 오른쪽 끝은 최소제곱**이며 교차검증 곡선은 그 사이 어딘가에서 바닥을 친다.
 
-i_min = int(np.argmin(cv_mean))
+    **(2) 수치적으로.** 1-표준오차 규칙은
 
-# 1-표준오차 규칙: 최솟값에서 1 표준오차 안에 드는 lambda 중 가장 큰 것을
-# 고른다. CV 곡선의 최소점은 그 자체가 흔들리는 추정값이므로, 조금 더
-# 단순한 모형 쪽으로 물러서는 편이 안전하다는 생각이다.
-threshold = cv_mean[i_min] + cv_se[i_min]
-i_1se = int(np.where(cv_mean <= threshold)[0][0])
+    $$
+    \hat\lambda_{1\text{SE}} = \max\{\lambda : \mathrm{CV}(\lambda) \le \mathrm{CV}(\hat\lambda_{\min}) + \mathrm{SE}(\hat\lambda_{\min})\}
+    $$
 
-for name, i in [("최소 CV", i_min), ("1-표준오차", i_1se)]:
-    beta = Lasso(alpha=lambdas[i], max_iter=10000).fit(X, y).coef_
-    print(f"{name:>10}: lambda = {lambdas[i]:.4f}, "
-          f"CV MSE = {cv_mean[i]:.3f} (SE {cv_se[i]:.3f}), "
-          f"0 이 아닌 계수 = {np.sum(np.abs(beta) > 1e-8)}개")
-print("참으로 0 이 아닌 계수: 3개")
-```
+    이다. 코드의 격자 `lambdas` 가 **큰 값에서 작은 값으로** 내려가므로 `np.where(cv_mean <= threshold)[0][0]` 이 집는 첫 번째 자리가 곧 조건을 만족하는 **가장 큰** $\lambda$다.
 
-출력:
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Lasso
+    from sklearn.model_selection import KFold
 
-```
-     최소 CV: lambda = 0.1000, CV MSE = 1.001 (SE 0.044), 0 이 아닌 계수 = 9개
-    1-표준오차: lambda = 0.1778, CV MSE = 1.038 (SE 0.083), 0 이 아닌 계수 = 5개
-참으로 0 이 아닌 계수: 3개
-```
+    rng = np.random.default_rng(42)
 
-최소 CV 규칙은 잡음 변수를 여섯 개나 남겼지만, 1-표준오차 규칙은 다섯 개만 남겼다.
-참으로 쓰인 변수가 셋임을 생각하면 뒤쪽이 더 나은 선택이다.
+    # 참으로 쓰이는 변수는 앞의 셋뿐이고 나머지 열일곱은 잡음이다.
+    n, p = 100, 20
+    X = rng.normal(size=(n, p))
+    beta_true = np.zeros(p)
+    beta_true[:3] = [3.0, -2.0, 1.5]
+    y = X @ beta_true + rng.normal(0, 1, n)
+
+    # lambda 격자는 로그 눈금으로 잡는다. 벌점의 효과가 곱셈으로 작동하므로
+    # 등간격보다 등비간격이 알맞다.
+    lambdas = np.logspace(0.5, -2.5, 25)
+
+    kf = KFold(n_splits=5, shuffle=True, random_state=0)
+
+    # 겹마다의 MSE 를 따로 남긴다. 평균만 구하면 1-표준오차 규칙을 쓸 수 없다.
+    fold_mse = np.zeros((5, len(lambdas)))
+    for k, (tr, va) in enumerate(kf.split(X)):
+        for i, lam in enumerate(lambdas):
+            model = Lasso(alpha=lam, max_iter=10000).fit(X[tr], y[tr])
+            fold_mse[k, i] = np.mean((y[va] - model.predict(X[va])) ** 2)
+
+    cv_mean = fold_mse.mean(axis=0)
+    cv_se = fold_mse.std(axis=0, ddof=1) / np.sqrt(5)
+
+    i_min = int(np.argmin(cv_mean))
+
+    # 1-표준오차 규칙: 최솟값에서 1 표준오차 안에 드는 lambda 중 가장 큰 것을
+    # 고른다. CV 곡선의 최소점은 그 자체가 흔들리는 추정값이므로, 조금 더
+    # 단순한 모형 쪽으로 물러서는 편이 안전하다는 생각이다.
+    threshold = cv_mean[i_min] + cv_se[i_min]
+    i_1se = int(np.where(cv_mean <= threshold)[0][0])
+
+    for name, i in [("최소 CV", i_min), ("1-표준오차", i_1se)]:
+        beta = Lasso(alpha=lambdas[i], max_iter=10000).fit(X, y).coef_
+        print(f"{name:>10}: lambda = {lambdas[i]:.4f}, "
+              f"CV MSE = {cv_mean[i]:.3f} (SE {cv_se[i]:.3f}), "
+              f"0 이 아닌 계수 = {np.sum(np.abs(beta) > 1e-8)}개")
+    print("참으로 0 이 아닌 계수: 3개")
+
+    # --- (1) 의 바닥과 천장을 확인한다 ---
+    print(f"잡음분산 sigma^2 = 1 이므로 CV MSE 의 하한은 1.000")
+    print(f"최소 CV MSE = {cv_mean[i_min]:.4f}  ->  하한 위로 {cv_mean[i_min] - 1:+.4f}")
+    print(f"1-SE 문턱 = {cv_mean[i_min]:.4f} + {cv_se[i_min]:.4f} = {threshold:.4f}")
+    print(f"격자 첫 값 lambda = {lambdas[0]:.4f},  이론 lambda_max = |X'y|_inf/n = "
+          f"{np.abs(X.T @ (y - y.mean())).max() / n:.4f}")
+    print(f"가장 큰 lambda 에서의 CV MSE = {cv_mean[0]:.4f}  (영모형: Var(y) = {y.var():.4f})")
+    ```
+
+    출력:
+
+    ```
+         최소 CV: lambda = 0.1000, CV MSE = 1.001 (SE 0.044), 0 이 아닌 계수 = 9개
+        1-표준오차: lambda = 0.1778, CV MSE = 1.038 (SE 0.083), 0 이 아닌 계수 = 5개
+    참으로 0 이 아닌 계수: 3개
+    잡음분산 sigma^2 = 1 이므로 CV MSE 의 하한은 1.000
+    최소 CV MSE = 1.0014  ->  하한 위로 +0.0014
+    1-SE 문턱 = 1.0014 + 0.0441 = 1.0455
+    격자 첫 값 lambda = 3.1623,  이론 lambda_max = |X'y|_inf/n = 3.1113
+    가장 큰 lambda 에서의 CV MSE = 17.4719  (영모형: Var(y) = 17.5023)
+    ```
+
+    **바닥이 맞는다.** 최소 CV MSE가 $1.0014$로 유도한 하한 $\sigma^2 = 1$보다 겨우 $0.0014$ 높다. 표준오차가 $0.044$이니 이 차이는 재어 낼 수도 없는 크기다. $n = 100$에 참 변수가 셋뿐이라 라쏘가 $\beta$를 거의 완벽히 되찾았다는 뜻이다.
+
+    **천장도 맞는다.** 격자의 첫 값 $3.1623$이 이론적 $\lambda_{\max} = 3.1113$보다 크므로 거기서 라쏘 해는 영벡터이고, 실제 CV MSE가 $17.4719$로 $\operatorname{Var}(y) = 17.5023$과 사실상 같다. (1)에서 어림한 $17.25$와도 가깝다. 둘의 작은 차이는 $n = 100$에서 $X$의 표본공분산이 $I$와 꼭 같지는 않기 때문이다. 겹을 나누어 적합했으므로 완전히 같아질 이유도 없다.
+
+    최소 CV 규칙은 잡음 변수를 여섯 개나 남겼지만, 1-표준오차 규칙은 다섯 개만 남겼다. 참으로 쓰인 변수가 셋임을 생각하면 뒤쪽이 더 나은 선택이다. **다만 CV가 겨냥하는 것은 예측오차이지 올바른 변수집합이 아니다.** 둘 다 과다선택을 한 것은 CV가 실패했기 때문이 아니라, 계수가 거의 0인 잡음변수를 하나 더 넣어도 예측오차가 거의 늘지 않기 때문이다.
 
 ## 1-표준오차 규칙
 

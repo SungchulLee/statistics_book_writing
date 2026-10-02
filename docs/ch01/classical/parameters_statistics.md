@@ -95,84 +95,113 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 표본평균의 표본분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표본평균의 표본분포. $\mu = 100$, $\sigma = 15$인 모집단 $50$만 명에서 $n = 50$씩 $5{,}000$번 뽑아 그때마다 표본평균을 적는다.
+
+**(1)** 표본평균들의 **평균**과 **표준편차**가 이론적으로 얼마여야 하는지 구하시오. 또 되풀이가 $5{,}000$번뿐이므로 그 두 값에 붙는 **몬테카를로 오차**도 각각 구하시오.
+
+**(2)** 모의실험 결과가 그 범위 안에 드는지 확인하시오.
 
 </div>
 
-```python
-"""표본평균의 표본분포를 눈으로 확인한다."""
+??? success "풀이"
 
-import matplotlib
-matplotlib.use("Agg")
-import numpy as np
-import matplotlib.pyplot as plt
+    **(1) 해석적으로.** 표본평균은 불편이므로 $E[\bar X] = \mu = 100$이고, 표준오차는
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    $$
+    \operatorname{SE}(\bar X) = \frac{\sigma}{\sqrt n} = \frac{15}{\sqrt{50}} = 2.1213
+    $$
 
-rng = np.random.default_rng(0)
+    이다($n/N = 10^{-4}$이라 유한모집단 수정은 무시해도 좋다).
 
-# === 모수: 우리가 알아내려는 대상 ===
-# 현실에서는 이 두 값을 절대 알 수 없다. 모의실험이므로 답을 미리 정해 둔다.
-mu_true = 100
-sigma_true = 15
-population = rng.normal(mu_true, sigma_true, size=500_000)
+    되풀이 $M = 5{,}000$번으로 이 두 값을 **추정**하는 데 따르는 오차는 따로 있다.
 
-# === 표본을 5000번 되풀이해 뽑고, 그때마다 표본평균을 기록한다 ===
-# 이것이 이 보기의 핵심이다. 현실에서는 표본을 한 번만 뽑으므로
-# 표본평균도 하나뿐이다. 여기서는 "만약 다시 뽑는다면 얼마가 나올까"를
-# 5000번 되풀이해 그 분포를 직접 만들어 본다.
-n = 50                # 표본 하나의 크기
-num_samples = 5_000   # 되풀이 횟수
-sample_means = np.array([
-    rng.choice(population, n, replace=False).mean()
-    for _ in range(num_samples)
-])
+    - 표본평균들의 평균은 $M$개의 독립 관측을 평균한 것이므로 그 표준오차가 $\operatorname{SE}/\sqrt M = 2.1213/\sqrt{5000} = 0.0300$이다.
+    - 표본평균들의 표준편차는 정규표본의 표준편차 추정이므로 그 표준오차가 대략 $\operatorname{SE}/\sqrt{2(M-1)} = 2.1213/99.99 = 0.0212$다.
 
-# === 표본분포에서 두 가지를 확인한다 ===
-#   (1) 중심: 표본평균들의 평균이 참 mu와 같은가?  -> 불편성
-#   (2) 퍼짐: 그 표준편차가 이론값 sigma/sqrt(n)과 맞는가? -> 표준오차 공식
-print(f"참 모평균 mu:      {mu_true}")
-print(f"표본평균들의 평균: {sample_means.mean():.3f}")
-print(f"이론 표준오차:     {sigma_true / np.sqrt(n):.3f}")
-print(f"관측 표준오차:     {sample_means.std(ddof=1):.3f}")
+    **이 두 수가 "얼마나 가까워야 가까운 것인가"의 자다.** 이 자가 없으면 $99.969$가 $100$에 가까운지 아닌지 말할 수 없다.
 
-# 5000개의 표본평균을 히스토그램으로 그린다.
-# 모집단이 정규분포이므로 표본분포도 정규분포이며, 참 mu를 중심으로 대칭이다.
-fig, ax = plt.subplots(figsize=(8, 3))
-ax.hist(sample_means, bins=40, density=True, alpha=0.75,
-        color="#1565C0", edgecolor="white")
-ax.axvline(mu_true, color="#D32F2F", lw=2,
-           label=r"참 모평균 $\mu = 100$")      # 참값 표시
-ax.set_xlabel("표본평균")
-ax.set_ylabel("밀도")
-ax.set_title("표본평균의 표본분포 (n = 50)")
-ax.legend()
-fig.tight_layout()
-fig.savefig("sampling_distribution_mean.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
-```
+    **(2) 수치적으로.** 아래 코드를 돌리면 표본평균들의 평균이 $99.969$, 표준편차가 $2.097$로 나온다.
 
-출력:
+    **중심.** $99.969$는 $100$에서 $0.031$ 떨어져 있고 몬테카를로 오차가 $0.0300$이므로 $z = -1.03$이다. 어긋남이라 할 수 없다. 한 가지 더 정확히 말하자면, 비복원으로 뽑는 대상은 $N(100, 15^2)$이 아니라 생성된 $50$만 명이고 그들의 평균은 $100.0258$이다. 그것을 참값으로 쓰면 $z = -1.9$가 되는데, 역시 $2$ 안이다.
 
-```
-참 모평균 mu:      100
-표본평균들의 평균: 99.969
-이론 표준오차:     2.121
-관측 표준오차:     2.097
-```
+    **퍼짐.** $2.097$은 이론값 $2.1213$에서 $0.024$ 떨어져 있고 몬테카를로 오차가 $0.0212$이므로 $z = -1.15$다. 역시 맞는다.
 
-![표본평균의 표본분포](./img/sampling_distribution_mean.png)
+    모집단의 표준편차 $15$가 표본평균의 표준편차 $2.1$로 줄어든 것이 $1/\sqrt{50} = 0.1414$배이며, 추론이 가능한 이유 자체다.
 
-숫자와 그림이 같은 말을 한다.
+    ```python
+    """표본평균의 표본분포를 눈으로 확인한다."""
 
-- **중심.** 표본평균들의 평균이 99.969로 참값 100과 사실상 같다. 히스토그램의 봉우리도 빨간 선(참 $\mu$) 위에 놓여 있다. 표본평균이 $\mu$의 **불편추정량**이라는 뜻이다.
-- **퍼짐.** 이론값 $\sigma/\sqrt{n} = 15/\sqrt{50} = 2.121$과 관측값 2.097이 거의 맞는다.
+    import matplotlib
+    matplotlib.use("Agg")
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-주목할 것은 **모집단의 표준편차가 15인데 표본평균들의 표준편차는 2.1**이라는 점이다. 개별 관측값보다 표본평균이 일곱 배쯤 덜 흔들린다. 이 축소가 $1/\sqrt{n}$ 배이며, 통계적 추론이 가능한 이유 자체다.
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    rng = np.random.default_rng(0)
+
+    # === 모수: 우리가 알아내려는 대상 ===
+    # 현실에서는 이 두 값을 절대 알 수 없다. 모의실험이므로 답을 미리 정해 둔다.
+    mu_true = 100
+    sigma_true = 15
+    population = rng.normal(mu_true, sigma_true, size=500_000)
+
+    # === 표본을 5000번 되풀이해 뽑고, 그때마다 표본평균을 기록한다 ===
+    # 이것이 이 보기의 핵심이다. 현실에서는 표본을 한 번만 뽑으므로
+    # 표본평균도 하나뿐이다. 여기서는 "만약 다시 뽑는다면 얼마가 나올까"를
+    # 5000번 되풀이해 그 분포를 직접 만들어 본다.
+    n = 50                # 표본 하나의 크기
+    num_samples = 5_000   # 되풀이 횟수
+    sample_means = np.array([
+        rng.choice(population, n, replace=False).mean()
+        for _ in range(num_samples)
+    ])
+
+    # === 표본분포에서 두 가지를 확인한다 ===
+    #   (1) 중심: 표본평균들의 평균이 참 mu와 같은가?  -> 불편성
+    #   (2) 퍼짐: 그 표준편차가 이론값 sigma/sqrt(n)과 맞는가? -> 표준오차 공식
+    print(f"참 모평균 mu:      {mu_true}")
+    print(f"표본평균들의 평균: {sample_means.mean():.3f}")
+    print(f"이론 표준오차:     {sigma_true / np.sqrt(n):.3f}")
+    print(f"관측 표준오차:     {sample_means.std(ddof=1):.3f}")
+
+    # 5000개의 표본평균을 히스토그램으로 그린다.
+    # 모집단이 정규분포이므로 표본분포도 정규분포이며, 참 mu를 중심으로 대칭이다.
+    fig, ax = plt.subplots(figsize=(8, 3))
+    ax.hist(sample_means, bins=40, density=True, alpha=0.75,
+            color="#1565C0", edgecolor="white")
+    ax.axvline(mu_true, color="#D32F2F", lw=2,
+               label=r"참 모평균 $\mu = 100$")      # 참값 표시
+    ax.set_xlabel("표본평균")
+    ax.set_ylabel("밀도")
+    ax.set_title("표본평균의 표본분포 (n = 50)")
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig("sampling_distribution_mean.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+    ```
+
+    출력:
+
+    ```
+    참 모평균 mu:      100
+    표본평균들의 평균: 99.969
+    이론 표준오차:     2.121
+    관측 표준오차:     2.097
+    ```
+
+    ![표본평균의 표본분포](./img/sampling_distribution_mean.png)
+
+    숫자와 그림이 같은 말을 한다.
+
+    - **중심.** 표본평균들의 평균이 99.969로 참값 100과 사실상 같다. 히스토그램의 봉우리도 빨간 선(참 $\mu$) 위에 놓여 있다. 표본평균이 $\mu$의 **불편추정량**이라는 뜻이다.
+    - **퍼짐.** 이론값 $\sigma/\sqrt{n} = 15/\sqrt{50} = 2.121$과 관측값 2.097이 거의 맞는다.
+
+    주목할 것은 **모집단의 표준편차가 15인데 표본평균들의 표준편차는 2.1**이라는 점이다. 개별 관측값보다 표본평균이 일곱 배쯤 덜 흔들린다. 이 축소가 $1/\sqrt{n}$ 배이며, 통계적 추론이 가능한 이유 자체다.
 
 ## 연습문제
 

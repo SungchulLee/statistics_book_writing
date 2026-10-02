@@ -23,54 +23,148 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 카플란-마이어 추정 구현
+**보기 1.** <span class="diff easy" title="쉬움"></span> 카플란-마이어 추정 구현. 여덟 명을 관측해 다음을 얻었다(+ 는 절단).
+
+| 시각 | 3 | 5+ | 7 | 7 | 10+ | 12 | 15+ | 18 |
+|:---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+
+**(1)** $\hat S(t)$를 손으로 계산하고, 그린우드 공식으로 $t = 12$에서의 표준오차를 구하시오.
+
+**(2)** 절단을 무시하고 여덟 시각을 그냥 평균 내면 $9.625$다. 카플란-마이어 곡선이 말하는 값과 견주시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def kaplan_meier(times, censored):
-    """카플란-마이어 생존함수 추정값을 구한다.
+    **(1) 해석적으로.** 사건이 일어난 시각은 $3, 7, 12, 18$이다(절단된 $5, 10, 15$는 곡선을 떨어뜨리지 않는다). 각 시점에서 위험집합 $n_j$는 **그 시각 이상인 관측의 수**다.
 
-    사건이 일어난 시점마다 "그 직전까지 살아 있던 사람 중 그 시점을
-    넘긴 비율"을 곱해 나간다. 중도절단된 사람은 절단 시점까지만
-    위험집합에 남아 있다가 조용히 빠진다 — 이것이 중도절단 자료를
-    버리지 않고 쓰는 방법이다.
+    | $t_{(j)}$ | $n_j$ | $d_j$ | $1 - d_j/n_j$ | $\hat S(t_{(j)})$ |
+    |:---:|:---:|:---:|:---:|:---:|
+    | 3 | 8 | 1 | $7/8$ | $7/8 = 0.875000$ |
+    | 7 | 6 | 2 | $4/6$ | $7/12 = 0.583333$ |
+    | 12 | 3 | 1 | $2/3$ | $7/18 = 0.388889$ |
+    | 18 | 1 | 1 | $0/1$ | $0$ |
 
-    매개변수
-    --------
-    times    : 관측된 시각(사건 또는 절단)
-    censored : 1 이면 중도절단, 0 이면 사건이 관측됨
+    $t = 7$에서 $n_2 = 6$인 것이 절단의 작동 방식을 보여 준다. $t = 3$의 사건과 $t = 5$의 절단으로 두 명이 빠져 여섯이 남았다. **절단된 사람은 곡선을 떨어뜨리지 않지만 그 뒤의 위험집합을 줄인다.**
 
-    돌려주는 값
-    ----------
-    t_plot, s_plot : 계단그림에 쓸 시각과 생존확률
-    """
-    order = np.argsort(times)
-    times = times[order]
-    censored = censored[order]
+    그린우드 공식은
 
-    event_times = times[censored == 0]
-    unique_events = np.unique(event_times)
+    $$
+    \widehat{\operatorname{Var}}\big(\hat S(t)\big)
+    = \hat S(t)^2 \sum_{t_{(j)} \le t} \frac{d_j}{n_j(n_j - d_j)}
+    $$
 
-    s = 1.0
-    t_list = [0.0]
-    s_list = [1.0]
+    이다. $t = 12$까지의 합은
 
-    for t_j in unique_events:
-        # 위험집합: 그 시점에 아직 사건도 절단도 겪지 않은 사람 수
-        n_at_risk = np.sum(times >= t_j)
-        d_j = np.sum((times == t_j) & (censored == 0))
-        s *= (n_at_risk - d_j) / n_at_risk
-        t_list.append(t_j)
-        s_list.append(s)
+    $$
+    \frac{1}{8\cdot 7} + \frac{2}{6\cdot 4} + \frac{1}{3\cdot 2}
+    = 0.017857 + 0.083333 + 0.166667 = 0.267857
+    $$
 
-    t_list.append(times.max())
-    s_list.append(s_list[-1])
+    이고 $\hat S(12) = 7/18$이므로
 
-    return np.array(t_list), np.array(s_list)
-```
+    $$
+    \operatorname{SE}\big(\hat S(12)\big) = \frac{7}{18}\sqrt{0.267857} = 0.201269
+    $$
+
+    이다. **추정값 $0.389$에 표준오차가 $0.201$이다.** 여덟 명으로는 생존확률을 거의 못 재며, 세 항 가운데 마지막 $0.167$이 전체의 $62\%$를 차지한다. 위험집합이 셋으로 줄어든 꼬리가 불확실성을 지배한다.
+
+    **(2) 해석적으로.** 절단된 세 명의 기록은 "적어도 그때까지는 살아 있었다"는 뜻이므로, 그 값을 사건시각처럼 평균에 넣으면 생존시간을 **반드시 과소평가한다.** 카플란-마이어가 주는 짝은 곡선 아래 넓이, 곧 $18$까지의 제한평균생존시간이다.
+
+    $$
+    \int_0^{18}\hat S(t)\,dt
+    = 1\cdot 3 + \tfrac78\cdot 4 + \tfrac7{12}\cdot 5 + \tfrac7{18}\cdot 6
+    = 3 + 3.5 + 2.916667 + 2.333333 = 11.75
+    $$
+
+    **$9.625$ 대 $11.75$로 $22\%$ 차이다.** 절단을 무시하는 것은 자료를 조금 낭비하는 일이 아니라 답을 한 방향으로 틀리게 만드는 일이다.
+
+    **(1)(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    def kaplan_meier(times, censored):
+        """카플란-마이어 생존함수 추정값을 구한다.
+
+        사건이 일어난 시점마다 "그 직전까지 살아 있던 사람 중 그 시점을
+        넘긴 비율"을 곱해 나간다. 중도절단된 사람은 절단 시점까지만
+        위험집합에 남아 있다가 조용히 빠진다 — 이것이 중도절단 자료를
+        버리지 않고 쓰는 방법이다.
+
+        매개변수
+        --------
+        times    : 관측된 시각(사건 또는 절단)
+        censored : 1 이면 중도절단, 0 이면 사건이 관측됨
+
+        돌려주는 값
+        ----------
+        t_plot, s_plot : 계단그림에 쓸 시각과 생존확률
+        """
+        order = np.argsort(times)
+        times = times[order]
+        censored = censored[order]
+
+        event_times = times[censored == 0]
+        unique_events = np.unique(event_times)
+
+        s = 1.0
+        t_list = [0.0]
+        s_list = [1.0]
+
+        for t_j in unique_events:
+            # 위험집합: 그 시점에 아직 사건도 절단도 겪지 않은 사람 수
+            n_at_risk = np.sum(times >= t_j)
+            d_j = np.sum((times == t_j) & (censored == 0))
+            s *= (n_at_risk - d_j) / n_at_risk
+            t_list.append(t_j)
+            s_list.append(s)
+
+        t_list.append(times.max())
+        s_list.append(s_list[-1])
+
+        return np.array(t_list), np.array(s_list)
+
+    # --- (1) 의 표와 그린우드 표준오차를 확인한다 ---
+    times = np.array([3., 5., 7., 7., 10., 12., 15., 18.])
+    censored = np.array([0, 1, 0, 0, 1, 0, 1, 0])
+
+    t, s = kaplan_meier(times, censored)
+    print("t_plot =", t)
+    print("s_plot =", np.round(s, 6))
+
+    acc, S = 0.0, 1.0
+    for t_j in np.unique(times[censored == 0]):
+        n = int(np.sum(times >= t_j))
+        d = int(np.sum((times == t_j) & (censored == 0)))
+        S *= (n - d) / n
+        if n > d:
+            acc += d / (n * (n - d))
+        print(f"  t={t_j:5.1f}  n={n}  d={d}  S={S:.6f}  "
+              f"그린우드합={acc:.6f}  SE={S * np.sqrt(acc):.6f}")
+
+    # --- (2) 절단을 무시한 평균과 곡선 아래 넓이 ---
+    print(f"절단을 사건으로 보고 낸 평균 = {times.mean():.4f}")
+    area = np.sum(s[:-2] * np.diff(t[:-1]))
+    print(f"곡선 아래 넓이 (18 까지의 제한평균생존시간) = {area:.4f}")
+    ```
+
+    출력:
+
+    ```
+    t_plot = [ 0.  3.  7. 12. 18. 18.]
+    s_plot = [1.       0.875    0.583333 0.388889 0.       0.      ]
+      t=  3.0  n=8  d=1  S=0.875000  그린우드합=0.017857  SE=0.116927
+      t=  7.0  n=6  d=2  S=0.583333  그린우드합=0.101190  SE=0.185561
+      t= 12.0  n=3  d=1  S=0.388889  그린우드합=0.267857  SE=0.201269
+      t= 18.0  n=1  d=1  S=0.000000  그린우드합=0.267857  SE=0.000000
+    절단을 사건으로 보고 낸 평균 = 9.6250
+    곡선 아래 넓이 (18 까지의 제한평균생존시간) = 11.7500
+    ```
+
+    **손으로 만든 표와 코드가 전부 맞는다.** $0.875$, $0.583333$, $0.388889$, $0$의 네 값과 $t = 12$의 표준오차 $0.201269$가 그대로 나왔고, 곡선 아래 넓이도 $11.75$다.
+
+    마지막 줄의 $\operatorname{SE} = 0$은 그린우드 공식의 알려진 결함이다. 마지막 사건에서 $\hat S$가 정확히 0이 되면 공식이 $\hat S^2$을 곱하므로 분산도 0이 된다. **한 사람이 남아 있을 때의 추정이 확실할 리 없다.** 곡선의 끝부분은 신뢰구간을 믿지 말고 위험집합 크기를 함께 보아야 한다.
 
 !!! warning "이 코드의 `censored`는 $\delta$와 부호가 반대다"
     이 페이지의 코드는 `censored == 1`이 절단, `censored == 0`이 사건을 뜻한다. 이 장의 본문
@@ -132,55 +226,132 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 로그순위 검정 구현
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로그순위 검정 구현. 두 집단을 다음과 같이 관측했다(+ 는 절단).
+
+**집단 1:** 5, 8, 12+, 15.  **집단 2:** 2, 4, 6+, 10.
+
+**(1)** $t = 2$와 $t = 8$에서 $e_{1j}$와 $v_j$를 손으로 계산하고, 로그순위 통계량이 시각의 **값이 아니라 순서에만** 의존함을 보이시오.
+
+**(2)** 전체 통계량을 손으로 합산해 구한 뒤 코드로 확인하고, 시각을 $\log(1+t)$나 $t^3$으로 바꾸어도 답이 그대로인지 보시오.
 
 </div>
 
-```python
-from scipy import stats
+??? success "풀이"
 
-def logrank_test(times_1, censored_1, times_2, censored_2):
-    """이표본 로그순위 검정.
+    **(1) 해석적으로.** 통계량에 들어가는 재료는 각 사건시각에서의 $r_{1j}, r_{2j}, d_{1j}, d_{2j}$ 넷뿐이다. 그런데 $r_{1j} = \#\{i : t_{1i} \ge t_{(j)}\}$는 **"몇 명이 아직 남아 있는가"**를 세는 양이고, $d_{1j}$는 **"그 시각에 몇 건이 일어났는가"**를 세는 양이다. 둘 다 부등식 $t_{1i} \ge t_{(j)}$와 등식 $t_{1i} = t_{(j)}$로만 정해진다.
 
-    사건 시점마다 2x2 분할표를 만들어 관측 사건 수와 기대 사건 수를
-    비교한다. 그 차이를 모든 시점에 걸쳐 누적한 것이 통계량이다.
-    두 생존곡선이 같다는 귀무가설 아래에서 자유도 1 인 카이제곱을 따른다.
+    $g$가 **순증가함수**이면 $t_{1i} \ge t_{(j)} \iff g(t_{1i}) \ge g(t_{(j)})$이고 $t_{1i} = t_{(j)} \iff g(t_{1i}) = g(t_{(j)})$이므로, 변환 뒤에도 네 수가 모두 그대로다. 따라서 $O_1$, $E_1$, $V$가 바뀌지 않고 $\chi^2$도 바뀌지 않는다. **로그순위는 순위검정이다.** 시간을 일로 재든 달로 재든 로그로 재든 답이 같다.
 
-    돌려주는 값
-    ----------
-    chi2, p_value
-    """
-    event_1 = times_1[censored_1 == 0]
-    event_2 = times_2[censored_2 == 0]
-    all_event_times = np.unique(np.concatenate([event_1, event_2]))
+    이제 두 시각을 계산한다. $t = 2$에서는 아무도 빠지지 않았으므로 $r_1 = 4$, $r_2 = 4$, $r = 8$이고 집단 2에서 한 건이 일어났으므로 $d_1 = 0$, $d = 1$이다.
 
-    O1, E1, V = 0.0, 0.0, 0.0
+    $$
+    e_{11} = d\cdot\frac{r_1}{r} = \frac48 = 0.5,
+    \qquad
+    v_1 = \frac{4\cdot 4\cdot 1\cdot 7}{8^2\cdot 7} = \frac{16}{64} = 0.25
+    $$
 
-    for t_j in all_event_times:
-        r1 = np.sum(times_1 >= t_j)
-        r2 = np.sum(times_2 >= t_j)
-        r  = r1 + r2
+    $t = 8$에서는 집단 1에 $8, 12, 15$가 남아 $r_1 = 3$, 집단 2에는 $10$만 남아 $r_2 = 1$이다. $r = 4$이고 집단 1에서 한 건이 일어났으므로 $d_1 = d = 1$이다.
 
-        d1 = np.sum(event_1 == t_j)
-        d2 = np.sum(event_2 == t_j)
-        d  = d1 + d2
+    $$
+    e_{14} = \frac{3}{4} = 0.75,
+    \qquad
+    v_4 = \frac{3\cdot 1\cdot 1\cdot 3}{4^2\cdot 3} = \frac{3}{16} = 0.1875
+    $$
 
-        # 두 집단의 생존이 같다면, 그 시점의 사건은 위험집합 크기에
-        # 비례해 나뉘어야 한다. 그것이 기대 사건 수 e1 이다.
-        e1 = r1 * d / r if r > 0 else 0
-        v  = r1 * r2 * d * (r - d) / (r**2 * (r - 1)) if r > 1 else 0
+    합친 사건시각은 $2, 4, 5, 8, 10, 15$ 여섯이고, 같은 방식으로 나머지를 채우면
 
-        O1 += d1
-        E1 += e1
-        V  += v
+    | $t_{(j)}$ | $r_1$ | $r_2$ | $d_1$ | $d$ | $e_{1j}$ | $v_j$ |
+    |:---:|:---:|:---:|:---:|:---:|---:|---:|
+    | 2 | 4 | 4 | 0 | 1 | $0.500000$ | $0.250000$ |
+    | 4 | 4 | 3 | 0 | 1 | $0.571429$ | $0.244898$ |
+    | 5 | 4 | 2 | 1 | 1 | $0.666667$ | $0.222222$ |
+    | 8 | 3 | 1 | 1 | 1 | $0.750000$ | $0.187500$ |
+    | 10 | 2 | 1 | 0 | 1 | $0.666667$ | $0.222222$ |
+    | 15 | 1 | 0 | 1 | 1 | $1.000000$ | $0$ |
 
-    chi2 = (O1 - E1)**2 / V if V > 0 else 0
-    p_value = stats.chi2(1).sf(chi2)
-    return chi2, p_value
-```
+    이다. 마지막 줄의 $v_6 = 0$을 눈여겨보라. $r = 1$이면 분모의 $r-1$이 0이 되므로 코드가 $v$를 0으로 둔다. **집단 2에 아무도 남지 않은 시점은 비교할 것이 없으므로 정보를 주지 않는다.**
 
-이 구현은 합쳐진 각 사건시간을 순회하며 집단 1의 관측 사건 수, 기대 사건 수, 분산을 누적한 뒤
-카이제곱 통계량을 계산한다.
+    합하면 $O_1 = 3$, $E_1 = 4.154762$, $V = 1.126842$이고
+
+    $$
+    \chi^2 = \frac{(3 - 4.154762)^2}{1.126842} = \frac{1.333475}{1.126842} = 1.183373
+    $$
+
+    이다. 자유도 1인 카이제곱에서 $p = 0.2767$이다. 집단 2의 사건이 먼저 몰려 있었지만 각 집단 네 명으로는 **아무것도 말할 수 없다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    from scipy import stats
+
+    def logrank_test(times_1, censored_1, times_2, censored_2):
+        """이표본 로그순위 검정.
+
+        사건 시점마다 2x2 분할표를 만들어 관측 사건 수와 기대 사건 수를
+        비교한다. 그 차이를 모든 시점에 걸쳐 누적한 것이 통계량이다.
+        두 생존곡선이 같다는 귀무가설 아래에서 자유도 1 인 카이제곱을 따른다.
+
+        돌려주는 값
+        ----------
+        chi2, p_value
+        """
+        event_1 = times_1[censored_1 == 0]
+        event_2 = times_2[censored_2 == 0]
+        all_event_times = np.unique(np.concatenate([event_1, event_2]))
+
+        O1, E1, V = 0.0, 0.0, 0.0
+
+        for t_j in all_event_times:
+            r1 = np.sum(times_1 >= t_j)
+            r2 = np.sum(times_2 >= t_j)
+            r  = r1 + r2
+
+            d1 = np.sum(event_1 == t_j)
+            d2 = np.sum(event_2 == t_j)
+            d  = d1 + d2
+
+            # 두 집단의 생존이 같다면, 그 시점의 사건은 위험집합 크기에
+            # 비례해 나뉘어야 한다. 그것이 기대 사건 수 e1 이다.
+            e1 = r1 * d / r if r > 0 else 0
+            v  = r1 * r2 * d * (r - d) / (r**2 * (r - 1)) if r > 1 else 0
+
+            O1 += d1
+            E1 += e1
+            V  += v
+
+        chi2 = (O1 - E1)**2 / V if V > 0 else 0
+        p_value = stats.chi2(1).sf(chi2)
+        return chi2, p_value
+
+    # --- (1) 의 합산과 순위 불변성을 확인한다 ---
+    t1 = np.array([5., 8., 12., 15.]); c1 = np.array([0, 0, 1, 0])
+    t2 = np.array([2., 4., 6., 10.]);  c2 = np.array([0, 0, 1, 0])
+
+    chi2, p = logrank_test(t1, c1, t2, c2)
+    print(f"chi2 = {chi2:.6f},  p = {p:.4f}")
+
+    for name, g in [("log(1+t)", np.log1p), ("t^3", lambda x: x ** 3),
+                    ("sqrt(t)", np.sqrt)]:
+        c, pp = logrank_test(g(t1), c1, g(t2), c2)
+        print(f"  {name:9s}: chi2 = {c:.6f}  p = {pp:.4f}")
+    ```
+
+    출력:
+
+    ```
+    chi2 = 1.183373,  p = 0.2767
+      log(1+t) : chi2 = 1.183373  p = 0.2767
+      t^3      : chi2 = 1.183373  p = 0.2767
+      sqrt(t)  : chi2 = 1.183373  p = 0.2767
+    ```
+
+    **손으로 합산한 $\chi^2 = 1.183373$과 $p = 0.2767$이 코드와 소수 여섯째 자리까지 같다.**
+
+    세 변환 모두 통계량을 **한 자리도 바꾸지 않는다.** $t^3$은 $15$를 $3375$로, $\sqrt t$는 $2$를 $1.414$로 보내 시각의 간격을 완전히 뒤바꾸는데도 답이 같다. (1)에서 보인 대로 $r$과 $d$가 순서로만 정해지기 때문이다.
+
+    **이것은 로그순위의 힘이자 한계다.** 시간 눈금을 잘못 잡아도 안전하다는 것이 힘이고, 생존시간이 **얼마나** 길어졌는지는 전혀 재지 못한다는 것이 한계다. 효과의 크기를 말하려면 중앙생존시간이나 위험비 같은 다른 양이 필요하다.
+
+    이 구현은 합쳐진 각 사건시간을 순회하며 집단 1의 관측 사건 수, 기대 사건 수, 분산을 누적한 뒤 카이제곱 통계량을 계산한다.
 
 ## 모의실험과 시각화
 
@@ -188,55 +359,111 @@ def logrank_test(times_1, censored_1, times_2, censored_2):
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 두 집단의 생존곡선 그리기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 두 집단의 생존곡선 그리기. 1집단은 평균 $20$, 2집단은 평균 $12$인 지수분포에서 각각 $40$명을 뽑고 $20\%$를 절단으로 표시한다.
+
+**(1)** 두 집단의 참 중앙생존시간과 참 위험비를 구하시오. 그런데 이 코드의 절단 방식은 관측시각을 줄이지 않고 **이름표만 바꾼다.** 그러면 카플란-마이어 추정값이 무엇으로 수렴하는가.
+
+**(2)** 실행해 추정 중앙값과 로그순위 결과를 (1)의 값들과 견주시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 해석적으로.** 평균 $\theta$인 지수분포는 $S(t) = e^{-t/\theta}$이므로 중앙값은 $S(t) = 0.5$에서
 
-# 1집단: 사건이 늦게 일어난다(평균 20). 20%는 중도절단된다.
-# 중도절단은 "그 시점까지는 살아 있었다"는 정보를 주므로 버리지 않는다.
-n1 = 40
-times_1 = np.random.exponential(scale=20, size=n1)
-censored_1 = (np.random.rand(n1) < 0.2).astype(int)
+    $$
+    t_{1/2} = \theta\ln 2
+    $$
 
-# 2집단: 사건이 빨리 일어난다(평균 12).
-n2 = 40
-times_2 = np.random.exponential(scale=12, size=n2)
-censored_2 = (np.random.rand(n2) < 0.2).astype(int)
+    다. 따라서 1집단은 $20\ln 2 = 13.863$, 2집단은 $12\ln 2 = 8.318$이다. 위험은 $\lambda = 1/\theta$로 일정하므로 참 위험비는
 
-t1, s1 = kaplan_meier(times_1, censored_1)
-t2, s2 = kaplan_meier(times_2, censored_2)
+    $$
+    \frac{\lambda_1}{\lambda_2} = \frac{1/20}{1/12} = 0.6
+    $$
 
-# 그림으로 확인
-fig, ax = plt.subplots(figsize=(10, 5))
-# where="post" 가 계단을 오른쪽으로 뻗게 한다. 생존함수는 사건이 일어난
-# 그 순간에 떨어지고 다음 사건까지 평평하므로, 이 설정이라야 맞다.
-ax.step(t1, s1, where="post", linewidth=2, label="Group 1 (slow)")
-ax.step(t2, s2, where="post", linewidth=2, label="Group 2 (fast)")
-ax.set_xlabel("Time")
-ax.set_ylabel("Survival Probability")
-ax.set_title("Kaplan-Meier Survival Curves")
-ax.set_ylim(-0.02, 1.05)
-ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    이고, 1집단의 위험이 2집단의 $60\%$다.
 
-![두 집단의 카플란-마이어 생존곡선](./img/kaplan_meier_code_173.png)
+    이제 절단 방식을 따진다. 올바른 절단이라면 각자에게 절단시각 $C_i$가 있고 관측값이 $\min(T_i, C_i)$여야 한다. 그런데 이 코드는 $T_i$를 그대로 두고 그중 $20\%$에 "절단"이라는 이름표만 붙인다. 이는 **각 사람의 사건을 그 사건시각에 절단한 것**과 같다. 그러면 카플란-마이어가 각 시점에서 세는 $d_j$는 참 사건 수의 $(1-q)$배(여기서 $q$는 절단 비율)가 되고, 추정 위험이 참 위험의 $(1-q)$배로 줄어든다. 곧
 
-집단 1은 평균 20인 지수분포에서(사건이 느림), 집단 2는 평균 12에서(사건이 빠름) 뽑았다. 각
-집단의 약 20%가 무작위로 절단되었다.
+    $$
+    \hat S(t) \;\longrightarrow\; e^{-(1-q)t/\theta},
+    \qquad
+    \hat t_{1/2} \;\longrightarrow\; \frac{\theta\ln 2}{1-q}
+    $$
 
-!!! note "이 코드의 절단은 사건시간과 독립이 아니다"
-    `censored_1 = (np.random.rand(n1) < 0.2)`는 관측된 시간과 **무관하게** 20%를 절단으로
-    표시한다. 이는 실제 절단 기제(대상마다 절단시간 $C_i$가 있고 $t = \min(T, C)$)와 다르다.
-    여기서는 관측 시간을 그대로 두고 이름표만 바꾸므로, 절단된 대상의 기록된 시간이 참
-    사건시간이다. 교육용으로는 무해하지만, 절단이 관측 시간을 **줄인다**는 현실의 핵심
-    성질이 빠져 있다. 21.1절의 모의실험 코드가 올바른 방식을 보여준다.
+    이다. **생존이 실제보다 좋아 보인다.** $q = 0.2$라면 중앙값이 $1/0.8 = 1.25$배로 부풀려져 1집단 $17.33$, 2집단 $10.40$이 된다. 위험비는 두 집단 모두 같은 비율로 줄어들면 유지되지만, 표본마다 $q$가 다르면 그것도 흔들린다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    np.random.seed(0)
+
+    # 1집단: 사건이 늦게 일어난다(평균 20). 20%는 중도절단된다.
+    # 중도절단은 "그 시점까지는 살아 있었다"는 정보를 주므로 버리지 않는다.
+    n1 = 40
+    times_1 = np.random.exponential(scale=20, size=n1)
+    censored_1 = (np.random.rand(n1) < 0.2).astype(int)
+
+    # 2집단: 사건이 빨리 일어난다(평균 12).
+    n2 = 40
+    times_2 = np.random.exponential(scale=12, size=n2)
+    censored_2 = (np.random.rand(n2) < 0.2).astype(int)
+
+    t1, s1 = kaplan_meier(times_1, censored_1)
+    t2, s2 = kaplan_meier(times_2, censored_2)
+
+    # 그림으로 확인
+    fig, ax = plt.subplots(figsize=(10, 5))
+    # where="post" 가 계단을 오른쪽으로 뻗게 한다. 생존함수는 사건이 일어난
+    # 그 순간에 떨어지고 다음 사건까지 평평하므로, 이 설정이라야 맞다.
+    ax.step(t1, s1, where="post", linewidth=2, label="Group 1 (slow)")
+    ax.step(t2, s2, where="post", linewidth=2, label="Group 2 (fast)")
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Survival Probability")
+    ax.set_title("Kaplan-Meier Survival Curves")
+    ax.set_ylim(-0.02, 1.05)
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+
+    # --- (1) 의 예측과 맞추어 본다 ---
+    def km_median(t, s):
+        idx = np.where(s <= 0.5)[0]
+        return t[idx[0]] if len(idx) else np.nan
+
+    q1, q2 = censored_1.mean(), censored_2.mean()
+    print(f"실제 절단 비율: 1집단 {q1:.3f}, 2집단 {q2:.3f}  (설계값 0.200)")
+    print(f"KM 중앙값          : 1집단 {km_median(t1, s1):6.3f}, 2집단 {km_median(t2, s2):6.3f}")
+    print(f"참 중앙값 th*ln2    : 1집단 {20 * np.log(2):6.3f}, 2집단 {12 * np.log(2):6.3f}")
+    print(f"이름표 절단이 뜻하는 값: 1집단 {20 * np.log(2) / (1 - q1):6.3f}, "
+          f"2집단 {12 * np.log(2) / (1 - q2):6.3f}")
+
+    chi2, p = logrank_test(times_1, censored_1, times_2, censored_2)
+    print(f"로그순위: chi2 = {chi2:.4f},  p = {p:.5f}")
+    ```
+
+    출력:
+
+    ```
+    실제 절단 비율: 1집단 0.325, 2집단 0.175  (설계값 0.200)
+    KM 중앙값          : 1집단 20.763, 2집단 10.446
+    참 중앙값 th*ln2    : 1집단 13.863, 2집단  8.318
+    이름표 절단이 뜻하는 값: 1집단 20.538, 2집단 10.082
+    로그순위: chi2 = 12.6889,  p = 0.00037
+    ```
+
+    ![두 집단의 카플란-마이어 생존곡선](./img/kaplan_meier_code_173.png)
+
+    **추정 중앙값이 참값과 크게 어긋나며, 어긋나는 방향과 크기가 (1)의 예측과 맞는다.** 1집단의 KM 중앙값 $20.763$은 참값 $13.863$보다 $50\%$ 크지만, 이 표본의 절단 비율 $q = 0.325$를 넣은 예측값 $13.863/0.675 = 20.538$과는 $1.1\%$ 안에서 일치한다. 2집단도 $10.446$ 대 예측 $10.082$로 가깝고 참값 $8.318$과는 멀다.
+
+    **이것은 추정량의 결함이 아니라 자료를 만든 방식의 결함이다.** 카플란-마이어는 주어진 자료에 대해 옳게 작동했다. 다만 그 자료에서 "절단"이라 표시된 사람은 실제로는 그 시각에 사건을 겪었으므로, 추정량이 보기에는 생존이 실제보다 좋아 보인다. 쪽 아래의 주의 상자가 지적하는 대로 절단은 **관측시각을 줄여야** 하며, 그렇게 만든 자료에서는 이런 치우침이 생기지 않는다.
+
+    로그순위 쪽은 영향이 훨씬 작다. $\chi^2 = 12.69$, $p = 0.00037$로 두 집단의 차이를 또렷하게 잡아낸다. 사건이 양쪽에서 같은 비율로 지워졌다면 순위 구조가 크게 망가지지 않기 때문이다. 다만 여기서도 $q_1 = 0.325$와 $q_2 = 0.175$가 서로 달라 1집단의 사건이 더 많이 지워졌고, 그 탓에 1집단이 실제보다 더 좋아 보이는 쪽으로 검정이 조금 기울었다.
+
+    !!! note "이 코드의 절단은 사건시간과 독립이 아니다"
+        `censored_1 = (np.random.rand(n1) < 0.2)`는 관측된 시간과 **무관하게** 20%를 절단으로 표시한다. 이는 실제 절단 기제(대상마다 절단시간 $C_i$가 있고 $t = \min(T, C)$)와 다르다. 여기서는 관측 시간을 그대로 두고 이름표만 바꾸므로, 절단된 대상의 기록된 시간이 참 사건시간이다. 위에서 보았듯 그 결과로 **생존이 체계적으로 좋게 추정된다.** 21.1절의 모의실험 코드가 올바른 방식을 보여준다.
 
 ## 해석
 

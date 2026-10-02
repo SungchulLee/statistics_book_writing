@@ -75,75 +75,119 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 지도학습
+**보기 1.** <span class="diff easy" title="쉬움"></span> 지도학습. 대출 $1{,}000$건의 연체를 맞히는 이진 분류다. 참 로그오즈가 $-3 + 0.01(50-\text{소득}) + 5(\text{dti}-0.3)$이고, 앞 $700$건으로 로지스틱 회귀를 적합해 뒤 $300$건에서 평가한다.
+
+**(1)** 참 로그오즈를 절편·소득·dti의 계수로 다시 적으시오. 적합된 계수가 그 세 값과 맞는가.
+
+**(2)** "아무것도 연체하지 않는다"고만 답하는 모형의 시험 정확도는 얼마인가. 적합한 모형과 견주시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy.optimize import minimize
-from scipy.special import expit  # logistic function
+??? success "풀이"
 
-np.random.seed(42)
-n = 1000
+    **(1) 해석적으로.** 괄호를 풀어 정리하면
 
-# === 자료 생성: 대출 연체를 맞히는 이진 분류 문제 ===
-# 설명변수 둘을 만든다.
-#   income  연소득(천 달러). clip(10)으로 하한을 둔다
-#   dti     소득 대비 부채 비율(debt-to-income). 0.01~1.0으로 자른다
-income = np.random.normal(60, 20, n).clip(10)
-dti = np.random.normal(0.3, 0.15, n).clip(0.01, 1.0)
+    $$
+    -3 + 0.01(50 - \text{소득}) + 5(\text{dti} - 0.3)
+    = -4.0 - 0.01\,\text{소득} + 5.0\,\text{dti}
+    $$
 
-# 참 구조를 로그오즈로 적는다.
-#   소득이 낮을수록(50 - income이 클수록) 연체 확률이 오르고
-#   부채비율이 높을수록(dti - 0.3이 클수록) 크게 오른다
-log_odds = -3 + 0.01 * (50 - income) + 5 * (dti - 0.3)
+    이므로 참 계수는 $(\beta_0, \beta_{\text{소득}}, \beta_{\text{dti}}) = (-4.0,\ -0.01,\ 5.0)$이다.
 
-# expit(z) = 1/(1+e^{-z}). 로그오즈를 0~1 사이 확률로 바꾼다.
-prob = expit(log_odds)
+    **(2) 해석적으로.** 시험자료의 연체율을 $\bar d$라 하면 언제나 "연체 없음"이라 답하는 모형의 정확도는 정확히 $1 - \bar d$다. **이 수가 어떤 분류기도 넘어야 할 바닥**이며, 희귀사건 자료에서는 그 바닥이 $0.95$를 넘는 일이 흔하다.
 
-# 각자 자기 확률로 동전을 던져 실제 연체 여부(정답 레이블)를 정한다
-default = np.random.binomial(1, prob)
+    **(1)(2) 수치적으로.**
 
-# === 훈련/시험 분할 ===
-# 앞 700개로 배우고 뒤 300개로 평가한다.
-# 지도학습의 성적은 반드시 **보지 않은 자료**에서 재야 한다.
-train, test = np.arange(700), np.arange(700, n)
-X = np.column_stack([np.ones(n), income, dti])   # 절편 열을 앞에 붙인다
+    ```python
+    import numpy as np
+    from scipy.optimize import minimize
+    from scipy.special import expit  # logistic function
 
-# === 적합: 음의 로그가능도를 최소화한다 ===
-def neg_log_lik(beta):
-    """로지스틱 회귀의 음의 로그가능도.
+    np.random.seed(42)
+    n = 1000
 
-    한 관측의 로그가능도는  y*z - log(1 + e^z)  이다 (z는 로그오즈).
-    log1p(exp(z))는 log(1+exp(z))를 수치적으로 안정하게 계산한다.
-    최소제곱과 달리 닫힌 해가 없어 수치 최적화가 필요하다.
-    """
-    z = X[train] @ beta
-    return -np.sum(default[train] * z - np.log1p(np.exp(z)))
+    # === 자료 생성: 대출 연체를 맞히는 이진 분류 문제 ===
+    # 설명변수 둘을 만든다.
+    #   income  연소득(천 달러). clip(10)으로 하한을 둔다
+    #   dti     소득 대비 부채 비율(debt-to-income). 0.01~1.0으로 자른다
+    income = np.random.normal(60, 20, n).clip(10)
+    dti = np.random.normal(0.3, 0.15, n).clip(0.01, 1.0)
 
-# BFGS: 기울기를 근사해 내려가는 준뉴턴법
-result = minimize(neg_log_lik, np.zeros(3), method="BFGS")
-beta_hat = result.x
+    # 참 구조를 로그오즈로 적는다.
+    #   소득이 낮을수록(50 - income이 클수록) 연체 확률이 오르고
+    #   부채비율이 높을수록(dti - 0.3이 클수록) 크게 오른다
+    log_odds = -3 + 0.01 * (50 - income) + 5 * (dti - 0.3)
 
-# === 평가: 시험자료에서의 정확도 ===
-probs_test = expit(X[test] @ beta_hat)   # 예측 확률
-preds = (probs_test > 0.5).astype(int)   # 0.5를 문턱으로 0/1 판정
-accuracy = np.mean(preds == default[test])
-print(f"Test accuracy:        {accuracy:.3f}")
-print(f"Default rate (test):  {default[test].mean():.3f}")
-print(f"Coefficients:         {beta_hat.round(4)}")
-```
+    # expit(z) = 1/(1+e^{-z}). 로그오즈를 0~1 사이 확률로 바꾼다.
+    prob = expit(log_odds)
 
-출력:
+    # 각자 자기 확률로 동전을 던져 실제 연체 여부(정답 레이블)를 정한다
+    default = np.random.binomial(1, prob)
 
-```
-Test accuracy:        0.957
-Default rate (test):  0.043
-Coefficients:         [-3.6561 -0.0273  6.0932]
-```
+    # === 훈련/시험 분할 ===
+    # 앞 700개로 배우고 뒤 300개로 평가한다.
+    # 지도학습의 성적은 반드시 **보지 않은 자료**에서 재야 한다.
+    train, test = np.arange(700), np.arange(700, n)
+    X = np.column_stack([np.ones(n), income, dti])   # 절편 열을 앞에 붙인다
 
-클래스가 불균형할 때 정확도만 보면 오도된다. 대출의 10%만 부도가 난다면 "부도 없음"이라고만 답하는 모형도 정확도가 90%가 될 수 있다. 실제 평가에는 정밀도, 재현율, ROC-AUC, 또는 거짓양성과 거짓음성의 비대칭적 비용을 반영한 비용가중 손실이 필요하다(19.3절 모형 평가). 연습문제 9에서 수치로 확인한다.
+    # === 적합: 음의 로그가능도를 최소화한다 ===
+    def neg_log_lik(beta):
+        """로지스틱 회귀의 음의 로그가능도.
+
+        한 관측의 로그가능도는  y*z - log(1 + e^z)  이다 (z는 로그오즈).
+        log1p(exp(z))는 log(1+exp(z))를 수치적으로 안정하게 계산한다.
+        최소제곱과 달리 닫힌 해가 없어 수치 최적화가 필요하다.
+        """
+        z = X[train] @ beta
+        return -np.sum(default[train] * z - np.log1p(np.exp(z)))
+
+    # BFGS: 기울기를 근사해 내려가는 준뉴턴법
+    result = minimize(neg_log_lik, np.zeros(3), method="BFGS")
+    beta_hat = result.x
+
+    # === 평가: 시험자료에서의 정확도 ===
+    probs_test = expit(X[test] @ beta_hat)   # 예측 확률
+    preds = (probs_test > 0.5).astype(int)   # 0.5를 문턱으로 0/1 판정
+    accuracy = np.mean(preds == default[test])
+    print(f"Test accuracy:        {accuracy:.3f}")
+    print(f"Default rate (test):  {default[test].mean():.3f}")
+    print(f"Coefficients:         {beta_hat.round(4)}")
+
+    # --- (1)(2) 의 이론값과 맞추어 본다 ---
+    beta_true = np.array([-4.0, -0.01, 5.0])
+    p_hat = expit(X[train] @ beta_hat)
+    info = X[train].T @ (X[train] * (p_hat * (1 - p_hat))[:, None])
+    se = np.sqrt(np.diag(np.linalg.inv(info)))
+    print(f"참 계수:              {beta_true}")
+    print(f"SE:                   {se.round(4)}")
+    print(f"z (추정 - 참)/SE:     {((beta_hat - beta_true) / se).round(2)}")
+    print(f"훈련 연체 수 {default[train].sum()} / 700,  시험 연체 수 {default[test].sum()} / 300")
+    print(f"모형이 '연체'로 판정한 시험 건수: {preds.sum()}")
+    print(f"'연체 없음'만 답하는 모형의 정확도: {1 - default[test].mean():.3f}")
+    ```
+
+    출력:
+
+    ```
+    Test accuracy:        0.957
+    Default rate (test):  0.043
+    Coefficients:         [-3.6561 -0.0273  6.0932]
+    참 계수:              [-4.   -0.01  5.  ]
+    SE:                   [0.7291 0.0094 1.2631]
+    z (추정 - 참)/SE:     [ 0.47 -1.84  0.87]
+    훈련 연체 수 37 / 700,  시험 연체 수 13 / 300
+    모형이 '연체'로 판정한 시험 건수: 0
+    '연체 없음'만 답하는 모형의 정확도: 0.957
+    ```
+
+    **계수는 세 개 모두 참값과 맞는다.** $z$ 값이 $0.47$, $-1.84$, $0.87$로 전부 $2$ 안이다. 소득 계수의 추정값 $-0.0273$이 참값 $-0.01$의 세 배처럼 보이지만, 표준오차가 $0.0094$라 **$1.84$ 표준오차 차이**일 뿐이다. 훈련자료 $700$건에 연체가 $37$건뿐이니 이만한 불확실성은 당연하다.
+
+    **정확도 쪽은 사정이 전혀 다르다.** 모형의 시험 정확도 $0.957$과 "연체 없음"만 답하는 모형의 정확도 $0.957$이 **소수 셋째 자리까지 같다.** 같을 수밖에 없다. 모형이 시험 $300$건 가운데 "연체"로 판정한 것이 **단 한 건도 없기** 때문이다. 예측 확률이 전부 $0.5$ 아래였고, 그래서 두 모형이 내놓은 판정이 글자 그대로 동일하다.
+
+    여기서 갈라 보아야 할 것이 있다. **모형은 좋고 평가가 나쁘다.** 계수 셋이 모두 참값과 맞으니 모형은 자료생성과정을 제대로 배웠다. 다만 문턱 $0.5$가 연체율 $4\%$짜리 자료에 맞지 않을 뿐이다. 문턱을 낮추거나, 정밀도·재현율·ROC-AUC처럼 문턱에 의존하지 않는 지표를 쓰거나, 거짓양성과 거짓음성의 비용 차이를 반영해야 한다.
+
+    클래스가 불균형할 때 정확도만 보면 오도된다. 대출의 10%만 부도가 난다면 "부도 없음"이라고만 답하는 모형도 정확도가 90%가 될 수 있다. 실제 평가에는 정밀도, 재현율, ROC-AUC, 또는 거짓양성과 거짓음성의 비대칭적 비용을 반영한 비용가중 손실이 필요하다(19.3절 모형 평가). 연습문제 9에서 수치로 확인한다.
+
 
 ## 연습문제
 

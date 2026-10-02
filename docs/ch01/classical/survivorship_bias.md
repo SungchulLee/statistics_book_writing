@@ -84,54 +84,104 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 생존자 편향
+**보기 1.** <span class="diff easy" title="쉬움"></span> 생존자 편향. 펀드 $1{,}000$개의 연수익률을 모두 **같은** $N(0.05,\,0.15^2)$에서 $10$년치 뽑는다. 실력 차이는 없고 운의 차이만 있다. 누적 배수가 한 번이라도 $0.5$ 아래로 내려가면 청산되어 자료에서 사라진다.
+
+**(1)** 청산을 무시했을 때 $10$년 뒤 누적 배수의 기댓값과 표준편차를 구하시오.
+
+**(2)** 살아남은 펀드만 보면 평균이 얼마나 부풀려지는가. 청산 문턱을 올리면 그 부풀림이 어떻게 되는지 함께 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-np.random.seed(42)
-n_funds = 1000
-years = 10
+    **(1) 해석적으로.** 연수익률 $r_t$가 독립이므로 누적 배수 $\prod_{t=1}^{10}(1+r_t)$의 기댓값은 기댓값의 곱이다.
 
-# 1단계: 펀드 1000개의 연간 수익률을 10년치 모의생성한다.
-# 평균 5%, 표준편차 15%. 결과는 (1000, 10) 모양의 행렬이다.
-# 중요한 점: 모든 펀드가 완전히 같은 분포에서 나온다.
-#            즉 실력 차이는 없고 운의 차이만 있다.
-returns = np.random.normal(0.05, 0.15, (n_funds, years))
+    $$
+    E\!\left[\prod_{t=1}^{10}(1+r_t)\right] = \big(E[1+r]\big)^{10} = 1.05^{10} = 1.6289
+    $$
 
-# 누적 성장배수. cumprod가 (1+r)을 해마다 곱해 나간다.
-# cumulative[i, t] = i번 펀드의 t년째까지의 누적 배수
-cumulative = np.cumprod(1 + returns, axis=1)
+    분산은 이차적률에서 나온다. $E[(1+r)^2] = 1.05^2 + 0.15^2 = 1.125$이므로
 
-# 2단계: 폐쇄 규칙. 한 번이라도 누적 배수가 0.5 아래로 떨어지면 청산된다.
-# all(axis=1)은 "10년 내내 0.5를 넘겼는가"를 묻는다.
-survived = np.all(cumulative > 0.5, axis=1)
+    $$
+    \operatorname{Var} = 1.125^{10} - 1.05^{20} = 3.2473 - 2.6533 = 0.5940,
+    \qquad
+    \operatorname{sd} = 0.7707
+    $$
 
-# 3단계: 두 가지 평균을 비교한다.
-#   all_final       1000개 전부의 10년차 최종 배수 (진실)
-#   survivor_final  살아남은 펀드만의 최종 배수  (자료로 남는 것)
-# 실무에서 데이터베이스에 남아 있는 것은 둘째뿐이다. 청산된 펀드는 목록에서 사라진다.
-all_final = cumulative[:, -1]
-survivor_final = all_final[survived]
+    이다. **중심이 $1.63$인데 표준편차가 $0.77$이다.** 실력이 똑같은데도 $10$년 뒤 성적표는 두 배 넘게 벌어진다. 펀드 $1{,}000$개의 평균에 붙는 표준오차는 $0.7707/\sqrt{1000} = 0.0244$다.
 
-print(f"Total funds: {n_funds}")
-print(f"Survivors: {survived.sum()}")
-print(f"Mean final value (all funds):      {all_final.mean():.3f}")
-print(f"Mean final value (survivors only): {survivor_final.mean():.3f}")
-print(f"Survivorship bias: {survivor_final.mean() - all_final.mean():+.3f}")
-```
+    **(2) 해석적으로.** 생존 여부는 과거 수익률의 함수이고, 수익률이 높을수록 살아남을 확률이 높다. 따라서 "생존"으로 조건을 거는 것은 **수익률이 높은 쪽을 골라내는 일**이고 생존자의 평균은 반드시 전체 평균보다 크다. 크기는 두 가지가 정한다. 걸러지는 비율과, 걸러진 것들이 얼마나 나빴는가다. 문턱을 올리면 둘 다 커지므로 편향도 커진다.
 
-출력:
+    **(1)(2) 수치적으로.**
 
-```
-Total funds: 1000
-Survivors: 966
-Mean final value (all funds):      1.618
-Mean final value (survivors only): 1.657
-Survivorship bias: +0.039
-```
+    ```python
+    import numpy as np
+
+    np.random.seed(42)
+    n_funds = 1000
+    years = 10
+
+    # 1단계: 펀드 1000개의 연간 수익률을 10년치 모의생성한다.
+    # 평균 5%, 표준편차 15%. 결과는 (1000, 10) 모양의 행렬이다.
+    # 중요한 점: 모든 펀드가 완전히 같은 분포에서 나온다.
+    #            즉 실력 차이는 없고 운의 차이만 있다.
+    returns = np.random.normal(0.05, 0.15, (n_funds, years))
+
+    # 누적 성장배수. cumprod가 (1+r)을 해마다 곱해 나간다.
+    # cumulative[i, t] = i번 펀드의 t년째까지의 누적 배수
+    cumulative = np.cumprod(1 + returns, axis=1)
+
+    # 2단계: 폐쇄 규칙. 한 번이라도 누적 배수가 0.5 아래로 떨어지면 청산된다.
+    # all(axis=1)은 "10년 내내 0.5를 넘겼는가"를 묻는다.
+    survived = np.all(cumulative > 0.5, axis=1)
+
+    # 3단계: 두 가지 평균을 비교한다.
+    #   all_final       1000개 전부의 10년차 최종 배수 (진실)
+    #   survivor_final  살아남은 펀드만의 최종 배수  (자료로 남는 것)
+    # 실무에서 데이터베이스에 남아 있는 것은 둘째뿐이다. 청산된 펀드는 목록에서 사라진다.
+    all_final = cumulative[:, -1]
+    survivor_final = all_final[survived]
+
+    print(f"Total funds: {n_funds}")
+    print(f"Survivors: {survived.sum()}")
+    print(f"Mean final value (all funds):      {all_final.mean():.3f}")
+    print(f"Mean final value (survivors only): {survivor_final.mean():.3f}")
+    print(f"Survivorship bias: {survivor_final.mean() - all_final.mean():+.3f}")
+
+    # --- (1) 의 이론값, 그리고 문턱을 올려 가며 편향을 잰다 ---
+    mean_th = 1.05 ** years
+    sd_th = np.sqrt((1.05 ** 2 + 0.15 ** 2) ** years - 1.05 ** (2 * years))
+    print(f"이론 E[final] = 1.05^10 = {mean_th:.4f},  sd = {sd_th:.4f},  "
+          f"SE = {sd_th / np.sqrt(n_funds):.4f}")
+    for thr in (0.5, 0.7, 0.8, 0.9, 1.0):
+        s = np.all(cumulative > thr, axis=1)
+        print(f"  문턱 {thr}: 생존 {s.sum():4d}개,  생존자 평균 {all_final[s].mean():.3f},  "
+              f"편향 {all_final[s].mean() - all_final.mean():+.3f}")
+    ```
+
+    출력:
+
+    ```
+    Total funds: 1000
+    Survivors: 966
+    Mean final value (all funds):      1.618
+    Mean final value (survivors only): 1.657
+    Survivorship bias: +0.039
+    이론 E[final] = 1.05^10 = 1.6289,  sd = 0.7707,  SE = 0.0244
+      문턱 0.5: 생존  966개,  생존자 평균 1.657,  편향 +0.039
+      문턱 0.7: 생존  846개,  생존자 평균 1.761,  편향 +0.143
+      문턱 0.8: 생존  746개,  생존자 평균 1.835,  편향 +0.217
+      문턱 0.9: 생존  589개,  생존자 평균 1.942,  편향 +0.324
+      문턱 1.0: 생존  398개,  생존자 평균 2.063,  편향 +0.445
+    ```
+
+    **이론값이 맞는다.** 전체 $1{,}000$개의 평균 최종 배수가 $1.618$로 이론값 $1.6289$에서 $0.43$ 표준오차 떨어져 있다.
+
+    문턱 $0.5$에서는 $34$개만 청산되므로 편향이 $+0.039$, 곧 $2.4\%$에 그친다. **그러나 문턱을 올리면 이야기가 달라진다.** $1.0$으로 올려 "$10$년 내내 원금을 지킨 펀드만" 남기면 $398$개가 살아남고 그들의 평균은 $2.063$으로 참값보다 $27\%$ 높다. 연평균 수익률로 환산하면 참값 $5.0\%$가 $7.5\%$로 보인다.
+
+    **이 모의실험에는 실력 좋은 펀드가 하나도 없다.** 모두 똑같은 분포에서 나왔고 기대수익률이 전부 $5\%$다. 그런데도 살아남은 펀드만 모아 놓으면 "꾸준히 시장을 이기는 운용사"처럼 보인다. 생존자 평균이 높은 것은 그들이 잘해서가 아니라 **못한 것들이 목록에서 지워졌기** 때문이다.
+
+    읽는 법 하나. 생존자 편향의 크기는 **"몇 개가 사라졌는가"**로 가늠한다. 청산률이 $3.4\%$면 편향도 작고, $60\%$면 크다. 펀드 성과를 보고하는 자료를 받았을 때 던질 첫 질문은 수익률이 아니라 **"이 기간에 문을 닫은 펀드가 몇 개이고 그것들이 표에 들어 있는가"**다.
 
 ## 연습문제
 

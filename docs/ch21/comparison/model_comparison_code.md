@@ -98,46 +98,101 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Cox-Snell 잔차 진단
+**보기 1.** <span class="diff easy" title="쉬움"></span> Cox-Snell 잔차 진단. 콕스-스넬 잔차는 적합된 모형의 누적위험에 관측시각을 넣은 값 $r_i = \hat H(t_i)$다.
+
+**(1)** 모형이 옳으면 $r_i$가 지수$(1)$을 따름을 보이고, 아래 코드의 세로축 $-\ln(1 - i/(n+1))$이 사실 **지수$(1)$의 분위수**임을 보이시오. 그러므로 이 그림은 무엇이고 왜 45도선이 기준인가.
+
+**(2)** 옳은 모형과 잘못 지정된 모형에서 각각 점들이 45도선에 얼마나 붙는지 수로 재어 견주시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-def cox_snell_diagnostic(residuals):
-    """Cox-Snell 잔차 진단 그림.
+    **(1) 해석적으로.** $T$의 참 누적위험을 $H$라 하면 $S(t) = e^{-H(t)}$이고 $S(T) \sim \text{Unif}(0,1)$이다(연속분포의 확률적분변환). 따라서
 
-    모형이 옳다면 잔차의 누적위험함수가 단위 지수분포를 따른다. 곧
-    H(r) = r 이므로 점들이 45도선 위에 놓인다. 생존분석에서 모형의
-    적합도를 보는 표준적인 그림이다.
-    """
-    sorted_r = np.sort(residuals)
-    n = len(sorted_r)
+    $$
+    H(T) = -\ln S(T) \sim \text{Exp}(1)
+    $$
 
-    # 잔차의 누적위험함수를 Nelson-Aalen 방식으로 추정한다.
-    # 분모에 n+1 을 쓰는 것은 마지막 점에서 로그가 발산하는 것을 피하기 위함이다.
-    H_na = -np.log(1 - np.arange(1, n + 1) / (n + 1))
+    이다. $U \sim \text{Unif}(0,1)$일 때 $-\ln U$가 지수$(1)$이기 때문이다. 모형이 옳아 $\hat H \approx H$이면 잔차 $r_i = \hat H(t_i)$가 지수$(1)$ 표본처럼 보여야 한다.
 
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.plot(sorted_r, H_na, "o", markersize=3, label="Cox-Snell residuals")
-    ax.plot([0, sorted_r.max()], [0, sorted_r.max()], "r--", label="45-degree line")
-    ax.set_xlabel("Cox-Snell Residuals")
-    ax.set_ylabel("Cumulative Hazard")
-    ax.legend()
-    plt.tight_layout()
-    plt.show()
+    지수$(1)$의 누적위험은 $H_r(r) = -\ln e^{-r} = r$로 **항등함수**다. 그러므로 잔차를 하나의 자료로 보고 그 누적위험을 추정해 잔차 자체에 대해 그리면 45도선이 나와야 한다.
+
+    코드의 세로축을 보자. 지수$(1)$의 분포함수는 $F(x) = 1-e^{-x}$이므로 $p$분위수는
+
+    $$
+    F^{-1}(p) = -\ln(1-p)
+    $$
+
+    다. 코드가 $i$번째 점에 주는 값 $-\ln(1 - i/(n+1))$은 바로 $p = i/(n+1)$에서의 지수$(1)$ 분위수다. **그러므로 이 그림은 잔차의 순서통계량을 지수$(1)$ 분위수에 대해 그린 Q-Q 그림이고**, 두 분포가 같으면 점들이 $y = x$ 위에 놓인다. 45도선이 기준인 까닭이 이것이다.
+
+    분모를 $n$이 아니라 $n+1$로 둔 것도 여기서 설명된다. $i = n$에서 $-\ln(1 - n/n) = \infty$로 발산하기 때문이며, $i/(n+1)$은 널리 쓰이는 작도위치 가운데 하나다.
+
+    **(2) 수치적으로.** 잘못 지정된 경우로 잔차가 $\text{Exp}(1)^{1.5}$를 따르는 상황을 쓴다. 이는 참 분포가 와이불인데 지수를 적합했을 때 생기는 꼴이다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def cox_snell_diagnostic(residuals):
+        """Cox-Snell 잔차 진단 그림.
+
+        모형이 옳다면 잔차의 누적위험함수가 단위 지수분포를 따른다. 곧
+        H(r) = r 이므로 점들이 45도선 위에 놓인다. 생존분석에서 모형의
+        적합도를 보는 표준적인 그림이다.
+        """
+        sorted_r = np.sort(residuals)
+        n = len(sorted_r)
+
+        # 잔차의 누적위험함수를 Nelson-Aalen 방식으로 추정한다.
+        # 분모에 n+1 을 쓰는 것은 마지막 점에서 로그가 발산하는 것을 피하기 위함이다.
+        H_na = -np.log(1 - np.arange(1, n + 1) / (n + 1))
+
+        fig, ax = plt.subplots(figsize=(6, 6))
+        ax.plot(sorted_r, H_na, "o", markersize=3, label="Cox-Snell residuals")
+        ax.plot([0, sorted_r.max()], [0, sorted_r.max()], "r--", label="45-degree line")
+        ax.set_xlabel("Cox-Snell Residuals")
+        ax.set_ylabel("Cumulative Hazard")
+        ax.legend()
+        plt.tight_layout()
+        plt.show()
+
+        return sorted_r, H_na
 
 
-# 모형이 옳을 때: Cox-Snell 잔차는 단위 지수분포를 따르므로 45도선 위에 놓인다
-rng = np.random.default_rng(0)
-cox_snell_diagnostic(rng.exponential(1.0, 200))
-```
+    # 모형이 옳을 때: Cox-Snell 잔차는 단위 지수분포를 따르므로 45도선 위에 놓인다
+    rng = np.random.default_rng(0)
+    r, H = cox_snell_diagnostic(rng.exponential(1.0, 200))
 
-![Cox-Snell 잔차 진단 그림](./img/model_comparison_code_99.png)
+    # --- 45도선에서 얼마나 벗어나는지 수로 잰다 ---
+    def report(name, r, H):
+        slope, intercept = np.polyfit(r, H, 1)
+        print(f"{name}: 기울기 {slope:.4f}, 절편 {intercept:+.4f}, "
+              f"최대 이탈 {np.abs(H - r).max():.4f}, 평균잔차 {r.mean():.4f}")
 
-모형이 옳을 때의 모습이다. 점들이 45도선을 따라 놓인다. 실제 자료에서 점들이 이 선에서 체계적으로 벗어나면 모형 설정이 잘못되었다는 뜻이다.
+    report("옳은 모형  ", r, H)
+
+    # 잘못 지정한 경우: 잔차가 Exp(1)^1.5 를 따른다(참이 와이불인데 지수를 적합한 꼴).
+    bad = rng.exponential(1.0, 200) ** 1.5
+    rb = np.sort(bad)
+    Hb = -np.log(1 - np.arange(1, 201) / 201)
+    report("잘못된 모형", rb, Hb)
+    ```
+
+    출력:
+
+    ```
+    옳은 모형  : 기울기 0.9232, 절편 -0.0553, 최대 이탈 0.7544, 평균잔차 1.1292
+    잘못된 모형: 기울기 0.3323, 절편 +0.4599, 최대 이탈 17.8726, 평균잔차 1.5866
+    ```
+
+    ![Cox-Snell 잔차 진단 그림](./img/model_comparison_code_99.png)
+
+    **그림은 모형이 옳을 때의 모습이다.** 점들이 45도선을 따라 놓이고, 맞춘 직선의 기울기가 $0.9232$, 절편이 $-0.0553$으로 이상적인 $1$과 $0$에 가깝다. 지수$(1)$의 평균이 1인데 잔차의 평균이 $1.1292$인 것도 $n = 200$에서 표준오차가 $1/\sqrt{200} = 0.071$임을 생각하면 $1.8$ 표준오차 안이다.
+
+    잘못 지정된 쪽은 기울기가 $0.3323$으로 떨어지고 최대 이탈이 $17.87$까지 벌어진다. 꼬리에서 잔차가 너무 크게 나오기 때문이며, **그림에서는 점들이 선 아래로 휘어 내려가는 모양**으로 나타난다.
+
+    **다만 옳은 모형에서도 최대 이탈이 $0.7544$다.** 꼬리의 몇 점은 늘 크게 벌어지며, 이는 가장 큰 순서통계량의 분산이 크기 때문이지 모형의 결함이 아니다. **콕스-스넬 그림은 몸통의 추세로 읽고 꼬리의 한두 점으로 판정하지 말아야 한다.**
 
 ## 실무적 작업 흐름
 

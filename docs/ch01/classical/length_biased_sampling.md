@@ -143,73 +143,124 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 길이 편향 표집과 검사 역설
+**보기 1.** <span class="diff easy" title="쉬움"></span> 길이 편향 표집과 검사 역설. 버스 간격의 분포를 $X$라 하자. 승객은 **시간축 위에 고르게** 정류장에 도착한다. 두 노선을 견준다. 하나는 정확히 $10$분마다 오고, 다른 하나는 평균 $10$분인 지수분포 간격으로 온다.
+
+**(1)** 승객이 겪는 간격의 기댓값이 $E[X^2]/E[X] = E[X](1+\mathrm{CV}^2)$임을 보이시오. 그가 실제로 **기다리는** 시간의 기댓값은 얼마인가.
+
+**(2)** 두 노선에서 네 값을 계산하고, 모의실험이 그것을 재현하는지 확인하시오.
 
 </div>
 
-버스 간격의 변동이 커질수록 승객이 겪는 대기시간이 어떻게 늘어나는지를, 시뮬레이션과 이론값을 나란히 놓고 확인한다.
+??? success "풀이"
 
-```python
-"""검사 역설: 내가 도착한 간격은 평균보다 길다."""
+    **(1) 해석적으로.** 승객이 시간축 위에 고르게 떨어지므로, 길이 $x$인 간격 안에 떨어질 확률은 그 간격이 시간축에서 차지하는 **폭 $x$에 비례**한다. 따라서 승객이 겪는 간격의 밀도는 $f$가 아니라
 
-import numpy as np
+    $$
+    g(x) = \frac{x f(x)}{E[X]}
+    $$
 
-rng = np.random.default_rng(1)
-mean_gap = 10.0        # 버스 사이 평균 간격(분)
-n_buses = 200_000
-n_riders = 200_000
+    다($\int xf(x)\,dx = E[X]$로 나누어 정규화했다). 이것이 **길이 편향 밀도**이고, 그 기댓값은
+
+    $$
+    E[\text{관측 간격}] = \int x\,\frac{xf(x)}{E[X]}\,dx = \frac{E[X^2]}{E[X]}
+    $$
+
+    이다. $E[X^2] = \operatorname{Var}(X) + E[X]^2$을 넣고 $\mathrm{CV} = \operatorname{sd}(X)/E[X]$로 쓰면
+
+    $$
+    \frac{E[X^2]}{E[X]} = E[X]\left(1 + \mathrm{CV}^2\right)
+    $$
+
+    가 된다. **변동이 없으면($\mathrm{CV} = 0$) 편향도 없고, 들쭉날쭉할수록 커진다.**
+
+    기다리는 시간은 다르다. 겪은 간격의 길이가 $g$로 주어지면 승객은 그 안에 **고르게** 떨어져 있으므로 남은 시간의 조건부 기댓값이 $g/2$다. 따라서
+
+    $$
+    E[\text{대기}] = \frac12\,E[\text{관측 간격}] = \frac{E[X^2]}{2E[X]}
+    $$
+
+    이다. **관측 간격은 $E[X^2]/E[X]$, 대기시간은 그 절반인 $E[X^2]/(2E[X])$다.** 두 식을 혼동하지 말아야 한다.
+
+    두 노선에 넣는다.
+
+    | 노선 | $E[X]$ | $E[X^2]$ | $\mathrm{CV}$ | 관측 간격 | 대기 |
+    |:---|---:|---:|---:|---:|---:|
+    | 정확히 10분 | $10$ | $100$ | $0$ | $10.00$ | $5.00$ |
+    | 지수(평균 10) | $10$ | $200$ | $1$ | $20.00$ | $10.00$ |
+
+    지수분포는 $E[X^2] = 2\theta^2 = 200$이므로 관측 간격이 참 평균의 **두 배**가 되고, 대기시간은 $10$분이다. 무기억성에서 곧바로 나오는 그 유명한 결과이기도 하다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    """검사 역설: 내가 도착한 간격은 평균보다 길다."""
+
+    import numpy as np
+
+    rng = np.random.default_rng(1)
+    mean_gap = 10.0        # 버스 사이 평균 간격(분)
+    n_buses = 200_000
+    n_riders = 200_000
 
 
-def simulate(gaps, label):
-    """승객을 아무 때나 정류장에 떨어뜨리고, 그가 겪는 간격과 대기시간을 잰다."""
-    # 간격들을 누적하면 각 버스의 도착 시각이 된다
-    arrivals = np.cumsum(gaps)
-    horizon = arrivals[-1]
+    def simulate(gaps, label):
+        """승객을 아무 때나 정류장에 떨어뜨리고, 그가 겪는 간격과 대기시간을 잰다."""
+        # 간격들을 누적하면 각 버스의 도착 시각이 된다
+        arrivals = np.cumsum(gaps)
+        horizon = arrivals[-1]
 
-    # 여기가 길이 편향이 생기는 지점이다.
-    # 승객을 **시간축 위에** 고르게 뿌린다(간격 위에 고르게가 아니다).
-    # 긴 간격일수록 시간축에서 차지하는 폭이 넓으므로 더 많은 승객이 그 안에 떨어진다.
-    riders = rng.uniform(0, horizon, n_riders)
+        # 여기가 길이 편향이 생기는 지점이다.
+        # 승객을 **시간축 위에** 고르게 뿌린다(간격 위에 고르게가 아니다).
+        # 긴 간격일수록 시간축에서 차지하는 폭이 넓으므로 더 많은 승객이 그 안에 떨어진다.
+        riders = rng.uniform(0, horizon, n_riders)
 
-    # 각 승객이 어느 간격에 속하는지 이진탐색으로 찾는다
-    idx = np.searchsorted(arrivals, riders)
-    observed_gap = gaps[idx]                 # 승객이 겪은 간격
-    wait = arrivals[idx] - riders            # 다음 버스까지 기다린 시간
+        # 각 승객이 어느 간격에 속하는지 이진탐색으로 찾는다
+        idx = np.searchsorted(arrivals, riders)
+        observed_gap = gaps[idx]                 # 승객이 겪은 간격
+        wait = arrivals[idx] - riders            # 다음 버스까지 기다린 시간
 
-    # 이론값: E[관측 간격] = E[간격] * (1 + CV^2)
-    #   CV = 변동계수 = 표준편차 / 평균
-    # 간격이 일정하면 CV=0이라 편향이 없고, 들쭉날쭉할수록 편향이 커진다.
-    cv2 = gaps.var() / gaps.mean() ** 2
-    print(f"{label}")
-    print(f"  gap mean (bus company) : {gaps.mean():5.2f} min")
-    print(f"  gap seen by riders     : {observed_gap.mean():5.2f} min "
-          f"(theory: {gaps.mean() * (1 + cv2):5.2f})")
-    print(f"  mean wait              : {wait.mean():5.2f} min")
+        # 이론값: E[관측 간격] = E[간격] * (1 + CV^2)
+        #   CV = 변동계수 = 표준편차 / 평균
+        # 간격이 일정하면 CV=0이라 편향이 없고, 들쭉날쭉할수록 편향이 커진다.
+        cv2 = gaps.var() / gaps.mean() ** 2
+        print(f"{label}")
+        print(f"  gap mean (bus company) : {gaps.mean():5.2f} min")
+        print(f"  gap seen by riders     : {observed_gap.mean():5.2f} min "
+              f"(theory: {gaps.mean() * (1 + cv2):5.2f})")
+        print(f"  mean wait              : {wait.mean():5.2f} min")
 
 
-# === 경우 1: 정확히 10분마다. 표준편차 0이므로 CV = 0 ===
-# 편향이 전혀 없다. 버스회사의 평균과 승객이 겪는 평균이 같다.
-simulate(np.full(n_buses, mean_gap), "Every 10 minutes exactly")
+    # === 경우 1: 정확히 10분마다. 표준편차 0이므로 CV = 0 ===
+    # 편향이 전혀 없다. 버스회사의 평균과 승객이 겪는 평균이 같다.
+    simulate(np.full(n_buses, mean_gap), "Every 10 minutes exactly")
 
-# === 경우 2: 지수분포 간격(포아송 도착). 표준편차 = 평균이므로 CV = 1 ===
-# 이론값이 10 * (1 + 1) = 20분. 승객이 겪는 간격이 두 배가 된다.
-simulate(rng.exponential(mean_gap, n_buses), "Exponential gaps (Poisson buses)")
-```
+    # === 경우 2: 지수분포 간격(포아송 도착). 표준편차 = 평균이므로 CV = 1 ===
+    # 이론값이 10 * (1 + 1) = 20분. 승객이 겪는 간격이 두 배가 된다.
+    simulate(rng.exponential(mean_gap, n_buses), "Exponential gaps (Poisson buses)")
+    ```
 
-출력:
+    출력:
 
-```
-Every 10 minutes exactly
-  gap mean (bus company) : 10.00 min
-  gap seen by riders     : 10.00 min (theory: 10.00)
-  mean wait              :  5.00 min
-Exponential gaps (Poisson buses)
-  gap mean (bus company) :  9.98 min
-  gap seen by riders     : 19.87 min (theory: 19.89)
-  mean wait              :  9.96 min
-```
+    ```
+    Every 10 minutes exactly
+      gap mean (bus company) : 10.00 min
+      gap seen by riders     : 10.00 min (theory: 10.00)
+      mean wait              :  5.00 min
+    Exponential gaps (Poisson buses)
+      gap mean (bus company) :  9.98 min
+      gap seen by riders     : 19.87 min (theory: 19.89)
+      mean wait              :  9.96 min
+    ```
 
-두 노선 모두 "평균 배차 10분"이다. 승객이 겪는 것은 5분과 10분으로 두 배 차이가 난다. 차이를 만드는 것은 평균이 아니라 **분산**이다.
+    **네 값이 모두 맞는다.** 정확히 $10$분 노선에서는 승객이 겪는 간격이 $10.00$분, 대기가 $5.00$분으로 편향이 없다. 지수 노선에서는 관측 간격이 $19.87$분으로 이론값 $20$의 $0.7\%$ 안이고, 대기가 $9.96$분으로 $10$분에 맞는다.
+
+    코드가 찍는 `theory` 값 $19.89$는 모집단의 $20$이 아니라 **실제로 뽑힌 $20$만 개 간격의** $\bar X(1 + \widehat{\mathrm{CV}}^2)$다. 그 표본의 평균이 $9.98$이었으므로 조금 작게 나왔고, 모의값 $19.87$은 그 $19.89$와 $0.1\%$ 안에서 일치한다. **이론과 모의가 어긋나는 것이 아니라, 두 단계의 몬테카를로 오차가 따로 있다.**
+
+    두 노선 모두 버스회사가 광고하는 "평균 배차 $10$분"은 참이다. 그런데 승객이 기다리는 시간은 $5$분과 $10$분으로 두 배 차이가 난다. **차이를 만드는 것은 평균이 아니라 분산이다.** 평균을 그대로 둔 채 간격을 고르게만 만들어도 대기시간은 절반이 된다.
+
+    !!! warning "두 식을 혼동하지 말 것"
+        **관측 간격**은 $E[X^2]/E[X]$이고 **잔여 대기시간**은 $E[X^2]/(2E[X])$다. 지수 노선에서 각각 $20$분과 $10$분이다. "검사 역설"이라는 이름 아래 두 값이 자주 뒤섞이는데, 전자는 "내가 탄 버스의 배차 간격", 후자는 "내가 정류장에서 보낸 시간"으로 묻는 것이 다르다.
+
 
 ## 연습문제
 

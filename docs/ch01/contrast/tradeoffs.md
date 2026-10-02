@@ -45,62 +45,114 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 패러다임의 강점과 한계
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 패러다임의 강점과 한계. 같은 도구(선형모형)로 목표가 다른 두 일을 한다. 하나는 $n = 500$을 두 군에 무작위 배정해 효과 $2.0$을 재는 A/B 검정($\sigma = 5$)이고, 다른 하나는 설명변수 셋짜리 회귀를 $250$개로 적합해 나머지 $250$개에서 평가하는 예측 과제($\sigma = 1$)다.
+
+**(1)** A/B 검정에서 추정 효과의 표준오차를 구하시오.
+
+**(2)** 예측 과제에서 **시험 MSE가 내려갈 수 없는 바닥**과, 모수를 추정하느라 치르는 **웃돈**을 구하시오.
 
 </div>
 
-```python
-"""같은 도구(선형모형)로 목표가 다른 두 일을 해 본다: 추론 대 예측."""
+??? success "풀이"
 
-import numpy as np
-from scipy import stats
+    **(1) 해석적으로.** 두 군의 크기를 $n_1, n_0$이라 하면
 
-rng = np.random.default_rng(42)
-n = 500
-true_effect = 2.0
+    $$
+    \operatorname{SE} = \sigma\sqrt{\frac{1}{n_1} + \frac{1}{n_0}}
+    $$
 
-# === 고전적 A/B 검정 — 목표는 "효과가 있는가"를 판정하는 것 ===
-# 처리를 무작위로 배정한다. 배정이 결과와 무관하므로 인과 해석이 가능하다.
-group = rng.choice([0, 1], size=n)
-outcome = 10 + true_effect * group + rng.normal(0, 5, n)
+    이다. 배정을 동전으로 하므로 군 크기 자체가 확률변수인데, 실제로는 $n_1 = 244$, $n_0 = 256$이 되어
 
-# 관심사는 계수 하나(효과의 크기)와 그것에 대한 불확실성(p값)이다.
-# 예측 정확도는 아예 재지도 않는다. 잡음이 커서 개별 예측은 형편없다.
-t_stat, p_val = stats.ttest_ind(outcome[group == 1], outcome[group == 0])
-print("=== Classical A/B test ===")
-print(f"Estimated effect: {outcome[group == 1].mean() - outcome[group == 0].mean():+.2f} "
-      f"(true {true_effect})")
-print(f"p = {p_val:.4f}")
+    $$
+    5\sqrt{\frac{1}{244} + \frac{1}{256}} = 0.4473
+    $$
 
-# === 현대적 예측 — 목표는 "새 자료에서 얼마나 잘 맞히는가" ===
-# 설명변수 3개짜리 회귀. 계수의 의미나 유의성에는 관심이 없다.
-X = rng.standard_normal((n, 3))
-y = 2 * X[:, 0] - X[:, 1] + 0.5 * X[:, 2] + rng.standard_normal(n)
+    이다. 관측된 추정값 $+2.35$는 참값 $2.0$에서 $0.79$ 표준오차 떨어져 있다.
 
-# 자료를 훈련용과 시험용으로 반씩 나눈다.
-# 이 분할이 예측 패러다임의 핵심이다. 모형이 **보지 않은** 자료로 평가해야
-# 외운 것인지 배운 것인지 구별할 수 있다.
-train, test = np.arange(n // 2), np.arange(n // 2, n)
+    **(2) 해석적으로.** 새 관측 $(x_0, y_0)$에 대해
 
-# 훈련자료로만 계수를 구한다(최소제곱)
-beta_train = np.linalg.lstsq(X[train], y[train], rcond=None)[0]
+    $$
+    E\big[(y_0 - x_0^\top\hat\beta)^2\big] = \sigma^2 + E\big[(x_0^\top(\hat\beta-\beta))^2\big]
+    $$
 
-# 시험자료에서 평균제곱오차를 잰다. 이것이 성적표다.
-mse_test = np.mean((y[test] - X[test] @ beta_train) ** 2)
-print("\n=== Modern prediction ===")
-print(f"Test MSE = {mse_test:.3f}")
-```
+    다. 첫 항 $\sigma^2 = 1$이 **바닥**이고, 둘째 항이 계수를 자료에서 추정했기 때문에 치르는 **웃돈**이다. 설계가 표준정규이면 그 웃돈의 기댓값이 $\sigma^2 p/(n-p-1)$이므로
 
-출력:
+    $$
+    E[\text{시험 MSE}] = \sigma^2\left(1 + \frac{p}{n-p-1}\right) = 1 + \frac{3}{246} = 1.0122
+    $$
 
-```
-=== Classical A/B test ===
-Estimated effect: +2.35 (true 2.0)
-p = 0.0000
+    **웃돈은 $1.2\%$뿐이다.** 훈련자료 $250$개에 모수가 셋이라 추정이 충분히 정밀하기 때문이고, $p$가 $n$에 가까워지면 이 항이 폭발한다.
 
-=== Modern prediction ===
-Test MSE = 1.017
-```
+    **(1)(2) 수치적으로.**
+
+    ```python
+    """같은 도구(선형모형)로 목표가 다른 두 일을 해 본다: 추론 대 예측."""
+
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(42)
+    n = 500
+    true_effect = 2.0
+
+    # === 고전적 A/B 검정 — 목표는 "효과가 있는가"를 판정하는 것 ===
+    # 처리를 무작위로 배정한다. 배정이 결과와 무관하므로 인과 해석이 가능하다.
+    group = rng.choice([0, 1], size=n)
+    outcome = 10 + true_effect * group + rng.normal(0, 5, n)
+
+    # 관심사는 계수 하나(효과의 크기)와 그것에 대한 불확실성(p값)이다.
+    # 예측 정확도는 아예 재지도 않는다. 잡음이 커서 개별 예측은 형편없다.
+    t_stat, p_val = stats.ttest_ind(outcome[group == 1], outcome[group == 0])
+    print("=== Classical A/B test ===")
+    print(f"Estimated effect: {outcome[group == 1].mean() - outcome[group == 0].mean():+.2f} "
+          f"(true {true_effect})")
+    print(f"p = {p_val:.4f}")
+
+    # === 현대적 예측 — 목표는 "새 자료에서 얼마나 잘 맞히는가" ===
+    # 설명변수 3개짜리 회귀. 계수의 의미나 유의성에는 관심이 없다.
+    X = rng.standard_normal((n, 3))
+    y = 2 * X[:, 0] - X[:, 1] + 0.5 * X[:, 2] + rng.standard_normal(n)
+
+    # 자료를 훈련용과 시험용으로 반씩 나눈다.
+    # 이 분할이 예측 패러다임의 핵심이다. 모형이 **보지 않은** 자료로 평가해야
+    # 외운 것인지 배운 것인지 구별할 수 있다.
+    train, test = np.arange(n // 2), np.arange(n // 2, n)
+
+    # 훈련자료로만 계수를 구한다(최소제곱)
+    beta_train = np.linalg.lstsq(X[train], y[train], rcond=None)[0]
+
+    # 시험자료에서 평균제곱오차를 잰다. 이것이 성적표다.
+    mse_test = np.mean((y[test] - X[test] @ beta_train) ** 2)
+    print("\n=== Modern prediction ===")
+    print(f"Test MSE = {mse_test:.3f}")
+
+    # --- (1)(2) 의 이론값 ---
+    n1, n0 = int((group == 1).sum()), int((group == 0).sum())
+    print(f"\n군 크기 {n1} / {n0},  이론 SE = 5*sqrt(1/n1+1/n0) = "
+          f"{5 * np.sqrt(1 / n1 + 1 / n0):.4f}")
+    p_dim, n_tr = X.shape[1], len(train)
+    print(f"이론 E[시험 MSE] = 1 + p/(n-p-1) = {1 + p_dim / (n_tr - p_dim - 1):.4f}")
+    ```
+
+    출력:
+
+    ```
+    === Classical A/B test ===
+    Estimated effect: +2.35 (true 2.0)
+    p = 0.0000
+
+    === Modern prediction ===
+    Test MSE = 1.017
+
+    군 크기 244 / 256,  이론 SE = 5*sqrt(1/n1+1/n0) = 0.4473
+    이론 E[시험 MSE] = 1 + p/(n-p-1) = 1.0122
+    ```
+
+    **두 이론값이 모두 맞는다.** 추정 효과 $+2.35$는 참값 $2.0$에서 $0.79$ 표준오차($0.4473$) 떨어져 있고, 시험 MSE $1.017$은 이론값 $1.0122$와 $0.5\%$ 안에서 같다($n = 250$에서 MSE 추정의 상대 표준오차가 $\sqrt{2/250} = 9\%$이므로 넉넉히 들어온다).
+
+    **두 성적표가 서로 다른 것을 잰다는 점이 이 보기의 요점이다.** A/B 검정은 $p < 0.0001$로 효과를 확실히 잡아냈지만, 잡음이 $\sigma = 5$라서 **개별 관측의 예측에는 아무 쓸모가 없다.** 효과 $2$에 잡음 $5$이니 한 사람의 결과를 맞히는 일은 애초에 불가능하다. 반대로 예측 쪽은 시험 MSE $1.017$로 거의 완벽하지만, 그 숫자는 어느 변수가 왜 중요한지에 대해 한 마디도 하지 않는다.
+
+    **같은 최소제곱이 두 패러다임에서 다른 질문에 답한다.** 도구가 갈리는 것이 아니라 성적표가 갈린다.
 
 ## 연습문제
 

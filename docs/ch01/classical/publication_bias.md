@@ -82,65 +82,135 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 출판 편향과 파일서랍 문제
+**보기 1.** <span class="diff easy" title="쉬움"></span> 출판 편향과 파일서랍 문제. 참 효과가 코헨의 $d = 0.3$인 현상을 집단당 $25$명으로 연구한 논문 $2{,}000$편을 만든다. 모두 같은 현상을 같은 설계로 연구하며, $p < 0.05$인 것만 학술지에 실린다.
+
+**(1)** 이 설계의 **검정력**과, 출판되려면 효과크기가 얼마를 넘어야 하는지를 구하시오.
+
+**(2)** 출판된 논문의 평균 효과크기 $E[\hat d \mid p < 0.05]$를 이론적으로 계산하고 모의실험과 견주시오.
 
 </div>
 
-효과가 실제로 있지만 작은 경우에도, 유의한 연구만 출판되면 문헌의 효과크기가 어떻게 부풀려지는지를 보여 준다.
+??? success "풀이"
 
-```python
-"""승자의 저주: 유의한 연구만 출판되면 문헌의 효과크기가 부풀려진다."""
+    **(1) 해석적으로.** 이표본 $t$ 검정의 비중심모수는
 
-import numpy as np
-from scipy import stats
+    $$
+    \text{ncp} = d\sqrt{\frac{n}{2}} = 0.3\sqrt{12.5} = 1.0607
+    $$
 
-rng = np.random.default_rng(0)
-n_studies = 2000
-n_per_group = 25          # 집단당 25명 — 작고 검정력이 낮은 연구
-true_effect = 0.3         # 코헨의 d. 실재하지만 크지 않은 효과
+    이고 자유도는 $2n - 2 = 48$이다. 양측 $\alpha = 0.05$의 임계값이 $t_{0.975,48} = 2.0106$이므로 검정력은 비중심 $t$ 분포에서
 
-# === 독립적인 연구 2000개를 돌린다 ===
-# 중요한 전제: 2000개 모두 참 효과 0.3인 같은 현상을 연구한다.
-# 즉 연구자들의 실력도, 현상도 모두 같다. 다른 것은 우연뿐이다.
-effects, pvals = [], []
-for _ in range(n_studies):
-    control = rng.normal(0, 1, n_per_group)
-    treated = rng.normal(true_effect, 1, n_per_group)
-    t_stat, p = stats.ttest_ind(treated, control)
+    $$
+    P(|T'| > 2.0106) = 0.1800
+    $$
 
-    # 코헨의 d = (평균 차이) / (합동표준편차)
-    # 단위에 의존하지 않는 표준화된 효과크기라 연구끼리 비교할 수 있다.
-    pooled_sd = np.sqrt((control.var(ddof=1) + treated.var(ddof=1)) / 2)
-    effects.append((treated.mean() - control.mean()) / pooled_sd)
-    pvals.append(p)
+    이다. **다섯 편 중 네 편은 참 효과가 있는데도 유의하지 못한다.**
 
-effects, pvals = np.array(effects), np.array(pvals)
+    출판 문턱을 효과크기로 옮기면 더 선명해진다. $\hat d = t\sqrt{2/n} = 0.2828\,t$이므로 $|t| > 2.0106$은
 
-# === 출판 필터 ===
-# p < 0.05 인 연구만 학술지에 실린다고 두자.
-# 검정력이 낮으므로, 통과하려면 우연히 효과가 크게 나와야 한다.
-# 다시 말해 **필터가 효과크기가 큰 표본을 골라낸다.** 이것이 승자의 저주다.
-published = pvals < 0.05
+    $$
+    |\hat d| > 2.0106 \times 0.2828 = 0.5687
+    $$
 
-# === 서랍 속에 남은 것과 문헌에 보이는 것을 비교한다 ===
-print(f"True effect                : {true_effect:.2f}")
-print(f"All studies,      mean d   : {effects.mean():.2f}  (n = {n_studies})")
-print(f"Published only,   mean d   : {effects[published].mean():.2f}  "
-      f"(n = {published.sum()})")
-print(f"Inflation                  : "
-      f"{100 * (effects[published].mean() / true_effect - 1):.0f}%")
-print(f"Studies in the file drawer : {(~published).sum()}")
-```
+    를 뜻한다. **참값이 $0.3$인데 $0.57$ 넘게 나와야만 출판된다.** 필터가 효과크기를 두 배 가까이 과장한 표본만 통과시키는 것이다. 이것이 승자의 저주이고, 검정력이 낮을수록 심해진다.
 
-출력:
+    **(2) 해석적으로.** 출판된 논문의 평균은 비중심 $t$ 분포를 꼬리에서만 잘라 낸 조건부 기댓값이다.
 
-```
-True effect                : 0.30
-All studies,      mean d   : 0.32  (n = 2000)
-Published only,   mean d   : 0.72  (n = 381)
-Inflation                  : 141%
-Studies in the file drawer : 1619
-```
+    $$
+    E[\hat d \mid \text{유의}] = \sqrt{\tfrac2n}\;
+    \frac{\displaystyle\int_{|t|>t_c} t\,f_{T'}(t)\,dt}{\displaystyle\int_{|t|>t_c} f_{T'}(t)\,dt}
+    $$
+
+    수치적분하면 $0.7232$가 나온다. 참값 $0.3$의 **$2.41$배**, 곧 $141\%$ 부풀림이다.
+
+    한편 **전부를 모으면** 참값을 거의 되찾는다. 다만 코헨의 $\hat d$ 자체가 조금 위로 치우쳐 있어 $E[\hat d] = d/J$이고, $J = \Gamma(24)/(\sqrt{24}\,\Gamma(23.5)) = 0.98428$이므로 $0.3048$이 기댓값이다.
+
+    **(1)(2) 수치적으로.**
+
+    ```python
+    """승자의 저주: 유의한 연구만 출판되면 문헌의 효과크기가 부풀려진다."""
+
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    n_studies = 2000
+    n_per_group = 25          # 집단당 25명 — 작고 검정력이 낮은 연구
+    true_effect = 0.3         # 코헨의 d. 실재하지만 크지 않은 효과
+
+    # === 독립적인 연구 2000개를 돌린다 ===
+    # 중요한 전제: 2000개 모두 참 효과 0.3인 같은 현상을 연구한다.
+    # 즉 연구자들의 실력도, 현상도 모두 같다. 다른 것은 우연뿐이다.
+    effects, pvals = [], []
+    for _ in range(n_studies):
+        control = rng.normal(0, 1, n_per_group)
+        treated = rng.normal(true_effect, 1, n_per_group)
+        t_stat, p = stats.ttest_ind(treated, control)
+
+        # 코헨의 d = (평균 차이) / (합동표준편차)
+        # 단위에 의존하지 않는 표준화된 효과크기라 연구끼리 비교할 수 있다.
+        pooled_sd = np.sqrt((control.var(ddof=1) + treated.var(ddof=1)) / 2)
+        effects.append((treated.mean() - control.mean()) / pooled_sd)
+        pvals.append(p)
+
+    effects, pvals = np.array(effects), np.array(pvals)
+
+    # === 출판 필터 ===
+    # p < 0.05 인 연구만 학술지에 실린다고 두자.
+    # 검정력이 낮으므로, 통과하려면 우연히 효과가 크게 나와야 한다.
+    # 다시 말해 **필터가 효과크기가 큰 표본을 골라낸다.** 이것이 승자의 저주다.
+    published = pvals < 0.05
+
+    # === 서랍 속에 남은 것과 문헌에 보이는 것을 비교한다 ===
+    print(f"True effect                : {true_effect:.2f}")
+    print(f"All studies,      mean d   : {effects.mean():.2f}  (n = {n_studies})")
+    print(f"Published only,   mean d   : {effects[published].mean():.2f}  "
+          f"(n = {published.sum()})")
+    print(f"Inflation                  : "
+          f"{100 * (effects[published].mean() / true_effect - 1):.0f}%")
+    print(f"Studies in the file drawer : {(~published).sum()}")
+
+    # --- (1)(2) 의 이론값과 맞추어 본다 ---
+    from scipy.integrate import quad
+
+    df = 2 * n_per_group - 2
+    ncp = true_effect * np.sqrt(n_per_group / 2)
+    t_c = stats.t.ppf(0.975, df)
+    power = stats.nct.sf(t_c, df, ncp) + stats.nct.cdf(-t_c, df, ncp)
+    k = np.sqrt(2 / n_per_group)
+
+    f = lambda t: stats.nct.pdf(t, df, ncp)
+    num = quad(lambda t: t * f(t), t_c, 50)[0] + quad(lambda t: t * f(t), -50, -t_c)[0]
+    den = quad(f, t_c, 50)[0] + quad(f, -50, -t_c)[0]
+
+    print(f"이론 검정력 = {power:.4f}  (관측 {published.mean():.4f})")
+    print(f"출판 문턱 |d| > {k * t_c:.4f}")
+    print(f"이론 E[d | 유의] = {k * num / den:.4f}  (관측 {effects[published].mean():.4f})")
+    print(f"관측 전체 평균 d = {effects.mean():.4f},  "
+          f"SE = {effects.std(ddof=1) / np.sqrt(n_studies):.4f}")
+    ```
+
+    출력:
+
+    ```
+    True effect                : 0.30
+    All studies,      mean d   : 0.32  (n = 2000)
+    Published only,   mean d   : 0.72  (n = 381)
+    Inflation                  : 141%
+    Studies in the file drawer : 1619
+    이론 검정력 = 0.1800  (관측 0.1905)
+    출판 문턱 |d| > 0.5687
+    이론 E[d | 유의] = 0.7232  (관측 0.7231)
+    관측 전체 평균 d = 0.3178,  SE = 0.0064
+    ```
+
+    **이론과 모의가 소수 넷째 자리까지 맞는다.** 비중심 $t$ 분포로 계산한 $E[\hat d \mid \text{유의}] = 0.7232$와 모의실험의 $0.7231$이 사실상 같다. 출판 문턱 $0.5687$도 그대로이고, 검정력은 이론 $0.1800$ 대 관측 $0.1905$로 표준오차 $\sqrt{0.18\times0.82/2000} = 0.0086$의 $1.2$배 안이다.
+
+    전체 평균은 $0.3178$로 이론값 $0.3048$보다 $2.0$ 표준오차 높다. 몬테카를로 오차의 가장자리이며, $2{,}000$편을 더 늘리면 내려앉을 값이다. **중요한 것은 $0.32$가 $0.30$ 근처라는 것이지 소수 둘째 자리가 아니다.**
+
+    **부정직한 연구자도 잘못된 통계도 없다.** $2{,}000$편 모두 같은 설계로 정직하게 수행되었고, 모두 올바른 $t$ 검정을 썼다. 걸러 내는 규칙 하나가 참값 $0.3$을 문헌에서 $0.72$로 만들었다. 서랍 속에 남은 $1{,}619$편은 아무 잘못도 하지 않았다.
+
+    읽는 법 하나. **검정력이 낮을수록 부풀림이 커진다.** 문턱이 $\lvert\hat d\rvert > 0.5687$인 것은 $n = 25$라서이며, 집단당 $200$명이면 문턱이 $0.1966$으로 내려가 참값을 훨씬 덜 과장한다. 작은 연구만 모은 메타분석을 특히 조심해야 하는 이유다.
 
 모든 연구를 합치면 참값을 되찾지만, 유의한 것만 모으면 효과가 크게 부풀려진다. 부정직한 연구자도, 잘못된 통계도 없다. 걸러 내는 규칙 하나만으로 충분하다.
 
