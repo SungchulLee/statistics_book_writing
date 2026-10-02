@@ -46,74 +46,315 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 비율 차이 검정 계산기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 비율 차이 검정 계산기. 아래 함수는 $\delta_0 = 0$일 때는 **합동** 표준오차를, 그 밖의 경우에는 **Wald** 표준오차를 쓴다. 두 표준오차는 같은 자료에서 다른 수다.
+
+**(1)** $\text{SE}_{\text{pool}}^2 - \text{SE}_{\text{wald}}^2$을 닫힌 꼴로 구하고 $n_1 = n_2$일 때로 특수화하시오. 어느 쪽이 큰지는 무엇이 정하는가.
+
+**(2)** 그 식을 무작위 입력으로 검사하고, $n_1 = 80$, $n_2 = 60$에서 두 표준오차의 크기 순서가 **뒤집히는 경계**를 찾으시오.
 
 </div>
 
-```python
-import math
-from scipy.stats import norm
+??? success "풀이"
 
-def test_diff_two_props(k1, n1, k2, n2, delta0=0.0,
-                        method="pooled", alt="two-sided", alpha=0.05):
-    """귀무가설 H0: p1 - p2 = delta0.
+    **(1) 해석적으로.** $A = \hat p_1$, $B = \hat p_2$, $N = n_1 + n_2$로 줄여 쓰면 합동 비율이 $\bar p = (n_1A + n_2B)/N$이므로
 
-    delta0=0이고 method='pooled'이면 합동 표준오차를 쓴다.
-    돌려주는 값은 (z, p, 기각 여부, 이름).
-    """
-    p1, p2 = k1 / n1, k2 / n2
-    d_hat = p1 - p2
-    if delta0 == 0.0 and method == "pooled":
-        # H0가 "두 비율이 같다"이면 그 공통값의 최선의 추정은 전체를 합친 비율이다.
-        # 검정은 H0 아래의 분포를 쓰므로 여기서 합동하는 것이 옳다.
-        p_pool = (k1 + k2) / (n1 + n2)
-        se = math.sqrt(p_pool * (1 - p_pool) * (1 / n1 + 1 / n2))
-        label = "pooled z-test"
-    else:
-        # delta0이 0이 아니면 "두 비율이 같다"는 가정이 없으므로 합동할 수 없다.
-        # 신뢰구간에서 쓰는 것과 같은 표준오차다.
-        se = math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2)
-        label = "wald z-test"
+    $$
+    \text{SE}_{\text{pool}}^2 = \bar p(1-\bar p)\,\frac{N}{n_1n_2},
+    \qquad
+    \text{SE}_{\text{wald}}^2 = \frac{n_2 A(1-A) + n_1 B(1-B)}{n_1 n_2}
+    $$
 
-    z = (d_hat - delta0) / se
-    if alt == "two-sided":
-        p = 2 * min(norm.cdf(z), 1 - norm.cdf(z))
-    elif alt == "less":
-        p = norm.cdf(z)
-    else:
-        p = 1 - norm.cdf(z)
-    return z, p, (p < alpha), label
-```
+    이다. 차에 $n_1n_2$를 곱하면 일차항에서
+
+    $$
+    N\bar p - n_2 A - n_1 B = n_1A + n_2B - n_2A - n_1B = (n_1-n_2)(A-B)
+    $$
+
+    가 남고, 이차항에서는
+
+    $$
+    n_2A^2 + n_1B^2 - N\bar p^{\,2}
+    = \frac{n_1n_2(A-B)^2 - (n_1-n_2)N(A-B)(A+B)}{N}
+    $$
+
+    이 남는다. 둘을 더해 $(A-B)$로 묶으면
+
+    $$
+    \boxed{\;
+    \text{SE}_{\text{pool}}^2 - \text{SE}_{\text{wald}}^2
+    = \frac{\hat p_1 - \hat p_2}{n_1 n_2}
+    \left[(n_1-n_2)\bigl(1 - \hat p_1 - \hat p_2\bigr)
+    + \frac{n_1n_2\,(\hat p_1 - \hat p_2)}{N}\right]
+    \;}
+    $$
+
+    이다. $n_1 = n_2 = n$을 넣으면 첫 항이 사라지고
+
+    $$
+    \text{SE}_{\text{pool}}^2 - \text{SE}_{\text{wald}}^2 = \frac{(\hat p_1 - \hat p_2)^2}{2n} \;\ge\; 0
+    $$
+
+    이 되어, **균형 설계에서는 합동 쪽이 언제나 크다.** 이 특수한 꼴은 [비율에 대한 이표본 Z-검정](z_test_two_proportions.md)의 보기 2에서 $p(1-p)$의 오목성으로 얻었던 식과 같다. 위 식은 거기에 불균형 항을 더한 일반형이다.
+
+    **순서를 뒤집는 것은 괄호 안의 첫 항이다.** 둘째 항은 $(A-B)$와 같은 부호여서 곱하면 언제나 $\ge 0$이지만, 첫 항은 $(n_1-n_2)$와 $(1-A-B)$의 부호에 따라 어느 쪽으로도 갈 수 있다. 특히 **두 비율이 모두 높아 $A + B > 1$이 되면 $(1-A-B)$가 음수**가 되어, 표본이 큰 쪽의 비율이 높을 때 합동 표준오차가 Wald보다 작아질 수 있다. $A - B$를 고정했을 때의 경계는 괄호를 0으로 두어
+
+    $$
+    A + B = 1 + \frac{n_1n_2}{N(n_1-n_2)}\,(A - B)
+    $$
+
+    로 구해진다.
+
+    **(2) 수치적으로.** 먼저 함수다.
+
+    ```python
+    import math
+    from scipy.stats import norm
+
+    def test_diff_two_props(k1, n1, k2, n2, delta0=0.0,
+                            method="pooled", alt="two-sided", alpha=0.05):
+        """귀무가설 H0: p1 - p2 = delta0.
+
+        delta0=0이고 method='pooled'이면 합동 표준오차를 쓴다.
+        돌려주는 값은 (z, p, 기각 여부, 이름).
+        """
+        p1, p2 = k1 / n1, k2 / n2
+        d_hat = p1 - p2
+        if delta0 == 0.0 and method == "pooled":
+            # H0가 "두 비율이 같다"이면 그 공통값의 최선의 추정은 전체를 합친 비율이다.
+            # 검정은 H0 아래의 분포를 쓰므로 여기서 합동하는 것이 옳다.
+            p_pool = (k1 + k2) / (n1 + n2)
+            se = math.sqrt(p_pool * (1 - p_pool) * (1 / n1 + 1 / n2))
+            label = "pooled z-test"
+        else:
+            # delta0이 0이 아니면 "두 비율이 같다"는 가정이 없으므로 합동할 수 없다.
+            # 신뢰구간에서 쓰는 것과 같은 표준오차다.
+            se = math.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2)
+            label = "wald z-test"
+
+        z = (d_hat - delta0) / se
+        if alt == "two-sided":
+            p = 2 * min(norm.cdf(z), 1 - norm.cdf(z))
+        elif alt == "less":
+            p = norm.cdf(z)
+        else:
+            p = 1 - norm.cdf(z)
+        return z, p, (p < alpha), label
+    ```
+
+    이제 (1)의 식을 검사한다.
+
+    ```python
+    import numpy as np
+
+
+    def se_pair(k1, n1, k2, n2):
+        """합동 SE^2, Wald SE^2, 그리고 닫힌 꼴이 예측하는 차."""
+        p1, p2 = k1 / n1, k2 / n2
+        N = n1 + n2
+        p_pool = (k1 + k2) / N
+        se_p2 = p_pool * (1 - p_pool) * (1 / n1 + 1 / n2)
+        se_w2 = p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2
+        pred = (p1 - p2) * ((n1 - n2) * (1 - p1 - p2)
+                            + n1 * n2 * (p1 - p2) / N) / (n1 * n2)
+        return se_p2, se_w2, pred
+
+
+    rng = np.random.default_rng(3)
+    worst = 0.0
+    for _ in range(200_000):
+        a, b = int(rng.integers(2, 301)), int(rng.integers(2, 301))
+        u, v = int(rng.integers(0, a + 1)), int(rng.integers(0, b + 1))
+        if u + v in (0, a + b):
+            continue                      # 합동 비율이 0 또는 1 이면 SE = 0
+        sp2, sw2, pred = se_pair(u, a, v, b)
+        worst = max(worst, abs(sp2 - sw2 - pred))
+    print(f"항등식 검사 20만 개: 절대오차의 최대값 = {worst:.3e}")
+
+    print("\nn1 = 80, n2 = 60 에서 같은 차이를 위로 옮기면 부호가 뒤집힌다")
+    print("  k1  k2   p1-p2   p1+p2    SE_p^2 - SE_w^2   큰 쪽")
+    for k1, k2 in ((30, 18), (44, 29), (48, 32), (50, 33), (52, 34)):
+        sp2, sw2, pred = se_pair(k1, 80, k2, 60)
+        print(f" {k1:3d} {k2:3d}  {k1/80 - k2/60:6.4f}  {k1/80 + k2/60:6.4f}"
+              f"   {sp2 - sw2:+.3e}      {'합동' if sp2 > sw2 else 'Wald'}")
+    print(f"  부호가 바뀌는 경계: p1+p2 = "
+          f"{1 + 80 * 60 / (140 * 20) * 0.075:.6f}  (p1-p2 = 0.075 고정)")
+    ```
+
+    출력:
+
+    ```
+    항등식 검사 20만 개: 절대오차의 최대값 = 6.245e-17
+
+    n1 = 80, n2 = 60 에서 같은 차이를 위로 옮기면 부호가 뒤집힌다
+      k1  k2   p1-p2   p1+p2    SE_p^2 - SE_w^2   큰 쪽
+      30  18  0.0750  0.6750   +1.417e-04      합동
+      44  29  0.0667  1.0333   +2.249e-05      합동
+      48  32  0.0667  1.1333   -5.291e-06      Wald
+      50  33  0.0750  1.1750   -1.451e-05      Wald
+      52  34  0.0833  1.2167   -2.563e-05      Wald
+      부호가 바뀌는 경계: p1+p2 = 1.128571  (p1-p2 = 0.075 고정)
+    ```
+
+    **항등식이 성립한다.** 표본크기를 2에서 300까지, 성공 수를 0에서 $n$까지 무작위로 뽑은 20만 개에서 절대오차의 최대값이 $6 \times 10^{-17}$로 부동소수점 한계다.
+
+    **부호도 예측대로 뒤집힌다.** $p_1 - p_2 = 0.075$를 유지한 채 두 비율을 함께 올리면 $(30, 18)$에서 합동이 크고 $(50, 33)$에서 Wald가 크다. 경계 $p_1 + p_2 = 1.128571$을 사이에 두고 $(44,29)$의 $1.0333$은 아래, $(48,32)$의 $1.1333$은 위다. **같은 차이, 같은 표본크기인데 비율의 수준만 달라져 두 표준오차의 순서가 바뀐다.** 그러므로 "검정은 합동이라 더 보수적이다" 같은 어림짐작은 균형 설계에서만 옳다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 비율 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 비율 검정. 집단 1에서 $n_1 = 80$ 중 $k_1 = 30$, 집단 2에서 $n_2 = 60$ 중 $k_2 = 18$이 성공했다($\hat p_1 = 0.375$, $\hat p_2 = 0.300$).
+
+**(1)** 합동과 Wald 두 가지로 $z$를 구하고, 어느 쪽 $\lvert z \rvert$가 큰지를 보기 1의 식으로 설명하시오. 합동 $z$의 제곱이 이 표의 피어슨 카이제곱통계량과 같은지 확인하시오.
+
+**(2)** 이 표본크기에서 합동 $z$ 검정의 **정확한** 제1종 오류율을 구하시오. 명목 5%를 얼마나 지키는가, 그리고 어디서 무너지는가.
 
 </div>
 
-```python
-z, p, reject, label = test_diff_two_props(
-    k1=30, n1=80, k2=18, n2=60, delta0=0.0, method="pooled"
-)
-print(label, "z:", z, "p:", p, "reject:", reject)
+??? success "풀이"
 
-# 같은 자료를 합동하지 않은 Wald 표준오차로 계산하면 어떻게 다른가?
-z2, p2, reject2, label2 = test_diff_two_props(
-    k1=30, n1=80, k2=18, n2=60, delta0=0.0, method="wald"
-)
-print(label2, "z:", z2, "p:", p2, "reject:", reject2)
-```
+    **(1) 해석적으로.** $\hat p_1 + \hat p_2 = 0.675 < 1$이고 $n_1 > n_2$, $\hat p_1 > \hat p_2$이므로 보기 1의 괄호 안 두 항이 모두 양수다.
 
-출력:
+    $$
+    (n_1 - n_2)(1 - \hat p_1 - \hat p_2) = 20 \times 0.325 = 6.5,
+    \qquad
+    \frac{n_1n_2(\hat p_1 - \hat p_2)}{N} = \frac{4800 \times 0.075}{140} = 2.5714
+    $$
 
-```
-pooled z-test z: 0.9251909321159419 p: 0.3548665994806586 reject: False
-wald z-test z: 0.9353331581027243 p: 0.3496166322568355 reject: False
-```
+    이고 괄호는 $9.0714$다. 따라서
 
-$\hat p_1 = 0.375$, $\hat p_2 = 0.30$으로 7.5%p 차이지만 표본이 80명과 60명뿐이라 기각하지 못한다.
+    $$
+    \text{SE}_{\text{pool}}^2 - \text{SE}_{\text{wald}}^2
+    = \frac{0.075 \times 9.0714}{4800} = 1.417 \times 10^{-4} > 0
+    $$
 
-두 방식의 z가 0.925와 0.935로 비슷하다. 두 비율이 0.375와 0.30으로 그리 멀지 않아 합동비율 0.343이 양쪽 모두를 그런대로 대신하기 때문이다. 두 비율이 크게 다르면 이 차이가 커진다. 신뢰구간을 만들 때는 합동하지 않은 쪽을 써야 하며, 그래서 "검정은 기각하지 않았는데 신뢰구간은 0을 아슬아슬하게 벗어난다" 같은 어긋남이 생길 수 있다.
+    으로 **합동 표준오차가 더 크다.** 분자가 같으므로 $\lvert z_{\text{pool}} \rvert < \lvert z_{\text{wald}} \rvert$, 곧 합동 쪽이 더 보수적이다. 실제로
+
+    $$
+    \text{SE}_{\text{pool}} = \sqrt{0.342857 \times 0.657143 \times \left(\tfrac1{80}+\tfrac1{60}\right)} = 0.081064,
+    \qquad
+    z_{\text{pool}} = \frac{0.075}{0.081064} = 0.925191
+    $$
+
+    이고 Wald 쪽은 $\text{SE} = 0.080185$, $z = 0.935333$이다. 두 값이 가까운 것은 $0.375$와 $0.300$이 멀지 않아 합동비율 $0.342857$이 양쪽을 그런대로 대신하기 때문이다.
+
+    **$z_{\text{pool}}^2 = \chi^2$**은 본문에서 본 항등식이다. $0.925191^2 = 0.855978$이 $2\times2$ 표의 피어슨 카이제곱(연속성 보정 없이)과 같아야 한다.
+
+    **(2) 정확한 수준.** $p_1 = p_2 = p$일 때 $(k_1, k_2)$는 독립인 두 이항변수이므로, $(n_1+1)(n_2+1) = 81 \times 61 = 4941$칸을 **모두 훑어** 기각되는 칸의 확률을 더하면 실제 오류율이 정확히 나온다. 근사도 모의실험도 필요 없다.
+
+    $$
+    \alpha_{\text{실제}}(p) = \sum_{k_1=0}^{n_1}\sum_{k_2=0}^{n_2}
+    \binom{n_1}{k_1}p^{k_1}q^{n_1-k_1}\binom{n_2}{k_2}p^{k_2}q^{n_2-k_2}
+    \mathbf{1}\bigl\{\lvert z(k_1,k_2)\rvert > 1.96\bigr\}
+    $$
+
+    $k_1 + k_2 = 0$ 또는 $N$인 두 칸은 합동 비율이 $0$ 또는 $1$이어서 표준오차가 0이 되는데, 그때는 $\hat p_1 - \hat p_2 = 0$이므로 기각하지 않는 것으로 둔다.
+
+    **수치적으로.**
+
+    ```python
+    z, p, reject, label = test_diff_two_props(
+        k1=30, n1=80, k2=18, n2=60, delta0=0.0, method="pooled"
+    )
+    print(label, "z:", z, "p:", p, "reject:", reject)
+
+    # 같은 자료를 합동하지 않은 Wald 표준오차로 계산하면 어떻게 다른가?
+    z2, p2, reject2, label2 = test_diff_two_props(
+        k1=30, n1=80, k2=18, n2=60, delta0=0.0, method="wald"
+    )
+    print(label2, "z:", z2, "p:", p2, "reject:", reject2)
+    ```
+
+    출력:
+
+    ```
+    pooled z-test z: 0.9251909321159419 p: 0.3548665994806586 reject: False
+    wald z-test z: 0.9353331581027243 p: 0.3496166322568355 reject: False
+    ```
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    k1, n1, k2, n2 = 30, 80, 18, 60
+    p1, p2 = k1 / n1, k2 / n2
+    N = n1 + n2
+    p_pool = (k1 + k2) / N
+    se_p2 = p_pool * (1 - p_pool) * (1 / n1 + 1 / n2)
+    se_w2 = p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2
+    pred = (p1 - p2) * ((n1 - n2) * (1 - p1 - p2)
+                        + n1 * n2 * (p1 - p2) / N) / (n1 * n2)
+    print(f"p1 = {p1}, p2 = {p2}, p_pool = {p_pool:.9f}")
+    print(f"SE_pool = {math.sqrt(se_p2):.9f}   SE_wald = {math.sqrt(se_w2):.9f}")
+    print(f"SE_p^2 - SE_w^2 = {se_p2 - se_w2:.3e}   닫힌 꼴 = {pred:.3e}")
+    z_pool = (p1 - p2) / math.sqrt(se_p2)
+    chi = stats.chi2_contingency([[k1, n1 - k1], [k2, n2 - k2]],
+                                 correction=False).statistic
+    print(f"z_pool^2 = {z_pool**2:.12f}   피어슨 카이제곱 = {chi:.12f}")
+
+
+    def exact_level(n1, n2, p, alpha=0.05):
+        """p1 = p2 = p 일 때 합동 z 검정의 **정확한** 제1종 오류율.
+
+        (k1, k2) 의 (n1+1)(n2+1) 칸을 모두 훑어 기각 칸의 이항확률을 더한다.
+        근사도 모의실험도 아니다.
+        """
+        zc = stats.norm.ppf(1 - alpha / 2)
+        K1, K2 = np.arange(n1 + 1), np.arange(n2 + 1)
+        pr = stats.binom.pmf(K1, n1, p)[:, None] * stats.binom.pmf(K2, n2, p)[None, :]
+        P1, P2 = K1[:, None] / n1, K2[None, :] / n2
+        PP = (K1[:, None] + K2[None, :]) / (n1 + n2)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            z = (P1 - P2) / np.sqrt(PP * (1 - PP) * (1 / n1 + 1 / n2))
+        rej = np.abs(z) > zc
+        rej[~np.isfinite(z)] = False        # k1+k2 가 0 또는 n1+n2 인 두 칸
+        return float((pr * rej).sum())
+
+
+    print(f"\n정확한 수준 (n1 = {n1}, n2 = {n2}, 명목 0.05)")
+    print("     p    실제 수준     n2*min(p,1-p)")
+    for p in (0.01, 0.02, 0.03, 0.05, 0.0833, 0.1, 0.2, 0.343, 0.5):
+        print(f"  {p:.4f}   {exact_level(n1, n2, p):.6f}      {n2 * min(p, 1 - p):6.2f}")
+
+    ps = np.linspace(0.002, 0.998, 499)
+    lv = np.array([exact_level(n1, n2, p) for p in ps])
+    i = int(lv.argmax())
+    mid = (ps >= 0.03) & (ps <= 0.97)
+    print(f"\n격자 499 점의 최대 = {lv[i]:.6f} (p = {ps[i]:.3f})")
+    print(f"0.03 <= p <= 0.97 구간의 범위 = [{lv[mid].min():.6f}, {lv[mid].max():.6f}]")
+    print(f"0.05 를 넘는 점의 비율 = {float((lv > 0.05).mean()):.3f}")
+    ```
+
+    출력:
+
+    ```
+    p1 = 0.375, p2 = 0.3, p_pool = 0.342857143
+    SE_pool = 0.081064348   SE_wald = 0.080185332
+    SE_p^2 - SE_w^2 = 1.417e-04   닫힌 꼴 = 1.417e-04
+    z_pool^2 = 0.855978260870   피어슨 카이제곱 = 0.855978260870
+
+    정확한 수준 (n1 = 80, n2 = 60, 명목 0.05)
+         p    실제 수준     n2*min(p,1-p)
+      0.0100   0.010866        0.60
+      0.0200   0.032648        1.20
+      0.0300   0.047253        1.80
+      0.0500   0.053474        3.00
+      0.0833   0.050844        5.00
+      0.1000   0.049784        6.00
+      0.2000   0.047094       12.00
+      0.3430   0.049443       20.58
+      0.5000   0.049180       30.00
+
+    격자 499 점의 최대 = 0.053604 (p = 0.046)
+    0.03 <= p <= 0.97 구간의 범위 = [0.045280, 0.053604]
+    0.05 를 넘는 점의 비율 = 0.365
+    ```
+
+    **(1)이 맞는다.** 두 표준오차가 $0.081064$와 $0.080185$, 제곱의 차가 닫힌 꼴이 준 $1.417\times10^{-4}$와 같다. 두 $z$는 $0.925191$과 $0.935333$이고 양쪽 모두 $p \approx 0.35$로 기각하지 못한다. $\hat p_1 - \hat p_2 = 7.5$%p는 작지 않은 차이인데 80명과 60명으로는 가려낼 수 없다. $z_{\text{pool}}^2 = 0.855978260870$이 피어슨 카이제곱과 소수 열두째 자리까지 같아 항등식도 확인된다.
+
+    **(2) 명목 5%는 생각보다 잘 지켜진다.** $0.03 \le p \le 0.97$에서 실제 수준이 $[0.0453,\ 0.0536]$ 안에 있다. 참값 $0.05$를 넘는 경우가 격자의 37%이고 최대가 $p = 0.046$에서 $0.0536$이다. **$\pm 0.005$ 안쪽의 진동이며, 그 진동의 원인은 근사의 치우침이 아니라 $(k_1, k_2)$가 이산이라는 사실이다.** 기각역의 경계가 격자점 사이를 지나므로 $p$가 조금 움직일 때마다 어떤 칸이 들어오고 나간다.
+
+    **무너지는 곳은 꼬리다.** $p = 0.02$에서 $0.0326$, $p = 0.01$에서 $0.0109$로 명목의 다섯 분의 일까지 내려간다. 이때 작은 집단의 기대 성공 수가 $n_2 p = 1.2$와 $0.6$으로, 흔히 쓰는 조건 $n\hat p \ge 5$를 크게 밑돈다. **그 조건의 경계 $p = 5/60 = 0.0833$에서는 실제 수준이 이미 $0.0508$로 제자리를 찾았다.** 경험칙이 어디서 와서 어디까지 필요한지가 이 표에 그대로 나타나 있다.
+
+    보수적인 쪽으로 어긋난다는 점도 읽어 두어야 한다. 꼬리에서 실제 수준이 명목보다 **낮으므로** 거짓 양성은 걱정할 필요가 없지만, 그만큼 검정력도 함께 잃는다. 비율이 매우 작은 사건을 비교할 때 정규근사 대신 피셔의 정확검정이나 조건부 정확검정을 권하는 까닭이다.
 
 ### 해석
 

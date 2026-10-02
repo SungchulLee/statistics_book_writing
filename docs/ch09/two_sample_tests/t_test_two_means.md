@@ -116,127 +116,389 @@ $$d = \frac{\bar{X}_1 - \bar{X}_2}{S_p}$$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 웹페이지 A/B 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 웹페이지 A/B 검정. 새로 디자인한 웹페이지(페이지 B)에서 사용자가 기존 버전(페이지 A)보다 더 오래 머무는지 검정한다. 체류시간(초)을 각 10명에게서 재어 아래를 얻었다.
+
+$$
+\begin{aligned}
+\text{A} &: 185,\ 188,\ 142,\ 160,\ 161,\ 157,\ 182,\ 181,\ 159,\ 167\\
+\text{B} &: 173,\ 181,\ 182,\ 170,\ 169,\ 177,\ 168,\ 183,\ 169,\ 164
+\end{aligned}
+$$
+
+**(1)** 두 평균과 표준편차, 합동표준편차, 코헨의 $d$를 구하시오. 양측 p-값에서 단측 p-값을 얻는 규칙은 무엇인가.
+
+**(2)** 이 $d$를 검정력 $80\%$로 탐지하려면 집단당 몇 명이 필요한가. 정규근사와 정확한 비중심 $t$ 계산을 모두 하고, 현재 설계(집단당 10명)의 검정력도 구하시오.
 
 </div>
 
-새로 디자인한 웹페이지(페이지 B)에서 사용자가 기존 버전(페이지 A)보다 더 오래 머무는지 검정한다고 하자:
+??? success "풀이"
 
-```python
-import numpy as np
-from scipy import stats
+    **(1) 해석적으로.** 평균은 $\bar x_A = 168.20$, $\bar x_B = 173.60$으로 차이가 $5.40$초다. 표본분산은 $s_A^2 = 227.2889$, $s_B^2 = 44.9333$이고 표본표준편차로는 $15.0761$과 $6.7032$다. 집단크기가 같으므로 합동분산은 단순평균이다.
 
-# 체류시간(초)
-page_a = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167])
-page_b = np.array([173, 181, 182, 170, 169, 177, 168, 183, 169, 164])
+    $$
+    s_p^2 = \frac{9 \times 227.2889 + 9 \times 44.9333}{18}
+    = \frac{227.2889 + 44.9333}{2} = 136.1111,
+    \qquad s_p = 11.6667
+    $$
 
-# scipy의 기본값은 equal_var=True(합동)이다. Welch를 쓰려면 반드시 명시해야 한다.
-t_stat, p_value = stats.ttest_ind(page_a, page_b, equal_var=False)
+    따라서
 
-print(f"Page A: mean = {page_a.mean():.2f}, std = {page_a.std(ddof=1):.2f}")
-print(f"Page B: mean = {page_b.mean():.2f}, std = {page_b.std(ddof=1):.2f}")
-print(f"t-statistic: {t_stat:.4f}")
-print(f"p-value (two-sided): {p_value:.4f}")
+    $$
+    d = \frac{\bar x_B - \bar x_A}{s_p} = \frac{5.40}{11.6667} = 0.462857.
+    $$
 
-# 단측검정. 대립가설은 B 쪽 평균이 더 크다는 것이다.
-p_one_sided = p_value / 2 if page_b.mean() > page_a.mean() else 1 - p_value / 2
-print(f"p-value (one-sided): {p_one_sided:.4f}")
+    **단측 p-값의 규칙.** 양측 p-값은 $2\min\{F(t), 1-F(t)\}$이므로, 관측된 차이가 대립가설이 말하는 방향이면 단측 p-값이 양측의 절반이고 반대 방향이면 $1 - (\text{양측})/2$이다. 여기서는 $H_1\colon \mu_B > \mu_A$이고 실제로 $\bar x_B > \bar x_A$이므로 절반을 쓴다. $0.3204/2 = 0.1602$다.
 
-# 효과크기 Cohen 의 d — 평균 차이를 표준편차 단위로 잰 값
-pooled_std = np.sqrt(((len(page_a) - 1) * page_a.std(ddof=1)**2 +
-                       (len(page_b) - 1) * page_b.std(ddof=1)**2) /
-                      (len(page_a) + len(page_b) - 2))
-# 효과크기는 표본크기와 무관하다. t는 n이 커지면 함께 커지지만 d는 그렇지 않다.
-# 그래서 "유의한가"와 "쓸모 있을 만큼 큰가"를 따로 말할 수 있다.
-cohens_d = (page_b.mean() - page_a.mean()) / pooled_std
-print(f"Cohen's d: {cohens_d:.3f}")
-```
+    **(2) 필요한 표본크기.** 균형 이표본 검정의 비중심모수는 $\lambda = d\sqrt{n/2}$($n$은 집단당 크기)이고, 임계값을 정규로 바꾸는 거친 근사에서는
 
-출력:
+    $$
+    d\sqrt{\frac n2} \ge z_{1-\alpha/2} + z_{0.80}
+    \iff n \ge \frac{2(z_{1-\alpha/2} + z_{0.80})^2}{d^2}
+    = \frac{2(1.959964 + 0.841621)^2}{0.462857^2} = 73.273
+    $$
 
-```
-Page A: mean = 168.20, std = 15.08
-Page B: mean = 173.60, std = 6.70
-t-statistic: -1.0350
-p-value (two-sided): 0.3204
-p-value (one-sided): 0.1602
-Cohen's d: 0.463
-```
+    이므로 $n = 74$다. 그러나 이 근사는 **자유도를 무한으로 보고** 비중심 $t$를 정규로 바꾼 것이라 필요한 표본을 과소평가한다. 정확한 계산은
 
-$p = 0.32$로 기각하지 못하지만 Cohen의 $d = 0.46$은 "작은~중간" 효과다. 효과가 없다는 뜻이 아니라 집단당 10명으로는 이 정도 효과를 가려낼 수 없다는 뜻이다. $d = 0.46$을 검정력 80%로 탐지하려면 집단당 75명 남짓이 필요하다.
+    $$
+    \text{검정력}(n) = P\bigl(T'_{2n-2,\,\lambda} > t_{1-\alpha/2,\,2n-2}\bigr)
+    + P\bigl(T'_{2n-2,\,\lambda} < -t_{1-\alpha/2,\,2n-2}\bigr)
+    $$
 
-두 집단의 표준편차가 15.08과 6.70으로 두 배 넘게 차이 난다는 점도 눈여겨보라. 합동 $t$-검정이 가정하는 등분산과는 거리가 멀어서, 여기서 Welch를 쓴 것은 형식이 아니라 필요다.
+    을 쓰며, 아래에서 보듯 $n = 74$에서 $0.79868$로 모자라고 $n = 75$에서 $0.80400$이 된다. **정확한 답은 집단당 75명이다.** 본문이 "75명 남짓"이라 한 것이 이 값이다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 체류시간(초)
+    page_a = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167])
+    page_b = np.array([173, 181, 182, 170, 169, 177, 168, 183, 169, 164])
+
+    # scipy의 기본값은 equal_var=True(합동)이다. Welch를 쓰려면 반드시 명시해야 한다.
+    t_stat, p_value = stats.ttest_ind(page_a, page_b, equal_var=False)
+
+    print(f"Page A: mean = {page_a.mean():.2f}, std = {page_a.std(ddof=1):.2f}")
+    print(f"Page B: mean = {page_b.mean():.2f}, std = {page_b.std(ddof=1):.2f}")
+    print(f"t-statistic: {t_stat:.4f}")
+    print(f"p-value (two-sided): {p_value:.4f}")
+
+    # 단측검정. 대립가설은 B 쪽 평균이 더 크다는 것이다.
+    p_one_sided = p_value / 2 if page_b.mean() > page_a.mean() else 1 - p_value / 2
+    print(f"p-value (one-sided): {p_one_sided:.4f}")
+
+    # 효과크기 Cohen 의 d — 평균 차이를 표준편차 단위로 잰 값
+    pooled_std = np.sqrt(((len(page_a) - 1) * page_a.std(ddof=1)**2 +
+                           (len(page_b) - 1) * page_b.std(ddof=1)**2) /
+                          (len(page_a) + len(page_b) - 2))
+    # 효과크기는 표본크기와 무관하다. t는 n이 커지면 함께 커지지만 d는 그렇지 않다.
+    # 그래서 "유의한가"와 "쓸모 있을 만큼 큰가"를 따로 말할 수 있다.
+    cohens_d = (page_b.mean() - page_a.mean()) / pooled_std
+    print(f"Cohen's d: {cohens_d:.3f}")
+    ```
+
+    출력:
+
+    ```
+    Page A: mean = 168.20, std = 15.08
+    Page B: mean = 173.60, std = 6.70
+    t-statistic: -1.0350
+    p-value (two-sided): 0.3204
+    p-value (one-sided): 0.1602
+    Cohen's d: 0.463
+    ```
+
+    ```python
+    d = cohens_d
+    print(f"정확한 d = {d:.9f}   (s_p = {pooled_std:.9f})")
+
+    za, zb = stats.norm.ppf(0.975), stats.norm.ppf(0.80)
+    n_norm = 2 * (za + zb) ** 2 / d**2
+    print(f"정규근사가 주는 집단당 n = {n_norm:.4f}  →  {int(np.ceil(n_norm))}")
+
+
+    def power_two_sample(n, d, alpha=0.05):
+        """집단당 n 명, 참 효과크기 d 인 균형 이표본 t 검정의 검정력."""
+        df = 2 * n - 2
+        nc = d * np.sqrt(n / 2)            # 비중심모수
+        tc = stats.t.ppf(1 - alpha / 2, df)
+        return stats.nct.sf(tc, df, nc) + stats.nct.cdf(-tc, df, nc)
+
+
+    print("\n   n(집단당)   검정력")
+    for n in (10, 70, 73, 74, 75, 76, 80):
+        print(f"{n:9d}   {power_two_sample(n, d):.5f}")
+
+    # 격자의 "첫 칸" 만 보지 않는다. 3 부터 400 까지 모두 훑는다.
+    # (n >= 757 부터는 검정력이 배정밀도로 정확히 1 이 되어 차가 0 이 된다.)
+    ns = np.arange(3, 401)
+    pw = np.array([power_two_sample(int(k), d) for k in ns])
+    ok = ns[pw >= 0.80]
+    print(f"\n검정력 >= 0.80 인 n 의 개수 = {len(ok)},  가장 작은 n = {ok.min()},"
+          f"  연속인가 = {bool(np.all(np.diff(ok) == 1))}")
+    print(f"검정력이 n 에 대해 단조증가인가 = {bool(np.all(np.diff(pw) > 0))}")
+    print(f"현재 설계(n = 10)의 검정력 = {power_two_sample(10, d):.4f}")
+    ```
+
+    출력:
+
+    ```
+    정확한 d = 0.462857143   (s_p = 11.666666667)
+    정규근사가 주는 집단당 n = 73.2730  →  74
+
+       n(집단당)   검정력
+           10   0.16531
+           70   0.77614
+           73   0.79324
+           74   0.79868
+           75   0.80400
+           76   0.80920
+           80   0.82883
+
+    검정력 >= 0.80 인 n 의 개수 = 326,  가장 작은 n = 75,  연속인가 = True
+    검정력이 n 에 대해 단조증가인가 = True
+    현재 설계(n = 10)의 검정력 = 0.1653
+    ```
+
+    **(1)의 수가 모두 맞는다.** 평균 $168.20$과 $173.60$, 표준편차 $15.08$과 $6.70$, $d = 0.463$이다. 양측 $p = 0.3204$, 단측 $p = 0.1602$로 정확히 절반이다.
+
+    **(2)에서 근사와 정확값이 하나 차이로 갈린다.** 정규근사는 $73.27$을 주어 $74$라 하지만, $n = 74$의 실제 검정력은 $0.79868$로 목표에 $0.0013$ 모자란다. 정확한 답은 $75$($0.80400$)다. 검정력이 $n$에 대해 단조증가이고 $n \ge 75$가 끊김 없이 이어지는 것까지 확인했다.
+
+    **그리고 현재 설계의 검정력은 $0.1653$이다.** $d = 0.463$이 참값이라 해도 여섯 번에 한 번만 잡아낸다. $p = 0.32$로 기각하지 못한 것은 효과가 없다는 뜻이 아니라 **집단당 10명으로는 이만한 효과를 가려낼 수 없다**는 뜻이다. 필요한 75명의 7분의 1밖에 모으지 않았다.
+
+    두 집단의 표준편차가 $15.08$과 $6.70$으로 두 배 넘게(분산으로는 다섯 배) 차이 난다는 점도 눈여겨보라. 합동 $t$-검정이 가정하는 등분산과는 거리가 멀어서, 여기서 Welch를 쓴 것은 형식이 아니라 필요다.
 
 ### scipy.stats 사용
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> scipy 로 이표본 t-검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> scipy 로 이표본 t-검정. 같은 자료에 `equal_var=False`(Welch)와 `equal_var=True`(합동)를 모두 적용하면 **통계량은 똑같고 p-값만 다르다**($-1.0350$에 대해 $0.3204$와 $0.3144$).
+
+**(1)** 집단크기가 같으면 두 검정의 통계량이 **정확히 같은 수**가 되는 까닭을 보이시오. 그렇다면 어느 쪽 p-값이 반드시 큰가.
+
+**(2)** 균형 설계에서 Welch 자유도를 분산비 $\rho = s_2^2/s_1^2$만의 식으로 쓰고, 그 값이 들어갈 수 있는 범위를 구하시오.
 
 </div>
 
-```python
-from scipy import stats
+??? success "풀이"
 
-group1, group2 = page_a, page_b          # 위 보기의 자료를 그대로 쓴다
+    **(1) 같은 통계량.** [이표본 평균 검정](test_two_means.md)의 보기 1에서 두 표준오차의 차를 닫힌 꼴로 구했다.
 
-# Welch t-검정 (권장). 등분산을 가정하지 않는다.
-t_welch, p_welch = stats.ttest_ind(group1, group2, equal_var=False)
+    $$
+    \text{SE}_{\text{pool}}^2 - \text{SE}_{\text{welch}}^2
+    = \frac{(N-1)(n_1-n_2)(s_1^2-s_2^2)}{(N-2)\,n_1n_2}
+    $$
 
-# 합동 t-검정. 등분산을 가정한다.
-t_pooled, p_pooled = stats.ttest_ind(group1, group2, equal_var=True)
+    $n_1 = n_2$이면 $(n_1 - n_2) = 0$이므로 **차가 분산비와 무관하게 정확히 0이다.** 분자도 같으니 두 통계량은 같은 수다. 직접 확인해도 된다. $n_1 = n_2 = n$에서
 
-print(f"Welch : t = {t_welch:.4f}, p = {p_welch:.4f}")
-print(f"Pooled: t = {t_pooled:.4f}, p = {p_pooled:.4f}")
+    $$
+    \text{SE}_{\text{pool}}^2 = \frac{(n-1)s_1^2 + (n-1)s_2^2}{2n-2}\cdot\frac{2}{n}
+    = \frac{s_1^2 + s_2^2}{n}
+    = \frac{s_1^2}{n} + \frac{s_2^2}{n} = \text{SE}_{\text{welch}}^2
+    $$
 
-# 단측 p-값. 통계량의 부호에 따라 처리가 달라진다.
-if t_welch > 0:
-    p_one_sided = p_welch / 2
-else:
-    p_one_sided = 1 - p_welch / 2
-print(f"one-sided (H1: mu1 > mu2): p = {p_one_sided:.4f}")
-```
+    이다.
 
-출력:
+    **그러므로 남는 차이는 자유도뿐이다.** 같은 $\lvert t \rvert$를 자유도가 작은 분포로 읽으면 꼬리확률이 더 크고, Welch 자유도는 언제나 $\nu \le n_1 + n_2 - 2$이므로
 
-```
-Welch : t = -1.0350, p = 0.3204
-Pooled: t = -1.0350, p = 0.3144
-one-sided (H1: mu1 > mu2): p = 0.8398
-```
+    $$
+    p_{\text{welch}} \ \ge\ p_{\text{pool}}
+    $$
 
-$n_1 = n_2$이면 두 방법의 **통계량이 정확히 같다**. 표본크기가 같을 때 합동 표준오차와 Welch 표준오차가 대수적으로 일치하기 때문이다. 달라지는 것은 자유도뿐이고(18 대 12.42), 그래서 p-값만 조금 다르다.
+    이다. 등호는 $\nu = n_1+n_2-2$, 곧 균형 설계에서는 $s_1 = s_2$일 때뿐이다. **균형 설계에서 Welch는 합동과 같은 통계량을 더 조심스럽게 읽는 검정이다.**
 
-단측 p-값이 0.84로 나온 것도 읽어 둘 만하다. $t$가 음수인데 $H_1$을 $\mu_1 > \mu_2$로 잡았으니 자료가 대립가설과 반대 방향이고, 그럴 때 단측 p-값은 0.5보다 커진다.
+    **(2) 균형 설계의 자유도.** $a = s_1^2/n$, $b = s_2^2/n$이고 두 자유도가 모두 $n-1$이므로
 
-분산이 이렇게 다른데도 두 검정이 비슷한 답을 주는 것은 표본크기가 같기 때문이다. $n$까지 달랐다면 합동 검정이 크게 어긋났을 것이다.
+    $$
+    \nu = \frac{(a+b)^2}{\dfrac{a^2 + b^2}{n-1}}
+    = (n-1)\,\frac{(s_1^2+s_2^2)^2}{s_1^4+s_2^4}
+    = (n-1)\,\frac{(1+\rho)^2}{1+\rho^2},
+    \qquad \rho = \frac{s_2^2}{s_1^2}
+    $$
+
+    이다. $g(\rho) = (1+\rho)^2/(1+\rho^2)$는 $\rho = 1$에서 최대 2, $\rho \to 0$ 또는 $\rho \to \infty$에서 1로 간다. 그러므로
+
+    $$
+    n - 1 \;<\; \nu \;\le\; 2(n-1) = n_1 + n_2 - 2
+    $$
+
+    이다. **균형 설계에서 Welch가 잃을 수 있는 자유도는 최대 절반이다.** $n = 10$이면 $\nu$가 9와 18 사이에 있다.
+
+    **수치적으로.**
+
+    ```python
+    from scipy import stats
+
+    group1, group2 = page_a, page_b          # 위 보기의 자료를 그대로 쓴다
+
+    # Welch t-검정 (권장). 등분산을 가정하지 않는다.
+    t_welch, p_welch = stats.ttest_ind(group1, group2, equal_var=False)
+
+    # 합동 t-검정. 등분산을 가정한다.
+    t_pooled, p_pooled = stats.ttest_ind(group1, group2, equal_var=True)
+
+    print(f"Welch : t = {t_welch:.4f}, p = {p_welch:.4f}")
+    print(f"Pooled: t = {t_pooled:.4f}, p = {p_pooled:.4f}")
+
+    # 단측 p-값. 통계량의 부호에 따라 처리가 달라진다.
+    if t_welch > 0:
+        p_one_sided = p_welch / 2
+    else:
+        p_one_sided = 1 - p_welch / 2
+    print(f"one-sided (H1: mu1 > mu2): p = {p_one_sided:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Welch : t = -1.0350, p = 0.3204
+    Pooled: t = -1.0350, p = 0.3144
+    one-sided (H1: mu1 > mu2): p = 0.8398
+    ```
+
+    ```python
+    n = len(group1)
+    v1, v2 = group1.var(ddof=1), group2.var(ddof=1)
+    a, b = v1 / n, v2 / n
+
+    se_welch = np.sqrt(a + b)
+    sp2 = ((n - 1) * v1 + (n - 1) * v2) / (2 * n - 2)
+    se_pool = np.sqrt(sp2 * (1 / n + 1 / n))
+    print(f"n1 = n2 = {n}")
+    print(f"  SE_welch = {se_welch:.12f}")
+    print(f"  SE_pool  = {se_pool:.12f}")
+    print(f"  차 = {se_pool - se_welch:.3e}   (0 이어야 한다)")
+    print(f"  t_welch = {t_welch:.15f}")
+    print(f"  t_pool  = {t_pooled:.15f}")
+    print(f"  두 통계량이 같은가: {t_welch == t_pooled}")
+
+    nu = (a + b) ** 2 / (a**2 / (n - 1) + b**2 / (n - 1))
+    rho = v2 / v1
+    print(f"\n자유도: 합동 {2 * n - 2},  Welch {nu:.9f}")
+    print(f"  균형 공식 (n-1)(1+rho)^2/(1+rho^2) = "
+          f"{(n - 1) * (1 + rho) ** 2 / (1 + rho**2):.9f}   (rho = s2^2/s1^2 = {rho:.6f})")
+    print(f"  공식이 주는 범위: [{n - 1}, {2 * (n - 1)}]")
+    print(f"\n같은 |t| = {abs(t_welch):.6f} 를 두 자유도로 읽으면")
+    print(f"  df = {2 * n - 2}      : p = {2 * stats.t.sf(abs(t_welch), 2 * n - 2):.9f}")
+    print(f"  df = {nu:.4f} : p = {2 * stats.t.sf(abs(t_welch), nu):.9f}")
+    ```
+
+    출력:
+
+    ```
+    n1 = n2 = 10
+      SE_welch = 5.217491947500
+      SE_pool  = 5.217491947500
+      차 = 8.882e-16   (0 이어야 한다)
+      t_welch = -1.034980035299904
+      t_pool  = -1.034980035299904
+      두 통계량이 같은가: True
+
+    자유도: 합동 18,  Welch 12.424624520
+      균형 공식 (n-1)(1+rho)^2/(1+rho^2) = 12.424624520   (rho = s2^2/s1^2 = 0.197693)
+      공식이 주는 범위: [9, 18]
+
+    같은 |t| = 1.034980 를 두 자유도로 읽으면
+      df = 18      : p = 0.314383791
+      df = 12.4246 : p = 0.320403323
+    ```
+
+    **두 통계량이 비트 단위로 같다.** `t_welch == t_pooled`가 `True`이고, 두 표준오차의 차가 $9 \times 10^{-16}$으로 부동소수점 반올림뿐이다. 분산이 다섯 배 차이 나는데도 그렇다. **균형이 합동 $t$를 구해 준다**는 말의 가장 깨끗한 형태다.
+
+    **자유도 공식도 맞는다.** $\rho = 0.197693$에서 $(n-1)(1+\rho)^2/(1+\rho^2) = 12.424624520$이 `scipy`의 Welch 자유도와 소수 아홉째 자리까지 같다. 범위 $[9, 18]$ 안에 있다.
+
+    **p-값의 차는 자유도에서만 온다.** 같은 $\lvert t \rvert = 1.034980$을 자유도 18로 읽으면 $0.314384$, $12.4246$으로 읽으면 $0.320403$이다. 예상대로 Welch 쪽이 크다. 이 자료에서는 둘 다 $0.05$와 멀어 판정이 같지만, 경계 근처라면 자유도 하나 때문에 결론이 갈릴 수 있다.
+
+    단측 p-값이 $0.8398$로 나온 것도 읽어 둘 만하다. $t$가 음수인데 $H_1$을 $\mu_1 > \mu_2$로 잡았으니 자료가 대립가설과 반대 방향이고, 그럴 때 단측 p-값은 $0.5$보다 커진다. 보기 1에서 쓴 단측 p-값 $0.1602$는 집단의 순서를 반대로 잡은 것, 곧 $H_1\colon \mu_B > \mu_A$에 대한 값이다. **같은 자료에서 두 수가 더해 1이 된다**($0.1602 + 0.8398$).
 
 ### statsmodels 사용
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> statsmodels 로 이표본 t-검정
+**보기 3.** <span class="diff easy" title="쉬움"></span> statsmodels 로 이표본 t-검정. `scipy.stats.ttest_ind`는 $t$와 p-값만 돌려주지만 `statsmodels`는 자유도까지 함께 준다. 보고할 때 자유도를 적어야 하므로 이 점이 편하다.
+
+**(1)** `statsmodels`가 주는 Welch 자유도를 보기 2의 공식으로 손으로 재현하시오. 본문은 "한쪽 분산이 다른 쪽의 다섯 배"라 했는데 실제 비는 얼마이고, 자유도를 얼마나 잃었는가.
+
+**(2)** 분산비를 극단까지 밀면 자유도가 어디까지 내려가는지 표로 보이시오.
 
 </div>
 
-```python
-import statsmodels.api as sm
+??? success "풀이"
 
-# statsmodels는 자유도까지 함께 돌려준다. scipy는 그렇지 않다.
-# 결과를 보고할 때 자유도를 함께 적어야 하므로 이 점이 편하다.
-t_stat, p_value, df = sm.stats.ttest_ind(group1, group2,
-                                         usevar='unequal',
-                                         alternative='two-sided')
-print(f"t = {t_stat:.4f}, p = {p_value:.4f}, df = {df:.4f}")
-```
+    **(1) 해석적으로.** 보기 2의 공식에 $\rho = s_2^2/s_1^2 = 44.9333/227.2889 = 0.197693$과 $n = 10$을 넣으면
 
-출력:
+    $$
+    \nu = 9 \times \frac{(1 + 0.197693)^2}{1 + 0.197693^2}
+    = 9 \times \frac{1.434469}{1.039083} = 12.424625
+    $$
 
-```
-t = -1.0350, p = 0.3204, df = 12.4246
-```
+    다. 분산비는 $s_1^2/s_2^2 = 5.0584$로 본문의 "다섯 배"가 맞다. 합동 자유도 $18$ 가운데 $5.5754$를 잃어 $69.0\%$만 남았다.
 
-Welch 자유도가 12.42다. $n_1 + n_2 - 2 = 18$보다 눈에 띄게 작다. 한쪽 분산이 다른 쪽의 다섯 배라 실효 정보량이 그만큼 줄어든 것이다.
+    **(2) 극단으로 밀면.** 보기 2에서 보았듯 $g(\rho) = (1+\rho)^2/(1+\rho^2)$는 $\rho \to 0$에서 1로 가므로 $\nu \to n-1 = 9$다. **분산비가 아무리 커도 자유도가 절반 아래로는 내려가지 않는다.** 다가가는 속도는 느리다. 분산비 10에서 $10.78$, 100에서 $9.18$, 10,000에서 $9.0018$이다.
+
+    **수치적으로.**
+
+    ```python
+    import statsmodels.api as sm
+
+    # statsmodels는 자유도까지 함께 돌려준다. scipy는 그렇지 않다.
+    # 결과를 보고할 때 자유도를 함께 적어야 하므로 이 점이 편하다.
+    t_stat, p_value, df = sm.stats.ttest_ind(group1, group2,
+                                             usevar='unequal',
+                                             alternative='two-sided')
+    print(f"t = {t_stat:.4f}, p = {p_value:.4f}, df = {df:.4f}")
+    ```
+
+    출력:
+
+    ```
+    t = -1.0350, p = 0.3204, df = 12.4246
+    ```
+
+    ```python
+    # 손으로 구한 값과 맞추어 본다.
+    nu_hand = (n - 1) * (1 + rho) ** 2 / (1 + rho**2)
+    print(f"statsmodels df = {df:.12f}")
+    print(f"손으로 구한 df = {nu_hand:.12f}   차 = {abs(df - nu_hand):.2e}")
+    print(f"분산비 s1^2/s2^2 = {v1 / v2:.6f}  (본문의 '다섯 배')")
+    print(f"잃은 자유도 = {2 * (n - 1) - nu_hand:.6f}  "
+          f"(합동 {2 * (n - 1)} 의 {100 * nu_hand / (2 * (n - 1)):.1f}% 만 남는다)")
+
+    print("\n분산비를 바꾸면 자유도가 어떻게 되는가 (n = 10 균형)")
+    print("   s1^2/s2^2     nu      합동과의 비")
+    for ratio in (1, 2, 5.058358, 10, 100, 10_000):
+        rr = 1 / ratio
+        nn = (n - 1) * (1 + rr) ** 2 / (1 + rr**2)
+        print(f"{ratio:11.4f}  {nn:8.4f}     {nn / (2 * (n - 1)):.4f}")
+
+    print(f"\nscipy 와 statsmodels 의 t, p 가 같은가: "
+          f"{np.allclose([t_stat, p_value], [t_welch, p_welch])}")
+    ```
+
+    출력:
+
+    ```
+    statsmodels df = 12.424624519556
+    손으로 구한 df = 12.424624519556   차 = 0.00e+00
+    분산비 s1^2/s2^2 = 5.058358  (본문의 '다섯 배')
+    잃은 자유도 = 5.575375  (합동 18 의 69.0% 만 남는다)
+
+    분산비를 바꾸면 자유도가 어떻게 되는가 (n = 10 균형)
+       s1^2/s2^2     nu      합동과의 비
+         1.0000   18.0000     1.0000
+         2.0000   16.2000     0.9000
+         5.0584   12.4246     0.6903
+        10.0000   10.7822     0.5990
+       100.0000    9.1800     0.5100
+     10000.0000    9.0018     0.5001
+
+    scipy 와 statsmodels 의 t, p 가 같은가: True
+    ```
+
+    **손계산과 `statsmodels`가 완전히 같다.** 차가 $0$이다(배정밀도로 같은 비트). 두 라이브러리의 $t$와 p-값도 일치한다.
+
+    **표가 (2)를 확인한다.** 분산비 1에서 $\nu = 18$로 합동과 같고, 거기서 내려가지만 10,000배에서도 $9.0018$로 하한 9에 닿기만 할 뿐 밑돌지 않는다. **균형 설계에서 Welch가 치르는 자유도의 대가는 최악의 경우에도 절반이다.** 이 자료의 $12.42$는 그 중간쯤이고, 실제로 잃은 것은 p-값에서 $0.3144 \to 0.3204$, 곧 $0.006$이다. 등분산이 의심스러울 때 Welch를 기본으로 쓰는 것이 왜 손해가 아닌지가 이 수에 들어 있다.
 
 ## 가정
 

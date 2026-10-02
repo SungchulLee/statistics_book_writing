@@ -45,78 +45,322 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 평균 차이 검정 계산기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 평균 차이 검정 계산기. 아래 함수는 같은 자료를 `method="welch"`와 `method="pooled"` 두 길로 처리한다. 두 길은 표준오차와 자유도가 모두 다르다.
+
+**(1)** 두 표준오차의 차 $\text{SE}_{\text{pool}}^2 - \text{SE}_{\text{welch}}^2$을 닫힌 꼴로 구하고, 합동 쪽이 더 작아지는(곧 더 쉽게 기각하는) 조건을 말하시오. 균형 설계 $n_1 = n_2$에서는 어떻게 되는가.
+
+**(2)** 그 식을 검사하고, 웰치 자유도가 $\min(n_1,n_2)-1 \le \nu \le n_1+n_2-2$를 지키는지 무작위 입력으로 확인하시오. 두 한계에 등호가 오는 입력을 각각 만드시오.
 
 </div>
 
-```python
-import math
-from scipy.stats import t as tdist
+??? success "풀이"
 
-def test_diff_two_means(n1, m1, s1, n2, m2, s2, method="welch",
-                        delta0=0.0, alt="two-sided", alpha=0.05):
-    """귀무가설 H0: mu1 - mu2 = delta0.
+    **(1) 해석적으로.** $A = s_1^2$, $B = s_2^2$, $N = n_1 + n_2$로 줄여 쓴다. 두 표준오차의 제곱은
 
-    delta0을 0이 아닌 값으로 둘 수 있게 해 두었다.
-    "차이가 있는가"가 아니라 "차이가 5 이상인가"를 묻는 동등성·비열등성
-    검정에서 이 자리가 쓰인다.
-    method='welch'(기본) 또는 'pooled'. 돌려주는 값은 (t, df, p, 기각 여부).
-    """
-    diff_hat = m1 - m2
-    if method == "welch":
-        # 두 분산을 따로 둔 채 더한다. 합동하지 않는다.
-        se = math.sqrt(s1**2 / n1 + s2**2 / n2)
-        num = (s1**2 / n1 + s2**2 / n2) ** 2
-        den = (s1**2 / n1)**2 / (n1 - 1) + (s2**2 / n2)**2 / (n2 - 1)
-        df = num / den
-    else:
-        # 합동: 두 분산이 같다고 보고 자유도로 가중평균한다.
-        # 이 가정이 틀리면 표준오차가 편향되고 t가 t분포를 따르지 않는다.
-        df = n1 + n2 - 2
-        sp2 = ((n1 - 1) * s1**2 + (n2 - 1) * s2**2) / df
-        se = math.sqrt(sp2 * (1 / n1 + 1 / n2))
+    $$
+    \text{SE}_{\text{welch}}^2 = \frac{A}{n_1} + \frac{B}{n_2} = \frac{An_2 + Bn_1}{n_1n_2},
+    \qquad
+    \text{SE}_{\text{pool}}^2 = \frac{(n_1-1)A + (n_2-1)B}{N-2}\cdot\frac{N}{n_1n_2}
+    $$
 
-    t = (diff_hat - delta0) / se
-    if alt == "two-sided":
-        p = 2 * min(tdist.cdf(t, df), 1 - tdist.cdf(t, df))
-    elif alt == "less":
-        p = tdist.cdf(t, df)
-    else:
-        p = 1 - tdist.cdf(t, df)
-    return t, df, p, (p < alpha)
-```
+    이다. 차를 구해 $n_1n_2$를 곱하고 $N-2$로 통분하면 분자가
+
+    $$
+    A\bigl[(n_1-1)N - (N-2)n_2\bigr] + B\bigl[(n_2-1)N - (N-2)n_1\bigr]
+    $$
+
+    이다. 첫 괄호를 $N = n_1+n_2$로 풀어 쓰면
+
+    $$
+    (n_1+n_2)(n_1-n_2-1) + 2n_2 = n_1^2 - n_2^2 - (n_1 - n_2) = (n_1-n_2)(N-1)
+    $$
+
+    이고, 둘째 괄호는 아래위를 맞바꾼 꼴이므로 $(n_2-n_1)(N-1)$이다. 따라서
+
+    $$
+    \boxed{\;
+    \text{SE}_{\text{pool}}^2 - \text{SE}_{\text{welch}}^2
+    = \frac{(N-1)\,(n_1-n_2)\,(s_1^2 - s_2^2)}{(N-2)\,n_1 n_2}
+    \;}
+    $$
+
+    부호가 $(n_1-n_2)(s_1^2-s_2^2)$ 하나에 달려 있다. 그러므로
+
+    - $(n_1 - n_2)(s_1^2 - s_2^2) < 0$, 곧 **큰 표본분산이 작은 표본에 붙어 있으면** 합동 표준오차가 더 작고 $\lvert t_{\text{pool}}\rvert > \lvert t_{\text{welch}}\rvert$다. 합동 쪽이 더 쉽게 기각한다.
+    - 부호가 반대면, 곧 큰 분산이 큰 표본에 붙어 있으면 합동 쪽이 더 보수적이다.
+
+    **균형 설계에서는 차가 정확히 0이다.** $n_1 = n_2$이면 두 검정의 표준오차가 **같은 수**이고 따라서 $t$ 통계량도 같은 수다. 달라지는 것은 자유도뿐이며 $\nu \le N-2$이므로, **균형 설계에서 Welch는 합동과 같은 통계량을 더 작은 자유도로 읽는 검정, 곧 언제나 조금 더 보수적인 검정이다.** 합동 $t$가 무너지려면 이분산만으로는 안 되고 불균형이 함께 들어와야 한다는 사실이 이 식에 그대로 들어 있다. 자세한 격자는 [5.3절 $\bar X_1 - \bar X_2$의 표본분포](../../ch05/applications/diff_means_welch.md)에서 다루었다.
+
+    자유도의 범위 $\min(n_1,n_2)-1 \le \nu \le n_1+n_2-2$는 그 절의 연습문제 4에서 코시-슈바르츠로 증명했다. 여기서는 **구현이 그 범위를 지키는지** 검사한다. 등호 조건은 상한에서 $a/(n_1-1) = b/(n_2-1)$($a = s_1^2/n_1$, $b = s_2^2/n_2$), 하한에서 한쪽이 전부를 지배하는 극한이다.
+
+    **(2) 수치적으로.** 먼저 함수다.
+
+    ```python
+    import math
+    from scipy.stats import t as tdist
+
+    def test_diff_two_means(n1, m1, s1, n2, m2, s2, method="welch",
+                            delta0=0.0, alt="two-sided", alpha=0.05):
+        """귀무가설 H0: mu1 - mu2 = delta0.
+
+        delta0을 0이 아닌 값으로 둘 수 있게 해 두었다.
+        "차이가 있는가"가 아니라 "차이가 5 이상인가"를 묻는 동등성·비열등성
+        검정에서 이 자리가 쓰인다.
+        method='welch'(기본) 또는 'pooled'. 돌려주는 값은 (t, df, p, 기각 여부).
+        """
+        diff_hat = m1 - m2
+        if method == "welch":
+            # 두 분산을 따로 둔 채 더한다. 합동하지 않는다.
+            se = math.sqrt(s1**2 / n1 + s2**2 / n2)
+            num = (s1**2 / n1 + s2**2 / n2) ** 2
+            den = (s1**2 / n1)**2 / (n1 - 1) + (s2**2 / n2)**2 / (n2 - 1)
+            df = num / den
+        else:
+            # 합동: 두 분산이 같다고 보고 자유도로 가중평균한다.
+            # 이 가정이 틀리면 표준오차가 편향되고 t가 t분포를 따르지 않는다.
+            df = n1 + n2 - 2
+            sp2 = ((n1 - 1) * s1**2 + (n2 - 1) * s2**2) / df
+            se = math.sqrt(sp2 * (1 / n1 + 1 / n2))
+
+        t = (diff_hat - delta0) / se
+        if alt == "two-sided":
+            p = 2 * min(tdist.cdf(t, df), 1 - tdist.cdf(t, df))
+        elif alt == "less":
+            p = tdist.cdf(t, df)
+        else:
+            p = 1 - tdist.cdf(t, df)
+        return t, df, p, (p < alpha)
+    ```
+
+    이제 범위와 항등식을 검사한다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    K = 200_000
+    n1 = rng.integers(2, 201, K)
+    n2 = rng.integers(2, 201, K)
+    s1 = 10.0 ** rng.uniform(-3, 3, K)      # 분산비를 10^12 까지 벌린다
+    s2 = 10.0 ** rng.uniform(-3, 3, K)
+
+    a, b = s1**2 / n1, s2**2 / n2
+    nu = (a + b) ** 2 / (a**2 / (n1 - 1) + b**2 / (n2 - 1))
+    lo = np.minimum(n1, n2) - 1
+    hi = n1 + n2 - 2
+    print(f"범위 검사 {K:,} 개")
+    print(f"  nu < min(n1,n2)-1 인 경우 = {int(np.sum(nu < lo - 1e-9))}")
+    print(f"  nu > n1+n2-2    인 경우 = {int(np.sum(nu > hi + 1e-9))}")
+    print(f"  하한에 가장 가까운 비 nu/lo 의 최소 = {np.min(nu / lo):.12f}")
+    print(f"  상한에 가장 가까운 비 nu/hi 의 최대 = {np.max(nu / hi):.12f}")
+
+    # 두 끝을 직접 만들어 본다. n1 = 12, n2 = 10 고정.
+    print("\n  s1      s2        welch nu      합동 df")
+    for ss1, ss2 in ((1.0, 1.0), (1.0, 1e3), (1e3, 1.0),
+                     (math.sqrt(12 * 11), math.sqrt(10 * 9))):
+        _, nu_w, _, _ = test_diff_two_means(12, 0, ss1, 10, 0, ss2, method="welch")
+        _, nu_p, _, _ = test_diff_two_means(12, 0, ss1, 10, 0, ss2, method="pooled")
+        print(f"{ss1:8.4f} {ss2:8.4f}  {nu_w:12.6f}  {nu_p:8.0f}")
+
+    # 표준오차 항등식
+    print("\n표준오차 항등식 검사")
+    worst = 0.0
+    for _ in range(200_000):
+        m, k = int(rng.integers(2, 201)), int(rng.integers(2, 201))
+        u, v = 10.0 ** rng.uniform(-3, 3), 10.0 ** rng.uniform(-3, 3)
+        N = m + k
+        se_w2 = u**2 / m + v**2 / k
+        sp2 = ((m - 1) * u**2 + (k - 1) * v**2) / (N - 2)
+        se_p2 = sp2 * (1 / m + 1 / k)
+        pred = (N - 1) * (m - k) * (u**2 - v**2) / ((N - 2) * m * k)
+        worst = max(worst, abs(se_p2 - se_w2 - pred) / max(se_w2, 1e-300))
+    print(f"  상대오차의 최대값 = {worst:.3e}")
+    ```
+
+    출력:
+
+    ```
+    범위 검사 200,000 개
+      nu < min(n1,n2)-1 인 경우 = 0
+      nu > n1+n2-2    인 경우 = 0
+      하한에 가장 가까운 비 nu/lo 의 최소 = 1.000000000000
+      상한에 가장 가까운 비 nu/hi 의 최대 = 0.999999999798
+
+      s1      s2        welch nu      합동 df
+      1.0000   1.0000     19.289855        20
+      1.0000 1000.0000      9.000015        20
+    1000.0000   1.0000     11.000026        20
+     11.4891   9.4868     20.000000        20
+
+    표준오차 항등식 검사
+      상대오차의 최대값 = 3.773e-14
+    ```
+
+    **범위가 지켜진다.** 표본크기를 2에서 200까지, 표준편차를 $10^{-3}$에서 $10^{3}$까지(분산비로는 $10^{12}$까지) 벌린 입력 20만 개에서 위아래 어느 쪽도 한 번 벗어나지 않는다. 그리고 두 비가 모두 $1$에 닿는다. **상한과 하한이 둘 다 도달 가능한 한계, 곧 더 좁힐 수 없는 한계라는 뜻이다.**
+
+    아래 표가 그 두 끝을 직접 보여 준다. $s_2$만 1000배로 키우면 $\nu \to 9.000015$로 **하한 $\min(12,10)-1 = 9$**에 붙는다. 작은 쪽 표본이 분산을 지배하는 경우다. 반대로 $s_1$을 키우면 $11.000026$으로 가는데, 이것은 $n_1 - 1 = 11$로 하한이 아니다. **하한이 실제로 달성되는 것은 지배하는 쪽이 표본이 작은 집단일 때뿐이다.** 상한은 $a/(n_1-1) = b/(n_2-1)$을 풀어 $s_1 = \sqrt{n_1(n_1-1)} = 11.4891$, $s_2 = \sqrt{n_2(n_2-1)} = 9.4868$로 두면 $\nu = 20.000000$으로 정확히 합동 자유도와 같아진다.
+
+    등분산 $s_1 = s_2 = 1$인 줄도 눈여겨볼 만하다. $\nu = 19.29$로 합동의 20보다 작다. **표본크기가 다르면 등분산이어도 Welch는 자유도를 조금 잃는다.** 이것이 Welch를 기본으로 쓰는 값이고, 그 대가가 이만큼(20에서 19.29로)밖에 안 된다는 것이 쓰는 이유다.
+
+    항등식은 같은 폭의 입력 20만 개에서 상대오차 $4 \times 10^{-14}$, 곧 부동소수점 한계 안에서 성립한다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 평균 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 평균 검정 — 큰 분산이 작은 표본에 붙은 경우. $n_1 = 12$, $\bar x_1 = 0.0$, $s_1 = 1.0$과 $n_2 = 10$, $\bar x_2 = 0.5$, $s_2 = 1.5$로 $H_0\colon \mu_1 - \mu_2 = 0$ 대 $H_1\colon \mu_1 - \mu_2 > 0$을 검정한다.
+
+**(1)** 보기 1의 식으로 두 표준오차와 두 $t$ 통계량을 구하시오. 어느 쪽 $\lvert t \rvert$가 크고 그 까닭은 무엇인가. 단측 p-값이 $0.81$인 것은 무슨 뜻인가.
+
+**(2)** 이 배치를 그대로 두고 $H_0$이 참인 정규모집단($\sigma_1 = 1.0$, $\sigma_2 = 1.5$)을 가정할 때, 명목 5% 양측검정의 **실제 오류율**을 예측하고 모의실험으로 확인하시오.
 
 </div>
 
-```python
-t, df, p, reject = test_diff_two_means(
-    n1=12, m1=0.0, s1=1.0, n2=10, m2=0.5, s2=1.5,
-    method="welch", alt="greater"
-)
-print("t:", t, "df:", df, "p:", p, "reject:", reject)
+??? success "풀이"
 
-# 같은 자료를 합동 t로도 해 본다. 자유도가 어떻게 달라지는지 보라.
-t_p, df_p, p_p, reject_p = test_diff_two_means(
-    n1=12, m1=0.0, s1=1.0, n2=10, m2=0.5, s2=1.5,
-    method="pooled", alt="greater"
-)
-print("t:", t_p, "df:", df_p, "p:", p_p, "reject:", reject_p)
-```
+    **(1) 해석적으로.** $n_1 = 12 > n_2 = 10$이고 $s_1^2 = 1 < s_2^2 = 2.25$이므로 $(n_1-n_2)(s_1^2-s_2^2) = 2 \times (-1.25) < 0$이다. 보기 1의 식이 바로
 
-출력:
+    $$
+    \text{SE}_{\text{pool}}^2 - \text{SE}_{\text{welch}}^2
+    = \frac{21 \times 2 \times (-1.25)}{20 \times 120} = -0.021875
+    $$
 
-```
-t: -0.9004503377814964 df: 15.195761856710394 p: 0.8090351110315042 reject: False
-t: -0.9341987329938274 df: 20 p: 0.8193278973550725 reject: False
-```
+    을 준다. **큰 분산이 작은 표본에 붙은 배치라 합동 표준오차가 더 작다.** 실제로
 
-Welch 자유도가 15.20으로 합동의 20보다 작다. 분산이 1.0과 1.5로 다르고 표본크기도 12와 10으로 달라서 생기는 차이다. 정보량을 더 보수적으로 잡는 쪽이 Welch다.
+    $$
+    \text{SE}_{\text{welch}} = \sqrt{\frac{1}{12} + \frac{2.25}{10}} = \sqrt{0.308333} = 0.555278,
+    \qquad
+    \text{SE}_{\text{pool}} = \sqrt{1.5625 \times \frac{11}{60}} = 0.535218
+    $$
 
-p-값이 0.81로 1에 가깝다는 점도 읽어 두라. 자료가 대립가설과 **반대** 방향이기 때문이다. 단측검정에서 이런 p-값이 나오면 "증거가 약하다"가 아니라 "방향이 반대다"라는 뜻이다.
+    이고($s_p^2 = (11 \times 1 + 9 \times 2.25)/20 = 1.5625$), 분자가 $\bar x_1 - \bar x_2 = -0.5$로 같으므로
+
+    $$
+    t_{\text{welch}} = \frac{-0.5}{0.555278} = -0.900450,
+    \qquad
+    t_{\text{pool}} = \frac{-0.5}{0.535218} = -0.934199
+    $$
+
+    로 합동 쪽이 크다. 자유도는 반대로 합동이 20, Welch가 15.1958이다. **합동 $t$는 표준오차를 작게 잡으면서 자유도는 크게 주장한다.** 두 어긋남이 같은 방향으로 작용해 기각을 쉽게 만든다.
+
+    p-값이 $0.81$인 것은 **자료가 대립가설과 반대 방향**이라는 뜻이다. $H_1\colon \mu_1 - \mu_2 > 0$인데 $\bar x_1 - \bar x_2 = -0.5 < 0$이니 $t < 0$이고, 우측 꼬리확률은 $0.5$를 넘을 수밖에 없다. 단측검정에서 p-값이 $0.5$를 넘으면 언제나 이 상황이며, "증거가 약하다"가 아니라 "방향이 반대다"로 읽어야 한다.
+
+    **(2) 오류율의 예측.** [5.3절](../../ch05/applications/diff_means_welch.md)에서 합동 $t$의 실제 오류율을 두 손잡이로 설명했다. $c = 1/n_1 + 1/n_2$, $d_i = n_i - 1$로 두면
+
+    $$
+    R = \frac{E\bigl[S_p^2 c\bigr]}{\sigma_1^2/n_1 + \sigma_2^2/n_2},
+    \qquad
+    m = \frac{(d_1\sigma_1^2 + d_2\sigma_2^2)^2}{d_1\sigma_1^4 + d_2\sigma_2^4},
+    \qquad
+    T_{\text{pool}} \approx \frac{t_m}{\sqrt R}
+    $$
+
+    이다. 여기에 $\sigma_1 = 1$, $\sigma_2 = 1.5$, $n_1 = 12$, $n_2 = 10$을 넣으면 $R = 0.929054$, $m = 17.2652$이고
+
+    $$
+    P\bigl(\lvert T_{\text{pool}} \rvert > t_{0.975,\,20}\bigr)
+    \approx P\bigl(\lvert t_{17.2652} \rvert > 2.085963\sqrt{0.929054}\bigr) = 0.0603
+    $$
+
+    을 예측한다. 두 손잡이가 모두 조금씩 어긋나 있다. $R < 1$이라 통계량의 척도가 $1/\sqrt R = 1.0375$배 부풀고, $m = 17.27 < 20$이라 분모가 합동 자유도가 주장하는 것보다 더 흔들린다. 둘이 더해져 명목 $0.05$가 $0.060$으로 간다.
+
+    **$0.060$은 작은 어긋남이다.** 불균형이 $12{:}10$뿐이고 분산비도 $1.5$라서 그렇다. 5.3절의 격자는 같은 구조를 극단으로 밀면 $(n_1,n_2) = (10,40)$, $\sigma_1/\sigma_2 = 4$에서 오류율이 $0.291$까지 간다는 것을 보였다. 여기서는 같은 병의 가벼운 증상만 보고 있는 것이다.
+
+    **수치적으로.**
+
+    ```python
+    t, df, p, reject = test_diff_two_means(
+        n1=12, m1=0.0, s1=1.0, n2=10, m2=0.5, s2=1.5,
+        method="welch", alt="greater"
+    )
+    print("t:", t, "df:", df, "p:", p, "reject:", reject)
+
+    # 같은 자료를 합동 t로도 해 본다. 자유도가 어떻게 달라지는지 보라.
+    t_p, df_p, p_p, reject_p = test_diff_two_means(
+        n1=12, m1=0.0, s1=1.0, n2=10, m2=0.5, s2=1.5,
+        method="pooled", alt="greater"
+    )
+    print("t:", t_p, "df:", df_p, "p:", p_p, "reject:", reject_p)
+    ```
+
+    출력:
+
+    ```
+    t: -0.9004503377814964 df: 15.195761856710394 p: 0.8090351110315042 reject: False
+    t: -0.9341987329938274 df: 20 p: 0.8193278973550725 reject: False
+    ```
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    n1, n2, sg1, sg2 = 12, 10, 1.0, 1.5
+    d1, d2, N = n1 - 1, n2 - 1, n1 + n2
+    c = 1 / n1 + 1 / n2
+
+    # 두 표준오차와 항등식
+    se_w = math.sqrt(sg1**2 / n1 + sg2**2 / n2)
+    sp2 = (d1 * sg1**2 + d2 * sg2**2) / (N - 2)
+    se_p = math.sqrt(sp2 * c)
+    ident = (N - 1) * (n1 - n2) * (sg1**2 - sg2**2) / ((N - 2) * n1 * n2)
+    print(f"SE_welch = {se_w:.9f}   SE_pool = {se_p:.9f}")
+    print(f"SE_p^2 - SE_w^2 = {se_p**2 - se_w**2:.12f}   항등식 = {ident:.12f}")
+    print(f"t_welch = {-0.5 / se_w:.9f}   t_pool = {-0.5 / se_p:.9f}")
+
+    # 5.3 절의 두 손잡이 R 과 m
+    tau2 = sg1**2 / n1 + sg2**2 / n2
+    EVp = c * (d1 * sg1**2 + d2 * sg2**2) / (d1 + d2)
+    R = EVp / tau2
+    m = (d1 * sg1**2 + d2 * sg2**2) ** 2 / (d1 * sg1**4 + d2 * sg2**4)
+    crit = stats.t.ppf(0.975, N - 2)
+    print(f"\nR = {R:.6f},  m = {m:.6f},  t_(0.975, 20) = {crit:.6f}")
+    print(f"다듬은 어림 P(|t_m| > crit*sqrt(R)) = "
+          f"{2 * stats.t.sf(crit * math.sqrt(R), m):.6f}")
+    print(f"거친 어림   P(|Z|   > crit*sqrt(R)) = "
+          f"{2 * stats.norm.sf(crit * math.sqrt(R)):.6f}")
+
+    # 모의실험
+    rng = np.random.default_rng(7)
+    B = 200_000
+    x1 = rng.normal(0, sg1, (B, n1))
+    x2 = rng.normal(0, sg2, (B, n2))
+    dd = x1.mean(1) - x2.mean(1)
+    v1, v2 = x1.var(1, ddof=1), x2.var(1, ddof=1)
+
+    t_pool = dd / np.sqrt(((d1 * v1 + d2 * v2) / (N - 2)) * c)
+    a, b = v1 / n1, v2 / n2
+    t_welch = dd / np.sqrt(a + b)
+    nu = (a + b) ** 2 / (a**2 / d1 + b**2 / d2)
+    print(f"\n반복 {B:,} 회   (오류율 0.05 둘레의 몬테카를로 오차 ±0.0005)")
+    print(f"  합동 t 의 실제 오류율  = {np.mean(np.abs(t_pool) > crit):.5f}")
+    print(f"  Welch 의 실제 오류율   = "
+          f"{np.mean(np.abs(t_welch) > stats.t(nu).ppf(0.975)):.5f}")
+    print(f"  실현된 nu: 평균 {nu.mean():.4f}, 최소 {nu.min():.4f}, 최대 {nu.max():.4f}"
+          f"   (한계 {min(n1, n2) - 1} 과 {N - 2})")
+    ```
+
+    출력:
+
+    ```
+    SE_welch = 0.555277708   SE_pool = 0.535218024
+    SE_p^2 - SE_w^2 = -0.021875000000   항등식 = -0.021875000000
+    t_welch = -0.900450338   t_pool = -0.934198733
+
+    R = 0.929054,  m = 17.265193,  t_(0.975, 20) = 2.085963
+    다듬은 어림 P(|t_m| > crit*sqrt(R)) = 0.060252
+    거친 어림   P(|Z|   > crit*sqrt(R)) = 0.044367
+
+    반복 200,000 회   (오류율 0.05 둘레의 몬테카를로 오차 ±0.0005)
+      합동 t 의 실제 오류율  = 0.05967
+      Welch 의 실제 오류율   = 0.04979
+      실현된 nu: 평균 15.4196, 최소 9.2603, 최대 20.0000   (한계 9 과 20)
+    ```
+
+    **(1)의 수가 모두 맞는다.** 두 표준오차가 $0.555278$과 $0.535218$, 그 제곱의 차가 항등식이 준 $-0.021875$와 소수 열두째 자리까지 같다. 두 $t$도 $-0.900450$과 $-0.934199$로 함수의 출력과 일치한다. 이 자료에서는 $s_i$가 마침 $\sigma_i$와 같은 수여서 (1)의 표본 계산과 (2)의 모집단 계산이 같은 수를 쓰게 되었지만, 앞의 것은 관측된 표준오차이고 뒤의 것은 그 기댓값이라는 점을 구별해 두어야 한다.
+
+    **(2)의 예측도 맞는다.** 다듬은 어림 $0.060252$에 대해 모의실험이 $0.05967$을 주었다. 반복 20만 회에서 몬테카를로 오차가 $\pm 0.00053$이므로 어긋남 $0.00058$은 그 범위에 있다. Welch는 $0.04979$로 명목을 지킨다.
+
+    거친 어림 $P(\lvert Z \rvert > \cdot) = 0.044367$은 **명목보다도 낮은 값**을 주어 방향조차 틀린다. 분모의 흔들림($m = 17.27$)을 빠뜨리면 이렇게 된다는 5.3절의 경고가 여기서도 그대로 나타난다.
+
+    실현된 $\nu$의 범위도 함께 확인해 두었다. 20만 개 표본에서 최소 $9.2603$, 최대 $20.0000$으로 보기 1의 한계 $[9,\ 20]$ 안에 있다. **실제 자료에서도 자유도가 작은 쪽 표본의 크기 가까이까지 내려간다.**
 
 ### 해석
 

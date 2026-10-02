@@ -245,47 +245,165 @@ Holm이 Bonferroni와 결과가 같다는 점도 눈에 띈다. Holm은 이론�
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 재표본으로 FDR 추정하기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 재표본으로 FDR 추정하기. 아래 함수는 집단 이름을 뒤섞어 귀무분포를 만들고, 가능한 모든 문턱 $t$에서
+
+$$
+\widehat{\text{FDR}}(t) = \frac{\hat V(t)}{R(t)},
+\qquad
+\hat V(t) = \frac{1}{B}\sum_{b=1}^{B} \#\{j : \lvert T^{(b)}_j \rvert \ge t\}
+$$
+
+를 돌려준다. 여기서 $R(t) = \#\{j : \lvert T_j \rvert \ge t\}$는 실제 기각 수다.
+
+**(1)** $\hat V(t)$가 무엇을 추정하는지 적고, 특징 $m$개 가운데 $m_0$개가 귀무일 때 이 추정량이 **참 FDR의 몇 배**로 치우치는지 구하시오.
+
+**(2)** 특징 $m = 200$개(앞의 40개만 참 신호, $\delta = 1$, 각 집단 25명)를 만들어 그 치우침을 수로 확인하시오.
 
 </div>
 
-```python
-def resampling_fdr(X_group1, X_group2, n_permutations=500):
-    n1, n2 = X_group1.shape[0], X_group2.shape[0]
-    n_features = X_group1.shape[1]
-    X_combined = np.vstack([X_group1, X_group2])
+??? success "풀이"
 
-    # 관측된 검정통계량
-    t_obs = np.array([
-        stats.ttest_ind(X_group1[:, j], X_group2[:, j]).statistic
-        for j in range(n_features)
-    ])
+    **(1) 해석적으로.** 집단 이름을 뒤섞으면 두 집단의 차이가 **모든 특징에서** 지워진다. 신호가 있던 특징도 마찬가지다. 그러므로 순열 통계량 $T^{(b)}_j$는 $j$가 참 신호인지와 무관하게 귀무분포에서 나온 값처럼 행동하고,
 
-    # 집단 이름을 뒤섞어 만든 귀무분포. 모형을 가정하지 않는다.
-    t_perm = np.zeros((n_permutations, n_features))
-    for b in range(n_permutations):
+    $$
+    E\bigl[\hat V(t)\bigr] \approx m \cdot P_0\bigl(\lvert T \rvert \ge t\bigr) = m\,p(t)
+    $$
+
+    이다. 여기서 $p(t)$는 귀무분포의 양측 꼬리확률이다.
+
+    그런데 **실제로 거짓 양성을 낼 수 있는 특징은 귀무인 $m_0$개뿐이다.** 참 신호가 기각되는 것은 거짓 양성이 아니다. 그러므로 참값은
+
+    $$
+    E[V(t)] = m_0\,p(t)
+    $$
+
+    이고, 두 식을 나누면 치우침이 바로 나온다.
+
+    $$
+    \frac{E[\hat V(t)]}{E[V(t)]} = \frac{m}{m_0} = \frac{1}{\pi_0},
+    \qquad \pi_0 = \frac{m_0}{m}
+    $$
+
+    **이 추정량은 참 FDR을 정확히 $1/\pi_0$배로 과대평가한다.** $t$에 의존하지 않는 상수배라는 점이 중요하다. 꼬리확률 $p(t)$가 분자와 분모에서 그대로 약분되기 때문이다.
+
+    방향이 **보수적**이라는 것도 함께 읽어야 한다. 과대평가이므로 이 추정값으로 문턱을 정하면 실제 FDR은 목표보다 낮다. 참 신호가 드문 상황($\pi_0 \approx 1$)에서는 치우침이 거의 없고, 신호가 많을 때만 손해가 커진다. 고차원 자료에서 $\pi_0$이 보통 0.9를 넘기 때문에 실무에서 이 추정량이 그대로 쓰이는 것이다. 바로잡고 싶으면 $\hat\pi_0$을 곱하면 되는데(스토리의 보정), 그 $\hat\pi_0$을 추정하는 일이 또 다른 문제를 만든다.
+
+    대신 이 방법이 사는 것은 **분포 가정이 전혀 없다**는 점이다. $t$ 분포도 정규성도 쓰지 않고, 특징끼리 상관되어 있어도 순열이 그 상관을 고스란히 보존한 채로 귀무분포를 만든다.
+
+    **(2) 수치적으로.** 먼저 함수다. $t$ 분포도 정규성 가정도 쓰지 않는다는 것이 요점이다.
+
+    ```python
+    def resampling_fdr(X_group1, X_group2, n_permutations=500):
+        n1, n2 = X_group1.shape[0], X_group2.shape[0]
+        n_features = X_group1.shape[1]
+        X_combined = np.vstack([X_group1, X_group2])
+
+        # 관측된 검정통계량
+        t_obs = np.array([
+            stats.ttest_ind(X_group1[:, j], X_group2[:, j]).statistic
+            for j in range(n_features)
+        ])
+
+        # 집단 이름을 뒤섞어 만든 귀무분포. 모형을 가정하지 않는다.
+        t_perm = np.zeros((n_permutations, n_features))
+        for b in range(n_permutations):
+            idx = np.random.permutation(n1 + n2)
+            for j in range(n_features):
+                t_perm[b, j] = stats.ttest_ind(
+                    X_combined[idx[:n1], j],
+                    X_combined[idx[n1:], j]
+                ).statistic
+
+        # 문턱마다 FDR을 추정한다.
+        Rs, FDRs = [], []
+        for thresh in np.sort(np.abs(t_obs)):
+            R = np.sum(np.abs(t_obs) >= thresh)       # 실제 기각 수
+            # 순열 자료에서 문턱을 넘은 총 개수를 순열 횟수로 나눈다.
+            # 이것이 "H0가 참일 때 기대되는 기각 수", 즉 E[V]의 추정이다.
+            V = np.sum(np.abs(t_perm) >= thresh) / n_permutations
+            Rs.append(R)
+            FDRs.append(V / max(R, 1))
+        return np.array(Rs), np.array(FDRs)
+    ```
+
+    이제 정답을 아는 자료를 만들어 (1)의 예측과 맞춘다. $m = 200$, $m_0 = 160$이므로 치우침은 $m/m_0 = 1.25$배로 예측된다.
+
+    ```python
+    np.random.seed(0)
+
+    m, m1, n1, n2, delta = 200, 40, 25, 25, 1.0
+    m0 = m - m1
+    truth = np.zeros(m, dtype=int)
+    truth[:m1] = 1                      # 앞의 40개 특징만 참 신호
+
+    X1 = np.random.normal(0.0, 1.0, (n1, m))
+    X2 = np.random.normal(0.0, 1.0, (n2, m))
+    X2[:, :m1] += delta                 # 신호는 집단 2 의 평균을 delta 만큼 옮긴다
+
+    t_obs = np.array([stats.ttest_ind(X1[:, j], X2[:, j]).statistic
+                      for j in range(m)])
+    Rs, FDRs = resampling_fdr(X1, X2, n_permutations=200)
+
+    df = n1 + n2 - 2
+    print(f"m = {m},  m0 = {m0},  m/m0 = {m / m0:.4f},  자유도 = {df}")
+
+    print("\n순열 귀무분포가 t_48 과 맞는가")
+    print("    t     순열 P(|T|>=t)    2*sf(t, 48)")
+    # resampling_fdr 안에서 쓴 것과 같은 순열을 다시 만들 수는 없으므로
+    # 같은 방식으로 새로 200 번 섞어 비교한다.
+    Xc = np.vstack([X1, X2])
+    cnt = np.zeros(4)
+    grid = np.array([1.0, 2.0, 2.5, 3.0])
+    B = 200
+    for b in range(B):
         idx = np.random.permutation(n1 + n2)
-        for j in range(n_features):
-            t_perm[b, j] = stats.ttest_ind(
-                X_combined[idx[:n1], j],
-                X_combined[idx[n1:], j]
-            ).statistic
+        tp = np.array([stats.ttest_ind(Xc[idx[:n1], j], Xc[idx[n1:], j]).statistic
+                       for j in range(m)])
+        cnt += [(np.abs(tp) >= g).sum() for g in grid]
+    for g, c in zip(grid, cnt):
+        print(f"{g:5.1f}      {c / (B * m):11.6f}    {2 * stats.t.sf(g, df):11.6f}")
 
-    # 문턱마다 FDR을 추정한다.
-    Rs, FDRs = [], []
-    for thresh in np.sort(np.abs(t_obs)):
-        R = np.sum(np.abs(t_obs) >= thresh)       # 실제 기각 수
-        # 순열 자료에서 문턱을 넘은 총 개수를 순열 횟수로 나눈다.
-        # 이것이 "H0가 참일 때 기대되는 기각 수", 즉 E[V]의 추정이다.
-        V = np.sum(np.abs(t_perm) >= thresh) / n_permutations
-        Rs.append(R)
-        FDRs.append(V / max(R, 1))
-    return np.array(Rs), np.array(FDRs)
-```
+    print("\n   R    문턱    FDR 추정   m*p(t)/R   m0*p(t)/R   비   실현 FDP")
+    thr = np.sort(np.abs(t_obs))
+    for k in range(len(thr)):
+        R = Rs[k]
+        if R not in (200, 100, 60, 50, 40, 30, 20):
+            continue
+        t = thr[k]
+        p_t = 2 * stats.t.sf(t, df)
+        sel = np.abs(t_obs) >= t
+        fdp = np.sum(sel & (truth == 0)) / max(sel.sum(), 1)
+        print(f"{R:4d} {t:7.4f}  {FDRs[k]:9.4f}  {m * p_t / R:9.4f}"
+              f"   {m0 * p_t / R:9.4f}  {m * p_t / (m0 * p_t):5.2f}  {fdp:9.4f}")
+    ```
 
-t-분포도 정규성 가정도 쓰지 않는다는 것이 이 방법의 요점이다. 귀무분포를 자료 자체에서 만들어 내므로, 검정통계량의 분포를 모르거나 특징이 서로 상관되어 있을 때도 쓸 수 있다.
+    출력:
 
-이 알고리즘은 각 문턱을 넘는 순열 검정통계량의 개수를 세어 관측된 기각 수로 나누며, 가능한 모든 절단값에서 FDR 추정값을 준다.
+    ```
+    m = 200,  m0 = 160,  m/m0 = 1.2500,  자유도 = 48
+
+    순열 귀무분포가 t_48 과 맞는가
+        t     순열 P(|T|>=t)    2*sf(t, 48)
+      1.0         0.322125       0.322325
+      2.0         0.052850       0.051176
+      2.5         0.016450       0.015890
+      3.0         0.004375       0.004272
+
+       R    문턱    FDR 추정   m*p(t)/R   m0*p(t)/R   비   실현 FDP
+     200  0.0249     0.9807     0.9802      0.7842   1.25     0.8000
+     100  0.9308     0.7107     0.7133      0.5706   1.25     0.6000
+      60  1.5739     0.3944     0.4069      0.3255   1.25     0.3500
+      50  1.8511     0.2711     0.2813      0.2250   1.25     0.2200
+      40  2.1825     0.1635     0.1700      0.1360   1.25     0.0500
+      30  2.9122     0.0350     0.0362      0.0290   1.25     0.0000
+      20  3.5186     0.0065     0.0096      0.0077   1.25     0.0000
+    ```
+
+    **순열 귀무분포가 $t_{48}$과 맞는다.** $t = 2.0$에서 $0.0529$ 대 $0.0512$, $t = 2.5$에서 $0.0165$ 대 $0.0159$로 몬테카를로 오차($B \times m = 40{,}000$개 추출이지만 같은 순열 안의 특징들이 함께 움직이므로 유효 표본은 그보다 작다) 안에서 일치한다. 정규자료라 당연한 결과이지만, 이 일치가 **순열이 올바른 귀무분포를 만들고 있다는 점검**이 된다.
+
+    **치우침이 유도한 그대로다.** 셋째 열(함수가 준 FDR 추정)과 넷째 열($m\,p(t)/R$, 곧 (1)이 예측한 극한)이 거의 겹친다. $R = 200$에서 $0.9807$ 대 $0.9802$, $R = 100$에서 $0.7107$ 대 $0.7133$, $R = 50$에서 $0.2711$ 대 $0.2813$이다. 그리고 넷째 열은 다섯째 열($m_0\,p(t)/R$, 참값)의 정확히 $1.25$배다. **추정량이 참 FDR이 아니라 그것의 $1/\pi_0$배를 재고 있다는 것이 수로 확인된다.**
+
+    마지막 열의 **실현 FDP**는 또 다른 것이다. $R = 40$에서 추정값은 $0.1635$인데 실제로 섞여 들어온 거짓 양성은 2개뿐이어서 $0.05$이고, $R = 30$과 $R = 20$에서는 $0$이다. FDR은 FDP의 **기댓값**이므로 한 번의 실현이 기댓값보다 크거나 작은 것은 이상한 일이 아니다. 특히 기각 수가 적을 때는 FDP가 $0$ 아니면 $1/R$ 꼴로 뚝뚝 끊기므로 한 번의 실현으로 추정값을 반박할 수 없다. **문턱을 고르는 데 쓰는 것은 추정 FDR 곡선이고, 실현 FDP는 모의실험에서만 볼 수 있는 값이다.**
 
 ## 해석
 

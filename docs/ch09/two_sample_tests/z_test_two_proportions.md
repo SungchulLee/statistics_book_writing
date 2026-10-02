@@ -163,73 +163,241 @@ $\alpha = 0.05$에서 전환율이 다른지 검정하라.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 두 비율의 z 검정 구현
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 비율의 z 검정 구현 — 손계산과 어긋나는 자리. 보기 1을 손으로 풀 때 $z_{\text{obs}} \approx -1.582$를 얻었는데, 아래 구현은 $-1.573$을 준다.
+
+**(1)** 두 값이 어디서 갈라졌는지 짚고 정확한 $z$와 $p$를 구하시오. 또 성공 수와 표본크기를 함께 $k$배로 늘리면 $z$가 어떻게 변하는지 식으로 쓰시오.
+
+**(2)** 검정은 **합동**한 표준오차를 쓰고 신뢰구간은 **합동하지 않은** 표준오차를 쓴다. $n_1 = n_2 = n$일 때 두 표준오차의 정확한 관계를 유도하고, 그 결론이 이 자료($500$ 대 $480$)에도 그대로 적용되는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def two_proportion_z_test(x1, n1, x2, n2, alternative="two-sided"):
-    """두 비율의 차이에 대한 이표본 z 검정.
+    **(1) 어긋남의 출처는 분자다.** 정확한 값은 $\hat p_2 = 58/480 = 0.12083333\ldots$인데 보기 1의 손계산은 이것을 $0.121$로 올림하고 차이도 $-0.031$로 적었다. 참 차이는
 
-    Parameters
-    ----------
-    x1, x2 : int
-        Number of successes in each sample.
-    n1, n2 : int
-        Sample sizes.
-    alternative : str
-        'two-sided', 'less', or 'greater'.
+    $$
+    \hat p_1 - \hat p_2 = 0.09 - 0.12083333 = -0.03083333
+    $$
 
-    Returns
-    -------
-    z_stat : float
-        Test statistic.
-    p_value : float
-        P-value.
-    """
-    p1_hat = x1 / n1
-    p2_hat = x2 / n2
-    # H0가 "두 비율이 같다"이므로 그 공통값을 전체를 합쳐 추정한다.
-    # 신뢰구간을 만들 때는 합동하지 않는다. 목적이 다르기 때문이다.
-    p_hat = (x1 + x2) / (n1 + n2)
+    이므로 손계산은 분자의 크기를 $0.54\%$ 부풀렸다. 분모는 거의 그대로다. 합동 비율 $\hat p = 103/980 = 0.10510204$에서
 
-    se = np.sqrt(p_hat * (1 - p_hat) * (1 / n1 + 1 / n2))
-    z_stat = (p1_hat - p2_hat) / se
+    $$
+    \text{SE} = \sqrt{0.10510204 \times 0.89489796 \times \left(\frac{1}{500} + \frac{1}{480}\right)}
+    = 0.01959746
+    $$
 
-    if alternative == "two-sided":
-        p_value = 2 * (1 - stats.norm.cdf(abs(z_stat)))
-    elif alternative == "less":
-        p_value = stats.norm.cdf(z_stat)
-    elif alternative == "greater":
-        p_value = 1 - stats.norm.cdf(z_stat)
-    else:
-        raise ValueError("alternative must be 'two-sided', 'less', or 'greater'")
+    이고, 보기 1이 쓴 반올림값 $0.1051$로 계산해도 $0.01959729$로 소수 일곱째 자리에서야 갈라진다. 그러므로
 
-    return z_stat, p_value
+    $$
+    \frac{-0.031}{0.0195975} = -1.581838,
+    \qquad
+    \frac{-0.03083333}{0.0195975} = -1.573333
+    $$
+
+    로 **차이 전부가 분자의 반올림에서 왔다.** 정확한 값은 $z = -1.573333$, $p = 0.115642$이고 판정은 바뀌지 않는다.
+
+    **$k$배 확장.** $x_i \to kx_i$, $n_i \to kn_i$로 늘리면 $\hat p_1, \hat p_2, \hat p$가 모두 그대로이고 $1/n_1 + 1/n_2$만 $1/k$배가 되므로
+
+    $$
+    \text{SE}(k) = \frac{\text{SE}(1)}{\sqrt k},
+    \qquad z(k) = \sqrt k \; z(1).
+    $$
+
+    $k = 10$이면 $z = -1.573333\sqrt{10} = -4.975317$, $k = 100$이면 $-15.733333$이다.
+
+    **(2) 균형 설계에서는 합동 쪽이 반드시 크다.** $f(p) = p(1-p)$로 쓰고 $n_1 = n_2 = n$, $d = \hat p_1 - \hat p_2$라 하자. 이때 합동 비율은 단순평균 $\bar p = (\hat p_1 + \hat p_2)/2$이고
+
+    $$
+    \text{SE}_{\text{pool}}^2 = \frac{2}{n} f(\bar p),
+    \qquad
+    \text{SE}_{\text{CI}}^2 = \frac{f(\hat p_1) + f(\hat p_2)}{n}.
+    $$
+
+    $f$의 일차항은 평균을 지나므로 차이는 이차항만 남는다.
+
+    $$
+    f(\bar p) - \frac{f(\hat p_1) + f(\hat p_2)}{2}
+    = \left[\bar p - \bar p^{\,2}\right] - \left[\bar p - \frac{\hat p_1^2 + \hat p_2^2}{2}\right]
+    = \frac{\hat p_1^2 + \hat p_2^2}{2} - \bar p^{\,2}
+    = \frac{d^2}{4}
+    $$
+
+    이므로
+
+    $$
+    \text{SE}_{\text{pool}}^2 = \text{SE}_{\text{CI}}^2 + \frac{d^2}{2n}.
+    $$
+
+    양변을 $d^2$으로 나누면 두 통계량의 관계가 깔끔하게 나온다.
+
+    $$
+    \frac{1}{z_{\text{pool}}^2} = \frac{1}{z_{\text{CI}}^2} + \frac{1}{2n}
+    \iff
+    z_{\text{pool}}^2 = \frac{z_{\text{CI}}^2}{1 + z_{\text{CI}}^2/(2n)}
+    $$
+
+    **그러므로 균형 설계에서는 언제나 $\lvert z_{\text{pool}} \rvert \le \lvert z_{\text{CI}} \rvert$다.** 곧 검정이 신뢰구간보다 조금 보수적이다. 그리고 $z_{\text{CI}}$를 아무리 키워도 $z_{\text{pool}}^2 < 2n = N$이다. **합동 $z$ 통계량은 총 관측값 수의 제곱근을 넘지 못한다.** 이 한계는 균형에만 있는 것이 아니다. $z_{\text{pool}}^2$은 $2 \times 2$ 표의 피어슨 카이제곱통계량과 정확히 같고, 그것은 $N\phi^2$($\phi$는 파이계수)이며 $\lvert \phi \rvert \le 1$이기 때문이다.
+
+    **그러나 이 자료는 균형이 아니다.** 아래에서 확인하듯 $500$ 대 $480$에서는 부등호가 뒤집힌다. 균형점에서의 간격이 $d^2/(2n) = 0.03083333^2/980 = 9.70 \times 10^{-7}$(분산 척도), 표준오차로는 $0.0000247$밖에 안 되어, 열 명의 불균형이 그것을 지워 버린다.
+
+    **수치적으로.** 먼저 검정 함수를 만든다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def two_proportion_z_test(x1, n1, x2, n2, alternative="two-sided"):
+        """두 비율의 차이에 대한 이표본 z 검정.
+
+        Parameters
+        ----------
+        x1, x2 : int
+            Number of successes in each sample.
+        n1, n2 : int
+            Sample sizes.
+        alternative : str
+            'two-sided', 'less', or 'greater'.
+
+        Returns
+        -------
+        z_stat : float
+            Test statistic.
+        p_value : float
+            P-value.
+        """
+        p1_hat = x1 / n1
+        p2_hat = x2 / n2
+        # H0가 "두 비율이 같다"이므로 그 공통값을 전체를 합쳐 추정한다.
+        # 신뢰구간을 만들 때는 합동하지 않는다. 목적이 다르기 때문이다.
+        p_hat = (x1 + x2) / (n1 + n2)
+
+        se = np.sqrt(p_hat * (1 - p_hat) * (1 / n1 + 1 / n2))
+        z_stat = (p1_hat - p2_hat) / se
+
+        if alternative == "two-sided":
+            p_value = 2 * (1 - stats.norm.cdf(abs(z_stat)))
+        elif alternative == "less":
+            p_value = stats.norm.cdf(z_stat)
+        elif alternative == "greater":
+            p_value = 1 - stats.norm.cdf(z_stat)
+        else:
+            raise ValueError("alternative must be 'two-sided', 'less', or 'greater'")
+
+        return z_stat, p_value
 
 
-# 보기: A/B 검정
-z, p = two_proportion_z_test(45, 500, 58, 480, alternative="two-sided")
-print(f"z = {z:.3f}, p-value = {p:.3f}")
+    # 보기 1 의 A/B 검정
+    z, p = two_proportion_z_test(45, 500, 58, 480, alternative="two-sided")
+    print(f"z = {z:.3f}, p-value = {p:.3f}")
+    ```
 
-# 같은 전환율 차이를 표본만 열 배로 늘려 다시 검정한다.
-z10, p10 = two_proportion_z_test(450, 5000, 580, 4800, alternative="two-sided")
-print(f"z = {z10:.3f}, p-value = {p10:.5f}")
-```
+    출력:
 
-출력:
+    ```
+    z = -1.573, p-value = 0.116
+    ```
 
-```
-z = -1.573, p-value = 0.116
-z = -4.975, p-value = 0.00000
-```
+    이제 (1)과 (2)를 확인한다.
 
-전환율 9.0%와 12.1%로 3.1%p 차이인데, 방문자 1,000명 남짓으로는 기각하지 못한다. 같은 차이를 10,000명으로 보면 $p$가 $10^{-6}$ 수준까지 떨어진다.
+    ```python
+    x1, n1, x2, n2 = 45, 500, 58, 480
+    p1, p2 = x1 / n1, x2 / n2
+    pb = (x1 + x2) / (n1 + n2)
+    d = p1 - p2
+    se_p = np.sqrt(pb * (1 - pb) * (1 / n1 + 1 / n2))
+    se_u = np.sqrt(p1 * (1 - p1) / n1 + p2 * (1 - p2) / n2)
+    print(f"p1 = {p1:.7f}   p2 = {p2:.7f}   차이 = {d:.7f}")
+    print(f"합동 p = {pb:.7f}   합동 SE = {se_p:.7f}")
+    print(f"손계산의 차이 -0.031 →  z = {-0.031 / se_p:.6f}")
+    print(f"정확한 차이          →  z = {d / se_p:.6f}"
+          f"   p = {2 * stats.norm.sf(abs(d / se_p)):.6f}")
 
-A/B 검정에서 표본크기 계획이 왜 중요한지 보여주는 예다. 실험을 너무 일찍 멈추면 실재하는 3%p 개선을 "차이 없음"으로 결론짓게 된다.
+    print("\n자료를 k 배로 늘릴 때")
+    print("   k      z          p            sqrt(k)*z_1")
+    z1 = d / se_p
+    for k in (1, 10, 100):
+        z, _ = two_proportion_z_test(k * x1, k * n1, k * x2, k * n2)
+        p = 2 * stats.norm.sf(abs(z))
+        print(f"{k:4d}  {z:9.6f}  {p:.3e}   {np.sqrt(k) * z1:9.6f}")
+
+    print(f"\n비합동 SE = {se_u:.7f}   |z| = {abs(d / se_u):.6f}")
+    print(f"합동   SE = {se_p:.7f}   |z| = {abs(d / se_p):.6f}")
+    print(f"→ 이 불균형 자료에서는 {'합동' if se_p > se_u else '비합동'} 쪽 SE 가 크다")
+
+    # 균형 설계에서의 항등식: SE_p^2 - SE_u^2 = d^2/(2n)
+    rng = np.random.default_rng(0)
+    worst = 0.0
+    for _ in range(20_000):
+        n = int(rng.integers(20, 2000))
+        a, b = int(rng.integers(1, n)), int(rng.integers(1, n))
+        q1, q2, qb = a / n, b / n, (a + b) / (2 * n)
+        sp2 = qb * (1 - qb) * (2 / n)
+        su2 = q1 * (1 - q1) / n + q2 * (1 - q2) / n
+        worst = max(worst, abs(sp2 - su2 - (q1 - q2) ** 2 / (2 * n)))
+    print(f"\n균형 항등식 SE_p^2 - SE_u^2 = d^2/(2n) 의 최대 오차 = {worst:.2e}"
+          f"  (무작위 표 20000 개)")
+
+    # 총 980 명을 어떻게 나누면 부호가 뒤집히는가
+    print("\n  n1   n2    합동 SE   비합동 SE   큰 쪽")
+    for m in (400, 450, 490, 495, 500, 560):
+        k = 980 - m
+        PB = (m * p1 + k * p2) / 980
+        sp = np.sqrt(PB * (1 - PB) * (1 / m + 1 / k))
+        su = np.sqrt(p1 * (1 - p1) / m + p2 * (1 - p2) / k)
+        print(f"{m:4d} {k:4d}   {sp:.7f}  {su:.7f}   {'합동' if sp > su else '비합동'}")
+
+    # z_p^2 은 2x2 피어슨 카이제곱과 같고 N 을 넘지 못한다
+    chi = stats.chi2_contingency([[x1, n1 - x1], [x2, n2 - x2]], correction=False)
+    print(f"\nz_p^2 = {z1**2:.9f}   피어슨 카이제곱 = {chi.statistic:.9f}")
+    worst = 0.0
+    for _ in range(20_000):
+        a, b = int(rng.integers(5, 500)), int(rng.integers(5, 500))
+        u, v = int(rng.integers(0, a + 1)), int(rng.integers(0, b + 1))
+        if u + v in (0, a + b):
+            continue
+        P1, P2, PB = u / a, v / b, (u + v) / (a + b)
+        z = (P1 - P2) / np.sqrt(PB * (1 - PB) * (1 / a + 1 / b))
+        worst = max(worst, z**2 / (a + b))
+    print(f"z_p^2 / N 의 최대값 = {worst:.9f}  (1 을 넘지 못한다)")
+    ```
+
+    출력:
+
+    ```
+    p1 = 0.0900000   p2 = 0.1208333   차이 = -0.0308333
+    합동 p = 0.1051020   합동 SE = 0.0195975
+    손계산의 차이 -0.031 →  z = -1.581838
+    정확한 차이          →  z = -1.573333   p = 0.115642
+
+    자료를 k 배로 늘릴 때
+       k      z          p            sqrt(k)*z_1
+       1  -1.573333  1.156e-01   -1.573333
+      10  -4.975317  6.514e-07   -4.975317
+     100  -15.733333  8.938e-56   -15.733333
+
+    비합동 SE = 0.0196244   |z| = 1.571171
+    합동   SE = 0.0195975   |z| = 1.573333
+    → 이 불균형 자료에서는 비합동 쪽 SE 가 크다
+
+    균형 항등식 SE_p^2 - SE_u^2 = d^2/(2n) 의 최대 오차 = 6.94e-18  (무작위 표 20000 개)
+
+      n1   n2    합동 SE   비합동 SE   큰 쪽
+     400  580   0.0201930  0.0196954   합동
+     450  530   0.0197882  0.0195560   합동
+     490  490   0.0196192  0.0195945   합동
+     495  485   0.0196073  0.0196084   비합동
+     500  480   0.0195975  0.0196244   비합동
+     560  420   0.0196385  0.0199796   비합동
+
+    z_p^2 = 2.475377593   피어슨 카이제곱 = 2.475377593
+    z_p^2 / N 의 최대값 = 1.000000000  (1 을 넘지 못한다)
+    ```
+
+    **(1)이 맞는다.** 반올림한 분자는 $-1.581838$, 정확한 분자는 $-1.573333$으로 손계산의 $-1.582$가 그대로 재현된다. $k$배 확장에서도 $\sqrt k\,z(1)$이 직접 계산한 $z$와 소수 여섯째 자리까지 같다. 같은 $3.08\%$p 차이가 $k = 1$에서 $p = 0.116$, $k = 10$에서 $6.5 \times 10^{-7}$, $k = 100$에서 $9 \times 10^{-56}$이다. **A/B 검정에서 표본크기 계획이 왜 중요한지가 이 한 줄에 다 있다.** 실험을 너무 일찍 멈추면 실재하는 3%p 개선을 "차이 없음"으로 결론짓는다.
+
+    **(2)의 항등식도 맞는다.** 무작위로 만든 균형 표 20,000개에서 $\text{SE}_{\text{pool}}^2 - \text{SE}_{\text{CI}}^2 = d^2/(2n)$의 최대 오차가 $7 \times 10^{-18}$로 부동소수점 한계다. $z_{\text{pool}}^2 = 2.475377593$이 피어슨 카이제곱과 소수 아홉째 자리까지 같고, $z_{\text{pool}}^2/N$의 최대값은 정확히 $1$에서 멈춘다($\hat p_1 = 0$, $\hat p_2 = 1$인 극단에서 등호가 성립한다).
+
+    **그런데 부등호는 균형에서만 보장된다.** 표를 보면 $n_1 \le 490$에서는 합동 SE가 크고 $n_1 \ge 495$에서는 비합동 SE가 크다. 균형점 $490{:}490$에서의 간격이 $0.0196192 - 0.0195945 = 0.0000247$에 지나지 않으므로, 열 명만 옮겨도 뒤집히는 것이다. 이 자료에서는 $p = 0.115642$(합동) 대 $0.116143$(비합동)으로 **두 값 모두 $0.05$에서 멀어 판정이 갈릴 일이 없지만**, 경계 근처라면 "검정은 기각했는데 신뢰구간은 0을 담는다"는 모순이 생길 수 있다. 바로 아래 「신뢰구간과의 관계」에서 짚는 쌍대성이 **정확한** 동치가 아닌 이유가 이 분모의 차이다.
 
 ## 신뢰구간과의 관계
 

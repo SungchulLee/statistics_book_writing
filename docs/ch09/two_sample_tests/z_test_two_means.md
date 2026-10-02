@@ -141,74 +141,173 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 두 평균의 z 검정 구현
+**보기 2.** <span class="diff easy" title="쉬움"></span> 두 평균의 z 검정 구현 — 표본을 늘리면 어디까지 갈 수 있는가. 보기 1의 자료($\bar x - \bar y = 4$, $\sigma_1 = 12$, $\sigma_2 = 15$, $n_1 = 50$, $n_2 = 60$)에서 양측 $p = 0.120$이었다. 관측된 차이 4점은 그대로 둔 채 표본만 늘린다.
+
+**(1)** 두 표본크기를 같은 배수 $k$로 늘리면 $z$가 어떻게 변하는지 식으로 쓰고, $p < 0.05$가 되는 가장 작은 정수 $k$를 구하시오.
+
+**(2)** A 학군은 더 조사할 수 없어 $n_1 = 50$에 묶여 있다. B 학군만 늘릴 때 $z$가 올라갈 수 있는 **상한**과 $p$의 **하한**을 구하고, $p < 0.05$에 필요한 $n_2$를 구하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def two_sample_z_test(x_bar, y_bar, sigma1, sigma2, n1, n2,
-                      delta0=0, alternative="two-sided"):
-    """두 평균의 차이에 대한 이표본 z 검정.
+    **(1) 해석적으로.** 표준오차 안의 두 항이 모두 $n_i$에 반비례하므로 $n_1 \to kn_1$, $n_2 \to kn_2$로 바꾸면
 
-    Parameters
-    ----------
-    x_bar, y_bar : float
-        Sample means.
-    sigma1, sigma2 : float
-        Known population standard deviations.
-    n1, n2 : int
-        Sample sizes.
-    delta0 : float
-        Hypothesized difference (default 0).
-    alternative : str
-        'two-sided', 'less', or 'greater'.
+    $$
+    \text{SE}(k) = \sqrt{\frac{\sigma_1^2}{kn_1} + \frac{\sigma_2^2}{kn_2}}
+    = \frac{1}{\sqrt{k}}\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}
+    = \frac{\text{SE}(1)}{\sqrt{k}}
+    $$
 
-    Returns
-    -------
-    z_stat : float
-        Test statistic.
-    p_value : float
-        P-value.
-    """
-    # sigma를 알고 있으므로 표본에서 추정하지 않는다.
-    # 그래서 자유도라는 개념이 없고 표준정규를 그대로 쓴다.
-    se = np.sqrt(sigma1**2 / n1 + sigma2**2 / n2)
-    z_stat = ((x_bar - y_bar) - delta0) / se
+    이고, 분자인 관측된 차이는 그대로이므로
 
-    if alternative == "two-sided":
-        p_value = 2 * (1 - stats.norm.cdf(abs(z_stat)))
-    elif alternative == "less":
-        p_value = stats.norm.cdf(z_stat)
-    elif alternative == "greater":
-        p_value = 1 - stats.norm.cdf(z_stat)
-    else:
-        raise ValueError("alternative must be 'two-sided', 'less', or 'greater'")
+    $$
+    z(k) = \frac{\bar x - \bar y}{\text{SE}(k)} = \sqrt{k}\; z(1).
+    $$
 
-    return z_stat, p_value
+    **$z$는 $\sqrt{k}$로만 자란다.** $z(1) = 4/2.574879 = 1.553471$이므로
+
+    $$
+    p < 0.05 \iff \sqrt{k}\,z(1) > z_{0.025} = 1.959964
+    \iff k > \left(\frac{1.959964}{1.553471}\right)^2 = 1.591804
+    $$
+
+    이고 가장 작은 정수는 $k = 2$다. 곧 $n_1 = 100$, $n_2 = 120$이면 된다.
+
+    **(2) 한쪽만 늘릴 때.** $n_1 = 50$이 고정이면 $\sigma_1^2/n_1 = 144/50 = 2.88$은 줄지 않는다. $n_2 \to \infty$에서 둘째 항만 사라지므로
+
+    $$
+    \text{SE} \;\downarrow\; \frac{\sigma_1}{\sqrt{n_1}} = \frac{12}{\sqrt{50}} = 1.697056,
+    \qquad
+    z \;\uparrow\; \frac{4}{1.697056} = 2.357023
+    $$
+
+    이고 $p$의 하한은 $2\bar\Phi(2.357023) = 0.018422$다. **B 학군을 백만 명 조사해도 $p$를 $0.0184$ 아래로 내릴 수 없다.** 고정된 항이 표준오차의 바닥을 만들기 때문이다. 본문에서 "합 안의 큰 쪽이 전체를 지배한다"고 한 말이 이 바닥이다.
+
+    $p < 0.05$에 필요한 $n_2$는 $\text{SE} < 4/1.959964 = 2.040852$에서
+
+    $$
+    \frac{225}{n_2} < 2.040852^2 - 2.88 = 1.285078
+    \implies n_2 > 175.0858
+    $$
+
+    이므로 $n_2 = 176$이다. 총 관측값은 $50 + 176 = 226$개로, (1)의 비례 확장 $100 + 120 = 220$개보다 오히려 많다. **작은 집단을 늘리는 편이 효율적이라는 것이 수로 확인된다.**
+
+    **수치적으로.** 먼저 검정 함수를 만든다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def two_sample_z_test(x_bar, y_bar, sigma1, sigma2, n1, n2,
+                          delta0=0, alternative="two-sided"):
+        """두 평균의 차이에 대한 이표본 z 검정.
+
+        Parameters
+        ----------
+        x_bar, y_bar : float
+            Sample means.
+        sigma1, sigma2 : float
+            Known population standard deviations.
+        n1, n2 : int
+            Sample sizes.
+        delta0 : float
+            Hypothesized difference (default 0).
+        alternative : str
+            'two-sided', 'less', or 'greater'.
+
+        Returns
+        -------
+        z_stat : float
+            Test statistic.
+        p_value : float
+            P-value.
+        """
+        # sigma를 알고 있으므로 표본에서 추정하지 않는다.
+        # 그래서 자유도라는 개념이 없고 표준정규를 그대로 쓴다.
+        se = np.sqrt(sigma1**2 / n1 + sigma2**2 / n2)
+        z_stat = ((x_bar - y_bar) - delta0) / se
+
+        if alternative == "two-sided":
+            p_value = 2 * (1 - stats.norm.cdf(abs(z_stat)))
+        elif alternative == "less":
+            p_value = stats.norm.cdf(z_stat)
+        elif alternative == "greater":
+            p_value = 1 - stats.norm.cdf(z_stat)
+        else:
+            raise ValueError("alternative must be 'two-sided', 'less', or 'greater'")
+
+        return z_stat, p_value
 
 
-# 보기: A 학군 대 B 학군
-z, p = two_sample_z_test(78, 74, 12, 15, 50, 60, alternative="two-sided")
-print(f"z = {z:.3f}, p-value = {p:.3f}")
+    # 보기 1 의 자료
+    z, p = two_sample_z_test(78, 74, 12, 15, 50, 60, alternative="two-sided")
+    print(f"z = {z:.3f}, p-value = {p:.3f}")
+    ```
 
-# 같은 차이 4점을 표본크기만 네 배로 늘려 다시 검정해 본다.
-z4, p4 = two_sample_z_test(78, 74, 12, 15, 200, 240, alternative="two-sided")
-print(f"z = {z4:.3f}, p-value = {p4:.3f}")
-```
+    출력:
 
-출력:
+    ```
+    z = 1.553, p-value = 0.120
+    ```
 
-```
-z = 1.553, p-value = 0.120
-z = 3.107, p-value = 0.002
-```
+    이제 (1)과 (2)의 식을 확인한다.
 
-같은 4점 차이가 표본을 네 배로 늘리자 $p = 0.120$에서 $p = 0.002$로 바뀐다. $z$는 정확히 $\sqrt{4} = 2$배가 되었다. 표준오차가 $1/\sqrt{n}$로 줄기 때문이다.
+    ```python
+    z95 = stats.norm.ppf(0.975)
+    sigma1, sigma2, n1, n2, diff = 12.0, 15.0, 50, 60, 4.0
 
-p-값이 말해 주는 것은 효과의 크기가 아니라 "이 표본크기에서 이만한 차이를 우연으로 보기 어려운가"라는 점을 잘 보여준다. 두 경우의 효과크기는 완전히 같다.
+    # (1) 두 표본을 같은 배수 k 로 늘린다.
+    print("   k    n1    n2       SE        z         p")
+    for k in (1, 2, 3, 4):
+        se = np.sqrt(sigma1**2 / (n1 * k) + sigma2**2 / (n2 * k))
+        z = diff / se
+        print(f"{k:4d} {n1 * k:5d} {n2 * k:5d} {se:8.4f} {z:8.4f}"
+              f"  {2 * stats.norm.sf(z):.6f}")
+    z1 = diff / np.sqrt(sigma1**2 / n1 + sigma2**2 / n2)
+    print(f"\np < 0.05 가 되는 k 의 문턱 = (z_0.025/z_1)^2 = {(z95 / z1)**2:.6f}"
+          f"  →  k = 2")
+
+    # (2) B 학군만 늘린다. n1 은 50 에 묶여 있다.
+    print("\n      n2       SE        z         p")
+    for m in (60, 176, 1000, 10**6):
+        se = np.sqrt(sigma1**2 / n1 + sigma2**2 / m)
+        z = diff / se
+        print(f"{m:8d} {se:8.4f} {z:8.4f}  {2 * stats.norm.sf(z):.6f}")
+    se_inf = sigma1 / np.sqrt(n1)
+    print(f"{'무한':>8} {se_inf:8.4f} {diff / se_inf:8.4f}  "
+          f"{2 * stats.norm.sf(diff / se_inf):.6f}   ← 하한")
+
+    need = sigma2**2 / ((diff / z95)**2 - sigma1**2 / n1)
+    print(f"\np < 0.05 에 필요한 n2 > {need:.4f}  →  n2 = {int(np.ceil(need))}")
+    ```
+
+    출력:
+
+    ```
+       k    n1    n2       SE        z         p
+       1    50    60   2.5749   1.5535  0.120311
+       2   100   120   1.8207   2.1969  0.028025
+       3   150   180   1.4866   2.6907  0.007130
+       4   200   240   1.2874   3.1069  0.001890
+
+    p < 0.05 가 되는 k 의 문턱 = (z_0.025/z_1)^2 = 1.591804  →  k = 2
+
+          n2       SE        z         p
+          60   2.5749   1.5535  0.120311
+         176   2.0392   1.9615  0.049816
+        1000   1.7621   2.2700  0.023207
+     1000000   1.6971   2.3569  0.018427
+          무한   1.6971   2.3570  0.018422   ← 하한
+
+    p < 0.05 에 필요한 n2 > 175.0858  →  n2 = 176
+    ```
+
+    **(1)이 그대로 맞는다.** $k = 4$에서 $z = 3.1069$로 $k = 1$의 $1.5535$의 정확히 두 배이고, $k = 2$에서 $p = 0.028 < 0.05$, $k = 1$에서는 $0.120$이다. 문턱 $1.5918$을 넘는 첫 정수가 2라는 것과 맞는다.
+
+    **(2)도 맞는다.** $n_2 = 176$에서 $p = 0.049816$으로 겨우 $0.05$를 밑돌고, $n_2 = 175$에서는 $0.050017$로 넘는다. $n_2 = 10^6$의 $p = 0.018427$은 해석적 하한 $0.018422$와 소수 다섯째 자리에서야 갈라진다.
+
+    같은 4점 차이를 놓고 $p$가 $0.120$에서 $0.0019$까지 움직인다. **p-값이 말해 주는 것은 효과의 크기가 아니라 "이 표본크기에서 이만한 차이를 우연으로 보기 어려운가"다.** 네 경우의 효과크기는 완전히 같다. 그리고 $n_2$만 늘리는 길에서는 $p$가 아무리 가도 $0.0184$에 걸려 멈춘다. **표본을 늘려서 얻을 수 있는 유의성에는 설계가 정하는 천장이 있다.**
 
 ## 이표본 t-검정과의 관계
 
