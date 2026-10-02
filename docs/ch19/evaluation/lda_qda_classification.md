@@ -83,42 +83,141 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 가지 자료 만들기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 어느 분류기도 넘을 수 없는 천장. 두 시나리오로 범주당 $200$건씩 생성한다. 사전확률은 $0.5$로 같다.
+
+**(1)** 시나리오 A는 두 범주가 공분산을 공유하므로 베이즈 오류율이 **닫힌 꼴**로 나온다. 마할라노비스 거리를 써서 유도하고 값을 구하시오.
+
+**(2)** 시나리오 B는 닫힌 꼴이 없다. 어떻게 구할 것인지 적고 값을 구하시오. 두 천장을 비교하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** 사전확률이 같고 $\boldsymbol\Sigma_0 = \boldsymbol\Sigma_1 = \boldsymbol\Sigma$이면 로그 가능도비가
 
-def generate_shared_cov(n_per_class=200):
-    """공분산이 같은 두 범주.
+    $$
+    \log\frac{f_1(\mathbf x)}{f_0(\mathbf x)}
+    = \left(\mathbf x - \frac{\boldsymbol\mu_0+\boldsymbol\mu_1}{2}\right)^{\!\top}
+      \boldsymbol\Sigma^{-1}(\boldsymbol\mu_1 - \boldsymbol\mu_0)
+    $$
 
-    LDA 의 가정이 정확히 맞는 상황이다. 이때는 LDA 가 QDA 보다 낫다 —
-    추정할 모수가 적어 분산이 작기 때문이다.
-    """
-    cov = [[1.0, 0.5], [0.5, 1.0]]
-    X0 = np.random.multivariate_normal([0, 0], cov, n_per_class)
-    X1 = np.random.multivariate_normal([2, 1.5], cov, n_per_class)
-    X = np.vstack([X0, X1])
-    y = np.array([0] * n_per_class + [1] * n_per_class)
-    return X, y
+    로 $\mathbf x$의 **일차함수**가 된다(이차항이 서로 소거된다). 베이즈 규칙은 이 값이 양수면 범주 $1$이다.
 
-def generate_diff_cov(n_per_class=200):
-    """공분산이 다른 두 범주.
+    이제 $Y = 0$일 때 $\mathbf x \sim N(\boldsymbol\mu_0, \boldsymbol\Sigma)$이므로 위 일차통계량 $T$는 정규분포를 따르고
 
-    LDA 의 가정이 깨진다. 경계가 직선이어야 할 까닭이 없으므로, 곡선
-    경계를 그릴 수 있는 QDA 가 유리해진다.
-    """
-    cov0 = [[1.0, 0.0], [0.0, 0.3]]
-    cov1 = [[0.3, 0.0], [0.0, 2.0]]
-    X0 = np.random.multivariate_normal([0, 0], cov0, n_per_class)
-    X1 = np.random.multivariate_normal([1.5, 1.5], cov1, n_per_class)
-    X = np.vstack([X0, X1])
-    y = np.array([0] * n_per_class + [1] * n_per_class)
-    return X, y
-```
+    $$
+    E[T \mid Y=0] = -\tfrac12\Delta^2,
+    \qquad
+    \operatorname{Var}(T) = \Delta^2,
+    \qquad
+    \Delta^2 := (\boldsymbol\mu_1-\boldsymbol\mu_0)^\top\boldsymbol\Sigma^{-1}(\boldsymbol\mu_1-\boldsymbol\mu_0)
+    $$
+
+    이다. 따라서 오분류 확률은
+
+    $$
+    P(T > 0 \mid Y = 0)
+    = P\!\left(Z > \frac{\Delta^2/2}{\Delta}\right)
+    = \Phi\!\left(-\frac{\Delta}{2}\right)
+    $$
+
+    이고 대칭이라 $Y = 1$ 쪽도 같으므로 **베이즈 오류율이 $\Phi(-\Delta/2)$**다.
+
+    값을 넣는다. $\boldsymbol\Sigma^{-1} = \frac{1}{0.75}\begin{pmatrix}1 & -0.5\\ -0.5 & 1\end{pmatrix}$이고 $\boldsymbol\mu_1 - \boldsymbol\mu_0 = (2,\ 1.5)^\top$이므로
+
+    $$
+    \Delta^2 = \frac{1}{0.75}\bigl[2^2 - 2(0.5)(2)(1.5) + 1.5^2\bigr]
+    = \frac{4 - 3 + 2.25}{0.75} = \frac{3.25}{0.75} = 4.33333
+    $$
+
+    $$
+    \Delta = 2.081666,
+    \qquad
+    \Phi(-1.040833) = 0.148977
+    $$
+
+    **시나리오 A의 베이즈 정확도는 $0.851023$이다.**
+
+    **(2) 해석적으로.** 공분산이 다르면 로그 가능도비에 이차항이 남아 $T$가 정규분포를 따르지 않는다(이차형식이라 $\chi^2$들의 일차결합이다). 닫힌 꼴 대신 **$\min$의 적분**을 쓴다. 사전확률이 같을 때 베이즈 오류율은
+
+    $$
+    \text{err} = \tfrac12\int_{\mathbb R^2} \min\bigl(f_0(\mathbf x),\, f_1(\mathbf x)\bigr)\,d\mathbf x
+    $$
+
+    이다(각 점에서 더 작은 밀도 쪽이 곧 틀리는 몫이다). 이차원이므로 격자 수치적분으로 충분히 정확하게 구할 수 있다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    np.random.seed(42)
+
+    def generate_shared_cov(n_per_class=200):
+        """공분산이 같은 두 범주.
+
+        LDA 의 가정이 정확히 맞는 상황이다. 이때는 LDA 가 QDA 보다 낫다 —
+        추정할 모수가 적어 분산이 작기 때문이다.
+        """
+        cov = [[1.0, 0.5], [0.5, 1.0]]
+        X0 = np.random.multivariate_normal([0, 0], cov, n_per_class)
+        X1 = np.random.multivariate_normal([2, 1.5], cov, n_per_class)
+        X = np.vstack([X0, X1])
+        y = np.array([0] * n_per_class + [1] * n_per_class)
+        return X, y
+
+    def generate_diff_cov(n_per_class=200):
+        """공분산이 다른 두 범주.
+
+        LDA 의 가정이 깨진다. 경계가 직선이어야 할 까닭이 없으므로, 곡선
+        경계를 그릴 수 있는 QDA 가 유리해진다.
+        """
+        cov0 = [[1.0, 0.0], [0.0, 0.3]]
+        cov1 = [[0.3, 0.0], [0.0, 2.0]]
+        X0 = np.random.multivariate_normal([0, 0], cov0, n_per_class)
+        X1 = np.random.multivariate_normal([1.5, 1.5], cov1, n_per_class)
+        X = np.vstack([X0, X1])
+        y = np.array([0] * n_per_class + [1] * n_per_class)
+        return X, y
+
+
+    from scipy import stats
+
+    # 시나리오 A: 닫힌 꼴.
+    S = np.array([[1.0, 0.5], [0.5, 1.0]])
+    d = np.array([2.0, 1.5])
+    delta2 = d @ np.linalg.inv(S) @ d
+    errA = stats.norm.cdf(-np.sqrt(delta2) / 2)
+    print(f"A: Delta^2 = {delta2:.5f}, Delta = {np.sqrt(delta2):.6f}")
+    print(f"A: 베이즈 오류율 = Phi(-{np.sqrt(delta2) / 2:.6f}) = {errA:.6f}"
+          f"   정확도 = {1 - errA:.6f}")
+
+    # 시나리오 B: 격자 수치적분.  err = 0.5 * ∫ min(f0, f1)
+    g = np.linspace(-8, 10, 801)
+    XX, YY = np.meshgrid(g, g)
+    P = np.dstack([XX, YY])
+    h = g[1] - g[0]
+    f0 = stats.multivariate_normal([0, 0], [[1, 0], [0, 0.3]]).pdf(P)
+    f1 = stats.multivariate_normal([1.5, 1.5], [[0.3, 0], [0, 2.0]]).pdf(P)
+    errB = 0.5 * np.sum(np.minimum(f0, f1)) * h * h
+    print(f"B: 격자의 질량 합 = {0.5 * np.sum(f0 + f1) * h * h:.6f}  (1 이어야 한다)")
+    print(f"B: 베이즈 오류율 = {errB:.6f}   정확도 = {1 - errB:.6f}")
+    ```
+
+    출력:
+
+    ```
+    A: Delta^2 = 4.33333, Delta = 2.081666
+    A: 베이즈 오류율 = Phi(-1.040833) = 0.148977   정확도 = 0.851023
+    B: 격자의 질량 합 = 1.000000  (1 이어야 한다)
+    B: 베이즈 오류율 = 0.106328   정확도 = 0.893672
+    ```
+
+    유도한 $\Delta^2 = 4.33333$과 $\Phi(-1.040833) = 0.148977$이 맞고, 격자가 밀도의 질량을 $1.000000$으로 담아내므로 수치적분도 믿을 만하다. 격자를 $401$점에서 $2001$점까지 바꿔 보아도 $0.106323$에서 $0.106328$ 사이로만 움직인다.
+
+    **두 천장이 뜻밖에도 B 쪽이 더 높다.** 시나리오 B의 베이즈 정확도 $0.8937$이 A의 $0.8510$보다 $0.043$ 크다. 평균 사이의 거리는 B가 $\lVert(1.5,1.5)\rVert = 2.12$로 A의 $\lVert(2,1.5)\rVert = 2.5$보다 **가까운데도** 그렇다. 까닭은 B에서 범주 $0$이 가로로 납작하고($\sigma_2^2 = 0.3$) 범주 $1$이 세로로 길쭉해($\sigma_1^2 = 0.3$) 두 구름이 서로 다른 방향으로 퍼지므로, **곡선 경계로 가르면 겹치는 부분이 오히려 적기 때문**이다.
+
+    그러므로 뒤의 보기 2에서 분류기들의 성적을 읽을 때 **시나리오 B의 수가 더 작으면 그것은 문제가 더 어려워서가 아니다.** 천장은 B가 더 높은데 실제 성적이 더 낮다면, 그 차이는 분류기가 천장에 닿지 못한 몫이다.
 
 !!! warning "난수 씨앗이 함수 밖에 있다"
     `np.random.seed(42)`는 모듈 수준에서 한 번만 호출되고 생성 함수 안에는 없다. 따라서 두
@@ -131,124 +230,220 @@ def generate_diff_cov(n_per_class=200):
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 네 분류기의 교차검증 정확도
+**보기 2.** <span class="diff easy" title="쉬움"></span> LDA와 QDA가 같은 점수를 받았다. 네 분류기를 두 시나리오에서 $10$겹 교차검증으로 견준다.
+
+**(1)** $p = 2$, $K = 2$에서 LDA와 QDA가 추정하는 **모수의 개수**를 각각 세고, 일반적인 $p$에서 공분산 모수가 몇 배 차이 나는지 적으시오.
+
+**(2)** 출력에서 LDA와 QDA가 두 시나리오 모두 소수 넷째 자리까지 **같은 정확도**를 받았다. 이것이 **같은 예측을 해서**인가, 아니면 우연인가? 확인하고, 보기 1의 천장과도 견주시오.
 
 </div>
 
-```python
-from sklearn.discriminant_analysis import (
-    LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis,
-)
-from sklearn.naive_bayes import GaussianNB
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_val_score
+??? success "풀이"
 
-# 네 분류기를 같은 자료에 돌린다. 앞의 셋은 생성모형(각 범주의 분포를
-# 모형화한 뒤 베이즈 정리로 뒤집는다)이고, 로지스틱 회귀만 판별모형
-# (경계를 바로 추정한다)이다.
-classifiers = {
-    "LDA": LinearDiscriminantAnalysis(),
-    "QDA": QuadraticDiscriminantAnalysis(),
-    "Naive Bayes": GaussianNB(),
-    "Logistic Reg": LogisticRegression(),
-}
+    **(1) 해석적으로.** 세어 보면 이렇다. 사전확률은 $\pi_0 + \pi_1 = 1$이라 자유모수가 $K - 1 = 1$개다.
 
-for scenario_name, (X, y) in [
-    ("Shared Cov", generate_shared_cov()),
-    ("Diff Cov", generate_diff_cov()),
-]:
-    print(f"\n--- {scenario_name} ---")
-    for name, clf in classifiers.items():
-        clf.fit(X, y)
-        cv_acc = cross_val_score(clf, X, y, cv=10,
-                                  scoring="accuracy").mean()
-        print(f"  {name:15s}: 10-fold CV accuracy = {cv_acc:.4f}")
-```
+    | | 평균 | 공분산 | 사전확률 | 합 |
+    |---|---|---|---|---|
+    | LDA | $Kp = 4$ | $\dfrac{p(p+1)}{2} = 3$ | $1$ | $\mathbf{8}$ |
+    | QDA | $Kp = 4$ | $K\dfrac{p(p+1)}{2} = 6$ | $1$ | $\mathbf{11}$ |
 
-출력:
+    **공분산 쪽만 $K = 2$배 차이 난다.** 일반적으로 LDA는 $p(p+1)/2$개, QDA는 $K\,p(p+1)/2$개이므로 $p$가 커지면 격차가 빠르게 벌어진다. $p = 50$, $K = 2$라면 $1275$개 대 $2550$개다.
 
-```
---- Shared Cov ---
-  LDA            : 10-fold CV accuracy = 0.8825
-  QDA            : 10-fold CV accuracy = 0.8825
-  Naive Bayes    : 10-fold CV accuracy = 0.8800
-  Logistic Reg   : 10-fold CV accuracy = 0.8850
+    **여기서 두 방법의 맞바꿈이 나온다.** 공분산이 실제로 같으면 LDA는 **편향 없이** 모수를 적게 쓰므로 분산이 작아 이긴다. 공분산이 다르면 LDA는 **구조적으로 틀린** 선형경계만 그릴 수 있어 편향이 생기고, QDA가 모수를 더 쓰는 대가로 그 편향을 없앤다. 그러므로 시나리오 A에서는 LDA가, B에서는 QDA가 유리해야 한다.
 
---- Diff Cov ---
-  LDA            : 10-fold CV accuracy = 0.8575
-  QDA            : 10-fold CV accuracy = 0.8575
-  Naive Bayes    : 10-fold CV accuracy = 0.8475
-  Logistic Reg   : 10-fold CV accuracy = 0.8600
-```
+    **(2) 수치적으로.**
 
-실행 결과는 다음과 같다.
+    ```python
+    from sklearn.discriminant_analysis import (
+        LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis,
+    )
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import cross_val_score
 
-| 분류기 | 시나리오 A(공유 공분산) | 시나리오 B(다른 공분산) |
-|---|---|---|
-| LDA | $0.8825$ | $0.8575$ |
-| QDA | $0.8825$ | $0.8575$ |
-| 나이브 베이즈 | $0.8800$ | $0.8475$ |
-| 로지스틱 회귀 | $0.8850$ | $0.8600$ |
+    # 네 분류기를 같은 자료에 돌린다. 앞의 셋은 생성모형(각 범주의 분포를
+    # 모형화한 뒤 베이즈 정리로 뒤집는다)이고, 로지스틱 회귀만 판별모형
+    # (경계를 바로 추정한다)이다.
+    classifiers = {
+        "LDA": LinearDiscriminantAnalysis(),
+        "QDA": QuadraticDiscriminantAnalysis(),
+        "Naive Bayes": GaussianNB(),
+        "Logistic Reg": LogisticRegression(),
+    }
+
+    for scenario_name, (X, y) in [
+        ("Shared Cov", generate_shared_cov()),
+        ("Diff Cov", generate_diff_cov()),
+    ]:
+        print(f"\n--- {scenario_name} ---")
+        for name, clf in classifiers.items():
+            clf.fit(X, y)
+            cv_acc = cross_val_score(clf, X, y, cv=10,
+                                      scoring="accuracy").mean()
+            print(f"  {name:15s}: 10-fold CV accuracy = {cv_acc:.4f}")
+
+    # LDA 와 QDA 가 정말 같은 예측을 하는가?
+    from sklearn.model_selection import cross_val_predict
+
+    np.random.seed(42)
+    for scenario_name, (X, y) in [
+        ("Shared Cov", generate_shared_cov()),
+        ("Diff Cov", generate_diff_cov()),
+    ]:
+        pl = cross_val_predict(LinearDiscriminantAnalysis(), X, y, cv=10)
+        pq = cross_val_predict(QuadraticDiscriminantAnalysis(), X, y, cv=10)
+        print(f"\n{scenario_name}: LDA 와 QDA 의 CV 예측이 엇갈린 관측 = "
+              f"{int((pl != pq).sum())} / {len(y)}")
+        print(f"  LDA 오류 {int((pl != y).sum())}건, "
+              f"QDA 오류 {int((pq != y).sum())}건")
+    ```
+
+    출력:
+
+    ```
+    --- Shared Cov ---
+      LDA            : 10-fold CV accuracy = 0.8825
+      QDA            : 10-fold CV accuracy = 0.8825
+      Naive Bayes    : 10-fold CV accuracy = 0.8800
+      Logistic Reg   : 10-fold CV accuracy = 0.8850
+
+    --- Diff Cov ---
+      LDA            : 10-fold CV accuracy = 0.8575
+      QDA            : 10-fold CV accuracy = 0.8575
+      Naive Bayes    : 10-fold CV accuracy = 0.8475
+      Logistic Reg   : 10-fold CV accuracy = 0.8600
+
+    Shared Cov: LDA 와 QDA 의 CV 예측이 엇갈린 관측 = 0 / 400
+      LDA 오류 47건, QDA 오류 47건
+
+    Diff Cov: LDA 와 QDA 의 CV 예측이 엇갈린 관측 = 18 / 400
+      LDA 오류 57건, QDA 오류 57건
+    ```
+
+    | 분류기 | 시나리오 A(공유 공분산) | 시나리오 B(다른 공분산) |
+    |---|---|---|
+    | LDA | $0.8825$ | $0.8575$ |
+    | QDA | $0.8825$ | $0.8575$ |
+    | 나이브 베이즈 | $0.8800$ | $0.8475$ |
+    | 로지스틱 회귀 | $0.8850$ | $0.8600$ |
+    | **베이즈 한계 (보기 1)** | $0.8510$ | $0.8937$ |
+
+    **두 동점의 성격이 완전히 다르다.**
+
+    시나리오 A에서는 **같은 예측을 해서** 같은 점수가 나왔다. $400$건 전부에서 LDA와 QDA의 교차검증 예측이 일치한다. 공분산이 실제로 같으므로 QDA가 추정한 두 공분산행렬이 서로 비슷해지고, 이차항이 자료가 놓인 구간에서는 거의 사라져 경계가 사실상 직선이 되기 때문이다. **QDA가 모수 세 개를 더 썼는데 아무 데도 쓰지 않은 셈이다.**
+
+    시나리오 B에서는 **우연이다.** 두 분류기의 예측이 $400$건 가운데 $18$건에서 엇갈리는데, 그 $18$건 중 아홉 건씩 각자 맞고 틀려 오류 수가 $57$로 똑같아졌다. **같은 점수를 받았다고 같은 분류기인 것이 아니다.** 소수 넷째 자리까지 같은 수를 보고 "둘이 똑같다"고 읽으면 안 되며, 예측을 직접 맞춰 봐야 알 수 있다.
+
+    **(1)에서 예상한 "B에서는 QDA가 이긴다"는 이 자료에서 나타나지 않았다.** $18$건의 엇갈림이 정확히 반씩 갈린 것은 운이지만, QDA가 뚜렷이 앞서지 못한 것 자체는 설명할 수 있다. 범주당 $200$건으로 $2\times2$ 공분산 두 개를 따로 추정하면 분산이 커져, 편향을 없앤 이득을 상당 부분 까먹는다. 보기 3의 그림은 **다른 난수로 생성된 자료**를 쓰는데, 거기서는 QDA $0.900$ 대 LDA $0.873$으로 예상대로 갈린다. **표본 하나로 두 방법의 우열을 가리기에는 $400$건이 모자라다.**
+
+    마지막으로 **베이즈 한계와 견주면 두 시나리오의 평가가 뒤집힌다.** 시나리오 A의 $0.8825$는 천장 $0.8510$을 **넘어선다.** 분류기가 신통해서가 아니라 이 표본 하나가 운이 좋았기 때문이다($\sqrt{0.851\times0.149/400} = 0.0178$이므로 $1.8$ 표준오차다). 반대로 시나리오 B의 $0.8575$는 천장 $0.8937$에 $0.036$, 곧 $2.3$ 표준오차만큼 못 미친다. **날값만 보면 A가 더 잘한 것 같지만, 천장까지의 거리로 보면 B 쪽이 훨씬 아쉽다.**
 
 ## 결정경계 시각화
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 결정경계 그리기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 경계를 보아야 알 수 있는 것. 네 분류기의 결정경계를 두 시나리오에 대해 $2 \times 4$로 그린다.
+
+**(1)** 아래 그림의 교차검증 정확도가 보기 2의 표와 **다르다.** 왜 그런가? 그리고 그림의 수로는 QDA와 LDA의 우열이 어떻게 갈리는가?
+
+**(2)** 아랫줄 QDA 칸의 **오른쪽 끝에 떨어져 있는 붉은 영역**은 무엇인가. 그림으로만 알 수 있는 이 결함을 수로 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
+??? success "풀이"
 
-def plot_decision_boundary(ax, clf, X, y, title):
-    """결정경계를 격자로 칠하고 그 위에 자료를 흩뿌린다.
+    유도할 답이 있는 문제가 아니다. **그림이 보여 주는 것과 숫자 표가 놓치는 것**이 이 보기의 전부다.
 
-    LDA 는 직선, QDA 는 곡선 경계를 그린다. 나이브 베이즈는 변수 사이의
-    상관을 아예 없다고 보므로 축에 나란한 모양이 나온다.
-    """
-    h = 0.05
-    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-                          np.arange(y_min, y_max, h))
-    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
-    cmap_light = ListedColormap(["#FFAAAA", "#AAAAFF"])
-    ax.contourf(xx, yy, Z, alpha=0.3, cmap=cmap_light)
-    ax.scatter(X[y == 0, 0], X[y == 0, 1], c="red", s=10,
-               edgecolors="none", alpha=0.6, label="Class 0")
-    ax.scatter(X[y == 1, 0], X[y == 1, 1], c="blue", s=10,
-               edgecolors="none", alpha=0.6, label="Class 1")
-    ax.set_title(title, fontsize=10)
-    ax.legend(fontsize=7, loc="upper left")
+    ```python
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import ListedColormap
 
-fig, axes = plt.subplots(2, 4, figsize=(18, 9))
-scenarios = {
-    "Shared Covariance": generate_shared_cov(),
-    "Different Covariances": generate_diff_cov(),
-}
-for row, (scenario_name, (X, y)) in enumerate(scenarios.items()):
-    for col, (name, clf) in enumerate(classifiers.items()):
-        clf.fit(X, y)
-        cv_acc = cross_val_score(clf, X, y, cv=10,
-                                  scoring="accuracy").mean()
-        plot_decision_boundary(
-            axes[row, col], clf, X, y,
-            f"{name}\nCV acc = {cv_acc:.3f}")
-        if col == 0:
-            axes[row, col].set_ylabel(scenario_name, fontsize=11)
+    def plot_decision_boundary(ax, clf, X, y, title):
+        """결정경계를 격자로 칠하고 그 위에 자료를 흩뿌린다.
 
-plt.suptitle("Generative Classifiers: Decision Boundaries", fontsize=13)
-plt.tight_layout()
-plt.show()
-```
+        LDA 는 직선, QDA 는 곡선 경계를 그린다. 나이브 베이즈는 변수 사이의
+        상관을 아예 없다고 보므로 축에 나란한 모양이 나온다.
+        """
+        h = 0.05
+        x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+        y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                              np.arange(y_min, y_max, h))
+        Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+        Z = Z.reshape(xx.shape)
+        cmap_light = ListedColormap(["#FFAAAA", "#AAAAFF"])
+        ax.contourf(xx, yy, Z, alpha=0.3, cmap=cmap_light)
+        ax.scatter(X[y == 0, 0], X[y == 0, 1], c="red", s=10,
+                   edgecolors="none", alpha=0.6, label="Class 0")
+        ax.scatter(X[y == 1, 0], X[y == 1, 1], c="blue", s=10,
+                   edgecolors="none", alpha=0.6, label="Class 1")
+        ax.set_title(title, fontsize=10)
+        ax.legend(fontsize=7, loc="upper left")
 
-![생성적 분류기의 결정경계](./img/lda_qda_classification_156.png)
+    fig, axes = plt.subplots(2, 4, figsize=(18, 9))
+    scenarios = {
+        "Shared Covariance": generate_shared_cov(),
+        "Different Covariances": generate_diff_cov(),
+    }
+    for row, (scenario_name, (X, y)) in enumerate(scenarios.items()):
+        for col, (name, clf) in enumerate(classifiers.items()):
+            clf.fit(X, y)
+            cv_acc = cross_val_score(clf, X, y, cv=10,
+                                      scoring="accuracy").mean()
+            plot_decision_boundary(
+                axes[row, col], clf, X, y,
+                f"{name}\nCV acc = {cv_acc:.3f}")
+            if col == 0:
+                axes[row, col].set_ylabel(scenario_name, fontsize=11)
 
-그림에서 확인할 것은 정확도 숫자가 아니라 **경계의 모양**이다. LDA와 로지스틱 회귀는 직선을,
-QDA는 곡선을, 나이브 베이즈는 축에 정렬된 곡선을 그린다.
+    plt.suptitle("Generative Classifiers: Decision Boundaries", fontsize=13)
+    plt.tight_layout()
+    plt.show()
+
+    # 아랫줄 QDA 의 오른쪽 붉은 섬을 수로 확인한다.
+    X, y = scenarios["Different Covariances"]
+    qda = QuadraticDiscriminantAnalysis().fit(X, y)
+    lda = LinearDiscriminantAnalysis().fit(X, y)
+    xs = np.linspace(1, 6, 2001)
+    line = np.c_[xs, np.zeros_like(xs)]
+    for nm, clf in [("LDA", lda), ("QDA", qda)]:
+        pr = clf.predict(line)
+        flips = np.where(np.diff(pr) != 0)[0]
+        print(f"{nm}: y = 0 선을 따라가며 예측이 바뀌는 x = "
+              f"{np.round(xs[flips], 3)}")
+    print(f"자료 중 x1 > 3 인 점 = {int((X[:, 0] > 3).sum())}개,  "
+          f"x1 > 2.5 인 점 = {int((X[:, 0] > 2.5).sum())}개")
+    ```
+
+    출력:
+
+    ```
+    LDA: y = 0 선을 따라가며 예측이 바뀌는 x = [1.088]
+    QDA: y = 0 선을 따라가며 예측이 바뀌는 x = [1.358 3.38 ]
+    자료 중 x1 > 3 인 점 = 1개,  x1 > 2.5 인 점 = 9개
+    ```
+
+    ![생성적 분류기의 결정경계](./img/lda_qda_classification_156.png)
+
+    **(1) 그림의 자료가 보기 2의 자료와 다르기 때문이다.** 바로 위 경고 상자가 말하듯 `np.random.seed(42)`가 모듈 수준에 한 번만 있고 생성 함수 안에는 없다. 보기 2가 `generate_shared_cov()`와 `generate_diff_cov()`를 한 번씩 부르며 난수를 소비했으므로, 이 블록에서 다시 부르면 **두 번째 뽑기**가 나온다. 같은 코드인데 다른 자료다.
+
+    그 자료에서 윗줄은 네 분류기가 모두 $0.875$로 같고, 아랫줄은
+
+    $$
+    \text{QDA } 0.900 \;>\; \text{나이브 베이즈 } 0.890 \;>\; \text{LDA } 0.873 \;>\; \text{로지스틱 } 0.870
+    $$
+
+    으로 **교과서가 말하는 순서 그대로 갈린다.** 공분산이 다를 때 곡선 경계를 그릴 수 있는 쪽이 이기고, 직선밖에 못 그리는 LDA와 로지스틱 회귀가 뒤로 밀린다. 보기 2의 자료에서 QDA가 이기지 못한 것은 이론이 틀려서가 아니라 **표본 하나가 그렇게 나왔을 뿐**임을 이 그림이 보여 준다. 숫자 표 하나에 기대지 말아야 하는 이유다.
+
+    **(2) 그 붉은 섬은 QDA의 이차경계가 자료 밖에서 되돌아온 자국이다.** 로그 가능도비가 $\mathbf x$의 이차식이므로 결정경계는 원뿔곡선이고, 여기서는 쌍곡선처럼 두 조각으로 갈라져 **오른쪽 멀리에서 다시 범주 $0$ 쪽으로 넘어간다.** 출력이 그것을 정확히 집어낸다. 가로선 $x_2 = 0$을 따라가면 LDA는 $x_1 = 1.088$ 한 곳에서만 예측이 바뀌는데, QDA는 $x_1 = 1.358$에서 범주 $1$로 넘어갔다가 $x_1 = 3.380$에서 **다시 범주 $0$으로 돌아온다.**
+
+    까닭은 분산의 비다. 범주 $0$은 $x_1$ 방향 분산이 $1.0$, 범주 $1$은 $0.3$이라, $x_1$이 아주 커지면 "퍼진 쪽"인 범주 $0$의 밀도가 "좁은 쪽"인 범주 $1$의 밀도보다 커진다. 가우스 밀도의 꼬리는 $\exp(-x^2/2\sigma^2)$이므로 **$\sigma$가 큰 쪽이 언제나 멀리서 이긴다.** QDA는 그 사실을 성실히 반영한 것이고, 모형 안에서는 옳다.
+
+    **문제는 그 영역에 자료가 없다는 것이다.** $x_1 > 3$인 관측이 통틀어 $1$개, $x_1 > 2.5$라 해도 $9$개뿐이다. 곧 **그 섬은 자료가 말해 준 것이 아니라 정규분포 가정을 외삽한 결과**다. 비슷한 모양이 나이브 베이즈 칸에도 나타난다(그쪽도 범주별 분산을 따로 추정하므로 경계가 이차다).
+
+    이것이 표로는 결코 알 수 없고 그림으로만 보이는 것이다. 교차검증 정확도는 자료가 있는 곳에서만 재므로 이 섬에 아무런 벌점도 주지 않는다. **배치한 뒤 $x_1 = 4$인 관측이 들어오면 모형이 조용히 범주 $0$이라고 답한다.** 생성 분류기를 쓸 때 결정경계를 반드시 그려 보아야 하는 이유이며, 경계가 자료 범위를 벗어난 곳에서 무엇을 하는지는 눈으로 보기 전에는 알 수 없다.
+
+    덧붙여 모양 자체도 읽어 둘 만하다. **LDA와 로지스틱 회귀는 직선, QDA는 자유로운 곡선, 나이브 베이즈는 축에 정렬된 곡선**을 그린다. 윗줄 나이브 베이즈 칸의 경계가 QDA 칸과 미묘하게 다른 것은 상관계수 $0.5$를 $0$으로 보도록 강제했기 때문이다.
 
 ## 해석
 

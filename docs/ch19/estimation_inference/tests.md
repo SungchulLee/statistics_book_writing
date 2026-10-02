@@ -122,79 +122,166 @@ $B = \operatorname{diag}(\hat p_i(1-\hat p_i))$가 0으로 가고, $(A^TBA)^{-1}
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Wald 검정과 가능도비 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 여기서는 둘이 같고 저기서는 다섯 배 갈린다. 설명변수 셋 가운데 $x_3$만 참 계수가 $0$인 자료를 $n = 500$ 생성해 두 검정을 돌린다. 결과는 $W^2 = z^2 = 1.5608$, $\Lambda = 1.5719$로 거의 같다.
+
+**(1)** 바로 위 그림의 $\hat\beta_1 = 6.78$ 자리에서는 $\Lambda = 90.22$, $W^2 = 16.81$로 다섯 배 넘게 갈렸다. 왜 여기서는 같고 거기서는 다른가. 테일러 전개의 **오차 차수**로 설명하시오.
+
+**(2)** 요약표의 `LLR p-value: 1.943e-30`을 `Log-Likelihood`와 `LL-Null` 두 수만으로 재현하고 자유도를 정하시오. 또 네 자리의 $\Lambda/W^2$를 모아 $\lvert\hat\beta\rvert$와 함께 커지는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import statsmodels.api as sm
-from scipy import stats
+??? success "풀이"
 
-# 설명변수 셋 중 마지막 하나는 반응변수와 무관하게 만든다
-rng = np.random.default_rng(0)
-n = 500
-X = rng.normal(0, 1, size=(n, 3))
-logit = -0.5 + 1.2 * X[:, 0] - 0.8 * X[:, 1] + 0.0 * X[:, 2]
-y = (rng.random(n) < 1 / (1 + np.exp(-logit))).astype(int)
+    **(1) 해석적으로.** 관심모수 $\beta_j$에 대한 프로파일 로그가능도를 최대점 $\hat\beta_j$ 둘레에서 **세 항까지** 전개한다. 일차항은 $\hat\beta_j$가 최대점이라 사라지므로
 
-# 전체 모형을 적합한다. 세 번째 계수는 참으로 0 이다.
-X_full = sm.add_constant(X)
-model_full = sm.Logit(y, X_full).fit(disp=0)
+    $$
+    \ell(\beta) = \ell(\hat\beta)
+    - \tfrac12\,\mathcal I(\hat\beta)\,(\beta - \hat\beta)^2
+    + \tfrac16\,\ell'''(\tilde\beta)\,(\beta - \hat\beta)^3
+    + \cdots
+    $$
+
+    이다. 검정은 $\beta = 0$에서 값을 읽으므로 $(\beta - \hat\beta) = -\hat\beta$를 넣으면
+
+    $$
+    \Lambda = -2\bigl[\ell(0) - \ell(\hat\beta)\bigr]
+    = \underbrace{\mathcal I(\hat\beta)\,\hat\beta^2}_{= \;W^2}
+    \;+\; \tfrac13\,\ell'''(\tilde\beta)\,\hat\beta^3 + \cdots
+    $$
+
+    를 얻는다. 둘째 항을 첫째 항으로 나누면
+
+    $$
+    \frac{\Lambda}{W^2} = 1 + O\bigl(\hat\beta\bigr)
+    $$
+
+    **곧 두 통계량의 상대차는 $\hat\beta$의 크기에 비례해 커진다.** 왈드는 $\hat\beta$ 자리에서 그린 포물선을 $0$까지 **외삽**하는 것이고, 외삽 거리가 바로 $\lvert\hat\beta\rvert$다. 가까우면 포물선이 잘 맞고 멀면 어긋난다.
+
+    이 자료에서 $\hat\beta_3 = -0.1287$은 $0$에서 거의 떨어져 있지 않으므로 외삽할 거리가 없다시피 하다. 반면 $\hat\beta_1 = 6.78$이면 **$50$배 넘게 먼 곳까지 외삽**하는 셈이라 포물선이 실제 곡선을 전혀 따라가지 못한다.
+
+    한 가지는 분명히 해 두어야 한다. **위 전개는 "상대차가 $\hat\beta$와 함께 커진다"까지만 말해 주고 얼마나 커지는지는 말해 주지 않는다.** $\hat\beta$가 커지면 세 항 전개 자체가 무의미해지기 때문이다. $\Lambda/W^2$가 얼마가 될지는 계산해 보는 수밖에 없다.
+
+    **(2) 해석적으로.** 요약표의 `LLR`은 세 설명변수를 **한꺼번에** 뺀 영모형과의 비교이므로 자유도가 $3$이다.
+
+    $$
+    \Lambda_{\text{전체}} = -2\bigl[(-340.15) - (-269.48)\bigr] = -2 \times (-70.67) = 141.34
+    $$
+
+    $$
+    p = P(\chi^2_3 \ge 141.34) = 1.943\times10^{-30}
+    $$
+
+    반면 $x_3$ 하나만 두고 하는 검정은 자유도가 $1$이고, 그것이 출력 마지막 두 줄이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import statsmodels.api as sm
+    from scipy import stats
+
+    # 설명변수 셋 중 마지막 하나는 반응변수와 무관하게 만든다
+    rng = np.random.default_rng(0)
+    n = 500
+    X = rng.normal(0, 1, size=(n, 3))
+    logit = -0.5 + 1.2 * X[:, 0] - 0.8 * X[:, 1] + 0.0 * X[:, 2]
+    y = (rng.random(n) < 1 / (1 + np.exp(-logit))).astype(int)
+
+    # 전체 모형을 적합한다. 세 번째 계수는 참으로 0 이다.
+    X_full = sm.add_constant(X)
+    model_full = sm.Logit(y, X_full).fit(disp=0)
 
 
-def print_summary(res):
-    """summary()의 Date/Time 칸은 실행할 때마다 달라지므로 비우고 출력한다."""
-    lines = []
-    for line in str(res.summary()).split("\n"):
-        if line.startswith(("Date:", "Time:")):
-            lines.append(line[:19].ljust(38) + line[38:])
-        else:
-            lines.append(line)
-    print("\n".join(lines))
+    def print_summary(res):
+        """summary()의 Date/Time 칸은 실행할 때마다 달라지므로 비우고 출력한다."""
+        lines = []
+        for line in str(res.summary()).split("\n"):
+            if line.startswith(("Date:", "Time:")):
+                lines.append(line[:19].ljust(38) + line[38:])
+            else:
+                lines.append(line)
+        print("\n".join(lines))
 
 
-# statsmodels 의 출력표는 기본으로 Wald 검정을 보여 준다. 계수를 그
-# 표준오차로 나눈 값이다.
-print_summary(model_full)
+    # statsmodels 의 출력표는 기본으로 Wald 검정을 보여 준다. 계수를 그
+    # 표준오차로 나눈 값이다.
+    print_summary(model_full)
 
-# 가능도비 검정은 변수를 뺀 모형과 넣은 모형의 로그가능도를 견준다.
-# Wald 는 한 모형만 적합하면 되지만, 가능도비는 두 번 적합해야 한다.
-# 대신 표본이 작거나 계수가 클 때 가능도비 쪽이 더 믿을 만하다.
-model_restricted = sm.Logit(y, X_full[:, :-1]).fit(disp=0)
-lr_stat = -2 * (model_restricted.llf - model_full.llf)
-p_value = stats.chi2.sf(lr_stat, df=1)
+    # 가능도비 검정은 변수를 뺀 모형과 넣은 모형의 로그가능도를 견준다.
+    # Wald 는 한 모형만 적합하면 되지만, 가능도비는 두 번 적합해야 한다.
+    # 대신 표본이 작거나 계수가 클 때 가능도비 쪽이 더 믿을 만하다.
+    model_restricted = sm.Logit(y, X_full[:, :-1]).fit(disp=0)
+    lr_stat = -2 * (model_restricted.llf - model_full.llf)
+    p_value = stats.chi2.sf(lr_stat, df=1)
 
-# z^2 과 가능도비 통계량이 비슷하게 나오는지 본다. 표본이 크면 둘이
-# 같은 값으로 다가간다(점근적으로 동등하다).
-wald_z = model_full.tvalues[-1]
-print(f"Wald z = {wald_z:.4f}, z^2 = {wald_z**2:.4f}, p = {model_full.pvalues[-1]:.4f}")
-print(f"LRT  = {lr_stat:.4f}, p = {p_value:.4f}")
-```
+    # z^2 과 가능도비 통계량이 비슷하게 나오는지 본다. 표본이 크면 둘이
+    # 같은 값으로 다가간다(점근적으로 동등하다).
+    wald_z = model_full.tvalues[-1]
+    print(f"Wald z = {wald_z:.4f}, z^2 = {wald_z**2:.4f}, p = {model_full.pvalues[-1]:.4f}")
+    print(f"LRT  = {lr_stat:.4f}, p = {p_value:.4f}")
 
-출력:
+    # 요약표의 LLR 을 두 수로 되살린다 (자유도 3).
+    ll_full, ll_null = model_full.llf, model_full.llnull
+    big = -2 * (ll_null - ll_full)
+    print(f"\n-2*({ll_null:.2f} - ({ll_full:.2f})) = {big:.4f}, df = 3, "
+          f"p = {stats.chi2.sf(big, 3):.3e}")
+    print(f"statsmodels 가 적은 값: LLR = {model_full.llr:.4f}, "
+          f"p = {model_full.llr_pvalue:.3e}")
 
-```
-Logit Regression Results                           
-==============================================================================
-Dep. Variable:                      y   No. Observations:                  500
-Model:                          Logit   Df Residuals:                      496
-Method:                           MLE   Df Model:                            3
-Date:                                   Pseudo R-squ.:                  0.2078
-Time:                                   Log-Likelihood:                -269.48
-converged:                       True   LL-Null:                       -340.15
-Covariance Type:            nonrobust   LLR p-value:                 1.943e-30
-==============================================================================
-                 coef    std err          z      P>|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-const         -0.2445      0.105     -2.329      0.020      -0.450      -0.039
-x1             1.2057      0.137      8.776      0.000       0.936       1.475
-x2            -0.7111      0.118     -6.016      0.000      -0.943      -0.479
-x3            -0.1287      0.103     -1.249      0.212      -0.331       0.073
-==============================================================================
-Wald z = -1.2493, z^2 = 1.5608, p = 0.2115
-LRT  = 1.5719, p = 0.2099
-```
+    # 네 자리의 Lambda / W^2.  뒤의 셋은 연습문제 2 의 모의실험 결과다.
+    print("\n  beta_hat      W^2       Lambda   Lambda/W^2")
+    rows = [(model_full.params[-1], wald_z ** 2, lr_stat),
+            (0.966, 3.393 ** 2, 14.16),
+            (3.033, 4.780 ** 2, 58.06),
+            (6.780, 4.100 ** 2, 90.22)]
+    for b, w2, lam in rows:
+        print(f"{b:10.4f} {w2:10.4f} {lam:10.4f} {lam / w2:10.4f}")
+    ```
+
+    출력:
+
+    ```
+                               Logit Regression Results                           
+    ==============================================================================
+    Dep. Variable:                      y   No. Observations:                  500
+    Model:                          Logit   Df Residuals:                      496
+    Method:                           MLE   Df Model:                            3
+    Date:                                   Pseudo R-squ.:                  0.2078
+    Time:                                   Log-Likelihood:                -269.48
+    converged:                       True   LL-Null:                       -340.15
+    Covariance Type:            nonrobust   LLR p-value:                 1.943e-30
+    ==============================================================================
+                     coef    std err          z      P>|z|      [0.025      0.975]
+    ------------------------------------------------------------------------------
+    const         -0.2445      0.105     -2.329      0.020      -0.450      -0.039
+    x1             1.2057      0.137      8.776      0.000       0.936       1.475
+    x2            -0.7111      0.118     -6.016      0.000      -0.943      -0.479
+    x3            -0.1287      0.103     -1.249      0.212      -0.331       0.073
+    ==============================================================================
+    Wald z = -1.2493, z^2 = 1.5608, p = 0.2115
+    LRT  = 1.5719, p = 0.2099
+
+    -2*(-340.15 - (-269.48)) = 141.3402, df = 3, p = 1.943e-30
+    statsmodels 가 적은 값: LLR = 141.3402, p = 1.943e-30
+
+      beta_hat      W^2       Lambda   Lambda/W^2
+       -0.1287     1.5608     1.5719     1.0071
+        0.9660    11.5124    14.1600     1.2300
+        3.0330    22.8484    58.0600     2.5411
+        6.7800    16.8100    90.2200     5.3670
+    ```
+
+    **요약표의 두 수로 $141.3402$와 $p = 1.943\times10^{-30}$이 그대로 되살아난다.**
+
+    마지막 표가 (1)의 유도를 확인해 준다. $\Lambda/W^2$가
+
+    $$
+    1.0071 \;<\; 1.2300 \;<\; 2.5411 \;<\; 5.3670
+    $$
+
+    으로 $\lvert\hat\beta\rvert = 0.13,\ 0.97,\ 3.03,\ 6.78$을 따라 **단조롭게 커진다.** $\hat\beta_3 = -0.1287$ 자리에서는 둘의 차이가 $0.7\%$에 지나지 않아 왈드 $p = 0.2115$와 가능도비 $p = 0.2099$가 사실상 같은 답을 준다. **계수가 작으면 소프트웨어가 찍어 주는 왈드 $z$를 그대로 읽어도 된다는 실무 지침이 이 한 줄이다.**
+
+    다만 유도가 예측한 것은 **순서**이지 크기가 아니다. $\Lambda/W^2 - 1$을 $\lvert\hat\beta\rvert$로 나누면 $0.055$, $0.238$, $0.508$, $0.644$로 **그것도 함께 커진다.** 곧 상대차가 $\hat\beta$에 단순 비례하지 않는다는 뜻이고, 세 항 전개가 큰 $\hat\beta$에서 무너진다는 것을 수가 보여 준다. 네 번째 줄에서는 $W^2 = 16.81$이 세 번째 줄의 $22.85$보다 **오히려 작은데**, 이것이 본문에서 말한 하우크-도너 현상이다. 신호가 더 강해졌는데 왈드 통계량이 줄어든 것이다.
 
 
 ## 연습문제

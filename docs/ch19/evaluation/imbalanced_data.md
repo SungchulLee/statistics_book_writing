@@ -26,44 +26,107 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 불균형 자료 만들기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 절편 $-2.0$이 연체율 $19\%$를 만든다. 설명변수 셋이 서로 독립인 $N(0,1)$이고 $\operatorname{logit} p = -2.0 - 1.1\,\text{score} + 0.9\,\text{dti} - 0.5\,\text{income}$인 자료를 $n = 4000$ 생성한다.
+
+**(1)** 설명변수를 모르는 채 한 사람을 뽑았을 때의 **주변 연체율** $P(Y=1)$을 적분으로 적고, 그 값이 왜 $\sigma(-2) = 0.1192$보다 **큰지** 설명하시오.
+
+**(2)** 자료를 만들어 관측 연체율과 견주고, `stratify`가 세 조각에서 무슨 일을 하는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
+??? success "풀이"
 
-rng = np.random.default_rng(0)
-n = 4000
+    **(1) 해석적으로.** 세 설명변수의 선형결합
 
-# 신용점수·부채비율·소득이 연체 위험을 결정한다
-score = rng.normal(0, 1, n)
-dti = rng.normal(0, 1, n)
-income = rng.normal(0, 1, n)
-X = np.column_stack([score, dti, income])
+    $$
+    Z = -1.1\,\text{score} + 0.9\,\text{dti} - 0.5\,\text{income}
+    $$
 
-# 절편 -2.0이 연체율을 약 19%로 맞춘다
-logit = -2.0 - 1.1 * score + 0.9 * dti - 0.5 * income
-p_default = 1 / (1 + np.exp(-logit))
-y = (rng.random(n) < p_default).astype(int)   # 1 = 연체, 0 = 상환
+    는 독립인 표준정규 셋의 일차결합이므로 정규분포이고, 분산은 계수의 제곱합이다.
 
-X_tmp, X_test, y_tmp, y_test = train_test_split(
-    X, y, test_size=0.25, random_state=0, stratify=y)
-X_train, X_val, y_train, y_val = train_test_split(
-    X_tmp, y_tmp, test_size=0.25, random_state=0, stratify=y_tmp)
+    $$
+    \operatorname{Var}(Z) = 1.1^2 + 0.9^2 + 0.5^2 = 1.21 + 0.81 + 0.25 = 2.27
+    $$
 
-print(f"n = {n}, 연체율 = {y.mean():.3f}")
-print(f"train {len(y_train)}, val {len(y_val)}, test {len(y_test)}")
-```
+    곧 $Z \sim N(0,\ 1.506652^2)$이다. 따라서
 
-출력:
+    $$
+    P(Y = 1) = E\bigl[\sigma(-2 + Z)\bigr]
+    = \int_{-\infty}^{\infty} \sigma(-2 + 1.506652\,w)\,\phi(w)\,dw
+    $$
 
-```
-n = 4000, 연체율 = 0.191
-train 2250, val 750, test 1000
-```
+    이다. 닫힌 꼴이 없으니 수치적분으로 구하면 $0.190528$이다.
+
+    **왜 $\sigma(-2) = 0.119203$보다 큰가.** 옌센의 부등식이 답한다. $\sigma$는 인수가 음수인 쪽에서 **아래로 볼록**이다($\sigma'' = \sigma(1-\sigma)(1-2\sigma) > 0$은 $\sigma < 1/2$일 때, 곧 인수가 음수일 때 성립한다). 이 자료는 $-2 + Z$가 $81\%$의 확률로 음수인 영역에 머무르므로 볼록한 쪽이 지배하고
+
+    $$
+    E[\sigma(-2+Z)] > \sigma\bigl(E[-2+Z]\bigr) = \sigma(-2)
+    $$
+
+    가 된다. **설명변수의 흩어짐이 주변 확률을 끌어올린다.** 올리는 쪽(위험한 사람)의 확률 증가가 내리는 쪽의 감소보다 크기 때문이며, 크기로는 $0.1192$에서 $0.1905$로 $60\%$ 늘어난다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import train_test_split
+
+    rng = np.random.default_rng(0)
+    n = 4000
+
+    # 신용점수·부채비율·소득이 연체 위험을 결정한다
+    score = rng.normal(0, 1, n)
+    dti = rng.normal(0, 1, n)
+    income = rng.normal(0, 1, n)
+    X = np.column_stack([score, dti, income])
+
+    # 절편 -2.0이 연체율을 약 19%로 맞춘다
+    logit = -2.0 - 1.1 * score + 0.9 * dti - 0.5 * income
+    p_default = 1 / (1 + np.exp(-logit))
+    y = (rng.random(n) < p_default).astype(int)   # 1 = 연체, 0 = 상환
+
+    X_tmp, X_test, y_tmp, y_test = train_test_split(
+        X, y, test_size=0.25, random_state=0, stratify=y)
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_tmp, y_tmp, test_size=0.25, random_state=0, stratify=y_tmp)
+
+    print(f"n = {n}, 연체율 = {y.mean():.3f}")
+    print(f"train {len(y_train)}, val {len(y_val)}, test {len(y_test)}")
+
+    from scipy import integrate, stats
+
+    sd = np.sqrt(1.1**2 + 0.9**2 + 0.5**2)
+    g = lambda w: 1 / (1 + np.exp(-(-2 + sd * w))) * stats.norm.pdf(w)
+    theo = integrate.quad(g, -10, 10)[0]
+    print(f"\nVar(Z) = 2.27,  sd = {sd:.6f}")
+    print(f"이론 연체율 = {theo:.6f}   sigma(-2) = "
+          f"{1 / (1 + np.exp(2)):.6f}")
+    print(f"관측 연체율 = {y.mean():.6f}  "
+          f"(표준오차 {np.sqrt(theo * (1 - theo) / n):.5f})")
+    print(f"\n조각별 연체율  train {y_train.mean():.6f}  "
+          f"val {y_val.mean():.6f}  test {y_test.mean():.6f}")
+    print(f"조각별 연체 건수  train {y_train.sum()}  val {y_val.sum()}  "
+          f"test {y_test.sum()}   합 {y.sum()}")
+    ```
+
+    출력:
+
+    ```
+    n = 4000, 연체율 = 0.191
+    train 2250, val 750, test 1000
+
+    Var(Z) = 2.27,  sd = 1.506652
+    이론 연체율 = 0.190528   sigma(-2) = 0.119203
+    관측 연체율 = 0.190750  (표준오차 0.00621)
+
+    조각별 연체율  train 0.190667  val 0.190667  test 0.191000
+    조각별 연체 건수  train 429  val 143  test 191   합 763
+    ```
+
+    **유도한 $0.190528$과 관측값 $0.190750$이 표준오차의 $0.04$배 안에서 맞는다.** 그리고 $\sigma(-2) = 0.119203$보다 확실히 크다. 절편만 보고 "연체율 $12\%$"라고 읽으면 안 된다는 뜻이다.
+
+    `stratify`가 한 일은 세 조각의 연체율을 가지런히 맞춘 것이다. $0.190667$, $0.190667$, $0.191000$으로 소수 셋째 자리까지 같다. **층화하지 않았다면 검정자료 $1000$건의 연체율이 $0.191 \pm 0.012$쯤 흔들렸을 테고**($\sqrt{0.191 \times 0.809/1000} = 0.0124$), 검증자료에서 고른 문턱이 검정자료에서 어긋나는 원인이 되었을 것이다. 불균형 자료에서 층화는 선택이 아니라 기본이다.
 
 ## 전략 1: 가중을 통한 조정
 
@@ -102,33 +165,128 @@ scikit-learn에서는 다음과 같다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 범주 가중값 주기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 가중은 문턱을 옮기는 일이다. 아래 코드는 `class_weight='balanced'`를 **그리고** `sample_weight`로 $5.3$배를 **함께** 준다.
+
+**(1)** 훈련자료가 연체 $429$건, 상환 $1821$건일 때 두 가중이 겹쳐 생기는 **실효 가중비**를 구하시오. 그 가중이 절편을 얼마나 밀어 올려야 하는가?
+
+**(2)** 가중 모형을 문턱 $0.5$로 쓰는 것이 가중 없는 모형을 어느 문턱으로 쓰는 것과 같은지 구하고, 예측 연체율 $0.776$을 그 문턱으로 재현해 보시오.
 
 </div>
 
-```python
-from sklearn.linear_model import LogisticRegression
+??? success "풀이"
 
-# 방법 1: 'balanced' 는 각 범주의 빈도에 반비례해 가중값을 자동으로 정한다.
-model = LogisticRegression(class_weight='balanced')
+    **(1) 해석적으로.** scikit-learn의 `class_weight='balanced'`는 범주 $c$에 $n/(K n_c)$를 준다. $K = 2$이므로
 
-# 방법 2: 직접 정한다. 5.3 은 위 자동값과 비슷하게 맞춘 것이다.
-# 가중을 주면 모형이 소수 범주를 더 자주 예측하게 되는데, 이는 실은
-# 문턱값을 옮기는 것과 비슷한 일을 하는 셈이다.
-weights = [5.3 if yi == 1 else 1.0 for yi in y_train]
-model.fit(X_train, y_train, sample_weight=weights)
+    $$
+    w_1^{\text{bal}} = \frac{2250}{2 \times 429} = 2.622378,
+    \qquad
+    w_0^{\text{bal}} = \frac{2250}{2 \times 1821} = 0.617792
+    $$
 
-print("가중 없음 예측 연체율:",
-      LogisticRegression().fit(X_train, y_train).predict(X_val).mean().round(4))
-print("가중 적용 예측 연체율:", model.predict(X_val).mean().round(4))
-```
+    이고 비는 $w_1^{\text{bal}}/w_0^{\text{bal}} = 1821/429 = 4.244755$다.
 
-출력:
+    **중요한 것은 `sample_weight`가 이것을 대체하지 않고 곱해진다는 점이다.** `fit`에 넘긴 $5.3$이 `class_weight`와 함께 쓰이므로 실효 가중비는
 
-```
-가중 없음 예측 연체율: 0.096
-가중 적용 예측 연체율: 0.776
-```
+    $$
+    \frac{w_1}{w_0} = 5.3 \times 4.244755 = 22.4972
+    $$
+
+    가 된다. 코드의 주석은 $5.3$이 자동값과 비슷하도록 맞춘 값이라 하지만, 둘이 **겹쳐서** 다섯 배 넘게 세진다.
+
+    가중 로그가능도는 양성 하나를 $w_1$번, 음성 하나를 $w_0$번 센 것과 같다. 이는 양성을 $w_1$의 비율로, 음성을 $w_0$의 비율로 표집한 자료를 보는 것과 같으므로, 연습문제 1의 프렌티스-파이크 결과가 그대로 적용된다. **기울기는 그대로이고 절편만**
+
+    $$
+    \Delta = \log\frac{w_1}{w_0} = \log 22.4972 = 3.1134
+    $$
+
+    **만큼 올라간다.**
+
+    **(2) 해석적으로.** 가중 모형의 로그오즈가 가중 없는 모형보다 어디서나 $\Delta$만큼 크다면
+
+    $$
+    \hat\eta_w(\mathbf x) \ge 0
+    \iff
+    \hat\eta(\mathbf x) + \Delta \ge 0
+    \iff
+    \hat\eta(\mathbf x) \ge -\Delta
+    \iff
+    \hat p(\mathbf x) \ge \sigma(-\Delta)
+    $$
+
+    이다. 곧 **가중 모형을 문턱 $0.5$로 쓰는 것은 가중 없는 모형을 문턱**
+
+    $$
+    \tau = \sigma(-\Delta) = \frac{1}{1 + w_1/w_0} = \frac{1}{1 + 22.4972} = 0.042558
+    $$
+
+    **로 쓰는 것과 같다.** 자료를 한 건도 바꾸지 않고 확률 $0.0426$ 위를 모두 연체로 부른다는 뜻이며, 검증자료에서 그 비율이 $0.776$ 근처여야 한다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from sklearn.linear_model import LogisticRegression
+
+    # 방법 1: 'balanced' 는 각 범주의 빈도에 반비례해 가중값을 자동으로 정한다.
+    model = LogisticRegression(class_weight='balanced')
+
+    # 방법 2: 직접 정한다. 5.3 은 위 자동값과 비슷하게 맞춘 것이다.
+    # 가중을 주면 모형이 소수 범주를 더 자주 예측하게 되는데, 이는 실은
+    # 문턱값을 옮기는 것과 비슷한 일을 하는 셈이다.
+    weights = [5.3 if yi == 1 else 1.0 for yi in y_train]
+    model.fit(X_train, y_train, sample_weight=weights)
+
+    print("가중 없음 예측 연체율:",
+          LogisticRegression().fit(X_train, y_train).predict(X_val).mean().round(4))
+    print("가중 적용 예측 연체율:", model.predict(X_val).mean().round(4))
+
+    n1, n0 = int(y_train.sum()), int((1 - y_train).sum())
+    eff = 5.3 * n0 / n1
+    print(f"\n연체 {n1}건, 상환 {n0}건  ->  balanced 비 = {n0 / n1:.6f}")
+    print(f"실효 가중비 = 5.3 * {n0 / n1:.4f} = {eff:.4f},  "
+          f"log = {np.log(eff):.4f}")
+
+    plain = LogisticRegression().fit(X_train, y_train)
+    print(f"\n가중 없음  절편 {plain.intercept_[0]:.6f}  "
+          f"기울기 {np.round(plain.coef_[0], 4)}")
+    print(f"가중 적용  절편 {model.intercept_[0]:.6f}  "
+          f"기울기 {np.round(model.coef_[0], 4)}")
+    print(f"절편 이동 = {model.intercept_[0] - plain.intercept_[0]:.4f}"
+          f"   (예측 {np.log(eff):.4f})")
+
+    tau = 1 / (1 + eff)
+    p_plain = plain.predict_proba(X_val)[:, 1]
+    print(f"\n같은 문턱 tau = 1/(1+{eff:.4f}) = {tau:.6f}")
+    print(f"가중 없음 모형을 tau 로 자른 예측 연체율 = {(p_plain >= tau).mean():.4f}")
+    print(f"가중 모형을 0.5 로 자른 예측 연체율      = "
+          f"{model.predict(X_val).mean():.4f}")
+    print(f"두 분류가 엇갈린 관측 = "
+          f"{int((model.predict(X_val) != (p_plain >= tau)).sum())} / {len(y_val)}")
+    ```
+
+    출력:
+
+    ```
+    가중 없음 예측 연체율: 0.096
+    가중 적용 예측 연체율: 0.776
+
+    연체 429건, 상환 1821건  ->  balanced 비 = 4.244755
+    실효 가중비 = 5.3 * 4.2448 = 22.4972,  log = 3.1134
+
+    가중 없음  절편 -1.948054  기울기 [-0.9578  0.9223 -0.5285]
+    가중 적용  절편 1.139232  기울기 [-1.0132  0.9481 -0.4773]
+    절편 이동 = 3.0873   (예측 3.1134)
+
+    같은 문턱 tau = 1/(1+22.4972) = 0.042558
+    가중 없음 모형을 tau 로 자른 예측 연체율 = 0.7960
+    가중 모형을 0.5 로 자른 예측 연체율      = 0.7760
+    두 분류가 엇갈린 관측 = 19 / 750
+    ```
+
+    **유도가 맞되 정확히는 아니다.** 절편 이동의 예측값 $3.1134$와 관측값 $3.0873$이 $0.8\%$ 차이이고, 예측 연체율은 $0.7960$ 대 $0.7760$으로 $750$건 중 $19$건이 엇갈린다.
+
+    **어긋나는 까닭은 기울기도 함께 다시 적합되기 때문이다.** 프렌티스-파이크 결과는 "모형이 참이면 기울기가 그대로"라고 말하지만, 여기서는 유한표본이고 거기에 sklearn의 기본 L2 벌점까지 걸려 있다. 가중을 주면 실효 표본크기가 커져 벌점의 상대적 세기가 달라지고, 기울기가 $(-0.9578,\ 0.9223,\ -0.5285)$에서 $(-1.0132,\ 0.9481,\ -0.4773)$로 $5\%$쯤 움직인다. 순위가 조금 달라졌으니 문턱 하나로 완전히 포개지지는 않는다.
+
+    **그래도 요점은 분명하다.** 가중이 한 일의 $99\%$는 절편을 $3.09$ 밀어 올린 것이고, 그것은 문턱을 $0.5$에서 $0.0426$으로 내린 것과 사실상 같다. **자료도 손실함수도 건드리지 않고 문턱만 옮기면 같은 결과를 얻으면서 확률은 그대로 남는다.**
 
 **장점:**
 
@@ -199,32 +357,67 @@ Oversampled: 81,105 paid off + 81,105 default (via replication)
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> SMOTE 로 늘리기
+**보기 3.** <span class="diff easy" title="쉬움"></span> SMOTE 뒤의 크기를 미리 안다. 훈련자료는 연체 $429$건, 상환 $1821$건이다.
+
+**(1)** `SMOTE(random_state=0)`가 기본 설정(`sampling_strategy='auto'`)에서 만들어 낼 **합성점의 개수**와 재표집 뒤의 $n$을 구하시오.
+
+**(2)** 확인하고, SMOTE가 왜 **훈련자료에만** 적용되어야 하는지 적으시오.
 
 </div>
 
-```python
-from imblearn.over_sampling import SMOTE
+??? success "풀이"
 
-# SMOTE 는 소수 범주의 관측값 사이를 이어 새 점을 만들어 채운다. 단순
-# 복제와 달리 같은 점이 겹치지 않는다는 것이 장점이다. 다만 만들어 낸
-# 점은 실제 관측이 아니므로, 반드시 훈련자료에만 적용해야 한다.
-# 검증·시험자료에 쓰면 성능이 부풀려진다.
-X_resampled, y_resampled = SMOTE(random_state=0).fit_resample(X_train, y_train)
+    **(1) 해석적으로.** 기본 설정의 SMOTE는 소수 범주를 다수 범주와 **같은 개수**가 되도록 채운다. 그러므로 만들어 낼 합성점의 개수는
 
-model = LogisticRegression()
-model.fit(X_resampled, y_resampled)
+    $$
+    1821 - 429 = 1392
+    $$
 
-print(f"원자료:   n = {len(y_train)}, 연체율 = {y_train.mean():.3f}")
-print(f"SMOTE 후: n = {len(y_resampled)}, 연체율 = {y_resampled.mean():.3f}")
-```
+    이고 재표집 뒤의 크기는
 
-출력:
+    $$
+    n = 1821 + 1821 = 2 \times 1821 = 3642
+    $$
 
-```
-원자료:   n = 2250, 연체율 = 0.191
-SMOTE 후: n = 3642, 연체율 = 0.500
-```
+    이다. 연체율은 정확히 $0.500$이 된다. **다수 범주는 하나도 건드리지 않으므로 원래 $2250$건이 모두 그대로 남고 $1392$건이 더해져 $2250 + 1392 = 3642$**라고 세어도 같다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from imblearn.over_sampling import SMOTE
+
+    # SMOTE 는 소수 범주의 관측값 사이를 이어 새 점을 만들어 채운다. 단순
+    # 복제와 달리 같은 점이 겹치지 않는다는 것이 장점이다. 다만 만들어 낸
+    # 점은 실제 관측이 아니므로, 반드시 훈련자료에만 적용해야 한다.
+    # 검증·시험자료에 쓰면 성능이 부풀려진다.
+    X_resampled, y_resampled = SMOTE(random_state=0).fit_resample(X_train, y_train)
+
+    model = LogisticRegression()
+    model.fit(X_resampled, y_resampled)
+
+    print(f"원자료:   n = {len(y_train)}, 연체율 = {y_train.mean():.3f}")
+    print(f"SMOTE 후: n = {len(y_resampled)}, 연체율 = {y_resampled.mean():.3f}")
+
+    print(f"\n소수 {n1} -> {int(y_resampled.sum())},  "
+          f"합성점 {int(y_resampled.sum()) - n1}개  (= {n0} - {n1})")
+    print(f"다수 {n0} -> {int((1 - y_resampled).sum())} (그대로)")
+    print(f"n = {n0} + {n0} = {2 * n0} = {len(y_resampled)}")
+    ```
+
+    출력:
+
+    ```
+    원자료:   n = 2250, 연체율 = 0.191
+    SMOTE 후: n = 3642, 연체율 = 0.500
+
+    소수 429 -> 1821,  합성점 1392개  (= 1821 - 429)
+    다수 1821 -> 1821 (그대로)
+    n = 1821 + 1821 = 3642 = 3642
+    ```
+
+    **세어서 예측한 $1392$와 $3642$가 정확히 맞는다.** 반올림이 끼어들 자리가 없는 계산이라 그렇다(보기 4의 ADASYN은 그렇지 않다).
+
+    **훈련자료에만 써야 하는 까닭.** SMOTE가 만든 점 $x_{\text{syn}} = x_i + \lambda(x_{\text{nb}} - x_i)$는 **원자료 두 점의 정보로 만들어진 것**이지 새 관측이 아니다. 이것을 검증·검정자료에 섞으면 두 가지가 동시에 망가진다. 첫째, 합성점이 자신을 만든 원본과 거의 같은 위치에 있으므로 모형이 훈련에서 본 점을 검정에서 다시 보는 셈이 되어 **성능이 부풀려진다.** 둘째, 검정자료의 연체율이 $0.191$에서 $0.5$로 바뀌어 **정밀도·AP처럼 유병률에 의존하는 측도가 모두 거짓이 된다.** 재표집은 모형을 만드는 쪽의 일이고, 평가는 손대지 않은 원래 분포에서 해야 한다.
 
 **장점:**
 
@@ -248,30 +441,57 @@ SMOTE 후: n = 3642, 연체율 = 0.500
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> BorderlineSMOTE 와 ADASYN
+**보기 4.** <span class="diff easy" title="쉬움"></span> 하나는 딱 맞고 하나는 어긋난다. 같은 훈련자료에 BorderlineSMOTE와 ADASYN을 적용한다.
+
+**(1)** 두 방법 가운데 보기 3이 예측한 $n = 3642$, 연체율 $0.500$을 **정확히** 내놓는 쪽은 어느 것인가. 다른 쪽은 왜 어긋나는가?
+
+**(2)** 어긋난 쪽이 몇 개 모자란지 세어 확인하시오.
 
 </div>
 
-```python
-from imblearn.over_sampling import BorderlineSMOTE, ADASYN
+??? success "풀이"
 
-# BorderlineSMOTE 는 두 범주의 경계 가까이에 있는 점만 골라 늘린다.
-# 경계에서 먼 점은 어차피 쉽게 맞히므로 늘려도 보탬이 적다는 생각이다.
-X_bl, y_bl = BorderlineSMOTE(random_state=0).fit_resample(X_train, y_train)
+    **(1) 해석적으로.** **BorderlineSMOTE는 정확히 맞고 ADASYN은 맞지 않는다.**
 
-# ADASYN 은 분류하기 어려운 점일수록 더 많이 늘린다.
-X_ad, y_ad = ADASYN(random_state=0).fit_resample(X_train, y_train)
+    BorderlineSMOTE는 합성점을 **어디에** 만들지만 바꾼다. 경계 근처의 소수 범주 점만 씨앗으로 쓸 뿐, 전체 몇 개를 만들지는 SMOTE와 같은 규칙으로 정한다. 곧 "소수를 다수와 같게"이므로 $1821 - 429 = 1392$개를 만들어 $n = 3642$, 연체율 정확히 $0.500$이 된다.
 
-print(f"BorderlineSMOTE: n = {len(y_bl)}, 연체율 = {y_bl.mean():.3f}")
-print(f"ADASYN:          n = {len(y_ad)}, 연체율 = {y_ad.mean():.3f}")
-```
+    ADASYN은 **개수 배분 방식이 다르다.** 소수 범주 점 $x_i$마다 그 이웃에 다수 범주가 얼마나 많은지로 어려움 $r_i$를 재고, 그것을 정규화한 $\hat r_i = r_i/\sum_j r_j$에 전체 생성량 $G = 1821 - 429 = 1392$를 곱해 $g_i = \hat r_i \times G$개를 만든다. 그런데 $g_i$가 정수가 아니므로 **점마다 반올림한 뒤 더한다.** 반올림 오차가 쌓이면 총합이 $G$에서 벗어나고, 그래서 연체율이 $0.500$에 정확히 닿지 못한다.
 
-출력:
+    **(2) 수치적으로.**
 
-```
-BorderlineSMOTE: n = 3642, 연체율 = 0.500
-ADASYN:          n = 3635, 연체율 = 0.499
-```
+    ```python
+    from imblearn.over_sampling import BorderlineSMOTE, ADASYN
+
+    # BorderlineSMOTE 는 두 범주의 경계 가까이에 있는 점만 골라 늘린다.
+    # 경계에서 먼 점은 어차피 쉽게 맞히므로 늘려도 보탬이 적다는 생각이다.
+    X_bl, y_bl = BorderlineSMOTE(random_state=0).fit_resample(X_train, y_train)
+
+    # ADASYN 은 분류하기 어려운 점일수록 더 많이 늘린다.
+    X_ad, y_ad = ADASYN(random_state=0).fit_resample(X_train, y_train)
+
+    print(f"BorderlineSMOTE: n = {len(y_bl)}, 연체율 = {y_bl.mean():.3f}")
+    print(f"ADASYN:          n = {len(y_ad)}, 연체율 = {y_ad.mean():.3f}")
+
+    target = n0 - n1
+    for name, yy in [("BorderlineSMOTE", y_bl), ("ADASYN", y_ad)]:
+        made = int(yy.sum()) - n1
+        print(f"{name:16s} 소수 {n1} -> {int(yy.sum())},  만든 점 {made} "
+              f"(목표 {target}, 차이 {made - target}),  "
+              f"연체율 {yy.mean():.6f}")
+    ```
+
+    출력:
+
+    ```
+    BorderlineSMOTE: n = 3642, 연체율 = 0.500
+    ADASYN:          n = 3635, 연체율 = 0.499
+    BorderlineSMOTE  소수 429 -> 1821,  만든 점 1392 (목표 1392, 차이 0),  연체율 0.500000
+    ADASYN           소수 429 -> 1814,  만든 점 1385 (목표 1392, 차이 -7),  연체율 0.499037
+    ```
+
+    BorderlineSMOTE는 목표 $1392$를 **정확히** 채워 연체율이 $0.500000$이다. ADASYN은 $1385$개만 만들어 **$7$개 모자라고**, 그래서 연체율이 $1814/3635 = 0.499037$로 $0.5$에 살짝 못 미친다.
+
+    $7$개는 $1392$의 $0.5\%$라 실용적으로는 아무 차이가 없다. **다만 "ADASYN도 균형을 맞춰 준다"고 적힌 수가 $0.500$이 아니라 $0.499$인 이유를 설명할 수 있어야 한다.** 알고리즘의 결함이 아니라 점마다 정수 개를 만들어야 하는 데서 오는 어쩔 수 없는 반올림이다.
 
 ## 전략 4: 문턱 조정
 
@@ -348,41 +568,113 @@ $0.200$으로 실제값과 거의 같다. 즉 조정하지 않은 모형이 이�
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 권장 절차 — 확률 추정과 비용 문턱
+**보기 5.** <span class="diff easy" title="쉬움"></span> 문턱은 통계가 아니라 비용이 정한다. 위양성 한 건의 비용이 $50$, 위음성 한 건의 비용이 $1000$이라 하자.
+
+**(1)** 기대비용을 최소로 하는 문턱이 $\tau^\ast = C_{FP}/(C_{FP}+C_{FN})$임을 유도하고 값을 구하시오. 문턱 $0.5$에 숨어 있는 가정은 무엇인가?
+
+**(2)** 검정자료 $1000$건에서 $\tau = 0.5$와 $\tau = \tau^\ast$의 **총비용**을 견주시오. 정확도는 어느 쪽이 높은가?
 
 </div>
 
-```python
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_auc_score, brier_score_loss, roc_curve
+??? success "풀이"
 
-# 여기부터가 이 절의 결론에 해당하는 절차다. 재표집이나 가중 없이
-# 원자료 그대로 적합한다. 불균형 자체는 확률 추정을 망가뜨리지 않는다.
-model = LogisticRegression().fit(X_train, y_train)
+    **(1) 해석적으로.** 한 사람의 연체확률이 $p$일 때, 두 선택지의 기대비용을 적는다.
 
-# 2단계: 순위 매기는 능력(AUC)과 확률의 보정 상태(Brier)를 따로 본다.
-# 불균형 자료에서 정확도는 뜻이 없다 — 전부 음성이라 해도 81%가 나온다.
-p_val = model.predict_proba(X_val)[:, 1]
-print("AUC  :", roc_auc_score(y_val, p_val))
-print("Brier:", brier_score_loss(y_val, p_val))
+    $$
+    E[\text{비용} \mid \text{양성이라 한다}] = (1-p)\,C_{FP},
+    \qquad
+    E[\text{비용} \mid \text{음성이라 한다}] = p\,C_{FN}
+    $$
 
-# 3단계: 문턱값은 통계가 아니라 비용이 정한다. 거짓양성 50, 거짓음성
-# 1000 이면 최적 문턱은 50/(50+1000) = 0.048 이다. 0.5 를 쓰는 관행에는
-# 두 오류의 비용이 같다는 가정이 숨어 있다.
-c_fp, c_fn = 50.0, 1000.0
-threshold = c_fp / (c_fp + c_fn)
+    (맞힌 경우의 비용은 $0$으로 둔다.) 양성이라 부르는 것이 유리한 조건은
 
-# 4단계: 시험자료는 마지막에 딱 한 번만 쓴다. 여기서 결과를 보고 다시
-# 손대면 시험자료가 사실상 검증자료가 되어 버린다.
-y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
-```
+    $$
+    (1-p)\,C_{FP} < p\,C_{FN}
+    \iff
+    C_{FP} < p\,(C_{FP} + C_{FN})
+    \iff
+    p > \frac{C_{FP}}{C_{FP} + C_{FN}}
+    $$
 
-출력:
+    이다. 곧
 
-```
-AUC  : 0.8369258418681812
-Brier: 0.111258445223284
-```
+    $$
+    \tau^\ast = \frac{C_{FP}}{C_{FP}+C_{FN}} = \frac{50}{50 + 1000} = \frac{1}{21} = 0.047619
+    $$
+
+    **$\tau = 0.5$를 쓴다는 것은 $C_{FP} = C_{FN}$을 가정한 것이다.** 이 문제에서는 위음성이 위양성보다 $20$배 비싸므로 그 가정이 명백히 틀렸다. $\tau^\ast$가 유병률이 아니라 **비용의 비**로만 정해진다는 점도 눈여겨볼 일이다. 불균형 자체는 여기에 나오지 않는다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import (roc_auc_score, brier_score_loss, roc_curve,
+                                 confusion_matrix)
+
+    # 여기부터가 이 절의 결론에 해당하는 절차다. 재표집이나 가중 없이
+    # 원자료 그대로 적합한다. 불균형 자체는 확률 추정을 망가뜨리지 않는다.
+    model = LogisticRegression().fit(X_train, y_train)
+
+    # 2단계: 순위 매기는 능력(AUC)과 확률의 보정 상태(Brier)를 따로 본다.
+    # 불균형 자료에서 정확도는 뜻이 없다 — 전부 음성이라 해도 81%가 나온다.
+    p_val = model.predict_proba(X_val)[:, 1]
+    print("AUC  :", roc_auc_score(y_val, p_val))
+    print("Brier:", brier_score_loss(y_val, p_val))
+
+    # 3단계: 문턱값은 통계가 아니라 비용이 정한다. 거짓양성 50, 거짓음성
+    # 1000 이면 최적 문턱은 50/(50+1000) = 0.048 이다. 0.5 를 쓰는 관행에는
+    # 두 오류의 비용이 같다는 가정이 숨어 있다.
+    c_fp, c_fn = 50.0, 1000.0
+    threshold = c_fp / (c_fp + c_fn)
+
+    # 4단계: 시험자료는 마지막에 딱 한 번만 쓴다. 여기서 결과를 보고 다시
+    # 손대면 시험자료가 사실상 검증자료가 되어 버린다.
+    y_test_pred = (model.predict_proba(X_test)[:, 1] >= threshold).astype(int)
+
+    print(f"\ntau* = {c_fp}/({c_fp}+{c_fn}) = {threshold:.6f}")
+    p_test = model.predict_proba(X_test)[:, 1]
+    print(f"\n{'문턱':>10} {'TN':>5} {'FP':>5} {'FN':>5} {'TP':>5} "
+          f"{'총비용':>9} {'정확도':>8} {'재현율':>8}")
+    for lab, t in [("전부 음성", 1.01), ("0.5", 0.5), ("tau*", threshold)]:
+        pr = (p_test >= t).astype(int)
+        cm_t = confusion_matrix(y_test, pr, labels=[0, 1])
+        TN, FP, FN, TP = cm_t[0, 0], cm_t[0, 1], cm_t[1, 0], cm_t[1, 1]
+        cost = c_fp * FP + c_fn * FN
+        print(f"{lab:>10} {TN:5d} {FP:5d} {FN:5d} {TP:5d} {cost:9.0f} "
+              f"{(TP + TN) / len(y_test):8.4f} {TP / (TP + FN):8.4f}")
+
+    best = min((c_fp * ((p_test >= g) & (y_test == 0)).sum()
+                + c_fn * ((p_test < g) & (y_test == 1)).sum(), g)
+               for g in np.unique(p_test))
+    print(f"\n검정자료에서 사후적으로 가장 싼 문턱 = {best[1]:.6f}, "
+          f"그때 비용 {best[0]:.0f}")
+    ```
+
+    출력:
+
+    ```
+    AUC  : 0.8369258418681812
+    Brier: 0.111258445223284
+
+    tau* = 50.0/(50.0+1000.0) = 0.047619
+
+            문턱    TN    FP    FN    TP       총비용      정확도      재현율
+         전부 음성   809     0   191     0    191000   0.8090   0.0000
+           0.5   788    21   137    54    138050   0.8420   0.2827
+          tau*   204   605     7   184     37250   0.3880   0.9634
+
+    검정자료에서 사후적으로 가장 싼 문턱 = 0.046219, 그때 비용 35500
+    ```
+
+    **유도한 $\tau^\ast = 1/21 = 0.047619$가 코드와 맞고, 비용 비교가 요점을 그대로 보여 준다.**
+
+    $\tau = 0.5$는 정확도 $0.8420$으로 가장 높지만 총비용은 $138{,}050$이다. $\tau^\ast$로 내리면 정확도가 $0.3880$으로 **반 토막 나는데 총비용은 $37{,}250$으로 $3.7$배 싸진다.** 위음성이 $137$건에서 $7$건으로 줄었기 때문이고, 그 대가로 위양성이 $21$건에서 $605$건으로 늘었지만 한 건에 $50$밖에 하지 않는다.
+
+    **정확도가 목적함수였다면 정반대의 답을 골랐을 것이다.** 아무것도 안 하고 전부 음성이라 해도 정확도 $0.8090$이 나오는 자료에서 정확도를 기준 삼는 일이 왜 위험한지가 첫 줄에 들어 있다.
+
+    끝으로 사후 최적 문턱도 적어 두었다. 검정자료 $1000$건의 예측확률을 전부 문턱 후보로 훑어 가장 싼 것을 고르면 $0.046219$이고 비용이 $35{,}500$으로, $\tau^\ast$의 $37{,}250$보다 $4.7\%$ 싸다.
+
+    **이 차이를 "$\tau^\ast$가 틀렸다"로 읽으면 안 된다.** $\tau^\ast$는 **기대비용**을 최소로 하는 문턱이고, $35{,}500$은 이 검정자료 한 벌에서 사후적으로 짜낸 값이다. 검정자료를 들여다보고 고른 문턱이 그 검정자료에서 더 싼 것은 당연하며, 다음 자료에서도 그러리라는 보장은 없다. $\tau^\ast$는 자료를 한 번도 보지 않고 비용 두 개만으로 정한 값이고, 그래서 보고할 수 있다.
 
 ## 연습문제
 

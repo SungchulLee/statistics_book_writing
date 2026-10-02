@@ -41,43 +41,122 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> L2 벌점 로지스틱
+**보기 1.** <span class="diff easy" title="쉬움"></span> 능형 해가 반드시 만족하는 등식. 변수 $p = 20$개 가운데 앞 다섯만 참으로 쓰인 자료를 $n = 200$ 생성하고 `C=1.0`의 L2 로지스틱을 적합한다.
+
+**(1)** 능형 로지스틱의 최적해가 만족하는 **정상조건**을 적고, $C = 1$에서 그것이 "잔차와 $j$번째 설명변수의 내적이 $\hat\beta_j$와 같다"는 말이 됨을 보이시오.
+
+**(2)** 그 등식을 자료에서 확인하고, 벌점 없는 최대가능도추정과 견주어 축소의 크기를 재시오.
 
 </div>
 
-```python
-from sklearn.linear_model import LogisticRegression
-import numpy as np
+??? success "풀이"
 
-# 변수 20개 중 참으로 쓰이는 것은 앞의 다섯뿐이다. 세 벌점이 이 다섯을
-# 어떻게 다루는지 견준다.
-np.random.seed(42)
-n, p = 200, 20
-X = np.random.randn(n, p)
-true_beta = np.zeros(p)
-true_beta[:5] = [1.5, -1.0, 0.8, -0.5, 0.3]
-logit = X @ true_beta
-prob = 1 / (1 + np.exp(-logit))
-y = np.random.binomial(1, prob)
+    **(1) 해석적으로.** 최소화할 목적함수는
 
-# sklearn 에서 C 는 벌점의 역수다. C 가 작을수록 벌점이 세다 —
-# 다른 책의 lambda 와 방향이 반대이니 헷갈리기 쉽다.
-ridge_model = LogisticRegression(penalty='l2', C=1.0, solver='lbfgs',
-                                  max_iter=1000)
-ridge_model.fit(X, y)
-print("Ridge coefficients:", np.round(ridge_model.coef_[0], 3))
-```
+    $$
+    J(\boldsymbol\beta) = -\ell(\boldsymbol\beta) + \frac{1}{2C}\lVert\boldsymbol\beta\rVert_2^2
+    $$
 
-출력:
+    이다. 로지스틱 로그가능도의 기울기는 잘 알려진 대로
 
-```
-Ridge coefficients: [ 1.346 -1.162  0.955 -0.593 -0.031 -0.187 -0.009 -0.243  0.359  0.041
- -0.176  0.021  0.069  0.145  0.398  0.04   0.047  0.095 -0.046 -0.166]
-```
+    $$
+    \frac{\partial \ell}{\partial \beta_j} = \sum_{i=1}^{n} x_{ij}\,(y_i - \hat p_i)
+    = \mathbf x_{(j)}^\top \mathbf r,
+    \qquad \mathbf r = \mathbf y - \hat{\mathbf p}
+    $$
 
-앞 다섯 개 계수는 $(1.346,\ -1.162,\ 0.955,\ -0.593,\ -0.031)$이다. 참값
-$(1.5, -1.0, 0.8, -0.5, 0.3)$과 비교하면 강한 신호 네 개는 잘 잡아냈지만 가장 약한 신호
-$0.3$은 부호까지 틀렸다. 잡음변수 15개의 계수는 절댓값이 최대 $0.398$로, 0이 아니지만 작다.
+    이므로 $\nabla J = 0$에서
+
+    $$
+    -\mathbf X^\top \mathbf r + \frac{1}{C}\hat{\boldsymbol\beta} = \mathbf 0
+    \quad\Longleftrightarrow\quad
+    \mathbf X^\top \mathbf r = \frac{\hat{\boldsymbol\beta}}{C}
+    $$
+
+    를 얻는다. $C = 1$이면 오른쪽이 그냥 $\hat{\boldsymbol\beta}$이므로
+
+    $$
+    \mathbf x_{(j)}^\top \mathbf r = \hat\beta_j
+    \qquad (j = 1, \dots, 20)
+    $$
+
+    이다. **벌점이 없다면 오른쪽이 $0$이어서 잔차가 모든 설명변수와 직교한다.** 벌점은 그 직교성을 깨뜨리고, 깨뜨린 만큼이 정확히 계수다. 계수가 큰 변수일수록 잔차와 더 많이 상관되어 남는다는 뜻이고, 이것이 축소의 대가다.
+
+    한편 **절편은 벌점을 받지 않는다**(sklearn의 기본 동작). 그래서 절편에 대한 정상조건은 벌점 없는 경우와 같은
+
+    $$
+    \sum_{i=1}^{n}(y_i - \hat p_i) = 0
+    $$
+
+    이다. 곧 **잔차의 합은 여전히 $0$이지만 각 열과의 내적은 $0$이 아니다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    from sklearn.linear_model import LogisticRegression
+    import numpy as np
+
+    # 변수 20개 중 참으로 쓰이는 것은 앞의 다섯뿐이다. 세 벌점이 이 다섯을
+    # 어떻게 다루는지 견준다.
+    np.random.seed(42)
+    n, p = 200, 20
+    X = np.random.randn(n, p)
+    true_beta = np.zeros(p)
+    true_beta[:5] = [1.5, -1.0, 0.8, -0.5, 0.3]
+    logit = X @ true_beta
+    prob = 1 / (1 + np.exp(-logit))
+    y = np.random.binomial(1, prob)
+
+    # sklearn 에서 C 는 벌점의 역수다. C 가 작을수록 벌점이 세다 —
+    # 다른 책의 lambda 와 방향이 반대이니 헷갈리기 쉽다.
+    ridge_model = LogisticRegression(penalty='l2', C=1.0, solver='lbfgs',
+                                      max_iter=1000)
+    ridge_model.fit(X, y)
+    print("Ridge coefficients:", np.round(ridge_model.coef_[0], 3))
+
+    # 정상조건 X^T r = beta/C 를 직접 확인한다.
+    r = y - ridge_model.predict_proba(X)[:, 1]
+    print(f"\n잔차의 합 = {r.sum():.3e}   (절편은 벌점을 받지 않는다)")
+    print(f"X^T r  첫 5개 = {np.round(X.T @ r, 4)[:5]}")
+    print(f"beta   첫 5개 = {np.round(ridge_model.coef_[0], 4)[:5]}")
+    print(f"max |X^T r - beta| = {np.abs(X.T @ r - ridge_model.coef_[0]).max():.3e}")
+
+    # 수렴 기준을 조이면 등식이 더 정확해진다 — 어긋남은 수학이 아니라 풀이기다.
+    tight = LogisticRegression(penalty='l2', C=1.0, solver='lbfgs',
+                               max_iter=20000, tol=1e-8).fit(X, y)
+    r2 = y - tight.predict_proba(X)[:, 1]
+    print(f"tol=1e-8 로 다시: max |X^T r - beta| = "
+          f"{np.abs(X.T @ r2 - tight.coef_[0]).max():.3e}")
+
+    # 벌점을 완전히 끈 최대가능도와 견준다.
+    mle = LogisticRegression(penalty=None, solver='lbfgs', max_iter=5000).fit(X, y)
+    print(f"\nMLE  첫 5개 = {np.round(mle.coef_[0], 3)[:5]}")
+    print(f"능형 노름 {np.linalg.norm(ridge_model.coef_[0]):.4f}, "
+          f"MLE 노름 {np.linalg.norm(mle.coef_[0]):.4f}, "
+          f"비 {np.linalg.norm(ridge_model.coef_[0]) / np.linalg.norm(mle.coef_[0]):.4f}")
+    ```
+
+    출력:
+
+    ```
+    Ridge coefficients: [ 1.346 -1.162  0.955 -0.593 -0.031 -0.187 -0.009 -0.243  0.359  0.041
+     -0.176  0.021  0.069  0.145  0.398  0.04   0.047  0.095 -0.046 -0.166]
+
+    잔차의 합 = -3.266e-03   (절편은 벌점을 받지 않는다)
+    X^T r  첫 5개 = [ 1.3531 -1.1535  0.9554 -0.5991 -0.0282]
+    beta   첫 5개 = [ 1.3458 -1.1624  0.9554 -0.5931 -0.031 ]
+    max |X^T r - beta| = 8.861e-03
+    tol=1e-8 로 다시: max |X^T r - beta| = 6.020e-06
+
+    MLE  첫 5개 = [ 1.519 -1.318  1.071 -0.673 -0.054]
+    능형 노름 2.2160, MLE 노름 2.5020, 비 0.8857
+    ```
+
+    **유도한 등식 $\mathbf x_{(j)}^\top\mathbf r = \hat\beta_j$가 맞는다.** 기본 설정에서 최대 어긋남이 $8.9\times10^{-3}$이고, 수렴 기준을 `tol=1e-8`로 조이면 $6.0\times10^{-6}$으로 떨어진다. **차이가 수학이 아니라 풀이기의 정지 조건에서 왔다는 증거다.** 잔차의 합도 같은 이유로 $-3.3\times10^{-3}$이지 정확한 $0$이 아니다.
+
+    축소의 크기는 노름으로 재면 분명하다. 벌점 없는 최대가능도의 $\lVert\hat{\boldsymbol\beta}\rVert_2 = 2.5020$이 `C=1.0`에서 $2.2160$으로 줄어, **$11.4\%$가 깎였다.** 첫 다섯 개만 보아도 $1.519 \to 1.346$, $-1.318 \to -1.162$로 한결같이 $0$ 쪽으로 당겨져 있다.
+
+    참값과 견주면 이야기가 더 재미있다. 강한 신호 넷은 잘 잡았지만 **가장 약한 신호 $\beta_5 = 0.3$은 부호까지 틀려 $-0.031$이 되었다.** 이는 벌점 탓이 아니다. 벌점을 끈 MLE도 $-0.054$로 똑같이 음수이기 때문이다. $n = 200$에서 계수 하나의 표준오차가 $0.2$ 수준이라 크기 $0.3$인 효과는 잡음에 묻힌다. 잡음변수 $15$개의 계수가 최대 $0.398$까지 올라오는 것도 같은 사정이다.
 
 ## L1 정칙화(라쏘)
 
@@ -94,31 +173,92 @@ L1 벌점은 **희소성**을 유도한다. 충분히 작은 계수는 정확히
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> L1 벌점 로지스틱
+**보기 2.** <span class="diff easy" title="쉬움"></span> 어떤 계수가 $0$이 되는가를 미리 말할 수 있다. 같은 자료에 `penalty='l1', C=1.0`을 적합한다.
+
+**(1)** 절댓값 벌점은 $0$에서 미분되지 않는다. 열미분(하위미분)으로 최적조건을 적고, **$\hat\beta_j = 0$이 될 조건**과 **$\hat\beta_j \ne 0$일 때 반드시 성립하는 등식**을 각각 구하시오.
+
+**(2)** 그 두 조건을 자료에서 확인하시오. $0$이 된 계수가 셋이라면, 그 셋의 잔차 내적은 얼마여야 하는가?
 
 </div>
 
-```python
-# L1 벌점은 lbfgs 로 풀 수 없다. 0 에서 미분이 되지 않기 때문이며,
-# 그래서 saga 같은 다른 풀이기를 써야 한다.
-lasso_model = LogisticRegression(penalty='l1', C=1.0, solver='saga',
-                                  max_iter=5000)
-lasso_model.fit(X, y)
-print("Lasso coefficients:", np.round(lasso_model.coef_[0], 3))
-print(f"Non-zero coefficients: {np.sum(lasso_model.coef_[0] != 0)} / {p}")
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 목적함수는
 
-```
-Lasso coefficients: [ 1.34  -1.146  0.94  -0.579  0.    -0.158  0.    -0.211  0.344  0.028
- -0.134  0.     0.023  0.092  0.37   0.006  0.007  0.055 -0.003 -0.127]
-Non-zero coefficients: 17 / 20
-```
+    $$
+    J(\boldsymbol\beta) = -\ell(\boldsymbol\beta) + \frac{1}{C}\lVert\boldsymbol\beta\rVert_1
+    $$
 
-앞 다섯 개는 $(1.340,\ -1.146,\ 0.940,\ -0.579,\ 0)$으로, 가장 약한 신호가 정확히 0이 되었다.
-전체로는 20개 중 **17개**가 0이 아니다. 즉 $C = 1.0$에서는 아직 벌점이 약해 잡음변수 대부분이
-살아남는다.
+    이다. $\lvert\beta_j\rvert$는 $\beta_j \ne 0$에서 미분값이 $\operatorname{sign}(\beta_j)$이고, $\beta_j = 0$에서는 미분 대신 **열미분 집합** $[-1, 1]$을 갖는다. 볼록함수의 최솟값 조건은 "$0$이 열미분 집합에 들어 있다"이므로, $s_j := \mathbf x_{(j)}^\top\mathbf r$라 쓰면
+
+    $$
+    \hat\beta_j \ne 0
+    \;\Longrightarrow\;
+    -s_j + \frac{1}{C}\operatorname{sign}(\hat\beta_j) = 0
+    \;\Longleftrightarrow\;
+    s_j = \frac{\operatorname{sign}(\hat\beta_j)}{C}
+    $$
+
+    $$
+    \hat\beta_j = 0
+    \;\Longleftrightarrow\;
+    \lvert s_j \rvert \le \frac{1}{C}
+    $$
+
+    이다. **살아남은 계수는 전부 $\lvert s_j\rvert$가 정확히 $1/C$다.** 능형에서 $s_j$가 계수에 비례해 제각각이던 것과 완전히 다르다. L1에서는 $1/C$가 **문턱**으로 작동해, 잔차와의 상관이 그 문턱에 닿지 못하는 변수는 통째로 떨어져 나간다. 이것이 희소성의 정체이며, $0$에서 꺾인 모서리가 그 문턱을 만든다.
+
+    $C = 1$이므로 이 자료에서는
+
+    - $0$이 아닌 계수: $\lvert s_j\rvert = 1$ (부호는 계수와 같다)
+    - $0$인 계수: $\lvert s_j\rvert \le 1$
+
+    이어야 한다.
+
+    같은 꺾임이 `lbfgs`를 못 쓰게 만드는 이유이기도 하다. `lbfgs`는 기울기가 어디에나 있다고 가정하는 준뉴턴법이라 $0$에서 멈출 수가 없다. `saga`나 좌표하강처럼 **근위 연산자**를 쓰는 풀이기가 필요하다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    # L1 벌점은 lbfgs 로 풀 수 없다. 0 에서 미분이 되지 않기 때문이며,
+    # 그래서 saga 같은 다른 풀이기를 써야 한다.
+    lasso_model = LogisticRegression(penalty='l1', C=1.0, solver='saga',
+                                      max_iter=5000)
+    lasso_model.fit(X, y)
+    print("Lasso coefficients:", np.round(lasso_model.coef_[0], 3))
+    print(f"Non-zero coefficients: {np.sum(lasso_model.coef_[0] != 0)} / {p}")
+
+    r1 = y - lasso_model.predict_proba(X)[:, 1]
+    s = X.T @ r1
+    nz = lasso_model.coef_[0] != 0
+    print(f"\n0 이 된 계수의 번호: {np.where(~nz)[0]}")
+    print(f"그 셋의 |s_j| = {np.round(np.abs(s[~nz]), 4)}   (모두 1 이하여야 한다)")
+    print(f"0 이 아닌 {nz.sum()}개의 |s_j| 범위 = "
+          f"[{np.abs(s[nz]).min():.4f}, {np.abs(s[nz]).max():.4f}]")
+    print(f"그 중 1 에서 가장 많이 벗어난 값 = "
+          f"{np.abs(np.abs(s[nz]) - 1.0).max():.4f}")
+    print(f"부호가 계수와 일치하는가: "
+          f"{bool(np.all(np.sign(s[nz]) == np.sign(lasso_model.coef_[0][nz])))}")
+    ```
+
+    출력:
+
+    ```
+    Lasso coefficients: [ 1.34  -1.146  0.94  -0.579  0.    -0.158  0.    -0.211  0.344  0.028
+     -0.134  0.     0.023  0.092  0.37   0.006  0.007  0.055 -0.003 -0.127]
+    Non-zero coefficients: 17 / 20
+
+    0 이 된 계수의 번호: [ 4  6 11]
+    그 셋의 |s_j| = [0.8042 0.2508 0.6809]   (모두 1 이하여야 한다)
+    0 이 아닌 17개의 |s_j| 범위 = [0.9985, 1.0023]
+    그 중 1 에서 가장 많이 벗어난 값 = 0.0023
+    부호가 계수와 일치하는가: True
+    ```
+
+    **두 조건이 모두 맞는다.** $0$이 아닌 $17$개의 $\lvert s_j\rvert$가 $[0.9985,\ 1.0023]$에 모두 들어 있어 이론값 $1/C = 1$에서 최대 $0.0023$밖에 벗어나지 않고, 부호도 전부 계수와 같다. $0$이 된 셋은 $0.8042$, $0.2508$, $0.6809$로 셋 다 문턱 $1$을 넘지 못했다.
+
+    어느 셋이 떨어졌는지도 뜻이 있다. 번호 $4$는 **참 계수가 $0.3$인 가장 약한 신호**이고 나머지 둘은 잡음변수다. 신호 하나를 버리고 잡음 둘을 버린 셈인데, $\lvert s_4\rvert = 0.8042$가 문턱에 가장 가까웠다는 것이 그 변수가 "거의 살아남을 뻔했다"는 뜻이다.
+
+    전체로는 $20$개 중 $17$개가 살아 있다. **$C = 1.0$에서는 벌점이 아직 약해 잡음변수 대부분이 문턱을 넘는다.** 잡음변수를 떨어뜨리려면 $C$를 줄여 문턱 $1/C$를 올려야 한다(연습문제 1).
 
 ## 엘라스틱넷
 
@@ -135,28 +275,103 @@ $\alpha = 0$이면 능형, $\alpha = 1$이면 라쏘가 된다. 상관된 특성
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 엘라스틱넷 로지스틱
+**보기 3.** <span class="diff easy" title="쉬움"></span> 문턱이 절반으로 낮아진다. `l1_ratio=0.5`, `C=1.0`으로 엘라스틱넷을 적합한다.
+
+**(1)** 보기 1과 보기 2의 조건을 합쳐 엘라스틱넷의 최적조건을 적고, $\hat\beta_j = 0$이 되는 **문턱**이 얼마인지 구하시오.
+
+**(2)** 그 조건을 확인하고, 세 벌점의 $0$이 아닌 계수 개수가 왜 $20 > 19 > 17$ 순서로 놓이는지 설명하시오.
 
 </div>
 
-```python
-# 엘라스틱넷은 l1_ratio 로 두 벌점의 배합비를 정한다. 0.5 면 절반씩이다.
-enet_model = LogisticRegression(penalty='elasticnet', C=1.0,
-                                 solver='saga', l1_ratio=0.5,
-                                 max_iter=5000)
-enet_model.fit(X, y)
-print("Elastic Net coefficients:", np.round(enet_model.coef_[0], 3))
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** $\alpha = $ `l1_ratio`라 쓰면 목적함수는
 
-```
-Elastic Net coefficients: [ 1.342 -1.153  0.947 -0.585 -0.012 -0.172  0.    -0.229  0.351  0.035
- -0.154  0.006  0.046  0.118  0.385  0.022  0.027  0.074 -0.026 -0.146]
-```
+    $$
+    J(\boldsymbol\beta) = -\ell(\boldsymbol\beta)
+    + \frac{1}{C}\left[\frac{1-\alpha}{2}\lVert\boldsymbol\beta\rVert_2^2
+    + \alpha\lVert\boldsymbol\beta\rVert_1\right]
+    $$
 
-앞 다섯 개는 $(1.342,\ -1.153,\ 0.947,\ -0.585,\ -0.012)$이고 0이 아닌 계수는 19개다. 예상대로
-능형(20개)과 라쏘(17개) 사이에 놓인다.
+    이다. 벌점이 두 조각의 합이므로 열미분도 두 조각의 합이고, $s_j = \mathbf x_{(j)}^\top\mathbf r$에 대해
+
+    $$
+    \hat\beta_j \ne 0
+    \;\Longrightarrow\;
+    s_j = \frac{(1-\alpha)\hat\beta_j + \alpha\operatorname{sign}(\hat\beta_j)}{C}
+    $$
+
+    $$
+    \hat\beta_j = 0
+    \;\Longleftrightarrow\;
+    \lvert s_j\rvert \le \frac{\alpha}{C}
+    $$
+
+    이다. **$\beta_j = 0$에서는 L2 조각의 미분이 $0$이라 문턱을 만드는 것은 L1 조각뿐이다.** 그래서 문턱이 $1/C$가 아니라
+
+    $$
+    \frac{\alpha}{C} = \frac{0.5}{1.0} = 0.5
+    $$
+
+    로 **절반으로 낮아진다.** 문턱이 낮으면 더 많은 변수가 살아남으므로, $0$이 아닌 계수의 개수는 라쏘보다 많고 능형($20$개, 문턱이 없다)보다는 적거나 같다. $C = 1$, $\alpha = 0.5$에서 $0$이 아닌 계수는
+
+    $$
+    s_j = 0.5\,\hat\beta_j + 0.5\operatorname{sign}(\hat\beta_j)
+    $$
+
+    를 만족해야 한다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    # 엘라스틱넷은 l1_ratio 로 두 벌점의 배합비를 정한다. 0.5 면 절반씩이다.
+    enet_model = LogisticRegression(penalty='elasticnet', C=1.0,
+                                     solver='saga', l1_ratio=0.5,
+                                     max_iter=5000)
+    enet_model.fit(X, y)
+    print("Elastic Net coefficients:", np.round(enet_model.coef_[0], 3))
+
+    be = enet_model.coef_[0]
+    re = y - enet_model.predict_proba(X)[:, 1]
+    se = X.T @ re
+    nze = be != 0
+    pred = 0.5 * be[nze] + 0.5 * np.sign(be[nze])
+    print(f"\n0 이 된 계수의 번호: {np.where(~nze)[0]}, "
+          f"|s_j| = {np.round(np.abs(se[~nze]), 4)}  (문턱 0.5 이하)")
+    print(f"0 이 아닌 {nze.sum()}개:  "
+          f"max |s_j - (0.5 b + 0.5 sign b)| = {np.abs(se[nze] - pred).max():.4f}")
+
+    bl, br = lasso_model.coef_[0], ridge_model.coef_[0]
+    print(f"\n0 이 아닌 개수   능형 {int((br != 0).sum())}  "
+          f"엘넷 {int(nze.sum())}  라쏘 {int((bl != 0).sum())}")
+    print(f"L1 노름         능형 {np.abs(br).sum():.4f}  "
+          f"엘넷 {np.abs(be).sum():.4f}  라쏘 {np.abs(bl).sum():.4f}")
+    print(f"|라쏘| <= |엘넷| 이 20개 모두 성립: "
+          f"{bool(np.all(np.abs(bl) <= np.abs(be) + 1e-9))}")
+    print(f"|엘넷| <= |능형| 이 20개 모두 성립: "
+          f"{bool(np.all(np.abs(be) <= np.abs(br) + 1e-9))}")
+    ```
+
+    출력:
+
+    ```
+    Elastic Net coefficients: [ 1.342 -1.153  0.947 -0.585 -0.012 -0.172  0.    -0.229  0.351  0.035
+     -0.154  0.006  0.046  0.118  0.385  0.022  0.027  0.074 -0.026 -0.146]
+
+    0 이 된 계수의 번호: [6], |s_j| = [0.0184]  (문턱 0.5 이하)
+    0 이 아닌 19개:  max |s_j - (0.5 b + 0.5 sign b)| = 0.0014
+
+    0 이 아닌 개수   능형 20  엘넷 19  라쏘 17
+    L1 노름         능형 6.1297  엘넷 5.8315  라쏘 5.5625
+    |라쏘| <= |엘넷| 이 20개 모두 성립: True
+    |엘넷| <= |능형| 이 20개 모두 성립: True
+    ```
+
+    **최적조건이 맞는다.** $0$이 아닌 $19$개가 $s_j = 0.5\hat\beta_j + 0.5\operatorname{sign}(\hat\beta_j)$를 최대 $0.0014$ 오차로 만족하고, $0$이 된 번호 $6$은 $\lvert s_6\rvert = 0.0184$로 문턱 $0.5$에 한참 못 미친다.
+
+    개수의 순서 $20 > 19 > 17$은 문턱의 순서 그대로다. 능형은 문턱이 아예 없어 $20$개가 모두 살고, 엘라스틱넷은 문턱 $\alpha/C = 0.5$라 하나가 떨어지며, 라쏘는 문턱 $1/C = 1$이라 셋이 떨어진다. **보기 2에서 떨어진 셋의 $\lvert s_j\rvert$가 $0.8042$, $0.2508$, $0.6809$였는데, 문턱이 $0.5$로 내려오자 $0.2508$짜리 하나만 남았다**(그것이 번호 $6$이다). 문턱을 반으로 낮춘 결과가 "둘이 되살아났다"로 그대로 나타난다.
+
+    크기 쪽에서도 세 해가 가지런히 늘어선다. $L_1$ 노름이 $6.1297 > 5.8315 > 5.5625$이고, **$20$개 계수 전부에서 $\lvert\hat\beta^{\text{lasso}}_j\rvert \le \lvert\hat\beta^{\text{enet}}_j\rvert \le \lvert\hat\beta^{\text{ridge}}_j\rvert$가 성립한다.** 다만 이것은 이 자료에서 확인된 사실이지 일반적으로 보장되는 성질이 아니다. 설명변수가 서로 상관되어 있으면 순서가 뒤집히는 좌표가 나올 수 있다. 여기서는 $\mathbf X$의 열이 독립인 표준정규라 그런 일이 없었다.
 
 ## 정칙화 강도의 영향
 
@@ -165,40 +380,86 @@ $C$가 커지면(정칙화가 약해지면) 추정치가 벌점 없는 MLE에 �
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 계수 경로 그리기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 경로의 양 끝은 무엇인가. $C$를 $10^{-3}$에서 $10^3$까지 훑으며 L2 계수 $20$개의 경로를 그린다.
+
+**(1)** 그림의 **왼쪽 끝과 오른쪽 끝**에서 경로가 무엇에 수렴하는지 말하고, 그림에서 읽히는 끝값을 보기 1의 수와 맞춰 보시오.
+
+**(2)** 이 그림이 **보여 주지 못하는 것**은 무엇인가. 참으로 쓰인 다섯 변수를 굵게 그렸는데, 그 다섯을 그림만 보고 가려낼 수 있는가?
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# C 를 키우며 계수 경로를 그린다. 참으로 쓰인 다섯 변수는 굵게, 나머지는
-# 흐리게 그려 어느 쪽이 먼저 살아나는지 보이게 한다.
-C_values = np.logspace(-3, 3, 50)
-coefs = []
+    **(1) 양 끝은 둘 다 답이 정해져 있다.**
 
-for C in C_values:
-    model = LogisticRegression(penalty='l2', C=C, solver='lbfgs',
-                                max_iter=2000)
-    model.fit(X, y)
-    coefs.append(model.coef_[0])
+    $C \to 0$이면 벌점 $\frac{1}{2C}\lVert\boldsymbol\beta\rVert^2$가 로그가능도를 압도하므로 $\hat{\boldsymbol\beta} \to \mathbf 0$이다. 그림의 왼쪽 끝 $\log_{10} C = -3$에서 $20$개 선이 모두 $0$에 붙어 있는 것이 그것이다. **이때 모형은 절편만 남아 모든 사람에게 같은 확률 $\bar y = 0.505$를 준다.**
 
-coefs = np.array(coefs)
+    $C \to \infty$이면 벌점이 사라져 벌점 없는 최대가능도에 수렴한다. 보기 1에서 구한 MLE가 첫 다섯 개에 대해 $(1.519,\ -1.318,\ 1.071,\ -0.673,\ -0.054)$였으니, 그림의 오른쪽 끝에서 굵은 선들이 **$1.52$, $-1.32$, $1.07$, $-0.67$, 그리고 $0$ 근처**에 눕는 것과 맞는다. 읽어 보면 파란 선이 $1.5$ 조금 위, 주황 선이 $-1.3$ 근처, 초록 선이 $1.07$, 빨간 선이 $-0.67$ 자리다.
 
-plt.figure(figsize=(10, 5))
-for j in range(p):
-    plt.plot(np.log10(C_values), coefs[:, j],
-             linewidth=2 if j < 5 else 0.8,
-             alpha=1.0 if j < 5 else 0.3)
-plt.xlabel('log10(C)')
-plt.ylabel('Coefficient value')
-plt.title('Ridge Logistic Regression: Coefficient Paths')
-plt.axhline(0, color='black', linestyle='--', linewidth=0.5)
-plt.tight_layout()
-plt.show()
-```
+    아래 코드가 양 끝의 수를 찍어 그 읽기를 확인한다.
 
-![릿지 로지스틱 회귀의 계수 경로](./img/regularized_logistic_119.png)
+    ```python
+    import matplotlib.pyplot as plt
+
+    # C 를 키우며 계수 경로를 그린다. 참으로 쓰인 다섯 변수는 굵게, 나머지는
+    # 흐리게 그려 어느 쪽이 먼저 살아나는지 보이게 한다.
+    C_values = np.logspace(-3, 3, 50)
+    coefs = []
+
+    for C in C_values:
+        model = LogisticRegression(penalty='l2', C=C, solver='lbfgs',
+                                    max_iter=2000)
+        model.fit(X, y)
+        coefs.append(model.coef_[0])
+
+    coefs = np.array(coefs)
+
+    plt.figure(figsize=(10, 5))
+    for j in range(p):
+        plt.plot(np.log10(C_values), coefs[:, j],
+                 linewidth=2 if j < 5 else 0.8,
+                 alpha=1.0 if j < 5 else 0.3)
+    plt.xlabel('log10(C)')
+    plt.ylabel('Coefficient value')
+    plt.title('Ridge Logistic Regression: Coefficient Paths')
+    plt.axhline(0, color='black', linestyle='--', linewidth=0.5)
+    plt.tight_layout()
+    plt.show()
+
+    # 그림의 양 끝에서 읽어야 할 수.
+    print(f"왼쪽 끝 log10(C) = -3:  max |beta| = {np.abs(coefs[0]).max():.5f}")
+    print(f"오른쪽 끝 log10(C) = 3: 첫 5개 = {np.round(coefs[-1][:5], 3)}")
+    print(f"                        MLE 첫 5개 = {np.round(mle.coef_[0][:5], 3)}")
+    print(f"잡음 15개의 끝값 범위 = [{coefs[-1][5:].min():.3f}, "
+          f"{coefs[-1][5:].max():.3f}]")
+    print(f"그 가운데 절댓값이 가장 큰 것 = "
+          f"{np.abs(coefs[-1][5:]).max():.3f} (번호 "
+          f"{5 + int(np.argmax(np.abs(coefs[-1][5:])))})")
+    print(f"참 신호 5번(beta5=0.3)의 끝값 = {coefs[-1][4]:.3f}")
+    ```
+
+    출력:
+
+    ```
+    왼쪽 끝 log10(C) = -3:  max |beta| = 0.03406
+    오른쪽 끝 log10(C) = 3: 첫 5개 = [ 1.519 -1.318  1.07  -0.673 -0.054]
+                            MLE 첫 5개 = [ 1.519 -1.318  1.071 -0.673 -0.054]
+    잡음 15개의 끝값 범위 = [-0.271, 0.436]
+    그 가운데 절댓값이 가장 큰 것 = 0.436 (번호 14)
+    참 신호 5번(beta5=0.3)의 끝값 = -0.054
+    ```
+
+    ![릿지 로지스틱 회귀의 계수 경로](./img/regularized_logistic_119.png)
+
+    왼쪽 끝에서 가장 큰 계수조차 $0.0341$로 사실상 $0$이고, 오른쪽 끝의 다섯 값이 보기 1의 MLE와 **소수 둘째 자리까지 같다.** 유도한 두 극한이 그대로 확인된다. 셋째 변수만 $1.070$ 대 $1.071$로 한 자리 어긋나는데, 이는 $C = 10^3$에서 벌점 $\frac{1}{2C} = 5\times10^{-4}$이 아직 완전히 $0$은 아니기 때문이다. **경로의 오른쪽 끝은 MLE에 *가까운* 것이지 MLE 그 자체가 아니다.**
+
+    **(2) 이 그림은 세 가지를 보여 주지 못한다.**
+
+    **첫째, 어느 선이 어느 변수인지 알 수 없다.** 범례가 없어서, 오른쪽 끝의 $1.52$가 $\beta_1$인지 $\beta_3$인지 그림만으로는 정할 수 없다. 계수 경로 그림에서는 오른쪽 가장자리에 변수 이름을 직접 적어 주는 것이 관례다.
+
+    **둘째, 굵은 선 다섯 가운데 하나는 눈에 띄지 않는다.** 참으로 쓰인 다섯을 `linewidth=2`로 굵게 그렸는데, $\beta_5 = 0.3$에 해당하는 선은 끝값이 $-0.054$라 **$0$ 주위의 흐린 잡음선 다발에 통째로 묻힌다.** 거꾸로 잡음변수 가운데 $14$번은 끝값이 $0.436$까지 올라가 $\beta_5$보다 **여덟 배 크다.** 곧 **"굵은 선 다섯이 위로 솟고 흐린 선 열다섯이 바닥에 깔린다"는 그림이 아니다.** 굵게 칠해 놓았으니 다섯을 가려낼 수 있어 보이지만, 그것은 **답을 알고 그린 사람의 특권**이지 그림이 알려 준 것이 아니다. 실제 자료에서는 참 계수를 모르므로 이 그림만으로 변수선택을 할 수 없다.
+
+    **셋째, 가로축의 왼쪽 끝이 "벌점 없음"이 아니다.** $\log_{10} C$ 축이라 왼쪽이 **강한 벌점**, 오른쪽이 **약한 벌점**이다. $\lambda = 1/C$에 익숙한 사람은 방향을 거꾸로 읽기 쉽다. 또 오른쪽 끝 $\log_{10}C = 3$에서 이미 MLE에 수렴했으므로 $C$를 더 키워도 아무 일도 일어나지 않는다. **경로의 오른쪽 $1$개 눈금은 사실상 쓸모없는 여백이다.**
 
 ## 교차검증으로 C 조율하기
 
@@ -206,32 +467,108 @@ scikit-learn은 $C$ 격자 위에서 교차검증을 수행하는 `LogisticRegre
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 교차검증으로 C 고르기
+**보기 5.** <span class="diff easy" title="쉬움"></span> $1.6238$은 어디서 온 수인가. `Cs=20`으로 5겹 교차검증을 돌리면 최적 $C = 1.6238$, 교차검증 정확도 $0.7450$이 나온다.
+
+**(1)** `Cs=20`이 만드는 격자를 적고, $1.6238$이 그 가운데 **몇 번째 점**인지 지수로 정확히 맞히시오.
+
+**(2)** 교차검증 정확도 $0.7450$은 몇 건을 맞힌 것인가. 같은 $C$에서 훈련 정확도와 다수범주 기준선을 함께 구해 세 수를 견주시오.
 
 </div>
 
-```python
-from sklearn.linear_model import LogisticRegressionCV
+??? success "풀이"
 
-# C 는 교차검증으로 고른다. Cs=20 은 격자 점의 개수이며, sklearn 이
-# 알아서 로그 눈금으로 펼친다.
-model_cv = LogisticRegressionCV(
-    Cs=20, penalty='l2', cv=5, scoring='accuracy',
-    solver='lbfgs', max_iter=2000
-)
-model_cv.fit(X, y)
-print(f"Best C: {model_cv.C_[0]:.4f}")
-print(f"Best CV accuracy: {model_cv.scores_[1].mean(axis=0).max():.4f}")
-```
+    **(1) 해석적으로.** `LogisticRegressionCV`에 `Cs`를 정수로 주면 scikit-learn은 $10^{-4}$부터 $10^{4}$까지를 로그 눈금으로 균등하게 나눈 격자를 쓴다. 곧 `np.logspace(-4, 4, 20)`이고 $k$번째($k = 0, \dots, 19$) 점은
 
-출력:
+    $$
+    C_k = 10^{\,-4 + \frac{8k}{19}}
+    $$
 
-```
-Best C: 1.6238
-Best CV accuracy: 0.7450
-```
+    이다. $1.6238$을 넣어 보면
 
-결과는 최적 $C = 1.6238$, 교차검증 정확도 $0.7450$이다.
+    $$
+    \log_{10} 1.6238 = 0.210526 = -4 + \frac{8k}{19}
+    \;\Longrightarrow\;
+    k = \frac{19 \times 4.210526}{8} = 10.000
+    $$
+
+    로 **정확히 $k = 10$**이다. 확인하면
+
+    $$
+    C_{10} = 10^{-4 + 80/19} = 10^{0.2105263} = 1.623777
+    $$
+
+    이다. **격자가 로그 눈금이라는 것을 모르면 $1.6238$이 어디서 왔는지 영영 알 수 없다.** 격자의 이웃 점은 $C_9 = 0.6158$과 $C_{11} = 4.2813$이므로 한 칸 간격이 $10^{8/19} = 2.637$배다. 곧 **교차검증이 고른 $C$의 분해능이 $2.6$배 수준**이며, "최적 $C$가 $1.6238$이다"를 소수 넷째 자리까지 믿을 이유가 전혀 없다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from sklearn.linear_model import LogisticRegressionCV
+
+    # C 는 교차검증으로 고른다. Cs=20 은 격자 점의 개수이며, sklearn 이
+    # 알아서 로그 눈금으로 펼친다.
+    model_cv = LogisticRegressionCV(
+        Cs=20, penalty='l2', cv=5, scoring='accuracy',
+        solver='lbfgs', max_iter=2000
+    )
+    model_cv.fit(X, y)
+    print(f"Best C: {model_cv.C_[0]:.4f}")
+    print(f"Best CV accuracy: {model_cv.scores_[1].mean(axis=0).max():.4f}")
+
+    grid = np.logspace(-4, 4, 20)
+    print(f"\nCs_ 가 logspace(-4, 4, 20) 인가: "
+          f"{bool(np.allclose(model_cv.Cs_, grid))}")
+    k = int(np.argmin(np.abs(grid - model_cv.C_[0])))
+    print(f"고른 점은 k = {k},  10^(-4 + 8*{k}/19) = {10 ** (-4 + 8 * k / 19):.6f}")
+    print(f"이웃 격자점 C_9 = {grid[9]:.4f}, C_11 = {grid[11]:.4f}  "
+          f"(한 칸 {10 ** (8 / 19):.3f}배)")
+
+    mean_scores = model_cv.scores_[1].mean(axis=0)
+    print(f"\n격자별 CV 정확도 = {np.round(mean_scores, 3)}")
+    print(f"최댓값 {mean_scores.max():.4f} 를 주는 격자점 = "
+          f"{np.where(mean_scores == mean_scores.max())[0]}")
+    print(f"맞힌 건수 = {mean_scores.max():.4f} * {len(y)} = "
+          f"{mean_scores.max() * len(y):.0f}")
+
+    refit = LogisticRegression(penalty='l2', C=model_cv.C_[0],
+                               solver='lbfgs', max_iter=2000).fit(X, y)
+    print(f"\n훈련 정확도   {refit.score(X, y):.4f}")
+    print(f"교차검증 정확도 {mean_scores.max():.4f}")
+    print(f"다수범주 기준선 {max(y.mean(), 1 - y.mean()):.4f}")
+    ```
+
+    출력:
+
+    ```
+    Best C: 1.6238
+    Best CV accuracy: 0.7450
+
+    Cs_ 가 logspace(-4, 4, 20) 인가: True
+    고른 점은 k = 10,  10^(-4 + 8*10/19) = 1.623777
+    이웃 격자점 C_9 = 0.6158, C_11 = 4.2813  (한 칸 2.637배)
+
+    격자별 CV 정확도 = [0.535 0.555 0.645 0.71  0.72  0.72  0.72  0.73  0.74  0.74  0.745 0.745
+     0.74  0.735 0.735 0.735 0.735 0.735 0.735 0.735]
+    최댓값 0.7450 를 주는 격자점 = [10 11]
+    맞힌 건수 = 0.7450 * 200 = 149
+
+    훈련 정확도   0.8000
+    교차검증 정확도 0.7450
+    다수범주 기준선 0.5050
+    ```
+
+    **유도한 $k = 10$과 $C_{10} = 1.623777$이 정확히 맞는다.** 그리고 격자별 점수를 펼쳐 보면 **$k = 10$과 $k = 11$이 둘 다 $0.745$로 똑같다.** `argmax`가 앞의 것을 집었을 뿐이며, 만약 자료가 한 건만 달랐어도 $4.2813$이 "최적 $C$"로 보고되었을 것이다. 소수 넷째 자리까지 적는 관행이 얼마나 공허한지가 여기 드러난다.
+
+    세 정확도의 순서도 교과서대로다.
+
+    $$
+    \underbrace{0.5050}_{\text{다수범주}}
+    \;<\;
+    \underbrace{0.7450}_{\text{교차검증}}
+    \;<\;
+    \underbrace{0.8000}_{\text{훈련}}
+    $$
+
+    $0.7450$은 $200$건 가운데 $149$건을 맞혔다는 뜻이다. **훈련 정확도 $0.8000$이 교차검증보다 $0.055$ 높은 것이 낙관 편의**이고, $p = 20$ 가운데 $15$개가 잡음인 자료에서 그 정도가 나온다. 보고할 수는 $0.8000$이 아니라 $0.7450$이다.
 
 !!! note "`scores_`의 키에 주의"
     `model_cv.scores_`는 범주 이름표를 키로 하는 딕셔너리다. 위 코드의 `scores_[1]`은 이름표가

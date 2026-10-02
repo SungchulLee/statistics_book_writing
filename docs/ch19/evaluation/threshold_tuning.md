@@ -223,111 +223,328 @@ $C_{FN} = C_{FP}$라는 특수한 가정에 해당하는 한 점일 뿐임이 �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 불균형 자료와 예측확률
+**보기 1.** <span class="diff easy" title="쉬움"></span> 코드 주석의 "약 12%"는 어디서 온 수인가. 설명변수 셋이 독립인 $N(0,1)$이고 $\operatorname{logit} p = -2.0 - 1.1x_1 + 0.9x_2 - 0.5x_3$인 자료를 $n = 4000$ 생성한다. 아래 코드의 주석은 양성 비율이 **약 $12\%$**라 하는데, 이 절 들머리의 본문은 **약 $19\%$**라 한다.
+
+**(1)** 둘 중 어느 쪽이 맞는가. $12\%$라는 수가 어디서 나온 것인지 밝히고, 옳은 주변 양성비율을 구하시오.
+
+**(2)** 자료를 만들어 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
+??? success "풀이"
 
-# 절편 -2.0 이 양성 비율을 약 12%로 맞춘다. 불균형 자료에서 문턱값 0.5 가
-# 왜 나쁜 선택이 되는지 보기 위한 설정이다.
-rng = np.random.default_rng(0)
-n = 4000
-X = rng.normal(0, 1, size=(n, 3))
-logit = -2.0 - 1.1 * X[:, 0] + 0.9 * X[:, 1] - 0.5 * X[:, 2]
-y = (rng.random(n) < 1 / (1 + np.exp(-logit))).astype(int)
+    **(1) 해석적으로. $19\%$가 맞다.** $12\%$는 **설명변수를 모두 $0$으로 둔 사람의 확률**이다.
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.25, random_state=0, stratify=y)
+    $$
+    \sigma(-2) = \frac{1}{1 + e^{2}} = 0.119203
+    $$
 
-model = LogisticRegression().fit(X_train, y_train)
-y_prob = model.predict_proba(X_test)[:, 1]
+    이것은 절편만 읽은 값이지 주변확률이 아니다. 주변확률은 설명변수를 적분해 없애야 나온다. $Z = -1.1x_1 + 0.9x_2 - 0.5x_3$은 독립인 표준정규 셋의 일차결합이므로
 
-print(f"검정자료 양성 비율 = {y_test.mean():.3f}")
-print(f"예측확률 범위 = [{y_prob.min():.3f}, {y_prob.max():.3f}]")
-```
+    $$
+    \operatorname{Var}(Z) = 1.1^2 + 0.9^2 + 0.5^2 = 2.27,
+    \qquad Z \sim N(0,\ 1.506652^2)
+    $$
 
-출력:
+    이고
 
-```
-검정자료 양성 비율 = 0.181
-예측확률 범위 = [0.002, 0.978]
-```
+    $$
+    P(Y = 1) = E\bigl[\sigma(-2 + Z)\bigr] = 0.190528
+    $$
+
+    이다(수치적분). **$\sigma$가 $-2$ 언저리에서 아래로 볼록이므로 옌센의 부등식이 $E[\sigma(-2+Z)] > \sigma(-2)$를 보장한다.** 설명변수의 흩어짐이 주변 양성률을 $0.1192$에서 $0.1905$로, 곧 $60\%$ 끌어올린다. 자세한 유도는 [19.3절 불균형 자료 다루기의 보기 1](imbalanced_data.md)에 있다.
+
+    **주석이 틀린 것은 절편의 뜻을 주변확률로 착각한 흔한 오독이다.** 로지스틱 모형에서 $\sigma(\beta_0)$은 "모든 설명변수가 $0$인 개체의 확률"이고, 그것이 평균적인 개체의 확률과 같을 이유가 전혀 없다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import train_test_split
+
+    # 절편 -2.0 이 양성 비율을 약 12%로 맞춘다. 불균형 자료에서 문턱값 0.5 가
+    # 왜 나쁜 선택이 되는지 보기 위한 설정이다.
+    rng = np.random.default_rng(0)
+    n = 4000
+    X = rng.normal(0, 1, size=(n, 3))
+    logit = -2.0 - 1.1 * X[:, 0] + 0.9 * X[:, 1] - 0.5 * X[:, 2]
+    y = (rng.random(n) < 1 / (1 + np.exp(-logit))).astype(int)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.25, random_state=0, stratify=y)
+
+    model = LogisticRegression().fit(X_train, y_train)
+    y_prob = model.predict_proba(X_test)[:, 1]
+
+    print(f"검정자료 양성 비율 = {y_test.mean():.3f}")
+    print(f"예측확률 범위 = [{y_prob.min():.3f}, {y_prob.max():.3f}]")
+
+    from scipy import integrate, stats
+
+    sig = lambda z: 1 / (1 + np.exp(-z))
+    sd = np.sqrt(1.1 ** 2 + 0.9 ** 2 + 0.5 ** 2)
+    theo = integrate.quad(lambda w: sig(-2 + sd * w) * stats.norm.pdf(w),
+                          -10, 10)[0]
+    print(f"\nsigma(-2)            = {sig(-2):.6f}   <- 주석의 '약 12%'")
+    print(f"이론 주변 양성비율      = {theo:.6f}   <- 본문의 '약 19%'")
+    print(f"실제 표본 양성비율      = {y.mean():.6f}  ({y.sum()}/{n})")
+    se = np.sqrt(theo * (1 - theo) / n)
+    print(f"표준오차 {se:.5f},  z = {(y.mean() - theo) / se:+.3f}")
+    print(f"훈련 {y_train.mean():.6f}   검정 {y_test.mean():.6f} "
+          f"({y_test.sum()}/{len(y_test)})")
+    ```
+
+    출력:
+
+    ```
+    검정자료 양성 비율 = 0.181
+    예측확률 범위 = [0.002, 0.978]
+
+    sigma(-2)            = 0.119203   <- 주석의 '약 12%'
+    이론 주변 양성비율      = 0.190528   <- 본문의 '약 19%'
+    실제 표본 양성비율      = 0.181250  (725/4000)
+    표준오차 0.00621,  z = -1.494
+    훈련 0.181333   검정 0.181000 (181/1000)
+    ```
+
+    **$\sigma(-2) = 0.119203$이 주석의 $12\%$와 정확히 맞아떨어진다.** 주석은 틀린 수를 쓴 것이 아니라 **맞는 수를 틀린 이름으로 부른** 것이다. 실제 표본 양성비율은 $0.18125$로 이론값 $0.190528$에서 $1.49$ 표준오차 아래이며, $0.12$와는 비교할 수 없이 멀다.
+
+    예측확률의 범위 $[0.002,\ 0.978]$도 눈여겨볼 만하다. **양성이 $18\%$뿐인 자료인데 모형은 $0.978$까지 자신 있는 예측을 내놓는다.** 그러므로 "불균형 자료에서는 예측확률이 다 작게 나온다"는 말은 사실이 아니다. 문제는 확률의 범위가 아니라 **$0.5$를 넘는 관측이 $1000$건 중 $79$건뿐**이라는 데 있고, 그래서 문턱 $0.5$로 자르면 재현율이 바닥을 긴다(보기 2).
 
 ### 파이썬 보기
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 문턱값에 따른 측도 변화
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정밀도가 문턱보다 크다는 것은 우연이 아니다. 다섯 문턱에서 정밀도·재현율·$F_1$을 잰다.
+
+**(1)** 모형이 잘 **보정**되어 있다면, 문턱 $t$에서의 정밀도는 그 문턱을 넘은 관측들의 **평균 예측확률**과 같아야 함을 보이시오. 그로부터 왜 $\text{Precision}(t) \ge t$가 되는지 설명하시오.
+
+**(2)** 다섯 문턱에서 두 양을 나란히 찍어 확인하고, $F_1$을 최대로 하는 문턱을 구하시오.
 
 </div>
 
-```python
-from sklearn.metrics import (confusion_matrix, precision_score,
-                             recall_score, f1_score)
+??? success "풀이"
 
-# 문턱을 낮추면 재현율이 오르고 정밀도가 내린다. 어느 쪽을 중히 볼지는
-# 자료가 아니라 문제가 정한다 — 암 검진이라면 재현율, 스팸 분류라면
-# 정밀도 쪽이 중요하다.
-thresholds = [0.2, 0.3, 0.5, 0.7, 0.8]
+    **(1) 해석적으로.** 문턱 $t$에서 양성으로 예측된 집합을 $S_t = \{i : \hat p_i \ge t\}$라 쓰면
 
-for t in thresholds:
-    y_pred = (y_prob >= t).astype(int)
-    cm = confusion_matrix(y_test, y_pred)
+    $$
+    \text{Precision}(t) = \frac{1}{\lvert S_t\rvert}\sum_{i \in S_t} y_i
+    $$
 
-    precision = precision_score(y_test, y_pred)
-    recall = recall_score(y_test, y_pred)
-    f1 = f1_score(y_test, y_pred)
+    이다. 모형이 보정되어 있다는 말은 $E[y_i \mid \mathbf x_i] = \hat p_i$라는 뜻이므로, 기댓값을 취하면
 
-    print(f"Threshold {t}: Precision={precision:.3f}, "
-          f"Recall={recall:.3f}, F1={f1:.3f}")
-```
+    $$
+    E\bigl[\text{Precision}(t)\bigr]
+    = \frac{1}{\lvert S_t\rvert}\sum_{i \in S_t} \hat p_i
+    = \overline{\hat p}\,\bigl(S_t\bigr)
+    $$
 
-출력:
+    **곧 정밀도의 기댓값이 그 집합의 평균 예측확률이다.** 정밀도는 "양성이라 부른 것 중 실제 양성의 비율"이고 평균 예측확률은 "그들에게 매긴 확률의 평균"이니, 보정이란 정확히 이 둘이 맞는다는 말이다.
 
-```
-Threshold 0.2: Precision=0.384, Recall=0.702, F1=0.496
-Threshold 0.3: Precision=0.500, Recall=0.547, F1=0.522
-Threshold 0.5: Precision=0.709, Recall=0.309, F1=0.431
-Threshold 0.7: Precision=0.889, Recall=0.088, F1=0.161
-Threshold 0.8: Precision=0.900, Recall=0.050, F1=0.094
-```
+    여기서 부등식 하나가 공짜로 나온다. $S_t$ 안의 모든 $\hat p_i$가 정의상 $t$ 이상이므로 평균도 $t$ 이상이고, 따라서
+
+    $$
+    E\bigl[\text{Precision}(t)\bigr] = \overline{\hat p}(S_t) \;\ge\; t
+    $$
+
+    이다. **보정된 모형에서는 정밀도가 문턱보다 작을 수 없다.** 표에서 $t = 0.5$의 정밀도가 $0.709$인 것은 운이 좋아서가 아니라 구조적인 일이다. 거꾸로 **정밀도가 문턱보다 꾸준히 작게 나온다면 모형이 과신하고 있다는 신호**이며, 이는 보정 그림을 그려 보기 전에도 알아챌 수 있는 간단한 진단이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from sklearn.metrics import (confusion_matrix, precision_score,
+                                 recall_score, f1_score)
+
+    # 문턱을 낮추면 재현율이 오르고 정밀도가 내린다. 어느 쪽을 중히 볼지는
+    # 자료가 아니라 문제가 정한다 — 암 검진이라면 재현율, 스팸 분류라면
+    # 정밀도 쪽이 중요하다.
+    thresholds = [0.2, 0.3, 0.5, 0.7, 0.8]
+
+    for t in thresholds:
+        y_pred = (y_prob >= t).astype(int)
+        cm = confusion_matrix(y_test, y_pred)
+
+        precision = precision_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred)
+
+        print(f"Threshold {t}: Precision={precision:.3f}, "
+              f"Recall={recall:.3f}, F1={f1:.3f}")
+
+    print("\n  t    n_pos  정밀도   평균 p    차      SE     z")
+    for t in thresholds:
+        s = y_prob >= t
+        prec = precision_score(y_test, s.astype(int))
+        mp = y_prob[s].mean()
+        se = np.sqrt(mp * (1 - mp) / s.sum())
+        print(f"{t:5.1f} {s.sum():6d}  {prec:.4f}  {mp:.4f}  "
+              f"{prec - mp:+.4f}  {se:.4f}  {(prec - mp) / se:+.2f}")
+
+    grid = np.unique(y_prob)
+    f1s = np.array([f1_score(y_test, (y_prob >= t).astype(int),
+                             zero_division=0) for t in grid])
+    k = int(np.argmax(f1s))
+    print(f"\nF1 최대 = {f1s[k]:.4f} (문턱 {grid[k]:.4f})")
+    acc = np.array([((y_prob >= t).astype(int) == y_test).mean() for t in grid])
+    ka = int(np.argmax(acc))
+    print(f"정확도 최대 = {acc[ka]:.4f} (문턱 {grid[ka]:.4f});  "
+          f"전부 음성이라 하면 {1 - y_test.mean():.4f}")
+    ```
+
+    출력:
+
+    ```
+    Threshold 0.2: Precision=0.384, Recall=0.702, F1=0.496
+    Threshold 0.3: Precision=0.500, Recall=0.547, F1=0.522
+    Threshold 0.5: Precision=0.709, Recall=0.309, F1=0.431
+    Threshold 0.7: Precision=0.889, Recall=0.088, F1=0.161
+    Threshold 0.8: Precision=0.900, Recall=0.050, F1=0.094
+
+      t    n_pos  정밀도   평균 p    차      SE     z
+      0.2    331  0.3837  0.3931  -0.0094  0.0268  -0.35
+      0.3    198  0.5000  0.4926  +0.0074  0.0355  +0.21
+      0.5     79  0.7089  0.6502  +0.0587  0.0537  +1.09
+      0.7     18  0.8889  0.8247  +0.0642  0.0896  +0.72
+      0.8     10  0.9000  0.8739  +0.0261  0.1050  +0.25
+
+    F1 최대 = 0.5238 (문턱 0.3041)
+    정확도 최대 = 0.8520 (문턱 0.5078);  전부 음성이라 하면 0.8190
+    ```
+
+    **유도한 등식이 다섯 줄 모두에서 맞는다.** 정밀도와 평균 예측확률의 차이가 $-0.0094$에서 $+0.0642$까지인데, 표준오차로 나누면 $-0.35$에서 $+1.09$ 사이다. **어느 줄도 $1.1$ 표준오차를 넘지 않으므로 이 모형은 잘 보정되어 있다.** 문턱이 높아질수록 차이의 절댓값이 커 보이는 것은 모형이 나빠져서가 아니라 $n_{\text{pos}}$가 $331 \to 10$으로 줄어 표준오차가 $0.027 \to 0.105$로 네 배 커지기 때문이다.
+
+    부등식 $\text{Precision}(t) \ge t$도 다섯 줄 모두에서 성립한다($0.384 > 0.2$, $0.500 > 0.3$, $0.709 > 0.5$, $0.889 > 0.7$, $0.900 > 0.8$).
+
+    $F_1$은 문턱 $0.3041$에서 최대 $0.5238$이고, 표의 다섯 값 가운데 가장 큰 $t = 0.3$의 $0.5224$가 거의 그 자리다. **기본값 $0.5$의 $0.431$보다 $22\%$ 높다.**
+
+    정확도만 보면 이야기가 거꾸로 간다. 정확도를 최대로 하는 문턱은 $0.5078$로 기본값과 사실상 같고 그 값이 $0.8520$인데, **아무것도 안 하고 전부 음성이라 해도 $0.8190$이 나온다.** 겨우 $0.033$ 벌자고 양성의 $69\%$를 놓치는 것이다. 불균형 자료에서 정확도를 목적함수로 삼으면 안 되는 이유가 이 두 줄에 들어 있다.
 
 ### ROC 곡선과 유든의 J
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Youden의 J로 문턱 고르기
+**보기 3.** <span class="diff easy" title="쉬움"></span> $0.176$은 유병률이다. 유든의 $J = \text{TPR} - \text{FPR}$가 고른 문턱은 $0.176$이고, 검정자료의 양성 비율은 $0.181$이다. 우연일까?
+
+**(1)** 모형이 잘 보정되어 있을 때, 유든의 $J$가 고르는 문턱이 **유병률 $\pi$와 같음**을 보이시오.
+
+**(2)** 확인하고, 유한표본에서 둘이 정확히 같지 않은 까닭을 수로 설명하시오.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.metrics import roc_curve, roc_auc_score
+??? success "풀이"
 
-# ROC 곡선 계산
-fpr, tpr, thresholds = roc_curve(y_test, y_prob)
+    **(1) 해석적으로.** 두 가지 사실을 이어 붙인다.
 
-# Youden 의 J 는 TPR - FPR 을 최대로 만드는 점을 고른다. ROC 곡선에서
-# 왼쪽 위 모서리에 가장 가까운 자리인 셈이다. 다만 이 규칙에는 두 오류의
-# 비용이 같다는 가정이 들어 있으므로, 비용을 알면 그쪽을 쓰는 편이 낫다.
-j_scores = tpr - fpr
-optimal_idx = np.argmax(j_scores)
-optimal_threshold = thresholds[optimal_idx]
+    **첫째, ROC 곡선의 기울기는 가능도비다.** 점수 $S = \hat p$의 범주별 밀도를 $f_1$, $f_0$이라 하면 문턱 $t$에서 $\text{TPR}(t) = \int_t^1 f_1$, $\text{FPR}(t) = \int_t^1 f_0$이므로
 
-print(f"AUC: {roc_auc_score(y_test, y_prob):.4f}")
-print(f"Optimal threshold (Youden's J): {optimal_threshold:.3f}")
-```
+    $$
+    \frac{d\,\text{TPR}}{d\,\text{FPR}}
+    = \frac{d\text{TPR}/dt}{d\text{FPR}/dt}
+    = \frac{-f_1(t)}{-f_0(t)}
+    = \frac{f_1(t)}{f_0(t)}
+    $$
 
-출력:
+    이다. 그리고 $J = \text{TPR} - \text{FPR}$를 최대로 하는 점에서는 $dJ/dt = 0$, 곧
 
-```
-AUC: 0.8163
-Optimal threshold (Youden's J): 0.176
-```
+    $$
+    \frac{d\text{TPR}}{dt} = \frac{d\text{FPR}}{dt}
+    \;\Longleftrightarrow\;
+    f_1(t) = f_0(t)
+    \;\Longleftrightarrow\;
+    \frac{f_1(t)}{f_0(t)} = 1
+    $$
+
+    **곧 ROC 곡선의 기울기가 $1$이 되는 자리**, 다시 말해 기울기 $1$인 접선이 곡선에 닿는 곳이다.
+
+    **둘째, 보정이 가능도비를 문턱으로 번역해 준다.** 보정된 모형에서는 정의상 $P(Y = 1 \mid \hat p = t) = t$이고, 베이즈 정리로
+
+    $$
+    t = P(Y=1 \mid \hat p = t)
+    = \frac{\pi f_1(t)}{\pi f_1(t) + (1-\pi) f_0(t)}
+    $$
+
+    이다. 정리하면
+
+    $$
+    \frac{t}{1-t} = \frac{\pi}{1-\pi}\cdot\frac{f_1(t)}{f_0(t)}
+    \quad\Longleftrightarrow\quad
+    \frac{f_1(t)}{f_0(t)} = \frac{t}{1-t}\cdot\frac{1-\pi}{\pi}
+    $$
+
+    이고, 여기에 첫째 조건 $f_1/f_0 = 1$을 넣으면
+
+    $$
+    \frac{t}{1-t} = \frac{\pi}{1-\pi}
+    \quad\Longleftrightarrow\quad
+    \boxed{t^\ast = \pi}
+    $$
+
+    **유든의 $J$가 고르는 문턱은 유병률이다.** 이 자료에서 $\pi = 0.181$이므로 $0.176$은 우연이 아니다.
+
+    뒤집어 보면 뜻이 더 분명해진다. 유든의 $J$는 두 오류의 비용이 같다고 가정한 규칙인데, 비용이 같을 때의 기대비용 최소 문턱은 [19.3절](imbalanced_data.md)에서 본 $C_{FP}/(C_{FP}+C_{FN}) = 1/2$다. **$1/2$가 아니라 $\pi$가 나오는 까닭은 $J$가 TPR과 FPR, 곧 두 범주 **안에서의** 비율만 보기 때문이다.** 범주 크기를 무시하는 것은 유병률 $1/2$인 세상을 가정하는 것과 같고, 그 세상의 문턱 $1/2$를 실제 유병률 $\pi$의 세상으로 되옮기면 $\pi$가 된다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.metrics import roc_curve, roc_auc_score
+
+    # ROC 곡선 계산
+    fpr, tpr, thresholds = roc_curve(y_test, y_prob)
+
+    # Youden 의 J 는 TPR - FPR 을 최대로 만드는 점을 고른다. ROC 곡선에서
+    # 왼쪽 위 모서리에 가장 가까운 자리인 셈이다. 다만 이 규칙에는 두 오류의
+    # 비용이 같다는 가정이 들어 있으므로, 비용을 알면 그쪽을 쓰는 편이 낫다.
+    j_scores = tpr - fpr
+    optimal_idx = np.argmax(j_scores)
+    optimal_threshold = thresholds[optimal_idx]
+
+    print(f"AUC: {roc_auc_score(y_test, y_prob):.4f}")
+    print(f"Optimal threshold (Youden's J): {optimal_threshold:.3f}")
+
+    pi = y_test.mean()
+    print(f"\n고른 문턱 {optimal_threshold:.6f}   유병률 {pi:.6f}   "
+          f"차 {optimal_threshold - pi:+.6f}")
+
+    def J(t):
+        s = y_prob >= t
+        return (s & (y_test == 1)).sum() / (y_test == 1).sum() \
+             - (s & (y_test == 0)).sum() / (y_test == 0).sum()
+
+    print("\n문턱 주변에서 J 가 얼마나 들쭉날쭉한가")
+    for t in [0.15, 0.16, 0.17, optimal_threshold, pi, 0.19, 0.20, 0.22]:
+        print(f"  t = {t:.6f}   J = {J(t):.4f}")
+    print(f"\n문턱 {optimal_threshold:.4f} 와 {pi:.4f} 사이에 든 검정 관측 = "
+          f"{int(((y_prob >= optimal_threshold) & (y_prob < pi)).sum())}건")
+    ```
+
+    출력:
+
+    ```
+    AUC: 0.8163
+    Optimal threshold (Youden's J): 0.176
+
+    고른 문턱 0.176290   유병률 0.181000   차 -0.004710
+
+    문턱 주변에서 J 가 얼마나 들쭉날쭉한가
+      t = 0.150000   J = 0.4481
+      t = 0.160000   J = 0.4633
+      t = 0.170000   J = 0.4602
+      t = 0.176290   J = 0.4773
+      t = 0.181000   J = 0.4546
+      t = 0.190000   J = 0.4447
+      t = 0.200000   J = 0.4526
+      t = 0.220000   J = 0.4444
+
+    문턱 0.1763 와 0.1810 사이에 든 검정 관측 = 9건
+    ```
+
+    **유도한 $t^\ast = \pi$가 맞는다.** $J$가 고른 $0.176290$과 유병률 $0.181000$의 차이가 $0.0047$, 곧 상대적으로 $2.6\%$다.
+
+    **정확히 같지 않은 까닭은 경험적 ROC가 계단함수이기 때문이다.** 유도는 밀도 $f_0$, $f_1$이 매끄럽다는 전제 위에 있는데, $1000$건의 자료가 만드는 ROC는 관측 하나마다 한 칸씩 뛰는 계단이라 "기울기 $1$"인 점이 하나로 정해지지 않는다. 출력의 $J$ 값들이 그 사정을 그대로 보여 준다. $t$를 $0.15$에서 $0.22$까지 옮기는 동안 $J$가 $0.4444$에서 $0.4773$ 사이를 **단조롭지 않게 오르내린다.** 최댓값 $0.4773$과 유병률에서의 $0.4546$ 차이는 $0.023$인데, 이 구간에 걸친 관측이 $9$건뿐이라 한두 건의 운으로 쉽게 뒤집힌다.
+
+    그러므로 **"유든의 $J$가 고른 최적 문턱은 $0.176$"을 소수 셋째 자리까지 믿어서는 안 된다.** 믿어도 되는 것은 "유병률 언저리"라는 결론이고, 그것은 표본이 아니라 유도가 말해 준 것이다. 비용을 아는 상황이라면 애초에 $J$가 아니라 $C_{FP}/(C_{FP}+C_{FN})$을 써야 한다.
 
 ## 문턱 조율의 주요 성질
 
