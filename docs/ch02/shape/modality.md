@@ -18,36 +18,186 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 봉우리가 둘인 분포 만들기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 봉우리가 둘로 갈라지는 경계. 분산이 같은 두 정규분포를 반반 섞되 중심을 $\pm\mu$에 둔다. 아래 코드는 $\mu = 3$(중심 사이 거리 $6\sigma$)으로 섞어 봉우리 둘을 얻는다.
+
+**(1)** 이 혼합의 밀도가 **이봉이 될 필요충분조건이 $\mu > \sigma$**임을 보이시오. 또 $\mu = 3$일 때 두 봉우리가 성분 평균 $\pm 3$에서 얼마나 벗어나는지 구하시오.
+
+**(2)** $\mu/\sigma = 0.9,\ 1.0,\ 1.1$에서 봉우리 개수를 세어 (1)을 확인하고, 이봉이 된 직후의 **골이 얼마나 얕은지** 재시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 해석적으로.** 일반성을 잃지 않고 $\sigma = 1$로 두자($x$를 $\sigma$로 재면 된다). 밀도는
 
-# 중심이 0 과 6 으로 떨어진 정규분포 둘에서 각각 1000개씩 뽑는다.
-data_normal_1 = stats.norm().rvs(1_000)
-data_normal_2 = stats.norm(loc=6).rvs(1_000)
+    $$
+    f(x) = \tfrac{1}{2}\left[\phi(x - \mu) + \phi(x + \mu)\right]
+    $$
 
-# 둘을 한 자료로 섞는다. 어느 값이 어느 쪽에서 왔는지는 지워진다.
-combined_data = np.concatenate((data_normal_1, data_normal_2))
+    이고 $f(-x) = f(x)$이므로 $f'(0) = 0$이다. **$x = 0$은 언제나 정류점이다.** 남은 물음은 그것이 봉우리인가 골인가 하나뿐이다. 표준정규밀도의 이계도함수가 $\phi''(u) = \phi(u)(u^2 - 1)$이므로
 
-# 그래도 히스토그램에는 봉우리가 둘로 남는다. 섞인 흔적이 모양에 드러난 것이다.
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.hist(combined_data, bins=30, color='skyblue', edgecolor='black')
-ax.set_title("이봉 분포의 히스토그램")
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-plt.show()
-```
+    $$
+    f''(0) = \tfrac{1}{2}\left[\phi''(-\mu) + \phi''(\mu)\right] = \phi(\mu)\left(\mu^2 - 1\right)
+    $$
 
-![이봉 분포의 히스토그램](./img/modality_19.png)
+    이다. $\phi(\mu) > 0$이므로 부호는 $\mu^2 - 1$이 정한다.
 
-두 봉우리가 뚜렷이 보이며, 각각이 구성 정규분포 하나씩에 대응한다.
+    - $\mu < 1$이면 $f''(0) < 0$이라 $x = 0$이 극대다. 중심에 봉우리가 하나 서고 **단봉**이다.
+    - $\mu > 1$이면 $f''(0) > 0$이라 $x = 0$이 극소다. 가운데가 골이므로 양옆에 봉우리가 하나씩 있어 **이봉**이다.
+
+    경계 $\mu = 1$은 따로 보아야 한다. $f''(0) = 0$이므로 더 미분한다. $\phi^{(4)}(u) = \phi(u)(u^4 - 6u^2 + 3)$에서
+
+    $$
+    f^{(4)}(0) = \phi(\mu)\left(\mu^4 - 6\mu^2 + 3\right) \Big|_{\mu = 1} = -2\,\phi(1) < 0
+    $$
+
+    이라 $x = 0$이 여전히 극대다. **경계에서는 단봉이다.** 그러므로 조건은 $\mu \ge 1$이 아니라 **$\mu > 1$**, 곧 $\sigma$를 되살리면 $\mu > \sigma$다. 중심 사이의 거리로 말하면 $2\mu > 2\sigma$다.
+
+    **봉우리의 위치.** $f'(x) = 0$은
+
+    $$
+    (x - \mu)\,e^{-(x-\mu)^2/2} + (x + \mu)\,e^{-(x+\mu)^2/2} = 0
+    $$
+
+    이다. 오른쪽 봉우리를 $x = \mu - \delta$로 두면 첫 항이 $-\delta e^{-\delta^2/2}$, 둘째 항이 $(2\mu - \delta)e^{-(2\mu-\delta)^2/2}$이고, $\delta$가 작다고 보면
+
+    $$
+    \delta \approx 2\mu\, e^{-2\mu^2}
+    $$
+
+    이다. $\mu = 3$이면 $\delta \approx 6e^{-18} = 9.1 \times 10^{-8}$이다. **멀리 떨어뜨리면 봉우리가 성분 평균과 사실상 같아진다.** 반대로 경계 바로 위에서는 봉우리가 성분 평균에서 한참 안쪽에 있다 — 아래에서 수로 본다.
+
+    **(2) 수치적으로.** 먼저 코드가 섞는 것은 $\mu = 3$, 곧 임계값의 세 배다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 중심이 0 과 6 으로 떨어진 정규분포 둘에서 각각 1000개씩 뽑는다.
+    data_normal_1 = stats.norm().rvs(1_000)
+    data_normal_2 = stats.norm(loc=6).rvs(1_000)
+
+    # 둘을 한 자료로 섞는다. 어느 값이 어느 쪽에서 왔는지는 지워진다.
+    combined_data = np.concatenate((data_normal_1, data_normal_2))
+
+    # 그래도 히스토그램에는 봉우리가 둘로 남는다. 섞인 흔적이 모양에 드러난 것이다.
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.hist(combined_data, bins=30, color='skyblue', edgecolor='black')
+    ax.set_title("이봉 분포의 히스토그램")
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    plt.show()
+    ```
+
+    ![이봉 분포의 히스토그램](./img/modality_19.png)
+
+    두 봉우리가 뚜렷이 보이며, 각각이 구성 정규분포 하나씩에 대응한다. 이제 중심을 당겨 가며 언제 이 모양이 무너지는지 본다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+    from scipy.optimize import brentq
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+
+    def mixture(mu, sigma=1.0, m=200_001):
+        """중심이 ±mu 인 등가중 정규혼합의 밀도를 촘촘한 격자에서 잰다."""
+        g = np.linspace(-(mu + 6 * sigma), mu + 6 * sigma, m)
+        d = 0.5 * (stats.norm.pdf(g, -mu, sigma) + stats.norm.pdf(g, mu, sigma))
+        return g, d
+
+
+    def peaks_and_dip(mu, sigma=1.0, w=200):
+        """봉우리 위치와 골의 깊이 1 - f(0)/f(최대) 를 돌려준다."""
+        g, d = mixture(mu, sigma)
+        out = []
+        for i in range(w, len(g) - w):
+            # 창 안에서 최대이고 양쪽 끝보다 높아야 봉우리로 센다.
+            # 평탄부를 봉우리 여럿으로 세지 않기 위한 장치다.
+            if d[i] == d[i - w:i + w + 1].max() and d[i] > d[i - w] and d[i] > d[i + w]:
+                if not out or abs(g[i] - out[-1]) > 0.05:
+                    out.append(g[i])
+        dip = 1 - d[np.argmin(np.abs(g))] / d.max()
+        return out, dip
+
+
+    print(f"{'mu/sigma':>9}{'mu^2-sigma^2':>14}{'봉우리 수':>10}{'봉우리 위치':>22}{'골의 깊이':>12}")
+    for mu in (0.9, 1.0, 1.1, 1.2, 1.5, 2.0, 3.0):
+        pk, dip = peaks_and_dip(mu)
+        print(f"{mu:>9.2f}{mu * mu - 1:>+14.4f}{len(pk):>10d}"
+              f"{str([round(q, 3) for q in pk]):>22}{dip:>12.6f}")
+
+    # mu = 3 (위 코드의 분리 6) 에서 봉우리가 성분 평균에 얼마나 가까운가.
+    a = 3.0
+    dfdx = lambda x: -((x - a) * stats.norm.pdf(x - a) + (x + a) * stats.norm.pdf(x + a))
+    root = brentq(dfdx, 1.0, 5.0, xtol=1e-14)
+    print(f"\nmu = 3 의 오른쪽 봉우리 = {root:.9f}   (어림 mu - 2mu e^(-2mu^2) = "
+          f"{a - 2 * a * np.exp(-2 * a * a):.9f})")
+
+    fig, (ax, az) = plt.subplots(1, 2, figsize=(12, 3.4))
+
+    for mu, c, ls in ((0.9, "#1565C0", "-"), (1.0, "#37474F", "--"), (1.1, "#E65100", "-")):
+        g, d = mixture(mu)
+        ax.plot(g, d, color=c, ls=ls, lw=1.8, label=f"$\\mu/\\sigma = {mu}$")
+    ax.set_xlim(-2.6, 2.6)
+    ax.set_xlabel("$x$")
+    ax.set_ylabel("밀도")
+    ax.set_title("임계값 근처의 혼합밀도 — $\\mu/\\sigma = 1$ 에서 갈린다", fontsize=11)
+    ax.legend(fontsize=9)
+
+    rs = np.linspace(0.5, 3.0, 120)
+    dips = [peaks_and_dip(r)[1] for r in rs]
+    az.plot(rs, dips, color="#1565C0", lw=1.8)
+    az.axvline(1.0, color="#D32F2F", ls="--", lw=1.4)
+    az.axhline(0.0, color="#90A4AE", lw=0.8)
+    for r in (1.1, 1.2, 1.5, 2.0, 3.0):
+        az.plot([r], [peaks_and_dip(r)[1]], "o", ms=5, color="#E65100")
+    az.set_xlabel("$\\mu/\\sigma$")
+    az.set_ylabel("골의 깊이 $1 - f(0)/f_{\\max}$")
+    az.set_title("이봉이 된 뒤에도 골은 한참 얕다", fontsize=11)
+
+    for a_ in (ax, az):
+        a_.spines[["top", "right"]].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+     mu/sigma  mu^2-sigma^2     봉우리 수                봉우리 위치       골의 깊이
+         0.90       -0.1900         1                 [0.0]    0.000000
+         1.00       +0.0000         1                 [0.0]    0.000000
+         1.10       +0.2100         2       [-0.737, 0.737]    0.025963
+         1.20       +0.4400         2       [-1.001, 1.001]    0.089434
+         1.50       +1.2500         2       [-1.463, 1.463]    0.358217
+         2.00       +3.0000         2       [-1.999, 1.999]    0.729420
+         3.00       +8.0000         2           [-3.0, 3.0]    0.977782
+
+    mu = 3 의 오른쪽 봉우리 = 2.999999909   (어림 mu - 2mu e^(-2mu^2) = 2.999999909)
+    ```
+
+    ![이봉이 되는 임계값과 골의 깊이](./img/modality_threshold.png)
+
+    **$\mu^2 - \sigma^2$의 부호가 봉우리 수를 정확히 가른다.** $\mu/\sigma = 0.9$와 $1.0$에서는 봉우리가 $x = 0$ 하나뿐이고, $1.1$에서 비로소 $\pm 0.737$에 둘이 생긴다. 경계 $\mu/\sigma = 1$이 단봉 쪽에 속한다는 것도 그대로 확인된다 — $f^{(4)}(0) < 0$으로 예측한 바다.
+
+    봉우리 위치도 예측과 맞는다. $\mu = 3$의 오른쪽 봉우리가 $2.999999909$로, 어림식 $\mu - 2\mu e^{-2\mu^2}$가 준 값과 소수점 아홉째 자리까지 같다. **성분 평균 $3$에서 $10^{-7}$밖에 떨어져 있지 않다.** 반면 $\mu/\sigma = 1.1$에서는 봉우리가 $\pm 0.737$로 성분 평균 $\pm 1.1$에서 $33\%$나 안쪽이다. **봉우리 위치는 성분 평균이 아니다.**
+
+    **이봉과 "눈에 보이는 이봉"은 다르다.** 마지막 열이 그 이야기다. $\mu/\sigma = 1.1$은 수학적으로 분명히 이봉이지만 골이 봉우리 높이의 $2.6\%$밖에 내려가지 않는다. 오른쪽 그림에서 주황 곡선의 가운데가 거의 평평해 보이는 것이 그래서다. $\mu/\sigma = 1.2$에서 $8.9\%$, $1.5$에서 $35.8\%$이고, 코드가 쓴 $\mu/\sigma = 3$에 이르러서야 $97.8\%$로 두 봉우리가 거의 끊어진다.
+
+    그러므로 실무에서 읽을 교훈은 임계값보다 한 걸음 더 멀리 있다.
+
+    - **중심 사이 거리가 $2\sigma$ 이하이면 히스토그램에 봉우리가 하나뿐이다.** 두 집단이 분명히 섞여 있어도 그렇다. 봉우리 수는 하위집단 개수의 하한일 뿐이다.
+    - **$2\sigma$를 조금 넘긴 것으로는 모자란다.** 골이 $10\%$는 내려가야 눈에 띄는데 그러려면 $\mu/\sigma \gtrsim 1.2$, 곧 거리가 $2.4\sigma$는 되어야 한다. 표집 잡음까지 생각하면 더 들 수 있다.
+
+    남녀 키가 그 보기다. 표준편차가 각각 약 $6$cm, 평균 차이가 약 $13$cm이면 $\mu/\sigma \approx 1.08$로 임계값을 겨우 넘는다. 밀도는 이봉이지만 골의 깊이가 $1.8\%$에 그쳐 **실제 키 히스토그램은 단봉으로 보인다.** 연습문제 7에서 같은 임계값을 중심 사이 거리 $s = 2a$로 다시 쓰고, 연습문제 8에서는 표집 잡음이 여기에 무엇을 더하는지 본다. $\square$
 
 ## 다봉 분포
 

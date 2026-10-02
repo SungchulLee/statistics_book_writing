@@ -43,45 +43,129 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 소득 자료의 평균
+**보기 1.** <span class="diff easy" title="쉬움"></span> 무게중심은 한가운데가 아니다. 대출 신청자 $50{,}000$명의 소득 자료에 평균을 세로선으로 긋는다.
+
+**(1)** 평균이 $\sum_i (x_i - c) = 0$을 만족하는 **유일한** $c$임을 보이고, "무게중심"이라는 말이 뜻하는 바를 적으시오.
+
+**(2)** 그렇다면 평균의 왼쪽과 오른쪽에 자료가 반씩 있는가. 이 자료에서 평균보다 작은 관측의 비율을 구하시오.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import pandas as pd
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** $h(c) = \sum_{i=1}^n (x_i - c)$는 $c$의 **일차함수**다.
 
-url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
-loans_data = pd.read_csv(url)
+    $$
+    h(c) = \sum_i x_i - nc
+    $$
 
-mean_income = loans_data['x'].mean()
+    기울기가 $-n \ne 0$이므로 $h$는 강한 단조감소이고 영점이 정확히 하나다. 그 영점은
 
-fig, ax = plt.subplots(figsize=(12, 3))
-# density=True 라서 y축이 밀도다. 소득 자료의 밀도는 1e-5 규모이므로
-# 아래 세로선의 높이 1.6e-5 도 그 눈금에 맞춘 값이다.
-ax.hist(loans_data['x'], bins=20, density=True, alpha=0.35,
-        color="#1565C0", edgecolor="white")
-# 평균 위치에 세로선을 긋는다. (x, x)와 (0, 높이)를 이어 그린 것이다.
-ax.plot([mean_income, mean_income], [0, 1.6e-5], "--",
-        color="#E65100", lw=2, label="평균")
-ax.legend()
-ax.set_title("소득 자료의 히스토그램과 평균")
-ax.set_xlabel("소득 (달러)")
-ax.set_ylabel("밀도")
-ax.spines[["top", "right"]].set_visible(False)
-fig.savefig("mean_median_mode_44.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
-```
+    $$
+    \sum_i x_i - nc = 0 \;\Longleftrightarrow\; c = \frac{1}{n}\sum_i x_i = \bar x
+    $$
 
-![소득 자료의 히스토그램과 평균](./img/mean_median_mode_44.png)
+    다. **평균은 편차의 합을 $0$으로 만드는 유일한 점이다.**
+
+    물리로 읽으면 이렇다. 수직선 위 $x_i$마다 무게 $1$의 추를 매달고 받침대를 $c$에 두면, 추 하나가 주는 돌림힘(토크)이 $x_i - c$이고 전체 돌림힘이 $h(c)$다. 받침대가 균형을 이루는 자리가 곧 $h(c) = 0$인 자리, 곧 평균이다. 합을 왼쪽과 오른쪽으로 갈라 적으면
+
+    $$
+    \sum_{x_i < \bar x} (\bar x - x_i) \;=\; \sum_{x_i > \bar x} (x_i - \bar x)
+    $$
+
+    로, **양쪽 토크가 정확히 같다.**
+
+    **(2) 해석적으로.** 위 등식이 말하는 것은 **거리의 합**이 같다는 것이지 **개수**가 같다는 것이 아니다. 개수를 반으로 가르는 것은 중앙값의 일이다. 오른쪽으로 치우친 자료에서는 오른쪽 소수가 아주 멀리 있어 큰 토크를 내므로, 왼쪽은 **많은 수가 가까이** 모여 균형을 맞춘다. 따라서
+
+    $$
+    \#\{x_i < \bar x\} > \frac{n}{2}
+    $$
+
+    가 되리라 예상된다. 얼마나 넘는지는 자료가 정한다 — 수로 재어 보자.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    loans_data = pd.read_csv(url)
+
+    mean_income = loans_data['x'].mean()
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # density=True 라서 y축이 밀도다. 소득 자료의 밀도는 1e-5 규모이므로
+    # 아래 세로선의 높이 1.6e-5 도 그 눈금에 맞춘 값이다.
+    ax.hist(loans_data['x'], bins=20, density=True, alpha=0.35,
+            color="#1565C0", edgecolor="white")
+    # 평균 위치에 세로선을 긋는다. (x, x)와 (0, 높이)를 이어 그린 것이다.
+    ax.plot([mean_income, mean_income], [0, 1.6e-5], "--",
+            color="#E65100", lw=2, label="평균")
+    ax.legend()
+    ax.set_title("소득 자료의 히스토그램과 평균")
+    ax.set_xlabel("소득 (달러)")
+    ax.set_ylabel("밀도")
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.savefig("mean_median_mode_44.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+    ```
+
+    ![소득 자료의 히스토그램과 평균](./img/mean_median_mode_44.png)
+
+    주황 세로선이 평균이다. 이제 그 선이 정말 균형점인지 재어 본다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
+           '/master/data/loans_income.csv')
+    income = pd.read_csv(url)['x'].values.astype(float)
+    m = income.mean()
+    dev = income - m
+
+    print(f"n = {len(income):,},  평균 {m:,.2f}")
+    print(f"편차의 합 = {dev.sum():.3e}   (0 이어야 한다)")
+    print(f"  자료 규모로 나눈 상대오차 = {abs(dev.sum()) / np.abs(income).sum():.1e}")
+    print(f"왼쪽 토크  sum(m - x),  x < m : {(m - income[income < m]).sum():>15,.0f}")
+    print(f"오른쪽 토크 sum(x - m),  x > m : {(income[income > m] - m).sum():>15,.0f}")
+
+    below, above = np.sum(income < m), np.sum(income > m)
+    print(f"\n평균 미만 {below:,}명 ({below / len(income):.2%})")
+    print(f"평균 초과 {above:,}명 ({above / len(income):.2%})")
+    print(f"중앙값 {np.median(income):,.0f} 은 평균보다 {m - np.median(income):,.0f} 작다")
+    ```
+
+    출력:
+
+    ```
+    n = 50,000,  평균 68,760.52
+    편차의 합 = -6.217e-08   (0 이어야 한다)
+      자료 규모로 나눈 상대오차 = 1.8e-17
+    왼쪽 토크  sum(m - x),  x < m :     640,946,246
+    오른쪽 토크 sum(x - m),  x > m :     640,946,246
+
+    평균 미만 28,811명 (57.62%)
+    평균 초과 21,189명 (42.38%)
+    중앙값 62,000 은 평균보다 6,761 작다
+    ```
+
+    **(1)이 그대로 확인된다.** 편차의 합이 $-6.2 \times 10^{-8}$인데, 소득 총액이 $34$억 달러 규모임을 생각하면 상대오차가 $1.8 \times 10^{-17}$로 **배정밀도 부동소수점의 한계 그 자체**다. 수학적으로는 정확히 $0$이고, 남은 것은 $50{,}000$번 더하는 동안 쌓인 반올림 오차뿐이다.
+
+    **양쪽 토크가 $640{,}946{,}246$으로 마지막 자리까지 같다.** 이것이 "무게중심"의 정확한 내용이다.
+
+    **그런데 개수는 전혀 반반이 아니다.** 평균 미만이 $28{,}811$명($57.62\%$), 평균 초과가 $21{,}189$명($42.38\%$)이다. **대출 신청자 열 명 가운데 여섯 명 가까이가 "평균 소득"에 못 미친다.** 이상한 일이 아니라 (2)에서 예상한 그대로다. 오른쪽 꼬리의 소수가 아주 멀리 떨어져 큰 토크를 내므로, 왼쪽에서는 가까이 모인 다수가 그 토크를 받아 내야 한다.
+
+    **그래서 "평균보다 못 번다"는 말은 생각보다 흔한 처지다.** 반을 가르는 값을 알고 싶으면 평균이 아니라 중앙값을 물어야 하며, 여기서는 $62{,}000$달러로 평균보다 $6{,}761$달러 낮다. 다음 보기가 이 차이를 다룬다.
 
 ---
 
@@ -105,57 +189,156 @@ fig.savefig("mean_median_mode_44.png", dpi=170, facecolor="white",
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 소득 자료에서 중앙값과 평균 견주기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균과 중앙값은 얼마나 멀어질 수 있는가. 소득 자료에서 평균이 중앙값보다 $6{,}761$달러 크다.
+
+**(1)** 어떤 분포에서나 $\lvert \mu - m \rvert \le \sigma$임을 보이시오($m$은 중앙값).
+
+**(2)** 소득 자료와 치우친 분포 여럿에서 비 $\lvert \mu - m \rvert / \sigma$를 재어, 이 부등식이 얼마나 빡빡한지 보시오.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import pandas as pd
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 세 걸음이면 된다.
 
-url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
-loans_data = pd.read_csv(url)
+    **첫째 걸음 — 옌센.** 절댓값은 볼록함수이므로 $\lvert \mathbb{E}[Y] \rvert \le \mathbb{E}\lvert Y \rvert$다. $Y = X - m$으로 두면
 
-# 같은 자료에 평균과 중앙값을 함께 표시한다.
-# 오른쪽으로 치우친 분포에서는 평균이 중앙값보다 오른쪽에 놓인다.
-# 긴 오른쪽 꼬리가 평균만 끌어당기기 때문이다.
-mean_income = loans_data['x'].mean()
-median_income = loans_data['x'].median()
+    $$
+    \lvert \mu - m \rvert = \lvert \mathbb{E}[X - m] \rvert \le \mathbb{E}\lvert X - m \rvert
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.hist(loans_data['x'], bins=20, density=True, alpha=0.35,
-        color="#1565C0", edgecolor="white")
-ax.plot([mean_income, mean_income], [0, 1.6e-5], "--",
-        color="#E65100", lw=2, label="평균")
-ax.plot([median_income, median_income], [0, 1.6e-5], "--",
-        color="#33691E", lw=2, label="중앙값")
-ax.legend()
-ax.set_title("소득 자료의 히스토그램과 평균, 중앙값")
-ax.set_xlabel("소득 (달러)")
-ax.set_ylabel("밀도")
-ax.spines[["top", "right"]].set_visible(False)
-fig.savefig("mean_median_mode_87.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
+    이다.
 
-print(f"평균   {mean_income:>9,.0f}")
-print(f"중앙값 {median_income:>9,.0f}")
-print(f"차이   {mean_income - median_income:>9,.0f}  (양수 = 오른쪽 치우침)")
-```
+    **둘째 걸음 — 중앙값의 최소성.** 중앙값은 $c \mapsto \mathbb{E}\lvert X - c\rvert$를 최소화한다(연습문제 3). 특히 $c = \mu$를 넣은 값보다 작거나 같으므로
 
-출력:
+    $$
+    \mathbb{E}\lvert X - m \rvert \le \mathbb{E}\lvert X - \mu \rvert
+    $$
 
-```
-평균      68,761
-중앙값    62,000
-차이       6,761  (양수 = 오른쪽 치우침)
-```
+    이다.
 
-![소득 자료의 히스토그램과 평균, 중앙값](./img/mean_median_mode_87.png)
+    **셋째 걸음 — 코시–슈바르츠(또는 옌센).** $\mathbb{E}\lvert Z \rvert \le \sqrt{\mathbb{E}[Z^2]}$이므로 $Z = X - \mu$에서
+
+    $$
+    \mathbb{E}\lvert X - \mu \rvert \le \sqrt{\mathbb{E}\left[(X-\mu)^2\right]} = \sigma
+    $$
+
+    이다. 셋을 이으면
+
+    $$
+    \lvert \mu - m \rvert \;\le\; \mathbb{E}\lvert X - m \rvert \;\le\; \mathbb{E}\lvert X - \mu \rvert \;\le\; \sigma
+    $$
+
+    로 **$\lvert \mu - m \rvert \le \sigma$** 가 증명된다. 분산이 유한하기만 하면 모양에 아무 조건이 없다. 치우쳐도, 봉우리가 여럿이어도, 이산이어도 성립한다.
+
+    **세 부등식이 모두 등호가 되어야 $\lvert \mu - m\rvert = \sigma$다.** 마지막 등호는 $\lvert X - \mu \rvert$가 상수일 때, 곧 $X$가 $\mu \pm \sigma$ 두 값만 갖는 분포일 때 성립한다. 그런데 그런 분포에서 두 값의 확률이 같으면 $m = \mu$가 되어 좌변이 $0$이고, 다르면 중앙값이 확률 큰 쪽 값이 되어 둘째 부등식이 엄격해진다. **그러므로 $\sigma$라는 상한에는 실제로 닿지 못한다.** 아래에서 보듯 흔한 분포들은 $0.4$에도 이르지 못한다.
+
+    **(2) 수치적으로.** 먼저 쪽의 코드가 두 값을 재고, 이어서 비를 계산한다.
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    loans_data = pd.read_csv(url)
+
+    # 같은 자료에 평균과 중앙값을 함께 표시한다.
+    # 오른쪽으로 치우친 분포에서는 평균이 중앙값보다 오른쪽에 놓인다.
+    # 긴 오른쪽 꼬리가 평균만 끌어당기기 때문이다.
+    mean_income = loans_data['x'].mean()
+    median_income = loans_data['x'].median()
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.hist(loans_data['x'], bins=20, density=True, alpha=0.35,
+            color="#1565C0", edgecolor="white")
+    ax.plot([mean_income, mean_income], [0, 1.6e-5], "--",
+            color="#E65100", lw=2, label="평균")
+    ax.plot([median_income, median_income], [0, 1.6e-5], "--",
+            color="#33691E", lw=2, label="중앙값")
+    ax.legend()
+    ax.set_title("소득 자료의 히스토그램과 평균, 중앙값")
+    ax.set_xlabel("소득 (달러)")
+    ax.set_ylabel("밀도")
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.savefig("mean_median_mode_87.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    print(f"평균   {mean_income:>9,.0f}")
+    print(f"중앙값 {median_income:>9,.0f}")
+    print(f"차이   {mean_income - median_income:>9,.0f}  (양수 = 오른쪽 치우침)")
+    ```
+
+    출력:
+
+    ```
+    평균      68,761
+    중앙값    62,000
+    차이       6,761  (양수 = 오른쪽 치우침)
+    ```
+
+    ![소득 자료의 히스토그램과 평균, 중앙값](./img/mean_median_mode_87.png)
+
+    차이 $6{,}761$달러가 큰 것인지 작은 것인지는 퍼짐과 견주어야 알 수 있다. (1)의 부등식이 그 자를 준다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
+           '/master/data/loans_income.csv')
+    income = pd.read_csv(url)['x'].values.astype(float)
+    mu, me, sd = income.mean(), np.median(income), income.std(ddof=1)
+    print(f"소득 자료 : 평균 {mu:,.2f}  중앙값 {me:,.2f}  표준편차 {sd:,.2f}")
+    print(f"            |평균 - 중앙값| / 표준편차 = {abs(mu - me) / sd:.6f}   (1 이하여야 한다)")
+
+    dists = {
+        "정규(0,1)": stats.norm(),
+        "지수(1)": stats.expon(),
+        "로그정규(1)": stats.lognorm(s=1),
+        "카이제곱(1)": stats.chi2(1),
+        "파레토(3)": stats.pareto(3),
+        "감마(0.2)": stats.gamma(0.2),
+        "베타(0.1, 5)": stats.beta(0.1, 5),
+    }
+    print(f"\n{'분포':>12}{'평균':>12}{'중앙값':>12}{'표준편차':>12}{'|mu-m|/sigma':>14}")
+    for name, d in dists.items():
+        mu_, me_, sd_ = d.mean(), d.median(), np.sqrt(d.var())
+        print(f"{name:>12}{mu_:>12.6f}{me_:>12.6f}{sd_:>12.6f}{abs(mu_ - me_) / sd_:>14.6f}")
+    ```
+
+    출력:
+
+    ```
+    소득 자료 : 평균 68,760.52  중앙값 62,000.00  표준편차 32,872.04
+                |평균 - 중앙값| / 표준편차 = 0.205662   (1 이하여야 한다)
+
+              분포          평균         중앙값        표준편차  |mu-m|/sigma
+         정규(0,1)    0.000000    0.000000    1.000000      0.000000
+           지수(1)    1.000000    0.693147    1.000000      0.306853
+         로그정규(1)    1.648721    1.000000    2.161197      0.300168
+         카이제곱(1)    1.000000    0.454936    1.414214      0.385418
+          파레토(3)    1.500000    1.259921    0.866025      0.277219
+         감마(0.2)    0.200000    0.020746    0.447214      0.400823
+      베타(0.1, 5)    0.019608    0.000130    0.056137      0.346967
+    ```
+
+    **마지막 열이 모두 $1$보다 작다.** 부등식이 여덟 경우에서 모두 성립한다. 대칭인 정규분포는 $\mu = m$이라 $0$이고, 나머지는 치우친 정도에 따라 $0.277$에서 $0.401$ 사이에 놓인다.
+
+    **그런데 어느 것도 $1$ 근처에 가지 않는다.** 꼬리가 아주 두꺼운 파레토(3)도 $0.277$이고, 모양모수가 $0.2$로 극단적으로 치우친 감마조차 $0.401$이다. 한쪽으로 쏠린 베타$(0.1, 5)$도 $0.347$에 그친다. **$\lvert\mu - m\rvert \le \sigma$는 참이지만 아주 느슨한 부등식**이며, (1)의 등호 분석이 그 까닭을 설명한다 — 세 부등식이 동시에 등호가 될 수 없기 때문이다.
+
+    실용적으로 읽으면 이렇다.
+
+    - **$\lvert\mu - m\rvert$가 $\sigma$의 절반을 넘으면 의심해야 한다.** 위 표에서 보듯 흔한 치우친 분포들도 $0.4$를 넘지 못한다. 그보다 크다면 자료 오류이거나 아주 특이한 분포다.
+    - **소득 자료의 $0.206$은 "뚜렷하지만 극단적이지는 않은" 치우침이다.** 평균과 중앙값이 $6{,}761$달러 벌어졌어도 퍼짐 $32{,}872$달러에 견주면 $20\%$다.
+    - **$\mu - m$만 보고 치우침을 말할 수 없다.** 단위가 붙은 양이므로 반드시 $\sigma$로 나누어야 비교가 된다. 이 비 자체가 **비모수적 왜도 측도**로 쓰이기도 한다.
+
+    한 가지 주의. **이 부등식의 부호는 치우침의 방향을 보장하지 않는다.** "평균이 중앙값보다 크면 오른쪽으로 치우쳤다"는 어림은 대개 맞지만 반례가 있으며, 보기 8 에서 하나 만들어 본다.
 
 ### 중앙값은 이상치에 강건하다
 
@@ -163,111 +346,212 @@ print(f"차이   {mean_income - median_income:>9,.0f}  (양수 = 오른쪽 치�
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 이상치가 평균과 중앙값에 미치는 영향
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이상치 스무 개가 평균을 얼마나 미는가. 소득 자료 $50{,}000$개에 $2{,}000$만 달러짜리 $20$개를 더한다. 전체의 $0.04\%$다.
+
+**(1)** 관측 $n$개의 평균이 $\bar x$일 때 값 $M$인 관측 $k$개를 더하면 평균이 정확히 얼마만큼 움직이는지 식으로 적고, 이 자료에 넣어 수를 구하시오.
+
+**(2)** 같은 변화가 중앙값에는 왜 거의 영향을 주지 못하는지 **순서통계량의 색인**으로 설명하시오.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    **(1) 해석적으로.** 새 평균은
 
-url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
-loans_data = pd.read_csv(url)
-income_data = loans_data['x'].values
+    $$
+    \bar x_{\text{new}} = \frac{n\bar x + kM}{n + k}
+    $$
 
-# --- 1부: 원자료 ---
-mean_income = income_data.mean()
-median_income = np.median(income_data)
+    이므로 이동량은
 
-fig, (hist_ax, box_ax) = plt.subplots(1, 2, figsize=(12, 3))
-fig.suptitle("원자료", fontsize=16)
+    $$
+    \bar x_{\text{new}} - \bar x = \frac{n\bar x + kM - (n+k)\bar x}{n+k} = \frac{k\,(M - \bar x)}{n + k}
+    $$
 
-n, bin_edges, _ = hist_ax.hist(income_data, bins=20, density=True, alpha=0.5,
-                                color="#DCEBFB", edgecolor="#1565C0")
-hist_ax.plot([mean_income, mean_income], [0, n.max()], "--",
-             color="#E65100", lw=2, label="평균")
-hist_ax.plot([median_income, median_income], [0, n.max()], "--",
-             color="#33691E", lw=2, label="중앙값")
-hist_ax.legend()
-hist_ax.set_title("히스토그램")
-hist_ax.set_xlabel("소득 (달러)")
-hist_ax.set_ylabel("밀도")
+    다. **이동량이 $M$에 비례한다.** $M$을 두 배로 키우면 이동도 (거의) 두 배가 된다. 이것이 "평균의 붕괴점이 $0$"이라는 말의 정량적 내용이다(연습문제 7).
 
-box_ax.boxplot(income_data, vert=False, patch_artist=True)
-box_ax.set_title("상자그림")
-box_ax.set_xlabel("소득 (달러)")
+    여기에 $n = 50{,}000$, $k = 20$, $M = 2{,}000$만, $\bar x = 68{,}760.52$를 넣으면
 
-for ax in (hist_ax, box_ax):
-    ax.spines[["top", "right"]].set_visible(False)
+    $$
+    \frac{20 \times (20{,}000{,}000 - 68{,}760.52)}{50{,}020} = \frac{20 \times 19{,}931{,}239.48}{50{,}020} = 7{,}969.31
+    $$
 
-fig.tight_layout()
-fig.savefig("mean_median_mode_117_0.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
+    이다. 새 평균은 $68{,}760.52 + 7{,}969.31 = 76{,}729.83$, 곧 $11.6\%$ 증가다.
 
-# --- 2부: 이상치를 넣는다 ---
-# 5만 개 자료에 2천만 달러짜리 20개를 더한다. 전체의 0.04%에 불과하다.
-# 그런데도 평균은 크게 밀리고 중앙값은 사실상 그대로다.
-outliers = np.array([20_000_000] * 20)
-data_with_outliers = np.concatenate((income_data, outliers))
+    **(2) 해석적으로.** 중앙값은 **값이 아니라 자리**를 본다. 원자료는 $n = 50{,}000$(짝수)이므로 중앙값이
 
-mean_outliers = data_with_outliers.mean()
-median_outliers = np.median(data_with_outliers)
+    $$
+    \frac{x_{(25{,}000)} + x_{(25{,}001)}}{2}
+    $$
 
-fig, (hist_ax, box_ax) = plt.subplots(1, 2, figsize=(12, 3))
-fig.suptitle("이상치를 넣은 뒤", fontsize=16)
+    이다. 더한 $20$개는 모두 자료의 최댓값보다 크므로 정렬하면 맨 끝 $20$자리를 차지한다. 그러므로 **원래 관측들의 상대 순서는 전혀 바뀌지 않고**, 중앙값의 색인만 $n' = 50{,}020$에 맞추어
 
-# 구간 경계를 원자료와 똑같이 맞춘다. 그래야 두 히스토그램을 나란히 견줄 수 있다.
-# 이상치는 이 구간 밖이라 막대로는 보이지 않고, 평균선의 이동으로만 드러난다.
-n, bin_edges, _ = hist_ax.hist(data_with_outliers, bins=bin_edges,
-                                density=True, alpha=0.5,
-                                color="#DCEBFB", edgecolor="#1565C0")
-hist_ax.plot([mean_outliers, mean_outliers], [0, n.max()], "--",
-             color="#E65100", lw=2, label="평균")
-hist_ax.plot([median_outliers, median_outliers], [0, n.max()], "--",
-             color="#33691E", lw=2, label="중앙값")
-hist_ax.legend()
-hist_ax.set_title("히스토그램")
-hist_ax.set_xlabel("소득 (달러)")
-hist_ax.set_ylabel("밀도")
+    $$
+    \frac{x_{(25{,}010)} + x_{(25{,}011)}}{2}
+    $$
 
-box_ax.boxplot(data_with_outliers, vert=False, patch_artist=True)
-box_ax.set_title("상자그림")
-box_ax.set_xlabel("소득 (달러)")
+    로 열 칸 올라간다. 열 칸 올라간 자리의 값이 원래 자리의 값과 얼마나 다른가 — 그것이 중앙값이 받는 충격의 전부이며, 이상치의 **크기**와는 아무 상관이 없다. $M$을 $10^{30}$으로 바꾸어도 중앙값은 똑같다. 소득 자료는 $62{,}000$달러 근처에 같은 값이 빽빽이 쌓여 있어 열 칸을 올라가도 값이 그대로다.
 
-for ax in (hist_ax, box_ax):
-    ax.spines[["top", "right"]].set_visible(False)
+    **(3) 수치적으로.**
 
-fig.tight_layout()
-fig.savefig("mean_median_mode_117_1.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-# 이상치 20개(전체의 0.04%)가 두 측도를 각각 얼마나 움직였는가
-print(f"{'':10}{'원자료':>14}{'이상치 추가 후':>18}{'변화율':>10}")
-print(f"{'평균':10}{mean_income:>14,.0f}{mean_outliers:>18,.0f}"
-      f"{(mean_outliers/mean_income - 1):>9.1%}")
-print(f"{'중앙값':10}{median_income:>14,.0f}{median_outliers:>18,.0f}"
-      f"{(median_outliers/median_income - 1):>9.1%}")
-```
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
-출력:
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    loans_data = pd.read_csv(url)
+    income_data = loans_data['x'].values
 
-```
-                     원자료          이상치 추가 후       변화율
-평균                68,761            76,730    11.6%
-중앙값               62,000            62,000     0.0%
-```
+    # --- 1부: 원자료 ---
+    mean_income = income_data.mean()
+    median_income = np.median(income_data)
 
-![원자료의 히스토그램과 상자그림](./img/mean_median_mode_117_0.png)
+    fig, (hist_ax, box_ax) = plt.subplots(1, 2, figsize=(12, 3))
+    fig.suptitle("원자료", fontsize=16)
 
-![이상치를 넣은 뒤의 히스토그램과 상자그림](./img/mean_median_mode_117_1.png)
+    n, bin_edges, _ = hist_ax.hist(income_data, bins=20, density=True, alpha=0.5,
+                                    color="#DCEBFB", edgecolor="#1565C0")
+    hist_ax.plot([mean_income, mean_income], [0, n.max()], "--",
+                 color="#E65100", lw=2, label="평균")
+    hist_ax.plot([median_income, median_income], [0, n.max()], "--",
+                 color="#33691E", lw=2, label="중앙값")
+    hist_ax.legend()
+    hist_ax.set_title("히스토그램")
+    hist_ax.set_xlabel("소득 (달러)")
+    hist_ax.set_ylabel("밀도")
 
-이상치를 넣으면 평균은 극적으로 이동하지만 중앙값은 거의 변하지 않는다.
+    box_ax.boxplot(income_data, vert=False, patch_artist=True)
+    box_ax.set_title("상자그림")
+    box_ax.set_xlabel("소득 (달러)")
+
+    for ax in (hist_ax, box_ax):
+        ax.spines[["top", "right"]].set_visible(False)
+
+    fig.tight_layout()
+    fig.savefig("mean_median_mode_117_0.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    # --- 2부: 이상치를 넣는다 ---
+    # 5만 개 자료에 2천만 달러짜리 20개를 더한다. 전체의 0.04%에 불과하다.
+    # 그런데도 평균은 크게 밀리고 중앙값은 사실상 그대로다.
+    outliers = np.array([20_000_000] * 20)
+    data_with_outliers = np.concatenate((income_data, outliers))
+
+    mean_outliers = data_with_outliers.mean()
+    median_outliers = np.median(data_with_outliers)
+
+    fig, (hist_ax, box_ax) = plt.subplots(1, 2, figsize=(12, 3))
+    fig.suptitle("이상치를 넣은 뒤", fontsize=16)
+
+    # 구간 경계를 원자료와 똑같이 맞춘다. 그래야 두 히스토그램을 나란히 견줄 수 있다.
+    # 이상치는 이 구간 밖이라 막대로는 보이지 않고, 평균선의 이동으로만 드러난다.
+    n, bin_edges, _ = hist_ax.hist(data_with_outliers, bins=bin_edges,
+                                    density=True, alpha=0.5,
+                                    color="#DCEBFB", edgecolor="#1565C0")
+    hist_ax.plot([mean_outliers, mean_outliers], [0, n.max()], "--",
+                 color="#E65100", lw=2, label="평균")
+    hist_ax.plot([median_outliers, median_outliers], [0, n.max()], "--",
+                 color="#33691E", lw=2, label="중앙값")
+    hist_ax.legend()
+    hist_ax.set_title("히스토그램")
+    hist_ax.set_xlabel("소득 (달러)")
+    hist_ax.set_ylabel("밀도")
+
+    box_ax.boxplot(data_with_outliers, vert=False, patch_artist=True)
+    box_ax.set_title("상자그림")
+    box_ax.set_xlabel("소득 (달러)")
+
+    for ax in (hist_ax, box_ax):
+        ax.spines[["top", "right"]].set_visible(False)
+
+    fig.tight_layout()
+    fig.savefig("mean_median_mode_117_1.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    # 이상치 20개(전체의 0.04%)가 두 측도를 각각 얼마나 움직였는가
+    print(f"{'':10}{'원자료':>14}{'이상치 추가 후':>18}{'변화율':>10}")
+    print(f"{'평균':10}{mean_income:>14,.0f}{mean_outliers:>18,.0f}"
+          f"{(mean_outliers/mean_income - 1):>9.1%}")
+    print(f"{'중앙값':10}{median_income:>14,.0f}{median_outliers:>18,.0f}"
+          f"{(median_outliers/median_income - 1):>9.1%}")
+    ```
+
+    출력:
+
+    ```
+                         원자료          이상치 추가 후       변화율
+    평균                68,761            76,730    11.6%
+    중앙값               62,000            62,000     0.0%
+    ```
+
+    ![원자료의 히스토그램과 상자그림](./img/mean_median_mode_117_0.png)
+
+    ![이상치를 넣은 뒤의 히스토그램과 상자그림](./img/mean_median_mode_117_1.png)
+
+    이상치를 넣으면 평균은 극적으로 이동하지만 중앙값은 거의 변하지 않는다. 그 이동량이 (1)의 식과 맞는지 확인한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
+           '/master/data/loans_income.csv')
+    income = pd.read_csv(url)['x'].values.astype(float)
+    n, k, M = len(income), 20, 20_000_000.0
+    xbar = income.mean()
+    shifted = np.concatenate([income, np.full(k, M)])
+
+    pred = k * (M - xbar) / (n + k)
+    print(f"예측 이동량 k(M - xbar)/(n+k) = {pred:,.4f}")
+    print(f"실제 이동량                  = {shifted.mean() - xbar:,.4f}")
+    print(f"새 평균 {shifted.mean():,.4f}  ({shifted.mean() / xbar - 1:.2%} 증가)")
+
+    # 이상치 크기를 키우면 이동량도 비례해서 커진다.
+    print(f"\n{'M':>14}{'예측 이동량':>16}{'실제 이동량':>16}{'중앙값':>12}")
+    for Mi in (2e7, 2e8, 2e9, 1e30):
+        q = np.concatenate([income, np.full(k, Mi)])
+        print(f"{Mi:>14.1e}{k * (Mi - xbar) / (n + k):>16.4e}{q.mean() - xbar:>16.4e}"
+              f"{np.median(q):>12,.0f}")
+
+    # 중앙값은 색인만 옮겨 간다.
+    srt, srt2 = np.sort(income), np.sort(shifted)
+    print(f"\n원자료 n = {n}:   x_({n // 2}) = {srt[n // 2 - 1]:,.0f},"
+          f"  x_({n // 2 + 1}) = {srt[n // 2]:,.0f}   -> 중앙값 {np.median(income):,.0f}")
+    m2 = len(shifted)
+    print(f"이후   n = {m2}: x_({m2 // 2}) = {srt2[m2 // 2 - 1]:,.0f},"
+          f"  x_({m2 // 2 + 1}) = {srt2[m2 // 2]:,.0f}   -> 중앙값 {np.median(shifted):,.0f}")
+    print(f"62,000 달러인 관측이 {np.sum(income == 62000):,}명이나 된다")
+    ```
+
+    출력:
+
+    ```
+    예측 이동량 k(M - xbar)/(n+k) = 7,969.3081
+    실제 이동량                  = 7,969.3081
+    새 평균 76,729.8265  (11.59% 증가)
+
+                 M          예측 이동량          실제 이동량         중앙값
+           2.0e+07      7.9693e+03      7.9693e+03      62,000
+           2.0e+08      7.9941e+04      7.9941e+04      62,000
+           2.0e+09      7.9965e+05      7.9965e+05      62,000
+           1.0e+30      3.9984e+26      3.9984e+26      62,000
+
+    원자료 n = 50000:   x_(25000) = 62,000,  x_(25001) = 62,000   -> 중앙값 62,000
+    이후   n = 50020: x_(25010) = 62,000,  x_(25011) = 62,000   -> 중앙값 62,000
+    62,000 달러인 관측이 429명이나 된다
+    ```
+
+    **유도한 이동량과 실제 이동량이 소수점 넷째 자리까지 같다.** $7{,}969.3081$이다. 네 줄 모두 그렇고, $M = 10^{30}$에서도 예측 $3.9984 \times 10^{26}$이 실제와 일치한다. **$M$을 열 배로 키우면 이동량도 거의 열 배가 된다** — $7.97\times10^3 \to 7.99\times10^4 \to 8.00\times10^5$. 비례상수가 $k/(n+k) = 20/50{,}020 \approx 4\times10^{-4}$이고, $M$이 커질수록 $M - \bar x \approx M$이라 비례가 정확해진다.
+
+    **중앙값은 네 줄 모두 정확히 $62{,}000$이다.** $M$을 $2{,}000$만에서 $10^{30}$으로, 곧 $23$자릿수나 키웠는데 꿈쩍도 않는다. (2)의 설명이 그대로 확인된다. 중앙값 자리가 $x_{(25{,}000)}, x_{(25{,}001)}$에서 $x_{(25{,}010)}, x_{(25{,}011)}$로 열 칸 올라갔지만 **네 자리의 값이 모두 $62{,}000$** 이다. $62{,}000$달러를 신고한 사람이 $429$명이나 되어 그 구간이 두껍기 때문이다.
+
+    **그래서 "중앙값은 거의 변하지 않는다"는 서술은 조금 약하다.** 정확한 서술은 **"평균은 이상치의 크기에 비례해 한없이 커지고 중앙값은 순서만 보므로 크기에 아예 반응하지 않는다"** 이다. 중앙값이 받는 유일한 영향은 색인이 $k/2$칸 밀리는 것이고, 그 영향도 자료가 두꺼운 곳에서는 $0$이다.
 
 ### 중앙값이 선호되는 실제 사례
 
@@ -303,40 +587,135 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 절사평균과 중앙값 — 주 인구 자료
+**보기 4.** <span class="diff easy" title="쉬움"></span> `trim_mean(x, 0.1)` 은 몇 퍼센트를 자르는가. 미국 $50$개 주의 인구에 평균, 절단평균, 중앙값을 재어 본다.
+
+**(1)** 정의 1 의 $p$-절단평균이 $n = 50$, $p = 0.1$에서 각 꼬리의 관측 몇 개를 버리는지 구하시오.
+
+**(2)** `scipy.stats.trim_mean(x, 0.1)` 이 버리는 개수와 견주시오. 두 값이 같은가. 같지 않다면 아래 출력의 $4{,}783{,}697$ 은 정의 1 의 몇 퍼센트 절단평균인가.
 
 </div>
 
-```python
-import pandas as pd
-from scipy.stats import trim_mean
+??? success "풀이"
 
-# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
-url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
-state = pd.read_csv(url)
+    **(1) 해석적으로.** 정의 1 은 각 꼬리에서
 
-# 보통의 평균. 캘리포니아 같은 큰 주 하나에 끌려 올라간다.
-mean_pop = state['Population'].mean()
-print(f"평균       : {mean_pop:,.0f}")
+    $$
+    \left\lceil \frac{p\,n}{2} \right\rceil
+    $$
 
-# 절사평균. 0.1 은 양끝에서 5%씩 잘라내고 나머지로 평균을 낸다는 뜻이다.
-trimmed_mean_pop = trim_mean(state['Population'], 0.1)
-print(f"10% 절사평균: {trimmed_mean_pop:,.0f}")
+    개를 버린다. 양쪽을 합쳐 대략 $p n$개, 곧 **전체의 $p$만큼**을 버린다는 뜻이다. $n = 50$, $p = 0.1$이면
 
-# 중앙값은 순서만 보므로 꼬리가 아무리 길어도 흔들리지 않는다.
-median_pop = state['Population'].median()
-print(f"중앙값     : {median_pop:,.0f}")
-```
+    $$
+    \left\lceil \frac{0.1 \times 50}{2} \right\rceil = \lceil 2.5 \rceil = 3
+    $$
 
-출력:
+    이므로 각 꼬리에서 $3$개씩, 모두 $6$개를 버리고 $44$개로 평균을 낸다.
 
-```
-평균       : 6,162,876
-10% 절사평균: 4,783,697
-중앙값     : 4,436,370
-```
+    **(2) 해석적으로.** `scipy.stats.trim_mean(a, proportiontocut)` 은 **각 꼬리에서 `proportiontocut` 비율만큼**을 잘라 낸다. 버리는 개수는 꼬리마다
 
-절단평균은 중간 지대를 차지한다. 극단값(캘리포니아의 3700만 인구)의 영향을 평균보다 덜 받으면서도 중앙값보다 많은 자료를 사용한다. 꼬리를 완전히 무시하지 않으면서 적당한 수준의 강건성을 원할 때 유용하다.
+    $$
+    \lfloor n \cdot \texttt{proportiontocut} \rfloor
+    $$
+
+    이므로 $n = 50$, 인수 $0.1$이면 꼬리마다 $5$개, 모두 $10$개를 버리고 $40$개로 평균을 낸다. **정의 1 의 $3$개와 다르다.**
+
+    두 규약을 맞추려면
+
+    $$
+    \left\lceil \frac{p n}{2}\right\rceil = \lfloor n q \rfloor
+    \;\;\Longrightarrow\;\; q \approx \frac{p}{2}
+    $$
+
+    이어야 한다. 곧 **`scipy` 의 인수는 정의 1 의 $p$의 절반**이다. 거꾸로 읽으면 `trim_mean(x, 0.1)` 은 정의 1 의 표기로 **$p = 0.2$, 곧 $20\%$ 절단평균**이다. 아래 출력의 $4{,}783{,}697$ 이 그 값이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    from scipy.stats import trim_mean
+
+    # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    state = pd.read_csv(url)
+
+    # 보통의 평균. 캘리포니아 같은 큰 주 하나에 끌려 올라간다.
+    mean_pop = state['Population'].mean()
+    print(f"평균       : {mean_pop:,.0f}")
+
+    # 절사평균. scipy 의 0.1 은 "양끝에서 각각 10%씩" 이다 (아래 (2) 참조).
+    trimmed_mean_pop = trim_mean(state['Population'], 0.1)
+    print(f"10% 절사평균: {trimmed_mean_pop:,.0f}")
+
+    # 중앙값은 순서만 보므로 꼬리가 아무리 길어도 흔들리지 않는다.
+    median_pop = state['Population'].median()
+    print(f"중앙값     : {median_pop:,.0f}")
+    ```
+
+    출력:
+
+    ```
+    평균       : 6,162,876
+    10% 절사평균: 4,783,697
+    중앙값     : 4,436,370
+    ```
+
+    절단평균은 중간 지대를 차지한다. 극단값(캘리포니아의 3700만 인구)의 영향을 평균보다 덜 받으면서도 중앙값보다 많은 자료를 사용한다. 꼬리를 완전히 무시하지 않으면서 적당한 수준의 강건성을 원할 때 유용하다. 이제 두 규약이 정말 다른지 개수를 세어 본다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy.stats import trim_mean
+
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
+           '/master/data/state.csv')
+    pop = np.sort(pd.read_csv(url)['Population'].values.astype(float))
+    n = len(pop)
+    print(f"n = {n}")
+
+    # scipy 는 양끝에서 각각 proportiontocut 만큼 버린다.
+    print(f"\n{'인수':>6}{'양끝에서 버리는 개수':>22}{'남는 개수':>10}{'값':>14}")
+    for q in (0.05, 0.06, 0.10, 0.25):
+        cut = int(n * q)
+        print(f"{q:>6.2f}{cut:>22}{n - 2 * cut:>10}{trim_mean(pop, q):>14,.0f}")
+        assert np.isclose(trim_mean(pop, q), pop[cut:n - cut].mean())
+
+    # 책의 정의 1 은 각 꼬리에서 ceil(p*n/2) 개를 버린다 -- 전체 p 다.
+    print(f"\n{'p':>6}{'ceil(pn/2)':>12}{'남는 개수':>10}{'정의 1 의 값':>16}{'scipy trim_mean(x, p)':>24}")
+    for p in (0.05, 0.10, 0.20, 0.40):
+        c = int(np.ceil(p * n / 2))
+        print(f"{p:>6.2f}{c:>12}{n - 2 * c:>10}{pop[c:n - c].mean():>16,.0f}"
+              f"{trim_mean(pop, p):>24,.0f}")
+
+    print(f"\n평균 {pop.mean():,.0f},  중앙값 {np.median(pop):,.0f}")
+    ```
+
+    출력:
+
+    ```
+    n = 50
+
+        인수           양끝에서 버리는 개수     남는 개수             값
+      0.05                     2        46     5,316,412
+      0.06                     3        44     5,102,369
+      0.10                     5        40     4,783,697
+      0.25                    12        26     4,334,488
+
+         p  ceil(pn/2)     남는 개수        정의 1 의 값   scipy trim_mean(x, p)
+      0.05           2        46       5,316,412               5,316,412
+      0.10           3        44       5,102,369               4,783,697
+      0.20           5        40       4,783,697               4,413,916
+      0.40          10        30       4,413,916               4,281,384
+
+    평균 6,162,876,  중앙값 4,436,370
+    ```
+
+    **두 규약이 정말로 다르다.** 윗 표의 `assert` 가 통과하므로 `scipy` 가 꼬리마다 $\lfloor nq \rfloor$개를 버린다는 것이 확인된다. 인수 $0.10$에서 꼬리마다 $5$개, 모두 $10$개를 버려 $40$개가 남는다.
+
+    아랫 표가 (2)의 결론을 그대로 보여 준다. **정의 1 의 $p = 0.10$은 $5{,}102{,}369$ 인데 `trim_mean(x, 0.10)` 은 $4{,}783{,}697$ 이다.** 차이가 $32$만 명이 넘는다. 그리고 $4{,}783{,}697$ 은 **정의 1 의 $p = 0.20$ 줄에 정확히 다시 나타난다.** 두 열이 한 칸씩 어긋나 있는 것이 보일 것이다 — $5{,}316{,}412$, $4{,}783{,}697$, $4{,}413{,}916$ 이 차례로 밀려 있다.
+
+    **그러므로 이 쪽의 "$10\%$ 절사평균 $= 4{,}783{,}697$"은 정의 1 의 표기로는 $20\%$ 절단평균이다.** 숫자가 틀린 것이 아니라 이름표가 두 규약 사이에서 흔들린 것이다. 정의 1 대로 $10\%$를 자르고 싶으면 `trim_mean(pop, 0.06)` 을 써야 한다($\lfloor 50 \times 0.06\rfloor = 3$).
+
+    **보고할 때는 비율이 아니라 개수를 적는 편이 안전하다.** "$50$개 중 양끝 $5$개씩을 버린 $40$개의 평균"이라고 쓰면 규약을 몰라도 재현된다. 소프트웨어마다 규약이 다르고(R 의 `mean(x, trim=0.1)` 도 양끝에서 각각 $10\%$씩이다), 올림·내림 처리까지 제각각이기 때문이다.
 
 ### 절단평균을 쓸 때
 
@@ -364,36 +743,137 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 주 인구로 가중한 살인율
+**보기 5.** <span class="diff easy" title="쉬움"></span> 가중평균이 단순평균보다 큰 까닭. 미국 $50$개 주의 살인율을 단순평균하면 $4.066$, 인구로 가중하면 $4.446$이다.
+
+**(1)** 가중평균과 단순평균의 차가 $\operatorname{Cov}(w, x) / \bar w$ 임을 보이시오.
+
+**(2)** 이 자료에서 그 값을 계산해 차이 $0.380$을 설명하시오. 또 인구로 가중한 살인율이 **전국 살인율**(총 살인 건수를 총 인구로 나눈 것)과 같음을 보이시오.
 
 </div>
 
-```python
-import pandas as pd
-import numpy as np
+??? success "풀이"
 
-# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
-url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
-state = pd.read_csv(url)
+    **(1) 해석적으로.** 가중치의 평균을 $\bar w = \frac{1}{n}\sum_i w_i$라 하자. 분자와 분모를 각각 $n$으로 나누면
 
-# 가중하지 않은 평균은 주 50개를 똑같이 한 표씩 센다.
-# 인구 60만의 와이오밍과 인구 3900만의 캘리포니아가 같은 무게를 갖는다.
-unweighted_mean = state['Murder.Rate'].mean()
-print(f"단순평균 살인율: {unweighted_mean:.3f}")
+    $$
+    \bar x_w = \frac{\sum_i w_i x_i}{\sum_i w_i}
+            = \frac{\frac{1}{n}\sum_i w_i x_i}{\bar w}
+    $$
 
-# 인구로 가중하면 사람 한 명이 한 표가 된다. "미국 사람이 겪는 평균"에 가깝다.
-weighted_mean = np.average(state['Murder.Rate'], weights=state['Population'])
-print(f"가중평균 살인율: {weighted_mean:.3f}")
-```
+    이다. 분자를 공분산으로 풀어쓴다. $\operatorname{Cov}(w, x) = \frac{1}{n}\sum_i (w_i - \bar w)(x_i - \bar x)$에서
 
-출력:
+    $$
+    \frac{1}{n}\sum_i w_i x_i = \operatorname{Cov}(w, x) + \bar w\,\bar x
+    $$
 
-```
-단순평균 살인율: 4.066
-가중평균 살인율: 4.446
-```
+    이므로
 
-인구가 많은 주(캘리포니아, 텍사스, 플로리다, 뉴욕)의 살인율이 작은 주보다 높은 경향이 있어 가중평균이 더 크다. 가중하지 않은 평균은 몬태나(인구 99만)와 캘리포니아(인구 3700만)를 동등하게 취급하는데, 가중평균이 이 왜곡을 바로잡는다.
+    $$
+    \bar x_w = \frac{\operatorname{Cov}(w, x) + \bar w \bar x}{\bar w} = \bar x + \frac{\operatorname{Cov}(w, x)}{\bar w}
+    $$
+
+    이고 따라서
+
+    $$
+    \boxed{\;\bar x_w - \bar x = \frac{\operatorname{Cov}(w, x)}{\bar w}\;}
+    $$
+
+    다. **가중평균이 단순평균과 갈라지는 것은 오직 가중치와 값이 상관될 때뿐이다.** 가중치가 모두 같으면 공분산이 $0$이라 둘이 일치한다. 가중치가 값과 **양의** 상관을 가지면 가중평균이 더 크고, 음의 상관이면 더 작다.
+
+    여기서는 $w$가 인구, $x$가 살인율이다. 인구가 많은 주의 살인율이 높은 경향이 있다면 공분산이 양수이고 가중평균이 커진다.
+
+    **(2) 해석적으로 — 전국 살인율.** 살인율이 인구 $10$만 명당 건수이므로 주 $i$의 살인 건수는 $10^{-5} \cdot \text{pop}_i \cdot \text{rate}_i$다. 전국 살인율은
+
+    $$
+    10^{5} \cdot \frac{\sum_i 10^{-5}\,\text{pop}_i \cdot \text{rate}_i}{\sum_i \text{pop}_i}
+    = \frac{\sum_i \text{pop}_i \cdot \text{rate}_i}{\sum_i \text{pop}_i}
+    $$
+
+    로 **정확히 인구가중 평균의 정의식**이다. 곧 가중평균은 "사람 한 명이 한 표"를 센 값이고, 단순평균은 "주 하나가 한 표"를 센 값이다. 전국에서 실제로 일어난 살인을 말하려면 앞의 것이어야 한다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    state = pd.read_csv(url)
+
+    # 가중하지 않은 평균은 주 50개를 똑같이 한 표씩 센다.
+    # 인구 60만의 와이오밍과 인구 3900만의 캘리포니아가 같은 무게를 갖는다.
+    unweighted_mean = state['Murder.Rate'].mean()
+    print(f"단순평균 살인율: {unweighted_mean:.3f}")
+
+    # 인구로 가중하면 사람 한 명이 한 표가 된다. "미국 사람이 겪는 평균"에 가깝다.
+    weighted_mean = np.average(state['Murder.Rate'], weights=state['Population'])
+    print(f"가중평균 살인율: {weighted_mean:.3f}")
+    ```
+
+    출력:
+
+    ```
+    단순평균 살인율: 4.066
+    가중평균 살인율: 4.446
+    ```
+
+    인구가 많은 주(캘리포니아, 텍사스, 플로리다, 뉴욕)의 살인율이 작은 주보다 높은 경향이 있어 가중평균이 더 크다. 가중하지 않은 평균은 몬태나(인구 99만)와 캘리포니아(인구 3700만)를 동등하게 취급하는데, 가중평균이 이 왜곡을 바로잡는다. 그 "경향"을 공분산으로 재어 (1)과 맞춰 본다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
+           '/master/data/state.csv')
+    state = pd.read_csv(url)
+    pop = state['Population'].values.astype(float)
+    rate = state['Murder.Rate'].values.astype(float)
+
+    uw = rate.mean()
+    w = np.average(rate, weights=pop)
+    cov = np.mean((pop - pop.mean()) * (rate - rate.mean()))
+    print(f"단순평균 {uw:.6f}")
+    print(f"가중평균 {w:.6f}")
+    print(f"차       {w - uw:.6f}")
+    print(f"Cov(w, x) / wbar = {cov / pop.mean():.6f}   <- 같아야 한다")
+    print(f"상관계수 corr(인구, 살인율) = {np.corrcoef(pop, rate)[0, 1]:.4f}")
+
+    print(f"\n인구 상위 5 개 주")
+    top = np.argsort(pop)[::-1][:5]
+    for j in top:
+        print(f"  {state['State'][j]:>12}  인구 {pop[j]:>12,.0f}  살인율 {rate[j]:>5.1f}"
+              f"  가중치 {pop[j] / pop.sum():.4f}")
+    print(f"  상위 5 개 주가 가중치의 {pop[top].sum() / pop.sum():.1%} 를 갖는다")
+
+    print(f"\n총 살인 건수 / 총 인구 (10만 명당) = {np.sum(rate * pop) / np.sum(pop):.6f}")
+    ```
+
+    출력:
+
+    ```
+    단순평균 4.066000
+    가중평균 4.445834
+    차       0.379834
+    Cov(w, x) / wbar = 0.379834   <- 같아야 한다
+    상관계수 corr(인구, 살인율) = 0.1821
+
+    인구 상위 5 개 주
+        California  인구   37,253,956  살인율   4.4  가중치 0.1209
+             Texas  인구   25,145,561  살인율   4.4  가중치 0.0816
+          New York  인구   19,378,102  살인율   3.1  가중치 0.0629
+           Florida  인구   18,801,310  살인율   5.8  가중치 0.0610
+          Illinois  인구   12,830,632  살인율   5.3  가중치 0.0416
+      상위 5 개 주가 가중치의 36.8% 를 갖는다
+
+    총 살인 건수 / 총 인구 (10만 명당) = 4.445834
+    ```
+
+    **항등식이 소수점 여섯째 자리까지 맞는다.** 차이 $0.379834$가 곧 $\operatorname{Cov}(\text{인구}, \text{살인율}) / \overline{\text{인구}}$다. 그러므로 **"가중평균이 더 크다"는 관찰은 "인구와 살인율이 양의 상관을 갖는다"는 관찰과 같은 말**이다.
+
+    **다만 그 상관은 $0.1821$로 약하다.** 그런데도 평균이 $9.3\%$나 움직인 것은 가중치가 몹시 치우쳐 있기 때문이다. 상위 $5$개 주가 가중치의 $36.8\%$를 가져가고, 캘리포니아 하나가 $12.1\%$다. **가중평균에서 "유효 표본크기"는 $50$이 아니다.** 가중치가 고를수록 단순평균에 가까워지고, 한곳에 쏠릴수록 소수의 관측이 답을 정한다.
+
+    **총 살인 건수를 총 인구로 나눈 값이 $4.445834$로 가중평균과 정확히 같다.** (2)에서 유도한 대로다. 그러므로 **전국 살인율을 묻는다면 답은 $4.446$이지 $4.066$이 아니다.** 단순평균 $4.066$은 "주 하나를 한 표로 셀 때의 평균적인 주"를 말할 뿐이며, 그것도 쓸모 있는 양이지만 다른 질문의 답이다. 어느 쪽을 보고할지는 **무엇에 대해 평균을 내는가**가 정한다.
 
 ### 가중중앙값
 
@@ -401,44 +881,126 @@ print(f"가중평균 살인율: {weighted_mean:.3f}")
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 가중중앙값 구하기
+**보기 6.** <span class="diff easy" title="쉬움"></span> "누적 가중치가 절반을 넘는 값"은 어디서 왔는가. 아래 구현은 가중중앙값을 그렇게 정의한다.
+
+**(1)** 가중중앙값이 $\sum_i w_i \lvert x_i - c\rvert$를 최소화하는 $c$임을 보이고, 그 최소점이 왜 "누적 가중치가 절반에 이르는 값"인지 설명하시오.
+
+**(2)** 격자 탐색으로 세 목적함수 $\sum w_i\lvert x_i - c\rvert$, $\sum w_i (x_i - c)^2$, $\sum \lvert x_i - c\rvert$의 최소점을 찾아 각각 가중중앙값, 가중평균, 중앙값과 맞는지 확인하시오.
 
 </div>
 
-```python
-import pandas as pd
+??? success "풀이"
 
-# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
-url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
-state = pd.read_csv(url)
+    **(1) 해석적으로.** $g(c) = \sum_i w_i \lvert x_i - c\rvert$는 $c$의 **볼록**함수이고, 각 $x_i$에서 꺾이는 **조각별 일차함수**다. $c$가 어느 $x_i$와도 같지 않은 구간에서 미분하면 $\frac{d}{dc}\lvert x_i - c\rvert = -\operatorname{sign}(x_i - c)$이므로
 
-# 가중하지 않은 중앙값: 주를 크기와 상관없이 한 표씩 센다.
-# 즉 캘리포니아(3900만 명)와 와이오밍(56만 명)이 같은 무게를 갖는다.
-unweighted_median = state['Murder.Rate'].median()
-print(f"Unweighted Median: {unweighted_median:.1f}")
+    $$
+    g'(c) = \sum_{x_i < c} w_i \;-\; \sum_{x_i > c} w_i
+    $$
+
+    다. 총 가중치를 $W = \sum_i w_i$라 하고 $S(c) = \sum_{x_i < c} w_i$라 하면 $\sum_{x_i > c} w_i = W - S(c)$(동점이 없을 때)이므로
+
+    $$
+    g'(c) = 2S(c) - W
+    $$
+
+    이다. **$g'$의 부호는 $S(c)$가 $W/2$보다 작은가 큰가로 정해진다.** $S$는 비감소이므로 $g$는 $S(c) < W/2$인 동안 감소하고 $S(c) > W/2$가 되는 순간부터 증가한다. 따라서 최소점은
+
+    $$
+    S(c) \le \frac{W}{2} \le S(c) + w_{(c)}
+    $$
+
+    를 만족하는 $c$, 곧 **정렬한 뒤 누적 가중치가 처음으로 $W/2$에 이르는 관측값**이다. 아래 구현의 `cum >= 0.5` 가 정확히 이 조건이다.
+
+    가중치가 모두 $1$이면 $S(c)$는 $c$보다 작은 관측의 개수이고 조건은 "개수가 절반"이 되어 **보통의 중앙값으로 되돌아간다.** 같은 논리로 $\sum w_i (x_i - c)^2$을 미분하면 $-2\sum w_i (x_i - c) = 0$에서 $c = \sum w_i x_i/\sum w_i$, 곧 **가중평균**이 나온다. 가중 여부와 무관하게 **$L^1$은 (가중)중앙값, $L^2$는 (가중)평균**이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import pandas as pd
+
+    # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    state = pd.read_csv(url)
+
+    # 가중하지 않은 중앙값: 주를 크기와 상관없이 한 표씩 센다.
+    # 즉 캘리포니아(3900만 명)와 와이오밍(56만 명)이 같은 무게를 갖는다.
+    unweighted_median = state['Murder.Rate'].median()
+    print(f"Unweighted Median: {unweighted_median:.1f}")
 
 
-def weighted_median(values, weights):
-    """누적 가중치가 전체의 절반에 도달하는 값을 찾는다.
+    def weighted_median(values, weights):
+        """누적 가중치가 전체의 절반에 도달하는 값을 찾는다.
 
-    가중중앙값의 정의 그대로다. 외부 패키지 없이 세 줄로 구현된다.
-    """
-    d = pd.DataFrame({"v": values, "w": weights}).sort_values("v")
-    cum = d["w"].cumsum() / d["w"].sum()      # 누적 가중치 비율
-    return d.loc[cum >= 0.5, "v"].iloc[0]     # 0.5를 처음 넘는 값
+        가중중앙값의 정의 그대로다. 외부 패키지 없이 세 줄로 구현된다.
+        """
+        d = pd.DataFrame({"v": values, "w": weights}).sort_values("v")
+        cum = d["w"].cumsum() / d["w"].sum()      # 누적 가중치 비율
+        return d.loc[cum >= 0.5, "v"].iloc[0]     # 0.5를 처음 넘는 값
 
-# 인구로 가중한 중앙값: 사람 한 명씩을 세는 것과 같다.
-# "미국의 중앙값 시민이 사는 주의 살인율"이라고 읽으면 된다.
-wm = weighted_median(state['Murder.Rate'], state['Population'])
-print(f"Weighted Median: {wm:.1f}")
-```
+    # 인구로 가중한 중앙값: 사람 한 명씩을 세는 것과 같다.
+    # "미국의 중앙값 시민이 사는 주의 살인율"이라고 읽으면 된다.
+    wm = weighted_median(state['Murder.Rate'], state['Population'])
+    print(f"Weighted Median: {wm:.1f}")
+    ```
 
-출력:
+    출력:
 
-```
-Unweighted Median: 4.0
-Weighted Median: 4.4
-```
+    ```
+    Unweighted Median: 4.0
+    Weighted Median: 4.4
+    ```
+
+    이제 세 목적함수를 격자에서 직접 최소화해 (1)을 확인한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
+           '/master/data/state.csv')
+    state = pd.read_csv(url)
+    pop = state['Population'].values.astype(float)
+    rate = state['Murder.Rate'].values.astype(float)
+
+    grid = np.linspace(rate.min(), rate.max(), 20001)
+    wl1 = np.array([np.sum(pop * np.abs(rate - c)) for c in grid])
+    wl2 = np.array([np.sum(pop * (rate - c) ** 2) for c in grid])
+    l1 = np.array([np.sum(np.abs(rate - c)) for c in grid])
+
+    print(f"{'목적함수':>22}{'격자 최소점':>14}{'닫힌 꼴의 답':>16}")
+    print(f"{'sum w|x - c|':>22}{grid[wl1.argmin()]:>14.4f}{4.4:>16.4f}")
+    print(f"{'sum w(x - c)^2':>22}{grid[wl2.argmin()]:>14.4f}"
+          f"{np.average(rate, weights=pop):>16.4f}")
+    print(f"{'sum |x - c| (가중 없음)':>22}{grid[l1.argmin()]:>14.4f}{np.median(rate):>16.4f}")
+    print(f"격자 간격 {grid[1] - grid[0]:.6f}")
+
+    # 누적 가중치가 0.5 를 넘는 자리
+    d = pd.DataFrame({"v": rate, "w": pop}).sort_values("v")
+    cum = (d["w"].cumsum() / d["w"].sum()).values
+    v = d["v"].values
+    j = int(np.argmax(cum >= 0.5))
+    print(f"\n누적 가중치가 0.5 를 처음 넘는 자리: 값 {v[j]}, 누적 {cum[j]:.6f}")
+    print(f"  바로 앞 값 {v[j - 1]}, 누적 {cum[j - 1]:.6f}")
+    ```
+
+    출력:
+
+    ```
+                      목적함수        격자 최소점         닫힌 꼴의 답
+              sum w|x - c|        4.4001          4.4000
+            sum w(x - c)^2        4.4457          4.4458
+       sum |x - c| (가중 없음)        4.0001          4.0000
+    격자 간격 0.000470
+
+    누적 가중치가 0.5 를 처음 넘는 자리: 값 4.4, 누적 0.563949
+      바로 앞 값 4.4, 누적 0.443051
+    ```
+
+    **세 쌍이 모두 격자 간격 안에서 일치한다.** 가중 $L^1$의 최소점 $4.4001$은 가중중앙값 $4.4$와 $0.0001$ 차이이고, 이는 격자 간격 $0.00047$보다 작다. 가중 $L^2$의 최소점 $4.4457$도 가중평균 $4.445834$와 그만큼 떨어져 있다. 가중치를 뺀 $L^1$은 보통의 중앙값 $4.0$을 돌려준다. **격자가 고른 답은 격자만큼만 정확하고, 닫힌 꼴의 답은 정확하다.**
+
+    마지막 출력이 (1)의 조건이 실제로 어떻게 걸리는지 보여 준다. 누적 가중치가 살인율 $4.4$인 관측들을 지나면서 $0.443051$에서 $0.563949$로 **건너뛴다.** $0.5$가 그 도약 **안쪽**에 들어 있으므로 가중중앙값은 $4.4$로 유일하게 정해진다. 도약이 큰 까닭은 살인율 $4.4$인 주에 캘리포니아($12.1\%$)와 텍사스($8.2\%$)가 함께 들어 있기 때문이다.
+
+    **만약 $0.5$가 도약의 경계에 정확히 걸렸다면** $g'(c) = 0$인 구간이 생겨 최소점이 **구간 전체**가 된다. 짝수 표본의 보통 중앙값에서 가운데 두 값 사이가 모두 최소가 되는 것과 같은 현상이며, 그때는 관례를 정해야 한다([자료의 종류](../data_types/data_types.md)의 보기 3 에서 순서형을 두고 같은 이야기를 한다).
 
 ### 가중 통계량을 쓸 때
 
@@ -460,54 +1022,208 @@ Weighted Median: 4.4
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> 최빈값 구하기
+**보기 7.** <span class="diff easy" title="쉬움"></span> 연속자료에 최빈값 함수를 쓰면 무엇이 나오는가. 이산자료 $4, 1, 2, 2, 3, 5$ 에서는 $2$ 가 유일하게 두 번 나오므로 최빈값이 분명하다.
+
+**(1)** 관측값이 모두 서로 다른 자료에서 "가장 자주 나온 값"이 무엇인지 생각하고, `scipy.stats.mode` 와 `statistics.mode` 가 각각 무엇을 돌려줄지 예측하시오.
+
+**(2)** $N(0,1)$ 에서 뽑은 $1{,}000$개로 예측을 확인하고, 반올림 자리를 바꾸어 가며 최빈값이 어디로 가는지 보시오.
 
 </div>
 
-```python
-import statistics
+??? success "풀이"
 
-# 최빈값은 가장 자주 나온 값이다. 여기서는 2 만 두 번 나온다.
-data = [4, 1, 2, 2, 3, 5]
-mode = statistics.mode(data)
-print(f"{mode = }")  # mode = 2
-```
+    **(1) 해석적으로.** 관측값이 모두 서로 다르면 도수가 전부 $1$이다. 그러므로 **최빈값의 정의가 자료 전체를 가리킨다** — $1{,}000$개 모두가 똑같이 "가장 자주 나온 값"이다. 연속분포에서 $P(X_i = X_j) = 0$이므로 이것은 예외가 아니라 **표준 상황**이다.
 
-출력:
+    함수들은 그래도 무언가를 돌려주어야 하므로 **동점을 깨는 규칙**을 둔다.
 
-```
-mode = 2
-```
+    - `scipy.stats.mode` 는 정렬한 뒤 도수가 최대인 것 중 **가장 작은 값**을 돌려준다. 모두 도수 $1$이면 결국 **자료의 최솟값**이다.
+    - `statistics.mode` 는 세어 나가며 **처음 만난 최대 도수의 값**을 돌려준다. 모두 도수 $1$이면 **자료의 첫 원소**다.
+
+    둘 다 "가장 흔한 값"과는 아무 상관이 없다. $N(0,1)$의 참 최빈값은 $0$인데 어느 쪽도 $0$ 근처를 가리키지 않을 것이다. **연속자료에서 최빈값을 얻으려면 반드시 구간화나 평활을 거쳐야 하며, 그 선택이 답을 정한다.**
+
+    **(2) 수치적으로.** 먼저 이산자료에서는 제대로 작동한다.
+
+    ```python
+    import statistics
+
+    # 최빈값은 가장 자주 나온 값이다. 여기서는 2 만 두 번 나온다.
+    data = [4, 1, 2, 2, 3, 5]
+    mode = statistics.mode(data)
+    print(f"{mode = }")  # mode = 2
+    ```
+
+    출력:
+
+    ```
+    mode = 2
+    ```
+
+    이제 연속자료를 넣어 본다.
+
+    ```python
+    import statistics
+
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    x = rng.normal(0, 1, 1000)          # 참 최빈값은 0
+    print(f"n = {len(x)},  서로 다른 값의 개수 = {len(set(x))}   (모두 다르다)")
+
+    r = stats.mode(x, keepdims=False)
+    print(f"\nscipy.stats.mode  -> 값 {r.mode:.6f},  도수 {r.count}")
+    print(f"  자료의 최솟값     =  {x.min():.6f}   <- 같은 값이다")
+    print(f"statistics.mode   -> 값 {statistics.mode(x):.6f}")
+    print(f"  자료의 첫 원소    =  {x[0]:.6f}   <- 같은 값이다")
+    print(f"statistics.multimode 가 돌려주는 값의 개수 = {len(statistics.multimode(list(x)))}")
+
+    # 구간을 잡아 주면? 어떻게 잡느냐에 따라 답이 달라진다.
+    print(f"\n{'반올림 자리':>12}{'최빈값':>10}{'그 도수':>9}")
+    for d in (0, 1, 2):
+        xr = np.round(x, d)
+        vals, cnts = np.unique(xr, return_counts=True)
+        print(f"{d:>12}{vals[cnts.argmax()]:>10.2f}{cnts.max():>9}")
+    ```
+
+    출력:
+
+    ```
+    n = 1000,  서로 다른 값의 개수 = 1000   (모두 다르다)
+
+    scipy.stats.mode  -> 값 -3.899422,  도수 1
+      자료의 최솟값     =  -3.899422   <- 같은 값이다
+    statistics.mode   -> 값 0.125730
+      자료의 첫 원소    =  0.125730   <- 같은 값이다
+    statistics.multimode 가 돌려주는 값의 개수 = 1000
+
+          반올림 자리       최빈값     그 도수
+               0      0.00      389
+               1     -0.30       50
+               2      0.36       11
+    ```
+
+    **예측이 그대로 맞는다.** `scipy.stats.mode` 가 돌려준 $-3.899422$는 자료의 **최솟값**이고 도수는 $1$이다. **참 최빈값 $0$ 에서 거의 $4$ 표준편차나 떨어진 값**을 "가장 흔한 값"이라 부른 셈이다. `statistics.mode` 는 첫 원소 $0.125730$을 돌려주는데, 자료의 순서를 섞으면 답이 바뀐다는 뜻이다. `multimode` 는 정직하게 $1{,}000$개 전부를 돌려준다 — **그것이 참말이다.**
+
+    **반올림을 하면 비로소 뜻이 생기지만, 어디서 반올림하느냐가 답을 정한다.** 소수 $0$째 자리로 묶으면 $0.00$에 $389$개가 몰려 참값을 맞히지만, $1$째 자리로 묶으면 $-0.30$(도수 $50$), $2$째 자리로 묶으면 $0.36$(도수 $11$)으로 옮겨 간다. **구간이 좁아질수록 도수가 작아지고, 도수가 작아질수록 우연이 답을 정한다.** 연습문제 10 이 이 흔들림을 모의실험으로 정량화한다.
+
+    **그러므로 연속자료에 `mode` 함수를 쓰면 안 된다.** 쓰고 싶다면 KDE 의 최댓값 위치처럼 평활을 거친 추정량을 쓰고, 대역폭이나 구간 수를 반드시 함께 밝혀야 한다.
 
 최빈값이 여럿인 자료의 경우:
 
 <div class="exbox" markdown>
 
-**보기 8.** <span class="diff easy" title="쉬움"></span> 최빈값이 둘일 때
+**보기 8.** <span class="diff easy" title="쉬움"></span> 봉우리가 둘이면 어림이 깨진다. $4, 1, 2, 2, 3, 3, 5$ 에서는 $2$ 와 $3$ 이 나란히 두 번씩 나온다.
+
+**(1)** `statistics.mode` 와 `statistics.multimode` 가 이 자료에서 무엇을 돌려주는지 적고, 앞의 것이 왜 위험한지 말하시오.
+
+**(2)** "평균 $>$ 중앙값이면 오른쪽으로 치우쳤다"는 어림의 **반례**를 만드시오. 곧 평균이 중앙값보다 큰데 왜도가 **음수**인 자료다.
 
 </div>
 
-```python
-import statistics
+??? success "풀이"
 
-# 이번에는 2 와 3 이 나란히 두 번씩 나온다. 최빈값이 둘인 자료다.
-data = [4, 1, 2, 2, 3, 3, 5]
+    **(1) 해석적으로.** 도수가 $2$인 값이 $2$와 $3$ 둘이므로 **최빈값은 집합 $\{2, 3\}$ 이다.** `multimode` 는 그 집합을 그대로 돌려주고, `mode` 는 세어 나가다 처음 만난 하나만 돌려준다. 돌려받는 쪽에서는 그것이 유일한 최빈값인지 여럿 중 하나인지 **구별할 방법이 없다.** 보기 7 에서 본 것과 같은 결함이다 — 함수가 동점을 말없이 깬다.
 
-# mode 는 그중 먼저 나온 것 하나만 돌려준다. 나머지 하나가 조용히 감춰진다.
-mode = statistics.mode(data)
-print(f"{mode = }")
+    자료가 이봉이라는 사실은 중심 측도 하나로 요약하는 일 자체가 적절한지를 묻게 만드는 중요한 정보인데, `mode` 는 바로 그 정보를 지운다.
 
-# 그래서 최빈값이 여럿일 수 있는 자료에는 multimode 를 쓴다.
-modes = statistics.multimode(data)
-print(f"{modes = }")  # [2, 3]
-```
+    **(2) 해석적으로 — 반례 만들기.** 어림이 기대는 그림은 "긴 오른쪽 꼬리가 평균만 끌어당긴다"는 것이다. 그런데 **평균을 미는 힘과 왜도를 정하는 힘은 차수가 다르다.** 평균은 편차의 $1$제곱, 왜도는 $3$제곱을 쓴다. 그러므로
 
-출력:
+    - 한쪽에 **멀리 떨어진 소수**를 두면 $3$제곱이 압도해 왜도의 부호를 정하고,
+    - 반대쪽에 **가깝지만 많은** 관측을 두면 $1$제곱 합에서 이겨 평균을 그쪽으로 민다.
 
-```
-mode = 2
-modes = [2, 3]
-```
+    이 둘을 서로 반대 방향으로 놓으면 어림이 깨진다. 값 $9$를 넷, 값 $7$을 넷, 그리고 왼쪽 멀리 $0$ 하나를 두자.
+
+    $$
+    0,\ 7,\ 7,\ 7,\ 7,\ 9,\ 9,\ 9,\ 9
+    $$
+
+    $n = 9$(홀수)라 중앙값은 다섯 번째 값 $7$이다. 평균은
+
+    $$
+    \bar x = \frac{0 + 4\cdot 7 + 4\cdot 9}{9} = \frac{64}{9} = 7.1111
+    $$
+
+    이다. **$\bar x > m$ 이므로 어림은 "오른쪽으로 치우쳤다"고 말한다.** 그러나 $0$ 하나가 왼쪽으로 $7.11$만큼 떨어져 있고 그 세제곱이 $-360$ 규모라, 오른쪽 네 개가 기여하는 $(+1.89)^3 \times 4 \approx +27$을 압도한다. 왜도는 **음수**다.
+
+    왜 평균이 그래도 큰가. 왼쪽으로 미는 힘은 $7.11$ 하나뿐인데 오른쪽으로 미는 힘은 $1.89 \times 4 = 7.56$으로, 근소하게 오른쪽이 이긴다. **$1$제곱에서는 오른쪽이, $3$제곱에서는 왼쪽이 이기는 것**이 이 반례의 전부다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import statistics
+
+    # 이번에는 2 와 3 이 나란히 두 번씩 나온다. 최빈값이 둘인 자료다.
+    data = [4, 1, 2, 2, 3, 3, 5]
+
+    # mode 는 그중 먼저 나온 것 하나만 돌려준다. 나머지 하나가 조용히 감춰진다.
+    mode = statistics.mode(data)
+    print(f"{mode = }")
+
+    # 그래서 최빈값이 여럿일 수 있는 자료에는 multimode 를 쓴다.
+    modes = statistics.multimode(data)
+    print(f"{modes = }")  # [2, 3]
+    ```
+
+    출력:
+
+    ```
+    mode = 2
+    modes = [2, 3]
+    ```
+
+    이제 (2)의 반례를 재어 본다.
+
+    ```python
+    import statistics
+
+    import numpy as np
+    from scipy import stats
+
+    # 평균 > 중앙값 인데 왼쪽으로 치우친 자료
+    a = np.array([0, 7, 7, 7, 7, 9, 9, 9, 9], dtype=float)
+    print(f"자료 {a.astype(int)}")
+    print(f"평균 {a.mean():.4f}   중앙값 {np.median(a):.1f}   최빈값 {statistics.multimode(list(a))}")
+    print(f"평균 - 중앙값 = {a.mean() - np.median(a):+.4f}   -> 어림은 '오른쪽 치우침' 이라 한다")
+    print(f"표본왜도 g1   = {stats.skew(a):+.4f}            -> 실제로는 왼쪽 치우침")
+    print(f"  (불편보정 G1 = {stats.skew(a, bias=False):+.4f})")
+
+    print(f"\n{'c':>6}{'sum|x - c|':>12}{'sum(x - c)^2':>14}")
+    for c in (6.0, 7.0, 7.111111, 8.0, 9.0):
+        print(f"{c:>6.2f}{np.abs(a - c).sum():>12.4f}{((a - c) ** 2).sum():>14.4f}")
+
+    # 거울상을 보면 부호가 모두 뒤집힌다
+    b = -a
+    print(f"\n거울상 -x : 평균 {b.mean():.4f}  중앙값 {np.median(b):.1f}  왜도 {stats.skew(b):+.4f}")
+    ```
+
+    출력:
+
+    ```
+    자료 [0 7 7 7 7 9 9 9 9]
+    평균 7.1111   중앙값 7.0   최빈값 [7.0, 9.0]
+    평균 - 중앙값 = +0.1111   -> 어림은 '오른쪽 치우침' 이라 한다
+    표본왜도 g1   = -1.9092            -> 실제로는 왼쪽 치우침
+      (불편보정 G1 = -2.3143)
+
+         c  sum|x - c|  sum(x - c)^2
+      6.00     22.0000       76.0000
+      7.00     15.0000       65.0000
+      7.11     15.1111       64.8889
+      8.00     16.0000       72.0000
+      9.00     17.0000       97.0000
+
+    거울상 -x : 평균 -7.1111  중앙값 -7.0  왜도 +1.9092
+    ```
+
+    **반례가 성립한다.** 평균 $7.1111$이 중앙값 $7.0$보다 크지만 왜도는 $-1.9092$로 **뚜렷한 음수**다. 조금 큰 쪽이 아니라 $\lvert g_1\rvert \approx 1.9$로 강하게 왼쪽으로 치우쳐 있다. **"평균 $>$ 중앙값"과 "오른쪽 치우침"이 정반대를 가리킨다.**
+
+    거울상 줄이 그것을 확인해 준다. 자료를 $-x$로 뒤집으면 평균과 중앙값의 부호가 함께 뒤집히는 동시에 왜도도 $+1.9092$가 된다. 두 진술은 **독립적인 성질**이지 한쪽이 다른 쪽을 함의하지 않는다.
+
+    가운데 표는 덤이다. $\sum\lvert x - c\rvert$가 $c = 7$(중앙값)에서 $15.0000$으로 최소이고, $\sum (x-c)^2$은 $c = 7.1111$(평균)에서 $64.8889$로 최소다. **연습문제 3 의 특성화가 이 작은 자료에서 그대로 보인다.**
+
+    **이 반례는 희귀한 병리가 아니다.** 이 자료는 최빈값이 $7$과 $9$ 둘인 **이봉 자료**다. 어림이 전제하는 "단봉이고 꼬리가 한쪽으로 길다"는 그림이 처음부터 성립하지 않는다. 이산분포, 다봉분포, 한쪽에 바닥이나 천장이 있는 자료에서는 흔히 깨진다.
+
+    **그러므로 어림은 어림으로만 쓰라.** 단봉이고 매끄러운 분포에서는 대개 맞고, 보기 2 의 소득 자료가 그런 경우다. 그러나 **치우침을 주장하려면 왜도를 재거나 그림을 그려야 한다.** $\bar x - m$ 의 부호만 보고 결론을 내면 안 된다. 왜도를 제대로 다루는 것은 [왜도와 첨도](../shape/skewness_kurtosis.md)의 몫이다.
 
 ---
 
@@ -675,7 +1391,7 @@ $\bar{x} = \sum f_i m_i / \sum f_i$와 $s^2 = \sum f_i (m_i - \bar{x})^2 / (n - 
     출력:
 
     ```
-    오염 비율          평균      10% 절단      25% 절단        중앙값
+         오염 비율          평균      10% 절단      25% 절단        중앙값
           0.00        50.8       50.73       50.38      50.73
           0.05     50048.3       51.69       51.21      51.75
           0.10    100045.7       52.77       52.08      52.17
@@ -733,7 +1449,7 @@ $\bar{x} = \sum f_i m_i / \sum f_i$와 $s^2 = \sum f_i (m_i - \bar{x})^2 / (n - 
     출력:
 
     ```
-    분포       Var(평균)     Var(중앙값)    Var(25% 절단)       중앙값 효율
+         분포       Var(평균)     Var(중앙값)    Var(25% 절단)       중앙값 효율
          정규        0.0400       0.0618         0.0471       0.6483
        t(3)        0.1203       0.0751         0.0626       1.6004
          코시   145970.0658       0.1113         0.1242 1311827.9195
