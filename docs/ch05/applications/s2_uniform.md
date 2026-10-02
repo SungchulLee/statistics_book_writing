@@ -73,80 +73,193 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 균등모집단에서 S²의 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 균등모집단에서 S²의 표집분포. $\text{Uniform}(0,1)$에서 $n = 10$과 $n = 100$인 표본을 각각 10만 번 뽑아 $S^2$을 계산한다.
+
+**(1)** 두 표본크기에서 $E[S^2]$, $\operatorname{sd}(S^2)$, 그리고 카이제곱이 예측하는 폭과의 **분산 배율**을 이론으로 적으시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오. 배율이 $n$에 따라 달라지는지 보시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(1)
+    **(1) 이론값.** $\text{Uniform}(0,1)$은 $\sigma^2 = 1/12$, $\beta_2 = 1.8$이다. 불편성은 모집단을 가리지 않으므로 두 경우 모두
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 3.5))
-for ax, n in zip(axes, (10, 100)):
-    # 표본을 10만 번 뽑아 매번 S^2 을 기록한다. 이 값들의 분포가 표집분포다.
-    s2 = rng.uniform(size=(100_000, n)).var(axis=1, ddof=1)
+    $$
+    E[S^2] = \sigma^2 = \frac{1}{12} = 0.083333
+    $$
 
-    # 오른쪽 꼬리의 극단값 때문에 가로축이 늘어나지 않도록 99.5백분위에서 자른다.
-    hi = np.percentile(s2, 99.5)
-    _, bins, _ = ax.hist(s2, bins=60, range=(0, hi), density=True,
-                         alpha=0.5, edgecolor="white", label=r"simulated $S^2$")
+    이다. 폭은 $\operatorname{Var}(S^2) = \left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4/n$에 넣어 계산한다. $\sigma^4 = 1/144$이므로
 
-    # 카이제곱이 예측하는 밀도를 S^2 의 눈금으로 옮겨 그린다.
-    #   (n-1)S^2/sigma^2 ~ chi^2(n-1)  =>  S^2 = X/c,  c = (n-1)/sigma^2
-    # 변수변환 Y = X/c 의 밀도는 f_X(cy)*c 이므로 마지막 c 가 야코비안이다.
-    df, sigma2 = n - 1, 1 / 12
-    c = df / sigma2
-    g = np.linspace(1e-6, hi, 300)
-    ax.plot(g, stats.chi2(df).pdf(g * c) * c, "--r", lw=2, label=r"$\chi^2$-based PDF")
+    $$
+    n = 10: \quad \operatorname{Var}(S^2) = \frac{1.8 - 7/9}{10 \cdot 144} = 7.0988 \times 10^{-4},
+    \qquad \operatorname{sd}(S^2) = 0.026644
+    $$
 
-    ax.set_title(f"Uniform(0,1),  n = {n}")
-    ax.set_xlabel(r"$S^2$")
-    ax.set_xlim(0, hi)
+    $$
+    n = 100: \quad \operatorname{Var}(S^2) = \frac{1.8 - 97/99}{100 \cdot 144} = 5.6959 \times 10^{-5},
+    \qquad \operatorname{sd}(S^2) = 0.0075471
+    $$
 
-axes[0].set_ylabel("Density")
-axes[1].legend(fontsize=8)
-plt.tight_layout()
-plt.show()
-```
+    카이제곱 모형은 $\operatorname{sd}(S^2) = \sqrt{2/(n-1)}\,\sigma^2$을 예측하므로 각각 $0.039284$와 $0.011844$다. 분산 배율은 $\frac{n-1}{2n}\left(\beta_2 - \frac{n-3}{n-1}\right)$에서
 
-![균등모집단에서 S²의 표집분포](./img/s2_uniform_fig1.png)
+    $$
+    n = 10: \ \frac{9}{20} \times 1.02222 = 0.4600, \qquad
+    n = 100: \ \frac{99}{200} \times 0.82020 = 0.4060
+    $$
+
+    이다. **극한값 $0.4$에 아직 도달하지 않았다.** 배율은 위에서 아래로 $0.46 \to 0.406 \to 0.4$로 내려가며, $n = 10$에서 $15\%$ 높은 것은 $-\frac{n-3}{n-1}$ 항이 작은 $n$에서 느슨해지기 때문이다. 어느 쪽이든 $1$에서 한참 멀다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+
+    beta2, sigma2_true = 1.8, 1 / 12
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 3.5))
+    for ax, n in zip(axes, (10, 100)):
+        # 표본을 10만 번 뽑아 매번 S^2 을 기록한다. 이 값들의 분포가 표집분포다.
+        s2 = rng.uniform(size=(100_000, n)).var(axis=1, ddof=1)
+
+        # 이론값과 모의값을 나란히 적는다.
+        sd_true = np.sqrt((beta2 - (n - 3) / (n - 1)) * sigma2_true ** 2 / n)
+        sd_chi2 = np.sqrt(2 / (n - 1)) * sigma2_true
+        ratio_true = (n - 1) / (2 * n) * (beta2 - (n - 3) / (n - 1))
+        print(f"n = {n}")
+        print(f"  E[S^2]   이론 {sigma2_true:.6f}   모의 {s2.mean():.6f}   (MC오차 {sd_true / np.sqrt(len(s2)):.6f})")
+        print(f"  sd(S^2)  이론 {sd_true:.6f}   모의 {s2.std(ddof=1):.6f}   (MC오차 {sd_true / np.sqrt(2 * len(s2)):.6f})")
+        print(f"  카이제곱이 예측하는 sd = {sd_chi2:.6f}")
+        print(f"  분산 배율  이론 {ratio_true:.4f}   모의 {(s2.std(ddof=1) / sd_chi2) ** 2:.4f}")
+
+        # 오른쪽 꼬리의 극단값 때문에 가로축이 늘어나지 않도록 99.5백분위에서 자른다.
+        hi = np.percentile(s2, 99.5)
+        _, bins, _ = ax.hist(s2, bins=60, range=(0, hi), density=True,
+                             alpha=0.5, edgecolor="white", label=r"simulated $S^2$")
+
+        # 카이제곱이 예측하는 밀도를 S^2 의 눈금으로 옮겨 그린다.
+        #   (n-1)S^2/sigma^2 ~ chi^2(n-1)  =>  S^2 = X/c,  c = (n-1)/sigma^2
+        # 변수변환 Y = X/c 의 밀도는 f_X(cy)*c 이므로 마지막 c 가 야코비안이다.
+        df, sigma2 = n - 1, 1 / 12
+        c = df / sigma2
+        g = np.linspace(1e-6, hi, 300)
+        ax.plot(g, stats.chi2(df).pdf(g * c) * c, "--r", lw=2, label=r"$\chi^2$-based PDF")
+
+        ax.set_title(f"Uniform(0,1),  n = {n}")
+        ax.set_xlabel(r"$S^2$")
+        ax.set_xlim(0, hi)
+
+    axes[0].set_ylabel("Density")
+    axes[1].legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    n = 10
+      E[S^2]   이론 0.083333   모의 0.083383   (MC오차 0.000084)
+      sd(S^2)  이론 0.026644   모의 0.026650   (MC오차 0.000060)
+      카이제곱이 예측하는 sd = 0.039284
+      분산 배율  이론 0.4600   모의 0.4602
+    n = 100
+      E[S^2]   이론 0.083333   모의 0.083356   (MC오차 0.000024)
+      sd(S^2)  이론 0.007547   모의 0.007582   (MC오차 0.000017)
+      카이제곱이 예측하는 sd = 0.011844
+      분산 배율  이론 0.4060   모의 0.4098
+    ```
+
+    ![균등모집단에서 S²의 표집분포](./img/s2_uniform_fig1.png)
+
+    여기서는 모집단이 실현된 유한집합이 아니라 $\text{Uniform}(0,1)$ 그 자체다. 매번 새로 뽑으므로 **이론값이 그대로 겨냥값**이고, 앞 쪽들에서 끼어들던 "실현 모집단" 층이 없다.
+
+    **불편성.** $n = 10$에서 모의 $E[S^2] = 0.083383$이 이론값 $0.083333$에서 몬테카를로 오차 $0.000084$의 $0.6$배, $n = 100$에서 $0.083356$이 $0.000024$의 $1.0$배만큼 떨어져 있다. 둘 다 맞는다.
+
+    **폭.** $n = 10$에서 모의 $0.026650$이 이론 $0.026644$에 소수 다섯째 자리까지 맞는다($0.1$ 오차). $n = 100$에서는 모의 $0.007582$가 이론 $0.007547$보다 $0.46\%$ 커서 몬테카를로 요동의 $2$배인데, 같은 일을 200 번 되풀이해 평균을 내면 $0.0075479$가 되어 이론값 $0.0075471$에 다섯째 자리까지 맞는다. 한 번의 요동이다.
+
+    **배율이 $n$에 따라 달라지는가.** 달라진다. $n = 10$에서 $0.4602$(이론 $0.4600$), $n = 100$에서 $0.4098$(이론 $0.4060$)이다. 다만 **$0.4$ 쪽으로 내려가는 것이지 $1$ 쪽으로 올라가는 것이 아니다.** 표본을 열 배 키웠는데 어긋남이 오히려 조금 커졌다. 이것이 $\bar X$와 결정적으로 다른 점이며, 다음 보기에서 신뢰구간의 포함률로 그 대가를 치른다.
+
 
 히스토그램이 빨간 곡선보다 **좁고 높다.** $n = 100$에서는 두 곡선이 같은 자리에 중심을 두면서도 폭이 뚜렷이 다르다는 것이 한눈에 보인다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 분산 신뢰구간의 실제 포함률
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분산 신뢰구간의 실제 포함률. $\text{Uniform}(0,1)$에서 $n = 10,\, 30,\, 100,\, 1000$인 표본을 각각 10만 번 뽑고, 그때마다 카이제곱 공식으로 $\sigma^2$의 $95\%$ 신뢰구간을 만들어 참값 $1/12$을 덮는 비율을 센다.
+
+**(1)** 실제 포함률이 얼마가 될지 이론으로 예측하시오. $n \to \infty$에서의 값과 유한한 $n$에서의 값을 모두 적으시오.
+
+**(2)** 모의실험으로 (1)을 확인하고, 예측이 잘 맞는 $n$의 범위를 말하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(1)
-sigma2 = 1 / 12          # Uniform(0,1)의 참 분산
+    **(1) 이론 예측.** 구간은 $W = (n-1)S^2/\sigma^2$이 $\chi^2(n-1)$의 $2.5$-$97.5$ 백분위 $[\ell, u]$ 안에 있을 때 참값을 덮는다. 그러므로 포함률은 정확히 $P(\ell \le W \le u)$다. 카이제곱 모형은 $W$의 평균이 $n-1$, 분산이 $2(n-1)$이라고 보는데, 실제로는
 
-print("명목 신뢰수준 95%")
-for n in (10, 30, 100, 1000):
-    s2 = rng.uniform(size=(100_000, n)).var(axis=1, ddof=1)
-    lo, hi = stats.chi2(n - 1).ppf([0.025, 0.975])
-    # 카이제곱 구간: [(n-1)s^2/hi, (n-1)s^2/lo]
-    cover = np.mean(((n - 1) * s2 / hi <= sigma2) & (sigma2 <= (n - 1) * s2 / lo))
-    print(f"n = {n:>4}:  실제 포함률 {cover:.3f}")
-```
+    $$
+    E[W] = n-1, \qquad \operatorname{Var}(W) = \frac{(n-1)^2}{\sigma^4}\operatorname{Var}(S^2) = 2(n-1)\,r,
+    \qquad r = \frac{n-1}{2n}\left(\beta_2 - \frac{n-3}{n-1}\right)
+    $$
 
-출력:
+    이다. **평균은 맞고 분산만 $r$배 작다.** 균등에서 $r \approx 0.4$이니 $W$가 예상보다 $\sqrt{0.4} = 0.63$배 좁게 모여 있고, 그래서 구간이 참값을 **너무 자주** 덮는다.
 
-```
-명목 신뢰수준 95%
-n =   10:  실제 포함률 0.993
-n =   30:  실제 포함률 0.997
-n =  100:  실제 포함률 0.998
-n = 1000:  실제 포함률 0.998
-```
+    $n$이 크면 $W$가 정규에 가까워지므로 $\ell, u \approx (n-1) \pm 1.96\sqrt{2(n-1)}$을 넣어
+
+    $$
+    \text{포함률} \;\to\; 2\Phi\!\left(\frac{1.96}{\sqrt{r}}\right) - 1
+    = 2\Phi\!\left(\frac{1.96}{\sqrt{0.4}}\right) - 1 = 2\Phi(3.0984) - 1 = 0.9981
+    $$
+
+    을 얻는다. **$0.95$가 아니라 $0.998$로 굳는다**는 예측이다.
+
+    유한한 $n$에서는 $W$가 아직 치우쳐 있으니 정규 대신 **적률을 맞춘 카이제곱**을 쓴다. $W \approx r \cdot \chi^2\!\left(\frac{n-1}{r}\right)$로 놓으면 평균 $n-1$과 분산 $2(n-1)r$이 둘 다 맞고, 포함률 예측은 $P\!\left(\ell/r \le \chi^2\!\left(\frac{n-1}{r}\right) \le u/r\right)$다. 네 표본크기에서 $0.9960$, $0.9975$, $0.9979$, $0.9980$이 나온다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    sigma2 = 1 / 12          # Uniform(0,1)의 참 분산
+    beta2 = 1.8              # 균등분포의 첨도
+
+    print("명목 신뢰수준 95%")
+    for n in (10, 30, 100, 1000):
+        s2 = rng.uniform(size=(100_000, n)).var(axis=1, ddof=1)
+        lo, hi = stats.chi2(n - 1).ppf([0.025, 0.975])
+        # 카이제곱 구간: [(n-1)s^2/hi, (n-1)s^2/lo]
+        cover = np.mean(((n - 1) * s2 / hi <= sigma2) & (sigma2 <= (n - 1) * s2 / lo))
+
+        # 이론 예측. W = (n-1)S^2/sigma^2 의 평균은 n-1, 분산은 2(n-1)r 이므로
+        # 같은 두 적률을 갖는 r*chi^2((n-1)/r) 로 바꿔 놓고 구간에 넣는다.
+        r = (n - 1) / (2 * n) * (beta2 - (n - 3) / (n - 1))
+        pred = stats.chi2((n - 1) / r).cdf(hi / r) - stats.chi2((n - 1) / r).cdf(lo / r)
+        print(f"n = {n:>4}:  실제 포함률 {cover:.3f}   배율 r = {r:.4f}   적률맞춤 예측 {pred:.4f}")
+    ```
+
+    출력:
+
+    ```
+    명목 신뢰수준 95%
+    n =   10:  실제 포함률 0.993   배율 r = 0.4600   적률맞춤 예측 0.9960
+    n =   30:  실제 포함률 0.997   배율 r = 0.4200   적률맞춤 예측 0.9975
+    n =  100:  실제 포함률 0.998   배율 r = 0.4060   적률맞춤 예측 0.9979
+    n = 1000:  실제 포함률 0.998   배율 r = 0.4006   적률맞춤 예측 0.9980
+    ```
+
+    소수 다섯째 자리까지 적으면 포함률이 $0.99262$, $0.99671$, $0.99758$, $0.99810$이다. 비율의 몬테카를로 오차는 $\sqrt{0.998 \times 0.002/10^5} = 0.00014$쯤이다.
+
+    **$n \ge 30$에서는 예측이 맞는다.** 어긋남이 $n = 30$에서 $0.00075$(오차의 $4$배), $n = 100$에서 $0.00031$($2$배), $n = 1000$에서 $0.00006$($0.4$배)로 줄어든다. 적률맞춤 근사가 두 적률만 맞춘 것이라 3차 이상의 어긋남이 남는데, 그 몫이 $n$과 함께 사라지는 것이다.
+
+    **$n = 10$에서는 예측이 $0.9960$인데 실제는 $0.99262$로 $0.0034$ 벗어난다.** 오차의 $12$배이니 요동으로 볼 수 없다. 까닭은 $n = 10$에서 $W$의 왜도가 카이제곱의 왜도와 많이 다른데 적률맞춤이 그것을 손대지 않기 때문이다. 두 적률만 맞춘 근사의 한계이고, 적어도 **방향과 크기는 바르게 짚는다**(예측 $0.996$, 실제 $0.993$ — 둘 다 $0.95$에서 한참 위다).
+
+    요점은 마지막 두 줄이다. **$n = 100$에서 $n = 1000$으로 열 배 키워도 포함률이 $0.998$에서 꼼짝하지 않는다.** $r$이 $0.4$로 수렴해 버리기 때문이고, 이것은 표본을 더 모아서 고칠 수 있는 종류의 문제가 아니다.
 
 **표본을 100배 키워도 0.95로 돌아오지 않는다.** 오히려 0.998에서 굳어 버린다. 구간이 실제 필요한 것보다 넓기 때문이며, 그 넓이의 비가 $n$과 무관한 $1/\sqrt{0.4} = 1.58$배이기 때문이다.
 

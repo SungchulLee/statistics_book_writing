@@ -95,66 +95,131 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 포함률 곡선
+**보기 1.** <span class="diff easy" title="쉬움"></span> 포함률 곡선. 명목 $95\%$ 왈드 구간과 윌슨 구간의 실제 포함률을 두 방향으로 훑는다. 왼쪽은 $n = 40$을 고정하고 $p$를 $0.01$에서 $0.5$까지, 오른쪽은 $p = 0.1$을 고정하고 $n$을 $10$에서 $200$까지 **$1$씩** 늘린다.
+
+**(1)** $n = 40$, $p = 0.01$에서 왈드 포함률이 넘을 수 없는 값을 구하시오. 같은 자리에서 윌슨 구간은 $\hat p = 0$일 때 어떤 구간이 되는가.
+
+**(2)** 두 패널을 그리고, 왈드 곡선의 왼쪽 절벽과 오른쪽 톱니가 각각 어디서 오는지 수와 함께 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-rng = np.random.default_rng(1)
-z, REP = 1.96, 100_000
+    **(1) 왈드의 천장.** $\hat p = 0$이면 추정 표준오차가 $\sqrt{0 \times 1/n} = 0$이라 구간이 $[0, 0]$ 한 점으로 붕괴한다. $p = 0.01 > 0$이므로 그런 표본에서는 **절대** 참값을 담지 못한다. 그 일이 일어날 확률이
+
+    $$
+    P(\hat p = 0) = (1-p)^n = 0.99^{40} = 0.66897
+    $$
+
+    이므로 포함률은
+
+    $$
+    C(40,\, 0.01) \le 1 - 0.66897 = 0.33103
+    $$
+
+    을 넘을 수 없다. 표본의 $67\%$를 버리고 시작하는 구간이다.
+
+    **윌슨은 붕괴하지 않는다.** $\hat p = 0$을 윌슨의 부등식에 넣으면
+
+    $$
+    \frac{p^2}{p(1-p)/n} \le z^2
+    \;\Longrightarrow\; \frac{np}{1-p} \le z^2
+    \;\Longrightarrow\; p \le \frac{z^2}{n+z^2}
+    $$
+
+    이므로 구간이 $\left[0,\ \frac{1.96^2}{40+1.96^2}\right] = [0,\ 0.08762]$다. **폭이 남아 있고 $p = 0.01$을 담는다.** 분모에 $\hat p$이 아니라 $p$를 둔 것 하나가 이 차이를 만든다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    rng = np.random.default_rng(1)
+    z, REP = 1.96, 100_000
 
 
-def coverage(n, p):
-    """명목 95% Wald 구간과 Wilson 구간의 실제 포함률을 모의실험으로 구한다."""
-    phat = rng.binomial(n, p, size=REP) / n
+    def coverage(n, p):
+        """명목 95% Wald 구간과 Wilson 구간의 실제 포함률을 모의실험으로 구한다."""
+        phat = rng.binomial(n, p, size=REP) / n
 
-    # Wald: 표준오차에 p 대신 p^ 를 그대로 꽂는다. p^ = 0 이면 구간이 [0, 0].
-    half = z * np.sqrt(phat * (1 - phat) / n)
-    wald = np.mean((phat - half <= p) & (p <= phat + half))
+        # Wald: 표준오차에 p 대신 p^ 를 그대로 꽂는다. p^ = 0 이면 구간이 [0, 0].
+        half = z * np.sqrt(phat * (1 - phat) / n)
+        wald = np.mean((phat - half <= p) & (p <= phat + half))
 
-    # Wilson: |p - p^| <= z sqrt(p(1-p)/n) 을 p 에 대해 풀어 얻는다.
-    c = 1 + z**2 / n
-    center = (phat + z**2 / (2 * n)) / c
-    half_w = z * np.sqrt(phat * (1 - phat) / n + z**2 / (4 * n**2)) / c
-    wilson = np.mean((center - half_w <= p) & (p <= center + half_w))
+        # Wilson: |p - p^| <= z sqrt(p(1-p)/n) 을 p 에 대해 풀어 얻는다.
+        c = 1 + z**2 / n
+        center = (phat + z**2 / (2 * n)) / c
+        half_w = z * np.sqrt(phat * (1 - phat) / n + z**2 / (4 * n**2)) / c
+        wilson = np.mean((center - half_w <= p) & (p <= center + half_w))
 
-    return wald, wilson
+        return wald, wilson
 
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
 
-# (좌) n 을 40 으로 고정하고 참값 p 를 훑는다.
-ps = np.arange(0.01, 0.5001, 0.005)
-cov = np.array([coverage(40, q) for q in ps])
-ax1.plot(ps, cov[:, 0], "-", color="tab:red", lw=1.5, label="Wald")
-ax1.plot(ps, cov[:, 1], "-", color="tab:blue", lw=1.5, label="Wilson")
-ax1.axhline(0.95, color="black", ls="--", lw=1, label="nominal 0.95")
-ax1.set_xlabel("true $p$")
-ax1.set_ylabel("actual coverage")
-ax1.set_title("n = 40 fixed")
-ax1.set_ylim(0.25, 1.0)
-ax1.legend(fontsize=9, loc="lower right")
+    # (좌) n 을 40 으로 고정하고 참값 p 를 훑는다.
+    ps = np.arange(0.01, 0.5001, 0.005)
+    cov = np.array([coverage(40, q) for q in ps])
+    ax1.plot(ps, cov[:, 0], "-", color="tab:red", lw=1.5, label="Wald")
+    ax1.plot(ps, cov[:, 1], "-", color="tab:blue", lw=1.5, label="Wilson")
+    ax1.axhline(0.95, color="black", ls="--", lw=1, label="nominal 0.95")
+    ax1.set_xlabel("true $p$")
+    ax1.set_ylabel("actual coverage")
+    ax1.set_title("n = 40 fixed")
+    ax1.set_ylim(0.25, 1.0)
+    ax1.legend(fontsize=9, loc="lower right")
 
-# (우) p 를 0.1 로 고정하고 표본크기를 키운다. 톱니 진동을 보려면 n 을 1 씩 늘려야 한다.
-ns = np.arange(10, 201)
-cov2 = np.array([coverage(int(m), 0.1) for m in ns])
-ax2.plot(ns, cov2[:, 0], "-", color="tab:red", lw=1.2, label="Wald")
-ax2.plot(ns, cov2[:, 1], "-", color="tab:blue", lw=1.2, label="Wilson")
-ax2.axhline(0.95, color="black", ls="--", lw=1, label="nominal 0.95")
-ax2.set_xlabel("sample size $n$")
-ax2.set_ylabel("actual coverage")
-ax2.set_title("p = 0.1 fixed")
-ax2.set_ylim(0.6, 1.0)
-ax2.legend(fontsize=9, loc="lower right")
+    # (우) p 를 0.1 로 고정하고 표본크기를 키운다. 톱니 진동을 보려면 n 을 1 씩 늘려야 한다.
+    ns = np.arange(10, 201)
+    cov2 = np.array([coverage(int(m), 0.1) for m in ns])
+    ax2.plot(ns, cov2[:, 0], "-", color="tab:red", lw=1.2, label="Wald")
+    ax2.plot(ns, cov2[:, 1], "-", color="tab:blue", lw=1.2, label="Wilson")
+    ax2.axhline(0.95, color="black", ls="--", lw=1, label="nominal 0.95")
+    ax2.set_xlabel("sample size $n$")
+    ax2.set_ylabel("actual coverage")
+    ax2.set_title("p = 0.1 fixed")
+    ax2.set_ylim(0.6, 1.0)
+    ax2.legend(fontsize=9, loc="lower right")
 
-plt.tight_layout()
-plt.show()
-```
+    plt.tight_layout()
+    plt.show()
 
-![Wald 구간과 Wilson 구간의 실제 포함률](./img/phat_wald_wilson_fig1.png)
+    # 두 패널을 수로 요약한다.
+    print(f"n = 40, p = 0.01:  P(p-hat = 0) = {0.99 ** 40:.4f}  ->  Wald 포함률의 상한 {1 - 0.99 ** 40:.4f},  모의 {cov[0, 0]:.4f}")
+    print(f"  p-hat = 0 일 때 Wilson 구간 = [0, {z**2 / (40 + z**2):.4f}]  (p = 0.01 을 담는다)")
+    print(f"왼쪽 패널 {len(ps)} 개 p 에 대해   Wald  최소 {cov[:, 0].min():.4f}  평균 {cov[:, 0].mean():.4f}  0.95 이상인 비율 {(cov[:, 0] >= 0.95).mean():.3f}")
+    print(f"                              Wilson 최소 {cov[:, 1].min():.4f}  평균 {cov[:, 1].mean():.4f}  0.95 이상인 비율 {(cov[:, 1] >= 0.95).mean():.3f}")
+    i29, i30 = list(ns).index(29), list(ns).index(30)
+    print(f"오른쪽 패널  n = 29 -> 30:  Wald {cov2[i29, 0]:.4f} -> {cov2[i30, 0]:.4f}  (낙차 {cov2[i29, 0] - cov2[i30, 0]:.4f})")
+    print(f"             n >= 100 에서  Wald  최소 {cov2[90:, 0].min():.4f}  최대 {cov2[90:, 0].max():.4f}")
+    print(f"                            Wilson 최소 {cov2[90:, 1].min():.4f}  최대 {cov2[90:, 1].max():.4f}")
+    ```
+
+    출력:
+
+    ```
+    n = 40, p = 0.01:  P(p-hat = 0) = 0.6690  ->  Wald 포함률의 상한 0.3310,  모의 0.3313
+      p-hat = 0 일 때 Wilson 구간 = [0, 0.0876]  (p = 0.01 을 담는다)
+    왼쪽 패널 99 개 p 에 대해   Wald  최소 0.3313  평균 0.9017  0.95 이상인 비율 0.030
+                                  Wilson 최소 0.9216  평균 0.9522  0.95 이상인 비율 0.545
+    오른쪽 패널  n = 29 -> 30:  Wald 0.9465 -> 0.8093  (낙차 0.1371)
+                 n >= 100 에서  Wald  최소 0.9107  최대 0.9538
+                                Wilson 최소 0.9352  최대 0.9651
+    ```
+
+    ![Wald 구간과 Wilson 구간의 실제 포함률](./img/phat_wald_wilson_fig1.png)
+
+    **천장이 그대로 달성된다.** 모의 포함률 $0.3313$이 (1)에서 구한 상한 $0.33103$과 비율의 몬테카를로 오차 $\sqrt{0.33 \times 0.67/10^5} = 0.0015$ 안에서 같다. **상한이 "넘을 수 없다"가 아니라 "정확히 그만큼"**이라는 뜻이고, $\hat p \ge 1/40$인 표본에서는 왈드 구간이 전부 $p = 0.01$을 담는다는 것이다. 왈드가 놓치는 표본과 $\hat p = 0$인 표본이 같은 집합이다.
+
+    **왼쪽 패널의 절벽.** $p$가 작은 쪽에서 빨간 선이 수직으로 떨어지는 것은 $(1-p)^{40}$이 급격히 커지기 때문이다. 같은 이유로 $p$가 조금만 커져도 절벽이 사라진다. $p = 0.05$에서 $(1-p)^{40} = 0.1285$, $p = 0.1$에서 $0.0148$이다.
+
+    그런데 절벽을 지나서도 왈드는 명목 수준에 닿지 못한다. 훑어본 $99$개 $p$ 가운데 포함률이 $0.95$ 이상인 것이 **$3\%$**뿐이고 평균이 $0.9017$이다. 윌슨은 최소가 $0.9216$, 평균이 $0.9522$, $0.95$ 이상인 비율이 $54.5\%$다. **왈드의 문제는 극단적인 $p$에만 있는 것이 아니라 전 구간에 있다.**
+
+    **오른쪽 패널의 톱니.** $n = 29$에서 $0.9465$였던 왈드 포함률이 $n = 30$에서 $0.8093$으로 $0.1371$ 떨어진다. **표본을 하나 더 얻고 포함률 $14$ 퍼센트포인트를 잃었다.** 까닭은 이산성이다. $k = 1$의 왈드 상한이 $n = 29$에서 $0.10089$였다가 $n = 30$에서 $0.09757$로 내려가 $p = 0.1$을 넘지 못하게 되고, 그 순간 $P(X = 1) = 0.1413$이라는 점질량이 통째로 빠진다. 낙차 $0.1371$이 이 점질량과 거의 같다.
+
+    **톱니는 잡음이 아니다.** 되풀이를 10만 번 했으므로 한 점의 몬테카를로 오차가 $0.0015$ 남짓인데 톱니의 골은 그보다 100배 깊다. 같은 계산을 모의실험 없이 정확히 해도 같은 톱니가 나오며, 그것을 다음 보기에서 확인한다. $n \ge 100$에서도 왈드가 $0.9107$에서 $0.9538$ 사이를 오르내리고 윌슨은 $0.9352$에서 $0.9651$ 사이다. **어느 쪽도 한 값으로 수렴하지 않는다.** 이항 자료에서 포함률이 $n$의 매끄러운 함수가 될 수 없기 때문이다.
+
 
 **왼쪽 패널.** 빨간 선(왈드)이 $p$가 작은 쪽에서 절벽처럼 떨어진다. $p = 0.01$에서 0.33이고, $p = 0.1$에 가도 0.92를 넘지 못한다. $p = 0.5$에 이르러서야 0.92쯤이다. 파란 선(윌슨)은 전 구간에서 0.95 수평선 주위에 붙어 있다.
 
@@ -162,54 +227,118 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 대표값을 표로 정리한다
+**보기 2.** <span class="diff easy" title="쉬움"></span> 대표값을 표로 정리한다. 앞 보기의 두 곡선에서 대표적인 $(n, p)$를 골라 숫자로 적는다.
+
+**(1)** 포함률을 **모의실험 없이** 정확히 계산할 수 있는가. 가능하다면 그 식을 적으시오.
+
+**(2)** 정확한 포함률과 모의 포함률을 나란히 적어 서로 맞는지 확인하고, 왈드 구간이 놓치는 표본이 어떤 표본인지 밝히시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# coverage() 는 보기 1 과 같다. 난수열을 처음부터 다시 쓰려고 rng 를 새로 만든다.
-rng = np.random.default_rng(1)
+    **(1) 정확히 계산된다.** $\hat p$이 가질 수 있는 값은 $k/n$ 꼴의 $n+1$개뿐이고 각 값의 확률은 이항 PMF가 준다. 구간이 참값을 덮는지는 $k$만 알면 결정되므로, 포함률은 **덮는 $k$들의 점질량을 더한 유한합**이다.
 
-print("n = 40 고정")
-print("    p     Wald   Wilson   P(p^=0)")
-for p in (0.01, 0.02, 0.05, 0.10, 0.20, 0.30, 0.50):
-    w, s = coverage(40, p)
-    print(f"{p:>5.2f}   {w:.4f}   {s:.4f}   {(1-p)**40:>7.4f}")
+    $$
+    C(n, p) = \sum_{k=0}^{n} \binom nk p^k (1-p)^{n-k}\,
+    \mathbf 1\!\left\{\,p \in I\!\left(\tfrac kn\right)\right\}
+    $$
 
-print()
-print("p = 0.1 고정")
-print("   n     Wald   Wilson")
-for n in (10, 20, 29, 30, 40, 50, 100, 200):
-    w, s = coverage(n, 0.1)
-    print(f"{n:>4}   {w:.4f}   {s:.4f}")
-```
+    여기서 $I(\hat p)$가 왈드든 윌슨이든 무엇이든 상관없다. **모의실험은 확인용이고, 참값은 이 합이다.** 앞 보기의 톱니가 잡음이 아니라 구조라는 것도 이 식에서 바로 보인다. $n$이 하나 늘면 지시함수가 $1$에서 $0$으로 뒤집히는 $k$가 생기고, 그 $k$의 점질량이 합에서 통째로 사라진다.
 
-출력:
+    되풀이 10만 번의 모의 포함률은 이 참값을 $\sqrt{C(1-C)/10^5} \le 0.0016$의 오차로 추정한다. 그러므로 소수 셋째 자리까지는 믿을 수 있고 넷째 자리는 믿을 수 없다.
 
-```
-n = 40 고정
-    p     Wald   Wilson   P(p^=0)
- 0.01   0.3313   0.9393    0.6690
- 0.02   0.5525   0.9549    0.4457
- 0.05   0.8670   0.9528    0.1285
- 0.10   0.9133   0.9432    0.0148
- 0.20   0.9036   0.9275    0.0001
- 0.30   0.9300   0.9442    0.0000
- 0.50   0.9191   0.9614    0.0000
+    **(2) 두 값을 나란히.**
 
-p = 0.1 고정
-   n     Wald   Wilson
-  10   0.6496   0.9294
-  20   0.8774   0.9572
-  29   0.9466   0.9783
-  30   0.8093   0.9741
-  40   0.9134   0.9431
-  50   0.8779   0.9702
- 100   0.9325   0.9375
- 200   0.9267   0.9551
-```
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    z, REP = 1.96, 100_000
+    rng = np.random.default_rng(1)
+
+
+    def coverage(n, p):
+        """보기 1 과 같다. 모의실험으로 두 구간의 포함률을 구한다."""
+        phat = rng.binomial(n, p, size=REP) / n
+        half = z * np.sqrt(phat * (1 - phat) / n)
+        wald = np.mean((phat - half <= p) & (p <= phat + half))
+        c = 1 + z**2 / n
+        center = (phat + z**2 / (2 * n)) / c
+        half_w = z * np.sqrt(phat * (1 - phat) / n + z**2 / (4 * n**2)) / c
+        wilson = np.mean((center - half_w <= p) & (p <= center + half_w))
+        return wald, wilson
+
+
+    def exact_coverage(n, p):
+        """포함률은 유한한 점질량의 합이므로 모의실험 없이 정확히 계산된다."""
+        k = np.arange(n + 1)
+        phat = k / n
+        pmf = stats.binom(n, p).pmf(k)
+        half = z * np.sqrt(phat * (1 - phat) / n)
+        wald = pmf[(phat - half <= p) & (p <= phat + half)].sum()
+        c = 1 + z**2 / n
+        center = (phat + z**2 / (2 * n)) / c
+        half_w = z * np.sqrt(phat * (1 - phat) / n + z**2 / (4 * n**2)) / c
+        wilson = pmf[(center - half_w <= p) & (p <= center + half_w)].sum()
+        return wald, wilson
+
+
+    print("n = 40 고정          Wald            Wilson")
+    print("    p      정확    모의     정확    모의    P(p^=0)")
+    for p in (0.01, 0.02, 0.05, 0.10, 0.20, 0.30, 0.50):
+        w, s = coverage(40, p)
+        we, se_ = exact_coverage(40, p)
+        print(f"{p:>5.2f}   {we:.4f}  {w:.4f}   {se_:.4f}  {s:.4f}   {(1-p)**40:>7.4f}")
+
+    print()
+    print("p = 0.1 고정         Wald            Wilson")
+    print("   n      정확    모의     정확    모의")
+    for n in (10, 20, 29, 30, 40, 50, 100, 200):
+        w, s = coverage(n, 0.1)
+        we, se_ = exact_coverage(n, 0.1)
+        print(f"{n:>4}   {we:.4f}  {w:.4f}   {se_:.4f}  {s:.4f}")
+    ```
+
+    출력:
+
+    ```
+    n = 40 고정          Wald            Wilson
+        p      정확    모의     정확    모의    P(p^=0)
+     0.01   0.3310  0.3313   0.9393  0.9393    0.6690
+     0.02   0.5531  0.5525   0.9543  0.9549    0.4457
+     0.05   0.8681  0.8670   0.9520  0.9528    0.1285
+     0.10   0.9145  0.9133   0.9433  0.9432    0.0148
+     0.20   0.9047  0.9036   0.9283  0.9275    0.0001
+     0.30   0.9299  0.9300   0.9443  0.9442    0.0000
+     0.50   0.9193  0.9191   0.9615  0.9614    0.0000
+
+    p = 0.1 고정         Wald            Wilson
+       n      정확    모의     정확    모의
+      10   0.6497  0.6496   0.9298  0.9294
+      20   0.8760  0.8774   0.9568  0.9572
+      29   0.9467  0.9466   0.9784  0.9783
+      30   0.8085  0.8093   0.9742  0.9741
+      40   0.9145  0.9134   0.9433  0.9431
+      50   0.8789  0.8779   0.9703  0.9702
+     100   0.9324  0.9325   0.9364  0.9375
+     200   0.9271  0.9267   0.9561  0.9551
+    ```
+
+    **정확값과 모의값이 모두 맞는다.** 서른 쌍 가운데 가장 크게 벌어진 것이 $n = 20$의 왈드($0.8760$ 대 $0.8774$)와 $n = 100$의 윌슨($0.9364$ 대 $0.9375$)으로 둘 다 $0.0011$–$0.0014$이고, 그 자리의 몬테카를로 오차 $0.0010$–$0.0008$의 $1.3$–$1.4$배다. 나머지는 소수 셋째 자리까지 그대로 겹친다. **앞 보기의 톱니는 모의실험이 만든 것이 아니다.**
+
+    **왈드가 놓치는 표본의 정체.** 위쪽 표에서 정확한 포함률과 마지막 열을 더해 보라.
+
+    $$
+    p = 0.01: \ 0.3310 + 0.6690 = 1.0000, \qquad
+    p = 0.02: \ 0.5531 + 0.4457 = 0.9988
+    $$
+
+    $p = 0.01$에서는 소수 넷째 자리까지 정확히 $1$이다. **왈드가 놓치는 표본이 곧 $\hat p = 0$인 표본**이라는 것이며, 그 밖의 표본에서는 하나도 놓치지 않는다. $p = 0.02$에서 $0.9988$로 조금 모자라는 것은 $k \ge 5$인 표본 때문이다. $k = 5$면 $\hat p = 0.125$이고 구간이 $[0.0225,\ 0.2275]$가 되어 **하한이 $p = 0.02$를 넘어선다.** $k \ge 5$의 점질량을 모두 더하면 $0.0012$로, 모자라는 양과 정확히 맞는다.
+
+    **$p$가 극단이 아닐 때도 모자란다.** $p = 0.2$에서 정확한 왈드 포함률이 $0.9047$, $p = 0.5$에서 $0.9193$이다. $\hat p = 0$이 사실상 일어나지 않는 자리인데도 $0.95$에 못 미친다. 이것은 붕괴와 다른 원인, 곧 $\hat p(1-\hat p)$이 $p(1-p)$를 **평균적으로 작게** 추정한다는 사실에서 온다($E[\hat p(1-\hat p)] = \frac{n-1}{n}pq$). 구간이 체계적으로 좁다.
+
+    **아래쪽 표.** $n = 29 \to 30$의 정확한 낙차가 $0.9467 \to 0.8085$로 $0.1382$이고, $n = 30$에서 $P(X=1) = 0.1413$인 점질량이 빠진 것과 맞는다. 그리고 $n = 200$에서도 왈드가 $0.9271$이다. **$n$을 스무 배로 늘려도 $0.95$에 닿지 못한다.** 윌슨은 여덟 자리 모두 $0.93$ 위이고 평균적으로 $0.95$ 근처다.
 
 위쪽 표의 마지막 열이 왈드 구간의 실패를 설명한다. $P(\hat p = 0)$과 왈드 포함률의 합이 $p = 0.01$에서 $0.3313 + 0.6690 = 1.0003$으로 거의 정확히 1이다. $p = 0.02$에서도 $0.5525 + 0.4457 = 0.9982$다. **왈드 구간이 놓치는 표본이 곧 $\hat p = 0$인 표본**이라는 뜻이다.
 

@@ -50,55 +50,147 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 균등 모집단에서 표본평균의 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 균등 모집단에서 표본평균의 표집분포. $\text{Uniform}(0,1)$에서 뽑아 만든 모집단 1만 개에서 $n = 5$씩 비복원으로 뽑아 표본평균을 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** $\bar X$의 평균, 표준편차, 왜도, 초과첨도를 이론으로 적으시오.
+
+**(2)** 모의실험으로 (1)을 확인하고, 맨 아래 칸이 "종 모양에 가깝다"는 것이 **얼마나** 가까운 것인지 수로 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-np.random.seed(1)
+    **(1) 이론값.** $\text{Uniform}(0,1)$은 $\mu = 1/2$, $\sigma^2 = 1/12$이므로 중심과 폭은 모집단의 모양을 보지 않고 곧바로 나온다.
 
-sample_size = 5
-n_samples = 10_000
-n_population = 10_000
+    $$
+    E[\bar X] = \frac{1}{2} = 0.5, \qquad
+    \operatorname{sd}(\bar X) = \frac{\sigma}{\sqrt{n}} = \frac{1}{\sqrt{60}} = 0.12910
+    $$
 
-# Uniform(0,1)에서 큰 모집단을 만든다.
-population = np.random.uniform(size=(n_population,))
+    모양은 적률로 잰다. 독립인 합에서 3차·4차 중심적률이 더해지므로 $\bar X$의 왜도는 $\gamma_1/\sqrt{n}$, 초과첨도는 $(\beta_2 - 3)/n$이다. 균등분포는 $\gamma_1 = 0$, $\beta_2 = 1.8$이므로
 
-# 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
-# 아래 가운데 패널에 점 몇 개로 그려진다.
-single_sample = np.random.choice(population, size=sample_size, replace=False)
+    $$
+    \text{왜도}(\bar X) = 0, \qquad
+    \text{초과첨도}(\bar X) = \frac{1.8 - 3}{5} = -0.24
+    $$
 
-# 표본을 되풀이해 뽑으며 표본평균을 기록한다. 이 값들의 분포가 표집분포다.
-sample_means = [
-    np.mean(np.random.choice(population, size=sample_size, replace=False))
-    for _ in range(n_samples)
-]
+    **왜도는 처음부터 맞아 있고 틀린 것은 꼬리의 두께뿐이다.** 음수라는 것은 정규보다 꼬리가 **짧다**는 뜻이며, 당연하다. $\bar X$는 $[0,1]$ 밖으로 나갈 수 없는데 정규분포는 나갈 수 있다.
 
-# 모집단과 표집분포를 나란히 그린다.
-# 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
-# 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
-#   위   모집단      : 가장 넓다
-#   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
-#   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
-fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+    더 나아가 $n = 5$에서는 정확한 분포도 안다. $\sum_{i=1}^5 X_i$가 어윈-홀 분포를 따르므로 그 누적분포함수는 조각별 5차 다항식이다.
 
-ax0.hist(population, bins=np.linspace(0, 1, 100))
-ax0.set_title("Population Distribution")
+    $$
+    F_{S_5}(x) = \frac{1}{5!} \sum_{k=0}^{\lfloor x \rfloor} (-1)^k \binom{5}{k} (x-k)^5, \qquad 0 \le x \le 5
+    $$
 
-ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
-ax1.set_title(f"Sample Distribution (n = {sample_size})")
+    따라서 "정규근사가 얼마나 어긋나는가"를 어림하지 않고 **정확히** 잴 수 있다. 아래에서 그렇게 한다.
 
-ax2.hist(sample_means, bins=np.linspace(0, 1, 100))
-ax2.set_title("Sampling Distribution of X-bar")
+    **(2) 모의실험.**
 
-plt.tight_layout()
-plt.show()
-```
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from math import comb, factorial
+    from scipy import stats
 
-![Population Distribution](./img/xbar_uniform_45.png)
+    np.random.seed(1)
+
+    sample_size = 5
+    n_samples = 10_000
+    n_population = 10_000
+
+    # Uniform(0,1)에서 큰 모집단을 만든다.
+    population = np.random.uniform(size=(n_population,))
+
+    # 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
+    # 아래 가운데 패널에 점 몇 개로 그려진다.
+    single_sample = np.random.choice(population, size=sample_size, replace=False)
+
+    # 표본을 되풀이해 뽑으며 표본평균을 기록한다. 이 값들의 분포가 표집분포다.
+    sample_means = [
+        np.mean(np.random.choice(population, size=sample_size, replace=False))
+        for _ in range(n_samples)
+    ]
+    sample_means = np.asarray(sample_means)
+
+    # 중심과 폭: 이론값과 모의값을 나란히 둔다.
+    mu_pop, sd_pop = population.mean(), population.std()
+    se = sd_pop / np.sqrt(sample_size)
+    print(f"Uniform(0,1) 이론   평균 = 0.5000,  sigma/sqrt(n) = {1 / np.sqrt(12 * sample_size):.4f}")
+    print(f"실현 모집단 1만 개  평균 = {mu_pop:.4f},  s/sqrt(n)     = {se:.4f}")
+    print(f"모의 1만 회         평균 = {sample_means.mean():.4f},  표준편차      = {sample_means.std(ddof=1):.4f}")
+
+    # 모양: 균등의 X-bar 는 왜도 0, 초과첨도 (1.8-3)/n = -0.24 여야 한다.
+    print(f"모의 왜도    = {stats.skew(sample_means):+.4f}  (이론 {0.0:+.4f}, 표준오차 {np.sqrt(6 / n_samples):.4f})")
+    print(f"모의 초과첨도 = {stats.kurtosis(sample_means):+.4f}  (이론 {(1.8 - 3) / sample_size:+.4f}, 표준오차 {np.sqrt(24 / n_samples):.4f})")
+
+    # 정규근사가 얼마나 어긋나는가. n=5 에서 X-bar 의 정확한 분포는
+    # 어윈-홀 분포를 5 로 나눈 것이므로 누적분포를 닫힌 꼴로 적을 수 있다.
+    def cdf_irwin_hall(x, n):
+        """Irwin-Hall(n) 의 누적분포함수. X_1+...+X_n, X_i ~ Uniform(0,1)."""
+        x = np.asarray(x, dtype=float)
+        total = np.zeros_like(x)
+        for k in range(n + 1):
+            total += (-1) ** k * comb(n, k) * np.clip(x - k, 0, None) ** n
+        return np.clip(total / factorial(n), 0, 1)
+
+    grid = np.linspace(0, 1, 200_001)
+    gap = np.abs(cdf_irwin_hall(sample_size * grid, sample_size)
+                 - stats.norm.cdf(grid, loc=0.5, scale=1 / np.sqrt(12 * sample_size)))
+    print(f"정확분포 대 정규근사  최대 누적분포 차 = {gap.max():.5f}  (x = {grid[gap.argmax()]:.4f})")
+    p_exact = 1 - cdf_irwin_hall(sample_size * 0.7, sample_size)
+    p_normal = 1 - stats.norm.cdf(0.7, loc=0.5, scale=1 / np.sqrt(12 * sample_size))
+    print(f"P(X-bar > 0.7)  정확 = {p_exact:.6f},  정규근사 = {p_normal:.6f},  모의 = {(sample_means > 0.7).mean():.6f}")
+
+    # 모집단과 표집분포를 나란히 그린다.
+    # 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
+    # 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
+    #   위   모집단      : 가장 넓다
+    #   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
+    #   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
+    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+
+    ax0.hist(population, bins=np.linspace(0, 1, 100))
+    ax0.set_title("Population Distribution")
+
+    ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
+    ax1.set_title(f"Sample Distribution (n = {sample_size})")
+
+    ax2.hist(sample_means, bins=np.linspace(0, 1, 100))
+    ax2.set_title("Sampling Distribution of X-bar")
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Uniform(0,1) 이론   평균 = 0.5000,  sigma/sqrt(n) = 0.1291
+    실현 모집단 1만 개  평균 = 0.4980,  s/sqrt(n)     = 0.1287
+    모의 1만 회         평균 = 0.4993,  표준편차      = 0.1268
+    모의 왜도    = +0.0071  (이론 +0.0000, 표준오차 0.0245)
+    모의 초과첨도 = -0.2495  (이론 -0.2400, 표준오차 0.0490)
+    정확분포 대 정규근사  최대 누적분포 차 = 0.00571  (x = 0.4019)
+    P(X-bar > 0.7)  정확 = 0.061979,  정규근사 = 0.060668,  모의 = 0.056600
+    ```
+
+    ![Population Distribution](./img/xbar_uniform_45.png)
+
+    **중심과 폭.** 비복원으로 뽑으므로 $\bar X$가 실제로 겨냥하는 것은 $\text{Uniform}(0,1)$이 아니라 **실현된 1만 개**의 평균 $0.4980$이다. 모의 평균 $0.4993$이 거기서 몬테카를로 오차 $0.1287/\sqrt{10000} = 0.0013$의 $1$배만큼 떨어져 있어 잘 맞는다. 모의 표준편차 $0.1268$은 겨냥값 $0.1287$보다 $1.4\%$ 작고, 표준편차의 몬테카를로 오차 $0.1287/\sqrt{2 \times 10^4} = 0.0009$의 두 배쯤이다.
+
+    **모양이 이 쪽의 본론이다.** 왜도 $+0.0071$은 표준오차 $0.0245$의 $0.3$배로 $0$과 구별되지 않는다. 예측대로 맞아 있다. 초과첨도 $-0.2495$는 이론값 $-0.24$에서 표준오차 $0.0490$의 $0.2$배만큼 떨어져 있어 역시 맞는다. **$-0.24$는 $0$이 아니다.** 아래 칸은 종 모양으로 **보이지만** 정규분포가 아니고, 꼬리가 조금 짧은 종이다.
+
+    "얼마나 가까운가"에 대한 정직한 답은 마지막 두 줄이다. 어윈-홀로 계산한 정확한 누적분포와 정규근사의 차는 어디서나 $0.0057$을 넘지 않는다. 확률을 소수 둘째 자리까지만 쓸 생각이라면 $n = 5$에서 이미 정규로 바꿔 써도 된다는 뜻이다. 다만 꼬리에서는 상대오차가 커진다. $P(\bar X > 0.7)$은 정확히 $0.061979$인데 정규근사는 $0.060668$을 주어 $2.1\%$ 낮다. 꼬리가 짧은 분포이니 정규가 꼬리를 과대평가할 것 같지만 **이 지점에서는 반대**다. 까닭은 에지워스 전개의 첨도 항이 설명한다. 대칭분포에서
+
+    $$
+    P(\bar X > x) \approx 1 - \Phi(z) + \frac{\gamma_2}{24}\,(z^3 - 3z)\,\phi(z),
+    \qquad z = \frac{x - \mu}{\sigma/\sqrt{n}}
+    $$
+
+    인데 $z^3 - 3z$의 부호가 $z = \sqrt{3} = 1.732$에서 바뀐다. $x = 0.7$은 $z = 1.5492$여서 아직 $\sqrt{3}$ 안쪽이고 $z^3 - 3z = -0.9295$가 음수이므로, $\gamma_2 = -0.24$와 곱해져 보정이 **양**이 된다. 실제로 $0.060668 + 0.001117 = 0.061785$로 정확값 $0.061979$에 소수 셋째 자리까지 맞아, 남은 어긋남 $0.0002$는 정규근사의 $0.0013$에서 $6$분의 $1$로 줄었다. $x = 0.75$($z = 1.9365$)로 더 나가면 부호가 뒤집혀 정규근사가 $0.026404$로 정확값 $0.025391$을 **넘어선다.** 짧은 꼬리라는 성질이 꼬리 확률에 어떻게 나타나는지는 어디를 보는가에 달려 있다.
+
+    모의값 $0.0566$은 정확값보다 더 낮다. 두 가지가 겹쳐 있다. 첫째, 실현 모집단의 평균이 $0.4980$으로 $0.5$보다 작아 겨냥값 자체가 $0.0595$로 내려가 있다(같은 모집단에서 100만 번 다시 뽑아 확인했다). 둘째, 남은 차이 $0.0029$는 비율의 몬테카를로 오차 $\sqrt{0.06 \times 0.94 / 10^4} = 0.0024$의 $1.2$배다. **세 수가 어긋나는 순서가 정확 → 겨냥 → 모의이고, 각 단계의 까닭이 다르다.**
+
 
 ## 해석
 

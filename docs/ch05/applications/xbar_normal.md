@@ -38,55 +38,127 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 정규 모집단에서 표본평균의 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규 모집단에서 표본평균의 표집분포. $N(0, 1)$에서 뽑아 만든 모집단 1만 개에서 $n = 5$씩 비복원으로 뽑아 표본평균을 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** $\bar X$의 평균, 표준편차, 그리고 **분포의 모양**이 각각 무엇이 되어야 하는지 이론으로 적고, 앞의 두 쪽(균등·지수)과 무엇이 다른지 말하시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오. 모양이 정규인지를 왜도·초과첨도와 적합도검정으로 재어 보시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-np.random.seed(1)
+    **(1) 이론값.** $N(0,1)$은 $\mu = 0$, $\sigma = 1$이므로 중심과 폭은 앞의 두 쪽과 똑같은 공식에서 나온다.
 
-sample_size = 5
-n_samples = 10_000
-n_population = 10_000
+    $$
+    E[\bar X] = \mu = 0, \qquad
+    \operatorname{sd}(\bar X) = \frac{\sigma}{\sqrt{n}} = \frac{1}{\sqrt{5}} = 0.44721
+    $$
 
-# N(0,1)에서 큰 모집단을 만든다.
-population = np.random.normal(loc=0, scale=1, size=n_population)
+    달라지는 것은 **모양**이다. 위 정리 1에 따라 $\bar X \sim N(0, 1/5)$이 모든 $n$에서 정확히 성립하므로
 
-# 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
-# 아래 가운데 패널에 점 몇 개로 그려진다.
-single_sample = np.random.choice(population, size=sample_size, replace=False)
+    $$
+    \text{왜도}(\bar X) = 0, \qquad \text{초과첨도}(\bar X) = 0
+    $$
 
-# 표본을 되풀이해 뽑으며 표본평균을 기록한다. 이 값들의 분포가 표집분포다.
-sample_means = [
-    np.mean(np.random.choice(population, size=sample_size, replace=False))
-    for _ in range(n_samples)
-]
+    이고, 이것이 $n = 5$에서도 **근사가 아니라 등호**다.
 
-# 모집단과 표집분포를 나란히 그린다.
-# 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
-# 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
-#   위   모집단      : 가장 넓다
-#   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
-#   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
-fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+    앞의 두 쪽과 견주면 차이가 분명해진다. 모집단의 왜도를 $\gamma_1$, 첨도를 $\beta_2$라 하면 독립인 합에서 $\bar X$의 왜도는 $\gamma_1/\sqrt{n}$, 초과첨도는 $(\beta_2 - 3)/n$이다. $n = 5$에 넣으면
 
-ax0.hist(population, bins=100, edgecolor="white")
-ax0.set_title("Population Distribution N(0, 1)")
+    | 모집단 | $\gamma_1$ | $\beta_2$ | $\bar X$의 왜도 | $\bar X$의 초과첨도 |
+    |---|---|---|---|---|
+    | 균등 | $0$ | $1.8$ | $0$ | $-0.240$ |
+    | 지수 | $2$ | $9$ | $0.894$ | $+1.200$ |
+    | 정규 | $0$ | $3$ | $0$ | $0$ |
 
-ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
-ax1.set_title(f"Sample Distribution (n = {sample_size})")
+    가 된다. 균등은 대칭이라 왜도는 맞히지만 꼬리가 정규보다 짧고(음의 초과첨도), 지수는 왜도부터 틀린다. **셋 가운데 정규만 두 칸이 모두 $0$이고, 그래서 $n$을 키울 필요가 없다.**
 
-ax2.hist(sample_means, bins=100, edgecolor="white")
-ax2.set_title("Sampling Distribution of X-bar")
+    비복원으로 뽑으므로 엄밀하게 겨냥하는 것은 $N(0,1)$ 자체가 아니라 **실현된 유한모집단 1만 개**이고, 유한모집단 수정 $\sqrt{(10000-5)/9999} = 0.99980$이 붙는다. 소수 넷째 자리에서 겨우 보이는 크기다.
 
-plt.tight_layout()
-plt.show()
-```
+    **(2) 모의실험.**
 
-![정규모집단, 표본 하나, 표본평균의 표집분포](./img/xbar_normal_42.png)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(1)
+
+    sample_size = 5
+    n_samples = 10_000
+    n_population = 10_000
+
+    # N(0,1)에서 큰 모집단을 만든다.
+    population = np.random.normal(loc=0, scale=1, size=n_population)
+
+    # 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
+    # 아래 가운데 패널에 점 몇 개로 그려진다.
+    single_sample = np.random.choice(population, size=sample_size, replace=False)
+
+    # 표본을 되풀이해 뽑으며 표본평균을 기록한다. 이 값들의 분포가 표집분포다.
+    sample_means = [
+        np.mean(np.random.choice(population, size=sample_size, replace=False))
+        for _ in range(n_samples)
+    ]
+    sample_means = np.asarray(sample_means)
+
+    # 이론값과 모의값을 나란히 둔다. 비복원으로 뽑으므로 직접 겨냥하는 것은
+    # N(0,1) 자체가 아니라 실현된 유한모집단 1만 개이고, 유한모집단 수정이 붙는다.
+    mu_pop, sd_pop = population.mean(), population.std()
+    fpc = np.sqrt((n_population - sample_size) / (n_population - 1))
+    se_realized = sd_pop / np.sqrt(sample_size) * fpc
+    print(f"N(0,1) 이론        평균 = 0.0000,  sigma/sqrt(n) = {1 / np.sqrt(sample_size):.4f}")
+    print(f"실현 모집단 1만 개  평균 = {mu_pop:+.4f},  s/sqrt(n)*fpc = {se_realized:.4f}")
+    print(f"모의 1만 회        평균 = {sample_means.mean():+.4f},  표준편차      = {sample_means.std(ddof=1):.4f}")
+    print(f"몬테카를로 오차     평균 {se_realized / np.sqrt(n_samples):.4f},  표준편차 {se_realized / np.sqrt(2 * n_samples):.4f}")
+
+    # 모양을 잰다. 정규라면 왜도와 초과첨도가 둘 다 0 이어야 한다.
+    print(f"모의 왜도 = {stats.skew(sample_means):+.4f},  초과첨도 = {stats.kurtosis(sample_means):+.4f}")
+    ks = stats.kstest(sample_means, "norm", args=(mu_pop, se_realized))
+    print(f"KS 적합도검정  D = {ks.statistic:.4f},  p = {ks.pvalue:.4f}")
+
+    # 모집단과 표집분포를 나란히 그린다.
+    # 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
+    # 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
+    #   위   모집단      : 가장 넓다
+    #   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
+    #   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
+    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+
+    ax0.hist(population, bins=100, edgecolor="white")
+    ax0.set_title("Population Distribution N(0, 1)")
+
+    ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
+    ax1.set_title(f"Sample Distribution (n = {sample_size})")
+
+    ax2.hist(sample_means, bins=100, edgecolor="white")
+    ax2.set_title("Sampling Distribution of X-bar")
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    N(0,1) 이론        평균 = 0.0000,  sigma/sqrt(n) = 0.4472
+    실현 모집단 1만 개  평균 = +0.0098,  s/sqrt(n)*fpc = 0.4466
+    모의 1만 회        평균 = +0.0109,  표준편차      = 0.4561
+    몬테카를로 오차     평균 0.0045,  표준편차 0.0032
+    모의 왜도 = -0.0069,  초과첨도 = +0.0360
+    KS 적합도검정  D = 0.0106,  p = 0.2106
+    ```
+
+    ![정규모집단, 표본 하나, 표본평균의 표집분포](./img/xbar_normal_42.png)
+
+    **중심.** 실현된 모집단 1만 개의 평균이 $+0.0098$이다. 1만 개를 뽑을 때의 표집오차가 $1/\sqrt{10000} = 0.01$이니 $1$ 표집오차만큼 비껴난 것이고, 비복원 $\bar X$가 겨냥하는 것은 $0$이 아니라 이 $+0.0098$이다. 모의 평균 $+0.0109$는 거기서 몬테카를로 오차 $0.0045$의 $0.24$배만큼 떨어져 있어 잘 맞는다.
+
+    **폭.** 모의 표준편차 $0.4561$은 겨냥값 $0.4466$보다 $2.1\%$ 크다. 표준편차 자체의 몬테카를로 오차가 $\mathrm{SE}/\sqrt{2B} = 0.0032$이므로 $3.0$배 어긋난 셈이고, 1만 번치고는 운이 나쁜 쪽이다. 되풀이를 5만 번으로 늘리면 $0.4484$, 20만 번으로 늘리면 $0.4471$이 되어 겨냥값으로 다가간다. **체계적 차이가 아니라 몬테카를로 요동이다.**
+
+    **모양.** 여기가 이 쪽의 요점이다. 왜도 $-0.0069$는 표준오차 $\sqrt{6/B} = 0.0245$의 $0.3$배, 초과첨도 $+0.0360$은 표준오차 $\sqrt{24/B} = 0.0490$의 $0.7$배다. 둘 다 $0$과 구별되지 않는다. KS 검정도 $p = 0.21$로 기각하지 못한다. 같은 $n = 5$에서 균등 모집단이라면 초과첨도가 $-0.240$으로 표준오차의 $5$배, 지수 모집단이라면 왜도가 $0.894$로 표준오차의 $36$배가 되어 검정이 가차없이 기각할 값이다.
+
+    물론 적합도검정은 정규성을 **증명**하지 못한다. 기각하지 못했다는 것뿐이다. 정확성을 주는 것은 위 정리 1의 적률생성함수 계산이고, 모의실험은 그것과 어긋나지 않는다는 것만 보일 수 있다. 그리고 이 쪽에서는 그것으로 충분하다. **어긋날 자리가 애초에 없기 때문이다.**
+
 
 ## 해석
 

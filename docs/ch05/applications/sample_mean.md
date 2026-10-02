@@ -287,54 +287,129 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> 표본평균의 표준오차 모의실험
+**보기 7.** <span class="diff easy" title="쉬움"></span> 표본평균의 표준오차 모의실험. $\text{Uniform}(0,1)$에서 $n = 5$인 표본을 1만 번 뽑아 표본평균 1만 개를 모으고, 그 평균과 표준편차를 재어 공식과 맞춰 본다.
+
+**(1)** 모의실험이 내놓을 두 숫자를 이론으로 미리 적고, **1만 번밖에 되풀이하지 않았을 때 그 두 숫자가 얼마나 흔들릴 수 있는지**도 함께 적으시오.
+
+**(2)** 모의실험으로 확인하시오. 그림의 점선 두 개(평균 $\pm$ 표준오차)가 가두는 확률이 얼마인지도 구하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 이론값.** $\text{Uniform}(0,1)$은 $\mu = 1/2$, $\sigma = 1/\sqrt{12} = 0.288675$이므로
 
-# 크기 5짜리 균등표본 U(0,1)을 1만 번 뽑아 그때마다 표본평균을 기록한다.
-X_bar = []
-for _ in range(10_000):
-    x = np.random.uniform(size=(5,))
-    X_bar.append(x.mean())
+    $$
+    E[\bar X] = 0.5, \qquad
+    \operatorname{SE}(\bar X) = \frac{\sigma}{\sqrt{n}} = \frac{1}{\sqrt{60}} = 0.12910
+    $$
 
-# 1만 개 표본평균의 평균과 표준편차.
-#   평균     -> 참 평균 0.5 에 가까워야 한다
-#   표준편차 -> 이것이 표준오차다. 이론값은 sigma/sqrt(n) 이며
-#              U(0,1)의 sigma = 1/sqrt(12) 이므로
-#              (1/sqrt(12))/sqrt(5) = 0.1291 이 나와야 한다.
-average = np.array(X_bar).mean()
-standard_error = np.array(X_bar).std()
+    이다. 이 두 값에는 근사가 없다. 모집단이 균등이든 무엇이든 정확하다.
 
-print(f"Estimated Mean of X_bar:  {average:.4f}")
-print(f"Standard Error of X_bar:  {standard_error:.4f}")
+    여기서 한 걸음 더 나가는 것이 요령이다. **모의실험이 내놓는 두 숫자 자체가 확률변수**이므로 그것들의 흔들림도 미리 계산할 수 있다. 되풀이 횟수를 $B = 10{,}000$이라 하면
 
-# 히스토그램에 이론값을 겹쳐 그린다.
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.set_title("Sampling Distribution of X-bar")
-ax.hist(X_bar, bins=100, density=True, alpha=0.3)
-ax.vlines(average, ymin=0, ymax=5, color="k", lw=5, label="Mean")
-ax.vlines(average + standard_error, ymin=0, ymax=5,
-          color="k", ls="--", label="Mean +/- SE")
-ax.vlines(average - standard_error, ymin=0, ymax=5,
-          color="k", ls="--")
-ax.legend()
-plt.show()
-```
+    $$
+    \operatorname{sd}(\text{모의 평균}) = \frac{\operatorname{SE}}{\sqrt{B}} = \frac{0.12910}{100} = 0.00129
+    $$
 
-출력:
+    이고, 표준편차 추정값의 흔들림은 대략
 
-```
-Estimated Mean of X_bar:  0.4981
-Standard Error of X_bar:  0.1287
-```
+    $$
+    \operatorname{sd}(\text{모의 표준오차}) \approx \frac{\operatorname{SE}}{\sqrt{2B}} = \frac{0.12910}{141.42} = 0.00091
+    $$
 
-![Sampling Distribution of X-bar](./img/se_xbar_45.png)
+    이다. 그러므로 **$0.5000$과 $0.1291$이 그대로 나올 것을 기대하면 안 된다.** 소수 셋째 자리에서 흔들리는 것이 정상이며, 어긋남이 위 두 수의 두세 배 안에 들면 공식이 맞은 것이다.
+
+    점선이 가두는 확률도 계산해 둔다. $n = 5$에서 $\bar X$의 정확한 분포는 어윈-홀 분포를 $5$로 나눈 것이므로
+
+    $$
+    P\!\left(\lvert \bar X - \mu \rvert \le \operatorname{SE}\right)
+    = F_{S_5}\!\left(5(\mu + \operatorname{SE})\right) - F_{S_5}\!\left(5(\mu - \operatorname{SE})\right) = 0.6724
+    $$
+
+    를 얻는다. 정규분포라면 $2\Phi(1) - 1 = 0.6827$이니 **$0.0103$ 작다.** 균등의 $\bar X$는 꼬리가 정규보다 짧아($n = 5$에서 초과첨도 $-0.24$) 가운데 한 표준편차 안에 든 질량이 오히려 **적다.**
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from math import comb, factorial
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 크기 5짜리 균등표본 U(0,1)을 1만 번 뽑아 그때마다 표본평균을 기록한다.
+    X_bar = []
+    for _ in range(10_000):
+        x = np.random.uniform(size=(5,))
+        X_bar.append(x.mean())
+
+    # 1만 개 표본평균의 평균과 표준편차.
+    #   평균     -> 참 평균 0.5 에 가까워야 한다
+    #   표준편차 -> 이것이 표준오차다. 이론값은 sigma/sqrt(n) 이며
+    #              U(0,1)의 sigma = 1/sqrt(12) 이므로
+    #              (1/sqrt(12))/sqrt(5) = 0.1291 이 나와야 한다.
+    average = np.array(X_bar).mean()
+    standard_error = np.array(X_bar).std()
+
+    print(f"Estimated Mean of X_bar:  {average:.4f}")
+    print(f"Standard Error of X_bar:  {standard_error:.4f}")
+
+    # 이론값과 1만 번 되풀이에서 기대할 요동을 함께 적는다.
+    n, B = 5, 10_000
+    mu_true, se_true = 0.5, 1 / np.sqrt(12 * n)
+    print(f"이론값  mu = {mu_true:.4f},  sigma/sqrt(n) = {se_true:.4f}")
+    print(f"몬테카를로 오차  평균 {se_true / np.sqrt(B):.4f},  표준오차 {se_true / np.sqrt(2 * B):.4f}")
+    print(f"어긋남을 오차 단위로  평균 {abs(average - mu_true) / (se_true / np.sqrt(B)):.2f}배,  "
+          f"표준오차 {abs(standard_error - se_true) / (se_true / np.sqrt(2 * B)):.2f}배")
+
+    # 점선 두 개가 가두는 확률. n=5 의 정확한 분포는 어윈-홀을 5로 나눈 것이다.
+    def cdf_irwin_hall(x, n):
+        x = np.asarray(x, dtype=float)
+        total = np.zeros_like(x)
+        for k in range(n + 1):
+            total += (-1) ** k * comb(n, k) * np.clip(x - k, 0, None) ** n
+        return np.clip(total / factorial(n), 0, 1)
+
+    p_exact = float(cdf_irwin_hall(n * (mu_true + se_true), n) - cdf_irwin_hall(n * (mu_true - se_true), n))
+    p_normal = float(stats.norm.cdf(1) - stats.norm.cdf(-1))
+    p_sim = float(np.mean(np.abs(np.array(X_bar) - average) <= standard_error))
+    print(f"점선 사이의 확률  정확 {p_exact:.4f},  정규근사 {p_normal:.4f},  모의 {p_sim:.4f}")
+
+    # 히스토그램에 이론값을 겹쳐 그린다.
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.set_title("Sampling Distribution of X-bar")
+    ax.hist(X_bar, bins=100, density=True, alpha=0.3)
+    ax.vlines(average, ymin=0, ymax=5, color="k", lw=5, label="Mean")
+    ax.vlines(average + standard_error, ymin=0, ymax=5,
+              color="k", ls="--", label="Mean +/- SE")
+    ax.vlines(average - standard_error, ymin=0, ymax=5,
+              color="k", ls="--")
+    ax.legend()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Estimated Mean of X_bar:  0.4981
+    Standard Error of X_bar:  0.1287
+    이론값  mu = 0.5000,  sigma/sqrt(n) = 0.1291
+    몬테카를로 오차  평균 0.0013,  표준오차 0.0009
+    어긋남을 오차 단위로  평균 1.47배,  표준오차 0.42배
+    점선 사이의 확률  정확 0.6724,  정규근사 0.6827,  모의 0.6685
+    ```
+
+    ![Sampling Distribution of X-bar](./img/se_xbar_45.png)
+
+    **두 숫자 모두 예측한 띠 안에 든다.** 모의 평균 $0.4981$이 $0.5$에서 $0.0019$ 떨어져 있어 몬테카를로 오차 $0.0013$의 $1.47$배, 모의 표준오차 $0.1287$이 $0.1291$에서 $0.0004$ 떨어져 있어 $0.0009$의 $0.42$배다. **"가깝다"가 아니라 "오차의 $1.5$배와 $0.4$배"라고 말할 수 있다는 것이 이 보기의 쓸모다.** 둘 다 $2$배 안쪽이므로 공식과 어긋난다고 볼 근거가 없다.
+
+    띠의 폭을 알면 반대 방향으로도 쓸 수 있다. 모의 표준오차를 소수 넷째 자리까지 믿고 싶다면 $\mathrm{SE}/\sqrt{2B} < 0.00005$, 곧 $B > 3{,}300{,}000$번을 되풀이해야 한다. **1만 번으로 셋째 자리까지가 한계**다.
+
+    **점선 두 개.** 모의 비율 $0.6685$가 정확값 $0.6724$에서 $0.0039$ 떨어져 있고, 비율의 몬테카를로 오차가 $\sqrt{0.672 \times 0.328/10^4} = 0.0047$이니 $0.8$배다. 반면 정규근사 $0.6827$과는 $0.0142$, 곧 오차의 $3.0$배나 떨어져 있다. **1만 번의 모의실험이 "정확한 어윈-홀"과 "정규근사"를 구별해 낼 만큼 촘촘하다**는 뜻이고, 그래서 $n = 5$에서 $\bar X$가 아직 정규가 아니라는 것을 모의실험만으로도 보일 수 있다.
+
+    다만 공식 $\sigma/\sqrt n$ 쪽에는 그런 어긋남이 없다. 중심과 폭은 모집단의 모양과 무관하게 정확하고, 모양만 근사다. **이 쪽이 처음부터 말해 온 구분이 숫자로 갈라져 나온 자리다.**
 
 모의실험이 내놓은 0.4981과 0.1287은 이론이 예측한 $\mu = 0.5$와 $\sigma/\sqrt{n} \approx 0.1291$에 각각 가깝다. 남은 차이는 표집을 1만 번밖에 되풀이하지 않은 탓이며, 횟수를 늘리면 줄어든다. 공식은 맞았다.
 

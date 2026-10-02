@@ -110,93 +110,282 @@ $p = 1/2$에서는 위 식이 $0/0$이 되고 실제 상관계수는 0이다. �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> S²이 X̄의 함수라는 것과 이산 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> S²이 X̄의 함수라는 것과 이산 표집분포. $\text{Bernoulli}(0.3)$에서 $n = 20$인 표본을 5천 번 뽑아 $\bar X$와 $S^2$을 함께 기록한다.
+
+**(1)** $S^2$이 가질 수 있는 **서로 다른** 값의 개수와 그 최댓값을 구하고, $E[S^2]$, $\operatorname{sd}(S^2)$, 카이제곱 예측과의 분산 배율, $\operatorname{corr}(\bar X, S^2)$을 이론으로 적으시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오. 왼쪽 그림의 점들이 흩어지지 않는 까닭과, 오른쪽 그림에서 점질량의 **간격**이 오른쪽 끝으로 가며 좁아지는 까닭을 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(1)
-n, p = 20, 0.3
+    **(1) 해석적으로.** 위에서 얻은 항등식 $S^2 = \frac{n}{n-1}\bar X(1-\bar X)$에 $n\bar X = k$를 넣으면
 
-X = rng.binomial(1, p, size=(5000, n))
-xbar = X.mean(axis=1)
-s2 = X.var(axis=1, ddof=1)
+    $$
+    S^2 = \frac{n}{n-1}\cdot\frac{k}{n}\left(1 - \frac{k}{n}\right)
+    = \frac{k(n-k)}{n(n-1)}, \qquad k = 0, 1, \ldots, n
+    $$
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 3.5))
+    이다. 여기서 $k(n-k)$는 $k \mapsto n-k$에 대해 **대칭**이므로 $S^2(k) = S^2(n-k)$가 되어, $n+1$개의 $k$가 주는 값 가운데 서로 다른 것은
 
-# 왼쪽: (X-bar, S^2) 산점도. 5천 개 점이 모두 포물선 위에 정확히 얹힌다.
-# 두 통계량이 함수 관계라는 것을 그림 하나로 보여 준다.
-ax1.scatter(xbar, s2, s=8, alpha=0.25)
-g = np.linspace(0, 1, 200)
-ax1.plot(g, n / (n - 1) * g * (1 - g), 'r-', lw=2,
-         label=r"$\frac{n}{n-1}\bar X(1-\bar X)$")
-ax1.set_xlabel(r"$\bar X$")
-ax1.set_ylabel(r"$S^2$")
-ax1.set_title(f"Bernoulli(p={p}),  n = {n}")
-ax1.legend(fontsize=9)
+    $$
+    \left\lfloor \frac{n}{2} \right\rfloor + 1 = 11 \ \text{개}
+    $$
 
-# 오른쪽: S^2 의 표집분포. 연속밀도가 아니라 n+1 개의 점질량이다.
-# 이항 PMF를 그대로 S^2 의 눈금으로 옮겨 그린다.
-k = np.arange(0, n + 1)
-pmf = stats.binom(n, p).pmf(k)
-s2_vals = n / (n - 1) * (k / n) * (1 - k / n)
-ax2.vlines(s2_vals, 0, pmf, lw=2)
-ax2.plot(s2_vals, pmf, 'o', ms=4)
+    뿐이다. 최댓값은 $k = n/2 = 10$에서
 
-# 카이제곱 기반 밀도를 오른쪽 축에 겹친다. 눈금이 다르므로 축을 나눈다.
-sigma2 = p * (1 - p)
-c = (n - 1) / sigma2
-gg = np.linspace(1e-4, s2_vals.max() * 1.1, 300)
-ax2b = ax2.twinx()
-ax2b.plot(gg, stats.chi2(n - 1).pdf(gg * c) * c, '--r', lw=2,
-          label=r"$\chi^2$-based PDF")
-ax2b.set_ylabel("density", color='r')
-ax2b.legend(fontsize=8, loc='upper left')
-ax2.set_xlabel(r"$S^2$")
-ax2.set_ylabel("P(S² = value)")
-ax2.set_title("Sampling distribution of $S^2$ (discrete)")
+    $$
+    \max S^2 = \frac{n}{n-1}\cdot\frac14 = \frac{20}{19 \cdot 4} = \frac{5}{19} = 0.26316
+    $$
 
-plt.tight_layout()
-plt.show()
-```
+    이다. 표본비율이 $0.1$일 때와 $0.9$일 때 분산이 같다는, 당연하지만 눈에 띄는 성질이 이 대칭이다.
 
-![베르누이모집단에서 S²과 X̄의 관계](./img/s2_bernoulli_fig1.png)
+    적률은 베르누이의 중심적률에서 나온다. $X - p$가 확률 $p$로 $q$, 확률 $q$로 $-p$를 취하므로
+
+    $$
+    \mu_3 = pq^3 - qp^3 = pq(q^2 - p^2) = pq(q-p), \qquad
+    \mu_4 = pq^4 + qp^4 = pq(p^3 + q^3) = pq(1 - 3pq)
+    $$
+
+    이고($p^3+q^3 = (p+q)^3 - 3pq(p+q) = 1-3pq$), 따라서
+
+    $$
+    \beta_2 = \frac{\mu_4}{\sigma^4} = \frac{pq(1-3pq)}{(pq)^2} = \frac{1 - 3pq}{pq}
+    $$
+
+    다. $p = 0.3$이면 $pq = 0.21$이므로 $\mu_3 = 0.084$, $\beta_2 = 0.37/0.21 = 1.76190$이다($p = 1/2$에 넣으면 $\beta_2 = 0.25/0.25 = 1$로 본문의 값이 나온다).
+
+    이제 일반 공식에 넣는다.
+
+    $$
+    E[S^2] = \sigma^2 = pq = 0.21
+    $$
+
+    $$
+    \operatorname{Var}(S^2) = \frac{1}{20}\left(1.76190 - \frac{17}{19}\right)(0.21)^4 \cdot \frac{1}{(0.21)^2}
+    $$
+
+    꼴로 쓰면 지저분하니 $\sigma^4 = 0.0441$을 그대로 곱해
+
+    $$
+    \operatorname{Var}(S^2) = \frac{(1.76190 - 0.89474) \times 0.0441}{20} = 0.00191211,
+    \qquad \operatorname{sd}(S^2) = 0.043728
+    $$
+
+    를 얻는다. 카이제곱 예측은 $\sqrt{2/19} \times 0.21 = 0.068133$이므로 분산 배율은
+
+    $$
+    \frac{19}{40}\left(1.76190 - \frac{17}{19}\right) = 0.41190
+    $$
+
+    이다. **$1$보다 작다.** 상관계수는
+
+    $$
+    \operatorname{corr}(\bar X, S^2) = \frac{\mu_3}{\sigma^3\sqrt{\beta_2 - \frac{n-3}{n-1}}}
+    = \frac{0.084}{0.21^{3/2}\sqrt{0.86717}} = \frac{0.084}{0.089616} = 0.93734
+    $$
+
+    로 $1$에 가깝지만 아직 $1$은 아니다. $n$을 키우면 $\operatorname{sign}(q-p) = +1$로 간다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    n, p = 20, 0.3
+
+    X = rng.binomial(1, p, size=(5000, n))
+    xbar = X.mean(axis=1)
+    s2 = X.var(axis=1, ddof=1)
+
+    # 항등식, 적률, 상관을 이론과 맞춰 본다.
+    q = 1 - p
+    pq = p * q
+    beta2 = (1 - 3 * pq) / pq            # 베르누이의 첨도 mu4/sigma^4
+    mu3 = pq * (q - p)                   # 3차 중심적률
+    var_s2 = (beta2 - (n - 3) / (n - 1)) * pq ** 2 / n
+    corr_s2 = mu3 / (pq ** 1.5 * np.sqrt(beta2 - (n - 3) / (n - 1)))
+
+    # 정확한 표집분포는 이항 PMF 를 S^2 의 눈금으로 옮긴 점질량이다.
+    kk = np.arange(n + 1)
+    pmf_exact = stats.binom(n, p).pmf(kk)
+    s2_exact = n / (n - 1) * (kk / n) * (1 - kk / n)
+
+    print(f"베르누이(p={p}),  n = {n}:  beta2 = {beta2:.6f},  mu3 = {mu3:.4f}")
+    print(f"max |S^2 - (n/(n-1)) X-bar(1-X-bar)| = {np.abs(s2 - n / (n - 1) * xbar * (1 - xbar)).max():.2e}")
+    print(f"k = 0..{n} 이 주는 값 {n + 1} 개 가운데 서로 다른 것은 {len(np.unique(s2_exact.round(12)))} 개 "
+          f"(S^2(k) = S^2(n-k) 이므로),  모의에서 관측된 것 {len(np.unique(s2.round(12)))} 개")
+    print(f"S^2 의 최댓값 = {s2_exact.max():.5f}")
+    print(f"E[S^2]   공식 {pq:.6f}   정확 {(pmf_exact * s2_exact).sum():.6f}   모의 {s2.mean():.6f}")
+    print(f"sd(S^2)  공식 {np.sqrt(var_s2):.6f}   정확 {np.sqrt((pmf_exact * (s2_exact - pq) ** 2).sum()):.6f}   모의 {s2.std(ddof=1):.6f}")
+    print(f"카이제곱이 예측하는 sd = {np.sqrt(2 / (n - 1)) * pq:.6f},  분산 배율 = {(n - 1) / (2 * n) * (beta2 - (n - 3) / (n - 1)):.5f}")
+    print(f"corr(X-bar, S^2)  이론 {corr_s2:.5f}   모의 {np.corrcoef(xbar, s2)[0, 1]:.5f}")
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 3.5))
+
+    # 왼쪽: (X-bar, S^2) 산점도. 5천 개 점이 모두 포물선 위에 정확히 얹힌다.
+    # 두 통계량이 함수 관계라는 것을 그림 하나로 보여 준다.
+    ax1.scatter(xbar, s2, s=8, alpha=0.25)
+    g = np.linspace(0, 1, 200)
+    ax1.plot(g, n / (n - 1) * g * (1 - g), 'r-', lw=2,
+             label=r"$\frac{n}{n-1}\bar X(1-\bar X)$")
+    ax1.set_xlabel(r"$\bar X$")
+    ax1.set_ylabel(r"$S^2$")
+    ax1.set_title(f"Bernoulli(p={p}),  n = {n}")
+    ax1.legend(fontsize=9)
+
+    # 오른쪽: S^2 의 표집분포. 연속밀도가 아니라 점질량이다.
+    # S^2(k) = S^2(n-k) 이므로 서로 다른 값은 n+1 개가 아니라 floor(n/2)+1 개다.
+    # 이항 PMF를 그대로 S^2 의 눈금으로 옮겨 그린다.
+    k = np.arange(0, n + 1)
+    pmf = stats.binom(n, p).pmf(k)
+    s2_vals = n / (n - 1) * (k / n) * (1 - k / n)
+    ax2.vlines(s2_vals, 0, pmf, lw=2)
+    ax2.plot(s2_vals, pmf, 'o', ms=4)
+
+    # 카이제곱 기반 밀도를 오른쪽 축에 겹친다. 눈금이 다르므로 축을 나눈다.
+    sigma2 = p * (1 - p)
+    c = (n - 1) / sigma2
+    gg = np.linspace(1e-4, s2_vals.max() * 1.1, 300)
+    ax2b = ax2.twinx()
+    ax2b.plot(gg, stats.chi2(n - 1).pdf(gg * c) * c, '--r', lw=2,
+              label=r"$\chi^2$-based PDF")
+    ax2b.set_ylabel("density", color='r')
+    ax2b.legend(fontsize=8, loc='upper left')
+    ax2.set_xlabel(r"$S^2$")
+    ax2.set_ylabel("P(S² = value)")
+    ax2.set_title("Sampling distribution of $S^2$ (discrete)")
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    베르누이(p=0.3),  n = 20:  beta2 = 1.761905,  mu3 = 0.0840
+    max |S^2 - (n/(n-1)) X-bar(1-X-bar)| = 1.11e-16
+    k = 0..20 이 주는 값 21 개 가운데 서로 다른 것은 11 개 (S^2(k) = S^2(n-k) 이므로),  모의에서 관측된 것 11 개
+    S^2 의 최댓값 = 0.26316
+    E[S^2]   공식 0.210000   정확 0.210000   모의 0.210273
+    sd(S^2)  공식 0.043728   정확 0.043728   모의 0.043696
+    카이제곱이 예측하는 sd = 0.068133,  분산 배율 = 0.41190
+    corr(X-bar, S^2)  이론 0.93734   모의 0.94034
+    ```
+
+    ![베르누이모집단에서 S²과 X̄의 관계](./img/s2_bernoulli_fig1.png)
+
+    **항등식이 수치로 확인된다.** 5천 개 표본 전부에서 $S^2$과 $\frac{n}{n-1}\bar X(1-\bar X)$의 차가 최대 $1.11 \times 10^{-16}$이다. 배정밀도 부동소수의 기계 입실론이 $2.2 \times 10^{-16}$이므로 **마지막 비트 하나의 차이**이고, 수학적으로는 등호다. 왼쪽 그림에서 점들이 흩어지지 않는 것이 같은 사실의 그림 버전이다. 두 통계량의 산점도가 보통 구름처럼 퍼지는 데 반해 여기서는 곡선 하나로 눌려 있다.
+
+    **값의 개수.** 서로 다른 값이 $11$개라는 예측이 그대로 확인되고, 5천 번 가운데 $11$개가 모두 관측되었다. $k$를 세어 보면 $0$부터 $13$까지 나왔는데 $k = 11, 12, 13$이 각각 $k = 9, 8, 7$과 같은 $S^2$을 주므로 서로 다른 값은 늘지 않는다.
+
+    **적률.** 공식으로 구한 $E[S^2] = 0.21$과 $\operatorname{sd}(S^2) = 0.043728$이, 이항 PMF를 직접 합해 얻은 **정확값**과 소수 여섯째 자리까지 똑같다. 일반 공식이 이산분포에서도 그대로 통한다는 확인이다. 모의값은 $0.210273$과 $0.043696$으로, 평균의 몬테카를로 오차 $0.043728/\sqrt{5000} = 0.000618$ 단위로 $0.44$배, 표준편차 쪽은 $0.07\%$ 차이다.
+
+    **배율 $0.41$.** 카이제곱 예측 $0.068133$에 비해 실제 폭이 $0.043728$로 $64\%$다. 베르누이의 첨도가 $1.76$으로 정규의 $3$보다 작으니 균등모집단과 같은 방향이고, 그래서 분산 신뢰구간은 지나치게 넓어진다.
+
+    **점질량의 간격.** 오른쪽 그림에서 막대들이 오른쪽 끝으로 가며 촘촘해진다. $S^2(k) = k(n-k)/\{n(n-1)\}$을 차분하면
+
+    $$
+    S^2(k+1) - S^2(k) = \frac{n - 1 - 2k}{n(n-1)}
+    $$
+
+    이고, $k$가 $n/2$에 가까워지면 분자가 $0$으로 간다. $k = 0 \to 1$에서 간격이 $19/380 = 0.05$인데 $k = 9 \to 10$에서는 $1/380 = 0.00263$으로 **$19$배 좁다.** 포물선 꼭대기가 평평하다는 말의 정확한 뜻이 이것이며, $p = 1/2$에서 $\operatorname{Var}(S^2)$이 한 차수 떨어지는 까닭도 같다.
+
+    질량이 어디에 있는지는 또 다른 이야기다. $p = 0.3$이니 $k$는 $6$ 근처에 모이고 $S^2$도 $0.2211$ 근처에 모인다. **간격이 촘촘한 곳은 오른쪽 끝이지만 확률이 몰린 곳은 가운데**다. 붉은 카이제곱 곡선은 오른쪽 축에 따로 그린 것이라 높이를 막대와 직접 견줄 수 없고, 폭과 치우침만 읽을 수 있다.
+
 
 왼쪽 그림에서 점들이 흩어지지 않고 **곡선 위에 정확히 놓인다.** 오른쪽 그림에서는 $S^2$의 값들이 최댓값 $0.263$ 근처에 촘촘히 몰려 있는데, 포물선의 꼭대기가 평평해서 서로 다른 $\bar X$가 거의 같은 $S^2$으로 옮겨 가기 때문이다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 항등식과 상관계수를 수치로 확인
+**보기 2.** <span class="diff easy" title="쉬움"></span> 항등식과 상관계수를 수치로 확인. $n = 100$으로 고정하고 $p = 0.5,\, 0.3,\, 0.2$에서 각각 10만 번 표본을 뽑는다.
+
+**(1)** 세 $p$에서 $\operatorname{corr}(\bar X, S^2)$과 $\operatorname{sd}(S^2)$, 그리고 카이제곱 예측과의 분산 배율을 이론으로 적으시오.
+
+**(2)** 모의실험으로 확인하시오. $p = 1/2$에서 상관계수가 $0$인데도 $S^2$이 $\bar X$의 함수인 것이 모순이 아닌 까닭을 설명하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-rng = np.random.default_rng(1)
-n = 100
+    **(1) 해석적으로.** 앞 보기에서 얻은 $\mu_3 = pq(q-p)$, $\beta_2 = (1-3pq)/pq$를 쓴다. $n = 100$이므로 $(n-3)/(n-1) = 97/99 = 0.979798$이고
 
-print(f"{'p':>5}{'max|S² - 항등식|':>20}{'corr(X̄, S²)':>16}")
-for p in (0.5, 0.3, 0.2):
-    X = rng.binomial(1, p, size=(100_000, n))
-    xbar = X.mean(axis=1)
-    s2 = X.var(axis=1, ddof=1)
-    gap = np.abs(s2 - n / (n - 1) * xbar * (1 - xbar)).max()
-    print(f"{p:>5}{gap:>20.2e}{np.corrcoef(xbar, s2)[0, 1]:>+16.3f}")
-```
+    $$
+    A \equiv \beta_2 - \frac{97}{99}, \qquad
+    \operatorname{sd}(S^2) = \sqrt{\frac{A\,(pq)^2}{100}}, \qquad
+    \operatorname{corr}(\bar X, S^2) = \frac{pq(q-p)}{(pq)^{3/2}\sqrt{A}},
+    \qquad \text{배율} = \frac{99}{200}A
+    $$
 
-출력:
+    세 $p$에 넣으면 다음과 같다.
 
-```
-    p     max|S² - 항등식|     corr(X̄, S²)
-  0.5            1.67e-16          +0.005
-  0.3            1.67e-16          +0.987
-  0.2            1.67e-16          +0.995
-```
+    | $p$ | $pq$ | $\beta_2$ | $\mu_3$ | $A$ | $\operatorname{sd}(S^2)$ | 배율 | $\operatorname{corr}$ |
+    |---|---|---|---|---|---|---|---|
+    | $0.5$ | $0.25$ | $1.0000$ | $0$ | $0.020202$ | $0.003553$ | $0.0100$ | $0$ |
+    | $0.3$ | $0.21$ | $1.7619$ | $0.084$ | $0.782107$ | $0.018572$ | $0.3871$ | $+0.98700$ |
+    | $0.2$ | $0.16$ | $3.2500$ | $0.096$ | $2.270202$ | $0.024108$ | $1.1237$ | $+0.99554$ |
+
+    세 줄이 각각 다른 것을 말한다. $p = 0.5$에서는 $\beta_2 = 1$이라 $A = 1 - 97/99 = 2/99$로 **주도항이 소멸**하고 배율이 정확히 $0.01 = 1/n$이 된다. $p = 0.3$은 $\beta_2 < 3$이라 배율이 $1$보다 작고, $p = 0.2$는 $\beta_2 = 3.25 > 3$이라 배율이 $1$을 **넘는다.** 베르누이가 $p$에 따라 정규보다 가벼운 쪽과 무거운 쪽을 모두 지나간다는 뜻이다. 경계는 $\beta_2 = 3$, 곧 $pq = 1/6$에서 $p = 0.2113$이다.
+
+    상관계수는 $p = 0.5$에서 $\mu_3 = pq(q-p) = 0$이므로 정확히 $0$이고, 나머지 둘은 $1$에 거의 닿는다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(1)
+    n = 100
+
+    print(f"{'p':>5}{'max|S² - 항등식|':>20}{'corr 이론':>12}{'corr 모의':>12}"
+          f"{'sd(S²) 이론':>14}{'sd(S²) 모의':>14}{'배율':>9}")
+    for p in (0.5, 0.3, 0.2):
+        X = rng.binomial(1, p, size=(100_000, n))
+        xbar = X.mean(axis=1)
+        s2 = X.var(axis=1, ddof=1)
+        gap = np.abs(s2 - n / (n - 1) * xbar * (1 - xbar)).max()
+
+        # 베르누이의 첨도와 3차 중심적률에서 이론값을 만든다.
+        pq = p * (1 - p)
+        beta2 = (1 - 3 * pq) / pq
+        mu3 = pq * (1 - 2 * p)
+        adj = beta2 - (n - 3) / (n - 1)
+        corr_th = mu3 / (pq ** 1.5 * np.sqrt(adj))
+        sd_th = np.sqrt(adj * pq ** 2 / n)
+        ratio = (n - 1) / (2 * n) * adj
+        print(f"{p:>5}{gap:>20.2e}{corr_th:>+12.3f}{np.corrcoef(xbar, s2)[0, 1]:>+12.3f}"
+              f"{sd_th:>14.6f}{s2.std(ddof=1):>14.6f}{ratio:>9.3f}")
+    ```
+
+    출력:
+
+    ```
+        p       max|S² - 항등식|     corr 이론     corr 모의     sd(S²) 이론     sd(S²) 모의       배율
+      0.5            1.67e-16      +0.000      +0.005      0.003553      0.003554    0.010
+      0.3            1.67e-16      +0.987      +0.987      0.018572      0.018545    0.387
+      0.2            1.67e-16      +0.996      +0.995      0.024108      0.024130    1.124
+    ```
+
+    세 $p$에서 이론과 모의가 모두 맞는다. $\operatorname{sd}(S^2)$의 상대차가 $+0.03\%$, $-0.15\%$, $+0.09\%$이고, 10만 번에서 표준편차의 몬테카를로 요동이 $1/\sqrt{2 \times 10^5} = 0.22\%$이므로 셋 다 그 안에 든다. 상관계수는 소수 셋째 자리까지 일치한다. $p = 0.5$의 모의 상관 $+0.005$는 이론 $0$에서 상관계수의 몬테카를로 오차 $1/\sqrt{10^5} = 0.0032$의 $1.6$배 떨어진 값이다.
+
+    항등식의 오차가 $1.67 \times 10^{-16}$이라는 것이 여기서도 그대로다. $n = 100$이라 중간 계산이 더 많은데도 기계 입실론의 한 배 안에 머문다.
+
+    **$p = 1/2$의 모순 아닌 모순.** $S^2 = \frac{n}{n-1}\bar X(1-\bar X)$이므로 $\bar X$를 알면 $S^2$이 **완전히** 정해진다. 그런데 상관계수가 $0$이다. 상관계수가 재는 것은 두 변수 사이의 **일차** 관계뿐이기 때문이다.
+
+    $\bar X = \frac12 + U$로 놓으면
+
+    $$
+    S^2 = \frac{n}{n-1}\left(\frac12 + U\right)\left(\frac12 - U\right)
+    = \frac{n}{n-1}\left(\frac14 - U^2\right)
+    $$
+
+    이다. $S^2$이 $U$의 **짝함수**이고, $p = 1/2$에서 $U$의 분포는 $0$을 중심으로 대칭이다. 따라서 $\operatorname{Cov}(\bar X, S^2) = -\frac{n}{n-1}E[U^3] = 0$이 된다. $U^3$이 홀함수이고 $U$가 대칭이니 그 기댓값이 $0$인 것이다. 일반 공식 $\operatorname{Cov}(\bar X, S^2) = \mu_3/n$이 말하는 바도 정확히 이것이다.
+
+    그림으로 보면 더 분명하다. 앞 보기의 왼쪽 패널에서 점들은 포물선 위에 놓여 있었다. $p = 1/2$이면 점들이 꼭대기 $\bar X = 1/2$ 양쪽에 **대칭으로** 흩어지므로, 그 구름에 가장 잘 맞는 직선은 기울기 $0$의 수평선이다. 상관계수가 $0$이라는 것은 그 수평선을 가리키는 것이지 관계가 없다는 뜻이 아니다. $p = 0.3$이나 $0.2$에서는 점들이 꼭대기 한쪽 옆에만 모여 거의 직선처럼 보이고, 그래서 상관계수가 $0.99$에 닿는다. **같은 포물선인데 어디를 보는지가 상관계수를 정한다.**
 
 항등식의 오차가 $10^{-16}$으로 **부동소수점 한계**다. 수치오차만 남았을 뿐 정확히 같다는 뜻이다.
 

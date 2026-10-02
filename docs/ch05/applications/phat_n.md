@@ -109,49 +109,134 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 점질량과 정규근사를 겹쳐 본다
+**보기 1.** <span class="diff easy" title="쉬움"></span> 점질량과 정규근사를 겹쳐 본다. $p = 0.3$을 고정하고 $n = 5,\, 20,\, 100,\, 1000$에서 $\hat p$의 **정확한** 점질량과 정규밀도를 같은 축에 올린다.
+
+**(1)** $n = 5$에서 $\hat p$의 점질량 여섯 개를 모두 적고, 각 $n$에서 최대 점질량이 얼마가 되는지 어림하는 식을 세우시오.
+
+**(2)** $n = 100$, $k = 30$에서 국소극한정리 $P(\hat p = k/n) \approx \frac1n f(k/n)$의 근사값과 정확값을 견주고, 네 패널에서 격자가 연속처럼 보이기 시작하는 지점이 어디인지 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-p = 0.3
+    **(1) 해석적으로.** $n\hat p \sim \text{Binomial}(5, 0.3)$이므로 점질량은 이항 확률 그대로다.
 
-fig, axes = plt.subplots(2, 2, figsize=(12, 6))
-for ax, n, ms in zip(axes.ravel(), (5, 20, 100, 1000), (7, 5, 3, 1.2)):
-    se = np.sqrt(p * (1 - p) / n)
+    $$
+    P\!\left(\hat p = \frac k5\right) = \binom 5k (0.3)^k (0.7)^{5-k}
+    $$
 
-    # p-hat 의 정확한 분포. 이항 PMF 를 격자 k/n 위에 올린 점질량이다.
-    k = np.arange(n + 1)
-    pmf = stats.binom(n, p).pmf(k)
-    x = k / n
+    여섯 개를 손으로 적으면
 
-    lo, hi = max(0.0, p - 4.5 * se), min(1.0, p + 4.5 * se)
-    m = (x >= lo) & (x <= hi)
-    ax.vlines(x[m], 0, pmf[m], color="tab:blue", lw=1.0 if n < 500 else 0.4,
-              alpha=0.7, label=r"exact PMF of $\hat p$")
-    ax.plot(x[m], pmf[m], "o", color="tab:blue", ms=ms)
+    | $\hat p$ | $0$ | $0.2$ | $0.4$ | $0.6$ | $0.8$ | $1$ |
+    |---|---|---|---|---|---|---|
+    | 확률 | $0.16807$ | $0.36015$ | $0.30870$ | $0.13230$ | $0.02835$ | $0.00243$ |
 
-    # 정규 밀도를 n 으로 나누면 확률의 눈금이 된다(국소극한정리).
-    g = np.linspace(lo, hi, 400)
-    ax.plot(g, stats.norm(p, se).pdf(g) / n, "--r", lw=1.8,
-            label=r"$N(p,\,pq/n)$ / $n$")
+    가 된다. $0.7^5 = 0.16807$과 $5(0.3)(0.7)^4 = 0.36015$가 첫 두 개다. **합이 $1$인 여섯 개의 수가 분포 전부**이며, 여기에는 "근사"라 할 것이 전혀 없다.
 
-    ax.set_title(f"n = {n},  spacing 1/n = {1/n:g},  SE = {se:.4f}", fontsize=10)
-    ax.set_xlim(lo, hi)
-    ax.set_ylim(bottom=0)
-    ax.set_xlabel(r"$\hat p$")
-    ax.set_ylabel("Probability")
+    최대 점질량은 국소극한정리에서 어림한다. 최빈값이 $k \approx np$에 있고 그 자리에서 정규밀도가 최대 $\phi(0)/\operatorname{SE}$이므로
 
-axes[0, 0].legend(fontsize=8)
-plt.tight_layout()
-plt.show()
-```
+    $$
+    \max_k P\!\left(\hat p = \frac kn\right) \approx \frac1n \cdot \frac{\phi(0)}{\sqrt{pq/n}}
+    = \frac{0.39894}{\sqrt{npq}}
+    $$
 
-![p̂의 표본분포와 정규근사](./img/phat_n_fig1.png)
+    이다. $1/\sqrt n$으로 줄어든다. 격자 간격과 표준오차의 비도 같은 차수다.
+
+    $$
+    \frac{1/n}{\sqrt{pq/n}} = \frac{1}{\sqrt{npq}}
+    $$
+
+    **그래서 "격자가 얼마나 거친가"를 재는 양이 $\sqrt{npq}$ 하나로 요약된다.** $n = 5$에서 $\sqrt{npq} = 1.025$이고 $n = 1000$에서 $14.49$다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    p = 0.3
+
+    print("n = 5 의 점질량 전부:")
+    for k in range(6):
+        print(f"  P(p-hat = {k / 5:.1f}) = {stats.binom(5, p).pmf(k):.6f}")
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 6))
+    print("\n  n   격자 1/n      SE   격자/SE   최대 점질량   0.39894/sqrt(npq)")
+    for ax, n, ms in zip(axes.ravel(), (5, 20, 100, 1000), (7, 5, 3, 1.2)):
+        se = np.sqrt(p * (1 - p) / n)
+
+        # p-hat 의 정확한 분포. 이항 PMF 를 격자 k/n 위에 올린 점질량이다.
+        k = np.arange(n + 1)
+        pmf = stats.binom(n, p).pmf(k)
+        x = k / n
+
+        print(f"{n:5d} {1 / n:8.3f} {se:8.5f} {1 / (n * se):8.3f} {pmf.max():13.6f} "
+              f"{0.398942 / np.sqrt(n * p * (1 - p)):17.6f}")
+
+        lo, hi = max(0.0, p - 4.5 * se), min(1.0, p + 4.5 * se)
+        m = (x >= lo) & (x <= hi)
+        ax.vlines(x[m], 0, pmf[m], color="tab:blue", lw=1.0 if n < 500 else 0.4,
+                  alpha=0.7, label=r"exact PMF of $\hat p$")
+        ax.plot(x[m], pmf[m], "o", color="tab:blue", ms=ms)
+
+        # 정규 밀도를 n 으로 나누면 확률의 눈금이 된다(국소극한정리).
+        g = np.linspace(lo, hi, 400)
+        ax.plot(g, stats.norm(p, se).pdf(g) / n, "--r", lw=1.8,
+                label=r"$N(p,\,pq/n)$ / $n$")
+
+        ax.set_title(f"n = {n},  spacing 1/n = {1/n:g},  SE = {se:.4f}", fontsize=10)
+        ax.set_xlim(lo, hi)
+        ax.set_ylim(bottom=0)
+        ax.set_xlabel(r"$\hat p$")
+        ax.set_ylabel("Probability")
+
+    axes[0, 0].legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()
+
+    # 국소극한정리를 한 점에서 확인한다.
+    n, k = 100, 30
+    exact = stats.binom(n, p).pmf(k)
+    approx = stats.norm(p, np.sqrt(p * (1 - p) / n)).pdf(k / n) / n
+    print(f"\n국소극한정리  n = {n}, k = {k}:  정확 {exact:.6f},  (1/n) f(k/n) = {approx:.6f},  "
+          f"상대오차 {approx / exact - 1:+.4%}")
+    ```
+
+    출력:
+
+    ```
+    n = 5 의 점질량 전부:
+      P(p-hat = 0.0) = 0.168070
+      P(p-hat = 0.2) = 0.360150
+      P(p-hat = 0.4) = 0.308700
+      P(p-hat = 0.6) = 0.132300
+      P(p-hat = 0.8) = 0.028350
+      P(p-hat = 1.0) = 0.002430
+
+      n   격자 1/n      SE   격자/SE   최대 점질량   0.39894/sqrt(npq)
+        5    0.200  0.20494    0.976      0.360150          0.389328
+       20    0.050  0.10247    0.488      0.191639          0.194664
+      100    0.010  0.04583    0.218      0.086784          0.087056
+     1000    0.001  0.01449    0.069      0.027521          0.027530
+
+    국소극한정리  n = 100, k = 30:  정확 0.086784,  (1/n) f(k/n) = 0.087056,  상대오차 +0.3140%
+    ```
+
+    ![p̂의 표본분포와 정규근사](./img/phat_n_fig1.png)
+
+    **점질량은 손계산과 똑같다.** 여섯 개가 소수 여섯째 자리까지 일치한다.
+
+    **최대 점질량의 어림이 빠르게 좋아진다.** $0.39894/\sqrt{npq}$가 실제 최대 점질량과 견주어 $n = 5$에서 $8\%$ 크고($0.389$ 대 $0.360$), $n = 20$에서 $1.6\%$, $n = 100$에서 $0.31\%$, $n = 1000$에서 $0.03\%$ 크다. **표본크기에 거의 반비례해 줄어든다**($1/n$ 차수다). $n = 5$에서 어긋나는 것은 그 자리에서 최빈값 $k = 1$이 $np = 1.5$에서 반 칸 비껴나 있기도 해서다.
+
+    **국소극한정리.** $n = 100$, $k = 30$에서 정확값 $0.086784$와 근사값 $0.087056$이 $+0.31\%$ 차이다. 격자 한 칸의 폭 $1/n$에 그 자리의 정규밀도를 곱한 것이 그 칸의 확률이라는 해석이 세 자리까지 맞는다는 뜻이다. **이 관계가 있어야 점질량과 밀도곡선을 같은 축에 올릴 수 있다.**
+
+    **네 패널.** 넷째 열의 "격자/SE"가 그림을 그대로 설명한다. $n = 5$에서 그 값이 $0.976$이다. **격자 한 칸이 표준오차만큼 크다**는 뜻이므로 분포 전체가 막대 두세 개 폭에 들어가고, 붉은 곡선이 그 위를 지나가기는 하지만 두 대상을 같다고 할 수 없다. $\hat p = 0$에 아직 $0.168$이 남아 있는 것도 그 때문이다.
+
+    $n = 20$에서 비가 $0.488$로 절반이 되고 곡선이 꼭대기를 잘 따라간다. $n = 100$에서 $0.218$이면 $p \pm \operatorname{SE}$ 안에 격자점이 $2\sqrt{npq} \approx 9$개 들어가므로 점들이 곡선 위에 얹혀 보인다. $n = 1000$에서는 $0.069$, 격자점 $29$개여서 눈으로는 면과 구별되지 않는다.
+
+    **눈이 속는 지점이 바로 여기다.** 그림만 보면 $n = 100$에서 근사가 끝난 것 같다. 그러나 격자/SE가 $0.218$이라는 것은 **CDF가 여전히 한 칸마다 최대 점질량 $0.087$만큼 뛰어오른다**는 뜻이기도 하다. 다음 보기에서 그 값이 확률의 오차로 얼마가 되는지 잰다.
+
 
 $n = 5$ 패널은 막대 여섯 개다. 정규 곡선이 그 위를 지나가기는 하지만 두 대상이 같은 것이라고 말하기 어렵다. $\hat p = 0.2$의 점질량이 0.36으로 몰려 있고 $\hat p = 0$에도 0.168이 남아 있다.
 
@@ -159,42 +244,106 @@ $n = 20$에서는 막대가 21개로 늘고 곡선이 꼭대기를 잘 따라간
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 근사 오차를 수치로 잰다
+**보기 2.** <span class="diff easy" title="쉬움"></span> 근사 오차를 수치로 잰다. $p = 0.3$에서 네 표본크기마다 정확한 이항 누적분포와 정규근사의 최대 차 $\sup_k \lvert F - \Phi \rvert$를 연속성 수정 없이, 그리고 수정해서 구한다.
+
+**(1)** 그 최대 차를 **격자 항**과 **왜도 항**으로 나누어 각각 닫힌 꼴로 어림하고, 두 근사의 오차 비가 얼마가 될지 예측하시오.
+
+**(2)** 수치로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-p, q = 0.3, 0.7
+    **(1) 두 항을 따로 어림한다.**
 
-print(" n     1/n    #values      SE     skew   sup|F-Phi|   with c.c.")
-for n in (5, 20, 100, 1000):
-    se = np.sqrt(p * q / n)
-    skew = (1 - 2 * p) / np.sqrt(n * p * q)
+    **격자 항.** 정확한 CDF는 격자점마다 그 점의 확률만큼 뛰는 계단이고 정규 CDF는 매끄럽다. 계단의 왼쪽 끝에서 재면 정규 CDF가 그 칸의 확률을 거의 절반 세므로, 어긋남은 가장 큰 점질량의 절반 정도다. 앞 보기에서 최대 점질량이 $0.39894/\sqrt{npq}$였으니
 
-    # 격자점 k/n 에서 정확한 CDF 와 두 정규근사를 견준다.
-    k = np.arange(n + 1)
-    F_exact = stats.binom(n, p).cdf(k)
-    F_plain = stats.norm.cdf((k / n - p) / se)                       # 수정 없음
-    F_cc = stats.norm.cdf((k + 0.5 - n * p) / np.sqrt(n * p * q))    # 연속성 수정
+    $$
+    \text{격자 항} \approx \frac12 \cdot \frac{\phi(0)}{\sqrt{npq}}
+    = \frac{0.19947}{\sqrt{npq}}
+    $$
 
-    d_plain = np.max(np.abs(F_exact - F_plain))
-    d_cc = np.max(np.abs(F_exact - F_cc))
-    print(f"{n:>4} {1/n:>7.3f} {n+1:>8} {se:>9.5f} {skew:>8.4f} "
-          f"{d_plain:>10.4f} {d_cc:>11.4f}")
-```
+    이다.
 
-출력:
+    **왜도 항.** 에지워스 전개의 1차 보정은
 
-```
- n     1/n    #values      SE     skew   sup|F-Phi|   with c.c.
-   5   0.200        6   0.20494   0.3904     0.2154      0.0282
-  20   0.050       21   0.10247   0.1952     0.1080      0.0127
- 100   0.010      101   0.04583   0.0873     0.0491      0.0058
-1000   0.001     1001   0.01449   0.0276     0.0156      0.0018
-```
+    $$
+    F(x) \approx \Phi(z) - \frac{\gamma_1}{6}\,(z^2-1)\,\phi(z),
+    \qquad \gamma_1 = \frac{1-2p}{\sqrt{npq}}
+    $$
+
+    이다. 보정항의 크기는 $h(z) = (z^2-1)\phi(z)$가 정하는데, $h'(z) = z\phi(z)(3 - z^2)$이므로 임계점이 $z = 0, \pm\sqrt3$이고
+
+    $$
+    \lvert h(0) \rvert = \phi(0) = 0.39894, \qquad
+    \lvert h(\pm\sqrt3) \rvert = 2\phi(\sqrt3) = 0.17712
+    $$
+
+    에서 $z = 0$이 최대다. 따라서
+
+    $$
+    \text{왜도 항} \approx \frac{\gamma_1}{6}\,\phi(0) = \frac{0.06649\,(1-2p)}{\sqrt{npq}}
+    $$
+
+    **두 항의 비.** 둘 다 최대가 $z = 0$ 근처에서 나므로 수정 없는 오차는 둘의 합, 수정한 오차는 왜도 항만 남는다. 그러므로
+
+    $$
+    \frac{\sup\lvert F - \Phi\rvert}{\sup\lvert F - \Phi_{\text{c.c.}}\rvert}
+    \approx \frac{\phi(0)/2 + \phi(0)\gamma_1/6}{\phi(0)\gamma_1/6}
+    = 1 + \frac{3}{1-2p}
+    $$
+
+    이다. **$\sqrt{npq}$가 통째로 약분되어 $n$이 사라진다.** $p = 0.3$에 넣으면 $1 + 3/0.4 = 8.5$다. 연속성 수정이 $n$과 무관하게 오차를 $8.5$배 줄인다는 예측이고, 이것이 본문에서 "8배 이상"이라 한 수의 출처다.
+
+    **(2) 수치로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    p, q = 0.3, 0.7
+
+    print(" n     1/n    #values      SE     skew   sup|F-Phi|   with c.c.   격자항 예측   왜도항 예측")
+    for n in (5, 20, 100, 1000):
+        se = np.sqrt(p * q / n)
+        skew = (1 - 2 * p) / np.sqrt(n * p * q)
+
+        # 격자점 k/n 에서 정확한 CDF 와 두 정규근사를 견준다.
+        k = np.arange(n + 1)
+        F_exact = stats.binom(n, p).cdf(k)
+        F_plain = stats.norm.cdf((k / n - p) / se)                       # 수정 없음
+        F_cc = stats.norm.cdf((k + 0.5 - n * p) / np.sqrt(n * p * q))    # 연속성 수정
+
+        d_plain = np.max(np.abs(F_exact - F_plain))
+        d_cc = np.max(np.abs(F_exact - F_cc))
+
+        # 에지워스가 예측하는 두 항. phi(0)/2 = 0.19947, phi(0)/6 = 0.06649 이다.
+        grid_term = stats.norm.pdf(0) / 2 / np.sqrt(n * p * q)
+        skew_term = stats.norm.pdf(0) / 6 * skew
+        print(f"{n:>4} {1/n:>7.3f} {n+1:>8} {se:>9.5f} {skew:>8.4f} "
+              f"{d_plain:>10.4f} {d_cc:>11.4f} {grid_term:>13.4f} {skew_term:>13.4f}")
+    print(f"\n두 오차의 비 예측 = 1 + 3/(1-2p) = {1 + 3 / (1 - 2 * p):.2f}")
+    ```
+
+    출력:
+
+    ```
+     n     1/n    #values      SE     skew   sup|F-Phi|   with c.c.   격자항 예측   왜도항 예측
+       5   0.200        6   0.20494   0.3904     0.2154      0.0282        0.1947        0.0260
+      20   0.050       21   0.10247   0.1952     0.1080      0.0127        0.0973        0.0130
+     100   0.010      101   0.04583   0.0873     0.0491      0.0058        0.0435        0.0058
+    1000   0.001     1001   0.01449   0.0276     0.0156      0.0018        0.0138        0.0018
+
+    두 오차의 비 예측 = 1 + 3/(1-2p) = 8.50
+    ```
+
+    **왜도 항이 거의 완벽하게 맞는다.** 마지막 열과 "with c.c." 열을 견주면 $n = 20$에서 $0.0130$ 대 $0.0127$, $n = 100$에서 $0.0058$ 대 $0.0058$, $n = 1000$에서 $0.0018$ 대 $0.0018$이다. $n = 5$만 $0.0260$ 대 $0.0282$로 $8\%$ 작은데, 에지워스의 다음 항(첨도, $n^{-1}$ 차수)이 그 자리에서는 아직 무시할 수 없기 때문이다.
+
+    **격자 항도 맞는다.** "sup$\lvert F-\Phi \rvert$"에서 "with c.c."를 뺀 값이 $n = 5, 20, 100, 1000$에서 $0.1872$, $0.0953$, $0.0433$, $0.0138$이고, 예측한 격자 항이 $0.1947$, $0.0973$, $0.0435$, $0.0138$이다. $n = 20$부터는 소수 넷째 자리까지 맞는다.
+
+    **비도 맞는다.** 실제 비가 $7.63$, $8.47$, $8.50$, $8.50$이다. 예측 $8.50$에 $n = 20$부터 붙어 있고, $n$이 커져도 더 좋아지지 않는다. **연속성 수정의 효용은 표본크기에 달린 것이 아니라 $p$에 달려 있다.** $p$가 $1/2$에 가까우면 $1-2p$가 작아져 비가 커지고($p = 0.45$에서 $31$배), 극단적인 $p$에서는 작아진다.
+
+    이 수들을 확률로 읽으면 사정이 분명해진다. 수정하지 않은 정규근사의 최대 오차가 $n = 100$에서 $0.0491$이다. 그림에서는 완벽해 보였는데 **유의수준 $0.05$를 다루는 자리에서 오차가 $0.05$**라는 뜻이다. 같은 $n$에서 수정 한 줄을 넣으면 $0.0058$이 된다. 수정 없이 $0.0058$에 닿으려면 $n$을 $100$배 가까이 키워야 하므로, **표본을 더 모으는 것보다 공식을 고치는 쪽이 압도적으로 싸다.**
 
 수정하지 않은 정규근사의 최대 오차가 $n = 100$에서도 **0.0491**이다. 그림에서는 완벽해 보였는데 확률로는 5퍼센트포인트나 어긋난다. $n = 1000$에서 겨우 0.0156으로 줄어든다.
 

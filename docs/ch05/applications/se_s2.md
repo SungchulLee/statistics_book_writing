@@ -72,57 +72,139 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 표본분산의 표준오차 모의실험
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표본분산의 표준오차 모의실험. $\text{Uniform}(0,1)$에서 $n = 5$인 표본을 1만 번 뽑아 $S^2$ 값 1만 개를 모으고, 그 평균과 표준편차를 재어 위의 손계산과 맞춰 본다.
+
+**(1)** $E[S^2]$과 $\operatorname{SE}(S^2)$을 일반 공식으로 구하고, 같은 $n$에서 모집단이 정규라고 **잘못** 가정했을 때의 값과 견주시오.
+
+**(2)** 모의실험으로 확인하시오. 그림의 세로선 셋을 두고, $S^2$의 치우침이 **$1$ 표준오차 거리에서 드러나는가 $2$ 표준오차 거리에서 드러나는가**를 수로 판정하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 이론값.** 위에서 한 계산을 다시 모아 적는다. $\text{Uniform}(0,1)$은 $\sigma^2 = 1/12$, $\mu_4 = 1/80$이므로 불편성에서
 
-# 크기 5짜리 균등표본을 1만 번 뽑아 그때마다 S^2 을 기록한다.
-S_square = []
-for _ in range(10_000):
-    x = np.random.uniform(size=(5,))
-    sigma = x.std(ddof=1)     # ddof=1 이라야 표본표준편차다
-    S_square.append(sigma ** 2)
+    $$
+    E[S^2] = \sigma^2 = \frac{1}{12} = 0.083333
+    $$
 
-# 1만 개 S^2 값의 **평균**과 **표준편차**를 낸다.
-#   평균  -> S^2 의 중심. 참 분산 1/12 ≈ 0.0833 에 가까워야 한다(불편성).
-#   표준편차 -> 그것이 곧 S^2 의 **표준오차**다.
-# 표준오차란 "통계량의 표집분포의 표준편차"이므로,
-# 통계량 값을 잔뜩 모아 그 표준편차를 재면 그것이 표준오차다.
-average = np.array(S_square).mean()
-standard_error = np.array(S_square).std()
+    이고, 일반 공식에 $n = 5$를 넣으면 $(n-3)/(n-1) = 2/4 = 1/2$이라
 
-print(f"Estimated Mean of S^2:   {average:.4f}")
-print(f"Standard Error of S^2:   {standard_error:.4f}")
+    $$
+    \operatorname{Var}(S^2) = \frac{1}{5}\left(\frac{1}{80} - \frac12 \cdot \frac{1}{144}\right)
+    = \frac{1}{5}\left(0.0125 - 0.00347222\right) = 0.00180556
+    $$
 
-# 히스토그램에 이론값을 겹쳐 그린다.
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.set_title("Sampling Distribution of S^2")
-ax.hist(S_square, bins=100, density=True, alpha=0.3)
-# 평균과 평균 ± 1 표준오차를 세로선으로 표시한다.
-# S^2 의 분포는 오른쪽으로 치우쳐 있어 이 구간이 대칭이 아님에 주의하라.
-ax.vlines(average, ymin=0, ymax=12, color="k", lw=5, label="Mean")
-ax.vlines(average + standard_error, ymin=0, ymax=12,
-          color="k", ls="--", label="Mean +/- SE")
-ax.vlines(average - standard_error, ymin=0, ymax=12,
-          color="k", ls="--")
-ax.legend()
-plt.show()
-```
+    $$
+    \operatorname{SE}(S^2) = \sqrt{0.00180556} = 0.042492
+    $$
 
-출력:
+    를 얻는다. 모집단이 정규라고 가정하면 $\mu_4 = 3\sigma^4$이므로
 
-```
-Estimated Mean of S^2:   0.0838
-Standard Error of S^2:   0.0425
-```
+    $$
+    \operatorname{SE}(S^2) = \sigma^2\sqrt{\frac{2}{n-1}} = \frac{1}{12}\sqrt{\frac24} = 0.058926
+    $$
 
-![Sampling Distribution of S^2](./img/se_s2_55.png)
+    이 되어 **$39\%$ 더 크다.** 분산으로는 배율이
+
+    $$
+    \frac{n-1}{2n}\left(\beta_2 - \frac{n-3}{n-1}\right) = \frac{4}{10}(1.8 - 0.5) = 0.52
+    $$
+
+    다. 균등모집단의 꼬리가 가벼워 $S^2$이 정규모집단보다 덜 흔들리는 것이고, 정규를 가정하는 쪽이 **보수적**(과대평가)이다.
+
+    크기 자체도 짚어 둘 만하다. $\operatorname{SE}/E[S^2] = 0.042492/0.083333 = 0.51$이다. **표준오차가 추정하려는 값의 절반을 넘는다.**
+
+    치우침에 대해서는 미리 어림할 것이 하나 있다. $S^2 \ge 0$이고 $\operatorname{SE}$가 평균의 절반이 넘으므로 $\mu - 2\operatorname{SE} = 0.0833 - 0.0850 = -0.0017$이 **음수**다. 곧 $\mu - 2\operatorname{SE}$ 아래의 확률은 정확히 $0$이고, 그 거리에서는 치우침이 극단적으로 드러나야 한다. $\mu \pm \operatorname{SE}$에서는 어떨지 모의실험으로 재어 본다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 크기 5짜리 균등표본을 1만 번 뽑아 그때마다 S^2 을 기록한다.
+    S_square = []
+    for _ in range(10_000):
+        x = np.random.uniform(size=(5,))
+        sigma = x.std(ddof=1)     # ddof=1 이라야 표본표준편차다
+        S_square.append(sigma ** 2)
+
+    # 1만 개 S^2 값의 **평균**과 **표준편차**를 낸다.
+    #   평균  -> S^2 의 중심. 참 분산 1/12 ≈ 0.0833 에 가까워야 한다(불편성).
+    #   표준편차 -> 그것이 곧 S^2 의 **표준오차**다.
+    # 표준오차란 "통계량의 표집분포의 표준편차"이므로,
+    # 통계량 값을 잔뜩 모아 그 표준편차를 재면 그것이 표준오차다.
+    average = np.array(S_square).mean()
+    standard_error = np.array(S_square).std()
+
+    print(f"Estimated Mean of S^2:   {average:.4f}")
+    print(f"Standard Error of S^2:   {standard_error:.4f}")
+
+    # 이론값. Uniform(0,1) 은 sigma^2 = 1/12, mu_4 = 1/80 이다.
+    n, B = 5, 10_000
+    sigma2, mu4 = 1 / 12, 1 / 80
+    var_s2 = (mu4 - (n - 3) / (n - 1) * sigma2 ** 2) / n
+    se_s2 = np.sqrt(var_s2)
+    print(f"이론  E[S^2] = {sigma2:.6f},  Var(S^2) = {var_s2:.8f},  SE(S^2) = {se_s2:.6f}")
+    print(f"몬테카를로 오차  평균 {se_s2 / np.sqrt(B):.6f},  표준오차 {se_s2 / np.sqrt(2 * B):.6f}")
+    print(f"어긋남을 오차 단위로  평균 {abs(average - sigma2) / (se_s2 / np.sqrt(B)):.2f}배,  "
+          f"표준오차 {abs(standard_error - se_s2) / (se_s2 / np.sqrt(2 * B)):.2f}배")
+    print(f"정규모집단이라면 SE = sigma^2 sqrt(2/(n-1)) = {sigma2 * np.sqrt(2 / (n - 1)):.6f},  "
+          f"분산 배율 = {(n - 1) / (2 * n) * (mu4 / sigma2 ** 2 - (n - 3) / (n - 1)):.4f}")
+    print(f"SE / E[S^2] = {se_s2 / sigma2:.4f}")
+
+    # 치우침을 수로 읽는다. 1 표준오차 거리와 2 표준오차 거리를 갈라서 본다.
+    s = np.array(S_square)
+    print(f"왜도(S^2) 모의 = {stats.skew(s):.4f},  중앙값 {np.median(s):.5f} < 평균 {sigma2:.5f}")
+    print(f"mu +- SE  = [{sigma2 - se_s2:+.5f}, {sigma2 + se_s2:+.5f}]   바깥 확률  왼쪽 {(s < sigma2 - se_s2).mean():.4f}  오른쪽 {(s > sigma2 + se_s2).mean():.4f}")
+    print(f"mu +- 2SE = [{sigma2 - 2 * se_s2:+.5f}, {sigma2 + 2 * se_s2:+.5f}]   바깥 확률  왼쪽 {(s < sigma2 - 2 * se_s2).mean():.4f}  오른쪽 {(s > sigma2 + 2 * se_s2).mean():.4f}")
+
+    # 히스토그램에 이론값을 겹쳐 그린다.
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.set_title("Sampling Distribution of S^2")
+    ax.hist(S_square, bins=100, density=True, alpha=0.3)
+    # 평균과 평균 ± 1 표준오차를 세로선으로 표시한다.
+    # S^2 의 분포는 오른쪽으로 치우쳐 있어 이 구간이 대칭이 아님에 주의하라.
+    ax.vlines(average, ymin=0, ymax=12, color="k", lw=5, label="Mean")
+    ax.vlines(average + standard_error, ymin=0, ymax=12,
+              color="k", ls="--", label="Mean +/- SE")
+    ax.vlines(average - standard_error, ymin=0, ymax=12,
+              color="k", ls="--")
+    ax.legend()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Estimated Mean of S^2:   0.0838
+    Standard Error of S^2:   0.0425
+    이론  E[S^2] = 0.083333,  Var(S^2) = 0.00180556,  SE(S^2) = 0.042492
+    몬테카를로 오차  평균 0.000425,  표준오차 0.000300
+    어긋남을 오차 단위로  평균 1.18배,  표준오차 0.04배
+    정규모집단이라면 SE = sigma^2 sqrt(2/(n-1)) = 0.058926,  분산 배율 = 0.5200
+    SE / E[S^2] = 0.5099
+    왜도(S^2) 모의 = 0.4122,  중앙값 0.08072 < 평균 0.08333
+    mu +- SE  = [+0.04084, +0.12583]   바깥 확률  왼쪽 0.1735  오른쪽 0.1718
+    mu +- 2SE = [-0.00165, +0.16832]   바깥 확률  왼쪽 0.0000  오른쪽 0.0304
+    ```
+
+    ![Sampling Distribution of S^2](./img/se_s2_55.png)
+
+    **두 숫자가 맞는다.** 모의 평균 $0.0838$이 이론 $0.083333$에서 몬테카를로 오차 $0.000425$의 $1.18$배, 모의 표준오차 $0.0425$가 이론 $0.042492$에서 오차 $0.000300$의 $0.04$배 떨어져 있다. 표준오차 쪽은 소수 넷째 자리까지 그대로 맞았다. **$\mu_4$가 들어간 일반 공식이 옳다**는 확인이고, 정규를 가정해 얻은 $0.058926$을 썼다면 $39\%$ 과대평가였을 것이다.
+
+    **치우침은 $1$ 표준오차 거리에서 보이지 않는다.** 왜도가 $+0.41$로 양수이고 중앙값 $0.0807$이 평균 $0.0833$보다 작으니 분포가 오른쪽으로 끌린 것은 분명하다. 그런데 $\mu \pm \operatorname{SE}$ 바깥의 확률은 왼쪽 $0.1735$, 오른쪽 $0.1718$로 **사실상 같다.** 비율의 몬테카를로 오차가 $\sqrt{0.17 \times 0.83/10^4} = 0.0038$이므로 두 값의 차 $0.0017$은 오차의 절반도 안 된다.
+
+    이것이 우연이 아님을 확인하려고 되풀이를 1천만 번으로 늘려 보았다. 왼쪽 $0.17686$, 오른쪽 $0.16743$이 되어 오차 $0.00012$ 기준으로는 분명히 다르지만, **큰 쪽이 왼쪽**이다. 왜도가 $+0.41$인 감마분포에 같은 계산을 하면 $0.1572$와 $0.1567$로 거의 같은 값이 나오니, **한 표준오차 거리에서는 왜도가 좌우 확률을 거의 가르지 않는다**는 것이 일반적인 사정이다. 왜도는 3차 적률이어서 훨씬 먼 꼬리에서 결정된다.
+
+    **$2$ 표준오차 거리에서는 완전히 드러난다.** $\mu - 2\operatorname{SE} = -0.00165$가 음수이므로 그 아래의 확률이 **정확히 $0$**이고, 오른쪽은 $0.0304$다. 정규분포라면 양쪽이 각각 $0.0228$이어야 한다. 한쪽이 $0$이고 다른 쪽이 $3\%$라는 것은 대칭으로는 설명할 길이 없는 모습이다.
+
+    **그래서 그림의 점선 두 개를 "전형적인 범위"로 읽을 때 조심해야 한다.** 폭만 보면 $0.0425$가 평균 $0.0833$의 $51\%$라 다섯 개짜리 표본의 $S^2$ 하나로 모분산을 논하기 어렵다는 것이 바로 읽힌다. 그러나 그 구간이 **비대칭한 분포를 대칭한 두 선으로 가둔 것**이라는 사실은 점선만 보아서는 알 수 없고, 위의 마지막 두 줄처럼 양쪽을 갈라 세어야 드러난다.
+
 
 ## 해석
 
@@ -132,7 +214,7 @@ Standard Error of S^2:   0.0425
 
     모양은 $\bar{X}$의 경우와 사뭇 다르다. $S^2$의 표본분포는 근사적으로 대칭인 $\bar{X}$의 분포와 달리 **오른쪽으로 치우쳐** 있다. $S^2 \ge 0$이라 왼쪽이 0에서 막히는 반면 오른쪽은 열려 있기 때문이며, 분산의 표본분포에서 전형적인 모습이다.
 
-    그림의 세로선은 평균과 평균 $\pm$ 표준오차를 나타낸다. 이 구간이 $S^2$ 값의 전형적인 범위인데, 분포가 치우쳐 있으므로 평균 $+$ 표준오차보다 큰 값이 평균 $-$ 표준오차보다 작은 값보다 더 흔하다. 구간의 폭이 눈에 띄게 넓다는 점도 함께 보아야 한다. 표준오차 0.0425는 평균 0.0838의 절반을 넘는다. $n = 5$짜리 표본에서 얻은 $S^2$ 하나로 모분산을 논하기 어렵다는 뜻이다.
+    그림의 세로선은 평균과 평균 $\pm$ 표준오차를 나타낸다. 이 구간이 $S^2$ 값의 전형적인 범위다. 분포가 오른쪽으로 치우쳐 있지만 **$1$ 표준오차 거리에서는 그 치우침이 좌우를 가르지 못한다** — 왼쪽 바깥이 $0.1767$, 오른쪽 바깥이 $0.1674$로 오히려 왼쪽이 조금 더 흔하다(보기 1). 치우침이 드러나는 것은 $2$ 표준오차 거리로, 거기서는 왼쪽이 아예 불가능해진다($\mu - 2\,\mathrm{SE} < 0$). 구간의 폭이 눈에 띄게 넓다는 점도 함께 보아야 한다. 표준오차 0.0425는 평균 0.0838의 절반을 넘는다. $n = 5$짜리 표본에서 얻은 $S^2$ 하나로 모분산을 논하기 어렵다는 뜻이다.
 
 !!! warning "S²의 표준오차는 모집단 모양에 의존한다"
     $\sigma$와 $n$에만 의존하는 $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$과 달리, $S^2$의 표준오차는 모집단의 4차 적률(첨도)에 의존한다. 꼬리가 두꺼운 모집단일수록 $S^2$ 값의 변동이 커진다.

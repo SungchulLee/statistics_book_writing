@@ -47,55 +47,157 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 지수 모집단에서 표본평균의 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 지수 모집단에서 표본평균의 표집분포. $\text{Exp}(1)$에서 뽑아 만든 모집단 1만 개에서 $n = 5$씩 비복원으로 뽑아 표본평균을 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** $\bar X$의 평균, 표준편차, 왜도, 초과첨도를 이론으로 적고, $n = 5$에서 정규근사가 $P(\bar X > 2)$를 얼마나 틀리는지 정확한 분포와 견주어 구하시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오. 어긋나는 것이 있으면 그것이 몬테카를로 오차인지 다른 까닭인지 가리시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-np.random.seed(1)
+    **(1) 이론값.** $\text{Exp}(1)$은 $\mu = 1$, $\sigma = 1$이므로 중심과 폭은 치우침과 무관하게 곧바로 나온다.
 
-sample_size = 5
-n_samples = 10_000
-n_population = 10_000
+    $$
+    E[\bar X] = 1, \qquad
+    \operatorname{sd}(\bar X) = \frac{\sigma}{\sqrt{n}} = \frac{1}{\sqrt{5}} = 0.44721
+    $$
 
-# Exp(1)에서 큰 모집단을 만든다. 치우친 모집단이다.
-population = np.random.exponential(size=(n_population,))
+    모양도 정확히 안다. $\bar X \sim \text{Gamma}(\text{형상}=5,\ \text{비율}=5)$이고 $\text{Gamma}(k)$의 왜도는 $2/\sqrt{k}$, 초과첨도는 $6/k$이므로
 
-# 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
-# 아래 가운데 패널에 점 몇 개로 그려진다.
-single_sample = np.random.choice(population, size=sample_size, replace=False)
+    $$
+    \text{왜도}(\bar X) = \frac{2}{\sqrt{5}} = 0.89443, \qquad
+    \text{초과첨도}(\bar X) = \frac{6}{5} = 1.2
+    $$
 
-# 표본을 되풀이해 뽑으며 표본평균을 기록한다. 이 값들의 분포가 표집분포다.
-sample_means = [
-    np.mean(np.random.choice(population, size=sample_size, replace=False))
-    for _ in range(n_samples)
-]
+    이다. 일반 공식 $\gamma_1/\sqrt{n}$, $(\beta_2-3)/n$에 $\text{Exp}(1)$의 $\gamma_1 = 2$, $\beta_2 = 9$를 넣은 것과 같은 값이다. **왜도가 $0.894$라는 것은 $n = 5$에서 치우침이 거의 그대로 남아 있다는 뜻이다.** 균등 모집단에서는 같은 $n$에서 왜도가 처음부터 $0$이었다.
 
-# 모집단과 표집분포를 나란히 그린다.
-# 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
-# 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
-#   위   모집단      : 가장 넓다
-#   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
-#   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
-fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+    꼬리확률의 오차는 감마와 정규를 각각 계산해 견주면 된다. $z = (2-1)/0.44721 = 2.23607$이므로
 
-_, bins, _ = ax0.hist(population, bins=100)
-ax0.set_title("Population Distribution (Exponential)")
+    $$
+    P(\bar X > 2) = \begin{cases}
+    0.029253 & \text{정확 (감마)}\\
+    1 - \Phi(2.23607) = 0.012674 & \text{정규근사}
+    \end{cases}
+    $$
 
-ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
-ax1.set_title(f"Sample Distribution (n = {sample_size})")
+    **정규근사가 꼬리확률을 $2.3$배 작게 본다.** 중심과 폭은 소수점까지 맞게 주면서도 꼬리는 절반 이하로 틀리는 것이며, $\sigma$를 아는데도 그렇다. 덧붙여 정규근사는 $P(\bar X \le 0) = \Phi(-2.23607) = 0.012674$라는 값을 내놓는데 $\bar X > 0$은 확률 $1$이다. 두 수가 똑같은 것은 $0$과 $2$가 평균 $1$에서 같은 거리에 있기 때문이고, **정규근사가 없는 대칭을 강제한 흔적**이 바로 그것이다.
 
-ax2.hist(sample_means, bins=bins)
-ax2.set_title("Sampling Distribution of X-bar")
+    **(2) 모의실험.**
 
-plt.tight_layout()
-plt.show()
-```
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
 
-![Population Distribution (Exponential)](./img/xbar_exponential_40.png)
+    np.random.seed(1)
+
+    sample_size = 5
+    n_samples = 10_000
+    n_population = 10_000
+
+    # Exp(1)에서 큰 모집단을 만든다. 치우친 모집단이다.
+    population = np.random.exponential(size=(n_population,))
+
+    # 표본을 딱 하나 뽑는다. 현실에서 우리가 실제로 갖게 되는 것이 이것뿐이다.
+    # 아래 가운데 패널에 점 몇 개로 그려진다.
+    single_sample = np.random.choice(population, size=sample_size, replace=False)
+
+    # 표본을 되풀이해 뽑으며 표본평균을 기록한다. 이 값들의 분포가 표집분포다.
+    sample_means = [
+        np.mean(np.random.choice(population, size=sample_size, replace=False))
+        for _ in range(n_samples)
+    ]
+    sample_means = np.asarray(sample_means)
+
+    # 중심과 폭: Exp(1) 이론값, 실현 모집단, 모의값을 나란히 둔다.
+    mu_pop, sd_pop = population.mean(), population.std()
+    print(f"Exp(1) 이론        평균 = 1.0000,  sigma/sqrt(n) = {1 / np.sqrt(sample_size):.4f}")
+    print(f"실현 모집단 1만 개  평균 = {mu_pop:.4f},  s/sqrt(n)     = {sd_pop / np.sqrt(sample_size):.4f}")
+    print(f"모의 1만 회        평균 = {sample_means.mean():.4f},  표준편차      = {sample_means.std(ddof=1):.4f}")
+
+    # 모양. X-bar ~ Gamma(n, rate=n) 이므로 Exp(1) 이론은 왜도 2/sqrt(n), 초과첨도 6/n 이다.
+    # 그런데 실현된 1만 개는 Exp(1) 의 꼬리를 다 담지 못하므로 겨냥값이 따로 있다.
+    print(f"\nExp(1) 이론        왜도 = {2 / np.sqrt(sample_size):+.4f},  초과첨도 = {6 / sample_size:+.4f}")
+    print(f"실현 모집단 1만 개  왜도 = {stats.skew(population):+.4f},  초과첨도 = {stats.kurtosis(population):+.4f}  (최대값 {population.max():.2f})")
+    print(f"  거기서 나오는 X-bar 겨냥값   = {stats.skew(population) / np.sqrt(sample_size):+.4f},  {stats.kurtosis(population) / sample_size:+.4f}")
+    print(f"모의 1만 회        왜도 = {stats.skew(sample_means):+.4f},  초과첨도 = {stats.kurtosis(sample_means):+.4f}")
+
+    # 모양 통계량의 몬테카를로 요동은 정규 공식 sqrt(6/B), sqrt(24/B) 를 쓸 수 없다.
+    # 그 공식은 정규모집단에서만 맞다. 그래서 실제로 400 번 되풀이해 재어 본다.
+    rng = np.random.default_rng(11)
+    rep = np.array([
+        [stats.skew(m), stats.kurtosis(m), m.std(ddof=1)]
+        for m in (population[rng.integers(0, n_population, size=(n_samples, sample_size))].mean(axis=1)
+                  for _ in range(400))
+    ])
+    print(f"  같은 일을 400 번 되풀이한 요동 = {rep[:, 0].std():.4f},  {rep[:, 1].std():.4f}  (표준편차는 {rep[:, 2].std():.4f})")
+
+    # 정확분포(감마)와 정규근사를 견준다.
+    exact = stats.gamma(a=sample_size, scale=1 / sample_size)
+    approx = stats.norm(loc=1, scale=1 / np.sqrt(sample_size))
+    grid = np.linspace(0, 5, 200_001)
+    gap = np.abs(exact.cdf(grid) - approx.cdf(grid))
+    print(f"\n정확분포 대 정규근사  최대 누적분포 차 = {gap.max():.5f}  (x = {grid[gap.argmax()]:.4f})")
+    for x in (1.5, 2.0):
+        print(f"P(X-bar > {x})  정확 = {exact.sf(x):.6f},  정규근사 = {approx.sf(x):.6f},  모의 = {(sample_means > x).mean():.6f}")
+    print(f"P(X-bar <= 0)  정확 = 0.000000,  정규근사 = {approx.cdf(0):.6f}")
+
+    # 모집단과 표집분포를 나란히 그린다.
+    # 세 패널을 sharex=True 로 묶는 것이 이 그림의 핵심 장치다.
+    # 가로 눈금이 같아야 세 분포의 **퍼짐**을 직접 견줄 수 있다.
+    #   위   모집단      : 가장 넓다
+    #   가운데 표본 하나  : 모집단에서 뽑은 점 몇 개
+    #   아래  표집분포    : 눈에 띄게 좁다. 이 좁아짐이 sigma/sqrt(n) 이다.
+    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+
+    _, bins, _ = ax0.hist(population, bins=100)
+    ax0.set_title("Population Distribution (Exponential)")
+
+    ax1.scatter(single_sample, np.zeros_like(single_sample), s=100)
+    ax1.set_title(f"Sample Distribution (n = {sample_size})")
+
+    ax2.hist(sample_means, bins=bins)
+    ax2.set_title("Sampling Distribution of X-bar")
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Exp(1) 이론        평균 = 1.0000,  sigma/sqrt(n) = 0.4472
+    실현 모집단 1만 개  평균 = 0.9885,  s/sqrt(n)     = 0.4387
+    모의 1만 회        평균 = 0.9886,  표준편차      = 0.4312
+
+    Exp(1) 이론        왜도 = +0.8944,  초과첨도 = +1.2000
+    실현 모집단 1만 개  왜도 = +1.9196,  초과첨도 = +5.1090  (최대값 8.99)
+      거기서 나오는 X-bar 겨냥값   = +0.8585,  +1.0218
+    모의 1만 회        왜도 = +0.8353,  초과첨도 = +0.9186
+      같은 일을 400 번 되풀이한 요동 = 0.0340,  0.1625  (표준편차는 0.0036)
+
+    정확분포 대 정규근사  최대 누적분포 차 = 0.05963  (x = 0.9835)
+    P(X-bar > 1.5)  정확 = 0.132062,  정규근사 = 0.131776,  모의 = 0.121500
+    P(X-bar > 2.0)  정확 = 0.029253,  정규근사 = 0.012674,  모의 = 0.023900
+    P(X-bar <= 0)  정확 = 0.000000,  정규근사 = 0.012674
+    ```
+
+    ![Population Distribution (Exponential)](./img/xbar_exponential_40.png)
+
+    **중심과 폭은 맞는다.** 비복원으로 뽑으므로 겨냥값은 실현된 1만 개의 평균 $0.9885$이고, 모의 평균 $0.9886$이 몬테카를로 오차 $0.0044$의 $0.02$배만큼 떨어져 있다. 모의 표준편차 $0.4312$는 겨냥값 $0.4387$보다 $1.7\%$ 작은데, 400 번 되풀이해 재어 본 요동이 $0.0036$이므로 2배쯤 어긋난 셈이다.
+
+    **모양에서 재미있는 일이 생긴다.** 모의 왜도 $0.8353$은 $\text{Exp}(1)$ 이론값 $0.8944$보다 작고, 초과첨도 $0.9186$은 이론값 $1.2$보다 한참 작다. 요동이 각각 $0.0340$과 $0.1625$이니 $1.7$배씩 어긋난 것으로, 못 봐줄 정도는 아니지만 둘이 **같은 방향으로** 치우쳐 있는 것이 수상하다.
+
+    범인은 몬테카를로가 아니라 **실현된 모집단**이다. $\text{Exp}(1)$의 왜도는 $2$, 초과첨도는 $6$인데, 거기서 뽑힌 1만 개는 왜도 $1.9196$, 초과첨도 $5.1090$밖에 되지 않는다. 최대값이 $8.99$에서 끊겼기 때문이다. $\text{Exp}(1)$에서 $9$를 넘는 값은 확률 $e^{-9} = 0.00012$로 1만 개에 한 개꼴이니 꼬리가 통째로 잘려 나간 셈이고, **적률의 차수가 높을수록 그 손실이 크다.** 평균은 $1.1\%$, 분산은 $3.8\%$ 어긋나는데 4차 중심적률은 $9$여야 할 것이 $7.507$로 $17\%$가 사라졌다.
+
+    잘린 모집단에서 나오는 겨냥값은 $0.8585$와 $1.0218$이다. 이것과 견주면 모의값 $0.8353$, $0.9186$이 각각 요동의 $0.7$배, $0.6$배만큼 떨어져 있어 깔끔하게 맞는다. **어긋난 것은 모의실험이 아니라 "모집단 1만 개를 $\text{Exp}(1)$ 자체로 여긴" 가정이었다.**
+
+    **꼬리확률.** 정확분포와 정규근사의 누적분포 차는 최대 $0.0596$으로 균등의 $0.0057$보다 열 배 크다. $x = 1.5$에서는 둘이 $0.1321$과 $0.1318$로 거의 같은데 이것은 우연이며, $x = 2$로 가면 $0.0293$ 대 $0.0127$로 벌어진다. 모의값 $0.1215$와 $0.0239$는 잘린 모집단에서 뽑은 것이라 겨냥값이 각각 $0.12557$과 $0.02627$로 내려가 있고(같은 모집단에서 200만 번 다시 뽑아 확인했다), 거기서 비율의 몬테카를로 오차 $0.0034$와 $0.0016$의 $1.2$배, $1.5$배만큼 떨어져 있다.
+
+    요점은 셋째 줄이다. **폭은 $\sigma/\sqrt n$으로 정확히 주면서 꼬리는 $2.3$배 틀리는 것**이 $n = 5$의 지수 모집단이고, 이것이 "$n \ge 30$이면 된다"는 어림짐작이 어디서 깨지는지 알려 준다.
+
 
 ## 해석
 

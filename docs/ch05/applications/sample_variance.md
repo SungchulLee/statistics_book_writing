@@ -164,52 +164,122 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 정규모집단에서 표본분산의 표집분포
+**보기 4.** <span class="diff easy" title="쉬움"></span> 정규모집단에서 표본분산의 표집분포. $N(0,1)$에서 뽑아 만든 모집단 10만 개에서 $n = 10$씩 비복원으로 뽑아 $S^2$을 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** $E[S^2]$, $\operatorname{sd}(S^2)$, **왜도**, 그리고 최빈값·중앙값·평균의 순서를 이론으로 적으시오. 아울러 $P(S^2 > \sigma^2)$을 구하시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(1)
+    **(1) 이론값.** 정규모집단이므로 $(n-1)S^2/\sigma^2 \sim \chi^2(9)$이 **정확**하다. 따라서 $S^2 = \frac{\sigma^2}{9}\chi^2(9)$이고, $\chi^2(d)$의 평균 $d$, 분산 $2d$, 왜도 $\sqrt{8/d}$를 옮겨 쓰면 된다.
 
-population = stats.norm().rvs(100_000)
-sample_size = 10
-n_samples = 10_000
+    $$
+    E[S^2] = \sigma^2 = 1, \qquad
+    \operatorname{Var}(S^2) = \frac{\sigma^4}{81}\cdot 2 \cdot 9 = \frac{2}{9},
+    \qquad \operatorname{sd}(S^2) = \sqrt{\frac29} = 0.471405
+    $$
 
-# 표본평균 대신 표본분산을 기록한다. ddof=1 이 n-1로 나누는 표본분산이다.
-# 아래 그림에서 두 가지를 확인하라.
-#   중심: 참 분산 1 근처에 놓인다 (S^2 은 불편추정량이다)
-#   모양: 대칭이 아니라 **오른쪽으로 치우쳐 있다**.
-#         분산은 음수가 될 수 없어 왼쪽이 0에서 막히기 때문이다.
-#         표본평균의 표집분포가 대칭인 것과 대비된다.
-sample_vars = [
-    np.var(np.random.choice(population, size=sample_size, replace=False), ddof=1)
-    for _ in range(n_samples)
-]
+    $$
+    \text{왜도}(S^2) = \sqrt{\frac89} = 0.942809
+    $$
 
-# 위아래 두 패널로 나눈다. 위는 모집단, 아래는 통계량의 표집분포다.
-# 둘의 **가로 눈금이 다르다**는 점에 주의하라.
-# 표집분포가 훨씬 좁으므로 같은 축에 그리면 한 점처럼 보인다.
-fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
+    왜도가 $0$이 아니다. **모집단은 완벽히 대칭인데 $S^2$의 표집분포는 오른쪽으로 치우쳐 있다.** 일반 공식 $\operatorname{Var}(S^2) = \left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4/n$에 $\beta_2 = 3$을 넣어도 $(3 - 7/9)/10 = 2/9$로 같은 값이 나온다.
 
-ax0.hist(population, bins=100, density=True, alpha=0.5)
-ax0.set_title('Population Distribution (Normal)', fontsize=16)
+    치우침의 크기는 세 중심위치의 순서로 읽으면 분명하다. $\chi^2(9)$의 최빈값은 $d - 2 = 7$, 중앙값은 $8.3428$, 평균은 $9$이므로 $9$로 나누어
 
-ax1.hist(sample_vars, bins=100, density=True, alpha=0.5)
-ax1.set_title(rf'Sampling Distribution of $S^2$ (n = {sample_size})', fontsize=16)
+    $$
+    \text{최빈값} 0.77778 \;<\; \text{중앙값 } 0.92698 \;<\; \text{평균 } 1
+    $$
 
-for ax in (ax0, ax1):
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    이 된다. 평균이 중앙값보다 $8\%$ 오른쪽에 있다. 그래서
 
-plt.tight_layout()
-plt.show()
-```
+    $$
+    P(S^2 > \sigma^2) = P\!\left(\chi^2(9) > 9\right) = 0.43727
+    $$
 
-![Population Distribution (Normal)](./img/sample_variance_156.png)
+    로 **절반이 안 된다.** $S^2$은 불편추정량이지만 과반의 표본에서 참값보다 작게 나온다는 뜻이다. 불편성이 "절반씩 갈라진다"는 말이 아니라는 것을 보여 주는 숫자다.
+
+    비복원으로 뽑으므로 겨냥값은 $N(0,1)$ 자체가 아니라 **실현된 10만 개**의 분산이다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(1)
+
+    population = stats.norm().rvs(100_000)
+    sample_size = 10
+    n_samples = 10_000
+
+    # 표본평균 대신 표본분산을 기록한다. ddof=1 이 n-1로 나누는 표본분산이다.
+    # 아래 그림에서 두 가지를 확인하라.
+    #   중심: 참 분산 1 근처에 놓인다 (S^2 은 불편추정량이다)
+    #   모양: 대칭이 아니라 **오른쪽으로 치우쳐 있다**.
+    #         분산은 음수가 될 수 없어 왼쪽이 0에서 막히기 때문이다.
+    #         표본평균의 표집분포가 대칭인 것과 대비된다.
+    sample_vars = [
+        np.var(np.random.choice(population, size=sample_size, replace=False), ddof=1)
+        for _ in range(n_samples)
+    ]
+    sample_vars = np.asarray(sample_vars)
+
+    # 이론값과 모의값을 나란히 둔다. 비복원이므로 겨냥값은 실현된 10만 개의 적률이다.
+    df = sample_size - 1
+    s2_real, b2_real = population.var(), stats.kurtosis(population) + 3
+    sd_true = np.sqrt((b2_real - (sample_size - 3) / df) * s2_real ** 2 / sample_size)
+    chi2 = stats.chi2(df)
+    print(f"실현 모집단 10만 개  분산 = {s2_real:.6f},  첨도 = {b2_real:.4f}")
+    print(f"E[S^2]    이론 {s2_real:.6f}   모의 {sample_vars.mean():.6f}   (MC오차 {sd_true / np.sqrt(n_samples):.6f})")
+    print(f"sd(S^2)   이론 {sd_true:.6f}   모의 {sample_vars.std(ddof=1):.6f}   (MC오차 {sd_true / np.sqrt(2 * n_samples):.6f})")
+    print(f"왜도(S^2) 이론 {np.sqrt(8 / df):.6f}   모의 {stats.skew(sample_vars):.6f}")
+    print(f"최빈값 {(df - 2) / df:.5f} < 중앙값 {chi2.median() / df:.5f} < 평균 {1.0:.5f}   "
+          f"(모의 중앙값 {np.median(sample_vars) / s2_real:.5f})")
+    print(f"P(S^2 > sigma^2)  이론 {chi2.sf(df):.5f}   모의 {(sample_vars > s2_real).mean():.5f}")
+
+    # 위아래 두 패널로 나눈다. 위는 모집단, 아래는 통계량의 표집분포다.
+    # 둘의 **가로 눈금이 다르다**는 점에 주의하라.
+    # 표집분포가 훨씬 좁으므로 같은 축에 그리면 한 점처럼 보인다.
+    fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
+
+    ax0.hist(population, bins=100, density=True, alpha=0.5)
+    ax0.set_title('Population Distribution (Normal)', fontsize=16)
+
+    ax1.hist(sample_vars, bins=100, density=True, alpha=0.5)
+    ax1.set_title(rf'Sampling Distribution of $S^2$ (n = {sample_size})', fontsize=16)
+
+    for ax in (ax0, ax1):
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    실현 모집단 10만 개  분산 = 0.996661,  첨도 = 3.0205
+    E[S^2]    이론 0.996661   모의 0.999114   (MC오차 0.004720)
+    sd(S^2)   이론 0.471989   모의 0.473219   (MC오차 0.003337)
+    왜도(S^2) 이론 0.942809   모의 0.966648
+    최빈값 0.77778 < 중앙값 0.92698 < 평균 1.00000   (모의 중앙값 0.92563)
+    P(S^2 > sigma^2)  이론 0.43727   모의 0.43880
+    ```
+
+    ![Population Distribution (Normal)](./img/sample_variance_156.png)
+
+    **다섯 줄이 모두 맞는다.** $E[S^2] = 0.999114$가 겨냥값 $0.996661$에서 몬테카를로 오차 $0.004720$의 $0.52$배, $\operatorname{sd}(S^2) = 0.473219$가 $0.471989$에서 오차 $0.003337$의 $0.37$배 떨어져 있다. 실현된 10만 개의 첨도가 $3.0205$로 $3$에 가까워 명목 이론값 $\sqrt{2/9} = 0.471405$와도 사실상 같다. 꼬리가 가벼운 모집단에서는 10만 개가 모집단을 거의 그대로 대표한다.
+
+    **왜도가 요점이다.** 모의 왜도 $0.966648$이 이론 $0.942809$와 $2.5\%$ 차이인데, 왜도 추정값 자체의 몬테카를로 요동이 $\chi^2(9)/9$에서 $B = 10{,}000$일 때 $0.038$이므로 $0.6$배다. 맞는다. 위 패널의 모집단은 좌우대칭인데 아래 패널은 $0.94$만큼 오른쪽으로 끌려 있다. **대칭인 모집단에서 비대칭인 표집분포가 나온 것**이고, 까닭은 $S^2 \ge 0$이라 왼쪽이 $0$에서 막히는 반면 오른쪽은 열려 있기 때문이다.
+
+    그 치우침을 수로 읽으면 더 선명하다. 모의 중앙값이 $\sigma^2$의 $0.92563$배로 이론 $0.92698$과 맞는다. 그리고 $S^2$이 참값을 넘는 비율이 $0.43880$으로 이론 $0.43727$과 맞는데(비율의 오차 $0.00496$의 $0.3$배), **열 번 가운데 대여섯 번($0.5627$)은 분산을 작게 추정한다**는 뜻이다. 불편성은 평균에 관한 성질이지 "반반"에 관한 성질이 아니다.
+
 
 위 패널의 모집단은 좌우대칭인데 아래 패널의 $S^2$ 분포는 오른쪽으로 꼬리를 끈다. 분산이 음수가 될 수 없어 왼쪽이 0에서 막히는 반면 오른쪽은 열려 있기 때문이며, 표본평균의 표집분포가 대칭이었던 것과 대비된다. 중심은 참값 1 근처에 놓여 불편성을 확인해 준다.
 
@@ -217,50 +287,112 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 치우친 모집단에서 표본분산의 표집분포
+**보기 5.** <span class="diff easy" title="쉬움"></span> 치우친 모집단에서 표본분산의 표집분포. 대출 신청자 5만 명의 소득 자료를 모집단으로 삼아 $n = 10$씩 비복원으로 뽑아 $S^2$을 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** 모집단의 첨도를 재고, 거기서 $\operatorname{sd}(S^2)$과 카이제곱 예측과의 **분산 배율**을 이론으로 구하시오.
+
+**(2)** 모의실험으로 확인하고, 치우친 모집단에서 **무엇이 달라지고 무엇이 그대로인지** 가리시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+??? success "풀이"
 
-np.random.seed(1)
+    **(1) 이론값.** 모집단이 자료로 주어져 있으므로 적률을 직접 재면 된다. 5만 명의 소득은 평균 $68{,}761$, 표준편차 $32{,}872$, 왜도 $1.0488$, 첨도 $\beta_2 = 4.0808$이다. $\sigma^2 = 1.0805 \times 10^9$을 공식에 넣으면
 
-url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
-df = pd.read_csv(url)
-population = df['x'].values
-sample_size = 10
-n_samples = 10_000
+    $$
+    \operatorname{Var}(S^2) = \frac{1}{10}\left(4.0808 - \frac{7}{9}\right)\sigma^4,
+    \qquad \operatorname{sd}(S^2) = 6.2101 \times 10^8
+    $$
 
-sample_vars = [
-    np.var(np.random.choice(population, size=sample_size, replace=False), ddof=1)
-    for _ in range(n_samples)
-]
+    이다. 카이제곱 모형이 예측하는 값은 $\sqrt{2/9}\,\sigma^2 = 5.0938 \times 10^8$이므로 분산 배율은
 
-# 위아래 두 패널로 나눈다. 위는 모집단, 아래는 통계량의 표집분포다.
-# 둘의 **가로 눈금이 다르다**는 점에 주의하라.
-# 표집분포가 훨씬 좁으므로 같은 축에 그리면 한 점처럼 보인다.
-fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
+    $$
+    \frac{9}{20}\left(4.0808 - \frac79\right) = 1.4863
+    $$
 
-ax0.hist(population, bins=100, density=True, alpha=0.5)
-ax0.set_title('Population Distribution (Income — Skewed)', fontsize=16)
+    이고 극한값은 $(\beta_2-1)/2 = 1.5404$다. **폭으로는 $\sqrt{1.4863} = 1.22$배, 곧 $22\%$ 넓다.** 정규모집단의 $1.00$에서 벗어났으되 지수모집단의 $3.97$만큼은 아니다. 까닭은 소득 자료가 오른쪽으로 치우쳐 있어도 $199{,}000$에서 끊겨 있어 첨도가 $4.08$에 머물기 때문이다. **치우침이 곧 큰 첨도는 아니다.**
 
-ax1.hist(sample_vars, bins=100, density=True, alpha=0.5)
-ax1.set_title(rf'Sampling Distribution of $S^2$ (n = {sample_size})', fontsize=16)
+    모양은 어떨까. $n = 10$에서 카이제곱이라면 왜도가 $\sqrt{8/9} = 0.9428$이어야 한다. 여기서는 모집단이 치우쳤으니 더 커질 법하지만 얼마나 커질지는 6차 적률이 정하는 일이라 간단한 닫힌 꼴이 없다. 모의실험으로 재어 본다.
 
-for ax in (ax0, ax1):
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    **(2) 모의실험.**
 
-plt.tight_layout()
-plt.show()
-```
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
 
-![치우친 소득 모집단과 표본분산의 표집분포](./img/sample_variance_228.png)
+    np.random.seed(1)
 
-소득 모집단은 꼬리가 두꺼워 첨도가 크다. 앞에서 본 배율 $(\beta_2-1)/2$가 그만큼 크게 작용하므로 $S^2$의 퍼짐도 정규모집단에서보다 훨씬 커지고, 카이제곱 공식이 주는 값은 더 이상 맞지 않는다. 모집단의 모양이 $\bar{X}$의 표집분포에는 거의 흔적을 남기지 않았지만 $S^2$에는 고스란히 남는 것이다.
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    df = pd.read_csv(url)
+    population = df['x'].values
+    sample_size = 10
+    n_samples = 10_000
+
+    sample_vars = [
+        np.var(np.random.choice(population, size=sample_size, replace=False), ddof=1)
+        for _ in range(n_samples)
+    ]
+    sample_vars = np.asarray(sample_vars)
+
+    # 모집단의 적률과 거기서 나오는 S^2 의 이론값을 적는다.
+    dof = sample_size - 1
+    s2_pop = population.var()
+    b2_pop = stats.kurtosis(population) + 3
+    sd_true = np.sqrt((b2_pop - (sample_size - 3) / dof) * s2_pop ** 2 / sample_size)
+    sd_chi2 = np.sqrt(2 / dof) * s2_pop
+    print(f"소득 모집단 {len(population)} 명:  평균 {population.mean():.0f},  표준편차 {population.std():.0f},  "
+          f"왜도 {stats.skew(population):.4f},  첨도 {b2_pop:.4f}")
+    print(f"E[S^2]   이론 {s2_pop:.4e}   모의 {sample_vars.mean():.4e}   (MC오차 {sd_true / np.sqrt(n_samples):.4e})")
+    print(f"sd(S^2)  이론 {sd_true:.4e}   모의 {sample_vars.std(ddof=1):.4e}   (MC오차 {sd_true / np.sqrt(2 * n_samples):.4e})")
+    print(f"카이제곱이 예측하는 sd = {sd_chi2:.4e}")
+    print(f"분산 배율  이론 {dof / (2 * sample_size) * (b2_pop - (sample_size - 3) / dof):.4f}   "
+          f"모의 {(sample_vars.std(ddof=1) / sd_chi2) ** 2:.4f}   극한 {(b2_pop - 1) / 2:.4f}")
+    print(f"왜도(S^2)  카이제곱이라면 {np.sqrt(8 / dof):.4f}   모의 {stats.skew(sample_vars):.4f}")
+
+    # 위아래 두 패널로 나눈다. 위는 모집단, 아래는 통계량의 표집분포다.
+    # 둘의 **가로 눈금이 다르다**는 점에 주의하라.
+    # 표집분포가 훨씬 좁으므로 같은 축에 그리면 한 점처럼 보인다.
+    fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
+
+    ax0.hist(population, bins=100, density=True, alpha=0.5)
+    ax0.set_title('Population Distribution (Income — Skewed)', fontsize=16)
+
+    ax1.hist(sample_vars, bins=100, density=True, alpha=0.5)
+    ax1.set_title(rf'Sampling Distribution of $S^2$ (n = {sample_size})', fontsize=16)
+
+    for ax in (ax0, ax1):
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    소득 모집단 50000 명:  평균 68761,  표준편차 32872,  왜도 1.0488,  첨도 4.0808
+    E[S^2]   이론 1.0805e+09   모의 1.0845e+09   (MC오차 6.2101e+06)
+    sd(S^2)  이론 6.2101e+08   모의 6.2921e+08   (MC오차 4.3912e+06)
+    카이제곱이 예측하는 sd = 5.0938e+08
+    분산 배율  이론 1.4863   모의 1.5259   극한 1.5404
+    왜도(S^2)  카이제곱이라면 0.9428   모의 0.9776
+    ```
+
+    ![치우친 소득 모집단과 표본분산의 표집분포](./img/sample_variance_228.png)
+
+    **그대로인 것 — 불편성.** 모의 $E[S^2] = 1.0845 \times 10^9$이 모집단 분산 $1.0805 \times 10^9$에서 몬테카를로 오차 $6.21 \times 10^6$의 $0.64$배만큼 떨어져 있다. 모집단이 치우쳤다는 사실이 중심에는 아무 영향을 주지 않는다.
+
+    **달라진 것 — 폭.** 모의 $\operatorname{sd}(S^2) = 6.2921 \times 10^8$이 이론 $6.2101 \times 10^8$과 $1.3\%$ 차이로 맞고, 카이제곱 예측 $5.0938 \times 10^8$보다는 $24\%$ 크다. 배율로는 모의 $1.5259$가 이론 $1.4863$과 $2.7\%$ 차이이며(배율은 표준편차의 제곱이라 상대오차가 두 배로 보인다), 극한 $1.5404$에 아래에서 다가가는 중이다. **명목 $95\%$ 신뢰구간을 카이제곱으로 짜면 폭이 $1/1.22$배로 좁아진다.**
+
+    **거의 그대로인 것 — 모양.** 뜻밖에도 왜도가 $0.9776$으로 카이제곱이 예측하는 $0.9428$과 거의 같다. 왜도 추정값의 몬테카를로 요동이 $0.038$쯤이니 $0.9$배 차이, 곧 구별되지 않는다. **$n = 10$에서 $S^2$의 치우침은 모집단이 아니라 자유도가 정한다.** 아래 패널의 모양만 보고는 모집단이 정규였는지 소득이었는지 가려낼 수 없고, 가려내게 해 주는 것은 가로축의 **폭**뿐이다.
+
+    그러므로 이 쪽의 결론을 한 줄로 줄이면 이렇다. $\bar X$에서는 모집단의 치우침이 중심극한정리에 씻겨 거의 사라지지만, $S^2$에서는 **중심에도 모양에도 나타나지 않고 오직 폭에만 남는다.** 그리고 폭은 신뢰구간과 검정이 직접 쓰는 양이다.
+
+
+소득 모집단은 꼬리가 두꺼워 첨도가 크다. 앞에서 본 배율 $(\beta_2-1)/2$가 그만큼 크게 작용하므로 $S^2$의 퍼짐이 정규모집단에서보다 커지고, 카이제곱 공식이 주는 값은 더 이상 맞지 않는다. 다만 그 정도를 가늠해 두자. 이 모집단은 $\beta_2 = 4.08$이라 분산 배율이 $1.49$, 폭으로는 $22\%$ 넓어지는 수준이다(지수모집단의 $3.97$과는 자릿수가 다르다). 모집단의 모양이 $\bar{X}$의 표집분포에는 거의 흔적을 남기지 않았지만 $S^2$에는 고스란히 남는 것이다.
 
 ## 연습문제
 

@@ -115,71 +115,137 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 표본분산의 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 모양에 따른 표본분산의 표집분포. 네 모집단 $\text{Normal}(0,1)$, $\text{Exp}(1)$, $\chi^2(2)$, $\text{Uniform}(0,1)$을 각각 1만 개 만들고, 거기서 $n = 100$씩 비복원으로 뽑아 $S^2$을 계산하는 일을 1천 번 되풀이한다.
+
+**(1)** 네 모집단에 대해 $E[S^2]$과 $\operatorname{sd}(S^2)$을 이론으로 적고, 카이제곱이 예측하는 폭과의 **분산 배율**을 구하시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오. 어긋나는 것이 있으면 이론이 틀린 것인지 다른 까닭인지 가리시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-np.random.seed(1)
+    **(1) 이론값.** $E[S^2] = \sigma^2$은 정규성 없이 성립하므로 넷 다 모집단 분산을 그대로 겨냥한다. 틀릴 수 있는 것은 **폭**뿐이고, 그것은 위의 식
 
-n_population = 10_000
-n_sample = 100
-n_sim = 1_000
+    $$
+    \operatorname{Var}(S^2) = \frac{1}{n}\left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4
+    $$
 
-# 모집단 넷을 준비한다. 정규 하나와 정규가 아닌 셋이다.
-# 카이제곱 결과는 정규모집단에서만 정확하므로,
-# 나머지 셋에서 어긋나는 모습을 보는 것이 이 그림의 목적이다.
-# random_state를 각각 다르게 주어 네 모집단이 서로 무관하게 만든다.
-populations = {
-    "Normal(0,1)":  stats.norm().rvs(n_population, random_state=1),
-    "Exp(1)":       stats.expon().rvs(n_population, random_state=2),
-    "Chi-sq(2)":    stats.chi2(df=2).rvs(n_population, random_state=3),
-    "Uniform(0,1)": stats.uniform().rvs(n_population, random_state=4),
-}
+    에 $n = 100$을 넣어 $(\beta_2 - 97/99)\sigma^4/100$으로 계산한다. $\chi^2(2) = \text{Exp}(1/2)$라 지수와 모양이 같아 첨도도 $9$로 같고, 분산만 $4$배다.
 
-fig, axes = plt.subplots(1, len(populations), figsize=(16, 3.5))
+    | 모집단 | $\sigma^2$ | $\beta_2$ | $E[S^2]$ | $\operatorname{sd}(S^2)$ | 카이제곱 예측 $\sqrt{2/99}\,\sigma^2$ | 분산 배율 |
+    |---|---|---|---|---|---|---|
+    | $\text{Normal}(0,1)$ | $1$ | $3.0$ | $1$ | $0.14213$ | $0.14213$ | $1.000$ |
+    | $\text{Exp}(1)$ | $1$ | $9.0$ | $1$ | $0.28320$ | $0.14213$ | $3.970$ |
+    | $\chi^2(2)$ | $4$ | $9.0$ | $4$ | $1.13280$ | $0.56853$ | $3.970$ |
+    | $\text{Uniform}(0,1)$ | $1/12$ | $1.8$ | $1/12$ | $0.00755$ | $0.01184$ | $0.406$ |
 
-for ax, (name, population) in zip(axes, populations.items()):
-    # 표본분산 S^2 의 표집분포를 모의실험으로 얻는다.
-    s2_sims = np.array([
-        np.random.choice(population, size=n_sample, replace=False).var(ddof=1)
-        for _ in range(n_sim)
-    ])
+    분산 배율은 $\frac{n-1}{2n}\left(\beta_2 - \frac{n-3}{n-1}\right)$이고 $n = 100$에서 $0.495\,(\beta_2 - 0.9798)$이다. **첫 줄이 정확히 $1$이 되는 것이 정리 1이고, 나머지 세 줄이 $1$에서 벗어난 양이 이 쪽의 주제다.** $n = 100$인데도 지수·카이제곱에서 폭이 두 배 가까이 넓고 균등에서 $0.64$배로 좁다.
 
-    # 모의실험으로 얻은 값들의 히스토그램.
-    _, bins, _ = ax.hist(s2_sims, density=True, bins=30,
-                         alpha=0.5, edgecolor="white",
-                         label=r"simulated $S^2$")
+    **(2) 모의실험.**
 
-    # 이론적 카이제곱 밀도를 S^2 의 눈금으로 옮겨 그린다.
-    # 정리는 (n-1)S^2/sigma^2 ~ chi^2(n-1) 이므로
-    # S^2 = (sigma^2/(n-1)) * chi^2 = X/c  (단, c = (n-1)/sigma^2) 이다.
-    #
-    # 변수변환 Y = X/c 의 밀도는 f_Y(y) = f_X(cy) * c 다.
-    # 마지막에 곱하는 c 가 그 야코비안이며, 이것을 빠뜨리면
-    # 곡선의 넓이가 1이 되지 않아 히스토그램과 눈금이 어긋난다.
-    df = n_sample - 1
-    sigma2 = population.var()
-    c = df / sigma2
-    x_grid = np.linspace(bins[0], bins[-1], 300)
-    pdf = stats.chi2(df).pdf(x_grid * c) * c
-    ax.plot(x_grid, pdf, "--r", lw=2, alpha=0.7,
-            label=r"$\chi^2$-based PDF")
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
 
-    ax.set_title(name)
-    ax.set_xlabel(r"$S^2$")
+    np.random.seed(1)
 
-axes[0].set_ylabel("Density")
-axes[-1].legend(fontsize=8)
-plt.tight_layout()
-plt.show()
-```
+    n_population = 10_000
+    n_sample = 100
+    n_sim = 1_000
 
-![S-squared의 표본분포 (Normal)](./img/s2_normal_61.png)
+    # 모집단 넷을 준비한다. 정규 하나와 정규가 아닌 셋이다.
+    # 카이제곱 결과는 정규모집단에서만 정확하므로,
+    # 나머지 셋에서 어긋나는 모습을 보는 것이 이 그림의 목적이다.
+    # random_state를 각각 다르게 주어 네 모집단이 서로 무관하게 만든다.
+    populations = {
+        "Normal(0,1)":  stats.norm().rvs(n_population, random_state=1),
+        "Exp(1)":       stats.expon().rvs(n_population, random_state=2),
+        "Chi-sq(2)":    stats.chi2(df=2).rvs(n_population, random_state=3),
+        "Uniform(0,1)": stats.uniform().rvs(n_population, random_state=4),
+    }
+
+    # 명목 모집단의 분산과 첨도. 실현된 1만 개는 이 값에서 조금 비껴난다.
+    nominal = {"Normal(0,1)": (1.0, 3.0), "Exp(1)": (1.0, 9.0),
+               "Chi-sq(2)": (4.0, 9.0), "Uniform(0,1)": (1 / 12, 1.8)}
+
+    def sd_s2(sigma2, beta2, n):
+        """Var(S^2) = (beta2 - (n-3)/(n-1)) sigma^4 / n 의 제곱근."""
+        return np.sqrt((beta2 - (n - 3) / (n - 1)) * sigma2 ** 2 / n)
+
+    fig, axes = plt.subplots(1, len(populations), figsize=(16, 3.5))
+
+    print("모집단          beta2 명목/실현   E[S^2] 실현/모의    sd(S^2) 명목/실현/모의   배율 (모의/카이제곱)^2  이론 배율")
+    for ax, (name, population) in zip(axes, populations.items()):
+        # 표본분산 S^2 의 표집분포를 모의실험으로 얻는다.
+        s2_sims = np.array([
+            np.random.choice(population, size=n_sample, replace=False).var(ddof=1)
+            for _ in range(n_sim)
+        ])
+
+        # 명목 모집단, 실현된 1만 개, 모의실험의 세 층을 나란히 적는다.
+        s2_nom, b2_nom = nominal[name]
+        s2_real, b2_real = population.var(), stats.kurtosis(population) + 3
+        # 카이제곱이 예측하는 폭. 정규모집단에서만 맞는 값이다.
+        chi2_sd = np.sqrt(2 / (n_sample - 1)) * s2_real
+        ratio_sim = (s2_sims.std(ddof=1) / chi2_sd) ** 2
+        ratio_thm = (n_sample - 1) / (2 * n_sample) * (b2_real - (n_sample - 3) / (n_sample - 1))
+        print(f"{name:14s} {b2_nom:5.2f} / {b2_real:5.3f}   {s2_real:7.5f} / {s2_sims.mean():7.5f}   "
+              f"{sd_s2(s2_nom, b2_nom, n_sample):.5f} / {sd_s2(s2_real, b2_real, n_sample):.5f} / {s2_sims.std(ddof=1):.5f}"
+              f"        {ratio_sim:5.3f}            {ratio_thm:5.3f}")
+
+        # 모의실험으로 얻은 값들의 히스토그램.
+        _, bins, _ = ax.hist(s2_sims, density=True, bins=30,
+                             alpha=0.5, edgecolor="white",
+                             label=r"simulated $S^2$")
+
+        # 이론적 카이제곱 밀도를 S^2 의 눈금으로 옮겨 그린다.
+        # 정리는 (n-1)S^2/sigma^2 ~ chi^2(n-1) 이므로
+        # S^2 = (sigma^2/(n-1)) * chi^2 = X/c  (단, c = (n-1)/sigma^2) 이다.
+        #
+        # 변수변환 Y = X/c 의 밀도는 f_Y(y) = f_X(cy) * c 다.
+        # 마지막에 곱하는 c 가 그 야코비안이며, 이것을 빠뜨리면
+        # 곡선의 넓이가 1이 되지 않아 히스토그램과 눈금이 어긋난다.
+        df = n_sample - 1
+        sigma2 = population.var()
+        c = df / sigma2
+        x_grid = np.linspace(bins[0], bins[-1], 300)
+        pdf = stats.chi2(df).pdf(x_grid * c) * c
+        ax.plot(x_grid, pdf, "--r", lw=2, alpha=0.7,
+                label=r"$\chi^2$-based PDF")
+
+        ax.set_title(name)
+        ax.set_xlabel(r"$S^2$")
+
+    axes[0].set_ylabel("Density")
+    axes[-1].legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    모집단          beta2 명목/실현   E[S^2] 실현/모의    sd(S^2) 명목/실현/모의   배율 (모의/카이제곱)^2  이론 배율
+    Normal(0,1)     3.00 / 3.029   0.99757 / 1.00183   0.14213 / 0.14279 / 0.14371        1.027            1.014
+    Exp(1)          9.00 / 8.166   0.98539 / 0.97830   0.28320 / 0.26415 / 0.26405        3.554            3.557
+    Chi-sq(2)       9.00 / 8.242   3.86995 / 3.86573   1.13280 / 1.04290 / 1.04117        3.583            3.595
+    Uniform(0,1)    1.80 / 1.785   0.08472 / 0.08441   0.00755 / 0.00760 / 0.00776        0.415            0.398
+    ```
+
+    ![S-squared의 표본분포 (Normal)](./img/s2_normal_61.png)
+
+    **불편성은 넷 다 맞는다.** 모의 $E[S^2]$이 실현 모집단의 분산에서 떨어진 거리가 몬테카를로 오차($\operatorname{sd}(S^2)/\sqrt{1000}$) 단위로 각각 $0.9$배, $0.9$배, $0.1$배, $1.3$배다. **정규든 아니든, 첨도가 $1.8$이든 $9$이든 중심은 흔들리지 않는다.**
+
+    **폭은 실현 이론값과 맞는다.** 셋째 열의 둘째 수(실현)와 셋째 수(모의)를 견주면 상대차가 $+0.6\%$, $-0.04\%$, $-0.17\%$, $+2.1\%$다. 되풀이 1천 번에서 표준편차의 몬테카를로 요동이 $1/\sqrt{2000} = 2.2\%$쯤이므로 넷 다 그 안에 든다. 마지막 두 열의 배율도 $1.027$ 대 $1.014$, $3.554$ 대 $3.557$, $3.583$ 대 $3.595$, $0.415$ 대 $0.398$로 맞아 떨어진다. 배율은 표준편차의 제곱이라 상대오차가 두 배로 보이는 것을 감안해야 한다.
+
+    **그런데 명목 이론값과는 어긋난다.** 지수에서 (1)이 예측한 $\operatorname{sd}(S^2) = 0.28320$과 배율 $3.970$이 모의에서는 $0.26405$와 $3.554$로 나왔다. 둘째 열이 범인을 가리킨다. $\text{Exp}(1)$의 첨도는 $9$인데 거기서 뽑힌 1만 개의 첨도는 $8.166$밖에 되지 않는다. 카이제곱 모집단에서도 $9$가 $8.242$로 내려갔다. **첨도는 4차 적률이라 유한한 모집단이 꼬리를 다 담지 못하면 곧바로 작아진다.** 실현된 $\beta_2$를 식에 넣으면 $0.26415$와 $3.557$이 나와 모의값과 소수 셋째 자리까지 맞는다.
+
+    꼬리가 가벼운 쪽에서는 이 문제가 없다. 균등의 첨도는 $1.8$에서 $1.785$로 거의 그대로고, 정규도 $3.0$에서 $3.029$다. **어긋남이 생기는 곳은 꼬리가 무거운 모집단뿐이며, 그것은 식이 틀린 것이 아니라 "1만 개를 $\text{Exp}(1)$ 자체로 여긴" 가정이 틀린 것이다.**
+
+    그림의 네 패널을 보면 히스토그램은 넷 다 종 모양에 가깝다. $S^2$에도 중심극한정리가 작용하기 때문이다. 그런데 붉은 카이제곱 곡선과 겹치는 것은 첫째 패널뿐이고, 둘째·셋째는 곡선보다 낮고 넓으며 넷째는 높고 좁다. **모양이 닮아 가는 일과 폭이 맞는 일이 따로 논다**는 것이 숫자로도, 그림으로도 확인된다.
+
 
 ## 해석
 

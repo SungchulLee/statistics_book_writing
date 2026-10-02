@@ -66,76 +66,212 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 지수모집단에서 S²의 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 지수모집단에서 S²의 표집분포. $\text{Exp}(1)$에서 $n = 10$과 $n = 100$인 표본을 각각 10만 번 뽑아 $S^2$을 계산한다.
+
+**(1)** 두 표본크기에서 $E[S^2]$, $\operatorname{sd}(S^2)$, 카이제곱 예측과의 **분산 배율**, 그리고 $\operatorname{corr}(\bar X, S^2)$을 이론으로 적으시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(1)
+    **(1) 이론값.** $\text{Exp}(1)$은 $\sigma^2 = 1$, $\mu_3 = 2$, $\beta_2 = 9$다. 불편성은 치우침과 무관하므로 두 경우 모두 $E[S^2] = 1$이다. 폭은
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 3.5))
-for ax, n in zip(axes, (10, 100)):
-    s2 = rng.exponential(size=(100_000, n)).var(axis=1, ddof=1)
+    $$
+    \operatorname{Var}(S^2) = \frac{1}{n}\left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4
+    $$
 
-    # 꼬리가 아주 길다. n=10 에서는 S^2 이 18을 넘는 표본도 나오므로
-    # 99.5백분위에서 자르지 않으면 가운데가 뭉개져 보이지 않는다.
-    hi = np.percentile(s2, 99.5)
-    _, bins, _ = ax.hist(s2, bins=60, range=(0, hi), density=True,
-                         alpha=0.5, edgecolor="white", label=r"simulated $S^2$")
+    에 넣는다.
 
-    df, sigma2 = n - 1, 1.0
-    c = df / sigma2
-    g = np.linspace(1e-6, hi, 300)
-    ax.plot(g, stats.chi2(df).pdf(g * c) * c, "--r", lw=2, label=r"$\chi^2$-based PDF")
+    $$
+    n = 10: \ \operatorname{Var}(S^2) = \frac{9 - 7/9}{10} = 0.822222, \quad \operatorname{sd}(S^2) = 0.906765
+    $$
 
-    ax.set_title(f"Exp(1),  n = {n}")
-    ax.set_xlabel(r"$S^2$")
-    ax.set_xlim(0, hi)
+    $$
+    n = 100: \ \operatorname{Var}(S^2) = \frac{9 - 97/99}{100} = 0.080202, \quad \operatorname{sd}(S^2) = 0.283200
+    $$
 
-axes[0].set_ylabel("Density")
-axes[1].legend(fontsize=8)
-plt.tight_layout()
-plt.show()
-```
+    카이제곱 예측은 $\sqrt{2/(n-1)}$이므로 $0.471405$와 $0.142134$다. 분산 배율은
 
-![지수모집단에서 S²의 표집분포](./img/s2_exponential_fig1.png)
+    $$
+    n = 10: \ \frac{9}{20} \times 8.22222 = 3.700, \qquad
+    n = 100: \ \frac{99}{200} \times 8.02020 = 3.970
+    $$
+
+    이고 극한값 $4$에 아래에서 다가간다. **표준편차로는 두 배 가까이 넓다.**
+
+    상관계수는 $\operatorname{Cov}(\bar X, S^2) = \mu_3/n$, $\operatorname{Var}(\bar X) = \sigma^2/n$을 쓰면 $n$이 약분되어
+
+    $$
+    \operatorname{corr}(\bar X, S^2)
+    = \frac{\mu_3/n}{\sqrt{\dfrac{\sigma^2}{n}} \cdot \sqrt{\dfrac{1}{n}\left(\beta_2 - \dfrac{n-3}{n-1}\right)\sigma^4}}
+    = \frac{\mu_3}{\sigma^3 \sqrt{\beta_2 - \dfrac{n-3}{n-1}}}
+    $$
+
+    가 된다. $n = 10$에서 $2/\sqrt{8.22222} = 0.69749$, $n = 100$에서 $2/\sqrt{8.02020} = 0.70621$이고 극한이 $2/\sqrt{8} = 0.70711$이다. **$n$이 들어 있던 자리가 모두 지워진 것**이 요점이다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+
+    beta2, mu3, sigma2_true = 9.0, 2.0, 1.0
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 3.5))
+    for ax, n in zip(axes, (10, 100)):
+        samples = rng.exponential(size=(100_000, n))
+        s2 = samples.var(axis=1, ddof=1)
+        xbar = samples.mean(axis=1)
+
+        # 이론값과 모의값을 나란히 적는다. 여기서 MC오차는 정규가정 아래의 어림값이다.
+        sd_true = np.sqrt((beta2 - (n - 3) / (n - 1)) * sigma2_true ** 2 / n)
+        sd_chi2 = np.sqrt(2 / (n - 1)) * sigma2_true
+        ratio_true = (n - 1) / (2 * n) * (beta2 - (n - 3) / (n - 1))
+        corr_true = mu3 / (np.sqrt(sigma2_true) ** 3 * np.sqrt(beta2 - (n - 3) / (n - 1)))
+        print(f"n = {n}")
+        print(f"  E[S^2]   이론 {sigma2_true:.6f}   모의 {s2.mean():.6f}   (MC오차 {sd_true / np.sqrt(len(s2)):.6f})")
+        print(f"  sd(S^2)  이론 {sd_true:.6f}   모의 {s2.std(ddof=1):.6f}")
+        print(f"  카이제곱이 예측하는 sd = {sd_chi2:.6f}   분산 배율  이론 {ratio_true:.4f}   모의 {(s2.std(ddof=1) / sd_chi2) ** 2:.4f}")
+        print(f"  corr(X-bar, S^2)  이론 {corr_true:.4f}   모의 {np.corrcoef(xbar, s2)[0, 1]:.4f}")
+
+        # 꼬리가 아주 길다. n=10 에서는 S^2 이 18을 넘는 표본도 나오므로
+        # 99.5백분위에서 자르지 않으면 가운데가 뭉개져 보이지 않는다.
+        hi = np.percentile(s2, 99.5)
+        _, bins, _ = ax.hist(s2, bins=60, range=(0, hi), density=True,
+                             alpha=0.5, edgecolor="white", label=r"simulated $S^2$")
+
+        df, sigma2 = n - 1, 1.0
+        c = df / sigma2
+        g = np.linspace(1e-6, hi, 300)
+        ax.plot(g, stats.chi2(df).pdf(g * c) * c, "--r", lw=2, label=r"$\chi^2$-based PDF")
+
+        ax.set_title(f"Exp(1),  n = {n}")
+        ax.set_xlabel(r"$S^2$")
+        ax.set_xlim(0, hi)
+
+    axes[0].set_ylabel("Density")
+    axes[1].legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    n = 10
+      E[S^2]   이론 1.000000   모의 0.991682   (MC오차 0.002867)
+      sd(S^2)  이론 0.906765   모의 0.898319
+      카이제곱이 예측하는 sd = 0.471405   분산 배율  이론 3.7000   모의 3.6314
+      corr(X-bar, S^2)  이론 0.6975   모의 0.6957
+    n = 100
+      E[S^2]   이론 1.000000   모의 1.000781   (MC오차 0.000896)
+      sd(S^2)  이론 0.283200   모의 0.283307
+      카이제곱이 예측하는 sd = 0.142134   분산 배율  이론 3.9700   모의 3.9730
+      corr(X-bar, S^2)  이론 0.7062   모의 0.7056
+    ```
+
+    ![지수모집단에서 S²의 표집분포](./img/s2_exponential_fig1.png)
+
+    **$n = 100$은 깔끔하게 맞는다.** $E[S^2] = 1.000781$이 몬테카를로 오차 $0.000896$의 $0.9$배, $\operatorname{sd}(S^2) = 0.283307$이 이론값과 $0.04\%$ 차이, 배율 $3.9730$이 이론 $3.9700$과 맞고, 상관 $0.7056$이 이론 $0.7062$와 맞는다.
+
+    **$n = 10$에서는 몬테카를로 오차를 조심해야 한다.** 모의 $E[S^2] = 0.991682$가 $1$에서 $0.0083$ 떨어져 있어 위에 적힌 오차 $0.002867$의 $2.9$배다. 같은 일을 120 번 되풀이해 재어 보면 평균이 $0.999753$으로 맞고 요동의 실제 폭이 $0.00273$이니, **이 한 번이 운 나쁜 쪽에 떨어진 것**이다.
+
+    $\operatorname{sd}(S^2)$에서는 한 가지가 더 있다. 모의 $0.898319$가 이론 $0.906765$보다 $0.93\%$ 작은데, 표준편차의 몬테카를로 요동을 정규가정 공식 $\mathrm{sd}/\sqrt{2B} = 0.00203$으로 어림하면 $4$배 어긋난 것으로 보인다. 그러나 그 공식은 재는 대상이 정규일 때만 맞다. $n = 10$의 지수모집단에서 $S^2$은 첨도가 아주 큰 분포이므로 요동이 실제로 $0.00604$로 **세 배** 크고, 그 단위로는 $1.4$배다. 120 번의 평균은 $0.906358$로 이론값 $0.906765$와 맞는다. **정규용 오차 공식을 비정규 대상에 쓰면 어긋남을 과장해 읽게 된다**는 것이 이 보기가 덤으로 주는 교훈이다.
+
+    배율과 상관계수는 두 $n$에서 모두 맞는다. 상관이 $0.6957$과 $0.7056$으로 $n$이 열 배 달라져도 거의 그대로인 것이 눈에 띈다. **이것이 "$n$을 키워도 고쳐지지 않는다"의 가장 간결한 증거다.**
+
 
 $n = 100$ 패널을 보라. 히스토그램이 빨간 곡선보다 **뚜렷이 낮고 넓다.** 두 분포 모두 종 모양에 가까워졌지만 폭이 두 배 차이 난다. **모양이 닮아 가는 것과 폭이 맞는 것은 다른 이야기**임을 보여 주는 그림이다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 포함률은 표본을 키우면 더 나빠진다
+**보기 2.** <span class="diff easy" title="쉬움"></span> 포함률은 표본을 키우면 더 나빠진다. $\text{Exp}(1)$에서 $n = 10,\, 30,\, 100,\, 1000$인 표본을 각각 10만 번 뽑고, 그때마다 카이제곱 공식으로 $\sigma^2$의 $95\%$ 신뢰구간을 만들어 참값 $1$을 덮는 비율을 센다.
+
+**(1)** $n \to \infty$에서의 실제 포함률을 닫힌 꼴로 구하시오.
+
+**(2)** 모의실험으로 (1)을 확인하고, 작은 $n$에서 포함률이 극한보다 **높은** 까닭을 설명하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(1)
-sigma2 = 1.0             # Exp(1)의 참 분산
+    **(1) 극한 포함률.** 구간은 $W = (n-1)S^2/\sigma^2$이 $\chi^2(n-1)$의 $2.5$-$97.5$ 백분위 $[\ell, u]$에 들 때 참값을 덮는다. $W$의 평균은 정확히 $n-1$이지만 분산은
 
-print("명목 신뢰수준 95%")
-for n in (10, 30, 100, 1000):
-    s2 = rng.exponential(size=(100_000, n)).var(axis=1, ddof=1)
-    lo, hi = stats.chi2(n - 1).ppf([0.025, 0.975])
-    cover = np.mean(((n - 1) * s2 / hi <= sigma2) & (sigma2 <= (n - 1) * s2 / lo))
-    print(f"n = {n:>4}:  실제 포함률 {cover:.3f}")
-```
+    $$
+    \operatorname{Var}(W) = \frac{(n-1)^2}{\sigma^4}\operatorname{Var}(S^2) = 2(n-1)\,r,
+    \qquad r \to \frac{\beta_2 - 1}{2} = 4
+    $$
 
-출력:
+    로 카이제곱이 믿는 $2(n-1)$의 **네 배**다. $n$이 크면 $W$가 정규에 가까워지고 $\ell, u \approx (n-1) \pm 1.96\sqrt{2(n-1)}$이므로, $W$를 자기 표준편차 $\sqrt{2(n-1)r}$로 재면 그 경계가 $\pm 1.96/\sqrt{r}$에 놓인다. 따라서
 
-```
-명목 신뢰수준 95%
-n =   10:  실제 포함률 0.764
-n =   30:  실제 포함률 0.716
-n =  100:  실제 포함률 0.690
-n = 1000:  실제 포함률 0.673
-```
+    $$
+    \text{포함률} \;\to\; 2\Phi\!\left(\frac{1.96}{\sqrt{4}}\right) - 1 = 2\Phi(0.98) - 1 = 0.6729
+    $$
+
+    **명목 $95\%$가 실제로는 $67\%$다.** 균등모집단에서는 $0.998$로 지나치게 넓었으나 여기서는 반대쪽으로, 그리고 훨씬 더 심하게 어긋난다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    sigma2 = 1.0             # Exp(1)의 참 분산
+    beta2 = 9.0              # Exp(1)의 첨도
+
+    print("명목 신뢰수준 95%")
+    for n in (10, 30, 100, 1000):
+        s2 = rng.exponential(size=(100_000, n)).var(axis=1, ddof=1)
+        lo, hi = stats.chi2(n - 1).ppf([0.025, 0.975])
+        cover = np.mean(((n - 1) * s2 / hi <= sigma2) & (sigma2 <= (n - 1) * s2 / lo))
+
+        # W = (n-1)S^2/sigma^2 의 평균·표준편차·왜도. 카이제곱이라면 왜도가 sqrt(8/(n-1)) 여야 한다.
+        w = (n - 1) * s2 / sigma2
+        r = (n - 1) / (2 * n) * (beta2 - (n - 3) / (n - 1))
+        sd_w = np.sqrt(2 * (n - 1) * r)
+
+        # 예측 두 가지. 정규 근사는 적률 둘만, 이동감마 근사는 왜도까지 맞춘다.
+        z_lo, z_hi = (lo - (n - 1)) / sd_w, (hi - (n - 1)) / sd_w
+        pred_normal = stats.norm.cdf(z_hi) - stats.norm.cdf(z_lo)
+        k = 4 / stats.skew(w) ** 2
+        b = sd_w / np.sqrt(k)
+        a = (n - 1) - b * k
+        pred_gamma = stats.gamma(k).cdf((hi - a) / b) - stats.gamma(k).cdf(max((lo - a) / b, 0))
+
+        print(f"n = {n:>4}:  실제 포함률 {cover:.3f}   배율 r = {r:.4f}   "
+              f"왜도(W) 모의 {stats.skew(w):.3f} 카이제곱 {np.sqrt(8 / (n - 1)):.3f}   "
+              f"예측 정규 {pred_normal:.3f} 이동감마 {pred_gamma:.3f}")
+    print(f"극한: 2*Phi(1.96/sqrt(4)) - 1 = {2 * stats.norm.cdf(stats.norm.ppf(0.975) / 2) - 1:.4f}")
+    ```
+
+    출력:
+
+    ```
+    명목 신뢰수준 95%
+    n =   10:  실제 포함률 0.764   배율 r = 3.7000   왜도(W) 모의 3.332 카이제곱 0.943   예측 정규 0.670 이동감마 0.908
+    n =   30:  실제 포함률 0.716   배율 r = 3.9000   왜도(W) 모의 1.768 카이제곱 0.525   예측 정규 0.672 이동감마 0.715
+    n =  100:  실제 포함률 0.690   배율 r = 3.9700   왜도(W) 모의 0.969 카이제곱 0.284   예측 정규 0.673 이동감마 0.681
+    n = 1000:  실제 포함률 0.673   배율 r = 3.9970   왜도(W) 모의 0.296 카이제곱 0.089   예측 정규 0.673 이동감마 0.674
+    극한: 2*Phi(1.96/sqrt(4)) - 1 = 0.6729
+    ```
+
+    **극한은 맞는다.** $n = 1000$의 실제 포함률 $0.673$이 (1)에서 구한 $0.6729$와 소수 셋째 자리까지 일치한다. 비율의 몬테카를로 오차가 $\sqrt{0.673 \times 0.327/10^5} = 0.0015$이니 들어맞는다고 할 수 있다.
+
+    **작은 $n$에서는 정규 예측이 맞지 않는다.** 둘째 열의 배율 $r$은 $n = 10$에서 이미 $3.70$으로 극한 $4$에 가까운데, 정규 예측은 네 $n$에서 $0.670$–$0.673$으로 거의 움직이지 않는다. 실제는 $0.764 \to 0.716 \to 0.690 \to 0.673$으로 내려간다. **빠진 것은 $r$이 아니라 모양이다.**
+
+    셋째 열이 그것을 가리킨다. $n = 10$에서 $W$의 왜도가 $3.332$인데 카이제곱이라면 $\sqrt{8/9} = 0.943$이어야 한다. **세 배 반이나 더 치우쳐 있다.** 오른쪽으로 길게 늘어진 분포는 질량 대부분이 평균 왼쪽에 몰려 있고, 구간 $[\ell, u]$는 평균을 기준으로 왼쪽 $-0.77$ 표준편차, 오른쪽 $+1.23$ 표준편차에 걸쳐 있다. 왼쪽 경계가 짧아 거기서 조금 잃지만, 질량이 몰려 있는 중앙 왼쪽을 구간이 품고 있어 전체로는 정규가 예측한 것보다 더 많이 덮는다.
+
+    왜도를 맞추면 따라잡히는지 확인하려고 마지막 열에 **이동감마** 근사를 두었다. $W \approx a + b\,\text{Gamma}(k)$로 놓고 평균·분산·왜도 셋을 맞춘 것이다. $n = 30$에서 $0.715$(실제 $0.716$), $n = 100$에서 $0.681$(실제 $0.690$), $n = 1000$에서 $0.674$(실제 $0.673$)로 정규 예측보다 뚜렷이 낫다. **왜도를 넣은 것이 $n$ 의존성의 대부분을 설명한다.**
+
+    다만 $n = 10$에서는 이동감마가 $0.908$을 주어 실제 $0.764$를 크게 넘어선다. 적률 셋으로도 모자란다는 뜻이고, 그 자리에서는 왜도 $3.33$에 대응하는 감마 형상모수가 $k = 4/3.33^2 = 0.36$으로 극단적이어서 근사 자체가 믿을 만하지 않다. **세 적률을 맞춘 근사가 두 적률보다 낫지만 $n = 10$에서는 아직 모자라다**는 것을 숨기지 않고 적어 둔다.
+
+    어느 쪽이든 결론은 같다. $0.764$에서 $0.673$으로 가는 내림세는 **고쳐지는 방향이 아니다.** 카이제곱이 작은 $n$에서 우연히 덜 틀려 보이던 것이 $n$이 커지며 벗겨지는 것이고, 바닥은 $0.673$이다.
 
 **포함률이 표본크기와 함께 내려간다.** $n$이 작을 때는 카이제곱분포 자체가 넓어서 어긋남이 일부 가려지는데, $n$이 커지면 그 완충이 사라지고 첨도로 인한 어긋남만 남는다. 극한값은 정규근사로 계산할 수 있다(연습문제 3).
 

@@ -42,64 +42,124 @@ $B$가 크면 두 방식이 거의 같은 답을 준다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 붓스트랩으로 표준오차 구하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 붓스트랩으로 표준오차 구하기. 가격 관측값 $31$개에 고전적 공식 $s/\sqrt n$과 붓스트랩 두 변형을 모두 적용해 세 숫자를 나란히 놓는다.
+
+**(1)** 붓스트랩 표준오차가 $B \to \infty$에서 **정확히** 무엇으로 수렴하는지 유도하고, 고전적 $s/\sqrt n$과의 비를 구하시오. 두 번째 변형(흩어짐을 원래 표본평균에서 재는 것)의 극한도 함께 구하시오.
+
+**(2)** 실행해 확인하고, 세 숫자 사이의 차이를 **체계적인 몫**과 **우연한 몫**으로 가르시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 붓스트랩의 극한은 정확히 계산된다.** 붓스트랩 표본 $x_1^*, \ldots, x_n^*$은 경험분포 $\hat F_n$에서 **독립으로** 뽑힌다. $\hat F_n$은 관측값 하나하나에 질량 $1/n$을 주는 분포이므로 그 평균과 분산이
 
-# 자료: 가격 관측값 31개.
-data = np.array([
-    245.02, 244.88, 244.76, 244.65, 244.53, 244.42, 244.30,
-    244.18, 244.08, 243.97, 243.85, 243.74, 243.63, 243.52,
-    243.40, 243.28, 243.17, 243.06, 242.95, 242.83, 242.72,
-    242.61, 242.49, 242.38, 242.27, 242.15, 242.04, 241.93,
-    241.81, 241.70, 241.59,
-])
+    $$
+    E_*[X^*] = \bar x, \qquad
+    \operatorname{Var}_*(X^*) = \hat\sigma^2 \equiv \frac1n \sum_{i=1}^n (x_i - \bar x)^2
+    $$
 
-n = len(data)
-n_boot = 10_000     # 붓스트랩 재표본 개수
+    다. **$n-1$이 아니라 $n$으로 나눈 것**이라는 데 주의할 것. 경험분포의 분산은 추정량이 아니라 그 분포의 성질이므로 불편보정이 끼어들 자리가 없다. 독립인 $n$개의 평균이므로
 
-# 고전적 표준오차. s/sqrt(n) 이라는 **공식**에 의존한다.
-se_classical = data.std(ddof=1) / np.sqrt(n)
+    $$
+    \operatorname{Var}_*(\bar X^*) = \frac{\hat\sigma^2}{n}
+    \;\Longrightarrow\;
+    \widehat{\operatorname{SE}}_{\text{boot}} \xrightarrow[B \to \infty]{} \frac{\hat\sigma}{\sqrt n}
+    $$
 
-# 붓스트랩 표준오차. 공식 대신 **재표본추출**로 구한다.
-# 핵심은 replace=True 다. 원자료에서 크기 n짜리를 복원추출하므로
-# 같은 값이 여러 번 뽑히거나 아예 안 뽑히기도 한다.
-# 그 우연이 만들어 내는 표본평균의 흩어짐이 곧 표준오차의 추정이다.
-#
-# 발상은 이렇다. 우리는 모집단에서 표본을 다시 뽑을 수 없다.
-# 그래서 **표본을 모집단인 셈 치고** 거기서 다시 뽑는다.
-boot_means = np.array([
-    np.random.choice(data, size=n, replace=True).mean()
-    for _ in range(n_boot)
-])
-se_bootstrap = boot_means.std(ddof=1)
+    이다. 고전적 공식은 $s/\sqrt n$이고 $\hat\sigma = s\sqrt{(n-1)/n}$이므로 비가
 
-# 같은 양을 조금 다르게 적은 것. 흩어짐을 복제값들 자신의 평균이 아니라
-# 원래 표본평균에서 잰다. B 가 크면 위와 거의 같은 답을 준다.
-sq_errors = np.array([
-    (np.random.choice(data, size=n, replace=True).mean() - data.mean()) ** 2
-    for _ in range(n_boot)
-])
-se_squared_error = np.sqrt(sq_errors.mean())
+    $$
+    \frac{\hat\sigma/\sqrt n}{s/\sqrt n} = \sqrt{\frac{n-1}{n}} = \sqrt{\frac{30}{31}} = 0.98374
+    $$
 
-print(f"Classical SE:       {se_classical:.4f}")
-print(f"Bootstrap SE:       {se_bootstrap:.4f}")
-print(f"Squared-error SE:   {se_squared_error:.4f}")
-```
+    로 **붓스트랩 쪽이 체계적으로 $1.6\%$ 작다.** 이것은 $B$를 아무리 키워도 남는다.
 
-출력:
+    두 번째 변형도 같은 값을 겨냥한다. $E_*[\bar X^*] = \bar x$이므로
 
-```
-Classical SE:       0.1854
-Bootstrap SE:       0.1834
-Squared-error SE:   0.1810
-```
+    $$
+    E_*\!\left[(\bar X^* - \bar x)^2\right] = \operatorname{Var}_*(\bar X^*) = \frac{\hat\sigma^2}{n}
+    $$
+
+    이다. **$\bar x$를 중심으로 재든 복제값들의 평균을 중심으로 재든 극한이 똑같다.** 두 변형 사이의 차이는 전부 몬테카를로 요동이다.
+
+    수를 넣어 보자. $s = 1.032017$, $\hat\sigma = 1.015235$이므로
+
+    $$
+    \frac{s}{\sqrt{31}} = 0.185356, \qquad
+    \frac{\hat\sigma}{\sqrt{31}} = 0.182342
+    $$
+
+    이고, $B = 10{,}000$에서 표준오차 추정값의 몬테카를로 요동은 $0.182342/\sqrt{2B} = 0.001289$다. **그러므로 셋째 자리까지만 의미가 있다.**
+
+    **(2) 실행.**
+
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+
+    # 자료: 가격 관측값 31개.
+    data = np.array([
+        245.02, 244.88, 244.76, 244.65, 244.53, 244.42, 244.30,
+        244.18, 244.08, 243.97, 243.85, 243.74, 243.63, 243.52,
+        243.40, 243.28, 243.17, 243.06, 242.95, 242.83, 242.72,
+        242.61, 242.49, 242.38, 242.27, 242.15, 242.04, 241.93,
+        241.81, 241.70, 241.59,
+    ])
+
+    n = len(data)
+    n_boot = 10_000     # 붓스트랩 재표본 개수
+
+    # 고전적 표준오차. s/sqrt(n) 이라는 **공식**에 의존한다.
+    se_classical = data.std(ddof=1) / np.sqrt(n)
+
+    # 붓스트랩 표준오차. 공식 대신 **재표본추출**로 구한다.
+    # 핵심은 replace=True 다. 원자료에서 크기 n짜리를 복원추출하므로
+    # 같은 값이 여러 번 뽑히거나 아예 안 뽑히기도 한다.
+    # 그 우연이 만들어 내는 표본평균의 흩어짐이 곧 표준오차의 추정이다.
+    #
+    # 발상은 이렇다. 우리는 모집단에서 표본을 다시 뽑을 수 없다.
+    # 그래서 **표본을 모집단인 셈 치고** 거기서 다시 뽑는다.
+    boot_means = np.array([
+        np.random.choice(data, size=n, replace=True).mean()
+        for _ in range(n_boot)
+    ])
+    se_bootstrap = boot_means.std(ddof=1)
+
+    # 같은 양을 조금 다르게 적은 것. 흩어짐을 복제값들 자신의 평균이 아니라
+    # 원래 표본평균에서 잰다. B 가 크면 위와 거의 같은 답을 준다.
+    sq_errors = np.array([
+        (np.random.choice(data, size=n, replace=True).mean() - data.mean()) ** 2
+        for _ in range(n_boot)
+    ])
+    se_squared_error = np.sqrt(sq_errors.mean())
+
+    print(f"Classical SE:       {se_classical:.4f}")
+    print(f"Bootstrap SE:       {se_bootstrap:.4f}")
+    print(f"Squared-error SE:   {se_squared_error:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Classical SE:       0.1854
+    Bootstrap SE:       0.1834
+    Squared-error SE:   0.1810
+    ```
+
+    **셋이 맞는다.** 고전 $0.1854$, 붓스트랩 $0.1834$, 제곱오차판 $0.1810$이다. 차이를 두 몫으로 가른다.
+
+    **체계적인 몫.** 고전과 붓스트랩의 겨냥값 차이가 $0.185356 - 0.182342 = 0.003014$다. 비로는 $0.98374$이고, 이것은 (1)에서 유도한 $\sqrt{30/31}$ 그대로다. **우연이 아니라 $n$으로 나눈 것과 $n-1$으로 나눈 것의 차이**이며, $n$이 커지면 $\sqrt{(n-1)/n} \to 1$로 사라진다. $n = 31$에서 $1.6\%$다.
+
+    **우연한 몫.** 두 붓스트랩 변형은 같은 값 $0.182342$를 겨냥한다. 모의값이 $0.183396$과 $0.180975$로, 겨냥값에서 각각 $+0.001054$와 $-0.001367$ 떨어져 있다. 몬테카를로 요동 $0.001289$ 단위로 $0.82$배와 $1.06$배다. 서로 다른 난수열을 썼으므로 둘의 차 $0.00242$가 요동의 $\sqrt2$배인 $0.00182$의 $1.3$배가 되는 것도 맞는다. **두 변형의 차이는 전부 요동이다.**
+
+    되풀이를 늘려 확인할 수 있다. $B$를 백만 번으로 올리면 두 변형이 모두 $0.1823$ 근처로 모여 극한값 $0.182342$에 붙는다. 반면 고전 $0.185356$과의 $1.6\%$ 차이는 그대로 남는다. **$B$를 키워 없어지는 것과 없어지지 않는 것을 가려 읽는 것이 이 보기의 요점이다.**
+
+    시험은 통과했다. 표본평균처럼 공식을 아는 통계량에서 붓스트랩이 그 공식과 (알려진 보정만큼 다른) 같은 답을 내놓았으니, 공식을 모르는 통계량에서 내놓는 답도 믿어 볼 근거가 생겼다.
+
 
 세 값이 소수점 둘째 자리까지 같다. 공식을 쓴 쪽과 공식 없이 재표집만으로 얻은 쪽이 같은 답에 이르렀다는 뜻이다. 시험은 통과했다.
 
@@ -111,47 +171,122 @@ Squared-error SE:   0.1810
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 분포 시각화
+**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 분포 시각화. 왼쪽은 재표본 1만 개의 평균이 이루는 분포, 오른쪽은 쓰는 자료를 늘려 갈 때 고전적 표준오차가 어떻게 움직이는지를 그린다(보기 1의 변수를 그대로 이어 쓴다).
+
+**(1)** 왼쪽 히스토그램의 중심·폭·모양이 각각 무엇이 되어야 하는지 적고, 오른쪽 회색 점선이 $k = 5,\ 15,\ 31$에서 지나는 값을 구하시오.
+
+**(2)** 그려서 확인하시오. 자료를 섞지 않고 **앞에서부터** 잘랐다면 무엇이 어떻게 달라지는지 수로 보이시오.
 
 </div>
 
-```python
-fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+??? success "풀이"
 
-# 왼쪽: 붓스트랩 분포.
-# 이 히스토그램의 **표준편차**가 곧 붓스트랩 표준오차다.
-# 표집분포를 모의실험으로 만든 것과 모양이 같지만,
-# 모집단이 아니라 표본에서 뽑았다는 점이 다르다.
-ax = axes[0]
-ax.hist(boot_means, bins=40, edgecolor="white", alpha=0.7)
-ax.axvline(data.mean(), color="red", linestyle="--",
-           label=f"Sample mean = {data.mean():.2f}")
-ax.set_xlabel("Bootstrap sample mean")
-ax.set_ylabel("Frequency")
-ax.set_title(f"Bootstrap Distribution (SE = {se_bootstrap:.3f})")
-ax.legend()
+    **(1) 왼쪽 패널.** 재표본평균 $\bar X^*$의 분포이므로 (1)에서 구한 두 적률이 그대로 답이다.
 
-# 오른쪽: 표본 크기에 따른 SE의 변화.
-# 주의. 이 자료는 시간순으로 기록돼 있어 값이 계속 내려간다.
-# data[:k] 로 앞에서부터 자르면 k가 커질수록 s 자체가 커져서
-# SE가 오히려 **늘어난다**. 한 번 무작위로 섞은 뒤 앞에서 k개를 쓴다.
-ax = axes[1]
-shuffled = np.random.default_rng(0).permutation(data)
-sizes = np.arange(5, n + 1)
-se_vals = [shuffled[:k].std(ddof=1) / np.sqrt(k) for k in sizes]
-ax.plot(sizes, se_vals, marker="o", markersize=4, label="observed")
-ax.plot(sizes, data.std(ddof=1) / np.sqrt(sizes), "--", color="gray",
-        label="$s/\\sqrt{n}$")
-ax.set_xlabel("Sample size n")
-ax.set_ylabel("SE (classical)")
-ax.set_title("Standard Error Shrinks Like 1/sqrt(n)")
-ax.legend()
+    $$
+    \text{중심} = \bar x = 243.28742, \qquad
+    \text{폭} = \frac{\hat\sigma}{\sqrt n} = 0.182342
+    $$
 
-plt.tight_layout()
-plt.show()
-```
+    모양도 계산된다. 경험분포의 왜도가 $0.00762$, 첨도가 $\hat\beta_2 = 1.80711$이므로($31$개가 거의 등간격이라 균등분포의 $1.8$에 가깝다) 독립인 $n$개의 평균에 대해
 
-![Standard Error Shrinks Like 1/sqrt(n)](./img/bootstrap_standard_error_91.png)
+    $$
+    \text{왜도}(\bar X^*) = \frac{0.00762}{\sqrt{31}} = 0.00137,
+    \qquad \text{초과첨도}(\bar X^*) = \frac{1.80711 - 3}{31} = -0.0385
+    $$
+
+    다. **거의 정규다.** 재표집이 흉내 내려던 것이 $\bar X$의 표집분포이고, 그 분포가 정규여야 하므로 예상과 맞는다.
+
+    **오른쪽 패널.** 회색 점선은 전체 표본의 $s = 1.032017$을 고정해 둔 $s/\sqrt k$다.
+
+    $$
+    k = 5: \ 0.46153, \qquad k = 15: \ 0.26647, \qquad k = 31: \ 0.18536
+    $$
+
+    파란 곡선은 앞 $k$개만으로 $s$를 다시 재므로 이 점선 주위에서 흔들린다. $k$가 작을 때 흔들림이 크고 $k = 31$에서는 정의상 두 값이 같아진다.
+
+    **(2) 그려서 확인.**
+
+
+    ```python
+    # 보기 1 의 data, n, boot_means, se_bootstrap, plt, np 를 그대로 이어 쓴다.
+    from scipy import stats
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+
+    # 왼쪽: 붓스트랩 분포.
+    # 이 히스토그램의 **표준편차**가 곧 붓스트랩 표준오차다.
+    # 표집분포를 모의실험으로 만든 것과 모양이 같지만,
+    # 모집단이 아니라 표본에서 뽑았다는 점이 다르다.
+    ax = axes[0]
+    ax.hist(boot_means, bins=40, edgecolor="white", alpha=0.7)
+    ax.axvline(data.mean(), color="red", linestyle="--",
+               label=f"Sample mean = {data.mean():.2f}")
+    ax.set_xlabel("Bootstrap sample mean")
+    ax.set_ylabel("Frequency")
+    ax.set_title(f"Bootstrap Distribution (SE = {se_bootstrap:.3f})")
+    ax.legend()
+
+    # 오른쪽: 표본 크기에 따른 SE의 변화.
+    # 주의. 이 자료는 시간순으로 기록돼 있어 값이 계속 내려간다.
+    # data[:k] 로 앞에서부터 자르면 k가 커질수록 s 자체가 커져서
+    # SE가 오히려 **늘어난다**. 한 번 무작위로 섞은 뒤 앞에서 k개를 쓴다.
+    ax = axes[1]
+    shuffled = np.random.default_rng(0).permutation(data)
+    sizes = np.arange(5, n + 1)
+    se_vals = [shuffled[:k].std(ddof=1) / np.sqrt(k) for k in sizes]
+    ax.plot(sizes, se_vals, marker="o", markersize=4, label="observed")
+    ax.plot(sizes, data.std(ddof=1) / np.sqrt(sizes), "--", color="gray",
+            label="$s/\\sqrt{n}$")
+    ax.set_xlabel("Sample size n")
+    ax.set_ylabel("SE (classical)")
+    ax.set_title("Standard Error Shrinks Like 1/sqrt(n)")
+    ax.legend()
+
+    plt.tight_layout()
+    plt.show()
+    # 왼쪽 패널을 수로 읽는다. 중심은 x-bar, 폭은 붓스트랩 표준오차여야 한다.
+    sd_plug = data.std(ddof=0) / np.sqrt(n)
+    print(f"왼쪽  중심  원표본평균 {data.mean():.6f}   붓스트랩 평균 {boot_means.mean():.6f}   (MC오차 {sd_plug / 100:.6f})")
+    print(f"      폭    극한 {sd_plug:.6f}   모의 {se_bootstrap:.6f}   (MC오차 {sd_plug / np.sqrt(20000):.6f})")
+    beta2_hat = stats.kurtosis(data) + 3
+    print(f"      모양  왜도 {stats.skew(boot_means):+.4f} (이론 {stats.skew(data) / np.sqrt(n):+.4f}),  "
+          f"초과첨도 {stats.kurtosis(boot_means):+.4f} (이론 {(beta2_hat - 3) / n:+.4f})")
+
+    # 오른쪽 패널. 섞은 것과 안 섞은 것을 나란히 본다.
+    print("\n  k   섞은 뒤 SE   s/sqrt(k) (전체 s)   섞지 않고 앞에서부터 SE")
+    for k in (5, 10, 15, 20, 31):
+        print(f"{k:>3} {shuffled[:k].std(ddof=1) / np.sqrt(k):>11.4f} "
+              f"{data.std(ddof=1) / np.sqrt(k):>18.4f} {data[:k].std(ddof=1) / np.sqrt(k):>22.4f}")
+    ```
+
+    출력:
+
+    ```
+    왼쪽  중심  원표본평균 243.287419   붓스트랩 평균 243.287386   (MC오차 0.001823)
+          폭    극한 0.182342   모의 0.183396   (MC오차 0.001289)
+          모양  왜도 +0.0289 (이론 +0.0014),  초과첨도 +0.0110 (이론 -0.0385)
+
+      k   섞은 뒤 SE   s/sqrt(k) (전체 s)   섞지 않고 앞에서부터 SE
+      5      0.4665             0.4615                 0.0856
+     10      0.3393             0.3264                 0.1109
+     15      0.2875             0.2665                 0.1318
+     20      0.2356             0.2308                 0.1506
+     31      0.1854             0.1854                 0.1854
+    ```
+
+    ![Standard Error Shrinks Like 1/sqrt(n)](./img/bootstrap_standard_error_91.png)
+
+    **왼쪽 패널의 세 줄이 모두 맞는다.** 붓스트랩 평균 $243.287386$이 원표본평균 $243.287419$에서 $3.3 \times 10^{-5}$ 떨어져 있어 몬테카를로 오차 $0.001823$의 $0.02$배다. **재표집이 중심을 옮기지 않는다**는 $E_*[\bar X^*] = \bar x$가 그대로 확인된 것이고, 그래서 붓스트랩은 편의를 고쳐 주는 도구가 아니라 **퍼짐을 재는** 도구다. 폭은 모의 $0.183396$이 극한 $0.182342$에서 요동 $0.001289$의 $0.82$배다.
+
+    모양도 예상대로다. 왜도 $+0.0289$가 이론 $+0.0014$에서 왜도 추정값의 요동 $\sqrt{6/B} = 0.0245$의 $1.2$배, 초과첨도 $+0.0110$이 이론 $-0.0385$에서 $\sqrt{24/B} = 0.0490$의 $1.0$배 떨어져 있다. **이론값 자체가 $0$에 너무 가까워 1만 번으로는 $0$과 구별되지 않는다.** 히스토그램이 종 모양으로 보이는 것이 그 뜻이다.
+
+    **오른쪽 패널.** 섞은 뒤의 관측값이 $k = 5,\ 15,\ 31$에서 $0.4665$, $0.2875$, $0.1854$이고 회색 점선이 $0.4615$, $0.2665$, $0.1854$다. 작은 $k$에서 위로 조금 벗어나는 것은 그 $k$개로 다시 잰 $s$가 전체 $s$보다 컸다는 뜻이며, $k = 31$에서는 두 값이 정의상 같다. **$1/\sqrt k$ 곡선을 따라 내려간다**는 것이 패널의 전부다.
+
+    **섞지 않았다면.** 마지막 열이 그 경우다. $k = 5$에서 $0.0856$, $k = 31$에서 $0.1854$로 표준오차가 줄기는커녕 **두 배 넘게 늘어난다.** 이 $31$개는 시간순으로 $245.02$에서 $241.59$까지 계속 내려가는 값이고 인접한 차이가 $0.11$–$0.14$로 거의 일정하다. 앞에서부터 $k$개를 자르면 잘라낸 구간의 폭이 $k$에 비례해 넓어지므로 $s$가 $k$에 거의 비례해 커지고, $\sqrt k$로 나눈 뒤에도 $\sqrt k$만큼 커진 채 남는다. 실제로 $0.0856\sqrt{31/5} = 0.213$으로 $0.1854$와 같은 자리다.
+
+    그러므로 **추세가 있는 자료에서 앞에서부터 자르는 것은 표본크기를 키우는 일이 아니라 모집단을 바꾸는 일이다.** $1/\sqrt n$ 법칙은 같은 모집단에서 독립으로 뽑는다는 전제 위의 이야기이고, 그 전제가 깨지면 법칙이 부호까지 뒤집혀 보인다. 코드가 한 번 섞고 나서 쓰는 이유가 이것이다.
+
 
 ## 해석
 

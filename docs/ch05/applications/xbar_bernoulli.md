@@ -62,59 +62,150 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이 모집단에서 표본평균의 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이 모집단에서 표본평균의 표집분포. $p = 0.4,\, 0.5,\, 0.6,\, 0.7$인 베르누이 모집단을 각각 1만 개 만들고, 거기서 $n = 100$씩 비복원으로 뽑아 $\hat p$를 계산하는 일을 1천 번 되풀이한다.
+
+**(1)** 네 경우의 $E[\hat p]$, $\operatorname{SE}(\hat p)$, 왜도를 이론으로 적으시오.
+
+**(2)** 모의실험으로 (1)을 확인하시오. 그리고 $n = 100$에서 정규곡선이 실제 분포와 어긋나는 양을 정확한 이항분포와 견주어 재고, **그 어긋남의 주된 원인이 치우침인지 다른 것인지** 가리시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-np.random.seed(1)
+    **(1) 이론값.** $\hat p$는 $0$과 $1$의 표본평균이므로 $\mu = p$, $\sigma^2 = p(1-p)$를 그대로 넣으면 된다.
 
-n_population = 10_000
-n_sample = 100
-n_sim = 1_000
-p_values = [0.4, 0.5, 0.6, 0.7]
+    $$
+    E[\hat p] = p, \qquad
+    \operatorname{SE}(\hat p) = \sqrt{\frac{p(1-p)}{n}}
+    $$
 
-fig, axes = plt.subplots(1, len(p_values), figsize=(14, 3.5))
+    왜도는 $\gamma_1/\sqrt{n}$ 공식에 베르누이의 왜도 $(1-2p)/\sqrt{p(1-p)}$를 넣어 얻는다.
 
-# p를 0.4에서 0.7까지 바꿔 가며 네 패널을 그린다.
-# 모집단은 0과 1뿐인 가장 비정규적인 분포인데도
-# 표본비율의 표집분포는 어느 p에서나 종 모양이 된다.
-for ax, p in zip(axes, p_values):
-    population = stats.binom(n=1, p=p).rvs(n_population, random_state=1)
+    $$
+    \text{왜도}(\hat p) = \frac{1 - 2p}{\sqrt{n\,p(1-p)}}
+    $$
 
-    # 0/1 자료의 평균이 곧 비율이므로 p-hat 은 표본평균의 한 경우다.
-    p_hat_sims = np.array([
-        np.random.choice(population, size=n_sample, replace=False).mean()
-        for _ in range(n_sim)
-    ])
+    | $p$ | $\operatorname{SE}(\hat p)$ | 왜도$(\hat p)$ |
+    |---|---|---|
+    | 0.4 | $0.04899$ | $+0.04082$ |
+    | 0.5 | $0.05000$ | $0$ |
+    | 0.6 | $0.04899$ | $-0.04082$ |
+    | 0.7 | $0.04583$ | $-0.08729$ |
 
-    # 모의실험으로 얻은 값들의 히스토그램.
-    _, bins, _ = ax.hist(p_hat_sims, density=True, bins=15,
-                         alpha=0.5, edgecolor="white",
-                         label=r"simulated $\hat{p}$")
+    왜도가 넷 다 $\lvert \cdot \rvert \le 0.09$로 아주 작다. **$n = 100$에서 치우침은 사실상 없다**는 예측이다. 그렇다면 정규곡선이 어긋날 자리도 없어야 할 텐데, 꼭 그렇지는 않다. 남은 것이 하나 있다.
 
-    # 정규근사를 겹쳐 그린다.
-    # 베르누이의 분산이 p(1-p) 이므로 표준오차는 sqrt(p(1-p)/n) 이다.
-    # 이 값은 p = 0.5 에서 최대가 되고 0이나 1에 가까울수록 작아진다.
-    # 네 패널의 폭이 조금씩 다른 이유가 그것이다.
-    se = np.sqrt(p * (1 - p) / n_sample)
-    x_grid = np.linspace(bins[0], bins[-1], 200)
-    pdf = stats.norm(loc=p, scale=se).pdf(x_grid)
-    ax.plot(x_grid, pdf, "--r", lw=2, alpha=0.7, label="Normal approx.")
-    ax.set_title(f"p = {p}")
-    ax.set_xlabel(r"$\hat{p}$")
+    $n\hat p \sim \text{Binomial}(n, p)$이므로 $\hat p$의 정확한 분포는 $0,\, 0.01,\, 0.02,\, \ldots,\, 1$에만 확률이 얹힌 **이산분포**다. 정규곡선은 연속이다. 이 두 가지를 누적분포로 견주면 어긋남의 크기가 곧바로 나오는데, 격자점 $k/n$ 바로 아래에서 정규누적분포는 그 점의 확률을 절반쯤만 세므로 어긋남이 대략
 
-axes[0].set_ylabel("Density")
-axes[-1].legend(fontsize=8)
-plt.tight_layout()
-plt.show()
-```
+    $$
+    \frac{1}{2} \max_k P(n\hat p = k) \approx \frac{1}{2} \cdot \frac{0.3989}{\sqrt{n p (1-p)}}
+    $$
 
-![성공확률에 따른 표본비율의 표집분포](./img/xbar_bernoulli_60.png)
+    이 된다. $p = 0.5$, $n = 100$이면 $0.3989/(2 \times 5) = 0.0399$다. 이것은 치우침과 아무 상관이 없고 **$1/\sqrt{n}$으로만 줄어든다.** 격자를 반 칸 밀어 주는 연속성 보정을 넣으면 사라진다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    np.random.seed(1)
+
+    n_population = 10_000
+    n_sample = 100
+    n_sim = 1_000
+    p_values = [0.4, 0.5, 0.6, 0.7]
+
+    fig, axes = plt.subplots(1, len(p_values), figsize=(14, 3.5))
+
+    # 유한모집단 수정. 1만 개에서 100 개를 비복원으로 뽑으므로 폭이 조금 줄어든다.
+    fpc = np.sqrt((n_population - n_sample) / (n_population - 1))
+    print(f"유한모집단 수정 = {fpc:.5f}")
+    print("  p   실현비율   이론 SE   겨냥 SE   모의 평균   모의 표준편차   MC오차(평균/표준편차)")
+
+    # p를 0.4에서 0.7까지 바꿔 가며 네 패널을 그린다.
+    # 모집단은 0과 1뿐인 가장 비정규적인 분포인데도
+    # 표본비율의 표집분포는 어느 p에서나 종 모양이 된다.
+    for ax, p in zip(axes, p_values):
+        population = stats.binom(n=1, p=p).rvs(n_population, random_state=1)
+
+        # 0/1 자료의 평균이 곧 비율이므로 p-hat 은 표본평균의 한 경우다.
+        p_hat_sims = np.array([
+            np.random.choice(population, size=n_sample, replace=False).mean()
+            for _ in range(n_sim)
+        ])
+
+        # 이론값과 모의값을 나란히 적는다. 비복원이므로 겨냥하는 것은 명목 p 가 아니라
+        # 실현된 1만 개의 비율이고, 거기에 유한모집단 수정이 붙는다.
+        p_real = population.mean()
+        se = np.sqrt(p * (1 - p) / n_sample)
+        se_target = np.sqrt(p_real * (1 - p_real) / n_sample) * fpc
+        print(f"{p:.1f}    {p_real:.4f}    {se:.4f}    {se_target:.4f}    {p_hat_sims.mean():.4f}      "
+              f"{p_hat_sims.std(ddof=1):.4f}        {se_target / np.sqrt(n_sim):.4f} / {se_target / np.sqrt(2 * n_sim):.4f}")
+
+        # 모의실험으로 얻은 값들의 히스토그램.
+        _, bins, _ = ax.hist(p_hat_sims, density=True, bins=15,
+                             alpha=0.5, edgecolor="white",
+                             label=r"simulated $\hat{p}$")
+
+        # 정규근사를 겹쳐 그린다.
+        # 베르누이의 분산이 p(1-p) 이므로 표준오차는 sqrt(p(1-p)/n) 이다.
+        # 이 값은 p = 0.5 에서 최대가 되고 0이나 1에 가까울수록 작아진다.
+        # 네 패널의 폭이 조금씩 다른 이유가 그것이다.
+        se = np.sqrt(p * (1 - p) / n_sample)
+        x_grid = np.linspace(bins[0], bins[-1], 200)
+        pdf = stats.norm(loc=p, scale=se).pdf(x_grid)
+        ax.plot(x_grid, pdf, "--r", lw=2, alpha=0.7, label="Normal approx.")
+        ax.set_title(f"p = {p}")
+        ax.set_xlabel(r"$\hat{p}$")
+
+    axes[0].set_ylabel("Density")
+    axes[-1].legend(fontsize=8)
+    plt.tight_layout()
+    plt.show()
+
+    # 근사의 오차를 정확한 이항분포와 견주어 잰다. 모의실험이 아니라 닫힌 꼴 계산이다.
+    print("\n  p   최대 |F_binom - F_normal|   보정 후   왜도     최빈값 확률/2   P(p-hat >= 0.5) 정확 / 근사 / 보정")
+    for p in p_values:
+        k = np.arange(n_sample + 1)
+        sd = np.sqrt(p * (1 - p) / n_sample)
+        f_binom = stats.binom.cdf(k, n_sample, p)
+        f_normal = stats.norm.cdf(k / n_sample, loc=p, scale=sd)
+        f_corrected = stats.norm.cdf((k + 0.5) / n_sample, loc=p, scale=sd)
+        print(f"{p:.1f}        {np.abs(f_binom - f_normal).max():.5f}            {np.abs(f_binom - f_corrected).max():.5f}"
+              f"   {(1 - 2 * p) / np.sqrt(n_sample * p * (1 - p)):+.5f}   {stats.binom.pmf(k, n_sample, p).max() / 2:.5f}"
+              f"     {stats.binom.sf(49, n_sample, p):.6f} / {stats.norm.sf(0.5, loc=p, scale=sd):.6f} / {stats.norm.sf(0.495, loc=p, scale=sd):.6f}")
+    ```
+
+    출력:
+
+    ```
+    유한모집단 수정 = 0.99504
+      p   실현비율   이론 SE   겨냥 SE   모의 평균   모의 표준편차   MC오차(평균/표준편차)
+    0.4    0.3942    0.0490    0.0486    0.3909      0.0479        0.0015 / 0.0011
+    0.5    0.5010    0.0500    0.0498    0.5016      0.0503        0.0016 / 0.0011
+    0.6    0.6058    0.0490    0.0486    0.6038      0.0494        0.0015 / 0.0011
+    0.7    0.7049    0.0458    0.0454    0.7058      0.0460        0.0014 / 0.0010
+
+      p   최대 |F_binom - F_normal|   보정 후   왜도     최빈값 확률/2   P(p-hat >= 0.5) 정확 / 근사 / 보정
+    0.4        0.04329            0.00272   +0.04082   0.04061     0.027099 / 0.020613 / 0.026240
+    0.5        0.03979            0.00027   +0.00000   0.03979     0.539795 / 0.500000 / 0.539828
+    0.6        0.03792            0.00272   -0.04082   0.04061     0.983238 / 0.979387 / 0.983956
+    0.7        0.03766            0.00578   -0.08729   0.04339     0.999991 / 0.999994 / 0.999996
+    ```
+
+    ![성공확률에 따른 표본비율의 표집분포](./img/xbar_bernoulli_60.png)
+
+    **중심과 폭.** 비복원으로 뽑으므로 겨냥값은 명목 $p$가 아니라 실현된 1만 개의 비율이다. $p = 0.4$를 주문했는데 실제로 만들어진 모집단의 비율은 $0.3942$이고, 모의 평균 $0.3909$는 거기서 몬테카를로 오차 $0.0015$의 $2.2$배만큼 떨어져 있다. 나머지 셋은 각각 $0.4$배, $1.3$배, $0.6$배다. 폭도 네 경우 모두 겨냥 SE에서 표준편차의 몬테카를로 오차 $0.0011$의 $0.6$배, $0.5$배, $0.7$배, $0.6$배 안에 든다. **이론이 준 네 숫자가 그대로 재현된다.**
+
+    되풀이가 1천 번뿐이라 오차가 앞 쪽들보다 세 배 크다. $p = 0.4$에서 평균이 $2.2$ 오차만큼 비껴난 것은 그 때문이고, 되풀이를 늘리면 줄어든다.
+
+    **어긋남의 원인 가리기 — 이것이 (2)의 본론이다.** 아래 표의 셋째 열에 적힌 왜도는 넷 다 $0.09$ 아래다. 그런데 정확한 이항 누적분포와 정규 누적분포의 차는 $0.038$–$0.043$으로, 왜도로 설명될 크기가 전혀 아니다. 범인은 다음 열이 가리킨다. **최빈값 확률의 절반**이 $0.0406$, $0.0398$, $0.0406$, $0.0434$로 어긋남과 거의 같은 값이다. $p = 0.5$에서는 $0.03979$로 소수 다섯째 자리까지 일치한다.
+
+    곧 어긋남은 치우침이 아니라 **이산성**이다. 연속성 보정을 넣으면 $0.04$대였던 차가 $0.00027$–$0.00578$로 한 자리에서 두 자리 줄어든다. 남은 것이 비로소 치우침 몫이며, 왜도가 가장 큰 $p = 0.7$에서 $0.00578$로 가장 크다는 순서까지 맞는다.
+
+    마지막 열이 이 구별을 한눈에 보여 준다. $p = 0.5$에서 $P(\hat p \ge 0.5)$는 정확히 $0.539795$다. $\hat p = 0.5$라는 점 하나에만 확률 $0.0796$이 얹혀 있고 그것을 전부 세기 때문이다. 정규근사는 $0.5$를 주어 $0.0398$만큼 틀리고, 보정을 넣으면 $0.539828$이 되어 넷째 자리까지 맞는다. **분포가 종 모양으로 보이는 것과 확률을 바르게 주는 것은 다른 문제다.** 그림의 네 패널에서 히스토그램과 붉은 곡선이 잘 겹쳐 보이는 것은 15 개 구간으로 묶어 격자를 지워 놓았기 때문이기도 하다.
+
 
 ## 네 패널이 말해 주는 것
 

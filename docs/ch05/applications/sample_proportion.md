@@ -178,50 +178,126 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 표본비율의 표집분포 모의실험
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표본비율의 표집분포 모의실험. $p = 0.4$인 베르누이 모집단 10만 개에서 $n = 1000$씩 비복원으로 뽑아 $\hat p$를 계산하는 일을 1만 번 되풀이한다.
+
+**(1)** $E[\hat p]$, $\operatorname{SE}(\hat p)$, 왜도, 초과첨도를 이론으로 적으시오.
+
+**(2)** (1)의 네 값이 모두 맞는다면 정규근사가 완벽한가. 아직 남아 있는 어긋남이 무엇이고 그 크기가 얼마인지 어림한 뒤, 모의실험으로 전부 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(1)
+    **(1) 이론값.** $\hat p$는 $0/1$ 자료의 표본평균이므로 베르누이의 $\mu = p$, $\sigma^2 = pq$를 그대로 쓴다.
 
-# 모집단은 0과 1 두 값뿐인 베르누이다. binom(n=1)이 곧 베르누이다.
-population = stats.binom(n=1, p=0.4).rvs(100_000)
-sample_size = 1_000
-n_samples = 10_000
+    $$
+    E[\hat p] = p = 0.4, \qquad
+    \operatorname{SE}(\hat p) = \sqrt{\frac{pq}{n}} = \sqrt{\frac{0.24}{1000}} = 0.0154919
+    $$
 
-# 0/1 자료의 평균이 곧 비율이다. 그래서 p-hat 은 특별한 통계량이 아니라
-# **표본평균의 한 경우**이며, 중심극한정리가 그대로 적용된다.
-sample_proportions = [
-    np.mean(np.random.choice(population, size=sample_size, replace=False))
-    for _ in range(n_samples)
-]
+    모양은 베르누이의 왜도 $(q-p)/\sqrt{pq}$와 초과첨도 $(1-6pq)/(pq)$를 각각 $\sqrt{n}$과 $n$으로 나눠 얻는다.
 
-# 이 그림의 요점은 위아래의 **모양 차이**다.
-# 모집단은 막대 두 개뿐인 가장 극단적인 비정규 분포인데,
-# 표본비율의 표집분포는 매끄러운 종 모양이 된다.
-fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
+    $$
+    \text{왜도}(\hat p) = \frac{1-2p}{\sqrt{npq}} = \frac{0.2}{15.4919} = 0.012910,
+    \qquad
+    \text{초과첨도}(\hat p) = \frac{1-6pq}{npq} = \frac{-0.44}{240} = -0.0018333
+    $$
 
-# bins=3 인 이유: 값이 0과 1뿐이라 구간을 잘게 나눌 필요가 없다.
-ax0.hist(population, bins=3, density=True, alpha=0.5)
-ax0.set_title('Population Distribution (Bernoulli, p = 0.4)', fontsize=16)
+    **둘 다 $0$에 붙어 있다.** $np = 400$, $n(1-p) = 600$으로 $5$든 $10$이든 넉넉히 넘고, 치우침은 $0.013$밖에 남지 않았다. 비복원으로 뽑으므로 겨냥값에는 유한모집단 수정 $\sqrt{(10^5 - 10^3)/(10^5-1)} = 0.99499$이 붙는다.
 
-ax1.hist(sample_proportions, bins=50, density=True, alpha=0.5)
-ax1.set_title(rf'Sampling Distribution of $\hat{{p}}$ (n = {sample_size})', fontsize=16)
+    **(2) 아직 남은 것 — 이산성.** 네 적률이 다 맞아도 정규근사는 완벽하지 않다. $n\hat p \sim \text{Binomial}(1000, 0.4)$이므로 $\hat p$는 $0.001$ 간격의 격자에만 확률이 얹힌 **이산분포**이고, 정규곡선은 연속이다. 격자점 바로 아래에서 정규누적분포는 그 점의 확률을 절반쯤만 세므로 누적분포의 어긋남이 대략
 
-for ax in (ax0, ax1):
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    $$
+    \frac12 \max_k P(n\hat p = k) \approx \frac{1}{2\sqrt{2\pi n p q}}
+    = \frac{0.39894}{2 \times 15.4919} = 0.012876
+    $$
 
-plt.tight_layout()
-plt.show()
-```
+    이 된다. 이것은 **치우침과 무관하고 $1/\sqrt{n}$으로만 줄어든다.** 같은 계산을 $n = 100$에서 하면 $0.0407$이니, 표본을 열 배 키워 어긋남이 $\sqrt{10} = 3.16$배 줄어든 셈이다. 연속성 보정으로 격자를 반 칸 밀면 사라진다.
 
-![베르누이 모집단과 표본비율의 표집분포](./img/sample_proportion_183.png)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(1)
+
+    # 모집단은 0과 1 두 값뿐인 베르누이다. binom(n=1)이 곧 베르누이다.
+    population = stats.binom(n=1, p=0.4).rvs(100_000)
+    sample_size = 1_000
+    n_samples = 10_000
+
+    # 0/1 자료의 평균이 곧 비율이다. 그래서 p-hat 은 특별한 통계량이 아니라
+    # **표본평균의 한 경우**이며, 중심극한정리가 그대로 적용된다.
+    sample_proportions = [
+        np.mean(np.random.choice(population, size=sample_size, replace=False))
+        for _ in range(n_samples)
+    ]
+    sample_proportions = np.asarray(sample_proportions)
+
+    # 이론값과 모의값을 나란히 둔다. 비복원이므로 겨냥값은 실현된 10만 개의 비율이고,
+    # 유한모집단 수정 sqrt((N-n)/(N-1)) 이 붙는다.
+    p, n, N = 0.4, sample_size, len(population)
+    p_real = population.mean()
+    fpc = np.sqrt((N - n) / (N - 1))
+    se_nom = np.sqrt(p * (1 - p) / n)
+    se_target = np.sqrt(p_real * (1 - p_real) / n) * fpc
+    print(f"명목 p = {p},  np = {n * p:.0f},  n(1-p) = {n * (1 - p):.0f}   (5/10 기준을 넉넉히 넘는다)")
+    print(f"SE  명목 {se_nom:.6f}   유한모집단 수정 {fpc:.5f} 적용한 겨냥값 {se_target:.6f}")
+    print(f"평균  실현 모집단 {p_real:.6f}   모의 {sample_proportions.mean():.6f}   (MC오차 {se_target / np.sqrt(n_samples):.6f})")
+    print(f"표준편차  겨냥 {se_target:.6f}   모의 {sample_proportions.std(ddof=1):.6f}   (MC오차 {se_target / np.sqrt(2 * n_samples):.6f})")
+    print(f"왜도    이론 {(1 - 2 * p) / np.sqrt(n * p * (1 - p)):+.6f}   모의 {stats.skew(sample_proportions):+.6f}")
+    print(f"초과첨도 이론 {(1 - 6 * p * (1 - p)) / (n * p * (1 - p)):+.6f}   모의 {stats.kurtosis(sample_proportions):+.6f}")
+
+    # 남은 어긋남은 이산성뿐이다. 이항분포와 정규의 누적분포를 직접 견준다.
+    k = np.arange(n + 1)
+    f_binom = stats.binom.cdf(k, n, p)
+    f_normal = stats.norm.cdf(k / n, loc=p, scale=se_nom)
+    f_corrected = stats.norm.cdf((k + 0.5) / n, loc=p, scale=se_nom)
+    print(f"최대 |F_binom - F_normal| = {np.abs(f_binom - f_normal).max():.5f}  "
+          f"(최빈값 확률의 절반 {stats.binom.pmf(k, n, p).max() / 2:.5f}),  연속성 보정 후 {np.abs(f_binom - f_corrected).max():.5f}")
+
+    # 이 그림의 요점은 위아래의 **모양 차이**다.
+    # 모집단은 막대 두 개뿐인 가장 극단적인 비정규 분포인데,
+    # 표본비율의 표집분포는 매끄러운 종 모양이 된다.
+    fig, (ax0, ax1) = plt.subplots(2, 1, figsize=(12, 6))
+
+    # bins=3 인 이유: 값이 0과 1뿐이라 구간을 잘게 나눌 필요가 없다.
+    ax0.hist(population, bins=3, density=True, alpha=0.5)
+    ax0.set_title('Population Distribution (Bernoulli, p = 0.4)', fontsize=16)
+
+    ax1.hist(sample_proportions, bins=50, density=True, alpha=0.5)
+    ax1.set_title(rf'Sampling Distribution of $\hat{{p}}$ (n = {sample_size})', fontsize=16)
+
+    for ax in (ax0, ax1):
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    명목 p = 0.4,  np = 400,  n(1-p) = 600   (5/10 기준을 넉넉히 넘는다)
+    SE  명목 0.015492   유한모집단 수정 0.99499 적용한 겨냥값 0.015411
+    평균  실현 모집단 0.399420   모의 0.399186   (MC오차 0.000154)
+    표준편차  겨냥 0.015411   모의 0.015489   (MC오차 0.000109)
+    왜도    이론 +0.012910   모의 +0.041087
+    초과첨도 이론 -0.001833   모의 +0.097581
+    최대 |F_binom - F_normal| = 0.01373  (최빈값 확률의 절반 0.01287),  연속성 보정 후 0.00086
+    ```
+
+    ![베르누이 모집단과 표본비율의 표집분포](./img/sample_proportion_183.png)
+
+    **중심과 폭.** 비복원으로 뽑았으니 겨냥값은 명목 $0.4$가 아니라 실현된 10만 개의 비율 $0.399420$이다. 모의 평균 $0.399186$이 거기서 몬테카를로 오차 $0.000154$의 $1.5$배, 모의 표준편차 $0.015489$가 겨냥 $0.015411$에서 오차 $0.000109$의 $0.7$배 떨어져 있다. 둘 다 맞는다.
+
+    **모양.** 모의 왜도 $+0.041$이 이론 $+0.013$에서 왜도의 몬테카를로 오차 $\sqrt{6/B} = 0.0245$의 $1.2$배, 모의 초과첨도 $+0.098$이 이론 $-0.002$에서 $\sqrt{24/B} = 0.049$의 $2.0$배 떨어져 있다. **이론값이 $0$에 너무 가까워서 1만 번의 모의실험으로는 $0$과 구별할 수가 없다.** 이것이 이 쪽이 말하려는 바로 그 결론이다. 위 패널은 막대 두 개뿐인 가장 비정규적인 모집단인데 아래 패널은 종 모양과 구별되지 않는다.
+
+    **그래도 완벽은 아니다.** 마지막 줄을 보라. 정확한 이항 누적분포와 정규 누적분포의 차가 최대 $0.01373$이고, 이것은 모양이 아니라 **이산성** 몫이다. (1)에서 어림한 $0.012876$과, 실제 최빈값 확률의 절반 $0.01287$이 거의 같은 값을 주며, 어림한 쪽이 실제보다 $6\%$ 작은 것은 격자가 조금 밀려 있어서다. 연속성 보정을 넣으면 $0.00086$으로 **16배** 줄어든다.
+
+    정리하면 $n = 1000$에서 치우침은 $0.013$, 초과첨도는 $-0.002$로 사실상 없어졌고, 남은 어긋남은 $0.013$짜리 이산성 하나뿐이며 그것도 보정 한 줄로 지울 수 있다. 꼬리의 상대오차는 다른 이야기이므로 극단적인 $p$를 다룰 때는 이 결론을 그대로 옮기지 말아야 한다. 그 경우는 바로 아래에서 다룬다.
+
 
 ## 근사를 버려야 할 때
 

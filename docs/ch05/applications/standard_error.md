@@ -161,78 +161,105 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 표준오차를 한 파일로 구하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 표준오차를 한 파일로 구하기. $\text{Uniform}(0,1)$에서 $n = 5$인 표본을 1만 번 뽑아 표본평균 1만 개를 모으고, 그 평균과 표준편차를 재어 표준오차의 **정의**를 그대로 실행한다.
+
+**(1)** 코드가 내놓을 두 숫자를 이론으로 미리 적으시오.
+
+**(2)** 실행해 확인하고, 그림에서 양방향 화살표가 가리키는 폭이 분포의 어느 정도를 가두는지 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
-plt.rcParams['axes.unicode_minus'] = False
+    **(1) 이론값.** $\text{Uniform}(0,1)$은 $\mu = 1/2$, $\sigma = 1/\sqrt{12}$이므로
 
-np.random.seed(0)
+    $$
+    E[\bar X] = 0.5, \qquad
+    \operatorname{SE}(\bar X) = \frac{\sigma}{\sqrt n} = \frac{1}{\sqrt{60}} = 0.129099
+    $$
 
-def main():
-    # 크기 5짜리 균등표본을 1만 번 뽑아 표본평균을 모은다.
-    X_bar = []
-    for _ in range(10_000):
-        x = np.random.uniform(size=(5,))
-        x_bar = x.mean()
-        X_bar.append(x_bar)
+    이다. 1만 번 되풀이할 때 이 두 추정값이 흔들리는 폭은 각각 $\operatorname{SE}/\sqrt{B} = 0.001291$과 $\operatorname{SE}/\sqrt{2B} = 0.000913$이므로, **소수 셋째 자리까지만 맞기를 기대해야 한다.**
 
-    # 표준오차의 정의를 그대로 실행한 것이 아래 두 줄이다.
-    #   average        = 표집분포의 중심 (참 mu = 0.5 의 좋은 추정)
-    #   standard_error = 표집분포의 표준편차 <- 이것이 표준오차다
-    # 즉 표준오차는 새로운 개념이 아니라, 통계량의 분포에 대한 표준편차다.
-    # 현실에서는 표본이 하나뿐이라 이렇게 구할 수 없어 공식 s/sqrt(n) 을 쓴다.
-    X_bar = np.array(X_bar)
-    average = X_bar.mean()
-    standard_error = X_bar.std()
+    화살표가 가두는 확률은 $n = 5$에서 정확히 $0.6724$다([표본평균 쪽의 보기 7](sample_mean.md)에서 어윈-홀 분포로 계산했다). 정규분포의 $0.6827$보다 $0.0103$ 작다.
 
-    print(f'표본평균의 표집분포 중심 : {average:.4}')
-    print(f'표본평균의 표준오차      : {standard_error:.4}')
+    **(2) 실행.**
 
-    fig, ax = plt.subplots(figsize=(12, 3))
-    # 한글은 $...$ 바깥에 둔다. 수식 글꼴에는 한글 글리프가 없다.
-    ax.set_title(r'표본평균 $\bar X$ 의 표집분포', fontsize=20)
 
-    ax.hist(X_bar, bins=100, density=True, alpha=0.3)
-    ax.vlines(average, ymin=0, ymax=5, alpha=1.0, color='k', ls='-', lw=5)
-    ax.vlines(average + standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
-    ax.vlines(average - standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
 
-    # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
-    # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
-    ax.annotate('', xy=(average, 5), xytext=(average + standard_error, 5),
-                arrowprops=dict(arrowstyle='<->', color='k', linewidth=3,
-                                mutation_scale=20))
-    ax.text(average, 5.5, '표준오차', fontsize=15)
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
 
-    ax.set_xlim(0.0, 1.0)
-    ax.set_ylim(-0.1, 6)
+    np.random.seed(0)
 
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
+    def main():
+        # 크기 5짜리 균등표본을 1만 번 뽑아 표본평균을 모은다.
+        X_bar = []
+        for _ in range(10_000):
+            x = np.random.uniform(size=(5,))
+            x_bar = x.mean()
+            X_bar.append(x_bar)
 
-    plt.show()
+        # 표준오차의 정의를 그대로 실행한 것이 아래 두 줄이다.
+        #   average        = 표집분포의 중심 (참 mu = 0.5 의 좋은 추정)
+        #   standard_error = 표집분포의 표준편차 <- 이것이 표준오차다
+        # 즉 표준오차는 새로운 개념이 아니라, 통계량의 분포에 대한 표준편차다.
+        # 현실에서는 표본이 하나뿐이라 이렇게 구할 수 없어 공식 s/sqrt(n) 을 쓴다.
+        X_bar = np.array(X_bar)
+        average = X_bar.mean()
+        standard_error = X_bar.std()
 
-if __name__ == "__main__":
-    main()
-```
+        print(f'표본평균의 표집분포 중심 : {average:.4}')
+        print(f'표본평균의 표준오차      : {standard_error:.4}')
 
-출력:
+        fig, ax = plt.subplots(figsize=(12, 3))
+        # 한글은 $...$ 바깥에 둔다. 수식 글꼴에는 한글 글리프가 없다.
+        ax.set_title(r'표본평균 $\bar X$ 의 표집분포', fontsize=20)
 
-```
-표본평균의 표집분포 중심 : 0.4981
-표본평균의 표준오차      : 0.1287
-```
+        ax.hist(X_bar, bins=100, density=True, alpha=0.3)
+        ax.vlines(average, ymin=0, ymax=5, alpha=1.0, color='k', ls='-', lw=5)
+        ax.vlines(average + standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
+        ax.vlines(average - standard_error, ymin=0, ymax=5, alpha=0.7, color='k', ls='--')
 
-![표본평균의 표집분포](./img/se_xbar_single_file.png)
+        # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
+        # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
+        ax.annotate('', xy=(average, 5), xytext=(average + standard_error, 5),
+                    arrowprops=dict(arrowstyle='<->', color='k', linewidth=3,
+                                    mutation_scale=20))
+        ax.text(average, 5.5, '표준오차', fontsize=15)
+
+        ax.set_xlim(0.0, 1.0)
+        ax.set_ylim(-0.1, 6)
+
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+
+        plt.show()
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    표본평균의 표집분포 중심 : 0.4981
+    표본평균의 표준오차      : 0.1287
+    ```
+
+    ![표본평균의 표집분포](./img/se_xbar_single_file.png)
+
+    **두 숫자가 띠 안에 든다.** 중심 $0.4981$이 $0.5$에서 $0.0019$ 떨어져 있어 몬테카를로 오차 $0.001291$의 $1.47$배, 표준오차 $0.1287$이 $0.129099$에서 $0.0004$ 떨어져 있어 $0.000913$의 $0.44$배다. **표준오차는 새로 배울 개념이 아니라 "통계량 값을 잔뜩 모아 잰 표준편차"**라는 것이 이 두 줄의 내용이다.
+
+    **화살표의 폭.** 평균에서 한 표준오차까지가 화살표이고, 양쪽을 합한 구간 $[\bar X - \operatorname{SE},\ \bar X + \operatorname{SE}]$이 가두는 확률은 $0.6724$다. 정규분포라면 $0.6827$이니 $1$ 퍼센트포인트 작다. $n = 5$의 균등 표본평균은 꼬리가 정규보다 짧아($\bar X$의 초과첨도 $-0.24$) 한 표준오차 안에 든 질량이 오히려 **적다.**
+
+    현실에서는 이 그림을 그릴 수 없다는 점을 잊지 말아야 한다. 표본은 한 번만 뽑히므로 $\bar X$ 값 하나밖에 손에 없고, 1만 개를 모아 표준편차를 재는 일은 불가능하다. $s/\sqrt n$이라는 공식이 **이 그림을 대신하는 장치**다.
+
 
 ## 같은 코드를 파일 둘로 나눈다면
 
@@ -240,112 +267,183 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 공유 설정 모듈 — `global_name_space.py`
+**보기 2.** <span class="diff easy" title="쉬움"></span> 공유 설정 모듈 — `global_name_space.py`. 난수 씨앗과 그림 설정만 담은 파일이다. 계산도 그림도 없다.
+
+**(1)** 계산이 하나도 없는 이 파일이 어떻게 뒤의 두 파일을 재현 가능하게 만드는지, 그 구조를 설명하시오.
+
+**(2)** `from global_name_space import ARGS`에서 `ARGS`라는 이름을 실제로 쓰지 않는데도 이 줄이 반드시 있어야 하는 까닭을 말하고, 이 방식이 깨지는 경우를 하나 들으시오.
 
 </div>
 
-```python
-import argparse
+??? success "풀이"
 
-import matplotlib.pyplot as plt
-import numpy as np
+    **유도할 식이 없는 보기다.** 여기서 읽을 것은 수가 아니라 **구조**다.
 
-# 이 파일은 여러 스크립트가 공유하는 설정을 한곳에 모아 두는 용도다.
-# 다른 모듈에서 `from global_name_space import ARGS` 로 가져다 쓴다.
-parser = argparse.ArgumentParser(description='Standard error simulation')
-parser.add_argument('--seed', type=int, default=1, metavar='S',
-                    help='random seed (default: 1)')
-ARGS = parser.parse_args()
+    **(1) import 가 곧 실행이다.** 파이썬에서 모듈을 처음 가져오면 그 파일의 최상위 문장이 전부 **한 번** 실행된다. 이 파일의 최상위에는 세 가지가 있다.
 
-# 시드를 여기서 한 번만 고정하면 이 설정을 가져다 쓰는 모든 스크립트가
-# 같은 난수열을 쓰게 되어 결과가 재현된다.
-np.random.seed(ARGS.seed)
+    1. `ARGS = parser.parse_args()` — 명령줄을 읽어 `--seed` 값을 정한다.
+    2. `np.random.seed(ARGS.seed)` — 전역 난수 상태를 그 값으로 고정한다.
+    3. `plt.rcParams[...] = ...` — 글꼴과 마이너스 기호 설정을 바꾼다.
 
-# 그림 설정도 여기 모아 둔다. 이 파일을 가져다 쓰는 스크립트는 글꼴을
-# 따로 손대지 않아도 된다.
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
-plt.rcParams['axes.unicode_minus'] = False
-```
+    그러므로 **이 파일을 가져오는 행위 자체가 "씨앗 고정 + 그림 설정"을 수행한다.** 뒤의 두 파일은 `np.random.seed`를 한 줄도 쓰지 않는데도 재현 가능한 결과를 내는데, 그 일을 여기서 대신 해 주기 때문이다.
+
+    씨앗을 **한 곳에서 한 번만** 정한다는 점이 핵심이다. 파일마다 `np.random.seed(1)`을 적어 두면 어느 한 곳을 고치는 순간 조용히 어긋나기 시작한다. 모듈 하나로 모아 두면 그럴 수 없다. 설정이 여러 군데 흩어지지 않게 한다는 뜻에서 **단일 진실 공급원**을 둔 것이다.
+
+    **(2) 쓰이지 않는 이름을 가져오는 까닭.** `from global_name_space import ARGS`라고 적으면 린터는 "쓰지 않는 import"라고 경고할 것이다. 그러나 이 줄을 지우면 모듈이 아예 로드되지 않고, 따라서 **씨앗도 글꼴도 적용되지 않는다.** 가져오는 이름이 아니라 **가져오는 행위**가 목적인 import다. 이런 것을 부작용을 노린 import 라 부르며, 드물지만 설정 모듈에서는 흔한 관용이다.
+
+    같은 이유로 `import global_name_space`라고만 적어도 효과는 같다. `ARGS`를 명시하는 것은 "이 파일이 설정을 들고 있다"는 신호를 코드에 남기려는 선택이다.
+
+    **깨지는 경우.** `parse_args()`를 모듈 최상위에서 부르는 것이 값이다. 이 파서는 `--seed`만 알고 있으므로, **이 모듈을 가져오는 어떤 프로그램이든 자기 명령줄 인자를 그 파서에 내주게 된다.**
+
+    ```
+    $ python standard_error_of_s_square.py --bins 50
+    usage: standard_error_of_s_square.py [-h] [--seed S]
+    standard_error_of_s_square.py: error: unrecognized arguments: --bins 50
+    ```
+
+    `standard_error_of_s_square.py`는 `--bins`라는 옵션을 알지 못하지만, 그 오류를 내는 주체도 그 파일이 아니다. `global_name_space`가 가진 파서다. 같은 이유로 `pytest`나 주피터에서 이 모듈을 가져오면 그쪽의 명령줄 인자를 읽으려 들어 `SystemExit`로 죽는다.
+
+    고치는 방법은 파싱을 함수 안으로 내리고(`def get_args(): ...`) 호출 시점을 `if __name__ == "__main__":` 안으로 옮기는 것이다. 다만 그러면 씨앗 고정도 명시적으로 불러야 하므로 "가져오기만 하면 설정이 끝난다"는 편의는 사라진다. **편의와 안전을 맞바꾸는 자리**이고, 이 쪽에서는 보기 셋이 같은 씨앗을 쓰는 것을 보이려고 편의 쪽을 택했다.
+
+
+
+    ```python
+    import argparse
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # 이 파일은 여러 스크립트가 공유하는 설정을 한곳에 모아 두는 용도다.
+    # 다른 모듈에서 `from global_name_space import ARGS` 로 가져다 쓴다.
+    parser = argparse.ArgumentParser(description='Standard error simulation')
+    parser.add_argument('--seed', type=int, default=1, metavar='S',
+                        help='random seed (default: 1)')
+    ARGS = parser.parse_args()
+
+    # 시드를 여기서 한 번만 고정하면 이 설정을 가져다 쓰는 모든 스크립트가
+    # 같은 난수열을 쓰게 되어 결과가 재현된다.
+    np.random.seed(ARGS.seed)
+
+    # 그림 설정도 여기 모아 둔다. 이 파일을 가져다 쓰는 스크립트는 글꼴을
+    # 따로 손대지 않아도 된다.
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
+    ```
 
 이제 본문 쪽이다. `standard_error_of_x_bar.py`는 보기 1과 계산이 같다. 달라진 곳은 두 군데다. 시드를 직접 고정하는 대신 `global_name_space`를 가져오고, 그리는 부분을 `draw()`로 떼어 놓았다. 뒤에서 같은 그림을 $S^2$에 대해 한 번 더 그릴 것이므로 미리 나누어 둔 것이다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 표준오차를 그림에 표시하기 — `standard_error_of_x_bar.py`
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표준오차를 그림에 표시하기 — `standard_error_of_x_bar.py`. 보기 1과 계산은 같고, 씨앗 고정을 `global_name_space`에 넘기고 그리는 부분을 `draw()`로 떼어 놓았다.
+
+**(1)** 보기 1과 계산이 같은데 결과가 다르게 나올 것이다. 그 차이가 **오류인가 요동인가**를 판정할 기준을 미리 세우시오.
+
+**(2)** 실행해 확인하시오. 아울러 `draw()`를 따로 떼어 둔 것이 뒤의 보기 4에서 어떤 이득이 되는지 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-# 이 import 는 ARGS 라는 이름이 필요해서가 아니다. global_name_space 를 불러오는
-# 순간 그 파일의 np.random.seed(ARGS.seed) 와 글꼴 설정이 실행된다.
-# 즉 "가져오는 것" 자체가 설정을 적용하는 일이다.
-from global_name_space import ARGS
+    **(1) 판정 기준.** 보기 1은 `np.random.seed(0)`, 이 파일은 `global_name_space.py`의 기본값 `--seed 1`을 쓴다. 뽑히는 난수열이 다르니 결과가 달라지는 것이 **정상**이다.
+
+    문제는 "얼마나 달라도 정상인가"다. 두 실행은 같은 양 $\mu = 0.5$와 $\operatorname{SE} = 1/\sqrt{60} = 0.129099$를 각각 1만 개의 표본평균으로 추정한다. 추정값의 요동은
+
+    $$
+    \operatorname{sd}(\text{중심 추정}) = \frac{\operatorname{SE}}{\sqrt B} = 0.001291,
+    \qquad
+    \operatorname{sd}(\text{표준오차 추정}) \approx \frac{\operatorname{SE}}{\sqrt{2B}} = 0.000913
+    $$
+
+    이다. 그러므로 **두 실행의 중심이 $0.0013$의 두세 배 안에서 다르고 표준오차가 $0.0009$의 두세 배 안에서 다르면 요동이고, 그보다 크게 벌어지면 코드가 다른 것이다.** 각 실행이 참값에서 얼마나 떨어졌는지를 재면 바로 판정된다.
+
+    **(2) 실행.**
 
 
-def draw(values, name, symbol, ymax, ytop, xlim):
-    """표집분포의 히스토그램에 평균선과 ±1 표준오차를 그린다.
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
 
-    표본평균이든 표본분산이든 재는 방법도 그리는 방법도 같으므로
-    한곳에 모아 둔다. values 에 무엇을 담아 넘기느냐만 바뀐다.
-    """
-    values = np.array(values)
+    # 이 import 는 ARGS 라는 이름이 필요해서가 아니다. global_name_space 를 불러오는
+    # 순간 그 파일의 np.random.seed(ARGS.seed) 와 글꼴 설정이 실행된다.
+    # 즉 "가져오는 것" 자체가 설정을 적용하는 일이다.
+    from global_name_space import ARGS
+
+
+    def draw(values, name, symbol, ymax, ytop, xlim):
+        """표집분포의 히스토그램에 평균선과 ±1 표준오차를 그린다.
+
+        표본평균이든 표본분산이든 재는 방법도 그리는 방법도 같으므로
+        한곳에 모아 둔다. values 에 무엇을 담아 넘기느냐만 바뀐다.
+        """
+        values = np.array(values)
+        average = values.mean()
+        standard_error = values.std()
+
+        print(f'{name}의 표집분포 중심 : {average:.4}')
+        print(f'{name}의 표준오차      : {standard_error:.4}')
+
+        fig, ax = plt.subplots(figsize=(12, 3))
+        # 한글은 $...$ 바깥에 둔다. 수식 글꼴에는 한글 글리프가 없다.
+        ax.set_title(f'{name} ${symbol}$ 의 표집분포', fontsize=20)
+
+        ax.hist(values, bins=100, density=True, alpha=0.3)
+        ax.vlines(average, ymin=0, ymax=ymax, alpha=1.0, color='k', ls='-', lw=5)
+        ax.vlines(average + standard_error, ymin=0, ymax=ymax, alpha=0.7, color='k', ls='--')
+        ax.vlines(average - standard_error, ymin=0, ymax=ymax, alpha=0.7, color='k', ls='--')
+
+        # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
+        # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
+        ax.annotate('', xy=(average, ymax), xytext=(average + standard_error, ymax),
+                    arrowprops=dict(arrowstyle='<->', color='k', linewidth=3,
+                                    mutation_scale=20))
+        ax.text(average, ymax * 1.1, '표준오차', fontsize=15)
+
+        ax.set_xlim(*xlim)
+        ax.set_ylim(-0.1, ytop)
+
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+
+        plt.show()
+
+    def main():
+        X_bar = []
+        for _ in range(10_000):
+            x = np.random.uniform(size=(5,))
+            x_bar = x.mean()
+            X_bar.append(x_bar)
+
+        draw(X_bar, '표본평균', r'\bar X', ymax=5, ytop=6, xlim=(0.0, 1.0))
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    표본평균의 표집분포 중심 : 0.4993
+    표본평균의 표준오차      : 0.1281
+    ```
+
+    ![표본평균의 표집분포 — 모듈 버전](./img/se_xbar_module.png)
+
+    **요동이다.** 이 실행의 중심 $0.4993$은 $0.5$에서 $0.00067$ 떨어져 있어 오차 $0.001291$의 $0.52$배, 표준오차 $0.1281$은 $0.129099$에서 $0.00100$ 떨어져 있어 $0.000913$의 $1.09$배다. 보기 1은 각각 $1.47$배와 $0.44$배였다. **네 값이 모두 $1.5$배 안에 들어 있으므로 두 실행은 같은 것을 재고 있다.**
+
+    씨앗을 바꿔 가며 몇 번 더 돌려 보면 감이 잡힌다. `--seed 7`이면 중심 $0.4996$, 표준오차 $0.1283$이 나온다. 세 실행의 표준오차가 $0.1287$, $0.1281$, $0.1283$으로 셋째 자리에서 흔들리고 넷째 자리는 의미가 없다. **1만 번으로 살 수 있는 정밀도가 거기까지**라는 것이 (1)에서 계산한 $0.0009$의 뜻이다.
+
+    **`draw()`를 뗀 이득.** 이 함수가 받는 것은 "값의 목록, 이름, 기호, 축 범위"뿐이고 값이 표본평균인지 표본분산인지 묻지 않는다. 표준오차를 재는 두 줄
+
+    ```python
     average = values.mean()
     standard_error = values.std()
+    ```
 
-    print(f'{name}의 표집분포 중심 : {average:.4}')
-    print(f'{name}의 표준오차      : {standard_error:.4}')
+    도 통계량의 종류와 무관하다. **표준오차의 정의가 대상을 가리지 않기 때문에 코드도 가릴 필요가 없다.** 그래서 다음 보기의 파일이 열 줄 남짓으로 끝난다. 모듈로 나눈 것의 값은 파일 수를 늘린 데 있지 않고, "재는 방법이 하나"라는 사실을 코드 구조로 드러낸 데 있다.
 
-    fig, ax = plt.subplots(figsize=(12, 3))
-    # 한글은 $...$ 바깥에 둔다. 수식 글꼴에는 한글 글리프가 없다.
-    ax.set_title(f'{name} ${symbol}$ 의 표집분포', fontsize=20)
-
-    ax.hist(values, bins=100, density=True, alpha=0.3)
-    ax.vlines(average, ymin=0, ymax=ymax, alpha=1.0, color='k', ls='-', lw=5)
-    ax.vlines(average + standard_error, ymin=0, ymax=ymax, alpha=0.7, color='k', ls='--')
-    ax.vlines(average - standard_error, ymin=0, ymax=ymax, alpha=0.7, color='k', ls='--')
-
-    # 평균에서 +1 표준오차까지를 양방향 화살표로 표시해
-    # "표준오차 = 이만큼의 폭"임을 그림에서 직접 보여 준다.
-    ax.annotate('', xy=(average, ymax), xytext=(average + standard_error, ymax),
-                arrowprops=dict(arrowstyle='<->', color='k', linewidth=3,
-                                mutation_scale=20))
-    ax.text(average, ymax * 1.1, '표준오차', fontsize=15)
-
-    ax.set_xlim(*xlim)
-    ax.set_ylim(-0.1, ytop)
-
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-
-    plt.show()
-
-def main():
-    X_bar = []
-    for _ in range(10_000):
-        x = np.random.uniform(size=(5,))
-        x_bar = x.mean()
-        X_bar.append(x_bar)
-
-    draw(X_bar, '표본평균', r'\bar X', ymax=5, ytop=6, xlim=(0.0, 1.0))
-
-if __name__ == "__main__":
-    main()
-```
-
-출력:
-
-```
-표본평균의 표집분포 중심 : 0.4993
-표본평균의 표준오차      : 0.1281
-```
-
-![표본평균의 표집분포 — 모듈 버전](./img/se_xbar_module.png)
 
 보기 1과 계산이 같은데 값이 조금 다르다. 시드가 다르기 때문이다(보기 1은 0, 여기서는 `global_name_space.py`의 기본값 1). 두 결과가 모두 참값 $\mu = 0.5$와 $\sigma/\sqrt5 = 0.1291$ 근처에 있으며, 그 흔들림 자체가 모의실험 오차다.
 
@@ -355,42 +453,89 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 분산의 표준오차도 같은 방법으로 — `standard_error_of_s_square.py`
+**보기 4.** <span class="diff easy" title="쉬움"></span> 분산의 표준오차도 같은 방법으로 — `standard_error_of_s_square.py`. 앞 파일의 `draw()`를 가져다 쓰고, 표본평균 대신 표본분산을 기록한다.
+
+**(1)** $E[S^2]$과 $\operatorname{SE}(S^2)$을 이론으로 구하시오. 아울러 `ddof=1`을 빼먹으면 중심이 얼마로 나오는지 미리 계산하시오.
+
+**(2)** 실행해 확인하고, 같은 `draw()`로 그렸는데도 그림의 모양이 보기 3과 사뭇 다른 까닭을 말하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# 그리는 부분은 앞 파일에 이미 있으므로 가져다 쓴다.
-# 앞 파일에 if __name__ == "__main__": 가드가 있어서, import 해도
-# 그쪽 main() 은 실행되지 않고 함수 정의만 넘어온다. 가드를 두는 이유가 이것이다.
-# 이 import 가 global_name_space 도 함께 불러오므로 시드도 같이 고정된다.
-from standard_error_of_x_bar import draw
+    **(1) 이론값.** $\text{Uniform}(0,1)$은 $\sigma^2 = 1/12$, $\mu_4 = 1/80$, 첨도 $\beta_2 = \mu_4/\sigma^4 = 1.8$이다. 불편성에서
+
+    $$
+    E[S^2] = \sigma^2 = \frac{1}{12} = 0.083333
+    $$
+
+    이고, 폭은 $n = 5$에서 $(n-3)/(n-1) = 1/2$이므로
+
+    $$
+    \operatorname{Var}(S^2) = \frac1n\left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4
+    = \frac{1.8 - 0.5}{5 \times 144} = 0.00180556,
+    \qquad \operatorname{SE}(S^2) = 0.042492
+    $$
+
+    다. 1만 번 되풀이할 때의 요동은 중심이 $0.042492/100 = 0.000425$, 표준오차가 $0.042492/\sqrt{20000} = 0.000300$이다.
+
+    눈여겨볼 비가 하나 있다. $\operatorname{SE}(S^2)/E[S^2] = 0.042492/0.083333 = 0.51$이다. **분산을 재는 일이 평균을 재는 일보다 훨씬 거칠다.** 같은 $n = 5$에서 $\bar X$의 상대적 흔들림은 $0.129099/0.5 = 0.26$으로 그 절반이다.
+
+    **`ddof`를 빼먹으면.** `x.var()`는 $n$으로 나누므로 $\frac{n-1}{n}S^2$을 돌려준다. 따라서 중심이
+
+    $$
+    E\!\left[\frac{n-1}{n}S^2\right] = \frac{4}{5} \cdot \frac{1}{12} = 0.066667
+    $$
+
+    로 나온다. 참값보다 $20\%$ 작다. $0.0833$이 아니라 $0.0667$이 찍히면 불편성이 깨진 것처럼 보이지만 깨진 것은 `ddof`다.
+
+    **(2) 실행.**
 
 
-def main():
-    S_square = []
-    for _ in range(10_000):
-        x = np.random.uniform(size=(5,))
-        # ddof=1 을 반드시 적어야 한다. numpy의 기본값은 ddof=0 이라
-        # x.var() 나 x.std()**2 는 n 으로 나눈 편향추정량을 준다.
-        S_square.append(x.var(ddof=1))
+    ```python
+    import numpy as np
 
-    draw(S_square, '표본분산', 'S^2', ymax=8, ytop=10, xlim=(0.0, 0.25))
+    # 그리는 부분은 앞 파일에 이미 있으므로 가져다 쓴다.
+    # 앞 파일에 if __name__ == "__main__": 가드가 있어서, import 해도
+    # 그쪽 main() 은 실행되지 않고 함수 정의만 넘어온다. 가드를 두는 이유가 이것이다.
+    # 이 import 가 global_name_space 도 함께 불러오므로 시드도 같이 고정된다.
+    from standard_error_of_x_bar import draw
 
-if __name__ == "__main__":
-    main()
-```
 
-출력:
+    def main():
+        S_square = []
+        for _ in range(10_000):
+            x = np.random.uniform(size=(5,))
+            # ddof=1 을 반드시 적어야 한다. numpy의 기본값은 ddof=0 이라
+            # x.var() 나 x.std()**2 는 n 으로 나눈 편향추정량을 준다.
+            S_square.append(x.var(ddof=1))
 
-```
-표본분산의 표집분포 중심 : 0.08406
-표본분산의 표준오차      : 0.04263
-```
+        draw(S_square, '표본분산', 'S^2', ymax=8, ytop=10, xlim=(0.0, 0.25))
 
-![표본분산의 표집분포](./img/se_s2_module.png)
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    표본분산의 표집분포 중심 : 0.08406
+    표본분산의 표준오차      : 0.04263
+    ```
+
+    ![표본분산의 표집분포](./img/se_s2_module.png)
+
+    **두 숫자가 맞는다.** 중심 $0.08406$이 이론 $0.083333$에서 $0.00073$ 떨어져 있어 오차 $0.000425$의 $1.72$배, 표준오차 $0.04263$이 이론 $0.042492$에서 $0.00014$ 떨어져 있어 $0.000300$의 $0.45$배다. 중심 쪽이 $1.7$배까지 벌어진 것은 $S^2$의 표집분포가 오른쪽으로 치우쳐 있어 1만 번으로도 평균이 안정되기 더 어렵기 때문이고, $2$배 안쪽이므로 어긋났다고 볼 근거는 없다.
+
+    씨앗을 바꾸면 흔들림이 보인다. `--seed 7`로 돌리면 중심 $0.0842$, 표준오차 $0.04259$가 나온다. **표준오차 쪽은 넷째 자리까지 꽤 안정적인데 중심 쪽이 더 흔들린다**는 것이 위 두 오차의 비($0.000425$ 대 $0.000300$)와 치우침이 함께 만든 결과다.
+
+    **모양이 다른 까닭.** `draw()`도, 재는 두 줄도, 씨앗도, 되풀이 횟수도 같다. 바뀐 것은 `values`에 무엇을 담았는지뿐인데 그림이 전혀 다르다.
+
+    - 보기 3의 $\bar X$는 $0.5$를 중심으로 **대칭**이다. 균등분포의 왜도가 $0$이고 $\bar X$의 왜도는 $\gamma_1/\sqrt n$이므로 $0$이다.
+    - 보기 4의 $S^2$은 오른쪽으로 끌려 있다. 모집단이 대칭이어도 $S^2 \ge 0$이라 왼쪽이 $0$에서 막히고 오른쪽만 열려 있기 때문이다. 모의 왜도는 $+0.41$이다.
+
+    그래서 점선 두 개를 "전형적인 범위"로 읽을 때 두 그림의 성격이 다르다. 보기 3에서는 그 구간이 대칭인 분포를 대칭으로 가둔 것이라 자연스럽지만, 보기 4에서는 $\mu - 2\operatorname{SE} = 0.0833 - 0.0850 < 0$이어서 **두 표준오차만 내려가도 가능한 값의 바깥**이다. 같은 도구가 대상에 따라 다르게 읽혀야 한다는 뜻이며, [표본분산의 표준오차](se_s2.md) 쪽에서 이 치우침을 수로 갈라 센다.
+
 
 두 수치를 이론과 견주어 보자. $\text{Uniform}(0,1)$의 분산이 $\sigma^2 = 1/12 = 0.0833$이므로 평균 0.0841은 **불편성**을 확인해 준다. 표준오차 0.0426은 5.6절에서 볼 공식
 
