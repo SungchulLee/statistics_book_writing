@@ -82,61 +82,167 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 여러 검정을 함께 적용하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 꼬리가 무거우면 ARE 가 1 을 넘는다. 같은 대응자료 15쌍에 세 검정을 적용하면 p-값이 부호검정 $0.0209$, 부호순위검정 $0.0086$, 순위합검정 $0.1409$ 로 나온다.
+
+**(1)** 셋 가운데 쓰면 안 되는 것은 무엇인가. 나머지 둘의 p-값 순서가 ARE $0.955$ 대 $0.637$ 로 **예측되는** 것인지 따져 보시오.
+
+**(2)** 아래 "두꺼운 꼬리 분포에서는 ARE 가 1 을 넘는다" 를 수로 확인하시오. 대칭밀도 $f$, 분산 $\sigma^2$ 에서 윌콕슨 부호순위검정의 $t$ 검정 대비 ARE 는
+
+$$
+\text{ARE}(\text{윌콕슨}, t) = 12\,\sigma^2\left(\int_{-\infty}^{\infty} f(x)^2\,dx\right)^2
+$$
+
+이다. 정규·로지스틱·이중지수·균등에서 부호검정의 $4\sigma^2 f(0)^2$(연습문제 2)과 함께 계산하시오.
 
 </div>
 
-아래 코드는 같은 대응자료에 여러 검정을 적용하여 $p$값을 직접 비교한다.
+??? success "풀이"
 
-```python
-import numpy as np
-from scipy import stats
+    **(1) 순위합검정을 쓰면 안 되고, 나머지 둘의 순서는 ARE 가 보장하지 않는다.**
 
-paired_data = np.array([
-    [93, 76], [70, 72], [81, 75], [65, 68], [79, 65],
-    [54, 54], [94, 88], [91, 81], [77, 65], [65, 57],
-    [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]
-])
+    자료는 같은 학생 15명을 처치 전후로 잰 **대응자료**다. `ranksums` 는 두 열을 서로 독립인 표본으로 보므로 짝 구조를 버린다. 그 $p = 0.1409$ 는 "보수적인 결과" 가 아니라 **잘못 적용한 검정의 값**이고, 다른 둘과 견줄 수 있는 수가 아니다.
 
-post, pre = paired_data[:, 0], paired_data[:, 1]
+    남은 둘의 순서는 조금 더 조심해야 한다. ARE 가 뜻하는 것은
 
-# 부호검정(정규근사)
-diffs = post - pre
-nonzero = diffs[diffs != 0]
-n_plus = (nonzero > 0).sum()
-n = len(nonzero)
-z_sign = (2 * n_plus - n) / np.sqrt(n)
-p_sign = 2 * stats.norm.cdf(-abs(z_sign))
-print(f"Sign test:          Z = {z_sign:.4f}, p = {p_sign:.4f}")
-# Sign test:          Z = 2.3094, p = 0.0209
+    > **정규모집단에서**, 귀무가설로 수렴하는 **국소 대립가설** 열에 대해, **$n \to \infty$** 에서 같은 검정력을 얻는 데 필요한 표본크기의 비
 
-# Wilcoxon 부호순위검정
-stat_sr, p_sr = stats.wilcoxon(post, pre, alternative="two-sided",
-                                method="approx", zero_method="pratt")
-print(f"Signed-rank test:   W = {stat_sr}, p = {p_sr:.4f}")
-# Signed-rank test:   W = 11.0, p = 0.0086
+    다. ARE $= 0.955$ 는 "윌콕슨이 $t$ 검정의 검정력에 맞추려면 관측값이 $1/0.955 = 1.047$ 배 필요하다" 는 뜻이고, $0.637$ 은 부호검정에 $1/0.637 = 1.571$ 배가 필요하다는 뜻이다. **세 조건이 모두 붙어 있다.**
 
-# Wilcoxon 순위합검정 — 이 대응자료에는 맞지 않는다. 견주어 보려고 싣는다
-stat_rs, p_rs = stats.ranksums(post, pre)
-print(f"Rank-sum test:      Z = {stat_rs:.4f}, p = {p_rs:.4f}")
-# Rank-sum test:      Z = 1.4725, p = 0.1409
-```
+    그러므로 ARE 는 **한 자료에서 어느 검정의 p-값이 작을지 보장하지 않는다.** 이 자료에서 부호순위검정이 이긴 것은 음의 차이 둘이 하필 가장 작은 쪽($-2$ 와 $-3$)이어서 $W^- = 11$ 로 작게 나왔기 때문이다. 같은 부호 구성에서 크기만 뒤바꾸면 부호검정의 p-값은 $0.0209$ 그대로인데 부호순위검정은 $0.1095$ 로 올라가 순서가 뒤집힌다([일표본 비모수 검정](../one_sample_nonparametric/one_sample.md) 보기 5 가 그 자료를 만든다).
 
-출력:
+    **(2) 분포를 바꾸면 ARE 가 1 을 넘는다.** 네 대칭분포에서 두 공식을 계산하면
 
-```
-Sign test:          Z = 2.3094, p = 0.0209
-Signed-rank test:   W = 11.0, p = 0.0086
-Rank-sum test:      Z = 1.4725, p = 0.1409
-```
+    | 분포 | $\sigma^2$ | $f(0)$ | $\int f^2$ | 부호 ARE $= 4\sigma^2 f(0)^2$ | 윌콕슨 ARE $= 12\sigma^2(\int f^2)^2$ |
+    |---|---|---|---|---|---|
+    | 정규 $\mathcal N(0,1)$ | $1$ | $0.398942$ | $0.282095$ | $2/\pi = 0.636620$ | $3/\pi = 0.954930$ |
+    | 로지스틱 | $\pi^2/3 = 3.289868$ | $1/4$ | $1/6$ | $\pi^2/12 = 0.822467$ | $\pi^2/9 = \mathbf{1.096623}$ |
+    | 이중지수 | $2$ | $1/2$ | $1/4$ | $\mathbf{2.000000}$ | $\mathbf{1.500000}$ |
+    | 균등 | $1/12$ | $1$ | $1$ | $1/3 = 0.333333$ | $1.000000$ |
 
-| 검정 | $p$값 | 적절한가 |
-|:---|---:|:---|
-| Wilcoxon 부호순위 | $0.0086$ | 예 |
-| 부호검정 | $0.0209$ | 예 (더 보수적) |
-| Wilcoxon 순위합 | $0.1409$ | **아니오** |
+    **정규분포는 $t$ 검정의 고향이므로 둘 다 1 아래다.** 그런데 꼬리를 무겁게 하면
 
-대응자료에 적절한 두 검정 중에서는 부호순위검정이 정보를 더 많이 쓰므로 $p$값이 작다.
+    - **로지스틱**에서 윌콕슨 ARE 가 $\pi^2/9 = 1.0966$ 으로 **1 을 넘는다.** 정규보다 꼬리가 조금 두꺼운 것만으로도 순위검정이 $t$ 검정을 앞선다.
+    - **이중지수**(라플라스)에서는 윌콕슨 $1.5$, 부호검정 $2.0$ 으로 **둘 다 1 을 넘고, 순서까지 뒤집힌다.** 부호검정이 윌콕슨보다 나아진다 — 이 분포에서 $f(0)$ 이 뾰족해 중앙값 근처의 정보가 가장 값지기 때문이다.
+    - 반대로 **균등분포**에서는 꼬리가 아예 없어 부호검정이 $1/3$ 로 최악이 되고 윌콕슨은 정확히 $1$ 이다.
+
+    이 네 줄이 비모수 검정을 쓰는 참된 이유를 말해 준다. **"정규성이 성립할 때 5% 손해" 는 최악의 경우이고, 꼬리가 조금만 무거워지면 손해가 이익으로 바뀐다.** 반면 $t$ 검정이 이기는 범위는 정규분포 주변으로 좁다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    paired_data = np.array([
+        [93, 76], [70, 72], [81, 75], [65, 68], [79, 65],
+        [54, 54], [94, 88], [91, 81], [77, 65], [65, 57],
+        [95, 86], [89, 87], [78, 78], [80, 77], [76, 76]
+    ])
+
+    post, pre = paired_data[:, 0], paired_data[:, 1]
+
+    # 부호검정(정규근사)
+    diffs = post - pre
+    nonzero = diffs[diffs != 0]
+    n_plus = (nonzero > 0).sum()
+    n = len(nonzero)
+    z_sign = (2 * n_plus - n) / np.sqrt(n)
+    p_sign = 2 * stats.norm.cdf(-abs(z_sign))
+    print(f"Sign test:          Z = {z_sign:.4f}, p = {p_sign:.4f}")
+    # Sign test:          Z = 2.3094, p = 0.0209
+
+    # Wilcoxon 부호순위검정
+    stat_sr, p_sr = stats.wilcoxon(post, pre, alternative="two-sided",
+                                    method="approx", zero_method="pratt")
+    print(f"Signed-rank test:   W = {stat_sr}, p = {p_sr:.4f}")
+    # Signed-rank test:   W = 11.0, p = 0.0086
+
+    # Wilcoxon 순위합검정 — 이 대응자료에는 맞지 않는다. 견주어 보려고 싣는다
+    stat_rs, p_rs = stats.ranksums(post, pre)
+    print(f"Rank-sum test:      Z = {stat_rs:.4f}, p = {p_rs:.4f}")
+    # Rank-sum test:      Z = 1.4725, p = 0.1409
+    ```
+
+    출력:
+
+    ```
+    Sign test:          Z = 2.3094, p = 0.0209
+    Signed-rank test:   W = 11.0, p = 0.0086
+    Rank-sum test:      Z = 1.4725, p = 0.1409
+    ```
+
+    | 검정 | $p$값 | 적절한가 |
+    |:---|---:|:---|
+    | Wilcoxon 부호순위 | $0.0086$ | 예 |
+    | 부호검정 | $0.0209$ | 예 (더 보수적) |
+    | Wilcoxon 순위합 | $0.1409$ | **아니오** |
+
+    대응자료에 적절한 두 검정 중에서는 부호순위검정이 정보를 더 많이 쓰므로 $p$값이 작다.
+
+    ```python
+    from scipy import integrate
+
+    cases = {
+        "정규 N(0,1)": stats.norm(),
+        "로지스틱": stats.logistic(),
+        "이중지수": stats.laplace(),
+        "균등 U(-.5,.5)": stats.uniform(loc=-0.5, scale=1),
+    }
+    print("분포              sigma^2      f(0)   int f^2   부호 ARE  윌콕슨 ARE")
+    for name, dist in cases.items():
+        var, f0 = dist.var(), dist.pdf(0)
+        I, _ = integrate.quad(lambda x: dist.pdf(x) ** 2, -60, 60, limit=400)
+        print(f"{name:<14} {var:>9.6f} {f0:>9.6f} {I:>9.6f}"
+              f" {4 * var * f0 ** 2:>10.6f} {12 * var * I ** 2:>11.6f}")
+
+    print(f"\n이론값: 2/pi = {2 / np.pi:.6f},  3/pi = {3 / np.pi:.6f},"
+          f"  pi^2/12 = {np.pi ** 2 / 12:.6f},  pi^2/9 = {np.pi ** 2 / 9:.6f}")
+    ```
+
+    출력:
+
+    ```
+    분포              sigma^2      f(0)   int f^2   부호 ARE  윌콕슨 ARE
+    정규 N(0,1)       1.000000  0.398942  0.282095   0.636620    0.954930
+    로지스틱            3.289868  0.250000  0.166667   0.822467    1.096623
+    이중지수            2.000000  0.500000  0.250000   2.000000    1.500000
+    균등 U(-.5,.5)    0.083333  1.000000  1.000000   0.333333    1.000000
+    
+    이론값: 2/pi = 0.636620,  3/pi = 0.954930,  pi^2/12 = 0.822467,  pi^2/9 = 1.096623
+    ```
+
+    ```python
+    rng = np.random.default_rng(0)
+    B, m = 2000, 20
+    delta = 0.5
+    print(f"n = {m},  delta = {delta},  반복 {B} 회,  alpha = 0.05")
+    print("분포        t 검정   윌콕슨   부호검정")
+    for name, draw in (("정규", lambda: rng.normal(0, 1, m)),
+                       ("이중지수", lambda: rng.laplace(0, 1, m))):
+        p_t, p_w, p_s = [], [], []
+        for _ in range(B):
+            d = draw() + delta
+            p_t.append(stats.ttest_1samp(d, 0).pvalue)
+            p_w.append(stats.wilcoxon(d).pvalue)
+            p_s.append(stats.binomtest(int((d > 0).sum()), m).pvalue)
+        rate = lambda p: np.mean(np.array(p) < 0.05)
+        print(f"{name:<9} {rate(p_t):>7.3f} {rate(p_w):>8.3f} {rate(p_s):>10.3f}")
+    print(f"몬테카를로 오차 <= {np.sqrt(0.25 / B):.3f}")
+    ```
+
+    출력:
+
+    ```
+    n = 20,  delta = 0.5,  반복 2000 회,  alpha = 0.05
+    분포        t 검정   윌콕슨   부호검정
+    정규          0.566    0.552      0.392
+    이중지수        0.348    0.406      0.385
+    몬테카를로 오차 <= 0.011
+    ```
+
+    **네 분포의 ARE 가 이론값 $2/\pi$, $3/\pi$, $\pi^2/12$, $\pi^2/9$, 그리고 $2.0$, $1.5$, $1/3$, $1.0$ 과 소수 여섯째 자리까지 모두 맞는다.** 수치적분으로 구한 $\int f^2$ 가 로지스틱에서 $1/6$, 이중지수에서 $1/4$, 균등에서 $1$ 로 떨어지는 것도 확인된다.
+
+    둘째 모의실험이 유한 $n$ 에서 그 역전을 보여 준다. **정규에서는 $t > $ 윌콕슨 $>$ 부호($0.566 / 0.552 / 0.392$)인데 이중지수에서는 $t$ 가 꼴찌로 내려간다($0.348$).** 다만 역전이 **절반만** 일어났다 — ARE 가 예측하는 "부호 $>$ 윌콕슨" 까지는 가지 않고 $0.385$ 대 $0.406$ 이다(몬테카를로 오차 $\pm 0.011$). 이상한 일이 아니다. **ARE 는 $\delta \to 0$, $n \to \infty$ 의 극한값이고 여기서는 $n = 20$, $\delta = 0.5$ 로 둘 다 극한과 멀기 때문이다.** 유한 $n$ 에서는 부호검정의 이산성 손실(기각역을 촘촘히 채울 수 없는 것)이 ARE 의 이득을 상당 부분 먹는다.
 
 !!! danger "순위합검정의 $p$값은 비교 대상이 아니다"
     순위합검정의 $0.1409$가 가장 크다고 해서 "가장 보수적인 검정"이라고 읽으면

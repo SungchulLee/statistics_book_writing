@@ -37,50 +37,168 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 부호검정 구현
+**보기 1.** <span class="diff easy" title="쉬움"></span> 명목 5%, 실제로는 7.8% 까지. 아래 함수는 연속성 보정 없는 정규근사를 쓴다. 양측 $\alpha = 0.05$ 로 쓰면 기각규칙이 사실
+
+$$
+\lvert Z \rvert = \frac{\lvert 2n_+ - n \rvert}{\sqrt{n}} > 1.959964
+$$
+
+가 된다.
+
+**(1)** 이 규칙의 **실제 제1종 오류율**을 $n = 5$ 부터 $40$ 까지 정확 이항분포로 계산하시오. 모의실험이 아니라 합으로 구할 수 있다.
+
+**(2)** 연속성 보정을 넣은 규칙과 `binomtest` 의 정확 규칙은 어떤가. 세 규칙 가운데 명목수준을 넘는 것은 무엇이며, $n$ 을 키우면 그 문제가 사라지는가.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
+
+    **(1) 실제 수준은 유한 합으로 정확히 구해진다.** $H_0$ 아래에서 $n_+ \sim \text{Bin}(n, 1/2)$ 는 **정확한** 사실이고, 기각역은 정수 $k$ 의 유한집합이다. 그러므로
+
+    $$
+    \text{실제 수준} = \sum_{k \,:\, \lvert 2k - n \rvert > 1.959964\sqrt{n}} \binom{n}{k} \frac{1}{2^n}
+    $$
+
+    을 그대로 더하면 된다. 모의실험이 필요 없다.
+
+    $n = 21$ 을 손으로 해 보자. $\sqrt{21} = 4.582576$ 이므로 문턱은 $1.959964 \times 4.582576 = 8.982$ 이다. $n$ 이 홀수이면 $2k - n$ 도 홀수이므로 $\lvert 2k-21 \rvert \in \{1, 3, 5, \dots, 21\}$ 이고, $8.982$ 를 넘는 가장 작은 값은 $9$ 다. $\lvert 2k-21 \rvert \geq 9$ 는 $k \leq 6$ 또는 $k \geq 15$ 를 뜻하므로
+
+    $$
+    \text{실제 수준}
+    = 2 \sum_{k=0}^{6} \binom{21}{k} \frac{1}{2^{21}}
+    = \frac{2(1 + 21 + 210 + 1330 + 5985 + 20349 + 54264)}{2097152}
+    = \frac{164320}{2097152}
+    = 0.078354
+    $$
+
+    **명목 $0.05$ 의 1.57배다.** 이 규칙은 $H_0$ 이 참일 때 스무 번에 한 번이 아니라 **열세 번에 한 번** 기각한다.
+
+    **(2) 보정하면 넘지 않는다.** $n = 5$ 부터 $40$ 까지 세 규칙을 모두 재면
+
+    | 규칙 | 명목수준을 넘는 $n$ 의 개수 | 최대 실제 수준 |
+    |---|---|---|
+    | 정규근사, 보정 없음 (이 함수) | 36 개 가운데 **17 개** | $0.078354$ ($n = 21$) |
+    | 정규근사, 연속성 보정 | 0 개 | $0.047031$ ($n = 37$) |
+    | 정확 이항 (`binomtest`) | 0 개 | $0.049042$ ($n = 17$) |
+
+    **보정 없는 쪽만 명목수준을 넘고, 그것도 절반 가까운 $n$ 에서 넘는다.**
+
+    그리고 **$n$ 을 키워도 문제가 사라지지 않는다.** $n = 39$ 에서도 $0.0533$ 이다. 까닭은 이산성이다. 문턱 $1.959964\sqrt{n}$ 이 $\lvert 2k-n \rvert$ 이 실제로 가질 수 있는 값들(짝수 $n$ 이면 짝수, 홀수 $n$ 이면 홀수) 사이 어디에 떨어지는지가 $n$ 마다 다르다. 문턱이 어떤 달성 가능한 값 **바로 아래**에 떨어지면 그 쌍이 기각역에 들어와 실제 수준이 튀어 오른다. $\sqrt{n}$ 은 매끄럽게 커지지만 격자는 $2$ 씩 뛰므로 이 어긋남이 **주기적으로 되풀이된다.**
+
+    연속성 보정이 하는 일이 바로 그 어긋남을 메우는 것이다. 문턱을 반 칸 밖으로 밀어 두므로 격자점이 경계에 걸리는 일이 줄고, 그 결과 실제 수준이 명목값 **아래**로 내려간다. 다만 지나치게 내려가기도 한다 — $n = 17$ 에서 정확검정은 $0.0490$ 인데 보정 규칙은 $0.0127$ 이다. **검정력을 그만큼 버린 셈이다.**
+
+    따라서 권고는 분명하다. **이 함수의 $p$ 값을 $0.05$ 와 견주어 판정하지 말고 `binomtest` 를 쓰라.** 정확검정은 설계상 명목수준을 넘지 않으며, 보정 규칙처럼 지나치게 보수적이지도 않다. $n$ 이 수천 이하이면 계산은 순식간이다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
 
 
-def sign_test(paired_data, test_type="two-sided"):
-    """대응표본에 대한 부호검정.
+    def sign_test(paired_data, test_type="two-sided"):
+        """대응표본에 대한 부호검정.
 
-    차이의 크기는 버리고 부호만 센다. 그래서 자료가 순서척도이기만 하면
-    쓸 수 있고 이상치에도 끄떡없다. 대신 크기 정보를 버린 만큼 검정력이
-    낮다 — 그 중간이 부호순위검정이다.
+        차이의 크기는 버리고 부호만 센다. 그래서 자료가 순서척도이기만 하면
+        쓸 수 있고 이상치에도 끄떡없다. 대신 크기 정보를 버린 만큼 검정력이
+        낮다 — 그 중간이 부호순위검정이다.
 
-    매개변수
-    --------
-    paired_data : 모양 (n, 2) 인 배열. 0열이 처리 후, 1열이 처리 전이다.
-    test_type : "less", "two-sided", "greater" 중 하나
+        매개변수
+        --------
+        paired_data : 모양 (n, 2) 인 배열. 0열이 처리 후, 1열이 처리 전이다.
+        test_type : "less", "two-sided", "greater" 중 하나
 
-    돌려주는 값
-    ----------
-    z : Z 통계량
-    p_value : p-값
-    """
-    p_0, q_0 = 0.5, 0.5
+        돌려주는 값
+        ----------
+        z : Z 통계량
+        p_value : p-값
+        """
+        p_0, q_0 = 0.5, 0.5
 
-    n_plus = np.sum(paired_data[:, 0] > paired_data[:, 1])
-    n_minus = np.sum(paired_data[:, 0] < paired_data[:, 1])
-    n = n_plus + n_minus  # 동점은 세지 않는다
-    p_hat = n_plus / n
+        n_plus = np.sum(paired_data[:, 0] > paired_data[:, 1])
+        n_minus = np.sum(paired_data[:, 0] < paired_data[:, 1])
+        n = n_plus + n_minus  # 동점은 세지 않는다
+        p_hat = n_plus / n
 
-    z = (p_hat - p_0) / np.sqrt(p_0 * q_0 / n)
+        z = (p_hat - p_0) / np.sqrt(p_0 * q_0 / n)
 
-    if test_type == "less":
-        p_value = stats.norm.cdf(z)
-    elif test_type == "two-sided":
-        p_value = 2 * stats.norm.cdf(-abs(z))
-    elif test_type == "greater":
-        p_value = stats.norm.sf(z)
+        if test_type == "less":
+            p_value = stats.norm.cdf(z)
+        elif test_type == "two-sided":
+            p_value = 2 * stats.norm.cdf(-abs(z))
+        elif test_type == "greater":
+            p_value = stats.norm.sf(z)
 
-    return z, p_value
-```
+        return z, p_value
+    ```
+
+    ```python
+    from math import comb, sqrt
+
+    crit = stats.norm.isf(0.025)
+    print(f"임계값 z_0.025 = {crit:.6f}")
+
+    # n = 21 을 손으로 따라가 본다.
+    n = 21
+    print(f"\nn = {n}: 문턱 = {crit:.6f} * sqrt({n}) = {crit * sqrt(n):.3f}")
+    ks = [k for k in range(n + 1) if abs(2 * k - n) > crit * sqrt(n)]
+    print(f"  기각역 k in {ks}")
+    terms = [comb(n, k) for k in range(7)]
+    print(f"  2*({' + '.join(map(str, terms))})/{2 ** n} = {2 * sum(terms)}/{2 ** n}"
+          f" = {2 * sum(terms) / 2 ** n:.6f}")
+
+    print("\n  n   보정없음    보정    정확")
+    worst = {"plain": (0, 0), "corr": (0, 0), "exact": (0, 0)}
+    over = []
+    for n in range(5, 41):
+        pmf = np.array([comb(n, k) for k in range(n + 1)]) / 2 ** n
+        k = np.arange(n + 1)
+        rej_plain = np.abs(2 * k - n) / np.sqrt(n) > crit
+        rej_corr = (np.abs(k - n / 2) - 0.5) / np.sqrt(n / 4) > crit
+        rej_exact = np.array([stats.binomtest(j, n).pvalue < 0.05 for j in k])
+        s = (pmf[rej_plain].sum(), pmf[rej_corr].sum(), pmf[rej_exact].sum())
+        for key, val in zip(("plain", "corr", "exact"), s):
+            if val > worst[key][0]:
+                worst[key] = (val, n)
+        if s[0] > 0.05:
+            over.append(n)
+        if n in (5, 12, 17, 21, 25, 30, 39, 40):
+            print(f"{n:>3} {s[0]:>10.4f} {s[1]:>8.4f} {s[2]:>8.4f}")
+
+    print(f"\n보정 없음: 명목 0.05 를 넘는 n {len(over)} 개 / 36 개  -> {over}")
+    print(f"  최대 실제 수준 {worst['plain'][0]:.6f} (n = {worst['plain'][1]})")
+    print(f"연속성 보정: 최대 {worst['corr'][0]:.6f} (n = {worst['corr'][1]})")
+    print(f"정확 이항  : 최대 {worst['exact'][0]:.6f} (n = {worst['exact'][1]})")
+    ```
+
+    출력:
+
+    ```
+    임계값 z_0.025 = 1.959964
+
+    n = 21: 문턱 = 1.959964 * sqrt(21) = 8.982
+      기각역 k in [0, 1, 2, 3, 4, 5, 6, 15, 16, 17, 18, 19, 20, 21]
+      2*(1 + 21 + 210 + 1330 + 5985 + 20349 + 54264)/2097152 = 164320/2097152 = 0.078354
+
+      n   보정없음    보정    정확
+      5     0.0625   0.0000   0.0000
+     12     0.0386   0.0386   0.0386
+     17     0.0490   0.0127   0.0490
+     21     0.0784   0.0266   0.0266
+     25     0.0433   0.0433   0.0433
+     30     0.0428   0.0428   0.0428
+     39     0.0533   0.0237   0.0237
+     40     0.0385   0.0385   0.0385
+
+    보정 없음: 명목 0.05 를 넘는 n 17 개 / 36 개  -> [5, 8, 11, 14, 16, 19, 21, 22, 24, 26, 27, 29, 31, 32, 34, 36, 39]
+      최대 실제 수준 0.078354 (n = 21)
+    연속성 보정: 최대 0.047031 (n = 37)
+    정확 이항  : 최대 0.049042 (n = 17)
+    ```
+
+    **손으로 더한 $164320/2097152 = 0.078354$ 가 코드와 같다.** 보정 없는 규칙이 36 개 $n$ 가운데 17 개에서 명목수준을 넘고, $n = 39$ 까지도 $0.0533$ 으로 넘는다는 것이 확인된다. 보정 규칙과 정확 규칙은 한 번도 넘지 않는다.
+
+    표에서 $n = 12, 25, 30, 40$ 처럼 **세 값이 완전히 같아지는** $n$ 들이 눈에 띈다. 그 $n$ 에서는 문턱이 세 규칙 모두 같은 격자점 사이에 떨어져 **기각역이 글자 하나까지 같아지기** 때문이다. 어느 규칙을 쓰느냐가 중요한 것은 문턱이 격자점 바로 옆에 떨어지는 $n$ 에서다. 그리고 **어느 $n$ 이 그런지는 미리 알 수 없다** — 그러므로 늘 정확검정을 쓰는 편이 안전하다.
 
 <div class="exbox" markdown>
 
