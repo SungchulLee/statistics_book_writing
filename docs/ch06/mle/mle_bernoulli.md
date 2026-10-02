@@ -69,132 +69,226 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이 로그가능도와 MLE
+**보기 1.** <span class="diff easy" title="쉬움"></span> 베르누이 로그가능도와 MLE. 참값 $p = 0.7$인 동전을 $m = 100$번 던진 자료로, $[0.01, 0.99]$를 $100$점으로 나눈 격자 위에서 로그가능도를 잰다. 앞면은 $74$번 나왔다.
+
+**(1)** 비용함수 $J(p)$를 최소로 만드는 $p$를 구하고, 그 최솟값을 $m$으로 나눈 $J(\hat p)/m$이 **무엇과 같은지** 밝히시오.
+
+**(2)** 격자가 고른 값은 $0.7425$이고 최대 로그가능도는 $-57.3074$다. (1)의 답과 어긋나는 양을 미리 계산하고 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
-seed = 1
-np.random.seed(seed)
+    **(1) 해석적으로.** $k = \sum_i x^{(i)} = 74$라 두면
 
-# 앞면 확률과 던지는 횟수를 정한다.
-p = 0.7
-n_samples = 100
+    $$
+    J(p) = -\left[k\log p + (m-k)\log(1-p)\right]
+    $$
 
-def load_data():
-    """
-    Simulate coin flips based on a binomial distribution.
+    이고 미분해 $0$으로 두면
 
-    Returns:
-    - numpy array: Array of coin flips (1 for heads, 0 for tails).
-    """
-    return np.random.binomial(n=1, p=p, size=(n_samples,))  # Shape (100,)
+    $$
+    J'(p) = -\frac{k}{p} + \frac{m-k}{1-p} = 0
+    \;\Longrightarrow\;
+    k(1-p) = (m-k)p
+    \;\Longrightarrow\;
+    \hat p = \frac{k}{m} = \frac{74}{100} = 0.74
+    $$
 
-def compute_prob(coin, p):
-    """
-    Compute the probability of a single coin flip outcome.
+    이다. 한 번 더 미분하면
 
-    Parameters:
-    - coin: Outcome of the coin flip (1 for heads, 0 for tails).
-    - p: Probability of heads.
+    $$
+    J''(p) = \frac{k}{p^2} + \frac{m-k}{(1-p)^2} > 0
+    $$
 
-    Returns:
-    - float: Probability of observing the outcome.
-    """
-    return p**coin * (1 - p)**(1 - coin)
+    이 $(0,1)$ 전체에서 성립하므로 $J$가 엄밀히 **볼록**이고 정류점이 유일한 전역 최소다. 가능도 쪽에서 보면 $\ell = -J$가 엄밀히 오목이라는 같은 말이다.
 
-def compute_log_prob(coin, p):
-    """
-    Compute the log-probability of a single coin flip outcome.
+    **최솟값이 무엇인가.** $\hat p = k/m$을 넣으면 $k = m\hat p$이므로
 
-    Parameters:
-    - coin: Outcome of the coin flip (1 for heads, 0 for tails).
-    - p: Probability of heads.
+    $$
+    \frac{J(\hat p)}{m}
+    = -\left[\hat p\log\hat p + (1-\hat p)\log(1-\hat p)\right]
+    = H(\hat p)
+    $$
 
-    Returns:
-    - float: Log-probability of observing the outcome.
-    """
-    return coin * np.log(p) + (1 - coin) * np.log(1 - p)
+    곧 **관측 하나당 비용의 바닥이 $\text{Bernoulli}(\hat p)$의 엔트로피**다. $\hat p = 0.74$에서
 
-def compute_likelihood(coins, p):
-    """
-    Compute the joint probability of all coin flips for a given probability.
+    $$
+    H(0.74) = -0.74\log 0.74 - 0.26\log 0.26 = 0.5731\ \text{냇}
+    $$
 
-    Parameters:
-    - coins: Array of coin flip outcomes.
-    - p: Probability of heads.
+    이므로 $J(\hat p) = 57.3057$, $\ell(\hat p) = -57.3057$이다.
 
-    Returns:
-    - float: Joint probability of observing all outcomes.
-    """
-    joint_prob = 1.0
-    for coin in coins:
-        joint_prob *= compute_prob(coin, p)
-    return joint_prob
+    이것이 교차엔트로피 손실을 쓸 때 꼭 알아 두어야 할 사실이다. **손실은 아무리 잘 맞춰도 $0$으로 내려가지 않는다.** 바닥은 자료 자체의 엔트로피이며, 그보다 낮은 값이 나왔다면 자료를 외웠다는 뜻이다. 결정론적인 자료($\hat p = 0$ 또는 $1$)일 때만 $H = 0$이 되어 손실이 $0$에 닿는다.
 
-def compute_log_likelihood(coins, p):
-    """
-    Compute the log-likelihood of all coin flips for a given probability.
+    **어긋남의 예고.** 격자 간격이 $(0.99 - 0.01)/99 = 0.0098990$이고 $(0.74 - 0.01)/0.0098990 = 73.745$가 정수가 아니므로 $0.74$는 격자에 **없다.** 가장 가까운 격자점은 $j = 74$인 $0.7425253$이고, $\lvert\ell''(\hat p)\rvert = m/(\hat p(1-\hat p)) = 519.75$이므로 로그가능도가
 
-    Parameters:
-    - coins: Array of coin flip outcomes.
-    - p: Probability of heads.
+    $$
+    \tfrac12 \times 519.75 \times (0.7425253 - 0.74)^2 = 0.00166
+    $$
 
-    Returns:
-    - float: Log-likelihood of observing all outcomes.
-    """
-    log_joint_prob = 0.0
-    for coin in coins:
-        log_joint_prob += compute_log_prob(coin, p)
-    return log_joint_prob
+    만큼 낮게 나와야 한다. 곧 $-57.3057 - 0.0017 = -57.3074$다. **출력에 찍힌 값과 같다.**
 
-# 동전을 n번 던진다. 참 p 는 우리가 모르는 값이라고 둔다.
-coins = load_data()
+    **(2) 수치적으로.**
 
-# p 후보를 격자로 늘어놓는다. 이 중 로그가능도가 가장 큰 것을 고른다.
-ps = np.linspace(0.01, 0.99, 100)
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-# 후보마다 로그가능도를 계산한다.
-log_likelihood_list = [compute_log_likelihood(coins, p) for p in ps]
-log_likelihood = np.array(log_likelihood_list)
+    # 같은 결과가 다시 나오도록 난수 씨앗을 고정한다.
+    seed = 1
+    np.random.seed(seed)
 
-# 로그가능도가 가장 큰 후보가 최대가능도추정값이다.
-idx = np.argmax(log_likelihood)
-mle_p = ps[idx]
-log_likelihood_max = log_likelihood[idx]
-print(f"MLE index: {idx}")
-print(f"MLE probability (p): {mle_p:.4f}")
-print(f"Max log-likelihood: {log_likelihood_max:.4f}\n")
+    # 앞면 확률과 던지는 횟수를 정한다.
+    p = 0.7
+    n_samples = 100
 
-# 로그가능도 곡선을 그리고 최댓값 자리를 표시한다.
-fig, ax = plt.subplots(figsize=(12, 3))
-ax.plot(ps, log_likelihood, label="Log-likelihood")
-ax.plot([mle_p, mle_p], [0, log_likelihood_max], '--or', label="MLE")
-ax.legend(loc="lower right")
+    def load_data():
+        """
+        Simulate coin flips based on a binomial distribution.
 
-# 축 이름과 범례를 다듬는다.
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['bottom'].set_position("zero")
-ax.spines['left'].set_position("zero")
-ax.set_xlabel("Probability (p)")
-ax.set_ylabel("Log-likelihood")
-plt.show()
-```
+        Returns:
+        - numpy array: Array of coin flips (1 for heads, 0 for tails).
+        """
+        return np.random.binomial(n=1, p=p, size=(n_samples,))  # Shape (100,)
 
-출력:
+    def compute_prob(coin, p):
+        """
+        Compute the probability of a single coin flip outcome.
 
-```
-MLE index: 74
-MLE probability (p): 0.7425
-Max log-likelihood: -57.3074
-```
+        Parameters:
+        - coin: Outcome of the coin flip (1 for heads, 0 for tails).
+        - p: Probability of heads.
 
-![베르누이분포의 MLE](./img/mle_bernoulli_70.png)
+        Returns:
+        - float: Probability of observing the outcome.
+        """
+        return p**coin * (1 - p)**(1 - coin)
+
+    def compute_log_prob(coin, p):
+        """
+        Compute the log-probability of a single coin flip outcome.
+
+        Parameters:
+        - coin: Outcome of the coin flip (1 for heads, 0 for tails).
+        - p: Probability of heads.
+
+        Returns:
+        - float: Log-probability of observing the outcome.
+        """
+        return coin * np.log(p) + (1 - coin) * np.log(1 - p)
+
+    def compute_likelihood(coins, p):
+        """
+        Compute the joint probability of all coin flips for a given probability.
+
+        Parameters:
+        - coins: Array of coin flip outcomes.
+        - p: Probability of heads.
+
+        Returns:
+        - float: Joint probability of observing all outcomes.
+        """
+        joint_prob = 1.0
+        for coin in coins:
+            joint_prob *= compute_prob(coin, p)
+        return joint_prob
+
+    def compute_log_likelihood(coins, p):
+        """
+        Compute the log-likelihood of all coin flips for a given probability.
+
+        Parameters:
+        - coins: Array of coin flip outcomes.
+        - p: Probability of heads.
+
+        Returns:
+        - float: Log-likelihood of observing all outcomes.
+        """
+        log_joint_prob = 0.0
+        for coin in coins:
+            log_joint_prob += compute_log_prob(coin, p)
+        return log_joint_prob
+
+    # 동전을 n번 던진다. 참 p 는 우리가 모르는 값이라고 둔다.
+    coins = load_data()
+
+    # p 후보를 격자로 늘어놓는다. 이 중 로그가능도가 가장 큰 것을 고른다.
+    ps = np.linspace(0.01, 0.99, 100)
+
+    # 후보마다 로그가능도를 계산한다.
+    log_likelihood_list = [compute_log_likelihood(coins, p) for p in ps]
+    log_likelihood = np.array(log_likelihood_list)
+
+    # 로그가능도가 가장 큰 후보가 최대가능도추정값이다.
+    idx = np.argmax(log_likelihood)
+    mle_p = ps[idx]
+    log_likelihood_max = log_likelihood[idx]
+    print(f"MLE index: {idx}")
+    print(f"MLE probability (p): {mle_p:.4f}")
+    print(f"Max log-likelihood: {log_likelihood_max:.4f}\n")
+
+    # 로그가능도 곡선을 그리고 최댓값 자리를 표시한다.
+    fig, ax = plt.subplots(figsize=(12, 3))
+    ax.plot(ps, log_likelihood, label="Log-likelihood")
+    ax.plot([mle_p, mle_p], [0, log_likelihood_max], '--or', label="MLE")
+    ax.legend(loc="lower right")
+
+    # 축 이름과 범례를 다듬는다.
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_position("zero")
+    ax.spines['left'].set_position("zero")
+    ax.set_xlabel("Probability (p)")
+    ax.set_ylabel("Log-likelihood")
+    plt.show()
+
+    # (1) 에서 따진 것을 확인한다.
+    k = coins.sum()
+    m = len(coins)
+    p_exact = k / m
+    exact_ll = k * np.log(p_exact) + (m - k) * np.log(1 - p_exact)
+    entropy = -(p_exact * np.log(p_exact) + (1 - p_exact) * np.log(1 - p_exact))
+    step = ps[1] - ps[0]
+
+    print(f"k = {k},  m = {m},  해석적 p-hat = k/m = {p_exact}")
+    print(f"격자 간격 = {step:.7f},  (0.74 - 0.01)/간격 = {(0.74 - 0.01) / step:.3f}")
+    print(f"해석적 l(p-hat) = {exact_ll:.6f}")
+    print(f"격자   l({mle_p:.7f}) = {log_likelihood_max:.6f}")
+    print(f"어긋남 = {exact_ll - log_likelihood_max:.6f}   "
+          f"(예측 {0.5 * m / (p_exact * (1 - p_exact)) * (mle_p - p_exact)**2:.6f})")
+    print(f"J(p-hat)/m = {-exact_ll / m:.7f},  H(p-hat) = {entropy:.7f}")
+
+    # 가능도를 곱으로 그대로 계산해도 로그를 취하면 같은 값이 나온다.
+    raw = compute_likelihood(coins, p_exact)
+    print(f"곱으로 계산한 L(p-hat) = {raw:.6e},  log = {np.log(raw):.6f}")
+    ```
+
+    출력:
+
+    ```
+    MLE index: 74
+    MLE probability (p): 0.7425
+    Max log-likelihood: -57.3074
+
+    k = 74,  m = 100,  해석적 p-hat = k/m = 0.74
+    격자 간격 = 0.0098990,  (0.74 - 0.01)/간격 = 73.745
+    해석적 l(p-hat) = -57.305692
+    격자   l(0.7425253) = -57.307356
+    어긋남 = 0.001664   (예측 0.001657)
+    J(p-hat)/m = 0.5730569,  H(p-hat) = 0.5730569
+    곱으로 계산한 L(p-hat) = 1.295550e-25,  log = -57.305692
+    ```
+
+    ![베르누이분포의 MLE](./img/mle_bernoulli_70.png)
+
+    **세 가지가 모두 맞는다.**
+
+    첫째, $J(\hat p)/m = 0.5730569$와 $H(\hat p) = 0.5730569$가 소수 일곱째 자리까지 같다. (1)에서 유도한 **"교차엔트로피 손실의 바닥은 경험분포의 엔트로피"**가 수로 확인되었다.
+
+    둘째, 격자와 해석적 답의 어긋남이 $0.001664$인데 포물선 근사로 예고한 $0.001657$과 셋째 자리까지 맞는다. 남는 $7\times10^{-6}$은 포물선이 근사일 뿐이라서 생기는 삼차 이상의 항이다. **격자 탐색이 $0.7425$를 준 것은 $0.74$가 격자에 없기 때문**이며, $(0.74-0.01)/0.0098990 = 73.745$가 정수가 아니라는 것이 그 전부다.
+
+    셋째, 가능도를 $100$개의 곱으로 그대로 계산한 $1.2956\times10^{-25}$에 로그를 취하면 $-57.305692$로 로그가능도와 정확히 같다. $m = 100$에서는 아직 언더플로가 없어 두 길이 같은 답을 준다. 그러나 이 값이 이미 $10^{-25}$인 데서 보듯, $m$을 열 배로 늘리면 $10^{-250}$ 자리가 되고 그 뒤로는 곱 쪽이 무너진다. `compute_likelihood`와 `compute_log_likelihood`를 나란히 정의해 둔 까닭이 이것이다.
 
 ## 연습문제
 

@@ -25,7 +25,7 @@ $$
 $$
 
 !!! warning "왜 가능도를 직접 쓰지 않는가?"
-    $p = 0.7$인 $n = 100$개의 베르누이 관측값에서 가능도는 0과 1 사이 수 100개의 곱이다. 이 곱은 $10^{-30}$ 규모로 부동소수점 언더플로 문턱보다 훨씬 작다. 로그가능도는 로그확률의 합으로 작업하여 이를 피한다.
+    $p = 0.7$인 $n = 100$개의 베르누이 관측값에서 가능도는 0과 1 사이 수 100개의 곱이다. 이 곱은 $10^{-30}$ 규모여서 아직은 표현된다 — 배정도의 언더플로 문턱은 $10^{-308}$ 근처이기 때문이다. 그러나 곱의 자릿수는 $n$에 **비례해** 내려가므로 $n$이 몇 백만 되면 금세 그 문턱을 넘는다(보기 3이 그 지점을 정확히 계산한다). 로그가능도는 곱을 합으로 바꾸어 이 문제를 아예 없앤다.
 
 ## 베르누이 로그가능도
 
@@ -71,60 +71,102 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 로그가능도 구현과 시각화
+**보기 1.** <span class="diff easy" title="쉬움"></span> 로그가능도 구현과 시각화. 참값 $p = 0.7$인 동전을 $n = 100$번 던진 자료로 $\ell(p)$를 $[0.01, 0.99]$의 격자 $200$점 위에서 계산한다.
+
+**(1)** 관측이 앞면 $k = 67$회였다. 해석적 최대가능도추정값은 얼마인가. 격자 탐색이 그 값을 정확히 찍을 수 있는가.
+
+**(2)** 그려서 확인하고, 봉우리가 얼마나 평평한지 꼭대기보다 $2$ 낮은 높이를 기준으로 재시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def compute_log_prob(coin, p):
-    """베르누이 시행 한 번의 로그확률."""
-    return coin * np.log(p) + (1 - coin) * np.log(1 - p)
+    **(1) 해석적으로.** 위에서 유도한 대로
+
+    $$
+    \hat p = \frac{k}{n} = \frac{67}{100} = 0.67
+    $$
+
+    이고 $\ell''(p) < 0$이므로 이것이 유일한 전역 최대다.
+
+    **격자는 이 값을 찍지 못한다.** 격자가 $[0.01, 0.99]$를 $200$점으로 나누므로 간격이
+
+    $$
+    \frac{0.99 - 0.01}{199} = 0.0049246\ldots
+    $$
+
+    이고 격자점은 $0.01 + j \times 0.0049246$ 꼴이다. $0.67$이 이 꼴이 되려면 $j = (0.67 - 0.01)/0.0049246 = 134.0204\ldots$이 정수여야 하는데 그렇지 않다. 가장 가까운 격자점은 $j = 134$인 $0.6698995$다. **해석적으로 푼 답은 정확하고 격자 탐색은 격자만큼만 정확하다.**
+
+    다만 그 대가는 작다. $\ell$이 봉우리에서 포물선에 가까워 $\hat p$에서 $\delta$ 벗어나면 $\ell$이 $\tfrac12\lvert\ell''(\hat p)\rvert\delta^2$만큼 떨어지는데, $\lvert\ell''(0.67)\rvert = n/(\hat p(1-\hat p)) = 452.1$이고 $\delta = 1.0 \times 10^{-4}$이므로 떨어지는 양이 $2.3\times10^{-6}$에 지나지 않는다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    def compute_log_prob(coin, p):
+        """베르누이 시행 한 번의 로그확률."""
+        return coin * np.log(p) + (1 - coin) * np.log(1 - p)
 
 
-def compute_log_likelihood(coins, p):
-    """베르누이 시행 여러 번의 로그가능도."""
-    return sum(compute_log_prob(coin, p) for coin in coins)
+    def compute_log_likelihood(coins, p):
+        """베르누이 시행 여러 번의 로그가능도."""
+        return sum(compute_log_prob(coin, p) for coin in coins)
 
 
-# 동전을 n번 던진다. 참 p 는 우리가 모르는 값이라고 둔다.
-rng = np.random.default_rng(1)
-p_true = 0.7
-n_samples = 100
-coins = rng.binomial(n=1, p=p_true, size=n_samples)
+    # 동전을 n번 던진다. 참 p 는 우리가 모르는 값이라고 둔다.
+    rng = np.random.default_rng(1)
+    p_true = 0.7
+    n_samples = 100
+    coins = rng.binomial(n=1, p=p_true, size=n_samples)
 
-k = coins.sum()
-print(f"Observed: {k} heads out of {n_samples} flips")
-print(f"MLE: p_hat = {k / n_samples:.4f}")
+    k = coins.sum()
+    print(f"Observed: {k} heads out of {n_samples} flips")
+    print(f"MLE: p_hat = {k / n_samples:.4f}")
 
-# 격자 위에서 로그가능도를 계산한다.
-ps = np.linspace(0.01, 0.99, 200)
-log_liks = np.array([compute_log_likelihood(coins, p) for p in ps])
+    # 격자 위에서 로그가능도를 계산한다.
+    ps = np.linspace(0.01, 0.99, 200)
+    log_liks = np.array([compute_log_likelihood(coins, p) for p in ps])
 
-# 수치 최적화로 MLE를 찾는다.
-idx = np.argmax(log_liks)
-mle_p = ps[idx]
-print(f"Grid-search MLE: p_hat = {mle_p:.4f}")
-print(f"Max log-likelihood: {log_liks[idx]:.4f}")
-```
+    # 수치 최적화로 MLE를 찾는다.
+    idx = np.argmax(log_liks)
+    mle_p = ps[idx]
+    print(f"Grid-search MLE: p_hat = {mle_p:.4f}")
+    print(f"Max log-likelihood: {log_liks[idx]:.4f}")
 
-출력:
+    # (1) 에서 따진 것을 확인한다. 0.67 은 격자 위에 없다.
+    step = ps[1] - ps[0]
+    exact_ll = k * np.log(0.67) + (n_samples - k) * np.log(0.33)
+    print(f"\n격자 간격 = {step:.7f},  (0.67 - 0.01)/간격 = {(0.67 - 0.01) / step:.4f}")
+    print(f"격자점 {mle_p:.7f} 에서 l = {log_liks[idx]:.9f}")
+    print(f"해석적  0.67      에서 l = {exact_ll:.9f}   (차이 {exact_ll - log_liks[idx]:.2e})")
 
-```
-Observed: 67 heads out of 100 flips
-MLE: p_hat = 0.6700
-Grid-search MLE: p_hat = 0.6699
-Max log-likelihood: -63.4179
-```
+    # (2) 봉우리의 폭. 꼭대기보다 2 낮은 높이 위에 머무는 구간.
+    within = ps[log_liks >= log_liks[idx] - 2]
+    print(f"꼭대기보다 2 낮은 높이 위의 구간: {within.min():.4f} ~ {within.max():.4f}")
+    ```
 
-격자 위에서 계산한 값을 그대로 그리면 이렇다.
+    출력:
 
-![앞면 67회의 로그가능도 곡선](./img/bernoulli_loglik_curve.png)
+    ```
+    Observed: 67 heads out of 100 flips
+    MLE: p_hat = 0.6700
+    Grid-search MLE: p_hat = 0.6699
+    Max log-likelihood: -63.4179
 
-봉우리가 $\hat p = 0.67$에 있고 그 높이가 $-63.42$다. 위 코드의 격자 탐색이 찾아낸 $0.6699$가 이 자리이며, 해석적으로 구한 $k/n$과 같다.
+    격자 간격 = 0.0049246,  (0.67 - 0.01)/간격 = 134.0204
+    격자점 0.6698995 에서 l = -63.417865855
+    해석적  0.67      에서 l = -63.417863571   (차이 2.28e-06)
+    꼭대기보다 2 낮은 높이 위의 구간: 0.5763 ~ 0.7585
+    ```
 
-곡선의 **모양**에서 읽을 것이 둘이다. 첫째, 봉우리 부근이 평평하다. 그림의 점선이 꼭대기보다 2만큼 낮은 높이인데, 곡선이 그 위에 머무는 구간이 대략 $0.58$에서 $0.76$까지다. 자료 100개로도 이 폭의 값들을 뚜렷이 구별하지 못한다는 뜻이다. 이 평평함의 정도가 곧 추정의 불확실성이며 [Fisher 정보량](fisher_information.md)이 재는 것이 그것이다. 둘째, 양 끝에서 곡선이 급격히 떨어진다. $p$가 0이나 1에 가까우면 관측된 자료가 사실상 불가능해지기 때문이다.
+    격자 위에서 계산한 값을 그대로 그리면 이렇다.
+
+    ![앞면 67회의 로그가능도 곡선](./img/bernoulli_loglik_curve.png)
+
+    **(1)이 예측한 그대로다.** $(0.67 - 0.01)/0.0049246 = 134.0204$이 정수가 아니므로 $0.67$은 격자에 없고, 격자가 고른 $0.6698995$에서의 로그가능도가 해석적 답보다 $2.28\times10^{-6}$ 낮다. 앞서 포물선 근사로 어림한 $2.3\times10^{-6}$과 맞는다. **격자가 비껴난 것은 사실이지만 그 대가는 소수 여섯째 자리에서야 보인다.** 그래서 그림으로는 두 값이 구별되지 않는다.
+
+    곡선의 **모양**에서 읽을 것이 둘이다. 첫째, 봉우리 부근이 평평하다. 그림의 점선이 꼭대기보다 2만큼 낮은 높이인데, 곡선이 그 위에 머무는 구간이 $0.5763$부터 $0.7585$까지로 폭이 $0.18$이나 된다. 자료 100개로도 이 폭의 값들을 뚜렷이 구별하지 못한다는 뜻이다. 격자가 만든 $10^{-6}$의 오차와 자료가 남긴 $0.18$의 불확실성을 나란히 놓으면 **어느 쪽을 걱정해야 하는지가 분명하다.** 이 평평함의 정도가 곧 추정의 불확실성이며 [Fisher 정보량](fisher_information.md)이 재는 것이 그것이다. 둘째, 양 끝에서 곡선이 급격히 떨어진다. $p$가 0이나 1에 가까우면 관측된 자료가 사실상 불가능해지기 때문이다.
 
 !!! note "로그가능도의 모양"
     베르누이 로그가능도는 $(0, 1)$에서 $p$에 대해 오목한 함수이므로 유일한 전역 최댓값이 보장된다. 이 오목성은 모든 $p \in (0, 1)$에서 $\ell''(p) < 0$이라는 사실에서 따라 나온다.
@@ -135,34 +177,84 @@ Max log-likelihood: -63.4179
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 로그가능도의 벡터화
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로그가능도의 벡터화. 보기 1의 `compute_log_likelihood`는 관측 $100$개를 하나씩 돌며 로그확률을 더한다.
+
+**(1)** 같은 값을 자료의 요약 두 개만으로 한 줄에 계산하는 식을 쓰시오. 두 판본이 **비트까지** 같은 값을 줄 것이라 기대할 수 있는가.
+
+**(2)** 격자 $200$점에서 두 판본을 견주어 (1)의 예측을 확인하시오. 값이 어긋나더라도 MLE가 바뀌지 않는 까닭도 밝히시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def log_likelihood_vectorized(coins, p):
-    """로그가능도를 벡터화해 한 번에 계산한다."""
-    k = coins.sum()
-    n = len(coins)
-    return k * np.log(p) + (n - k) * np.log(1 - p)
+    **(1) 해석적으로.** 합을 풀어 쓰면 $x_i$가 $0$ 아니면 $1$이므로
 
-# 두 값을 견준다.
-rng = np.random.default_rng(1)
-coins = rng.binomial(1, 0.7, 100)
-ps = np.linspace(0.01, 0.99, 200)
+    $$
+    \ell(p) = \sum_{i=1}^n \left[x_i\log p + (1-x_i)\log(1-p)\right]
+    = \left(\sum_i x_i\right)\log p + \left(n - \sum_i x_i\right)\log(1-p)
+    = k\log p + (n-k)\log(1-p)
+    $$
 
-ll_vec = np.array([log_likelihood_vectorized(coins, p) for p in ps])
-idx = np.argmax(ll_vec)
-print(f"Vectorized MLE: p = {ps[idx]:.4f}")
-```
+    이다. 관측 $100$개가 $(k, n)$ 두 수로 줄었다. **$k$가 충분통계량**이라는 사실의 계산적 결과이며, 벡터화가 가능한 까닭도 결국 이것이다. 반복문 판본은 격자점마다 $\log$를 $2n = 200$번 부르지만 이 식은 $2$번만 부른다.
 
-출력:
+    **비트까지 같지는 않을 것이다.** 두 식은 실수에서 같지만 부동소수점에서는 셈의 **순서**가 다르다. 반복문은 항 $100$개를 차례로 더하며 반올림 오차를 $99$번 쌓고, 한 줄 판본은 곱 두 번과 덧셈 한 번으로 끝낸다. 쌓이는 상대오차는 머신 엡실론 $\varepsilon \approx 2.2\times10^{-16}$의 몇 배, 곧 $10^{-15}$ 자리로 예상된다.
 
-```
-Vectorized MLE: p = 0.6699
-```
+    **그래도 MLE는 바뀌지 않는다.** 이웃한 격자점 사이에서 $\ell$이 $\tfrac12\lvert\ell''\rvert h^2 \approx \tfrac12(452)(0.0049)^2 = 5.4\times10^{-3}$만큼 차이 나는데, 이는 예상 오차 $10^{-13}$보다 $10$자리 크다. 순위가 뒤집힐 여지가 없다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    def log_likelihood_vectorized(coins, p):
+        """로그가능도를 벡터화해 한 번에 계산한다."""
+        k = coins.sum()
+        n = len(coins)
+        return k * np.log(p) + (n - k) * np.log(1 - p)
+
+    # 두 값을 견준다.
+    rng = np.random.default_rng(1)
+    coins = rng.binomial(1, 0.7, 100)
+    ps = np.linspace(0.01, 0.99, 200)
+
+    ll_vec = np.array([log_likelihood_vectorized(coins, p) for p in ps])
+    idx = np.argmax(ll_vec)
+    print(f"Vectorized MLE: p = {ps[idx]:.4f}")
+
+    # 보기 1 의 반복문 판본과 견준다.
+    def compute_log_likelihood(coins, p):
+        return sum(coin * np.log(p) + (1 - coin) * np.log(1 - p) for coin in coins)
+
+    ll_loop = np.array([compute_log_likelihood(coins, p) for p in ps])
+    print(f"\n두 판본이 비트까지 같은가? {np.array_equal(ll_loop, ll_vec)}")
+    print(f"최대 절대 차이 = {np.abs(ll_loop - ll_vec).max():.3e}")
+    print(f"최대 상대 차이 = {np.abs((ll_loop - ll_vec) / ll_loop).max():.3e}  "
+          f"(머신 엡실론 {np.finfo(float).eps:.3e})")
+    print(f"그래도 argmax 는 같은가? {np.argmax(ll_loop) == np.argmax(ll_vec)}")
+    print(f"이웃 격자점 사이 l 의 차 = {ll_vec[idx] - ll_vec[idx + 1]:.3e}")
+
+    # 격자까지 한꺼번에 밀어 넣으면 log 호출이 40000 번에서 2 번으로 준다.
+    k, n = coins.sum(), len(coins)
+    ll_array = k * np.log(ps) + (n - k) * np.log(1 - ps)
+    print(f"격자 전체를 한 줄로 계산한 것과의 최대 차이 = {np.abs(ll_array - ll_vec).max():.3e}")
+    ```
+
+    출력:
+
+    ```
+    Vectorized MLE: p = 0.6699
+
+    두 판본이 비트까지 같은가? False
+    최대 절대 차이 = 4.263e-13
+    최대 상대 차이 = 2.402e-15  (머신 엡실론 2.220e-16)
+    그래도 argmax 는 같은가? True
+    이웃 격자점 사이 l 의 차 = 5.287e-03
+    격자 전체를 한 줄로 계산한 것과의 최대 차이 = 0.000e+00
+    ```
+
+    **예측이 맞았다.** 두 판본은 비트까지 같지 않고, 최대 상대 차이가 $2.4\times10^{-15}$로 머신 엡실론의 약 $11$배다. $100$개 항을 더하며 쌓인 오차치고는 작은 편이다. 그런데도 `argmax`는 같은데, 이웃 격자점 사이의 $\ell$ 차이 $5.287\times10^{-3}$이 (1)에서 어림한 $5.4\times10^{-3}$과 맞고 어긋남 $4.3\times10^{-13}$보다 $10$자리 크기 때문이다. **값이 다르면서도 답은 같다** — 수치계산에서 흔히 보는 꼴이고, "같은지"를 물을 때 비트 비교 대신 허용오차를 두고 보아야 하는 까닭이다.
+
+    격자를 통째로 넣은 마지막 판본은 한 줄 판본과 **정확히 같은 값**($0$ 차이)을 준다. 격자점마다 부른 것과 배열로 한 번에 부른 것이 같은 연산을 같은 순서로 하기 때문이다. $\log$ 호출 수는 $40{,}000$번에서 $2$번으로 줄었다.
 
 ## 가능도와 로그가능도의 비교
 
@@ -170,46 +262,110 @@ Vectorized MLE: p = 0.6699
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 가능도와 로그가능도의 수치 비교
+**보기 3.** <span class="diff easy" title="쉬움"></span> 가능도와 로그가능도의 수치 비교. 가능도를 곱으로 그대로 계산하면 $n$이 커질수록 작아져 언젠가 $0$으로 내려앉는다.
+
+**(1)** $k = \hat p\,n$일 때 $\log_{10} L(\hat p)$를 $n$의 함수로 쓰고, $\hat p = 0.67$에서 배정밀도 부동소수점이 $0$을 돌려주기 시작하는 $n$을 구하시오.
+
+**(2)** 확인하시오. 또 격자 $[0.01, 0.99]$ **전체**에서 계산할 때는 훨씬 작은 $n$에서 이미 망가지는데, 왜 그런가.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-rng = np.random.default_rng(1)
-coins = rng.binomial(1, 0.7, 100)
-k = coins.sum()
-n = len(coins)
+    **(1) 해석적으로.** $k = \hat p\,n$을 넣으면
 
-p = 0.7
-# 가능도를 곱으로 그대로 계산하면 100개의 작은 수를 곱하게 되어
-# 값이 1e-28 까지 내려간다. n이 1000쯤 되면 아예 0으로 언더플로된다.
-raw_likelihood = p**k * (1-p)**(n-k)
+    $$
+    \log_{10} L(\hat p)
+    = k \log_{10}\hat p + (n-k)\log_{10}(1-\hat p)
+    = -n\underbrace{\left[-\hat p\log_{10}\hat p - (1-\hat p)\log_{10}(1-\hat p)\right]}_{H_{10}(\hat p)}
+    $$
 
-# 로그를 취하면 곱이 합이 되어 이 문제가 사라진다.
-# log는 단조증가 함수이므로 **최대가 되는 지점은 바뀌지 않는다.**
-# 로그가능도를 쓰는 이유가 이 두 가지다: 수치 안정성과 미분의 편리함.
-log_likelihood = k * np.log(p) + (n-k) * np.log(1-p)
+    이다. 대괄호 안은 밑이 $10$인 **엔트로피**이고 $\hat p = 0.67$에서
 
-print(f"Raw likelihood at p=0.7: {raw_likelihood:.2e}")
-print(f"Log-likelihood at p=0.7: {log_likelihood:.4f}")
-```
+    $$
+    H_{10}(0.67) = -0.67\log_{10}0.67 - 0.33\log_{10}0.33 = 0.27542
+    $$
 
-출력:
+    이다. 곧 $\log_{10}L = -0.27542\,n$으로 $n$에 **비례해** 자릿수가 내려간다. $n = 100$이면 $10^{-27.5}$, $n = 1000$이면 $10^{-275}$다.
 
-```
-Raw likelihood at p=0.7: 2.33e-28
-Log-likelihood at p=0.7: -63.6283
-```
+    배정밀도의 바닥은 두 단계다. 정규수의 최솟값이 $2.225\times10^{-308}$이므로
 
-원래 가능도는 천문학적으로 작은 수인 반면 로그가능도는 다루기 좋은 음수이다.
+    $$
+    0.27542\,n > 307.65 \;\Longrightarrow\; n > 1117
+    $$
 
-![가능도와 로그가능도](./img/likelihood_vs_loglik_scale.png)
+    에서 비정규수로 떨어져 유효숫자를 잃기 시작하고, 비정규수의 최솟값 $\approx 10^{-323.3}$마저 뚫는
 
-왼쪽 세로축의 $10^{-28}$이라는 배율에 주목하라. 관측값 100개의 확률을 그대로 곱한 값이며, $n$이 1000쯤 되면 배정밀도 부동소수점의 밑바닥($\approx 10^{-308}$)을 뚫고 0으로 내려앉는다. 그러면 최대화할 대상 자체가 사라진다.
+    $$
+    0.27542\,n > 323.3 \;\Longrightarrow\; n > 1174
+    $$
 
-오른쪽은 같은 함수에 로그를 씌운 것이다. **봉우리의 자리는 조금도 움직이지 않았다.** 로그가 순증가함수이므로 대소 관계가 그대로 보존되기 때문이며, 바뀐 것은 세로축의 눈금뿐이다. 왼쪽에서 봉우리 밖이 전부 0처럼 보이던 구간도 오른쪽에서는 제 값을 갖고 구별된다.
+    에서 정확히 $0$이 된다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(1)
+    coins = rng.binomial(1, 0.7, 100)
+    k = coins.sum()
+    n = len(coins)
+
+    p = 0.7
+    # 가능도를 곱으로 그대로 계산하면 100개의 작은 수를 곱하게 되어
+    # 값이 1e-28 까지 내려간다.
+    raw_likelihood = p**k * (1-p)**(n-k)
+
+    # 로그를 취하면 곱이 합이 되어 이 문제가 사라진다.
+    # log는 단조증가 함수이므로 **최대가 되는 지점은 바뀌지 않는다.**
+    # 로그가능도를 쓰는 이유가 이 두 가지다: 수치 안정성과 미분의 편리함.
+    log_likelihood = k * np.log(p) + (n-k) * np.log(1-p)
+
+    print(f"Raw likelihood at p=0.7: {raw_likelihood:.2e}")
+    print(f"Log-likelihood at p=0.7: {log_likelihood:.4f}")
+
+    # (1) 이 예측한 자리에서 정말 0 이 되는지 본다. k = 0.67 n 으로 늘려 간다.
+    print("\n봉우리 p_hat = 0.67 에서의 가능도")
+    for N in (100, 500, 1000, 1117, 1175):
+        kk = round(0.67 * N)
+        print(f"  n = {N:>4}:  L = {0.67**kk * 0.33**(N - kk):.3e}")
+
+    # 격자 전체에서는 가장 작은 값이 먼저 0 이 된다.
+    ps = np.linspace(0.01, 0.99, 200)
+    print("\n격자 [0.01, 0.99] 위에서 가장 작은 가능도")
+    for N in (100, 200, 241, 250):
+        kk = round(0.67 * N)
+        print(f"  n = {N:>4}:  min L = {(ps**kk * (1 - ps)**(N - kk)).min():.3e}")
+    ```
+
+    출력:
+
+    ```
+    Raw likelihood at p=0.7: 2.33e-28
+    Log-likelihood at p=0.7: -63.6283
+
+    봉우리 p_hat = 0.67 에서의 가능도
+      n =  100:  L = 2.871e-28
+      n =  500:  L = 1.949e-138
+      n = 1000:  L = 3.799e-276
+      n = 1117:  L = 1.720e-308
+      n = 1175:  L = 0.000e+00
+
+    격자 [0.01, 0.99] 위에서 가장 작은 가능도
+      n =  100:  min L = 7.177e-135
+      n =  200:  min L = 5.151e-269
+      n =  241:  min L = 4.447e-323
+      n =  250:  min L = 0.000e+00
+    ```
+
+    **(1)의 예측이 자리마다 맞는다.** $n = 100$에서 $10^{-27.5}$, $n = 1000$에서 $10^{-275.6}$으로 $-0.27542\,n$ 그대로이고, $n = 1117$에서 $1.72\times10^{-308}$로 정규수의 바닥을 막 뚫었으며, $n = 1175$에서 정확히 $0$이 된다. 예측한 문턱 $1117$과 $1174$가 그대로 나왔다.
+
+    **격자 전체에서는 훨씬 일찍 망가진다.** $n = 250$만 되어도 격자 위의 가장 작은 값이 이미 $0$이다. 까닭은 $\log_{10}L(p) = n[\hat p\log_{10}p + (1-\hat p)\log_{10}(1-p)]$에서 $p$가 봉우리를 벗어나면 대괄호가 $-H_{10}(\hat p)$보다 훨씬 작아지기 때문이다. 격자의 왼쪽 끝 $p = 0.01$에서는 그 값이 $-1.341$로 봉우리의 $-0.275$보다 다섯 배 가파르고, 그래서 $323.3/1.341 = 241$에서 벌써 $0$에 닿는다. **최대화할 대상이 사라지는 것은 봉우리가 아니라 그 바깥부터다.**
+
+    ![가능도와 로그가능도](./img/likelihood_vs_loglik_scale.png)
+
+    왼쪽 세로축의 $10^{-28}$이라는 배율에 주목하라. 관측값 100개의 확률을 그대로 곱한 값이다. 오른쪽은 같은 함수에 로그를 씌운 것이다. **봉우리의 자리는 조금도 움직이지 않았다.** 로그가 순증가함수이므로 대소 관계가 그대로 보존되기 때문이며, 바뀐 것은 세로축의 눈금뿐이다. 왼쪽에서 봉우리 밖이 전부 0처럼 보이던 구간도 오른쪽에서는 제 값을 갖고 구별되는데, 바로 그 구간이 $n$을 키우면 **진짜로** 0이 되어 사라지는 곳이다.
 
 ## 해석
 

@@ -30,47 +30,120 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 격자탐색으로 MLE 찾기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 격자탐색으로 MLE 찾기. $N(\mu, \sigma^2)$에서 $n = 100$을 뽑고 $\sigma$를 $\hat\sigma$로 고정한 뒤, $\mu$를 $[3, 7]$의 격자 $500$점에서 찾는다.
+
+**(1)** 이때 $\ell(\mu)$가 $\mu$의 **정확한 이차식**임을 보이고 닫힌 해를 구하시오. 격자 탐색이 범할 수 있는 오차의 상한은 얼마인가.
+
+**(2)** 격자가 준 $4.8998$과 닫힌 해 $4.8995$의 차이를 재어 (1)의 상한과 견주시오. 소수 넷째 자리까지 맞히려면 격자를 몇 점으로 해야 하는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def grid_search_normal_mean(data, mu_grid):
-    """mu 후보를 격자로 늘어놓고 로그가능도가 가장 큰 것을 고른다.
+    **(1) 해석적으로.** $\sigma = \hat\sigma$를 고정하면
 
-    가장 단순하고 가장 확실한 방법이다. 미분도 초기값도 필요 없고
-    국소 최적에 갇히지도 않는다. 대신 격자 간격보다 정밀할 수 없고,
-    모수가 d개면 격자점이 (격자 수)^d 로 폭발해 d가 3~4만 넘어도 못 쓴다.
-    """
-    sigma_hat = data.std(ddof=0)     # ddof=0 이 MLE 판본이다(n으로 나눔)
+    $$
+    \ell(\mu) = -\frac{n}{2}\log(2\pi\hat\sigma^2) - \frac{1}{2\hat\sigma^2}\sum_{i=1}^n (x_i - \mu)^2
+    $$
 
-    # logpdf 를 더한다. pdf를 곱한 뒤 로그를 취하면 언더플로가 나므로
-    # 처음부터 로그로 계산해 더하는 것이 정석이다.
-    log_liks = np.array([
-        np.sum(stats.norm.logpdf(data, loc=mu, scale=sigma_hat))
-        for mu in mu_grid
-    ])
-    best_idx = np.argmax(log_liks)
-    return mu_grid[best_idx], log_liks
+    인데, 제곱합을 $\bar x$ 둘레로 펴면
 
-# 보기.
-rng = np.random.default_rng(42)
-data = rng.normal(loc=5.0, scale=2.0, size=100)
-mu_grid = np.linspace(3.0, 7.0, 500)
-mu_hat, log_liks = grid_search_normal_mean(data, mu_grid)
-print(f"Grid search MLE: mu_hat = {mu_hat:.4f}")
-print(f"Closed-form MLE: mu_hat = {data.mean():.4f}")
-```
+    $$
+    \sum_i (x_i - \mu)^2 = \sum_i (x_i - \bar x)^2 + n(\mu - \bar x)^2
+    $$
 
-출력:
+    이다(교차항 $2(\bar x - \mu)\sum_i(x_i - \bar x)$가 $0$이다). 따라서
 
-```
-Grid search MLE: mu_hat = 4.8998
-Closed-form MLE: mu_hat = 4.8995
-```
+    $$
+    \ell(\mu) = \text{상수} - \frac{n}{2\hat\sigma^2}(\mu - \bar x)^2
+    $$
+
+    로 **꼭짓점이 $\bar x$인 정확한 포물선**이다. 근사가 아니라 항등식이고, 그러므로
+
+    $$
+    \hat\mu = \bar x, \qquad \lvert\ell''\rvert = \frac{n}{\hat\sigma^2}
+    $$
+
+    이다.
+
+    **격자 오차의 상한.** 격자 간격이 $h = (7-3)/499 = 0.0080160$이므로 $\bar x$에서 가장 가까운 격자점은 많아야 반 칸, 곧 $h/2 = 0.0040080$ 떨어져 있다. 그때 잃는 로그가능도는
+
+    $$
+    \frac{1}{2}\cdot\frac{n}{\hat\sigma^2}\cdot\left(\frac{h}{2}\right)^2
+    = \frac{1}{2}\cdot\frac{100}{2.3888}\cdot(0.004008)^2
+    = 3.36\times10^{-4}
+    $$
+
+    이하다. **격자 탐색은 반 칸보다 정밀할 수 없다**는 것이 요점이고, 이는 자료를 아무리 늘려도 나아지지 않는 종류의 오차다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def grid_search_normal_mean(data, mu_grid):
+        """mu 후보를 격자로 늘어놓고 로그가능도가 가장 큰 것을 고른다.
+
+        가장 단순하고 가장 확실한 방법이다. 미분도 초기값도 필요 없고
+        국소 최적에 갇히지도 않는다. 대신 격자 간격보다 정밀할 수 없고,
+        모수가 d개면 격자점이 (격자 수)^d 로 폭발해 d가 3~4만 넘어도 못 쓴다.
+        """
+        sigma_hat = data.std(ddof=0)     # ddof=0 이 MLE 판본이다(n으로 나눔)
+
+        # logpdf 를 더한다. pdf를 곱한 뒤 로그를 취하면 언더플로가 나므로
+        # 처음부터 로그로 계산해 더하는 것이 정석이다.
+        log_liks = np.array([
+            np.sum(stats.norm.logpdf(data, loc=mu, scale=sigma_hat))
+            for mu in mu_grid
+        ])
+        best_idx = np.argmax(log_liks)
+        return mu_grid[best_idx], log_liks
+
+    # 보기.
+    rng = np.random.default_rng(42)
+    data = rng.normal(loc=5.0, scale=2.0, size=100)
+    mu_grid = np.linspace(3.0, 7.0, 500)
+    mu_hat, log_liks = grid_search_normal_mean(data, mu_grid)
+    print(f"Grid search MLE: mu_hat = {mu_hat:.4f}")
+    print(f"Closed-form MLE: mu_hat = {data.mean():.4f}")
+
+    # (1) 에서 따진 상한과 견준다.
+    step = mu_grid[1] - mu_grid[0]
+    mu_exact = data.mean()
+    sigma_hat = data.std(ddof=0)
+    ll = lambda m: np.sum(stats.norm.logpdf(data, loc=m, scale=sigma_hat))
+
+    print(f"\n격자 간격 = {step:.7f},  반 칸 = {step / 2:.7f}")
+    print(f"격자 - 닫힌해 = {mu_hat - mu_exact:+.7f}  "
+          f"(반 칸의 {abs(mu_hat - mu_exact) / (step / 2):.1%})")
+    print(f"l 의 손실   = {ll(mu_exact) - ll(mu_hat):.6e}")
+    print(f"이차식 예측 = {0.5 * len(data) / sigma_hat**2 * (mu_hat - mu_exact)**2:.6e}")
+    print(f"손실의 상한 = {0.5 * len(data) / sigma_hat**2 * (step / 2)**2:.6e}")
+    print(f"소수 넷째 자리까지 맞히려면 격자점이 {int((7 - 3) / 2e-4) + 1}개 필요하다")
+    ```
+
+    출력:
+
+    ```
+    Grid search MLE: mu_hat = 4.8998
+    Closed-form MLE: mu_hat = 4.8995
+
+    격자 간격 = 0.0080160,  반 칸 = 0.0040080
+    격자 - 닫힌해 = +0.0003388  (반 칸의 8.5%)
+    l 의 손실   = 2.402909e-06
+    이차식 예측 = 2.402909e-06
+    손실의 상한 = 3.362425e-04
+    소수 넷째 자리까지 맞히려면 격자점이 20001개 필요하다
+    ```
+
+    **(1)의 주장이 모두 확인된다.** 격자와 닫힌 해의 차이가 $0.00034$로 반 칸 $0.0040$의 $8.5\%$ 안에 들어 상한을 지켰다. 이번에는 운이 좋아 반 칸보다 훨씬 가까웠지만, $\bar x$가 어디 떨어지느냐에 따라 최악에는 반 칸까지 벌어질 수 있다.
+
+    더 눈여겨볼 것은 로그가능도의 손실이다. 실제 $2.402909\times10^{-6}$과 이차식이 예측한 $2.402909\times10^{-6}$이 **일곱 자리까지 같다.** (1)에서 포물선이 근사가 아니라 항등식이라고 한 그대로이며, 어림이 아니라 정확한 예측이다.
+
+    **격자의 대가는 여기서 분명해진다.** $\hat\mu$를 소수 넷째 자리까지 맞히려면 간격을 $2\times10^{-4}$ 아래로 줄여야 하므로 격자점이 $20{,}001$개 필요하다. 지금의 $500$점보다 $40$배다. 닫힌 해 $\bar x$는 덧셈 $100$번이면 끝나고 자리 손실도 없다. **닫힌 해가 있으면 격자를 쓸 이유가 없고**, 격자는 닫힌 해가 없을 때 또는 곡면의 모양을 눈으로 보고 싶을 때 쓰는 도구다.
+
+    모수가 $d$개면 격자점이 $(\text{격자 수})^d$로 폭발한다는 점도 함께 기억해 두자. 지금 쓴 $500$점을 모수 넷에 똑같이 적용하면 $500^4 = 6.25\times10^{10}$점이 되어 계산이 불가능하다.
 
 ## 기울기 기반 최적화
 
@@ -94,57 +167,129 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 재모수화로 제약 없애기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 재모수화로 제약 없애기. $\phi = \log\sigma^2$로 바꾸어 제약 $\sigma^2 > 0$을 없앤 뒤 넬더-미드로 $(\mu, \phi)$를 최적화한다.
+
+**(1)** 재모수화해도 최적점이 달라지지 않는 까닭을 말하고 $(\hat\mu, \hat\sigma^2)$의 닫힌 해를 쓰시오.
+
+**(2)** 수치 해가 닫힌 해와 소수 넷째 자리까지 같다. **이것이 넬더-미드가 그만큼 정확하다는 증거인가.**
 
 </div>
 
-```python
-import numpy as np
-from scipy import optimize
+??? success "풀이"
 
-def mle_normal_numerical(data):
-    """재매개변수화를 써서 정규분포의 MLE를 수치적으로 찾는다."""
-    def neg_log_lik(params):
-        # sigma^2 을 직접 다루지 않고 log(sigma^2) 을 최적화한다.
-        # 이유: sigma^2 > 0 이라는 제약을 최적화기에 알려 주기 어려운데,
-        #       log를 쓰면 log_sigma2 가 어떤 실수든 exp를 거치며 자동으로 양수가 된다.
-        #       제약 없는 최적화 문제로 바뀌므로 Nelder-Mead 같은 단순한 방법도 쓸 수 있다.
-        mu, log_sigma2 = params
-        sigma2 = np.exp(log_sigma2)
-        n = len(data)
-        # 음의 로그가능도. 최소화하는 것이 가능도를 최대화하는 것과 같다.
-        return 0.5 * n * np.log(2 * np.pi * sigma2) + np.sum((data - mu) ** 2) / (2 * sigma2)
+    **(1) 해석적으로.** $g(\sigma^2) = \log\sigma^2$이 $(0,\infty)$에서 $\mathbb{R}$로 가는 **전단사**이므로
 
-    # 출발점을 여러 개 시도한다.
-    # 정규분포의 로그가능도는 볼록해서 사실 한 번이면 충분하지만,
-    # 봉우리가 여럿인 문제에서는 이렇게 여러 곳에서 출발해
-    # 가장 좋은 것을 골라야 국소 최적에 갇히지 않는다.
-    # (numpy 배열에는 .median() 이 없으므로 np.median 을 쓴다.)
-    best_result = None
+    $$
+    \max_{\sigma^2 > 0} \ell(\mu, \sigma^2) = \max_{\phi \in \mathbb{R}} \ell(\mu, e^\phi)
+    $$
+
+    이고 두 최대점이 $\hat\phi = \log\hat\sigma^2$로 맞물린다. 최댓값을 **옮겨 놓았을 뿐 바꾸지 않았다.** 이것이 최대가능도추정량의 불변성이며, 덤으로 $e^\phi > 0$이 저절로 보장되어 제약이 사라진다. 최적화기는 $\phi$를 실수 전체에서 자유롭게 움직일 수 있다.
+
+    닫힌 해는 잘 알려진 대로
+
+    $$
+    \hat\mu = \bar x, \qquad
+    \hat\sigma^2 = \frac{1}{n}\sum_{i=1}^n (x_i - \bar x)^2
+    $$
+
+    이다. 분모가 $n-1$이 아니라 **$n$**이라는 점이 중요하다.
+
+    **(2) 증거가 아니다.** 코드의 출발점 목록을 다시 보라.
+
+    ```
     for mu0 in [0, data.mean(), np.median(data)]:
         for ls0 in [0, np.log(data.var())]:
-            result = optimize.minimize(neg_log_lik, x0=[mu0, ls0], method="Nelder-Mead")
-            # result.fun 이 그 출발점에서 도달한 최솟값이다
-            if best_result is None or result.fun < best_result.fun:
-                best_result = result
+    ```
 
-    mu_hat = best_result.x[0]
-    sigma2_hat = np.exp(best_result.x[1])    # log에서 되돌린다
-    return mu_hat, sigma2_hat
+    `np.var`의 기본값은 `ddof=0`이므로 `data.var()`는 **정확히 $\hat\sigma^2$**이다. 곧 출발점 $(\bar x, \log\hat\sigma^2)$은 이미 **정답 그 자리**다. 넬더-미드는 그 자리에서 단체를 만들고 어느 꼭짓점도 더 낫지 않으면 $x_0$를 그대로 돌려주므로, 일치는 "소수 넷째 자리"가 아니라 **비트까지**다. 알고리즘의 정확도와는 아무 상관이 없다.
 
-rng = np.random.default_rng(42)
-data = rng.normal(5.0, 2.0, 100)
-mu_hat, sigma2_hat = mle_normal_numerical(data)
-print(f"Numerical MLE: mu = {mu_hat:.4f}, sigma^2 = {sigma2_hat:.4f}")
-print(f"Closed-form:   mu = {data.mean():.4f}, sigma^2 = {np.mean((data - data.mean())**2):.4f}")
-```
+    넬더-미드의 실제 정확도를 보려면 나머지 다섯 출발점을 따로 보아야 한다.
 
-출력:
+    ```python
+    import numpy as np
+    from scipy import optimize
 
-```
-Numerical MLE: mu = 4.8995, sigma^2 = 2.3888
-Closed-form:   mu = 4.8995, sigma^2 = 2.3888
-```
+    def mle_normal_numerical(data):
+        """재매개변수화를 써서 정규분포의 MLE를 수치적으로 찾는다."""
+        def neg_log_lik(params):
+            # sigma^2 을 직접 다루지 않고 log(sigma^2) 을 최적화한다.
+            # 이유: sigma^2 > 0 이라는 제약을 최적화기에 알려 주기 어려운데,
+            #       log를 쓰면 log_sigma2 가 어떤 실수든 exp를 거치며 자동으로 양수가 된다.
+            #       제약 없는 최적화 문제로 바뀌므로 Nelder-Mead 같은 단순한 방법도 쓸 수 있다.
+            mu, log_sigma2 = params
+            sigma2 = np.exp(log_sigma2)
+            n = len(data)
+            # 음의 로그가능도. 최소화하는 것이 가능도를 최대화하는 것과 같다.
+            return 0.5 * n * np.log(2 * np.pi * sigma2) + np.sum((data - mu) ** 2) / (2 * sigma2)
+
+        # 출발점을 여러 개 시도한다.
+        # 정규분포의 로그가능도는 볼록해서 사실 한 번이면 충분하지만,
+        # 봉우리가 여럿인 문제에서는 이렇게 여러 곳에서 출발해
+        # 가장 좋은 것을 골라야 국소 최적에 갇히지 않는다.
+        # (numpy 배열에는 .median() 이 없으므로 np.median 을 쓴다.)
+        best_result = None
+        for mu0 in [0, data.mean(), np.median(data)]:
+            for ls0 in [0, np.log(data.var())]:
+                result = optimize.minimize(neg_log_lik, x0=[mu0, ls0], method="Nelder-Mead")
+                # result.fun 이 그 출발점에서 도달한 최솟값이다
+                if best_result is None or result.fun < best_result.fun:
+                    best_result = result
+
+        mu_hat = best_result.x[0]
+        sigma2_hat = np.exp(best_result.x[1])    # log에서 되돌린다
+        return mu_hat, sigma2_hat
+
+    rng = np.random.default_rng(42)
+    data = rng.normal(5.0, 2.0, 100)
+    mu_hat, sigma2_hat = mle_normal_numerical(data)
+    print(f"Numerical MLE: mu = {mu_hat:.4f}, sigma^2 = {sigma2_hat:.4f}")
+    print(f"Closed-form:   mu = {data.mean():.4f}, sigma^2 = {np.mean((data - data.mean())**2):.4f}")
+
+    # 소수 넷째 자리가 아니라 비트까지 같은지 본다.
+    mu_closed = data.mean()
+    sigma2_closed = np.mean((data - mu_closed) ** 2)
+    print(f"\nmu  비트까지 같은가? {mu_hat == mu_closed}")
+    print(f"s^2 비트까지 같은가? {sigma2_hat == sigma2_closed}")
+    print(f"np.var(data) 가 MLE 와 같은가? {data.var() == sigma2_closed}")
+
+    # 출발점마다 따로 보면 넬더-미드의 실제 정확도가 드러난다.
+    def neg_ll(params):
+        mu, ls = params
+        s2 = np.exp(ls)
+        return 0.5 * len(data) * np.log(2 * np.pi * s2) + np.sum((data - mu) ** 2) / (2 * s2)
+
+    print("\n출발점별 오차")
+    for mu0, nm in [(0.0, "0"), (mu_closed, "mean"), (float(np.median(data)), "median")]:
+        for ls0, ln in [(0.0, "0"), (float(np.log(data.var())), "log var")]:
+            r = optimize.minimize(neg_ll, x0=[mu0, ls0], method="Nelder-Mead")
+            print(f"  ({nm:>6}, {ln:>7}):  mu 오차 {r.x[0] - mu_closed:>9.2e},"
+                  f"  s^2 오차 {np.exp(r.x[1]) - sigma2_closed:>9.2e},  호출 {r.nfev:>3}")
+    ```
+
+    출력:
+
+    ```
+    Numerical MLE: mu = 4.8995, sigma^2 = 2.3888
+    Closed-form:   mu = 4.8995, sigma^2 = 2.3888
+
+    mu  비트까지 같은가? True
+    s^2 비트까지 같은가? True
+    np.var(data) 가 MLE 와 같은가? True
+
+    출발점별 오차
+      (     0,       0):  mu 오차  2.17e-06,  s^2 오차  7.58e-05,  호출 152
+      (     0, log var):  mu 오차 -2.75e-05,  s^2 오차  8.64e-05,  호출 153
+      (  mean,       0):  mu 오차  2.15e-05,  s^2 오차  5.11e-05,  호출 105
+      (  mean, log var):  mu 오차  0.00e+00,  s^2 오차  0.00e+00,  호출  45
+      (median,       0):  mu 오차  1.16e-05,  s^2 오차  5.96e-05,  호출 102
+      (median, log var):  mu 오차  1.62e-05,  s^2 오차 -7.70e-05,  호출  49
+    ```
+
+    **짐작이 맞았다.** $\hat\mu$와 $\hat\sigma^2$이 닫힌 해와 **비트까지** 같고, `data.var()`가 MLE와 같다는 것도 `True`다. 표를 보면 사정이 분명해진다. 출발점이 `(mean, log var)`인 줄만 오차가 정확히 $0$이고 함수 호출이 $45$번으로 가장 적다. 그 자리에서 출발해 아무 데도 가지 않은 것이다. `best_result`가 최솟값으로 그 줄을 고르니 최종 답이 닫힌 해와 같아진다.
+
+    **나머지 다섯 줄이 넬더-미드의 참모습이다.** $\hat\mu$의 오차가 $10^{-6}\sim10^{-5}$, $\hat\sigma^2$의 오차가 $5\times10^{-5}\sim9\times10^{-5}$다. 기본 허용오차 `xatol = fatol = 1e-4`에 걸맞은 정확도이며, 소수 넷째 자리까지만 믿을 수 있다는 뜻이다. **처음 출력이 넷째 자리까지 맞아 보인 것은 운이 아니라 반칙이었다.**
+
+    여기서 배울 것은 두 가지다. 첫째, 수치 해를 닫힌 해와 견줄 때는 **출발점이 답을 알고 있지 않은지** 먼저 확인해야 한다. 둘째, 알고리즘의 정확도를 알고 싶으면 일치하는 자릿수를 세지 말고 **허용오차 설정을 보라.** $10^{-4}$를 넣고 $10^{-10}$의 정확도를 기대할 수는 없다.
 
 ## Newton-Raphson 방법
 
@@ -177,46 +322,110 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 출발값에 따른 수렴 위치
+**보기 3.** <span class="diff easy" title="쉬움"></span> 출발값에 따른 수렴 위치. 성분 둘짜리 정규 혼합에서 뽑은 $n = 200$개로 $(\pi, \mu_1, \mu_2, \sigma)$를 세 출발점에서 최적화한다.
+
+**(1)** 세 결과가 모두 $402.58$에 닿는데 출발 2만 $\mu_1$과 $\mu_2$가 뒤바뀌어 있다. **이것이 국소 최적에 갇힌 것인가.** 그렇게 판정한 근거와 함께, $\hat\pi$ 두 값 사이에 성립해야 할 관계를 쓰시오.
+
+**(2)** 찾은 모수에서 이름을 맞바꾼 벡터의 음의 로그가능도를 다시 계산해 (1)을 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import optimize, stats
+??? success "풀이"
 
-def mixture_log_likelihood(params, data):
-    """성분 둘짜리 정규 혼합모형의 음의 로그가능도."""
-    pi, mu1, mu2, sigma = params[0], params[1], params[2], np.exp(params[3])
-    pi = 1 / (1 + np.exp(-pi))  # sigmoid transform for mixing weight
-    ll = np.sum(np.log(
-        pi * stats.norm.pdf(data, mu1, sigma) +
-        (1 - pi) * stats.norm.pdf(data, mu2, sigma)
-    ))
-    return -ll
+    **(1) 해석적으로. 국소 최적이 아니다 — 라벨 바꿈이다.** 혼합밀도
 
-# 봉우리 둘짜리 혼합분포에서 자료를 만든다.
-rng = np.random.default_rng(42)
-n = 200
-z = rng.binomial(1, 0.4, n)
-data = np.where(z, rng.normal(0, 1, n), rng.normal(4, 1, n))
+    $$
+    f(x) = \pi\,\varphi(x; \mu_1, \sigma) + (1-\pi)\,\varphi(x; \mu_2, \sigma)
+    $$
 
-# 출발값을 바꿔 가며 어디로 수렴하는지 본다.
-starts = [[0, -1, 5, 0], [0, 2, 2, 0], [0, 0, 3, 0.5]]
-for i, x0 in enumerate(starts):
-    result = optimize.minimize(mixture_log_likelihood, x0, args=(data,), method="Nelder-Mead")
-    pi_hat = 1 / (1 + np.exp(-result.x[0]))
-    print(f"Start {i+1}: pi={pi_hat:.3f}, mu1={result.x[1]:.3f}, "
-          f"mu2={result.x[2]:.3f}, nll={result.fun:.2f}")
-```
+    에서 치환
 
-출력:
+    $$
+    (\pi, \mu_1, \mu_2) \;\longmapsto\; (1-\pi,\ \mu_2,\ \mu_1)
+    $$
 
-```
-Start 1: pi=0.374, mu1=0.154, mu2=3.900, nll=402.58
-Start 2: pi=0.626, mu1=3.900, mu2=0.154, nll=402.58
-Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
-```
+    을 하면 두 항이 자리만 바꿀 뿐 **합이 한 치도 달라지지 않는다.** 모든 $x$에서 $f$가 같으므로 가능도도 정확히 같다. 성분이 $K$개면 이런 치환이 $K!$가지 있고, 여기서는 $2! = 2$다. 곧 전역 최대가 **둘**이고 둘은 같은 해를 다르게 이름 붙인 것에 지나지 않는다.
+
+    출발 2는 $\mu_1 = \mu_2 = 2$라는 대칭 자리에서 시작했다. 두 봉우리에서 꼭 같은 거리에 있으므로 어느 쪽으로 가느냐는 단체가 처음 어떻게 펴지느냐가 정할 뿐이고, 어느 쪽으로 가든 **같은 높이**에 닿는다. 국소 최적에 갇혔다면 음의 로그가능도가 **더 컸어야** 하는데 셋이 모두 $402.58$이다.
+
+    $\hat\pi$ 사이에는 치환이 그대로
+
+    $$
+    \hat\pi_{(2)} = 1 - \hat\pi_{(1)}
+    $$
+
+    을 요구한다. 출력의 $0.374$와 $0.626$이 정확히 그 관계다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import optimize, stats
+
+    def mixture_log_likelihood(params, data):
+        """성분 둘짜리 정규 혼합모형의 음의 로그가능도."""
+        pi, mu1, mu2, sigma = params[0], params[1], params[2], np.exp(params[3])
+        pi = 1 / (1 + np.exp(-pi))  # sigmoid transform for mixing weight
+        ll = np.sum(np.log(
+            pi * stats.norm.pdf(data, mu1, sigma) +
+            (1 - pi) * stats.norm.pdf(data, mu2, sigma)
+        ))
+        return -ll
+
+    # 봉우리 둘짜리 혼합분포에서 자료를 만든다.
+    rng = np.random.default_rng(42)
+    n = 200
+    z = rng.binomial(1, 0.4, n)
+    data = np.where(z, rng.normal(0, 1, n), rng.normal(4, 1, n))
+
+    # 출발값을 바꿔 가며 어디로 수렴하는지 본다.
+    starts = [[0, -1, 5, 0], [0, 2, 2, 0], [0, 0, 3, 0.5]]
+    for i, x0 in enumerate(starts):
+        result = optimize.minimize(mixture_log_likelihood, x0, args=(data,), method="Nelder-Mead")
+        pi_hat = 1 / (1 + np.exp(-result.x[0]))
+        print(f"Start {i+1}: pi={pi_hat:.3f}, mu1={result.x[1]:.3f}, "
+              f"mu2={result.x[2]:.3f}, nll={result.fun:.2f}")
+
+    # (1) 이 말한 불변성을 직접 확인한다.
+    best = optimize.minimize(mixture_log_likelihood, starts[0], args=(data,),
+                             method="Nelder-Mead").x
+    swapped = np.array([-best[0], best[2], best[1], best[3]])   # pi -> 1-pi, mu1 <-> mu2
+    a = mixture_log_likelihood(best, data)
+    b = mixture_log_likelihood(swapped, data)
+
+    print(f"\nnll(theta)   = {a:.12f}")
+    print(f"nll(swapped) = {b:.12f}")
+    print(f"비트까지 같은가? {a == b}")
+
+    sig = lambda t: 1 / (1 + np.exp(-t))
+    print(f"pi + (1-pi) 로 맞물리는가: {sig(best[0]):.6f} + {sig(-best[0]):.6f} "
+          f"= {sig(best[0]) + sig(-best[0]):.6f}")
+    print(f"sigma-hat = {np.exp(best[3]):.4f}  (참값 1)")
+    print(f"pi-hat = {sig(best[0]):.4f},  표본의 실제 섞임 비율 = {z.mean():.4f},  참값 0.4")
+    ```
+
+    출력:
+
+    ```
+    Start 1: pi=0.374, mu1=0.154, mu2=3.900, nll=402.58
+    Start 2: pi=0.626, mu1=3.900, mu2=0.154, nll=402.58
+    Start 3: pi=0.374, mu1=0.154, mu2=3.899, nll=402.58
+
+    nll(theta)   = 402.578187662901
+    nll(swapped) = 402.578187662901
+    비트까지 같은가? True
+    pi + (1-pi) 로 맞물리는가: 0.374353 + 0.625647 = 1.000000
+    sigma-hat = 1.0101  (참값 1)
+    pi-hat = 0.3744,  표본의 실제 섞임 비율 = 0.3850,  참값 0.4
+    ```
+
+    **불변성이 비트까지 확인되었다.** 이름을 맞바꾼 모수에서 음의 로그가능도를 다시 재면 $402.578187662901$로 자릿수 하나 다르지 않다. 반올림 오차 수준으로 같은 것이 아니라 **정확히 같은 수**인데, 두 식이 같은 항들을 다른 순서로 더한 것이 아니라 아예 같은 곱의 합이기 때문이다. $\hat\pi$도 $0.374353 + 0.625647 = 1.000000$으로 맞물린다.
+
+    **따라서 세 결과는 모두 전역 최대다.** 출발 2가 다른 답을 준 것이 아니라 같은 답에 다른 이름을 붙였을 뿐이고, 국소 최적에 갇힌 것과는 성질이 전혀 다르다. 세 `nll`을 소수 아래까지 펼쳐 보면 $5\times10^{-8}$ 안에서 같은데, 이는 넬더-미드가 멈춘 자리의 차이일 뿐 봉우리가 달라서 생긴 차이가 아니다.
+
+    **그렇다고 라벨 바꿈이 무해하지는 않다.** 같은 자료에 여러 번 적합하거나 MCMC로 사후표본을 모으면 $\mu_1$이 어떤 때는 $0.15$, 어떤 때는 $3.90$으로 튀어 **평균을 내면 $2$ 언저리라는 엉뚱한 값**이 나온다. 그래서 실무에서는 $\mu_1 < \mu_2$ 같은 **순서 제약**을 걸거나, 적합이 끝난 뒤 성분을 평균순으로 정렬해 이름을 통일한다.
+
+    나머지 추정값도 제자리다. $\hat\sigma = 1.0101$이 참값 $1$에 가깝고, $\hat\pi = 0.3744$는 참값 $0.4$보다 이 표본에서 실제로 뽑힌 비율 $0.3850$에 더 가깝다. **추정량이 겨냥하는 것은 모집단의 참값이지만 손에 쥔 자료는 표본이므로** 이것이 당연한 모습이다.
 
 ## 해석
 

@@ -56,95 +56,175 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 포획-재포획 MLE 구현
+**보기 1.** <span class="diff easy" title="쉬움"></span> 포획-재포획 MLE 구현. 새 $c = 10$마리를 잡아 표지하고 놓아 준 뒤 $r = 10$마리를 다시 잡았더니 $t = 3$마리가 표지되어 있었다.
+
+**(1)** 가능도를 전수 탐색하는 함수를 짜서 $\hat N$을 구하고, 닫힌 꼴 $\lfloor cr/t \rfloor$와 맞는지 확인하시오.
+
+**(2)** 봉우리가 얼마나 넓은지 재시오. 가능도가 꼭대기의 절반 이상인 $N$의 구간은 어디까지인가.
 
 </div>
 
-```python
-from scipy import special
+??? success "풀이"
 
-def prob(n, c, r, t):
-    """
-    Hypergeometric probability: P(T = t | N = n).
-    
-    Parameters
-    ----------
-    n : Total population size
-    c : Number tagged in capture phase
-    r : Number in recapture sample
-    t : Number of tagged in recapture
-    """
-    return special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
+    **(1) 해석적으로.** 닫힌 꼴이 $\hat N = \lfloor cr/t \rfloor$이고 여기서는
+
+    $$
+    \frac{cr}{t} = \frac{10 \times 10}{3} = 33.333\ldots
+    $$
+
+    이므로 $\hat N = 33$이다. $cr/t$가 **정수가 아니라는 점**이 중요하다. 가능도비가 $1$이 되는 $N$이 없으므로 $L(32) < L(33) > L(34)$로 최대점이 하나뿐이고, 전수 탐색과 공식이 어긋날 여지가 없다. ($cr/t$가 정수이면 사정이 달라진다. 바로 아래 보기 2가 그 경우다.)
+
+    탐색 범위의 아래쪽 벽도 짚어 두자. 표지된 $c$마리와 재포획에서 새로 잡힌 $r - t$마리는 서로 다른 개체이므로
+
+    $$
+    N \ge c + r - t = 17
+    $$
+
+    이다. 위쪽에는 그런 벽이 없다. $t$를 하나 줄이면 $cr/t$가 $33.3$에서 $50$으로 뛰므로 가능도는 **오른쪽으로 길게 늘어진다.**
+
+    **(2) 수치적으로.** 후보 $N$마다 초기하확률을 재고, 꼭대기의 절반 이상인 것을 모은다.
+
+    ```python
+    from scipy import special
+
+    def prob(n, c, r, t):
+        """
+        Hypergeometric probability: P(T = t | N = n).
+
+        Parameters
+        ----------
+        n : Total population size
+        c : Number tagged in capture phase
+        r : Number in recapture sample
+        t : Number of tagged in recapture
+        """
+        return special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
 
 
-def capture_recapture_mle(c, r, t):
-    """
-    Compute the MLE of population size N via exhaustive search.
-    """
-    n_min = c + r - t  # minimum possible N
-    n_max = 10 * n_min  # search range
+    def capture_recapture_mle(c, r, t):
+        """
+        Compute the MLE of population size N via exhaustive search.
+        """
+        n_min = c + r - t  # minimum possible N
+        n_max = 10 * n_min  # search range
 
-    prob_list = [prob(n, c, r, t) for n in range(n_min, n_max)]
-    mle_idx = max(range(len(prob_list)), key=lambda i: prob_list[i])
-    mle_n = mle_idx + n_min
+        prob_list = [prob(n, c, r, t) for n in range(n_min, n_max)]
+        mle_idx = max(range(len(prob_list)), key=lambda i: prob_list[i])
+        mle_n = mle_idx + n_min
 
-    return mle_n, prob_list
+        return mle_n, prob_list
 
 
-# 보기: 10마리에 표지, 10마리를 다시 잡았고 그중 3마리가 표지된 개체였다.
-c, r, t = 10, 10, 3
-mle_n, probs = capture_recapture_mle(c, r, t)
-print(f"Capture: {c} tagged, Recapture: {r} caught, {t} tagged")
-print(f"MLE of N: {mle_n}")
-print(f"Lincoln-Petersen estimate: {c * r // t}")
-```
+    # 보기: 10마리에 표지, 10마리를 다시 잡았고 그중 3마리가 표지된 개체였다.
+    c, r, t = 10, 10, 3
+    mle_n, probs = capture_recapture_mle(c, r, t)
+    print(f"Capture: {c} tagged, Recapture: {r} caught, {t} tagged")
+    print(f"MLE of N: {mle_n}")
+    print(f"Lincoln-Petersen estimate: {c * r // t}")
 
-출력:
+    # 봉우리의 폭. 가능도가 꼭대기의 절반 이상인 N 을 모은다.
+    n_min = c + r - t
+    peak = max(probs)
+    half = [n_min + i for i, p in enumerate(probs) if p >= peak / 2]
+    print(f"cr/t = {c * r / t:.3f}  (정수가 아니므로 최대점은 하나)")
+    print(f"가능도가 꼭대기의 절반 이상인 구간: N = {half[0]} ~ {half[-1]}")
+    ```
 
-```
-Capture: 10 tagged, Recapture: 10 caught, 3 tagged
-MLE of N: 33
-Lincoln-Petersen estimate: 33
-```
+    출력:
 
-탐색한 가능도를 그대로 그리면 이렇다. 오른쪽은 아래 보기 2의 수치다.
+    ```
+    Capture: 10 tagged, Recapture: 10 caught, 3 tagged
+    MLE of N: 33
+    Lincoln-Petersen estimate: 33
+    cr/t = 33.333  (정수가 아니므로 최대점은 하나)
+    가능도가 꼭대기의 절반 이상인 구간: N = 23 ~ 60
+    ```
 
-![개체군 크기에 대한 가능도](./img/capture_recapture_likelihood.png)
+    탐색한 가능도를 그대로 그리면 이렇다. 왼쪽이 이 보기의 수치이고 오른쪽은 아래 보기 2의 수치다.
 
-**봉우리의 자리보다 그 폭이 더 할 말이 많다.** 왼쪽에서 $\hat N = 33$이 나오지만 가능도가 꼭대기의 절반 이상인 구간은 $23$부터 $60$까지다. 표지된 10마리 중 3마리를 다시 잡았다는 관측만으로는 개체군이 25마리든 55마리든 크게 이상하지 않다는 뜻이다. 재포획 수 $t$가 하나만 달라져도 $cr/t$가 크게 움직이는 것과 같은 이야기다.
+    ![개체군 크기에 대한 가능도](./img/capture_recapture_likelihood.png)
 
-분포가 **오른쪽으로 길게 늘어진다**는 점도 중요하다. $t$가 작을 때 $cr/t$는 위쪽으로 얼마든지 커질 수 있는 반면 아래쪽으로는 $c + r - t$라는 벽이 있다. 그래서 점추정값 하나만 보고하는 것은 이 문제에서 특히 위험하다.
+    전수 탐색이 준 $33$이 해석적 답 $\lfloor 33.333 \rfloor = 33$과 맞는다. **봉우리의 자리보다 그 폭이 더 할 말이 많다.** 가능도가 꼭대기의 절반 이상인 구간이 $23$부터 $60$까지로, 폭이 점추정값보다도 넓다. 표지된 10마리 중 3마리를 다시 잡았다는 관측만으로는 개체군이 25마리든 55마리든 크게 이상하지 않다는 뜻이다.
+
+    구간이 $33$을 중심으로 대칭이 아니라 위쪽으로 치우쳐 있다는 것도 (1)에서 따진 비대칭 그대로다. 아래로는 $10$칸, 위로는 $27$칸이다. 그래서 점추정값 하나만 보고하는 것은 이 문제에서 특히 위험하다.
 
 !!! note "$cr/t$ 가 정수이면 최대가 둘이다"
-    오른쪽 그림에서 $\hat N = 14$와 $15$의 가능도가 **정확히 같다.** $c = 5$, $r = 6$, $t = 2$이면 $cr/t = 15$로 딱 떨어지는데, 이런 경우 $\lfloor cr/t \rfloor$와 그보다 하나 작은 값이 함께 최대가 된다. 위 코드처럼 `max`로 찾으면 먼저 만나는 $14$가 나오고, 닫힌 형태 공식을 쓰면 $15$가 나온다. 둘 다 MLE이므로 어느 쪽도 틀리지 않았다.
+    $cr/t$가 딱 떨어지면 $\lfloor cr/t \rfloor$와 그보다 하나 작은 값이 **함께** 최대가 된다. 그러면 위 코드처럼 `max`로 찾은 값과 닫힌 형태 공식이 $1$만큼 어긋나는데, 둘 다 MLE이므로 어느 쪽도 틀리지 않았다. 바로 아래 보기 2가 그 경우를 따진다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 포획–재포획 최대가능도
+**보기 2.** <span class="diff easy" title="쉬움"></span> 전수 탐색과 공식이 갈리는 경우. 어떤 야생동물 생물학자가 새 $c = 5$마리를 잡아 표지하고 놓아 준 뒤, 나중에 $r = 6$마리를 재포획했더니 그중 $t = 2$마리가 표지되어 있었다.
+
+**(1)** 같은 함수를 그대로 돌리면 전수 탐색은 $\hat N = 14$를, 공식 $\lfloor cr/t \rfloor$는 $15$를 준다. 어느 쪽이 틀렸는가.
+
+**(2)** 분수 연산으로 $L(14)$와 $L(15)$를 정확히 계산해 (1)의 답을 확인하고, 봉우리의 폭도 재시오.
 
 </div>
 
-어떤 야생동물 생물학자가 새 $c = 5$마리를 잡아 표지하고 놓아 준 뒤, 나중에 $r = 6$마리를 재포획했더니 그중 $t = 2$마리가 표지되어 있었다고 하자.
+??? success "풀이"
 
-```python
-c, r, t = 5, 6, 2
-mle_n, probs = capture_recapture_mle(c, r, t)
-print(f"MLE of N: {mle_n}")
-print(f"Lincoln-Petersen: {c * r // t}")
-```
+    **(1) 해석적으로. 어느 쪽도 틀리지 않았다.** 가능도비
 
-출력:
+    $$
+    \frac{L(N)}{L(N-1)} = \frac{(N-c)(N-r)}{N(N-c-r+t)}
+    $$
 
-```
-MLE of N: 14
-Lincoln-Petersen: 15
-```
+    가 $1$ 이상인 조건은 $N \le cr/t$다. 여기서는
 
-Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이다.
+    $$
+    \frac{cr}{t} = \frac{5 \times 6}{2} = 15
+    $$
 
-**두 줄의 값이 다른 것은 오류가 아니다.** 위 주석에서 본 대로 $cr/t$가 정수인 이 경우 $N = 14$와 $N = 15$의 가능도가 정확히 같아서, 격자 탐색은 먼저 만나는 $14$를 돌려주고 공식은 $15$를 준다. 그림에서 두 막대의 높이가 같은 것을 확인할 수 있다.
+    이 **정수**이므로 $N = 15$에서 이 부등식이 등호가 되고, 비가 정확히 $1$, 곧
 
-봉우리 자체도 그리 뾰족하지 않다. 가능도가 꼭대기의 절반 이상인 구간이 $10$부터 $30$까지이므로, 관측 여섯 마리로 개체군 크기를 정밀하게 잡아내기는 어렵다.
+    $$
+    L(14) = L(15)
+    $$
+
+    이다. 가능도의 최댓값이 두 곳에서 달성되므로 최대가능도추정값이 **둘**이다. 전수 탐색은 동점 중 먼저 만나는 $14$를 돌려주고 공식은 $15$를 주지만, 둘 다 MLE다. 가능도만으로는 어느 쪽도 고를 수 없다.
+
+    한 가지는 분명히 해 두자. 이 어긋남은 **격자가 성겨서 생긴 오차가 아니다.** $N$의 후보를 하나도 빠뜨리지 않고 다 재었는데도 동점이 남은 것이고, 동점이 생긴다는 사실 자체가 가능도비 계산이 예측한 바다.
+
+    **(2) 수치적으로.** 부동소수점으로는 "거의 같다"와 "정확히 같다"를 가릴 수 없으므로 분수로 재어 본다.
+
+    ```python
+    from fractions import Fraction
+    from math import comb
+
+    c, r, t = 5, 6, 2
+    mle_n, probs = capture_recapture_mle(c, r, t)
+    print(f"MLE of N: {mle_n}")
+    print(f"Lincoln-Petersen: {c * r // t}")
+
+    def exact_prob(n, c, r, t):
+        """같은 확률을 분수로 계산한다. 반올림이 끼어들지 않는다."""
+        return Fraction(comb(n - c, r - t) * comb(c, t), comb(n, r))
+
+    print(f"분수로 L(14) = {exact_prob(14, c, r, t)}")
+    print(f"분수로 L(15) = {exact_prob(15, c, r, t)}")
+    print(f"L(14) == L(15) ? {exact_prob(14, c, r, t) == exact_prob(15, c, r, t)}")
+
+    # 봉우리의 폭도 보기 1 과 같은 방식으로 재 둔다.
+    n_min = c + r - t
+    peak = max(probs)
+    half = [n_min + i for i, p in enumerate(probs) if p >= peak / 2]
+    print(f"가능도가 꼭대기의 절반 이상인 구간: N = {half[0]} ~ {half[-1]}")
+    ```
+
+    출력:
+
+    ```
+    MLE of N: 14
+    Lincoln-Petersen: 15
+    분수로 L(14) = 60/143
+    분수로 L(15) = 60/143
+    L(14) == L(15) ? True
+    가능도가 꼭대기의 절반 이상인 구간: N = 10 ~ 30
+    ```
+
+    $L(14)$와 $L(15)$가 둘 다 $60/143$으로 한 치도 다르지 않다. 유도가 예측한 동점이 분수 연산으로 확인되었다. 위 그림의 오른쪽 그래프에서 두 점의 높이가 같은 것도 같은 사실이다.
+
+    봉우리 자체도 그리 뾰족하지 않다. 가능도가 꼭대기의 절반 이상인 구간이 $10$부터 $30$까지이므로, 관측 여섯 마리로 개체군 크기를 정밀하게 잡아내기는 어렵다. 보기 1에서는 이 구간에 $N$ 값이 $38$개 들어갔고 여기서는 $21$개뿐이지만, 추정값 자체가 작으므로 **상대적인** 불확실성은 오히려 크다. 보기 1의 구간은 꼭대기 $33$의 $0.70$배에서 $1.82$배까지였는데, 여기서는 꼭대기 $14$의 $0.71$배에서 $2.14$배까지가 다 그럴듯하다.
 
 ## 추정량의 성질
 
@@ -155,7 +235,7 @@ Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이
     \hat{N}_{\text{Chapman}} = \frac{(c+1)(r+1)}{t+1} - 1
     $$
 
-이 문제의 가능도함수 $L(N)$은 **단봉**이므로(봉우리가 하나이므로) MLE가 유일하고 격자탐색을 믿을 수 있다.
+이 문제의 가능도함수 $L(N)$은 **단봉**이므로(한 번 올랐다가 내려오므로) 격자탐색을 믿을 수 있다. 다만 $cr/t$가 **정수**이면 꼭대기에서 가능도비가 정확히 $1$이 되어 최대가 두 곳에서 달성된다. 그때는 MLE가 유일하지 않다.
 
 ## 민감도 분석
 
@@ -167,53 +247,95 @@ Lincoln-Petersen 추정값은 $\hat{N} = \lfloor 5 \times 6 / 2 \rfloor = 15$이
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 재포획 결과에 따른 민감도
+**보기 3.** <span class="diff easy" title="쉬움"></span> 재포획 결과에 따른 민감도. $c = r = 10$을 고정하고 재포획된 표지 개체 수 $t$를 $1$부터 $10$까지 바꿔 가며 전수 탐색 MLE를 표로 만든다.
+
+**(1)** 표를 만들기 **전에** 전수 탐색값이 $\lfloor cr/t \rfloor$와 어긋날 $t$를 모두 지목하시오.
+
+**(2)** 표를 만들어 (1)의 예측을 확인하고, $t$가 작을 때 추정이 왜 믿기 어려운지 적으시오.
 
 </div>
 
-```python
-from scipy import special
+??? success "풀이"
 
-def sensitivity_analysis():
-    """재포획된 표지 개체 수 t 를 바꿔 가며 MLE가 어떻게 변하는지 본다.
+    **(1) 해석적으로.** 보기 2에서 본 대로 전수 탐색과 공식이 갈리는 것은 **$cr/t$가 정수일 때**뿐이다. 그때 $L(\lfloor cr/t \rfloor - 1) = L(\lfloor cr/t \rfloor)$인 동점이 생기고 탐색은 작은 쪽을 고른다. 여기서 $cr = 100$이므로 조건은
 
-    t가 작을수록(표지가 거의 안 잡힐수록) 추정 개체수가 커진다.
-    t = 1 처럼 극단적인 경우 추정값이 100을 넘고 매우 불안정해지는데,
-    포획-재포획 조사에서 재포획 표본을 충분히 크게 잡아야 하는 이유다.
-    """
-    c, r = 10, 10
-    print(f"c = {c}, r = {r}")
-    print(f"{'t':>4} {'MLE':>6} {'cr/t':>8}")
-    print("-" * 20)
-    for t in range(1, min(c, r) + 1):
-        n_min = c + r - t
-        n_max = 10 * n_min
-        probs = [special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
-                 for n in range(n_min, n_max)]
-        mle_idx = max(range(len(probs)), key=lambda i: probs[i])
-        mle_n = mle_idx + n_min
-        print(f"{t:>4} {mle_n:>6} {c*r/t:>8.1f}")
+    $$
+    t \mid 100, \qquad 1 \le t \le 10
+    $$
 
-sensitivity_analysis()
-```
+    곧 $t \in \{1, 2, 4, 5, 10\}$이다.
 
-출력:
+    그런데 **$t = 10$은 예외다.** 동점 상대는 $cr/t - 1 = 9$인데 탐색 범위의 아래쪽 벽이
 
-```
-c = 10, r = 10
-   t    MLE     cr/t
---------------------
-   1     99    100.0
-   2     49     50.0
-   3     33     33.3
-   4     24     25.0
-   5     19     20.0
-   6     16     16.7
-   7     14     14.3
-   8     12     12.5
-   9     11     11.1
-  10     10     10.0
-```
+    $$
+    N \ge c + r - t = 10 + 10 - 10 = 10
+    $$
+
+    이어서 $9$가 애초에 후보가 아니다. 표지 $10$마리에 재포획 $10$마리가 모두 표지된 개체였다면 개체군이 $10$마리보다 작을 수 없으니 당연한 일이다. 동점의 한쪽이 경계 밖으로 밀려나 최대점이 다시 하나가 된다.
+
+    따라서 **어긋나는 것은 $t = 1, 2, 4, 5$ 넷**이고 그때마다 탐색값이 공식보다 정확히 $1$ 작아야 한다. 나머지 $t = 3, 6, 7, 8, 9, 10$에서는 두 값이 같아야 한다.
+
+    **(2) 수치적으로.** 예측한 대로인지 보려면 표에 $\lfloor cr/t \rfloor$ 열과 동점 여부를 함께 찍어야 한다.
+
+    ```python
+    from scipy import special
+
+    def sensitivity_analysis():
+        """재포획된 표지 개체 수 t 를 바꿔 가며 MLE가 어떻게 변하는지 본다.
+
+        t가 작을수록(표지가 거의 안 잡힐수록) 추정 개체수가 커진다.
+        t = 1 처럼 극단적인 경우 추정값이 100 가까이 치솟고 매우 불안정해지는데,
+        포획-재포획 조사에서 재포획 표본을 충분히 크게 잡아야 하는 이유다.
+        """
+        c, r = 10, 10
+        print(f"c = {c}, r = {r}")
+        print(f"{'t':>4} {'MLE':>6} {'cr/t':>8} {'floor':>6}  동점?")
+        print("-" * 36)
+        for t in range(1, min(c, r) + 1):
+            n_min = c + r - t
+            n_max = 10 * n_min
+            probs = [special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
+                     for n in range(n_min, n_max)]
+            mle_idx = max(range(len(probs)), key=lambda i: probs[i])
+            mle_n = mle_idx + n_min
+
+            # cr/t 가 정수이면 그 값과 하나 작은 값이 함께 최대가 된다.
+            # 단 하나 작은 값이 n_min 아래로 밀려나면 후보가 아니므로 동점이 사라진다.
+            tie = (c * r) % t == 0 and c * r // t - 1 >= n_min
+            print(f"{t:>4} {mle_n:>6} {c*r/t:>8.1f} {c*r//t:>6}  {'예' if tie else '아니오'}")
+
+    sensitivity_analysis()
+    ```
+
+    출력:
+
+    ```
+    c = 10, r = 10
+       t    MLE     cr/t  floor  동점?
+    ------------------------------------
+       1     99    100.0    100  예
+       2     49     50.0     50  예
+       3     33     33.3     33  아니오
+       4     24     25.0     25  예
+       5     19     20.0     20  예
+       6     16     16.7     16  아니오
+       7     14     14.3     14  아니오
+       8     12     12.5     12  아니오
+       9     11     11.1     11  아니오
+      10     10     10.0     10  아니오
+    ```
+
+    **(1)의 예측이 그대로 맞았다.** 동점이 "예"인 네 줄($t = 1, 2, 4, 5$)에서만 MLE 열이 floor 열보다 $1$ 작고, 나머지 여섯 줄은 두 열이 같다. $t = 10$은 $cr/t = 10$이 정수인데도 동점이 아니라고 찍혔다 — 경계가 동점 상대를 지운 그 경우다.
+
+    **$t$가 작을 때가 문제다.** $t$를 $1$에서 $2$로 **한 마리** 늘리는 것만으로 추정값이 $99$에서 $49$로 반토막 난다. $3$으로 늘리면 $33$이다. 반대편을 보면 $t$를 $9$에서 $10$으로 늘릴 때는 $11$에서 $10$으로 하나밖에 움직이지 않는다. $\hat N \approx cr/t$가 $t$의 **역수**이므로
+
+    $$
+    \left\lvert \frac{d\hat N}{dt} \right\rvert = \frac{cr}{t^2}
+    $$
+
+    이고, $t = 1$에서 이 값이 $100$, $t = 10$에서 $1$이다. **백 배 차이다.** 표지 개체를 몇 마리 다시 잡느냐가 추정의 정밀도를 거의 전부 정한다는 뜻이고, 조사 설계에서 재포획 표본을 충분히 크게 잡으라는 권고가 여기서 나온다.
+
+    $t = 0$이면 $cr/t$가 아예 정의되지 않는다. 가능도가 $N$에 대해 단조증가해서 최대점이 무한대로 달아나므로 MLE가 없고, 채프먼 추정량 같은 보정이 필요하다.
 
 ## 해석
 

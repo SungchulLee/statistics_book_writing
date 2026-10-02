@@ -79,7 +79,7 @@ $$
 
 ### 가능도의 최대화
 
-가능도에 자연로그를 취해 $\ell(N) = \log L(N)$을 얻고 $N$에 대해 미분하면 $N$의 MLE를 얻는다:
+$N$은 **정수 모수**라 미분할 수 없다. 대신 이웃한 두 값의 가능도비 $L(N)/L(N-1)$을 따지면 그 비가 $1$ 이상인 구간이 $N \le Mn/m$으로 나오므로, 가능도는 거기까지 오르다가 내려간다. 따라서 MLE는 바닥값이다:
 
 $$
 \hat{N} = \frac{M \cdot n}{m}
@@ -121,99 +121,179 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 포획-재포획으로 모집단 크기 추정하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 작은 표본에서의 포획-재포획. $M = 5$마리를 잡아 표지하고 놓아 준 뒤 $n = 6$마리를 다시 잡았더니 $m = 2$마리가 표지되어 있었다.
+
+**(1)** 가능도 $L(N)$을 최대로 만드는 $N$을 구하시오. 비례식이 주는 $Mn/m$과 정확히 같은가.
+
+**(2)** $N$을 하나씩 바꿔 가며 가능도를 재는 코드는 최대점을 **14**로 찍는다. (1)의 답과 어긋나는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from scipy import special
+??? success "풀이"
 
-def prob(n, c, r, t):
-    """
-    Calculate the probability of capturing 't' tagged birds in a recapture
-    sample of size 'r', given that there are 'n' birds in total.
+    **(1) 해석적으로.** $N$은 정수이므로 미분할 수 없다. 이웃한 두 값의 비를 본다. $\binom{M}{m}$은 $N$과 무관하여 약분되므로
 
-    Parameters:
-    - n: Total number of birds in the population
-    - c: Number of birds captured and tagged in the first stage
-    - r: Number of birds recaptured in the second stage
-    - t: Number of tagged birds in the recapture stage
+    $$
+    \frac{L(N)}{L(N-1)}
+    = \frac{\binom{N-M}{n-m}}{\binom{N-1-M}{n-m}} \cdot \frac{\binom{N-1}{n}}{\binom{N}{n}}
+    = \frac{(N-M)(N-n)}{N(N-M-n+m)}
+    $$
 
-    Returns:
-    - Probability of observing 't' tagged birds in the recapture sample.
-    """
-    return special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
+    이다. 이 비가 $1$ 이상인 조건을 정리한다. 분모가 양수인 범위에서
 
-def capture_recapture(c=10, r=10, t=3):
-    """
-    Calculate the probability distribution over possible total population sizes
-    and determine the MLE (Maximum Likelihood Estimate) for the population size.
+    $$
+    (N-M)(N-n) \ge N(N-M-n+m)
+    $$
 
-    Parameters:
-    - c: Number of birds captured and tagged in the first stage
-    - r: Number of birds recaptured in the second stage
-    - t: Number of tagged birds in the recapture stage
+    인데, 양변을 펼치면 $N^2$와 $-N(M+n)$이 지워지고 $Mn \ge Nm$만 남는다. 곧
 
-    Returns:
-    - prob_list: List of probabilities for each population size
-    - mle_n: MLE for the total population size
-    """
-    prob_list = []
+    $$
+    \frac{L(N)}{L(N-1)} \ge 1 \iff N \le \frac{Mn}{m}
+    $$
 
-    # 가능한 모집단 크기 n마다 확률을 구한다.
-    for n in range(c + r - t, 10 * (c + r - t)):
-        prob_list.append(prob(n, c, r, t))
+    이다. 가능도는 $Mn/m$까지 오르다가 그 뒤로 내려가므로
 
-    # 확률이 가장 큰 n이 모집단 크기의 MLE다.
-    prob_max = max(prob_list)
-    idx = prob_list.index(prob_max)
-    mle_n = idx + (c + r - t)
-    print(f'MLE n: {mle_n}')
+    $$
+    \hat N = \left\lfloor \frac{Mn}{m} \right\rfloor
+    $$
 
-    return prob_list, mle_n
+    이다. **비례식이 주는 $Mn/m$에 바닥함수가 붙는다**는 것이 요점이고, 그 까닭은 $N$이 정수라는 것 하나다(연습문제 9에서 같은 계산을 다시 밟는다).
 
-def draw(prob_list, mle_n, c=10, r=10, t=3):
-    """
-    Plot the probability distribution of the total population size
-    and highlight the MLE.
+    여기서는 $Mn/m = 5 \times 6 / 2 = 15$가 **정수**다. 그러면 $N = 15$에서 위 부등식이 등호가 되어 비가 정확히 $1$, 곧
 
-    Parameters:
-    - prob_list: List of probabilities for each population size
-    - mle_n: MLE for the total population size
-    - c, r, t: Parameters for the capture-recapture model
-    """
-    idx = mle_n - (c + r - t)
-    fig, ax = plt.subplots(figsize=(12, 3))
-    ax.plot(range(c + r - t, 10 * (c + r - t)), prob_list, label='Probability')
-    ax.plot([mle_n, mle_n], [0, prob_list[idx]], 'o--r', label=f'MLE: {mle_n}')
+    $$
+    L(14) = L(15)
+    $$
 
-    # 축 이름과 범례를 다듬는다.
-    ax.set_xlabel('Total Population Size (n)')
-    ax.set_ylabel('Probability')
-    ax.set_title('Capture-Recapture MLE for Population Size')
-    ax.legend()
-    plt.show()
+    이다. 최대가능도추정값이 **둘**이고 가능도만으로는 어느 쪽도 고를 수 없다.
 
-# 포획-재포획 모형의 값들: 표지 수, 재포획 수, 그중 표지된 수.
-c = 5   # Birds captured and tagged in the first stage
-r = 6   # Birds recaptured in the second stage
-t = 2   # Tagged birds in the recapture stage
+    **(2) 수치적으로.** 후보 $N$마다 초기하확률을 재어 가장 큰 곳을 찾는다.
 
-# 후보마다 확률을 구하고 가장 큰 것을 고른다.
-prob_list, mle_n = capture_recapture(c, r, t)
+    ```python
+    import matplotlib.pyplot as plt
+    from fractions import Fraction
+    from math import comb
+    from scipy import special
 
-# 확률을 후보별로 그리고 최댓값 자리를 표시한다.
-draw(prob_list, mle_n, c, r, t)
-```
+    def prob(n, c, r, t):
+        """
+        Calculate the probability of capturing 't' tagged birds in a recapture
+        sample of size 'r', given that there are 'n' birds in total.
 
-출력:
+        Parameters:
+        - n: Total number of birds in the population
+        - c: Number of birds captured and tagged in the first stage
+        - r: Number of birds recaptured in the second stage
+        - t: Number of tagged birds in the recapture stage
 
-```
-MLE n: 14
-```
+        Returns:
+        - Probability of observing 't' tagged birds in the recapture sample.
+        """
+        return special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
 
-![Capture-Recapture MLE for Population Size](./img/capture_recapture_124.png)
+    def exact_prob(n, c, r, t):
+        """같은 확률을 분수로 계산한다. 반올림이 끼어들지 않는다."""
+        return Fraction(comb(n - c, r - t) * comb(c, t), comb(n, r))
+
+    def capture_recapture(c=10, r=10, t=3):
+        """
+        Calculate the probability distribution over possible total population sizes
+        and determine the MLE (Maximum Likelihood Estimate) for the population size.
+
+        Parameters:
+        - c: Number of birds captured and tagged in the first stage
+        - r: Number of birds recaptured in the second stage
+        - t: Number of tagged birds in the recapture stage
+
+        Returns:
+        - prob_list: List of probabilities for each population size
+        - mle_n: MLE for the total population size
+        """
+        prob_list = []
+
+        # 가능한 모집단 크기 n마다 확률을 구한다.
+        for n in range(c + r - t, 10 * (c + r - t)):
+            prob_list.append(prob(n, c, r, t))
+
+        # 확률이 가장 큰 n이 모집단 크기의 MLE다.
+        prob_max = max(prob_list)
+        idx = prob_list.index(prob_max)
+        mle_n = idx + (c + r - t)
+        print(f'MLE n: {mle_n}')
+
+        return prob_list, mle_n
+
+    def draw(prob_list, mle_n, c=10, r=10, t=3):
+        """
+        Plot the probability distribution of the total population size
+        and highlight the MLE.
+
+        Parameters:
+        - prob_list: List of probabilities for each population size
+        - mle_n: MLE for the total population size
+        - c, r, t: Parameters for the capture-recapture model
+        """
+        idx = mle_n - (c + r - t)
+        fig, ax = plt.subplots(figsize=(12, 3))
+        ax.plot(range(c + r - t, 10 * (c + r - t)), prob_list, label='Probability')
+        ax.plot([mle_n, mle_n], [0, prob_list[idx]], 'o--r', label=f'MLE: {mle_n}')
+
+        # 축 이름과 범례를 다듬는다.
+        ax.set_xlabel('Total Population Size (n)')
+        ax.set_ylabel('Probability')
+        ax.set_title('Capture-Recapture MLE for Population Size')
+        ax.legend()
+        plt.show()
+
+    # 포획-재포획 모형의 값들: 표지 수, 재포획 수, 그중 표지된 수.
+    c = 5   # Birds captured and tagged in the first stage
+    r = 6   # Birds recaptured in the second stage
+    t = 2   # Tagged birds in the recapture stage
+
+    # 후보마다 확률을 구하고 가장 큰 것을 고른다.
+    prob_list, mle_n = capture_recapture(c, r, t)
+
+    # (1) 에서 유도한 floor(M n / m) 과 비교해 보라.
+    print(f'floor(c*r/t): {c * r // t}')
+
+    # c*r/t = 15 가 정수이므로 L(14) 와 L(15) 는 **정확히 같다.** 분수로 재면 드러난다.
+    print(f'exact L(14) == L(15) ? {exact_prob(14, c, r, t) == exact_prob(15, c, r, t)}')
+    print(f'float L(14) - L(15) = {prob(14, c, r, t) - prob(15, c, r, t):+.3e}')
+
+    # r 을 7 로 바꾸면 c*r/t = 17.5 라 나누어떨어지지 않고 최대점이 하나뿐이다.
+    capture_recapture(c=5, r=7, t=2)
+    print(f'floor(5*7/2): {5 * 7 // 2}')
+
+    # 봉우리가 얼마나 평평한지 재 본다.
+    for n in (10, 15, 30, 60):
+        print(f'L({n}) / L(15) = {prob(n, c, r, t) / prob(15, c, r, t):.3f}')
+
+    # 확률을 후보별로 그리고 최댓값 자리를 표시한다.
+    draw(prob_list, mle_n, c, r, t)
+    ```
+
+    출력:
+
+    ```
+    MLE n: 14
+    floor(c*r/t): 15
+    exact L(14) == L(15) ? True
+    float L(14) - L(15) = +0.000e+00
+    MLE n: 17
+    floor(5*7/2): 17
+    L(10) / L(15) = 0.567
+    L(15) / L(15) = 1.000
+    L(30) / L(15) = 0.508
+    L(60) / L(15) = 0.162
+    ```
+
+    ![Capture-Recapture MLE for Population Size](./img/capture_recapture_124.png)
+
+    **14가 나온 까닭이 드러났다.** 분수로 재면 $L(14)$와 $L(15)$가 한 치도 다르지 않고, 부동소수점으로도 차이가 정확히 $0$이다. 비트까지 같으므로 `max()`와 `index()`는 앞쪽을 고르고, 결과는 14가 된다. **이 어긋남은 수치의 오차가 아니라 동점이며, 동점이 생긴다는 사실 자체가 (1)의 유도가 예측한 바다.** 두 값 모두 최대가능도추정값이고 가능도만으로는 가릴 수 없다.
+
+    $n$을 7로 바꾸면 $Mn/m = 17.5$라 나누어떨어지지 않고, 격자가 찾은 17이 $\lfloor 17.5 \rfloor = 17$과 정확히 맞는다. 바닥함수가 제 몫을 하는 경우다.
+
+    곡선이 봉우리 주위에서 **아주 평평하다**는 점도 눈여겨볼 만하다. $N$을 10으로 줄이거나 30으로 늘려도 가능도가 최댓값의 $0.57$배, $0.51$배로 남고, 60으로 네 배 늘려도 $0.16$배가 남는다. 재포획된 표지 개체가 $m = 2$마리뿐이라는 적은 정보로는 개체수를 정밀하게 맞힐 수 없다는 뜻이고, 연습문제 8이 따지는 "정밀도는 $m$이 정한다"가 바로 이 평평함이다.
 
 ## 연습문제
 

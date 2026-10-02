@@ -58,55 +58,129 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 베타-이항 켤레모형으로 비율 추정하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 베타-이항 켤레모형으로 비율 추정하기. 사전분포 $\text{Beta}(2,2)$에 $n = 50$번 중 $k = 32$번 성공을 관측한다.
+
+**(1)** 사후평균과 MAP를 각각 **"사전값과 MLE의 가중평균"** 꼴로 쓰고 가중치를 구하시오. 셋($\text{MLE}$, 사후평균, MAP) 가운데 어느 것이 가운데에 놓이겠는가.
+
+**(2)** 확인하고, $95\%$ 신용구간의 아래끝이 $0.4980$으로 $0.5$를 간신히 넘지 못하는 것이 무엇을 뜻하는지 적으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def demo_beta_binomial():
-    """베타-이항 켤레모형으로 비율을 추정한다."""
-    alpha_0, beta_0 = 2, 2  # weakly informative prior
+    **(1) 해석적으로.** 사후분포가 $\text{Beta}(\alpha_0+k,\ \beta_0+n-k) = \text{Beta}(34, 20)$이다.
 
-    n, k = 50, 32  # observed data
+    **사후평균.** $\nu = \alpha_0+\beta_0 = 4$라 두면
 
-    # 사후분포의 모수. 켤레사전분포라 형태가 그대로 유지된다.
-    alpha_post = alpha_0 + k
-    beta_post = beta_0 + (n - k)
+    $$
+    E[p \mid k] = \frac{\alpha_0+k}{\nu+n}
+    = \frac{\nu}{\nu+n}\cdot\frac{\alpha_0}{\nu} + \frac{n}{\nu+n}\cdot\frac{k}{n}
+    = \frac{4}{54}(0.5) + \frac{50}{54}(0.64)
+    $$
 
-    # 점추정값: 사후평균과 사후최빈값.
-    map_est = (alpha_post - 1) / (alpha_post + beta_post - 2)
-    post_mean = alpha_post / (alpha_post + beta_post)
-    mle = k / n
+    로 가중치가 $(0.0741,\ 0.9259)$다.
 
-    print(f"Prior:     Beta({alpha_0}, {beta_0})")
-    print(f"Data:      {k} successes in {n} trials")
-    print(f"Posterior: Beta({alpha_post}, {beta_post})")
-    print(f"MAP        = {map_est:.4f}")
-    print(f"Post. mean = {post_mean:.4f}")
-    print(f"MLE        = {mle:.4f}")
+    **MAP.** 최빈값은 $(\alpha-1)/(\alpha+\beta-2)$이므로
 
-    # 95% 신용구간: 사후분포의 2.5·97.5 백분위점.
-    ci_low = stats.beta.ppf(0.025, alpha_post, beta_post)
-    ci_high = stats.beta.ppf(0.975, alpha_post, beta_post)
-    print(f"95% CI:    [{ci_low:.4f}, {ci_high:.4f}]")
+    $$
+    \hat p_{\text{MAP}} = \frac{\alpha_0+k-1}{\nu+n-2}
+    = \frac{\nu-2}{\nu-2+n}\cdot\frac{\alpha_0-1}{\nu-2} + \frac{n}{\nu-2+n}\cdot\frac{k}{n}
+    = \frac{2}{52}(0.5) + \frac{50}{52}(0.64)
+    $$
 
-demo_beta_binomial()
-```
+    로 가중치가 $(0.0385,\ 0.9615)$다. 사전값 자리에 사전분포의 **최빈값** $(\alpha_0-1)/(\nu-2) = 1/2$가 들어간다는 점만 다르다.
 
-출력:
+    **두 가지 "유효 표본크기".** 평균을 볼 때 사전분포의 무게는 $\nu = \alpha_0+\beta_0 = 4$이고, 최빈값을 볼 때는 $\nu - 2 = 2$다. 아래 주석 상자가 "$\alpha_0-1$번 성공, $\beta_0-1$번 실패를 미리 본 셈"이라 말하는 것은 **최빈값 쪽 셈법**이다. 어느 쪽이 옳고 그른 것이 아니라 어떤 요약값을 보느냐에 따라 사전분포의 무게가 $2$만큼 달라진다.
 
-```
-Prior:     Beta(2, 2)
-Data:      32 successes in 50 trials
-Posterior: Beta(34, 20)
-MAP        = 0.6346
-Post. mean = 0.6296
-MLE        = 0.6400
-95% CI:    [0.4980, 0.7521]
-```
+    **순서.** 사전값이 둘 다 $0.5$로 MLE $0.64$보다 작으므로 사후평균과 MAP가 모두 MLE 아래에 놓인다. 그런데 MAP 쪽 사전 무게 $0.0385$가 사후평균 쪽 $0.0741$의 **절반**이므로 MAP가 덜 당겨져 MLE에 더 가깝다. 따라서
+
+    $$
+    E[p \mid k] \;<\; \hat p_{\text{MAP}} \;<\; \hat p_{\text{MLE}}
+    $$
+
+    곧 **MAP가 가운데**다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def demo_beta_binomial():
+        """베타-이항 켤레모형으로 비율을 추정한다."""
+        alpha_0, beta_0 = 2, 2  # weakly informative prior
+
+        n, k = 50, 32  # observed data
+
+        # 사후분포의 모수. 켤레사전분포라 형태가 그대로 유지된다.
+        alpha_post = alpha_0 + k
+        beta_post = beta_0 + (n - k)
+
+        # 점추정값: 사후평균과 사후최빈값.
+        map_est = (alpha_post - 1) / (alpha_post + beta_post - 2)
+        post_mean = alpha_post / (alpha_post + beta_post)
+        mle = k / n
+
+        print(f"Prior:     Beta({alpha_0}, {beta_0})")
+        print(f"Data:      {k} successes in {n} trials")
+        print(f"Posterior: Beta({alpha_post}, {beta_post})")
+        print(f"MAP        = {map_est:.4f}")
+        print(f"Post. mean = {post_mean:.4f}")
+        print(f"MLE        = {mle:.4f}")
+
+        # 95% 신용구간: 사후분포의 2.5·97.5 백분위점.
+        ci_low = stats.beta.ppf(0.025, alpha_post, beta_post)
+        ci_high = stats.beta.ppf(0.975, alpha_post, beta_post)
+        print(f"95% CI:    [{ci_low:.4f}, {ci_high:.4f}]")
+
+        # (1) 의 두 가중평균 분해와 맞는지 본다.
+        nu = alpha_0 + beta_0
+        mean_blend = nu / (nu + n) * 0.5 + n / (nu + n) * mle
+        map_blend = (nu - 2) / (nu - 2 + n) * 0.5 + n / (nu - 2 + n) * mle
+        print(f"\n사후평균 가중치 ({nu / (nu + n):.4f}, {n / (nu + n):.4f})  "
+              f"-> {mean_blend:.6f}  (실제 {post_mean:.6f})")
+        print(f"MAP 가중치      ({(nu - 2) / (nu - 2 + n):.4f}, "
+              f"{n / (nu - 2 + n):.4f})  -> {map_blend:.6f}  (실제 {map_est:.6f})")
+        print(f"순서: 사후평균 {post_mean:.4f} < MAP {map_est:.4f} < MLE {mle:.4f}  "
+              f"-> {post_mean < map_est < mle}")
+
+        # 신용구간이 0.5 를 포함하는가. 포함한다면 얼마나 아슬아슬한가.
+        print(f"\n구간이 0.5 를 포함하는가? {ci_low < 0.5 < ci_high}")
+        print(f"P(p > 0.5) = {1 - stats.beta.cdf(0.5, alpha_post, beta_post):.4f}")
+
+    demo_beta_binomial()
+    ```
+
+    출력:
+
+    ```
+    Prior:     Beta(2, 2)
+    Data:      32 successes in 50 trials
+    Posterior: Beta(34, 20)
+    MAP        = 0.6346
+    Post. mean = 0.6296
+    MLE        = 0.6400
+    95% CI:    [0.4980, 0.7521]
+
+    사후평균 가중치 (0.0741, 0.9259)  -> 0.629630  (실제 0.629630)
+    MAP 가중치      (0.0385, 0.9615)  -> 0.634615  (실제 0.634615)
+    순서: 사후평균 0.6296 < MAP 0.6346 < MLE 0.6400  -> True
+
+    구간이 0.5 를 포함하는가? True
+    P(p > 0.5) = 0.9733
+    ```
+
+    **두 분해가 모두 소수 여섯째 자리까지 맞는다.** 가중치 $(0.0741, 0.9259)$가 사후평균을, $(0.0385, 0.9615)$가 MAP를 정확히 재현한다. 순서도 예측대로 $0.6296 < 0.6346 < 0.6400$이다. **MAP가 사후평균보다 MLE에 가까운 것은 MAP 쪽에서 사전분포의 무게가 절반이기 때문**이고, 사전분포가 균등이 아니라 $\text{Beta}(2,2)$인 데서 비롯한 차이다.
+
+    **신용구간의 아래끝 $0.4980$.** 구간이 $0.5$를 **간신히 포함한다.** 그러므로 "$95\%$ 신용구간 안에 $0.5$가 있으니 과반이라고 단정할 수 없다"가 정직한 보고다. 그러나 이것이 "$p > 0.5$일 가능성이 반반"이라는 뜻은 결코 아니다. 실제로 계산하면
+
+    $$
+    P(p > 0.5 \mid k = 32, n = 50) = 0.9733
+    $$
+
+    으로 **$97\%$가 넘는다.** 구간이 $0.5$를 포함하는 것과 $0.5$ 너머에 사후확률이 거의 다 몰려 있는 것은 전혀 모순이 아니다. $95\%$ 구간은 양쪽 꼬리를 $2.5\%$씩 잘라 낸 것이고, 아래 꼬리 $2.5\%$가 $0.4980$까지 뻗어 있을 뿐이다.
+
+    **이것이 구간만 보고 판단할 때 생기는 전형적인 오해다.** 베이즈 방법의 이점은 $P(p > 0.5)$를 그대로 계산해 "$97.3\%$의 확률로 과반이다"라고 말할 수 있다는 데 있다. 의사결정이 필요하면 구간이 아니라 이 수를 보고하는 것이 옳다. 빈도주의 신뢰구간에서는 이런 진술 자체가 허용되지 않는다는 점도 함께 기억해 두자.
 
 !!! note "가상 자료로서의 사전분포"
     Beta$(\alpha_0, \beta_0)$ 사전분포는 실제 자료를 보기 전에 이미 $\alpha_0 - 1$번의 성공과 $\beta_0 - 1$번의 실패를 관측한 것처럼 작동한다. $\alpha_0 = \beta_0 = 2$이면 사전분포가 총 2개의 "가상 관측값"에 해당하는 기여를 한다.
@@ -141,46 +215,122 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 정규-정규 켤레모형으로 평균 추정하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규-정규 켤레모형으로 평균 추정하기. $\sigma = 2$가 알려진 상태에서 $n = 25$를 뽑고 사전분포 $N(0, 10^2)$을 쓴다.
+
+**(1)** 사후평균이 표본평균을 사전평균 쪽으로 얼마나 당기는지, 그리고 사후표준편차 $\tau_n$이 $\sigma/\sqrt{n}$과 얼마나 다른지 **수로** 예측하시오.
+
+**(2)** 확인하고, 이때 베이즈 신용구간과 빈도주의 신뢰구간을 견주시오. 두 구간이 거의 같다면 베이즈로 푼 보람은 어디에 있는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def demo_normal_normal():
-    """정규-정규 켤레모형으로 평균을 추정한다."""
-    sigma = 2.0        # known population std
-    mu_true = 5.0      # true mean
-    mu_0, tau_0 = 0, 10  # prior parameters
+    **(1) 해석적으로.** 정밀도(분산의 역수)로 생각하면 식이 한눈에 들어온다. 사전분포의 정밀도가 $1/\tau_0^2$, 자료의 정밀도가 $n/\sigma^2$이고 **정밀도는 더해진다.**
 
-    rng = np.random.default_rng(42)
-    n = 25
-    data = rng.normal(mu_true, sigma, n)
-    x_bar = data.mean()
+    $$
+    \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2} + \frac{n}{\sigma^2}
+    = \frac{1}{100} + \frac{25}{4} = 0.01 + 6.25 = 6.26
+    $$
 
-    # 사후분포의 모수. 켤레사전분포라 형태가 그대로 유지된다.
-    tau_n_sq = 1 / (1 / tau_0**2 + n / sigma**2)
-    mu_n = tau_n_sq * (mu_0 / tau_0**2 + n * x_bar / sigma**2)
-    tau_n = np.sqrt(tau_n_sq)
+    따라서 $\tau_n^2 = 1/6.26 = 0.159744$, $\tau_n = 0.39968$이다.
 
-    print(f"Prior:      N({mu_0}, {tau_0}^2)")
-    print(f"Data:       n={n}, x_bar={x_bar:.3f}")
-    print(f"Posterior:  N({mu_n:.3f}, {tau_n:.3f}^2)")
-    print(f"95% credible interval: [{mu_n - 1.96*tau_n:.3f}, {mu_n + 1.96*tau_n:.3f}]")
+    **당김.** 사후평균은 정밀도를 가중치로 한 평균이므로
 
-demo_normal_normal()
-```
+    $$
+    w_{\text{사전}} = \frac{1/\tau_0^2}{1/\tau_n^2} = \frac{0.01}{6.26} = 0.001597,
+    \qquad
+    w_{\text{자료}} = \frac{6.25}{6.26} = 0.998403
+    $$
 
-출력:
+    이다. 사전평균이 $\mu_0 = 0$이므로
 
-```
-Prior:      N(0, 10^2)
-Data:       n=25, x_bar=4.929
-Posterior:  N(4.921, 0.400^2)
-95% credible interval: [4.138, 5.705]
-```
+    $$
+    \mu_n - \bar x = w_{\text{사전}}\left(\mu_0 - \bar x\right) = -0.001597\,\bar x
+    $$
+
+    곧 표본평균을 $0$ 쪽으로 **$0.16\%$만** 당긴다. $\bar x \approx 4.93$이면 $-0.0079$ 정도다.
+
+    **$\tau_n$과 $\sigma/\sqrt n$.** 빈도주의의 표준오차는 $\sigma/\sqrt n = 2/5 = 0.4$이고
+
+    $$
+    \frac{\tau_n}{\sigma/\sqrt n} = \sqrt{\frac{n/\sigma^2}{1/\tau_0^2 + n/\sigma^2}}
+    = \sqrt{\frac{6.25}{6.26}} = 0.9992
+    $$
+
+    이다. $\tau_n$이 $0.08\%$ 작다. 사전분포가 정보를 **조금** 보태므로 사후가 조금 더 좁은데, 그 조금이 소수 넷째 자리에서야 보인다.
+
+    **까닭은 $\tau_0 = 10$이 지나치게 크다는 데 있다.** 사전분포의 정밀도 $0.01$이 자료의 정밀도 $6.25$의 $0.16\%$라 사실상 아무 말도 하지 않는 사전분포다. $\tau_0 \to \infty$로 보내면 $w_{\text{사전}} \to 0$이고 사후분포가 $N(\bar x, \sigma^2/n)$으로 가능도와 완전히 같아진다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def demo_normal_normal():
+        """정규-정규 켤레모형으로 평균을 추정한다."""
+        sigma = 2.0        # known population std
+        mu_true = 5.0      # true mean
+        mu_0, tau_0 = 0, 10  # prior parameters
+
+        rng = np.random.default_rng(42)
+        n = 25
+        data = rng.normal(mu_true, sigma, n)
+        x_bar = data.mean()
+
+        # 사후분포의 모수. 켤레사전분포라 형태가 그대로 유지된다.
+        tau_n_sq = 1 / (1 / tau_0**2 + n / sigma**2)
+        mu_n = tau_n_sq * (mu_0 / tau_0**2 + n * x_bar / sigma**2)
+        tau_n = np.sqrt(tau_n_sq)
+
+        print(f"Prior:      N({mu_0}, {tau_0}^2)")
+        print(f"Data:       n={n}, x_bar={x_bar:.3f}")
+        print(f"Posterior:  N({mu_n:.3f}, {tau_n:.3f}^2)")
+        print(f"95% credible interval: [{mu_n - 1.96*tau_n:.3f}, {mu_n + 1.96*tau_n:.3f}]")
+
+        # (1) 의 예측과 견준다.
+        w_prior = (1 / tau_0**2) / (1 / tau_0**2 + n / sigma**2)
+        se = sigma / np.sqrt(n)
+        print(f"\n정밀도: 사전 {1 / tau_0**2:.4f} + 자료 {n / sigma**2:.4f} "
+              f"= 사후 {1 / tau_n_sq:.4f}")
+        print(f"가중치: 사전 {w_prior:.6f}, 자료 {1 - w_prior:.6f}")
+        print(f"당김  mu_n - x_bar = {mu_n - x_bar:.6f}  "
+              f"(예측 {w_prior * (mu_0 - x_bar):.6f})")
+        print(f"tau_n = {tau_n:.6f},  sigma/sqrt(n) = {se:.6f},  "
+              f"비 {tau_n / se:.6f}")
+        print(f"빈도주의 신뢰구간: [{x_bar - 1.96*se:.4f}, {x_bar + 1.96*se:.4f}]")
+        print(f"베이즈   신용구간: [{mu_n - 1.96*tau_n:.4f}, {mu_n + 1.96*tau_n:.4f}]")
+
+    demo_normal_normal()
+    ```
+
+    출력:
+
+    ```
+    Prior:      N(0, 10^2)
+    Data:       n=25, x_bar=4.929
+    Posterior:  N(4.921, 0.400^2)
+    95% credible interval: [4.138, 5.705]
+
+    정밀도: 사전 0.0100 + 자료 6.2500 = 사후 6.2600
+    가중치: 사전 0.001597, 자료 0.998403
+    당김  mu_n - x_bar = -0.007874  (예측 -0.007874)
+    tau_n = 0.399680,  sigma/sqrt(n) = 0.400000,  비 0.999201
+    빈도주의 신뢰구간: [4.1452, 5.7132]
+    베이즈   신용구간: [4.1380, 5.7047]
+    ```
+
+    **예측한 수가 모두 그대로 나왔다.** 정밀도가 $0.01 + 6.25 = 6.26$으로 더해지고, 가중치가 $(0.001597,\ 0.998403)$이며, 당김이 $-0.007874$로 예측값과 소수 여섯째 자리까지 같다. $\tau_n/(\sigma/\sqrt n) = 0.999201$도 $\sqrt{6.25/6.26} = 0.9992$와 맞는다.
+
+    **두 구간이 거의 같다.** 폭이 $1.5668$ 대 $1.5680$으로 $0.08\%$ 다르고 중심이 $0.0079$ 어긋날 뿐이다. 소수 둘째 자리까지 보고하면 구별되지 않는다. $\tau_0 = 10$이라는 막연한 사전분포 아래에서 사후분포가 사실상 가능도 그 자체이므로 당연한 결과다.
+
+    **그렇다면 보람은 어디에 있는가. 두 가지다.**
+
+    **첫째, 말할 수 있는 것이 다르다.** 베이즈 구간은 "$\mu$가 이 구간에 있을 확률이 $0.95$다"라고 **그대로 읽는다.** 빈도주의 구간은 $\mu$가 상수이므로 그런 진술을 할 수 없고, "이 절차를 되풀이하면 구간의 $95\%$가 $\mu$를 덮는다"가 전부다. 숫자가 같아도 해석은 같지 않다.
+
+    **둘째, 사전분포를 바꿀 자리가 열려 있다.** 지금은 $\tau_0 = 10$이라 사전분포가 거의 아무 말도 하지 않았지만, 과거 자료나 물리적 제약에서 온 정보가 있으면 $\tau_0$를 줄여 그 몫을 키울 수 있다. $\tau_0 = 1$이면 사전 정밀도가 $1$이 되어 가중치가 $\left(\tfrac{1}{7.25},\ \tfrac{6.25}{7.25}\right) = (0.138,\ 0.862)$로 뛰고 당김이 $-0.68$로 여든여섯 배가 된다. **같은 틀 안에서 "정보를 얼마나 믿을 것인가"를 숫자 하나로 조절할 수 있다**는 것이 켤레 모형의 쓸모다.
+
+    거꾸로 말하면, **막연한 사전분포를 쓰면서 베이즈의 이점을 기대해서는 안 된다.** 그때 얻는 것은 해석의 편의뿐이고 숫자는 빈도주의와 같다.
 
 ## 자료에 따른 사후분포의 변화
 

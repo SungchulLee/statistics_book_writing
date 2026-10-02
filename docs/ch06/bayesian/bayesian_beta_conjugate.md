@@ -38,43 +38,122 @@ $a + b$는 **사전 유효 표본크기**로 작동한다. 이 값이 클수록 
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 베이즈 갱신 함수
+**보기 1.** <span class="diff easy" title="쉬움"></span> 베이즈 갱신 함수. 사전분포 $\text{Beta}(a,b)$에서 출발해 $n$번 중 $k$번 성공을 관측한다.
+
+**(1)** 사후분포가 $\text{Beta}(a+k,\, b+n-k)$임을 유도하고, 사후평균이 사전평균과 MLE의 가중평균임을 **가중치까지** 구하시오.
+
+**(2)** $\text{Beta}(1,1)$에서 $k = 7$, $n = 10$을 보면 사후평균이 $0.6667$이다. (1)의 가중평균과 맞는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import beta
+??? success "풀이"
 
-def bayesian_update(a_prior, b_prior, k, n):
-    """n번 중 k번 성공을 관측한 뒤의 사후 베타 모수를 구한다.
+    **(1) 해석적으로.** 베이즈 정리에서 사후밀도는 가능도와 사전밀도의 곱에 비례한다. $\theta$에 의존하지 않는 상수(이항계수와 베타함수)를 모두 비례기호 뒤로 보내면
 
-    베타분포가 이항 가능도의 **켤레사전분포**라서 이렇게 단순해진다.
-    사후 = 가능도 x 사전 을 전개하면 지수가 그냥 더해지므로,
-    적분을 하나도 하지 않고 모수 덧셈만으로 사후분포가 나온다.
+    $$
+    p(\theta \mid k, n)
+    \;\propto\;
+    \underbrace{\theta^{k}(1-\theta)^{n-k}}_{\text{가능도}}
+    \cdot
+    \underbrace{\theta^{a-1}(1-\theta)^{b-1}}_{\text{사전}}
+    = \theta^{(a+k)-1}(1-\theta)^{(b+n-k)-1}
+    $$
 
-    a는 "성공 횟수", b는 "실패 횟수"처럼 읽으면 된다.
-    Beta(2, 3)을 사전분포로 쓴다는 것은 "성공 1번, 실패 2번을
-    미리 본 셈 친다"는 뜻이다(균등분포 Beta(1,1)이 기준점).
-    """
-    a_post = a_prior + k          # 성공 횟수를 더한다
-    b_post = b_prior + n - k      # 실패 횟수를 더한다
-    return a_post, b_post
+    이다. 오른쪽이 바로 $\text{Beta}(a+k,\, b+n-k)$의 밀도 꼴이고, 밀도는 적분이 $1$이 되도록 정규화되므로 **비례만으로 분포가 정해진다.**
+
+    $$
+    \theta \mid k, n \;\sim\; \text{Beta}(a+k,\ b+n-k)
+    $$
+
+    적분을 하나도 하지 않았다. 지수가 더해질 뿐이라 **모수 덧셈**이 전부인데, 이것이 켤레성이 주는 이득이다.
+
+    **가중평균.** $\text{Beta}(\alpha,\beta)$의 평균이 $\alpha/(\alpha+\beta)$이므로 사후평균은 $(a+k)/(a+b+n)$이다. 사전의 가상표본크기를 $\nu = a+b$, 사전평균을 $\mu_0 = a/\nu$, MLE를 $\hat\theta = k/n$이라 두면
+
+    $$
+    \frac{a+k}{\nu+n}
+    = \frac{\nu}{\nu+n}\cdot\frac{a}{\nu} + \frac{n}{\nu+n}\cdot\frac{k}{n}
+    = \frac{\nu}{\nu+n}\,\mu_0 + \frac{n}{\nu+n}\,\hat\theta
+    $$
+
+    로 쪼개진다(오른쪽을 통분하면 $a/(\nu+n) + k/(\nu+n)$으로 되돌아간다). 가중치가
+
+    $$
+    w_{\text{사전}} = \frac{\nu}{\nu+n}, \qquad
+    w_{\text{자료}} = \frac{n}{\nu+n}
+    $$
+
+    로 **관측 수의 비 그대로**다. $\nu = a+b$를 "미리 본 시행 횟수"로 읽으면 전체가 $\nu + n$번의 시행이고 각자 제 몫만큼 발언권을 갖는 셈이다.
+
+    **(2) 수치적으로.** $\text{Beta}(1,1)$이면 $\nu = 2$, $\mu_0 = 0.5$이고 $k=7$, $n=10$이면 $\hat\theta = 0.7$이므로
+
+    $$
+    \frac{2}{12}(0.5) + \frac{10}{12}(0.7)
+    = 0.08333 + 0.58333 = 0.66667
+    $$
+
+    이 되어야 한다. 코드로 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy.stats import beta
+
+    def bayesian_update(a_prior, b_prior, k, n):
+        """n번 중 k번 성공을 관측한 뒤의 사후 베타 모수를 구한다.
+
+        베타분포가 이항 가능도의 **켤레사전분포**라서 이렇게 단순해진다.
+        사후 = 가능도 x 사전 을 전개하면 지수가 그냥 더해지므로,
+        적분을 하나도 하지 않고 모수 덧셈만으로 사후분포가 나온다.
+
+        a는 "성공 횟수", b는 "실패 횟수"처럼 읽으면 된다.
+        Beta(2, 3)을 사전분포로 쓴다는 것은 "성공 1번, 실패 2번을
+        미리 본 셈 친다"는 뜻이다(균등분포 Beta(1,1)이 기준점).
+        """
+        a_post = a_prior + k          # 성공 횟수를 더한다
+        b_post = b_prior + n - k      # 실패 횟수를 더한다
+        return a_post, b_post
 
 
-# 균등한 사전분포 Beta(1,1)에서 출발해 10번 중 7번 성공을 보면?
-a, b = bayesian_update(1, 1, k=7, n=10)
-print(f"사후분포 Beta({a}, {b})")
-# 베타분포의 평균은 a/(a+b) 다. MLE 0.7 보다 살짝 0.5 쪽으로 당겨진다.
-print(f"사후평균 {a/(a+b):.4f}   (MLE = {7/10:.4f})")
-```
+    # 균등한 사전분포 Beta(1,1)에서 출발해 10번 중 7번 성공을 보면?
+    a, b = bayesian_update(1, 1, k=7, n=10)
+    print(f"사후분포 Beta({a}, {b})")
+    # 베타분포의 평균은 a/(a+b) 다. MLE 0.7 보다 살짝 0.5 쪽으로 당겨진다.
+    print(f"사후평균 {a/(a+b):.4f}   (MLE = {7/10:.4f})")
 
-출력:
+    # (1) 의 가중평균 분해와 맞는지 본다.
+    nu, mu0, theta_hat, n_obs = 1 + 1, 1 / (1 + 1), 7 / 10, 10
+    w_prior = nu / (nu + n_obs)
+    w_data = n_obs / (nu + n_obs)
+    blend = w_prior * mu0 + w_data * theta_hat
+    print(f"\n가중치: 사전 {w_prior:.6f}, 자료 {w_data:.6f}, 합 {w_prior + w_data:.6f}")
+    print(f"가중평균 {w_prior:.6f} x {mu0} + {w_data:.6f} x {theta_hat} = {blend:.6f}")
+    print(f"사후평균 a/(a+b) = {a / (a + b):.6f}")
+    print(f"두 값이 같은가? {np.isclose(blend, a / (a + b), rtol=0, atol=1e-12)}")
+    ```
 
-```
-사후분포 Beta(8, 4)
-사후평균 0.6667   (MLE = 0.7000)
-```
+    출력:
+
+    ```
+    사후분포 Beta(8, 4)
+    사후평균 0.6667   (MLE = 0.7000)
+
+    가중치: 사전 0.166667, 자료 0.833333, 합 1.000000
+    가중평균 0.166667 x 0.5 + 0.833333 x 0.7 = 0.666667
+    사후평균 a/(a+b) = 0.666667
+    두 값이 같은가? True
+    ```
+
+    **가중평균 분해가 맞는다.** 사후평균 $8/12 = 0.666667$이 $\tfrac16(0.5) + \tfrac56(0.7)$과 소수 열두째 자리까지 같다. 가중치의 합이 $1$인 것도 확인된다.
+
+    읽어 둘 점은 $\hat\theta = 0.7$에서 $0.6667$로 **$0.5$ 쪽으로 당겨졌다**는 것이다. 당겨진 양은
+
+    $$
+    E[\theta \mid k,n] - \hat\theta = \frac{\nu}{\nu+n}\left(\mu_0 - \hat\theta\right)
+    = \frac{2}{12}(0.5 - 0.7) = -0.0333
+    $$
+
+    으로, **가중치와 거리의 곱**이다. 이 꼴이 다음 보기에서 그대로 쓰인다.
+
+    균등분포 $\text{Beta}(1,1)$조차 $\nu = 2$만큼의 무게를 갖는다는 점도 짚어 두자. "아무 정보가 없는" 사전분포라 불리지만 가상의 시행 두 번이 섞여 있고, $n = 10$에서는 그 $2$가 전체의 $17\%$라 무시할 수 없다. $n$이 수백이 되면 비로소 사라진다.
 
 ## 사전분포에 따른 민감도 분석
 
@@ -82,51 +161,124 @@ print(f"사후평균 {a/(a+b):.4f}   (MLE = {7/10:.4f})")
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 사전분포에 따른 민감도 분석
+**보기 2.** <span class="diff easy" title="쉬움"></span> 사전분포에 따른 민감도 분석. $n = 581$, $k = 281$인 여론조사에 사전분포 여섯을 차례로 적용한다.
+
+**(1)** 사후평균이 MLE에서 당겨지는 양을 $\nu$와 $\mu_0$로 쓰고, **여섯 중 어느 사전분포가 가장 크게 당기겠는지** 코드를 돌리기 전에 지목하시오.
+
+**(2)** 표를 만들어 (1)의 예측을 확인하고, $P(\theta < 0.5)$가 사전분포에 따라 어떻게 달라지는지 설명하시오.
 
 </div>
 
-```python
-n = 581
-k = 281
+??? success "풀이"
 
-# 사전분포 여섯 개. a + b 가 곧 "가상의 표본 크기"라고 읽으면 된다.
-#   (1,1)     : 가상표본 2. 사실상 아무 정보도 넣지 않는다(균등).
-#   (5,5)     : 가상표본 10. 자료 581에 비해 미미하다.
-#   (50,50)   : 가상표본 100. 자료의 6분의 1쯤 되는 무게.
-#   (2,8),(8,2): 크기는 작지만 한쪽으로 치우친 사전분포.
-#   (100,100) : 가상표본 200. 자료의 3분의 1이라 결과를 눈에 띄게 당긴다.
-priors = [
-    (1, 1, "Uniform (a=1, b=1)"),
-    (5, 5, "Weakly informative (a=5, b=5)"),
-    (50, 50, "Moderate prior centered at 0.5"),
-    (2, 8, "Prior skewed toward low p"),
-    (8, 2, "Prior skewed toward high p"),
-    (100, 100, "Strong prior at 0.5"),
-]
+    **(1) 해석적으로.** 보기 1의 분해에서 양변에 $\hat\theta$를 빼면
 
-for a, b, label in priors:
-    a_post, b_post = bayesian_update(a, b, k, n)
-    # 베타분포의 평균은 a/(a+b) 다.
-    # 자료 n=581 이 사전분포보다 훨씬 무거우면 사후평균이 MLE(0.4836)에 붙는다.
-    post_mean = a_post / (a_post + b_post)
-    # 사후확률 P(p < 0.5). 베이즈 방법에서는 이것을 그대로 "후보가 과반에
-    # 못 미칠 확률"이라고 읽을 수 있다. 빈도주의 p-값과 해석이 다른 지점이다.
-    p_less_half = beta.cdf(0.5, a_post, b_post)
-    print(f"{label:<35s}  a_post={a_post:>4d}  b_post={b_post:>4d}  "
-          f"mean={post_mean:.4f}  P(p<0.5)={p_less_half:.4f}")
-```
+    $$
+    E[\theta \mid k, n] - \hat\theta
+    = \frac{\nu}{\nu+n}\,\mu_0 + \frac{n}{\nu+n}\,\hat\theta - \hat\theta
+    = \frac{\nu}{\nu+n}\left(\mu_0 - \hat\theta\right)
+    $$
 
-출력:
+    이다. **당기는 힘은 무게와 거리의 곱이다.** $\nu/(\nu+n)$이 사전분포가 가진 발언권이고 $\mu_0 - \hat\theta$가 사전분포가 가리키는 방향과 거리다. 둘 중 하나만 커도 소용없다.
 
-```
-Uniform (a=1, b=1)                   a_post= 282  b_post= 301  mean=0.4837  P(p<0.5)=0.7845
-Weakly informative (a=5, b=5)        a_post= 286  b_post= 305  mean=0.4839  P(p<0.5)=0.7829
-Moderate prior centered at 0.5       a_post= 331  b_post= 350  mean=0.4860  P(p<0.5)=0.7669
-Prior skewed toward low p            a_post= 283  b_post= 308  mean=0.4788  P(p<0.5)=0.8483
-Prior skewed toward high p           a_post= 289  b_post= 302  mean=0.4890  P(p<0.5)=0.7037
-Strong prior at 0.5                  a_post= 381  b_post= 400  mean=0.4878  P(p<0.5)=0.7518
-```
+    $\hat\theta = 281/581 = 0.48365$를 넣고 여섯을 계산한다.
+
+    | 사전분포 | $\nu$ | 무게 $\nu/(\nu+n)$ | $\mu_0$ | 거리 $\mu_0 - \hat\theta$ | 당김 |
+    |---|---|---|---|---|---|
+    | $\text{Beta}(1,1)$ | 2 | 0.0034 | 0.5 | $+0.0164$ | $+0.000056$ |
+    | $\text{Beta}(5,5)$ | 10 | 0.0169 | 0.5 | $+0.0164$ | $+0.000277$ |
+    | $\text{Beta}(50,50)$ | 100 | 0.1468 | 0.5 | $+0.0164$ | $+0.002401$ |
+    | $\text{Beta}(2,8)$ | 10 | 0.0169 | 0.2 | $-0.2836$ | $-0.004799$ |
+    | $\text{Beta}(8,2)$ | 10 | 0.0169 | 0.8 | $+0.3164$ | $+0.005353$ |
+    | $\text{Beta}(100,100)$ | 200 | 0.2561 | 0.5 | $+0.0164$ | $+0.004187$ |
+
+    **가장 크게 당기는 것은 $\text{Beta}(8,2)$다.** $\text{Beta}(100,100)$이 아니다. 뜻밖으로 보이지만 곱의 두 인수를 보면 당연하다. $\text{Beta}(100,100)$은 무게가 $0.2561$로 $\text{Beta}(8,2)$의 $0.0169$보다 **$15$배** 크지만, 가리키는 자리 $0.5$가 $\hat\theta = 0.4836$ 바로 옆이라 거리가 $0.0164$밖에 안 된다. 반면 $\text{Beta}(8,2)$는 가벼워도 $0.8$을 가리켜 거리가 $0.3164$로 **$19$배** 멀다. $19 > 15$라 곱이 뒤집힌다.
+
+    **"강한 사전분포"라는 말이 두 가지를 뒤섞는다**는 것이 요점이다. $\nu$가 큰 것과 자료에서 먼 것은 다른 이야기이고, 결과를 움직이는 것은 둘의 곱이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    n = 581
+    k = 281
+
+    # 사전분포 여섯 개. a + b 가 곧 "가상의 표본 크기"라고 읽으면 된다.
+    #   (1,1)     : 가상표본 2. 사실상 아무 정보도 넣지 않는다(균등).
+    #   (5,5)     : 가상표본 10. 자료 581에 비해 미미하다.
+    #   (50,50)   : 가상표본 100. 자료의 6분의 1쯤 되는 무게.
+    #   (2,8),(8,2): 크기는 작지만 한쪽으로 치우친 사전분포.
+    #   (100,100) : 가상표본 200. 자료의 3분의 1이라 결과를 눈에 띄게 당긴다.
+    priors = [
+        (1, 1, "Uniform (a=1, b=1)"),
+        (5, 5, "Weakly informative (a=5, b=5)"),
+        (50, 50, "Moderate prior centered at 0.5"),
+        (2, 8, "Prior skewed toward low p"),
+        (8, 2, "Prior skewed toward high p"),
+        (100, 100, "Strong prior at 0.5"),
+    ]
+
+    for a, b, label in priors:
+        a_post, b_post = bayesian_update(a, b, k, n)
+        # 베타분포의 평균은 a/(a+b) 다.
+        # 자료 n=581 이 사전분포보다 훨씬 무거우면 사후평균이 MLE(0.4836)에 붙는다.
+        post_mean = a_post / (a_post + b_post)
+        # 사후확률 P(p < 0.5). 베이즈 방법에서는 이것을 그대로 "후보가 과반에
+        # 못 미칠 확률"이라고 읽을 수 있다. 빈도주의 p-값과 해석이 다른 지점이다.
+        p_less_half = beta.cdf(0.5, a_post, b_post)
+        print(f"{label:<35s}  a_post={a_post:>4d}  b_post={b_post:>4d}  "
+              f"mean={post_mean:.4f}  P(p<0.5)={p_less_half:.4f}")
+
+    # (1) 의 당김 공식과 견준다. 사후표준편차도 함께 잰다.
+    mle = k / n
+    print(f"\nMLE = {mle:.5f}")
+    print(f"{'사전':>10} {'nu':>5} {'무게':>8} {'거리':>9} {'당김':>10} "
+          f"{'예측평균':>9} {'실제평균':>9} {'사후sd':>8}")
+    for a, b, _ in priors:
+        nu = a + b
+        w = nu / (nu + n)
+        d = a / nu - mle
+        A, B = bayesian_update(a, b, k, n)
+        sd = np.sqrt(A * B / ((A + B) ** 2 * (A + B + 1)))
+        print(f"{f'Beta({a},{b})':>10} {nu:>5} {w:>8.4f} {d:>+9.4f} {w * d:>+10.6f} "
+              f"{mle + w * d:>9.4f} {A / (A + B):>9.4f} {sd:>8.5f}")
+    ```
+
+    출력:
+
+    ```
+    Uniform (a=1, b=1)                   a_post= 282  b_post= 301  mean=0.4837  P(p<0.5)=0.7845
+    Weakly informative (a=5, b=5)        a_post= 286  b_post= 305  mean=0.4839  P(p<0.5)=0.7829
+    Moderate prior centered at 0.5       a_post= 331  b_post= 350  mean=0.4860  P(p<0.5)=0.7669
+    Prior skewed toward low p            a_post= 283  b_post= 308  mean=0.4788  P(p<0.5)=0.8483
+    Prior skewed toward high p           a_post= 289  b_post= 302  mean=0.4890  P(p<0.5)=0.7037
+    Strong prior at 0.5                  a_post= 381  b_post= 400  mean=0.4878  P(p<0.5)=0.7518
+
+    MLE = 0.48365
+            사전    nu       무게        거리         당김      예측평균      실제평균     사후sd
+     Beta(1,1)     2   0.0034   +0.0164  +0.000056    0.4837    0.4837  0.02068
+     Beta(5,5)    10   0.0169   +0.0164  +0.000277    0.4839    0.4839  0.02054
+    Beta(50,50)   100   0.1468   +0.0164  +0.002401    0.4860    0.4860  0.01914
+     Beta(2,8)    10   0.0169   -0.2836  -0.004799    0.4788    0.4788  0.02053
+     Beta(8,2)    10   0.0169   +0.3164  +0.005353    0.4890    0.4890  0.02054
+    Beta(100,100)   200   0.2561   +0.0164  +0.004187    0.4878    0.4878  0.01787
+    ```
+
+    **예측과 실제가 네 자리까지 모두 같다.** 당김 공식 $\frac{\nu}{\nu+n}(\mu_0 - \hat\theta)$가 여섯 줄 어디서도 어긋나지 않는다. 그리고 (1)에서 지목한 대로 **당김이 가장 큰 것은 $\text{Beta}(8,2)$의 $+0.005353$**이고 $\text{Beta}(100,100)$의 $+0.004187$이 그 다음이다. 무게로는 $15$배 밀리는 사전분포가 거리 덕에 앞섰다.
+
+    **$P(\theta<0.5)$는 두 가지에 함께 움직인다.** 사후분포가 거의 정규이므로
+
+    $$
+    P(\theta < 0.5) \approx \Phi\!\left(\frac{0.5 - E[\theta \mid k,n]}{\operatorname{sd}}\right)
+    $$
+
+    인데, 사후평균이 $0.5$에 가까워질수록 이 값이 $0.5$ 쪽으로 내려가고 사후표준편차가 작아질수록 평균이 $0.5$의 어느 쪽에 있느냐에 따라 더 멀리 밀린다. 표에서
+
+    - $\text{Beta}(2,8)$: 평균이 $0.4788$로 가장 낮아 $P = 0.8483$으로 가장 크다.
+    - $\text{Beta}(8,2)$: 평균이 $0.4890$으로 가장 높아 $P = 0.7037$로 가장 작다.
+
+    로 순서가 그대로 뒤집힌다. 둘의 사후표준편차는 $0.02053$과 $0.02054$로 사실상 같으므로 **차이를 만든 것은 오로지 평균의 이동**이다.
+
+    **사후표준편차의 방향도 읽어 두자.** $\nu$가 커질수록 사후표준편차가 $0.02068 \to 0.01914 \to 0.01787$로 **줄어든다.** 사후분포의 총 가상관측수가 $\nu + n$이고 표준편차가 대략 $1/\sqrt{\nu+n}$으로 작아지기 때문이다. 곧 강한 사전분포는 사후분포를 **넓히는 것이 아니라 좁힌다.** 다만 좁아진 그 봉우리가 자료가 가리키는 자리에서 비껴나 있을 수 있고, 그것이 강한 사전분포의 진짜 위험이다.
 
 ## 사전분포에서 사후분포로의 갱신 시각화
 
@@ -134,54 +286,113 @@ Strong prior at 0.5                  a_post= 381  b_post= 400  mean=0.4878  P(p<
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 사전에서 사후로 가는 과정 그리기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 사전에서 사후로 가는 과정 그리기. 여섯 사전분포 각각에 대해 사전밀도(파란 점선), 사후밀도(빨간 실선), 음영 $P(\theta<0.5)$, MLE 세로선을 한 판에 그린다.
+
+**(1)** 그림을 그리기 전에 두 가지를 예측하시오. 여섯 패널 가운데 **사후분포가 가장 좁은 것**은 어느 것이고, **사후 봉우리가 MLE 선에서 가장 멀리 벗어나는 것**은 어느 것인가.
+
+**(2)** 그림에서 실제로 무엇이 보이는지 적고, 사전밀도와 사후밀도의 높이 차이가 왜 그렇게 큰지 설명하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-theta = np.linspace(0, 1, 1000)
+    **(1) 해석적으로.** 두 물음의 답이 **서로 다른 패널**이다.
 
-fig, axes = plt.subplots(2, 3, figsize=(16, 10))
-for idx, (a, b, label) in enumerate(priors):
-    a_post, b_post = bayesian_update(a, b, k, n)
-    p_less_half = beta.cdf(0.5, a_post, b_post)
-    ax = axes.flatten()[idx]
+    **가장 좁은 것은 $\text{Beta}(100,100)$이다.** 사후분포 $\text{Beta}(\alpha,\beta)$의 표준편차가
 
-    ax.plot(theta, beta.pdf(theta, a, b), "b--", lw=2, label="Prior")
-    ax.plot(theta, beta.pdf(theta, a_post, b_post), "r-", lw=2.5,
-            label="Posterior")
+    $$
+    \operatorname{sd} = \sqrt{\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}}
+    \approx \frac{\sqrt{\mu(1-\mu)}}{\sqrt{\nu+n+1}}
+    $$
 
-    # 사후분포의 0.5 왼쪽을 칠한다. 그 넓이가 곧 P(p < 0.5) 다.
-    # 베이즈에서는 모수 자체가 확률변수이므로 이런 진술이 가능하다.
-    mask = theta <= 0.5
-    ax.fill_between(theta[mask],
-                    beta.pdf(theta[mask], a_post, b_post),
-                    alpha=0.2, color="blue",
-                    label=f"P(p<0.5) = {p_less_half:.3f}")
-    # MLE를 세로선으로 표시한다. 사후분포(빨강)의 봉우리가 이 선에서
-    # 얼마나 벗어나는지가 곧 사전분포가 결과를 당긴 정도다.
-    # 마지막 패널(강한 사전분포)에서 가장 크게 벌어진다.
-    ax.axvline(k / n, color="green", linestyle=":", lw=1.5,
-               label=f"MLE = {k/n:.3f}")
-    ax.set_title(label)
-    ax.set_xlabel("theta")
-    ax.set_ylabel("Density")
-    ax.legend(fontsize=7)
-    ax.set_xlim(0.35, 0.65)
+    이므로 $\nu$가 클수록 좁아진다. $\nu = 200$인 $\text{Beta}(100,100)$이 $\nu+n = 781$로 가장 크니 가장 좁다. 보기 2의 표가 $0.01787$로 이미 보여 주었다.
 
-plt.tight_layout()
-plt.show()
-```
+    **가장 멀리 벗어나는 것은 $\text{Beta}(8,2)$다.** 봉우리는 최빈값이고
 
-![베이즈 베타켤레 사전분포](./img/bayesian_beta_conjugate_79.png)
+    $$
+    \hat\theta_{\text{MAP}} = \frac{\alpha-1}{\alpha+\beta-2}
+    $$
+
+    인데, $\alpha$와 $\beta$가 수백이라 최빈값이 평균과 소수 넷째 자리까지 같다. 그러므로 보기 2의 당김 표가 그대로 답이고, $\text{Beta}(8,2)$가 $+0.00535$로 가장 크다.
+
+    **코드의 주석 "마지막 패널(강한 사전분포)에서 가장 크게 벌어진다"는 맞지 않는다.** 가장 크게 벌어지는 것은 다섯째 패널이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    theta = np.linspace(0, 1, 1000)
+
+    fig, axes = plt.subplots(2, 3, figsize=(16, 10))
+    for idx, (a, b, label) in enumerate(priors):
+        a_post, b_post = bayesian_update(a, b, k, n)
+        p_less_half = beta.cdf(0.5, a_post, b_post)
+        ax = axes.flatten()[idx]
+
+        ax.plot(theta, beta.pdf(theta, a, b), "b--", lw=2, label="Prior")
+        ax.plot(theta, beta.pdf(theta, a_post, b_post), "r-", lw=2.5,
+                label="Posterior")
+
+        # 사후분포의 0.5 왼쪽을 칠한다. 그 넓이가 곧 P(p < 0.5) 다.
+        # 베이즈에서는 모수 자체가 확률변수이므로 이런 진술이 가능하다.
+        mask = theta <= 0.5
+        ax.fill_between(theta[mask],
+                        beta.pdf(theta[mask], a_post, b_post),
+                        alpha=0.2, color="blue",
+                        label=f"P(p<0.5) = {p_less_half:.3f}")
+        # MLE를 세로선으로 표시한다. 사후분포(빨강)의 봉우리가 이 선에서
+        # 얼마나 벗어나는지가 곧 사전분포가 결과를 당긴 정도다.
+        # 마지막 패널(강한 사전분포)에서 가장 크게 벌어진다.
+        ax.axvline(k / n, color="green", linestyle=":", lw=1.5,
+                   label=f"MLE = {k/n:.3f}")
+        ax.set_title(label)
+        ax.set_xlabel("theta")
+        ax.set_ylabel("Density")
+        ax.legend(fontsize=7)
+        ax.set_xlim(0.35, 0.65)
+
+    plt.tight_layout()
+    plt.show()
+
+    # 그림으로는 읽기 어려운 두 양을 수로 찍는다.
+    print(f"{'사전':>14} {'MAP':>9} {'MAP-MLE':>9} {'사후 봉우리':>12} {'사전 최대':>11}")
+    on_window = (theta >= 0.35) & (theta <= 0.65)
+    for a, b, _ in priors:
+        A, B = bayesian_update(a, b, k, n)
+        mode = (A - 1) / (A + B - 2)
+        print(f"{f'Beta({a},{b})':>14} {mode:>9.5f} {mode - k / n:>+9.5f} "
+              f"{beta.pdf(mode, A, B):>12.2f} "
+              f"{beta.pdf(theta, a, b)[on_window].max():>11.2f}")
+    ```
+
+    출력:
+
+    ```
+                사전       MAP   MAP-MLE       사후 봉우리       사전 최대
+         Beta(1,1)   0.48365  +0.00000        19.27        1.00
+         Beta(5,5)   0.48387  +0.00022        19.40        2.46
+       Beta(50,50)   0.48601  +0.00236        20.82        7.96
+         Beta(2,8)   0.47878  -0.00487        19.41        1.23
+         Beta(8,2)   0.48896  +0.00532        19.39        1.23
+     Beta(100,100)   0.48780  +0.00416        22.30       11.27
+    ```
+
+    ![베이즈 베타켤레 사전분포](./img/bayesian_beta_conjugate_79.png)
+
+    **(1)의 두 예측이 모두 맞는다.** 봉우리가 가장 높고 좁은 것은 여섯째 패널 $\text{Beta}(100,100)$으로 높이가 $22.30$이고 나머지는 $19.3 \sim 20.8$이다. MLE에서 가장 멀리 벗어난 것은 다섯째 패널 $\text{Beta}(8,2)$로 $+0.00532$이며 여섯째 패널의 $+0.00416$보다 크다. 최빈값이 보기 2의 사후평균과 소수 넷째 자리까지 같다는 것도 확인된다.
+
+    **그러나 그림만으로는 이 차이를 읽을 수 없다.** 가로축이 $0.35$부터 $0.65$까지 폭 $0.30$인데 가장 큰 벗어남이 $0.00532$, 곧 폭의 $1.8\%$다. 다섯째·여섯째 패널에서 빨간 봉우리가 초록 점선 오른쪽으로 아주 조금 밀려 보이기는 하나 어느 쪽이 더 큰지는 눈으로 가릴 수 없다. **수로 재야 알 수 있는 것을 그림이 보여 주리라 기대하면 안 된다.** 이 그림이 잘 보여 주는 것은 봉우리의 **높이와 폭**이지 위치의 미세한 이동이 아니다.
+
+    **사전밀도가 납작해 보이는 까닭.** 파란 점선의 최대 높이가 균등분포에서 $1.00$, $\text{Beta}(5,5)$에서 $2.46$인데 빨간 실선은 $19$가 넘는다. 밀도는 넓이가 $1$이 되도록 정규화되므로 **좁을수록 높다.** 사전분포는 $[0,1]$ 전체에 퍼져 있고 사후분포는 폭 $0.02$ 남짓에 몰려 있으니 높이가 스무 배 가까이 차이 난다. 관측 $581$개가 $\theta$를 그만큼 좁혔다는 뜻이고, 셋째·여섯째 패널에서 파란 점선이 제법 솟아 보이는 것도 그 사전분포들이 그만큼 좁기 때문이다.
+
+    **$x$축이 가리는 것.** 치우친 두 사전분포 $\text{Beta}(2,8)$과 $\text{Beta}(8,2)$가 그림에서 거의 밋밋한 직선으로 보인다. 두 밀도의 봉우리는 각각 $0.125$와 $0.875$에 있는데 둘 다 $[0.35, 0.65]$ 바깥이라 **잘려 나갔고**, 창 안에 남은 것은 완만한 기울기뿐이다. 창 안 최대 높이가 $1.23$으로 둘이 같은 것은 좌우 대칭이기 때문이다. 이 두 패널만 보고 "치우친 사전분포"의 생김새를 짐작하면 안 된다.
 
 ## 해석
 
 - **균등 사전분포** $\text{Beta}(1,1)$: 사후분포가 전적으로 자료로 결정된다. 사후평균이 MLE와 거의 같고 $P(\theta < 0.5)$는 표본추출 증거만 반영한다.
 - **약한 정보의 사전분포** (작은 $a + b$): 사전분포의 유효 표본크기가 $n = 581$에 비해 무시할 만하므로 사후분포가 균등 사전분포일 때와 거의 구별되지 않는다.
-- **0.5에 집중된 강한 사전분포** $\text{Beta}(100, 100)$: 사전 유효 표본크기가 200으로 $n = 581$에 비해 상당하다. 사후평균이 0.5 쪽으로 눈에 띄게 당겨지고 사후분포가 MLE 주변으로 더 넓어진다.
+- **0.5에 집중된 강한 사전분포** $\text{Beta}(100, 100)$: 사전 유효 표본크기가 200으로 $n = 581$에 비해 상당하다. 사후평균이 0.5 쪽으로 당겨지고, 사후분포는 오히려 **좁아진다**(사후표준편차가 $0.02054$에서 $0.01787$로 준다). 유효 표본크기가 $581$에서 $781$로 늘어난 셈이기 때문이다. 다만 당겨지는 **양**은 $\text{Beta}(8,2)$ 쪽이 더 크다 — 무게는 15배 작지만 거리가 19배 멀다(보기 2).
 - **치우친 사전분포**: 사전분포 $\text{Beta}(2, 8)$(평균 0.2)과 $\text{Beta}(8, 2)$(평균 0.8)는 유효 표본크기가 작아($a + b = 10$) 자료에 쉽게 압도된다.
 - **사후확률** $P(\theta < 0.5)$는 직접적이고 해석 가능한 양으로 의사결정에 유용하다. 예를 들어 어떤 후보가 과반에 못 미치는 지지를 받을 가능성이 큰지 판단할 수 있다.
 

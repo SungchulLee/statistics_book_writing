@@ -109,68 +109,141 @@ Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 피셔 정보량을 수치로 구하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 피셔 정보량을 수치로 구하기. $\sigma = 2$가 알려진 $N(\mu, \sigma^2)$에서 $\mu$에 관한 피셔 정보량을 생각한다.
+
+**(1)** $I(\mu)$를 점수의 분산과 이계도함수 기댓값의 음수, 두 가지로 구하고 둘이 일치함을 보이시오.
+
+**(2)** 로그밀도를 중심차분으로 미분해 점수를 근사한 뒤 그 표본분산으로 $I(\mu)$를 추정하면 $N = 10^5$에서 $0.251855$가 나온다. 해석값과 $0.74\%$ 어긋나는데, **중심차분의 오차인가 표본의 오차인가.**
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def fisher_information_numerical(dist_name="norm", true_params=None,
-                                  param_name="loc", n_samples=100_000, delta=1e-5):
-    """점수함수의 분산으로 피셔 정보량을 수치적으로 구한다."""
-    if true_params is None:
-        true_params = {"loc": 5, "scale": 2}
+    **(1) 해석적으로.** 로그밀도가
 
-    dist = getattr(stats, dist_name)
+    $$
+    \log f(x; \mu) = -\tfrac{1}{2}\log(2\pi\sigma^2) - \frac{(x-\mu)^2}{2\sigma^2}
+    $$
+
+    이므로 점수는
+
+    $$
+    S(\mu) = \frac{\partial}{\partial\mu}\log f(X; \mu) = \frac{X-\mu}{\sigma^2}
+    $$
+
+    이다. **점수의 분산으로.** $E[S(\mu)] = E[X-\mu]/\sigma^2 = 0$이므로 분산과 2차 적률이 같고
+
+    $$
+    I(\mu) = \operatorname{Var}\!\left(\frac{X-\mu}{\sigma^2}\right)
+    = \frac{\operatorname{Var}(X)}{\sigma^4} = \frac{\sigma^2}{\sigma^4} = \frac{1}{\sigma^2}
+    $$
+
+    이다. **이계도함수로.** 한 번 더 미분하면
+
+    $$
+    \frac{\partial^2}{\partial\mu^2}\log f(x; \mu) = -\frac{1}{\sigma^2}
+    $$
+
+    인데 이것이 $x$에 **의존하지 않는 상수**이므로 기댓값을 취할 것이 없고 $-E[\cdot] = 1/\sigma^2$이다. 두 길이 같은 답을 준다.
+
+    $$
+    I(\mu) = \frac{1}{\sigma^2} = \frac{1}{4} = 0.25
+    $$
+
+    이계도함수가 상수라는 사실은 따로 기억해 둘 만하다. 로그가능도가 $\mu$에 대해 **정확한 포물선**이고 그 곡률이 자료와 무관하게 $1/\sigma^2$로 고정되어 있다는 뜻이다. 이 점이 (2)에서 바로 쓰인다.
+
+    **(2) 수치적으로. 표본의 오차다.** 중심차분의 나머지항은
+
+    $$
+    \frac{\ell(\mu+\delta) - \ell(\mu-\delta)}{2\delta} = \ell'(\mu) + \frac{\delta^2}{6}\ell'''(\mu) + O(\delta^4)
+    $$
+
+    인데, (1)에서 보았듯 $\ell$이 $\mu$의 이차식이라 $\ell''' \equiv 0$이다. **이 모형에서 중심차분은 근사가 아니라 정확하다.** 그러므로 어긋남은 모두 표본 $N = 10^5$개에서 오는 몬테카를로 오차여야 한다. 코드로 두 주장을 다 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def fisher_information_numerical(dist_name="norm", true_params=None,
+                                      param_name="loc", n_samples=100_000, delta=1e-5):
+        """점수함수의 분산으로 피셔 정보량을 수치적으로 구한다."""
+        if true_params is None:
+            true_params = {"loc": 5, "scale": 2}
+
+        dist = getattr(stats, dist_name)
+        rng = np.random.default_rng(42)
+        data = dist.rvs(size=n_samples, random_state=rng, **true_params)
+
+        theta = true_params[param_name]
+
+        # 점수함수 = 로그밀도를 모수로 미분한 것.
+        # 해석적으로 미분하는 대신 중심차분으로 근사한다.
+        # 그래서 이 코드는 분포가 무엇이든 그대로 쓸 수 있다.
+        params_plus = {**true_params, param_name: theta + delta}
+        params_minus = {**true_params, param_name: theta - delta}
+
+        logf_plus = dist.logpdf(data, **params_plus)
+        logf_minus = dist.logpdf(data, **params_minus)
+        score = (logf_plus - logf_minus) / (2 * delta)
+
+        # 피셔정보는 점수함수의 **분산**이다.
+        # 참 모수에서 점수의 기댓값이 0이므로 분산 = 2차 적률이 되고,
+        # 그래서 var를 그대로 쓰면 된다.
+        #
+        # 직관: 점수가 크게 흔들린다는 것은 모수를 조금만 바꿔도 가능도가
+        # 크게 변한다는 뜻이고, 그만큼 자료가 모수를 잘 짚어낸다는 뜻이다.
+        I_numerical = np.var(score)
+        return I_numerical
+
+    # 정규분포 평균의 피셔 정보량은 이론적으로 1/sigma^2 이다.
+    I_num = fisher_information_numerical("norm", {"loc": 5, "scale": 2}, "loc")
+    I_theory = 1 / 2**2
+    print(f"Normal mean Fisher information:")
+    print(f"  Numerical:   I(mu) = {I_num:.6f}")
+    print(f"  Theoretical: I(mu) = {I_theory:.6f}")
+
+    # 어긋남이 중심차분 탓인가 표본 탓인가. 같은 자료로 점수를
+    # **해석적으로** 계산해 나란히 놓으면 가려진다.
     rng = np.random.default_rng(42)
-    data = dist.rvs(size=n_samples, random_state=rng, **true_params)
+    data = stats.norm.rvs(size=100_000, random_state=rng, loc=5, scale=2)
+    delta = 1e-5
+    score_fd = (stats.norm.logpdf(data, loc=5 + delta, scale=2)
+                - stats.norm.logpdf(data, loc=5 - delta, scale=2)) / (2 * delta)
+    score_exact = (data - 5) / 2**2        # S(mu) = (x - mu) / sigma^2
 
-    theta = true_params[param_name]
+    print()
+    print(f"  중심차분 점수 - 해석적 점수, 최대 차이 = {np.abs(score_fd - score_exact).max():.2e}")
+    print(f"  var(중심차분 점수) = {np.var(score_fd):.9f}")
+    print(f"  var(해석적 점수)   = {np.var(score_exact):.9f}")
+    print(f"  몬테카를로 상대오차 sqrt(2/N) = {np.sqrt(2 / 100_000):.3%}")
+    print(f"  실제 상대 어긋남              = {(I_num - I_theory) / I_theory:.3%}")
+    ```
 
-    # 점수함수 = 로그밀도를 모수로 미분한 것.
-    # 해석적으로 미분하는 대신 중심차분으로 근사한다.
-    # 그래서 이 코드는 분포가 무엇이든 그대로 쓸 수 있다.
-    params_plus = {**true_params, param_name: theta + delta}
-    params_minus = {**true_params, param_name: theta - delta}
+    출력:
 
-    logf_plus = dist.logpdf(data, **params_plus)
-    logf_minus = dist.logpdf(data, **params_minus)
-    score = (logf_plus - logf_minus) / (2 * delta)
+    ```
+    Normal mean Fisher information:
+      Numerical:   I(mu) = 0.251855
+      Theoretical: I(mu) = 0.250000
 
-    # 피셔정보는 점수함수의 **분산**이다.
-    # 참 모수에서 점수의 기댓값이 0이므로 분산 = 2차 적률이 되고,
-    # 그래서 var를 그대로 쓰면 된다.
-    #
-    # 직관: 점수가 크게 흔들린다는 것은 모수를 조금만 바꿔도 가능도가
-    # 크게 변한다는 뜻이고, 그만큼 자료가 모수를 잘 짚어낸다는 뜻이다.
-    I_numerical = np.var(score)
-    return I_numerical
+      중심차분 점수 - 해석적 점수, 최대 차이 = 1.53e-10
+      var(중심차분 점수) = 0.251855080
+      var(해석적 점수)   = 0.251855080
+      몬테카를로 상대오차 sqrt(2/N) = 0.447%
+      실제 상대 어긋남              = 0.742%
+    ```
 
-# 정규분포 평균의 피셔 정보량은 이론적으로 1/sigma^2 이다.
-I_num = fisher_information_numerical("norm", {"loc": 5, "scale": 2}, "loc")
-I_theory = 1 / 2**2
-print(f"Normal mean Fisher information:")
-print(f"  Numerical:   I(mu) = {I_num:.6f}")
-print(f"  Theoretical: I(mu) = {I_theory:.6f}")
-```
+    ![점수의 분산이 곧 정보량이다](./img/score_variance_information.png)
 
-출력:
+    **판정이 끝났다.** 중심차분 점수와 해석적 점수가 최대 $1.5\times10^{-10}$밖에 다르지 않고(이것은 $\delta = 10^{-5}$에서 생기는 부동소수점 자리 손실이다), 두 점수의 표본분산은 아홉째 자리까지 똑같이 $0.251855080$이다. 곧 **중심차분은 어긋남에 기여하지 않았다.**
 
-```
-Normal mean Fisher information:
-  Numerical:   I(mu) = 0.251855
-  Theoretical: I(mu) = 0.250000
-```
+    남는 것은 표본이다. $S(\mu) \sim N(0, 1/\sigma^2)$이므로 표본분산의 상대 표준오차가 $\sqrt{2/N} = 0.447\%$인데 실제 어긋남이 $0.742\%$, 곧 $1.7$ 표준오차다. 흔히 일어나는 요동이다. 자리를 더 얻으려면 $N$을 키우는 수밖에 없고, $\delta$를 줄이는 것은 아무 도움이 되지 않는다(오히려 자리 손실만 늘어난다).
 
-![점수의 분산이 곧 정보량이다](./img/score_variance_information.png)
+    왼쪽 그림이 위 코드가 계산한 점수값들의 분포다. 두 가지가 눈에 띈다. **중심이 0**이고($E[S] = 0$은 정칙 조건 아래에서 언제나 성립한다), 그 **퍼짐이 곧 정보량**이다. 평균이 0이므로 분산과 2차 적률이 같아져 `np.var(score)` 한 줄로 $I(\theta)$가 나온다.
 
-왼쪽이 위 코드가 계산한 점수값들의 분포다. 두 가지가 눈에 띈다. **중심이 0**이고($E[s] = 0$은 정칙 조건 아래에서 언제나 성립한다), 그 **퍼짐이 곧 정보량**이다. 평균이 0이므로 분산과 2차 적률이 같아져 `np.var(score)` 한 줄로 $I(\theta)$가 나온다.
+    오른쪽은 같은 방법을 네 분포에 적용해 해석값과 나란히 놓은 것이다. 베르누이의 막대가 유독 긴 것은 $p = 0.3$에서 $I(p) = 1/(p(1-p)) \approx 4.76$이기 때문인데, 성공확률이 0이나 1에 가까울수록 관측 하나가 주는 정보가 커진다는 뜻이다.
 
-오른쪽은 같은 방법을 네 분포에 적용해 해석값과 나란히 놓은 것이다. 베르누이의 막대가 유독 긴 것은 $p = 0.3$에서 $I(p) = 1/(p(1-p)) \approx 4.76$이기 때문인데, 성공확률이 0이나 1에 가까울수록 관측 하나가 주는 정보가 커진다는 뜻이다.
-
-수치적 방법의 쓸모는 여기에 있다. **로그밀도를 미분할 수만 있으면 분포가 무엇이든 같은 코드가 통한다.** 해석적으로 기댓값을 구하기 어려운 모형에서 특히 그렇다.
+    수치적 방법의 쓸모는 여기에 있다. **로그밀도를 미분할 수만 있으면 분포가 무엇이든 같은 코드가 통한다.** 해석적으로 기댓값을 구하기 어려운 모형에서 특히 그렇다. 다만 지금 본 대로 정규분포의 평균처럼 로그밀도가 이차식인 경우가 아니면 중심차분의 $O(\delta^2)$ 항이 살아 있어, $\delta$를 너무 크게 잡으면 절단오차가, 너무 작게 잡으면 자리 손실이 끼어든다.
 
 ## Cramér-Rao 한계 확인
 
@@ -178,45 +251,123 @@ Normal mean Fisher information:
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 표본평균이 하한에 도달함을 확인하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 표본평균이 하한에 도달함을 확인하기. $\sigma = 2$인 정규모집단에서 $n = 50$을 뽑는다.
+
+**(1)** 크라메르-라오 하한과 $\operatorname{Var}(\bar X)$를 구해 $\bar X$가 효율적임을 보이고, 비교 대상으로 표본중앙값의 점근분산도 구하시오.
+
+**(2)** 모의실험으로 두 분산을 재면 중앙값의 효율이 $0.6567$로 나온다. 점근값 $2/\pi = 0.6366$보다 $3\%$ 크다. **몬테카를로 오차인가.**
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def verify_crlb(mu_true=5.0, sigma=2.0, n=50, n_sim=20_000):
-    """표본평균이 크라메르-라오 하한에 도달함을 확인한다."""
-    rng = np.random.default_rng(42)
-    crlb = sigma**2 / n
+    **(1) 해석적으로.** 보기 1에서 $I(\mu) = 1/\sigma^2$을 얻었으므로 표본 $n$개의 전체 정보는 $nI(\mu) = n/\sigma^2$이고 하한은
 
-    means = np.array([rng.normal(mu_true, sigma, n).mean() for _ in range(n_sim)])
-    empirical_var = means.var()
+    $$
+    \operatorname{Var}(\hat\mu) \ge \frac{1}{nI(\mu)} = \frac{\sigma^2}{n} = \frac{4}{50} = 0.08
+    $$
 
-    print(f"CRLB = sigma^2/n = {crlb:.6f}")
-    print(f"Var(X_bar)       = {empirical_var:.6f}")
-    print(f"Ratio            = {empirical_var / crlb:.4f}")
+    이다. 한편 $\operatorname{Var}(\bar X) = \sigma^2/n$이 정확히 이 값이다. **표본평균은 하한을 등호로 달성한다.** 점근적으로만 그런 것이 아니라 모든 $n$에서 그렇다.
 
-    # 비교: 중앙값은 하한을 달성하지 못한다.
-    # 정규모집단에서 중앙값의 점근 효율은 2/pi ≈ 0.637 이다.
-    # 즉 같은 정밀도를 얻으려면 표본이 약 1.57배 더 필요하다.
-    medians = np.array([np.median(rng.normal(mu_true, sigma, n)) for _ in range(n_sim)])
-    print(f"\nVar(median) = {medians.var():.6f}")
-    print(f"Efficiency of median = {crlb / medians.var():.4f}")
+    표본중앙값은 다르다. 중앙값의 점근분포는
 
-verify_crlb()
-```
+    $$
+    \sqrt{n}\,(\tilde X - \mu) \overset{d}{\to} N\!\left(0, \frac{1}{4f(\mu)^2}\right)
+    $$
 
-출력:
+    인데 정규밀도의 중앙에서 $f(\mu) = 1/(\sigma\sqrt{2\pi})$이므로
 
-```
-CRLB = sigma^2/n = 0.080000
-Var(X_bar)       = 0.078777
-Ratio            = 0.9847
+    $$
+    \frac{1}{4f(\mu)^2} = \frac{2\pi\sigma^2}{4} = \frac{\pi\sigma^2}{2},
+    \qquad
+    \operatorname{Var}(\tilde X) \approx \frac{\pi\sigma^2}{2n} = \frac{\pi \cdot 4}{100} = 0.1257
+    $$
 
-Var(median) = 0.121813
-Efficiency of median = 0.6567
-```
+    이다. 효율은 둘의 비
+
+    $$
+    \frac{\sigma^2/n}{\pi\sigma^2/(2n)} = \frac{2}{\pi} = 0.6366
+    $$
+
+    으로 $\sigma$와 $n$이 모두 지워진다. **중앙값은 자료가 담은 정보의 $64\%$만 쓴다**는 익숙한 수가 여기서 나온다. 다만 이 $2/\pi$는 $n \to \infty$의 값이라는 점을 기억해 두자. (2)의 물음이 바로 그것이다.
+
+    **(2) 수치적으로. 몬테카를로 오차가 아니다 — 유한표본 효과다.** 먼저 모의실험을 돌린다.
+
+    ```python
+    import numpy as np
+
+    def verify_crlb(mu_true=5.0, sigma=2.0, n=50, n_sim=20_000):
+        """표본평균이 크라메르-라오 하한에 도달함을 확인한다."""
+        rng = np.random.default_rng(42)
+        crlb = sigma**2 / n
+
+        means = np.array([rng.normal(mu_true, sigma, n).mean() for _ in range(n_sim)])
+        empirical_var = means.var()
+
+        print(f"CRLB = sigma^2/n = {crlb:.6f}")
+        print(f"Var(X_bar)       = {empirical_var:.6f}")
+        print(f"Ratio            = {empirical_var / crlb:.4f}")
+
+        # 비교: 중앙값은 하한을 달성하지 못한다.
+        # 정규모집단에서 중앙값의 점근 효율은 2/pi ≈ 0.637 이다.
+        # 즉 같은 정밀도를 얻으려면 표본이 약 1.57배 더 필요하다.
+        medians = np.array([np.median(rng.normal(mu_true, sigma, n)) for _ in range(n_sim)])
+        print(f"\nVar(median) = {medians.var():.6f}")
+        print(f"Efficiency of median = {crlb / medians.var():.4f}")
+
+    verify_crlb()
+    ```
+
+    출력:
+
+    ```
+    CRLB = sigma^2/n = 0.080000
+    Var(X_bar)       = 0.078777
+    Ratio            = 0.9847
+
+    Var(median) = 0.121813
+    Efficiency of median = 0.6567
+    ```
+
+    **표본평균 쪽은 먼저 정리된다.** $\operatorname{Var}(\bar X) = 0.078777$이 하한 $0.08$의 $0.9847$배인데, 반복 $20{,}000$회에서 분산 추정값의 상대 표준오차가 $\sqrt{2/20{,}000} = 1.0\%$이므로 $1.5\%$의 어긋남은 $1.5$ 표준오차다. 몬테카를로 요동이고, (1)이 말한 등호 달성과 어긋나지 않는다.
+
+    **중앙값 쪽은 다르다.** $0.6567$과 $0.6366$의 차이는 $3\%$, 곧 $3$ 표준오차로 요동만으로는 설명되지 않는다. 범인은 $2/\pi$가 **$n \to \infty$의 값**이라는 데 있다. $n$을 바꿔 가며 다시 재 보면 드러난다.
+
+    ```python
+    import numpy as np
+
+    # 중앙값의 효율이 n 과 함께 2/pi 로 내려가는지 본다.
+    # 반복 수를 n 에 따라 달리 두어 작은 n 쪽의 몬테카를로 오차를 줄인다.
+    print(f"{'n':>6} {'반복':>8} {'Var(median)':>13} {'CRLB':>10} {'효율':>8} {'MC오차':>8}")
+    print("-" * 60)
+    rng = np.random.default_rng(0)
+    for n, n_sim in ((49, 200_000), (50, 200_000), (51, 200_000),
+                     (200, 50_000), (1000, 20_000)):
+        v = np.median(rng.normal(5.0, 2.0, size=(n_sim, n)), axis=1).var()
+        print(f"{n:>6} {n_sim:>8} {v:>13.6f} {4 / n:>10.6f} "
+              f"{(4 / n) / v:>8.4f} {np.sqrt(2 / n_sim):>7.2%}")
+    print(f"\n점근값 2/pi = {2 / np.pi:.4f}")
+    ```
+
+    출력:
+
+    ```
+         n       반복   Var(median)       CRLB       효율     MC오차
+    ------------------------------------------------------------
+        49   200000      0.126389   0.081633   0.6459   0.32%
+        50   200000      0.122504   0.080000   0.6530   0.32%
+        51   200000      0.121927   0.078431   0.6433   0.32%
+       200    50000      0.031505   0.020000   0.6348   0.63%
+      1000    20000      0.006296   0.004000   0.6353   1.00%
+
+    점근값 2/pi = 0.6366
+    ```
+
+    **$n$이 커지면 효율이 $2/\pi$로 내려간다.** $n = 1000$에서 $0.6353$, $n = 200$에서 $0.6348$로 둘 다 점근값 $0.6366$과 몬테카를로 오차 안에서 맞는다. 반면 $n = 50$에서는 $0.6530$으로 분명히 크다. 처음의 $0.6567$은 이 유한표본 값에 반복 수가 적어 생긴 요동이 더해진 것이다.
+
+    **왜 $n = 50$이 유독 유리한가.** 표에서 $n = 49$는 $0.6459$, $n = 51$은 $0.6433$인데 가운데 끼인 $n = 50$만 $0.6530$으로 튄다. 몬테카를로 오차 $0.32\%$를 넘는 차이다. 짝수 $n$에서는 중앙값이 가운데 **두** 순서통계량의 평균이고, 그 평균이 하나만 쓰는 것보다 분산을 줄여 주기 때문이다. 홀수와 짝수가 번갈아 오르내리면서 $n$이 커질수록 둘 다 $2/\pi$로 모인다.
+
+    정리하면 **표본평균의 $1.5\%$는 몬테카를로 오차이고, 중앙값의 $3\%$는 유한표본 효과다.** 겉보기 크기는 비슷해도 성격이 다르며, 반복 수를 늘려 가려낼 수 있는 것은 앞쪽뿐이다.
 
 !!! note "중앙값의 효율"
     정규분포에서 평균 대비 중앙값의 점근 상대효율은 $2/\pi \approx 0.637$이다. 중앙값은 자료가 담은 정보의 약 64%만 사용한다.
