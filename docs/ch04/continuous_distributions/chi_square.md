@@ -114,6 +114,38 @@ $$
 
 </div>
 
+??? proof "증명"
+
+    위에서 $Q = \sum_{i=1}^d Z_i^2$의 MGF가 $(1-2t)^{-d/2}$임을 보였다. MGF 는 원점
+    둘레의 구간에서 유한하면 분포를 하나로 정하므로, **위 밀도의 MGF 를 구해 그것과
+    같음을 보이면 된다.**
+
+    형상 $\alpha$, 척도 $\theta$인 감마밀도
+
+    $$
+    g(q) = \frac{1}{\Gamma(\alpha)\,\theta^{\alpha}}\, q^{\alpha - 1} e^{-q/\theta}, \qquad q > 0
+    $$
+
+    에 대해 $t < 1/\theta$이면
+
+    $$
+    \int_0^{\infty} e^{tq}\, g(q)\,dq
+    = \frac{1}{\Gamma(\alpha)\,\theta^{\alpha}} \int_0^{\infty} q^{\alpha-1} e^{-q\left(\frac1\theta - t\right)}dq
+    $$
+
+    이다. 안쪽 적분은 $u = q\left(\frac1\theta - t\right)$로 치환하면 감마함수의 정의
+    $\int_0^\infty u^{\alpha-1}e^{-u}du = \Gamma(\alpha)$로 돌아가고, 치환으로 생긴
+    인수가 $\left(\frac1\theta - t\right)^{-\alpha}$이므로
+
+    $$
+    \int_0^{\infty} e^{tq}\, g(q)\,dq
+    = \frac{\left(\frac1\theta - t\right)^{-\alpha}}{\theta^{\alpha}}
+    = (1 - \theta t)^{-\alpha}
+    $$
+
+    이다. 여기에 $\alpha = d/2$, $\theta = 2$를 넣으면 $(1-2t)^{-d/2}$로 $M_Q$와 같다.
+    따라서 $Q$의 밀도가 그 감마밀도, 곧 정리의 식이다. $\square$
+
 $d = 1$을 넣으면 $\Gamma(1/2) = \sqrt\pi$이므로 정리 1의 식으로 돌아온다:
 
 $$

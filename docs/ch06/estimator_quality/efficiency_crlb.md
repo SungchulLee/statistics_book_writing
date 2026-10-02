@@ -55,6 +55,54 @@ $$
 
 </div>
 
+??? proof "증명"
+
+    **점수함수.** 표본 전체의 로그가능도를 $\ell(\theta) = \sum_i \log f(X_i; \theta)$라
+    하고 그 도함수를 **점수** $S(\theta) = \ell'(\theta)$라 하자.
+
+    밀도의 적분이 $\theta$와 무관하게 1이므로, 정칙 조건 3이 허락하는 대로 양변을
+    $\theta$로 미분하면
+
+    $$
+    0 = \frac{\partial}{\partial \theta}\int f(x; \theta)\,dx
+    = \int \frac{\partial f}{\partial \theta}\,dx
+    = \int \frac{\partial \log f}{\partial \theta}\, f\,dx
+    = E\!\left[\frac{\partial \log f}{\partial \theta}\right]
+    $$
+
+    이다. 곧 관측값 하나의 점수는 기댓값이 $0$이고, 따라서 $E[S(\theta)] = 0$이다.
+    점수의 분산은 Fisher 정보량의 정의이고 독립이면 더해지므로
+    $\text{Var}(S(\theta)) = n I(\theta)$다.
+
+    **불편성을 미분한다.** $\hat\theta$가 불편이므로 모든 $\theta$에 대해
+    $E[\hat\theta] = \theta$다. 양변을 $\theta$로 미분하면 왼쪽은
+
+    $$
+    \frac{\partial}{\partial \theta}\int \hat\theta(x)\, L(x; \theta)\,dx
+    = \int \hat\theta(x)\, \frac{\partial L}{\partial \theta}\,dx
+    = \int \hat\theta(x)\, S(\theta)\, L(x; \theta)\,dx
+    = E[\hat\theta\, S(\theta)]
+    $$
+
+    이고 오른쪽은 $1$이다. $E[S(\theta)] = 0$이므로 이것은 곧 공분산이다.
+
+    $$
+    \operatorname{Cov}(\hat\theta,\, S(\theta)) = E[\hat\theta\,S] - E[\hat\theta]E[S] = 1
+    $$
+
+    **코시–슈바르츠.** 공분산의 제곱은 분산의 곱을 넘지 못하므로
+
+    $$
+    1 = \operatorname{Cov}(\hat\theta, S)^2 \le \text{Var}(\hat\theta)\,\text{Var}(S)
+    = \text{Var}(\hat\theta)\cdot n I(\theta)
+    $$
+
+    이고, 양변을 $nI(\theta) > 0$으로 나누면 $\text{Var}(\hat\theta) \ge 1/(nI(\theta))$다.
+    $\square$
+
+    등호는 코시–슈바르츠가 등호가 될 때, 곧 $\hat\theta - \theta$가 점수의 상수배일
+    때에만 성립한다. 뒤에 나오는 **효율적 추정량**이 정확히 그 경우다.
+
 $1 / (nI(\theta))$가 Cramér-Rao 하한이다. 어떤 불편추정량도 이 문턱 아래의 분산을 가질 수 없다.
 
 ![휘어짐, 정보량, 그리고 분산의 바닥](./img/crlb_information.png)

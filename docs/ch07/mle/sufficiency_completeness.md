@@ -66,12 +66,42 @@ $$
 
 ### 정리 1. (Lehmann-Scheffé) { .thm }
 
-
 $T$가 $\theta$에 대한 완비충분통계량이라 하자. $h(T)$가 함수 $\tau(\theta)$의 임의의 불편추정량이면 — 즉 모든 $\theta$에 대해 $E_\theta[h(T)] = \tau(\theta)$이면 — $h(T)$는 $\tau(\theta)$의 유일한 **균일최소분산불편추정량(UMVUE)**이다.
 
 </div>
 
-증명은 두 가지 사실에 기댄다. 첫째, Rao-Blackwell 정리에 의해 임의의 불편추정량을 충분통계량으로 조건부기댓값을 취하면 분산이 커지지 않는다. 둘째, 완비성은 각 목표 $\tau(\theta)$에 대해 $T$의 불편인 함수가 하나뿐임을 보장하므로 Rao-Blackwell화한 추정량이 유일하다.
+??? proof "증명"
+
+    $W$를 $\tau(\theta)$의 **아무** 불편추정량이라 하고 $\varphi(T) = E[W \mid T]$로 두자.
+    $T$가 충분하므로 이 조건부기댓값은 $\theta$에 의존하지 않는다. 곧 $\varphi(T)$는
+    실제로 쓸 수 있는 통계량이다. 충분성이 필요한 자리가 바로 여기다.
+
+    **1. Rao–Blackwell: 분산이 커지지 않는다.** 반복 기댓값에 의해
+    $E[\varphi(T)] = E[W] = \tau(\theta)$이므로 $\varphi(T)$도 불편이다. 전체 분산의
+    법칙을 쓰면
+
+    $$
+    \text{Var}(W) = E\big[\text{Var}(W \mid T)\big] + \text{Var}\big(E[W \mid T]\big)
+    \ge \text{Var}(\varphi(T))
+    $$
+
+    이다. 첫 항이 음이 아니기 때문이고, 등호는 $W$가 거의 확실히 $T$의 함수일 때에만
+    성립한다.
+
+    **2. 완비성: 그런 함수는 하나뿐이다.** $h(T)$와 $\varphi(T)$가 모두 $T$의 함수이고
+    둘 다 불편이므로, 모든 $\theta$에 대해
+
+    $$
+    E_\theta\big[h(T) - \varphi(T)\big] = \tau(\theta) - \tau(\theta) = 0
+    $$
+
+    이다. $T$가 완비이므로 $0$의 불편추정량은 항등적으로 $0$인 함수뿐이고, 따라서
+    $h(T) = \varphi(T)$가 거의 확실히 성립한다.
+
+    두 단계를 합치면 $\text{Var}(h(T)) = \text{Var}(\varphi(T)) \le \text{Var}(W)$이다.
+    $W$가 임의의 불편추정량이었으므로 $h(T)$가 UMVUE다. 유일성도 2 에서 따라 나온다.
+    분산이 같은 다른 불편추정량이 있다면 1 의 등호 조건에 의해 그것은 $T$의 함수여야
+    하고, 그러면 완비성이 $h(T)$와 같다고 말해 주기 때문이다. $\square$
 
 ## 정규 모형에의 적용
 

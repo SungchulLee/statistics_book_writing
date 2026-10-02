@@ -28,7 +28,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 1. { .thm }
+### 정리 1. 정규모집단에서의 표본분산 { .thm }
 
 $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면:
 
@@ -39,6 +39,42 @@ $$
 또한 $\bar{X}$와 $S^2$은 독립이다.
 
 </div>
+
+??? proof "증명"
+
+    $\mu = 0$, $\sigma = 1$로 두어도 일반성을 잃지 않는다. $\bar X$와 $S^2$의 독립성도
+    $(n-1)S^2/\sigma^2$의 분포도 위치·척도 변환에 영향받지 않기 때문이다. 이때
+    $\mathbf{X} = (X_1, \ldots, X_n)^\top \sim N(\mathbf{0}, I)$이다.
+
+    첫 행이 $\mathbf{u}_1 = (1/\sqrt n)(1, \ldots, 1)$인 직교행렬 $Q$를 잡고(그람–슈미트로
+    언제나 만들 수 있다) $\mathbf{Y} = Q\mathbf{X}$로 두자. 직교변환이므로
+
+    $$
+    \operatorname{Cov}(\mathbf{Y}) = Q I Q^\top = I
+    $$
+
+    이고, 따라서 $Y_1, \ldots, Y_n$도 독립인 표준정규확률변수다. **표준정규벡터를
+    회전해도 다시 표준정규벡터**라는 이 사실이 증명의 전부다.
+
+    두 통계량을 $\mathbf{Y}$로 다시 쓴다. 첫 성분은
+
+    $$
+    Y_1 = \mathbf{u}_1^\top \mathbf{X} = \sqrt n\, \bar X
+    $$
+
+    이고, 직교변환은 길이를 보존하므로 $\sum_i X_i^2 = \sum_i Y_i^2$이어서
+
+    $$
+    (n-1)S^2 = \sum_{i=1}^n X_i^2 - n\bar X^2 = \sum_{i=1}^n Y_i^2 - Y_1^2 = \sum_{i=2}^n Y_i^2
+    $$
+
+    이다. 오른쪽은 독립인 표준정규 $n-1$개의 제곱합이므로 정의에 의해
+    $\chi^2(n-1)$을 따른다. 또 $\bar X$는 $Y_1$만의 함수이고 $S^2$은
+    $Y_2, \ldots, Y_n$만의 함수인데 이들이 서로 독립이므로 $\bar X$와 $S^2$도
+    독립이다. $\square$
+
+    같은 논법을 [4.2절 정규분포](../../ch04/continuous_distributions/normal.md) 연습문제
+    7에서 독립성 쪽에 무게를 두어 한 번 더 다룬다.
 
 이 결과로부터 $S^2$ 자체의 분포는 다음과 같이 쓸 수 있다:
 

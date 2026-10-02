@@ -58,9 +58,6 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathb
 
 </div>
 
-!!! warning "중복도를 세는 규약"
-    2번에서 고윳값을 $\mathbb{C}$ 안에서 센다는 점이 중요하다. 실수 성분의 행렬도 실수 고윳값을 갖지 않을 수 있다(예: 회전행렬 $\begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$의 고윳값은 $\pm i$다). 3번과 4번이 고윳값의 합·곱으로 설명되는 것도 복소 고윳값을 중복도까지 모두 셀 때뿐이다. 자세한 것은 다음다음 쪽 "대각합과 고윳값"에서 다룬다.
-
 ??? proof "증명"
 
     **1 (특성다항식).** $\lambda\mathbf{I} = \mathbf{P}^{-1}(\lambda\mathbf{I})\mathbf{P}$이므로
@@ -100,6 +97,9 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathb
     **6 (최소다항식).** 임의의 다항식 $f$에 대해 $f(\mathbf{B}) = \mathbf{P}^{-1}f(\mathbf{A})\mathbf{P}$이다(연습문제 6). 따라서 $f(\mathbf{A}) = \mathbf{O}$와 $f(\mathbf{B}) = \mathbf{O}$가 동등하므로, $\mathbf{A}$를 없애는 다항식 전체와 $\mathbf{B}$를 없애는 다항식 전체가 같은 집합이고, 그중 최고차항의 계수가 1인 최소 차수 원소도 같다.
 
     **7 (기하적 중복도).** $\mathbf{B} - \lambda\mathbf{I} = \mathbf{P}^{-1}(\mathbf{A} - \lambda\mathbf{I})\mathbf{P}$이므로 5번을 $\mathbf{A} - \lambda\mathbf{I}$에 적용하면 계수가 같고, 따라서 차원정리에 의해 영공간의 차원도 같다. $\square$
+
+!!! warning "중복도를 세는 규약"
+    2번에서 고윳값을 $\mathbb{C}$ 안에서 센다는 점이 중요하다. 실수 성분의 행렬도 실수 고윳값을 갖지 않을 수 있다(예: 회전행렬 $\begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$의 고윳값은 $\pm i$다). 3번과 4번이 고윳값의 합·곱으로 설명되는 것도 복소 고윳값을 중복도까지 모두 셀 때뿐이다. 자세한 것은 다음다음 쪽 "대각합과 고윳값"에서 다룬다.
 
 ### 닮음의 완전 불변량
 
