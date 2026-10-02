@@ -226,7 +226,7 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
 </div>
 
 ??? success "풀이"
-    #### 구현
+    **구현**
 
     ```python
     import numpy as np
@@ -315,7 +315,7 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
 
     이 값들은 `statsmodels`의 `sm.ols('Sales ~ TV + Radio + Newspaper', train_data).fit().summary()`가 내놓는 표와 정확히 일치한다.
 
-    #### 출력 읽기
+    **출력 읽기**
 
     회귀표의 각 행은 다음을 담고 있다.
 

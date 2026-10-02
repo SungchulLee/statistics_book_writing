@@ -30,94 +30,384 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 자료와 최소제곱해
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료와 최소제곱해. $\text{TV} \sim U(0,300)$ 에서 $\text{Sales} = 7 + 0.05\,\text{TV} + \varepsilon$, $\varepsilon \sim N(0, 2^2)$ 로 $n = 100$ 개를 만들고 $X$ 를 **중심화만** 한 뒤 적합한다.
+
+**(1)** 중심화하면 $\hat\beta_0 = \bar y$ 가 되고 $\hat\beta_0$ 과 $\hat\beta_1$ 의 추정이 **무상관**이 됨을 $(X^\top X)^{-1}$ 로 보이시오. 중심화 좌표에서 **참 절편**은 $7$ 이 아니라 얼마인가.
+
+**(2)** 두 추정값을 참값과 견주고, 각자의 표준오차 단위로 어긋남을 재시오.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import StandardScaler
+??? success "풀이"
 
-# 광고비와 매출을 흉내 낸 자료. 참 기울기는 0.05 다.
-np.random.seed(42)
-n_samples = 100
-TV = np.random.uniform(0, 300, n_samples)
-Sales = 7 + 0.05 * TV + np.random.normal(0, 2, n_samples)
+    **(1) 해석적으로.** 중심화하면 $\sum_i x_i = 0$ 이므로
 
-# 중심화만 하고 척도는 건드리지 않는다(with_std=False). 중심화하면 절편과
-# 기울기의 추정이 서로 독립이 되어, 아래 등고선이 기울어지지 않고 바로 선다.
-X = TV.reshape(-1, 1)
-scaler = StandardScaler(with_mean=True, with_std=False)
-X_scaled = scaler.fit_transform(X)
+    $$
+    X^\top X = \begin{pmatrix} n & \sum x_i \\ \sum x_i & \sum x_i^2 \end{pmatrix}
+    = \begin{pmatrix} n & 0 \\ 0 & S_{xx} \end{pmatrix}
+    \quad\Longrightarrow\quad
+    (X^\top X)^{-1} = \begin{pmatrix} 1/n & 0 \\ 0 & 1/S_{xx} \end{pmatrix}
+    $$
 
-model = LinearRegression()
-model.fit(X_scaled, Sales)
-beta_0 = model.intercept_
-beta_1 = model.coef_[0]
-```
+    다. **대각행렬이다.** 따라서 $\operatorname{Cov}(\hat{\boldsymbol\beta}) = \sigma^2(X^\top X)^{-1}$ 의 비대각 원소가 $0$ 이고 두 추정량이 무상관이다(정규 오차에서는 독립이다). 일반적으로는 $\operatorname{Cov}(\hat\beta_0, \hat\beta_1) = -\sigma^2\bar x/S_{xx}$ 이므로 $\bar x = 0$ 일 때만 $0$ 이 된다.
 
-$X$를 중심화만 했으므로($\bar{x} = 0$) 절편은 `Sales`의 평균과 같다. 적합 결과는 $\hat{\beta}_0 = 14.0506$, $\hat{\beta}_1 = 0.046935$이다.
+    또 첫째 정규방정식이 $n\hat\beta_0 + \hat\beta_1\sum x_i = \sum y_i$ 인데 $\sum x_i = 0$ 이므로 $\hat\beta_0 = \bar y$ 다.
+
+    **참 절편은 $7$ 이 아니다.** 원래 좌표에서 $\text{Sales} = 7 + 0.05\,\text{TV} + \varepsilon$ 인데 $x = \text{TV} - \overline{\text{TV}}$ 로 바꾸면
+
+    $$
+    \text{Sales} = \underbrace{7 + 0.05\,\overline{\text{TV}}}_{\text{새 절편}} + 0.05\,x + \varepsilon
+    $$
+
+    이다. **중심화는 기울기를 바꾸지 않고 절편만 옮긴다.** $\overline{\text{TV}} \approx 141$ 이니 새 절편은 $14.05$ 쯤이 되어야 한다.
+
+    표준오차도 바로 읽힌다. $(X^\top X)^{-1}$ 이 대각이므로
+
+    $$
+    \operatorname{se}(\hat\beta_0) = \frac{s}{\sqrt n}, \qquad
+    \operatorname{se}(\hat\beta_1) = \frac{s}{\sqrt{S_{xx}}}
+    $$
+
+    이고, 첫 식은 **표본평균의 표준오차와 똑같다.** 중심화한 회귀에서 절편은 말 그대로 $\bar y$ 이기 때문이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+    from sklearn.preprocessing import StandardScaler
+
+    # 광고비와 매출을 흉내 낸 자료. 참 기울기는 0.05 다.
+    np.random.seed(42)
+    n_samples = 100
+    TV = np.random.uniform(0, 300, n_samples)
+    Sales = 7 + 0.05 * TV + np.random.normal(0, 2, n_samples)
+
+    # 중심화만 하고 척도는 건드리지 않는다(with_std=False). 중심화하면 절편과
+    # 기울기의 추정이 서로 독립이 되어, 아래 등고선이 기울어지지 않고 바로 선다.
+    X = TV.reshape(-1, 1)
+    scaler = StandardScaler(with_mean=True, with_std=False)
+    X_scaled = scaler.fit_transform(X)
+
+    model = LinearRegression()
+    model.fit(X_scaled, Sales)
+    beta_0 = model.intercept_
+    beta_1 = model.coef_[0]
+
+    # 중심화의 두 효과를 확인한다.
+    print(f"X_scaled 의 합 = {X_scaled.sum():.3e}   (중심화했으므로 0)")
+    print(f"beta_0 = {beta_0:.6f},   Sales 평균 = {Sales.mean():.6f},"
+          f"   차이 = {abs(beta_0 - Sales.mean()):.2e}")
+    print(f"beta_1 = {beta_1:.8f}   (참 기울기 0.05)")
+    print()
+    # 중심화 좌표에서 참 절편은 7 + 0.05*TV-bar 다
+    print(f"TV 평균 = {TV.mean():.4f}")
+    print(f"중심화 좌표에서의 참 절편 = 7 + 0.05*{TV.mean():.4f} = {7 + 0.05 * TV.mean():.6f}")
+    print()
+    S_xx = (X_scaled.ravel() ** 2).sum()
+    residuals = Sales - model.predict(X_scaled)
+    rss_min = (residuals ** 2).sum()
+    s_square = rss_min / (n_samples - 2)
+    print(f"S_xx = {S_xx:.4f}   (이론 (n-1)*300^2/12 = {99 * 7500:.1f})")
+    print(f"RSS_min = {rss_min:.4f},  s^2 = {s_square:.6f},  s = {np.sqrt(s_square):.6f}  (참 sigma 2)")
+    print(f"se(beta_0) = s/sqrt(n)    = {np.sqrt(s_square / n_samples):.6f}")
+    print(f"se(beta_1) = s/sqrt(S_xx) = {np.sqrt(s_square / S_xx):.8f}")
+    print(f"(beta_1 - 0.05)/se = {(beta_1 - 0.05) / np.sqrt(s_square / S_xx):+.4f}")
+    print(f"(beta_0 - {7 + 0.05 * TV.mean():.4f})/se = "
+          f"{(beta_0 - (7 + 0.05 * TV.mean())) / np.sqrt(s_square / n_samples):+.4f}")
+    ```
+
+    출력:
+
+    ```
+    X_scaled 의 합 = -5.400e-13   (중심화했으므로 0)
+    beta_0 = 14.050550,   Sales 평균 = 14.050550,   차이 = 0.00e+00
+    beta_1 = 0.04693485   (참 기울기 0.05)
+
+    TV 평균 = 141.0542
+    중심화 좌표에서의 참 절편 = 7 + 0.05*141.0542 = 14.052711
+
+    S_xx = 788534.5515   (이론 (n-1)*300^2/12 = 742500.0)
+    RSS_min = 322.6338,  s^2 = 3.292182,  s = 1.814437  (참 sigma 2)
+    se(beta_0) = s/sqrt(n)    = 0.181444
+    se(beta_1) = s/sqrt(S_xx) = 0.00204330
+    (beta_1 - 0.05)/se = -1.5001
+    (beta_0 - 14.0527)/se = -0.0119
+    ```
+
+    **$\hat\beta_0 = \bar y$ 가 자릿수까지 정확하다.** 차이가 $0$ 으로 떨어진다. `X_scaled` 의 합이 $-5.4\times10^{-13}$ 인 것은 부동소수점 한계이며, 그 작은 어긋남조차 절편에는 보이지 않는다.
+
+    **$\hat\beta_0$ 은 거의 완벽히, $\hat\beta_1$ 은 $1.5$ 표준오차 아래로 맞는다.** 절편은 참값 $14.0527$ 에서 표준오차의 $0.012$ 배 떨어져 있는데 이는 운이 좋은 것이고, 기울기는 $0.046935$ 로 참값 $0.05$ 에서 $-1.50$ 표준오차다. $\lvert z\rvert = 1.5$ 는 $13\%$ 의 확률로 일어나므로 전혀 이상하지 않다.
+
+    두 어긋남의 **방향이 서로 무관**하다는 것도 (1)의 무상관성과 맞는다. 중심화하지 않았다면 $\bar x = 141$ 이 커서 $\operatorname{Cov}(\hat\beta_0,\hat\beta_1) = -\sigma^2\bar x/S_{xx}$ 가 뚜렷한 음수가 되고, 기울기를 낮게 추정한 표본은 절편을 높게 추정하는 쪽으로 쏠렸을 것이다.
+
+    $s = 1.8144$ 가 참 $\sigma = 2$ 보다 $9.3\%$ 작다. $s$ 의 상대 표준오차가 $1/\sqrt{2\times98} = 7.1\%$ 이므로 $-1.3$ 표준오차다. 이 때문에 두 표준오차가 모두 참값보다 작게 나왔고, 위의 $z$ 값들은 그만큼 크게 읽혔다. $\square$
 
 ### RSS 곡면 계산
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> RSS 격자 계산
+**보기 2.** <span class="diff easy" title="쉬움"></span> RSS 격자 계산. 최적해 둘레로 $\beta_0 \pm 2$, $\beta_1 \pm 0.05$ 격자를 $50 \times 50$ 으로 깔고 칸마다 RSS 를 이중루프로 계산한다.
+
+**(1)** 중심화한 설계에서 RSS 가 **정확히**
+
+$$
+\text{RSS}(\beta_0, \beta_1) = \text{RSS}_{\min} + n(\beta_0 - \hat\beta_0)^2 + S_{xx}(\beta_1 - \hat\beta_1)^2
+$$
+
+임을 보이시오. 근사가 아니라 등식인 까닭은 무엇인가. 그렇다면 격자를 $2500$ 번 돌 필요가 있는가.
+
+**(2)** 격자 끝에서 두 항의 크기를 재어 보시오. 격자가 두 방향으로 **균형 있게** 잡혀 있는가.
 
 </div>
 
-```python
-# 최적해 둘레로 격자를 깔고 칸마다 잔차제곱합을 계산한다.
-# 최소제곱이 무엇을 최소화하는지를 눈으로 보려는 것이다.
-B0_range = np.linspace(beta_0 - 2, beta_0 + 2, 50)
-B1_range = np.linspace(beta_1 - 0.05, beta_1 + 0.05, 50)
-B0_mesh, B1_mesh = np.meshgrid(B0_range, B1_range)
+??? success "풀이"
 
-RSS = np.zeros_like(B0_mesh)
-for i in range(B0_mesh.shape[0]):
-    for j in range(B0_mesh.shape[1]):
-        y_pred = B0_mesh[i, j] + B1_mesh[i, j] * X_scaled
-        RSS[i, j] = np.sum((Sales - y_pred) ** 2)
-```
+    **(1) 해석적으로.** $\boldsymbol\beta = \hat{\boldsymbol\beta} + \mathbf d$ 로 쓰면 잔차가 $\mathbf y - X\boldsymbol\beta = \mathbf e - X\mathbf d$ 이고
+
+    $$
+    \text{RSS}(\boldsymbol\beta) = \|\mathbf e - X\mathbf d\|^2
+    = \|\mathbf e\|^2 - 2\mathbf d^\top X^\top \mathbf e + \mathbf d^\top X^\top X\mathbf d
+    $$
+
+    다. 가운데 항이 **정규방정식 때문에 사라진다.** $X^\top \mathbf e = \mathbf 0$ 이기 때문이다. 따라서
+
+    $$
+    \text{RSS}(\boldsymbol\beta) = \text{RSS}_{\min} + \mathbf d^\top (X^\top X)\,\mathbf d
+    $$
+
+    이고, 보기 1에서 중심화 덕에 $X^\top X = \operatorname{diag}(n, S_{xx})$ 이므로 교차항 없이
+
+    $$
+    \text{RSS} = \text{RSS}_{\min} + n\,d_0^2 + S_{xx}\,d_1^2
+    $$
+
+    이 된다. **근사가 아니라 등식인 까닭은 RSS 가 $\boldsymbol\beta$ 의 이차함수**라서 테일러 전개가 이차항에서 정확히 끝나기 때문이다. 삼차 이상의 항이 아예 없다.
+
+    따라서 **격자를 돌 필요가 없다.** $\text{RSS}_{\min}$, $n$, $S_{xx}$ 세 수만 알면 임의의 $(\beta_0, \beta_1)$ 에서의 RSS 를 바로 계산할 수 있고, `numpy` 의 브로드캐스팅으로 한 줄에 쓸 수 있다. 이중루프 $2500$ 회는 $(\beta_0,\beta_1)$ 마다 $n = 100$ 개 잔차를 다시 계산하므로 $25$ 만 번의 쓸모없는 산술을 한다. 교육적으로는 "RSS 의 정의대로 계산한다"는 투명함이 값지지만, 계산으로는 낭비다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    # 최적해 둘레로 격자를 깔고 칸마다 잔차제곱합을 계산한다.
+    # 최소제곱이 무엇을 최소화하는지를 눈으로 보려는 것이다.
+    B0_range = np.linspace(beta_0 - 2, beta_0 + 2, 50)
+    B1_range = np.linspace(beta_1 - 0.05, beta_1 + 0.05, 50)
+    B0_mesh, B1_mesh = np.meshgrid(B0_range, B1_range)
+
+    RSS = np.zeros_like(B0_mesh)
+    for i in range(B0_mesh.shape[0]):
+        for j in range(B0_mesh.shape[1]):
+            y_pred = B0_mesh[i, j] + B1_mesh[i, j] * X_scaled
+            RSS[i, j] = np.sum((Sales - y_pred) ** 2)
+
+    # RSS 의 이차 전개가 정확한지, 격자의 네 자리에서 확인한다.
+    def rss_at(b0, b1):
+        return np.sum((Sales - (b0 + b1 * X_scaled.ravel())) ** 2)
+
+    print(f"RSS_min = {rss_min:.4f},  n = {n_samples},  S_xx = {S_xx:.4f}")
+    print()
+    print(f"{'(d0, d1)':>18s}{'실제 RSS':>16s}{'RSS_min + n d0^2 + S_xx d1^2':>32s}{'차이':>12s}")
+    for d0, d1 in [(0, 0), (2, 0), (0, 0.05), (2, 0.05), (-2, -0.05), (1, -0.025)]:
+        actual = rss_at(beta_0 + d0, beta_1 + d1)
+        predicted = rss_min + n_samples * d0 ** 2 + S_xx * d1 ** 2
+        print(f"{f'({d0}, {d1})':>18s}{actual:16.4f}{predicted:32.4f}{abs(actual - predicted):12.2e}")
+    print()
+    print(f"격자 끝에서 두 항의 크기")
+    print(f"  n * 2^2        = {n_samples * 4:.1f}")
+    print(f"  S_xx * 0.05^2  = {S_xx * 0.0025:.1f}")
+    print(f"  비 = {S_xx * 0.0025 / (n_samples * 4):.3f}")
+    print(f"RSS 가 격자 안에서 커지는 최대 배수 = "
+          f"{(rss_min + n_samples * 4 + S_xx * 0.0025) / rss_min:.3f}")
+    ```
+
+    출력:
+
+    ```
+    RSS_min = 322.6338,  n = 100,  S_xx = 788534.5515
+
+              (d0, d1)          실제 RSS    RSS_min + n d0^2 + S_xx d1^2          차이
+                (0, 0)        322.6338                        322.6338    0.00e+00
+                (2, 0)        722.6338                        722.6338    3.41e-13
+             (0, 0.05)       2293.9702                       2293.9702    1.82e-12
+             (2, 0.05)       2693.9702                       2693.9702    1.82e-12
+           (-2, -0.05)       2693.9702                       2693.9702    3.18e-12
+           (1, -0.025)        915.4679                        915.4679    1.36e-12
+
+    격자 끝에서 두 항의 크기
+      n * 2^2        = 400.0
+      S_xx * 0.05^2  = 1971.3
+      비 = 4.928
+    RSS 가 격자 안에서 커지는 최대 배수 = 8.350
+    ```
+
+    **여섯 자리 모두에서 등식이 성립한다.** 차이가 $10^{-12}$ 이하이니 부동소수점 한계다. $(2, 0.05)$ 와 $(-2, -0.05)$ 가 **같은 값 $2693.9702$** 를 주는 것도 교차항이 없다는 증거다. 교차항 $2\bar x\,d_0 d_1$ 이 있었다면 부호가 반대인 두 구석에서 값이 달라졌을 것이다.
+
+    **(2) 격자가 균형 있지 않다.** $\beta_1$ 쪽 끝에서 RSS 증가가 $1971.3$ 인데 $\beta_0$ 쪽 끝에서는 $400.0$ 으로, 비가 $4.93$ 이다. 곧 격자가 $\beta_1$ 방향으로 $\sqrt{4.93} = 2.22$ 배 **더 멀리** 나가 있다. 등고선을 같은 RSS 수준에서 보면 타원이 $\beta_0$ 방향으로 늘어난 모양이 되고, 그림에서 등고선이 원이 아니라 가로로 납작한 타원으로 보이는 까닭이 이것이다.
+
+    균형을 맞추려면 두 항을 같게 두면 된다. $n\,d_0^2 = S_{xx}\,d_1^2$ 에서
+
+    $$
+    \frac{d_0}{d_1} = \sqrt{\frac{S_{xx}}{n}} = \sqrt{\frac{788534.55}{100}} = 88.80
+    $$
+
+    인데 격자가 쓴 비는 $2/0.05 = 40$ 이다. $\beta_0$ 범위를 $\pm 2$ 로 두려면 $\beta_1$ 범위를 $\pm 2/88.80 = \pm 0.0225$ 로 좁혀야 등고선이 원으로 보인다. 거꾸로 $\beta_1$ 을 $\pm 0.05$ 로 두려면 $\beta_0$ 를 $\pm 4.44$ 로 넓혀야 한다.
+
+    이 비 $88.80$ 은 **두 표준오차의 비**와 정확히 같다. $\operatorname{se}(\hat\beta_0)/\operatorname{se}(\hat\beta_1) = (s/\sqrt n)/(s/\sqrt{S_{xx}}) = \sqrt{S_{xx}/n}$ 이기 때문이다. 보기 1의 $0.181444/0.00204330 = 88.80$ 이 그 수다. **곧 "등고선이 원으로 보이는 격자"는 두 축을 각자의 표준오차 단위로 재는 격자**다. 계수를 표준오차로 나누어 보는 습관이 기하적으로도 자연스러운 까닭이 여기 있다.
+
+    마지막 줄은 격자 안에서 RSS 가 최대 $8.35$ 배까지 커진다는 것을 말한다. 최소점에서 $322.6$ 이던 것이 구석에서 $2694.0$ 이 된다. 곡면 그림에서 사발이 꽤 깊어 보이는 까닭이다. $\square$
 
 ### 시각화
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 등고선과 곡면으로 보기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 등고선과 곡면으로 보기. 왼쪽에 `contour` 로 등고선을, 오른쪽에 `plot_surface` 로 곡면을 그리고 최소제곱해에 빨간 별을 찍는다.
+
+**(1)** 그림을 보라. 등고선의 중심이 빨간 별과 일치하는가. 오른쪽 곡면이 본문이 말하는 **그릇 모양**인가. `RSS` 배열의 최솟값이 어느 격자점에 있는지 찾아 확인하시오.
+
+**(2)** 어긋난다면 까닭을 찾고, 어긋난 값이 무엇을 계산한 것인지 **식으로** 적으시오. 고친 뒤의 최솟값 자리와 값은 어떻게 되는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-fig = plt.figure(figsize=(16, 6))
+    **(1) 일치하지 않는다. 그리고 곡면은 그릇이 아니다.**
 
-# 왼쪽: 등고선. 별표가 최소점이고, 그것이 곧 최소제곱추정값이다.
-ax1 = fig.add_subplot(121)
-contour = ax1.contour(B0_mesh, B1_mesh, RSS / 1000, levels=20, cmap='viridis')
-ax1.plot(beta_0, beta_1, 'r*', markersize=20, label='Optimal')
-ax1.set_xlabel('beta_0 (Intercept)')
-ax1.set_ylabel('beta_1 (Slope)')
-ax1.set_title('RSS Contour Plot')
+    그림을 수치 없이 보기만 해도 두 가지가 눈에 걸린다. 왼쪽 등고선은 아래로 열린 **포물선 모양 호**들이 겹겹이 쌓여 있고 그 중심이 그림 **아래쪽 가장자리**($\beta_1 \approx 0$)에 있다. 빨간 별은 $\beta_1 \approx 0.047$ 에 찍혀 있어 중심에서 한참 떨어져 있다. 오른쪽 곡면은 사발이 아니라 $\beta_1$ 이 커질수록 일방적으로 올라가는 **비탈**이다. 세로축도 $300$ 에서 $900$ 까지인데, $\text{RSS}/1000$ 이라는 이름대로 읽으면 $\text{RSS}$ 가 $30$ 만에서 $90$ 만이라는 뜻이 된다. 보기 2에서 잰 $\text{RSS}_{\min} = 322.6$ 과 자릿수가 세 개나 어긋난다.
 
-# 오른쪽: 같은 것을 곡면으로. RSS 가 계수의 이차함수이므로 사발 모양이고,
-# 그래서 최소점이 하나뿐이며 닫힌 해가 존재한다.
-ax2 = fig.add_subplot(122, projection='3d')
-ax2.plot_surface(B0_mesh, B1_mesh, RSS / 1000, cmap='viridis', alpha=0.8)
-ax2.set_xlabel('beta_0')
-ax2.set_ylabel('beta_1')
-ax2.set_zlabel('RSS / 1000')
-ax2.set_title('RSS 3D Surface')
+    **(2) 원인은 넘파이의 브로드캐스팅이다.** `Sales` 의 모양은 `(100,)` 인데 `X_scaled` 의 모양은 `(100, 1)` 이다. 따라서 `B0 + B1 * X_scaled` 도 `(100, 1)` 이고,
 
-plt.tight_layout()
-plt.show()
-```
+    ```
+    (100,) - (100, 1)  ->  (100, 100)
+    ```
 
-![RSS 곡면](./img/rss_surface_visualization_71.png)
+    로 퍼진다. `np.sum` 이 $100$ 개가 아니라 **$10000$ 개**를 더하는 것이다. 더해지는 것은 $(y_j - \beta_0 - \beta_1 x_i)^2$ 을 **모든 $(i, j)$ 쌍에 대해** 모은 값이다.
 
-$(\beta_0, \beta_1)$ 평면 위의 RSS 곡면이다. 그릇 모양이라는 것이 최소제곱 문제가 볼록이라는 사실을 눈으로 보여준다. 국소 최소점이 없으므로 해가 유일하다.
+    그 값을 정확히 계산할 수 있다. $u_i = \beta_0 + \beta_1 x_i$ 로 두면
+
+    $$
+    \sum_i\sum_j (y_j - u_i)^2
+    = n\sum_j y_j^2 - 2\Bigl(\sum_j y_j\Bigr)\sum_i u_i + n\sum_i u_i^2
+    $$
+
+    이고 중심화 덕에 $\sum_i x_i = 0$ 이므로 $\sum_i u_i = n\beta_0$, $\sum_i u_i^2 = n\beta_0^2 + \beta_1^2 S_{xx}$ 다. 정리하면
+
+    $$
+    \text{RSS}_{\text{잘못}}(\beta_0, \beta_1)
+    = n\left[S_{yy} + n(\beta_0 - \bar y)^2 + \beta_1^2\,S_{xx}\right]
+    $$
+
+    이다. **$\beta_1$ 이 $\hat\beta_1$ 이 아니라 $0$ 에서 최소가 된다.** $y_j$ 와 $x_i$ 의 짝이 깨지면서 두 변수 사이의 연관이 통째로 사라졌기 때문이고, 연관이 없는 자료에서 최선의 기울기는 $0$ 이다. 그래서 등고선의 중심이 $\beta_1 = 0$ 으로 내려갔다.
+
+    $\beta_0$ 쪽은 살아남는다. 식의 $n(\beta_0 - \bar y)^2$ 항이 $\beta_0 = \bar y = \hat\beta_0$ 에서 최소이므로 가로 방향으로는 별이 중심에 맞는다. 그림에서 호들의 꼭짓점이 $\beta_0 \approx 14.05$ 에 줄지어 있는 것이 그 때문이다.
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    fig = plt.figure(figsize=(16, 6))
+
+    # 왼쪽: 등고선. 별표가 최소점이고, 그것이 곧 최소제곱추정값이다.
+    ax1 = fig.add_subplot(121)
+    contour = ax1.contour(B0_mesh, B1_mesh, RSS / 1000, levels=20, cmap='viridis')
+    ax1.plot(beta_0, beta_1, 'r*', markersize=20, label='Optimal')
+    ax1.set_xlabel('beta_0 (Intercept)')
+    ax1.set_ylabel('beta_1 (Slope)')
+    ax1.set_title('RSS Contour Plot')
+
+    # 오른쪽: 같은 것을 곡면으로. RSS 가 계수의 이차함수이므로 사발 모양이고,
+    # 그래서 최소점이 하나뿐이며 닫힌 해가 존재한다.
+    ax2 = fig.add_subplot(122, projection='3d')
+    ax2.plot_surface(B0_mesh, B1_mesh, RSS / 1000, cmap='viridis', alpha=0.8)
+    ax2.set_xlabel('beta_0')
+    ax2.set_ylabel('beta_1')
+    ax2.set_zlabel('RSS / 1000')
+    ax2.set_title('RSS 3D Surface')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![RSS 곡면](./img/rss_surface_visualization_71.png)
+
+    위 그림이 (1)에서 말한 모습이다. 이제 수치로 확인한다.
+
+    ```python
+    # 등고선의 최소점이 정말 최소제곱해인지 확인한다.
+    i_min, j_min = np.unravel_index(np.argmin(RSS), RSS.shape)
+    print(f"RSS 배열의 최솟값 자리 = (행 {i_min}, 열 {j_min})   격자 가운데는 (24~25, 24~25)")
+    print(f"  그 자리의 beta_0 = {B0_mesh[i_min, j_min]:.6f}   (최소제곱해 {beta_0:.6f})")
+    print(f"  그 자리의 beta_1 = {B1_mesh[i_min, j_min]:.8f}   (최소제곱해 {beta_1:.8f})")
+    print(f"  B1 격자에서 0 에 가장 가까운 칸 = {int(np.argmin(np.abs(B1_range)))}")
+    print()
+    print(f"RSS 배열의 최솟값 = {RSS.min():.4f}")
+    print(f"  그런데 참 최소제곱 RSS 는 {rss_min:.4f} 다.  비 = {RSS.min() / rss_min:.1f}")
+    print()
+    # 까닭: 모양이 (100,1) 과 (100,) 이라 브로드캐스팅이 일어난다
+    y_pred_demo = beta_0 + beta_1 * X_scaled
+    print(f"Sales.shape = {Sales.shape},  (beta_0 + beta_1*X_scaled).shape = {y_pred_demo.shape}")
+    print(f"  (Sales - y_pred).shape = {(Sales - y_pred_demo).shape}   <- 100x100 으로 퍼진다")
+    print(f"  ravel() 을 쓰면 {(Sales - y_pred_demo.ravel()).shape}")
+    print()
+    S_yy = ((Sales - Sales.mean()) ** 2).sum()
+    print("브로드캐스팅된 합은 n*[S_yy + n(b0-ybar)^2 + b1^2 S_xx] 와 같다")
+    for d0, d1 in [(0, 0), (2, 0), (0, 0.05)]:
+        actual = np.sum((Sales - ((beta_0 + d0) + (beta_1 + d1) * X_scaled)) ** 2)
+        predicted = n_samples * (S_yy + n_samples * d0 ** 2 + (beta_1 + d1) ** 2 * S_xx)
+        print(f"  ({d0}, {d1})  실제 {actual:14.4f}  예측 {predicted:14.4f}  차이 {abs(actual - predicted):.2e}")
+    print(f"  이 식은 b1 = 0 에서 최소다. 그래서 등고선의 중심이 0.0469 가 아니라 0 이 된다.")
+    print()
+    RSS_fixed = np.zeros_like(B0_mesh)
+    for i in range(B0_mesh.shape[0]):
+        for j in range(B0_mesh.shape[1]):
+            RSS_fixed[i, j] = np.sum((Sales - (B0_mesh[i, j] + B1_mesh[i, j] * X_scaled.ravel())) ** 2)
+    i2, j2 = np.unravel_index(np.argmin(RSS_fixed), RSS_fixed.shape)
+    print(f"ravel() 로 고치면 최솟값 자리 = (행 {i2}, 열 {j2}),  값 {RSS_fixed.min():.4f}"
+          f"  (참 최솟값 {rss_min:.4f})")
+    print(f"  RSS/1000 의 범위:  버그판 {RSS.min() / 1000:.3f} ~ {RSS.max() / 1000:.3f},"
+          f"   고친 판 {RSS_fixed.min() / 1000:.3f} ~ {RSS_fixed.max() / 1000:.3f}")
+    ```
+
+    출력:
+
+    ```
+    RSS 배열의 최솟값 자리 = (행 2, 열 25)   격자 가운데는 (24~25, 24~25)
+      그 자리의 beta_0 = 14.091367   (최소제곱해 14.050550)
+      그 자리의 beta_1 = 0.00101648   (최소제곱해 0.04693485)
+      B1 격자에서 0 에 가장 가까운 칸 = 2
+
+    RSS 배열의 최솟값 = 206066.1906
+      그런데 참 최소제곱 RSS 는 322.6338 다.  비 = 638.7
+
+    Sales.shape = (100,),  (beta_0 + beta_1*X_scaled).shape = (100, 1)
+      (Sales - y_pred).shape = (100, 100)   <- 100x100 으로 퍼진다
+      ravel() 을 쓰면 (100,)
+
+    브로드캐스팅된 합은 n*[S_yy + n(b0-ybar)^2 + b1^2 S_xx] 와 같다
+      (0, 0)  실제    379672.7322  예측    379672.7322  차이 0.00e+00
+      (2, 0)  실제    419672.7322  예측    419672.7322  차이 0.00e+00
+      (0, 0.05)  실제    946903.8408  예측    946903.8408  차이 1.16e-10
+      이 식은 b1 = 0 에서 최소다. 그래서 등고선의 중심이 0.0469 가 아니라 0 이 된다.
+
+    ravel() 로 고치면 최솟값 자리 = (행 24, 열 24),  값 323.6215  (참 최솟값 322.6338)
+      RSS/1000 의 범위:  버그판 206.066 ~ 986.904,   고친 판 0.324 ~ 2.694
+    ```
+
+    **진단이 완전히 맞아떨어진다.** `RSS` 배열의 최솟값이 행 $2$, 열 $25$ 에 있는데, 열 $25$ 는 $\beta_0 \approx \hat\beta_0$ 이라 맞고 **행 $2$ 는 $\beta_1 = 0.00102$**, 곧 격자에서 $0$ 에 가장 가까운 칸이다. 최소제곱해 $\hat\beta_1 = 0.0469$ 는 행 $24{-}25$ 에 있다. 유도한 식 $n[S_{yy} + n(\beta_0-\bar y)^2 + \beta_1^2 S_{xx}]$ 도 세 자리에서 $10^{-10}$ 안쪽으로 맞는다.
+
+    `ravel()` 하나를 넣으면 최솟값이 행 $24$, 열 $24$ 로 **격자 가운데**로 돌아오고 값도 $323.62$ 가 되어 참 최솟값 $322.63$ 과 격자 해상도만큼만 떨어진다. $\text{RSS}/1000$ 의 범위도 $206\text{–}987$ 에서 $0.32\text{–}2.69$ 로 바뀐다.
+
+    !!! danger "이 쪽의 그림은 고쳐져야 한다"
+        위 PNG 는 `(100,)` 과 `(100,1)` 의 브로드캐스팅이 든 `RSS` 배열로 그려졌다. 그래서
+
+        - **등고선의 중심이 최소제곱해가 아니라 $\beta_1 = 0$ 에 있고**, 빨간 별이 중심에서 벗어나 있다.
+        - **오른쪽 곡면이 그릇이 아니라 비탈이다.** 격자가 $\beta_1 \in [-0.003,\ 0.097]$ 이라 최소점 $\beta_1 = 0$ 이 거의 왼쪽 끝에 있어, 사발의 한쪽 벽만 그려졌다.
+        - 세로축의 수가 실제 RSS 의 약 $640$ 배다.
+
+        따라서 본문이 말하는 "그릇 모양이라는 것이 최소제곱 문제가 볼록이라는 사실을 눈으로 보여준다"는 **이 그림으로는 확인되지 않는다.** 고치려면 보기 2의 계산에서 `X_scaled` 를 `X_scaled.ravel()` 로 바꾸고 그림을 다시 그려야 한다. 이 보기는 그 수정을 하지 않고 어긋남만 드러내 둔다.
+
+    어긋남이 알려 주는 것도 적지 않다. **브로드캐스팅 버그는 예외를 던지지 않는다.** 모양이 맞지 않으면 오류가 나기를 바라지만, 넘파이는 조용히 $100\times100$ 으로 퍼뜨리고 그럴듯한 수를 돌려준다. 그림도 그럴듯한 등고선으로 나온다. **잡아낼 수 있는 길은 "알고 있는 값과 맞추어 보는 것" 하나뿐이다.** 여기서는 보기 1이 내놓은 $\text{RSS}_{\min} = 322.63$ 과 보기 2가 유도한 이차식이 그 구실을 했다.
+
+    그러므로 곡면 그림을 그릴 때는 늘 **최소점이 별과 맞는지 먼저 확인**해야 한다. `np.argmin` 한 줄이면 되는 일이고, 그 한 줄이 없었기에 이 그림이 그대로 실렸다. $\square$
 
 ## 해석
 

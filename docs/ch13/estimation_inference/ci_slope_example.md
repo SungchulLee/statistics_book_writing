@@ -30,54 +30,137 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 기울기의 신뢰구간
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기울기의 신뢰구간. $\hat\beta_1 = 0.164$, $\text{SE} = 0.057$, $n = 20$ 으로 $95\%$ 신뢰구간을 만든다.
+
+**(1)** 신뢰수준을 $1$ 쪽으로 밀면 오차한계가 커져 구간이 결국 $0$ 을 담게 된다. **구간이 $0$ 을 담기 시작하는 신뢰수준**을 $p$ 값으로 정확히 나타내시오.
+
+**(2)** 그 수준을 계산하고, 신뢰수준 $0.90$ 부터 $0.999$ 까지 구간을 늘어놓아 확인하시오. $\alpha \to 0$ 에서 $t^*_{18}$ 이 어떻게 자라는가.
 
 </div>
 
-```python
-from scipy import stats
+??? success "풀이"
 
-# 회귀 출력표에서 그대로 읽은 값이다.
-beta_1_hat = 0.164      # 추정된 기울기
-standard_error = 0.057  # 기울기의 표준오차
+    **(1) 답은 $1 - p$ 다.** 구간이 $0$ 을 담지 **않을** 조건은 보기로 익숙한 꼴이다.
 
-# 자유도는 n-2 다. 절편과 기울기를 자료에서 추정했기 때문이다.
-n = 20
-df = n - 2
+    $$
+    \lvert \hat\beta_1 \rvert > t^*_{n-2}\!\left(1 - \tfrac\alpha2\right)\cdot\text{SE}
+    \quad\Longleftrightarrow\quad
+    \lvert T_{\text{obs}} \rvert > t^*_{n-2}\!\left(1 - \tfrac\alpha2\right),
+    \qquad T_{\text{obs}} = \frac{\hat\beta_1}{\text{SE}}
+    $$
 
-# 표본이 20 으로 작아 t 임계값이 정규의 1.96 보다 눈에 띄게 크다.
-confidence_level = 0.95
-alpha = 1 - confidence_level
-t_star = stats.t(df).ppf(1 - alpha / 2)
+    $t^*_{n-2}(1-\alpha/2)$ 는 $\alpha$ 에 대해 **단조감소**하므로, 위 부등식은 $\alpha$ 가 어떤 문턱보다 클 때 성립하고 작으면 깨진다. 등호가 되는 자리는 $t^*_{n-2}(1-\alpha/2) = \lvert T_{\text{obs}}\rvert$ 이고, 양변에 생존함수를 씌우면
 
-margin_of_error = t_star * standard_error
+    $$
+    \frac{\alpha}{2} = P\!\left(T_{n-2} > \lvert T_{\text{obs}}\rvert\right)
+    \quad\Longrightarrow\quad
+    \alpha = 2P\!\left(T_{n-2} > \lvert T_{\text{obs}}\rvert\right) = p
+    $$
 
-ci_lower = beta_1_hat - margin_of_error
-ci_upper = beta_1_hat + margin_of_error
+    다. 곧 **문턱 유의수준이 바로 $p$ 값**이고, 구간이 $0$ 을 담기 시작하는 신뢰수준은 $1 - p$ 다.
 
-print(f"Slope estimate: {beta_1_hat:.4f}")
-print(f"Standard error: {standard_error:.4f}")
-print(f"t* (df={df}): {t_star:.4f}")
-print(f"Margin of error: {margin_of_error:.4f}")
-print(f"\n{confidence_level:.0%} confidence interval of the slope")
-print(f"{beta_1_hat:.4f} +/- {margin_of_error:.4f}")
-print(f"({ci_lower:.4f}, {ci_upper:.4f})")
-```
+    이것이 "$p$ 값은 귀무가설이 간신히 기각되는 유의수준"이라는 정의의 신뢰구간 판본이다. 신뢰수준을 $1-p$ 보다 조금만 높이면 구간이 $0$ 을 삼키고, 조금만 낮추면 뱉는다.
 
-출력:
+    $\alpha \to 0$ 에서는 $t^*_{n-2}(1-\alpha/2) \to \infty$ 이므로 오차한계도 무한히 커진다. **어떤 자료에서든 신뢰수준을 충분히 높이면 구간이 $0$ 을 담는다.** 자유도가 작으면 더 빨리 커지는데, $t_\nu$ 의 꼬리가 $x^{-\nu}$ 로 줄어들어 분위수가 $\alpha^{-1/\nu}$ 로 자라기 때문이다. 정규라면 $\sqrt{2\log(1/\alpha)}$ 로 훨씬 느리게 자란다.
 
-```
-Slope estimate: 0.1640
-Standard error: 0.0570
-t* (df=18): 2.1009
-Margin of error: 0.1198
+    **(2) 수치적으로.**
 
-95% confidence interval of the slope
-0.1640 +/- 0.1198
-(0.0442, 0.2838)
-```
+    ```python
+    from scipy import stats
 
-자유도가 $n - 2 = 18$이므로 $t^* = 2.1009$다. 정규분포의 1.96보다 큰 이 값이 $\sigma$를 추정한 대가다.
+    # 회귀 출력표에서 그대로 읽은 값이다.
+    beta_1_hat = 0.164      # 추정된 기울기
+    standard_error = 0.057  # 기울기의 표준오차
+
+    # 자유도는 n-2 다. 절편과 기울기를 자료에서 추정했기 때문이다.
+    n = 20
+    df = n - 2
+
+    # 표본이 20 으로 작아 t 임계값이 정규의 1.96 보다 눈에 띄게 크다.
+    confidence_level = 0.95
+    alpha = 1 - confidence_level
+    t_star = stats.t(df).ppf(1 - alpha / 2)
+
+    margin_of_error = t_star * standard_error
+
+    ci_lower = beta_1_hat - margin_of_error
+    ci_upper = beta_1_hat + margin_of_error
+
+    print(f"Slope estimate: {beta_1_hat:.4f}")
+    print(f"Standard error: {standard_error:.4f}")
+    print(f"t* (df={df}): {t_star:.4f}")
+    print(f"Margin of error: {margin_of_error:.4f}")
+    print(f"\n{confidence_level:.0%} confidence interval of the slope")
+    print(f"{beta_1_hat:.4f} +/- {margin_of_error:.4f}")
+    print(f"({ci_lower:.4f}, {ci_upper:.4f})")
+    ```
+
+    출력:
+
+    ```
+    Slope estimate: 0.1640
+    Standard error: 0.0570
+    t* (df=18): 2.1009
+    Margin of error: 0.1198
+
+    95% confidence interval of the slope
+    0.1640 +/- 0.1198
+    (0.0442, 0.2838)
+    ```
+
+    자유도가 $n - 2 = 18$이므로 $t^* = 2.1009$다. 정규분포의 1.96보다 큰 이 값이 $\sigma$를 추정한 대가다. 이제 신뢰수준을 바꿔 가며 (1)을 확인한다.
+
+    ```python
+    # 신뢰수준을 바꾸면 구간이 어떻게 달라지는가, 그리고 0 을 언제 담기 시작하는가.
+    t_obs = beta_1_hat / standard_error
+    p_value = 2 * stats.t(df).sf(t_obs)
+    print(f"관측 t = {beta_1_hat}/{standard_error} = {t_obs:.6f},   p-값 = {p_value:.6f}")
+    print(f"구간이 0 을 담기 시작하는 신뢰수준 = 1 - p = {1 - p_value:.6f}"
+          f"  ({100 * (1 - p_value):.4f}%)")
+    print()
+    print(f"{'신뢰수준':>10s}{'t*':>10s}{'오차한계':>11s}{'하한':>11s}{'상한':>11s}  0 을 담는가")
+    for level in (0.90, 0.95, 0.98, 1 - p_value, 0.99, 0.999):
+        tc = stats.t(df).ppf(1 - (1 - level) / 2)
+        moe = tc * standard_error
+        lo, hi = beta_1_hat - moe, beta_1_hat + moe
+        print(f"{level:10.6f}{tc:10.4f}{moe:11.4f}{lo:11.4f}{hi:11.4f}  "
+              f"{'담는다' if lo <= 0 <= hi else '담지 않는다'}")
+    print()
+    print(f"alpha -> 0 에서 t*_18 이 어떻게 자라는가")
+    for a in (0.05, 0.01, 1e-3, 1e-6, 1e-12):
+        print(f"  alpha = {a:>8.0e}:  t* = {stats.t(df).ppf(1 - a / 2):10.4f}"
+              f"   오차한계 = {stats.t(df).ppf(1 - a / 2) * standard_error:9.4f}")
+    ```
+
+    출력:
+
+    ```
+    관측 t = 0.164/0.057 = 2.877193,   p-값 = 0.010027
+    구간이 0 을 담기 시작하는 신뢰수준 = 1 - p = 0.989973  (98.9973%)
+
+          신뢰수준        t*       오차한계         하한         상한  0 을 담는가
+      0.900000    1.7341     0.0988     0.0652     0.2628  담지 않는다
+      0.950000    2.1009     0.1198     0.0442     0.2838  담지 않는다
+      0.980000    2.5524     0.1455     0.0185     0.3095  담지 않는다
+      0.989973    2.8772     0.1640     0.0000     0.3280  담지 않는다
+      0.990000    2.8784     0.1641    -0.0001     0.3281  담는다
+      0.999000    3.9216     0.2235    -0.0595     0.3875  담는다
+
+    alpha -> 0 에서 t*_18 이 어떻게 자라는가
+      alpha =    5e-02:  t* =     2.1009   오차한계 =    0.1198
+      alpha =    1e-02:  t* =     2.8784   오차한계 =    0.1641
+      alpha =    1e-03:  t* =     3.9216   오차한계 =    0.2235
+      alpha =    1e-06:  t* =     7.2321   오차한계 =    0.4122
+      alpha =    1e-12:  t* =    17.4502   오차한계 =    0.9947
+    ```
+
+    **문턱이 정확히 $1 - p = 0.989973$ 이다.** 그 수준에서 오차한계가 $0.1640$ 으로 추정값 $0.164$ 와 같아져 하한이 정확히 $0$ 이 된다. 표에서 그 줄의 하한이 `0.0000` 이고 바로 아래 $0.99$ 줄의 하한이 `-0.0001` 인 것이 그 경계를 사이에 두고 갈라진 모습이다. 신뢰수준을 $0.989973$ 에서 $0.99$ 로 **$0.0027$ 퍼센트포인트** 올린 것만으로 판정이 뒤집힌다.
+
+    이 쪽의 해석 글이 말하는 "$p = 0.0100$ 이 $0.01$ 을 간발의 차이로 넘는다"가 바로 이것이다. 더 정확히는 $p = 0.010027$ 이고 $0.01$ 보다 $0.000027$ 크다. 그래서 $99\%$ 구간이 $0$ 을 **담는다.** 출력표에 반올림되어 적힌 `0.010` 은 이 미세한 초과를 숨긴다.
+
+    **$t^*$ 가 자라는 속도도 유도와 맞는다.** $\alpha$ 를 $10^{-2}$ 에서 $10^{-12}$ 로 $10$ 자릿수 줄이는 동안 $t^*_{18}$ 은 $2.88$ 에서 $17.45$ 로 $6.1$ 배 커졌다. 정규라면 $2.58$ 에서 $7.13$ 으로 $2.8$ 배만 커진다. 자유도 $18$ 의 꼬리가 그만큼 두껍기 때문이다. $\alpha^{-1/18}$ 꼴을 쓰면 $10^{10}$ 의 $1/18$ 제곱이 $3.6$ 배인데 실제가 $6.1$ 배이므로, 이 자유도에서는 점근식이 아직 정확하지 않다. **방향만 맞고 크기는 어림이다.**
+
+    실용적인 교훈은 하나다. **구간은 신뢰수준을 하나 고르는 순간 정해지고, 그 선택이 결론을 바꿀 수 있다.** 그러므로 "$95\%$ 구간이 $0$ 을 담지 않았다"는 보고에는 반드시 구간 자체가 따라붙어야 한다. $(0.044,\ 0.284)$ 를 보면 이 결론이 얼마나 아슬아슬한지 — 하한이 $0$ 에서 겨우 $0.044$ 떨어져 있다는 것이 — 바로 보인다. $\square$
 
 ## 해석
 

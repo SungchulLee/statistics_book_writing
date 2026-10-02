@@ -118,79 +118,171 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 네 성능 측도 한자리에
+**보기 1.** <span class="diff easy" title="쉬움"></span> 네 성능 측도 한자리에. 광고 자료에 `TV`, `Radio`, `TV:Radio` 세 설명변수로 회귀하고 $R^2$, MAE, MSE, RMSE 를 훈련·시험에서 각각 잰다.
+
+**(1)** 이 네 수는 **서로 독립적인 정보가 아니다.** $\mathrm{RMSE}$ 와 $R^2$ 를 $\mathrm{MSE}$ 로 적어, 실제로 자유로운 수가 몇 개인지 가리고 수로 확인하시오.
+
+**(2)** $\mathrm{RMSE}/\mathrm{MAE}$ 비를 훈련과 시험에서 계산하여, 잔차에 두꺼운 꼬리가 있는지 판정하시오. 시험 MSE 가 훈련 MSE 보다 **작은** 까닭도 그 비로 설명하시오.
 
 </div>
 
-```python
-import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn import metrics
+??? success "풀이"
 
-# 앞 절과 같은 광고 자료를 쓴다.
-url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
-df = pd.read_csv(url, usecols=[1, 2, 3, 4])
+    **(1) 자유로운 수는 두 개다.** 먼저 정의에서
 
-df['TV:Radio'] = df['TV'] * df['Radio']
+    $$
+    \mathrm{RMSE} = \sqrt{\mathrm{MSE}}
+    $$
 
-X = df[['TV', 'Radio', 'TV:Radio']]
-y = df['Sales']
+    이므로 둘은 같은 양의 다른 표현이다. 정보가 하나 줄었다.
 
-test_size_ratio = 0.3
-x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=test_size_ratio, random_state=42)
+    $R^2$ 도 MSE 에서 나온다. 어떤 자료집합에서
 
-model = LinearRegression()
-model.fit(x_train, y_train)
+    $$
+    R^2 = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}
+    = 1 - \frac{\sum_i (y_i - \hat y_i)^2}{\sum_i (y_i - \bar y)^2}
+    = 1 - \frac{\frac{1}{n}\sum_i (y_i - \hat y_i)^2}{\frac{1}{n}\sum_i (y_i - \bar y)^2}
+    = 1 - \frac{\mathrm{MSE}}{\widehat{\operatorname{Var}}(y)}
+    $$
 
-y_train_pred = model.predict(x_train)
-y_test_pred = model.predict(x_test)
+    이다. 분자와 분모를 같은 $n$ 으로 나누었을 뿐이므로 $\widehat{\operatorname{Var}}(y)$ 는 **$n$ 으로 나눈** 표본분산이다($\texttt{ddof=0}$). 그러므로 $R^2$ 는 MSE 를 그 자료의 $y$ 분산으로 재규격화한 것이고, **새 정보가 없다.**
 
-print(f"Intercept: {model.intercept_}")
-print(f"Coefficients: {model.coef_}\n")
+    남는 것은 $\mathrm{MSE}$ 와 $\mathrm{MAE}$ 둘이다. 둘은 서로에서 나오지 않는다. 하나는 제곱의 평균, 하나는 절대값의 평균이어서 **오차 분포의 다른 모양을 본다.**
 
-# 아래 네 측도를 훈련과 시험에서 각각 잰다. 시험 쪽 값이 훈련 쪽보다
-# 크게 나쁘면 과적합을 의심한다.
-# R^2 — 반응의 분산 중 모형이 설명하는 몫. 단위가 없어 견주기 좋다.
-print(f"Training R^2: {model.score(x_train, y_train)}")
-print(f"Testing R^2: {model.score(x_test, y_test)}\n")
+    이 셈이 척도를 고르는 문제를 또렷하게 만든다. $R^2$ 와 RMSE 와 MSE 를 나란히 보고하는 것은 **같은 수를 세 번 적는 것**이고, 거기에 MAE 를 더해야 비로소 두 번째 정보가 생긴다.
 
-# MAE — 오차의 절댓값 평균. 단위가 반응과 같고 이상치에 덜 휘둘린다.
-print(f"Training MAE: {metrics.mean_absolute_error(y_train, y_train_pred)}")
-print(f"Testing MAE: {metrics.mean_absolute_error(y_test, y_test_pred)}\n")
+    **(2) 정규잔차의 비는 $\sqrt{\pi/2}$ 다.** $\varepsilon \sim N(0, \sigma^2)$ 이면 $E|\varepsilon| = \sigma\sqrt{2/\pi}$ 이고 $\sqrt{E[\varepsilon^2]} = \sigma$ 이므로
 
-# MSE — 오차의 제곱 평균. 큰 오차에 더 무거운 벌을 준다. 단위가 제곱이라
-# 그대로 읽기는 어렵다.
-print(f"Training MSE: {metrics.mean_squared_error(y_train, y_train_pred)}")
-print(f"Testing MSE: {metrics.mean_squared_error(y_test, y_test_pred)}\n")
+    $$
+    \frac{\mathrm{RMSE}}{\mathrm{MAE}} \;\longrightarrow\; \sqrt{\frac{\pi}{2}} = 1.2533
+    $$
 
-# RMSE — MSE 의 제곱근. 단위가 반응과 같아져 해석이 쉬워진다.
-# 큰 오차를 무겁게 보되 읽기도 편해, 회귀에서 가장 널리 쓰인다.
-print(f"Training RMSE: {np.sqrt(metrics.mean_squared_error(y_train, y_train_pred))}")
-print(f"Testing RMSE: {np.sqrt(metrics.mean_squared_error(y_test, y_test_pred))}\n")
-```
+    이다. $\sigma$ 가 약분되므로 이 비는 **잔차의 크기와 무관하게 모양만** 잰다.
 
-출력:
+    - 비가 $1.25$ 보다 **크면** 큰 잔차 몇 개가 RMSE 를 혼자 밀어 올리는 것이므로 꼬리가 두껍다.
+    - 비가 $1.25$ 보다 **작으면** 잔차의 크기가 고르다. 아래 그림의 모형 B 가 $1.09$ 인 경우다.
+    - 비의 하한은 $1$ 이고(모든 잔차가 같은 크기), 상한은 없다.
 
-```
-Intercept: 6.37486462995429
-Coefficients: [0.02060952 0.04735462 0.00100684]
+    시험 MSE 가 훈련 MSE 보다 작다는 사실도 이 비가 설명할 수 있다. 훈련 쪽에 **아주 큰 잔차 몇 개**가 몰려 있다면 훈련 MSE 가 그만큼 부풀기 때문이다. 그렇다면 훈련 쪽의 비가 시험 쪽보다 클 것이다. 확인해 보자.
 
-Training R^2: 0.9659030787012204
-Testing R^2: 0.9673268969053402
+    ```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
 
-Training MAE: 0.6344840392254547
-Testing MAE: 0.730384235550869
+    # 앞 절과 같은 광고 자료를 쓴다.
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    df = pd.read_csv(url, usecols=[1, 2, 3, 4])
 
-Training MSE: 0.8947370334590617
-Testing MSE: 0.8921262830343071
+    df['TV:Radio'] = df['TV'] * df['Radio']
 
-Training RMSE: 0.9459054040754085
-Testing RMSE: 0.9445243686820934
-```
+    X = df[['TV', 'Radio', 'TV:Radio']]
+    y = df['Sales']
 
-훈련 $R^2$ 0.9659와 시험 $R^2$ 0.9673이 거의 같다. 두 값이 크게 벌어지면 과적합을 의심한다.
+    test_size_ratio = 0.3
+    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=test_size_ratio, random_state=42)
+
+    model = LinearRegression()
+    model.fit(x_train, y_train)
+
+    y_train_pred = model.predict(x_train)
+    y_test_pred = model.predict(x_test)
+
+    print(f"Intercept: {model.intercept_}")
+    print(f"Coefficients: {model.coef_}\n")
+
+    # 아래 네 측도를 훈련과 시험에서 각각 잰다. 시험 쪽 값이 훈련 쪽보다
+    # 크게 나쁘면 과적합을 의심한다.
+    # R^2 — 반응의 분산 중 모형이 설명하는 몫. 단위가 없어 견주기 좋다.
+    print(f"Training R^2: {model.score(x_train, y_train)}")
+    print(f"Testing R^2: {model.score(x_test, y_test)}\n")
+
+    # MAE — 오차의 절댓값 평균. 단위가 반응과 같고 이상치에 덜 휘둘린다.
+    print(f"Training MAE: {metrics.mean_absolute_error(y_train, y_train_pred)}")
+    print(f"Testing MAE: {metrics.mean_absolute_error(y_test, y_test_pred)}\n")
+
+    # MSE — 오차의 제곱 평균. 큰 오차에 더 무거운 벌을 준다. 단위가 제곱이라
+    # 그대로 읽기는 어렵다.
+    print(f"Training MSE: {metrics.mean_squared_error(y_train, y_train_pred)}")
+    print(f"Testing MSE: {metrics.mean_squared_error(y_test, y_test_pred)}\n")
+
+    # RMSE — MSE 의 제곱근. 단위가 반응과 같아져 해석이 쉬워진다.
+    # 큰 오차를 무겁게 보되 읽기도 편해, 회귀에서 가장 널리 쓰인다.
+    print(f"Training RMSE: {np.sqrt(metrics.mean_squared_error(y_train, y_train_pred))}")
+    print(f"Testing RMSE: {np.sqrt(metrics.mean_squared_error(y_test, y_test_pred))}\n")
+    ```
+
+    출력:
+
+    ```
+    Intercept: 6.37486462995429
+    Coefficients: [0.02060952 0.04735462 0.00100684]
+
+    Training R^2: 0.9659030787012204
+    Testing R^2: 0.9673268969053402
+
+    Training MAE: 0.6344840392254547
+    Testing MAE: 0.730384235550869
+
+    Training MSE: 0.8947370334590617
+    Testing MSE: 0.8921262830343071
+
+    Training RMSE: 0.9459054040754085
+    Testing RMSE: 0.9445243686820934
+    ```
+
+    ```python
+    from scipy import stats
+
+    for name, xx, yy, pp in [("훈련", x_train, y_train, y_train_pred),
+                             ("시험", x_test, y_test, y_test_pred)]:
+        mae = metrics.mean_absolute_error(yy, pp)
+        mse = metrics.mean_squared_error(yy, pp)
+        rmse = np.sqrt(mse)
+        r2 = model.score(xx, yy)
+        var0 = np.var(yy, ddof=0)
+        e = np.asarray(yy) - pp
+        big = np.abs(e) > 3 * rmse
+        print(f"{name}: MAE={mae:.6f}  MSE={mse:.6f}  RMSE={rmse:.6f}  R2={r2:.6f}")
+        print(f"   RMSE^2 - MSE          = {rmse ** 2 - mse:.3e}")
+        print(f"   1 - MSE/Var(y, ddof=0) = {1 - mse / var0:.6f}   (R2 와의 차이 {abs(1 - mse / var0 - r2):.3e})")
+        print(f"   RMSE/MAE = {rmse / mae:.4f}    정규라면 sqrt(pi/2) = {np.sqrt(np.pi / 2):.4f}")
+        print(f"   잔차 왜도 {stats.skew(e):+.3f}  첨도 {stats.kurtosis(e, fisher=False):.3f}  "
+              f"최대 |e| = {np.abs(e).max():.3f} (RMSE 의 {np.abs(e).max() / rmse:.1f}배)")
+        print(f"   |e| > 3*RMSE 인 관측값 {big.sum()}개 / {len(e)}개,  "
+              f"그 몫이 MSE 에서 차지하는 비율 {(e[big] ** 2).sum() / (e ** 2).sum() * 100:.1f}%")
+    ```
+
+    출력:
+
+    ```
+    훈련: MAE=0.634484  MSE=0.894737  RMSE=0.945905  R2=0.965903
+       RMSE^2 - MSE          = 0.000e+00
+       1 - MSE/Var(y, ddof=0) = 0.965903   (R2 와의 차이 0.000e+00)
+       RMSE/MAE = 1.4908    정규라면 sqrt(pi/2) = 1.2533
+       잔차 왜도 -3.073  첨도 20.638  최대 |e| = 6.692 (RMSE 의 7.1배)
+       |e| > 3*RMSE 인 관측값 2개 / 140개,  그 몫이 MSE 에서 차지하는 비율 47.6%
+    시험: MAE=0.730384  MSE=0.892126  RMSE=0.944524  R2=0.967327
+       RMSE^2 - MSE          = 1.110e-16
+       1 - MSE/Var(y, ddof=0) = 0.967327   (R2 와의 차이 0.000e+00)
+       RMSE/MAE = 1.2932    정규라면 sqrt(pi/2) = 1.2533
+       잔차 왜도 -1.215  첨도 4.148  최대 |e| = 2.765 (RMSE 의 2.9배)
+       |e| > 3*RMSE 인 관측값 0개 / 60개,  그 몫이 MSE 에서 차지하는 비율 0.0%
+    ```
+
+    **(1) 두 관계식이 정확히 성립한다.** $\mathrm{RMSE}^2 - \mathrm{MSE}$ 가 훈련에서 정확히 $0$, 시험에서 $1.1 \times 10^{-16}$ 이다. 그리고 $1 - \mathrm{MSE}/\widehat{\operatorname{Var}}(y)$ 가 `model.score` 의 $R^2$ 와 **차이 $0$** 으로 같다. 유도한 대로 **네 수 가운데 자유로운 것은 MSE 와 MAE 둘뿐**이다.
+
+    **(2) 훈련 잔차에 두꺼운 꼬리가 있다.** 비가 훈련에서 $1.4908$ 로 정규 기준 $1.2533$ 보다 $19\%$ 크고, 시험에서는 $1.2932$ 로 $3\%$ 밖에 크지 않다.
+
+    범인이 분명하게 드러난다. 훈련자료 $140$ 개 가운데 $|e| > 3\,\mathrm{RMSE}$ 인 것이 **단 두 개**인데, 그 둘이 **MSE 의 $47.6\%$** 를 차지한다. 가장 큰 잔차는 $6.692$ 로 RMSE 의 $7.1$ 배다. 왜도 $-3.073$, 첨도 $20.638$ 도 정규의 $0$ 과 $3$ 에서 한참 멀다. 시험자료에는 그런 관측값이 하나도 없고(왜도 $-1.215$, 첨도 $4.148$), 최대 잔차가 RMSE 의 $2.9$ 배에 그친다.
+
+    **그래서 시험 MSE 가 훈련 MSE 보다 작다.** $0.892126$ 대 $0.894737$ 이다. 유도에서 예상한 대로이고, 과적합이 없어서가 아니라 **이상점 두 개가 우연히 훈련 쪽에 떨어졌기** 때문이다. MAE 로 보면 이야기가 뒤집힌다. 훈련 $0.6345$, 시험 $0.7304$ 로 **시험 쪽이 $15\%$ 나쁘다.** 이상점에 덜 휘둘리는 자로 재면 정상적인 방향이 나타난다.
+
+    훈련 $R^2$ $0.9659$ 와 시험 $R^2$ $0.9673$ 이 거의 같다. 두 값이 크게 벌어지면 과적합을 의심한다. 다만 위에서 보았듯 **이 두 수가 거의 같다는 사실 자체는 MSE 가 같다는 말의 되풀이**이고, $R^2$ 가 각 집합의 $y$ 분산으로 규격화된다는 점까지 더해져 있다. 시험 쪽 $y$ 의 분산이 $27.30$ 으로 훈련 쪽 $26.24$ 보다 커서, 같은 MSE 라도 시험 $R^2$ 가 조금 더 높게 나왔다.
+
+    **교훈은 둘을 함께 보라는 것이다.** MSE 하나만 보면 "시험이 더 좋다" 는 엉뚱한 결론에 이르고, MAE 를 함께 보면 바로잡힌다. 그리고 두 척도가 엇갈리는 바로 그 자리가 이상점이 사는 곳이다.
 
 ## 척도가 엇갈릴 때
 

@@ -34,120 +34,417 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 실험용 자료
+**보기 1.** <span class="diff easy" title="쉬움"></span> 실험용 자료. 설명변수 여덟 개 가운데 앞의 넷만 참 계수가 $0$ 이 아닌 자료 $200$ 개를 만든다.
+
+**(1)** 참 계수 $3.0,\ 1.5,\ -2.0,\ 0.8$ 의 **신호 세기**를 추정값의 표준오차 단위로 미리 계산하시오. 네 변수가 모두 쉽게 발견될 것인가.
+
+**(2)** 아래 그림의 "어려운 설정"($n = 60$, $\beta_4 = 0.6$)에서 같은 셈을 해 보고, 세 방법이 거기서 $35\%$ 틀리는 까닭을 설명하시오. 이 자료의 모집단 $R^2$ 도 구하시오.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.linear_model import LinearRegression
+??? success "풀이"
 
-# 앞의 넷만 참 계수가 0 이 아니다. 세 방법이 이 넷을 찾아내는지 견준다.
-np.random.seed(42)
-n, p = 200, 8
-X = np.random.randn(n, p)
-true_beta = np.array([3.0, 1.5, -2.0, 0.8, 0, 0, 0, 0])
-y = X @ true_beta + np.random.normal(0, 2, n)
-names = [f"x{i+1}" for i in range(p)]
-```
+    **(1) 표준오차를 미리 알 수 있다.** 설명변수가 서로 독립인 표준정규이므로 $\mathbf{X}^\top\mathbf{X} \approx n\mathbf{I}$ 이고
+
+    $$
+    \mathrm{SE}(\hat\beta_j) \approx \frac{\sigma}{\sqrt{n}} = \frac{2}{\sqrt{200}} = 0.1414
+    $$
+
+    이다. 그러면 각 참 계수의 기대 $t$ 값은 $\beta_j / 0.1414$ 로
+
+    $$
+    \frac{3.0}{0.1414} = 21.2,
+    \quad \frac{1.5}{0.1414} = 10.6,
+    \quad \frac{-2.0}{0.1414} = -14.1,
+    \quad \frac{0.8}{0.1414} = 5.7
+    $$
+
+    이다. **가장 약한 신호도 $t = 5.7$** 이니 넷 모두 거의 확실하게 발견된다. 어떤 선택법을 쓰든 같은 답이 나올 조건이다.
+
+    **(2) 어려운 설정에서는 사정이 다르다.** $n = 60$, $\sigma = 2$, $\beta_4 = 0.6$ 이면
+
+    $$
+    \mathrm{SE} \approx \frac{2}{\sqrt{60}} = 0.2582,
+    \qquad t \approx \frac{0.6}{0.2582} = 2.32
+    $$
+
+    이다. $t = 2.32$ 는 유의수준 $5\%$ 를 겨우 넘는 값이고, 표본을 다시 뽑으면 $t$ 가 $1.3$ 이 되거나 $3.3$ 이 되는 일이 예사다($t$ 의 표준편차가 $1$ 이다). 곧 $x_4$ 를 찾아낼 확률이 대략 $P(t > 2) \approx 0.63$ 쯤이고, 쪽의 그림에서 $x_4$ 가 뽑힌 비율이 $0.65$ 인 것과 맞아떨어진다.
+
+    **그러므로 $35\%$ 의 실패는 알고리즘의 결함이 아니다.** 자료에 그만큼의 정보밖에 없다.
+
+    **모집단 $R^2$.** 설명변수가 독립인 표준정규이므로 신호의 분산이 계수의 제곱합이다.
+
+    $$
+    \operatorname{Var}(\mathbf{x}^\top\boldsymbol\beta) = 3.0^2 + 1.5^2 + 2.0^2 + 0.8^2 = 9 + 2.25 + 4 + 0.64 = 15.89
+    $$
+
+    이고 $\sigma^2 = 4$ 이므로
+
+    $$
+    R^2_{\text{pop}} = \frac{15.89}{15.89 + 4} = 0.7989
+    $$
+
+    이다.
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+
+    # 앞의 넷만 참 계수가 0 이 아니다. 세 방법이 이 넷을 찾아내는지 견준다.
+    np.random.seed(42)
+    n, p = 200, 8
+    X = np.random.randn(n, p)
+    true_beta = np.array([3.0, 1.5, -2.0, 0.8, 0, 0, 0, 0])
+    y = X @ true_beta + np.random.normal(0, 2, n)
+    names = [f"x{i+1}" for i in range(p)]
+    ```
+
+    ```python
+    import statsmodels.api as sm
+
+    print(f"sigma/sqrt(n) = {2 / np.sqrt(n):.4f}")
+    fit = sm.OLS(y, sm.add_constant(X)).fit()
+    print("실제 SE  :", fit.bse[1:].round(4))
+    print("기대 t   :", (true_beta / (2 / np.sqrt(n))).round(2))
+    print("실제 t   :", fit.tvalues[1:].round(2))
+    print("추정 계수:", fit.params[1:].round(3))
+    V_signal = (true_beta ** 2).sum()
+    print(f"모집단 R^2 = {V_signal} / ({V_signal} + 4) = {V_signal / (V_signal + 4):.4f},  실제 R^2 = {fit.rsquared:.4f}")
+    print(f"그림의 어려운 설정(n=60, beta4=0.6)에서 기대 t = {0.6 / (2 / np.sqrt(60)):.2f}")
+    ```
+
+    출력:
+
+    ```
+    sigma/sqrt(n) = 0.1414
+    실제 SE  : [0.1547 0.1426 0.1396 0.1381 0.1449 0.1272 0.1364 0.135 ]
+    기대 t   : [ 21.21  10.61 -14.14   5.66   0.     0.     0.     0.  ]
+    실제 t   : [ 18.64  10.39 -13.14   6.02  -1.15  -0.15  -0.07   0.74]
+    추정 계수: [ 2.884  1.481 -1.834  0.832 -0.166 -0.019 -0.01   0.1  ]
+    모집단 R^2 = 15.89 / (15.89 + 4) = 0.7989,  실제 R^2 = 0.7790
+    그림의 어려운 설정(n=60, beta4=0.6)에서 기대 t = 2.32
+    ```
+
+    **(1)의 어림이 잘 맞는다.** 어림한 $\mathrm{SE} = 0.1414$ 와 실제 표준오차 $0.1272 \sim 0.1547$ 이 같은 자리 수다. 기대 $t$ 값 $(21.2,\ 10.6,\ -14.1,\ 5.7)$ 과 실제 $(18.6,\ 10.4,\ -13.1,\ 6.0)$ 이 나란히 놓인다. 차이는 표본의 운이며, $t$ 의 표준편차가 $1$ 이라는 것을 생각하면 $21.2$ 대 $18.6$ 은 $2.6$ 표준편차로 다소 큰 쪽이지만 설명변수의 실현된 분산이 작았던 몫이 섞여 있다.
+
+    **가장 약한 넷째 신호도 $t = 6.0$ 이다.** 잡음 변수 넷의 실제 $t$ 는 $-1.15,\ -0.15,\ -0.07,\ 0.74$ 로 모두 $\pm 2$ 안에 있다. **신호와 잡음의 간격이 $6.0$ 과 $1.15$ 로 또렷하다.** 이것이 아래 세 방법이 모두 같은 답을 내게 되는 까닭이다.
+
+    **(2) 어려운 설정의 $t = 2.32$ 가 확인된다.** 이 자료의 $5.66$ 과 견주면 **$2.4$ 배 약한 신호**다. $t$ 가 $2.3$ 근처면 표본마다 발견 여부가 바뀌므로, 선택법의 성능 차이가 아니라 자료의 한계가 결과를 지배한다.
+
+    모집단 $R^2$ 는 $0.7989$ 이고 이 표본의 실제 $R^2$ 는 $0.7790$ 이다. $0.02$ 낮은 것은 이 표본에서 실현된 잡음이 참값보다 컸기 때문이다. **그리고 이 $R^2$ 는 모수 $9$ 개를 쓴 전체 모형의 값**이므로, 참 변수 넷만 쓴 모형의 $R^2$ 와 견주면 그 차이가 잡음 변수가 가져간 몫이 된다.
+
+    마지막으로 추정 계수를 읽어 두자. $(2.884,\ 1.481,\ -1.834,\ 0.832)$ 로 참값 $(3.0,\ 1.5,\ -2.0,\ 0.8)$ 에 가깝고, 잡음 쪽은 $(-0.166,\ -0.019,\ -0.010,\ 0.100)$ 으로 $0$ 에 가깝다. **참 모형을 아는 인공자료로 실험하는 값어치가 여기 있다.** 선택법이 고른 것이 옳은지 틀렸는지 판정할 수 있다.
 
 ### 최량 부분집합 선택
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 최적 부분집합 선택
+**보기 2.** <span class="diff easy" title="쉬움"></span> 최적 부분집합 선택. 크기 $k$ 마다 가능한 조합을 남김없이 적합해 훈련 RSS 가 가장 작은 것을 고른다.
+
+**(1)** 이 함수가 적합하는 모형의 개수를 $p = 8$ 에서 세고, $p = 20$ 에서 얼마가 되는지 적으시오.
+
+**(2)** 최량 부분집합의 RSS 가 $k$ 에 대해 **줄기만 한다**는 것을 증명하고 수로 확인하시오. 그러면 이 함수만으로 최적 $k$ 를 고를 수 있는가.
 
 </div>
 
-```python
-from itertools import combinations
+??? success "풀이"
 
-def best_subset(X, y, max_k=None):
-    """모든 부분집합을 다 따져 크기별 최선을 찾는다.
+    **(1) $2^p - 1$ 개다.** 크기 $k$ 의 부분집합이 $\binom{p}{k}$ 개이고 $k$ 를 $1$ 부터 $p$ 까지 돌므로
 
-    크기 k 마다 가능한 조합을 남김없이 본다. 답은 확실하지만 부분집합이
-    2^p 개라 변수가 스물만 넘어도 감당할 수 없다.
-    """
-    n, p = X.shape
-    if max_k is None:
-        max_k = p
-    results = {}
-    for k in range(1, max_k + 1):
-        best_rss, best_features = np.inf, None
-        for combo in combinations(range(p), k):
-            model = LinearRegression().fit(X[:, combo], y)
-            rss = np.sum((y - model.predict(X[:, combo])) ** 2)
-            if rss < best_rss:
-                best_rss, best_features = rss, combo
-        results[k] = {"features": best_features, "rss": best_rss}
-    return results
-```
+    $$
+    \sum_{k=1}^{p}\binom{p}{k} = 2^p - 1
+    $$
+
+    이다(공집합만 뺀 것). $p = 8$ 이면 $255$ 개이고, 크기별로는 $8, 28, 56, 70, 56, 28, 8, 1$ 로 가운데가 가장 두껍다.
+
+    $p = 20$ 이면 $2^{20} - 1 = 1{,}048{,}575$ 개다. 적합 한 번이 $0.1$ 밀리초라도 두 분쯤 걸린다. $p = 30$ 이면 $10$ 억 개를 넘어 **현실적으로 불가능**하다.
+
+    **(2) 줄기만 한다.** 크기 $k$ 의 최적 집합을 $\mathcal{S}^*_k$ 라 하자. 아무 변수 $j \notin \mathcal{S}^*_k$ 를 더한 $\mathcal{S}^*_k \cup \{j\}$ 는 크기가 $k+1$ 이고, 열을 더하면 사영 공간이 커지므로
+
+    $$
+    \mathrm{RSS}\bigl(\mathcal{S}^*_k \cup \{j\}\bigr) \le \mathrm{RSS}\bigl(\mathcal{S}^*_k\bigr)
+    $$
+
+    이다. 한편 $\mathcal{S}^*_k \cup \{j\}$ 는 크기 $k+1$ 의 후보 가운데 하나이므로 최솟값은 그보다 작거나 같다. 따라서
+
+    $$
+    \mathrm{RSS}_{\text{best}}(k+1) \le \mathrm{RSS}\bigl(\mathcal{S}^*_k \cup \{j\}\bigr) \le \mathrm{RSS}_{\text{best}}(k)
+    $$
+
+    **그러므로 이 함수만으로는 최적 $k$ 를 고를 수 없다.** $k$ 를 키우면 RSS 가 결코 늘지 않으니 $k = p$ 가 언제나 "최선" 이 된다. 크기를 고르는 일은 훈련 RSS 밖의 기준 — 검증 RSS, 교차검증, AIC, BIC — 에 맡겨야 한다. 쪽머리의 "최적 크기 고르기" 가 그 이야기다.
+
+    눈여겨볼 것은 $\mathcal{S}^*_k \subset \mathcal{S}^*_{k+1}$ 이 **보장되지 않는다**는 점이다. 위 증명은 "$\mathcal{S}^*_k$ 에 뭘 더한 것보다 좋다" 만 말하고, 실제 $\mathcal{S}^*_{k+1}$ 이 $\mathcal{S}^*_k$ 를 품을 필요는 없다. 이것이 전수탐색이 단계적 방법과 갈릴 수 있는 자리다.
+    ```python
+    from itertools import combinations
+
+    def best_subset(X, y, max_k=None):
+        """모든 부분집합을 다 따져 크기별 최선을 찾는다.
+
+        크기 k 마다 가능한 조합을 남김없이 본다. 답은 확실하지만 부분집합이
+        2^p 개라 변수가 스물만 넘어도 감당할 수 없다.
+        """
+        n, p = X.shape
+        if max_k is None:
+            max_k = p
+        results = {}
+        for k in range(1, max_k + 1):
+            best_rss, best_features = np.inf, None
+            for combo in combinations(range(p), k):
+                model = LinearRegression().fit(X[:, combo], y)
+                rss = np.sum((y - model.predict(X[:, combo])) ** 2)
+                if rss < best_rss:
+                    best_rss, best_features = rss, combo
+            results[k] = {"features": best_features, "rss": best_rss}
+        return results
+    ```
+
+    ```python
+    from math import comb
+
+    print("크기별 후보 개수:", [comb(p, k) for k in range(1, p + 1)])
+    print(f"합 = {sum(comb(p, k) for k in range(1, p + 1))},  2^p - 1 = {2 ** p - 1}")
+    print(f"p = 20 이면 {2 ** 20 - 1:,} 개")
+
+    best = best_subset(X, y)
+    print("  k  변수집합                     RSS")
+    for k in range(1, p + 1):
+        print(f"  {k}  {str(best[k]['features']):28s} {best[k]['rss']:9.3f}")
+    print("RSS 가 k 에 대해 단조감소:",
+          all(best[k + 1]['rss'] <= best[k]['rss'] + 1e-9 for k in range(1, p)))
+    ```
+
+    출력:
+
+    ```
+    크기별 후보 개수: [8, 28, 56, 70, 56, 28, 8, 1]
+    합 = 255,  2^p - 1 = 255
+    p = 20 이면 1,048,575 개
+      k  변수집합                     RSS
+      1  (0,)                          1972.005
+      2  (0, 2)                        1303.749
+      3  (0, 1, 2)                      861.547
+      4  (0, 1, 2, 3)                   711.610
+      5  (0, 1, 2, 3, 4)                707.136
+      6  (0, 1, 2, 3, 4, 7)             705.141
+      7  (0, 1, 2, 3, 4, 5, 7)          705.057
+      8  (0, 1, 2, 3, 4, 5, 6, 7)       705.038
+    RSS 가 k 에 대해 단조감소: True
+    ```
+
+    **(1)의 셈이 맞는다.** 크기별 후보가 $8, 28, 56, 70, 56, 28, 8, 1$ 이고 합이 $255 = 2^8 - 1$ 이다. 가운데 $k = 4$ 에서 $70$ 개로 가장 많다.
+
+    **(2) 단조감소가 확인된다.** $1972.0 \to 1303.7 \to 861.5 \to 711.6 \to 707.1 \to 705.1 \to 705.1 \to 705.0$ 으로 한 번도 올라가지 않는다.
+
+    그리고 이 표가 (2)의 결론을 그대로 보여 준다. **훈련 RSS 만 보면 $k = 8$ 이 이긴다.** 그러나 $k = 4$ 에서 $8$ 로 가며 줄어든 양은 $711.610 - 705.038 = 6.57$ 로, $k = 1$ 에서 $4$ 로 가며 줄어든 $1260$ 의 **$0.5\%$** 다. 잡음 변수 넷을 더해 얻은 것이 그만큼이다.
+
+    이 자료에서는 운 좋게 $\mathcal{S}^*_k$ 가 모두 중첩되어 있다. $(0) \subset (0,2) \subset (0,1,2) \subset (0,1,2,3) \subset \cdots$ 로 쌓인다. 유도에서 말했듯 보장된 일이 아니고, 설명변수가 서로 독립이어서 생긴 결과다. 또한 **$k \le 4$ 에서 고른 집합이 참 변수 $\{x_1, x_2, x_3, x_4\}$ 의 부분집합**이라는 점도 확인해 둘 만하다. 크기 $5$ 부터는 잡음 변수 $x_5$(색인 $4$)가 끼어든다.
 
 ### 전진 단계적 선택
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 전진 단계선택
+**보기 3.** <span class="diff easy" title="쉬움"></span> 전진 단계선택. 빈 모형에서 시작해 RSS 를 가장 많이 줄이는 변수를 하나씩 더한다.
+
+**(1)** 이 함수가 적합하는 모형의 개수를 세고 보기 2 의 $255$ 와 견주시오. $p = 20$ 이면 두 수가 각각 얼마가 되는가.
+
+**(2)** 크기마다 전진선택의 RSS 를 최량 부분집합의 RSS 와 나란히 찍어, 탐욕적 경로가 전역 최적을 놓쳤는지 확인하시오.
 
 </div>
 
-```python
-def forward_stepwise(X, y):
-    """빈 모형에서 시작해 RSS 를 가장 많이 줄이는 변수를 하나씩 더한다.
+??? success "풀이"
 
-    따지는 모형이 p(p+1)/2 개로 줄어 훨씬 빠르다. 다만 한 번 들어간 변수는
-    빠지지 않으므로 최적 부분집합을 놓칠 수 있다.
-    """
-    n, p = X.shape
-    selected, remaining = [], list(range(p))
-    results = {}
+    **(1) 모형 수는 $p(p+1)/2$ 다.** 첫 단계에서 후보가 $p$ 개, 둘째 단계에서 남은 $p-1$ 개, …, 마지막 단계에서 $1$ 개이므로
+
+    $$
+    p + (p-1) + \cdots + 1 = \frac{p(p+1)}{2}
+    $$
+
+    이고 $p = 8$ 이면 $36$ 이다. 보기 2 의 $255$ 와 비교하면 $7.1$ 배 적다.
+
+    **차이는 $p$ 가 커질 때 폭발한다.** 하나는 $O(p^2)$, 다른 하나는 $O(2^p)$ 다. $p = 20$ 에서는
+
+    $$
+    \frac{20 \cdot 21}{2} = 210
+    \qquad\text{대}\qquad
+    2^{20} - 1 = 1{,}048{,}575
+    $$
+
+    로 $5000$ 배 차이가 된다. $p = 40$ 이면 $820$ 대 $1.1 \times 10^{12}$ 다. 전수탐색이 $p \le 20$ 쯤에서 멈추는 까닭이 이것이다.
+
+    **(2) 놓칠 수 있다.** 전진선택은 한 번 들어간 변수를 다시 빼지 않으므로, 단계 $k$ 에서 고른 집합이 단계 $k+1$ 의 최적 집합에 들어 있지 않으면 거기서부터 어긋난다. 연습문제 4 가 증명하는 대로
+
+    $$
+    \mathrm{RSS}_{\text{best}}(k) \le \mathrm{RSS}_{\text{fwd}}(k)
+    $$
+
+    이고, 등호가 성립하는지는 자료에 달려 있다.
+
+    이 자료에서는 등호를 기대할 만하다. 설명변수 여덟 개가 서로 독립인 표준정규이므로 설계행렬이 거의 직교이고, 그러면 변수 하나가 줄이는 RSS 가 다른 변수의 유무에 거의 영향받지 않는다. 곧 **"RSS 를 가장 많이 줄이는 것부터 차례로" 가 곧 전역 최적**이 된다. 확인해 보자.
+    ```python
+    def forward_stepwise(X, y):
+        """빈 모형에서 시작해 RSS 를 가장 많이 줄이는 변수를 하나씩 더한다.
+
+        따지는 모형이 p(p+1)/2 개로 줄어 훨씬 빠르다. 다만 한 번 들어간 변수는
+        빠지지 않으므로 최적 부분집합을 놓칠 수 있다.
+        """
+        n, p = X.shape
+        selected, remaining = [], list(range(p))
+        results = {}
+        for k in range(1, p + 1):
+            best_rss, best_feature = np.inf, None
+            for f in remaining:
+                trial = selected + [f]
+                model = LinearRegression().fit(X[:, trial], y)
+                rss = np.sum((y - model.predict(X[:, trial])) ** 2)
+                if rss < best_rss:
+                    best_rss, best_feature = rss, f
+            selected.append(best_feature)
+            remaining.remove(best_feature)
+            results[k] = {"features": tuple(selected), "rss": best_rss}
+        return results
+    ```
+
+    ```python
+    print(f"forward 가 따지는 모형 수 = p + (p-1) + ... + 1 = {p * (p + 1) // 2},  "
+          f"best_subset 은 {2 ** p - 1} (비 {(2 ** p - 1) / (p * (p + 1) // 2):.1f}배)")
+    print(f"p = 20 이면 {20 * 21 // 2} 대 {2 ** 20 - 1:,}")
+
+    fwd = forward_stepwise(X, y)
+    print("들어온 순서:", fwd[p]['features'])
+    print("  k  변수집합(정렬)              fwd RSS     best RSS   차이")
     for k in range(1, p + 1):
-        best_rss, best_feature = np.inf, None
-        for f in remaining:
-            trial = selected + [f]
-            model = LinearRegression().fit(X[:, trial], y)
-            rss = np.sum((y - model.predict(X[:, trial])) ** 2)
-            if rss < best_rss:
-                best_rss, best_feature = rss, f
-        selected.append(best_feature)
-        remaining.remove(best_feature)
-        results[k] = {"features": tuple(selected), "rss": best_rss}
-    return results
-```
+        print(f"  {k}  {str(tuple(sorted(fwd[k]['features']))):28s} {fwd[k]['rss']:9.3f}  "
+              f"{best[k]['rss']:9.3f}  {fwd[k]['rss'] - best[k]['rss']:.2e}")
+    ```
+
+    출력:
+
+    ```
+    forward 가 따지는 모형 수 = p + (p-1) + ... + 1 = 36,  best_subset 은 255 (비 7.1배)
+    p = 20 이면 210 대 1,048,575
+    들어온 순서: (0, 2, 1, 3, 4, 7, 5, 6)
+      k  변수집합(정렬)              fwd RSS     best RSS   차이
+      1  (0,)                          1972.005   1972.005  0.00e+00
+      2  (0, 2)                        1303.749   1303.749  0.00e+00
+      3  (0, 1, 2)                      861.547    861.547  0.00e+00
+      4  (0, 1, 2, 3)                   711.610    711.610  1.14e-13
+      5  (0, 1, 2, 3, 4)                707.136    707.136  0.00e+00
+      6  (0, 1, 2, 3, 4, 7)             705.141    705.141  1.14e-13
+      7  (0, 1, 2, 3, 4, 5, 7)          705.057    705.057  -2.27e-13
+      8  (0, 1, 2, 3, 4, 5, 6, 7)       705.038    705.038  0.00e+00
+    ```
+
+    **(1)의 셈이 맞는다.** $36$ 대 $255$ 로 $7.1$ 배이고, $p = 20$ 에서 $210$ 대 $1{,}048{,}575$ 다.
+
+    **(2) 하나도 놓치지 않았다.** 여덟 크기 모두에서 전진선택과 최량 부분집합의 변수집합이 같고 RSS 의 차이가 $10^{-13}$ 아래다. 유도한 예측대로다. (차이가 $k = 7$ 에서 $-2.27 \times 10^{-13}$ 으로 음수인데, 부등식을 어긴 것이 아니라 두 경로가 같은 모형을 다른 순서의 열로 적합해 생긴 반올림 차이다.)
+
+    들어온 순서는 $x_1, x_3, x_2, x_4$ 다(색인 $0, 2, 1, 3$). 참 계수의 절대값이 $3.0,\ 2.0,\ 1.5,\ 0.8$ 인 순서와 정확히 같다. **설명변수가 직교이면 전진선택의 순서가 효과 크기의 순서가 된다.** 그 뒤의 $x_5, x_8, x_6, x_7$ 은 계수가 모두 $0$ 이므로 순서에 뜻이 없다.
+
+    RSS 가 줄어드는 폭도 읽을 거리다. $1972 \to 1304 \to 862 \to 712$ 까지 네 걸음에서 $1260$ 이 줄고, 그 뒤 네 걸음에서는 $712 \to 705$ 로 $7$ 밖에 줄지 않는다. **네 번째와 다섯 번째 사이에 꺾임이 있다.** 참 모형의 크기가 $4$ 라는 신호이며, 다만 훈련 RSS 는 계속 줄기만 하므로 이 꺾임을 눈으로 보는 것 말고 기준이 필요하다. 그것이 연습문제 1 의 검증 RSS 와 연습문제 5 의 AIC 다.
 
 ### 후진 단계적 선택
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 후진 단계선택
+**보기 4.** <span class="diff easy" title="쉬움"></span> 후진 단계선택. 전체 모형에서 시작해 RSS 를 가장 적게 늘리는 변수를 하나씩 뺀다.
+
+**(1)** 이 함수가 적합하는 모형의 개수를 세어 전진선택과 견주시오. 그리고 `n > p` 가 필요한 까닭을 $n = 6$, $p = 8$ 에서 수로 보이시오.
+
+**(2)** 세 방법(최량 부분집합·전진·후진)이 **모든 크기 $k$ 에서** 같은 변수집합을 골랐는지 확인하시오. 같다면 그 사실에서 무엇을 읽어야 하는가.
 
 </div>
 
-```python
-def backward_stepwise(X, y):
-    """전체 모형에서 시작해 RSS 를 가장 적게 늘리는 변수를 하나씩 뺀다.
+??? success "풀이"
 
-    시작점이 전체 모형이므로 n > p 여야 쓸 수 있다. 변수가 관측보다 많으면
-    전진선택으로 가야 한다.
-    """
-    n, p = X.shape
-    current = list(range(p))
-    results = {}
-    model = LinearRegression().fit(X, y)
-    results[p] = {"features": tuple(current),
-                  "rss": np.sum((y - model.predict(X)) ** 2)}
-    for k in range(p - 1, 0, -1):
-        best_rss, best_remove = np.inf, None
-        for f in current:
-            trial = [x for x in current if x != f]
-            model = LinearRegression().fit(X[:, trial], y)
-            rss = np.sum((y - model.predict(X[:, trial])) ** 2)
-            if rss < best_rss:
-                best_rss, best_remove = rss, f
-        current.remove(best_remove)
-        results[k] = {"features": tuple(current), "rss": best_rss}
-    return results
-```
+    **(1) 적합 횟수는 전진선택과 같다.** 먼저 전체 모형 하나를 적합하고($1$ 번), 그다음 크기를 $p-1$ 로 줄일 때 후보가 $p$ 개, $p-2$ 로 줄일 때 $p-1$ 개, …, 크기 $1$ 로 줄일 때 $2$ 개다. 합하면
+
+    $$
+    1 + \bigl(p + (p-1) + \cdots + 2\bigr) = 1 + \left(\frac{p(p+1)}{2} - 1\right) = \frac{p(p+1)}{2}
+    $$
+
+    이다. $p = 8$ 이면 $36$ 으로 **전진선택과 정확히 같다.** 방향만 반대이고 셈의 구조는 같다.
+
+    **`n > p` 가 필요한 까닭.** 후진선택은 전체 모형을 적합하는 데서 출발한다. 설계행렬이 $n \times (p+1)$ 이므로 rank 가 $\min(n, p+1)$ 을 넘을 수 없고, $n \le p$ 면 열이 독립일 수 없다. 그러면 계수가 유일하지 않고 **훈련 RSS 가 $0$ 이 되어** 어느 변수를 빼야 할지 가릴 수 없다. 모든 후보의 RSS 가 $0$ 으로 같아지기 때문이다.
+
+    전진선택은 빈 모형에서 출발하므로 이 문제가 없다. 그래서 $p > n$ 인 고차원 자료에서는 전진선택(이나 라쏘)만 쓸 수 있다.
+
+    **(2) 같을지는 보장되지 않는다.** 연습문제 4 가 보이듯 최량 부분집합의 RSS 는 전진선택의 것보다 작거나 같다. 등호는 **탐욕적 경로가 우연히 전역 최적을 지날 때만** 성립한다. 후진선택도 마찬가지로 다른 경로이므로 다른 답을 낼 수 있다.
+
+    보기 1 의 자료는 그 "우연" 이 일어나기 좋은 조건을 갖추고 있다. 설명변수 여덟 개가 서로 **독립인 표준정규**이고, 참 신호 넷의 $t$ 값이 모두 $5$ 를 넘는다. 설명변수가 직교에 가까우면 변수 하나가 줄이는 RSS 가 다른 변수의 유무에 거의 영향받지 않으므로, 탐욕적으로 큰 것부터 고르는 것이 곧 전역 최적이 된다. 그러므로 **세 방법이 모든 $k$ 에서 같을 것**이라고 예측할 수 있다.
+    ```python
+    def backward_stepwise(X, y):
+        """전체 모형에서 시작해 RSS 를 가장 적게 늘리는 변수를 하나씩 뺀다.
+
+        시작점이 전체 모형이므로 n > p 여야 쓸 수 있다. 변수가 관측보다 많으면
+        전진선택으로 가야 한다.
+        """
+        n, p = X.shape
+        current = list(range(p))
+        results = {}
+        model = LinearRegression().fit(X, y)
+        results[p] = {"features": tuple(current),
+                      "rss": np.sum((y - model.predict(X)) ** 2)}
+        for k in range(p - 1, 0, -1):
+            best_rss, best_remove = np.inf, None
+            for f in current:
+                trial = [x for x in current if x != f]
+                model = LinearRegression().fit(X[:, trial], y)
+                rss = np.sum((y - model.predict(X[:, trial])) ** 2)
+                if rss < best_rss:
+                    best_rss, best_remove = rss, f
+            current.remove(best_remove)
+            results[k] = {"features": tuple(current), "rss": best_rss}
+        return results
+    ```
+
+    ```python
+    print(f"backward 가 따지는 모형 수 = 1 + (p + (p-1) + ... + 2) = {1 + sum(range(2, p + 1))}")
+
+    bwd = backward_stepwise(X, y)
+    print("  k  변수집합                     RSS      fwd 와 같은 집합인가")
+    for k in range(p, 0, -1):
+        print(f"  {k}  {str(bwd[k]['features']):28s} {bwd[k]['rss']:9.3f}   "
+              f"{set(bwd[k]['features']) == set(fwd[k]['features'])}")
+    print("세 방법이 모든 k 에서 같은 집합:",
+          all(set(best[k]['features']) == set(fwd[k]['features']) == set(bwd[k]['features'])
+              for k in range(1, p + 1)))
+
+    # n <= p 면 출발점이 무너진다.
+    X_small, y_small = X[:6], y[:6]
+    print(f"n = {len(y_small)}, p = {p} 일 때 전체모형 설계행렬의 rank = "
+          f"{np.linalg.matrix_rank(np.column_stack([np.ones(len(y_small)), X_small]))}  (열 {p + 1}개)")
+    full = LinearRegression().fit(X_small, y_small)
+    print(f"  그 모형의 훈련 RSS = {np.sum((y_small - full.predict(X_small)) ** 2):.3e}")
+    ```
+
+    출력:
+
+    ```
+    backward 가 따지는 모형 수 = 1 + (p + (p-1) + ... + 2) = 36
+      k  변수집합                     RSS      fwd 와 같은 집합인가
+      8  (0, 1, 2, 3, 4, 5, 6, 7)       705.038   True
+      7  (0, 1, 2, 3, 4, 5, 7)          705.057   True
+      6  (0, 1, 2, 3, 4, 7)             705.141   True
+      5  (0, 1, 2, 3, 4)                707.136   True
+      4  (0, 1, 2, 3)                   711.610   True
+      3  (0, 1, 2)                      861.547   True
+      2  (0, 2)                        1303.749   True
+      1  (0,)                          1972.005   True
+    세 방법이 모든 k 에서 같은 집합: True
+    n = 6, p = 8 일 때 전체모형 설계행렬의 rank = 6  (열 9개)
+      그 모형의 훈련 RSS = 6.306e-29
+    ```
+
+    **(1) 적합 횟수가 $36$ 으로 전진선택과 같다.** 그리고 $n = 6$, $p = 8$ 일 때 설계행렬의 열이 $9$ 개인데 rank 가 $6$ 이다. 그 모형의 훈련 RSS 가 $6.3 \times 10^{-29}$, 곧 **$0$** 이다. 관측값 여섯 개를 모수 아홉 개로 완벽히 지나가는 것이고, 변수를 하나 빼도 rank 가 여전히 $6$ 이라 RSS 가 $0$ 으로 남는다. **어느 변수를 뺄지 가릴 수 없다.** 유도한 대로 후진선택의 출발점이 무너진다.
+
+    **(2) 세 방법이 여덟 크기 모두에서 같은 집합을 골랐다.** 후진제거의 경로가 $\{0,\ldots,7\} \to \{0,1,2,3,4,5,7\} \to \cdots \to \{0\}$ 로 내려가는데, 이것이 전진선택이 올라간 길을 **거꾸로 밟은 것**이다. RSS 도 소수 셋째 자리까지 같다.
+
+    읽어야 할 것은 세 가지다.
+
+    첫째, **이 일치는 자료의 성질 때문**이며 알고리즘의 보장이 아니다. 유도에서 말한 대로 설명변수가 직교에 가깝고 신호가 뚜렷해서 생긴 결과다. 쪽의 그림이 보이듯 표본을 $n = 60$ 으로 줄이고 $x_5$ 를 $x_4$ 와 상관 $0.75$ 로 묶으면 세 방법이 완전히 일치하는 비율이 $96.8\%$ 로 내려간다.
+
+    둘째, 그럼에도 **전수탐색의 이득이 작다.** 같은 답을 얻는 데 최량 부분집합은 $255$ 개, 단계적 방법은 $36$ 개를 적합했다. $p$ 가 조금만 커지면 이 비가 폭발한다($p = 20$ 에서 $1{,}048{,}575$ 대 $210$).
+
+    셋째, **세 방법이 일치한다는 것이 답이 옳다는 뜻은 아니다.** 여기서는 참 변수 넷을 정확히 찾았지만, 쪽의 그림에서는 세 방법 모두 $35\%$ 의 경우에 틀렸고 그 실패는 알고리즘이 아니라 자료의 한계였다. **알고리즘의 일치는 자료가 말하는 바가 또렷하다는 증거일 뿐이고, 그 말이 참인지는 다른 문제다.**
 
 ## 세 방법은 얼마나 자주 갈라지는가
 
