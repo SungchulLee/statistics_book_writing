@@ -133,7 +133,7 @@ $$
 
     ```
            count   mean     std
-    group                      
+    group
     ctrl      10  5.032  0.5831
     trt1      10  4.661  0.7937
     trt2      10  5.526  0.4426

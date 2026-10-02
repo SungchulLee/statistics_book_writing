@@ -378,7 +378,7 @@ $$
 
     ```text
                count   mean     std
-    supp dose                      
+    supp dose
     OJ   0.5      10  13.23  4.4597
          1.0      10  22.70  3.9110
          2.0      10  26.06  2.6551
