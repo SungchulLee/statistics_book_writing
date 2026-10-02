@@ -40,66 +40,257 @@ $$
 | 중앙값 | $\tilde{y}_i$ | Brown-Forsythe 변형. 치우침과 이상점에 로버스트 |
 | 절사평균 | $\bar{y}_i^{(\text{trim})}$ | 검정력과 로버스트성의 절충 |
 
-`scipy.stats.levene`에서는 `center` 인자로 이를 정한다. 기본값은 Brown-Forsythe 변형인 `'median'`이다:
+`scipy.stats.levene`에서는 `center` 인자로 이를 정한다. **기본값은 `'median'`이므로, 아무 인자도 주지 않고 부른 `levene(...)`은 원래의 Levene 검정이 아니라 Brown-Forsythe 변형이다.** 이 책에서 "Levene 검정"이라 적을 때도 실제로 돌아가는 것은 중앙값 기준임을 기억해 두라. 두 선택은 치우친 자료에서 꽤 다른 답을 준다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 중심을 무엇으로 잡을 것인가
+**보기 1.** <span class="diff easy" title="쉬움"></span> 중심을 무엇으로 잡을 것인가. 집단 $i$의 변환값 평균을 $\bar Z_i(c) = \dfrac{1}{n_i}\sum_j |y_{ij} - c|$라 쓰자.
+
+**(1)** 중앙값이 $\sum_j |y_{ij} - c|$를 최소화함을 보이고, 따라서 **어떤 중심 $c$를 쓰더라도 $\bar Z_i(\tilde y_i) \le \bar Z_i(c)$**임을 결론하시오. 특히 중앙값 기준의 $\bar Z_i$는 평균 기준의 것보다 크지 않다.
+
+**(2)** $\sigma = 1.0$과 $1.5$인 두 정규 집단에 세 중심(평균·중앙값·$10\%$ 절사평균)으로 검정을 돌려 (1)의 부등식을 확인하고, 모분산이 같은 **로그정규** 자료에서 두 중심이 얼마나 갈리는지 보시오.
 
 </div>
 
-```python
-import scipy.stats as stats
-from scipy.stats import levene
+??? success "풀이"
 
-# 표준편차가 1.0과 1.5로 다른 두 집단
-group1 = stats.norm(0, 1.0).rvs(50, random_state=0)
-group2 = stats.norm(0, 1.5).rvs(50, random_state=1)
+    **(1) 해석적으로.** 집단 하나만 보면 되므로 첨자를 떼고 자료를 $y_1, \ldots, y_n$이라 하자. 함수
 
-stat, pval = levene(group1, group2, center='median')
-print(f"F = {stat:.4f}, p = {pval:.4f}")
-```
+    $$
+    g(c) = \sum_{j=1}^{n} |y_j - c|
+    $$
 
-출력:
+    는 절대값의 합이므로 **볼록**이고 조각마다 선형이다. 어떤 $y_j$와도 같지 않은 $c$에서 미분하면
 
-```
-F = 2.8007, p = 0.0974
-```
+    $$
+    g'(c) = \#\{j : y_j < c\} - \#\{j : y_j > c\}
+    $$
 
-표준편차가 1.5배 차이 나는데도 집단당 50개로는 5% 수준에서 기각하지 못한다. 등분산 검정의 검정력은 대체로 낮다.
+    이다. $c$를 왼쪽에서 오른쪽으로 옮기면 왼쪽 개수는 늘고 오른쪽 개수는 줄므로 $g'$는 **단조증가**하며, 부호가 음에서 양으로 바뀌는 자리가 바로 왼쪽과 오른쪽의 개수가 뒤집히는 자리, 곧 중앙값이다. 볼록함수의 미분이 음에서 양으로 바뀌는 곳이 최소점이므로
+
+    $$
+    \tilde y = \operatorname{median}(y) \in \arg\min_c g(c)
+    $$
+
+    이다. ($n$이 짝수면 가운데 두 관측값 사이의 모든 $c$가 같은 값을 주어 최소점이 구간이 되고, `numpy` 의 중앙값은 그 구간의 중점을 고른다. 어느 점을 골라도 $g$의 값은 같다.)
+
+    양변을 $n_i$로 나누면 곧바로
+
+    $$
+    \bar Z_i(\tilde y_i) \le \bar Z_i(c) \qquad \text{모든 } c
+    $$
+
+    이고, $c = \bar y_i$로 두면 **중앙값 기준의 $\bar Z_i$가 평균 기준의 것보다 크지 않다**는 결론을 얻는다. 자료가 치우쳐 평균과 중앙값이 멀어질수록 두 값의 차이가 커진다.
+
+    주의할 것이 하나 있다. 이 부등식은 **분자인 $\bar Z_i$에 대한 것일 뿐 통계량 $W$에 대한 것이 아니다.** $W$는 집단 간 변동을 집단 내 변동으로 나눈 비이므로, 중심을 바꾸면 분자와 분모가 함께 움직여 어느 쪽이 커질지 일반적으로 정해지지 않는다. 중앙값 기준이 더 좋은 이유는 $W$가 작아지는 데 있지 않고, **$Z$의 분포가 모집단 모양에 덜 흔들리는 데** 있다.
+
+    **(2) 수치적으로.** 먼저 기본값이 정말 `'median'` 인지 함수 서명에서 확인한다.
+
+    ```python
+    import inspect
+
+    import numpy as np
+    import scipy.stats as stats
+    from scipy.stats import levene
+
+    # 기본값이 무엇인지 함수 서명에서 직접 확인한다.
+    print("levene 의 center 기본값 =", inspect.signature(levene).parameters["center"].default)
+
+    # 표준편차가 1.0과 1.5로 다른 두 집단
+    group1 = stats.norm(0, 1.0).rvs(50, random_state=0)
+    group2 = stats.norm(0, 1.5).rvs(50, random_state=1)
+
+    stat, pval = levene(group1, group2, center='median')
+    print(f"F = {stat:.4f}, p = {pval:.4f}")
+
+    # 세 중심을 나란히 둔다. 'mean' 이 원래의 Levene(1960), 'median' 이 Brown-Forsythe.
+    print(f"\n{'center':>10}{'W':>10}{'p':>9}{'Zbar_1':>9}{'Zbar_2':>9}")
+    for center in ("mean", "median", "trimmed"):
+        kw = {"proportiontocut": 0.1} if center == "trimmed" else {}
+        W, p = levene(group1, group2, center=center, **kw)
+        if center == "mean":
+            locs = [g.mean() for g in (group1, group2)]
+        elif center == "median":
+            locs = [np.median(g) for g in (group1, group2)]
+        else:
+            locs = [stats.trim_mean(g, 0.1) for g in (group1, group2)]
+        zbar = [np.abs(g - c).mean() for g, c in zip((group1, group2), locs)]
+        print(f"{center:>10}{W:>10.4f}{p:>9.4f}{zbar[0]:>9.4f}{zbar[1]:>9.4f}")
+
+    # (1) 의 부등식: 중앙값이 sum |y - c| 를 최소화하므로 Zbar 는 중앙값에서 가장 작다.
+    print("\n중심을 바꿔 가며 group2 의 Zbar 를 재 본다 (중앙값에서 최소여야 한다)")
+    med2 = np.median(group2)
+    for label, c in [("mean", group2.mean()), ("median", med2),
+                     ("median-0.3", med2 - 0.3), ("median+0.3", med2 + 0.3)]:
+        print(f"  {label:>12}: c = {c:+.4f}   Zbar = {np.abs(group2 - c).mean():.6f}")
+
+    # 치우친 자료에서는 두 중심이 크게 갈린다. 로그정규 세 집단, 모분산은 모두 같다.
+    rng = np.random.default_rng(3)
+    g = [np.exp(rng.normal(size=40)) for _ in range(3)]
+    print("\n로그정규 세 집단 (모분산 동일)")
+    for center in ("mean", "median"):
+        W, p = levene(*g, center=center)
+        print(f"  center={center:>6}:  W = {W:.4f}   p = {p:.4f}")
+    ```
+
+    출력:
+
+    ```
+    levene 의 center 기본값 = median
+    F = 2.8007, p = 0.0974
+
+        center         W        p   Zbar_1   Zbar_2
+          mean    3.3525   0.0701   0.9017   1.1842
+        median    2.8007   0.0974   0.9015   1.1695
+       trimmed    3.7073   0.0578   0.9016   1.1800
+
+    중심을 바꿔 가며 group2 의 Zbar 를 재 본다 (중앙값에서 최소여야 한다)
+              mean: c = -0.0383   Zbar = 1.184206
+            median: c = -0.2732   Zbar = 1.169549
+        median-0.3: c = -0.5732   Zbar = 1.199370
+        median+0.3: c = +0.0268   Zbar = 1.191244
+
+    로그정규 세 집단 (모분산 동일)
+      center=  mean:  W = 2.0636   p = 0.1316
+      center=median:  W = 0.6888   p = 0.5042
+    ```
+
+    **기본값은 `median` 이다.** 그러므로 `levene(group1, group2)`라고만 쓰면 Brown-Forsythe 검정이 돌아간다.
+
+    **(1)의 부등식이 맞는다.** 둘째 집단에서 $\bar Z_2$가 중앙값 기준 $1.169549$, 평균 기준 $1.184206$으로 중앙값 쪽이 작다. 중앙값을 좌우로 $0.3$씩 옮겨 보면 $1.199370$과 $1.191244$로 둘 다 커지므로, 최소점이 정말 중앙값에 있음이 양쪽에서 확인된다. 첫째 집단은 $0.9015$ 대 $0.9017$로 차이가 거의 없는데, 이 표본의 평균과 중앙값이 가까웠기 때문이다.
+
+    **$W$는 부등식을 따르지 않는다.** $3.3525$(평균), $2.8007$(중앙값), $3.7073$(절사평균)으로 중앙값 기준이 가장 작지만 절사평균 기준이 가장 크다. (1)에서 경고한 대로 $W$는 비이므로 분자의 부등식이 그대로 넘어오지 않는다. p-값도 $0.0701$, $0.0974$, $0.0578$로 흩어져 **중심의 선택이 $\alpha = 0.05$ 근처에서는 결론을 바꿀 수 있는 크기**임을 보여 준다.
+
+    로그정규 줄이 왜 기본값을 중앙값으로 두는지 말해 준다. 모분산이 **정확히 같은** 세 집단인데 평균 기준은 $W = 2.0636$, $p = 0.1316$을 주고 중앙값 기준은 $W = 0.6888$, $p = 0.5042$를 준다. 표본 하나로 수준을 논할 수는 없지만, 아래 그림의 모의실험에서 평균 기준의 실제 오류율이 로그정규에서 $0.247$까지 가고 중앙값 기준은 $0.037$–$0.046$에 머무는 것이 같은 현상이다. 치우친 분포에서는 평균이 긴 꼬리로 끌려가 몇몇 $|y - \bar y|$가 과장되고, 그 과장이 표본마다 요동친다.
+
+    마지막으로 검정력에 대해. 표준편차가 $1.5$배 차이 나는데도 집단당 50개로는 $5\%$ 수준에서 기각하지 못했다($p = 0.0974$). **등분산 검정의 검정력은 대체로 낮다.**
+
+이제 분산비를 조금씩 키워 가며 검정이 어떻게 반응하는지 본다. 씨앗을 고정하면 통계량이 닫힌 꼴로 적힌다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Levene 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> Levene 검정. $X \sim N(0,1)$과 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$인 $Y \sim N(1, \sigma_Y^2)$을 집단당 $n = 100$, 같은 씨앗으로 생성한다.
+
+**(1)** 씨앗이 고정되어 있을 때 $Z$값이 $Z_{1j} = a_j$, $Z_{2j} = \sigma_Y a_j$ ($a_j = |z_j - \tilde z|$)로 적힘을 보이고, 이를 써서
+
+$$
+W(\sigma_Y) = C \cdot \frac{(\sigma_Y - 1)^2}{1 + \sigma_Y^2},
+\qquad
+C = \frac{(n-1)\, n\, \bar a^2}{\sum_j (a_j - \bar a)^2}
+$$
+
+임을 유도하시오. $\sigma_Y = 1$에서 $W = 0$이 되는 까닭도 밝히시오.
+
+**(2)** 검정을 실행해 이 식이 맞는지 확인하고, $p = 0.05$가 되는 $\sigma_Y$를 구하시오.
 
 </div>
 
-함께 제공되는 스크립트는 $X \sim N(0, 1)$과 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$인 $Y \sim N(1, \sigma_Y)$을 생성하고 각 쌍에 Levene 검정을 적용한다:
+??? success "풀이"
 
-```python
-import numpy as np
-import scipy.stats as stats
+    **(1) 해석적으로.** 같은 씨앗에서 `norm(loc, scale).rvs` 는 같은 표준정규열 $z_1, \ldots, z_n$을 꺼내 쓰므로 $x_j = z_j$, $y_j = 1 + \sigma_Y z_j$다. 중앙값은 선형변환과 교환되므로 $\tilde y = 1 + \sigma_Y \tilde z$이고, $\sigma_Y > 0$이므로
 
-seed, size = 1, 100
-x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+    $$
+    Z_{2j} = |y_j - \tilde y| = |\sigma_Y (z_j - \tilde z)| = \sigma_Y |z_j - \tilde z| = \sigma_Y a_j
+    $$
 
-for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
-    y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
-    stat, pval = stats.levene(x, y)
-    print(f"sigma_y={scale:.2f}: F={stat:.2f}, p={pval:.3f}")
-```
+    이다. 한편 $Z_{1j} = |x_j - \tilde x| = a_j$다. **두 집단의 $Z$가 같은 수열의 배율판**이라는 것이 모든 것을 결정한다.
 
-출력:
+    이제 $W$에 넣는다. $\bar Z_1 = \bar a$, $\bar Z_2 = \sigma_Y \bar a$이고 두 집단 크기가 같으므로 전체 평균은 $\bar Z_{\cdot\cdot} = \frac{1+\sigma_Y}{2}\bar a$다. 집단 간 제곱합은
 
-```
-sigma_y=1.00: F=0.00, p=1.000
-sigma_y=1.05: F=0.20, p=0.652
-sigma_y=1.10: F=0.78, p=0.379
-sigma_y=1.15: F=1.67, p=0.198
-sigma_y=1.20: F=2.82, p=0.095
-```
+    $$
+    \sum_i n_i (\bar Z_i - \bar Z_{\cdot\cdot})^2
+    = n\bar a^2\left[\left(\frac{1-\sigma_Y}{2}\right)^2 + \left(\frac{\sigma_Y-1}{2}\right)^2\right]
+    = \frac{n\bar a^2 (\sigma_Y-1)^2}{2}
+    $$
 
-$\sigma_Y = 1.00$에서 $F$가 정확히 0으로 나온 것은 우연이 아니다. `random_state`를 같게 두었으므로 $x$와 $y$가 평균만 1만큼 다른 **완전히 같은** 난수열이고, Levene 검정은 중앙값으로부터의 절대편차를 보므로 두 집단의 편차가 한 치도 다르지 않다.
+    이다. 집단 내 제곱합은 $S_a = \sum_j (a_j - \bar a)^2$라 두면
+
+    $$
+    \sum_{i}\sum_j (Z_{ij} - \bar Z_i)^2 = S_a + \sigma_Y^2 S_a = (1+\sigma_Y^2)\,S_a
+    $$
+
+    이다. $k = 2$, $N = 2n$이므로 앞의 계수는 $(N-k)/(k-1) = 2n-2$이고
+
+    $$
+    W = (2n-2) \cdot \frac{n\bar a^2 (\sigma_Y-1)^2 / 2}{(1+\sigma_Y^2) S_a}
+    = \underbrace{\frac{(n-1)\,n\,\bar a^2}{S_a}}_{C} \cdot \frac{(\sigma_Y-1)^2}{1+\sigma_Y^2}
+    $$
+
+    을 얻는다. **$\bar a^2/S_a$만 자료에 의존하고 $\sigma_Y$의 역할은 $(\sigma_Y-1)^2/(1+\sigma_Y^2)$ 한 덩어리에 갇힌다.**
+
+    $\sigma_Y = 1$에서 $W = 0$인 까닭이 이제 분명하다. 그때 두 집단의 $Z$가 **한 치도 다르지 않은 같은 수열**이므로 집단 간 제곱합이 정확히 $0$이다. 평균만 $1$만큼 다른 자료인데, Levene 검정은 중심으로부터의 절대편차만 보므로 그 차이를 아예 보지 못한다. $F(1, 198)$에서 $W = 0$의 양측 꼬리 확률은 $1$이므로 p-값이 정확히 $1.000$으로 찍힌다.
+
+    **(2) 수치적으로.** 다섯 $\sigma_Y$에 검정을 돌리고 식과 맞춰 본다.
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    seed, size = 1, 100
+    x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+
+    for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
+        y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
+        stat, pval = stats.levene(x, y)
+        print(f"sigma_y={scale:.2f}: F={stat:.2f}, p={pval:.3f}")
+    ```
+
+    출력:
+
+    ```
+    sigma_y=1.00: F=0.00, p=1.000
+    sigma_y=1.05: F=0.20, p=0.652
+    sigma_y=1.10: F=0.78, p=0.379
+    sigma_y=1.15: F=1.67, p=0.198
+    sigma_y=1.20: F=2.82, p=0.095
+    ```
+
+    식을 쓰려면 $C$를 자료에서 한 번 계산해 두면 된다.
+
+    ```python
+    import scipy.optimize as opt
+
+    a = np.abs(x - np.median(x))
+    C = (size - 1) * size * a.mean() ** 2 / ((a - a.mean()) ** 2).sum()
+    print(f"C = {C:.5f}")
+
+    print(f"\n{'sigma_y':>8}{'levene':>12}{'공식':>12}{'p':>9}")
+    for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
+        y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
+        W, p = stats.levene(x, y)
+        W_formula = C * (scale - 1) ** 2 / (1 + scale ** 2)
+        print(f"{scale:>8.2f}{W:>12.6f}{W_formula:>12.6f}{p:>9.4f}")
+
+    # p = 0.05 가 되는 sigma 를 공식을 거꾸로 풀어 찾는다. 격자 탐색이 아니다.
+    crit = stats.f(1, 2 * size - 2).ppf(0.95)
+    root = opt.brentq(lambda s: C * (s - 1) ** 2 / (1 + s ** 2) - crit, 1.0001, 5.0)
+    print(f"\n임계값 F_0.95(1,198) = {crit:.4f}")
+    print(f"W = 임계값이 되는 sigma_y = {root:.4f}")
+    print(f"sigma_y -> inf 에서 W 의 상한 = C = {C:.4f}  (해가 존재할 조건)")
+    ```
+
+    출력:
+
+    ```
+    C = 171.94090
+
+     sigma_y      levene          공식        p
+        1.00    0.000000    0.000000   1.0000
+        1.05    0.204448    0.204448   0.6516
+        1.10    0.778013    0.778013   0.3788
+        1.15    1.665735    1.665735   0.1983
+        1.20    2.818703    2.818703   0.0947
+
+    임계값 F_0.95(1,198) = 3.8889
+    W = 임계값이 되는 sigma_y = 1.2395
+    sigma_y -> inf 에서 W 의 상한 = C = 171.9409  (해가 존재할 조건)
+    ```
+
+    **유도한 식과 `scipy.stats.levene` 의 값이 소수점 여섯째 자리까지 같다.** 근사가 아니라 등식이다.
+
+    $p = 0.05$ 경계는 $\sigma_Y = 1.2395$다. 격자의 마지막 값 $1.20$은 그에 못 미치므로 기각되지 않으며, 이것이 $p = 0.095$의 정체다. 경계를 구할 때 격자를 훑지 않고 식을 거꾸로 푼 것에 유의하라. 격자를 훑는다면 $\{1.00, \ldots, 1.20\}$ 안에 조건을 만족하는 칸이 **하나도 없으므로** 답이 없다고 해야 한다. $W(\sigma_Y)$가 $\sigma_Y \to \infty$에서 $C = 171.94$로 유계이므로 임계값 $3.8889$보다 커질 수 있고 해가 존재한다는 것도 함께 확인해 두었다.
+
+    [등분산 F-검정](f_test_equality_of_variances.md)의 같은 경계가 $\sigma_Y^* = 1.2191$이었다. **정확한 정규성 아래에서는 Levene이 조금 덜 민감하다**는 말의 정량적 표현이며, 그 대가로 얻는 것이 비정규성 아래의 올바른 오류율이다.
 
 표로 정리하면:
 

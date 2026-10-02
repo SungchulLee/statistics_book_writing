@@ -20,48 +20,122 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 기각역과 검정통계량
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기각역과 검정통계량. 평균 170 cm, 표준편차 8 cm인 정규분포에서 키 $n = 250$개를 만들어 $H_0\colon \mu = 172$를 $\alpha = 0.05$ 양측으로 검정한다. 표본에서 $\bar x = 169.9806$, $s = 7.728430$이 나왔다.
+
+**(1)** 표준오차와 임계값을 구해 기각역을 **$t$ 척도와 cm 척도 둘 다로** 적고, 검정통계량을 계산해 판정하시오.
+
+**(2)** cm 척도 기각역의 반너비가 $n$에 어떻게 달려 있는지 쓰고, 그 반너비가 2 cm가 되려면 $n$이 얼마여야 하는지 구하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-data = stats.norm.rvs(loc=170, scale=8, size=250)
+    **(1) 해석적으로.** 표준오차는
 
-mu0 = 172
-n = len(data)
-df = n - 1
-xbar = data.mean()
-s = data.std(ddof=1)
-se = s / np.sqrt(n)
+    $$
+    \text{SE} = \frac{s}{\sqrt n} = \frac{7.728430}{\sqrt{250}} = \frac{7.728430}{15.811388} = 0.488789
+    $$
 
-alpha = 0.05
-# 양측이므로 alpha를 두 꼬리에 반씩 나눈다. ppf에 1 - alpha/2를 넣는 이유다.
-t_crit = stats.t.ppf(1 - alpha / 2, df)
-t_stat = (xbar - mu0) / se
+    이다. 양측이므로 $\alpha$를 두 꼬리에 반씩 나누어 $t_{0.025,\,249} = 1.969537$을 쓴다. $t$ 척도의 기각역은
 
-print(f"x-bar = {xbar:.2f}, SE = {se:.2f}")
-print(f"t-stat = {t_stat:.4f}, t-crit = +/-{t_crit:.4f}")
-# 기각역을 t 척도가 아니라 cm 척도로도 적어 둔다.
-# 실무자에게는 "표본평균이 171.04 아래면 기각"이 t보다 읽기 쉽다.
-print(f"Rejection boundaries: {mu0 - t_crit*se:.2f} and {mu0 + t_crit*se:.2f}")
-```
+    $$
+    \lvert t \rvert > 1.969537
+    $$
 
-출력:
+    이고, 양변에 $\text{SE}$를 곱하고 $\mu_0$을 더하면 cm 척도가 된다.
 
-```
-x-bar = 169.98, SE = 0.49
-t-stat = -4.1314, t-crit = +/-1.9695
-Rejection boundaries: 171.04 and 172.96
-```
+    $$
+    \bar x < 172 - 1.969537 \times 0.488789 = 171.0373
+    \quad \text{또는} \quad
+    \bar x > 172 + 0.962688 = 172.9627
+    $$
 
-자료를 평균 170에서 만들었으니 $H_0\colon \mu = 172$는 실제로 거짓이고, 검정이 그것을 잡아냈다($|t| = 4.13 > 1.97$).
+    검정통계량은
 
-주목할 것은 기각역의 좁기다. $n = 250$이라 표준오차가 0.49 cm밖에 안 되고, 그래서 표본평균이 172에서 1 cm만 벗어나도 기각된다. 표본이 크면 실질적으로 사소한 차이도 통계적으로 유의해진다.
+    $$
+    t = \frac{169.980617 - 172}{0.488789} = \frac{-2.019383}{0.488789} = -4.131402
+    $$
+
+    이다. $\lvert t \rvert = 4.1314 > 1.9695$이므로 **기각**한다. cm 척도로 보아도 $\bar x = 169.98$이 왼쪽 경계 $171.04$보다 작으니 같은 결론이다. **두 척도는 같은 부등식을 단위만 바꿔 쓴 것**이므로 언제나 같은 판정을 준다.
+
+    **(2) 해석적으로.** cm 척도 기각역의 반너비는
+
+    $$
+    h(n) = t_{\alpha/2,\,n-1}\cdot \frac{s}{\sqrt n}
+    $$
+
+    이다. $t_{\alpha/2,\,n-1}$은 $n$이 커지면 $z_{\alpha/2} = 1.96$으로 빠르게 수렴하므로, 사실상 $h(n) \propto 1/\sqrt n$이다. **표본을 네 배로 늘리면 기각역이 절반으로 좁아진다.** $h = 2$가 되는 $n$은 $z_{\alpha/2}$로 어림하면
+
+    $$
+    n \approx \left(\frac{1.959964 \times 7.728430}{2}\right)^2 = (7.573)^2 = 57.4
+    $$
+
+    인데, 이 크기에서는 $t$가 아직 $z$보다 꽤 크므로 $t$로 다시 풀어야 한다. 아래 코드에서 보듯 답은 $n = 60$이다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    np.random.seed(42)
+    data = stats.norm.rvs(loc=170, scale=8, size=250)
+
+    mu0 = 172
+    n = len(data)
+    df = n - 1
+    xbar = data.mean()
+    s = data.std(ddof=1)
+    se = s / np.sqrt(n)
+
+    alpha = 0.05
+    # 양측이므로 alpha를 두 꼬리에 반씩 나눈다. ppf에 1 - alpha/2를 넣는 이유다.
+    t_crit = stats.t.ppf(1 - alpha / 2, df)
+    t_stat = (xbar - mu0) / se
+
+    print(f"x-bar = {xbar:.2f}, SE = {se:.2f}")
+    print(f"t-stat = {t_stat:.4f}, t-crit = +/-{t_crit:.4f}")
+    # 기각역을 t 척도가 아니라 cm 척도로도 적어 둔다.
+    # 실무자에게는 "표본평균이 171.04 아래면 기각"이 t보다 읽기 쉽다.
+    print(f"Rejection boundaries: {mu0 - t_crit*se:.2f} and {mu0 + t_crit*se:.2f}")
+    print(f"더 정밀하게: x-bar = {xbar:.6f}, s = {s:.6f}, SE = {se:.6f}")
+    print(f"             t = {t_stat:.6f},  경계 "
+          f"{mu0 - t_crit * se:.6f} / {mu0 + t_crit * se:.6f}")
+    print(f"             p = {2 * stats.t.sf(abs(t_stat), df):.3e}")
+
+    # (2) 반너비가 2 cm 아래로 내려가는 첫 n 을 찾는다.
+    # **격자에서 argmin/argmax 로 찾지 말 것.** 조건을 만족하는 칸이 하나도
+    # 없어도 0 을 돌려주므로, 조건을 만족하는 n 이 실제로 있는지부터 확인한다.
+    ns = np.arange(10, 400)
+    half = stats.t.ppf(0.975, ns - 1) * s / np.sqrt(ns)
+    ok = np.flatnonzero(half <= 2.0)
+    assert ok.size > 0, "반너비가 2 cm 이하가 되는 n 이 격자 안에 없다"
+    n2 = ns[ok[0]]
+    print(f"\n반너비 <= 2 cm 인 첫 n = {n2}  (반너비 {half[ok[0]]:.4f} cm)"
+          f"   바로 앞 n = {n2 - 1} 은 {half[ok[0] - 1]:.4f} cm")
+    print(f"z 어림: n = {(stats.norm.ppf(0.975) * s / 2) ** 2:.1f}")
+    ```
+
+    출력:
+
+    ```
+    x-bar = 169.98, SE = 0.49
+    t-stat = -4.1314, t-crit = +/-1.9695
+    Rejection boundaries: 171.04 and 172.96
+    더 정밀하게: x-bar = 169.980617, s = 7.728430, SE = 0.488789
+                 t = -4.131402,  경계 171.037312 / 172.962688
+                 p = 4.927e-05
+
+    반너비 <= 2 cm 인 첫 n = 60  (반너비 1.9965 cm)   바로 앞 n = 59 은 2.0140 cm
+    z 어림: n = 57.4
+    ```
+
+    (1)에서 손으로 구한 값이 모두 그대로 나왔다. $\text{SE} = 0.488789$, $t = -4.131402$, 경계 $171.037312$와 $172.962688$이 소수점 여섯째 자리까지 일치한다. (2)의 답도 $n = 60$이고, $z$ 어림이 준 $57.4$는 세 칸 모자란다.
+
+    자료를 평균 170에서 만들었으니 $H_0\colon \mu = 172$는 실제로 거짓이고, 검정이 그것을 잡아냈다($\lvert t \rvert = 4.13 > 1.97$, $p = 4.9\times10^{-5}$).
+
+    주목할 것은 기각역의 좁기다. $n = 250$이라 표준오차가 $0.49$ cm밖에 안 되고, 그래서 표본평균이 172에서 **0.963 cm**만 벗어나도 기각된다. 효과크기로 보면 $d = 2/7.73 = 0.259$로 코헨의 기준에서 "작은" 효과인데도 $p$가 $5\times10^{-5}$다. **표본이 크면 실질적으로 사소한 차이도 통계적으로 유의해진다.** 그러므로 $p$-값만 보고 "큰 차이"라고 읽으면 안 되고, 효과크기와 신뢰구간을 함께 보아야 한다.
 
 ### 시각화
 
@@ -69,35 +143,73 @@ Rejection boundaries: 171.04 and 172.96
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 기각역 그리기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기각역 그리기. 보기 1의 검정을 $t$ 척도에서 그린다. 곡선은 $H_0$ 아래 $T$의 밀도, 붉게 칠한 두 꼬리가 기각역, 파란 점선이 관측된 통계량이다.
+
+**(1)** 이 그림에서 읽히는 것을 수치와 함께 적으시오.
+
+**(2)** 이 그림이 **가리는 것**은 무엇인가. $p$-값을 이 그림에서 읽어 낼 수 있는가.
 
 </div>
 
-```python
-# 기각역은 자료를 보기 전에 정해지는 영역이다. 관측된 통계량이 칠해진
-# 구역 안에 떨어지면 기각한다. p-값 방식과 결론은 언제나 같다.
-x_t = np.linspace(-5, 5, 300)
-y_t = stats.t.pdf(x_t, df)
+??? success "풀이"
 
-fig, ax = plt.subplots(figsize=(10, 4))
-ax.plot(x_t, y_t, "tomato", lw=2)
-ax.fill_between(x_t[x_t <= -t_crit], stats.t.pdf(x_t[x_t <= -t_crit], df),
-                color="tomato", alpha=0.5, label="Rejection region")
-ax.fill_between(x_t[x_t >= t_crit], stats.t.pdf(x_t[x_t >= t_crit], df),
-                color="tomato", alpha=0.5)
-ax.axvline(t_stat, color="blue", linestyle="--", label=f"t = {t_stat:.2f}")
-ax.set_xlabel("t")
-ax.set_ylabel("Density")
-ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    유도할 답이 있는 문제가 아니다. **그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 이 보기의 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다.
 
-![기각역과 검정통계량](./img/rejection_region_demo_51.png)
+    ```python
+    # 기각역은 자료를 보기 전에 정해지는 영역이다. 관측된 통계량이 칠해진
+    # 구역 안에 떨어지면 기각한다. p-값 방식과 결론은 언제나 같다.
+    x_t = np.linspace(-5, 5, 300)
+    y_t = stats.t.pdf(x_t, df)
 
-파란 점선이 관측된 $t = -4.13$이고 붉게 칠한 양쪽 꼬리가 기각역이다. 점선이 왼쪽 기각역 안에 확실히 들어가 있다.
+    # 그림에서 읽을 수치를 미리 찍어 둔다.
+    print(f"꼭대기 밀도 f(0)        = {stats.t.pdf(0, df):.6f}")
+    print(f"임계값에서의 밀도 f(tc) = {stats.t.pdf(t_crit, df):.6f}")
+    print(f"관측값에서의 밀도 f(t)  = {stats.t.pdf(t_stat, df):.8f}"
+          f"   꼭대기의 1/{stats.t.pdf(0, df) / stats.t.pdf(t_stat, df):.0f}")
+    print(f"칠한 꼬리 넓이 (한쪽)   = {stats.t.sf(t_crit, df):.6f}  (두쪽 합 "
+          f"{2 * stats.t.sf(t_crit, df):.4f})")
+    print(f"그림 밖 |t| > 5 의 질량 = {2 * stats.t.sf(5, df):.3e}")
+    print(f"P(|T| > |t|) = {2 * stats.t.sf(abs(t_stat), df):.3e}"
+          f"   칠한 왼쪽 꼬리의 {stats.t.cdf(t_stat, df) / stats.t.cdf(-t_crit, df):.4%}")
 
-이 그림은 $t$ 척도라 자유도만 알면 자료와 무관하게 언제나 같은 모양이다. 자료가 하는 일은 파란 점선을 어디에 놓을지 정하는 것뿐이다.
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.plot(x_t, y_t, "tomato", lw=2)
+    ax.fill_between(x_t[x_t <= -t_crit], stats.t.pdf(x_t[x_t <= -t_crit], df),
+                    color="tomato", alpha=0.5, label="Rejection region")
+    ax.fill_between(x_t[x_t >= t_crit], stats.t.pdf(x_t[x_t >= t_crit], df),
+                    color="tomato", alpha=0.5)
+    ax.axvline(t_stat, color="blue", linestyle="--", label=f"t = {t_stat:.2f}")
+    ax.set_xlabel("t")
+    ax.set_ylabel("Density")
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    꼭대기 밀도 f(0)        = 0.398542
+    임계값에서의 밀도 f(tc) = 0.057714
+    관측값에서의 밀도 f(t)  = 0.00010028   꼭대기의 1/3974
+    칠한 꼬리 넓이 (한쪽)   = 0.025000  (두쪽 합 0.0500)
+    그림 밖 |t| > 5 의 질량 = 1.082e-06
+    P(|T| > |t|) = 4.927e-05   칠한 왼쪽 꼬리의 0.0985%
+    ```
+
+    ![기각역과 검정통계량](./img/rejection_region_demo_51.png)
+
+    **(1) 읽히는 것.** 종 모양 곡선이 0에 봉우리를 두고 좌우대칭이다. 꼭대기 밀도가 $0.398542$로 표준정규의 $0.398942$와 거의 같은데, 자유도가 249라 $t$가 이미 정규에 매우 가깝기 때문이다. 붉게 칠한 두 꼬리는 $\lvert t \rvert > 1.9695$이고 넓이가 각각 $0.025$, 합이 정확히 $\alpha = 0.05$다. **색칠된 넓이가 유의수준 그 자체**라는 것이 이 그림이 가르치려는 바다.
+
+    파란 점선이 $t = -4.13$에 서 있고 왼쪽 기각역 **안**에 확실히 들어가 있다. 그러므로 기각이다. 점선 자리의 밀도는 $0.00010$으로 꼭대기의 $1/3974$이라, 곡선이 이 근처에서는 바닥에 눌려 보인다.
+
+    **(2) 가리는 것 — 얼마나 깊이 들어갔는가.** 그림만 보면 점선이 경계 $-1.97$보다 왼쪽에 있다는 것까지는 알 수 있지만, 그것이 "조금" 넘은 것인지 "한참" 넘은 것인지는 **읽을 수 없다.** 수로 보면 점선 왼쪽의 넓이는 $2.46\times10^{-5}$로 칠해진 왼쪽 꼬리 전체 $0.025$의 $0.0985\%$, 곧 **천분의 일**이다. 선형 세로축에서는 이 넓이가 한 화소도 되지 않으므로 그림에서 $p$-값을 읽어 낼 길이 없다. **$p$-값은 수로 보고해야 하고, 이런 그림은 판정의 논리를 보일 뿐 증거의 세기를 보이지 못한다.**
+
+    **가로 범위도 자의적이다.** $x$를 $[-5, 5]$로 잘랐는데 이 바깥의 질량은 $1.08\times10^{-6}$뿐이라 분포를 자르는 데에는 문제가 없다. 그러나 관측값이 $t = -6$이었다면 점선이 그림 밖으로 나가 **아예 보이지 않았을 것**이다. 통계량이 강할수록 그림이 못 쓰게 되는 셈이다.
+
+    **$H_1$이 없다.** 이 그림에는 $H_0$ 아래의 분포 하나뿐이다. 그래서 2종 오류도 검정력도 여기서는 보이지 않는다. 그 둘을 보려면 $H_1$ 아래의 분포를 겹쳐 그려야 하며, 9.2절의 두 분포 그림이 그 일을 한다.
+
+    끝으로, 이 그림은 $t$ 척도라 **자유도만 알면 자료와 무관하게 언제나 같은 모양**이다. 자료가 하는 일은 파란 점선을 어디에 놓을지 정하는 것뿐이다. 거꾸로 말하면 cm 같은 실제 단위의 감각은 이 그림에서 완전히 사라진다. 보기 1에서 cm 척도 경계를 따로 적어 둔 이유가 그것이다.
 
 ## 단측검정
 
@@ -119,34 +231,95 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 기각값 구하기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 기각값 구하기. $\text{df} = 100$, $\alpha = 0.05$에서 좌측·우측·양측 임계값을 본다.
+
+**(1)** $t$ 분포의 대칭성에서 $t_{\alpha,\,\text{df}} = -t_{1-\alpha,\,\text{df}}$를 보이고, 세 임계값을 구하시오.
+
+**(2)** 단측검정의 임계값이 더 안쪽에 있으니 검정력이 크다. 비중심모수 $\lambda = 2$인 대립가설에서 그 **이득이 얼마**이고, $\lambda = -3$처럼 **방향이 반대**인 대립가설에서 그 **대가가 얼마**인지 수로 답하시오.
 
 </div>
 
-```python
-df = 100
-alpha = 0.05
-x = np.linspace(-5, 5, 300)
-y = stats.t.pdf(x, df)
+??? success "풀이"
 
-# 단측이므로 alpha를 나누지 않는다. 꼬리 하나에 5%를 통째로 준다.
-t_lo = stats.t.ppf(alpha, df)
-print(f"Left-tailed critical value: {t_lo:.4f}")
+    **(1) 해석적으로.** 밀도가 0에 대해 대칭이므로 누적분포함수가 $F(-x) = 1 - F(x)$를 만족한다. 정의상 $F(t_{1-\alpha}) = 1-\alpha$이므로
 
-t_hi = stats.t.ppf(1 - alpha, df)
-print(f"Right-tailed critical value: {t_hi:.4f}")
-```
+    $$
+    F(-t_{1-\alpha}) = 1 - F(t_{1-\alpha}) = 1 - (1-\alpha) = \alpha
+    $$
 
-출력:
+    이고, $F$가 순증가라 $\alpha$를 주는 점은 하나뿐이다. 따라서 $t_{\alpha} = -t_{1-\alpha}$다.
 
-```
-Left-tailed critical value: -1.6602
-Right-tailed critical value: 1.6602
-```
+    단측이므로 $\alpha$를 나누지 않고 꼬리 하나에 5%를 통째로 준다. $\text{df} = 100$에서
 
-$t$-분포의 대칭성에 의해 $t_{\alpha,\,\text{df}} = -t_{1-\alpha,\,\text{df}}$이다.
+    $$
+    t_{0.05,\,100} = -1.6602, \qquad t_{0.95,\,100} = +1.6602
+    $$
 
-같은 자유도의 양측 임계값 $t_{0.025,\,100} = 1.9840$과 비교해 보라. 단측검정의 임계값 1.6602가 더 안쪽에 있어 넘기 쉽다. 이것이 단측검정의 검정력 이득이고, 그 대가는 반대 방향의 효과를 아예 보지 못한다는 것이다.
+    이고, 같은 자유도의 양측 임계값은 $\alpha$를 반씩 나누므로
+
+    $$
+    t_{0.025,\,100} = 1.9840
+    $$
+
+    이다. $1.6602 < 1.9840$이라 **단측 쪽 문턱이 더 낮다.**
+
+    **(2) 해석적으로.** $H_1$ 아래에서 $T$는 비중심모수 $\lambda$인 비중심 $t$를 따른다. 우측검정의 검정력은 $P(T'_{100,\lambda} > 1.6602)$ 하나이고, 양측검정은 $P(T'_{100,\lambda} > 1.9840) + P(T'_{100,\lambda} < -1.9840)$이다. **문턱이 낮다는 것만으로 우측검정이 유리해지는 것은 $\lambda > 0$일 때뿐**이고, $\lambda < 0$이면 우측검정의 검정력이 $\alpha$보다도 작아진다.
+
+    **수치적으로.**
+
+    ```python
+    df = 100
+    alpha = 0.05
+    x = np.linspace(-5, 5, 300)
+    y = stats.t.pdf(x, df)
+
+    # 단측이므로 alpha를 나누지 않는다. 꼬리 하나에 5%를 통째로 준다.
+    t_lo = stats.t.ppf(alpha, df)
+    print(f"Left-tailed critical value: {t_lo:.4f}")
+
+    t_hi = stats.t.ppf(1 - alpha, df)
+    print(f"Right-tailed critical value: {t_hi:.4f}")
+
+    t_two = stats.t.ppf(1 - alpha / 2, df)
+    print(f"Two-tailed critical value : +/-{t_two:.4f}")
+    print(f"대칭성 확인: t_lo + t_hi = {t_lo + t_hi:.1e}")
+
+    def power_one(lam):      # 우측 단측검정
+        return stats.nct.sf(t_hi, df, lam)
+
+    def power_two(lam):      # 양측검정
+        return stats.nct.sf(t_two, df, lam) + stats.nct.cdf(-t_two, df, lam)
+
+    print(f"\n{'lambda':>7} {'우측 단측':>10} {'양측':>8} {'차이':>9}")
+    for lam in (-3.0, -1.0, 0.0, 1.0, 2.0, 3.0):
+        p1, p2 = power_one(lam), power_two(lam)
+        print(f"{lam:>7.1f} {p1:>10.4f} {p2:>8.4f} {p1 - p2:>+9.4f}")
+    ```
+
+    출력:
+
+    ```
+    Left-tailed critical value: -1.6602
+    Right-tailed critical value: 1.6602
+    Two-tailed critical value : +/-1.9840
+    대칭성 확인: t_lo + t_hi = -6.7e-16
+
+     lambda      우측 단측       양측        차이
+       -3.0     0.0000   0.8440   -0.8440
+       -1.0     0.0042   0.1677   -0.1636
+        0.0     0.0500   0.0500   -0.0000
+        1.0     0.2573   0.1677   +0.0896
+        2.0     0.6337   0.5083   +0.1253
+        3.0     0.9090   0.8440   +0.0650
+    ```
+
+    $t_{0.05,100} + t_{0.95,100}$이 $-6.7\\times10^{-16}$으로 부동소수점 반올림 한 단위에 지나지 않아 (1)의 대칭성이 확인된다.
+
+    **이득.** $\lambda = 2$에서 우측 단측검정의 검정력은 $0.6337$, 양측검정은 $0.5083$이다. 차이가 $0.1253$, 곧 **12.5%포인트**다. $\lambda = 1$에서는 $0.0896$, $\lambda = 3$에서는 $0.0650$으로, 이득은 중간 세기의 효과에서 가장 크다. 효과가 아주 크면 둘 다 거의 1이라 차이가 사라지기 때문이다.
+
+    **대가.** $\lambda = -3$에서 양측검정의 검정력은 $0.8440$인데 우측 단측검정은 $1.9\times10^{-6}$이다. **사실상 0이다.** 실제로 존재하는 큰 효과를 방향이 반대라는 이유만으로 통째로 놓친다. $\lambda = 0$, 곧 $H_0$이 참일 때는 두 검정 모두 정확히 $0.05$를 주므로 1종 오류율에는 차이가 없다.
+
+    그러므로 단측검정은 **반대 방향의 효과가 나와도 아무 조치를 하지 않을 때에만** 정당하다. 그 판단은 자료를 보기 전에 끝나 있어야 한다.
 
 ## 해석
 

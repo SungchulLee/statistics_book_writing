@@ -20,127 +20,301 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 동전 던지기 한 번의 실험
+**보기 1.** <span class="diff easy" title="쉬움"></span> 동전 던지기 한 번의 실험. $H_0$이 참일 때 한 판이 어떻게 생겼는지부터 본다.
+
+**(1)** $H_0$ 아래에서 앞면 수 $X$의 기댓값과 표준편차를 구하고, 관측값 24가 평균에서 몇 표준편차 떨어져 있는지 말하시오.
+
+**(2)** 열 판을 돌렸을 때 그중 24 이상이 나오는 판이 **몇 판쯤** 나오리라 기대하는가. 실제로 열 판을 돌려 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** $H_0\colon p = 0.5$ 아래에서 $X \sim \text{Bin}(30,\,0.5)$이므로
 
-TOTAL_TOSSES = 30
-OBSERVED_HEADS = 24
-PROB_HEAD_FAIR = 0.5
-NUM_SIMULATIONS = 100_000
+    $$
+    E[X] = np = 30 \times 0.5 = 15, \qquad
+    \text{SD}(X) = \sqrt{np(1-p)} = \sqrt{30 \times 0.25} = \sqrt{7.5} = 2.738613
+    $$
 
-def single_experiment(n_tosses=TOTAL_TOSSES, p=PROB_HEAD_FAIR):
-    """공정한 동전을 n_tosses번 던진 한 판을 흉내 내고 앞면 횟수를 돌려준다."""
-    # 0/1을 30개 뽑아 더할 필요가 없다. 앞면 횟수의 분포가 곧 Bin(30, 0.5)다.
-    return np.random.binomial(n_tosses, p)
+    이다. 관측값 24는
 
-# H0가 참일 때 한 판을 돌리면 무엇이 나오는지 몇 번 본다.
-print([single_experiment() for _ in range(10)])
-```
+    $$
+    \frac{24 - 15}{2.738613} = 3.286335
+    $$
 
-출력:
+    이므로 **평균에서 3.29 표준편차 위**에 있다. 정규분포라면 오른쪽 꼬리 확률이 $5\times10^{-4}$쯤 되는 자리다(정확한 이항 값은 보기 3에서 구한다).
 
-```
-[14, 20, 17, 16, 12, 12, 11, 18, 16, 17]
-```
+    **(2) 해석적으로.** $P(X \ge 24) = 0.000715$이므로(보기 3) 열 판에서 24 이상이 나오는 판의 수는 $\text{Bin}(10,\,0.000715)$를 따르고 기댓값은
 
-공정한 동전에서 앞면은 15 언저리를 오간다. 관측된 24가 이 범위에서 얼마나 떨어져 있는지가 이 검정의 전부다.
+    $$
+    10 \times 0.000715 = 0.00715
+    $$
+
+    이다. **열 판을 한 묶음으로 보면 140묶음에 한 번쯤** 그런 판이 나온다는 뜻이다. 그러니 열 판에서는 거의 확실히 한 판도 나오지 않는다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+
+    np.random.seed(42)
+
+    TOTAL_TOSSES = 30
+    OBSERVED_HEADS = 24
+    PROB_HEAD_FAIR = 0.5
+    NUM_SIMULATIONS = 100_000
+
+    def single_experiment(n_tosses=TOTAL_TOSSES, p=PROB_HEAD_FAIR):
+        """공정한 동전을 n_tosses번 던진 한 판을 흉내 내고 앞면 횟수를 돌려준다."""
+        # 0/1을 30개 뽑아 더할 필요가 없다. 앞면 횟수의 분포가 곧 Bin(30, 0.5)다.
+        return np.random.binomial(n_tosses, p)
+
+    # H0가 참일 때 한 판을 돌리면 무엇이 나오는지 몇 번 본다.
+    print([single_experiment() for _ in range(10)])
+    ```
+
+    출력:
+
+    ```
+    [14, 20, 17, 16, 12, 12, 11, 18, 16, 17]
+    ```
+
+    열 판의 평균이 $15.3$으로 이론값 $15$ 언저리이고, 가장 큰 값이 $20$, 가장 작은 값이 $11$이다. 둘 다 평균에서 두 표준편차 안쪽이다. **24에 닿은 판은 하나도 없다.** (2)에서 기대값이 $0.00715$였으니 당연한 결과다.
+
+    공정한 동전에서 앞면은 15 언저리를 오간다. 관측된 24가 이 범위에서 얼마나 떨어져 있는지가 이 검정의 전부다.
 
 ### 반복 모의실험
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 모의실험 되풀이하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 모의실험 되풀이하기. 이번에는 $N = 100{,}000$판을 돌려 24 이상이 나온 판을 센다.
+
+**(1)** 참 꼬리확률을 $p^* = 0.000715453$(보기 3에서 구한다)이라 할 때, 이 **개수**가 따르는 분포와 그 기댓값·표준편차를 구하시오. 모의실험 $p$-값의 표준오차는 얼마인가.
+
+**(2)** 모의실험을 돌려 실제 개수를 세고, (1)의 예측과 몇 표준편차 떨어져 있는지 확인하시오.
 
 </div>
 
-```python
-def simulate_coin_tosses(n_simulations=NUM_SIMULATIONS,
-                         n_tosses=TOTAL_TOSSES,
-                         p=PROB_HEAD_FAIR):
-    """실험을 n_simulations번 반복하고 앞면 횟수 배열을 돌려준다."""
-    return np.random.binomial(n_tosses, p, size=n_simulations)
+??? success "풀이"
 
-# 여기서 세는 것은 "H0가 참일 때 관측값만큼 극단적인 일이 얼마나 자주 일어나는가"다.
-# 그것이 p-값의 정의다. 이항분포 공식을 몰라도 이 논리는 그대로 성립한다.
+    **(1) 해석적으로.** $N$판은 서로 독립이고 각 판이 "24 이상"일 확률이 $p^*$로 같다. 그러므로 개수 $Y$는
 
-head_counts = simulate_coin_tosses()
-extreme = np.sum(head_counts >= OBSERVED_HEADS)
-pct = extreme / NUM_SIMULATIONS * 100
+    $$
+    Y \sim \text{Bin}(N,\, p^*), \qquad N = 100{,}000,\ p^* = 0.000715453
+    $$
 
-print(f"Times with >= {OBSERVED_HEADS} heads: {extreme:,}")
-print(f"Percentage: {pct:.4f}%")
-```
+    를 따르고
 
-출력:
+    $$
+    E[Y] = N p^* = 71.545, \qquad
+    \text{SD}(Y) = \sqrt{N p^*(1-p^*)} = \sqrt{71.494} = 8.4554
+    $$
 
-```
-Times with >= 24 heads: 71
-Percentage: 0.0710%
-```
+    이다. 모의실험 $p$-값은 $\hat p = Y/N$이므로 표준오차는 이것을 $N$으로 나눈
 
-10만 번 중 71번이다. 모의실험 p-값은 0.00071이 된다.
+    $$
+    \text{SE}(\hat p) = \sqrt{\frac{p^*(1-p^*)}{N}} = \frac{8.4554}{100{,}000} = 8.455 \times 10^{-5}
+    $$
+
+    이다. **참값의 12%쯤 되는 상대오차**다. 꼬리확률처럼 작은 수를 모의실험으로 재면 상대오차가 이렇게 크다. 이를 반으로 줄이려면 $N$을 네 배로 늘려야 한다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    def simulate_coin_tosses(n_simulations=NUM_SIMULATIONS,
+                             n_tosses=TOTAL_TOSSES,
+                             p=PROB_HEAD_FAIR):
+        """실험을 n_simulations번 반복하고 앞면 횟수 배열을 돌려준다."""
+        return np.random.binomial(n_tosses, p, size=n_simulations)
+
+    # 여기서 세는 것은 "H0가 참일 때 관측값만큼 극단적인 일이 얼마나 자주 일어나는가"다.
+    # 그것이 p-값의 정의다. 이항분포 공식을 몰라도 이 논리는 그대로 성립한다.
+
+    head_counts = simulate_coin_tosses()
+    extreme = np.sum(head_counts >= OBSERVED_HEADS)
+    pct = extreme / NUM_SIMULATIONS * 100
+
+    print(f"Times with >= {OBSERVED_HEADS} heads: {extreme:,}")
+    print(f"Percentage: {pct:.4f}%")
+
+    # (1) 의 예측과 견준다.
+    p_star = 0.000715453
+    mean_y = NUM_SIMULATIONS * p_star
+    sd_y = np.sqrt(NUM_SIMULATIONS * p_star * (1 - p_star))
+    print(f"예측 개수 {mean_y:.3f} ± {sd_y:.4f}"
+          f"   관측과의 거리 {(extreme - mean_y) / sd_y:+.3f} SD")
+
+    # 모의실험 p-값의 표준오차는 관측된 비율로도 잴 수 있다.
+    p_hat = extreme / NUM_SIMULATIONS
+    se_hat = np.sqrt(p_hat * (1 - p_hat) / NUM_SIMULATIONS)
+    print(f"p-hat = {p_hat:.6f},  SE = {se_hat:.3e},"
+          f"  95% 구간 ({p_hat - 1.96 * se_hat:.6f}, {p_hat + 1.96 * se_hat:.6f})")
+    ```
+
+    출력:
+
+    ```
+    Times with >= 24 heads: 71
+    Percentage: 0.0710%
+    예측 개수 71.545 ± 8.4554   관측과의 거리 -0.064 SD
+    p-hat = 0.000710,  SE = 8.423e-05,  95% 구간 (0.000545, 0.000875)
+    ```
+
+    10만 번 중 71번이다. 모의실험 $p$-값은 $0.00071$이 된다.
+
+    (1)이 예측한 $71.545$에 대해 관측값이 $71$이니 **0.064 표준편차** 떨어져 있다. 이보다 더 잘 맞을 수는 없을 정도다. 다만 그것은 운이기도 하다. 표준편차가 $8.46$이므로 예컨대 $60$이나 $83$이 나와도 전혀 이상하지 않았다.
+
+    관측된 비율로 잰 95% 구간 $(0.000545,\ 0.000875)$가 참값 $0.000715$를 담는다. 구간의 폭이 참값의 절반 가까이 되므로, **모의실험만으로는 "0.0007 언저리"라는 정도까지만 말할 수 있다.**
 
 ### 정확한 값과의 비교
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 정확한 값과 견주기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 정확한 값과 견주기. 이산분포의 꼬리확률을 누적분포함수로 구할 때 가장 흔한 실수가 부등호를 한 칸 어긋나게 쓰는 것이다.
+
+**(1)** $P(X \ge 24)$를 $F(x) = P(X \le x)$로 쓰면 $1 - F(23)$인가 $1 - F(24)$인가. 틀린 쪽을 쓰면 **몇 배** 어긋나는지 수로 답하시오.
+
+**(2)** 두 값을 모두 계산해 (1)을 확인하고, 보기 2의 모의실험 값과 견주시오.
 
 </div>
 
-```python
-from scipy.stats import binom
+??? success "풀이"
 
-# P(X >= 24) = 1 - P(X <= 23) 이다. cdf에 24가 아니라 **23**을 넣어야 한다.
-# 이산분포에서 부등호를 하나 어긋나게 쓰는 것이 가장 흔한 실수다.
-p_exact = 1 - binom.cdf(OBSERVED_HEADS - 1, TOTAL_TOSSES, PROB_HEAD_FAIR)
-print(f"Exact binomial P(X >= {OBSERVED_HEADS}): {p_exact:.6f}")
-```
+    **(1) 해석적으로.** $X$가 정수값만 가지므로 $\{X \ge 24\}$의 여집합은 $\{X \le 23\}$이다. 따라서
 
-출력:
+    $$
+    P(X \ge 24) = 1 - F(23)
+    $$
 
-```
-Exact binomial P(X >= 24): 0.000715
-```
+    가 옳다. $1 - F(24) = P(X \ge 25)$는 **$X = 24$인 경우를 통째로 빠뜨린다.** 연속분포라면 한 점의 확률이 0이라 아무 차이가 없지만 이산분포에서는 그렇지 않다.
 
-모의실험의 0.00071과 정확한 값 0.000715가 소수점 넷째 자리까지 맞는다. 모의실험 p-값의 표준오차가 $\sqrt{0.0007 \times 0.9993/100000} \approx 0.000084$이므로 이 정도 일치는 기대할 만하다(연습문제 3).
+    빠뜨리는 양이 얼마나 되는지 보자.
+
+    $$
+    P(X = 24) = \binom{30}{24}\left(\tfrac12\right)^{30} = \frac{593{,}775}{1{,}073{,}741{,}824} = 0.000553
+    $$
+
+    인데 전체가 $P(X \ge 24) = 0.000715$다. **한 점이 꼬리 전체의 77.3%를 차지한다.** 그러므로 틀린 쪽은
+
+    $$
+    1 - F(24) = 0.000715 - 0.000553 = 0.000162
+    $$
+
+    를 주고, 비는
+
+    $$
+    \frac{0.000715453}{0.000162458} = 4.404
+    $$
+
+    이다. **4.4배 작게 보고하게 된다.** 꼬리 끝으로 갈수록 이항 PMF가 가파르게 줄어들기 때문에, 극단값일수록 맨 앞 한 항이 꼬리를 거의 다 차지하고 이 실수의 대가가 커진다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from scipy.stats import binom
+
+    # P(X >= 24) = 1 - P(X <= 23) 이다. cdf에 24가 아니라 **23**을 넣어야 한다.
+    # 이산분포에서 부등호를 하나 어긋나게 쓰는 것이 가장 흔한 실수다.
+    p_exact = 1 - binom.cdf(OBSERVED_HEADS - 1, TOTAL_TOSSES, PROB_HEAD_FAIR)
+    print(f"Exact binomial P(X >= {OBSERVED_HEADS}): {p_exact:.6f}")
+
+    # 한 칸 어긋나게 쓰면 어떻게 되는가.
+    p_wrong = 1 - binom.cdf(OBSERVED_HEADS, TOTAL_TOSSES, PROB_HEAD_FAIR)
+    pmf24 = binom.pmf(OBSERVED_HEADS, TOTAL_TOSSES, PROB_HEAD_FAIR)
+    print(f"틀린 1 - F(24)          : {p_wrong:.6f}   (= P(X >= 25))")
+    print(f"빠뜨린 P(X = 24)        : {pmf24:.6f}"
+          f"   꼬리에서 차지하는 몫 {pmf24 / p_exact:.1%}")
+    print(f"비 (옳은 값)/(틀린 값)  : {p_exact / p_wrong:.3f}")
+    print(f"모의실험 값             : {pct / 100:.6f}"
+          f"   차이 {abs(pct / 100 - p_exact) / se_hat:.3f} SE")
+    ```
+
+    출력:
+
+    ```
+    Exact binomial P(X >= 24): 0.000715
+    틀린 1 - F(24)          : 0.000162   (= P(X >= 25))
+    빠뜨린 P(X = 24)        : 0.000553   꼬리에서 차지하는 몫 77.3%
+    비 (옳은 값)/(틀린 값)  : 4.404
+    모의실험 값             : 0.000710   차이 0.065 SE
+    ```
+
+    유도한 $77.3\%$와 $4.404$가 그대로 나왔다.
+
+    모의실험의 $0.00071$과 정확한 값 $0.000715$는 모의실험 표준오차의 **0.065배**밖에 떨어져 있지 않다. 보기 2에서 본 대로 $\text{SE} \approx 8.4\times10^{-5}$이므로 이 정도 일치는 기대할 만하다(연습문제 3).
+
+    여기서 두 방법의 역할이 갈린다. **정확한 이항 계산은 자릿수를 몇 개든 줄 수 있고, 모의실험은 $N$이 주는 만큼만 준다.** 분포를 아는 문제에서 모의실험을 쓸 이유는 없다. 모의실험이 값진 것은 분포를 모르는 문제에서이고, 이 페이지는 **같은 답을 두 길로 얻어 두 길이 모두 옳음을 확인하는** 연습이다.
 
 ### 시각화
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 결과를 히스토그램으로
+**보기 4.** <span class="diff easy" title="쉬움"></span> 결과를 히스토그램으로. 보기 2의 10만 판을 막대그림으로 그리고 관측값 24에 세로선을 긋는다.
+
+**(1)** 이 그림에서 읽히는 것을 수치와 함께 적으시오.
+
+**(2)** 이 그림이 **가리는 것**과 **잘못 읽히기 쉬운 곳**은 어디인가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 앞면 수가 정수이므로 계급 경계를 반 칸씩 밀어 막대 하나가 값 하나를 담게 한다.
-fig, ax = plt.subplots(figsize=(8, 5))
-bins = np.arange(0, TOTAL_TOSSES + 2) - 0.5
-ax.hist(head_counts, bins=bins, edgecolor="white", alpha=0.7,
-        label="Simulated head counts")
-# 관측값 자리에 세로선을 긋는다. 그 오른쪽 막대들의 넓이 비율이 곧 p-값이다.
-ax.axvline(OBSERVED_HEADS, color="red", linestyle="--", linewidth=2,
-           label=f"Observed = {OBSERVED_HEADS}")
-ax.set_xlabel("Number of heads")
-ax.set_ylabel("Frequency")
-ax.set_title(f"Coin Toss Simulation ({NUM_SIMULATIONS:,} runs)")
-ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    유도할 답이 있는 문제가 아니다. **그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 이 보기의 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다.
 
-![Coin Toss Simulation (100,000 runs)](./img/coin_toss_simulation_100.png)
+    ```python
+    import matplotlib.pyplot as plt
 
-히스토그램이 15를 중심으로 모여 있고 빨간 선이 그은 24는 오른쪽 꼬리 저 끝에 있다. 막대 높이가 눈에 보이지 않을 만큼 낮은 영역이다. p-값이란 결국 이 빨간 선 오른쪽에 있는 막대들의 넓이 비율이다.
+    # 그림에서 읽을 수치를 미리 찍어 둔다.
+    counts = np.bincount(head_counts, minlength=TOTAL_TOSSES + 1)
+    print(f"모의 평균 {head_counts.mean():.4f}  표준편차 {head_counts.std(ddof=1):.4f}"
+          f"   (이론 15, {np.sqrt(7.5):.4f})")
+    print(f"최솟값 {head_counts.min()}  최댓값 {head_counts.max()}")
+    print(f"가장 높은 막대: x = {counts.argmax()}, 높이 {counts.max():,}")
+    for x in (22, 23, 24, 25, 26):
+        print(f"  x = {x}: 높이 {counts[x]:>5,}"
+              f"   가장 높은 막대의 {counts[x] / counts.max():.3%}")
+
+    # 앞면 수가 정수이므로 계급 경계를 반 칸씩 밀어 막대 하나가 값 하나를 담게 한다.
+    fig, ax = plt.subplots(figsize=(8, 5))
+    bins = np.arange(0, TOTAL_TOSSES + 2) - 0.5
+    ax.hist(head_counts, bins=bins, edgecolor="white", alpha=0.7,
+            label="Simulated head counts")
+    # 관측값 자리에 세로선을 긋는다. 그 오른쪽 막대들의 넓이 비율이 곧 p-값이다.
+    ax.axvline(OBSERVED_HEADS, color="red", linestyle="--", linewidth=2,
+               label=f"Observed = {OBSERVED_HEADS}")
+    ax.set_xlabel("Number of heads")
+    ax.set_ylabel("Frequency")
+    ax.set_title(f"Coin Toss Simulation ({NUM_SIMULATIONS:,} runs)")
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    모의 평균 14.9923  표준편차 2.7302   (이론 15, 2.7386)
+    최솟값 4  최댓값 26
+    가장 높은 막대: x = 15, 높이 14,442
+      x = 22: 높이   535   가장 높은 막대의 3.704%
+      x = 23: 높이   180   가장 높은 막대의 1.246%
+      x = 24: 높이    56   가장 높은 막대의 0.388%
+      x = 25: 높이    12   가장 높은 막대의 0.083%
+      x = 26: 높이     3   가장 높은 막대의 0.021%
+    ```
+
+    ![Coin Toss Simulation (100,000 runs)](./img/coin_toss_simulation_100.png)
+
+    **(1) 읽히는 것.** 히스토그램이 좌우대칭의 종 모양으로 $x = 15$에 봉우리를 두고 있다. 모의 평균 $14.9923$과 표준편차 $2.7302$가 이론값 $15$, $2.7386$과 소수점 둘째 자리까지 맞으므로 **모의실험이 $\text{Bin}(30,\,0.5)$를 제대로 재현했다**고 읽을 수 있다. 막대 높이는 $x=15$에서 $14{,}442$이고 $x = 15 \pm 3$인 12와 18에서 $8{,}000$ 남짓이다.
+
+    빨간 선이 그은 24는 봉우리에서 멀찍이 떨어져 있고, **그 오른쪽에는 눈에 보이는 막대가 없다.** 이것이 그림이 전하려는 전부다. 관측된 24가 $H_0$ 아래에서 일어날 법한 자리가 아니라는 것.
+
+    **(2) 가리는 것 — 꼬리의 크기.** 세로축이 선형 빈도라 $0$부터 $14{,}500$까지를 한 화면에 담는다. $x = 24$의 막대는 높이 $56$으로 가장 높은 막대의 $0.388\%$이고, 세로 500화소 남짓한 그림에서 **1화소 남짓**이다. $x = 25$는 $12$, $x = 26$은 $3$이라 아예 그려지지 않는다. 그러므로 이 그림만 보고는 $P(X \ge 24)$가 $0.0007$인지 $0.00001$인지 **분간할 수 없다.** $p$-값을 그림에서 읽어 내겠다면 로그 세로축을 쓰거나 꼬리 구간만 따로 확대해야 한다.
+
+    **잘못 읽히기 쉬운 곳 — 선의 자리.** 막대는 정수에 **중심을 두고** 그려져 있고 빨간 선은 $x = 24$에 그어져 있다. 그러니 "선 오른쪽 막대의 넓이"를 글자 그대로 재면 $x = 24$ 막대의 **오른쪽 절반만** 세게 되어 $p$-값을 과소평가한다. 우리가 원하는 영역은 $\{X \ge 24\}$이므로 선은 $x = 23.5$에 그어야 맞다. 보기 3에서 본 부등호 한 칸 문제가 그림에서는 이 모습으로 나타난다.
+
+    **또 하나 — 모의실험의 해상도.** 10만 판에서 나온 최댓값이 $26$이다. $x = 27$ 이상은 한 번도 나오지 않았으므로 이 그림은 그 구간에 대해 "확률이 $10^{-5}$보다 작다"는 것 말고는 아무 말도 하지 못한다. 실제로 $P(X \ge 27) = 4\times10^{-6}$이라 10만 판에서 0.4판이 기대되는 값이다. **모의실험으로는 $1/N$보다 작은 확률을 볼 수 없다.**
 
 ### 해석
 

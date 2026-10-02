@@ -30,134 +30,394 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이표본 t-검정의 검정력 함수
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이표본 t-검정의 검정력 함수. 집단당 $n$명씩 두 집단을 $\alpha = 0.05$ 양측으로 견준다. $d = \delta/\sigma = 0.5$다.
+
+**(1)** 위 검정력 식의 **두 항**이 각각 무엇을 세는지 밝히고, $n = 20,\ 50,\ 100$에서 두 항의 값을 따로 구하시오. 둘째 항은 얼마나 큰가.
+
+**(2)** 이 식은 정규근사다. `statsmodels`의 비중심 $t$ 답과 견주어 어긋남이 $n$에 따라 어떻게 변하는지 보시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def power_ttest(n, delta, sigma=1.0, alpha=0.05):
-    """양측 이표본 t-검정의 검정력 (정규근사)."""
-    # 두 집단의 차이라 분산이 두 번 들어간다. 그래서 sqrt(2/n)이다.
-    se = sigma * np.sqrt(2 / n)
-    z_crit = stats.norm.ppf(1 - alpha / 2)
-    z_effect = delta / se
-    # 두 꼬리를 모두 세는 것이 정확하다. 두 번째 항은 참 효과가 양수인데도
-    # 통계량이 반대쪽 꼬리로 넘어가 기각되는 경우이며, 보통 무시할 만큼 작다.
-    power = (1 - stats.norm.cdf(z_crit - z_effect)
-             + stats.norm.cdf(-z_crit - z_effect))
-    return power
+    **(1) 해석적으로.** 기각 조건은 $\lvert Z \rvert > z_{\alpha/2}$이고, $H_1$ 아래에서
 
-for n in [20, 50, 100]:
-    print(f"n={n:>4} per group: power = {power_ttest(n, delta=0.5):.4f}")
-```
+    $$
+    Z \sim N\!\left(\frac{\delta}{\sigma\sqrt{2/n}},\, 1\right)
+    $$
 
-출력:
+    이다. 비중심모수를 $\lambda = \delta/(\sigma\sqrt{2/n}) = d\sqrt{n/2}$라 쓰면 검정력은 **두 꼬리의 합**이다.
 
-```
-n=  20 per group: power = 0.3526
-n=  50 per group: power = 0.7054
-n= 100 per group: power = 0.9424
-```
+    $$
+    1-\beta = \underbrace{P(Z > z_{\alpha/2})}_{\text{옳은 방향}} + \underbrace{P(Z < -z_{\alpha/2})}_{\text{반대 방향}}
+    = \Phi(\lambda - z_{\alpha/2}) + \Phi(-z_{\alpha/2} - \lambda)
+    $$
 
-$d = 0.5$에서 집단당 20명이면 검정력이 0.35에 불과하다. 실제로 효과가 있어도 세 번 중 두 번은 놓친다. 이 값이 정규근사라 $t$-분포를 쓰는 statsmodels의 결과보다 조금 낙관적이라는 점도 염두에 두라. 실제 검정력은 이보다 약간 낮다.
+    첫째 항은 참 효과가 양수이고 통계량도 오른쪽 꼬리로 나가 기각되는, **제대로 된** 기각이다. 둘째 항은 참 효과가 양수인데도 표본이 거꾸로 나와 **왼쪽** 꼬리에서 기각되는 경우다. 기각은 기각이지만 효과의 방향을 반대로 보고하게 되므로 반가운 일이 아니다.
+
+    $d = 0.5$에서 $\lambda = 0.5\sqrt{n/2}$이므로
+
+    | $n$ | $\lambda$ | 첫째 항 | 둘째 항 |
+    |---|---|---|---|
+    | 20 | 1.581139 | $\Phi(-0.378825) = 0.352409$ | $\Phi(-3.541103) = 0.000199$ |
+    | 50 | 2.500000 | $\Phi(0.540036) = 0.705414$ | $\Phi(-4.459964) = 0.0000041$ |
+    | 100 | 3.535534 | $\Phi(1.575570) = 0.942438$ | $\Phi(-5.495498) = 2\times10^{-8}$ |
+
+    **둘째 항은 $n = 20$에서도 전체의 $0.06\%$뿐이고 $n$이 커지면 자릿수로 사라진다.** 효과가 뚜렷할수록 표본이 거꾸로 나올 일이 없기 때문이다. 그래도 식에 넣어 두는 것이 옳다. $\lambda$가 0에 가까우면 두 항이 비슷해지고, $\lambda = 0$에서는 둘을 합쳐야 정확히 $\alpha$가 된다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def power_ttest(n, delta, sigma=1.0, alpha=0.05):
+        """양측 이표본 t-검정의 검정력 (정규근사)."""
+        # 두 집단의 차이라 분산이 두 번 들어간다. 그래서 sqrt(2/n)이다.
+        se = sigma * np.sqrt(2 / n)
+        z_crit = stats.norm.ppf(1 - alpha / 2)
+        z_effect = delta / se
+        # 두 꼬리를 모두 세는 것이 정확하다. 두 번째 항은 참 효과가 양수인데도
+        # 통계량이 반대쪽 꼬리로 넘어가 기각되는 경우이며, 보통 무시할 만큼 작다.
+        power = (1 - stats.norm.cdf(z_crit - z_effect)
+                 + stats.norm.cdf(-z_crit - z_effect))
+        return power
+
+    for n in [20, 50, 100]:
+        print(f"n={n:>4} per group: power = {power_ttest(n, delta=0.5):.4f}")
+
+    # (1) 두 항을 따로 본다.
+    from statsmodels.stats.power import TTestIndPower
+    zc = stats.norm.ppf(0.975)
+    print(f"\n{'n':>5} {'lambda':>9} {'첫째 항':>10} {'둘째 항':>11}"
+          f" {'정규근사':>9} {'비중심 t':>9} {'차이':>8}")
+    for n in (20, 50, 100):
+        lam = 0.5 * np.sqrt(n / 2)
+        up, lo = stats.norm.sf(zc - lam), stats.norm.cdf(-zc - lam)
+        nct = TTestIndPower().power(effect_size=0.5, nobs1=n, alpha=0.05,
+                                    ratio=1.0, alternative='two-sided')
+        print(f"{n:>5} {lam:>9.6f} {up:>10.6f} {lo:>11.3e}"
+              f" {up + lo:>9.4f} {nct:>9.4f} {up + lo - nct:>+8.4f}")
+    ```
+
+    출력:
+
+    ```
+    n=  20 per group: power = 0.3526
+    n=  50 per group: power = 0.7054
+    n= 100 per group: power = 0.9424
+
+        n    lambda       첫째 항        둘째 항      정규근사     비중심 t       차이
+       20  1.581139   0.352409   1.992e-04    0.3526    0.3379  +0.0147
+       50  2.500000   0.705414   4.099e-06    0.7054    0.6969  +0.0085
+      100  3.535534   0.942438   1.948e-08    0.9424    0.9404  +0.0020
+    ```
+
+    (1)의 표가 그대로 재현된다. $\lambda$, 첫째 항, 둘째 항이 모두 맞고, 둘째 항은 $n = 100$에서 $2\times10^{-8}$까지 떨어진다.
+
+    **정규근사는 언제나 낙관적이다.** 차이가 $+0.0147$, $+0.0085$, $+0.0020$으로 모두 양수이고 $n$이 커지면 줄어든다. $\sigma$를 모른다는 대가가 자유도가 커질수록 작아지기 때문이다. 그러므로 **이 페이지의 수는 모두 약간 낙관적인 값**으로 읽어야 한다.
+
+    $d = 0.5$에서 집단당 20명이면 검정력이 $0.35$(정확히는 $0.34$)에 불과하다. 실제로 효과가 있어도 **세 번 중 두 번은 놓친다.** 이런 설계로 "유의하지 않았다"는 결론을 내는 것은 거의 아무 정보도 주지 못한다.
 
 ### 필요한 표본크기
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 필요한 표본크기 함수
+**보기 2.** <span class="diff easy" title="쉬움"></span> 필요한 표본크기 함수. 비율검정의 표본크기 공식에는 제곱근이 **둘** 나오는데 그 안이 서로 다르다. 한쪽은 합동비율 $\bar p$를, 다른 쪽은 $p_1$과 $p_2$를 따로 쓴다.
+
+**(1)** 이 공식을 유도해 두 제곱근이 어디서 오는지 밝히시오.
+
+**(2)** 둘을 구별하지 않고 한 가지로 통일하면 답이 얼마나 달라지는가. $p_1 = 0.0121,\ p_2 = 0.011$과 $p_1 = 0.6,\ p_2 = 0.3$ 두 경우에서 재어 보시오.
 
 </div>
 
-```python
-def sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80):
-    """이표본 t-검정의 집단당 최소 표본크기."""
-    z_alpha = stats.norm.ppf(1 - alpha / 2)
-    z_beta = stats.norm.ppf(power)
-    # 앞의 계수 2가 "두 집단"의 대가다. 일표본 공식과 여기서 갈린다.
-    n = 2 * ((z_alpha + z_beta) * sigma / delta) ** 2
-    return int(np.ceil(n))
+??? success "풀이"
 
-def sample_size_proportion(p1, p2, alpha=0.05, power=0.80):
-    """이표본 비율검정의 집단당 최소 표본크기."""
-    p_bar = (p1 + p2) / 2
-    z_alpha = stats.norm.ppf(1 - alpha / 2)
-    z_beta = stats.norm.ppf(power)
-    # 두 항의 제곱근 안이 서로 다르다는 점이 핵심이다.
-    #   z_alpha 쪽: H0("두 비율이 같다") 아래의 분산이므로 합동비율 p_bar를 쓴다.
-    #   z_beta  쪽: H1 아래의 분산이므로 p1과 p2를 각각 쓴다.
-    # 검정력 계산은 두 가설 아래의 분포를 동시에 다루므로 이렇게 섞인다.
-    numer = (z_alpha * np.sqrt(2 * p_bar * (1 - p_bar))
-             + z_beta * np.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2
-    n = numer / (p1 - p2) ** 2
-    return int(np.ceil(n))
-```
+    **(1) 해석적으로.** 검정통계량은 $H_0$ 아래의 표준오차로 나눈 것이다.
+
+    $$
+    Z = \frac{\hat p_1 - \hat p_2}{\sqrt{2\bar p(1-\bar p)/n}},
+    \qquad \text{기각 조건} \quad \lvert Z \rvert > z_{\alpha/2}
+    $$
+
+    이 조건을 원 척도로 옮기면 $\lvert \hat p_1 - \hat p_2 \rvert > z_{\alpha/2}\sqrt{2\bar p(1-\bar p)/n}$다. **이것이 첫째 제곱근의 출처다.** 기각 문턱은 "$H_0$이 참이라면"이라는 가정 아래에서 정해지므로 $\bar p$를 쓴다.
+
+    이제 $H_1$ 아래에서 이 사건의 확률을 잰다. $\hat p_1 - \hat p_2$는 평균이 $\delta = p_1 - p_2$이고 표준편차가
+
+    $$
+    \sqrt{\frac{p_1(1-p_1) + p_2(1-p_2)}{n}}
+    $$
+
+    인 근사 정규다. **이것이 둘째 제곱근의 출처다.** 이번에는 참 비율이 $p_1, p_2$라고 **가정하고** 있으므로 각각을 따로 쓴다. $\delta > 0$일 때 왼쪽 꼬리를 버리면
+
+    $$
+    1-\beta \approx \Phi\!\left(
+    \frac{\delta\sqrt n - z_{\alpha/2}\sqrt{2\bar p(1-\bar p)}}
+    {\sqrt{p_1(1-p_1)+p_2(1-p_2)}}\right)
+    $$
+
+    이고, 이것을 $1-\beta$와 같다고 놓으면 괄호 안이 $z_\beta$가 되어
+
+    $$
+    \delta\sqrt n = z_{\alpha/2}\sqrt{2\bar p(1-\bar p)} + z_\beta\sqrt{p_1(1-p_1)+p_2(1-p_2)}
+    $$
+
+    이다. 양변을 제곱해 $\delta^2$으로 나누면 본문의 공식이다. **$z_{\alpha/2}$에는 $H_0$의 분산이, $z_\beta$에는 $H_1$의 분산이 붙는다**는 것이 요점이고, 검정력 계산이 두 가설 아래의 분포를 동시에 다루기 때문에 이렇게 섞인다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    def sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80):
+        """이표본 t-검정의 집단당 최소 표본크기."""
+        z_alpha = stats.norm.ppf(1 - alpha / 2)
+        z_beta = stats.norm.ppf(power)
+        # 앞의 계수 2가 "두 집단"의 대가다. 일표본 공식과 여기서 갈린다.
+        n = 2 * ((z_alpha + z_beta) * sigma / delta) ** 2
+        return int(np.ceil(n))
+
+    def sample_size_proportion(p1, p2, alpha=0.05, power=0.80):
+        """이표본 비율검정의 집단당 최소 표본크기."""
+        p_bar = (p1 + p2) / 2
+        z_alpha = stats.norm.ppf(1 - alpha / 2)
+        z_beta = stats.norm.ppf(power)
+        # 두 항의 제곱근 안이 서로 다르다는 점이 핵심이다.
+        #   z_alpha 쪽: H0("두 비율이 같다") 아래의 분산이므로 합동비율 p_bar를 쓴다.
+        #   z_beta  쪽: H1 아래의 분산이므로 p1과 p2를 각각 쓴다.
+        # 검정력 계산은 두 가설 아래의 분포를 동시에 다루므로 이렇게 섞인다.
+        numer = (z_alpha * np.sqrt(2 * p_bar * (1 - p_bar))
+                 + z_beta * np.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2
+        n = numer / (p1 - p2) ** 2
+        return int(np.ceil(n))
+
+    # (2) 두 제곱근을 하나로 통일하면 어떻게 되는가.
+    za, zb = stats.norm.ppf(0.975), stats.norm.ppf(0.80)
+    for p1, p2 in [(0.0121, 0.011), (0.6, 0.3)]:
+        pb = (p1 + p2) / 2
+        s0 = np.sqrt(2 * pb * (1 - pb))                   # H0 아래
+        s1 = np.sqrt(p1 * (1 - p1) + p2 * (1 - p2))       # H1 아래
+        ok = (za * s0 + zb * s1) ** 2 / (p1 - p2) ** 2
+        only0 = ((za + zb) * s0) ** 2 / (p1 - p2) ** 2
+        only1 = ((za + zb) * s1) ** 2 / (p1 - p2) ** 2
+        print(f"p1={p1}, p2={p2}:  s0={s0:.6f}  s1={s1:.6f}  s0/s1={s0 / s1:.4f}")
+        print(f"   옳은 식 {ok:>12.3f}   s0 만 {only0:>12.3f}"
+              f"   s1 만 {only1:>12.3f}")
+        print(f"   옳은 n 에서의 검정력 "
+              f"{stats.norm.sf((za * s0 - (p1 - p2) * np.sqrt(np.ceil(ok))) / s1):.4f}")
+    ```
+
+    출력:
+
+    ```
+    p1=0.0121, p2=0.011:  s0=0.151107  s1=0.151105  s0/s1=1.0000
+       옳은 식   148110.393   s0 만   148111.571   s1 만   148107.647
+       옳은 n 에서의 검정력 0.8000
+    p1=0.6, p2=0.3:  s0=0.703562  s1=0.670820  s0/s1=1.0488
+       옳은 식       41.970   s0 만       43.169   s1 만       39.244
+       옳은 n 에서의 검정력 0.8003
+    ```
+
+    (1)의 식이 목표 검정력 $0.80$을 정확히 돌려준다. 두 경우 모두 올림한 $n$에서 $0.8000$과 $0.8003$이다.
+
+    **두 제곱근의 차이는 $p_1$과 $p_2$가 얼마나 벌어져 있느냐에 달려 있다.** 첫째 경우는 $0.0121$과 $0.011$이 거의 같아 $s_0/s_1 = 1.0000$이고, 어느 쪽으로 통일하든 $148{,}111$ 대 $148{,}112$ 대 $148{,}108$로 **0.003% 차이**다. 사실상 구별할 필요가 없다.
+
+    둘째 경우는 $0.6$과 $0.3$이 멀어 $s_0/s_1 = 1.0488$이다. $s_0$으로 통일하면 $43.17 \to 44$로 **5% 크게**, $s_1$로 통일하면 $39.24 \to 40$으로 **6% 작게** 나온다. 올림하면 42명 대신 44명 또는 40명이다. 큰 차이는 아니지만 **$s_1$로 통일하는 쪽은 표본이 모자라게 되므로** 위험하다.
+
+    왜 $s_0 > s_1$인가. $\bar p$는 $p_1$과 $p_2$의 중점이고 $p(1-p)$가 $p = 1/2$에서 최대인 **오목함수**이므로, 옌센 부등식에 의해 $\bar p(1-\bar p) \ge \{p_1(1-p_1)+p_2(1-p_2)\}/2$다. 양변에 2를 곱하면 $s_0^2 \ge s_1^2$이고 등호는 $p_1 = p_2$일 때만이다. **$H_0$ 아래의 분산이 언제나 더 크다.**
 
 ### 계산 예시
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 계산 예
+**보기 3.** <span class="diff easy" title="쉬움"></span> 계산 예. 두 설계의 표본크기를 재어 견준다. 하나는 $d = 0.5$인 이표본 $t$ 검정, 다른 하나는 전환율을 $1.10\%$에서 $1.21\%$로(상대 $10\%$ 개선) 올리는 A/B 검정이다.
+
+**(1)** 두 값을 보기 2의 공식으로 손으로 구하시오.
+
+**(2)** 둘의 비가 왜 그렇게 큰지, 비율 쪽의 **유효 효과크기**를 $d_{\text{eff}} = (p_1-p_2)/\sqrt{\bar p(1-\bar p)}$로 정의해 설명하시오.
 
 </div>
 
-```python
-# 이표본 t-검정: 중간 크기 효과 (Cohen's d = 0.5)
-delta = 0.5
-n_req = sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80)
-print(f"Required n per group: {n_req}")
+??? success "풀이"
 
-# 비율 검정 (A/B 검정): 전환율 1.10% -> 1.21%, 즉 10% 상대 개선
-p1, p2 = 0.0121, 0.011
-n_prop = sample_size_proportion(p1, p2, alpha=0.05, power=0.80)
-print(f"Required n per group: {n_prop:,}")
-```
+    **(1) 해석적으로.** $t$ 검정 쪽은 $z_{0.025} + z_{0.20} = 2.801585$이므로
 
-출력:
+    $$
+    n = 2\left(\frac{2.801585}{0.5}\right)^2 = 2 \times 31.3955 = 62.791 \;\rightarrow\; 63
+    $$
 
-```
-Required n per group: 63
-Required n per group: 148,111
-```
+    이다. 비율 쪽은 $\bar p = (0.0121+0.011)/2 = 0.01155$이므로
 
-두 줄의 차이가 2,000배가 넘는다. 비율 쪽이 이렇게 커지는 이유는 두 가지가 겹쳐서다. 절대차가 0.0011로 아주 작고, 기저율 1.1%가 낮아 신호 대비 잡음이 나쁘다. 전환율을 10% 상대 개선하는 실험을 하려면 집단당 15만 명, 합쳐서 30만 명의 방문자가 필요하다는 뜻이다.
+    $$
+    \sqrt{2\bar p(1-\bar p)} = \sqrt{2 \times 0.01155 \times 0.98845} = 0.151107
+    $$
+
+    $$
+    \sqrt{p_1(1-p_1)+p_2(1-p_2)} = \sqrt{0.0121 \times 0.9879 + 0.011 \times 0.989} = 0.151105
+    $$
+
+    이고 분자는
+
+    $$
+    (1.959964 \times 0.151107 + 0.841621 \times 0.151105)^2 = (0.296163 + 0.127173)^2 = 0.423336^2 = 0.179214
+    $$
+
+    다. $\delta = 0.0011$이므로 $\delta^2 = 1.21\times10^{-6}$이고
+
+    $$
+    n = \frac{0.179214}{1.21\times10^{-6}} = 148110.4 \;\rightarrow\; 148111
+    $$
+
+    이다.
+
+    **(2) 해석적으로.** 비가 $148111/63 = 2351$배다. 이 수가 어디서 오는지 보려면 비율 문제를 **같은 척도의 $d$로** 바꿔 읽으면 된다. 비율의 "표준편차"는 $\sqrt{\bar p(1-\bar p)}$이므로
+
+    $$
+    d_{\text{eff}} = \frac{p_1 - p_2}{\sqrt{\bar p(1-\bar p)}}
+    = \frac{0.0011}{\sqrt{0.01155 \times 0.98845}}
+    = \frac{0.0011}{0.106849} = 0.010295
+    $$
+
+    다. $t$ 검정의 $d = 0.5$에 견주면 **48.6분의 1**이고, $n \propto d^{-2}$이므로
+
+    $$
+    \left(\frac{0.5}{0.010295}\right)^2 = 48.567^2 = 2358.8
+    $$
+
+    배가 예측된다. 실제 비 $2351$과 $0.3\%$ 안에서 맞는다(차이는 두 제곱근이 꼭 같지는 않아서다).
+
+    **$d_{\text{eff}}$가 작은 까닭 둘.** 분자 $0.0011$이 작은 것이 하나고, 분모 $\sqrt{\bar p(1-\bar p)} = 0.1068$이 그에 비해 큰 것이 또 하나다. 기저율이 $1.1\%$로 낮으면 $\sqrt{p(1-p)} \approx \sqrt p$라 **상대 개선 $10\%$가 표준편차 단위로는 $1\%$밖에 안 된다.** 상대 개선이 같아도 기저율이 낮을수록 손해다.
+
+    **수치적으로.**
+
+    ```python
+    # 이표본 t-검정: 중간 크기 효과 (Cohen's d = 0.5)
+    delta = 0.5
+    n_req = sample_size_ttest(delta, sigma=1.0, alpha=0.05, power=0.80)
+    print(f"Required n per group: {n_req}")
+
+    # 비율 검정 (A/B 검정): 전환율 1.10% -> 1.21%, 즉 10% 상대 개선
+    p1, p2 = 0.0121, 0.011
+    n_prop = sample_size_proportion(p1, p2, alpha=0.05, power=0.80)
+    print(f"Required n per group: {n_prop:,}")
+
+    # (2) 유효 효과크기로 읽어 본다.
+    pb = (p1 + p2) / 2
+    d_eff = (p1 - p2) / np.sqrt(pb * (1 - pb))
+    print(f"\n유효 효과크기 d_eff = {d_eff:.6f}"
+          f"   (t 검정의 d = 0.5 의 1/{0.5 / d_eff:.1f})")
+    print(f"d_eff 로 예측한 n   = {2 * ((za + zb) / d_eff) ** 2:>12.1f}")
+    print(f"공식이 준 n         = {n_prop:>12,}")
+    print(f"비: 예측 {(0.5 / d_eff) ** 2:.1f}배   실제 {n_prop / n_req:.1f}배")
+    print(f"\n필요한 방문자: 집단당 {n_prop:,}명,  합계 {2 * n_prop:,}명")
+    ```
+
+    출력:
+
+    ```
+    Required n per group: 63
+    Required n per group: 148,111
+
+    유효 효과크기 d_eff = 0.010295   (t 검정의 d = 0.5 의 1/48.6)
+    d_eff 로 예측한 n   =     148111.6
+    공식이 준 n         =      148,111
+    비: 예측 2358.8배   실제 2351.0배
+
+    필요한 방문자: 집단당 148,111명,  합계 296,222명
+    ```
+
+    (1)에서 손으로 구한 $62.791 \to 63$과 $148110.4 \to 148111$이 그대로 나왔다. (2)의 $d_{\text{eff}}$ 예측 $148111.6$은 공식의 $148111$과 **1 이내**로 맞는다.
+
+    **두 줄의 차이가 2,351배다.** 전환율을 $10\%$ 상대 개선하는 실험을 하려면 집단당 약 15만 명, 합쳐서 **약 30만 명**의 방문자가 필요하다는 뜻이다. 목표를 상대 $50\%$ 개선($p_1 = 0.0165$)으로 잡으면 같은 공식이 집단당 $7{,}036$명을 주므로, 개선 폭을 5분의 1로 줄인 대가가 **21배**다. $n \propto \delta^{-2}$이 $5^2 = 25$배를 예측하는데 실제로는 그보다 조금 작은데, $p_1$이 달라지면 분자의 분산 항도 함께 움직이기 때문이다.
 
 ### 검정력 곡선
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 검정력 곡선
+**보기 4.** <span class="diff easy" title="쉬움"></span> 검정력 곡선. 보기 1의 `power_ttest`로 $d = 0.2,\ 0.5,\ 0.8$의 곡선을 집단당 $n = 10 \sim 499$에서 그린다.
+
+**(1)** 세 곡선이 $0.80$ 기준선을 지나는 $n$을 보기 2의 공식으로 예측하시오.
+
+**(2)** 곡선 위에서 그 자리를 **직접 찾아** 예측과 맞추고, 곡선이 평평해지는 구간을 수로 적으시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 효과가 작을수록 같은 검정력에 필요한 표본이 가파르게 늘어난다.
-# d=0.2 곡선이 0.8 에 닿는 자리를 d=0.8 곡선의 그것과 견주어 보면 된다.
-ns = np.arange(10, 500)
-fig, ax = plt.subplots(figsize=(10, 5))
-for d, ls in [(0.2, '--'), (0.5, '-'), (0.8, ':')]:
-    powers = [power_ttest(n, d) for n in ns]
-    ax.plot(ns, powers, ls, label=f'd = {d}')
+    **(1) 해석적으로.** 보기 2의 식 $n = 2\left((z_{\alpha/2}+z_\beta)/d\right)^2$에 $z_{0.025}+z_{0.20} = 2.801585$를 넣으면
 
-ax.axhline(0.80, color='grey', linestyle='-.', alpha=0.5, label='Power = 0.80')
-ax.set_xlabel('Sample size per group (n)')
-ax.set_ylabel('Power')
-ax.set_title('Power Curves for Two-Sample t-Test')
-ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    $$
+    n(0.2) = 2\left(\frac{2.801585}{0.2}\right)^2 = 392.444, \quad
+    n(0.5) = 62.791, \quad
+    n(0.8) = 24.528
+    $$
 
-![Power Curves for Two-Sample t-Test](./img/power_analysis_114.png)
+    이다. 올림하면 $393$, $63$, $25$다.
 
-세 곡선이 회색 기준선(검정력 0.80)을 지나는 지점이 각 효과크기에 필요한 표본크기다. $d = 0.8$은 26 언저리에서, $d = 0.5$는 63에서, $d = 0.2$는 그래프 오른쪽 끝 근처인 393에서 지난다.
+    **(2) 수치적으로.** 격자 위에서 조건을 만족하는 **첫** $n$을 찾는다. 이때 조심할 것이 있다. 조건을 만족하는 칸이 하나도 없어도 `argmax` 류는 말없이 0번 칸을 돌려주므로, **답이 격자 안에 있는지부터 단언문으로 확인**해야 한다.
 
-곡선의 모양도 읽어 둘 만하다. 검정력 0.9를 넘어서면 곡선이 거의 평평해진다. 그 구간에서는 표본을 더 모아도 얻는 것이 거의 없다. 반대로 $d = 0.2$ 곡선의 왼쪽 절반처럼 가파른 구간에서는 표본을 조금만 늘려도 검정력이 크게 오른다.
+    ```python
+    import matplotlib.pyplot as plt
+
+    # 효과가 작을수록 같은 검정력에 필요한 표본이 가파르게 늘어난다.
+    # d=0.2 곡선이 0.8 에 닿는 자리를 d=0.8 곡선의 그것과 견주어 보면 된다.
+    ns = np.arange(10, 500)
+    fig, ax = plt.subplots(figsize=(10, 5))
+    for d, ls in [(0.2, '--'), (0.5, '-'), (0.8, ':')]:
+        powers = [power_ttest(n, d) for n in ns]
+        ax.plot(ns, powers, ls, label=f'd = {d}')
+
+    ax.axhline(0.80, color='grey', linestyle='-.', alpha=0.5, label='Power = 0.80')
+    ax.set_xlabel('Sample size per group (n)')
+    ax.set_ylabel('Power')
+    ax.set_title('Power Curves for Two-Sample t-Test')
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+
+    # (1) 의 예측과 곡선 위에서 찾은 자리를 맞춘다.
+    print(f"{'d':>5} {'공식':>10} {'곡선':>6} {'그 n 의 검정력':>14} {'직전 n':>7}")
+    for d in (0.2, 0.5, 0.8):
+        pw = np.array([power_ttest(n, d) for n in ns])
+        hit = np.flatnonzero(pw >= 0.80)
+        # **조건을 만족하는 칸이 있는지 먼저 확인한다.** 없으면 아래 인덱싱이
+        # 조용히 엉뚱한 답을 주는 대신 여기서 멈춘다.
+        assert hit.size > 0, f"d={d} 는 격자 안에서 0.80 에 닿지 않는다"
+        k = hit[0]
+        print(f"{d:>5.1f} {2 * ((za + zb) / d) ** 2:>10.3f} {ns[k]:>6}"
+              f" {pw[k]:>14.4f} {pw[k - 1]:>7.4f}")
+
+    # 평평해지는 구간: d = 0.5 에서 검정력을 더 올리는 값.
+    print()
+    for target, zq in ((0.80, zb), (0.90, stats.norm.ppf(0.90)),
+                       (0.95, stats.norm.ppf(0.95))):
+        n = 2 * ((za + zq) / 0.5) ** 2
+        print(f"  d=0.5, 검정력 {target:.2f}: n = {n:7.2f}"
+              f" -> {int(np.ceil(n)):>3}  (실제 {power_ttest(int(np.ceil(n)), 0.5):.4f})")
+    print(f"  d=0.2 는 격자 끝 n=499 에서도 {power_ttest(499, 0.2):.4f} 까지만 간다")
+    ```
+
+    출력:
+
+    ```
+        d         공식     곡선      그 n 의 검정력    직전 n
+      0.2    392.444    393         0.8006  0.7996
+      0.5     62.791     63         0.8013  0.7950
+      0.8     24.528     25         0.8074  0.7914
+
+      d=0.5, 검정력 0.80: n =   62.79 ->  63  (실제 0.8013)
+      d=0.5, 검정력 0.90: n =   84.06 ->  85  (실제 0.9031)
+      d=0.5, 검정력 0.95: n =  103.96 -> 104  (실제 0.9501)
+      d=0.2 는 격자 끝 n=499 에서도 0.8848 까지만 간다
+    ```
+
+    ![Power Curves for Two-Sample t-Test](./img/power_analysis_114.png)
+
+    (1)의 예측 $392.444$, $62.791$, $24.528$을 올림한 $393$, $63$, $25$가 곡선 위에서 찾은 자리와 **정확히 같다.** 직전 $n$에서는 각각 $0.7996$, $0.7950$, $0.7914$로 모두 $0.80$에 못 미치므로 올림이 옳았다.
+
+    세 곡선이 회색 기준선을 지나는 자리가 바로 이 세 값이다. $d = 0.8$ 곡선은 그림 왼쪽 끝에서 이미 치솟아 $n = 25$에서 넘고, $d = 0.5$는 $63$에서, $d = 0.2$는 그림 오른쪽 끝 가까운 $393$에서 넘는다. **효과크기가 4분의 1이면 표본은 16배**($393/25 = 15.7$)다. $n \propto d^{-2}$ 그대로다.
+
+    **평평해지는 구간.** $d = 0.5$에서 검정력 $0.80$에 63명, $0.90$에 85명, $0.95$에 104명이다. 처음 $10$%p를 더 얻는 데 22명, 그다음 $5$%p에 19명이 든다. **단위 검정력당 비용이 두 배 넘게 뛴다.** 그림에서 $d = 0.8$ 곡선이 $n = 60$ 언저리부터 1에 붙어 눈으로 구별되지 않는 것도 같은 현상이다. 그 구간에서 표본을 더 모아도 얻는 것이 사실상 없다.
+
+    반대로 $d = 0.2$ 곡선은 그림 전체에서 가파르다. 격자 끝 $n = 499$에서도 검정력이 $0.8848$에 그치므로, **이 그림만으로는 $d = 0.2$에서 검정력 $0.95$에 몇 명이 필요한지 알 수 없다.** 공식으로 계산하면 $649$명이고 그림 밖이다. 곡선 그림은 보이는 범위까지만 말해 준다.
 
 ### 해석
 

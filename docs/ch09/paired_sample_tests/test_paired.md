@@ -38,32 +38,141 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 대응표본 평균 검정 계산기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 대응표본 평균 검정 계산기. 함수가 받는 것은 $(n,\ \bar d,\ s_D)$ 세 수뿐이다. 두 집단의 산포 $\sigma_1, \sigma_2$도 쌍 안의 상관 $\rho$도 받지 않는다.
+
+**(1)** 세 수만으로 충분한 까닭을 적고, $\sigma_1 = \sigma_2 = \sigma$일 때 **짝짓기가 이득이 되는 상관의 문턱** $\rho^*$를 닫힌 꼴로 구하시오.
+
+**(2)** $\rho^*$를 $n = 5, 10, 30$에서 계산해 위 그림의 값과 맞추고, 문턱을 검정력으로 다시 정의하면 어떻게 달라지는지 보이시오.
 
 </div>
 
-```python
-import math
-from scipy.stats import t as tdist
+??? success "풀이"
 
-def test_paired_mean(n, dbar, sd_d, mu_d0=0.0,
-                     alt="two-sided", alpha=0.05):
-    """대응 t-검정. 차이 D = X - Y에 대한 일표본 검정과 같다.
+    **(1) 해석적으로.** 쌍 $(X_i, Y_i)$가 서로 독립이면 차이 $D_i = X_i - Y_i$는 i.i.d.이고, 대응 검정은 **$D$에 대한 일표본 $t$ 검정 그 자체**다. 일표본 검정이 쓰는 것은 $(n, \bar d, s_D)$ 세 수뿐이므로 함수도 그 셋만 받으면 된다.
 
-    받는 것은 짝의 개수 n, 차이의 평균, 차이의 표준편차뿐이다.
-    두 집단의 산포나 상관을 따로 알 필요가 없다. 짝을 지으며 이미 흡수했기 때문이다.
-    """
-    df = n - 1               # 짝의 개수 - 1. 관측값 2n개가 아니다.
-    se = sd_d / math.sqrt(n)
-    t = (dbar - mu_d0) / se
-    if alt == "two-sided":
-        p = 2 * min(tdist.cdf(t, df), 1 - tdist.cdf(t, df))
-    elif alt == "less":
-        p = tdist.cdf(t, df)
-    else:
-        p = 1 - tdist.cdf(t, df)
-    return t, p, (p < alpha)
-```
+    $\sigma_1$, $\sigma_2$, $\rho$가 필요 없어지는 것은 그것들이 사라졌기 때문이 아니라 **$s_D$ 안에 이미 들어와 있기** 때문이다.
+
+    $$
+    \operatorname{Var}(D) = \sigma_1^2 + \sigma_2^2 - 2\rho\sigma_1\sigma_2
+    $$
+
+    이고 $s_D^2$이 이 값을 추정한다. 세 모수가 각자 무엇이었는지는 알 수 없지만, 검정에 필요한 것은 그 조합 하나뿐이다.
+
+    **문턱을 구한다.** 관측값 $2n$개를 같은 자료로 두고 두 설계를 견준다. $\sigma_1 = \sigma_2 = \sigma$라 하면
+
+    - **대응**: 쌍 $n$개. $\operatorname{sd}(D) = \sigma\sqrt{2(1-\rho)}$이므로 표준오차는 $\sigma\sqrt{2(1-\rho)/n}$, 자유도는 $n-1$이다.
+    - **독립 이표본**: 각 $n$명의 두 집단. 표준오차는 $\sigma\sqrt{2/n}$, 자유도는 $2n-2$다.
+
+    유의하다고 선언되는 **관측 차이의 문턱**(임계값 $\times$ 표준오차)을 각각 적으면
+
+    $$
+    c_{\text{대응}} = t_{1-\alpha/2,\,n-1}\,\sigma\sqrt{\frac{2(1-\rho)}{n}},
+    \qquad
+    c_{\text{독립}} = t_{1-\alpha/2,\,2n-2}\,\sigma\sqrt{\frac{2}{n}}
+    $$
+
+    이다. $\sigma$와 $\sqrt{2/n}$이 양쪽에 공통이므로 **지워진다.** 두 문턱이 같아지는 조건은
+
+    $$
+    t_{1-\alpha/2,\,n-1}\sqrt{1-\rho} = t_{1-\alpha/2,\,2n-2}
+    $$
+
+    이고, 양변을 제곱해 $\rho$로 풀면
+
+    $$
+    \boxed{\;\rho^* = 1 - \left(\frac{t_{1-\alpha/2,\,2n-2}}{t_{1-\alpha/2,\,n-1}}\right)^{2}\;}
+    $$
+
+    이다. 자유도가 크면 $t$ 임계값이 작아지므로 언제나 $t_{2n-2} < t_{n-1}$이고 따라서 $0 < \rho^* < 1$이다. **$\rho > \rho^*$이면 짝짓기가 이득, $\rho < \rho^*$이면 손해다.** 그리고 $n \to \infty$에서 두 임계값이 모두 $z_{1-\alpha/2}$로 가므로 $\rho^* \to 0$, 곧 **쌍이 많으면 상관이 조금만 있어도 짝짓기가 이긴다.**
+
+    **(2) 수치적으로.** 먼저 함수를 만든다.
+
+    ```python
+    import math
+    from scipy.stats import t as tdist
+
+    def test_paired_mean(n, dbar, sd_d, mu_d0=0.0,
+                         alt="two-sided", alpha=0.05):
+        """대응 t-검정. 차이 D = X - Y에 대한 일표본 검정과 같다.
+
+        받는 것은 짝의 개수 n, 차이의 평균, 차이의 표준편차뿐이다.
+        두 집단의 산포나 상관을 따로 알 필요가 없다. 짝을 지으며 이미 흡수했기 때문이다.
+        """
+        df = n - 1               # 짝의 개수 - 1. 관측값 2n개가 아니다.
+        se = sd_d / math.sqrt(n)
+        t = (dbar - mu_d0) / se
+        if alt == "two-sided":
+            p = 2 * min(tdist.cdf(t, df), 1 - tdist.cdf(t, df))
+        elif alt == "less":
+            p = tdist.cdf(t, df)
+        else:
+            p = 1 - tdist.cdf(t, df)
+        return t, p, (p < alpha)
+    ```
+
+    문턱을 두 가지 기준으로 계산한다. 하나는 (1)의 닫힌 꼴이고, 다른 하나는 두 설계의 **검정력**이 같아지는 $\rho$를 비중심 $t$ 분포로 직접 찾은 것이다.
+
+    ```python
+    from scipy import stats
+    from scipy.optimize import brentq
+
+    print("  n   t_{n-1}   t_{2n-2}    rho*")
+    for n in (5, 10, 30):
+        t1 = stats.t.ppf(0.975, n - 1)
+        t2 = stats.t.ppf(0.975, 2 * n - 2)
+        print(f"{n:4d}   {t1:.4f}    {t2:.4f}    {1 - (t2 / t1)**2:.4f}")
+
+
+    def pow_paired(n, rho, mu):
+        """쌍 n 개, 상관 rho, 참 평균차 mu 일 때 대응 검정의 검정력."""
+        nc = mu * math.sqrt(n) / math.sqrt(2 * (1 - rho))
+        tc = stats.t.ppf(0.975, n - 1)
+        return stats.nct.sf(tc, n - 1, nc) + stats.nct.cdf(-tc, n - 1, nc)
+
+
+    def pow_two(n, mu):
+        """각 n 명인 독립 두 집단의 검정력. 자유도가 2n-2 로 늘어난다."""
+        nc = mu * math.sqrt(n) / math.sqrt(2)
+        tc = stats.t.ppf(0.975, 2 * n - 2)
+        return stats.nct.sf(tc, 2 * n - 2, nc) + stats.nct.cdf(-tc, 2 * n - 2, nc)
+
+
+    print("\n검정력을 같게 만드는 rho (sigma = 1, 참 mu_D 를 바꾸며)")
+    print("   n    mu_D   독립 검정력    rho*")
+    for n in (5, 10, 30):
+        for mu in (0.5, 1.0, 1.5):
+            r = brentq(lambda rr: pow_paired(n, rr, mu) - pow_two(n, mu), -0.5, 0.95)
+            print(f"{n:4d}   {mu:.1f}      {pow_two(n, mu):.4f}      {r:.4f}")
+    ```
+
+    출력:
+
+    ```
+      n   t_{n-1}   t_{2n-2}    rho*
+       5   2.7764    2.3060    0.3102
+      10   2.2622    2.1009    0.1375
+      30   2.0452    2.0017    0.0421
+
+    검정력을 같게 만드는 rho (sigma = 1, 참 mu_D 를 바꾸며)
+       n    mu_D   독립 검정력    rho*
+       5   0.5      0.1077      0.2191
+       5   1.0      0.2863      0.2368
+       5   1.5      0.5494      0.2563
+      10   0.5      0.1851      0.1052
+      10   1.0      0.5620      0.1112
+      10   1.5      0.8870      0.1173
+      30   0.5      0.4779      0.0335
+      30   1.0      0.9677      0.0346
+      30   1.5      0.9999      0.0356
+    ```
+
+    첫 표의 $0.3102$, $0.1375$, $0.0421$이 위 그림에서 읽은 $0.31$, $0.14$, $0.04$와 같다. 닫힌 꼴이 그림을 그대로 재현한다.
+
+    둘째 표가 이 보기에서 한 걸음 더 나간 부분이다. **검정력을 기준으로 삼으면 문턱이 조금 더 낮다.** $n = 10$에서 $0.1375$ 대신 $0.105$에서 $0.117$ 사이이고, $n = 5$에서는 $0.310$ 대신 $0.219$에서 $0.256$ 사이다. 곧 **(1)의 $\rho^*$는 짝짓기에 조금 불리한 쪽으로 기운 기준이며, 실제로는 그보다 낮은 상관에서도 짝짓기가 이긴다.**
+
+    두 기준이 어긋나는 까닭은 자유도가 다르면 검정력 곡선의 **모양**까지 달라지기 때문이다. (1)은 임계값 하나만 견주었으므로 $\rho^*$가 참 효과크기와 무관한 수로 나오는데, 검정력은 참 $\mu_D$에 의존하므로 문턱도 함께 움직인다. 표에서 $\mu_D$가 커질수록 문턱이 $0.1052 \to 0.1173$으로 올라가는 것이 그 의존성이다.
+
+    실무에는 (1)의 닫힌 꼴로 충분하다. **보수적인 쪽으로 틀리기** 때문이다. $3 \le n \le 200$과 검정력 $0.05$에서 $0.9995$ 사이를 훑어 보면 검정력 기준의 문턱이 $\rho^*$를 넘는 경우가 한 번도 없었다. 그러므로 $\rho > \rho^*$를 확인했다면 검정력 기준으로도 이득이라고 보아도 된다.
 
 <div class="exbox" markdown>
 

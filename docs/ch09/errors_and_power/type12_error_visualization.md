@@ -45,86 +45,232 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 오류를 한 그림에
+**보기 1.** <span class="diff easy" title="쉬움"></span> 두 오류를 한 그림에. 귀무분포 $N(0,1)$과 대립분포 $N(3,1)$을 겹쳐 그리고 $\alpha = 0.05$인 우측검정의 두 오류를 색칠한다.
+
+**(1)** 임계값과 $\beta$를 계산하고, 두 오류가 **서로 다른 곡선** 아래에서 재어진다는 것이 무슨 뜻인지 말하시오.
+
+**(2)** 임계값을 옮기면 두 오류가 맞바뀐다. $\alpha + \beta$를 가장 작게 하는 임계값을 구하고, 그것이 $\alpha = 0.05$가 주는 자리와 같은지 보시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-null_loc = 0
-alt_loc = 3
-alpha = 0.05
+    **(1) 해석적으로.** $\alpha = 0.05$인 우측검정의 임계값은 귀무분포의 상위 $5\%$ 자리이므로
 
-x = np.linspace(null_loc - 4, alt_loc + 4, 400)
-y_null = stats.norm.pdf(x, loc=null_loc)
-y_alt = stats.norm.pdf(x, loc=alt_loc)
+    $$
+    z_c = \mu_0 + z_{0.95} = 0 + 1.644854 = 1.644854
+    $$
 
-z_crit = stats.norm.ppf(1 - alpha, loc=null_loc)
+    다. $\beta$는 **같은 임계값**을 대립분포에서 재는 것이다.
 
-fig, ax = plt.subplots(figsize=(12, 5))
-ax.plot(x, y_null, "b-", lw=2, label="Null distribution")
-ax.plot(x, y_alt, "r-", lw=2, label="Alternative distribution")
+    $$
+    \beta = P(Z < z_c \mid H_1) = \Phi(z_c - \mu_1) = \Phi(1.644854 - 3) = \Phi(-1.355146) = 0.087686
+    $$
 
-# 제1종 오류: 귀무분포에서 임계값 오른쪽. H0가 참인데 기각하는 경우다.
-mask_t1 = x >= z_crit
-ax.fill_between(x[mask_t1], y_null[mask_t1], alpha=0.4, color="blue",
-                label="Type I error (alpha)")
+    이고 검정력은 $1 - \beta = 0.912314$다.
 
-# 제2종 오류: 대립분포에서 임계값 왼쪽. H1이 참인데 기각하지 못하는 경우다.
-# 두 오류가 **다른 곡선** 아래에서 재어진다는 점이 이 그림의 요점이다.
-mask_t2 = x <= z_crit
-ax.fill_between(x[mask_t2], y_alt[mask_t2], alpha=0.3, color="red",
-                label="Type II error (beta)")
+    **"서로 다른 곡선"의 뜻.** 두 넓이 모두 $x$축의 같은 점 $z_c$에서 잘리지만, $\alpha$는 **파란** 곡선 아래에서 오른쪽을, $\beta$는 **빨간** 곡선 아래에서 왼쪽을 잰다. 그러므로 둘은 같은 확률공간의 보완사건이 아니고 $\alpha + \beta$가 1이 될 이유가 없다. 여기서는 $0.05 + 0.088 = 0.138$이다. 두 수는 **서로 다른 가정 아래의 확률**이며, 어느 쪽이 참인지 우리는 모른다.
 
-ax.axvline(z_crit, color="black", linestyle="--", alpha=0.6,
-           label=f"Critical value = {z_crit:.2f}")
-ax.set_xlabel("Test statistic")
-ax.set_ylabel("Density")
-ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    **(2) 해석적으로.** 임계값을 $c$로 두면
 
-![제1종 오류와 제2종 오류](./img/type12_error_visualization_44.png)
+    $$
+    \alpha(c) = 1 - \Phi(c) = \Phi(-c), \qquad \beta(c) = \Phi(c - 3)
+    $$
 
-같은 세로 점선(임계값 1.645)이 두 곡선을 각각 자른다. 파란 곡선에서 오른쪽으로 잘린 조각이 $\alpha$, 빨간 곡선에서 왼쪽으로 잘린 조각이 $\beta$다.
+    이다. $c$가 커지면 $\alpha$는 줄고 $\beta$는 는다. **하나를 줄이면 다른 하나가 커진다.** 합을 최소로 만드는 $c$는 미분해서 찾는다.
 
-점선을 오른쪽으로 옮기면 파란 조각이 줄고 빨간 조각이 는다. 하나를 줄이면 다른 하나가 커지는 이 맞바꿈은 임계값 하나로 두 오류를 동시에 통제할 수 없다는 뜻이다. 둘 다 줄이는 방법은 하나뿐이다. 표본을 키워 두 곡선을 좁게 만드는 것이다.
+    $$
+    \frac{d}{dc}\{\alpha(c)+\beta(c)\} = -\varphi(c) + \varphi(c-3) = 0
+    \quad\Longrightarrow\quad
+    \varphi(c) = \varphi(c-3)
+    $$
+
+    정규밀도는 $\varphi(u) \propto e^{-u^2/2}$이라 이 등식은 $c^2 = (c-3)^2$, 곧 $c = 1.5$를 준다. **두 분포의 중점이다.** 이계도함수가 양수임은 $c = 1.5$에서 $\varphi'(c) - \varphi'(c-3) = -1.5\varphi(1.5) + 1.5\varphi(-1.5) \cdot(-1)$을 따질 것 없이, $c \to \pm\infty$에서 합이 1로 가고 중간에서 작아진다는 것으로 충분하다. 최솟값은 대칭성에 의해
+
+    $$
+    \alpha(1.5) + \beta(1.5) = 2\Phi(-1.5) = 2 \times 0.066807 = 0.133614
+    $$
+
+    이다. **$\alpha = 0.05$가 주는 $c = 1.645$는 이 자리가 아니다.** 거기서는 합이 $0.137686$으로 최소보다 $3\%$ 크다. 수준 $\alpha$를 고정하는 관행은 두 오류의 **합**을 최소화하는 것이 아니라 **1종 오류를 우선 보호**하겠다는 선택이다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    null_loc = 0
+    alt_loc = 3
+    alpha = 0.05
+
+    x = np.linspace(null_loc - 4, alt_loc + 4, 400)
+    y_null = stats.norm.pdf(x, loc=null_loc)
+    y_alt = stats.norm.pdf(x, loc=alt_loc)
+
+    z_crit = stats.norm.ppf(1 - alpha, loc=null_loc)
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.plot(x, y_null, "b-", lw=2, label="Null distribution")
+    ax.plot(x, y_alt, "r-", lw=2, label="Alternative distribution")
+
+    # 제1종 오류: 귀무분포에서 임계값 오른쪽. H0가 참인데 기각하는 경우다.
+    mask_t1 = x >= z_crit
+    ax.fill_between(x[mask_t1], y_null[mask_t1], alpha=0.4, color="blue",
+                    label="Type I error (alpha)")
+
+    # 제2종 오류: 대립분포에서 임계값 왼쪽. H1이 참인데 기각하지 못하는 경우다.
+    # 두 오류가 **다른 곡선** 아래에서 재어진다는 점이 이 그림의 요점이다.
+    mask_t2 = x <= z_crit
+    ax.fill_between(x[mask_t2], y_alt[mask_t2], alpha=0.3, color="red",
+                    label="Type II error (beta)")
+
+    ax.axvline(z_crit, color="black", linestyle="--", alpha=0.6,
+               label=f"Critical value = {z_crit:.2f}")
+    ax.set_xlabel("Test statistic")
+    ax.set_ylabel("Density")
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+
+    # (1) 임계값과 두 오류.
+    print(f"z_c = {z_crit:.6f}")
+    print(f"alpha = {stats.norm.sf(z_crit, loc=null_loc):.6f}"
+          f"   beta = {stats.norm.cdf(z_crit, loc=alt_loc):.6f}"
+          f"   power = {stats.norm.sf(z_crit, loc=alt_loc):.6f}")
+
+    # (2) 임계값을 옮기며 두 오류의 맞바꿈을 본다.
+    print(f"\n{'c':>6} {'alpha':>9} {'beta':>9} {'합':>9}")
+    for c in (1.0, 1.5, z_crit, 2.0, 2.5, 3.0):
+        a_, b_ = stats.norm.sf(c), stats.norm.cdf(c - alt_loc)
+        mark = "  <- alpha=0.05" if abs(c - z_crit) < 1e-9 else (
+            "  <- 합이 최소" if c == 1.5 else "")
+        print(f"{c:>6.3f} {a_:>9.6f} {b_:>9.6f} {a_ + b_:>9.6f}{mark}")
+    print(f"\n이론 최솟값 2*Phi(-1.5) = {2 * stats.norm.cdf(-1.5):.6f}")
+    ```
+
+    출력:
+
+    ```
+    z_c = 1.644854
+    alpha = 0.050000   beta = 0.087685   power = 0.912315
+
+         c     alpha      beta         합
+     1.000  0.158655  0.022750  0.181405
+     1.500  0.066807  0.066807  0.133614  <- 합이 최소
+     1.645  0.050000  0.087685  0.137685  <- alpha=0.05
+     2.000  0.022750  0.158655  0.181405
+     2.500  0.006210  0.308538  0.314747
+     3.000  0.001350  0.500000  0.501350
+
+    이론 최솟값 2*Phi(-1.5) = 0.133614
+    ```
+
+    ![제1종 오류와 제2종 오류](./img/type12_error_visualization_44.png)
+
+    (1)에서 구한 $z_c = 1.644854$, $\beta = 0.087685$, 검정력 $0.912315$가 그대로 나왔다. (2)의 최솟값 $0.133614$도 $c = 1.5$ 줄에서 확인된다.
+
+    같은 세로 점선(임계값 $1.645$)이 두 곡선을 각각 자른다. 파란 곡선에서 오른쪽으로 잘린 조각이 $\alpha$, 빨간 곡선에서 왼쪽으로 잘린 조각이 $\beta$다.
+
+    표가 맞바꿈을 수로 보인다. $c$를 $1.0$에서 $3.0$으로 옮기는 동안 $\alpha$는 $0.159$에서 $0.00135$로 **118배 줄고** $\beta$는 $0.0228$에서 $0.500$으로 **22배 는다.** 점선을 오른쪽으로 옮기면 파란 조각이 줄고 빨간 조각이 느는 것이다. 임계값 하나로 두 오류를 동시에 통제할 수는 없다.
+
+    표가 $c = 1.5$를 중심으로 **대칭**인 것도 눈여겨보라. $c = 1.0$과 $c = 2.0$의 합이 둘 다 $0.181405$이고, $\alpha$와 $\beta$가 자리만 바뀌어 있다. 두 분포가 폭이 같고 중심만 다르기 때문이다.
+
+    둘 다 줄이는 방법은 하나뿐이다. **표본을 키워 두 곡선을 좁게 만드는 것**이다. 그러면 표준오차 단위로 잰 분리 $\mu_1 - \mu_0$이 커지고, 같은 $\alpha$에서 $\beta$가 작아진다. 보기 2가 그 효과를 수로 보인다.
 
 ### 분리 정도에 따른 검정력 계산
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 분리 정도에 따른 검정력
+**보기 2.** <span class="diff easy" title="쉬움"></span> 분리 정도에 따른 검정력. $\alpha = 0.05$ 우측검정에서 두 분포의 분리 $s = \mu_1 - \mu_0$을 1부터 5까지 바꿔 본다(두 분포 모두 표준편차 1).
+
+**(1)** 검정력을 $s$의 함수로 닫힌 꼴로 쓰고 다섯 값을 구하시오.
+
+**(2)** 검정력이 $s$에 대해 선형으로 오르지 않는다. **어느 $s$에서 가장 빨리 오르는지** 미분으로 구하고, 양 끝의 증가량을 견주시오.
 
 </div>
 
-```python
-for sep in [1, 2, 3, 4, 5]:
+??? success "풀이"
+
+    **(1) 해석적으로.** 임계값은 $H_0$ 아래에서 정해지므로 $s$와 무관하게 $z_c = z_{0.95} = 1.644854$다. 검정력은 이 문턱을 대립분포에서 재는 것이고, 대립분포가 $N(s, 1)$이므로
+
+    $$
+    1-\beta(s) = P(Z > z_c \mid Z \sim N(s,1)) = 1 - \Phi(z_c - s) = \Phi(s - z_c)
+    $$
+
+    이다. 다섯 값은 다음과 같다.
+
+    | $s$ | $s - z_c$ | 검정력 $\Phi(s-z_c)$ | $\beta$ |
+    |---|---|---|---|
+    | 1 | $-0.644854$ | $0.259511$ | $0.740489$ |
+    | 2 | $0.355146$ | $0.638760$ | $0.361240$ |
+    | 3 | $1.355146$ | $0.912315$ | $0.087685$ |
+    | 4 | $2.355146$ | $0.990742$ | $0.009258$ |
+    | 5 | $3.355146$ | $0.999603$ | $0.000397$ |
+
+    **(2) 해석적으로.** 검정력을 $s$로 미분하면 누적분포함수의 미분이므로 밀도가 나온다.
+
+    $$
+    \frac{d}{ds}\Phi(s - z_c) = \varphi(s - z_c)
+    $$
+
+    표준정규밀도 $\varphi$는 인수가 0일 때 최대이므로, **증가가 가장 빠른 자리는 $s = z_c = 1.645$**이고 그때 기울기는 $\varphi(0) = 0.398942$다. 곧 **검정력이 $1/2$을 지나는 바로 그 자리**에서 가장 가파르다. 거기서 멀어지면 양쪽 모두 완만해지는데, $\varphi$가 지수적으로 줄기 때문에 멀어질수록 급격히 평평해진다.
+
+    $s = 1 \to 2$의 증가량은 $0.638760 - 0.259511 = 0.379249$, $s = 4 \to 5$는 $0.999603 - 0.990742 = 0.008861$이다. **42.8배** 차이다.
+
+    **수치적으로.**
+
+    ```python
+    for sep in [1, 2, 3, 4, 5]:
+        z_c = stats.norm.ppf(0.95)
+        # loc=sep은 "대립분포에서 재라"는 뜻이다. 임계값 z_c 자체는 sep과 무관하다.
+        # H0 아래에서 정해지는 값이기 때문이다.
+        power = 1 - stats.norm.cdf(z_c, loc=sep)
+        beta = 1 - power
+        print(f"Separation = {sep}: beta = {beta:.4f}, Power = {power:.4f}")
+
+    # (2) 기울기와 한 칸 증가량.
     z_c = stats.norm.ppf(0.95)
-    # loc=sep은 "대립분포에서 재라"는 뜻이다. 임계값 z_c 자체는 sep과 무관하다.
-    # H0 아래에서 정해지는 값이기 때문이다.
-    power = 1 - stats.norm.cdf(z_c, loc=sep)
-    beta = 1 - power
-    print(f"Separation = {sep}: beta = {beta:.4f}, Power = {power:.4f}")
-```
+    print(f"\n{'s':>3} {'검정력':>10} {'기울기 phi(s-z_c)':>18} {'한 칸 증가':>11}")
+    prev = None
+    for s in (1, 2, 3, 4, 5):
+        pw = stats.norm.cdf(s - z_c)
+        inc = "" if prev is None else f"{pw - prev:>11.6f}"
+        print(f"{s:>3} {pw:>10.6f} {stats.norm.pdf(s - z_c):>18.6f} {inc}")
+        prev = pw
+    print(f"\n기울기가 최대인 s = z_c = {z_c:.6f},"
+          f"  그때 기울기 = {stats.norm.pdf(0):.6f}")
+    print(f"증가량 비 (1->2) / (4->5) = "
+          f"{(stats.norm.cdf(2 - z_c) - stats.norm.cdf(1 - z_c)) / (stats.norm.cdf(5 - z_c) - stats.norm.cdf(4 - z_c)):.1f}")
+    ```
 
-출력:
+    출력:
 
-```
-Separation = 1: beta = 0.7405, Power = 0.2595
-Separation = 2: beta = 0.3612, Power = 0.6388
-Separation = 3: beta = 0.0877, Power = 0.9123
-Separation = 4: beta = 0.0093, Power = 0.9907
-Separation = 5: beta = 0.0004, Power = 0.9996
-```
+    ```
+    Separation = 1: beta = 0.7405, Power = 0.2595
+    Separation = 2: beta = 0.3612, Power = 0.6388
+    Separation = 3: beta = 0.0877, Power = 0.9123
+    Separation = 4: beta = 0.0093, Power = 0.9907
+    Separation = 5: beta = 0.0004, Power = 0.9996
 
-검정력이 선형으로 오르지 않는다. 분리가 1에서 2로 갈 때 0.26에서 0.64로 크게 뛰지만, 4에서 5로 갈 때는 0.991에서 0.9996으로 거의 움직이지 않는다. 정규분포의 꼬리가 지수적으로 얇아지기 때문이다.
+      s        검정력     기울기 phi(s-z_c)      한 칸 증가
+      1   0.259511           0.324050 
+      2   0.638760           0.374560    0.379249
+      3   0.912315           0.159271    0.273555
+      4   0.990742           0.024915    0.078428
+      5   0.999603           0.001434    0.008861
 
-분리가 1일 때 검정력이 0.26이라는 것도 새겨 둘 만하다. 효과가 표준오차만큼 있어도 네 번 중 세 번은 놓친다. "효과가 있으면 검정이 잡아낼 것"이라는 기대는 대체로 근거가 없다.
+    기울기가 최대인 s = z_c = 1.644854,  그때 기울기 = 0.398942
+    증가량 비 (1->2) / (4->5) = 42.8
+    ```
+
+    (1)의 다섯 값이 그대로 나왔고, (2)의 기울기 최대 자리 $s = 1.644854$와 증가량 비 $42.8$도 확인된다.
+
+    **검정력이 선형으로 오르지 않는다.** 분리가 1에서 2로 갈 때 $0.26$에서 $0.64$로 크게 뛰지만, 4에서 5로 갈 때는 $0.991$에서 $0.9996$으로 거의 움직이지 않는다. 기울기 열이 그 까닭을 보인다. $s = 2$ 근처에서 $0.375$이던 것이 $s = 5$에서 $0.0014$로 **260배** 줄어든다. 정규분포의 꼬리가 지수적으로 얇아지기 때문이다.
+
+    분리가 1일 때 검정력이 $0.26$이라는 것도 새겨 둘 만하다. **효과가 표준오차만큼 있어도 네 번 중 세 번은 놓친다.** "효과가 있으면 검정이 잡아낼 것"이라는 기대는 대체로 근거가 없다.
+
+    실무로 옮기면 이렇다. 분리 $s$는 $(\mu_1-\mu_0)\sqrt n/\sigma$이므로 $\sqrt n$에 비례한다. 지금 $s = 1$인 설계라면 $s = 3$으로 가는 데 표본이 **아홉 배** 든다. 그 투자로 검정력이 $0.26$에서 $0.91$로 오른다. 반면 $s = 4$에서 $s = 5$로 가는 데에도 표본이 $1.56$배 드는데 얻는 것은 $0.009$뿐이다. **투자할 자리는 곡선의 가파른 구간**이다.
 
 ## 해석
 

@@ -30,47 +30,138 @@ $$
 
 이다. $H_0$과 정규성 아래에서 $\chi^2_B$는 근사적으로 $\chi^2(k-1)$을 따른다. $\chi^2_B > \chi^2_{1-\alpha}(k-1)$이면 $H_0$을 기각한다.
 
-함께 제공되는 스크립트는 기준 표본 $X \sim N(0, 1)$을 생성하고 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$인 표본 $Y \sim N(1, \sigma_Y)$과 비교한다:
+함께 제공되는 스크립트는 기준 표본 $X \sim N(0, 1)$을 생성하고 $\sigma_Y \in \{1.00, 1.05, 1.10, 1.15, 1.20\}$인 표본 $Y \sim N(1, \sigma_Y)$과 비교한다. 씨앗을 고정하므로 통계량이 자료에 전혀 의존하지 않는 닫힌 꼴로 적힌다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 분산 차이를 키워 가며 보는 Bartlett 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산 차이를 키워 가며 보는 Bartlett 검정. 집단당 $n = 100$, 씨앗 `seed = 1`을 고정하고 $\sigma_Y$만 바꾼다.
+
+**(1)** $k = 2$, $\nu_1 = \nu_2 = \nu = n - 1$이고 씨앗이 고정되어 있을 때
+
+$$
+\chi_B^2(\sigma_Y) = \frac{2\nu}{1 + \dfrac{1}{2\nu}} \,
+\ln\!\left(\frac{1 + \sigma_Y^2}{2\sigma_Y}\right)
+$$
+
+임을 유도하시오. 이 값이 언제나 $0$ 이상이고 $\sigma_Y = 1$에서만 $0$임을 보이시오.
+
+**(2)** 검정을 실행해 이 식이 맞는지 확인하고, $p = 0.05$가 되는 $\sigma_Y$를 구해 [등분산 F-검정](f_test_equality_of_variances.md)의 같은 경계와 견주시오.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-# 한쪽 표준편차를 1 로 고정하고 다른 쪽을 조금씩 키워 가며 검정해 본다.
-# 5% 차이까지는 잡아내지 못하고 20% 쯤 되어야 걸린다. 검정력이 무엇에
-# 좌우되는지를 눈으로 보는 대목이다.
-seed, size = 1, 100
-x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+    **(1) 해석적으로.** 같은 씨앗에서 `norm(loc, scale).rvs` 는 같은 표준정규열 $z_1, \ldots, z_n$을 꺼내 쓰므로 $x_j = z_j$, $y_j = 1 + \sigma_Y z_j$다. 표본분산은 위치이동에 둔감하고 배율의 제곱만큼 커지므로
 
-for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
-    y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
-    stat, pval = stats.bartlett(x, y)
-    print(f"sigma_y={scale:.2f}: chi2={stat:.2f}, p={pval:.3f}")
-```
+    $$
+    S_1^2 = s_z^2, \qquad S_2^2 = \sigma_Y^2 s_z^2
+    $$
 
-출력:
+    이다. 합동분산은 두 자유도가 같으므로 단순평균이 된다.
 
-```
-sigma_y=1.00: chi2=-0.00, p=1.000
-sigma_y=1.05: chi2=0.23, p=0.628
-sigma_y=1.10: chi2=0.89, p=0.345
-sigma_y=1.15: chi2=1.92, p=0.166
-sigma_y=1.20: chi2=3.26, p=0.071
-```
+    $$
+    S_p^2 = \frac{\nu s_z^2 + \nu \sigma_Y^2 s_z^2}{2\nu} = \frac{1 + \sigma_Y^2}{2}\, s_z^2
+    $$
 
-첫 줄의 $\chi^2 = -0.00$은 오류가 아니다. `random_state`를 같게 두었으므로 $\sigma_Y = 1.00$일 때 두 표본의 분산이 완전히 같고 통계량이 정확히 0이 되는데, 부동소수점 계산에서 $-10^{-15}$ 수준의 값이 나와 반올림하면 $-0.00$으로 찍힌다.
+    이제 분자를 계산한다.
 
-표준편차가 20% 차이 나는 마지막 줄에서도 $p = 0.071$로 5% 수준을 넘기지 못한다. 집단당 100개로도 이 정도 분산 차이는 잡기 어렵다.
+    $$
+    \begin{aligned}
+    2\nu \ln S_p^2 - \nu \ln S_1^2 - \nu \ln S_2^2
+    &= 2\nu\left[\ln s_z^2 + \ln\frac{1+\sigma_Y^2}{2}\right]
+       - \nu \ln s_z^2 - \nu\left[\ln s_z^2 + \ln \sigma_Y^2\right] \\
+    &= 2\nu \ln\frac{1+\sigma_Y^2}{2} - 2\nu \ln \sigma_Y \\
+    &= 2\nu \ln\!\left(\frac{1+\sigma_Y^2}{2\sigma_Y}\right)
+    \end{aligned}
+    $$
 
-각 호출은 Bartlett $\chi^2$ 통계량과 그 p-값을 돌려준다. 스크립트가 그리는 겹친 히스토그램으로 각 분산비에서 두 분포를 시각적으로 비교할 수 있다.
+    **$\ln s_z^2$이 완전히 약분된다.** 계수 $2\nu - \nu - \nu = 0$이기 때문이고, 바로 이 때문에 통계량이 자료의 흩어짐 크기에 의존하지 않는다.
 
-출력은 다음과 같다:
+    분모의 보정항은 $k = 2$, $\nu_1 = \nu_2 = \nu$에서
+
+    $$
+    1 + \frac{1}{3(k-1)}\left(\sum_i \frac{1}{\nu_i} - \frac{1}{\sum_i \nu_i}\right)
+    = 1 + \frac{1}{3}\left(\frac{2}{\nu} - \frac{1}{2\nu}\right)
+    = 1 + \frac{1}{3}\cdot\frac{3}{2\nu}
+    = 1 + \frac{1}{2\nu}
+    $$
+
+    이다. 둘을 합치면 문제의 식이 나온다. $\nu = 99$에서 보정항은 $1 + 1/198 = 1.0050505$다.
+
+    부호는 산술–기하평균 부등식이 정해 준다. $1$과 $\sigma_Y^2$에 대해
+
+    $$
+    \frac{1 + \sigma_Y^2}{2} \ge \sqrt{1 \cdot \sigma_Y^2} = \sigma_Y
+    \quad\Longrightarrow\quad
+    \frac{1+\sigma_Y^2}{2\sigma_Y} \ge 1
+    \quad\Longrightarrow\quad
+    \ln\!\left(\frac{1+\sigma_Y^2}{2\sigma_Y}\right) \ge 0
+    $$
+
+    이고 등호는 $\sigma_Y^2 = 1$, 곧 $\sigma_Y = 1$일 때만 성립한다. **$\sigma_Y = 1$에서 $\chi_B^2$은 근삿값이 아니라 정확히 $0$이다.** 출력의 $-0.00$은 이 정확한 $0$을 부동소수점으로 계산할 때 $-10^{-15}$ 수준의 잔여가 남은 것일 뿐이다. 통계량이 음수가 될 수 있다는 뜻이 아니다.
+
+    **(2) 수치적으로.** 다섯 $\sigma_Y$에 대해 `scipy` 값과 닫힌 꼴을 나란히 적는다.
+
+    ```python
+    import numpy as np
+    import scipy.optimize as opt
+    import scipy.stats as stats
+
+    # (1) 에서 유도한 닫힌 꼴: nu = n-1, C = 1 + 1/(2 nu).
+    seed, size = 1, 100
+    nu = size - 1
+    C = 1 + 1 / (2 * nu)
+    x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+
+    print(f"nu = {nu},  보정항 C = 1 + 1/(2nu) = {C:.7f}")
+    print(f"\n{'sigma_y':>8}{'bartlett':>12}{'closed':>12}{'p':>9}")
+    for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
+        y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
+        stat, pval = stats.bartlett(x, y)
+        closed = 2 * nu * np.log((1 + scale ** 2) / (2 * scale)) / C
+        print(f"{scale:>8.2f}{stat:>12.8f}{closed:>12.8f}{pval:>9.4f}")
+
+    # p = 0.05 경계. 닫힌 꼴을 거꾸로 푼다 — 격자 탐색이 아니다.
+    crit = stats.chi2(df=1).ppf(0.95)
+    g = lambda s: 2 * nu * np.log((1 + s ** 2) / (2 * s)) / C - crit
+    root = opt.brentq(g, 1.0001, 5.0)
+    print(f"\n임계값 chi2_0.95(1) = {crit:.4f}")
+    print(f"chi2_B = 임계값이 되는 sigma_y = {root:.4f}")
+
+    # 같은 경계를 등분산 F 검정에서 구하면 1/sqrt(F_0.025(99,99)) 다.
+    print(f"F 검정의 같은 경계             = {1 / np.sqrt(stats.f(nu, nu).ppf(0.025)):.4f}")
+    ```
+
+    출력:
+
+    ```
+    nu = 99,  보정항 C = 1 + 1/(2nu) = 1.0050505
+
+     sigma_y    bartlett      closed        p
+        1.00 -0.00000000  0.00000000   1.0000
+        1.05  0.23439030  0.23439030   0.6283
+        1.10  0.89344836  0.89344836   0.3445
+        1.15  1.91785747  1.91785747   0.1661
+        1.20  3.25635555  3.25635555   0.0711
+
+    임계값 chi2_0.95(1) = 3.8415
+    chi2_B = 임계값이 되는 sigma_y = 1.2191
+    F 검정의 같은 경계             = 1.2191
+    ```
+
+    **유도한 식과 `scipy.stats.bartlett` 의 값이 소수점 여덟째 자리까지 같다.** 첫 줄만 `scipy` 쪽이 $-0.00000000$, 닫힌 꼴이 $0.00000000$인데, (1)에서 본 대로 참값은 정확히 $0$이고 차이는 부동소수점 잔여뿐이다.
+
+    $p = 0.05$ 경계는 $\sigma_Y = 1.2191$이다. 격자의 마지막 값 $1.20$이 그에 못 미치므로 기각되지 않으며, 이것이 $p = 0.071$의 정체다. 표준편차가 $20\%$ 차이 나도 집단당 100개로는 $5\%$ 수준을 넘기지 못한다.
+
+    **같은 경계가 등분산 F-검정에서도 $1.2191$로 똑같이 나오는 것**이 이 보기의 가장 쓸모 있는 대목이다. 우연이 아니다. (1)의 유도에서 $\chi_B^2$이 $\sigma_Y$에만 의존했는데, $\sigma_Y^2 = S_2^2/S_1^2$은 F-통계량의 역수다. 일반적으로 $r = S_1^2/S_2^2$이라 쓰면
+
+    $$
+    \chi_B^2 = \frac{2\nu}{1 + 1/(2\nu)} \ln\!\left(\frac{1+r}{2\sqrt r}\right)
+    $$
+
+    이고 이는 $|\ln r|$의 **증가함수**다. 따라서 $k = 2$, 균형설계, 정규 자료에서 바틀렛 검정은 F-검정의 단조변환이며 두 검정은 같은 순서로 기각한다. 본문 표의 p-값이 F-검정의 것과 소수점 셋째 자리까지 같았던 까닭도 이것이다. 두 경계가 소수점 넷째 자리까지 일치한 것은 $\chi^2(1)$ 근사가 $\nu = 99$에서 충분히 정확했다는 뜻이기도 하다.
+
+각 호출은 Bartlett $\chi^2$ 통계량과 그 p-값을 돌려준다. 출력은 다음과 같다:
 
 | $\sigma_Y$ | $\chi^2_B$ | p-값 |
 |---|---|---|

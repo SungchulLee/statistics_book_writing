@@ -151,88 +151,146 @@ FDR 통제는 후속 조사를 할 유망한 후보 집합을 찾는 것이 목�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 벤자미니-호크버그 절차 구현
+**보기 2.** <span class="diff easy" title="쉬움"></span> 벤자미니-호크버그 절차 구현. 보정 $p$-값(q-값)은
+
+$$
+\tilde p_{(i)} = \min_{j \ge i}\left\{\frac{m}{j}\,p_{(j)}\right\}
+$$
+
+인데, 구현에서는 **큰 순위에서 작은 쪽으로 훑으며 최솟값을 취하는** 한 줄짜리 되짚기로 처리한다.
+
+**(1)** $p$-값 $0.001,\ 0.008,\ 0.039,\ 0.041,\ 0.23,\ 0.76$에 대해 되짚기 **전**의 값 $\tfrac{m}{k}p_{(k)}$를 모두 구하고, 어디서 단조성이 깨지는지 찾으시오. 되짚기 후의 값도 구하시오.
+
+**(2)** 되짚기를 하지 않으면 무엇이 잘못되는가. 또 조건을 만족하는 $k$가 **하나도 없을 때** 이 구현이 어떻게 처리하는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def benjamini_hochberg(p_values, alpha=0.05):
-    """벤자미니-호크버그 절차를 적용한다.
+    **(1) 해석적으로.** $m = 6$이고 $p$-값이 이미 정렬되어 있으므로 $\tfrac{m}{k}p_{(k)}$를 차례로 잰다.
 
-        p-값을 작은 것부터 늘어놓고 k번째를 k/m*alpha 와 견준다. 조건을 만족하는
-        가장 큰 k 를 찾아 그 아래를 모두 기각한다. FWER 대신 FDR 을 통제하므로
-        본페로니보다 훨씬 덜 보수적이다.
+    | $k$ | $p_{(k)}$ | $\tfrac{6}{k}p_{(k)}$ | 되짚기 후 |
+    |---|---|---|---|
+    | 1 | $0.001$ | $0.001 \times 6 = 0.0060$ | $0.0060$ |
+    | 2 | $0.008$ | $0.008 \times 3 = 0.0240$ | $0.0240$ |
+    | 3 | $0.039$ | $0.039 \times 2 = 0.0780$ | $0.0615$ |
+    | 4 | $0.041$ | $0.041 \times 1.5 = 0.0615$ | $0.0615$ |
+    | 5 | $0.230$ | $0.230 \times 1.2 = 0.2760$ | $0.2760$ |
+    | 6 | $0.760$ | $0.760 \times 1 = 0.7600$ | $0.7600$ |
 
-    Parameters
-    ----------
-    p_values : array-like
-        Raw p-values from m hypothesis tests.
-    alpha : float
-        Target FDR level.
+    **$k = 3$에서 단조성이 깨진다.** $0.0780 > 0.0615$이므로 셋째 자리의 값이 넷째보다 **크다.** 원래 $p$-값은 $0.039 < 0.041$로 셋째가 더 작은데, 보정하면 순서가 뒤집히는 것이다. $m/k$가 $k$에 대해 감소하므로 $p_{(k)}$가 충분히 천천히 커지면 이런 역전이 일어난다.
 
-    Returns
-    -------
-    rejected : ndarray of bool
-        True for hypotheses that are rejected.
-    adjusted : ndarray of float
-        BH-adjusted p-values.
-    """
-    p = np.asarray(p_values)
-    m = len(p)
-    order = np.argsort(p)
-    sorted_p = p[order]
+    되짚기는 오른쪽 끝에서 시작해 $\tilde p_{(i)} = \min\{\tfrac{m}{i}p_{(i)},\ \tilde p_{(i+1)}\}$을 적용한다. $i = 4$에서 $\min(0.0615, 0.2760) = 0.0615$, $i = 3$에서 $\min(0.0780, 0.0615) = 0.0615$가 되어 셋째가 끌어내려진다. 나머지는 이미 작으므로 그대로다. 이 한 번의 훑기가 정의의 $\min_{j \ge i}$를 그대로 계산한다.
 
-    # BH 문턱값: k번째로 작은 p-값을 k/m*alpha 와 견준다.
-    thresholds = np.arange(1, m + 1) / m * alpha
+    **(2) 되짚기를 하지 않으면.** 셋째의 보정 $p$가 $0.0780$으로 남는다. 그러면 $\alpha = 0.07$에서 **넷째($0.0615$)는 기각되는데 셋째($0.0780$)는 기각되지 않는** 결과가 나온다. 원래 $p$-값이 더 작은 가설을 기각하지 못하는 셈이라, 단계적 상승 절차의 "가장 큰 $k$ 아래를 모두 기각한다"는 규칙과 어긋난다. **되짚기는 보정 $p$-값과 BH 절차를 동치로 만들기 위한 장치**다. 그래야 "$\tilde p_{(i)} \le \alpha$이면 기각"이 BH와 정확히 같은 답을 준다.
 
-    # 조건을 만족하는 가장 큰 k 를 찾는다. 그 아래는 모두 기각한다.
-    below = sorted_p <= thresholds
-    if not below.any():
-        k = 0
-    else:
-        k = np.max(np.where(below)[0]) + 1
+    **조건을 만족하는 $k$가 없을 때.** 구현의 `if not below.any(): k = 0` 한 줄이 그 경우를 막는다. 이 보호가 없으면 `np.max(np.where(below)[0])`이 빈 배열에서 예외를 던지고, `np.argmax(below)` 같은 꼴로 썼다면 **조용히 0번 칸을 돌려주어 첫 가설을 기각해 버린다.** 격자에서 답을 찾는 코드가 흔히 빠지는 함정이며, 아래에서 실제로 확인한다.
 
-    # 기각 여부를 표시한다.
-    rejected = np.zeros(m, dtype=bool)
-    rejected[order[:k]] = True
+    **수치적으로.**
 
-    # 보정 p-값. 큰 것에서 작은 쪽으로 훑으며 단조성을 강제한다.
-    # 이 되짚기가 없으면 원래 p-값의 순서가 뒤집히는 일이 생겨
-    # "더 작은 p-값이 더 큰 보정 p-값을 갖는" 이상한 결과가 나온다.
-    adjusted_sorted = np.minimum(1, sorted_p * m / np.arange(1, m + 1))
-    for i in range(m - 2, -1, -1):
-        adjusted_sorted[i] = min(adjusted_sorted[i], adjusted_sorted[i + 1])
-    adjusted = np.empty(m)
-    adjusted[order] = adjusted_sorted      # 원래 순서로 되돌린다
+    ```python
+    import numpy as np
 
-    return rejected, adjusted
+    def benjamini_hochberg(p_values, alpha=0.05):
+        """벤자미니-호크버그 절차를 적용한다.
+
+            p-값을 작은 것부터 늘어놓고 k번째를 k/m*alpha 와 견준다. 조건을 만족하는
+            가장 큰 k 를 찾아 그 아래를 모두 기각한다. FWER 대신 FDR 을 통제하므로
+            본페로니보다 훨씬 덜 보수적이다.
+
+        Parameters
+        ----------
+        p_values : array-like
+            Raw p-values from m hypothesis tests.
+        alpha : float
+            Target FDR level.
+
+        Returns
+        -------
+        rejected : ndarray of bool
+            True for hypotheses that are rejected.
+        adjusted : ndarray of float
+            BH-adjusted p-values.
+        """
+        p = np.asarray(p_values)
+        m = len(p)
+        order = np.argsort(p)
+        sorted_p = p[order]
+
+        # BH 문턱값: k번째로 작은 p-값을 k/m*alpha 와 견준다.
+        thresholds = np.arange(1, m + 1) / m * alpha
+
+        # 조건을 만족하는 가장 큰 k 를 찾는다. 그 아래는 모두 기각한다.
+        below = sorted_p <= thresholds
+        if not below.any():
+            k = 0
+        else:
+            k = np.max(np.where(below)[0]) + 1
+
+        # 기각 여부를 표시한다.
+        rejected = np.zeros(m, dtype=bool)
+        rejected[order[:k]] = True
+
+        # 보정 p-값. 큰 것에서 작은 쪽으로 훑으며 단조성을 강제한다.
+        # 이 되짚기가 없으면 원래 p-값의 순서가 뒤집히는 일이 생겨
+        # "더 작은 p-값이 더 큰 보정 p-값을 갖는" 이상한 결과가 나온다.
+        adjusted_sorted = np.minimum(1, sorted_p * m / np.arange(1, m + 1))
+        for i in range(m - 2, -1, -1):
+            adjusted_sorted[i] = min(adjusted_sorted[i], adjusted_sorted[i + 1])
+        adjusted = np.empty(m)
+        adjusted[order] = adjusted_sorted      # 원래 순서로 되돌린다
+
+        return rejected, adjusted
 
 
-# 아래 연습문제 1의 p-값으로 확인한다.
-pvals = np.array([0.001, 0.008, 0.039, 0.041, 0.23, 0.76])
-rej, adj = benjamini_hochberg(pvals, alpha=0.10)
-print("rejected:", rej)
-print("adjusted:", np.round(adj, 4))
+    # 아래 연습문제 1의 p-값으로 확인한다.
+    pvals = np.array([0.001, 0.008, 0.039, 0.041, 0.23, 0.76])
+    rej, adj = benjamini_hochberg(pvals, alpha=0.10)
+    print("rejected:", rej)
+    print("adjusted:", np.round(adj, 4))
 
-# statsmodels와 대조
-from statsmodels.stats.multitest import multipletests
-rej_sm, adj_sm, _, _ = multipletests(pvals, alpha=0.10, method="fdr_bh")
-print("statsmodels adjusted:", np.round(adj_sm, 4))
-```
+    # statsmodels와 대조
+    from statsmodels.stats.multitest import multipletests
+    rej_sm, adj_sm, _, _ = multipletests(pvals, alpha=0.10, method="fdr_bh")
+    print("statsmodels adjusted:", np.round(adj_sm, 4))
 
-출력:
+    # (1) 되짚기 전후를 나란히 본다.
+    m = len(pvals)
+    raw = np.minimum(1, np.sort(pvals) * m / np.arange(1, m + 1))
+    print("\n되짚기 전:", np.round(raw, 4))
+    print("되짚기 후:", np.round(np.sort(adj), 4))
+    print("단조성이 깨진 자리:",
+          [int(k) + 1 for k in np.where(np.diff(raw) < 0)[0]], "번째")
 
-```
-rejected: [ True  True  True  True False False]
-adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
-statsmodels adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
-```
+    # (2) 조건을 만족하는 k 가 하나도 없는 경우.
+    none_p = np.array([0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+    rej0, adj0 = benjamini_hochberg(none_p, alpha=0.10)
+    print("\n아무것도 기각되지 않는 경우:", rej0, np.round(adj0, 4))
+    print("statsmodels 도 같은가:",
+          np.array_equal(rej0, multipletests(none_p, alpha=0.10,
+                                             method="fdr_bh")[0]))
+    ```
 
-앞의 네 개가 기각된다. Bonferroni였다면 문턱이 $0.10/6 = 0.0167$이라 처음 두 개만 기각되었을 것이다.
+    출력:
 
-보정 p-값에서 셋째와 넷째가 0.0615로 같아진 것이 위에서 말한 단조성 강제의 결과다. 곧이곧대로 계산하면 셋째가 $0.039 \times 6/3 = 0.078$, 넷째가 $0.041 \times 6/4 = 0.0615$로 원래 p-값의 순서와 어긋난다. 뒤에서부터 훑으며 최솟값을 취해 셋째를 0.0615로 끌어내린다.
+    ```
+    rejected: [ True  True  True  True False False]
+    adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
+    statsmodels adjusted: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
+
+    되짚기 전: [0.006  0.024  0.078  0.0615 0.276  0.76  ]
+    되짚기 후: [0.006  0.024  0.0615 0.0615 0.276  0.76  ]
+    단조성이 깨진 자리: [3] 번째
+
+    아무것도 기각되지 않는 경우: [False False False False False False] [0.9 0.9 0.9 0.9 0.9 0.9]
+    statsmodels 도 같은가: True
+    ```
+
+    (1)의 표가 그대로 재현된다. 되짚기 전의 여섯 값이 $0.006,\ 0.024,\ 0.078,\ 0.0615,\ 0.276,\ 0.76$이고 셋째에서만 단조성이 깨진다. 되짚기 후에는 셋째가 $0.0615$로 끌어내려져 넷째와 같아지며, 이 결과가 `statsmodels`와 **완전히 일치**한다.
+
+    앞의 네 개가 기각된다. Bonferroni였다면 문턱이 $0.10/6 = 0.0167$이라 처음 두 개만 기각되었을 것이다. 보정 $p$-값으로 읽어도 같다. $0.006,\ 0.024,\ 0.0615,\ 0.0615$가 모두 $\alpha = 0.10$ 이하이고 $0.276$부터는 넘는다. **단계적 상승 규칙과 보정 $p$-값 비교가 같은 답을 주는 것**이 (2)에서 말한 되짚기의 몫이다.
+
+    (2)의 마지막 확인도 통과한다. $p$-값이 모두 커서 조건을 만족하는 $k$가 하나도 없을 때 `k = 0`이 되어 **하나도 기각하지 않는다.** 보정 $p$-값은 여섯 개 모두 $0.9$다. 되짚기 전에는 앞의 네 자리가 $\tfrac{6}{k}p_{(k)} > 1$이라 모두 $1$로 잘려 있었는데, 가장 큰 순위의 값 $0.9 \times \tfrac66 = 0.9$가 되짚기를 거치며 모든 자리로 내려온 것이다. 어느 것도 $\alpha = 0.10$ 이하가 아니므로 기각이 없고, `statsmodels`도 같은 답을 준다.
 
 ## 다른 주제와의 연결
 

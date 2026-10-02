@@ -58,184 +58,293 @@ p-값은 귀무가설에 반하는 증거의 척도를 준다:
 
 ### F. 보기
 
-$$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu\neq50$$
-
-주어진 값: $n = 500$, $\bar{x} = 48$, $s = 20.3$.
-
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 양측
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 양측. 관측값 $n = 500$개에서 $\bar x = 48$, $s = 20.3$을 얻었다.
+
+$$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu \neq 50$$
+
+**(1)** 검정통계량과 양측 p-값을 손으로 구하고, $\alpha = 0.05$의 기각역을 $\bar x$의 값으로 환산하시오.
+
+**(2)** 코드로 확인하고, p-값이 그림의 어느 넓이인지 밝히시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def plot_z_statistic(statistic, ax, alternative='two-sided'):
-    """검정통계량 위치에서 잘린 꼬리를 칠해 p-값을 눈으로 보여준다.
+    **(1) 해석적으로.** 표준오차부터 구한다.
 
-    칠해진 넓이가 곧 p-값이다. 양측이면 좌우 두 조각의 합이다.
-    """
-    x = np.linspace(-4, 4, 100)
-    y = stats.norm().pdf(x)
-    ax.plot(x, y, '-k')
+    $$
+    \frac{s}{\sqrt{n}} = \frac{20.3}{\sqrt{500}} = \frac{20.3}{22.3607} = 0.90784
+    $$
 
-    if alternative == 'less':
-        x_fill = np.linspace(-4, statistic, 100)
-        y_fill = stats.norm().pdf(x_fill)
-        ax.fill_between(x_fill, y_fill, color='r', alpha=0.2)
-    elif alternative == 'greater':
-        x_fill = np.linspace(statistic, 4, 100)
-        y_fill = stats.norm().pdf(x_fill)
-        ax.fill_between(x_fill, y_fill, color='r', alpha=0.2)
-    elif alternative == 'two-sided':
-        x_fill_left = np.linspace(-4, -abs(statistic), 100)
-        y_fill_left = stats.norm().pdf(x_fill_left)
-        ax.fill_between(x_fill_left, y_fill_left, color='r', alpha=0.2)
-        x_fill_right = np.linspace(abs(statistic), 4, 100)
-        y_fill_right = stats.norm().pdf(x_fill_right)
-        ax.fill_between(x_fill_right, y_fill_right, color='r', alpha=0.2)
+    이므로 검정통계량은
 
-    ax.spines['left'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    ax.set_yticks([])
+    $$
+    z = \frac{\bar x - \mu_0}{s/\sqrt{n}} = \frac{48 - 50}{0.90784} = -2.20302
+    $$
 
-mu = 50
-n = 500
-x_bar = 48
-s = 20.3
+    이고, 양측 p-값은 한쪽 꼬리를 두 배 한 값이다.
 
-# n = 500 >= 30 이므로 sigma를 몰라도 s를 넣고 z를 쓴다.
-statistic = (x_bar - mu) / (s / np.sqrt(n))
-# sf(x) = 1 - cdf(x) 이고 꼬리확률에서는 sf가 수치적으로 더 정확하다.
-# abs를 씌우고 2를 곱해 양측으로 만든다.
-p_value = stats.norm().sf(abs(statistic)) * 2
+    $$
+    p = 2\,P(Z \ge 2.20302) = 2 \times 0.013797 = 0.027593
+    $$
 
-print(f"Statistic: {statistic:.4f}")
-print(f"P-value  : {p_value:.4f}")
+    기각역을 $\bar x$의 값으로 되돌려 보면 더 잘 보인다. $\lvert \bar x - 50 \rvert > 1.95996 \times 0.90784 = 1.77934$이므로
 
-alpha = 0.05
-if p_value <= alpha:
-    print("Reject H0 (Choose H1)")
-else:
-    print("Fail to reject H0")
+    $$
+    \bar x < 48.2207 \quad \text{또는} \quad \bar x > 51.7793
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
-plot_z_statistic(statistic, ax=ax, alternative='two-sided')
-plt.show()
-```
+    이다. 관측된 $48$은 아래쪽 경계보다 $0.22$만 더 낮다. **아슬아슬하게 들어간 것**이고, p-값 $0.0276$이 $0.05$에 가까운 것이 같은 사실의 다른 표현이다.
 
-출력:
+    **(2) 수치적으로.**
 
-```
-Statistic: -2.2030
-P-value  : 0.0276
-Reject H0 (Choose H1)
-```
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
 
-![양측검정의 p-값](./img/one_sample_67.png)
+    def plot_z_statistic(statistic, ax, alternative='two-sided'):
+        """검정통계량 위치에서 잘린 꼬리를 칠해 p-값을 눈으로 보여준다.
 
-$\bar x = 48$은 가설값 50에서 2만큼 떨어져 있을 뿐이지만 $n = 500$이라 표준오차가 0.91로 작아 $z = -2.20$이 된다. 표본이 크면 작은 차이도 유의해진다.
+        칠해진 넓이가 곧 p-값이다. 양측이면 좌우 두 조각의 합이다.
+        """
+        x = np.linspace(-4, 4, 100)
+        y = stats.norm().pdf(x)
+        ax.plot(x, y, '-k')
 
-그림에서 칠해진 두 꼬리의 넓이 합이 0.0276이다.
+        if alternative == 'less':
+            x_fill = np.linspace(-4, statistic, 100)
+            y_fill = stats.norm().pdf(x_fill)
+            ax.fill_between(x_fill, y_fill, color='r', alpha=0.2)
+        elif alternative == 'greater':
+            x_fill = np.linspace(statistic, 4, 100)
+            y_fill = stats.norm().pdf(x_fill)
+            ax.fill_between(x_fill, y_fill, color='r', alpha=0.2)
+        elif alternative == 'two-sided':
+            x_fill_left = np.linspace(-4, -abs(statistic), 100)
+            y_fill_left = stats.norm().pdf(x_fill_left)
+            ax.fill_between(x_fill_left, y_fill_left, color='r', alpha=0.2)
+            x_fill_right = np.linspace(abs(statistic), 4, 100)
+            y_fill_right = stats.norm().pdf(x_fill_right)
+            ax.fill_between(x_fill_right, y_fill_right, color='r', alpha=0.2)
 
-$$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu<50$$
+        ax.spines['left'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.set_yticks([])
 
-주어진 값: $n = 500$, $\bar{x} = 48$, $s = 20.3$.
+    mu = 50
+    n = 500
+    x_bar = 48
+    s = 20.3
 
-<div class="exbox" markdown>
+    # n = 500 >= 30 이므로 sigma를 몰라도 s를 넣고 z를 쓴다.
+    statistic = (x_bar - mu) / (s / np.sqrt(n))
+    # sf(x) = 1 - cdf(x) 이고 꼬리확률에서는 sf가 수치적으로 더 정확하다.
+    # abs를 씌우고 2를 곱해 양측으로 만든다.
+    p_value = stats.norm().sf(abs(statistic)) * 2
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 작음
+    print(f"Statistic: {statistic:.4f}")
+    print(f"P-value  : {p_value:.4f}")
 
-</div>
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H0 (Choose H1)")
+    else:
+        print("Fail to reject H0")
 
-```python
-mu = 50
-n = 500
-x_bar = 48
-s = 20.3
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_z_statistic(statistic, ax=ax, alternative='two-sided')
+    plt.show()
+    ```
 
-statistic = (x_bar - mu) / (s / np.sqrt(n))
-# H1이 "작다" 쪽이므로 왼쪽 꼬리만 센다. abs도, 2를 곱하는 것도 없다.
-p_value = stats.norm().cdf(statistic)
+    출력:
 
-print(f"Statistic : {statistic:.4f}")
-print(f"P-value   : {p_value:.4f}")
+    ```
+    Statistic: -2.2030
+    P-value  : 0.0276
+    Reject H0 (Choose H1)
+    ```
 
-alpha = 0.05
-if p_value <= alpha:
-    print("We choose H1, or using statistician's jargon, reject H0")
-else:
-    print("We choose H0, or using statistician's jargon, fail to reject H0")
+    ![양측검정의 p-값](./img/one_sample_67.png)
 
-fig, ax = plt.subplots(figsize=(12, 3))
-plot_z_statistic(statistic, ax=ax, alternative='less')
-plt.show()
-```
+    $\bar x = 48$은 가설값 50에서 2만큼 떨어져 있을 뿐이지만 $n = 500$이라 표준오차가 0.91로 작아 $z = -2.20$이 된다. 표본이 크면 작은 차이도 유의해진다.
 
-출력:
+    그림에서 칠해진 두 꼬리의 넓이 합이 0.0276이다.
 
-```
-Statistic : -2.2030
-P-value   : 0.0138
-We choose H1, or using statistician's jargon, reject H0
-```
+    유도한 $z = -2.20302$와 $p = 0.027593$이 출력의 $-2.2030$, $0.0276$과 맞는다. 칠해진 두 꼬리는 $z \le -2.2030$과 $z \ge 2.2030$이고 정규분포가 대칭이므로 두 조각의 넓이가 같다. 한 조각이 $0.013797$이다.
 
-![좌측검정의 p-값](./img/one_sample_127.png)
+    **표본이 크면 작은 차이도 유의해진다.** 거꾸로 같은 $\bar x$와 $s$로 $n = 100$이었다면 표준오차가 $2.03$이 되어 $z = -0.9852$, $p = 0.3245$로 기각하지 못한다.
 
-같은 자료, 같은 통계량인데 p-값이 양측의 0.0276에서 정확히 절반인 0.0138이 되었다. 그림에서도 오른쪽 꼬리의 칠이 사라졌다.
+    한 가지 덧붙일 것이 있다. 여기서는 $\sigma$를 모르고 $s$를 넣었으니 통계량은 엄밀히 말해 $z$가 아니라 $t_{499}$다. 자유도 $499$에서 양측 p-값은 $0.02805$, 임계값은 $1.9647$이어서 정규의 $1.9600$과 거의 같다. **$n$이 이만큼 크면 둘을 구별할 필요가 없다**는 것이 "$n \ge 30$" 관례가 가리키는 바다.
 
-단측검정을 쓰려면 자료를 보기 **전에** 방향을 정해 두어야 한다. 결과를 보고 유리한 방향을 고르면 실제 제1종 오류율이 5%가 아니라 10%가 된다.
-
-$$H_0: \mu=50 \quad \text{vs} \quad H_1: \mu>50$$
-
-주어진 값: $n = 500$, $\bar{x} = 52$, $s = 20.3$.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 큼
+**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 작음. 자료는 보기 1과 같고($n = 500$, $\bar x = 48$, $s = 20.3$) 대립가설만 바꾼다.
+
+$$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu < 50$$
+
+**(1)** 이 좌측 p-값이 보기 1의 양측 p-값의 **정확히** 절반임을 보이시오.
+
+**(2)** 자료를 본 뒤에 유리한 방향을 골라 단측검정을 하면 실제 제1종 오류율이 얼마가 되는지 구하시오.
 
 </div>
 
-```python
-mu = 50
-n = 500
-x_bar = 52
-s = 20.3
+??? success "풀이"
 
-statistic = (x_bar - mu) / (s / np.sqrt(n))
-# 이번에는 H1이 "크다" 쪽이므로 오른쪽 꼬리만 센다.
-p_value = stats.norm().sf(statistic)
+    **(1) 절반인 것은 우연이 아니다.** 통계량은 자료만으로 정해지므로 보기 1과 같은 $z = -2.20302$다. 좌측 p-값은
 
-print(f"Statistic : {statistic:.4f}")
-print(f"P-value   : {p_value:.4f}")
+    $$
+    p_{<} = P(Z \le z) = P(Z \le -2.20302) = 0.013797
+    $$
 
-alpha = 0.05
-if p_value <= alpha:
-    print("We choose H1, or using statistician's jargon, reject H0")
-else:
-    print("We choose H0, or using statistician's jargon, fail to reject H0")
+    이고 양측 p-값은 정의상
 
-fig, ax = plt.subplots(figsize=(12, 3))
-plot_z_statistic(statistic, ax=ax, alternative='greater')
-plt.show()
-```
+    $$
+    p_{\ne} = 2\,P(Z \ge \lvert z \rvert) = 2\,P(Z \le -\lvert z \rvert)
+    $$
 
-출력:
+    이다. 지금은 $z < 0$이므로 $-\lvert z \rvert = z$이고, 따라서 $p_{\ne} = 2 p_{<}$가 **등식으로** 성립한다. $0.027593 = 2 \times 0.013797$이다.
 
-```
-Statistic : 2.2030
-P-value   : 0.0138
-We choose H1, or using statistician's jargon, reject H0
-```
+    여기에는 조건이 하나 붙어 있다. **통계량의 부호가 대립가설이 가리키는 방향과 같아야 한다.** 만약 $\bar x = 52$였다면 $z = +2.20302$이고 좌측 p-값은 $0.98620$이 되어 양측값 $0.027593$의 절반과는 아무 관계가 없다.
 
-![우측검정의 p-값](./img/one_sample_156.png)
+    **(2) 수치적으로.**
 
-$\bar x$가 48에서 52로 바뀌어 통계량의 부호만 뒤집혔고, 대립가설의 방향도 함께 뒤집혀 p-값은 앞의 보기와 같은 0.0138이다. 정규분포의 대칭성 덕분이다.
+    ```python
+    mu = 50
+    n = 500
+    x_bar = 48
+    s = 20.3
+
+    statistic = (x_bar - mu) / (s / np.sqrt(n))
+    # H1이 "작다" 쪽이므로 왼쪽 꼬리만 센다. abs도, 2를 곱하는 것도 없다.
+    p_value = stats.norm().cdf(statistic)
+
+    print(f"Statistic : {statistic:.4f}")
+    print(f"P-value   : {p_value:.4f}")
+
+    alpha = 0.05
+    if p_value <= alpha:
+        print("We choose H1, or using statistician's jargon, reject H0")
+    else:
+        print("We choose H0, or using statistician's jargon, fail to reject H0")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_z_statistic(statistic, ax=ax, alternative='less')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Statistic : -2.2030
+    P-value   : 0.0138
+    We choose H1, or using statistician's jargon, reject H0
+    ```
+
+    ![좌측검정의 p-값](./img/one_sample_127.png)
+
+    같은 자료, 같은 통계량인데 p-값이 양측의 0.0276에서 정확히 절반인 0.0138이 되었다. 그림에서도 오른쪽 꼬리의 칠이 사라졌다.
+
+    단측검정을 쓰려면 자료를 보기 **전에** 방향을 정해 두어야 한다. 결과를 보고 유리한 방향을 고르면 실제 제1종 오류율이 5%가 아니라 10%가 된다.
+
+    그 $10\%$는 어림이 아니라 정확한 값이다. 자료를 보고 유리한 쪽을 고른다는 것은 두 단측 p-값 중 **작은 쪽**을 쓴다는 뜻인데, 두 값의 합이 항상 $1$이므로 작은 쪽은 언제나 $P(Z \le -\lvert z \rvert)$다. 그러니 기각하는 사건은
+
+    $$
+    \min(p_{<},\, p_{>}) \le 0.05 \iff \lvert z \rvert \ge z_{0.05} = 1.64485
+    $$
+
+    이고, $H_0$ 아래에서 그 확률은
+
+    $$
+    P(\lvert Z \rvert \ge 1.64485) = 2 \times 0.05 = 0.10
+    $$
+
+    이다. **명목 $5\%$ 검정이 실제로는 $10\%$ 검정이 된다.** 모의실험이 필요 없는 닫힌 꼴이다.
+
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 큼. 이번에는 $n = 500$, $\bar x = 52$, $s = 20.3$이다.
+
+$$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu > 50$$
+
+**(1)** p-값이 보기 2와 같은 값이 되는 까닭을 밝히시오.
+
+**(2)** 참 평균이 정말 $52$라면, 같은 $\alpha = 0.05$에서 단측검정과 양측검정의 검정력은 각각 얼마인가. 닫힌 꼴로 구하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 두 번 뒤집히면 제자리다.** $\bar x$가 $48$에서 $52$로 옮겨 가 $\bar x - \mu_0$의 부호만 바뀌었으므로 $z = +2.20302$다. 대립가설이 오른쪽이라 p-값은 오른쪽 꼬리이고
+
+    $$
+    p_{>} = P(Z \ge 2.20302) = 0.013797
+    $$
+
+    이다. 보기 2의 $P(Z \le -2.20302)$와 같은 수인데, 표준정규밀도가 $\varphi(-x) = \varphi(x)$로 대칭이기 때문이다. **통계량의 부호와 꼬리의 방향이 함께 뒤집혀 상쇄되었다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    mu = 50
+    n = 500
+    x_bar = 52
+    s = 20.3
+
+    statistic = (x_bar - mu) / (s / np.sqrt(n))
+    # 이번에는 H1이 "크다" 쪽이므로 오른쪽 꼬리만 센다.
+    p_value = stats.norm().sf(statistic)
+
+    print(f"Statistic : {statistic:.4f}")
+    print(f"P-value   : {p_value:.4f}")
+
+    alpha = 0.05
+    if p_value <= alpha:
+        print("We choose H1, or using statistician's jargon, reject H0")
+    else:
+        print("We choose H0, or using statistician's jargon, fail to reject H0")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_z_statistic(statistic, ax=ax, alternative='greater')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Statistic : 2.2030
+    P-value   : 0.0138
+    We choose H1, or using statistician's jargon, reject H0
+    ```
+
+    ![우측검정의 p-값](./img/one_sample_156.png)
+
+    $\bar x$가 48에서 52로 바뀌어 통계량의 부호만 뒤집혔고, 대립가설의 방향도 함께 뒤집혀 p-값은 앞의 보기와 같은 0.0138이다. 정규분포의 대칭성 덕분이다.
+
+    **검정력은 방향을 맞게 세운 쪽이 높다.** 참 평균이 $\mu = 52$이고 표준오차가 $\sigma/\sqrt{n} = 0.90784$라면 비중심성은
+
+    $$
+    \frac{\mu - \mu_0}{\sigma/\sqrt{n}} = \frac{2}{0.90784} = 2.20302
+    $$
+
+    이다. $Z = (\bar X - 50)/0.90784$는 평균 $2.20302$, 분산 $1$인 정규분포를 따르므로
+
+    $$
+    \text{단측 검정력} = P(Z > 1.64485) = 1 - \Phi(1.64485 - 2.20302) = 1 - \Phi(-0.55817) = 0.7116
+    $$
+
+    $$
+    \text{양측 검정력} = 1 - \Phi(1.95996 - 2.20302) + \Phi(-1.95996 - 2.20302) = 0.5960 + 0.0000 = 0.5960
+    $$
+
+    이다. 양측의 왼쪽 꼬리 기여 $\Phi(-4.163) = 0.0000157$은 소수 넷째 자리에 거의 보이지 않는다. **방향을 미리 알고 있으면 같은 자료로 검정력이 $0.596$에서 $0.712$로 올라간다.** 이것이 단측검정을 쓰는 유일한 정당한 이유이며, 보기 2에서 본 대로 **자료를 본 뒤에 방향을 고르는 순간 그 이득은 오류율로 되돌려 갚아야 한다.**
+
 
 ---
 
@@ -276,251 +385,656 @@ $$ t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}} $$
 
 ### F. 보기
 
-Rory는 자기 학군의 교사들이 평균적으로 경력 5년 미만이라고 의심한다. $H_0: \mu = 5$ 대 $H_1: \mu < 5$를 검정한다. 교사 25명을 표본으로 모아 $\bar{x} = 4$년, $s = 2$년을 얻었다.
-
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 교사 경력에 대한 t 통계량
+**보기 4.** <span class="diff easy" title="쉬움"></span> 교사 경력에 대한 t 통계량. Rory는 자기 학군의 교사들이 평균적으로 경력 5년 미만이라고 의심한다. 교사 25명을 표본으로 모아 $\bar x = 4$년, $s = 2$년을 얻었다.
+
+$$H_0: \mu = 5 \quad \text{vs} \quad H_1: \mu < 5$$
+
+**(1)** $t$ 통계량과 p-값을 손으로 구하고, $\alpha = 0.05$의 기각역을 $\bar x$의 값으로 환산하시오.
+
+**(2)** 코드로 확인하시오.
+
+**(3)** 모집단이 정규라면 이 검정의 제1종 오류율이 $\sigma$의 값과 상관없이 **정확히** $\alpha$가 되는 까닭을 밝히고, 치우친 모집단에서 실제 오류율을 모의로 재시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def plot_t_statistic(statistic, df, ax, alternative='two-sided'):
-    """t 분포를 그리고 p-값에 해당하는 꼬리를 칠한다.
+    **(1) 해석적으로.** 표준오차가
 
-    대립가설의 방향에 따라 칠하는 쪽이 달라진다. 양측이면 양쪽을 모두
-    칠하므로 넓이가 두 배가 되고, 그래서 양측 p-값이 단측의 두 배다.
-    """
-    x = np.linspace(-4, 4, 100)
-    y = stats.t(df).pdf(x)
-    ax.plot(x, y, '-k')
+    $$
+    \frac{s}{\sqrt{n}} = \frac{2}{\sqrt{25}} = \frac{2}{5} = 0.4
+    $$
 
-    if alternative == 'less':
-        x_fill = np.linspace(-4, statistic, 100)
-        y_fill = stats.t(df).pdf(x_fill)
-        ax.fill_between(x_fill, y_fill, color='k', alpha=0.2)
-    elif alternative == 'greater':
-        x_fill = np.linspace(statistic, 4, 100)
-        y_fill = stats.t(df).pdf(x_fill)
-        ax.fill_between(x_fill, y_fill, color='k', alpha=0.2)
-    elif alternative == 'two-sided':
-        x_fill_left = np.linspace(-4, -abs(statistic), 100)
-        y_fill_left = stats.t(df).pdf(x_fill_left)
-        ax.fill_between(x_fill_left, y_fill_left, color='k', alpha=0.2)
-        x_fill_right = np.linspace(abs(statistic), 4, 100)
-        y_fill_right = stats.t(df).pdf(x_fill_right)
-        ax.fill_between(x_fill_right, y_fill_right, color='k', alpha=0.2)
+    로 깔끔하게 나오므로
 
-    ax.spines['left'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    ax.set_yticks(())
+    $$
+    t = \frac{\bar x - \mu_0}{s/\sqrt{n}} = \frac{4 - 5}{0.4} = -2.5
+    $$
 
-# sigma 를 모르므로 s 를 쓴다. 그래서 z 가 아니라 t 로 간다.
-mu_0 = 5
-x_bar = 4
-s = 2
-n = 25
+    이고 자유도는 $n - 1 = 24$다. 좌측 p-값은
 
-statistic = (x_bar - mu_0) / (s / np.sqrt(n))
-df = n - 1                      # s를 자료에서 추정했으므로 하나를 잃는다
-p_value = stats.t(df).cdf(statistic)
+    $$
+    p = P(T_{24} \le -2.5) = 0.009827
+    $$
 
-print(f"T-statistic: {statistic:.4f}")
-print(f"P-value    : {p_value:.4f}")
+    이다. 임계값은 $t_{0.05,\,24} = -1.71088$이므로 기각역을 $\bar x$로 환산하면
 
-fig, ax = plt.subplots(figsize=(12, 3))
-plot_t_statistic(statistic, df=df, ax=ax, alternative='less')
-plt.show()
-```
+    $$
+    \bar x < 5 - 1.71088 \times 0.4 = 4.31565
+    $$
 
-출력:
+    다. 관측된 $\bar x = 4$는 경계보다 $0.32$년 더 아래여서 **여유 있게** 기각역 안에 있다.
 
-```
-T-statistic: -2.5000
-P-value    : 0.0098
-```
+    **(2) 수치적으로.**
 
-![교사 경력에 대한 t 통계량](./img/one_sample_222.png)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
 
-$p = 0.0098$로 1% 수준에서도 기각된다. Rory의 의심을 자료가 강하게 뒷받침한다.
+    def plot_t_statistic(statistic, df, ax, alternative='two-sided'):
+        """t 분포를 그리고 p-값에 해당하는 꼬리를 칠한다.
 
-Miriam은 $H_0: \mu = 18$ 대 $H_1: \mu < 18$을 검정했다. 관측값 $n = 7$개를 써서 $t = -1.9$를 얻었다.
+        대립가설의 방향에 따라 칠하는 쪽이 달라진다. 양측이면 양쪽을 모두
+        칠하므로 넓이가 두 배가 되고, 그래서 양측 p-값이 단측의 두 배다.
+        """
+        x = np.linspace(-4, 4, 100)
+        y = stats.t(df).pdf(x)
+        ax.plot(x, y, '-k')
+
+        if alternative == 'less':
+            x_fill = np.linspace(-4, statistic, 100)
+            y_fill = stats.t(df).pdf(x_fill)
+            ax.fill_between(x_fill, y_fill, color='k', alpha=0.2)
+        elif alternative == 'greater':
+            x_fill = np.linspace(statistic, 4, 100)
+            y_fill = stats.t(df).pdf(x_fill)
+            ax.fill_between(x_fill, y_fill, color='k', alpha=0.2)
+        elif alternative == 'two-sided':
+            x_fill_left = np.linspace(-4, -abs(statistic), 100)
+            y_fill_left = stats.t(df).pdf(x_fill_left)
+            ax.fill_between(x_fill_left, y_fill_left, color='k', alpha=0.2)
+            x_fill_right = np.linspace(abs(statistic), 4, 100)
+            y_fill_right = stats.t(df).pdf(x_fill_right)
+            ax.fill_between(x_fill_right, y_fill_right, color='k', alpha=0.2)
+
+        ax.spines['left'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.set_yticks(())
+
+    # sigma 를 모르므로 s 를 쓴다. 그래서 z 가 아니라 t 로 간다.
+    mu_0 = 5
+    x_bar = 4
+    s = 2
+    n = 25
+
+    statistic = (x_bar - mu_0) / (s / np.sqrt(n))
+    df = n - 1                      # s를 자료에서 추정했으므로 하나를 잃는다
+    p_value = stats.t(df).cdf(statistic)
+
+    print(f"T-statistic: {statistic:.4f}")
+    print(f"P-value    : {p_value:.4f}")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_t_statistic(statistic, df=df, ax=ax, alternative='less')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    T-statistic: -2.5000
+    P-value    : 0.0098
+    ```
+
+    ![교사 경력에 대한 t 통계량](./img/one_sample_222.png)
+
+    $p = 0.0098$로 1% 수준에서도 기각된다. Rory의 의심을 자료가 강하게 뒷받침한다.
+
+    유도한 $t = -2.5$와 $p = 0.009827$이 출력의 $-2.5000$, $0.0098$과 맞는다.
+
+    **(3) 정규모집단에서는 크기가 정확히 $\alpha$다.** $X_1, \ldots, X_n$이 독립인 $N(\mu_0, \sigma^2)$이면
+
+    $$
+    T = \frac{\bar X - \mu_0}{S/\sqrt{n}} \sim t_{n-1}
+    $$
+
+    이 **근사가 아니라 등식**이고, 이 분포에 $\sigma$가 들어 있지 않다. $T$는 $\sigma$에 의존하지 않는 **추축량**이다. 그러므로 $\sigma$가 얼마든
+
+    $$
+    P(T < t_{\alpha,\,n-1}) = \alpha
+    $$
+
+    가 정확히 성립한다. $n$이 작아도 그렇다. $\sigma$를 모른다는 사실이 손해를 주는 곳은 오류율이 아니라 **임계값의 크기**다($1.7109$ 대 정규의 $1.6449$).
+
+    **깨지는 것은 정규성이고, 어긋나는 양은 왜도가 정한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(3)
+    M, n = 400_000, 25
+    c_left = stats.t(n - 1).ppf(0.05)        # 좌측 임계값 (우측은 대칭이라 -c_left)
+    c_two = stats.t(n - 1).ppf(0.975)        # 양측 임계값
+
+    print(f"n = {n},  되풀이 {M:,}회,  명목 수준 0.05")
+    print(f"{'모집단':>10s} {'왜도':>7s} {'좌측':>8s} {'우측':>8s} {'양측':>8s}")
+    for label, draw, mu, g1 in [
+        ("정규", lambda s: rng.normal(0, 1, s), 0.0, 0.0),
+        ("지수", lambda s: rng.exponential(1, s), 1.0, 2.0),
+        ("로그정규", lambda s: rng.lognormal(0, 1, s), np.exp(0.5), 6.1849),
+    ]:
+        x = draw((M, n))
+        # 참 평균 mu 를 귀무가설값으로 넣는다. 곧 H0 가 참인 세상이다.
+        t = (x.mean(1) - mu) / (x.std(1, ddof=1) / np.sqrt(n))
+        print(f"{label:>10s} {g1:7.2f} {(t < c_left).mean():8.4f} "
+              f"{(t > -c_left).mean():8.4f} {(np.abs(t) > c_two).mean():8.4f}")
+    print(f"\n몬테카를로 오차 = sqrt(0.05*0.95/{M}) "
+          f"= {np.sqrt(0.05 * 0.95 / M):.5f}")
+    ```
+
+    출력:
+
+    ```
+    n = 25,  되풀이 400,000회,  명목 수준 0.05
+           모집단      왜도       좌측       우측       양측
+            정규    0.00   0.0500   0.0501   0.0502
+            지수    2.00   0.1033   0.0214   0.0769
+          로그정규    6.18   0.1626   0.0089   0.1245
+
+    몬테카를로 오차 = sqrt(0.05*0.95/400000) = 0.00034
+    ```
+
+    **정규 줄의 세 값이 모두 $0.05$다.** 몬테카를로 오차가 $0.00034$이니 $0.0500$, $0.0501$, $0.0502$는 모두 $0.05$와 구별되지 않는다. 추축량 논증이 수로 확인된 것이다.
+
+    치우친 모집단에서는 어긋나는 **방향이 꼬리마다 다르다.** 오른쪽으로 치우친 자료에서는 $\bar X$가 작게 나올 때 $S$도 함께 작아져 $T$의 왼쪽 꼬리가 두꺼워진다. 그래서 이 보기처럼 **좌측검정은 위험해지고**($0.05 \to 0.1033 \to 0.1626$) 우측검정은 보수적이 된다($0.05 \to 0.0214 \to 0.0089$). 양측은 두 효과가 일부 상쇄되어 중간에 놓인다. 왜도가 $2$에서 $6.18$로 커질 때 어긋남도 함께 커진다는 점에 주의하라. 이 어긋남이 $n$에 따라 어떻게 줄어드는지는 [5.3절](../../ch05/applications/standard_error.md)에서 다룬 바 있다.
+
+    Rory의 자료에서는 교사 경력이 오른쪽으로 치우쳐 있을 가능성이 높다(경력은 $0$에서 막히고 위로만 열려 있다). 그렇다면 좌측검정인 이 검정의 실제 오류율은 $5\%$보다 **클** 수 있으므로, $p = 0.0098$을 명목 그대로 읽는 것은 위험한 쪽으로 기운 읽기다.
+
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> Miriam의 검정에서 p-값
+**보기 5.** <span class="diff easy" title="쉬움"></span> Miriam의 검정에서 p-값. Miriam은 관측값 $n = 7$개로 $H_0: \mu = 18$ 대 $H_1: \mu < 18$을 검정해 $t = -1.9$를 얻었다. 원자료는 남아 있지 않다.
+
+**(1)** 통계량과 자유도만으로 p-값을 구할 수 있는 까닭을 말하고, $\alpha = 0.05$에서의 결론을 임계값과 견주어 내리시오.
+
+**(2)** 같은 $t = -1.9$에서 자유도를 키우면 p-값이 어떻게 변하는지 표로 만들고, 그 극한값이 무엇인지 밝히시오.
 
 </div>
 
-```python
-n = 7
-df = n - 1
-# 원자료 없이 t 통계량만 있어도 p-값을 구할 수 있다.
-# 필요한 것은 통계량과 자유도뿐이다.
-statistic = -1.9
-p_value = stats.t(df).cdf(statistic)
-print(f"{statistic = :.4f}")
-print(f"{p_value = :.4f}")
+??? success "풀이"
 
-fig, ax = plt.subplots(figsize=(12, 3))
-plot_t_statistic(statistic, df=df, ax=ax, alternative='less')
-plt.show()
-```
+    **(1) 통계량이 이미 모든 정보를 담고 있다.** $t$ 통계량은 $\bar x$, $s$, $n$을 하나의 수로 뭉친 것이고, 귀무분포 $t_{n-1}$은 자유도 하나로 정해진다. 그러니 p-값을 계산하는 데 필요한 것은 **통계량과 자유도뿐**이다. $\bar x$가 $17$이었는지 $4$였는지는 p-값에 영향을 주지 않는다.
 
-출력:
+    $n = 7$이므로 $\text{df} = 6$이고
 
-```
-statistic = -1.9000
-p_value = 0.0531
-```
+    $$
+    p = P(T_6 \le -1.9) = 0.0531
+    $$
 
-![Miriam의 검정에서 p-값](./img/one_sample_275.png)
+    이다. 임계값으로 보면 $t_{0.05,\,6} = -1.94318$이고 $-1.9 > -1.94318$이므로 기각역 **바깥**이다. 두 읽기가 당연히 일치한다. $p > 0.05 \iff t > t_{0.05,\,6}$이기 때문이다.
 
-$p = 0.0531$로 0.05를 아슬아슬하게 넘어 기각하지 못한다. 같은 $t = -1.9$라도 자유도가 크면 이야기가 달라진다. $\text{df} = 30$이면 $p = 0.0335$로 기각된다. 자유도가 6밖에 안 되어 꼬리가 두꺼운 것이 여기서 결론을 가른다.
+    **(2) 수치적으로.**
 
-Caterina는 $H_0: \mu = 0$ 대 $H_1: \mu \neq 0$을 검정했다. 관측값 $n = 6$개를 써서 $t = 2.75$를 얻었다.
+    ```python
+    n = 7
+    df = n - 1
+    # 원자료 없이 t 통계량만 있어도 p-값을 구할 수 있다.
+    # 필요한 것은 통계량과 자유도뿐이다.
+    statistic = -1.9
+    p_value = stats.t(df).cdf(statistic)
+    print(f"{statistic = :.4f}")
+    print(f"{p_value = :.4f}")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_t_statistic(statistic, df=df, ax=ax, alternative='less')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    statistic = -1.9000
+    p_value = 0.0531
+    ```
+
+    ![Miriam의 검정에서 p-값](./img/one_sample_275.png)
+
+    $p = 0.0531$로 0.05를 아슬아슬하게 넘어 기각하지 못한다. 같은 $t = -1.9$라도 자유도가 크면 이야기가 달라진다. $\text{df} = 30$이면 $p = 0.0335$로 기각된다. 자유도가 6밖에 안 되어 꼬리가 두꺼운 것이 여기서 결론을 가른다.
+
+    자유도를 키워 가며 같은 통계량의 p-값을 재면 이렇다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    statistic = -1.9
+    print(f"{'df':>6s} {'임계값':>10s} {'p-값':>9s}")
+    for df in [6, 10, 20, 30, 60, 120, 1000]:
+        print(f"{df:6d} {stats.t(df).ppf(0.05):10.4f} {stats.t(df).cdf(statistic):9.4f}")
+    # 자유도를 무한히 키운 극한이 표준정규다.
+    print(f"{'∞':>6s} {stats.norm.ppf(0.05):10.4f} {stats.norm.cdf(statistic):9.4f}")
+    ```
+
+    출력:
+
+    ```
+        df        임계값       p-값
+         6    -1.9432    0.0531
+        10    -1.8125    0.0433
+        20    -1.7247    0.0360
+        30    -1.6973    0.0335
+        60    -1.6706    0.0311
+       120    -1.6577    0.0299
+      1000    -1.6464    0.0289
+         ∞    -1.6449    0.0287
+    ```
+
+    **p-값은 자유도의 감소함수이고 극한은 $\Phi(-1.9) = 0.0287$이다.** 본문이 말한 $\text{df} = 30$의 $0.0335$가 표에 그대로 있다. 자유도가 $6$인 Miriam의 $0.0531$은 그 극한보다 $0.0244$나 크다. **$t_6$의 꼬리가 정규보다 두꺼워 같은 거리가 더 흔한 일로 읽힌다**는 뜻이다.
+
+    결론이 갈리는 지점을 거꾸로 찾아볼 수도 있다. $p = 0.05$가 되는 통계량은 임계값 그 자체이므로, $t = -1.9$로 기각하려면 임계값이 $-1.9$보다 커야 하고 표에서 그것은 $\text{df} \ge 10$일 때다. **관측값 세 개만 더 있었다면 결론이 뒤집혔다.**
+
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> Caterina의 검정에서 p-값
+**보기 6.** <span class="diff easy" title="쉬움"></span> Caterina의 검정에서 p-값. Caterina는 관측값 $n = 6$개로 $H_0: \mu = 0$ 대 $H_1: \mu \neq 0$을 검정해 $t = 2.75$를 얻었다. 원자료도, $\bar x$도, $s$도 남아 있지 않다.
+
+**(1)** 양측 p-값과, 같은 자료를 단측으로 검정했을 때의 p-값을 구하시오.
+
+**(2)** $\bar x$와 $s$를 모르는데도 **$\mu$의 95% 신뢰구간이 $0$을 담지 않는다**는 것을 보일 수 있다. 보이시오.
 
 </div>
 
-```python
-n = 6
-df = n - 1
-statistic = 2.75
-# 양측이므로 한쪽 꼬리를 두 배 한다.
-p_value = stats.t(df).sf(statistic) * 2
-print(f"{statistic = :.4f}")
-print(f"{p_value = :.4f}")
+??? success "풀이"
 
-fig, ax = plt.subplots(figsize=(12, 3))
-plot_t_statistic(statistic, df=df, ax=ax, alternative='two-sided')
-plt.show()
-```
+    **(1) 해석적으로.** $\text{df} = n - 1 = 5$이고 통계량이 양수이므로
 
-출력:
+    $$
+    p_{\ne} = 2\,P(T_5 \ge 2.75) = 2 \times 0.020155 = 0.040310
+    $$
 
-```
-statistic = 2.7500
-p_value = 0.0403
-```
+    이다. 단측(큼)이었다면 그 절반인 $p_{>} = 0.020155$다. 보기 2에서 본 관계가 그대로 적용된다 — 통계량의 부호가 대립가설의 방향과 같으므로 단측이 양측의 정확히 절반이다.
 
-![Caterina의 검정에서 p-값](./img/one_sample_292.png)
+    **(2) 수치적으로.**
 
-양측인데도 $p = 0.0403 < 0.05$로 기각된다. 만약 Caterina가 단측으로 검정했다면 $p = 0.0201$이었을 것이다.
+    ```python
+    n = 6
+    df = n - 1
+    statistic = 2.75
+    # 양측이므로 한쪽 꼬리를 두 배 한다.
+    p_value = stats.t(df).sf(statistic) * 2
+    print(f"{statistic = :.4f}")
+    print(f"{p_value = :.4f}")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_t_statistic(statistic, df=df, ax=ax, alternative='two-sided')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    statistic = 2.7500
+    p_value = 0.0403
+    ```
+
+    ![Caterina의 검정에서 p-값](./img/one_sample_292.png)
+
+    양측인데도 $p = 0.0403 < 0.05$로 기각된다. 만약 Caterina가 단측으로 검정했다면 $p = 0.0201$이었을 것이다.
+
+    **신뢰구간과 검정은 같은 사건이다.** $\mu$의 양측 $95\%$ $t$-구간은
+
+    $$
+    \bar x \pm t_{0.025,\,5}\,\frac{s}{\sqrt{6}}, \qquad t_{0.025,\,5} = 2.570582
+    $$
+
+    이다. 여기서 $\bar x$와 $s$를 따로 알 필요가 없다. 통계량의 정의 $t = \bar x / (s/\sqrt{6}) = 2.75$가 $\bar x = 2.75 \cdot s/\sqrt{6}$을 주므로, 구간 전체를 $s/\sqrt{6}$을 단위로 적을 수 있다.
+
+    $$
+    \left(\,(2.75 - 2.570582)\frac{s}{\sqrt 6},\ \ (2.75 + 2.570582)\frac{s}{\sqrt 6}\,\right)
+    = \left(0.179418\,\frac{s}{\sqrt 6},\ \ 5.320582\,\frac{s}{\sqrt 6}\right)
+    $$
+
+    $s > 0$이므로 **아래끝이 양수**이고 따라서 구간은 $0$을 담지 않는다. $\bar x$와 $s$를 몰라도 결론이 정해진 것이다.
+
+    이것은 우연이 아니라 **쌍대성**이다. 일반적으로
+
+    $$
+    \lvert t \rvert > t_{\alpha/2,\,n-1}
+    \iff
+    \mu_0 \notin \left(\bar x \pm t_{\alpha/2,\,n-1}\frac{s}{\sqrt n}\right)
+    $$
+
+    가 동치다. 양변 모두 $\lvert \bar x - \mu_0 \rvert > t_{\alpha/2,\,n-1}\,s/\sqrt n$을 다르게 쓴 것일 뿐이다. 그러므로 **구간의 포함률과 검정의 크기는 정확히 더해 $1$이 된다.** 정규모집단에서 둘은 각각 $0.95$와 $0.05$이고, 정규성이 깨지면 **같은 양만큼** 함께 어긋난다. 보기 4의 표에서 양측 크기가 $0.1245$였던 로그정규 설정이라면 같은 구간의 포함률이 $0.8755$라는 뜻이다.
+
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> Jude의 자동 음료 충전기
+**보기 7.** <span class="diff easy" title="쉬움"></span> Jude의 자동 음료 충전기. 표시량이 530 mL인 충전기에서 음료 $n = 20$개를 뽑아 $\bar x = 528$ mL, $s = 4$ mL를 얻었다.
+
+$$H_0: \mu = 530 \quad \text{vs} \quad H_1: \mu \neq 530$$
+
+**(1)** $t$ 통계량과 양측 p-값을 구하고 $\alpha = 0.05$에서 판정하시오.
+
+**(2)** $\mu$의 $95\%$ 신뢰구간을 구해 (1)과 같은 결론이 나오는지 확인하고, **부족량이 얼마나 되는지** 구간으로 답하시오.
 
 </div>
 
-Jude는 음료 $n = 20$개로 $H_0: \mu = 530$ 대 $H_1: \mu \neq 530$을 검정했다. $\bar{x} = 528$ mL, $s = 4$ mL를 얻어 $t = -2.236$, $p \approx 0.038$이 되었다. $\alpha = 0.05$에서 p-값이 유의수준보다 작으므로 $H_0$을 기각하고 $H_1$을 택한다.
+??? success "풀이"
+
+    **(1) 해석적으로.** 표준오차는
+
+    $$
+    \frac{s}{\sqrt n} = \frac{4}{\sqrt{20}} = \frac{4}{4.472136} = 0.894427
+    $$
+
+    이고
+
+    $$
+    t = \frac{528 - 530}{0.894427} = -\frac{2\sqrt{20}}{4} = -\frac{\sqrt{20}}{2} = -\sqrt 5 = -2.236068
+    $$
+
+    이다. 자료가 깔끔해서 통계량이 $-\sqrt 5$라는 닫힌 꼴로 나온다. 자유도 $19$에서
+
+    $$
+    p = 2\,P(T_{19} \le -2.236068) = 0.037541
+    $$
+
+    이고 임계값 $t_{0.025,\,19} = 2.093024$보다 $\lvert t \rvert$가 크므로 $\alpha = 0.05$에서 $H_0$을 **기각한다.**
+
+    **(2) 신뢰구간으로.** 같은 재료로 구간을 만들면
+
+    $$
+    528 \pm 2.093024 \times 0.894427 = 528 \pm 1.872058 = (526.128,\ 529.872)
+    $$
+
+    이다. $530$이 위끝 $529.872$보다 크므로 구간 밖이고, 보기 6에서 본 쌍대성대로 (1)과 같은 결론이다. 부족량 $530 - \mu$의 구간은 양끝을 뒤집어
+
+    $$
+    (530 - 529.872,\ 530 - 526.128) = (0.128,\ 3.872)\ \text{mL}
+    $$
+
+    가 된다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    mu_0, x_bar, s, n = 530, 528, 4, 20
+    se = s / np.sqrt(n)
+    df = n - 1
+    statistic = (x_bar - mu_0) / se
+    p_value = 2 * stats.t(df).cdf(statistic)
+    t_crit = stats.t(df).ppf(0.975)
+    lo, hi = x_bar - t_crit * se, x_bar + t_crit * se
+
+    print(f"표준오차 = {se:.6f}")
+    print(f"t = {statistic:.5f}   (-sqrt(5) = {-np.sqrt(5):.5f})")
+    print(f"양측 p = {p_value:.5f}")
+    print(f"임계값 t(0.025, {df}) = {t_crit:.5f}")
+    print(f"95% 신뢰구간 = ({lo:.4f}, {hi:.4f})")
+    print(f"구간이 530 을 담는가: {lo <= mu_0 <= hi}")
+    print(f"부족량 530 - mu 의 95% 구간 = "
+          f"({mu_0 - hi:.4f}, {mu_0 - lo:.4f}) mL")
+    print(f"표시량에 대한 비율 = ({(mu_0 - hi) / mu_0 * 100:.3f}%, "
+          f"{(mu_0 - lo) / mu_0 * 100:.3f}%)")
+    ```
+
+    출력:
+
+    ```
+    표준오차 = 0.894427
+    t = -2.23607   (-sqrt(5) = -2.23607)
+    양측 p = 0.03754
+    임계값 t(0.025, 19) = 2.09302
+    95% 신뢰구간 = (526.1279, 529.8721)
+    구간이 530 을 담는가: False
+    부족량 530 - mu 의 95% 구간 = (0.1279, 3.8721) mL
+    표시량에 대한 비율 = (0.024%, 0.731%)
+    ```
+
+    유도한 세 값이 모두 맞는다. 통계량이 $-\sqrt 5$라는 것도 출력이 확인해 준다.
+
+    **그런데 기각했다는 것과 고쳐야 한다는 것은 다른 이야기다.** 부족량의 구간이 $(0.13,\ 3.87)$ mL이고 표시량에 대한 비율로는 $(0.02\%,\ 0.73\%)$다. 아래끝은 **사실상 $0$과 구별되지 않는 크기**다. 자료가 말해 주는 것은 "평균이 $530$보다 작다는 쪽이 맞을 듯하다"일 뿐이고, **얼마나 작은지는 거의 아무것도 말해 주지 못한다.**
+
+    p-값 하나만 보고 "유의한 미달이 확인되었다"고 적으면 이 사정이 가려진다. 보기 1에서 본 것의 짝이 되는 교훈이다 — 표본이 크면 작은 차이도 유의해지고, **유의한 차이가 반드시 큰 차이는 아니다.**
+
+
+<div class="exbox" markdown>
+
+**보기 8.** <span class="diff easy" title="쉬움"></span> 일표본 t 검정 — 간단한 예. 관측값은 $78, 83, 68, 72, 88$ 다섯 개다.
 
 $$H_0 : \mu = 70 \quad\text{vs}\quad H_1: \mu > 70$$
 
-<div class="exbox" markdown>
+**(1)** $\bar x$, $s^2$, 표준오차, $t$ 를 손으로 구하고 $\alpha = 0.05$에서 임계값과 견주어 판정하시오.
 
-**보기 8.** <span class="diff easy" title="쉬움"></span> 일표본 t 검정 — 간단한 예
-
-</div>
-
-```python
-samples = np.array([78, 83, 68, 72, 88])
-
-n = samples.shape[0]
-df = n - 1
-x_bar = samples.mean()
-s = samples.std(ddof=1)
-mu = 70
-
-confidence_level = 0.95
-alpha = 1 - confidence_level
-t_score = (x_bar - mu) / (s / np.sqrt(n))
-# H1이 mu > 70인 단측이므로 오른쪽 꼬리만 센다.
-# 여기에 양측 공식 sf(abs(t))*2 를 쓰면 p-값이 두 배가 되어
-# 이 자료에서는 결론이 뒤집힌다(0.0484 대 0.0969).
-p_value = stats.t(df=df).sf(t_score)
-
-print(f"Test statistic (t-score): {t_score:.4f}")
-print(f"p-value                 : {p_value:.4f}")
-
-if p_value <= alpha:
-    print("Reject H_0: Sufficient evidence to support the alternative hypothesis.")
-else:
-    print("Fail to reject H_0: Insufficient evidence to support the alternative hypothesis.")
-
-fig, ax = plt.subplots(figsize=(12, 3))
-plot_t_statistic(t_score, df=df, ax=ax, alternative='greater')
-ax.legend(["t-distribution", f"t statistic = {t_score:.4f}"])
-plt.show()
-```
-
-출력:
-
-```
-Test statistic (t-score): 2.1600
-p-value                 : 0.0484
-Reject H_0: Sufficient evidence to support the alternative hypothesis.
-```
-
-![일표본 t 검정 — 간단한 예](./img/one_sample_313.png)
-
-$p = 0.0484$로 0.05를 겨우 밑돌아 기각된다. 이 보기는 단측과 양측의 차이가 결론을 가르는 경우다. 양측으로 계산하면 $p = 0.0969$가 되어 기각하지 못한다. 대립가설의 방향을 세워 두었으면 p-값도 그 방향으로 계산해야 한다.
-
-$\bar x = 77.8$로 가설값 70보다 한참 크지만 $n = 5$에 $s = 8.07$이라 표준오차가 3.61이나 되어 이만큼 아슬아슬해진다.
-
-어떤 공장의 우유 용기에 128온스라고 표시되어 있다. 용기 12개의 표본에서 $\bar{x} = 127.2$ oz, $s = 2.1$ oz를 얻었다. $H_0: \mu = 128$ 대 $H_1: \mu < 128$을 검정하라.
-
-<div class="exbox" markdown>
-
-**보기 9.** <span class="diff easy" title="쉬움"></span> 우유 표시량 검정
+**(2)** 코드로 확인하고, 같은 통계량을 **양측**으로 계산하면 결론이 어떻게 달라지는지 말하시오.
 
 </div>
 
-```python
-# 표시량 128 에 못 미치는지를 묻는 단측검정이다. 그래서 아래에서 cdf 를 쓴다.
-mu_0 = 128
-x_bar = 127.2
-s = 2.1
-n = 12
-statistic = (x_bar - mu_0) / (s / np.sqrt(n))
-df = n - 1
-p_value = stats.t(df).cdf(statistic)
+??? success "풀이"
 
-print(f"{statistic = :.4f}")
-print(f"{p_value = :.4f}")
+    **(1) 해석적으로.** 합이 $78 + 83 + 68 + 72 + 88 = 389$이므로
 
-alpha = 0.05
-if p_value <= alpha:
-    print("Reject H_0 in favor of H_1")
-else:
-    print("Fail to reject H_0")
+    $$
+    \bar x = \frac{389}{5} = 77.8
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
-plot_t_statistic(statistic, df=df, ax=ax, alternative='less')
-plt.show()
-```
+    이다. 편차는 $0.2,\ 5.2,\ -9.8,\ -5.8,\ 10.2$이고 제곱의 합은
 
-출력:
+    $$
+    0.04 + 27.04 + 96.04 + 33.64 + 104.04 = 260.8
+    $$
 
-```
-statistic = -1.3197
-p_value = 0.1069
-Fail to reject H_0
-```
+    이다. 자유도 $n - 1 = 4$로 나누어
 
-![우유 용기 검정](./img/one_sample_345.png)
+    $$
+    s^2 = \frac{260.8}{4} = 65.2, \qquad s = \sqrt{65.2} = 8.074652,
+    \qquad \frac{s}{\sqrt 5} = 3.611094
+    $$
 
-평균이 표시량보다 0.8 oz 모자라지만 기각하지 못한다. $n = 12$에 $s = 2.1$이면 표준오차가 0.61이라 0.8 oz의 부족은 표준오차 1.3배 남짓에 지나지 않는다. "기각하지 못했다"가 "용기가 제대로 채워졌다"는 뜻이 아니라는 점이 중요하다. 이 자료는 $\mu = 128$도, $\mu = 126.4$도 배제하지 못한다.
+    를 얻는다. 따라서
+
+    $$
+    t = \frac{77.8 - 70}{3.611094} = \frac{7.8}{3.611094} = 2.160010
+    $$
+
+    이다. 단측(큼) 임계값은 $t_{0.05,\,4} = 2.131847$이고 $2.160010 > 2.131847$이므로 **기각한다.** p-값으로는
+
+    $$
+    p = P(T_4 \ge 2.160010) = 0.048444
+    $$
+
+    로 $0.05$를 $0.0016$만큼 밑돈다. **아슬아슬한 기각**이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    samples = np.array([78, 83, 68, 72, 88])
+
+    n = samples.shape[0]
+    df = n - 1
+    x_bar = samples.mean()
+    s = samples.std(ddof=1)
+    mu = 70
+
+    confidence_level = 0.95
+    alpha = 1 - confidence_level
+    t_score = (x_bar - mu) / (s / np.sqrt(n))
+    # H1이 mu > 70인 단측이므로 오른쪽 꼬리만 센다.
+    # 여기에 양측 공식 sf(abs(t))*2 를 쓰면 p-값이 두 배가 되어
+    # 이 자료에서는 결론이 뒤집힌다(0.0484 대 0.0969).
+    p_value = stats.t(df=df).sf(t_score)
+
+    print(f"Test statistic (t-score): {t_score:.4f}")
+    print(f"p-value                 : {p_value:.4f}")
+
+    if p_value <= alpha:
+        print("Reject H_0: Sufficient evidence to support the alternative hypothesis.")
+    else:
+        print("Fail to reject H_0: Insufficient evidence to support the alternative hypothesis.")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_t_statistic(t_score, df=df, ax=ax, alternative='greater')
+    ax.legend(["t-distribution", f"t statistic = {t_score:.4f}"])
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Test statistic (t-score): 2.1600
+    p-value                 : 0.0484
+    Reject H_0: Sufficient evidence to support the alternative hypothesis.
+    ```
+
+    ![일표본 t 검정 — 간단한 예](./img/one_sample_313.png)
+
+    $p = 0.0484$로 0.05를 겨우 밑돌아 기각된다. 이 보기는 단측과 양측의 차이가 결론을 가르는 경우다. 양측으로 계산하면 $p = 0.0969$가 되어 기각하지 못한다. 대립가설의 방향을 세워 두었으면 p-값도 그 방향으로 계산해야 한다.
+
+    $\bar x = 77.8$로 가설값 70보다 한참 크지만 $n = 5$에 $s = 8.07$이라 표준오차가 3.61이나 되어 이만큼 아슬아슬해진다.
+
+    유도한 $t = 2.160010$과 $p = 0.048444$가 출력의 $2.1600$, $0.0484$와 맞는다.
+
+    **양측으로 계산하면 결론이 뒤집힌다.** $p_{\ne} = 2 \times 0.048444 = 0.096888$이 되어 $0.05$의 거의 두 배다. 임계값으로 보아도 $t_{0.025,\,4} = 2.776445$여서 $2.160010$이 한참 못 미친다.
+
+    **자유도가 $4$뿐이라는 것이 여기서 결정적이다.** 같은 $t = 2.16$을 자유도 $30$에서 얻었다면 양측 p-값이 $0.0388$로 기각된다. $t_4$의 꼬리가 그만큼 두껍다. 관측값 다섯 개로는 $\bar x$가 가설값보다 $7.8$이나 커도 단측에서 겨우 기각할 뿐이다.
+
+    방향을 **자료를 보기 전에** 세워 두었다면 단측이 정당하고, 그러면 $p = 0.0484$가 맞는 값이다. 보기 2에서 본 대로 $\bar x$를 보고 나서 "크다 쪽"을 고르는 것은 실제 오류율을 $10\%$로 올린다. 그 경우 $0.0484$는 **명목값일 뿐 실제 오류율이 아니다.**
+
+
+<div class="exbox" markdown>
+
+**보기 9.** <span class="diff easy" title="쉬움"></span> 우유 표시량 검정. 어떤 공장의 우유 용기에 128온스라고 표시되어 있다. 용기 12개의 표본에서 $\bar x = 127.2$ oz, $s = 2.1$ oz를 얻었다.
+
+$$H_0: \mu = 128 \quad \text{vs} \quad H_1: \mu < 128$$
+
+**(1)** $t$ 통계량과 p-값을 손으로 구하고 $\alpha = 0.05$에서 판정하시오.
+
+**(2)** 참 평균이 정말 $127.2$이고 $\sigma = 2.1$이라면 이 검정이 그것을 잡아낼 확률은 얼마인가. **비중심 $t$** 로 정확히 구하고, 정규근사로 어림한 값과 견주시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 표준오차는
+
+    $$
+    \frac{s}{\sqrt n} = \frac{2.1}{\sqrt{12}} = \frac{2.1}{3.464102} = 0.606218
+    $$
+
+    이고
+
+    $$
+    t = \frac{127.2 - 128}{0.606218} = \frac{-0.8}{0.606218} = -1.319658
+    $$
+
+    이다. 자유도 $11$에서 좌측 p-값은
+
+    $$
+    p = P(T_{11} \le -1.319658) = 0.106878
+    $$
+
+    이고 임계값 $t_{0.05,\,11} = -1.795885$보다 통계량이 **크므로** 기각역 바깥이다. $H_0$을 기각하지 못한다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    # 표시량 128 에 못 미치는지를 묻는 단측검정이다. 그래서 아래에서 cdf 를 쓴다.
+    mu_0 = 128
+    x_bar = 127.2
+    s = 2.1
+    n = 12
+    statistic = (x_bar - mu_0) / (s / np.sqrt(n))
+    df = n - 1
+    p_value = stats.t(df).cdf(statistic)
+
+    print(f"{statistic = :.4f}")
+    print(f"{p_value = :.4f}")
+
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H_0 in favor of H_1")
+    else:
+        print("Fail to reject H_0")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_t_statistic(statistic, df=df, ax=ax, alternative='less')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    statistic = -1.3197
+    p_value = 0.1069
+    Fail to reject H_0
+    ```
+
+    ![우유 용기 검정](./img/one_sample_345.png)
+
+    평균이 표시량보다 0.8 oz 모자라지만 기각하지 못한다. $n = 12$에 $s = 2.1$이면 표준오차가 0.61이라 0.8 oz의 부족은 표준오차 1.3배 남짓에 지나지 않는다. "기각하지 못했다"가 "용기가 제대로 채워졌다"는 뜻이 아니라는 점이 중요하다. 이 자료는 $\mu = 128$도, $\mu = 126.4$도 배제하지 못한다.
+
+    **검정력은 비중심 $t$ 가 필요하다.** 참 평균이 $\mu = 127.2$라면 통계량
+
+    $$
+    T = \frac{\bar X - 128}{S/\sqrt{12}}
+    $$
+
+    의 분자가 $0$을 중심으로 돌지 않고 $\mu - \mu_0 = -0.8$만큼 밀려 있다. 이때 $T$가 따르는 것은 중심 $t$가 아니라 **비중심 모수**
+
+    $$
+    \delta = \frac{\mu - \mu_0}{\sigma/\sqrt n} = \frac{-0.8}{0.606218} = -1.319658
+    $$
+
+    인 비중심 $t_{11}(\delta)$다. 검정력은 그 분포가 기각역에 주는 확률
+
+    $$
+    1 - \beta = P\!\left(T_{11}(\delta) < t_{0.05,\,11}\right) = P\!\left(T_{11}(-1.319658) < -1.795885\right)
+    $$
+
+    이다. 손으로 적을 닫힌 꼴이 없으므로 수로 구한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    mu_0, mu_true, sigma, n = 128, 127.2, 2.1, 12
+    df = n - 1
+    ncp = (mu_true - mu_0) / (sigma / np.sqrt(n))     # 비중심 모수
+    crit = stats.t(df).ppf(0.05)                      # 좌측 임계값
+
+    print(f"비중심 모수 delta = {ncp:.6f}")
+    print(f"좌측 임계값       = {crit:.6f}")
+    print(f"비중심 t 로 구한 정확한 검정력 = "
+          f"{stats.nct(df, ncp).cdf(crit):.4f}")
+    print(f"정규근사 (z 임계값을 쓴 어림)  = "
+          f"{stats.norm.cdf(-stats.norm.ppf(0.95) - ncp):.4f}")
+    print(f"정규근사 (t 임계값을 쓴 어림)  = "
+          f"{stats.norm.cdf(crit - ncp):.4f}")
+    ```
+
+    출력:
+
+    ```
+    비중심 모수 delta = -1.319658
+    좌측 임계값       = -1.795885
+    비중심 t 로 구한 정확한 검정력 = 0.3422
+    정규근사 (z 임계값을 쓴 어림)  = 0.3725
+    정규근사 (t 임계값을 쓴 어림)  = 0.3170
+    ```
+
+    **정확한 검정력은 $0.3422$다.** 자주 쓰는 정규근사 $1 - \Phi(z_{0.05} - \lvert\delta\rvert)$는 $0.3725$로 **$0.030$ 과대평가**한다. 그 어림은 $S$의 변동을 아예 무시하고 임계값마저 $1.6449$로 낮춰 잡은 것이다. 거꾸로 $t$ 임계값 $-1.795885$를 쓰면서 분포만 정규로 두면 $0.3170$으로 **과소평가**한다. 두 어림이 정확값을 양쪽에서 끼고 있고, 어느 쪽도 $n = 12$에서는 쓸 만하지 않다. **작은 표본의 검정력은 비중심 $t$로 계산해야 한다.**
+
+    실무적으로 더 중요한 수는 $0.3422$ 자체다. **참 부족량이 정확히 관측된 만큼($0.8$ oz)이더라도 이 검정이 그것을 잡아낼 확률은 세 번에 한 번뿐이다.** 그러니 "기각하지 못했다"는 결과는 거의 아무 정보도 아니다. 위에서 $\mu = 128$도 $\mu = 126.4$도 배제하지 못한다고 한 것이 바로 이 사정의 신뢰구간 쪽 표현이다.
+
 
 ---
 
@@ -563,23 +1077,194 @@ $$ z = \frac{\hat{p} - p_0}{\sqrt{\frac{p_0 (1 - p_0)}{n}}} $$
 
 <div class="exbox" markdown>
 
-**보기 10.** <span class="diff easy" title="쉬움"></span> 노동조합 가입 비율
-
-</div>
-
-Ariel은 자기 주의 교사 중 49%가 조합원인지 검정하려 한다.
+**보기 10.** <span class="diff easy" title="쉬움"></span> 노동조합 가입 비율 — 표본을 몇 명 모아야 하는가. Ariel은 자기 주의 교사 중 49%가 조합원인지 검정하려 한다. **자료는 아직 모으지 않았다.**
 
 $$H_0: p = 0.49 \quad \text{vs} \quad H_1: p \neq 0.49$$
 
-<div class="exbox" markdown>
+**(1)** 참 비율이 $p = 0.55$라면 $\alpha = 0.05$ 양측 점수검정이 검정력 $0.80$을 가지려면 표본이 몇 명이어야 하는가. 정규근사로 공식을 유도해 답하시오.
 
-**보기 11.** <span class="diff easy" title="쉬움"></span> 인터넷을 쓰는 California 가구의 비율
+**(2)** 그 표본크기에서 **정확한** 검정력을 전수 열거로 재어, 공식의 답이 목표를 채우는지 확인하시오.
 
 </div>
 
-California 가구의 약 90%가 인터넷을 이용한다. 시장조사자들이 가구 1,000곳의 표본에서 920곳(92%)이 이용하는 것을 보고 그 비율이 더 높아졌는지 검정한다.
+??? success "풀이"
+
+    **(1) 해석적으로.** 기각 조건은 $\lvert \hat p - p_0 \rvert > z_{\alpha/2}\sqrt{p_0 q_0 / n}$이다. 참 비율이 $p_1 > p_0$이면 왼쪽으로 기각할 확률은 무시할 만큼 작으므로 오른쪽만 센다. $\hat p$가 근사적으로 $N(p_1,\ p_1 q_1/n)$이라 보면
+
+    $$
+    1 - \beta \approx P\!\left(\hat p > p_0 + z_{\alpha/2}\sqrt{\frac{p_0 q_0}{n}}\right)
+    = 1 - \Phi\!\left(\frac{p_0 - p_1 + z_{\alpha/2}\sqrt{p_0 q_0/n}}{\sqrt{p_1 q_1/n}}\right)
+    $$
+
+    이다. 이것이 $1 - \beta$가 되려면 괄호 안이 $-z_\beta$여야 한다. 양변에 $\sqrt{n}$을 곱해 정리하면
+
+    $$
+    z_{\alpha/2}\sqrt{p_0 q_0} - \sqrt n\,(p_1 - p_0) = -z_\beta \sqrt{p_1 q_1}
+    $$
+
+    이고 따라서
+
+    $$
+    n \ge \left(\frac{z_{\alpha/2}\sqrt{p_0 q_0} + z_\beta\sqrt{p_1 q_1}}{p_1 - p_0}\right)^{\!2}
+    $$
+
+    를 얻는다. **분자에 두 표준편차가 따로 들어간다**는 점이 요점이다. 크기는 $p_0$ 아래에서 재고 검정력은 $p_1$ 아래에서 재기 때문이다.
+
+    수를 넣으면 $z_{0.025} = 1.959964$, $z_{0.20} = 0.841621$, $\sqrt{0.49 \times 0.51} = 0.499900$, $\sqrt{0.55 \times 0.45} = 0.497494$이므로
+
+    $$
+    n \ge \left(\frac{1.959964 \times 0.499900 + 0.841621 \times 0.497494}{0.06}\right)^{\!2}
+    = \left(\frac{1.398487}{0.06}\right)^{\!2} = 23.30812^2 = 543.27
+    $$
+
+    이고 올림하여 **$n = 544$** 명이다.
+
+    **(2) 수치적으로.** $\hat p$의 분포는 사실 연속이 아니라 이항이다. 표본이 $n$명이면 가능한 결과가 $n + 1$가지뿐이므로 **검정력을 어림하지 않고 전수 열거로 정확히 계산할 수 있다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    p_0, p_1, alpha, beta = 0.49, 0.55, 0.05, 0.20
+    z_a = stats.norm.ppf(1 - alpha / 2)
+    z_b = stats.norm.ppf(1 - beta)
+
+    n_formula = ((z_a * np.sqrt(p_0 * (1 - p_0))
+                  + z_b * np.sqrt(p_1 * (1 - p_1))) / (p_1 - p_0)) ** 2
+    print(f"정규근사 공식이 주는 n = {n_formula:.2f}  ->  {int(np.ceil(n_formula))}")
+
+
+    def exact_power(n, p_true, p_0=0.49, alpha=0.05):
+        """전수 열거로 구한 양측 점수검정의 정확한 기각확률."""
+        k = np.arange(n + 1)
+        z = (k / n - p_0) / np.sqrt(p_0 * (1 - p_0) / n)
+        reject = np.abs(z) > stats.norm.ppf(1 - alpha / 2)
+        return stats.binom.pmf(k, n, p_true)[reject].sum()
+
+
+    print(f"그 n 에서의 정확 검정력 = {exact_power(544, p_1):.4f}  (목표 0.80)")
+    print(f"그 n 에서의 정확 크기   = {exact_power(544, p_0):.4f}  (명목 0.05)")
+
+    # 격자에서 "처음 0.80 을 넘는 n" 을 집으면 안 된다. 검정력이 n 의
+    # 증가함수가 아니기 때문이다. 격자 전체를 보고 되돌아오는 칸을 센다.
+    ns = np.arange(300, 901)
+    pw = np.array([exact_power(n, p_1) for n in ns])
+    first = ns[pw >= 0.80].min()
+    dips = ns[(ns > first) & (pw < 0.80)]
+    print(f"\n처음 0.80 에 닿는 n = {first}  (검정력 {exact_power(first, p_1):.4f})")
+    print(f"그보다 큰데도 0.80 에 못 미치는 n = {list(dips)}")
+    print(f"0.80 이 무너지지 않는 가장 작은 n = {dips.max() + 1}")
+    ```
+
+    출력:
+
+    ```
+    정규근사 공식이 주는 n = 543.27  ->  544
+    그 n 에서의 정확 검정력 = 0.7985  (목표 0.80)
+    그 n 에서의 정확 크기   = 0.0484  (명목 0.05)
+
+    처음 0.80 에 닿는 n = 535  (검정력 0.8017)
+    그보다 큰데도 0.80 에 못 미치는 n = [536, 538, 540, 542, 544, 553, 555, 557]
+    0.80 이 무너지지 않는 가장 작은 n = 558
+    ```
+
+    **공식이 준 $544$에서 정확 검정력은 $0.7985$다. 목표 $0.80$에 $0.0015$ 모자란다.** 유도가 틀린 것이 아니라 유도가 **연속근사**였기 때문이다. 실무에서는 이 정도 차이를 무시해도 좋지만, "$544$명이면 검정력 $0.80$이 보장된다"고 적으면 그것은 사실이 아니다.
+
+    더 조심할 것이 하나 있다. **정확 검정력은 $n$의 증가함수가 아니다.** 출력의 둘째 덩어리가 그것을 보여 준다. $n = 535$에서 처음 $0.80$을 넘지만 $536, 538, 540, 542, 544$에서 다시 아래로 내려가고 $553, 555, 557$에서 또 내려간다. $0.80$이 더는 무너지지 않는 가장 작은 $n$은 **$558$**이다.
+
+    까닭은 기각역이 이산이라는 데 있다. $n$이 하나 늘면 기각 경계가 되는 성공 개수 $k$가 한 칸씩 움직이는데, 그 움직임이 $n$의 증가가 주는 이득보다 클 때 검정력이 되돌아간다. **격자에서 조건을 처음 만족하는 칸을 답으로 삼으면 안 된다는 것**이 여기서 구체적으로 드러난다. 격자 전체를 보고 **마지막으로 조건을 깨뜨리는 칸 다음**을 골라야 한다.
+
+    같은 출력의 정확 크기 $0.0484$도 명목 $0.05$가 아니다. 비율 검정의 실제 크기가 명목값과 어긋나는 문제는 보기 12에서 다시 본다.
+
+
+<div class="exbox" markdown>
+
+**보기 11.** <span class="diff easy" title="쉬움"></span> 인터넷을 쓰는 California 가구의 비율. California 가구의 약 90%가 인터넷을 이용한다. 시장조사자들이 가구 1,000곳의 표본에서 920곳(92%)이 이용하는 것을 보고 그 비율이 더 높아졌는지 검정한다.
 
 $$H_0: p = 0.90 \quad \text{vs} \quad H_1: p > 0.90$$
+
+**(1)** 점수 $z$ 통계량과 단측 p-값을 손으로 구하시오.
+
+**(2)** 정확 이항 p-값을 구하고, 보정하지 않은 정규근사와 **연속성 보정**을 한 정규근사 중 어느 쪽이 더 가까운지 확인하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** $\hat p = 920/1000 = 0.92$이고 $H_0$ 아래의 표준오차는
+
+    $$
+    \sqrt{\frac{p_0(1-p_0)}{n}} = \sqrt{\frac{0.90 \times 0.10}{1000}} = \sqrt{0.00009} = 0.00948683
+    $$
+
+    이다. 따라서
+
+    $$
+    z = \frac{0.92 - 0.90}{0.00948683} = \frac{0.02}{0.00948683} = 2.108185
+    $$
+
+    이고 단측 p-값은
+
+    $$
+    p = P(Z \ge 2.108185) = 0.017507
+    $$
+
+    이다. $\alpha = 0.05$에서 기각한다. 조건도 넉넉히 만족한다 — $np_0 = 900$, $n(1-p_0) = 100$으로 보수적 기준 $10$을 한참 넘는다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    n, k, p_0 = 1000, 920, 0.90
+    sd = np.sqrt(n * p_0 * (1 - p_0))          # X 의 표준편차
+    se_0 = np.sqrt(p_0 * (1 - p_0) / n)        # p_hat 의 표준오차
+
+    z = (k / n - p_0) / se_0
+    exact = stats.binomtest(k, n, p_0, alternative="greater").pvalue
+    z_cc = (k - 0.5 - n * p_0) / sd            # 연속성 보정
+    g1 = (1 - 2 * p_0) / sd                    # 이항분포의 왜도
+    # 연속성 보정 위에 왜도 항을 하나 더 얹은 에지워스 근사
+    edge = stats.norm.sf(z_cc) + (g1 / 6) * (z_cc**2 - 1) * stats.norm.pdf(z_cc)
+
+    print(f"z (점수)  = {z:.6f}")
+    print(f"z (연속성 보정) = {z_cc:.6f}")
+    print(f"이항분포의 왜도 = {g1:.6f}\n")
+    for label, value in [("정확 이항", exact),
+                         ("정규근사", stats.norm.sf(z)),
+                         ("정규근사 + 연속성 보정", stats.norm.sf(z_cc)),
+                         ("정규근사 + 연속성 + 왜도", edge)]:
+        print(f"{label:24s} p = {value:.6f}   오차 {abs(value - exact):.6f}")
+    ```
+
+    출력:
+
+    ```
+    z (점수)  = 2.108185
+    z (연속성 보정) = 2.055480
+    이항분포의 왜도 = -0.084327
+
+    정확 이항                    p = 0.017612   오차 0.000000
+    정규근사                     p = 0.017507   오차 0.000104
+    정규근사 + 연속성 보정            p = 0.019916   오차 0.002305
+    정규근사 + 연속성 + 왜도          p = 0.017730   오차 0.000118
+    ```
+
+    유도한 $z = 2.108185$와 $p = 0.017507$이 출력과 맞는다.
+
+    **그런데 (2)의 답이 뜻밖이다. 연속성 보정이 상황을 나쁘게 만들었다.** 보정하지 않은 $0.017507$의 오차가 $0.000104$인데 보정한 $0.019916$의 오차는 $0.002305$로 **스물두 배**다. 보기 14에서는 같은 보정이 거의 정확히 들어맞을 것이므로, 이것은 "보정이 늘 좋다"는 생각이 틀렸다는 뜻이다.
+
+    까닭은 표의 마지막 줄이 보여 준다. 이항분포는 $p_0 = 0.90$에서 **왼쪽으로 치우쳐** 있고 왜도가 $-0.0843$이다. 오른쪽 꼬리확률을 정규로 바꿀 때 생기는 오차에는 **이산성에서 오는 항과 왜도에서 오는 항이 둘 다** 있으며, 여기서는 둘이 서로 **반대 방향**이라 상쇄되고 있었다. 연속성 보정만 넣으면 그 균형이 깨진다. 왜도 항
+
+    $$
+    \frac{\gamma_1}{6}\,(z^2 - 1)\,\varphi(z), \qquad \gamma_1 = \frac{1 - 2p_0}{\sqrt{np_0(1-p_0)}}
+    $$
+
+    까지 함께 얹으면 오차가 $0.002305$에서 $0.000118$로 되돌아온다. 상쇄가 일어나고 있었다는 설명이 수로 확인된 것이다.
+
+    **실무적 결론은 간단하다. 근사를 고쳐 쓸 것이 아니라 정확 이항검정을 쓰면 된다.** $n = 1000$에서도 `binomtest` 는 즉시 끝난다. 근사는 손으로 계산할 때나 필요했던 것이고, $p_0$이 $0.5$에서 멀면 보정의 효과를 미리 가늠하기 어렵다.
+
 
 시장이 주민 200명의 표본에서 22명이 실업 상태인 것을 보고 $H_0: p = 0.08$ 대 $H_1: p \neq 0.08$을 검정한다.
 

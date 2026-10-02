@@ -21,50 +21,140 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> scipy로 적합도 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> scipy로 적합도 검정. 가위바위보 24 판에서 승 4, 패 13, 무 7 을 얻었고 귀무가설은 세 결과가 똑같이 그럴듯하다는 것이다.
+
+**(1)** `chisquare` 는 `f_exp` 의 합이 `f_obs` 의 합과 다르면 오류를 낸다. 왜 그래야 하는가. 비율 $[1/3, 1/3, 1/3]$ 을 그대로 넘겼다면 어떤 값이 나왔을지 식으로 예측하시오.
+
+**(2)** 통계량과 p-값을 손으로 구하시오. 자유도 2 에서는 p-값이 닫힌 꼴로 적힌다.
+
+**(3)** 그 p-값은 **극한분포**가 준 값이다. $n = 24$ 에서의 정확한 p-값을 전수 열거로 구해 견주고, 명목 $5\%$ 기각역의 실제 제1종 오류율도 재시오.
 
 </div>
 
-```python
-from scipy import stats
+??? success "풀이"
 
-# 결과별 관측도수: 승, 패, 무
-observed_frequencies = [4, 13, 7]
+    **(1) 합이 맞아야 $\chi^2$ 이 된다.** 통계량이 $\chi^2_{k-1}$ 을 따르는 데에는 $\sum_i (O_i - E_i) = 0$ 이라는 제약이 결정적이다. 그 제약 하나가 자유도를 $k$ 에서 $k-1$ 로 깎는 것이고, 제약이 깨지면 통계량이 엉뚱한 곳으로 밀려난다.
 
-# H0(균등분포) 아래의 기대도수.
-# f_exp의 합은 f_obs의 합과 같아야 한다. 다르면 scipy가 오류를 낸다.
-total_games = sum(observed_frequencies)
-expected_frequencies = [total_games / 3] * 3
+    얼마나 밀려나는지는 정확히 계산된다. $E_i = c\,p_i$ ($\sum_i p_i = 1$, $c \ne n$)를 넣고 $d_i = O_i - np_i$ 라 두면 $\sum_i d_i = 0$ 이므로
 
-chi_square_statistic, p_value = stats.chisquare(
-    f_obs=observed_frequencies, f_exp=expected_frequencies
-)
+    $$
+    \sum_i \frac{(O_i - cp_i)^2}{cp_i}
+    = \sum_i \frac{\bigl(d_i + (n-c)p_i\bigr)^2}{cp_i}
+    = \sum_i \frac{d_i^2}{cp_i} + \frac{2(n-c)}{c}\underbrace{\sum_i d_i}_{=\,0} + \frac{(n-c)^2}{c}\underbrace{\sum_i p_i}_{=\,1}
+    $$
 
-print(f"{chi_square_statistic = }")
-print(f"{p_value = }")
-```
+    곧 **교차항이 사라지고** 깔끔한 꼴이 남는다.
 
-출력:
+    $$
+    \sum_i \frac{(O_i - cp_i)^2}{cp_i} = \frac nc\,\chi^2 + \frac{(n-c)^2}{c}
+    $$
 
-```
-chi_square_statistic = 5.25
-p_value = 0.07243975703425146
-```
+    여기서 $\chi^2$ 은 올바르게 계산한 값이다. 비율을 그대로 넘기면 $c = 1$ 이므로 $n\chi^2 + (n-1)^2$ 이 되고, 수를 넣으면
 
-수동 계산 페이지의 결과와 정확히 같다. `chisquare`는 같은 식을 감싼 것일 뿐이다.
+    $$
+    24 \times 5.25 + 23^2 = 126 + 529 = 655
+    $$
 
-**`stats.chisquare`의 주요 인자:**
+    이다. 참값 $5.25$ 대신 $655$ 가 나오고, 그중 $529$ 는 자료와 아무 상관 없는 **순전한 눈금 오류**다. `scipy` 가 오류를 내 주는 것이 다행인 까닭이다.
 
-| 인자 | 설명 |
-|-----------|-------------|
-| `f_obs` | 관측도수 배열 |
-| `f_exp` | 기대도수 배열(`f_obs`와 합이 같아야 한다). 생략하면 균등분포를 가정한다. |
-| `ddof` | 자유도 조정. 기본값은 0이며 $\text{df} = k - 1$이 된다. 자료로부터 모수를 추정했다면 그에 맞게 설정한다. |
+    **(2) 손계산.** 기대도수는 $E_i = n/k = 24/3 = 8$ 이고
 
-**이 보기의 출력:**
+    $$
+    \chi^2 = \frac{(4-8)^2 + (13-8)^2 + (7-8)^2}{8} = \frac{16+25+1}{8} = \frac{42}{8} = \frac{21}{4} = 5.25
+    $$
 
-- `chi_square_statistic = 5.25`
-- `p_value = 0.07249...`
+    다. 자유도는 $k - 1 = 2$ 이고, $\chi^2_2$ 의 밀도가 $\tfrac12 e^{-x/2}$ (평균 2 인 지수분포)라서 꼬리확률이 바로 적분된다.
+
+    $$
+    p = P(\chi^2_2 \ge 5.25) = e^{-5.25/2} = e^{-21/8} = 0.0724398
+    $$
+
+    $p > 0.05$ 이므로 기각하지 못한다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    from scipy import stats
+
+    # 결과별 관측도수: 승, 패, 무
+    observed_frequencies = [4, 13, 7]
+
+    # H0(균등분포) 아래의 기대도수.
+    # f_exp의 합은 f_obs의 합과 같아야 한다. 다르면 scipy가 오류를 낸다.
+    total_games = sum(observed_frequencies)
+    expected_frequencies = [total_games / 3] * 3
+
+    chi_square_statistic, p_value = stats.chisquare(
+        f_obs=observed_frequencies, f_exp=expected_frequencies
+    )
+
+    print(f"{chi_square_statistic = }")
+    print(f"{p_value = }")
+    ```
+
+    출력:
+
+    ```
+    chi_square_statistic = 5.25
+    p_value = 0.07243975703425146
+    ```
+
+    수동 계산 페이지의 결과와 정확히 같다. `chisquare`는 같은 식을 감싼 것일 뿐이다.
+
+    **`stats.chisquare`의 주요 인자:**
+
+    | 인자 | 설명 |
+    |-----------|-------------|
+    | `f_obs` | 관측도수 배열 |
+    | `f_exp` | 기대도수 배열(`f_obs`와 합이 같아야 한다). 생략하면 균등분포를 가정한다. |
+    | `ddof` | 자유도 조정. 기본값은 0이며 $\text{df} = k - 1$이 된다. 자료로부터 모수를 추정했다면 그에 맞게 설정한다. |
+
+    **(3) 근사가 얼마나 정확한가.** $\chi^2_2$ 은 $n \to \infty$ 에서의 극한분포다. $n = 24$ 에서는 $(\text{승},\text{패},\text{무})$ 가 취할 수 있는 조합이 $\binom{26}{2} = 325$ 가지뿐이므로 귀무분포를 **전부 열거**할 수 있다.
+
+    ```python
+    from math import factorial
+    from scipy import stats
+
+    n, k = 24, 3
+    obs_stat = 5.25
+
+    # H0 가 참인 세상에서 가능한 (승, 패, 무) 조합을 전부 열거한다.
+    dist = {}
+    for a in range(n + 1):
+        for b in range(n + 1 - a):
+            c = n - a - b
+            prob = (factorial(n) / (factorial(a) * factorial(b) * factorial(c))
+                    / k ** n)
+            stat = sum((x - n / k) ** 2 / (n / k) for x in (a, b, c))
+            dist[round(stat, 9)] = dist.get(round(stat, 9), 0.0) + prob
+
+    crit = stats.chi2.ppf(0.95, k - 1)
+    print(f"확률의 총합              {sum(dist.values()):.12f}")
+    print(f"통계량이 가질 수 있는 값   {len(dist)} 개")
+    print(f"E[chi2]   정확 {sum(s * v for s, v in dist.items()):.6f}   이론 k-1 = {k - 1}")
+    print(f"p-값      정확 {sum(v for s, v in dist.items() if s >= obs_stat - 1e-9):.6f}"
+          f"   근사 {stats.chi2.sf(obs_stat, k - 1):.6f}")
+    print(f"명목 5% 임계값 {crit:.4f} 에서의 실제 제1종 오류율 "
+          f"{sum(v for s, v in dist.items() if s >= crit - 1e-9):.6f}")
+    ```
+
+    출력:
+
+    ```
+    확률의 총합              1.000000000000
+    통계량이 가질 수 있는 값   44 개
+    E[chi2]   정확 2.000000   이론 k-1 = 2
+    p-값      정확 0.080040   근사 0.072440
+    명목 5% 임계값 5.9915 에서의 실제 제1종 오류율 0.049902
+    ```
+
+    세 가지를 읽을 수 있다.
+
+    - **평균은 근사가 아니다.** 정확한 $E[\chi^2]$ 이 $2.000000$ 으로 자유도 $k-1=2$ 와 같다. 이것은 $E[\chi^2] = \sum_i(1-p_i) = k-1$ 이라는 항등식에서 나오며 $n$ 과 무관하게 정확하다.
+    - **325 가지 조합인데 통계량의 값은 44 개뿐이다.** 범주를 바꿔 넣어도 통계량이 같기 때문이다. 귀무분포가 44 개의 점으로만 이루어진 성근 계단이라는 뜻이고, 이것이 아래 그림 (나)의 파란 계단이다.
+    - **p-값은 근사가 작게 나온다.** 정확값 $0.080040$ 대 근사 $0.072440$ 으로 근사가 약 $10\%$ 작다. 이산인 통계량을 연속분포로 재기 때문이다.
+
+    그런데 **명목 $5\%$ 기각역의 실제 오류율은 $0.049902$ 로 거의 정확하다.** p-값 하나에서는 $10\%$ 어긋났지만 임계값 근처에서는 계단이 운 좋게 잘 맞는다. $0.0724$ 든 $0.0800$ 든 결론은 "기각하지 못한다" 로 같다.
 
 ## f_exp를 생략해도 되는 경우
 
@@ -72,22 +162,64 @@ p_value = 0.07243975703425146
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 기대도수를 생략하는 경우
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기대도수를 생략하는 경우.
+
+**(1)** `f_exp` 를 생략하면 `chisquare` 는 무엇을 넣는가.
+
+**(2)** 생략한 결과와 그 값을 명시한 결과가 "거의 같은" 것이 아니라 **부동소수점 비트 단위로 같은지** 확인하시오. $n/k$ 가 유한소수로 떨어지지 않는 경우도 넣어 보시오.
+
+**(3)** 생략해도 되는 경우와 그러면 안 되는 경우를 가르시오. 보기 1 (1)의 합 불일치와 달리 이쪽은 왜 더 위험한가.
 
 </div>
 
-```python
-statistic, p = stats.chisquare(f_obs=[4, 13, 7])
-print(f"{statistic = }, {p = }")
-```
+??? success "풀이"
 
-출력:
+    **(1) 균등분포를 넣는다.** `f_obs` 의 합을 $n$, 길이를 $k$ 라 하면 각 기대도수가 $n/k$ 로 채워진다. 여기서는 $24/3 = 8$ 이다. 합이 자동으로 $n$ 이 되므로 보기 1 (1)의 오류가 일어날 수 없다.
 
-```
-statistic = 5.25, p = 0.07243975703425146
-```
+    **(2) 비트 단위로 같아야 한다.** 생략과 명시가 **같은 산술 경로**를 지나기 때문이다. `chisquare` 가 속으로 하는 일이 `f_exp = [sum(f_obs)/k] * k` 한 줄이고, 그 뒤의 계산은 전혀 다르지 않다. 그러므로 $n/k$ 가 $16/3 = 5.333\ldots$ 처럼 이진수로 떨어지지 않는 경우에도 **양쪽이 똑같이 같은 반올림을 받는다.** 반올림 오차가 생기더라도 두 경로에서 같은 크기로 생기므로 결과가 어긋나지 않는다.
 
-SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$은 전체 도수, $k$는 `f_obs`의 길이이다. 앞의 결과와 완전히 같다.
+    **(3) 생략은 조용히 틀린다.** 합이 어긋나면 `scipy` 가 `ValueError` 로 멈춰 준다. 그러나 **귀무가설이 균등분포가 아닌데 `f_exp` 를 생략하면 아무 경고도 없다.** 함수는 시킨 대로 균등분포를 검정하고 정상적으로 수를 돌려준다. 다만 그 수가 묻고자 한 질문의 답이 아니다. 보기 3 의 $[0.4, 0.3, 0.3]$ 처럼 가설이 균등하지 않을 때 `f_exp` 를 빠뜨리는 것이 이 함수에서 가장 흔한 실수다.
+
+    **수치적으로.**
+
+    ```python
+    statistic, p = stats.chisquare(f_obs=[4, 13, 7])
+    print(f"{statistic = }, {p = }")
+    ```
+
+    출력:
+
+    ```
+    statistic = 5.25, p = 0.07243975703425146
+    ```
+
+    SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$은 전체 도수, $k$는 `f_obs`의 길이이다. 앞의 결과와 완전히 같다.
+
+    (2)를 네 가지 자료로 확인한다.
+
+    ```python
+    from scipy import stats
+
+    for obs in [[4, 13, 7], [1, 2, 3, 4], [7, 7, 7, 7, 7], [0, 5, 11]]:
+        k = len(obs)
+        uniform = [sum(obs) / k] * k          # scipy 가 속으로 넣는 값
+        a = stats.chisquare(obs)              # f_exp 생략
+        b = stats.chisquare(obs, f_exp=uniform)
+        print(f"{str(obs):>18s}  n/k = {sum(obs) / k!r:<18s} "
+              f"chi2 {a.statistic:8.4f}   같은가 "
+              f"{a.statistic == b.statistic and a.pvalue == b.pvalue}")
+    ```
+
+    출력:
+
+    ```
+            [4, 13, 7]  n/k = 8.0                chi2   5.2500   같은가 True
+          [1, 2, 3, 4]  n/k = 2.5                chi2   2.0000   같은가 True
+       [7, 7, 7, 7, 7]  n/k = 7.0                chi2   0.0000   같은가 True
+            [0, 5, 11]  n/k = 5.333333333333333  chi2  11.3750   같은가 True
+    ```
+
+    네 번째 줄이 (2)의 요점이다. $16/3$ 은 이진 부동소수점으로 정확히 표현되지 않아 `5.333333333333333` 로 저장되는데, 생략한 쪽과 명시한 쪽이 **같은 부정확한 값**을 쓰므로 `==` 비교가 `True` 다. 세 번째 줄의 $\chi^2 = 0$ 은 관측이 기대와 완전히 일치하는 극단으로, 통계량이 음수가 될 수 없음을 상기시킨다.
 
 ## 균등하지 않은 기대 비율
 
@@ -95,27 +227,103 @@ SciPy가 자동으로 각 기대도수를 $n / k$로 설정한다. 여기서 $n$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 기대 비율이 균등하지 않을 때
+**보기 3.** <span class="diff easy" title="쉬움"></span> 기대 비율이 균등하지 않을 때. 고객 300 명의 연령대가 $18$–$25$, $26$–$40$, $41$ 이상에 $40\%,\ 30\%,\ 30\%$ 로 나뉜다는 주장을 검정한다. 관측도수는 $(130,\ 85,\ 85)$ 다.
+
+**(1)** 기대도수를 구하고 $\chi^2$ 을 **유리수로**, p-값을 **닫힌 꼴로** 구하시오.
+
+**(2)** 비율 $[0.4, 0.3, 0.3]$ 을 `f_exp` 에 그대로 넘기면 어떻게 되는가. 막히지 않았다면 어떤 값이 나왔을지 보기 1 (1)의 식으로 예측하고 확인하시오.
+
+**(3)** $\alpha = 0.05$ 에서 판정하시오.
 
 </div>
 
-```python
-n = 300
-proportions = [0.4, 0.3, 0.3]
-# 비율이 아니라 **도수**를 넘겨야 한다. 비율 [0.4, 0.3, 0.3]을 그대로 넣으면
-# 합이 f_obs의 합과 달라 오류가 나거나, 운이 나쁘면 엉뚱한 값이 나온다.
-expected = [n * p for p in proportions]
-stat, pval = stats.chisquare(f_obs=[130, 85, 85], f_exp=expected)
-print(f"{stat = :.4f}, {pval = :.4f}")
-```
+??? success "풀이"
 
-출력:
+    **(1) 유리수로.** $E_i = n p_i$ 이므로 기대도수는 $(120,\ 90,\ 90)$ 이고
 
-```
-stat = 1.3889, pval = 0.4994
-```
+    $$
+    \chi^2 = \frac{(130-120)^2}{120} + \frac{(85-90)^2}{90} + \frac{(85-90)^2}{90}
+    = \frac{100}{120} + \frac{25}{90} + \frac{25}{90}
+    $$
 
-관측 비율이 43.3%, 28.3%, 28.3%로 가설의 40%, 30%, 30%에 가까워 기각하지 못한다($p = 0.50$).
+    $$
+    = \frac56 + \frac5{18} + \frac5{18} = \frac{15 + 5 + 5}{18} = \frac{25}{18} = 1.3888889
+    $$
+
+    다. 자유도는 $k-1 = 2$ 이므로 보기 1 (2)와 같은 닫힌 꼴을 쓴다.
+
+    $$
+    p = e^{-\chi^2/2} = e^{-25/36} = 0.4993518
+    $$
+
+    **(2) 식이 예측한다.** 비율을 그대로 넘기면 $c = \sum_i p_i = 1$ 이고 $n = 300$ 이므로 보기 1 (1)의 식이
+
+    $$
+    \frac nc \chi^2 + \frac{(n-c)^2}{c} = 300 \times \frac{25}{18} + 299^2
+    = 416.6667 + 89401 = 89817.6667
+    $$
+
+    을 준다. 참값 $1.39$ 대신 $89{,}818$ 이 나오고 그중 $89{,}401$ 은 자료와 무관한 눈금 오류다. 다행히 `scipy` 가 `ValueError` 로 막는다.
+
+    **(3) 판정.** $p = 0.4994 > 0.05$ 이므로 기각하지 못한다. 관측 비율이 $43.3\%,\ 28.3\%,\ 28.3\%$ 로 가설의 $40\%,\ 30\%,\ 30\%$ 와 가깝다. 자유도 2 인 카이제곱의 평균이 2 인데 관측값이 $1.39$ 이니 평균보다도 작은, 아주 흔한 값이다.
+
+    **수치적으로.**
+
+    ```python
+    n = 300
+    proportions = [0.4, 0.3, 0.3]
+    # 비율이 아니라 **도수**를 넘겨야 한다. 비율 [0.4, 0.3, 0.3]을 그대로 넣으면
+    # 합이 f_obs의 합과 달라 오류가 나거나, 운이 나쁘면 엉뚱한 값이 나온다.
+    expected = [n * p for p in proportions]
+    stat, pval = stats.chisquare(f_obs=[130, 85, 85], f_exp=expected)
+    print(f"{stat = :.4f}, {pval = :.4f}")
+    ```
+
+    출력:
+
+    ```
+    stat = 1.3889, pval = 0.4994
+    ```
+
+    관측 비율이 43.3%, 28.3%, 28.3%로 가설의 40%, 30%, 30%에 가까워 기각하지 못한다($p = 0.50$). 출력의 `1.3889` 와 `0.4994` 가 (1)의 $25/18$ 과 $e^{-25/36}$ 과 맞는다.
+
+    (2)도 확인해 둔다.
+
+    ```python
+    from scipy import stats
+
+    n = 300
+    proportions = [0.4, 0.3, 0.3]
+    obs = [130, 85, 85]
+
+    # ① 도수로 바꾸어 넘긴다 — 올바른 사용
+    stat, pval = stats.chisquare(f_obs=obs, f_exp=[n * p for p in proportions])
+    print(f"도수로 넘김   chi2 = {stat:.6f},  p = {pval:.6f}")
+
+    # ② 비율을 그대로 넘긴다 — scipy 가 막아 준다
+    try:
+        stats.chisquare(f_obs=obs, f_exp=proportions)
+    except ValueError as e:
+        print(f"비율로 넘김   ValueError: {str(e).splitlines()[0][:60]}...")
+
+    # 막지 않았다면 어떤 값이 나왔을까. 보기 1 (1) 의 식으로 예측한다.
+    c = sum(proportions)
+    predicted = (n / c) * stat + (n - c) ** 2 / c
+    actual = sum((o - c * p) ** 2 / (c * p) for o, p in zip(obs, proportions))
+    print(f"식의 예측 (n/c)chi2 + (n-c)^2/c = {predicted:.4f}")
+    print(f"직접 계산                        = {actual:.4f}")
+    ```
+
+    출력:
+
+    ```
+    도수로 넘김   chi2 = 1.388889,  p = 0.499352
+    비율로 넘김   ValueError: For each axis slice, the sum of the observed frequencies mus...
+    식의 예측 (n/c)chi2 + (n-c)^2/c = 89817.6667
+    직접 계산                        = 89817.6667
+    ```
+
+    **예측과 직접 계산이 소수 넷째 자리까지 같다.** 보기 1 (1)에서 교차항이 사라진다고 한 유도가 맞다는 뜻이다. 합이 맞지 않는 `f_exp` 는 조금 틀린 답을 주는 것이 아니라 **자료와 무관한 수를 더해 버린다.**
 
 ## 해석
 

@@ -29,40 +29,106 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 적합도 검정 손계산
+**보기 1.** <span class="diff easy" title="쉬움"></span> 적합도 검정 손계산. 가위바위보 24 판에서 승 4, 패 13, 무 7 을 얻었다. $H_0$ 은 세 결과가 똑같이 그럴듯하다는 것이다.
+
+**(1)** 코드가 기대도수를 `observed_counts.mean()` 으로 구한다. $H_0$ 이 균등분포일 때 기대도수가 **관측도수의 평균**과 같아지는 까닭을 적으시오.
+
+**(2)** 분모가 관측도수가 아니라 기대도수인 까닭을 적으시오. $H_0$ 아래에서 $\operatorname{Var}(O_i)$ 는 $E_i$ 와 **정확히 같지 않다.** 그런데도 $E_i$ 로 나누는 것이 왜 옳은가. $E[\chi^2]$ 를 계산해 답하시오.
+
+**(3)** 통계량과 p-값을 손으로 구하고 코드와 맞추시오. 자유도 2 에서는 p-값이 닫힌 꼴로 적힌다. 타당성 조건도 점검하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-observed_counts = np.array([4, 13, 7])
-# H0가 균등분포이므로 기대도수는 모두 n/k, 즉 관측도수의 평균과 같다.
-expected_counts = np.ones(3) * observed_counts.mean()
-degrees_of_freedom = observed_counts.shape[0] - 1   # 총합이 고정이라 하나를 잃는다
+    **(1) 균등분포의 기대도수는 평균이다.** $H_0$ 이 $p_i = 1/k$ 이면
 
-# 분모가 관측도수가 아니라 **기대도수**인 것에 주의하라.
-# H0 아래에서 각 칸 도수의 분산이 근사적으로 E_i이기 때문이다(연습문제 4).
-chi_square_statistic = np.sum(
-    (observed_counts - expected_counts) ** 2 / expected_counts
-)
-# 카이제곱 적합도 검정은 언제나 우측검정이므로 sf(위쪽 꼬리)를 쓴다.
-p_value = stats.chi2(degrees_of_freedom).sf(chi_square_statistic)
+    $$
+    E_i = n p_i = \frac nk = \frac{1}{k}\sum_{j=1}^k O_j = \bar O
+    $$
 
-print(f"Chi-square Statistic = {chi_square_statistic:.4f}")
-print(f"p-value = {p_value:.4f}")
-```
+    이다. $n = \sum_j O_j$ 라서 "전체를 범주 수로 나눈 값" 이 곧 관측도수의 평균이 된다. 그러므로 `np.ones(3) * observed_counts.mean()` 이 $[8, 8, 8]$ 을 준다. **균등분포일 때만 쓸 수 있는 요령**이고, 기대 비율이 균등하지 않으면 $E_i = np_i$ 를 하나씩 적어야 한다(연습문제 3 이 그 경우다).
 
-출력:
+    **(2) $E_i$ 로 나누어야 평균이 자유도가 된다.** $H_0$ 아래에서 $O_i \sim \text{Bin}(n, p_i)$ 이므로
 
-```
-Chi-square Statistic = 5.2500
-p-value = 0.0724
-```
+    $$
+    E[O_i] = np_i = E_i,
+    \qquad
+    \operatorname{Var}(O_i) = np_i(1-p_i) = E_i(1-p_i)
+    $$
 
-기대도수가 모두 8로 5를 넘으므로 카이제곱 근사를 써도 되는 상황이다.
+    다. 분산은 $E_i$ 보다 $(1-p_i)$ 배 **작다.** 여기서는 $\operatorname{Var}(O_i) = 8 \times \tfrac23 = 5.3333$ 이고 $E_i = 8$ 이다.
+
+    그러니 "표준화" 를 제대로 하려면 $\operatorname{Var}(O_i)$ 로 나누어야 할 것처럼 보인다. 그렇게 하면 어떻게 되는지 평균을 재 본다.
+
+    $$
+    E\left[\sum_i \frac{(O_i-E_i)^2}{\operatorname{Var}(O_i)}\right] = \sum_{i=1}^k 1 = k
+    $$
+
+    $$
+    E\left[\sum_i \frac{(O_i-E_i)^2}{E_i}\right] = \sum_{i=1}^k \frac{E_i(1-p_i)}{E_i} = \sum_{i=1}^k (1-p_i) = k - 1
+    $$
+
+    **$E_i$ 로 나눈 쪽이 정확히 $k-1$ 을 준다.** 도수의 합이 $n$ 으로 묶여 있어 자유도가 하나 줄어드는데, $E_i$ 로 나누는 것이 바로 그 하나를 덜어 내는 일을 한다. 분산으로 나누면 평균이 $k$ 가 되어 자유도와 어긋난다. **지나치게 큰 $E_i$ 로 나누는 것이 실수가 아니라 제약의 보정이다.**
+
+    관측도수 $O_i$ 로 나누면 어떻게 되는가. $O_i$ 는 확률변수이므로 분모가 흔들리고, 우연히 작은 칸에서 기여가 폭발한다. $O_i = 0$ 이면 0 으로 나누기까지 한다. 자세한 것은 연습문제 4 에 있다.
+
+    **(3) 손계산.** $E_i = 8$ 이므로
+
+    $$
+    \chi^2 = \frac{(4-8)^2 + (13-8)^2 + (7-8)^2}{8} = \frac{16+25+1}{8} = \frac{42}{8} = \frac{21}{4} = 5.25
+    $$
+
+    자유도는 $k-1 = 2$ 이고 $\chi^2_2$ 의 밀도가 $\tfrac12e^{-x/2}$ 이므로
+
+    $$
+    p = P(\chi^2_2 \ge 5.25) = e^{-5.25/2} = e^{-21/8} = 0.0724398
+    $$
+
+    이다. $p > 0.05$ 라 기각하지 못한다. 타당성 조건은 기대도수가 모두 $8 \ge 5$ 이므로 충족된다.
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    observed_counts = np.array([4, 13, 7])
+    # H0가 균등분포이므로 기대도수는 모두 n/k, 즉 관측도수의 평균과 같다.
+    expected_counts = np.ones(3) * observed_counts.mean()
+    degrees_of_freedom = observed_counts.shape[0] - 1   # 총합이 고정이라 하나를 잃는다
+
+    # 분모가 관측도수가 아니라 **기대도수**인 것에 주의하라.
+    # H0 아래에서 각 칸 도수의 분산이 근사적으로 E_i이기 때문이다(연습문제 4).
+    chi_square_statistic = np.sum(
+        (observed_counts - expected_counts) ** 2 / expected_counts
+    )
+    # 카이제곱 적합도 검정은 언제나 우측검정이므로 sf(위쪽 꼬리)를 쓴다.
+    p_value = stats.chi2(degrees_of_freedom).sf(chi_square_statistic)
+
+    print(f"Chi-square Statistic = {chi_square_statistic:.4f}")
+    print(f"p-value = {p_value:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Chi-square Statistic = 5.2500
+    p-value = 0.0724
+    ```
+
+    `5.2500` 과 `0.0724` 가 (3)의 $21/4$ 와 $e^{-21/8} = 0.0724398$ 과 맞는다.
+
+    (2)를 확인해 둔다. 이 자료에서는 $k = 3$, $p_i = 1/3$ 이므로
+
+    $$
+    \sum_i (1-p_i) = 3 \times \frac23 = 2 = k-1
+    $$
+
+    이고, 자유도 2 인 카이제곱분포의 평균도 2 다. **분모를 $E_i$ 로 둔 덕분에 통계량의 평균이 기준분포의 평균과 맞는다.** 만약 $\operatorname{Var}(O_i) = 5.3333$ 으로 나누었다면 통계량이 $5.25 \times 8/5.3333 = 7.875$ 로 부풀고 평균도 3 이 되어, 자유도 2 인 분포에 견주는 것이 틀렸을 것이다.
+
+    기대도수가 모두 8로 5를 넘으므로 카이제곱 근사를 써도 되는 상황이다.
 
 **단계별 설명:**
 
@@ -80,51 +146,76 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 검정 결과를 그림으로
+**보기 2.** <span class="diff easy" title="쉬움"></span> 검정 결과를 그림으로. 보기 1 의 결과를 $\chi^2_2$ 밀도 위에 그린다.
+
+**(1)** 통계량 왼쪽과 오른쪽을 다른 색으로 칠한 그림을 그리시오.
+
+**(2)** 그림에서 읽히는 것을 **수치와 함께** 적으시오.
+
+**(3)** 이 그림이 **가리는 것**은 무엇인가. 그림만 보고 기각 여부를 판정할 수 있는가.
 
 </div>
 
-```python
-fig, ax = plt.subplots(figsize=(12, 4))
+??? success "풀이"
 
-# 왼쪽 구간 — 기각하지 않는 쪽
-x_left = np.linspace(0, chi_square_statistic, 100)
-y_left = stats.chi2(degrees_of_freedom).pdf(x_left)
-ax.plot(x_left, y_left, linewidth=3)
-x_fill_left = np.concatenate([[0], x_left, [chi_square_statistic], [0]])
-y_fill_left = np.concatenate([[0], y_left, [0], [0]])
-ax.fill(x_fill_left, y_fill_left, alpha=0.1)
+    **유도할 답은 없다.** 통계량과 p-값은 보기 1 에서 이미 얻었다($\chi^2 = 21/4$, $p = e^{-21/8} = 0.0724398$). 그림의 몫은 그 $p$ 가 **넓이**라는 것을 보여 주는 것이다.
 
-# 오른쪽 꼬리 — 기각역
-x_right = np.linspace(chi_square_statistic, 20, 100)
-y_right = stats.chi2(degrees_of_freedom).pdf(x_right)
-ax.plot(x_right, y_right, linewidth=3)
-x_fill_right = np.concatenate(
-    [[chi_square_statistic], x_right, [20], [chi_square_statistic]]
-)
-y_fill_right = np.concatenate([[0], y_right, [0], [0]])
-ax.fill(x_fill_right, y_fill_right, alpha=0.1)
+    **(1) 그린다.**
 
-# p-값을 표시한다
-ax.annotate(
-    f"p-value = {p_value:.02%}",
-    xy=((12.5 + 15.0) / 2, 0.01),
-    xytext=(16.5, 0.10),
-    fontsize=15,
-    arrowprops=dict(width=0.2, headwidth=8),
-)
+    ```python
+    fig, ax = plt.subplots(figsize=(12, 4))
 
-ax.spines["right"].set_visible(False)
-ax.spines["top"].set_visible(False)
-ax.spines["bottom"].set_position("zero")
-ax.spines["left"].set_position("zero")
-plt.tight_layout()
-plt.show()
-```
+    # 왼쪽 구간 — 기각하지 않는 쪽
+    x_left = np.linspace(0, chi_square_statistic, 100)
+    y_left = stats.chi2(degrees_of_freedom).pdf(x_left)
+    ax.plot(x_left, y_left, linewidth=3)
+    x_fill_left = np.concatenate([[0], x_left, [chi_square_statistic], [0]])
+    y_fill_left = np.concatenate([[0], y_left, [0], [0]])
+    ax.fill(x_fill_left, y_fill_left, alpha=0.1)
 
-![카이제곱 분포와 p-값](./img/gof_manual_66.png)
+    # 오른쪽 꼬리 — 기각역
+    x_right = np.linspace(chi_square_statistic, 20, 100)
+    y_right = stats.chi2(degrees_of_freedom).pdf(x_right)
+    ax.plot(x_right, y_right, linewidth=3)
+    x_fill_right = np.concatenate(
+        [[chi_square_statistic], x_right, [20], [chi_square_statistic]]
+    )
+    y_fill_right = np.concatenate([[0], y_right, [0], [0]])
+    ax.fill(x_fill_right, y_fill_right, alpha=0.1)
 
-색칠된 오른쪽 꼬리는 $H_0$ 아래에서 $5.25$만큼 또는 그보다 극단적인 $\chi^2$ 값을 관측할 확률을 나타낸다.
+    # p-값을 표시한다
+    ax.annotate(
+        f"p-value = {p_value:.02%}",
+        xy=((12.5 + 15.0) / 2, 0.01),
+        xytext=(16.5, 0.10),
+        fontsize=15,
+        arrowprops=dict(width=0.2, headwidth=8),
+    )
+
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["bottom"].set_position("zero")
+    ax.spines["left"].set_position("zero")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![카이제곱 분포와 p-값](./img/gof_manual_66.png)
+
+    색칠된 오른쪽 꼬리는 $H_0$ 아래에서 $5.25$만큼 또는 그보다 극단적인 $\chi^2$ 값을 관측할 확률을 나타낸다.
+
+    **(2) 읽히는 것.**
+
+    - **밀도가 0 에서 가장 높고 단조감소한다.** $\chi^2_2$ 의 밀도는 $f(x) = \tfrac12 e^{-x/2}$, 곧 평균 2 인 지수분포라 봉우리가 $x = 0$ 에 있고 높이가 $0.5$ 다. 자유도 1 이나 2 인 카이제곱만 이런 모양이고, 자유도 3 이상이면 봉우리가 0 에서 떨어진 곳에 생긴다.
+    - **빨간 넓이가 $0.0724$ 다.** $x = 5.25$ 에서 밀도가 $0.0362$ 로 이미 봉우리의 $7\%$ 까지 내려와 있다. 곡선이 그렇게 낮고 평평한 구간의 넓이이므로 **눈으로는 $0.07$ 인지 $0.03$ 인지 구별할 수 없다.**
+    - **파란 넓이는 $0.9276$ 이다.** 그림의 거의 전부가 파랑인데, 그것이 "$H_0$ 가 참이라면 이 정도 이하의 통계량이 나온다" 는 뜻이다.
+    - **$x$ 축을 20 에서 끊었다.** $P(\chi^2_2 \ge 20) = e^{-10} = 0.0000454$ 이므로 잘려 나간 꼬리는 십만분의 오 에 불과하다. 그림의 눈금 선택이 넓이를 왜곡하지 않는다.
+
+    **(3) 가리는 것.**
+
+    - **임계값이 그려져 있지 않다.** $5\%$ 기각 경계는 $\chi^2_{2,\,0.05} = 5.9915$ 로 빨간 선 바로 오른쪽, $0.74$ 떨어진 곳이다. 그 선이 없으니 **그림만 보고는 기각인지 아닌지 알 수 없다.** 빨간 꼬리가 그려져 있다는 사실이 "기각" 으로 오해되기 쉽다. 사실은 기각하지 못한다.
+    - **진짜 귀무분포는 이 매끄러운 곡선이 아니다.** $n = 24$ 에서 통계량이 취할 수 있는 값은 44 개뿐이고 귀무분포는 성근 계단이다. 정확한 꼬리확률은 $0.0800$ 이어서 곡선이 준 $0.0724$ 보다 $10\%$ 크다. 그림은 그 이산성을 완전히 감춘다.
+    - **어느 범주가 통계량을 만들었는지 보이지 않는다.** $5.25$ 는 세 범주의 기여 $2 + 3.125 + 0.125$ 를 더한 값인데, 이 그림에는 그 분해가 들어 있지 않다. 연습문제 6 이 그것을 따로 다룬다.
 
 ## 해석
 

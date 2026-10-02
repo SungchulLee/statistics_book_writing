@@ -10,47 +10,116 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비. 세 집단 각 $n = 20$에 모표준편차를 $1.0,\ 1.3,\ 1.6$으로 주고 적합한다.
+
+**(1)** 정규표본에서 $S^2$은 $\sigma^2$의 불편추정량이지만 $S$는 $\sigma$를 **아래로** 치우쳐 추정한다. $E[S] = c_4 \sigma$ 꼴로 적고 $c_4$를 감마함수로 표현하시오. 아울러 $\operatorname{SD}(S) = \sigma\sqrt{1 - c_4^2}$임을 보이고 $n = 20$에서 두 값을 계산하시오.
+
+**(2)** 모형을 적합해 세 표본표준편차를 (1)의 $E[S]$와 $\operatorname{SD}(S)$에 비추어 읽으시오. 세 추정값이 모두 참값보다 작게 나온 것은 치우침 때문인가 표집 변동 때문인가.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-# 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
-# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
-# (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
-rng = np.random.default_rng(42)
-n = 20
-data = pd.DataFrame({
-    "group": np.repeat(["A", "B", "C"], n),
-    "response": np.concatenate([
-        rng.normal(10.0, 1.0, n),
-        rng.normal(10.8, 1.3, n),
-        rng.normal(12.0, 1.6, n),
-    ]),
-})
-model = ols("response ~ C(group)", data=data).fit()
+    **(1) 해석적으로.** 정규표본에서 $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$이다. 그러므로
 
-print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
-print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
-```
+    $$
+    S = \frac{\sigma}{\sqrt{n-1}}\sqrt{Q}, \qquad Q \sim \chi^2(n-1)
+    $$
 
-출력:
+    이고 $E[S]$를 구하려면 $E[\sqrt{Q}]$를 알아야 한다. $\chi^2(d)$의 밀도로 직접 적분하면
 
-```
-       count    mean    std
-group                      
-A         20   9.967  0.870
-B         20  10.942  1.034
-C         20  12.191  1.145
+    $$
+    E[\sqrt{Q}]
+    = \int_0^\infty \frac{x^{1/2} \, x^{d/2-1} e^{-x/2}}{2^{d/2}\Gamma(d/2)}\,dx
+    = \frac{2^{(d+1)/2}\Gamma\!\left(\frac{d+1}{2}\right)}{2^{d/2}\Gamma(d/2)}
+    = \sqrt{2}\,\frac{\Gamma\!\left(\frac{d+1}{2}\right)}{\Gamma(d/2)}
+    $$
 
-F = 23.7708, p = 0.0000
-```
+    이다. 중간 단계는 $\int_0^\infty x^{a-1}e^{-x/2}dx = 2^a\Gamma(a)$를 $a = (d+1)/2$에 쓴 것뿐이다. $d = n-1$을 넣으면
 
-표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
+    $$
+    E[S] = c_4\,\sigma, \qquad
+    c_4 = \sqrt{\frac{2}{n-1}}\,\frac{\Gamma(n/2)}{\Gamma\!\left(\frac{n-1}{2}\right)}
+    $$
+
+    을 얻는다. $\sqrt{\cdot}$가 오목함수이므로 옌센 부등식이 $E[\sqrt Q] < \sqrt{E[Q]}$를 보장하고 따라서 $c_4 < 1$, 곧 **$S$는 $\sigma$를 아래로 치우쳐 추정한다.** $S^2$이 불편이라는 것과 모순이 아니다. 불편성은 비선형변환을 통과하지 못한다.
+
+    분산은 $E[S^2] = \sigma^2$을 그대로 쓰면 바로 나온다.
+
+    $$
+    \operatorname{Var}(S) = E[S^2] - (E[S])^2 = \sigma^2 - c_4^2\sigma^2 = \sigma^2(1-c_4^2)
+    \quad\Longrightarrow\quad
+    \operatorname{SD}(S) = \sigma\sqrt{1-c_4^2}
+    $$
+
+    $n = 20$에서 $c_4 = 0.98693$이고 $\sqrt{1-c_4^2} = 0.16112$다. **치우침은 $1.3\%$뿐인데 표집 변동은 $16.1\%$다.** 둘의 크기가 열 배 넘게 차이 난다는 것을 미리 적어 둔다.
+
+    **(2) 수치적으로.** 모형을 적합하고 세 표본표준편차를 (1)의 값과 나란히 둔다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import special
+    from statsmodels.formula.api import ols
+
+    # 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
+    # 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
+    # (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
+    rng = np.random.default_rng(42)
+    n = 20
+    data = pd.DataFrame({
+        "group": np.repeat(["A", "B", "C"], n),
+        "response": np.concatenate([
+            rng.normal(10.0, 1.0, n),
+            rng.normal(10.8, 1.3, n),
+            rng.normal(12.0, 1.6, n),
+        ]),
+    })
+    model = ols("response ~ C(group)", data=data).fit()
+
+    print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+    print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+
+    # (1) 에서 유도한 c4 와 SD(S)/sigma 를 n = 20 에서 계산한다.
+    c4 = np.sqrt(2 / (n - 1)) * special.gamma(n / 2) / special.gamma((n - 1) / 2)
+    rel_sd = np.sqrt(1 - c4 ** 2)
+    print(f"\nc4 = {c4:.5f}   (치우침 {100 * (1 - c4):.2f}%)")
+    print(f"SD(S)/sigma = {rel_sd:.5f}   (표집 변동 {100 * rel_sd:.2f}%)")
+
+    print(f"\n{'sigma':>7}{'E[S]':>9}{'SD(S)':>9}{'관측 s':>9}{'z':>8}")
+    obs = data.groupby("group").response.std().values
+    for sigma, s in zip([1.0, 1.3, 1.6], obs):
+        print(f"{sigma:>7.1f}{c4 * sigma:>9.4f}{rel_sd * sigma:>9.4f}"
+              f"{s:>9.4f}{(s - c4 * sigma) / (rel_sd * sigma):>+8.3f}")
+    ```
+
+    출력:
+
+    ```
+           count    mean    std
+    group                      
+    A         20   9.967  0.870
+    B         20  10.942  1.034
+    C         20  12.191  1.145
+
+    F = 23.7708, p = 0.0000
+
+    c4 = 0.98693   (치우침 1.31%)
+    SD(S)/sigma = 0.16112   (표집 변동 16.11%)
+
+      sigma     E[S]    SD(S)     관측 s       z
+        1.0   0.9869   0.1611   0.8702  -0.725
+        1.3   1.2830   0.2095   1.0335  -1.191
+        1.6   1.5791   0.2578   1.1450  -1.684
+    ```
+
+    **유도한 $c_4 = 0.98693$과 $\operatorname{SD}(S)/\sigma = 0.16112$가 코드와 맞는다.**
+
+    물음에 답하면 **압도적으로 표집 변동 때문**이다. 치우침은 $\sigma = 1.6$에서도 $1.6 - 1.5791 = 0.021$밖에 설명하지 못하는데, 실제로 벌어진 간격은 $1.6 - 1.145 = 0.455$다. 표준화하면 세 집단의 $z$가 $-0.73$, $-1.19$, $-1.68$이고 모두 $2$ 표준편차 안에 있으므로 어느 하나도 놀랄 값이 아니다.
+
+    셋이 모두 아래로 떨어진 것도 이상하지 않다. $P(S < E[S]) = P\bigl(\chi^2_{19} < 19 c_4^2\bigr) = 0.511$이므로 세 집단이 독립일 때 모두 아래일 확률은 $0.511^3 = 0.134$다. 일곱 번에 한 번쯤 일어나는 일이다.
+
+    실무적 교훈은 이것이다. **집단당 20개에서 표본표준편차는 참값의 $\pm 32\%$($2\operatorname{SD}$) 안에서 흔들린다.** 참 비가 $1.6/1.0 = 1.6$이었는데 관측된 비가 $1.145/0.870 = 1.32$로 눌려 나온 것이 그 결과이며, 아래에서 등분산 검정이 이 자료의 분산 차이를 잡아내지 못하는 것도 같은 까닭이다. 가정 검정의 결과를 "가정이 성립한다"로 읽으면 안 되는 이유를 이 표 하나가 보여 준다.
 
 ## 확인 방법
 
@@ -64,24 +133,84 @@ Q-Q 그림은 관측된 잔차의 분위수를 정규분포의 이론적 분위�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Q-Q 그림
+**보기 2.** <span class="diff easy" title="쉬움"></span> Q-Q 그림. 보기 1의 모형에서 나온 잔차 60개를 그린다.
+
+**(1)** 잔차의 Q-Q 그림을 그리고 무엇을 읽을 수 있는지 말하시오. "점들이 기준선을 잘 따른다"는 판단을 **수치로** 뒷받침하시오.
+
+**(2)** 이 그림이 **가리는 것**은 무엇인가. 이 자료에 실제로 들어 있는 가정 위반 가운데 Q-Q 그림으로는 볼 수 없는 것을 찾아 수치로 보이시오.
 
 </div>
 
-```python
-import statsmodels.api as sm
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# line='s'는 표본의 평균과 표준편차로 정한 기준선이다.
-# line='45'(y=x)는 잔차가 표준화되어 있을 때만 맞으므로 여기서는 쓰지 않는다.
-sm.qqplot(model.resid, line='s')
-plt.title("Q-Q Plot of Residuals")
-plt.show()
-```
+    이 보기에는 유도할 식이 없다. 그림에서 무엇을 읽어야 하는지가 전부다. 그러므로 읽히는 것을 수로 적는 일에 집중한다.
 
-![잔차의 Q-Q 그림](./img/normality_59.png)
+    **(1) 그림이 말하는 것.**
 
-점들이 기준선을 잘 따른다. 양쪽 꼬리에서 한두 점이 살짝 벗어나지만 $n = 60$에서 이 정도는 표집 변동으로 볼 만하다.
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import statsmodels.api as sm
+    from scipy import stats
+
+    # 그림에서 읽으려는 것을 먼저 수로 적어 둔다.
+    e = np.sort(model.resid.values)
+    N = len(e)
+    q = stats.norm.ppf(np.arange(1, N + 1) / (N + 1))   # sm.qqplot 의 기본 위치
+    m, s = e.mean(), e.std(ddof=1)
+    line = m + s * q                                     # line='s' 가 그리는 기준선
+
+    print(f"n = {N},  잔차 표준편차 s = {s:.4f}")
+    print(f"정렬 잔차와 이론 분위수의 상관 r = {np.corrcoef(e, q)[0, 1]:.5f}   (r^2 = {np.corrcoef(e, q)[0, 1] ** 2:.5f})")
+    print(f"Shapiro-Wilk W                  = {stats.shapiro(model.resid).statistic:.5f}")
+    k = np.argmax(np.abs(e - line))
+    print(f"기준선에서 가장 먼 점: 순위 {k + 1},  관측 {e[k]:+.4f},  기준선 {line[k]:+.4f}"
+          f"  (차이 {e[k] - line[k]:+.4f} = {abs(e[k] - line[k]) / s:.2f}s)")
+    print(f"왜도 {stats.skew(e):+.4f},  초과첨도 {stats.kurtosis(e):+.4f}")
+
+    # Q-Q 그림이 가리는 것: 집단마다 잔차의 흩어짐이 다른지는 보이지 않는다.
+    g = model.model.data.frame["group"]
+    print("\n집단별 잔차 표준편차 (Q-Q 그림에는 드러나지 않는다)")
+    print(model.resid.groupby(g).std().round(4).to_string())
+
+    # line='s'는 표본의 평균과 표준편차로 정한 기준선이다.
+    # line='45'(y=x)는 잔차가 표준화되어 있을 때만 맞으므로 여기서는 쓰지 않는다.
+    sm.qqplot(model.resid, line='s')
+    plt.title("Q-Q Plot of Residuals")
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    n = 60,  잔차 표준편차 s = 1.0050
+    정렬 잔차와 이론 분위수의 상관 r = 0.99115   (r^2 = 0.98238)
+    Shapiro-Wilk W                  = 0.98696
+    기준선에서 가장 먼 점: 순위 60,  관측 +2.6418,  기준선 +2.1454  (차이 +0.4965 = 0.49s)
+    왜도 +0.0390,  초과첨도 -0.0756
+
+    집단별 잔차 표준편차 (Q-Q 그림에는 드러나지 않는다)
+    group
+    A    0.8702
+    B    1.0335
+    C    1.1450
+    ```
+
+    ![잔차의 Q-Q 그림](./img/normality_59.png)
+
+    **"기준선을 잘 따른다"의 정량적 내용은 $r = 0.99115$다.** 정렬된 잔차와 이론 분위수의 상관이 이 값이고, Q-Q 그림의 직선성은 바로 이 상관을 눈으로 재는 일이다.
+
+    모양에 관한 두 수도 함께 읽어야 한다. **왜도 $+0.0390$**이므로 S자 휘어짐이 없고(치우침 없음), **초과첨도 $-0.0756$**이므로 꼬리가 두껍지도 얇지도 않다. 앞의 "확인 방법"이 열거한 세 가지 이상 징후 가운데 어느 것도 나타나지 않는다.
+
+    **꼬리에서 벗어난 점도 재 두어야 한다.** 가장 멀리 떨어진 것은 최대 잔차로, 관측값 $+2.6418$인데 기준선은 $+2.1454$를 기대한다. 차이 $0.4965$는 잔차 표준편차의 $0.49$배다. 표본 하나의 최댓값이 $0.5$ 표준편차만큼 기대에서 벗어나는 일은 $n = 60$에서 흔하다. 최댓값의 분포 자체가 넓기 때문이며, 꼬리의 한두 점으로 정규성을 판단하면 안 되는 까닭이 이것이다.
+
+    상관과 Shapiro-Wilk $W$의 관계도 짚어 둔다. $r^2 = 0.98238$이고 $W = 0.98696$으로 $W$가 조금 크다. $W$의 분자 $\left(\sum a_i x_{(i)}\right)^2$에 쓰이는 가중값 $a_i$가 순서통계량의 공분산까지 반영한 **최적** 가중값이어서, 등가중 상관보다 큰 값을 주기 때문이다. 둘은 가깝지만 같지 않다.
+
+    **(2) 그림이 가리는 것.** 이 자료에는 실제로 가정 위반이 하나 들어 있다. 집단별 모표준편차를 $1.0,\ 1.3,\ 1.6$으로 다르게 주었으므로 **등분산성이 깨져 있다.** 잔차 표준편차가 집단 A $0.8702$, B $1.0335$, C $1.1450$으로 단조증가하는 것이 그 흔적이다.
+
+    그런데 Q-Q 그림에는 이것이 전혀 드러나지 않는다. 잔차를 한 덩어리로 모아 정렬한 뒤 분위수만 비교하므로 **어느 점이 어느 집단에서 왔는지가 지워진다.** 표준편차가 다른 세 정규분포의 혼합은 초과첨도를 조금 올리지만($0.87, 1.03, 1.15$ 정도의 차이로는 $0.01$ 수준이라 $-0.0756$ 안에 묻힌다) 여전히 정규에 아주 가까운 모양이어서, 정규성 진단은 아무 경보를 울리지 않는다.
+
+    같은 이유로 Q-Q 그림은 **관측 순서에 관한 정보도 지운다.** 잔차가 서로 상관되어 있어도(독립성 위반) 정렬해 버리면 알 수 없다. 그래서 정규성 Q-Q 그림, 등분산성의 잔차 대 적합값 그림, 독립성의 순서 대 잔차 그림이 **서로를 대신할 수 없다.** 세 그림은 같은 잔차를 보지만 각각 다른 축을 버린다.
 
 ### Shapiro-Wilk 검정
 

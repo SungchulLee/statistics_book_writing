@@ -82,48 +82,117 @@ $\alpha = 0.05$에서 $H_0: p_{\text{대면}} = p_{\text{온라인}}$을 검정�
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 신뢰구간과 검정이 같은 답을 준다
+**보기 4.** <span class="diff easy" title="쉬움"></span> 신뢰구간과 검정이 같은 답을 준다. $\bar x = 52$, $\mu_0 = 50$, $\sigma = 10$(기지), $n = 25$, $\alpha = 0.05$인 양측 $z$ 검정이다.
+
+**(1)** 두 판정이 "우연히 맞아떨어지는" 것이 아니라 **같은 사건**임을 부등식의 동치변형으로 보이고, 이 자료에서 두 값을 계산하시오.
+
+**(2)** 더 날카로운 진술이 있다. $p$-값은 **$\mu_0$이 구간의 끝점이 되는 바로 그 $\alpha$**다. 이 자료에서 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-x_bar = 52
-mu_0 = 50
-sigma = 10
-n = 25
-alpha = 0.05
+    **(1) 해석적으로.** 기각 조건에서 출발해 한 줄씩 동치변형한다. 각 화살표는 "같은 값을 양변에 곱하거나 더한다"일 뿐이므로 **역도 성립한다.**
 
-# 검정: mu_0를 중심에 놓고 x_bar가 얼마나 떨어져 있는지 잰다.
-z = (x_bar - mu_0) / (sigma / np.sqrt(n))
-p_value = 2 * stats.norm.sf(abs(z))
-reject_test = p_value <= alpha
+    $$
+    \lvert z \rvert > z_{\alpha/2}
+    \iff \left\lvert \frac{\bar x - \mu_0}{\sigma/\sqrt n} \right\rvert > z_{\alpha/2}
+    \iff \lvert \bar x - \mu_0 \rvert > z_{\alpha/2}\frac{\sigma}{\sqrt n}
+    $$
 
-# 신뢰구간: x_bar를 중심에 놓고 mu_0가 안에 들어오는지 본다.
-# 기준점만 바꿔 같은 부등식을 두 번 쓰는 셈이라 결론이 어긋날 수 없다.
-z_crit = stats.norm.ppf(1 - alpha / 2)
-ci_lower = x_bar - z_crit * sigma / np.sqrt(n)
-ci_upper = x_bar + z_crit * sigma / np.sqrt(n)
-reject_ci = mu_0 < ci_lower or mu_0 > ci_upper
+    마지막 식은 $\mu_0 < \bar x - z_{\alpha/2}\sigma/\sqrt n$ 또는 $\mu_0 > \bar x + z_{\alpha/2}\sigma/\sqrt n$, 곧
 
-print(f"Test: z = {z:.4f}, p-value = {p_value:.4f}, Reject = {reject_test}")
-print(f"CI: ({ci_lower:.4f}, {ci_upper:.4f}), mu_0 outside CI = {reject_ci}")
-print(f"Both methods agree: {reject_test == reject_ci}")
-```
+    $$
+    \mu_0 \notin \left(\bar x - z_{\alpha/2}\frac{\sigma}{\sqrt n},\;
+    \bar x + z_{\alpha/2}\frac{\sigma}{\sqrt n}\right)
+    $$
 
-출력:
+    이다. **두 절차가 같은 답을 주는 것이 아니라, 두 문장이 같은 사건을 가리킨다.** 달라지는 것은 어느 쪽을 기준점으로 삼아 거리를 재느냐뿐이다. 검정은 $\mu_0$을 가운데 놓고 $\bar x$가 얼마나 떨어졌는지 보고, 구간은 $\bar x$를 가운데 놓고 $\mu_0$이 들어오는지 본다. 같은 자를 양쪽에서 댄 것이다.
 
-```
-Test: z = 1.0000, p-value = 0.3173, Reject = False
-CI: (48.0801, 55.9199), mu_0 outside CI = False
-Both methods agree: True
-```
+    이 자료에서는 $\sigma/\sqrt n = 10/5 = 2$이므로
 
-두 접근이 같은 결론에 이른다. $z = 1$은 임계값 1.96에 못 미치고, 같은 이유로 $\mu_0 = 50$이 구간 $(48.08, 55.92)$ 안에 있다.
+    $$
+    z = \frac{52-50}{2} = 1, \qquad p = 2\{1-\Phi(1)\} = 0.317311
+    $$
 
-여기서 구간이 검정보다 하나 더 말해 준다는 점을 짚어 둘 만하다. 검정은 "50을 배제할 수 없다"까지만 말하지만, 구간은 48.08에서 55.92까지가 모두 배제되지 않는다고 말한다. 기각하지 못했다는 결과를 "차이가 없다"로 읽으면 안 되는 이유가 이것이다. 자료는 $\mu = 55$ 역시 배제하지 못한다.
+    이고 구간은 $52 \pm 1.959964 \times 2 = (48.080072,\ 55.919928)$이다. $\lvert z \rvert = 1 < 1.96$이고 $50 \in (48.08, 55.92)$이라 **둘 다 비기각**이다.
+
+    **(2) 해석적으로.** (1)의 동치를 $\alpha$의 함수로 읽으면 더 날카로운 진술이 나온다. $\mu_0$이 구간의 **끝점**이 되는 조건은 위 부등식이 **등식**이 되는 것, 곧
+
+    $$
+    \lvert z \rvert = z_{\alpha/2}
+    \iff \alpha = 2\{1 - \Phi(\lvert z \rvert)\} = p
+    $$
+
+    이다. 그러므로 **$p$-값은 $\mu_0$이 신뢰구간의 경계에 정확히 놓이는 유의수준**이다. $\alpha < p$이면 구간이 더 넓어 $\mu_0$을 품고, $\alpha > p$이면 더 좁아 $\mu_0$을 내뱉는다. 여기서는 $p = 0.317311$이므로 $(1-p) = 68.27\%$ 신뢰구간의 아래 끝점이 정확히 $50$이어야 한다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    x_bar = 52
+    mu_0 = 50
+    sigma = 10
+    n = 25
+    alpha = 0.05
+
+    # 검정: mu_0를 중심에 놓고 x_bar가 얼마나 떨어져 있는지 잰다.
+    z = (x_bar - mu_0) / (sigma / np.sqrt(n))
+    p_value = 2 * stats.norm.sf(abs(z))
+    reject_test = p_value <= alpha
+
+    # 신뢰구간: x_bar를 중심에 놓고 mu_0가 안에 들어오는지 본다.
+    # 기준점만 바꿔 같은 부등식을 두 번 쓰는 셈이라 결론이 어긋날 수 없다.
+    z_crit = stats.norm.ppf(1 - alpha / 2)
+    ci_lower = x_bar - z_crit * sigma / np.sqrt(n)
+    ci_upper = x_bar + z_crit * sigma / np.sqrt(n)
+    reject_ci = mu_0 < ci_lower or mu_0 > ci_upper
+
+    print(f"Test: z = {z:.4f}, p-value = {p_value:.4f}, Reject = {reject_test}")
+    print(f"CI: ({ci_lower:.4f}, {ci_upper:.4f}), mu_0 outside CI = {reject_ci}")
+    print(f"Both methods agree: {reject_test == reject_ci}")
+
+    # (2) alpha 를 바꿔 가며 구간이 mu_0 를 언제 내뱉는지 본다.
+    se = sigma / np.sqrt(n)
+    print(f"\n{'alpha':>8} {'신뢰수준':>8} {'구간':>24} {'mu0 포함':>9} {'검정 기각':>9}")
+    for al in (0.05, 0.20, p_value, 0.40, 0.60):
+        zc = stats.norm.ppf(1 - al / 2)
+        lo, hi = x_bar - zc * se, x_bar + zc * se
+        inside = lo <= mu_0 <= hi
+        print(f"{al:>8.6f} {1 - al:>8.4f} ({lo:>9.6f}, {hi:>9.6f})"
+              f" {str(inside):>9} {str(p_value <= al):>9}")
+    print(f"\np-값 = {p_value:.6f} 에서 아래 끝점이 정확히 mu_0 = "
+          f"{x_bar - stats.norm.ppf(1 - p_value / 2) * se:.10f}")
+    ```
+
+    출력:
+
+    ```
+    Test: z = 1.0000, p-value = 0.3173, Reject = False
+    CI: (48.0801, 55.9199), mu_0 outside CI = False
+    Both methods agree: True
+
+       alpha     신뢰수준                       구간    mu0 포함     검정 기각
+    0.050000   0.9500 (48.080072, 55.919928)      True     False
+    0.200000   0.8000 (49.436897, 54.563103)      True     False
+    0.317311   0.6827 (50.000000, 54.000000)      True      True
+    0.400000   0.6000 (50.316758, 53.683242)     False      True
+    0.600000   0.4000 (50.951199, 53.048801)     False      True
+
+    p-값 = 0.317311 에서 아래 끝점이 정확히 mu_0 = 50.0000000000
+    ```
+
+    (1)의 $z = 1$, $p = 0.317311$, 구간 $(48.080072,\ 55.919928)$이 그대로 나왔다. 표의 `mu0 포함`과 `검정 기각` 두 열이 **네 줄에서 정확히 반대**다.
+
+    (2)도 확인된다. $\alpha = p = 0.317311$인 줄에서 구간이 $(50.000000,\ 54.000000)$이라 **아래 끝점이 소수점 열째 자리까지 $\mu_0 = 50$**이다. 그보다 작은 $\alpha$에서는 구간이 넓어 $\mu_0$을 품고, 큰 $\alpha$에서는 좁아 내뱉는다.
+
+    남은 한 줄이 바로 그 $\alpha = p$인 줄인데, 두 열이 **둘 다 `True`**로 나왔다. 어긋난 것이 아니라 **$\mu_0$이 정확히 경계에 놓인 자리**다. 코드가 포함을 $\text{lo} \le \mu_0 \le \text{hi}$로, 기각을 $p \le \alpha$로 쓰는데 둘 다 등호를 포함하므로 경계에서 둘 다 참이 된다. 쌍대성의 엄밀한 진술은 **열린** 구간으로 쓴다. $\mu_0 \in (\text{lo}, \text{hi})$와 "기각 못함"이 동치이고, 끝점은 어느 쪽에 넣든 확률 0인 사건이라 실무에서는 문제가 되지 않는다.
+
+    두 접근이 같은 결론에 이른다. $z = 1$은 임계값 $1.96$에 못 미치고, **같은 이유로** $\mu_0 = 50$이 구간 $(48.08, 55.92)$ 안에 있다.
+
+    여기서 구간이 검정보다 하나 더 말해 준다는 점을 짚어 둘 만하다. 검정은 "50을 배제할 수 없다"까지만 말하지만, 구간은 $48.08$에서 $55.92$까지가 모두 배제되지 않는다고 말한다. **기각하지 못했다는 결과를 "차이가 없다"로 읽으면 안 되는 이유**가 이것이다. 자료는 $\mu = 55$ 역시 배제하지 못한다.
 
 ## 연습문제
 

@@ -56,39 +56,92 @@ $$
 
 ## 확률밀도함수와 누적분포함수의 시각화
 
-다음 코드는 주어진 자유도에 대해 확률밀도함수와 누적분포함수를 그린다:
+성질 표의 최빈값 $\max(d-2,0)$은 밀도를 직접 미분해 얻을 수 있다. 그 값이 정말 봉우리에 놓이는지 그려서 보자.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 카이제곱 분포의 밀도와 분포함수
+**보기 1.** <span class="diff easy" title="쉬움"></span> 카이제곱 분포의 밀도와 분포함수. 자유도 $d = 5$를 쓴다.
+
+**(1)** 밀도 $f(x; d) \propto x^{d/2-1}e^{-x/2}$를 미분해 최빈값이 $\max(d-2,\,0)$임을 보이시오. $d \le 2$에서 따로 따져야 하는 까닭도 적으시오.
+
+**(2)** $d = 5$의 밀도와 분포함수를 겹쳐 그려 (1)의 답이 봉우리에 놓이는지 확인하고, $P(Q \le 15)$와 상위 5% 임계값을 계산하시오.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 자유도 5 인 카이제곱의 밀도함수와 분포함수를 겹쳐 그린다.
-# 값이 0 이상에서만 정의되고 오른쪽으로 길게 늘어진 모양임을 확인한다.
-df = 5
-x = np.linspace(0, 30, 100)
-pdf = stats.chi2(df=df).pdf(x)
-cdf = stats.chi2(df=df).cdf(x)
+    **(1) 해석적으로.** 상수배는 봉우리의 위치를 바꾸지 않으므로 로그를 씌워 미분한다. $x > 0$에서
 
-fig, ax = plt.subplots()
-ax.plot(x, pdf, label="PDF")
-ax.plot(x, cdf, label="CDF")
-ax.legend()
-ax.set_title(f"PDF and CDF of chi-squared({df})")
-plt.show()
-```
+    $$
+    \log f(x; d) = \left(\frac{d}{2} - 1\right)\log x - \frac{x}{2} + C
+    $$
 
-![카이제곱 분포의 pdf와 cdf](./img/chi_square_distribution_57.png)
+    이고
 
-자유도 5에서 확률밀도함수의 최빈값이 $d - 2 = 3$에 있고 오른쪽으로 길게 늘어져 있다. 누적분포함수는 15 근처에서 이미 1에 가까워진다.
+    $$
+    \frac{\partial}{\partial x}\log f = \frac{d/2 - 1}{x} - \frac{1}{2}
+    $$
 
-$d$가 작으면 확률밀도함수가 오른쪽으로 치우치고 최빈값이 0 근처에 있다. $d$가 커지면 분포가 더 대칭적이 되고 오른쪽으로 이동한다.
+    이다. 이것을 $0$으로 두면 $x = d - 2$를 얻는다. 이 정류점이 최대임은 이계도함수가 보여 준다.
+
+    $$
+    \frac{\partial^2}{\partial x^2}\log f = -\frac{d/2 - 1}{x^2} < 0 \qquad (d > 2)
+    $$
+
+    $d > 2$에서 $\log f$가 $(0,\infty)$에서 위로 오목하므로 정류점은 하나뿐이고 그것이 최대다.
+
+    $d \le 2$에서는 사정이 다르다. 계수 $d/2 - 1 \le 0$이므로 $\partial \log f/\partial x < 0$이 모든 $x > 0$에서 성립해 **$f$가 단조감소**한다. 정류점 $x = d-2$는 음수여서 정의역 밖이고, 최대는 경계 $x \to 0^+$에서 잡힌다. $d = 1$이면 $f$가 $0$에서 발산하고 $d = 2$이면 $f(x) = e^{-x/2}/2$로 유한한 값 $1/2$에서 시작한다. 두 경우를 함께 적으면
+
+    $$
+    \text{최빈값} = \max(d - 2,\, 0)
+    $$
+
+    이고, $d = 5$에서는 $3$이다. **$d = 2$가 모양이 바뀌는 경계**라는 것이 요점이다.
+
+    **(2) 수치적으로.** 격자 위에서 밀도의 최대점을 찾고 분포함수의 값을 읽는다.
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+    import matplotlib.pyplot as plt
+
+    # 자유도 5 인 카이제곱의 밀도함수와 분포함수를 겹쳐 그린다.
+    # 값이 0 이상에서만 정의되고 오른쪽으로 길게 늘어진 모양임을 확인한다.
+    df = 5
+    x = np.linspace(0, 30, 100)
+    pdf = stats.chi2(df=df).pdf(x)
+    cdf = stats.chi2(df=df).cdf(x)
+
+    # (1) 에서 유도한 최빈값 d-2 를 격자가 고른 최대점과 견준다.
+    print(f"해석적 최빈값  d - 2      = {df - 2}")
+    print(f"격자 최대점              = {x[np.argmax(pdf)]:.4f}  (격자 간격 {x[1] - x[0]:.4f})")
+    print(f"F(15) = P(Q <= 15)       = {stats.chi2(df=df).cdf(15):.4f}")
+    print(f"상위 5% 임계값            = {stats.chi2(df=df).ppf(0.95):.4f}")
+
+    fig, ax = plt.subplots()
+    ax.plot(x, pdf, label="PDF")
+    ax.plot(x, cdf, label="CDF")
+    ax.legend()
+    ax.set_title(f"PDF and CDF of chi-squared({df})")
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    해석적 최빈값  d - 2      = 3
+    격자 최대점              = 3.0303  (격자 간격 0.3030)
+    F(15) = P(Q <= 15)       = 0.9896
+    상위 5% 임계값            = 11.0705
+    ```
+
+    ![카이제곱 분포의 pdf와 cdf](./img/chi_square_distribution_57.png)
+
+    **해석적 최빈값 $3$과 격자 최대점 $3.0303$이 한 칸 차이로 맞는다.** 격자 간격이 $0.3030$이라 $x = 3$이 후보에 아예 없으므로 이 차이는 격자의 몫이지 유도의 흠이 아니다. 해석적으로 푼 답은 정확하고, 격자 탐색은 격자만큼만 정확하다.
+
+    분포함수는 $P(Q \le 15) = 0.9896$이다. 그림에서 "15 근처에서 이미 1에 가까워진다"고 읽히는 것의 정확한 값이며, 여전히 $1\%$ 남짓이 오른쪽에 남아 있다. 상위 5% 임계값은 $11.0705$로 성질 표 아래의 "약 11.07"과 맞는다. 평균이 $5$인데 임계값이 $11.07$이니 **오른쪽 꼬리가 평균의 두 배 너머까지 뻗는다**는 뜻이고, 자유도가 작은 카이제곱 검정이 왜 둔한지의 출발점이다.
+
+    $d$가 작으면 밀도가 오른쪽으로 치우치고 최빈값이 0 근처에 있다. $d$가 커지면 분포가 더 대칭적이 되고 오른쪽으로 이동한다. 왜도 $\sqrt{8/d}$가 $d \to \infty$에서 $0$으로 가는 것이 그 말의 정량적 표현이다.
 
 ## 정규 제곱합으로부터의 구성
 
@@ -99,36 +152,74 @@ $d$가 작으면 확률밀도함수가 오른쪽으로 치우치고 최빈값이
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 정규 제곱합으로 만들어 보기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규 제곱합으로 만들어 보기. $d = 5$에서 두 방식으로 10,000개씩 얻는다.
+
+**(1)** $Q = \sum_{i=1}^d Z_i^2$의 평균과 분산을 표준정규의 적률로 직접 계산하시오.
+
+**(2)** 두 방식의 표본평균과 표본분산을 (1)의 이론값과 견주고, 남은 차이가 몬테카를로 오차로 설명되는지 확인하시오.
 
 </div>
 
-```python
-df, seed = 5, 1
-data_direct = stats.chi2(df=df).rvs(10_000, random_state=seed)
-# 표준정규를 df개 제곱해서 더한다. 이것이 카이제곱분포의 정의다.
-# axis=0으로 합해야 열마다(표본마다) 제곱합이 하나씩 나온다.
-data_from_norm = np.sum(
-    stats.norm().rvs(size=(df, 10_000), random_state=seed) ** 2,
-    axis=0
-)
+??? success "풀이"
 
-for name, d in [("직접 표집", data_direct), ("제곱합 구성", data_from_norm)]:
-    print(f"{name:<12} mean={d.mean():.4f}  var={d.var(ddof=1):.4f}")
-print(f"{'이론값':<12} mean={df:.4f}  var={2*df:.4f}")
-```
+    **(1) 해석적으로.** $Z \sim N(0,1)$의 짝수 적률은 $E[Z^{2k}] = (2k-1)!!$이므로 $E[Z^2] = 1$, $E[Z^4] = 3$이다. 따라서
 
-출력:
+    $$
+    E[Z^2] = 1, \qquad \operatorname{Var}(Z^2) = E[Z^4] - (E[Z^2])^2 = 3 - 1 = 2
+    $$
 
-```
-직접 표집        mean=4.9953  var=10.0317
-제곱합 구성       mean=5.0068  var=9.9999
-이론값          mean=5.0000  var=10.0000
-```
+    이다. $Z_1, \ldots, Z_d$가 독립이므로 기댓값은 그냥 더해지고 분산도 더해진다.
 
-두 방식 모두 이론값 $E[\chi^2_d] = d = 5$와 $\text{Var}(\chi^2_d) = 2d = 10$을 재현한다. 정의 $\sum Z_i^2 \sim \chi^2(d)$가 수치로 확인된 셈이다.
+    $$
+    E[Q] = \sum_{i=1}^d E[Z_i^2] = d, \qquad
+    \operatorname{Var}(Q) = \sum_{i=1}^d \operatorname{Var}(Z_i^2) = 2d
+    $$
 
-두 표본이 서로 정확히 같지는 않다는 점에 주의하라. `random_state`가 같아도 뽑는 난수의 **개수와 용도**가 다르기 때문이다. 직접 표집은 10,000개를 뽑고, 제곱합 구성은 50,000개를 뽑아 다섯 개씩 묶는다.
+    $d = 5$에서 $E[Q] = 5$, $\operatorname{Var}(Q) = 10$이다. **분산의 $2$가 어디서 왔는지가 요점이다.** $E[Z^4] = 3$에서 왔으므로, 정규성이 깨지면 이 $2$가 바뀐다. 5.3절에서 분산 추론의 오류율이 첨도로 정해지던 것과 같은 자리다.
+
+    같은 계산으로 첨도도 나온다. $\chi^2(d)$의 표준화 4차 적률은 $\beta_2 = 3 + 12/d$이고, $d = 5$에서 $\beta_2 = 5.4$다. 아래에서 분산의 몬테카를로 오차를 잴 때 쓴다.
+
+    **(2) 수치적으로.** 정의대로 쌓아 만든 것과 `scipy` 가 직접 뽑아 준 것을 나란히 둔다.
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    df, seed = 5, 1
+    data_direct = stats.chi2(df=df).rvs(10_000, random_state=seed)
+    # 표준정규를 df개 제곱해서 더한다. 이것이 카이제곱분포의 정의다.
+    # axis=0으로 합해야 열마다(표본마다) 제곱합이 하나씩 나온다.
+    data_from_norm = np.sum(
+        stats.norm().rvs(size=(df, 10_000), random_state=seed) ** 2,
+        axis=0
+    )
+
+    for name, d in [("직접 표집", data_direct), ("제곱합 구성", data_from_norm)]:
+        print(f"{name:<12} mean={d.mean():.4f}  var={d.var(ddof=1):.4f}")
+    print(f"{'이론값':<12} mean={df:.4f}  var={2*df:.4f}")
+
+    # 몬테카를로 오차. 평균은 SD/sqrt(N), 분산은 Var * sqrt((beta2-1)/N) 이며
+    # 카이제곱(d) 의 첨도는 beta2 = 3 + 12/d 다.
+    N, beta2 = 10_000, 3 + 12 / df
+    se_mean = np.sqrt(2 * df) / np.sqrt(N)
+    se_var = 2 * df * np.sqrt((beta2 - 1) / N)
+    print(f"{'MC 오차':<12} mean={se_mean:.4f}  var={se_var:.4f}")
+    ```
+
+    출력:
+
+    ```
+    직접 표집        mean=4.9953  var=10.0317
+    제곱합 구성       mean=5.0068  var=9.9999
+    이론값          mean=5.0000  var=10.0000
+    MC 오차        mean=0.0316  var=0.2098
+    ```
+
+    **두 방식이 모두 이론값 안에 든다.** 평균의 어긋남은 $-0.0047$과 $+0.0068$로 몬테카를로 오차 $0.0316$의 $0.15$배와 $0.22$배다. 분산의 어긋남은 $+0.0317$과 $-0.0001$로 오차 $0.2098$의 $0.15$배와 사실상 $0$이다. 네 수 모두 $1$ 표준오차 안에 있으므로 정의 $\sum Z_i^2 \sim \chi^2(d)$가 수치로 확인된 셈이다.
+
+    분산의 몬테카를로 오차가 평균의 것보다 $6.6$배 큰 데에는 이유가 있다. 표본분산의 표준오차는 $\sigma^2\sqrt{(\beta_2-1)/N}$이라 **첨도가 들어오는데**, $\chi^2(5)$의 $\beta_2 = 5.4$가 정규의 $3$보다 크기 때문이다. 2차 적률을 재려면 4차 적률이 필요하다는 것이 여기서도 보인다.
+
+    두 표본이 서로 정확히 같지는 않다는 점에 주의하라. `random_state`가 같아도 뽑는 난수의 **개수와 용도**가 다르기 때문이다. 직접 표집은 10,000개를 뽑고, 제곱합 구성은 50,000개를 뽑아 다섯 개씩 묶는다. 같은 분포에서 뽑은 **서로 다른 두 표본**이므로 평균과 분산이 소수점 셋째 자리에서 갈리는 것이 정상이다.
 
 ## 해석
 

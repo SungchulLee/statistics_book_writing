@@ -113,48 +113,141 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 집합, 함수, 논리
+**보기 1.** <span class="diff easy" title="쉬움"></span> 드모르간 법칙, 지시함수, 그리고 $\mathbb{N}$ 과 $\mathbb{Z}$ 의 대응. $\Omega = \{1, 2, \ldots, 10\}$에 $A = \{1,2,3,4,5\}$, $B = \{4,5,6,7\}$을 놓는다.
+
+**(1)** $(A \cup B)^c$와 $A^c \cap B^c$를 각각 손으로 적어 같음을 보이고, 이 등식이 이 세 집합에서만 성립하는 우연이 아님을 논리 항등식으로 설명하시오.
+
+**(2)** $\Omega$에서 균등하게 뽑은 표본으로 지시함수 $\mathbf{1}_A$의 표본평균을 재면 무엇을 추정하는가. 그 참값을 구하고, $n = 10^4$에서 추정값이 참값에서 얼마나 벗어나는 것이 정상인지 미리 말하시오.
+
+**(3)** 코드의 `bijection_N_to_Z`가 $\mathbb{N} \to \mathbb{Z}$의 전단사임을 보이고 그 역함수를 명시적으로 적으시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# === De Morgan's law with finite sets ===
-omega = set(range(1, 11))
-A = {1, 2, 3, 4, 5}
-B = {4, 5, 6, 7}
+    쪽의 코드가 세 가지를 차례로 보인다. 유한집합에서의 드모르간 법칙, 지시함수의 기댓값이 확률이라는 사실, 그리고 $\mathbb{N}$ 과 $\mathbb{Z}$ 를 짝지우는 함수다.
 
-A_c, B_c = omega - A, omega - B
-lhs = omega - (A | B)   # (A ∪ B)^c
-rhs = A_c & B_c          # A^c ∩ B^c
-print(f"(A ∪ B)^c = {lhs}")
-print(f"A^c ∩ B^c = {rhs}")
-print(f"Equal: {lhs == rhs}")
+    ```python
+    import numpy as np
 
-# === Indicator function and its connection to probability ===
-rng = np.random.default_rng(42)
-samples = rng.integers(low=1, high=11, size=10_000)
-prob_A = np.mean([s in A for s in samples])
-print(f"P(A) estimate: {prob_A:.3f} (true 1/2 since |A|=5 of 10)")
+    # === De Morgan's law with finite sets ===
+    omega = set(range(1, 11))
+    A = {1, 2, 3, 4, 5}
+    B = {4, 5, 6, 7}
 
-# === Bijection demonstration: N <-> Z ===
-def bijection_N_to_Z(n):
-    # n=1 -> 0, n=2 -> 1, n=3 -> -1, n=4 -> 2, n=5 -> -2, ...
-    return n // 2 if n % 2 == 0 else -(n // 2)
+    A_c, B_c = omega - A, omega - B
+    lhs = omega - (A | B)   # (A ∪ B)^c
+    rhs = A_c & B_c          # A^c ∩ B^c
+    print(f"(A ∪ B)^c = {lhs}")
+    print(f"A^c ∩ B^c = {rhs}")
+    print(f"Equal: {lhs == rhs}")
 
-print([bijection_N_to_Z(n) for n in range(1, 11)])
-```
+    # === Indicator function and its connection to probability ===
+    rng = np.random.default_rng(42)
+    samples = rng.integers(low=1, high=11, size=10_000)
+    prob_A = np.mean([s in A for s in samples])
+    print(f"P(A) estimate: {prob_A:.3f} (true 1/2 since |A|=5 of 10)")
 
-출력:
+    # === Bijection demonstration: N <-> Z ===
+    def bijection_N_to_Z(n):
+        # n=1 -> 0, n=2 -> 1, n=3 -> -1, n=4 -> 2, n=5 -> -2, ...
+        return n // 2 if n % 2 == 0 else -(n // 2)
 
-```
-(A ∪ B)^c = {8, 9, 10}
-A^c ∩ B^c = {8, 9, 10}
-Equal: True
-P(A) estimate: 0.506 (true 1/2 since |A|=5 of 10)
-[0, 1, -1, 2, -2, 3, -3, 4, -4, 5]
-```
+    print([bijection_N_to_Z(n) for n in range(1, 11)])
+    ```
+
+    출력:
+
+    ```
+    (A ∪ B)^c = {8, 9, 10}
+    A^c ∩ B^c = {8, 9, 10}
+    Equal: True
+    P(A) estimate: 0.506 (true 1/2 since |A|=5 of 10)
+    [0, 1, -1, 2, -2, 3, -3, 4, -4, 5]
+    ```
+
+    **(1) 손으로 세어 본다.** $A \cup B = \{1,2,3,4,5,6,7\}$이므로 $(A \cup B)^c = \{8,9,10\}$이다. 다른 쪽은 $A^c = \{6,7,8,9,10\}$과 $B^c = \{1,2,3,8,9,10\}$을 교차시켜 $A^c \cap B^c = \{8,9,10\}$이다. 출력의 두 줄이 그대로 이것이다.
+
+    우연이 아닌 까닭은 이 등식이 **집합의 사실이 아니라 논리의 사실**이기 때문이다. 원소 하나를 잡고 소속 여부를 명제로 읽으면
+
+    $$
+    x \in (A \cup B)^c \iff \lnot(x \in A \;\lor\; x \in B) \iff \lnot(x \in A) \;\land\; \lnot(x \in B) \iff x \in A^c \cap B^c
+    $$
+
+    이고, 가운데 단계가 바로 $\lnot(P \lor Q) \iff \lnot P \land \lnot Q$다. $\Omega$가 무엇이든, $A$와 $B$가 무엇이든 성립한다. 아래 확인 코드는 $\lvert \Omega \rvert = 5$에서 부분집합 쌍 $32^2 = 1024$개를 전수 검사해 합집합꼴과 교집합꼴이 모두 참임을 보인다.
+
+    **(2) 추정하는 것은 $P(A)$이고 참값은 정확히 $1/2$이다.** 지시함수의 기댓값이 확률이라는 것이
+
+    $$
+    \mathbb{E}[\mathbf{1}_A] = 1 \cdot P(A) + 0 \cdot P(A^c) = P(A)
+    $$
+
+    이고, 균등분포에서는 $P(A) = \lvert A \rvert / \lvert \Omega \rvert = 5/10 = 1/2$다. 표본평균은 $\mathbf{1}_A(X_i)$들의 평균, 곧 $\text{Bernoulli}(1/2)$ 표본의 비율이므로 표준오차가
+
+    $$
+    \text{SE} = \sqrt{\frac{p(1-p)}{n}} = \sqrt{\frac{0.25}{10^4}} = 0.005
+    $$
+
+    이다. 그러므로 추정값이 $0.5$에서 $\pm 0.005$ 안쪽에 들 확률이 약 $68\%$, $\pm 0.01$ 안쪽이 약 $95\%$다. **$0.506$은 정확히 그 예산 안에 있다.** 실제로 $10000$개 가운데 $5061$개가 $A$에 들었으니 벗어남은 $0.0061 = 1.22\,\text{SE}$다. 어긋난 것이 아니라 예상된 흔들림이며, 참값과 일치하기를 바라는 것이 오히려 잘못된 기대다. 자릿수를 더 얻으려면 $n$을 100배로 키워야 $\text{SE}$가 10분의 1이 된다.
+
+    **(3) 두 쪽을 따로 보면 전단사가 보인다.** $n$이 짝수면 $f(n) = n/2$, 홀수면 파이썬의 `n // 2`가 $(n-1)/2$이므로 $f(n) = -(n-1)/2$다. 곧
+
+    $$
+    f(\{2, 4, 6, \ldots\}) = \{1, 2, 3, \ldots\}, \qquad f(\{1, 3, 5, \ldots\}) = \{0, -1, -2, \ldots\}
+    $$
+
+    이고 두 상(image)이 서로 겹치지 않으면서 합이 $\mathbb{Z}$ 전체다. 각 쪽에서 $f$가 단조이므로 단사이고, 두 상이 $\mathbb{Z}$를 덮으므로 전사다. 역함수는
+
+    $$
+    g(k) = \begin{cases} 2k, & k \ge 1 \\ 1 - 2k, & k \le 0 \end{cases}
+    $$
+
+    이다. $g(1) = 2$, $g(0) = 1$, $g(-1) = 3$, $g(5) = 10$이고, 출력의 리스트 `[0, 1, -1, 2, -2, ...]`가 $g$의 값을 $1$부터 차례로 되읽은 것이다.
+
+    ```python
+    import itertools
+    import math
+
+    import numpy as np
+
+    # === 드모르간이 특정 세 집합의 우연이 아님을 전수 확인한다 ===
+    om = set(range(5))
+    subs = [set(c) for r in range(6) for c in itertools.combinations(om, r)]
+    ok_union = all(om - (X | Y) == (om - X) & (om - Y) for X in subs for Y in subs)
+    ok_inter = all(om - (X & Y) == (om - X) | (om - Y) for X in subs for Y in subs)
+    print(f"부분집합 쌍 {len(subs) ** 2}개 전수 확인:  합집합꼴 {ok_union}  교집합꼴 {ok_inter}")
+
+    # === 지시함수 추정값이 1 표준오차 몇 배만큼 벗어났는가 ===
+    rng = np.random.default_rng(42)
+    samples = rng.integers(low=1, high=11, size=10_000)
+    k = int(np.sum(np.isin(samples, [1, 2, 3, 4, 5])))
+    se = math.sqrt(0.5 * 0.5 / 10_000)
+    print(f"A에 든 표본 {k}/10000 = {k / 10_000:.4f},  SE = {se:.4f},  "
+          f"벗어남 = {(k / 10_000 - 0.5) / se:.2f} SE")
+
+    # === 전단사의 역함수를 적어 양쪽으로 확인한다 ===
+    def f(n):
+        return n // 2 if n % 2 == 0 else -(n // 2)
+
+    def g(k):
+        return 2 * k if k >= 1 else 1 - 2 * k
+
+    print(f"f가 1..4000에서 단사:      {len(set(map(f, range(1, 4001)))) == 4000}")
+    print(f"f(g(k)) == k  (|k| <= 2000): {all(f(g(k)) == k for k in range(-2000, 2001))}")
+    print(f"g(f(n)) == n  (n <= 4000):   {all(g(f(n)) == n for n in range(1, 4001))}")
+    ```
+
+    출력:
+
+    ```
+    부분집합 쌍 1024개 전수 확인:  합집합꼴 True  교집합꼴 True
+    A에 든 표본 5061/10000 = 0.5061,  SE = 0.0050,  벗어남 = 1.22 SE
+    f가 1..4000에서 단사:      True
+    f(g(k)) == k  (|k| <= 2000): True
+    g(f(n)) == n  (n <= 4000):   True
+    ```
+
+    세 가지가 모두 맞는다. 그리고 (3)이 이 쪽에서 가장 쓸모 있는 대목이다. $\mathbb{N}$ 은 $\mathbb{Z}$ 의 진부분집합인데도 둘 사이에 전단사가 있으므로 $\mathbb{Z}$ 는 가산이다. 가산이라는 것은 곧 $\sigma$-가법성을 그대로 쓸 수 있다는 뜻이고, 그래서 $\mathbb{Z}$ 를 값으로 갖는 확률변수는 확률질량함수 하나로 다 기술된다. 반면 $\mathbb{R}$ 에는 그런 짝짓기가 없고, 거기서부터 밀도와 적분이 필요해진다.
 
 ## 연습문제
 

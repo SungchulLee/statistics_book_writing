@@ -135,58 +135,173 @@ $O_p$를 **확률적 유계(boundedness in probability)**, $o_p$를 **확률적�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 수열, 극한, 점근
+**보기 1.** <span class="diff easy" title="쉬움"></span> 네 가지 극한을 수로 확인하기. 아래 코드는 $(1+1/n)^n \to e$, 등비급수의 부분합, $e^{0.3}$의 테일러 근사, 그리고 점근 표기를 차례로 보인다. 각 수렴이 **얼마나 빠른지**를 미리 계산하고 출력과 맞춰 본다.
+
+**(1)** $(1+1/n)^n$의 오차가 출력에서 $n$이 10배가 될 때마다 10분의 1로 줄어든다. 그 비례상수를 해석적으로 구하고, $n \cdot (\text{오차})$가 그 값에 다가가는지 확인하시오.
+
+**(2)** $r = 1/2$인 등비급수의 부분합 $S_{19}$를 닫힌 꼴로 적어, 출력의 열째 자리까지와 대조하시오.
+
+**(3)** 차수 $k$의 테일러 근사에서 차수를 하나 올리면 오차가 몇 분의 1로 줄어드는가. 예측값을 출력의 여섯 줄과 견주시오.
+
+**(4)** 코드의 마지막 머리글은 `o(1/n) vs O(1/n)`이라 적혀 있다. $\log n / n$은 과연 $O(1/n)$인가. 아니라면 두 수열은 각각 무엇인가.
 
 </div>
 
-```python
-import math
-import numpy as np
+??? success "풀이"
 
-# === (1 + 1/n)^n → e ===
-ns = [10, 100, 1_000, 10_000, 100_000]
-for n in ns:
-    approx = (1 + 1/n)**n
-    print(f"n={n:>7d}: (1+1/n)^n = {approx:.8f}, error = {abs(approx - math.e):.2e}")
+    ```python
+    import math
+    import numpy as np
 
-# === Geometric series partial sums ===
-r = 0.5
-partial = np.cumsum(r ** np.arange(20))
-exact = 1 / (1 - r)
-print(f"\nGeometric r=0.5: S_19 = {partial[-1]:.10f}, exact = {exact}")
+    # === (1 + 1/n)^n → e ===
+    ns = [10, 100, 1_000, 10_000, 100_000]
+    for n in ns:
+        approx = (1 + 1/n)**n
+        print(f"n={n:>7d}: (1+1/n)^n = {approx:.8f}, error = {abs(approx - math.e):.2e}")
 
-# === Taylor approximation of e^x at x = 0.3 ===
-x = 0.3
-for k in range(1, 7):
-    taylor = sum(x**n / math.factorial(n) for n in range(k + 1))
-    print(f"order {k}: {taylor:.8f}, exact: {math.exp(x):.8f}")
+    # === Geometric series partial sums ===
+    r = 0.5
+    partial = np.cumsum(r ** np.arange(20))
+    exact = 1 / (1 - r)
+    print(f"\nGeometric r=0.5: S_19 = {partial[-1]:.10f}, exact = {exact}")
 
-# === Demonstrating o(1/n) vs O(1/n) ===
-n = np.arange(1, 50)
-print("\nlog(n) / n   (o(1)? yes):", (np.log(n) / n)[-1])
-print("sin(n) / n^2 (O(1/n^2)):", (np.sin(n) / n**2)[-1])
-```
+    # === Taylor approximation of e^x at x = 0.3 ===
+    x = 0.3
+    for k in range(1, 7):
+        taylor = sum(x**n / math.factorial(n) for n in range(k + 1))
+        print(f"order {k}: {taylor:.8f}, exact: {math.exp(x):.8f}")
 
-출력:
+    # === Demonstrating o(1/n) vs O(1/n) ===
+    n = np.arange(1, 50)
+    print("\nlog(n) / n   (o(1)? yes):", (np.log(n) / n)[-1])
+    print("sin(n) / n^2 (O(1/n^2)):", (np.sin(n) / n**2)[-1])
+    ```
 
-```
-n=     10: (1+1/n)^n = 2.59374246, error = 1.25e-01
-n=    100: (1+1/n)^n = 2.70481383, error = 1.35e-02
-n=   1000: (1+1/n)^n = 2.71692393, error = 1.36e-03
-n=  10000: (1+1/n)^n = 2.71814593, error = 1.36e-04
-n= 100000: (1+1/n)^n = 2.71826824, error = 1.36e-05
+    출력:
 
-Geometric r=0.5: S_19 = 1.9999980927, exact = 2.0
-order 1: 1.30000000, exact: 1.34985881
-order 2: 1.34500000, exact: 1.34985881
-order 3: 1.34950000, exact: 1.34985881
-order 4: 1.34983750, exact: 1.34985881
-order 5: 1.34985775, exact: 1.34985881
-order 6: 1.34985876, exact: 1.34985881
+    ```
+    n=     10: (1+1/n)^n = 2.59374246, error = 1.25e-01
+    n=    100: (1+1/n)^n = 2.70481383, error = 1.35e-02
+    n=   1000: (1+1/n)^n = 2.71692393, error = 1.36e-03
+    n=  10000: (1+1/n)^n = 2.71814593, error = 1.36e-04
+    n= 100000: (1+1/n)^n = 2.71826824, error = 1.36e-05
 
-log(n) / n   (o(1)? yes): 0.07942490404307401
-sin(n) / n^2 (O(1/n^2)): -0.00039723142555579834
-```
+    Geometric r=0.5: S_19 = 1.9999980927, exact = 2.0
+    order 1: 1.30000000, exact: 1.34985881
+    order 2: 1.34500000, exact: 1.34985881
+    order 3: 1.34950000, exact: 1.34985881
+    order 4: 1.34983750, exact: 1.34985881
+    order 5: 1.34985775, exact: 1.34985881
+    order 6: 1.34985876, exact: 1.34985881
+
+    log(n) / n   (o(1)? yes): 0.07942490404307401
+    sin(n) / n^2 (O(1/n^2)): -0.00039723142555579834
+    ```
+
+    **(1) 비례상수는 $e/2 = 1.359141\ldots$이다.** 로그를 취하고 $\log(1+u) = u - u^2/2 + u^3/3 - \cdots$를 $u = 1/n$에 쓴다.
+
+    $$
+    n \log\!\left(1 + \frac{1}{n}\right) = n\left(\frac{1}{n} - \frac{1}{2n^2} + \frac{1}{3n^3} - \cdots\right) = 1 - \frac{1}{2n} + \frac{1}{3n^2} - \cdots
+    $$
+
+    지수를 다시 씌우면서 $e^{-t} = 1 - t + t^2/2 - \cdots$를 $t = 1/(2n) - 1/(3n^2)$에 쓰면
+
+    $$
+    \left(1 + \frac{1}{n}\right)^{\!n} = e \cdot \exp\!\left(-\frac{1}{2n} + \frac{1}{3n^2} - \cdots\right) = e\left(1 - \frac{1}{2n} + \frac{11}{24n^2} - \cdots\right)
+    $$
+
+    이다($1/3 + 1/8 = 11/24$). 따라서 오차가
+
+    $$
+    e - \left(1 + \frac{1}{n}\right)^{\!n} = \frac{e}{2n} - \frac{11e}{24n^2} + O(n^{-3})
+    $$
+
+    이고 선행항의 계수가 $e/2$다. **수렴은 $\Theta(1/n)$으로 느리다.** $n$을 10배 늘려야 자릿수 하나를 얻는다는 출력이 바로 그 뜻이다.
+
+    **(2) $S_{19} = 2 - 2^{-19}$이다.** 유한 등비합 공식에서
+
+    $$
+    S_{19} = \sum_{k=0}^{19} \left(\frac{1}{2}\right)^{\!k} = \frac{1 - (1/2)^{20}}{1 - 1/2} = 2\left(1 - 2^{-20}\right) = 2 - 2^{-19}
+    $$
+
+    이고 $2^{-19} = 1.907349 \times 10^{-6}$이므로 $S_{19} = 1.99999809265\ldots$다. 열째 자리로 끊으면 $1.9999980927$로 출력과 정확히 같다. 이쪽 수렴은 **기하적**이어서 항을 하나 더할 때마다 오차가 절반으로 줄고, 20항만으로 여섯 자리를 얻는다. (1)의 $\Theta(1/n)$과 견주면 차이가 분명하다.
+
+    **(3) 차수를 하나 올리면 오차가 약 $(k+2)/x$분의 1로 줄어든다.** 차수 $k$ 근사의 절단오차는 남은 항들의 합이고 그 선행항이 $x^{k+1}/(k+1)!$이다.
+
+    $$
+    e^x - \sum_{n=0}^{k} \frac{x^n}{n!} = \frac{x^{k+1}}{(k+1)!} + \frac{x^{k+2}}{(k+2)!} + \cdots
+    $$
+
+    그러므로 $k \to k+1$에서 선행항의 비가 $x/(k+2)$, 곧 오차는 $(k+2)/x$분의 1이 된다. $x = 0.3$이니 $k = 1 \to 2$에서 $3/0.3 = 10$배, $k = 2 \to 3$에서 $4/0.3 = 13.3$배, $k = 4 \to 5$에서 $6/0.3 = 20$배다. 출력의 오차를 차례로 재면 $4.986\times10^{-2}$, $4.859\times10^{-3}$, $3.588\times10^{-4}$, $2.131\times10^{-5}$, $1.058\times10^{-6}$, $4.508\times10^{-8}$이고 연속한 비가 $10.3$, $13.5$, $16.8$, $20.1$, $23.5$다. 예측 $10$, $13.3$, $16.7$, $20$, $23.3$과 맞는다. 실제 오차는 선행항보다 조금 크며($k = 5$에서 비가 $1.0445$) 뒤따르는 항들 때문이다. 차수가 올라갈수록 그 비가 1로 간다.
+
+    **(4) 아니다. $\log n / n$은 $O(1/n)$이 아니다.** $O(1/n)$이라면 어떤 상수 $C$에 대해 $\log n / n \le C/n$, 곧 $\log n \le C$가 모든 $n$에서 성립해야 한다. $\log n$은 무한히 커지므로 그런 $C$는 없다. 비를 재 보면 $n = 49$에서 $3.89$, $n = 10^6$에서 $13.82$, $n = 10^{12}$에서 $27.63$으로 계속 자란다. 올바른 분류는
+
+    $$
+    \frac{\log n}{n} = o(1), \qquad \frac{\log n}{n} = O\!\left(n^{-1+\varepsilon}\right) \;\; (\forall \varepsilon > 0), \qquad \frac{\log n}{n} \ne O(1/n)
+    $$
+
+    이다. 코드 안의 주석 `(o(1)? yes)`는 맞고, 머리글의 `o(1/n)`은 이 수열에 해당하지 않는다. **$o(1/n)$에 해당하는 것은 둘째 수열이다.** $\lvert \sin n \rvert \le 1$이므로 $\lvert \sin(n)/n^2 \rvert \le 1/n^2$이고, $n^2$로 나눈 것이 $1/n$보다 한 차수 빠르므로
+
+    $$
+    \frac{\sin n}{n^2} = O(1/n^2) \quad \Longrightarrow \quad \frac{\sin n}{n^2} = o(1/n)
+    $$
+
+    이다. 다만 $\Theta(1/n^2)$은 **아니다.** $n \bmod 2\pi$가 $[0, 2\pi)$에 고르게 퍼지므로 $\sin n$이 0에 얼마든지 가까워지는 $n$이 있고, 그때 분자가 함께 작아진다. 출력의 $n = 49$에서는 $\sin 49 = -0.9538$이 마침 $\pm 1$ 근처라 상한에 거의 닿아 있어 $-3.972\times10^{-4} \approx -0.954/2401$이지만, $n = 10^6$에서는 $\lvert \sin n \rvert = 0.350$으로 세 배 작다. **점근 표기에서 상한과 정확한 차수를 구별해야 하는 자리가 이런 곳이다.**
+
+    ```python
+    import math
+
+    # === (1 + 1/n)^n 의 오차가 e/(2n) 인가 ===
+    print(f"e/2 = {math.e / 2:.6f}")
+    for n in [10, 100, 1_000, 10_000, 100_000]:
+        err = math.e - (1 + 1 / n) ** n
+        print(f"n={n:>7d}:  오차 {err:.3e}   n*오차 {n * err:.5f}   "
+              f"두 항 예측 {math.e * (1 / (2 * n) - 11 / (24 * n ** 2)):.3e}")
+
+    # === 등비급수 부분합은 2 - 2^-19 이다 ===
+    S19 = sum(0.5 ** k for k in range(20))
+    print(f"\n2 - 2^-19 = {2 - 2.0 ** -19:.10f}   코드의 S_19 = {S19:.10f}   "
+          f"2^-19 = {2.0 ** -19:.6e}")
+
+    # === 테일러 절단오차의 선행항은 x^(k+1)/(k+1)! 이다 ===
+    x = 0.3
+    for k in range(1, 7):
+        taylor = sum(x ** n / math.factorial(n) for n in range(k + 1))
+        err = math.exp(x) - taylor
+        lead = x ** (k + 1) / math.factorial(k + 1)
+        print(f"order {k}: 오차 {err:.3e}  선행항 x^{k + 1}/{k + 1}! = {lead:.3e}  "
+              f"비 {err / lead:.4f}")
+
+    # === log(n)/n 은 O(1/n) 이 아니다 ===
+    for n in [49, 10 ** 3, 10 ** 6, 10 ** 12]:
+        print(f"n={n:>13d}:  n*log(n)/n = log n = {math.log(n):.4f}   "
+              f"n^2*|sin n|/n^2 = |sin n| = {abs(math.sin(n)):.4f}")
+    ```
+
+    출력:
+
+    ```
+    e/2 = 1.359141
+    n=     10:  오차 1.245e-01   n*오차 1.24539   두 항 예측 1.235e-01
+    n=    100:  오차 1.347e-02   n*오차 1.34680   두 항 예측 1.347e-02
+    n=   1000:  오차 1.358e-03   n*오차 1.35790   두 항 예측 1.358e-03
+    n=  10000:  오차 1.359e-04   n*오차 1.35902   두 항 예측 1.359e-04
+    n= 100000:  오차 1.359e-05   n*오차 1.35913   두 항 예측 1.359e-05
+
+    2 - 2^-19 = 1.9999980927   코드의 S_19 = 1.9999980927   2^-19 = 1.907349e-06
+    order 1: 오차 4.986e-02  선행항 x^2/2! = 4.500e-02  비 1.1080
+    order 2: 오차 4.859e-03  선행항 x^3/3! = 4.500e-03  비 1.0797
+    order 3: 오차 3.588e-04  선행항 x^4/4! = 3.375e-04  비 1.0631
+    order 4: 오차 2.131e-05  선행항 x^5/5! = 2.025e-05  비 1.0522
+    order 5: 오차 1.058e-06  선행항 x^6/6! = 1.012e-06  비 1.0445
+    order 6: 오차 4.508e-08  선행항 x^7/7! = 4.339e-08  비 1.0388
+    n=           49:  n*log(n)/n = log n = 3.8918   n^2*|sin n|/n^2 = |sin n| = 0.9538
+    n=         1000:  n*log(n)/n = log n = 6.9078   n^2*|sin n|/n^2 = |sin n| = 0.8269
+    n=      1000000:  n*log(n)/n = log n = 13.8155   n^2*|sin n|/n^2 = |sin n| = 0.3500
+    n=1000000000000:  n*log(n)/n = log n = 27.6310   n^2*|sin n|/n^2 = |sin n| = 0.6112
+    ```
+
+    $n \cdot (\text{오차})$가 $1.2454 \to 1.3591$로 $e/2 = 1.359141$에 올라붙고, 두 항까지 맞춘 예측은 $n \ge 100$에서 네 자리가 모두 일치한다. $n = 10$에서만 $1.235$ 대 $1.245$로 어긋나는데, 버린 $O(n^{-3})$항이 거기서는 아직 무시할 만큼 작지 않기 때문이다. **점근식은 $n$이 커질 때의 진술이고, 작은 $n$에서 맞는다는 보장은 어디에도 없다.** 9장 이후의 점근 신뢰구간을 작은 표본에 쓸 때 되풀이될 경고가 이것이다.
 
 ## 연습문제
 

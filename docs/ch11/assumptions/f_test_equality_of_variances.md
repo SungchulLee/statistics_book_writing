@@ -52,65 +52,199 @@ $$
 
 이며, 이것이 $F(n_1 - 1, n_2 - 1)$ 분포의 정의 형태이다.
 
-다음 함수는 양측 F-검정을 구현한다:
+다음 함수는 양측 F-검정을 구현한다. 어느 표본을 분자에 두느냐는 분석자의 임의 선택이므로, 그 선택이 결론을 바꾸지 않아야 한다는 점을 먼저 확인해 둘 필요가 있다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 등분산 F 검정 구현
+**보기 1.** <span class="diff easy" title="쉬움"></span> 등분산 F 검정 구현. 두 표본의 순서를 바꾸면 통계량은 $F \mapsto 1/F$로, 자유도는 $(d_1, d_2) \mapsto (d_2, d_1)$로 바뀐다.
+
+**(1)** 그래도 양측 p-값 $p = 2\min(G_{d_1,d_2}(F),\, 1 - G_{d_1,d_2}(F))$는 **바뀌지 않음**을 보이시오. 임계값에 대해서는 $F_{1-\alpha/2}(d_1, d_2) = 1/F_{\alpha/2}(d_2, d_1)$이 성립함도 보이시오.
+
+**(2)** 크기가 서로 다른 두 표본($n = 20$과 $n = 35$)에 함수를 두 순서로 적용해 (1)을 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def f_test(data_0, data_1):
-    """두 분산이 같은지 F 검정한다.
+    **(1) 해석적으로.** 바탕이 되는 사실 하나로 모두 따라온다. $G \sim F(d_2, d_1)$이면
 
-    두 표본분산의 비가 F 분포를 따른다는 사실을 쓴다. 카이제곱과 마찬가지로
-    좌우가 대칭이 아니므로 작은 쪽 꼬리를 두 배 해 양측 p-값을 만든다.
-    이 검정은 정규성에 매우 민감하다 — 그래서 실제로는 Levene 을 더 쓴다.
-    """
-    statistic = data_0.var(ddof=1) / data_1.var(ddof=1)
-    df1 = data_0.shape[0] - 1
-    df2 = data_1.shape[0] - 1
-    p_value = 2 * min(
-        stats.f(df1, df2).cdf(statistic),
-        stats.f(df1, df2).sf(statistic)
-    )
-    return statistic, p_value
-```
+    $$
+    \frac{1}{G} \sim F(d_1, d_2)
+    $$
 
-보기는 $X \sim N(0, 1)$과 여러 $\sigma_Y$ 값에 대한 $Y \sim N(1, \sigma_Y)$을 생성한다:
+    이다. $F$-분포가 두 카이제곱의 비 $\dfrac{\chi^2_{d_2}/d_2}{\chi^2_{d_1}/d_1}$로 정의되므로 역수를 취하면 분자와 분모가 맞바뀌는 것뿐이다.
+
+    이제 관측된 비를 $f = s_1^2/s_2^2$라 하고 순서를 바꾼 쪽의 분포함수를 계산한다. $G \sim F(d_2, d_1)$에 대해
+
+    $$
+    P\!\left(G \le \frac{1}{f}\right)
+    = P\!\left(\frac{1}{G} \ge f\right)
+    = P\bigl(F_{d_1, d_2} \ge f\bigr)
+    = 1 - G_{d_1,d_2}(f)
+    $$
+
+    이고 같은 계산으로 $P(G \ge 1/f) = G_{d_1,d_2}(f)$다. 곧 **두 꼬리 확률이 서로 자리를 맞바꿀 뿐**이다. $\min$은 두 인수의 순서에 영향받지 않으므로
+
+    $$
+    2\min\bigl(G_{d_2,d_1}(1/f),\, 1 - G_{d_2,d_1}(1/f)\bigr)
+    = 2\min\bigl(1 - G_{d_1,d_2}(f),\, G_{d_1,d_2}(f)\bigr)
+    = p
+    $$
+
+    이다. **양측 p-값은 표본의 순서에 의존하지 않는다.**
+
+    임계값 관계도 같은 사실에서 나온다. $G \sim F(d_2, d_1)$일 때
+
+    $$
+    \alpha/2 = P\bigl(G \le F_{\alpha/2}(d_2,d_1)\bigr)
+    = P\!\left(F_{d_1,d_2} \ge \frac{1}{F_{\alpha/2}(d_2,d_1)}\right)
+    $$
+
+    이므로 괄호 안의 값이 바로 $F_{d_1,d_2}$의 상위 $\alpha/2$ 분위수다. 곧
+
+    $$
+    F_{1-\alpha/2}(d_1, d_2) = \frac{1}{F_{\alpha/2}(d_2, d_1)}
+    $$
+
+    특히 $d_1 = d_2 = d$이면 $F$와 $1/F$가 같은 분포를 가지므로 $P(F \le 1) = P(F \ge 1) = 1/2$, 곧 **$F(d,d)$의 중앙값은 정확히 $1$**이다. 아래 보기 2에서 $\sigma_Y = 1$일 때 p-값이 정확히 $1.000$으로 찍히는 까닭이 이것이다.
+
+    **(2) 수치적으로.** 자유도가 실제로 뒤바뀌도록 두 표본의 크기를 다르게 둔다.
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    def f_test(data_0, data_1):
+        """두 분산이 같은지 F 검정한다.
+
+        두 표본분산의 비가 F 분포를 따른다는 사실을 쓴다. 카이제곱과 마찬가지로
+        좌우가 대칭이 아니므로 작은 쪽 꼬리를 두 배 해 양측 p-값을 만든다.
+        이 검정은 정규성에 매우 민감하다 — 그래서 실제로는 Levene 을 더 쓴다.
+        """
+        statistic = data_0.var(ddof=1) / data_1.var(ddof=1)
+        df1 = data_0.shape[0] - 1
+        df2 = data_1.shape[0] - 1
+        p_value = 2 * min(
+            stats.f(df1, df2).cdf(statistic),
+            stats.f(df1, df2).sf(statistic)
+        )
+        return statistic, p_value
+
+    # 표본 크기를 일부러 다르게 두어 자유도가 뒤바뀌는 것까지 보이게 한다.
+    rng = np.random.default_rng(7)
+    a = rng.normal(scale=1.0, size=20)
+    b = rng.normal(scale=1.7, size=35)
+
+    Fab, pab = f_test(a, b)
+    Fba, pba = f_test(b, a)
+    print(f"f_test(a, b):  F = {Fab:.6f}   p = {pab:.6f}   (자유도 19, 34)")
+    print(f"f_test(b, a):  F = {Fba:.6f}   p = {pba:.6f}   (자유도 34, 19)")
+    print(f"F 는 역수인가 ?      {np.isclose(Fab * Fba, 1.0)}")
+    print(f"p 는 같은가 ?        {np.isclose(pab, pba)}")
+
+    # 임계값의 역수 관계. F_{1-a/2}(d1,d2) = 1 / F_{a/2}(d2,d1).
+    d1, d2 = 19, 34
+    hi = stats.f(d1, d2).ppf(0.975)
+    lo_swapped = stats.f(d2, d1).ppf(0.025)
+    print(f"\nF_0.975(19,34)        = {hi:.6f}")
+    print(f"1 / F_0.025(34,19)    = {1 / lo_swapped:.6f}")
+
+    # 양측 p-값이 1 을 넘지 않는 까닭은 d1 = d2 일 때 가장 또렷하다.
+    # F(d,d) 는 역수에 대해 대칭이므로 중앙값이 정확히 1 이다.
+    print(f"\nP(F(99,99) <= 1)      = {stats.f(99, 99).cdf(1):.6f}")
+    ```
+
+    출력:
+
+    ```
+    f_test(a, b):  F = 0.237062   p = 0.001581   (자유도 19, 34)
+    f_test(b, a):  F = 4.218313   p = 0.001581   (자유도 34, 19)
+    F 는 역수인가 ?      True
+    p 는 같은가 ?        True
+
+    F_0.975(19,34)        = 2.153050
+    1 / F_0.025(34,19)    = 2.153050
+
+    P(F(99,99) <= 1)      = 0.500000
+    ```
+
+    **세 가지가 모두 맞는다.** 통계량은 $0.237062$와 $4.218313$으로 곱이 $1$이고, p-값은 $0.001581$로 소수점 여섯째 자리까지 같다. 임계값은 $F_{0.975}(19,34) = 2.153050$이 $1/F_{0.025}(34,19)$와 자리까지 일치하며, $F(99,99)$의 중앙값이 $1$임도 $P(F \le 1) = 0.500000$으로 확인된다.
+
+    실무적으로는 이것이 안심거리다. **"큰 분산을 분자에 두라"는 흔한 지침은 양측검정에서는 필요하지 않다.** 그 지침이 뜻을 갖는 것은 한쪽 꼬리만 보는 단측검정이나, 상위 분위수표만 실린 책에서 손으로 임계값을 찾을 때다. 다만 구현을 바꿔 `p = 2 * sf(statistic)`처럼 한쪽 꼬리만 두 배 하면 이 대칭이 깨져 순서에 따라 결론이 달라진다. 위 함수가 `min`을 쓰는 이유다.
+
+보기는 $X \sim N(0, 1)$과 여러 $\sigma_Y$ 값에 대한 $Y \sim N(1, \sigma_Y)$을 생성한다. 씨앗을 고정하므로 두 표본이 **같은 난수열**에서 나온다는 점을 눈여겨보라.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 검정 실행
+**보기 2.** <span class="diff easy" title="쉬움"></span> 검정 실행. 집단당 $n = 100$, 씨앗 `seed = 1`을 고정하고 $\sigma_Y$만 바꾼다.
+
+**(1)** 씨앗이 고정되어 있을 때 $F = S_X^2/S_Y^2$가 자료에 전혀 의존하지 않고 $1/\sigma_Y^2$으로 **정확히** 정해짐을 보이시오. 또 이 설정에서 $p = 0.05$가 되는 $\sigma_Y$를 구하시오.
+
+**(2)** 검정을 실행해 (1)의 두 답을 확인하고, $\sigma_Y = 1.20$에서 왜 $\alpha = 0.05$에 닿지 못하는지 설명하시오.
 
 </div>
 
-```python
-# Bartlett 검정과 같은 설정으로 돌려 두 검정의 p-값을 견주어 볼 수 있다.
-seed, size = 1, 100
-x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+??? success "풀이"
 
-for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
-    y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
-    stat, pval = f_test(x, y)
-    print(f"sigma_y={scale:.2f}: F={stat:.2f}, p={pval:.3f}")
-```
+    **(1) 해석적으로.** 같은 씨앗에서 `norm(loc, scale).rvs` 는 같은 표준정규열 $z_1, \ldots, z_n$을 꺼내 $\text{loc} + \text{scale}\cdot z_i$로 바꾼다. 그러므로 $x_i = z_i$이고 $y_i = 1 + \sigma_Y z_i$이며, 표본분산은 위치이동에 둔감하고 배율의 제곱만큼 커진다.
 
-출력:
+    $$
+    s_X^2 = s_z^2, \qquad s_Y^2 = \sigma_Y^2 s_z^2
+    \quad\Longrightarrow\quad
+    F = \frac{s_X^2}{s_Y^2} = \frac{s_z^2}{\sigma_Y^2 s_z^2} = \frac{1}{\sigma_Y^2}
+    $$
 
-```
-sigma_y=1.00: F=1.00, p=1.000
-sigma_y=1.05: F=0.91, p=0.628
-sigma_y=1.10: F=0.83, p=0.345
-sigma_y=1.15: F=0.76, p=0.166
-sigma_y=1.20: F=0.69, p=0.071
-```
+    **$s_z^2$이 약분되어 사라진다.** 자료가 무엇이든 $F$는 $1/\sigma_Y^2$ 하나로 정해지며, 표집 변동이 전혀 들어오지 않는다. 그래서 이 표는 검정력의 표가 아니라 **분산비 하나를 F-분포에 비추어 본 표**다.
 
-p-값이 앞의 Bartlett 검정과 소수점 셋째 자리까지 같다. 우연이 아니다. 집단이 둘이고 자료가 정규일 때 Bartlett 검정은 등분산 $F$-검정과 동등하다.
+    $p = 0.05$가 되는 $\sigma_Y$를 구해 보자. $F$가 아래쪽으로 밀려가므로 걸리는 임계값은 하위 $2.5\%$ 분위수다. $F = F_{0.025}(99,99)$에서
+
+    $$
+    \frac{1}{\sigma_Y^{*2}} = F_{0.025}(99, 99) = 0.67284
+    \quad\Longrightarrow\quad
+    \sigma_Y^* = \frac{1}{\sqrt{0.67284}} = 1.2191
+    $$
+
+    이다. **$\sigma_Y$가 $1.2191$을 넘어야 기각된다.** 격자의 마지막 값 $1.20$은 그보다 작으므로 기각되지 않으며, 이것이 $p = 0.071$의 정체다.
+
+    **(2) 수치적으로.** 다섯 $\sigma_Y$에 대해 돌린다.
+
+    ```python
+    # Bartlett 검정과 같은 설정으로 돌려 두 검정의 p-값을 견주어 볼 수 있다.
+    seed, size = 1, 100
+    x = stats.norm(loc=0, scale=1).rvs(size, random_state=seed)
+
+    for scale in [1.00, 1.05, 1.10, 1.15, 1.20]:
+        y = stats.norm(loc=1, scale=scale).rvs(size, random_state=seed)
+        stat, pval = f_test(x, y)
+        print(f"sigma_y={scale:.2f}: F={stat:.2f}, p={pval:.3f}")
+    ```
+
+    출력:
+
+    ```
+    sigma_y=1.00: F=1.00, p=1.000
+    sigma_y=1.05: F=0.91, p=0.628
+    sigma_y=1.10: F=0.83, p=0.345
+    sigma_y=1.15: F=0.76, p=0.166
+    sigma_y=1.20: F=0.69, p=0.071
+    ```
+
+    **$F = 1/\sigma_Y^2$이 다섯 자리에서 모두 맞는다.** $1/1.05^2 = 0.9070$, $1/1.10^2 = 0.8264$, $1/1.15^2 = 0.7561$, $1/1.20^2 = 0.6944$가 출력의 $0.91,\ 0.83,\ 0.76,\ 0.69$와 일치한다. 근사가 아니라 등식이다.
+
+    $\sigma_Y = 1.00$에서 p-값이 정확히 $1.000$인 것도 (1)의 부산물이다. $F = 1$이고 보기 1에서 본 대로 $F(99,99)$의 중앙값이 $1$이므로 $p = 2 \times 0.5 = 1$이다. **p-값이 꼭 $1$로 찍히는 일은 여기서처럼 통계량이 귀무분포의 중앙값에 정확히 앉을 때만 일어난다.**
+
+    $\sigma_Y = 1.20$이 $\alpha = 0.05$에 닿지 못하는 까닭은 (1)에서 계산한 $\sigma_Y^* = 1.2191$과 비교하면 바로 보인다. $F = 0.6944$가 임계값 $0.67284$보다 **아직 크다.** 간발의 차이로 보이지만 그 간격이 곧 $p = 0.071$과 $p = 0.05$의 차이다. $F(99,99)$가 $F = 1$ 부근에 두툼하게 몰려 있으므로, 분산비 $1.44$쯤은 귀무가설과 구별되지 않는다.
+
+    주의할 점이 하나 있다. $\sigma_Y^* = 1.2191$은 **이 설정에서만** 성립하는 경계다. 씨앗을 바꾸면 두 표본이 더 이상 같은 난수열이 아니고, $F$에 표집 변동이 끼어들어 결론이 표본마다 달라진다. 아래 연습문제의 검정력 식
+
+    $$
+    \text{검정력} = P\!\left(F_{d,d} < \frac{F_{\alpha/2}(d,d)}{r}\right) + P\!\left(F_{d,d} > \frac{F_{1-\alpha/2}(d,d)}{r}\right),
+    \qquad r = \frac{\sigma_X^2}{\sigma_Y^2}
+    $$
+
+    에 $d = 99$, $r = 1/1.44$를 넣으면 $\sigma_Y = 1.20$에서의 실제 검정력은 $0.438$이다. **다섯 줄의 표가 보여 준 "기각하지 못함"은 열 번 중 여섯 번 일어나는 일**이지, 이 검정이 늘 못 잡는다는 뜻은 아니다.
+
+    p-값이 앞의 Bartlett 검정과 소수점 셋째 자리까지 같다. 우연이 아니다. 집단이 둘이고 자료가 정규일 때 Bartlett 검정은 등분산 $F$-검정과 동등하다.
 
 표로 정리하면:
 

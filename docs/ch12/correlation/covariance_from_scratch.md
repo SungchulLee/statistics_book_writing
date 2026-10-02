@@ -41,41 +41,99 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 공분산과 상관을 단계별로 구현
+**보기 1.** <span class="diff easy" title="쉬움"></span> $n$으로 나눌 것인가 $n-1$로 나눌 것인가. 아래 구현은 공분산을 $n-1$로, 표준편차도 `ddof=1`로 맞춘다.
+
+**(1)** 공분산만 $n-1$로 나누고 표준편차는 $n$으로 나누면 무엇이 깨지는가. 한 직선 위에 완벽히 놓인 자료로 보이시오.
+
+**(2)** 반대로 둘을 **일관되게** 쓰면 $n$이든 $n-1$이든 $r$가 같음을 보이시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def covariance_step_by_step(x, y):
-    """표본공분산을 구하고, 중간 계산인 편차까지 함께 돌려준다.
+    **(1) $\lvert r \rvert \le 1$이 깨진다.** 분자의 공분산을 $n-1$로, 분모의 두 표준편차를 $n$으로 나누면
+
+    $$
+    \frac{\frac{1}{n-1}\sum_i (x_i-\bar x)(y_i-\bar y)}
+         {\sqrt{\frac{1}{n}\sum_i (x_i-\bar x)^2}\;\sqrt{\frac{1}{n}\sum_i (y_i-\bar y)^2}}
+    = \frac{n}{n-1} \cdot r
+    $$
+
+    이다. 자료가 한 직선 위에 완벽히 놓여 $r = 1$인 경우에 이 값은 $n/(n-1) > 1$이 된다. $n = 10$이면 $1.1111$이고, **상관계수가 1을 넘는 일은 있을 수 없으므로 식이 틀렸다는 증거가 된다.** $n$이 커지면 $n/(n-1) \to 1$이라 눈치채기 어려워지는데, 그래서 더 위험하다.
+
+    **(2) 일관되게 쓰면 약분된다.** 나누는 수를 $m$($= n$ 또는 $n-1$)으로 두면
+
+    $$
+    r = \frac{\frac{1}{m}\sum_i (x_i-\bar x)(y_i-\bar y)}
+             {\sqrt{\frac{1}{m}\sum_i (x_i-\bar x)^2}\;\sqrt{\frac{1}{m}\sum_i (y_i-\bar y)^2}}
+      = \frac{\sum_i (x_i-\bar x)(y_i-\bar y)}
+             {\sqrt{\sum_i (x_i-\bar x)^2}\;\sqrt{\sum_i (y_i-\bar y)^2}}
+    $$
+
+    로 $1/m$이 분자에 한 번, 분모에 $\sqrt{1/m} \times \sqrt{1/m} = 1/m$로 한 번 들어가 그대로 상쇄된다. **$r$에는 베셀 보정을 할 것인가 말 것인가라는 물음 자체가 없다.** 반면 공분산은 $m$에 따라 값이 달라지므로 규약을 밝혀야 한다.
+
+    **확인.**
+
+    ```python
+    import numpy as np
+
+    def covariance_step_by_step(x, y):
+        """표본공분산을 구하고, 중간 계산인 편차까지 함께 돌려준다.
 
         편차를 돌려주는 까닭은 뒤에서 편차곱을 막대로 그려 보이기 위함이다.
         """
-    n = len(x)
-    x_mean = x.mean()
-    y_mean = y.mean()
-    x_dev = x - x_mean
-    y_dev = y - y_mean
-    # n이 아니라 n-1로 나눈다. 베셀 보정이며, 분산에서와 같은 이유다.
-    # 편차를 참 평균이 아니라 표본평균에서 쟀기 때문에 자유도 하나를 잃는다.
-    cov = np.sum(x_dev * y_dev) / (n - 1)
-    return cov, x_dev, y_dev
+        n = len(x)
+        x_mean = x.mean()
+        y_mean = y.mean()
+        x_dev = x - x_mean
+        y_dev = y - y_mean
+        # n이 아니라 n-1로 나눈다. 베셀 보정이며, 분산에서와 같은 이유다.
+        # 편차를 참 평균이 아니라 표본평균에서 쟀기 때문에 자유도 하나를 잃는다.
+        cov = np.sum(x_dev * y_dev) / (n - 1)
+        return cov, x_dev, y_dev
 
-def pearson_r_step_by_step(x, y):
-    """피어슨 상관계수를 정의대로 구한다.
+    def pearson_r_step_by_step(x, y):
+        """피어슨 상관계수를 정의대로 구한다.
 
         공분산을 두 표준편차의 곱으로 나눈다. 이 나눗셈이 단위를 없애므로
         r 은 -1 과 1 사이에 갇힌 값이 된다.
         """
-    cov, _, _ = covariance_step_by_step(x, y)
-    # ddof=1로 맞춰야 한다. 공분산이 n-1로 나눈 값이므로
-    # 표준편차도 같은 규약을 써야 두 n-1이 약분되어 r이 척도와 무관해진다.
-    sx = x.std(ddof=1)
-    sy = y.std(ddof=1)
-    return cov / (sx * sy)
-```
+        cov, _, _ = covariance_step_by_step(x, y)
+        # ddof=1로 맞춰야 한다. 공분산이 n-1로 나눈 값이므로
+        # 표준편차도 같은 규약을 써야 두 n-1이 약분되어 r이 척도와 무관해진다.
+        sx = x.std(ddof=1)
+        sy = y.std(ddof=1)
+        return cov / (sx * sy)
+
+    # 한 직선 위에 완벽히 놓인 자료. r 는 정확히 1 이어야 한다.
+    a = np.arange(10.0)
+    b = 2 * a + 1
+    n = len(a)
+    cov, _, _ = covariance_step_by_step(a, b)
+
+    print(f"n = {n}")
+    print(f"규약을 맞춘 r      = {pearson_r_step_by_step(a, b):.6f}")
+    print(f"분모만 n 으로 나눈 r = {cov / (a.std(ddof=0) * b.std(ddof=0)):.6f}"
+          f"   (= r * n/(n-1) = {n / (n - 1):.6f})")
+
+    # 둘을 일관되게 쓰면 규약이 약분된다.
+    cov_n = np.sum((a - a.mean()) * (b - b.mean())) / n
+    print(f"\n둘 다 n 으로   r = {cov_n / (a.std(ddof=0) * b.std(ddof=0)):.6f}")
+    print(f"둘 다 n-1 로  r = {cov / (a.std(ddof=1) * b.std(ddof=1)):.6f}")
+    ```
+
+    출력:
+
+    ```
+    n = 10
+    규약을 맞춘 r      = 1.000000
+    분모만 n 으로 나눈 r = 1.111111   (= r * n/(n-1) = 1.111111)
+
+    둘 다 n 으로   r = 1.000000
+    둘 다 n-1 로  r = 1.000000
+    ```
+
+    섞어 쓴 값 $1.111111$이 정확히 $n/(n-1) = 10/9$와 같아 (1)의 유도와 맞고, 일관되게 쓴 두 값은 규약과 무관하게 $1.000000$으로 같아 (2)와 맞는다.
 
 ---
 
@@ -92,20 +150,102 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 가격 자료 만들기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 공분산을 자료보다 먼저 알기. $\text{trend}_t$는 48주에 걸쳐 0에서 $-12$까지 선형으로 내려가는 **고정된** 수열이고, 두 잡음은 서로 독립이다.
+
+**(1)** 자료를 만들기 전에 $\operatorname{Cov}(\text{CA}, \text{NY})$의 기댓값을 손으로 구하시오.
+
+**(2)** 같은 방법으로 두 분산의 기댓값도 구해 $r$를 예측하시오.
 
 </div>
 
-```python
-np.random.seed(42)
-WEEKS = 48
+??? success "풀이"
 
-# 두 주의 가격에 공통으로 실릴 하락 추세. 공분산이 커지는 까닭이 바로 이것이다.
-trend = np.linspace(0, -12, WEEKS)
+    **(1) 해석적으로.** 추세가 고정되어 있으므로 표본공분산의 기댓값만 보면 된다. $\text{CA}_t = 248 + T_t + e_t$, $\text{NY}_t = 350 + 0.8T_t + f_t$에서 상수는 편차를 잡는 순간 사라지고, $e$와 $f$가 서로 독립이고 평균이 0이므로 교차항의 기댓값도 0이다. 남는 것은
 
-CA = 248.0 + trend + np.random.normal(0, 0.5, WEEKS)
-NY = 350.0 + trend * 0.8 + np.random.normal(0, 0.6, WEEKS)
-```
+    $$
+    E\!\left[\frac{1}{n-1}\sum_t (\text{CA}_t - \overline{\text{CA}})(\text{NY}_t - \overline{\text{NY}})\right]
+    = 0.8 \cdot \frac{1}{n-1}\sum_t (T_t - \bar T)^2
+    = 0.8 \, s_T^2
+    $$
+
+    이다. $T_t = -12t/47$($t = 0, 1, \ldots, 47$)이고 $0, 1, \ldots, N-1$의 표본분산이 $N(N+1)/12$이므로
+
+    $$
+    s_T^2 = \left(\frac{12}{47}\right)^2 \cdot \frac{48 \times 49}{12}
+          = 0.0651879 \times 196 = 12.7768
+    $$
+
+    이고, 따라서
+
+    $$
+    E[\operatorname{Cov}] = 0.8 \times 12.7768 = 10.2215
+    $$
+
+    이다.
+
+    **(2)** 같은 논리로 잡음의 분산이 더해진다.
+
+    $$
+    E[s_{\text{CA}}^2] = s_T^2 + 0.5^2 = 13.0268,
+    \qquad
+    E[s_{\text{NY}}^2] = 0.64\, s_T^2 + 0.6^2 = 8.5372
+    $$
+
+    $r$는 세 양의 **비**이므로 기댓값을 그대로 넣는 것이 정확한 계산은 아니지만, 대입하면
+
+    $$
+    \rho \approx \frac{10.2215}{\sqrt{13.0268 \times 8.5372}} = \frac{10.2215}{10.5458} = 0.9692
+    $$
+
+    를 얻는다. 뒤에서 모의실험으로 이 어림이 얼마나 맞는지 본다.
+
+    **확인.**
+
+    ```python
+    np.random.seed(42)
+    WEEKS = 48
+
+    # 두 주의 가격에 공통으로 실릴 하락 추세. 공분산이 커지는 까닭이 바로 이것이다.
+    trend = np.linspace(0, -12, WEEKS)
+
+    CA = 248.0 + trend + np.random.normal(0, 0.5, WEEKS)
+    NY = 350.0 + trend * 0.8 + np.random.normal(0, 0.6, WEEKS)
+
+    s_T2 = trend.var(ddof=1)
+    print(f"s_T^2 = {s_T2:.6f}   (12/47)^2 * 196 = {(12 / 47) ** 2 * 196:.6f}")
+    print(f"E[Cov]    = 0.8 s_T^2        = {0.8 * s_T2:.4f}")
+    print(f"E[s_CA^2] = s_T^2 + 0.25     = {s_T2 + 0.25:.4f}")
+    print(f"E[s_NY^2] = 0.64 s_T^2 + 0.36 = {0.64 * s_T2 + 0.36:.4f}")
+    print(f"대입해 얻은 rho              = {0.8 * s_T2 / np.sqrt((s_T2 + 0.25) * (0.64 * s_T2 + 0.36)):.4f}")
+
+    # 씨앗을 바꿔 가며 20만 번 되풀이해 기댓값을 직접 잰다.
+    rng = np.random.default_rng(99)
+    A = 248.0 + trend + rng.normal(0, 0.5, (200_000, WEEKS))
+    B = 350.0 + 0.8 * trend + rng.normal(0, 0.6, (200_000, WEEKS))
+    Ad = A - A.mean(1, keepdims=True)
+    Bd = B - B.mean(1, keepdims=True)
+    cv = (Ad * Bd).sum(1) / (WEEKS - 1)
+    rr = cv / (Ad.std(1, ddof=1) * Bd.std(1, ddof=1))
+    print(f"\n20만 회 평균 Cov = {cv.mean():.4f} (표준편차 {cv.std():.4f})")
+    print(f"20만 회 평균 r   = {rr.mean():.5f} (표준편차 {rr.std():.5f})")
+    ```
+
+    출력:
+
+    ```
+    s_T^2 = 12.776822   (12/47)^2 * 196 = 12.776822
+    E[Cov]    = 0.8 s_T^2        = 10.2215
+    E[s_CA^2] = s_T^2 + 0.25     = 13.0268
+    E[s_NY^2] = 0.64 s_T^2 + 0.36 = 8.5372
+    대입해 얻은 rho              = 0.9692
+
+    20만 회 평균 Cov = 10.2217 (표준편차 0.3788)
+    20만 회 평균 r   = 0.96986 (표준편차 0.00631)
+    ```
+
+    **공분산의 기댓값은 정확히 맞는다.** 유도한 $10.2215$와 모의실험의 $10.2217$이 소수 셋째 자리까지 같고, 차이 $0.0002$는 몬테카를로 오차($0.3788/\sqrt{200000} = 0.00085$) 안이다.
+
+    **$r$의 기댓값은 어림이었다.** 대입해 얻은 $0.9692$와 실제 $E[r] = 0.96986$이 $0.0007$ 어긋난다. 비의 기댓값이 기댓값의 비와 같지 않기 때문이고, 어긋남의 방향도 설명된다 — 공분산과 분산이 **같은 자료에서 함께 흔들리므로** 분자가 큰 표본에서는 분모도 커져 비가 안정된다. 어긋남의 크기 $0.0007$은 $r$ 자체의 표집 표준편차 $0.0063$의 $11\%$에 지나지 않으므로 실용적으로는 무시해도 좋다.
 
 ---
 

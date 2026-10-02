@@ -14,40 +14,88 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 표본을 몰래 늘려 가며 보기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정직한 검정의 기준선. 두 집단을 모두 같은 $N(0,1)$에서 30개씩 뽑아 이표본 $t$ 검정을 하는 실험을 10,000번 되풀이한다. $H_0$이 참인 상황이다.
+
+**(1)** $H_0$ 아래에서 $p$-값의 분포를 쓰고, 유의하다고 나오는 실험의 **개수**가 따르는 분포와 그 기댓값·표준편차를 구하시오.
+
+**(2)** 모의실험 결과가 (1)의 예측에서 몇 표준편차 떨어져 있는지 확인하시오. $p$-값의 사분위수도 이론값과 견주시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** $p$-값의 정의가 $p = P(T \text{ 가 관측만큼 극단적} \mid H_0)$이므로, $T$의 분포가 연속이면 $H_0$ 아래에서
 
-n_experiments = 10_000
-n_per_group = 30
-pvals = np.zeros(n_experiments)
+    $$
+    P(p \le t \mid H_0) = t \qquad (0 \le t \le 1)
+    $$
 
-for i in range(n_experiments):
-    a = np.random.normal(0, 1, n_per_group)
-    b = np.random.normal(0, 1, n_per_group)
-    _, pvals[i] = stats.ttest_ind(a, b)
+    이다. 곧 $p \sim \text{Uniform}(0,1)$이다. 따라서 한 실험이 "유의"할 확률은 정확히 $\alpha = 0.05$이고, 실험이 독립이므로 유의한 개수 $Y$는
 
-# 두 집단 모두 같은 N(0,1)에서 뽑았으니 H0가 참인 상황이다.
-# 그런데도 5%는 기각된다. 그것이 alpha의 정의다.
-false_pos_rate = np.mean(pvals < 0.05)
-print(f"False positive rate: {false_pos_rate:.4f}  (expected: 0.05)")
-```
+    $$
+    Y \sim \text{Bin}(10000,\ 0.05), \qquad
+    E[Y] = 500, \qquad
+    \text{SD}(Y) = \sqrt{10000 \times 0.05 \times 0.95} = \sqrt{475} = 21.794
+    $$
 
-출력:
+    를 따른다. 비율로 보면 $\text{SE} = 21.794/10000 = 0.002179$다.
 
-```
-False positive rate: 0.0508  (expected: 0.05)
-```
+    균등분포이므로 사분위수도 바로 나온다. $Q_1 = 0.25$, 중앙값 $= 0.50$, $Q_3 = 0.75$다.
 
-10,000번 중 508번이 "유의하다"고 나왔다. 정직하게 한 번만 검정하면 거짓 양성은 정확히 명목 수준에 머문다. 아래에서 무너지는 것은 이 전제다.
+    **(2) 수치적으로.**
 
-p-값의 히스토그램은 사실상 평평하여 $H_0$ 아래의 균등성을 확인해 준다.
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+
+    n_experiments = 10_000
+    n_per_group = 30
+    pvals = np.zeros(n_experiments)
+
+    for i in range(n_experiments):
+        a = np.random.normal(0, 1, n_per_group)
+        b = np.random.normal(0, 1, n_per_group)
+        _, pvals[i] = stats.ttest_ind(a, b)
+
+    # 두 집단 모두 같은 N(0,1)에서 뽑았으니 H0가 참인 상황이다.
+    # 그런데도 5%는 기각된다. 그것이 alpha의 정의다.
+    false_pos_rate = np.mean(pvals < 0.05)
+    print(f"False positive rate: {false_pos_rate:.4f}  (expected: 0.05)")
+
+    # (1) 의 예측과 견준다.
+    count = int(np.sum(pvals < 0.05))
+    mean_y = n_experiments * 0.05
+    sd_y = np.sqrt(n_experiments * 0.05 * 0.95)
+    print(f"유의한 개수 {count}  예측 {mean_y:.0f} +- {sd_y:.3f}"
+          f"   거리 {(count - mean_y) / sd_y:+.3f} SD")
+
+    # p-값이 정말 균등한가.
+    print(f"\n사분위수  관측 {np.percentile(pvals, [25, 50, 75]).round(4)}"
+          f"   이론 [0.25 0.5  0.75]")
+    print(f"평균 {pvals.mean():.4f} (이론 0.5)"
+          f"   표준편차 {pvals.std(ddof=1):.4f} (이론 {1 / np.sqrt(12):.4f})")
+    ks = stats.kstest(pvals, "uniform")
+    print(f"균등성 KS 검정: D = {ks.statistic:.4f}, p = {ks.pvalue:.4f}")
+    ```
+
+    출력:
+
+    ```
+    False positive rate: 0.0508  (expected: 0.05)
+    유의한 개수 508  예측 500 +- 21.794   거리 +0.367 SD
+
+    사분위수  관측 [0.2527 0.5023 0.7477]   이론 [0.25 0.5  0.75]
+    평균 0.4996 (이론 0.5)   표준편차 0.2878 (이론 0.2887)
+    균등성 KS 검정: D = 0.0058, p = 0.8898
+    ```
+
+    (1)의 예측이 전부 맞는다. 유의한 실험이 $508$개로 예측 $500 \pm 21.8$에서 **0.37 표준편차**밖에 떨어져 있지 않다. 사분위수는 소수점 둘째 자리까지 이론값과 같고, 표준편차도 균등분포의 $1/\sqrt{12} = 0.2887$을 재현한다. 균등성 콜모고로프–스미르노프 검정의 $p$-값이 $0.89$라 균등성을 의심할 근거가 전혀 없다.
+
+    10,000번 중 508번이 "유의하다"고 나왔다. **정직하게 한 번만 검정하면 거짓 양성은 정확히 명목 수준에 머문다.** 아래에서 무너지는 것은 이 전제다.
+
+    균등성이 왜 중요한가. $p$-값이 균등하다는 것은 **"$\alpha$를 고르면 거짓 양성률이 정확히 $\alpha$"라는 약속의 내용 그 자체**다. 아래 두 보기는 $p$-값의 계산을 바꾸지 않는다. 바꾸는 것은 어느 $p$-값을 보고할지 고르는 규칙이고, 그 순간 보고되는 값은 더 이상 균등하지 않다.
 
 ## 여러 결과변수 중 골라 쓰기
 
@@ -67,39 +115,95 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 결과변수를 여러 개 재기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 결과변수를 여러 개 재기. 효과가 전혀 없는 결과변수 $k = 20$개를 각각 검정하고 **가장 작은 $p$-값 하나만** 보고한다.
+
+**(1)** 보고되는 $\min(p_1,\dots,p_k)$가 따르는 분포를 쓰고, 그 기댓값·중앙값과 $P(\min < 0.05)$를 구하시오.
+
+**(2)** 1,000번 모의실험한 결과가 (1)의 예측에서 몇 표준편차 떨어져 있는지 확인하시오.
 
 </div>
 
-```python
-n_outcomes = 20
-min_pvals = np.zeros(1000)
+??? success "풀이"
 
-for i in range(1000):
-    ps = []
-    for _ in range(n_outcomes):
-        a = np.random.normal(0, 1, 30)
-        b = np.random.normal(0, 1, 30)
-        _, p = stats.ttest_ind(a, b)
-        ps.append(p)
-    min_pvals[i] = min(ps)
+    **(1) 해석적으로.** 보기 1에서 보았듯 $H_0$ 아래에서 $p_i \sim \text{Uniform}(0,1)$이고 20개가 독립이다. 최솟값의 분포는 여집합으로 구한다.
 
-# 20개를 검정하고 그중 **가장 작은** p-값만 보고하는 상황을 흉내 낸다.
-phack_rate = np.mean(min_pvals < 0.05)
-print(f"Cherry-pick rate: {phack_rate:.4f}  (theoretical: 0.6415)")
-```
+    $$
+    P(\min > u) = \prod_{i=1}^{k} P(p_i > u) = (1-u)^k
+    \quad\Longrightarrow\quad
+    P(\min \le u) = 1 - (1-u)^k
+    $$
 
-출력:
+    이것이 $\text{Beta}(1, k)$의 누적분포함수다. 따라서
 
-```
-Cherry-pick rate: 0.6580  (theoretical: 0.6415)
-```
+    $$
+    E[\min] = \frac{1}{k+1} = \frac{1}{21} = 0.047619
+    $$
 
-거짓 양성 비율이 5%에서 66%로 뛴다. 실제로 아무 효과도 없는데 세 번에 두 번은 "유의한 결과"를 손에 쥔다는 뜻이다.
+    이고 중앙값은 $1-(1-u)^k = 1/2$에서
 
-모의실험이 1,000회뿐이라 표준오차가 1.5%p 정도이므로 0.658은 이론값 0.6415와 어긋나지 않는다.
+    $$
+    u_{1/2} = 1 - 2^{-1/k} = 1 - 2^{-0.05} = 0.034064
+    $$
 
-여기서 결정적인 것은 20개를 검정했다는 사실 자체가 아니라 **그중 하나만 보고한다는 점**이다. 20개를 모두 보고하고 보정했다면 문제가 없다.
+    이다. **보고되는 $p$-값의 중앙값이 $0.034$다.** 균등분포라면 $0.5$였을 자리다. 그리고
+
+    $$
+    P(\min < 0.05) = 1 - 0.95^{20} = 0.641514
+    $$
+
+    다. 1,000번 되풀이하면 유의하다고 나오는 횟수는 $\text{Bin}(1000,\ 0.641514)$를 따르고
+
+    $$
+    E = 641.5, \qquad \text{SD} = \sqrt{1000 \times 0.641514 \times 0.358486} = 15.165
+    $$
+
+    이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    n_outcomes = 20
+    min_pvals = np.zeros(1000)
+
+    for i in range(1000):
+        ps = []
+        for _ in range(n_outcomes):
+            a = np.random.normal(0, 1, 30)
+            b = np.random.normal(0, 1, 30)
+            _, p = stats.ttest_ind(a, b)
+            ps.append(p)
+        min_pvals[i] = min(ps)
+
+    # 20개를 검정하고 그중 **가장 작은** p-값만 보고하는 상황을 흉내 낸다.
+    phack_rate = np.mean(min_pvals < 0.05)
+    print(f"Cherry-pick rate: {phack_rate:.4f}  (theoretical: 0.6415)")
+
+    # (1) 의 예측과 견준다.
+    k = n_outcomes
+    theory = 1 - 0.95 ** k
+    cnt = int(np.sum(min_pvals < 0.05))
+    sd = np.sqrt(1000 * theory * (1 - theory))
+    print(f"유의한 횟수 {cnt}  예측 {1000 * theory:.1f} +- {sd:.3f}"
+          f"   거리 {(cnt - 1000 * theory) / sd:+.3f} SD")
+    print(f"min p 의 평균   {min_pvals.mean():.6f}  이론 1/(k+1) = {1 / (k + 1):.6f}")
+    print(f"min p 의 중앙값 {np.median(min_pvals):.6f}"
+          f"  이론 1-2^(-1/k) = {1 - 2 ** (-1 / k):.6f}")
+    ```
+
+    출력:
+
+    ```
+    Cherry-pick rate: 0.6580  (theoretical: 0.6415)
+    유의한 횟수 658  예측 641.5 +- 15.165   거리 +1.087 SD
+    min p 의 평균   0.045322  이론 1/(k+1) = 0.047619
+    min p 의 중앙값 0.033638  이론 1-2^(-1/k) = 0.034064
+    ```
+
+    (1)의 세 예측이 모두 확인된다. 유의한 횟수 $658$이 예측 $641.5 \pm 15.2$에서 **1.09 표준편차**이고, 최솟값의 평균 $0.045322$와 중앙값 $0.033638$이 이론값 $0.047619$, $0.034064$와 소수점 둘째 자리까지 맞는다.
+
+    거짓 양성 비율이 $5\%$에서 $66\%$로 뛴다. 실제로 아무 효과도 없는데 **세 번에 두 번은 "유의한 결과"를 손에 쥔다**는 뜻이다. 모의실험이 1,000회뿐이라 표준오차가 $1.5$%p 정도이므로 $0.658$은 이론값 $0.6415$와 어긋나지 않는다.
+
+    여기서 결정적인 것은 20개를 검정했다는 사실 자체가 **아니라** 그중 하나만 보고한다는 점이다. 20개를 모두 보고하고 보정했다면 문제가 없다. 보고되는 수의 분포가 $\text{Uniform}(0,1)$에서 $\text{Beta}(1,20)$으로 바뀌었는데도 독자는 여전히 균등분포를 가정하고 읽는 것, 그것이 $p$-해킹의 정체다.
 
 ## 임의 중단
 
@@ -107,53 +211,105 @@ Cherry-pick rate: 0.6580  (theoretical: 0.6415)
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> p-해킹의 결과 모으기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 임의 중단. 집단당 10명씩 자료를 늘려 가며 200명이 될 때까지 **스무 번** $p$-값을 들여다보고, $p < 0.05$가 되는 즉시 멈춘다. 두 집단은 여전히 같은 분포에서 나온다.
+
+**(1)** 이 절차의 거짓 양성률이 어느 범위에 있어야 하는지 **위아래 한계**를 말하시오. 왜 독립인 검정 20개의 값에 못 미치는가.
+
+**(2)** 1,000번 모의실험한 $0.2380$이 믿을 만한 값인가. 되풀이 횟수를 크게 늘려 더 정확한 기준값을 구하고, 엿본 횟수에 따라 어떻게 오르는지 보시오.
 
 </div>
 
-```python
-n_experiments = 1000
-n_max = 200
-check_interval = 10
+??? success "풀이"
 
-stopped_pvals = []
-for _ in range(n_experiments):
-    a, b = [], []
-    for n in range(check_interval, n_max + 1, check_interval):
-        a.extend(np.random.normal(0, 1, check_interval).tolist())
-        b.extend(np.random.normal(0, 1, check_interval).tolist())
-        _, p = stats.ttest_ind(a, b)
-        if p < 0.05:
+    **(1) 해석적으로.** 닫힌 꼴이 없는 문제다. 그러나 두 한계는 분명하다.
+
+    **아래 한계는 $\alpha = 0.05$**다. 거짓 양성률은 적어도 첫 번째 엿보기에서 기각할 확률만큼은 되고, 그것이 $0.05$다. 엿보기를 더 하는 것이 기각 사건을 **줄일 수는 없으므로** 전체 확률은 $0.05$ 이상이다.
+
+    **위 한계는 $1-(1-\alpha)^{20} = 0.6415$**다. 적어도 한 번 기각할 확률은 본페로니 부등식에 의해 개별 확률의 합 $20 \times 0.05 = 1$보다 작고, 더 날카롭게는 스무 번이 **독립일 때** 정확히 $0.6415$가 된다. 실제 값은 이보다 작다.
+
+    **왜 작은가.** 연이은 엿보기는 앞의 자료를 **그대로 포함한다.** $n = 10$에서 쓴 10명이 $n = 20$의 자료 안에 다 들어 있으므로 두 검정통계량은 강하게 양의 상관을 갖는다. 서로 비슷한 검정을 스무 번 하는 것은 서로 다른 검정을 스무 번 하는 것보다 **새로운 기회를 훨씬 적게** 준다. 극단적으로 상관이 1이면 스무 번이 한 번과 같아 $0.05$에 머물 것이다. 실제는 그 사이 어딘가다.
+
+    그러므로 답은 $0.05$와 $0.6415$ 사이이고, 정확한 값은 수치로 구할 수밖에 없다.
+
+    **(2) 수치적으로.** 1,000번은 적다. 관측값 $0.2380$의 표준오차는 $\sqrt{0.238 \times 0.762/1000} = 0.0135$이므로 95% 구간이 $(0.211,\ 0.265)$로 폭이 $5$%p를 넘는다. 되풀이를 100,000번으로 늘려 기준값을 다시 잡는다. 느린 이중 반복문 대신 누적합으로 통계량을 한꺼번에 계산한다.
+
+    ```python
+    n_experiments = 1000
+    n_max = 200
+    check_interval = 10
+
+    stopped_pvals = []
+    for _ in range(n_experiments):
+        a, b = [], []
+        for n in range(check_interval, n_max + 1, check_interval):
+            a.extend(np.random.normal(0, 1, check_interval).tolist())
+            b.extend(np.random.normal(0, 1, check_interval).tolist())
+            _, p = stats.ttest_ind(a, b)
+            if p < 0.05:
+                stopped_pvals.append(p)
+                break
+        else:
             stopped_pvals.append(p)
-            break
-    else:
-        stopped_pvals.append(p)
 
-# for-else 구문이다. break 없이 반복이 끝나면 else가 실행된다.
-# 즉 20번을 다 엿봐도 유의하지 않았던 경우에는 마지막 p-값을 기록한다.
-stop_rate = np.mean(np.array(stopped_pvals) < 0.05)
-print(f"Optional stopping rate: {stop_rate:.4f}")
-```
+    # for-else 구문이다. break 없이 반복이 끝나면 else가 실행된다.
+    # 즉 20번을 다 엿봐도 유의하지 않았던 경우에는 마지막 p-값을 기록한다.
+    stop_rate = np.mean(np.array(stopped_pvals) < 0.05)
+    print(f"Optional stopping rate: {stop_rate:.4f}")
 
-출력:
+    # 되풀이를 10만 번으로 늘려 기준값을 다시 잡는다.
+    # 반복문 대신 누적합으로 모든 엿보기의 t 통계량을 한꺼번에 만든다.
+    def stopping_rate(B, n_looks, step=10, alpha=0.05, seed=0):
+        """step 명씩 n_looks 번 엿볼 때 '한 번이라도 기각'할 비율."""
+        rng = np.random.default_rng(seed)
+        n_max = step * n_looks
+        a = rng.normal(0, 1, (B, n_max))
+        b = rng.normal(0, 1, (B, n_max))
+        ca, cb = np.cumsum(a, 1), np.cumsum(b, 1)
+        ca2, cb2 = np.cumsum(a * a, 1), np.cumsum(b * b, 1)
+        rejected = np.zeros(B, dtype=bool)
+        for n in range(step, n_max + 1, step):
+            i = n - 1
+            ma, mb = ca[:, i] / n, cb[:, i] / n
+            va = (ca2[:, i] - n * ma ** 2) / (n - 1)
+            vb = (cb2[:, i] - n * mb ** 2) / (n - 1)
+            t = (ma - mb) / np.sqrt((va + vb) / 2 * 2 / n)
+            rejected |= 2 * stats.t.sf(np.abs(t), 2 * n - 2) < alpha
+        return rejected.mean()
 
-```
-Optional stopping rate: 0.2380
-```
+    B = 100_000
+    print(f"\n{'엿본 횟수':>8} {'거짓 양성률':>11} {'SE':>8} {'독립이라면':>10}")
+    for L in (1, 2, 5, 10, 20):
+        r = stopping_rate(B, L)
+        print(f"{L:>8} {r:>11.4f} {np.sqrt(r * (1 - r) / B):>8.4f}"
+              f" {1 - 0.95 ** L:>10.4f}")
+    ```
 
-역시 두 집단이 같은 분포에서 나온 자료인데 24%가 "유의하다"고 나온다. 각각의 검정은 완전히 정당했고 어떤 자료도 버리지 않았다는 점이 이 보기를 불편하게 만든다. 문제는 오직 **언제 멈출지를 자료를 보고 정했다**는 데 있다.
+    출력:
 
-임상시험에서 중간분석을 할 때 알파 소비 함수 같은 형식적 절차를 반드시 쓰는 이유가 이것이다.
+    ```
+    Optional stopping rate: 0.2380
 
-(200개까지 10개마다 확인하여) 최대 20번 엿보면 거짓 양성 비율이 20%를 넘을 수 있다.
+       엿본 횟수      거짓 양성률       SE      독립이라면
+           1      0.0503   0.0007     0.0500
+           2      0.0841   0.0009     0.0975
+           5      0.1426   0.0011     0.2262
+          10      0.1944   0.0013     0.4013
+          20      0.2492   0.0014     0.6415
+    ```
 
-![엿보면서 멈추면](./img/optional_stopping.png)
+    ![엿보면서 멈추면](./img/optional_stopping.png)
 
-왼쪽은 $H_0$이 참인 실험 여섯 개의 $p$-값이 자료를 모으는 동안 어떻게 움직이는지 그린 것이다. **$p$-값은 $n$이 커질수록 작아지는 양이 아니다.** 효과가 없으면 위아래로 떠다닐 뿐이며, 그러다 보면 어느 순간 우연히 $0.05$ 아래를 지나간다. 붉은 점이 그 순간이고, 거기서 멈추면 "유의한 결과"가 손에 들어온다.
+    (1)의 두 한계가 지켜진다. 스무 번 엿본 거짓 양성률이 $0.2492 \pm 0.0014$로 아래 한계 $0.05$보다 훨씬 크고 위 한계 $0.6415$보다 훨씬 작다. 한 번만 엿보는 경우는 $0.0503$으로 명목 $\alpha$를 그대로 재현하므로 이 구현이 맞다는 것도 확인된다.
 
-오른쪽이 그 대가다. 한 번만 보면 $0.05$이지만, 열 번 엿보면 $0.19$, 스무 번이면 $0.25$가 된다. 각각의 $t$ 검정은 흠잡을 데가 없고 자료를 버리지도 않았다. **부풀린 것은 검정이 아니라 멈추는 규칙이다.**
+    1,000번으로 얻은 $0.2380$은 기준값 $0.2492$에서 $0.83$ 표준오차 떨어져 있다. **어긋난 것이 아니라 거칠었던 것**이고, 10만 번으로 늘리자 표준오차가 $0.0135$에서 $0.0014$로 열 배 줄었다.
 
-이 곡선이 앞의 FWER 곡선과 닮았지만 더 완만하다는 점도 눈여겨볼 만하다. 연이은 엿보기는 앞의 자료를 그대로 포함하므로 서로 강하게 상관되어 있고, 그래서 독립인 검정 20개의 $0.64$까지는 오르지 않는다. **상관이 있어도 부풀려지는 것은 막지 못한다**는 점이 요점이다.
+    역시 두 집단이 같은 분포에서 나온 자료인데 **4분의 1이 "유의하다"고 나온다.** 각각의 검정은 완전히 정당했고 어떤 자료도 버리지 않았다는 점이 이 보기를 불편하게 만든다. 문제는 오직 **언제 멈출지를 자료를 보고 정했다**는 데 있다. 임상시험에서 중간분석을 할 때 알파 소비 함수 같은 형식적 절차를 반드시 쓰는 이유가 이것이다.
+
+    그림의 왼쪽은 $H_0$이 참인 실험 여섯 개의 $p$-값이 자료를 모으는 동안 어떻게 움직이는지 그린 것이다. **$p$-값은 $n$이 커질수록 작아지는 양이 아니다.** 효과가 없으면 위아래로 떠다닐 뿐이며, 그러다 보면 어느 순간 우연히 $0.05$ 아래를 지나간다. 붉은 점이 그 순간이고, 거기서 멈추면 "유의한 결과"가 손에 들어온다.
+
+    오른쪽이 그 대가이며 위 표의 `거짓 양성률` 열을 그린 것이다. 한 번만 보면 $0.05$이지만 열 번 엿보면 $0.19$, 스무 번이면 $0.25$가 된다. 각각의 $t$ 검정은 흠잡을 데가 없고 자료를 버리지도 않았다. **부풀린 것은 검정이 아니라 멈추는 규칙이다.**
+
+    `독립이라면` 열과 견주면 (1)에서 말한 상관의 효과가 수로 보인다. 엿보기가 독립이라면 스무 번에 $0.6415$여야 하는데 실제는 $0.2492$로 **절반도 안 된다.** 연이은 엿보기가 앞의 자료를 그대로 포함해 강하게 상관되어 있기 때문이다. 그래도 $0.05$의 다섯 배다. **상관이 있다고 해서 부풀려지는 것을 막지는 못한다**는 점이 요점이다.
 
 ## 해석
 

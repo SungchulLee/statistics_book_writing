@@ -109,161 +109,291 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 정의대로 계산한 동질성 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정의대로 계산한 동질성 검정. 위의 병원 만족도 표를 쓴다. 행이 응답 범주(별 5개 … 별 1개), 열이 나라다. 행 합은 $847,\ 782,\ 1196,\ 677,\ 204$, 열 합은 $2165,\ 311,\ 1230$, 총합은 $n = 3706$ 이다.
+
+**(1)** 동질성의 귀무가설을 **열별 조건부분포**로 적고, 그로부터 기대도수가 $E_{ij} = R_i C_j / n$ 이 됨을 보이시오. 이 식이 "각 나라에 **통합 분포**를 씌운 것" 이라는 뜻임을 설명하시오.
+
+**(2)** 코드로 $\chi^2$ 과 자유도, p-값을 구해 판정하시오.
+
+**(3)** 칸별 기여를 모두 구해 **어느 나라의 어느 범주**가 통계량을 끌고 가는지 찾고, 크래머 $V$ 로 효과크기를 재시오. $\chi^2$ 이 212.94 라는 것과 $V$ 가 말하는 것이 어떻게 다른가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def compute_expected(observed):
-    """행과 열이 무관하다는 가정 아래 기대도수를 구한다.
+    **(1) 동질성의 $H_0$ 는 열별 조건부분포가 같다는 것.** 나라 $j$ 에서 응답이 범주 $i$ 일 조건부확률을 $\pi_{i\mid j}$ 라 하면
 
-    무관하다면 결합확률이 주변확률의 곱이 된다. 그 곱에 전체 도수를 곱한
-    것이 각 칸의 기대도수다.
-    """
-    row_sum = observed.sum(axis=1)
-    row_pmf = row_sum.reshape((-1, 1)) / row_sum.sum()
+    $$
+    H_0:\ \pi_{i\mid 1} = \pi_{i\mid 2} = \pi_{i\mid 3} = \pi_i
+    \qquad (i = 1,\ldots,5)
+    $$
 
-    column_sum = observed.sum(axis=0)
-    column_pmf = column_sum.reshape((1, -1)) / column_sum.sum()
+    이다. 공통값 $\pi_i$ 는 모르는 값이므로 자료에서 추정해야 하는데, 세 나라를 통틀어 범주 $i$ 에 든 사람이 $R_i$ 명이므로 가장 자연스러운 추정값은 **통합 비율**
 
-    joint_pmf = row_pmf * column_pmf
-    expected = joint_pmf * row_sum.sum()
-    return expected
+    $$
+    \hat\pi_i = \frac{R_i}{n}
+    $$
 
-def main():
-    """동질성 검정을 정의대로 계산하고 p-값을 그림으로 보인다."""
-    # 행이 나라, 열이 응답 범주다. 나라마다 응답 분포가 같은지를 묻는다.
-    observed = np.array([[541, 75, 231], [498, 71, 213],
-                         [779, 96, 321], [282, 50, 345], [65, 19, 120]])
-    expected = compute_expected(observed)
+    이다. 나라 $j$ 의 응답자가 $C_j$ 명이니 그 나라에서 범주 $i$ 의 기대도수는
 
-    # 자유도는 (행-1)(열-1). 행합과 열합이 묶여 있어 자유롭게 움직일 수 있는
-    # 칸이 그만큼뿐이다.
-    df = (observed.shape[0] - 1) * (observed.shape[1] - 1)
+    $$
+    E_{ij} = C_j \cdot \hat\pi_i = \frac{R_i C_j}{n}
+    $$
 
-    statistic = np.sum((observed - expected)**2 / expected)
-    p_value = stats.chi2(df).sf(statistic)
-    print(f"{statistic = :.02f}")
-    print(f"{p_value   = :.02%}")
+    가 되고, 이것이 독립성 검정에서 쓰는 식과 **글자 하나까지 같다.** 다만 읽는 법이 다르다. 독립성에서는 "주변확률의 곱" 이었고, 동질성에서는 **"각 나라에 통합 분포를 그대로 씌운 것"** 이다.
 
-    _, ax = plt.subplots(figsize=(12, 4))
+    통합 분포는
 
-    x = np.linspace(0, statistic, 1000)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='b', linewidth=3)
+    $$
+    \left(\frac{847}{3706},\ \frac{782}{3706},\ \frac{1196}{3706},\ \frac{677}{3706},\ \frac{204}{3706}\right)
+    = (0.2285,\ 0.2110,\ 0.3227,\ 0.1827,\ 0.0550)
+    $$
 
-    x = np.concatenate([[0], x, [statistic], [0]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='b', alpha=0.1)
+    이고, 나라별 실제 분포는
 
-    x = np.linspace(statistic, 300, 100)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='r', linewidth=3)
+    $$
+    \begin{array}{c|ccc}
+     & \text{US} & \text{Canada} & \text{Mexico} \\ \hline
+    \text{별 5개} & 0.2499 & 0.2412 & 0.1878 \\
+    \text{별 4개} & 0.2300 & 0.2283 & 0.1732 \\
+    \text{별 3개} & 0.3598 & 0.3087 & 0.2610 \\
+    \text{별 2개} & 0.1303 & 0.1608 & 0.2805 \\
+    \text{별 1개} & 0.0300 & 0.0611 & 0.0976
+    \end{array}
+    $$
 
-    x = np.concatenate([[statistic], x, [20], [statistic]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='r', alpha=0.1)
+    다. **별 2개와 별 1개 줄을 보라.** US 의 $0.1303$ 과 $0.0300$ 이 Mexico 에서는 $0.2805$ 와 $0.0976$ 으로 두 배에서 세 배가 된다. 통계량이 어디서 나올지가 이미 보인다.
 
-    xy = (250, 0.01)
-    xytext = (250, 0.08)
-    arrowprops = dict(color='k', width=0.2, headwidth=8)
-    ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+    자유도는 $(r-1)(c-1) = 4 \times 2 = 8$ 이다. 통합 분포를 추정하느라 $r-1 = 4$ 개의 모수를 썼고, 나라마다 $r-1=4$ 개의 자유로운 비율이 있어 모두 $3 \times 4 = 12$ 개였으므로 $12 - 4 = 8$ 이 남는다.
 
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    ax.spines['left'].set_position("zero")
+    **(2) 수치적으로.**
 
-    plt.show()
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
 
-if __name__ == "__main__":
-    main()
-```
+    def compute_expected(observed):
+        """행과 열이 무관하다는 가정 아래 기대도수를 구한다.
 
-출력:
+        무관하다면 결합확률이 주변확률의 곱이 된다. 그 곱에 전체 도수를 곱한
+        것이 각 칸의 기대도수다.
+        """
+        row_sum = observed.sum(axis=1)
+        row_pmf = row_sum.reshape((-1, 1)) / row_sum.sum()
 
-```
-statistic = 212.94
-p_value   = 0.00%
-```
+        column_sum = observed.sum(axis=0)
+        column_pmf = column_sum.reshape((1, -1)) / column_sum.sum()
 
-![카이제곱 분포와 p-값](./img/homogeneity_105.png)
+        joint_pmf = row_pmf * column_pmf
+        expected = joint_pmf * row_sum.sum()
+        return expected
 
-$\chi^2 = 212.94$는 자유도 8인 카이제곱분포에서 사실상 불가능한 값이다. 세 나라의 만족도 분포가 같지 않다는 결론을 강하게 지지한다.
+    def main():
+        """동질성 검정을 정의대로 계산하고 p-값을 그림으로 보인다."""
+        # 행이 나라, 열이 응답 범주다. 나라마다 응답 분포가 같은지를 묻는다.
+        observed = np.array([[541, 75, 231], [498, 71, 213],
+                             [779, 96, 321], [282, 50, 345], [65, 19, 120]])
+        expected = compute_expected(observed)
 
-관측값이 3,500개가 넘어 검정력이 아주 높다는 점도 함께 보아야 한다. 어느 나라가 어떻게 다른지는 이 검정이 알려주지 않으므로, 표준화 잔차를 따로 살펴야 한다.
+        # 자유도는 (행-1)(열-1). 행합과 열합이 묶여 있어 자유롭게 움직일 수 있는
+        # 칸이 그만큼뿐이다.
+        df = (observed.shape[0] - 1) * (observed.shape[1] - 1)
+
+        statistic = np.sum((observed - expected)**2 / expected)
+        p_value = stats.chi2(df).sf(statistic)
+        print(f"{statistic = :.02f}")
+        print(f"{p_value   = :.02%}")
+
+        _, ax = plt.subplots(figsize=(12, 4))
+
+        x = np.linspace(0, statistic, 1000)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='b', linewidth=3)
+
+        x = np.concatenate([[0], x, [statistic], [0]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='b', alpha=0.1)
+
+        x = np.linspace(statistic, 300, 100)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='r', linewidth=3)
+
+        x = np.concatenate([[statistic], x, [20], [statistic]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='r', alpha=0.1)
+
+        xy = (250, 0.01)
+        xytext = (250, 0.08)
+        arrowprops = dict(color='k', width=0.2, headwidth=8)
+        ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.spines['left'].set_position("zero")
+
+        plt.show()
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    statistic = 212.94
+    p_value   = 0.00%
+    ```
+
+    ![카이제곱 분포와 p-값](./img/homogeneity_105.png)
+
+    $\chi^2 = 212.94$는 자유도 8인 카이제곱분포에서 사실상 불가능한 값이다. 세 나라의 만족도 분포가 같지 않다는 결론을 강하게 지지한다.
+
+    **(3) 어디서 나온 통계량인가.** 칸별 기여를 모두 인쇄한다.
+
+    ```python
+    import numpy as np
+
+    O = np.array([[541, 75, 231], [498, 71, 213],
+                  [779, 96, 321], [282, 50, 345], [65, 19, 120]])
+    R, C, N = O.sum(1), O.sum(0), O.sum()
+    E = np.outer(R, C) / N
+    contrib = (O - E) ** 2 / E
+
+    print("칸별 기여  (O-E)^2/E")
+    print(f"{'':8s}{'US':>9s}{'Canada':>9s}{'Mexico':>9s}{'행 합':>9s}")
+    for lab, row in zip(["별 5개", "별 4개", "별 3개", "별 2개", "별 1개"], contrib):
+        print(f"{lab:8s}" + "".join(f"{v:9.2f}" for v in row) + f"{row.sum():9.2f}")
+    print(f"{'열 합':8s}" + "".join(f"{v:9.2f}" for v in contrib.sum(0))
+          + f"{contrib.sum():9.2f}")
+    print(f"\n최소 기대도수 {E.min():.2f}")
+    print(f"크래머 V = sqrt(chi2 / (n min(r-1,c-1))) "
+          f"= sqrt({contrib.sum():.2f} / (3706 x 2)) = {np.sqrt(contrib.sum() / (N * 2)):.4f}")
+    ```
+
+    출력:
+
+    ```
+    칸별 기여  (O-E)^2/E
+                   US   Canada   Mexico      행 합
+    별 5개         4.31     0.22     8.93    13.46
+    별 4개         3.71     0.44     8.35    12.50
+    별 3개         9.23     0.19    14.53    23.95
+    별 2개        32.57     0.82    64.42    97.80
+    별 1개        24.63     0.21    40.39    65.22
+    열 합         74.45     1.87   136.62   212.94
+
+    최소 기대도수 17.12
+    크래머 V = sqrt(chi2 / (n min(r-1,c-1))) = sqrt(212.94 / (3706 x 2)) = 0.1695
+    ```
+
+    **두 줄이 전부다.** 별 2개 줄이 $97.80$, 별 1개 줄이 $65.22$ 로 둘을 합치면 $163.0$, 곧 전체 $212.94$ 의 $77\%$ 다. 나라로 보면 Mexico 가 $136.62$ ($64\%$), US 가 $74.45$ ($35\%$), Canada 는 $1.87$ ($0.9\%$) 다. **Canada 는 통합 분포에 거의 그대로 맞는다.** 가장 큰 칸 하나는 Mexico 의 별 2개로 $64.42$, 전체의 $30\%$ 다.
+
+    최소 기대도수가 $17.12$ 라 모든 칸이 5 를 넘고, 타당성 조건이 넉넉하게 충족된다.
+
+    **$\chi^2$ 과 $V$ 가 서로 다른 말을 한다.** $\chi^2 = 212.94$ 는 "우연으로 보기 어렵다" 를 압도적으로 말하지만 크래머 $V = 0.1695$ 는 **약한 연관**이다($V \le 0.1$ 약함, $0.3$ 중간, $0.5$ 이상 강함이라는 흔한 눈금에서 약함과 중간 사이다). 까닭은 $\chi^2 = n V^2 \min(r-1,c-1)$ 이라서 $n = 3706$ 이 통계량을 끌어올리기 때문이다. 관측값이 3,500 개가 넘어 검정력이 아주 높다는 점을 함께 보아야 한다. **"분포가 같지 않다" 는 확실하지만 "많이 다르다" 는 아니다.**
 
 ### Python 구현 (`scipy.stats.chi2_contingency` 사용)
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> scipy로 계산한 동질성 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> scipy로 계산한 동질성 검정.
+
+**(1)** `scipy.stats.chi2_contingency` 가 보기 1 의 손계산과 같은 값을 주는지 확인하시오. 이 함수는 독립성인지 동질성인지 알 수 있는가.
+
+**(2)** 출력이 `p_value = 0.00%` 다. 실제 p-값은 얼마인가. 임계값 방식으로도 판정하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def main():
-    """같은 계산을 scipy 의 chi2_contingency 로 대신한다."""
-    observed = np.array([[541, 75, 231], [498, 71, 213],
-                         [779, 96, 321], [282, 50, 345], [65, 19, 120]])
+    **(1) 같은 계산이다.** 보기 1 (1)에서 본 대로 동질성의 기대도수와 독립성의 기대도수가 같은 식 $R_iC_j/n$ 이므로 `chi2_contingency` 는 둘을 구분할 필요가 없다. **구분은 표집 설계에 있고 그것은 함수가 알 수 없다.** 여기서 나라별 표본 크기 $2165,\ 311,\ 1230$ 이 연구자가 정한 값인지 결과인지는 코드에 적혀 있지 않다. 설계를 아는 사람이 결론 문장을 "세 나라의 만족도 분포가 같지 않다" 로 쓰느냐 "나라와 만족도가 독립이 아니다" 로 쓰느냐만 달라진다.
 
-    # 기대도수와 자유도까지 함께 돌려준다. 앞의 손계산과 값이 맞아야 한다.
-    statistic, p_value, df, expected = stats.chi2_contingency(observed)
-    print(f"{statistic = :.02f}")
-    print(f"{p_value   = :.02%}")
+    `chi2_contingency` 는 $2\times2$ 표에만 예이츠 보정을 걸고 여기는 $5\times3$ 이라 보정이 없다. 그러므로 보기 1 과 **같은 수**가 나와야 한다.
 
-    _, ax = plt.subplots(figsize=(12, 4))
+    **(2) 수치적으로.**
 
-    x = np.linspace(0, statistic, 1000)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='b', linewidth=3)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
 
-    x = np.concatenate([[0], x, [statistic], [0]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='b', alpha=0.1)
+    def main():
+        """같은 계산을 scipy 의 chi2_contingency 로 대신한다."""
+        observed = np.array([[541, 75, 231], [498, 71, 213],
+                             [779, 96, 321], [282, 50, 345], [65, 19, 120]])
 
-    x = np.linspace(statistic, 300, 100)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='r', linewidth=3)
+        # 기대도수와 자유도까지 함께 돌려준다. 앞의 손계산과 값이 맞아야 한다.
+        statistic, p_value, df, expected = stats.chi2_contingency(observed)
+        print(f"{statistic = :.02f}")
+        print(f"{p_value   = :.02%}")
 
-    x = np.concatenate([[statistic], x, [20], [statistic]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='r', alpha=0.1)
+        _, ax = plt.subplots(figsize=(12, 4))
 
-    xy = (250, 0.01)
-    xytext = (250, 0.08)
-    arrowprops = dict(color='k', width=0.2, headwidth=8)
-    ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+        x = np.linspace(0, statistic, 1000)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='b', linewidth=3)
 
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    ax.spines['left'].set_position("zero")
+        x = np.concatenate([[0], x, [statistic], [0]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='b', alpha=0.1)
 
-    plt.show()
+        x = np.linspace(statistic, 300, 100)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='r', linewidth=3)
 
-if __name__ == "__main__":
-    main()
-```
+        x = np.concatenate([[statistic], x, [20], [statistic]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='r', alpha=0.1)
 
-출력:
+        xy = (250, 0.01)
+        xytext = (250, 0.08)
+        arrowprops = dict(color='k', width=0.2, headwidth=8)
+        ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
 
-```
-statistic = 212.94
-p_value   = 0.00%
-```
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.spines['left'].set_position("zero")
 
-![카이제곱 분포와 p-값](./img/homogeneity_168.png)
+        plt.show()
 
-`chi2_contingency`가 수동 계산과 같은 값을 준다.
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    statistic = 212.94
+    p_value   = 0.00%
+    ```
+
+    ![카이제곱 분포와 p-값](./img/homogeneity_168.png)
+
+    `chi2_contingency`가 수동 계산과 같은 값을 준다.
+
+    인쇄된 `0.00%` 는 소수 둘째 자리에서 끊은 것이다. 실제 값을 자리수까지 본다.
+
+    ```python
+    from scipy.stats import chi2
+
+    chi2_obs = 212.93563265
+    print(f"정확한 p-값          {chi2.sf(chi2_obs, 8):.4e}")
+    print(f"임계값 chi2_0.05(8)  {chi2.ppf(0.95, 8):.4f}")
+    print(f"관측값은 임계값의    {chi2_obs / chi2.ppf(0.95, 8):.1f} 배")
+    ```
+
+    출력:
+
+    ```
+    정확한 p-값          1.1951e-41
+    임계값 chi2_0.05(8)  15.5073
+    관측값은 임계값의    13.7 배
+    ```
+
+    $p = 1.2 \times 10^{-41}$ 이다. 임계값 $15.5073$ 의 $13.7$ 배이므로 어떤 통상적 유의수준에서도 기각한다. 다만 보기 1 (3)에서 본 대로 효과크기는 $V = 0.17$ 로 크지 않다. **p-값의 자릿수는 표본 크기의 이야기이고 효과의 크기가 아니다.**
 
 ### 동질적인 경우와의 비교
 
@@ -271,110 +401,229 @@ p_value   = 0.00%
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 동질적인 자료와 견주기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 동질적인 자료와 견주기. 같은 절차를 **나라별 분포가 거의 같은** 자료에 적용한다.
+
+$$
+O = \begin{pmatrix}
+541 & 530 & 550 \\
+498 & 490 & 503 \\
+779 & 750 & 760 \\
+282 & 270 & 265 \\
+65 & 60 & 58
+\end{pmatrix}
+$$
+
+**(1)** $\chi^2$ 과 p-값을 구하시오.
+
+**(2)** 귀무가설 아래에서 $E[\chi^2] = \text{df}$ 가 **정확히** 성립한다. 그러면 이 자료의 $1.10$ 은 자유도 8 인 카이제곱분포의 어디에 놓이는가. **아래쪽** 꼬리의 백분위로 답하시오.
+
+**(3)** (2)의 답이 뜻하는 것은 무엇인가. "적합이 너무 좋다" 가 왜 문제가 될 수 있는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def compute_expected(observed):
-    row_sum = observed.sum(axis=1)
-    row_pmf = row_sum.reshape((-1, 1)) / row_sum.sum()
-    column_sum = observed.sum(axis=0)
-    column_pmf = column_sum.reshape((1, -1)) / column_sum.sum()
-    joint_pmf = row_pmf * column_pmf
-    expected = joint_pmf * row_sum.sum()
-    return expected
+    **(1) 수치적으로.** 절차는 보기 1 과 똑같다. 도수만 바꾼다.
 
-def main():
-    # 이번에는 세 나라의 분포를 비슷하게 맞춘 자료다. 앞과 같은 절차인데
-    # p-값이 크게 나온다. 검정이 무엇에 반응하는지가 이 대비에서 드러난다.
-    observed = np.array([[541, 530, 550], [498, 490, 503],
-                         [779, 750, 760], [282, 270, 265], [65, 60, 58]])
-    expected = compute_expected(observed)
-    df = (observed.shape[0] - 1) * (observed.shape[1] - 1)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
 
-    statistic = np.sum((observed - expected)**2 / expected)
-    p_value = stats.chi2(df).sf(statistic)
-    print(f"{statistic = :.02f}")
-    print(f"{p_value   = :.02%}")
+    def compute_expected(observed):
+        row_sum = observed.sum(axis=1)
+        row_pmf = row_sum.reshape((-1, 1)) / row_sum.sum()
+        column_sum = observed.sum(axis=0)
+        column_pmf = column_sum.reshape((1, -1)) / column_sum.sum()
+        joint_pmf = row_pmf * column_pmf
+        expected = joint_pmf * row_sum.sum()
+        return expected
 
-if __name__ == "__main__":
-    main()
-```
+    def main():
+        # 이번에는 세 나라의 분포를 비슷하게 맞춘 자료다. 앞과 같은 절차인데
+        # p-값이 크게 나온다. 검정이 무엇에 반응하는지가 이 대비에서 드러난다.
+        observed = np.array([[541, 530, 550], [498, 490, 503],
+                             [779, 750, 760], [282, 270, 265], [65, 60, 58]])
+        expected = compute_expected(observed)
+        df = (observed.shape[0] - 1) * (observed.shape[1] - 1)
 
-출력:
+        statistic = np.sum((observed - expected)**2 / expected)
+        p_value = stats.chi2(df).sf(statistic)
+        print(f"{statistic = :.02f}")
+        print(f"{p_value   = :.02%}")
 
-```
-statistic = 1.10
-p_value   = 99.75%
-```
+    if __name__ == "__main__":
+        main()
+    ```
 
-앞의 자료와 대비된다. 나라별 분포가 거의 같으면 통계량이 1.10까지 떨어지고 p-값은 99.75%가 된다. 자유도 8인 카이제곱분포의 평균이 8이므로, 1.10은 오히려 "지나치게 잘 맞는" 축에 든다.
+    출력:
+
+    ```
+    statistic = 1.10
+    p_value   = 99.75%
+    ```
+
+    앞의 자료와 대비된다. 나라별 분포가 거의 같으면 통계량이 1.10까지 떨어지고 p-값은 99.75%가 된다.
+
+    **(2) 기준선은 자유도다.** 귀무가설 아래에서 각 칸의 어긋남이 평균 0, 분산이 대략 $E_{ij}$ 이므로 $(O-E)^2/E$ 의 기댓값이 칸마다 1 근처이고, 제약을 빼고 세면 정확히 자유도만큼 남는다. 적합도 검정에서는 이것이
+
+    $$
+    E[\chi^2] = \sum_i \frac{\operatorname{Var}(O_i)}{np_i} = \sum_i (1-p_i) = k-1
+    $$
+
+    로 **근사 없이** 나온다(연습문제 9 에서 과대산포를 진단할 때 쓰는 바로 그 사실이다). 분할표에서도 $E[\chi^2] \approx (r-1)(c-1) = 8$ 이다.
+
+    그러므로 $\chi^2 = 1.10$ 은 **기준선 8 의 7 분의 1** 이다. 위쪽 꼬리 확률이 $0.9975$ 라는 말은 아래쪽 꼬리 확률이 $0.0025$ 라는 말이다.
+
+    $$
+    P(\chi^2_8 \le 1.0988) = 0.00246
+    $$
+
+    곧 **하위 $0.25\%$** 다. 자유도 8 의 $1\%$ 분위가 $1.6465$ 인데 $1.0988$ 은 그보다도 작다.
+
+    **(3) 너무 잘 맞는 것도 신호다.** 자료가 참으로 귀무가설에서 나왔다면 $\chi^2$ 이 하위 $0.25\%$ 에 떨어질 확률은 400 분의 1 이다. 그런 일이 눈앞에 있다면 둘 중 하나다.
+
+    - **우연히 아주 잘 맞았다.** 400 번에 한 번은 일어난다.
+    - **자료가 "맞도록" 만들어졌다.** 여기서는 후자다. 세 열을 손으로 비슷하게 적어 넣었으니 무작위 흔들림이 있어야 할 만큼 들어 있지 않다.
+
+    이 "너무 좋은 적합" 검사는 실제 자료 조작을 찾아내는 데 쓰인다. 멘델의 완두콩 자료가 그 유명한 예다. 적합도 검정은 보통 위쪽 꼬리만 보지만, **아래쪽 꼬리도 뜻이 있다.**
 
 ### 두 나라 비교 (US 대 Canada)
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 두 나라만 비교하기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 두 나라만 비교하기. 전체 검정은 "세 나라가 모두 같은가" 에만 답한다. 어느 쌍이 다른지는 쌍마다 따로 보아야 한다.
+
+**(1)** US 와 Canada 만 남기면 열이 둘인 $5\times2$ 표가 된다. [독립성 검정](independence.md) 보기 1 에서 얻은 $r\times2$ 닫힌 꼴
+
+$$
+\chi^2 = \frac{n^2}{C_1C_2}\sum_{i=1}^r \frac{d_i^2}{R_i},
+\qquad d_i = O_{i1} - \frac{R_iC_1}{n}
+$$
+
+으로 통계량을 구하고 코드와 맞추시오.
+
+**(2)** 세 쌍을 모두 계산하시오. 세 쌍의 $\chi^2$ 을 더하면 전체 검정의 $212.94$ 가 되는가. 왜 그런가.
+
+**(3)** 세 쌍을 모두 검정했으므로 다중비교 보정이 필요하다. 본페로니로 보정하면 US–Canada 의 결론이 어떻게 바뀌는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def main():
-    """열을 둘로 줄여 두 나라만 견준다."""
-    observed = np.array([[541, 75], [498, 71], [779, 96], [282, 50], [65, 19]])
+    **(1) 열이 둘이면 닫힌 꼴이 쓰인다.** US 와 Canada 만 남긴 표의 주변합은 행 합 $616,\ 569,\ 875,\ 332,\ 84$, 열 합 $C_1 = 2165$(US), $C_2 = 311$(Canada), 총합 $n = 2476$ 이다. 각 행의 어긋남은
 
-    statistic, p_value, df, expected = stats.chi2_contingency(observed)
-    print(f"{statistic = :.02f}")
-    print(f"{p_value   = :.02%}")
-    print("expected")
-    print(expected)
+    $$
+    d_i = O_{i1} - \frac{R_i C_1}{n}
+    $$
 
-if __name__ == "__main__":
-    main()
-```
+    하나로 묶이고(열이 둘이므로 둘째 칸은 $-d_i$), 그 값은 차례로
 
-출력:
+    $$
+    d_1 = +2.3732,\quad d_2 = +0.4697,\quad d_3 = +13.9051,\quad d_4 = -8.2989,\quad d_5 = -8.4491
+    $$
 
-```
-statistic = 11.73
-p_value   = 1.95%
-expected
-[[538.62681745  77.37318255]
- [497.53029079  71.46970921]
- [765.09491115 109.90508885]
- [290.29886914  41.70113086]
- [ 73.44911147  10.55088853]]
-```
+    이다. $\sum_i d_i = 0$ 이어야 하고 실제로 그렇다. 그러면
 
-세 나라 중 둘만 놓고 비교하면 $\chi^2$이 212.94에서 11.73으로 뚝 떨어진다. 앞의 큰 통계량은 대부분 세 번째 나라 때문이었다는 뜻이다.
+    $$
+    \sum_i \frac{d_i^2}{R_i}
+    = \frac{2.3732^2}{616} + \frac{0.4697^2}{569} + \frac{13.9051^2}{875} + \frac{8.2989^2}{332} + \frac{8.4491^2}{84}
+    $$
 
-$p = 0.0195$로 여전히 5% 수준에서는 기각하지만, 1% 수준에서는 기각하지 못한다. 기대도수 중 가장 작은 값이 10.55로 경험칙을 만족한다.
+    $$
+    = 0.00914 + 0.00039 + 0.22097 + 0.20744 + 0.84985 = 1.28780
+    $$
+
+    $$
+    \chi^2 = \frac{2476^2}{2165 \times 311} \times 1.28780
+    = 9.10506 \times 1.28780 = 11.7255
+    $$
+
+    자유도는 $(5-1)(2-1) = 4$ 다. 다섯 항 가운데 마지막(별 1개)이 $0.84985$ 로 전체의 $66\%$ 다. Canada 의 별 1개가 기대 $10.55$ 명에 대해 19 명이었던 것이 US–Canada 차이의 거의 전부다. **행 합 84 로 나누기 때문에 작은 행의 어긋남이 크게 친다.**
+
+    **(2)·(3) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    def main():
+        """열을 둘로 줄여 두 나라만 견준다."""
+        observed = np.array([[541, 75], [498, 71], [779, 96], [282, 50], [65, 19]])
+
+        statistic, p_value, df, expected = stats.chi2_contingency(observed)
+        print(f"{statistic = :.02f}")
+        print(f"{p_value   = :.02%}")
+        print("expected")
+        print(expected)
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    statistic = 11.73
+    p_value   = 1.95%
+    expected
+    [[538.62681745  77.37318255]
+     [497.53029079  71.46970921]
+     [765.09491115 109.90508885]
+     [290.29886914  41.70113086]
+     [ 73.44911147  10.55088853]]
+    ```
+
+    세 나라 중 둘만 놓고 비교하면 $\chi^2$이 212.94에서 11.73으로 뚝 떨어진다. (1)에서 손으로 얻은 $11.7255$ 와 코드의 `11.73` 이 맞고, 기대도수의 최소 $10.55$ 도 경험칙을 만족한다.
+
+    앞의 큰 통계량이 어디서 왔는지 세 쌍을 모두 보면 분명해진다.
+
+    ```python
+    import itertools
+    import numpy as np
+    from scipy import stats
+
+    O = np.array([[541, 75, 231], [498, 71, 213],
+                  [779, 96, 321], [282, 50, 345], [65, 19, 120]])
+    names = ["US", "Canada", "Mexico"]
+
+    print("쌍마다 열 둘만 남겨 다시 검정한다 (df = 4)")
+    total = 0.0
+    for i, j in itertools.combinations(range(3), 2):
+        res = stats.chi2_contingency(O[:, [i, j]])
+        total += res.statistic
+        print(f"  {names[i]:>6s} - {names[j]:<6s}  chi2 = {res.statistic:8.4f}   "
+              f"p = {res.pvalue:9.3g}   최소기대 {res.expected_freq.min():6.2f}")
+    print(f"\n세 쌍의 합 {total:.4f}   전체 검정 212.9356")
+    print(f"본페로니 임계 p = 0.05/3 = {0.05 / 3:.4f}")
+    ```
+
+    출력:
+
+    ```
+    쌍마다 열 둘만 남겨 다시 검정한다 (df = 4)
+          US - Canada  chi2 =  11.7255   p =    0.0195   최소기대  10.55
+          US - Mexico  chi2 = 210.5657   p =  2.01e-44   최소기대  67.03
+      Canada - Mexico  chi2 =  27.2786   p =  1.75e-05   최소기대  28.05
+
+    세 쌍의 합 249.5698   전체 검정 212.9356
+    본페로니 임계 p = 0.05/3 = 0.0167
+    ```
+
+    **Mexico 가 범인이다.** US–Mexico 만으로 $210.57$ 이고, 전체 $212.94$ 의 거의 전부다. 보기 1 (3)에서 Mexico 열의 기여가 $136.62$ 로 가장 컸던 것과 같은 이야기다.
+
+    **세 쌍의 합 $249.57$ 은 전체 $212.94$ 와 같지 않다.** 같을 이유가 없다. 쌍마다 **총합과 통합 분포가 달라진다.** US–Canada 쌍에서는 $n = 2476$, Mexico 가 들어간 쌍에서는 $n$ 이 각각 $3395$, $1541$ 이다. 기준선이 쌍마다 다르므로 세 수는 서로 다른 표에 대한 통계량이고, 더해서 전체가 되는 분해가 아니다. 진짜 분해를 원하면 자유도를 쪼개는 직교 대비를 써야 하고, 그러면 세 쌍이 아니라 **두 개의 독립 대비**만 잡을 수 있다($\text{df} = 8 = 4 + 4$).
+
+    **(3) 본페로니.** 세 쌍을 모두 검정했으므로 쌍별 유의수준을 $0.05/3 = 0.0167$ 로 내린다. US–Mexico 와 Canada–Mexico 는 $p$ 가 $10^{-5}$ 보다 작아 그대로 유의하지만, **US–Canada 는 $p = 0.0195 > 0.0167$ 이 되어 유의성을 잃는다.** 보정 전에는 "5% 수준에서 기각" 이던 것이 보정 후에는 기각되지 않는다. 사후비교의 보정 방법과 그 함정은 연습문제 7 이 자세히 다룬다.
 
 ---
 
-<div class="exbox" markdown>
-
-**보기 5.** <span class="diff easy" title="쉬움"></span> 좋아하는 과목과 주로 쓰는 손
-
-</div>
-
 > **출처**: [Khan Academy — Chi-Square Test Homogeneity](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-homogeneity)
 
-왼손잡이와 오른손잡이가 과학·기술·공학·수학, 인문학, 또는 그 어느 쪽도 아닌 것에 대해 비슷한 성향을 보이는지 판정하고자 한다.
+<div class="exbox" markdown>
 
-- **귀무가설**: 왼손잡이와 오른손잡이 사이에 과목 선호 분포의 차이가 없다.
-- **대립가설**: 왼손잡이와 오른손잡이 사이에 과목 선호 분포의 차이가 있다.
-
-오른손잡이 60명과 왼손잡이 40명을 각각 무작위로 뽑았다:
+**보기 5.** <span class="diff easy" title="쉬움"></span> 좋아하는 과목과 주로 쓰는 손. 오른손잡이 60명과 왼손잡이 40명을 **각각** 무작위로 뽑아 선호 과목을 물었다. 두 집단의 표본 크기를 미리 정했으므로 전형적인 동질성 설계다.
 
 |            | 오른손 | 왼손 | 합계   |
 |:----------:|:-----:|:----:|:-------:|
@@ -383,71 +632,136 @@ $p = 0.0195$로 여전히 5% 수준에서는 기각하지만, 1% 수준에서는
 | 같음      | 15    | 5    | **20**  |
 | 합계      | **60**| **40** | **100** |
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+**(1)** 기대도수가 모두 정수로 딱 떨어진다. 왜 그런가.
 
-def main():
-    observed = np.array([[30, 10], [15, 25], [15, 5]])
+**(2)** $r\times2$ 닫힌 꼴로 $\chi^2$ 을 **유리수로** 구하시오. 자유도 2 에서는 p-값에도 닫힌 꼴이 있다.
 
-    statistic, p_value, df, expected = stats.chi2_contingency(observed)
-    print(f"{statistic = :.02f}")
-    print(f"{p_value   = :.04f}")
-    print(f"\nExpected frequencies:")
-    print(expected)
+**(3)** 크래머 $V$ 로 효과크기를 재고, 보기 1 의 $V = 0.17$ 과 견주시오. 관측값이 100 개뿐인데도 강하게 기각되는 까닭이 거기 있다.
 
-    _, ax = plt.subplots(figsize=(12, 4))
+</div>
 
-    x = np.linspace(0, statistic)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='b', linewidth=3)
+??? success "풀이"
 
-    x = np.concatenate([[0], x, [statistic], [0]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='b', alpha=0.1)
+    **가설.** $H_0$ 은 오른손잡이와 왼손잡이의 과목 선호 분포가 같다는 것, $H_1$ 은 다르다는 것이다.
 
-    x = np.linspace(statistic, 20, 100)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='r', linewidth=3)
+    **(1) 주변합이 100 을 깔끔하게 나눈다.** $E_{ij} = R_i C_j / n$ 에서 $n = 100$ 이고 행 합이 $40, 40, 20$, 열 합이 $60, 40$ 이다. 분자 $R_i C_j$ 가 언제나 $100$ 의 배수이므로
 
-    x = np.concatenate([[statistic], x, [20], [statistic]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='r', alpha=0.1)
+    $$
+    E = \frac{1}{100}
+    \begin{pmatrix} 40 \\ 40 \\ 20 \end{pmatrix}
+    \begin{pmatrix} 60 & 40 \end{pmatrix}
+    = \begin{pmatrix} 24 & 16 \\ 24 & 16 \\ 12 & 8 \end{pmatrix}
+    $$
 
-    xy = (15.0, 0.01)
-    xytext = (16.5, 0.10)
-    arrowprops = dict(color='k', width=0.2, headwidth=8)
-    ax.annotate(f'{p_value = :.04f}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+    가 정수 행렬이 된다. 1 행과 2 행의 행 합이 둘 다 40 이라 기대도수도 같은 것 역시 눈여겨볼 만하다. 기대표는 **주변합만 보기 때문**이다.
 
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    ax.spines['left'].set_position("zero")
+    **(2) 유리수로.** 열이 둘이므로 행마다 어긋남이 하나다.
 
-    plt.show()
+    $$
+    d_1 = 30 - 24 = 6,
+    \qquad d_2 = 15 - 24 = -9,
+    \qquad d_3 = 15 - 12 = 3
+    $$
 
-if __name__ == "__main__":
-    main()
-```
+    $d_1 + d_2 + d_3 = 0$ 으로 열 합이 보존된다. 닫힌 꼴에 넣는다.
 
-출력:
+    $$
+    \sum_i \frac{d_i^2}{R_i} = \frac{36}{40} + \frac{81}{40} + \frac{9}{20} = \frac{27}{8},
+    \qquad
+    \frac{n^2}{C_1C_2} = \frac{10000}{60 \times 40} = \frac{25}{6}
+    $$
 
-```
-statistic = 14.06
-p_value   = 0.0009
+    $$
+    \chi^2 = \frac{25}{6}\times\frac{27}{8} = \frac{675}{48} = \frac{225}{16} = 14.0625
+    $$
 
-Expected frequencies:
-[[24. 16.]
- [24. 16.]
- [12.  8.]]
-```
+    정의대로 더해도 같다. $1.5 + 2.25 + 3.375 + 5.0625 + 0.75 + 1.125 = 14.0625$ 다.
 
-![카이제곱 분포와 p-값](./img/homogeneity_291.png)
+    자유도는 $(3-1)(2-1) = 2$ 이고, 자유도 2 의 꼬리확률은 $P(\chi^2_2 \ge t) = e^{-t/2}$ 이므로
 
-관측값이 100개뿐인데도 강하게 기각된다. STEM에서 오른손잡이가 기대 24에 대해 30, 인문학에서 왼손잡이가 기대 16에 대해 25로 어긋남이 크기 때문이다.
+    $$
+    p = e^{-14.0625/2} = e^{-7.03125} = 0.00088383
+    $$
 
-기대도수가 모두 정수로 딱 떨어진 것은 우연이 아니다. 행 합계가 40, 40, 20이고 열 합계가 60, 40이며 총합이 100이라 $R_i C_j / n$이 언제나 정수가 된다.
+    이다. $p < 0.001$ 이므로 강하게 기각한다.
+
+    **(3) 효과크기.** $\min(r-1, c-1) = 1$ 이므로
+
+    $$
+    V = \sqrt{\frac{\chi^2}{n\min(r-1,c-1)}} = \sqrt{\frac{225/16}{100}} = \sqrt{\frac{9}{64}} = \frac38 = 0.375
+    $$
+
+    **정확히 $0.375$** 다. 보기 1 의 병원 자료는 $n = 3706$ 이나 되는데 $V = 0.17$ 이었다. 여기는 $n = 100$ 뿐인데 $V = 0.375$ 로 두 배 넘게 강하다. $\chi^2 = nV^2\min(r-1,c-1)$ 이므로 **작은 표본으로도 강하게 기각되는 것은 효과가 그만큼 크기 때문**이다.
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    def main():
+        observed = np.array([[30, 10], [15, 25], [15, 5]])
+
+        statistic, p_value, df, expected = stats.chi2_contingency(observed)
+        print(f"{statistic = :.02f}")
+        print(f"{p_value   = :.04f}")
+        print(f"\nExpected frequencies:")
+        print(expected)
+
+        _, ax = plt.subplots(figsize=(12, 4))
+
+        x = np.linspace(0, statistic)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='b', linewidth=3)
+
+        x = np.concatenate([[0], x, [statistic], [0]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='b', alpha=0.1)
+
+        x = np.linspace(statistic, 20, 100)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='r', linewidth=3)
+
+        x = np.concatenate([[statistic], x, [20], [statistic]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='r', alpha=0.1)
+
+        xy = (15.0, 0.01)
+        xytext = (16.5, 0.10)
+        arrowprops = dict(color='k', width=0.2, headwidth=8)
+        ax.annotate(f'{p_value = :.04f}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.spines['left'].set_position("zero")
+
+        plt.show()
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    statistic = 14.06
+    p_value   = 0.0009
+
+    Expected frequencies:
+    [[24. 16.]
+     [24. 16.]
+     [12.  8.]]
+    ```
+
+    ![카이제곱 분포와 p-값](./img/homogeneity_291.png)
+
+    `statistic = 14.06` 과 `p_value = 0.0009` 가 (2)의 $225/16 = 14.0625$ 와 $e^{-7.03125} = 0.00088383$ 과 맞고, 기대도수 행렬도 (1)에서 손으로 적은 정수 행렬과 글자 하나까지 같다.
+
+    관측값이 100개뿐인데도 강하게 기각된다. STEM에서 오른손잡이가 기대 24에 대해 30, 인문학에서 왼손잡이가 기대 16에 대해 25로 어긋남이 크기 때문이다. 칸별 기여를 보면 인문학·왼손 칸이 $81/16 = 5.0625$ 로 가장 크고 전체 $14.0625$ 의 $36\%$ 다.
+
+    기대도수가 모두 정수로 딱 떨어진 것은 우연이 아니다. 행 합계가 40, 40, 20이고 열 합계가 60, 40이며 총합이 100이라 $R_i C_j / n$이 언제나 정수가 된다.
 
 ## 연습문제
 

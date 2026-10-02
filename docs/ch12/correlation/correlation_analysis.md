@@ -44,22 +44,85 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이변량 자료 만들기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모형에서 상관을 미리 계산하기. 위 모형에서 $x$와 $\varepsilon$은 독립이다.
+
+**(1)** 자료를 보기 전에 모집단 상관 $\rho_{XY}$를 손으로 구하시오.
+
+**(2)** 잡음의 표준편차를 $8$에서 $16$으로 키우면 $\rho$는 얼마가 되는가. 절반으로 줄어드는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** $X \sim \text{Uniform}(10, 60)$이므로 구간 길이가 $50$이고
 
-# 기울기 0.8 의 선형 관계에 표준편차 8 짜리 잡음을 얹는다.
-n = 120
-x = np.random.uniform(10, 60, n)
-noise = np.random.normal(0, 8, n)
-y = 0.8 * x + 5 + noise
-```
+    $$
+    \operatorname{Var}(X) = \frac{50^2}{12} = \frac{2500}{12} = 208.3333,
+    \qquad
+    \sigma_X = 14.4338
+    $$
+
+    이다. $Y = 0.8X + 5 + \varepsilon$에서 상수 $5$는 분산에도 공분산에도 기여하지 않고, $\varepsilon$이 $X$와 독립이므로
+
+    $$
+    \operatorname{Cov}(X, Y) = \operatorname{Cov}(X,\, 0.8X) = 0.8 \operatorname{Var}(X) = 166.6667,
+    $$
+
+    $$
+    \operatorname{Var}(Y) = 0.8^2 \operatorname{Var}(X) + \sigma^2 = 0.64 \times 208.3333 + 64 = 197.3333,
+    \qquad
+    \sigma_Y = 14.0475
+    $$
+
+    이다. 따라서
+
+    $$
+    \rho_{XY} = \frac{0.8\,\sigma_X^2}{\sigma_X \sqrt{0.64\,\sigma_X^2 + \sigma^2}}
+    = \frac{0.8\,\sigma_X}{\sqrt{0.64\,\sigma_X^2 + \sigma^2}}
+    = \frac{166.6667}{14.4338 \times 14.0475} = 0.8220
+    $$
+
+    이다. 마지막 꼴을 보면 **$\rho$를 정하는 것은 $0.8\sigma_X$와 $\sigma$의 비 하나뿐**임이 드러난다. 여기서는 $0.8 \times 14.4338 = 11.547$ 대 $8$이다.
+
+    **(2)** 같은 식에 $\sigma = 16$을 넣으면
+
+    $$
+    \rho = \frac{11.547}{\sqrt{11.547^2 + 16^2}} = \frac{11.547}{19.729} = 0.5852
+    $$
+
+    이다. **절반이 아니다.** 신호 대 잡음비가 $11.547/8 = 1.443$에서 $0.722$로 절반이 되었는데 $\rho$는 $0.8220$에서 $0.5852$로 $71\%$만 남는다. $\rho = s/\sqrt{s^2+1}$ 꼴(여기서 $s$는 신호 대 잡음비)은 $s$가 작을 때만 $s$에 거의 비례하고, $s$가 1을 넘으면 1에 눌려 천천히 움직인다. 잡음을 더 키워 $\sigma = 100$으로 해도 $\rho = 0.1147$로 0에 다가가기만 할 뿐 음수가 되지는 않는다.
+
+    **확인.** 뒤에서 쓸 자료를 만들고 위 수치를 찍어 둔다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+
+    # 기울기 0.8 의 선형 관계에 표준편차 8 짜리 잡음을 얹는다.
+    n = 120
+    x = np.random.uniform(10, 60, n)
+    noise = np.random.normal(0, 8, n)
+    y = 0.8 * x + 5 + noise
+
+    sigma_x = np.sqrt(50 ** 2 / 12)      # 균등분포의 표준편차
+    signal = 0.8 * sigma_x               # 기울기가 만들어 내는 Y 의 변동 폭
+    print(f"sigma_X = {sigma_x:.4f},  0.8 sigma_X = {signal:.4f}")
+    for sigma in (8, 16, 100):
+        print(f"  sigma = {sigma:3d}  ->  rho = {signal / np.sqrt(signal ** 2 + sigma ** 2):.4f}")
+    ```
+
+    출력:
+
+    ```
+    sigma_X = 14.4338,  0.8 sigma_X = 11.5470
+      sigma =   8  ->  rho = 0.8220
+      sigma =  16  ->  rho = 0.5852
+      sigma = 100  ->  rho = 0.1147
+    ```
+
+    손으로 구한 세 값과 모두 맞는다.
 
 ---
 
@@ -69,31 +132,83 @@ SciPy는 각 측도에 대한 함수를 제공하며 계수와 함께 연관이 
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 세 상관계수 구하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 세 계수를 무엇과 견줄 것인가. 보기 1의 `x`, `y`를 이어받아 세 계수를 구한다.
+
+**(1)** 표본 Pearson $r$를 보기 1에서 유도한 $\rho$와 견주시오.
+
+**(2)** 이변량 정규분포에서는 $\tau = \frac{2}{\pi}\arcsin\rho$, $\rho_s = \frac{6}{\pi}\arcsin\frac{\rho}{2}$라는 닫힌 꼴이 있다. 이 자료의 $\tau$와 $\rho_s$를 그 식으로 예측해도 되는가.
 
 </div>
 
-```python
-# 세 측도를 함께 구한다. 관계가 선형이고 이상치가 없으면 셋이 비슷하게 나온다.
-# 값이 크게 갈린다면 관계가 곡선이거나 이상치가 있다는 신호다.
-r_pearson, p_pearson = stats.pearsonr(x, y)
-r_spearman, p_spearman = stats.spearmanr(x, y)
-r_kendall, p_kendall = stats.kendalltau(x, y)
+??? success "풀이"
 
-print(f"Pearson  r = {r_pearson:.4f}  (p = {p_pearson:.2e})")
-print(f"Spearman rho = {r_spearman:.4f}  (p = {p_spearman:.2e})")
-print(f"Kendall  tau = {r_kendall:.4f}  (p = {p_kendall:.2e})")
-```
+    **(1)** 보기 1에서 $\rho = 0.8220$을 얻었고, 표본상관의 표준오차는
 
-출력:
+    $$
+    \operatorname{SE}(r) \approx \frac{1 - \rho^2}{\sqrt{n}} = \frac{1 - 0.8220^2}{\sqrt{120}} = \frac{0.3243}{10.954} = 0.0296
+    $$
 
-```
-Pearson  r = 0.8221  (p = 1.21e-30)
-Spearman rho = 0.8363  (p = 1.38e-32)
-Kendall  tau = 0.6420  (p = 2.54e-25)
-```
+    이다. 표본값이 이 폭 안에 들어오면 맞는 것이다.
 
-세 계수가 0.82, 0.84, 0.64로 다르다. Kendall이 유독 작은 것은 척도가 달라서이며, 강도가 약하다는 뜻이 아니다.
+    **(2) 쓰면 안 된다.** 두 닫힌 꼴은 $(X, Y)$가 **이변량 정규**일 때의 결과다. 여기서는 $X$가 균등분포이므로 $(X,Y)$가 이변량 정규가 아니고, 식의 전제가 깨진다. $\tau$와 $\rho_s$는 주변분포를 바꾸지 않는 단조변환에만 불변일 뿐 **주변분포 자체가 다르면 값이 달라진다.**
+
+    닫힌 꼴이 없으므로 모집단 값을 모의실험으로 잰다. 같은 모형에서 아주 큰 표본을 거듭 뽑아 평균을 내면 그것이 참값이다.
+
+    ```python
+    # 세 측도를 함께 구한다. 관계가 선형이고 이상치가 없으면 셋이 비슷하게 나온다.
+    # 값이 크게 갈린다면 관계가 곡선이거나 이상치가 있다는 신호다.
+    r_pearson, p_pearson = stats.pearsonr(x, y)
+    r_spearman, p_spearman = stats.spearmanr(x, y)
+    r_kendall, p_kendall = stats.kendalltau(x, y)
+
+    print(f"Pearson  r = {r_pearson:.4f}  (p = {p_pearson:.2e})")
+    print(f"Spearman rho = {r_spearman:.4f}  (p = {p_spearman:.2e})")
+    print(f"Kendall  tau = {r_kendall:.4f}  (p = {p_kendall:.2e})")
+
+    # (1) 의 닫힌 꼴과 견준다.
+    var_x = 50 ** 2 / 12
+    rho = 0.8 * var_x / np.sqrt(var_x * (0.64 * var_x + 64))
+    se = (1 - rho ** 2) / np.sqrt(n)
+    print(f"\n이론 rho   = {rho:.4f}   SE = {se:.4f}   z = {(r_pearson - rho) / se:+.3f}")
+
+    # tau 와 rho_s 에는 닫힌 꼴이 없다. 같은 모형에서 큰 표본을 거듭 뽑아 모집단 값을 잰다.
+    rng = np.random.default_rng(1)
+    taus, rhos = [], []
+    for _ in range(40):
+        bx = rng.uniform(10, 60, 50_000)
+        by = 0.8 * bx + 5 + rng.normal(0, 8, 50_000)
+        taus.append(stats.kendalltau(bx, by).statistic)
+        rhos.append(stats.spearmanr(bx, by).statistic)
+    print(f"모의 tau   = {np.mean(taus):.4f} +- {np.std(taus) / np.sqrt(40):.4f}   표본 {r_kendall:.4f}")
+    print(f"모의 rho_s = {np.mean(rhos):.4f} +- {np.std(rhos) / np.sqrt(40):.4f}   표본 {r_spearman:.4f}")
+
+    # 이변량 정규에서만 성립하는 닫힌 꼴. 여기서는 x 가 균등이므로 맞지 않는다.
+    print(f"\n정규 가정 공식: tau = (2/pi)arcsin(rho)   = {2 / np.pi * np.arcsin(rho):.4f}")
+    print(f"                rho_s = (6/pi)arcsin(rho/2) = {6 / np.pi * np.arcsin(rho / 2):.4f}")
+    ```
+
+    출력:
+
+    ```
+    Pearson  r = 0.8221  (p = 1.21e-30)
+    Spearman rho = 0.8363  (p = 1.38e-32)
+    Kendall  tau = 0.6420  (p = 2.54e-25)
+
+    이론 rho   = 0.8220   SE = 0.0296   z = +0.003
+    모의 tau   = 0.6292 +- 0.0002   표본 0.6420
+    모의 rho_s = 0.8326 +- 0.0002   표본 0.8363
+
+    정규 가정 공식: tau = (2/pi)arcsin(rho)   = 0.6143
+                    rho_s = (6/pi)arcsin(rho/2) = 0.8089
+    ```
+
+    **(1)의 답.** 표본 $r = 0.8221$이 이론값 $0.8220$에서 표준오차의 $0.003$배 떨어져 있다. 우연히 잘 맞은 것이고 보통은 이보다 더 벌어진다. 바로 그 폭을 $\operatorname{SE} = 0.0296$이 말해 준다.
+
+    **(2)의 답.** 모의실험이 준 모집단 값은 $\tau = 0.6292$, $\rho_s = 0.8326$이다. 정규 가정 공식은 $0.6143$과 $0.8089$를 주므로 각각 $0.015$와 $0.024$만큼 **치우쳐 있다.** 같은 모형에서 $n = 120$ 표본을 거듭 뽑아 재 보면 $\tau$의 표집 표준편차가 $0.031$, $\rho_s$의 것이 $0.029$이니, 이 치우침은 표본 하나의 흔들림과 맞먹는 크기다. 한 표본에서는 묻히지만 **표본을 아무리 키워도 사라지지 않는다.** 모의실험 값의 불확실도는 $\pm 0.0002$에 지나지 않는다.
+
+    표본값 $\tau = 0.6420$과 $\rho_s = 0.8363$은 모의실험이 준 모집단 값에서 각각 $0.41$과 $0.13$ 표집 표준편차 안이다. **옳은 기준과는 맞고 잘못된 기준과는 어긋난다.**
+
+    세 계수가 $0.82$, $0.84$, $0.64$로 갈리는 것도 이 눈금 차이 때문이다. Kendall이 유독 작은 것은 척도가 달라서이며 강도가 약하다는 뜻이 아니다.
 
 ---
 
@@ -103,26 +218,84 @@ Kendall  tau = 0.6420  (p = 2.54e-25)
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 순위에 대한 피어슨이 스피어만이다
+**보기 3.** <span class="diff easy" title="쉬움"></span> 순위에 대한 피어슨이 스피어만이다. 동점이 없는 $n$개 자료를 생각하자.
+
+**(1)** 동점이 없으면 순위는 $1, 2, \ldots, n$의 치환이다. 이 사실만으로 Spearman의 간편 공식
+
+$$
+\rho_s = 1 - \frac{6\sum_i d_i^2}{n(n^2-1)},
+\qquad d_i = R(x_i) - R(y_i)
+$$
+
+를 유도하시오.
+
+**(2)** 세 가지 — `spearmanr`, 순위에 대한 `pearsonr`, 간편 공식 — 가 같은 값을 주는지 확인하시오.
 
 </div>
 
-```python
-# Spearman 은 "순위에 대한 Pearson"이라는 정의를 그대로 확인한다.
-r_rank = stats.pearsonr(stats.rankdata(x), stats.rankdata(y))[0]
-print(f"Pearson r on ranks = {r_rank:.4f}")
-print(f"Spearman rho       = {r_spearman:.4f}")
-# 두 값이 같아야 한다.
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** $R(x_i)$와 $R(y_i)$는 각각 $1$부터 $n$까지를 한 번씩 쓰므로 **평균과 분산이 서로 같고 자료에 의존하지 않는다.**
 
-```
-Pearson r on ranks = 0.8363
-Spearman rho       = 0.8363
-```
+    $$
+    \bar{R} = \frac{1}{n}\sum_{k=1}^{n} k = \frac{n+1}{2},
+    \qquad
+    \sum_{i}(R(x_i) - \bar{R})^2 = \sum_{i}(R(y_i) - \bar{R})^2 = \frac{n(n^2-1)}{12}
+    $$
 
-순위로 바꾼 뒤 계산한 Pearson 상관이 Spearman과 정확히 같다. Spearman은 별개의 공식이 아니라 **순위에 적용한 Pearson**이라는 정의를 수치로 확인한 것이다.
+    마지막 값은 $\sum_{k=1}^n k^2 - n\bar{R}^2 = \frac{n(n+1)(2n+1)}{6} - \frac{n(n+1)^2}{4} = \frac{n(n^2-1)}{12}$에서 나온다. 이 양을 $S$라 쓰자.
+
+    이제 $a_i = R(x_i) - \bar R$, $b_i = R(y_i) - \bar R$로 두면 $d_i = a_i - b_i$이고
+
+    $$
+    \sum_i d_i^2 = \sum_i a_i^2 + \sum_i b_i^2 - 2\sum_i a_i b_i = 2S - 2\sum_i a_i b_i
+    $$
+
+    이므로 $\sum_i a_i b_i = S - \frac{1}{2}\sum_i d_i^2$이다. 순위에 대한 Pearson 상관은 분모가 $\sqrt{S}\sqrt{S} = S$이므로
+
+    $$
+    \rho_s = \frac{\sum_i a_i b_i}{S}
+    = \frac{S - \frac{1}{2}\sum_i d_i^2}{S}
+    = 1 - \frac{\sum_i d_i^2}{2S}
+    = 1 - \frac{6\sum_i d_i^2}{n(n^2-1)}
+    $$
+
+    이다. **공식이 간단해지는 유일한 이유는 두 순위열의 제곱합이 똑같이 $S$로 고정된다는 것**이다. 동점이 생겨 중간순위를 쓰면 제곱합이 $S$보다 작아지므로 이 유도가 무너지고, 간편 공식도 더 이상 정확하지 않다.
+
+    **(2) 수치적으로.** $n = 120$, 동점 없음이므로 셋이 모두 같아야 한다.
+
+    ```python
+    # Spearman 은 "순위에 대한 Pearson"이라는 정의를 그대로 확인한다.
+    rx, ry = stats.rankdata(x), stats.rankdata(y)
+    r_rank = stats.pearsonr(rx, ry)[0]
+    print(f"Pearson r on ranks = {r_rank:.4f}")
+    print(f"Spearman rho       = {r_spearman:.4f}")
+    # 두 값이 같아야 한다.
+
+    # 간편 공식도 같은 값을 주는지 본다.
+    d2 = np.sum((rx - ry) ** 2)
+    shortcut = 1 - 6 * d2 / (n * (n ** 2 - 1))
+    print(f"\n동점 개수 = {n - len(np.unique(rx))} (x), {n - len(np.unique(ry))} (y)")
+    print(f"sum d^2 = {d2:.0f},  S = n(n^2-1)/12 = {n * (n ** 2 - 1) / 12:.0f}")
+    print(f"간편 공식 = {shortcut:.6f}   spearmanr = {r_spearman:.6f}")
+    print(f"세 값이 같은가: {np.allclose([r_rank, shortcut], r_spearman)}")
+    ```
+
+    출력:
+
+    ```
+    Pearson r on ranks = 0.8363
+    Spearman rho       = 0.8363
+
+    동점 개수 = 0 (x), 0 (y)
+    sum d^2 = 47138,  S = 143990
+    간편 공식 = 0.836315   spearmanr = 0.836315
+    세 값이 같은가: True
+    ```
+
+    셋이 소수 여섯째 자리까지 같다. 손으로 확인해 보면 $1 - 47138/(2 \times 143990) = 1 - 0.163685 = 0.836315$다.
+
+    Spearman은 별개의 공식이 아니라 **순위에 적용한 Pearson**이며, 간편 공식은 그것을 동점 없는 경우에 한해 다시 쓴 것일 뿐이다.
 
 ---
 
@@ -132,32 +305,76 @@ Spearman rho       = 0.8363
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 회귀직선을 얹은 산점도
+**보기 4.** <span class="diff easy" title="쉬움"></span> 회귀직선을 얹어 읽기. 같은 자료에 OLS 직선을 겹쳐 그린다.
+
+**(1)** 그림의 직선은 $y = 0.76x + 6.78$이다. 자료를 만들 때 쓴 참 직선은 $y = 0.8x + 5$였다. 어긋남을 어떻게 설명해야 하는가.
+
+**(2)** 상관 $r = 0.822$와 이 직선의 기울기 $0.76$은 서로 어떤 관계인가. 그림에서 둘을 각각 어디서 읽는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 상관계수는 숫자 하나일 뿐이므로 반드시 그림과 함께 본다.
-slope, intercept, _, _, _ = stats.linregress(x, y)
+    **(1) 표집 변동이다.** OLS 기울기의 표준오차는
 
-fig, ax = plt.subplots(figsize=(8, 5))
-ax.scatter(x, y, alpha=0.6, edgecolors='k', linewidths=0.3)
-x_line = np.array([x.min(), x.max()])
-ax.plot(x_line, intercept + slope * x_line, 'r-', linewidth=2,
-        label=f'OLS: y = {slope:.2f}x + {intercept:.2f}')
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_title(f'Pearson r = {r_pearson:.3f}')
-ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    $$
+    \operatorname{SE}(\hat\beta) = \frac{\sigma}{\sigma_X \sqrt{n}} = \frac{8}{14.4338 \times \sqrt{120}} = 0.0506
+    $$
 
-![세 상관계수의 비교](./img/correlation_analysis_92.png)
+    이므로 $0.7622$는 참값 $0.8$에서 $0.75$ 표준오차 떨어져 있다. 절편의 표준오차는 더 크다. 절편은 $x = 0$에서의 값인데 자료가 $x \in [10, 60]$에만 있으므로 **외삽**이고, 기울기가 조금만 기울어도 절편이 크게 흔들린다. 여기서는 $6.78$ 대 $5$다.
 
-산점도에 세 계수를 함께 적어 두면 어떤 모양에서 값이 갈리는지 볼 수 있다.
+    **(2) 둘은 한 식으로 묶여 있다.** OLS 기울기는
+
+    $$
+    \hat\beta = \frac{\sum_i (x_i-\bar x)(y_i-\bar y)}{\sum_i (x_i-\bar x)^2}
+    = r \cdot \frac{s_y}{s_x}
+    $$
+
+    이다. **$r$는 단위가 없고 $\hat\beta$는 단위가 있다.** 그래서 $r$는 그림을 가로세로로 늘였다 줄여도 그대로이지만 기울기는 바뀐다. 그림에서 $r$를 읽는 자리는 **점들이 직선 둘레에 얼마나 몰려 있는가**이고, 기울기를 읽는 자리는 **직선이 얼마나 가파른가**다.
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    # 상관계수는 숫자 하나일 뿐이므로 반드시 그림과 함께 본다.
+    slope, intercept, _, _, _ = stats.linregress(x, y)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.scatter(x, y, alpha=0.6, edgecolors='k', linewidths=0.3)
+    x_line = np.array([x.min(), x.max()])
+    ax.plot(x_line, intercept + slope * x_line, 'r-', linewidth=2,
+            label=f'OLS: y = {slope:.2f}x + {intercept:.2f}')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_title(f'Pearson r = {r_pearson:.3f}')
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+
+    # 그림에서 읽을 수치를 찍어 둔다.
+    sx, sy = x.std(ddof=1), y.std(ddof=1)
+    print(f"기울기 {slope:.4f}  =  r * s_y/s_x = {r_pearson:.4f} * {sy:.4f}/{sx:.4f} = {r_pearson * sy / sx:.4f}")
+    print(f"절편 {intercept:.4f}   (참값: 기울기 0.8, 절편 5)")
+    print(f"SE(beta) = sigma/(sigma_X sqrt(n)) = {8 / (np.sqrt(50 ** 2 / 12) * np.sqrt(n)):.4f}, "
+          f"z = {(slope - 0.8) / (8 / (np.sqrt(50 ** 2 / 12) * np.sqrt(n))):+.3f}")
+    print(f"r^2 = {r_pearson ** 2:.4f}   잔차 표준편차 = {np.std(y - (intercept + slope * x), ddof=2):.4f}  (참값 8)")
+    ```
+
+    출력:
+
+    ```
+    기울기 0.7622  =  r * s_y/s_x = 0.8221 * 13.8062/14.8914 = 0.7622
+    절편 6.7816   (참값: 기울기 0.8, 절편 5)
+    SE(beta) = sigma/(sigma_X sqrt(n)) = 0.0506, z = -0.748
+    r^2 = 0.6758   잔차 표준편차 = 7.8939  (참값 8)
+    ```
+
+    ![세 상관계수의 비교](./img/correlation_analysis_92.png)
+
+    $\hat\beta = r \cdot s_y/s_x$가 소수 넷째 자리까지 맞고, 기울기의 어긋남 $-0.748$ 표준오차도 표집 변동으로 설명된다. 잔차 표준편차 $7.89$가 참 잡음 $8$과 맞는 것도 함께 확인된다.
+
+    그림에서 **$r^2 = 0.676$이 눈으로 읽히는 자리**를 짚어 두자. $y$의 흩어짐 $13.81$ 가운데 직선이 설명하는 몫이 $67.6\%$이고 남은 것이 $\sqrt{1-r^2} \times 13.81 = 7.86$이다. 그림에서 $x = 40$ 둘레의 점들이 세로로 $\pm 15.7$쯤 퍼져 있는 것이 그 $2\sigma$ 폭이다. **$r = 0.82$는 "거의 직선"이 아니다.** 직선 둘레의 띠가 눈에 보일 만큼 두껍다.
+
+    그림의 제목이 Pearson $r$만 적고 있다는 점도 짚을 만하다. 보기 2에서 본 대로 같은 자료의 $\tau$는 $0.642$인데, 그 수를 모르는 독자가 이 산점도만 보고 $\tau$를 가늠할 길은 없다. **한 그림에 한 계수만 적으면 나머지 둘은 그림에서 사라진다.**
 
 ---
 

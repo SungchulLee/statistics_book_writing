@@ -18,29 +18,107 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 상관 구조를 가진 자료 만들기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 섞는 비율에서 상관으로. 위 구성식에서 $z_1, z_2, \varepsilon, \varepsilon'$은 모두 독립인 표준정규이다.
+
+**(1)** 네 변수의 모집단 상관행렬을 손으로 구하시오. $\rho_{12}$가 섞는 비율 $0.7$과 같은가.
+
+**(2)** $n = 200$짜리 표본을 만들어 (1)의 답과 맞는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-np.random.seed(7)
-n = 200
+    **(1) 해석적으로.** 각 변수가 독립인 표준정규의 일차결합이므로 분산과 공분산이 계수만으로 결정된다. $\operatorname{Var}(z_1) = \operatorname{Var}(z_2) = \operatorname{Var}(\varepsilon) = 1$이고 서로 독립이므로
 
-# 공통 요인 z1 을 섞는 정도를 달리해 상관 구조를 만든다.
-# X2 는 X1 과 강한 양, X3 은 X1 과 중간 음, X4 는 어느 것과도 무관하다.
-z1 = np.random.randn(n)
-z2 = np.random.randn(n)
+    $$
+    \operatorname{Var}(x_1) = 1,
+    \quad
+    \operatorname{Var}(x_2) = 0.7^2 + 0.3^2 = 0.58,
+    \quad
+    \operatorname{Var}(x_3) = 0.5^2 + 0.8^2 = 0.89,
+    \quad
+    \operatorname{Var}(x_4) = 1
+    $$
 
-x1 = z1
-x2 = 0.7 * z1 + 0.3 * z2
-x3 = -0.5 * z1 + np.random.randn(n) * 0.8
-x4 = np.random.randn(n)
+    이다. 공분산은 **공유하는 원천의 계수곱만** 남는다. $x_1$과 $x_2$는 $z_1$을 공유하므로
 
-data = np.column_stack([x1, x2, x3, x4])
-labels = ['X1', 'X2', 'X3', 'X4']
-```
+    $$
+    \operatorname{Cov}(x_1, x_2) = 0.7,
+    \qquad
+    \operatorname{Cov}(x_1, x_3) = -0.5,
+    \qquad
+    \operatorname{Cov}(x_2, x_3) = 0.7 \times (-0.5) = -0.35
+    $$
+
+    이고, $x_4$는 아무 원천도 공유하지 않으므로 나머지 셋과의 공분산이 모두 0이다. 각각을 표준편차의 곱으로 나누면
+
+    $$
+    \rho_{12} = \frac{0.7}{\sqrt{0.58}} = 0.9191,
+    \qquad
+    \rho_{13} = \frac{-0.5}{\sqrt{0.89}} = -0.5300,
+    \qquad
+    \rho_{23} = \frac{-0.35}{\sqrt{0.58}\sqrt{0.89}} = -0.4871
+    $$
+
+    이다.
+
+    **$\rho_{12}$는 $0.7$이 아니다.** 섞는 비율 $0.7$은 공분산이지 상관이 아니며, $x_2$의 표준편차 $\sqrt{0.58} = 0.7616$으로 나누는 순간 $0.9191$로 올라간다. $x_2$가 $z_1$에 실어 준 분산이 $0.49$로 전체 $0.58$의 $84\%$나 되기 때문이다. **계수를 상관으로 읽는 것이 이런 자료에서 가장 흔한 실수다.**
+
+    **(2) 수치적으로.** 표본을 만들어 (1)의 행렬과 나란히 놓는다.
+
+    ```python
+    import numpy as np
+
+    np.random.seed(7)
+    n = 200
+
+    # 공통 요인 z1 을 섞는 정도를 달리해 상관 구조를 만든다.
+    # X2 는 X1 과 강한 양, X3 은 X1 과 중간 음, X4 는 어느 것과도 무관하다.
+    z1 = np.random.randn(n)
+    z2 = np.random.randn(n)
+
+    x1 = z1
+    x2 = 0.7 * z1 + 0.3 * z2
+    x3 = -0.5 * z1 + np.random.randn(n) * 0.8
+    x4 = np.random.randn(n)
+
+    data = np.column_stack([x1, x2, x3, x4])
+    labels = ['X1', 'X2', 'X3', 'X4']
+
+    # (1) 에서 손으로 구한 모집단 상관행렬
+    s2, s3 = np.sqrt(0.58), np.sqrt(0.89)
+    theory = np.array([
+        [1.0,        0.7 / s2,          -0.5 / s3,          0.0],
+        [0.7 / s2,   1.0,               -0.35 / (s2 * s3),  0.0],
+        [-0.5 / s3, -0.35 / (s2 * s3),   1.0,               0.0],
+        [0.0,        0.0,                0.0,               1.0],
+    ])
+
+    sample = np.corrcoef(data, rowvar=False)
+
+    print("쌍      이론      표본      SE      z")
+    for i in range(4):
+        for j in range(i + 1, 4):
+            rho, r = theory[i, j], sample[i, j]
+            se = (1 - rho ** 2) / np.sqrt(n)   # 표본상관의 표준오차
+            print(f"{labels[i]}-{labels[j]}  {rho:+.4f}  {r:+.4f}  {se:.4f}  {(r - rho) / se:+.3f}")
+    ```
+
+    출력:
+
+    ```
+    쌍      이론      표본      SE      z
+    X1-X2  +0.9191  +0.9192  0.0110  +0.001
+    X1-X3  -0.5300  -0.5115  0.0508  +0.365
+    X1-X4  +0.0000  -0.0156  0.0707  -0.220
+    X2-X3  -0.4871  -0.4688  0.0539  +0.339
+    X2-X4  +0.0000  +0.0272  0.0707  +0.384
+    X3-X4  +0.0000  +0.0295  0.0707  +0.417
+    ```
+
+    여섯 쌍 모두 유도한 값과 맞는다. 가장 크게 어긋난 $X_3$–$X_4$조차 표준오차의 $0.42$배이고, $X_1$–$X_2$는 $+0.9191$ 대 $+0.9192$로 소수 넷째 자리에서 갈린다.
+
+    표준오차 $\operatorname{SE}(r) \approx (1-\rho^2)/\sqrt{n}$이 $\rho$에 따라 크게 다르다는 점을 눈여겨볼 만하다. $\rho = 0.9191$에서는 $0.0110$인데 $\rho = 0$에서는 $0.0707$로 여섯 배가 넘는다. **강한 상관일수록 정밀하게 추정된다.** 그래서 "$-0.0156$은 0이 아니다"라고 말할 수 없는 것이다.
 
 ---
 
@@ -56,15 +134,64 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 상관행렬
+**보기 2.** <span class="diff easy" title="쉬움"></span> 상관행렬이 담은 것과 `rowvar` 함정. 보기 1의 `data`(모양 $200 \times 4$)를 이어받는다.
+
+**(1)** $4 \times 4$ 상관행렬의 칸은 16개다. 그중 자유로운 수는 몇 개이며 대각합은 얼마인가.
+
+**(2)** `np.corrcoef(data)`를 `rowvar` 없이 부르면 어떤 행렬이 나오는가. 왜 이 실수가 잘 드러나지 않는가.
 
 </div>
 
-```python
-# rowvar=False 는 "행이 관측, 열이 변수"라는 뜻이다. 기본값은 그 반대이므로
-# 자료행렬을 그대로 넣으면 엉뚱한 행렬이 나온다.
-corr_matrix = np.corrcoef(data, rowvar=False)
-```
+??? success "풀이"
+
+    **(1) 해석적으로.** 상관행렬은 대칭($R_{ij} = R_{ji}$)이고 대각이 모두 1이다. 그러므로 자유로운 수는 위쪽 삼각형의
+
+    $$
+    \binom{4}{2} = \frac{4 \times 3}{2} = 6
+    $$
+
+    개뿐이고 나머지 10칸은 되풀이다. 대각이 전부 1이므로 대각합도 곧바로 나온다.
+
+    $$
+    \operatorname{tr}(\mathbf{R}) = \sum_{i=1}^{4} R_{ii} = 4
+    $$
+
+    대각합은 고윳값의 합이기도 하다. 변수 수 $k$가 무엇이든 $\sum_i \lambda_i = k$로 고정되어 있으므로, **상관이 강해진다는 것은 고윳값이 몇 개로 쏠린다는 뜻**이지 총량이 늘어난다는 뜻이 아니다.
+
+    **(2) `rowvar`의 기본값은 `True`**이고 그것은 "**행이 변수**, 열이 관측"이라는 뜻이다. $200 \times 4$ 자료를 그대로 넣으면 넘파이는 관측 200개를 변수로 읽어 $200 \times 200$ 행렬을 내놓는다. 각 성분은 변수 사이의 상관이 아니라 **관측끼리 네 좌표를 견준 상관**이다.
+
+    이 실수가 드러나지 않는 까닭은 결과가 멀쩡해 보이기 때문이다. 대각은 1, 성분은 $[-1, 1]$ 안, 대칭까지 그대로여서 상관행렬의 겉모습을 모두 갖추고 있다.
+
+    ```python
+    # rowvar=False 는 "행이 관측, 열이 변수"라는 뜻이다. 기본값은 그 반대이므로
+    # 자료행렬을 그대로 넣으면 엉뚱한 행렬이 나온다.
+    corr_matrix = np.corrcoef(data, rowvar=False)
+
+    print(f"rowvar=False : {corr_matrix.shape}")
+    print(f"대각합       : {np.trace(corr_matrix):.1f}")
+    print(f"고윳값       : {np.round(np.linalg.eigvalsh(corr_matrix)[::-1], 4)}")
+
+    wrong = np.corrcoef(data)          # 기본값 rowvar=True
+    print(f"\nrowvar 생략  : {wrong.shape}")
+    print(f"대각 성분    : {wrong[0, 0]:.1f}, 성분 범위 [{wrong.min():.2f}, 1.00], 대칭 {np.allclose(wrong, wrong.T)}")
+    print(f"계수(rank)   : {np.linalg.matrix_rank(wrong)}")
+    ```
+
+    출력:
+
+    ```
+    rowvar=False : (4, 4)
+    대각합       : 4.0
+    고윳값       : [2.2914 1.0035 0.6266 0.0786]
+
+    rowvar 생략  : (200, 200)
+    대각 성분    : 1.0, 성분 범위 [-1.00, 1.00], 대칭 True
+    계수(rank)   : 3
+    ```
+
+    대각합이 $4.0$으로 (1)의 유도와 맞고, 고윳값 넷을 더해도 $2.2914 + 1.0035 + 0.6266 + 0.0786 = 4.0001$이다. 가장 큰 고윳값 $2.2914$가 전체의 $57\%$를 차지하는데, 이것이 $X_1, X_2, X_3$에 공통으로 실린 $z_1$ 한 축이다. 이론 상관행렬로 같은 계산을 하면 $2.3132$이니 표본값이 잘 맞는다.
+
+    **잘못 부른 쪽을 알아보는 단서는 모양과 계수다.** $200 \times 200$인데 계수가 3밖에 되지 않는다. 좌표가 넷뿐인 벡터를 중심화해 견주었으니 자유도가 $4 - 1 = 3$으로 떨어진 것이다. 성분 값만 훑어서는 알 수 없고, `.shape`를 찍어 보아야 한다.
 
 ---
 
@@ -74,40 +201,67 @@ corr_matrix = np.corrcoef(data, rowvar=False)
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 상관 열지도
+**보기 3.** <span class="diff easy" title="쉬움"></span> 열지도를 그려 읽기. 보기 2의 `corr_matrix`를 열지도로 그린다.
+
+**(1)** 그려 보고, 색만 보고 네 변수의 관계를 읽어 내시오.
+
+**(2)** 16칸 가운데 **가장 진한 색**을 차지한 것은 무엇이며 거기에 정보가 있는가. 이 그림이 **가리는 것**은 무엇인가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 발산형 색지도를 쓰고 vmin/vmax 를 -1 과 1 로 못박는다. 이래야 흰색이
-# 정확히 0 에 놓여, 색만 보고도 부호와 세기를 읽을 수 있다.
-k = data.shape[1]
-fig, ax = plt.subplots(figsize=(6, 5))
-im = ax.imshow(corr_matrix, cmap='RdBu_r', vmin=-1, vmax=1)
-ax.set_xticks(range(k))
-ax.set_yticks(range(k))
-ax.set_xticklabels(labels)
-ax.set_yticklabels(labels)
+    유도할 답이 있는 문제가 아니다. **그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다.
 
-for i in range(k):
-    for j in range(k):
-        ax.text(j, i, f'{corr_matrix[i, j]:.2f}',
-                ha='center', va='center', fontsize=11,
-                color='white' if abs(corr_matrix[i, j]) > 0.5 else 'black')
+    ```python
+    import matplotlib.pyplot as plt
 
-fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-ax.set_title('Correlation Heatmap')
-plt.tight_layout()
-plt.show()
-```
+    # 발산형 색지도를 쓰고 vmin/vmax 를 -1 과 1 로 못박는다. 이래야 흰색이
+    # 정확히 0 에 놓여, 색만 보고도 부호와 세기를 읽을 수 있다.
+    k = data.shape[1]
+    fig, ax = plt.subplots(figsize=(6, 5))
+    im = ax.imshow(corr_matrix, cmap='RdBu_r', vmin=-1, vmax=1)
+    ax.set_xticks(range(k))
+    ax.set_yticks(range(k))
+    ax.set_xticklabels(labels)
+    ax.set_yticklabels(labels)
 
-![상관 열지도](./img/corr_viz_58.png)
+    for i in range(k):
+        for j in range(k):
+            ax.text(j, i, f'{corr_matrix[i, j]:.2f}',
+                    ha='center', va='center', fontsize=11,
+                    color='white' if abs(corr_matrix[i, j]) > 0.5 else 'black')
 
-열지도를 보면 $X_1$과 $X_2$가 강한 양의 상관(진한 빨강), $X_1$과 $X_3$이 약한 음의 상관(연한 파랑)을 가지며 $X_4$는 사실상 어느 변수와도 무상관임이 즉시 드러난다.
+    fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+    ax.set_title('Correlation Heatmap')
+    plt.tight_layout()
+    plt.show()
 
-변수 쌍마다 산점도를 그려 놓으면 상관행렬의 숫자가 어떤 모양에서 나왔는지 확인할 수 있다.
+    # 그림에서 읽을 수치를 찍어 둔다.
+    off = corr_matrix[np.triu_indices(k, 1)]
+    print(f"비대각 6칸: {np.round(off, 4)}")
+    print(f"|r| < 0.05 인 칸 {np.sum(np.abs(off) < 0.05)}개, 그 범위 "
+          f"[{off[np.abs(off) < 0.05].min():+.4f}, {off[np.abs(off) < 0.05].max():+.4f}]")
+    print(f"가장 진한 비대각 칸 |r| = {np.abs(off).max():.4f}, 대각 칸 = 1.0000")
+    ```
+
+    출력:
+
+    ```
+    비대각 6칸: [ 0.9192 -0.5115 -0.0156 -0.4688  0.0272  0.0295]
+    |r| < 0.05 인 칸 3개, 그 범위 [-0.0156, +0.0295]
+    가장 진한 비대각 칸 |r| = 0.9192, 대각 칸 = 1.0000
+    ```
+
+    ![상관 열지도](./img/corr_viz_58.png)
+
+    **(1) 색이 말하는 것.** $X_1$–$X_2$ 칸이 거의 색막대 꼭대기의 진한 빨강이고 숫자가 $0.92$다. $X_1$–$X_3$과 $X_2$–$X_3$은 중간 세기의 파랑으로 $-0.51$, $-0.47$이니 $X_3$은 앞의 둘과 **반대로** 움직인다. $X_4$ 행과 열은 세 칸 모두 흰색에 가깝고 값이 $-0.02$, $0.03$, $0.03$이라 어느 변수와도 선형 관계가 없다. 보기 1에서 $X_4$를 아무 원천도 공유하지 않게 만들었으니 예상대로다.
+
+    **(2) 가장 진한 네 칸은 대각선이고 거기에는 정보가 없다.** $R_{ii} = 1$은 어떤 자료에서나 그렇다. 16칸 중 넷이 색막대의 양끝 색을 차지하고 앉아 있으면서 아무것도 말하지 않고, 대칭이라 아래 삼각형 6칸도 위 삼각형의 되풀이다. **읽을 거리가 있는 칸은 6개뿐인데 그림은 16칸을 쓴다.** 연습문제 2가 아래쪽 삼각형만 남기는 이유가 이것이다.
+
+    가리는 것은 둘이다. 첫째, **부호를 눈으로 가려낼 수 없는 구간이 있다.** $X_1$–$X_4$의 $-0.0156$과 $X_3$–$X_4$의 $+0.0295$는 부호가 반대인데 둘 다 흰색이다. 색의 세기가 $|r|$에 비례하므로 색 범위의 $1.6\%$와 $3.0\%$를 구별하라는 요구인 셈인데, 눈으로는 불가능하다. 다만 이 경우에는 숨겨도 좋다 — 셋 다 표준오차 $0.0707$ 안이라 참값이 0이기 때문이다.
+
+    둘째, **모양을 통째로 가린다.** 한 칸에 수 하나만 담으므로 $r = 0$이 "관계가 없다"인지 "직선 관계만 없다"인지 구별하지 못한다. 연습문제 1이 $x_5 = x_1^2$으로, 연습문제 4가 두 군집으로 같은 함정을 만든다. 둘 다 열지도에서는 흰 칸 하나로 보인다. 그래서 다음 보기의 산점도 행렬이 필요하다.
 
 ---
 
@@ -117,41 +271,87 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 산점도 행렬
+**보기 4.** <span class="diff easy" title="쉬움"></span> 산점도 행렬로 모양 보기. 같은 자료를 쌍별 산점도 격자로 그린다.
+
+**(1)** "$|r|$이 커질수록 점구름이 좁은 타원으로 조여든다"를 **수치로** 확인하시오. 자료를 표준화한 뒤 점구름의 긴 축과 짧은 축의 비는 얼마인가.
+
+**(2)** 이 그림의 대각선 칸은 다른 칸들과 세로축의 뜻이 다르다. 무엇이 어긋나 있는가.
 
 </div>
 
-```python
-# 열지도는 숫자 하나로 요약하지만 산점도 행렬은 관계의 모양을 보여 준다.
-# 상관계수가 같아도 모양이 다를 수 있으므로 둘을 함께 본다.
-# 대각선에는 그 변수 자신의 분포를 그린다.
-fig, axes = plt.subplots(k, k, figsize=(10, 10))
-for i in range(k):
-    for j in range(k):
-        ax = axes[i, j]
-        if i == j:
-            ax.hist(data[:, i], bins=20, edgecolor='k', alpha=0.7)
-        else:
-            ax.scatter(data[:, j], data[:, i], s=8, alpha=0.5)
-        if j == 0:
-            ax.set_ylabel(labels[i])
-        if i == k - 1:
-            ax.set_xlabel(labels[j])
-        if j != 0:
-            ax.set_yticklabels([])
-        if i != k - 1:
-            ax.set_xticklabels([])
+??? success "풀이"
 
-fig.suptitle('Scatter Matrix (Pair Plot)', fontsize=14, y=1.01)
-plt.tight_layout()
-plt.show()
-```
+    **(1) 축 비에는 닫힌 꼴이 있다.** 두 변수를 표준화하면 공분산행렬이 상관행렬 $\begin{pmatrix} 1 & r \\ r & 1 \end{pmatrix}$ 그 자체가 된다. 이 행렬의 고유벡터는 $(1,1)/\sqrt{2}$와 $(1,-1)/\sqrt{2}$이고 고윳값은
 
-![산점도 행렬](./img/corr_viz_89.png)
+    $$
+    \lambda_{\max} = 1 + |r|, \qquad \lambda_{\min} = 1 - |r|
+    $$
 
-$|r|$이 커질수록 점구름이 좁은 타원으로 조여든다.
+    이다. 점구름의 축 길이는 표준편차에 비례하므로 고윳값의 제곱근에 비례하고, 따라서
 
-산점도 행렬은 열지도가 보여주지 못하는 것들, 즉 비선형 관계, 이상점, 군집, 주변분포의 모양을 드러낸다.
+    $$
+    \frac{\text{긴 축}}{\text{짧은 축}} = \sqrt{\frac{1 + |r|}{1 - |r|}}
+    $$
+
+    이다. 이 비가 $|r|$에 대해 **매우 느리게** 움직인다는 점이 중요하다. $|r| = 0.03$이면 $1.03$, $|r| = 0.5$라야 $1.73$이다. 약한 상관은 눈에 거의 보이지 않는다.
+
+    **(2) 수치적으로.** 그림을 그리고 쌍마다 축 비를 재어 공식과 맞춰 본다.
+
+    ```python
+    # 열지도는 숫자 하나로 요약하지만 산점도 행렬은 관계의 모양을 보여 준다.
+    # 상관계수가 같아도 모양이 다를 수 있으므로 둘을 함께 본다.
+    # 대각선에는 그 변수 자신의 분포를 그린다.
+    fig, axes = plt.subplots(k, k, figsize=(10, 10))
+    for i in range(k):
+        for j in range(k):
+            ax = axes[i, j]
+            if i == j:
+                ax.hist(data[:, i], bins=20, edgecolor='k', alpha=0.7)
+            else:
+                ax.scatter(data[:, j], data[:, i], s=8, alpha=0.5)
+            if j == 0:
+                ax.set_ylabel(labels[i])
+            if i == k - 1:
+                ax.set_xlabel(labels[j])
+            if j != 0:
+                ax.set_yticklabels([])
+            if i != k - 1:
+                ax.set_xticklabels([])
+
+    fig.suptitle('Scatter Matrix (Pair Plot)', fontsize=14, y=1.01)
+    plt.tight_layout()
+    plt.show()
+
+    # 표준화한 점구름의 축 비를 직접 재어 공식과 맞춘다.
+    print("쌍      |r|      공식      주성분으로 잰 값")
+    for i, j in [(0, 1), (0, 2), (1, 2), (2, 3)]:
+        Z = np.column_stack([data[:, i], data[:, j]])
+        Z = (Z - Z.mean(axis=0)) / Z.std(axis=0, ddof=1)
+        lam = np.linalg.eigvalsh(np.cov(Z, rowvar=False))     # 오름차순
+        r = abs(corr_matrix[i, j])
+        print(f"{labels[i]}-{labels[j]}  {r:.4f}  {np.sqrt((1 + r) / (1 - r)):.4f}    "
+              f"{np.sqrt(lam[1] / lam[0]):.4f}")
+    ```
+
+    출력:
+
+    ```
+    쌍      |r|      공식      주성분으로 잰 값
+    X1-X2  0.9192  4.8724    4.8724
+    X1-X3  0.5115  1.7589    1.7589
+    X2-X3  0.4688  1.6629    1.6629
+    X3-X4  0.0295  1.0300    1.0300
+    ```
+
+    ![산점도 행렬](./img/corr_viz_89.png)
+
+    네 쌍 모두 공식과 주성분이 소수 넷째 자리까지 같다. 그림에서 $X_1$–$X_2$ 칸만 가는 띠로 보이고($4.87$배) $X_1$–$X_3$은 겨우 알아볼 만한 기울기이며($1.76$배) $X_3$–$X_4$는 둥근 구름($1.03$배)이라는 인상이 수치와 맞는다.
+
+    여기서 **열지도와 산점도 행렬이 서로 다른 눈금 위에 있다**는 것이 드러난다. 열지도의 색은 $r$에 **선형**이라 $-0.51$ 칸이 $0.92$ 칸의 절반쯤 되는 세기로 보인다. 그런데 모양으로 재면 $1.76$ 대 $4.87$이라 절반이 아니라 $36\%$다. 같은 자료를 두 그림이 다르게 과장한다. 어느 쪽도 틀리지 않았고, **$r$은 색으로 읽고 모양은 산점도로 읽어야 한다**는 뜻이다.
+
+    **대각선 칸의 세로축은 도수다.** $(1,1)$ 칸은 $X_1$의 히스토그램이므로 세로축이 "몇 개인가"인데, 코드가 `j == 0`일 때 `set_ylabel(labels[i])`를 붙이므로 그 칸에도 `X1`이라는 세로축 이름이 달린다. 왼쪽 위 칸의 세로 눈금이 $0$에서 $22$까지 올라가는 것이 그 흔적이다. 같은 행의 나머지 세 칸은 세로축이 정말 $X_1$이고 범위가 $-2$에서 $2$이니 **한 행 안에서 세로축이 두 가지 뜻으로 쓰인다.** 산점도 행렬의 고질적인 결함이고, 대각선에 이름만 적거나 밀도곡선을 그리는 구현이 많은 이유다.
+
+    이런 결함을 감안해도 산점도 행렬은 열지도가 못 보여 주는 셋을 보여 준다. **비선형 관계**(연습문제 1의 포물선), **군집**(연습문제 4의 두 덩어리), **주변분포의 모양**(대각선의 치우침과 이상점)이다.
 
 ---
 

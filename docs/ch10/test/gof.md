@@ -140,160 +140,168 @@ $$
 
 ---
 
-<div class="exbox" markdown>
-
-**보기 1.** <span class="diff easy" title="쉬움"></span> 가위바위보
-
-</div>
-
 > **출처**: [Khan Academy — Goodness of Fit Example](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-goodness-fit/v/goodness-of-fit-example)
 
-Kenny는 가위바위보를 자주 하는데 이기고 비기고 지는 빈도가 서로 같으리라 기대한다. 그런데 자신의 경기가 이 기대 패턴을 따르지 않는다는 의심이 들기 시작했다. 이를 조사하려고 Kenny는 24판을 무작위로 뽑아 결과를 기록했다:
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 가위바위보. Kenny는 가위바위보를 자주 하는데 이기고 비기고 지는 빈도가 서로 같으리라 기대한다. 그런데 자신의 경기가 이 기대 패턴을 따르지 않는다는 의심이 들기 시작했다. 24판을 무작위로 뽑아 결과를 기록했다.
 
 |                 | 승 | 패 | 무 |
 |:---------------:|:---:|:----:|:---:|
 | 판 수 | 4   | 13   | 7   |
 
-Kenny는 이 기록으로 $\chi^2$ 적합도 검정을 수행하여 자신의 결과 분포가 균등분포에서 벗어나는지 알아보려 한다. 검정통계량과 p-값은 얼마인가?
+**(1)** 균등분포 아래의 기대도수를 구하고 $\chi^2$ 을 **유리수로** 구하시오. 기대도수가 모두 같을 때 쓸 수 있는 간편한 꼴도 함께 적으시오.
 
-#### 풀이
+**(2)** 자유도와 p-값을 구해 $\alpha = 0.05$ 에서 판정하시오. 자유도 2 에서는 p-값이 **닫힌 꼴**로 적힌다.
 
-**1단계: 가설 설정**
+**(3)** 정의대로 계산하는 코드와 `scipy.stats.chisquare` 가 같은 값을 주는지 확인하시오.
 
-- **귀무가설** $H_0$: 결과(승, 패, 무)가 똑같이 그럴듯하다. 즉 균등분포를 따른다.
-- **대립가설** $H_1$: 결과가 균등분포를 따르지 않는다.
+</div>
 
-**2단계: 관측도수와 기대도수**
+??? success "풀이"
 
-| 결과  | 관측 | 기대 | $(O_i - E_i)^2 / E_i$       |
-|:--------:|:--------:|:--------:|:----------------------------:|
-| 승      | 4        | 8        | $(4 - 8)^2 / 8 = 2$         |
-| 패     | 13       | 8        | $(13 - 8)^2 / 8 = 3.125$    |
-| 무      | 7        | 8        | $(7 - 8)^2 / 8 = 0.125$     |
-| $\chi^2$ |          |          | 5.25                         |
+    **가설.** $H_0$ 은 세 결과(승·패·무)가 똑같이 그럴듯하다는 것, $H_1$ 은 그렇지 않다는 것이다.
 
-전체 판 수: 24. 결과가 고르게 분포한다면 각 결과의 기대도수는 $24 / 3 = 8$이다.
+    **(1) 기대도수와 통계량.** 전체 $n = 24$ 판이 세 결과에 고르게 나뉜다면 각 결과의 기대도수는 $E_i = n/k = 24/3 = 8$ 이다.
 
-**3단계: $\chi^2$ 검정통계량 계산**
+    $$
+    \begin{array}{c|ccc|c}
+     & \text{승} & \text{패} & \text{무} & \text{합} \\ \hline
+    \text{관측 } O_i & 4 & 13 & 7 & 24 \\
+    \text{기대 } E_i & 8 & 8 & 8 & 24 \\
+    (O_i-E_i)^2/E_i & 16/8 = 2 & 25/8 = 3.125 & 1/8 = 0.125 & 21/4
+    \end{array}
+    $$
 
-$$
-\chi^2 = \frac{(4 - 8)^2}{8} + \frac{(13 - 8)^2}{8} + \frac{(7 - 8)^2}{8} = 5.25
-$$
+    $$
+    \chi^2 = \frac{(4-8)^2}{8} + \frac{(13-8)^2}{8} + \frac{(7-8)^2}{8}
+    = \frac{16+25+1}{8} = \frac{42}{8} = \frac{21}{4} = 5.25
+    $$
 
-**4단계: 자유도**
+    분모가 모두 같으므로 **분자를 먼저 다 더하고 한 번만 나누면 된다.** 이것을 식으로 정리해 두면 손계산이 훨씬 가볍다. $E_i = n/k$ 일 때
 
-$$
-\text{df} = k - 1 = 3 - 1 = 2
-$$
+    $$
+    \chi^2 = \frac{k}{n}\sum_{i=1}^k \left(O_i - \frac nk\right)^{\!2}
+    = \frac kn \left(\sum_i O_i^2 - \frac{2n}{k}\sum_i O_i + k\cdot\frac{n^2}{k^2}\right)
+    = \frac kn \sum_{i=1}^k O_i^2 - n
+    $$
 
-**5단계: p-값 구하기**
+    이다($\sum_i O_i = n$ 을 썼다). 확인해 보면 $\sum O_i^2 = 16 + 169 + 49 = 234$ 이므로
 
-자유도 2인 카이제곱 분포에서 $\chi^2 = 5.25$의 p-값은 근사적으로
+    $$
+    \chi^2 = \frac{3}{24}\times 234 - 24 = 29.25 - 24 = 5.25
+    $$
 
-$$
-p \approx 0.0725
-$$
+    로 같다. **관측도수의 제곱합만 있으면 된다.**
 
-이다.
+    **(2) 자유도와 p-값.** 범주가 셋이고 도수의 합이 24 로 묶여 있으므로 $\text{df} = k - 1 = 2$ 다.
 
-**결론**: p-값이 약 0.0725이므로 Kenny가 유의수준 0.05에서 검정한다면 귀무가설을 기각하지 못한다. 결과의 분포가 균등분포에서 유의하게 벗어난다는 강한 증거는 없다는 뜻이다.
+    자유도 2 는 특별하다. $\chi^2_2$ 의 밀도가 $\tfrac12 e^{-x/2}$, 곧 평균 2 인 지수분포라서 꼬리확률이 바로 적분된다.
 
-#### Python 구현 (`scipy.stats.chisquare` 없이)
+    $$
+    p = P(\chi^2_2 \ge 5.25) = \int_{5.25}^\infty \tfrac12 e^{-x/2}\,dx = e^{-5.25/2} = e^{-21/8} = 0.0724398
+    $$
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+    $p = 0.0724 > 0.05$ 이므로 귀무가설을 **기각하지 못한다.** 세 결과의 분포가 균등분포에서 유의하게 벗어난다는 증거는 없다. 다만 $0.0724$ 는 $0.05$ 에서 멀지 않다. 24 판은 너무 적다. 같은 비율로 72 판을 모았다면 $\chi^2$ 이 세 배인 $15.75$ 가 되어 $p = e^{-7.875} = 0.00038$ 이 된다.
 
-# 관측도수와, 고르게 나온다고 볼 때의 기대도수
-observed_counts = np.array([4, 13, 7])
-expected_counts = np.ones(3) * observed_counts.mean()
-degrees_of_freedom = observed_counts.shape[0] - 1
+    **(3) 수치적으로.** 먼저 정의대로 계산한다.
 
-# 검정통계량과 p-값 계산
-chi_square_statistic = np.sum((observed_counts - expected_counts) ** 2 / expected_counts)
-p_value = stats.chi2(degrees_of_freedom).sf(chi_square_statistic)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
 
-# 결과 출력
-print(f"Chi-square Statistic = {chi_square_statistic:.4f}")
-print(f"p-value = {p_value:.4f}\n")
+    # 관측도수와, 고르게 나온다고 볼 때의 기대도수
+    observed_counts = np.array([4, 13, 7])
+    expected_counts = np.ones(3) * observed_counts.mean()
+    degrees_of_freedom = observed_counts.shape[0] - 1
 
-# 그림 준비
-fig, ax = plt.subplots(figsize=(12, 4))
+    # 검정통계량과 p-값 계산
+    chi_square_statistic = np.sum((observed_counts - expected_counts) ** 2 / expected_counts)
+    p_value = stats.chi2(degrees_of_freedom).sf(chi_square_statistic)
 
-# 통계량까지의 왼쪽 구간
-x_left = np.linspace(0, chi_square_statistic, 100)
-y_left = stats.chi2(degrees_of_freedom).pdf(x_left)
-ax.plot(x_left, y_left, color='b', linewidth=3)
+    # 결과 출력
+    print(f"Chi-square Statistic = {chi_square_statistic:.4f}")
+    print(f"p-value = {p_value:.4f}\n")
 
-# 왼쪽을 칠한다. 기각하지 않는 쪽이다.
-x_fill_left = np.concatenate([[0], x_left, [chi_square_statistic], [0]])
-y_fill_left = np.concatenate([[0], y_left, [0], [0]])
-ax.fill(x_fill_left, y_fill_left, color='b', alpha=0.1)
+    # 그림 준비
+    fig, ax = plt.subplots(figsize=(12, 4))
 
-# 통계량 오른쪽 꼬리
-x_right = np.linspace(chi_square_statistic, 20, 100)
-y_right = stats.chi2(degrees_of_freedom).pdf(x_right)
-ax.plot(x_right, y_right, color='r', linewidth=3)
+    # 통계량까지의 왼쪽 구간
+    x_left = np.linspace(0, chi_square_statistic, 100)
+    y_left = stats.chi2(degrees_of_freedom).pdf(x_left)
+    ax.plot(x_left, y_left, color='b', linewidth=3)
 
-# 오른쪽을 칠한다. 이 넓이가 곧 p-값이다.
-x_fill_right = np.concatenate([[chi_square_statistic], x_right, [20], [chi_square_statistic]])
-y_fill_right = np.concatenate([[0], y_right, [0], [0]])
-ax.fill(x_fill_right, y_fill_right, color='r', alpha=0.1)
+    # 왼쪽을 칠한다. 기각하지 않는 쪽이다.
+    x_fill_left = np.concatenate([[0], x_left, [chi_square_statistic], [0]])
+    y_fill_left = np.concatenate([[0], y_left, [0], [0]])
+    ax.fill(x_fill_left, y_fill_left, color='b', alpha=0.1)
 
-# 화살표로 p-값을 가리킨다
-annotation_xy = ((12.5 + 15.0) / 2, 0.01)
-annotation_xytext = (16.5, 0.10)
-arrow_properties = dict(color='k', width=0.2, headwidth=8)
-ax.annotate(f'p-value = {p_value:.02%}', annotation_xy, xytext=annotation_xytext,
-            fontsize=15, arrowprops=arrow_properties)
+    # 통계량 오른쪽 꼬리
+    x_right = np.linspace(chi_square_statistic, 20, 100)
+    y_right = stats.chi2(degrees_of_freedom).pdf(x_right)
+    ax.plot(x_right, y_right, color='r', linewidth=3)
 
-# 축과 테두리를 다듬는다
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.spines['bottom'].set_position("zero")
-ax.spines['left'].set_position("zero")
+    # 오른쪽을 칠한다. 이 넓이가 곧 p-값이다.
+    x_fill_right = np.concatenate([[chi_square_statistic], x_right, [20], [chi_square_statistic]])
+    y_fill_right = np.concatenate([[0], y_right, [0], [0]])
+    ax.fill(x_fill_right, y_fill_right, color='r', alpha=0.1)
 
-plt.show()
-```
+    # 화살표로 p-값을 가리킨다
+    annotation_xy = ((12.5 + 15.0) / 2, 0.01)
+    annotation_xytext = (16.5, 0.10)
+    arrow_properties = dict(color='k', width=0.2, headwidth=8)
+    ax.annotate(f'p-value = {p_value:.02%}', annotation_xy, xytext=annotation_xytext,
+                fontsize=15, arrowprops=arrow_properties)
 
-출력:
+    # 축과 테두리를 다듬는다
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['bottom'].set_position("zero")
+    ax.spines['left'].set_position("zero")
 
-```
-Chi-square Statistic = 5.2500
-p-value = 0.0724
-```
+    plt.show()
+    ```
 
-![카이제곱 분포와 p-값](./img/gof_199.png)
+    출력:
 
-#### Python 구현 (`scipy.stats.chisquare` 사용)
+    ```
+    Chi-square Statistic = 5.2500
+    p-value = 0.0724
+    ```
 
-```python
-from scipy import stats
+    ![카이제곱 분포와 p-값](./img/gof_199.png)
 
-# 결과별 관측도수: 승, 패, 무
-observed_frequencies = [4, 13, 7]
+    **이제 `scipy` 로 같은 일을 한다.**
 
-# 세 결과가 고르게 나온다고 볼 때의 기대도수
-total_games = sum(observed_frequencies)
-expected_frequencies = [total_games / 3] * 3
+    ```python
+    from scipy import stats
 
-# 카이제곱 적합도 검정
-chi_square_statistic, p_value = stats.chisquare(f_obs=observed_frequencies, f_exp=expected_frequencies)
+    # 결과별 관측도수: 승, 패, 무
+    observed_frequencies = [4, 13, 7]
 
-# 결과 출력
-print(f"{chi_square_statistic = }")
-print(f"{p_value = }")
-```
+    # 세 결과가 고르게 나온다고 볼 때의 기대도수
+    total_games = sum(observed_frequencies)
+    expected_frequencies = [total_games / 3] * 3
 
-출력:
+    # 카이제곱 적합도 검정
+    chi_square_statistic, p_value = stats.chisquare(f_obs=observed_frequencies, f_exp=expected_frequencies)
 
-```
-chi_square_statistic = 5.25
-p_value = 0.07243975703425146
-```
+    # 결과 출력
+    print(f"{chi_square_statistic = }")
+    print(f"{p_value = }")
+    ```
 
-수동 계산과 정확히 같다.
+    출력:
+
+    ```
+    chi_square_statistic = 5.25
+    p_value = 0.07243975703425146
+    ```
+
+    `chisquare` 가 돌려준 `5.25` 와 `0.07243975703425146` 이 (1)·(2)의 손계산 $21/4$ 와 $e^{-21/8}$ 과 **표시된 모든 자리까지 같다.** 자유도 2 에서는 p-값에 특수함수가 전혀 쓰이지 않으므로 지수함수 한 번으로 끝난다는 것을 수치가 확인해 준다.
+
+    본문이 적은 $p \approx 0.0725$ 는 $0.0724398$ 을 소수 넷째 자리에서 올린 것이다. 셋째 자리까지는 $0.072$ 로 같다.
 
 ## 문제 B: 조작된 주사위?
 
@@ -326,40 +334,141 @@ p_value = 0.07243975703425146
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 범주별로 따로 검정하면 안 되는 이유
+**보기 2.** <span class="diff easy" title="쉬움"></span> 범주별로 따로 검정하면 안 되는 이유. 주사위를 60번 굴려 $(5, 7, 17, 14, 8, 9)$ 를 얻었다. 눈 3 이 17 번이나 나온 것이 눈에 띄므로 **그 눈 하나만** 놓고 일표본 비율 z-검정을 해 본다.
+
+**(1)** $H_0: p = 1/6$ 에 대한 z 통계량과 양측 p-값을 구하시오. 통계량은 무리수로 깔끔하게 적힌다.
+
+**(2)** 주사위가 공정할 때 **여섯 눈 중 적어도 하나**가 $\alpha = 0.05$ 에서 유의해질 확률은 얼마인가. 여섯 검정이 독립이라고 보면 얼마가 되고, 실제로는 왜 그 값과 다른가.
+
+**(3)** 그러므로 (1)의 p-값을 어떻게 읽어야 하는가.
 
 </div>
 
-```python
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def main():
-    p_0 = 1/6
-    p_hat = 17 / 60
-    n = 60
+    **(1) z 통계량.** $p_0 = 1/6$, $\hat p = 17/60$, $n = 60$ 이다. 귀무가설 아래의 표준오차는
 
-    # 눈 3 하나만 놓고 보는 일표본 비율 z-검정
-    statistic = (p_hat - p_0) / np.sqrt(p_0 * (1 - p_0) / n)
-    p_value = stats.norm().sf(abs(statistic)) * 2
+    $$
+    \operatorname{SE} = \sqrt{\frac{p_0(1-p_0)}{n}} = \sqrt{\frac{(1/6)(5/6)}{60}} = \sqrt{\frac{5}{2160}} = \sqrt{\frac{1}{432}} = \frac{1}{12\sqrt3}
+    $$
 
-    print(f"{statistic = :.02f}")
-    print(f"{p_value   = :.02%}")
+    이고 $\hat p - p_0 = 17/60 - 10/60 = 7/60$ 이므로
 
-if __name__ == "__main__":
-    main()
-```
+    $$
+    z = \frac{7/60}{1/(12\sqrt3)} = \frac{7 \cdot 12\sqrt3}{60} = \frac{7\sqrt3}{5} = 2.4248711
+    $$
 
-출력:
+    이다. 양측 p-값은 $2\bigl(1 - \Phi(2.4248711)\bigr) = 0.0153138$, 곧 $1.53\%$ 다. 이것만 보면 "유의하다" 고 말하고 싶어진다.
 
-```
-statistic = 2.42
-p_value   = 1.53%
-```
+    **(2) 여섯 번 보면 한 번은 걸린다.** 눈 $i$ 의 도수 $O_i$ 는 주변적으로 $\text{Bin}(60, 1/6)$ 이고 표준편차가 $\sqrt{60 \cdot \tfrac16 \cdot \tfrac56} = \sqrt{25/3} = 2.8868$ 이다. $\lvert z_i \rvert > 1.96$ 은
 
-이것이 주사위가 조작되었다는 충분한 증거일까?
+    $$
+    \lvert O_i - 10 \rvert > 1.96 \times 2.8868 = 5.6579
+    $$
 
-성급하다. 각 행에 대해 비슷한 검정을 할 수 있고, 행이 많으면 언젠가는 아주 작은 p-값을 보게 된다. 러시안 룰렛과 같아서, 계속하다 보면 주사위가 공정하더라도 조만간 아주 작은 p-값을 만나게 된다. 따라서 한 범주만 보는 검정으로 주사위가 조작되었다고 결론지을 수 없다. **모든 범주를 동시에** 고려하는 검정이 필요하다.
+    곧 $O_i \le 4$ 또는 $O_i \ge 16$ 을 뜻한다. 이항분포로 그 확률을 세면
+
+    $$
+    P(O_i \le 4) + P(O_i \ge 16) = 0.0540
+    $$
+
+    이다. 명목 유의수준 $0.05$ 보다 이미 조금 크다. 도수가 정수라 임계선이 칸 사이에 떨어지지 않기 때문이다.
+
+    이제 여섯 눈에 모두 같은 검정을 한다고 보고 **적어도 하나가 유의할 확률**을 센다. 여섯이 서로 독립이라면
+
+    $$
+    1 - (1-q)^6 = 1 - (1 - 0.0540)^6 = 0.2835,
+    \qquad q = 0.0540
+    $$
+
+    이고, 본페로니 상한은 $6q = 0.3242$ 다. 그런데 여섯 도수는 독립이 아니다. 합이 60 으로 묶여 있어 **음의 상관**을 가진다. 다항분포에서 $p_i = p_j = p$ 일 때
+
+    $$
+    \operatorname{corr}(O_i, O_j) = -\frac{p}{1-p} = -\frac{1/6}{5/6} = -0.2
+    $$
+
+    다. 한 눈이 많이 나오면 다른 눈은 적게 나와야 하는데, **양쪽검정에서는 "적게 나오는 것" 도 유의하다.** 그래서 "눈 $i$ 가 유의" 와 "눈 $j$ 가 유의" 는 서로 **함께 일어나기 쉬운** 사건이 되고, 합집합의 확률은 독립일 때보다 **작아진다.** 아래 모의가 $0.2726$ 을 주어 $0.2835$ 보다 작다.
+
+    **(3) 읽는 법.** $1.53\%$ 는 "눈 3 을 **미리** 정해 두고 검정했다면" 의 p-값이다. 그러나 눈 3 은 자료를 보고 고른 것이다. 가장 많이 나온 눈을 고르는 행위가 이미 여섯 번의 검정을 한 것과 같으므로, 실제 제1종 오류율은 $5\%$ 가 아니라 $27\%$ 다. 러시안 룰렛과 같아서 계속하다 보면 공정한 주사위에서도 조만간 작은 p-값을 만난다. **한 범주만 보는 검정으로 주사위가 조작되었다고 결론지을 수 없고, 모든 범주를 동시에 재는 검정이 필요하다.** 그것이 보기 3 의 적합도 검정통계량이다.
+
+    **(1)을 코드로 확인한다.**
+
+    ```python
+    import numpy as np
+    import scipy.stats as stats
+
+    def main():
+        p_0 = 1/6
+        p_hat = 17 / 60
+        n = 60
+
+        # 눈 3 하나만 놓고 보는 일표본 비율 z-검정
+        statistic = (p_hat - p_0) / np.sqrt(p_0 * (1 - p_0) / n)
+        p_value = stats.norm().sf(abs(statistic)) * 2
+
+        print(f"{statistic = :.02f}")
+        print(f"{p_value   = :.02%}")
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    statistic = 2.42
+    p_value   = 1.53%
+    ```
+
+    출력의 `2.42` 와 `1.53%` 가 (1)의 $7\sqrt3/5 = 2.4248711$ 과 $0.0153138$ 과 맞는다.
+
+    (2)를 모의로 확인한다. 공정한 주사위를 60번 굴리는 일을 20만 번 되풀이하면서, 여섯 눈 중 하나라도 $\lvert z_i \rvert > 1.96$ 이 되는 비율을 센다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    M = 200_000
+    n, k, p = 60, 6, 1 / 6
+    z_crit = stats.norm.ppf(0.975)
+
+    # 공정한 주사위를 60번 굴리는 일을 20만 번 되풀이한다.
+    X = rng.multinomial(n, [p] * k, size=M)
+    Z = np.abs(X - n * p) / np.sqrt(n * p * (1 - p))
+    any_sig = (Z > z_crit).any(axis=1).mean()
+
+    # 눈 하나만 보았을 때 유의해질 확률 q — 주변적으로는 이항분포다.
+    b = stats.binom(n, p)
+    q = b.cdf(4) + b.sf(15)
+
+    print(f"임계값  |O_i - 10| > {z_crit * np.sqrt(n * p * (1 - p)):.4f}"
+          f"   곧 O_i <= 4 또는 O_i >= 16")
+    print(f"눈 하나가 유의할 확률  q          {q:.4f}")
+    print(f"여섯이 독립이라면  1 - (1-q)^6    {1 - (1 - q) ** k:.4f}")
+    print(f"본페로니 상한      6q            {k * q:.4f}")
+    print(f"여섯 중 적어도 하나 (모의)        {any_sig:.4f}   "
+          f"오차 {np.sqrt(any_sig * (1 - any_sig) / M):.4f}")
+    print(f"corr(O_1, O_2)  모의 {np.corrcoef(X[:, 0], X[:, 1])[0, 1]:.4f}"
+          f"   이론 -p/(1-p) = {-p / (1 - p):.4f}")
+    ```
+
+    출력:
+
+    ```
+    임계값  |O_i - 10| > 5.6579   곧 O_i <= 4 또는 O_i >= 16
+    눈 하나가 유의할 확률  q          0.0540
+    여섯이 독립이라면  1 - (1-q)^6    0.2835
+    본페로니 상한      6q            0.3242
+    여섯 중 적어도 하나 (모의)        0.2726   오차 0.0010
+    corr(O_1, O_2)  모의 -0.1993   이론 -p/(1-p) = -0.2000
+    ```
+
+    손으로 구한 임계값 $5.6579$, 한 눈의 유의 확률 $0.0540$, 독립일 때의 $0.2835$, 본페로니 상한 $0.3242$ 가 모두 그대로 나온다. 도수끼리의 상관도 모의 $-0.1993$ 이 이론 $-0.2$ 와 맞는다.
+
+    실제 확률은 $0.2726$ 으로 독립일 때의 $0.2835$ 보다 $0.011$ **작다.** 몬테카를로 오차가 $0.0010$ 이므로 이 차이는 우연이 아니며, (2)에서 말한 양의 연관이 만든 것이다. 본페로니 상한 $0.3242$ 는 세 값 모두를 위에서 덮는다.
+
+    **공정한 주사위를 한 번 굴려 보고 "가장 튀는 눈"을 골라 검정하면 네 번에 한 번 이상 유의해진다.** $1.53\%$ 를 증거로 쓸 수 없는 이유가 이 수다.
 
 ### 가설
 
@@ -375,30 +484,86 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 적합도 검정통계량
+**보기 3.** <span class="diff easy" title="쉬움"></span> 적합도 검정통계량. 같은 주사위 자료 $(5, 7, 17, 14, 8, 9)$ 에 대해 여섯 눈의 어긋남을 **한 숫자로 모은다.**
+
+**(1)** 보기 1 (1)의 간편한 꼴 $\chi^2 = \dfrac kn \sum_i O_i^2 - n$ 으로 통계량을 구하시오.
+
+**(2)** 이 통계량이 보기 2 의 $z$ 통계량과 어떤 관계인가. 눈 $i$ 의 $z_i$ 를 정의하고
+
+$$
+\chi^2 = (1 - p)\sum_{i=1}^k z_i^2
+$$
+
+임을 보이시오($p = 1/k$). 눈 3 의 기여와 보기 2 의 $z^2$ 을 견주시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def main():
-    observed = np.array([5, 7, 17, 14, 8, 9])
-    expected = np.array([10] * 6)
-    # 여섯 눈의 어긋남을 **한 숫자로 모은다**.
-    # 눈 하나만 보던 앞의 검정과 여기서 갈린다.
-    statistic = np.sum((observed - expected)**2 / expected)
-    print(f'{statistic = }')
+    **(1) 제곱합 한 번으로.** 기대도수가 모두 $E_i = 60/6 = 10$ 이므로 보기 1 의 꼴을 그대로 쓴다.
 
-if __name__ == "__main__":
-    main()
-```
+    $$
+    \sum_i O_i^2 = 25 + 49 + 289 + 196 + 64 + 81 = 704
+    $$
 
-출력:
+    $$
+    \chi^2 = \frac{k}{n}\sum_i O_i^2 - n = \frac{6}{60}\times 704 - 60 = 70.4 - 60 = 10.4
+    $$
 
-```
-statistic = 10.4
-```
+    정의대로 더해도 같다. $\sum_i (O_i - 10)^2 = 25 + 9 + 49 + 16 + 4 + 1 = 104$ 이므로 $\chi^2 = 104/10 = 10.4$ 다.
+
+    **(2) $\chi^2$ 은 $z_i^2$ 들의 합에 $1-p$ 를 곱한 것이다.** 눈 $i$ 의 도수 $O_i$ 는 주변적으로 $\text{Bin}(n, p)$ 이므로 보기 2 와 똑같이 표준화할 수 있다.
+
+    $$
+    z_i = \frac{O_i - np}{\sqrt{np(1-p)}}
+    $$
+
+    한편 적합도 검정의 칸별 항은 $np$ 로 나눈다.
+
+    $$
+    \frac{(O_i - np)^2}{np} = \frac{(O_i-np)^2}{np(1-p)}\cdot(1-p) = (1-p)\,z_i^2
+    $$
+
+    **분모가 $np(1-p)$ 가 아니라 $np$ 라는 것, 그 하나가 두 검정의 차이다.** 더하면 주장한 식이다. 수로 확인한다. $\sqrt{np(1-p)} = \sqrt{60 \cdot \tfrac16 \cdot \tfrac56} = 2.8868$ 이므로
+
+    $$
+    (z_1,\ldots,z_6) = (-1.7321,\ -1.0392,\ +2.4249,\ +1.3856,\ -0.6928,\ -0.3464)
+    $$
+
+    $$
+    \sum_i z_i^2 = \frac{104}{25/3} = 12.48,
+    \qquad
+    (1-p)\sum_i z_i^2 = \frac56 \times 12.48 = 10.4
+    $$
+
+    로 (1)과 같다.
+
+    **눈 3 을 떼어 본다.** $z_3 = 2.4248711$ 은 보기 2 의 $z$ 와 **같은 수**다. 당연하다. 같은 자료, 같은 표준화다. 그 하나만으로 재면 $z_3^2 = 5.88$ 을 $\chi^2_1$ 에 견주어 $p = 0.0153$ 을 얻는다. 그런데 적합도 검정에서 눈 3 의 기여는 $(1-p)z_3^2 = \tfrac56 \times 5.88 = 4.9$ 이고, 이는 전체 $10.4$ 의 $47\%$ 에 지나지 않는다. **나머지 다섯 눈이 보태는 $5.5$ 가 "이 정도 흔들림은 흔하다" 는 기준선을 올려 준다.** 자유도가 1 에서 5 로 늘어나는 것이 바로 그 기준선이다.
+
+    ```python
+    import numpy as np
+
+    def main():
+        observed = np.array([5, 7, 17, 14, 8, 9])
+        expected = np.array([10] * 6)
+        # 여섯 눈의 어긋남을 **한 숫자로 모은다**.
+        # 눈 하나만 보던 앞의 검정과 여기서 갈린다.
+        statistic = np.sum((observed - expected)**2 / expected)
+        print(f'{statistic = }')
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    statistic = 10.4
+    ```
+
+    `statistic = 10.4` 가 (1)의 손계산과 정확히 같다. 소수점이 없는 깔끔한 값인 것은 $\sum(O_i - 10)^2 = 104$ 가 기대도수 10 으로 나누어떨어지기 때문이다.
+
+    이 한 수를 어떤 분포에 견주어야 하는지, 그래서 p-값이 얼마가 되는지는 보기 4 에서 본다.
 
 ### 기각역
 
@@ -449,147 +614,232 @@ $$\text{주사위는 조작되지 않았다.}$$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 정의대로 계산한 적합도 검정
+**보기 4.** <span class="diff easy" title="쉬움"></span> 정의대로 계산한 적합도 검정. 보기 3 의 $\chi^2 = 10.4$ 를 판정한다.
+
+**(1)** 자유도가 5 인 까닭을 적으시오.
+
+**(2)** 귀무가설 아래에서 $E[\chi^2]$ 이 **근사가 아니라 정확히** $k-1$ 임을 보이시오. 그러면 관측값 $10.4$ 가 기준선의 몇 배인가.
+
+**(3)** p-값과 임계값을 구해 $\alpha = 0.05$ 에서 판정하고, 보기 2 의 $p = 0.0153$ 과 왜 다른지 설명하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def main():
-    """적합도 검정통계량을 정의대로 구하고 p-값을 그림으로 보인다."""
-    # 주사위를 60번 굴린 결과라고 하자. 고른 주사위라면 눈마다 10번씩 나온다.
-    observed = np.array([5, 7, 17, 14, 8, 9])
-    expected = np.array([10] * 6)
+    **(1) 자유도 5.** 범주가 $k = 6$ 개지만 도수의 합이 $60$ 으로 묶여 있다. 다섯 칸을 알면 나머지 한 칸이 자동으로 정해지므로 자유롭게 움직이는 것은 $k - 1 = 5$ 개다. 같은 말을 어긋남으로 적으면 $\sum_i (O_i - E_i) = 60 - 60 = 0$ 이라는 선형 제약이 하나 있다는 것이다.
 
-    # 자유도는 범주 수에서 1을 뺀다. 도수의 합이 60으로 묶여 있어
-    # 다섯 칸을 알면 나머지 한 칸이 자동으로 정해지기 때문이다.
-    df = observed.shape[0] - 1
+    **(2) $E[\chi^2] = k - 1$ 이 정확히 성립한다.** 귀무가설 아래에서 $O_i \sim \text{Bin}(n, p_i)$ 이므로 $E[O_i] = np_i$ 이고 $\operatorname{Var}(O_i) = np_i(1-p_i)$ 다. 기댓값은 선형이므로 항별로 계산하면 된다.
 
-    statistic = np.sum((observed - expected)**2 / expected)
-    p_value = stats.chi2(df).sf(statistic)
-    print(f"{statistic = :.02f}")
-    print(f"{p_value    = :.02%}")
+    $$
+    E[\chi^2] = \sum_{i=1}^k \frac{E\bigl[(O_i - np_i)^2\bigr]}{np_i}
+    = \sum_{i=1}^k \frac{np_i(1-p_i)}{np_i}
+    = \sum_{i=1}^k (1 - p_i) = k - \sum_i p_i = k - 1
+    $$
 
-    # 파랑은 통계량보다 작은 쪽, 빨강은 그보다 큰 쪽이다.
-    # 적합도 검정은 언제나 우측검정이므로 빨간 넓이가 곧 p-값이다.
-    _, ax = plt.subplots(figsize=(12, 4))
+    **근사가 하나도 쓰이지 않았다.** $n$ 이 작아도, $p_i$ 가 치우쳐 있어도 평균은 정확히 $k-1$ 이다. 근사가 필요한 것은 평균이 아니라 **분포 전체의 모양**이다.
 
-    x = np.linspace(0, statistic)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='b', linewidth=3)
+    여기서는 $E[\chi^2] = 5$ 이므로 관측값 $10.4$ 는 기준선의 **2.08 배**다. 두 배쯤 크다는 것은 꽤 큰 어긋남이지만, 자유도 5 인 카이제곱은 표준편차가 $\sqrt{2 \times 5} = 3.16$ 이나 되어 평균의 두 배쯤은 드물지 않다.
 
-    x = np.concatenate([[0], x, [statistic], [0]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='b', alpha=0.1)
+    **(3) p-값과 임계값.**
 
-    x = np.linspace(statistic, 20, 100)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='r', linewidth=3)
+    $$
+    p = P(\chi^2_5 \ge 10.4) = 0.064663,
+    \qquad
+    \chi^2_{5,\,0.05} = 11.0705
+    $$
 
-    x = np.concatenate([[statistic], x, [20], [statistic]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='r', alpha=0.1)
+    $10.4 < 11.07$ 이고 $p = 0.0647 > 0.05$ 이므로 귀무가설을 **기각하지 못한다.** 주사위가 조작되었다는 증거가 부족하다.
 
-    xy = ((12.5 + 15.0) / 2, 0.01)
-    xytext = (16.5, 0.10)
-    arrowprops = dict(color='k', width=0.2, headwidth=8)
-    ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+    보기 2 의 $p = 0.0153$ 과 네 배 넘게 다르다. 까닭은 두 겹이다. 첫째, 보기 3 에서 본 대로 눈 3 의 기여가 전체의 절반이 안 되므로 통계량이 "눈 3 만 보던 값" 보다 상대적으로 덜 극단적이다. 둘째, 자유도가 1 에서 5 로 늘어 **기준분포 자체가 오른쪽으로 옮겨 간다.** $\chi^2_1$ 의 평균은 1 이지만 $\chi^2_5$ 의 평균은 5 다.
 
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    ax.spines['left'].set_position("zero")
+    **수치적으로.**
 
-    plt.show()
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
 
-if __name__ == "__main__":
-    main()
-```
+    def main():
+        """적합도 검정통계량을 정의대로 구하고 p-값을 그림으로 보인다."""
+        # 주사위를 60번 굴린 결과라고 하자. 고른 주사위라면 눈마다 10번씩 나온다.
+        observed = np.array([5, 7, 17, 14, 8, 9])
+        expected = np.array([10] * 6)
 
-출력:
+        # 자유도는 범주 수에서 1을 뺀다. 도수의 합이 60으로 묶여 있어
+        # 다섯 칸을 알면 나머지 한 칸이 자동으로 정해지기 때문이다.
+        df = observed.shape[0] - 1
 
-```
-statistic = 10.40
-p_value    = 6.47%
-```
+        statistic = np.sum((observed - expected)**2 / expected)
+        p_value = stats.chi2(df).sf(statistic)
+        print(f"{statistic = :.02f}")
+        print(f"{p_value    = :.02%}")
 
-![카이제곱 분포와 p-값](./img/gof_400.png)
+        # 파랑은 통계량보다 작은 쪽, 빨강은 그보다 큰 쪽이다.
+        # 적합도 검정은 언제나 우측검정이므로 빨간 넓이가 곧 p-값이다.
+        _, ax = plt.subplots(figsize=(12, 4))
 
-$p = 0.0647$로 5% 수준에서 기각하지 못한다. 눈 3만 따로 보았을 때의 $p = 0.0153$과 대조된다. 눈 하나를 골라 검정하면 유의하고, 여섯 눈을 함께 보면 유의하지 않다.
+        x = np.linspace(0, statistic)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='b', linewidth=3)
 
-어느 쪽이 옳은가? 여섯 눈을 함께 보는 쪽이다. "눈 3이 많이 나왔다"는 것은 자료를 보고 고른 사실이며, 그 고르는 행위가 이미 여섯 번의 검정을 한 것과 같기 때문이다. 앞 장의 p-해킹과 같은 문제다.
+        x = np.concatenate([[0], x, [statistic], [0]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='b', alpha=0.1)
+
+        x = np.linspace(statistic, 20, 100)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='r', linewidth=3)
+
+        x = np.concatenate([[statistic], x, [20], [statistic]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='r', alpha=0.1)
+
+        xy = ((12.5 + 15.0) / 2, 0.01)
+        xytext = (16.5, 0.10)
+        arrowprops = dict(color='k', width=0.2, headwidth=8)
+        ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.spines['left'].set_position("zero")
+
+        plt.show()
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    출력:
+
+    ```
+    statistic = 10.40
+    p_value    = 6.47%
+    ```
+
+    ![카이제곱 분포와 p-값](./img/gof_400.png)
+
+    `statistic = 10.40`, `p_value = 6.47%` 가 (3)의 $0.064663$ 과 맞는다.
+
+    $p = 0.0647$로 5% 수준에서 기각하지 못한다. 눈 3만 따로 보았을 때의 $p = 0.0153$과 대조된다. 눈 하나를 골라 검정하면 유의하고, 여섯 눈을 함께 보면 유의하지 않다.
+
+    어느 쪽이 옳은가? 여섯 눈을 함께 보는 쪽이다. "눈 3이 많이 나왔다"는 것은 자료를 보고 고른 사실이며, 보기 2 가 모의로 보인 대로 **그 고르는 행위의 실제 오류율이 $27\%$** 이기 때문이다. 앞 장의 p-해킹과 같은 문제다.
 
 ### Python 구현 (`scipy.stats.chisquare` 사용)
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> scipy로 계산한 적합도 검정
+**보기 5.** <span class="diff easy" title="쉬움"></span> scipy로 계산한 적합도 검정.
+
+**(1)** `scipy.stats.chisquare` 가 보기 4 의 손계산과 같은 값을 주는지 확인하시오. 이 함수는 자유도를 무엇으로 정하는가.
+
+**(2)** $p = 0.0647$ 은 **카이제곱 근사**가 준 값이다. 실제 다항분포에서의 p-값은 얼마인가. 몬테카를로로 재고, 보기 4 (2)에서 유도한 $E[\chi^2] = k-1$ 도 함께 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
+??? success "풀이"
 
-def main():
-    """앞의 손계산을 scipy 한 줄로 대신한다. 값이 같아야 한다."""
-    observed = np.array([5, 7, 17, 14, 8, 9])
-    expected = np.array([10] * 6)
-    df = observed.shape[0] - 1
+    **(1) 자유도는 $k - 1 - \text{ddof}$ 다.** `chisquare` 는 범주 수에서 1 을 빼 자유도를 정하고, 모수를 자료에서 추정한 경우를 위해 `ddof` 인자를 둔다. 기본값 `ddof=0` 이면 $\text{df} = k - 1 = 5$ 로 보기 4 와 같다. (연습문제 2 가 `ddof` 를 써야 하는 경우를 다룬다.)
 
-    # chisquare 는 통계량과 p-값을 한꺼번에 돌려준다. 자유도는 알아서 정한다.
-    statistic, p_value = stats.chisquare(observed, f_exp=expected)
-    print(f"{statistic = :.02f}")
-    print(f"{p_value    = :.02%}")
+    **수치적으로.**
 
-    _, ax = plt.subplots(figsize=(12, 4))
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
 
-    x = np.linspace(0, statistic)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='b', linewidth=3)
+    def main():
+        """앞의 손계산을 scipy 한 줄로 대신한다. 값이 같아야 한다."""
+        observed = np.array([5, 7, 17, 14, 8, 9])
+        expected = np.array([10] * 6)
+        df = observed.shape[0] - 1
 
-    x = np.concatenate([[0], x, [statistic], [0]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='b', alpha=0.1)
+        # chisquare 는 통계량과 p-값을 한꺼번에 돌려준다. 자유도는 알아서 정한다.
+        statistic, p_value = stats.chisquare(observed, f_exp=expected)
+        print(f"{statistic = :.02f}")
+        print(f"{p_value    = :.02%}")
 
-    x = np.linspace(statistic, 20, 100)
-    y = stats.chi2(df).pdf(x)
-    ax.plot(x, y, color='r', linewidth=3)
+        _, ax = plt.subplots(figsize=(12, 4))
 
-    x = np.concatenate([[statistic], x, [20], [statistic]])
-    y = np.concatenate([[0], y, [0], [0]])
-    ax.fill(x, y, color='r', alpha=0.1)
+        x = np.linspace(0, statistic)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='b', linewidth=3)
 
-    xy = ((12.5 + 15.0) / 2, 0.01)
-    xytext = (16.5, 0.10)
-    arrowprops = dict(color='k', width=0.2, headwidth=8)
-    ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
+        x = np.concatenate([[0], x, [statistic], [0]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='b', alpha=0.1)
 
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
-    ax.spines['bottom'].set_position("zero")
-    ax.spines['left'].set_position("zero")
+        x = np.linspace(statistic, 20, 100)
+        y = stats.chi2(df).pdf(x)
+        ax.plot(x, y, color='r', linewidth=3)
 
-    plt.show()
+        x = np.concatenate([[statistic], x, [20], [statistic]])
+        y = np.concatenate([[0], y, [0], [0]])
+        ax.fill(x, y, color='r', alpha=0.1)
 
-if __name__ == "__main__":
-    main()
-```
+        xy = ((12.5 + 15.0) / 2, 0.01)
+        xytext = (16.5, 0.10)
+        arrowprops = dict(color='k', width=0.2, headwidth=8)
+        ax.annotate(f'{p_value = :.02%}', xy, xytext=xytext, fontsize=15, arrowprops=arrowprops)
 
-출력:
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.spines['left'].set_position("zero")
 
-```
-statistic = 10.40
-p_value    = 6.47%
-```
+        plt.show()
 
-![카이제곱 분포와 p-값](./img/gof_451.png)
+    if __name__ == "__main__":
+        main()
+    ```
 
-`chisquare`가 수동 계산과 같은 값을 준다.
+    출력:
+
+    ```
+    statistic = 10.40
+    p_value    = 6.47%
+    ```
+
+    ![카이제곱 분포와 p-값](./img/gof_451.png)
+
+    `chisquare`가 수동 계산과 같은 값을 준다. 통계량 `10.40`, p-값 `6.47%` 가 보기 4 와 글자 하나까지 같다.
+
+    **(2) 근사가 얼마나 정확한가.** $\chi^2_5$ 는 $n \to \infty$ 에서의 극한분포다. $n = 60$, 칸당 기대 10 에서 그 근사가 얼마나 믿을 만한지는 귀무가설이 참인 세상을 직접 만들어 보면 알 수 있다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    M = 200_000
+    n, k = 60, 6
+    obs = 10.4
+
+    # H0 가 참인 세상에서 주사위를 60번 굴리는 일을 20만 번 되풀이한다.
+    X = rng.multinomial(n, np.ones(k) / k, size=M)
+    chi2_sim = ((X - n / k) ** 2 / (n / k)).sum(axis=1)
+
+    print(f"모의 {M}회")
+    print(f"  E[chi2]  이론 k-1 = {k - 1}        모의 {chi2_sim.mean():.4f}   "
+          f"오차 {chi2_sim.std() / np.sqrt(M):.4f}")
+    print(f"  p-값     카이제곱 근사 {stats.chi2.sf(obs, k - 1):.4f}   "
+          f"모의 {(chi2_sim >= obs - 1e-9).mean():.4f}   "
+          f"오차 {np.sqrt(0.066 * 0.934 / M):.4f}")
+    ```
+
+    출력:
+
+    ```
+    모의 200000회
+      E[chi2]  이론 k-1 = 5        모의 5.0039   오차 0.0070
+      p-값     카이제곱 근사 0.0647   모의 0.0659   오차 0.0006
+    ```
+
+    **평균이 정확히 맞는다.** 보기 4 (2)에서 유도한 $E[\chi^2] = k - 1 = 5$ 와 모의 평균 $5.0039$ 의 차이는 $0.0039$ 이고 몬테카를로 오차가 $0.0070$ 이다. **차이가 오차의 절반 크기이므로 어긋난 것이 아니다.**
+
+    **p-값은 근사가 약간 작게 나온다.** 참값에 가까운 모의값이 $0.0659$ 인데 카이제곱 근사는 $0.0647$ 이다. 차이 $0.0012$ 가 오차 $0.0006$ 의 두 배이므로 이것은 실재하는 치우침이고, **근사가 기각하는 쪽으로 조금 기울어 있다**는 뜻이다. 까닭은 통계량이 실은 이산인데 연속분포로 재기 때문이다. 연습문제 8 이 작은 표에서 같은 치우침을 전수 열거로 보인다.
+
+    다행히 여기서는 어느 쪽이든 결론이 같다. $0.0647$ 이든 $0.0659$ 든 $0.05$ 보다 크다. 그러나 p-값이 $0.05$ 바로 근처였다면 이 $0.0012$ 가 결론을 갈랐을 것이다.
 
 ## 연습문제
 

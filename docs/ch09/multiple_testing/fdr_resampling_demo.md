@@ -50,32 +50,86 @@ $H_{(1)}, \ldots, H_{(k)}$를 모두 기각한다. 독립일 때 이 절차는 F
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 검정 수에 따른 FWER
+**보기 1.** <span class="diff easy" title="쉬움"></span> 검정 수에 따른 FWER. 독립인 검정 $m = 100$개를 각각 수준 $\alpha$에서 수행하고, 모든 귀무가설이 참이라고 하자.
+
+**(1)** $\alpha = 0.05,\ 0.01,\ 0.001$에서 FWER을 구하시오.
+
+**(2)** $m = 100$에서 FWER을 정확히 $0.05$로 **맞추는** $\alpha$를 구하고, 본페로니의 $\alpha/m$과 견주시오. 어느 쪽이 더 보수적인가.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# 검정 m 개가 모두 참 귀무가설이고 서로 독립이라면, 하나도 잘못 기각하지
-# 않을 확률이 (1-a)^m 이다. 적어도 하나를 잘못 기각할 확률이 그 나머지다.
-# m=100, a=0.05 면 0.994 — 거의 확실하게 거짓 양성이 하나는 나온다.
-m_vals = np.arange(1, 501)
-alphas = [0.05, 0.01, 0.001]
-for a in alphas:
-    fwer = 1 - (1 - a) ** m_vals
-    print(f"alpha={a}, m=100: FWER={1 - (1-a)**100:.4f}")
-```
+    **(1) 해석적으로.** 검정 $i$가 잘못 기각하지 않을 확률이 $1-\alpha$이고 $m$개가 독립이므로, **하나도** 잘못 기각하지 않을 확률은 $(1-\alpha)^m$이다. 적어도 하나를 잘못 기각할 확률은 그 여집합이다.
 
-출력:
+    $$
+    \text{FWER} = 1 - (1-\alpha)^m
+    $$
 
-```
-alpha=0.05, m=100: FWER=0.9941
-alpha=0.01, m=100: FWER=0.6340
-alpha=0.001, m=100: FWER=0.0952
-```
+    $m = 100$에 세 값을 넣는다.
 
-검정 100개를 $\alpha = 0.05$로 하면 거짓 양성이 하나도 없을 확률이 0.6%에 불과하다. $\alpha$를 0.001까지 낮춰야 FWER이 10% 아래로 내려온다. 이것이 Bonferroni가 하는 일이고, 동시에 Bonferroni가 검정력을 잃는 이유이기도 하다.
+    $$
+    \alpha = 0.05\colon\ 1 - 0.95^{100} = 0.9941, \quad
+    \alpha = 0.01\colon\ 1 - 0.99^{100} = 0.6340, \quad
+    \alpha = 0.001\colon\ 1 - 0.999^{100} = 0.0952
+    $$
+
+    **(2) 해석적으로.** $1 - (1-\alpha)^{100} = 0.05$를 $\alpha$에 대해 푼다.
+
+    $$
+    (1-\alpha)^{100} = 0.95
+    \quad\Longrightarrow\quad
+    \alpha = 1 - 0.95^{1/100} = 1 - e^{\ln 0.95/100} = 0.00051280
+    $$
+
+    이것이 시닥(Šidák) 보정이다. 본페로니는 $\alpha/m = 0.05/100 = 0.00050000$을 쓴다.
+
+    **본페로니 쪽이 더 작으므로 더 보수적이다.** 비가 $0.00051280/0.00050000 = 1.0256$이니 약 $2.6\%$ 차이다. 두 값이 가까운 까닭은 $\alpha$가 작을 때 $1-(1-\alpha)^m \approx m\alpha$이기 때문이고, 실제로 $\ln(1-x) \approx -x$를 쓰면
+
+    $$
+    1 - 0.95^{1/m} = 1 - e^{\ln 0.95 / m} \approx -\frac{\ln 0.95}{m} = \frac{0.051293}{m}
+    $$
+
+    로 본페로니의 $0.05/m$과 분자만 $2.6\%$ 다르다. **시닥이 조금 덜 보수적이지만 그 이득은 미미하고, 대신 독립성을 가정해야 한다.** 본페로니는 종속성이 어떻든 성립한다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+
+    # 검정 m 개가 모두 참 귀무가설이고 서로 독립이라면, 하나도 잘못 기각하지
+    # 않을 확률이 (1-a)^m 이다. 적어도 하나를 잘못 기각할 확률이 그 나머지다.
+    # m=100, a=0.05 면 0.994 — 거의 확실하게 거짓 양성이 하나는 나온다.
+    m_vals = np.arange(1, 501)
+    alphas = [0.05, 0.01, 0.001]
+    for a in alphas:
+        fwer = 1 - (1 - a) ** m_vals
+        print(f"alpha={a}, m=100: FWER={1 - (1-a)**100:.4f}")
+
+    # (2) FWER 을 0.05 로 맞추는 alpha.
+    m = 100
+    sidak = 1 - 0.95 ** (1 / m)
+    bonf = 0.05 / m
+    print(f"\n시닥   alpha = {sidak:.8f}   확인 FWER = {1 - (1 - sidak) ** m:.6f}")
+    print(f"본페로니 alpha = {bonf:.8f}   확인 FWER = {1 - (1 - bonf) ** m:.6f}")
+    print(f"비 시닥/본페로니 = {sidak / bonf:.4f}")
+    ```
+
+    출력:
+
+    ```
+    alpha=0.05, m=100: FWER=0.9941
+    alpha=0.01, m=100: FWER=0.6340
+    alpha=0.001, m=100: FWER=0.0952
+
+    시닥   alpha = 0.00051280   확인 FWER = 0.050000
+    본페로니 alpha = 0.00050000   확인 FWER = 0.048782
+    비 시닥/본페로니 = 1.0256
+    ```
+
+    (1)과 (2)의 값이 모두 그대로 나왔다. 시닥의 $\alpha$를 넣으면 FWER이 정확히 $0.050000$이고, 본페로니는 $0.048782$로 목표보다 **낮다.** 보수적이라는 말의 뜻이 이것이다.
+
+    검정 100개를 $\alpha = 0.05$로 하면 거짓 양성이 하나도 없을 확률이 $0.6\%$에 불과하다. $\alpha$를 $0.001$까지 낮춰야 FWER이 $10\%$ 아래로 내려온다. **이것이 Bonferroni가 하는 일이고, 동시에 Bonferroni가 검정력을 잃는 이유이기도 하다.**
 
 ### 네 방법을 같은 자료에 적용하면
 
@@ -93,46 +147,83 @@ alpha=0.001, m=100: FWER=0.0952
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 보정을 적용한 다중검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 보정을 적용한 다중검정. 가설 $m = 2000$개 가운데 앞의 $200$개만 참 신호($d = 0.5$, $n = 50$인 일표본 $t$ 검정)이고 나머지 $1800$개는 귀무가 참이다. $\alpha = 0.05$에서 세 보정을 적용한다.
+
+**(1)** 본페로니의 원 $p$-값 문턱을 구하고, 그 문턱에서 **참 신호 하나가 기각될 확률**(비중심 $t$)을 계산해 기대 TP와 기대 FP를 구하시오.
+
+**(2)** 코드의 결과와 맞추시오. BH가 기각한 개수 $R$을 알고 나면 BH의 유효 문턱이 정해지는데, 그 문턱으로 TP와 FP를 다시 예측해 보시오.
 
 </div>
 
-```python
-from scipy import stats
-from statsmodels.stats.multitest import multipletests
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 해석적으로.** 본페로니는 보정 $p$-값 $\min(1,\ m p)$를 $\alpha$와 견주므로 원 $p$-값 문턱이
 
-n_tests = 2000
-n_true_alt = 200
-n_obs = 50
-effect_size = 0.5
+    $$
+    \frac{\alpha}{m} = \frac{0.05}{2000} = 2.5\times10^{-5}
+    $$
 
-p_values = np.zeros(n_tests)
-truth = np.zeros(n_tests, dtype=int)
-truth[:n_true_alt] = 1      # 앞의 200개만 참 신호, 나머지 1800개는 귀무
+    다. 귀무가 참인 검정이 이 문턱을 넘을 확률은 정의상 $2.5\times10^{-5}$이므로
 
-for i in range(n_tests):
-    # 모의실험이라 정답을 알고 있다. 그래서 TP와 FP를 직접 셀 수 있다.
-    # 실제 자료에서는 이 정보가 없으므로 FDR을 추정해야 한다.
-    mu = effect_size if i < n_true_alt else 0.0
-    data = np.random.normal(mu, 1.0, n_obs)
-    _, p_values[i] = stats.ttest_1samp(data, 0)
+    $$
+    E[\text{FP}] = 1800 \times 2.5\times10^{-5} = 0.045
+    $$
 
-# 세 보정 방법을 같은 p-값 묶음에 적용한다.
-_, p_bonf, _, _ = multipletests(p_values, method="bonferroni")
-_, p_holm, _, _ = multipletests(p_values, method="holm")
-_, p_bh, _, _   = multipletests(p_values, method="fdr_bh")
+    이다. **거짓 양성이 하나라도 나올 확률은 $1-(1-2.5\times10^{-5})^{1800} = 0.0440$**, 곧 22번에 한 번쯤이다.
 
-alpha = 0.05
-for name, adj_p in [("Bonferroni", p_bonf), ("Holm", p_holm), ("BH", p_bh)]:
-    rejected = adj_p < alpha
-    tp = np.sum(rejected & (truth == 1))
-    fp = np.sum(rejected & (truth == 0))
-    fdr = fp / max(np.sum(rejected), 1)
-    power = tp / np.sum(truth == 1)
-    print(f"{name:12s}: TP={tp}, FP={fp}, FDR={fdr:.3f}, Power={power:.3f}")
-```
+    참 신호 쪽은 비중심 $t$를 쓴다. $d = 0.5$, $n = 50$이므로 비중심모수가 $\lambda = d\sqrt n = 0.5\sqrt{50} = 3.5355$이고 자유도는 $49$다. 임계값은 $t_{49}$의 상위 $1.25\times10^{-5}$ 분위수이고, 검정력은
+
+    $$
+    P(\lvert T'_{49,\,3.5355}\rvert > t_{\text{crit}}) = 0.16065
+    $$
+
+    이다. 따라서
+
+    $$
+    E[\text{TP}] = 200 \times 0.16065 = 32.13, \qquad
+    \text{SD}(\text{TP}) = \sqrt{200 \times 0.16065 \times 0.83935} = 5.19
+    $$
+
+    다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from scipy import stats
+    from statsmodels.stats.multitest import multipletests
+
+    np.random.seed(42)
+
+    n_tests = 2000
+    n_true_alt = 200
+    n_obs = 50
+    effect_size = 0.5
+
+    p_values = np.zeros(n_tests)
+    truth = np.zeros(n_tests, dtype=int)
+    truth[:n_true_alt] = 1      # 앞의 200개만 참 신호, 나머지 1800개는 귀무
+
+    for i in range(n_tests):
+        # 모의실험이라 정답을 알고 있다. 그래서 TP와 FP를 직접 셀 수 있다.
+        # 실제 자료에서는 이 정보가 없으므로 FDR을 추정해야 한다.
+        mu = effect_size if i < n_true_alt else 0.0
+        data = np.random.normal(mu, 1.0, n_obs)
+        _, p_values[i] = stats.ttest_1samp(data, 0)
+
+    # 세 보정 방법을 같은 p-값 묶음에 적용한다.
+    _, p_bonf, _, _ = multipletests(p_values, method="bonferroni")
+    _, p_holm, _, _ = multipletests(p_values, method="holm")
+    _, p_bh, _, _   = multipletests(p_values, method="fdr_bh")
+
+    alpha = 0.05
+    for name, adj_p in [("Bonferroni", p_bonf), ("Holm", p_holm), ("BH", p_bh)]:
+        rejected = adj_p < alpha
+        tp = np.sum(rejected & (truth == 1))
+        fp = np.sum(rejected & (truth == 0))
+        fdr = fp / max(np.sum(rejected), 1)
+        power = tp / np.sum(truth == 1)
+        print(f"{name:12s}: TP={tp}, FP={fp}, FDR={fdr:.3f}, Power={power:.3f}")
+    ```
 
 출력:
 
