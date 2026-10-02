@@ -119,50 +119,107 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 선형대수 표기와 관례
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모자 행렬의 네 가지 성질. $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 선형독립이라 하고 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$라 두자.
+
+**(1)** $\mathbf{H}$가 대칭이고 멱등임을 보이고, $\operatorname{tr}(\mathbf{H}) = p$를 유도하시오. 이어서 $\mathbf{H}$의 고윳값이 $0$ 또는 $1$뿐이며 $1$이 정확히 $p$개임을 보이시오.
+
+**(2)** $n = 50$, $p = 3$인 모의자료로 (1)의 네 성질을 모두 확인하고, 최소제곱 추정값이 참값에서 벗어난 폭이 표준오차로 설명되는지 보시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-rng = np.random.default_rng(42)
-n, p = 50, 3
-X = np.column_stack([np.ones(n), rng.standard_normal((n, p - 1))])
-beta_true = np.array([2.0, -1.0, 0.5])
-y = X @ beta_true + rng.standard_normal(n) * 0.5
+    **(1) 해석적으로.** 네 성질이 모두 $(\mathbf{X}^T\mathbf{X})^{-1}$의 존재 하나에서 나온다.
 
-# === OLS via normal equations ===
-beta_hat = np.linalg.solve(X.T @ X, X.T @ y)
-print("True beta:", beta_true)
-print("OLS beta: ", beta_hat.round(4))
+    **대칭성.** $\mathbf{X}^T\mathbf{X}$가 대칭이므로 그 역행렬도 대칭이고, $(\mathbf{A}\mathbf{B})^T = \mathbf{B}^T\mathbf{A}^T$를 두 번 쓰면
 
-# === Hat matrix properties ===
-H = X @ np.linalg.inv(X.T @ X) @ X.T
-print(f"Symmetric:  {np.allclose(H, H.T)}")
-print(f"Idempotent: {np.allclose(H @ H, H)}")
-print(f"tr(H) = {np.trace(H):.1f}  (should equal p = {p})")
+    $$
+    \mathbf{H}^T = \big(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\big)^T = \mathbf{X}\big((\mathbf{X}^T\mathbf{X})^{-1}\big)^T\mathbf{X}^T = \mathbf{H}
+    $$
 
-# === Spectral decomposition of X'X (symmetric, PD here) ===
-eigvals, eigvecs = np.linalg.eigh(X.T @ X)
-print(f"Eigenvalues: {eigvals.round(2)}")
-print(f"Condition number: {eigvals.max() / eigvals.min():.2f}")
-reconstruction = eigvecs @ np.diag(eigvals) @ eigvecs.T
-print(f"Spectral reconstruction matches X'X: {np.allclose(reconstruction, X.T @ X)}")
-```
+    이다.
 
-출력:
+    **멱등성.** 가운데에서 $(\mathbf{X}^T\mathbf{X})^{-1}(\mathbf{X}^T\mathbf{X}) = \mathbf{I}_p$가 지워진다.
 
-```
-True beta: [ 2.  -1.   0.5]
-OLS beta:  [ 1.9711 -0.95    0.4159]
-Symmetric:  True
-Idempotent: True
-tr(H) = 3.0  (should equal p = 3)
-Eigenvalues: [20.34 38.64 51.  ]
-Condition number: 2.51
-Spectral reconstruction matches X'X: True
-```
+    $$
+    \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}}_{\mathbf{I}_p}\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
+    $$
+
+    **대각합.** 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$를 $\mathbf{A} = \mathbf{X}$, $\mathbf{B} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$로 쓰면
+
+    $$
+    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\big((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\big) = \operatorname{tr}(\mathbf{I}_p) = p
+    $$
+
+    이다. $n \times n$ 행렬의 대각합이 $n$에 무관하게 $p$로 정해지는 것이 요점이다.
+
+    **고윳값.** $\mathbf{H}\mathbf{v} = \lambda\mathbf{v}$이고 $\mathbf{v} \ne \mathbf{0}$이면 멱등성에서 $\lambda\mathbf{v} = \mathbf{H}\mathbf{v} = \mathbf{H}^2\mathbf{v} = \lambda^2\mathbf{v}$이므로 $\lambda^2 = \lambda$, 곧 $\lambda \in \{0, 1\}$이다. $\mathbf{H}$가 대칭이므로 스펙트럼 정리가 실수 고윳값 $n$개를 보장하고, 대각합이 고윳값의 합이라는 사실에서 $1$의 개수가 $\operatorname{tr}(\mathbf{H}) = p$개, 나머지 $n - p$개가 $0$이다. 이 $n - p$가 잔차 자유도 $d$다.
+
+    **(2) 수치적으로.** $\sigma = 0.5$인 잡음을 얹은 자료로 네 성질을 확인한다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(42)
+    n, p = 50, 3
+    X = np.column_stack([np.ones(n), rng.standard_normal((n, p - 1))])
+    beta_true = np.array([2.0, -1.0, 0.5])
+    sigma = 0.5
+    y = X @ beta_true + rng.standard_normal(n) * sigma
+
+    # === 정규방정식으로 최소제곱 풀기 ===
+    beta_hat = np.linalg.solve(X.T @ X, X.T @ y)
+    print("참값   beta:", beta_true)
+    print("최소제곱 beta:", beta_hat.round(4))
+
+    # 추정값이 참값에서 얼마나 벗어났는지를 표준오차 단위로 재어 본다.
+    se = sigma * np.sqrt(np.diag(np.linalg.inv(X.T @ X)))
+    print("표준오차      :", se.round(4))
+    print("(추정-참)/SE  :", ((beta_hat - beta_true) / se).round(2))
+
+    # === 모자 행렬의 성질 ===
+    H = X @ np.linalg.inv(X.T @ X) @ X.T
+    print(f"대칭:   {np.allclose(H, H.T)}")
+    print(f"멱등:   {np.allclose(H @ H, H)}")
+    print(f"tr(H) = {np.trace(H):.1f}  (p = {p} 와 같아야 한다)")
+
+    # 고윳값은 1 이 p 개, 0 이 n-p 개여야 한다.
+    eig_H = np.linalg.eigvalsh(H)
+    print(f"H 의 고윳값 중 1 에 가까운 것: {np.sum(np.isclose(eig_H, 1))} 개")
+    print(f"H 의 고윳값 중 0 에 가까운 것: {np.sum(np.isclose(eig_H, 0))} 개")
+
+    # === X'X 의 스펙트럼 분해 (대칭이고 여기서는 양정치다) ===
+    eigvals, eigvecs = np.linalg.eigh(X.T @ X)
+    print(f"고윳값: {eigvals.round(2)}")
+    print(f"고윳값의 합 {eigvals.sum():.2f} = tr(X'X) {np.trace(X.T @ X):.2f}")
+    print(f"조건수: {eigvals.max() / eigvals.min():.2f}")
+    reconstruction = eigvecs @ np.diag(eigvals) @ eigvecs.T
+    print(f"스펙트럼 복원이 X'X 와 일치: {np.allclose(reconstruction, X.T @ X)}")
+    ```
+
+    출력:
+
+    ```
+    참값   beta: [ 2.  -1.   0.5]
+    최소제곱 beta: [ 1.9711 -0.95    0.4159]
+    표준오차      : [0.071  0.0882 0.1041]
+    (추정-참)/SE  : [-0.41  0.57 -0.81]
+    대칭:   True
+    멱등:   True
+    tr(H) = 3.0  (p = 3 와 같아야 한다)
+    H 의 고윳값 중 1 에 가까운 것: 3 개
+    H 의 고윳값 중 0 에 가까운 것: 47 개
+    고윳값: [20.34 38.64 51.  ]
+    고윳값의 합 109.97 = tr(X'X) 109.97
+    조건수: 2.51
+    스펙트럼 복원이 X'X 와 일치: True
+    ```
+
+    네 성질이 모두 맞는다. $\operatorname{tr}(\mathbf{H}) = 3.0$이 $p = 3$과 같고, $50 \times 50$ 행렬인 $\mathbf{H}$의 고윳값은 $1$이 $3$개, $0$이 $47 = n - p$개다. 유도한 대로 $\mathbf{H}$는 $\mathbb{R}^{50}$을 3차원 열공간과 47차원 잔차공간으로 쪼개며, **$n$이 아무리 커져도 열공간의 차원은 $p$에 묶여 있다.**
+
+    추정값 $(1.9711, -0.9500, 0.4159)$는 참값 $(2, -1, 0.5)$과 다르다. 유도가 틀린 것이 아니라 자료에 잡음이 있어서다. $\operatorname{Cov}(\hat{\boldsymbol\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$이 주는 표준오차가 $(0.0710, 0.0882, 0.1041)$인데, 실제 벗어난 폭을 그것으로 나누면 $(-0.41, 0.57, -0.81)$로 셋 다 1 표준오차 안이다. **이만큼 벗어나는 것이 정상이라는 뜻이다.**
+
+    $\mathbf{X}^T\mathbf{X}$ 쪽에서는 고윳값의 합 $109.97$이 대각합과 정확히 같다는 것, 그리고 조건수가 $2.51$로 작다는 것을 볼 수 있다. 조건수가 작으니 열들이 서로 충분히 갈라져 있어 $(\mathbf{X}^T\mathbf{X})^{-1}$을 안심하고 쓸 수 있다. 앞에서 본 오른쪽 그림처럼 한 열이 다른 열의 배수에 가까워지면 가장 작은 고윳값이 $0$으로 내려가고 조건수가 터져, 같은 공식이 수치적으로 못 쓰게 된다.
 
 ## 연습문제
 

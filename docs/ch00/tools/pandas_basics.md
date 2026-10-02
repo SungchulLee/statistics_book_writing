@@ -17,58 +17,82 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 자료를 불러와 훑어보기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자료를 불러와 훑어보기. 결측값 두 개가 섞인 $12$행 $3$열의 표를 만들어 `head`, `shape`, `dtypes`, `describe`를 차례로 부른다.
+
+**(1)** `describe()`가 세 열 가운데 두 열만 보이고, 그 두 열의 `count`가 $10$과 $12$로 서로 다른 까닭을 말하시오.
+
+**(2)** 네 호출을 돌려 각각에서 무엇을 읽어야 하는지 수치와 함께 적고, 이 네 개만으로는 알 수 없는 것을 하나 들으시오.
 
 </div>
 
-```python
-"""표를 만들어 크기·자료형·요약통계를 훑어보는 첫 단계를 보인다."""
-import numpy as np
-import pandas as pd
+??? success "풀이"
 
-# 실제 작업에서는 df = pd.read_csv("data.csv")로 파일을 읽는다.
-# 여기서는 결과를 바로 볼 수 있도록 작은 표를 직접 만든다.
-rng = np.random.default_rng(0)
-n = 12
-demo = pd.DataFrame({
-    "treatment": rng.choice(["control", "drug"], size=n),
-    "x": rng.normal(10, 2, size=n).round(2),
-    "outcome": rng.normal(50, 8, size=n).round(1),
-})
-demo.loc[[2, 7], "x"] = np.nan        # 결측값 두 개를 일부러 넣는다
+    **(1) 두 물음의 답은 각각 하나씩이다.**
 
-print(demo.head())        # 앞 다섯 행
-print(demo.shape)         # (행 수, 열 수)
-print(demo.dtypes)        # 열마다의 자료형
-print(demo.describe().round(2))   # 개수·평균·표준편차·최솟값·사분위수·최댓값
-```
+    **열이 둘만 나오는 까닭.** `describe()`는 기본적으로 **수치형 열만** 요약한다. `treatment`는 문자열이어서 평균이나 사분위수가 정의되지 않으므로 빠진다. 범주형까지 보고 싶으면 `describe(include="all")`을 쓰면 되고, 그때는 `count`·`unique`·`top`·`freq`가 나온다.
 
-출력:
+    **`count`가 다른 까닭.** pandas의 `count`는 **결측이 아닌 값의 개수**다. `x`에 `NaN`을 두 개 심어 두었으니 $12 - 2 = 10$이고, `outcome`은 그대로 $12$다. 그러므로 `describe()`의 첫 줄만 보아도 결측이 어느 열에 몇 개 있는지 알 수 있다. 거꾸로 말하면 **`count` 줄을 건너뛰면 결측을 놓친다.** 아래의 `mean` $9.05$는 열 전체의 평균이 아니라 결측을 뺀 $10$개의 평균이다.
 
-```
-  treatment      x  outcome
-0      drug  12.61     53.3
-1      drug  11.89     58.3
-2      drug    NaN     49.0
-3   control   7.47     60.9
-4   control   8.75     44.7
-(12, 3)
-treatment     object
-x            float64
-outcome      float64
-dtype: object
-           x  outcome
-count  10.00    12.00
-mean    9.05    50.98
-std     2.13     5.90
-min     5.35    42.60
-25%     7.77    45.90
-50%     8.83    51.30
-75%     9.90    54.28
-max    12.61    60.90
-```
+    **(2) 네 호출이 각각 무엇을 보이는가.**
 
-`read_csv`는 `parse_dates`, `dtype`, `na_values`, `usecols`, `chunksize`를 받는다. 자료 품질 문제는 대부분 나중이 아니라 불러오는 시점에 처리하는 것이 가장 좋다.
+    ```python
+    """표를 만들어 크기·자료형·요약통계를 훑어보는 첫 단계를 보인다."""
+    import numpy as np
+    import pandas as pd
+
+    # 실제 작업에서는 df = pd.read_csv("data.csv")로 파일을 읽는다.
+    # 여기서는 결과를 바로 볼 수 있도록 작은 표를 직접 만든다.
+    rng = np.random.default_rng(0)
+    n = 12
+    demo = pd.DataFrame({
+        "treatment": rng.choice(["control", "drug"], size=n),
+        "x": rng.normal(10, 2, size=n).round(2),
+        "outcome": rng.normal(50, 8, size=n).round(1),
+    })
+    demo.loc[[2, 7], "x"] = np.nan        # 결측값 두 개를 일부러 넣는다
+
+    print(demo.head())        # 앞 다섯 행
+    print(demo.shape)         # (행 수, 열 수)
+    print(demo.dtypes)        # 열마다의 자료형
+    print(demo.describe().round(2))   # 개수·평균·표준편차·최솟값·사분위수·최댓값
+    ```
+
+    출력:
+
+    ```
+      treatment      x  outcome
+    0      drug  12.61     53.3
+    1      drug  11.89     58.3
+    2      drug    NaN     49.0
+    3   control   7.47     60.9
+    4   control   8.75     44.7
+    (12, 3)
+    treatment     object
+    x            float64
+    outcome      float64
+    dtype: object
+               x  outcome
+    count  10.00    12.00
+    mean    9.05    50.98
+    std     2.13     5.90
+    min     5.35    42.60
+    25%     7.77    45.90
+    50%     8.83    51.30
+    75%     9.90    54.28
+    max    12.61    60.90
+    ```
+
+    **`head()`** 는 앞 다섯 행이다. 행 번호 $2$의 `x`가 `NaN`으로 찍혀 결측이 눈에 보인다. 다섯 행만 보여 주므로 행 $7$의 결측은 여기에 안 나온다 — **`head`로 결측을 찾으려 해서는 안 된다.**
+
+    **`shape`** 는 `(12, 3)`, 곧 $12$행 $3$열이다. 행이 관측이고 열이 변수라는 규약을 확인하는 자리다. 이 수가 기대와 다르면 불러오기 자체가 잘못된 것이므로 더 가지 말고 멈춰야 한다.
+
+    **`dtypes`** 에서 `treatment`는 `object`, `x`와 `outcome`은 `float64`다. 문자열 열이 `object`인 것은 pandas가 파이썬 객체를 가리키는 포인터 배열로 담기 때문이다. `x`가 `float64`인 데에는 이유가 둘 있다. 원래 값이 실수인 것이 하나고, 결측 표시 `NaN`이 **부동소수점 특수값**이라는 것이 다른 하나다. 정수 열에 `NaN`을 하나라도 넣으면 pandas는 그 열을 `float64`로 올려 버린다.
+
+    **`describe()`** 는 수치형 두 열만 요약한다. `x`의 `count`가 $10$이라 결측 $2$개가 바로 드러난다. `mean` $9.05$와 `50%` $8.83$이 다른데, 평균이 중앙값보다 큰 쪽으로 $0.22$ 밀려 있다. `max` $12.61$이 `75%` $9.90$에서 멀리 떨어져 있어 오른쪽으로 끌린 것이다. `std` $2.13$은 **`ddof=1`** 로 계산된 표본표준편차라는 점을 기억해 두어야 한다. NumPy의 `np.std`는 기본값이 `ddof=0`이라 같은 자료에서 다른 수를 준다.
+
+    **이 네 개가 못 보이는 것.** 분포의 모양이다. `describe()`가 주는 여섯 개의 수(최솟값·사분위수 셋·최댓값·평균)는 봉우리가 하나인지 둘인지 구별하지 못한다. 쌍봉 분포와 균등분포가 거의 같은 요약표를 낼 수 있다. 그래서 훑어보기의 다음 단계는 언제나 그림이며, 다음 쪽 **Matplotlib으로 기본 시각화하기** 의 히스토그램이 그 일을 한다.
+
+    `read_csv`는 `parse_dates`, `dtype`, `na_values`, `usecols`, `chunksize`를 받는다. 자료 품질 문제는 대부분 나중이 아니라 불러오는 시점에 처리하는 것이 가장 좋다.
 
 ## 행과 열 선택하기
 
@@ -87,34 +111,88 @@ max    12.61    60.90
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 결측값 세고 메우기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 결측값 세고 메우기. 보기 1 의 `demo`에서 `x`의 결측 두 개를 중앙값으로 메운다.
+
+**(1)** `dropna()`와 `dropna(subset=["x"])`가 둘 다 $10$을 주는 까닭을 말하시오.
+
+**(2)** 관측된 값이 $n_0$개이고 표본표준편차가 $s_0$일 때 결측 $k$개를 중앙값 $m$으로 메우면 표본표준편차와 평균의 표준오차가 어떻게 바뀌는지 식으로 적고, 이 자료에서 그 값을 계산해 코드와 맞추시오.
 
 </div>
 
-```python
-print(demo.isna().sum())              # 열마다 결측이 몇 개인지
-print(len(demo.dropna()))             # 결측이 하나라도 있는 행을 버린다
-print(len(demo.dropna(subset=["x"]))) # x 의 결측만 기준으로 버린다
+??? success "풀이"
 
-# 중앙값으로 메우면 평균보다 이상치에 덜 흔들린다. 다만 메운 값에는
-# 불확실성이 없는 것처럼 되므로 이후 표준오차가 과소추정된다.
-filled = demo.fillna(demo.median(numeric_only=True))
-print(filled["x"].isna().sum(), filled["x"].median())
-```
+    **(1)** 두 호출이 같은 수를 주는 것은 **결측이 `x` 열에만 있기 때문**이다. `isna().sum()`이 `treatment` $0$, `x` $2$, `outcome` $0$을 주었으니, "어느 열이든 결측이 있는 행"과 "`x`에 결측이 있는 행"이 같은 두 행(인덱스 $2$와 $7$)이고 둘 다 $12 - 2 = 10$을 남긴다. 결측이 여러 열에 흩어져 있으면 두 수가 갈린다. `dropna()`는 열이 늘어날수록 더 많이 버리므로, 쓰지도 않을 열의 결측 때문에 자료가 깎이는 일이 흔하다. **분석에 쓸 열만 `subset`에 적는 습관이 안전하다.**
 
-출력:
+    **(2) 해석적으로.** 관측된 $n_0$개의 평균을 $\bar x_0$, 표본표준편차를 $s_0$라 하고 결측 $k$개를 모두 상수 $m$으로 메운다. 메운 뒤의 평균은 두 덩어리의 가중평균이다.
 
-```
-treatment    0
-x            2
-outcome      0
-dtype: int64
-10
-10
-0 8.83
-```
+    $$
+    \bar x_{\text{new}} = \frac{n_0 \bar x_0 + k m}{n_0 + k}
+    $$
 
-"옳은" 대체 전략이란 없다. 무엇을 고를지(삭제, 평균, 중앙값, 모형 기반, 다중대체)는 결측 기제에 달려 있다. pandas는 도구를 줄 뿐 결정은 사용자에게 맡긴다.
+    제곱합은 평균을 옮긴 만큼을 보정해 두 덩어리로 쪼갠다.
+
+    $$
+    \mathrm{SS}_{\text{new}} = (n_0 - 1)s_0^2 + n_0(\bar x_0 - \bar x_{\text{new}})^2 + k(m - \bar x_{\text{new}})^2
+    $$
+
+    이고, `ddof=1`이므로
+
+    $$
+    s_{\text{new}} = \sqrt{\frac{\mathrm{SS}_{\text{new}}}{n_0 + k - 1}}, \qquad \mathrm{SE}_{\text{new}} = \frac{s_{\text{new}}}{\sqrt{n_0 + k}}
+    $$
+
+    이다. 여기서 $n_0 = 10$, $k = 2$, $\bar x_0 = 9.0480$, $s_0 = 2.1299$, $m = 8.83$을 넣으면
+
+    $$
+    \bar x_{\text{new}} = \frac{10(9.0480) + 2(8.83)}{12} = 9.0117
+    $$
+
+    이고
+
+    $$
+    \mathrm{SS}_{\text{new}} = 9(2.1299)^2 + 10(0.0363)^2 + 2(0.1817)^2 = 40.830 + 0.013 + 0.066 = 40.909
+    $$
+
+    이므로 $s_{\text{new}} = \sqrt{40.909/11} = 1.9285$, $\mathrm{SE}_{\text{new}} = 1.9285/\sqrt{12} = 0.5567$이다.
+
+    **두 변화의 방향이 식에 그대로 적혀 있다.** 메우는 값 $m$이 중앙값이라 $\bar x_{\text{new}}$에 가까우므로 셋째 항 $k(m - \bar x_{\text{new}})^2$이 거의 $0$이다. 분자는 거의 그대로인데 분모가 $n_0 - 1 = 9$에서 $n_0 + k - 1 = 11$로 커지니 $s$는 줄어든다. 표준오차는 거기에 $\sqrt{n}$이 $\sqrt{10}$에서 $\sqrt{12}$로 커지는 효과가 겹쳐 두 배로 줄어든다. **없는 정보를 메워 넣었는데 정밀도가 올라간 것처럼 보이는 것이 상수 대체의 근본 문제다.**
+
+    **수치적으로.**
+
+    ```python
+    print(demo.isna().sum())              # 열마다 결측이 몇 개인지
+    print(len(demo.dropna()))             # 결측이 하나라도 있는 행을 버린다
+    print(len(demo.dropna(subset=["x"]))) # x 의 결측만 기준으로 버린다
+
+    # 중앙값으로 메우면 평균보다 이상치에 덜 흔들린다. 다만 메운 값에는
+    # 불확실성이 없는 것처럼 되므로 이후 표준오차가 과소추정된다.
+    filled = demo.fillna(demo.median(numeric_only=True))
+    print(filled["x"].isna().sum(), filled["x"].median())
+
+    # 메우기가 퍼짐에 무슨 일을 하는지 수로 본다.
+    print(f"메우기 전: n = {demo['x'].count()}, 평균 = {demo['x'].mean():.4f}, "
+          f"s = {demo['x'].std():.4f}, SE = {demo['x'].sem():.4f}")
+    print(f"메운  뒤: n = {filled['x'].count()}, 평균 = {filled['x'].mean():.4f}, "
+          f"s = {filled['x'].std():.4f}, SE = {filled['x'].sem():.4f}")
+    ```
+
+    출력:
+
+    ```
+    treatment    0
+    x            2
+    outcome      0
+    dtype: int64
+    10
+    10
+    0 8.83
+    메우기 전: n = 10, 평균 = 9.0480, s = 2.1299, SE = 0.6735
+    메운  뒤: n = 12, 평균 = 9.0117, s = 1.9285, SE = 0.5567
+    ```
+
+    손으로 구한 $\bar x_{\text{new}} = 9.0117$, $s_{\text{new}} = 1.9285$, $\mathrm{SE}_{\text{new}} = 0.5567$이 코드가 준 값과 소수 넷째 자리까지 같다. 표준편차는 $9.5\%$, 표준오차는 $17.3\%$ 줄었다. **자료는 한 조각도 늘지 않았는데 신뢰구간은 $17\%$ 좁아진다.** 메운 값을 관측값과 똑같이 취급한 대가이며, 다중대체가 대체마다의 변동을 따로 더해 주는 이유가 바로 이것이다.
+
+    "옳은" 대체 전략이란 없다. 무엇을 고를지(삭제, 평균, 중앙값, 모형 기반, 다중대체)는 결측 기제에 달려 있다. pandas는 도구를 줄 뿐 결정은 사용자에게 맡긴다.
 
 ## 그룹화: 분할–적용–결합
 
@@ -122,25 +200,72 @@ pandas에서 가장 강력한 하나의 패턴이다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 집단별 요약 — 분할·적용·결합
+**보기 3.** <span class="diff easy" title="쉬움"></span> 집단별 요약 — 분할·적용·결합. 보기 1 의 `demo`를 `treatment`로 나누어 `outcome`의 개수·평균·표준편차를 구한다.
+
+**(1)** 두 집단의 평균 차이가 영과 구별되는 크기인지, 표에 나온 개수와 표준편차만으로 판단하시오. 보기 1 의 생성 코드를 보면 참값은 무엇인가?
+
+**(2)** 같은 `groupby`에 `agg`를 걸 때와 `transform`을 걸 때 결과의 행 수가 어떻게 달라지는지 확인하고, 그 차이가 어디서 오는지 말하시오.
 
 </div>
 
-```python
-# 분할(treatment 로 나누고) — 적용(집계 함수를 걸고) — 결합(하나의 표로 모은다)
-print(demo.groupby("treatment")["outcome"].agg(["count", "mean", "std"]).round(2))
-```
+??? success "풀이"
 
-출력:
+    **(1) 참값은 영이다.** 보기 1 에서 `outcome`은 `rng.normal(50, 8, size=n)`으로 만들었고 `treatment`를 전혀 참조하지 않았다. 두 집단이 같은 $N(50, 8^2)$에서 나왔으므로 **참 차이는 정확히 $0$** 이고, 표에 보이는 차이는 전부 표집에 의한 흔들림이다.
 
-```
-           count   mean   std
-treatment                    
-control        6  51.75  6.69
-drug           6  50.22  5.52
-```
+    그것이 눈에 보이는지 재어 보자. 두 독립표본 평균 차이의 표준오차는
 
-`groupby`는 `"treatment"`의 서로 다른 값에 따라 자료를 분할하고, 각 그룹 안에서 `"outcome"`에 지정된 집계를 적용한 뒤, 결과를 깔끔한 DataFrame으로 결합한다. 탐색적 분석과 확증적 분석의 일꾼이다. 여러 키(`groupby(["a", "b"])`)와 사용자 정의 집계(`agg(my_func)`)로 이 패턴을 일반화할 수 있다.
+    $$
+    \mathrm{SE}(\bar y_1 - \bar y_2) = \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}
+    $$
+
+    이고, 표의 수를 넣으면
+
+    $$
+    \mathrm{SE} = \sqrt{\frac{6.69^2}{6} + \frac{5.52^2}{6}} = \sqrt{7.459 + 5.078} = \sqrt{12.538} = 3.54
+    $$
+
+    다. 차이는 $51.75 - 50.22 = 1.53$이므로 표준오차의 $0.43$배에 지나지 않는다. **차이가 그 자신의 표준오차의 절반도 안 되니 영과 구별할 수 없다.** 집단당 $6$개로는 $8$이라는 표준편차에 묻힌 차이를 볼 수 없다는 뜻이고, 실제로 볼 것이 없는 것이 맞다.
+
+    `groupby`가 주는 표는 이렇게 **차이를 보여 주면서 그 차이의 불확실성은 보여 주지 않는다.** `count`와 `std`가 같은 표에 들어 있는 것이 다행인데, 그 두 수가 없으면 $1.53$을 발견으로 착각하기 쉽다.
+
+    **(2)** `agg`는 그룹당 한 행으로 줄이므로 행 수가 $12$에서 그룹 수 $2$로 줄고 그룹 키가 인덱스가 된다. `transform`은 그룹 통계량을 그 그룹에 속했던 모든 행에 되돌려 붙이므로 행 수와 행 순서가 원래 그대로 $12$다. 그래서 `transform`의 결과만 원래 표에 열로 바로 대입할 수 있다.
+
+    ```python
+    # 분할(treatment 로 나누고) — 적용(집계 함수를 걸고) — 결합(하나의 표로 모은다)
+    summary = demo.groupby("treatment")["outcome"].agg(["count", "mean", "std"]).round(2)
+    print(summary)
+
+    # 두 집단 평균의 차이를 그 표준오차와 견주어 본다.
+    diff = summary.loc["control", "mean"] - summary.loc["drug", "mean"]
+    se = np.sqrt(summary.loc["control", "std"] ** 2 / 6 + summary.loc["drug", "std"] ** 2 / 6)
+    print(f"차이 = {diff:.2f}, SE = {se:.2f}, 차이/SE = {diff / se:.2f}")
+
+    # agg 는 그룹당 한 행으로 줄이고, transform 은 원래 행 수를 그대로 돌려준다.
+    centered = demo["outcome"] - demo.groupby("treatment")["outcome"].transform("mean")
+    print(f"agg 행 수 = {len(summary)}, transform 행 수 = {len(centered)}, 원래 행 수 = {len(demo)}")
+
+    # 행 수가 같으니 transform 결과는 원래 표에 열로 바로 붙는다.
+    print(demo.assign(centered=centered.round(2))[["treatment", "outcome", "centered"]].head(3))
+    ```
+
+    출력:
+
+    ```
+               count   mean   std
+    treatment
+    control        6  51.75  6.69
+    drug           6  50.22  5.52
+    차이 = 1.53, SE = 3.54, 차이/SE = 0.43
+    agg 행 수 = 2, transform 행 수 = 12, 원래 행 수 = 12
+      treatment  outcome  centered
+    0      drug     53.3      3.08
+    1      drug     58.3      8.08
+    2      drug     49.0     -1.22
+    ```
+
+    손으로 구한 $\mathrm{SE} = 3.54$와 차이/SE $= 0.43$이 코드와 같다. 행 수는 $2$ 대 $12$로 갈린다. `centered` 열의 첫 세 값은 `drug` 집단의 평균 $50.22$를 뺀 것이어서 $53.3 - 50.22 = 3.08$, $58.3 - 50.22 = 8.08$, $49.0 - 50.22 = -1.22$가 맞다.
+
+    `groupby`는 `"treatment"`의 서로 다른 값에 따라 자료를 분할하고, 각 그룹 안에서 `"outcome"`에 지정된 집계를 적용한 뒤, 결과를 깔끔한 DataFrame으로 결합한다. 탐색적 분석과 확증적 분석의 일꾼이다. 여러 키(`groupby(["a", "b"])`)와 사용자 정의 집계(`agg(my_func)`)로 이 패턴을 일반화할 수 있다.
 
 ![groupby의 분할 적용 결합](./img/groupby_split_apply_combine.png)
 
@@ -165,63 +290,122 @@ drug           6  50.22  5.52
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> pandas로 자료 다루기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 요약통계가 이론값을 재현하는지 보기. `value`를 $N(50, 10^2)$에서, `score`를 $\{0, \ldots, 99\}$의 균등분포에서 서로 독립으로 $200$개씩 뽑는다. `group`은 `A`, `B`, `C` 중에서 균등하게 고른다.
+
+**(1)** `value`가 $60$을 넘는 관측이 몇 개쯤 나오겠는가? 집단별 평균이 $50$에서 벗어나는 폭의 표준오차는 얼마인가? 두 열의 참 상관은 얼마인가? 코드를 돌리기 전에 세 수를 적으시오.
+
+**(2)** 돌려서 (1)의 예측과 맞춰 보고, 피벗표에 보이는 추세 가운데 실제인 것과 잡음인 것을 가르시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
+??? success "풀이"
 
-rng = np.random.default_rng(42)
+    **(1) 세 수를 미리 적는다.**
 
-# 범주형과 수치형을 섞은 자료틀을 만든다
-df = pd.DataFrame({
-    "group": rng.choice(["A", "B", "C"], size=200),
-    "value": rng.normal(50, 10, size=200),
-    "score": rng.integers(0, 100, size=200),
-})
+    **$60$ 초과 개수.** $X \sim N(50, 10^2)$이면 $60$은 평균에서 정확히 표준편차 하나 위다.
 
-# 집단별 요약
-summary = df.groupby("group")["value"].agg(["count", "mean", "std"]).round(2)
-print(summary)
+    $$
+    P(X > 60) = P\!\left(Z > \frac{60 - 50}{10}\right) = P(Z > 1) = 0.158655
+    $$
 
-# 불리언으로 걸러내기
-high = df[df["value"] > 60]
-print(f"\nValues > 60: {len(high)} / {len(df)}")
+    이므로 $200$개 중 기대 개수는 $200 \times 0.158655 = 31.7$개다. 개수는 $\text{Binomial}(200, 0.1587)$을 따르므로 표준편차가 $\sqrt{200(0.1587)(0.8413)} = 5.2$이고, 대략 $26$에서 $37$ 사이면 놀랄 일이 아니다.
 
-# 수치형 열 사이의 상관
-print("\nCorrelation:\n", df.corr(numeric_only=True).round(3))
+    **집단 평균의 표준오차.** 집단 $g$에 $n_g$개가 들어갔다면 $\mathrm{SE} = \sigma/\sqrt{n_g} = 10/\sqrt{n_g}$다. 집단 크기는 $200/3 = 66.7$ 근처일 테니 $\mathrm{SE} \approx 10/\sqrt{66.7} = 1.22$다. 집단 평균이 $50$에서 $1$에서 $2$쯤 벗어나는 것은 정상이다.
 
-# 피벗: 집단과 점수 사분위별 평균
-df["score_q"] = pd.qcut(df["score"], 4, labels=["Q1", "Q2", "Q3", "Q4"])
-print("\nPivot:\n", df.pivot_table(values="value", index="group",
-                                   columns="score_q", aggfunc="mean").round(1))
-```
+    **참 상관.** `value`와 `score`를 같은 생성기에서 뽑되 서로 참조하지 않았으므로 **독립이고 참 상관은 $0$** 이다. 표본상관의 표준편차는 $n$이 클 때 $1/\sqrt{n-1} = 1/\sqrt{199} = 0.071$ 정도이므로, $|r|$이 $0.14$ 안쪽이면 영과 구별되지 않는다.
 
-출력:
+    **(2) 수치적으로.**
 
-```
-       count   mean    std
-group                     
-A         58  50.17  10.20
-B         72  49.72   9.83
-C         70  49.24   9.98
+    ```python
+    import math
 
-Values > 60: 31 / 200
+    import numpy as np
+    import pandas as pd
 
-Correlation:
-        value  score
-value  1.000 -0.111
-score -0.111  1.000
+    rng = np.random.default_rng(42)
 
-Pivot:
- score_q    Q1    Q2    Q3    Q4
-group                          
-A        55.4  50.1  48.6  46.9
-B        50.5  53.6  48.0  48.0
-C        48.8  48.0  50.1  50.0
-```
+    # 범주형과 수치형을 섞은 자료틀을 만든다
+    df = pd.DataFrame({
+        "group": rng.choice(["A", "B", "C"], size=200),
+        "value": rng.normal(50, 10, size=200),
+        "score": rng.integers(0, 100, size=200),
+    })
+
+    # 집단별 요약
+    summary = df.groupby("group")["value"].agg(["count", "mean", "std"]).round(2)
+    print(summary)
+
+    # 집단 평균이 참값 50 에서 벗어난 폭을 표준오차 10/sqrt(n) 로 나누어 본다.
+    z = (summary["mean"] - 50) / (10 / np.sqrt(summary["count"]))
+    print("\n(집단평균 - 50) / SE:")
+    print(z.round(2))
+
+    # 불리언으로 걸러내기. P(X > 60) = P(Z > 1) 이므로 기대 개수를 함께 적는다.
+    high = df[df["value"] > 60]
+    p_tail = math.erfc(1 / math.sqrt(2)) / 2
+    print(f"\n60 초과: {len(high)} / {len(df)}  (이론 기대 {200 * p_tail:.1f})")
+
+    # 수치형 열 사이의 상관. 두 열을 독립으로 만들었으므로 참 상관은 0 이다.
+    print("\n상관행렬:")
+    print(df.corr(numeric_only=True).round(3))
+    r = df["value"].corr(df["score"])
+    t = r * np.sqrt((len(df) - 2) / (1 - r ** 2))
+    print(f"r = {r:.3f},  t = {t:.2f}  (자유도 198)")
+
+    # 피벗: 집단과 점수 사분위별 평균
+    df["score_q"] = pd.qcut(df["score"], 4, labels=["Q1", "Q2", "Q3", "Q4"])
+    print("\n피벗 — 칸마다의 평균:")
+    print(df.pivot_table(values="value", index="group", columns="score_q",
+                         aggfunc="mean", observed=False).round(1))
+    print("\n피벗 — 칸마다의 개수:")
+    print(df.pivot_table(values="value", index="group", columns="score_q",
+                         aggfunc="count", observed=False))
+    ```
+
+    출력:
+
+    ```
+           count   mean    std
+    group
+    A         58  50.17  10.20
+    B         72  49.72   9.83
+    C         70  49.24   9.98
+
+    (집단평균 - 50) / SE:
+    group
+    A    0.13
+    B   -0.24
+    C   -0.64
+    dtype: float64
+
+    60 초과: 31 / 200  (이론 기대 31.7)
+
+    상관행렬:
+           value  score
+    value  1.000 -0.111
+    score -0.111  1.000
+    r = -0.111,  t = -1.56  (자유도 198)
+
+    피벗 — 칸마다의 평균:
+    score_q    Q1    Q2    Q3    Q4
+    group
+    A        55.4  50.1  48.6  46.9
+    B        50.5  53.6  48.0  48.0
+    C        48.8  48.0  50.1  50.0
+
+    피벗 — 칸마다의 개수:
+    score_q  Q1  Q2  Q3  Q4
+    group
+    A        12  19  16  11
+    B        23  12  19  18
+    C        15  19  16  20
+    ```
+
+    **세 예측이 모두 맞는다.** $60$ 초과가 $31$개로 이론 기대 $31.7$개와 거의 같다(표준편차 $5.2$ 안쪽이니 둘을 구별할 수 없다). 집단별 표본표준편차 $10.20$, $9.83$, $9.98$이 참값 $\sigma = 10$을 둘러싸고 있고, 집단 평균이 $50$에서 벗어난 폭을 표준오차로 나누면 $0.13$, $-0.24$, $-0.64$로 셋 다 $1$ 안쪽이다. 상관은 $r = -0.111$, $t = -1.56$(자유도 $198$, 양쪽 $p$ 값 $0.12$)로 **영과 구별되지 않는다.** 참 상관이 $0$인 것을 알고 있으므로 이것이 옳은 결론이다.
+
+    **피벗표의 추세는 전부 잡음이다.** 집단 `A`의 행이 $55.4 \to 50.1 \to 48.6 \to 46.9$로 깔끔하게 내려가 "점수가 높을수록 `value`가 낮다"는 이야기로 읽히기 쉽다. 그러나 `value`와 `score`는 독립으로 만들었으니 **그런 추세는 존재하지 않는다.** 개수 표를 함께 보면 까닭이 보인다. `A` 행의 네 칸에 $12$, $19$, $16$, $11$개씩만 들어 있어 칸 평균의 표준오차가 $10/\sqrt{11} = 3.0$에서 $10/\sqrt{19} = 2.3$에 이른다. 네 칸을 그만큼의 오차로 흔들면 단조로워 보이는 배열이 적잖이 나온다. 집단 `C`의 행($48.8$, $48.0$, $50.1$, $50.0$)은 반대로 올라가는 듯 보이는데, 두 행의 모양이 어긋난다는 것 자체가 추세가 아니라 잡음이라는 증거다.
+
+    **피벗표는 칸의 개수를 숨긴다.** `aggfunc="mean"` 한 번만 부르면 각 수가 몇 개로 지어진 것인지 알 수 없고, $12$개의 평균과 $23$개의 평균이 같은 꼴로 나란히 찍힌다. **피벗표를 믿으려면 같은 피벗을 `aggfunc="count"`로 한 번 더 불러 보아야 한다.** `200`개를 $3 \times 4 = 12$칸으로 쪼개면 칸마다 $17$개 정도가 남는데, 이 정도 표본에서 칸 평균을 비교하는 것은 애초에 무리다.
 
 ## 연습문제
 

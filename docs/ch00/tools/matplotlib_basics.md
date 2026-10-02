@@ -43,52 +43,114 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 그림 머리글과 저장 규약
+**보기 1.** <span class="diff easy" title="쉬움"></span> 그림 머리글과 저장 규약. 머리글을 붙여 표준정규 밀도를 그리고 $\pm 1.96$에 점선을 얹는다.
+
+**(1)** 그림을 그리기 전에, 곡선의 봉우리 높이와 점선이 곡선과 만나는 높이, 그리고 두 점선 사이의 면적을 손으로 구하시오.
+
+**(2)** 머리글의 네 가지 설정 — `matplotlib.use("Agg")`, `font.family`, `axes.unicode_minus`, 저장 인수 셋 — 이 각각 없으면 무슨 일이 생기는지 말하시오.
 
 </div>
 
-```python
-"""이 책의 모든 그림 코드가 공유하는 머리글."""
+??? success "풀이"
 
-import matplotlib
-matplotlib.use("Agg")          # 창을 띄우지 않고 파일로만 그린다
-import numpy as np
-import matplotlib.pyplot as plt
+    **(1) 해석적으로.** 표준정규 밀도는
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호(U+2212)가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    $$
+    \varphi(z) = \frac{1}{\sqrt{2\pi}}e^{-z^2/2}
+    $$
 
-# 이 책이 쓰는 팔레트. 같은 뜻에는 언제나 같은 색을 쓴다.
-INK = "#37474F"                              # 글자, 축, 기준선
-BLUE, BLUE_L = "#1565C0", "#DCEBFB"          # 주된 계열과 그 채움색
-ORANGE, ORANGE_L = "#E65100", "#FFE0B2"      # 대조 계열
-GREEN, GREEN_L = "#33691E", "#C5E1A5"        # 셋째 계열
-PURPLE = "#6A1B9A"                           # 넷째 계열
-MUTED = "#90A4AE"                            # 참고선, 배경 요소
-RED = "#D32F2F"                              # 경고, 기각역
+    이다. 지수가 $z = 0$에서만 $0$이고 그 밖에서는 음수이므로 봉우리는 $z = 0$에 있고 그 높이는
 
-x = np.linspace(-3.5, 3.5, 400)
-pdf = np.exp(-x ** 2 / 2) / np.sqrt(2 * np.pi)
+    $$
+    \varphi(0) = \frac{1}{\sqrt{2\pi}} = 0.398942
+    $$
 
-fig, ax = plt.subplots(figsize=(6, 3.2))
-ax.fill_between(x, 0, pdf, color=BLUE_L)
-ax.plot(x, pdf, color=BLUE, lw=2, label="표준정규 밀도")
-ax.axvline(-1.96, color=RED, lw=1.2, ls="--")
-ax.axvline(1.96, color=RED, lw=1.2, ls="--", label="$\\pm 1.96$")
-ax.set_xlabel("표준화 점수 $z$")     # 한글은 반드시 $...$ 밖에 둔다
-ax.set_ylabel("밀도")
-ax.spines[["top", "right"]].set_visible(False)
-ax.legend(frameon=False)
-fig.savefig("figure_conventions.png", dpi=170, facecolor="white",
-            bbox_inches="tight")
-```
+    다. **밀도의 최댓값이 $1$보다 작은 것이 이상하지 않다.** 밀도는 확률이 아니라 단위 길이당 확률이어서 $1$을 넘어도 되고 못 미쳐도 된다. 넓이만 $1$이면 된다.
 
-![이 책의 그림 규약을 따른 표준정규 밀도](./img/matplotlib_basics_conventions.png)
+    점선이 곡선과 만나는 높이는
 
-저장 인수 세 개가 모두 필요하다. `dpi=170`은 화면과 인쇄 모두에서 또렷한 해상도이고, `facecolor="white"`가 없으면 어두운 배경의 문서에서 축 이름표가 보이지 않으며, `bbox_inches="tight"`가 없으면 가장자리에 쓸데없는 흰 여백이 남는다.
+    $$
+    \varphi(1.96) = \frac{1}{\sqrt{2\pi}}e^{-1.9208} = 0.398942 \times 0.146490 = 0.058441
+    $$
+
+    이고, 두 점선 사이의 면적은
+
+    $$
+    P(-1.96 < Z < 1.96) = 2\Phi(1.96) - 1 = \operatorname{erf}\!\left(\frac{1.96}{\sqrt 2}\right) = 0.950004
+    $$
+
+    다. $1.96$이 정확히 $0.95$를 주는 값이 아니라 $0.95$를 주는 값($1.959964$)의 반올림이라는 것이 여기서 드러난다. 넷째 자리의 $0.950004$가 그 흔적이다.
+
+    **(2) 네 설정이 각각 막는 것.**
+
+    - **`matplotlib.use("Agg")`** 는 화면 없는 환경(CI, 원격 서버, 스크립트 실행)에서 창을 띄우려다 실패하는 것을 막는다. 반드시 `pyplot`을 임포트하기 **전에** 불러야 한다. 뒤에 부르면 이미 정해진 백엔드가 바뀌지 않는다.
+    - **`font.family`** 를 지정하지 않으면 기본 글꼴(DejaVu Sans)에 한글 글리프가 없어 제목·축이름의 한글이 모두 네모(□)로 찍힌다. 오류도 나지 않고 그림만 조용히 망가진다.
+    - **`axes.unicode_minus = False`** 가 없으면 음수 눈금의 빼기 기호가 유니코드 U+2212로 그려지는데, 한글 글꼴에 그 글리프가 없어 또 네모가 된다. 이 설정은 그것을 ASCII 하이픈으로 바꾼다. 위 그림의 $x$축 눈금 `-3`, `-2`, `-1`이 제대로 보이는 것이 그 덕이다.
+    - **저장 인수 셋.** `dpi=170`은 해상도, `facecolor="white"`는 투명·어두운 배경 문제, `bbox_inches="tight"`는 가장자리 여백을 맡는다. 셋 다 저장 시점에만 효과가 있고, `fig.tight_layout()`과는 다른 일을 한다.
+
+    ```python
+    """이 책의 모든 그림 코드가 공유하는 머리글."""
+
+    import math
+
+    import matplotlib
+    matplotlib.use("Agg")          # 창을 띄우지 않고 파일로만 그린다
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호(U+2212)가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    # 이 책이 쓰는 팔레트. 같은 뜻에는 언제나 같은 색을 쓴다.
+    INK = "#37474F"                              # 글자, 축, 기준선
+    BLUE, BLUE_L = "#1565C0", "#DCEBFB"          # 주된 계열과 그 채움색
+    ORANGE, ORANGE_L = "#E65100", "#FFE0B2"      # 대조 계열
+    GREEN, GREEN_L = "#33691E", "#C5E1A5"        # 셋째 계열
+    PURPLE = "#6A1B9A"                           # 넷째 계열
+    MUTED = "#90A4AE"                            # 참고선, 배경 요소
+    RED = "#D32F2F"                              # 경고, 기각역
+
+    x = np.linspace(-3.5, 3.5, 400)
+    pdf = np.exp(-x ** 2 / 2) / np.sqrt(2 * np.pi)
+
+    fig, ax = plt.subplots(figsize=(6, 3.2))
+    ax.fill_between(x, 0, pdf, color=BLUE_L)
+    ax.plot(x, pdf, color=BLUE, lw=2, label="표준정규 밀도")
+    ax.axvline(-1.96, color=RED, lw=1.2, ls="--")
+    ax.axvline(1.96, color=RED, lw=1.2, ls="--", label="$\\pm 1.96$")
+    ax.set_xlabel("표준화 점수 $z$")     # 한글은 반드시 $...$ 밖에 둔다
+    ax.set_ylabel("밀도")
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.legend(frameon=False)
+    fig.savefig("figure_conventions.png", dpi=170, facecolor="white",
+                bbox_inches="tight")
+
+    # 그림에서 읽을 수 있는 세 수를 따로 계산해 둔다.
+    print(f"격자 최대 높이 = {pdf.max():.6f}  (격자점 x = {x[pdf.argmax()]:.6f})")
+    print(f"이론 봉우리    = {1 / np.sqrt(2 * np.pi):.6f}")
+    print(f"phi(1.96)      = {np.exp(-1.96 ** 2 / 2) / np.sqrt(2 * np.pi):.6f}")
+    print(f"두 점선 사이 면적 = {math.erf(1.96 / math.sqrt(2)):.6f}")
+    ```
+
+    출력:
+
+    ```
+    격자 최대 높이 = 0.398927  (격자점 x = -0.008772)
+    이론 봉우리    = 0.398942
+    phi(1.96)      = 0.058441
+    두 점선 사이 면적 = 0.950004
+    ```
+
+    ![이 책의 그림 규약을 따른 표준정규 밀도](./img/matplotlib_basics_conventions.png)
+
+    그림을 읽으면 봉우리가 $0.4$ 조금 아래, 점선이 곡선과 만나는 자리가 $0.06$ 근처다. 유도한 $0.398942$와 $0.058441$에 맞는다.
+
+    **한 자리가 어긋난다.** 코드가 준 격자 최대 높이는 $0.398927$로 이론값 $0.398942$보다 $1.5 \times 10^{-5}$ 작다. `np.linspace(-3.5, 3.5, 400)`은 간격이 $7/399 = 0.017544$인 격자인데 $3.5$가 그 간격의 정수배가 아니라 **$z = 0$이 격자에 아예 없다.** 가장 가까운 격자점이 $-0.008772$이고 거기서의 밀도가 $0.398927$이다. 격자가 고른 최댓값은 격자만큼만 정확하다. 점 개수를 $401$개로 바꾸면 $0$이 격자에 들어와 두 수가 일치한다.
+
+    저장 인수 세 개가 모두 필요하다. `dpi=170`은 화면과 인쇄 모두에서 또렷한 해상도이고, `facecolor="white"`가 없으면 어두운 배경의 문서에서 축 이름표가 보이지 않으며, `bbox_inches="tight"`가 없으면 가장자리에 쓸데없는 흰 여백이 남는다.
 
 !!! warning "mathtext 는 한글을 그리지 못한다"
     Matplotlib의 수식 엔진(mathtext)은 `$...$` 안의 글자를 수학 글꼴로 바꾸어 그리는데,
@@ -125,25 +187,77 @@ fig.savefig("figure_conventions.png", dpi=170, facecolor="white",
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Axes 사용자화와 저장
+**보기 2.** <span class="diff easy" title="쉬움"></span> Axes 사용자화와 저장. $x \in [0, 20]$에서 $\sin x$를 $400$점으로 그려 놓고 `ax.set_xlim(0, 10)`으로 보이는 범위를 절반으로 좁힌다.
+
+**(1)** `set_xlim` 뒤에 그림 안에 남아 있는 점은 몇 개인가? 자료가 지워지는가 가려지는가?
+
+**(2)** 같은 그림을 `bbox_inches="tight"` 없이, 있게, 그리고 `fig.tight_layout()`까지 부른 뒤로 세 번 저장해 화소 크기를 견주시오. 셋 가운데 가장 큰 것이 어느 것이겠는가?
 
 </div>
 
-```python
-# 그림을 손보는 일은 거의 전부 Axes 객체의 메서드로 이루어진다.
-ax.set_xlabel("x")
-ax.set_ylabel("y")
-ax.set_title("Title")
-ax.set_xlim(0, 10)              # 보이는 범위를 직접 정한다
-ax.set_ylim(-1, 1)
-ax.grid(True, alpha=0.3)        # 격자는 옅게. 자료보다 튀면 안 된다
-ax.legend(loc="best", frameon=False)
-fig.tight_layout()              # 축 이름표가 잘리지 않도록 여백을 맞춘다
-# bbox_inches="tight" 를 주어야 저장본에서도 이름표가 잘리지 않는다.
-fig.savefig("figure.png", dpi=170, facecolor="white", bbox_inches="tight")
-```
+??? success "풀이"
 
-`tight_layout`은 여러 패널이 있는 그림에서 축 이름표가 잘리거나 겹치는 것을 막는다. 해상도는 앞 절에서 정한 대로 `dpi=170`을 쓴다. 화면과 대부분의 인쇄 용도에 충분하며, `dpi=300`은 최종 출판용이 아니라면 과하다.
+    **(1) 가려질 뿐 지워지지 않는다.** `set_xlim`은 `Line2D` 객체가 들고 있는 자료를 전혀 건드리지 않고, 축이 어느 구간을 보여 줄지만 바꾼다. 그러므로 `ax.lines[0].get_xdata()`는 여전히 $400$개이고 그중 $x \le 10$인 $200$개만 화면에 들어온다. **`set_xlim`은 자료를 거르는 수단이 아니다.** 실제로 바깥 자료를 빼고 통계를 내야 한다면 자료 쪽에서 걸러야 하며, 그러지 않으면 "그림에 보이는 것"과 "계산에 들어간 것"이 어긋난다.
+
+    **(2)** 미리 답을 적자면 **가장 큰 것은 `bbox_inches="tight"`만 준 쪽**이다. `bbox_inches="tight"`는 흔히 "여백을 자른다"고 설명되지만 하는 일은 그게 아니라 **그려진 모든 요소를 꼭 감싸는 상자로 캔버스를 다시 잡는 것**이다. 요소가 캔버스 밖으로 비어져 나와 있으면 상자가 오히려 커진다. `tight_layout()`을 먼저 불러 요소들을 캔버스 안으로 들여놓은 다음에야 `bbox_inches`가 자르는 쪽으로 작동한다.
+
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.image as mpimg
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    x = np.linspace(0, 20, 400)
+    y = np.sin(x)
+
+    fig, ax = plt.subplots(figsize=(6, 3.2))
+    ax.plot(x, y, color="#1565C0", lw=2, label="$\\sin x$")
+
+    # 그림을 손보는 일은 거의 전부 Axes 객체의 메서드로 이루어진다.
+    ax.set_xlabel("가로축 $x$")
+    ax.set_ylabel("세로축 $\\sin x$")
+    ax.set_title("범위를 좁히면 바깥 자료는 가려질 뿐 지워지지 않는다", fontsize=11)
+    ax.set_xlim(0, 10)              # 보이는 범위를 직접 정한다
+    ax.set_ylim(-1, 1)
+    ax.grid(True, alpha=0.3)        # 격자는 옅게. 자료보다 튀면 안 된다
+    ax.legend(loc="lower left", frameon=False)
+
+    # set_xlim 은 선을 자르지 않는다. 그린 점은 그대로 있고 보이지 않을 뿐이다.
+    print(f"그린 점 {len(ax.lines[0].get_xdata())} 개,  그중 x <= 10 인 것 {np.sum(x <= 10)} 개")
+    print(f"자료의 x 범위 = ({x.min():.0f}, {x.max():.0f}),  보이는 범위 = {ax.get_xlim()}")
+
+    # 저장을 세 가지로 해 두고 화소 크기를 견준다.
+    fig.savefig("plain.png", dpi=170, facecolor="white")
+    fig.savefig("bbox.png", dpi=170, facecolor="white", bbox_inches="tight")
+    fig.tight_layout()              # 축 이름표가 잘리지 않도록 여백을 맞춘다
+    fig.savefig("both.png", dpi=170, facecolor="white", bbox_inches="tight")
+
+    for name in ("plain.png", "bbox.png", "both.png"):
+        h, w = mpimg.imread(name).shape[:2]
+        print(f"{name:10s} {w} x {h} 화소")
+    ```
+
+    출력:
+
+    ```
+    그린 점 400 개,  그중 x <= 10 인 것 200 개
+    자료의 x 범위 = (0, 20),  보이는 범위 = (0.0, 10.0)
+    plain.png  1020 x 544 화소
+    bbox.png   944 x 559 화소
+    both.png   1000 x 525 화소
+    ```
+
+    ![set_xlim 으로 범위를 좁힌 사인 곡선](./img/matplotlib_basics_customize.png)
+
+    **그림에서 읽히는 것.** 보이는 구간 $[0, 10]$은 $10/(2\pi) = 1.59$주기에 해당하고, 과연 봉우리가 $\pi/2 = 1.57$과 $5\pi/2 = 7.85$ 두 곳, 골이 $3\pi/2 = 4.71$ 한 곳에 있다. $x = 10$에서 곡선이 $\sin 10 = -0.544$로 잘리듯 끝나는데, **자료가 거기서 끝난 것이 아니라 축이 거기서 끝난 것이다.** 이 그림만 보고 "자료가 $10$까지다"라고 읽으면 틀린다.
+
+    **화소 크기 셋.** `plain.png`가 $1020 \times 544$다. `figsize=(6, 3.2)`에 `dpi=170`을 곱한 $1020 \times 544$가 그대로 나왔으니 이쪽이 지정한 크기를 지킨다. `bbox.png`는 $944 \times 559$로 **가로는 $76$화소 줄었는데 세로는 $15$화소 늘었다.** 좌우에는 잘라낼 여백이 있었지만 위아래로는 제목과 축이름이 캔버스 경계를 넘어가 있었기 때문이다. 예상대로 셋 중 가장 넓은 면적이 여기다. `tight_layout()`을 부른 뒤의 `both.png`는 $1000 \times 525$로 가로세로가 모두 줄어든다.
+
+    **그래서 둘은 서로를 대신하지 못한다.** `tight_layout()`은 캔버스 **안에서** 축의 자리를 조정해 이름표가 잘리지 않게 하고, `bbox_inches="tight"`는 저장할 때 캔버스 **경계**를 다시 잡는다. 이 책의 규약이 둘을 함께 쓰는 것은 그 때문이다. 해상도는 앞 절에서 정한 대로 `dpi=170`을 쓴다. 화면과 대부분의 인쇄 용도에 충분하며, `dpi=300`은 최종 출판용이 아니라면 과하다.
 
 ## pandas와의 연동
 
@@ -151,76 +265,164 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> pandas 그림 메서드로 세 패널 그리기
+**보기 3.** <span class="diff easy" title="쉬움"></span> pandas 그림 메서드로 세 패널 그리기. `x`와 `y`를 독립인 표준정규에서 $200$개씩 뽑고 `value`를 $2x + \varepsilon$로 만든 뒤, 히스토그램·산점도·집단별 상자그림을 한 줄씩으로 그린다.
+
+**(1)** 세 패널에서 각각 무엇을 읽어야 하는지 수치와 함께 적으시오. 특히 상자그림의 두 집단이 달라야 할 까닭이 코드에 있는가?
+
+**(2)** pandas의 그림 메서드가 자동으로 해 주는 것과, 이 책의 그림 규약에 비추어 손으로 고쳐야 하는 것을 가르시오.
 
 </div>
 
-```python
-"""DataFrame 이 자체로 갖고 있는 그림 메서드로 세 패널을 한 번에 그린다."""
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-rng = np.random.default_rng(0)
-df = pd.DataFrame({"x": rng.normal(0, 1, 200),
-                   "y": rng.normal(0, 1, 200),
-                   "group": rng.choice(["A", "B"], 200)})
-# x 와 상관되도록 value 를 만든다. 상자그림에서 집단 차이를 보기 위해서다.
-df["value"] = df["x"] * 2 + rng.normal(0, 1, 200)
+    ```python
+    """DataFrame 이 자체로 갖고 있는 그림 메서드로 세 패널을 한 번에 그린다."""
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
 
-# ax= 로 그릴 자리를 지정하면 pandas 가 그 Axes 위에 그린다.
-# 이렇게 해야 여러 패널을 한 그림에 모을 수 있다.
-fig, axes = plt.subplots(1, 3, figsize=(13, 3.5))
-df["x"].plot.hist(bins=30, ax=axes[0], title="hist")
-df.plot.scatter(x="x", y="y", ax=axes[1], title="scatter")
-df.boxplot(column="value", by="group", ax=axes[2])
-plt.suptitle("")            # boxplot이 붙이는 자동 제목을 지운다
-plt.tight_layout()
-plt.show()
-```
+    rng = np.random.default_rng(0)
+    df = pd.DataFrame({"x": rng.normal(0, 1, 200),
+                       "y": rng.normal(0, 1, 200),
+                       "group": rng.choice(["A", "B"], 200)})
+    # value 는 x 에 2 를 곱하고 잡음을 더해 만든다. group 은 전혀 쓰지 않는다.
+    df["value"] = df["x"] * 2 + rng.normal(0, 1, 200)
 
-![pandas의 그림 메서드 세 가지](./img/matplotlib_basics_68.png)
+    print(df.groupby("group")["value"].agg(["count", "median"]).round(2))
+    print(f"x 와 y 의 상관     = {df['x'].corr(df['y']):.3f}")
+    print(f"x 와 value 의 상관 = {df['x'].corr(df['value']):.3f}")
 
-빠르게 탐색할 때 편리하다. 최종 그림에서는 Matplotlib을 직접 호출하는 편이 더 세밀하게 제어할 수 있다.
+    # ax= 로 그릴 자리를 지정하면 pandas 가 그 Axes 위에 그린다.
+    # 이렇게 해야 여러 패널을 한 그림에 모을 수 있다.
+    fig, axes = plt.subplots(1, 3, figsize=(13, 3.5))
+    df["x"].plot.hist(bins=30, ax=axes[0], title="hist")
+    df.plot.scatter(x="x", y="y", ax=axes[1], title="scatter")
+    df.boxplot(column="value", by="group", ax=axes[2])
+    plt.suptitle("")            # boxplot이 붙이는 자동 제목을 지운다
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+           count  median
+    group
+    A         92    0.35
+    B        108   -0.01
+    x 와 y 의 상관     = -0.065
+    x 와 value 의 상관 = 0.895
+    ```
+
+    ![pandas의 그림 메서드 세 가지](./img/matplotlib_basics_68.png)
+
+    **(1) 세 패널이 보이는 것.**
+
+    **왼쪽 히스토그램.** `x`의 범위가 $-2.40$에서 $2.00$까지라 구간 $30$개의 폭이 $0.1467$이고, 구간당 평균은 $200/30 = 6.7$개다. 가장 높은 막대는 $0$ 바로 오른쪽 구간의 $18$개다. 그 구간에 들어갈 기대 개수는 $200 \times \big(\Phi(0.389) - \Phi(0.242)\big) = 11.1$개이고 표준편차가 $3.2$이므로 $18$은 $2.1$표준편차 위다. 구간이 $30$개나 되니 그중 하나가 이만큼 솟는 것은 놀랄 일이 아니다. **구간을 잘게 쪼갤수록 칸마다의 상대오차가 커져 울퉁불퉁해 보인다.** 세로축이 `Frequency`, 곧 도수이지 밀도가 아니다. 그래서 여기에 이론 밀도 곡선을 겹치려면 `density=True`를 주어 세로축을 밀도로 바꾸어야 한다.
+
+    **가운데 산점도.** `x`와 `y`는 독립으로 뽑았으므로 참 상관이 $0$이고, 표본상관은 $-0.065$다($t = -0.92$, 자유도 $198$). 구름에 기울기가 보이지 않고 둥글게 퍼진 모양이 그것이다. 점이 $200$개인데 가운데가 겹쳐 보이는 것은 정규분포가 중심에 몰리기 때문이지 군집이 있어서가 아니다.
+
+    **오른쪽 상자그림.** 집단 `A`가 $92$개로 중앙값 $0.35$, `B`가 $108$개로 중앙값 $-0.01$이다. 상자와 수염의 길이도 거의 같다. **두 집단이 달라야 할 까닭은 코드에 없다.** `value`는 `x`에 $2$를 곱하고 잡음을 더해 만들었고 `group`을 전혀 참조하지 않았으므로 **참 차이는 $0$** 이다. 웰치 $t$ 검정을 해 보면 $t = 0.81$, $p = 0.42$로 역시 차이가 없다. 상자그림이 두 집단을 나란히 놓으면 눈이 저절로 차이를 찾게 되지만, 여기서 찾을 것은 없고 그것이 옳은 결론이다.
+
+    세 패널이 보이지 않는 것도 있다. **`x`와 `value`의 상관 $0.895$가 어느 패널에도 없다.** 이론값은 $\operatorname{Corr}(x,\, 2x + \varepsilon) = 2/\sqrt{5} = 0.894$이고 표본값이 $0.895$로 그것을 재현하는데, 산점도가 그린 것은 `x` 대 `y`이지 `x` 대 `value`가 아니다. **자료에서 가장 강한 관계가 그림 세 장 어디에도 안 나올 수 있다.**
+
+    **(2) 자동으로 해 주는 것.** 열 이름을 축 이름으로 달아 주고(`x`, `y`, `group`), 결측을 알아서 빼고, `by=`를 주면 집단별로 쪼개어 나란히 놓아 준다. `ax=`로 자리를 주면 여러 패널을 한 그림에 모을 수도 있다. 탐색 단계에서는 이만하면 충분하다.
+
+    **손으로 고쳐야 하는 것.** 이 책의 규약에 비추면 거의 전부다. 제목이 `hist`, `scatter`, `value`로 제각각이고 셋 다 영어이며, 무엇을 보라는 제목이 아니라 메서드 이름이다. 세로축 이름 `Frequency`도 영어로 고정이라 한글로 바꾸려면 `set_ylabel`을 따로 불러야 한다. `df.boxplot`은 옛 스타일이라 셋째 패널에만 격자가 켜져 있어 세 패널의 모양이 어긋나고, 묻지도 않은 `suptitle`을 붙이기 때문에 `plt.suptitle("")`로 지워야 한다. 색도 Matplotlib 기본값이지 이 책의 팔레트가 아니다.
+
+    빠르게 탐색할 때 편리하다. 최종 그림에서는 Matplotlib을 직접 호출하는 편이 더 세밀하게 제어할 수 있다.
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> Matplotlib으로 기본 시각화하기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 히스토그램과 Q-Q 그림으로 정규성 보기. $N(50, 10^2)$에서 $500$개를 뽑아 왼쪽에는 밀도 히스토그램에 이론 밀도를 겹치고, 오른쪽에는 정규 Q-Q 그림을 그린다.
+
+**(1)** 왼쪽 빨간 곡선의 봉우리 높이는 얼마인가? 오른쪽 Q-Q 직선의 기울기와 절편은 각각 무엇이 되어야 하는가? 그리기 전에 적으시오.
+
+**(2)** 돌려서 확인하고, 가장 높은 막대가 이론 곡선을 $23\%$나 넘어서는 것이 자료가 정규분포가 아니라는 뜻인지 판정하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.stats import norm
+??? success "풀이"
 
-rng = np.random.default_rng(42)
-data = rng.normal(loc=50, scale=10, size=500)
+    **(1) 해석적으로.**
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+    **봉우리 높이.** $N(\mu, \sigma^2)$의 밀도는 $z = \mu$에서 가장 크고 그 값은
 
-# 왼쪽: 히스토그램에 이론 밀도함수를 겹친다
-axes[0].hist(data, bins=30, density=True, alpha=0.5,
-             edgecolor="black", label="Sample")
-x = np.linspace(data.min(), data.max(), 200)
-axes[0].plot(x, norm.pdf(x, loc=50, scale=10), "r-",
-             lw=2, label="N(50, 10) PDF")
-axes[0].set_xlabel("value"); axes[0].set_ylabel("density")
-axes[0].set_title("Histogram with density overlay")
-axes[0].legend()
+    $$
+    f(\mu) = \frac{1}{\sigma\sqrt{2\pi}} = \frac{1}{10\sqrt{2\pi}} = 0.039894
+    $$
 
-# 오른쪽: Q-Q 그림
-from scipy.stats import probplot
-probplot(data, dist="norm", plot=axes[1])
-axes[1].set_title("Q-Q plot vs. Normal")
+    다. 보기 1 의 표준정규 봉우리 $0.398942$를 $\sigma = 10$으로 나눈 값이다. **밀도의 높이는 눈금의 단위에 따라 바뀐다**는 것이 여기서 보인다. 넓이는 언제나 $1$이므로 가로로 $10$배 늘어나면 세로로 $10$분의 $1$이 된다.
 
-fig.tight_layout()
-plt.show()
-```
+    **Q-Q 직선.** 정규 Q-Q 그림은 가로축에 이론 분위수 $z_{(i)}$를, 세로축에 정렬한 관측값 $x_{(i)}$를 놓는다. 자료가 $N(\mu, \sigma^2)$이면 $x_{(i)} \approx \mu + \sigma z_{(i)}$이므로 점들이 **기울기 $\sigma = 10$, 절편 $\mu = 50$** 인 직선 위에 놓인다. `probplot`이 그려 주는 직선은 이 관계를 최소제곱으로 적합한 것이어서 기울기가 $\sigma$의 추정값, 절편이 $\mu$의 추정값이 된다. 이론 분위수가 $0$을 중심으로 대칭이라 $\sum z_{(i)} = 0$이고, 그러면 최소제곱 절편이 정확히 표본평균 $\bar x$와 같아진다.
 
-![히스토그램과 Q-Q 그림](./img/matplotlib_basics_92.png)
+    **(2) 수치적으로.**
 
-히스토그램은 적합도를 눈으로 확인하게 해주고, Q-Q 그림은 직선에서 벗어나는 정도를 보여줌으로써 분석적으로 확인하게 해준다. 통계적인 그림은 이 둘 중 하나 없이는 완성되는 일이 드물다.
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import norm, probplot
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    rng = np.random.default_rng(42)
+    data = rng.normal(loc=50, scale=10, size=500)
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+    # 왼쪽: 히스토그램에 이론 밀도함수를 겹친다. density=True 여야 세로축이 밀도가 된다.
+    counts, edges, _ = axes[0].hist(data, bins=30, density=True, alpha=0.5,
+                                    edgecolor="black", color="#1565C0", label="표본")
+    x = np.linspace(data.min(), data.max(), 200)
+    axes[0].plot(x, norm.pdf(x, loc=50, scale=10), color="#D32F2F",
+                 lw=2, label="$N(50, 10^2)$ 밀도")
+    axes[0].set_xlabel("값")
+    axes[0].set_ylabel("밀도")
+    axes[0].set_title("히스토그램에 이론 밀도 겹치기", fontsize=11)
+    axes[0].legend(frameon=False)
+
+    # 오른쪽: Q-Q 그림. probplot 은 최소제곱 직선의 기울기·절편·상관을 돌려준다.
+    (osm, osr), (slope, intercept, r) = probplot(data, dist="norm", plot=axes[1])
+    axes[1].set_title("정규 Q-Q 그림", fontsize=11)
+    axes[1].set_xlabel("이론 분위수")
+    axes[1].set_ylabel("정렬된 관측값")
+
+    print(f"이론 봉우리 1/(10*sqrt(2pi)) = {norm.pdf(50, 50, 10):.6f}")
+    print(f"가장 높은 막대              = {counts.max():.6f}  (막대 폭 {edges[1] - edges[0]:.3f})")
+    print(f"표본평균 = {data.mean():.4f},  표본표준편차 = {data.std(ddof=1):.4f}")
+    print(f"Q-Q 직선: 기울기 = {slope:.4f},  절편 = {intercept:.4f},  r = {r:.4f}")
+
+    fig.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    이론 봉우리 1/(10*sqrt(2pi)) = 0.039894
+    가장 높은 막대              = 0.049265  (막대 폭 1.827)
+    표본평균 = 49.8687,  표본표준편차 = 9.5993
+    Q-Q 직선: 기울기 = 9.6288,  절편 = 49.8687,  r = 0.9990
+    ```
+
+    ![히스토그램과 Q-Q 그림](./img/matplotlib_basics_92.png)
+
+    **유도가 맞는다.** 이론 봉우리가 $0.039894$이고 그림의 빨간 곡선도 $0.04$ 바로 아래에서 꺾인다. Q-Q 직선의 절편 $49.8687$은 표본평균과 소수 넷째 자리까지 같다 — 위에서 유도한 대로다. 기울기 $9.6288$은 표본표준편차 $9.5993$과 $0.03$쯤 다른데, 최소제곱 기울기와 표본표준편차는 **같은 양의 서로 다른 추정량**이라 완전히 일치하지는 않는다. 둘 다 참값 $\sigma = 10$을 조금 밑돈다. $s$의 표준오차가 대략 $\sigma/\sqrt{2(n-1)} = 0.317$이므로 $9.5993$은 참값에서 $1.3$표준오차 아래이고, 이상한 일이 아니다.
+
+    **(2) 의 답은 "아니다"이다.** 가장 높은 막대의 높이는 $0.049265$로 이론 곡선의 봉우리 $0.039894$보다 $23\%$ 크다. 그러나 그 막대는 봉우리에 있지 않고 구간 $[51.74,\, 53.56]$에 있으며, **밀도가 아니라 개수로 따져야 한다.** 그 구간에 들어갈 기대 개수는
+
+    $$
+    500 \times \big(\Phi(0.356) - \Phi(0.174)\big) = 35.1
+    $$
+
+    이고 표준편차가 $\sqrt{35.1 \times (1 - 0.0703)} = 5.7$이다. 실제로 들어간 것은 $45$개이니 $1.7$표준편차 위다. 막대가 $30$개나 되므로 그중 하나가 이만큼 솟는 것은 흔한 일이다. **히스토그램 막대 하나가 곡선을 넘는 것은 증거가 못 된다.**
+
+    오른쪽 Q-Q 그림이 이 판정을 훨씬 분명하게 해 준다. 점들이 직선 위에 거의 그대로 놓이고 적합 상관이 $r = 0.9990$이다. 양 끝 몇 점이 직선에서 벗어나 보이는데, 가장 바깥 점은 $500$개 중 가장 큰 값 하나이므로 원래 가장 많이 흔들리는 자리다. **Q-Q 그림의 꼬리는 언제나 들쭉날쭉하며, 거기서 벗어난다고 정규성을 버려서는 안 된다.**
+
+    두 그림이 서로를 메운다. 히스토그램은 구간 나누기에 따라 모양이 크게 바뀌어 적합도 판정에 약하지만 봉우리가 몇 개인지를 보인다. Q-Q 그림은 구간 나누기가 없어 적합도에 훨씬 민감하지만 **이봉 분포를 잘 못 보인다.** 통계적인 그림은 이 둘 중 하나 없이는 완성되는 일이 드물다.
 
 ## 연습문제
 

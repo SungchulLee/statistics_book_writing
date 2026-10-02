@@ -57,40 +57,139 @@ conda env export > environment.yml
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 리스트 컴프리헨션
+**보기 1.** <span class="diff easy" title="쉬움"></span> 리스트 컴프리헨션. `data = [-2, 3, 0, 5, -1, 4]`에 `[x**2 for x in data if x > 0]`를 건다.
+
+**(1)** 결과의 길이와 내용을 돌리기 전에 적으시오. `0`은 들어가는가?
+
+**(2)** `if`를 `for` 앞으로 옮긴 `[x**2 if x > 0 else 0 for x in data]`는 무엇이 다른가? 길이로 답하시오.
 
 </div>
 
-```python
-data = [-2, 3, 0, 5, -1, 4]
-# for 와 if 를 한 줄에 적는다. 걸러내기와 변환이 한 번에 일어난다.
-squares = [x**2 for x in data if x > 0]
-print(squares)
-```
+??? success "풀이"
 
-출력:
+    **(1) 길이 $3$에 `[9, 25, 16]`.** 컴프리헨션은 왼쪽에서 오른쪽으로 `for` → `if` → 표현식 순으로 읽으면 된다. `data`를 앞에서부터 훑으며 `x > 0`을 만족하는 것만 남기므로 통과하는 것은 $3$, $5$, $4$ 셋이다. `0`은 **`> 0`이 아니라 `>= 0`이어야 통과하므로 빠진다.** 경계가 열려 있는지 닫혀 있는지가 길이를 바꾸는 자리다. 남은 셋을 제곱하면 $9$, $25$, $16$이고, **입력 순서가 그대로 유지된다.** 컴프리헨션은 정렬하지 않는다.
 
-```
-[9, 25, 16]
-```
+    **(2) 길이 $6$에 `[0, 9, 0, 25, 0, 16]`.** `if`의 자리가 뜻을 바꾼다.
 
-사전(`{k: f(k) for k in keys}`), 집합(`{f(x) for x in xs}`), 제너레이터(`(f(x) for x in xs)`)에도 같은 형태가 있다. 제너레이터는 게으르게 값을 내놓으므로 열이 크거나 무한할 때 중요하다.
+    - `[... for x in data if 조건]` — 뒤에 붙은 `if`는 **거르개**다. 조건을 통과한 것만 결과에 들어가므로 길이가 줄어든다.
+    - `[A if 조건 else B for x in data]` — 앞에 붙은 `if ... else`는 **삼항 표현식**이다. 모든 원소에 대해 값을 하나씩 내놓으므로 길이가 입력과 같다. `else`가 반드시 있어야 하고(없으면 문법 오류), 거르는 일은 하지 않는다.
+
+    **길이로 둘을 구별하면 틀리지 않는다.** 거르개는 길이를 줄이고 삼항은 길이를 보존한다.
+
+    ```python
+    data = [-2, 3, 0, 5, -1, 4]
+    # for 와 if 를 한 줄에 적는다. 걸러내기와 변환이 한 번에 일어난다.
+    squares = [x**2 for x in data if x > 0]
+    print(squares, len(squares))
+
+    # if 를 for 앞에 두면 거르는 것이 아니라 삼항 연산이 된다. 길이가 줄지 않는다.
+    ternary = [x**2 if x > 0 else 0 for x in data]
+    print(ternary, len(ternary))
+    ```
+
+    출력:
+
+    ```
+    [9, 25, 16] 3
+    [0, 9, 0, 25, 0, 16] 6
+    ```
+
+    예측대로다. 통계 작업에서 이 차이가 결정적일 때가 있다. 결측을 $0$으로 바꾸는 것(삼항)과 결측인 관측을 버리는 것(거르개)은 전혀 다른 분석이며, 앞의 것은 표본 크기를 그대로 두고 뒤의 것은 줄인다. **$n$이 바뀌었는지를 보면 어느 쪽을 썼는지 알 수 있다.**
+
+    사전(`{k: f(k) for k in keys}`), 집합(`{f(x) for x in xs}`), 제너레이터(`(f(x) for x in xs)`)에도 같은 형태가 있다. 제너레이터는 게으르게 값을 내놓으므로 열이 크거나 무한할 때 중요하다.
 
 ## 함수와 독스트링
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 함수와 독스트링
+**보기 2.** <span class="diff easy" title="쉬움"></span> 함수와 독스트링. 독스트링이 `"""수들의 산술평균을 돌려준다."""` 한 줄뿐이고 본문이 `return sum(data) / len(data)`인 함수 `sample_mean(data)`를 생각하자.
+
+**(1)** `sample_mean([0.1, 0.1, 0.1]) == 0.1`은 참인가? 참이 아니라면 어긋나는 폭이 얼마인지 밝히시오.
+
+**(2)** 독스트링이 약속한 "수들의 산술평균"을 이 구현이 못 지키는 입력을 두 가지 들고, 독스트링을 고쳐 쓰시오.
 
 </div>
 
-```python
-def sample_mean(data):
-    """수들의 산술평균을 돌려준다."""
-    return sum(data) / len(data)
-```
+??? success "풀이"
 
-독스트링은 함수의 계약이다. 무엇을 계산하고, 무엇을 기대하며, 무엇을 반환하는지 밝힌다. `def` 줄 바로 뒤의 삼중 따옴표 문자열은 `help(fn)`으로 볼 수 있고 자동 문서화의 근거가 된다.
+    **(1) 거짓이다.** 십진수 $0.1$은 이진 부동소수점으로 정확히 적을 수 없다. 배정도에서 `0.1`이 실제로 담고 있는 값은
+
+    $$
+    0.1000000000000000055511151231257827\ldots
+    $$
+
+    이다. 이것을 셋 더하면 참값보다 조금 큰 수가 되고, 그 합을 가장 가까운 배정도로 맞추면 $0.30000000000000004$가 된다. 다시 $3$으로 나누어 반올림하면 $0.10000000000000002$이고, 이것은 $0.1$이 아니다.
+
+    어긋나는 폭은 $1.3878 \times 10^{-17}$인데, 이것이 바로 **$0.1$ 근처에서 배정도 수들이 놓인 간격(ulp)** 과 정확히 같다. $0.1$은 $2^{-4}$와 $2^{-3}$ 사이에 있으므로 그 구간의 간격은
+
+    $$
+    2^{-4} \times 2^{-52} = 2^{-56} = 1.3878 \times 10^{-17}
+    $$
+
+    이다. 곧 **답은 표현할 수 있는 수 가운데 정답 바로 옆칸**이며, 이보다 더 잘할 수는 없다. 같은 이유로 `0.1 + 0.2 == 0.3`도 거짓이다(왼쪽이 $0.30000000000000004$). 부동소수점 결과를 `==`로 견주지 말고 `math.isclose`나 `np.isclose`를 쓰라는 규칙이 여기서 나온다.
+
+    **(2) 못 지키는 입력 두 가지.**
+
+    - **빈 열.** `sample_mean([])`은 `len(data)`가 $0$이라 `ZeroDivisionError`를 던진다. 빈 열의 평균이 정의되지 않는 것은 맞지만, 독스트링은 이 경우를 한 마디도 말하지 않는다.
+    - **제너레이터.** `sample_mean(x for x in [1, 2, 3])`은 `TypeError: object of type 'generator' has no len()`을 낸다. "수들의 열"이라고만 적혀 있으면 제너레이터도 될 것 같지만 `len`이 없어 안 된다. 게다가 `sum`이 이미 열을 다 소비해 버리므로 순서를 바꾸어도 안 된다.
+
+    ```python
+    import math
+
+
+    def sample_mean(data):
+        """수들의 산술평균을 돌려준다."""
+        return sum(data) / len(data)
+
+
+    m = sample_mean([0.1, 0.1, 0.1])
+    print(f"sample_mean([0.1, 0.1, 0.1]) = {m!r}")
+    print(f"== 0.1 인가?  {m == 0.1}")
+    print(f"math.isclose 로는?  {math.isclose(m, 0.1)}")
+    print(f"차이 = {m - 0.1!r},  0.1 근처의 간격(ulp) = {math.ulp(0.1)!r}")
+
+    for bad in ([], (x for x in [1, 2, 3])):
+        try:
+            sample_mean(bad)
+        except Exception as err:
+            print(f"{type(err).__name__}: {err}")
+    ```
+
+    출력:
+
+    ```
+    sample_mean([0.1, 0.1, 0.1]) = 0.10000000000000002
+    == 0.1 인가?  False
+    math.isclose 로는?  True
+    차이 = 1.3877787807814457e-17,  0.1 근처의 간격(ulp) = 1.3877787807814457e-17
+    ZeroDivisionError: division by zero
+    TypeError: object of type 'generator' has no len()
+    ```
+
+    차이 $1.3877787807814457 \times 10^{-17}$이 `math.ulp(0.1)`과 자릿수 끝까지 같다. 유도한 $2^{-56}$이 맞는다.
+
+    계약을 지키도록 고쳐 쓰면 이렇게 된다.
+
+    ```python
+    def sample_mean(data):
+        """수들의 산술평균을 돌려준다.
+
+        인수:
+            data: 수의 이터러블. 제너레이터도 받는다.
+        반환:
+            float. 부동소수점 반올림 때문에 참값과 1 ulp 쯤 어긋날 수 있다.
+        예외:
+            ValueError: data 가 비어 있을 때.
+        """
+        values = list(data)          # 제너레이터도 받도록 한 번에 펼친다
+        if not values:
+            raise ValueError("빈 열의 평균은 정의되지 않는다")
+        return sum(values) / len(values)
+    ```
+
+    고친 쪽이 길어진 것이 요점이다. **독스트링은 함수가 무엇을 하는지가 아니라 무엇을 보장하는지를 적는 자리이며**, 보장할 수 없는 것은 보장하지 않는다고 적어야 한다.
+
+    독스트링은 함수의 계약이다. 무엇을 계산하고, 무엇을 기대하며, 무엇을 반환하는지 밝힌다. `def` 줄 바로 뒤의 삼중 따옴표 문자열은 `help(fn)`으로 볼 수 있고 자동 문서화의 근거가 된다.
 
 람다(`lambda x: x**2`)는 이름 없는 단일 표현식 함수로, `map`, `filter`, `sorted(..., key=...)`의 인수로 쓰기 편하다. 표현식 하나보다 길어지는 것은 이름 있는 `def`로 쓰는 편이 낫다.
 
@@ -102,31 +201,88 @@ def sample_mean(data):
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 모듈 구조와 __main__ 가드
 
+**(1)** 한 파일 안에 가드 밖의 `print`와 가드 안의 `print`를 하나씩 두었다. 이 파일을 직접 실행할 때와 다른 파일에서 `import`할 때 각각 몇 줄이 찍히는가?
+
+**(2)** 그때 `__name__`의 값이 각각 무엇인지 적고, 실제로 돌려 확인하시오.
+
 </div>
 
-```python
-"""이 스크립트가 무엇을 하는지 적는 모듈 독스트링."""
+??? success "풀이"
 
-# === 임포트 ===
-import numpy as np
+    **(1)·(2) 함께.** 파이썬은 모듈을 올릴 때마다 그 모듈의 전역 이름공간에 `__name__`을 넣어 준다. 값은 **그 모듈을 어떻게 올렸느냐에 따라** 달라진다.
 
-# === 함수 정의 ===
-def my_function(x):
-    return x + 1
+    - `python demo_mod.py`로 **직접 실행**하면 그 파일이 최상위 스크립트이므로 `__name__`이 문자열 `"__main__"`이 된다. 가드의 조건이 참이 되어 **두 줄 다** 찍힌다.
+    - 다른 파일에서 `import demo_mod`로 **불러오면** `__name__`이 모듈 이름 `"demo_mod"`가 된다. 가드의 조건이 거짓이라 **가드 밖의 한 줄만** 찍힌다.
 
-# === 시연 / 진입점 ===
-# 이 가드가 없으면 다른 파일에서 import 하는 순간 아래 코드까지 실행된다.
-if __name__ == "__main__":
-    print(my_function(3))
-```
+    요점은 `import`가 **파일을 위에서 아래로 끝까지 실행한다**는 것이다. 흔히 "import 는 함수만 가져온다"고 오해하지만 그렇지 않다. `def` 문도 실행되어야 함수 객체가 만들어지고, `def`가 아닌 줄도 똑같이 실행된다. 그러므로 **가드가 없으면 남의 모듈을 하나 불러올 때마다 그 모듈의 시연이 다 돌아간다.** 그림이 뜨고 파일이 써지고 모의실험이 몇 초씩 걸린다.
 
-출력:
+    ```python
+    """이 스크립트가 무엇을 하는지 적는 모듈 독스트링."""
 
-```
-4
-```
+    # === 임포트 ===
+    import numpy as np
 
-`if __name__ == "__main__":` 가드는 시연 블록이 직접 호출(`python my_script.py`)할 때만 실행되고, 다른 모듈이 `import my_script`할 때는 실행되지 않도록 보장한다. 이 책의 모든 `.py` 파일이 따르는 교육용 방식이다.
+    # === 함수 정의 ===
+    def my_function(x):
+        return x + 1
+
+    # === 시연 / 진입점 ===
+    # 이 가드가 없으면 다른 파일에서 import 하는 순간 아래 코드까지 실행된다.
+    if __name__ == "__main__":
+        print(my_function(3))
+    ```
+
+    출력:
+
+    ```
+    4
+    ```
+
+    두 경우를 한자리에서 보려면 작은 모듈을 만들어 두 가지로 올려 보면 된다.
+
+    ```python
+    import pathlib
+    import runpy
+    import sys
+    import tempfile
+
+    SRC = '''\
+    def my_function(x):
+        return x + 1
+
+    print("가드 밖의 줄은 언제나 실행된다.    __name__ =", __name__)
+
+    if __name__ == "__main__":
+        print("가드 안쪽은 직접 실행할 때만.  __name__ =", __name__)
+    '''
+
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    (tmp / "demo_mod.py").write_text(SRC, encoding="utf-8")
+
+    print("--- python demo_mod.py 로 직접 실행할 때")
+    runpy.run_path(str(tmp / "demo_mod.py"), run_name="__main__")
+
+    print("--- import demo_mod 로 불러올 때")
+    sys.path.insert(0, str(tmp))
+    import demo_mod
+
+    print("불러온 함수는 쓸 수 있다:", demo_mod.my_function(3))
+    ```
+
+    출력:
+
+    ```
+    --- python demo_mod.py 로 직접 실행할 때
+    가드 밖의 줄은 언제나 실행된다.    __name__ = __main__
+    가드 안쪽은 직접 실행할 때만.  __name__ = __main__
+    --- import demo_mod 로 불러올 때
+    가드 밖의 줄은 언제나 실행된다.    __name__ = demo_mod
+    불러온 함수는 쓸 수 있다: 4
+    ```
+
+    예측대로 직접 실행은 두 줄, `import`는 한 줄이다. 그러면서도 마지막 줄이 보이듯 **`my_function`은 멀쩡히 쓸 수 있다.** 가드는 재사용을 막지 않고 시연만 막는다.
+
+    `if __name__ == "__main__":` 가드는 시연 블록이 직접 호출(`python my_script.py`)할 때만 실행되고, 다른 모듈이 `import my_script`할 때는 실행되지 않도록 보장한다. 이 책의 모든 `.py` 파일이 따르는 교육용 방식이다.
 
 ## 표준 임포트 별칭
 
@@ -134,19 +290,65 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 표준 임포트 별칭
+**보기 4.** <span class="diff easy" title="쉬움"></span> 표준 임포트 별칭. `import numpy as np` 대신 `from numpy import *`를 쓰면 타자는 줄지만 이름이 덮어쓰인다.
+
+**(1)** `from numpy import *`가 가려 버리는 파이썬 내장 이름은 몇 개이고 무엇인가? 세어 보시오.
+
+**(2)** 그중 `sum`과 `max`를 골라, 가려지기 전과 뒤에 $2 \times 3$ 배열에 대해 결과가 어떻게 달라지는지 보이시오.
 
 </div>
 
-```python
-# 이 별칭들은 사실상 표준이다. 다르게 쓰면 남이 읽기 어려워진다.
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from scipy import stats
-```
+??? success "풀이"
 
-이 별칭들(`np`, `pd`, `plt`, `stats`)은 사실상의 표준이며 가독성을 높인다.
+    ```python
+    # 이 별칭들은 사실상 표준이다. 다르게 쓰면 남이 읽기 어려워진다.
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from scipy import stats
+    ```
+
+    **(1) 여덟 개다.** `dir(np)`와 `dir(builtins)`를 교차시키면 `abs`, `all`, `any`, `divmod`, `max`, `min`, `round`, `sum`이 걸린다. `from numpy import *`를 쓰는 순간 이 여덟 이름이 전부 NumPy 판으로 바뀌며, **바뀐 뒤에도 코드가 돌아가므로 알아차리기 어렵다.** 오류가 나면 차라리 다행이고, 조용히 다른 수를 내놓는 쪽이 고약하다.
+
+    **(2) `sum`과 `max`가 갈리는 자리.** 둘이 다른 것은 **NumPy 판은 배열 전체를 하나로 보고 내장 판은 배열을 "행들의 열"로 보기 때문**이다. 배열에 `for`를 돌리면 행이 하나씩 나온다.
+
+    - **`sum(a)`** — 내장 `sum`은 `0 + a[0] + a[1]`을 계산한다. 더해지는 것이 행이므로 결과가 길이 $3$인 배열이 된다. 곧 **축 $0$으로만 더한 것**이며 `np.sum(a, axis=0)`과 같다. `np.sum(a)`는 모든 원소를 더해 스칼라를 준다.
+    - **`max(a)`** — 내장 `max`는 행끼리 `>`로 견주려 하는데, 배열 둘을 `>`로 견주면 원소별 불리언 배열이 나오고 그것을 `if`에 넣을 수 없어 `ValueError`가 난다. `np.max(a)`는 모든 원소의 최댓값 하나를 준다.
+
+    ```python
+    import builtins
+
+    import numpy as np
+
+    # from numpy import * 를 하면 덮어쓰이는 내장 이름들
+    shadowed = sorted(n for n in dir(np) if not n.startswith("_") and hasattr(builtins, n))
+    print(f"numpy 가 가리는 내장 이름 {len(shadowed)} 개: {shadowed}")
+
+    a = np.arange(6).reshape(2, 3)
+    print("내장 sum(a) =", sum(a))     # 축 0 으로만 더해 배열이 남는다
+    print("np.sum(a)   =", np.sum(a))  # 모든 원소를 더해 스칼라가 된다
+    try:
+        max(a)
+    except ValueError as err:
+        print("내장 max(a) -> ValueError:", err)
+    print("np.max(a)   =", np.max(a))
+    ```
+
+    출력:
+
+    ```
+    numpy 가 가리는 내장 이름 8 개: ['abs', 'all', 'any', 'divmod', 'max', 'min', 'round', 'sum']
+    내장 sum(a) = [3 5 7]
+    np.sum(a)   = 15
+    내장 max(a) -> ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+    np.max(a)   = 5
+    ```
+
+    $a = \begin{pmatrix} 0 & 1 & 2 \\ 3 & 4 & 5\end{pmatrix}$이므로 손으로 확인된다. 열별 합이 $0+3 = 3$, $1+4 = 5$, $2+5 = 7$이라 `[3 5 7]`이 맞고, 전체 합은 $0 + 1 + \cdots + 5 = 15$다. **같은 이름 `sum`이 $[3, 5, 7]$과 $15$를 주는 것**이 별칭을 쓰는 까닭이다. `np.`가 앞에 붙어 있으면 어느 쪽인지 코드를 읽는 사람이 바로 안다.
+
+    `max` 쪽은 그나마 오류를 내 주어 낫다. 가장 무서운 것은 `sum`처럼 **오류 없이 다른 모양을 돌려주는** 경우다. $2 \times 3$이 아니라 $n \times 1$ 배열이었다면 `sum(a)`가 길이 $1$인 배열을 주는데, 그것이 스칼라처럼 출력되어 한참 뒤에야 모양이 어긋난 것을 알게 된다.
+
+    이 별칭들(`np`, `pd`, `plt`, `stats`)은 사실상의 표준이며 가독성을 높인다.
 
 ## 주피터 필수 사항
 
@@ -161,51 +363,86 @@ from scipy import stats
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 파이썬과 주피터 기초
+**보기 5.** <span class="diff easy" title="쉬움"></span> NumPy 없이 요약통계를 짓고 NumPy 와 맞추기. 자료는 $4, 7, 13, 2, 9$다.
+
+**(1)** 표본평균과 표본분산 $s^2 = \frac{1}{n-1}\sum (x_i - \bar x)^2$을 손으로 구하시오. 평균보다 큰 값은 무엇인가?
+
+**(2)** 순수 파이썬으로 짠 `summarize`와 `np.var`가 같은 수를 주는지 확인하고, `np.var(data)`를 인수 없이 부르면 어떤 수가 나오는지 밝히시오.
 
 </div>
 
-```python
-"""통계에 자주 쓰이는 파이썬 관용구를 모아 보인다."""
+??? success "풀이"
 
-# === Compute a summary without NumPy ===
-def summarize(data):
-    n = len(data)
-    mean = sum(data) / n
-    variance = sum((x - mean) ** 2 for x in data) / (n - 1)
-    return {"mean": mean, "variance": variance, "n": n}
+    **(1) 해석적으로.** 다섯 수의 합이 $4 + 7 + 13 + 2 + 9 = 35$이므로
 
-# === Comprehensions and unpacking ===
-values = [4, 7, 13, 2, 9]
-squares = [v ** 2 for v in values]
-above_average = [v for v in values if v > sum(values) / len(values)]
+    $$
+    \bar x = \frac{35}{5} = 7
+    $$
 
-result = summarize(values)
-mean, variance, n = result["mean"], result["variance"], result["n"]
+    이다. 편차는 $-3,\, 0,\, 6,\, -5,\, 2$이고 **합이 $0$** 이다(언제나 그렇다. 평균이 그렇게 정의되어 있다). 제곱해 더하면
 
-print(f"Values:           {values}")
-print(f"Squares:          {squares}")
-print(f"Above average:    {above_average}")
-print(f"Mean = {mean:.3f}, Var = {variance:.3f}, n = {n}")
+    $$
+    \sum (x_i - \bar x)^2 = 9 + 0 + 36 + 25 + 4 = 74
+    $$
 
-# === Hand-off to NumPy ===
-import numpy as np
-data = np.array(values)
-print(f"NumPy mean:       {data.mean():.3f}")
-print(f"NumPy var (n-1):  {data.var(ddof=1):.3f}")
-```
+    이므로
 
-출력:
+    $$
+    s^2 = \frac{74}{5-1} = \frac{74}{4} = 18.5
+    $$
 
-```
-Values:           [4, 7, 13, 2, 9]
-Squares:          [16, 49, 169, 4, 81]
-Above average:    [13, 9]
-Mean = 7.000, Var = 18.500, n = 5
-NumPy mean:       7.000
-NumPy var (n-1):  18.500
-```
+    다. 평균 $7$보다 큰 값은 $13$과 $9$ 둘뿐이다($7$ 자신은 `>`를 통과하지 못한다).
 
+    **(2)** `np.var`의 기본값은 `ddof=0`이므로 인수 없이 부르면 $74/5 = 14.8$이 나온다. $18.5$를 받으려면 `ddof=1`을 명시해야 한다. 두 수의 비는 $(n-1)/n = 4/5 = 0.8$이다.
+
+    ```python
+    """통계에 자주 쓰이는 파이썬 관용구를 모아 보인다."""
+
+    # === NumPy 없이 요약통계 짓기 ===
+    def summarize(data):
+        n = len(data)
+        mean = sum(data) / n
+        variance = sum((x - mean) ** 2 for x in data) / (n - 1)
+        return {"mean": mean, "variance": variance, "n": n}
+
+    # === 컴프리헨션과 풀어내기 ===
+    values = [4, 7, 13, 2, 9]
+    squares = [v ** 2 for v in values]
+    above_average = [v for v in values if v > sum(values) / len(values)]
+
+    result = summarize(values)
+    mean, variance, n = result["mean"], result["variance"], result["n"]
+
+    print(f"값:            {values}")
+    print(f"제곱:          {squares}")
+    print(f"평균보다 큰 값: {above_average}")
+    print(f"평균 = {mean:.3f}, 분산 = {variance:.3f}, n = {n}")
+
+    # === NumPy 로 넘기기 ===
+    import numpy as np
+    data = np.array(values)
+    print(f"NumPy 평균:         {data.mean():.3f}")
+    print(f"NumPy 분산 (ddof=1): {data.var(ddof=1):.3f}")
+    print(f"NumPy 분산 (기본값):  {data.var():.3f}   <- ddof=0 이다")
+    ```
+
+    출력:
+
+    ```
+    값:            [4, 7, 13, 2, 9]
+    제곱:          [16, 49, 169, 4, 81]
+    평균보다 큰 값: [13, 9]
+    평균 = 7.000, 분산 = 18.500, n = 5
+    NumPy 평균:         7.000
+    NumPy 분산 (ddof=1): 18.500
+    NumPy 분산 (기본값):  14.800   <- ddof=0 이다
+    ```
+
+    손으로 구한 $\bar x = 7$과 $s^2 = 18.5$가 두 구현에서 모두 나온다. 평균보다 큰 값도 $13$과 $9$로 맞는다. 인수 없는 `np.var`는 예상대로 $14.8$이고, $14.8 / 18.5 = 0.8 = (n-1)/n$이다.
+
+    **$n$이 작을 때 이 차이는 작지 않다.** 여기서는 $20\%$이고, 표준편차로 보아도 $\sqrt{0.8} = 0.894$배라 $11\%$ 차이다. pandas의 `.var()`는 `ddof=1`이 기본이고 NumPy의 `np.var`는 `ddof=0`이 기본이므로, **같은 자료에 두 라이브러리를 번갈아 쓰면 조용히 어긋난다.** 두 결과가 $(n-1)/n$배만큼 다르면 거의 틀림없이 이것이 원인이다.
+
+    편차의 합이 $0$이라는 사실이 $n-1$을 쓰는 까닭과 맞닿아 있다. 편차 다섯 개 가운데 넷을 알면 나머지 하나가 정해지므로 자유롭게 움직이는 것은 $4$개뿐이고, 그 $4$가 분모의 $n - 1$이다.
 ## 연습문제
 
 <div class="drillbox" markdown>
