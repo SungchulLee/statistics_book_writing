@@ -183,14 +183,14 @@ $$
 
     관측도수
     Survived    0    1  All
-    Sex                    
+    Sex
     female     81  233  314
     male      468  109  577
     All       549  342  891
 
     기대도수 (H0: 독립)
     Survived       0       1
-    Sex                     
+    Sex
     female    193.47  120.53
     male      355.53  221.47
 
@@ -198,7 +198,7 @@ $$
 
     관측 - 기대
     Survived       0       1
-    Sex                     
+    Sex
     female   -112.47  112.47
     male      112.47 -112.47
     ```
@@ -314,7 +314,7 @@ $$
     ```text
     칸별 기여도
     Survived      0       1
-    Sex                    
+    Sex
     female    65.39  104.96
     male      35.58   57.12
 

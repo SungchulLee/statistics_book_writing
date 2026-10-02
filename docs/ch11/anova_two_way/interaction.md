@@ -229,7 +229,7 @@ $$
     ```
     칸평균
     dose    0.5    1.0    2.0
-    supp                     
+    supp
     OJ    13.23  22.70  26.06
     VC     7.98  16.77  26.14
 
@@ -368,7 +368,7 @@ $$
         OJ     VC     -3.7 0.0604 -7.567 0.167  False
     -------------------------------------------------
 
-     Multiple Comparison of Means - Tukey HSD, FWER=0.05  
+     Multiple Comparison of Means - Tukey HSD, FWER=0.05
     ======================================================
     group1 group2 meandiff p-adj   lower    upper   reject
     ------------------------------------------------------
@@ -725,7 +725,7 @@ $$
     ```
     칸평균
     Study_Time       1 Hour  2 Hours
-    Teaching_Method                 
+    Teaching_Method
     Online             64.0     73.0
     Traditional        61.0     69.0
 

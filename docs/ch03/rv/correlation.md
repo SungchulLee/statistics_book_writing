@@ -212,7 +212,7 @@ $\rho$는 두 가지를 하지 **못한다.**
 
     품종별 평균
                 sepal_length  sepal_width
-    species                              
+    species
     setosa              5.01         3.43
     versicolor          5.94         2.77
     virginica           6.59         2.97

@@ -160,13 +160,13 @@ $$
 
     도수
     Survived     0    1
-    Age_Group          
+    Age_Group
     <21         98   82
     >=21       326  208
 
     집단 안에서의 생존율 (%)
     Survived       0      1
-    Age_Group              
+    Age_Group
     <21        54.44  45.56
     >=21       61.05  38.95
 
@@ -760,7 +760,7 @@ $$
 
     ```text
               count  sum    mean
-    Age                         
+    Age
     [0, 10)      62   38  0.6129
     [10, 20)    102   41  0.4020
     [20, 30)    220   77  0.3500
@@ -1020,9 +1020,9 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
 
     ```text
     성별로 나눈 나이대별 생존율
-              count         mean        
+              count         mean
     Sex      female male  female    male
-    AgeBin                              
+    AgeBin
     [0, 10)      30   32  0.6333  0.5938
     [10, 20)     45   57  0.7556  0.1228
     [20, 30)     72  148  0.7222  0.1689

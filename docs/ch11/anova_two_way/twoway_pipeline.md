@@ -135,7 +135,7 @@ $$
     ```
     칸별 관측 수
     dose  0.5  1.0  2.0
-    supp               
+    supp
     OJ     10   10   10
     VC     10   10   10
 
@@ -183,7 +183,7 @@ $$
     ```
     칸별 관측 수 (불균형)
     dose  0.5  1.0  2.0
-    supp               
+    supp
     OJ      8   10   10
     VC      6   10   10
 
@@ -410,7 +410,7 @@ $$
     출력:
 
     ```
-     Multiple Comparison of Means - Tukey HSD, FWER=0.05  
+     Multiple Comparison of Means - Tukey HSD, FWER=0.05
     ======================================================
     group1 group2 meandiff p-adj   lower    upper   reject
     ------------------------------------------------------
@@ -562,7 +562,7 @@ $$
 
     ```
                 mean    std  count
-    supp dose                     
+    supp dose
     OJ   0.5   13.23  4.460     10
          1.0   22.70  3.911     10
          2.0   26.06  2.655     10
@@ -781,7 +781,7 @@ $$
 
     [1] 칸 요약
                size   mean    std
-    supp dose                    
+    supp dose
     OJ   0.5     10  13.23  4.460
          1.0     10  22.70  3.911
          2.0     10  26.06  2.655
@@ -903,7 +903,7 @@ $$
     같은 용량에서의 OJ-VC 차이
       dose 0.5:  +5.250   Tukey15 통과   본페로니3 통과
       dose 1.0:  +5.930   Tukey15 통과   본페로니3 통과
-      dose 2.0:  -0.080   Tukey15  -    본페로니3  - 
+      dose 2.0:  -0.080   Tukey15  -    본페로니3  -
     ```
 
     **임계 차이가 4.80에서 4.01로 17% 줄어든다.**
@@ -1087,7 +1087,7 @@ ToothGrowth를 **불균형으로 만들어** 파이프라인을 다시 돌려라
     ```text
     칸별 n
     dose  0.5  1.0  2.0
-    supp               
+    supp
     OJ     10   10    7
     VC      5   10   10
 

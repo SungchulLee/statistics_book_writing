@@ -188,7 +188,7 @@ $$ w_{ij} = \frac{n_{ij}}{s_{ij}^2} $$
 
     자료를 3x3 표로 보면
     Fertilizer      A     B     C
-    Temperature                  
+    Temperature
     High         12.0  15.0  14.0
     Low          10.0  13.0  11.0
     Medium       14.0  16.0  15.0
@@ -478,7 +478,7 @@ Welch의 이원배치 분산분석에서 두 요인의 주효과는 유의하고
 
     ```text
            size    mean     var
-    A  B                       
+    A  B
     A0 B0    12  10.109   1.272
        B1    10  13.713   1.814
        B2     8  16.181  21.283
