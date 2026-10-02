@@ -121,46 +121,169 @@ D'Agostino와 Pearson의 변환이 하는 일이 바로 이것이다. 표준오�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> K-제곱이 두 검정의 합임을 확인하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> K-제곱이 두 검정의 합임을 확인하기. $\mathcal{N}(0,1)$에서 $n = 1000$개를 뽑아 세 함수를 모두 불러 본다.
+
+**(1)** `normaltest`의 통계량이 `skewtest`와 `kurtosistest`의 $Z$ 제곱합과 같은지 확인하고, $p$값을 $K^2$만의 닫힌 꼴로 쓰시오.
+
+**(2)** 제곱합을 $\chi^2_2$로 읽으려면 $Z_1$과 $Z_2$가 **독립인 표준정규**여야 한다. 정규 자료에서 실제로 그런지 모의실험으로 확인하시오. 상관계수, 두 표준편차, $K^2$의 평균·분산, 그리고 실제 기각률을 각각 이론값과 나란히 적으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 끝자리까지 같고, $p = e^{-K^2/2}$다.** 이 표본에서 $Z_1 = 0.4402147002$, $Z_2 = -0.1979898523$이므로
 
-data = np.random.normal(0, 1, 1000)
+    $$
+    K^2 = Z_1^2 + Z_2^2 = 0.1937889... + 0.0392000... = 0.2329889638562599
+    $$
 
-# D'Agostino 의 K^2 은 왜도 검정과 첨도 검정을 하나로 묶은 것이다.
-# 각 검정의 Z 를 제곱해 더하면 정확히 K^2 이 된다는 것을 아래에서 확인한다.
-# 두 Z 가 대략 독립인 표준정규이므로 그 합이 자유도 2 인 카이제곱을 따른다.
-Z_skewtest, p_value = stats.skewtest(data)
-Z_kurtosistest, p_value = stats.kurtosistest(data)
-print(f"{Z_skewtest**2 + Z_kurtosistest**2 = }")
+    이고 `stats.normaltest`가 돌려주는 값이 **같은 부동소수점 수**다. `normaltest`가 두 검정을 내부에서 그대로 불러 제곱해 더하는 것이니 당연하지만, 직접 확인해 보면 $K^2$이 새로운 통계량이 아니라 **묶음**일 뿐이라는 점이 분명해진다.
 
-# scipy 에서는 normaltest 가 곧 D'Agostino 의 K^2 검정이다.
-stat, p_value = stats.normaltest(data)
+    자유도 2인 카이제곱은 평균 2인 지수분포이므로 생존함수가 $e^{-x/2}$다. 따라서
 
-print(f"D'Agostino's K-squared Test: Statistic={stat}, p-value={p_value}")
+    $$
+    p = P(\chi^2_2 > K^2) = e^{-K^2/2} = e^{-0.11649448} = 0.8900350082402695
+    $$
 
-alpha = 0.05
-if p_value > alpha:
-    print("Fail to reject H_0: The data is normally distributed.")
-else:
-    print("Reject H_0: The data is not normally distributed.")
-```
+    이고, 이 역시 `normaltest`의 $p$값과 마지막 자리까지 일치한다. $K^2$이 작으니 기각하지 못한다.
 
-출력:
+    **(2) 네 가지 모두 이론값과 맞는다.** $n = 1000$인 정규 표본을 4만 번 뽑아 재면
 
-```text
-Z_skewtest**2 + Z_kurtosistest**2 = 0.2329889638562599
-D'Agostino's K-squared Test: Statistic=0.2329889638562599, p-value=0.8900350082402695
-Fail to reject H_0: The data is normally distributed.
-```
+    | 재는 것 | 이론값 | 모의값 | 몬테카를로 오차 |
+    |---|---|---|---|
+    | $\operatorname{corr}(Z_1, Z_2)$ | $0$ | $-0.0019$ | $\pm 0.0050$ |
+    | $\mathrm{SD}(Z_1)$ | $1$ | $0.9922$ | — |
+    | $\mathrm{SD}(Z_2)$ | $1$ | $0.9995$ | — |
+    | $\mathbb{E}[K^2]$ | $2$ | $1.9834$ | — |
+    | $\mathrm{Var}(K^2)$ | $4$ | $4.1826$ | — |
+    | $P(K^2 > 5.991)$ | $0.05$ | $0.0502$ | $\pm 0.0011$ |
 
-`normaltest`의 통계량이 두 z 점수의 제곱합과 정확히 일치함을 확인할 수 있다. 이것이 $K^2 = Z_{\text{skewness}}^2 + Z_{\text{kurtosis}}^2$의 정의이다.
+    이다. 상관계수가 $-0.0019$로 몬테카를로 오차 $1/\sqrt{R} = 0.0050$의 절반도 안 되니 **0과 구별되지 않는다.** 이것은 우연이 아니다. 정규분포는 대칭이므로 홀수 차수 적률에서 나온 $g_1$과 짝수 차수 적률에서 나온 $g_2$가 상관을 갖지 않는다. 부호를 뒤집어도 $g_2$는 그대로인데 $g_1$은 뒤집히므로, 둘의 공분산이 자기 자신의 음수와 같아야 하고 따라서 0이다.
+
+    두 표준편차가 1에 붙고 상관이 0이므로 $K^2$은 제대로 $\chi^2_2$를 따른다. 기각률 $0.0502$가 명목 $0.05$에서 몬테카를로 표준오차의 $0.2$배 안이다. **$n = 1000$에서 다고스티노 $K^2$은 약속한 크기를 정확히 지킨다.**
+
+    한 가지 짚어 둘 것이 있다. 위 본문의 두 표준오차
+
+    $$
+    \mathrm{SE}_S = \sqrt{\frac{6n(n-1)}{(n-2)(n+1)(n+3)}}, \qquad
+    \mathrm{SE}_K = \sqrt{\frac{24n(n-1)^2}{(n-3)(n-2)(n+3)(n+5)}}
+    $$
+
+    는 **보정판** $G_1$, $G_2$의 것이다. 본문이 $S$와 $K$를 $1/n$ 적률로 정의했으므로 그것은 비보정판 $g_1$, $b_2$이고, 그 분산은
+
+    $$
+    \mathrm{Var}(g_1) = \frac{6(n-2)}{(n+1)(n+3)}, \qquad
+    \mathrm{Var}(b_2) = \frac{24n(n-2)(n-3)}{(n+1)^2(n+3)(n+5)}
+    $$
+
+    이다. 두 쌍은 보정 계수로 정확히 이어진다. $G_1 = \frac{\sqrt{n(n-1)}}{n-2}g_1$에서
+
+    $$
+    \mathrm{Var}(G_1) = \frac{n(n-1)}{(n-2)^2}\cdot\frac{6(n-2)}{(n+1)(n+3)} = \frac{6n(n-1)}{(n-2)(n+1)(n+3)}
+    $$
+
+    이고, $G_2 = \frac{(n+1)(n-1)}{(n-2)(n-3)}\bigl(b_2 - \mathbb{E}[b_2]\bigr)$에서
+
+    $$
+    \mathrm{Var}(G_2) = \frac{(n+1)^2(n-1)^2}{(n-2)^2(n-3)^2}\cdot\frac{24n(n-2)(n-3)}{(n+1)^2(n+3)(n+5)} = \frac{24n(n-1)^2}{(n-2)(n-3)(n+3)(n+5)}
+    $$
+
+    이다. 두 항등식을 수로 확인하면 $n = 1000$에서 좌변과 우변이 열 자리까지 같다. 실제 값은 $\mathrm{SD}(g_1) = 0.07723$ 대 $\mathrm{SD}(G_1) = 0.07734$, $\mathrm{SD}(g_2) = 0.15376$ 대 $\mathrm{SD}(G_2) = 0.15453$이다. $n = 1000$에서는 차이가 $0.1$–$0.5\%$에 지나지 않지만, **비보정 통계량을 보정판의 표준오차로 나누면 $z$ 점수가 그만큼 틀어진다.** 작은 표본에서는 그 틀어짐이 커진다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    data = np.random.normal(0, 1, 1000)
+
+    # D'Agostino 의 K^2 은 왜도 검정과 첨도 검정을 하나로 묶은 것이다.
+    # 각 검정의 Z 를 제곱해 더하면 정확히 K^2 이 된다는 것을 아래에서 확인한다.
+    # 두 Z 가 대략 독립인 표준정규이므로 그 합이 자유도 2 인 카이제곱을 따른다.
+    Z_skewtest, p_value = stats.skewtest(data)
+    Z_kurtosistest, p_value = stats.kurtosistest(data)
+    print(f"{Z_skewtest**2 + Z_kurtosistest**2 = }")
+
+    # scipy 에서는 normaltest 가 곧 D'Agostino 의 K^2 검정이다.
+    stat, p_value = stats.normaltest(data)
+
+    print(f"D'Agostino's K-squared Test: Statistic={stat}, p-value={p_value}")
+
+    alpha = 0.05
+    if p_value > alpha:
+        print("Fail to reject H_0: The data is normally distributed.")
+    else:
+        print("Reject H_0: The data is not normally distributed.")
+    ```
+
+    출력:
+
+    ```text
+    Z_skewtest**2 + Z_kurtosistest**2 = 0.2329889638562599
+    D'Agostino's K-squared Test: Statistic=0.2329889638562599, p-value=0.8900350082402695
+    Fail to reject H_0: The data is normally distributed.
+    ```
+
+    $p$값의 닫힌 꼴과 독립성·보정을 함께 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+    data = np.random.normal(0, 1, 1000)
+    z1 = stats.skewtest(data)[0]
+    z2 = stats.kurtosistest(data)[0]
+    K2 = z1**2 + z2**2
+    print(f"Z1 = {z1:.10f},  Z2 = {z2:.10f}")
+    print(f"exp(-K2/2)   = {np.exp(-K2 / 2)!r}")
+    print(f"normaltest p = {stats.normaltest(data)[1]!r}")
+
+    # 두 Z 가 독립인 표준정규인가 — 정규 자료에서 직접 잰다.
+    rng = np.random.default_rng(21)
+    R, n = 40_000, 1000
+    X = rng.standard_normal((R, n))
+    Z1 = np.array([stats.skewtest(x)[0] for x in X])
+    Z2 = np.array([stats.kurtosistest(x)[0] for x in X])
+    print(f"\ncorr(Z1, Z2) = {np.corrcoef(Z1, Z2)[0, 1]:+.4f}   (MC SE 약 {1 / np.sqrt(R):.4f})")
+    print(f"sd(Z1) = {Z1.std(ddof=1):.4f},  sd(Z2) = {Z2.std(ddof=1):.4f}   (이론 1)")
+    K2s = Z1**2 + Z2**2
+    print(f"K^2 평균 {K2s.mean():.4f} (이론 2),  분산 {K2s.var(ddof=1):.4f} (이론 4)")
+    print(f"기각률 = {np.mean(K2s > stats.chi2.ppf(0.95, 2)):.4f}"
+          f"  (명목 0.05, MC SE {np.sqrt(0.05 * 0.95 / R):.4f})")
+
+    # 본문의 두 SE 가 어느 판본의 것인가 — 보정 항등식을 수로 확인한다.
+    var_g1 = 6.0 * (n - 2) / ((n + 1) * (n + 3))
+    var_G1 = 6.0 * n * (n - 1) / ((n - 2) * (n + 1) * (n + 3))
+    var_b2 = 24.0 * n * (n - 2) * (n - 3) / ((n + 1) ** 2 * (n + 3) * (n + 5))
+    var_G2 = 24.0 * n * (n - 1) ** 2 / ((n - 3) * (n - 2) * (n + 3) * (n + 5))
+    c = (n + 1) * (n - 1) / ((n - 2) * (n - 3))
+    print(f"\nn(n-1)/(n-2)^2 * Var(g1) = {n * (n - 1) / (n - 2)**2 * var_g1:.10f}"
+          f"   Var(G1) = {var_G1:.10f}")
+    print(f"c^2 * Var(b2)            = {c * c * var_b2:.10f}   Var(G2) = {var_G2:.10f}")
+    print(f"SD(g1) = {np.sqrt(var_g1):.5f}, SD(G1) = {np.sqrt(var_G1):.5f}, "
+          f"SD(g2) = {np.sqrt(var_b2):.5f}, SD(G2) = {np.sqrt(var_G2):.5f}")
+    ```
+
+    출력:
+
+    ```text
+    Z1 = 0.4402147002,  Z2 = -0.1979898523
+    exp(-K2/2)   = 0.8900350082402695
+    normaltest p = 0.8900350082402695
+
+    corr(Z1, Z2) = -0.0019   (MC SE 약 0.0050)
+    sd(Z1) = 0.9922,  sd(Z2) = 0.9995   (이론 1)
+    K^2 평균 1.9834 (이론 2),  분산 4.1826 (이론 4)
+    기각률 = 0.0502  (명목 0.05, MC SE 0.0011)
+
+    n(n-1)/(n-2)^2 * Var(g1) = 0.0059820658   Var(G1) = 0.0059820658
+    c^2 * Var(b2)            = 0.0238808359   Var(G2) = 0.0238808359
+    SD(g1) = 0.07723, SD(G1) = 0.07734, SD(g2) = 0.15376, SD(G2) = 0.15453
+    ```
+
+    $e^{-K^2/2}$가 `normaltest`의 $p$값과 열여섯 자리까지 같고, 두 보정 항등식의 좌우가 열 자리까지 같다. 유도한 것이 모두 맞는다. $\square$
 
 ## 응용
 

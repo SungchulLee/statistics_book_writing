@@ -32,63 +32,88 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Q-Q 그림과 검정을 함께
+**보기 1.** <span class="diff easy" title="쉬움"></span> 가운데는 정규, 꼬리만 두꺼운 자료. $\mathcal{N}(0,1)$에서 150개, $t_3$에서 50개를 뽑아 섞은 $n = 200$ 표본에 Q-Q 그림과 세 검정(샤피로–윌크, 다고스티노 $K^2$, 앤더슨–달링)을 함께 걸어 본다.
+
+**(1)** 세 검정 가운데 **하나만** 5% 수준에서 기각하지 못한다. 어느 것인지 통계량과 임계값을 수로 대어 말하시오.
+
+**(2)** Q-Q 그림에서 점들이 적합선을 벗어나는 자리를 찾으시오. 가운데($\lvert q\rvert < 1$)와 꼬리($\lvert q\rvert > 2$)의 잔차를 재어, 어느 구간에서 얼마나 벗어나는지 수로 적으시오. 이 그림이 **말해 주지 않는 것**은 무엇인가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-# 정규 150개에 자유도 3 인 t 를 50개 섞었다. 가운데는 정규 같지만
-# 꼬리만 두꺼운 자료다.
-rng = np.random.default_rng(0)
-x = np.concatenate([rng.normal(0, 1, size=150),
-                    rng.standard_t(df=3, size=50)])
+    유도할 답이 있는 문제가 아니다. **그림과 검정이 각각 무엇을 보여 주고 무엇을 감추는가**가 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다.
 
-# fit=False 로 두면 probplot 이 그림을 그리지 않고 좌표만 돌려준다.
-# 그 좌표로 직접 그려야 점과 직선의 모양을 마음대로 손볼 수 있다.
-osm, osr = stats.probplot(x, dist="norm", sparams=(), fit=False)
-b, a = np.polyfit(osm, osr, 1)
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
 
-fig, ax = plt.subplots(figsize=(7, 4))
-ax.scatter(osm, osr, s=15)
-xx = np.linspace(osm.min(), osm.max(), 200)
-ax.plot(xx, a + b * xx, linestyle="--")
-ax.set_title("Q-Q Plot vs Normal with Fitted Line")
-ax.set_xlabel("Theoretical quantiles (Normal)")
-ax.set_ylabel("Ordered data")
-plt.tight_layout()
-plt.show()
+    # 정규 150개에 자유도 3 인 t 를 50개 섞었다. 가운데는 정규 같지만
+    # 꼬리만 두꺼운 자료다.
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=150),
+                        rng.standard_t(df=3, size=50)])
 
-# 그림에서 본 것을 검정으로 확인한다. 그림과 검정은 서로를 보완한다 —
-# 검정은 "정규가 아니다"까지만 말하고, 어디가 어긋났는지는 그림이 말한다.
-W, p_sw = stats.shapiro(x)
-K2, p_k2 = stats.normaltest(x)
-ad = stats.anderson(x, dist="norm")
+    # fit=False 로 두면 probplot 이 그림을 그리지 않고 좌표만 돌려준다.
+    # 그 좌표로 직접 그려야 점과 직선의 모양을 마음대로 손볼 수 있다.
+    osm, osr = stats.probplot(x, dist="norm", sparams=(), fit=False)
+    b, a = np.polyfit(osm, osr, 1)
 
-print(f"Shapiro-Wilk:     W = {W:.4f}, p = {p_sw:.4g}")
-print(f"D'Agostino K^2:   K2 = {K2:.4f}, p = {p_k2:.4g}")
-print(f"Anderson-Darling: A^2 = {ad.statistic:.4f}")
-for crit, sig in zip(ad.critical_values, ad.significance_level):
-    print(f"  Critical {sig:.0f}%: {crit:.4f} -> reject if A^2 > crit")
-```
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ax.scatter(osm, osr, s=15)
+    xx = np.linspace(osm.min(), osm.max(), 200)
+    ax.plot(xx, a + b * xx, linestyle="--")
+    ax.set_title("Q-Q Plot vs Normal with Fitted Line")
+    ax.set_xlabel("Theoretical quantiles (Normal)")
+    ax.set_ylabel("Ordered data")
+    plt.tight_layout()
+    plt.show()
 
-출력:
+    # 그림에서 본 것을 검정으로 확인한다. 그림과 검정은 서로를 보완한다 —
+    # 검정은 "정규가 아니다"까지만 말하고, 어디가 어긋났는지는 그림이 말한다.
+    W, p_sw = stats.shapiro(x)
+    K2, p_k2 = stats.normaltest(x)
+    ad = stats.anderson(x, dist="norm")
 
-```text
-Shapiro-Wilk:     W = 0.9716, p = 0.0004476
-D'Agostino K^2:   K2 = 17.1070, p = 0.0001929
-Anderson-Darling: A^2 = 0.6894
-  Critical 15%: 0.5650 -> reject if A^2 > crit
-  Critical 10%: 0.6440 -> reject if A^2 > crit
-  Critical 5%: 0.7720 -> reject if A^2 > crit
-  Critical 2%: 0.9010 -> reject if A^2 > crit
-  Critical 1%: 1.0710 -> reject if A^2 > crit
-```
+    print(f"Shapiro-Wilk:     W = {W:.4f}, p = {p_sw:.4g}")
+    print(f"D'Agostino K^2:   K2 = {K2:.4f}, p = {p_k2:.4g}")
+    print(f"Anderson-Darling: A^2 = {ad.statistic:.4f}")
+    for crit, sig in zip(ad.critical_values, ad.significance_level):
+        print(f"  Critical {sig:.0f}%: {crit:.4f} -> reject if A^2 > crit")
+    ```
 
-![자료의 Q-Q 그림](./img/qq_plot_basic_35.png)
+    출력:
+
+    ```text
+    Shapiro-Wilk:     W = 0.9716, p = 0.0004476
+    D'Agostino K^2:   K2 = 17.1070, p = 0.0001929
+    Anderson-Darling: A^2 = 0.6894
+      Critical 15%: 0.5650 -> reject if A^2 > crit
+      Critical 10%: 0.6440 -> reject if A^2 > crit
+      Critical 5%: 0.7720 -> reject if A^2 > crit
+      Critical 2%: 0.9010 -> reject if A^2 > crit
+      Critical 1%: 1.0710 -> reject if A^2 > crit
+    ```
+
+    ![자료의 Q-Q 그림](./img/qq_plot_basic_35.png)
+
+    **(1) 기각하지 못하는 것은 앤더슨–달링이다.** 샤피로–윌크는 $W = 0.9716$에 $p = 0.000448$, 다고스티노는 $K^2 = 17.107$에 $p = 0.000193$으로 둘 다 0.001 아래다. 그런데 앤더슨–달링은 $A^2 = 0.6894$로 5% 임계값 $0.7720$에 **미치지 못한다.** 넘는 것은 15%($0.5650$)와 10%($0.6440$) 임계값뿐이니, 이 검정으로 할 수 있는 가장 강한 진술은 "10% 수준에서 기각"이다. 유의수준을 5%로 못 박아 두었다면 앤더슨–달링 하나만으로는 이 비정규성을 **놓쳤을 것이다.**
+
+    까닭은 가중치의 자리다. $A^2$는 CDF 전체에 걸친 제곱 거리에 $1/\{F(1-F)\}$ 가중을 준 적분이어서 꼬리를 중시하지만, 그 적분이 **전 구간의 합**이라는 점이 여기서 발목을 잡는다. 이 자료의 이탈은 꼬리의 몇 점에만 몰려 있고 나머지 구간은 멀쩡하므로, 합을 내면 임계값 근처까지만 올라간다. 반면 $K^2 = Z_1^2 + Z_2^2$는 왜도와 첨도를 **직접** 겨냥하므로 같은 신호를 훨씬 크게 증폭한다.
+
+    **(2) 벗어나는 자리는 오직 꼬리다.** 적합선은 $\hat y = 0.0071 + 1.1021\,q$로, 절편이 표본평균 $\bar x = 0.0071$과, 기울기가 표본표준편차 $S = 1.1115$와 거의 같다. 잔차 $x_{(i)} - (\hat a + \hat b\, q_i)$를 구간별로 재면
+
+    | 구간 | 점 개수 | 잔차 |
+    |---|---|---|
+    | $\lvert q\rvert < 1$ | 136 | 최대 절대값 $0.120$ |
+    | $\lvert q\rvert > 2$ | 8 | $-0.839,\ -0.185,\ 0.068,\ -0.031,\ -0.306,\ +1.157,\ +1.382,\ +1.579$ |
+
+    이다. **가운데 136점은 직선에서 0.12 이상 벗어나지 않는다.** 자료의 68%가 거의 완벽하게 정규인 셈이고, 히스토그램만 그렸다면 아무 이상도 못 보았을 것이다. 반면 양 끝 네 점씩을 보면 위쪽 세 점이 적합선 위로 $1.16$, $1.38$, $1.58$만큼 올라가고 아래쪽 최저점은 선 아래로 $0.84$만큼 내려간다. 곧 S자 패턴이다. 실제 자료 범위는 $[-3.81,\ 4.56]$으로, $n = 200$인 표준정규 표본의 최댓값이 보통 3 근처에 머무는 것과 비교하면 양쪽이 모두 과하게 길다.
+
+    표본의 모양 통계량도 같은 말을 한다. 보정판으로 $G_1 = 0.349$, 초과첨도 $G_2 = 2.130$이고, 보정하지 않은 판본은 $g_1 = 0.346$, $g_2 = 2.047$이다(`scipy.stats.skew`·`kurtosis`의 기본값은 `bias=True`이므로 후자를 준다). 어느 판본이든 첨도가 압도적으로 크고 왜도는 작으니, **이 자료의 비정규성은 치우침이 아니라 두꺼운 꼬리**다.
+
+    **이 그림이 말해 주지 않는 것**은 "그 벗어남이 우연인가"다. $q = 2.7$ 자리의 점 하나가 선에서 1.58 떨어져 있다는 사실만으로는 판정을 내릴 수 없다. 극단 순서통계량은 정규 자료에서도 변동이 크기 때문이다. 벗어남의 **크기**는 그림이 주지만 **유의성**은 주지 않으며, 그래서 다음 절의 신뢰띠나 위의 세 검정이 필요하다. 거꾸로 세 검정은 $p$값 하나를 줄 뿐 "꼬리가 문제다"라고는 말하지 않는다. 둘은 서로의 결함을 메운다.
 
 ## 해석
 

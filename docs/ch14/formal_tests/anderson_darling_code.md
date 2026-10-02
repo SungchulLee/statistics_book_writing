@@ -40,47 +40,154 @@ SciPy의 `stats.anderson`은 통계량 $A^2$과 함께 유의수준 15%, 10%, 5%
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 섞인 자료에 Anderson-Darling 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 섞인 자료에 Anderson-Darling 검정. $\mathcal{N}(0,1)$ 230개에 $\text{Lognormal}(0, 0.6^2)$ 70개를 섞은 $n = 300$ 표본에서 $A^2 = 1.0034$가 나와 2.5% 수준까지 기각하고 1%에서는 기각하지 못한다.
+
+**(1)** 같은 자료에 샤피로–윌크·자크–베라·다고스티노 $K^2$·릴리에포르를 걸면 각각 어떤 $p$값을 주는가. 앤더슨–달링이 가장 보수적인가.
+
+**(2)** "AD가 꼬리 가중 덕분에 KS보다 낫다"는 주장을 **검정력**으로 확인하시오. 이 혼합 대립에서 네 검정의 순위는 어떻게 되며, AD가 1등인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 정규 230개에 로그정규 70개를 섞은 자료다.
-rng = np.random.default_rng(0)
-x = np.concatenate([rng.normal(0, 1, size=230),
-                    rng.lognormal(0, 0.6, size=70)])
+    **(1) 가장 보수적인 것은 릴리에포르이고, 앤더슨–달링은 그다음이다.** 같은 표본에서
 
-# A^2 은 경험분포와 이론분포의 차이를 제곱해 적분한 값인데, 꼬리 쪽에
-# 더 큰 무게를 싣는다. 그래서 KS 보다 꼬리 이탈을 잘 잡는다.
-res = stats.anderson(x, dist="norm")
-print(f"Sample size n = {x.size}")
-print(f"Anderson-Darling A^2 = {res.statistic:.4f}")
-print("Critical values vs significance levels:")
-for cv, sl in zip(res.critical_values, res.significance_level):
-    flag = " REJECT" if res.statistic > cv else ""
-    print(f"  {sl:.1f}% -> {cv:.4f}{flag}")
+    | 검정 | 통계량 | $p$값 | 5% 판정 |
+    |---|---|---|---|
+    | 자크–베라 | $JB = 58.5069$ | $1.97\times10^{-13}$ | 기각 |
+    | 다고스티노 $K^2$ | $K^2 = 26.6879$ | $1.60\times10^{-6}$ | 기각 |
+    | 샤피로–윌크 | $W = 0.9723$ | $1.52\times10^{-5}$ | 기각 |
+    | 앤더슨–달링 | $A^2 = 1.0034$ | — (2.5% 임계값 $0.9060$ 초과, 1% 임계값 $1.0780$ 미달) | 기각 |
+    | 릴리에포르 | $D = 0.0470$ | $0.1617$ | **기각 못 함** |
 
-reject_5 = res.statistic > res.critical_values[
-    list(res.significance_level).index(5.0)]
-print(f"Decision at 5%: {'Reject' if reject_5 else 'Fail to reject'} normality")
-```
+    이다. $A^2 = 1.0034$는 1% 임계값 $1.0780$에서 $0.0746$ 모자란다. 다른 세 검정이 $p$를 $10^{-5}$ 아래로 밀어 내리는 것과 견주면 앤더슨–달링이 상당히 조심스러운 편이다. 그러나 **진짜로 못 잡는 것은 릴리에포르**다. $p = 0.162$로 5% 수준에서 기각하지 못한다.
 
-출력:
+    까닭은 쪽 위의 가중함수 그림이 말해 준다. 이 자료의 이탈은 대수정규 성분이 오른쪽 꼬리에 들여놓은 큰 값들에 몰려 있다. 릴리에포르(=KS)는 분포의 모든 지점을 똑같이 저울질하므로 꼬리에서 벌어진 틈이 가운데의 잡음에 묻힌다. $A^2$은 꼬리에 무게를 실으므로 같은 틈을 크게 본다. **$A^2$이 기각하고 $D$가 기각하지 못하는 이 한 줄이 "꼬리 가중"의 실물이다.**
 
-```text
-Sample size n = 300
-Anderson-Darling A^2 = 1.0034
-Critical values vs significance levels:
-  15.0% -> 0.5690 REJECT
-  10.0% -> 0.6480 REJECT
-  5.0% -> 0.7770 REJECT
-  2.5% -> 0.9060 REJECT
-  1.0% -> 1.0780
-Decision at 5%: Reject normality
-```
+    **(2) 아니다. 샤피로–윌크가 1등이다.** 같은 혼합 모집단에서 $n = 300$짜리 표본을 1500번 뽑아 $\alpha = 0.05$의 기각률을 재면
+
+    | 검정 | 혼합 대립에서의 검정력 | 정규 자료에서의 크기 |
+    |---|---|---|
+    | 샤피로–윌크 | $\mathbf{0.4987}$ | $0.0493$ |
+    | 앤더슨–달링 | $0.4313$ | $0.0420$ |
+    | 자크–베라 | $0.4033$ | $0.0520$ |
+    | 릴리에포르 | $0.3260$ | $0.0373$ |
+
+    이다(몬테카를로 표준오차는 검정력 쪽에서 최대 $0.0129$, 크기 쪽에서 $0.0056$).
+
+    **AD가 릴리에포르를 이기는 것은 사실이다**($0.431$ 대 $0.326$, 차이가 몬테카를로 오차의 여덟 배). 꼬리 가중이 값을 한다. 그러나 **AD는 샤피로–윌크에게 진다**($0.431$ 대 $0.499$). 순서통계량 전체의 직선성을 보는 샤피로–윌크가 이 대립에서 더 효율적이다.
+
+    여기에 (1)과의 **어긋남**이 있다. 이 한 표본에서는 자크–베라가 $p = 2\times10^{-13}$으로 가장 극적인 수를 내놓았는데, 검정력으로는 $0.403$으로 AD보다도 낮다. **$p$값 하나로 검정의 성능을 순위 짓는 것은 틀렸다.** $p$값의 크기는 그 검정의 귀무분포가 얼마나 빠르게 꺼지는지를 반영할 뿐이고, 성능은 같은 대립을 되풀이 뽑았을 때의 기각률로만 재진다. 앞 쪽에서 본 대로 자크–베라는 유한표본에서 $g_2$를 날것으로 제곱해 통계량을 부풀리므로 극적인 $p$값을 잘 내놓는다.
+
+    한 가지 단서. AD와 릴리에포르는 크기가 각각 $0.0420$, $0.0373$으로 명목 $0.05$보다 작다(릴리에포르는 몬테카를로 오차의 $2.3$배 아래). 크기가 작으면 검정력도 그만큼 깎이므로 이 비교가 두 검정에 조금 불리하다. 다만 샤피로–윌크의 크기는 $0.0493$으로 명목에 맞고 검정력이 가장 높으니 **1등 판정은 그대로 성립한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 정규 230개에 로그정규 70개를 섞은 자료다.
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=230),
+                        rng.lognormal(0, 0.6, size=70)])
+
+    # A^2 은 경험분포와 이론분포의 차이를 제곱해 적분한 값인데, 꼬리 쪽에
+    # 더 큰 무게를 싣는다. 그래서 KS 보다 꼬리 이탈을 잘 잡는다.
+    res = stats.anderson(x, dist="norm")
+    print(f"Sample size n = {x.size}")
+    print(f"Anderson-Darling A^2 = {res.statistic:.4f}")
+    print("Critical values vs significance levels:")
+    for cv, sl in zip(res.critical_values, res.significance_level):
+        flag = " REJECT" if res.statistic > cv else ""
+        print(f"  {sl:.1f}% -> {cv:.4f}{flag}")
+
+    reject_5 = res.statistic > res.critical_values[
+        list(res.significance_level).index(5.0)]
+    print(f"Decision at 5%: {'Reject' if reject_5 else 'Fail to reject'} normality")
+    ```
+
+    출력:
+
+    ```text
+    Sample size n = 300
+    Anderson-Darling A^2 = 1.0034
+    Critical values vs significance levels:
+      15.0% -> 0.5690 REJECT
+      10.0% -> 0.6480 REJECT
+      5.0% -> 0.7770 REJECT
+      2.5% -> 0.9060 REJECT
+      1.0% -> 1.0780
+    Decision at 5%: Reject normality
+    ```
+
+    네 검정의 판정과 검정력을 함께 구한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from statsmodels.stats.diagnostic import lilliefors
+
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=230),
+                        rng.lognormal(0, 0.6, size=70)])
+    res = stats.anderson(x, dist="norm")
+    print(f"A^2 = {res.statistic:.4f},  1% 임계값 = {res.critical_values[4]:.4f}"
+          f"  (차 {res.critical_values[4] - res.statistic:.4f})")
+    print(f"Shapiro-Wilk  W = {stats.shapiro(x)[0]:.4f}, p = {stats.shapiro(x)[1]:.4g}")
+    print(f"Jarque-Bera  JB = {stats.jarque_bera(x)[0]:.4f}, p = {stats.jarque_bera(x)[1]:.4g}")
+    print(f"DAgostino K^2  = {stats.normaltest(x)[0]:.4f}, p = {stats.normaltest(x)[1]:.4g}")
+    print(f"Lilliefors    D = {lilliefors(x)[0]:.4f}, p = {lilliefors(x)[1]:.4g}")
+
+    # 이 혼합 대립에서 네 검정의 검정력 (n = 300, alpha = 0.05)
+    rg = np.random.default_rng(13)
+    R, n_norm, n_ln = 1500, 230, 70
+    cnt = dict(AD=0, SW=0, JB=0, LF=0)
+    for _ in range(R):
+        y = np.concatenate([rg.normal(0, 1, n_norm), rg.lognormal(0, 0.6, n_ln)])
+        r = stats.anderson(y, dist="norm")
+        cnt["AD"] += r.statistic > r.critical_values[2]
+        cnt["SW"] += stats.shapiro(y)[1] < 0.05
+        cnt["JB"] += stats.jarque_bera(y)[1] < 0.05
+        cnt["LF"] += lilliefors(y)[1] < 0.05
+    print(f"\n혼합 대립에서의 검정력 (n = 300, R = {R}, MC SE 최대 {0.5 / np.sqrt(R):.4f})")
+    for k in ("AD", "SW", "JB", "LF"):
+        print(f"  {k}: {cnt[k] / R:.4f}")
+
+    # 정규 자료에서의 크기도 확인
+    cnt0 = dict(AD=0, SW=0, JB=0, LF=0)
+    for _ in range(R):
+        y = rg.standard_normal(300)
+        r = stats.anderson(y, dist="norm")
+        cnt0["AD"] += r.statistic > r.critical_values[2]
+        cnt0["SW"] += stats.shapiro(y)[1] < 0.05
+        cnt0["JB"] += stats.jarque_bera(y)[1] < 0.05
+        cnt0["LF"] += lilliefors(y)[1] < 0.05
+    print(f"정규 자료에서의 크기 (명목 0.05, MC SE {np.sqrt(0.05 * 0.95 / R):.4f})")
+    for k in ("AD", "SW", "JB", "LF"):
+        print(f"  {k}: {cnt0[k] / R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    A^2 = 1.0034,  1% 임계값 = 1.0780  (차 0.0746)
+    Shapiro-Wilk  W = 0.9723, p = 1.519e-05
+    Jarque-Bera  JB = 58.5069, p = 1.974e-13
+    DAgostino K^2  = 26.6879, p = 1.602e-06
+    Lilliefors    D = 0.0470, p = 0.1617
+
+    혼합 대립에서의 검정력 (n = 300, R = 1500, MC SE 최대 0.0129)
+      AD: 0.4313
+      SW: 0.4987
+      JB: 0.4033
+      LF: 0.3260
+    정규 자료에서의 크기 (명목 0.05, MC SE 0.0056)
+      AD: 0.0420
+      SW: 0.0493
+      JB: 0.0520
+      LF: 0.0373
+    ```
+
+    이 결과가 쪽 아래 "꼬리 가중이 실제로 사 오는 것" 절의 $n = 100$ 그림과 같은 방향을 가리킨다. 그 그림에서도 $\varepsilon = 0.05$에서 샤피로–윌크 $0.597$이 앤더슨–달링 $0.420$을 앞섰다. **표본크기와 대립을 바꾸어도 "AD는 KS보다 낫지만 샤피로–윌크에는 못 미친다"는 순서가 유지된다.** $\square$
 
 ## 해석
 

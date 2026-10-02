@@ -65,41 +65,123 @@ Shapiro-Wilk 검정통계량 $W$는 다음 단계로 계산한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Shapiro-Wilk 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> Shapiro-Wilk 검정. $\mathcal{N}(1, 10^2)$에서 $n = 1000$개를 뽑으면 $W = 0.9986$, $p = 0.5912$다.
+
+**(1)** $W$가 위치와 척도에 불변임을 정의에서 보이시오. 가중치 $a_i$의 어떤 성질이 필요한가.
+
+**(2)** "$W = 0.9986$이 1에 매우 가깝다"는 말에 정보가 있는가. $n = 1000$에서 $W$의 귀무분포를 모의실험으로 구해 **기각 경계가 되는 $W$**를 찾고, 관측값이 그 분포의 어디에 있는지 적으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 분자와 분모가 모두 2차 동차이고, 상수항은 $\sum a_i = 0$으로 지워진다.** 통계량은
 
-# 위치와 척도를 바꿔도 결론은 같다. 검정이 묻는 것은 모양이다.
-# data = np.random.normal(0, 1, 1000)
-data = np.random.normal(1, 10, 1000)
+    $$
+    W = \frac{\left(\sum_{i=1}^{n} a_i X_{(i)}\right)^2}{\sum_{i=1}^{n}(X_i - \bar X)^2}
+    $$
 
-# W 는 1 에 가까울수록 정규에 가깝다. 순서통계량과 정규분포의 기대
-# 순서통계량이 얼마나 잘 맞는지를 재므로, Q-Q 그림을 숫자로 옮긴 셈이다.
-stat, p_value = stats.shapiro(data)
-print(f"Shapiro-Wilk Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
+    이다. $Y_i = cX_i + d$ ($c > 0$)로 옮기면 순서가 보존되므로 $Y_{(i)} = cX_{(i)} + d$이고
 
-# 결과 해석
-alpha = 0.05
-if p_value <= alpha:
-    print("Reject H_0: The data is not normally distributed.")
-else:
-    print("Fail to reject H_0: The data is normally distributed.")
-```
+    $$
+    \sum_i a_i Y_{(i)} = c\sum_i a_i X_{(i)} + d\sum_i a_i
+    $$
 
-출력:
+    이다. **가중치 벡터 $a$는 반대칭이어서 $a_{n+1-i} = -a_i$이고 따라서 $\sum_i a_i = 0$이다.** 정규분포의 기대 순서통계량이 중앙에 대해 대칭이므로 거기서 유도되는 가중치도 그렇다. 그러므로 둘째 항이 사라지고 분자는 $c^2(\sum a_i X_{(i)})^2$이 된다. 분모도 $\sum(Y_i - \bar Y)^2 = c^2\sum(X_i - \bar X)^2$이니
 
-```text
-Shapiro-Wilk Test: Statistic=0.9986, p-value=0.5912
-Fail to reject H_0: The data is normally distributed.
-```
+    $$
+    W(Y) = \frac{c^2(\sum a_i X_{(i)})^2}{c^2\sum(X_i - \bar X)^2} = W(X)
+    $$
 
-$W = 0.9986$이 1에 매우 가깝고 $p = 0.591$이므로 정규성을 기각하지 못한다. 자료를 실제로 정규분포에서 생성했으므로 기대한 결과이다.
+    로 $c$와 $d$가 완전히 약분된다. 씨앗을 고정하면 `normal(1, 10, 1000)`이 `normal(0, 1, 1000)`의 $10$배에 1을 더한 것이므로 두 $W$는 같아야 하는데, 실제로
+
+    $$
+    W = 0.9985554728235057
+    $$
+
+    가 양쪽에서 **같은 부동소수점 수**로 나오고 $p$값도 $0.5912267898687746$으로 같다. 앤더슨–달링에서는 $10^{-13}$의 반올림 차이가 남았는데 여기서는 그조차 없다. $W$의 계산 경로가 짧아서다.
+
+    **(2) 정보가 없다. $W$는 정규 자료에서도 늘 1에 가깝다.** $n = 1000$인 표준정규 표본을 2만 번 뽑아 $W$의 귀무분포를 재면
+
+    | 백분위 | 1% | 5% | 50% | 95% | 최솟값 | 최댓값 |
+    |---|---|---|---|---|---|---|
+    | $W$ | $0.99598$ | $0.99689$ | $0.99840$ | $0.99915$ | $0.98960$ | $0.99961$ |
+
+    이다. **귀무분포 전체가 $[0.9896,\ 0.9996]$ 안에 들어 있다.** 5% 기각 경계가 $0.99689$이니 1에서 고작 $0.0031$ 떨어져 있을 뿐이다. 곧 $n = 1000$에서는 $W = 0.996$도 "1에 매우 가까운" 값이지만 기각된다. **소수점 셋째 자리까지 보고하면 판정에 필요한 정보가 통째로 사라진다.**
+
+    관측값 $W = 0.99856$은 이 분포의 **60.6 백분위**다. 중앙값 $0.99840$보다 오히려 조금 크다. 그래서 $p = 0.591$이 나온다. 바꾸어 말하면 이 표본은 정규 자료 가운데서도 평균보다 약간 더 정규답게 나온 표본이다.
+
+    실무적 결론은 **$W$ 값 자체를 읽지 말고 $p$값을 읽으라**는 것이다. $W$의 귀무분포는 $n$에 따라 크게 움직인다. 작은 표본에서는 $W = 0.95$도 흔하지만 $n = 1000$에서는 그런 값이 2만 번 중 한 번도 나오지 않는다. "$W$가 1에 가까우면 정규"라는 어림은 $n$을 모르면 쓸 수 없다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 위치와 척도를 바꿔도 결론은 같다. 검정이 묻는 것은 모양이다.
+    # data = np.random.normal(0, 1, 1000)
+    data = np.random.normal(1, 10, 1000)
+
+    # W 는 1 에 가까울수록 정규에 가깝다. 순서통계량과 정규분포의 기대
+    # 순서통계량이 얼마나 잘 맞는지를 재므로, Q-Q 그림을 숫자로 옮긴 셈이다.
+    stat, p_value = stats.shapiro(data)
+    print(f"Shapiro-Wilk Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
+
+    # 결과 해석
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H_0: The data is not normally distributed.")
+    else:
+        print("Fail to reject H_0: The data is normally distributed.")
+    ```
+
+    출력:
+
+    ```text
+    Shapiro-Wilk Test: Statistic=0.9986, p-value=0.5912
+    Fail to reject H_0: The data is normally distributed.
+    ```
+
+    불변성과 귀무분포를 함께 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+    a = np.random.normal(1, 10, 1000)
+    np.random.seed(0)
+    b = np.random.normal(0, 1, 1000)
+    print(f"a = 10b + 1 인가: {np.array_equal(a, 10 * b + 1)}")
+    print(f"W(a) = {stats.shapiro(a)[0]:.16f},  p = {stats.shapiro(a)[1]:.16f}")
+    print(f"W(b) = {stats.shapiro(b)[0]:.16f},  p = {stats.shapiro(b)[1]:.16f}")
+
+    # n = 1000 에서 W 의 귀무분포. 기각 경계는 아래쪽 꼬리에 있다.
+    rng = np.random.default_rng(5)
+    R, n = 20_000, 1000
+    W = np.array([stats.shapiro(rng.standard_normal(n))[0] for _ in range(R)])
+    q = np.percentile(W, [1, 5, 50, 95])
+    print(f"\nn = {n} 에서 W 의 귀무분포 (R = {R})")
+    print(f"  1 백분위 {q[0]:.5f},  5 백분위 {q[1]:.5f},  중앙값 {q[2]:.5f},  95 백분위 {q[3]:.5f}")
+    print(f"  관측 W = 0.99862 의 백분위 = {100 * np.mean(W < stats.shapiro(a)[0]):.1f}")
+    print(f"  가장 작은 W = {W.min():.5f},  가장 큰 W = {W.max():.5f}")
+    ```
+
+    출력:
+
+    ```text
+    a = 10b + 1 인가: True
+    W(a) = 0.9985554728235057,  p = 0.5912267898687746
+    W(b) = 0.9985554728235057,  p = 0.5912267898687746
+
+    n = 1000 에서 W 의 귀무분포 (R = 20000)
+      1 백분위 0.99598,  5 백분위 0.99689,  중앙값 0.99840,  95 백분위 0.99915
+      관측 W = 0.99862 의 백분위 = 60.6
+      가장 작은 W = 0.98960,  가장 큰 W = 0.99961
+    ```
+
+    불변성이 마지막 비트까지 성립하고, 모의실험이 $W$ 값만으로는 판정할 수 없음을 수로 보여 준다. 자료를 실제로 정규분포에서 생성했으므로 기각하지 못하는 것이 기대한 결과이고, $W$가 중앙값보다 조금 큰 쪽에 떨어진 것도 그에 맞는다. $\square$
 
 정리하면, Shapiro-Wilk 검정은 정렬된 표본자료와 미리 계산된 가중치로 검정통계량 $W$를 구해 자료가 정규분포에서 왔을 가능성을 판정한다. 특히 작거나 중간 크기의 표본에서 가장 강력한 정규성 검정 가운데 하나로 평가된다.
 

@@ -53,42 +53,135 @@ K-S 검정은 분포의 중심위치와 모양의 차이를 탐지하는 데 효
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> KS 검정의 함정
+**보기 1.** <span class="diff easy" title="쉬움"></span> KS 검정의 함정. 자료에서 추정한 평균과 표준편차로 표준화한 뒤 표준 KS 임계값을 쓰면 $D = 0.019034$, $p = 0.8548$이 나온다.
+
+**(1)** $D$를 정의대로 손계산해 `kstest`의 값을 재현하시오. 계단의 위쪽 틈 $D^+$와 아래쪽 틈 $D^-$ 중 어느 쪽이 통계량이 되었는가. 표준화에 쓰인 `data.std()`는 어느 판본인가.
+
+**(2)** 이 "검정"의 **실제 크기**를 모의실험으로 재시오. 명목 $0.05$가 얼마가 되는가. 정규 자료에서 $p$값이 균등분포를 따라야 하는데 실제로 어떤가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) $D^+$가 이겼고, 표준화는 `ddof=0`이다.** 정렬된 자료를 표준화한 $z_{(i)}$에 대해 경험분포함수는 $z_{(i)}$에서 $(i-1)/n$에서 $i/n$으로 뛰는 계단이므로, 두 방향의 틈을 따로 재야 한다.
 
-# 예시 자료를 만든다
-# data = np.random.normal(0, 1, 1000)
-data = np.random.normal(1, 10, 1000)
+    $$
+    D^+ = \max_i\left(\frac{i}{n} - \Phi(z_{(i)})\right), \qquad
+    D^- = \max_i\left(\Phi(z_{(i)}) - \frac{i-1}{n}\right), \qquad
+    D = \max(D^+, D^-)
+    $$
 
-# kstest 는 모수를 미리 알고 있다고 전제한다. 그래서 표준화해 N(0,1) 과
-# 견주는데, 그 평균과 표준편차를 자료에서 뽑아 썼다는 것이 함정이다.
-# 이러면 검정이 지나치게 너그러워져 p-값이 실제보다 크게 나온다.
-# 아래 Lilliefors 가 바로 이 문제를 고친 검정이다.
-data_ks = (data - data.mean()) / data.std()
+    이 표본에서 재면
 
-stat, p_value = stats.kstest(data_ks, 'norm')
-print(f"Kolmogorov-Smirnov Test: Statistic={stat}, p-value={p_value}")
+    | 표준화 | $D^+$ | $D^-$ | $D = \max$ |
+    |---|---|---|---|
+    | `ddof=0` ($1/n$) | $0.0190341127$ | $0.0098858448$ | $\mathbf{0.0190341127}$ |
+    | `ddof=1` ($1/(n-1)$) | $0.0191252945$ | $0.0098072163$ | $0.0191252945$ |
 
-alpha = 0.05
-if p_value <= alpha:
-    print("Reject H_0: The data is not normally distributed.")
-else:
-    print("Fail to reject H_0: The data is normally distributed.")
-```
+    이다. **위쪽 줄의 $D = 0.0190341127$이 `kstest`의 값과 열 자리까지 같다.** 코드가 쓴 `data.std()`의 기본값이 `ddof=0`이기 때문이다. 아래쪽 줄의 $0.0191252945$는 보기 2에서 릴리에포르가 돌려주는 통계량과 정확히 같은 수인데, `statsmodels`의 `lilliefors`가 $1/(n-1)$짜리 표준편차로 표준화하기 때문이다. **두 검정의 통계량이 "거의 같다"고 하는 차이의 정체가 이것이고, 통계량의 차이는 자료가 아니라 `ddof` 하나다.**
 
-출력:
+    $D^+$가 $D^-$의 거의 두 배인 것은 이 표본에서 경험분포함수가 적합 정규분포함수보다 위로 더 멀리 벗어나는 자리가 있다는 뜻이다. 어느 쪽이 이기느냐 자체에는 특별한 의미가 없다.
 
-```text
-Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.8547733408587939
-Fail to reject H_0: The data is normally distributed.
-```
+    **(2) 명목 $0.05$가 실제로 $0.0005$다. 백 분의 일이다.** 진짜 표준정규 자료에 같은 절차를 4000번 적용하면
+
+    | 명목 수준 | 실제 기각률 |
+    |---|---|
+    | $0.05$ | $0.00050$ (4000번 중 2번) |
+    | $0.10$ | $0.00150$ (6번) |
+    | $0.20$ | $0.00725$ (29번) |
+
+    이다. 어느 수준에서도 **두 자릿수**로 작다. $p$값의 평균은 $0.7869$로, 귀무가설이 참일 때 $p$가 $[0,1]$에 균등해야 한다는 것(평균 $0.5$)과 전혀 다르다. 더 결정적인 것은 4000번 가운데 **가장 작은 $p$값이 $0.0408$**이라는 사실이다. 곧 이 절차는 명목 $0.01$에서 아무리 뽑아도 **단 한 번도** 기각하지 못한다.
+
+    까닭은 쪽 위에서 본 대로다. 표준화가 경험분포함수를 기준 곡선 쪽으로 끌어당기므로 $D$가 체계적으로 작아지는데, `kstest`는 그 사실을 모르고 **모수를 알고 있을 때의** 귀무분포로 $p$값을 계산한다. 작아진 통계량을 작아지지 않은 잣대로 재니 $p$값이 1 쪽으로 몰린다.
+
+    **그러므로 $p = 0.855$는 자료에 대해 아무것도 말해 주지 않는다.** 자료가 어떻든 이 절차는 큰 $p$값을 내놓는다. 고쳐야 할 것은 통계량이 아니라 그것을 비교할 귀무분포이고, 보기 2에서 그 교정을 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 예시 자료를 만든다
+    # data = np.random.normal(0, 1, 1000)
+    data = np.random.normal(1, 10, 1000)
+
+    # kstest 는 모수를 미리 알고 있다고 전제한다. 그래서 표준화해 N(0,1) 과
+    # 견주는데, 그 평균과 표준편차를 자료에서 뽑아 썼다는 것이 함정이다.
+    # 이러면 검정이 지나치게 너그러워져 p-값이 실제보다 크게 나온다.
+    # 아래 Lilliefors 가 바로 이 문제를 고친 검정이다.
+    data_ks = (data - data.mean()) / data.std()
+
+    stat, p_value = stats.kstest(data_ks, 'norm')
+    print(f"Kolmogorov-Smirnov Test: Statistic={stat}, p-value={p_value}")
+
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H_0: The data is not normally distributed.")
+    else:
+        print("Fail to reject H_0: The data is normally distributed.")
+    ```
+
+    출력:
+
+    ```text
+    Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.8547733408587939
+    Fail to reject H_0: The data is normally distributed.
+    ```
+
+    손계산과 실제 크기를 함께 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+    data = np.random.normal(1, 10, 1000)
+    n = data.size
+
+    # 정의대로 D 를 손계산한다. 계단의 양쪽을 모두 본다.
+    def D_of(x, ddof):
+        z = np.sort((x - x.mean()) / x.std(ddof=ddof))
+        F = stats.norm.cdf(z)
+        i = np.arange(1, len(z) + 1)
+        d_plus = np.max(i / len(z) - F)
+        d_minus = np.max(F - (i - 1) / len(z))
+        return max(d_plus, d_minus), d_plus, d_minus
+
+    D0, dp0, dm0 = D_of(data, 0)
+    D1, dp1, dm1 = D_of(data, 1)
+    print(f"ddof=0:  D+ = {dp0:.10f},  D- = {dm0:.10f},  D = {D0:.10f}")
+    print(f"ddof=1:  D+ = {dp1:.10f},  D- = {dm1:.10f},  D = {D1:.10f}")
+
+    data_ks = (data - data.mean()) / data.std()
+    print(f"\nkstest   D = {stats.kstest(data_ks, 'norm')[0]:.10f}")
+
+    # 이 "검정" 의 실제 크기를 재 본다.
+    rng = np.random.default_rng(7)
+    R = 4000
+    ps = np.array([stats.kstest((lambda x: (x - x.mean()) / x.std())(
+        rng.standard_normal(n)), 'norm')[1] for _ in range(R)])
+    for a in (0.05, 0.10, 0.20):
+        print(f"명목 {a:.2f}: 실제 기각률 = {np.mean(ps < a):.5f}"
+              f"  ({np.sum(ps < a)}/{R})")
+    print(f"\np 값의 평균 = {ps.mean():.4f}  (균등이면 0.5),  최솟값 = {ps.min():.4f}")
+    ```
+
+    출력:
+
+    ```text
+    ddof=0:  D+ = 0.0190341127,  D- = 0.0098858448,  D = 0.0190341127
+    ddof=1:  D+ = 0.0191252945,  D- = 0.0098072163,  D = 0.0191252945
+
+    kstest   D = 0.0190341127
+    명목 0.05: 실제 기각률 = 0.00050  (2/4000)
+    명목 0.10: 실제 기각률 = 0.00150  (6/4000)
+    명목 0.20: 실제 기각률 = 0.00725  (29/4000)
+
+    p 값의 평균 = 0.7869  (균등이면 0.5),  최솟값 = 0.0408
+    ```
+
+    손계산한 $D$가 `kstest`의 값과 열 자리까지 같고, 모의실험이 쪽 위의 "보수적이 된다"는 서술을 **백 배**라는 수로 바꾸어 준다. $\square$
 
 !!! warning "이 코드는 사실 타당한 K-S 검정이 아니다"
     위 코드는 **자료에서 추정한** 평균과 표준편차로 자료를 표준화한 뒤 표준 K-S 임계값을 쓴다. 표준화가 경험적 CDF를 이론적 CDF 쪽으로 인위적으로 끌어당기므로 $D$가 작아지고 $p$값이 지나치게 커진다. 곧 검정이 보수적이 되어 검정력을 잃는다. 이것이 바로 다음 절의 Lilliefors 검정이 필요한 이유이다.
@@ -134,49 +227,141 @@ SciPy의 `stats.kstest` 함수는 **Kolmogorov-Smirnov(K-S) 검정**을 수행�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> KS와 Lilliefors 견주기
+**보기 2.** <span class="diff easy" title="쉬움"></span> KS와 Lilliefors 견주기. 같은 자료에 두 검정을 나란히 돌리면 통계량은 $0.01903$ 대 $0.01913$으로 거의 같은데 $p$값은 $0.855$ 대 $0.582$로 갈린다.
+
+**(1)** 통계량의 차이 $0.0001$은 어디서 오는가. **릴리에포르의 통계량을 `kstest`의 귀무분포로 읽으면** $p$값이 얼마가 되는가. 그 수를 보면 $p$값의 차이가 통계량에서 오는 것인지 귀무분포에서 오는 것인지 가려진다.
+
+**(2)** 릴리에포르는 보기 1에서 본 왜곡을 얼마나 바로잡는가. $n = 50,\ 200,\ 1000$에서 두 절차의 실제 크기를 재어 명목값과 나란히 적으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
-from statsmodels.stats.diagnostic import lilliefors
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 통계량의 차이는 `ddof` 하나이고, $p$값의 차이는 전부 귀무분포에서 온다.** 보기 1에서 이미 확인했듯이
 
-# 예시 자료를 만든다
-# data = np.random.normal(0, 1, 1000)
-data = np.random.normal(1, 10, 1000)
+    $$
+    \text{`kstest` 쪽}: \ \texttt{data.std(ddof=0)}, \qquad
+    \text{`lilliefors` 쪽}: \ \texttt{data.std(ddof=1)}
+    $$
 
-data_ks = (data - data.mean()) / data.std()
+    이고, 자료를 `ddof=1`로 표준화해 `kstest`에 넣으면 통계량이 $0.019125294462$가 되어 **릴리에포르의 값과 소수 열두째 자리까지 같다.** 두 검정은 같은 통계량을 쓴다. 차이는 그것을 표준화할 때 분모에 $n$을 쓰느냐 $n-1$을 쓰느냐뿐이고, 그 차이는 $0.5\%$다.
 
-# 같은 자료에 두 검정을 나란히 돌린다. 통계량은 거의 같은데 p-값이 갈린다.
-stat, p_value = stats.kstest(data_ks, 'norm')
-print(f"Kolmogorov-Smirnov Test: Statistic={stat}, p-value={p_value}")
+    결정적인 수는 세 번째 줄이다. **같은 통계량 $0.019125$**를
 
-# Lilliefors 는 모수를 자료에서 추정했다는 사실을 셈에 넣은 기각값을 쓴다.
-# 그래서 같은 통계량에도 더 작은 p-값을 준다. 모수를 추정했다면 이쪽이 맞다.
-stat, p_value = lilliefors(data)
-print(f"Lilliefors Test: Statistic={stat}, p-value={p_value}")
+    | 읽는 방식 | $p$값 |
+    |---|---|
+    | 릴리에포르의 귀무분포 | $0.5818$ |
+    | `kstest`의 귀무분포(모수를 안다고 가정) | $0.8508$ |
 
-# 결과 해석
-alpha = 0.05
-if p_value <= alpha:
-    print("Reject H_0: The data is not normally distributed.")
-else:
-    print("Fail to reject H_0: The data is normally distributed.")
-```
+    로 읽으면 $0.582$와 $0.851$이 나온다. 본문의 $0.855$와 $0.582$ 차이 가운데 통계량의 몫은 $0.855 - 0.851 = 0.004$에 지나지 않고, **나머지 $0.269$가 전부 귀무분포의 몫이다.** 곧 "통계량은 거의 같은데 $p$값이 갈린다"는 서술은 정확하며, 갈리는 까닭은 **같은 수를 다른 잣대로 재기 때문**이다. 모수를 추정했다면 추정했을 때의 잣대를 써야 한다.
 
-출력:
+    **(2) KS는 끝까지 무너지고 릴리에포르는 대체로 명목을 지킨다.** 진짜 표준정규 자료에서 2000번씩 재면
 
-```text
-Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.8547733408587939
-Lilliefors Test: Statistic=0.019125294462402076, p-value=0.5818164701330186
-Fail to reject H_0: The data is normally distributed.
-```
+    | $n$ | 명목 $0.05$ — 릴리에포르 | 명목 $0.05$ — KS | 명목 $0.10$ — 릴리에포르 | 명목 $0.10$ — KS |
+    |---|---|---|---|---|
+    | 50 | $0.0540$ | $0.0000$ | $0.1080$ | $0.0005$ |
+    | 200 | $0.0470$ | $0.0000$ | $0.0970$ | $0.0010$ |
+    | 1000 | $0.0365$ | $0.0000$ | $0.0745$ | $0.0020$ |
 
-두 검정통계량은 거의 같지만($0.01903$ 대 $0.01913$) **$p$값이 다르다**($0.855$ 대 $0.582$). Lilliefors가 모수 추정을 반영한 다른 귀무분포를 쓰기 때문이다. 여기서는 자료가 실제로 정규이므로 두 검정 모두 기각하지 않지만, 자료가 정규가 아니라면 Lilliefors 쪽이 훨씬 먼저 이를 잡아낸다.
+    몬테카를로 표준오차는 $0.05$에서 $0.0049$, $0.10$에서 $0.0067$이다.
+
+    **KS 쪽은 세 표본크기 모두에서 사실상 0이다.** 2000번 뽑아 명목 $0.05$에서 한 번도 기각하지 못한다. 표본을 키워도 나아지지 않는다는 점이 중요하다. 이것은 수렴이 느린 문제가 아니라 **잘못된 귀무분포를 쓰는 문제**라서 $n$으로 고쳐지지 않는다.
+
+    **릴리에포르 쪽은 $n = 50$에서 $0.0540$, $n = 200$에서 $0.0470$으로 명목 $0.05$를 몬테카를로 오차 안에서 지킨다.** 교정이 제 일을 한다. 다만 $n = 1000$에서는 $0.0365$로 명목보다 $27\%$ 작고, 이는 몬테카를로 표준오차의 $2.8$배이므로 잡음이 아니다. 명목 $0.10$에서도 $0.0745$로 같은 방향이다. `statsmodels`의 `lilliefors`가 기본으로 쓰는 $p$값 근사표가 큰 $n$에서 다소 보수적이라는 뜻이다. **"교정했으니 완벽하다"가 아니라 "교정하면 두 자릿수 왜곡이 수십 퍼센트 왜곡으로 줄어든다"가 정직한 요약이다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from statsmodels.stats.diagnostic import lilliefors
+
+    np.random.seed(0)
+
+    # 예시 자료를 만든다
+    # data = np.random.normal(0, 1, 1000)
+    data = np.random.normal(1, 10, 1000)
+
+    data_ks = (data - data.mean()) / data.std()
+
+    # 같은 자료에 두 검정을 나란히 돌린다. 통계량은 거의 같은데 p-값이 갈린다.
+    stat, p_value = stats.kstest(data_ks, 'norm')
+    print(f"Kolmogorov-Smirnov Test: Statistic={stat}, p-value={p_value}")
+
+    # Lilliefors 는 모수를 자료에서 추정했다는 사실을 셈에 넣은 기각값을 쓴다.
+    # 그래서 같은 통계량에도 더 작은 p-값을 준다. 모수를 추정했다면 이쪽이 맞다.
+    stat, p_value = lilliefors(data)
+    print(f"Lilliefors Test: Statistic={stat}, p-value={p_value}")
+
+    # 결과 해석
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H_0: The data is not normally distributed.")
+    else:
+        print("Fail to reject H_0: The data is normally distributed.")
+    ```
+
+    출력:
+
+    ```text
+    Kolmogorov-Smirnov Test: Statistic=0.01903411267034605, p-value=0.8547733408587939
+    Lilliefors Test: Statistic=0.019125294462402076, p-value=0.5818164701330186
+    Fail to reject H_0: The data is normally distributed.
+    ```
+
+    통계량의 출처와 두 절차의 실제 크기를 함께 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from statsmodels.stats.diagnostic import lilliefors
+
+    np.random.seed(0)
+    data = np.random.normal(1, 10, 1000)
+
+    z0 = (data - data.mean()) / data.std(ddof=0)
+    z1 = (data - data.mean()) / data.std(ddof=1)
+    print(f"ddof=0 으로 표준화한 KS 통계량 = {stats.kstest(z0, 'norm')[0]:.12f}")
+    print(f"ddof=1 으로 표준화한 KS 통계량 = {stats.kstest(z1, 'norm')[0]:.12f}")
+    print(f"lilliefors 의 통계량           = {lilliefors(data)[0]:.12f}")
+    print(f"\n같은 통계량에 붙는 두 p 값")
+    print(f"  kstest     p = {stats.kstest(z0, 'norm')[1]:.6f}")
+    print(f"  lilliefors p = {lilliefors(data)[1]:.6f}")
+    print(f"  ddof=1 통계량을 kstest 의 귀무분포로 읽으면 p = {stats.kstest(z1, 'norm')[1]:.6f}")
+
+    # 릴리에포르가 실제 크기를 얼마나 바로잡는가
+    rng = np.random.default_rng(1234)
+    R = 2000
+    print(f"\n정규 자료에서의 실제 기각률 (R = {R})")
+    for n in (50, 200, 1000):
+        pl = np.array([lilliefors(rng.standard_normal(n))[1] for _ in range(R)])
+        pk = np.array([stats.kstest((lambda x: (x - x.mean()) / x.std())(
+            rng.standard_normal(n)), 'norm')[1] for _ in range(R)])
+        print(f"{n:>6}  릴리에포르 {np.mean(pl < 0.05):.4f}  KS {np.mean(pk < 0.05):.4f}"
+              f"   |  릴리에포르 {np.mean(pl < 0.10):.4f}  KS {np.mean(pk < 0.10):.4f}")
+    print(f"\n몬테카를로 표준오차: 0.05 에서 {np.sqrt(0.05 * 0.95 / R):.4f},"
+          f"  0.10 에서 {np.sqrt(0.10 * 0.90 / R):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    ddof=0 으로 표준화한 KS 통계량 = 0.019034112670
+    ddof=1 으로 표준화한 KS 통계량 = 0.019125294462
+    lilliefors 의 통계량           = 0.019125294462
+
+    같은 통계량에 붙는 두 p 값
+      kstest     p = 0.854773
+      lilliefors p = 0.581816
+      ddof=1 통계량을 kstest 의 귀무분포로 읽으면 p = 0.850822
+
+    정규 자료에서의 실제 기각률 (R = 2000)
+        50  릴리에포르 0.0540  KS 0.0000   |  릴리에포르 0.1080  KS 0.0005
+       200  릴리에포르 0.0470  KS 0.0000   |  릴리에포르 0.0970  KS 0.0010
+      1000  릴리에포르 0.0365  KS 0.0000   |  릴리에포르 0.0745  KS 0.0020
+
+    몬테카를로 표준오차: 0.05 에서 0.0049,  0.10 에서 0.0067
+    ```
+
+    릴리에포르의 통계량이 `ddof=1`짜리 KS 통계량과 열두 자리까지 같음이 확인되고, 같은 통계량이 두 귀무분포에서 $0.582$와 $0.851$이라는 서로 다른 $p$값을 받는다. 본문이 "자료가 정규가 아니라면 릴리에포르 쪽이 훨씬 먼저 잡아낸다"고 적은 것의 근거가 아래 표다. **KS 쪽은 애초에 기각하는 일이 거의 없으므로, 먼저 잡아내는 것이 아니라 KS가 끝내 잡아내지 못하는 것이다.** $\square$
 
 ---
 

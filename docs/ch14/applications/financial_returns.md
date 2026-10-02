@@ -119,76 +119,224 @@ $1\%$를 지나면서 상황이 뒤집힌다. $\alpha = 0.01$에서 비가 $1.12
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 수익률의 정규성과 VaR
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모집단 왜도가 0인데 표본왜도가 $+1.43$ 이다. 자유도 5인 $t$ 분포에 $0.01$을 곱해 일간 수익률 1000일을 만들고, 요약통계·정규성 검정·1% VaR를 함께 구한다.
+
+**(1)** $t_5$ 의 **모집단** 왜도와 초과첨도를 닫힌 꼴로 구하시오. 표본값은 $g_1 = +1.4292$, $g_2 = +17.3412$ 다. 왜 이렇게 벌어지는가. $t_5$ 에서 몇 차 적률까지 존재하는지로 설명하시오.
+
+**(2)** 자르크–베라 통계량을 $g_1$, $g_2$ 로 직접 계산해 출력의 $12870.3735$ 와 맞추시오.
+
+**(3)** 1% VaR 비가 $1.02$ 로 나왔다. 그런데 이 모형의 **참** 비는 앞 표의 $1.12$ 다. 어긋남이 어디서 왔는지 수로 분리하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# ===================================================================
-# 모의 수익률로 정규성 검정 — 그리고 그것이 위험 측정에 미치는 영향
-# ===================================================================
+    **쪽의 코드를 먼저 그대로 돌린다.**
 
-np.random.seed(42)
+    ```python
+    import numpy as np
+    from scipy import stats
 
-# 자유도 5 인 t 로 일별 수익률을 만든다. 실제 수익률처럼 꼬리가 두껍다.
-n_days = 1000
-df = 5
-daily_returns = stats.t.rvs(df=df, size=n_days) * 0.01
+    # ===================================================================
+    # 모의 수익률로 정규성 검정 — 그리고 그것이 위험 측정에 미치는 영향
+    # ===================================================================
 
-# 먼저 요약통계로 훑는다. 정규라면 왜도 0, 초과첨도 0 이어야 한다.
-skew = stats.skew(daily_returns)
-kurt = stats.kurtosis(daily_returns)  # excess kurtosis
+    np.random.seed(42)
 
-# 세 검정을 함께 돌린다. 셋의 결론이 갈리는 일은 드물지만, 무엇에
-# 민감한지가 서로 달라 함께 보면 이탈의 성격을 짐작할 수 있다.
-sw_stat, sw_p = stats.shapiro(daily_returns)
-jb_stat, jb_p = stats.jarque_bera(daily_returns)
-ad_result = stats.anderson(daily_returns, dist="norm")
+    # 자유도 5 인 t 로 일별 수익률을 만든다. 실제 수익률처럼 꼬리가 두껍다.
+    n_days = 1000
+    df = 5
+    daily_returns = stats.t.rvs(df=df, size=n_days) * 0.01
 
-# 정규성이 깨졌을 때 실무에서 치르는 대가를 숫자로 본다. 정규를 가정한
-# VaR 은 꼬리 쪽 손실을 실제보다 작게 잡는다. 아래 비가 1 보다 크면
-# 정규 가정이 위험을 그만큼 과소평가하고 있다는 뜻이다.
-alpha = 0.01
-var_normal = -(np.mean(daily_returns)
-               + stats.norm.ppf(alpha) * np.std(daily_returns, ddof=1))
-var_empirical = -np.quantile(daily_returns, alpha)
+    # 먼저 요약통계로 훑는다. 정규라면 왜도 0, 초과첨도 0 이어야 한다.
+    skew = stats.skew(daily_returns)
+    kurt = stats.kurtosis(daily_returns)  # excess kurtosis
 
-if __name__ == "__main__":
-    print(f"Simulated daily returns (t-distribution, df={df})")
-    print(f"  Skewness:        {skew:.4f}")
-    print(f"  Excess kurtosis: {kurt:.4f}")
-    print(f"\nNormality tests:")
-    print(f"  Shapiro-Wilk:  W = {sw_stat:.4f}, p = {sw_p:.4f}")
-    print(f"  Jarque-Bera:   JB = {jb_stat:.4f}, p = {jb_p:.4f}")
-    print(f"  Anderson-Darling: A2 = {ad_result.statistic:.4f}")
-    print(f"\n1% VaR comparison:")
-    print(f"  Normal VaR:    {var_normal:.6f}")
-    print(f"  Empirical VaR: {var_empirical:.6f}")
-    print(f"  Ratio:         {var_empirical / var_normal:.2f}")
-```
+    # 세 검정을 함께 돌린다. 셋의 결론이 갈리는 일은 드물지만, 무엇에
+    # 민감한지가 서로 달라 함께 보면 이탈의 성격을 짐작할 수 있다.
+    sw_stat, sw_p = stats.shapiro(daily_returns)
+    jb_stat, jb_p = stats.jarque_bera(daily_returns)
+    ad_result = stats.anderson(daily_returns, dist="norm")
 
-출력:
+    # 정규성이 깨졌을 때 실무에서 치르는 대가를 숫자로 본다. 정규를 가정한
+    # VaR 은 꼬리 쪽 손실을 실제보다 작게 잡는다. 아래 비가 1 보다 크면
+    # 정규 가정이 위험을 그만큼 과소평가하고 있다는 뜻이다.
+    alpha = 0.01
+    var_normal = -(np.mean(daily_returns)
+                   + stats.norm.ppf(alpha) * np.std(daily_returns, ddof=1))
+    var_empirical = -np.quantile(daily_returns, alpha)
 
-```text
-Simulated daily returns (t-distribution, df=5)
-  Skewness:        1.4292
-  Excess kurtosis: 17.3412
+    if __name__ == "__main__":
+        print(f"Simulated daily returns (t-distribution, df={df})")
+        print(f"  Skewness:        {skew:.4f}")
+        print(f"  Excess kurtosis: {kurt:.4f}")
+        print(f"\nNormality tests:")
+        print(f"  Shapiro-Wilk:  W = {sw_stat:.4f}, p = {sw_p:.4f}")
+        print(f"  Jarque-Bera:   JB = {jb_stat:.4f}, p = {jb_p:.4f}")
+        print(f"  Anderson-Darling: A2 = {ad_result.statistic:.4f}")
+        print(f"\n1% VaR comparison:")
+        print(f"  Normal VaR:    {var_normal:.6f}")
+        print(f"  Empirical VaR: {var_empirical:.6f}")
+        print(f"  Ratio:         {var_empirical / var_normal:.2f}")
+    ```
 
-Normality tests:
-  Shapiro-Wilk:  W = 0.9177, p = 0.0000
-  Jarque-Bera:   JB = 12870.3735, p = 0.0000
-  Anderson-Darling: A2 = 6.4988
+    출력:
 
-1% VaR comparison:
-  Normal VaR:    0.030028
-  Empirical VaR: 0.030613
-  Ratio:         1.02
-```
+    ```text
+    Simulated daily returns (t-distribution, df=5)
+      Skewness:        1.4292
+      Excess kurtosis: 17.3412
 
-세 정규성 검정이 모두 압도적으로 기각한다(초과첨도가 17.3에 이른다).
+    Normality tests:
+      Shapiro-Wilk:  W = 0.9177, p = 0.0000
+      Jarque-Bera:   JB = 12870.3735, p = 0.0000
+      Anderson-Darling: A2 = 6.4988
+
+    1% VaR comparison:
+      Normal VaR:    0.030028
+      Empirical VaR: 0.030613
+      Ratio:         1.02
+    ```
+
+    세 검정이 모두 압도적으로 기각한다. 자료가 $t_5$ 에서 나왔으니 당연하다. 재미있는 것은 그다음이다.
+
+    **(1) $t_5$ 의 모집단 왜도는 0이고 초과첨도는 6이다.** $t_\nu$ 는 0을 중심으로 **대칭**이므로 3차 중심적률이 존재하는 한(곧 $\nu > 3$) 왜도는 정확히 0이다. 초과첨도는 $\nu > 4$에서
+
+    $$
+    \gamma_2(\nu) = \frac{6}{\nu - 4}
+    $$
+
+    이고, $\nu = 5$면 $6/1 = 6$이다. 표본값과 나란히 놓으면
+
+    | | 모집단 | 표본($n = 1000$) |
+    |---|---|---|
+    | 왜도 | $0$ | $g_1 = +1.4292$ |
+    | 초과첨도 | $6$ | $g_2 = +17.3412$ |
+
+    **왜도는 0이어야 하는데 $+1.43$이 나왔고, 초과첨도는 6이어야 하는데 세 배 가까운 $17.34$가 나왔다.** 자료가 1000개인데도 그렇다.
+
+    까닭은 적률의 존재 범위다. $t_\nu$ 는 **$\nu$보다 낮은 차수의 적률만 갖는다.** $\nu = 5$면 1차부터 4차까지 존재하고 **5차 이상은 발산한다.** 그런데 표본왜도 $\hat g_1$의 분산을 계산하려면 **6차 적률**이, 표본 초과첨도 $\hat g_2$의 분산을 계산하려면 **8차 적률**이 필요하다. 둘 다 $t_5$ 에는 없다. 곧 이 두 추정량은 **분산이 무한**하다. 큰수의 법칙으로 참값에 수렴하기는 하지만(일치성은 4차 적률만 있으면 되므로 $g_2$는 아슬아슬하게 일치, $g_1$은 넉넉히 일치), **중심극한정리가 적용되지 않으므로 "표준오차 ± 몇 배" 같은 말을 할 수 없다.**
+
+    모의실험으로 그 표본분포를 직접 보면 뚜렷하다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    r = stats.t.rvs(df=5, size=1000) * 0.01
+    n, nu = 1000, 5
+    g1, g2 = stats.skew(r), stats.kurtosis(r)   # 둘 다 bias=True 기본값
+
+    print("(1) 모집단 대 표본")
+    print(f"  왜도      모집단 0        표본 g1 = {g1:+.4f}")
+    print(f"  초과첨도  모집단 {6/(nu-4):.1f}      표본 g2 = {g2:+.4f}")
+
+    print("\n(2) 자르크-베라")
+    print(f"  (n/6)(g1^2 + g2^2/4) = {(n/6)*(g1**2 + g2**2/4):.4f}")
+    print(f"  scipy.stats.jarque_bera = {stats.jarque_bera(r)[0]:.4f}")
+
+    print("\n(3) VaR 1% 분해")
+    sig, z = 0.01*np.sqrt(nu/(nu-2)), stats.norm.ppf(0.01)
+    s, m = r.std(ddof=1), r.mean()
+    print(f"  참 sigma = {sig:.6f},  표본 s = {s:.6f},  s/sigma = {s/sig:.4f}")
+    print(f"  정규 VaR (참 모수)  = {-(0 + z*sig):.6f}")
+    print(f"  정규 VaR (표본 모수) = {-(m + z*s):.6f}")
+    print(f"  참 t5 VaR           = {-0.01*stats.t.ppf(0.01, nu):.6f}")
+    print(f"  경험 VaR            = {-np.quantile(r, 0.01):.6f}")
+    print(f"  참 비 = {(-0.01*stats.t.ppf(0.01,nu))/(-(z*sig)):.4f}"
+          f"   표본 비 = {(-np.quantile(r,0.01))/(-(m+z*s)):.4f}")
+    f0 = stats.t.pdf(stats.t.ppf(0.01, nu), nu) / 0.01
+    se = np.sqrt(0.01*0.99/n) / f0
+    print(f"  1% 경험분위수 점근 SE = {se:.6f}"
+          f"  (부족분 {(-0.01*stats.t.ppf(0.01,nu)) - (-np.quantile(r,0.01)):.6f}"
+          f" = {((-0.01*stats.t.ppf(0.01,nu)) - (-np.quantile(r,0.01)))/se:.2f} SE)")
+
+    print("\n(1) 보충 — g1, g2 의 표본분포 (t5, n=1000, 2000 회)")
+    rng = np.random.default_rng(1)
+    G1, G2 = [], []
+    for _ in range(2000):
+        x = stats.t.rvs(df=nu, size=n, random_state=rng)
+        G1.append(stats.skew(x)); G2.append(stats.kurtosis(x))
+    G1, G2 = np.array(G1), np.array(G2)
+    print(f"  g1: 중앙값 {np.median(G1):+.3f}  2.5~97.5% [{np.percentile(G1,2.5):+.2f},"
+          f" {np.percentile(G1,97.5):+.2f}]  최대절대 {np.abs(G1).max():.2f}")
+    print(f"  g2: 중앙값 {np.median(G2):.2f}   2.5~97.5% [{np.percentile(G2,2.5):.2f},"
+          f" {np.percentile(G2,97.5):.2f}]   최대 {G2.max():.1f}")
+    print(f"  관측 g1 의 백분위 {100*(G1<g1).mean():.1f}%,  g2 의 백분위 {100*(G2<g2).mean():.1f}%")
+    ```
+
+    출력:
+
+    ```text
+    (1) 모집단 대 표본
+      왜도      모집단 0        표본 g1 = +1.4292
+      초과첨도  모집단 6.0      표본 g2 = +17.3412
+
+    (2) 자르크-베라
+      (n/6)(g1^2 + g2^2/4) = 12870.3735
+      scipy.stats.jarque_bera = 12870.3735
+
+    (3) VaR 1% 분해
+      참 sigma = 0.012910,  표본 s = 0.012907,  s/sigma = 0.9998
+      정규 VaR (참 모수)  = 0.030033
+      정규 VaR (표본 모수) = 0.030028
+      참 t5 VaR           = 0.033649
+      경험 VaR            = 0.030613
+      참 비 = 1.1204   표본 비 = 1.0195
+      1% 경험분위수 점근 SE = 0.002884  (부족분 0.003036 = 1.05 SE)
+
+    (1) 보충 — g1, g2 의 표본분포 (t5, n=1000, 2000 회)
+      g1: 중앙값 -0.006  2.5~97.5% [-0.89, +0.95]  최대절대 16.65
+      g2: 중앙값 2.95   2.5~97.5% [1.18, 14.65]   최대 422.1
+      관측 g1 의 백분위 99.0%,  g2 의 백분위 98.2%
+    ```
+
+    표본분포가 사정을 전부 말해 준다. $g_1$의 **중앙값은 $-0.006$으로 참값 0에 정확히 앉아 있는데** 95% 구간이 $[-0.89,\ +0.95]$로 벌어지고 2000번 가운데 최대 절대값은 $16.65$까지 간다. 관측된 $+1.43$은 그 분포의 99 백분위다. 드물지만 놀랄 일은 아니다.
+
+    $g_2$는 더 고약하다. 참값이 6인데 **중앙값이 $2.95$**로 절반도 안 되고, 95% 구간은 $[1.18,\ 14.65]$이며 최대는 $422$다. 분포가 극도로 오른쪽으로 치우쳐 있어서 **대부분의 표본은 참값을 크게 밑돌고 소수의 표본이 참값을 크게 넘어 평균을 맞춘다.** 관측된 $17.34$는 98 백분위에 해당한다. 그러므로 "초과첨도 17이니 꼬리가 $t_5$ 보다도 훨씬 두껍다"고 읽으면 **틀린다.** 자료는 정확히 $t_5$ 에서 나왔고, 17은 운이 나쁜(또는 극단값이 하나 더 들어온) 표본의 값일 뿐이다.
+
+    실무적 함의가 있다. 본문이 "일간 주식 수익률의 초과첨도는 흔히 3에서 50 사이"라고 한 그 폭의 상당 부분은 **자산의 차이가 아니라 추정량의 변동**일 수 있다. 표본 첨도 하나로 꼬리 두께를 보고할 때는 점추정값만 적지 말고 부트스트랩 구간을 함께 적어야 하며, 꼬리지수 $\hat\nu$ 를 직접 추정하는 편이 더 안정적이다.
+
+    **(2) 자르크–베라는 $g_1$과 $g_2$ 를 그대로 쓴다.**
+
+    $$
+    \mathrm{JB} = \frac{n}{6}\Bigl(g_1^2 + \frac{g_2^2}{4}\Bigr)
+    $$
+
+    에 $n = 1000$, $g_1 = 1.4292$, $g_2 = 17.3412$를 넣으면
+
+    $$
+    \frac{1000}{6}\Bigl(1.4292^2 + \frac{17.3412^2}{4}\Bigr) = 166.6667\,(2.0426 + 75.1793) = 12870.37
+    $$
+
+    이고, 코드가 준 $12870.3735$와 소수 넷째 자리까지 맞는다. `scipy.stats.jarque_bera`도 같은 값을 준다.
+
+    여기서 판본이 결정적이다. 위 식에 들어가는 것은 **보정하지 않은** $g_1$, $g_2$ 이고, `scipy.stats.skew`·`kurtosis`의 기본값(`bias=True`, `fisher=True`)이 바로 그것이다. 보정판 $G_1$, $G_2$ 를 넣으면 값이 달라져 맞지 않는다. 또 분해를 보면 첨도 항 $g_2^2/4 = 75.18$이 왜도 항 $2.04$의 **37배**다. 이 자료의 JB를 밀어 올린 것은 거의 전부 첨도이며, 자유도 2의 $\chi^2$ 임계값 $5.99$에 비해 $12870$은 사실상 무한대다.
+
+    **(3) 어긋남은 전부 경험분위수에서 왔다.** 네 수를 나란히 놓자.
+
+    | | 값 |
+    |---|---|
+    | 정규 VaR, **참** 모수 $\sigma = 0.01\sqrt{5/3} = 0.012910$ | $0.030033$ |
+    | 정규 VaR, **표본** 모수 $s = 0.012907$ | $0.030028$ |
+    | **참** $t_5$ VaR $= -0.01\,t_{0.01,5} = 0.01 \times 3.36493$ | $0.033649$ |
+    | **경험** VaR (1% 표본분위수) | $0.030613$ |
+
+    분모 쪽은 거의 움직이지 않았다. $s/\sigma = 0.9998$이므로 표본 표준편차가 참 $\sigma$와 **소수 넷째 자리까지 같고**, 정규 VaR도 $0.030033$에서 $0.030028$로 $0.02\%$만 달라졌다. 어긋남은 분자 쪽이다. 경험 VaR $0.030613$이 참값 $0.033649$보다 $0.003036$ 작다.
+
+    그 크기가 설명된다. 1% 표본분위수의 점근 표준오차는
+
+    $$
+    \mathrm{SE} = \frac{\sqrt{\alpha(1-\alpha)/n}}{f(q_\alpha)}
+    $$
+
+    이고, $\alpha = 0.01$, $n = 1000$, $f$ 가 자료의 밀도(척도 $0.01$인 $t_5$)일 때 $0.002884$다. 부족분 $0.003036$은 정확히 $1.05$ 표준오차다. **곧 이 표본의 비 $1.02$는 참값 $1.12$에서 한 표준오차만큼 벗어난 것이고, 그것으로 전부 설명된다.** 이유가 하나뿐인 셈이다. $n = 1000$에서 1% 분위수는 사실상 10번째로 작은 값이 어디에 떨어지느냐에 달려 있고, 이 표본에서는 그것이 $-0.0313$으로 참값보다 안쪽이었다.
+
+    !!! warning "본문의 두 번째 이유는 이 표본에서 작동하지 않는다"
+        바로 아래 주의 상자는 "정규 VaR가 표본 표준편차를 쓰는데 그 표준편차가 두꺼운 꼬리 때문에 이미 부풀려져 있어 정규 VaR도 함께 커진다"를 둘째 이유로 든다. 그러나 이 표본에서는 $s/\sigma = 0.9998$로 **부풀려지지 않았다.** 더 근본적으로, $t_5$ 는 4차 적률이 존재하므로 $s^2$ 은 $\sigma^2$ 의 **불편추정량**이고 꼬리가 두껍다는 사실만으로 체계적으로 커지지는 않는다. 두꺼운 꼬리가 하는 일은 $s$ 를 **크게 흔드는** 것이지 한쪽으로 밀어 올리는 것이 아니다. 그래서 어떤 표본에서는 정규 VaR가 커지고 어떤 표본에서는 작아진다.
+
+        이 쪽에서 $1.12$가 $1.02$로 내려앉은 것은 **첫째 이유 하나로 충분히** 설명된다(부족분 $= 1.05\,\mathrm{SE}$).
 
 !!! note "VaR 비가 1.02밖에 안 되는 이유"
     이론적으로 이 자료의 참 VaR 비는 위 표의 $1.12$여야 하는데 모의실험에서는 $1.02$가 나왔다. 두 가지 이유가 있다. 첫째, 관측값 1000개에서 추정한 1% 경험분위수는 사실상 10번째로 작은 값 근처이므로 변동이 매우 크다. 둘째, 정규 VaR가 **표본** 표준편차를 쓰는데 그 표준편차가 두꺼운 꼬리 때문에 이미 부풀려져 있어 정규 VaR도 함께 커진다.

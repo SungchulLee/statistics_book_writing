@@ -28,46 +28,82 @@ $p$값은 $p = P(\chi^2_2 \geq \text{JB}_{\text{obs}})$이며 $p < \alpha$일 �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 섞인 자료에 Jarque-Bera 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 섞인 자료에 Jarque-Bera 검정. $\mathcal{N}(0,1)$ 240개에 $\text{Lognormal}(0, 0.6^2)$ 60개를 섞은 $n = 300$ 표본에 검정을 걸면 $JB = 47.5606$이 나온다. 그런데 같은 코드가 찍어 주는 왜도·첨도는 $0.3707$과 $1.8565$다.
+
+**(1)** 출력된 두 값을 공식 $JB = \frac{n}{6}(g_1^2 + g_2^2/4)$에 그대로 넣으면 얼마가 나오는가. `scipy`가 준 $47.5606$과 맞는가. 맞지 않으면 그 까닭은 무엇인가.
+
+**(2)** $JB$를 왜도 항 $\frac{n}{6}g_1^2$과 첨도 항 $\frac{n}{24}g_2^2$으로 나누어, 기각을 끌고 온 것이 치우침인지 두꺼운 꼬리인지 수로 판정하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 정규 240개에 로그정규 60개를 섞은 자료다.
-rng = np.random.default_rng(0)
-x = np.concatenate([rng.normal(0, 1, size=240),
-                    rng.lognormal(0, 0.6, size=60)])
+    **(1) 맞지 않는다. $49.9516$이 나온다.** 출력된 값은 `bias=False`로 구한 **보정판** $G_1 = 0.37074$, $G_2 = 1.85650$인데, `scipy.stats.jarque_bera`는 **비보정판** $g_1$, $g_2$로 통계량을 만든다. 둘을 나란히 놓으면
 
-jb_stat, p = stats.jarque_bera(x)
+    | 판본 | 왜도 | 초과첨도 | 왜도 항 | 첨도 항 | 합 |
+    |---|---|---|---|---|---|
+    | 비보정 (`bias=True`, 기본값) | $g_1 = 0.36880$ | $g_2 = 1.80578$ | $6.8005$ | $40.7601$ | $\mathbf{47.5606}$ |
+    | 보정 (`bias=False`) | $G_1 = 0.37074$ | $G_2 = 1.85650$ | $6.8691$ | $43.0825$ | $49.9516$ |
 
-# bias=False 는 유한표본 보정을 적용한다는 뜻이다. fisher=True 는 첨도에서
-# 3 을 빼 정규를 0 으로 맞춘 초과첨도를 준다. 둘 다 scipy 의 기본값과 다르니
-# 다른 책의 숫자와 견줄 때 확인해야 할 대목이다.
-g1 = stats.skew(x, bias=False)
-g2 = stats.kurtosis(x, fisher=True, bias=False)
+    이다. 아래쪽 합이 $49.95$로 `scipy`가 돌려준 $47.5606$보다 $5.0\%$ 크다. **$n = 300$이나 되는데도 그만큼 어긋난다.** 왜도의 보정 계수는
 
-print(f"Sample size n = {x.size}")
-print(f"Skewness g1 = {g1:.4f}")
-print(f"Excess kurtosis g2 = {g2:.4f}")
-print(f"Jarque-Bera: JB = {jb_stat:.4f}, p-value = {p:.4g}")
-if p < 0.05:
-    print("=> Reject normality at alpha = 0.05.")
-else:
-    print("=> Fail to reject normality at alpha = 0.05.")
-```
+    $$
+    G_1 = \frac{\sqrt{n(n-1)}}{n-2}\,g_1, \qquad n = 300 \ \Rightarrow\ \frac{\sqrt{300\cdot 299}}{298} = 1.00503
+    $$
 
-출력:
+    로 $0.5\%$에 지나지 않지만, 첨도 쪽 보정은 $1.85650/1.80578 = 1.02809$로 더 크고 공식이 이들을 **제곱**하므로 차이가 두 배로 증폭된다.
 
-```text
-Sample size n = 300
-Skewness g1 = 0.3707
-Excess kurtosis g2 = 1.8565
-Jarque-Bera: JB = 47.5606, p-value = 4.703e-11
-=> Reject normality at alpha = 0.05.
-```
+    그러므로 코드가 찍는 `Skewness g1`·`Excess kurtosis g2`라는 이름은 사실 $G_1$, $G_2$이고, **그 값으로는 같은 출력에 찍힌 $JB$를 재현할 수 없다.** 코드의 주석이 "둘 다 scipy 의 기본값과 다르니 다른 책의 숫자와 견줄 때 확인해야 할 대목이다"라고 경고하는 것이 바로 이 일이다. 손으로 $JB$를 확인하려면 `bias` 인자를 떼고 기본값으로 다시 불러야 한다.
+
+    **(2) 첨도 항이 $85.7\%$다.** 비보정 판본으로
+
+    $$
+    \frac{n}{6}g_1^2 = \frac{300}{6}(0.36880)^2 = 6.8005, \qquad
+    \frac{n}{24}g_2^2 = \frac{300}{24}(1.80578)^2 = 40.7601
+    $$
+
+    이고 합이 정확히 $47.5606$이다. 비율은 왜도 $14.3\%$, 첨도 $85.7\%$다. $g_2 = +1.81$로 **부호가 양수**이니 꼬리가 두꺼운 쪽이며, 대수정규 오염이 들여온 몇 개의 큰 값이 네제곱 적률을 지배한 것이다. 치우침($g_1 = 0.37$)도 있지만 기각을 끌고 온 주범은 아니다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 정규 240개에 로그정규 60개를 섞은 자료다.
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=240),
+                        rng.lognormal(0, 0.6, size=60)])
+
+    jb_stat, p = stats.jarque_bera(x)
+
+    # bias=False 는 유한표본 보정을 적용한다는 뜻이다. fisher=True 는 첨도에서
+    # 3 을 빼 정규를 0 으로 맞춘 초과첨도를 준다. 둘 다 scipy 의 기본값과 다르니
+    # 다른 책의 숫자와 견줄 때 확인해야 할 대목이다.
+    g1 = stats.skew(x, bias=False)
+    g2 = stats.kurtosis(x, fisher=True, bias=False)
+
+    print(f"Sample size n = {x.size}")
+    print(f"Skewness g1 = {g1:.4f}")
+    print(f"Excess kurtosis g2 = {g2:.4f}")
+    print(f"Jarque-Bera: JB = {jb_stat:.4f}, p-value = {p:.4g}")
+    if p < 0.05:
+        print("=> Reject normality at alpha = 0.05.")
+    else:
+        print("=> Fail to reject normality at alpha = 0.05.")
+    ```
+
+    출력:
+
+    ```text
+    Sample size n = 300
+    Skewness g1 = 0.3707
+    Excess kurtosis g2 = 1.8565
+    Jarque-Bera: JB = 47.5606, p-value = 4.703e-11
+    => Reject normality at alpha = 0.05.
+    ```
+
+    $p$값은 $e^{-JB/2} = e^{-23.78} = 4.703\times10^{-11}$로 사실상 0이다. 같은 자료에 다고스티노 $K^2$를 걸면 $K^2 = 22.21$($p = 1.50\times10^{-5}$)로 훨씬 작은데, 이는 검정력의 차이가 아니라 $K^2$가 $g_2$를 비선형 변환으로 먼저 길들이기 때문이다. 유한표본에서 $g_2$의 분포가 오른쪽으로 크게 치우쳐 있어 $JB$가 쉽게 부풀려진다.
+
+    출력의 두 수에 속지 말 것. 아래 "해석"에서 다시 쓰는 분해 $6.80 + 40.76$은 비보정 $g_1 = 0.3688$, $g_2 = 1.8058$로 계산한 것이고, **그 합만이** $47.5606$과 끝자리까지 일치한다. $\square$
 
 ## D'Agostino K제곱과의 비교
 

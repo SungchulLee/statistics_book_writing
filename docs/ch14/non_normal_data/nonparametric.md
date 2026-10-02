@@ -10,42 +10,161 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Mann-Whitney U 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> Mann-Whitney U 검정. 척도 $2$와 $3$인 두 지수분포에서 각각 $n = 100$을 뽑아 만–휘트니 $U$ 검정을 걸면 $U = 3411$, $p = 0.000104$가 나온다.
+
+**(1)** 만–휘트니 검정이 재는 모수는 평균의 차가 아니라 $\theta = P(X_1 > X_2)$이다. 척도가 $s_1$, $s_2$인 두 지수분포에서 $\theta$를 **닫힌 꼴로 유도**하고, 그로부터 $\mathbb{E}[U]$를 구하시오.
+
+**(2)** 관측된 $U = 3411$과 $p = 0.000104$를 (1)의 결과와 정규근사로 **재현**하시오. 또 이 자료의 효과 크기를 "두 평균이 $2$ 대 $3$으로 50% 차이난다"로 말하는 것과 "$\theta$가 $0.5$에서 $0.4$로 벗어났다"로 말하는 것 가운데, 검정이 실제로 보는 것은 어느 쪽인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy.stats import mannwhitneyu
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 해석적으로.** 지수분포의 척도 $s$는 비율 $\lambda = 1/s$에 대응한다. $X \sim \text{Exp}(\lambda_1)$, $Y \sim \text{Exp}(\lambda_2)$가 독립이라 하고 $Y$로 조건을 걸어 적분한다. 지수분포의 생존함수가 $P(X > y) = e^{-\lambda_1 y}$이므로
 
-# 두 지수분포. 정규와는 거리가 멀다.
-group1 = np.random.exponential(scale=2, size=100)
-group2 = np.random.exponential(scale=3, size=100)
+    $$
+    \theta = P(X > Y) = \int_0^\infty P(X > y)\, \lambda_2 e^{-\lambda_2 y}\, dy
+    = \lambda_2 \int_0^\infty e^{-(\lambda_1 + \lambda_2) y}\, dy
+    = \frac{\lambda_2}{\lambda_1 + \lambda_2}
+    $$
 
-# Mann-Whitney U 는 t 검정의 비모수 대응이다. 값 대신 순위만 쓰므로
-# 정규성을 요구하지 않는다. 다만 귀무가설이 "두 평균이 같다"가 아니라
-# "두 분포의 위치가 같다"이므로, 결론을 말할 때 표현에 주의해야 한다.
-stat, p_value = mannwhitneyu(group1, group2)
-print(f"Mann-Whitney U Test: Statistic={stat}, p-value={p_value}")
+    이다. 척도로 바꿔 쓰면 분자·분모에 $s_1 s_2$를 곱해
 
-# 결과 해석
-alpha = 0.05
-if p_value > alpha:
-    print("Fail to reject H_0: No significant difference between the groups.")
-else:
-    print("Reject H_0: Significant difference between the groups.")
-```
+    $$
+    \theta = \frac{1/s_2}{1/s_1 + 1/s_2} = \frac{s_1}{s_1 + s_2}
+    $$
 
-출력:
+    을 얻는다. 기억하기 좋은 꼴이다. $s_1 = 2$, $s_2 = 3$이면
 
-```text
-Mann-Whitney U Test: Statistic=3411.0, p-value=0.00010388964489703351
-Reject H_0: Significant difference between the groups.
-```
+    $$
+    \theta = \frac{2}{2+3} = \frac{2}{5} = 0.4
+    $$
 
-두 집단의 표본중앙값이 각각 $1.26$과 $2.57$로 뚜렷이 다르며, 두 자료 모두 강하게 치우친 지수분포에서 왔는데도 순위 기반 검정이 이 차이를 확실히 탐지한다.
+    이다. 이제 $U$로 넘어간다. 만–휘트니 통계량은 묶임이 없을 때 **큰 쪽 쌍의 개수**다.
+
+    $$
+    U_1 = \sum_{i=1}^{n_1}\sum_{j=1}^{n_2} \mathbf{1}\{X_i > Y_j\}
+    $$
+
+    기댓값은 선형성만으로 바로 나온다. 지시함수 $n_1 n_2$개가 각각 평균 $\theta$를 가지므로
+
+    $$
+    \mathbb{E}[U_1] = n_1 n_2\, \theta = 100 \times 100 \times 0.4 = 4000
+    $$
+
+    이다. **근사가 아니라 정확한 등식이다.** 지시함수들이 서로 독립이 아니지만(같은 $X_i$를 공유한다) 기댓값에는 영향이 없다. 분산을 구할 때라야 그 종속이 문제가 된다.
+
+    귀무가설 $H_0 : \theta = 1/2$ 아래에서는 $\mathbb{E}[U_1] = n_1 n_2 / 2 = 5000$이고, 알려진 분산식으로
+
+    $$
+    \operatorname{SD}(U_1) = \sqrt{\frac{n_1 n_2 (n_1 + n_2 + 1)}{12}} = \sqrt{\frac{100 \times 100 \times 201}{12}} = \sqrt{167\,500} = 409.27
+    $$
+
+    이다.
+
+    **(2) 수치적으로.** 먼저 쪽의 코드를 그대로 돌린다.
+
+    ```python
+    import numpy as np
+    from scipy.stats import mannwhitneyu
+
+    np.random.seed(0)
+
+    # 두 지수분포. 정규와는 거리가 멀다.
+    group1 = np.random.exponential(scale=2, size=100)
+    group2 = np.random.exponential(scale=3, size=100)
+
+    # Mann-Whitney U 는 t 검정의 비모수 대응이다. 값 대신 순위만 쓰므로
+    # 정규성을 요구하지 않는다. 다만 귀무가설이 "두 평균이 같다"가 아니라
+    # "두 분포의 위치가 같다"이므로, 결론을 말할 때 표현에 주의해야 한다.
+    stat, p_value = mannwhitneyu(group1, group2)
+    print(f"Mann-Whitney U Test: Statistic={stat}, p-value={p_value}")
+
+    # 결과 해석
+    alpha = 0.05
+    if p_value > alpha:
+        print("Fail to reject H_0: No significant difference between the groups.")
+    else:
+        print("Reject H_0: Significant difference between the groups.")
+    ```
+
+    출력:
+
+    ```text
+    Mann-Whitney U Test: Statistic=3411.0, p-value=0.00010388964489703351
+    Reject H_0: Significant difference between the groups.
+    ```
+
+    이제 (1)의 값과 맞춰 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from scipy.stats import mannwhitneyu
+
+    np.random.seed(0)
+    group1 = np.random.exponential(scale=2, size=100)
+    group2 = np.random.exponential(scale=3, size=100)
+    n1 = n2 = 100
+    U, p = mannwhitneyu(group1, group2)
+
+    # theta = P(X1 > X2) 의 닫힌 꼴. 척도 s1, s2 이면 s1/(s1+s2) 다.
+    theta = 2 / (2 + 3)
+    print(f"이론  theta = s1/(s1+s2) = {theta:.4f}")
+    print(f"이론  E[U] = n1 n2 theta = {n1 * n2 * theta:.1f}")
+
+    # U 가 정말로 쌍의 개수인지 직접 세어 확인한다.
+    pairs = (group1[:, None] > group2[None, :]).sum()
+    print(f"직접 센 #(x > y) = {pairs}   scipy 의 U = {U:.1f}")
+    print(f"표본비율 = {pairs / (n1 * n2):.4f}")
+
+    # H0: theta = 1/2 아래의 정규근사. 연속성 보정을 넣는다.
+    mu0 = n1 * n2 / 2
+    sd0 = np.sqrt(n1 * n2 * (n1 + n2 + 1) / 12)
+    z = (U - mu0 + 0.5) / sd0
+    print(f"H0 아래  E[U] = {mu0:.1f},  SD = {sd0:.4f}")
+    print(f"z = ({U:.1f} - {mu0:.1f} + 0.5) / {sd0:.4f} = {z:.4f}")
+    print(f"양쪽 p = {2 * stats.norm.cdf(z):.8f}")
+    print(f"scipy 의 p = {p:.8f}")
+
+    print(f"표본중앙값 {np.median(group1):.4f}, {np.median(group2):.4f}  "
+          f"(이론 {2*np.log(2):.4f}, {3*np.log(2):.4f})")
+    print(f"표본평균   {group1.mean():.4f}, {group2.mean():.4f}  (이론 2, 3)")
+    ```
+
+    출력:
+
+    ```text
+    이론  theta = s1/(s1+s2) = 0.4000
+    이론  E[U] = n1 n2 theta = 4000.0
+    직접 센 #(x > y) = 3411   scipy 의 U = 3411.0
+    표본비율 = 0.3411
+    H0 아래  E[U] = 5000.0,  SD = 409.2676
+    z = (3411.0 - 5000.0 + 0.5) / 409.2676 = -3.8813
+    양쪽 p = 0.00010389
+    scipy 의 p = 0.00010389
+    표본중앙값 1.2603, 2.5687  (이론 1.3863, 2.0794)
+    표본평균   1.8373, 3.1543  (이론 2, 3)
+    ```
+
+    **세 군데가 맞는다.**
+
+    첫째, $U$가 쌍의 개수라는 해석이 **정확히** 맞는다. $X_i > Y_j$인 쌍을 직접 세면 $3411$개이고 SciPy의 $U$도 $3411.0$이다. 소수점이 없는 것은 묶임이 하나도 없다는 뜻이다(연속분포에서 뽑았으니 당연하다).
+
+    둘째, 유도한 $\mathbb{E}[U] = 4000$에 대해 관측값은 $3411$이다. 표본비율로 보면 이론 $\theta = 0.4000$에 대해 $0.3411$이다. 차이가 작지 않은데, $U$의 대립가설 아래 표준편차가 $400$ 남짓이므로 $3411$은 $4000$에서 약 $1.5$ 표준편차 떨어진 자리다. 씨앗 0의 표본이 참값보다 조금 더 극단적으로 나온 것이고, 우연의 범위 안이다.
+
+    셋째, $p$값이 **소수점 여덟째 자리까지 재현된다.** $z = (3411 - 5000 + 0.5)/409.2676 = -3.8813$에서 $2\Phi(-3.8813) = 0.00010389$이고 SciPy가 준 값도 $0.00010389$다. $+0.5$를 빼놓으면 $0.00010337$이 되어 다섯째 자리부터 어긋나므로, SciPy가 **연속성 보정을 넣은 정규근사**를 쓴다는 것까지 확인된다.
+
+    **검정이 보는 것은 $\theta$ 쪽이다.** 두 말이 같은 자료를 가리키지만 검정이 재는 척도는 하나뿐이다.
+
+    | 척도 | 귀무값 | 참값 | 벗어난 정도 |
+    |---|---|---|---|
+    | 평균의 비 | $1$ | $3/2 = 1.5$ | 50% |
+    | $\theta = P(X_1 > X_2)$ | $0.5$ | $0.4$ | $0.1$ |
+
+    만–휘트니는 값을 순위로 바꿔 버리므로 **"평균이 50% 크다"는 정보를 아예 보지 않는다.** 그것이 보는 것은 "무작위로 고른 $X_1$이 무작위로 고른 $X_2$보다 클 확률이 $0.4$"라는 사실뿐이다. 그래서 이 검정의 결론을 "두 평균이 다르다"로 옮겨 적으면 안 된다. 쪽의 주석이 경계하는 바가 이것이고, $\theta$가 모평균과 **단조로 이어지지 않는** 분포들을 만들 수 있기 때문에 단순한 번역이 통하지 않는다.
+
+    실무적으로는 $\theta$가 오히려 보고하기 좋은 효과 크기다. 단위가 없고 "둘을 맞붙이면 어느 쪽이 이길 확률"이라는 뜻이 분명하다. 표본에서 $\hat\theta = U/(n_1 n_2) = 3411/10000 = 0.3411$로 바로 읽힌다. 평균의 차를 보고해야 하는 상황이라면 순위검정이 아니라 붓스트랩으로 가야 한다.
 
 비모수 검정은 정규성 가정이 위배되거나 순서형 자료를 다룰 때 로버스트한 대안을 제공한다. 자료의 분포를 모르거나 정규가 아닌 상황에서 널리 쓰인다.
 

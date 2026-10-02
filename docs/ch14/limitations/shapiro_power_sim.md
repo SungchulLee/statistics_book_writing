@@ -34,62 +34,163 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Shapiro-Wilk 검정력 곡선
+**보기 1.** <span class="diff easy" title="쉬움"></span> Shapiro-Wilk 검정력 곡선. 대립가설 쪽 모집단을 $\text{Lognormal}(0,\, 0.6)$으로 **고정**하고 $n$만 $20$에서 $300$까지 키워, 각 $n$에서 반복 400회로 검정력을 잰다.
+
+**(1)** $\text{Lognormal}(0, \sigma)$의 왜도와 초과첨도를 $m = e^{\sigma^2}$으로 나타내고 $\sigma = 0.6$에서의 값을 구하시오. 본문이 말하는 왜도 $2.26$과 맞는가.
+
+**(2)** 반복 400회가 주는 몬테카를로 표준오차를 구하고, 표의 **"검정력 = 1.000"을 어떻게 읽어야 하는지** 말하시오. 검정력이 $0.8$을 넘는 $n$도 더 촘촘히 좁혀 구하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-def power_for_n(n, sims=500, sigma_ln=0.6, alpha=0.05, seed=0):
-    """주어진 표본크기에서 Shapiro-Wilk 검정의 검정력을 모의실험으로 잰다.
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
 
-    대립가설 쪽 모집단은 로그정규로 고정한다. 정규에서 벗어난 정도는
-    내내 같으므로, 검정력의 변화는 오직 표본크기 때문이다.
-    """
-    rng = np.random.default_rng(seed)
-    rejections = 0
-    for _ in range(sims):
-        x = rng.lognormal(mean=0.0, sigma=sigma_ln, size=n)
-        W, p = stats.shapiro(x)
-        if p < alpha:
-            rejections += 1
-    return rejections / sims
+    def power_for_n(n, sims=500, sigma_ln=0.6, alpha=0.05, seed=0):
+        """주어진 표본크기에서 Shapiro-Wilk 검정의 검정력을 모의실험으로 잰다.
 
-# n 을 키워 가며 검정력 곡선을 그린다. 같은 이탈인데도 n=20 에서는
-# 절반도 잡아내지 못하고 n=300 에서는 거의 놓치지 않는다.
-ns = [20, 30, 50, 80, 120, 200, 300]
-powers = [power_for_n(n, sims=400, sigma_ln=0.6, alpha=0.05,
-                      seed=42 + n) for n in ns]
+        대립가설 쪽 모집단은 로그정규로 고정한다. 정규에서 벗어난 정도는
+        내내 같으므로, 검정력의 변화는 오직 표본크기 때문이다.
+        """
+        rng = np.random.default_rng(seed)
+        rejections = 0
+        for _ in range(sims):
+            x = rng.lognormal(mean=0.0, sigma=sigma_ln, size=n)
+            W, p = stats.shapiro(x)
+            if p < alpha:
+                rejections += 1
+        return rejections / sims
 
-fig, ax = plt.subplots(figsize=(7, 4))
-ax.plot(ns, powers, marker="o")
-ax.set_ylim(0, 1)
-ax.set_xlabel("Sample size (n)")
-ax.set_ylabel("Empirical power (alpha = 0.05)")
-ax.set_title("Shapiro-Wilk power vs n (lognormal alt, sigma = 0.6)")
-plt.tight_layout()
-plt.show()
+    # n 을 키워 가며 검정력 곡선을 그린다. 같은 이탈인데도 n=20 에서는
+    # 절반도 잡아내지 못하고 n=300 에서는 거의 놓치지 않는다.
+    ns = [20, 30, 50, 80, 120, 200, 300]
+    powers = [power_for_n(n, sims=400, sigma_ln=0.6, alpha=0.05,
+                          seed=42 + n) for n in ns]
 
-for n, pw in zip(ns, powers):
-    print(f"n = {n:>3}: power = {pw:.3f}")
-```
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ax.plot(ns, powers, marker="o")
+    ax.set_ylim(0, 1)
+    ax.set_xlabel("Sample size (n)")
+    ax.set_ylabel("Empirical power (alpha = 0.05)")
+    ax.set_title("Shapiro-Wilk power vs n (lognormal alt, sigma = 0.6)")
+    plt.tight_layout()
+    plt.show()
 
-출력:
+    for n, pw in zip(ns, powers):
+        print(f"n = {n:>3}: power = {pw:.3f}")
+    ```
 
-```text
-n =  20: power = 0.647
-n =  30: power = 0.833
-n =  50: power = 0.978
-n =  80: power = 1.000
-n = 120: power = 1.000
-n = 200: power = 1.000
-n = 300: power = 1.000
-```
+    출력:
 
-![표본크기에 따른 검정력](./img/shapiro_power_sim_37.png)
+    ```text
+    n =  20: power = 0.647
+    n =  30: power = 0.833
+    n =  50: power = 0.978
+    n =  80: power = 1.000
+    n = 120: power = 1.000
+    n = 200: power = 1.000
+    n = 300: power = 1.000
+    ```
+
+    ![표본크기에 따른 검정력](./img/shapiro_power_sim_37.png)
+
+    **(1) 해석적으로.** $X = e^{Z}$, $Z \sim \mathcal{N}(0, \sigma^2)$이면 $E[X^k] = e^{k^2\sigma^2/2}$이다. $m = e^{\sigma^2}$으로 두고 표준화된 적률을 정리하면
+
+    $$
+    \gamma_1 = (m + 2)\sqrt{m - 1}, \qquad \gamma_2 = m^4 + 2m^3 + 3m^2 - 6
+    $$
+
+    이다. **$\sigma$만이 모양을 정하고 위치 모수 $\mu$는 척도로만 작용하므로 아무 몫도 하지 않는다.** $\sigma = 0.6$에서 $m = e^{0.36} = 1.43333$이므로
+
+    $$
+    \gamma_1 = 3.43333 \times \sqrt{0.43333} = 2.2601,
+    \qquad
+    \gamma_2 = 10.2734
+    $$
+
+    를 얻는다. 본문이 말하는 왜도 $2.26$과 **맞는다.** 초과첨도 $10.27$도 함께 적어 두는 것이 좋다. 왜도만 보면 $t_5$($\gamma_1 = 0$, $\gamma_2 = 6$)와 견줄 데가 없어 보이지만, 첨도까지 보면 이 대립가설은 $t_5$보다도 정규에서 멀다. $n = 20$에서 이미 검정력이 $0.65$나 되는 까닭이 이것이고, 앞 절의 $t_{30}$($\gamma_2 = 0.23$)과 대비하면 차이가 분명하다.
+
+    **(2)** 반복 $M$회 모의의 추정 검정력은 성공확률 $\pi$인 이항비율이므로 표준오차는 $\sqrt{\hat\pi(1-\hat\pi)/M}$이다. $M = 400$에서 가장 커지는 $\hat\pi \approx 0.5$ 근처라면 $0.025$이니, **이 표의 수는 둘째 자리까지만 의미가 있다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    sigma_ln, alpha = 0.6, 0.05
+
+    # 1) 대립가설의 이탈 크기는 닫힌 꼴로 정해져 있다.
+    m = np.exp(sigma_ln ** 2)
+    g1 = (m + 2) * np.sqrt(m - 1)
+    g2 = m ** 4 + 2 * m ** 3 + 3 * m ** 2 - 6
+    print(f"Lognormal(0, {sigma_ln}):  m = exp(sigma^2) = {m:.5f}")
+    print(f"  왜도      (m+2) sqrt(m-1)        = {g1:.4f}")
+    print(f"  초과첨도  m^4 + 2m^3 + 3m^2 - 6  = {g2:.4f}")
+    lg = stats.lognorm(s=sigma_ln)
+    print(f"  scipy 확인:  왜도 {lg.stats('s'):.4f}   초과첨도 {lg.stats('k'):.4f}")
+
+    # 2) 반복 400 회가 주는 정밀도. 기각 횟수까지 함께 본다.
+    print(f"\n보기의 표를 기각 횟수와 몬테카를로 오차까지 적으면 (sims = 400)")
+    sims = 400
+    for n in (20, 30, 50, 80, 120, 200, 300):
+        rng = np.random.default_rng(42 + n)
+        rej = sum(1 for _ in range(sims)
+                  if stats.shapiro(rng.lognormal(0.0, sigma_ln, n)).pvalue < alpha)
+        ph = rej / sims
+        se = np.sqrt(ph * (1 - ph) / sims)
+        if rej == sims:
+            lower = alpha ** (1 / sims)       # 클로퍼-피어슨 95% 하한
+            note = f"-> 95% 하한 {lower:.4f}"
+        else:
+            note = f"+- {1.96 * se:.4f}  (MC SE {se:.4f})"
+        print(f"  n = {n:4d}  기각 {rej:3d}/{sims}  검정력 {ph:.4f}  {note}")
+
+    # 3) 0.8 선을 더 촘촘히, 반복을 늘려 좁힌다.
+    print("\n0.8 선 좁히기 (sims = 20000)")
+    for n in (22, 24, 26, 28, 30):
+        rng = np.random.default_rng(7000 + n)
+        rej = sum(1 for _ in range(20000)
+                  if stats.shapiro(rng.lognormal(0.0, sigma_ln, n)).pvalue < alpha)
+        print(f"  n = {n:4d}  검정력 {rej / 20000:.4f}  (MC SE "
+              f"{np.sqrt(rej / 20000 * (1 - rej / 20000) / 20000):.4f})")
+    ```
+
+    출력:
+
+    ```text
+    Lognormal(0, 0.6):  m = exp(sigma^2) = 1.43333
+      왜도      (m+2) sqrt(m-1)        = 2.2601
+      초과첨도  m^4 + 2m^3 + 3m^2 - 6  = 10.2734
+      scipy 확인:  왜도 2.2601   초과첨도 10.2734
+
+    보기의 표를 기각 횟수와 몬테카를로 오차까지 적으면 (sims = 400)
+      n =   20  기각 259/400  검정력 0.6475  +- 0.0468  (MC SE 0.0239)
+      n =   30  기각 333/400  검정력 0.8325  +- 0.0366  (MC SE 0.0187)
+      n =   50  기각 391/400  검정력 0.9775  +- 0.0145  (MC SE 0.0074)
+      n =   80  기각 400/400  검정력 1.0000  -> 95% 하한 0.9925
+      n =  120  기각 400/400  검정력 1.0000  -> 95% 하한 0.9925
+      n =  200  기각 400/400  검정력 1.0000  -> 95% 하한 0.9925
+      n =  300  기각 400/400  검정력 1.0000  -> 95% 하한 0.9925
+
+    0.8 선 좁히기 (sims = 20000)
+      n =   22  검정력 0.6968  (MC SE 0.0033)
+      n =   24  검정력 0.7439  (MC SE 0.0031)
+      n =   26  검정력 0.7819  (MC SE 0.0029)
+      n =   28  검정력 0.8154  (MC SE 0.0027)
+      n =   30  검정력 0.8436  (MC SE 0.0026)
+    ```
+
+    **닫힌 꼴이 `scipy`와 소수점 넷째 자리까지 맞는다.** 손으로 유도한 $\gamma_1 = 2.2601$, $\gamma_2 = 10.2734$가 `stats.lognorm(s=0.6).stats('sk')`가 주는 값과 같다.
+
+    **"검정력 = 1.000"은 1이 아니다.** 그것은 400번 가운데 400번 기각했다는 뜻일 뿐이며, 참 검정력이 $0.99$라면 400번 모두 기각할 확률이 $0.99^{400} = 0.018$로 결코 무시할 만하지 않다. 정규근사 표준오차는 $\hat\pi = 1$에서 $0$을 주어 쓸 수 없으므로 클로퍼–피어슨 하한을 쓴다. $400$번 모두 성공했을 때 95% 하한은 $0.05^{1/400} = 0.9925$이므로, **표의 $1.000$은 "검정력 $\ge 0.993$"으로 읽어야 한다.** 연습문제 5가 같은 계산을 한다.
+
+    다른 행도 눈금을 붙여 읽어야 한다. $n = 20$은 $259/400 = 0.6475$이고 95% 오차한계가 $\pm 0.047$이므로 참 검정력은 대략 $[0.60,\, 0.69]$ 안에 있다. (본문은 같은 수를 $0.648$로, 코드 출력은 $0.647$로 적는데 둘 다 $0.6475$를 셋째 자리에서 끊은 것이다.) $n = 30$은 $333/400 = 0.8325 \pm 0.037$이니 관례적 기준 $0.8$을 넘었다는 판정 자체는 오차 안에서 간신히 유지된다.
+
+    **$0.8$ 선은 $n \approx 27$이다.** 반복을 20,000회로 올려 촘촘히 재면 $n = 26$에서 $0.7819$, $n = 28$에서 $0.8154$이므로 선형보간으로 $n = 27.1$을 얻는다. 표준오차가 $0.003$으로 줄어 이제 셋째 자리까지 믿을 수 있다. 연습문제 1이 400–500회의 거친 격자에서 보간해 얻은 $n \approx 28$과 한 칸 차이인데, 그 격자의 분해능($n = 20$과 $30$ 사이를 직선으로 이은 것) 안이다.
+
+    요점은 두 가지다. 첫째, **이탈이 크면 작은 표본으로도 잡힌다.** 왜도 $2.26$에 초과첨도 $10.27$인 이 대립가설은 $n = 27$이면 다섯 번에 네 번 잡힌다. 둘째, **모의실험으로 얻은 검정력에는 반드시 오차를 붙여야 한다.** $0.647$과 $1.000$을 같은 자리까지 적어 늘어놓으면 앞의 수가 뒤의 수만큼 정밀해 보이지만, 실제 오차한계는 $\pm 0.047$ 대 $[0.993,\, 1]$로 전혀 다르다.
 
 ## 검정력 곡선 읽기
 

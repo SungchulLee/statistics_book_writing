@@ -23,34 +23,138 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 정규자료의 왜도
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규자료의 왜도. $\mathcal{N}(0, 3^2)$에서 $n = 1000$개를 뽑아 왜도를 재면 $0.0339$가 나온다.
+
+**(1)** 왜도가 **척도에 휘둘리지 않는다**는 것을 공식에서 보이시오. 같은 씨앗으로 표준편차만 1에서 3으로 바꿔 뽑으면 왜도가 어떻게 되는가.
+
+**(2)** 관측된 $0.0339$는 참값 0과 구별되는가. 표준오차를 구해 판정하시오. 그 표준오차는 어느 판본($g_1$인가 $G_1$인가)의 것인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 척도불변성은 분모의 거듭제곱에서 바로 나온다.** 중심적률을 $m_k = \frac1n\sum(x_i - \bar x)^k$라 두면 공식은
 
-# 정규분포는 좌우대칭이므로 왜도가 0 근처로 나온다. 표준편차를 3 으로
-# 키워도 마찬가지다 — 왜도는 척도에 휘둘리지 않는 값이다.
-data = np.random.normal(0, 3, 1000)
-# data = np.random.exponential(1, 1000)
+    $$
+    g_1 = \frac{m_3}{m_2^{3/2}}
+    $$
 
-skewness_value = stats.skew(data)
-print(f"Skewness: {skewness_value:.4f}")
-```
+    이다. $y_i = c\,x_i + d$ ($c > 0$)로 옮기고 늘이면 $\bar y = c\bar x + d$이므로 편차가 $y_i - \bar y = c(x_i - \bar x)$가 되고
 
-출력:
+    $$
+    m_k(y) = \frac1n\sum c^k (x_i - \bar x)^k = c^k m_k(x)
+    $$
 
-```
-Skewness: 0.0339
-```
+    이다. 따라서
 
-정규분포에서 뽑은 1,000개 표본의 왜도가 0.034다. 참값 0에 가깝지만 정확히 0은 아니다. 표본왜도 자체가 표집오차를 갖기 때문이며, $n = 1000$에서 그 표준오차는 대략 $\sqrt{6/n} \approx 0.077$이다.
+    $$
+    g_1(y) = \frac{c^3 m_3(x)}{\bigl(c^2 m_2(x)\bigr)^{3/2}} = \frac{c^3}{c^3}\cdot\frac{m_3(x)}{m_2(x)^{3/2}} = g_1(x)
+    $$
 
-이 정규 자료의 왜도는 $0.0339$로 0에 매우 가깝다. 주석 처리된 지수 자료로 바꿔 실행하면 왜도가 $2.0526$이 되어(이론값 2) 강한 오른쪽 치우침을 보여준다.
+    로 **$c$와 $d$가 완전히 약분된다.** 첨도도 $m_4/m_2^2$에서 $c^4/c^4$가 되어 같은 이유로 불변이다. 다만 $c < 0$이면 $c^3 < 0$이라 왜도의 **부호가 뒤집힌다**. 뒤집힌 분포의 치우침이 반대쪽인 것이 당연하다.
+
+    `numpy`의 `normal(0, scale, size)`는 표준정규 추출값에 `scale`을 곱하는 방식이라, 씨앗을 고정하면 `normal(0, 3, 1000)`이 `normal(0, 1, 1000)`의 **정확히 3배**다. 그러므로 두 왜도는 마지막 자리까지 같아야 하고, 실제로 둘 다 $0.0338589532$다.
+
+    **(2) 구별되지 않는다. 표준오차의 $0.44$배에 지나지 않는다.** 정규 i.i.d. 표본에서 **보정판** $G_1$의 표준오차는 닫힌 꼴로
+
+    $$
+    \mathrm{SE}(G_1) = \sqrt{\frac{6n(n-1)}{(n-2)(n+1)(n+3)}}
+    $$
+
+    이다. $n = 1000$에서 $0.07734$이고, 흔히 쓰는 어림 $\sqrt{6/n} = 0.07746$이 그 값을 조금 위로 잡는다. **이 식은 $g_1$의 것이 아니다.** 두 판본은
+
+    $$
+    G_1 = \frac{\sqrt{n(n-1)}}{n-2}\,g_1
+    $$
+
+    로 묶여 있으니 역으로 $\mathrm{SE}(g_1) = \mathrm{SE}(G_1)\cdot\frac{n-2}{\sqrt{n(n-1)}} = 0.07734/1.001503 = 0.07723$이다. $n = 1000$에서는 둘의 차이가 $0.1\%$로 실무상 무해하지만, 작은 표본에서는 차이가 커지므로 어느 판본의 표준오차인지 밝혀야 한다.
+
+    `scipy.stats.skew`의 기본값은 `bias=True`이므로 코드가 돌려준 $0.0338590$은 $g_1$이다. 따라서 비교 대상은 $\mathrm{SE}(g_1) = 0.0772$이고
+
+    $$
+    \frac{g_1}{\mathrm{SE}(g_1)} = \frac{0.0338590}{0.0772} = 0.44
+    $$
+
+    다. $2\,\mathrm{SE}$에 한참 못 미치니 **"왜도가 0이 아니다"고 말할 근거가 전혀 없다.** 정규 자료에서 이보다 큰 왜도가 나올 확률이 $66\%$나 된다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 정규분포는 좌우대칭이므로 왜도가 0 근처로 나온다. 표준편차를 3 으로
+    # 키워도 마찬가지다 — 왜도는 척도에 휘둘리지 않는 값이다.
+    data = np.random.normal(0, 3, 1000)
+    # data = np.random.exponential(1, 1000)
+
+    skewness_value = stats.skew(data)
+    print(f"Skewness: {skewness_value:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Skewness: 0.0339
+    ```
+
+    척도불변성과 표준오차를 수로 확인하면 다음과 같다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 같은 씨앗에서 척도만 바꾸어 뽑으면 자료는 정확히 3배가 된다.
+    a = np.random.normal(0, 3, 1000)
+    np.random.seed(0)
+    b = np.random.normal(0, 1, 1000)
+    print(f"a 가 b 의 정확히 3배인가: {np.array_equal(a, 3 * b)}")
+    print(f"skew(a) = {stats.skew(a):.10f}")
+    print(f"skew(b) = {stats.skew(b):.10f}")
+
+    # 표준오차: 보정판 G1 에 대한 정확식과 어림값.
+    n = 1000
+    se_G1 = np.sqrt(6 * n * (n - 1) / ((n - 2) * (n + 1) * (n + 3)))
+    se_g1 = se_G1 * (n - 2) / np.sqrt(n * (n - 1))
+    print(f"\nSE(G1) 정확식 = {se_G1:.5f},  sqrt(6/n) = {np.sqrt(6 / n):.5f}")
+    print(f"SE(g1) = SE(G1) * (n-2)/sqrt(n(n-1)) = {se_g1:.5f}")
+
+    # 모의실험으로 두 판본의 표준편차를 직접 잰다.
+    rng = np.random.default_rng(11)
+    R = 50_000
+    X = rng.standard_normal((R, n))
+    sd_g1 = stats.skew(X, axis=1).std(ddof=1)
+    sd_G1 = stats.skew(X, axis=1, bias=False).std(ddof=1)
+    print(f"모의 sd(g1) = {sd_g1:.5f},  모의 sd(G1) = {sd_G1:.5f}  (R = {R})")
+    print(f"관측된 g1 = {stats.skew(b):.4f} 은 SE 의 {stats.skew(b) / sd_g1:.2f} 배")
+    ```
+
+    출력:
+
+    ```text
+    a 가 b 의 정확히 3배인가: True
+    skew(a) = 0.0338589532
+    skew(b) = 0.0338589532
+
+    SE(G1) 정확식 = 0.07734,  sqrt(6/n) = 0.07746
+    SE(g1) = SE(G1) * (n-2)/sqrt(n(n-1)) = 0.07723
+    모의 sd(g1) = 0.07741,  모의 sd(G1) = 0.07753  (R = 50000)
+    관측된 g1 = 0.0339 은 SE 의 0.44 배
+    ```
+
+    모의실험이 닫힌 꼴을 재현한다. $\mathrm{SE}(G_1)$의 정확식 $0.07734$에 대해 모의값이 $0.07753$인데, $R = 50000$에서 표준편차 추정의 몬테카를로 오차가 대략 $\mathrm{SE}/\sqrt{2R} = 0.00024$이므로 차이 $0.00019$는 그 안에 들어온다. $g_1$ 쪽도 닫힌 꼴 $0.07723$ 대 모의 $0.07741$로 같은 수준에서 맞는다.
+
+    한 가지 짚어 둘 것은 이 쪽 본문의 공식
+
+    $$
+    \frac{1}{n}\sum_{i=1}^{n}\left(\frac{x_i - \bar x}{s}\right)^3
+    $$
+
+    에서 $s$를 **$1/n$로 나눈 $\sqrt{m_2}$로 읽어야** `scipy`와 맞는다는 점이다. $1/(n-1)$짜리 표본표준편차를 넣으면 결과가 $g_1\cdot\bigl(\frac{n-1}{n}\bigr)^{3/2}$이 되어, $n = 1000$에서도 $0.0338590$이 아니라 $0.0338083$이 나온다. 넷째 자리가 달라진다.
+
+    주석 처리된 지수 자료로 바꿔 실행하면 왜도가 $2.0526$이 되어(이론값 2) 강한 오른쪽 치우침을 보여 준다. 그때는 $2.05/0.077 = 27$배이니 판정이 전혀 다르다. $\square$
 
 ## 첨도
 
@@ -74,37 +178,125 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 지수자료의 왜도와 첨도
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수자료의 왜도와 첨도. $\text{Exponential}(1)$에서 $n = 1000$개를 뽑아 재면 왜도 $2.0526$, 초과첨도 $6.476$이 나온다.
+
+**(1)** $\text{Exponential}(1)$의 **이론** 왜도와 이론 초과첨도를 중심적률로 유도하시오.
+
+**(2)** 표본값이 이론값에서 벗어난 정도를 설명할 수 있는가. 정규이론 표준오차 $\sqrt{24/n}$을 첨도의 잣대로 쓰면 어떻게 되는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 왜도 2, 초과첨도 6이다.** $X \sim \text{Exponential}(1)$의 적률은
 
-# 이번에는 지수분포다. 오른쪽으로 길게 늘어졌으므로 왜도가 양으로 크게 나온다.
-# data = np.random.normal(0, 1, 1000)
-data = np.random.exponential(1, 1000)
+    $$
+    \mathbb{E}[X^k] = \int_0^\infty x^k e^{-x}\,dx = \Gamma(k+1) = k!
+    $$
 
-skewness_value = stats.skew(data)
-print(f"Skewness: {skewness_value:.4f}")
+    이므로 $\mathbb{E}[X] = 1$, $\mathbb{E}[X^2] = 2$, $\mathbb{E}[X^3] = 6$, $\mathbb{E}[X^4] = 24$다. $\mu = 1$ 주위의 중심적률을 전개하면
 
-# scipy 의 kurtosis 는 기본이 초과첨도다(정규가 0). 다른 책에서 3 을 더한
-# 값을 쓰는 일이 많으니 견줄 때 주의해야 한다.
-kurtosis_value = stats.kurtosis(data)
-print(f"Kurtosis: {kurtosis_value:.4}")
-```
+    $$
+    \mu_2 = \mathbb{E}[X^2] - \mu^2 = 2 - 1 = 1
+    $$
 
-출력:
+    $$
+    \mu_3 = \mathbb{E}[X^3] - 3\mu\,\mathbb{E}[X^2] + 3\mu^2\,\mathbb{E}[X] - \mu^3 = 6 - 6 + 3 - 1 = 2
+    $$
 
-```text
-Skewness: 2.0526
-Kurtosis: 6.476
-```
+    $$
+    \mu_4 = \mathbb{E}[X^4] - 4\mu\,\mathbb{E}[X^3] + 6\mu^2\,\mathbb{E}[X^2] - 4\mu^3\,\mathbb{E}[X] + \mu^4 = 24 - 24 + 12 - 4 + 1 = 9
+    $$
 
-지수분포의 이론값은 왜도 2, 초과첨도 6이며, 표본값이 그에 가깝다.
+    이다. 따라서
+
+    $$
+    \gamma_1 = \frac{\mu_3}{\mu_2^{3/2}} = \frac{2}{1} = 2, \qquad
+    \gamma_2 = \frac{\mu_4}{\mu_2^{2}} - 3 = \frac{9}{1} - 3 = 6
+    $$
+
+    이다. 지수분포는 척도만 다를 뿐 모양이 하나로 정해진 분포이므로 비율을 바꿔도 이 두 값은 변하지 않는다. (1)에서 본 척도불변성이 그것을 보장한다.
+
+    **(2) 벗어난 정도는 표집변동으로 설명되지만, $\sqrt{24/n}$으로는 설명할 수 없다.** 관측값 $g_1 = 2.0526$은 이론값 2에서 $+0.053$, $g_2 = 6.476$은 6에서 $+0.476$ 떨어져 있다. 이것이 큰 차이인지 보려면 **지수 자료에서의** 표집분포를 알아야 한다. 모의실험으로 재면 $n = 1000$에서
+
+    | 통계량 | 이론값 | 표집분포의 평균 | 표집분포의 표준편차 | 관측값의 위치 |
+    |---|---|---|---|---|
+    | $g_1$ | $2$ | $1.974$ | $0.251$ | $+0.31$ 표준편차 |
+    | $g_2$ | $6$ | $5.741$ | $2.470$ | $+0.30$ 표준편차 |
+
+    이다. 둘 다 표집분포의 가운데에서 $0.3$ 표준편차 안에 있으니 **이론값과 완전히 양립한다.**
+
+    여기서 두 가지가 드러난다. 첫째, 표집분포의 평균이 $1.974$와 $5.741$로 이론값보다 **작다.** 유한표본에서 $g_1$과 $g_2$는 치우침·꼬리를 아래로 깎아 추정하며, 특히 첨도의 편향이 $-0.26$으로 크다. 둘째, **$g_2$의 표준편차가 $2.47$이다.** 정규이론이 주는 $\sqrt{24/n} = \sqrt{24/1000} = 0.155$의 **16배**다. 정규 자료용 표준오차를 두꺼운 꼬리 자료에 가져다 쓰면 변동을 열여섯 분의 일로 과소평가하게 되고, 그러면 $6.476$과 $6$의 차이 $0.476$이 $3\,\mathrm{SE}$를 넘는 "유의한 이탈"로 오판된다. 실제로는 $0.3\,\mathrm{SE}$다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 이번에는 지수분포다. 오른쪽으로 길게 늘어졌으므로 왜도가 양으로 크게 나온다.
+    # data = np.random.normal(0, 1, 1000)
+    data = np.random.exponential(1, 1000)
+
+    skewness_value = stats.skew(data)
+    print(f"Skewness: {skewness_value:.4f}")
+
+    # scipy 의 kurtosis 는 기본이 초과첨도다(정규가 0). 다른 책에서 3 을 더한
+    # 값을 쓰는 일이 많으니 견줄 때 주의해야 한다.
+    kurtosis_value = stats.kurtosis(data)
+    print(f"Kurtosis: {kurtosis_value:.4}")
+    ```
+
+    출력:
+
+    ```text
+    Skewness: 2.0526
+    Kurtosis: 6.476
+    ```
+
+    이론값과 표집분포를 함께 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 지수분포의 이론 적률: E[X^k] = k! (비율 1)
+    mu = 1.0
+    m2 = 2 - 1**2
+    m3 = 6 - 3 * 2 * 1 + 3 * 1 * 1**2 - 1**3
+    m4 = 24 - 4 * 6 * 1 + 6 * 2 * 1**2 - 4 * 1 * 1**3 + 1**4
+    print(f"중심적률  mu2 = {m2:.0f}, mu3 = {m3:.0f}, mu4 = {m4:.0f}")
+    print(f"이론 왜도   = mu3 / mu2^1.5 = {m3 / m2**1.5:.0f}")
+    print(f"이론 초과첨도 = mu4 / mu2^2 - 3 = {m4 / m2**2 - 3:.0f}")
+
+    # 표본값이 이론값에서 얼마나 떨어질 수 있는가 — 표집분포를 직접 잰다.
+    rng = np.random.default_rng(3)
+    R, n = 20_000, 1000
+    Y = rng.exponential(1.0, size=(R, n))
+    g1 = stats.skew(Y, axis=1)
+    g2 = stats.kurtosis(Y, axis=1)
+    print(f"\n지수 자료 n = {n} 의 표집분포 (R = {R})")
+    print(f"  g1: 평균 {g1.mean():.3f}  표준편차 {g1.std(ddof=1):.3f}")
+    print(f"  g2: 평균 {g2.mean():.3f}  표준편차 {g2.std(ddof=1):.3f}")
+    print(f"  관측 g1 = 2.0526 은 평균에서 {(2.0526 - g1.mean()) / g1.std(ddof=1):+.2f} 표준편차")
+    print(f"  관측 g2 = 6.476  은 평균에서 {(6.476 - g2.mean()) / g2.std(ddof=1):+.2f} 표준편차")
+    ```
+
+    출력:
+
+    ```text
+    중심적률  mu2 = 1, mu3 = 2, mu4 = 9
+    이론 왜도   = mu3 / mu2^1.5 = 2
+    이론 초과첨도 = mu4 / mu2^2 - 3 = 6
+
+    지수 자료 n = 1000 의 표집분포 (R = 20000)
+      g1: 평균 1.974  표준편차 0.251
+      g2: 평균 5.741  표준편차 2.470
+      관측 g1 = 2.0526 은 평균에서 +0.31 표준편차
+      관측 g2 = 6.476  은 평균에서 +0.30 표준편차
+    ```
+
+    유도한 $\gamma_1 = 2$, $\gamma_2 = 6$이 모의실험의 표집분포 중심($1.974$, $5.741$)과 유한표본 편향만큼 떨어진 자리에서 맞아떨어진다. **표본값이 "그에 가깝다"는 말은 $g_1$에서는 참이지만 $g_2$에서는 운이 좋았다는 뜻으로 읽어야 한다.** 같은 모의실험에서 $g_2$의 $95\%$ 구간이 $[2.80,\ 11.81]$이다. 표본을 다시 뽑으면 초과첨도가 $3$으로도 $11$로도 나올 수 있다는 뜻이다. $\square$
 
 ## 이 두 값은 왜 그렇게 흔들리는가
 
@@ -230,7 +422,7 @@ Kurtosis: 6.476
     출력:
 
     ```
-    분포        왜도        초과첨도      왜도^2       초과첨도+2
+          분포        왜도        초과첨도      왜도^2       초과첨도+2
           정규    -0.005       0.006     0.000        2.006
           지수     2.002       5.966     4.007        7.966
         로그정규     5.978      91.554    35.735       93.554
@@ -260,7 +452,7 @@ Kurtosis: 6.476
     출력:
 
     ```
-    n                SE(왜도)                  SE(첨도)
+         n                SE(왜도)                  SE(첨도)
                   기본값 bias=False        이론   bias=False        이론
         20     0.4712     0.5143    0.5121       0.9969    0.9924
         50     0.3246     0.3375    0.3366       0.6609    0.6619

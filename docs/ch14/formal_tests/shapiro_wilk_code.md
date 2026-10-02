@@ -34,43 +34,127 @@ $W$가 작으면(동등하게 $p$값이 작으면) $H_0$을 기각한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 검정과 요약통계를 함께 읽기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 검정과 요약통계를 함께 읽기. $\mathcal{N}(0,1)$ 240개에 $\text{Lognormal}(0, 0.6^2)$ 60개를 섞은 $n = 300$ 표본에서 $W = 0.9750$, $p = 4.27\times10^{-5}$다.
+
+**(1)** 검정은 "정규가 아니다"까지만 말한다. 출력의 왜도·첨도를 **검정으로 바꾸어** 둘 중 어느 쪽이 기각을 이끌었는지 판정하시오. 출력의 두 수는 어느 판본인가.
+
+**(2)** 앞 쪽 보기의 $W = 0.9986$에서 여기의 $W = 0.9750$까지는 $0.024$ 차이뿐인데 $p$값은 $0.59$에서 $4.3\times10^{-5}$로 내려앉는다. $n = 300$에서 $W$의 귀무분포를 구해 그 급강하를 설명하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 정규 240개에 로그정규 60개를 섞은 자료다.
-rng = np.random.default_rng(0)
-x = np.concatenate([rng.normal(0, 1, size=240),
-                    rng.lognormal(0, 0.6, size=60)])
+    **(1) 첨도 쪽이 범인이다.** 두 적률을 각각 검정으로 바꾸면
 
-W, p = stats.shapiro(x)
+    | 성분 | 통계량 | $p$값 |
+    |---|---|---|
+    | 왜도 검정 | $Z_1 = 2.5915$ | $0.00956$ |
+    | 첨도 검정 | $Z_2 = 3.9365$ | $8.27\times10^{-5}$ |
 
-# 검정은 "정규가 아니다"까지만 말한다. 무엇이 문제인지는 왜도와 첨도가
-# 알려 준다. 그래서 검정 결과와 늘 함께 본다.
-g1 = stats.skew(x, bias=False)
-g2 = stats.kurtosis(x, fisher=True, bias=False)
+    이다. 둘 다 $\alpha = 0.05$에서 기각하지만 첨도 쪽 $p$값이 **백 배** 작다. 대수정규 오염이 치우침과 두꺼운 꼬리를 동시에 들여왔는데, $n = 300$에서 잡히는 신호는 꼬리 쪽이 훨씬 강하다. 샤피로–윌크의 $p = 4.27\times10^{-5}$가 첨도 검정의 $8.27\times10^{-5}$와 같은 자릿수인 것도 그에 맞는다.
 
-print(f"Sample size n = {x.size}")
-print(f"Shapiro-Wilk: W = {W:.4f}, p-value = {p:.4g}")
-print(f"Skewness g1 = {g1:.4f}, Excess kurtosis g2 = {g2:.4f}")
-if p < 0.05:
-    print("=> Reject normality at alpha = 0.05.")
-else:
-    print("=> Fail to reject normality at alpha = 0.05.")
-```
+    **요약통계만으로는 이 판정을 할 수 없다.** $g_1 = 0.37$과 $g_2 = 1.86$을 나란히 놓고 "첨도가 더 크다"고 말하는 것은 단위가 다른 두 수를 비교하는 것이어서 의미가 없다. 각각을 자기 표준오차로 재어 $Z$로 바꾸어야 비교가 성립한다.
 
-출력:
+    출력의 두 수는 **보정판** $G_1 = 0.3707$, $G_2 = 1.8565$다(`bias=False`). 비보정판은 $g_1 = 0.3688$, $g_2 = 1.8058$이고, 차이가 왜도에서 $0.5\%$, 첨도에서 $2.8\%$다. 이 쪽에서는 어느 판본을 써도 결론이 같지만, 같은 자료로 자크–베라를 계산할 때는 **반드시 비보정판**이어야 통계량이 맞는다(그 쪽에서 $47.56$ 대 $49.95$로 갈린다).
 
-```text
-Sample size n = 300
-Shapiro-Wilk: W = 0.9750, p-value = 4.27e-05
-Skewness g1 = 0.3707, Excess kurtosis g2 = 1.8565
-=> Reject normality at alpha = 0.05.
-```
+    **(2) $n = 300$에서 $W$의 귀무분포가 $[0.976,\ 1]$ 안에 갇혀 있다.** 2만 번 뽑아 재면
+
+    | 백분위 | 0.1% | 1% | 5% | 50% | 최솟값 |
+    |---|---|---|---|---|---|
+    | $W$ | $0.98279$ | $0.98713$ | $0.99052$ | $0.99528$ | $0.97602$ |
+
+    이다. 5% 기각 경계가 $0.99052$로 1에서 $0.0095$ 떨어져 있을 뿐이다. 관측값 $W = 0.97497$은 1에서 $0.0250$ 떨어져 있으니 **그 거리의 $2.64$배**다.
+
+    더 극적인 것은 관측값이 **2만 개 모의값 전부보다 작다**는 사실이다. 귀무분포의 최솟값이 $0.97602$인데 관측값이 $0.97497$이다. 곧 모의실험이 줄 수 있는 답은 $p < 1/20000 = 5\times10^{-5}$이고, `scipy`가 돌려준 $4.27\times10^{-5}$가 그와 맞아떨어진다.
+
+    **급강하의 정체는 이것이다.** $W$가 사는 구간이 $n$과 함께 1 쪽으로 쪼그라들므로, $W$의 눈금 $0.001$이 큰 표본에서는 엄청난 양의 증거가 된다. $0.9986$과 $0.9750$의 차이는 "$0.024$ 차이"가 아니라 **귀무분포의 폭으로 재면 자릿수를 건너뛰는 차이**다. 앞 쪽에서 본 결론이 여기서 되풀이된다. $W$ 값을 눈으로 읽지 말고 $p$값을 읽어야 한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 정규 240개에 로그정규 60개를 섞은 자료다.
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=240),
+                        rng.lognormal(0, 0.6, size=60)])
+
+    W, p = stats.shapiro(x)
+
+    # 검정은 "정규가 아니다"까지만 말한다. 무엇이 문제인지는 왜도와 첨도가
+    # 알려 준다. 그래서 검정 결과와 늘 함께 본다.
+    g1 = stats.skew(x, bias=False)
+    g2 = stats.kurtosis(x, fisher=True, bias=False)
+
+    print(f"Sample size n = {x.size}")
+    print(f"Shapiro-Wilk: W = {W:.4f}, p-value = {p:.4g}")
+    print(f"Skewness g1 = {g1:.4f}, Excess kurtosis g2 = {g2:.4f}")
+    if p < 0.05:
+        print("=> Reject normality at alpha = 0.05.")
+    else:
+        print("=> Fail to reject normality at alpha = 0.05.")
+    ```
+
+    출력:
+
+    ```text
+    Sample size n = 300
+    Shapiro-Wilk: W = 0.9750, p-value = 4.27e-05
+    Skewness g1 = 0.3707, Excess kurtosis g2 = 1.8565
+    => Reject normality at alpha = 0.05.
+    ```
+
+    두 성분의 검정과 $W$의 귀무분포를 함께 구한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=240),
+                        rng.lognormal(0, 0.6, size=60)])
+    n = x.size
+    W, p = stats.shapiro(x)
+    print(f"W = {W:.6f},  p = {p:.4g}")
+
+    # 기각의 범인은 치우침인가 꼬리인가 — 두 성분을 따로 본다.
+    z1, p1 = stats.skewtest(x)
+    z2, p2 = stats.kurtosistest(x)
+    print(f"\n왜도 검정   Z1 = {z1:.4f}, p = {p1:.4g}")
+    print(f"첨도 검정   Z2 = {z2:.4f}, p = {p2:.4g}")
+    print(f"비보정 g1 = {stats.skew(x):.4f}, g2 = {stats.kurtosis(x):.4f}")
+    print(f"보정   G1 = {stats.skew(x, bias=False):.4f}, G2 = {stats.kurtosis(x, bias=False):.4f}")
+
+    # n = 300 에서 W 의 귀무분포
+    rng2 = np.random.default_rng(9)
+    R = 20_000
+    Wn = np.array([stats.shapiro(rng2.standard_normal(n))[0] for _ in range(R)])
+    q = np.percentile(Wn, [0.1, 1, 5, 50])
+    print(f"\nn = {n} 에서 W 의 귀무분포 (R = {R})")
+    print(f"  0.1 백분위 {q[0]:.5f},  1 백분위 {q[1]:.5f},  5 백분위 {q[2]:.5f},  중앙값 {q[3]:.5f}")
+    print(f"  관측 W = {W:.5f} 보다 작은 모의값의 비율 = {np.mean(Wn < W):.5f}  ({np.sum(Wn < W)}/{R})")
+    print(f"  귀무분포의 최솟값 = {Wn.min():.5f}")
+    print(f"  5 백분위와 1 의 거리 = {1 - q[2]:.5f},  관측 W 와 1 의 거리 = {1 - W:.5f}"
+          f"  (비 {(1 - W) / (1 - q[2]):.2f})")
+    ```
+
+    출력:
+
+    ```text
+    W = 0.974974,  p = 4.27e-05
+
+    왜도 검정   Z1 = 2.5915, p = 0.009556
+    첨도 검정   Z2 = 3.9365, p = 8.266e-05
+    비보정 g1 = 0.3688, g2 = 1.8058
+    보정   G1 = 0.3707, G2 = 1.8565
+
+    n = 300 에서 W 의 귀무분포 (R = 20000)
+      0.1 백분위 0.98279,  1 백분위 0.98713,  5 백분위 0.99052,  중앙값 0.99528
+      관측 W = 0.97497 보다 작은 모의값의 비율 = 0.00000  (0/20000)
+      귀무분포의 최솟값 = 0.97602
+      5 백분위와 1 의 거리 = 0.00948,  관측 W 와 1 의 거리 = 0.02503  (비 2.64)
+    ```
+
+    모의실험이 `scipy`의 $p$값을 위에서 묶어 준다. 2만 번 가운데 관측값보다 작은 $W$가 **하나도 없으므로** 경험적 $p$값은 $5\times10^{-5}$ 미만이고, 보고된 $4.27\times10^{-5}$가 그 안에 들어온다. $\square$
 
 ## 강점과 한계
 

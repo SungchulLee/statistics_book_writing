@@ -93,61 +93,163 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포가 꼬리를 얼마나 과소평가하는가
+**보기 1.** <span class="diff easy" title="쉬움"></span> 참 꼬리확률은 경험값과 정규값 사이 어디인가. 자유도 5인 $t$ 에 $0.01$을 곱해 일간 수익률 2000일을 만들고 $P(\lvert R - \mu\rvert > 3\sigma)$ 를 경험값과 정규값으로 견준다. 출력은 경험 $0.0090$, 정규 $0.0027$이다.
+
+**(1)** 이 모형은 자료생성과정을 알고 있으므로 **참 꼬리확률을 정확히 계산할 수 있다.** $t_5$ 로 구하시오. 경험값 $0.0090$과 정규값 $0.0027$ 가운데 어느 쪽에 가까운가.
+
+**(2)** 경험값이 참값에서 벗어난 폭이 몬테카를로 오차 안인지 확인하시오.
+
+**(3)** 거꾸로 묻자. 정규분포가 $3\sigma$ 에 주는 확률 $0.0027$을 $t_5$ 에서 얻으려면 몇 $\sigma$ 까지 나가야 하는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# ===================================================================
-# 수익률의 꼬리가 정규분포의 꼬리와 얼마나 다른가
-#
-# 정규분포를 가정하면 큰 손실이 일어날 확률을 실제보다 훨씬 작게 잡는다.
-# 그 차이를 숫자 하나로 보이는 것이 이 코드의 목적이다.
-# ===================================================================
+    **쪽의 코드를 먼저 그대로 돌린다.**
 
-np.random.seed(42)
+    ```python
+    import numpy as np
+    from scipy import stats
 
-# 자유도 5 인 t 로 수익률을 만든다. 실제 수익률과 비슷하게 꼬리가 두껍다.
-n = 2000
-df = 5
-returns = stats.t.rvs(df=df, size=n) * 0.01  # scale to ~1% daily vol
+    # ===================================================================
+    # 수익률의 꼬리가 정규분포의 꼬리와 얼마나 다른가
+    #
+    # 정규분포를 가정하면 큰 손실이 일어날 확률을 실제보다 훨씬 작게 잡는다.
+    # 그 차이를 숫자 하나로 보이는 것이 이 코드의 목적이다.
+    # ===================================================================
 
-mean_r = np.mean(returns)
-std_r = np.std(returns, ddof=1)
-skew_r = stats.skew(returns)
-kurt_r = stats.kurtosis(returns)  # excess kurtosis
+    np.random.seed(42)
 
-# 평균에서 3 표준편차 밖으로 나갈 확률을 견준다. 정규라면 0.0027,
-# 곧 1000일에 세 번이다. 실제 자료에서는 이보다 몇 배 잦게 일어난다.
-threshold = 3 * std_r
-empirical_tail = np.mean(np.abs(returns - mean_r) > threshold)
-normal_tail = 2 * (1 - stats.norm.cdf(3))
+    # 자유도 5 인 t 로 수익률을 만든다. 실제 수익률과 비슷하게 꼬리가 두껍다.
+    n = 2000
+    df = 5
+    returns = stats.t.rvs(df=df, size=n) * 0.01  # scale to ~1% daily vol
 
-if __name__ == "__main__":
-    print(f"Sample mean:           {mean_r:.6f}")
-    print(f"Sample std dev:        {std_r:.6f}")
-    print(f"Sample skewness:       {skew_r:.4f}")
-    print(f"Sample excess kurtosis: {kurt_r:.4f}")
-    print(f"\nP(|R - mean| > 3 std):")
-    print(f"  Empirical:  {empirical_tail:.4f}")
-    print(f"  Normal:     {normal_tail:.4f}")
-```
+    mean_r = np.mean(returns)
+    std_r = np.std(returns, ddof=1)
+    skew_r = stats.skew(returns)
+    kurt_r = stats.kurtosis(returns)  # excess kurtosis
 
-출력:
+    # 평균에서 3 표준편차 밖으로 나갈 확률을 견준다. 정규라면 0.0027,
+    # 곧 1000일에 세 번이다. 실제 자료에서는 이보다 몇 배 잦게 일어난다.
+    threshold = 3 * std_r
+    empirical_tail = np.mean(np.abs(returns - mean_r) > threshold)
+    normal_tail = 2 * (1 - stats.norm.cdf(3))
 
-```text
-Sample mean:           -0.000275
-Sample std dev:        0.012886
-Sample skewness:       0.8632
-Sample excess kurtosis: 10.4205
+    if __name__ == "__main__":
+        print(f"Sample mean:           {mean_r:.6f}")
+        print(f"Sample std dev:        {std_r:.6f}")
+        print(f"Sample skewness:       {skew_r:.4f}")
+        print(f"Sample excess kurtosis: {kurt_r:.4f}")
+        print(f"\nP(|R - mean| > 3 std):")
+        print(f"  Empirical:  {empirical_tail:.4f}")
+        print(f"  Normal:     {normal_tail:.4f}")
+    ```
 
-P(|R - mean| > 3 std):
-  Empirical:  0.0090
-  Normal:     0.0027
-```
+    출력:
+
+    ```text
+    Sample mean:           -0.000275
+    Sample std dev:        0.012886
+    Sample skewness:       0.8632
+    Sample excess kurtosis: 10.4205
+
+    P(|R - mean| > 3 std):
+      Empirical:  0.0090
+      Normal:     0.0027
+    ```
+
+    **(1) 참값은 $0.011725$ 로, 경험값보다도 크다.** 자료생성과정을 알고 있으니 추정할 필요가 없다. $R = 0.01\,T$, $T \sim t_5$ 이고 $t_\nu$ 의 분산이 $\nu/(\nu-2)$ 이므로
+
+    $$
+    \sigma = 0.01\sqrt{\frac{5}{3}} = 0.012910, \qquad \mu = 0
+    $$
+
+    이다. 따라서 $3\sigma$ 라는 문턱을 $T$ 의 단위로 되돌리면
+
+    $$
+    \frac{3\sigma}{0.01} = 3\sqrt{\frac{5}{3}} = \sqrt{15} = 3.872983
+    $$
+
+    이고
+
+    $$
+    P(\lvert R\rvert > 3\sigma) = P(\lvert T\rvert > \sqrt{15}) = 2\,\bigl[1 - F_{t_5}(3.872983)\bigr] = 0.011725 .
+    $$
+
+    세 수를 나란히 놓으면
+
+    | | $P(\lvert R - \mu\rvert > 3\sigma)$ | 정규값과의 비 |
+    |---|---|---|
+    | 정규 | $0.002700$ | $1.000$ |
+    | 경험($n = 2000$) | $0.009000$ | $3.334$ |
+    | **참($t_5$)** | **$0.011725$** | **$4.343$** |
+
+    본문이 지적한 "$3.3$배"는 **표본에서 읽은 값**이고, 이 모형의 **참** 배수는 $4.34$ 다. 곧 이 보기의 경험값은 두꺼운 꼬리를 과장한 것이 아니라 오히려 **덜 보여 준 것**이다. 꼬리 확률을 표본에서 세는 방식은 구조적으로 아래쪽으로 치우치기 쉽다. 드문 사건이라 개수가 적고, 2000일 가운데 몇 개가 더 들어오거나 빠지는 것으로 값이 크게 움직인다.
+
+    **(2) 벗어난 폭은 몬테카를로 오차 안이다.** 경험값은 $18/2000 = 0.0090$ 이다. 초과 여부가 성공확률 $p = 0.011725$ 인 베르누이 시행이므로 비율의 표준오차는
+
+    $$
+    \mathrm{SE} = \sqrt{\frac{p(1-p)}{n}} = \sqrt{\frac{0.011725 \times 0.988275}{2000}} = 0.00241
+    $$
+
+    이고, 경험값과 참값의 차는 $0.0090 - 0.011725 = -0.00272$, 곧 $-1.13$ 표준오차다. **평범한 변동이다.**
+
+    상대오차로 보면 이야기가 더 뚜렷하다. $\mathrm{SE}/p = 0.00241/0.011725 = 21\%$ 다. 2000일(8년치)을 모아도 꼬리 확률은 상대오차 $20\%$ 로밖에 못 재는 셈이다. 기대 초과 개수가 $2000 \times 0.011725 = 23.5$ 개뿐이니 당연하다. **꼬리를 세려면 자료가 아주 많아야 한다**는 것, 그리고 바로 그 자리에서 정규 가정의 오차가 가장 크다는 것이 이 장이 거듭 짚는 비대칭이다.
+
+    **(3) $t_5$ 에서 $0.0027$ 을 얻으려면 $4.266\sigma$ 까지 나가야 한다.** $t_5$ 의 양쪽 꼬리확률 $0.0027$ 을 주는 지점은 $\pm 5.5071$ 이고 이를 $\sqrt{5/3} = 1.2910$ 으로 나누면
+
+    $$
+    \frac{5.5071}{1.2910} = 4.266
+    $$
+
+    이다. 정규분포라면 $3\sigma$ 가 "1000일에 세 번"인데, 같은 희소성을 $t_5$ 에서는 $4.27\sigma$ 에 가야 만난다. 거꾸로 읽으면 **정규 모형이 $4.27\sigma$ 사건이라 부르는 것이 실제로는 $3\sigma$ 사건**이라는 뜻이다. 앞의 경고 상자가 든 "4 표준편차는 63년에 한 번"이라는 산술이 어디서 무너지는지가 여기에 있다.
+
+    참고로 표본 왜도 $0.8632$ 와 초과첨도 $10.4205$ 도 참값과 견주어 보아야 한다. $t_5$ 의 모집단 왜도는 **정확히 0**(대칭이고 $\nu > 3$)이고 모집단 초과첨도는 $6/(\nu - 4) = 6$ 이다. 표본값이 각각 $+0.86$ 과 $10.42$ 로 크게 벗어났는데, $\hat g_1$ 의 분산은 6차 적률을, $\hat g_2$ 의 분산은 8차 적률을 요구하고 $t_5$ 에는 5차 이상 적률이 없어 **두 추정량의 분산이 무한**하기 때문이다. 두 값은 `scipy.stats.skew`·`kurtosis` 의 기본값이므로 보정하지 않은 $g_1$ 과 초과첨도 $g_2$ 다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n, nu = 2000, 5
+    r = stats.t.rvs(df=nu, size=n) * 0.01
+    m, s = r.mean(), r.std(ddof=1)
+    sig = 0.01 * np.sqrt(nu / (nu - 2))        # 참 표준편차
+
+    print(f"표본 sd = {s:.6f},  참 sigma = {sig:.6f},  s/sigma = {s/sig:.4f}")
+    k = 3 * np.sqrt(nu / (nu - 2))             # 3 sigma 를 t 단위로 환산
+    p_true = 2 * stats.t.sf(k, nu)
+    p_norm = 2 * stats.norm.sf(3)
+    p_emp = np.mean(np.abs(r - m) > 3 * s)
+    print(f"3 sigma = {3*sig:.6f}  ->  t 단위 {k:.6f}")
+    print(f"참   P(|R| > 3 sigma) = {p_true:.6f}")
+    print(f"정규 P              = {p_norm:.6f}   (참/정규 = {p_true/p_norm:.3f})")
+    print(f"경험 P              = {p_emp:.6f}   ({int(round(p_emp*n))}/{n} 개,"
+          f" 경험/정규 = {p_emp/p_norm:.3f})")
+    se = np.sqrt(p_true * (1 - p_true) / n)
+    print(f"경험값의 MC SE = {se:.5f};  경험 - 참 = {p_emp-p_true:+.5f}"
+          f" = {(p_emp-p_true)/se:+.2f} SE")
+    print(f"t5 에서 꼬리확률 0.0027 을 주는 문턱 = "
+          f"{stats.t.isf(p_norm/2, nu)/np.sqrt(nu/(nu-2)):.3f} sigma")
+    print(f"모집단 초과첨도 6/(nu-4) = {6/(nu-4):.1f},"
+          f"  표본 g2 = {stats.kurtosis(r):.4f},  표본 g1 = {stats.skew(r):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    표본 sd = 0.012886,  참 sigma = 0.012910,  s/sigma = 0.9982
+    3 sigma = 0.038730  ->  t 단위 3.872983
+    참   P(|R| > 3 sigma) = 0.011725
+    정규 P              = 0.002700   (참/정규 = 4.343)
+    경험 P              = 0.009000   (18/2000 개, 경험/정규 = 3.334)
+    경험값의 MC SE = 0.00241;  경험 - 참 = -0.00272 = -1.13 SE
+    t5 에서 꼬리확률 0.0027 을 주는 문턱 = 4.266 sigma
+    모집단 초과첨도 6/(nu-4) = 6.0,  표본 g2 = 10.4205,  표본 g1 = 0.8632
+    ```
+
+    손으로 구한 $\sigma = 0.012910$, 문턱 $\sqrt{15} = 3.872983$, 참 확률 $0.011725$, 비 $4.343$, 벗어남 $-1.13\,\mathrm{SE}$, 문턱 $4.266\sigma$ 가 모두 코드와 맞는다. 표본 표준편차는 $s/\sigma = 0.9982$ 로 참값과 거의 같으므로, 코드가 $3s$ 를 쓴 것과 $3\sigma$ 를 쓴 것의 차이는 무시할 수 있다.
 
 경험적 꼬리 확률 $0.0090$이 정규분포의 예측 $0.0027$의 3.3배로, 금융 수익률의 두꺼운 꼬리와 일관된다. 초과첨도 $10.42$도 정규분포의 0에서 크게 벗어나 있다.
 

@@ -104,71 +104,208 @@ $n$이 크면 사소한 이탈로도 기각할 수 있으므로 그런 경우에
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 회귀 잔차의 정규성 확인
+**보기 1.** <span class="diff easy" title="쉬움"></span> 벗어남을 표준오차로 재기. $X \sim \text{Uniform}(0,10)$, $Y = 2 + 3X + \varepsilon$, $\varepsilon \sim \mathcal{N}(0, 2^2)$로 $n = 100$을 만들어 최소제곱 적합하고 잔차를 진단한다. 추정값은 $\hat\beta_0 = 2.430$, $\hat\beta_1 = 2.908$이 나온다.
+
+**(1)** $\sigma = 2$를 알고 있으므로 $\mathrm{SE}(\hat\beta_0)$와 $\mathrm{SE}(\hat\beta_1)$을 **닫힌 꼴로** 구할 수 있다. 참값 $(2, 3)$에서의 벗어남이 각각 몇 표준오차인지 재시오.
+
+**(2)** 두 벗어남의 **부호가 반대**다($\hat\beta_0$은 크게, $\hat\beta_1$은 작게 나왔다). 우연인가? $\operatorname{Cov}(\hat\beta_0, \hat\beta_1)$을 구해 답하시오.
+
+**(3)** 이 자료에서 $X$, $Y$, 잔차 **셋 모두에** 샤피로–윌크를 걸어 보시오. 어느 것이 통과하는가. $X$와 $Y$의 초과첨도를 닫힌 꼴로 구해 표본값과 맞추시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# ===================================================================
-# 회귀 잔차의 정규성 확인
-#
-# 회귀에서 정규성은 반응변수가 아니라 오차항에 요구되는 가정이다.
-# 게다가 계수 추정의 불편성에는 필요 없고, 작은 표본에서 t 검정과
-# 신뢰구간을 쓰기 위해 필요하다.
-# ===================================================================
+    **쪽의 코드를 먼저 그대로 돌린다.**
 
-np.random.seed(42)
-n = 100
+    ```python
+    import numpy as np
+    from scipy import stats
 
-# 오차를 정규분포에서 만든다. 그러므로 잔차도 정규로 나와야 한다.
-X = np.random.uniform(0, 10, size=n)
-beta_0, beta_1 = 2.0, 3.0
-epsilon = np.random.normal(0, 2, size=n)
-Y = beta_0 + beta_1 * X + epsilon
+    # ===================================================================
+    # 회귀 잔차의 정규성 확인
+    #
+    # 회귀에서 정규성은 반응변수가 아니라 오차항에 요구되는 가정이다.
+    # 게다가 계수 추정의 불편성에는 필요 없고, 작은 표본에서 t 검정과
+    # 신뢰구간을 쓰기 위해 필요하다.
+    # ===================================================================
 
-# 정규방정식을 직접 풀어 적합한다. 첫 열의 1 이 절편에 대응한다.
-X_design = np.column_stack([np.ones(n), X])
-beta_hat = np.linalg.lstsq(X_design, Y, rcond=None)[0]
-Y_hat = X_design @ beta_hat
-residuals = Y - Y_hat
+    np.random.seed(42)
+    n = 100
 
-# 잔차에 대한 정규성 검정
-sw_stat, sw_p = stats.shapiro(residuals)
+    # 오차를 정규분포에서 만든다. 그러므로 잔차도 정규로 나와야 한다.
+    X = np.random.uniform(0, 10, size=n)
+    beta_0, beta_1 = 2.0, 3.0
+    epsilon = np.random.normal(0, 2, size=n)
+    Y = beta_0 + beta_1 * X + epsilon
 
-# 검정이 기각되었을 때 무엇이 문제인지는 이 둘이 알려 준다.
-# 왜도가 크면 치우침, 초과첨도가 크면 두꺼운 꼬리다.
-skew_r = stats.skew(residuals)
-kurt_r = stats.kurtosis(residuals)  # excess kurtosis
+    # 정규방정식을 직접 풀어 적합한다. 첫 열의 1 이 절편에 대응한다.
+    X_design = np.column_stack([np.ones(n), X])
+    beta_hat = np.linalg.lstsq(X_design, Y, rcond=None)[0]
+    Y_hat = X_design @ beta_hat
+    residuals = Y - Y_hat
 
-if __name__ == "__main__":
-    print(f"Estimated coefficients: beta_0 = {beta_hat[0]:.3f}, "
-          f"beta_1 = {beta_hat[1]:.3f}")
-    print(f"\nResidual diagnostics:")
-    print(f"  Shapiro-Wilk: W = {sw_stat:.4f}, p = {sw_p:.4f}")
-    print(f"  Skewness:     {skew_r:.4f}")
-    print(f"  Excess kurtosis: {kurt_r:.4f}")
+    # 잔차에 대한 정규성 검정
+    sw_stat, sw_p = stats.shapiro(residuals)
 
-    if sw_p > 0.05:
-        print("\n  Residuals are consistent with normality.")
-    else:
-        print("\n  Evidence of non-normality in residuals.")
-```
+    # 검정이 기각되었을 때 무엇이 문제인지는 이 둘이 알려 준다.
+    # 왜도가 크면 치우침, 초과첨도가 크면 두꺼운 꼬리다.
+    skew_r = stats.skew(residuals)
+    kurt_r = stats.kurtosis(residuals)  # excess kurtosis
 
-출력:
+    if __name__ == "__main__":
+        print(f"Estimated coefficients: beta_0 = {beta_hat[0]:.3f}, "
+              f"beta_1 = {beta_hat[1]:.3f}")
+        print(f"\nResidual diagnostics:")
+        print(f"  Shapiro-Wilk: W = {sw_stat:.4f}, p = {sw_p:.4f}")
+        print(f"  Skewness:     {skew_r:.4f}")
+        print(f"  Excess kurtosis: {kurt_r:.4f}")
 
-```text
-Estimated coefficients: beta_0 = 2.430, beta_1 = 2.908
+        if sw_p > 0.05:
+            print("\n  Residuals are consistent with normality.")
+        else:
+            print("\n  Evidence of non-normality in residuals.")
+    ```
 
-Residual diagnostics:
-  Shapiro-Wilk: W = 0.9846, p = 0.2984
-  Skewness:     0.2173
-  Excess kurtosis: -0.0712
+    출력:
 
-  Residuals are consistent with normality.
-```
+    ```text
+    Estimated coefficients: beta_0 = 2.430, beta_1 = 2.908
+
+    Residual diagnostics:
+      Shapiro-Wilk: W = 0.9846, p = 0.2984
+      Skewness:     0.2173
+      Excess kurtosis: -0.0712
+
+      Residuals are consistent with normality.
+    ```
+
+    **(1) 표준오차는 닫힌 꼴로 나온다.** 단순회귀의 설계행렬 $\mathbf{X} = [\mathbf{1}\ \ \mathbf{x}]$에 대해
+
+    $$
+    (\mathbf{X}^{\!\top}\mathbf{X})^{-1} = \frac{1}{n S_{xx}}\begin{bmatrix} \sum x_i^2 & -\sum x_i \\ -\sum x_i & n \end{bmatrix},
+    \qquad S_{xx} = \sum_i (x_i - \bar x)^2
+    $$
+
+    이고 $\operatorname{Var}(\hat{\boldsymbol\beta}) = \sigma^2 (\mathbf{X}^{\!\top}\mathbf{X})^{-1}$이므로
+
+    $$
+    \mathrm{SE}(\hat\beta_1) = \frac{\sigma}{\sqrt{S_{xx}}},
+    \qquad
+    \mathrm{SE}(\hat\beta_0) = \sigma\sqrt{\frac{1}{n} + \frac{\bar x^2}{S_{xx}}} .
+    $$
+
+    이 표본에서 $\bar x = 4.7018$, $S_{xx} = 876.15$이고 $\sigma = 2$를 **알고 있으므로**(모의실험이니까) 추정하지 않고 바로 넣을 수 있다.
+
+    $$
+    \mathrm{SE}(\hat\beta_1) = \frac{2}{\sqrt{876.15}} = 0.0676,
+    \qquad
+    \mathrm{SE}(\hat\beta_0) = 2\sqrt{\frac{1}{100} + \frac{4.7018^2}{876.15}} = 0.3754
+    $$
+
+    따라서 벗어남은
+
+    $$
+    \frac{\hat\beta_0 - 2}{0.3754} = \frac{+0.4302}{0.3754} = +1.146,
+    \qquad
+    \frac{\hat\beta_1 - 3}{0.0676} = \frac{-0.0920}{0.0676} = -1.361
+    $$
+
+    이다. **둘 다 1.5 표준오차 안이다.** 절편이 $0.43$이나 벗어난 것이 커 보이지만, 절편의 표준오차가 $0.375$나 되므로 평범한 변동이다. 반대로 기울기의 $0.092$는 작아 보이지만 표준오차가 $0.068$뿐이어서 상대적으로는 더 멀리 간 것이다. **벗어남의 크기는 눈으로 재는 것이 아니라 표준오차로 재는 것이다.**
+
+    **(2) 우연이 아니다.** 위 역행렬의 비대각 성분에서
+
+    $$
+    \operatorname{Cov}(\hat\beta_0, \hat\beta_1) = -\frac{\sigma^2 \bar x}{S_{xx}},
+    \qquad
+    \operatorname{Corr}(\hat\beta_0, \hat\beta_1) = \frac{-\bar x}{\sqrt{\overline{x^2}}}
+    $$
+
+    이다. $\bar x > 0$이면 **언제나 음의 상관**이다. 이 자료에서는 $\operatorname{Cov} = -4 \times 4.7018/876.15 = -0.02147$, 상관 $-0.8463$이다. 곧 절편이 참값보다 크게 나오면 기울기는 작게 나오는 쪽으로 $0.85$만큼 묶여 있다.
+
+    기하적으로 분명하다. 최소제곱 적합선은 **반드시 $(\bar x, \bar y)$를 지난다**(코드에서 $\hat\beta_0 + \hat\beta_1 \bar x = 16.1033 = \bar y$로 확인된다). 그 한 점에 못이 박혀 있으니 선을 시계 방향으로 돌리면 기울기가 줄고 절편이 늘어난다. 두 추정값은 독립적으로 흔들릴 수 없다.
+
+    그러므로 둘을 따로 보면 안 된다. 이변량으로 재면 마할라노비스 거리의 제곱이
+
+    $$
+    (\hat{\boldsymbol\beta} - \boldsymbol\beta)^{\!\top} \operatorname{Var}(\hat{\boldsymbol\beta})^{-1} (\hat{\boldsymbol\beta} - \boldsymbol\beta) = 1.8522
+    $$
+
+    이고 $\chi^2_2$ 의 꼬리확률이 $0.396$이다. **합동으로 보아도 완전히 평범한 표본이다.**
+
+    **(3) 통과하는 것은 잔차뿐이다.** 이 쪽의 주제가 보기 안에서 그대로 재현된다.
+
+    | | 샤피로–윌크 $p$ | $g_1$ | $g_2$ | 이론 초과첨도 |
+    |---|---|---|---|---|
+    | $X$ | $0.000218$ | $+0.1117$ | $-1.2788$ | $-1.2$ |
+    | $Y$ | $0.000636$ | $+0.1990$ | $-1.2004$ | $-1.0816$ |
+    | 잔차 | $0.298$ | $+0.2173$ | $-0.0712$ | $0$ |
+
+    $X$와 $Y$ 모두 $p < 0.001$로 **강하게 기각**되고 잔차만 $p = 0.298$로 통과한다. 모형은 조금도 틀리지 않았다. $X$에 검정을 걸었다면 멀쩡한 교과서적 회귀를 "정규성 위배"로 버렸을 것이다.
+
+    이론값이 그 까닭을 말해 준다. $\text{Uniform}(a,b)$의 초과첨도는 $-6/5 = -1.2$이고, 표본값 $-1.279$가 거기에 맞는다($n = 100$에서 초과첨도의 귀무 표준오차가 $\sqrt{24/100} = 0.49$이므로 넉넉히 안쪽이다). $Y$는 독립인 $3(X - 5) \sim \text{Uniform}(-15, 15)$와 $\varepsilon \sim \mathcal{N}(0,4)$의 합이므로 중심적률이 더해져
+
+    $$
+    \mu_4(Y) = \frac{30^4}{80} + 6 \cdot 75 \cdot 4 + 3 \cdot 4^2 = 10125 + 1800 + 48 = 11973,
+    \qquad \operatorname{Var}(Y) = 75 + 4 = 79
+    $$
+
+    이고 초과첨도는 $11973/79^2 - 3 = -1.0816$이다. 표본값 $-1.200$과 맞는다. (닫힌 꼴은 $8\times10^6$개 몬테카를로로도 확인했다. $-1.0817$이 나온다.) **곧 $X$도 $Y$도 정규가 아닌 것이 참이다.** 평평한 균등분포가 정규보다 납작하기 때문이고, 정규 잡음을 더해도 $-1.08$까지만 끌어올린다.
+
+    왜도·첨도는 모두 `scipy.stats.skew`·`kurtosis`의 기본값이므로 보정하지 않은 $g_1$과 초과첨도 $g_2$다. 잔차의 보정판은 $G_1 = +0.2206$, $G_2 = -0.0124$로 조금 다르다. $n = 100$에서는 차이가 작지만, 보고할 때는 어느 판본인지 밝혀야 한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 100
+    X = np.random.uniform(0, 10, size=n)
+    Y = 2.0 + 3.0 * X + np.random.normal(0, 2, size=n)
+    Xd = np.column_stack([np.ones(n), X])
+    b = np.linalg.lstsq(Xd, Y, rcond=None)[0]
+    resid = Y - Xd @ b
+
+    sigma = 2.0                      # 참값을 알고 있으므로 이론 SE 를 쓸 수 있다
+    xbar, Sxx = X.mean(), ((X - X.mean())**2).sum()
+    se0 = sigma * np.sqrt(1/n + xbar**2 / Sxx)
+    se1 = sigma / np.sqrt(Sxx)
+    print(f"xbar = {xbar:.4f},  Sxx = {Sxx:.2f}")
+    print(f"SE(b0) = {se0:.4f}   b0 = {b[0]:.4f}  편차 {b[0]-2:+.4f} = {(b[0]-2)/se0:+.3f} SE")
+    print(f"SE(b1) = {se1:.4f}   b1 = {b[1]:.4f}  편차 {b[1]-3:+.4f} = {(b[1]-3)/se1:+.3f} SE")
+
+    V = sigma**2 * np.linalg.inv(Xd.T @ Xd)
+    print(f"Cov(b0, b1) = {V[0,1]:.5f},  Corr = {V[0,1]/np.sqrt(V[0,0]*V[1,1]):.4f}")
+    d = np.array([b[0] - 2, b[1] - 3])
+    m2 = d @ np.linalg.inv(V) @ d
+    print(f"마할라노비스^2 = {m2:.4f},  chi2_2 꼬리확률 = {stats.chi2.sf(m2, 2):.4f}")
+    print(f"b0 + b1*xbar = {b[0] + b[1]*xbar:.4f},  ybar = {Y.mean():.4f}")
+
+    print("\n정규성 검정을 어디에 걸어야 하는가")
+    for name, v, closed in [("X   ", X, -6/5), ("Y   ", Y, 30**4/80/79**2 + (6*75*4 + 3*16)/79**2 - 3),
+                            ("잔차", resid, 0.0)]:
+        print(f"  {name}: shapiro p = {stats.shapiro(v)[1]:>9.3g},"
+              f"  g1 = {stats.skew(v):+.4f},  g2 = {stats.kurtosis(v):+.4f}"
+              f"   (이론 초과첨도 {closed:+.4f})")
+    ```
+
+    출력:
+
+    ```text
+    xbar = 4.7018,  Sxx = 876.15
+    SE(b0) = 0.3754   b0 = 2.4302  편차 +0.4302 = +1.146 SE
+    SE(b1) = 0.0676   b1 = 2.9080  편차 -0.0920 = -1.361 SE
+    Cov(b0, b1) = -0.02147,  Corr = -0.8463
+    마할라노비스^2 = 1.8522,  chi2_2 꼬리확률 = 0.3961
+    b0 + b1*xbar = 16.1033,  ybar = 16.1033
+
+    정규성 검정을 어디에 걸어야 하는가
+      X   : shapiro p =  0.000218,  g1 = +0.1117,  g2 = -1.2788   (이론 초과첨도 -1.2000)
+      Y   : shapiro p =  0.000636,  g1 = +0.1990,  g2 = -1.2004   (이론 초과첨도 -1.0816)
+      잔차: shapiro p =     0.298,  g1 = +0.2173,  g2 = -0.0712   (이론 초과첨도 +0.0000)
+    ```
+
+    손으로 구한 $\mathrm{SE} = (0.3754,\ 0.0676)$, 벗어남 $(+1.146,\ -1.361)$ 표준오차, 상관 $-0.8463$, 마할라노비스 $1.8522$가 모두 코드와 맞는다. 이론 초과첨도 $-1.2$와 $-1.0816$도 표본값과 맞는다.
 
 잔차의 왜도 $0.217$과 초과첨도 $-0.071$이 모두 0에 가깝고 Shapiro-Wilk $p = 0.298$로 기각하지 못한다. 정규 오차로 자료를 생성했으므로 기대한 결과이다. 추정된 계수 $(2.430, 2.908)$이 참값 $(2.0, 3.0)$과 정확히 일치하지 않는 것은 $n = 100$에서의 표집변동일 뿐이다.
 

@@ -33,60 +33,187 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 다섯 검정을 한자리에서
+**보기 1.** <span class="diff easy" title="쉬움"></span> 다섯 검정을 한자리에서. $\mathcal{N}(0,1)$에서 $n = 100$개를 뽑아 다섯 검정을 모두 돌리면 전부 기각하지 않는다.
+
+**(1)** 다섯 검정 가운데 **하나만 귀무가설이 다르다.** 어느 것인가. 자료를 $0.5$만큼 옮겨 다섯 결과가 어떻게 달라지는지 보고 가리시오.
+
+**(2)** 모두 기각하지 않았다는 것이 "다섯 검정의 성능이 비슷하다"는 뜻인가. $t_5$(두꺼운 꼬리)와 표준화한 대수정규(치우침)를 대립으로 두고 각 검정의 검정력을 재어 비교하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 참으로 정규인 자료에 다섯 검정을 모두 돌려 견준다. 모두 기각하지
-# 않아야 정상이다. 검정마다 무엇에 민감한지가 달라, 정규에서 벗어난
-# 자료로 바꿔 돌려 보면 차이가 드러난다.
-rng = np.random.default_rng(0)
-data = rng.normal(0, 1, size=100)
+    **(1) KS만 다르다. 자료를 옮기면 KS만 무너진다.** 같은 자료에 $+0.5$를 더해 다시 돌리면
 
-# Shapiro-Wilk — 작은 표본에서 검정력이 가장 좋다. 두루 쓰기 좋은 기본값이다.
-W, p_sw = stats.shapiro(data)
-print(f"Shapiro-Wilk:     W = {W:.4f}, p = {p_sw:.4g}")
+    | 검정 | 원자료 | $+0.5$ |
+    |---|---|---|
+    | 샤피로–윌크 | $p = 0.1873$ | $p = 0.1873$ |
+    | 다고스티노 $K^2$ | $p = 0.3738$ | $p = 0.3738$ |
+    | 자크–베라 | $p = 0.4908$ | $p = 0.4908$ |
+    | **KS (vs $\mathcal{N}(0,1)$)** | $p = 0.6465$ | $p = \mathbf{1.56\times10^{-5}}$ |
+    | 앤더슨–달링 | $A^2 = 0.4494$ | $A^2 = 0.4494$ |
 
-# D'Agostino K^2 — 왜도와 첨도만 본다. 왜 기각되었는지 알기 쉽다.
-K2, p_k2 = stats.normaltest(data)
-print(f"D'Agostino K^2:   K2 = {K2:.4f}, p = {p_k2:.4g}")
+    이다. 네 검정은 소수 넷째 자리까지 **꼼짝도 하지 않고** KS만 $0.65$에서 $0.0000156$으로 떨어진다.
 
-# Jarque-Bera — K^2 과 비슷하지만 표본이 아주 클 때라야 근사가 맞는다.
-JB, p_jb = stats.jarque_bera(data)
-print(f"Jarque-Bera:      JB = {JB:.4f}, p = {p_jb:.4g}")
+    까닭은 귀무가설의 모양이다. 네 검정은
 
-# KS — 모수를 못박은 경우에만 이 p-값이 맞다. 자료에서 추정했다면
-# Lilliefors 로 가야 한다.
-D, p_ks = stats.kstest(data, 'norm', args=(0, 1))
-print(f"KS (vs N(0,1)):   D = {D:.4f}, p = {p_ks:.4g}")
+    $$
+    H_0: \text{자료가 } \mathcal{N}(\mu, \sigma^2)\text{에서 왔다 (어떤 } \mu, \sigma\text{에 대해서든)}
+    $$
 
-# Anderson-Darling — 꼬리 쪽 이탈에 민감하다. p-값 대신 기각값 표를 준다.
-ad = stats.anderson(data, dist="norm")
-print(f"Anderson-Darling: A^2 = {ad.statistic:.4f}")
-for cv, sl in zip(ad.critical_values, ad.significance_level):
-    print(f"  {sl:.0f}% critical value: {cv:.4f}")
-```
+    를 묻고, 그래서 위치·척도 불변이다. 그런데 `args=(0, 1)`을 넘긴 KS는
 
-출력:
+    $$
+    H_0: \text{자료가 } \mathcal{N}(0, 1)\text{에서 왔다}
+    $$
 
-```text
-Shapiro-Wilk:     W = 0.9819, p = 0.1873
-D'Agostino K^2:   K2 = 1.9679, p = 0.3738
-Jarque-Bera:      JB = 1.4236, p = 0.4908
-KS (vs N(0,1)):   D = 0.0723, p = 0.6465
-Anderson-Darling: A^2 = 0.4494
-  15% critical value: 0.5550
-  10% critical value: 0.6320
-  5% critical value: 0.7590
-  2% critical value: 0.8850
-  1% critical value: 1.0530
-```
+    를 묻는다. 평균이 $0.5$인 정규자료는 **정규이지만 $\mathcal{N}(0,1)$은 아니므로** KS가 올바르게 기각한다. KS가 틀린 것이 아니라 **다른 질문에 답하는 것**이다.
 
-자료를 실제로 $N(0,1)$에서 생성했으므로 다섯 검정 모두 정규성을 기각하지 않는다. Anderson-Darling 통계량 $0.449$도 가장 느슨한 15% 임계값 $0.555$보다 작다.
+    그러므로 이 표를 "다섯 정규성 검정의 비교"로 읽으면 안 된다. 네 개는 정규성 검정이고 KS 한 줄은 적합도 검정이다. 정규성을 묻는 KS를 이 자리에 넣으려면 모수를 추정하고 릴리에포르 임계값을 써야 한다.
+
+    **(2) 아니다. $t_5$에서 검정력이 $0.063$부터 $0.612$까지 열 배 벌어진다.** $n = 100$, $\alpha = 0.05$에서 4000번씩 재면
+
+    | 대립 | 샤피로–윌크 | $K^2$ | 자크–베라 | KS | 앤더슨–달링 |
+    |---|---|---|---|---|---|
+    | $\mathcal{N}(0,1)$ — 크기 | $0.0558$ | $0.0580$ | $0.0440$ | $0.0475$ | $0.0475$ |
+    | $t_5$ — 두꺼운 꼬리 | $0.5503$ | $0.5880$ | $\mathbf{0.6122}$ | $0.0630$ | $0.4710$ |
+    | 표준화 대수정규 — 치우침 | $\mathbf{0.9990}$ | $0.9925$ | $0.9905$ | $0.4095$ | $0.9932$ |
+
+    이다(몬테카를로 표준오차는 $0.05$ 근처에서 $0.0034$, $0.5$ 근처에서 $0.0079$).
+
+    첫 줄은 **다섯 검정 모두 약속한 크기를 지킨다**는 확인이다. 다섯 수가 모두 $0.05$에서 몬테카를로 오차의 $2.4$배 안에 있다.
+
+    아래 두 줄이 차이를 드러낸다. **두꺼운 꼬리에서는 자크–베라가 가장 강하다**($0.612$). 꼬리를 네제곱 적률로 직접 겨냥하기 때문이다. $K^2$이 $0.588$, 샤피로–윌크가 $0.550$, 앤더슨–달링이 $0.471$로 따른다. **치우침에서는 샤피로–윌크가 가장 강하다**($0.999$). 순서통계량 전체의 직선성을 보기 때문이다.
+
+    KS는 두 경우 모두 꼴찌이고, $t_5$에서는 $0.063$으로 **크기 $0.0475$와 거의 구별되지 않는다.** 이유를 수로 짚을 수 있다. $t_5$와 $\mathcal{N}(0,1)$의 분포함수 최대 거리는
+
+    $$
+    \sup_x \lvert F_{t_5}(x) - \Phi(x)\rvert = 0.0305
+    $$
+
+    인데 $n = 100$에서 5% 기각에 필요한 $D$는 $1.36/\sqrt{100} = 0.1360$이다. **필요한 양의 $22\%$밖에 안 된다.** 표준화 대수정규는 같은 거리가 $0.0990$으로 $0.136$에 훨씬 가까워, 검정력이 $0.41$까지 올라간다. KS가 "둔감하다"는 말의 정체가 이 비교다.
+
+    **실무적 결론.** 꼬리가 걱정이면 자크–베라나 $K^2$, 치우침이 걱정이면 샤피로–윌크, 무엇이 걱정인지 모르면 샤피로–윌크(두 대립에서 모두 상위권이다). **정규성 검정에 KS를 쓰는 것은 어느 경우에도 좋은 선택이 아니다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 참으로 정규인 자료에 다섯 검정을 모두 돌려 견준다. 모두 기각하지
+    # 않아야 정상이다. 검정마다 무엇에 민감한지가 달라, 정규에서 벗어난
+    # 자료로 바꿔 돌려 보면 차이가 드러난다.
+    rng = np.random.default_rng(0)
+    data = rng.normal(0, 1, size=100)
+
+    # Shapiro-Wilk — 작은 표본에서 검정력이 가장 좋다. 두루 쓰기 좋은 기본값이다.
+    W, p_sw = stats.shapiro(data)
+    print(f"Shapiro-Wilk:     W = {W:.4f}, p = {p_sw:.4g}")
+
+    # D'Agostino K^2 — 왜도와 첨도만 본다. 왜 기각되었는지 알기 쉽다.
+    K2, p_k2 = stats.normaltest(data)
+    print(f"D'Agostino K^2:   K2 = {K2:.4f}, p = {p_k2:.4g}")
+
+    # Jarque-Bera — K^2 과 비슷하지만 표본이 아주 클 때라야 근사가 맞는다.
+    JB, p_jb = stats.jarque_bera(data)
+    print(f"Jarque-Bera:      JB = {JB:.4f}, p = {p_jb:.4g}")
+
+    # KS — 모수를 못박은 경우에만 이 p-값이 맞다. 자료에서 추정했다면
+    # Lilliefors 로 가야 한다.
+    D, p_ks = stats.kstest(data, 'norm', args=(0, 1))
+    print(f"KS (vs N(0,1)):   D = {D:.4f}, p = {p_ks:.4g}")
+
+    # Anderson-Darling — 꼬리 쪽 이탈에 민감하다. p-값 대신 기각값 표를 준다.
+    ad = stats.anderson(data, dist="norm")
+    print(f"Anderson-Darling: A^2 = {ad.statistic:.4f}")
+    for cv, sl in zip(ad.critical_values, ad.significance_level):
+        print(f"  {sl:.0f}% critical value: {cv:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    Shapiro-Wilk:     W = 0.9819, p = 0.1873
+    D'Agostino K^2:   K2 = 1.9679, p = 0.3738
+    Jarque-Bera:      JB = 1.4236, p = 0.4908
+    KS (vs N(0,1)):   D = 0.0723, p = 0.6465
+    Anderson-Darling: A^2 = 0.4494
+      15% critical value: 0.5550
+      10% critical value: 0.6320
+      5% critical value: 0.7590
+      2% critical value: 0.8850
+      1% critical value: 1.0530
+    ```
+
+    자료를 실제로 $N(0,1)$에서 생성했으므로 다섯 검정 모두 정규성을 기각하지 않는다. Anderson-Darling 통계량 $0.449$도 가장 느슨한 15% 임계값 $0.555$보다 작다.
+
+    자료를 옮겨 보고, 두 대립에 대한 검정력을 재어 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    data = rng.normal(0, 1, size=100)
+    n = data.size
+
+    # (1) 다섯 검정 가운데 KS 만 귀무가설이 다르다. 자료를 0.5 만큼 옮겨 본다.
+    shift = data + 0.5
+    print("원자료와 0.5 옮긴 자료의 p 값")
+    print(f"{'검정':<18}{'원자료':>12}{'+0.5':>12}")
+    print(f"{'Shapiro-Wilk':<18}{stats.shapiro(data)[1]:>12.4g}{stats.shapiro(shift)[1]:>12.4g}")
+    print(f"{'DAgostino K^2':<18}{stats.normaltest(data)[1]:>12.4g}{stats.normaltest(shift)[1]:>12.4g}")
+    print(f"{'Jarque-Bera':<18}{stats.jarque_bera(data)[1]:>12.4g}{stats.jarque_bera(shift)[1]:>12.4g}")
+    print(f"{'KS vs N(0,1)':<18}{stats.kstest(data, 'norm', args=(0, 1))[1]:>12.4g}"
+          f"{stats.kstest(shift, 'norm', args=(0, 1))[1]:>12.4g}")
+    print(f"{'Anderson A^2':<18}{stats.anderson(data).statistic:>12.4f}"
+          f"{stats.anderson(shift).statistic:>12.4f}")
+
+    # (2) 같은 n 에서 두 대립에 대한 검정력
+    def power(draw, R, alpha=0.05):
+        out = {k: 0 for k in ("SW", "K2", "JB", "KS", "AD")}
+        for _ in range(R):
+            x = draw()
+            out["SW"] += stats.shapiro(x)[1] < alpha
+            out["K2"] += stats.normaltest(x)[1] < alpha
+            out["JB"] += stats.jarque_bera(x)[1] < alpha
+            out["KS"] += stats.kstest(x, 'norm', args=(0, 1))[1] < alpha
+            r = stats.anderson(x)
+            out["AD"] += r.statistic > r.critical_values[2]
+        return {k: v / R for k, v in out.items()}
+
+    rg = np.random.default_rng(3)
+    R = 4000
+    print(f"\nn = {n}, alpha = 0.05, R = {R}  (MC SE 는 0.05 에서 0.0034)")
+    rows = [("정규 N(0,1) — 크기", lambda: rg.standard_normal(n)),
+            ("t_5 — 두꺼운 꼬리", lambda: rg.standard_t(5, n)),
+            ("Lognormal(0,0.5) 표준화 — 치우침",
+             lambda: (lambda z: (z - z.mean()) / z.std(ddof=1))(rg.lognormal(0, 0.5, n)))]
+    print(f"{'대립':<34}{'SW':>8}{'K2':>8}{'JB':>8}{'KS':>8}{'AD':>8}")
+    for name, d in rows:
+        pw = power(d, R)
+        print(f"{name:<34}{pw['SW']:>8.4f}{pw['K2']:>8.4f}{pw['JB']:>8.4f}"
+              f"{pw['KS']:>8.4f}{pw['AD']:>8.4f}")
+    ```
+
+    출력:
+
+    ```text
+    원자료와 0.5 옮긴 자료의 p 값
+    검정                         원자료        +0.5
+    Shapiro-Wilk            0.1873      0.1873
+    DAgostino K^2           0.3738      0.3738
+    Jarque-Bera             0.4908      0.4908
+    KS vs N(0,1)            0.6465   1.562e-05
+    Anderson A^2            0.4494      0.4494
+
+    n = 100, alpha = 0.05, R = 4000  (MC SE 는 0.05 에서 0.0034)
+    대립                                      SW      K2      JB      KS      AD
+    정규 N(0,1) — 크기                      0.0558  0.0580  0.0440  0.0475  0.0475
+    t_5 — 두꺼운 꼬리                        0.5503  0.5880  0.6122  0.0630  0.4710
+    Lognormal(0,0.5) 표준화 — 치우침          0.9990  0.9925  0.9905  0.4095  0.9932
+    ```
+
+    네 검정의 $p$값이 자료를 옮겨도 소수 넷째 자리까지 변하지 않고 KS만 네 자릿수 떨어지므로 (1)의 판정이 확인된다. 그리고 검정력 표의 첫 줄이 다섯 검정의 크기를 보증하므로 아래 두 줄의 비교가 공정하다. $\square$
 
 ## 검정마다 잘 잡는 이탈이 다르다
 

@@ -113,57 +113,158 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 같은 자료에 네 검정 돌려 보기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 같은 자료에 네 검정 돌려 보기. $t_5$에서 $n = 100$개를 뽑아 샤피로–윌크, 앤더슨–달링, 콜모고로프–스미르노프, 자르크–베라를 모두 돌린다.
+
+**(1)** 자르크–베라의 닫힌 꼴 $JB = \frac{n}{6}\bigl(g_1^2 + \frac{g_2^2}{4}\bigr)$을 코드가 준 $JB = 5365.90$과 맞춰 보고, `scipy`가 **어느 판본**의 왜도·첨도를 쓰는지 밝히시오. $t_5$의 이론값($\gamma_1 = 0$, $\gamma_2 = 6$)을 넣으면 $JB$가 얼마인가. 관측값과의 차이는 어디서 오는가.
+
+**(2)** KS 의 $p = 0.0030$은 나머지 셋과 **견줄 수 있는 수가 아니다.** 왜 그런가. 모수 추정을 반영한 올바른 귀무분포를 모의로 만들어 바른 $p$값과 5% 임계값을 구하고, 표준 KS 임계값을 그대로 썼을 때 검정의 **실제 크기**를 재시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# ===================================================================
-# 같은 자료에 네 검정을 모두 돌려 결론을 견준다
-#
-# 검정마다 무엇에 민감한지가 달라, 같은 자료에서도 p-값이 꽤 갈린다.
-# 하나만 골라 돌리고 끝낼 일이 아니라는 것이 요점이다.
-# ===================================================================
+    ```python
+    import numpy as np
+    from scipy import stats
 
-np.random.seed(42)
-n = 100
+    # ===================================================================
+    # 같은 자료에 네 검정을 모두 돌려 결론을 견준다
+    #
+    # 검정마다 무엇에 민감한지가 달라, 같은 자료에서도 p-값이 꽤 갈린다.
+    # 하나만 골라 돌리고 끝낼 일이 아니라는 것이 요점이다.
+    # ===================================================================
 
-# 자유도 5 인 t. 대칭이지만 꼬리가 두꺼운 자료다.
-data = stats.t.rvs(df=5, size=n)
+    np.random.seed(42)
+    n = 100
 
-if __name__ == "__main__":
-    # Shapiro-Wilk — 두루 쓰기 좋고 작은 표본에서 검정력이 높다.
-    sw_stat, sw_p = stats.shapiro(data)
-    print(f"Shapiro-Wilk:      W = {sw_stat:.4f}, p = {sw_p:.4f}")
+    # 자유도 5 인 t. 대칭이지만 꼬리가 두꺼운 자료다.
+    data = stats.t.rvs(df=5, size=n)
 
-    # Anderson-Darling — 꼬리에 무게를 싣는다. 이 자료에 가장 민감할 것이다.
-    ad_result = stats.anderson(data, dist="norm")
-    print(f"Anderson-Darling:  A2 = {ad_result.statistic:.4f}, "
-          f"critical (5%) = {ad_result.critical_values[2]:.4f}")
+    if __name__ == "__main__":
+        # Shapiro-Wilk — 두루 쓰기 좋고 작은 표본에서 검정력이 높다.
+        sw_stat, sw_p = stats.shapiro(data)
+        print(f"Shapiro-Wilk:      W = {sw_stat:.4f}, p = {sw_p:.4f}")
 
-    # KS — 모수를 자료에서 추정해 넘겼으므로 p-값이 실제보다 크게 나온다.
-    # 제대로 하려면 Lilliefors 기각값을 써야 한다.
-    ks_stat, ks_p = stats.kstest(data, "norm", args=(np.mean(data), np.std(data)))
-    print(f"KS (estimated):    D = {ks_stat:.4f}, p = {ks_p:.4f}")
+        # Anderson-Darling — 꼬리에 무게를 싣는다. 이 자료에 가장 민감할 것이다.
+        ad_result = stats.anderson(data, dist="norm")
+        print(f"Anderson-Darling:  A2 = {ad_result.statistic:.4f}, "
+              f"critical (5%) = {ad_result.critical_values[2]:.4f}")
 
-    # Jarque-Bera — 왜도와 첨도만 본다. 큰 표본에서 쓸 만하다.
-    jb_stat, jb_p = stats.jarque_bera(data)
-    print(f"Jarque-Bera:       JB = {jb_stat:.4f}, p = {jb_p:.4f}")
-```
+        # KS — 모수를 자료에서 추정해 넘겼으므로 p-값이 실제보다 크게 나온다.
+        # 제대로 하려면 Lilliefors 기각값을 써야 한다.
+        ks_stat, ks_p = stats.kstest(data, "norm", args=(np.mean(data), np.std(data)))
+        print(f"KS (estimated):    D = {ks_stat:.4f}, p = {ks_p:.4f}")
 
-출력:
+        # Jarque-Bera — 왜도와 첨도만 본다. 큰 표본에서 쓸 만하다.
+        jb_stat, jb_p = stats.jarque_bera(data)
+        print(f"Jarque-Bera:       JB = {jb_stat:.4f}, p = {jb_p:.4f}")
+    ```
 
-```text
-Shapiro-Wilk:      W = 0.6287, p = 0.0000
-Anderson-Darling:  A2 = 6.0914, critical (5%) = 0.7590
-KS (estimated):    D = 0.1783, p = 0.0030
-Jarque-Bera:       JB = 5365.9041, p = 0.0000
-```
+    출력:
 
-이 표본은 왜도 $4.83$, 초과첨도 $34.56$으로 매우 극단적인 값이 섞여 있어 네 검정이 모두 기각한다. 다만 **증거의 강도가 크게 다르다**. Shapiro-Wilk와 Jarque-Bera의 $p$값은 사실상 0이고 Anderson-Darling 통계량 $6.09$는 5% 임계값 $0.759$의 여덟 배인 반면, KS 검정의 $p$값은 $0.003$으로 상대적으로 가장 약한 증거를 준다. 같은 자료에서도 KS가 가장 둔감함을 보여준다.
+    ```text
+    Shapiro-Wilk:      W = 0.6287, p = 0.0000
+    Anderson-Darling:  A2 = 6.0914, critical (5%) = 0.7590
+    KS (estimated):    D = 0.1783, p = 0.0030
+    Jarque-Bera:       JB = 5365.9041, p = 0.0000
+    ```
+
+    표본의 모양 통계량은 $g_1 = 4.8256$, $g_2 = 34.5640$이다(보정판은 $G_1 = 4.8994$, $G_2 = 36.4190$). 네 검정이 모두 기각한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 100
+    d = stats.t.rvs(df=5, size=n)
+
+    print("t_5 의 이론값:  왜도 0,  초과첨도 6/(5-4) = 6")
+    print(f"이 표본:  g1 = {stats.skew(d):.4f}   g2 = {stats.kurtosis(d):.4f}")
+    print(f"  (보정판 G1 = {stats.skew(d, bias=False):.4f},"
+          f" G2 = {stats.kurtosis(d, bias=False):.4f})")
+
+    # 자르크-베라의 닫힌 꼴을 직접 확인한다.
+    g1, g2 = stats.skew(d), stats.kurtosis(d)
+    print(f"\nJB = n/6*(g1^2 + g2^2/4) = {n / 6 * (g1 ** 2 + g2 ** 2 / 4):.4f}"
+          f"   scipy = {stats.jarque_bera(d).statistic:.4f}")
+    print(f"t_5 의 이론값을 넣으면 JB = {n / 6 * (0 ** 2 + 6 ** 2 / 4):.1f}")
+
+    # 이 표본의 극단값 하나가 모든 것을 끌고 간다.
+    z = (d - d.mean()) / d.std(ddof=1)
+    print(f"\n표준화 최대/최소:  {z.max():+.2f}  {z.min():+.2f}")
+    drop = np.sort(d)[:-1]
+    print("가장 큰 관측 하나를 빼면 (n = 99):")
+    print(f"  g1 = {stats.skew(drop):+.4f}   g2 = {stats.kurtosis(drop):+.4f}")
+    print(f"  W = {stats.shapiro(drop).statistic:.4f}  p = {stats.shapiro(drop).pvalue:.4f}")
+    print(f"  A2 = {stats.anderson(drop, dist='norm').statistic:.4f}")
+    print(f"  JB = {stats.jarque_bera(drop).statistic:.4f}"
+          f"  p = {stats.jarque_bera(drop).pvalue:.4f}")
+
+    # KS 를 추정 모수로 쓰면 p 값이 얼마나 과대평가되는가.
+    D_obs = stats.kstest(d, "norm", args=(np.mean(d), np.std(d))).statistic
+
+
+    def ks_est(x):
+        return stats.kstest(x, "norm", args=(np.mean(x), np.std(x))).statistic
+
+
+    rng = np.random.default_rng(404)
+    R = 40000
+    Dnull = np.array([ks_est(rng.normal(0, 1, n)) for _ in range(R)])
+    p_lillie = np.mean(Dnull >= D_obs)
+    print(f"\nKS:  D = {D_obs:.4f}")
+    print(f"  표준 KS p값 (모수를 안다고 가정)        = "
+          f"{stats.kstest(d, 'norm', args=(np.mean(d), np.std(d))).pvalue:.4f}")
+    print(f"  릴리에포르 p값 (모수 추정을 반영, R={R}) = {p_lillie:.5f}")
+    print(f"  5% 임계값:  표준 KS {stats.ksone.ppf(0.975, n):.4f}"
+          f"   릴리에포르 {np.percentile(Dnull, 95):.4f}")
+
+    # 그 임계값을 잘못 쓰면 검정의 실제 크기는 얼마가 되는가.
+    crit_std = stats.ksone.ppf(0.975, n)
+    print(f"\n표준 KS 임계값 {crit_std:.4f} 를 추정 모수에 그대로 쓰면")
+    print(f"  명목 0.05 인 검정의 실제 크기 = {np.mean(Dnull > crit_std):.5f}")
+    ```
+
+    출력:
+
+    ```text
+    t_5 의 이론값:  왜도 0,  초과첨도 6/(5-4) = 6
+    이 표본:  g1 = 4.8256   g2 = 34.5640
+      (보정판 G1 = 4.8994, G2 = 36.4190)
+
+    JB = n/6*(g1^2 + g2^2/4) = 5365.9041   scipy = 5365.9041
+    t_5 의 이론값을 넣으면 JB = 150.0
+
+    표준화 최대/최소:  +7.75  -1.45
+    가장 큰 관측 하나를 빼면 (n = 99):
+      g1 = +0.8195   g2 = +2.7637
+      W = 0.9548  p = 0.0019
+      A2 = 0.6086
+      JB = 42.5870  p = 0.0000
+
+    KS:  D = 0.1783
+      표준 KS p값 (모수를 안다고 가정)        = 0.0030
+      릴리에포르 p값 (모수 추정을 반영, R=40000) = 0.00000
+      5% 임계값:  표준 KS 0.1340   릴리에포르 0.0892
+
+    표준 KS 임계값 0.1340 를 추정 모수에 그대로 쓰면
+      명목 0.05 인 검정의 실제 크기 = 0.00015
+    ```
+
+    **(1) 닫힌 꼴이 소수점 넷째 자리까지 맞는다.** $\frac{100}{6}\bigl(4.8256^2 + \frac{34.5640^2}{4}\bigr) = 5365.9041$이고 `scipy.stats.jarque_bera`가 준 값과 같다. 이 일치가 **판본을 결정해 준다.** 보정판 $G_1 = 4.8994$, $G_2 = 36.4190$을 넣으면 $\frac{100}{6}(24.00 + 331.59) = 5926$이 되어 전혀 다른 수가 나오므로, `scipy`의 자르크–베라는 보정하지 않은 $g_1$, $g_2$를 쓴다. 자르크–베라를 손으로 계산할 때 pandas 의 `.skew()`($G_1$)를 가져다 쓰면 값이 맞지 않는다.
+
+    $t_5$의 이론값을 넣으면 $JB = \frac{100}{6}\bigl(0 + \frac{36}{4}\bigr) = 150$이다. 관측값 $5365.9$는 그 **36배**다. 이론이 예측하는 것보다 훨씬 큰 값이 나왔으니, 이 표본이 $t_5$를 대표하지 못한다는 뜻이다.
+
+    차이의 출처는 **관측값 하나**다. 표준화한 최댓값이 $+7.75$인데 최솟값은 $-1.45$에 지나지 않는다. 그 한 점을 빼면 $g_1$이 $4.83 \to 0.82$로, $g_2$가 $34.56 \to 2.76$으로 떨어지고 $JB$는 $5366 \to 42.6$이 된다. $t_5$는 **대칭** 분포인데 이 표본의 왜도가 $4.83$이나 되는 것은 꼬리가 두꺼워서가 아니라 오른쪽 꼬리에서 하나가 유독 멀리 나왔기 때문이다. 코드의 주석이 "대칭이지만 꼬리가 두꺼운 자료"라 적은 것은 모집단의 성질이고, 이 표본은 그 성질을 왜도로는 보여 주지 못한다.
+
+    **한 점이 판정을 뒤집기도 한다.** 앤더슨–달링은 $A^2 = 6.0914$로 5% 임계값 $0.759$의 여덟 배였지만, 같은 한 점을 빼면 $A^2 = 0.6086$으로 **임계값 아래로 내려가 기각하지 못한다.** 샤피로–윌크는 $W = 0.6287 \to 0.9548$($p = 0.0019$)로, 자르크–베라는 $p$값이 여전히 $10^{-9}$ 아래로 기각을 유지한다. 곧 이 자료에서 네 검정의 결론이 갈리는 정도는 "검정마다 민감도가 다르다"보다 **"극단점 하나에 얼마나 끌려가는가"** 가 더 크게 설명한다. $A^2$의 $1/\{F(1-F)\}$ 가중이 꼬리를 중시하는 만큼 꼬리의 한 점에 취약하기도 한 것이다.
+
+    **(2) KS 의 $p = 0.0030$은 틀린 귀무분포에서 읽은 수다.** `stats.kstest`에 `args=(np.mean(data), np.std(data))`를 넘기는 것은 "평균과 표준편차를 **미리 알고 있었다**"고 주장하는 것이다. 실제로는 자료에서 추정했고, 추정된 모수는 정의상 경험분포에 **가장 잘 맞도록** 정해지므로 $D$가 체계적으로 작아진다. 그러므로 표준 KS 귀무분포에서 읽은 $p$값은 **실제보다 크다.**
+
+    모의로 바른 귀무분포(릴리에포르 분포)를 만들면 그 차이가 드러난다. 5% 임계값이 표준 KS 의 $0.1340$에서 릴리에포르의 $0.0892$로 **1.5배 낮아진다.** 관측 $D = 0.1783$은 40,000번의 귀무 모의에서 한 번도 넘어서지 못했으므로 바른 $p$값은 $1/40000 = 2.5\times 10^{-5}$보다 작다. 곧 **올바르게 교정한 KS 는 $p = 0.003$이 아니라 $p < 2.5\times 10^{-5}$로 압도적으로 기각한다.**
+
+    반대 방향의 피해가 더 크다. 표준 KS 임계값 $0.1340$을 추정 모수에 그대로 쓰면 명목 5% 검정의 실제 크기가 $0.00015$(40,000번 중 6번)로 **333분의 1**로 쪼그라든다. 검정이 지나치게 **보수적**이 되어, 참으로 비정규인 자료도 거의 기각하지 못한다. 이것이 모수를 추정했을 때 릴리에포르 보정이 선택이 아니라 필수인 까닭이다.
 
 ## 연습문제
 

@@ -32,58 +32,184 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Q-Q 그림에 95% 띠 얹기
+**보기 1.** <span class="diff easy" title="쉬움"></span> Q-Q 그림에 95% 띠 얹기. 대수정규$(\mu = 0,\ \sigma = 0.6)$에서 $n = 300$개를 뽑아, 적합된 정규분포에서 $B = 600$번 다시 뽑는 모수적 붓스트랩으로 95% 점별 띠를 그린다.
+
+**(1)** 띠를 벗어난 점이 **몇 개**이며 어느 순위 구간인가. 세어 보시오. 벗어남이 흩어져 있는가, 몰려 있는가.
+
+**(2)** 띠의 폭이 가운데와 양 끝에서 각각 얼마인가. 몇 배 차이인가.
+
+**(3)** 띠의 **아래 경계가 음수**인 구간이 있다. 자료는 대수정규라 모두 양수인데 어떻게 된 일인가.
+
+**(4)** 표본왜도를 대수정규의 이론값과 견주시오. 대수정규$(0, \sigma^2)$의 왜도는 $(e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}$ 이다.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-def qq_with_band(x, B=800, seed=42):
-    """Q-Q 그림에 모의실험으로 만든 95% 띠를 얹는다.
+    **(4)** 의 이론값만 먼저 계산해 둔다. $\sigma^2 = 0.36$이므로 $e^{0.36} = 1.43333$이고
 
-    Q-Q 그림의 점들은 웬만큼 흔들리기 마련이라, 직선에서 조금 벗어난 것이
-    문제인지 아닌지 눈으로는 알기 어렵다. 적합한 정규분포에서 같은 크기의
-    표본을 B 번 뽑아 각 자리의 2.5·97.5 백분위점을 구하면, "정규라면 이
-    정도까지는 흔들린다"는 범위를 그릴 수 있다.
-    """
-    x = np.asarray(x, dtype=float)
+    $$
+    \gamma_1 = (e^{\sigma^2} + 2)\sqrt{e^{\sigma^2} - 1}
+        = 3.43333 \times \sqrt{0.43333} = 3.43333 \times 0.65828 = 2.2601
+    $$
+
+    이다. 표준편차의 이론값은 $\sqrt{(e^{\sigma^2}-1)e^{\sigma^2}} = \sqrt{0.43333 \times 1.43333} = 0.7881$, 평균은 $e^{\sigma^2/2} = 1.1972$다. 나머지는 읽기 문제다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
+
+    def qq_with_band(x, B=800, seed=42):
+        """Q-Q 그림에 모의실험으로 만든 95% 띠를 얹는다.
+
+        Q-Q 그림의 점들은 웬만큼 흔들리기 마련이라, 직선에서 조금 벗어난 것이
+        문제인지 아닌지 눈으로는 알기 어렵다. 적합한 정규분포에서 같은 크기의
+        표본을 B 번 뽑아 각 자리의 2.5·97.5 백분위점을 구하면, "정규라면 이
+        정도까지는 흔들린다"는 범위를 그릴 수 있다.
+        """
+        x = np.asarray(x, dtype=float)
+        n = x.size
+        mu, sd = x.mean(), x.std(ddof=1)
+
+        # 이론 분위수. 0.5 를 빼는 것은 i/n 이 마지막 점에서 1 이 되어
+        # ppf 가 무한이 되는 것을 피하기 위한 흔한 보정이다.
+        p = (np.arange(1, n + 1) - 0.5) / n
+        q_theor = stats.norm.ppf(p)
+
+        x_sorted = np.sort(x)
+
+        # 적합된 정규분포에서 B 번 표본을 뽑아 각 순서통계량의 분포를 얻는다.
+        rng = np.random.default_rng(seed)
+        sims = np.sort(rng.normal(mu, sd, size=(B, n)), axis=1)
+        lo = np.percentile(sims, 2.5, axis=0)
+        hi = np.percentile(sims, 97.5, axis=0)
+
+        fig, ax = plt.subplots(figsize=(7, 4))
+        ax.scatter(q_theor, x_sorted, s=15)
+        ax.plot(q_theor, mu + sd * q_theor, linestyle="--")
+        ax.fill_between(q_theor, lo, hi, alpha=0.15,
+                        label="95% pointwise band")
+        ax.set_title("Q-Q Plot with Simulated 95% Band")
+        ax.set_xlabel("Theoretical quantiles (Normal)")
+        ax.set_ylabel("Ordered data")
+        ax.legend()
+        plt.tight_layout()
+        plt.show()
+
+    rng = np.random.default_rng(123)
+    x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
+    qq_with_band(x, B=600, seed=7)
+    ```
+
+    ![신뢰띠를 포함한 Q-Q 그림](./img/qq_confidence_band_35.png)
+
+    그림에서 읽을 수치를 따로 찍어 둔다.
+
+    ```python
+    def runs(mask):
+        """True 인 자리를 연속 구간으로 묶는다 (1 부터 센 순위로)."""
+        idx = np.where(mask)[0]
+        if idx.size == 0:
+            return []
+        out, start, prev = [], idx[0], idx[0]
+        for j in idx[1:]:
+            if j == prev + 1:
+                prev = j
+            else:
+                out.append((start + 1, prev + 1))
+                start = prev = j
+        out.append((start + 1, prev + 1))
+        return out
+
+    rng = np.random.default_rng(123)
+    x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
+
     n = x.size
     mu, sd = x.mean(), x.std(ddof=1)
-
-    # 이론 분위수. 0.5 를 빼는 것은 i/n 이 마지막 점에서 1 이 되어
-    # ppf 가 무한이 되는 것을 피하기 위한 흔한 보정이다.
     p = (np.arange(1, n + 1) - 0.5) / n
-    q_theor = stats.norm.ppf(p)
-
+    q = stats.norm.ppf(p)
     x_sorted = np.sort(x)
 
-    # 적합된 정규분포에서 B 번 표본을 뽑아 각 순서통계량의 분포를 얻는다.
-    rng = np.random.default_rng(seed)
-    sims = np.sort(rng.normal(mu, sd, size=(B, n)), axis=1)
+    sims = np.sort(np.random.default_rng(7).normal(mu, sd, size=(600, n)), axis=1)
     lo = np.percentile(sims, 2.5, axis=0)
     hi = np.percentile(sims, 97.5, axis=0)
 
-    fig, ax = plt.subplots(figsize=(7, 4))
-    ax.scatter(q_theor, x_sorted, s=15)
-    ax.plot(q_theor, mu + sd * q_theor, linestyle="--")
-    ax.fill_between(q_theor, lo, hi, alpha=0.15,
-                    label="95% pointwise band")
-    ax.set_title("Q-Q Plot with Simulated 95% Band")
-    ax.set_xlabel("Theoretical quantiles (Normal)")
-    ax.set_ylabel("Ordered data")
-    ax.legend()
-    plt.tight_layout()
-    plt.show()
+    above, below = x_sorted > hi, x_sorted < lo
+    print(f"적합된 정규: mu-hat {mu:.4f}, sd-hat {sd:.4f}")
+    print(f"띠 밖의 점 {above.sum() + below.sum()}/{n} "
+          f"({100 * (above.sum() + below.sum()) / n:.1f}%)")
+    print(f"  위로 벗어난 구간(순위): {runs(above)}")
+    print(f"  아래로 벗어난 순위 범위: {np.where(below)[0].min() + 1}"
+          f" ~ {np.where(below)[0].max() + 1}  ({below.sum()}점)")
 
-rng = np.random.default_rng(123)
-x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
-qq_with_band(x, B=600, seed=7)
-```
+    width = hi - lo
+    print(f"띠 폭: 가운데 최솟값 {width.min():.4f}, 양 끝 {width[0]:.4f} / "
+          f"{width[-1]:.4f}, 최대/최소 = {width.max() / width.min():.2f}")
+    print(f"띠 하한의 최솟값 {lo.min():.4f}   자료 최솟값 {x_sorted[0]:.4f}")
+    print(f"P(적합된 정규 < 0) = {stats.norm.cdf(0, mu, sd):.4f}")
+    print(f"최댓값 {x_sorted[-1]:.4f}  띠 상한 {hi[-1]:.4f}  "
+          f"({x_sorted[-1] / hi[-1]:.2f}배)")
 
-![신뢰띠를 포함한 Q-Q 그림](./img/qq_confidence_band_35.png)
+    s2 = 0.6 ** 2
+    print(f"\n이론: 평균 {np.exp(s2 / 2):.4f}  sd "
+          f"{np.sqrt((np.exp(s2) - 1) * np.exp(s2)):.4f}  왜도 "
+          f"{(np.exp(s2) + 2) * np.sqrt(np.exp(s2) - 1):.4f}")
+    print(f"표본: 평균 {mu:.4f}  sd {sd:.4f}  g1 {stats.skew(x):.4f}"
+          f"  G1 {stats.skew(x, bias=False):.4f}")
+    print(f"샤피로-윌크 p = {stats.shapiro(x)[1]:.4g}")
+    ```
+
+    출력:
+
+    ```text
+    적합된 정규: mu-hat 1.2044, sd-hat 0.7138
+    띠 밖의 점 204/300 (68.0%)
+      위로 벗어난 구간(순위): [(1, 48), (278, 293), (295, 300)]
+      아래로 벗어난 순위 범위: 103 ~ 241  (134점)
+    띠 폭: 가운데 최솟값 0.1994, 양 끝 1.0862 / 1.0342, 최대/최소 = 5.45
+    띠 하한의 최솟값 -1.4917   자료 최솟값 0.1807
+    P(적합된 정규 < 0) = 0.0458
+    최댓값 4.8422  띠 상한 3.8469  (1.26배)
+
+    이론: 평균 1.1972  sd 0.7881  왜도 2.2601
+    표본: 평균 1.2044  sd 0.7138  g1 1.5056  G1 1.5132
+    샤피로-윌크 p = 3.877e-14
+    ```
+
+    **(1) 300점 가운데 204점(68%)이 띠 밖이고, 흩어져 있지 않고 세 덩어리로 몰려 있다.**
+
+    | 순위 구간 | 점 개수 | 방향 |
+    |---|---|---|
+    | $1 \sim 48$ | 48 | 띠 **위** |
+    | $103 \sim 241$ | 134 | 띠 **아래** |
+    | $278 \sim 300$ | 22 | 띠 **위** |
+
+    이 세 덩어리가 "위–아래–위" 순서로 늘어선 것이 **오른쪽 치우침의 서명**이다. 왼쪽 끝이 띠 위에 있는 것은 자료의 왼쪽 꼬리가 적합된 정규분포보다 **짧기** 때문이고(대수정규는 0 에서 잘린다), 오른쪽 끝이 띠 위에 있는 것은 오른쪽 꼬리가 **길기** 때문이다. 가운데가 띠 아래로 내려앉는 것은 자료의 중앙값($\approx 1.0$)이 평균 $1.2044$보다 작기 때문이다. 아래로 볼록이 아니라 **위로 휘는 곡선** 전체가 이렇게 나타난다.
+
+    몰려 있다는 사실 자체가 중요하다. 순서통계량은 강하게 양의 상관을 가지므로 $x_{(i)}$가 띠를 벗어나면 $x_{(i+1)}$도 벗어나기 쉽다. **그래서 벗어난 점의 개수를 "$0.05 \times 300 = 15$개"와 견주는 것은 뜻이 없다.** 연습문제 1 에서 보듯 참으로 정규인 표본에서는 평균 $0.7$개만 벗어나고 $78\%$의 표본에서는 하나도 벗어나지 않는다. 204 개는 그 기준에서 압도적인 신호다. 샤피로–윌크의 $p = 3.9\times10^{-14}$가 같은 말을 한 수로 요약한다.
+
+    **(2) 띠 폭이 5.45배 차이 난다.** 가운데에서 가장 좁은 곳이 $0.1994$인데 양 끝은 $1.0862$와 $1.0342$다. 띠가 나팔처럼 벌어지는 까닭은 순서통계량의 분산이 꼬리에서 크기 때문이다 — 연습문제 3 에서 유도한다.
+
+    **이것이 띠를 그리는 이유다.** 띠가 없다면 양 끝 점이 적합선에서 $1.0$ 벗어난 것과 가운데 점이 $0.2$ 벗어난 것 가운데 어느 쪽이 더 심각한지 눈으로 판단할 수 없다. 띠가 그 환산율을 그림 위에 직접 그려 준다.
+
+    **(3) 적합된 정규분포가 음수를 허용하기 때문이다.** $\hat\mu = 1.2044$, $\hat\sigma = 0.7138$인 정규분포는
+
+    $$
+    P(X < 0) = \Phi\!\Bigl(\frac{0 - 1.2044}{0.7138}\Bigr) = \Phi(-1.687) = 0.0458
+    $$
+
+    로 전체 질량의 $4.6\%$를 음수에 둔다. $n = 300$이면 음수가 평균 14개쯤 나오는 셈이고, 그래서 가장 작은 순서통계량의 모의분포가 음수 영역에 걸쳐 띠 하한이 $-1.4917$까지 내려간다. 반면 자료의 최솟값은 $0.1807$이다.
+
+    **이것만으로도 정규 모형은 기각된다.** 띠를 그리거나 검정을 돌릴 필요도 없이, "길이·가격·소득처럼 양수일 수밖에 없는 양에 정규분포를 적합하면 모형이 불가능한 영역에 질량을 준다"는 사실이 드러난 것이다. 변동계수 $\hat\sigma/\hat\mu = 0.59$처럼 산포가 큰 양수 자료에서는 늘 이 문제가 생기며, 로그 변환이 표준 처방인 까닭이기도 하다.
+
+    **(4) 표본왜도가 이론값보다 한참 작다.** $g_1 = 1.5056$(보정판 $G_1 = 1.5132$)인데 이론값은 $2.2601$이다. **$33\%$ 작다.** 표준편차도 $0.7138$ 대 이론 $0.7881$로 $9\%$ 작다.
+
+    우연이 아니라 오른쪽 꼬리가 긴 분포에서 늘 일어나는 일이다. 왜도는 세제곱 적률이라 그 추정의 변동이 6차 적률에 지배되는데, 대수정규의 고차 적률은 $e^{k^2\sigma^2/2}$로 폭발적으로 커진다($\sigma = 0.6$에서 6차 적률은 $e^{6.48} = 652$다). 그런 분포에서 $g_1$의 표본분포는 오른쪽으로 길게 늘어지고 **중앙값이 참값 아래에 놓인다.** 평균을 떠받치는 것은 극단적으로 큰 관측값이 섞인 드문 표본이고, 대다수 표본은 참값을 밑돈다.
+
+    요점은 두 가지다. 첫째, **보고된 왜도 하나를 소수점까지 믿지 말라.** 둘째, 그런데도 **방향은 맞는다** — $1.5$든 $2.3$이든 "오른쪽으로 치우쳤다"는 결론은 같다. 크기를 쓰려면 붓스트랩 구간을 함께 보고해야 한다.
+
+    `scipy.stats.skew`의 기본값은 `bias=True`이므로 위 출력의 $1.5056$은 보정하지 않은 $g_1$이다. $n = 300$에서 두 판본의 차이는 $0.5\%$로 결론에 영향이 없다.
 
 ## 점별 띠와 동시 띠
 

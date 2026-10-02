@@ -16,38 +16,120 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 두 수익률의 요약통계
+**보기 1.** <span class="diff easy" title="쉬움"></span> 요약통계 넷 가운데 믿을 수 있는 것은 몇 개인가. 일평균 $\mu = 0.0005$, 척도 $0.015$로 정규 계열과 $t_6$ 계열을 각각 $n = 2000$개 만들어 평균 · 표준편차 · 왜도 · 초과첨도를 재고 자르크–베라를 돌린다.
+
+**(1)** 정규 계열의 표본평균이 $0.001176$으로 지정한 $\mu = 0.0005$의 두 배를 넘는다. 이것이 이상한 일인가. 표준오차로 판정하시오. 그리고 **$\mu$ 를 2 표준오차 안에서 집어내려면 며칠의 자료가 필요한가.**
+
+**(2)** 두 계열의 표준편차가 $0.014823$과 $0.018552$로 다르다. 둘 다 `scale=0.015`로 만들었는데 왜 그런가. 이론값을 계산해 표본값과 견주시오.
+
+**(3)** 꼬리 계열의 초과첨도 $2.4735$를 $t_6$의 이론값 $6/(6-4) = 3$과 견주시오. 작게 나온 것이 우연인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-n = 2000
+    ```python
+    import numpy as np
+    from scipy import stats
 
-# 정규 수익률: 일평균 0.05%, 변동성 1.5%
-normal_returns = np.random.normal(loc=0.0005, scale=0.015, size=n)
+    np.random.seed(42)
+    n = 2000
 
-# 꼬리가 두꺼운 수익률: 자유도 6 인 t. 평균과 척도는 위와 같게 맞췄으므로
-# 달라지는 것은 꼬리뿐이다. 요약통계에서 초과첨도만 크게 벌어진다.
-heavy_returns = stats.t.rvs(df=6, loc=0.0005, scale=0.015, size=n)
+    # 정규 수익률: 일평균 0.05%, 변동성 1.5%
+    normal_returns = np.random.normal(loc=0.0005, scale=0.015, size=n)
 
-for name, r in [("Normal", normal_returns), ("Heavy-tailed", heavy_returns)]:
-    g1 = stats.skew(r)
-    g2 = stats.kurtosis(r)
-    _, p_jb = stats.jarque_bera(r)
-    print(f"{name}: mean={r.mean():.6f}, std={r.std():.6f}, "
-          f"skew={g1:.4f}, excess_kurt={g2:.4f}, JB p={p_jb:.4g}")
-```
+    # 꼬리가 두꺼운 수익률: 자유도 6 인 t. 평균과 척도는 위와 같게 맞췄으므로
+    # 달라지는 것은 꼬리뿐이다. 요약통계에서 초과첨도만 크게 벌어진다.
+    heavy_returns = stats.t.rvs(df=6, loc=0.0005, scale=0.015, size=n)
 
-출력:
+    for name, r in [("Normal", normal_returns), ("Heavy-tailed", heavy_returns)]:
+        g1 = stats.skew(r)
+        g2 = stats.kurtosis(r)
+        _, p_jb = stats.jarque_bera(r)
+        print(f"{name}: mean={r.mean():.6f}, std={r.std():.6f}, "
+              f"skew={g1:.4f}, excess_kurt={g2:.4f}, JB p={p_jb:.4g}")
+    ```
 
-```text
-Normal: mean=0.001176, std=0.014823, skew=0.0329, excess_kurt=0.0513, JB p=0.7486
-Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB p=6.062e-115
-```
+    출력:
+
+    ```text
+    Normal: mean=0.001176, std=0.014823, skew=0.0329, excess_kurt=0.0513, JB p=0.7486
+    Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB p=6.062e-115
+    ```
+
+    **(1) 이상한 일이 아니고, 오히려 평균은 애초에 추정할 수 없는 양이다.** 표본평균의 표준오차는
+
+    $$
+    \mathrm{SE}(\bar r) = \frac{\sigma}{\sqrt n} = \frac{0.015}{\sqrt{2000}} = 0.000335
+    $$
+
+    이다. 관측된 치우침 $0.001176 - 0.0005 = 0.000676$은 $2.02\,\mathrm{SE}$이니 흔한 흔들림이다.
+
+    요점은 그 다음이다. **지정한 $\mu = 0.0005$ 자체가 $1.49\,\mathrm{SE}$에 지나지 않는다.** 곧 $n = 2000$일(약 8년)의 자료로도 "일평균 수익률이 0 인지 $0.05\%$인지"를 구별할 수 없다. $\mu$ 를 2 표준오차 안에서 집어내려면
+
+    $$
+    \frac{\mu}{\sigma/\sqrt n} \ge 2
+    \quad\Longrightarrow\quad
+    n \ge \Bigl(\frac{2\sigma}{\mu}\Bigr)^2 = \Bigl(\frac{2 \times 0.015}{0.0005}\Bigr)^2 = 3600
+    $$
+
+    일, 곧 거래일 252일로 치면 **14년 이상**이 필요하다. 그만한 기간이면 $\mu$ 자체가 일정하다고 볼 수 없다. **금융 수익률에서 1차 적률은 사실상 추정 불가능하고, 추정할 수 있는 것은 2차 적률 이상**이라는 것이 이 수치의 뜻이다.
+
+    꼬리 계열도 같은 사정이다. 표본평균 $-0.000555$는 지정값과 부호마저 다른데, 이론 표준오차 $0.018371/\sqrt{2000} = 0.000411$로 재면 $-2.57\,\mathrm{SE}$다. 조금 큰 편이지만 계열 둘을 본 것이므로 놀랄 값은 아니다.
+
+    **(2) `scale` 은 표준편차가 아니다.** `stats.t.rvs(df, scale=s)`의 모수화는 $X = \text{loc} + s\,T_\nu$이고 $T_\nu$ 자체의 분산이 1 이 아니다. $\nu > 2$에서 $\operatorname{Var}(T_\nu) = \nu/(\nu-2)$이므로
+
+    $$
+    \operatorname{sd}(X) = s\sqrt{\frac{\nu}{\nu-2}}
+        = 0.015\sqrt{\frac{6}{4}} = 0.015 \times 1.2247 = 0.018371
+    $$
+
+    이다. 표본값 $0.018552$가 이 이론값에 $1.0\%$ 안에서 맞는다. 표본 비 $0.018552/0.014823 = 1.2515$도 이론 비 $\sqrt{1.5} = 1.2247$에 가깝다.
+
+    그러므로 **"꼬리만 두꺼운 두 계열"이 아니다.** 꼬리 계열은 변동성 자체가 $22\%$ 크다. 순수한 꼬리 효과만 보려면 `scale=0.015/np.sqrt(1.5)`로 두어 표준편차를 맞춰야 한다. 이 혼동은 뒤의 VaR 계산에서 $35\%$ 대 $10\%$라는 자릿수 차이를 낳는다.
+
+    **(3) 우연이 아니라 규칙이다.** $t_6$에서 $g_2$의 표본분포를 재 보면 된다.
+
+    ```python
+    print(f"g1: 정규 g1={stats.skew(normal_returns):.4f} G1="
+          f"{stats.skew(normal_returns, bias=False):.4f}  |  "
+          f"꼬리 g1={stats.skew(heavy_returns):.4f} G1="
+          f"{stats.skew(heavy_returns, bias=False):.4f}")
+    print(f"g2: 정규 g2={stats.kurtosis(normal_returns):.4f} G2="
+          f"{stats.kurtosis(normal_returns, bias=False):.4f}  |  "
+          f"꼬리 g2={stats.kurtosis(heavy_returns):.4f} G2="
+          f"{stats.kurtosis(heavy_returns, bias=False):.4f}")
+    print(f"정규 아래 SE: g1 sqrt(6/n)={np.sqrt(6 / n):.4f}, "
+          f"g2 sqrt(24/n)={np.sqrt(24 / n):.4f}")
+
+    # 참으로 t_6 인 자료에서 g2 의 표본분포.
+    rng = np.random.default_rng(5)
+    g2s = np.array([stats.kurtosis(stats.t.rvs(df=6, size=2000, random_state=rng))
+                    for _ in range(2000)])
+    print(f"\nt_6 에서 g2 (이론 3.0): 중앙값 {np.median(g2s):.2f}"
+          f"  평균 {g2s.mean():.2f}  5~95% [{np.percentile(g2s, 5):.2f}, "
+          f"{np.percentile(g2s, 95):.2f}]  최대 {g2s.max():.1f}")
+    print(f"  P(g2 <= 2.4735) = {np.mean(g2s <= 2.4735):.3f}")
+    ```
+
+    출력:
+
+    ```text
+    g1: 정규 g1=0.0329 G1=0.0329  |  꼬리 g1=0.2201 G1=0.2203
+    g2: 정규 g2=0.0513 G2=0.0544  |  꼬리 g2=2.4735 G2=2.4827
+    정규 아래 SE: g1 sqrt(6/n)=0.0548, g2 sqrt(24/n)=0.1095
+
+    t_6 에서 g2 (이론 3.0): 중앙값 2.17  평균 2.68  5~95% [1.22, 5.78]  최대 22.9
+      P(g2 <= 2.4735) = 0.626
+    ```
+
+    참으로 $t_6$인 자료 2000벌에서 $g_2$의 **중앙값이 $2.17$로 참값 $3$보다 훨씬 작고**, 90% 구간은 $[1.22,\ 5.78]$로 벌어지며 최댓값은 $22.9$까지 올라갔다. 관측된 $2.4735$는 **63 백분위수**다. 곧 작게 나온 것이 아니라 **중앙값보다 오히려 큰** 값이다.
+
+    왜 중앙값이 참값 아래로 쏠리는가. $g_2$의 점근분산이 8차 적률 $\mu_8$을 품는데 $t_\nu$는 $\nu$차 이상의 적률을 갖지 않으므로 $\nu = 6$이면 $\mu_8 = \infty$다. 중심극한정리가 적용되지 않고, 표본분포가 오른쪽으로 길게 늘어진 꼴이 된다. 그런 분포에서는 **평균이 참값에 맞아도 중앙값은 참값 아래**가 된다 — 실제로 평균 $2.68$이 중앙값 $2.17$보다 크다. 극단값이 몇 개 뽑히는 드문 표본이 평균을 떠받치고, 나머지 대다수 표본은 참값을 밑도는 구조다.
+
+    **판본을 밝혀 두자.** 위 출력은 `scipy.stats.skew`·`kurtosis`의 기본값(`bias=True`, `fisher=True`)이므로 보정하지 않은 $g_1$, $g_2$이고 초과첨도다. 이 쪽의 연습문제 1 은 `bias=False`를 주어 $G_1 = 0.2203$, $G_2 = 2.4827$을 보고하는데, $n = 2000$에서 두 판본의 차이는 $0.4\%$ 미만이라 결론에 영향이 없다. 그러나 **자르크–베라에 넣을 때는 반드시 $g_1$, $g_2$를 써야 한다.** 그 통계량의 정의가 보정하지 않은 적률비 위에 세워져 있다.
+
+    요약하면 **넷 가운데 믿을 만한 것은 표준편차 하나뿐이다.** 평균은 신호가 잡음에 묻혀 있고, 왜도는 $t_6$의 참값 0 에 대해 $0.22$가 나왔으며($\mu_6 = \infty$이므로 역시 불안정하다), 초과첨도는 참값의 $72\%$ 자리에 중앙값이 놓인다. 그런데도 자르크–베라는 $p = 6\times10^{-115}$로 비정규성을 확실하게 잡아낸다 — **방향은 맞히지만 크기는 못 믿는다**는 것이 적률 기반 진단의 성격이다.
 
 !!! warning "`scale` 모수는 표준편차가 아니다"
     두 계열의 표준편차가 $0.0148$과 $0.0186$으로 25% 차이가 난다. 둘 다 `scale=0.015`로 생성했는데도 그렇다.
@@ -68,42 +150,118 @@ Heavy-tailed: mean=-0.000555, std=0.018552, skew=0.2201, excess_kurt=2.4735, JB 
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 두 수익률의 Q-Q 그림
+**보기 2.** <span class="diff easy" title="쉬움"></span> 같은 눈금으로 두 칸을 나란히. 보기 1 의 두 계열을 정규 Q-Q 그림 두 칸에 나란히 그린다. 왼쪽이 정규 계열, 오른쪽이 $t_6$ 계열이다.
+
+**(1)** 두 칸의 상관계수 $r$ 과 구간별 잔차를 재어, S자가 **꼬리에서만** 생기는 것임을 수로 보이시오. 왼쪽 칸(참으로 정규인 자료)도 양 끝에서는 직선을 벗어난다 — 그 폭은 오른쪽 칸의 몇 분의 몇인가.
+
+**(2)** 본문은 Q-Q 그림이 **척도에 불변**이라고 한다. 두 칸의 적합선 기울기를 재어 그 말이 무슨 뜻인지 확인하시오.
+
+**(3)** 두 계열에서 $\lvert z\rvert > 3$, $\lvert z\rvert > 4$인 관측값의 개수를 세어 정규분포의 기대와 견주시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-normal_returns = np.random.normal(0.0005, 0.015, 2000)
-heavy_returns = stats.t.rvs(df=6, loc=0.0005, scale=0.015, size=2000)
+    유도할 식이 없는 읽기 문제다. **두 칸의 차이를 눈대중이 아니라 수로 잡아내는 것**이 이 보기의 몫이다.
 
-# 왼쪽은 직선에 붙고, 오른쪽은 양끝이 S 자로 휘어 오른다.
-# 이 휘어짐이 두꺼운 꼬리의 눈에 보이는 모습이다.
-fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
 
-stats.probplot(normal_returns, dist="norm", plot=axes[0])
-axes[0].set_title("Q-Q Plot: Normal Returns")
-axes[0].grid(True, alpha=0.3)
+    np.random.seed(42)
+    normal_returns = np.random.normal(0.0005, 0.015, 2000)
+    heavy_returns = stats.t.rvs(df=6, loc=0.0005, scale=0.015, size=2000)
 
-stats.probplot(heavy_returns, dist="norm", plot=axes[1])
-axes[1].set_title("Q-Q Plot: Heavy-Tailed Returns")
-axes[1].grid(True, alpha=0.3)
+    # 왼쪽은 직선에 붙고, 오른쪽은 양끝이 S 자로 휘어 오른다.
+    # 이 휘어짐이 두꺼운 꼬리의 눈에 보이는 모습이다.
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-plt.tight_layout()
-plt.show()
-```
+    stats.probplot(normal_returns, dist="norm", plot=axes[0])
+    axes[0].set_title("Q-Q Plot: Normal Returns")
+    axes[0].grid(True, alpha=0.3)
 
-![정규 자료와 두꺼운 꼬리 자료의 Q-Q 비교](./img/qq_plot_financial_returns_64.png)
+    stats.probplot(heavy_returns, dist="norm", plot=axes[1])
+    axes[1].set_title("Q-Q Plot: Heavy-Tailed Returns")
+    axes[1].grid(True, alpha=0.3)
 
-**정규 수익률:** 점들이 대각선을 따라 놓여 분포 가정을 확인해 준다.
+    plt.tight_layout()
+    plt.show()
+    ```
 
-**두꺼운 꼬리 수익률:** Q-Q 그림이 특징적인 S자를 보인다. 왼쪽 아래 점들이 선 아래로 휘고(정규가 예측하는 것보다 극단적인 손실) 오른쪽 위 점들이 선 위로 휜다(더 극단적인 이익). 이 S자 패턴이 고첨(두꺼운 꼬리) 분포의 특징이다.
+    ![정규 자료와 두꺼운 꼬리 자료의 Q-Q 비교](./img/qq_plot_financial_returns_64.png)
 
-Q-Q 그림은 **척도에 불변**이라는 점이 유용하다. 앞의 경고에서 지적한 변동성 차이는 적합선의 기울기에만 영향을 주고 S자 모양 자체는 순수하게 꼬리의 성질을 반영한다.
+    두 칸에서 읽을 수치를 따로 찍어 둔다.
+
+    ```python
+    for name, r in [("정규", normal_returns), ("꼬리", heavy_returns)]:
+        (osm, osr), (slope, intercept, rho) = stats.probplot(r, dist="norm")
+        resid = osr - (intercept + slope * osm)
+        s = r.std(ddof=1)
+        print(f"[{name}] 기울기 {slope:.6f}  표본표준편차 {s:.6f}  r {rho:.6f}")
+        for lo, lab in [(1, "|q| < 1"), (2, "|q| > 2")]:
+            m = np.abs(osm) < lo if lo == 1 else np.abs(osm) > lo
+            mx = np.abs(resid[m]).max()
+            print(f"    {lab}: {m.sum()}점  최대절대잔차 {mx:.5f}"
+                  f"  (표준편차의 {mx / s:.3f}배)")
+        print(f"    끝점 잔차 {resid[0]:+.5f}, {resid[-1]:+.5f}")
+        print(f"    최댓값 {osr[-1]:.5f}  적합선 {intercept + slope * osm[-1]:.5f}")
+        z = (r - r.mean()) / s
+        print(f"    |z|>3 {np.sum(np.abs(z) > 3)}개 (정규 기대 "
+              f"{2000 * 2 * stats.norm.sf(3):.2f}), "
+              f"|z|>4 {np.sum(np.abs(z) > 4)}개 (기대 "
+              f"{2000 * 2 * stats.norm.sf(4):.3f})")
+        print(f"    샤피로-윌크 p = {stats.shapiro(r)[1]:.4g}")
+    ```
+
+    출력:
+
+    ```text
+    [정규] 기울기 0.014842  표본표준편차 0.014827  r 0.999734
+        |q| < 1: 1366점  최대절대잔차 0.00050  (표준편차의 0.034배)
+        |q| > 2: 90점  최대절대잔차 0.00677  (표준편차의 0.456배)
+        끝점 잔차 +0.00105, +0.00677
+        최댓값 0.05829  적합선 0.05152
+        |z|>3 7개 (정규 기대 5.40), |z|>4 0개 (기대 0.127)
+        샤피로-윌크 p = 0.9086
+    [꼬리] 기울기 0.018386  표본표준편차 0.018556  r 0.989588
+        |q| < 1: 1366점  최대절대잔차 0.00225  (표준편차의 0.121배)
+        |q| > 2: 90점  최대절대잔차 0.06098  (표준편차의 3.286배)
+        끝점 잔차 -0.01236, +0.06098
+        최댓값 0.12280  적합선 0.06182
+        |z|>3 17개 (정규 기대 5.40), |z|>4 4개 (기대 0.127)
+        샤피로-윌크 p = 6.076e-16
+    ```
+
+    **(1) S자는 꼬리에서만 생긴다.** 구간별로 재면 한눈에 보인다.
+
+    | 구간 | 정규 칸 | 꼬리 칸 | 비 |
+    |---|---|---|---|
+    | $\lvert q\rvert < 1$ (1366점) | $0.034\,s$ | $0.121\,s$ | $3.6$ |
+    | $\lvert q\rvert > 2$ (90점) | $0.456\,s$ | $3.286\,s$ | $7.2$ |
+
+    가운데 1366점에서는 두 칸의 잔차가 각각 표준편차의 $3.4\%$와 $12\%$다. **둘 다 작다.** $t_6$ 자료도 분포의 가운데에서는 정규와 거의 구별되지 않는다는 뜻이다. 그런데 꼬리의 90점으로 가면 정규 칸이 $0.456\,s$인데 꼬리 칸은 $3.286\,s$다. 표준편차의 **세 배를 넘게** 벗어난 점이 있다. 상관계수로 요약하면 $0.999734$ 대 $0.989588$이다.
+
+    오른쪽 칸의 최댓값이 특히 극적이다. $0.12280$인데 적합선이 예측하는 자리는 $0.06182$니 **거의 두 배($1.99$배)**다. 일간 수익률로 읽으면 "정규 모형이 $6.2\%$를 예상한 자리에서 $12.3\%$가 일어났다"는 말이다.
+
+    **왼쪽 칸도 양 끝에서는 벗어난다.** $0.456\,s$는 작은 값이 아니다. 이 자료가 참으로 $\mathcal{N}(0.0005, 0.015^2)$에서 나왔음은 틀릴 수 없는 사실이고, 샤피로–윌크도 $p = 0.909$로 조용하다. 꼬리 칸과의 비는 $3.286/0.456 = 7.2$배다. 곧 **"양 끝이 조금 벌어졌다"만으로는 아무것도 말할 수 없고, 7 배쯤 벌어져야 신호다.** 이 보기가 두 칸을 나란히 놓은 까닭이 여기 있다. 비교할 기준 칸이 없으면 $0.456\,s$를 보고도 비정규라고 오판한다.
+
+    S자의 좌우가 고르지 않은 점도 적어 둘 만하다. 꼬리 칸의 아래쪽 끝 잔차가 $-0.01236$, 위쪽 끝이 $+0.06098$로 오른쪽이 $4.9$배 크다. $t_6$는 대칭분포이니 이것은 모집단의 성질이 아니라 **이 한 번의 추출 결과**다. 보기 1 에서 본 표본왜도 $g_1 = 0.22$가 같은 사실의 다른 표현이다.
+
+    **(2) 척도 불변이란 기울기가 척도를 흡수한다는 뜻이다.** 두 칸의 기울기가 $0.014842$와 $0.018386$으로 다르고, 각각 자기 계열의 표본표준편차 $0.014827$ · $0.018556$과 $0.1\%$ · $0.9\%$ 안에서 맞는다. 보기 1 에서 본 대로 꼬리 계열의 변동성이 $22\%$ 크지만, **그 차이는 전부 기울기로 빨려 들어간다.**
+
+    남는 것은 모양이다. 두 칸 모두 세로축이 자기 자료의 범위에 맞추어 그려지므로, 변동성이 큰 쪽이 "더 퍼져 보이는" 일은 일어나지 않는다. 오른쪽 칸에서 보이는 휘어짐은 변동성 차이가 아니라 **순수하게 꼬리 두께의 결과**다. 그래서 Q-Q 그림은 서로 단위가 다른 계열끼리도 모양을 비교할 수 있다 — 적률을 직접 견주는 방식이 할 수 없는 일이다.
+
+    **(3) $4\sigma$ 밖의 개수가 결정적이다.**
+
+    | 사건 | 정규 기대 | 정규 계열 | 꼬리 계열 |
+    |---|---|---|---|
+    | $\lvert z\rvert > 3$ | $5.40$개 | 7개 | 17개 |
+    | $\lvert z\rvert > 4$ | $0.127$개 | 0개 | 4개 |
+
+    $3\sigma$ 밖만 보면 두 계열이 7개 대 17개로 세 배 남짓이라 그럭저럭 흔한 차이처럼 보인다. 그런데 $4\sigma$ 밖으로 가면 정규 계열은 0개(기대 $0.127$개와 일치)인데 꼬리 계열은 **4개**다. 정규 세계에서 $n = 2000$ 표본에 4개가 나올 확률은 포아송 근사로 $e^{-0.127}\,0.127^4/4! \approx 9.5\times10^{-6}$, 곧 10만 번에 한 번이다.
+
+    **위험 관리에서 중요한 것이 전부 이 구간에 있다.** 자료의 $0.2\%$에 해당하는 네 점이고 평균이나 표준편차를 거의 움직이지 않지만, VaR 와 기대손실은 바로 이 네 점이 결정한다. 그리고 이 네 점은 히스토그램에서 보이지 않는다 — Q-Q 그림이 금융 자료의 기본 진단 도구인 까닭이다.
 
 ## 꼬리 위험의 함의
 

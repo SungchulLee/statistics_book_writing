@@ -46,42 +46,151 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 꼬리만 두꺼운 자료의 첨도 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 꼬리만 두꺼운 자료의 첨도 검정. $\mathcal{N}(0,1)$ 220개에 $t_4$ 80개를 섞은 $n = 300$ 표본에서 $Z_2 = 2.7603$, $p = 0.00577$이 나온다.
+
+**(1)** 변환 전의 **단순 표준화** $u = \{b_2 - \mathbb{E}[b_2]\}/\mathrm{SD}(b_2)$를 구하시오. 정규성 아래에서 $\mathbb{E}[b_2]$가 3이 아니라는 점에 주의하라. 변환은 $u$를 어디로 옮기며, 단순 표준화를 그대로 썼다면 $p$값이 몇 배 달라지는가.
+
+**(2)** `scipy.stats.kurtosistest`가 쓰는 첨도는 어느 판본인가. 출력에 찍힌 $1.0493$과 같은 값인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 정규에 자유도 4 짜리 t 를 섞었다. 중심은 그대로이고 꼬리만 두꺼워진다.
-# 왜도 검정으로는 잡히지 않고 첨도 검정에만 걸리는 자료다.
-rng = np.random.default_rng(0)
-x = np.concatenate([rng.normal(0, 1, size=220),
-                    rng.standard_t(df=4, size=80)])
+    **(1) $u = 3.7403$이고 변환이 그것을 $2.7603$으로 끌어내린다.** 먼저 중심이 3이 아니다. 정규성 아래에서 비보정 첨도 $b_2 = m_4/m_2^2$의 기댓값은
 
-# 표본첨도를 바로 쓰지 않고 Z 로 바꾸는 까닭은, 첨도의 표집분포가 표본이
-# 상당히 클 때까지도 크게 치우쳐 있기 때문이다. 이 검정은 n>=20 부터 쓸 만하다.
-g2 = stats.kurtosis(x, fisher=True, bias=False)
-z, p = stats.kurtosistest(x)
+    $$
+    \mathbb{E}[b_2] = \frac{3(n-1)}{n+1}
+    $$
 
-print(f"Sample size n = {x.size}")
-print(f"Sample excess kurtosis (Fisher) g2 = {g2:.4f}")
-print(f"D'Agostino kurtosis test: Z = {z:.4f}, p-value = {p:.4g}")
-if p < 0.05:
-    print("=> Evidence of non-normal kurtosis (departing from normality).")
-else:
-    print("=> No strong evidence of non-normal kurtosis.")
-```
+    이고 $n = 300$에서 $2.980066$이다. 3보다 작다. **표본첨도는 정규 자료에서도 3을 밑돌게 나오는 쪽으로 편향되어 있다.** 분산은 위 본문의 식
 
-출력:
+    $$
+    \mathrm{Var}(b_2) = \frac{24n(n-2)(n-3)}{(n+1)^2(n+3)(n+5)}
+    $$
 
-```text
-Sample size n = 300
-Sample excess kurtosis (Fisher) g2 = 1.0493
-D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
-=> Evidence of non-normal kurtosis (departing from normality).
-```
+    에서 $\mathrm{SD}(b_2) = 0.275877$이다. 이 표본의 $b_2 = 4.011938$을 넣으면
+
+    $$
+    u = \frac{4.011938 - 2.980066}{0.275877} = 3.740339
+    $$
+
+    이다. 변환은 앞 절의 왜도 검정과 달리 역쌍곡사인이 아니라 **윌슨–힐퍼티 꼴의 세제곱근**을 쓴다. $b_2$의 귀무분포가 치우친 정도를 $\sqrt{\beta_1}$로 재고, 그만큼 치우친 카이제곱을 펴는 세제곱근 변환을 적용하는 것이다.
+
+    $$
+    \sqrt{\beta_1} = \frac{6(n^2 - 5n + 2)}{(n+7)(n+9)}\sqrt{\frac{6(n+3)(n+5)}{n(n-2)(n-3)}}, \quad
+    A = 6 + \frac{8}{\sqrt{\beta_1}}\left(\frac{2}{\sqrt{\beta_1}} + \sqrt{1 + \frac{4}{\beta_1}}\right)
+    $$
+
+    $$
+    Z_2 = \frac{\bigl(1 - \frac{2}{9A}\bigr) - \left(\dfrac{1 - 2/A}{1 + u\sqrt{2/(A-4)}}\right)^{1/3}}{\sqrt{2/(9A)}}
+    $$
+
+    $n = 300$에서 $\sqrt{\beta_1} = 0.808923$, $A = 56.827255$이고 $Z_2 = 2.760321$이 나온다.
+
+    **$p$값은 31배 달라진다.** 단순 표준화 $u = 3.7403$을 표준정규 분위수로 읽으면 $p = 0.000184$인데, 변환을 거친 참값은 $p = 0.005774$다. 비 $0.005774/0.000184 = 31.4$다. $b_2$의 귀무분포가 오른쪽으로 치우쳐 있어 큰 양의 값이 정규 자료에서도 흔히 나오는데, 단순 표준화는 그 사실을 모르고 과장한다. 이 보기에서는 어느 쪽이든 $\alpha = 0.05$에서 기각하지만, 결론의 **강도**가 "매우 유의"에서 "유의"로 내려앉는다.
+
+    **(2) 쓰는 것은 비보정 $b_2$이고, 출력의 $1.0493$과 다르다.** 세 판본을 나란히 놓으면
+
+    | 판본 | 값 |
+    |---|---|
+    | $b_2 = m_4/m_2^2$ (`fisher=False, bias=True`) | $4.011938$ |
+    | $g_2 = b_2 - 3$ (`fisher=True, bias=True`, 기본값) | $1.011938$ |
+    | 보정 초과첨도 $G_2$ (`fisher=True, bias=False`) | $1.049279$ |
+
+    이고, `kurtosistest`가 쓰는 것은 첫 줄의 $b_2$다. 코드는 세 번째 줄의 $G_2 = 1.0493$을 찍으므로 **출력의 두 수가 서로 맞물리지 않는다.** 손으로 $Z_2$를 재현하려면 `fisher=False`에 `bias` 인자 없이 불러야 한다.
+
+    같은 이유로 본문의 분산식은 **비보정판** $b_2$(또는 $g_2$, 상수 이동이니 분산은 같다)의 것이다. 모의실험으로 $n = 300$, 200만 번 반복해 재면 $\mathrm{SD}(b_2) = 0.27588$로 공식값 $0.275877$과 소수 다섯째 자리까지 맞는데, 같은 실험에서 보정판은 $\mathrm{SD}(G_2) = 0.2789$로 어긋난다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 정규에 자유도 4 짜리 t 를 섞었다. 중심은 그대로이고 꼬리만 두꺼워진다.
+    # 왜도 검정으로는 잡히지 않고 첨도 검정에만 걸리는 자료다.
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=220),
+                        rng.standard_t(df=4, size=80)])
+
+    # 표본첨도를 바로 쓰지 않고 Z 로 바꾸는 까닭은, 첨도의 표집분포가 표본이
+    # 상당히 클 때까지도 크게 치우쳐 있기 때문이다. 이 검정은 n>=20 부터 쓸 만하다.
+    g2 = stats.kurtosis(x, fisher=True, bias=False)
+    z, p = stats.kurtosistest(x)
+
+    print(f"Sample size n = {x.size}")
+    print(f"Sample excess kurtosis (Fisher) g2 = {g2:.4f}")
+    print(f"D'Agostino kurtosis test: Z = {z:.4f}, p-value = {p:.4g}")
+    if p < 0.05:
+        print("=> Evidence of non-normal kurtosis (departing from normality).")
+    else:
+        print("=> No strong evidence of non-normal kurtosis.")
+    ```
+
+    출력:
+
+    ```text
+    Sample size n = 300
+    Sample excess kurtosis (Fisher) g2 = 1.0493
+    D'Agostino kurtosis test: Z = 2.7603, p-value = 0.005774
+    => Evidence of non-normal kurtosis (departing from normality).
+    ```
+
+    변환을 한 단계씩 손으로 짚으면 다음과 같다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=220),
+                        rng.standard_t(df=4, size=80)])
+    n = x.size
+
+    b2 = stats.kurtosis(x, fisher=False)              # 비보정, 3 을 빼지 않은 것
+    g2 = stats.kurtosis(x)                            # 비보정 초과첨도 = b2 - 3
+    G2 = stats.kurtosis(x, fisher=True, bias=False)   # 보정 초과첨도
+    print(f"b2 (비보정)      = {b2:.6f}")
+    print(f"g2 = b2 - 3      = {g2:.6f}")
+    print(f"G2 (보정)        = {G2:.6f}")
+
+    # 1단계: 정규성 아래의 평균과 분산으로 표준화.
+    E = 3.0 * (n - 1) / (n + 1)
+    varb2 = 24.0 * n * (n - 2) * (n - 3) / ((n + 1) ** 2 * (n + 3) * (n + 5))
+    u = (b2 - E) / np.sqrt(varb2)
+    print(f"\nE[b2] = 3(n-1)/(n+1) = {E:.6f},  SD(b2) = {np.sqrt(varb2):.6f}")
+    print(f"단순 표준화 u = {u:.6f}")
+
+    # 2단계: 귀무분포의 왜도를 윌슨–힐퍼티 세제곱근으로 펴 준다.
+    sqrtbeta1 = (6.0 * (n * n - 5 * n + 2) / ((n + 7) * (n + 9))
+                 * np.sqrt(6.0 * (n + 3) * (n + 5) / (n * (n - 2) * (n - 3))))
+    A = 6.0 + 8.0 / sqrtbeta1 * (2.0 / sqrtbeta1 + np.sqrt(1 + 4.0 / sqrtbeta1**2))
+    term1 = 1 - 2 / (9.0 * A)
+    term2 = ((1 - 2.0 / A) / (1 + u * np.sqrt(2 / (A - 4.0)))) ** (1 / 3)
+    Z = (term1 - term2) / np.sqrt(2 / (9.0 * A))
+    print(f"sqrt(beta1) = {sqrtbeta1:.6f},  A = {A:.6f}")
+    print(f"손계산 Z2 = {Z:.6f},  p = {2 * stats.norm.sf(abs(Z)):.6f}")
+
+    z_scipy, p_scipy = stats.kurtosistest(x)
+    print(f"scipy  Z2 = {z_scipy:.6f},  p = {p_scipy:.6f}")
+    print(f"\n단순 표준화만 했다면 p = {2 * stats.norm.sf(abs(u)):.6f}")
+    ```
+
+    출력:
+
+    ```text
+    b2 (비보정)      = 4.011938
+    g2 = b2 - 3      = 1.011938
+    G2 (보정)        = 1.049279
+
+    E[b2] = 3(n-1)/(n+1) = 2.980066,  SD(b2) = 0.275877
+    단순 표준화 u = 3.740339
+    sqrt(beta1) = 0.808923,  A = 56.827255
+    손계산 Z2 = 2.760321,  p = 0.005774
+    scipy  Z2 = 2.760321,  p = 0.005774
+
+    단순 표준화만 했다면 p = 0.000184
+    ```
+
+    손으로 밟은 $Z_2 = 2.760321$이 `scipy.stats.kurtosistest`의 값과 **소수점 여섯째 자리까지** 같다. 맨 아래 줄이 (1)의 요점이다. 변환을 생략하면 $p$값이 $0.005774$가 아니라 $0.000184$가 되어, 같은 자료를 두고 증거의 강도를 서른 배 넘게 부풀리게 된다. $\square$
 
 ## 해석
 

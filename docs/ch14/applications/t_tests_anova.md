@@ -107,65 +107,194 @@ $t$ 검정은 원자료(또는 각 집단의 자료)의 정규성을 가정하�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 분산분석 잔차의 정규성 확인
+**보기 1.** <span class="diff easy" title="쉬움"></span> 잔차에 검정을 걸 때 자유도는 몇인가. 평균 $5.0$, $5.5$, $6.0$에 공통 표준편차 $1.5$인 세 정규 집단에서 각각 30개를 뽑아, 집단중심화 잔차에 샤피로–윌크를 걸고 일원분산분석을 수행한다.
+
+**(1)** 출력의 $F = 6.3788$을 **분산분해로 손계산**해 맞추시오. $\hat\sigma = \sqrt{\mathrm{MSW}}$ 는 참값 $1.5$에서 얼마나 떨어져 있는가.
+
+**(2)** 중심화하지 **않고** 그냥 통합한 자료에 샤피로–윌크를 걸면 어떻게 되는가. 이 자료에서는 통과한다. 본문은 "집단 평균이 크게 다르면 다봉으로 보인다"고 했는데, 왜 여기서는 그렇게 되지 않는가.
+
+**(3)** 잔차는 90개이지만 집단마다 합이 0이라는 **제약 3개**를 받으므로 독립이 아니다. 샤피로–윌크는 독립 표본을 가정한다. 그러면 검정의 실제 크기가 명목 $0.05$에서 벗어나는가? 모의실험으로 재고, 집단 수 $k$를 늘리면 어떻게 되는지 보이시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# ===================================================================
-# 분산분석 잔차의 정규성 확인
-#
-# 집단마다 평균이 다르므로 자료 전체를 한 번에 검정하면 안 된다.
-# 각 관측값에서 제 집단의 평균을 뺀 것이 잔차이고, 정규성은 여기에 요구된다.
-# ===================================================================
+    **쪽의 코드를 먼저 그대로 돌린다.**
 
-np.random.seed(42)
+    ```python
+    import numpy as np
+    from scipy import stats
 
-# 평균이 조금씩 다른 세 집단. 분산은 모두 같다.
-group1 = np.random.normal(loc=5.0, scale=1.5, size=30)
-group2 = np.random.normal(loc=5.5, scale=1.5, size=30)
-group3 = np.random.normal(loc=6.0, scale=1.5, size=30)
+    # ===================================================================
+    # 분산분석 잔차의 정규성 확인
+    #
+    # 집단마다 평균이 다르므로 자료 전체를 한 번에 검정하면 안 된다.
+    # 각 관측값에서 제 집단의 평균을 뺀 것이 잔차이고, 정규성은 여기에 요구된다.
+    # ===================================================================
 
-# 집단별 평균을 빼면 세 집단이 같은 중심으로 모인다. 이렇게 모은 뒤라야
-# 하나의 검정으로 정규성을 물을 수 있다.
-residuals = np.concatenate([
-    group1 - np.mean(group1),
-    group2 - np.mean(group2),
-    group3 - np.mean(group3),
-])
+    np.random.seed(42)
 
-# 잔차에 대한 Shapiro-Wilk 검정
-sw_stat, sw_p = stats.shapiro(residuals)
+    # 평균이 조금씩 다른 세 집단. 분산은 모두 같다.
+    group1 = np.random.normal(loc=5.0, scale=1.5, size=30)
+    group2 = np.random.normal(loc=5.5, scale=1.5, size=30)
+    group3 = np.random.normal(loc=6.0, scale=1.5, size=30)
 
-# 가정을 확인했으니 본 검정으로 넘어간다.
-f_stat, f_p = stats.f_oneway(group1, group2, group3)
+    # 집단별 평균을 빼면 세 집단이 같은 중심으로 모인다. 이렇게 모은 뒤라야
+    # 하나의 검정으로 정규성을 물을 수 있다.
+    residuals = np.concatenate([
+        group1 - np.mean(group1),
+        group2 - np.mean(group2),
+        group3 - np.mean(group3),
+    ])
 
-if __name__ == "__main__":
-    print("Normality check on ANOVA residuals:")
-    print(f"  Shapiro-Wilk: W = {sw_stat:.4f}, p = {sw_p:.4f}")
-    print(f"\nOne-way ANOVA:")
-    print(f"  F = {f_stat:.4f}, p = {f_p:.4f}")
+    # 잔차에 대한 Shapiro-Wilk 검정
+    sw_stat, sw_p = stats.shapiro(residuals)
 
-    if sw_p > 0.05:
-        print("\n  Residuals are consistent with normality (p > 0.05).")
-    else:
-        print("\n  Evidence of non-normality in residuals (p <= 0.05).")
-```
+    # 가정을 확인했으니 본 검정으로 넘어간다.
+    f_stat, f_p = stats.f_oneway(group1, group2, group3)
 
-출력:
+    if __name__ == "__main__":
+        print("Normality check on ANOVA residuals:")
+        print(f"  Shapiro-Wilk: W = {sw_stat:.4f}, p = {sw_p:.4f}")
+        print(f"\nOne-way ANOVA:")
+        print(f"  F = {f_stat:.4f}, p = {f_p:.4f}")
 
-```text
-Normality check on ANOVA residuals:
-  Shapiro-Wilk: W = 0.9925, p = 0.8948
+        if sw_p > 0.05:
+            print("\n  Residuals are consistent with normality (p > 0.05).")
+        else:
+            print("\n  Evidence of non-normality in residuals (p <= 0.05).")
+    ```
 
-One-way ANOVA:
-  F = 6.3788, p = 0.0026
+    출력:
 
-  Residuals are consistent with normality (p > 0.05).
-```
+    ```text
+    Normality check on ANOVA residuals:
+      Shapiro-Wilk: W = 0.9925, p = 0.8948
+
+    One-way ANOVA:
+      F = 6.3788, p = 0.0026
+
+      Residuals are consistent with normality (p > 0.05).
+    ```
+
+    **(1) 분산분해.** 집단이 $k = 3$, 전체 $N = 90$, 집단당 $n_i = 30$이다. 집단평균은 $4.7178$, $5.3183$, $6.0193$이고 대평균은 $\bar x_{\cdot\cdot} = 5.3518$이다.
+
+    $$
+    \mathrm{SSB} = \sum_{i=1}^{3} n_i (\bar x_{i\cdot} - \bar x_{\cdot\cdot})^2 = 30\,(0.4020 + 0.0011 + 0.4456) = 25.4610
+    $$
+
+    $$
+    \mathrm{SSW} = \sum_{i}\sum_{j} (x_{ij} - \bar x_{i\cdot})^2 = 173.6298
+    $$
+
+    자유도는 각각 $k - 1 = 2$와 $N - k = 87$이므로
+
+    $$
+    \mathrm{MSB} = \frac{25.4610}{2} = 12.7305,
+    \qquad
+    \mathrm{MSW} = \frac{173.6298}{87} = 1.9957
+    $$
+
+    $$
+    F = \frac{\mathrm{MSB}}{\mathrm{MSW}} = \frac{12.7305}{1.9957} = 6.3788
+    $$
+
+    로 출력의 $6.3788$과 소수 넷째 자리까지 맞는다. 임계값 $F_{0.95}(2, 87) = 3.1013$을 두 배 넘게 넘으므로 $p = 0.0026$이다. (보기 1의 분산분석은 앞 쪽 `applications.md` 의 $F = 3.3415$처럼 아슬아슬하지 않다. 집단당 30개에 표준편차 $1.5$, 평균 간격 $0.5$라 효과가 뚜렷하다.)
+
+    $\mathrm{MSW}$ 는 $\sigma^2$ 의 불편추정량이므로 $\hat\sigma = \sqrt{1.9957} = 1.4127$이다. 참값 $1.5$보다 $5.8\%$ 작다. 이것도 표본변동이다. $(N-k)\mathrm{MSW}/\sigma^2 \sim \chi^2_{87}$이므로 $\hat\sigma/\sigma$ 의 상대 표준오차는 약 $1/\sqrt{2(N-k)} = 1/\sqrt{174} = 0.0758$이고, 관측된 $-0.0582$는 $-0.77$ 표준오차다.
+
+    **(2) 여기서는 통합해도 통과한다($p = 0.5458$).** 본문의 다봉 그림은 평균이 $4$, $9$, $14$이고 표준편차가 $1.4$인 자료였다. 간격을 표준편차로 재면 $5/1.4 = 3.6$이다. 반면 이 보기는 간격 $0.5$에 표준편차 $1.5$이므로
+
+    $$
+    \frac{\text{평균 간격}}{\sigma} = \frac{0.5}{1.5} = 0.333
+    $$
+
+    에 지나지 않는다. **열 배 이상 좁다.** 성분이 이만큼 겹치면 혼합은 단봉이고 정규와 거의 구별되지 않는다. 본문의 경고가 틀린 것이 아니라, 경고가 발동하는 **조건**이 간격 대 표준편차의 비라는 뜻이다. 간격이 $\sigma$ 의 세 배쯤 되어야 비로소 통합 자료가 기각되기 시작한다.
+
+    그러므로 "중심화하지 않아도 통과했으니 괜찮다"고 읽으면 안 된다. 통과한 것은 **효과가 작아서**이고, 효과가 클 때 — 곧 분산분석이 기각할 때 — 정확히 그때 통합 검정이 오작동한다. 통과 여부와 무관하게 중심화하는 것이 옳다.
+
+    **(3) 제약 3개는 거의 아무 일도 하지 않는다. 그러나 $k$가 커지면 달라진다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    gs = [np.random.normal(loc=m, scale=1.5, size=30) for m in (5.0, 5.5, 6.0)]
+    N, k = 90, 3
+    grand = np.concatenate(gs).mean()
+
+    print("(1) 분산분해로 F 를 손계산")
+    SSB = sum(30 * (g.mean() - grand)**2 for g in gs)
+    SSW = sum(((g - g.mean())**2).sum() for g in gs)
+    MSB, MSW = SSB / (k - 1), SSW / (N - k)
+    print(f"  집단평균 {np.round([g.mean() for g in gs], 4)},  대평균 {grand:.4f}")
+    print(f"  SSB = {SSB:.4f},  SSW = {SSW:.4f}")
+    print(f"  MSB = {MSB:.4f},  MSW = {MSW:.4f}")
+    print(f"  F = MSB/MSW = {MSB/MSW:.4f}   scipy = {stats.f_oneway(*gs)[0]:.4f}")
+    print(f"  p = {stats.f.sf(MSB/MSW, k-1, N-k):.4f},  임계 F = {stats.f.ppf(0.95, k-1, N-k):.4f}")
+    print(f"  sigma-hat = sqrt(MSW) = {np.sqrt(MSW):.4f}  (참 1.5,"
+          f" 상대편차 {(np.sqrt(MSW)-1.5)/1.5:+.4f} = {((np.sqrt(MSW)-1.5)/1.5)*np.sqrt(2*(N-k)):+.2f} SD)")
+
+    print("\n(2) 중심화의 효과")
+    resid = np.concatenate([g - g.mean() for g in gs])
+    print(f"  잔차 shapiro p         = {stats.shapiro(resid)[1]:.4f}  (집단별 합 모두 0)")
+    print(f"  중심화 안 한 통합 p    = {stats.shapiro(np.concatenate(gs))[1]:.4f}")
+    print(f"  평균간격 / sigma = 0.5/1.5 = {0.5/1.5:.4f}")
+
+    print("\n(3) 잔차에 샤피로를 걸면 크기가 명목값을 지키는가 (명목 0.05, R = 20000)")
+    rng, R = np.random.default_rng(2026), 20000
+    print(f"  몬테카를로 SE = {np.sqrt(0.05*0.95/R):.4f}")
+    cnt = sum(stats.shapiro(rng.normal(0, 1, 90))[1] < 0.05 for _ in range(R))
+    print(f"  iid n=90 (제약 없음)      크기 = {cnt/R:.4f}")
+    for kk, m in [(3, 30), (9, 10), (30, 3)]:
+        c = 0
+        for _ in range(R):
+            x = rng.normal(0, 1, (kk, m))
+            c += stats.shapiro((x - x.mean(axis=1, keepdims=True)).ravel())[1] < 0.05
+        print(f"  잔차 k={kk:<2d} 집단당 {m:<2d} (k/N = {kk/90:.3f})  크기 = {c/R:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    (1) 분산분해로 F 를 손계산
+      집단평균 [4.7178 5.3183 6.0193],  대평균 5.3518
+      SSB = 25.4610,  SSW = 173.6298
+      MSB = 12.7305,  MSW = 1.9957
+      F = MSB/MSW = 6.3788   scipy = 6.3788
+      p = 0.0026,  임계 F = 3.1013
+      sigma-hat = sqrt(MSW) = 1.4127  (참 1.5, 상대편차 -0.0582 = -0.77 SD)
+
+    (2) 중심화의 효과
+      잔차 shapiro p         = 0.8948  (집단별 합 모두 0)
+      중심화 안 한 통합 p    = 0.5458
+      평균간격 / sigma = 0.5/1.5 = 0.3333
+
+    (3) 잔차에 샤피로를 걸면 크기가 명목값을 지키는가 (명목 0.05, R = 20000)
+      몬테카를로 SE = 0.0015
+      iid n=90 (제약 없음)      크기 = 0.0496
+      잔차 k=3  집단당 30 (k/N = 0.033)  크기 = 0.0500
+      잔차 k=9  집단당 10 (k/N = 0.100)  크기 = 0.0482
+      잔차 k=30 집단당 3  (k/N = 0.333)  크기 = 0.0316
+    ```
+
+    명목 $0.05$에 몬테카를로 표준오차가 $\sqrt{0.05 \times 0.95/20000} = 0.0015$이므로, $0.05$에서 $\pm 0.003$ 밖으로 나가면 유의한 차이다.
+
+    | 설계 | $k/N$ | 실제 크기 | 명목값과의 차 |
+    |---|---|---|---|
+    | iid $n = 90$ | — | $0.0496$ | $-0.3\,\mathrm{SE}$ |
+    | $k = 3$, 집단당 30 | $0.033$ | $0.0500$ | $0.0\,\mathrm{SE}$ |
+    | $k = 9$, 집단당 10 | $0.100$ | $0.0482$ | $-1.2\,\mathrm{SE}$ |
+    | $k = 30$, 집단당 3 | $0.333$ | $0.0316$ | $-12\,\mathrm{SE}$ |
+
+    **이 보기의 설계($k = 3$, 집단당 30)에서는 걱정할 것이 없다.** 크기가 $0.0500$으로 명목값과 구별되지 않는다. 자유도 90 가운데 3을 쓴 것뿐이라 잔차가 $\mathrm{iid}$ 표본과 거의 다르지 않다.
+
+    그러나 $k$를 늘리면 이야기가 달라진다. $k = 30$에 집단당 3개면 실제 크기가 $0.0316$으로 명목값의 **63%**에 지나지 않는다. 몬테카를로 표준오차의 12배나 벗어난 것이니 우연이 아니다. **검정이 지나치게 보수적**이 되어 실제로 비정규인 자료도 통과시키게 된다.
+
+    까닭은 이 장 전체를 꿰는 주제와 같다. 모수를 추정한 뒤 남은 잔차는 **실제보다 더 정규처럼 보인다.** 집단당 $m$개에서 평균 하나를 뺐으니 집단 안의 자유도가 $m$에서 $m-1$로 줄고, 그 손실 비율이 $1/m$이다. $m = 30$이면 $3\%$라 무시할 수 있지만 $m = 3$이면 $33\%$다. 모수를 추정하고도 추정하지 않은 경우의 임계값을 쓰면 검정의 크기가 명목값 아래로 내려앉는다는 것, 그것이 콜모고로프–스미르노프에 릴리에포르 보정이 필요한 이유와 정확히 같은 구조다.
+
+    실무 지침은 간단하다. **집단당 관측값이 넉넉하면($m \gtrsim 10$) 잔차에 그대로 검정을 걸어도 좋고, 집단은 많은데 집단당 관측값이 몇 개뿐이면 잔차 기반 정규성 검정의 $p$값을 그대로 믿지 말아야 한다.** 후자라면 모의실험으로 귀무분포를 직접 만들거나 Q-Q 그림으로 눈으로 보는 편이 낫다.
 
 잔차가 정규성과 잘 맞고($p = 0.895$) 분산분석은 집단 평균의 차이를 유의하게 탐지한다($p = 0.0026$, 표본평균은 각각 4.72, 5.32, 6.02). 정규성 진단은 통과하고 관심 있는 검정은 기각하는, 이상적인 상황이다.
 

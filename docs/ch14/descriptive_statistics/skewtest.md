@@ -38,41 +38,154 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 로그정규 자료의 왜도 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 로그정규 자료의 왜도 검정. $\text{Lognormal}(0, 0.6^2)$에서 $n = 300$개를 뽑으면 $Z_1 = 10.4038$이 나온다.
+
+**(1)** 위 변환 $Y = g_1\sqrt{(n+1)(n+3)/\{6(n-2)\}}$가 사실 **단순 표준화** $g_1/\mathrm{SD}(g_1)$임을 확인하시오. 그 값은 얼마이며, 다고스티노 변환은 그것을 어느 쪽으로 얼마나 옮기는가.
+
+**(2)** `scipy.stats.skewtest`가 쓰는 왜도는 **어느 판본**인가. 코드가 찍어 주는 $2.2452$를 변환에 넣으면 $Z_1$이 얼마가 되는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 로그정규는 오른쪽으로 길게 늘어진 대표적인 분포다.
-rng = np.random.default_rng(0)
-x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
+    **(1) $Y$는 정확히 단순 표준화이고, 그 값은 $15.9548$이다.** 정규성 아래 비보정 왜도의 분산이
 
-# 표본왜도를 그대로 쓰지 않고 Z 로 바꾼다. 왜도의 표집분포가 정규에서
-# 멀어, 값 자체로는 얼마나 큰 것인지 판단할 수 없기 때문이다.
-# 이 변환은 n>=8 부터 쓸 수 있다.
-g1 = stats.skew(x, bias=False)
-z, p = stats.skewtest(x)
+    $$
+    \mathrm{Var}(g_1) = \frac{6(n-2)}{(n+1)(n+3)}
+    $$
 
-print(f"Sample size n = {x.size}")
-print(f"Sample skewness (Fisher's g1) = {g1:.4f}")
-print(f"D'Agostino skewness test: Z = {z:.4f}, p-value = {p:.4g}")
-if p < 0.05:
-    print("=> Evidence of non-zero skewness (departing from normality).")
-else:
-    print("=> No strong evidence of non-zero skewness.")
-```
+    이므로 그 역수의 제곱근을 곱하는 것이 곧 표준화다.
 
-출력:
+    $$
+    Y = g_1\sqrt{\frac{(n+1)(n+3)}{6(n-2)}} = \frac{g_1}{\mathrm{SD}(g_1)}
+    $$
 
-```text
-Sample size n = 300
-Sample skewness (Fisher's g1) = 2.2452
-D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
-=> Evidence of non-zero skewness (departing from normality).
-```
+    $n = 300$에서 $\mathrm{SD}(g_1) = \sqrt{6\cdot298/(301\cdot303)} = 0.14002$이고 $g_1 = 2.233937$이니 $Y = 15.9548$이다.
+
+    **변환은 이 값을 $10.4038$로 끌어내린다.** $15.95$에서 $10.40$으로, 곧 **35%를 깎는다.** 다고스티노와 피어슨의 변환은 $Y$의 4차 누적률을 보정한 뒤 역쌍곡사인을 씌우는 것이다.
+
+    $$
+    \beta_2 = \frac{3(n^2 + 27n - 70)(n+1)(n+3)}{(n-2)(n+5)(n+7)(n+9)}, \quad
+    W^2 = -1 + \sqrt{2(\beta_2 - 1)}
+    $$
+
+    $$
+    \delta = \frac{1}{\sqrt{\tfrac12\ln W^2}}, \quad
+    \alpha = \sqrt{\frac{2}{W^2 - 1}}, \quad
+    Z_1 = \delta\,\operatorname{arcsinh}\!\left(\frac{Y}{\alpha}\right)
+    $$
+
+    여기서 $\operatorname{arcsinh} u = \ln\bigl(u + \sqrt{u^2+1}\bigr)$다. $n = 300$에서 $\beta_2 = 3.110831$, $W^2 = 1.054668$, $\delta = 6.129875$, $\alpha = 6.048490$이고
+
+    $$
+    Z_1 = 6.129875 \cdot \operatorname{arcsinh}\!\left(\frac{15.954814}{6.048490}\right) = 10.403829
+    $$
+
+    가 나온다. **깎는 방향이 중요하다.** $\operatorname{arcsinh}$는 큰 인수에서 로그처럼 자라므로 꼬리를 눌러 준다. 유한표본에서 $g_1$의 분포가 오른쪽으로 치우쳐 있어 단순 표준화는 큰 값을 과대평가하는데, 변환이 그것을 바로잡는다. 만약 $Y = 15.95$를 그대로 표준정규 분위수로 읽으면 $p = 2.64\times10^{-57}$이 되는데, 실제 $p$는 $2.38\times10^{-25}$다. **자릿수가 서른 둘 벌어진다.**
+
+    **(2) `skewtest`가 쓰는 것은 비보정판 $g_1 = \sqrt{b_1} = m_3/m_2^{3/2}$다.** 이 표본에서 $g_1 = 2.233937$인데, 코드는 `bias=False`로 구한 **보정판** $G_1 = 2.245179$를 찍는다. 둘은
+
+    $$
+    G_1 = \frac{\sqrt{n(n-1)}}{n-2}\,g_1 = \frac{\sqrt{300\cdot299}}{298}\cdot 2.233937 = 2.245179
+    $$
+
+    로 묶여 있고 $n = 300$에서 비는 $1.00503$이다. $G_1$을 변환에 넣으면 $Z_1 = 10.4326$이 되어 `scipy`가 돌려준 $10.4038$과 **다르다.** 차이가 $0.3\%$로 작아 이 보기에서는 결론이 바뀌지 않지만, 출력에 나란히 찍힌 두 수가 서로 맞물리지 않는다는 사실은 알아 두어야 한다. 손으로 재현하려면 `bias` 인자를 떼야 한다.
+
+    같은 이유로 위 본문의 분산식 $\mathrm{Var}(g_1) \approx 6(n-2)/\{(n+1)(n+3)\}$은 **비보정판**의 것이다. 보정판의 분산은
+
+    $$
+    \mathrm{Var}(G_1) = \frac{n(n-1)}{(n-2)^2}\,\mathrm{Var}(g_1) = \frac{6n(n-1)}{(n-2)(n+1)(n+3)}
+    $$
+
+    이고, $n = 300$에서 표준편차가 $0.14002$ 대 $0.14072$로 갈린다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 로그정규는 오른쪽으로 길게 늘어진 대표적인 분포다.
+    rng = np.random.default_rng(0)
+    x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
+
+    # 표본왜도를 그대로 쓰지 않고 Z 로 바꾼다. 왜도의 표집분포가 정규에서
+    # 멀어, 값 자체로는 얼마나 큰 것인지 판단할 수 없기 때문이다.
+    # 이 변환은 n>=8 부터 쓸 수 있다.
+    g1 = stats.skew(x, bias=False)
+    z, p = stats.skewtest(x)
+
+    print(f"Sample size n = {x.size}")
+    print(f"Sample skewness (Fisher's g1) = {g1:.4f}")
+    print(f"D'Agostino skewness test: Z = {z:.4f}, p-value = {p:.4g}")
+    if p < 0.05:
+        print("=> Evidence of non-zero skewness (departing from normality).")
+    else:
+        print("=> No strong evidence of non-zero skewness.")
+    ```
+
+    출력:
+
+    ```text
+    Sample size n = 300
+    Sample skewness (Fisher's g1) = 2.2452
+    D'Agostino skewness test: Z = 10.4038, p-value = 2.382e-25
+    => Evidence of non-zero skewness (departing from normality).
+    ```
+
+    변환을 한 단계씩 손으로 짚어 보면 다음과 같다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    x = rng.lognormal(mean=0.0, sigma=0.6, size=300)
+    n = x.size
+
+    g1 = stats.skew(x)              # 비보정 sqrt(b1) — skewtest 가 쓰는 판본
+    G1 = stats.skew(x, bias=False)  # 보정판
+    print(f"g1 (비보정) = {g1:.6f}")
+    print(f"G1 (보정)   = {G1:.6f}")
+    print(f"G1 = g1*sqrt(n(n-1))/(n-2) = {g1 * np.sqrt(n * (n - 1)) / (n - 2):.6f}")
+
+    # 1단계: 단순 표준화. 이것이 본문의 Y 다.
+    sd_g1 = np.sqrt(6 * (n - 2) / ((n + 1) * (n + 3)))
+    Y = g1 / sd_g1
+    print(f"\nSD(g1) = {sd_g1:.5f},  단순 표준화 Y = g1/SD = {Y:.6f}")
+
+    # 2단계: 고차 누적률 보정 후 역쌍곡사인 변환.
+    beta2 = (3.0 * (n**2 + 27 * n - 70) * (n + 1) * (n + 3)
+             / ((n - 2.0) * (n + 5) * (n + 7) * (n + 9)))
+    W2 = -1 + np.sqrt(2 * (beta2 - 1))
+    delta = 1 / np.sqrt(0.5 * np.log(W2))
+    alpha = np.sqrt(2.0 / (W2 - 1))
+    Z = delta * np.arcsinh(Y / alpha)
+    print(f"beta2 = {beta2:.6f}, W^2 = {W2:.6f}, delta = {delta:.6f}, alpha = {alpha:.6f}")
+    print(f"손계산 Z1 = {Z:.6f},  p = {2 * stats.norm.sf(abs(Z)):.4g}")
+
+    z_scipy, p_scipy = stats.skewtest(x)
+    print(f"scipy  Z1 = {z_scipy:.6f},  p = {p_scipy:.4g}")
+
+    # 보정판을 넣으면 답이 달라진다.
+    Z_wrong = delta * np.arcsinh((G1 / sd_g1) / alpha)
+    print(f"\nG1 을 넣었을 때의 Z1 = {Z_wrong:.6f}  (scipy 와 다르다)")
+    ```
+
+    출력:
+
+    ```text
+    g1 (비보정) = 2.233937
+    G1 (보정)   = 2.245179
+    G1 = g1*sqrt(n(n-1))/(n-2) = 2.245179
+
+    SD(g1) = 0.14002,  단순 표준화 Y = g1/SD = 15.954814
+    beta2 = 3.110831, W^2 = 1.054668, delta = 6.129875, alpha = 6.048490
+    손계산 Z1 = 10.403829,  p = 2.382e-25
+    scipy  Z1 = 10.403829,  p = 2.382e-25
+
+    G1 을 넣었을 때의 Z1 = 10.432609  (scipy 와 다르다)
+    ```
+
+    손으로 밟은 $Z_1 = 10.403829$가 `scipy.stats.skewtest`의 값과 **소수점 여섯째 자리까지** 같다. 변환이 투명한 공식 몇 줄로 끝난다는 뜻이며, $p$값도 $2.382\times10^{-25}$로 일치한다. $\square$
 
 ## 해석
 

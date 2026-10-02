@@ -24,37 +24,151 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 히스토그램에 정규곡선 겹치기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 히스토그램에 정규곡선 겹치기. $\mathcal{N}(0,1)$에서 $n = 100$개를 뽑아 구간 15개의 히스토그램에 적합 정규곡선을 겹친다. 자료는 **정말로** 정규다.
+
+**(1)** 그려 보고 무엇이 읽히는지 말하시오. 구간 도수를 나열하여 **봉우리가 몇 개로 보이는지** 세고, 최고 막대가 적합 곡선을 몇 퍼센트 넘어서는지 적으시오.
+
+**(2)** (1)에서 읽은 울퉁불퉁함이 자료의 성질인지 그림의 성질인지 가르시오. 구간 수를 바꾸어 보고, 세 구간 규칙(Sturges·Scott·Freedman–Diaconis)이 권하는 값과 비교하시오. 자료가 정규라는 것은 어떻게 확인하는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-np.random.seed(42)
+    유도할 답이 있는 문제가 아니다. **그림에서 무엇이 읽히고 그중 무엇이 자료의 성질이 아닌가**가 이 보기의 전부다.
 
-n = 100
-data = np.random.normal(loc=0, scale=1, size=n)
+    **(1) 그림.**
 
-# 히스토그램에 적합한 정규곡선을 겹친다. 위치와 척도를 자료에서 뽑아 썼으므로
-# 남는 차이는 모양뿐이다. 다만 계급 수에 따라 인상이 달라지므로, 이 그림만으로
-# 판단하지 말고 Q-Q 그림과 함께 본다.
-fig, ax = plt.subplots(figsize=(7, 4))
-ax.hist(data, bins=15, density=True, alpha=0.6, edgecolor="black")
-x_grid = np.linspace(data.min() - 0.5, data.max() + 0.5, 200)
-ax.plot(x_grid, stats.norm.pdf(x_grid, data.mean(), data.std(ddof=1)),
-        linewidth=2, label="Fitted Normal PDF")
-ax.set_xlabel("Value")
-ax.set_ylabel("Density")
-ax.set_title("Histogram with Normal Overlay")
-ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
 
-![히스토그램과 적합된 정규밀도](./img/graphical_checks_27.png)
+    np.random.seed(42)
+
+    n = 100
+    data = np.random.normal(loc=0, scale=1, size=n)
+
+    # 히스토그램에 적합한 정규곡선을 겹친다. 위치와 척도를 자료에서 뽑아 썼으므로
+    # 남는 차이는 모양뿐이다. 다만 계급 수에 따라 인상이 달라지므로, 이 그림만으로
+    # 판단하지 말고 Q-Q 그림과 함께 본다.
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ax.hist(data, bins=15, density=True, alpha=0.6, edgecolor="black")
+    x_grid = np.linspace(data.min() - 0.5, data.max() + 0.5, 200)
+    ax.plot(x_grid, stats.norm.pdf(x_grid, data.mean(), data.std(ddof=1)),
+            linewidth=2, label="Fitted Normal PDF")
+    ax.set_xlabel("Value")
+    ax.set_ylabel("Density")
+    ax.set_title("Histogram with Normal Overlay")
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![히스토그램과 적합된 정규밀도](./img/graphical_checks_27.png)
+
+    **(2) 구간 수를 흔들고 검정으로 확인한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 100
+    data = np.random.normal(loc=0, scale=1, size=n)
+
+    mu, s = data.mean(), data.std(ddof=1)
+    dens, bins = np.histogram(data, bins=15, density=True)
+    cnt, _ = np.histogram(data, bins=15)
+    ctr = (bins[:-1] + bins[1:]) / 2
+
+
+    def n_peaks(counts):
+        pad = np.r_[-1.0, counts.astype(float), -1.0]
+        return int(np.sum((pad[1:-1] > pad[:-2]) & (pad[1:-1] >= pad[2:])))
+
+
+    print(f"평균 = {mu:.4f}   S(ddof=1) = {s:.4f}   구간 폭 = {bins[1] - bins[0]:.4f}")
+    print(f"구간 도수: {cnt}")
+    print(f"구간당 평균 도수 = {cnt.mean():.2f}   봉우리 {n_peaks(cnt)}개   빈 구간 {int((cnt == 0).sum())}개")
+
+    diff = dens - stats.norm.pdf(ctr, mu, s)
+    j = int(np.abs(diff).argmax())
+    print(f"최고 막대 밀도 = {dens.max():.4f} @ {ctr[int(dens.argmax())]:+.3f}"
+          f"   적합 곡선 최대 = {stats.norm.pdf(mu, mu, s):.4f} @ {mu:+.3f}")
+    print(f"가장 어긋난 구간: 중심 {ctr[j]:+.3f}  막대 {dens[j]:.4f}  곡선 {stats.norm.pdf(ctr[j], mu, s):.4f}"
+          f"  차 {diff[j]:+.4f} ({100 * diff[j] / stats.norm.pdf(ctr[j], mu, s):.0f}%)")
+
+    print("\n같은 자료, 구간 수만 바꾼다:")
+    for m in (5, 8, 10, 15, 20, 30):
+        c, b = np.histogram(data, bins=m)
+        print(f"  구간 {m:2d}개  폭 {b[1] - b[0]:.3f}  봉우리 {n_peaks(c)}개"
+              f"  빈 구간 {int((c == 0).sum())}개  최대 도수 {c.max():2d}")
+
+    q1, q3 = np.percentile(data, [25, 75])
+    rg = data.max() - data.min()
+    print(f"\n권장 구간 수:  Sturges {1 + np.log2(n):.2f}"
+          f"   Scott {rg / (3.49 * s * n ** (-1 / 3)):.2f}"
+          f"   FD {rg / (2 * (q3 - q1) * n ** (-1 / 3)):.2f}")
+
+    print(f"\n이 표본은 실제로 정규인가:")
+    print(f"  Shapiro-Wilk  p = {stats.shapiro(data).pvalue:.4f}")
+    print(f"  D'Agostino K2 p = {stats.normaltest(data).pvalue:.4f}")
+    print(f"  G1 = {stats.skew(data, bias=False):.4f}   G2 = {stats.kurtosis(data, bias=False):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    평균 = -0.1038   S(ddof=1) = 0.9082   구간 폭 = 0.2981
+    구간 도수: [ 1  0  4  3  6  5  9 15 12 18  7  7  5  5  3]
+    구간당 평균 도수 = 6.67   봉우리 5개   빈 구간 1개
+    최고 막대 밀도 = 0.6038 @ +0.213   적합 곡선 최대 = 0.4393 @ -0.104
+    가장 어긋난 구간: 중심 +0.213  막대 0.6038  곡선 0.4134  차 +0.1903 (46%)
+
+    같은 자료, 구간 수만 바꾼다:
+      구간  5개  폭 0.894  봉우리 1개  빈 구간 0개  최대 도수 36
+      구간  8개  폭 0.559  봉우리 1개  빈 구간 0개  최대 도수 23
+      구간 10개  폭 0.447  봉우리 3개  빈 구간 0개  최대 도수 21
+      구간 15개  폭 0.298  봉우리 5개  빈 구간 1개  최대 도수 18
+      구간 20개  폭 0.224  봉우리 7개  빈 구간 1개  최대 도수 14
+      구간 30개  폭 0.149  봉우리 9개  빈 구간 4개  최대 도수 10
+
+    권장 구간 수:  Sturges 7.64   Scott 6.55   FD 10.31
+
+    이 표본은 실제로 정규인가:
+      Shapiro-Wilk  p = 0.6552
+      D'Agostino K2 p = 0.7501
+      G1 = -0.1779   G2 = -0.1010
+    ```
+
+    **(1) 읽기.** 구간 도수가
+
+    $$
+    1,\ 0,\ 4,\ 3,\ 6,\ 5,\ 9,\ 15,\ 12,\ 18,\ 7,\ 7,\ 5,\ 5,\ 3
+    $$
+
+    이다. 오르내림을 세면 **봉우리가 5개**이고 **빈 구간도 하나** 있다. 가운데에서 $15 \to 12 \to 18$로 한 번 꺼졌다가 다시 솟는 자리가 특히 눈에 띈다. 최고 막대는 밀도 $0.6038$로 그 자리의 적합 곡선 $0.4134$를 **$46\%$ 넘어선다.** 적합 곡선의 최대 $0.4393$과 견주어도 $37\%$ 높다. 봉우리의 자리도 어긋난다. 최고 막대의 중심이 $+0.213$인데 표본평균은 $-0.104$다.
+
+    그림만 보고 적으면 "가운데가 이봉 같고, 봉우리가 곡선보다 많이 높고, 봉우리 자리도 평균에서 밀려 있으니 정규가 아닌 듯하다"가 된다. **그 결론은 전부 틀렸다.**
+
+    **(2) 울퉁불퉁함은 그림의 성질이다.** 두 가지가 그것을 보인다.
+
+    첫째, **자료는 정규를 잘 통과한다.** 샤피로–윌크 $p = 0.655$, 다고스티노 $K^2$ $p = 0.750$이고 $G_1 = -0.178$, $G_2 = -0.101$로 둘 다 0에 붙어 있다(보정판이다. `bias=False`를 주었다). 애초에 $\mathcal{N}(0,1)$에서 뽑은 자료이니 당연한 일이다.
+
+    둘째, **봉우리 개수가 구간 수만 따라 움직인다.** 자료는 한 번도 바뀌지 않았다.
+
+    | 구간 수 | 5 | 8 | 10 | 15 | 20 | 30 |
+    |---|---|---|---|---|---|---|
+    | 봉우리 | 1 | 1 | 3 | **5** | 7 | 9 |
+    | 빈 구간 | 0 | 0 | 0 | 1 | 1 | 4 |
+
+    8개 이하에서는 봉우리가 하나뿐이다. 그리고 **세 구간 규칙이 모두 그 아래쪽을 권한다.** Sturges $7.64$, Scott $6.55$, Freedman–Diaconis $10.31$이다. 쪽에서 쓴 `bins=15`는 세 권고값을 모두 넘어서니 **$n = 100$에 비해 구간이 너무 많다.**
+
+    까닭은 산술로 분명하다. 구간당 평균 도수가 $6.67$개뿐이다. 각 구간의 도수는 대략 평균 $6.67$의 포아송처럼 흔들리므로 표준편차가 $\sqrt{6.67} = 2.58$, 곧 상대변동이 $39\%$다. **인접한 막대의 높이가 $40\%$씩 들쭉날쭉한 것이 정상이고**, 가운데의 $15 \to 12 \to 18$ 같은 골은 그 변동이 만든 것이다. 최고 막대가 곡선을 $46\%$ 넘어선 것도 같은 크기의 잡음이다.
+
+    **따라서 이 그림에서 읽어야 할 것은 "대략 종 모양이다"까지이고, 봉우리의 개수·높이·위치는 읽어서는 안 된다.** 이 쪽의 '정리하며'는 히스토그램의 강점이 다봉성이라고 적어 두었는데, 그 강점은 $n$이 넉넉할 때의 이야기다. $n = 100$에서는 **없는 다봉성을 만들어 내는 쪽이 먼저다.**
+
+    실무에서 할 일은 둘이다. 구간 수를 몇 가지로 바꿔 그려 **어느 선택에서도 남는 특징만 인정하는 것**, 그리고 Q-Q 그림이나 형식적 검정으로 **그림의 인상을 따로 확인하는 것**이다. 여기서는 구간 8개 이하에서 봉우리가 하나로 합쳐지고 두 검정이 모두 통과하므로, 단봉 정규라고 판단하는 것이 옳다.
 
 ## 커널밀도추정
 

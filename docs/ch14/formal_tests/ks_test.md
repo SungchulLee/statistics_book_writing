@@ -54,38 +54,148 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 모수를 못박은 KS 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모수를 못박은 KS 검정. $\mathcal{N}(0,1)$에서 $n = 250$개를 뽑고 귀무가설의 모수를 `args=(0.0, 1.0)`으로 직접 넘겨 주면 $D = 0.0354$, $p = 0.9013$이다.
+
+**(1)** $D$를 정의대로 손계산해 재현하시오. 모수를 못박았으므로 $p$값에 닫힌 꼴이 있다. **점근** 콜모고로프 분포로 계산한 값과 `scipy`가 주는 값이 얼마나 다른가.
+
+**(2)** 모수를 못박은 이 검정은 명목 크기를 지키는가. 모의실험으로 실제 기각률과 $p$값의 평균을 재어, 모수를 추정했을 때(이 장 [KS 와 릴리에포르](./ks_lilliefors.md) 보기 1)의 $0.0005$와 견주시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(0)
-x = rng.normal(0.0, 1.0, size=250)
+    **(1) 손계산이 끝자리까지 맞고, 점근식은 $1.2\%$ 어긋난다.** 경험분포함수는 각 관측값에서 뛰는 계단이므로 두 방향의 틈을 따로 잰다. 모수를 못박았으니 표준화 없이 $F_0 = \Phi$를 바로 쓴다.
 
-# 귀무가설이 N(0,1) 로 완전히 못박혀 있는 경우다. args 로 모수를 직접
-# 넘겨 주었고 자료에서 추정하지 않았으므로, 이 p-값은 그대로 믿을 수 있다.
-# 모수를 자료에서 뽑아 쓰면 Lilliefors 로 가야 한다.
-# D 는 경험분포함수와 이론분포함수의 최대 세로 거리다.
-D, p = stats.kstest(x, 'norm', args=(0.0, 1.0))
+    $$
+    D^+ = \max_i\left(\frac{i}{n} - \Phi(x_{(i)})\right) = 0.0354148220, \qquad
+    D^- = \max_i\left(\Phi(x_{(i)}) - \frac{i-1}{n}\right) = 0.0302637669
+    $$
 
-print(f"n = {x.size}")
-print(f"KS one-sample vs N(0,1): D = {D:.4f}, p = {p:.4f}")
-if p < 0.05:
-    print("=> Reject H0: data may not follow N(0,1).")
-else:
-    print("=> Fail to reject H0 at alpha = 0.05.")
-```
+    이고 $D = \max = 0.0354148220$으로 `scipy`의 값과 열 자리까지 같다.
 
-출력:
+    $p$값은 콜모고로프 분포에서 온다. $t = \sqrt{n}\,D = \sqrt{250}\times0.0354148 = 0.559958$에 대해 **점근** 공식은
 
-```text
-n = 250
-KS one-sample vs N(0,1): D = 0.0354, p = 0.9013
-=> Fail to reject H0 at alpha = 0.05.
-```
+    $$
+    P(\sqrt{n}\,D_n > t) \longrightarrow 2\sum_{k=1}^{\infty}(-1)^{k-1}e^{-2k^2t^2}
+    $$
+
+    이고, 이 급수는 매우 빨리 수렴하므로 100항만 더해도 충분하다. 값은 $0.912469$다. 그런데 `scipy`가 돌려주는 것은
+
+    $$
+    p = 0.901284
+    $$
+
+    로 **$1.2\%$ 작다.** 까닭은 `scipy`가 점근식 대신 $n$에 대한 **정확 분포**(`scipy.stats.kstwo`)를 쓰기 때문이다. $n = 250$은 점근식이 쓸 만한 크기이지만 아직 완전히 같지는 않다. 급수식으로 직접 계산한 값을 그대로 보고하면 셋째 자리가 틀린다.
+
+    **(2) 정확히 지킨다.** 진짜 표준정규 자료에 같은 절차를 4000번 적용하면
+
+    | 재는 것 | 명목값 | 실제값 | 몬테카를로 오차 |
+    |---|---|---|---|
+    | 기각률 | $0.05$ | $0.0500$ | $\pm0.0034$ |
+    | 기각률 | $0.10$ | $0.1010$ | $\pm0.0047$ |
+    | $p$값의 평균 | $0.5$ | $0.5014$ | — |
+
+    이다. **$p$값이 $[0,1]$에 균등하다.** 귀무가설이 참일 때 $p$값이 균등해야 한다는 교과서의 약속이 그대로 지켜진다.
+
+    이 표를 [KS 와 릴리에포르](./ks_lilliefors.md) 보기 1의 표와 나란히 놓는 것이 이 보기의 요점이다. 같은 `stats.kstest` 함수인데
+
+    | 쓰는 방식 | 명목 $0.05$의 실제 기각률 | $p$값의 평균 |
+    |---|---|---|
+    | 모수를 `args`로 못박음 (이 보기) | $0.0500$ | $0.5014$ |
+    | 모수를 자료에서 추정해 표준화 | $0.0005$ | $0.7869$ |
+
+    로 **백 배** 갈린다. 함수가 틀린 것이 아니다. **함수가 전제하는 바를 지켰는가 아닌가의 차이**이고, 그 전제는 "$F_0$가 자료를 보기 전에 완전히 정해져 있다"는 것이다.
+
+    실무에서 이 전제가 성립하는 경우는 생각보다 드물다. 정규성을 검정하겠다고 할 때 $\mu$와 $\sigma$를 미리 알고 있는 일은 거의 없다. 그러므로 **`kstest`로 정규성을 검정하는 코드를 보면 거의 언제나 틀렸다고 보아야 하고**, 맞는 경우는 균등성 검정처럼 귀무분포가 모수 없이 정해지는 때다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    x = rng.normal(0.0, 1.0, size=250)
+
+    # 귀무가설이 N(0,1) 로 완전히 못박혀 있는 경우다. args 로 모수를 직접
+    # 넘겨 주었고 자료에서 추정하지 않았으므로, 이 p-값은 그대로 믿을 수 있다.
+    # 모수를 자료에서 뽑아 쓰면 Lilliefors 로 가야 한다.
+    # D 는 경험분포함수와 이론분포함수의 최대 세로 거리다.
+    D, p = stats.kstest(x, 'norm', args=(0.0, 1.0))
+
+    print(f"n = {x.size}")
+    print(f"KS one-sample vs N(0,1): D = {D:.4f}, p = {p:.4f}")
+    if p < 0.05:
+        print("=> Reject H0: data may not follow N(0,1).")
+    else:
+        print("=> Fail to reject H0 at alpha = 0.05.")
+    ```
+
+    출력:
+
+    ```text
+    n = 250
+    KS one-sample vs N(0,1): D = 0.0354, p = 0.9013
+    => Fail to reject H0 at alpha = 0.05.
+    ```
+
+    손계산과 실제 크기를 함께 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    x = rng.normal(0.0, 1.0, size=250)
+    n = x.size
+
+    # D 를 정의대로 손계산한다.
+    z = np.sort(x)
+    F = stats.norm.cdf(z)
+    i = np.arange(1, n + 1)
+    d_plus = np.max(i / n - F)
+    d_minus = np.max(F - (i - 1) / n)
+    print(f"D+ = {d_plus:.10f},  D- = {d_minus:.10f},  D = {max(d_plus, d_minus):.10f}")
+    print(f"scipy D = {stats.kstest(x, 'norm', args=(0.0, 1.0))[0]:.10f}")
+
+    # p 값: 모수를 못박았으므로 콜모고로프 분포를 쓸 수 있다.
+    D = max(d_plus, d_minus)
+    t = np.sqrt(n) * D
+    p_asym = 2 * sum((-1)**(k - 1) * np.exp(-2 * k**2 * t**2) for k in range(1, 101))
+    print(f"\nsqrt(n) D = {t:.6f}")
+    print(f"점근 p = 2 sum (-1)^(k-1) exp(-2k^2 t^2) = {p_asym:.6f}")
+    print(f"scipy 의 점근 분포 kstwobign.sf(t)        = {stats.kstwobign.sf(t):.6f}")
+    print(f"정확 분포 kstwo.sf(D, n)                 = {stats.kstwo.sf(D, n):.6f}")
+    print(f"kstest p                                 = {stats.kstest(x, 'norm', args=(0.0, 1.0))[1]:.6f}")
+
+    # 모수를 못박은 KS 는 명목 크기를 지키는가
+    rng2 = np.random.default_rng(11)
+    R = 4000
+    ps = np.array([stats.kstest(rng2.standard_normal(n), 'norm', args=(0.0, 1.0))[1]
+                   for _ in range(R)])
+    print(f"\n모수를 못박았을 때의 실제 기각률 (R = {R})")
+    for a in (0.05, 0.10):
+        print(f"  명목 {a:.2f}: {np.mean(ps < a):.4f}  (MC SE {np.sqrt(a * (1 - a) / R):.4f})")
+    print(f"  p 값의 평균 = {ps.mean():.4f}  (균등이면 0.5)")
+    ```
+
+    출력:
+
+    ```text
+    D+ = 0.0354148220,  D- = 0.0302637669,  D = 0.0354148220
+    scipy D = 0.0354148220
+
+    sqrt(n) D = 0.559958
+    점근 p = 2 sum (-1)^(k-1) exp(-2k^2 t^2) = 0.912469
+    scipy 의 점근 분포 kstwobign.sf(t)        = 0.912469
+    정확 분포 kstwo.sf(D, n)                 = 0.901284
+    kstest p                                 = 0.901284
+
+    모수를 못박았을 때의 실제 기각률 (R = 4000)
+      명목 0.05: 0.0500  (MC SE 0.0034)
+      명목 0.10: 0.1010  (MC SE 0.0047)
+      p 값의 평균 = 0.5014  (균등이면 0.5)
+    ```
+
+    세 가지가 맞아떨어진다. 손계산한 $D$가 `scipy`와 열 자리까지 같고, 손으로 더한 급수가 `scipy`의 점근 분포 함수와 여섯 자리까지 같으며(둘 다 $0.912469$), 그 점근값이 정확값 $0.901284$에서 $1.2\%$ 떨어져 있다. 그리고 모수를 못박은 검정은 명목 크기를 몬테카를로 오차 안에서 지킨다. $\square$
 
 ## Lilliefors 문제
 

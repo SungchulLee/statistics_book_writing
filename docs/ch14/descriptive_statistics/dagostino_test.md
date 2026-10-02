@@ -34,47 +34,121 @@ $p < \alpha$일 때 $H_0$을 기각한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 섞인 자료에 K-제곱 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 섞인 자료에 K-제곱 검정. $\mathcal{N}(0,1)$ 240개에 $\text{Lognormal}(0, 0.6^2)$ 60개를 섞은 $n = 300$ 표본에서 $K^2 = 22.2123$이 나온다.
+
+**(1)** 두 성분의 제곱이 $K^2$을 이루는지 확인하고, $p$값을 $K^2$만의 닫힌 꼴로 쓰시오. 기각을 이끈 것은 치우침인가 꼬리인가.
+
+**(2)** **같은 자료**에 자크–베라를 걸면 $JB = 47.5606$으로 $K^2$의 두 배가 넘는다. 두 통계량을 왜도 항과 첨도 항으로 각각 쪼개어, 그 차이가 **어느 항에서** 오는지 수로 밝히시오. $JB$가 더 크다는 것이 검정력이 더 좋다는 뜻인가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 정규 240개에 로그정규 60개를 섞었다. 겉보기에는 정규 같지만 오른쪽이
-# 조금 늘어난 자료다. 검정이 이것을 잡아내는지 본다.
-rng = np.random.default_rng(0)
-x = np.concatenate([rng.normal(0, 1, size=240),
-                    rng.lognormal(0, 0.6, size=60)])
+    **(1) 첨도 성분이 $69.8\%$다.** 분해는 정확히 맞아떨어진다.
 
-# K^2 과 그것을 이루는 두 성분을 함께 구한다. 어느 쪽이 큰지를 보면
-# 정규에서 벗어난 까닭이 치우침인지 꼬리인지 알 수 있다.
-K2, p = stats.normaltest(x)
-z1, _ = stats.skewtest(x)
-z2, _ = stats.kurtosistest(x)
+    $$
+    K^2 = Z_1^2 + Z_2^2 = 2.5915^2 + 3.9365^2 = 6.7159 + 15.4964 = 22.2123
+    $$
 
-print(f"Sample size n = {x.size}")
-print(f"D'Agostino's K^2 statistic = {K2:.4f}")
-print(f"  components: Z1 = {z1:.4f}, Z2 = {z2:.4f}")
-print(f"p-value = {p:.4g}")
-if p < 0.05:
-    print("=> Reject normality at alpha = 0.05.")
-else:
-    print("=> Fail to reject normality at alpha = 0.05.")
-```
+    $\chi^2_2$의 생존함수가 $e^{-x/2}$이므로
 
-출력:
+    $$
+    p = e^{-K^2/2} = e^{-11.10615} = 1.502\times10^{-5}
+    $$
 
-```text
-Sample size n = 300
-D'Agostino's K^2 statistic = 22.2123
-  components: Z1 = 2.5915, Z2 = 3.9365
-p-value = 1.502e-05
-=> Reject normality at alpha = 0.05.
-```
+    이고 `normaltest`의 $p$값과 일치한다. 두 성분 모두 $\lvert Z\rvert > 1.96$을 넘으므로 둘 다 혼자서도 기각하는데, 첨도 쪽이 $15.50$ 대 $6.72$로 $2.3$배 크다. **대수정규 오염이 치우침과 두꺼운 꼬리를 동시에 들여왔고 꼬리 쪽 신호가 더 강하다.**
 
-분해가 정확히 맞아떨어진다. $2.5915^2 + 3.9365^2 = 6.716 + 15.496 = 22.212$.
+    **(2) 차이는 전부 첨도 항에서 온다.** 두 통계량을 나란히 쪼개면
+
+    | 항 | $K^2$ | $JB$ | 비 |
+    |---|---|---|---|
+    | 왜도 | $Z_1^2 = 6.7159$ | $\frac{n}{6}g_1^2 = 6.8005$ | $1.01$ |
+    | 첨도 | $Z_2^2 = 15.4964$ | $\frac{n}{24}g_2^2 = 40.7601$ | $2.63$ |
+    | 합 | $22.2123$ | $47.5606$ | $2.14$ |
+
+    이다. **왜도 항은 $1\%$ 안에서 같다.** $JB$의 왜도 항이 $\frac{n}{6}g_1^2 = (g_1/\sqrt{6/n})^2$, 곧 $\mathrm{Var}(g_1) \approx 6/n$을 쓴 단순 표준화의 제곱인데, $n = 300$에서 왜도 쪽 변환은 거의 아무것도 바꾸지 않으므로 $Z_1^2$과 사실상 같은 값이 된다.
+
+    첨도 항은 $2.63$배 벌어진다. 까닭은 앞 쪽에서 본 대로 **$b_2$의 귀무분포가 크게 치우쳐 있다**는 데 있다. $JB$는 $g_2$를 그대로 제곱하므로 그 치우침을 전혀 고려하지 않고, $K^2$은 윌슨–힐퍼티 세제곱근 변환으로 치우침을 먼저 펴 준 다음 제곱한다. 두꺼운 꼬리 쪽 이탈에서는 변환이 값을 크게 깎으므로 $Z_2^2$이 작아진다.
+
+    **그러므로 $JB$가 크다는 것은 검정력이 좋다는 뜻이 아니다.** 통계량이 커진 만큼 그 귀무분포도 함께 부풀어야 $\chi^2_2$가 맞는데, $JB$는 중간 크기 표본에서 그 보정 없이 $\chi^2_2$를 쓴다. 그래서 $p$값이 $4.70\times10^{-11}$까지 내려가지만, 이 쪽에서 $K^2$이 주는 $1.50\times10^{-5}$가 더 믿을 만한 수다. **두 $p$값의 자릿수 차이 여섯은 증거의 차이가 아니라 보정의 차이다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 정규 240개에 로그정규 60개를 섞었다. 겉보기에는 정규 같지만 오른쪽이
+    # 조금 늘어난 자료다. 검정이 이것을 잡아내는지 본다.
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=240),
+                        rng.lognormal(0, 0.6, size=60)])
+
+    # K^2 과 그것을 이루는 두 성분을 함께 구한다. 어느 쪽이 큰지를 보면
+    # 정규에서 벗어난 까닭이 치우침인지 꼬리인지 알 수 있다.
+    K2, p = stats.normaltest(x)
+    z1, _ = stats.skewtest(x)
+    z2, _ = stats.kurtosistest(x)
+
+    print(f"Sample size n = {x.size}")
+    print(f"D'Agostino's K^2 statistic = {K2:.4f}")
+    print(f"  components: Z1 = {z1:.4f}, Z2 = {z2:.4f}")
+    print(f"p-value = {p:.4g}")
+    if p < 0.05:
+        print("=> Reject normality at alpha = 0.05.")
+    else:
+        print("=> Fail to reject normality at alpha = 0.05.")
+    ```
+
+    출력:
+
+    ```text
+    Sample size n = 300
+    D'Agostino's K^2 statistic = 22.2123
+      components: Z1 = 2.5915, Z2 = 3.9365
+    p-value = 1.502e-05
+    => Reject normality at alpha = 0.05.
+    ```
+
+    두 통계량의 분해를 나란히 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(0)
+    x = np.concatenate([rng.normal(0, 1, size=240),
+                        rng.lognormal(0, 0.6, size=60)])
+    n = x.size
+    K2, p = stats.normaltest(x)
+    z1, _ = stats.skewtest(x)
+    z2, _ = stats.kurtosistest(x)
+    print(f"Z1^2 = {z1**2:.4f},  Z2^2 = {z2**2:.4f},  합 = {z1**2 + z2**2:.4f}  (K2 = {K2:.4f})")
+    print(f"첨도 성분의 비중 = {100 * z2**2 / K2:.1f}%")
+    print(f"p = exp(-K2/2) = {np.exp(-K2 / 2):.4g},  normaltest p = {p:.4g}")
+
+    g1, g2 = stats.skew(x), stats.kurtosis(x)
+    jb, pjb = stats.jarque_bera(x)
+    jb_s, jb_k = n / 6 * g1**2, n / 24 * g2**2
+    print(f"\nJB = {jb:.4f} = {jb_s:.4f} + {jb_k:.4f},  첨도 비중 {100 * jb_k / jb:.1f}%")
+    print(f"  p(JB) = {pjb:.4g}")
+    print(f"\n왜도 쪽:  JB 항 {jb_s:.4f}  대  Z1^2 {z1**2:.4f}   (비 {jb_s / z1**2:.2f})")
+    print(f"첨도 쪽:  JB 항 {jb_k:.4f}  대  Z2^2 {z2**2:.4f}   (비 {jb_k / z2**2:.2f})")
+    ```
+
+    출력:
+
+    ```text
+    Z1^2 = 6.7159,  Z2^2 = 15.4964,  합 = 22.2123  (K2 = 22.2123)
+    첨도 성분의 비중 = 69.8%
+    p = exp(-K2/2) = 1.502e-05,  normaltest p = 1.502e-05
+
+    JB = 47.5606 = 6.8005 + 40.7601,  첨도 비중 85.7%
+      p(JB) = 4.703e-11
+
+    왜도 쪽:  JB 항 6.8005  대  Z1^2 6.7159   (비 1.01)
+    첨도 쪽:  JB 항 40.7601  대  Z2^2 15.4964   (비 2.63)
+    ```
+
+    분해가 양쪽 모두 끝까지 맞고, $e^{-K^2/2}$가 `normaltest`의 $p$값과 일치한다. 마지막 두 줄이 (2)의 답이다. **같은 자료에서 두 옴니버스 검정이 왜도에는 똑같이 반응하고 첨도에만 다르게 반응한다.** $\square$
 
 ## 왜 옴니버스 검정인가
 

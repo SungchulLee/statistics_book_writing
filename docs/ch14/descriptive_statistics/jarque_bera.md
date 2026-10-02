@@ -84,50 +84,94 @@ Jarque-Bera 검정통계량 $JB$는 귀무가설 아래에서 자유도 2인 카
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> JB 통계량을 정의대로 구하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> JB 통계량을 정의대로 구하기. $\mathcal{N}(0,1)$에서 $n = 1000$개를 뽑아 위 공식을 손으로 계산한다.
+
+**(1)** 공식의 $S$와 $K$에 들어갈 표본적률은 **어느 판본**인가. 그 판본으로 계산한 값이 `scipy.stats.jarque_bera`와 일치함을 수로 확인하시오. 보정판 $G_1$, $G_2$를 넣으면 무엇이 달라지는가.
+
+**(2)** $\chi^2_2$의 생존함수가 닫힌 꼴임을 이용해 $p$값을 $JB$만의 함수로 쓰시오. 그 식이 `scipy`가 돌려준 $p$값과 몇 자리까지 맞는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 판본은 비보정 $1/n$ 적률이다.** 중심적률을 $m_k = \frac1n\sum(x_i - \bar x)^k$라 두면
 
-n = 1000
+    $$
+    S = g_1 = \frac{m_3}{m_2^{3/2}}, \qquad K - 3 = g_2 = \frac{m_4}{m_2^{2}} - 3
+    $$
 
-# 주석을 바꿔 가며 정규와 지수를 견주어 볼 수 있다.
-data = np.random.normal(0, 1, n)
-# data = np.random.exponential(1, n)
+    이고, 이것이 `scipy.stats.skew`와 `scipy.stats.kurtosis`의 **기본값**(`bias=True`, 첨도는 `fisher=True`)이 돌려주는 값이다. `scipy.stats.jarque_bera`도 같은 규약을 쓰므로 둘이 맞아떨어진다. 곧 공식은
 
-# JB 통계량을 정의대로 구한다. 왜도의 제곱과 초과첨도의 제곱을 더하되
-# 첨도 쪽에 1/4 을 곱한다. 정규라면 둘 다 0 이므로 JB 도 0 에 가깝다.
-skewness_value = stats.skew(data)
-kurtosis_value = stats.kurtosis(data)
-JB = n / 6 * (skewness_value**2 + kurtosis_value**2 / 4)
-print(f"{JB = }")
+    $$
+    JB = \frac{n}{6}\left(g_1^2 + \frac{g_2^2}{4}\right)
+    $$
 
-# scipy 의 결과와 맞는지 확인한다. JB 는 자유도 2 인 카이제곱을 따르지만,
-# 그 근사는 표본이 아주 클 때라야 쓸 만하다.
-stat, p_value = stats.jarque_bera(data)
-print(f"Jarque-Bera Test: Statistic={stat}, p-value={p_value}")
+    로 읽어야 한다. 이 표본에서 재면 $m_3/m_2^{3/2} = 0.0338590$, $m_4/m_2^2 = 2.953234$이므로 $g_1 = 0.0338590$, $g_2 = -0.0467663$이고
 
-alpha = 0.05
-if p_value <= alpha:
-    print("Reject H_0: The data is not normally distributed.")
-else:
-    print("Fail to reject H_0: The data is normally distributed.")
-```
+    $$
+    JB = \frac{1000}{6}\left(0.0338590^2 + \frac{(-0.0467663)^2}{4}\right) = 0.191071 + 0.091129 = 0.282200
+    $$
 
-출력:
+    이다. 왜도항이 $0.191$, 첨도항이 $0.091$로 둘 다 작다. 정규 자료이니 당연한 결과다.
 
-```text
-JB = 0.28220016508625234
-Jarque-Bera Test: Statistic=0.28220016508625234, p-value=0.8684023954281485
-Fail to reject H_0: The data is normally distributed.
-```
+    **보정판을 넣으면 답이 달라진다.** 같은 표본에서 $G_1 = 0.0339098$, $G_2 = -0.0409769$이고 이것으로 계산하면 $JB = 0.261609$다. 통계량이 7% 작아지는데, $n = 1000$에서도 그 정도 차이가 난다. $JB$는 **$g$ 판본으로 정의된 통계량**이므로 $G$ 판본을 넣으면 그것은 더 이상 자크–베라 통계량이 아니다. 어느 판본인지 밝히지 않으면 수가 맞지 않는다.
 
-손으로 계산한 값이 `scipy.stats.jarque_bera`와 정확히 일치한다. `stats.kurtosis`가 이미 **초과**첨도 $K-3$을 돌려주므로 코드에서 `kurtosis_value**2 / 4`가 공식의 $(K-3)^2/4$에 해당한다는 점에 유의하라.
+    **(2) $p$값은 지수함수 한 번으로 끝난다.** 자유도 2인 카이제곱의 밀도는
+
+    $$
+    f(x) = \frac{1}{2^{k/2}\Gamma(k/2)}\,x^{k/2 - 1}e^{-x/2} \bigg|_{k=2} = \frac{1}{2}e^{-x/2}, \qquad x > 0
+    $$
+
+    곧 평균 2인 지수분포다. 그러므로 생존함수가 $P(\chi^2_2 > x) = e^{-x/2}$이고
+
+    $$
+    p = e^{-JB/2}
+    $$
+
+    이다. $JB = 0.2822002$를 넣으면 $p = e^{-0.1411001} = 0.8684024$다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    n = 1000
+
+    # 주석을 바꿔 가며 정규와 지수를 견주어 볼 수 있다.
+    data = np.random.normal(0, 1, n)
+    # data = np.random.exponential(1, n)
+
+    # JB 통계량을 정의대로 구한다. 왜도의 제곱과 초과첨도의 제곱을 더하되
+    # 첨도 쪽에 1/4 을 곱한다. 정규라면 둘 다 0 이므로 JB 도 0 에 가깝다.
+    skewness_value = stats.skew(data)
+    kurtosis_value = stats.kurtosis(data)
+    JB = n / 6 * (skewness_value**2 + kurtosis_value**2 / 4)
+    print(f"{JB = }")
+
+    # scipy 의 결과와 맞는지 확인한다. JB 는 자유도 2 인 카이제곱을 따르지만,
+    # 그 근사는 표본이 아주 클 때라야 쓸 만하다.
+    stat, p_value = stats.jarque_bera(data)
+    print(f"Jarque-Bera Test: Statistic={stat}, p-value={p_value}")
+
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H_0: The data is not normally distributed.")
+    else:
+        print("Fail to reject H_0: The data is normally distributed.")
+    ```
+
+    출력:
+
+    ```text
+    JB = 0.28220016508625234
+    Jarque-Bera Test: Statistic=0.28220016508625234, p-value=0.8684023954281485
+    Fail to reject H_0: The data is normally distributed.
+    ```
+
+    손으로 계산한 $JB = 0.28220016508625234$가 `scipy.stats.jarque_bera`의 값과 **마지막 자리까지** 같다. $e^{-JB/2}$ 역시 $0.8684023954281485$로 `scipy`의 $p$값과 끝까지 일치한다(배정도 한계인 16자리). `stats.kurtosis`가 이미 **초과**첨도 $K - 3$을 돌려주므로 코드의 `kurtosis_value**2 / 4`가 공식의 $(K-3)^2/4$에 해당한다는 점에 유의하라. 3을 한 번 더 빼면 안 된다.
+
+    한 가지 단서를 달아 두어야 한다. $p = e^{-JB/2}$는 **$\chi^2_2$에 대해서는 정확하다.** 그러나 "$JB$가 $\chi^2_2$를 따른다"는 것 자체가 점근적 주장이어서, 그 근사가 어긋나면 이 깔끔한 식도 어긋난 값을 준다. 바로 아래에서 $n = 50$일 때 95백분위가 $\chi^2_2$의 $5.991$이 아니라 $4.97$임을 보인다. $n = 1000$인 이 보기에서는 근사가 쓸 만하다.
 
 ## 카이제곱 근사는 얼마나 맞는가
 

@@ -31,46 +31,128 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 왜도 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 왜도 검정. $\mathcal{N}(2, 2^2)$에서 $n = 1000$개를 뽑으면 $Z_1 = 0.4402$, $p = 0.6598$로 기각하지 못한다.
+
+**(1)** 이 검정이 $n = 1000$에서 **잡아낼 수 있는 가장 작은 왜도**는 얼마인가. $\lvert Z_1\rvert = 1.96$이 되는 $g_1$을 구하고, 흔히 쓰는 어림 $1.96\sqrt{6/n}$과 비교하시오.
+
+**(2)** 코드의 주석을 풀어 $\text{Gamma}(k = 2,\ \theta = 2)$로 돌리면 어떻게 되는가. 감마분포의 **이론** 왜도를 구해 표본값과 견주시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 경계는 $g_1 = 0.1515$다.** `skewtest`의 변환 $Z_1 = \delta\operatorname{arcsinh}(Y/\alpha)$는 $g_1$의 단조증가함수이므로, $Z_1 = 1.959964$가 되는 $g_1$을 수치적으로 찾으면 유일한 답이 나온다. $n = 1000$에서
 
-# 지금은 정규자료다. 위 주석을 바꿔 감마분포로 돌리면 검정이 기각되는 것을
-# 볼 수 있다. 두 경우를 견주는 것이 이 코드의 쓰임이다.
-# data = np.random.gamma(2, 2, 1000)
-data = np.random.normal(2, 2, 1000)
+    $$
+    g_1^{\ast} = 0.1515
+    $$
 
-skewness_value = stats.skew(data)
-print(f"Skewness: {skewness_value:.4f}")
+    이고, 어림 $1.96\sqrt{6/n} = 1.959964\times0.0774597 = 0.1518$이 그것을 거의 그대로 맞힌다(차이 $0.2\%$). $n$이 1000쯤 되면 $g_1$의 귀무분포가 충분히 정규에 가까워져 단순 어림이 통한다는 뜻이다. 앞 쪽에서 본 대로 $n$이 작을 때는 그렇지 않다.
 
-# 귀무가설은 "모집단의 왜도가 0" 이다. 이 검정은 치우침만 보므로,
-# 대칭이면서 꼬리만 두꺼운 분포는 잡아내지 못한다.
-stat, p_value = stats.skewtest(data)
-print(f"Skewness Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
+    관측값 $g_1 = 0.0339$는 이 경계의 $22\%$에 지나지 않는다. 그래서 $p = 0.66$이다.
 
-# 결과 해석
-alpha = 0.05
-if p_value <= alpha:
-    print("Reject H_0: The data is not symmetrically distributed (significant skewness).")
-else:
-    print("Fail to reject H_0: The data is symmetrically distributed (no significant skewness).")
-```
+    **거꾸로 읽는 것이 중요하다.** "기각하지 못했다"는 **"왜도가 $0.15$보다 작다"는 말일 뿐 "0이다"라는 말이 아니다.** 모집단 왜도가 $0.1$인 자료를 $n = 1000$으로 조사하면 이 검정은 대개 통과시킨다. $\lvert g_1\rvert < 0.15$가 실무상 무해한지는 검정이 답해 줄 수 없는 질문이고, 쓰려는 방법이 무엇인지에 달려 있다.
 
-출력:
+    **(2) 이론 왜도는 $2/\sqrt{k} = 1.4142$이고 표본값은 $1.3583$이다.** 형상모수 $k$, 척도모수 $\theta$인 감마분포의 중심적률은
 
-```text
-Skewness: 0.0339
-Skewness Test: Statistic=0.4402, p-value=0.6598
-Fail to reject H_0: The data is symmetrically distributed (no significant skewness).
-```
+    $$
+    \mu_2 = k\theta^2, \qquad \mu_3 = 2k\theta^3
+    $$
 
-정규 자료이므로 왜도가 $0.0339$로 0에 가깝고 $p = 0.66$으로 기각하지 못한다. 기대한 대로이다.
+    이므로
+
+    $$
+    \gamma_1 = \frac{\mu_3}{\mu_2^{3/2}} = \frac{2k\theta^3}{(k\theta^2)^{3/2}} = \frac{2}{\sqrt{k}}
+    $$
+
+    다. **척도 $\theta$가 약분되어 사라진다**는 점에 주의하라. $\theta = 2$를 $\theta = 100$으로 바꿔도 왜도는 그대로다. $k = 2$이므로 $\gamma_1 = 2/\sqrt2 = 1.41421$이다.
+
+    표본값 $g_1 = 1.3583$은 이론값보다 $0.056$ 작다. 유한표본에서 $g_1$이 치우침을 아래로 깎는 쪽으로 편향되어 있고 또 표집변동도 있으니 예상 범위다. 중요한 것은 이 값이 경계 $0.1515$의 **아홉 배**라는 사실이다. 검정은 $Z_1 = 13.6656$, $p = 1.63\times10^{-42}$로 압도적으로 기각한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # 지금은 정규자료다. 위 주석을 바꿔 감마분포로 돌리면 검정이 기각되는 것을
+    # 볼 수 있다. 두 경우를 견주는 것이 이 코드의 쓰임이다.
+    # data = np.random.gamma(2, 2, 1000)
+    data = np.random.normal(2, 2, 1000)
+
+    skewness_value = stats.skew(data)
+    print(f"Skewness: {skewness_value:.4f}")
+
+    # 귀무가설은 "모집단의 왜도가 0" 이다. 이 검정은 치우침만 보므로,
+    # 대칭이면서 꼬리만 두꺼운 분포는 잡아내지 못한다.
+    stat, p_value = stats.skewtest(data)
+    print(f"Skewness Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
+
+    # 결과 해석
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H_0: The data is not symmetrically distributed (significant skewness).")
+    else:
+        print("Fail to reject H_0: The data is symmetrically distributed (no significant skewness).")
+    ```
+
+    출력:
+
+    ```text
+    Skewness: 0.0339
+    Skewness Test: Statistic=0.4402, p-value=0.6598
+    Fail to reject H_0: The data is symmetrically distributed (no significant skewness).
+    ```
+
+    경계와 감마 쪽 값을 함께 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from scipy.optimize import brentq
+
+    n = 1000
+
+    # skewtest 의 변환을 g1 의 함수로 쓴다 (단조증가이므로 역이 하나다).
+    def z1_of(g1, n):
+        Y = g1 * np.sqrt((n + 1) * (n + 3) / (6.0 * (n - 2)))
+        beta2 = (3.0 * (n**2 + 27 * n - 70) * (n + 1) * (n + 3)
+                 / ((n - 2.0) * (n + 5) * (n + 7) * (n + 9)))
+        W2 = -1 + np.sqrt(2 * (beta2 - 1))
+        delta = 1 / np.sqrt(0.5 * np.log(W2))
+        alpha = np.sqrt(2.0 / (W2 - 1))
+        return delta * np.arcsinh(Y / alpha)
+
+    g1_cut = brentq(lambda g: z1_of(g, n) - 1.959964, 0.0, 1.0)
+    print(f"|Z1| = 1.96 이 되는 g1 = {g1_cut:.4f}")
+    print(f"어림 1.96*sqrt(6/n)   = {1.959964 * np.sqrt(6 / n):.4f}")
+
+    print(f"\nGamma(k=2) 이론 왜도 = 2/sqrt(k) = {2 / np.sqrt(2.0):.4f}")
+    np.random.seed(0)
+    gam = np.random.gamma(2, 2, 1000)
+    zg, pg = stats.skewtest(gam)
+    print(f"감마 표본 g1 = {stats.skew(gam):.4f},  Z1 = {zg:.4f},  p = {pg:.4g}")
+
+    # 정규 자료에서의 실제 기각률이 명목을 지키는지도 본다.
+    rng = np.random.default_rng(42)
+    R = 4000
+    rej = np.mean([stats.skewtest(s)[1] < 0.05 for s in rng.standard_normal((R, n))])
+    print(f"\n정규 자료 기각률 = {rej:.4f}  (명목 0.05, MC SE {np.sqrt(0.05 * 0.95 / R):.4f})")
+    ```
+
+    출력:
+
+    ```text
+    |Z1| = 1.96 이 되는 g1 = 0.1515
+    어림 1.96*sqrt(6/n)   = 0.1518
+
+    Gamma(k=2) 이론 왜도 = 2/sqrt(k) = 1.4142
+    감마 표본 g1 = 1.3583,  Z1 = 13.6656,  p = 1.629e-42
+
+    정규 자료 기각률 = 0.0530  (명목 0.05, MC SE 0.0034)
+    ```
+
+    세 가지가 맞아떨어진다. 수치적으로 구한 경계 $0.1515$가 어림 $0.1518$과 맞고, 유도한 이론 왜도 $1.4142$가 표본 $1.3583$과 표집변동 범위에서 맞으며, 정규 자료에서의 실제 기각률 $0.0530$이 명목 $0.05$에서 몬테카를로 표준오차의 $0.9$배 안에 들어온다. **검정이 약속한 크기를 지킨다**는 확인이다. $\square$
 
 ---
 
@@ -105,42 +187,135 @@ Fail to reject H_0: The data is symmetrically distributed (no significant skewne
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 첨도 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 첨도 검정. 보기 1과 **같은** $\mathcal{N}(2, 2^2)$ 표본에 첨도 검정을 걸면 $g_2 = -0.0468$, $Z_2 = -0.1980$, $p = 0.8431$이다.
+
+**(1)** $\lvert Z_2\rvert = 1.96$이 되는 $g_2$의 두 경계를 구하시오. 왜도 검정의 경계와 달리 **0을 중심으로 대칭이 아닐 것이다.** 어느 쪽이 넓으며 왜 그런가.
+
+**(2)** $\text{Gamma}(k = 2,\ \theta = 2)$의 이론 초과첨도를 유도해 표본값과 견주시오. 감마 자료에서 왜도 검정과 첨도 검정 중 어느 쪽이 더 강하게 기각하는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 경계는 $[-0.2744,\ +0.3272]$이고 위쪽이 $19\%$ 넓다.** 앞 쪽의 변환을 $b_2$의 함수로 보면 단조증가이므로 $Z_2 = \pm1.959964$를 주는 $b_2$를 수치적으로 찾을 수 있다. $n = 1000$에서 $g_2 = b_2 - 3$으로 옮겨 적으면
 
-# data = np.random.gamma(2, 2, 1000)
-data = np.random.normal(2, 2, 1000)
+    $$
+    -0.2744 \;\le\; g_2 \;\le\; +0.3272
+    $$
 
-kurtosis_value = stats.kurtosis(data)
-print(f"Kurtosis: {kurtosis_value:.4f}")
+    가 기각하지 못하는 구간이다. 비가 $0.3272/0.2744 = 1.192$다. 대칭 어림 $1.96\sqrt{24/n} = \pm0.3036$은 위쪽 경계를 $7\%$ 작게, 아래쪽 경계를 $11\%$ 크게 잡는다.
 
-# 귀무가설은 "모집단의 초과첨도가 0" 이다. 앞의 왜도 검정과 짝을 이루며,
-# 둘을 합친 것이 D'Agostino 의 K^2 이다.
-stat, p_value = stats.kurtosistest(data)
-print(f"Kurtosis Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
+    **비대칭의 까닭은 $b_2$의 귀무분포가 치우쳐 있다는 것이다.** 초과첨도는 아래로 막혀 있고($g_2 \ge -2$) 위로는 열려 있다. 게다가 $g_2$는 꼬리의 몇 안 되는 관측값이 좌우하므로 큰 값 하나가 들어오면 위로만 크게 튄다. 한쪽으로만 튈 수 있는 통계량의 분포는 대칭일 수 없고, 그러므로 **같은 크기의 이탈이라도 양수 쪽이 더 흔하다.** 검정이 그 사실을 반영해 위쪽 경계를 더 멀리 둔다.
 
-# 결과 해석
-alpha = 0.05
-if p_value <= alpha:
-    print("Reject H_0: The data does not have normal kurtosis.")
-else:
-    print("Fail to reject H_0: The data has normal kurtosis.")
-```
+    관측값 $-0.0468$은 아래쪽 경계의 $17\%$ 자리다. 그래서 $p = 0.84$다. **$Z_2$의 부호가 음수라는 사실에는 아무 정보가 없다.** 정규 자료에서 $g_2$가 음수로 나올 확률은 절반을 넘는데(비보정 $b_2$의 기댓값이 $3(n-1)/(n+1) < 3$이므로 중앙값도 3 아래다), "꼬리가 얇다는 증거"로 읽으면 안 된다.
 
-출력:
+    **(2) 이론 초과첨도는 $6/k = 3$이고 표본값은 $2.4079$다.** 형상 $k$, 척도 $\theta$인 감마분포의 중심적률은 $\mu_2 = k\theta^2$, $\mu_4 = 3k(k+2)\theta^4$이므로
 
-```text
-Kurtosis: -0.0468
-Kurtosis Test: Statistic=-0.1980, p-value=0.8431
-Fail to reject H_0: The data has normal kurtosis.
-```
+    $$
+    \gamma_2 = \frac{\mu_4}{\mu_2^2} - 3 = \frac{3k(k+2)\theta^4}{k^2\theta^4} - 3 = \frac{3(k+2)}{k} - 3 = \frac{6}{k}
+    $$
+
+    다. 왜도와 마찬가지로 **척도가 약분된다.** $k = 2$이므로 $\gamma_2 = 3$이다. 표본값 $2.4079$는 이론값보다 $0.59$ 작은데, 앞 쪽에서 본 $g_2$의 아래쪽 편향과 큰 표집변동을 생각하면 놀랄 일이 아니다.
+
+    **기각은 왜도 쪽이 훨씬 강하다.** 같은 감마 표본에서
+
+    | 검정 | 통계량 | $p$값 |
+    |---|---|---|
+    | 왜도 검정 | $Z_1 = 13.6656$ | $1.63\times10^{-42}$ |
+    | 첨도 검정 | $Z_2 = 7.7918$ | $6.61\times10^{-15}$ |
+
+    이다. 이론값으로 보면 감마 $k=2$는 왜도 $1.414$와 초과첨도 $3$을 **둘 다** 가지므로 두 검정이 모두 기각하는 것이 당연하다. 그런데 $Z_1$이 $Z_2$의 $1.75$배다. 치우친 분포에서는 왜도 쪽 신호가 먼저, 더 크게 잡힌다. 거꾸로 꼬리만 두꺼운 $t$나 꼬리만 얇은 균등분포에서는 첨도 검정만 반응한다. **두 검정을 함께 돌리고 어느 $Z$가 컸는지 보는 것이 "어떻게 정규가 아닌가"에 대한 답이 된다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    # data = np.random.gamma(2, 2, 1000)
+    data = np.random.normal(2, 2, 1000)
+
+    kurtosis_value = stats.kurtosis(data)
+    print(f"Kurtosis: {kurtosis_value:.4f}")
+
+    # 귀무가설은 "모집단의 초과첨도가 0" 이다. 앞의 왜도 검정과 짝을 이루며,
+    # 둘을 합친 것이 D'Agostino 의 K^2 이다.
+    stat, p_value = stats.kurtosistest(data)
+    print(f"Kurtosis Test: Statistic={stat:.4f}, p-value={p_value:.4f}")
+
+    # 결과 해석
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H_0: The data does not have normal kurtosis.")
+    else:
+        print("Fail to reject H_0: The data has normal kurtosis.")
+    ```
+
+    출력:
+
+    ```text
+    Kurtosis: -0.0468
+    Kurtosis Test: Statistic=-0.1980, p-value=0.8431
+    Fail to reject H_0: The data has normal kurtosis.
+    ```
+
+    비대칭 경계와 감마 쪽 값을 함께 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from scipy.optimize import brentq
+
+    n = 1000
+
+    # kurtosistest 의 변환을 b2 의 함수로 쓴다 (단조증가이므로 역이 하나다).
+    def z2_of(b2, n):
+        E = 3.0 * (n - 1) / (n + 1)
+        varb2 = 24.0 * n * (n - 2) * (n - 3) / ((n + 1) ** 2 * (n + 3) * (n + 5))
+        u = (b2 - E) / np.sqrt(varb2)
+        sqrtbeta1 = (6.0 * (n * n - 5 * n + 2) / ((n + 7) * (n + 9))
+                     * np.sqrt(6.0 * (n + 3) * (n + 5) / (n * (n - 2) * (n - 3))))
+        A = 6.0 + 8.0 / sqrtbeta1 * (2.0 / sqrtbeta1 + np.sqrt(1 + 4.0 / sqrtbeta1**2))
+        term1 = 1 - 2 / (9.0 * A)
+        term2 = ((1 - 2.0 / A) / (1 + u * np.sqrt(2 / (A - 4.0)))) ** (1 / 3)
+        return (term1 - term2) / np.sqrt(2 / (9.0 * A))
+
+    lo = brentq(lambda g: z2_of(g + 3.0, n) + 1.959964, -0.5, 0.0)
+    hi = brentq(lambda g: z2_of(g + 3.0, n) - 1.959964, 0.0, 2.0)
+    print(f"기각하지 않는 g2 구간 = [{lo:.4f}, {hi:.4f}]")
+    print(f"폭의 비 (위/아래) = {hi / abs(lo):.3f}")
+    print(f"대칭 어림 1.96*sqrt(24/n) = +-{1.959964 * np.sqrt(24 / n):.4f}")
+
+    print(f"\nGamma(k=2) 이론 초과첨도 = 3(k+2)/k - 3 = 6/k = {6 / 2.0:.4f}")
+    np.random.seed(0)
+    gam = np.random.gamma(2, 2, 1000)
+    z1, p1 = stats.skewtest(gam)
+    z2, p2 = stats.kurtosistest(gam)
+    print(f"감마 표본 g2 = {stats.kurtosis(gam):.4f},  Z2 = {z2:.4f},  p = {p2:.4g}")
+    print(f"감마 표본 Z1 = {z1:.4f} (왜도)  대  Z2 = {z2:.4f} (첨도)")
+
+    # 정규 자료에서의 실제 기각률
+    rng = np.random.default_rng(43)
+    R = 4000
+    rej = np.mean([stats.kurtosistest(s)[1] < 0.05 for s in rng.standard_normal((R, n))])
+    print(f"\n정규 자료 기각률 = {rej:.4f}  (명목 0.05, MC SE {np.sqrt(0.05 * 0.95 / R):.4f})")
+    ```
+
+    출력:
+
+    ```text
+    기각하지 않는 g2 구간 = [-0.2744, 0.3272]
+    폭의 비 (위/아래) = 1.192
+    대칭 어림 1.96*sqrt(24/n) = +-0.3036
+
+    Gamma(k=2) 이론 초과첨도 = 3(k+2)/k - 3 = 6/k = 3.0000
+    감마 표본 g2 = 2.4079,  Z2 = 7.7918,  p = 6.607e-15
+    감마 표본 Z1 = 13.6656 (왜도)  대  Z2 = 7.7918 (첨도)
+
+    정규 자료 기각률 = 0.0470  (명목 0.05, MC SE 0.0034)
+    ```
+
+    구한 구간 $[-0.2744,\ 0.3272]$가 앞 쪽 [첨도 검정](./kurtosistest.md)에서 모의실험으로 얻은 $n = 1000$의 95% 범위 $[-0.27,\ +0.33]$과 일치한다. 한쪽은 변환식을 역으로 푼 것이고 다른 쪽은 자료를 6만 번 뽑아 센 것인데 같은 수가 나왔다. 유도한 이론 초과첨도 $3$도 표본 $2.4079$와 표집변동 범위에서 맞고, 정규 자료에서의 실제 기각률 $0.0470$이 명목 $0.05$에서 몬테카를로 표준오차의 $0.9$배 안에 든다. $\square$
 
 ---
 
