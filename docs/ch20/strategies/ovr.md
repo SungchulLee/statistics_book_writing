@@ -144,37 +144,118 @@ $0.452$, 평균이 $0.339$에 그친다. 그림에서 B의 무리 전체가 주�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일대다 전략
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일대다 전략. 붓꽃 자료($n = 150$, $C = 3$)를 층화추출로 $7:3$으로 나누어 `OneVsRestClassifier`를 적합한다.
+
+**(1)** 세 이항 부분문제의 양성 비율은 각각 얼마인가.
+
+**(2)** OvR 점수는 관측치마다 합이 $1$이 아니다. 그런데 **훈련자료 전체에 걸쳐 평균하면 정확히 $1$이 된다.** 이것을 유도하고, 관측치별 합이 실제로 얼마나 흩어지는지 코드로 확인하시오.
 
 </div>
 
-```python
-from sklearn.linear_model import LogisticRegression
-from sklearn.multiclass import OneVsRestClassifier
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
+??? success "풀이"
 
-X, y = load_iris(return_X_y=True)
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=0, stratify=y)
+    **(1) 양성 비율.** 층화추출이므로 훈련자료 $n = 105$개가 범주마다 $35$개씩이다. 분류기 $f_c$는 범주 $c$를 양성, 나머지 둘을 음성으로 두므로 양성 비율은
 
-# 일대다(OvR)는 범주마다 "이 범주인가 아닌가" 분류기를 하나씩 둔다.
-# 분류기가 C 개뿐이라 단순하지만, 각 분류기가 불균형 자료를 보게 되고
-# 서로 다른 분류기의 점수를 견줄 근거도 약하다는 점이 걸린다.
-model = OneVsRestClassifier(LogisticRegression(max_iter=1000))
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
+    $$
+    \frac{n_c}{n} = \frac{35}{105} = \frac{1}{3} = \frac{1}{C}
+    $$
 
-print(f"이항 분류기 개수: {len(model.estimators_)}")
-print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
-```
+    이고 양성 대 음성이 $1:2$다. 세 부분문제가 모두 같다. 이 쪽의 연습문제 2가 다루는 $1/C$가 $C = 3$에서는 $33.3\%$라 아직 견딜 만하다.
 
-출력:
+    **(2) 평균하면 왜 $1$인가.** 분류기 $f_c$는 다시 붙인 목표값 $\tilde y_i^{(c)} = \mathbf{1}\{y_i = c\}$에 대해 벌점 붙은 음의 로그가능도
 
-```
-이항 분류기 개수: 3
-검정 정확도: 0.9333
-```
+    $$
+    J_c(\mathbf{w}_c, b_c)
+    = -\sum_{i=1}^{n}\Bigl[\tilde y_i^{(c)}\log \hat p_i^{(c)}
+    + \bigl(1 - \tilde y_i^{(c)}\bigr)\log\bigl(1 - \hat p_i^{(c)}\bigr)\Bigr]
+    + \frac{\lambda}{2}\lVert \mathbf{w}_c\rVert^2
+    $$
+
+    을 최소화한다. 여기서 $\hat p_i^{(c)} = \sigma(\mathbf{w}_c^\top\mathbf{x}_i + b_c)$다. **절편에는 벌점이 걸리지 않으므로** $b_c$에 대한 편미분이 그대로
+
+    $$
+    \frac{\partial J_c}{\partial b_c}
+    = \sum_{i=1}^{n}\bigl(\hat p_i^{(c)} - \tilde y_i^{(c)}\bigr) = 0
+    $$
+
+    이 되고, 따라서 최적점에서
+
+    $$
+    \sum_{i=1}^{n} \hat p_i^{(c)} = \sum_{i=1}^{n} \tilde y_i^{(c)} = n_c
+    $$
+
+    가 **정확히** 성립한다. 각 이항 모형의 점수를 훈련자료에 걸쳐 더하면 그 범주의 개수가 된다는 말이다. 이제 $c$에 대해 더하면
+
+    $$
+    \sum_{i=1}^{n}\sum_{c=1}^{C} \hat p_i^{(c)} = \sum_{c=1}^{C} n_c = n
+    $$
+
+    이므로 양변을 $n$으로 나누어
+
+    $$
+    \frac{1}{n}\sum_{i=1}^{n}\Bigl(\sum_{c=1}^{C} f_c(\mathbf{x}_i)\Bigr) = 1
+    $$
+
+    을 얻는다. **점마다는 $1$이 아니지만 평균으로는 $1$이다.** 그러므로 "점수의 합이 $1$이 아니다"라는 이 절의 경고는 치우침의 문제가 아니라 **퍼짐**의 문제다. 평균은 공짜로 맞아 주고, 틀리는 것은 개별 관측치다. 덧붙여 이 등식은 훈련자료에서만 성립한다. 검정자료에서는 성립할 이유가 없다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.multiclass import OneVsRestClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+
+    X, y = load_iris(return_X_y=True)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=0, stratify=y)
+
+    # 일대다(OvR)는 범주마다 "이 범주인가 아닌가" 분류기를 하나씩 둔다.
+    # 분류기가 C 개뿐이라 단순하지만, 각 분류기가 불균형 자료를 보게 되고
+    # 서로 다른 분류기의 점수를 견줄 근거도 약하다는 점이 걸린다.
+    model = OneVsRestClassifier(LogisticRegression(max_iter=1000))
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+
+    print(f"이항 분류기 개수: {len(model.estimators_)}")
+    print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
+
+    # 세 이항 모형의 점수를 날것으로 모은다. 래퍼의 predict_proba 는 합이
+    # 1 이 되도록 정규화해 버리므로 이항 모형에서 직접 꺼낸다.
+    S = np.column_stack([e.predict_proba(X_train)[:, 1] for e in model.estimators_])
+    print(f"훈련 점수의 열별 합 {np.round(S.sum(axis=0), 4)}"
+          f"   (범주별 개수 {np.bincount(y_train)})")
+    print(f"훈련 행별 합:  평균 {S.sum(axis=1).mean():.7f}"
+          f"   최소 {S.sum(axis=1).min():.4f}   최대 {S.sum(axis=1).max():.4f}")
+
+    T = np.column_stack([e.predict_proba(X_test)[:, 1] for e in model.estimators_])
+    print(f"검정 행별 합:  평균 {T.sum(axis=1).mean():.4f}"
+          f"   최소 {T.sum(axis=1).min():.4f}   최대 {T.sum(axis=1).max():.4f}")
+    print(f"아무도 0.5 를 넘지 않는 검정점 {(T.max(axis=1) < 0.5).sum()}/{len(T)}"
+          f",  둘 이상 넘는 점 {((T > 0.5).sum(axis=1) >= 2).sum()}")
+
+    bad = np.where(y_pred != y_test)[0]
+    print(f"틀린 {len(bad)}개:  참 {y_test[bad]}  ->  예측 {y_pred[bad]}")
+    ```
+
+    출력:
+
+    ```
+    이항 분류기 개수: 3
+    검정 정확도: 0.9333
+    훈련 점수의 열별 합 [34.9997 35.0003 35.    ]   (범주별 개수 [35 35 35])
+    훈련 행별 합:  평균 1.0000007   최소 0.4144   최대 1.5730
+    검정 행별 합:  평균 0.9591   최소 0.3622   최대 1.5178
+    아무도 0.5 를 넘지 않는 검정점 9/45,  둘 이상 넘는 점 3
+    틀린 3개:  참 [1 1 1]  ->  예측 [2 2 2]
+    ```
+
+    **유도한 등식이 맞는다.** 열별 합이 $34.9997$, $35.0003$, $35.0000$으로 범주별 개수 $35$와 소수 넷째 자리까지 같다. 차이 $3 \times 10^{-4}$는 L-BFGS가 수렴 허용오차에서 멈춘 탓이며, 식이 틀린 탓이 아니다. 행별 합의 평균은 $1.0000007$로 예고한 $1$과 맞는다.
+
+    **그런데 개별 관측치는 전혀 $1$이 아니다.** 훈련자료에서 행별 합이 $0.4144$에서 $1.5730$까지 흩어진다. 최소점에서는 세 분류기를 다 합쳐도 $0.41$밖에 안 되니 아무도 그 점을 자기 것이라 하지 않고, 최대점에서는 $1.57$이니 둘 이상이 동시에 자기 것이라 한다. 검정자료에서 **$45$개 중 $9$개가 $\max_c f_c < 0.5$로 아무도 주장하지 않는 점**이고 $3$개는 둘 이상이 주장하는 점이다. 앞 그림의 주황 영역과 분홍 영역이 수로 나타난 것이다.
+
+    틀린 $3$개는 모두 참값이 versicolor(범주 $1$)인데 virginica(범주 $2$)로 예측되었다. 가운데에 놓인 versicolor가 "versicolor 대 setosa $\cup$ virginica"라는 **선형으로 분리되지 않는** 부분문제의 양성이 되는 탓이다. 바로 앞에서 그림으로 본 구조적 결함이 수로 드러난 셈이다. 참고로 [다음 절의 OvO](ovo.md)는 똑같은 분할에서 $1.0000$을 내며, 소프트맥스도 그렇다.
 
 !!! warning "`LogisticRegression`의 기본값은 OvR이 아니다"
     `LogisticRegression`이 기본으로 OvR을 쓴다는 서술을 자주 보게 되지만, 이는 오래된

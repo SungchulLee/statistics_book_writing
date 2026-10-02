@@ -24,44 +24,166 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 수치적으로 안정한 소프트맥스
 
+**(1)** 최댓값을 빼도 결과가 바뀌지 않는 까닭을 보이시오. 왜 **행마다 따로** 빼야 하는가.
+
+**(2)** `keepdims=True`를 빼면 어떻게 되는가. 입력이 **정사각 행렬**일 때 특히 조심해야 하는 이유를 수로 보이시오.
+
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def softmax(z):
-    """수치적으로 안정한 소프트맥스.
+    **(1) 평행이동 불변성.** 임의의 스칼라 $\alpha$에 대해
 
-    가장 큰 값을 빼고 나서 exp 를 씌운다. 지수가 커지면 exp 가 넘쳐
-    inf 가 되는데, 모든 항에서 같은 값을 빼면 분자와 분모에서 약분되어
-    결과는 그대로이면서 넘침만 막을 수 있다.
-    """
-    z_shifted = z - np.max(z, axis=1, keepdims=True)
-    exp_z = np.exp(z_shifted)
-    return exp_z / np.sum(exp_z, axis=1, keepdims=True)
-```
+    $$
+    \operatorname{softmax}(\mathbf{z} - \alpha\mathbf{1})_k
+    = \frac{e^{z_k - \alpha}}{\sum_j e^{z_j - \alpha}}
+    = \frac{e^{-\alpha}e^{z_k}}{e^{-\alpha}\sum_j e^{z_j}}
+    = \operatorname{softmax}(\mathbf{z})_k
+    $$
+
+    로 $e^{-\alpha}$가 약분된다. 그러므로 $\alpha = \max_k z_k$로 두어도 답은 그대로이고, 가장 큰 지수가 $e^0 = 1$이 되어 넘침만 사라진다.
+
+    여기서 결정적인 것은 **$\alpha$가 그 행 안에서는 모든 성분에 똑같이 적용되어야 한다**는 점이다. 약분이 일어나려면 분자와 분모의 모든 항이 같은 $e^{-\alpha}$를 가져야 하기 때문이다. 행마다 $\alpha$가 달라지는 것은 상관없다. 소프트맥스가 행마다 따로 계산되므로 각 행이 자기 $\alpha$를 쓰면 된다. 반대로 **열마다 다른 값을 빼면** 한 행 안에서 성분별로 다른 수를 빼는 것이 되어 약분이 깨지고, 답이 달라진다.
+
+    **(2) `keepdims`의 역할.** `np.max(z, axis=1)`은 모양이 $(n,)$이고 `keepdims=True`를 주면 $(n, 1)$이다. 넘파이는 뒤축부터 맞추어 퍼뜨리므로
+
+    - $(n, C) - (n, 1)$: 둘째 축이 $1$이라 늘어나 **행마다** 빼진다. 옳다.
+    - $(n, C) - (n,)$: $(n,)$을 $(1, n)$으로 보고 $C$와 $n$을 맞추려 한다. $C \ne n$이면 `ValueError`로 **곧바로 들킨다.**
+    - $(n, n) - (n,)$: 모양이 맞아 **오류 없이 통과한다.** 그런데 이때 빼지는 것은 열마다 다른 값이므로 (1)에서 본 약분이 깨진다. **조용히 틀린 답이 나온다.**
+
+    ```python
+    import numpy as np
+
+    def softmax(z):
+        """수치적으로 안정한 소프트맥스.
+
+        가장 큰 값을 빼고 나서 exp 를 씌운다. 지수가 커지면 exp 가 넘쳐
+        inf 가 되는데, 모든 항에서 같은 값을 빼면 분자와 분모에서 약분되어
+        결과는 그대로이면서 넘침만 막을 수 있다.
+        """
+        z_shifted = z - np.max(z, axis=1, keepdims=True)
+        exp_z = np.exp(z_shifted)
+        return exp_z / np.sum(exp_z, axis=1, keepdims=True)
+
+    # 하필 3x3 인 로짓. keepdims 를 빠뜨려도 오류가 나지 않는다.
+    Z = np.array([[2.0, 1.0, -1.0],
+                  [0.0, 3.0,  1.0],
+                  [5.0, 5.0,  5.0]])
+
+    good = softmax(Z)
+    shift_wrong = np.exp(Z - np.max(Z, axis=1))
+    bad = shift_wrong / np.sum(shift_wrong, axis=1, keepdims=True)
+
+    print("keepdims=True :\n", np.round(good, 6))
+    print("keepdims 뺀 것:\n", np.round(bad, 6))
+    print("틀린 쪽의 행 합", bad.sum(axis=1), "  두 결과가 같은가", np.allclose(good, bad))
+
+    # 정사각이 아니면 그 자리에서 오류가 난다.
+    try:
+        Zr = np.array([[2.0, 1.0, -1.0], [0.0, 3.0, 1.0]])
+        np.exp(Zr - np.max(Zr, axis=1))
+    except ValueError as e:
+        print("정사각이 아니면:", type(e).__name__, e)
+    ```
+
+    출력:
+
+    ```
+    keepdims=True :
+     [[0.705385 0.259496 0.035119]
+     [0.04201  0.843795 0.114195]
+     [0.333333 0.333333 0.333333]]
+    keepdims 뺀 것:
+     [[0.878878 0.118943 0.002179]
+     [0.11731  0.866813 0.015876]
+     [0.705385 0.259496 0.035119]]
+    틀린 쪽의 행 합 [1. 1. 1.]  두 결과가 같은가 False
+    정사각이 아니면: ValueError operands could not be broadcast together with shapes (2,3) (2,)
+    ```
+
+    **이 버그가 왜 무서운지가 여기 있다.** 틀린 결과도 행 합이 모두 정확히 $1$이다. 비음성도 만족하고 합도 $1$이니 **확률벡터로서는 흠잡을 데가 없다.** 그런데 값은 전혀 다르다. 셋째 행이 특히 선명하다. 로짓이 $(5,5,5)$로 완전히 대칭이라 답은 반드시 $(1/3, 1/3, 1/3)$이어야 하는데, 틀린 쪽은 $(0.705, 0.259, 0.035)$를 내놓는다. 그 값이 하필 첫째 행의 답과 똑같다는 것도 우연이 아니다. 열별 최댓값 $(5, 5, 5)$를 모든 행에서 빼 버렸기 때문이다.
+
+    비정사각 입력에서는 `ValueError`가 즉시 나므로 오히려 안전하다. **위험한 것은 $n = C$가 되는 때**이고, 범주 수와 묶음 크기를 같게 잡는 일은 작은 실험에서 드물지 않다.
 
 로짓 벡터 $\mathbf{z} = (2, 1, -1)^\top$로 구현을 확인할 수 있다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 로짓에서 확률로
+**보기 2.** <span class="diff easy" title="쉬움"></span> 로짓에서 확률로. $\mathbf{z} = (2, 1, -1)^\top$를 넣는다.
+
+**(1)** 세 확률을 손으로 구하시오.
+
+**(2)** 주석은 "$2$와 $1$의 차이가 $1$이므로 첫 확률이 둘째의 $e$배쯤 된다"고 말한다. **"쯤"이 맞는 말인가.** 확률의 비가 무엇으로 정해지는지 밝히고 수로 확인하시오.
 
 </div>
 
-```python
-# 로짓의 차이가 확률의 비를 정한다. 2 와 1 의 차이가 1 이므로 첫 확률이
-# 둘째의 e 배쯤 된다.
-z = np.array([[2.0, 1.0, -1.0]])
-print(softmax(z))
-# [[0.7054  0.2595  0.0351]]
-```
+??? success "풀이"
 
-출력:
+    **(1) 손으로.** 지수를 계산하면
 
-```
-[[0.70538451 0.25949646 0.03511903]]
-```
+    $$
+    e^2 = 7.389056,
+    \qquad
+    e^1 = 2.718282,
+    \qquad
+    e^{-1} = 0.367879
+    $$
+
+    이고 합이 $10.475217$이다. 따라서
+
+    $$
+    \hat p_1 = \frac{7.389056}{10.475217} = 0.705385,
+    \quad
+    \hat p_2 = \frac{2.718282}{10.475217} = 0.259496,
+    \quad
+    \hat p_3 = \frac{0.367879}{10.475217} = 0.035119
+    $$
+
+    이다.
+
+    **(2) "쯤"이 아니라 정확히 $e$배다.** 두 확률의 비를 보면 분모가 통째로 약분되어
+
+    $$
+    \frac{\hat p_j}{\hat p_k}
+    = \frac{e^{z_j} / \sum_m e^{z_m}}{e^{z_k} / \sum_m e^{z_m}}
+    = e^{z_j - z_k}
+    $$
+
+    가 된다. **확률의 비는 오직 두 로짓의 차이만으로 정해지며, 다른 범주가 무엇이든 전혀 끼어들지 않는다.** 그러므로
+
+    $$
+    \frac{\hat p_1}{\hat p_2} = e^{2-1} = e = 2.718282,
+    \qquad
+    \frac{\hat p_2}{\hat p_3} = e^{1-(-1)} = e^2 = 7.389056
+    $$
+
+    이고 근삿값이 아니라 **등식**이다. 로그로 쓰면 $\log(\hat p_j/\hat p_k) = z_j - z_k$로, **로짓의 차가 곧 로그오즈비**다. 이범주 로지스틱 회귀에서 계수를 로그오즈비로 읽던 해석이 그대로 이어진다.
+
+    여기에 소프트맥스 회귀의 한 가지 성질이 들어 있다. 범주 $3$을 자료에서 빼더라도 $\hat p_1 : \hat p_2$는 $e : 1$ 그대로다. 선택이론에서 **무관한 대안으로부터의 독립**(IIA)이라 부르는 성질이며, 편리하기도 하고 때로는 모형의 한계이기도 하다.
+
+    ```python
+    # 로짓의 차이가 확률의 비를 정한다. 2 와 1 의 차이가 1 이므로 첫 확률이
+    # 둘째의 e 배쯤 된다.
+    z = np.array([[2.0, 1.0, -1.0]])
+    print(softmax(z))
+    # [[0.7054  0.2595  0.0351]]
+
+    p = softmax(z)[0]
+    print(f"분모 e^2 + e + e^-1 = {np.exp(2) + np.exp(1) + np.exp(-1):.6f}")
+    print(f"p1/p2 = {p[0] / p[1]:.9f}   e   = {np.e:.9f}")
+    print(f"p2/p3 = {p[1] / p[2]:.9f}   e^2 = {np.e**2:.9f}")
+    ```
+
+    출력:
+
+    ```
+    [[0.70538451 0.25949646 0.03511903]]
+    분모 e^2 + e + e^-1 = 10.475217
+    p1/p2 = 2.718281828   e   = 2.718281828
+    p2/p3 = 7.389056099   e^2 = 7.389056099
+    ```
+
+    손으로 구한 세 확률이 그대로 나오고, 두 비가 $e$와 $e^2$와 **아홉 자리까지 같다.** 주석의 "$e$배쯤"은 사실 "정확히 $e$배"다.
 
 ---
 
@@ -81,24 +203,81 @@ $\varepsilon$이 $\log(0)$을 막는다.
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 교차엔트로피 손실
 
+**(1)** $\mathbf{Y}$가 원-핫이면 이 식이 무엇으로 줄어드는가. **완벽한 예측**, **균등 예측**, **가장 나쁜 예측**에서의 값을 각각 구하시오.
+
+**(2)** $\varepsilon = 10^{-12}$이 손실에 씌우는 **상한**은 얼마인가. 완벽한 예측에서는 손실이 정확히 $0$이 되는가.
+
 </div>
 
-```python
-def cross_entropy_loss(Y, Y_hat, eps=1e-12):
-    """평균 교차엔트로피 손실.
+??? success "풀이"
 
-    원-핫 이름표를 곱하므로 실제로는 "참 범주에 준 확률의 로그"만 더해진다.
-    참 범주에 0 에 가까운 확률을 주면 손실이 무한대로 치솟는다.
-    eps 는 로그가 발산하는 것을 막는 안전장치다.
+    **(1) 원-핫이면 한 항만 남는다.** 관측치 $i$의 참 범주를 $c_i$라 하면 $y_{ic} = \mathbf{1}\{c = c_i\}$이므로 안쪽 합에서 한 항만 살아남아
 
-    매개변수
-    --------
-    Y : (n, C) 원-핫 이름표 행렬
-    Y_hat : (n, C) 예측확률 행렬
-    """
-    n = Y.shape[0]
-    return -np.sum(Y * np.log(Y_hat + eps)) / n
-```
+    $$
+    J = -\frac{1}{n}\sum_{i=1}^{n} \log \hat y_{i c_i}
+    $$
+
+    가 된다. **참 범주에 준 확률의 로그를 평균한 것에 음수를 붙인 값**이며, 다른 범주에 확률을 어떻게 나누어 주었는지는 전혀 보지 않는다.
+
+    세 가지 경우를 재어 본다.
+
+    | 예측 | $\hat y_{ic_i}$ | $J$ | $C = 3$에서 |
+    |:---|:---:|:---:|:---:|
+    | 완벽 | $1$ | $-\log 1 = 0$ | $0$ |
+    | 균등 | $1/C$ | $\log C$ | $1.098612$ |
+    | 가장 나쁨 | $0$ | $+\infty$ | $\varepsilon$에 잘려 $27.631$ |
+
+    **$\log C$가 기준선이다.** 아무것도 모르는 모형의 손실이 그 값이며, 그보다 크면 모형이 확신을 갖고 틀리는 중이라는 뜻이다. $C = 3$이면 $\log 3 = 1.0986$, $C = 10$이면 $\log 10 = 2.3026$이다.
+
+    **(2) 상한은 $-\log\varepsilon$이다.** 참 범주에 $\hat y = 0$을 주면 참값이 $+\infty$지만 코드가 더하는 $\varepsilon$ 때문에
+
+    $$
+    -\log(0 + 10^{-12}) = 12 \log 10 = 27.631021
+    $$
+
+    에서 멈춘다. 모든 관측치가 그렇다면 $J$도 $27.631$이다. **$\varepsilon$은 수치적 안전장치인 동시에 손실을 자르는 문턱**이며, 이 쪽의 경고 상자가 말하는 바가 이것이다.
+
+    반대쪽도 공짜가 아니다. 완벽한 예측에서도 $\log(1 + 10^{-12}) = 10^{-12}$이므로
+
+    $$
+    J = -\frac{1}{n}\sum_i \log(1 + 10^{-12}) = -10^{-12}
+    $$
+
+    로 **아주 조금 음수**가 된다. 교차엔트로피는 원래 음수가 될 수 없으니, 손실 기록에 $-10^{-12}$ 같은 값이 찍히면 놀랄 일이 아니라 이 $\varepsilon$ 탓이다. 크기가 $10^{-12}$라 실무에서는 무해하지만, **$\varepsilon$을 더하는 것이 목적함수를 조금 바꾼다**는 사실은 알고 있어야 한다. 더 깔끔한 길은 확률이 아니라 로짓에서 `log_softmax`를 계산하는 것이다.
+
+    ```python
+    def cross_entropy_loss(Y, Y_hat, eps=1e-12):
+        """평균 교차엔트로피 손실.
+
+        원-핫 이름표를 곱하므로 실제로는 "참 범주에 준 확률의 로그"만 더해진다.
+        참 범주에 0 에 가까운 확률을 주면 손실이 무한대로 치솟는다.
+        eps 는 로그가 발산하는 것을 막는 안전장치다.
+
+        매개변수
+        --------
+        Y : (n, C) 원-핫 이름표 행렬
+        Y_hat : (n, C) 예측확률 행렬
+        """
+        n = Y.shape[0]
+        return -np.sum(Y * np.log(Y_hat + eps)) / n
+
+    Y = np.eye(3)            # 세 관측치의 참 범주가 각각 0, 1, 2
+    print(f"완벽      {cross_entropy_loss(Y, Y):.6e}")
+    print(f"균등      {cross_entropy_loss(Y, np.full((3, 3), 1 / 3)):.6f}"
+          f"   log 3 = {np.log(3):.6f}")
+    print(f"가장 나쁨 {cross_entropy_loss(Y, 1 - Y):.6f}"
+          f"   -log(1e-12) = {-np.log(1e-12):.6f}")
+    ```
+
+    출력:
+
+    ```
+    완벽      -1.000089e-12
+    균등      1.098612   log 3 = 1.098612
+    가장 나쁨 27.631021   -log(1e-12) = 27.631021
+    ```
+
+    예고한 세 값이 모두 맞는다. 균등 예측이 정확히 $\log 3 = 1.098612$, 최악이 $27.631021$, 그리고 완벽한 예측이 $0$이 아니라 $-1.000089 \times 10^{-12}$다.
 
 !!! warning "$\varepsilon$ 보정은 손실값만 보호한다"
     이 $\varepsilon$ 기법은 `nan`을 막아 주지만 목적함수를 미세하게 바꾼다. 확신에 찬 오답의
@@ -131,22 +310,105 @@ $$
 
 **보기 4.** <span class="diff easy" title="쉬움"></span> 기울기 계산
 
+**(1)** $\partial J/\partial \mathbf{W}$의 **행 합**과 $\partial J/\partial \mathbf{b}$의 **합**이 모두 $0$임을 보이시오. 이것이 소프트맥스의 과모수화와 어떤 관계인가.
+
+**(2)** 수치미분으로 기울기를 검산하고 (1)의 등식을 확인하시오.
+
 </div>
 
-```python
-def compute_gradients(X, Y, Y_hat):
-    """교차엔트로피의 W, b 에 대한 기울기.
+??? success "풀이"
 
-    소프트맥스와 교차엔트로피를 함께 쓰면 미분이 Y_hat - Y 라는 아주
-    간단한 꼴로 떨어진다. 로지스틱 회귀의 기울기와 같은 모양이며,
-    일반화선형모형 전체에서 되풀이되는 구조다.
-    """
-    n = X.shape[0]
-    error = Y_hat - Y                   # (n, C)
-    dW = X.T @ error / n                # (d, C)
-    db = np.mean(error, axis=0)         # (C,)
-    return dW, db
-```
+    **(1) 오차행렬의 행 합이 $0$이다.** $\hat{\mathbf{Y}}$의 각 행은 확률이라 합이 $1$이고 $\mathbf{Y}$의 각 행은 원-핫이라 역시 합이 $1$이다. 그러므로 오차행렬 $\mathbf{E} = \hat{\mathbf{Y}} - \mathbf{Y}$에 대해
+
+    $$
+    \mathbf{E}\mathbf{1}_C = \hat{\mathbf{Y}}\mathbf{1}_C - \mathbf{Y}\mathbf{1}_C
+    = \mathbf{1}_n - \mathbf{1}_n = \mathbf{0}
+    $$
+
+    이다. 이것 하나에서 둘이 따라 나온다.
+
+    $$
+    \frac{\partial J}{\partial \mathbf{W}}\mathbf{1}_C
+    = \frac{1}{n}\mathbf{X}^\top \mathbf{E}\mathbf{1}_C = \mathbf{0},
+    \qquad
+    \mathbf{1}_C^\top\frac{\partial J}{\partial \mathbf{b}}
+    = \frac{1}{n}\mathbf{1}_n^\top \mathbf{E}\mathbf{1}_C = 0
+    $$
+
+    곧 **기울기행렬의 행마다 $C$개 성분을 더하면 정확히 $0$이고, 편향 기울기도 더하면 $0$이다.**
+
+    **과모수화와의 관계.** 앞 절에서 보았듯 모든 범주의 가중벡터에 같은 $\mathbf{v}$를 더해도 로짓의 차가 변하지 않아 예측이 똑같다. 곧 $\mathbf{W} \mapsto \mathbf{W} + \mathbf{v}\mathbf{1}_C^\top$ 방향으로 손실이 **완전히 평평**하다. 기울기는 평평한 방향에 성분을 가질 수 없으므로
+
+    $$
+    \left\langle \frac{\partial J}{\partial \mathbf{W}},\ \mathbf{v}\mathbf{1}_C^\top \right\rangle
+    = \mathbf{v}^\top\!\left(\frac{\partial J}{\partial \mathbf{W}}\mathbf{1}_C\right) = 0
+    $$
+
+    이 모든 $\mathbf{v}$에 대해 성립해야 하고, 그것이 바로 위의 등식이다. **행 합이 $0$이라는 것은 과모수화의 다른 말이다.**
+
+    여기서 실용적인 결론이 나온다. 경사하강은 평평한 방향으로 **한 발짝도 움직이지 못하므로**
+
+    $$
+    \sum_{c} W_{jc} \quad\text{이 학습 내내 보존된다.}
+    $$
+
+    처음에 무작위로 잡은 행 합이 $200$세대 뒤에도 그대로 남는다는 뜻이다. 벌점이 없으면 해가 유일하지 않고, 어느 해에 가는지는 **초기값이 정한다.** $L_2$ 벌점을 걸면 그 방향으로도 기울기가 생겨($\lambda\mathbf{W}$) 행 합이 $0$인 쪽으로 끌려가고 해가 유일해진다. 보기 8에서 scikit-learn의 계수로 이것을 확인한다.
+
+    ```python
+    def compute_gradients(X, Y, Y_hat):
+        """교차엔트로피의 W, b 에 대한 기울기.
+
+        소프트맥스와 교차엔트로피를 함께 쓰면 미분이 Y_hat - Y 라는 아주
+        간단한 꼴로 떨어진다. 로지스틱 회귀의 기울기와 같은 모양이며,
+        일반화선형모형 전체에서 되풀이되는 구조다.
+        """
+        n = X.shape[0]
+        error = Y_hat - Y                   # (n, C)
+        dW = X.T @ error / n                # (d, C)
+        db = np.mean(error, axis=0)         # (C,)
+        return dW, db
+
+    def one_hot_tmp(y, C):                  # 보기 5 에서 다시 다룬다
+        Y = np.zeros((y.shape[0], C))
+        Y[np.arange(y.shape[0]), y] = 1.0
+        return Y
+
+    rng = np.random.default_rng(1)
+    n, d, C = 7, 4, 3
+    X = rng.normal(size=(n, d))
+    y = rng.integers(0, C, n)
+    Y = one_hot_tmp(y, C)
+    W = rng.normal(size=(d, C)) * 0.5
+    b = rng.normal(size=C) * 0.5
+
+    dW, db = compute_gradients(X, Y, softmax(X @ W + b))
+    print("dW 의 행 합", dW.sum(axis=1))
+    print("db 의 합   ", db.sum())
+
+    # 중심차분으로 모든 성분을 검사한다.
+    eps, worst = 1e-6, 0.0
+    for P, G in ((W, dW), (b, db)):
+        for idx in np.ndindex(P.shape):
+            o = P[idx]
+            P[idx] = o + eps
+            lp = cross_entropy_loss(Y, softmax(X @ W + b))
+            P[idx] = o - eps
+            lm = cross_entropy_loss(Y, softmax(X @ W + b))
+            P[idx] = o
+            num = (lp - lm) / (2 * eps)
+            worst = max(worst, abs(num - G[idx]) / max(abs(num), abs(G[idx]), 1e-12))
+    print(f"{W.size + b.size}개 성분 모두 검사,  최대 상대오차 {worst:.2e}")
+    ```
+
+    출력:
+
+    ```
+    dW 의 행 합 [0.00000000e+00 0.00000000e+00 0.00000000e+00 2.77555756e-17]
+    db 의 합    -1.3877787807814457e-17
+    15개 성분 모두 검사,  최대 상대오차 9.27e-08
+    ```
+
+    **두 가지가 함께 확인된다.** 행 합과 편향 기울기의 합이 $10^{-17}$ 수준, 곧 배정도의 반올림 한계까지 $0$이다. 그리고 $15$개 성분을 모두 중심차분과 맞춰 본 최대 상대오차가 $9.27 \times 10^{-8}$로 통과 기준 안에 든다. 유도한 $\frac1n\mathbf{X}^\top(\hat{\mathbf{Y}} - \mathbf{Y})$가 옳다.
 
 ---
 
@@ -159,20 +421,81 @@ def compute_gradients(X, Y, Y_hat):
 
 **보기 5.** <span class="diff easy" title="쉬움"></span> 원-핫 변환
 
+**(1)** `one_hot`이 돌려주는 $\mathbf{Y}$에 대해 $\mathbf{Y}\mathbf{1}_C$, $\mathbf{1}_n^\top\mathbf{Y}$, $\mathbf{Y}^\top\mathbf{Y}$가 각각 무엇인지 적으시오.
+
+**(2)** 이 구현은 이름표를 **검사하지 않는다.** $y_i = C$와 $y_i = -1$이 들어오면 각각 어떻게 되는가. 둘 중 어느 쪽이 더 위험한가.
+
 </div>
 
-```python
-def one_hot(y, C):
-    """정수 이름표를 원-핫 행렬로 바꾼다.
+??? success "풀이"
 
-    범주에 매긴 번호를 그대로 쓰면 "2가 1보다 크다" 같은 뜻이 없는 순서가
-    생긴다. 원-핫은 그 순서를 지운다.
-    """
-    n = y.shape[0]
-    Y = np.zeros((n, C))
-    Y[np.arange(n), y] = 1.0
-    return Y
-```
+    **(1) 세 가지 곱.** $Y_{ic} = \mathbf{1}\{y_i = c\}$이므로
+
+    $$
+    \mathbf{Y}\mathbf{1}_C = \mathbf{1}_n,
+    \qquad
+    \mathbf{1}_n^\top\mathbf{Y} = (n_0, n_1, \ldots, n_{C-1}),
+    \qquad
+    \mathbf{Y}^\top\mathbf{Y} = \operatorname{diag}(n_0, \ldots, n_{C-1})
+    $$
+
+    이다. 차례로 **행마다 정확히 하나의 $1$**, **열 합이 범주별 개수**, 그리고 **서로 다른 두 열의 내적이 $0$**이라는 말이다. 마지막 것은 한 관측치가 두 범주에 동시에 속할 수 없다는 사실의 대수적 표현이고, 원-핫 열들이 서로 직교한다는 뜻이기도 하다.
+
+    번호를 그대로 쓰지 않고 원-핫으로 펼치는 이유가 여기서 보인다. 번호 $0, 1, 2$를 특성으로 쓰면 "$2$와 $0$의 거리가 $2$이고 $1$과 $0$의 거리가 $1$"이라는, 범주에 없던 **순서와 간격**이 생긴다. 원-핫에서는 서로 다른 두 범주의 거리가 언제나 $\sqrt{2}$로 같다.
+
+    **(2) 검사하지 않는다.** `Y[np.arange(n), y] = 1.0`은 넘파이의 자리 지정이라 색인 규칙을 그대로 따른다.
+
+    - $y_i = C$(범위를 넘는 값): 열이 $C$개뿐이므로 `IndexError`가 난다. **시끄럽게 실패하니 안전하다.**
+    - $y_i = -1$(음수): 넘파이는 음수 색인을 **뒤에서부터 센다.** $-1$은 마지막 열이므로 아무 오류 없이 범주 $C-1$의 원-핫이 만들어진다. **조용히 틀린다.**
+
+    뒤의 것이 훨씬 위험하다. 결측을 $-1$로 표시하는 관행이 흔한데, 그런 자료를 그대로 넣으면 **모든 결측이 마지막 범주로 둔갑한 채** 학습이 끝까지 돌아간다. `assert y.min() >= 0 and y.max() < C` 한 줄이면 막을 수 있다.
+
+    ```python
+    def one_hot(y, C):
+        """정수 이름표를 원-핫 행렬로 바꾼다.
+
+        범주에 매긴 번호를 그대로 쓰면 "2가 1보다 크다" 같은 뜻이 없는 순서가
+        생긴다. 원-핫은 그 순서를 지운다.
+        """
+        n = y.shape[0]
+        Y = np.zeros((n, C))
+        Y[np.arange(n), y] = 1.0
+        return Y
+
+    y = np.array([0, 2, 1, 2, 2])
+    Y = one_hot(y, 3)
+    print(Y)
+    print("행 합", Y.sum(axis=1), " 열 합", Y.sum(axis=0),
+          " 범주별 개수", np.bincount(y, minlength=3))
+    print("Y^T Y =\n", Y.T @ Y)
+
+    print("이름표 -1 을 넣으면:", one_hot(np.array([-1]), 3))
+    try:
+        one_hot(np.array([3]), 3)
+    except IndexError as e:
+        print("이름표 3 을 넣으면:", type(e).__name__)
+    ```
+
+    출력:
+
+    ```
+    [[1. 0. 0.]
+     [0. 0. 1.]
+     [0. 1. 0.]
+     [0. 0. 1.]
+     [0. 0. 1.]]
+    행 합 [1. 1. 1. 1. 1.]  열 합 [1. 1. 3.]  범주별 개수 [1 1 3]
+    Y^T Y =
+     [[1. 0. 0.]
+     [0. 1. 0.]
+     [0. 0. 3.]]
+    이름표 -1 을 넣으면: [[0. 0. 1.]]
+    이름표 3 을 넣으면: IndexError
+    ```
+
+    **(1)의 세 등식이 모두 맞는다.** 행 합이 전부 $1$, 열 합 $(1, 1, 3)$이 범주별 개수와 같고, $\mathbf{Y}^\top\mathbf{Y}$가 그 개수를 대각선에 늘어놓은 행렬이다.
+
+    그리고 (2)가 예고한 비대칭이 그대로다. 이름표 $3$은 `IndexError`로 막히지만 이름표 $-1$은 $(0, 0, 1)$, 곧 **범주 $2$의 원-핫을 아무 말 없이 돌려준다.**
 
 ---
 
@@ -184,62 +507,104 @@ def one_hot(y, C):
 
 **보기 6.** <span class="diff easy" title="쉬움"></span> 붓꽃 자료로 학습하기
 
+**(1)** `W = np.random.randn(d, C) * 0.01`, `b = np.zeros(C)`로 출발한다. **첫 세대의 손실**이 얼마여야 하는지 미리 계산하시오.
+
+**(2)** 돌려서 (1)을 확인하고, 보기 4에서 유도한 **행 합의 보존**이 실제로 일어나는지 보시오.
+
 </div>
 
-```python
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+??? success "풀이"
 
-# --- 자료 준비 ---
-iris = load_iris()
-X, y = iris.data, iris.target
-C = len(np.unique(y))
+    **(1) 거의 균등 예측에서 출발한다.** 표준화한 특성은 성분별 표준편차가 $1$이고 $d = 4$이므로, 초기 로짓
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42)
+    $$
+    z_{ic} = \sum_{j=1}^{4} x_{ij}W_{jc}, \qquad W_{jc} \sim 0.01 \times N(0,1)
+    $$
 
-# 표준화는 훈련자료로만 적합하고 시험자료에는 변환만 적용한다. 시험자료의
-# 평균과 표준편차까지 보고 맞추면 정보가 새어 들어간다.
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+    의 표준편차는 대략 $0.01\sqrt{4} = 0.02$다. 편향은 $0$이다. 로짓이 이렇게 $0$ 근처에 모여 있으면 소프트맥스가 거의 균등하게 $(1/3, 1/3, 1/3)$을 주므로, 보기 3의 표에서
 
-Y_train = one_hot(y_train, C)
-Y_test = one_hot(y_test, C)
+    $$
+    J_0 \approx \log C = \log 3 = 1.098612
+    $$
 
-# --- 모수 초기화 ---
-d = X_train.shape[1]
-np.random.seed(0)
-W = np.random.randn(d, C) * 0.01
-b = np.zeros(C)
+    가 나와야 한다. 정확히 $\log 3$은 아니다. $\mathbf{W}$가 $0$이 아니므로 작은 **양의** 보정이 붙는다. 로짓이 참 범주 쪽으로 치우칠 이유가 없고 교차엔트로피는 균등점에서 최소이기 때문에, 손실은 $\log 3$보다 **크되 로짓 크기의 제곱 수준**으로만 크다. $O(0.02^2) \sim 10^{-3}$을 예상한다.
 
-# --- 학습 ---
-# 전체 자료로 한 번에 기울기를 구하는 순수 경사하강법이다. 자료가 105건뿐이라
-# 묶음으로 나눌 까닭이 없다.
-lr = 0.5
-epochs = 200
-loss_history = []
+    **(2) 행 합의 보존.** 보기 4에서 $\partial J/\partial\mathbf{W}$의 행 합이 $0$임을 보였고, 갱신은 `W -= lr * dW`뿐이다. 그러므로 어떤 세대에서나
 
-for epoch in range(epochs):
-    Z = X_train @ W + b                 # 로짓 (n, C)
-    Y_hat = softmax(Z)                  # 확률 (n, C)
-    loss = cross_entropy_loss(Y_train, Y_hat)
-    loss_history.append(loss)
-    dW, db = compute_gradients(X_train, Y_train, Y_hat)
-    W -= lr * dW
-    b -= lr * db
+    $$
+    \sum_c W_{jc}^{(t+1)} = \sum_c W_{jc}^{(t)} - \eta \sum_c \left(\frac{\partial J}{\partial \mathbf{W}}\right)_{jc} = \sum_c W_{jc}^{(t)}
+    $$
 
-print(f"Final training loss: {loss_history[-1]:.4f}")
-```
+    로 **행 합이 변하지 않는다.** $200$세대를 돌려도 처음 뽑은 무작위 행 합이 그대로 남아 있어야 한다. 편향도 $\mathbf{b}^{(0)} = \mathbf{0}$에서 출발하므로 합이 영원히 $0$이다.
 
-출력:
+    ```python
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
 
-```
-Final training loss: 0.1326
-```
+    # --- 자료 준비 ---
+    iris = load_iris()
+    X, y = iris.data, iris.target
+    C = len(np.unique(y))
 
-최종 훈련 손실은 $0.1326$이다.
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=42)
+
+    # 표준화는 훈련자료로만 적합하고 시험자료에는 변환만 적용한다. 시험자료의
+    # 평균과 표준편차까지 보고 맞추면 정보가 새어 들어간다.
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    Y_train = one_hot(y_train, C)
+    Y_test = one_hot(y_test, C)
+
+    # --- 모수 초기화 ---
+    d = X_train.shape[1]
+    np.random.seed(0)
+    W = np.random.randn(d, C) * 0.01
+    b = np.zeros(C)
+    row_sums_0 = W.sum(axis=1).copy()
+
+    # --- 학습 ---
+    # 전체 자료로 한 번에 기울기를 구하는 순수 경사하강법이다. 자료가 105건뿐이라
+    # 묶음으로 나눌 까닭이 없다.
+    lr = 0.5
+    epochs = 200
+    loss_history = []
+
+    for epoch in range(epochs):
+        Z = X_train @ W + b                 # 로짓 (n, C)
+        Y_hat = softmax(Z)                  # 확률 (n, C)
+        loss = cross_entropy_loss(Y_train, Y_hat)
+        loss_history.append(loss)
+        dW, db = compute_gradients(X_train, Y_train, Y_hat)
+        W -= lr * dW
+        b -= lr * db
+
+    print(f"Final training loss: {loss_history[-1]:.4f}")
+    print(f"첫 세대 손실 {loss_history[0]:.6f},  log 3 = {np.log(3):.6f},"
+          f"  차이 {loss_history[0] - np.log(3):.6f}")
+    print(f"손실이 매 세대 줄었는가: {bool(np.all(np.diff(loss_history) < 0))}")
+    print(f"W 의 행 합  처음 {np.round(row_sums_0, 8)}")
+    print(f"           나중 {np.round(W.sum(axis=1), 8)}")
+    print(f"최대 차이 {np.abs(row_sums_0 - W.sum(axis=1)).max():.2e},  b 의 합 {b.sum():.1e}")
+    ```
+
+    출력:
+
+    ```
+    Final training loss: 0.1326
+    첫 세대 손실 1.100430,  log 3 = 1.098612,  차이 0.001817
+    손실이 매 세대 줄었는가: True
+    W 의 행 합  처음 [0.03142948 0.03131173 0.00695512 0.02008916]
+               나중 [0.03142948 0.03131173 0.00695512 0.02008916]
+    최대 차이 1.87e-15,  b 의 합 0.0e+00
+    ```
+
+    **(1)이 맞는다.** 첫 세대 손실이 $1.100430$으로 $\log 3 = 1.098612$보다 $0.0018$만큼 크다. 예상한 $10^{-3}$ 수준이다. $200$세대를 돌면 $0.1326$까지 내려가고 손실은 한 번도 되오르지 않는다. 학습률 $0.5$가 이 문제에 과하지 않았다는 뜻이다.
+
+    **(2)도 맞는다.** $\mathbf{W}$의 행 합 네 개가 $200$세대 전후로 소수 여덟째 자리까지 같고, 차이가 $1.87 \times 10^{-15}$로 배정도 누적오차 수준이다. **경사하강은 과모수화 방향으로 한 발짝도 가지 않는다.** 그래서 이 $\mathbf{W}$는 "여러 해 가운데 초기값이 고른 하나"이고, 다른 씨앗으로 출발하면 **같은 예측을 주는 다른 계수**가 나온다. 계수 자체를 해석하려면 벌점을 걸어야 한다. 보기 8에서 그 차이를 본다.
 
 ---
 
@@ -251,26 +616,91 @@ Final training loss: 0.1326
 
 **보기 7.** <span class="diff easy" title="쉬움"></span> 시험 정확도
 
+**(1)** $45$개를 모두 맞혀 $\hat p = 1$이 나왔다. 이때 윌슨 $95\%$ 구간의 **아래끝에는 닫힌 꼴이 있다.** 구하시오.
+
+**(2)** 값을 계산해 본문의 "$[92\%,\ 100\%]$"와 맞추고, 정확 이항구간(클로퍼-피어슨)과 견주시오.
+
 </div>
 
-```python
-# 시험자료에서의 정확도. 가장 큰 확률을 가진 범주를 고른다.
-Z_test = X_test @ W + b
-Y_hat_test = softmax(Z_test)
-y_pred = np.argmax(Y_hat_test, axis=1)
-accuracy = np.mean(y_pred == y_test)
-print(f"Test accuracy: {accuracy:.4f}")
-```
+??? success "풀이"
 
-출력:
+    **(1) 닫힌 꼴.** 윌슨 구간은
 
-```
-Test accuracy: 1.0000
-```
+    $$
+    \frac{\hat p + \dfrac{z^2}{2n} \pm z\sqrt{\dfrac{\hat p(1-\hat p)}{n} + \dfrac{z^2}{4n^2}}}{1 + \dfrac{z^2}{n}}
+    $$
 
-이 분할에서 검정 정확도는 $1.0000$이다. 검정자료가 45개뿐이고 붓꽃 자료의 세 품종이 잘
-분리되어 있어 완벽한 분류가 드물지 않다. 다만 45개에서의 $100\%$는 참 정확도가 $100\%$라는
-뜻이 아니다. 95% 신뢰구간(윌슨 구간)은 대략 $[92\%,\ 100\%]$로 여전히 넓다.
+    인데, $\hat p = 1$이면 뿌리 안의 첫 항 $\hat p(1-\hat p)/n$이 사라져
+
+    $$
+    \sqrt{0 + \frac{z^2}{4n^2}} = \frac{z}{2n}
+    $$
+
+    가 된다. 그러면 분자에서 $\pm$의 음부호 쪽이
+
+    $$
+    1 + \frac{z^2}{2n} - z \cdot \frac{z}{2n} = 1 + \frac{z^2}{2n} - \frac{z^2}{2n} = 1
+    $$
+
+    로 **깨끗하게 $1$만 남는다.** 따라서
+
+    $$
+    \text{아래끝} = \frac{1}{1 + z^2/n},
+    \qquad
+    \text{위끝} = \frac{1 + z^2/n}{1 + z^2/n} = 1
+    $$
+
+    이다. $n = 45$, $z = 1.959964$를 넣으면 $z^2 = 3.841459$이고
+
+    $$
+    \frac{1}{1 + 3.841459/45} = \frac{1}{1.0853658} = 0.921348
+    $$
+
+    이다. **구간은 $[0.9213,\ 1]$이다.** 본문의 "대략 $[92\%,\ 100\%]$"가 이 수를 가리킨다.
+
+    식 $1/(1 + z^2/n)$은 기억해 둘 만하다. 모두 맞혔을 때의 보수적인 아래끝이 **표본 크기만으로** 정해진다는 뜻이기 때문이다. $n = 10$이면 $0.7225$, $n = 100$이면 $0.9630$, $n = 1000$이면 $0.9962$이다. $45$개를 모두 맞혔다는 사실만으로는 **참 정확도가 $93\%$일 가능성조차 배제하지 못한다.**
+
+    **(2) 정확 구간과의 견줌.** 클로퍼-피어슨 구간의 아래끝은 $x = n$일 때 $\alpha/2$ 분위에서
+
+    $$
+    p_{\text{lo}} = (\alpha/2)^{1/n} = 0.025^{1/45} = e^{\log 0.025 / 45} = 0.921295
+    $$
+
+    로 역시 닫힌 꼴이 있다. 윌슨의 $0.921348$과 **소수 넷째 자리까지 같다.** 두 구간은 유도가 전혀 다른데도 이 극단에서는 거의 겹친다. 참고로 흔히 쓰는 발드 구간 $\hat p \pm z\sqrt{\hat p(1-\hat p)/n}$은 여기서 폭이 $0$이 되어 $[1, 1]$이라는 **쓸모없는 답**을 준다. 비율이 $0$이나 $1$에 붙었을 때 발드 구간을 쓰면 안 되는 이유다.
+
+    ```python
+    from scipy import stats
+
+    # 시험자료에서의 정확도. 가장 큰 확률을 가진 범주를 고른다.
+    Z_test = X_test @ W + b
+    Y_hat_test = softmax(Z_test)
+    y_pred = np.argmax(Y_hat_test, axis=1)
+    accuracy = np.mean(y_pred == y_test)
+    print(f"Test accuracy: {accuracy:.4f}")
+
+    n_test = len(y_test)
+    z = stats.norm.ppf(0.975)
+    print(f"n = {n_test},  z = {z:.6f},  z^2 = {z**2:.6f}")
+    print(f"윌슨 아래끝 1/(1 + z^2/n) = {1 / (1 + z**2 / n_test):.6f}")
+    print(f"클로퍼-피어슨 아래끝 0.025^(1/n) = {0.025 ** (1 / n_test):.6f}")
+    for m in (10, 45, 100, 1000):
+        print(f"  n = {m:4d} 을 모두 맞혔을 때의 아래끝 {1 / (1 + z**2 / m):.4f}")
+    ```
+
+    출력:
+
+    ```
+    Test accuracy: 1.0000
+    n = 45,  z = 1.959964,  z^2 = 3.841459
+    윌슨 아래끝 1/(1 + z^2/n) = 0.921348
+    클로퍼-피어슨 아래끝 0.025^(1/n) = 0.921295
+      n =   10 을 모두 맞혔을 때의 아래끝 0.7225
+      n =   45 을 모두 맞혔을 때의 아래끝 0.9213
+      n =  100 을 모두 맞혔을 때의 아래끝 0.9630
+      n = 1000 을 모두 맞혔을 때의 아래끝 0.9962
+    ```
+
+    **유도한 식이 그대로 맞는다.** 윌슨 $0.921348$과 클로퍼-피어슨 $0.921295$의 차이가 $5 \times 10^{-5}$에 지나지 않는다. 그러므로 **"검정 정확도 $100\%$"는 "참 정확도가 적어도 $92\%$"라는 뜻**으로 읽어야 하며, 그 이상은 $45$개로 말할 수 없다.
 
 ---
 
@@ -283,24 +713,87 @@ Test accuracy: 1.0000
 
 **보기 8.** <span class="diff easy" title="쉬움"></span> sklearn 과 맞춰 보기
 
+**(1)** 두 구현이 **같은 정확도**를 낸다고 해서 같은 모형인가. 목적함수가 어떻게 다른지 적고, 그 차이가 **계수에서 어떻게 드러날지** 미리 말하시오.
+
+**(2)** 계수를 꺼내어 (1)을 확인하시오. 예측과 예측확률은 얼마나 맞는가.
+
 </div>
 
-```python
-from sklearn.linear_model import LogisticRegression
+??? success "풀이"
 
-# sklearn 과 맞춰 본다. 직접 구현한 것과 비슷하게 나오면 제대로 짠 것이다.
-clf = LogisticRegression(solver='lbfgs', max_iter=1000)
-clf.fit(X_train, y_train)
-print(f"scikit-learn accuracy: {clf.score(X_test, y_test):.4f}")
-```
+    **(1) 목적함수가 다르다.** 우리 학습 루프는 벌점 없는 교차엔트로피를 최소화한다. scikit-learn의 `LogisticRegression`은 기본값 `C=1.0`, `penalty='l2'`라 사실상
 
-출력:
+    $$
+    J_{\text{sk}} = \frac{1}{2}\lVert \mathbf{W}\rVert_F^2 + C\sum_i \ell_i
+    $$
 
-```
-scikit-learn accuracy: 1.0000
-```
+    를 푼다(절편은 벌점에서 빠진다). 그러므로 **정확도가 같아도 계수는 같을 수 없다.** 두 가지가 예상된다.
 
-scikit-learn도 $1.0000$을 내어 두 구현이 일치한다.
+    첫째, **벌점이 계수를 줄인다.** 우리 쪽 $\lVert\mathbf{W}\rVert_F$가 더 클 것이다.
+
+    둘째, 그리고 이쪽이 더 중요한데, **벌점이 과모수화를 고정한다.** 보기 4에서 보았듯 $\mathbf{W} \mapsto \mathbf{W} + \mathbf{v}\mathbf{1}_C^\top$은 예측을 바꾸지 않는다. 벌점이 없으면 이 방향으로 손실이 평평해 경사하강이 초기값의 행 합을 그대로 들고 간다. 벌점이 있으면 사정이 다르다. 같은 예측을 주는 해들 가운데
+
+    $$
+    \min_{\mathbf{v}} \lVert \mathbf{W} + \mathbf{v}\mathbf{1}_C^\top\rVert_F^2
+    = \min_{\mathbf{v}} \sum_j \sum_c (W_{jc} + v_j)^2
+    $$
+
+    을 푸는 것인데, 안쪽이 $v_j$에 대한 이차식이라 미분해 $0$으로 두면 $\sum_c (W_{jc} + v_j) = 0$, 곧
+
+    $$
+    v_j = -\frac{1}{C}\sum_c W_{jc}
+    $$
+
+    에서 최소다. 그 자리에서는 **행 합이 정확히 $0$**이다. 그러므로 **scikit-learn의 계수행렬은 범주 방향으로 더한 값이 $0$이어야 한다.** 우리 것은 그렇지 않을 것이다.
+
+    셋째로, 예측에 쓰이는 것은 계수 자체가 아니라 **차이** $\mathbf{w}_j - \mathbf{w}_k$다. 이것은 과모수화의 영향을 받지 않으므로 두 구현에서 거의 같은 **방향**을 가리켜야 한다. 길이는 벌점 때문에 우리 쪽이 길 것이다.
+
+    ```python
+    from sklearn.linear_model import LogisticRegression
+
+    # sklearn 과 맞춰 본다. 직접 구현한 것과 비슷하게 나오면 제대로 짠 것이다.
+    clf = LogisticRegression(solver='lbfgs', max_iter=1000)
+    clf.fit(X_train, y_train)
+    print(f"scikit-learn accuracy: {clf.score(X_test, y_test):.4f}")
+
+    print(f"우리 W 의 행 합      {np.round(W.sum(axis=1), 6)}")
+    print(f"sklearn 의 범주 합   {np.round(clf.coef_.sum(axis=0), 12)}")
+    print(f"프로베니우스 노름   우리 {np.linalg.norm(W):.4f}"
+          f"   sklearn {np.linalg.norm(clf.coef_):.4f}")
+
+    for j, k in ((0, 1), (0, 2), (1, 2)):
+        a = W[:, j] - W[:, k]
+        c = clf.coef_[j] - clf.coef_[k]
+        cos = a @ c / np.linalg.norm(a) / np.linalg.norm(c)
+        print(f"  w_{j} - w_{k}:  코사인유사도 {cos:.6f}"
+              f"   길이비 {np.linalg.norm(a) / np.linalg.norm(c):.4f}")
+
+    ours = np.argmax(softmax(X_test @ W + b), axis=1)
+    print(f"45개 검정점에서 예측이 모두 같은가: {bool(np.all(ours == clf.predict(X_test)))}")
+    print(f"예측확률의 최대 차이 {np.abs(softmax(X_test @ W + b) - clf.predict_proba(X_test)).max():.4f}")
+    ```
+
+    출력:
+
+    ```
+    scikit-learn accuracy: 1.0000
+    우리 W 의 행 합      [0.031429 0.031312 0.006955 0.020089]
+    sklearn 의 범주 합   [-0.  0. -0. -0.]
+    프로베니우스 노름   우리 5.1935   sklearn 4.2964
+      w_0 - w_1:  코사인유사도 0.999029   길이비 1.2699
+      w_0 - w_2:  코사인유사도 0.999719   길이비 1.2030
+      w_1 - w_2:  코사인유사도 0.997450   길이비 1.1921
+    45개 검정점에서 예측이 모두 같은가: True
+    예측확률의 최대 차이 0.0656
+    ```
+
+    **(1)의 세 예상이 모두 맞는다.**
+
+    1. **행 합.** scikit-learn의 범주 방향 합이 네 특성 모두 $-0$ 또는 $0$으로 **정확히 영**이다. 우리 것은 $0.031429$ 등 초기값에서 물려받은 값 그대로다(보기 6에서 보존을 확인했다). 벌점이 과모수화를 고정한다는 말이 수로 보인다.
+    2. **노름.** 우리 $5.1935$ 대 sklearn $4.2964$로 벌점 쪽이 작다.
+    3. **방향.** 세 쌍별 차이벡터의 코사인유사도가 $0.9975$에서 $0.9997$로 거의 평행하고, 길이는 우리 쪽이 $1.19$--$1.27$배 길다. **두 모형은 같은 방향의 경계를 긋되 기울기의 가파름만 다르다.**
+
+    그 결과 $45$개 검정점에서 **예측이 하나도 어긋나지 않는다.** 다만 예측확률은 최대 $0.0656$까지 벌어진다. 벌점을 받은 쪽이 로짓의 폭이 좁아 확신이 덜하기 때문이다. **"정확도가 같다"는 확인은 구현이 맞다는 약한 증거일 뿐**이며, 확률값까지 맞추려면 두 목적함수를 같게 맞추어야 한다. 우리 루프에 $\lambda = 1/(nC_{\text{sk}})$에 해당하는 벌점을 넣는 것이 그 길이다.
 
 !!! note "`multi_class='multinomial'`은 더 이상 필요하지 않다"
     예전 코드에서는 `LogisticRegression(multi_class='multinomial', ...)`처럼 명시하는 것이

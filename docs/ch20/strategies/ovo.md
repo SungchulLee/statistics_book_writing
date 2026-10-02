@@ -149,38 +149,94 @@ scikit-learn은 `OneVsOneClassifier` 래퍼를 제공한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일대일 전략
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일대일 전략. 붓꽃 자료($n = 150$, $C = 3$)를 층화추출로 $7:3$으로 나누어 `OneVsOneClassifier`를 적합한다.
+
+**(1)** 이항 분류기는 몇 개 생기며, 각 분류기가 보는 훈련 사례는 몇 개인가. 학습 과정에서 처리되는 사례의 **총 개수**를 OvR과 견주어 미리 계산하시오.
+
+**(2)** 검정점 하나에 던져지는 표의 **총합**과 한 범주가 받을 수 있는 **최대 표 수**를 각각 구하고, 코드로 (1)과 함께 확인하시오.
 
 </div>
 
-```python
-from sklearn.linear_model import LogisticRegression
-from sklearn.multiclass import OneVsOneClassifier
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
+??? success "풀이"
 
-X, y = load_iris(return_X_y=True)
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=0, stratify=y)
+    **(1) 해석적으로.** $C = 3$이므로 쌍의 개수는
 
-# 일대일(OvO)은 범주 쌍마다 이항 분류기를 하나씩 둔다. 분류기 수가
-# C(C-1)/2 로 늘지만, 각 분류기가 쓰는 자료는 두 범주 것뿐이라 오히려
-# 학습이 빠를 수 있다. 예측은 다수결로 정한다.
-model = OneVsOneClassifier(LogisticRegression(max_iter=1000))
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
+    $$
+    \binom{C}{2} = \frac{C(C-1)}{2} = \frac{3 \cdot 2}{2} = 3
+    $$
 
-# C = 3이므로 이항 분류기는 C(C-1)/2 = 3개다
-print(f"이항 분류기 개수: {len(model.estimators_)}")
-print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
-```
+    이다. 쌍은 $(0,1)$, $(0,2)$, $(1,2)$다. **$C = 3$은 OvO와 OvR의 분류기 수가 같아지는 유일한 경우다.** 비율이 $\frac{C(C-1)/2}{C} = \frac{C-1}{2}$이므로 $C = 3$에서 정확히 $1$이다.
 
-출력:
+    훈련 자료는 $n = 150 \times 0.7 = 105$개이고 층화추출이므로 범주마다 $105/3 = 35$개씩이다. 따라서 분류기 $f_{c,c'}$는
 
-```
-이항 분류기 개수: 3
-검정 정확도: 1.0000
-```
+    $$
+    n_c + n_{c'} = 35 + 35 = 70 = \frac{2n}{C} = \frac{2 \cdot 105}{3}
+    $$
+
+    개를 본다. 전체의 $2/3$이다. 셋을 합치면 처리되는 사례의 총 개수가
+
+    $$
+    \frac{C(C-1)}{2} \cdot \frac{2n}{C} = (C-1)\,n = 2 \times 105 = 210
+    $$
+
+    이고, OvR이라면 $Cn = 3 \times 105 = 315$다. **OvO가 오히려 적다.** 분류기 수는 같은데도 그런 것은, 각 사례가 OvR에서는 $C = 3$개 분류기 모두에 나타나지만 OvO에서는 자기 범주가 참여하는 $C - 1 = 2$개에만 나타나기 때문이다.
+
+    **(2) 표의 산술.** 분류기는 하나같이 둘 중 하나에 표를 주고 기권하지 않으므로, 검정점 하나가 받는 표의 총합은 분류기 개수와 같은 $C(C-1)/2 = 3$이다. 한 범주는 $C - 1 = 2$번의 대결에만 참여하므로 받을 수 있는 최대 표는 $2$다. $2 + 1 + 0$ 또는 $1+1+1$만이 가능한 분배이고, 뒤의 것이 바로 앞에서 본 순환이 일으키는 삼중 동점이다.
+
+    **수치적으로.**
+
+    ```python
+    from itertools import combinations
+
+    import numpy as np
+    from sklearn.datasets import load_iris
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import train_test_split
+    from sklearn.multiclass import OneVsOneClassifier
+
+    X, y = load_iris(return_X_y=True)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=0, stratify=y)
+
+    # 일대일(OvO)은 범주 쌍마다 이항 분류기를 하나씩 둔다. 분류기 수가
+    # C(C-1)/2 로 늘지만, 각 분류기가 쓰는 자료는 두 범주 것뿐이라 오히려
+    # 학습이 빠를 수 있다. 예측은 다수결로 정한다.
+    model = OneVsOneClassifier(LogisticRegression(max_iter=1000))
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+
+    # C = 3이므로 이항 분류기는 C(C-1)/2 = 3개다
+    print(f"이항 분류기 개수: {len(model.estimators_)}")
+    print(f"검정 정확도: {(y_pred == y_test).mean():.4f}")
+
+    # 각 쌍이 실제로 몇 개의 사례로 학습되었는지 센다.
+    counts = np.bincount(y_train)
+    print(f"훈련 자료 {len(y_train)}개,  범주별 {counts}")
+    for a, b in combinations(range(3), 2):
+        m = counts[a] + counts[b]
+        print(f"  f_{a}{b}: {m}개  (전체의 {m / len(y_train):.3f})")
+
+    # 다수결의 상한을 확인한다. decision_function 은 표 수에 확신도를
+    # 아주 작게 섞은 값이므로 반올림하면 표 수가 된다.
+    votes = np.floor(model.decision_function(X_test) + 0.5).astype(int)
+    print(f"표 수의 최댓값 {votes.max()},  행별 표 합 {set(votes.sum(axis=1))}")
+    ```
+
+    출력:
+
+    ```
+    이항 분류기 개수: 3
+    검정 정확도: 1.0000
+    훈련 자료 105개,  범주별 [35 35 35]
+      f_01: 70개  (전체의 0.667)
+      f_02: 70개  (전체의 0.667)
+      f_12: 70개  (전체의 0.667)
+    표 수의 최댓값 2,  행별 표 합 {3}
+    ```
+
+    **셈이 모두 맞는다.** 분류기 $3$개, 각 $70$개 사례로 전체의 $0.667 = 2/3$, 표의 총합은 모든 검정점에서 예외 없이 $3$이고 최댓값은 $2 = C-1$이다. 검정 정확도는 $1.0000$으로 $45$개를 모두 맞혔다.
+
+    눈여겨볼 것은 [앞 절의 OvR](ovr.md)이 **똑같은 분할에서 $0.9333$**을 냈다는 점이다. 틀린 $3$개는 모두 참값이 versicolor인데 virginica로 예측된 것이다. 가운데에 놓인 versicolor를 OvR은 "versicolor 대 setosa $\cup$ virginica"라는 선형으로 분리되지 않는 문제로 풀어야 하지만, OvO는 그 범주를 한 번에 하나씩만 상대하므로 그런 부담이 없다. 다만 소프트맥스도 같은 분할에서 $1.0000$을 내니, **이 한 번의 비교가 OvO의 우월함을 말해 주지는 않는다.** 검정 사례가 $45$개뿐이어서 $0.9333$과 $1.0000$의 차이가 세 사례에 걸려 있다는 것도 함께 기억해야 한다. 전략 사이의 체계적인 비교는 [소프트맥스와의 비교](comparison.md)에 있다.
 
 SVM에서는 OvO가 `SVC`의 기본 동작이므로 별도의 래퍼가 필요 없다.
 
