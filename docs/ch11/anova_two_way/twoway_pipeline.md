@@ -27,40 +27,178 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 모형 적합
+**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 제곱합의 세 유형은 언제 같은가. 코드의 주석은 "균형 설계에서는 세 유형이 모두 같지만 불균형이면 갈린다"고 말한다. 확인해 보자.
+
+**(1)** 설계가 **균형**이면(모든 칸의 관측 수가 같으면) 요인 $A$ 의 지시열과 요인 $B$ 의 지시열이 중심화한 뒤 **직교**함을 보이고, 이로부터 제I형 제곱합이 항의 순서에 의존하지 않음을 설명하시오. 또 제II형 제곱합은 불균형에서도 **"그 효과를 마지막에 넣은 제I형"** 과 같음을 지적하시오.
+
+**(2)** ToothGrowth 에서 세 유형을 모두 계산해 (1)을 확인하고, 칸 여섯 개 중 둘을 줄여 **불균형으로 만들면** 무엇이 갈라지는지 보이시오.
 
 </div>
 
-```python
-import pandas as pd
-from statsmodels.formula.api import ols
-from statsmodels.stats.anova import anova_lm
+??? success "풀이"
 
-url = ('https://raw.githubusercontent.com/vincentarelbundock/'
-       'Rdatasets/master/csv/datasets/ToothGrowth.csv')
-df = pd.read_csv(url, usecols=[1, 2, 3])
+    **(1) 해석적으로.** 칸 $(i,j)$ 의 관측 수를 $n_{ij}$ 라 하자. 요인 $A$ 의 수준 $i$ 를 가리키는 지시벡터를 $u_i$, 요인 $B$ 의 수준 $j$ 를 가리키는 지시벡터를 $v_j$ 라 쓰면
 
-model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
-# typ=2를 명시한다. statsmodels의 기본값은 typ=1(순차적 제곱합)이라
-# 모형에 넣는 항의 **순서에 따라 결과가 달라진다**. 균형 설계에서는
-# 세 유형이 모두 같지만, 불균형이면 갈린다.
-aov2 = anova_lm(model, typ=2)
-print(aov2)
-```
+    $$
+    u_i^\top v_j = n_{ij},
+    \qquad
+    u_i^\top \mathbf 1 = n_{i\cdot},
+    \qquad
+    v_j^\top \mathbf 1 = n_{\cdot j}
+    $$
 
-출력:
+    이다. 전체평균을 뺀 중심화 벡터 $\tilde u_i = u_i - \frac{n_{i\cdot}}{N}\mathbf 1$, $\tilde v_j = v_j - \frac{n_{\cdot j}}{N}\mathbf 1$ 의 내적은
 
-```
-                      sum_sq    df          F        PR(>F)
-C(supp)           205.350000   1.0  15.571979  2.311828e-04
-C(dose)          2426.434333   2.0  91.999965  4.046291e-18
-C(supp):C(dose)   108.319000   2.0   4.106991  2.186027e-02
-Residual          712.106000  54.0        NaN           NaN
-```
+    $$
+    \tilde u_i^\top \tilde v_j = n_{ij} - \frac{n_{i\cdot} n_{\cdot j}}{N}
+    $$
 
-용량의 효과가 압도적이고($F = 92$), 보충제의 효과와 교호작용도 유의하다. 교호작용이 유의하다는 것은 주효과를 따로 해석하기 전에 조심해야 한다는 신호다. "OJ가 VC보다 낫다"는 말이 용량마다 다르게 성립하기 때문이다.
+    다. **균형 설계이면 $n_{ij} = n$, $n_{i\cdot} = nb$, $n_{\cdot j} = na$, $N = nab$ 이므로**
 
-제II형 제곱합은 각 주효과를 다른 주효과로 조정하되 교호작용은 무시하고 검정한다. 설계가 균형이거나 거의 균형일 때 권장된다.
+    $$
+    \tilde u_i^\top \tilde v_j = n - \frac{nb \cdot na}{nab} = n - n = 0
+    $$
+
+    으로 **정확히 직교한다.** 두 요인이 만드는 부분공간이 서로 직교하면, 한쪽을 먼저 넣든 나중에 넣든 사영의 크기가 변하지 않는다. 제I형은 "앞의 항들을 넣은 뒤 늘어나는 설명량"이므로 순서에 의존하지 않게 되고, 제II형·제III형도 같은 값이 된다. 이것이 균형 설계의 값어치다. **요인들이 서로 간섭하지 않는다.**
+
+    불균형이면 $n_{ij} \ne \frac{n_{i\cdot}n_{\cdot j}}{N}$ 이라 직교가 깨지고, 두 요인이 **겹치는 설명량**이 생긴다. 먼저 들어온 쪽이 그 겹치는 몫을 가져가므로 제I형이 순서에 따라 달라진다. 제II형은 정의가 "다른 **주효과**를 모두 통제한 뒤의 증가분"이므로, 주효과가 둘뿐인 이 설계에서는 **그 효과를 주효과 중 마지막에 넣은 제I형과 같은 수**가 된다.
+
+    한 가지 덧붙일 것이 있다. `anova_lm(..., typ=3)` 은 **코딩에 민감하다.** 제III형은 "다른 모든 항(교호작용 포함)을 통제한 효과"인데, 교호작용 열이 직교하도록 만들려면 수준 더미를 합이 $0$ 이 되게 코딩해야 한다. statsmodels 의 기본 처리코딩(`C()`)으로 `typ=3` 을 부르면 올바른 제III형이 아니라 **기준수준에서의 단순효과**를 재게 된다. 아래 출력이 그 함정을 보여 준다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    url = ('https://raw.githubusercontent.com/vincentarelbundock/'
+           'Rdatasets/master/csv/datasets/ToothGrowth.csv')
+    df = pd.read_csv(url, usecols=[1, 2, 3])
+
+    model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
+    # typ=2를 명시한다. statsmodels의 기본값은 typ=1(순차적 제곱합)이라
+    # 모형에 넣는 항의 **순서에 따라 결과가 달라진다**. 균형 설계에서는
+    # 세 유형이 모두 같지만, 불균형이면 갈린다.
+    aov2 = anova_lm(model, typ=2)
+    print(aov2)
+    ```
+
+    출력:
+
+    ```
+                          sum_sq    df          F        PR(>F)
+    C(supp)           205.350000   1.0  15.571979  2.311828e-04
+    C(dose)          2426.434333   2.0  91.999965  4.046291e-18
+    C(supp):C(dose)   108.319000   2.0   4.106991  2.186027e-02
+    Residual          712.106000  54.0        NaN           NaN
+    ```
+
+    용량의 효과가 압도적이고($F = 92$), 보충제의 효과와 교호작용도 유의하다. 교호작용이 유의하다는 것은 주효과를 따로 해석하기 전에 조심해야 한다는 신호다. "OJ가 VC보다 낫다"는 말이 용량마다 다르게 성립하기 때문이다.
+
+    제II형 제곱합은 각 주효과를 다른 주효과로 조정하되 교호작용은 무시하고 검정한다. 설계가 균형이거나 거의 균형일 때 권장된다. 세 유형을 모두 계산해 본다.
+
+    ```python
+    # 균형 설계인가. 여섯 칸의 개수를 센다.
+    print("칸별 관측 수")
+    print(df.groupby(['supp', 'dose']).size().unstack())
+
+    a1 = anova_lm(model, typ=1)['sum_sq']
+    model_rev = ols('len ~ C(dose) + C(supp) + C(dose):C(supp)', data=df).fit()
+    a1r = anova_lm(model_rev, typ=1)['sum_sq']
+    a2 = anova_lm(model, typ=2)['sum_sq']
+    a3_bad = anova_lm(model, typ=3)['sum_sq']
+    # 제III형은 합이 0 이 되는 코딩(Sum)으로 적합해야 올바른 값이 나온다.
+    model_sum = ols('len ~ C(supp, Sum) + C(dose, Sum) + C(supp, Sum):C(dose, Sum)',
+                    data=df).fit()
+    a3 = anova_lm(model_sum, typ=3)['sum_sq']
+
+    print(f"\n{'방법':<22}{'supp':>12}{'dose':>14}{'supp:dose':>12}")
+    print(f"{'제I형 (supp 먼저)':<22}{a1['C(supp)']:>12.4f}{a1['C(dose)']:>14.4f}"
+          f"{a1['C(supp):C(dose)']:>12.4f}")
+    print(f"{'제I형 (dose 먼저)':<22}{a1r['C(supp)']:>12.4f}{a1r['C(dose)']:>14.4f}"
+          f"{a1r['C(dose):C(supp)']:>12.4f}")
+    print(f"{'제II형':<22}{a2['C(supp)']:>12.4f}{a2['C(dose)']:>14.4f}"
+          f"{a2['C(supp):C(dose)']:>12.4f}")
+    print(f"{'제III형 (처리코딩)':<22}{a3_bad['C(supp)']:>12.4f}{a3_bad['C(dose)']:>14.4f}"
+          f"{a3_bad['C(supp):C(dose)']:>12.4f}")
+    print(f"{'제III형 (합코딩)':<22}{a3['C(supp, Sum)']:>12.4f}{a3['C(dose, Sum)']:>14.4f}"
+          f"{a3['C(supp, Sum):C(dose, Sum)']:>12.4f}")
+
+    print(f"\n네 제곱합의 합 = {a2.sum():.4f},  "
+          f"SST = {((df['len'] - df['len'].mean()) ** 2).sum():.4f}")
+    print(f"자유도 59 = 1 + 2 + 2 + 54")
+    ```
+
+    출력:
+
+    ```
+    칸별 관측 수
+    dose  0.5  1.0  2.0
+    supp               
+    OJ     10   10   10
+    VC     10   10   10
+
+    방법                            supp          dose   supp:dose
+    제I형 (supp 먼저)             205.3500     2426.4343    108.3190
+    제I형 (dose 먼저)             205.3500     2426.4343    108.3190
+    제II형                      205.3500     2426.4343    108.3190
+    제III형 (처리코딩)              137.8125      885.2647    108.3190
+    제III형 (합코딩)               205.3500     2426.4343    108.3190
+
+    네 제곱합의 합 = 3452.2093,  SST = 3452.2093
+    자유도 59 = 1 + 2 + 2 + 54
+    ```
+
+    **균형 설계라 네 줄이 같다.** 칸마다 정확히 $10$ 개씩이므로 (1)의 직교성이 성립하고, 제I형(어느 순서로 넣든)·제II형·제III형(합코딩)이 모두 $205.3500$ 과 $2426.4343$ 을 준다. 제곱합 분해도 $3452.2093$ 으로 정확히 맞고 자유도는 $59 = 1+2+2+54$ 로 갈린다.
+
+    **처리코딩으로 부른 제III형만 다르다.** $137.8125$ 와 $885.2647$ 은 틀린 값이 아니라 **다른 질문에 대한 답**이다. 처리코딩에서 `C(supp)` 항은 "dose 가 기준수준($0.5$)일 때의 supp 효과", 곧 단순효과를 가리키므로 주효과와 같을 이유가 없다. `typ=3` 을 쓸 생각이면 반드시 `C(..., Sum)` 으로 적합해야 한다.
+
+    이제 균형을 깨 보면 (1)의 나머지가 드러난다.
+
+    ```python
+    # OJ_0.5 에서 둘, VC_0.5 에서 넷을 지워 불균형을 만든다.
+    drop = df.index[(df['supp'] == 'OJ') & (df['dose'] == 0.5)][:2].tolist()
+    drop += df.index[(df['supp'] == 'VC') & (df['dose'] == 0.5)][:4].tolist()
+    dfu = df.drop(index=drop).reset_index(drop=True)
+    print("칸별 관측 수 (불균형)")
+    print(dfu.groupby(['supp', 'dose']).size().unstack())
+
+    mu = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=dfu).fit()
+    mur = ols('len ~ C(dose) + C(supp) + C(dose):C(supp)', data=dfu).fit()
+    u1, u1r = anova_lm(mu, typ=1)['sum_sq'], anova_lm(mur, typ=1)['sum_sq']
+    u2 = anova_lm(mu, typ=2)['sum_sq']
+    print(f"\n{'방법':<22}{'supp':>12}{'dose':>14}")
+    print(f"{'제I형 (supp 먼저)':<22}{u1['C(supp)']:>12.4f}{u1['C(dose)']:>14.4f}")
+    print(f"{'제I형 (dose 먼저)':<22}{u1r['C(supp)']:>12.4f}{u1r['C(dose)']:>14.4f}")
+    print(f"{'제II형':<22}{u2['C(supp)']:>12.4f}{u2['C(dose)']:>14.4f}")
+    print(f"\n제II형의 supp 가 '제I형에서 supp 를 나중에 넣은 값'과 같은가: "
+          f"{abs(u2['C(supp)'] - u1r['C(supp)']) < 1e-9}")
+    print(f"제II형의 dose 가 '제I형에서 dose 를 나중에 넣은 값'과 같은가: "
+          f"{abs(u2['C(dose)'] - u1['C(dose)']) < 1e-9}")
+    ```
+
+    출력:
+
+    ```
+    칸별 관측 수 (불균형)
+    dose  0.5  1.0  2.0
+    supp               
+    OJ      8   10   10
+    VC      6   10   10
+
+    방법                            supp          dose
+    제I형 (supp 먼저)              75.2894     2061.9230
+    제I형 (dose 먼저)             125.6611     2011.5513
+    제II형                      125.6611     2061.9230
+
+    제II형의 supp 가 '제I형에서 supp 를 나중에 넣은 값'과 같은가: True
+    제II형의 dose 가 '제I형에서 dose 를 나중에 넣은 값'과 같은가: True
+    ```
+
+    **불균형이 되자 순서가 결과를 바꾼다.** `supp` 의 제곱합이 먼저 넣으면 $75.29$, 나중에 넣으면 $125.66$ 으로 **$1.7$ 배 차이가 난다.** $14$ 개를 지웠을 뿐인데 이렇다. 요인끼리 겹치는 설명량이 생겼고, 제I형은 그 몫을 **먼저 들어온 쪽에 통째로 준다.**
+
+    **제II형이 (1)의 예측과 정확히 맞는다.** `supp` 의 제II형 $125.6611$ 이 "dose 를 먼저 넣은 제I형"의 `supp` 와 같고, `dose` 의 제II형 $2061.9230$ 이 "supp 를 먼저 넣은 제I형"의 `dose` 와 같다. 곧 **제II형은 각 주효과를 늘 마지막에 넣어 본 값**이고, 그래서 순서를 정할 필요가 없다. 코드가 `typ=2` 를 명시한 까닭이 이것이다.
 
 ## 2단계: 주효과에 대한 Tukey HSD
 
@@ -68,40 +206,137 @@ Residual          712.106000  54.0        NaN           NaN
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — 주효과 사후검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — 분산분석은 $p = 0.00023$, Tukey 는 $p = 0.060$. 같은 `supp` 효과를 두고 두 수가 이렇게 벌어지는 까닭을 수로 밝힌다.
+
+**(1)** 설계가 균형이므로 `supp` 의 **집단 간 제곱합은 두 분석에서 같은 수**($205.35$)임을 지적하고, `supp` 만 보는 일원배치의 오차제곱합이
+
+$$
+SSW_{\text{1way}} = SS_{\text{dose}} + SS_{\text{supp}\times\text{dose}} + SSE_{\text{2way}}
+$$
+
+이며 자유도가 $2 + 2 + 54 = 58$ 임을 보이시오. 두 $MSE$ 의 비를 계산하시오.
+
+**(2)** 집단이 둘뿐이면 Tukey 의 `p-adj` 가 그 일원배치 $F$-검정의 $p$-값과 **같음**을 보이고, 수치로 확인하시오. 두 분석의 $F$ 값도 함께 적으시오.
 
 </div>
 
-```python
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+??? success "풀이"
 
-# 두 요인의 주효과를 각각 사후비교한다. 다른 요인은 잠시 무시하는 셈이다.
-print(pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05))
-print(pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05))
-```
+    **(1) 해석적으로.** 균형 설계에서는 보기 1의 직교성 덕분에 각 항의 제곱합이 다른 항과 무관하게 정해진다. 그러므로 `supp` 하나만 넣은 일원배치의 집단 간 제곱합은 이원배치표의 `C(supp)` 칸과 **같은 수** $205.35$ 다. 분자는 변하지 않는다.
 
-출력:
+    변하는 것은 분모다. 총제곱합은 어느 쪽에서나 같으므로
 
-```
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-===================================================
-group1 group2 meandiff p-adj  lower   upper  reject
----------------------------------------------------
-   0.5    1.0     9.13   0.0  5.9018 12.3582   True
-   0.5    2.0   15.495   0.0 12.2668 18.7232   True
-   1.0    2.0    6.365   0.0  3.1368  9.5932   True
----------------------------------------------------
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-=================================================
-group1 group2 meandiff p-adj  lower  upper reject
--------------------------------------------------
-    OJ     VC     -3.7 0.0604 -7.567 0.167  False
--------------------------------------------------
-```
+    $$
+    SST = \underbrace{SS_{\text{supp}}}_{205.35} + SS_{\text{dose}} + SS_{\text{supp}\times\text{dose}} + SSE_{\text{2way}}
+    $$
 
-용량은 세 수준이 서로 모두 다르다. 반면 보충제는 $p = 0.060$으로 유의하지 않게 나오는데, 분산분석표의 $p = 0.00023$과 어긋나 보인다.
+    인데, `supp` 만 넣은 모형은 가운데 두 항을 **설명하지 못하고 오차로 떠넘긴다.**
 
-모순이 아니다. 분산분석은 용량을 모형에 넣은 채 보충제 효과를 보지만, 이 Tukey는 용량을 무시하고 OJ 30개와 VC 30개를 통째로 비교한다. 용량이 만드는 큰 변동이 잡음으로 남아 보충제의 차이를 덮는 것이다. **주효과의 사후검정은 다른 요인을 무시한다**는 점을 잊으면 이런 표를 잘못 읽게 된다.
+    $$
+    SSW_{\text{1way}} = SST - SS_{\text{supp}} = SS_{\text{dose}} + SS_{\text{supp}\times\text{dose}} + SSE_{\text{2way}}
+    $$
+
+    자유도도 함께 옮겨 와 $2 + 2 + 54 = 58$ 이다. 수를 넣으면
+
+    $$
+    SSW_{\text{1way}} = 2426.434 + 108.319 + 712.106 = 3246.859,
+    \qquad
+    MSE_{\text{1way}} = \frac{3246.859}{58} = 55.98
+    $$
+
+    로, 이원배치의 $MSE = 712.106/54 = 13.19$ 보다 **$4.25$ 배 크다.** 같은 분자를 네 배 넘게 큰 분모로 나누니 $F$ 가 그만큼 작아지고 $p$ 가 커진다. **용량이 만드는 변동을 모형에 넣지 않으면 그것이 통째로 잡음이 된다.** 이원배치를 하는 이유가 바로 이 분모를 깎는 데 있다.
+
+    **(2) $k = 2$ 이면 Tukey 와 $F$-검정이 같다.** 집단이 둘이면 비교가 하나뿐이라 보정할 것이 없다. 스튜던트화 범위의 두 집단짜리 분포는 $Q_{2,\nu} = \sqrt2\,|t_\nu|$ 라는 관계를 만족하므로
+
+    $$
+    p_{\text{adj}} = P(Q_{2,\nu} \ge q_{\text{obs}}) = P\!\left(|t_\nu| \ge \tfrac{q_{\text{obs}}}{\sqrt2}\right) = P(t_\nu^2 \ge t_{\text{obs}}^2) = P(F_{1,\nu} \ge F_{\text{obs}})
+    $$
+
+    이고 마지막이 바로 일원배치 $F$-검정의 $p$-값이다(11.1절의 $F = t^2$ 항등식이 여기서 되풀이된다).
+
+    ```python
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+    # 두 요인의 주효과를 각각 사후비교한다. 다른 요인은 잠시 무시하는 셈이다.
+    print(pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05))
+    print(pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05))
+    ```
+
+    출력:
+
+    ```
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj  lower   upper  reject
+    ---------------------------------------------------
+       0.5    1.0     9.13   0.0  5.9018 12.3582   True
+       0.5    2.0   15.495   0.0 12.2668 18.7232   True
+       1.0    2.0    6.365   0.0  3.1368  9.5932   True
+    ---------------------------------------------------
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    =================================================
+    group1 group2 meandiff p-adj  lower  upper reject
+    -------------------------------------------------
+        OJ     VC     -3.7 0.0604 -7.567 0.167  False
+    -------------------------------------------------
+    ```
+
+    용량은 세 수준이 서로 모두 다르다. 반면 보충제는 $p = 0.060$으로 유의하지 않게 나오는데, 분산분석표의 $p = 0.00023$과 어긋나 보인다.
+
+    모순이 아니다. 분산분석은 용량을 모형에 넣은 채 보충제 효과를 보지만, 이 Tukey는 용량을 무시하고 OJ 30개와 VC 30개를 통째로 비교한다. 용량이 만드는 큰 변동이 잡음으로 남아 보충제의 차이를 덮는 것이다. **주효과의 사후검정은 다른 요인을 무시한다**는 점을 잊으면 이런 표를 잘못 읽게 된다. 그 "덮임"의 크기를 (1)의 식으로 재 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    SS_supp, SS_dose, SS_int, SSE2 = 205.350, 2426.434333, 108.319, 712.106
+
+    # supp 만 보는 일원배치의 분모를 손으로 만든다.
+    SSW1 = SS_dose + SS_int + SSE2
+    MSE1, MSE2 = SSW1 / 58, SSE2 / 54
+    print(f"SSW(1way) = {SS_dose:.3f} + {SS_int:.3f} + {SSE2:.3f} = {SSW1:.3f}  (df 58)")
+    print(f"MSE(1way) = {MSE1:.4f}   MSE(2way) = {MSE2:.4f}   비 = {MSE1 / MSE2:.4f}")
+    print(f"F(1way) = {SS_supp / MSE1:.4f}   F(2way) = {SS_supp / MSE2:.4f}")
+
+    oj = df.loc[df['supp'] == 'OJ', 'len'].values
+    vc = df.loc[df['supp'] == 'VC', 'len'].values
+    F1, p1 = stats.f_oneway(oj, vc)
+    print(f"\nf_oneway(OJ, VC):  F = {F1:.4f},  p = {p1:.6f}")
+
+    d = vc.mean() - oj.mean()
+    q_obs = abs(d) / np.sqrt(MSE1 / 30)
+    p_tukey = stats.studentized_range.sf(q_obs, 2, 58)
+    HSD = stats.studentized_range.ppf(0.95, 2, 58) * np.sqrt(MSE1 / 30)
+    print(f"Tukey(supp):  meandiff = {d:.2f},  p-adj = {p_tukey:.6f}")
+    print(f"              HSD = {HSD:.4f}  ->  CI = ({d - HSD:.3f}, {d + HSD:.3f})")
+
+    # dose 주효과 쪽도 같은 방식으로 되살려 본다.
+    SSW1d = SS_supp + SS_int + SSE2
+    HSD_dose = stats.studentized_range.ppf(0.95, 3, 57) * np.sqrt((SSW1d / 57) / 20)
+    print(f"\nTukey(dose):  MSE(1way) = {SSW1d / 57:.4f},  HSD = {HSD_dose:.4f}")
+    ```
+
+    출력:
+
+    ```
+    SSW(1way) = 2426.434 + 108.319 + 712.106 = 3246.859  (df 58)
+    MSE(1way) = 55.9803   MSE(2way) = 13.1871   비 = 4.2451
+    F(1way) = 3.6683   F(2way) = 15.5720
+
+    f_oneway(OJ, VC):  F = 3.6683,  p = 0.060393
+    Tukey(supp):  meandiff = -3.70,  p-adj = 0.060393
+                  HSD = 3.8670  ->  CI = (-7.567, 0.167)
+
+    Tukey(dose):  MSE(1way) = 17.9961,  HSD = 3.2282
+    ```
+
+    **(1)의 분해가 맞는다.** 손으로 더한 $SSW_{\text{1way}} = 3246.859$ 로 만든 $F = 3.6683$ 이 `f_oneway(OJ, VC)` 의 값과 소수 넷째 자리까지 같다. 두 $MSE$ 의 비가 $4.2451$ 이고, 그만큼 $F$ 가 $3.67$ 에서 $15.57$ 로 뛴다.
+
+    **(2)도 맞는다.** Tukey 의 `p-adj` 가 $0.060393$ 으로 일원배치 $F$-검정의 $p$-값과 **여섯 자리까지 같다.** 신뢰구간 $(-7.567,\ 0.167)$ 도 출력표와 일치하고, 반폭 $\text{HSD} = 3.8670$ 이 평균차 $3.70$ 보다 커서 구간이 $0$ 을 품는다.
+
+    용량 쪽도 같은 구조다. `dose` 주효과의 Tukey 는 $MSE = 17.9961$(= `supp` 와 교호작용을 오차로 떠넘긴 값)로 $\text{HSD} = 3.2282$ 를 쓰는데, 출력표의 세 구간 반폭 $(12.3582 - 9.13)$ 등이 모두 이 수다. 다만 용량의 효과가 $9.13$–$15.50$ 으로 워낙 커서 분모가 부풀려져도 세 쌍 모두 유의하다.
+
+    **교훈.** $p = 0.060$ 과 $p = 0.00023$ 중 무엇을 보고해야 하는가. **이원배치 쪽이다.** 자료가 두 요인으로 설계되었음을 알면서 한 요인을 모형에서 빼는 것은 그 요인의 변동을 일부러 잡음으로 만드는 일이다. `pairwise_tukeyhsd` 는 주어진 집단 변수 하나만 보므로 이 사실을 알려 주지 않는다. 다른 요인을 통제한 사후비교를 하려면 다음 단계처럼 **칸 단위로** 비교해야 한다.
 
 ## 3단계: 교호작용에 대한 Tukey HSD
 
@@ -109,53 +344,156 @@ $a \times b$개의 칸 평균을 모두 비교하려면 결합 집단 변수를 
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 교호작용 사후검정
+**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 여섯 칸을 한 집단으로 보면 분모가 제자리를 찾는다. 두 요인을 붙여 만든 `supp_dose` 로 Tukey 를 돌리면 $\binom62 = 15$ 개의 비교가 나온다.
+
+**(1)** 여섯 칸짜리 **일원배치**의 집단 내 평균제곱이 **이원배치의 잔차 평균제곱과 같은 수**임을 보이시오. (힌트: 두 모형의 적합값이 모두 칸평균이다.) 이로부터 $15$ 개 비교의 공통 반폭
+
+$$
+\text{HSD} = q_{0.05,\,6,\,54}\sqrt{\frac{MSE}{10}}
+$$
+
+를 계산하시오.
+
+**(2)** 같은 용량끼리 비교한 세 줄(단순효과)을 뽑고, 그 셋의 차이를 **교호작용 대비**
+
+$$
+L = (\bar y_{\text{OJ},0.5} - \bar y_{\text{VC},0.5}) - (\bar y_{\text{OJ},2.0} - \bar y_{\text{VC},2.0})
+$$
+
+하나로 요약하시오. $L$ 의 표준오차와 $t$ 값을 구하시오.
 
 </div>
 
-```python
-# 교호작용이 유의하면 주효과만으로는 부족하다. 두 요인을 붙여 만든 여섯 칸을
-# 서로 견주어야 "어느 조합이 어느 조합과 다른가"를 말할 수 있다.
-df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
-print(pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05))
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 포화 이원배치 모형
 
-```
- Multiple Comparison of Means - Tukey HSD, FWER=0.05  
-======================================================
-group1 group2 meandiff p-adj   lower    upper   reject
-------------------------------------------------------
-OJ_0.5 OJ_1.0     9.47    0.0   4.6719  14.2681   True
-OJ_0.5 OJ_2.0    12.83    0.0   8.0319  17.6281   True
-OJ_0.5 VC_0.5    -5.25 0.0243 -10.0481  -0.4519   True
-OJ_0.5 VC_1.0     3.54  0.264  -1.2581   8.3381  False
-OJ_0.5 VC_2.0    12.91    0.0   8.1119  17.7081   True
-OJ_1.0 OJ_2.0     3.36 0.3187  -1.4381   8.1581  False
-OJ_1.0 VC_0.5   -14.72    0.0 -19.5181  -9.9219   True
-OJ_1.0 VC_1.0    -5.93 0.0074 -10.7281  -1.1319   True
-OJ_1.0 VC_2.0     3.44 0.2936  -1.3581   8.2381  False
-OJ_2.0 VC_0.5   -18.08    0.0 -22.8781 -13.2819   True
-OJ_2.0 VC_1.0    -9.29    0.0 -14.0881  -4.4919   True
-OJ_2.0 VC_2.0     0.08    1.0  -4.7181   4.8781  False
-VC_0.5 VC_1.0     8.79    0.0   3.9919  13.5881   True
-VC_0.5 VC_2.0    18.16    0.0  13.3619  22.9581   True
-VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
-------------------------------------------------------
-```
+    $$
+    y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}
+    $$
 
-교호작용의 정체가 여기서 드러난다. 같은 용량끼리 비교한 세 줄을 뽑아 보면
+    는 모수 개수가 $ab$ 개로 **칸마다 자유로운 평균 하나씩**을 주는 것과 같다. 여섯 칸짜리 일원배치 모형 $y_{ijk} = \mu_{ij} + \varepsilon_{ijk}$ 도 똑같다. **두 모형의 적합값이 글자 그대로 같은 수**(칸평균)이므로 잔차도 같고, 따라서
 
-| 용량 | OJ − VC | p-adj |
-|---|---|---|
-| 0.5 | +5.25 | 0.024 |
-| 1.0 | +5.93 | 0.007 |
-| 2.0 | −0.08 | 1.000 |
+    $$
+    SSE_{\text{2way}} = SSW_{\text{6칸}} = \sum_{i,j}\sum_k (y_{ijk} - \bar y_{ij\cdot})^2,
+    \qquad
+    df = N - ab = 60 - 6 = 54
+    $$
 
-낮은 용량에서는 OJ가 5~6만큼 앞서지만 용량 2.0에서는 차이가 사실상 사라진다. 이것이 교호작용 항이 유의했던 이유다.
+    로 **두 분석의 분모가 완전히 같다.** 보기 2에서 주효과 Tukey 가 분모를 $55.98$ 로 부풀렸던 것과 달리, 칸 단위 Tukey 는 이원배치가 쓰는 바로 그 $MSE = 13.19$ 를 쓴다. 칸으로 쪼개는 것이 두 요인을 모두 모형에 넣는 일이기 때문이다.
 
-칸이 $a \times b = 2 \times 3 = 6$개이므로 쌍별 비교는 $\binom{6}{2} = 15$개이다. Tukey 절차는 이 15개 전체에 걸쳐 가족단위 오류율을 동시에 통제한다.
+    균형 설계라 칸마다 $n = 10$ 으로 같으므로 반폭이 쌍에 의존하지 않고
+
+    $$
+    \text{HSD} = q_{0.05,\,6,\,54}\sqrt{\frac{MSE}{10}}
+    $$
+
+    하나로 정해진다.
+
+    **(2) 교호작용 대비.** $L$ 은 네 칸평균의 선형결합이고 계수가 $(+1,-1,-1,+1)$ 이다. 네 칸이 독립이고 각 칸평균의 분산이 $\sigma^2/n$ 이므로
+
+    $$
+    \operatorname{Var}(L) = \frac{\sigma^2}{n}\sum c_i^2 = \frac{4\sigma^2}{n}
+    \quad\Longrightarrow\quad
+    \widehat{\operatorname{SE}}(L) = \sqrt{\frac{4\,MSE}{10}}
+    $$
+
+    이다. $L = 0$ 이 "용량 $0.5$ 와 $2.0$ 에서 OJ–VC 격차가 같다"는 뜻이므로, $L$ 이 $0$ 에서 멀수록 교호작용이 뚜렷하다.
+
+    ```python
+    # 교호작용이 유의하면 주효과만으로는 부족하다. 두 요인을 붙여 만든 여섯 칸을
+    # 서로 견주어야 "어느 조합이 어느 조합과 다른가"를 말할 수 있다.
+    df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
+    print(pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05))
+    ```
+
+    출력:
+
+    ```
+     Multiple Comparison of Means - Tukey HSD, FWER=0.05  
+    ======================================================
+    group1 group2 meandiff p-adj   lower    upper   reject
+    ------------------------------------------------------
+    OJ_0.5 OJ_1.0     9.47    0.0   4.6719  14.2681   True
+    OJ_0.5 OJ_2.0    12.83    0.0   8.0319  17.6281   True
+    OJ_0.5 VC_0.5    -5.25 0.0243 -10.0481  -0.4519   True
+    OJ_0.5 VC_1.0     3.54  0.264  -1.2581   8.3381  False
+    OJ_0.5 VC_2.0    12.91    0.0   8.1119  17.7081   True
+    OJ_1.0 OJ_2.0     3.36 0.3187  -1.4381   8.1581  False
+    OJ_1.0 VC_0.5   -14.72    0.0 -19.5181  -9.9219   True
+    OJ_1.0 VC_1.0    -5.93 0.0074 -10.7281  -1.1319   True
+    OJ_1.0 VC_2.0     3.44 0.2936  -1.3581   8.2381  False
+    OJ_2.0 VC_0.5   -18.08    0.0 -22.8781 -13.2819   True
+    OJ_2.0 VC_1.0    -9.29    0.0 -14.0881  -4.4919   True
+    OJ_2.0 VC_2.0     0.08    1.0  -4.7181   4.8781  False
+    VC_0.5 VC_1.0     8.79    0.0   3.9919  13.5881   True
+    VC_0.5 VC_2.0    18.16    0.0  13.3619  22.9581   True
+    VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
+    ------------------------------------------------------
+    ```
+
+    교호작용의 정체가 여기서 드러난다. 같은 용량끼리 비교한 세 줄을 뽑아 보면
+
+    | 용량 | OJ − VC | p-adj |
+    |---|---|---|
+    | 0.5 | +5.25 | 0.024 |
+    | 1.0 | +5.93 | 0.007 |
+    | 2.0 | −0.08 | 1.000 |
+
+    낮은 용량에서는 OJ가 5~6만큼 앞서지만 용량 2.0에서는 차이가 사실상 사라진다. 이것이 교호작용 항이 유의했던 이유다.
+
+    칸이 $a \times b = 2 \times 3 = 6$개이므로 쌍별 비교는 $\binom{6}{2} = 15$개이다. Tukey 절차는 이 15개 전체에 걸쳐 가족단위 오류율을 동시에 통제한다. (1)과 (2)를 확인한다.
+
+    ```python
+    # 여섯 칸 일원배치의 MSW 가 이원배치 잔차와 같은 수인가.
+    cells = [v.values for _, v in df.groupby('supp_dose')['len']]
+    SSW_cells = sum(((x - x.mean()) ** 2).sum() for x in cells)
+    MSE = SSW_cells / 54
+    print(f"6칸 일원배치 SSW = {SSW_cells:.3f} (df 54),  MSE = {MSE:.6f}")
+    print(f"이원배치 잔차     = 712.106   (df 54),  MS  = {712.106 / 54:.6f}")
+
+    q6 = stats.studentized_range.ppf(0.95, 6, 54)
+    HSD = q6 * np.sqrt(MSE / 10)
+    print(f"\nq(0.05, 6, 54) = {q6:.4f}   HSD = {HSD:.4f}  (15개 비교 공통)")
+
+    cell = df.groupby(['supp', 'dose'])['len'].mean()
+    print(f"\n{'dose':>6}{'OJ':>8}{'VC':>8}{'OJ-VC':>9}{'p-adj':>9}")
+    for d in (0.5, 1.0, 2.0):
+        diff = cell[('OJ', d)] - cell[('VC', d)]
+        p = stats.studentized_range.sf(abs(diff) / np.sqrt(MSE / 10), 6, 54)
+        print(f"{d:>6}{cell[('OJ', d)]:>8.2f}{cell[('VC', d)]:>8.2f}{diff:>9.2f}{p:>9.4f}")
+
+    contrast = ((cell[('OJ', 0.5)] - cell[('VC', 0.5)])
+                - (cell[('OJ', 2.0)] - cell[('VC', 2.0)]))
+    print(f"\n교호작용 대비 (0.5 의 격차) - (2.0 의 격차) = {contrast:.2f}")
+    print(f"이 대비의 표준오차 = {np.sqrt(4 * MSE / 10):.4f},  "
+          f"t = {contrast / np.sqrt(4 * MSE / 10):.4f}")
+    ```
+
+    출력:
+
+    ```
+    6칸 일원배치 SSW = 712.106 (df 54),  MSE = 13.187148
+    이원배치 잔차     = 712.106   (df 54),  MS  = 13.187148
+
+    q(0.05, 6, 54) = 4.1783   HSD = 4.7981  (15개 비교 공통)
+
+      dose      OJ      VC    OJ-VC    p-adj
+       0.5   13.23    7.98     5.25   0.0243
+       1.0   22.70   16.77     5.93   0.0074
+       2.0   26.06   26.14    -0.08   1.0000
+
+    교호작용 대비 (0.5 의 격차) - (2.0 의 격차) = 5.33
+    이 대비의 표준오차 = 2.2967,  t = 2.3207
+    ```
+
+    **(1)이 정확히 맞는다.** 여섯 칸 일원배치의 $SSW$ 가 $712.106$ 으로 이원배치표의 `Residual` 칸과 **같은 수**이고 자유도도 $54$ 로 같다. 반폭 $\text{HSD} = 4.7981$ 도 출력표의 모든 구간에서 확인된다. 예컨대 첫 줄 `OJ_0.5 OJ_1.0` 의 구간 $(4.6719,\ 14.2681)$ 은 중심 $9.47$ 에 $\pm 4.7981$ 이다.
+
+    주효과 Tukey 와 견주면 분모의 차이가 선명하다. 보기 2의 `supp` 비교는 $MSE = 55.98$ 을 썼고 여기서는 $13.19$ 를 쓴다. **비교 대상이 $1$ 개에서 $15$ 개로 늘어 $q$ 가 $2.83$ 에서 $4.18$ 로 커졌는데도**, 분모가 네 배 줄어든 덕에 용량 $0.5$ 와 $1.0$ 에서 OJ–VC 차이를 잡아낼 수 있었다.
+
+    **(2) 교호작용이 한 수로 요약된다.** 격차가 $5.25 \to 5.93 \to -0.08$ 로 가다가 마지막에서 무너진다. 양 끝의 차 $L = 5.33$ 이고 표준오차가 $2.2967$ 이므로 $t = 2.32$ 다. 자유도 $54$ 에서 $|t| > 2.005$ 면 $5\%$ 에서 유의하므로 이 대비 하나만으로도 교호작용이 잡힌다. 분산분석표의 $F = 4.107$ ($p = 0.0219$)은 자유도 $2$ 짜리 교호작용 전체를 재는 것이고, 이 대비는 그 가운데 **"양 끝 용량의 격차 차이"라는 한 방향**만 떼어 본 것이다.
+
+    주의할 점 하나. 이 $t = 2.32$ 는 **미리 정해 둔 대비 하나**에 대한 값이라 다중비교 보정이 들어 있지 않다. 표를 보고 나서 가장 눈에 띄는 대비를 고른 것이라면 그대로 쓸 수 없다. 그런 경우의 올바른 도구는 모든 대비에 대해 동시에 보정하는 Scheffé 절차다.
 
 ## 4단계: 교호작용 그림
 
@@ -163,29 +501,100 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 4단계 — 교호작용 그림
+**보기 4.** <span class="diff easy" title="쉬움"></span> 4단계 — 교호작용 그림에서 읽히는 것과 읽히지 않는 것. 두 선이 그려진다.
+
+**(1)** 그림에서 **읽히는 것**을 수치로 적으시오. 두 선이 얼마나 벌어졌다가 얼마나 좁혀지는가. 교차하는가.
+
+**(2)** 그림이 **보여 주지 않는 것** 셋을 들고, 그것들을 모르면 어떤 오독이 생기는지 말하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from statsmodels.graphics.factorplots import interaction_plot
+??? success "풀이"
 
-# 마지막으로 그림을 다시 본다. 사후비교로 갈린 쌍이 그림에서 어디인지
-# 짚어 보면 결과가 몸에 붙는다.
-fig, ax = plt.subplots(figsize=(8, 4))
-interaction_plot(df['dose'], df['supp'], df['len'], ax=ax,
-                 markers=['o', 's'], linestyles=['--', '-.'])
-ax.set_title("Interaction: dose x supp")
-ax.set_xlabel("dose")
-ax.set_ylabel("len")
-plt.tight_layout()
-plt.show()
-```
+    유도할 답이 있는 문제가 아니다. **그림이 어떤 수를 그리고 어떤 수를 숨기는지**를 짚는 것이 이 보기의 몫이다.
 
-![교호작용 그림](./img/twoway_pipeline_70.png)
+    ```python
+    import matplotlib.pyplot as plt
+    from statsmodels.graphics.factorplots import interaction_plot
 
-앞의 표에서 읽은 것이 그림 하나에 담긴다. 두 선이 왼쪽에서는 벌어져 있다가 용량 2.0에서 만난다. 선이 교차하지 않으므로 순서형 교호작용이며, OJ가 VC보다 나쁜 구간은 없다.
+    # 마지막으로 그림을 다시 본다. 사후비교로 갈린 쌍이 그림에서 어디인지
+    # 짚어 보면 결과가 몸에 붙는다.
+    fig, ax = plt.subplots(figsize=(8, 4))
+    interaction_plot(df['dose'], df['supp'], df['len'], ax=ax,
+                     markers=['o', 's'], linestyles=['--', '-.'])
+    ax.set_title("Interaction: dose x supp")
+    ax.set_xlabel("dose")
+    ax.set_ylabel("len")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![교호작용 그림](./img/twoway_pipeline_70.png)
+
+    앞의 표에서 읽은 것이 그림 하나에 담긴다. 그림이 그리는 수와 그리지 않는 수를 함께 찍어 둔다.
+
+    ```python
+    tab = df.groupby(['supp', 'dose'])['len'].agg(['mean', 'std', 'count'])
+    print(tab.round(3))
+
+    cell = df.groupby(['supp', 'dose'])['len'].mean()
+    MSE = 13.187148
+    print(f"\n칸평균의 표준오차 = sqrt(MSE/n) = {np.sqrt(MSE / 10):.4f}"
+          f"  (그림에 그려지지 않는다)")
+    print(f"{'dose':>6}{'OJ-VC':>9}{'+-1.96SE_diff':>16}")
+    for d in (0.5, 1.0, 2.0):
+        diff = cell[('OJ', d)] - cell[('VC', d)]
+        sed = np.sqrt(2 * MSE / 10)
+        print(f"{d:>6}{diff:>9.2f}   ({diff - 1.96 * sed:>6.2f}, {diff + 1.96 * sed:>6.2f})")
+
+    # 가로축을 '칸 번호'로 바꾸면 선의 모양이 달라 보인다.
+    print(f"\n선분의 기울기 (가로축이 실제 용량일 때)")
+    for s in ('OJ', 'VC'):
+        print(f"  {s}: 0.5->1.0 {(cell[(s, 1.0)] - cell[(s, 0.5)]) / 0.5:>7.2f}"
+              f"   1.0->2.0 {(cell[(s, 2.0)] - cell[(s, 1.0)]) / 1.0:>7.2f}")
+    print(f"선분이 올라간 양 (가로축이 순서 1,2,3 일 때)")
+    for s in ('OJ', 'VC'):
+        print(f"  {s}: 1->2 {cell[(s, 1.0)] - cell[(s, 0.5)]:>7.2f}"
+              f"   2->3 {cell[(s, 2.0)] - cell[(s, 1.0)]:>7.2f}")
+    ```
+
+    출력:
+
+    ```
+                mean    std  count
+    supp dose                     
+    OJ   0.5   13.23  4.460     10
+         1.0   22.70  3.911     10
+         2.0   26.06  2.655     10
+    VC   0.5    7.98  2.747     10
+         1.0   16.77  2.515     10
+         2.0   26.14  4.798     10
+
+    칸평균의 표준오차 = sqrt(MSE/n) = 1.1484  (그림에 그려지지 않는다)
+      dose    OJ-VC   +-1.96SE_diff
+       0.5     5.25   (  2.07,   8.43)
+       1.0     5.93   (  2.75,   9.11)
+       2.0    -0.08   ( -3.26,   3.10)
+
+    선분의 기울기 (가로축이 실제 용량일 때)
+      OJ: 0.5->1.0   18.94   1.0->2.0    3.36
+      VC: 0.5->1.0   17.58   1.0->2.0    9.37
+    선분이 올라간 양 (가로축이 순서 1,2,3 일 때)
+      OJ: 1->2    9.47   2->3    3.36
+      VC: 1->2    8.79   2->3    9.37
+    ```
+
+    **(1) 읽히는 것.** 두 선의 세로 간격이 $5.25 \to 5.93 \to -0.08$ 로 가다가 오른쪽 끝에서 **거의 정확히 만난다.** 왼쪽 두 점에서는 간격의 $95\%$ 구간이 $(2.07,\ 8.43)$ 과 $(2.75,\ 9.11)$ 로 $0$ 을 품지 않고, 오른쪽에서는 $(-3.26,\ 3.10)$ 으로 $0$ 을 품는다. 선이 **교차하지는 않으므로**(간격 $-0.08$ 은 사실상 $0$ 이다) 순서형 교호작용이고, OJ 가 VC 보다 나쁜 구간은 없다. 두 선 모두 단조증가하므로 용량의 주효과는 방향이 분명하다.
+
+    **(2) 보여 주지 않는 것 셋.**
+
+    **첫째, 흩어짐이 없다.** 그림에 찍힌 것은 칸평균 여섯 개뿐이고 오차막대가 없다. 칸평균의 표준오차는 $\sqrt{MSE/10} = 1.1484$ 이므로 점 하나가 세로로 $\pm 2.3$ 쯤 흔들릴 수 있는데, 그림에서는 모든 점이 똑같이 확정적으로 보인다. 더구나 칸별 표준편차가 $2.52$ 에서 $4.80$ 까지 **$1.9$ 배 차이가 나는데** 그 사실이 전혀 나타나지 않는다(가장 흔들리는 칸은 표준편차 $4.80$ 인 VC_2.0 이고, 하필 두 선이 만나는 바로 그 점이다).
+
+    **둘째, "평행한가"는 눈이 아니라 검정이 판정한다.** 두 선분의 기울기 차이를 보면 $0.5 \to 1.0$ 구간은 $18.94$ 대 $17.58$ 로 거의 평행하고, $1.0 \to 2.0$ 구간은 $3.36$ 대 $9.37$ 로 크게 다르다. 이 "크게 다름"이 유의한지는 교호작용 $F = 4.107$, $p = 0.0219$ 가 말해 준다. **$p = 0.022$ 는 압도적인 증거가 아니다.** 표본이 더 작았다면 똑같은 그림에서도 교호작용이 유의하지 않았을 것이다.
+
+    **셋째, 가로축의 눈금이 선택의 문제다.** 용량 $0.5, 1.0, 2.0$ 은 등간격이 아니다. 실제 용량을 축으로 쓰면 기울기가 $18.94 \to 3.36$ 으로 **급격히 꺾이고**, 순서 $1,2,3$ 을 축으로 쓰면 $9.47 \to 3.36$ 으로 꺾임이 훨씬 완만해진다. 같은 자료인데 "평행해 보이는 정도"가 축을 어떻게 잡느냐에 따라 달라진다. **교호작용 검정 자체는 축과 무관**($dose$ 를 범주형으로 넣었으므로)하지만 그림에서 받는 인상은 그렇지 않다.
+
+    요약하면 교호작용 그림은 **방향을 잡아 주는 도구**이지 판정 도구가 아니다. 판정은 보기 1의 $F$ 와 보기 3의 대비가 한다.
 
 ## 해석
 

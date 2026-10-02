@@ -16,36 +16,136 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 모형 적합
+**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 분산분석은 회귀다. `ols('weight ~ C(group)')` 는 회귀모형을 적합하는데 그 결과가 분산분석표로 나온다.
+
+**(1)** 처리코딩(`C()` 의 기본값)에서 적합된 계수가
+
+$$
+\hat\beta_0 = \bar y_{\text{ctrl}},
+\qquad
+\hat\beta_1 = \bar y_{\text{trt1}} - \bar y_{\text{ctrl}},
+\qquad
+\hat\beta_2 = \bar y_{\text{trt2}} - \bar y_{\text{ctrl}}
+$$
+
+임을 보이고, 설계행렬의 계수(rank)가 $k = 3$ 이므로 잔차 자유도가 $N - k = 27$ 임을 설명하시오. 또 $R^2 = SSB/SST$ 임을 밝히시오.
+
+**(2)** 계수와 자유도를 수치로 확인하고, **`C()` 를 빠뜨려 수준이 $0,1,2$ 로 코딩된 열을 그대로 넣으면** 무엇이 달라지는지 보이시오.
 
 </div>
 
-```python
-import pandas as pd
-from statsmodels.formula.api import ols
-from statsmodels.stats.anova import anova_lm
+??? success "풀이"
 
-url = ('https://raw.githubusercontent.com/vincentarelbundock/'
-       'Rdatasets/master/csv/datasets/PlantGrowth.csv')
-df = pd.read_csv(url, usecols=[1, 2])
+    **(1) 해석적으로.** 처리코딩의 설계행렬은 열이 셋이다. 모두 $1$ 인 열, trt1 이면 $1$ 인 지시열, trt2 이면 $1$ 인 지시열. 그러면 적합값이
 
-# C()로 감싸지 않으면 group을 숫자처럼 취급해 회귀직선을 적합해 버린다.
-# 문자열 열이면 statsmodels가 알아서 범주형으로 보지만, 수준이 0/1/2 같은
-# 숫자로 코딩되어 있으면 조용히 틀린 모형이 된다. 습관적으로 감싸는 편이 안전하다.
-model = ols('weight ~ C(group)', data=df).fit()
-aov = anova_lm(model)
-print(aov)
-```
+    $$
+    \hat y_{ij} = \beta_0 + \beta_1 \mathbf 1\{i = \text{trt1}\} + \beta_2 \mathbf 1\{i = \text{trt2}\}
+    $$
 
-출력:
+    인데, 이 모형은 **집단마다 자유로운 상수 하나**를 주는 것과 같다. 집단 $i$ 의 적합값은 $\mu_i$ 라는 하나의 수이고, 제곱오차
 
-```
-            df    sum_sq   mean_sq         F   PR(>F)
-C(group)   2.0   3.76634  1.883170  4.846088  0.01591
-Residual  27.0  10.49209  0.388596       NaN      NaN
-```
+    $$
+    \sum_{i}\sum_j (y_{ij} - \mu_i)^2
+    $$
 
-분산분석표는 집단 간 제곱합($SSB$), 집단 내 제곱합($SSW$), $F$-통계량, $p$-값을 보고한다. $p < \alpha$이면 $H_0$을 기각한다.
+    를 $\mu_i$ 에 대해 따로따로 최소화하면 $\hat\mu_i = \bar y_{i\cdot}$ 이다(제곱합의 최소점은 평균이다). 이제 모수로 되돌리면
+
+    $$
+    \hat\beta_0 = \hat\mu_{\text{ctrl}} = \bar y_{\text{ctrl}},
+    \qquad
+    \hat\beta_1 = \hat\mu_{\text{trt1}} - \hat\mu_{\text{ctrl}},
+    \qquad
+    \hat\beta_2 = \hat\mu_{\text{trt2}} - \hat\mu_{\text{ctrl}}
+    $$
+
+    이다. **절편은 기준집단의 평균이고 나머지는 기준집단과의 차이다.** 기준집단은 알파벳 순 첫 수준인 ctrl 이 자동으로 맡는다.
+
+    설계행렬의 세 열은 선형독립이므로 계수가 $3$ 이고, 사영공간의 차원이 $3$ 이라 잔차공간의 차원은 $N - 3 = 27$ 이다. 이것이 $MSW$ 의 자유도이고 앞 절의 $N-k$ 와 같은 수다.
+
+    $R^2$ 은 정의가 $1 - SSE/SST_{\text{total}}$ 인데 적합값이 집단평균이므로 $SSE = SSW$ 이고 $SST_{\text{total}} - SSW = SSB$ 다. 따라서
+
+    $$
+    R^2 = \frac{SSB}{SST_{\text{total}}}
+    $$
+
+    로 **분산분석표의 `sum_sq` 두 칸의 비**다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    url = ('https://raw.githubusercontent.com/vincentarelbundock/'
+           'Rdatasets/master/csv/datasets/PlantGrowth.csv')
+    df = pd.read_csv(url, usecols=[1, 2])
+
+    # C()로 감싸지 않으면 group을 숫자처럼 취급해 회귀직선을 적합해 버린다.
+    # 문자열 열이면 statsmodels가 알아서 범주형으로 보지만, 수준이 0/1/2 같은
+    # 숫자로 코딩되어 있으면 조용히 틀린 모형이 된다. 습관적으로 감싸는 편이 안전하다.
+    model = ols('weight ~ C(group)', data=df).fit()
+    aov = anova_lm(model)
+    print(aov)
+    ```
+
+    출력:
+
+    ```
+                df    sum_sq   mean_sq         F   PR(>F)
+    C(group)   2.0   3.76634  1.883170  4.846088  0.01591
+    Residual  27.0  10.49209  0.388596       NaN      NaN
+    ```
+
+    분산분석표는 집단 간 제곱합($SSB$), 집단 내 제곱합($SSW$), $F$-통계량, $p$-값을 보고한다. $p < \alpha$이면 $H_0$을 기각한다.
+
+    계수가 정말 집단평균의 차인지, 그리고 `C()` 가 왜 필요한지를 확인한다.
+
+    ```python
+    means = df.groupby('group')['weight'].mean()
+    print(model.params)
+    print(f"\n절편             = ctrl 평균     = {means['ctrl']:.3f}")
+    print(f"C(group)[T.trt1] = trt1 - ctrl  = {means['trt1'] - means['ctrl']:.3f}")
+    print(f"C(group)[T.trt2] = trt2 - ctrl  = {means['trt2'] - means['ctrl']:.3f}")
+    print(f"\nR^2 = SSB/SST = {model.rsquared:.7f}"
+          f"   (표에서 {3.76634 / (3.76634 + 10.49209):.7f})")
+    print(f"모형 자유도 {model.df_model:.0f},  잔차 자유도 {model.df_resid:.0f}")
+
+    # C() 를 빠뜨리면 어떻게 되는가. 수준을 0/1/2 로 코딩한 열을 만들어 넣어 본다.
+    df_num = df.assign(gcode=df['group'].map({'ctrl': 0, 'trt1': 1, 'trt2': 2}))
+    bad = ols('weight ~ gcode', data=df_num).fit()
+    print("\nC() 없이 숫자 코드를 그대로 넣으면")
+    print(anova_lm(bad))
+    print(f"기울기 = {bad.params['gcode']:.3f}  (집단당 '한 칸'씩 올라가는 직선)")
+    ```
+
+    출력:
+
+    ```
+    Intercept           5.032
+    C(group)[T.trt1]   -0.371
+    C(group)[T.trt2]    0.494
+    dtype: float64
+
+    절편             = ctrl 평균     = 5.032
+    C(group)[T.trt1] = trt1 - ctrl  = -0.371
+    C(group)[T.trt2] = trt2 - ctrl  = 0.494
+
+    R^2 = SSB/SST = 0.2641483   (표에서 0.2641483)
+    모형 자유도 2,  잔차 자유도 27
+
+    C() 없이 숫자 코드를 그대로 넣으면
+                df    sum_sq   mean_sq        F    PR(>F)
+    gcode      1.0   1.22018  1.220180  2.62037  0.116711
+    Residual  28.0  13.03825  0.465652      NaN       NaN
+    기울기 = 0.247  (집단당 '한 칸'씩 올라가는 직선)
+    ```
+
+    **(1)이 그대로 확인된다.** 절편 $5.032$ 가 ctrl 의 평균이고, 두 계수 $-0.371$ 과 $0.494$ 가 각각 trt1, trt2 와 ctrl 의 차다. $R^2 = 0.2641483$ 이 분산분석표의 $3.76634/(3.76634+10.49209)$ 와 일곱 자리까지 같다. 자유도도 $2$ 와 $27$ 로 맞는다.
+
+    **`C()` 를 빠뜨리면 결론이 뒤집힌다.** 숫자 코드를 그대로 넣으면 statsmodels 는 그것을 **연속변수**로 보고 기울기 하나짜리 직선을 적합한다. 자유도가 $2$ 에서 $1$ 로 줄고, 집단 간 제곱합이 $3.76634$ 에서 $1.22018$ 로 쪼그라들며(직선 위에 놓인 몫만 세기 때문이다), $p$-값이 $0.0159$ 에서 $0.1167$ 로 올라가 **$\alpha = 0.05$ 에서 기각하지 못하게 된다.**
+
+    왜 작아지는지 보면 이 모형이 무엇을 가정했는지 알 수 있다. 기울기 $0.247$ 짜리 직선은 집단평균이 $5.032 \to 5.279 \to 5.526$ 으로 **일정하게 올라간다**고 말하는데 실제 평균은 $5.032 \to 4.661 \to 5.526$ 으로 내려갔다 올라간다. 가운데 집단의 어긋남이 통째로 잔차로 밀려나 $SSE$ 가 $10.49$ 에서 $13.04$ 로 커졌다. **오류 메시지는 없다.** 조용히 다른 모형이 적합될 뿐이므로, 범주형 요인은 습관적으로 `C()` 로 감싸는 편이 안전하다.
 
 ## 2단계: Tukey HSD 사후검정
 
@@ -59,35 +159,119 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — Tukey HSD
+**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — Tukey 표의 네 열은 모두 한 수에서 나온다. 출력의 `lower`, `upper`, `p-adj`, `reject` 가 서로 어떻게 묶여 있는지 확인한다.
+
+**(1)** 균형 설계에서 Tukey 동시신뢰구간이
+
+$$
+(\bar y_i - \bar y_j) \pm \text{HSD},
+\qquad
+\text{HSD} = q_{\alpha,\,k,\,N-k}\sqrt{\frac{MSW}{n}}
+$$
+
+이고 **구간의 반폭이 세 쌍 모두에서 같은 수**임을 지적하시오. 또 `reject` 가 참인 것과 구간이 $0$ 을 품지 않는 것이 **동치**임을 보이고, `p-adj` 가 스튜던트화 범위 분포의 꼬리확률
+
+$$
+p_{\text{adj}} = P\!\left(Q_{k,\,N-k} \ge \frac{|\bar y_i - \bar y_j|}{\sqrt{MSW/n}}\right)
+$$
+
+임을 적으시오.
+
+**(2)** $\text{HSD}$ 를 계산해 출력의 여섯 경계값을 모두 되살리고, 세 `p-adj` 를 직접 재현하시오.
 
 </div>
 
-```python
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+??? success "풀이"
 
-# 분산분석이 유의했으니 이제 어느 쌍이 다른지를 본다. reject 열이 True 인
-# 쌍이 유의한 쌍이고, 신뢰구간이 0 을 품지 않는 쌍과 정확히 일치한다.
-tukey = pairwise_tukeyhsd(endog=df['weight'], groups=df['group'], alpha=0.05)
-print(tukey)
-```
+    **(1) 해석적으로.** 스튜던트화 범위 $Q_{k,\nu}$ 는 "같은 분포에서 뽑은 $k$ 개 평균의 최대–최소를, 자유도 $\nu$ 의 표준오차추정량으로 나눈 것"이다. 균형 설계에서 각 집단평균의 표준오차가 $\sqrt{MSW/n}$ 으로 **모두 같으므로**
 
-출력:
+    $$
+    P\!\left(\max_{i,j}\frac{|\bar y_i - \bar y_j|}{\sqrt{MSW/n}} \le q_{\alpha,k,\nu}\right) = 1-\alpha
+    $$
 
-```
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-===================================================
-group1 group2 meandiff p-adj   lower  upper  reject
----------------------------------------------------
-  ctrl   trt1   -0.371 0.3909 -1.0622 0.3202  False
-  ctrl   trt2    0.494  0.198 -0.1972 1.1852  False
-  trt1   trt2    0.865  0.012  0.1738 1.5562   True
----------------------------------------------------
-```
+    이고, 괄호 안의 사건은 **모든 쌍에 대해 동시에**
 
-세 비교 중 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어서, 서로 간의 차이(0.865)가 각각과 대조군의 차이(0.371, 0.494)보다 크기 때문이다.
+    $$
+    |(\bar y_i - \bar y_j) - (\mu_i - \mu_j)| \le q_{\alpha,k,\nu}\sqrt{\frac{MSW}{n}} = \text{HSD}
+    $$
 
-`reject` 열은 신뢰구간이 0을 담는지와 정확히 맞물린다. trt1 대 trt2의 구간 $(0.174, 1.556)$만 0을 담지 않는다.
+    가 성립한다는 말과 같다(귀무가설 아래). 그러므로 $(\bar y_i - \bar y_j) \pm \text{HSD}$ 가 신뢰수준 $1-\alpha$ 의 **동시**신뢰구간이다. $q$, $MSW$, $n$ 이 모두 쌍에 의존하지 않으므로 **반폭이 세 쌍에서 같은 수**이고, 그래서 Tukey 표의 세 구간은 길이가 같고 중심만 다르다.
+
+    `reject` 와의 동치는 곧바로 따라온다.
+
+    $$
+    0 \notin (\bar y_i - \bar y_j \pm \text{HSD})
+    \iff |\bar y_i - \bar y_j| > \text{HSD}
+    \iff \frac{|\bar y_i - \bar y_j|}{\sqrt{MSW/n}} > q_{\alpha,k,\nu}
+    $$
+
+    이고 마지막 식은 관측된 스튜던트화 범위통계량이 임계값을 넘는다는 뜻이다. 그 통계량의 꼬리확률이 바로 `p-adj` 이므로 "`p-adj` $< \alpha$", "구간이 $0$ 을 품지 않음", "`reject = True`" 세 가지가 **같은 하나의 부등식**이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+    # 분산분석이 유의했으니 이제 어느 쌍이 다른지를 본다. reject 열이 True 인
+    # 쌍이 유의한 쌍이고, 신뢰구간이 0 을 품지 않는 쌍과 정확히 일치한다.
+    tukey = pairwise_tukeyhsd(endog=df['weight'], groups=df['group'], alpha=0.05)
+    print(tukey)
+    ```
+
+    출력:
+
+    ```
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj   lower  upper  reject
+    ---------------------------------------------------
+      ctrl   trt1   -0.371 0.3909 -1.0622 0.3202  False
+      ctrl   trt2    0.494  0.198 -0.1972 1.1852  False
+      trt1   trt2    0.865  0.012  0.1738 1.5562   True
+    ---------------------------------------------------
+    ```
+
+    세 비교 중 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어서, 서로 간의 차이(0.865)가 각각과 대조군의 차이(0.371, 0.494)보다 크기 때문이다.
+
+    `reject` 열은 신뢰구간이 0을 담는지와 정확히 맞물린다. trt1 대 trt2의 구간 $(0.174, 1.556)$만 0을 담지 않는다. 이 표를 통째로 손으로 되살려 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    MSW, n, k, nu = 0.388596, 10, 3, 27
+    q_crit = stats.studentized_range.ppf(0.95, k, nu)
+    HSD = q_crit * np.sqrt(MSW / n)
+    print(f"q(0.05, 3, 27) = {q_crit:.4f}")
+    print(f"HSD = q * sqrt(MSW/n) = {HSD:.4f}   (세 쌍 공통)")
+
+    means = df.groupby('group')['weight'].mean()
+    print(f"\n{'pair':<12}{'diff':>8}{'lower':>9}{'upper':>8}{'q_obs':>8}{'p-adj':>8}{'reject':>8}")
+    for g1, g2 in [('ctrl', 'trt1'), ('ctrl', 'trt2'), ('trt1', 'trt2')]:
+        d = means[g2] - means[g1]
+        q_obs = abs(d) / np.sqrt(MSW / n)
+        p_adj = stats.studentized_range.sf(q_obs, k, nu)
+        print(f"{g1 + ' vs ' + g2:<12}{d:>8.3f}{d - HSD:>9.4f}{d + HSD:>8.4f}"
+              f"{q_obs:>8.4f}{p_adj:>8.4f}{str(abs(d) > HSD):>8}")
+    ```
+
+    출력:
+
+    ```
+    q(0.05, 3, 27) = 3.5064
+    HSD = q * sqrt(MSW/n) = 0.6912   (세 쌍 공통)
+
+    pair            diff    lower   upper   q_obs   p-adj  reject
+    ctrl vs trt1  -0.371  -1.0622  0.3202  1.8820  0.3909   False
+    ctrl vs trt2   0.494  -0.1972  1.1852  2.5060  0.1980   False
+    trt1 vs trt2   0.865   0.1738  1.5562  4.3880  0.0120    True
+    ```
+
+    **표가 통째로 되살아난다.** 여섯 경계값이 `pairwise_tukeyhsd` 의 출력과 소수 넷째 자리까지 같고, 세 `p-adj` 도 $0.3909$, $0.1980$, $0.0120$ 으로 같다. 쓰인 것은 $q_{0.05,3,27} = 3.5064$ 와 $MSW = 0.388596$ 둘뿐이다.
+
+    **반폭이 하나의 수다.** $\text{HSD} = 0.6912$ 가 세 쌍 모두에 쓰였고, 실제로 출력의 `upper - lower` 가 세 줄 모두 $1.3824 = 2\times0.6912$ 다. 그러므로 **Tukey 의 판정은 "차이의 절댓값이 $0.6912$ 를 넘는가" 하나로 끝난다.** $|{-0.371}| < 0.6912$, $|0.494| < 0.6912$, $|0.865| > 0.6912$ 로 셋째 쌍만 넘는다.
+
+    주의할 것은 이 단순함이 **균형 설계에서만** 성립한다는 점이다. $n_i$ 가 다르면 표준오차 $\sqrt{\frac{MSW}{2}\left(\frac{1}{n_i}+\frac{1}{n_j}\right)}$ 가 쌍마다 달라져 구간 길이도 달라지고, statsmodels 는 그때 Tukey–Kramer 변형을 쓴다.
 
 ## 3단계: Bonferroni 보정을 적용한 쌍별 Welch t-검정
 
@@ -99,42 +283,133 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 본페로니 보정 쌍별 비교
+**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 본페로니가 Tukey 보다 보수적인가. 이 단계는 Tukey 와 **두 가지**가 다르다. 다중성 보정 방법도 다르고(본페로니 대 스튜던트화 범위), 분산을 다루는 방법도 다르다(쌍별 Welch 대 합동 $MSW$).
+
+**(1)** 본페로니 보정이 FWER 을 $\alpha$ 이하로 지킴을 **합집합 상계**로 보이시오. 또 합동분산을 쓰는 두 방법의 문턱을 같은 자에 올리면 그 비가
+
+$$
+\frac{\text{Bonferroni 문턱}}{\text{Tukey 문턱}}
+= \frac{\sqrt2\, t_{1-\alpha/(2m),\,\nu}}{q_{\alpha,\,k,\,\nu}}
+$$
+
+임을 보이고, $k = 3$, $m = 3$, $\nu = 27$ 에서 이 값을 구하시오.
+
+**(2)** 두 차이를 **하나씩** 떼어 내시오. 곧 합동분산 $t$-검정에 본페로니를 걸어 Tukey 와 견주고, 다시 Welch 와 견주시오. 어느 쌍에서 Welch 가 오히려 더 작은 $p$-값을 주는가. 그 까닭은 무엇인가.
 
 </div>
 
-```python
-from itertools import combinations
-from scipy.stats import ttest_ind
-from statsmodels.stats.multitest import multipletests
+??? success "풀이"
 
-groups = df['group'].unique()
-p_raw, labels = [], []
-for g1, g2 in combinations(groups, 2):
-    x = df.loc[df['group'] == g1, 'weight'].values
-    y = df.loc[df['group'] == g2, 'weight'].values
-    stat, p = ttest_ind(x, y, equal_var=False)
-    p_raw.append(p)
-    labels.append(f"{g1} vs {g2}")
+    **(1) 해석적으로.** 비교가 $m$ 개이고 각각의 귀무가설을 $H_{0}^{(1)},\dots,H_{0}^{(m)}$ 이라 하자. 모두 참일 때 $i$ 번째를 수준 $\alpha/m$ 에서 기각할 확률은 $\alpha/m$ 이하다. 합집합 상계로
 
-# Bonferroni는 문턱을 낮추는 대신 p-값에 m을 곱해 돌려준다.
-# 그래서 보정 후에도 비교 대상은 여전히 alpha다.
-_, p_bonf, _, _ = multipletests(p_raw, alpha=0.05, method='bonferroni')
-for lbl, p, pb in zip(labels, p_raw, p_bonf):
-    print(f"{lbl:<12}  p = {p:.4f}   p_bonf = {pb:.4f}")
-```
+    $$
+    \text{FWER} = P\!\left(\bigcup_{i=1}^{m}\{\text{$i$ 번째를 기각}\}\right)
+    \le \sum_{i=1}^{m} P(\text{$i$ 번째를 기각})
+    \le m \cdot \frac{\alpha}{m} = \alpha
+    $$
 
-출력:
+    이다. 검정통계량들이 **서로 어떻게 얽혀 있든** 성립한다는 것이 이 상계의 장점이자 보수성의 출처다. 실제로 쌍별 비교는 같은 집단평균을 공유하므로 강하게 상관되어 있고, 그만큼 합집합 상계가 느슨해진다. 수준 $\alpha/m$ 으로 검정하는 것과 $p$-값에 $m$ 을 곱해 $\alpha$ 와 견주는 것은 같은 일이다.
 
-```
-ctrl vs trt1  p = 0.2504   p_bonf = 0.7511
-ctrl vs trt2  p = 0.0479   p_bonf = 0.1437
-trt1 vs trt2  p = 0.0093   p_bonf = 0.0279
-```
+    **문턱의 비.** 합동분산을 쓰면 본페로니는
 
-Tukey와 결론은 같지만(trt1 대 trt2만 유의) 보정 p-값은 0.0279로 Tukey의 0.012보다 크다. Bonferroni가 더 보수적이기 때문이다.
+    $$
+    |\bar y_i - \bar y_j| > t_{1-\alpha/(2m),\,\nu}\sqrt{MSW\left(\tfrac1n+\tfrac1n\right)}
+    = t_{1-\alpha/(2m),\,\nu}\,\sqrt2\,\sqrt{\frac{MSW}{n}}
+    $$
 
-ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 후 0.1437이 된다. 비교를 세 번 한다는 사실이 이만큼의 대가를 요구한다.
+    일 때 기각하고, Tukey 는 $q_{\alpha,k,\nu}\sqrt{MSW/n}$ 을 넘을 때 기각한다. $\sqrt{MSW/n}$ 이 약분되어
+
+    $$
+    \frac{\text{Bonferroni}}{\text{Tukey}} = \frac{\sqrt2\,t_{1-\alpha/(2m),\nu}}{q_{\alpha,k,\nu}}
+    $$
+
+    가 남는다. **$MSW$ 와 $n$ 에 의존하지 않는 순수한 분위수의 비**다. $k=3$ 이면 $m=3$ 이고, 아래에서 재 보면 $1.029$ 로 본페로니 쪽이 $3\%$ 높다. 집단이 많아질수록 $m = \binom k2$ 가 제곱으로 늘어 이 비가 커진다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from itertools import combinations
+    from scipy.stats import ttest_ind
+    from statsmodels.stats.multitest import multipletests
+
+    groups = df['group'].unique()
+    p_raw, labels = [], []
+    for g1, g2 in combinations(groups, 2):
+        x = df.loc[df['group'] == g1, 'weight'].values
+        y = df.loc[df['group'] == g2, 'weight'].values
+        stat, p = ttest_ind(x, y, equal_var=False)
+        p_raw.append(p)
+        labels.append(f"{g1} vs {g2}")
+
+    # Bonferroni는 문턱을 낮추는 대신 p-값에 m을 곱해 돌려준다.
+    # 그래서 보정 후에도 비교 대상은 여전히 alpha다.
+    _, p_bonf, _, _ = multipletests(p_raw, alpha=0.05, method='bonferroni')
+    for lbl, p, pb in zip(labels, p_raw, p_bonf):
+        print(f"{lbl:<12}  p = {p:.4f}   p_bonf = {pb:.4f}")
+    ```
+
+    출력:
+
+    ```
+    ctrl vs trt1  p = 0.2504   p_bonf = 0.7511
+    ctrl vs trt2  p = 0.0479   p_bonf = 0.1437
+    trt1 vs trt2  p = 0.0093   p_bonf = 0.0279
+    ```
+
+    Tukey와 결론은 같지만(trt1 대 trt2만 유의) 보정 p-값은 0.0279로 Tukey의 0.012보다 크다. Bonferroni가 더 보수적이기 때문이다.
+
+    ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 후 0.1437이 된다. 비교를 세 번 한다는 사실이 이만큼의 대가를 요구한다.
+
+    이제 두 차이를 하나씩 떼어 본다.
+
+    ```python
+    MSW, n, k, nu, m = 0.388596, 10, 3, 27, 3
+
+    # 본페로니와 Tukey 의 문턱을 같은 자에 올려 견준다 (둘 다 합동분산 기준).
+    t_b = stats.t.ppf(1 - 0.05 / (2 * m), nu)
+    thr_bonf = t_b * np.sqrt(2 * MSW / n)
+    q_crit = stats.studentized_range.ppf(0.95, k, nu)
+    thr_tukey = q_crit * np.sqrt(MSW / n)
+    print(f"본페로니 문턱 = {t_b:.4f} * {np.sqrt(2 * MSW / n):.4f} = {thr_bonf:.4f}")
+    print(f"Tukey  문턱   = {q_crit:.4f} * {np.sqrt(MSW / n):.4f} = {thr_tukey:.4f}")
+    print(f"비 = {thr_bonf / thr_tukey:.5f}   (= sqrt(2) t / q = {np.sqrt(2) * t_b / q_crit:.5f})")
+
+    # 합동분산 t 로 본페로니를 다시 하면 Welch 와 얼마나 다른가.
+    print(f"\n{'pair':<14}{'Welch p':>10}{'Welch bonf':>12}"
+          f"{'pooled p':>10}{'pooled bonf':>13}{'Tukey adj':>11}")
+    means = df.groupby('group')['weight'].mean()
+    for g1, g2 in combinations(['ctrl', 'trt1', 'trt2'], 2):
+        x = df.loc[df['group'] == g1, 'weight'].values
+        y = df.loc[df['group'] == g2, 'weight'].values
+        p_w = stats.ttest_ind(x, y, equal_var=False).pvalue
+        d = means[g2] - means[g1]
+        t_pool = d / np.sqrt(2 * MSW / n)
+        p_pool = 2 * stats.t.sf(abs(t_pool), nu)
+        p_tuk = stats.studentized_range.sf(abs(d) / np.sqrt(MSW / n), k, nu)
+        print(f"{g1 + ' vs ' + g2:<14}{p_w:>10.4f}{min(m * p_w, 1):>12.4f}"
+              f"{p_pool:>10.4f}{min(m * p_pool, 1):>13.4f}{p_tuk:>11.4f}")
+    ```
+
+    출력:
+
+    ```
+    본페로니 문턱 = 2.5525 * 0.2788 = 0.7116
+    Tukey  문턱   = 3.5064 * 0.1971 = 0.6912
+    비 = 1.02946   (= sqrt(2) t / q = 1.02946)
+
+    pair             Welch p  Welch bonf  pooled p  pooled bonf  Tukey adj
+    ctrl vs trt1      0.2504      0.7511    0.1944       0.5832     0.3909
+    ctrl vs trt2      0.0479      0.1437    0.0877       0.2630     0.1980
+    trt1 vs trt2      0.0093      0.0279    0.0045       0.0134     0.0120
+    ```
+
+    **(1)의 비가 맞는다.** 두 문턱의 비 $1.02946$ 이 $\sqrt2\,t/q$ 와 다섯 자리까지 같다. 분산을 같은 방식으로 다루면 **본페로니가 Tukey 보다 정확히 $2.9\%$ 보수적**이고, `pooled bonf` 열의 $0.0134$ 가 `Tukey adj` 의 $0.0120$ 보다 큰 것이 그 결과다. 세 집단에서는 차이가 이 정도로 작다.
+
+    **그런데 표의 `Welch bonf` 는 더 큰 $0.0279$ 다.** 다중성 보정 탓이 아니다. 같은 본페로니인데도 Welch 가 $0.0279$, 합동이 $0.0134$ 이므로, 차이는 **분산을 다루는 방식**에서 왔다. Welch 는 두 집단의 자료만으로 표준오차를 만들어 자유도가 $14$ 언저리로 줄고 임계값이 높아진다. 셋째 집단이 주는 정보를 버린 값이다.
+
+    **그러나 ctrl 대 trt2 에서는 방향이 뒤집힌다.** Welch 가 $p = 0.0479$ 로 합동의 $0.0877$ 보다 **작다.** 까닭은 집단별 표준편차에 있다. ctrl 과 trt2 는 $0.583$ 과 $0.443$ 으로 작은데, 합동 $MSW$ 에는 표준편차 $0.794$ 인 trt1 이 함께 들어가 있어 $\sqrt{MSW} = 0.623$ 으로 부풀려진다. **비교에 끼지도 않은 집단이 표준오차를 키운 것이다.** 자유도를 벌어 오는 대가가 이것이고, 등분산이 깨지면 손해가 이득을 넘어설 수 있다.
+
+    정리하면 이 자료에서 세 절차의 결론은 모두 같다(trt1 대 trt2 만 유의). 다만 이유가 겹겹이다. **방법을 바꿀 때는 무엇이 바뀌는지를 하나씩 떼어 보아야 한다.** 등분산이 미덥지 않다면 보정은 본페로니로 두더라도 쌍별 검정을 Welch 로 바꾸는 쪽이 옳고, 등분산이 믿을 만하다면 Tukey 가 가장 날카롭다.
 
 ## 4단계: 시각화
 
@@ -142,28 +417,71 @@ ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 �
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 4단계 — 상자그림
+**보기 4.** <span class="diff easy" title="쉬움"></span> 4단계 — "상자가 안 겹치면 유의하다"는 눈대중은 믿을 만한가. 마지막으로 상자그림을 그려 앞의 검정 결과와 같은 이야기를 하는지 확인한다.
+
+**(1)** 세 쌍의 상자가 **겹치는 길이**를 재고 Tukey 의 판정과 나란히 놓으시오. 순서가 맞는가.
+
+**(2)** 그래도 겹침을 판정의 근거로 쓸 수 없는 까닭을 밝히시오. Tukey 가 실제로 보는 것은 무엇인가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 상자그림으로 마무리한다. 검정 결과와 그림이 같은 이야기를 하는지 확인하는
-# 것이 마지막 단계다. 순서를 못박아 두어야 그림이 자료 순서에 휘둘리지 않는다.
-order = ['ctrl', 'trt1', 'trt2']
-data = [df.loc[df['group'] == g, 'weight'].values for g in order]
-plt.boxplot(data, labels=order)
-plt.xlabel('Group')
-plt.ylabel('Weight')
-plt.title('PlantGrowth weights by group')
-plt.tight_layout()
-plt.show()
-```
+    유도할 답이 있는 문제가 아니다. **그림이 가리키는 방향과 검정이 쓰는 양이 어떻게 다른지**를 수치로 읽는 것이 이 보기의 전부다.
 
-![집단별 상자그림](./img/oneway_pipeline_83.png)
+    ```python
+    import matplotlib.pyplot as plt
 
-trt1의 상자가 가장 낮고 넓으며, trt2가 가장 높고 좁다. 두 상자가 겹치는 부분이 거의 없다는 것이 Tukey 검정이 이 쌍만 잡아낸 이유다. ctrl의 상자는 두 처리 사이에 걸쳐 있어 어느 쪽과도 뚜렷이 갈리지 않는다.
+    # 상자그림으로 마무리한다. 검정 결과와 그림이 같은 이야기를 하는지 확인하는
+    # 것이 마지막 단계다. 순서를 못박아 두어야 그림이 자료 순서에 휘둘리지 않는다.
+    order = ['ctrl', 'trt1', 'trt2']
+    data = [df.loc[df['group'] == g, 'weight'].values for g in order]
+    plt.boxplot(data, labels=order)
+    plt.xlabel('Group')
+    plt.ylabel('Weight')
+    plt.title('PlantGrowth weights by group')
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![집단별 상자그림](./img/oneway_pipeline_83.png)
+
+    trt1의 상자가 가장 낮고 넓으며, trt2가 가장 높고 좁다. ctrl의 상자는 두 처리 사이에 걸쳐 있어 어느 쪽과도 뚜렷이 갈리지 않는다. 겹침을 실제로 재어 Tukey 와 견준다.
+
+    ```python
+    HSD = 0.6912
+    box = {g: np.percentile(df.loc[df['group'] == g, 'weight'], [25, 50, 75])
+           for g in order}
+    means = df.groupby('group')['weight'].mean()
+    print(f"{'pair':<14}{'box overlap':>12}{'|diff|':>9}{'HSD':>8}{'Tukey':>8}")
+    for g1, g2 in [('ctrl', 'trt1'), ('ctrl', 'trt2'), ('trt1', 'trt2')]:
+        lo = max(box[g1][0], box[g2][0])     # 두 상자 아랫변 중 높은 쪽
+        hi = min(box[g1][2], box[g2][2])     # 두 상자 윗변 중 낮은 쪽
+        overlap = max(hi - lo, 0.0)
+        d = abs(means[g2] - means[g1])
+        print(f"{g1 + ' vs ' + g2:<14}{overlap:>12.3f}{d:>9.3f}{HSD:>8.4f}"
+              f"{str(d > HSD):>8}")
+    ```
+
+    출력:
+
+    ```
+    pair           box overlap   |diff|     HSD   Tukey
+    ctrl vs trt1         0.320    0.371  0.6912   False
+    ctrl vs trt2         0.025    0.494  0.6912   False
+    trt1 vs trt2         0.000    0.865  0.6912    True
+    ```
+
+    **(1) 순서는 맞는다.** 겹침이 $0.320 \to 0.025 \to 0.000$ 으로 줄어드는 순서가 차이 $0.371 \to 0.494 \to 0.865$ 가 커지는 순서와 일치하고, 유일하게 겹침이 **정확히 $0$** 인 trt1–trt2 가 Tukey 가 잡은 쌍이다. 그림과 검정이 같은 이야기를 한다.
+
+    **(2) 그래도 겹침을 근거로 쓸 수는 없다.** ctrl 과 trt2 는 겹침이 $0.025$ 로 **거의 $0$ 인데도 유의하지 않다.** 겹침이 $0$ 이 되는 자리와 $\text{HSD}$ 를 넘는 자리가 서로 다르기 때문이다.
+
+    - 상자의 경계는 **사분위수**이고 겹침은 $Q_3^{(i)} - Q_1^{(j)}$ 같은 양이다. 표본크기와 무관하다.
+    - Tukey 가 보는 것은 **평균의 차** $|\bar y_i - \bar y_j|$ 와 $\text{HSD} = q\sqrt{MSW/n}$ 의 비교다. $\text{HSD}$ 에는 $n$ 이 분모로, 집단 수 $k$ 가 $q$ 를 통해 들어 있다.
+
+    그래서 $n$ 을 네 배로 늘리면 $\text{HSD}$ 가 절반이 되어 같은 그림에서도 판정이 바뀐다. **상자그림은 $n$ 을 전혀 보여 주지 않으므로, 겹침만 보고 유의성을 말하면 표본크기를 통째로 무시하는 셈이다.** 반대 방향의 실수도 흔하다. $n$ 이 아주 크면 상자가 많이 겹쳐도 평균 차가 유의해진다.
+
+    겹침을 보고 싶다면 상자가 아니라 **평균의 신뢰구간**을 그려야 하고, 그마저도 두 구간의 겹침과 차의 유의성은 다른 물음이다. 이 쪽에서는 보기 2의 Tukey 동시신뢰구간이 바로 그 올바른 그림이다. 상자그림의 몫은 판정이 아니라 **분포의 모양과 이상점을 눈으로 훑는 것**이다(같은 자료를 상자그림으로 읽는 다른 각도는 [scipy를 이용한 일원배치 분산분석](oneway_scipy.md)의 보기 3에 있다).
 
 ## 해석
 

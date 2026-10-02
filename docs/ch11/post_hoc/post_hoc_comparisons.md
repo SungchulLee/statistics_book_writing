@@ -26,50 +26,172 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Tukey HSD로 세 집단 견주기
+**보기 1.** <span class="diff easy" title="쉬움"></span> A–B 를 놓친 것은 운이 나빴기 때문인가. 참 평균이 $10, 12, 15$, 참 표준편차가 모두 $3.5$, 집단당 $n = 15$ 인 자료를 만들어 Tukey HSD 를 돌린다.
+
+**(1)** 균형 설계에서 쌍별 통계량
+
+$$
+T = \frac{\bar y_i - \bar y_j}{\sqrt{MSW\left(\frac{2}{n}\right)}}
+$$
+
+가 $H_1$ 아래에서 **비중심 $t$ 분포** $t_{N-k}(\delta)$ 를 정확히 따르고 $\delta = \dfrac{\mu_i - \mu_j}{\sigma\sqrt{2/n}}$ 임을 설명하시오. 네 문턱(보정 없음·Tukey·Bonferroni·Scheffé)을 표준오차 단위로 적고, **A–B 를 잡아낼 확률**을 각각 계산하시오.
+
+**(2)** 모의실험으로 (1)을 확인하고, Tukey 로 A–B 를 $80\%$ 확률로 잡으려면 집단당 몇 개가 필요한지 구하시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+??? success "풀이"
 
-# 세 집단의 참 평균을 10, 12, 15 로 두고 표준편차는 모두 3.5 로 맞췄다.
-# A와 B의 차이는 표준편차보다 작고 A와 C의 차이는 그보다 크다.
-# Tukey 가 어느 쌍을 갈라내고 어느 쌍을 갈라내지 못하는지 보게 된다.
-rng = np.random.default_rng(42)
-n = 15
-df = pd.DataFrame({
-    "response": np.concatenate([
-        rng.normal(10.0, 3.5, n),
-        rng.normal(12.0, 3.5, n),
-        rng.normal(15.0, 3.5, n),
-    ]),
-    "group": ["A"] * n + ["B"] * n + ["C"] * n,
-})
+    **(1) 해석적으로.** 분자 $\bar y_i - \bar y_j$ 는 평균 $\mu_i - \mu_j$, 분산 $2\sigma^2/n$ 의 정규분포다. 표준화하면
 
-# Tukey HSD 는 쌍 세 개를 한꺼번에 견주면서 전체 오류율을 0.05 로 묶는다.
-# 쌍마다 t-검정을 따로 하면 이 통제가 무너진다.
-print(pairwise_tukeyhsd(endog=df["response"], groups=df["group"], alpha=0.05))
-```
+    $$
+    Z = \frac{\bar y_i - \bar y_j}{\sigma\sqrt{2/n}} \sim N(\delta,\ 1),
+    \qquad
+    \delta = \frac{\mu_i-\mu_j}{\sigma\sqrt{2/n}}
+    $$
 
-출력:
+    이다. 한편 $\dfrac{(N-k)MSW}{\sigma^2} \sim \chi^2_{N-k}$ 이고 **분자와 독립**이다($MSW$ 는 집단 안 변동만 쓰고 집단평균과 직교한다). 그러므로
 
-```
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-===================================================
-group1 group2 meandiff p-adj   lower  upper  reject
----------------------------------------------------
-     A      B   2.1353 0.1115 -0.3876 4.6582  False
-     A      C   5.4745    0.0  2.9516 7.9975   True
-     B      C   3.3392 0.0069  0.8163 5.8621   True
----------------------------------------------------
-```
+    $$
+    T = \frac{Z}{\sqrt{\dfrac{(N-k)MSW/\sigma^2}{N-k}}} \sim t_{N-k}(\delta)
+    $$
 
-참 평균이 10, 12, 15이고 표준편차가 3.5인 자료다. A와 C의 차이(참값 5)와 B와 C의 차이(참값 3)는 잡아내지만, A와 B의 차이(참값 2)는 $p = 0.11$로 놓친다. 집단당 15개로는 표준편차 3.5 대비 2의 차이를 가려내기 어렵다.
+    로 비중심 $t$ 다. **근사가 아니라 정확한 분포**다.
 
-**사후검정이 유의하지 않다는 것이 차이가 없다는 뜻은 아니다.** 여기서는 참 차이가 분명히 존재하는데도 놓쳤다.
+    여기서는 $\mu_B - \mu_A = 2$, $\sigma = 3.5$, $n = 15$ 이므로
+
+    $$
+    \delta = \frac{2}{3.5\sqrt{2/15}} = \frac{2}{1.2780} = 1.5649
+    $$
+
+    이고 $N - k = 42$ 다. 네 절차의 문턱은 모두 "$|T|$ 가 얼마를 넘는가"로 적힌다.
+
+    | 방법 | 문턱 |
+    |---|---|
+    | 보정 없음 | $t_{0.975,\,42}$ |
+    | Tukey | $q_{0.05,\,3,\,42}/\sqrt2$ |
+    | Bonferroni | $t_{1-0.05/6,\,42}$ |
+    | Scheffé | $\sqrt{(k-1)F_{0.05,\,2,\,42}}$ |
+
+    각 문턱 $c$ 에 대한 검정력은 $P(|t_{42}(1.5649)| > c)$ 로 **닫힌 꼴로 계산된다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+    # 세 집단의 참 평균을 10, 12, 15 로 두고 표준편차는 모두 3.5 로 맞췄다.
+    # A와 B의 차이는 표준편차보다 작고 A와 C의 차이는 그보다 크다.
+    # Tukey 가 어느 쌍을 갈라내고 어느 쌍을 갈라내지 못하는지 보게 된다.
+    rng = np.random.default_rng(42)
+    n = 15
+    df = pd.DataFrame({
+        "response": np.concatenate([
+            rng.normal(10.0, 3.5, n),
+            rng.normal(12.0, 3.5, n),
+            rng.normal(15.0, 3.5, n),
+        ]),
+        "group": ["A"] * n + ["B"] * n + ["C"] * n,
+    })
+
+    # Tukey HSD 는 쌍 세 개를 한꺼번에 견주면서 전체 오류율을 0.05 로 묶는다.
+    # 쌍마다 t-검정을 따로 하면 이 통제가 무너진다.
+    print(pairwise_tukeyhsd(endog=df["response"], groups=df["group"], alpha=0.05))
+    ```
+
+    출력:
+
+    ```
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj   lower  upper  reject
+    ---------------------------------------------------
+         A      B   2.1353 0.1115 -0.3876 4.6582  False
+         A      C   5.4745    0.0  2.9516 7.9975   True
+         B      C   3.3392 0.0069  0.8163 5.8621   True
+    ---------------------------------------------------
+    ```
+
+    참 평균이 10, 12, 15이고 표준편차가 3.5인 자료다. A와 C의 차이(참값 5)와 B와 C의 차이(참값 3)는 잡아내지만, A와 B의 차이(참값 2)는 $p = 0.11$로 놓친다. 집단당 15개로는 표준편차 3.5 대비 2의 차이를 가려내기 어렵다.
+
+    **사후검정이 유의하지 않다는 것이 차이가 없다는 뜻은 아니다.** 여기서는 참 차이가 분명히 존재하는데도 놓쳤다. 그 "놓칠 확률"을 계산해 본다.
+
+    ```python
+    from scipy import stats
+
+    k, sigma = 3, 3.5
+    nu = k * n - k                      # 42
+    delta = 2.0                         # A 와 B 의 참 평균차
+    se_true = sigma * np.sqrt(2 / n)    # 차이의 '참' 표준오차
+    ncp = delta / se_true
+    print(f"참 표준오차 = {se_true:.4f},  비중심모수 delta/SE = {ncp:.4f}")
+
+    thr = {
+        "보정 없음": stats.t.ppf(0.975, nu),
+        "Tukey": stats.studentized_range.ppf(0.95, k, nu) / np.sqrt(2),
+        "Bonferroni": stats.t.ppf(1 - 0.05 / 6, nu),
+        "Scheffe": np.sqrt((k - 1) * stats.f(k - 1, nu).ppf(0.95)),
+    }
+
+    # 모의실험으로 확인한다 (통계량을 직접 만들어 문턱과 견준다).
+    B = 200_000
+    sim = np.random.default_rng(7)
+    mu = np.array([10.0, 12.0, 15.0])
+    Y = sim.normal(mu[None, :, None], sigma, size=(B, k, n))
+    gm = Y.mean(axis=2)
+    MSW = ((Y - gm[:, :, None]) ** 2).sum(axis=(1, 2)) / nu
+    T_AB = (gm[:, 1] - gm[:, 0]) / np.sqrt(MSW * 2 / n)
+
+    print(f"\n{'방법':<12}{'문턱(SE 단위)':>14}{'검정력(이론)':>14}{'검정력(모의)':>14}")
+    for name, c in thr.items():
+        th = stats.nct(nu, ncp).sf(c) + stats.nct(nu, ncp).cdf(-c)
+        print(f"{name:<12}{c:>14.4f}{th:>14.4f}{np.mean(np.abs(T_AB) > c):>14.4f}")
+
+    # Tukey 로 A-B 를 80% 확률로 잡으려면 집단당 몇 개가 필요한가.
+    print(f"\n{'n':>5}{'nu':>6}{'Tukey 문턱':>12}{'검정력':>10}")
+    for m in (15, 30, 50, 60, 63, 70):
+        nu_m = k * m - k
+        c = stats.studentized_range.ppf(0.95, k, nu_m) / np.sqrt(2)
+        nc = delta / (sigma * np.sqrt(2 / m))
+        pw = stats.nct(nu_m, nc).sf(c) + stats.nct(nu_m, nc).cdf(-c)
+        print(f"{m:>5}{nu_m:>6}{c:>12.4f}{pw:>10.4f}")
+
+    print(f"\n이 표본의 MSW = 8.088 로 참 분산 sigma^2 = {sigma ** 2:.3f} 보다 작다")
+    ```
+
+    출력:
+
+    ```
+    참 표준오차 = 1.2780,  비중심모수 delta/SE = 1.5649
+
+    방법               문턱(SE 단위)       검정력(이론)       검정력(모의)
+    보정 없음               2.0181        0.3336        0.3340
+    Tukey               2.4295        0.2056        0.2059
+    Bonferroni          2.4937        0.1889        0.1895
+    Scheffe             2.5377        0.1780        0.1780
+
+        n    nu    Tukey 문턱       검정력
+       15    42      2.4295    0.2056
+       30    87      2.3845    0.4357
+       50   147      2.3677    0.6875
+       60   177      2.3636    0.7774
+       63   186      2.3626    0.7999
+       70   207      2.3607    0.8452
+
+    이 표본의 MSW = 8.088 로 참 분산 sigma^2 = 12.250 보다 작다
+    ```
+
+    **이론과 모의가 소수 셋째 자리까지 맞는다.** 비중심 $t$ 로 계산한 검정력 $0.3336,\ 0.2056,\ 0.1889,\ 0.1780$ 이 $20$ 만 번 모의실험의 $0.3340,\ 0.2059,\ 0.1895,\ 0.1780$ 과 일치한다. (1)의 분포 주장이 확인되었다.
+
+    **A–B 를 놓친 것은 운이 나빠서가 아니다.** Tukey 로 이 쌍을 잡아낼 확률이 **$0.206$ 에 지나지 않는다.** 다섯 번 중 네 번은 놓치도록 설계된 실험이었던 셈이다. 보정을 아예 하지 않아도 $0.334$ 이니, **다중비교 보정이 범인도 아니다.** 보정이 앗아간 몫은 $0.33 \to 0.21$ 로 $0.13$ 이고, 나머지 $0.67$ 은 애초에 표본이 작아서 없던 검정력이다.
+
+    세 보정의 서열도 수로 확인된다. 문턱이 Tukey $2.4295$ < Bonferroni $2.4937$ < Scheffé $2.5377$ 이고 검정력은 그 역순이다. **쌍별 비교만 할 생각이라면 Tukey 가 가장 날카롭다.**
+
+    **처방은 표본이다.** 집단당 $15$ 개에서 $0.206$ 이던 검정력이 $30$ 개에서 $0.436$, $50$ 개에서 $0.688$ 이 되고 **$63$ 개에서 $0.80$ 에 닿는다.** 문턱 자체는 $2.4295$ 에서 $2.3626$ 으로 거의 움직이지 않는다는 점을 눈여겨보라. 검정력을 끌어올린 것은 문턱이 아니라 **분모의 $\sqrt{2/n}$ 이 줄어든 것**이다. 보정 방법을 고르는 일로 얻을 수 있는 것에는 한계가 있고, 그 너머는 표본으로 사야 한다.
+
+    마지막 줄은 덤이다. 이 표본의 $MSW = 8.088$ 이 참 분산 $\sigma^2 = 12.25$ 보다 꽤 작다. 우연히 얌전한 표본이 뽑힌 것이고, 그래서 출력표의 신뢰구간이 참 $\sigma$ 로 계산했을 때보다 좁다. **그런 운 좋은 표본에서도 A–B 는 잡히지 않았다.**
 
 불균형 설계에서는 Tukey-Kramer 수정이 $\sqrt{MSW/n}$을 $\sqrt{MSW \cdot (1/n_i + 1/n_j)/2}$로 대체한다.
 

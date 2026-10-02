@@ -18,52 +18,135 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 관계의 모양에 따른 세 측도
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 측도의 모집단 값을 먼저 구해 놓기. 세 자료는 선형($y = 2x + \varepsilon$), 단조 비선형($y = e^x + \varepsilon$), 이차($y = x^2 + \varepsilon$)다.
+
+**(1)** 선형 자료의 모집단 $\rho$, $\rho_s$, $\tau$ 를 **닫힌 꼴로** 구하시오. 이 자료에 이변량 정규 공식을 써도 되는가. 나머지 둘에는?
+
+**(2)** 이차 자료의 세 모집단 값은 얼마인가. "$0$ 에 가깝다"가 아니라 정확한 값을 말할 수 있는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
-n = 100
+    **(1) 선형 자료에는 쓸 수 있다.** $x \sim \mathcal N(0,1)$ 이고 $y = 2x + \varepsilon$, $\varepsilon \sim \mathcal N(0,1)$ 이 독립이므로 $(x, y)$ 는 **이변량 정규**다. 따라서
 
-# 선형 관계. 세 측도가 모두 크게 나온다.
-x_lin = np.random.normal(0, 1, n)
-y_lin = 2 * x_lin + np.random.normal(0, 1, n)
+    $$
+    \rho = \frac{\operatorname{Cov}(x,y)}{\sigma_x \sigma_y} = \frac{2}{1 \cdot \sqrt{4+1}} = \frac{2}{\sqrt5} = 0.894427
+    $$
 
-# 단조이지만 곡선인 관계. Pearson 은 떨어지지만 순위를 쓰는 두 측도는 버틴다.
-x_mono = np.random.uniform(0, 3, n)
-y_mono = np.exp(x_mono) + np.random.normal(0, 2, n)
+    이고, 이변량 정규에서만 성립하는 두 닫힌 꼴
 
-# 이차함수 관계. 관계는 아주 강한데 세 측도 모두 0 근처로 나온다.
-# 상관계수가 0 이라는 말이 "관계가 없다"는 뜻이 아님을 보여 주는 자리다.
-x_quad = np.random.normal(0, 2, n)
-y_quad = x_quad**2 + np.random.normal(0, 1, n)
+    $$
+    \rho_s = \frac{6}{\pi}\arcsin\frac{\rho}{2} = 0.885502,
+    \qquad
+    \tau = \frac{2}{\pi}\arcsin\rho = 0.704833
+    $$
 
-datasets = [
-    ("Linear", x_lin, y_lin),
-    ("Monotonic Nonlinear", x_mono, y_mono),
-    ("Quadratic (r ~ 0)", x_quad, y_quad),
-]
+    을 그대로 쓸 수 있다. 큰 표본으로 재면 $0.89427$, $0.88537$, $0.70497$ 이 나와 맞는다.
 
-for name, x, y in datasets:
-    r_p, _ = stats.pearsonr(x, y)
-    r_s, _ = stats.spearmanr(x, y)
-    r_k, _ = stats.kendalltau(x, y)
-    print(f"{name:<25} r={r_p:.4f}  rho_s={r_s:.4f}  tau={r_k:.4f}")
-```
+    **나머지 둘에는 쓰면 안 된다.** 단조 비선형 자료는 $x \sim U(0,3)$ 이라 주변분포가 정규가 아니고, 이차 자료는 애초에 이변량 정규가 아니다. 두 자료의 모집단 값은 모의실험으로 잰다.
 
-출력:
+    | 관계 | 모집단 $r$ | 모집단 $\rho_s$ | 모집단 $\tau$ |
+    |---|---|---|---|
+    | Linear | $+0.89427$ | $+0.88537$ | $+0.70497$ |
+    | Monotonic Nonlinear | $+0.87282$ | $+0.88110$ | $+0.70520$ |
+    | Quadratic | $+0.00038$ | $+0.00026$ | $-0.00096$ |
 
-```text
-Linear                    r=0.8724  rho_s=0.8686  tau=0.6853
-Monotonic Nonlinear       r=0.8676  rho_s=0.9032  tau=0.7402
-Quadratic (r ~ 0)         r=0.1014  rho_s=-0.0229  tau=-0.0376
-```
+    단조 비선형에서 $\rho_s > \rho$ 인 것($0.881$ 대 $0.873$)은 **모집단 수준에서도 참**이다. 표본에서 $0.868$ 대 $0.903$ 으로 더 벌어진 것은 표집 변동이다.
 
-선형 관계에서는 Pearson이 가장 크고, 단조 비선형(지수) 관계에서는 Spearman과 Kendall이 Pearson을 앞선다(0.903 대 0.868). 이차 관계에서는 $y$가 사실상 $x$의 결정론적 함수인데도 Pearson의 $r$가 0에 가깝다. Pearson 상관이 낮다고 해서 "관계가 없다"는 뜻이 아님을 보여준다.
+    **(2) 셋 다 정확히 $0$ 이다.** $x \sim \mathcal N(0, 2^2)$ 가 $0$ 에 대칭이고 $\varepsilon$ 이 독립이므로 $(x, y)$ 와 $(-x, y)$ 의 **분포가 같다.** 그러면 $x$ 의 홀함수 $g$ 와 $y$ 의 아무 함수 $h$ 에 대해
+
+    $$
+    \operatorname{Cov}\big(g(x), h(y)\big) = \operatorname{Cov}\big(g(-x), h(y)\big) = -\operatorname{Cov}\big(g(x), h(y)\big)
+    $$
+
+    이므로 $0$ 이다. Pearson 은 $g(x) = x$ 로 두면 되고($\operatorname{Cov}(x, x^2+\varepsilon) = E[x^3] = 0$), Spearman 은 $g(x) = F_x(x) - \tfrac12$ 가 홀함수라는 데서 나온다. Kendall 은 $(x_1 - x_2)$ 의 부호를 뒤집어도 $(y_1 - y_2)$ 의 분포가 그대로이므로 일치 확률과 불일치 확률이 같아 $0$ 이다.
+
+    모의실험이 $+0.00038 \pm 0.00120$ 을 주어 이 $0$ 들과 맞는다. **표본값 $0.1014$ 는 $\operatorname{SE} = 1/\sqrt{100} = 0.1$ 의 한 배**이므로 전혀 놀랍지 않다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 100
+
+    # 선형 관계. 세 측도가 모두 크게 나온다.
+    x_lin = np.random.normal(0, 1, n)
+    y_lin = 2 * x_lin + np.random.normal(0, 1, n)
+
+    # 단조이지만 곡선인 관계. Pearson 은 떨어지지만 순위를 쓰는 두 측도는 버틴다.
+    x_mono = np.random.uniform(0, 3, n)
+    y_mono = np.exp(x_mono) + np.random.normal(0, 2, n)
+
+    # 이차함수 관계. 관계는 아주 강한데 세 측도 모두 0 근처로 나온다.
+    # 상관계수가 0 이라는 말이 "관계가 없다"는 뜻이 아님을 보여 주는 자리다.
+    x_quad = np.random.normal(0, 2, n)
+    y_quad = x_quad**2 + np.random.normal(0, 1, n)
+
+    datasets = [
+        ("Linear", x_lin, y_lin),
+        ("Monotonic Nonlinear", x_mono, y_mono),
+        ("Quadratic (r ~ 0)", x_quad, y_quad),
+    ]
+
+    for name, x, y in datasets:
+        r_p, _ = stats.pearsonr(x, y)
+        r_s, _ = stats.spearmanr(x, y)
+        r_k, _ = stats.kendalltau(x, y)
+        print(f"{name:<25} r={r_p:.4f}  rho_s={r_s:.4f}  tau={r_k:.4f}")
+
+    # 모집단 값과 견준다.
+    rho_lin = 2 / np.sqrt(5)
+    print(f"\n선형: 참 rho = 2/sqrt(5) = {rho_lin:.6f}")
+    print(f"  (x,y) 가 이변량 정규이므로 닫힌 꼴이 있다")
+    print(f"  rho_s = (6/pi) arcsin(rho/2) = {6 / np.pi * np.arcsin(rho_lin / 2):.6f}")
+    print(f"  tau   = (2/pi) arcsin(rho)   = {2 / np.pi * np.arcsin(rho_lin):.6f}")
+
+    rng = np.random.default_rng(3)
+    def pop(gen, m=200_000, reps=20):
+        rs, ss, ks = [], [], []
+        for _ in range(reps):
+            a, b = gen(m)
+            rs.append(stats.pearsonr(a, b).statistic)
+            ss.append(stats.spearmanr(a, b).statistic)
+            ks.append(stats.kendalltau(a[:40_000], b[:40_000]).statistic)
+        return np.mean(rs), np.mean(ss), np.mean(ks)
+
+    gens = [
+        ("Linear", lambda m: (z := rng.standard_normal(m), 2 * z + rng.standard_normal(m))),
+        ("Monotonic Nonlinear",
+         lambda m: (z := rng.uniform(0, 3, m), np.exp(z) + rng.normal(0, 2, m))),
+        ("Quadratic (r ~ 0)",
+         lambda m: (z := rng.normal(0, 2, m), z**2 + rng.standard_normal(m))),
+    ]
+    print(f"\n{'관계':<22s} {'모집단 r':>10s} {'rho_s':>10s} {'tau':>10s}")
+    for name, g in gens:
+        a, b, c = pop(g)
+        print(f"{name:<22s} {a:+10.5f} {b:+10.5f} {c:+10.5f}")
+    ```
+
+    출력:
+
+    ```text
+    Linear                    r=0.8724  rho_s=0.8686  tau=0.6853
+    Monotonic Nonlinear       r=0.8676  rho_s=0.9032  tau=0.7402
+    Quadratic (r ~ 0)         r=0.1014  rho_s=-0.0229  tau=-0.0376
+
+    선형: 참 rho = 2/sqrt(5) = 0.894427
+      (x,y) 가 이변량 정규이므로 닫힌 꼴이 있다
+      rho_s = (6/pi) arcsin(rho/2) = 0.885502
+      tau   = (2/pi) arcsin(rho)   = 0.704833
+
+    관계                          모집단 r      rho_s        tau
+    Linear                   +0.89427   +0.88537   +0.70497
+    Monotonic Nonlinear      +0.87282   +0.88110   +0.70520
+    Quadratic (r ~ 0)        +0.00038   +0.00026   -0.00096
+    ```
+
+    닫힌 꼴 $0.894427$, $0.885502$, $0.704833$ 이 모의실험의 $0.89427$, $0.88537$, $0.70497$ 과 소수 넷째 자리까지 맞는다.
+
+    선형 관계에서는 Pearson 이 가장 크고, 단조 비선형(지수) 관계에서는 Spearman 과 Kendall 이 Pearson 을 앞선다. 이차 관계에서는 $y$ 가 사실상 $x$ 의 결정론적 함수인데도 세 측도가 모두 **정확히 $0$** 이다. **상관이 $0$ 이라는 말은 "관계가 없다"가 아니라 "단조 성분이 없다"는 뜻**이다.
 
 ---
 
@@ -89,41 +172,103 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Fisher z 신뢰구간
+**보기 2.** <span class="diff easy" title="쉬움"></span> 피셔 구간이 정말 $95\%$ 를 덮는가. $x \sim \mathcal N(0,1)$, $y = 0.6x + \varepsilon$, $\varepsilon \sim \mathcal N(0, 0.8^2)$ 에서 $n = 80$ 을 뽑아 $r = 0.6110$ 과 구간 $(0.4519,\, 0.7324)$ 를 얻었다.
+
+**(1)** 참 $\rho$ 를 구하시오. 구간이 그것을 덮는가. 양팔의 길이를 적으시오.
+
+**(2)** 이 구간의 **실제 포함률**이 명목 $95\%$ 와 맞는지 모의실험으로 재시오. 변환 없이 $r \pm 1.96(1-r^2)/\sqrt{n}$ 으로 만든 대칭 구간과 견주시오.
 
 </div>
 
-```python
-def fisher_z_ci(x, y, alpha=0.05):
-    """Fisher z 변환으로 상관계수의 신뢰구간을 구한다.
+??? success "풀이"
 
-    r 은 -1 과 1 사이에 갇혀 있어 분포가 치우친다. arctanh 를 씌우면
-    그 눈금이 실수 전체로 펴지며 분포가 거의 정규가 되고, 표준오차도
-    1/sqrt(n-3) 로 간단해진다. 구간을 만든 뒤 tanh 로 되돌린다.
-    """
-    n = len(x)
-    r, p_val = stats.pearsonr(x, y)
-    z = np.arctanh(r)
-    se = 1 / np.sqrt(n - 3)
-    z_crit = stats.norm.ppf(1 - alpha / 2)
-    z_lo, z_hi = z - z_crit * se, z + z_crit * se
-    rho_lo, rho_hi = np.tanh(z_lo), np.tanh(z_hi)
-    print(f"r = {r:.4f}, 95% CI for rho: ({rho_lo:.4f}, {rho_hi:.4f})")
-    return rho_lo, rho_hi
+    **(1) 참값이 딱 떨어진다.** $\operatorname{Cov}(x,y) = 0.6$, $\sigma_x = 1$, $\sigma_y = \sqrt{0.6^2 + 0.8^2} = 1$ 이므로
 
-np.random.seed(42)
-x = np.random.normal(0, 1, 80)
-y = 0.6 * x + np.random.normal(0, 0.8, 80)
-fisher_z_ci(x, y)
-```
+    $$
+    \rho = \frac{0.6}{1 \times 1} = 0.6
+    $$
 
-출력:
+    이다. $0.6$ 과 $0.8$ 이 피타고라스 쌍이라 분모가 정확히 $1$ 이 되도록 꾸며진 자료다. 구간 $(0.4519,\, 0.7324)$ 는 $0.6$ 을 덮는다.
 
-```text
-r = 0.6110, 95% CI for rho: (0.4519, 0.7324)
-```
+    양팔은 아래가 $0.6110 - 0.4519 = 0.1591$, 위가 $0.7324 - 0.6110 = 0.1214$ 로 **아래쪽이 $1.31$ 배 길다.** $\tanh$ 의 기울기가 $1 - r^2$ 이라 $r$ 가 큰 쪽에서 더 눌리기 때문이다.
 
-구간이 $\tanh$ 변환 때문에 점추정값 $0.611$을 중심으로 대칭이 아니라는 점에 주목하라. 위쪽 폭($0.121$)이 아래쪽 폭($0.159$)보다 좁다.
+    **(2) 피셔 구간은 맞고 대칭 구간은 좁다.** $n = 80$ 에서 같은 모형으로 $50{,}000$ 번 뽑아 재면
+
+    | 구간 | 포함률 |
+    |---|---|
+    | Fisher $z$ 구간 | $0.9497$ |
+    | 변환 없는 대칭 구간 | $0.9367$ |
+
+    이다. 피셔 쪽은 명목 $0.95$ 와 $0.0003$ 차이로 맞는다. 몬테카를로 오차가 $\sqrt{0.95 \times 0.05/50000} = 0.0010$ 이므로 **차이가 오차 안이다.**
+
+    대칭 구간은 $0.9367$ 로 **$1.3$ 퍼센트포인트 모자란다.** 명목 $5\%$ 라고 믿고 쓰면 실제로는 $6.3\%$ 가 빗나가므로 오류율이 $1.27$ 배가 된다. 까닭은 (1)에서 본 비대칭이다. 대칭 구간은 아래쪽을 $0.1591$ 이 아니라 $0.1214$ 쯤만 내려가므로 **참값이 아래쪽에 있을 때 자주 놓친다.**
+
+    ```python
+    def fisher_z_ci(x, y, alpha=0.05):
+        """Fisher z 변환으로 상관계수의 신뢰구간을 구한다.
+
+        r 은 -1 과 1 사이에 갇혀 있어 분포가 치우친다. arctanh 를 씌우면
+        그 눈금이 실수 전체로 펴지며 분포가 거의 정규가 되고, 표준오차도
+        1/sqrt(n-3) 로 간단해진다. 구간을 만든 뒤 tanh 로 되돌린다.
+        """
+        n = len(x)
+        r, p_val = stats.pearsonr(x, y)
+        z = np.arctanh(r)
+        se = 1 / np.sqrt(n - 3)
+        z_crit = stats.norm.ppf(1 - alpha / 2)
+        z_lo, z_hi = z - z_crit * se, z + z_crit * se
+        rho_lo, rho_hi = np.tanh(z_lo), np.tanh(z_hi)
+        print(f"r = {r:.4f}, 95% CI for rho: ({rho_lo:.4f}, {rho_hi:.4f})")
+        return rho_lo, rho_hi
+
+    np.random.seed(42)
+    x = np.random.normal(0, 1, 80)
+    y = 0.6 * x + np.random.normal(0, 0.8, 80)
+    fisher_z_ci(x, y)
+
+    # 참 rho 와 구간의 포함률을 확인한다.
+    rho_true = 0.6 / np.sqrt(0.6**2 + 0.8**2)
+    print(f"\n참 rho = 0.6/sqrt(0.6^2+0.8^2) = {rho_true:.4f}")
+    r_obs = stats.pearsonr(x, y)[0]
+    z = np.arctanh(r_obs); se = 1 / np.sqrt(len(x) - 3)
+    lo, hi = np.tanh(z - 1.96 * se), np.tanh(z + 1.96 * se)
+    print(f"구간이 참값을 덮는가: {lo < rho_true < hi}")
+    print(f"양팔: 아래 {r_obs - lo:.4f}, 위 {hi - r_obs:.4f}  "
+          f"(비 {(r_obs - lo) / (hi - r_obs):.3f})")
+
+    rng = np.random.default_rng(2024)
+    B, n = 50_000, 80
+    cov_fisher = cov_naive = 0
+    for _ in range(B):
+        a = rng.standard_normal(n)
+        b = 0.6 * a + rng.normal(0, 0.8, n)
+        r = np.corrcoef(a, b)[0, 1]
+        zz = np.arctanh(r)
+        if np.tanh(zz - 1.96 * se) < rho_true < np.tanh(zz + 1.96 * se):
+            cov_fisher += 1
+        half = (1 - r**2) / np.sqrt(n)        # 변환 없이 r 눈금에서 바로 만든 구간
+        if r - 1.96 * half < rho_true < r + 1.96 * half:
+            cov_naive += 1
+    print(f"\n포함률 ({B:,} 번, n = {n}, 명목 95%)")
+    print(f"  Fisher z 구간      = {cov_fisher / B:.4f}")
+    print(f"  변환 없는 대칭 구간 = {cov_naive / B:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    r = 0.6110, 95% CI for rho: (0.4519, 0.7324)
+
+    참 rho = 0.6/sqrt(0.6^2+0.8^2) = 0.6000
+    구간이 참값을 덮는가: True
+    양팔: 아래 0.1591, 위 0.1214  (비 1.310)
+
+    포함률 (50,000 번, n = 80, 명목 95%)
+      Fisher z 구간      = 0.9497
+      변환 없는 대칭 구간 = 0.9367
+    ```
+
+    손으로 구한 참값 $0.6$ 과 양팔의 비 $1.31$ 이 맞고, 포함률도 예상대로다. **구간이 비대칭인 것은 흠이 아니라 포함률을 지키기 위해 치러야 하는 값**이라는 것이 이 보기의 요점이다.
 
 ---
 
@@ -139,44 +284,148 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 심슨의 역설
+**보기 3.** <span class="diff easy" title="쉬움"></span> 합친 기울기 $+6.50$ 이 어디서 오는가. 집단 셋의 $x$ 평균이 $0.2, 0.5, 0.8$ 이고 기준선이 $2, 5, 8$ 이며 집단 안 기울기는 셋 다 $-0.5$ 다. $x$ 의 집단 안 표준편차는 $0.15$ 다.
+
+**(1)** 합친 회귀직선의 기울기를 **닫힌 꼴로** 구하시오. 집단 사이 기울기와 집단 안 기울기가 어떻게 섞이는가.
+
+**(2)** 그 식으로 "기준선을 $8, 5, 2$ 로 뒤집으면 역설이 사라진다"를 설명하고, 부호가 뒤집히는 **문턱**을 정확히 구하시오.
 
 </div>
 
-```python
-np.random.seed(42)
-# 집단마다 x 의 평균이 커질수록 y 의 기준선도 함께 올라간다. 이것이 교란이다.
-# 집단 안의 기울기는 셋 다 -0.5 로 음인데, 합쳐 놓으면 양이 된다.
-groups = {"Group A": (50, 0.2, 2, -0.5),
-          "Group B": (50, 0.5, 5, -0.5),
-          "Group C": (50, 0.8, 8, -0.5)}
+??? success "풀이"
 
-all_x, all_y = [], []
-for name, (n, xm, yb, slope) in groups.items():
-    x = np.random.normal(xm, 0.15, n)
-    y = yb + slope * x + np.random.normal(0, 0.3, n)
-    all_x.extend(x)
-    all_y.extend(y)
+    **(1) 합친 기울기는 두 기울기의 분산가중 평균이다.** 집단 중심의 $y$ 좌표는 $y_b - 0.5\,\bar x$ 이므로
 
-all_x, all_y = np.array(all_x), np.array(all_y)
-m_all, b_all = np.polyfit(all_x, all_y, 1)
-r_overall, _ = stats.pearsonr(all_x, all_y)
+    $$
+    (0.2,\, 1.9), \qquad (0.5,\, 4.75), \qquad (0.8,\, 7.6)
+    $$
 
-print(f"Overall slope: {m_all:.2f} (positive)")
-print(f"Within-group slope: -0.5 (negative)")
-print(f"Overall r = {r_overall:.4f}")
-```
+    이고 세 점이 정확히 한 직선 위에 있다. 그 **집단 사이 기울기**는
 
-출력:
+    $$
+    b = \frac{7.6 - 1.9}{0.8 - 0.2} = \frac{5.7}{0.6} = 9.5
+    $$
 
-```text
-Overall slope: 6.50 (positive)
-Within-group slope: -0.5 (negative)
-Overall r = 0.8593
-```
+    다. 이제 $x$ 의 분산을 두 몫으로 나눈다.
+
+    $$
+    V_{\text{사이}} = \operatorname{Var}(0.2, 0.5, 0.8) = 0.06,
+    \qquad
+    V_{\text{안}} = 0.15^2 = 0.0225
+    $$
+
+    공분산도 같은 꼴로 쪼개지므로
+
+    $$
+    \hat\beta_{\text{합}}
+    = \frac{V_{\text{사이}}\, b + V_{\text{안}}\, b_{\text{안}}}{V_{\text{사이}} + V_{\text{안}}}
+    = \frac{0.06 \times 9.5 + 0.0225 \times (-0.5)}{0.0825}
+    = \frac{0.55875}{0.0825} = 6.7727
+    $$
+
+    이다. 표본값 $6.50$ 이 이 둘레에 떨어진다. **합친 기울기는 $-0.5$ 와 $9.5$ 를 가중치 $0.0225$ 대 $0.06$ 으로 섞은 값**이고, 집단 사이 몫이 거의 세 배 무거워 부호가 그쪽으로 끌려간다.
+
+    같은 쪼개기로 합친 상관도 나온다. $\operatorname{Var}(y) = \operatorname{Var}(1.9, 4.75, 7.6) + \big(0.25 \times 0.0225 + 0.3^2\big) = 5.415 + 0.095625 = 5.510625$ 이므로
+
+    $$
+    \rho = \frac{0.55875}{\sqrt{0.0825 \times 5.510625}} = 0.8287
+    $$
+
+    이고 표본 $0.8593$ 과 맞는다.
+
+    **(2) 기준선을 뒤집으면 $b$ 의 부호가 바뀐다.** $y_b = 8, 5, 2$ 이면 집단 중심이 $(0.2, 7.9)$, $(0.5, 4.75)$, $(0.8, 1.6)$ 이라
+
+    $$
+    b = \frac{1.6 - 7.9}{0.6} = -10.5,
+    \qquad
+    \hat\beta_{\text{합}} = \frac{0.06 \times (-10.5) + 0.0225 \times (-0.5)}{0.0825} = -7.7727
+    $$
+
+    이다. 두 기울기가 **같은 부호**이므로 섞어도 부호가 바뀔 길이 없다.
+
+    문턱도 식에서 바로 읽힌다. $\hat\beta_{\text{합}} > 0$ 이려면
+
+    $$
+    V_{\text{사이}}\, b + V_{\text{안}} \times (-0.5) > 0
+    \qquad\Longleftrightarrow\qquad
+    b > \frac{0.5 \times 0.0225}{0.06} = 0.1875
+    $$
+
+    이다. **집단 사이 기울기가 $0.1875$ 만 넘으면 역설이 일어난다.** 여기서는 $9.5$ 로 그 $50$ 배가 넘으니 역설이 넉넉히 성립한다. 문턱이 이렇게 낮은 까닭은 집단 안의 $x$ 가 $0.15$ 로 거의 흩어지지 않아 $V_{\text{안}}$ 이 작기 때문이다. **집단 안에서 $x$ 를 넓게 재면 역설이 사라진다.**
+
+    ```python
+    np.random.seed(42)
+    # 집단마다 x 의 평균이 커질수록 y 의 기준선도 함께 올라간다. 이것이 교란이다.
+    # 집단 안의 기울기는 셋 다 -0.5 로 음인데, 합쳐 놓으면 양이 된다.
+    groups = {"Group A": (50, 0.2, 2, -0.5),
+              "Group B": (50, 0.5, 5, -0.5),
+              "Group C": (50, 0.8, 8, -0.5)}
+
+    all_x, all_y = [], []
+    for name, (n, xm, yb, slope) in groups.items():
+        x = np.random.normal(xm, 0.15, n)
+        y = yb + slope * x + np.random.normal(0, 0.3, n)
+        all_x.extend(x)
+        all_y.extend(y)
+
+    all_x, all_y = np.array(all_x), np.array(all_y)
+    m_all, b_all = np.polyfit(all_x, all_y, 1)
+    r_overall, _ = stats.pearsonr(all_x, all_y)
+
+    print(f"Overall slope: {m_all:.2f} (positive)")
+    print(f"Within-group slope: -0.5 (negative)")
+    print(f"Overall r = {r_overall:.4f}")
+
+    # 합친 기울기의 이론값: 집단 사이 기울기와 집단 안 기울기의 분산가중 평균
+    mx = np.array([0.2, 0.5, 0.8])
+    yb = np.array([2.0, 5.0, 8.0])
+    within_slope = -0.5
+    my = yb + within_slope * mx                      # 집단 중심의 y 좌표
+    b_between = (my[2] - my[0]) / (mx[2] - mx[0])    # 중심 세 점을 잇는 기울기
+    var_between = mx.var()
+    var_within = 0.15**2
+    slope_theory = ((var_between * b_between + var_within * within_slope)
+                    / (var_between + var_within))
+    print(f"\n집단 중심 = {list(zip(mx, my.round(2)))}")
+    print(f"집단 사이 기울기 b = {b_between:.4f},  집단 안 기울기 = {within_slope}")
+    print(f"Var(집단 사이) = {var_between:.4f},  Var(집단 안) = {var_within:.4f}")
+    print(f"합친 기울기 이론값 = {slope_theory:.4f}   (표본 {m_all:.2f})")
+
+    vy_within = within_slope**2 * var_within + 0.3**2
+    cov = var_between * b_between + var_within * within_slope
+    r_theory = cov / np.sqrt((var_between + var_within) * (my.var() + vy_within))
+    print(f"합친 상관 이론값   = {r_theory:.4f}   (표본 {r_overall:.4f})")
+
+    print(f"\n기준선을 뒤집으면 (8, 5, 2)")
+    my2 = np.array([8.0, 5.0, 2.0]) + within_slope * mx
+    b2 = (my2[2] - my2[0]) / (mx[2] - mx[0])
+    print(f"  집단 사이 기울기 = {b2:.4f}  ->  합친 기울기 = "
+          f"{(var_between * b2 + var_within * within_slope) / (var_between + var_within):.4f}")
+    print(f"부호가 뒤집히는 문턱: b > {-within_slope * var_within / var_between:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    Overall slope: 6.50 (positive)
+    Within-group slope: -0.5 (negative)
+    Overall r = 0.8593
+
+    집단 중심 = [(0.2, 1.9), (0.5, 4.75), (0.8, 7.6)]
+    집단 사이 기울기 b = 9.5000,  집단 안 기울기 = -0.5
+    Var(집단 사이) = 0.0600,  Var(집단 안) = 0.0225
+    합친 기울기 이론값 = 6.7727   (표본 6.50)
+    합친 상관 이론값   = 0.8287   (표본 0.8593)
+
+    기준선을 뒤집으면 (8, 5, 2)
+      집단 사이 기울기 = -10.5000  ->  합친 기울기 = -7.7727
+    부호가 뒤집히는 문턱: b > 0.1875
+    ```
+
+    손으로 구한 $9.5$, $0.06$, $0.0225$, $6.7727$, $0.8287$, $-7.7727$, $0.1875$ 가 모두 맞는다. 표본 기울기 $6.50$ 과 이론값 $6.7727$ 의 차이는 $n = 150$ 의 표집 변동이다.
 
 !!! warning "역설이 성립하려면 절편이 함께 움직여야 한다"
-    핵심은 집단의 $x$ 평균이 커질수록 기준선 `yb`도 함께 커진다는 데 있다($0.2 \to 2$, $0.5 \to 5$, $0.8 \to 8$). 만약 기준선이 반대로 감소한다면($8, 5, 2$) 전체 기울기는 $-7.38$로 오히려 더 가파른 음수가 되어 역설이 일어나지 않는다. 집단 간 이동 방향이 집단 내 기울기와 **반대**일 때만 부호가 뒤집힌다.
+    핵심은 집단의 $x$ 평균이 커질수록 기준선 `yb`도 함께 커진다는 데 있다($0.2 \to 2$, $0.5 \to 5$, $0.8 \to 8$). 기준선이 반대로 감소하면($8, 5, 2$) 집단 사이 기울기가 $-10.5$ 가 되어 합친 기울기도 $-7.77$ 로 더 가파른 음수가 되고 역설이 일어나지 않는다. 집단 간 이동 방향이 집단 내 기울기와 **반대**일 때만 부호가 뒤집힌다.
 
 전체 회귀직선의 기울기는 $+6.50$으로 양수인데, 집단마다의 회귀직선은 모두 기울기가 $-0.5$로 음수이다. 집단 변수를 무시하면 정반대의 결론에 이른다.
 
@@ -194,37 +443,110 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 부분상관
+**보기 4.** <span class="diff easy" title="쉬움"></span> 편상관이 $0$ 이 되는 것은 우연이 아니다. $Z \sim \mathcal N(0,1)$, $X = 0.7Z + \mathcal N(0, 0.5^2)$, $Y = 0.6Z + \mathcal N(0, 0.5^2)$ 이고 두 잡음은 서로 독립이다.
+
+**(1)** $\rho_{XZ}$, $\rho_{YZ}$, $\rho_{XY}$ 를 닫힌 꼴로 구하고, 그 셋 사이에 성립하는 **한 줄짜리 관계**를 찾으시오. 그 관계가 편상관을 어떻게 만드는가.
+
+**(2)** 표본값 $r_{XY} = 0.5699$ 와 $r_{XY\cdot Z} = -0.0201$ 이 모집단 값과 맞는가. 잔차 상관으로 구해도 같은 값이 나오는지 확인하시오.
 
 </div>
 
-```python
-n = 200
-np.random.seed(42)
+??? success "풀이"
 
-# 앞과 같은 구조다. Z 가 X 와 Y 를 함께 끌어 상관을 만든다.
-Z = np.random.normal(0, 1, n)
-X = 0.7 * Z + np.random.normal(0, 0.5, n)
-Y = 0.6 * Z + np.random.normal(0, 0.5, n)
+    **(1) 세 상관이 곱셈으로 묶인다.** $\operatorname{Var}(X) = 0.7^2 + 0.5^2 = 0.74$, $\operatorname{Var}(Y) = 0.6^2 + 0.5^2 = 0.61$ 이므로
 
-r_xy, p_xy = stats.pearsonr(X, Y)
-r_xz, _ = stats.pearsonr(X, Z)
-r_yz, _ = stats.pearsonr(Y, Z)
+    $$
+    \rho_{XZ} = \frac{0.7}{\sqrt{0.74}} = 0.813733,
+    \qquad
+    \rho_{YZ} = \frac{0.6}{\sqrt{0.61}} = 0.768221
+    $$
 
-r_xy_z = (r_xy - r_xz * r_yz) / np.sqrt((1 - r_xz**2) * (1 - r_yz**2))
+    이다. $X$ 와 $Y$ 의 공분산은 공통 부분에서만 나오므로 $\operatorname{Cov}(X,Y) = 0.7 \times 0.6 = 0.42$ 이고
 
-print(f"r(X, Y)    = {r_xy:.4f}  (appears significant)")
-print(f"r(X,Y | Z) = {r_xy_z:.4f}  (nearly vanishes)")
-```
+    $$
+    \rho_{XY} = \frac{0.42}{\sqrt{0.74 \times 0.61}} = 0.625127
+    $$
 
-출력:
+    다. 여기서 눈여겨볼 것은
 
-```text
-r(X, Y)    = 0.5699  (appears significant)
-r(X,Y | Z) = -0.0201  (nearly vanishes)
-```
+    $$
+    \rho_{XZ}\,\rho_{YZ} = \frac{0.7}{\sqrt{0.74}} \cdot \frac{0.6}{\sqrt{0.61}} = \frac{0.42}{\sqrt{0.74 \times 0.61}} = \rho_{XY}
+    $$
 
-$r(X, Y) = 0.570$은 $p \approx 1.3 \times 10^{-18}$로 압도적으로 유의하지만, 부분상관 $r_{XY \cdot Z} = -0.020$은 0에 가깝다. 겉보기 연관이 전적으로 교란변수 $Z$에서 비롯되었음이 드러난다.
+    **세 상관이 $\rho_{XY} = \rho_{XZ}\rho_{YZ}$ 로 묶인다**는 것이다. 이것이 "$X$ 와 $Y$ 사이의 모든 연관이 $Z$ 를 거쳐서만 흐른다"를 상관의 말로 옮긴 것이고, 편상관 공식의 분자가
+
+    $$
+    \rho_{XY} - \rho_{XZ}\rho_{YZ} = 0
+    $$
+
+    이 되어 **편상관이 정확히 $0$** 이 된다. 근사가 아니라 항등식이다. 거꾸로, 편상관이 $0$ 이 아니면 $Z$ 말고 다른 통로가 있다는 뜻이다.
+
+    **(2) 둘 다 맞는다.**
+
+    | 양 | 모집단 | 표본 | $\operatorname{SE}$ | $z$ |
+    |---|---|---|---|---|
+    | $\rho_{XY}$ | $0.625127$ | $0.5699$ | $0.0431$ | $-1.283$ |
+    | $\rho_{XY\cdot Z}$ | $0$ | $-0.0201$ | $0.0712$ | $-0.283$ |
+
+    편상관의 표준오차는 통제변수 하나를 썼으므로 $1/\sqrt{n-3} = 1/\sqrt{197} = 0.0712$ 로 잡았다. 둘 다 $\lvert z \rvert < 2$ 다.
+
+    $X$ 와 $Y$ 를 각각 $Z$ 에 회귀한 잔차끼리의 상관도 $-0.020130$ 으로 닫힌 꼴과 **소수 여섯째 자리까지 같다.** 두 계산이 같은 것이라는 사실이 확인된다.
+
+    ```python
+    n = 200
+    np.random.seed(42)
+
+    # 앞과 같은 구조다. Z 가 X 와 Y 를 함께 끌어 상관을 만든다.
+    Z = np.random.normal(0, 1, n)
+    X = 0.7 * Z + np.random.normal(0, 0.5, n)
+    Y = 0.6 * Z + np.random.normal(0, 0.5, n)
+
+    r_xy, p_xy = stats.pearsonr(X, Y)
+    r_xz, _ = stats.pearsonr(X, Z)
+    r_yz, _ = stats.pearsonr(Y, Z)
+
+    r_xy_z = (r_xy - r_xz * r_yz) / np.sqrt((1 - r_xz**2) * (1 - r_yz**2))
+
+    print(f"r(X, Y)    = {r_xy:.4f}  (appears significant)")
+    print(f"r(X,Y | Z) = {r_xy_z:.4f}  (nearly vanishes)")
+
+    # 모집단 값을 닫힌 꼴로 적는다.
+    rho_xz = 0.7 / np.sqrt(0.7**2 + 0.5**2)
+    rho_yz = 0.6 / np.sqrt(0.6**2 + 0.5**2)
+    rho_xy = (0.7 * 0.6) / np.sqrt((0.7**2 + 0.5**2) * (0.6**2 + 0.5**2))
+    part = (rho_xy - rho_xz * rho_yz) / np.sqrt((1 - rho_xz**2) * (1 - rho_yz**2))
+    print(f"\n모집단: rho_XZ = {rho_xz:.6f},  rho_YZ = {rho_yz:.6f}")
+    print(f"        rho_XY = rho_XZ * rho_YZ = {rho_xz * rho_yz:.6f}  (= {rho_xy:.6f})")
+    print(f"        편상관 = {part:.2e}   (정확히 0)")
+    se_xy = (1 - rho_xy**2) / np.sqrt(n)
+    print(f"\n표본 r_XY = {r_xy:.4f}   SE = {se_xy:.4f}   z = {(r_xy - rho_xy) / se_xy:+.3f}")
+    se_p = 1 / np.sqrt(n - 3)
+    print(f"표본 편상관 = {r_xy_z:.4f}   SE = {se_p:.4f}   z = {r_xy_z / se_p:+.3f}")
+    print(f"\n잔차로 구해도 같은가: ", end="")
+    ex = X - np.polyfit(Z, X, 1)[0] * Z - np.polyfit(Z, X, 1)[1]
+    ey = Y - np.polyfit(Z, Y, 1)[0] * Z - np.polyfit(Z, Y, 1)[1]
+    print(f"{stats.pearsonr(ex, ey)[0]:.6f}  (닫힌 꼴 {r_xy_z:.6f})")
+    ```
+
+    출력:
+
+    ```text
+    r(X, Y)    = 0.5699  (appears significant)
+    r(X,Y | Z) = -0.0201  (nearly vanishes)
+
+    모집단: rho_XZ = 0.813733,  rho_YZ = 0.768221
+            rho_XY = rho_XZ * rho_YZ = 0.625127  (= 0.625127)
+            편상관 = 0.00e+00   (정확히 0)
+
+    표본 r_XY = 0.5699   SE = 0.0431   z = -1.283
+    표본 편상관 = -0.0201   SE = 0.0712   z = -0.283
+
+    잔차로 구해도 같은가: -0.020130  (닫힌 꼴 -0.020130)
+    ```
+
+    항등식 $\rho_{XY} = \rho_{XZ}\rho_{YZ}$ 가 소수 여섯째 자리까지 맞고 편상관이 기계 정밀도로 $0$ 이다.
+
+    $r(X, Y) = 0.570$ 은 $p \approx 1.3 \times 10^{-18}$ 로 압도적으로 유의하지만 편상관 $-0.020$ 은 $0$ 에 가깝다. **p-값이 작다는 것과 연관이 직접적이라는 것은 아무 관계가 없다.**
 
 ![집단을 합치면 기울기 부호가 뒤집히고, 교란변수를 통제하면 상관이 사라진다](./img/simpson_and_partial.png)
 
@@ -246,43 +568,108 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 다중검정이 만드는 허위상관
+**보기 5.** <span class="diff easy" title="쉬움"></span> $240$ 과 $247.5$ 의 차이는 뜻이 있는가. 서로 완전히 독립인 변수 $100$ 개를 $n = 30$ 으로 재어 $4950$ 쌍을 모두 검정했더니 $240$ 쌍이 $\alpha = 0.05$ 에서 유의했다.
+
+**(1)** 거짓양성 개수의 기댓값이 왜 정확히 $0.05 \times 4950$ 인지 말하시오. 근사인가 정확한 값인가.
+
+**(2)** 그 개수가 얼마나 흔들리는지 구하시오. $4950$ 개 검정이 서로 **독립이 아닌데도** 이항분포의 표준편차를 써도 되는가. 관측값 $240$ 을 판정하시오.
 
 </div>
 
-```python
-def spurious_correlations_demo(n_vars=100, n_obs=30):
-    """서로 완전히 무관한 변수 100개에서 유의한 상관이 몇 쌍이나 나오는지 센다.
+??? success "풀이"
 
-    쌍이 4950개이므로 유의수준 5%에서 247쌍쯤은 그냥 나온다. 자료를 훑다가
-    찾아낸 상관 하나를 그대로 보고하면 안 되는 까닭이 여기 있다.
-    """
-    np.random.seed(42)
-    data = np.random.normal(0, 1, (n_obs, n_vars))
-    n_pairs = n_vars * (n_vars - 1) // 2
-    p_values = []
-    for i in range(n_vars):
-        for j in range(i + 1, n_vars):
-            _, p = stats.pearsonr(data[:, i], data[:, j])
-            p_values.append(p)
-    p_values = np.array(p_values)
-    n_sig = np.sum(p_values < 0.05)
-    print(f"Pairs tested: {n_pairs}")
-    print(f"Significant at 0.05: {n_sig} ({100*n_sig/n_pairs:.1f}%)")
-    print(f"Expected false positives: {0.05 * n_pairs:.0f}")
+    **(1) 정확한 값이다.** 자료가 모두 독립인 정규난수이므로 각 쌍에서 $H_0\colon \rho = 0$ 이 **참**이고, Pearson 의 $t$ 검정은 정규 가정 아래 $\rho = 0$ 에서 **정확한** 검정이다. 곧 각 쌍이 기각될 확률이 정확히 $0.05$ 다. 기댓값은 선형이므로 (검정들이 독립이든 아니든)
 
-spurious_correlations_demo()
-```
+    $$
+    E[\text{거짓양성 수}] = \sum_{\text{쌍}} P(\text{기각}) = 0.05 \times \binom{100}{2} = 0.05 \times 4950 = 247.5
+    $$
 
-출력:
+    이다. **합의 기댓값에는 독립이 필요 없다**는 점이 요점이다.
 
-```text
-Pairs tested: 4950
-Significant at 0.05: 240 (4.8%)
-Expected false positives: 248
-```
+    **(2) 분산에는 독립이 필요한데, 여기서는 써도 된다.** 검정들은 서로 독립이 아니다. 같은 열을 공유하는 쌍이 많고, 변수 $i$ 가 우연히 이상하게 나오면 그 변수가 끼는 $99$ 쌍이 함께 흔들린다. 그러므로 이항 표준편차
 
-100개 변수가 모두 독립인데도 약 5%의 쌍이 유의하게 나타난다. 이것이 다중검정 문제이며, Bonferroni나 Benjamini--Hochberg 같은 보정이 필요하다.
+    $$
+    \sqrt{4950 \times 0.05 \times 0.95} = 15.3
+    $$
+
+    을 그냥 믿을 수 없고 **재어 보아야 한다.** 같은 실험을 $300$ 번 되풀이하면
+
+    | | 값 |
+    |---|---|
+    | 유의 쌍 개수의 평균 | $246.0$ |
+    | 유의 쌍 개수의 표준편차 | $\mathbf{15.3}$ |
+    | 이항 공식이 주는 표준편차 | $15.3$ |
+    | $5$/$50$/$95$ 백분위 | $223$ / $245$ / $271$ |
+
+    로 **실제 표준편차가 이항 공식과 사실상 같다.** 쌍들의 의존이 약해서 분산을 거의 부풀리지 않는다. 그러므로 관측값 $240$ 은
+
+    $$
+    z = \frac{240 - 247.5}{15.3} = -0.49
+    $$
+
+    로 **아무 뜻이 없다.** $240$ 과 $247.5$ 의 차이 $7.5$ 는 표준편차의 절반도 안 된다. 보통 이 정도 실험에서 유의 쌍은 $223$ 과 $271$ 사이에 떨어진다.
+
+    ```python
+    def spurious_correlations_demo(n_vars=100, n_obs=30):
+        """서로 완전히 무관한 변수 100개에서 유의한 상관이 몇 쌍이나 나오는지 센다.
+
+        쌍이 4950개이므로 유의수준 5%에서 247쌍쯤은 그냥 나온다. 자료를 훑다가
+        찾아낸 상관 하나를 그대로 보고하면 안 되는 까닭이 여기 있다.
+        """
+        np.random.seed(42)
+        data = np.random.normal(0, 1, (n_obs, n_vars))
+        n_pairs = n_vars * (n_vars - 1) // 2
+        p_values = []
+        for i in range(n_vars):
+            for j in range(i + 1, n_vars):
+                _, p = stats.pearsonr(data[:, i], data[:, j])
+                p_values.append(p)
+        p_values = np.array(p_values)
+        n_sig = np.sum(p_values < 0.05)
+        print(f"Pairs tested: {n_pairs}")
+        print(f"Significant at 0.05: {n_sig} ({100*n_sig/n_pairs:.1f}%)")
+        print(f"Expected false positives: {0.05 * n_pairs:.0f}")
+
+    spurious_correlations_demo()
+
+    # 240 이라는 값이 247.5 에서 얼마나 벗어난 것인가
+    rng = np.random.default_rng(11)
+    n_vars, n_obs, B = 100, 30, 300
+    iu = np.triu_indices(n_vars, 1)
+    counts = []
+    for _ in range(B):
+        d = rng.standard_normal((n_obs, n_vars))
+        R = np.corrcoef(d, rowvar=False)[iu]
+        t = R * np.sqrt((n_obs - 2) / (1 - R**2))
+        counts.append((2 * stats.t.sf(np.abs(t), n_obs - 2) < 0.05).sum())
+    counts = np.array(counts)
+    print(f"\n같은 실험을 {B} 번 되풀이")
+    print(f"  유의 쌍 개수: 평균 {counts.mean():.1f}  표준편차 {counts.std(ddof=1):.1f}")
+    print(f"  이론 기댓값 0.05 * 4950 = {0.05 * 4950:.1f}")
+    print(f"  쌍이 서로 독립이라면 표준편차 = sqrt(4950*0.05*0.95) = "
+          f"{np.sqrt(4950 * 0.05 * 0.95):.1f}")
+    print(f"  관측값 240 의 z = {(240 - 247.5) / counts.std(ddof=1):+.2f}")
+    print(f"  5/50/95 백분위 = {np.percentile(counts, [5, 50, 95]).round(0)}")
+    ```
+
+    출력:
+
+    ```text
+    Pairs tested: 4950
+    Significant at 0.05: 240 (4.8%)
+    Expected false positives: 248
+
+    같은 실험을 300 번 되풀이
+      유의 쌍 개수: 평균 246.0  표준편차 15.3
+      이론 기댓값 0.05 * 4950 = 247.5
+      쌍이 서로 독립이라면 표준편차 = sqrt(4950*0.05*0.95) = 15.3
+      관측값 240 의 z = -0.49
+      5/50/95 백분위 = [223. 245. 271.]
+    ```
+
+    모의 평균 $246.0$ 이 이론 기댓값 $247.5$ 와 맞고(몬테카를로 오차 $15.3/\sqrt{300} = 0.9$ 이므로 $1.6$ 표준오차), 모의 표준편차가 이항 공식과 소수 첫째 자리까지 같다.
+
+    $100$ 개 변수가 모두 독립인데도 $240$ 쌍이 유의하게 나온다. 이것이 다중검정 문제이며 Bonferroni 나 Benjamini–Hochberg 같은 보정이 필요하다. **이 보기에서 더 새겨 둘 것은 "$240$ 이 $247.5$ 보다 작으니 검정이 보수적인가"라는 물음에 답하려면 흔들림의 폭을 먼저 알아야 한다**는 점이다. 수 하나를 기댓값과 견주는 일은 표준편차 없이는 할 수 없다.
 
 ---
 
@@ -298,35 +685,100 @@ $H_0$ 아래에서 $z$는 근사적으로 표준정규분포를 따른다.
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 두 상관의 비교
+**보기 6.** <span class="diff easy" title="쉬움"></span> "유의하지 않다"가 "같다"는 아니다. $r_1 = 0.72\,(n_1 = 100)$, $r_2 = 0.65\,(n_2 = 120)$ 에서 $z = 0.9638$, $p = 0.3351$ 이 나왔다.
+
+**(1)** $z$ 와 $p$ 를 손으로 다시 계산하시오.
+
+**(2)** 이 자료가 "두 상관이 같다"를 뒷받침하는가. $\zeta_1 - \zeta_2$ 의 $95\%$ 신뢰구간을 만들고, $\rho_2 = 0.65$ 로 고정했을 때 $\rho_1$ 이 들어갈 수 있는 범위를 적으시오.
 
 </div>
 
-```python
-def compare_two_correlations(r1, n1, r2, n2, alpha=0.05):
-    """서로 독립인 두 표본의 상관계수가 다른지 검정한다.
+??? success "풀이"
 
-    각각을 z 로 옮기면 차이의 분포가 정규가 되므로 z 검정을 쓸 수 있다.
-    두 표본이 겹치지 않을 때만 이 방법이 맞다.
-    """
-    z1, z2 = np.arctanh(r1), np.arctanh(r2)
-    se = np.sqrt(1/(n1 - 3) + 1/(n2 - 3))
-    z_stat = (z1 - z2) / se
-    p_value = 2 * (1 - stats.norm.cdf(abs(z_stat)))
-    print(f"r1={r1:.4f} (n={n1}), r2={r2:.4f} (n={n2})")
-    print(f"z = {z_stat:.4f}, p = {p_value:.4f}")
+    **(1) 피셔 눈금에서 빼면 된다.**
 
-compare_two_correlations(r1=0.72, n1=100, r2=0.65, n2=120)
-```
+    $$
+    \zeta_1 = \operatorname{arctanh}(0.72) = \tfrac12\ln\frac{1.72}{0.28} = 0.907645,
+    \qquad
+    \zeta_2 = \operatorname{arctanh}(0.65) = \tfrac12\ln\frac{1.65}{0.35} = 0.775299
+    $$
 
-출력:
+    이고 차이가 $0.132346$ 이다. 표준오차는
 
-```text
-r1=0.7200 (n=100), r2=0.6500 (n=120)
-z = 0.9638, p = 0.3351
-```
+    $$
+    \operatorname{SE} = \sqrt{\frac{1}{100-3} + \frac{1}{120-3}} = \sqrt{0.010309 + 0.008547} = \sqrt{0.018856} = 0.137318
+    $$
 
-$p = 0.335$이므로 두 상관이 다르다는 증거가 없다. $0.72$와 $0.65$라는 차이는 이 정도 표본크기에서 우연히 생길 만하다.
+    이므로
+
+    $$
+    z = \frac{0.132346}{0.137318} = 0.9638,
+    \qquad
+    p = 2\,\Phi(-0.9638) = 0.3351
+    $$
+
+    이다. 코드의 값과 소수 넷째 자리까지 같다.
+
+    **(2) 전혀 뒷받침하지 않는다.** 구간을 만들어 보면
+
+    $$
+    \zeta_1 - \zeta_2 \in 0.132346 \pm 1.96 \times 0.137318 = (-0.1368,\; +0.4015)
+    $$
+
+    로 $0$ 을 품으므로 검정 결과와 맞는다. 그런데 이 구간의 **폭이 $0.538$ 로 매우 넓다.** $\rho_2 = 0.65$ 로 고정하고 $\rho_1$ 로 되돌리면
+
+    $$
+    \rho_1 \in \big(\tanh(0.7753 - 0.1368),\; \tanh(0.7753 + 0.4015)\big) = (0.5639,\; 0.8264)
+    $$
+
+    이다. **$\rho_1$ 이 $0.56$ 일 수도 $0.83$ 일 수도 있다.** $\rho_1 = 0.56$ 이면 $\rho_2$ 보다 작고 $\rho_1 = 0.83$ 이면 꽤 크니, 이 자료는 두 상관의 **크기 순서조차 정하지 못한다.**
+
+    그러므로 $p = 0.335$ 를 "두 상관이 같다"로 읽으면 안 된다. 올바른 읽기는 **"이 표본으로는 구별할 수 없다"** 이고, 구별하려면 표본을 훨씬 키워야 한다.
+
+    ```python
+    def compare_two_correlations(r1, n1, r2, n2, alpha=0.05):
+        """서로 독립인 두 표본의 상관계수가 다른지 검정한다.
+
+        각각을 z 로 옮기면 차이의 분포가 정규가 되므로 z 검정을 쓸 수 있다.
+        두 표본이 겹치지 않을 때만 이 방법이 맞다.
+        """
+        z1, z2 = np.arctanh(r1), np.arctanh(r2)
+        se = np.sqrt(1/(n1 - 3) + 1/(n2 - 3))
+        z_stat = (z1 - z2) / se
+        p_value = 2 * (1 - stats.norm.cdf(abs(z_stat)))
+        print(f"r1={r1:.4f} (n={n1}), r2={r2:.4f} (n={n2})")
+        print(f"z = {z_stat:.4f}, p = {p_value:.4f}")
+
+    compare_two_correlations(r1=0.72, n1=100, r2=0.65, n2=120)
+
+    # 차이에 대한 신뢰구간을 z 눈금에서 만든다.
+    z1, z2 = np.arctanh(0.72), np.arctanh(0.65)
+    se = np.sqrt(1 / (100 - 3) + 1 / (120 - 3))
+    print(f"\nz1 = {z1:.6f},  z2 = {z2:.6f},  차이 = {z1 - z2:.6f}")
+    print(f"SE = sqrt(1/97 + 1/117) = {se:.6f}")
+    lo, hi = (z1 - z2) - 1.96 * se, (z1 - z2) + 1.96 * se
+    print(f"zeta1 - zeta2 의 95% 구간 = ({lo:+.4f}, {hi:+.4f})   0 을 품는다")
+    print(f"\nrho2 = 0.65 로 고정하면 rho1 이 들어갈 수 있는 범위")
+    print(f"  ({np.tanh(z2 + lo):.4f},  {np.tanh(z2 + hi):.4f})")
+    ```
+
+    출력:
+
+    ```text
+    r1=0.7200 (n=100), r2=0.6500 (n=120)
+    z = 0.9638, p = 0.3351
+
+    z1 = 0.907645,  z2 = 0.775299,  차이 = 0.132346
+    SE = sqrt(1/97 + 1/117) = 0.137318
+    zeta1 - zeta2 의 95% 구간 = (-0.1368, +0.4015)   0 을 품는다
+
+    rho2 = 0.65 로 고정하면 rho1 이 들어갈 수 있는 범위
+      (0.5639,  0.8264)
+    ```
+
+    손계산한 $z_1 = 0.907645$, $z_2 = 0.775299$, $\operatorname{SE} = 0.137318$, $z = 0.9638$ 이 모두 맞는다.
+
+    **구간을 함께 보고하라**는 것이 이 보기의 결론이다. $p = 0.335$ 라는 수 하나만 적으면 "차이가 없다"로 읽히지만, $\rho_1$ 이 $0.56$ 에서 $0.83$ 까지 열려 있다는 사실은 그 수에 들어 있지 않다.
 
 ---
 

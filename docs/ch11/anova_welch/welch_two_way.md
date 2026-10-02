@@ -62,41 +62,160 @@ $$ w_{ij} = \frac{n_{ij}}{s_{ij}^2} $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이원배치 Welch 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 요인을 하나씩 따로 보면 무엇을 잃는가. 자료는 온도 세 수준 × 비료 세 종류, 칸마다 관측값 하나씩인 $3\times3$ 표다.
+
+**(1)** `pg.welch_anova` 가 `Temperature` 에 대해 내놓은 $F = 5.1738$, $df_2 = 3.8192$ 를 세 집단의 평균·분산만으로 **손으로 재현**하시오(11.4절 Welch 공식을 그대로 쓴다).
+
+**(2)** 이 자료는 사실 **반복 없는 $3\times3$ 이원배치**다. 교호작용이 없다고 보는 **가법모형** $y_{ij} = \mu + \alpha_i + \beta_j + \varepsilon_{ij}$ 로 분산분석표를 만들고, (1)의 결과와 견주시오. 무엇이 달라지며 왜 달라지는가?
 
 </div>
 
-```python
-import pingouin as pg
-import pandas as pd
+??? success "풀이"
 
-# 예시 자료
-data = {
-    "Temperature": ["High", "High", "High", "Low", "Low", "Low", "Medium", "Medium", "Medium"],
-    "Fertilizer": ["A", "B", "C", "A", "B", "C", "A", "B", "C"],
-    "Growth": [12, 15, 14, 10, 13, 11, 14, 16, 15],
-}
-df = pd.DataFrame(data)
+    **(1) 해석적으로.** 11.4절의 Welch 통계량을 그대로 쓰면 된다. 온도 수준별 요약은
 
-# welch_anova는 between에 요인을 **하나만** 받는다. 그래서 따로 두 번 돌린다.
-# 이렇게 하면 각 주효과는 다른 요인을 무시한 채 계산되며, 교호작용은 볼 수 없다.
-print(pg.welch_anova(dv="Growth", between="Temperature", data=df))
-print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
-```
+    | 수준 | $n$ | $\bar y$ | $s^2$ | $w = n/s^2$ |
+    |---|---|---|---|---|
+    | High | $3$ | $13.6667$ | $2.3333$ | $1.2857$ |
+    | Low | $3$ | $11.3333$ | $2.3333$ | $1.2857$ |
+    | Medium | $3$ | $15.0000$ | $1.0000$ | $3.0000$ |
 
-출력:
+    이고 $W = \sum w_i$, $\tilde y = \sum w_i \bar y_i / W$ 를 만든 뒤
 
-```
-        Source  ddof1     ddof2         F     p_unc       np2
-0  Temperature      2  3.819209  5.173804  0.081821  0.645833
-       Source  ddof1     ddof2         F     p_unc       np2
-0  Fertilizer      2  3.915497  1.466347  0.334719  0.333333
-```
+    $$
+    F_W = \frac{\sum w_i(\bar y_i - \tilde y)^2/(k-1)}{1 + \frac{2(k-2)}{k^2-1}\Lambda},
+    \qquad
+    \Lambda = \sum_i \frac{(1-w_i/W)^2}{n_i-1},
+    \qquad
+    df_2 = \frac{k^2-1}{3\Lambda}
+    $$
 
-**해석:**
+    을 계산한다. $k = 3$ 이므로 보정계수가 $\frac{2}{8} = \frac14$ 로 **$0$ 이 아니다.** 아래에서 수로 확인한다.
 
-- **온도**: $F = 5.17$, $p = 0.082$로 $\alpha = 0.05$에서 유의하지 않다. 다만 칸당 관측값이 하나뿐이어서 검정력이 매우 낮다.
-- **비료**: $F = 1.47$, $p = 0.335$로 유의하지 않다.
+    **(2) 가법 이원배치.** 칸마다 관측값이 하나뿐이면 칸 안의 흩어짐을 잴 수 없다. 그러나 **교호작용이 없다고 가정하면** 교호작용 제곱합을 오차로 쓸 수 있고, 그러면
+
+    $$
+    SST = SS_A + SS_B + SS_E,
+    \qquad
+    df: \ 8 = 2 + 2 + 4
+    $$
+
+    로 분해된다. 여기서 $SS_A = b\sum_i(\bar y_{i\cdot}-\bar y)^2$, $SS_B = a\sum_j(\bar y_{\cdot j}-\bar y)^2$ 이다.
+
+    핵심은 **(1)의 일원배치가 쓴 "집단 안 변동"의 정체**다. 온도 수준 High 안의 세 값 $12, 15, 14$ 는 비료 A, B, C 를 하나씩 받은 것이므로, 그 흩어짐은 순수한 오차가 아니라 **비료 효과 + 오차**다. 일원배치는 비료 효과를 통째로 잡음으로 떠넘긴다. 11.3절 보기 2에서 본 것과 같은 구조이고, 여기서는 그 대가가 훨씬 크다.
+
+    ```python
+    import pingouin as pg
+    import pandas as pd
+
+    # 예시 자료
+    data = {
+        "Temperature": ["High", "High", "High", "Low", "Low", "Low", "Medium", "Medium", "Medium"],
+        "Fertilizer": ["A", "B", "C", "A", "B", "C", "A", "B", "C"],
+        "Growth": [12, 15, 14, 10, 13, 11, 14, 16, 15],
+    }
+    df = pd.DataFrame(data)
+
+    # welch_anova는 between에 요인을 **하나만** 받는다. 그래서 따로 두 번 돌린다.
+    # 이렇게 하면 각 주효과는 다른 요인을 무시한 채 계산되며, 교호작용은 볼 수 없다.
+    print(pg.welch_anova(dv="Growth", between="Temperature", data=df))
+    print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
+    ```
+
+    출력:
+
+    ```
+            Source  ddof1     ddof2         F     p_unc       np2
+    0  Temperature      2  3.819209  5.173804  0.081821  0.645833
+           Source  ddof1     ddof2         F     p_unc       np2
+    0  Fertilizer      2  3.915497  1.466347  0.334719  0.333333
+    ```
+
+    **해석:**
+
+    - **온도**: $F = 5.17$, $p = 0.082$로 $\alpha = 0.05$에서 유의하지 않다. 다만 칸당 관측값이 하나뿐이어서 검정력이 매우 낮다.
+    - **비료**: $F = 1.47$, $p = 0.335$로 유의하지 않다.
+
+    손계산으로 되살리고, 같은 자료를 $3\times3$ 표로 보아 다시 분석한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+
+    def welch_f_by_hand(groups):
+        k = len(groups)
+        n = np.array([len(g) for g in groups], float)
+        m = np.array([g.mean() for g in groups])
+        s2 = np.array([g.var(ddof=1) for g in groups])
+        w = n / s2
+        W = w.sum()
+        Lam = (((1 - w / W) ** 2) / (n - 1)).sum()
+        num = (w * (m - (w * m).sum() / W) ** 2).sum() / (k - 1)
+        return num / (1 + 2 * (k - 2) / (k ** 2 - 1) * Lam), (k ** 2 - 1) / (3 * Lam)
+
+
+    for fac in ("Temperature", "Fertilizer"):
+        gs = [v.values.astype(float) for _, v in df.groupby(fac)['Growth']]
+        F, d2 = welch_f_by_hand(gs)
+        print(f"{fac:>12}: 손계산 F = {F:.6f}, ddof2 = {d2:.6f}, "
+              f"p = {stats.f(2, d2).sf(F):.6f}")
+
+    # 반복 없는 3x3 가법모형
+    M = df.pivot(index='Temperature', columns='Fertilizer', values='Growth').astype(float)
+    print("\n자료를 3x3 표로 보면")
+    print(M)
+    row, col = M.mean(axis=1), M.mean(axis=0)
+    grand = M.values.mean()
+    SSA = 3 * ((row - grand) ** 2).sum()
+    SSB = 3 * ((col - grand) ** 2).sum()
+    SST = ((M.values - grand) ** 2).sum()
+    SSE = SST - SSA - SSB
+    MSE = SSE / 4
+    print(f"\nSS(온도) = {SSA:.4f} (df 2),  SS(비료) = {SSB:.4f} (df 2),  "
+          f"SS(오차) = {SSE:.4f} (df 4)")
+    print(f"SST = {SST:.4f},  MSE = {MSE:.6f}")
+    for name, SS in (("온도", SSA), ("비료", SSB)):
+        F = (SS / 2) / MSE
+        print(f"{name}: F = {F:.4f},  p = {stats.f(2, 4).sf(F):.6f}")
+    ```
+
+    출력:
+
+    ```
+     Temperature: 손계산 F = 5.173804, ddof2 = 3.819209, p = 0.081821
+      Fertilizer: 손계산 F = 1.466347, ddof2 = 3.915497, p = 0.334719
+
+    자료를 3x3 표로 보면
+    Fertilizer      A     B     C
+    Temperature                  
+    High         12.0  15.0  14.0
+    Low          10.0  13.0  11.0
+    Medium       14.0  16.0  15.0
+
+    SS(온도) = 20.6667 (df 2),  SS(비료) = 10.6667 (df 2),  SS(오차) = 0.6667 (df 4)
+    SST = 32.0000,  MSE = 0.166667
+    온도: F = 62.0000,  p = 0.000977
+    비료: F = 32.0000,  p = 0.003460
+    ```
+
+    **(1)이 맞는다.** 손계산한 $F = 5.173804$, $df_2 = 3.819209$, $p = 0.081821$ 이 `pg.welch_anova` 의 출력과 소수 여섯째 자리까지 같다. 비료 쪽도 마찬가지다.
+
+    **(2)의 결과가 충격적이다.** 같은 아홉 개 수를 $3\times3$ 표로 보고 가법모형을 적합하면
+
+    | 원천 | $SS$ | $df$ | $MS$ | $F$ | $p$ |
+    |---|---|---|---|---|---|
+    | 온도 | $20.6667$ | $2$ | $10.3333$ | $62.00$ | $0.00098$ |
+    | 비료 | $10.6667$ | $2$ | $5.3333$ | $32.00$ | $0.00346$ |
+    | 오차 | $0.6667$ | $4$ | $0.1667$ | | |
+
+    로 **두 효과가 모두 $1\%$ 수준에서 유의하다.** 일원배치 Welch 가 $p = 0.082$ 와 $p = 0.335$ 를 준 바로 그 자료다.
+
+    **까닭은 분모에 있다.** 온도 수준 High 안의 세 값 $12, 15, 14$ 는 비료 A·B·C 를 하나씩 받은 것이다. 그 분산 $s^2 = 2.3333$ 은 오차가 아니라 **비료 효과를 그대로 담고 있다.** 일원배치가 쓰는 분모는 이 $2.3333$ 언저리인데, 비료를 모형에 넣고 나면 남는 오차분산이 $MSE = 0.1667$ 로 **$14$ 배 줄어든다.** 분자는 거의 그대로이므로 $F$ 가 $5.17$ 에서 $62$ 로 뛴다.
+
+    그러니 "분산이 다를 수 있으니 Welch 를 쓰자"는 판단보다 **"요인이 둘이니 둘 다 모형에 넣자"는 판단이 먼저**다. 이 자료에서 Welch 가 해 준 일은 거의 없고, 잃은 것은 비료 요인 전체였다.
+
+    두 가지를 덧붙여 둔다. 첫째, 가법모형은 **교호작용이 없다고 가정한 것**이고 칸마다 관측값이 하나뿐이라 그 가정을 검정할 수 없다. 교호작용이 실제로 있다면 $MSE = 0.1667$ 은 과소추정이고 $F = 62$ 도 부풀려진 값이다. 둘째, 이 가법모형은 **등분산을 가정한다.** 이분산까지 함께 다루면서 교호작용도 보려면 [이원배치 Welch 분산분석 (로버스트 HC3)](./welch_twoway_robust.md) 으로 가야 한다.
 
 !!! warning "pingouin에는 두 요인을 동시에 다루는 Welch 분산분석이 없다"
 
@@ -110,36 +229,132 @@ print(pg.welch_anova(dv="Growth", between="Fertilizer", data=df))
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Games-Howell 사후검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> Games-Howell 표의 여섯 열을 손으로 만들기. Games-Howell 은 "Tukey 의 스튜던트화 범위 + Welch 의 표준오차와 자유도"를 합친 절차다.
+
+**(1)** 쌍 $(i,j)$ 에 대해
+
+$$
+\widehat{\operatorname{SE}} = \sqrt{\frac{s_i^2}{n_i}+\frac{s_j^2}{n_j}},
+\qquad
+T = \frac{\bar y_i - \bar y_j}{\widehat{\operatorname{SE}}},
+\qquad
+\nu_{ij} = \frac{\left(\frac{s_i^2}{n_i}+\frac{s_j^2}{n_j}\right)^2}{\frac{(s_i^2/n_i)^2}{n_i-1}+\frac{(s_j^2/n_j)^2}{n_j-1}}
+$$
+
+이고 $p = P\!\left(Q_{k,\nu_{ij}} \ge \sqrt2\,|T|\right)$ 임을 적고, **유의해지는 문턱**이 $T^\ast = q_{0.95,\,k,\,\nu_{ij}}/\sqrt2$ 임을 보이시오. Tukey 와 달리 **쌍마다 자유도와 문턱이 다르다**는 점을 지적하시오.
+
+**(2)** 출력표의 세 줄을 손으로 재현하고 각 $|T|$ 를 그 쌍의 문턱과 견주시오. 또 분산을 그대로 둔 채 **수준당 관측값만 늘리면** 문턱과 "유의해지는 데 필요한 평균차"가 어떻게 줄어드는지 계산하시오.
 
 </div>
 
-```python
-# Temperature에 대한 Games-Howell 사후검정
-post_hoc_temp = pg.pairwise_gameshowell(dv="Growth", between="Temperature", data=df)
-print(post_hoc_temp.round(4).to_string(index=False))
+??? success "풀이"
 
-# Fertilizer에 대한 Games-Howell 사후검정
-post_hoc_fert = pg.pairwise_gameshowell(dv="Growth", between="Fertilizer", data=df)
-print(post_hoc_fert.round(4).to_string(index=False))
-```
+    **(1) 해석적으로.** Tukey 가 모든 쌍에 **같은** 표준오차 $\sqrt{MSW(1/n_i+1/n_j)}$ 와 **같은** 자유도 $N-k$ 를 쓰는 반면, Games-Howell 은 두 집단의 자료만으로 표준오차를 만들고(Welch) 자유도도 Satterthwaite 로 따로 잰다. 다중성 보정은 Tukey 와 같은 스튜던트화 범위 분포로 한다.
 
-출력:
+    스튜던트화 범위와 $t$ 의 관계가 $Q_{k,\nu} = \sqrt2\,|t|$ 꼴로 들어가므로, $|T|$ 를 $\sqrt2$ 배해 $Q_{k,\nu_{ij}}$ 의 꼬리에서 읽으면 보정된 $p$-값이 된다. 뒤집으면 기각 조건이
 
-```
-   A      B  mean_A  mean_B    diff     se       T     df   pval  hedges
-High    Low 13.6667 11.3333  2.3333 1.2472  1.8708 4.0000 0.2604  1.2220
-High Medium 13.6667 15.0000 -1.3333 1.0541 -1.2649 3.4483 0.4915 -0.8262
- Low Medium 11.3333 15.0000 -3.6667 1.0541 -3.4785 3.4483 0.0660 -2.2722
-A B  mean_A  mean_B    diff     se       T     df   pval  hedges
-A B 12.0000 14.6667 -2.6667 1.4530 -1.8353 3.7409 0.2767 -1.1988
-A C 12.0000 13.3333 -1.3333 1.6667 -0.8000 3.9936 0.7230 -0.5226
-B C 14.6667 13.3333  1.3333 1.4907  0.8944 3.6697 0.6740  0.5842
-```
+    $$
+    \sqrt2\,|T| > q_{0.95,\,k,\,\nu_{ij}}
+    \quad\Longleftrightarrow\quad
+    |T| > T^\ast = \frac{q_{0.95,\,k,\,\nu_{ij}}}{\sqrt2}
+    $$
 
-어느 쌍도 유의하지 않다. 주효과 검정이 애초에 유의하지 않았으니 당연한 결과다.
+    다. 여기서 $k$ 는 **전체 집단 수**($=3$)이지 비교에 참여한 둘이 아니다. 비교 개수를 셈에 넣는 것이 다중성 보정이기 때문이다.
 
-효과크기 `hedges`가 $-2.3$에서 $1.2$까지로 상당히 큰데도 p-값이 크다는 점이 이 보기의 교훈이다. 칸마다 관측값이 하나뿐이라 자유도가 3~4에 불과하고, 그러면 아무리 큰 효과라도 유의성에 이르기 어렵다. **효과크기가 크다는 것과 통계적으로 유의하다는 것은 별개다.**
+    **중요한 차이는 $\nu_{ij}$ 가 쌍마다 다르다는 것이다.** Tukey 표에서는 반폭 하나가 모든 쌍에 공통이었지만(11.2절 보기 2) 여기서는 쌍마다 문턱이 달라진다. 분산이 비슷한 두 집단을 견줄 때는 자유도가 $n_i+n_j-2$ 에 가깝고, 분산이 크게 다르면 그보다 작아진다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    # Temperature에 대한 Games-Howell 사후검정
+    post_hoc_temp = pg.pairwise_gameshowell(dv="Growth", between="Temperature", data=df)
+    print(post_hoc_temp.round(4).to_string(index=False))
+
+    # Fertilizer에 대한 Games-Howell 사후검정
+    post_hoc_fert = pg.pairwise_gameshowell(dv="Growth", between="Fertilizer", data=df)
+    print(post_hoc_fert.round(4).to_string(index=False))
+    ```
+
+    출력:
+
+    ```
+       A      B  mean_A  mean_B    diff     se       T     df   pval  hedges
+    High    Low 13.6667 11.3333  2.3333 1.2472  1.8708 4.0000 0.2604  1.2220
+    High Medium 13.6667 15.0000 -1.3333 1.0541 -1.2649 3.4483 0.4915 -0.8262
+     Low Medium 11.3333 15.0000 -3.6667 1.0541 -3.4785 3.4483 0.0660 -2.2722
+    A B  mean_A  mean_B    diff     se       T     df   pval  hedges
+    A B 12.0000 14.6667 -2.6667 1.4530 -1.8353 3.7409 0.2767 -1.1988
+    A C 12.0000 13.3333 -1.3333 1.6667 -0.8000 3.9936 0.7230 -0.5226
+    B C 14.6667 13.3333  1.3333 1.4907  0.8944 3.6697 0.6740  0.5842
+    ```
+
+    어느 쌍도 유의하지 않다. 주효과 검정이 애초에 유의하지 않았으니 당연한 결과다.
+
+    효과크기 `hedges`가 $-2.3$에서 $1.2$까지로 상당히 큰데도 p-값이 크다는 점이 이 보기의 교훈이다. 표의 여섯 열을 손으로 만들어 그 까닭을 들여다본다.
+
+    ```python
+    from itertools import combinations
+
+    g = df.groupby('Temperature')['Growth'].agg(['mean', 'var', 'count'])
+    k = 3
+    print(f"{'pair':<14}{'diff':>9}{'se':>8}{'T':>9}{'df':>9}{'pval':>8}{'문턱 T*':>10}")
+    for a, b in combinations(['High', 'Low', 'Medium'], 2):
+        ma, va, na = g.loc[a]
+        mb, vb, nb = g.loc[b]
+        se = np.sqrt(va / na + vb / nb)
+        T = (ma - mb) / se
+        nu = (va / na + vb / nb) ** 2 / ((va / na) ** 2 / (na - 1)
+                                         + (vb / nb) ** 2 / (nb - 1))
+        pval = stats.studentized_range.sf(np.sqrt(2) * abs(T), k, nu)
+        thr = stats.studentized_range.ppf(0.95, k, nu) / np.sqrt(2)
+        print(f"{a + '-' + b:<14}{ma - mb:>9.4f}{se:>8.4f}{T:>9.4f}{nu:>9.4f}"
+              f"{pval:>8.4f}{thr:>10.4f}")
+
+    # 수준당 관측값을 늘리면 문턱이 얼마나 내려가는가 (분산은 그대로 둔다).
+    va, vb = 2.3333333, 1.0
+    print(f"\n{'수준당 n':>9}{'nu':>9}{'문턱 T*':>10}{'필요한 평균차':>14}")
+    for n in (3, 4, 5, 8, 20):
+        se = np.sqrt(va / n + vb / n)
+        nu = (va / n + vb / n) ** 2 / ((va / n) ** 2 / (n - 1) + (vb / n) ** 2 / (n - 1))
+        thr = stats.studentized_range.ppf(0.95, k, nu) / np.sqrt(2)
+        print(f"{n:>9}{nu:>9.3f}{thr:>10.4f}{thr * se:>14.4f}")
+    ```
+
+    출력:
+
+    ```
+    pair               diff      se        T       df    pval     문턱 T*
+    High-Low         2.3333  1.2472   1.8708   4.0000  0.2604    3.5640
+    High-Medium     -1.3333  1.0541  -1.2649   3.4483  0.4915    3.8425
+    Low-Medium      -3.6667  1.0541  -3.4785   3.4483  0.0660    3.8425
+
+        수준당 n       nu     문턱 T*       필요한 평균차
+            3    3.448    3.8425        4.0504
+            4    5.172    3.2155        2.9353
+            5    6.897    2.9558        2.4134
+            8   12.069    2.6658        1.7208
+           20   32.759    2.4546        1.0021
+    ```
+
+    **표가 통째로 재현된다.** `diff`, `se`, `T`, `df`, `pval` 다섯 열이 `pairwise_gameshowell` 의 출력과 소수 넷째 자리까지 같다.
+
+    **(1)의 "쌍마다 자유도가 다르다"가 눈에 보인다.** High–Low 는 두 집단의 분산이 $2.3333$ 으로 똑같아 $\nu = 4 = n_1+n_2-2$ 를 온전히 받는다. 반면 Medium 이 끼는 두 비교는 분산이 $2.3333$ 대 $1.0$ 으로 달라 $\nu = 3.4483$ 으로 깎이고, 그 대가로 문턱이 $3.5640$ 에서 $3.8425$ 로 **$8\%$ 올라간다.**
+
+    **세 $|T|$ 가 모두 문턱 아래다.** $1.8708 < 3.5640$, $1.2649 < 3.8425$, $3.4785 < 3.8425$. 가장 가까운 Low–Medium 조차 $0.36$ 모자라 $p = 0.0660$ 이 되었다. 자유도가 $3.45$ 밖에 안 되니 문턱이 $3.84$ 까지 치솟은 것이고, **같은 $|T| = 3.4785$ 라도 $\nu = 20$ 이었다면 문턱이 $2.45$ 라 넉넉히 유의했을 것이다.**
+
+    **처방은 반복이다.** 아래 표가 그것을 수로 말해 준다.
+
+    | 수준당 $n$ | $\nu$ | 문턱 $T^\ast$ | 유의해지는 데 필요한 평균차 |
+    |---|---|---|---|
+    | $3$ | $3.45$ | $3.8425$ | $4.0504$ |
+    | $4$ | $5.17$ | $3.2155$ | $2.9353$ |
+    | $5$ | $6.90$ | $2.9558$ | $2.4134$ |
+    | $8$ | $12.07$ | $2.6658$ | $1.7208$ |
+    | $20$ | $32.76$ | $2.4546$ | $1.0021$ |
+
+    수준당 $3$ 개에서는 평균차가 $4.05$ 는 되어야 하는데 실제 차이는 $3.667$ 이다. **수준당 하나씩만 더 붙여 $4$ 개로 만들면 필요한 차이가 $2.94$ 로 내려가 같은 차이가 유의해진다.** 두 몫이 함께 움직이기 때문이다. 표준오차가 $\sqrt{1/n}$ 으로 줄고, 자유도가 늘어 문턱 $T^\ast$ 자체도 $3.84$ 에서 $3.22$ 로 내려간다.
+
+    **효과크기가 크다는 것과 통계적으로 유의하다는 것은 별개다.** `hedges` 가 $-2.27$ 이나 되는 Low–Medium 이 유의하지 않은 것은 효과가 작아서가 아니라 **그 효과를 잴 자가 너무 거칠기 때문**이다.
 
 "자유도가 3~4에 불과하면 아무리 큰 효과라도 유의성에 이르기 어렵다"는 말이 얼마나 심각한지는 문턱을 그려 보아야 실감이 난다. Games-Howell은 스튜던트화 범위분포를 쓰므로, 집단이 $k = 3$일 때 유의해지는 데 필요한 통계량은 $q_{0.95,\,3,\,\nu}/\sqrt{2}$이다.
 

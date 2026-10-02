@@ -30,36 +30,104 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 교호작용 그림 그리기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이 두 선은 교차하는가. ToothGrowth 의 교호작용 그림을 그린다.
+
+**(1)** 그림이 그리는 여섯 칸평균과 **세 수준에서의 격차** $\delta_j = \bar y_{\text{OJ},j} - \bar y_{\text{VC},j}$ 를 수치로 적으시오.
+
+**(2)** 위 표에서 "교차하는 선 = 비순서형 교호작용"이라 했다. **표본에서 격차의 부호가 바뀌는가?** 바뀐다면 이 자료를 비순서형이라 불러야 하는가. 판정에 필요한 양을 계산해 답하시오.
 
 </div>
 
-```python
-import pandas as pd
-import matplotlib.pyplot as plt
-from statsmodels.graphics.factorplots import interaction_plot
+??? success "풀이"
 
-url = ('https://raw.githubusercontent.com/vincentarelbundock/'
-       'Rdatasets/master/csv/datasets/ToothGrowth.csv')
-df = pd.read_csv(url, usecols=[1, 2, 3])
+    유도할 답이 있는 문제가 아니다. 그러나 "교차하는가"는 **눈이 아니라 수로 답해야 하는 물음**이고, 그 수를 구하는 것이 이 보기의 몫이다.
 
-# 가로축이 한 요인, 선의 색이 다른 요인, 세로축이 반응의 평균이다.
-# 두 선이 평행이면 교호작용이 없고, 벌어지거나 엇갈리면 있는 것이다.
-fig, ax = plt.subplots(figsize=(10, 4))
-interaction_plot(df['dose'], df['supp'], df['len'],
-                 ax=ax, markers=['o', 's'], linestyles=['--', '-.'])
-ax.set_title("Interaction: dose x supp on tooth length")
-ax.set_xlabel("dose")
-ax.set_ylabel("len")
-plt.tight_layout()
-plt.show()
-```
+    ```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from statsmodels.graphics.factorplots import interaction_plot
 
-![교호작용 그림](./img/interaction_plot_31.png)
+    url = ('https://raw.githubusercontent.com/vincentarelbundock/'
+           'Rdatasets/master/csv/datasets/ToothGrowth.csv')
+    df = pd.read_csv(url, usecols=[1, 2, 3])
 
-두 선이 모두 오른쪽 위로 향하지만 기울기가 다르다. VC(점선)가 더 가파르게 올라 용량 2.0에서 OJ를 따라잡는다. 용량 0.5와 1.0에서는 OJ가 위에 있다가 2.0에서 두 점이 거의 겹친다.
+    # 가로축이 한 요인, 선의 색이 다른 요인, 세로축이 반응의 평균이다.
+    # 두 선이 평행이면 교호작용이 없고, 벌어지거나 엇갈리면 있는 것이다.
+    fig, ax = plt.subplots(figsize=(10, 4))
+    interaction_plot(df['dose'], df['supp'], df['len'],
+                     ax=ax, markers=['o', 's'], linestyles=['--', '-.'])
+    ax.set_title("Interaction: dose x supp on tooth length")
+    ax.set_xlabel("dose")
+    ax.set_ylabel("len")
+    plt.tight_layout()
+    plt.show()
+    ```
 
-선이 **교차하지는 않으므로** 순서형 교호작용이다. 어느 용량에서도 VC가 OJ보다 낫지는 않고, 다만 우위의 크기가 줄어들 뿐이다.
+    ![교호작용 그림](./img/interaction_plot_31.png)
+
+    두 선이 모두 오른쪽 위로 향하지만 기울기가 다르다. VC(점선)가 더 가파르게 올라 용량 2.0에서 OJ를 따라잡는다. 용량 0.5와 1.0에서는 OJ가 위에 있다가 2.0에서 두 점이 거의 겹친다.
+
+    눈으로 본 것을 수로 바꾼다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    MSE, c = 13.187148, 10          # 이원배치 잔차 평균제곱과 칸 크기
+    M = df.pivot_table(index='supp', columns='dose', values='len', aggfunc='mean')
+    print("칸평균")
+    print(M)
+
+    se_gap = np.sqrt(2 * MSE / c)
+    t_crit = stats.t.ppf(0.975, 54)
+    print(f"\n격차의 표준오차 = sqrt(2*MSE/n) = {se_gap:.4f},  t(0.975,54) = {t_crit:.4f}")
+    print(f"{'dose':>6}{'OJ':>8}{'VC':>8}{'OJ-VC':>9}{'95% CI':>22}")
+    for d in (0.5, 1.0, 2.0):
+        g = M.loc['OJ', d] - M.loc['VC', d]
+        lo, hi = g - t_crit * se_gap, g + t_crit * se_gap
+        print(f"{d:>6}{M.loc['OJ', d]:>8.2f}{M.loc['VC', d]:>8.2f}{g:>9.2f}"
+              f"   ({lo:>6.2f}, {hi:>6.2f})")
+
+    # 표본에서 격차의 부호가 바뀌는가.
+    gaps = (M.loc['OJ'] - M.loc['VC']).values
+    print(f"\n격차의 부호: {np.sign(gaps)}  ->  표본 평균선은 실제로 교차한다")
+    print(f"다만 마지막 격차 -0.08 은 표준오차 {se_gap:.2f} 의 {abs(gaps[-1]) / se_gap:.3f} 배다")
+
+    for s in ('OJ', 'VC'):
+        print(f"{s}: 0.5->1.0 {M.loc[s, 1.0] - M.loc[s, 0.5]:+.2f}, "
+              f"1.0->2.0 {M.loc[s, 2.0] - M.loc[s, 1.0]:+.2f}")
+    ```
+
+    출력:
+
+    ```
+    칸평균
+    dose    0.5    1.0    2.0
+    supp                     
+    OJ    13.23  22.70  26.06
+    VC     7.98  16.77  26.14
+
+    격차의 표준오차 = sqrt(2*MSE/n) = 1.6240,  t(0.975,54) = 2.0049
+      dose      OJ      VC    OJ-VC                95% CI
+       0.5   13.23    7.98     5.25   (  1.99,   8.51)
+       1.0   22.70   16.77     5.93   (  2.67,   9.19)
+       2.0   26.06   26.14    -0.08   ( -3.34,   3.18)
+
+    격차의 부호: [ 1.  1. -1.]  ->  표본 평균선은 실제로 교차한다
+    다만 마지막 격차 -0.08 은 표준오차 1.62 의 0.049 배다
+    OJ: 0.5->1.0 +9.47, 1.0->2.0 +3.36
+    VC: 0.5->1.0 +8.79, 1.0->2.0 +9.37
+    ```
+
+    **(1) 읽히는 수.** 격차가 $5.25 \to 5.93 \to -0.08$ 이다. 앞의 둘은 신뢰구간이 $0$ 을 품지 않으므로 뚜렷한 차이이고, 마지막은 $(-3.34,\ 3.18)$ 로 $0$ 을 넉넉히 품는다. 두 선의 기울기도 다르다. $1.0 \to 2.0$ 구간에서 OJ 는 $+3.36$ 만 오르는데 VC 는 $+9.37$ 오른다. **용량을 올려 얻는 이득이 OJ 쪽에서 먼저 포화한다.**
+
+    **(2) 표본에서는 부호가 바뀐다.** 격차의 부호가 $(+,+,-)$ 이므로 **그려진 두 선은 용량 $1.0$ 과 $2.0$ 사이 어딘가에서 실제로 교차한다.** 그림에서 두 점이 겹쳐 보여 교차가 눈에 띄지 않을 뿐이다. 그러니 "선이 교차하지 않는다"는 말은 그림에 대한 서술로는 정확하지 않다.
+
+    **그래도 비순서형이라 부르면 안 된다.** 마지막 격차 $-0.08$ 은 그 격차의 표준오차 $1.6240$ 의 **$0.049$ 배**다. 곧 $t = -0.05$ 이고, 자유도 $54$ 에서 이보다 큰 값은 심심하면 나온다. 신뢰구간 $(-3.34,\ 3.18)$ 은 $\delta_3$ 가 $+3$ 일 수도 $-3$ 일 수도 있다고 말하므로, **어느 쪽이 위인지 이 자료는 알지 못한다.** 표본평균이 교차했다는 것은 모평균이 교차했다는 증거가 못 된다.
+
+    정리하면 올바른 서술은 이렇다. **용량 $0.5$ 와 $1.0$ 에서는 OJ 가 $5$–$6$ 만큼 분명히 앞서고, 용량 $2.0$ 에서는 둘을 구별할 수 없다.** 순서형이냐 비순서형이냐는 이 자료로 가릴 수 없는 물음이며, 가리고 싶다면 용량 $2.0$ 근처에서 표본을 더 모아야 한다.
+
+    덧붙여, 순서형/비순서형의 구분 자체가 **관측한 수준 범위에 매여 있다**는 점도 기억할 만하다. 여기서 재지 않은 용량 $3.0$ 에서 VC 가 OJ 를 앞선다면 같은 자료생성구조가 비순서형으로 불릴 것이다. 분류는 모형의 성질이 아니라 **설계의 성질**이다.
 
 ## 그림 읽기
 

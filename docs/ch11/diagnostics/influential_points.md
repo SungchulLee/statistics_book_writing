@@ -8,51 +8,150 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+**보기 1.** <span class="diff easy" title="쉬움"></span> 영향점을 찾기에 앞서, **그 점이 실제로 무엇을 바꾸는가**를 먼저 재어 둔다.
+
+**(1)** 집단 $g$ 에 속한 관측 $i$ 를 빼면 그 집단의 평균이 정확히
+
+$$
+\bar y_{g(i)} - \bar y_{g} = -\frac{e_i}{n_g - 1}
+$$
+
+만큼 움직임을 보이시오($e_i = y_i - \bar y_g$). 다른 집단의 평균은 전혀 움직이지 않음도 밝히시오.
+
+**(2)** 이 자료에서 그 값을 계산하고, 관측 $59$ 번을 뺀 자료로 분산분석을 다시 돌려 $F$, p-값, $\hat\sigma$, $\eta^2$ 가 어떻게 바뀌는지 보이시오. **결론이 뒤집히는가?**
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-# 이 페이지의 진단은 모두 아래 모형 하나를 놓고 수행한다.
-# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주었고,
-# 집단 C에 이상점을 하나 심어 두었다.
-rng = np.random.default_rng(42)
-n = 20
-response = np.concatenate([
-    rng.normal(10.0, 1.0, n),
-    rng.normal(10.8, 1.3, n),
-    rng.normal(12.0, 1.6, n),
-])
-response[-1] = 20.0                     # 마지막 관측값을 이상점으로 만든다
-data = pd.DataFrame({
-    "group": np.repeat(["A", "B", "C"], n),
-    "response": response,
-})
-group1 = data.loc[data["group"] == "A", "response"]
-group2 = data.loc[data["group"] == "B", "response"]
-group3 = data.loc[data["group"] == "C", "response"]
+    **(1) 해석적으로.** 관측 $i$ 를 빼면 집단 $g$ 의 합이 $y_i$ 만큼, 개수가 하나 줄므로
 
-model = ols("response ~ C(group)", data=data).fit()
+    $$
+    \bar y_{g(i)} = \frac{n_g \bar y_g - y_i}{n_g - 1}
+    $$
 
-print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
-print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
-```
+    이다. 원래 평균을 빼면
 
-출력:
+    $$
+    \bar y_{g(i)} - \bar y_g
+    = \frac{n_g \bar y_g - y_i - (n_g-1)\bar y_g}{n_g-1}
+    = \frac{\bar y_g - y_i}{n_g-1}
+    = -\frac{e_i}{n_g-1}
+    $$
 
-```
-       count    mean    std
-group                      
-A         20   9.967  0.870
-B         20  10.942  1.034
-C         20  12.513  2.077
+    를 얻는다. $\square$
 
-F = 16.1314, p = 0.0000
-```
+    다른 집단은 움직이지 않는다. 일원배치의 최소제곱 적합값이 **집단마다 그 집단의 자료만으로** 정해지기 때문이다($\hat\mu_g = \bar y_g$). 회귀와 결정적으로 다른 점이다. 회귀에서는 한 점을 빼면 기울기가 움직여 **모든** 적합값이 바뀐다.
+
+    식의 꼴에서 두 가지를 읽을 수 있다. 첫째, **움직임의 크기는 잔차 $e_i$ 하나로 정해진다.** 값이 크냐 작냐가 아니라 자기 집단 평균에서 얼마나 떨어졌느냐다. 둘째, **$n_g$ 가 작을수록 크게 움직인다.** 같은 잔차라도 $n_g = 5$ 면 $e_i/4$, $n_g = 20$ 이면 $e_i/19$ 로 다섯 배 가까이 차이 난다. 이것이 뒤에 나올 지렛값 $h_{ii} = 1/n_g$ 의 다른 얼굴이다.
+
+    **(2) 수치적으로.** 먼저 이 쪽이 쓸 자료를 만들고 민감도 분석을 돌린다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.formula.api import ols
+
+    rng = np.random.default_rng(42)
+    n = 20
+    response = np.concatenate([
+        rng.normal(10.0, 1.0, n), rng.normal(10.8, 1.3, n), rng.normal(12.0, 1.6, n)])
+    response[-1] = 20.0
+    data = pd.DataFrame({"group": np.repeat(["A", "B", "C"], n), "response": response})
+
+    full = ols("response ~ C(group)", data=data).fit()
+    drop = ols("response ~ C(group)", data=data.drop(index=59)).fit()
+    e59 = full.resid.values[-1]
+
+    print(f"e_59 = {e59:.6f}")
+    print(f"공식  집단 C 평균의 변화 = -e_59/(n-1) = {-e59 / (n - 1):.6f}")
+    print(f"실제  {response[40:59].mean():.6f} - {response[40:].mean():.6f} = "
+          f"{response[40:59].mean() - response[40:].mean():.6f}")
+
+    print(f"\n{'':>8}{'F':>10}{'p':>12}{'sigma_hat':>12}{'eta^2':>9}{'평균 C':>11}")
+    print(f"{'전체 60':>8}{full.fvalue:>10.4f}{full.f_pvalue:>12.3e}"
+          f"{np.sqrt(full.mse_resid):>12.4f}{full.rsquared:>9.4f}{response[40:].mean():>11.4f}")
+    print(f"{'59 빼고':>8}{drop.fvalue:>10.4f}{drop.f_pvalue:>12.3e}"
+          f"{np.sqrt(drop.mse_resid):>12.4f}{drop.rsquared:>9.4f}{response[40:59].mean():>11.4f}")
+    ```
+
+    출력:
+
+    ```
+    e_59 = 7.486540
+    공식  집단 C 평균의 변화 = -e_59/(n-1) = -0.394028
+    실제  12.119432 - 12.513460 = -0.394028
+
+                     F           p   sigma_hat    eta^2       평균 C
+       전체 60   16.1314   2.808e-06      1.4306   0.3614    12.5135
+       59 빼고   21.9577   9.111e-08      1.0146   0.4395    12.1194
+    ```
+
+    **공식과 실제가 소수점 여섯째 자리까지 같다.** 잔차 $7.486540$ 을 $19$ 로 나눈 $0.394028$ 이 집단 C 평균이 내려오는 거리다.
+
+    **그런데 둘째 표가 뜻밖이다. 이상점을 빼면 결과가 더 강해진다.**
+
+    | | 전체 $60$ | $59$ 빼고 |
+    |---|---|---|
+    | $F$ | $16.13$ | $\mathbf{21.96}$ |
+    | p-값 | $2.8\times10^{-6}$ | $\mathbf{9.1\times10^{-8}}$ |
+    | $\hat\sigma$ | $1.4306$ | $1.0146$ |
+    | $\eta^2$ | $0.3614$ | $0.4395$ |
+
+    까닭은 두 몫이 서로 다른 방향으로 작용하기 때문이다. 그 점을 빼면
+
+    - 분자 쪽: 집단 C 평균이 $12.51 \to 12.12$ 로 내려와 집단 간 차이가 **줄어든다.**
+    - 분모 쪽: $\hat\sigma$ 가 $1.4306 \to 1.0146$ 으로 **$29\%$ 줄어든다.**
+
+    그리고 **분모의 효과가 훨씬 크다.** 분자는 $\eta^2$ 로 보면 미미하게 줄 뿐인데 분모는 제곱으로 들어가므로, 결국 $F$ 가 $36\%$ 커진다. 보기 3·4에서 보듯 그 한 점이 $\hat\sigma^2$ 의 절반 가까이를 혼자 내고 있었기 때문이다.
+
+    **그래서 이 자료의 민감도 분석 결론은 "결과가 로버스트하다"이다.** 그 점을 넣든 빼든 세 평균이 다르다는 결론은 바뀌지 않으며, 오히려 넣은 쪽이 **보수적**이다. 이것이 중요한 까닭은, 영향점을 찾았다고 해서 자동으로 결과를 의심할 일이 아니기 때문이다. 영향점이 결론을 **만들어 낸** 경우와 결론을 **가리고 있던** 경우는 전혀 다르게 다루어야 한다. 여기는 뒤쪽이다.
+
+    다만 이 쪽에서 앞으로 보게 될 진단량들($\hat\sigma$ 로 나누는 모든 것)은 **부풀려진 $1.4306$ 을 기준자로 쓴다**는 사실을 기억해 두어야 한다. 그 자가 이상점 자신 때문에 늘어났으므로, 이상점은 자기를 재는 자를 스스로 늘여 **덜 튀어 보이게** 만든다. 보기 4에서 볼 외부 스튜던트화 잔차가 그 순환을 끊는 장치다.
+
+    **이 쪽의 모형.** 아래 진단은 모두 이 `model` 하나를 놓고 수행한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.formula.api import ols
+
+    # 이 페이지의 진단은 모두 아래 모형 하나를 놓고 수행한다.
+    # 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주었고,
+    # 집단 C에 이상점을 하나 심어 두었다.
+    rng = np.random.default_rng(42)
+    n = 20
+    response = np.concatenate([
+        rng.normal(10.0, 1.0, n),
+        rng.normal(10.8, 1.3, n),
+        rng.normal(12.0, 1.6, n),
+    ])
+    response[-1] = 20.0                     # 마지막 관측값을 이상점으로 만든다
+    data = pd.DataFrame({
+        "group": np.repeat(["A", "B", "C"], n),
+        "response": response,
+    })
+    group1 = data.loc[data["group"] == "A", "response"]
+    group2 = data.loc[data["group"] == "B", "response"]
+    group3 = data.loc[data["group"] == "C", "response"]
+
+    model = ols("response ~ C(group)", data=data).fit()
+
+    print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+    print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+    ```
+
+    출력:
+
+    ```
+           count    mean    std
+    group                      
+    A         20   9.967  0.870
+    B         20  10.942  1.034
+    C         20  12.513  2.077
+
+    F = 16.1314, p = 0.0000
+    ```
 
 이상점 하나가 집단 C의 표준편차를 1.15에서 2.08로 키웠다. 아래 진단들이 이것을 잡아내는지 보라.
 
@@ -68,40 +167,166 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Cook의 거리
+**보기 2.** <span class="diff easy" title="쉬움"></span> Cook의 거리. 위의 식은 **정의가 아니라 결과**다. 정의는 삭제로 적혀 있다.
+
+$$
+D_i = \frac{\sum_{j=1}^{N}\left(\hat y_j - \hat y_{j(i)}\right)^2}{p\,\hat\sigma^2}
+$$
+
+($\hat y_{j(i)}$ 는 관측 $i$ 를 빼고 적합한 모형이 관측 $j$ 에 주는 적합값이다.)
+
+**(1)** 보기 1의 결과를 써서, 균형 일원배치에서 이 정의가
+
+$$
+D_i = \frac{n\,e_i^2}{p\,\hat\sigma^2 (n-1)^2}
+$$
+
+이 됨을 보이시오. 분자의 합에 항이 **몇 개** 남는가.
+
+**(2)** 이것이 쪽 위의 $D_i = \dfrac{r_i^2}{p}\cdot\dfrac{h_{ii}}{1-h_{ii}}$ 와 같음을 보이시오.
+
+**(3)** 실제로 한 점씩 빼고 다시 적합해 정의대로 계산한 값이 `cooks_distance` 와 같은지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 관측값마다 Cook 의 거리를 막대로 세운다. 유독 솟은 막대가 있는지를 본다.
-influence = model.get_influence()
-cooks_d = influence.cooks_distance[0]
+    **(1) 해석적으로.** 보기 1에서 관측 $i$ 를 빼면 **그 집단의 평균만** 움직이고 그 크기가 $-\dfrac{e_i}{n-1}$ 임을 보았다. 일원배치의 적합값은 곧 집단평균이므로
 
-plt.stem(range(len(cooks_d)), cooks_d, markerfmt=",")
-plt.xlabel("Observation Index")
-plt.ylabel("Cook's Distance")
-plt.title("Cook's Distance")
-plt.axhline(y=4/len(cooks_d), color='r', linestyle='--', label=f'Threshold = {4/len(cooks_d):.3f}')
-plt.legend()
-plt.show()
+    $$
+    \hat y_j - \hat y_{j(i)} =
+    \begin{cases}
+    \dfrac{e_i}{n-1} & j \text{ 가 } i \text{ 와 같은 집단} \\[4pt]
+    0 & \text{그 밖}
+    \end{cases}
+    $$
 
-print(f"threshold = {4/len(cooks_d):.4f}")
-print(f"max Cook's D = {cooks_d.max():.4f} at obs {cooks_d.argmax()}")
-print(f"flagged = {np.where(cooks_d > 4/len(cooks_d))[0]}")
-```
+    이다. 곧 **분자의 $N$ 개 항 가운데 $n$ 개만 살아남고 그 $n$ 개가 모두 같은 값**이다(자기 자신 $j = i$ 도 포함한다). 따라서
 
-출력:
+    $$
+    \sum_{j=1}^{N}\left(\hat y_j - \hat y_{j(i)}\right)^2 = n\left(\frac{e_i}{n-1}\right)^2
+    $$
 
-```
-threshold = 0.0667
-max Cook's D = 0.5058 at obs 59
-flagged = [52 59]
-```
+    이고
 
-![Cook의 거리](./img/influential_points_63.png)
+    $$
+    D_i = \frac{n\,e_i^2}{p\,\hat\sigma^2(n-1)^2}
+    $$
+
+    를 얻는다. $\square$
+
+    **(2) 해석적으로.** 잔차 분석 쪽에서 본 $r_i = \dfrac{e_i}{\hat\sigma\sqrt{1-h_{ii}}}$ 와 $h_{ii} = 1/n$ 을 쓰면
+
+    $$
+    \frac{r_i^2}{p}\cdot\frac{h_{ii}}{1-h_{ii}}
+    = \frac{1}{p}\cdot\frac{e_i^2}{\hat\sigma^2\left(1-\frac1n\right)}\cdot\frac{1/n}{1-\frac1n}
+    = \frac{e_i^2}{p\,\hat\sigma^2}\cdot\frac{1}{n\left(\frac{n-1}{n}\right)^2}
+    = \frac{n\,e_i^2}{p\,\hat\sigma^2(n-1)^2}
+    $$
+
+    로 (1)과 같다. $\square$
+
+    **두 식이 같다는 사실이 Cook 거리에 뜻을 준다.** $\frac{r_i^2}{p}\frac{h}{1-h}$ 만 보면 "표준화 잔차와 지렛값을 적당히 섞은 양"으로 보이지만, 그 섞음은 임의가 아니라 **"이 점을 빼면 적합값들이 얼마나 움직이는가"를 $p\hat\sigma^2$ 으로 잰 것**이다. 분모의 $p\hat\sigma^2$ 은 회귀계수의 신뢰영역이 쓰는 척도이므로, $D_i$ 는 "관측 $i$ 를 빼면 추정값이 신뢰영역 몇 개만큼 이동하는가"로도 읽힌다. 이것이 $D_i > 1$ 이라는 보수적 문턱의 출처다.
+
+    **(3) 수치적으로.** 먼저 쪽의 그림과 요약이다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # 관측값마다 Cook 의 거리를 막대로 세운다. 유독 솟은 막대가 있는지를 본다.
+    influence = model.get_influence()
+    cooks_d = influence.cooks_distance[0]
+
+    plt.stem(range(len(cooks_d)), cooks_d, markerfmt=",")
+    plt.xlabel("Observation Index")
+    plt.ylabel("Cook's Distance")
+    plt.title("Cook's Distance")
+    plt.axhline(y=4/len(cooks_d), color='r', linestyle='--', label=f'Threshold = {4/len(cooks_d):.3f}')
+    plt.legend()
+    plt.show()
+
+    print(f"threshold = {4/len(cooks_d):.4f}")
+    print(f"max Cook's D = {cooks_d.max():.4f} at obs {cooks_d.argmax()}")
+    print(f"flagged = {np.where(cooks_d > 4/len(cooks_d))[0]}")
+    ```
+
+    출력:
+
+    ```
+    threshold = 0.0667
+    max Cook's D = 0.5058 at obs 59
+    flagged = [52 59]
+    ```
+
+    ![Cook의 거리](./img/influential_points_63.png)
+
+    이제 정의 그대로 한 점씩 빼고 다시 적합해 본다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.formula.api import ols
+
+    rng = np.random.default_rng(42)
+    n, k = 20, 3
+    response = np.concatenate([
+        rng.normal(10.0, 1.0, n), rng.normal(10.8, 1.3, n), rng.normal(12.0, 1.6, n)])
+    response[-1] = 20.0
+    data = pd.DataFrame({"group": np.repeat(["A", "B", "C"], n), "response": response})
+    model = ols("response ~ C(group)", data=data).fit()
+    e = model.resid.values
+    fit = model.fittedvalues.values
+    s2 = model.mse_resid
+    D = model.get_influence().cooks_distance[0]
+
+    def cook_by_deletion(i):
+        """정의 그대로: i 를 빼고 다시 적합해 60 개 적합값이 얼마나 움직였는지 잰다."""
+        refit = ols("response ~ C(group)", data=data.drop(index=i)).fit()
+        moved = fit - refit.predict(data).values
+        return (moved ** 2).sum() / (k * s2)
+
+    print(f"{'관측':>6}{'e_i':>11}{'삭제 정의':>13}{'공식':>13}{'cooks_distance':>16}")
+    for i in [59, 52, 30, 0]:
+        formula = n * e[i] ** 2 / (k * s2 * (n - 1) ** 2)
+        print(f"{i:>6}{e[i]:>11.4f}{cook_by_deletion(i):>13.8f}{formula:>13.8f}{D[i]:>16.8f}")
+
+    # 59 번을 뺐을 때 실제로 움직인 적합값
+    refit = ols("response ~ C(group)", data=data.drop(index=59)).fit()
+    moved = fit - refit.predict(data).values
+    print(f"\n59 번을 뺐을 때 적합값이 움직인 집단: "
+          f"{sorted(set(data['group'][np.abs(moved) > 1e-12]))}")
+    print(f"  움직인 크기 = {moved[-1]:.6f}  (= e_59/(n-1) = {e[-1] / (n - 1):.6f})")
+    print(f"  움직인 관측 수 = {(np.abs(moved) > 1e-12).sum()}")
+    print(f"  제곱합 = {(moved ** 2).sum():.6f} = n*(e/(n-1))^2 = {n * (e[-1] / (n - 1)) ** 2:.6f}")
+    print(f"  p*sigma^2 = {k * s2:.6f}")
+    print(f"  나누면 {(moved ** 2).sum() / (k * s2):.8f}")
+    ```
+
+    출력:
+
+    ```
+        관측        e_i        삭제 정의           공식  cooks_distance
+        59     7.4865   0.50577484   0.50577484      0.50577484
+        52    -2.8449   0.07303512   0.07303512      0.07303512
+        30     2.6418   0.06298082   0.06298082      0.06298082
+         0     0.3376   0.00102879   0.00102879      0.00102879
+
+    59 번을 뺐을 때 적합값이 움직인 집단: ['C']
+      움직인 크기 = 0.394028  (= e_59/(n-1) = 0.394028)
+      움직인 관측 수 = 20
+      제곱합 = 3.105168 = n*(e/(n-1))^2 = 3.105168
+      p*sigma^2 = 6.139427
+      나누면 0.50577484
+    ```
+
+    **네 관측 모두에서 삭제 정의, (1)의 공식, `statsmodels` 의 `cooks_distance` 가 소수점 여덟째 자리까지 같다.** 유도가 맞는다.
+
+    아래 줄들이 그 정의를 분해해 보여 준다. $59$ 번을 빼면 **집단 C 의 적합값만** 움직이고($20$ 개), 하나하나가 $0.394028$ 씩 움직인다. 보기 1의 $e_{59}/(n-1)$ 과 같은 값이다. 제곱해 더하면 $20 \times 0.394028^2 = 3.105168$ 이고 이것을 $p\hat\sigma^2 = 3 \times 2.046476 = 6.139427$ 로 나누면 $0.5058$ 이다.
+
+    **$D_{59} = 0.506$ 을 어떻게 읽을 것인가.** 쪽의 본문이 "문턱 $0.067$ 의 여덟 배"라 한 것은 맞지만, 보수적 문턱 $D_i > 1$ 로 보면 **아직 절반에 못 미친다.** 그리고 보기 1에서 실제로 그 점을 빼 보았더니 결론이 뒤집히기는커녕 더 강해졌다. 두 사실이 서로 맞는다. $D_i$ 가 재는 것은 **추정값이 움직이는 거리**이지 결론이 뒤집히는 정도가 아니다.
+
+    끝으로 표의 둘째·셋째 줄에 눈길을 줄 만하다. $52$ 번의 잔차는 $-2.8449$ 로 **음수**이고 $30$ 번은 $+2.6418$ 인데, $D$ 가 $0.0730$ 과 $0.0630$ 으로 거의 같다. $D_i$ 가 $e_i^2$ 에만 의존하므로 **부호를 보지 않기** 때문이다. 영향력의 크기만 알려 주고 방향은 알려 주지 않으므로, 어느 쪽으로 끄는지 알려면 잔차나 다음에 볼 DFFITS 를 보아야 한다.
 
 막대 하나가 압도적으로 높다. 마지막 관측값(59번)의 Cook 거리 0.506은 문턱 0.067의 여덟 배에 가깝다. 52번도 문턱을 넘지만 값이 훨씬 작다.
 
@@ -127,33 +352,162 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 지렛값
+**보기 3.** <span class="diff easy" title="쉬움"></span> 지렛값은 무엇을 더하고 무엇을 더하지 않는가.
+
+**(1)** 모자행렬 $H = X(X^\top X)^{-1}X^\top$ 가 **멱등**($H^2 = H$)이고 대칭임을 쓰고, 그로부터
+
+$$
+\sum_{i=1}^{N} h_{ii} = \operatorname{tr}(H) = p,
+\qquad
+\bar h = \frac{p}{N},
+\qquad
+0 \le h_{ii} \le 1
+$$
+
+임을 보이시오.
+
+**(2)** 일원배치에서 $h_{ii} = 1/n_i$ 임을 쓰고, $\sum_i h_{ii} = p$ 가 **집단 수 $k$ 와 맞아떨어짐**을 확인하시오.
+
+**(3)** 균형설계에서 그림이 세로선 하나가 되는 것을 수로 확인하고, $n = (5, 20, 35)$ 인 불균형설계에서는 어떻게 달라지는지 보이시오. **똑같이 $\lvert r\rvert = 2$ 인 점이라도** 집단에 따라 Cook 거리가 얼마나 다른가.
 
 </div>
 
-```python
-# 지렛값은 설명변수 쪽에서 그 점이 얼마나 외따로 있는지를 잰다.
-# 지렛값이 크고 잔차도 큰 점이 가장 위험하다. 그 둘을 곱해 놓은 것이
-# 앞의 Cook 거리라고 보면 된다.
-leverage = influence.hat_matrix_diag
+??? success "풀이"
 
-plt.scatter(leverage, influence.resid_studentized_internal, alpha=0.6)
-plt.xlabel("Leverage")
-plt.ylabel("Studentized Residuals")
-plt.title("Leverage vs. Studentized Residuals")
-plt.axhline(y=0, color='r', linestyle='--')
-plt.show()
+    **(1) 해석적으로.** $H$ 가 열공간 위로의 직교사영이므로 $H^2 = H$ 이고 $H^\top = H$ 다. 대각합은
 
-print(f"leverage: min = {leverage.min():.4f}, max = {leverage.max():.4f}")
-```
+    $$
+    \operatorname{tr}(H) = \operatorname{tr}\!\left(X(X^\top X)^{-1}X^\top\right)
+    = \operatorname{tr}\!\left((X^\top X)^{-1}X^\top X\right) = \operatorname{tr}(I_p) = p
+    $$
 
-출력:
+    로 $\operatorname{tr}(AB) = \operatorname{tr}(BA)$ 를 한 번 쓴 결과다. 따라서 $\sum_i h_{ii} = p$ 이고 평균은 $p/N$ 이다. (멱등행렬의 대각합이 계수와 같다는 일반 사실의 특수한 경우다.)
 
-```
-leverage: min = 0.0500, max = 0.0500
-```
+    범위는 멱등성에서 나온다. $H = H^2 = H^\top H$ 의 $(i,i)$ 성분을 쓰면
 
-![지렛값 대 스튜던트화 잔차](./img/influential_points_97.png)
+    $$
+    h_{ii} = \sum_{j=1}^{N} h_{ij}^2 = h_{ii}^2 + \sum_{j \ne i} h_{ij}^2 \ \ge\ h_{ii}^2
+    $$
+
+    이다. $h_{ii} \ge h_{ii}^2$ 는 $0 \le h_{ii} \le 1$ 과 같다. $\square$ (덤으로, $h_{ii} = 1$ 이면 $j \ne i$ 인 모든 $h_{ij}$ 가 $0$ 이어서 그 점의 잔차가 **항상 $0$**, 곧 모형이 그 점을 완벽히 지나간다는 뜻이다. 자기 집단에 혼자뿐인 관측이 그 경우다.)
+
+    **(2) 해석적으로.** 잔차 분석 쪽 보기 3에서 보았듯 일원배치의 $H$ 는 블록대각이고 집단 $i$ 의 블록이 $\frac{1}{n_i}J_{n_i}$ 이므로 $h_{ii} = 1/n_i$ 다. 집단 $i$ 에 그런 관측이 $n_i$ 개 있으므로 그 집단의 몫이 $n_i \cdot \frac{1}{n_i} = 1$ 이고
+
+    $$
+    \sum_{\text{모든 } i} h_{ii} = \underbrace{1 + 1 + \cdots + 1}_{k\text{ 개}} = k = p
+    $$
+
+    로 (1)과 맞는다. $\square$ **집단마다 정확히 지렛값 $1$ 어치씩을 나눠 갖는다**는 것이 일원배치의 지렛값 구조 전부다. 큰 집단은 그 $1$ 을 여럿이 나누고 작은 집단은 몇이서 나눈다.
+
+    **(3) 수치적으로.** 먼저 쪽의 그림이다.
+
+    ```python
+    # 지렛값은 설명변수 쪽에서 그 점이 얼마나 외따로 있는지를 잰다.
+    # 지렛값이 크고 잔차도 큰 점이 가장 위험하다. 그 둘을 곱해 놓은 것이
+    # 앞의 Cook 거리라고 보면 된다.
+    leverage = influence.hat_matrix_diag
+
+    plt.scatter(leverage, influence.resid_studentized_internal, alpha=0.6)
+    plt.xlabel("Leverage")
+    plt.ylabel("Studentized Residuals")
+    plt.title("Leverage vs. Studentized Residuals")
+    plt.axhline(y=0, color='r', linestyle='--')
+    plt.show()
+
+    print(f"leverage: min = {leverage.min():.4f}, max = {leverage.max():.4f}")
+    ```
+
+    출력:
+
+    ```
+    leverage: min = 0.0500, max = 0.0500
+    ```
+
+    ![지렛값 대 스튜던트화 잔차](./img/influential_points_97.png)
+
+    이제 (1)·(2)를 수로 확인하고, 설계를 불균형으로 바꿔 본다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.formula.api import ols
+
+    rng = np.random.default_rng(42)
+    n, k = 20, 3
+    response = np.concatenate([
+        rng.normal(10.0, 1.0, n), rng.normal(10.8, 1.3, n), rng.normal(12.0, 1.6, n)])
+    response[-1] = 20.0
+    data = pd.DataFrame({"group": np.repeat(["A", "B", "C"], n), "response": response})
+    h = ols("response ~ C(group)", data=data).fit().get_influence().hat_matrix_diag
+    N = len(h)
+
+    print(f"균형설계 n=(20,20,20)")
+    print(f"  서로 다른 h = {np.unique(np.round(h, 12))}")
+    print(f"  sum h = {h.sum():.10f}  (= p = {k})")
+    print(f"  mean h = {h.mean():.10f}  (= p/N = {k / N})")
+    print(f"  std h = {h.std(ddof=1):.3e}")
+
+    # 불균형 설계에서는 어떻게 되는가
+    ns = [5, 20, 35]
+    rg = np.random.default_rng(11)
+    y2 = np.concatenate([rg.normal(10.0, 1.0, ns[0]),
+                         rg.normal(10.8, 1.0, ns[1]),
+                         rg.normal(12.0, 1.0, ns[2])])
+    d2 = pd.DataFrame({"group": np.repeat(["A", "B", "C"], ns), "response": y2})
+    inf2 = ols("response ~ C(group)", data=d2).fit().get_influence()
+    h2, r2 = inf2.hat_matrix_diag, inf2.resid_studentized_internal
+    D2 = inf2.cooks_distance[0]
+
+    print(f"\n불균형설계 n=(5,20,35)")
+    print(f"{'집단':>5}{'n_i':>5}{'h_ii':>10}{'1/n_i':>10}{'n_i*h_ii':>10}")
+    for i, (g, m) in enumerate(zip("ABC", ns)):
+        hi = h2[np.array(d2["group"]) == g][0]
+        print(f"{g:>5}{m:>5}{hi:>10.6f}{1 / m:>10.6f}{m * hi:>10.6f}")
+    print(f"  sum h = {h2.sum():.10f}  (= p = {k})")
+    print(f"  같은 |r| = 2 라도 Cook 거리는 집단마다 다르다:")
+    for g, m in zip("ABC", ns):
+        hi = h2[np.array(d2["group"]) == g][0]
+        print(f"    집단 {g}: D = (2^2/3)*h/(1-h) = {(4 / k) * hi / (1 - hi):.6f}")
+    print(f"  문턱 4/N = {4 / len(h2):.6f}")
+    ```
+
+    출력:
+
+    ```
+    균형설계 n=(20,20,20)
+      서로 다른 h = [0.05]
+      sum h = 3.0000000000  (= p = 3)
+      mean h = 0.0500000000  (= p/N = 0.05)
+      std h = 2.099e-17
+
+    불균형설계 n=(5,20,35)
+       집단  n_i      h_ii     1/n_i  n_i*h_ii
+        A    5  0.200000  0.200000  1.000000
+        B   20  0.050000  0.050000  1.000000
+        C   35  0.028571  0.028571  1.000000
+      sum h = 3.0000000000  (= p = 3)
+      같은 |r| = 2 라도 Cook 거리는 집단마다 다르다:
+        집단 A: D = (2^2/3)*h/(1-h) = 0.333333
+        집단 B: D = (2^2/3)*h/(1-h) = 0.070175
+        집단 C: D = (2^2/3)*h/(1-h) = 0.039216
+      문턱 4/N = 0.066667
+    ```
+
+    **균형설계에서 $\sum h_{ii} = 3.0000000000$ 이 정확히 $p = 3$ 이고 평균이 $p/N = 0.05$ 다.** 표준편차가 $2 \times 10^{-17}$ 이므로 $60$ 개가 모두 같은 값이고, 그래서 그림이 세로선 하나가 된다.
+
+    **불균형설계의 표가 이 보기의 요점이다.** $h_{ii}$ 가 $0.2$, $0.05$, $0.0286$ 으로 갈리고 $1/n_i$ 와 정확히 같다. 집단마다 $n_i h_{ii} = 1$ 로 **지렛값 $1$ 어치씩** 가져가는 것도 확인된다. 합은 여전히 정확히 $3$ 이다.
+
+    그리고 마지막 세 줄이 결과를 말한다. **똑같이 $\lvert r\rvert = 2$ 인 점이라도**
+
+    | 집단 | $n_i$ | $h_{ii}$ | $D$ | $4/N = 0.0667$ 을 넘는가 |
+    |---|---|---|---|---|
+    | A | $5$ | $0.2000$ | $\mathbf{0.3333}$ | 넘는다 (다섯 배) |
+    | B | $20$ | $0.0500$ | $0.0702$ | 겨우 넘는다 |
+    | C | $35$ | $0.0286$ | $0.0392$ | 못 넘는다 |
+
+    로 Cook 거리가 **여덟 배 넘게** 벌어진다. 작은 집단의 관측은 자기 집단 평균을 혼자 많이 끌고 가므로 같은 표준화 잔차라도 영향이 크다. **여기서 비로소 Cook 거리가 표준화 잔차와 다른 말을 한다.**
+
+    거꾸로 균형설계에서는 그 차이가 사라진다. 이 쪽의 자료가 바로 그 경우이고, 본문이 "지렛값은 영향점을 가려내는 데 아무 역할도 하지 못한다"고 한 것이 정확하다. 그러므로 **이 쪽의 그림 두 장(Cook 막대와 지렛값 산점도)은 서로 다른 정보를 주지 않는다.** 그렇다고 지렛값을 보지 말라는 뜻은 아니다. 지렛값을 그려 보고 "세로선 하나"임을 확인하는 일 자체가 **"이 설계에서는 Cook 거리를 잔차로 읽어도 된다"는 허가**이기 때문이다. 그 확인 없이 균형설계의 Cook 거리를 "지렛값까지 고려한 종합 지표"로 소개하면 없는 정보를 있다고 말하는 것이 된다.
 
 지렛값이 60개 모두 정확히 0.05다. 균형 설계라 모든 집단의 크기가 $n_i = 20$이고 $h_{ii} = 1/20 = 0.05$이기 때문이다.
 
@@ -190,35 +544,183 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 완전한 영향 진단
+**보기 4.** <span class="diff easy" title="쉬움"></span> 완전한 영향 진단. `summary_frame` 의 네 열이 서로 어떤 관계인지 식으로 적을 수 있다.
+
+**(1)** 균형 일원배치에서
+
+$$
+\text{DFFITS}_i = t_i\sqrt{\frac{h_{ii}}{1-h_{ii}}} = \frac{t_i}{\sqrt{n-1}}
+$$
+
+임을 보이시오($t_i$ 는 외부 스튜던트화 잔차).
+
+**(2)** 문턱 $\lvert\text{DFFITS}_i\rvert > 2\sqrt{p/N}$ 이 $\lvert t_i\rvert > 2\sqrt{1 - p/N}$ 과 같음을 보이시오. 분산분석 진단 쪽에서 본 Cook 의 $4/N$ 문턱과 견주면?
+
+**(3)** 잔차 분석 쪽에서 본 $\sum_i r_i^2 = N$ 을 써서 **Cook 거리의 평균이 자료와 무관하게 정확히 $\dfrac{1}{N-k}$** 임을 보이시오.
+
+**(4)** 세 결과를 확인하고, `describe()` 표의 네 열을 읽으시오.
 
 </div>
 
-```python
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-model = ols('response ~ group', data=data).fit()
+    **(1) 해석적으로.** $h_{ii} = 1/n$ 이므로
 
-influence = model.get_influence()
-# summary_frame은 진단량을 한 표에 모아 준다.
-summary = influence.summary_frame()
-print(summary[['hat_diag', 'cooks_d', 'dffits', 'student_resid']].describe())
-```
+    $$
+    \sqrt{\frac{h_{ii}}{1-h_{ii}}} = \sqrt{\frac{1/n}{(n-1)/n}} = \frac{1}{\sqrt{n-1}}
+    $$
 
-출력:
+    이고 곧바로 $\text{DFFITS}_i = t_i/\sqrt{n-1}$ 이다. $\square$ $n = 20$ 이면 $\sqrt{19} = 4.358899$ 로 나누는 것이다.
 
-```
-           hat_diag    cooks_d     dffits  student_resid
-count  6.000000e+01  60.000000  60.000000      60.000000
-mean   5.000000e-02   0.017544   0.008298       0.036170
-std    5.411161e-17   0.065539   0.281456       1.226837
-min    5.000000e-02   0.000002  -0.481894      -2.100527
-25%    5.000000e-02   0.001276  -0.139287      -0.607140
-50%    5.000000e-02   0.005002  -0.015728      -0.068558
-75%    5.000000e-02   0.012359   0.097065       0.423097
-max    5.000000e-02   0.505775   1.736734       7.570250
-```
+    **DFFITS 가 Cook 거리와 다른 점이 둘이다.** 첫째, **부호가 있다.** 그 관측이 자기 적합값을 위로 끄는지 아래로 끄는지 알려 준다. 둘째, **외부** 스튜던트화 잔차를 쓴다. 그 관측을 뺀 적합에서 추정한 $\hat\sigma_{(i)}$ 로 나누므로, 보기 1에서 말한 "이상점이 자기를 재는 자를 늘이는" 순환이 끊긴다.
+
+    **(2) 해석적으로.** (1)에서 $\lvert\text{DFFITS}_i\rvert = \lvert t_i\rvert/\sqrt{n-1}$ 이므로
+
+    $$
+    \frac{\lvert t_i\rvert}{\sqrt{n-1}} > 2\sqrt{\frac{p}{N}}
+    \iff
+    \lvert t_i\rvert > 2\sqrt{\frac{p(n-1)}{N}}
+    $$
+
+    이다. $p = k$, $N = kn$ 이므로
+
+    $$
+    \frac{p(n-1)}{N} = \frac{k(n-1)}{kn} = \frac{n-1}{n} = 1 - \frac{1}{n},
+    \qquad
+    \frac{p}{N} = \frac{k}{kn} = \frac{1}{n}
+    $$
+
+    이고 둘을 합치면
+
+    $$
+    \lvert t_i\rvert > 2\sqrt{1 - \frac{p}{N}}
+    $$
+
+    다. $\square$ $N = 60$, $p = 3$ 에서 $2\sqrt{0.95} = 1.949359$ 다.
+
+    **분산분석 진단 쪽 보기 5에서 Cook 의 $D_i > 4/N$ 이 $\lvert r_i\rvert > 2\sqrt{1 - k/N} = 1.949359$ 와 같음을 보았다. 같은 수다.** 두 문턱은 **같은 경계를 서로 다른 잔차에 적용**한다. $\lvert r\rvert > 1$ 인 범위에서 $\lvert t\rvert > \lvert r\rvert$ 이므로 **DFFITS 쪽이 조금 더 많이 걸러 낸다.**
+
+    **(3) 해석적으로.** 보기 2에서 $D_i = r_i^2/(N-k)$ 였고, 잔차 분석 쪽에서 $\sum_i r_i^2 = N$ 이었으므로
+
+    $$
+    \bar D = \frac{1}{N}\sum_i D_i = \frac{1}{N}\cdot\frac{\sum_i r_i^2}{N-k} = \frac{1}{N}\cdot\frac{N}{N-k} = \frac{1}{N-k}
+    $$
+
+    다. $\square$ **자료가 무엇이든 균형 일원배치에서 Cook 거리의 평균은 $1/(N-k)$ 로 고정**된다. 이 자료에서는 $1/57 = 0.017544$ 다.
+
+    그러므로 `describe()` 의 `mean` 칸은 자료에 대해 아무것도 말해 주지 않는다. **쓸모 있는 것은 `mean` 이 아니라 `max` 와 분위수의 간격**이다.
+
+    **(4) 수치적으로.** 먼저 쪽의 요약표다.
+
+    ```python
+    import statsmodels.api as sm
+    from statsmodels.formula.api import ols
+
+    model = ols('response ~ group', data=data).fit()
+
+    influence = model.get_influence()
+    # summary_frame은 진단량을 한 표에 모아 준다.
+    summary = influence.summary_frame()
+    print(summary[['hat_diag', 'cooks_d', 'dffits', 'student_resid']].describe())
+    ```
+
+    출력:
+
+    ```
+               hat_diag    cooks_d     dffits  student_resid
+    count  6.000000e+01  60.000000  60.000000      60.000000
+    mean   5.000000e-02   0.017544   0.008298       0.036170
+    std    5.411161e-17   0.065539   0.281456       1.226837
+    min    5.000000e-02   0.000002  -0.481894      -2.100527
+    25%    5.000000e-02   0.001276  -0.139287      -0.607140
+    50%    5.000000e-02   0.005002  -0.015728      -0.068558
+    75%    5.000000e-02   0.012359   0.097065       0.423097
+    max    5.000000e-02   0.505775   1.736734       7.570250
+    ```
+
+    이제 (1)–(3)을 확인한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.formula.api import ols
+
+    rng = np.random.default_rng(42)
+    n, k = 20, 3
+    response = np.concatenate([
+        rng.normal(10.0, 1.0, n), rng.normal(10.8, 1.3, n), rng.normal(12.0, 1.6, n)])
+    response[-1] = 20.0
+    data = pd.DataFrame({"group": np.repeat(["A", "B", "C"], n), "response": response})
+    inf = ols("response ~ group", data=data).fit().get_influence()
+    sf = inf.summary_frame()
+    N = 3 * n
+    r, t = inf.resid_studentized_internal, inf.resid_studentized_external
+
+    print(f"sum r^2 = {(r ** 2).sum():.6f}  (= N = {N})")
+    print(f"cooks_d 의 평균 = {sf['cooks_d'].mean():.10f},  1/(N-k) = {1 / (N - k):.10f}")
+
+    print(f"\nDFFITS = t * sqrt(h/(1-h)) = t / sqrt(n-1) = t / {np.sqrt(n - 1):.6f}")
+    print(f"  최대 t = {t.max():.6f}  ->  {t.max() / np.sqrt(n - 1):.6f}")
+    print(f"  summary_frame 의 dffits 최대 = {sf['dffits'].max():.6f}")
+
+    thr_d = 2 * np.sqrt(k / N)
+    print(f"\nDFFITS 문턱 2*sqrt(p/N) = {thr_d:.6f}")
+    print(f"  |t| 로 옮기면 {thr_d * np.sqrt(n - 1):.6f} = 2*sqrt(1 - p/N)")
+    print(f"  걸린 관측 = {np.where(np.abs(sf['dffits'].values) > thr_d)[0]}")
+    print(f"  Cook 4/N 으로 걸린 관측 = {np.where(sf['cooks_d'].values > 4 / N)[0]}")
+
+    print(f"\nstudent_resid: 평균 {t.mean():.6f} (0 이 아니다), "
+          f"최대 {t.max():.4f}, 최소 {t.min():.4f}")
+    print(f"  가장 큰 것을 뺀 |t| 의 최대 = {np.sort(np.abs(t))[-2]:.4f}")
+    print(f"cooks_d: 3사분위 {sf['cooks_d'].quantile(0.75):.6f}, "
+          f"최대 {sf['cooks_d'].max():.6f}  ({sf['cooks_d'].max() / sf['cooks_d'].quantile(0.75):.1f} 배)")
+    ```
+
+    출력:
+
+    ```
+    sum r^2 = 60.000000  (= N = 60)
+    cooks_d 의 평균 = 0.0175438596,  1/(N-k) = 0.0175438596
+
+    DFFITS = t * sqrt(h/(1-h)) = t / sqrt(n-1) = t / 4.358899
+      최대 t = 7.570250  ->  1.736734
+      summary_frame 의 dffits 최대 = 1.736734
+
+    DFFITS 문턱 2*sqrt(p/N) = 0.447214
+      |t| 로 옮기면 1.949359 = 2*sqrt(1 - p/N)
+      걸린 관측 = [52 59]
+      Cook 4/N 으로 걸린 관측 = [52 59]
+
+    student_resid: 평균 0.036170 (0 이 아니다), 최대 7.5702, 최소 -2.1005
+      가장 큰 것을 뺀 |t| 의 최대 = 2.1005
+    cooks_d: 3사분위 0.012359, 최대 0.505775  (40.9 배)
+    ```
+
+    **세 결과가 모두 맞는다.** `cooks_d` 의 평균이 $0.0175438596$ 으로 $1/57$ 과 열째 자리까지 같고, DFFITS 의 최대가 $7.570250/4.358899 = 1.736734$ 로 표의 `max` 와 같으며, DFFITS 문턱이 $\lvert t\rvert > 1.949359$ 로 Cook 의 $4/N$ 문턱이 주는 수와 정확히 같다. 두 규칙이 이 자료에서는 같은 두 관측 $\{52, 59\}$ 를 걸러 낸다.
+
+    **표를 읽으면 이렇다.**
+
+    - **`hat_diag`:** 표준편차 $5.4\times10^{-17}$ 으로 $60$ 개가 모두 $0.05$ 다. 보기 3에서 본 대로다. **이 열은 이 설계에서 아무 정보도 담고 있지 않다.**
+    - **`cooks_d` 의 `mean`:** $0.017544$ 는 (3)에서 보았듯 **어떤 자료에서도 $1/57$ 로 나온다.** 자료를 읽은 값이 아니다.
+    - **`cooks_d` 의 `max` 와 `75%`:** $0.505775$ 와 $0.012359$ 로 **$40.9$ 배** 차이 난다. 이 간격이 "영향점이 하나 있다"를 말해 주는 실제 증거다.
+    - **`student_resid`:** 최대 $7.5702$, 그다음은 $2.1005$ 다. **둘째와 셋 배 넘게 벌어져 있다.** 그리고 `min` 이 $-2.1005$ 로 둘째로 큰 것과 같은 값이므로, 양쪽 꼬리를 통틀어 $\lvert t\rvert$ 가 $2.11$ 을 넘는 것은 그 하나뿐이다.
+    - **`student_resid` 의 `mean` 이 $0.036170$ 으로 $0$ 이 아니다.** 보통의 잔차는 합이 정확히 $0$ 인데, 외부 스튜던트화 잔차는 관측마다 **다른 $\hat\sigma_{(i)}$ 로 나누므로** 그 성질이 깨진다. 이상점의 $t$ 가 유난히 크게 나오는 것이 바로 그 때문이고, 따라서 **$t$ 들의 합이나 평균을 보는 일에는 뜻이 없다.**
+
+    **마지막으로 네 열의 관계를 정리하면 이렇다.** 균형 일원배치에서는
+
+    $$
+    e_i
+    \ \xrightarrow{\ \div\, \hat\sigma\sqrt{1-1/n}\ }\
+    r_i
+    \ \xrightarrow{\ r\sqrt{\frac{N-k-1}{N-k-r^2}}\ }\
+    t_i
+    \ \xrightarrow{\ \div\sqrt{n-1}\ }\
+    \text{DFFITS}_i,
+    \qquad
+    D_i = \frac{r_i^2}{N-k}
+    $$
+
+    로 **네 열이 모두 잔차 $e_i$ 하나의 단조변환**이다. 표가 네 가지를 재는 것처럼 보이지만 실제로 재는 것은 하나이고, 다른 것은 **눈금과 기준 분포**뿐이다. $t_i$ 만이 $t_{N-k-1}$ 분포를 가져 p-값을 붙일 수 있다는 점에서 질적으로 다르다. 이 관계가 깨지는 것은 지렛값이 관측마다 달라질 때, 곧 **불균형 설계나 연속형 설명변수가 있을 때**다.
 
 세 가지를 읽을 수 있다.
 

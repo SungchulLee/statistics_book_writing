@@ -127,28 +127,160 @@ Welch 분산분석이 유의한 차이를 찾으면, 등분산이나 동일 표�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Games-Howell 사후검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 합동을 버리면 늘 손해인가. 세 집단은 $n = (3,3,4)$, $s^2 = (1.00,\ 4.33,\ 6.67)$ 로 분산이 꽤 다르다.
+
+**(1)** Games-Howell 과 Tukey–Kramer 가 같은 쌍에 쓰는 표준오차
+
+$$
+\widehat{\operatorname{SE}}_{\text{GH}} = \sqrt{\frac{s_i^2}{n_i}+\frac{s_j^2}{n_j}},
+\qquad
+\widehat{\operatorname{SE}}_{\text{TK}} = \sqrt{MSW\left(\frac{1}{n_i}+\frac{1}{n_j}\right)}
+$$
+
+를 나란히 두고, **세 쌍 중 어느 쌍에서 Games-Howell 쪽이 더 작은지** 미리 짚으시오. 합동이 늘 유리한 것은 아님을 설명하시오.
+
+**(2)** 출력표의 `hedges` 열이
+
+$$
+g = J\cdot\frac{\bar y_i - \bar y_j}{s_p},
+\qquad
+J = 1 - \frac{3}{4(n_i+n_j-2)-1},
+\qquad
+s_p^2 = \frac{(n_i-1)s_i^2+(n_j-1)s_j^2}{n_i+n_j-2}
+$$
+
+임을 수치로 확인하고, 두 절차의 $p$-값을 견주시오.
 
 </div>
 
-```python
-# Games-Howell 사후검정. Tukey HSD와 달리 쌍마다 자유도를 따로 계산한다.
-post_hoc = pg.pairwise_gameshowell(dv="Values", between="Group", data=df)
-print(post_hoc.round(4).to_string(index=False))
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 합동 $MSW$ 는 세 집단의 분산을 자유도로 가중해 **하나의 수**로 만든다.
 
-```
-A B  mean_A  mean_B     diff     se        T     df   pval  hedges
-A B 13.0000 21.3333  -8.3333 1.3333  -6.2500 2.8764 0.0188 -4.0825
-A C 13.0000 32.0000 -19.0000 1.4142 -13.4350 4.0755 0.0004 -7.6277
-B C 21.3333 32.0000 -10.6667 1.7638  -6.0474 4.9154 0.0044 -3.7514
-```
+    $$
+    MSW = \frac{2(1.00) + 2(4.33) + 3(6.67)}{7} = 4.381
+    $$
 
-세 쌍이 모두 유의하다. `df` 열이 쌍마다 2.88, 4.08, 4.92로 다르다는 점이 Games-Howell의 특징이다. Tukey HSD라면 세 비교 모두 같은 자유도 $N - k = 7$을 썼을 것이다.
+    그러면 분산이 작은 집단은 **손해**를 보고 큰 집단은 **이득**을 본다. 자기 몫보다 큰(또는 작은) 분산을 배정받기 때문이다.
 
-`hedges` 열은 효과크기(Hedges의 $g$)다. $-4$에서 $-7.6$이라는 값은 통상적인 기준의 "큼"($0.8$)을 한참 넘는다. 집단 간 차이가 집단 내 산포보다 훨씬 크다는 뜻이며, 관측값이 10개뿐인데도 $p$가 이렇게 작은 이유이기도 하다.
+    - **A–B**: 두 집단의 분산이 $1.00$ 과 $4.33$ 으로 합동값 $4.381$ 보다 작거나 비슷하다. 합동은 이 쌍에 **너무 큰** 분산을 준다. 그러므로 $\widehat{\operatorname{SE}}_{\text{GH}} < \widehat{\operatorname{SE}}_{\text{TK}}$ 이고 **Games-Howell 쪽이 유리하다.**
+    - **A–C**: $1.00$ 과 $6.67$ 의 조합인데, 분산이 큰 C 가 $n = 4$ 로 크기도 커서 $s_C^2/n_C$ 가 덜 부담스럽다. 역시 Games-Howell 쪽이 조금 작다.
+    - **B–C**: $4.33$ 과 $6.67$ 로 둘 다 합동값보다 크다. 여기서는 합동이 **너무 작은** 분산을 주므로 $\widehat{\operatorname{SE}}_{\text{TK}} < \widehat{\operatorname{SE}}_{\text{GH}}$ 이고 **Tukey 쪽이 (부당하게) 유리하다.**
+
+    **그러므로 "합동하면 자유도를 벌어 늘 유리하다"는 말은 틀렸다.** 합동이 하는 일은 분산을 **재분배**하는 것이고, 등분산이 아니면 어떤 쌍은 득을 보고 어떤 쌍은 손해를 본다. Games-Howell 이 자유도를 잃는 대가로 얻는 것은 **쌍마다 올바른 분모**다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    # Games-Howell 사후검정. Tukey HSD와 달리 쌍마다 자유도를 따로 계산한다.
+    post_hoc = pg.pairwise_gameshowell(dv="Values", between="Group", data=df)
+    print(post_hoc.round(4).to_string(index=False))
+    ```
+
+    출력:
+
+    ```
+    A B  mean_A  mean_B     diff     se        T     df   pval  hedges
+    A B 13.0000 21.3333  -8.3333 1.3333  -6.2500 2.8764 0.0188 -4.0825
+    A C 13.0000 32.0000 -19.0000 1.4142 -13.4350 4.0755 0.0004 -7.6277
+    B C 21.3333 32.0000 -10.6667 1.7638  -6.0474 4.9154 0.0044 -3.7514
+    ```
+
+    세 쌍이 모두 유의하다. `df` 열이 쌍마다 2.88, 4.08, 4.92로 다르다는 점이 Games-Howell의 특징이다. Tukey HSD라면 세 비교 모두 같은 자유도 $N - k = 7$을 썼을 것이다.
+
+    `hedges` 열은 효과크기(Hedges의 $g$)다. 두 절차를 나란히 돌리고 `hedges` 열도 손으로 만들어 본다.
+
+    ```python
+    import numpy as np
+    from itertools import combinations
+
+    from scipy import stats
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+    g = df.groupby('Group')['Values'].agg(['mean', 'var', 'count'])
+    N, k = len(df), 3
+    MSW = ((g['count'] - 1) * g['var']).sum() / (N - k)
+    print(g.round(4))
+    print(f"합동 MSW = {MSW:.4f}  (자유도 {N - k})")
+
+    print(f"\n{'pair':<8}{'diff':>10}{'SE(GH)':>9}{'SE(TK)':>9}{'T(GH)':>9}{'T(TK)':>9}"
+          f"{'df(GH)':>9}{'p(GH)':>9}{'p(TK)':>9}")
+    for a, b in combinations('ABC', 2):
+        ma, va, na = g.loc[a]
+        mb, vb, nb = g.loc[b]
+        d = ma - mb
+        se_gh = np.sqrt(va / na + vb / nb)
+        se_tk = np.sqrt(MSW * (1 / na + 1 / nb))
+        nu = (va / na + vb / nb) ** 2 / ((va / na) ** 2 / (na - 1)
+                                         + (vb / nb) ** 2 / (nb - 1))
+        p_gh = stats.studentized_range.sf(np.sqrt(2) * abs(d / se_gh), k, nu)
+        p_tk = stats.studentized_range.sf(np.sqrt(2) * abs(d / se_tk), k, N - k)
+        print(f"{a + '-' + b:<8}{d:>10.4f}{se_gh:>9.4f}{se_tk:>9.4f}{d / se_gh:>9.4f}"
+              f"{d / se_tk:>9.4f}{nu:>9.4f}{p_gh:>9.4f}{p_tk:>9.4f}")
+
+    print("\nstatsmodels 의 Tukey-Kramer")
+    print(pairwise_tukeyhsd(df['Values'], df['Group'], alpha=0.05))
+
+    # hedges 열 재현
+    print(f"\n{'pair':<8}{'s_p':>9}{'d/s_p':>9}{'J':>9}{'hedges g':>10}")
+    for a, b in combinations('ABC', 2):
+        ma, va, na = g.loc[a]
+        mb, vb, nb = g.loc[b]
+        dfp = na + nb - 2
+        sp = np.sqrt(((na - 1) * va + (nb - 1) * vb) / dfp)
+        J = 1 - 3 / (4 * dfp - 1)
+        print(f"{a + '-' + b:<8}{sp:>9.4f}{(ma - mb) / sp:>9.4f}{J:>9.4f}"
+              f"{J * (ma - mb) / sp:>10.4f}")
+    ```
+
+    출력:
+
+    ```
+              mean     var  count
+    Group                        
+    A      13.0000  1.0000      3
+    B      21.3333  4.3333      3
+    C      32.0000  6.6667      4
+    합동 MSW = 4.3810  (자유도 7)
+
+    pair          diff   SE(GH)   SE(TK)    T(GH)    T(TK)   df(GH)    p(GH)    p(TK)
+    A-B        -8.3333   1.3333   1.7090  -6.2500  -4.8762   2.8764   0.0188   0.0044
+    A-C       -19.0000   1.4142   1.5986 -13.4350 -11.8853   4.0755   0.0004   0.0000
+    B-C       -10.6667   1.7638   1.5986  -6.0474  -6.6725   4.9154   0.0044   0.0007
+
+    statsmodels 의 Tukey-Kramer
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj  lower   upper  reject
+    ---------------------------------------------------
+         A      B   8.3333 0.0044 3.3003 13.3664   True
+         A      C     19.0    0.0 14.292  23.708   True
+         B      C  10.6667 0.0007 5.9587 15.3747   True
+    ---------------------------------------------------
+
+    pair          s_p    d/s_p        J  hedges g
+    A-B        1.6330  -5.1031   0.8000   -4.0825
+    A-C        2.0976  -9.0579   0.8421   -7.6277
+    B-C        2.3944  -4.4548   0.8421   -3.7514
+    ```
+
+    **(1)의 예측이 맞는다.** 표준오차를 견주면
+
+    | 쌍 | $\widehat{\operatorname{SE}}_{\text{GH}}$ | $\widehat{\operatorname{SE}}_{\text{TK}}$ | 어느 쪽이 작은가 |
+    |---|---|---|---|
+    | A–B | $1.3333$ | $1.7090$ | GH |
+    | A–C | $1.4142$ | $1.5986$ | GH |
+    | B–C | $1.7638$ | $1.5986$ | TK |
+
+    로 **B–C 에서만 방향이 뒤집힌다.** 분산이 작은 A 가 끼는 두 쌍에서는 합동이 분모를 부풀려 손해를 주고, 분산이 큰 둘끼리 견주는 B–C 에서는 합동이 분모를 깎아 (부당하게) 도와준다. 통계량도 그대로 따라가 A–B 에서 $|T|$ 가 $4.88 \to 6.25$ 로 커지고 B–C 에서는 $6.67 \to 6.05$ 로 작아진다.
+
+    **그런데 $p$-값의 순서는 그대로가 아니다.** A–B 에서 $|T|$ 가 더 큰데도 $p$ 는 $0.0044$ 에서 $0.0188$ 로 **커졌다.** 자유도가 $7$ 에서 $2.8764$ 로 깎였기 때문이다. $\nu$ 가 $3$ 아래로 내려가면 문턱이 가팔라진다는 것은 11.4절 Games-Howell 보기에서 본 그대로다. **Games-Howell 이 치르는 값은 자유도이고, 그 값이 올바른 분모가 주는 이득을 넘어설 수도 있다.**
+
+    그래도 결론은 세 쌍 모두에서 같다. 두 절차 다 세 쌍을 모두 유의하다고 판정한다. 효과가 워낙 커서($\lvert T\rvert \ge 6$) 어지간한 자유도 손실로는 뒤집히지 않는다.
+
+    **(2) `hedges` 열이 공식대로다.** A–B 에서 합동표준편차가 $s_p = 1.6330$, 표준화 차이가 $-5.1031$, 소표본 보정 $J = 1 - \frac{3}{4\cdot4-1} = 0.8$ 이므로 $g = -4.0825$ 로 표와 같다. 나머지 두 쌍도 $J = 0.8421$($df = 5$)로 맞는다.
+
+    $-3.75$ 에서 $-7.63$ 이라는 값은 통상적인 기준의 "큼"($0.8$)을 한참 넘는다. 집단 간 차이가 집단 내 산포보다 훨씬 크다는 뜻이며, 관측값이 10개뿐인데도 $p$ 가 이렇게 작은 이유이기도 하다. 다만 **$J$ 가 $0.8$ 까지 내려간다는 것은 보정 전 값이 $25\%$ 나 부풀려져 있었다는 뜻**이고, 자유도가 이렇게 작으면 효과크기 추정 자체의 불확실성도 크다는 점을 함께 기억해 두는 편이 좋다.
 
 ## 8. 장점
 

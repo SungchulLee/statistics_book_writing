@@ -131,85 +131,206 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> scipy로 하는 일원배치 분산분석
+**보기 1.** <span class="diff easy" title="쉬움"></span> $F$ 는 왜 1 근처인가. 집단 $i$ 의 관측값이 $y_{ij} = \mu_i + \varepsilon_{ij}$ 이고 $\varepsilon_{ij}$ 가 평균 $0$, 분산 $\sigma^2$ 으로 서로 독립이라 하자. $\bar\mu = \frac{1}{N}\sum_i n_i \mu_i$ 라 쓴다.
+
+**(1)** 두 평균제곱의 기댓값이
+
+$$
+E[MSW] = \sigma^2,
+\qquad
+E[MSB] = \sigma^2 + \frac{\sum_i n_i (\mu_i - \bar\mu)^2}{k-1}
+$$
+
+임을 보이시오. 이로부터 $H_0$ 이 참일 때 $F$ 가 왜 $1$ 근처에 놓이는지, 거짓일 때 왜 커지는지 설명하시오.
+
+**(2)** PlantGrowth 자료에 1–9단계를 그대로 밟아 $F$ 와 임계값과 판정을 내고 `f_oneway` 와 맞추시오. 그리고 **$H_0$ 아래에서 $E[MSB] = E[MSW]$ 인데도 $E[F] \ne 1$** 임을 모의실험으로 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from scipy import stats
-def load_data():
-    """
-    Load and preprocess plant growth data from the given URL.
-    Returns:
-        df (pd.DataFrame): The full DataFrame of plant growth data.
-        data (tuple): A tuple containing weights for each group ('ctrl', 'trt1', 'trt2').
-        df1 (int): Degrees of freedom between groups.
-        df2 (int): Degrees of freedom within groups.
-    """
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
-    df = pd.read_csv(url, usecols=[1, 2])
-    group_data = df.groupby('group')
-    data_ctrl = group_data.get_group('ctrl').weight
-    data_trt1 = group_data.get_group('trt1').weight
-    data_trt2 = group_data.get_group('trt2').weight
-    data = (data_ctrl, data_trt1, data_trt2)
-    total_samples = data_ctrl.shape[0] + data_trt1.shape[0] + data_trt2.shape[0]
-    num_groups = len(data)
-    df1 = num_groups - 1
-    df2 = total_samples - num_groups
-    return df, data, df1, df2
-def perform_anova(data_ctrl, data_trt1, data_trt2):
-    """
-    Perform one-way ANOVA on the given data.
-    Returns:
-        statistic (float): F-statistic of the ANOVA test.
-        p_value (float): P-value of the ANOVA test.
-    """
-    statistic, p_value = stats.f_oneway(data_ctrl, data_trt1, data_trt2)
-    print(f"\nANOVA Results:\nF-Statistic = {statistic:.4f}\nP-Value = {p_value:.4f}")
-    return statistic, p_value
-def plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value):
-    """
-    Plot boxplot of weights for each group and F-distribution with critical region.
-    """
-    fig, (ax_box, ax_pdf) = plt.subplots(1, 2, figsize=(12, 4))
-    ax_box.boxplot([data_ctrl, data_trt1, data_trt2], labels=['ctrl', 'trt1', 'trt2'])
-    ax_box.set_ylim(3, 7)
-    ax_box.set_xlabel('Group')
-    ax_box.set_ylabel('Weight')
-    x_vals = np.linspace(0, 6, 100)
-    pdf_vals = stats.f(df1, df2).pdf(x_vals)
-    ax_pdf.plot(x_vals, pdf_vals, label='F-distribution PDF')
-    ax_pdf.fill_between(x_vals[x_vals >= statistic], pdf_vals[x_vals >= statistic], color='red', alpha=0.3)
-    ax_pdf.spines[['top','right']].set_visible(False)
-    ax_pdf.spines[['bottom','left']].set_position("zero")
-    ax_pdf.set_title("F-distribution and Critical Region")
-    ax_pdf.legend()
-    ax_pdf.annotate(f'P-Value = {p_value:.2%}', xy=(5.0, 0.1), xytext=(5.0, 0.8),
-                    arrowprops=dict(color='k', width=0.2, headwidth=8), fontsize=12)
-    plt.tight_layout()
-    plt.show()
-# 자료 읽기 → 분산분석 → 그림 순으로 돌린다
-_, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
-statistic, p_value = perform_anova(data_ctrl, data_trt1, data_trt2)
-plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 정규성은 쓰지 않는다. 독립성과 등분산만 있으면 된다.
 
-```
+    **분모부터.** $SSW = \sum_i (n_i - 1) s_i^2$ 이고 $s_i^2$ 은 분산 $\sigma^2$ 의 비편향추정량이므로 $E[s_i^2] = \sigma^2$ 이다. 따라서
 
-ANOVA Results:
-F-Statistic = 4.8461
-P-Value = 0.0159
-```
+    $$
+    E[SSW] = \sum_i (n_i-1)\sigma^2 = (N-k)\sigma^2
+    \quad\Longrightarrow\quad
+    E[MSW] = \sigma^2
+    $$
 
-![상자그림과 F-분포](./img/f_test_132.png)
+    이다. **집단 평균이 무엇이든 상관없다.** 집단 안에서만 재므로 $\mu_i$ 들이 제각각이어도 $MSW$ 는 늘 $\sigma^2$ 을 겨눈다. 이것이 $MSW$ 가 "잡음의 자"로 쓰이는 까닭이다.
 
-왼쪽 상자그림에서 세 집단이 서로 겹치고, 오른쪽 F-분포에서 관측값 4.85 오른쪽의 붉은 넓이가 p-값 1.59%다.
+    **분자.** $\bar y_{i\cdot}$ 는 평균 $\mu_i$, 분산 $\sigma^2/n_i$ 이고 $\bar y_{\cdot\cdot} = \frac1N\sum_i n_i \bar y_{i\cdot}$ 는 평균 $\bar\mu$, 분산 $\sigma^2/N$ 이다. 또 집단이 독립이므로
+
+    $$
+    \operatorname{Cov}(\bar y_{i\cdot}, \bar y_{\cdot\cdot}) = \frac{n_i}{N}\operatorname{Var}(\bar y_{i\cdot}) = \frac{\sigma^2}{N}
+    $$
+
+    이다. 이제 $E[X^2] = \operatorname{Var}(X) + (E[X])^2$ 을 $X = \bar y_{i\cdot} - \bar y_{\cdot\cdot}$ 에 쓰면 $E[X] = \mu_i - \bar\mu$ 이고
+
+    $$
+    \operatorname{Var}(X) = \frac{\sigma^2}{n_i} - 2\cdot\frac{\sigma^2}{N} + \frac{\sigma^2}{N} = \frac{\sigma^2}{n_i} - \frac{\sigma^2}{N}
+    $$
+
+    이다. $n_i$ 를 곱해 더하면
+
+    $$
+    E[SSB] = \sum_i n_i\left(\frac{\sigma^2}{n_i} - \frac{\sigma^2}{N}\right) + \sum_i n_i(\mu_i-\bar\mu)^2
+    = (k-1)\sigma^2 + \sum_i n_i(\mu_i-\bar\mu)^2
+    $$
+
+    이고($\sum_i n_i = N$ 이므로 첫 합이 $k\sigma^2 - \sigma^2$ 이다) 자유도 $k-1$ 로 나누면 구하려던 식이 나온다.
+
+    **그러므로.** $H_0: \mu_1 = \cdots = \mu_k$ 가 참이면 둘째 항이 $0$ 이라 $E[MSB] = E[MSW] = \sigma^2$ 이다. 분자와 분모가 **같은 것**을 재므로 비는 $1$ 근처를 맴돈다. $H_0$ 이 거짓이면 분자에만 $\sum n_i(\mu_i-\bar\mu)^2/(k-1) > 0$ 이 더해지고 분모는 꿈쩍도 하지 않으므로 $F$ 가 위로 밀린다. **$F$-검정이 한쪽 꼬리만 보는 이유가 이것이다.** 대립가설이 $F$ 를 키우는 쪽으로만 작용한다.
+
+    **(2) 수치적으로.** 먼저 1–9단계를 밟는다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+    def load_data():
+        """
+        Load and preprocess plant growth data from the given URL.
+        Returns:
+            df (pd.DataFrame): The full DataFrame of plant growth data.
+            data (tuple): A tuple containing weights for each group ('ctrl', 'trt1', 'trt2').
+            df1 (int): Degrees of freedom between groups.
+            df2 (int): Degrees of freedom within groups.
+        """
+        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+        df = pd.read_csv(url, usecols=[1, 2])
+        group_data = df.groupby('group')
+        data_ctrl = group_data.get_group('ctrl').weight
+        data_trt1 = group_data.get_group('trt1').weight
+        data_trt2 = group_data.get_group('trt2').weight
+        data = (data_ctrl, data_trt1, data_trt2)
+        total_samples = data_ctrl.shape[0] + data_trt1.shape[0] + data_trt2.shape[0]
+        num_groups = len(data)
+        df1 = num_groups - 1
+        df2 = total_samples - num_groups
+        return df, data, df1, df2
+    def perform_anova(data_ctrl, data_trt1, data_trt2):
+        """
+        Perform one-way ANOVA on the given data.
+        Returns:
+            statistic (float): F-statistic of the ANOVA test.
+            p_value (float): P-value of the ANOVA test.
+        """
+        statistic, p_value = stats.f_oneway(data_ctrl, data_trt1, data_trt2)
+        print(f"\nANOVA Results:\nF-Statistic = {statistic:.4f}\nP-Value = {p_value:.4f}")
+        return statistic, p_value
+    def plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value):
+        """
+        Plot boxplot of weights for each group and F-distribution with critical region.
+        """
+        fig, (ax_box, ax_pdf) = plt.subplots(1, 2, figsize=(12, 4))
+        ax_box.boxplot([data_ctrl, data_trt1, data_trt2], labels=['ctrl', 'trt1', 'trt2'])
+        ax_box.set_ylim(3, 7)
+        ax_box.set_xlabel('Group')
+        ax_box.set_ylabel('Weight')
+        x_vals = np.linspace(0, 6, 100)
+        pdf_vals = stats.f(df1, df2).pdf(x_vals)
+        ax_pdf.plot(x_vals, pdf_vals, label='F-distribution PDF')
+        ax_pdf.fill_between(x_vals[x_vals >= statistic], pdf_vals[x_vals >= statistic], color='red', alpha=0.3)
+        ax_pdf.spines[['top','right']].set_visible(False)
+        ax_pdf.spines[['bottom','left']].set_position("zero")
+        ax_pdf.set_title("F-distribution and Critical Region")
+        ax_pdf.legend()
+        ax_pdf.annotate(f'P-Value = {p_value:.2%}', xy=(5.0, 0.1), xytext=(5.0, 0.8),
+                        arrowprops=dict(color='k', width=0.2, headwidth=8), fontsize=12)
+        plt.tight_layout()
+        plt.show()
+    # 자료 읽기 → 분산분석 → 그림 순으로 돌린다
+    _, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
+    statistic, p_value = perform_anova(data_ctrl, data_trt1, data_trt2)
+    plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
+    ```
+
+    출력:
+
+    ```
+
+    ANOVA Results:
+    F-Statistic = 4.8461
+    P-Value = 0.0159
+    ```
+
+    ![상자그림과 F-분포](./img/f_test_132.png)
+
+    왼쪽 상자그림에서 세 집단이 서로 겹치고, 오른쪽 F-분포에서 관측값 4.85 오른쪽의 붉은 넓이가 p-값 1.59%다.
+
+    이제 9단계를 손으로 밟고, (1)에서 유도한 두 기댓값을 모의실험으로 확인한다.
+
+    ```python
+    groups = [data_ctrl, data_trt1, data_trt2]
+    y = np.concatenate([g.values for g in groups])
+    n_i = np.array([len(g) for g in groups])
+    ybar_i = np.array([g.mean() for g in groups])
+    ybar = y.mean()
+
+    SST = ((y - ybar) ** 2).sum()
+    SSW = sum(((g.values - g.mean()) ** 2).sum() for g in groups)
+    SSB = (n_i * (ybar_i - ybar) ** 2).sum()
+    MSB, MSW = SSB / df1, SSW / df2
+    crit = stats.f(df1, df2).ppf(0.95)
+    print(f"SST = {SST:.5f} = SSW {SSW:.5f} + SSB {SSB:.5f}   (차이 {abs(SST - SSW - SSB):.1e})")
+    print(f"MSB = {MSB:.6f},  MSW = {MSW:.6f},  F = {MSB / MSW:.6f}")
+    print(f"임계값 F(0.05, 2, 27) = {crit:.4f}  ->  "
+          f"{'H0 기각' if MSB / MSW > crit else 'H0 기각 못 함'}")
+
+    # E[MSW] = sigma^2, E[MSB] = sigma^2 + sum n_i (mu_i - mubar)^2 / (k-1) 을
+    # 모의실험으로 확인한다. 평균이 서로 다른 세 집단(각 10개)을 쓴다.
+    sigma, mu = 0.6, np.array([5.0, 4.7, 5.5])
+    theory_MSW = sigma ** 2
+    theory_MSB = sigma ** 2 + (10 * (mu - mu.mean()) ** 2).sum() / df1
+    rng = np.random.default_rng(0)
+    Y = rng.normal(mu[None, :, None], sigma, size=(200_000, 3, 10))
+    gm = Y.mean(axis=2)
+    msw = ((Y - gm[:, :, None]) ** 2).sum(axis=(1, 2)) / df2
+    msb = (10 * (gm - gm.mean(axis=1, keepdims=True)) ** 2).sum(axis=1) / df1
+    print(f"\nE[MSW]  이론 {theory_MSW:.5f}   모의 {msw.mean():.5f}")
+    print(f"E[MSB]  이론 {theory_MSB:.5f}   모의 {msb.mean():.5f}")
+
+    # 귀무가설(세 평균이 모두 같음) 아래에서는 E[MSB] = E[MSW] = sigma^2 이지만
+    # E[F] 는 1 이 아니라 d2/(d2-2) 다. 비의 기댓값은 기댓값의 비가 아니다.
+    Y0 = rng.normal(5.0, sigma, size=(200_000, 3, 10))
+    gm0 = Y0.mean(axis=2)
+    msw0 = ((Y0 - gm0[:, :, None]) ** 2).sum(axis=(1, 2)) / df2
+    msb0 = (10 * (gm0 - gm0.mean(axis=1, keepdims=True)) ** 2).sum(axis=1) / df1
+    print(f"\nH0 아래  E[MSB] 모의 {msb0.mean():.5f}   E[MSW] 모의 {msw0.mean():.5f}")
+    print(f"         E[MSB]/E[MSW] = {msb0.mean() / msw0.mean():.4f}")
+    print(f"         E[F] 모의 {np.mean(msb0 / msw0):.4f}   이론 d2/(d2-2) = {df2 / (df2 - 2):.4f}")
+    ```
+
+    출력:
+
+    ```
+    SST = 14.25843 = SSW 10.49209 + SSB 3.76634   (차이 4.0e-15)
+    MSB = 1.883170,  MSW = 0.388596,  F = 4.846088
+    임계값 F(0.05, 2, 27) = 3.3541  ->  H0 기각
+
+    E[MSW]  이론 0.36000   모의 0.35980
+    E[MSB]  이론 1.99333   모의 1.99497
+
+    H0 아래  E[MSB] 모의 0.36119   E[MSW] 모의 0.35958
+             E[MSB]/E[MSW] = 1.0045
+             E[F] 모의 1.0847   이론 d2/(d2-2) = 1.0800
+    ```
+
+    **손계산이 `f_oneway` 와 맞는다.** $F = 4.846088$ 이고 $5\%$ 임계값 $3.3541$ 을 넘으므로 $H_0$ 을 기각한다. $p = 0.0159 < 0.05$ 라는 8단계의 판정과 같은 결론이다.
+
+    **(1)의 두 기댓값도 맞는다.** $\sigma = 0.6$, $\mu = (5.0,\ 4.7,\ 5.5)$ 로 두면 $\bar\mu = 5.0667$ 이고
+
+    $$
+    E[MSB] = 0.36 + \frac{10\left[(5.0-5.0667)^2 + (4.7-5.0667)^2 + (5.5-5.0667)^2\right]}{2} = 1.99333
+    $$
+
+    인데 모의값이 $1.99497$, $E[MSW]$ 는 이론 $0.36000$ 에 모의 $0.35980$ 으로 넷째 자리까지 맞는다. 남은 차이는 $20$만 번 반복의 몬테카를로 오차다.
+
+    **마지막 줄이 중요하다.** $H_0$ 이 참일 때 $E[MSB]$ 와 $E[MSW]$ 가 둘 다 $0.36$ 근처여서 **기댓값의 비는 $1.0045$ 로 $1$ 이다.** 그런데 **비의 기댓값** $E[F]$ 는 $1.0847$ 로 분명히 $1$ 보다 크고, 이론값 $\frac{d_2}{d_2-2} = \frac{27}{25} = 1.08$ 과 맞는다. 둘이 다른 것은 $1/x$ 이 볼록이라 $E[1/MSW] > 1/E[MSW]$ 이기 때문이다(옌센 부등식). 분모의 자유도가 작을수록 이 들뜸이 커지며, $d_2 \le 2$ 이면 $E[F]$ 가 아예 존재하지 않는다. **"$H_0$ 아래에서 $F$ 의 기댓값은 1"이라고 적으면 틀린다.**
 
 ### B. Statsmodels
 
@@ -565,89 +686,164 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 네 웹페이지의 체류시간
+**보기 3.** <span class="diff easy" title="쉬움"></span> 네 웹페이지의 체류시간. 네 페이지에 각각 $n = 5$ 명씩, 모두 $N = 20$ 개의 체류시간을 관측했다. 검정통계량은 집단평균 넷의 표본분산
+
+$$
+V = \frac{1}{k-1}\sum_{i=1}^{k}(\bar y_{i\cdot} - \bar y_{\cdot\cdot})^2
+$$
+
+이고, 이름표를 뒤섞어 만든 귀무분포와 견준다.
+
+**(1)** 순열분포의 **평균이 닫힌 꼴로 적힘**을 보이시오. 곧 묶은 $N$ 개 값의 표본분산을 $S^2 = \frac{SST}{N-1}$ 이라 할 때 균형 설계에서
+
+$$
+E_{\text{perm}}[V] = \frac{S^2}{n}
+$$
+
+이다. (힌트: 순열 아래에서 각 집단은 크기 $N$ 의 유한모집단에서 뽑은 크기 $n$ 의 비복원 단순임의표본이다.)
+
+**(2)** 모의실험의 순열분포 평균이 이 값을 재현하는지 확인하고, $p$-값을 읽으시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-# 웹페이지 네 개의 체류시간 자료
-four_sessions = pd.DataFrame({
-    'Time': [164, 178, 175, 155, 172, 182, 180, 179, 165, 166,
-             172, 161, 171, 173, 158, 161, 179, 159, 167, 162],
-    'Page': ['Page 1']*5 + ['Page 2']*5 + ['Page 3']*5 + ['Page 4']*5
-})
-# 관측된 집단평균들의 분산. 이 값이 클수록 집단 차이가 크다는 뜻이다.
-obs_variance = four_sessions.groupby('Page')['Time'].mean().var()
-print(f"Observed variance of means: {obs_variance:.2f}")
-# 순열검정: 집단 이름표를 뒤섞어 귀무분포를 만든다
-def perm_test_anova(df, group_col='Page', value_col='Time', n_perms=3000):
-    """
-    Permutation test for ANOVA using variance of group means.
-    Parameters:
-    -----------
-    df : DataFrame
-        Data with groups and values
-    group_col : str
-        Name of column with group labels
-    value_col : str
-        Name of column with values
-    n_perms : int
-        Number of permutations
-    Returns:
-    --------
-    p_value : float
-        Permutation test p-value
-    perm_vars : array
-        Permuted variances
-    """
-    groups = df[group_col].unique()
-    group_sizes = {g: (df[group_col] == g).sum() for g in groups}
-    obs_var = df.groupby(group_col)[value_col].mean().var()
-    perm_vars = np.zeros(n_perms)
-    for i in range(n_perms):
-        # 값을 뒤섞어 같은 크기의 집단으로 다시 나눈다
-        shuffled_values = np.random.permutation(df[value_col].values)
-        perm_df = df.copy()
-        perm_df[value_col] = shuffled_values
-        # 뒤섞은 자료에서 집단평균들의 분산을 구한다
-        perm_vars[i] = perm_df.groupby(group_col)[value_col].mean().var()
-    p_value = np.mean(perm_vars >= obs_var)
-    return p_value, perm_vars, obs_var
-# 순열검정 실행
-np.random.seed(42)
-p_val, perm_vars, obs_var = perm_test_anova(four_sessions)
-print(f"Permutation test p-value: {p_val:.4f}")
-print(f"Conclusion: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
-# 귀무분포에 관측값을 얹어 본다
-fig, ax = plt.subplots(figsize=(10, 6))
-ax.hist(perm_vars, bins=30, alpha=0.7, color='steelblue', edgecolor='black')
-ax.axvline(obs_var, color='red', linewidth=2, label=f'Observed = {obs_var:.2f}')
-ax.set_xlabel('Variance of Group Means')
-ax.set_ylabel('Frequency')
-ax.set_title(f'Permutation Distribution of Group Mean Variance (p={p_val:.3f})')
-ax.legend()
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-plt.tight_layout()
-plt.show()
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 순열은 $N$ 개의 값을 **그대로 둔 채 이름표만 바꾼다.** 그러므로 전체평균 $\bar y_{\cdot\cdot}$ 와 총제곱합 $SST$ 는 순열에 **불변**이다. 이것이 모든 계산의 출발점이다.
 
-```
-Observed variance of means: 14.92
-Permutation test p-value: 0.3673
-Conclusion: Fail to reject H0
-```
+    한 집단을 보면, 그 집단에 배정된 $n$ 개는 크기 $N$ 의 유한모집단에서 **비복원**으로 뽑은 단순임의표본이다. 유한모집단 표본평균의 분산 공식에서
 
-![순열분포](./img/f_test_504.png)
+    $$
+    \operatorname{Var}(\bar y_{i\cdot}) = \frac{S^2}{n}\left(1 - \frac{n}{N}\right),
+    \qquad
+    S^2 = \frac{1}{N-1}\sum_{i,j}(y_{ij}-\bar y_{\cdot\cdot})^2 = \frac{SST}{N-1}
+    $$
 
-빨간 선(관측 분산 14.92)이 순열분포의 한가운데쯤에 있다. 네 페이지의 체류시간 평균이 서로 다르다는 증거가 없다.
+    이고 $E[\bar y_{i\cdot}] = \bar y_{\cdot\cdot}$ 이므로 $E[(\bar y_{i\cdot} - \bar y_{\cdot\cdot})^2] = \operatorname{Var}(\bar y_{i\cdot})$ 다. 균형 설계이면 $N = nk$ 라 $1 - \frac{n}{N} = \frac{k-1}{k}$ 이므로
 
-여기서 순열이 하는 일을 다시 새겨 두자. 페이지 표시를 무작위로 뒤섞는 것은 "페이지가 아무 영향도 주지 않는" 세상을 만드는 일이고, 그 세상에서 평균들이 이만큼 흩어지는 일이 얼마나 흔한지를 세는 것이 p-값이다. $F$-분포도 정규성도 쓰지 않는다.
+    $$
+    E_{\text{perm}}[V]
+    = \frac{1}{k-1}\sum_{i=1}^{k}\frac{S^2}{n}\cdot\frac{k-1}{k}
+    = \frac{1}{k-1}\cdot k \cdot \frac{S^2}{n}\cdot\frac{k-1}{k}
+    = \frac{S^2}{n}
+    $$
+
+    이다. **깨끗이 떨어진다.** 유한모집단 보정 $\frac{k-1}{k}$ 가 자유도 $k-1$ 과 정확히 상쇄된다.
+
+    여기 $n$ 이 분모에 있는 것이 중요하다. 집단이 커질수록 집단평균이 덜 흔들리므로 귀무분포가 왼쪽으로 쪼그라든다. 관측값 $V_{\text{obs}}$ 는 그대로인데 비교 대상이 작아지므로 **같은 차이라도 $n$ 이 크면 유의해진다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    # 웹페이지 네 개의 체류시간 자료
+    four_sessions = pd.DataFrame({
+        'Time': [164, 178, 175, 155, 172, 182, 180, 179, 165, 166,
+                 172, 161, 171, 173, 158, 161, 179, 159, 167, 162],
+        'Page': ['Page 1']*5 + ['Page 2']*5 + ['Page 3']*5 + ['Page 4']*5
+    })
+    # 관측된 집단평균들의 분산. 이 값이 클수록 집단 차이가 크다는 뜻이다.
+    obs_variance = four_sessions.groupby('Page')['Time'].mean().var()
+    print(f"Observed variance of means: {obs_variance:.2f}")
+    # 순열검정: 집단 이름표를 뒤섞어 귀무분포를 만든다
+    def perm_test_anova(df, group_col='Page', value_col='Time', n_perms=3000):
+        """
+        Permutation test for ANOVA using variance of group means.
+        Parameters:
+        -----------
+        df : DataFrame
+            Data with groups and values
+        group_col : str
+            Name of column with group labels
+        value_col : str
+            Name of column with values
+        n_perms : int
+            Number of permutations
+        Returns:
+        --------
+        p_value : float
+            Permutation test p-value
+        perm_vars : array
+            Permuted variances
+        """
+        groups = df[group_col].unique()
+        group_sizes = {g: (df[group_col] == g).sum() for g in groups}
+        obs_var = df.groupby(group_col)[value_col].mean().var()
+        perm_vars = np.zeros(n_perms)
+        for i in range(n_perms):
+            # 값을 뒤섞어 같은 크기의 집단으로 다시 나눈다
+            shuffled_values = np.random.permutation(df[value_col].values)
+            perm_df = df.copy()
+            perm_df[value_col] = shuffled_values
+            # 뒤섞은 자료에서 집단평균들의 분산을 구한다
+            perm_vars[i] = perm_df.groupby(group_col)[value_col].mean().var()
+        p_value = np.mean(perm_vars >= obs_var)
+        return p_value, perm_vars, obs_var
+    # 순열검정 실행
+    np.random.seed(42)
+    p_val, perm_vars, obs_var = perm_test_anova(four_sessions)
+    print(f"Permutation test p-value: {p_val:.4f}")
+    print(f"Conclusion: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
+    # 귀무분포에 관측값을 얹어 본다
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.hist(perm_vars, bins=30, alpha=0.7, color='steelblue', edgecolor='black')
+    ax.axvline(obs_var, color='red', linewidth=2, label=f'Observed = {obs_var:.2f}')
+    ax.set_xlabel('Variance of Group Means')
+    ax.set_ylabel('Frequency')
+    ax.set_title(f'Permutation Distribution of Group Mean Variance (p={p_val:.3f})')
+    ax.legend()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Observed variance of means: 14.92
+    Permutation test p-value: 0.3673
+    Conclusion: Fail to reject H0
+    ```
+
+    ![순열분포](./img/f_test_504.png)
+
+    빨간 선(관측 분산 14.92)이 순열분포의 한가운데쯤에 있다. 네 페이지의 체류시간 평균이 서로 다르다는 증거가 없다.
+
+    (1)의 식이 맞는지 확인한다.
+
+    ```python
+    y = four_sessions['Time'].values
+    N, k, n = len(y), four_sessions['Page'].nunique(), 5
+    S2 = y.var(ddof=1)
+
+    theory_mean = S2 / n
+    mc_se = perm_vars.std(ddof=1) / np.sqrt(len(perm_vars))
+    print(f"묶은 20개 값의 표본분산 S^2 = {S2:.4f}")
+    print(f"순열분포 평균   이론 S^2/n = {theory_mean:.4f}")
+    print(f"                모의       = {perm_vars.mean():.4f}  (MC 표준오차 {mc_se:.4f})")
+    print(f"                z = {(perm_vars.mean() - theory_mean) / mc_se:+.2f}")
+    print(f"관측 분산 {obs_var:.4f} 는 순열평균보다 {obs_var - theory_mean:+.4f} 크다")
+    print(f"순열 p-값 = {p_val:.4f}")
+    ```
+
+    출력:
+
+    ```
+    묶은 20개 값의 표본분산 S^2 = 68.0500
+    순열분포 평균   이론 S^2/n = 13.6100
+                    모의       = 13.6739  (MC 표준오차 0.1802)
+                    z = +0.35
+    관측 분산 14.9167 는 순열평균보다 +1.3067 크다
+    순열 p-값 = 0.3673
+    ```
+
+    **이론값이 재현된다.** $S^2 = 68.05$ 이므로 $S^2/n = 13.61$ 이고, $3000$ 번의 순열이 준 평균은 $13.6739$ 다. 차이 $0.064$ 는 몬테카를로 표준오차 $0.1802$ 의 $0.35$ 배에 지나지 않으므로 어긋남이 아니다.
+
+    **판정.** 관측된 $V = 14.9167$ 은 귀무분포의 평균 $13.61$ 보다 겨우 $1.31$ 큰 값이다. 순열분포의 표준편차가 $9.87$ 인 것을 생각하면 $0.13$ 표준편차만큼 오른쪽에 있는 셈이고, $p = 0.3673$ 이 그 사실을 그대로 말해 준다. 네 페이지의 체류시간 평균이 다르다는 증거가 없다.
+
+    여기서 순열이 하는 일을 다시 새겨 두자. 페이지 표시를 무작위로 뒤섞는 것은 **"페이지가 아무 영향도 주지 않는" 세상을 만드는 일**이고, 그 세상에서 평균들이 이만큼 흩어지는 일이 얼마나 흔한지를 세는 것이 $p$-값이다. $F$-분포도 정규성도 쓰지 않는다. 그런데도 귀무분포의 **평균**만큼은 (1)처럼 손으로 적힌다는 것이 이 보기의 요점이다.
 
 ### 접근 2: F-통계량을 이용한 순열검정
 
@@ -674,53 +870,168 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 집단평균 분산을 통계량으로 쓴 순열검정
+**보기 4.** <span class="diff easy" title="쉬움"></span> 통계량을 $V$ 에서 $F$ 로 바꾸면 순열검정이 달라지는가. 보기 3의 $V$ 대신 $F = MSB/MSW$ 를 검정통계량으로 써 본다.
+
+**(1)** 순열은 $\bar y_{\cdot\cdot}$ 와 $SST$ 를 바꾸지 않음을 지적하고, 이로부터
+
+$$
+F = \frac{N-k}{k-1}\cdot\frac{SSB}{SST - SSB}
+$$
+
+가 $SSB$ 의 **순증가함수**임을 보이시오. 균형 설계에서 $SSB = n(k-1)V$ 이므로 $F$ 는 $V$ 의 순증가함수이기도 하다. 따라서 **같은 순열집합을 쓰면 두 순열 $p$-값이 정확히 같다**고 결론하시오.
+
+**(2)** 그렇다면 코드가 준 $0.3550$ 과 보기 3의 $0.3673$ 은 왜 다른가. 같은 순열을 두 통계량에 함께 먹여 (1)을 확인하고, 두 수의 차이를 몬테카를로 오차로 설명하시오.
 
 </div>
 
-```python
-from scipy import stats
-def perm_test_anova_f(df, group_col='Page', value_col='Time', n_perms=3000):
-    """
-    Permutation test for ANOVA using F-statistic.
-    """
-    groups = df[group_col].unique()
-    group_sizes = {g: (df[group_col] == g).sum() for g in groups}
-    # 관측된 F 값
-    model = smf.ols(f'{value_col} ~ C({group_col})', data=df).fit()
-    anova_table = sm.stats.anova_lm(model)
-    f_obs = anova_table['F'].iloc[0]
-    perm_f_stats = np.zeros(n_perms)
-    for i in range(n_perms):
-        # 값을 뒤섞는다
-        shuffled_values = np.random.permutation(df[value_col].values)
-        perm_df = df.copy()
-        perm_df[value_col] = shuffled_values
-        # 뒤섞은 자료의 F 값
-        perm_model = smf.ols(f'{value_col} ~ C({group_col})', data=perm_df).fit()
-        perm_anova = sm.stats.anova_lm(perm_model)
-        perm_f_stats[i] = perm_anova['F'].iloc[0]
-    p_value = np.mean(perm_f_stats >= f_obs)
-    return p_value, perm_f_stats, f_obs
-# F 를 통계량으로 쓴 순열검정
-import statsmodels.formula.api as smf
-import statsmodels.api as sm
-p_val_f, perm_f, obs_f = perm_test_anova_f(four_sessions)
-print(f"\nF-statistic based permutation test:")
-print(f"Observed F: {obs_f:.4f}")
-print(f"p-value: {p_val_f:.4f}")
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 순열은 $N$ 개의 값을 섞어 다시 나눌 뿐 값 자체를 바꾸지 않는다. 그러므로
 
-```
+    $$
+    \bar y_{\cdot\cdot} \text{ 와 } SST = \sum_{i,j}(y_{ij}-\bar y_{\cdot\cdot})^2
+    $$
 
-F-statistic based permutation test:
-Observed F: 1.1161
-p-value: 0.3550
-```
+    은 **어떤 순열에서도 같은 수**다. 한편 보기 1에서 본 항등식 $SST = SSB + SSW$ 가 늘 성립하므로 $SSW = SST - SSB$ 이고
 
-앞의 분산 기반 순열검정이 준 0.3673과 가깝다. 두 검정통계량이 다르지만 같은 정보를 다르게 요약할 뿐이기 때문이다. 실제로 집단 크기가 모두 같으면 집단평균의 분산과 $F$는 단조 관계라 순위가 같고, 순열 p-값도 모의실험 오차 범위에서 일치한다.
+    $$
+    F = \frac{SSB/(k-1)}{SSW/(N-k)} = \frac{N-k}{k-1}\cdot\frac{SSB}{SST-SSB}
+    $$
+
+    이다. **오른쪽에서 변하는 것은 $SSB$ 하나뿐이다.** $g(u) = \frac{u}{C-u}$ 는 $0 \le u < C$ 에서
+
+    $$
+    g'(u) = \frac{C}{(C-u)^2} > 0
+    $$
+
+    이므로 순증가한다. 따라서 $F$ 는 $SSB$ 의 순증가함수다. 균형 설계에서는 $\bar y_{\cdot\cdot}$ 가 집단평균들의 단순평균이므로
+
+    $$
+    SSB = n\sum_i (\bar y_{i\cdot} - \bar y_{\cdot\cdot})^2 = n(k-1)V
+    $$
+
+    이고, 양의 상수배이니 $F$ 는 $V$ 의 순증가함수이기도 하다.
+
+    순증가변환은 **순서를 보존한다.** 그러므로 임의의 순열 $b$ 에 대해
+
+    $$
+    \{F_b \ge F_{\text{obs}}\} = \{V_b \ge V_{\text{obs}}\}
+    $$
+
+    가 집합으로서 같고, 같은 순열집합에서 센 비율인 두 $p$-값은 **근사적으로가 아니라 정확히** 같다. 통계량을 바꾼 것이 아무 일도 하지 않은 셈이다.
+
+    **(2) 그렇다면 왜 수가 다른가.** 두 코드가 **서로 다른 순열을 뽑았기 때문이다.** 보기 3은 `np.random.seed(42)` 이후의 난수열에서 3000개를 뽑았고, 이 보기의 코드는 그 뒤를 이어 또 다른 3000개를 뽑았다. 통계량의 차이가 아니라 **표본의 차이**다. 아래에서 같은 순열을 함께 먹여 확인한다.
+
+    ```python
+    from scipy import stats
+    def perm_test_anova_f(df, group_col='Page', value_col='Time', n_perms=3000):
+        """
+        Permutation test for ANOVA using F-statistic.
+        """
+        groups = df[group_col].unique()
+        group_sizes = {g: (df[group_col] == g).sum() for g in groups}
+        # 관측된 F 값
+        model = smf.ols(f'{value_col} ~ C({group_col})', data=df).fit()
+        anova_table = sm.stats.anova_lm(model)
+        f_obs = anova_table['F'].iloc[0]
+        perm_f_stats = np.zeros(n_perms)
+        for i in range(n_perms):
+            # 값을 뒤섞는다
+            shuffled_values = np.random.permutation(df[value_col].values)
+            perm_df = df.copy()
+            perm_df[value_col] = shuffled_values
+            # 뒤섞은 자료의 F 값
+            perm_model = smf.ols(f'{value_col} ~ C({group_col})', data=perm_df).fit()
+            perm_anova = sm.stats.anova_lm(perm_model)
+            perm_f_stats[i] = perm_anova['F'].iloc[0]
+        p_value = np.mean(perm_f_stats >= f_obs)
+        return p_value, perm_f_stats, f_obs
+    # F 를 통계량으로 쓴 순열검정
+    import statsmodels.formula.api as smf
+    import statsmodels.api as sm
+    p_val_f, perm_f, obs_f = perm_test_anova_f(four_sessions)
+    print(f"\nF-statistic based permutation test:")
+    print(f"Observed F: {obs_f:.4f}")
+    print(f"p-value: {p_val_f:.4f}")
+    ```
+
+    출력:
+
+    ```
+
+    F-statistic based permutation test:
+    Observed F: 1.1161
+    p-value: 0.3550
+    ```
+
+    앞의 분산 기반 순열검정이 준 0.3673과 가깝다. 이제 **같은 순열**을 두 통계량에 함께 먹여 (1)을 확인한다.
+
+    ```python
+    # 같은 순열을 두 통계량에 함께 먹인다. 그래야 '통계량의 차이'만 남는다.
+    y = four_sessions['Time'].values
+    N, k, n = len(y), 4, 5
+    SST = ((y - y.mean()) ** 2).sum()
+    V_obs = four_sessions.groupby('Page')['Time'].mean().var()
+    SSB_obs = n * (k - 1) * V_obs
+    F_obs = (SSB_obs / (k - 1)) / ((SST - SSB_obs) / (N - k))
+    print(f"SST = {SST:.4f} (순열에 불변)")
+    print(f"관측  V = {V_obs:.6f}   SSB = {SSB_obs:.6f}   F = {F_obs:.6f}")
+
+    rng = np.random.default_rng(11)
+    B = 20000
+    V_perm = np.empty(B)
+    F_perm = np.empty(B)
+    for b in range(B):
+        gm = rng.permutation(y).reshape(k, n).mean(axis=1)
+        V_perm[b] = gm.var(ddof=1)
+        ssb = n * ((gm - y.mean()) ** 2).sum()
+        F_perm[b] = (ssb / (k - 1)) / ((SST - ssb) / (N - k))
+
+    print(f"\n같은 {B} 개 순열로 잰 p-값")
+    print(f"  V 기준: {np.mean(V_perm >= V_obs):.6f}")
+    print(f"  F 기준: {np.mean(F_perm >= F_obs):.6f}")
+
+    # 두 통계량의 순서가 뒤바뀐 쌍이 하나라도 있는가.
+    order = np.argsort(V_perm, kind='mergesort')
+    Vs, Fs = V_perm[order], F_perm[order]
+    gap = Vs[1:] - Vs[:-1]
+    down = Fs[:-1] > Fs[1:]
+    print(f"  V 가 뚜렷이 커지는데 F 는 작아진 쌍: {np.sum((gap > 1e-10) & down)} 개")
+    print(f"  동점(차이 1e-10 이하)인데 뒤바뀐 쌍: {np.sum((gap <= 1e-10) & down)} 개"
+          f"  (최대 차이 {gap[(gap <= 1e-10) & down].max():.1e})")
+
+    # F 를 V 로 직접 예측해 본다.
+    pred = (N - k) / (k - 1) * (n * (k - 1) * V_perm) / (SST - n * (k - 1) * V_perm)
+    print(f"  F 와 공식값의 최대 차이: {np.abs(pred - F_perm).max():.1e}")
+
+    print(f"\nB=3000, p≈0.36 에서 MC 표준오차 = {np.sqrt(0.36 * 0.64 / 3000):.4f}")
+    print(f"독립인 두 모의실험 차이의 표준오차 = {np.sqrt(2 * 0.36 * 0.64 / 3000):.4f}")
+    print(f"실제 차이 |0.3673 - 0.3550| = {abs(0.3673 - 0.3550):.4f}")
+    ```
+
+    출력:
+
+    ```
+    SST = 1292.9500 (순열에 불변)
+    관측  V = 14.916667   SSB = 223.750000   F = 1.116099
+
+    같은 20000 개 순열로 잰 p-값
+      V 기준: 0.368000
+      F 기준: 0.368000
+      V 가 뚜렷이 커지는데 F 는 작아진 쌍: 0 개
+      동점(차이 1e-10 이하)인데 뒤바뀐 쌍: 289 개  (최대 차이 3.6e-15)
+      F 와 공식값의 최대 차이: 1.1e-14
+
+    B=3000, p≈0.36 에서 MC 표준오차 = 0.0088
+    독립인 두 모의실험 차이의 표준오차 = 0.0124
+    실제 차이 |0.3673 - 0.3550| = 0.0123
+    ```
+
+    **(1)이 그대로 확인된다.** 같은 $20000$ 개 순열로 재면 두 $p$-값이 $0.368000$ 으로 **여섯 자리까지 같다.** 순서가 뒤집힌 쌍은 $V$ 가 뚜렷이 커지는 경우에는 **하나도 없고**, 뒤바뀐 $289$ 쌍은 모두 $V$ 의 차이가 $3.6\times10^{-15}$ 이하인 사실상 동점 쌍이다(배정밀도 반올림이다. 순열에는 집단평균이 완전히 같은 쌍이 많이 나온다). 공식 $F = \frac{N-k}{k-1}\cdot\frac{n(k-1)V}{SST - n(k-1)V}$ 로 예측한 값과 실제 $F$ 의 차이도 최대 $1.1\times10^{-14}$ 다.
+
+    **두 수의 차이는 몬테카를로 오차다.** $B = 3000$, $p \approx 0.36$ 에서 한 번의 모의실험이 갖는 표준오차는 $\sqrt{p(1-p)/B} = 0.0088$ 이고, 서로 다른 순열을 쓴 두 모의실험의 **차이**는 그 $\sqrt2$ 배인 $0.0124$ 의 표준오차를 갖는다. 실제 차이 $|0.3673 - 0.3550| = 0.0123$ 은 정확히 $1$ 표준오차다. 통계량을 바꾼 탓이 아니라 **난수 때문**임이 수치로 확인된다.
+
+    덧붙이면, 이 등가성은 **균형 설계**에서 $V$ 와 $SSB$ 가 상수배이기 때문에 성립한다. 집단 크기가 다르면 $SSB = \sum n_i(\bar y_{i\cdot}-\bar y_{\cdot\cdot})^2$ 이 가중합이라 가중하지 않은 $V$ 와 단조 관계가 깨지고, 두 검정은 **정말로 다른 검정**이 된다.
 
 ### 비교: 순열검정 대 모수적 분산분석
 
@@ -728,40 +1039,122 @@ p-value: 0.3550
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 순열검정과 모수적 분산분석의 비교
+**보기 5.** <span class="diff easy" title="쉬움"></span> 순열검정과 모수적 분산분석의 비교. 같은 자료에 두 검정을 돌리면 $p$-값이 각각 $0.3718$ 과 $0.3673$ 이 나온다.
+
+**(1)** 순열 $p$-값은 $B = 3000$ 번의 모의실험으로 **추정한** 값이다. 그 추정량의 몬테카를로 표준오차를 적고, 두 수의 차이 $0.0045$ 가 그 안에 드는지 판정하시오.
+
+**(2)** 가능한 배정의 수 $\binom{20}{5}\binom{15}{5}\binom{10}{5}$ 를 세어 **완전열거가 가능한지** 따지고, 두 방법이 각각 어떤 가정 아래 "정확한"지 구별하시오.
 
 </div>
 
-```python
-# 모수적 분산분석. 순열검정 결과와 견준다.
-f_stat, p_param = stats.f_oneway(
-    four_sessions[four_sessions.Page == 'Page 1']['Time'],
-    four_sessions[four_sessions.Page == 'Page 2']['Time'],
-    four_sessions[four_sessions.Page == 'Page 3']['Time'],
-    four_sessions[four_sessions.Page == 'Page 4']['Time']
-)
-print(f"\nParametric ANOVA:")
-print(f"F-statistic: {f_stat:.4f}")
-print(f"p-value: {p_param:.4f}")
-print(f"\nPermutation ANOVA (variance-based):")
-print(f"p-value: {p_val:.4f}")
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 순열 $p$-값은
 
-```
+    $$
+    \hat p = \frac{1}{B}\sum_{b=1}^{B}\mathbf 1\{V_b \ge V_{\text{obs}}\}
+    $$
 
-Parametric ANOVA:
-F-statistic: 1.1161
-p-value: 0.3718
+    로 베르누이 시행의 평균이다. 참값을 $p$ 라 하면 $B\hat p \sim \text{Binomial}(B, p)$ 이므로
 
-Permutation ANOVA (variance-based):
-p-value: 0.3673
-```
+    $$
+    \operatorname{SE}(\hat p) = \sqrt{\frac{p(1-p)}{B}}
+    \approx \sqrt{\frac{0.3673 \times 0.6327}{3000}} = 0.0088
+    $$
 
-모수적 분산분석의 0.3718과 순열검정의 0.3673이 거의 같다. 자료가 정규성에서 크게 벗어나지 않으면 두 방법이 같은 답을 준다는 뜻이다.
+    이다. 모수적 $p$-값과의 차이는 $|0.3718 - 0.3673| = 0.0045$ 로 **$0.51$ 표준오차**에 지나지 않는다. 두 값이 다르다고 말할 근거가 없다. 뒤집어 말하면, 순열 $p$-값의 $95\%$ 구간이 대략 $[0.350,\ 0.385]$ 이고 $0.3718$ 이 그 안에 넉넉히 들어온다.
 
-순열검정의 값어치는 이렇게 가정이 성립할 때가 아니라 깨질 때 드러난다. 그리고 여기처럼 두 방법이 일치하는 것을 확인하는 일 자체가 모수적 가정에 대한 하나의 점검이 된다.
+    여기서 교훈 하나. **순열 $p$-값을 소수 넷째 자리까지 적는 것은 과장이다.** $B = 3000$ 이면 믿을 수 있는 것은 둘째 자리까지다. $\pm 0.01$ 을 확보하려면 $B \approx 10^4$, $\pm 0.001$ 을 원하면 $B \approx 10^6$ 이 필요하다.
+
+    **(2) 완전열거는 불가능하다.** 네 집단에 다섯 개씩 배정하는 방법의 수는
+
+    $$
+    \binom{20}{5}\binom{15}{5}\binom{10}{5} = 15504 \times 3003 \times 252 = 11{,}732{,}745{,}024
+    $$
+
+    로 $117$ 억 가지다. 한 번에 $10\,\mu s$ 가 걸린다 해도 $32$ 시간이 넘는다. 그러므로 실무의 "순열검정"은 거의 언제나 **무작위 순열을 표본추출한** 몬테카를로 근사이고, (1)의 표준오차가 거기에 따라붙는다.
+
+    **"정확하다"가 뜻하는 바가 둘에서 다르다.**
+
+    | | 무엇이 가정인가 | 무엇이 정확한가 | 무엇이 오차인가 |
+    |---|---|---|---|
+    | 모수적 $F$-검정 | 정규성·등분산·독립 | 가정이 맞으면 $p$-값이 **정확**하다 | 가정이 틀린 만큼 틀린다 |
+    | 순열검정 | 교환가능성(=$H_0$) | 완전열거하면 $p$-값이 **정확**하다 | 표본추출로 인한 $\pm 0.0088$ |
+
+    두 오차의 성질이 다르다. 모수적 검정의 오차는 $B$ 를 키워도 줄지 않고, 순열검정의 오차는 $B$ 를 키우면 $1/\sqrt B$ 로 준다. 대신 순열검정은 **집단 간 분포가 완전히 같다**는 강한 귀무가설을 쓴다. 평균만 같고 분산이 다르면 교환가능성이 깨지므로, 이분산에서는 순열검정도 만능이 아니다(그 경우의 올바른 도구는 11.4절의 Welch 분산분석이다).
+
+    **(2) 수치적으로.**
+
+    ```python
+    # 모수적 분산분석. 순열검정 결과와 견준다.
+    f_stat, p_param = stats.f_oneway(
+        four_sessions[four_sessions.Page == 'Page 1']['Time'],
+        four_sessions[four_sessions.Page == 'Page 2']['Time'],
+        four_sessions[four_sessions.Page == 'Page 3']['Time'],
+        four_sessions[four_sessions.Page == 'Page 4']['Time']
+    )
+    print(f"\nParametric ANOVA:")
+    print(f"F-statistic: {f_stat:.4f}")
+    print(f"p-value: {p_param:.4f}")
+    print(f"\nPermutation ANOVA (variance-based):")
+    print(f"p-value: {p_val:.4f}")
+    ```
+
+    출력:
+
+    ```
+
+    Parametric ANOVA:
+    F-statistic: 1.1161
+    p-value: 0.3718
+
+    Permutation ANOVA (variance-based):
+    p-value: 0.3673
+    ```
+
+    (1)과 (2)의 계산을 붙여 본다.
+
+    ```python
+    import math
+
+    p_perm, B = p_val, 3000
+    se = math.sqrt(p_perm * (1 - p_perm) / B)
+    print(f"순열 p-값 = {p_perm:.4f},  MC 표준오차 = {se:.4f}")
+    print(f"95% 구간 = [{p_perm - 1.96 * se:.4f}, {p_perm + 1.96 * se:.4f}]")
+    print(f"모수적 p-값 {p_param:.4f} 와의 차이 = {abs(p_param - p_perm):.4f}"
+          f" = {abs(p_param - p_perm) / se:.2f} SE")
+
+    n_assign = math.comb(20, 5) * math.comb(15, 5) * math.comb(10, 5)
+    print(f"\n가능한 배정의 수 = {n_assign:,}")
+
+    # 가정이 성립하는지도 살펴 둔다.
+    resid = four_sessions.Time - four_sessions.groupby('Page').Time.transform('mean')
+    print(f"\n잔차의 Shapiro-Wilk: W = {stats.shapiro(resid).statistic:.4f}, "
+          f"p = {stats.shapiro(resid).pvalue:.4f}")
+    by_page = [four_sessions[four_sessions.Page == g].Time.values
+               for g in four_sessions.Page.unique()]
+    lev = stats.levene(*by_page)
+    print(f"Levene(중앙값 기준): W = {lev.statistic:.4f}, p = {lev.pvalue:.4f}")
+    ```
+
+    출력:
+
+    ```
+    순열 p-값 = 0.3673,  MC 표준오차 = 0.0088
+    95% 구간 = [0.3501, 0.3846]
+    모수적 p-값 0.3718 와의 차이 = 0.0045 = 0.51 SE
+
+    가능한 배정의 수 = 11,732,745,024
+
+    잔차의 Shapiro-Wilk: W = 0.9468, p = 0.3211
+    Levene(중앙값 기준): W = 0.0736, p = 0.9733
+    ```
+
+    **차이가 몬테카를로 오차 안에 든다.** $0.0045$ 는 표준오차 $0.0088$ 의 $0.51$ 배이고, 순열 $p$-값의 $95\%$ 구간 $[0.3501,\ 0.3846]$ 이 모수적 값 $0.3718$ 을 한가운데 가깝게 품는다. **두 방법이 다른 답을 주었다고 말할 수 없다.**
+
+    가정 점검도 두 방법의 일치를 거든다. 잔차의 Shapiro-Wilk 가 $p = 0.3211$ 로 정규성을 기각하지 않고, Levene 검정도 $p = 0.9733$ 으로 등분산을 전혀 의심하지 않는다. (`scipy.stats.levene` 의 `center` 기본값이 `'median'` 이므로 여기 돌아간 것은 엄밀히는 Brown–Forsythe 변형이다.) 모수적 $F$-검정이 서 있는 땅이 튼튼하다는 뜻이고, 그러니 순열검정이 같은 답을 주는 것이 자연스럽다.
+
+    순열검정의 값어치는 이렇게 **가정이 성립할 때가 아니라 깨질 때** 드러난다. 그리고 여기처럼 두 방법이 일치하는 것을 확인하는 일 자체가 모수적 가정에 대한 하나의 점검이 된다.
 
 ### 순열 분산분석의 장점
 

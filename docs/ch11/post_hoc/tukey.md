@@ -28,34 +28,128 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 일원배치 분산분석
+**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 일원배치 분산분석. 전역 $F$ 가 사실은 **쌍별 차이들의 평균**임을 보이면, 왜 사후비교가 필요한지가 분명해진다.
+
+**(1)** 균형설계($n_i = n$)에서
+
+$$
+\text{SSB} = n\sum_{i=1}^{k}(\bar y_i - \bar y)^2
+= \frac{n}{k}\sum_{i<j}(\bar y_i - \bar y_j)^2
+$$
+
+임을 보이시오.
+
+**(2)** 이 식에서 **전역 $F$ 가 유의해도 어느 쌍이 다른지는 알 수 없는 까닭**을 설명하시오.
+
+**(3)** PlantGrowth 자료에서 두 꼴이 같은 값을 주는지 확인하고, 세 쌍이 SSB 에 기여하는 몫을 구하시오.
 
 </div>
 
-```python
-import pandas as pd
-from statsmodels.formula.api import ols
-from statsmodels.stats.anova import anova_lm
+??? success "풀이"
 
-# R 의 PlantGrowth 자료. 대조군과 처리군 둘, 모두 세 집단이다.
-url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
-df = pd.read_csv(url, usecols=[1, 2])
+    **(1) 해석적으로.** 일반성을 잃지 않고 $\bar y = 0$ 이 되도록 평행이동하자(두 변 모두 차이에만 의존하므로 값이 바뀌지 않는다). 그러면 $\sum_i \bar y_i = 0$ 이고
 
-# 분산분석이 먼저다. 여기서 유의하지 않으면 사후비교로 넘어갈 까닭이 없다.
-model = ols('weight ~ C(group)', data=df).fit()
-anova_results = anova_lm(model)
-print("One-Way ANOVA Results:")
-print(anova_results)
-```
+    $$
+    \sum_{i<j}(\bar y_i - \bar y_j)^2
+    = \frac{1}{2}\sum_{i}\sum_{j}(\bar y_i - \bar y_j)^2
+    = \frac{1}{2}\sum_i\sum_j\left(\bar y_i^2 - 2\bar y_i \bar y_j + \bar y_j^2\right)
+    $$
 
-출력:
+    이다. 세 덩어리를 따로 세면 $\sum_i\sum_j \bar y_i^2 = k\sum_i \bar y_i^2$, $\sum_i\sum_j \bar y_j^2 = k\sum_j \bar y_j^2$, 그리고 교차항은 $-2\left(\sum_i \bar y_i\right)\left(\sum_j \bar y_j\right) = 0$ 이므로
 
-```
-One-Way ANOVA Results:
-            df    sum_sq   mean_sq         F   PR(>F)
-C(group)   2.0   3.76634  1.883170  4.846088  0.01591
-Residual  27.0  10.49209  0.388596       NaN      NaN
-```
+    $$
+    \sum_{i<j}(\bar y_i - \bar y_j)^2 = \frac{1}{2}\left(2k\sum_i \bar y_i^2\right) = k\sum_i \bar y_i^2 = k\sum_i (\bar y_i - \bar y)^2
+    $$
+
+    다. 양변에 $n/k$ 를 곱하면 구하는 식을 얻는다. $\square$
+
+    **(2) 해석적으로.** 이 항등식이 말하는 바는 분명하다. **SSB 는 $\binom{k}{2}$ 개 쌍별 제곱차의 합을 $k$ 로 나눈 것**이며, 어느 쌍이 얼마를 냈는지는 합산 과정에서 **지워진다.** 그러므로 같은 SSB 를 주는 자료가 여럿 있다.
+
+    - 한 쌍만 크게 다르고 나머지는 같은 경우
+    - 모든 쌍이 조금씩 다른 경우
+
+    두 경우가 같은 $F$ 를 줄 수 있다. 전역 검정이 "$\mu_1 = \cdots = \mu_k$ 가 거짓"까지만 말하고 멈추는 것은 통계량의 성질이 아니라 **가설의 성질**이다. 그 부정은 "적어도 한 쌍이 다르다"일 뿐이다. 어느 쌍인지 알려면 $\binom{k}{2}$ 개의 질문을 **따로** 물어야 하고, 그 순간 다중비교 문제가 생긴다. 이 쪽 전체가 그 문제를 다룬다.
+
+    **(3) 수치적으로.** 먼저 분산분석을 돌린다.
+
+    ```python
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    # R 의 PlantGrowth 자료. 대조군과 처리군 둘, 모두 세 집단이다.
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2])
+
+    # 분산분석이 먼저다. 여기서 유의하지 않으면 사후비교로 넘어갈 까닭이 없다.
+    model = ols('weight ~ C(group)', data=df).fit()
+    anova_results = anova_lm(model)
+    print("One-Way ANOVA Results:")
+    print(anova_results)
+    ```
+
+    출력:
+
+    ```
+    One-Way ANOVA Results:
+                df    sum_sq   mean_sq         F   PR(>F)
+    C(group)   2.0   3.76634  1.883170  4.846088  0.01591
+    Residual  27.0  10.49209  0.388596       NaN      NaN
+    ```
+
+    이제 두 꼴을 직접 맞춰 본다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2])
+    n, k = 10, 3
+
+    g = df.groupby('group').weight
+    m, s = g.mean().values, g.std().values
+    print(f"집단평균 = {np.round(m, 4)},  집단표준편차 = {np.round(s, 6)}")
+    print(f"전체평균 = {df.weight.mean():.6f}")
+
+    SSB_dev = n * ((m - m.mean()) ** 2).sum()
+    SSB_pair = (n / k) * sum((m[i] - m[j]) ** 2 for i in range(k) for j in range(i + 1, k))
+    MSE = (s ** 2).mean()
+    print(f"\nSSB (편차 꼴) = {SSB_dev:.6f}")
+    print(f"SSB (쌍  꼴) = {SSB_pair:.6f}")
+    print(f"MSE = 집단분산의 평균 = {MSE:.6f}")
+    print(f"F = (SSB/{k - 1})/MSE = {(SSB_dev / (k - 1)) / MSE:.6f}")
+
+    print(f"\n쌍별 제곱차가 SSB 에 기여하는 몫")
+    labels = ['ctrl', 'trt1', 'trt2']
+    for i in range(k):
+        for j in range(i + 1, k):
+            d2 = (m[i] - m[j]) ** 2
+            print(f"  {labels[i]}-{labels[j]}: (차)^2 = {d2:.6f},  몫 = {(n / k) * d2 / SSB_dev:.1%}")
+    ```
+
+    출력:
+
+    ```
+    집단평균 = [5.032 4.661 5.526],  집단표준편차 = [0.583091 0.793676 0.442573]
+    전체평균 = 5.073000
+
+    SSB (편차 꼴) = 3.766340
+    SSB (쌍  꼴) = 3.766340
+    MSE = 집단분산의 평균 = 0.388596
+    F = (SSB/2)/MSE = 4.846088
+
+    쌍별 제곱차가 SSB 에 기여하는 몫
+      ctrl-trt1: (차)^2 = 0.137641,  몫 = 12.2%
+      ctrl-trt2: (차)^2 = 0.244036,  몫 = 21.6%
+      trt1-trt2: (차)^2 = 0.748225,  몫 = 66.2%
+    ```
+
+    **두 꼴이 소수점 여섯째 자리까지 $3.766340$ 으로 같고**, 이것이 `anova_lm` 의 `sum_sq` 와도 같다. MSE $= 0.388596$ 도 집단분산 셋의 단순평균으로 나오고 $F = 4.846088$ 이 표와 일치한다. 집단별 요약 여섯 개만으로 분산분석표가 재구성된다.
+
+    **쌍별 몫이 (2)의 요점을 수로 보여 준다.** `trt1`–`trt2` 가 $66.2\%$ 를 내고 나머지 둘이 $12.2\%$ 와 $21.6\%$ 를 낸다. 곧 $F = 4.85$ 라는 한 숫자의 **삼분의 이가 한 쌍에서 온 것**인데, 분산분석표의 어느 칸에도 그 사실이 적혀 있지 않다. 보기 2의 Tukey HSD 가 이 분해를 검정의 꼴로 다시 적는 일을 한다.
+
+    덧붙여, 몫이 셋으로 고르게 나뉘었다면 어땠을지 생각해 보라. 평균이 등간격 $\mu, \mu+\delta, \mu+2\delta$ 이면 제곱차가 $\delta^2, \delta^2, 4\delta^2$ 로 양끝 쌍이 혼자 $2/3$ 를 낸다. **$k$ 개 집단이 일렬로 늘어서 있을 때 전역 $F$ 는 사실상 양끝 두 집단의 차이에 끌려간다.** 이것도 전역 검정이 답해 주지 않는 것 중 하나다.
 
 전역 검정이 $p = 0.0159$로 기각한다. 이제 어느 쌍이 다른지 찾을 차례다.
 
@@ -65,32 +159,148 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — Tukey HSD
+**보기 2.** <span class="diff easy" title="쉬움"></span> 2단계 — Tukey HSD. 출력의 네 열을 전부 손으로 만들어 본다.
+
+균형설계의 Tukey 임계차는
+
+$$
+\text{HSD} = q_{\alpha,\,k,\,N-k}\sqrt{\frac{\text{MSE}}{n}}
+$$
+
+이고 $q$ 는 스튜던트화 범위분포의 분위수다.
+
+**(1)** 쌍별 차이의 표준오차가 $\text{SE} = \sqrt{\text{MSE}\left(\frac1n+\frac1n\right)}$ 임을 쓰고,
+
+$$
+\text{HSD} = \frac{q_{\alpha,k,N-k}}{\sqrt2}\,\text{SE}
+$$
+
+임을 보이시오. 곧 $\lvert \bar y_i - \bar y_j\rvert > \text{HSD}$ 와 $\lvert t_{ij}\rvert > q/\sqrt2$ 가 같은 조건이다.
+
+**(2)** 조정 p-값이 $\Pr\!\left(Q_{k,\nu} > \sqrt2\,\lvert t_{ij}\rvert\right)$ 로 주어짐을 쓰고, 신뢰구간이 $(\bar y_j - \bar y_i) \pm \text{HSD}$ 임을 밝히시오. **구간의 폭이 세 쌍에서 모두 같은** 까닭은?
+
+**(3)** 이 자료에서 HSD, 세 쌍의 $t$, 조정 p-값, 구간을 모두 계산해 `pairwise_tukeyhsd` 의 출력과 맞추시오.
 
 </div>
 
-```python
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+??? success "풀이"
 
-# 분산분석은 "어딘가 다르다"까지만 말한다. 어느 쌍이 다른지는 사후비교의 몫이다.
-tukey_result = pairwise_tukeyhsd(endog=df['weight'], groups=df['group'], alpha=0.05)
-print("Tukey's HSD Test Results:")
-print(tukey_result)
-```
+    **(1) 해석적으로.** 두 집단평균의 차는 독립이므로
 
-출력:
+    $$
+    \operatorname{Var}(\bar Y_i - \bar Y_j) = \frac{\sigma^2}{n} + \frac{\sigma^2}{n} = \frac{2\sigma^2}{n}
+    $$
 
-```
-Tukey's HSD Test Results:
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-===================================================
-group1 group2 meandiff p-adj   lower  upper  reject
----------------------------------------------------
-  ctrl   trt1   -0.371 0.3909 -1.0622 0.3202  False
-  ctrl   trt2    0.494  0.198 -0.1972 1.1852  False
-  trt1   trt2    0.865  0.012  0.1738 1.5562   True
----------------------------------------------------
-```
+    이고 $\sigma^2$ 을 합동 MSE 로 바꾸면 $\text{SE} = \sqrt{2\,\text{MSE}/n}$ 이다. 따라서
+
+    $$
+    \frac{q}{\sqrt2}\,\text{SE} = \frac{q}{\sqrt2}\sqrt{\frac{2\,\text{MSE}}{n}} = q\sqrt{\frac{\text{MSE}}{n}} = \text{HSD}
+    $$
+
+    다. $\square$ 그러므로 $\lvert \bar y_i - \bar y_j\rvert > \text{HSD}$ 는 $\left\lvert \dfrac{\bar y_i - \bar y_j}{\text{SE}}\right\rvert > \dfrac{q}{\sqrt2}$ 와 같다.
+
+    $\sqrt2$ 가 들어오는 자리를 분명히 해 두자. 스튜던트화 범위 $Q_{k,\nu}$ 는 **표준오차가 $\sqrt{\text{MSE}/n}$ 인 척도**(평균 하나의 표준오차)로 정의된 **최대 차이**의 분포인데, 우리가 쓰는 $t$ 는 **차이의 표준오차** $\sqrt{2\text{MSE}/n}$ 로 나눈 양이다. 두 척도가 $\sqrt2$ 만큼 다르다.
+
+    **(2) 해석적으로.** $H_0$ 가 모두 참이면 $\max_{i<j}\dfrac{\lvert\bar Y_i - \bar Y_j\rvert}{\sqrt{\text{MSE}/n}}$ 가 정확히 $Q_{k,\nu}$ 를 따른다. 관측된 쌍 $(i,j)$ 를 같은 척도로 옮기면
+
+    $$
+    \frac{\lvert \bar y_i - \bar y_j\rvert}{\sqrt{\text{MSE}/n}} = \sqrt2\,\lvert t_{ij}\rvert
+    $$
+
+    이므로, **"최댓값이 이만큼 커질 확률"**로 읽은 조정 p-값이
+
+    $$
+    p^{\text{adj}}_{ij} = \Pr\!\left(Q_{k,\nu} > \sqrt2\,\lvert t_{ij}\rvert\right)
+    $$
+
+    다. 이것은 "이 쌍 하나가 이만큼 벌어질 확률"이 아니라 **"$\binom{k}{2}$ 개 중 가장 큰 것이 이만큼 벌어질 확률"**이며, 그래서 그대로 $\alpha$ 와 견주면 가족단위 오류율이 통제된다.
+
+    구간은 같은 부등식을 뒤집어 얻는다. $\lvert(\bar y_j - \bar y_i) - (\mu_j - \mu_i)\rvert \le \text{HSD}$ 가 동시에 성립할 확률이 $1-\alpha$ 이므로
+
+    $$
+    (\bar y_j - \bar y_i) \pm \text{HSD}
+    $$
+
+    가 **동시신뢰구간**이다. 폭이 세 쌍에서 모두 같은 까닭은 (1)의 $\text{SE}$ 가 **$n$ 과 MSE 에만 의존**하기 때문이다. 균형설계에서는 어느 쌍이든 $n_i = n_j = n$ 이므로 SE 가 같고, 따라서 임계차 하나가 모든 쌍에 공통으로 쓰인다. **"하나의 임계차"는 Tukey 의 설계가 아니라 균형설계의 결과**이며, 불균형이면 쌍마다 SE 가 달라져 Tukey–Kramer 로 확장해야 한다.
+
+    **(3) 수치적으로.** 먼저 쪽의 출력이다.
+
+    ```python
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+    # 분산분석은 "어딘가 다르다"까지만 말한다. 어느 쌍이 다른지는 사후비교의 몫이다.
+    tukey_result = pairwise_tukeyhsd(endog=df['weight'], groups=df['group'], alpha=0.05)
+    print("Tukey's HSD Test Results:")
+    print(tukey_result)
+    ```
+
+    출력:
+
+    ```
+    Tukey's HSD Test Results:
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj   lower  upper  reject
+    ---------------------------------------------------
+      ctrl   trt1   -0.371 0.3909 -1.0622 0.3202  False
+      ctrl   trt2    0.494  0.198 -0.1972 1.1852  False
+      trt1   trt2    0.865  0.012  0.1738 1.5562   True
+    ---------------------------------------------------
+    ```
+
+    이제 같은 표를 공식으로 만든다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2])
+    n, k, nu = 10, 3, 27
+
+    g = df.groupby('group').weight
+    m, s = g.mean().values, g.std().values
+    MSE = (s ** 2).mean()
+    SE = np.sqrt(MSE * (1 / n + 1 / n))
+
+    q = stats.studentized_range.ppf(0.95, k, nu)
+    HSD = q * np.sqrt(MSE / n)
+    print(f"MSE = {MSE:.6f},  SE = sqrt(MSE*(1/n+1/n)) = {SE:.6f}")
+    print(f"q(0.95, k=3, nu=27) = {q:.6f}")
+    print(f"HSD = q*sqrt(MSE/n) = {HSD:.6f}   (= q/sqrt(2) * SE = {q / np.sqrt(2) * SE:.6f})")
+
+    print(f"\n{'쌍':>12}{'차이':>9}{'|차이|>HSD':>11}{'t':>9}{'p-adj':>9}{'하한':>9}{'상한':>9}")
+    labels = ['ctrl', 'trt1', 'trt2']
+    for i in range(k):
+        for j in range(i + 1, k):
+            d = m[j] - m[i]
+            t = d / SE
+            p = stats.studentized_range.sf(abs(t) * np.sqrt(2), k, nu)
+            print(f"{labels[i] + '-' + labels[j]:>12}{d:>9.4f}{str(abs(d) > HSD):>11}"
+                  f"{t:>9.4f}{p:>9.4f}{d - HSD:>9.4f}{d + HSD:>9.4f}")
+    ```
+
+    출력:
+
+    ```
+    MSE = 0.388596,  SE = sqrt(MSE*(1/n+1/n)) = 0.278782
+    q(0.95, k=3, nu=27) = 3.506426
+    HSD = q*sqrt(MSE/n) = 0.691216   (= q/sqrt(2) * SE = 0.691216)
+
+               쌍       차이   |차이|>HSD        t    p-adj       하한       상한
+       ctrl-trt1  -0.3710      False  -1.3308   0.3909  -1.0622   0.3202
+       ctrl-trt2   0.4940      False   1.7720   0.1980  -0.1972   1.1852
+       trt1-trt2   0.8650       True   3.1028   0.0120   0.1738   1.5562
+    ```
+
+    **`meandiff`, `p-adj`, `lower`, `upper`, `reject` 다섯 열이 모두 `pairwise_tukeyhsd` 의 출력과 소수점 넷째 자리까지 같다.** (1)과 (2)의 유도가 맞는다. HSD 를 두 방식으로 계산한 $0.691216$ 도 서로 같다.
+
+    **읽을 것 셋.**
+
+    - **임계차는 $\text{HSD} = 0.6912$ 하나뿐이다.** 세 쌍의 차이 $-0.371$, $0.494$, $0.865$ 중 절댓값이 이를 넘는 것은 마지막 하나다. 신뢰구간이 $0$ 을 품느냐는 질문과 **정확히 같은 질문**이며, 실제로 셋째 줄만 $(0.1738,\ 1.5562)$ 로 $0$ 을 비껴간다.
+    - **$t$ 로 보면 문턱이 $q/\sqrt2 = 2.4794$ 다.** 보정하지 않은 $t_{0.975,27} = 2.0518$ 보다 높다. 그 차이가 "세 번 본다"는 사실의 값이다. `ctrl`–`trt2` 의 $t = 1.772$ 는 어느 문턱도 넘지 못하지만, 만약 $t$ 가 $2.2$ 였다면 보정 없이는 유의하고 Tukey 로는 아니었을 것이다.
+    - **`ctrl`–`trt2` 가 $p^{\text{adj}} = 0.198$ 로 아깝지 않게 밀린다.** 보기 1에서 이 쌍이 SSB 의 $21.6\%$ 를 냈는데도 그렇다. 전역 $F$ 가 $p = 0.016$ 으로 기각한 것과 사후비교에서 한 쌍만 살아남는 것 사이에 모순은 없다. **전역 검정은 세 쌍의 증거를 합쳐 쓰고 사후비교는 쌍마다 따로 쓰면서 문턱까지 올린다.** 전역이 기각했는데 어느 쌍도 유의하지 않는 일도 얼마든지 생긴다.
 
 세 비교 중 trt1 대 trt2 하나만 유의하다. `p-adj` 열은 이미 다중비교 보정을 마친 값이므로 그대로 0.05와 비교하면 된다.
 
@@ -106,47 +316,193 @@ group1 group2 meandiff p-adj   lower  upper  reject
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 본페로니 보정과의 비교
+**보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 본페로니 보정과의 비교. 보수성의 크기를 수로 잰다.
+
+**(1)** $m$ 개 비교를 각각 수준 $\alpha$ 로 하고 그들이 **독립**이면 가족단위 오류율이 $1-(1-\alpha)^m$ 임을 보이고, 합집합 한계가 주는 $m\alpha$ 와 견주시오. 집단이 $k$ 개면 $m = \binom{k}{2}$ 이므로 $k = 4$ 에서 그 값은 얼마인가.
+
+**(2)** 세 방법이 $\lvert t\rvert$ 척도에서 쓰는 문턱이
+
+$$
+\underbrace{t_{1-\alpha/2,\,\nu}}_{\text{보정 없음}}
+\ <\
+\underbrace{\frac{q_{\alpha,k,\nu}}{\sqrt2}}_{\text{투키}}
+\ <\
+\underbrace{t_{1-\alpha/(2m),\,\nu}}_{\text{본페로니}}
+$$
+
+임을 이 자료($k=3$, $\nu=27$)에서 확인하고, **가운데 부등호가 성립하는 까닭**을 밝히시오.
+
+**(3)** 쪽의 코드는 쌍마다 **두 집단의 자료만으로** $t$-검정을 한다. 합동 MSE 를 쓰는 쪽과 어떻게 다른지 자유도와 p-값으로 보이시오.
 
 </div>
 
-```python
-from statsmodels.stats.multitest import multipletests
-from itertools import combinations
-from scipy.stats import ttest_ind
+??? success "풀이"
 
-# 같은 일을 본페로니로 해 본다. 쌍마다 t-검정을 하고 p-값에 비교 횟수를 곱한다.
-groups = df['group'].unique()
+    **(1) 해석적으로.** 비교 $i$ 에서 거짓 기각이 일어나는 사건을 $A_i$ 라 하면 $\Pr(A_i) = \alpha$ 다. 독립이면
 
-# 쌍 세 개를 모두 돌며 보정 전 p-값을 모은다.
-p_values = []
-comparisons = []
+    $$
+    \text{FWER} = \Pr\left(\bigcup_i A_i\right) = 1 - \Pr\left(\bigcap_i A_i^c\right) = 1 - (1-\alpha)^m
+    $$
 
-for group1, group2 in combinations(groups, 2):
-    data1 = df[df['group'] == group1]['weight']
-    data2 = df[df['group'] == group2]['weight']
-    stat, p_val = ttest_ind(data1, data2)
-    p_values.append(p_val)
-    comparisons.append(f"{group1} vs {group2}")
+    이다. 한편 합집합 한계는 독립을 가정하지 않고
 
-# 본페로니는 Tukey 보다 보수적이다. 분산분석의 구조를 쓰지 않고
-# 검정 수만으로 문턱을 낮추기 때문이다.
-_, p_values_corrected, _, _ = multipletests(p_values, alpha=0.05, method='bonferroni')
+    $$
+    \Pr\left(\bigcup_i A_i\right) \le \sum_i \Pr(A_i) = m\alpha
+    $$
 
-# 보정 전과 뒤를 나란히 찍어 무엇이 달라지는지 본다.
-print("Bonferroni-Corrected Pairwise Comparisons:")
-for comparison, p_val, p_val_corr in zip(comparisons, p_values, p_values_corrected):
-    print(f"{comparison}: p-value = {p_val:.4f}, Bonferroni-corrected p-value = {p_val_corr:.4f}")
-```
+    를 준다. 본페로니는 이 한계를 $\alpha$ 로 묶으려고 각 비교의 수준을 $\alpha/m$ 으로 낮춘다. 두 값은 $m\alpha$ 가 작을 때 가깝지만($1-(1-\alpha)^m \approx m\alpha - \binom{m}{2}\alpha^2$) $m$ 이 커지면 벌어진다.
 
-출력:
+    $k$ 개 집단의 쌍 수는 $m = \binom{k}{2} = \frac{k(k-1)}{2}$ 다. $k = 4$ 면 $m = 6$ 이고
 
-```
-Bonferroni-Corrected Pairwise Comparisons:
-ctrl vs trt1: p-value = 0.2490, Bonferroni-corrected p-value = 0.7471
-ctrl vs trt2: p-value = 0.0469, Bonferroni-corrected p-value = 0.1406
-trt1 vs trt2: p-value = 0.0075, Bonferroni-corrected p-value = 0.0226
-```
+    $$
+    1 - 0.95^6 = 0.2649
+    $$
+
+    다. **집단 넷을 보정 없이 쌍별로 비교하면 적어도 하나를 거짓 기각할 확률이 $26\%$** 다. 약속한 $5\%$ 의 다섯 배가 넘는다.
+
+    **(2) 해석적으로.** 왼쪽 부등호는 쉽다. 보정 없는 문턱은 $m = 1$ 일 때의 값이므로 $m > 1$ 인 어떤 보정보다 낮다.
+
+    가운데 부등호가 이 보기의 요점이다. 세 쌍별 통계량 $t_{12}, t_{13}, t_{23}$ 은 **독립이 아니다.** 같은 집단평균을 나눠 쓰기 때문이다. 실제로 $\bar y_1 - \bar y_2$ 와 $\bar y_1 - \bar y_3$ 은 $\bar y_1$ 을 공유하므로 공분산이 $\sigma^2/n > 0$ 이고, 균형설계에서 상관계수가 $\tfrac12$ 다. 게다가 셋은 $t_{12} + t_{23} = t_{13}$ 이라는 **선형제약**까지 만족하므로 자유도가 둘뿐이다.
+
+    본페로니의 합집합 한계는 이 구조를 전혀 쓰지 않고 **최악의 경우**(사건들이 서로 겹치지 않는 경우)에 맞춘다. 반면 $q_{\alpha,k,\nu}$ 는 바로 그 종속 구조 아래의 **최댓값의 정확한 분포**에서 나온 분위수다. 겹침이 있으면 합집합의 확률이 합보다 작으므로, 정확한 분위수는 합집합 한계가 요구하는 문턱보다 **낮다.** 그래서
+
+    $$
+    \frac{q_{\alpha,k,\nu}}{\sqrt2} < t_{1-\alpha/(2m),\,\nu}
+    $$
+
+    이다. **같은 $\alpha$ 를 약속하면서 문턱이 낮다는 것은 검정력이 높다는 뜻이고, 그것이 Tukey 를 쓰는 이유 전부다.**
+
+    **수치적으로.** 먼저 쪽의 본페로니 계산이다.
+
+    ```python
+    from statsmodels.stats.multitest import multipletests
+    from itertools import combinations
+    from scipy.stats import ttest_ind
+
+    # 같은 일을 본페로니로 해 본다. 쌍마다 t-검정을 하고 p-값에 비교 횟수를 곱한다.
+    groups = df['group'].unique()
+
+    # 쌍 세 개를 모두 돌며 보정 전 p-값을 모은다.
+    p_values = []
+    comparisons = []
+
+    for group1, group2 in combinations(groups, 2):
+        data1 = df[df['group'] == group1]['weight']
+        data2 = df[df['group'] == group2]['weight']
+        stat, p_val = ttest_ind(data1, data2)
+        p_values.append(p_val)
+        comparisons.append(f"{group1} vs {group2}")
+
+    # 본페로니는 Tukey 보다 보수적이다. 분산분석의 구조를 쓰지 않고
+    # 검정 수만으로 문턱을 낮추기 때문이다.
+    _, p_values_corrected, _, _ = multipletests(p_values, alpha=0.05, method='bonferroni')
+
+    # 보정 전과 뒤를 나란히 찍어 무엇이 달라지는지 본다.
+    print("Bonferroni-Corrected Pairwise Comparisons:")
+    for comparison, p_val, p_val_corr in zip(comparisons, p_values, p_values_corrected):
+        print(f"{comparison}: p-value = {p_val:.4f}, Bonferroni-corrected p-value = {p_val_corr:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Bonferroni-Corrected Pairwise Comparisons:
+    ctrl vs trt1: p-value = 0.2490, Bonferroni-corrected p-value = 0.7471
+    ctrl vs trt2: p-value = 0.0469, Bonferroni-corrected p-value = 0.1406
+    trt1 vs trt2: p-value = 0.0075, Bonferroni-corrected p-value = 0.0226
+    ```
+
+    이제 (1)의 표와 (2)의 세 문턱을 계산하고, 두 종류의 $t$-검정을 나란히 둔다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2])
+    n, k, nu = 10, 3, 27
+
+    print(f"{'k':>4}{'쌍 수 m':>9}{'1-(1-a)^m':>12}{'합집합 한계 ma':>14}")
+    for kk in range(2, 7):
+        mm = kk * (kk - 1) // 2
+        print(f"{kk:>4}{mm:>9}{1 - 0.95 ** mm:>12.4f}{min(1, 0.05 * mm):>14.4f}")
+
+    print(f"\n세 문턱 (|t| 척도, nu = {nu})")
+    print(f"  보정 없음  t(0.975, 27)        = {stats.t.ppf(0.975, nu):.4f}")
+    print(f"  투키       q(0.95,3,27)/sqrt2  = {stats.studentized_range.ppf(0.95, k, nu) / np.sqrt(2):.4f}")
+    print(f"  본페로니   t(1-0.05/6, 27)     = {stats.t.ppf(1 - 0.05 / (2 * 3), nu):.4f}")
+
+    g = df.groupby('group').weight
+    m, s = g.mean().values, g.std().values
+    MSE = (s ** 2).mean()
+    SE = np.sqrt(2 * MSE / n)
+    labels = ['ctrl', 'trt1', 'trt2']
+    print(f"\n같은 합동 MSE(자유도 27)로 세 방법의 p-값을 나란히")
+    print(f"{'쌍':>12}{'|t|':>8}{'보정없음':>10}{'투키':>9}{'본페로니':>10}")
+    for i in range(k):
+        for j in range(i + 1, k):
+            t = abs(m[j] - m[i]) / SE
+            p_raw = 2 * stats.t.sf(t, nu)
+            p_tuk = stats.studentized_range.sf(t * np.sqrt(2), k, nu)
+            print(f"{labels[i] + '-' + labels[j]:>12}{t:>8.4f}{p_raw:>10.4f}"
+                  f"{p_tuk:>9.4f}{min(1, 3 * p_raw):>10.4f}")
+
+    print(f"\n쪽의 코드가 쓴 두 집단만의 t-검정 (자유도 18)")
+    for i in range(k):
+        for j in range(i + 1, k):
+            a = df[df.group == labels[i]].weight
+            b = df[df.group == labels[j]].weight
+            _, p = stats.ttest_ind(a, b)
+            print(f"{labels[i] + '-' + labels[j]:>12}  p = {p:.4f},  x3 = {min(1, 3 * p):.4f}")
+    ```
+
+    출력:
+
+    ```
+       k    쌍 수 m   1-(1-a)^m     합집합 한계 ma
+       2        1      0.0500        0.0500
+       3        3      0.1426        0.1500
+       4        6      0.2649        0.3000
+       5       10      0.4013        0.5000
+       6       15      0.5367        0.7500
+
+    세 문턱 (|t| 척도, nu = 27)
+      보정 없음  t(0.975, 27)        = 2.0518
+      투키       q(0.95,3,27)/sqrt2  = 2.4794
+      본페로니   t(1-0.05/6, 27)     = 2.5525
+
+    같은 합동 MSE(자유도 27)로 세 방법의 p-값을 나란히
+               쌍     |t|      보정없음       투키      본페로니
+       ctrl-trt1  1.3308    0.1944   0.3909    0.5832
+       ctrl-trt2  1.7720    0.0877   0.1980    0.2630
+       trt1-trt2  3.1028    0.0045   0.0120    0.0134
+
+    쪽의 코드가 쓴 두 집단만의 t-검정 (자유도 18)
+       ctrl-trt1  p = 0.2490,  x3 = 0.7471
+       ctrl-trt2  p = 0.0469,  x3 = 0.1406
+       trt1-trt2  p = 0.0075,  x3 = 0.0226
+    ```
+
+    **(1)의 표.** $k = 4$ 에서 $1 - 0.95^6 = 0.2649$ 로 예고한 값이 나온다. 합집합 한계 $m\alpha = 0.30$ 은 그보다 조금 크다. $k = 6$ 이면 참값 $0.5367$ 에 한계가 $0.75$ 로 벌어지고, $m \ge 20$ 이면 한계가 $1$ 을 넘어 아무 정보도 주지 못한다. **$m$ 이 클수록 본페로니가 버리는 양이 많아진다.**
+
+    (이 표의 $1-(1-\alpha)^m$ 은 **독립을 가정한** 값이다. 쌍별 비교는 실제로 양의 상관을 가지므로 참 FWER 은 이보다 조금 작다. 쪽의 그림에서 $k = 3$ 의 실제 값이 $0.119$ 로 표의 $0.1426$ 보다 작은 것이 그 까닭이다.)
+
+    **(2)의 세 문턱.** $2.0518 < 2.4794 < 2.5525$ 로 예고한 순서가 맞는다. 투키가 본페로니보다 $0.073$ 낮다. $k = 3$ 에서는 간격이 작지만, 보기 7에서 $k = 6$ 일 때 같은 비교를 다시 한다.
+
+    **(3) 두 종류의 $t$-검정.** 쪽의 코드가 쓴 두 집단만의 $t$-검정은 자유도가 $18$ 이고, 합동 MSE 를 쓰면 $27$ 이다. 그 차이가 p-값을 눈에 띄게 바꾼다.
+
+    | 쌍 | 두 집단만 (df $18$) | 합동 MSE (df $27$) |
+    |---|---|---|
+    | ctrl–trt1 | $0.2490$ | $0.1944$ |
+    | ctrl–trt2 | $\mathbf{0.0469}$ | $\mathbf{0.0877}$ |
+    | trt1–trt2 | $0.0075$ | $0.0045$ |
+
+    **방향이 쌍마다 다르다.** `ctrl`–`trt2` 는 두 집단만 보면 $0.0469$ 로 아슬아슬하게 유의한데 합동 MSE 로는 $0.0877$ 로 밀린다. 두 집단($s = 0.583$, $0.443$)이 모두 흩어짐이 작은 쪽이라 둘만의 합동분산이 전체 MSE 보다 작기 때문이다. 반대로 `trt1`–`trt2` 는 `trt1` 의 $s = 0.794$ 가 커서 둘만 보면 분모가 커지고, 전체 MSE 를 쓰면 작아진다.
+
+    **그러므로 "본페로니가 투키보다 보수적"이라는 비교를 쪽의 두 출력($0.0226$ 대 $0.012$)으로 하면 안 된다.** 거기에는 보정 방식의 차이와 **분산 추정 방식의 차이**가 섞여 있다. 같은 합동 MSE 위에서 비교하면 $0.0134$ 대 $0.0120$ 으로, 차이가 훨씬 작다. 이것이 투키가 본페로니를 이기는 **순수한 폭**이며, 쪽 아래 그림이 적은 수와 같다.
+
+    합동 MSE 를 쓰는 쪽이 옳은 까닭도 분명히 해 두자. 등분산을 가정한 모형에서는 **세 집단 전부가 같은 $\sigma^2$ 의 정보를 담고 있으므로**, 두 집단만 쓰는 것은 자유도 $9$ 어치를 버리는 일이다. 등분산이 의심스럽다면 합동할 것이 아니라 Games–Howell 로 가야 한다.
 
 Tukey와 결론은 같지만 보정 p-값이 다르다. trt1 대 trt2가 Tukey에서 0.012, Bonferroni에서 0.0226이다. Bonferroni가 더 보수적이기 때문이며, 비교 수가 늘수록 차이가 벌어진다.
 
@@ -174,112 +530,234 @@ Scheffé 검정은 쌍별이 아닌 비교나 대비를 검정하는 데 적합�
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> scipy의 tukey_hsd 로 신뢰구간까지
+**보기 4.** <span class="diff easy" title="쉬움"></span> `scipy`의 `tukey_hsd`로 신뢰구간까지. 신뢰수준을 $95\%$ 에서 $99\%$ 로 올리면 결론이 바뀐다.
+
+**(1)** 신뢰수준 $1-\alpha$ 의 동시신뢰구간이
+
+$$
+(\bar y_j - \bar y_i) \pm q_{\alpha,k,N-k}\sqrt{\frac{\text{MSE}}{n}}
+$$
+
+임을 쓰고, $\alpha = 0.01$ 에서 반폭을 구하시오.
+
+**(2)** 구간이 $0$ 을 품지 않는 것과 $p^{\text{adj}} < \alpha$ 가 **같은 사건**임을 밝히고, 이 자료에서 $\alpha = 0.05$ 와 $\alpha = 0.01$ 에 대해 확인하시오. $99\%$ 에서 `trt1`–`trt2` 는 어떻게 되는가.
+
+**(3)** 출력의 `(0 - 1)` 과 `(1 - 0)` 이 왜 부호만 다른 같은 비교인지 밝히시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats as stats
-import pandas as pd
+??? success "풀이"
 
-def load_data():
-    """PlantGrowth 자료를 읽어 집단별로 나누고 자유도까지 함께 돌려준다."""
+    **(1) 해석적으로.** 보기 2의 (2)에서 이미 얻었다. $H_0$ 아래에서
+
+    $$
+    \Pr\left(\max_{i<j}\frac{\lvert(\bar Y_i - \bar Y_j) - (\mu_i-\mu_j)\rvert}{\sqrt{\text{MSE}/n}} \le q_{\alpha,k,\nu}\right) = 1-\alpha
+    $$
+
+    이므로 모든 쌍에 대해 **동시에**
+
+    $$
+    \lvert(\bar y_j - \bar y_i) - (\mu_j - \mu_i)\rvert \le q_{\alpha,k,\nu}\sqrt{\frac{\text{MSE}}{n}}
+    $$
+
+    가 성립할 확률이 $1-\alpha$ 다. 이를 $\mu_j-\mu_i$ 에 대해 풀면 구하는 구간이 된다. **"동시"라는 말이 핵심이다.** $\binom{k}{2}$ 개 구간이 **모두 함께** 참값을 덮을 확률이 $1-\alpha$ 이지, 구간 하나하나가 $1-\alpha$ 인 것이 아니다.
+
+    **(2) 해석적으로.** 구간이 $0$ 을 품지 않는다는 것은
+
+    $$
+    \lvert \bar y_j - \bar y_i\rvert > q_{\alpha,k,\nu}\sqrt{\frac{\text{MSE}}{n}}
+    $$
+
+    인데, 양변을 $\sqrt{\text{MSE}/n}$ 으로 나누면 좌변이 보기 2에서 본 $\sqrt2\,\lvert t_{ij}\rvert$ 다. 그러므로
+
+    $$
+    \sqrt2\,\lvert t_{ij}\rvert > q_{\alpha,k,\nu}
+    \iff
+    \Pr\!\left(Q_{k,\nu} > \sqrt2\lvert t_{ij}\rvert\right) < \alpha
+    \iff
+    p^{\text{adj}}_{ij} < \alpha
+    $$
+
+    로 같은 사건이다($Q$ 의 분포함수가 증가함수이므로 부등식의 방향이 뒤집힌다). $\square$ **구간과 p-값은 같은 계산을 두 방향에서 적은 것**이며, 어느 쪽을 보고하든 판정은 같다.
+
+    **(3) 해석적으로.** $\bar y_0 - \bar y_1 = -(\bar y_1 - \bar y_0)$ 이고, 검정통계량이 $\lvert t\rvert$ 에만 의존하므로 p-값은 같다. 구간도 부호를 바꾸고 양끝을 맞바꾼 것이 된다. `scipy` 는 $k \times k$ 행렬을 통째로 돌려주므로 대각선 위아래가 같은 정보를 담고, `statsmodels` 는 $i < j$ 인 쪽만 인쇄한다. **$\binom{3}{2} = 3$ 개의 비교가 여섯 줄로 보이는 것일 뿐 검정 횟수가 여섯이 되는 것은 아니다.** ($k$ 를 정하는 것은 집단 수이지 인쇄된 줄 수가 아니다.)
+
+    **수치적으로.** 먼저 쪽의 출력이다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+    import pandas as pd
+
+    def load_data():
+        """PlantGrowth 자료를 읽어 집단별로 나누고 자유도까지 함께 돌려준다."""
+        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+        df = pd.read_csv(url, usecols=[1, 2])
+
+        grouped_data = df.groupby('group')
+        data_ctrl = grouped_data.get_group('ctrl').weight
+        data_trt1 = grouped_data.get_group('trt1').weight
+        data_trt2 = grouped_data.get_group('trt2').weight
+        data = (data_ctrl, data_trt1, data_trt2)
+
+        total_samples = data_ctrl.shape[0] + data_trt1.shape[0] + data_trt2.shape[0]
+        num_groups = len(data)
+        df1 = num_groups - 1
+        df2 = total_samples - num_groups
+
+        return df, data, df1, df2
+
+    def perform_anova(data_ctrl, data_trt1, data_trt2):
+        """세 집단에 일원배치 분산분석을 수행한다."""
+        statistic, p_value = stats.f_oneway(data_ctrl, data_trt1, data_trt2)
+        print("\nOne-way ANOVA Results:")
+        print(f"F-statistic = {statistic:.4f}")
+        print(f"P-value = {p_value:.4f}\n")
+        return statistic, p_value
+
+    def perform_tukey_hsd(data_ctrl, data_trt1, data_trt2, confidence_level=0.95):
+        """Tukey HSD 사후비교를 수행하고 쌍별 신뢰구간을 보여 준다.
+
+        구간이 0 을 품으면 그 쌍은 유의하지 않다고 읽는다. 신뢰수준을 높이면
+        구간이 넓어지므로 유의하다고 판정되는 쌍이 줄어든다.
+        """
+        result = stats.tukey_hsd(data_ctrl, data_trt1, data_trt2)
+        print(result)
+
+        print(f"\nTukey's HSD Pairwise Group Comparisons ({confidence_level:.0%} Confidence Interval)")
+        print("Comparison    Lower CI   Upper CI")
+        confidence_interval = result.confidence_interval(confidence_level=confidence_level)
+        for ((i, j), low) in np.ndenumerate(confidence_interval.low):
+            if i < j:
+                high = confidence_interval.high[i, j]
+                print(f" ({i} - {j})   {low:>10.3f}   {high:>9.3f}")
+        print()
+
+    # 자료 읽기 → 분산분석 → 사후비교 순으로 돌린다.
+    df, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
+
+    # 먼저 분산분석.
+    statistic, p_value = perform_anova(data_ctrl, data_trt1, data_trt2)
+
+    # 기본 95% 신뢰수준으로 사후비교.
+    perform_tukey_hsd(data_ctrl, data_trt1, data_trt2)
+
+    # 같은 자료를 99% 로 다시 본다. 구간이 넓어지는 만큼 결론이 보수적이 된다.
+    perform_tukey_hsd(data_ctrl, data_trt1, data_trt2, confidence_level=0.99)
+    ```
+
+    출력:
+
+    ```
+
+    One-way ANOVA Results:
+    F-statistic = 4.8461
+    P-value = 0.0159
+
+    Tukey's HSD Pairwise Group Comparisons (95.0% Confidence Interval)
+    Comparison  Statistic  p-value  Lower CI  Upper CI
+     (0 - 1)      0.371     0.391    -0.320     1.062
+     (0 - 2)     -0.494     0.198    -1.185     0.197
+     (1 - 0)     -0.371     0.391    -1.062     0.320
+     (1 - 2)     -0.865     0.012    -1.556    -0.174
+     (2 - 0)      0.494     0.198    -0.197     1.185
+     (2 - 1)      0.865     0.012     0.174     1.556
+
+
+    Tukey's HSD Pairwise Group Comparisons (95% Confidence Interval)
+    Comparison    Lower CI   Upper CI
+     (0 - 1)       -0.320       1.062
+     (0 - 2)       -1.185       0.197
+     (1 - 2)       -1.556      -0.174
+
+    Tukey's HSD Pairwise Group Comparisons (95.0% Confidence Interval)
+    Comparison  Statistic  p-value  Lower CI  Upper CI
+     (0 - 1)      0.371     0.391    -0.320     1.062
+     (0 - 2)     -0.494     0.198    -1.185     0.197
+     (1 - 0)     -0.371     0.391    -1.062     0.320
+     (1 - 2)     -0.865     0.012    -1.556    -0.174
+     (2 - 0)      0.494     0.198    -0.197     1.185
+     (2 - 1)      0.865     0.012     0.174     1.556
+
+
+    Tukey's HSD Pairwise Group Comparisons (99% Confidence Interval)
+    Comparison    Lower CI   Upper CI
+     (0 - 1)       -0.515       1.257
+     (0 - 2)       -1.380       0.392
+     (1 - 2)       -1.751       0.021
+    ```
+
+    이제 두 신뢰수준의 구간을 공식으로 만들고 쌍대성을 확인한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
     url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2])
+    n, k, nu = 10, 3, 27
+    g = df.groupby('group').weight
+    m, s = g.mean().values, g.std().values
+    MSE = (s ** 2).mean()
+    labels = ['ctrl', 'trt1', 'trt2']
 
-    grouped_data = df.groupby('group')
-    data_ctrl = grouped_data.get_group('ctrl').weight
-    data_trt1 = grouped_data.get_group('trt1').weight
-    data_trt2 = grouped_data.get_group('trt2').weight
-    data = (data_ctrl, data_trt1, data_trt2)
+    print(f"{'신뢰수준':>8}{'q':>10}{'반폭':>10}")
+    for lev in [0.95, 0.99]:
+        q = stats.studentized_range.ppf(lev, k, nu)
+        print(f"{lev:>8.2f}{q:>10.6f}{q * np.sqrt(MSE / n):>10.6f}")
 
-    total_samples = data_ctrl.shape[0] + data_trt1.shape[0] + data_trt2.shape[0]
-    num_groups = len(data)
-    df1 = num_groups - 1
-    df2 = total_samples - num_groups
+    print(f"\n{'쌍':>12}{'차이':>9}{'95% 구간':>22}{'99% 구간':>22}{'p-adj':>9}")
+    for i in range(k):
+        for j in range(i + 1, k):
+            d = m[j] - m[i]
+            t = abs(d) / np.sqrt(2 * MSE / n)
+            p = stats.studentized_range.sf(t * np.sqrt(2), k, nu)
+            h95 = stats.studentized_range.ppf(0.95, k, nu) * np.sqrt(MSE / n)
+            h99 = stats.studentized_range.ppf(0.99, k, nu) * np.sqrt(MSE / n)
+            print(f"{labels[i] + '-' + labels[j]:>12}{d:>9.3f}"
+                  f"{f'({d - h95:>7.3f}, {d + h95:>7.3f})':>22}"
+                  f"{f'({d - h99:>7.3f}, {d + h99:>7.3f})':>22}{p:>9.4f}")
 
-    return df, data, df1, df2
+    print("\n쌍대성 확인: 구간이 0 을 품지 않는다  <=>  p-adj < alpha")
+    for lev, a in [(0.95, 0.05), (0.99, 0.01)]:
+        h = stats.studentized_range.ppf(lev, k, nu) * np.sqrt(MSE / n)
+        for i in range(k):
+            for j in range(i + 1, k):
+                d = m[j] - m[i]
+                t = abs(d) / np.sqrt(2 * MSE / n)
+                p = stats.studentized_range.sf(t * np.sqrt(2), k, nu)
+                print(f"  alpha={a}  {labels[i] + '-' + labels[j]:>10}: "
+                      f"0 제외={abs(d) > h},  p-adj<alpha={p < a}")
+    ```
 
-def perform_anova(data_ctrl, data_trt1, data_trt2):
-    """세 집단에 일원배치 분산분석을 수행한다."""
-    statistic, p_value = stats.f_oneway(data_ctrl, data_trt1, data_trt2)
-    print("\nOne-way ANOVA Results:")
-    print(f"F-statistic = {statistic:.4f}")
-    print(f"P-value = {p_value:.4f}\n")
-    return statistic, p_value
+    출력:
 
-def perform_tukey_hsd(data_ctrl, data_trt1, data_trt2, confidence_level=0.95):
-    """Tukey HSD 사후비교를 수행하고 쌍별 신뢰구간을 보여 준다.
+    ```
+        신뢰수준         q        반폭
+        0.95  3.506426  0.691216
+        0.99  4.494842  0.886061
 
-    구간이 0 을 품으면 그 쌍은 유의하지 않다고 읽는다. 신뢰수준을 높이면
-    구간이 넓어지므로 유의하다고 판정되는 쌍이 줄어든다.
-    """
-    result = stats.tukey_hsd(data_ctrl, data_trt1, data_trt2)
-    print(result)
+               쌍       차이                95% 구간                99% 구간    p-adj
+       ctrl-trt1   -0.371    ( -1.062,   0.320)    ( -1.257,   0.515)   0.3909
+       ctrl-trt2    0.494    ( -0.197,   1.185)    ( -0.392,   1.380)   0.1980
+       trt1-trt2    0.865    (  0.174,   1.556)    ( -0.021,   1.751)   0.0120
 
-    print(f"\nTukey's HSD Pairwise Group Comparisons ({confidence_level:.0%} Confidence Interval)")
-    print("Comparison    Lower CI   Upper CI")
-    confidence_interval = result.confidence_interval(confidence_level=confidence_level)
-    for ((i, j), low) in np.ndenumerate(confidence_interval.low):
-        if i < j:
-            high = confidence_interval.high[i, j]
-            print(f" ({i} - {j})   {low:>10.3f}   {high:>9.3f}")
-    print()
+    쌍대성 확인: 구간이 0 을 품지 않는다  <=>  p-adj < alpha
+      alpha=0.05   ctrl-trt1: 0 제외=False,  p-adj<alpha=False
+      alpha=0.05   ctrl-trt2: 0 제외=False,  p-adj<alpha=False
+      alpha=0.05   trt1-trt2: 0 제외=True,  p-adj<alpha=True
+      alpha=0.01   ctrl-trt1: 0 제외=False,  p-adj<alpha=False
+      alpha=0.01   ctrl-trt2: 0 제외=False,  p-adj<alpha=False
+      alpha=0.01   trt1-trt2: 0 제외=False,  p-adj<alpha=False
+    ```
 
-# 자료 읽기 → 분산분석 → 사후비교 순으로 돌린다.
-df, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
+    **여섯 구간이 모두 `scipy` 의 출력과 소수점 셋째 자리까지 같다.** (부호만 다른 것은 `scipy` 가 `(i - j)` 를, 여기서는 `(j - i)` 를 적었기 때문이다.) 반폭은 $95\%$ 에서 $0.691216$, $99\%$ 에서 $0.886061$ 로 $q$ 가 $3.5064 \to 4.4948$ 로 커진 만큼 넓어진다.
 
-# 먼저 분산분석.
-statistic, p_value = perform_anova(data_ctrl, data_trt1, data_trt2)
+    **(2)의 쌍대성이 여섯 줄 모두에서 맞는다.** 그리고 결정적인 줄은 마지막에서 넷째다. $\alpha = 0.01$ 에서 `trt1`–`trt2` 의 구간이 $(-0.021,\ 1.751)$ 로 **$0$ 을 아슬아슬하게 품는다.** $p^{\text{adj}} = 0.0120 > 0.01$ 과 정확히 맞아떨어진다.
 
-# 기본 95% 신뢰수준으로 사후비교.
-perform_tukey_hsd(data_ctrl, data_trt1, data_trt2)
-
-# 같은 자료를 99% 로 다시 본다. 구간이 넓어지는 만큼 결론이 보수적이 된다.
-perform_tukey_hsd(data_ctrl, data_trt1, data_trt2, confidence_level=0.99)
-```
-
-출력:
-
-```
-One-way ANOVA Results:
-F-statistic = 4.8461
-P-value = 0.0159
-
-Tukey's HSD Pairwise Group Comparisons (95.0% Confidence Interval)
-Comparison  Statistic  p-value  Lower CI  Upper CI
- (0 - 1)      0.371     0.391    -0.320     1.062
- (0 - 2)     -0.494     0.198    -1.185     0.197
- (1 - 0)     -0.371     0.391    -1.062     0.320
- (1 - 2)     -0.865     0.012    -1.556    -0.174
- (2 - 0)      0.494     0.198    -0.197     1.185
- (2 - 1)      0.865     0.012     0.174     1.556
-
-
-Tukey's HSD Pairwise Group Comparisons (95% Confidence Interval)
-Comparison    Lower CI   Upper CI
- (0 - 1)       -0.320       1.062
- (0 - 2)       -1.185       0.197
- (1 - 2)       -1.556      -0.174
-
-Tukey's HSD Pairwise Group Comparisons (95.0% Confidence Interval)
-Comparison  Statistic  p-value  Lower CI  Upper CI
- (0 - 1)      0.371     0.391    -0.320     1.062
- (0 - 2)     -0.494     0.198    -1.185     0.197
- (1 - 0)     -0.371     0.391    -1.062     0.320
- (1 - 2)     -0.865     0.012    -1.556    -0.174
- (2 - 0)      0.494     0.198    -0.197     1.185
- (2 - 1)      0.865     0.012     0.174     1.556
-
-
-Tukey's HSD Pairwise Group Comparisons (99% Confidence Interval)
-Comparison    Lower CI   Upper CI
- (0 - 1)       -0.515       1.257
- (0 - 2)       -1.380       0.392
- (1 - 2)       -1.751       0.021
-```
+    **이 쌍의 지위가 신뢰수준에 달려 있다는 뜻이다.** $95\%$ 에서는 "유의한 유일한 쌍"이고 $99\%$ 에서는 "유의하지 않은 셋 중 하나"다. 하한이 $-0.021$ 로 $0$ 에서 겨우 $0.02$ 떨어져 있으니, 이 자료가 말할 수 있는 것은 **"$0.865$ 라는 차이는 세 쌍을 동시에 통제하는 틀에서 $95\%$ 수준의 증거는 되지만 $99\%$ 수준의 증거는 못 된다"**가 전부다. 보고할 때는 판정만 적지 말고 **구간 $(0.174,\ 1.556)$ 을 함께 적어야** 그 폭이 드러난다. 참값이 $0.17$ 일 수도 $1.56$ 일 수도 있다는 것은 집단당 $n = 10$ 으로 알 수 있는 것의 한계다.
 
 `scipy.stats.tukey_hsd`는 statsmodels와 달리 대칭인 쌍을 모두 인쇄한다. `(0 - 1)`과 `(1 - 0)`이 부호만 반대인 같은 비교다.
 
@@ -368,34 +846,157 @@ Tukey의 HSD 결과는 95% 신뢰수준에서 집단 1과 집단 2 사이에 통
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 1단계 — 이원배치 분산분석
+**보기 5.** <span class="diff easy" title="쉬움"></span> 1단계 — 이원배치 분산분석. 균형설계의 제곱합은 **행·열·칸 평균만으로** 손으로 적힌다.
+
+**(1)** 요인 A가 $a$ 수준, 요인 B가 $b$ 수준, 칸마다 $n$ 개인 균형설계에서
+
+$$
+\text{SS}_A = bn\sum_i(\bar y_{i\cdot\cdot}-\bar y)^2,
+\quad
+\text{SS}_B = an\sum_j(\bar y_{\cdot j\cdot}-\bar y)^2,
+\quad
+\text{SS}_{AB} = n\sum_{i,j}(\bar y_{ij\cdot}-\bar y)^2 - \text{SS}_A - \text{SS}_B
+$$
+
+이고 이 넷이 $\text{SS}_T$ 로 **정확히** 분해됨을 쓰시오. 교호작용의 자유도가 $(a-1)(b-1)$ 인 까닭을 밝히시오.
+
+**(2)** ToothGrowth 자료에서 행·열·칸 평균을 구하고 네 제곱합과 세 $F$ 를 손으로 만들어 `anova_lm` 과 맞추시오.
+
+**(3)** 교호작용이 유의할 때 주효과를 단독으로 읽으면 안 되는 까닭을 칸 평균으로 설명하시오.
 
 </div>
 
-```python
-import pandas as pd
-from statsmodels.formula.api import ols
-from statsmodels.stats.anova import anova_lm
+??? success "풀이"
 
-# ToothGrowth 자료. 보충제 종류(supp)와 투여량(dose) 두 요인이 있다.
-url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
-df = pd.read_csv(url, usecols=[1, 2, 3])
+    **(1) 해석적으로.** 칸 평균을 $\bar y_{ij\cdot}$ 라 쓰고 관측값을
 
-# 콜론이 교호작용 항이다. 두 요인의 효과가 서로 독립인지를 이 항이 묻는다.
-model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
-anova_results = anova_lm(model)
-print(anova_results)
-```
+    $$
+    y_{ijl} - \bar y
+    = \underbrace{(\bar y_{i\cdot\cdot}-\bar y)}_{\alpha_i}
+    + \underbrace{(\bar y_{\cdot j\cdot}-\bar y)}_{\beta_j}
+    + \underbrace{(\bar y_{ij\cdot}-\bar y_{i\cdot\cdot}-\bar y_{\cdot j\cdot}+\bar y)}_{(\alpha\beta)_{ij}}
+    + \underbrace{(y_{ijl}-\bar y_{ij\cdot})}_{e_{ijl}}
+    $$
 
-출력:
+    로 쪼갠다. 균형설계에서는 $\sum_i \alpha_i = 0$, $\sum_j\beta_j = 0$, $(\alpha\beta)_{ij}$ 가 행으로도 열로도 합이 $0$ 이며 $\sum_l e_{ijl} = 0$ 이므로 **네 조각이 서로 직교**한다. 따라서 제곱해 더하면 교차항이 모두 사라져
 
-```
-                   df       sum_sq      mean_sq          F        PR(>F)
-C(supp)           1.0   205.350000   205.350000  15.571979  2.311828e-04
-C(dose)           2.0  2426.434333  1213.217167  91.999965  4.046291e-18
-C(supp):C(dose)   2.0   108.319000    54.159500   4.106991  2.186027e-02
-Residual         54.0   712.106000    13.187148        NaN           NaN
-```
+    $$
+    \text{SS}_T = \text{SS}_A + \text{SS}_B + \text{SS}_{AB} + \text{SS}_E
+    $$
+
+    가 된다. 각 조각의 제곱합은 그 조각이 같은 값을 갖는 관측 수를 곱한 것이므로 $\text{SS}_A = bn\sum_i\alpha_i^2$, $\text{SS}_B = an\sum_j\beta_j^2$, $\text{SS}_{AB} = n\sum_{i,j}(\alpha\beta)_{ij}^2$ 다. 그리고 $n\sum_{i,j}(\bar y_{ij\cdot}-\bar y)^2$ 을 펼치면 세 항의 합이므로 $\text{SS}_{AB}$ 는 거기서 $\text{SS}_A$ 와 $\text{SS}_B$ 를 뺀 나머지다.
+
+    자유도는 자유로운 성분의 수다. $(\alpha\beta)_{ij}$ 는 $ab$ 개인데 행 제약 $a$ 개와 열 제약 $b$ 개가 걸리고 그중 하나가 겹치므로 $ab - a - b + 1 = (a-1)(b-1)$ 개가 자유롭다. $\square$
+
+    **(3) 해석적으로.** 교호작용이 유의하다는 것은 $(\alpha\beta)_{ij} \ne 0$, 곧 **요인 A의 효과가 요인 B의 수준마다 다르다**는 뜻이다. 주효과 $\alpha_i$ 는 그 다른 효과들을 B의 수준에 걸쳐 **평균낸 것**이므로, 평균이 실제 어느 수준에서도 일어나지 않는 일을 가리킬 수 있다. 극단적으로 A의 효과가 B의 한 수준에서 $+5$, 다른 수준에서 $-5$ 라면 주효과는 $0$ 이 되어 "효과 없음"으로 보고되지만 두 수준 모두에서 효과는 뚜렷하다.
+
+    **(2) 수치적으로.** 먼저 쪽의 분산분석표다.
+
+    ```python
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    # ToothGrowth 자료. 보충제 종류(supp)와 투여량(dose) 두 요인이 있다.
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2, 3])
+
+    # 콜론이 교호작용 항이다. 두 요인의 효과가 서로 독립인지를 이 항이 묻는다.
+    model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
+    anova_results = anova_lm(model)
+    print(anova_results)
+    ```
+
+    출력:
+
+    ```
+                       df       sum_sq      mean_sq          F        PR(>F)
+    C(supp)           1.0   205.350000   205.350000  15.571979  2.311828e-04
+    C(dose)           2.0  2426.434333  1213.217167  91.999965  4.046291e-18
+    C(supp):C(dose)   2.0   108.319000    54.159500   4.106991  2.186027e-02
+    Residual         54.0   712.106000    13.187148        NaN           NaN
+    ```
+
+    이제 같은 표를 행·열·칸 평균만으로 만든다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2, 3])
+    a, b, n = 2, 3, 10                      # supp 2 수준, dose 3 수준, 칸마다 10 개
+
+    gm = df.len.mean()
+    mi = df.groupby('supp').len.mean()      # 행 평균
+    mj = df.groupby('dose').len.mean()      # 열 평균
+    cell = df.groupby(['supp', 'dose']).len.mean()
+
+    SSA = b * n * ((mi - gm) ** 2).sum()
+    SSB = a * n * ((mj - gm) ** 2).sum()
+    SScell = n * ((cell - gm) ** 2).sum()
+    SSAB = SScell - SSA - SSB
+    SSE = ((df.len - df.groupby(['supp', 'dose']).len.transform('mean')) ** 2).sum()
+    SST = ((df.len - gm) ** 2).sum()
+
+    print(f"전체평균 = {gm:.4f}")
+    print(f"행 평균 (supp) = {np.round(mi.values, 4)}")
+    print(f"열 평균 (dose) = {np.round(mj.values, 4)}")
+    print(f"칸 평균 =\n{cell.round(3)}")
+    print(f"\nSS_supp     = {SSA:.6f}   (df {a - 1})")
+    print(f"SS_dose     = {SSB:.6f}   (df {b - 1})")
+    print(f"SS_교호작용 = {SSAB:.6f}   (df {(a - 1) * (b - 1)})")
+    print(f"SS_잔차     = {SSE:.6f}   (df {a * b * (n - 1)})")
+    print(f"SS_전체     = {SST:.6f}   (df {a * b * n - 1})")
+    print(f"네 조각의 합 = {SSA + SSB + SSAB + SSE:.6f},  차 = {SST - SSA - SSB - SSAB - SSE:.2e}")
+
+    MSE = SSE / (a * b * (n - 1))
+    print(f"\nMSE = {MSE:.6f}")
+    print(f"F_supp = {(SSA / (a - 1)) / MSE:.6f}")
+    print(f"F_dose = {(SSB / (b - 1)) / MSE:.6f}")
+    print(f"F_교호 = {(SSAB / ((a - 1) * (b - 1))) / MSE:.6f}")
+    ```
+
+    출력:
+
+    ```
+    전체평균 = 18.8133
+    행 평균 (supp) = [20.6633 16.9633]
+    열 평균 (dose) = [10.605 19.735 26.1  ]
+    칸 평균 =
+    supp  dose
+    OJ    0.5     13.23
+          1.0     22.70
+          2.0     26.06
+    VC    0.5      7.98
+          1.0     16.77
+          2.0     26.14
+    Name: len, dtype: float64
+
+    SS_supp     = 205.350000   (df 1)
+    SS_dose     = 2426.434333   (df 2)
+    SS_교호작용 = 108.319000   (df 2)
+    SS_잔차     = 712.106000   (df 54)
+    SS_전체     = 3452.209333   (df 59)
+    네 조각의 합 = 3452.209333,  차 = 1.14e-12
+
+    MSE = 13.187148
+    F_supp = 15.571979
+    F_dose = 91.999965
+    F_교호 = 4.106991
+    ```
+
+    **네 제곱합과 세 $F$ 가 `anova_lm` 의 출력과 소수점 여섯째 자리까지 같고**, 분해의 잔차가 $1.14\times10^{-12}$ 로 부동소수점 오차 수준이다. 균형설계이므로 Type I·II·III 제곱합이 모두 같다는 사실도 여기에 함께 들어 있다. 요인이 직교하므로 **항을 넣는 순서가 결과를 바꾸지 않는다.**
+
+    **(3)을 칸 평균으로 읽는다.** 같은 용량에서 OJ 와 VC 의 차이를 보면
+
+    | 용량 | OJ | VC | OJ $-$ VC |
+    |---|---|---|---|
+    | $0.5$ | $13.23$ | $7.98$ | $\mathbf{+5.25}$ |
+    | $1.0$ | $22.70$ | $16.77$ | $\mathbf{+5.93}$ |
+    | $2.0$ | $26.06$ | $26.14$ | $\mathbf{-0.08}$ |
+
+    다. **보충제의 효과가 용량 $2.0$ 에서 사라진다.** 주효과 $20.66 - 16.96 = 3.70$ 은 이 셋($5.25$, $5.93$, $-0.08$)의 평균일 뿐이고, 세 용량 가운데 **어느 하나에서도 실제로 일어나지 않는 값**이다. 교호작용 $F = 4.11$ ($p = 0.022$)이 바로 이 불균질함을 재고 있다. 보기 7·8이 이 표를 검정의 꼴로 다시 적는다.
 
 두 주효과와 교호작용이 모두 유의하다. 교호작용이 유의하다는 것은 주효과를 단독으로 해석하기 전에 조심하라는 신호다.
 
@@ -403,45 +1004,145 @@ Residual         54.0   712.106000    13.187148        NaN           NaN
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 2단계 — 주효과 사후검정
+**보기 6.** <span class="diff easy" title="쉬움"></span> 2단계 — 주효과 사후검정. 분산분석표의 `C(supp)` 는 $p = 0.00023$ 인데 `pairwise_tukeyhsd` 는 $p = 0.060$ 을 준다. 어긋남의 크기를 수로 밝힌다.
+
+**(1)** `pairwise_tukeyhsd(endog=df['len'], groups=df['supp'])` 는 용량을 **무시하고** 일원배치를 돌린다. 그때 쓰는 오차제곱합이
+
+$$
+\text{SS}_E^{(1)} = \text{SS}_T - \text{SS}_{\text{supp}} = \text{SS}_{\text{dose}} + \text{SS}_{AB} + \text{SS}_E
+$$
+
+임을 보이고, 자유도가 $58$ 임을 밝히시오.
+
+**(2)** 두 MSE 의 비를 구하고, 같은 차이 $\bar y_{VC} - \bar y_{OJ} = -3.70$ 에 대해 두 $t$ 값이 $\sqrt{\text{MSE}^{(1)}/\text{MSE}^{(2)}}$ 배만큼 다름을 보이시오.
+
+**(3)** 두 p-값을 계산해 $0.060$ 과 $0.00023$ 을 재현하고, 어느 쪽을 보고해야 하는지 밝히시오.
 
 </div>
 
-```python
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+??? success "풀이"
 
-# 주효과에 대한 사후비교. 교호작용이 유의하면 주효과를 이렇게 읽는 것이
-# 오해를 부를 수 있어, 아래 단순효과 분석으로 넘어가는 편이 낫다.
-tukey_dose = pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05)
-print("Post-Hoc Test for Dose:")
-print(tukey_dose)
+    **(1) 해석적으로.** 보기 5의 분해 $\text{SS}_T = \text{SS}_{\text{supp}} + \text{SS}_{\text{dose}} + \text{SS}_{AB} + \text{SS}_E$ 에서 $\text{SS}_{\text{supp}}$ 를 옮기면 곧바로 얻는다. 균형설계라 요인들이 직교하므로 **용량을 모형에서 빼도 $\text{SS}_{\text{supp}}$ 는 한 치도 바뀌지 않고**, 그 대신 용량이 설명하던 몫이 통째로 오차로 들어간다. 자유도는 $59 - 1 = 58$ 이다($2 + 2 + 54 = 58$ 과 맞는다).
 
-# 보충제 종류에 대한 주효과 사후비교.
-tukey_supp = pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05)
-print("Post-Hoc Test for Supplement:")
-print(tukey_supp)
-```
+    **(2) 해석적으로.** 두 분석의 **분자는 같다.** 집단평균 차 $-3.70$ 이 균형설계에서 모형과 무관하게 같기 때문이다. 다른 것은 분모뿐이고
 
-출력:
+    $$
+    \frac{t^{(2)}}{t^{(1)}}
+    = \frac{\text{SE}^{(1)}}{\text{SE}^{(2)}}
+    = \sqrt{\frac{\text{MSE}^{(1)}}{\text{MSE}^{(2)}}}
+    $$
 
-```
-Post-Hoc Test for Dose:
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-===================================================
-group1 group2 meandiff p-adj  lower   upper  reject
----------------------------------------------------
-   0.5    1.0     9.13   0.0  5.9018 12.3582   True
-   0.5    2.0   15.495   0.0 12.2668 18.7232   True
-   1.0    2.0    6.365   0.0  3.1368  9.5932   True
----------------------------------------------------
-Post-Hoc Test for Supplement:
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-=================================================
-group1 group2 meandiff p-adj  lower  upper reject
--------------------------------------------------
-    OJ     VC     -3.7 0.0604 -7.567 0.167  False
--------------------------------------------------
-```
+    다. **용량을 모형에 넣는 일은 분자를 키우는 것이 아니라 분모를 줄이는 것**이며, 그것이 검정력을 얻는 전부다. 이것이 요인설계의 요점이기도 하다. 통제할 수 있는 변동원을 모형에 넣으면 같은 자료로 더 작은 차이를 잡아낸다.
+
+    **(3) 수치적으로.** 먼저 쪽의 출력이다.
+
+    ```python
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+    # 주효과에 대한 사후비교. 교호작용이 유의하면 주효과를 이렇게 읽는 것이
+    # 오해를 부를 수 있어, 아래 단순효과 분석으로 넘어가는 편이 낫다.
+    tukey_dose = pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05)
+    print("Post-Hoc Test for Dose:")
+    print(tukey_dose)
+
+    # 보충제 종류에 대한 주효과 사후비교.
+    tukey_supp = pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05)
+    print("Post-Hoc Test for Supplement:")
+    print(tukey_supp)
+    ```
+
+    출력:
+
+    ```
+    Post-Hoc Test for Dose:
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj  lower   upper  reject
+    ---------------------------------------------------
+       0.5    1.0     9.13   0.0  5.9018 12.3582   True
+       0.5    2.0   15.495   0.0 12.2668 18.7232   True
+       1.0    2.0    6.365   0.0  3.1368  9.5932   True
+    ---------------------------------------------------
+    Post-Hoc Test for Supplement:
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    =================================================
+    group1 group2 meandiff p-adj  lower  upper reject
+    -------------------------------------------------
+        OJ     VC     -3.7 0.0604 -7.567 0.167  False
+    -------------------------------------------------
+    ```
+
+    이제 두 분석의 분모를 나란히 놓는다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2, 3])
+
+    gm = df.len.mean()
+    mi = df.groupby('supp').len.mean()
+    SST = ((df.len - gm) ** 2).sum()
+    SSA = 3 * 10 * ((mi - gm) ** 2).sum()
+    SSE2 = ((df.len - df.groupby(['supp', 'dose']).len.transform('mean')) ** 2).sum()
+
+    MSE1 = (SST - SSA) / 58                    # supp 만 넣은 일원배치
+    MSE2 = SSE2 / 54                           # 이원배치 + 교호작용
+    print(f"일원배치 MSE = (SST - SS_supp)/58 = {MSE1:.6f}   (df 58)")
+    print(f"이원배치 MSE = SS_E/54            = {MSE2:.6f}   (df 54)")
+    print(f"비 = {MSE1 / MSE2:.4f},  제곱근 = {np.sqrt(MSE1 / MSE2):.4f}")
+
+    d = mi['VC'] - mi['OJ']
+    print(f"\nVC - OJ = {d:.4f}  (어느 쪽에서나 같다)")
+    for lab, mse, nu in [("일원배치", MSE1, 58), ("이원배치", MSE2, 54)]:
+        se = np.sqrt(mse * (1 / 30 + 1 / 30))
+        t = d / se
+        print(f"  {lab}: SE = {se:.4f},  t = {t:.4f},  p = {2 * stats.t.sf(abs(t), nu):.6f}")
+
+    print(f"\n일원배치 MSE 안에 들어 있는 것")
+    SSB = 2 * 10 * ((df.groupby('dose').len.mean() - gm) ** 2).sum()
+    SSAB = SST - SSA - SSB - SSE2
+    print(f"  SS_dose   = {SSB:.4f}  ({SSB / (SST - SSA):.1%})")
+    print(f"  SS_교호   = {SSAB:.4f}  ({SSAB / (SST - SSA):.1%})")
+    print(f"  SS_잔차   = {SSE2:.4f}  ({SSE2 / (SST - SSA):.1%})")
+    print(f"  합        = {SSB + SSAB + SSE2:.4f}  = SST - SS_supp = {SST - SSA:.4f}")
+    ```
+
+    출력:
+
+    ```
+    일원배치 MSE = (SST - SS_supp)/58 = 55.980333   (df 58)
+    이원배치 MSE = SS_E/54            = 13.187148   (df 54)
+    비 = 4.2451,  제곱근 = 2.0604
+
+    VC - OJ = -3.7000  (어느 쪽에서나 같다)
+      일원배치: SE = 1.9318,  t = -1.9153,  p = 0.060393
+      이원배치: SE = 0.9376,  t = -3.9461,  p = 0.000231
+
+    일원배치 MSE 안에 들어 있는 것
+      SS_dose   = 2426.4343  (74.7%)
+      SS_교호   = 108.3190  (3.3%)
+      SS_잔차   = 712.1060  (21.9%)
+      합        = 3246.8593  = SST - SS_supp = 3246.8593
+    ```
+
+    **두 p-값 $0.060393$ 과 $0.000231$ 이 각각 `pairwise_tukeyhsd` 의 $0.0604$ 와 분산분석표의 $2.311828\times10^{-4}$ 를 재현한다.** 집단이 둘뿐이라 Tukey 가 보통의 $t$-검정과 같아진 것도 확인된다($q_{\alpha,2,\nu}/\sqrt2 = t_{1-\alpha/2,\nu}$).
+
+    **어긋남의 정체는 분모 하나다.** 분자는 양쪽에서 똑같이 $-3.70$ 이고, MSE 가 $55.98$ 대 $13.19$ 로 **$4.245$ 배** 다르다. 그 제곱근 $2.0604$ 가 그대로 $t$ 의 비다. 실제로 $1.9153 \times 2.0604 = 3.946$ 이다.
+
+    마지막 표가 그 $4.245$ 배의 출처다. 일원배치 오차제곱합 $3246.86$ 가운데
+
+    - **$74.7\%$ 가 용량이 만든 변동**($\text{SS}_{\text{dose}} = 2426.43$)
+    - $3.3\%$ 가 교호작용
+    - $21.9\%$ 만이 진짜 잔차
+
+    다. 용량을 모형에 넣지 않으면 그 압도적인 변동이 통째로 "잡음"으로 셈해지고, 보충제의 $3.70$ 이라는 차이가 그 안에 묻힌다. **설계상 통제된 요인을 분석에서 빼는 것은 자료를 버리는 일이다.**
+
+    **(3) 어느 쪽을 보고할 것인가.** 자료가 $2\times3$ 요인설계로 **수집되었으므로** 이원배치 쪽, 곧 $p = 0.00023$ 이 옳다. 쪽의 `pairwise_tukeyhsd(groups=df['supp'])` 호출은 설계를 모르는 채 돌아간 것이다.
+
+    그러나 여기에 한 겹이 더 있다. **보기 5에서 보았듯 교호작용이 유의하므로($p = 0.022$) `supp` 의 주효과 $-3.70$ 자체를 보고하는 일이 적절하지 않다.** 그 값은 용량별 차이 $+5.25$, $+5.93$, $-0.08$ 의 평균이고 어느 용량에서도 실제로 일어나지 않는다. 그러므로 올바른 답은 "$0.060$ 이 아니라 $0.00023$ 을 보고하라"가 아니라 **"주효과 대신 보기 8의 단순효과를 보고하라"**다.
 
 용량은 세 수준이 서로 모두 다르지만, 보충제는 $p = 0.060$으로 유의하지 않다. 분산분석표에서 `C(supp)`가 $p = 0.00023$이었던 것과 어긋나 보이는데, 이 Tukey가 용량을 무시하고 OJ 30개와 VC 30개를 통째로 비교하기 때문이다. 용량이 만드는 큰 변동이 잡음으로 남아 보충제의 차이를 덮는다.
 
@@ -449,45 +1150,130 @@ group1 group2 meandiff p-adj  lower  upper reject
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> 3단계 — 교호작용 사후검정
+**보기 7.** <span class="diff easy" title="쉬움"></span> 3단계 — 교호작용 사후검정. 칸이 여섯이 되면서 치르는 값을 잰다.
+
+**(1)** 두 요인을 붙여 $K = ab = 6$ 개 칸으로 보면 쌍이 몇 개인가. 보정하지 않았을 때의 가족단위 오류율(독립 가정)을 구하시오.
+
+**(2)** 투키의 임계차 $q_{0.05,6,54}\sqrt{\text{MSE}/n}$ 와 본페로니의 $t_{1-0.05/30,\,54}\sqrt{2\text{MSE}/n}$ 를 계산해 견주시오. 보기 3의 $k=3$ 일 때보다 차이가 벌어지는가.
+
+**(3)** 같은 용량끼리의 세 비교(`OJ_d` 대 `VC_d`)를 뽑아 교호작용이 무엇인지 수로 적으시오.
+
+**(4)** 이 접근이 **잃는 것**을 하나 지적하시오. 여섯 칸을 아무 구조 없는 여섯 집단으로 다루면 무엇이 사라지는가.
 
 </div>
 
-```python
-# 두 요인을 붙여 하나의 요인으로 만든다. 이러면 여섯 칸을 서로 견줄 수 있다.
-df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
+??? success "풀이"
 
-# 칸 여섯 개의 모든 쌍을 견주므로 비교 횟수가 15 로 늘어난다. 그만큼 보수적이 된다.
-tukey_interaction = pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05)
-print("Post-Hoc Test for Interaction (Supplement x Dose):")
-print(tukey_interaction)
-```
+    **(1) 해석적으로.** $K = 6$ 이므로 $m = \binom{6}{2} = 15$ 다. 보정하지 않고 각각 $\alpha = 0.05$ 로 검정하면(독립 가정)
 
-출력:
+    $$
+    1 - 0.95^{15} = 0.5367
+    $$
 
-```
-Post-Hoc Test for Interaction (Supplement x Dose):
- Multiple Comparison of Means - Tukey HSD, FWER=0.05  
-======================================================
-group1 group2 meandiff p-adj   lower    upper   reject
-------------------------------------------------------
-OJ_0.5 OJ_1.0     9.47    0.0   4.6719  14.2681   True
-OJ_0.5 OJ_2.0    12.83    0.0   8.0319  17.6281   True
-OJ_0.5 VC_0.5    -5.25 0.0243 -10.0481  -0.4519   True
-OJ_0.5 VC_1.0     3.54  0.264  -1.2581   8.3381  False
-OJ_0.5 VC_2.0    12.91    0.0   8.1119  17.7081   True
-OJ_1.0 OJ_2.0     3.36 0.3187  -1.4381   8.1581  False
-OJ_1.0 VC_0.5   -14.72    0.0 -19.5181  -9.9219   True
-OJ_1.0 VC_1.0    -5.93 0.0074 -10.7281  -1.1319   True
-OJ_1.0 VC_2.0     3.44 0.2936  -1.3581   8.2381  False
-OJ_2.0 VC_0.5   -18.08    0.0 -22.8781 -13.2819   True
-OJ_2.0 VC_1.0    -9.29    0.0 -14.0881  -4.4919   True
-OJ_2.0 VC_2.0     0.08    1.0  -4.7181   4.8781  False
-VC_0.5 VC_1.0     8.79    0.0   3.9919  13.5881   True
-VC_0.5 VC_2.0    18.16    0.0  13.3619  22.9581   True
-VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
-------------------------------------------------------
-```
+    로 **절반이 넘는 확률로 적어도 하나를 거짓 기각**한다. 보기 3의 표 마지막 줄이 이것이다. 실제로는 비교들이 양의 상관을 가져 참값이 이보다 조금 작지만, 어느 쪽이든 보정 없이 쓸 수 있는 수치가 아니다.
+
+    **(2)–(3) 수치적으로.** 먼저 쪽의 출력이다.
+
+    ```python
+    # 두 요인을 붙여 하나의 요인으로 만든다. 이러면 여섯 칸을 서로 견줄 수 있다.
+    df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
+
+    # 칸 여섯 개의 모든 쌍을 견주므로 비교 횟수가 15 로 늘어난다. 그만큼 보수적이 된다.
+    tukey_interaction = pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05)
+    print("Post-Hoc Test for Interaction (Supplement x Dose):")
+    print(tukey_interaction)
+    ```
+
+    출력:
+
+    ```
+    Post-Hoc Test for Interaction (Supplement x Dose):
+     Multiple Comparison of Means - Tukey HSD, FWER=0.05  
+    ======================================================
+    group1 group2 meandiff p-adj   lower    upper   reject
+    ------------------------------------------------------
+    OJ_0.5 OJ_1.0     9.47    0.0   4.6719  14.2681   True
+    OJ_0.5 OJ_2.0    12.83    0.0   8.0319  17.6281   True
+    OJ_0.5 VC_0.5    -5.25 0.0243 -10.0481  -0.4519   True
+    OJ_0.5 VC_1.0     3.54  0.264  -1.2581   8.3381  False
+    OJ_0.5 VC_2.0    12.91    0.0   8.1119  17.7081   True
+    OJ_1.0 OJ_2.0     3.36 0.3187  -1.4381   8.1581  False
+    OJ_1.0 VC_0.5   -14.72    0.0 -19.5181  -9.9219   True
+    OJ_1.0 VC_1.0    -5.93 0.0074 -10.7281  -1.1319   True
+    OJ_1.0 VC_2.0     3.44 0.2936  -1.3581   8.2381  False
+    OJ_2.0 VC_0.5   -18.08    0.0 -22.8781 -13.2819   True
+    OJ_2.0 VC_1.0    -9.29    0.0 -14.0881  -4.4919   True
+    OJ_2.0 VC_2.0     0.08    1.0  -4.7181   4.8781  False
+    VC_0.5 VC_1.0     8.79    0.0   3.9919  13.5881   True
+    VC_0.5 VC_2.0    18.16    0.0  13.3619  22.9581   True
+    VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
+    ------------------------------------------------------
+    ```
+
+    이제 두 문턱을 견주고 같은 용량끼리의 세 비교를 뽑는다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2, 3])
+    n, K, nu = 10, 6, 54
+    cell = df.groupby(['supp', 'dose']).len.mean()
+    MSE = ((df.len - df.groupby(['supp', 'dose']).len.transform('mean')) ** 2).sum() / nu
+    m = K * (K - 1) // 2
+    print(f"칸 수 K = {K},  쌍 수 m = {m},  보정 없는 FWER (독립 가정) = {1 - 0.95 ** m:.4f}")
+
+    q = stats.studentized_range.ppf(0.95, K, nu)
+    HSD = q * np.sqrt(MSE / n)
+    SE = np.sqrt(2 * MSE / n)
+    tb = stats.t.ppf(1 - 0.05 / (2 * m), nu)
+    print(f"\nMSE = {MSE:.6f},  SE = {SE:.6f}")
+    print(f"투키    q(0.95,6,54) = {q:.4f}  ->  |t| 문턱 {q / np.sqrt(2):.4f},  임계차 {HSD:.4f}")
+    print(f"본페로니 t(1-0.05/30, 54) = {tb:.4f}  ->  임계차 {tb * SE:.4f}")
+    print(f"투키가 낮은 폭: |t| 에서 {tb - q / np.sqrt(2):.4f},  임계차에서 {tb * SE - HSD:.4f}")
+
+    print(f"\n같은 용량끼리의 세 비교")
+    for d in [0.5, 1.0, 2.0]:
+        diff = cell[('VC', d)] - cell[('OJ', d)]
+        t = abs(diff) / SE
+        p = stats.studentized_range.sf(t * np.sqrt(2), K, nu)
+        print(f"  dose={d}: OJ-VC 차 = {-diff:>6.2f},  |t| = {t:.4f},  p-adj = {p:.4f},  "
+              f"구간 ({diff - HSD:>7.3f}, {diff + HSD:>7.3f})")
+    ```
+
+    출력:
+
+    ```
+    칸 수 K = 6,  쌍 수 m = 15,  보정 없는 FWER (독립 가정) = 0.5367
+
+    MSE = 13.187148,  SE = 1.624017
+    투키    q(0.95,6,54) = 4.1783  ->  |t| 문턱 2.9545,  임계차 4.7981
+    본페로니 t(1-0.05/30, 54) = 3.0714  ->  임계차 4.9880
+    투키가 낮은 폭: |t| 에서 0.1169,  임계차에서 0.1899
+
+    같은 용량끼리의 세 비교
+      dose=0.5: OJ-VC 차 =   5.25,  |t| = 3.2327,  p-adj = 0.0243,  구간 (-10.048,  -0.452)
+      dose=1.0: OJ-VC 차 =   5.93,  |t| = 3.6514,  p-adj = 0.0074,  구간 (-10.728,  -1.132)
+      dose=2.0: OJ-VC 차 =  -0.08,  |t| = 0.0493,  p-adj = 1.0000,  구간 ( -4.718,   4.878)
+    ```
+
+    **임계차 $4.7981$ 과 p-값·구간이 `pairwise_tukeyhsd` 의 출력과 소수점 넷째 자리까지 같다.** `OJ_0.5 VC_0.5` 줄의 $(-10.0481,\ -0.4519)$, $p = 0.0243$ 이 그대로 재현된다.
+
+    **(2) 두 문턱의 차이.** $\lvert t\rvert$ 척도에서 투키가 $2.9545$, 본페로니가 $3.0714$ 로 **$0.1169$** 낮다. 보기 3의 $k = 3$ 에서는 $2.4794$ 대 $2.5525$ 로 $0.0731$ 이었으니 **차이가 $1.6$ 배로 벌어졌다.** 임계차로 보면 $4.798$ 대 $4.988$ 로 $0.19$ 단위만큼 투키가 유리하다. 쪽의 본문이 "$k$ 가 커질수록 벌어진다"고 한 것의 수치다.
+
+    다만 솔직히 적자면 **그 폭은 여전히 작다.** $m = 15$ 에서도 본페로니가 투키보다 $4\%$ 쯤 높은 문턱을 쓸 뿐이다. 투키를 쓰는 진짜 이유는 검정력의 큰 차이가 아니라 **임계차가 하나로 떨어져 해석이 간단하고, $\alpha$ 를 정확히 쓰며, 동시신뢰구간이 자동으로 따라온다**는 데 있다.
+
+    **(3) 교호작용의 내용.** 같은 용량끼리의 세 비교가 $+5.25$ ($p = 0.024$), $+5.93$ ($p = 0.007$), $-0.08$ ($p = 1.000$)이다. **용량 $0.5$ 와 $1.0$ 에서는 OJ 가 앞서고 용량 $2.0$ 에서는 둘이 구별되지 않는다.** 마지막 줄의 구간 $(-4.718,\ 4.878)$ 은 $0$ 을 품되 폭이 $9.6$ 이나 되므로, "차이가 없다"가 아니라 **"$\pm 4.8$ 안쪽의 차이는 이 자료로 가려낼 수 없다"**로 읽어야 한다. 앞 두 용량의 차이 $5.25$, $5.93$ 이 그 폭보다 겨우 큰 정도임을 생각하면, 용량 $2.0$ 에서 효과가 "사라졌다"는 결론도 조심스럽게 적어야 한다.
+
+    **(4) 이 접근이 잃는 것.** 여섯 칸을 아무 구조 없는 여섯 집단으로 다루면 **요인구조가 통째로 사라진다.** 구체적으로
+
+    - **$15$ 개 비교 가운데 뜻이 분명한 것은 일부뿐이다.** `OJ_0.5` 대 `VC_2.0` 같은 비교는 보충제와 용량이 **함께** 바뀌므로 어느 쪽 탓인지 말할 수 없다. 그런 비교가 $15$ 개 중 $6$ 개다. 그런데 보정은 그 $6$ 개까지 모두 세어 문턱을 올린다.
+    - **교호작용 자체를 검정하지 않는다.** 교호작용은 "차이의 차이"($5.25$ 와 $-0.08$ 의 차)인데, 쌍별 비교의 목록에는 그 대비가 아예 들어 있지 않다. 분산분석표의 $F = 4.11$ 이 재는 것과 이 표가 재는 것은 다른 양이다.
+    - **용량의 순서가 쓰이지 않는다.** $0.5 < 1.0 < 2.0$ 이라는 순서 정보를 버리고 세 범주로만 다룬다. 추세 대비를 쓰면 자유도 하나로 같은 질문을 더 강하게 물을 수 있다.
+
+    그래서 다음에 볼 **단순효과 분석**이 흔히 더 낫다. 비교 수를 $15$ 에서 $3 + 3$ 으로 줄이면서 물음을 뚜렷하게 만든다.
 
 같은 용량끼리 비교한 세 줄(`OJ_0.5 VC_0.5`, `OJ_1.0 VC_1.0`, `OJ_2.0 VC_2.0`)을 보면 차이가 각각 $-5.25$($p = 0.024$), $-5.93$($p = 0.007$), $-0.08$($p = 1.000$)이다. 낮은 용량에서는 OJ가 앞서지만 용량 2.0에서는 차이가 사라진다. 이것이 교호작용의 내용이다.
 
@@ -497,65 +1283,214 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 <div class="exbox" markdown>
 
-**보기 8.** <span class="diff easy" title="쉬움"></span> 4단계 — 단순효과 분석
+**보기 8.** <span class="diff easy" title="쉬움"></span> 4단계 — 단순효과 분석. 두 조각으로 나누면 제곱합이 정확히 어디로 가는지 적을 수 있다.
+
+**(1)** 보충제를 고정하고 용량 효과를 재는 두 단순효과 제곱합의 합이
+
+$$
+\text{SS}_{\text{dose}}^{(OJ)} + \text{SS}_{\text{dose}}^{(VC)}
+= \text{SS}_{\text{dose}} + \text{SS}_{AB}
+$$
+
+임을 보이시오. 두 잔차제곱합의 합은 무엇이 되는가.
+
+**(2)** 자유도도 맞아떨어짐을 확인하시오($2 + 2$ 대 $2 + 2$, $27 + 27$ 대 $54$).
+
+**(3)** 단순효과의 Tukey 반폭을 보기 7의 여섯 칸 Tukey 반폭과 견주시오. 자유도를 $54$ 에서 $27$ 로 잃는데도 구간이 좁아지는가.
+
+**(4)** OJ 와 VC 안에서 각각 용량 $1.0$ 대 $2.0$ 을 비교해 교호작용의 내용을 적으시오.
 
 </div>
 
-```python
-# 단순효과 분석: 보충제를 하나로 고정해 두고 투여량 효과만 본다.
-# 교호작용이 있을 때 결과를 말이 되게 읽는 방법이다.
-oj_data = df[df['supp'] == 'OJ']
-vc_data = df[df['supp'] == 'VC']
+??? success "풀이"
 
-# 보충제별로 따로 일원배치 분산분석을 돌린다.
-oj_model = ols('len ~ C(dose)', data=oj_data).fit()
-vc_model = ols('len ~ C(dose)', data=vc_data).fit()
+    **(1) 해석적으로.** 보충제 $i$ 안에서 용량 효과의 제곱합은
 
-# 두 결과를 견주면 교호작용이 무엇을 뜻하는지 드러난다.
-print("ANOVA for Dose within Supplement OJ:")
-print(anova_lm(oj_model))
+    $$
+    \text{SS}_{\text{dose}}^{(i)} = n\sum_j (\bar y_{ij\cdot} - \bar y_{i\cdot\cdot})^2
+    $$
 
-print("ANOVA for Dose within Supplement VC:")
-print(anova_lm(vc_model))
+    이다. 보기 5의 분해 $\bar y_{ij\cdot} - \bar y_{i\cdot\cdot} = \beta_j + (\alpha\beta)_{ij}$ 를 넣으면
 
-# 보충제별 사후비교.
-print("Tukey HSD for Dose within Supplement OJ:")
-print(pairwise_tukeyhsd(endog=oj_data['len'], groups=oj_data['dose'], alpha=0.05))
+    $$
+    \text{SS}_{\text{dose}}^{(i)} = n\sum_j \left(\beta_j + (\alpha\beta)_{ij}\right)^2
+    = n\sum_j \beta_j^2 + 2n\sum_j \beta_j(\alpha\beta)_{ij} + n\sum_j (\alpha\beta)_{ij}^2
+    $$
 
-print("Tukey HSD for Dose within Supplement VC:")
-print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05))
-```
+    이고, $i$ 에 대해 더하면 가운데 항이 $2n\sum_j \beta_j \sum_i (\alpha\beta)_{ij} = 0$ (교호작용의 열 합이 $0$)으로 사라진다. 남는 것은
 
-출력:
+    $$
+    \sum_i \text{SS}_{\text{dose}}^{(i)} = an\sum_j\beta_j^2 + n\sum_{i,j}(\alpha\beta)_{ij}^2
+    = \text{SS}_{\text{dose}} + \text{SS}_{AB}
+    $$
 
-```
-ANOVA for Dose within Supplement OJ:
-            df      sum_sq     mean_sq          F        PR(>F)
-C(dose)    2.0  885.264667  442.632333  31.441504  8.887164e-08
-Residual  27.0  380.105000   14.077963        NaN           NaN
-ANOVA for Dose within Supplement VC:
-            df       sum_sq     mean_sq          F        PR(>F)
-C(dose)    2.0  1649.488667  824.744333  67.072379  3.357317e-11
-Residual  27.0   332.001000   12.296333        NaN           NaN
-Tukey HSD for Dose within Supplement OJ:
-Multiple Comparison of Means - Tukey HSD, FWER=0.05 
-====================================================
-group1 group2 meandiff p-adj   lower   upper  reject
-----------------------------------------------------
-   0.5    1.0     9.47    0.0  5.3096 13.6304   True
-   0.5    2.0    12.83    0.0  8.6696 16.9904   True
-   1.0    2.0     3.36 0.1309 -0.8004  7.5204  False
-----------------------------------------------------
-Tukey HSD for Dose within Supplement VC:
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-===================================================
-group1 group2 meandiff p-adj  lower   upper  reject
----------------------------------------------------
-   0.5    1.0     8.79   0.0  4.9018 12.6782   True
-   0.5    2.0    18.16   0.0 14.2718 22.0482   True
-   1.0    2.0     9.37   0.0  5.4818 13.2582   True
----------------------------------------------------
-```
+    다. $\square$ **단순효과는 주효과와 교호작용을 합쳐 다시 나눈 것**이며, 자른 방향만 다를 뿐 같은 제곱합을 다루고 있다.
+
+    잔차제곱합은 더 간단하다. 두 분석 모두 칸 평균에서 재므로
+
+    $$
+    \sum_i \text{SS}_E^{(i)} = \sum_i \sum_j\sum_l (y_{ijl} - \bar y_{ij\cdot})^2 = \text{SS}_E
+    $$
+
+    로 **이원배치의 잔차제곱합과 정확히 같다.**
+
+    **(2) 해석적으로.** 단순효과 쪽은 보충제마다 자유도 $b-1 = 2$ 이므로 합이 $4$ 이고, 오른쪽은 $\text{SS}_{\text{dose}}$ 의 $2$ 와 $\text{SS}_{AB}$ 의 $(a-1)(b-1) = 2$ 로 역시 $4$ 다. 잔차는 보충제마다 $b(n-1) = 27$ 이므로 합이 $54 = ab(n-1)$ 로 맞는다. 다만 **각 단순효과 분석은 자기 $27$ 만 쓰고 상대편의 $27$ 을 쓰지 않는다.** 이것이 (3)에서 치르는 값이다.
+
+    **(3)–(4) 수치적으로.** 먼저 쪽의 출력이다.
+
+    ```python
+    # 단순효과 분석: 보충제를 하나로 고정해 두고 투여량 효과만 본다.
+    # 교호작용이 있을 때 결과를 말이 되게 읽는 방법이다.
+    oj_data = df[df['supp'] == 'OJ']
+    vc_data = df[df['supp'] == 'VC']
+
+    # 보충제별로 따로 일원배치 분산분석을 돌린다.
+    oj_model = ols('len ~ C(dose)', data=oj_data).fit()
+    vc_model = ols('len ~ C(dose)', data=vc_data).fit()
+
+    # 두 결과를 견주면 교호작용이 무엇을 뜻하는지 드러난다.
+    print("ANOVA for Dose within Supplement OJ:")
+    print(anova_lm(oj_model))
+
+    print("ANOVA for Dose within Supplement VC:")
+    print(anova_lm(vc_model))
+
+    # 보충제별 사후비교.
+    print("Tukey HSD for Dose within Supplement OJ:")
+    print(pairwise_tukeyhsd(endog=oj_data['len'], groups=oj_data['dose'], alpha=0.05))
+
+    print("Tukey HSD for Dose within Supplement VC:")
+    print(pairwise_tukeyhsd(endog=vc_data['len'], groups=vc_data['dose'], alpha=0.05))
+    ```
+
+    출력:
+
+    ```
+    ANOVA for Dose within Supplement OJ:
+                df      sum_sq     mean_sq          F        PR(>F)
+    C(dose)    2.0  885.264667  442.632333  31.441504  8.887164e-08
+    Residual  27.0  380.105000   14.077963        NaN           NaN
+    ANOVA for Dose within Supplement VC:
+                df       sum_sq     mean_sq          F        PR(>F)
+    C(dose)    2.0  1649.488667  824.744333  67.072379  3.357317e-11
+    Residual  27.0   332.001000   12.296333        NaN           NaN
+    Tukey HSD for Dose within Supplement OJ:
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05 
+    ====================================================
+    group1 group2 meandiff p-adj   lower   upper  reject
+    ----------------------------------------------------
+       0.5    1.0     9.47    0.0  5.3096 13.6304   True
+       0.5    2.0    12.83    0.0  8.6696 16.9904   True
+       1.0    2.0     3.36 0.1309 -0.8004  7.5204  False
+    ----------------------------------------------------
+    Tukey HSD for Dose within Supplement VC:
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj  lower   upper  reject
+    ---------------------------------------------------
+       0.5    1.0     8.79   0.0  4.9018 12.6782   True
+       0.5    2.0    18.16   0.0 14.2718 22.0482   True
+       1.0    2.0     9.37   0.0  5.4818 13.2582   True
+    ---------------------------------------------------
+    ```
+
+    이제 (1)의 항등식과 (3)의 반폭을 확인한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2, 3])
+    n = 10
+    gm = df.len.mean()
+    SSB = 2 * n * ((df.groupby('dose').len.mean() - gm) ** 2).sum()
+    SSE = ((df.len - df.groupby(['supp', 'dose']).len.transform('mean')) ** 2).sum()
+    SSA = 3 * n * ((df.groupby('supp').len.mean() - gm) ** 2).sum()
+    SST = ((df.len - gm) ** 2).sum()
+    SSAB = SST - SSA - SSB - SSE
+
+    tot_ss, tot_e = 0.0, 0.0
+    print(f"{'보충제':>6}{'SS_dose':>12}{'SSE':>12}{'MSE':>11}{'df':>5}{'Tukey 반폭':>12}")
+    for s in ['OJ', 'VC']:
+        sub = df[df.supp == s]
+        mu = sub.groupby('dose').len.mean()
+        ss = n * ((mu - sub.len.mean()) ** 2).sum()
+        sse = ((sub.len - sub.groupby('dose').len.transform('mean')) ** 2).sum()
+        mse = sse / 27
+        half = stats.studentized_range.ppf(0.95, 3, 27) * np.sqrt(mse / n)
+        tot_ss += ss
+        tot_e += sse
+        print(f"{s:>6}{ss:>12.4f}{sse:>12.4f}{mse:>11.6f}{27:>5}{half:>12.4f}")
+
+    print(f"\n단순효과 SS 의 합   = {tot_ss:.4f}")
+    print(f"SS_dose + SS_교호   = {SSB:.4f} + {SSAB:.4f} = {SSB + SSAB:.4f}")
+    print(f"단순효과 SSE 의 합  = {tot_e:.4f}   (= 이원배치 SSE = {SSE:.4f})")
+
+    MSE2 = SSE / 54
+    half6 = stats.studentized_range.ppf(0.95, 6, 54) * np.sqrt(MSE2 / n)
+    print(f"\n여섯 칸 Tukey 의 반폭 = {half6:.4f}  (비교 15 개, df 54)")
+    print(f"단순효과 Tukey 의 반폭 = 위 표 (비교 3 개씩, df 27)")
+
+    print(f"\nOJ 안에서 dose 1.0 vs 2.0")
+    sub = df[df.supp == 'OJ']
+    mu = sub.groupby('dose').len.mean()
+    mse = ((sub.len - sub.groupby('dose').len.transform('mean')) ** 2).sum() / 27
+    d = mu[2.0] - mu[1.0]
+    t = d / np.sqrt(2 * mse / n)
+    print(f"  차 = {d:.2f},  |t| = {abs(t):.4f},  p-adj = {stats.studentized_range.sf(abs(t) * np.sqrt(2), 3, 27):.4f}")
+    sub = df[df.supp == 'VC']
+    mu = sub.groupby('dose').len.mean()
+    mse = ((sub.len - sub.groupby('dose').len.transform('mean')) ** 2).sum() / 27
+    d = mu[2.0] - mu[1.0]
+    t = d / np.sqrt(2 * mse / n)
+    print(f"VC 안에서 dose 1.0 vs 2.0")
+    print(f"  차 = {d:.2f},  |t| = {abs(t):.4f},  p-adj = {stats.studentized_range.sf(abs(t) * np.sqrt(2), 3, 27):.6f}")
+    ```
+
+    출력:
+
+    ```
+       보충제     SS_dose         SSE        MSE   df    Tukey 반폭
+        OJ    885.2647    380.1050  14.077963   27      4.1604
+        VC   1649.4887    332.0010  12.296333   27      3.8882
+
+    단순효과 SS 의 합   = 2534.7533
+    SS_dose + SS_교호   = 2426.4343 + 108.3190 = 2534.7533
+    단순효과 SSE 의 합  = 712.1060   (= 이원배치 SSE = 712.1060)
+
+    여섯 칸 Tukey 의 반폭 = 4.7981  (비교 15 개, df 54)
+    단순효과 Tukey 의 반폭 = 위 표 (비교 3 개씩, df 27)
+
+    OJ 안에서 dose 1.0 vs 2.0
+      차 = 3.36,  |t| = 2.0024,  p-adj = 0.1309
+    VC 안에서 dose 1.0 vs 2.0
+      차 = 9.37,  |t| = 5.9750,  p-adj = 0.000007
+    ```
+
+    **(1)의 항등식이 소수점 넷째 자리까지 맞는다.** $885.2647 + 1649.4887 = 2534.7533$ 이고 $\text{SS}_{\text{dose}} + \text{SS}_{AB} = 2426.4343 + 108.3190 = 2534.7533$ 이다. 잔차제곱합의 합도 $712.1060$ 으로 이원배치의 $\text{SS}_E$ 와 **정확히 같다.** 두 단순효과 분석이 자료를 쪼개 쓸 뿐 새로 만들거나 버리는 것이 없음을 보여 준다.
+
+    **(3) 반폭 비교가 뜻밖이다.**
+
+    | 분석 | 비교 수 | 자유도 | Tukey 반폭 |
+    |---|---|---|---|
+    | 여섯 칸 전부 | $15$ | $54$ | $4.7981$ |
+    | OJ 안에서만 | $3$ | $27$ | $\mathbf{4.1604}$ |
+    | VC 안에서만 | $3$ | $27$ | $\mathbf{3.8882}$ |
+
+    **자유도를 $54$ 에서 $27$ 로 절반이나 잃는데도 구간이 좁아진다.** 비교 수가 $15$ 에서 $3$ 으로 줄어 $q$ 가 $4.1783$ 에서 $3.5064$ 로 내려오는 효과가 자유도 손실보다 크기 때문이다. VC 쪽은 MSE 까지 $12.30$ 으로 전체 $13.19$ 보다 작아 $3.89$ 로 더 좁다. **묻는 질문을 좁히면 답이 선명해진다**는 다중비교의 일반 원리가 수로 나타난 것이다.
+
+    (반대로 OJ 안의 MSE 는 $14.08$ 로 전체보다 크다. 등분산을 믿는다면 $54$ 자유도의 합동 MSE 를 쓰고 비교 수만 $3$ 으로 줄이는 쪽이 가장 좋다. 그 경우 반폭은 $3.5064\sqrt{13.187/10} = 4.027$ 이 된다. 다만 `pairwise_tukeyhsd` 를 부분자료에 돌리면 자동으로 그 집단만의 MSE 를 쓰므로, 그렇게 하려면 대비를 직접 짜야 한다.)
+
+    **(4) 교호작용의 내용.** 용량 $1.0 \to 2.0$ 의 효과가
+
+    - OJ 에서 $+3.36$, $\lvert t\rvert = 2.00$, $p^{\text{adj}} = 0.131$ — **유의하지 않다.**
+    - VC 에서 $+9.37$, $\lvert t\rvert = 5.98$, $p^{\text{adj}} = 0.000007$ — **강하게 유의하다.**
+
+    반면 용량 $0.5 \to 1.0$ 은 OJ 에서 $+9.47$, VC 에서 $+8.79$ 로 둘 다 크고 둘 다 유의하다. 그러므로 교호작용 $F = 4.11$ ($p = 0.022$)이 요약한 이야기는 **"OJ 는 용량 $1.0$ 에서 이미 천장에 닿고 VC 는 $2.0$ 까지 계속 오른다"**이다. 보기 5의 칸 평균 표를 다시 보면 OJ 가 $13.23 \to 22.70 \to 26.06$, VC 가 $7.98 \to 16.77 \to 26.14$ 로 **용량 $2.0$ 에서 두 곡선이 만난다.**
+
+    **이것이 보기 6의 주효과 $-3.70$ 이 왜 쓸모없는 보고인지에 대한 최종 답이다.** 보충제의 효과는 $5.25$, $5.93$, $-0.08$ 로 용량에 따라 달라지고, 그 평균 하나를 적으면 "두 보충제 중 OJ 가 조금 낫다"는 쪽으로 읽히는데 실제 이야기는 **"낮은 용량에서는 OJ 가 확실히 낫고 충분한 용량에서는 어느 쪽이든 같다"**이다. 실무적으로 전혀 다른 결론이다.
 
 단순 효과 분석이 교호작용을 가장 또렷하게 보여준다. OJ 안에서는 용량 1.0과 2.0의 차이가 $p = 0.131$로 유의하지 않은 반면, VC 안에서는 같은 비교가 $p < 0.001$로 강하게 유의하다.
 

@@ -16,38 +16,143 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 자료와 자유도
+**보기 1.** <span class="diff easy" title="쉬움"></span> 자유도는 왜 $2$ 와 $27$ 인가. PlantGrowth 자료는 $k = 3$개 집단에 집단당 $n = 10$개씩, 전체 $N = 30$개다.
+
+**(1)** 총제곱합이
+
+$$
+SST = SSB + SSW
+$$
+
+로 쪼개짐을 보이고(교차항이 사라지는 까닭을 밝히라), 자유도도 $N - 1 = (k-1) + (N-k)$ 로 따라 쪼개짐을 설명하시오.
+
+**(2)** 균형 설계에서 $MSW$ 가 **집단별 표본분산의 단순평균**임을 보이고, 집단 요약표(개수·평균·표준편차)만 가지고 $MSW$ 를 구한 뒤 원자료로 계산한 값과 맞는지 확인하시오.
 
 </div>
 
-```python
-import pandas as pd
-from scipy import stats
+??? success "풀이"
 
-url = ('https://raw.githubusercontent.com/vincentarelbundock/'
-       'Rdatasets/master/csv/datasets/PlantGrowth.csv')
-df = pd.read_csv(url, usecols=[1, 2])
-g = df.groupby('group')
-# f_oneway는 집단을 **별도의 배열**로 받는다. 긴 형식 데이터프레임을 그대로
-# 넘길 수 없어서 이렇게 쪼개야 한다. statsmodels의 ols 방식은 그 반대다.
-ctrl = g.get_group('ctrl').weight.values
-trt1 = g.get_group('trt1').weight.values
-trt2 = g.get_group('trt2').weight.values
+    **(1) 해석적으로.** 관측값 하나를 전체평균에서 잰 편차를 두 조각으로 나눈다.
 
-print(df.groupby('group').weight.agg(['count', 'mean', 'std']).round(4))
-```
+    $$
+    y_{ij} - \bar y_{\cdot\cdot} = \underbrace{(y_{ij} - \bar y_{i\cdot})}_{\text{집단 안}} + \underbrace{(\bar y_{i\cdot} - \bar y_{\cdot\cdot})}_{\text{집단 사이}}
+    $$
 
-출력:
+    양변을 제곱해 모든 $i, j$ 에 대해 더하면
 
-```
-       count   mean     std
-group                      
-ctrl      10  5.032  0.5831
-trt1      10  4.661  0.7937
-trt2      10  5.526  0.4426
-```
+    $$
+    SST = \sum_{i}\sum_{j} (y_{ij} - \bar y_{i\cdot})^2 + \sum_i n_i (\bar y_{i\cdot} - \bar y_{\cdot\cdot})^2 + 2\sum_i (\bar y_{i\cdot} - \bar y_{\cdot\cdot}) \sum_j (y_{ij} - \bar y_{i\cdot})
+    $$
 
-집단당 10개씩 균형 설계다. 표본표준편차가 0.44에서 0.79까지 1.8배 차이 나는데, 이 정도는 등분산 가정을 크게 흔들지 않는다(자세한 확인은 Levene 검정 페이지 참조).
+    인데, 안쪽 합 $\sum_j (y_{ij} - \bar y_{i\cdot})$ 은 **집단 평균에서 잰 편차의 합이므로 정확히 $0$** 이다. 교차항이 통째로 사라지고
+
+    $$
+    SST = SSW + SSB
+    $$
+
+    만 남는다. 이것은 근사가 아니라 **항등식**이다. 어떤 자료에서도, 집단 평균이 모두 같든 전혀 다르든, 소수점 끝자리까지 성립한다.
+
+    자유도도 같이 쪼개진다. 기하로 보면 셋은 모두 제곱노름이다.
+
+    - $SST$ 는 $\mathbf 1$ 에 직교하는 부분공간 위의 길이이므로 차원이 $N-1$.
+    - $SSB$ 가 사는 곳은 집단 지시벡터 $k$ 개가 치는 공간에서 $\mathbf 1$ 방향을 뺀 것이므로 차원이 $k-1$.
+    - $SSW$ 는 각 집단 안에서 그 집단 평균을 뺀 것이므로 집단마다 $n_i - 1$, 합쳐서 $N-k$.
+
+    뒤의 두 공간은 서로 직교하고 합치면 첫째 공간이 되므로
+
+    $$
+    N - 1 = (k-1) + (N-k)
+    $$
+
+    이다. 여기서는 $29 = 2 + 27$ 이고, 이것이 $F_{2,27}$ 의 두 자유도다.
+
+    **(2) 균형 설계의 $MSW$.** 집단 $i$ 의 표본분산을 $s_i^2 = \frac{1}{n_i-1}\sum_j (y_{ij} - \bar y_{i\cdot})^2$ 라 쓰면 $SSW = \sum_i (n_i - 1) s_i^2$ 이므로
+
+    $$
+    MSW = \frac{SSW}{N-k} = \frac{\sum_i (n_i-1)s_i^2}{\sum_i (n_i-1)}
+    $$
+
+    로 **표본분산들의 가중평균**이다. 균형 설계 $n_i \equiv n$ 이면 가중치가 모두 $n-1$ 로 같아져
+
+    $$
+    MSW = \frac{(n-1)\sum_i s_i^2}{k(n-1)} = \frac{1}{k}\sum_{i=1}^{k} s_i^2
+    $$
+
+    곧 **단순평균**이 된다. 요약표의 세 표준편차만 있으면
+
+    $$
+    MSW \approx \frac{0.5831^2 + 0.7937^2 + 0.4426^2}{3} = \frac{0.340006 + 0.629960 + 0.195895}{3} = 0.388620
+    $$
+
+    이다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    url = ('https://raw.githubusercontent.com/vincentarelbundock/'
+           'Rdatasets/master/csv/datasets/PlantGrowth.csv')
+    df = pd.read_csv(url, usecols=[1, 2])
+    g = df.groupby('group')
+    # f_oneway는 집단을 **별도의 배열**로 받는다. 긴 형식 데이터프레임을 그대로
+    # 넘길 수 없어서 이렇게 쪼개야 한다. statsmodels의 ols 방식은 그 반대다.
+    ctrl = g.get_group('ctrl').weight.values
+    trt1 = g.get_group('trt1').weight.values
+    trt2 = g.get_group('trt2').weight.values
+
+    print(df.groupby('group').weight.agg(['count', 'mean', 'std']).round(4))
+
+    groups = [ctrl, trt1, trt2]
+    n = np.array([len(x) for x in groups])
+    mean_i = np.array([x.mean() for x in groups])
+    var_i = np.array([x.var(ddof=1) for x in groups])
+    N, k = n.sum(), len(groups)
+    grand = df.weight.mean()
+
+    # 제곱합 분해. 세 수를 따로 계산하고 항등식이 맞는지 본다.
+    SSB = (n * (mean_i - grand) ** 2).sum()
+    SSW = ((n - 1) * var_i).sum()
+    SST = ((df.weight - grand) ** 2).sum()
+    print(f"\nSSB = {SSB:.6f}   SSW = {SSW:.6f}   합 = {SSB + SSW:.6f}")
+    print(f"SST = {SST:.6f}   차이 = {abs(SST - SSB - SSW):.3e}")
+    print(f"자유도  {N - 1} = {k - 1} + {N - k}")
+
+    # 균형 설계이므로 MSW 는 표본분산의 단순평균이어야 한다.
+    MSW = SSW / (N - k)
+    print(f"\nMSW(=SSW/(N-k)) = {MSW:.8f}")
+    print(f"표본분산의 단순평균 = {var_i.mean():.8f}")
+
+    # 요약표의 반올림된 표준편차만 쓰면 얼마나 어긋나는가.
+    sd_rounded = np.array([0.5831, 0.7937, 0.4426])
+    print(f"반올림 표준편차로 = {(sd_rounded ** 2).mean():.8f}")
+    print(f"합동표준편차 sqrt(MSW) = {np.sqrt(MSW):.4f}")
+    ```
+
+    출력:
+
+    ```
+           count   mean     std
+    group                      
+    ctrl      10  5.032  0.5831
+    trt1      10  4.661  0.7937
+    trt2      10  5.526  0.4426
+
+    SSB = 3.766340   SSW = 10.492090   합 = 14.258430
+    SST = 14.258430   차이 = 3.553e-15
+    자유도  29 = 2 + 27
+
+    MSW(=SSW/(N-k)) = 0.38859593
+    표본분산의 단순평균 = 0.38859593
+    반올림 표준편차로 = 0.38862002
+    합동표준편차 sqrt(MSW) = 0.6234
+    ```
+
+    **분해가 맞는다.** $SSB + SSW = 14.258430$ 이 $SST$ 와 자릿수 끝까지 같고(차이 $3.6\times10^{-15}$ 는 부동소수점 반올림이다), 자유도도 $29 = 2 + 27$ 로 갈린다.
+
+    **단순평균 공식도 맞는다.** $SSW/(N-k)$ 와 $\frac13\sum s_i^2$ 이 $0.38859593$ 으로 여덟 자리까지 같다. 표의 반올림된 표준편차를 쓰면 $0.38862002$ 로 다섯째 자리에서 어긋나는데, 이것은 공식이 틀려서가 아니라 **표준편차를 소수 넷째 자리에서 끊었기 때문**이다. 손으로 검산할 때는 이 정도 오차를 각오해야 한다.
+
+    집단당 10개씩 균형 설계다. 표본표준편차가 0.44에서 0.79까지 1.8배 차이 나는데, 이 정도는 등분산 가정을 크게 흔들지 않는다(자세한 확인은 Levene 검정 페이지 참조). 합동표준편차 $\sqrt{MSW} = 0.6234$ 가 그 셋을 대표하는 하나의 수다.
 
 ## 분산분석 수행
 
@@ -59,24 +164,106 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 분산분석 수행
+**보기 2.** <span class="diff easy" title="쉬움"></span> 요약통계만으로 $F$ 를 손계산하기.
+
+**(1)** 보기 1의 요약표(개수 $10, 10, 10$, 평균 $5.032,\ 4.661,\ 5.526$)와 $MSW$ 만 가지고 $F$ 를 계산하시오. 원자료는 쓰지 말 것.
+
+**(2)** 집단이 **둘뿐이면** $F = t^2$ 임을 보이시오. 여기서 $t$ 는 합동분산을 쓴 이표본 $t$ 통계량이다. ctrl 과 trt1 두 집단으로 이 항등식을 수치 확인하고, $p$-값까지 같아지는 까닭을 밝히시오.
 
 </div>
 
-```python
-# F 는 집단 사이의 분산을 집단 안의 분산으로 나눈 값이다. 1 에 가까우면
-# 집단을 나눈 것이 아무 설명도 하지 못한다는 뜻이다.
-F, p = stats.f_oneway(ctrl, trt1, trt2)
-print(f"F = {F:.4f}, p = {p:.4f}")
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 균형 설계이므로 전체평균은 세 집단평균의 단순평균이다.
 
-```
-F = 4.8461, p = 0.0159
-```
+    $$
+    \bar y_{\cdot\cdot} = \frac{5.032 + 4.661 + 5.526}{3} = 5.073
+    $$
 
-$H_0: \mu_{\text{ctrl}} = \mu_{\text{trt1}} = \mu_{\text{trt2}}$ 아래에서 통계량은 $F \sim F_{2,27}$이다.
+    집단 간 제곱합은 집단평균이 전체평균에서 얼마나 떨어져 있는지를 표본크기로 가중해 더한 것이다.
+
+    $$
+    SSB = 10\left[(5.032 - 5.073)^2 + (4.661 - 5.073)^2 + (5.526 - 5.073)^2\right] = 3.76634
+    $$
+
+    자유도 $k - 1 = 2$ 로 나누면 $MSB = 1.88317$ 이고, 보기 1의 $MSW = 0.388596$ 으로 나누면
+
+    $$
+    F = \frac{MSB}{MSW} = \frac{1.88317}{0.388596} = 4.84609
+    $$
+
+    이다. **원자료 30개는 한 번도 쓰이지 않았다.** 분산분석은 집단별 $(n_i, \bar y_i, s_i^2)$ 세 쌍만 있으면 완전히 재구성된다.
+
+    **(2) $k = 2$ 이면 $F = t^2$.** 두 집단일 때 전체평균은 $\bar y = \frac{n_1\bar y_1 + n_2 \bar y_2}{n_1+n_2}$ 이므로
+
+    $$
+    \bar y_1 - \bar y = \frac{n_2(\bar y_1 - \bar y_2)}{n_1+n_2},
+    \qquad
+    \bar y_2 - \bar y = \frac{-\,n_1(\bar y_1 - \bar y_2)}{n_1+n_2}
+    $$
+
+    이다. 이것을 $SSB$ 에 넣으면
+
+    $$
+    SSB = \frac{n_1 n_2^2 + n_2 n_1^2}{(n_1+n_2)^2}(\bar y_1 - \bar y_2)^2
+        = \frac{n_1 n_2}{n_1+n_2}(\bar y_1 - \bar y_2)^2
+        = \frac{(\bar y_1 - \bar y_2)^2}{\frac{1}{n_1} + \frac{1}{n_2}}
+    $$
+
+    이고 $k - 1 = 1$ 이므로 $MSB = SSB$ 다. 한편 $MSW$ 는 정확히 합동분산 $s_p^2$ 이므로
+
+    $$
+    F = \frac{MSB}{MSW} = \frac{(\bar y_1 - \bar y_2)^2}{s_p^2\left(\frac{1}{n_1}+\frac{1}{n_2}\right)}
+      = \left[\frac{\bar y_1 - \bar y_2}{s_p\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}\right]^2 = t^2
+    $$
+
+    이다. **대수 항등식**이므로 자료가 무엇이든 소수점 끝까지 성립한다. $p$-값까지 같아지는 것은 분포 수준의 사실 때문이다. $T \sim t_m$ 이면 $T^2 \sim F_{1,m}$ 이고 $t$-검정의 양측 꼬리 $\{|T| \ge |t|\}$ 와 $F$-검정의 오른쪽 꼬리 $\{T^2 \ge t^2\}$ 는 **같은 사건**이다. 분산분석이 "양측"만 할 수 있는 이유도 여기에 있다.
+
+    ```python
+    # 보기 1 의 ctrl, trt1, trt2, n, mean_i, MSW, k 를 이어 쓴다.
+    # F 는 집단 사이의 분산을 집단 안의 분산으로 나눈 값이다. 1 에 가까우면
+    # 집단을 나눈 것이 아무 설명도 하지 못한다는 뜻이다.
+    F, p = stats.f_oneway(ctrl, trt1, trt2)
+    print(f"F = {F:.4f}, p = {p:.4f}")
+
+    # 요약통계(개수와 평균)만으로 손계산한다.
+    grand = (n * mean_i).sum() / n.sum()
+    SSB_hand = (n * (mean_i - grand) ** 2).sum()
+    MSB_hand = SSB_hand / (k - 1)
+    print(f"\n전체평균 = {grand:.4f}")
+    print(f"SSB = {SSB_hand:.6f}   MSB = {MSB_hand:.6f}   MSW = {MSW:.6f}")
+    print(f"F(손계산) = {MSB_hand / MSW:.10f}")
+    print(f"F(scipy)  = {F:.10f}")
+
+    # k=2 이면 F = t^2 이어야 한다. ctrl 과 trt1 둘만 쓴다.
+    F2, p2 = stats.f_oneway(ctrl, trt1)
+    t2, pt = stats.ttest_ind(ctrl, trt1)
+    print(f"\nk=2:  F = {F2:.10f}   t = {t2:.10f}   t^2 = {t2 ** 2:.10f}")
+    print(f"      p(F) = {p2:.10f}   p(t) = {pt:.10f}")
+    print(f"\nE[F(2,27)] = {27 / 25:.4f}")
+    ```
+
+    출력:
+
+    ```
+    F = 4.8461, p = 0.0159
+
+    전체평균 = 5.0730
+    SSB = 3.766340   MSB = 1.883170   MSW = 0.388596
+    F(손계산) = 4.8460878624
+    F(scipy)  = 4.8460878624
+
+    k=2:  F = 1.4191012974   t = 1.1912603818   t^2 = 1.4191012974
+          p(F) = 0.2490231660   p(t) = 0.2490231660
+
+    E[F(2,27)] = 1.0800
+    ```
+
+    **손계산이 맞는다.** $F = 4.8460878624$ 가 `f_oneway` 의 값과 열 자리까지 같다.
+
+    **$F = t^2$ 도 맞는다.** $t = 1.1912603818$ 을 제곱하면 $1.4191012974$ 로 $F$ 와 열 자리까지 일치하고, $p$-값도 $0.2490231660$ 으로 같다. 유도한 항등식이 수치로 확인되었다.
+
+    $H_0: \mu_{\text{ctrl}} = \mu_{\text{trt1}} = \mu_{\text{trt2}}$ 아래에서 통계량은 $F \sim F_{2,27}$ 이고 그 기댓값은 $\frac{d_2}{d_2-2} = \frac{27}{25} = 1.08$ 이다. 관측값 $4.85$ 는 그 네 배를 넘는다. 왜 기댓값이 $1$ 근처인지는 $E[MSW] = \sigma^2$ 와 $E[MSB] = \sigma^2 + \frac{\sum n_i(\mu_i - \bar\mu)^2}{k-1}$ 에서 나온다. 귀무가설이 참이면 둘째 항이 $0$ 이라 분자와 분모가 같은 것을 재게 되고, 비는 $1$ 근처를 맴돈다.
 
 ## 시각화: 상자그림
 
@@ -84,27 +271,98 @@ $H_0: \mu_{\text{ctrl}} = \mu_{\text{trt1}} = \mu_{\text{trt2}}$ 아래에서 �
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 상자그림으로 보기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 상자그림으로 보기. 세 집단의 무게를 상자그림으로 그린다.
+
+**(1)** 그림에서 읽히는 것을 **수치와 함께** 적으시오. 세 상자의 위아래 관계는 어떠한가.
+
+**(2)** 이 그림이 **가리는 것**은 무엇인가. 특히 분산분석의 $F$ 를 이 그림에서 눈대중으로 읽을 수 있는지 따지시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 검정을 하기 전이든 뒤든 그림을 본다. 상자가 겹치는 정도가 F 값과
-# 어떻게 맞물리는지 눈에 익혀 두면 좋다.
-fig, ax = plt.subplots(figsize=(6, 4))
-ax.boxplot([ctrl, trt1, trt2], labels=['ctrl', 'trt1', 'trt2'])
-ax.set_xlabel('Group')
-ax.set_ylabel('Weight')
-ax.set_title('Plant weights by group')
-plt.tight_layout()
-plt.show()
-```
+    유도할 답이 있는 문제가 아니다. **그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다.
 
-![집단별 상자그림](./img/oneway_scipy_49.png)
+    ```python
+    import matplotlib.pyplot as plt
 
-세 상자가 서로 겹친다. trt2가 가장 높고 trt1이 가장 낮지만 상자들이 나란히 놓일 만큼 가깝다. $p = 0.016$이 "압도적"이 아니라 "그럭저럭 유의한" 정도인 이유가 그림에 그대로 나타난다.
+    # 상자그림이 실제로 그리는 수들을 먼저 찍어 둔다.
+    names = ['ctrl', 'trt1', 'trt2']
+    groups = [ctrl, trt1, trt2]
+    print(f"{'group':>6}{'mean':>8}{'median':>8}{'Q1':>8}{'Q3':>8}{'IQR':>8}{'sd':>8}")
+    for name, x in zip(names, groups):
+        q1, q2, q3 = np.percentile(x, [25, 50, 75])
+        print(f"{name:>6}{x.mean():>8.3f}{q2:>8.3f}{q1:>8.3f}{q3:>8.3f}"
+              f"{q3 - q1:>8.3f}{x.std(ddof=1):>8.3f}")
+
+    # 상자 바깥으로 따로 찍히는 점이 어느 집단에 있는가.
+    for name, x in zip(names, groups):
+        q1, q3 = np.percentile(x, [25, 75])
+        lo, hi = q1 - 1.5 * (q3 - q1), q3 + 1.5 * (q3 - q1)
+        flagged = np.sort(x[(x < lo) | (x > hi)])
+        print(f"{name}: 울타리 밖 {flagged if len(flagged) else '없음'}")
+
+    # 그림에서는 읽히지 않는 것 — 쌍별 t-검정의 p-값.
+    for i in range(3):
+        for j in range(i + 1, 3):
+            t, p = stats.ttest_ind(groups[i], groups[j])
+            print(f"{names[i]} vs {names[j]}: t = {t:+.4f}, p = {p:.4f}")
+
+    # 검정을 하기 전이든 뒤든 그림을 본다. 상자가 겹치는 정도가 F 값과
+    # 어떻게 맞물리는지 눈에 익혀 두면 좋다.
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.boxplot([ctrl, trt1, trt2], labels=['ctrl', 'trt1', 'trt2'])
+    ax.set_xlabel('Group')
+    ax.set_ylabel('Weight')
+    ax.set_title('Plant weights by group')
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+     group    mean  median      Q1      Q3     IQR      sd
+      ctrl   5.032   5.155   4.550   5.293   0.742   0.583
+      trt1   4.661   4.550   4.207   4.870   0.662   0.794
+      trt2   5.526   5.435   5.268   5.735   0.467   0.443
+    ctrl: 울타리 밖 없음
+    trt1: 울타리 밖 [5.87 6.03]
+    trt2: 울타리 밖 없음
+    ctrl vs trt1: t = +1.1913, p = 0.2490
+    ctrl vs trt2: t = -2.1340, p = 0.0469
+    trt1 vs trt2: t = -3.0101, p = 0.0075
+    ```
+
+    ![집단별 상자그림](./img/oneway_scipy_49.png)
+
+    **(1) 읽히는 것.** 중앙값의 순서가 trt2($5.435$) > ctrl($5.155$) > trt1($4.550$)이고 평균의 순서($5.526 > 5.032 > 4.661$)와 같다. 세 상자가 서로 겹치기는 하지만 겹치는 정도가 쌍마다 크게 다르다.
+
+    - **trt1 과 trt2 는 상자가 전혀 닿지 않는다.** trt1의 $Q_3 = 4.870$ 이 trt2의 $Q_1 = 5.268$ 보다 $0.40$ 아래다. 세 쌍 중 가장 뚜렷하게 갈린 쌍이다.
+    - **ctrl 과 trt2 는 겨우 닿는다.** ctrl의 $Q_3 = 5.293$ 과 trt2의 $Q_1 = 5.268$ 이 폭 $0.025$ 만큼만 포갠다.
+    - **ctrl 과 trt1 은 많이 겹친다.** trt1의 상자 윗변이 ctrl 상자 한가운데쯤에 온다.
+
+    흩어짐도 집단마다 다르다. trt2의 $IQR = 0.467$ 이 가장 좁고 ctrl의 $0.742$ 가 가장 넓다. trt1에는 울타리 밖으로 따로 찍힌 점이 둘($5.87$, $6.03$) 있는데, 상자 윗변 $4.870$ 에서 한참 떨어져 있다.
+
+    **(2) 가리는 것.**
+
+    **첫째, 그림은 중앙값을 그리는데 분산분석은 평균을 쓴다.** ctrl에서 평균 $5.032$ 가 중앙값 $5.155$ 보다 $0.12$ 아래인데, 상자그림에는 그 선이 아예 그려지지 않는다. 여기서는 두 순서가 우연히 같았지만 치우친 자료에서는 갈라질 수 있고, 그때 상자그림으로 분산분석 결과를 가늠하면 틀린다.
+
+    **둘째, $F$ 의 분모를 그림에서 읽을 수 없다.** $F$ 를 좌우하는 것은 $\sqrt{MSW} = 0.6234$ 인데, 상자그림이 보여 주는 흩어짐 척도는 표준편차가 아니라 $IQR$ 이다. 그런데 이 자료에서는 **두 척도의 순위가 서로 어긋난다.**
+
+    | 집단 | $IQR$ | 표준편차 |
+    |---|---|---|
+    | ctrl | $0.742$ (가장 넓음) | $0.583$ |
+    | trt1 | $0.662$ | $0.794$ (가장 큼) |
+    | trt2 | $0.467$ | $0.443$ |
+
+    $IQR$ 로는 ctrl이 가장 퍼져 보이지만 표준편차로는 trt1이 가장 크다. trt1의 두 바깥점 $5.87$, $6.03$ 이 표준편차를 끌어올리는 동안 $IQR$ 은 꿈쩍도 하지 않았기 때문이다. **상자그림은 설계상 꼬리의 무게를 지우는 그림이고, $MSW$ 는 바로 그 꼬리에 민감하다.**
+
+    **셋째, 표본크기가 보이지 않는다.** 세 상자가 똑같이 당당해 보이지만 모두 $n = 10$ 짜리다. $n$ 이 다른 설계였다면 그림은 그대로인 채 $p$-값만 달라졌을 것이다.
+
+    **넷째, 겹침의 정도와 $p$-값은 같은 것이 아니다.** 상자가 전혀 닿지 않는 trt1–trt2 쌍은 $p = 0.0075$, 겨우 닿는 ctrl–trt2 는 $p = 0.0469$, 많이 겹치는 ctrl–trt1 은 $p = 0.2490$ 으로 과연 순서는 맞는다. 그러나 이 수들은 어디까지나 **쌍별** 값이고 다중비교 보정을 하지 않은 것이라, 셋을 한꺼번에 묻는 $p = 0.0159$ 와는 다른 물음에 대한 답이다. 상자그림은 "어느 쌍이 다른가"를 묻게 만들지만 그 답을 주지는 못한다. 그 일은 사후검정의 몫이다.
+
+    요약하면 $p = 0.016$ 이 "압도적"이 아니라 "그럭저럭 유의한" 정도인 이유가 그림에 그대로 나타난다. 세 상자가 완전히 떨어져 있지도, 포개져 있지도 않다.
 
 ## 시각화: 관측된 꼬리를 표시한 F-분포
 
@@ -112,31 +370,132 @@ $F_{2,27}$의 밀도함수를 그리고 관측된 $F$-통계량 너머의 넓이
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> F 분포와 관측된 꼬리
+**보기 4.** <span class="diff easy" title="쉬움"></span> $d_1 = 2$ 일 때의 닫힌 꼴. 분자 자유도가 $2$ 인 것은 운이 좋은 경우다. 꼬리확률이 적분기호 없이 적힌다.
+
+**(1)** $F \sim F_{2,m}$ 일 때
+
+$$
+P(F \ge f) = \left(1 + \frac{2f}{m}\right)^{-m/2},
+\qquad
+f_{F_{2,m}}(x) = \left(1 + \frac{2x}{m}\right)^{-(m+2)/2}
+$$
+
+임을 보이시오. 이로부터 밀도의 **최빈값이 어디인지** 말하고, 유의수준 $\alpha$ 의 임계값을 닫힌 꼴로 적으시오.
+
+**(2)** $m = 27$, $f_{\text{obs}} = 4.846088$ 에 대해 (1)의 식이 `scipy` 와 맞는지 확인하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# 자유도는 (집단 수 - 1, 전체 수 - 집단 수) = (2, 27) 이다.
-# 칠해진 오른쪽 꼬리의 넓이가 곧 p-값이다.
-x = np.linspace(0, 8, 400)
-pdf = stats.f(2, 27).pdf(x)
+    **(1) 해석적으로.** 정의대로 $F = \dfrac{U/2}{V/m}$ 라 쓰자. 여기서 $U \sim \chi^2_2$, $V \sim \chi^2_m$ 이고 둘은 독립이다. 핵심은 **$\chi^2_2$ 가 평균 $2$ 인 지수분포**라는 것이다.
 
-fig, ax = plt.subplots(figsize=(6, 4))
-ax.plot(x, pdf, label='F(2, 27) PDF')
-mask = x >= F
-ax.fill_between(x[mask], pdf[mask], alpha=0.3, label='Observed tail')
-ax.set_title('F-distribution and observed tail')
-ax.legend()
-plt.tight_layout()
-plt.show()
-```
+    $$
+    P(U > u) = e^{-u/2}, \qquad u > 0
+    $$
 
-![F-분포와 관측된 꼬리](./img/oneway_scipy_65.png)
+    (자유도 2의 카이제곱 밀도는 $\frac12 e^{-u/2}$ 이므로 곧바로 나온다.) 이제 $V$ 로 조건을 걸면
 
-칠해진 꼬리의 넓이가 p-값 0.0159다. $F_{2,27}$ 분포가 1 근처에 몰려 있으므로($H_0$ 아래에서 $F$의 기댓값은 $df_2/(df_2-2) = 1.08$) 관측값 4.85는 오른쪽으로 꽤 나간 값이다.
+    $$
+    P(F \ge f) = P\!\left(U \ge \frac{2fV}{m}\right)
+    = E\!\left[\exp\!\left(-\frac{fV}{m}\right)\right]
+    $$
+
+    인데 이것은 $V \sim \chi^2_m$ 의 적률생성함수 $M_V(t) = (1-2t)^{-m/2}$ 를 $t = -f/m$ 에서 잰 값이다. 따라서
+
+    $$
+    P(F \ge f) = \left(1 + \frac{2f}{m}\right)^{-m/2}
+    $$
+
+    이다. 밀도는 이것을 $f$ 로 미분해 부호를 바꾸면 된다.
+
+    $$
+    f_{F}(x) = -\frac{d}{dx}\left(1+\frac{2x}{m}\right)^{-m/2}
+    = \frac{m}{2}\cdot\frac{2}{m}\left(1+\frac{2x}{m}\right)^{-m/2-1}
+    = \left(1+\frac{2x}{m}\right)^{-(m+2)/2}
+    $$
+
+    **최빈값은 $x = 0$ 이다.** 지수가 음수이고 밑이 $x$ 와 함께 커지므로 밀도는 $x = 0$ 에서 값 $1$ 을 갖고 **그 뒤로 단조감소**한다. 봉우리가 없다. 이것은 $d_1 = 2$ 에만 있는 특징으로, $d_1 \ge 3$ 이면 최빈값이 $\frac{(d_1-2)m}{d_1(m+2)} > 0$ 으로 안쪽에 생긴다. 그러니 "$F$ 분포가 $1$ 근처에 몰려 있다"는 말은 **기댓값 $E[F] = \frac{m}{m-2} = 1.08$ 에 대해서만 참이고 밀도의 모양에 대해서는 참이 아니다.** 아래 그림이 $x = 0$ 에서 $1.0$ 으로 시작해 내리막만 타는 이유가 이것이다.
+
+    임계값은 꼬리확률 식을 뒤집어 풀면 된다. $\left(1+\frac{2f}{m}\right)^{-m/2} = \alpha$ 에서
+
+    $$
+    f_{\alpha,\,2,\,m} = \frac{m}{2}\left(\alpha^{-2/m} - 1\right)
+    $$
+
+    이고 $\alpha = 0.05$, $m = 27$ 이면 $\frac{27}{2}\left(0.05^{-2/27}-1\right)$ 이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    # 자유도는 (집단 수 - 1, 전체 수 - 집단 수) = (2, 27) 이다.
+    m = 27
+
+    # 닫힌 꼴 꼬리확률과 scipy 를 맞춰 본다.
+    p_closed = (1 + 2 * F / m) ** (-m / 2)
+    p_scipy = stats.f(2, m).sf(F)
+    print(f"닫힌 꼴 p = {p_closed:.10f}")
+    print(f"scipy   p = {p_scipy:.10f}")
+    print(f"차이      = {abs(p_closed - p_scipy):.3e}")
+
+    # 밀도도 닫힌 꼴이다. x=0 에서 1 이고 단조감소한다.
+    x = np.array([0.0, 0.5, 1.0, 2.0, 3.0, F, 8.0])
+    pdf_closed = (1 + 2 * x / m) ** (-(m + 2) / 2)
+    pdf_scipy = stats.f(2, m).pdf(x)
+    print(f"\n{'x':>8}{'closed':>14}{'scipy':>14}")
+    for xi, a, b in zip(x, pdf_closed, pdf_scipy):
+        print(f"{xi:>8.3f}{a:>14.8f}{b:>14.8f}")
+
+    # 임계값도 뒤집어 풀린다.
+    crit_closed = m / 2 * (0.05 ** (-2 / m) - 1)
+    print(f"\n임계값 닫힌 꼴 = {crit_closed:.8f}")
+    print(f"임계값 scipy   = {stats.f(2, m).ppf(0.95):.8f}")
+    print(f"E[F(2,27)] = {m / (m - 2):.4f},  최빈값 = 0 (밀도가 단조감소)")
+
+    # 칠해진 오른쪽 꼬리의 넓이가 곧 p-값이다.
+    x = np.linspace(0, 8, 400)
+    pdf = stats.f(2, 27).pdf(x)
+
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.plot(x, pdf, label='F(2, 27) PDF')
+    mask = x >= F
+    ax.fill_between(x[mask], pdf[mask], alpha=0.3, label='Observed tail')
+    ax.set_title('F-distribution and observed tail')
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    닫힌 꼴 p = 0.0159099583
+    scipy   p = 0.0159099583
+    차이      = 2.776e-17
+
+           x        closed         scipy
+       0.000    1.00000000    1.00000000
+       0.500    0.59017815    0.59017815
+       1.000    0.35481634    0.35481634
+       2.000    0.13490561    0.13490561
+       3.000    0.05449071    0.05449071
+       4.846    0.01170737    0.01170737
+       8.000    0.00117350    0.00117350
+
+    임계값 닫힌 꼴 = 3.35413083
+    임계값 scipy   = 3.35413083
+    E[F(2,27)] = 1.0800,  최빈값 = 0 (밀도가 단조감소)
+    ```
+
+    ![F-분포와 관측된 꼬리](./img/oneway_scipy_65.png)
+
+    **세 식이 모두 맞는다.** 꼬리확률은 $0.0159099583$ 으로 열 자리까지 같고 차이가 $2.8\times10^{-17}$ 로 배정밀도 오차 수준이다. 밀도는 일곱 지점에서 여덟 자리까지 일치하며, 특히 $x = 0$ 에서 정확히 $1.00000000$ 이다. 임계값도 $3.35413083$ 으로 같다.
+
+    칠해진 꼬리의 넓이가 바로 $p = 0.0159$ 다. 그림을 보면 밀도가 $x = 0$ 에서 $1.0$ 으로 출발해 내려가기만 하므로 **$F$ 가 작은 값일수록 더 흔하다.** 그런데도 $F$ 의 기댓값이 $1.08$ 인 것은 오른쪽 꼬리가 길어서다. 관측값 $4.85$ 는 그 기댓값의 네 배를 넘고 $5\%$ 임계값 $3.354$ 도 넘었으므로 $H_0$ 을 기각한다.
+
+    한 가지 덧붙이면, 분자 자유도가 $2$ 가 아니면 이런 닫힌 꼴은 없다. $d_1$ 이 홀수이거나 $4$ 이상이면 꼬리확률이 불완전베타함수로만 적히고 수치적분이 필요하다. 집단이 **셋**일 때만 손으로 $p$-값을 낼 수 있다는 뜻이다.
 
 색칠된 넓이는
 

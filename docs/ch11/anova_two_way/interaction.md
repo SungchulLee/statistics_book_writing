@@ -78,66 +78,177 @@ F-통계량을 F-분포표의 임계값과 비교하거나 p-값을 쓴다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 교호작용 그림과 이원배치 분산분석
+**보기 1.** <span class="diff easy" title="쉬움"></span> 분산분석표는 칸평균 여섯 개에서 나온다. ToothGrowth 는 $a = 2$(supp), $b = 3$(dose), 칸마다 $c = 10$ 인 균형 설계다.
+
+**(1)** 균형 설계의 세 제곱합
+
+$$
+SSA = bc\sum_i (\bar y_{i\cdot} - \bar y)^2,
+\quad
+SSB = ac\sum_j (\bar y_{\cdot j} - \bar y)^2,
+\quad
+SSAB = c\sum_{i,j}(\bar y_{ij} - \bar y_{i\cdot} - \bar y_{\cdot j} + \bar y)^2
+$$
+
+을 쓰고, **요인 A 의 수준이 둘일 때** $\delta_j = \bar y_{1j} - \bar y_{2j}$ (수준 $j$ 에서의 두 수준 격차)라 두면
+
+$$
+SSAB = \frac{c}{2}\sum_{j=1}^{b} (\delta_j - \bar\delta)^2
+$$
+
+임을 보이시오. 곧 **교호작용 제곱합은 격차들의 흩어짐**이다.
+
+**(2)** 칸평균 여섯 개만으로 $SSA$, $SSB$, $SSAB$ 를 계산해 출력표와 맞추시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import pandas as pd
-from statsmodels.formula.api import ols
-from statsmodels.stats.anova import anova_lm
-from statsmodels.graphics.factorplots import interaction_plot
+??? success "풀이"
 
-def load_data():
-    """ToothGrowth 자료를 읽는다. 보충제 종류와 투여량, 그리고 치아 길이다."""
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
-    df = pd.read_csv(url, usecols=[1, 2, 3])
-    return df
+    **(1) 해석적으로.** $a = 2$ 이면 교호작용 편차
 
-def plot_interaction(df):
-    """교호작용 그림. 두 선이 나란하면 교호작용이 없다는 뜻이다.
+    $$
+    d_{ij} = \bar y_{ij} - \bar y_{i\cdot} - \bar y_{\cdot j} + \bar y
+    $$
 
-    선이 벌어지거나 엇갈리면 한 요인의 효과가 다른 요인의 수준에 따라
-    달라진다는 것이고, 그때는 주효과만 말해서는 안 된다.
-    """
-    fig, ax = plt.subplots(figsize=(12, 3))
-    interaction_plot(df.dose, df.supp, df.len,
-                     colors=['red', 'blue'],
-                     markers=['*', 'P'],
-                     markersize=7, ax=ax,
-                     legendloc='lower right',
-                     linestyles=["--", "--"])
-    ax.set_title("Interaction Plot: Dose vs. Supplement on Tooth Length")
-    ax.set_xlabel("Dose Level")
-    ax.set_ylabel("Tooth Length")
-    plt.show()
+    가 열마다 더해서 $0$ 이 된다. 실제로 $\bar y_{\cdot j} = \frac{\bar y_{1j} + \bar y_{2j}}{2}$ 이고 $\bar y = \frac{\bar y_{1\cdot}+\bar y_{2\cdot}}{2}$ 이므로
 
-def perform_two_way_anova(df):
-    """이원배치 분산분석. 그림에서 본 것이 통계적으로도 유의한지 확인한다."""
-    model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
-    anova_results = anova_lm(model)
-    print("\nTwo-Way ANOVA Results:")
-    print(anova_results)
+    $$
+    d_{1j} + d_{2j} = (\bar y_{1j}+\bar y_{2j}) - (\bar y_{1\cdot}+\bar y_{2\cdot}) - 2\bar y_{\cdot j} + 2\bar y = 0
+    $$
 
-df = load_data()
-plot_interaction(df)
-perform_two_way_anova(df)
-```
+    이다. 따라서 $d_{2j} = -d_{1j}$ 이고
 
-출력:
+    $$
+    d_{1j} = \bar y_{1j} - \bar y_{1\cdot} - \frac{\bar y_{1j}+\bar y_{2j}}{2} + \frac{\bar y_{1\cdot}+\bar y_{2\cdot}}{2}
+    = \frac{\bar y_{1j} - \bar y_{2j}}{2} - \frac{\bar y_{1\cdot} - \bar y_{2\cdot}}{2}
+    = \frac{\delta_j - \bar\delta}{2}
+    $$
 
-```
+    이다($\bar\delta = \bar y_{1\cdot} - \bar y_{2\cdot}$ 는 $\delta_j$ 들의 평균이기도 하다). 제곱해 두 행을 더하면
 
-Two-Way ANOVA Results:
-                   df       sum_sq      mean_sq          F        PR(>F)
-C(supp)           1.0   205.350000   205.350000  15.571979  2.311828e-04
-C(dose)           2.0  2426.434333  1213.217167  91.999965  4.046291e-18
-C(supp):C(dose)   2.0   108.319000    54.159500   4.106991  2.186027e-02
-Residual         54.0   712.106000    13.187148        NaN           NaN
-```
+    $$
+    SSAB = c\sum_j (d_{1j}^2 + d_{2j}^2) = c\sum_j 2\left(\frac{\delta_j-\bar\delta}{2}\right)^2
+    = \frac{c}{2}\sum_j (\delta_j - \bar\delta)^2
+    $$
 
-![교호작용 그림](./img/interaction_79.png)
+    이다. **교호작용 제곱합이 "격차 $\delta_j$ 들이 서로 얼마나 다른가"를 그대로 잰 수**가 되었다. 격차가 모든 수준에서 같으면($\delta_j \equiv \bar\delta$) $SSAB = 0$ 이고, 이것이 바로 교호작용 그림의 두 선이 평행하다는 말이다. **"평행"의 대수적 뜻이 이 식에 담겨 있다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+    from statsmodels.graphics.factorplots import interaction_plot
+
+    def load_data():
+        """ToothGrowth 자료를 읽는다. 보충제 종류와 투여량, 그리고 치아 길이다."""
+        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+        df = pd.read_csv(url, usecols=[1, 2, 3])
+        return df
+
+    def plot_interaction(df):
+        """교호작용 그림. 두 선이 나란하면 교호작용이 없다는 뜻이다.
+
+        선이 벌어지거나 엇갈리면 한 요인의 효과가 다른 요인의 수준에 따라
+        달라진다는 것이고, 그때는 주효과만 말해서는 안 된다.
+        """
+        fig, ax = plt.subplots(figsize=(12, 3))
+        interaction_plot(df.dose, df.supp, df.len,
+                         colors=['red', 'blue'],
+                         markers=['*', 'P'],
+                         markersize=7, ax=ax,
+                         legendloc='lower right',
+                         linestyles=["--", "--"])
+        ax.set_title("Interaction Plot: Dose vs. Supplement on Tooth Length")
+        ax.set_xlabel("Dose Level")
+        ax.set_ylabel("Tooth Length")
+        plt.show()
+
+    def perform_two_way_anova(df):
+        """이원배치 분산분석. 그림에서 본 것이 통계적으로도 유의한지 확인한다."""
+        model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
+        anova_results = anova_lm(model)
+        print("\nTwo-Way ANOVA Results:")
+        print(anova_results)
+
+    df = load_data()
+    plot_interaction(df)
+    perform_two_way_anova(df)
+    ```
+
+    출력:
+
+    ```
+
+    Two-Way ANOVA Results:
+                       df       sum_sq      mean_sq          F        PR(>F)
+    C(supp)           1.0   205.350000   205.350000  15.571979  2.311828e-04
+    C(dose)           2.0  2426.434333  1213.217167  91.999965  4.046291e-18
+    C(supp):C(dose)   2.0   108.319000    54.159500   4.106991  2.186027e-02
+    Residual         54.0   712.106000    13.187148        NaN           NaN
+    ```
+
+    ![교호작용 그림](./img/interaction_79.png)
+
+    이제 칸평균 여섯 개만으로 같은 표를 만들어 본다.
+
+    ```python
+    import numpy as np
+
+    c = 10
+    M = df.pivot_table(index='supp', columns='dose', values='len', aggfunc='mean')
+    print("칸평균")
+    print(M)
+
+    row, col = M.mean(axis=1), M.mean(axis=0)
+    grand = M.values.mean()
+    SSA = 3 * c * ((row - grand) ** 2).sum()
+    SSB = 2 * c * ((col - grand) ** 2).sum()
+    D = M.values - row.values[:, None] - col.values[None, :] + grand
+    SSAB = c * (D ** 2).sum()
+    print(f"\n행평균 {row.values.round(4)}  열평균 {col.values.round(4)}  전체 {grand:.4f}")
+    print(f"SSA  = {SSA:.4f}   (표: 205.3500)")
+    print(f"SSB  = {SSB:.4f}   (표: 2426.4343)")
+    print(f"SSAB = {SSAB:.4f}   (표: 108.3190)")
+
+    # a=2 의 지름길: 격차의 흩어짐
+    delta = M.loc['OJ'] - M.loc['VC']
+    print(f"\n격차 delta_j = {delta.values.round(2)},  평균 {delta.mean():.2f}")
+    print(f"(c/2) * sum (delta - mean)^2 = {c / 2 * ((delta - delta.mean()) ** 2).sum():.4f}")
+
+    SSE = sum(((v.values - v.values.mean()) ** 2).sum()
+              for _, v in df.groupby(['supp', 'dose'])['len'])
+    SST = ((df['len'] - df['len'].mean()) ** 2).sum()
+    print(f"\nSSE = {SSE:.4f},  네 제곱합의 합 = {SSA + SSB + SSAB + SSE:.4f},  SST = {SST:.4f}")
+    ```
+
+    출력:
+
+    ```
+    칸평균
+    dose    0.5    1.0    2.0
+    supp                     
+    OJ    13.23  22.70  26.06
+    VC     7.98  16.77  26.14
+
+    행평균 [20.6633 16.9633]  열평균 [10.605 19.735 26.1  ]  전체 18.8133
+    SSA  = 205.3500   (표: 205.3500)
+    SSB  = 2426.4343   (표: 2426.4343)
+    SSAB = 108.3190   (표: 108.3190)
+
+    격차 delta_j = [ 5.25  5.93 -0.08],  평균 3.70
+    (c/2) * sum (delta - mean)^2 = 108.3190
+
+    SSE = 712.1060,  네 제곱합의 합 = 3452.2093,  SST = 3452.2093
+    ```
+
+    **세 제곱합이 칸평균만으로 복원된다.** $SSA = 205.3500$, $SSB = 2426.4343$, $SSAB = 108.3190$ 이 모두 분산분석표와 소수 넷째 자리까지 같다. 원자료 $60$ 개가 쓰인 곳은 $SSE$ 뿐이다. **분산분석표는 "칸평균 여섯 개 + 칸 안의 흩어짐" 두 덩어리로 완전히 정해진다.**
+
+    **(1)의 지름길도 맞는다.** 격차가 $\delta = (5.25,\ 5.93,\ -0.08)$ 이고 평균이 $3.70$ 이다. 이 셋의 편차제곱합에 $c/2 = 5$ 를 곱하면 $108.3190$ 으로 $SSAB$ 와 정확히 같다. 교호작용이 유의한 까닭이 여기서 한눈에 보인다. **격차 셋 중 둘은 $5$ 를 넘는데 하나는 $0$ 에 붙어 있다.** 그 흩어짐이 교호작용의 전부다.
+
+    덧붙이면 $\bar\delta = 3.70$ 이 바로 `supp` 주효과의 크기이고(보기 2의 Tukey 표에 나온 `meandiff`$= -3.70$ 과 같은 수다), $SSA = \frac{abc}{4}\bar\delta^2 = 15 \times 3.7^2 = 205.35$ 로도 나온다. **주효과는 격차의 평균, 교호작용은 격차의 분산**이다.
 
 ### 출력 해석
 
@@ -296,45 +407,187 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 2x2 설계의 이원배치 분산분석
+**보기 3.** <span class="diff easy" title="쉬움"></span> $2\times2$ 설계에서 교호작용 $p = 0.64$ 는 무엇을 뜻하는가. 교수법 둘 × 학습시간 둘, 칸마다 $c = 2$ 명인 설계다.
+
+**(1)** 보기 1의 식에서 $a = b = 2$ 일 때
+
+$$
+SSAB = \frac{c}{4}L^2,
+\qquad
+L = (\bar y_{11} - \bar y_{12}) - (\bar y_{21} - \bar y_{22})
+$$
+
+임을 보이고, 네 제곱합을 모두 손으로 계산하시오. 또 $F_{AB} = t^2$ 이며 $t = L/\widehat{\operatorname{SE}}(L)$ 임을 확인하시오.
+
+**(2)** 잔차 자유도가 $4$ 뿐이라는 사실의 대가를 수로 재시오. **$5\%$ 에서 유의하려면 $|L|$ 이 얼마보다 커야 하는가.** 참값이 $L = 2,\,4,\,6,\,8$ 일 때의 검정력을 구하고, $p = 0.64$ 를 "교호작용이 없다"로 읽으면 왜 안 되는지 말하시오.
 
 </div>
 
-```python
-import pandas as pd
-from statsmodels.formula.api import ols
-from statsmodels.stats.anova import anova_lm
+??? success "풀이"
 
-# 교수법 둘과 학습시간 둘, 칸마다 두 명씩인 2x2 설계다.
-# 칸당 반복이 둘뿐이라 자유도가 매우 적다. 교호작용을 재려면 칸마다
-# 반복이 적어도 둘은 있어야 한다는 요구를 겨우 맞춘 셈이다.
-data = {
-    'Teaching_Method': ['Traditional', 'Traditional', 'Traditional', 'Traditional',
-                        'Online', 'Online', 'Online', 'Online'],
-    'Study_Time': ['1 Hour', '1 Hour', '2 Hours', '2 Hours',
-                   '1 Hour', '1 Hour', '2 Hours', '2 Hours'],
-    'Score': [60, 62, 68, 70, 65, 63, 72, 74]
-}
-df = pd.DataFrame(data)
+    **(1) 해석적으로.** 보기 1에서 $a = 2$ 일 때 $SSAB = \frac{c}{2}\sum_j(\delta_j - \bar\delta)^2$ 였다. 이제 $b = 2$ 이면 $\delta_1, \delta_2$ 둘뿐이고 $\bar\delta = \frac{\delta_1+\delta_2}{2}$ 이므로
 
-model = ols('Score ~ C(Teaching_Method) + C(Study_Time) + C(Teaching_Method):C(Study_Time)', data=df).fit()
-anova_results = anova_lm(model)
-print("Two-Way ANOVA Results:")
-print(anova_results)
-```
+    $$
+    \sum_{j=1}^{2}(\delta_j - \bar\delta)^2 = 2\left(\frac{\delta_1-\delta_2}{2}\right)^2 = \frac{(\delta_1-\delta_2)^2}{2} = \frac{L^2}{2}
+    $$
 
-출력:
+    이고(여기서 $L = \delta_1 - \delta_2$ 가 보기에 적힌 네 칸평균의 대비다) 따라서
 
-```
-Two-Way ANOVA Results:
-                                   df  sum_sq  mean_sq      F    PR(>F)
-C(Teaching_Method)                1.0    24.5     24.5  12.25  0.024896
-C(Study_Time)                     1.0   144.5    144.5  72.25  0.001051
-C(Teaching_Method):C(Study_Time)  1.0     0.5      0.5   0.25  0.643330
-Residual                          4.0     8.0      2.0    NaN       NaN
-```
+    $$
+    SSAB = \frac{c}{2}\cdot\frac{L^2}{2} = \frac{c}{4}L^2
+    $$
 
-손계산한 표와 정확히 일치한다. 잔차 자유도가 4밖에 안 된다는 점은 눈여겨볼 만하다. 관측값 8개로 모수 4개(전체평균, 두 주효과, 교호작용)를 추정했기 때문이다. 이렇게 자유도가 작으면 F-검정의 검정력이 매우 낮아, 교호작용의 $p = 0.64$를 "교호작용이 없다"는 증거로 읽으면 안 된다.
+    이다. 자유도가 $(a-1)(b-1) = 1$ 이므로 $MSAB = SSAB$ 다.
+
+    한편 $L$ 은 네 칸평균의 계수 $(+1,-1,-1,+1)$ 짜리 대비이고 각 칸평균의 분산이 $\sigma^2/c$ 이므로
+
+    $$
+    \operatorname{Var}(L) = \frac{4\sigma^2}{c}
+    \quad\Longrightarrow\quad
+    \widehat{\operatorname{SE}}(L) = \sqrt{\frac{4\,MSE}{c}}
+    $$
+
+    이고
+
+    $$
+    t^2 = \frac{L^2}{4\,MSE/c} = \frac{(c/4)L^2}{MSE} = \frac{MSAB}{MSE} = F_{AB}
+    $$
+
+    로 **$F_{AB}$ 가 정확히 $t^2$ 이다.** 자유도 $1$ 의 $F$ 가 늘 그렇다.
+
+    칸평균은 $(60,62)\to 61$, $(68,70)\to 69$, $(65,63)\to 64$, $(72,74)\to 73$ 이다. 수를 넣으면 아래에서 확인한다.
+
+    **(2) 검정력.** 참 대비가 $L$ 일 때 비중심모수는
+
+    $$
+    \lambda = \frac{E[SSAB]-\sigma^2 \text{ 부분}}{\sigma^2} = \frac{c\,L^2}{4\sigma^2}
+    $$
+
+    이고 검정력은 $P\!\left(F'(1,4;\lambda) > F_{0.95}(1,4)\right)$ 다. $F_{0.95}(1,4) = 7.7086$ 으로 임계값이 매우 높다는 것이 자유도 $4$ 의 대가다.
+
+    ```python
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    # 교수법 둘과 학습시간 둘, 칸마다 두 명씩인 2x2 설계다.
+    # 칸당 반복이 둘뿐이라 자유도가 매우 적다. 교호작용을 재려면 칸마다
+    # 반복이 적어도 둘은 있어야 한다는 요구를 겨우 맞춘 셈이다.
+    data = {
+        'Teaching_Method': ['Traditional', 'Traditional', 'Traditional', 'Traditional',
+                            'Online', 'Online', 'Online', 'Online'],
+        'Study_Time': ['1 Hour', '1 Hour', '2 Hours', '2 Hours',
+                       '1 Hour', '1 Hour', '2 Hours', '2 Hours'],
+        'Score': [60, 62, 68, 70, 65, 63, 72, 74]
+    }
+    df = pd.DataFrame(data)
+
+    model = ols('Score ~ C(Teaching_Method) + C(Study_Time) + C(Teaching_Method):C(Study_Time)', data=df).fit()
+    anova_results = anova_lm(model)
+    print("Two-Way ANOVA Results:")
+    print(anova_results)
+    ```
+
+    출력:
+
+    ```
+    Two-Way ANOVA Results:
+                                       df  sum_sq  mean_sq      F    PR(>F)
+    C(Teaching_Method)                1.0    24.5     24.5  12.25  0.024896
+    C(Study_Time)                     1.0   144.5    144.5  72.25  0.001051
+    C(Teaching_Method):C(Study_Time)  1.0     0.5      0.5   0.25  0.643330
+    Residual                          4.0     8.0      2.0    NaN       NaN
+    ```
+
+    손계산한 표와 정확히 일치한다. (1)과 (2)를 수로 확인한다.
+
+    ```python
+    import warnings
+
+    import numpy as np
+    from scipy import stats
+
+    c = 2
+    M = df.pivot_table(index='Teaching_Method', columns='Study_Time',
+                       values='Score', aggfunc='mean')
+    print("칸평균")
+    print(M)
+
+    row, col = M.mean(axis=1), M.mean(axis=0)
+    grand = M.values.mean()
+    SSA = 2 * c * ((row - grand) ** 2).sum()
+    SSB = 2 * c * ((col - grand) ** 2).sum()
+    L = (M.iloc[0, 0] - M.iloc[0, 1]) - (M.iloc[1, 0] - M.iloc[1, 1])
+    SSAB = c * L ** 2 / 4
+    SSE = sum(((v.values - v.values.mean()) ** 2).sum()
+              for _, v in df.groupby(['Teaching_Method', 'Study_Time'])['Score'])
+    print(f"\n행평균 {row.values}  열평균 {col.values}  전체 {grand}")
+    print(f"SSA = {SSA}   SSB = {SSB}   L = {L}   SSAB = c L^2/4 = {SSAB}")
+    print(f"SSE = {SSE}   합 = {SSA + SSB + SSAB + SSE}   "
+          f"SST = {((df['Score'] - df['Score'].mean()) ** 2).sum()}")
+
+    MSE = SSE / 4
+    se_L = np.sqrt(4 * MSE / c)
+    t_L = L / se_L
+    print(f"\nMSE = {MSE},  SE(L) = {se_L},  t = {t_L},  t^2 = {t_L ** 2}")
+
+    # 자유도 4 에서 잡아낼 수 있는 교호작용의 크기는 얼마인가.
+    t_crit = stats.t.ppf(0.975, 4)
+    print(f"\nt(0.975, 4) = {t_crit:.4f}  ->  |L| > {t_crit * se_L:.4f} 이어야 유의하다")
+    print(f"견줄 것: 학습시간 주효과의 크기 = {col.iloc[1] - col.iloc[0]:.1f}")
+
+    F_crit = stats.f(1, 4).ppf(0.95)
+    print(f"\n{'참 L':>8}{'lambda':>10}{'검정력':>10}")
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        for L_true in (1, 2, 4, 6, 8):
+            lam = c * L_true ** 2 / (4 * MSE)
+            print(f"{L_true:>8}{lam:>10.3f}{stats.ncf(1, 4, lam).sf(F_crit):>10.4f}")
+    ```
+
+    출력:
+
+    ```
+    칸평균
+    Study_Time       1 Hour  2 Hours
+    Teaching_Method                 
+    Online             64.0     73.0
+    Traditional        61.0     69.0
+
+    행평균 [68.5 65. ]  열평균 [62.5 71. ]  전체 66.75
+    SSA = 24.5   SSB = 144.5   L = -1.0   SSAB = c L^2/4 = 0.5
+    SSE = 8.0   합 = 177.5   SST = 177.5
+
+    MSE = 2.0,  SE(L) = 2.0,  t = -0.5,  t^2 = 0.25
+
+    t(0.975, 4) = 2.7764  ->  |L| > 5.5529 이어야 유의하다
+    견줄 것: 학습시간 주효과의 크기 = 8.5
+
+         참 L    lambda       검정력
+           1     0.250    0.0679
+           2     1.000    0.1222
+           4     4.000    0.3360
+           6     9.000    0.6193
+           8    16.000    0.8433
+    ```
+
+    **(1)이 그대로 맞는다.** 손으로 구한 $SSA = 24.5$, $SSB = 144.5$, $SSAB = 0.5$, $SSE = 8.0$ 이 분산분석표와 똑같고 합이 $SST = 177.5$ 다. 대비는 $L = -1.0$ 이고 $SSAB = \frac{2}{4}\times 1 = 0.5$ 다. $t = -0.5$ 를 제곱하면 $0.25$ 로 표의 $F_{AB}$ 와 같다.
+
+    **(2) 자유도 $4$ 의 대가가 크다.** $\widehat{\operatorname{SE}}(L) = 2.0$ 이고 $t_{0.975,4} = 2.7764$ 이므로 **$|L| > 5.55$ 여야 유의하다고 말할 수 있다.** 그런데 이 자료에서 가장 큰 효과인 학습시간 주효과가 $8.5$ 점이다. 곧 **주효과에 맞먹는 크기의 교호작용이 아니면 이 설계는 잡아내지 못한다.**
+
+    검정력 표가 그것을 수로 말해 준다.
+
+    | 참 $L$ | $\lambda$ | 검정력 |
+    |---|---|---|
+    | $1$ | $0.25$ | $0.068$ |
+    | $2$ | $1.00$ | $0.122$ |
+    | $4$ | $4.00$ | $0.336$ |
+    | $6$ | $9.00$ | $0.619$ |
+    | $8$ | $16.00$ | $0.843$ |
+
+    관측된 $L = -1$ 이 참값이라면 검정력이 $0.068$ 로 **명목수준 $0.05$ 와 거의 다르지 않다.** $L = 4$ 라는 꽤 큰 교호작용이 실제로 있어도 세 번에 두 번은 놓친다.
+
+    **그러므로 $p = 0.64$ 는 "교호작용이 없다"는 증거가 아니라 "이 설계로는 알 수 없다"는 뜻이다.** 기각하지 못한 것과 귀무가설이 참인 것은 다르다. 교호작용을 진지하게 보려면 칸마다 반복을 늘려야 한다. $c$ 를 $2$ 에서 $8$ 로 늘리면 $\lambda$ 가 네 배가 되고 분모 자유도도 $4$ 에서 $28$ 로 커져 임계값이 $7.71$ 에서 $4.20$ 으로 내려간다.
 
 ### R 코드
 

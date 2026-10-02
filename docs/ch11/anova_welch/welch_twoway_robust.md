@@ -32,56 +32,163 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 로버스트 이원배치 분산분석
+**보기 1.** <span class="diff easy" title="쉬움"></span> 칸마다 둘씩이면 HC3 가 무엇을 하는가. 자료는 $3\times3$ 설계에 칸마다 반복 $2$ 개, 모두 $18$ 개다. 모형은 포화 요인모형이므로 적합값은 칸평균이다.
+
+**(1)** 이 설계에서 **모든 지렛값이 $h_{ii} = 1/2$** 임을 보이고, 칸 $(i,j)$ 의 두 관측값 차를 $d_{ij}$ 라 할 때 HC3 가 그 칸의 평균에 주는 분산이
+
+$$
+\widehat{\operatorname{Var}}_{\text{HC3}}(\bar y_{ij}) = \frac{d_{ij}^2}{2} = 2\cdot\frac{s_{ij}^2}{n_{ij}}
+$$
+
+곧 **보통의 $s_{ij}^2/n_{ij}$ 의 정확히 두 배**임을 보이시오. 또 칸당 $n = 1$ 이면 왜 계산이 불가능한지 밝히시오.
+
+**(2)** 두 주장을 수치로 확인하시오.
 
 </div>
 
-```python
-import pandas as pd
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-# 칸마다 반복이 **둘 이상** 있어야 한다. 칸당 하나뿐이면 3x3 설계에서
-# 모수 9개로 관측값 9개를 완전히 맞혀 버려 잔차 자유도가 0이 되고,
-# 지렛값 h_ii가 1이 되어 HC3의 1/(1-h_ii)^2 이 발산한다.
-data = {
-    "Temperature": ["High"]*6 + ["Low"]*6 + ["Medium"]*6,
-    "Fertilizer":  ["A", "A", "B", "B", "C", "C"] * 3,
-    "Growth":      [12, 13, 15, 18, 14, 15,
-                    10,  9, 13, 12, 11, 13,
-                    14, 16, 16, 21, 15, 17],
-}
-df = pd.DataFrame(data)
+    **(1) 해석적으로.** 포화 요인모형의 적합값은 칸평균이므로, 칸평균 모수화 $y = \sum_{i,j}\mu_{ij}\mathbf 1_{ij} + \varepsilon$ 로 바꾸어 생각해도 사영은 같다. 설계행렬의 열이 서로 겹치지 않는 지시벡터이므로 햇 행렬은 칸마다 $\frac{1}{n_{ij}}J_{n_{ij}}$ 인 블록대각이고
 
-model = ols("Growth ~ C(Temperature) * C(Fertilizer)", data=df).fit()
-rob = model.get_robustcov_results(cov_type="HC3")
+    $$
+    h_{ii} = \frac{1}{n_{ij}} = \frac12
+    $$
 
-# Temperature의 주효과 검정.
-# ":"가 든 이름을 빼야 한다. 교호작용 항의 이름도 "C(Temperature)["로 시작하므로
-# 그냥 startswith만 쓰면 교호작용까지 함께 검정해 자유도가 2가 아니라 6이 된다.
-pnames = model.params.index.tolist()
-temp_params = [p for p in pnames
-               if p.startswith("C(Temperature)[") and ":" not in p]
-constraint = ", ".join([f"{t} = 0" for t in temp_params])
-print("Main effect: Temperature")
-print(rob.f_test(constraint))
+    이다. **모든 관측값이 같은 지렛값을 받는다.** 따라서 HC3 의 가중 $1/(1-h_{ii})^2 = 1/(1/2)^2 = 4$ 도 모든 관측값에 공통이다.
 
-# 교호작용 검정
-inter_params = [p for p in pnames if ":" in p]
-constraint_inter = ", ".join([f"{t} = 0" for t in inter_params])
-print("Interaction: Temperature x Fertilizer")
-print(rob.f_test(constraint_inter))
-```
+    칸 안의 두 값을 $y_1, y_2$, 그 차를 $d = y_1 - y_2$ 라 하자. 칸평균이 $\frac{y_1+y_2}{2}$ 이므로 두 잔차는
 
-출력:
+    $$
+    \hat e_1 = \frac{d}{2},
+    \qquad
+    \hat e_2 = -\frac{d}{2}
+    $$
 
-```
-Main effect: Temperature
-<F test: F=8.055555555555552, p=0.009878581991016048, df_denom=9, df_num=2>
-Interaction: Temperature x Fertilizer
-<F test: F=0.15370680044593157, p=0.956506962060376, df_denom=9, df_num=4>
-```
+    다. 그 칸이 샌드위치 가운데에 기여하는 양은
 
-주효과는 유의하고($p = 0.0099$) 교호작용은 아니다($p = 0.957$). 분자 자유도가 각각 2와 4로, 수준 수에서 계산한 $a - 1 = 2$와 $(a-1)(b-1) = 4$에 맞는다. 이 자유도를 확인하는 것이 제약을 제대로 걸었는지 점검하는 가장 쉬운 방법이다.
+    $$
+    \sum_{\text{칸 안}} \frac{\hat e^2}{(1-h)^2} = 2\cdot\frac{d^2}{4}\cdot 4 = 2d^2
+    $$
+
+    이고, 이 모수화에서 $(X^\top X)^{-1}$ 의 해당 대각원소는 $1/n_{ij} = 1/2$ 이므로
+
+    $$
+    \widehat{\operatorname{Var}}_{\text{HC3}}(\bar y_{ij}) = \frac12 \cdot 2d^2 \cdot \frac12 = \frac{d^2}{2}
+    $$
+
+    이다. 한편 $n = 2$ 에서 표본분산은 $s^2 = \frac{d^2}{2}$ 이므로 보통의 추정값은 $s^2/n = \frac{d^2}{4}$ 다. 비가 정확히 $2$ 다.
+
+    **HC3 가 $n = 2$ 에서는 두 배 보수적**이라는 뜻이다. 같은 계산을 일반 $n$ 으로 하면 $h_{ii} = 1/n$, 가중 $\frac{n^2}{(n-1)^2}$, 칸 기여 $\frac{n^2}{(n-1)^2}\sum\hat e^2 = \frac{n^2 s^2}{n-1}$ 이고 양옆에 $1/n$ 을 곱해
+
+    $$
+    \widehat{\operatorname{Var}}_{\text{HC3}}(\bar y_{ij}) = \frac{s_{ij}^2}{n-1}
+    = \frac{n}{n-1}\cdot\frac{s_{ij}^2}{n}
+    $$
+
+    가 된다. 비가 $\frac{n}{n-1}$ 이므로 $n = 2$ 에서 $2$, $n = 5$ 에서 $1.25$, $n = 20$ 에서 $1.05$ 로 **칸이 커질수록 $1$ 에 가까워진다.** 잔차가 체계적으로 작아지는 것을 $(1-h)^2$ 로 되돌리는 보정인데, 칸이 작을수록 되돌릴 양이 크다.
+
+    **칸당 $n = 1$ 이면 발산한다.** 그때 $h_{ii} = 1/1 = 1$ 이라 $1/(1-h_{ii})^2$ 의 분모가 $0$ 이 된다. 포화모형이라 잔차도 모두 $0$ 이므로 $0/0$ 이고, 애초에 칸 안의 흩어짐을 재는 자료가 없으니 이분산을 추정할 재료 자체가 없다. **코드의 주석이 경고하는 것이 이것이다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    from statsmodels.formula.api import ols
+
+    # 칸마다 반복이 **둘 이상** 있어야 한다. 칸당 하나뿐이면 3x3 설계에서
+    # 모수 9개로 관측값 9개를 완전히 맞혀 버려 잔차 자유도가 0이 되고,
+    # 지렛값 h_ii가 1이 되어 HC3의 1/(1-h_ii)^2 이 발산한다.
+    data = {
+        "Temperature": ["High"]*6 + ["Low"]*6 + ["Medium"]*6,
+        "Fertilizer":  ["A", "A", "B", "B", "C", "C"] * 3,
+        "Growth":      [12, 13, 15, 18, 14, 15,
+                        10,  9, 13, 12, 11, 13,
+                        14, 16, 16, 21, 15, 17],
+    }
+    df = pd.DataFrame(data)
+
+    model = ols("Growth ~ C(Temperature) * C(Fertilizer)", data=df).fit()
+    rob = model.get_robustcov_results(cov_type="HC3")
+
+    # Temperature의 주효과 검정.
+    # ":"가 든 이름을 빼야 한다. 교호작용 항의 이름도 "C(Temperature)["로 시작하므로
+    # 그냥 startswith만 쓰면 교호작용까지 함께 검정해 자유도가 2가 아니라 6이 된다.
+    pnames = model.params.index.tolist()
+    temp_params = [p for p in pnames
+                   if p.startswith("C(Temperature)[") and ":" not in p]
+    constraint = ", ".join([f"{t} = 0" for t in temp_params])
+    print("Main effect: Temperature")
+    print(rob.f_test(constraint))
+
+    # 교호작용 검정
+    inter_params = [p for p in pnames if ":" in p]
+    constraint_inter = ", ".join([f"{t} = 0" for t in inter_params])
+    print("Interaction: Temperature x Fertilizer")
+    print(rob.f_test(constraint_inter))
+    ```
+
+    출력:
+
+    ```
+    Main effect: Temperature
+    <F test: F=8.055555555555552, p=0.009878581991016048, df_denom=9, df_num=2>
+    Interaction: Temperature x Fertilizer
+    <F test: F=0.15370680044593157, p=0.956506962060376, df_denom=9, df_num=4>
+    ```
+
+    주효과는 유의하고($p = 0.0099$) 교호작용은 아니다($p = 0.957$). 분자 자유도가 각각 2와 4로, 수준 수에서 계산한 $a - 1 = 2$와 $(a-1)(b-1) = 4$에 맞는다. 이 자유도를 확인하는 것이 제약을 제대로 걸었는지 점검하는 가장 쉬운 방법이다.
+
+    이제 (1)의 두 주장을 확인한다.
+
+    ```python
+    import numpy as np
+
+    # 모든 지렛값이 정말 1/2 인가.
+    h = model.get_influence().hat_matrix_diag
+    print(f"지렛값 h_ii: 최소 {h.min():.6f}, 최대 {h.max():.6f}  "
+          f"(모두 같은가: {np.allclose(h, 0.5)})")
+    print(f"HC3 가중 1/(1-h)^2 = {1 / (1 - h[0]) ** 2:.1f}")
+
+    # 칸평균 모수화로 다시 적합해 HC3 분산을 칸별 s^2/n 과 견준다.
+    cm = ols("Growth ~ C(Temperature):C(Fertilizer) - 1", data=df).fit()
+    cmr = cm.get_robustcov_results(cov_type="HC3")
+    hc3 = np.diag(cmr.cov_params())
+
+    cells = df.groupby(['Fertilizer', 'Temperature'])['Growth'].agg(['mean', 'var', 'count'])
+    classic = (cells['var'] / cells['count']).values
+    print(f"\n{'cell':<14}{'mean':>7}{'s^2':>8}{'s^2/n':>8}{'HC3':>8}{'비':>7}")
+    for (f, t), c, hv in zip(cells.index, classic, hc3):
+        v = cells.loc[(f, t), 'var']
+        print(f"{t + '-' + f:<14}{cells.loc[(f, t), 'mean']:>7.1f}{v:>8.2f}"
+              f"{c:>8.2f}{hv:>8.2f}{hv / c:>7.2f}")
+    print(f"\n비가 모두 2 인가: {np.allclose(hc3 / classic, 2.0)}")
+    ```
+
+    출력:
+
+    ```
+    지렛값 h_ii: 최소 0.500000, 최대 0.500000  (모두 같은가: True)
+    HC3 가중 1/(1-h)^2 = 4.0
+
+    cell             mean     s^2   s^2/n     HC3      비
+    High-A           12.5    0.50    0.25    0.50   2.00
+    Low-A             9.5    0.50    0.25    0.50   2.00
+    Medium-A         15.0    2.00    1.00    2.00   2.00
+    High-B           16.5    4.50    2.25    4.50   2.00
+    Low-B            12.5    0.50    0.25    0.50   2.00
+    Medium-B         18.5   12.50    6.25   12.50   2.00
+    High-C           14.5    0.50    0.25    0.50   2.00
+    Low-C            12.0    2.00    1.00    2.00   2.00
+    Medium-C         16.0    2.00    1.00    2.00   2.00
+
+    비가 모두 2 인가: True
+    ```
+
+    **두 주장이 모두 맞는다.** 열여덟 개 관측값의 지렛값이 전부 정확히 $0.5$ 이고, 아홉 칸 모두에서 HC3 분산이 $s_{ij}^2/n_{ij}$ 의 **정확히 두 배**다. 유도한 $\widehat{\operatorname{Var}}_{\text{HC3}} = s^2/(n-1)$ 이 $n = 2$ 에서 $s^2$ 가 되는 것도 표에서 바로 보인다(`s^2` 열과 `HC3` 열이 같은 수다).
+
+    여기서 이 방법의 성격이 드러난다. **HC3 는 칸마다 그 칸의 흩어짐을 쓴다.** Medium·B 칸은 $s^2 = 12.5$ 로 High·A 칸의 $0.5$ 보다 $25$ 배 크고, HC3 는 그 차이를 그대로 받아들인다. 반면 고전 분산분석은 아홉 칸을 합동해 $MSE = 25.0/9 = 2.778$ 하나를 모두에게 쓴다. 두 방법이 갈라지는 지점이 바로 여기다.
+
+    분모 자유도 $9$ 는 statsmodels 가 OLS 잔차 자유도 $N - ab = 18 - 9 = 9$ 를 그대로 쓴 것이고, **Welch 처럼 조정된 값이 아니다.** HC3 Wald 검정의 $F_{q,\nu}$ 참조분포는 대표본 근사이므로, 이 정도 표본에서는 $p$-값을 소수 넷째 자리까지 믿기 어렵다는 점을 기억해 두는 편이 좋다.
 
 ## 표준 분산분석과의 비교
 
@@ -89,31 +196,147 @@ Interaction: Temperature x Fertilizer
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 표준 분산분석과의 비교
+**보기 2.** <span class="diff easy" title="쉬움"></span> 합동이 누구를 돕고 누구를 해치는가. 같은 자료에 표준 분산분석과 HC3 Wald 검정을 모두 돌린다.
+
+**(1)** 비료 수준 $f$ 의 주변평균 $\bar y_{\cdot f} = \frac13\sum_i \bar y_{if}$ 의 분산을 두 방식으로 적으시오.
+
+$$
+\widehat{\operatorname{Var}}_{\text{합동}} = \frac{MSE}{6},
+\qquad
+\widehat{\operatorname{Var}}_{\text{칸별}} = \frac19\sum_{i}\frac{s_{if}^2}{2}
+$$
+
+셋 중 어느 비료에서 합동이 분산을 **과소**평가하고 어느 비료에서 **과대**평가하는지 수치로 보이시오.
+
+**(2)** 세 항의 $F$ 와 $p$ 를 두 방법에서 나란히 적고, $5\%$ 임계값 $F_{0.95}(2,9)$ 와 견주어 **어느 결론이 뒤집히는지** 짚으시오.
 
 </div>
 
-```python
-import statsmodels.api as sm
+??? success "풀이"
 
-# 같은 자료를 보통의 분산분석으로 돌려 견준다. 등분산이 깨진 설계에서
-# 두 방법의 p-값이 얼마나 갈리는지가 요점이다.
-print(sm.stats.anova_lm(model, typ=2))
-```
+    **(1) 해석적으로.** 합동 추정은 **모든 칸의 분산이 같다**고 보고 $MSE$ 하나를 모두에게 나누어 준다. 주변평균 $\bar y_{\cdot f}$ 는 $6$ 개 관측값의 평균이므로 $\widehat{\operatorname{Var}}_{\text{합동}} = MSE/6$ 이고, 비료가 무엇이든 **같은 수**다.
 
-출력:
+    칸별 추정은 다르다. $\bar y_{\cdot f} = \frac13\sum_i \bar y_{if}$ 이고 세 칸평균이 독립이므로
 
-```
-                                 sum_sq   df      F    PR(>F)
-C(Temperature)                81.444444  2.0  14.66  0.001475
-C(Fertilizer)                 36.777778  2.0   6.62  0.017060
-C(Temperature):C(Fertilizer)   2.555556  4.0   0.23  0.914666
-Residual                      25.000000  9.0    NaN       NaN
-```
+    $$
+    \operatorname{Var}(\bar y_{\cdot f}) = \frac19\sum_i \operatorname{Var}(\bar y_{if}) = \frac19\sum_i \frac{\sigma_{if}^2}{2}
+    $$
 
-표준 분산분석은 Temperature의 $F$를 14.66으로, HC3 Wald 검정은 8.06으로 준다. 두 값이 이만큼 다른 것은 분산이 칸마다 다르다는 신호다. 실제로 이 자료에서 B 비료의 칸들이 다른 칸보다 흩어져 있다.
+    로 **그 비료가 받은 세 칸의 분산만** 쓴다. 그러므로 어떤 비료에 흩어진 칸이 몰려 있으면 합동은 그 비료의 불확실성을 **과소**평가하고, 반대로 조용한 칸만 받은 비료에서는 **과대**평가한다. 합동은 칸 사이에서 불확실성을 재분배하는 셈이다.
 
-방향도 눈여겨보라. 로버스트 검정이 더 **작은** $F$를 준다. 표준 검정이 표준오차를 과소평가해 효과를 부풀리고 있었다는 뜻이다.
+    (1)에서 본 대로 HC3 는 $n = 2$ 에서 칸별 추정의 두 배를 쓰므로 세 열을 모두 적어 견주면 그림이 분명해진다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import statsmodels.api as sm
+
+    # 같은 자료를 보통의 분산분석으로 돌려 견준다. 등분산이 깨진 설계에서
+    # 두 방법의 p-값이 얼마나 갈리는지가 요점이다.
+    print(sm.stats.anova_lm(model, typ=2))
+    ```
+
+    출력:
+
+    ```
+                                     sum_sq   df      F    PR(>F)
+    C(Temperature)                81.444444  2.0  14.66  0.001475
+    C(Fertilizer)                 36.777778  2.0   6.62  0.017060
+    C(Temperature):C(Fertilizer)   2.555556  4.0   0.23  0.914666
+    Residual                      25.000000  9.0    NaN       NaN
+    ```
+
+    표준 분산분석은 Temperature의 $F$를 14.66으로, HC3 Wald 검정은 8.06으로 준다. 두 값이 이만큼 다른 것은 분산이 칸마다 다르다는 신호다. 실제로 이 자료에서 B 비료의 칸들이 다른 칸보다 흩어져 있다.
+
+    방향도 눈여겨보라. 로버스트 검정이 더 **작은** $F$를 준다. 어디서 그렇게 되는지 분해해 본다.
+
+    ```python
+    from scipy import stats
+
+    MSE = 25.0 / 9
+    cells = df.groupby(['Fertilizer', 'Temperature'])['Growth'].agg(['mean', 'var'])
+    print(f"합동 MSE = {MSE:.4f}   (칸 분산은 {cells['var'].min():.2f} 에서 "
+          f"{cells['var'].max():.2f} 까지)")
+
+    print(f"\n{'비료':>5}{'평균':>8}{'Var(합동)':>12}{'Var(칸별)':>12}{'Var(HC3)':>11}")
+    for f in ('A', 'B', 'C'):
+        v_cells = cells.loc[f, 'var'].values
+        var_pooled = MSE / 6
+        var_cell = (v_cells / 2).sum() / 9
+        print(f"{f:>5}{cells.loc[f, 'mean'].mean():>8.3f}{var_pooled:>12.4f}"
+              f"{var_cell:>12.4f}{2 * var_cell:>11.4f}")
+
+    # A 와 B 의 차에 대한 t 를 두 방식으로
+    mA, mB = cells.loc['A', 'mean'].mean(), cells.loc['B', 'mean'].mean()
+    vA = (cells.loc['A', 'var'].values / 2).sum() / 9
+    vB = (cells.loc['B', 'var'].values / 2).sum() / 9
+    se_pooled = np.sqrt(2 * MSE / 6)
+    se_hc3 = np.sqrt(2 * (vA + vB))
+    print(f"\nB - A = {mB - mA:.4f}")
+    print(f"  합동 SE = {se_pooled:.4f}  ->  t = {(mB - mA) / se_pooled:.4f}")
+    print(f"  HC3  SE = {se_hc3:.4f}  ->  t = {(mB - mA) / se_hc3:.4f}")
+
+    # 세 항의 F 를 나란히
+    pnames = model.params.index.tolist()
+    terms = {
+        "Temperature": [p for p in pnames
+                        if p.startswith("C(Temperature)[") and ":" not in p],
+        "Fertilizer": [p for p in pnames
+                       if p.startswith("C(Fertilizer)[") and ":" not in p],
+        "Interaction": [p for p in pnames if ":" in p]}
+    aov = sm.stats.anova_lm(model, typ=2)
+    print(f"\n{'항':>12}{'고전 F':>10}{'고전 p':>10}{'HC3 F':>10}{'HC3 p':>10}")
+    for name, ps in terms.items():
+        ft = rob.f_test(", ".join(f"{t} = 0" for t in ps))
+        row = aov.index[list(terms).index(name)]
+        print(f"{name:>12}{aov.loc[row, 'F']:>10.4f}{aov.loc[row, 'PR(>F)']:>10.4f}"
+              f"{float(ft.fvalue):>10.4f}{float(ft.pvalue):>10.4f}")
+    print(f"\n5% 임계값 F(2,9) = {stats.f(2, 9).ppf(0.95):.4f}")
+    ```
+
+    출력:
+
+    ```
+    합동 MSE = 2.7778   (칸 분산은 0.50 에서 12.50 까지)
+
+       비료      평균     Var(합동)     Var(칸별)   Var(HC3)
+        A  12.333      0.4630      0.1667     0.3333
+        B  15.833      0.4630      0.9722     1.9444
+        C  14.167      0.4630      0.2500     0.5000
+
+    B - A = 3.5000
+      합동 SE = 0.9623  ->  t = 3.6373
+      HC3  SE = 1.5092  ->  t = 2.3191
+
+               항      고전 F      고전 p     HC3 F     HC3 p
+     Temperature   14.6600    0.0015    8.0556    0.0099
+      Fertilizer    6.6200    0.0171    2.9474    0.1036
+     Interaction    0.2300    0.9147    0.1537    0.9565
+
+    5% 임계값 F(2,9) = 4.2565
+    ```
+
+    **(1)의 재분배가 눈에 보인다.** 합동은 세 비료에 모두 $0.4630$ 을 준다. 칸별로 재면
+
+    - **비료 B: $0.9722$ 로 합동의 $2.1$ 배.** 흩어진 칸(High·B $s^2 = 4.5$, Medium·B $s^2 = 12.5$)을 모두 받았기 때문이다. **합동이 과소평가한다.**
+    - **비료 A: $0.1667$ 로 합동의 $0.36$ 배.** 세 칸이 모두 조용하다. **합동이 과대평가한다.**
+    - 비료 C 는 $0.2500$ 으로 역시 합동보다 작다.
+
+    그러므로 **A 와 B 를 견주는 대비에서 합동은 분모를 심하게 줄인다.** 차이 $B - A = 3.50$ 에 대해 합동 표준오차는 $0.9623$ 이라 $t = 3.64$ 를 주지만, HC3 로는 $1.5092$ 라 $t = 2.32$ 로 내려앉는다.
+
+    **(2) 비료의 결론이 뒤집힌다.**
+
+    | 항 | 고전 $F$ | 고전 $p$ | HC3 $F$ | HC3 $p$ |
+    |---|---|---|---|---|
+    | 온도 | $14.66$ | $0.0015$ | $8.06$ | $0.0099$ |
+    | 비료 | $6.62$ | $0.0171$ | $2.95$ | $0.1036$ |
+    | 교호작용 | $0.23$ | $0.9147$ | $0.15$ | $0.9565$ |
+
+    세 항 모두 로버스트 쪽 $F$ 가 작다. **표준 검정이 표준오차를 과소평가해 효과를 부풀리고 있었다는 뜻이다.** 그런데 $5\%$ 임계값 $F_{0.95}(2,9) = 4.2565$ 를 기준으로 보면 온도는 $8.06$ 으로 여전히 위에 있어 결론이 유지되는 반면, **비료는 $6.62$ 에서 $2.95$ 로 떨어지며 임계값 아래로 내려간다.** $p$ 가 $0.0171$ 에서 $0.1036$ 으로 바뀌어 판정이 뒤집힌다.
+
+    **"비료 효과가 있다"는 결론은 등분산 가정 하나에 기대고 있었다.** 그 가정을 놓아 주자 사라졌고, 사라진 까닭도 분명하다. 비료 B 의 평균을 끌어올린 것이 Medium·B 칸의 $16$ 과 $21$ 인데 그 칸이야말로 가장 못 믿을 칸($s^2 = 12.5$)이다. 표준 분산분석과 로버스트 검정의 결과가 어긋날 때 무엇을 의심해야 하는지 이보다 분명한 예가 없다.
+
+    다만 과장하지는 말자. $p = 0.1036$ 도 "효과가 없다"는 증거는 아니다. 칸마다 반복이 둘뿐이고 HC3 가 $n=2$ 에서 두 배 보수적이라는 점(보기 1)까지 생각하면, **이 자료가 비료에 대해 말할 수 있는 것은 많지 않다.**
 
 분산이 같으면 HC3 Wald 검정과 표준 분산분석이 비슷한 결과를 준다. 두 결과가 어긋난다면 이분산이 표준 검정에 영향을 주고 있다는 뜻이다.
 

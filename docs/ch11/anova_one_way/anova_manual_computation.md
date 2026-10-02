@@ -26,80 +26,242 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 분산분석표 직접 계산하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 계산용 공식과 결정계수. 손으로 계산하던 시절에는 편차를 일일이 구하지 않고 "계산용 공식"을 썼다.
+
+**(1)** 다음 두 식을 유도하시오.
+
+$$
+SS_{\text{total}} = \sum_{i,j} y_{ij}^2 - N\bar y^2,
+\qquad
+SST = \sum_{i} n_i \bar y_i^2 - N\bar y^2
+$$
+
+또 $R^2 = SST / SS_{\text{total}}$ 이라 둘 때
+
+$$
+F = \frac{R^2/(k-1)}{(1-R^2)/(N-k)}
+$$
+
+임을 보이시오.
+
+**(2)** PlantGrowth 자료로 세 식을 확인하고, **계산용 공식이 부동소수점에서 손해**임을 수치로 보이시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def manual_anova(groups):
-    all_data = np.concatenate(list(groups.values()))
-    grand_mean = all_data.mean()
-    N = len(all_data)
-    k = len(groups)
+    **(1) 해석적으로.** 제곱을 풀어 쓰면 된다.
 
-    # SST: 집단평균이 전체평균에서 얼마나 떨어져 있는가. n_i로 가중한다.
-    # 큰 집단의 평균이 어긋나는 것이 더 무겁게 세어져야 하기 때문이다.
-    SST = sum(len(g) * (g.mean() - grand_mean) ** 2
-              for g in groups.values())
-    # SSE: 각 관측값이 **자기 집단의** 평균에서 얼마나 떨어져 있는가.
-    SSE = sum(np.sum((g - g.mean()) ** 2)
-              for g in groups.values())
+    $$
+    \sum_{i,j}(y_{ij} - \bar y)^2
+    = \sum_{i,j} y_{ij}^2 - 2\bar y \sum_{i,j} y_{ij} + N\bar y^2
+    $$
 
-    MST = SST / (k - 1)
-    MSE = SSE / (N - k)
-    F = MST / MSE                    # 신호 대 잡음
-    p_value = 1 - stats.f.cdf(F, k - 1, N - k)
-    return SST, SSE, MST, MSE, F, p_value
+    인데 $\sum_{i,j} y_{ij} = N\bar y$ 이므로 가운데 항이 $-2N\bar y^2$ 가 되어
+
+    $$
+    SS_{\text{total}} = \sum_{i,j} y_{ij}^2 - N\bar y^2
+    $$
+
+    이다. 집단 간도 똑같다. $\sum_i n_i \bar y_i = N \bar y$ 이므로
+
+    $$
+    SST = \sum_i n_i (\bar y_i - \bar y)^2 = \sum_i n_i \bar y_i^2 - 2\bar y \cdot N\bar y + N\bar y^2 = \sum_i n_i \bar y_i^2 - N\bar y^2
+    $$
+
+    이다. **원자료의 제곱합과 집단합계만 있으면 분산분석표가 나온다.** 자료를 두 번 훑지 않아도 되므로 계산기로 손계산하던 때에는 큰 이점이었다.
+
+    둘째 식. $SS_{\text{total}} = SST + SSE$ 이므로 $SST = R^2 \cdot SS_{\text{total}}$, $SSE = (1-R^2)\cdot SS_{\text{total}}$ 이고
+
+    $$
+    F = \frac{SST/(k-1)}{SSE/(N-k)}
+    = \frac{R^2 \cdot SS_{\text{total}}/(k-1)}{(1-R^2)\cdot SS_{\text{total}}/(N-k)}
+    = \frac{R^2/(k-1)}{(1-R^2)/(N-k)}
+    $$
+
+    이다. $SS_{\text{total}}$ 이 약분되어 사라진다. **$F$ 는 제곱합의 크기가 아니라 비율만 본다.** 자료의 단위를 바꾸거나 전체를 상수배해도 $F$ 가 그대로인 이유가 이것이다. 또 $R^2$ 과 $F$ 가 일대일로 대응하므로, 둘 중 하나를 알면 다른 하나가 정해진다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def manual_anova(groups):
+        all_data = np.concatenate(list(groups.values()))
+        grand_mean = all_data.mean()
+        N = len(all_data)
+        k = len(groups)
+
+        # SST: 집단평균이 전체평균에서 얼마나 떨어져 있는가. n_i로 가중한다.
+        # 큰 집단의 평균이 어긋나는 것이 더 무겁게 세어져야 하기 때문이다.
+        SST = sum(len(g) * (g.mean() - grand_mean) ** 2
+                  for g in groups.values())
+        # SSE: 각 관측값이 **자기 집단의** 평균에서 얼마나 떨어져 있는가.
+        SSE = sum(np.sum((g - g.mean()) ** 2)
+                  for g in groups.values())
+
+        MST = SST / (k - 1)
+        MSE = SSE / (N - k)
+        F = MST / MSE                    # 신호 대 잡음
+        p_value = 1 - stats.f.cdf(F, k - 1, N - k)
+        return SST, SSE, MST, MSE, F, p_value
 
 
-# R의 PlantGrowth 자료 (대조군과 두 처리, 각 10개)
-groups = {
-    "ctrl": np.array([4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14]),
-    "trt1": np.array([4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69]),
-    "trt2": np.array([6.31, 5.12, 5.54, 5.50, 5.37, 5.29, 4.92, 6.15, 5.80, 5.26]),
-}
+    # R의 PlantGrowth 자료 (대조군과 두 처리, 각 10개)
+    groups = {
+        "ctrl": np.array([4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14]),
+        "trt1": np.array([4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69]),
+        "trt2": np.array([6.31, 5.12, 5.54, 5.50, 5.37, 5.29, 4.92, 6.15, 5.80, 5.26]),
+    }
 
-SST, SSE, MST, MSE, F, p = manual_anova(groups)
-print(f"SST = {SST:.4f}, SSE = {SSE:.4f}")
-print(f"MST = {MST:.4f}, MSE = {MSE:.4f}")
-print(f"F   = {F:.4f}, p = {p:.4f}")
-```
+    SST, SSE, MST, MSE, F, p = manual_anova(groups)
+    print(f"SST = {SST:.4f}, SSE = {SSE:.4f}")
+    print(f"MST = {MST:.4f}, MSE = {MSE:.4f}")
+    print(f"F   = {F:.4f}, p = {p:.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-SST = 3.7663, SSE = 10.4921
-MST = 1.8832, MSE = 0.3886
-F   = 4.8461, p = 0.0159
-```
+    ```
+    SST = 3.7663, SSE = 10.4921
+    MST = 1.8832, MSE = 0.3886
+    F   = 4.8461, p = 0.0159
+    ```
 
-SSE가 SST의 세 배 가까이 크지만 자유도로 나누고 나면(2 대 27) MST가 MSE의 다섯 배가 된다. 분산분석에서 제곱합 자체가 아니라 **자유도로 나눈 평균제곱**을 비교하는 이유다.
+    SSE가 SST의 세 배 가까이 크지만 자유도로 나누고 나면(2 대 27) MST가 MSE의 다섯 배가 된다. 분산분석에서 제곱합 자체가 아니라 **자유도로 나눈 평균제곱**을 비교하는 이유다.
+
+    이제 (1)의 세 식을 확인한다.
+
+    ```python
+    y = np.concatenate(list(groups.values()))
+    N, k = len(y), len(groups)
+    gbar = y.mean()
+    n_i = np.array([len(g) for g in groups.values()])
+    ybar_i = np.array([g.mean() for g in groups.values()])
+
+    # 정의대로 잰 것과 계산용 공식으로 잰 것을 나란히 둔다.
+    tot_def = ((y - gbar) ** 2).sum()
+    tot_mac = (y ** 2).sum() - N * gbar ** 2
+    sst_def = (n_i * (ybar_i - gbar) ** 2).sum()
+    sst_mac = (n_i * ybar_i ** 2).sum() - N * gbar ** 2
+    print(f"SS_total  정의 {tot_def!r}")
+    print(f"          계산용 {tot_mac!r}   차이 {abs(tot_def - tot_mac):.2e}")
+    print(f"SST       정의 {sst_def!r}")
+    print(f"          계산용 {sst_mac!r}   차이 {abs(sst_def - sst_mac):.2e}")
+
+    # R^2 과 F 의 일대일 관계
+    R2 = sst_def / tot_def
+    print(f"\nR^2 = SST / SS_total = {R2:.7f}")
+    print(f"F from R^2 = {(R2 / (k - 1)) / ((1 - R2) / (N - k)):.10f}")
+    print(f"F from SS  = {(sst_def / (k - 1)) / ((tot_def - sst_def) / (N - k)):.10f}")
+
+    # 자료를 통째로 1000 만큼 옮기면 제곱합은 그대로여야 한다.
+    z = y + 1000.0
+    tot_def2 = ((z - z.mean()) ** 2).sum()
+    tot_mac2 = (z ** 2).sum() - N * z.mean() ** 2
+    print(f"\ny + 1000 으로 옮긴 뒤")
+    print(f"  정의    {tot_def2:.9f}   (상대오차 {abs(tot_def2 / tot_def - 1):.1e})")
+    print(f"  계산용  {tot_mac2:.9f}   (상대오차 {abs(tot_mac2 / tot_def - 1):.1e})")
+    ```
+
+    출력:
+
+    ```
+    SS_total  정의 14.258429999999999
+              계산용 14.258430000000203   차이 2.04e-13
+    SST       정의 3.766340000000002
+              계산용 3.7663399999997864   차이 2.15e-13
+
+    R^2 = SST / SS_total = 0.2641483
+    F from R^2 = 4.8460878624
+    F from SS  = 4.8460878624
+
+    y + 1000 으로 옮긴 뒤
+      정의    14.258430000   (상대오차 2.4e-14)
+      계산용  14.258430004   (상대오차 2.9e-10)
+    ```
+
+    **세 식이 모두 맞는다.** 계산용 공식이 정의와 소수 열한째 자리까지 같고, $R^2 = 0.2641483$ 에서 되살린 $F$ 가 제곱합에서 바로 구한 $F$ 와 열 자리까지 일치한다. 집단이 설명하는 몫이 전체 변동의 $26.4\%$ 라는 뜻이다.
+
+    **그러나 계산용 공식은 쓰지 않는 것이 좋다.** $\sum y^2$ 와 $N\bar y^2$ 는 둘 다 $763$ 쯤 되는 큰 수인데 그 차이가 $14.26$ 이다. 가까운 두 큰 수를 빼면 **앞자리가 통째로 상쇄되어 유효숫자가 날아간다.** 자료를 $1000$ 만큼 옮기기만 해도 차이가 드러난다. 제곱합은 평행이동에 불변이어야 하는데, 정의대로 잰 값은 상대오차 $2.4\times10^{-14}$ 로 끄떡없고 계산용 공식은 $2.9\times10^{-10}$ 로 네 자리를 잃는다. 자료가 $10^6$ 근처의 값이면 유효숫자가 더 날아가고, 극단적인 경우 **음수인 제곱합**이 나오기도 한다.
+
+    요약하면 (1)의 공식은 **대수 항등식으로는 옳고 수치 알고리즘으로는 나쁘다.** 손계산 시대의 유물이며, 오늘날 `numpy` 로는 정의대로 쓰는 것이 더 빠르지도 느리지도 않으면서 더 안전하다.
 
 scipy로 확인하는 것은 한 줄이면 된다:
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> scipy 결과와 맞춰 보기
+**보기 2.** <span class="diff easy" title="쉬움"></span> `1 - cdf` 와 `sf` 는 같지 않다. 보기 1의 `manual_anova` 는 $p$-값을 `1 - stats.f.cdf(F, k-1, N-k)` 로 구했다. 수학적으로는 생존함수 `stats.f(k-1, N-k).sf(F)` 와 똑같은 식이다.
+
+**(1)** 배정밀도 부동소수점에서 `1 - cdf` 가 낼 수 있는 **가장 작은 양수**가 얼마인지 적고, 왜 꼬리가 얇아질수록 이 방식이 무너지는지 설명하시오.
+
+**(2)** 두 방식이 PlantGrowth 의 $F = 4.8461$ 에서는 같은 답을 주지만 $F$ 를 키우면 갈라짐을 보이시오. 참값은 11.2절에서 얻은 $d_1 = 2$ 의 닫힌 꼴 $(1 + 2f/m)^{-m/2}$ 로 삼는다.
 
 </div>
 
-```python
-# 손으로 구한 값과 맞는지 확인한다. 한 줄이면 되는 계산을 굳이 풀어 쓴 까닭은
-# 제곱합이 어떻게 갈라지는지를 보이기 위해서다.
-F_scipy, p_scipy = stats.f_oneway(*groups.values())
-print(f"scipy: F = {F_scipy:.4f}, p = {p_scipy:.4f}")
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** `cdf` 가 돌려주는 것은 $[0,1]$ 안의 배정밀도 수다. $1$ 바로 아래의 배정밀도 수는
 
-```
-scipy: F = 4.8461, p = 0.0159
-```
+    $$
+    1 - 2^{-53} = 1 - 1.1102230246\times10^{-16}
+    $$
 
-두 방식이 동일한 $F$와 $p$-값을 주어 수동 계산이 맞음을 확인해 준다.
+    이므로, `cdf` 가 $1$ 과 구별되는 한 `1 - cdf` 가 낼 수 있는 가장 작은 양수는 $2^{-53} \approx 1.11\times10^{-16}$ 이고 그보다 작아지면 **정확히 $0.0$ 이 된다.** 중간 단계도 좋지 않다. $p$ 가 $10^{-13}$ 쯤이면 `cdf` 는 $0.9999999999999$ 를 돌려주는데 이 수가 담고 있는 유효숫자는 $16$ 자리이므로 $1$ 을 뺀 뒤 남는 유효숫자는 $3$ 자리뿐이다. **큰 수에서 큰 수를 빼면 유효숫자가 상쇄된다**는 보기 1의 교훈이 그대로 되풀이된다.
+
+    `sf` 는 꼬리확률을 **직접** 계산하므로 이 상쇄가 일어나지 않는다. 배정밀도의 지수 범위가 허락하는 $10^{-308}$ 까지 상대정확도를 유지한다.
+
+    **(2) 수치적으로.** 먼저 손계산과 `f_oneway` 를 맞춘다.
+
+    ```python
+    # 손으로 구한 값과 맞는지 확인한다. 한 줄이면 되는 계산을 굳이 풀어 쓴 까닭은
+    # 제곱합이 어떻게 갈라지는지를 보이기 위해서다.
+    F_scipy, p_scipy = stats.f_oneway(*groups.values())
+    print(f"scipy: F = {F_scipy:.4f}, p = {p_scipy:.4f}")
+    ```
+
+    출력:
+
+    ```
+    scipy: F = 4.8461, p = 0.0159
+    ```
+
+    두 방식이 동일한 $F$와 $p$-값을 주어 수동 계산이 맞음을 확인해 준다. 그런데 $p$-값을 꺼내는 **방법**은 둘이 다르다.
+
+    ```python
+    m = 27
+    print(f"1 바로 아래의 배정밀도 수 = 1 - {1 - np.nextafter(1.0, 0.0):.6e}")
+    print(f"{'F':>9}{'1 - cdf':>15}{'sf':>15}{'closed':>15}{'relerr':>10}")
+    for f in [4.8461, 20, 100, 200, 500, 1000]:
+        a = 1 - stats.f.cdf(f, 2, m)
+        b = stats.f(2, m).sf(f)
+        c = (1 + 2 * f / m) ** (-m / 2)   # d1=2 의 닫힌 꼴. 이것을 참값으로 삼는다.
+        print(f"{f:>9.4f}{a:>15.6e}{b:>15.6e}{c:>15.6e}{abs(a - c) / c:>10.1e}")
+    ```
+
+    출력:
+
+    ```
+    1 바로 아래의 배정밀도 수 = 1 - 1.110223e-16
+            F        1 - cdf             sf         closed    relerr
+       4.8461   1.590982e-02   1.590982e-02   1.590982e-02   2.4e-15
+      20.0000   4.692464e-06   4.692464e-06   4.692464e-06   1.7e-12
+     100.0000   3.288481e-13   3.288984e-13   3.288984e-13   1.5e-04
+     200.0000   1.110223e-16   6.495828e-17   6.495828e-17   7.1e-01
+     500.0000   1.110223e-16   4.647398e-22   4.647398e-22   2.4e+05
+    1000.0000   1.110223e-16   4.796067e-26   4.796067e-26   2.3e+09
+    ```
+
+    **(1)에서 적은 $2^{-53} = 1.110223\times10^{-16}$ 이 그대로 나타난다.** $F \ge 200$ 에서 `1 - cdf` 열이 이 값에 **딱 붙어 더 내려가지 못한다.** 그 아래로는 분해능이 없기 때문이다.
+
+    - $F = 4.8461$ 과 $F = 20$ 에서는 세 열이 모두 같다. **이 페이지의 계산에는 아무 문제가 없다.**
+    - $F = 100$ 부터 `1 - cdf` 가 $3.288481\times10^{-13}$ 로 참값 $3.288984\times10^{-13}$ 에서 넷째 유효숫자부터 어긋난다(상대오차 $1.5\times10^{-4}$).
+    - $F = 1000$ 에서 참값은 $4.8\times10^{-26}$ 인데 `1 - cdf` 는 $1.1\times10^{-16}$ 을 돌려준다. **$10$ 자릿수가 틀렸다.**
+
+    `sf` 열은 닫힌 꼴과 모든 $F$ 에서 여섯 자리까지 일치한다.
+
+    **결론.** $p$-값은 늘 `sf`(또는 왼쪽 꼬리면 `cdf`)로 직접 구하라. 분산분석처럼 $p$ 가 $0.01$ 근처인 상황에서는 차이가 없지만, 유전체 분석이나 다중검정처럼 $10^{-20}$ 급의 $p$-값을 보고해야 하는 자리에서는 `1 - cdf` 가 **모든 유의한 결과를 똑같은 수 하나로 뭉개 버린다.** 같은 이유로 $\log p$ 가 필요하면 `logsf` 를 쓴다.
 
 손으로 계산한 네 숫자가 실제로 무엇을 재고 있는지 그림으로 확인해 두자. 왼쪽은 관측값 30개 각각을 **전체평균에서 집단평균까지**(파랑)와 **집단평균에서 관측값까지**(주황) 두 토막으로 쪼갠 것이다.
 
@@ -123,50 +285,166 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Fisher LSD 사후비교
+**보기 3.** <span class="diff easy" title="쉬움"></span> Fisher LSD 는 언제 안전한가. 전역 $F$-검정이 기각했을 때만 LSD 쌍별 비교로 넘어가는 절차를 **보호된(protected) LSD** 라 한다.
+
+**(1)** LSD 문턱이 "합동 $MSE$ 를 쓴 이표본 $t$-검정"의 문턱과 같음을 보이고, 같은 자료의 Tukey HSD 문턱과의 비가
+
+$$
+\frac{\text{HSD}}{\text{LSD}} = \frac{q_{\alpha,\,k,\,\nu}}{\sqrt2\, t_{\alpha/2,\,\nu}}
+$$
+
+임을 보이시오. $k = 3$, $\nu = 27$, $\alpha = 0.05$ 에서 이 값을 구하시오.
+
+**(2)** 보호된 LSD 의 **집단별 오류율**(FWER)을 모의실험으로 재시오. 평균 하나만 크게 떨어뜨려 전역 검정이 거의 언제나 기각하도록 만들고, **나머지 같은 평균들 사이**에서 거짓 유의가 하나라도 나올 확률을 $k = 3, 5, 7$ 에 대해 비교하시오.
 
 </div>
 
-```python
-from itertools import combinations
+??? success "풀이"
 
-def fisher_lsd(groups, MSE, alpha=0.05):
-    """Fisher 의 최소유의차로 쌍별 비교를 한다.
+    **(1) 해석적으로.** 합동분산을 쓴 이표본 $t$-검정은
 
-    쌍마다 t-검정을 하되 표준오차를 그 두 집단이 아니라 전체 MSE 로 만든다.
-    모든 집단의 정보를 쓰므로 자유도가 커지는 것이 이점이다.
-    다만 다중비교를 보정하지 않으므로, 분산분석이 유의할 때만 쓴다.
-    """
-    names = list(groups.keys())
-    N_total = sum(len(g) for g in groups.values())
-    k = len(groups)
-    df_within = N_total - k
-    results = []
-    for (n1, g1), (n2, g2) in combinations(groups.items(), 2):
-        t_crit = stats.t.ppf(1 - alpha / 2, df_within)
-        lsd_val = t_crit * np.sqrt(MSE * (1/len(groups[n1]) + 1/len(groups[n2])))
-        diff = abs(groups[n1].mean() - groups[n2].mean())
-        results.append({"pair": f"{n1} vs {n2}",
-                        "diff": diff, "LSD": lsd_val,
-                        "significant": diff > lsd_val})
-    return results
+    $$
+    t = \frac{\bar y_i - \bar y_j}{\sqrt{s_p^2\left(\frac{1}{n_i}+\frac{1}{n_j}\right)}}
+    $$
+
+    를 $|t| > t_{\alpha/2,\nu}$ 와 견준다. 양변에 분모를 곱하면 기각 조건이
+
+    $$
+    |\bar y_i - \bar y_j| > t_{\alpha/2,\nu}\sqrt{s_p^2\left(\tfrac{1}{n_i}+\tfrac{1}{n_j}\right)}
+    $$
+
+    이 되는데, LSD 가 쓰는 $MSE$ 는 **$k$ 개 집단 전부를 합동한 분산추정량**이므로 두 집단만으로 만든 $s_p^2$ 대신 그것을 넣고 자유도를 $n_i+n_j-2$ 대신 $\nu = N-k$ 로 바꾼 것이 정확히 LSD 문턱이다. 그러므로 **LSD 는 분모를 더 많은 자료로 만든 쌍별 $t$-검정**이다. $k=2$ 이면 $MSE = s_p^2$, $\nu = N-2$ 라 둘이 완전히 같아진다.
+
+    Tukey HSD 는 같은 자리에 스튜던트화 범위 분포를 쓴다. 균형 설계에서
+
+    $$
+    \text{HSD} = q_{\alpha,k,\nu}\sqrt{\frac{MSE}{n}},
+    \qquad
+    \text{LSD} = t_{\alpha/2,\nu}\sqrt{\frac{2\,MSE}{n}}
+    $$
+
+    이므로 $\sqrt{MSE/n}$ 이 약분되어
+
+    $$
+    \frac{\text{HSD}}{\text{LSD}} = \frac{q_{\alpha,k,\nu}}{\sqrt2\,t_{\alpha/2,\nu}}
+    $$
+
+    이다. **$MSE$ 와 $n$ 에 전혀 의존하지 않는다.** $k=2$ 이면 $q_{\alpha,2,\nu} = \sqrt2\,t_{\alpha/2,\nu}$ 라 비가 정확히 $1$ 이고, $k$ 가 커지면 $q$ 가 커지므로 비도 커진다. 곧 **집단이 많아질수록 Tukey 의 문턱이 LSD 보다 빠르게 높아진다.** 아래에서 $k=3$, $\nu=27$ 의 값을 잰다.
+
+    **(2) 수치적으로.** 먼저 LSD 를 돌린다.
+
+    ```python
+    from itertools import combinations
+
+    def fisher_lsd(groups, MSE, alpha=0.05):
+        """Fisher 의 최소유의차로 쌍별 비교를 한다.
+
+        쌍마다 t-검정을 하되 표준오차를 그 두 집단이 아니라 전체 MSE 로 만든다.
+        모든 집단의 정보를 쓰므로 자유도가 커지는 것이 이점이다.
+        다만 다중비교를 보정하지 않으므로, 분산분석이 유의할 때만 쓴다.
+        """
+        names = list(groups.keys())
+        N_total = sum(len(g) for g in groups.values())
+        k = len(groups)
+        df_within = N_total - k
+        results = []
+        for (n1, g1), (n2, g2) in combinations(groups.items(), 2):
+            t_crit = stats.t.ppf(1 - alpha / 2, df_within)
+            lsd_val = t_crit * np.sqrt(MSE * (1/len(groups[n1]) + 1/len(groups[n2])))
+            diff = abs(groups[n1].mean() - groups[n2].mean())
+            results.append({"pair": f"{n1} vs {n2}",
+                            "diff": diff, "LSD": lsd_val,
+                            "significant": diff > lsd_val})
+        return results
 
 
-for r in fisher_lsd(groups, MSE):
-    print(f"{r['pair']:<14} diff = {r['diff']:.4f}  LSD = {r['LSD']:.4f}  {r['significant']}")
-```
+    for r in fisher_lsd(groups, MSE):
+        print(f"{r['pair']:<14} diff = {r['diff']:.4f}  LSD = {r['LSD']:.4f}  {r['significant']}")
+    ```
 
-출력:
+    출력:
 
-```
-ctrl vs trt1   diff = 0.3710  LSD = 0.5720  False
-ctrl vs trt2   diff = 0.4940  LSD = 0.5720  False
-trt1 vs trt2   diff = 0.8650  LSD = 0.5720  True
-```
+    ```
+    ctrl vs trt1   diff = 0.3710  LSD = 0.5720  False
+    ctrl vs trt2   diff = 0.4940  LSD = 0.5720  False
+    trt1 vs trt2   diff = 0.8650  LSD = 0.5720  True
+    ```
 
-전역 검정은 $p = 0.0159$로 기각했는데 쌍별로 보면 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어, 서로 간의 차이가 각각과 대조군의 차이보다 큰 것이다.
+    전역 검정은 $p = 0.0159$로 기각했는데 쌍별로 보면 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어, 서로 간의 차이가 각각과 대조군의 차이보다 큰 것이다.
 
-집단 크기가 모두 10으로 같아 LSD 문턱도 0.5720 하나로 같다. 크기가 다르면 쌍마다 문턱이 달라진다.
+    집단 크기가 모두 10으로 같아 LSD 문턱도 0.5720 하나로 같다. 크기가 다르면 쌍마다 문턱이 달라진다.
+
+    이제 (1)의 비를 재고 (2)의 모의실험을 돌린다.
+
+    ```python
+    t_crit = stats.t.ppf(0.975, 27)
+    q_crit = stats.studentized_range.ppf(0.95, 3, 27)
+    LSD = t_crit * np.sqrt(2 * MSE / 10)
+    HSD = q_crit * np.sqrt(MSE / 10)
+    print(f"t(0.975, 27) = {t_crit:.4f}   LSD = {LSD:.4f}")
+    print(f"q(0.05, 3, 27) = {q_crit:.4f}   HSD = {HSD:.4f}")
+    print(f"HSD / LSD = {HSD / LSD:.4f}   q/(sqrt(2) t) = {q_crit / (np.sqrt(2) * t_crit):.4f}")
+
+
+    def protected_lsd_fwer(mu, B=40000, n=10, alpha=0.05, seed=0):
+        """평균이 mu 인 k 개 집단에서, 전역 F 가 기각한 뒤 LSD 를 돌렸을 때
+        '참으로 같은 쌍' 가운데 하나라도 유의하다고 선언될 확률을 센다."""
+        mu = np.asarray(mu, float)
+        k = len(mu)
+        N = n * k
+        rng = np.random.default_rng(seed)
+        Y = rng.normal(mu[None, :, None], 1.0, size=(B, k, n))
+        gmean = Y.mean(axis=2)
+        grand = Y.mean(axis=(1, 2))
+        SSB = n * ((gmean - grand[:, None]) ** 2).sum(axis=1)
+        SSE_ = ((Y - gmean[:, :, None]) ** 2).sum(axis=(1, 2))
+        Fsim = (SSB / (k - 1)) / (SSE_ / (N - k))
+        gate = Fsim > stats.f(k - 1, N - k).ppf(1 - alpha)
+        thr = stats.t.ppf(1 - alpha / 2, N - k) * np.sqrt((SSE_ / (N - k)) * 2 / n)
+        null_pairs = [(i, j) for i, j in combinations(range(k), 2) if mu[i] == mu[j]]
+        any_false = np.zeros(B, bool)
+        for i, j in null_pairs:
+            any_false |= np.abs(gmean[:, i] - gmean[:, j]) > thr
+        return np.mean(gate & any_false), gate.mean(), len(null_pairs)
+
+
+    print(f"\n{'design':>22}{'nullpairs':>11}{'global.rej':>12}{'FWER':>9}")
+    for mu, label in [((0, 0, 3), "k=3, mu=(0,0,3)"),
+                      ((0, 0, 0, 0, 5), "k=5, mu=(0,0,0,0,5)"),
+                      ((0, 0, 0, 0, 0, 0, 8), "k=7, mu=(0,...,0,8)")]:
+        rate, gate, npair = protected_lsd_fwer(mu)
+        print(f"{label:>22}{npair:>11}{gate:>12.4f}{rate:>9.4f}")
+    print(f"\nB=40000 에서 FWER 추정의 MC 표준오차 ~ {np.sqrt(0.05 * 0.95 / 40000):.4f}")
+    ```
+
+    출력:
+
+    ```
+    t(0.975, 27) = 2.0518   LSD = 0.5720
+    q(0.05, 3, 27) = 3.5064   HSD = 0.6912
+    HSD / LSD = 1.2084   q/(sqrt(2) t) = 1.2084
+
+                    design  nullpairs  global.rej     FWER
+           k=3, mu=(0,0,3)          1      1.0000   0.0493
+       k=5, mu=(0,0,0,0,5)          6      1.0000   0.1974
+       k=7, mu=(0,...,0,8)         15      1.0000   0.3545
+
+    B=40000 에서 FWER 추정의 MC 표준오차 ~ 0.0011
+    ```
+
+    **(1)의 비가 맞는다.** $\text{HSD}/\text{LSD} = 1.2084$ 가 $q/(\sqrt2\,t) = 1.2084$ 와 네 자리까지 같다. Tukey 문턱 $0.6912$ 가 LSD 문턱 $0.5720$ 보다 $21\%$ 높다. 그런데 이 자료에서 유일하게 유의했던 trt1–trt2 의 차이가 $0.8650$ 이라 **두 문턱 모두를 넘는다.** 그래서 Tukey 로 바꾸어도 결론이 같고, 다만 $p_{\text{adj}}$ 가 $0.012$ 로 커질 뿐이다.
+
+    **(2)가 보호된 LSD 의 한계를 보여 준다.** 세 설계 모두 전역 $F$-검정이 $100\%$ 기각하므로 관문은 아무 일도 하지 않는다. 그 뒤에 남는 것은 **같은 평균들끼리의 쌍별 $t$-검정**이고, 그 수가 늘면 거짓 유의가 하나라도 나올 확률이 따라 오른다.
+
+    | $k$ | 참으로 같은 쌍 | FWER |
+    |---|---|---|
+    | $3$ | $1$ | $0.0493$ |
+    | $5$ | $6$ | $0.1974$ |
+    | $7$ | $15$ | $0.3545$ |
+
+    $k = 3$ 에서는 $0.0493$ 으로 명목수준 $0.05$ 를 지킨다(몬테카를로 표준오차가 $0.0011$ 이므로 $0.05$ 와 다르다고 할 수 없다). **비교할 쌍이 하나뿐이면 다중성이 없기 때문**이다. 그런데 $k=5$ 에서 $0.1974$, $k=7$ 에서 $0.3545$ 로 치솟는다. 일곱 집단 중 하나만 진짜로 다른 상황에서 **세 번에 한 번꼴로 가짜 쌍을 발표하게 된다.**
+
+    **그러므로 "분산분석이 유의했으니 LSD 를 써도 된다"는 말은 $k = 3$ 에서만 통한다.** 집단이 넷 이상이면 전역 검정이라는 관문은 보호막 구실을 하지 못하고, Tukey HSD 처럼 쌍의 개수를 직접 셈에 넣는 방법으로 가야 한다.
 
 ## 해석
 

@@ -28,43 +28,178 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 모의실험 설계
+**보기 1.** <span class="diff easy" title="쉬움"></span> Welch 분산분석은 집단이 둘이면 Welch $t$-검정이다. 모의실험에 들어가기 전에 쓰려는 도구가 무엇인지 확인해 둔다.
+
+**(1)** 가중치 $w_i = n_i/s_i^2$ 이 **집단평균의 분산추정량의 역수**임을 지적하고, $\tilde y = \sum w_i \bar y_i/\sum w_j$ 가 가중최소제곱 $\min_m \sum w_i(\bar y_i - m)^2$ 의 해임을 보이시오.
+
+**(2)** $k = 2$ 이면 분모의 보정항이 **정확히 $0$** 이 되어
+
+$$
+F_W = t_W^2,
+\qquad
+df_2 = \nu_{\text{Satterthwaite}}
+$$
+
+임을 보이시오. 여기서 $t_W$ 는 11.4절 서두와 5.3절의 Welch $t$ 통계량이다. 두 주장을 `pingouin` 과 `scipy` 로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-import pingouin as pg
+??? success "풀이"
 
-rng = np.random.default_rng(0)
+    **(1) 해석적으로.** 집단평균의 분산은 $\operatorname{Var}(\bar y_{i\cdot}) = \sigma_i^2/n_i$ 이고 그 추정량이 $s_i^2/n_i$ 다. 따라서
 
-def simulate_once(null=True):
-    ns = [10, 18, 7]
-    sigmas = [1.0, 3.0, 6.0]
-    means = [10.0, 10.0, 10.0] if null else [10.0, 10.0, 12.0]
+    $$
+    w_i = \frac{n_i}{s_i^2} = \frac{1}{\widehat{\operatorname{Var}}(\bar y_{i\cdot})}
+    $$
 
-    rows = []
-    for i, (n, mu, sd) in enumerate(zip(ns, means, sigmas), start=1):
-        x = rng.normal(mu, sd, size=n)
-        rows += [{"Group": f"G{i}", "Values": v} for v in x]
-    df = pd.DataFrame(rows)
+    로, **덜 흔들리는 집단평균에 더 큰 가중치**를 준다. 고전 $F$ 가 모든 집단에 같은 $MSW$ 를 쓰는 것과 갈리는 지점이 여기다.
 
-    aov = pg.welch_anova(dv="Values", between="Group", data=df)
-    # pingouin 0.6부터 열 이름이 "p-unc"에서 "p_unc"로 바뀌었다.
-    # 두 이름을 모두 받아들여 버전에 무관하게 동작하도록 한다.
-    col = "p_unc" if "p_unc" in aov.columns else "p-unc"
-    return float(aov[col].iloc[0])
+    가중평균이 가중최소제곱 해라는 것은 미분 한 번이면 된다. $g(m) = \sum_i w_i(\bar y_i - m)^2$ 는 $m$ 에 대해 볼록이고
 
-# 한 번 돌려 형태를 확인한다.
-print(f"single run p-value (null) = {simulate_once(null=True):.4f}")
-```
+    $$
+    g'(m) = -2\sum_i w_i(\bar y_i - m) = 0
+    \quad\Longrightarrow\quad
+    m = \frac{\sum_i w_i \bar y_i}{\sum_j w_j} = \tilde y
+    $$
 
-출력:
+    이며 $g''(m) = 2\sum w_i > 0$ 이므로 최소다. 그러므로 $F_W$ 의 분자 $\sum_i w_i(\bar y_i - \tilde y)^2$ 는 **"가중최소제곱으로 잴 때 남는 집단 간 변동"**이다.
 
-```
-single run p-value (null) = 0.4545
-```
+    **(2) $k = 2$ 의 경우.** 먼저 분모를 본다. 보정계수가
+
+    $$
+    \frac{2(k-2)}{k^2-1}\Bigg|_{k=2} = \frac{2 \times 0}{3} = 0
+    $$
+
+    이므로 분모가 **정확히 $1$** 이 되고, $F_W$ 는 분자 그 자체다. $W = w_1 + w_2$ 라 쓰면
+
+    $$
+    \bar y_1 - \tilde y = \frac{w_2(\bar y_1 - \bar y_2)}{W},
+    \qquad
+    \bar y_2 - \tilde y = \frac{-w_1(\bar y_1 - \bar y_2)}{W}
+    $$
+
+    이므로(11.1절 보기 2와 같은 계산이다)
+
+    $$
+    F_W = w_1\left(\frac{w_2 \Delta}{W}\right)^2 + w_2\left(\frac{w_1 \Delta}{W}\right)^2
+    = \frac{w_1 w_2}{W}\Delta^2
+    = \frac{\Delta^2}{\frac{1}{w_1}+\frac{1}{w_2}}
+    = \frac{(\bar y_1 - \bar y_2)^2}{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}} = t_W^2
+    $$
+
+    이다($\Delta = \bar y_1 - \bar y_2$).
+
+    자유도도 같다. $df_2 = \frac{k^2-1}{3\Lambda}$ 이고 $\Lambda = \sum_i \frac{(1-w_i/W)^2}{n_i-1}$ 인데, $k=2$ 이면 $\frac{k^2-1}{3} = 1$ 이라 $df_2 = 1/\Lambda$ 다. $1/w_i = s_i^2/n_i$ 이므로
+
+    $$
+    1 - \frac{w_1}{W} = \frac{w_2}{W} = \frac{1/w_1}{1/w_1 + 1/w_2} = \frac{s_1^2/n_1}{s_1^2/n_1 + s_2^2/n_2}
+    $$
+
+    이고(두 번째 집단도 같은 꼴) 넣어 정리하면
+
+    $$
+    \frac{1}{\Lambda} = \frac{\left(\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}\right)^2}{\frac{(s_1^2/n_1)^2}{n_1-1}+\frac{(s_2^2/n_2)^2}{n_2-1}} = \nu_{\text{Satterthwaite}}
+    $$
+
+    로 **5.3절의 Welch–Satterthwaite 자유도와 글자 그대로 같은 식**이다. 그러므로 Welch 분산분석은 두 집단 Welch $t$-검정의 $k$-집단 확장이며, 이분산에서 그것이 왜 옳은 일을 하는지는 [5.3절 Welch 검정](../../ch05/applications/diff_means_welch.md)에서 이미 다루었다. 여기서는 되풀이하지 않는다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    import pingouin as pg
+
+    rng = np.random.default_rng(0)
+
+    def simulate_once(null=True):
+        ns = [10, 18, 7]
+        sigmas = [1.0, 3.0, 6.0]
+        means = [10.0, 10.0, 10.0] if null else [10.0, 10.0, 12.0]
+
+        rows = []
+        for i, (n, mu, sd) in enumerate(zip(ns, means, sigmas), start=1):
+            x = rng.normal(mu, sd, size=n)
+            rows += [{"Group": f"G{i}", "Values": v} for v in x]
+        df = pd.DataFrame(rows)
+
+        aov = pg.welch_anova(dv="Values", between="Group", data=df)
+        # pingouin 0.6부터 열 이름이 "p-unc"에서 "p_unc"로 바뀌었다.
+        # 두 이름을 모두 받아들여 버전에 무관하게 동작하도록 한다.
+        col = "p_unc" if "p_unc" in aov.columns else "p-unc"
+        return float(aov[col].iloc[0])
+
+    # 한 번 돌려 형태를 확인한다.
+    print(f"single run p-value (null) = {simulate_once(null=True):.4f}")
+    ```
+
+    출력:
+
+    ```
+    single run p-value (null) = 0.4545
+    ```
+
+    이제 (1)의 공식을 그대로 코드로 옮겨 `pingouin` 과 맞추고, $k = 2$ 의 항등식을 확인한다.
+
+    ```python
+    from scipy import stats
+
+
+    def welch_f_by_hand(groups):
+        """공식 그대로 F_W 와 두 자유도를 만든다."""
+        k = len(groups)
+        n = np.array([len(g) for g in groups], float)
+        m = np.array([g.mean() for g in groups])
+        s2 = np.array([g.var(ddof=1) for g in groups])
+        w = n / s2
+        W = w.sum()
+        y_tilde = (w * m).sum() / W
+        Lam = (((1 - w / W) ** 2) / (n - 1)).sum()
+        num = (w * (m - y_tilde) ** 2).sum() / (k - 1)
+        den = 1 + 2 * (k - 2) / (k ** 2 - 1) * Lam
+        return num / den, k - 1, (k ** 2 - 1) / (3 * Lam)
+
+
+    # 세 집단에서 pingouin 과 맞는지 먼저 확인한다 (본문의 rng 은 건드리지 않는다).
+    chk = np.random.default_rng(99)
+    g3 = [chk.normal(10, s, n) for n, s in zip((10, 18, 7), (1.0, 3.0, 6.0))]
+    d3 = pd.DataFrame({"Values": np.concatenate(g3),
+                       "Group": sum([[f"G{i+1}"] * len(g) for i, g in enumerate(g3)], [])})
+    a3 = pg.welch_anova(dv="Values", between="Group", data=d3)
+    col = "p_unc" if "p_unc" in a3.columns else "p-unc"
+    F3, d1_3, d2_3 = welch_f_by_hand(g3)
+    print(f"손계산    F = {F3:.6f},  ddof1 = {d1_3},  ddof2 = {d2_3:.6f}")
+    print(f"pingouin  F = {a3['F'].iloc[0]:.6f},  ddof1 = {a3['ddof1'].iloc[0]},  "
+          f"ddof2 = {a3['ddof2'].iloc[0]:.6f}")
+
+    # k=2 이면 보정항이 0 이 되어 F_W = t_W^2 여야 한다.
+    chk2 = np.random.default_rng(5)
+    x = chk2.normal(10, 1.0, 12)
+    y = chk2.normal(11, 4.0, 9)
+    d2 = pd.DataFrame({"Values": np.r_[x, y], "Group": ["A"] * 12 + ["B"] * 9})
+    a2 = pg.welch_anova(dv="Values", between="Group", data=d2)
+    tt = stats.ttest_ind(x, y, equal_var=False)
+    print(f"\nk=2:  welch_anova  F = {a2['F'].iloc[0]:.6f}, "
+          f"ddof2 = {a2['ddof2'].iloc[0]:.6f}, p = {a2[col].iloc[0]:.6f}")
+    print(f"      ttest_ind    t^2 = {tt.statistic ** 2:.6f}, df = {tt.df:.6f}, "
+          f"p = {tt.pvalue:.6f}")
+    print(f"      보정항 2(k-2)/(k^2-1) = {2 * (2 - 2) / (2 ** 2 - 1)}")
+    ```
+
+    출력:
+
+    ```
+    손계산    F = 1.455237,  ddof1 = 2,  ddof2 = 13.231803
+    pingouin  F = 1.455237,  ddof1 = 2,  ddof2 = 13.231803
+
+    k=2:  welch_anova  F = 0.298550, ddof2 = 8.727233, p = 0.598482
+          ttest_ind    t^2 = 0.298550, df = 8.727233, p = 0.598482
+          보정항 2(k-2)/(k^2-1) = 0.0
+    ```
+
+    **공식이 맞는다.** 손으로 옮긴 $F_W$ 와 두 자유도가 `pingouin` 의 값과 소수 여섯째 자리까지 같다. 쓸 도구가 무엇인지 확인했으니 이제 모의실험으로 넘어가도 좋다.
+
+    **(2)의 항등식도 맞는다.** 집단이 둘일 때 `welch_anova` 의 $F = 0.298550$ 이 `ttest_ind(equal_var=False)` 의 $t^2$ 과 같고, $df_2 = 8.727233$ 이 Welch 의 자유도와 같고, $p$-값도 $0.598482$ 로 같다. 보정항이 정확히 $0.0$ 인 것도 확인된다.
+
+    눈여겨볼 것은 **$df_2$ 가 정수가 아니라는 점**이다. $8.727233$ 은 $n_1 + n_2 - 2 = 19$ 보다 한참 작다. 분산이 다른 두 집단을 합동하지 않는 대가로 자유도를 잃는 것이고, 그 잃은 만큼이 Welch 가 오류율을 지키는 값이다.
 
 ## 모의실험 실행
 
@@ -72,38 +207,123 @@ single run p-value (null) = 0.4545
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 제1종 오류율과 검정력 재기
+**보기 2.** <span class="diff easy" title="쉬움"></span> $B = 300$ 으로 "$0.047$" 을 보고해도 되는가. 그리고 고전 $F$ 는 같은 설계에서 무엇을 하는가.
+
+**(1)** 제1종 오류율 추정량 $\hat\alpha$ 의 몬테카를로 표준오차를 $B = 300$ 과 $B = 10000$ 에서 구하고, $B = 300$ 으로 구별할 수 있는 것과 없는 것을 말하시오.
+
+**(2)** 같은 설계 $\boldsymbol n = (10, 18, 7)$, $\boldsymbol\sigma = (1, 3, 6)$ 에서 Welch 와 **고전 $F$** 를 나란히 돌려 제1종 오류율과 검정력을 $B = 10000$ 으로 재시오. 고전 $F$ 의 검정력이 더 높게 나올 텐데, 그것을 "고전 $F$ 가 낫다"로 읽어도 되는가?
 
 </div>
 
-```python
-def run(n_sims=500, alpha=0.05):
-    """귀무가 참인 경우와 거짓인 경우를 함께 돌려 제1종 오류율과 검정력을 잰다.
+??? success "풀이"
 
-    분산이 다른 설계에서 보통의 분산분석은 제1종 오류율이 명목수준을 넘는다.
-    Welch 는 그것을 0.05 근처로 지켜 준다.
-    """
-    pvals_null = [simulate_once(null=True) for _ in range(n_sims)]
-    pvals_alt  = [simulate_once(null=False) for _ in range(n_sims)]
-    type1 = np.mean(np.array(pvals_null) < alpha)
-    power = np.mean(np.array(pvals_alt)  < alpha)
-    return type1, power
+    **(1) 해석적으로.** $B\hat\alpha \sim \text{Binomial}(B, \alpha)$ 이므로
 
-type1, power = run(n_sims=300, alpha=0.05)
-print(f"Estimated Type I error: {type1:.3f}")
-print(f"Estimated Power:        {power:.3f}")
-```
+    $$
+    \operatorname{SE}(\hat\alpha) = \sqrt{\frac{\alpha(1-\alpha)}{B}}
+    $$
 
-출력:
+    이고 $\alpha = 0.05$ 에서 $B = 300$ 이면 $0.0126$, $B = 10000$ 이면 $0.0022$ 다. $95\%$ 폭으로는 각각 $\pm 0.025$ 와 $\pm 0.004$ 다.
 
-```
-Estimated Type I error: 0.047
-Estimated Power:        0.100
-```
+    그러므로 $B = 300$ 의 $\hat\alpha = 0.047$ 이 말해 주는 것은 **"참값이 대략 $0.022$ 와 $0.072$ 사이"** 뿐이다. 명목 $0.05$ 와 어긋나지 않는다고는 말할 수 있지만, 참값이 $0.07$ 인 검정과 $0.05$ 인 검정을 이 반복수로는 **구별할 수 없다.** 검정의 수준을 따지는 모의실험에서 $B$ 를 수백으로 두면 결론이 거의 공허해진다. $\pm 0.005$ 를 보려면 $B \approx 10^4$ 가 필요하다.
 
-제1종 오류가 0.047로 명목 0.05와 어긋나지 않는다(모의실험 표준오차 0.013). 분산비가 6배나 되고 표본크기도 10, 18, 7로 제각각인데도 Welch가 오류율을 지켜 낸다.
+    **(2) 수치적으로.** 고전 $F$ 를 함께 돌린다.
 
-검정력 0.100은 처참하다. $G_3$을 2만큼 올렸지만 그 집단의 표준편차가 6이고 표본이 7개뿐이라 신호가 잡음에 묻힌다. **오류율을 지키는 것과 효과를 찾아내는 것은 다른 문제다.**
+    ```python
+    def run(n_sims=500, alpha=0.05):
+        """귀무가 참인 경우와 거짓인 경우를 함께 돌려 제1종 오류율과 검정력을 잰다.
+
+        분산이 다른 설계에서 보통의 분산분석은 제1종 오류율이 명목수준을 넘는다.
+        Welch 는 그것을 0.05 근처로 지켜 준다.
+        """
+        pvals_null = [simulate_once(null=True) for _ in range(n_sims)]
+        pvals_alt  = [simulate_once(null=False) for _ in range(n_sims)]
+        type1 = np.mean(np.array(pvals_null) < alpha)
+        power = np.mean(np.array(pvals_alt)  < alpha)
+        return type1, power
+
+    type1, power = run(n_sims=300, alpha=0.05)
+    print(f"Estimated Type I error: {type1:.3f}")
+    print(f"Estimated Power:        {power:.3f}")
+    ```
+
+    출력:
+
+    ```
+    Estimated Type I error: 0.047
+    Estimated Power:        0.100
+    ```
+
+    제1종 오류가 0.047로 명목 0.05와 어긋나지 않는다(모의실험 표준오차 0.013). 분산비가 6배나 되고 표본크기도 10, 18, 7로 제각각인데도 Welch가 오류율을 지켜 낸다.
+
+    검정력 0.100은 처참하다. $G_3$을 2만큼 올렸지만 그 집단의 표준편차가 6이고 표본이 7개뿐이라 신호가 잡음에 묻힌다. **오류율을 지키는 것과 효과를 찾아내는 것은 다른 문제다.**
+
+    반복을 늘리고 고전 $F$ 를 나란히 세운다.
+
+    ```python
+    for B in (300, 10000):
+        se = np.sqrt(0.05 * 0.95 / B)
+        print(f"B = {B:>5}:  제1종 오류 추정의 MC 표준오차 = {se:.4f},  "
+              f"95% 폭 = +-{1.96 * se:.4f}")
+
+    ns, sigmas = (10, 18, 7), (1.0, 3.0, 6.0)
+    B = 10000
+    sim = np.random.default_rng(2026)
+
+
+    def simulate(delta):
+        """mu3 를 delta 만큼 올린 설계에서 두 검정의 통계량을 모은다."""
+        mus = (10.0, 10.0, 10.0 + delta)
+        p_welch = np.empty(B)
+        F_classic = np.empty(B)
+        for b in range(B):
+            gs = [sim.normal(mu, sd, n) for n, mu, sd in zip(ns, mus, sigmas)]
+            Fw, d1, d2 = welch_f_by_hand(gs)
+            p_welch[b] = stats.f(d1, d2).sf(Fw)
+            F_classic[b] = stats.f_oneway(*gs).statistic
+        return p_welch, F_classic
+
+
+    pw0, Fc0 = simulate(0.0)
+    pw1, Fc1 = simulate(2.0)
+    crit_nominal = stats.f(2, sum(ns) - 3).ppf(0.95)
+    crit_empirical = np.quantile(Fc0, 0.95)   # 수준을 0.05 로 맞춘 임계값
+
+    half = lambda r: 1.96 * np.sqrt(r * (1 - r) / B)
+    size_w, size_c = np.mean(pw0 < 0.05), np.mean(Fc0 > crit_nominal)
+    pow_w, pow_c = np.mean(pw1 < 0.05), np.mean(Fc1 > crit_nominal)
+    pow_c_adj = np.mean(Fc1 > crit_empirical)
+    print(f"\n제1종 오류율   Welch {size_w:.4f} (+-{half(size_w):.4f})   "
+          f"고전 F {size_c:.4f} (+-{half(size_c):.4f})")
+    print(f"검정력         Welch {pow_w:.4f} (+-{half(pow_w):.4f})   "
+          f"고전 F {pow_c:.4f} (+-{half(pow_c):.4f})")
+    print(f"\n고전 F 의 임계값:  이론 {crit_nominal:.4f}  vs  수준 0.05 를 맞춘 "
+          f"경험적 임계값 {crit_empirical:.4f}")
+    print(f"수준을 맞춘 뒤의 고전 F 검정력 = {pow_c_adj:.4f} (+-{half(pow_c_adj):.4f})")
+    ```
+
+    출력:
+
+    ```
+    B =   300:  제1종 오류 추정의 MC 표준오차 = 0.0126,  95% 폭 = +-0.0247
+    B = 10000:  제1종 오류 추정의 MC 표준오차 = 0.0022,  95% 폭 = +-0.0043
+
+    제1종 오류율   Welch 0.0532 (+-0.0044)   고전 F 0.1418 (+-0.0068)
+    검정력         Welch 0.1059 (+-0.0060)   고전 F 0.2659 (+-0.0087)
+
+    고전 F 의 임계값:  이론 3.2945  vs  수준 0.05 를 맞춘 경험적 임계값 5.9757
+    수준을 맞춘 뒤의 고전 F 검정력 = 0.1222 (+-0.0064)
+    ```
+
+    **(1)이 확인된다.** $B = 300$ 의 폭 $\pm 0.025$ 는 $0.047$ 과 $0.070$ 을 가르지 못한다. $B = 10000$ 으로 올리자 Welch 의 수준이 $0.0532 \pm 0.0044$ 로 좁혀졌다. 이제 비로소 **"명목 $0.05$ 보다 아주 조금 높다"**고 말할 수 있다. Welch 분산분석의 수준은 정확한 것이 아니라 Satterthwaite 근사에 기댄 것이므로, 작은 표본에서 이 정도의 넘침은 알려진 성질이다.
+
+    **고전 $F$ 는 $0.1418$ 로 무너진다.** 세 평균이 모두 정확히 $10.0$ 인데 **일곱 번에 한 번꼴로 "차이가 있다"고 선언한다.** 명목수준의 $2.8$ 배다. 이 설계가 하필 가장 나쁜 쪽인 까닭은 **표준편차가 가장 큰 집단($\sigma_3 = 6$)에 표본을 가장 적게($n_3 = 7$) 주었기** 때문이다. 합동 $MSW$ 는 자유도로 가중하므로 그 집단의 큰 분산이 $6/32$ 의 몫밖에 반영되지 않고, 분모가 작게 추정된 채 분자는 그 집단 평균의 큰 흔들림을 그대로 받는다.
+
+    **검정력은 비교할 수 없다.** 고전 $F$ 의 $0.2659$ 가 Welch 의 $0.1059$ 보다 크지만, 이것을 "고전 $F$ 가 더 잘 찾아낸다"로 읽으면 안 된다. **두 검정의 실제 수준이 다르기 때문이다.** 고전 $F$ 는 아무 차이가 없을 때도 $0.1418$ 로 기각하므로, 그 $0.2659$ 중 상당 부분은 자료가 아니라 검정의 들뜸에서 온다. 수준이 $0.14$ 인 검정과 $0.05$ 인 검정의 검정력을 나란히 놓는 것은 **문턱 높이가 다른 두 뜀틀의 기록을 견주는 일**이다.
+
+    그래서 임계값을 다시 잡았다. 귀무 모의실험에서 얻은 고전 $F$ 의 경험적 $95\%$ 분위수는 $5.9757$ 로 이론 임계값 $3.2945$ 의 **$1.8$ 배**다. 그만큼 문턱을 올려 실제 수준을 $0.05$ 로 맞추고 다시 재면 고전 $F$ 의 검정력이 $0.2659$ 에서 **$0.1222$ 로 주저앉는다.** Welch 의 $0.1059$ 와 거의 같은 자리다($0.0163$ 차이에 두 추정의 표준오차가 각각 $0.003$ 쯤이므로 차이가 조금 남아 있기는 하다).
+
+    정리하면 이렇다. **고전 $F$ 의 "높은 검정력"은 거의 전부가 들뜬 수준에서 왔다.** 수준을 맞추면 두 검정이 비슷해지는데, 고전 $F$ 의 올바른 임계값은 $\sigma_i$ 를 모르면 구할 수 없는 수($5.9757$ 은 우리가 참값을 알기에 얻은 것이다)인 반면 Welch 는 자료만으로 $0.05$ 를 지켜 낸다. **옳은 수준을 지키는 것이 먼저이고 검정력 비교는 그다음이다.**
 
 ## 핵심 값
 
