@@ -142,6 +142,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     # 마지막 8 이 나머지에서 멀리 떨어져 있다.
     data = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
 
@@ -271,6 +274,9 @@ $$
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     # 표본크기를 키워 가며 잰 오차라고 하자. 셋 다 참값 1 근처를 겨냥한다.
     data_a = np.array([1, 2, 0, 0, 0, 1, 3, 1, 2, 1, 2, 4, 5, -1, -2, 0, 8])
@@ -644,7 +650,7 @@ $1.5\times\mathrm{IQR}$ 규칙은 **한 변수만 보고** 이상치를 정한�
     마할라노비스 거리
 
     $$
-    D^2 = (\mathbf{x}-\boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})
+    D^2 = (\mathbf{x}-\boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})
     $$
 
     는 공분산으로 표준화하므로 이런 조합의 이상함을 포착한다. 0장 NumPy 연습문제 10에서 `einsum` 으로 계산한 그 양이다. 다변량 정규 아래에서 $D^2 \sim \chi^2_p$이므로 임계값을 카이제곱 분위수에서 가져온다.

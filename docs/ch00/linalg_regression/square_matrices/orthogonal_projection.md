@@ -1,6 +1,6 @@
 # 직교사영행렬
 
-직교사영행렬은 모든 벡터를 어떤 부분공간 안에서 가장 가까운 점으로 보내며, 여기서 "가깝다"는 유클리드 거리로 잰다. 이것이 통상 최소제곱의 기하학적 내용이다. 적합값 벡터 $\hat{\mathbf{y}}$는 반응벡터 $\mathbf{y}$를 계획행렬 $\mathbf{X}$의 열공간 위로 직교사영한 것이고, 잔차벡터 $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$는 그 열공간에 수직이다. 직교사영은 멱등이면서 대칭인 것으로 특징지어지며, 그 명시적 공식 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$이 회귀의 모자 행렬이다. 이 공식은 $\mathbf{X}$의 **열이 선형독립일 때**에만 뜻을 갖는다. 그때에만 $\mathbf{X}^T\mathbf{X}$가 가역이기 때문이다(정리 2).
+직교사영행렬은 모든 벡터를 어떤 부분공간 안에서 가장 가까운 점으로 보내며, 여기서 "가깝다"는 유클리드 거리로 잰다. 이것이 통상 최소제곱의 기하학적 내용이다. 적합값 벡터 $\hat{\mathbf{y}}$는 반응벡터 $\mathbf{y}$를 계획행렬 $\mathbf{X}$의 열공간 위로 직교사영한 것이고, 잔차벡터 $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$는 그 열공간에 수직이다. 직교사영은 멱등이면서 대칭인 것으로 특징지어지며, 그 명시적 공식 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이 회귀의 모자 행렬이다. 이 공식은 $\mathbf{X}$의 **열이 선형독립일 때**에만 뜻을 갖는다. 그때에만 $\mathbf{X}^\top\mathbf{X}$가 가역이기 때문이다(정리 2).
 
 <div class="defn" markdown>
 
@@ -9,7 +9,7 @@
 정사각행렬 $\mathbf{P} \in \mathbb{R}^{n \times n}$이 멱등이면서 대칭이면 **직교사영행렬**이라 한다.
 
 $$
-\mathbf{P}^2 = \mathbf{P} \quad \text{and} \quad \mathbf{P}^T = \mathbf{P}
+\mathbf{P}^2 = \mathbf{P} \quad \text{and} \quad \mathbf{P}^\top = \mathbf{P}
 $$
 
 </div>
@@ -17,7 +17,7 @@ $$
 대칭성 조건이 직교사영을 빗각 사영과 구별해 준다. 멱등행렬 $\mathbf{P}$에 대해
 
 $$
-\mathbf{P}^T = \mathbf{P} \iff \ker(\mathbf{P}) = \operatorname{col}(\mathbf{P})^\perp
+\mathbf{P}^\top = \mathbf{P} \iff \ker(\mathbf{P}) = \operatorname{col}(\mathbf{P})^\perp
 $$
 
 이 성립한다. 곧 대칭성은 "영공간이 열공간의 직교여공간"이라는 기하적 조건과 정확히 같은 말이다. 이 동등성은 [멱등행렬](./idempotent.md) 쪽의 정리 3에서 증명했으므로 여기서는 인용만 한다.
@@ -73,7 +73,7 @@ $$
 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\operatorname{rank}(\mathbf{X}) = p$). $\operatorname{col}(\mathbf{X})$ 위로의 직교사영은
 
 $$
-\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
+\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top
 $$
 
 이다.
@@ -87,16 +87,16 @@ $$
     *멱등성:*
 
     $$
-    \mathbf{P}_{\mathbf{X}}^2 = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{P}_{\mathbf{X}}
+    \mathbf{P}_{\mathbf{X}}^2 = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{P}_{\mathbf{X}}
     $$
 
     *대칭성:*
 
     $$
-    \mathbf{P}_{\mathbf{X}}^T = (\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T)^T = \mathbf{X}((\mathbf{X}^T\mathbf{X})^{-1})^T\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{P}_{\mathbf{X}}
+    \mathbf{P}_{\mathbf{X}}^\top = (\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top)^\top = \mathbf{X}((\mathbf{X}^\top\mathbf{X})^{-1})^\top\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{P}_{\mathbf{X}}
     $$
 
-    마지막 단계에서는 $(\mathbf{X}^T\mathbf{X})^{-1}$이 대칭이라는 사실을 썼다(대칭행렬의 역행렬은 대칭이다). $\square$
+    마지막 단계에서는 $(\mathbf{X}^\top\mathbf{X})^{-1}$이 대칭이라는 사실을 썼다(대칭행렬의 역행렬은 대칭이다). $\square$
 
 ## 성질
 
@@ -115,7 +115,7 @@ $$
 행렬 $\mathbf{M} = \mathbf{I} - \mathbf{P}_{\mathbf{X}}$는 $\operatorname{col}(\mathbf{X})^\perp$ 위로의 직교사영이다.
 
 $$
-\mathbf{M}^2 = \mathbf{M}, \quad \mathbf{M}^T = \mathbf{M}, \quad \operatorname{tr}(\mathbf{M}) = n - p
+\mathbf{M}^2 = \mathbf{M}, \quad \mathbf{M}^\top = \mathbf{M}, \quad \operatorname{tr}(\mathbf{M}) = n - p
 $$
 
 ### 사영들의 직교성
@@ -137,29 +137,29 @@ $$
 부분공간이 1차원일 때, 즉 0이 아닌 벡터 $\mathbf{u}$에 대해 $\mathcal{V} = \operatorname{span}\{\mathbf{u}\}$일 때 사영 공식은
 
 $$
-\mathbf{P}_{\mathbf{u}} = \frac{\mathbf{u}\mathbf{u}^T}{\mathbf{u}^T\mathbf{u}}
+\mathbf{P}_{\mathbf{u}} = \frac{\mathbf{u}\mathbf{u}^\top}{\mathbf{u}^\top\mathbf{u}}
 $$
 
 으로 간단해진다. 이것은 임의의 벡터 $\mathbf{x}$를 $\mathbf{u}$ 위로 사영한다.
 
 $$
-\mathbf{P}_{\mathbf{u}}\mathbf{x} = \frac{\mathbf{u}^T\mathbf{x}}{\mathbf{u}^T\mathbf{u}}\,\mathbf{u}
+\mathbf{P}_{\mathbf{u}}\mathbf{x} = \frac{\mathbf{u}^\top\mathbf{x}}{\mathbf{u}^\top\mathbf{u}}\,\mathbf{u}
 $$
 
-스칼라 $\frac{\mathbf{u}^T\mathbf{x}}{\mathbf{u}^T\mathbf{u}}$가 $\mathbf{u}$ 위로 사영된 $\mathbf{x}$의 계수다.
+스칼라 $\frac{\mathbf{u}^\top\mathbf{x}}{\mathbf{u}^\top\mathbf{u}}$가 $\mathbf{u}$ 위로 사영된 $\mathbf{x}$의 계수다.
 
 ## 예 — 중심화행렬
 
 **중심화행렬**은
 
 $$
-\mathbf{C} = \mathbf{I}_n - \frac{1}{n}\mathbf{1}_n\mathbf{1}_n^T
+\mathbf{C} = \mathbf{I}_n - \frac{1}{n}\mathbf{1}_n\mathbf{1}_n^\top
 $$
 
-이며, 여기서 $\mathbf{1}_n = (1, \dots, 1)^T$이다. 이 행렬은 다음을 만족한다.
+이며, 여기서 $\mathbf{1}_n = (1, \dots, 1)^\top$이다. 이 행렬은 다음을 만족한다.
 
 - $\mathbf{C}^2 = \mathbf{C}$ (멱등)
-- $\mathbf{C}^T = \mathbf{C}$ (대칭)
+- $\mathbf{C}^\top = \mathbf{C}$ (대칭)
 - $\operatorname{tr}(\mathbf{C}) = n - 1$
 
 따라서 $\mathbf{C}$는 계수 $n - 1$인 직교사영이다. $\mathbf{1}_n$에 직교하는 부분공간(성분의 합이 0인 벡터들의 부분공간) 위로 사영한다. 임의의 자료벡터 $\mathbf{x}$에 대해
@@ -175,7 +175,7 @@ $$
 완전 열계수를 갖는 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대한 선형모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$에서 **모자 행렬**은
 
 $$
-\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
+\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top
 $$
 
 이다. 이것이 $\operatorname{col}(\mathbf{X})$ 위로의 직교사영이다. 이름은 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$라는 사실에서 왔다. 모자 행렬이 "$\mathbf{y}$에 모자를 씌우는" 것이다.
@@ -215,7 +215,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-$\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$이라 하자. 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$를 계산하고 $\operatorname{tr}(\mathbf{H}) = 2$임을 확인하라.
+$\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$이라 하자. 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$를 계산하고 $\operatorname{tr}(\mathbf{H}) = 2$임을 확인하라.
 
 </div>
 
@@ -223,13 +223,13 @@ $\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$이라 하�
     먼저 다음을 계산한다.
 
     $$
-    \mathbf{X}^T\mathbf{X} = \begin{pmatrix} 3 & 6 \\ 6 & 14 \end{pmatrix}, \quad (\mathbf{X}^T\mathbf{X})^{-1} = \frac{1}{6}\begin{pmatrix} 14 & -6 \\ -6 & 3 \end{pmatrix}
+    \mathbf{X}^\top\mathbf{X} = \begin{pmatrix} 3 & 6 \\ 6 & 14 \end{pmatrix}, \quad (\mathbf{X}^\top\mathbf{X})^{-1} = \frac{1}{6}\begin{pmatrix} 14 & -6 \\ -6 & 3 \end{pmatrix}
     $$
 
     그러면
 
     $$
-    \mathbf{H} = \mathbf{X} \cdot \frac{1}{6}\begin{pmatrix} 14 & -6 \\ -6 & 3 \end{pmatrix} \cdot \mathbf{X}^T = \frac{1}{6}\begin{pmatrix} 5 & 2 & -1 \\ 2 & 2 & 2 \\ -1 & 2 & 5 \end{pmatrix}
+    \mathbf{H} = \mathbf{X} \cdot \frac{1}{6}\begin{pmatrix} 14 & -6 \\ -6 & 3 \end{pmatrix} \cdot \mathbf{X}^\top = \frac{1}{6}\begin{pmatrix} 5 & 2 & -1 \\ 2 & 2 & 2 \\ -1 & 2 & 5 \end{pmatrix}
     $$
 
     이다. 대각합은 $\operatorname{tr}(\mathbf{H}) = (5 + 2 + 5)/6 = 12/6 = 2$로 $\mathbf{X}$의 열 개수($p = 2$)와 같다. 이는 일반적인 결과 $\operatorname{tr}(\mathbf{H}) = \operatorname{rank}(\mathbf{H}) = p$를 확인해 준다.
@@ -245,13 +245,13 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
     $\mathbf{y} = \hat{\mathbf{y}} + \mathbf{e}$이므로
 
     $$
-    \lVert \mathbf{y} \rVert^2 = (\hat{\mathbf{y}} + \mathbf{e})^T(\hat{\mathbf{y}} + \mathbf{e}) = \lVert \hat{\mathbf{y}} \rVert^2 + 2\hat{\mathbf{y}}^T\mathbf{e} + \lVert \mathbf{e} \rVert^2
+    \lVert \mathbf{y} \rVert^2 = (\hat{\mathbf{y}} + \mathbf{e})^\top(\hat{\mathbf{y}} + \mathbf{e}) = \lVert \hat{\mathbf{y}} \rVert^2 + 2\hat{\mathbf{y}}^\top\mathbf{e} + \lVert \mathbf{e} \rVert^2
     $$
 
     이다. 교차항은 다음과 같이 사라진다.
 
     $$
-    \hat{\mathbf{y}}^T\mathbf{e} = (\mathbf{H}\mathbf{y})^T(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^T\mathbf{H}^T(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^T\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y}
+    \hat{\mathbf{y}}^\top\mathbf{e} = (\mathbf{H}\mathbf{y})^\top(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top\mathbf{H}^\top(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y}
     $$
 
     $\mathbf{H}(\mathbf{I} - \mathbf{H}) = \mathbf{H} - \mathbf{H}^2 = \mathbf{H} - \mathbf{H} = \mathbf{0}$이므로 교차항이 0이 되어 $\lVert \mathbf{y} \rVert^2 = \lVert \hat{\mathbf{y}} \rVert^2 + \lVert \mathbf{e} \rVert^2$를 얻는다. $\square$
@@ -282,10 +282,10 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 </div>
 
 ??? success "풀이"
-    중심화한 두 벡터 $\tilde{\mathbf{y}} = \mathbf{y} - \bar{y}\mathbf{1}$과 $\tilde{\mathbf{y}}_{\!*} = \hat{\mathbf{y}} - \bar{y}\mathbf{1}$을 잡고 $\theta$를 둘 사이의 각이라 하자. $\tilde{\mathbf{y}} = \tilde{\mathbf{y}}_{\!*} + \mathbf{e}$이고 $\mathbf{e}$가 $\hat{\mathbf{y}}$과 $\mathbf{1}$ 모두에 직교하므로 $\tilde{\mathbf{y}}_{\!*}^T\mathbf{e} = 0$이며, 따라서
+    중심화한 두 벡터 $\tilde{\mathbf{y}} = \mathbf{y} - \bar{y}\mathbf{1}$과 $\tilde{\mathbf{y}}_{\!*} = \hat{\mathbf{y}} - \bar{y}\mathbf{1}$을 잡고 $\theta$를 둘 사이의 각이라 하자. $\tilde{\mathbf{y}} = \tilde{\mathbf{y}}_{\!*} + \mathbf{e}$이고 $\mathbf{e}$가 $\hat{\mathbf{y}}$과 $\mathbf{1}$ 모두에 직교하므로 $\tilde{\mathbf{y}}_{\!*}^\top\mathbf{e} = 0$이며, 따라서
 
     $$
-    \cos\theta = \frac{\tilde{\mathbf{y}}_{\!*}^T\tilde{\mathbf{y}}}{\lVert \tilde{\mathbf{y}}_{\!*} \rVert \lVert \tilde{\mathbf{y}} \rVert} = \frac{\lVert \tilde{\mathbf{y}}_{\!*} \rVert^2}{\lVert \tilde{\mathbf{y}}_{\!*} \rVert \lVert \tilde{\mathbf{y}} \rVert} = \frac{\lVert \tilde{\mathbf{y}}_{\!*} \rVert}{\lVert \tilde{\mathbf{y}} \rVert}
+    \cos\theta = \frac{\tilde{\mathbf{y}}_{\!*}^\top\tilde{\mathbf{y}}}{\lVert \tilde{\mathbf{y}}_{\!*} \rVert \lVert \tilde{\mathbf{y}} \rVert} = \frac{\lVert \tilde{\mathbf{y}}_{\!*} \rVert^2}{\lVert \tilde{\mathbf{y}}_{\!*} \rVert \lVert \tilde{\mathbf{y}} \rVert} = \frac{\lVert \tilde{\mathbf{y}}_{\!*} \rVert}{\lVert \tilde{\mathbf{y}} \rVert}
     $$
 
     이다. 곧 $R^2 = \text{SSR}/\text{SST} = \cos^2\theta$로, **평균만 맞히는 모형에서 출발한 반응벡터**와 그것을 모형 부분공간 위로 사영한 벡터 사이 각의 코사인의 제곱이다.
@@ -297,23 +297,23 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-영이 아닌 벡터 $\mathbf{a}$ 하나가 펼치는 직선 위로의 직교사영이 $\mathbf{P} = \dfrac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}$임을 보이고, 이것이 절편 없는 단순회귀와 어떻게 연결되는지 설명하라.
+영이 아닌 벡터 $\mathbf{a}$ 하나가 펼치는 직선 위로의 직교사영이 $\mathbf{P} = \dfrac{\mathbf{a}\mathbf{a}^\top}{\mathbf{a}^\top\mathbf{a}}$임을 보이고, 이것이 절편 없는 단순회귀와 어떻게 연결되는지 설명하라.
 
 </div>
 
 ??? success "풀이"
-    사영 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$에서 $\mathbf{X} = \mathbf{a}$($n \times 1$)로 두면 $\mathbf{X}^T\mathbf{X} = \mathbf{a}^T\mathbf{a}$가 스칼라이므로 역행렬이 곧 역수다.
+    사영 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$에서 $\mathbf{X} = \mathbf{a}$($n \times 1$)로 두면 $\mathbf{X}^\top\mathbf{X} = \mathbf{a}^\top\mathbf{a}$가 스칼라이므로 역행렬이 곧 역수다.
 
     $$
-    \mathbf{P} = \mathbf{a}\,(\mathbf{a}^T\mathbf{a})^{-1}\mathbf{a}^T = \frac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}
+    \mathbf{P} = \mathbf{a}\,(\mathbf{a}^\top\mathbf{a})^{-1}\mathbf{a}^\top = \frac{\mathbf{a}\mathbf{a}^\top}{\mathbf{a}^\top\mathbf{a}}
     $$
 
-    멱등성은 $\mathbf{P}^2 = \dfrac{\mathbf{a}(\mathbf{a}^T\mathbf{a})\mathbf{a}^T}{(\mathbf{a}^T\mathbf{a})^2} = \mathbf{P}$, 대칭성은 $(\mathbf{a}\mathbf{a}^T)^T = \mathbf{a}\mathbf{a}^T$에서 나온다. 계수가 1이므로 $\operatorname{tr}(\mathbf{P}) = 1$이다.
+    멱등성은 $\mathbf{P}^2 = \dfrac{\mathbf{a}(\mathbf{a}^\top\mathbf{a})\mathbf{a}^\top}{(\mathbf{a}^\top\mathbf{a})^2} = \mathbf{P}$, 대칭성은 $(\mathbf{a}\mathbf{a}^\top)^\top = \mathbf{a}\mathbf{a}^\top$에서 나온다. 계수가 1이므로 $\operatorname{tr}(\mathbf{P}) = 1$이다.
 
-    $\mathbf{P}\mathbf{y} = \mathbf{a}\dfrac{\mathbf{a}^T\mathbf{y}}{\mathbf{a}^T\mathbf{a}}$로 쓰면 계수가 바로 읽힌다.
+    $\mathbf{P}\mathbf{y} = \mathbf{a}\dfrac{\mathbf{a}^\top\mathbf{y}}{\mathbf{a}^\top\mathbf{a}}$로 쓰면 계수가 바로 읽힌다.
 
     $$
-    \hat{\beta} = \frac{\mathbf{a}^T\mathbf{y}}{\mathbf{a}^T\mathbf{a}} = \frac{\sum_i a_i y_i}{\sum_i a_i^2}
+    \hat{\beta} = \frac{\mathbf{a}^\top\mathbf{y}}{\mathbf{a}^\top\mathbf{a}} = \frac{\sum_i a_i y_i}{\sum_i a_i^2}
     $$
 
     이것이 **절편 없는 단순회귀** $y_i = \beta a_i + \varepsilon_i$의 최소제곱추정량이다.
@@ -354,10 +354,10 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 </div>
 
 ??? success "풀이"
-    $\mathbf{H}$가 대칭 멱등이므로 $\mathbf{H} = \mathbf{H}^2 = \mathbf{H}^T\mathbf{H}$이고, 따라서
+    $\mathbf{H}$가 대칭 멱등이므로 $\mathbf{H} = \mathbf{H}^2 = \mathbf{H}^\top\mathbf{H}$이고, 따라서
 
     $$
-    h_{ii} = [\mathbf{H}^T\mathbf{H}]_{ii} = \sum_j h_{ji}^2 = h_{ii}^2 + \sum_{j \neq i} h_{ji}^2
+    h_{ii} = [\mathbf{H}^\top\mathbf{H}]_{ii} = \sum_j h_{ji}^2 = h_{ii}^2 + \sum_{j \neq i} h_{ji}^2
     $$
 
     이다. 오른쪽의 합이 음이 아니므로 $h_{ii} \ge h_{ii}^2$, 곧 $h_{ii}(1 - h_{ii}) \ge 0$이고 $0 \le h_{ii} \le 1$이다. 합은 $\sum_i h_{ii} = \operatorname{tr}(\mathbf{H}) = p$다.
@@ -401,7 +401,7 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
     두 행렬 모두 대칭이므로 전치를 취하면
 
     $$
-    \mathbf{H}_1 = \mathbf{H}_1^T = (\mathbf{H}_2\mathbf{H}_1)^T = \mathbf{H}_1^T\mathbf{H}_2^T = \mathbf{H}_1\mathbf{H}_2
+    \mathbf{H}_1 = \mathbf{H}_1^\top = (\mathbf{H}_2\mathbf{H}_1)^\top = \mathbf{H}_1^\top\mathbf{H}_2^\top = \mathbf{H}_1\mathbf{H}_2
     $$
 
     이다.
@@ -427,12 +427,12 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
     대칭성에서
 
     $$
-    \mathbf{P}_1 = (\mathbf{P}_2\mathbf{P}_1)^T = \mathbf{P}_1^T\mathbf{P}_2^T = \mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2
+    \mathbf{P}_1 = (\mathbf{P}_2\mathbf{P}_1)^\top = \mathbf{P}_1^\top\mathbf{P}_2^\top = \mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2
     $$
 
     이므로 둘은 같다.
 
-    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 계획행렬(예: 예측변수를 재척도화하거나 선형결합한 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
+    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 계획행렬(예: 예측변수를 재척도화하거나 선형결합한 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
 
     빗각 사영에서는 이 유일성이 성립하지 않는다. 치역이 같아도 눌러 없애는 방향이 다르면 다른 사영이다. $\square$
 
@@ -546,4 +546,4 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
 ## 정리하며
 
-직교사영행렬은 벡터를 부분공간 안에서 가장 가까운 점으로 보내는 대칭 멱등행렬이다. 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$이 회귀의 모자 행렬이고, 여집합 사영 $\mathbf{I} - \mathbf{P}_{\mathbf{X}}$이 잔차를 만들어낸다. 적합값과 잔차의 직교성이 제곱합의 피타고라스 분해를 낳으며, 이것이 분산분석과 $R^2$의 기하학적 토대다.
+직교사영행렬은 벡터를 부분공간 안에서 가장 가까운 점으로 보내는 대칭 멱등행렬이다. 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이 회귀의 모자 행렬이고, 여집합 사영 $\mathbf{I} - \mathbf{P}_{\mathbf{X}}$이 잔차를 만들어낸다. 적합값과 잔차의 직교성이 제곱합의 피타고라스 분해를 낳으며, 이것이 분산분석과 $R^2$의 기하학적 토대다.

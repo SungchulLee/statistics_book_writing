@@ -348,7 +348,7 @@ import pandas as pd
 # openintro의 bdims 자료: 성인 507명의 신체 치수.
 # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
 url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-       "master/csv/openintro/bdims.csv")
+       "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
 data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
 data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 

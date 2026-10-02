@@ -281,6 +281,9 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
     import pandas as pd
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(0)
     df = pd.DataFrame({"x": rng.normal(0, 1, 200),
                        "y": rng.normal(0, 1, 200),
@@ -604,6 +607,9 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(0)
     n = 300
     samples = {"정규 N(0,1)": rng.standard_normal(n),
@@ -658,6 +664,9 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     x = np.linspace(1, 100, 500)
     power = 3 * x ** 2.0          # 멱법칙  y = a x^b
@@ -724,6 +733,9 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     groups = ["A", "B", "C", "D"]
     values = np.array([97.2, 98.1, 97.6, 98.4])
 
@@ -780,6 +792,9 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
     n = 50_000

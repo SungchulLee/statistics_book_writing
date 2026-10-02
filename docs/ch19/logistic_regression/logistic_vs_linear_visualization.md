@@ -696,17 +696,17 @@ $\log\frac{p}{1-p} = z$를 $p$에 대해 풀어 시그모이드 함수를 유도
     관측치 하나에 대한 음의 로그가능도(교차엔트로피)는
 
     $$
-    L_i(\boldsymbol\beta) = -y_i \log \sigma(\mathbf{x}_i^T\boldsymbol\beta) - (1-y_i)\log\bigl(1-\sigma(\mathbf{x}_i^T\boldsymbol\beta)\bigr)
+    L_i(\boldsymbol\beta) = -y_i \log \sigma(\mathbf{x}_i^\top\boldsymbol\beta) - (1-y_i)\log\bigl(1-\sigma(\mathbf{x}_i^\top\boldsymbol\beta)\bigr)
     $$
 
     이다. $\sigma(z) = 1/(1+e^{-z})$와 $1-\sigma(z) = \sigma(-z)$를 쓰면
 
     $$
-    L_i(\boldsymbol\beta) = -y_i\,\mathbf{x}_i^T\boldsymbol\beta + \log\bigl(1 + e^{\mathbf{x}_i^T\boldsymbol\beta}\bigr)
+    L_i(\boldsymbol\beta) = -y_i\,\mathbf{x}_i^\top\boldsymbol\beta + \log\bigl(1 + e^{\mathbf{x}_i^\top\boldsymbol\beta}\bigr)
     $$
 
     로 정리된다. 첫 항은 $\boldsymbol\beta$에 대해 일차이므로 볼록이다. 둘째 항은
-    $z = \mathbf{x}_i^T\boldsymbol\beta$에서 평가한 $\log(1+e^z)$인데, 모든 $z$에 대해
+    $z = \mathbf{x}_i^\top\boldsymbol\beta$에서 평가한 $\log(1+e^z)$인데, 모든 $z$에 대해
     $\frac{d^2}{dz^2}\log(1+e^z) = \sigma(z)(1-\sigma(z)) > 0$이므로 $\log(1+e^z)$는 볼록이다.
     볼록함수와 일차사상의 합성은 볼록이다. 합
     $L(\boldsymbol\beta) = \sum_i L_i$는 볼록함수들의 합이므로 볼록이다. $\square$
@@ -714,7 +714,7 @@ $\log\frac{p}{1-p} = z$를 $p$에 대해 풀어 시그모이드 함수를 유도
     !!! note "볼록이지만 강볼록은 아니다"
         $\sigma(z)(1-\sigma(z)) > 0$이 모든 $z$에서 성립하므로 일변량 함수 $\log(1+e^z)$는
         강볼록이다. 그러나 $\boldsymbol\beta$의 함수로서 $L$의 헤세행렬은
-        $\sum_i \sigma_i(1-\sigma_i)\mathbf{x}_i\mathbf{x}_i^T$이므로, $\{\mathbf{x}_i\}$가
+        $\sum_i \sigma_i(1-\sigma_i)\mathbf{x}_i\mathbf{x}_i^\top$이므로, $\{\mathbf{x}_i\}$가
         $\mathbb{R}^p$를 생성하지 못하면(예: $p > n$) 양반정치일 뿐이다. 게다가
         $\|\boldsymbol\beta\| \to \infty$이면 $\sigma_i(1-\sigma_i) \to 0$이라 곡률이 사라진다.
         이것이 완전 분리에서 MLE가 존재하지 않는 이유이자, 정칙화가 필요한 이유다.

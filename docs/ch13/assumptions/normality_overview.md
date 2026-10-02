@@ -82,10 +82,10 @@ $\hat{\beta}$의 불편추정에는 정규성이 필요하지 않지만 계수�
 </div>
 
 ??? success "풀이"
-    OLS 추정량 $\hat{\beta} = (X^T X)^{-1} X^T Y$는 $Y$의 선형함수이다. 그 기댓값은
+    OLS 추정량 $\hat{\beta} = (X^\top X)^{-1} X^\top Y$는 $Y$의 선형함수이다. 그 기댓값은
 
     $$
-    E[\hat{\beta}] = (X^T X)^{-1} X^T E[Y] = (X^T X)^{-1} X^T X \beta = \beta
+    E[\hat{\beta}] = (X^\top X)^{-1} X^\top E[Y] = (X^\top X)^{-1} X^\top X \beta = \beta
     $$
 
     이 유도에는 $E[\varepsilon] = 0$만 쓰였고 정규성은 쓰이지 않았다. 따라서 $\hat{\beta}$는 오차의 분포와 무관하게 불편이다.

@@ -268,7 +268,7 @@ $$
         앞 보기와 코드 구조는 같지만 결론이 정반대다.
         앞에서는 곡선이 히스토그램에 잘 맞았고, 여기서는 맞지 않는다.
         """
-        url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+        url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
         df = pd.read_csv(url)
 
         # 소득의 평균과 표준편차. 이 둘만으로 정규분포가 결정된다.
@@ -394,7 +394,7 @@ $$
     plt.rcParams["axes.unicode_minus"] = False
 
     # 캘리포니아 주택 자료. 구역마다 소득·집값·방 수 등 아홉 개 변수가 들어 있다.
-    DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
+    DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/7b7e23e7267356f8355580877eff98c43cda1bd0/"
     HOUSING_PATH = os.path.join("datasets", "housing")
     HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
 
@@ -546,7 +546,7 @@ $$
     plt.rcParams["font.family"] = "Apple SD Gothic Neo"
     plt.rcParams["axes.unicode_minus"] = False
 
-    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     df = pd.read_csv(url, index_col='PassengerId')
 
     # 다섯 변수를 한 줄에 나란히 그린다.

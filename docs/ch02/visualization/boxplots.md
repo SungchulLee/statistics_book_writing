@@ -39,7 +39,7 @@
     plt.rcParams['axes.unicode_minus'] = False
 
     # 자료를 인터넷에서 내려받으므로 실행에 연결이 필요하다.
-    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     df = pd.read_csv(url, index_col='PassengerId')
 
     fig, ax = plt.subplots(figsize=(5, 3))

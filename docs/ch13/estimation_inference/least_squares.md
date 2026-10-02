@@ -100,9 +100,9 @@ $$
 $$
 \text{argmin}_{\boldsymbol{\theta}} \; J(\boldsymbol{\theta})
 \quad \Rightarrow \quad
-\mathbf{X}^T \mathbf{X} \boldsymbol{\theta} = \mathbf{X}^T \mathbf{y}
+\mathbf{X}^\top \mathbf{X} \boldsymbol{\theta} = \mathbf{X}^\top \mathbf{y}
 \quad \Rightarrow \quad
-\hat{\boldsymbol{\theta}} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}
+\hat{\boldsymbol{\theta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
 $$
 
 ### 벡터 미적분 항등식
@@ -111,12 +111,12 @@ $$
 
 $$
 \begin{aligned}
-(1) \quad & \frac{\partial (\mathbf{a}^T \mathbf{b})}{\partial \mathbf{a}} = \mathbf{b} \\[4pt]
-(2) \quad & \frac{\partial (\mathbf{a}^T \mathbf{b})}{\partial \mathbf{b}} = \mathbf{a} \\[4pt]
-(3) \quad & \frac{\partial \text{tr}(\mathbf{A}\mathbf{B})}{\partial \mathbf{A}} = \mathbf{B}^T \\[4pt]
-(4) \quad & \frac{\partial \text{tr}(\mathbf{A}\mathbf{B})}{\partial \mathbf{B}} = \mathbf{A}^T \\[4pt]
+(1) \quad & \frac{\partial (\mathbf{a}^\top \mathbf{b})}{\partial \mathbf{a}} = \mathbf{b} \\[4pt]
+(2) \quad & \frac{\partial (\mathbf{a}^\top \mathbf{b})}{\partial \mathbf{b}} = \mathbf{a} \\[4pt]
+(3) \quad & \frac{\partial \text{tr}(\mathbf{A}\mathbf{B})}{\partial \mathbf{A}} = \mathbf{B}^\top \\[4pt]
+(4) \quad & \frac{\partial \text{tr}(\mathbf{A}\mathbf{B})}{\partial \mathbf{B}} = \mathbf{A}^\top \\[4pt]
 (5) \quad & \frac{\partial |\mathbf{A}|}{\partial \mathbf{A}} = \mathbf{C} \quad \text{($\mathbf{C}$는 $\mathbf{A}$의 여인수 행렬)} \\[4pt]
-(6) \quad & \frac{\partial \log|\mathbf{A}|}{\partial \mathbf{A}} = \mathbf{A}^{-T} := (\mathbf{A}^{-1})^T
+(6) \quad & \frac{\partial \log|\mathbf{A}|}{\partial \mathbf{A}} = \mathbf{A}^{-T} := (\mathbf{A}^{-1})^\top
 \end{aligned}
 $$
 
@@ -128,8 +128,8 @@ $$
 \begin{aligned}
 J(\boldsymbol{\theta})
 &= \frac{1}{2m} \| \mathbf{X}\boldsymbol{\theta} - \mathbf{y} \|^2 \\[4pt]
-&= \frac{1}{2m} (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})^T (\mathbf{X}\boldsymbol{\theta} - \mathbf{y}) \\[4pt]
-&= \frac{1}{2m} \left( \boldsymbol{\theta}^T \mathbf{X}^T \mathbf{X} \boldsymbol{\theta} - \boldsymbol{\theta}^T \mathbf{X}^T \mathbf{y} - \mathbf{y}^T \mathbf{X} \boldsymbol{\theta} + \mathbf{y}^T \mathbf{y} \right)
+&= \frac{1}{2m} (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})^\top (\mathbf{X}\boldsymbol{\theta} - \mathbf{y}) \\[4pt]
+&= \frac{1}{2m} \left( \boldsymbol{\theta}^\top \mathbf{X}^\top \mathbf{X} \boldsymbol{\theta} - \boldsymbol{\theta}^\top \mathbf{X}^\top \mathbf{y} - \mathbf{y}^\top \mathbf{X} \boldsymbol{\theta} + \mathbf{y}^\top \mathbf{y} \right)
 \end{aligned}
 $$
 
@@ -138,20 +138,20 @@ $\boldsymbol{\theta}$에 대해 미분하면
 $$
 \begin{aligned}
 \frac{\partial J}{\partial \boldsymbol{\theta}}
-&= \frac{1}{2m} \left( \mathbf{X}^T \mathbf{X} \boldsymbol{\theta} + (\boldsymbol{\theta}^T \mathbf{X}^T \mathbf{X})^T - \mathbf{X}^T \mathbf{y} - (\mathbf{y}^T \mathbf{X})^T \right) \\[4pt]
-&= \frac{1}{m} \left( \mathbf{X}^T \mathbf{X} \boldsymbol{\theta} - \mathbf{X}^T \mathbf{y} \right) \\[4pt]
+&= \frac{1}{2m} \left( \mathbf{X}^\top \mathbf{X} \boldsymbol{\theta} + (\boldsymbol{\theta}^\top \mathbf{X}^\top \mathbf{X})^\top - \mathbf{X}^\top \mathbf{y} - (\mathbf{y}^\top \mathbf{X})^\top \right) \\[4pt]
+&= \frac{1}{m} \left( \mathbf{X}^\top \mathbf{X} \boldsymbol{\theta} - \mathbf{X}^\top \mathbf{y} \right) \\[4pt]
 &= \mathbf{0}
 \end{aligned}
 $$
 
-이로부터 **정규방정식** $\mathbf{X}^T \mathbf{X} \boldsymbol{\theta} = \mathbf{X}^T \mathbf{y}$를 얻고, 닫힌 형태의 해는 다음과 같다.
+이로부터 **정규방정식** $\mathbf{X}^\top \mathbf{X} \boldsymbol{\theta} = \mathbf{X}^\top \mathbf{y}$를 얻고, 닫힌 형태의 해는 다음과 같다.
 
 $$
-\hat{\boldsymbol{\theta}} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}
+\hat{\boldsymbol{\theta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
 $$
 
 !!! note "역행렬은 언제 존재하는가"
-    행렬 $\mathbf{X}^T\mathbf{X}$가 가역인 것은 $\mathbf{X}$가 완전 열계수를 가질 때, 곧 어떤 설명변수도 나머지의 완전한 선형결합이 아닐 때에 한한다. 이 조건이 무너지면(다중공선성) 릿지 회귀 같은 정칙화 기법을 쓸 수 있다.
+    행렬 $\mathbf{X}^\top\mathbf{X}$가 가역인 것은 $\mathbf{X}$가 완전 열계수를 가질 때, 곧 어떤 설명변수도 나머지의 완전한 선형결합이 아닐 때에 한한다. 이 조건이 무너지면(다중공선성) 릿지 회귀 같은 정칙화 기법을 쓸 수 있다.
 
 ---
 
@@ -308,7 +308,7 @@ $$
     제곱손실함수는
 
     $$
-    J(\boldsymbol{\theta}) = \frac{1}{2m} \| \mathbf{X}\boldsymbol{\theta} - \mathbf{y} \|^2 = \frac{1}{2m} (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})^T (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})
+    J(\boldsymbol{\theta}) = \frac{1}{2m} \| \mathbf{X}\boldsymbol{\theta} - \mathbf{y} \|^2 = \frac{1}{2m} (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})^\top (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})
     $$
 
 ## 연습문제

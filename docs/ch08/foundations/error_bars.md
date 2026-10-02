@@ -412,6 +412,9 @@ SE가 널리 쓰이는 이유는 **막대가 짧아 보기 좋기 때문**이라
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(3)
     n = 25
     subject = rng.normal(0, 5, n)                 # 개인차가 크다
@@ -570,6 +573,9 @@ SE가 널리 쓰이는 이유는 **막대가 짧아 보기 좋기 때문**이라
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(5)
     n = 40
     a = rng.lognormal(0, 0.6, n)
@@ -647,6 +653,9 @@ SE가 널리 쓰이는 이유는 **막대가 짧아 보기 좋기 때문**이라
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(7)
     groups = ["A", "B", "C"]

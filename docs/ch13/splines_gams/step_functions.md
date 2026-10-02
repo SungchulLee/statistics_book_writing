@@ -51,7 +51,7 @@ $$
 
     # "Practical Statistics for Data Scientists" 저장소의 자료. 탭으로 구분되어 있다.
     url = ("https://raw.githubusercontent.com/gedeck/"
-           "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+           "practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/house_sales.csv")
     house = pd.read_csv(url, sep='\t')
 
     print(f"{len(house)}건, 열 {house.shape[1]}개")

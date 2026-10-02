@@ -1,3 +1,11 @@
+# 문서를 빌드하는 데 필요한 것만 담는다.
+#
+# GitHub Actions 가 이 파일만 설치하고 `mkdocs build --strict` 를 돌린다.
+# 빌드는 쪽에 실린 파이썬 코드를 **실행하지 않으므로** numpy·torch 따위를
+# 여기에 넣으면 CI 가 쓰지도 않을 꾸러미를 내려받느라 느려지기만 한다.
+#
+# 쪽의 코드를 직접 돌려 보려면 `requirements-examples.txt` 를 쓰라.
+
 mkdocs==1.6.1
 mkdocs-material==9.7.0
 pymdown-extensions==10.14.3

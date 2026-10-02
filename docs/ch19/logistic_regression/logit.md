@@ -46,7 +46,7 @@ $$
 선형관계를 가정한다.
 
 $$
-\operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^T\boldsymbol{\theta}
+\operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^\top\boldsymbol{\theta}
 $$
 
 동등하게, 특성벡터가 $A[i,:]$(절편을 위한 선행 1을 포함한 계획행렬의 행)인 $i$번째 관측치에
@@ -86,7 +86,7 @@ $0.982$로 $0.018$밖에 오르지 않는다. 열 배 가까이 차이가 난다
 
 ## 오즈를 통한 해석
 
-$\operatorname{logit}(p) = \mathbf{x}^T\boldsymbol{\theta}$이므로, 다른 변수를 고정한 채 특성
+$\operatorname{logit}(p) = \mathbf{x}^\top\boldsymbol{\theta}$이므로, 다른 변수를 고정한 채 특성
 $x_j$가 한 단위 증가하면 오즈에 $e^{\theta_j}$가 곱해진다. 이 곱셈적 해석은 로지스틱 회귀가
 응용통계와 금융에서 여전히 널리 쓰이는 핵심 이유 가운데 하나다.
 

@@ -76,6 +76,9 @@
     import matplotlib.pyplot as plt
     import pandas as pd
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     data = {
         '과목': ('국어', '역사', '기하', '화학', '물리'),
         '교사 수': (7, 3, 9, 1, 2)
@@ -198,6 +201,9 @@
     import numpy as np
     import pandas as pd
     from itertools import permutations
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     df = pd.DataFrame({'과목': ['국어', '역사', '기하', '화학', '물리'],
                        '교사 수': [7, 3, 9, 1, 2]})
@@ -413,6 +419,9 @@
     import numpy as np
     import pandas as pd
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     data = {
         '학생': ['Brandon', 'Vanessa', 'Daniel', 'Kevin', 'William'],
         '중간고사': [85, 60, 60, 65, 100],
@@ -552,6 +561,9 @@
     ```python
     import matplotlib.pyplot as plt
     import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     labels = ("있음", "없음")
     counts = (np.array([95, 90, 40]), np.array([5, 10, 60]))
@@ -713,6 +725,9 @@
     import matplotlib.pyplot as plt
     import numpy as np
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     # 같은 자료를 y축만 달리해 두 번 그린다. 숫자는 하나도 건드리지 않는다.
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 3.5))
 
@@ -857,6 +872,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     labels = ["A", "B", "C", "D", "E"]
     values = np.array([23, 21, 19, 19, 18], float)      # 서로 매우 가깝다
 
@@ -926,6 +944,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     groups = ["1분기", "2분기", "3분기"]
     seg = np.array([[30, 20, 15], [45, 18, 14], [20, 22, 16]], float)  # 행=막대, 열=층
 
@@ -991,6 +1012,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
     groups = {
@@ -1120,6 +1144,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     years = ["2021", "2022", "2023", "2024"]
     a = np.array([200, 260, 340, 430], float)      # 성분 A
     b = np.array([600, 700, 820, 960], float)      # 성분 B
@@ -1236,6 +1263,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     labels = ["A", "B", "C", "D"]
     values = np.array([97.2, 98.1, 97.6, 98.4])

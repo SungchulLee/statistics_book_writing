@@ -74,7 +74,7 @@ $$
     from sklearn.linear_model import LinearRegression
 
     # 광고비와 매출 자료. TV·라디오·신문 광고비와 매출이 들어 있다.
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3, 4])
     print(df.head(), end="\n\n")
 
@@ -174,7 +174,7 @@ $$
     from sklearn.model_selection import train_test_split
     from sklearn.linear_model import LinearRegression
 
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3, 4])
     df['TV:Radio'] = df['TV'] * df['Radio']
     X = df[['TV', 'Radio', 'TV:Radio']]
@@ -250,7 +250,7 @@ $$
     from sklearn.linear_model import LinearRegression
 
     # 자료 읽기
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3, 4])
 
     # 교호작용 항을 더한다
@@ -316,7 +316,7 @@ $$
     from sklearn.model_selection import train_test_split
     from sklearn.linear_model import LinearRegression
 
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3, 4])
     df['TV:Radio'] = df['TV'] * df['Radio']
     cols = ['TV', 'Radio', 'TV:Radio']
@@ -437,7 +437,7 @@ $$
         print("\n".join(lines) + "\n")
 
 
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     data = pd.read_csv(url, usecols=[1, 2, 3, 4])
 
     num_total_observations = data.shape[0]
@@ -516,7 +516,7 @@ $$
     import pandas as pd
     import statsmodels.formula.api as smf
 
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     data = pd.read_csv(url, usecols=[1, 2, 3, 4])
     train_data = data.iloc[:140]
 
@@ -687,7 +687,7 @@ $$
     import pandas as pd
     import statsmodels.formula.api as smf
 
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     train_data = pd.read_csv(url, usecols=[1, 2, 3, 4]).iloc[:140]
 
     full = smf.ols('Sales ~ TV + Radio + Newspaper', train_data).fit()
@@ -824,7 +824,7 @@ $$
     import pandas as pd
     import statsmodels.formula.api as smf
 
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     train_data = pd.read_csv(url, usecols=[1, 2, 3, 4]).iloc[:140]
 
     raw = smf.ols('Sales ~ TV + Radio + TV:Radio', train_data).fit()

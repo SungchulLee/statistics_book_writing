@@ -1084,7 +1084,7 @@ $$
     **고유분해.** 공분산행렬 $S$는 대칭 반양정부호이므로
 
     $$
-    S=V\Lambda V^T,\qquad \Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_p)
+    S=V\Lambda V^\top,\qquad \Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_p)
     $$
 
     **$v_i$ 방향으로 자료를 투영하면 분산이 정확히 $\lambda_i$**가 된다.

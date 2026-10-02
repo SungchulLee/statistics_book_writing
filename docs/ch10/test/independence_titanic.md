@@ -149,7 +149,7 @@ $$
     import pandas as pd
 
     URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-           "datasets/master/titanic.csv")
+           "datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv")
     df = pd.read_csv(URL, index_col="PassengerId")
 
     # Survived 와 Sex 에는 결측이 없다. 891명 전수를 쓴다.
@@ -1461,7 +1461,7 @@ $\chi^2 = 263.05$는 네 칸이 합쳐 만든 값이다. **어느 칸이 얼마�
     import numpy as np, pandas as pd
     from scipy import stats
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
     ct = pd.crosstab(t.Sex, t.Survived)
     O = ct.values.astype(float)
@@ -1521,7 +1521,7 @@ $\chi^2 = 263.05$는 네 칸이 합쳐 만든 값이다. **어느 칸이 얼마�
     import numpy as np, pandas as pd
     from scipy import stats
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
 
     num = den = 0.0
@@ -1586,7 +1586,7 @@ $\chi^2 = 263.05$는 네 칸이 합쳐 만든 값이다. **어느 칸이 얼마�
     import numpy as np, pandas as pd
     from scipy import stats
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
     ct3 = pd.crosstab(t.Pclass, t.Survived)
     c3, p3, d3, E3 = stats.chi2_contingency(ct3.values, correction=False)

@@ -1238,7 +1238,7 @@ $$
     ```python
     import pandas as pd
 
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
     df = pd.read_csv(url)
     mean, std, n = df.x.mean(), df.x.std(), len(df.x)
 
@@ -1277,7 +1277,7 @@ $$
 
     # (2) 자료는 무엇이 다른가.
     url = ('https://raw.githubusercontent.com/gedeck/'
-           'practical-statistics-for-data-scientists/master/data/loans_income.csv')
+           'practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv')
     x = pd.read_csv(url).x
     m, s = x.mean(), x.std()
 

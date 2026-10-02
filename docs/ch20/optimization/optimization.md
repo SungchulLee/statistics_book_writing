@@ -13,7 +13,7 @@ $\partial J/\partial \mathbf{Z}^o = \hat{\mathbf{Y}}-\mathbf{Y}$에서 출발하
 
 $$
 \underset{100 \times 10}{\frac{\partial J}{\partial \mathbf{W}^o}}
-= \underset{100 \times n}{\mathbf{H}^T}\;
+= \underset{100 \times n}{\mathbf{H}^\top}\;
   \bigl(\underset{n \times 10}{\hat{\mathbf{Y}}-\mathbf{Y}}\bigr)
 $$
 
@@ -32,7 +32,7 @@ $$
     \frac{\partial J}{\partial w_{\alpha c}^o}
     = \sum_i \frac{\partial J}{\partial z_{ic}^o}\,\frac{\partial z_{ic}^o}{\partial w_{\alpha c}^o}
     = \sum_i (\hat{y}_{ic}-y_{ic})\,h_{i\alpha}
-    = \bigl[\mathbf{H}^T(\hat{\mathbf{Y}}-\mathbf{Y})\bigr]_{\alpha c}
+    = \bigl[\mathbf{H}^\top(\hat{\mathbf{Y}}-\mathbf{Y})\bigr]_{\alpha c}
     $$
 
 ??? note "$\partial J/\partial \mathbf{b}^o$의 성분별 증명"
@@ -73,7 +73,7 @@ $$
 
 $$
 \underset{784 \times 100}{\frac{\partial J}{\partial \mathbf{W}^h}}
-= \mathbf{X}^T\;
+= \mathbf{X}^\top\;
   \bigl[\mathbf{H}\odot(1-\mathbf{H})\odot
         (\hat{\mathbf{Y}}-\mathbf{Y})\,\mathbf{W}^{oT}\bigr]
 $$

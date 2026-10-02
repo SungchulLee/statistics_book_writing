@@ -74,6 +74,9 @@
     import matplotlib.pyplot as plt
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     np.random.seed(0)
 
     # 중심이 0 과 6 으로 떨어진 정규분포 둘에서 각각 1000개씩 뽑는다.

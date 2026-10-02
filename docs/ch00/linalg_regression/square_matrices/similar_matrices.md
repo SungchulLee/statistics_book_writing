@@ -140,10 +140,10 @@ $\mathbf{A}, \mathbf{B} \in \mathbb{C}^{n \times n}$에 대해, $\mathbf{A}$와 
 
 - **고유벡터**는 불변이 아니다. 고윳값은 공유하지만 고유벡터는 공유하지 않는다. $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이면 $\mathbf{B}(\mathbf{P}^{-1}\mathbf{v}) = \mathbf{P}^{-1}\mathbf{A}\mathbf{v} = \lambda(\mathbf{P}^{-1}\mathbf{v})$이므로, $\mathbf{B}$의 고유벡터는 $\mathbf{A}$의 고유벡터를 $\mathbf{P}^{-1}$로 옮긴 것이다. 고유공간은 **대응**되지만 같지는 않다. 고윳값은 변환의 성질이고 고유벡터는 좌표의 성질이기 때문이다.
 - **대칭성**은 불변이 아니다. 대칭행렬이 대칭이 아닌 행렬과 닮을 수 있다(연습문제 7). 기저변환행렬 $\mathbf{P}$가 직교행렬일 필요는 없다.
-- **양정치성**은 불변이 아니다. 여기서 양정치성은 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0$인 것을 말한다. $\mathbf{A} = \operatorname{diag}(1, 100)$과 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$을 잡으면 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 1 & -99 \\ 0 & 100 \end{pmatrix}$인데, $\mathbf{x} = (1, t)^T$에서 $\mathbf{x}^T\mathbf{B}\mathbf{x} = 1 - 99t + 100t^2$이고 이 이차식의 판별식 $99^2 - 400 > 0$이라 어떤 $t$에서 음수가 된다. **고윳값이 모두 양수라는 성질은 불변이지만, 이차형식의 부호는 불변이 아니다.** 둘이 동등해지는 것은 행렬이 대칭일 때뿐이다(이 절의 "양정치행렬" 쪽).
+- **양정치성**은 불변이 아니다. 여기서 양정치성은 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} > 0$인 것을 말한다. $\mathbf{A} = \operatorname{diag}(1, 100)$과 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$을 잡으면 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 1 & -99 \\ 0 & 100 \end{pmatrix}$인데, $\mathbf{x} = (1, t)^\top$에서 $\mathbf{x}^\top\mathbf{B}\mathbf{x} = 1 - 99t + 100t^2$이고 이 이차식의 판별식 $99^2 - 400 > 0$이라 어떤 $t$에서 음수가 된다. **고윳값이 모두 양수라는 성질은 불변이지만, 이차형식의 부호는 불변이 아니다.** 둘이 동등해지는 것은 행렬이 대칭일 때뿐이다(이 절의 "양정치행렬" 쪽).
 - **개별 성분**은 당연히 바뀐다.
 
-기저변환행렬 $\mathbf{P}$를 직교행렬($\mathbf{P}^T = \mathbf{P}^{-1}$)로 제한하면, 그 결과인 **직교닮음** $\mathbf{B} = \mathbf{P}^T\mathbf{A}\mathbf{P}$는 대칭성을 보존한다(연습문제 8). 스펙트럼 정리가 직교대각화를 내놓는 이유가 여기에 있다.
+기저변환행렬 $\mathbf{P}$를 직교행렬($\mathbf{P}^\top = \mathbf{P}^{-1}$)로 제한하면, 그 결과인 **직교닮음** $\mathbf{B} = \mathbf{P}^\top\mathbf{A}\mathbf{P}$는 대칭성을 보존한다(연습문제 8). 스펙트럼 정리가 직교대각화를 내놓는 이유가 여기에 있다.
 
 ## 예
 
@@ -155,7 +155,7 @@ $$
 
 $\det(\mathbf{A} - \lambda\mathbf{I}) = (4 - \lambda)(3 - \lambda) - 2 = \lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0$에서 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 얻는다.
 
-고유벡터: $\lambda_1 = 5$에 대해 $(\mathbf{A} - 5\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀면 $\mathbf{v}_1 = (1, 1)^T$이고, $\lambda_2 = 2$에 대해 $(\mathbf{A} - 2\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀면 $\mathbf{v}_2 = (1, -2)^T$이다.
+고유벡터: $\lambda_1 = 5$에 대해 $(\mathbf{A} - 5\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀면 $\mathbf{v}_1 = (1, 1)^\top$이고, $\lambda_2 = 2$에 대해 $(\mathbf{A} - 2\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀면 $\mathbf{v}_2 = (1, -2)^\top$이다.
 
 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 1 & -2 \end{pmatrix}$로 두면
 
@@ -173,7 +173,7 @@ $$
 
 두 판에 그려진 화살표는 완전히 같은 화살표다. 파란 화살표가 벡터 $\mathbf{x}$이고 주황 화살표가 그것을 변환한 $T\mathbf{x}$이며, 위치도 길이도 방향도 두 판에서 똑같다. 바뀐 것은 그것을 읽는 **자**, 곧 배경의 격자뿐이다.
 
-표준기저로 읽으면 $\mathbf{x} = (3,4)^T$이고 $T\mathbf{x} = (16,18)^T$이며, 이 대응을 적은 행렬이 $\mathbf{A}$다. 기저를 $\mathbf{b}_1 = (1,3)^T$, $\mathbf{b}_2 = (2,1)^T$로 바꾸면 같은 $\mathbf{x}$의 성분은 $(1,1)$이 되고 같은 $T\mathbf{x}$의 성분은 $(4,6)$이 된다. 이 대응을 적은 행렬은 $\mathbf{P} = \begin{pmatrix} 1 & 2 \\ 3 & 1 \end{pmatrix}$에 대해
+표준기저로 읽으면 $\mathbf{x} = (3,4)^\top$이고 $T\mathbf{x} = (16,18)^\top$이며, 이 대응을 적은 행렬이 $\mathbf{A}$다. 기저를 $\mathbf{b}_1 = (1,3)^\top$, $\mathbf{b}_2 = (2,1)^\top$로 바꾸면 같은 $\mathbf{x}$의 성분은 $(1,1)$이 되고 같은 $T\mathbf{x}$의 성분은 $(4,6)$이 된다. 이 대응을 적은 행렬은 $\mathbf{P} = \begin{pmatrix} 1 & 2 \\ 3 & 1 \end{pmatrix}$에 대해
 
 $$
 \mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 3 & 1 \\ 2 & 4 \end{pmatrix}
@@ -187,11 +187,11 @@ $$
 
 닮은 행렬은 다변량 통계 전반에 등장한다.
 
-- **공분산행렬의 스펙트럼 분해.** $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이면 $\boldsymbol{\Sigma}$는 (직교행렬 $\mathbf{Q}$를 통해) $\boldsymbol{\Lambda}$와 닮았다. 고유기저에서 작업하면 계산이 간단해진다. $\operatorname{tr}(\boldsymbol{\Sigma}) = \sum_i \lambda_i$가 총분산을 주고, $\det(\boldsymbol{\Sigma}) = \prod_i \lambda_i$가 일반화 분산을 측정한다.
+- **공분산행렬의 스펙트럼 분해.** $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$이면 $\boldsymbol{\Sigma}$는 (직교행렬 $\mathbf{Q}$를 통해) $\boldsymbol{\Lambda}$와 닮았다. 고유기저에서 작업하면 계산이 간단해진다. $\operatorname{tr}(\boldsymbol{\Sigma}) = \sum_i \lambda_i$가 총분산을 주고, $\det(\boldsymbol{\Sigma}) = \prod_i \lambda_i$가 일반화 분산을 측정한다.
 
-- **이차형식의 단순화.** 마할라노비스 거리 $(\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1}$이 대각이 되는 고유기저로 옮겨서 분석할 수 있다. 이것이 정규확률벡터의 이차형식이 카이제곱분포를 따름을 유도하는 근거다.
+- **이차형식의 단순화.** 마할라노비스 거리 $(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1}$이 대각이 되는 고유기저로 옮겨서 분석할 수 있다. 이것이 정규확률벡터의 이차형식이 카이제곱분포를 따름을 유도하는 근거다.
 
-- **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$다. 다만 그 이유는 닮음이 아니다. 재매개변수화 $\mathbf{X} \mapsto \mathbf{X}\mathbf{C}$는 그람 행렬을 $\mathbf{C}^T\mathbf{X}^T\mathbf{X}\mathbf{C}$로 보내는 **합동변환**이며, $\mathbf{C}$가 직교행렬이 아니면 닮음변환이 아니라서 고윳값도 보존하지 않는다. $\operatorname{tr}(\mathbf{H})$가 보존되는 것은 열공간이 그대로여서 $\mathbf{H}$ 자체가 아예 바뀌지 않기 때문이다(연습문제 4).
+- **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$다. 다만 그 이유는 닮음이 아니다. 재매개변수화 $\mathbf{X} \mapsto \mathbf{X}\mathbf{C}$는 그람 행렬을 $\mathbf{C}^\top\mathbf{X}^\top\mathbf{X}\mathbf{C}$로 보내는 **합동변환**이며, $\mathbf{C}$가 직교행렬이 아니면 닮음변환이 아니라서 고윳값도 보존하지 않는다. $\operatorname{tr}(\mathbf{H})$가 보존되는 것은 열공간이 그대로여서 $\mathbf{H}$ 자체가 아예 바뀌지 않기 때문이다(연습문제 4).
 
 ## 연습문제
 
@@ -205,7 +205,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 ??? success "풀이"
     두 행렬 모두 고윳값이 $\lambda_1 = 1$과 $\lambda_2 = 3$이다($\mathbf{B}$는 이 값들을 대각에 갖는 대각행렬이고, $\mathbf{A}$는 이 값들을 대각에 갖는 상삼각행렬이다).
 
-    $\mathbf{A}$의 고유벡터는 $\lambda = 1$에 대해 $\mathbf{v}_1 = (1, 0)^T$이고, $\lambda = 3$에 대해서는 $(\mathbf{A} - 3\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀어 $\mathbf{v}_2 = (1, 1)^T$이다.
+    $\mathbf{A}$의 고유벡터는 $\lambda = 1$에 대해 $\mathbf{v}_1 = (1, 0)^\top$이고, $\lambda = 3$에 대해서는 $(\mathbf{A} - 3\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀어 $\mathbf{v}_2 = (1, 1)^\top$이다.
 
     $\mathbf{B}$의 대각이 $\{3, 1\}$ 순서이므로 $\lambda = 3$의 고유벡터가 첫 열에 오도록 고유벡터를 열로 배열한다: $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$, $\mathbf{P}^{-1} = \begin{pmatrix} 0 & 1 \\ 1 & -1 \end{pmatrix}$.
 
@@ -250,7 +250,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-회귀모형을 재매개변수화하면(예: 예측변수를 중심화하면) $\operatorname{tr}(\mathbf{H})$는 바뀌지 않는데 $\mathbf{X}^T\mathbf{X}$의 고윳값은 바뀔 수 있다. **닮음**과 **합동**의 차이로 이 비대칭을 설명하고 수치로 확인하라.
+회귀모형을 재매개변수화하면(예: 예측변수를 중심화하면) $\operatorname{tr}(\mathbf{H})$는 바뀌지 않는데 $\mathbf{X}^\top\mathbf{X}$의 고윳값은 바뀔 수 있다. **닮음**과 **합동**의 차이로 이 비대칭을 설명하고 수치로 확인하라.
 
 </div>
 
@@ -258,12 +258,12 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
     재매개변수화는 어떤 가역행렬 $\mathbf{C}$에 대해 $\mathbf{X}$를 $\mathbf{X}\mathbf{C}$로 바꾸는 것에 해당한다. 모자 행렬은 다음과 같이 변환된다.
 
     $$
-    \mathbf{H}' = \mathbf{X}\mathbf{C}(\mathbf{C}^T\mathbf{X}^T\mathbf{X}\mathbf{C})^{-1}\mathbf{C}^T\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
+    \mathbf{H}' = \mathbf{X}\mathbf{C}(\mathbf{C}^\top\mathbf{X}^\top\mathbf{X}\mathbf{C})^{-1}\mathbf{C}^\top\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}
     $$
 
     모자 행렬은 대각합만이 아니라 **완전히** 불변이다. $\mathbf{X}$와 $\mathbf{X}\mathbf{C}$의 열공간이 같고, $\mathbf{H}$는 그 열공간으로의 직교사영이어서 기저를 어떻게 적든 같은 사영이기 때문이다. 따라서 $\operatorname{tr}(\mathbf{H}) = p$도 그대로이며, 이는 재매개변수화로 모수의 개수가 바뀌지 않는다는 사실을 반영한다.
 
-    그람 행렬은 사정이 다르다. $\mathbf{X}^T\mathbf{X}$는 $\mathbf{C}^T(\mathbf{X}^T\mathbf{X})\mathbf{C}$로 바뀌는데, 이는 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P}$ 꼴이 아니라 $\mathbf{C}^T\mathbf{A}\mathbf{C}$ 꼴, 곧 **합동변환**이다. $\mathbf{C}$가 직교행렬이면 $\mathbf{C}^T = \mathbf{C}^{-1}$이라 둘이 일치하지만, 일반적인 가역행렬에서는 서로 다른 관계다. **합동이 보존하는 것은 계수와, 실베스터의 관성 법칙에 따른 고윳값의 부호 분포뿐이고 고윳값 자체는 보존하지 않는다.**
+    그람 행렬은 사정이 다르다. $\mathbf{X}^\top\mathbf{X}$는 $\mathbf{C}^\top(\mathbf{X}^\top\mathbf{X})\mathbf{C}$로 바뀌는데, 이는 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P}$ 꼴이 아니라 $\mathbf{C}^\top\mathbf{A}\mathbf{C}$ 꼴, 곧 **합동변환**이다. $\mathbf{C}$가 직교행렬이면 $\mathbf{C}^\top = \mathbf{C}^{-1}$이라 둘이 일치하지만, 일반적인 가역행렬에서는 서로 다른 관계다. **합동이 보존하는 것은 계수와, 실베스터의 관성 법칙에 따른 고윳값의 부호 분포뿐이고 고윳값 자체는 보존하지 않는다.**
 
     ```python
     import numpy as np
@@ -412,22 +412,22 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff easy" title="쉬움"></span>
-$\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^T\mathbf{A}\mathbf{Q}$도 대칭임을 보여라. 연습문제 7과 견주어 무엇이 달라졌는지 설명하라.
+$\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top\mathbf{A}\mathbf{Q}$도 대칭임을 보여라. 연습문제 7과 견주어 무엇이 달라졌는지 설명하라.
 
 </div>
 
 ??? success "풀이"
-    $\mathbf{Q}$가 직교이므로 $\mathbf{Q}^{-1} = \mathbf{Q}^T$이고, 따라서 $\mathbf{Q}^T\mathbf{A}\mathbf{Q}$는 닮음변환이다. 전치를 취하면
+    $\mathbf{Q}$가 직교이므로 $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이고, 따라서 $\mathbf{Q}^\top\mathbf{A}\mathbf{Q}$는 닮음변환이다. 전치를 취하면
 
     $$
-    (\mathbf{Q}^T\mathbf{A}\mathbf{Q})^T = \mathbf{Q}^T \mathbf{A}^T (\mathbf{Q}^T)^T = \mathbf{Q}^T\mathbf{A}\mathbf{Q}
+    (\mathbf{Q}^\top\mathbf{A}\mathbf{Q})^\top = \mathbf{Q}^\top \mathbf{A}^\top (\mathbf{Q}^\top)^\top = \mathbf{Q}^\top\mathbf{A}\mathbf{Q}
     $$
 
-    이다($\mathbf{A}^T = \mathbf{A}$를 썼다). 곧 대칭이다.
+    이다($\mathbf{A}^\top = \mathbf{A}$를 썼다). 곧 대칭이다.
 
-    연습문제 7과의 차이는 **$\mathbf{P}$에 건 제약** 하나뿐이다. 일반적인 가역행렬에서는 $\mathbf{P}^{-1} \neq \mathbf{P}^T$이므로 위 계산의 마지막 단계가 성립하지 않는다.
+    연습문제 7과의 차이는 **$\mathbf{P}$에 건 제약** 하나뿐이다. 일반적인 가역행렬에서는 $\mathbf{P}^{-1} \neq \mathbf{P}^\top$이므로 위 계산의 마지막 단계가 성립하지 않는다.
 
-    이것이 **직교닮음**을 따로 구분하는 이유다. 스펙트럼 정리가 대칭행렬에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$를 보장할 때, 대각화가 하필 직교행렬로 이루어진다는 점이 결정적이다. 그 덕분에 공분산행렬을 대각화해도 대칭성과 양정치성이 함께 보존된다. $\square$
+    이것이 **직교닮음**을 따로 구분하는 이유다. 스펙트럼 정리가 대칭행렬에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$를 보장할 때, 대각화가 하필 직교행렬로 이루어진다는 점이 결정적이다. 그 덕분에 공분산행렬을 대각화해도 대칭성과 양정치성이 함께 보존된다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -483,12 +483,12 @@ $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^T\ma
 
     성분은 서로 아무 관련이 없어 보이지만 네 가지 불변량은 소수점 아래까지 일치한다.
 
-    수치적으로 한 가지 주의할 점이 있다. $\mathbf{P}$가 특이행렬에 가까우면 $\mathbf{P}^{-1}$의 성분이 커져 반올림 오차가 증폭된다. 그래서 실무에서는 **직교행렬**을 기저변환에 쓴다. $\mathbf{Q}^{-1} = \mathbf{Q}^T$이므로 역행렬을 계산할 필요조차 없고 수치적으로도 안정하다. $\square$
+    수치적으로 한 가지 주의할 점이 있다. $\mathbf{P}$가 특이행렬에 가까우면 $\mathbf{P}^{-1}$의 성분이 커져 반올림 오차가 증폭된다. 그래서 실무에서는 **직교행렬**을 기저변환에 쓴다. $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이므로 역행렬을 계산할 필요조차 없고 수치적으로도 안정하다. $\square$
 
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-주성분분석은 공분산행렬 $\boldsymbol{\Sigma}$를 직교행렬 $\mathbf{Q}$로 대각화한다: $\boldsymbol{\Lambda} = \mathbf{Q}^T\boldsymbol{\Sigma}\mathbf{Q}$. 이때 **총분산**이 보존되는 이유를 닮음 불변량으로 설명하고 수치로 확인하라.
+주성분분석은 공분산행렬 $\boldsymbol{\Sigma}$를 직교행렬 $\mathbf{Q}$로 대각화한다: $\boldsymbol{\Lambda} = \mathbf{Q}^\top\boldsymbol{\Sigma}\mathbf{Q}$. 이때 **총분산**이 보존되는 이유를 닮음 불변량으로 설명하고 수치로 확인하라.
 
 </div>
 

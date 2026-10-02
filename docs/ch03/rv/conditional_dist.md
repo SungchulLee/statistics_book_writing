@@ -150,7 +150,7 @@ $x$를 고정하면 수이지만, $x$를 움직이면 $x$의 **함수**다. 그 
     ```python
     import pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
 
     # 조건부분포는 결합을 조건 변수의 주변으로 나눈 것이다.
@@ -308,7 +308,7 @@ $$
     import pandas as pd
     from scipy import stats
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL).dropna(subset=["Embarked"])
 
     # 승선항(C 셰르부르, Q 퀸스타운, S 사우샘프턴)과 생존.
@@ -537,7 +537,7 @@ $$
     import numpy as np
     import pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
 
     theta = t.groupby("Pclass").Survived.mean()          # 등급별 생존율

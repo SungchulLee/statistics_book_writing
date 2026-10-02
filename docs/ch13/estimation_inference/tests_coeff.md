@@ -24,7 +24,7 @@ $$
 OLS 추정량은
 
 $$
-\hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}
+\hat{\beta} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
 $$
 
 ---
@@ -36,13 +36,13 @@ $$
 선형회귀 모형의 가정 아래에서
 
 $$
-\hat{\beta} \sim N\!\left(\beta,\; \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}\right)
+\hat{\beta} \sim N\!\left(\beta,\; \sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}\right)
 $$
 
 곧 $\hat{\beta}$는 다음의 정규분포를 따른다.
 
 - **평균**: $E(\hat{\beta}) = \beta$ (불편),
-- **공분산**: $\text{Var}(\hat{\beta}) = \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}$.
+- **공분산**: $\text{Var}(\hat{\beta}) = \sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}$.
 
 ??? proof "증명"
 
@@ -50,28 +50,28 @@ $$
     OLS 공식에 $\mathbf{y} = \mathbf{X}\beta + \varepsilon$을 대입하면
 
     $$
-    \hat{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\mathbf{X}\beta + \varepsilon) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \varepsilon
+    \hat{\beta} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top (\mathbf{X}\beta + \varepsilon) = \beta + (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \varepsilon
     $$
 
     **불편성**: $E(\varepsilon) = \mathbf{0}$이므로
 
     $$
-    E(\hat{\beta}) = \beta + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T E(\varepsilon) = \beta
+    E(\hat{\beta}) = \beta + (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top E(\varepsilon) = \beta
     $$
 
-    **공분산**: $\mathbf{A} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$라 두면 $\hat{\beta} - \beta = \mathbf{A}\varepsilon$이고
+    **공분산**: $\mathbf{A} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top$라 두면 $\hat{\beta} - \beta = \mathbf{A}\varepsilon$이고
 
     $$
-    \text{Var}(\hat{\beta}) = \mathbf{A}\,\text{Var}(\varepsilon)\,\mathbf{A}^T = \mathbf{A}(\sigma^2 I_N)\mathbf{A}^T = \sigma^2 \mathbf{A}\mathbf{A}^T
+    \text{Var}(\hat{\beta}) = \mathbf{A}\,\text{Var}(\varepsilon)\,\mathbf{A}^\top = \mathbf{A}(\sigma^2 I_N)\mathbf{A}^\top = \sigma^2 \mathbf{A}\mathbf{A}^\top
     $$
 
-    $\mathbf{A}\mathbf{A}^T$를 계산하면
+    $\mathbf{A}\mathbf{A}^\top$를 계산하면
 
     $$
-    \mathbf{A}\mathbf{A}^T = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = (\mathbf{X}^T\mathbf{X})^{-1}
+    \mathbf{A}\mathbf{A}^\top = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} = (\mathbf{X}^\top\mathbf{X})^{-1}
     $$
 
-    따라서 $\text{Var}(\hat{\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$이다.
+    따라서 $\text{Var}(\hat{\beta}) = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$이다.
 
     **정규성**: $\hat{\beta} - \beta = \mathbf{A}\varepsilon$은 다변량정규벡터 $\varepsilon$의 선형변환이므로 $\hat{\beta}$ 자체도 다변량정규이다. $\square$
 
@@ -114,7 +114,7 @@ $$
 ??? proof "증명"
 
 
-    **1단계: 잔차를 사영으로 표현.** 모자행렬 $\mathbf{P} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$와 잔차생성행렬 $\mathbf{M} = I_N - \mathbf{P}$를 정의하자. 잔차벡터는
+    **1단계: 잔차를 사영으로 표현.** 모자행렬 $\mathbf{P} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$와 잔차생성행렬 $\mathbf{M} = I_N - \mathbf{P}$를 정의하자. 잔차벡터는
 
     $$
     \mathbf{e} = \mathbf{y} - \mathbf{X}\hat{\beta} = (I_N - \mathbf{P})\mathbf{y} = \mathbf{M}\varepsilon
@@ -125,7 +125,7 @@ $$
     **2단계: 잔차제곱합을 이차형식으로.**
 
     $$
-    \text{RSS} = \mathbf{e}^T\mathbf{e} = \varepsilon^T \mathbf{M}^T \mathbf{M}\,\varepsilon = \varepsilon^T \mathbf{M}\,\varepsilon
+    \text{RSS} = \mathbf{e}^\top\mathbf{e} = \varepsilon^\top \mathbf{M}^\top \mathbf{M}\,\varepsilon = \varepsilon^\top \mathbf{M}\,\varepsilon
     $$
 
     $\mathbf{M}$이 대칭이고 멱등($\mathbf{M}^2 = \mathbf{M}$)이기 때문이다.
@@ -133,7 +133,7 @@ $$
     **3단계: 카이제곱분포.** $\varepsilon \sim N(\mathbf{0}, \sigma^2 I_N)$이고 $\mathbf{M}$이 계수 $\text{tr}(\mathbf{M}) = N - (p+1) = N - p - 1$인 대칭 멱등행렬이므로
 
     $$
-    \frac{\varepsilon^T \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{N-p-1}
+    \frac{\varepsilon^\top \mathbf{M}\,\varepsilon}{\sigma^2} = \frac{\text{RSS}}{\sigma^2} \sim \chi^2_{N-p-1}
     $$
 
     **4단계: 결론.** 자유도로 나누면
@@ -154,7 +154,7 @@ $$
 t_j = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1}
 $$
 
-이다. 여기서 $v_j = \left((\mathbf{X}^T\mathbf{X})^{-1}\right)_{jj}$는 $(\mathbf{X}^T\mathbf{X})^{-1}$의 $j$번째 대각원소이다.
+이다. 여기서 $v_j = \left((\mathbf{X}^\top\mathbf{X})^{-1}\right)_{jj}$는 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 $j$번째 대각원소이다.
 
 ### 해석
 
@@ -236,7 +236,7 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
     # 광고비와 매출 자료를 읽는다
     dataset_url = (
         'https://raw.githubusercontent.com/justmarkham/'
-        'scikit-learn-videos/master/data/Advertising.csv'
+        'scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     )
     advertising_data = pd.read_csv(dataset_url, usecols=[1, 2, 3, 4])
 
@@ -320,7 +320,7 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
     회귀표의 각 행은 다음을 담고 있다.
 
     - **coef**: OLS 추정값 $\hat{\beta}_j$.
-    - **std err**: 표준오차 $s\sqrt{v_j}$. 여기서 $v_j = ((\mathbf{X}^T\mathbf{X})^{-1})_{jj}$이다.
+    - **std err**: 표준오차 $s\sqrt{v_j}$. 여기서 $v_j = ((\mathbf{X}^\top\mathbf{X})^{-1})_{jj}$이다.
     - **t**: $t$ 통계량 $t_j = \hat{\beta}_j / (s\sqrt{v_j})$.
     - **P>|t|**: $t_{N-p-1}$에서 얻은 양측 $p$값.
     - **[0.025, 0.975]**: 95% 신뢰구간 $\hat{\beta}_j \pm t_{N-p-1}(0.975) \cdot s\sqrt{v_j}$.

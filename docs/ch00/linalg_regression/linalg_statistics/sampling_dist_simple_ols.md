@@ -155,7 +155,7 @@ $$
 
 ??? proof "증명"
 
-    행렬 표기로 옮기는 것이 가장 짧다. $\mathbf{X} = [\mathbf{1}, \mathbf{x}]$($n \times 2$)를 계획행렬이라 하자. $x_i$가 모두 같지는 않다는 가정이 정확히 두 열의 선형독립성이므로 $\mathbf{X}^T\mathbf{X}$가 가역이고 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$가 정의된다. $\mathbf{M} = \mathbf{I} - \mathbf{H}$로 두면 $\mathbf{M}$은 대칭 멱등이고
+    행렬 표기로 옮기는 것이 가장 짧다. $\mathbf{X} = [\mathbf{1}, \mathbf{x}]$($n \times 2$)를 계획행렬이라 하자. $x_i$가 모두 같지는 않다는 가정이 정확히 두 열의 선형독립성이므로 $\mathbf{X}^\top\mathbf{X}$가 가역이고 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 정의된다. $\mathbf{M} = \mathbf{I} - \mathbf{H}$로 두면 $\mathbf{M}$은 대칭 멱등이고
 
     $$
     \operatorname{rank}(\mathbf{M}) = \operatorname{tr}(\mathbf{M}) = n - \operatorname{tr}(\mathbf{H}) = n - 2
@@ -166,10 +166,10 @@ $$
     *카이제곱.* 잔차는 $\mathbf{e} = \mathbf{M}\mathbf{Y}$이고, $\mathbf{M}\mathbf{X} = \mathbf{O}$이므로 $\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 대입하면 $\mathbf{e} = \mathbf{M}\boldsymbol{\varepsilon}$이다. 따라서
 
     $$
-    \text{SSE} = \mathbf{e}^T\mathbf{e} = \boldsymbol{\varepsilon}^T\mathbf{M}^T\mathbf{M}\boldsymbol{\varepsilon} = \boldsymbol{\varepsilon}^T\mathbf{M}\boldsymbol{\varepsilon}
+    \text{SSE} = \mathbf{e}^\top\mathbf{e} = \boldsymbol{\varepsilon}^\top\mathbf{M}^\top\mathbf{M}\boldsymbol{\varepsilon} = \boldsymbol{\varepsilon}^\top\mathbf{M}\boldsymbol{\varepsilon}
     $$
 
-    이고($\mathbf{M}$이 대칭 멱등이므로 $\mathbf{M}^T\mathbf{M} = \mathbf{M}$이다), $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\text{SSE}/\sigma^2 = \mathbf{z}^T\mathbf{M}\mathbf{z}$다. [카이제곱분포와 이차형식](./chi_squared_quadratic.md) 쪽의 정리 1에 의해 계수 $n-2$인 대칭 멱등행렬의 이차형식이므로
+    이고($\mathbf{M}$이 대칭 멱등이므로 $\mathbf{M}^\top\mathbf{M} = \mathbf{M}$이다), $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\text{SSE}/\sigma^2 = \mathbf{z}^\top\mathbf{M}\mathbf{z}$다. [카이제곱분포와 이차형식](./chi_squared_quadratic.md) 쪽의 정리 1에 의해 계수 $n-2$인 대칭 멱등행렬의 이차형식이므로
 
     $$
     \frac{\text{SSE}}{\sigma^2} \sim \chi^2_{n-2}
@@ -177,13 +177,13 @@ $$
 
     이다. **대칭성과 멱등성 둘 다 쓰였다는 점에 주의하라.** 멱등이지만 대칭이 아닌 행렬로는 이 결론이 나오지 않는다.
 
-    *독립성.* $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}$와 $\mathbf{e} = \mathbf{M}\mathbf{Y}$는 같은 정규벡터 $\mathbf{Y}$의 선형변환이므로 결합정규이고
+    *독립성.* $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{Y}$와 $\mathbf{e} = \mathbf{M}\mathbf{Y}$는 같은 정규벡터 $\mathbf{Y}$의 선형변환이므로 결합정규이고
 
     $$
-    \operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\sigma^2\mathbf{I})\mathbf{M} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{M}}_{=\,\mathbf{O}} = \mathbf{O}
+    \operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top(\sigma^2\mathbf{I})\mathbf{M} = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\underbrace{\mathbf{X}^\top\mathbf{M}}_{=\,\mathbf{O}} = \mathbf{O}
     $$
 
-    이다. 결합정규에서 공분산이 0이면 독립이므로 $\hat{\boldsymbol{\beta}}$과 $\mathbf{e}$가 독립이고, $\text{SSE} = \mathbf{e}^T\mathbf{e}$는 $\mathbf{e}$의 함수이므로 $\text{SSE}$도 $(\hat{\beta}_0, \hat{\beta}_1)$과 독립이다. $\square$
+    이다. 결합정규에서 공분산이 0이면 독립이므로 $\hat{\boldsymbol{\beta}}$과 $\mathbf{e}$가 독립이고, $\text{SSE} = \mathbf{e}^\top\mathbf{e}$는 $\mathbf{e}$의 함수이므로 $\text{SSE}$도 $(\hat{\beta}_0, \hat{\beta}_1)$과 독립이다. $\square$
 
 자유도가 $n - 2$인 것은 두 개의 모수($\beta_0$과 $\beta_1$)를 추정했기 때문이다. $\sigma^2$의 불편추정량은
 
@@ -320,7 +320,7 @@ $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n 
 </div>
 
 ??? success "풀이"
-    잔차제곱합은 ($\sigma^2$으로 나눈 뒤) 모자 행렬 $\mathbf{H}$에 대해 $\text{SSE} = \mathbf{Y}^T(\mathbf{I} - \mathbf{H})\mathbf{Y}/\sigma^2$로 쓸 수 있다. 행렬 $\mathbf{I} - \mathbf{H}$는 계수가 $n - 2$인 멱등행렬이다(단순회귀에서는 절편과 기울기에 대응하여 $\text{rank}(\mathbf{H}) = 2$이므로).
+    잔차제곱합은 ($\sigma^2$으로 나눈 뒤) 모자 행렬 $\mathbf{H}$에 대해 $\text{SSE} = \mathbf{Y}^\top(\mathbf{I} - \mathbf{H})\mathbf{Y}/\sigma^2$로 쓸 수 있다. 행렬 $\mathbf{I} - \mathbf{H}$는 계수가 $n - 2$인 멱등행렬이다(단순회귀에서는 절편과 기울기에 대응하여 $\text{rank}(\mathbf{H}) = 2$이므로).
 
     멱등행렬의 계수가 결과로 나오는 카이제곱분포의 자유도와 같다. 직관적으로는, $\mathbf{Y}$에 $n$개의 독립적인 정보 조각이 있는 상태에서 출발하지만 두 모수 $\beta_0$과 $\beta_1$을 적합하는 데 자유도 2를 "써버려" $\sigma^2$을 추정할 자유도로 $n - 2$가 남는다.
 

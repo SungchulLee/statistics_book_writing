@@ -252,8 +252,8 @@ $\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf
        = \hat{\mathbf{y}} - \mathbf{y}$가 한 줄로 나온다. 소프트맥스 야코비를 전개할 필요가
        없다.
     2. **볼록성이 따라온다.** LSE의 헤세행렬은
-       $\operatorname{diag}(\mathbf{p}) - \mathbf{p}\mathbf{p}^T$인데, 임의의 $v$에 대해
-       $v^T H v = \mathbb{E}_p[v^2] - (\mathbb{E}_p[v])^2 = \operatorname{Var}_p(v) \ge 0$
+       $\operatorname{diag}(\mathbf{p}) - \mathbf{p}\mathbf{p}^\top$인데, 임의의 $v$에 대해
+       $v^\top H v = \mathbb{E}_p[v^2] - (\mathbb{E}_p[v])^2 = \operatorname{Var}_p(v) \ge 0$
        이므로 양반정치다. 따라서 LSE는 볼록이고 교차엔트로피 손실도 볼록이다.
     3. **LSE는 최댓값의 매끄러운 근사다.** 실제로
        $\max_j z_j \le \operatorname{LSE}(\mathbf{z}) \le \max_j z_j + \log C$이므로

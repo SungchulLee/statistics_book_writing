@@ -542,6 +542,9 @@ $$
     import numpy as np
     import scipy.stats as stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     def generate_and_plot_histogram_and_box_plot_mixed_distribution(seed: int = 0):
         """같은 자료를 히스토그램과 상자그림으로 나란히 본다.
 
@@ -673,6 +676,9 @@ $$
     import scipy.stats as stats
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     def generate_and_plot_histogram_and_box_plot_right_skewed(seed: int = 0):
         """오른쪽으로 치우친 자료를 히스토그램과 상자그림으로 나란히 본다.
 
@@ -803,6 +809,9 @@ $$
     import numpy as np
     import scipy.stats as stats
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     def generate_and_plot_histogram_and_box_plot_left_skewed(seed: int = 0):
         """왼쪽으로 치우친 자료를 히스토그램과 상자그림으로 나란히 본다.
@@ -981,6 +990,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     def generate_samples(main_size, right_size, left_size):
         """왼쪽·오른쪽 덩어리의 **개수 차이**로 치우침을 만든다.
@@ -1231,6 +1243,9 @@ $$
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy import stats
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     def generate_samples(main_size, peak_size):
         """중앙에 아주 좁은(표준편차 0.2) 덩어리를 얹어 봉우리를 뾰족하게 만든다.

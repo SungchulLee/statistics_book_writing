@@ -60,6 +60,9 @@
     import pandas as pd
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     # 재현 가능하도록 주가를 모의생성한다. 실제 자료를 쓰는 법은 아래에 있다.
     # 로그수익률을 정규분포에서 뽑고 누적합의 지수를 취하면
     # 실제 주가와 비슷한 기하 브라운 운동 경로가 나온다.
@@ -320,6 +323,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(0)
     t = np.arange(60)
     a = 100 + np.cumsum(rng.normal(0, 1.2, 60))
@@ -390,6 +396,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(2)
     t = np.arange(40)
     y = 50 + np.cumsum(rng.normal(0, 1.5, 40))
@@ -445,6 +454,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(1)
     n = 730
@@ -528,6 +540,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(1)
     n = 730
     t = np.arange(n)
@@ -593,6 +608,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(4)
     K, n = 12, 60
@@ -668,6 +686,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     t = np.arange(40)
     y = 100 * 1.08 ** t                              # 매년 8% 성장
 
@@ -732,6 +753,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(6)
     t_obs = np.array([0, 1, 2, 3, 4, 5, 18, 19, 20, 34, 35, 48], float)

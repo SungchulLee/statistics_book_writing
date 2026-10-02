@@ -180,7 +180,7 @@ $$
     $j_1, j_2, \dots, j_D$라 하면 부분가능도는
 
     $$
-    L(\boldsymbol{\beta}) = \prod_{i=1}^D \frac{\exp(\mathbf{x}_{j_i}^T\boldsymbol{\beta})}{\sum_{k \in R(t_{(i)})} \exp(\mathbf{x}_k^T\boldsymbol{\beta})}
+    L(\boldsymbol{\beta}) = \prod_{i=1}^D \frac{\exp(\mathbf{x}_{j_i}^\top\boldsymbol{\beta})}{\sum_{k \in R(t_{(i)})} \exp(\mathbf{x}_k^\top\boldsymbol{\beta})}
     $$
 
     이다. 여기서 $R(t_{(i)})$는 시점 $t_{(i)}$의 위험집합(아직 관측 중인 모든 대상)이다.
@@ -229,7 +229,7 @@ $$
     비례위험 가정은 임의의 두 대상 사이의 위험비가 시간에 걸쳐 일정하다는 것이다.
 
     $$
-    \frac{h(t \mid \mathbf{x}_i)}{h(t \mid \mathbf{x}_j)} = \frac{h_0(t)\exp(\mathbf{x}_i^T\boldsymbol{\beta})}{h_0(t)\exp(\mathbf{x}_j^T\boldsymbol{\beta})} = \exp\!\left((\mathbf{x}_i - \mathbf{x}_j)^T\boldsymbol{\beta}\right)
+    \frac{h(t \mid \mathbf{x}_i)}{h(t \mid \mathbf{x}_j)} = \frac{h_0(t)\exp(\mathbf{x}_i^\top\boldsymbol{\beta})}{h_0(t)\exp(\mathbf{x}_j^\top\boldsymbol{\beta})} = \exp\!\left((\mathbf{x}_i - \mathbf{x}_j)^\top\boldsymbol{\beta}\right)
     $$
 
     기저위험 $h_0(t)$가 소거되어 비가 시간과 무관해진다. 비가 시간에 따라 변하면(예: 처리가

@@ -240,6 +240,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
 
     def slice_dice(values, x, y, dx, dy, vertical=True):
         """단순 분할: 한 방향으로만 차례로 자른다."""
@@ -379,6 +382,9 @@
     ```python
     import matplotlib.pyplot as plt
     import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     fig, ax = plt.subplots(1, 3, figsize=(16, 4.6))
 
@@ -828,6 +834,9 @@
     ```python
     import matplotlib.pyplot as plt
     from matplotlib.colors import TwoSlopeNorm
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
 
     def nested_treemap(groups, x=0.0, y=0.0, dx=1.0, dy=1.0):

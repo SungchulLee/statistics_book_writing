@@ -60,7 +60,7 @@ $$
 
 ![왼쪽은 벡터를 한 번 누른 뒤 다시 눌러도 자리가 변하지 않음을, 오른쪽은 단위원의 모든 점이 한 직선으로 눌리며 고윳값이 1과 0 둘뿐임을 보이는 그림](./img/idempotent_action.png)
 
-왼쪽 그림의 $\mathbf{P} = \mathbf{u}\mathbf{u}^T$는 $\mathbf{u} = (2,1)^T/\sqrt{5}$가 펼치는 직선 위로의 사영이다. $\mathbf{x} = (1,3)^T$를 누르면 $\mathbf{P}\mathbf{x} = (2,1)^T$가 되고, 여기서 한 번 더 눌러도 여전히 $(2,1)^T$다. **첫 번째 적용이 이미 $\mathbf{x}$를 $\operatorname{Col}(\mathbf{P})$ 안으로 옮겨 놓았고, 사영은 자기 치역 위에서 항등변환이기 때문이다.** 연습문제 1의 "$\mathbf{x} \in \operatorname{Col}(\mathbf{A}) \iff \mathbf{A}\mathbf{x} = \mathbf{x}$"가 그림에서는 "두 번 눌러도 더 움직이지 않는다"로 보인다. 버려진 몫 $(\mathbf{I}-\mathbf{P})\mathbf{x} = (-1,2)^T$는 $\ker(\mathbf{P})$ 위에 놓이며, 이쪽을 누르면 $\mathbf{0}$이 된다.
+왼쪽 그림의 $\mathbf{P} = \mathbf{u}\mathbf{u}^\top$는 $\mathbf{u} = (2,1)^\top/\sqrt{5}$가 펼치는 직선 위로의 사영이다. $\mathbf{x} = (1,3)^\top$를 누르면 $\mathbf{P}\mathbf{x} = (2,1)^\top$가 되고, 여기서 한 번 더 눌러도 여전히 $(2,1)^\top$다. **첫 번째 적용이 이미 $\mathbf{x}$를 $\operatorname{Col}(\mathbf{P})$ 안으로 옮겨 놓았고, 사영은 자기 치역 위에서 항등변환이기 때문이다.** 연습문제 1의 "$\mathbf{x} \in \operatorname{Col}(\mathbf{A}) \iff \mathbf{A}\mathbf{x} = \mathbf{x}$"가 그림에서는 "두 번 눌러도 더 움직이지 않는다"로 보인다. 버려진 몫 $(\mathbf{I}-\mathbf{P})\mathbf{x} = (-1,2)^\top$는 $\ker(\mathbf{P})$ 위에 놓이며, 이쪽을 누르면 $\mathbf{0}$이 된다.
 
 오른쪽 그림은 같은 $\mathbf{P}$를 단위원 전체에 적용한 결과다. 원 위의 모든 점이 한 직선으로 내려앉는다. 그 가운데 두 방향만이 방향을 바꾸지 않는데, $\mathbf{u}$는 제자리에 남고($\mathbf{P}\mathbf{u} = \mathbf{u}$) $\mathbf{k}$는 원점으로 간다($\mathbf{P}\mathbf{k} = \mathbf{0}$). 길이가 반으로 줄거나 $1.5$배로 늘어나는 방향은 하나도 없다. $\lambda^2 = \lambda$가 허용하는 값이 $0$과 $1$뿐이라는 정리 1이 그림에서는 이렇게 나타난다.
 
@@ -119,7 +119,7 @@ $\mathbf{A} \in \mathbb{R}^{n \times n}$이 멱등이라 하자. 그러면
 $$
 \ker(\mathbf{A}) = \operatorname{Col}(\mathbf{A})^\perp
 \quad\Longleftrightarrow\quad
-\mathbf{A} = \mathbf{A}^T
+\mathbf{A} = \mathbf{A}^\top
 $$
 
 이다. 즉 멱등행렬이 자기 열공간 위로의 **직교**사영일 필요충분조건은 그것이 대칭인 것이다.
@@ -128,10 +128,10 @@ $$
 
 ??? proof "증명"
 
-    ($\Leftarrow$) $\mathbf{A} = \mathbf{A}^T$라 하자. $\mathbf{u} \in \operatorname{Col}(\mathbf{A})$이면 $\mathbf{u} = \mathbf{A}\mathbf{w}$로 쓸 수 있고, $\mathbf{v} \in \ker(\mathbf{A})$이면
+    ($\Leftarrow$) $\mathbf{A} = \mathbf{A}^\top$라 하자. $\mathbf{u} \in \operatorname{Col}(\mathbf{A})$이면 $\mathbf{u} = \mathbf{A}\mathbf{w}$로 쓸 수 있고, $\mathbf{v} \in \ker(\mathbf{A})$이면
 
     $$
-    \mathbf{u}^T\mathbf{v} = (\mathbf{A}\mathbf{w})^T\mathbf{v} = \mathbf{w}^T\mathbf{A}^T\mathbf{v} = \mathbf{w}^T\mathbf{A}\mathbf{v} = 0
+    \mathbf{u}^\top\mathbf{v} = (\mathbf{A}\mathbf{w})^\top\mathbf{v} = \mathbf{w}^\top\mathbf{A}^\top\mathbf{v} = \mathbf{w}^\top\mathbf{A}\mathbf{v} = 0
     $$
 
     이다. 따라서 $\ker(\mathbf{A}) \subseteq \operatorname{Col}(\mathbf{A})^\perp$이고, 계수–퇴화차수 정리에 의해 두 공간의 차원이 모두 $n - \operatorname{rank}(\mathbf{A})$이므로 실은 같다.
@@ -139,16 +139,16 @@ $$
     ($\Rightarrow$) $\ker(\mathbf{A}) \subseteq \operatorname{Col}(\mathbf{A})^\perp$라 하자. 임의의 $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$에 대해 $\mathbf{x} = \mathbf{A}\mathbf{x} + (\mathbf{I}-\mathbf{A})\mathbf{x}$로 쪼개면 $\mathbf{A}\mathbf{x} \in \operatorname{Col}(\mathbf{A})$이고 $(\mathbf{I}-\mathbf{A})\mathbf{x} \in \ker(\mathbf{A})$이므로($\mathbf{A}(\mathbf{I}-\mathbf{A}) = \mathbf{A} - \mathbf{A}^2 = \mathbf{0}$) 두 조각은 직교한다. 그러면
 
     $$
-    \mathbf{x}^T\mathbf{A}\mathbf{y} = (\mathbf{A}\mathbf{x})^T(\mathbf{A}\mathbf{y}) + \bigl((\mathbf{I}-\mathbf{A})\mathbf{x}\bigr)^T(\mathbf{A}\mathbf{y}) = (\mathbf{A}\mathbf{x})^T(\mathbf{A}\mathbf{y})
+    \mathbf{x}^\top\mathbf{A}\mathbf{y} = (\mathbf{A}\mathbf{x})^\top(\mathbf{A}\mathbf{y}) + \bigl((\mathbf{I}-\mathbf{A})\mathbf{x}\bigr)^\top(\mathbf{A}\mathbf{y}) = (\mathbf{A}\mathbf{x})^\top(\mathbf{A}\mathbf{y})
     $$
 
     이고, 같은 계산을 $\mathbf{y}$ 쪽에 적용하면
 
     $$
-    \mathbf{x}^T\mathbf{A}^T\mathbf{y} = (\mathbf{A}\mathbf{x})^T\mathbf{y} = (\mathbf{A}\mathbf{x})^T(\mathbf{A}\mathbf{y}) + (\mathbf{A}\mathbf{x})^T(\mathbf{I}-\mathbf{A})\mathbf{y} = (\mathbf{A}\mathbf{x})^T(\mathbf{A}\mathbf{y})
+    \mathbf{x}^\top\mathbf{A}^\top\mathbf{y} = (\mathbf{A}\mathbf{x})^\top\mathbf{y} = (\mathbf{A}\mathbf{x})^\top(\mathbf{A}\mathbf{y}) + (\mathbf{A}\mathbf{x})^\top(\mathbf{I}-\mathbf{A})\mathbf{y} = (\mathbf{A}\mathbf{x})^\top(\mathbf{A}\mathbf{y})
     $$
 
-    이다. 곧 모든 $\mathbf{x}, \mathbf{y}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{y} = \mathbf{x}^T\mathbf{A}^T\mathbf{y}$이므로 $\mathbf{A} = \mathbf{A}^T$다. $\square$
+    이다. 곧 모든 $\mathbf{x}, \mathbf{y}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{y} = \mathbf{x}^\top\mathbf{A}^\top\mathbf{y}$이므로 $\mathbf{A} = \mathbf{A}^\top$다. $\square$
 
 대칭이 아닌 멱등행렬은 실제로 존재한다. 연습문제 3 의
 
@@ -156,7 +156,7 @@ $$
 \mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}
 $$
 
-은 멱등이지만 $\operatorname{Col}(\mathbf{A}) = \operatorname{span}\{(1,0)^T\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^T\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗사영**이라 하며, 0.3절의 「사영행렬」과 「직교사영행렬」에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
+은 멱등이지만 $\operatorname{Col}(\mathbf{A}) = \operatorname{span}\{(1,0)^\top\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^\top\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗사영**이라 하며, 0.3절의 「사영행렬」과 「직교사영행렬」에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
 
 | | 멱등 $\mathbf{A}^2 = \mathbf{A}$ | 멱등 **그리고** 대칭 |
 |---|---|---|
@@ -166,23 +166,23 @@ $$
 | $\ker(\mathbf{A}) \perp \operatorname{Col}(\mathbf{A})$ | 일반적으로 거짓 | 성립 |
 | 최근접점을 준다 | 아니다 | 그렇다(최소제곱) |
 | 제곱합의 피타고라스 분해 | 아니다 | 그렇다 |
-| $\mathbf{y} \sim N(\mathbf{0},\sigma^2\mathbf{I})$에서 $\mathbf{y}^T\mathbf{A}\mathbf{y}/\sigma^2 \sim \chi^2_{\operatorname{rank}\mathbf{A}}$ | 아니다 | 그렇다(연습문제 10) |
+| $\mathbf{y} \sim N(\mathbf{0},\sigma^2\mathbf{I})$에서 $\mathbf{y}^\top\mathbf{A}\mathbf{y}/\sigma^2 \sim \chi^2_{\operatorname{rank}\mathbf{A}}$ | 아니다 | 그렇다(연습문제 10) |
 
-마지막 두 줄이 핵심이다. 이 쪽에서 앞서 적은 분산분석 분해 $\|\mathbf{y}\|^2 = \|\mathbf{H}\mathbf{y}\|^2 + \|\mathbf{M}\mathbf{y}\|^2$과 카이제곱 자유도 계산은 $\mathbf{H}$가 멱등인 것만으로는 성립하지 않고 **대칭이기도 해야** 성립한다. 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$가 대칭이라는 사실(연습문제 4)이 그래서 형식적인 확인이 아니다.
+마지막 두 줄이 핵심이다. 이 쪽에서 앞서 적은 분산분석 분해 $\|\mathbf{y}\|^2 = \|\mathbf{H}\mathbf{y}\|^2 + \|\mathbf{M}\mathbf{y}\|^2$과 카이제곱 자유도 계산은 $\mathbf{H}$가 멱등인 것만으로는 성립하지 않고 **대칭이기도 해야** 성립한다. 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 대칭이라는 사실(연습문제 4)이 그래서 형식적인 확인이 아니다.
 
 ## 예
 
 다음을 생각하자.
 
 $$
-\mathbf{A} = \frac{1}{3}\begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1 \end{pmatrix} = \frac{1}{3} \mathbf{1}\mathbf{1}^T
+\mathbf{A} = \frac{1}{3}\begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1 \end{pmatrix} = \frac{1}{3} \mathbf{1}\mathbf{1}^\top
 $$
 
-**멱등성:** $\mathbf{A}^2 = \frac{1}{9}\mathbf{1}\mathbf{1}^T\mathbf{1}\mathbf{1}^T = \frac{1}{9}\mathbf{1}(3)\mathbf{1}^T = \frac{1}{3}\mathbf{1}\mathbf{1}^T = \mathbf{A}$.
+**멱등성:** $\mathbf{A}^2 = \frac{1}{9}\mathbf{1}\mathbf{1}^\top\mathbf{1}\mathbf{1}^\top = \frac{1}{9}\mathbf{1}(3)\mathbf{1}^\top = \frac{1}{3}\mathbf{1}\mathbf{1}^\top = \mathbf{A}$.
 
 **대각합과 계수:** $\operatorname{tr}(\mathbf{A}) = 1 = \operatorname{rank}(\mathbf{A})$.
 
-**고윳값:** 고유벡터 $(1,1,1)^T$에 대응하는 $\lambda_1 = 1$, 그리고 $(1,1,1)^T$에 직교하는 고유공간에 대응하는 $\lambda_2 = \lambda_3 = 0$.
+**고윳값:** 고유벡터 $(1,1,1)^\top$에 대응하는 $\lambda_1 = 1$, 그리고 $(1,1,1)^\top$에 직교하는 고유공간에 대응하는 $\lambda_2 = \lambda_3 = 0$.
 
 **기하적 해석:** $\mathbf{A}$는 모든 벡터를 $\mathbf{1}$이 생성하는 공간 위로 사영한다. 즉 $\mathbf{x}$의 각 성분을 표본평균으로 바꾼다. 이는 절편만 있는 회귀모형의 모자 행렬이다.
 
@@ -193,7 +193,7 @@ $$
 완전 열계수를 갖는 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대한 선형모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$에서
 
 $$
-\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T
+\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top
 $$
 
 는 대칭이고 멱등이다. 그 대각합이 모수의 개수를 준다: $\operatorname{tr}(\mathbf{H}) = p$(연습문제 4).
@@ -260,32 +260,32 @@ $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하
     \mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}, \quad \mathbf{A}^2 = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \mathbf{A}
     $$
 
-    고윳값: 고유벡터 $(1, 0)^T$에 대응하는 $1$과 고유벡터 $(-1, 1)^T$에 대응하는 $0$. 이 행렬은 직선 $y = -x$ 방향을 따라 $x$축 위로 사영한다. **빗각**(직교가 아닌) 사영이다.
+    고윳값: 고유벡터 $(1, 0)^\top$에 대응하는 $1$과 고유벡터 $(-1, 1)^\top$에 대응하는 $0$. 이 행렬은 직선 $y = -x$ 방향을 따라 $x$축 위로 사영한다. **빗각**(직교가 아닌) 사영이다.
 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-완전 열계수를 갖는 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대한 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$가 대칭이고 멱등이며 $\operatorname{tr}(\mathbf{H}) = p$임을 증명하라.
+완전 열계수를 갖는 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대한 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 대칭이고 멱등이며 $\operatorname{tr}(\mathbf{H}) = p$임을 증명하라.
 
 </div>
 
 ??? success "풀이"
-    **대칭성:** $\mathbf{X}^T\mathbf{X}$가 대칭이므로 그 역행렬도 대칭이다. 따라서
+    **대칭성:** $\mathbf{X}^\top\mathbf{X}$가 대칭이므로 그 역행렬도 대칭이다. 따라서
 
     $$
-    \mathbf{H}^T = \mathbf{X}\bigl[(\mathbf{X}^T\mathbf{X})^{-1}\bigr]^T \mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
+    \mathbf{H}^\top = \mathbf{X}\bigl[(\mathbf{X}^\top\mathbf{X})^{-1}\bigr]^\top \mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}
     $$
 
     **멱등성:**
 
     $$
-    \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}}_{\mathbf{I}_p}\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
+    \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\underbrace{\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}}_{\mathbf{I}_p}\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}
     $$
 
     **대각합:** 대각합의 순환 성질에 의해
 
     $$
-    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\!\bigl((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
+    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\!\bigl((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
     $$
 
     $\square$
@@ -301,14 +301,14 @@ $\mathbf{M} = \mathbf{I} - \mathbf{H}$에 대해 $\mathbf{H}\mathbf{X} = \mathbf
     직접 계산하면
 
     $$
-    \mathbf{H}\mathbf{X} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X} = \mathbf{X}, \qquad \mathbf{M}\mathbf{X} = (\mathbf{I} - \mathbf{H})\mathbf{X} = \mathbf{X} - \mathbf{X} = \mathbf{0}
+    \mathbf{H}\mathbf{X} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X} = \mathbf{X}, \qquad \mathbf{M}\mathbf{X} = (\mathbf{I} - \mathbf{H})\mathbf{X} = \mathbf{X} - \mathbf{X} = \mathbf{0}
     $$
 
     이다.
 
     **$\mathbf{H}\mathbf{X} = \mathbf{X}$의 기하적 의미:** $\mathbf{X}$의 각 열은 이미 $\mathbf{X}$의 열공간 안에 있으므로 그 공간 위로 사영해도 변하지 않는다. $\mathbf{H}$는 $\operatorname{Col}(\mathbf{X})$ 위에서 항등변환처럼 작용한다.
 
-    **$\mathbf{M}\mathbf{X} = \mathbf{0}$의 기하적 의미:** 잔차는 $\mathbf{X}$의 열공간에 직교한다. 이것이 바로 최소제곱을 정의하는 정규방정식 조건 $\mathbf{X}^T \mathbf{e} = \mathbf{0}$이다. 적합값이 $\mathbf{X}$에 담긴 선형 신호를 모두 포착하므로, 잔차에는 $\mathbf{X}$의 어떤 열로도 설명할 수 있는 것이 남아 있지 않다.
+    **$\mathbf{M}\mathbf{X} = \mathbf{0}$의 기하적 의미:** 잔차는 $\mathbf{X}$의 열공간에 직교한다. 이것이 바로 최소제곱을 정의하는 정규방정식 조건 $\mathbf{X}^\top \mathbf{e} = \mathbf{0}$이다. 적합값이 $\mathbf{X}$에 담긴 선형 신호를 모두 포착하므로, 잔차에는 $\mathbf{X}$의 어떤 열로도 설명할 수 있는 것이 남아 있지 않다.
 
 <div class="drillbox" markdown>
 
@@ -318,9 +318,9 @@ $\mathbf{A}, \mathbf{B}$가 $\mathbb{R}^{n \times n}$의 대칭 멱등행렬이�
 </div>
 
 ??? success "풀이"
-    **대칭성:** $(\mathbf{A} + \mathbf{B})^T = \mathbf{A}^T + \mathbf{B}^T = \mathbf{A} + \mathbf{B}$.
+    **대칭성:** $(\mathbf{A} + \mathbf{B})^\top = \mathbf{A}^\top + \mathbf{B}^\top = \mathbf{A} + \mathbf{B}$.
 
-    **멱등성:** (대칭성을 이용하면) $\mathbf{A}\mathbf{B} = \mathbf{0}$은 $\mathbf{B}\mathbf{A} = (\mathbf{A}\mathbf{B})^T = \mathbf{0}$을 함의한다. 그러면
+    **멱등성:** (대칭성을 이용하면) $\mathbf{A}\mathbf{B} = \mathbf{0}$은 $\mathbf{B}\mathbf{A} = (\mathbf{A}\mathbf{B})^\top = \mathbf{0}$을 함의한다. 그러면
 
     $$
     (\mathbf{A} + \mathbf{B})^2 = \mathbf{A}^2 + \mathbf{A}\mathbf{B} + \mathbf{B}\mathbf{A} + \mathbf{B}^2 = \mathbf{A} + \mathbf{0} + \mathbf{0} + \mathbf{B} = \mathbf{A} + \mathbf{B}
@@ -401,7 +401,7 @@ $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을
 </div>
 
 ??? success "풀이"
-    집단 지시행렬을 $\mathbf{G}$라 하고 집단평균 사영을 $\mathbf{P}_{\text{grp}} = \mathbf{G}(\mathbf{G}^T\mathbf{G})^{-1}\mathbf{G}^T$라 하자. 다음 셋으로 나눈다.
+    집단 지시행렬을 $\mathbf{G}$라 하고 집단평균 사영을 $\mathbf{P}_{\text{grp}} = \mathbf{G}(\mathbf{G}^\top\mathbf{G})^{-1}\mathbf{G}^\top$라 하자. 다음 셋으로 나눈다.
 
     $$
     \mathbf{P}_1 = \tfrac{1}{n}\mathbf{J}, \qquad
@@ -452,7 +452,7 @@ $\mathbf{A}$가 멱등이면서 **가역**이면 $\mathbf{A} = \mathbf{I}$임을
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-$\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이면 $\mathbf{y}^T\mathbf{A}\mathbf{y}/\sigma^2 \sim \chi^2_r$이다. 앞 문제의 $\mathbf{P}_3$으로 모의실험하여 확인하라.
+$\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이면 $\mathbf{y}^\top\mathbf{A}\mathbf{y}/\sigma^2 \sim \chi^2_r$이다. 앞 문제의 $\mathbf{P}_3$으로 모의실험하여 확인하라.
 
 </div>
 
@@ -494,15 +494,15 @@ $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수
 
     평균이 $6$, 분산이 $12$로 $\chi^2_6$과 맞고 분위수도 일치한다.
 
-    **왜 성립하는가.** $\mathbf{A}$가 대칭 멱등이고 계수가 $r$이면 $\mathbf{A} = \mathbf{Q}\operatorname{diag}(\mathbf{I}_r, \mathbf{O})\mathbf{Q}^T$로 쓸 수 있다. $\mathbf{z} = \mathbf{Q}^T\mathbf{y}$로 두면 $\mathbf{z}$도 $N(\mathbf{0}, \sigma^2\mathbf{I})$이고
+    **왜 성립하는가.** $\mathbf{A}$가 대칭 멱등이고 계수가 $r$이면 $\mathbf{A} = \mathbf{Q}\operatorname{diag}(\mathbf{I}_r, \mathbf{O})\mathbf{Q}^\top$로 쓸 수 있다. $\mathbf{z} = \mathbf{Q}^\top\mathbf{y}$로 두면 $\mathbf{z}$도 $N(\mathbf{0}, \sigma^2\mathbf{I})$이고
 
     $$
-    \mathbf{y}^T\mathbf{A}\mathbf{y} = \mathbf{z}^T\operatorname{diag}(\mathbf{I}_r, \mathbf{O})\mathbf{z} = \sum_{i=1}^{r} z_i^2
+    \mathbf{y}^\top\mathbf{A}\mathbf{y} = \mathbf{z}^\top\operatorname{diag}(\mathbf{I}_r, \mathbf{O})\mathbf{z} = \sum_{i=1}^{r} z_i^2
     $$
 
     로 **독립인 표준정규 제곱 $r$개의 합**이 된다. 이것이 카이제곱의 정의다.
 
-    이 사실이 회귀와 분산분석 전체를 떠받친다. $\text{SSE}/\sigma^2 = \mathbf{y}^T(\mathbf{I}-\mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$인 것도 $\mathbf{I}-\mathbf{H}$가 계수 $n-p$인 대칭 멱등행렬이기 때문이다. $\square$
+    이 사실이 회귀와 분산분석 전체를 떠받친다. $\text{SSE}/\sigma^2 = \mathbf{y}^\top(\mathbf{I}-\mathbf{H})\mathbf{y}/\sigma^2 \sim \chi^2_{n-p}$인 것도 $\mathbf{I}-\mathbf{H}$가 계수 $n-p$인 대칭 멱등행렬이기 때문이다. $\square$
 
 ---
 

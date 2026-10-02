@@ -70,7 +70,7 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
     인수분해 정리에 따라 이를 $g(T(\mathbf{x}), \theta) \cdot h(\mathbf{x})$로 쓰면:
 
     $$
-    g(T, \theta) = \theta^T e^{-n\theta}, \quad h(\mathbf{x}) = \frac{1}{\prod x_i!}, \quad T(\mathbf{x}) = \sum_{i=1}^n x_i
+    g(T, \theta) = \theta^\top e^{-n\theta}, \quad h(\mathbf{x}) = \frac{1}{\prod x_i!}, \quad T(\mathbf{x}) = \sum_{i=1}^n x_i
     $$
 
     따라서 $T = \sum_{i=1}^n X_i$가 $\theta$에 대해 충분하다. $\bar{X} = T/n$은 $T$의 일대일 함수이므로 마찬가지로 충분하다.
@@ -355,7 +355,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $T = X_{(n)}$이 완비충분임을 �
 
     **레만-셰페.** $T$가 완비충분이고 $\hat g$가 $T$의 함수이며 불편이므로, 이것이 **유일한 최소분산불편추정량**이다. $\square$
 
-    **확인.** $E[a^T] = e^{n\lambda(a-1)}$에 $a=1-1/n$을 넣으면 $e^{-\lambda}$가 나온다. ✓
+    **확인.** $E[a^\top] = e^{n\lambda(a-1)}$에 $a=1-1/n$을 넣으면 $e^{-\lambda}$가 나온다. ✓
 
     **MLE와의 비교.** MLE는 $e^{-\bar X}$다. $n$이 크면
 

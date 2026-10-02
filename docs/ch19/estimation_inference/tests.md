@@ -452,7 +452,7 @@ $W_j^2$와 LRT 통계량 $\Lambda$가 점근적으로 동등함을 보여라. �
     점수 통계량은
 
     $$
-    S = \mathbf{s}(\boldsymbol{\theta}_0)^T\,\mathcal{I}(\boldsymbol{\theta}_0)^{-1}\,\mathbf{s}(\boldsymbol{\theta}_0)
+    S = \mathbf{s}(\boldsymbol{\theta}_0)^\top\,\mathcal{I}(\boldsymbol{\theta}_0)^{-1}\,\mathbf{s}(\boldsymbol{\theta}_0)
     \;\stackrel{a}{\sim}\; \chi^2_q
     $$
 

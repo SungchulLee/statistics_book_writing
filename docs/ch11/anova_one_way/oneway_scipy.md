@@ -92,7 +92,7 @@ $$
     from scipy import stats
 
     url = ('https://raw.githubusercontent.com/vincentarelbundock/'
-           'Rdatasets/master/csv/datasets/PlantGrowth.csv')
+           'Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv')
     df = pd.read_csv(url, usecols=[1, 2])
     g = df.groupby('group')
     # f_oneway는 집단을 **별도의 배열**로 받는다. 긴 형식 데이터프레임을 그대로

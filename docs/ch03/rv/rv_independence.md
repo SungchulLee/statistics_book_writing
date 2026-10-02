@@ -220,7 +220,7 @@ $$
     import numpy as np
     import pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
 
     # 칸의 사람 수부터 본다. 비율은 전부 이 여섯 수에서 나온다.

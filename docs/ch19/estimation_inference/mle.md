@@ -17,15 +17,15 @@ $\boldsymbol{\theta}$에 대한 기울기가 깔끔한 행렬식으로 정리된
 $$
 \frac{\partial\ell}{\partial\boldsymbol{\theta}}
 = -\sum_{i=1}^{n}\left[
-  \frac{y^{(i)}}{\sigma^{(i)}}\,\sigma^{(i)}(1-\sigma^{(i)})\,A[i,:]^T
-  - \frac{1-y^{(i)}}{1-\sigma^{(i)}}\,\sigma^{(i)}(1-\sigma^{(i)})\,A[i,:]^T
+  \frac{y^{(i)}}{\sigma^{(i)}}\,\sigma^{(i)}(1-\sigma^{(i)})\,A[i,:]^\top
+  - \frac{1-y^{(i)}}{1-\sigma^{(i)}}\,\sigma^{(i)}(1-\sigma^{(i)})\,A[i,:]^\top
 \right]
 $$
 
 시그모이드 항이 약분되어
 
 $$
-\nabla\ell = \sum_{i=1}^{n}\bigl(\sigma^{(i)}-y^{(i)}\bigr)\,A[i,:]^T
+\nabla\ell = \sum_{i=1}^{n}\bigl(\sigma^{(i)}-y^{(i)}\bigr)\,A[i,:]^\top
 $$
 
 만 남는다.
@@ -35,7 +35,7 @@ $$
 잔차를 열벡터 $\boldsymbol{\sigma}-\mathbf{y}$로 쓰고 계획행렬의 행을 쌓으면
 
 $$
-\nabla\ell = A^T(\boldsymbol{\sigma}-\mathbf{y})
+\nabla\ell = A^\top(\boldsymbol{\sigma}-\mathbf{y})
 $$
 
 이다. 이는 제곱손실을 쓰는 선형회귀의 기울기와 같은 형태이며, 잔차
@@ -47,8 +47,8 @@ $\hat{\mathbf{y}}-\mathbf{y}$가 $\boldsymbol{\sigma}-\mathbf{y}$로 바뀐 것�
 
 $$
 \nabla^2\ell
-= \sum_{i=1}^{n}\sigma^{(i)}(1-\sigma^{(i)})\;A[i,:]^T\,A[i,:]
-= A^T B\, A
+= \sum_{i=1}^{n}\sigma^{(i)}(1-\sigma^{(i)})\;A[i,:]^\top\,A[i,:]
+= A^\top B\, A
 $$
 
 이고, 여기서 $B$는 $n\times n$ 대각행렬
@@ -92,7 +92,7 @@ $A^TBA$는 이 가중치로 잰 $A[i,:]^TA[i,:]$의 합이므로, 모형이 이�
 
 $$
 \boldsymbol{\theta} \leftarrow \boldsymbol{\theta} - \alpha\,\nabla\ell
-= \boldsymbol{\theta} - \alpha\,A^T(\boldsymbol{\sigma}-\mathbf{y})
+= \boldsymbol{\theta} - \alpha\,A^\top(\boldsymbol{\sigma}-\mathbf{y})
 $$
 
 이며, $\alpha$는 학습률이다.
@@ -103,7 +103,7 @@ $$
 
 $$
 \boldsymbol{\theta}
-= \boldsymbol{\theta}_0 - (A^TBA)^{-1}\,A^T(\boldsymbol{\sigma}-\mathbf{y})
+= \boldsymbol{\theta}_0 - (A^TBA)^{-1}\,A^\top(\boldsymbol{\sigma}-\mathbf{y})
 $$
 
 이는 **가중최소제곱**의 정규방정식으로 다시 쓸 수 있다. *작업 반응변수*를
@@ -199,7 +199,7 @@ IRLS는 보통 적은 반복으로 수렴하며, 많은 고전적 로지스틱 �
         절반씩 나눈다.
         """
         url = ('https://raw.githubusercontent.com/codebasics/py/'
-               'master/ML/7_logistic_reg/insurance_data.csv')
+               '3ee4bde332ae7a10499c2679900094fa22ae191f/ML/7_logistic_reg/insurance_data.csv')
         df = pd.read_csv(url)
         x = df[['age']].values.reshape((-1, 1))
         y = df.bought_insurance.values.reshape((-1,))
@@ -705,7 +705,7 @@ $(x_4, y_4) = (4, 1)$과 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$가 주
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-기울기 $\nabla\ell = A^T(\boldsymbol{\sigma}-\mathbf{y})$의 첫 성분(절편에 대응)을 0으로 놓으면
+기울기 $\nabla\ell = A^\top(\boldsymbol{\sigma}-\mathbf{y})$의 첫 성분(절편에 대응)을 0으로 놓으면
 무엇을 얻는가? 이 항등식이 로지스틱 회귀의 보정에 대해 무엇을 말해 주는지 설명하라.
 
 </div>
@@ -742,19 +742,19 @@ $(x_4, y_4) = (4, 1)$과 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$가 주
 
 ??? success "풀이"
 
-    $\nabla^2 \ell = A^T B A$이고 $B$의 대각원소가 $\le 1/4$이므로
+    $\nabla^2 \ell = A^\top B A$이고 $B$의 대각원소가 $\le 1/4$이므로
 
     $$
-    \nabla^2 \ell \preceq \tfrac{1}{4} A^T A
+    \nabla^2 \ell \preceq \tfrac{1}{4} A^\top A
     \quad\Longrightarrow\quad
-    L := \lambda_{\max}(\nabla^2 \ell) \le \tfrac{1}{4}\lambda_{\max}(A^T A)
+    L := \lambda_{\max}(\nabla^2 \ell) \le \tfrac{1}{4}\lambda_{\max}(A^\top A)
     $$
 
     이다. 여기서 $L$은 기울기의 립시츠 상수다. 볼록·$L$-평활 함수에 대한 경사하강은
     $\alpha < 2/L$일 때 수렴하고, $\alpha = 1/L$이 표준적인 선택이다.
 
     위 코드의 설명변수는 나이(age)로, 척도화하지 않은 수십 단위의 값이다. 절편 열을 포함하면
-    $A^T A$의 최대 고유값은 $\sum_i x_i^2$ 수준이므로, 나이가 수십이고 $n$이 수십이면
+    $A^\top A$의 최대 고유값은 $\sum_i x_i^2$ 수준이므로, 나이가 수십이고 $n$이 수십이면
     $10^4$을 훌쩍 넘는다. 따라서
 
     $$
@@ -779,7 +779,7 @@ $(x_4, y_4) = (4, 1)$과 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$가 주
 ??? success "풀이"
 
     **최적화 자체에는 문제가 없다.** 갱신식은 `gradient`만 사용하고 `loss`는 진행 상황을
-    보고하는 데만 쓰이기 때문이다. 그리고 참 기울기 $A^T(\boldsymbol{\sigma}-\mathbf{y})$는
+    보고하는 데만 쓰이기 때문이다. 그리고 참 기울기 $A^\top(\boldsymbol{\sigma}-\mathbf{y})$는
     $\sigma^{(i)}$가 0이나 1에 가까워져도 수치적으로 안전하다. 로그가 등장하지 않으므로 발산할
     항이 없고, 최악의 경우에도 각 잔차의 절댓값은 1 이하다.
 

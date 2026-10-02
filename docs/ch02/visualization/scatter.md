@@ -25,6 +25,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     from scipy import stats
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     np.random.seed(0)
     num_samples = 10
     x = stats.norm().rvs(size=num_samples)
@@ -165,6 +168,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
     n = 20000
@@ -338,6 +344,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
 
@@ -702,6 +711,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import matplotlib.pyplot as plt
     import matplotlib.ticker as mticker
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(4)
     n = 1500
     x = rng.lognormal(0, 1.4, n)
@@ -912,6 +924,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     values = np.array([1, 2, 4, 8, 16], float)
 
     print("값을 넓이에 비례시켰을 때")
@@ -980,6 +995,9 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
     K, n = 4, 120

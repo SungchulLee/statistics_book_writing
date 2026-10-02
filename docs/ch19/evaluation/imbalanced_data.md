@@ -701,7 +701,7 @@ $0.200$으로 실제값과 거의 같다. 즉 조정하지 않은 모형이 이�
 
     $$
     \operatorname{logit} P(Y=1\mid\mathbf{x}, S)
-    = \beta_0 + \mathbf{x}^T\boldsymbol{\beta} + \log\frac{s_1}{s_0}
+    = \beta_0 + \mathbf{x}^\top\boldsymbol{\beta} + \log\frac{s_1}{s_0}
     $$
 
     을 얻는다. 즉 **$\mathbf{x}$에 붙는 계수는 그대로이고 절편만 $\log(s_1/s_0)$만큼

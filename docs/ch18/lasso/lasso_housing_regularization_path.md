@@ -65,7 +65,7 @@ $$
     from sklearn.linear_model import LinearRegression, Lasso, LassoCV, Ridge, RidgeCV
 
     url = ("https://raw.githubusercontent.com/gedeck/"
-           "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+           "practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/house_sales.csv")
     house = pd.read_csv(url, sep='\t')
 
     # 설명변수를 열한 개로 늘렸다. 범주형(PropertyType)이 섞여 있어 가변수로

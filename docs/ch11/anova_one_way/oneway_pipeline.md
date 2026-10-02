@@ -78,7 +78,7 @@ $$
     from statsmodels.stats.anova import anova_lm
 
     url = ('https://raw.githubusercontent.com/vincentarelbundock/'
-           'Rdatasets/master/csv/datasets/PlantGrowth.csv')
+           'Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv')
     df = pd.read_csv(url, usecols=[1, 2])
 
     # C()로 감싸지 않으면 group을 숫자처럼 취급해 회귀직선을 적합해 버린다.

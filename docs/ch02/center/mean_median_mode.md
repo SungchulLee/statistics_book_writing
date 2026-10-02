@@ -97,7 +97,7 @@ $$
     plt.rcParams["font.family"] = "Apple SD Gothic Neo"
     plt.rcParams["axes.unicode_minus"] = False
 
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
     loans_data = pd.read_csv(url)
 
     mean_income = loans_data['x'].mean()
@@ -128,7 +128,7 @@ $$
     import pandas as pd
 
     url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
-           '/master/data/loans_income.csv')
+           '/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv')
     income = pd.read_csv(url)['x'].values.astype(float)
     m = income.mean()
     dev = income - m
@@ -244,7 +244,7 @@ $$
     plt.rcParams["font.family"] = "Apple SD Gothic Neo"
     plt.rcParams["axes.unicode_minus"] = False
 
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
     loans_data = pd.read_csv(url)
 
     # 같은 자료에 평균과 중앙값을 함께 표시한다.
@@ -291,7 +291,7 @@ $$
     from scipy import stats
 
     url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
-           '/master/data/loans_income.csv')
+           '/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv')
     income = pd.read_csv(url)['x'].values.astype(float)
     mu, me, sd = income.mean(), np.median(income), income.std(ddof=1)
     print(f"소득 자료 : 평균 {mu:,.2f}  중앙값 {me:,.2f}  표준편차 {sd:,.2f}")
@@ -404,7 +404,7 @@ $$
     plt.rcParams["font.family"] = "Apple SD Gothic Neo"
     plt.rcParams["axes.unicode_minus"] = False
 
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
     loans_data = pd.read_csv(url)
     income_data = loans_data['x'].values
 
@@ -501,7 +501,7 @@ $$
     import pandas as pd
 
     url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
-           '/master/data/loans_income.csv')
+           '/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv')
     income = pd.read_csv(url)['x'].values.astype(float)
     n, k, M = len(income), 20, 20_000_000.0
     xbar = income.mean()
@@ -635,7 +635,7 @@ $$
     from scipy.stats import trim_mean
 
     # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
-    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/state.csv')
     state = pd.read_csv(url)
 
     # 보통의 평균. 캘리포니아 같은 큰 주 하나에 끌려 올라간다.
@@ -667,7 +667,7 @@ $$
     from scipy.stats import trim_mean
 
     url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
-           '/master/data/state.csv')
+           '/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/state.csv')
     pop = np.sort(pd.read_csv(url)['Population'].values.astype(float))
     n = len(pop)
     print(f"n = {n}")
@@ -798,7 +798,7 @@ $$
     import numpy as np
 
     # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
-    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/state.csv')
     state = pd.read_csv(url)
 
     # 가중하지 않은 평균은 주 50개를 똑같이 한 표씩 센다.
@@ -825,7 +825,7 @@ $$
     import pandas as pd
 
     url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
-           '/master/data/state.csv')
+           '/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/state.csv')
     state = pd.read_csv(url)
     pop = state['Population'].values.astype(float)
     rate = state['Murder.Rate'].values.astype(float)
@@ -919,7 +919,7 @@ $$
     import pandas as pd
 
     # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
-    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/state.csv')
     state = pd.read_csv(url)
 
     # 가중하지 않은 중앙값: 주를 크기와 상관없이 한 표씩 센다.
@@ -957,7 +957,7 @@ $$
     import pandas as pd
 
     url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists'
-           '/master/data/state.csv')
+           '/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/state.csv')
     state = pd.read_csv(url)
     pop = state['Population'].values.astype(float)
     rate = state['Murder.Rate'].values.astype(float)

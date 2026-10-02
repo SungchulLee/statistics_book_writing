@@ -111,7 +111,7 @@ $0.6745 = \Phi^{-1}(0.75)$는 표준정규분포의 75번째 백분위수다. �
     from statsmodels import robust
 
     # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
-    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/state.csv')
     state = pd.read_csv(url)
 
     # 표준편차는 제곱을 쓰므로 멀리 떨어진 값 하나에 크게 흔들린다.
@@ -245,7 +245,7 @@ $0.6745 = \Phi^{-1}(0.75)$는 표준정규분포의 75번째 백분위수다. �
     from statsmodels import robust
 
     # 먼저 원래 자료에서 두 척도를 재 둔다.
-    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/state.csv')
     state = pd.read_csv(url)
     original_std = state['Population'].std()
     original_mad = robust.scale.mad(state['Population'])

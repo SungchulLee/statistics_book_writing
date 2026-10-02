@@ -337,7 +337,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **정규성 아래의 증명 개요.** $Z_i = (X_i - \mu)/\sigma$라 하고 벡터 $\mathbf{Z} = (Z_1,\ldots,Z_n)^T \sim \mathcal{N}(\mathbf{0}, I_n)$을 생각한다. 첫 행이 $\frac{1}{\sqrt{n}}(1,1,\ldots,1)$인 직교행렬 $Q$를 잡고 $\mathbf{Y} = Q\mathbf{Z}$라 하자.
+    **정규성 아래의 증명 개요.** $Z_i = (X_i - \mu)/\sigma$라 하고 벡터 $\mathbf{Z} = (Z_1,\ldots,Z_n)^\top \sim \mathcal{N}(\mathbf{0}, I_n)$을 생각한다. 첫 행이 $\frac{1}{\sqrt{n}}(1,1,\ldots,1)$인 직교행렬 $Q$를 잡고 $\mathbf{Y} = Q\mathbf{Z}$라 하자.
 
     직교변환은 표준정규 벡터의 분포를 보존하므로 $\mathbf{Y} \sim \mathcal{N}(\mathbf{0}, I_n)$이고 성분들이 서로 독립이다. 그런데
 

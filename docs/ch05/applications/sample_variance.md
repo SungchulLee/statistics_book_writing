@@ -324,7 +324,7 @@ $$
 
     np.random.seed(1)
 
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
     df = pd.read_csv(url)
     population = df['x'].values
     sample_size = 10

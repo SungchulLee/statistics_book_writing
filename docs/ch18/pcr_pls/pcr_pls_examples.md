@@ -99,7 +99,7 @@ PLS는 다음과 같은 상황에서 PCR을 능가하는 경향이 있다.
     from sklearn.metrics import mean_squared_error, r2_score
 
     url = ("https://raw.githubusercontent.com/gedeck/"
-           "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+           "practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/house_sales.csv")
     house = pd.read_csv(url, sep='\t')
 
     # 수치형 변수만 쓴다. 주성분은 분산을 기준으로 방향을 찾으므로
@@ -577,7 +577,7 @@ PCR 과 PLS 의 **결정적 차이**는 $\mathbf y$ 를 보느냐다.
 
 - **PLS 는 반응과의 관련성을 함께 본다.** 그래서 대개 **더 적은 성분으로 같은 예측 성능**을 낸다.
 - **PCR 이 뒤처지는 전형적 상황.** 분산이 큰 방향이 $\mathbf y$ 와 무관할 때이며, 인공자료로 그런 경우를 만들어 보면 차이가 뚜렷하다.
-- **PLS 는 과대적합 위험이 조금 더 크다.** $\mathbf y$ 를 쓰므로 성분 선택 자체가 자료에 적응하며, 교차검증이 더 중요하다.
+- **PLS 는 과적합 위험이 조금 더 크다.** $\mathbf y$ 를 쓰므로 성분 선택 자체가 자료에 적응하며, 교차검증이 더 중요하다.
 - **둘 다 해석이 어렵다.** 성분에 실질적 의미를 붙이기 힘든 것은 마찬가지다.
 - **능형·라쏘와 목적이 겹친다.** 실무에서는 정칙화 쪽이 더 널리 쓰이지만, 화학계량학처럼 $p\gg n$ 이 극단적인 분야에서는 PLS 가 표준이다.
 

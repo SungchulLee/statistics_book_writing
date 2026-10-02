@@ -1,6 +1,6 @@
 # 양정치행렬
 
-대칭행렬이 0이 아닌 모든 벡터 $\mathbf{x}$에 대해 이차형식 $\mathbf{x}^T\mathbf{A}\mathbf{x}$을 엄격히 양수로 만들 때 양정치라고 한다. 이 조건은 양의 실수에 대응하는 행렬판이며, $\mathbf{A}$가 가역이고 유일한 촐레스키 분해를 가지며 진짜 내적을 정의함을 보장한다. 통계에서 양정치성은 잘 정의된 공분산행렬(가역이며 유한한 밀도의 다변량 정규분포로 이어진다)과 퇴화한 것을 가르는 기준이다. 이 절에서는 정의, 동치인 특성화들, 그리고 촐레스키 분해를 다룬다.
+대칭행렬이 0이 아닌 모든 벡터 $\mathbf{x}$에 대해 이차형식 $\mathbf{x}^\top\mathbf{A}\mathbf{x}$을 엄격히 양수로 만들 때 양정치라고 한다. 이 조건은 양의 실수에 대응하는 행렬판이며, $\mathbf{A}$가 가역이고 유일한 촐레스키 분해를 가지며 진짜 내적을 정의함을 보장한다. 통계에서 양정치성은 잘 정의된 공분산행렬(가역이며 유한한 밀도의 다변량 정규분포로 이어진다)과 퇴화한 것을 가르는 기준이다. 이 절에서는 정의, 동치인 특성화들, 그리고 촐레스키 분해를 다룬다.
 
 <div class="defn" markdown>
 
@@ -8,10 +8,10 @@
 
 대칭행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$이
 
-- 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{x} > 0$이면 **양정치**($\mathbf{A} \succ 0$).
-- 모든 $\mathbf{x}$에 대해 $\mathbf{x}^T\mathbf{A}\mathbf{x} \geq 0$이면 **양반정치**($\mathbf{A} \succeq 0$).
+- 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} > 0$이면 **양정치**($\mathbf{A} \succ 0$).
+- 모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} \geq 0$이면 **양반정치**($\mathbf{A} \succeq 0$).
 - $-\mathbf{A} \succ 0$이면 **음정치**($\mathbf{A} \prec 0$).
-- $\mathbf{x}^T\mathbf{A}\mathbf{x}$가 양수와 음수를 모두 취하면 **부정치**.
+- $\mathbf{x}^\top\mathbf{A}\mathbf{x}$가 양수와 음수를 모두 취하면 **부정치**.
 
 </div>
 
@@ -31,51 +31,51 @@
 1. $\mathbf{A} \succ 0$ (이차형식 조건).
 2. $\mathbf{A}$의 모든 고윳값이 엄격히 양수다: $i = 1, \dots, n$에 대해 $\lambda_i > 0$.
 3. 모든 **선행 주소행렬식**이 양수다: $k = 1, \dots, n$에 대해 $\det(\mathbf{A}_k) > 0$이며, 여기서 $\mathbf{A}_k$는 왼쪽 위 $k \times k$ 부분행렬이다.
-4. $\mathbf{A}$가 **촐레스키 분해**를 갖는다: 대각 성분이 양수인 유일한 하삼각행렬 $\mathbf{L}$에 대해 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$.
-5. $\mathbf{A} = \mathbf{B}^T\mathbf{B}$인 가역행렬 $\mathbf{B}$가 존재한다.
+4. $\mathbf{A}$가 **촐레스키 분해**를 갖는다: 대각 성분이 양수인 유일한 하삼각행렬 $\mathbf{L}$에 대해 $\mathbf{A} = \mathbf{L}\mathbf{L}^\top$.
+5. $\mathbf{A} = \mathbf{B}^\top\mathbf{B}$인 가역행렬 $\mathbf{B}$가 존재한다.
 
 </div>
 
 ??? proof "증명"
 
-    **(1) $\Leftrightarrow$ (2).** 스펙트럼 정리에 의해 직교행렬 $\mathbf{Q}$에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$이다. $\mathbf{z} = \mathbf{Q}^T\mathbf{x}$로 두면($\mathbf{Q}$가 직교행렬이므로 $\mathbf{x} \mapsto \mathbf{z}$는 전단사이고 $\mathbf{x} \ne \mathbf{0} \iff \mathbf{z} \ne \mathbf{0}$이다)
+    **(1) $\Leftrightarrow$ (2).** 스펙트럼 정리에 의해 직교행렬 $\mathbf{Q}$에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$이다. $\mathbf{z} = \mathbf{Q}^\top\mathbf{x}$로 두면($\mathbf{Q}$가 직교행렬이므로 $\mathbf{x} \mapsto \mathbf{z}$는 전단사이고 $\mathbf{x} \ne \mathbf{0} \iff \mathbf{z} \ne \mathbf{0}$이다)
 
     $$
-    \mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{z}^T\boldsymbol{\Lambda}\mathbf{z} = \sum_{i=1}^n \lambda_i z_i^2
+    \mathbf{x}^\top\mathbf{A}\mathbf{x} = \mathbf{z}^\top\boldsymbol{\Lambda}\mathbf{z} = \sum_{i=1}^n \lambda_i z_i^2
     $$
 
     이다. 이것이 모든 $\mathbf{z} \neq \mathbf{0}$에 대해 양수일 필요충분조건은 모든 $\lambda_i > 0$인 것이다($\mathbf{z} = \mathbf{e}_i$를 넣으면 각 $\lambda_i > 0$이 필요하고, 역은 각 항이 음이 아니며 적어도 하나가 양수라는 데서 나온다).
 
-    **(1) $\Rightarrow$ (3).** $k$를 고정하고 $\mathbf{y} \in \mathbb{R}^k$, $\mathbf{y} \ne \mathbf{0}$을 잡아 $\mathbf{x} = (\mathbf{y}^T, \mathbf{0}^T)^T \in \mathbb{R}^n$으로 늘리면 $\mathbf{x} \ne \mathbf{0}$이고 $\mathbf{y}^T\mathbf{A}_k\mathbf{y} = \mathbf{x}^T\mathbf{A}\mathbf{x} > 0$이다. 곧 $\mathbf{A}_k \succ 0$이고, 이미 보인 (2)에 의해 $\mathbf{A}_k$의 고윳값이 모두 양수이므로 $\det(\mathbf{A}_k) > 0$이다.
+    **(1) $\Rightarrow$ (3).** $k$를 고정하고 $\mathbf{y} \in \mathbb{R}^k$, $\mathbf{y} \ne \mathbf{0}$을 잡아 $\mathbf{x} = (\mathbf{y}^\top, \mathbf{0}^\top)^\top \in \mathbb{R}^n$으로 늘리면 $\mathbf{x} \ne \mathbf{0}$이고 $\mathbf{y}^\top\mathbf{A}_k\mathbf{y} = \mathbf{x}^\top\mathbf{A}\mathbf{x} > 0$이다. 곧 $\mathbf{A}_k \succ 0$이고, 이미 보인 (2)에 의해 $\mathbf{A}_k$의 고윳값이 모두 양수이므로 $\det(\mathbf{A}_k) > 0$이다.
 
     **(3) $\Rightarrow$ (1).** $n$에 대한 귀납법. $n = 1$이면 $\det(\mathbf{A}_1) = a_{11} > 0$이 곧 결론이다. $n - 1$까지 성립한다고 하자. $\mathbf{A}$를
 
     $$
-    \mathbf{A} = \begin{pmatrix} \mathbf{A}_{n-1} & \mathbf{b} \\ \mathbf{b}^T & c \end{pmatrix}
+    \mathbf{A} = \begin{pmatrix} \mathbf{A}_{n-1} & \mathbf{b} \\ \mathbf{b}^\top & c \end{pmatrix}
     $$
 
-    로 분할한다. $\mathbf{A}_{n-1}$의 선행 주소행렬식은 $\mathbf{A}$의 것과 같으므로 귀납가정에 의해 $\mathbf{A}_{n-1} \succ 0$이고, 특히 가역이다. 슈어 여인수 $s = c - \mathbf{b}^T\mathbf{A}_{n-1}^{-1}\mathbf{b}$에 대해 블록 행렬식 공식이 $\det(\mathbf{A}) = \det(\mathbf{A}_{n-1})\, s$를 주므로 $\det(\mathbf{A}) > 0$과 $\det(\mathbf{A}_{n-1}) > 0$에서 $s > 0$이다. 이제 $\mathbf{x} = (\mathbf{u}^T, t)^T$에 대해 제곱을 완성하면
+    로 분할한다. $\mathbf{A}_{n-1}$의 선행 주소행렬식은 $\mathbf{A}$의 것과 같으므로 귀납가정에 의해 $\mathbf{A}_{n-1} \succ 0$이고, 특히 가역이다. 슈어 여인수 $s = c - \mathbf{b}^\top\mathbf{A}_{n-1}^{-1}\mathbf{b}$에 대해 블록 행렬식 공식이 $\det(\mathbf{A}) = \det(\mathbf{A}_{n-1})\, s$를 주므로 $\det(\mathbf{A}) > 0$과 $\det(\mathbf{A}_{n-1}) > 0$에서 $s > 0$이다. 이제 $\mathbf{x} = (\mathbf{u}^\top, t)^\top$에 대해 제곱을 완성하면
 
     $$
-    \mathbf{x}^T\mathbf{A}\mathbf{x} = (\mathbf{u} + t\,\mathbf{A}_{n-1}^{-1}\mathbf{b})^T\mathbf{A}_{n-1}(\mathbf{u} + t\,\mathbf{A}_{n-1}^{-1}\mathbf{b}) + s\,t^2
+    \mathbf{x}^\top\mathbf{A}\mathbf{x} = (\mathbf{u} + t\,\mathbf{A}_{n-1}^{-1}\mathbf{b})^\top\mathbf{A}_{n-1}(\mathbf{u} + t\,\mathbf{A}_{n-1}^{-1}\mathbf{b}) + s\,t^2
     $$
 
     이다. 두 항이 모두 음이 아니고, 합이 0이면 $t = 0$이고 이어서 $\mathbf{u} = \mathbf{0}$이므로 $\mathbf{x} = \mathbf{0}$이다. 따라서 $\mathbf{A} \succ 0$이다.
 
-    **(2) $\Rightarrow$ (4).** 역시 위 분할과 귀납법을 쓴다. $\mathbf{A}_{n-1} = \mathbf{L}_{n-1}\mathbf{L}_{n-1}^T$을 이미 얻었다고 하고 $\mathbf{L}_{n-1}\boldsymbol{\ell} = \mathbf{b}$를 풀면($\mathbf{L}_{n-1}$은 대각이 양수인 삼각행렬이라 가역이다) $c - \boldsymbol{\ell}^T\boldsymbol{\ell} = c - \mathbf{b}^T\mathbf{A}_{n-1}^{-1}\mathbf{b} = s > 0$이므로
+    **(2) $\Rightarrow$ (4).** 역시 위 분할과 귀납법을 쓴다. $\mathbf{A}_{n-1} = \mathbf{L}_{n-1}\mathbf{L}_{n-1}^\top$을 이미 얻었다고 하고 $\mathbf{L}_{n-1}\boldsymbol{\ell} = \mathbf{b}$를 풀면($\mathbf{L}_{n-1}$은 대각이 양수인 삼각행렬이라 가역이다) $c - \boldsymbol{\ell}^\top\boldsymbol{\ell} = c - \mathbf{b}^\top\mathbf{A}_{n-1}^{-1}\mathbf{b} = s > 0$이므로
 
     $$
-    \mathbf{L} = \begin{pmatrix} \mathbf{L}_{n-1} & \mathbf{0} \\ \boldsymbol{\ell}^T & \sqrt{s} \end{pmatrix}
+    \mathbf{L} = \begin{pmatrix} \mathbf{L}_{n-1} & \mathbf{0} \\ \boldsymbol{\ell}^\top & \sqrt{s} \end{pmatrix}
     $$
 
-    이 대각 성분이 양수인 하삼각행렬이고 $\mathbf{L}\mathbf{L}^T = \mathbf{A}$다. 유일성은 같은 귀납 단계에서 나온다. $\boldsymbol{\ell}$은 가역행렬 $\mathbf{L}_{n-1}$에 의해 유일하게 결정되고, 마지막 대각 성분은 $\sqrt{s} > 0$으로 부호까지 정해진다.
+    이 대각 성분이 양수인 하삼각행렬이고 $\mathbf{L}\mathbf{L}^\top = \mathbf{A}$다. 유일성은 같은 귀납 단계에서 나온다. $\boldsymbol{\ell}$은 가역행렬 $\mathbf{L}_{n-1}$에 의해 유일하게 결정되고, 마지막 대각 성분은 $\sqrt{s} > 0$으로 부호까지 정해진다.
 
-    **(4) $\Rightarrow$ (5).** $\mathbf{B} = \mathbf{L}^T$로 두면 된다. $\mathbf{L}$의 대각 성분이 모두 0이 아니므로 $\mathbf{B}$는 가역이다.
+    **(4) $\Rightarrow$ (5).** $\mathbf{B} = \mathbf{L}^\top$로 두면 된다. $\mathbf{L}$의 대각 성분이 모두 0이 아니므로 $\mathbf{B}$는 가역이다.
 
     **(5) $\Rightarrow$ (1).** $\mathbf{B}$가 가역이므로 $\mathbf{x} \ne \mathbf{0}$이면 $\mathbf{B}\mathbf{x} \ne \mathbf{0}$이고
 
     $$
-    \mathbf{x}^T\mathbf{A}\mathbf{x} = \mathbf{x}^T\mathbf{B}^T\mathbf{B}\mathbf{x} = \lVert\mathbf{B}\mathbf{x}\rVert^2 > 0
+    \mathbf{x}^\top\mathbf{A}\mathbf{x} = \mathbf{x}^\top\mathbf{B}^\top\mathbf{B}\mathbf{x} = \lVert\mathbf{B}\mathbf{x}\rVert^2 > 0
     $$
 
     이다. 이로써 (1) $\Leftrightarrow$ (2), (1) $\Leftrightarrow$ (3), (2) $\Rightarrow$ (4) $\Rightarrow$ (5) $\Rightarrow$ (1)의 고리가 닫혀 다섯 조건이 모두 동치다. $\square$
@@ -84,13 +84,13 @@
     정리 1 의 조건들을 양반정치로 옮길 때 부등호만 완화하면 된다고 생각하기 쉽지만, 조건마다 사정이 다르다.
 
     - **조건 2 는 그대로 옮겨간다.** $\mathbf{A} \succeq 0$일 필요충분조건은 모든 고윳값이 $\lambda_i \ge 0$인 것이다. 위 증명의 (1) $\Leftrightarrow$ (2) 논법에서 부등호만 바꾸면 된다.
-    - **조건 3 은 옮겨가지 않는다.** $\mathbf{A} = \operatorname{diag}(0, -1)$의 선행 주소행렬식은 $\det(\mathbf{A}_1) = 0$, $\det(\mathbf{A}_2) = 0$으로 둘 다 $\ge 0$이지만 $\mathbf{A}$는 양반정치가 아니다. $\mathbf{x} = (0, 1)^T$에서 $\mathbf{x}^T\mathbf{A}\mathbf{x} = -1 < 0$이고 고윳값이 $0, -1$이다. 올바른 판정법은 **모든 주소행렬식** — 행과 열에서 같은 첨자 집합을 골라 만든 $2^n - 1$개의 부분행렬식 — 이 $\ge 0$인 것이다. 위 예에서는 첨자 $\{2\}$를 고른 주소행렬식 $-1 < 0$이 걸러낸다. 선행 주소행렬식만으로 충분한 것은 **엄격한** 부등호(실베스터 판정법)일 때뿐이다.
-    - **조건 4 는 유일성을 잃는다.** 양반정치행렬도 대각 성분이 음이 아닌 하삼각행렬 $\mathbf{L}$로 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$을 만들 수 있지만, 대각에 0 이 나타나면 $\mathbf{L}$이 유일하지 않다. $\mathbf{A} = \operatorname{diag}(0, 1)$의 경우 임의의 $t \in [-1, 1]$에 대해 $\mathbf{L} = \begin{pmatrix} 0 & 0 \\ t & \sqrt{1 - t^2}\end{pmatrix}$이 모두 $\mathbf{L}\mathbf{L}^T = \mathbf{A}$를 만족한다. 유일한 촐레스키 분해는 엄격한 양정치성에 딸린 것이다.
-    - **조건 5 는 완화가 통한다.** $\mathbf{A} \succeq 0$일 필요충분조건은 $\mathbf{A} = \mathbf{B}^T\mathbf{B}$인 (계수 부족이어도 되는) 행렬 $\mathbf{B}$가 존재하는 것이다. 이것이 바로 다음 쪽의 그람 행렬 이야기다.
+    - **조건 3 은 옮겨가지 않는다.** $\mathbf{A} = \operatorname{diag}(0, -1)$의 선행 주소행렬식은 $\det(\mathbf{A}_1) = 0$, $\det(\mathbf{A}_2) = 0$으로 둘 다 $\ge 0$이지만 $\mathbf{A}$는 양반정치가 아니다. $\mathbf{x} = (0, 1)^\top$에서 $\mathbf{x}^\top\mathbf{A}\mathbf{x} = -1 < 0$이고 고윳값이 $0, -1$이다. 올바른 판정법은 **모든 주소행렬식** — 행과 열에서 같은 첨자 집합을 골라 만든 $2^n - 1$개의 부분행렬식 — 이 $\ge 0$인 것이다. 위 예에서는 첨자 $\{2\}$를 고른 주소행렬식 $-1 < 0$이 걸러낸다. 선행 주소행렬식만으로 충분한 것은 **엄격한** 부등호(실베스터 판정법)일 때뿐이다.
+    - **조건 4 는 유일성을 잃는다.** 양반정치행렬도 대각 성분이 음이 아닌 하삼각행렬 $\mathbf{L}$로 $\mathbf{A} = \mathbf{L}\mathbf{L}^\top$을 만들 수 있지만, 대각에 0 이 나타나면 $\mathbf{L}$이 유일하지 않다. $\mathbf{A} = \operatorname{diag}(0, 1)$의 경우 임의의 $t \in [-1, 1]$에 대해 $\mathbf{L} = \begin{pmatrix} 0 & 0 \\ t & \sqrt{1 - t^2}\end{pmatrix}$이 모두 $\mathbf{L}\mathbf{L}^\top = \mathbf{A}$를 만족한다. 유일한 촐레스키 분해는 엄격한 양정치성에 딸린 것이다.
+    - **조건 5 는 완화가 통한다.** $\mathbf{A} \succeq 0$일 필요충분조건은 $\mathbf{A} = \mathbf{B}^\top\mathbf{B}$인 (계수 부족이어도 되는) 행렬 $\mathbf{B}$가 존재하는 것이다. 이것이 바로 다음 쪽의 그람 행렬 이야기다.
 
 ### 그림으로 보기
 
-이차형식 $q(\mathbf{x}) = \mathbf{x}^T\mathbf{A}\mathbf{x}$는 평면 위의 각 점에 수 하나를 얹는 함수이므로 곡면으로 그릴 수 있다. 정부호성이란 결국 그 곡면이 어떤 모양인가에 대한 이름이다.
+이차형식 $q(\mathbf{x}) = \mathbf{x}^\top\mathbf{A}\mathbf{x}$는 평면 위의 각 점에 수 하나를 얹는 함수이므로 곡면으로 그릴 수 있다. 정부호성이란 결국 그 곡면이 어떤 모양인가에 대한 이름이다.
 
 ![이차형식의 그릇 모양](./img/quadratic_form_shapes.png)
 
@@ -98,7 +98,7 @@
 
 가운데는 양반정치다. $\mathbf{A} = \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}$의 고윳값은 $2$와 $0$이고 $q = (x_1 + x_2)^2$이다. 고윳값 하나가 $0$이 되면 그 방향으로는 곡면이 전혀 올라가지 않아 그릇이 골짜기로 납작해진다. 검은 점선이 그 바닥, 곧 $x_2 = -x_1$인 직선이며 그 위에서는 어디서나 $q = 0$이다. 등고선도 닫히지 않고 평행한 직선이 된다. **공분산행렬이 이 모양이면 자료가 한 직선 위에 갇혀 있다는 뜻이고, $\det = 0$이라 역행렬도 밀도도 존재하지 않는다.**
 
-오른쪽은 부정치다. $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$의 고윳값은 $3$과 $-1$이다. 부호가 엇갈리면 어떤 방향으로는 올라가고($\lambda = 3$의 고유벡터 $(1,1)^T$ 방향) 어떤 방향으로는 내려가($\lambda = -1$의 고유벡터 $(1,-1)^T$ 방향) 곡면이 안장이 된다. 주황으로 칠한 곳이 $q < 0$인 영역이고, 두 검은 점선이 $q = 0$인 두 직선 $x_1 = (-2 \pm \sqrt{3})\,x_2$이다. 등고선은 쌍곡선이라 중심을 에워싸지 못한다. 대각 성분이 모두 양수인데도 양정치가 아닐 수 있다는 연습문제 2의 경고가 이 그림이다.
+오른쪽은 부정치다. $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$의 고윳값은 $3$과 $-1$이다. 부호가 엇갈리면 어떤 방향으로는 올라가고($\lambda = 3$의 고유벡터 $(1,1)^\top$ 방향) 어떤 방향으로는 내려가($\lambda = -1$의 고유벡터 $(1,-1)^\top$ 방향) 곡면이 안장이 된다. 주황으로 칠한 곳이 $q < 0$인 영역이고, 두 검은 점선이 $q = 0$인 두 직선 $x_1 = (-2 \pm \sqrt{3})\,x_2$이다. 등고선은 쌍곡선이라 중심을 에워싸지 못한다. 대각 성분이 모두 양수인데도 양정치가 아닐 수 있다는 연습문제 2의 경고가 이 그림이다.
 
 세 판을 가르는 것은 성분이 아니라 고윳값의 부호다. 선행 주소행렬식도 촐레스키도 결국 이 부호를 다른 방식으로 확인하는 절차이며, 통계에서 "$\boldsymbol{\Sigma} \succ 0$을 요구한다"는 말은 그림의 첫째 판만 허용하겠다는 뜻이다.
 
@@ -111,7 +111,7 @@
 양정치행렬 $\mathbf{A}$의 **촐레스키 분해**는 유일한 인수분해
 
 $$
-\mathbf{A} = \mathbf{L}\mathbf{L}^T
+\mathbf{A} = \mathbf{L}\mathbf{L}^\top
 $$
 
 이며, 여기서 $\mathbf{L}$은 대각 성분이 엄격히 양수인 하삼각행렬이다.
@@ -160,43 +160,43 @@ $\mathbf{A} \succ 0$이고 $\mathbf{B} \succ 0$이면 $\mathbf{A} + \mathbf{B} \
 
 ### 합동변환은 양정치성을 보존한다
 
-$\mathbf{A} \succ 0$이고 $\mathbf{B}$가 $\operatorname{rank}(\mathbf{B}) = m$인 $n \times m$ 행렬이면 $\mathbf{B}^T\mathbf{A}\mathbf{B} \succ 0$이다($\mathbb{R}^{m \times m}$에서).
+$\mathbf{A} \succ 0$이고 $\mathbf{B}$가 $\operatorname{rank}(\mathbf{B}) = m$인 $n \times m$ 행렬이면 $\mathbf{B}^\top\mathbf{A}\mathbf{B} \succ 0$이다($\mathbb{R}^{m \times m}$에서).
 
 ??? proof "증명"
 
-    $\mathbb{R}^m$의 임의의 $\mathbf{y} \neq \mathbf{0}$에 대해 $\mathbf{x} = \mathbf{B}\mathbf{y}$로 두자. $\mathbf{B}$가 완전 열계수를 가지므로 $\mathbf{x} \neq \mathbf{0}$이고, 따라서 $\mathbf{y}^T(\mathbf{B}^T\mathbf{A}\mathbf{B})\mathbf{y} = \mathbf{x}^T\mathbf{A}\mathbf{x} > 0$이다. $\square$
+    $\mathbb{R}^m$의 임의의 $\mathbf{y} \neq \mathbf{0}$에 대해 $\mathbf{x} = \mathbf{B}\mathbf{y}$로 두자. $\mathbf{B}$가 완전 열계수를 가지므로 $\mathbf{x} \neq \mathbf{0}$이고, 따라서 $\mathbf{y}^\top(\mathbf{B}^\top\mathbf{A}\mathbf{B})\mathbf{y} = \mathbf{x}^\top\mathbf{A}\mathbf{x} > 0$이다. $\square$
 
-    이 결과가 $\mathbf{X}$가 완전 열계수를 가질 때 $\mathbf{X}^T\mathbf{X}$가 양정치인 이유를 설명한다. $\mathbf{I}_n \succ 0$을 $\mathbf{X}$로 합동변환한 것이기 때문이다.
+    이 결과가 $\mathbf{X}$가 완전 열계수를 가질 때 $\mathbf{X}^\top\mathbf{X}$가 양정치인 이유를 설명한다. $\mathbf{I}_n \succ 0$을 $\mathbf{X}$로 합동변환한 것이기 때문이다.
 
 ### 슈어 여인수
 
 대칭 양정치행렬을
 
 $$
-\mathbf{M} = \begin{pmatrix} \mathbf{A} & \mathbf{B} \\ \mathbf{B}^T & \mathbf{C} \end{pmatrix} \succ 0
+\mathbf{M} = \begin{pmatrix} \mathbf{A} & \mathbf{B} \\ \mathbf{B}^\top & \mathbf{C} \end{pmatrix} \succ 0
 $$
 
-으로 분할하면 **슈어 여인수** $\mathbf{S} = \mathbf{C} - \mathbf{B}^T\mathbf{A}^{-1}\mathbf{B}$도 양정치다. 슈어 여인수는 다변량 정규분포의 조건부 분산에 등장한다.
+으로 분할하면 **슈어 여인수** $\mathbf{S} = \mathbf{C} - \mathbf{B}^\top\mathbf{A}^{-1}\mathbf{B}$도 양정치다. 슈어 여인수는 다변량 정규분포의 조건부 분산에 등장한다.
 
 ## 통계와의 연결
 
 ### 공분산행렬
 
-공분산행렬 $\boldsymbol{\Sigma} = E[(\mathbf{X} - \boldsymbol{\mu})(\mathbf{X} - \boldsymbol{\mu})^T]$는 언제나 양반정치다. 양정치일 필요충분조건은 $\mathbf{X}$의 어떤 성분도 나머지 성분들의 정확한 선형결합이 아닌 것이다. $\boldsymbol{\Sigma} \succ 0$이면 다변량 정규밀도가 잘 정의된다.
+공분산행렬 $\boldsymbol{\Sigma} = E[(\mathbf{X} - \boldsymbol{\mu})(\mathbf{X} - \boldsymbol{\mu})^\top]$는 언제나 양반정치다. 양정치일 필요충분조건은 $\mathbf{X}$의 어떤 성분도 나머지 성분들의 정확한 선형결합이 아닌 것이다. $\boldsymbol{\Sigma} \succ 0$이면 다변량 정규밀도가 잘 정의된다.
 
 $$
-f(\mathbf{x}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol{\Sigma}|^{1/2}}\exp\!\Bigl(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\Bigr)
+f(\mathbf{x}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol{\Sigma}|^{1/2}}\exp\!\Bigl(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\Bigr)
 $$
 
 $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장하여(밀도가 유한하다) 지수부가 언제나 음수가 되게 한다(밀도가 모든 방향으로 감쇠한다).
 
 ### 최소제곱해의 존재
 
-최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$은 $\mathbf{X}^T\mathbf{X}$가 가역이어야 한다. $\mathbf{X}^T\mathbf{X}$는 언제나 양반정치이므로, 가역(양정치)이 되는 것은 정확히 $\mathbf{X}$가 완전 열계수를 가질 때다.
+최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 $\mathbf{X}^\top\mathbf{X}$가 가역이어야 한다. $\mathbf{X}^\top\mathbf{X}$는 언제나 양반정치이므로, 가역(양정치)이 되는 것은 정확히 $\mathbf{X}$가 완전 열계수를 가질 때다.
 
 ### 마할라노비스 거리
 
-마할라노비스 거리 $d^2 = (\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$은 $\boldsymbol{\Sigma}^{-1}$에 대한 이차형식이고, $\boldsymbol{\Sigma}$가 양정치이면 $\boldsymbol{\Sigma}^{-1}$도 양정치다. 이 덕분에 $d^2 \geq 0$이고 등호는 $\mathbf{x} = \boldsymbol{\mu}$에서만 성립하여, 진짜 거리에 준하는 측도가 된다.
+마할라노비스 거리 $d^2 = (\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$은 $\boldsymbol{\Sigma}^{-1}$에 대한 이차형식이고, $\boldsymbol{\Sigma}$가 양정치이면 $\boldsymbol{\Sigma}^{-1}$도 양정치다. 이 덕분에 $d^2 \geq 0$이고 등호는 $\mathbf{x} = \boldsymbol{\mu}$에서만 성립하여, 진짜 거리에 준하는 측도가 된다.
 
 ## 연습문제
 
@@ -226,20 +226,20 @@ $\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명�
     $\mathbf{e}_i$를 $i$번째 표준기저벡터라 하자($i$번째 자리가 $1$이고 나머지는 $0$). $\mathbf{e}_i \neq \mathbf{0}$이고 $\mathbf{A}$가 양정치이므로
 
     $$
-    \mathbf{e}_i^T \mathbf{A} \mathbf{e}_i > 0
+    \mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i > 0
     $$
 
-    이다. 그런데 $\mathbf{e}_i^T \mathbf{A} \mathbf{e}_i = a_{ii}$이므로 모든 $i$에 대해 $a_{ii} > 0$이다. 역은 성립하지 않음에 유의하라. 대각 성분이 양수라고 양정치성이 보장되지는 않는다(예를 들어 $\begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$은 대각 성분이 양수지만 고윳값이 $3$과 $-1$이다). $\square$
+    이다. 그런데 $\mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i = a_{ii}$이므로 모든 $i$에 대해 $a_{ii} > 0$이다. 역은 성립하지 않음에 유의하라. 대각 성분이 양수라고 양정치성이 보장되지는 않는다(예를 들어 $\begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$은 대각 성분이 양수지만 고윳값이 $3$과 $-1$이다). $\square$
 
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff easy" title="쉬움"></span>
-$\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분해 $\mathbf{A} = \mathbf{L}\mathbf{L}^T$를 구하라.
+$\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분해 $\mathbf{A} = \mathbf{L}\mathbf{L}^\top$를 구하라.
 
 </div>
 
 ??? success "풀이"
-    $\mathbf{L}\mathbf{L}^T = \mathbf{A}$가 되는 하삼각행렬 $\mathbf{L} = \begin{pmatrix} l_{11} & 0 \\ l_{21} & l_{22} \end{pmatrix}$을 찾는다.
+    $\mathbf{L}\mathbf{L}^\top = \mathbf{A}$가 되는 하삼각행렬 $\mathbf{L} = \begin{pmatrix} l_{11} & 0 \\ l_{21} & l_{22} \end{pmatrix}$을 찾는다.
 
     $l_{11}^2 = 4$에서 $l_{11} = 2$.
 
@@ -251,7 +251,7 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
     \mathbf{L} = \begin{pmatrix} 2 & 0 \\ 3 & 2 \end{pmatrix}
     $$
 
-    확인: $\mathbf{L}\mathbf{L}^T = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix} = \mathbf{A}$.
+    확인: $\mathbf{L}\mathbf{L}^\top = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix} = \mathbf{A}$.
 
 <div class="drillbox" markdown>
 
@@ -272,16 +272,16 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-$\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{x}) = (\mathbf{x} - \boldsymbol{\mu})^T\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$이 0일 필요충분조건이 $\mathbf{x} = \boldsymbol{\mu}$임을 증명하라.
+$\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{x}) = (\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$이 0일 필요충분조건이 $\mathbf{x} = \boldsymbol{\mu}$임을 증명하라.
 
 </div>
 
 ??? success "풀이"
     $\boldsymbol{\Sigma}$가 양정치이므로 $\boldsymbol{\Sigma}^{-1}$도 양정치다(그 고윳값이 $1/\lambda_i > 0$이다).
 
-    $\mathbf{z} = \mathbf{x} - \boldsymbol{\mu}$로 두면 $d^2 = \mathbf{z}^T\boldsymbol{\Sigma}^{-1}\mathbf{z}$이다.
+    $\mathbf{z} = \mathbf{x} - \boldsymbol{\mu}$로 두면 $d^2 = \mathbf{z}^\top\boldsymbol{\Sigma}^{-1}\mathbf{z}$이다.
 
-    $\boldsymbol{\Sigma}^{-1}$의 양정치성에 의해 모든 $\mathbf{z}$에 대해 $\mathbf{z}^T\boldsymbol{\Sigma}^{-1}\mathbf{z} \geq 0$이고, 등호는 $\mathbf{z} = \mathbf{0}$일 때에 한해 성립한다.
+    $\boldsymbol{\Sigma}^{-1}$의 양정치성에 의해 모든 $\mathbf{z}$에 대해 $\mathbf{z}^\top\boldsymbol{\Sigma}^{-1}\mathbf{z} \geq 0$이고, 등호는 $\mathbf{z} = \mathbf{0}$일 때에 한해 성립한다.
 
     따라서 $d^2 = 0$일 필요충분조건은 $\mathbf{x} - \boldsymbol{\mu} = \mathbf{0}$, 즉 $\mathbf{x} = \boldsymbol{\mu}$이다. 이는 마할라노비스 거리가 (정치성을 만족하는) 제대로 된 거리에 준하는 측도임을 확인해 준다. $\square$
 
@@ -296,19 +296,19 @@ $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 
     **역행렬.** $\mathbf{A}$가 양정치이면 가역이다. 임의의 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{y} = \mathbf{A}^{-1}\mathbf{x}$로 두면 $\mathbf{y} \neq \mathbf{0}$이고
 
     $$
-    \mathbf{x}^T\mathbf{A}^{-1}\mathbf{x} = (\mathbf{A}\mathbf{y})^T\mathbf{A}^{-1}(\mathbf{A}\mathbf{y}) = \mathbf{y}^T\mathbf{A}\mathbf{y} > 0
+    \mathbf{x}^\top\mathbf{A}^{-1}\mathbf{x} = (\mathbf{A}\mathbf{y})^\top\mathbf{A}^{-1}(\mathbf{A}\mathbf{y}) = \mathbf{y}^\top\mathbf{A}\mathbf{y} > 0
     $$
 
     이다($\mathbf{A}$의 대칭성을 썼다). 고윳값으로 보면 더 분명하다. $\mathbf{A}$의 고윳값이 $\lambda_i > 0$이면 $\mathbf{A}^{-1}$의 고윳값은 $1/\lambda_i > 0$이다.
 
-    **제곱근.** 스펙트럼 분해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T$에서 모든 $\lambda_i > 0$이므로 $\sqrt{\lambda_i}$가 실수로 정의된다.
+    **제곱근.** 스펙트럼 분해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$에서 모든 $\lambda_i > 0$이므로 $\sqrt{\lambda_i}$가 실수로 정의된다.
 
     $$
-    \mathbf{A}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^T,
+    \mathbf{A}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^\top,
     \qquad \boldsymbol{\Lambda}^{1/2} = \operatorname{diag}(\sqrt{\lambda_1}, \dots, \sqrt{\lambda_p})
     $$
 
-    로 두면 $(\mathbf{A}^{1/2})^2 = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^T = \mathbf{A}$이고, $\mathbf{A}^{1/2}$ 자신도 대칭 양정치다.
+    로 두면 $(\mathbf{A}^{1/2})^2 = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top = \mathbf{A}$이고, $\mathbf{A}^{1/2}$ 자신도 대칭 양정치다.
 
     ```python
     import numpy as np
@@ -345,10 +345,10 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
     **합.** 임의의 $\mathbf{x} \neq \mathbf{0}$에 대해
 
     $$
-    \mathbf{x}^T(\mathbf{A}+\mathbf{B})\mathbf{x} = \underbrace{\mathbf{x}^T\mathbf{A}\mathbf{x}}_{>0} + \underbrace{\mathbf{x}^T\mathbf{B}\mathbf{x}}_{>0} > 0
+    \mathbf{x}^\top(\mathbf{A}+\mathbf{B})\mathbf{x} = \underbrace{\mathbf{x}^\top\mathbf{A}\mathbf{x}}_{>0} + \underbrace{\mathbf{x}^\top\mathbf{B}\mathbf{x}}_{>0} > 0
     $$
 
-    이고 $(\mathbf{A}+\mathbf{B})^T = \mathbf{A}+\mathbf{B}$이므로 양정치다. 같은 논법으로 양정치 + 양반정치도 양정치다.
+    이고 $(\mathbf{A}+\mathbf{B})^\top = \mathbf{A}+\mathbf{B}$이므로 양정치다. 같은 논법으로 양정치 + 양반정치도 양정치다.
 
     **곱은 그렇지 않다.** 문제는 $\mathbf{A}\mathbf{B}$가 **대칭이 아닐 수 있다**는 데 있다. 양정치성은 대칭행렬에 대해 정의되므로 곱은 애초에 후보가 되지 못한다.
 
@@ -431,7 +431,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-촐레스키 분해 $\boldsymbol{\Sigma} = \mathbf{L}\mathbf{L}^T$를 이용해 공분산이 $\boldsymbol{\Sigma}$인 확률벡터를 생성하는 방법을 설명하고 수치로 확인하라.
+촐레스키 분해 $\boldsymbol{\Sigma} = \mathbf{L}\mathbf{L}^\top$를 이용해 공분산이 $\boldsymbol{\Sigma}$인 확률벡터를 생성하는 방법을 설명하고 수치로 확인하라.
 
 </div>
 
@@ -439,7 +439,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
     $\mathbf{Z} \sim (\mathbf{0}, \mathbf{I})$이고 $\mathbf{X} = \mathbf{L}\mathbf{Z}$로 두면
 
     $$
-    \operatorname{Var}(\mathbf{X}) = \mathbf{L}\operatorname{Var}(\mathbf{Z})\mathbf{L}^T = \mathbf{L}\mathbf{I}\mathbf{L}^T = \mathbf{L}\mathbf{L}^T = \boldsymbol{\Sigma}
+    \operatorname{Var}(\mathbf{X}) = \mathbf{L}\operatorname{Var}(\mathbf{Z})\mathbf{L}^\top = \mathbf{L}\mathbf{I}\mathbf{L}^\top = \mathbf{L}\mathbf{L}^\top = \boldsymbol{\Sigma}
     $$
 
     이다. 평균을 $\boldsymbol{\mu}$로 옮기려면 $\mathbf{X} = \boldsymbol{\mu} + \mathbf{L}\mathbf{Z}$로 두면 된다.
@@ -483,7 +483,7 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-$\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^T\mathbf{X}$가 특이행렬일 때, $\lambda > 0$에 대해 $\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I}$는 언제나 양정치임을 보여라.
+$\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^\top\mathbf{X}$가 특이행렬일 때, $\lambda > 0$에 대해 $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$는 언제나 양정치임을 보여라.
 
 </div>
 
@@ -491,12 +491,12 @@ $\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^T\mathbf{X}$가 �
     임의의 $\mathbf{v} \neq \mathbf{0}$에 대해
 
     $$
-    \mathbf{v}^T(\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})\mathbf{v}
+    \mathbf{v}^\top(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})\mathbf{v}
     = \underbrace{\lVert\mathbf{X}\mathbf{v}\rVert^2}_{\ge 0} + \lambda\underbrace{\lVert\mathbf{v}\rVert^2}_{>0}
     > 0
     $$
 
-    이다. 첫 항이 0이 되더라도($\mathbf{v} \in \ker(\mathbf{X})$) 둘째 항이 엄격히 양수이므로 전체가 양수다. 고윳값으로 보면 $\mathbf{X}^T\mathbf{X}$의 고윳값 $\lambda_i \ge 0$이 모두 $\lambda_i + \lambda > 0$으로 밀려 올라간다.
+    이다. 첫 항이 0이 되더라도($\mathbf{v} \in \ker(\mathbf{X})$) 둘째 항이 엄격히 양수이므로 전체가 양수다. 고윳값으로 보면 $\mathbf{X}^\top\mathbf{X}$의 고윳값 $\lambda_i \ge 0$이 모두 $\lambda_i + \lambda > 0$으로 밀려 올라간다.
 
     ```python
     import numpy as np
@@ -521,12 +521,12 @@ $\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^T\mathbf{X}$가 �
     lambda=2.0: 최소 고윳값 = 2.000000
     ```
 
-    $\mathbf{X}^T\mathbf{X}$의 최소 고윳값이 0이라 역행렬이 없지만, $\lambda$를 더하면 곧바로 양정치가 되어 역행렬이 존재한다.
+    $\mathbf{X}^\top\mathbf{X}$의 최소 고윳값이 0이라 역행렬이 없지만, $\lambda$를 더하면 곧바로 양정치가 되어 역행렬이 존재한다.
 
     **이것이 능형회귀가 언제나 풀리는 이유다.** 보통최소제곱은 $p > n$이거나 예측변수가 완전히 공선이면 해가 유일하지 않지만,
 
     $$
-    \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}
+    \hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}
     $$
 
     는 임의의 $\lambda > 0$에서 언제나 존재하고 유일하다. 능형회귀가 원래 다중공선성을 다루려고 고안된 것도 이 때문이다(18장). $\square$
@@ -535,4 +535,4 @@ $\mathbf{X}$가 완전 열계수를 갖지 않아 $\mathbf{X}^T\mathbf{X}$가 �
 
 ## 정리하며
 
-양정치성은 이차형식이 엄격히 양수임을 보장하는 행렬의 성질이며, 이는 가역성, 잘 정의된 밀도, 유일한 최소제곱해로 이어진다. 핵심적인 동치 특성화들 — 양의 고윳값, 양의 선행 주소행렬식, 촐레스키 분해의 존재 — 은 서로 다른 계산적·이론적 도구를 제공한다. 통계에서 $\boldsymbol{\Sigma}$의 양정치성이 다변량 정규분포를 떠받치고, $\mathbf{X}^T\mathbf{X}$의 양정치성이 최소제곱추정량의 존재를 보장한다.
+양정치성은 이차형식이 엄격히 양수임을 보장하는 행렬의 성질이며, 이는 가역성, 잘 정의된 밀도, 유일한 최소제곱해로 이어진다. 핵심적인 동치 특성화들 — 양의 고윳값, 양의 선행 주소행렬식, 촐레스키 분해의 존재 — 은 서로 다른 계산적·이론적 도구를 제공한다. 통계에서 $\boldsymbol{\Sigma}$의 양정치성이 다변량 정규분포를 떠받치고, $\mathbf{X}^\top\mathbf{X}$의 양정치성이 최소제곱추정량의 존재를 보장한다.

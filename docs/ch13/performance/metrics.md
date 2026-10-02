@@ -21,7 +21,7 @@ SS_{\text{Residual}} &=& \displaystyle \sum_{i}\left(y_{i}-\hat{y}_{i}\right)^{2
 \end{array}
 $$
 
-절편이 있는 모형을 훈련자료에 적합했다면 $R^2$는 0과 1 사이의 값을 가지며 클수록 적합이 좋다. 그러나 $R^2$는 설명변수를 추가하면 예측력이 나아지지 않아도 항상 커지므로 과대적합으로 이어질 수 있다.
+절편이 있는 모형을 훈련자료에 적합했다면 $R^2$는 0과 1 사이의 값을 가지며 클수록 적합이 좋다. 그러나 $R^2$는 설명변수를 추가하면 예측력이 나아지지 않아도 항상 커지므로 과적합으로 이어질 수 있다.
 
 </div>
 
@@ -173,7 +173,7 @@ $$
     from sklearn import metrics
 
     # 앞 절과 같은 광고 자료를 쓴다.
-    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/master/data/Advertising.csv'
+    url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3, 4])
 
     df['TV:Radio'] = df['TV'] * df['Radio']
@@ -325,7 +325,7 @@ $$
 </div>
 
 ??? success "풀이"
-    훈련 $R^2$(0.95)와 검정 $R^2$(0.60)의 큰 격차는 **과대적합**을 나타낸다. 모형이 훈련자료에만 있는 패턴(잡음 포함)을 학습하여 새 자료에 일반화되지 않는 것이다.
+    훈련 $R^2$(0.95)와 검정 $R^2$(0.60)의 큰 격차는 **과적합**을 나타낸다. 모형이 훈련자료에만 있는 패턴(잡음 포함)을 학습하여 새 자료에 일반화되지 않는 것이다.
 
     대책: (1) 설명변수를 빼거나, 정칙화(릿지/라쏘)를 쓰거나, 다항 차수를 낮추어 **모형 복잡도를 줄인다**. (2) 가능하면 **훈련자료를 늘린다**. (3) 모형 선택 과정에서 **교차검증**을 써서 표본 밖 성능을 더 신뢰성 있게 추정한다.
 

@@ -1,6 +1,6 @@
 # 표본분포 (일반 최소제곱)
 
-앞 절의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성, 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 장에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
+앞 절의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성, 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 장에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
 
 ## 일반 선형모형
 
@@ -28,10 +28,10 @@ $$
 최소제곱추정량은 $\lVert\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\rVert^2$을 최소화한다.
 
 $$
-\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}
 $$
 
-이것은 $\mathbf{y}$의 선형함수다. 행렬 $(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$가 $\mathbf{y}$를 $\hat{\boldsymbol{\beta}}$으로 보낸다.
+이것은 $\mathbf{y}$의 선형함수다. 행렬 $(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 $\mathbf{y}$를 $\hat{\boldsymbol{\beta}}$으로 보낸다.
 
 ## 최소제곱추정량의 표본분포
 
@@ -42,7 +42,7 @@ $$
 정규오차를 갖는 일반 선형모형 아래에서
 
 $$
-\hat{\boldsymbol{\beta}} \sim N\!\left(\boldsymbol{\beta},\; \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\right)
+\hat{\boldsymbol{\beta}} \sim N\!\left(\boldsymbol{\beta},\; \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\right)
 $$
 
 </div>
@@ -50,12 +50,12 @@ $$
 ??? proof "증명"
 
 
-    *선형성:* $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$은 $\mathbf{y}$의 선형변환이다.
+    *선형성:* $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 $\mathbf{y}$의 선형변환이다.
 
     *평균:*
 
     $$
-    E[\hat{\boldsymbol{\beta}}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T E[\mathbf{y}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
+    E[\hat{\boldsymbol{\beta}}] = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top E[\mathbf{y}] = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
     $$
 
     따라서 $\hat{\boldsymbol{\beta}}$은 **불편**이다.
@@ -63,22 +63,22 @@ $$
     *공분산행렬:*
 
     $$
-    \operatorname{Var}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \operatorname{Var}(\mathbf{y})\, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}
+    \operatorname{Var}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top \operatorname{Var}(\mathbf{y})\, \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}
     $$
 
     $$
-    = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T (\sigma^2\mathbf{I}_n)\, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}
+    = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top (\sigma^2\mathbf{I}_n)\, \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}
     $$
 
     *정규성:* 다변량 정규벡터의 선형변환은 다변량 정규분포를 따른다. $\square$
 
-    $j$번째 계수의 분산은 $\operatorname{Var}(\hat{\beta}_j) = \sigma^2[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}$이다.
+    $j$번째 계수의 분산은 $\operatorname{Var}(\hat{\beta}_j) = \sigma^2[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj}$이다.
 
 ## 그림으로 보는 공분산 구조
 
 ![왼쪽과 가운데는 계획행렬의 두 열이 직교할 때와 상관 0.9일 때 두 계수 추정값이 흩어지는 모양과 이론 95% 타원, 오른쪽은 열의 상관이 커질수록 계수의 분산이 부푸는 곡선](./img/beta_covariance_ellipse.png)
 
-단순회귀에서 기울기의 분산은 $\sigma^2/S_{xx}$라는 숫자 하나였다. 다중회귀에서 그 자리에 들어오는 $\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$은 행렬이고, 대각 성분 바깥에 있는 비대각 성분은 단순회귀에 없던 이야기를 한다. **계수들의 추정이 서로 얽히며, 그 얽힘은 자료의 잡음이 아니라 계획행렬의 기하에서 나온다.** 그림은 그 대응을 가능한 한 깨끗한 설정에서 보인다. $n = 40$, 절편과 설명변수 둘. 두 설명변수 열을 절편 열에 직교시키고 길이를 같게 맞춘 뒤 둘 사이의 상관 $\rho$만 조절하면, $\mathbf{X}^T\mathbf{X}$의 해당 $2 \times 2$ 블록은 대각 성분이 $n$이고 비대각 성분이 $n\rho$인 행렬이 되어
+단순회귀에서 기울기의 분산은 $\sigma^2/S_{xx}$라는 숫자 하나였다. 다중회귀에서 그 자리에 들어오는 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$은 행렬이고, 대각 성분 바깥에 있는 비대각 성분은 단순회귀에 없던 이야기를 한다. **계수들의 추정이 서로 얽히며, 그 얽힘은 자료의 잡음이 아니라 계획행렬의 기하에서 나온다.** 그림은 그 대응을 가능한 한 깨끗한 설정에서 보인다. $n = 40$, 절편과 설명변수 둘. 두 설명변수 열을 절편 열에 직교시키고 길이를 같게 맞춘 뒤 둘 사이의 상관 $\rho$만 조절하면, $\mathbf{X}^\top\mathbf{X}$의 해당 $2 \times 2$ 블록은 대각 성분이 $n$이고 비대각 성분이 $n\rho$인 행렬이 되어
 
 $$
 \operatorname{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1 - \rho^2)}, \qquad \operatorname{Corr}(\hat{\beta}_1, \hat{\beta}_2) = -\rho
@@ -86,11 +86,11 @@ $$
 
 를 얻는다. $2 \times 2$ 역행렬이 비대각 성분의 부호를 뒤집는 것이 전부다.
 
-왼쪽 그림은 $\rho = 0$인 경우다. $\mathbf{X}^T\mathbf{X}$가 대각행렬이면 역행렬도 대각행렬이고, 표본분포의 95% 등고선은 원이 된다. $60{,}000$번의 모의실험에서 $\operatorname{Var}(\hat{\beta}_1) = 0.02522$로 이론값 $\sigma^2/n = 0.025$와 맞고, 두 계수 추정량의 상관은 $+0.0052$로 이론값 0과 맞는다. 한 계수를 이번 표본에서 과대추정했다는 사실이 다른 계수에 대해 아무것도 말해 주지 않는 상태다.
+왼쪽 그림은 $\rho = 0$인 경우다. $\mathbf{X}^\top\mathbf{X}$가 대각행렬이면 역행렬도 대각행렬이고, 표본분포의 95% 등고선은 원이 된다. $60{,}000$번의 모의실험에서 $\operatorname{Var}(\hat{\beta}_1) = 0.02522$로 이론값 $\sigma^2/n = 0.025$와 맞고, 두 계수 추정량의 상관은 $+0.0052$로 이론값 0과 맞는다. 한 계수를 이번 표본에서 과대추정했다는 사실이 다른 계수에 대해 아무것도 말해 주지 않는 상태다.
 
 가운데 그림은 $\rho = 0.9$다. 타원이 기울면서 동시에 커진다. 측정된 상관은 $-0.9007$로 이론값 $-\rho = -0.9$와 맞는다. 부호가 음인 것을 읽는 법은 이렇다. 두 열이 거의 같은 방향을 가리키므로 $\beta_1 x_1 + \beta_2 x_2$는 사실상 $(\beta_1 + \beta_2)x_1$에 가깝고, 자료는 합 $\beta_1 + \beta_2$는 잘 집어내지만 $\beta_1$을 올리고 $\beta_2$를 그만큼 내린 조합과 그 반대를 구별하지 못한다. **타원의 긴 축이 바로 그 구별되지 않는 방향이고, 짧은 축은 여전히 잘 결정되는 방향이다.** $\operatorname{Var}(\hat{\beta}_1)$은 $0.13294$로 이론값 $0.13158$과 맞아, 왼쪽보다 다섯 배 넘게 부풀었다.
 
-오른쪽 그림은 그 부풂을 $\rho$의 함수로 그린 것이다. 분산팽창은 정확히 $1/(1 - \rho^2)$이며, $\rho = 0.9$에서 모의값 $5.2552$ 대 이론값 $5.2632$, $\rho = 0.95$에서 $10.1603$ 대 $10.2564$로 맞는다. $\rho \to 1$에서 값이 발산하는 것은 두 열이 완전히 겹치면 $\mathbf{X}^T\mathbf{X}$가 특이행렬이 되어 $(\mathbf{X}^T\mathbf{X})^{-1}$ 자체가 없어지기 때문이다. 모형의 가정에 $\operatorname{rank}(\mathbf{X}) = p$가 들어 있는 이유가 여기 있다. 그림이 덧붙이는 것은 그 가정이 있다와 없다로 갈리는 문제가 아니라 정도의 문제라는 사실이다. 동시에, 두 타원의 중심이 모두 참값 $(2, -1)$에 그대로 있다는 점도 눈여겨볼 만하다. **다중공선성은 추정값을 치우치게 하지 않는다.** $\hat{\boldsymbol{\beta}}$은 여전히 불편이며, 다만 분산이 부풀 뿐이다.
+오른쪽 그림은 그 부풂을 $\rho$의 함수로 그린 것이다. 분산팽창은 정확히 $1/(1 - \rho^2)$이며, $\rho = 0.9$에서 모의값 $5.2552$ 대 이론값 $5.2632$, $\rho = 0.95$에서 $10.1603$ 대 $10.2564$로 맞는다. $\rho \to 1$에서 값이 발산하는 것은 두 열이 완전히 겹치면 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 되어 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 자체가 없어지기 때문이다. 모형의 가정에 $\operatorname{rank}(\mathbf{X}) = p$가 들어 있는 이유가 여기 있다. 그림이 덧붙이는 것은 그 가정이 있다와 없다로 갈리는 문제가 아니라 정도의 문제라는 사실이다. 동시에, 두 타원의 중심이 모두 참값 $(2, -1)$에 그대로 있다는 점도 눈여겨볼 만하다. **다중공선성은 추정값을 치우치게 하지 않는다.** $\hat{\boldsymbol{\beta}}$은 여전히 불편이며, 다만 분산이 부풀 뿐이다.
 
 ## 적합값과 잔차
 
@@ -100,7 +100,7 @@ $$
 \hat{\mathbf{y}} = \mathbf{H}\mathbf{y}, \qquad \mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{M}\mathbf{y}
 $$
 
-이며, 여기서 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$는 모자 행렬이고 $\mathbf{M} = \mathbf{I} - \mathbf{H}$는 잔차생성행렬이다.
+이며, 여기서 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$는 모자 행렬이고 $\mathbf{M} = \mathbf{I} - \mathbf{H}$는 잔차생성행렬이다.
 
 이들의 분포는 다음과 같다.
 
@@ -123,7 +123,7 @@ $\mathbf{M}\mathbf{X} = \mathbf{0}$이므로 $\mathbf{e}$의 평균은 $\boldsym
 잔차제곱합
 
 $$
-\text{SSE} = \mathbf{e}^T\mathbf{e} = \mathbf{y}^T\mathbf{M}\mathbf{y}
+\text{SSE} = \mathbf{e}^\top\mathbf{e} = \mathbf{y}^\top\mathbf{M}\mathbf{y}
 $$
 
 은
@@ -141,10 +141,10 @@ $$
     $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$으로 쓰자. $\mathbf{M}\mathbf{X} = \mathbf{0}$이므로
 
     $$
-    \text{SSE} = \boldsymbol{\varepsilon}^T\mathbf{M}\boldsymbol{\varepsilon}
+    \text{SSE} = \boldsymbol{\varepsilon}^\top\mathbf{M}\boldsymbol{\varepsilon}
     $$
 
-    이다. $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\text{SSE}/\sigma^2 = \mathbf{z}^T\mathbf{M}\mathbf{z}$이다. $\mathbf{M}$이 $\operatorname{rank}(\mathbf{M}) = n - p$인 대칭 멱등행렬이므로 기본 카이제곱 정리에 의해 $\mathbf{z}^T\mathbf{M}\mathbf{z} \sim \chi^2_{n-p}$이다. $\square$
+    이다. $\mathbf{z} = \boldsymbol{\varepsilon}/\sigma \sim N(\mathbf{0}, \mathbf{I}_n)$으로 두면 $\text{SSE}/\sigma^2 = \mathbf{z}^\top\mathbf{M}\mathbf{z}$이다. $\mathbf{M}$이 $\operatorname{rank}(\mathbf{M}) = n - p$인 대칭 멱등행렬이므로 기본 카이제곱 정리에 의해 $\mathbf{z}^\top\mathbf{M}\mathbf{z} \sim \chi^2_{n-p}$이다. $\square$
 
     따라서 $\sigma^2$의 불편추정량은
 
@@ -152,7 +152,7 @@ $$
     s^2 = \frac{\text{SSE}}{n - p}
     $$
 
-    이다. **왜 분모가 $n-p$인지**는 카이제곱을 거치지 않고도 보인다. $\mathbb{E}[\mathbf{z}^T\mathbf{M}\mathbf{z}] = \operatorname{tr}(\mathbf{M})$이므로
+    이다. **왜 분모가 $n-p$인지**는 카이제곱을 거치지 않고도 보인다. $\mathbb{E}[\mathbf{z}^\top\mathbf{M}\mathbf{z}] = \operatorname{tr}(\mathbf{M})$이므로
 
     $$
     \mathbb{E}[\text{SSE}] = \sigma^2\operatorname{tr}(\mathbf{M}) = \sigma^2(n - p)
@@ -172,13 +172,13 @@ $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$는 독립이다.
 
 ??? proof "증명"
 
-    $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$이 $\mathbf{y}$의 선형함수이고 $\text{SSE} = \mathbf{y}^T\mathbf{M}\mathbf{y}$이 이차형식이므로, 선형 부분과 이차 부분이 서로 직교하는 사영에 관여한다는 사실에서 독립성이 따라온다. 형식적으로는
+    $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$이 $\mathbf{y}$의 선형함수이고 $\text{SSE} = \mathbf{y}^\top\mathbf{M}\mathbf{y}$이 이차형식이므로, 선형 부분과 이차 부분이 서로 직교하는 사영에 관여한다는 사실에서 독립성이 따라온다. 형식적으로는
 
     $$
-    \operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\operatorname{Var}(\mathbf{y})\mathbf{M} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{M} = \mathbf{0}
+    \operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\operatorname{Var}(\mathbf{y})\mathbf{M} = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{M} = \mathbf{0}
     $$
 
-    인데, $\mathbf{X}^T\mathbf{M} = \mathbf{X}^T(\mathbf{I} - \mathbf{H}) = \mathbf{X}^T - \mathbf{X}^T = \mathbf{0}$이기 때문이다. $\hat{\boldsymbol{\beta}}$과 $\mathbf{e}$는 같은 정규벡터 $\mathbf{y}$의 선형변환이라 결합정규이고, 결합 정규성 아래에서 공분산이 0이면 독립이다. 끝으로 $\text{SSE} = \mathbf{e}^T\mathbf{e}$이 $\mathbf{e}$만의 함수이므로 $\text{SSE}$도 $\hat{\boldsymbol{\beta}}$과 독립이다. $\square$
+    인데, $\mathbf{X}^\top\mathbf{M} = \mathbf{X}^\top(\mathbf{I} - \mathbf{H}) = \mathbf{X}^\top - \mathbf{X}^\top = \mathbf{0}$이기 때문이다. $\hat{\boldsymbol{\beta}}$과 $\mathbf{e}$는 같은 정규벡터 $\mathbf{y}$의 선형변환이라 결합정규이고, 결합 정규성 아래에서 공분산이 0이면 독립이다. 끝으로 $\text{SSE} = \mathbf{e}^\top\mathbf{e}$이 $\mathbf{e}$만의 함수이므로 $\text{SSE}$도 $\hat{\boldsymbol{\beta}}$과 독립이다. $\square$
 
     **무상관에서 독립으로 넘어가는 데 정규성이 쓰인다.** 가우스–마르코프 가정만으로는 $\operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = \mathbf{O}$까지만 얻고 독립성은 얻지 못한다. 그래서 정리 6(가우스–마르코프)은 정규성 없이 성립하지만 정리 4와 정리 5의 $t$·$F$ 분포는 그렇지 않다.
 
@@ -190,28 +190,28 @@ $\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포, �
 
 ### 정리 4. 계수 검정을 위한 t-분포 { .thm }
 
-$\boldsymbol{\beta} = (\beta_0, \beta_1, \dots, \beta_{p-1})^T$의 각 성분 $j = 0, 1, \dots, p-1$에 대해
+$\boldsymbol{\beta} = (\beta_0, \beta_1, \dots, \beta_{p-1})^\top$의 각 성분 $j = 0, 1, \dots, p-1$에 대해
 
 $$
 T_j = \frac{\hat{\beta}_j - \beta_j}{\text{SE}(\hat{\beta}_j)} \sim t_{n-p}
 $$
 
-이며, 여기서 $\text{SE}(\hat{\beta}_j) = s\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}$은 $\beta_j$에 대응하는 대각 성분으로 만든 표준오차다.
+이며, 여기서 $\text{SE}(\hat{\beta}_j) = s\sqrt{[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj}}$은 $\beta_j$에 대응하는 대각 성분으로 만든 표준오차다.
 
 </div>
 
 ??? proof "증명"
 
-    정리 1에서 $\hat{\beta}_j \sim N(\beta_j, \sigma^2[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj})$이므로 표준화하면
+    정리 1에서 $\hat{\beta}_j \sim N(\beta_j, \sigma^2[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj})$이므로 표준화하면
 
     $$
-    Z = \frac{\hat{\beta}_j - \beta_j}{\sigma\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}} \sim N(0,1)
+    Z = \frac{\hat{\beta}_j - \beta_j}{\sigma\sqrt{[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj}}} \sim N(0,1)
     $$
 
     이다. 정리 2에서 $V = \text{SSE}/\sigma^2 \sim \chi^2_{n-p}$이고 정리 3에서 $Z$와 $V$는 독립이다. 그런데 $s = \sigma\sqrt{V/(n-p)}$이므로
 
     $$
-    T_j = \frac{\hat{\beta}_j - \beta_j}{s\sqrt{[(\mathbf{X}^T\mathbf{X})^{-1}]_{jj}}} = \frac{Z}{\sqrt{V/(n-p)}}
+    T_j = \frac{\hat{\beta}_j - \beta_j}{s\sqrt{[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj}}} = \frac{Z}{\sqrt{V/(n-p)}}
     $$
 
     이고, 이것이 $t_{n-p}$ 분포의 정의다. $\square$
@@ -229,19 +229,19 @@ $$
 $H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$ 아래에서
 
 $$
-F = \frac{(\mathbf{C}\hat{\boldsymbol{\beta}})^T[\mathbf{C}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{C}^T]^{-1}(\mathbf{C}\hat{\boldsymbol{\beta}})/q}{s^2} \sim F_{q,\,n-p}
+F = \frac{(\mathbf{C}\hat{\boldsymbol{\beta}})^\top[\mathbf{C}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{C}^\top]^{-1}(\mathbf{C}\hat{\boldsymbol{\beta}})/q}{s^2} \sim F_{q,\,n-p}
 $$
 
 </div>
 
 ??? proof "증명"
 
-    $\mathbf{C}$의 계수가 $q$이고 $(\mathbf{X}^T\mathbf{X})^{-1}$이 양정치이므로 $\boldsymbol{\Omega} = \mathbf{C}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{C}^T$는 $q \times q$ 양정치행렬이고 따라서 가역이다. 정리 1에서 $\mathbf{C}\hat{\boldsymbol{\beta}} \sim N(\mathbf{C}\boldsymbol{\beta}, \sigma^2\boldsymbol{\Omega})$이므로 $H_0$ 아래에서 $\mathbf{C}\hat{\boldsymbol{\beta}} \sim N(\mathbf{0}, \sigma^2\boldsymbol{\Omega})$이다.
+    $\mathbf{C}$의 계수가 $q$이고 $(\mathbf{X}^\top\mathbf{X})^{-1}$이 양정치이므로 $\boldsymbol{\Omega} = \mathbf{C}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{C}^\top$는 $q \times q$ 양정치행렬이고 따라서 가역이다. 정리 1에서 $\mathbf{C}\hat{\boldsymbol{\beta}} \sim N(\mathbf{C}\boldsymbol{\beta}, \sigma^2\boldsymbol{\Omega})$이므로 $H_0$ 아래에서 $\mathbf{C}\hat{\boldsymbol{\beta}} \sim N(\mathbf{0}, \sigma^2\boldsymbol{\Omega})$이다.
 
     분자의 이차형식은 마할라노비스 꼴이다. $\mathbf{u} = \boldsymbol{\Omega}^{-1/2}\mathbf{C}\hat{\boldsymbol{\beta}}/\sigma \sim N(\mathbf{0}, \mathbf{I}_q)$로 백색화하면
 
     $$
-    \frac{(\mathbf{C}\hat{\boldsymbol{\beta}})^T\boldsymbol{\Omega}^{-1}(\mathbf{C}\hat{\boldsymbol{\beta}})}{\sigma^2} = \mathbf{u}^T\mathbf{u} \sim \chi^2_q
+    \frac{(\mathbf{C}\hat{\boldsymbol{\beta}})^\top\boldsymbol{\Omega}^{-1}(\mathbf{C}\hat{\boldsymbol{\beta}})}{\sigma^2} = \mathbf{u}^\top\mathbf{u} \sim \chi^2_q
     $$
 
     이다([카이제곱분포와 이차형식](./chi_squared_quadratic.md) 쪽 연습문제 9와 같은 계산이다).
@@ -262,7 +262,7 @@ $$
 F = \frac{\text{SSR}/(p - 1)}{\text{SSE}/(n - p)} = \frac{\text{MSR}}{\text{MSE}}
 $$
 
-여기서 $\text{SSR} = \hat{\mathbf{y}}^T\hat{\mathbf{y}} - n\bar{Y}^2$이 회귀제곱합이다. $H_0$ 아래에서 $F \sim F_{p-1,\,n-p}$이다.
+여기서 $\text{SSR} = \hat{\mathbf{y}}^\top\hat{\mathbf{y}} - n\bar{Y}^2$이 회귀제곱합이다. $H_0$ 아래에서 $F \sim F_{p-1,\,n-p}$이다.
 
 사영의 언어로는 $\text{SSR} = \lVert(\mathbf{H} - \tfrac{1}{n}\mathbf{J})\mathbf{y}\rVert^2$이다. 절편만 있는 모형의 사영 $\tfrac{1}{n}\mathbf{J}$를 $\mathbf{H}$에서 걷어낸 것이 계수 $p-1$인 직교사영이기 때문에 자유도가 $p$가 아니라 $p-1$이다.
 
@@ -280,21 +280,21 @@ $$
 
 ??? proof "증명"
 
-    $\tilde{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}$을 임의의 선형불편추정량이라 하자. 여기서 $\mathbf{A}$는 $\mathbf{y}$에 의존하지 않는 $p \times n$ 행렬이다. 불편성이 **모든** $\boldsymbol{\beta}$에 대해 성립해야 하므로 $\mathbf{A}\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}$에서 $\mathbf{A}\mathbf{X} = \mathbf{I}_p$를 요구한다. $\mathbf{D} = \mathbf{A} - (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$로 두면 $\mathbf{D}\mathbf{X} = \mathbf{I}_p - \mathbf{I}_p = \mathbf{O}$이다.
+    $\tilde{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}$을 임의의 선형불편추정량이라 하자. 여기서 $\mathbf{A}$는 $\mathbf{y}$에 의존하지 않는 $p \times n$ 행렬이다. 불편성이 **모든** $\boldsymbol{\beta}$에 대해 성립해야 하므로 $\mathbf{A}\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}$에서 $\mathbf{A}\mathbf{X} = \mathbf{I}_p$를 요구한다. $\mathbf{D} = \mathbf{A} - (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$로 두면 $\mathbf{D}\mathbf{X} = \mathbf{I}_p - \mathbf{I}_p = \mathbf{O}$이다.
 
-    $\operatorname{Var}(\mathbf{y}) = \sigma^2\mathbf{I}$이므로 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{A}\mathbf{A}^T$인데, 교차항이 $\mathbf{D}\mathbf{X} = \mathbf{O}$ 때문에 사라진다.
+    $\operatorname{Var}(\mathbf{y}) = \sigma^2\mathbf{I}$이므로 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{A}\mathbf{A}^\top$인데, 교차항이 $\mathbf{D}\mathbf{X} = \mathbf{O}$ 때문에 사라진다.
 
     $$
-    (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{D}^T = (\mathbf{X}^T\mathbf{X})^{-1}(\mathbf{D}\mathbf{X})^T = \mathbf{O}
+    (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{D}^\top = (\mathbf{X}^\top\mathbf{X})^{-1}(\mathbf{D}\mathbf{X})^\top = \mathbf{O}
     $$
 
     따라서
 
     $$
-    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{A}\mathbf{A}^T = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1} + \sigma^2\mathbf{D}\mathbf{D}^T
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{A}\mathbf{A}^\top = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1} + \sigma^2\mathbf{D}\mathbf{D}^\top
     $$
 
-    이다. $\mathbf{D}\mathbf{D}^T \succeq 0$이므로 양반정치 순서에서 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) \succeq \operatorname{Var}(\hat{\boldsymbol{\beta}})$이고, 등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다. 연습문제 6에서 같은 계산을 다시 밟는다. $\square$
+    이다. $\mathbf{D}\mathbf{D}^\top \succeq 0$이므로 양반정치 순서에서 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) \succeq \operatorname{Var}(\hat{\boldsymbol{\beta}})$이고, 등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다. 연습문제 6에서 같은 계산을 다시 밟는다. $\square$
 
     **가정에서 무엇이 빠졌는지 보라.** 정규성은 쓰지 않았고 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$만 썼다. 반면 등분산 $\sigma^2\mathbf{I}$는 반드시 쓴다. 이것이 깨지면 최소제곱은 여전히 불편이지만 더 이상 최량이 아니다(연습문제 10).
 
@@ -302,13 +302,13 @@ $$
 
 | 양 | 분포 | 자유도 |
 |---|---|---|
-| $\hat{\boldsymbol{\beta}}$ | $N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1})$ | — |
+| $\hat{\boldsymbol{\beta}}$ | $N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1})$ | — |
 | $\text{SSE}/\sigma^2$ | $\chi^2_{n-p}$ | $n - p$ |
 | $T_j = (\hat{\beta}_j - \beta_j)/\text{SE}(\hat{\beta}_j)$ | $t_{n-p}$ | $n - p$ |
 | 선형가설 $\mathbf{C}\boldsymbol{\beta} = \mathbf{0}$의 $F$ (정리 5) | $F_{q,\,n-p}$ | $q$와 $n-p$ |
 | 전체 F-검정 $F = \text{MSR}/\text{MSE}$ | $F_{p-1,\,n-p}$ | $p-1$과 $n-p$ |
 
-이 모든 분포는 세 가지 재료에 의존한다. (1) $\hat{\boldsymbol{\beta}}$이 정규벡터 $\mathbf{y}$의 선형함수이고, (2) $\mathbf{M}$이 대칭 멱등이며, (3) $\mathbf{X}^T\mathbf{M} = \mathbf{0}$이므로 $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$가 독립이라는 것이다.
+이 모든 분포는 세 가지 재료에 의존한다. (1) $\hat{\boldsymbol{\beta}}$이 정규벡터 $\mathbf{y}$의 선형함수이고, (2) $\mathbf{M}$이 대칭 멱등이며, (3) $\mathbf{X}^\top\mathbf{M} = \mathbf{0}$이므로 $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$가 독립이라는 것이다.
 
 ## 연습문제
 
@@ -333,7 +333,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-$\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$일 때 최소제곱 잔차벡터 $\mathbf{e} = \mathbf{M}\mathbf{y}$이 $\mathbf{X}^T\mathbf{e} = \mathbf{0}$을 만족함을 증명하라.
+$\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$일 때 최소제곱 잔차벡터 $\mathbf{e} = \mathbf{M}\mathbf{y}$이 $\mathbf{X}^\top\mathbf{e} = \mathbf{0}$을 만족함을 증명하라.
 
 </div>
 
@@ -341,11 +341,11 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
     직접 계산한다.
 
     $$
-    \mathbf{X}^T\mathbf{e} = \mathbf{X}^T\mathbf{M}\mathbf{y} = \mathbf{X}^T\bigl(\mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\bigr)\mathbf{y}
+    \mathbf{X}^\top\mathbf{e} = \mathbf{X}^\top\mathbf{M}\mathbf{y} = \mathbf{X}^\top\bigl(\mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\bigr)\mathbf{y}
     $$
 
     $$
-    = \mathbf{X}^T\mathbf{y} - \mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y} = \mathbf{X}^T\mathbf{y} - \mathbf{X}^T\mathbf{y} = \mathbf{0}
+    = \mathbf{X}^\top\mathbf{y} - \mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \mathbf{X}^\top\mathbf{y} - \mathbf{X}^\top\mathbf{y} = \mathbf{0}
     $$
 
     이는 잔차가 $\mathbf{X}$의 모든 열에 직교함을 보여주며, 이것이 정규방정식의 행렬 형태다. $\square$
@@ -369,7 +369,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
     **정리 5의 꼴과 같다.** 두 계획행렬을 $\mathbf{X}_R$, $\mathbf{X}_U$라 하고 각각의 모자 행렬을 $\mathbf{H}_R$, $\mathbf{H}_U$라 하면 $\operatorname{col}(\mathbf{X}_R) \subseteq \operatorname{col}(\mathbf{X}_U)$이므로 [직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽 연습문제 7에 의해 $\mathbf{H}_U - \mathbf{H}_R$이 계수 $q = 2$인 직교사영이고 $(\mathbf{H}_U - \mathbf{H}_R)(\mathbf{I} - \mathbf{H}_U) = \mathbf{O}$이다. 그런데
 
     $$
-    \text{SSE}_R - \text{SSE}_U = \mathbf{y}^T(\mathbf{I} - \mathbf{H}_R)\mathbf{y} - \mathbf{y}^T(\mathbf{I} - \mathbf{H}_U)\mathbf{y} = \mathbf{y}^T(\mathbf{H}_U - \mathbf{H}_R)\mathbf{y}
+    \text{SSE}_R - \text{SSE}_U = \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_R)\mathbf{y} - \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_U)\mathbf{y} = \mathbf{y}^\top(\mathbf{H}_U - \mathbf{H}_R)\mathbf{y}
     $$
 
     이므로 분자와 분모가 서로 직교하는 두 사영의 이차형식이고, 크레이그 정리로 독립인 두 카이제곱의 비가 된다. 곧 위 식은 정리 5를 제곱합의 차이로 다시 쓴 것일 뿐이다.
@@ -377,7 +377,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-(정규성 없이) 가우스–마르코프 가정 아래에서 $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$임을 보여라. (힌트: $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$에 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 대입하라.)
+(정규성 없이) 가우스–마르코프 가정 아래에서 $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$임을 보여라. (힌트: $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$에 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 대입하라.)
 
 </div>
 
@@ -385,19 +385,19 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
     $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$을 대입하면
 
     $$
-    \hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}) = \boldsymbol{\beta} + (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\boldsymbol{\varepsilon}
+    \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}) = \boldsymbol{\beta} + (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{\varepsilon}
     $$
 
-    이다. $\hat{\boldsymbol{\beta}} - \boldsymbol{\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\boldsymbol{\varepsilon}$이므로 ($\mathbf{X}$를 고정된 것으로 다루면)
+    이다. $\hat{\boldsymbol{\beta}} - \boldsymbol{\beta} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{\varepsilon}$이므로 ($\mathbf{X}$를 고정된 것으로 다루면)
 
     $$
-    \operatorname{Var}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T \operatorname{Var}(\boldsymbol{\varepsilon})\, \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}
+    \operatorname{Var}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top \operatorname{Var}(\boldsymbol{\varepsilon})\, \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}
     $$
 
     이다. $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$이면
 
     $$
-    = \sigma^2 (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}
+    = \sigma^2 (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}
     $$
 
     이다. 정규성 가정은 전혀 필요하지 않았고 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$만 썼다. $\square$
@@ -410,7 +410,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
 </div>
 
 ??? success "풀이"
-    핵심적인 기하적 성질은 모자 행렬 $\mathbf{H}$와 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$가 서로 직교하는 부분공간 위로 사영한다는 점이다. 구체적으로 $\hat{\boldsymbol{\beta}}$은 $\mathbf{y}$에 오직 $\mathbf{H}\mathbf{y}$($\mathbf{X}$의 열공간 위로의 사영)를 통해서만 의존하고, $\text{SSE} = \mathbf{y}^T\mathbf{M}\mathbf{y}$은 오직 $\mathbf{M}\mathbf{y}$(직교여공간 위로의 사영)를 통해서만 의존한다.
+    핵심적인 기하적 성질은 모자 행렬 $\mathbf{H}$와 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$가 서로 직교하는 부분공간 위로 사영한다는 점이다. 구체적으로 $\hat{\boldsymbol{\beta}}$은 $\mathbf{y}$에 오직 $\mathbf{H}\mathbf{y}$($\mathbf{X}$의 열공간 위로의 사영)를 통해서만 의존하고, $\text{SSE} = \mathbf{y}^\top\mathbf{M}\mathbf{y}$은 오직 $\mathbf{M}\mathbf{y}$(직교여공간 위로의 사영)를 통해서만 의존한다.
 
     $\mathbf{H}\mathbf{M} = \mathbf{0}$이므로 벡터 $\mathbf{H}\mathbf{y}$와 $\mathbf{M}\mathbf{y}$는 무상관이다. 정규성 가정 아래에서 무상관인 정규확률벡터는 독립이다. 이 직교 분해가 t-통계량과 F-통계량이 앞서 진술한 분포를 갖는 기하적 이유다.
 
@@ -422,7 +422,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
 </div>
 
 ??? success "풀이"
-    $\mathbf{C} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T + \mathbf{D}$로 쓰자. 불편성은 모든 $\boldsymbol{\beta}$에 대해
+    $\mathbf{C} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top + \mathbf{D}$로 쓰자. 불편성은 모든 $\boldsymbol{\beta}$에 대해
 
     $$
     E[\tilde{\boldsymbol{\beta}}] = \mathbf{C}\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
@@ -433,23 +433,23 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
     을 요구한다. 분산은
 
     $$
-    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{C}\mathbf{C}^T
-    = \sigma^2\left[(\mathbf{X}^T\mathbf{X})^{-1} + \mathbf{D}\mathbf{D}^T\right]
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{C}\mathbf{C}^\top
+    = \sigma^2\left[(\mathbf{X}^\top\mathbf{X})^{-1} + \mathbf{D}\mathbf{D}^\top\right]
     $$
 
     이다. 교차항이 사라지는 것이 핵심인데, $\mathbf{D}\mathbf{X} = \mathbf{O}$이므로
 
     $$
-    (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{D}^T = (\mathbf{X}^T\mathbf{X})^{-1}(\mathbf{D}\mathbf{X})^T = \mathbf{O}
+    (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{D}^\top = (\mathbf{X}^\top\mathbf{X})^{-1}(\mathbf{D}\mathbf{X})^\top = \mathbf{O}
     $$
 
     이기 때문이다. 따라서
 
     $$
-    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{D}\mathbf{D}^T \succeq 0
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{D}\mathbf{D}^\top \succeq 0
     $$
 
-    이다. 특히 임의의 $\mathbf{c}$에 대해 $\operatorname{Var}(\mathbf{c}^T\tilde{\boldsymbol{\beta}}) \ge \operatorname{Var}(\mathbf{c}^T\hat{\boldsymbol{\beta}})$이므로 최소제곱추정량이 **최량선형불편추정량(BLUE)**이다.
+    이다. 특히 임의의 $\mathbf{c}$에 대해 $\operatorname{Var}(\mathbf{c}^\top\tilde{\boldsymbol{\beta}}) \ge \operatorname{Var}(\mathbf{c}^\top\hat{\boldsymbol{\beta}})$이므로 최소제곱추정량이 **최량선형불편추정량(BLUE)**이다.
 
     등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다.
 
@@ -458,7 +458,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$�
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
-$\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1})$을 모의실험으로 확인하라. 공분산행렬 전체를 이론값과 비교하라.
+$\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1})$을 모의실험으로 확인하라. 공분산행렬 전체를 이론값과 비교하라.
 
 </div>
 
@@ -503,16 +503,16 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathb
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-새로운 점 $\mathbf{x}_0$에서 평균반응의 분산이 $\sigma^2\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0$임을 보이고 수치로 확인하라. 예측구간과 신뢰구간의 차이는 무엇인가?
+새로운 점 $\mathbf{x}_0$에서 평균반응의 분산이 $\sigma^2\mathbf{x}_0^\top(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{x}_0$임을 보이고 수치로 확인하라. 예측구간과 신뢰구간의 차이는 무엇인가?
 
 </div>
 
 ??? success "풀이"
-    $\hat{\mu}_0 = \mathbf{x}_0^T\hat{\boldsymbol{\beta}}$이므로
+    $\hat{\mu}_0 = \mathbf{x}_0^\top\hat{\boldsymbol{\beta}}$이므로
 
     $$
-    \operatorname{Var}(\hat{\mu}_0) = \mathbf{x}_0^T\operatorname{Var}(\hat{\boldsymbol{\beta}})\mathbf{x}_0
-    = \sigma^2\mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0
+    \operatorname{Var}(\hat{\mu}_0) = \mathbf{x}_0^\top\operatorname{Var}(\hat{\boldsymbol{\beta}})\mathbf{x}_0
+    = \sigma^2\mathbf{x}_0^\top(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{x}_0
     $$
 
     이다.
@@ -542,10 +542,10 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathb
     새 관측 예측오차 분산 이론 4.37503
     ```
 
-    **두 구간의 차이.** 신뢰구간은 $\hat{\mu}_0$이 참 평균 $\mathbf{x}_0^T\boldsymbol{\beta}$를 얼마나 정확히 맞추는지를 말하고, 예측구간은 새 관측값 $y_0$ 자체가 어디에 떨어질지를 말한다. 후자는 오차항 $\varepsilon_0$의 변동이 더해져
+    **두 구간의 차이.** 신뢰구간은 $\hat{\mu}_0$이 참 평균 $\mathbf{x}_0^\top\boldsymbol{\beta}$를 얼마나 정확히 맞추는지를 말하고, 예측구간은 새 관측값 $y_0$ 자체가 어디에 떨어질지를 말한다. 후자는 오차항 $\varepsilon_0$의 변동이 더해져
 
     $$
-    \operatorname{Var}(y_0 - \hat{\mu}_0) = \sigma^2\left(1 + \mathbf{x}_0^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{x}_0\right)
+    \operatorname{Var}(y_0 - \hat{\mu}_0) = \sigma^2\left(1 + \mathbf{x}_0^\top(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{x}_0\right)
     $$
 
     이 된다. 자료를 아무리 모아도 괄호 안의 $1$은 사라지지 않는다. $\square$
@@ -604,14 +604,14 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^T\mathb
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-$\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} \neq \mathbf{I}$)이면 최소제곱은 여전히 불편이지만 최량이 아니다. 일반화최소제곱 $\hat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}^T\mathbf{V}^{-1}\mathbf{X})^{-1}\mathbf{X}^T\mathbf{V}^{-1}\mathbf{y}$와 비교하라.
+$\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} \neq \mathbf{I}$)이면 최소제곱은 여전히 불편이지만 최량이 아니다. 일반화최소제곱 $\hat{\boldsymbol{\beta}}_{\text{GLS}} = (\mathbf{X}^\top\mathbf{V}^{-1}\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{V}^{-1}\mathbf{y}$와 비교하라.
 
 </div>
 
 ??? success "풀이"
-    **불편성은 유지된다.** $E[\hat{\boldsymbol{\beta}}] = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}$는 오차의 공분산 구조와 무관하다.
+    **불편성은 유지된다.** $E[\hat{\boldsymbol{\beta}}] = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}$는 오차의 공분산 구조와 무관하다.
 
-    **효율은 잃는다.** 분산이 $\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{V}\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}$이 되어 GLS의 $\sigma^2(\mathbf{X}^T\mathbf{V}^{-1}\mathbf{X})^{-1}$보다 크다.
+    **효율은 잃는다.** 분산이 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{V}\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}$이 되어 GLS의 $\sigma^2(\mathbf{X}^\top\mathbf{V}^{-1}\mathbf{X})^{-1}$보다 크다.
 
     ```python
     import numpy as np
@@ -652,4 +652,4 @@ $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} 
 
 ## 정리하며
 
-최소제곱의 행렬 정식화는 단순회귀의 표본분포 이론을 하나의 통합된 틀로 압축한다. 추정량 $\hat{\boldsymbol{\beta}}$은 공분산이 $\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$인 다변량 정규분포를 따르고, 잔차제곱합 $\text{SSE}/\sigma^2$은 자유도 $n - p$인 카이제곱을 따르며, 이 둘은 독립이다. 최소제곱의 직교사영 구조와 오차의 정규성에서 따라오는 이 세 사실이 개별 계수에 대한 모든 표준 t-검정과 계수 집합에 대한 F-검정을 만들어낸다. 나아가 가우스–마르코프 정리는 정규성 가정이 없어도 최소제곱이 선형불편추정량 가운데 최적임을 보여준다.
+최소제곱의 행렬 정식화는 단순회귀의 표본분포 이론을 하나의 통합된 틀로 압축한다. 추정량 $\hat{\boldsymbol{\beta}}$은 공분산이 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$인 다변량 정규분포를 따르고, 잔차제곱합 $\text{SSE}/\sigma^2$은 자유도 $n - p$인 카이제곱을 따르며, 이 둘은 독립이다. 최소제곱의 직교사영 구조와 오차의 정규성에서 따라오는 이 세 사실이 개별 계수에 대한 모든 표준 t-검정과 계수 집합에 대한 F-검정을 만들어낸다. 나아가 가우스–마르코프 정리는 정규성 가정이 없어도 최소제곱이 선형불편추정량 가운데 최적임을 보여준다.

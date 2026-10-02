@@ -73,7 +73,7 @@ $$
     from statsmodels.stats.anova import anova_lm
 
     url = ('https://raw.githubusercontent.com/vincentarelbundock/'
-           'Rdatasets/master/csv/datasets/ToothGrowth.csv')
+           'Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv')
     df = pd.read_csv(url, usecols=[1, 2, 3])
 
     model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()

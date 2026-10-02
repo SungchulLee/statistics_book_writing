@@ -69,6 +69,9 @@
     import numpy as np
     import pandas as pd
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     # 어떤 공정에서 한 달간 기록된 불량 유형별 건수
     defects = pd.Series({'긁힘': 112, '찌그러짐': 63, '정렬 불량': 41,
                          '변색': 18, '균열': 11, '기타': 7})
@@ -319,6 +322,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     labels = ["결제 오류", "배송 지연", "상품 불량", "회원가입 문제", "환불 요청", "기타"]
     counts = np.array([340, 210, 95, 60, 45, 30], float)

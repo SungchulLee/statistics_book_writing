@@ -606,7 +606,7 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 
     델타 방법에 의해 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = S^2$에 대해:
 
-    $$\text{Var}(\widehat{\text{SR}}) \approx \nabla g^T \Sigma \nabla g$$
+    $$\text{Var}(\widehat{\text{SR}}) \approx \nabla g^\top \Sigma \nabla g$$
 
     여기서 $\Sigma = \text{Cov}(\hat{\mu}, \hat{\sigma}^2)$이다. 정규 자료에서는 $\hat{\mu}$과 $\hat{\sigma}^2$이 독립이므로 $\Sigma$가 대각행렬이다:
 

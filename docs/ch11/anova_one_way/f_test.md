@@ -200,7 +200,7 @@ $$
             df1 (int): Degrees of freedom between groups.
             df2 (int): Degrees of freedom within groups.
         """
-        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
         df = pd.read_csv(url, usecols=[1, 2])
         group_data = df.groupby('group')
         data_ctrl = group_data.get_group('ctrl').weight
@@ -403,7 +403,7 @@ $$
         """
         Load and preprocess plant growth data for ANOVA.
         """
-        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
         df = pd.read_csv(url, usecols=[1, 2])
         group_data = df.groupby('group')
         data_ctrl = group_data.get_group('ctrl').weight

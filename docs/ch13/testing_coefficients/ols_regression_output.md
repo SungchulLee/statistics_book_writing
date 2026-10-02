@@ -114,7 +114,7 @@ $\beta_j$의 95% 신뢰구간은 $\hat{\beta}_j \pm t^*_{n-k,\,0.025} \cdot \mat
     import pandas as pd
 
     url = ('https://raw.githubusercontent.com/justmarkham/'
-           'scikit-learn-videos/master/data/Advertising.csv')
+           'scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv')
     data = pd.read_csv(url, usecols=[1, 2, 3, 4])
     training_data = data.iloc[:int(len(data) * 0.7)]
     y = np.array(training_data.Sales).reshape(-1, 1)
@@ -305,7 +305,7 @@ $\beta_j$의 95% 신뢰구간은 $\hat{\beta}_j \pm t^*_{n-k,\,0.025} \cdot \mat
     import pandas as pd
 
     url = ('https://raw.githubusercontent.com/justmarkham/'
-           'scikit-learn-videos/master/data/Advertising.csv')
+           'scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv')
     data = pd.read_csv(url, usecols=[1, 2, 3, 4])
     # 앞 70%만 훈련에 쓴다.
     training_data = data.iloc[:int(len(data) * 0.7)]

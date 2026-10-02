@@ -70,7 +70,7 @@ $$
     import numpy as np
     import pandas as pd
 
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
     loans_data = pd.read_csv(url)
 
     # 범위 = 최댓값 - 최솟값. 자료 전체에서 딱 두 점만 쓴다.
@@ -199,7 +199,7 @@ $$
     plt.rcParams["font.family"] = "Apple SD Gothic Neo"
     plt.rcParams["axes.unicode_minus"] = False
 
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
     df = pd.read_csv(url)
 
     # 같은 자료를 두 짝의 측도로 요약한다.
@@ -345,7 +345,7 @@ $$
     import numpy as np
     import pandas as pd
 
-    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/loans_income.csv'
     df = pd.read_csv(url)
 
     # quantile(p)는 자료의 p 비율이 그 아래에 놓이는 값을 돌려준다.

@@ -72,7 +72,7 @@ $$\frac{\partial \ell(\theta)}{\partial \theta} = 0$$
 
 **점수함수** $s(\theta) = \frac{\partial \ell(\theta)}{\partial \theta}$는 로그가능도의 기울기이다. MLE는 $s(\hat{\theta}_{\text{MLE}}) = 0$을 만족한다.
 
-벡터 모수 $\theta = (\theta_1, \ldots, \theta_k)^T$에 대해서는 다음 연립방정식을 푼다:
+벡터 모수 $\theta = (\theta_1, \ldots, \theta_k)^\top$에 대해서는 다음 연립방정식을 푼다:
 
 $$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
 

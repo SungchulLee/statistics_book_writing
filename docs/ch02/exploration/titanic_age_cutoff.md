@@ -106,7 +106,7 @@ $$
     import pandas as pd
 
     URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-           "datasets/master/titanic.csv")
+           "datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv")
     df = pd.read_csv(URL, index_col="PassengerId")
 
     # 나이가 없는 177명은 이 절의 분석에서 아예 쓸 수 없다.
@@ -1437,7 +1437,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
     ```python
     import numpy as np, pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     d = pd.read_csv(URL).dropna(subset=["Age"])
     sur = d["Survived"].to_numpy()
 
@@ -1495,7 +1495,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
     ```python
     import pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     d = pd.read_csv(URL).dropna(subset=["Age"])
 
     for name, binning in [("동일 폭", pd.cut(d.Age, bins=5)),
@@ -1559,7 +1559,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
     ```python
     import numpy as np, pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     d = pd.read_csv(URL).dropna(subset=["Age"])
     age, sur = d["Age"].to_numpy(), d["Survived"].to_numpy()
     CUTS = [c for c in range(1, 80)
@@ -1632,7 +1632,7 @@ $p$값의 논리는 **형사재판의 논리**와 같은 모양이다.
     ```python
     import numpy as np, pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     d = pd.read_csv(URL).dropna(subset=["Age"])
     age, sur = d["Age"].to_numpy(), d["Survived"].to_numpy()
 

@@ -84,7 +84,7 @@ King County(시애틀) 주택 매매 자료에서 우편번호 98105 지역만 �
 
     # "Practical Statistics for Data Scientists" 저장소의 자료. 탭으로 구분되어 있다.
     url = ("https://raw.githubusercontent.com/gedeck/"
-           "practical-statistics-for-data-scientists/master/data/house_sales.csv")
+           "practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/house_sales.csv")
     house = pd.read_csv(url, sep='\t')
     house_98105 = house.loc[house['ZipCode'] == 98105, :]
 

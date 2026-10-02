@@ -65,7 +65,7 @@
 
     # 자료는 "Practical Statistics for Data Scientists" 저장소에서 바로 읽는다.
     SP500 = ("https://raw.githubusercontent.com/gedeck/"
-             "practical-statistics-for-data-scientists/master/data/")
+             "practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/")
     sp500_sym = pd.read_csv(SP500 + 'sp500_sectors.csv')
     sp500_px = pd.read_csv(SP500 + 'sp500_data.csv.gz', index_col=0)
 
@@ -211,7 +211,7 @@
     # 앞과 같은 자료다.
     # 자료는 "Practical Statistics for Data Scientists" 저장소에서 바로 읽는다.
     SP500 = ("https://raw.githubusercontent.com/gedeck/"
-             "practical-statistics-for-data-scientists/master/data/")
+             "practical-statistics-for-data-scientists/8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/")
     sp500_sym = pd.read_csv(SP500 + 'sp500_sectors.csv')
     sp500_px = pd.read_csv(SP500 + 'sp500_data.csv.gz', index_col=0)
     etfs = sp500_px.loc[sp500_px.index > '2012-07-01',

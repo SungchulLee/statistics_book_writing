@@ -262,7 +262,7 @@ Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을
     plt.rcParams['axes.unicode_minus'] = False
 
     # 자료를 인터넷에서 내려받으므로 실행에 연결이 필요하다.
-    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     df = pd.read_csv(url)
 
     # 그림에 앞서 숫자로 먼저 확인한다. Age에 결측이 있어 count가 891보다 작다.

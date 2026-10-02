@@ -48,7 +48,7 @@ $$
     from statsmodels.graphics.factorplots import interaction_plot
 
     url = ('https://raw.githubusercontent.com/vincentarelbundock/'
-           'Rdatasets/master/csv/datasets/ToothGrowth.csv')
+           'Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv')
     df = pd.read_csv(url, usecols=[1, 2, 3])
 
     # 가로축이 한 요인, 선의 색이 다른 요인, 세로축이 반응의 평균이다.

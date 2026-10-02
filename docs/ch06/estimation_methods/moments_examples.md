@@ -303,7 +303,7 @@ $$
     **GMM 추정량:**
 
     $$
-    \hat\theta = \arg\min_\theta \left[\sum_i \mathbf g(X_i; \theta)\right]^T W \left[\sum_i \mathbf g(X_i; \theta)\right]
+    \hat\theta = \arg\min_\theta \left[\sum_i \mathbf g(X_i; \theta)\right]^\top W \left[\sum_i \mathbf g(X_i; \theta)\right]
     $$
 
     여기서 $W$는 양의 정부호 $m \times m$ 가중행렬이다.

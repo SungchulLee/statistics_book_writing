@@ -16,7 +16,7 @@ $$
   \bigl[y_i \log \hat{p}_i + (1 - y_i)\log(1 - \hat{p}_i)\bigr]
 $$
 
-를 최대화한다. 여기서 $\hat{p}_i = \sigma(\mathbf{x}_i^T \boldsymbol\beta)$이고
+를 최대화한다. 여기서 $\hat{p}_i = \sigma(\mathbf{x}_i^\top \boldsymbol\beta)$이고
 $\sigma(z) = 1/(1+e^{-z})$이다.
 
 ## L2 정칙화(능형)

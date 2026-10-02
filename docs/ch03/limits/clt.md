@@ -1306,9 +1306,9 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
     이며 수렴은 $\mathbb{R}^d$에서의 분포수렴(모든 성분의 결합분포)이다.
 
-    증명 개요: **크라메르–월드 장치**를 쓴다. 다변량 수렴은 모든 선형 사영이 (일변량으로) 수렴할 때에 한해 성립한다. 임의의 $\mathbf a \in \mathbb{R}^d$에 대해 스칼라 사영에 일변량 중심극한정리를 적용하면 $\sqrt n \, \mathbf a^T(\bar{\mathbf X}_n - \boldsymbol\mu) \xrightarrow{d} N(0, \mathbf a^T \boldsymbol\Sigma \mathbf a)$이고, 이로부터 $N_d(\mathbf 0, \boldsymbol\Sigma)$로의 다변량 수렴이 따라온다.
+    증명 개요: **크라메르–월드 장치**를 쓴다. 다변량 수렴은 모든 선형 사영이 (일변량으로) 수렴할 때에 한해 성립한다. 임의의 $\mathbf a \in \mathbb{R}^d$에 대해 스칼라 사영에 일변량 중심극한정리를 적용하면 $\sqrt n \, \mathbf a^\top(\bar{\mathbf X}_n - \boldsymbol\mu) \xrightarrow{d} N(0, \mathbf a^\top \boldsymbol\Sigma \mathbf a)$이고, 이로부터 $N_d(\mathbf 0, \boldsymbol\Sigma)$로의 다변량 수렴이 따라온다.
 
-    **신뢰타원체의 정당화:** $\bar{\mathbf X}_n \approx N_d(\boldsymbol\mu, \boldsymbol\Sigma/n)$이면 $n(\bar{\mathbf X}_n - \boldsymbol\mu)^T \boldsymbol\Sigma^{-1}(\bar{\mathbf X}_n - \boldsymbol\mu) \approx \chi^2_d$이다. 집합 $\{\boldsymbol\mu : n(\bar{\mathbf X}_n - \boldsymbol\mu)^T \boldsymbol\Sigma^{-1}(\bar{\mathbf X}_n - \boldsymbol\mu) \le \chi^2_{d, 0.95}\}$은 참 평균을 95%의 점근 확률로 덮는 타원체다. 호텔링의 $T^2$ 검정과 다변량 신뢰영역이 모두 이 위에 서 있다.
+    **신뢰타원체의 정당화:** $\bar{\mathbf X}_n \approx N_d(\boldsymbol\mu, \boldsymbol\Sigma/n)$이면 $n(\bar{\mathbf X}_n - \boldsymbol\mu)^\top \boldsymbol\Sigma^{-1}(\bar{\mathbf X}_n - \boldsymbol\mu) \approx \chi^2_d$이다. 집합 $\{\boldsymbol\mu : n(\bar{\mathbf X}_n - \boldsymbol\mu)^\top \boldsymbol\Sigma^{-1}(\bar{\mathbf X}_n - \boldsymbol\mu) \le \chi^2_{d, 0.95}\}$은 참 평균을 95%의 점근 확률로 덮는 타원체다. 호텔링의 $T^2$ 검정과 다변량 신뢰영역이 모두 이 위에 서 있다.
 
 <div class="drillbox" markdown>
 

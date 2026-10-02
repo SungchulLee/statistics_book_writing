@@ -34,7 +34,7 @@ $$
 
 $$
 \ell_{\text{ridge}}(\boldsymbol{\theta})
-= \sum_{i=1}^{n}\bigl[y_i\,\mathbf{x}_i^T\boldsymbol{\theta} - \log(1+e^{\mathbf{x}_i^T\boldsymbol{\theta}})\bigr] - \frac{\lambda}{2}\lVert\boldsymbol{\theta}_{-0}\rVert_2^2
+= \sum_{i=1}^{n}\bigl[y_i\,\mathbf{x}_i^\top\boldsymbol{\theta} - \log(1+e^{\mathbf{x}_i^\top\boldsymbol{\theta}})\bigr] - \frac{\lambda}{2}\lVert\boldsymbol{\theta}_{-0}\rVert_2^2
 $$
 
 가 된다. 능형 정칙화는 모든 계수를 0 쪽으로 축소하지만 어느 것도 정확히 0으로 만들지는 않는다.
@@ -59,7 +59,7 @@ $$
 
 $$
 \ell_{\text{lasso}}(\boldsymbol{\theta})
-= \sum_{i=1}^{n}\bigl[y_i\,\mathbf{x}_i^T\boldsymbol{\theta} - \log(1+e^{\mathbf{x}_i^T\boldsymbol{\theta}})\bigr] - \lambda\,\lVert\boldsymbol{\theta}_{-0}\rVert_1
+= \sum_{i=1}^{n}\bigl[y_i\,\mathbf{x}_i^\top\boldsymbol{\theta} - \log(1+e^{\mathbf{x}_i^\top\boldsymbol{\theta}})\bigr] - \lambda\,\lVert\boldsymbol{\theta}_{-0}\rVert_1
 $$
 
 이다. L1 벌점은 **희소한** 해를 만든다. $\lambda$가 충분히 크면 일부 계수가 정확히 0이 된다.

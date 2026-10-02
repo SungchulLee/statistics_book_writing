@@ -14,7 +14,7 @@ $\mathbf{W} \in \mathbb{R}^{p \times C}$(그리고 편향 $C$개)를 추정한�
 
 $$
 \mathcal{L}(\mathbf{W}, \mathbf{b})
-= -\frac{1}{n}\sum_{i=1}^{n}\log\operatorname{softmax}(\mathbf{W}^T\mathbf{x}_i + \mathbf{b})_{y_i}
+= -\frac{1}{n}\sum_{i=1}^{n}\log\operatorname{softmax}(\mathbf{W}^\top\mathbf{x}_i + \mathbf{b})_{y_i}
 $$
 
 여기서 $y_i \in \{1, \ldots, C\}$는 참 범주다. L2 벌점을 더하면

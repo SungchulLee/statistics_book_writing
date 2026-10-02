@@ -63,6 +63,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     years = np.arange(2015, 2025)
     rate = np.array([1.50, 1.25, 1.50, 1.75, 1.25, 0.50, 0.50, 3.25, 3.50, 3.50])
 
@@ -287,6 +290,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     years = np.arange(2015, 2025)
     vals = np.array([[10, 12, 14, 15, 18, 20, 22, 25, 27, 30],
@@ -576,6 +582,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     t = np.arange(24)
     a = 100 + 2.0 * t                       # 맨 아래 층: 꾸준히 증가
     b = 60 + 1.2 * t
@@ -645,6 +654,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     t = np.arange(20)
     total = 100 * 1.12 ** t                      # 전체가 빠르게 성장
     share_a = 0.55 - 0.004 * t                   # A 의 비중은 거의 그대로
@@ -701,6 +713,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     # 사망 시점 (간단한 예: 검열 없음)
     times = np.array([2, 5, 5, 9, 14, 20, 27, 31])
@@ -767,6 +782,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     # 대기열 길이: 도착·이탈 시점에만 바뀐다
     events = np.array([0, 2, 3, 5, 8, 9, 13, 15, 18, 20], float)
@@ -844,6 +862,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     t = np.arange(20)
     rng = np.random.default_rng(0)

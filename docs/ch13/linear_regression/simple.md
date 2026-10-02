@@ -52,7 +52,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     dataframe = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     dataframe["Gender"] = dataframe["sex"].map({1: "Male", 0: "Female"})
 
@@ -152,7 +152,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     dataframe = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     dataframe["Gender"] = dataframe["sex"].map({1: "Male", 0: "Female"})
 
@@ -267,7 +267,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
@@ -372,7 +372,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
@@ -516,7 +516,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
@@ -653,7 +653,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
@@ -798,7 +798,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
@@ -963,7 +963,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
@@ -1113,7 +1113,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
@@ -1253,7 +1253,7 @@ $$
     # openintro의 bdims 자료: 성인 507명의 신체 치수.
     # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
 
@@ -1463,7 +1463,7 @@ $$
 
     # 수식이 맞는지만 보는 확인이므로 자료는 아무것이나 좋다. 보기 1 의 bdims 를 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     male = data[data.sex == 1].loc[:300, ["Height", "Weight"]]
     x = male.Height.to_numpy()
@@ -1597,7 +1597,7 @@ $$
 
     # 주변분포는 그대로 두고 짝만 바꾼다. 자료는 보기 1 의 bdims 를 쓴다.
     data_url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-                "master/csv/openintro/bdims.csv")
+                "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/openintro/bdims.csv")
     data = pd.read_csv(data_url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     male = data[data.sex == 1].loc[:300, ["Height", "Weight"]]
     x_sorted = np.sort(male.Height.to_numpy())
@@ -1803,7 +1803,7 @@ import urllib
 from sklearn import metrics
 from sklearn.linear_model import LinearRegression
 
-DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
+DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/7b7e23e7267356f8355580877eff98c43cda1bd0/"
 HOUSING_PATH = os.path.join("datasets", "housing")
 HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
 
@@ -1841,7 +1841,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     from sklearn.linear_model import LinearRegression
 
-    DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
+    DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/7b7e23e7267356f8355580877eff98c43cda1bd0/"
     HOUSING_PATH = os.path.join("datasets", "housing")
     HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
 

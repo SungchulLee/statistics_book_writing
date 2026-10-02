@@ -66,7 +66,7 @@
     from scipy.stats import chi2_contingency
 
     URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-           "datasets/master/titanic.csv")
+           "datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv")
     df = pd.read_csv(URL, index_col="PassengerId")
     d = df.dropna(subset=["Age"]).copy()
 
@@ -1081,7 +1081,7 @@
     from scipy import stats
 
     URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-           "datasets/master/titanic.csv")
+           "datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv")
     d = pd.read_csv(URL).dropna(subset=["Age"])
     age = d["Age"].to_numpy()
     sur = d["Survived"].to_numpy().astype(float)
@@ -1150,7 +1150,7 @@
     import numpy as np, pandas as pd
 
     URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-           "datasets/master/titanic.csv")
+           "datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv")
     d = pd.read_csv(URL).dropna(subset=["Age"])
     age = d["Age"].to_numpy()
     sur = d["Survived"].to_numpy().astype(float)
@@ -1353,7 +1353,7 @@
     from scipy import stats
 
     URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-           "datasets/master/titanic.csv")
+           "datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv")
     dd = pd.read_csv(URL).dropna(subset=["Age"]).copy()
     dd["FamSize"] = dd.SibSp + dd.Parch
     sur2 = dd.Survived.to_numpy().astype(float)

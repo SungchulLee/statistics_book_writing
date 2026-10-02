@@ -62,7 +62,7 @@ OLS 추정값 $\hat{\beta}$가 불편이거나 일치성을 갖는 데는 오차
 3. **예측구간.** 새 관측값에 대한 예측구간은
 
     $$
-    \hat{Y}_{\text{new}} \pm t_{\alpha/2,\, n-p-1} \cdot \hat{\sigma}\sqrt{1 + \mathbf{x}_{\text{new}}^T (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{x}_{\text{new}}}
+    \hat{Y}_{\text{new}} \pm t_{\alpha/2,\, n-p-1} \cdot \hat{\sigma}\sqrt{1 + \mathbf{x}_{\text{new}}^\top (\mathbf{X}^\top\mathbf{X})^{-1} \mathbf{x}_{\text{new}}}
     $$
 
     이 구간은 예측오차가 정규분포를 따름을 보장하기 위해 오차의 정규성에 기댄다. 오차가 정규가 아니면 실제 포함확률이 $1 - \alpha$에서 크게 벗어날 수 있다.

@@ -253,7 +253,7 @@ OvR 점수의 합이 개별 관측치에서 1에서 멀어지는 두 가지 상�
 ??? success "풀이"
 
     **표현력이 같은 이유.** 두 방식 모두 $C$개의 아핀 점수함수
-    $g_c(\mathbf{x}) = \mathbf{w}_c^T\mathbf{x} + b_c$를 학습하고 $\arg\max_c g_c(\mathbf{x})$로
+    $g_c(\mathbf{x}) = \mathbf{w}_c^\top\mathbf{x} + b_c$를 학습하고 $\arg\max_c g_c(\mathbf{x})$로
     예측한다.
 
     - 소프트맥스는 $g_c$가 로짓이고, 소프트맥스가 단조이므로
@@ -262,7 +262,7 @@ OvR 점수의 합이 개별 관측치에서 1에서 멀어지는 두 가지 상�
       $\arg\max_c f_c = \arg\max_c g_c$다.
 
     따라서 두 방식이 만들 수 있는 결정 규칙의 집합은 모두
-    $\{\mathbf{x} \mapsto \arg\max_c (\mathbf{w}_c^T\mathbf{x} + b_c)\}$로 동일하다. 이런
+    $\{\mathbf{x} \mapsto \arg\max_c (\mathbf{w}_c^\top\mathbf{x} + b_c)\}$로 동일하다. 이런
     규칙이 만드는 영역을 **볼록 다면체 분할**이라 한다.
 
     **그렇다면 차이는 어디에서 오는가.** 세 가지다.

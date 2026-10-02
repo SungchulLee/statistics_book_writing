@@ -83,8 +83,8 @@ $C$개 분류기가 독립적으로 학습되므로, 같은 입력에 둘 이상
 기저 분류기가 로지스틱 회귀이면 각 이항 모형은
 
 $$
-f_c(\mathbf{x}) = \sigma(\mathbf{w}_c^T\mathbf{x} + b_c)
-= \frac{1}{1 + e^{-(\mathbf{w}_c^T\mathbf{x} + b_c)}}
+f_c(\mathbf{x}) = \sigma(\mathbf{w}_c^\top\mathbf{x} + b_c)
+= \frac{1}{1 + e^{-(\mathbf{w}_c^\top\mathbf{x} + b_c)}}
 $$
 
 를 추정한다. 가중벡터 $\mathbf{w}_1, \ldots, \mathbf{w}_C$와 편향 $b_1, \ldots, b_C$의 모음이

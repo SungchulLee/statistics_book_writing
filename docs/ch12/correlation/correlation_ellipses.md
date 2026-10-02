@@ -694,7 +694,7 @@ $2 \times 2$ 상관행렬 $\mathbf{R} = \begin{pmatrix} 1 & r \\ r & 1 \end{pmat
     **부호는 기울기로.** 고유벡터가
 
     $$
-    v_1=\frac{1}{\sqrt2}(1,\ \operatorname{sgn}(r))^T
+    v_1=\frac{1}{\sqrt2}(1,\ \operatorname{sgn}(r))^\top
     $$
 
     이므로 **장축이 $r>0$이면 $+45^\circ$, $r<0$이면 $-45^\circ$**로 항상 고정이다.
@@ -893,7 +893,7 @@ $2 \times 2$ 상관행렬 $\mathbf{R} = \begin{pmatrix} 1 & r \\ r & 1 \end{pmat
     **정의.**
 
     $$
-    D^2(\mathbf{x})=(\mathbf{x}-\boldsymbol\mu)^T\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)
+    D^2(\mathbf{x})=(\mathbf{x}-\boldsymbol\mu)^\top\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)
     $$
 
     **$D^2$의 등고선이 곧 타원**이며, 다변량 정규에서 $D^2\sim\chi^2_p$다.

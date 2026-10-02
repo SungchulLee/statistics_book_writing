@@ -228,7 +228,7 @@ Bessel 수정(분모의 $n-1$)은 모분산의 불편추정량을 만든다. 이
 </div>
 
 ??? success "풀이"
-    잔차 $e_i = Y_i - \hat Y_i$는 선형 제약(정규방정식: $\mathbf X^T \mathbf e = 0$)을 만족한다. $\mathbf X$의 열이 $p$개이므로 선형 제약이 $p$개이고, 유효 자유도는 $n - p$가 남는다.
+    잔차 $e_i = Y_i - \hat Y_i$는 선형 제약(정규방정식: $\mathbf X^\top \mathbf e = 0$)을 만족한다. $\mathbf X$의 열이 $p$개이므로 선형 제약이 $p$개이고, 유효 자유도는 $n - p$가 남는다.
 
     $\mathbb{E}[\mathrm{SSE}/\sigma^2] = n - p$이다(정규성 아래에서 카이제곱분포). 따라서 $\hat\sigma^2 = \mathrm{SSE}/(n - p)$는 불편이다.
 

@@ -1,6 +1,6 @@
 # 대각합과 고윳값
 
-행렬의 대각합 — 대각 성분의 합 — 은 계산하기 가장 쉬운 행렬 관련 양 중 하나다. 그런데도 깊은 정보를 담고 있다. 임의의 정사각행렬에서 대각합은 고윳값의 합과 같다. 이 연결은 통계에 끊임없이 등장한다. 공분산행렬의 대각합은 총분산을 주고, 모자 행렬의 대각합은 추정된 모수의 개수를 주며, 이차형식 $\mathbf{z}^T\mathbf{A}\mathbf{z}$의 기댓값은 $\operatorname{tr}(\mathbf{A})$로 표현할 수 있다. 이 쪽에서는 대각합과 고윳값의 관계, 그리고 그 핵심 성질을 전개한다.
+행렬의 대각합 — 대각 성분의 합 — 은 계산하기 가장 쉬운 행렬 관련 양 중 하나다. 그런데도 깊은 정보를 담고 있다. 임의의 정사각행렬에서 대각합은 고윳값의 합과 같다. 이 연결은 통계에 끊임없이 등장한다. 공분산행렬의 대각합은 총분산을 주고, 모자 행렬의 대각합은 추정된 모수의 개수를 주며, 이차형식 $\mathbf{z}^\top\mathbf{A}\mathbf{z}$의 기댓값은 $\operatorname{tr}(\mathbf{A})$로 표현할 수 있다. 이 쪽에서는 대각합과 고윳값의 관계, 그리고 그 핵심 성질을 전개한다.
 
 ## 정의와 기본 성질
 
@@ -96,20 +96,20 @@ $$
 행렬을 전치해도 대각 성분은 바뀌지 않으므로
 
 $$
-\operatorname{tr}(\mathbf{A}^T) = \operatorname{tr}(\mathbf{A})
+\operatorname{tr}(\mathbf{A}^\top) = \operatorname{tr}(\mathbf{A})
 $$
 
 이다.
 
 ### 외적의 대각합
 
-벡터 $\mathbf{a}, \mathbf{b} \in \mathbb{R}^n$에 대해 외적 $\mathbf{a}\mathbf{b}^T$는 $n \times n$ 행렬이고 그 대각합은
+벡터 $\mathbf{a}, \mathbf{b} \in \mathbb{R}^n$에 대해 외적 $\mathbf{a}\mathbf{b}^\top$는 $n \times n$ 행렬이고 그 대각합은
 
 $$
-\operatorname{tr}(\mathbf{a}\mathbf{b}^T) = \mathbf{b}^T\mathbf{a} = \sum_{i=1}^n a_i b_i
+\operatorname{tr}(\mathbf{a}\mathbf{b}^\top) = \mathbf{b}^\top\mathbf{a} = \sum_{i=1}^n a_i b_i
 $$
 
-이다. 이는 순환 성질에서 따라온다: $\operatorname{tr}(\mathbf{a}\mathbf{b}^T) = \operatorname{tr}(\mathbf{b}^T\mathbf{a}) = \mathbf{b}^T\mathbf{a}$이며, 마지막 등호는 $\mathbf{b}^T\mathbf{a}$가 $1 \times 1$ 행렬(스칼라)이기 때문에 성립한다.
+이다. 이는 순환 성질에서 따라온다: $\operatorname{tr}(\mathbf{a}\mathbf{b}^\top) = \operatorname{tr}(\mathbf{b}^\top\mathbf{a}) = \mathbf{b}^\top\mathbf{a}$이며, 마지막 등호는 $\mathbf{b}^\top\mathbf{a}$가 $1 \times 1$ 행렬(스칼라)이기 때문에 성립한다.
 
 ## 대각합은 고윳값의 합과 같다
 
@@ -211,7 +211,7 @@ $$
 
 ![대각합은 합, 행렬식은 곱](./img/trace_det_unit_circle.png)
 
-왼쪽은 행렬식 쪽이다. 고유벡터 $\mathbf{v}_1 = (2,1)^T/\sqrt{5}$와 $\mathbf{v}_2 = (1,-1)^T/\sqrt{2}$가 만드는 녹색 평행사변형에 $\mathbf{A}$를 곱하면 각 변이 $\lambda_1 = 5$배, $\lambda_2 = 2$배로 늘어나 주황 평행사변형이 된다. 면적은 $0.9487$에서 $9.4868$로 정확히 $10$배가 된다. 도형을 바꿔도 마찬가지여서, 파란 단위원은 주황 타원이 되고 면적은 $\pi$에서 $10\pi \approx 31.42$로 역시 $10$배가 된다. **행렬식은 넓이를 몇 배로 부풀리는가를 재는 수이고, 그 배율이 고윳값의 곱인 것은 각 고유방향이 독립적으로 $\lambda_i$배씩 기여하기 때문이다.**
+왼쪽은 행렬식 쪽이다. 고유벡터 $\mathbf{v}_1 = (2,1)^\top/\sqrt{5}$와 $\mathbf{v}_2 = (1,-1)^\top/\sqrt{2}$가 만드는 녹색 평행사변형에 $\mathbf{A}$를 곱하면 각 변이 $\lambda_1 = 5$배, $\lambda_2 = 2$배로 늘어나 주황 평행사변형이 된다. 면적은 $0.9487$에서 $9.4868$로 정확히 $10$배가 된다. 도형을 바꿔도 마찬가지여서, 파란 단위원은 주황 타원이 되고 면적은 $\pi$에서 $10\pi \approx 31.42$로 역시 $10$배가 된다. **행렬식은 넓이를 몇 배로 부풀리는가를 재는 수이고, 그 배율이 고윳값의 곱인 것은 각 고유방향이 독립적으로 $\lambda_i$배씩 기여하기 때문이다.**
 
 오른쪽은 대각합 쪽이다. 같은 총량 $7$을 두 가지로 쪼갤 수 있다. 위 막대는 대각 성분으로 쪼갠 $4 + 3$이고, 아래 막대는 고윳값으로 쪼갠 $5 + 2$다. 칸을 나누는 자리는 다르지만 막대의 오른쪽 끝은 같은 자리에 있다. 대각합–고윳값 항등식이 말하는 것이 바로 이 그림이다.
 
@@ -231,7 +231,7 @@ $$
 
 ### 모자 행렬과 유효 모수 개수
 
-계획행렬 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수($\operatorname{rank}(\mathbf{X}) = p$)라고 하자. 그러면 $\mathbf{X}^T\mathbf{X}$가 가역이고 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$가 정의되어 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 된다. $\mathbf{H}$는 대칭이고 멱등이므로($\mathbf{H}^2 = \mathbf{H}$) 고윳값이 0 아니면 1이다. 대각합은
+계획행렬 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수($\operatorname{rank}(\mathbf{X}) = p$)라고 하자. 그러면 $\mathbf{X}^\top\mathbf{X}$가 가역이고 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 정의되어 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 된다. $\mathbf{H}$는 대칭이고 멱등이므로($\mathbf{H}^2 = \mathbf{H}$) 고윳값이 0 아니면 1이다. 대각합은
 
 $$
 \operatorname{tr}(\mathbf{H}) = (\text{고윳값이 } 1 \text{인 것의 개수}) = \operatorname{rank}(\mathbf{X}) = p
@@ -244,10 +244,10 @@ $$
 $\mathbf{z} \sim (\boldsymbol{\mu}, \mathbf{I}_n)$(평균 $\boldsymbol{\mu}$, 단위 공분산)이면 임의의 대칭행렬 $\mathbf{A}$에 대해
 
 $$
-E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}
+E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A}) + \boldsymbol{\mu}^\top\mathbf{A}\boldsymbol{\mu}
 $$
 
-이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$로 간단해진다. 제곱합이 자료벡터의 이차형식인 분산분석에서 이 항등식이 근본적으로 쓰인다.
+이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$로 간단해진다. 제곱합이 자료벡터의 이차형식인 분산분석에서 이 항등식이 근본적으로 쓰인다.
 
 ## 연습문제
 
@@ -296,7 +296,7 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수라 하자. 순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$의 대각합이 (절편을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
+$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수라 하자. 순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$의 대각합이 (절편을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
 
 </div>
 
@@ -304,17 +304,17 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수라 하자. 순환 �
     인자를 묶어 순환 성질을 적용한다.
 
     $$
-    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\bigl(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\bigr) = \operatorname{tr}\bigl(\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
+    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\bigl(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\bigr) = \operatorname{tr}\bigl(\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
     $$
 
-    순환 이동이 $\mathbf{X}^T$를 맨 뒤에서 맨 앞으로 옮겨 $p \times p$ 단위행렬을 만들어낸다. 이 결과는 $n$이나 $\mathbf{X}$의 구체적인 성분과 무관하게 성립한다.
+    순환 이동이 $\mathbf{X}^\top$를 맨 뒤에서 맨 앞으로 옮겨 $p \times p$ 단위행렬을 만들어낸다. 이 결과는 $n$이나 $\mathbf{X}$의 구체적인 성분과 무관하게 성립한다.
 
-    완전 열계수 가정이 어디에 쓰였는지 짚어 두자. 그 가정 없이는 $\mathbf{X}^T\mathbf{X}$가 가역이 아니어서 $\mathbf{H}$ 자체가 정의되지 않는다. 계수가 $r < p$인 경우에는 일반화 역행렬을 써서 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{+}\mathbf{X}^T$로 정의하며, 그때는 $\operatorname{tr}(\mathbf{H}) = r$이 된다.
+    완전 열계수 가정이 어디에 쓰였는지 짚어 두자. 그 가정 없이는 $\mathbf{X}^\top\mathbf{X}$가 가역이 아니어서 $\mathbf{H}$ 자체가 정의되지 않는다. 계수가 $r < p$인 경우에는 일반화 역행렬을 써서 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{+}\mathbf{X}^\top$로 정의하며, 그때는 $\operatorname{tr}(\mathbf{H}) = r$이 된다.
 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-$\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이라 하자. 항등식 $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$를 이용해 $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = r$임을 보여라.
+$\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이라 하자. 항등식 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$를 이용해 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = r$임을 보여라.
 
 </div>
 
@@ -322,7 +322,7 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$�
     $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이므로 $\boldsymbol{\mu} = \mathbf{0}$이고, 항등식에 의해
 
     $$
-    E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})
+    E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})
     $$
 
     이다. $\mathbf{A}$가 대칭 멱등이므로 고윳값은 모두 0 또는 1이고, 1인 고윳값의 개수가 계수 $r$이다. 따라서
@@ -377,18 +377,18 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$�
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-$\operatorname{tr}(\mathbf{A}^T\mathbf{A}) = \sum_{i,j} a_{ij}^2 = \lVert\mathbf{A}\rVert_F^2$임을 보이고, 이것이 특이값의 제곱합과 같음을 확인하라.
+$\operatorname{tr}(\mathbf{A}^\top\mathbf{A}) = \sum_{i,j} a_{ij}^2 = \lVert\mathbf{A}\rVert_F^2$임을 보이고, 이것이 특이값의 제곱합과 같음을 확인하라.
 
 </div>
 
 ??? success "풀이"
-    $\mathbf{A}^T\mathbf{A}$의 $(j,j)$ 성분은 $\sum_i a_{ij}^2$, 곧 $j$번째 열의 제곱합이다. 대각합은 이를 모든 열에 대해 더한 것이므로
+    $\mathbf{A}^\top\mathbf{A}$의 $(j,j)$ 성분은 $\sum_i a_{ij}^2$, 곧 $j$번째 열의 제곱합이다. 대각합은 이를 모든 열에 대해 더한 것이므로
 
     $$
-    \operatorname{tr}(\mathbf{A}^T\mathbf{A}) = \sum_j \sum_i a_{ij}^2 = \lVert\mathbf{A}\rVert_F^2
+    \operatorname{tr}(\mathbf{A}^\top\mathbf{A}) = \sum_j \sum_i a_{ij}^2 = \lVert\mathbf{A}\rVert_F^2
     $$
 
-    이다. 한편 $\mathbf{A}^T\mathbf{A}$의 고윳값은 특이값의 제곱 $\sigma_i^2$이고 대각합은 고윳값의 합이므로
+    이다. 한편 $\mathbf{A}^\top\mathbf{A}$의 고윳값은 특이값의 제곱 $\sigma_i^2$이고 대각합은 고윳값의 합이므로
 
     $$
     \lVert\mathbf{A}\rVert_F^2 = \sum_i \sigma_i^2
@@ -416,34 +416,34 @@ $\operatorname{tr}(\mathbf{A}^T\mathbf{A}) = \sum_{i,j} a_{ij}^2 = \lVert\mathbf
     특이값 제곱합 = 13.498337
     ```
 
-    **통계적 의미.** $\mathbf{A}$가 중심화된 자료행렬이면 $\operatorname{tr}(\mathbf{A}^T\mathbf{A})$는 총제곱합이고, 특이값 제곱은 각 주성분이 설명하는 몫이다. "첫 $k$개 성분이 설명하는 비율"이 $\sum_{i \le k}\sigma_i^2 / \sum_i \sigma_i^2$인 것이 이 등식에서 나온다. $\square$
+    **통계적 의미.** $\mathbf{A}$가 중심화된 자료행렬이면 $\operatorname{tr}(\mathbf{A}^\top\mathbf{A})$는 총제곱합이고, 특이값 제곱은 각 주성분이 설명하는 몫이다. "첫 $k$개 성분이 설명하는 비율"이 $\sum_{i \le k}\sigma_i^2 / \sum_i \sigma_i^2$인 것이 이 등식에서 나온다. $\square$
 
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
-$E[\mathbf{z}] = \boldsymbol{\mu}$, $\operatorname{Var}(\mathbf{z}) = \boldsymbol{\Sigma}$인 일반적인 경우에 $E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}$임을 유도하라.
+$E[\mathbf{z}] = \boldsymbol{\mu}$, $\operatorname{Var}(\mathbf{z}) = \boldsymbol{\Sigma}$인 일반적인 경우에 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^\top\mathbf{A}\boldsymbol{\mu}$임을 유도하라.
 
 </div>
 
 ??? success "풀이"
-    스칼라는 자기 자신의 대각합과 같다는 점($\mathbf{z}^T\mathbf{A}\mathbf{z} = \operatorname{tr}(\mathbf{z}^T\mathbf{A}\mathbf{z})$)에서 출발해 순환 성질을 쓴다.
+    스칼라는 자기 자신의 대각합과 같다는 점($\mathbf{z}^\top\mathbf{A}\mathbf{z} = \operatorname{tr}(\mathbf{z}^\top\mathbf{A}\mathbf{z})$)에서 출발해 순환 성질을 쓴다.
 
     $$
-    \mathbf{z}^T\mathbf{A}\mathbf{z} = \operatorname{tr}(\mathbf{z}^T\mathbf{A}\mathbf{z}) = \operatorname{tr}(\mathbf{A}\mathbf{z}\mathbf{z}^T)
+    \mathbf{z}^\top\mathbf{A}\mathbf{z} = \operatorname{tr}(\mathbf{z}^\top\mathbf{A}\mathbf{z}) = \operatorname{tr}(\mathbf{A}\mathbf{z}\mathbf{z}^\top)
     $$
 
     대각합과 기댓값은 모두 선형이므로 순서를 바꿀 수 있다.
 
     $$
-    E[\mathbf{z}^T\mathbf{A}\mathbf{z}] = \operatorname{tr}\!\left(\mathbf{A}\,E[\mathbf{z}\mathbf{z}^T]\right)
+    E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}\!\left(\mathbf{A}\,E[\mathbf{z}\mathbf{z}^\top]\right)
     $$
 
-    여기서 $E[\mathbf{z}\mathbf{z}^T] = \operatorname{Var}(\mathbf{z}) + E[\mathbf{z}]E[\mathbf{z}]^T = \boldsymbol{\Sigma} + \boldsymbol{\mu}\boldsymbol{\mu}^T$이므로
+    여기서 $E[\mathbf{z}\mathbf{z}^\top] = \operatorname{Var}(\mathbf{z}) + E[\mathbf{z}]E[\mathbf{z}]^\top = \boldsymbol{\Sigma} + \boldsymbol{\mu}\boldsymbol{\mu}^\top$이므로
 
     $$
-    E[\mathbf{z}^T\mathbf{A}\mathbf{z}]
-    = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \operatorname{tr}(\mathbf{A}\boldsymbol{\mu}\boldsymbol{\mu}^T)
-    = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^T\mathbf{A}\boldsymbol{\mu}
+    E[\mathbf{z}^\top\mathbf{A}\mathbf{z}]
+    = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \operatorname{tr}(\mathbf{A}\boldsymbol{\mu}\boldsymbol{\mu}^\top)
+    = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}) + \boldsymbol{\mu}^\top\mathbf{A}\boldsymbol{\mu}
     $$
 
     이다(마지막에서 다시 순환 성질을 썼다).
@@ -458,13 +458,13 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 </div>
 
 ??? success "풀이"
-    $\operatorname{Var}(\mathbf{Y}) = \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^T$이므로 순환 성질에 의해
+    $\operatorname{Var}(\mathbf{Y}) = \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^\top$이므로 순환 성질에 의해
 
     $$
-    \operatorname{tr}(\operatorname{Var}(\mathbf{Y})) = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^T) = \operatorname{tr}(\boldsymbol{\Sigma}\mathbf{A}^T\mathbf{A})
+    \operatorname{tr}(\operatorname{Var}(\mathbf{Y})) = \operatorname{tr}(\mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^\top) = \operatorname{tr}(\boldsymbol{\Sigma}\mathbf{A}^\top\mathbf{A})
     $$
 
-    이다. $\mathbf{A}$가 직교행렬이면 $\mathbf{A}^T\mathbf{A} = \mathbf{I}$이므로
+    이다. $\mathbf{A}$가 직교행렬이면 $\mathbf{A}^\top\mathbf{A} = \mathbf{I}$이므로
 
     $$
     \operatorname{tr}(\operatorname{Var}(\mathbf{Y})) = \operatorname{tr}(\boldsymbol{\Sigma})
@@ -539,25 +539,25 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-능형회귀의 모자 행렬은 $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^T\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^T$이다. $\operatorname{tr}(\mathbf{H}_\lambda) = \sum_j \frac{d_j^2}{d_j^2 + \lambda}$($d_j$는 $\mathbf{X}$의 특이값)임을 보이고, 이 값이 $\lambda$에 따라 어떻게 변하는지 확인하라.
+능형회귀의 모자 행렬은 $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top$이다. $\operatorname{tr}(\mathbf{H}_\lambda) = \sum_j \frac{d_j^2}{d_j^2 + \lambda}$($d_j$는 $\mathbf{X}$의 특이값)임을 보이고, 이 값이 $\lambda$에 따라 어떻게 변하는지 확인하라.
 
 </div>
 
 ??? success "풀이"
-    특이값분해 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^T$를 넣으면 $\mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{D}^2\mathbf{V}^T$이고 $\mathbf{V}^T\mathbf{V} = \mathbf{I}$이므로
+    특이값분해 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$를 넣으면 $\mathbf{X}^\top\mathbf{X} = \mathbf{V}\mathbf{D}^2\mathbf{V}^\top$이고 $\mathbf{V}^\top\mathbf{V} = \mathbf{I}$이므로
 
     $$
-    \mathbf{X}^T\mathbf{X} + \lambda\mathbf{I} = \mathbf{V}(\mathbf{D}^2 + \lambda\mathbf{I})\mathbf{V}^T
+    \mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I} = \mathbf{V}(\mathbf{D}^2 + \lambda\mathbf{I})\mathbf{V}^\top
     $$
 
     이다. 따라서
 
     $$
-    \mathbf{H}_\lambda = \mathbf{U}\mathbf{D}\mathbf{V}^T\mathbf{V}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{V}^T\mathbf{V}\mathbf{D}\mathbf{U}^T
-    = \mathbf{U}\mathbf{D}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{D}\mathbf{U}^T
+    \mathbf{H}_\lambda = \mathbf{U}\mathbf{D}\mathbf{V}^\top\mathbf{V}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{V}^\top\mathbf{V}\mathbf{D}\mathbf{U}^\top
+    = \mathbf{U}\mathbf{D}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{D}\mathbf{U}^\top
     $$
 
-    이고, 순환 성질과 $\mathbf{U}^T\mathbf{U} = \mathbf{I}$에서
+    이고, 순환 성질과 $\mathbf{U}^\top\mathbf{U} = \mathbf{I}$에서
 
     $$
     \operatorname{tr}(\mathbf{H}_\lambda) = \operatorname{tr}\!\left(\mathbf{D}^2(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\right) = \sum_j \frac{d_j^2}{d_j^2+\lambda}

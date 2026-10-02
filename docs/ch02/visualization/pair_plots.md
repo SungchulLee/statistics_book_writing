@@ -24,7 +24,7 @@
     import seaborn as sns
     import pandas as pd
 
-    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     df = pd.read_csv(url, index_col='PassengerId')
 
     # 쌍그림은 수치형 변수만 받으므로 성별을 0/1로 부호화한다
@@ -163,6 +163,9 @@ $k$개 변수를 주면 $k \times k$ 격자가 만들어진다.
     import seaborn as sns
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     g = sns.PairGrid(df[["Survived", "Age", "Sex_int"]].dropna())
     g.map_lower(sns.scatterplot, s=10, alpha=.4)   # 아래쪽 삼각형: 산점도
@@ -711,6 +714,9 @@ $k$가 커지면 다음 중 하나로 간다.
     import pandas as pd
     import matplotlib.pyplot as plt
     import seaborn as sns
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(5)
     n = 20_000

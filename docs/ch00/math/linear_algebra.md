@@ -8,7 +8,7 @@
 
 ### 정의 1. 벡터와 행렬 { .dfn }
 
-벡터는 열벡터 $\mathbf{x} \in \mathbb{R}^n$이며 굵은 소문자로 쓴다. 행렬은 $\mathbf{A} \in \mathbb{R}^{m \times n}$이며 굵은 대문자로 쓴다. 전치는 $\mathbf{A}^T$, 역행렬은(존재할 때) $\mathbf{A}^{-1}$로 나타낸다. 단위행렬은 $\mathbf{I}_n$, 영행렬은 $\mathbf{0}$이다.
+벡터는 열벡터 $\mathbf{x} \in \mathbb{R}^n$이며 굵은 소문자로 쓴다. 행렬은 $\mathbf{A} \in \mathbb{R}^{m \times n}$이며 굵은 대문자로 쓴다. 전치는 $\mathbf{A}^\top$, 역행렬은(존재할 때) $\mathbf{A}^{-1}$로 나타낸다. 단위행렬은 $\mathbf{I}_n$, 영행렬은 $\mathbf{0}$이다.
 
 </div>
 
@@ -19,12 +19,12 @@
 $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$의 **내적**과 **노름**, 그리고 행렬 곱은 다음과 같다.
 
 $$
-\mathbf{x}^T \mathbf{y} = \sum_{i=1}^n x_i y_i, \qquad \|\mathbf{x}\| = \sqrt{\mathbf{x}^T \mathbf{x}} = \sqrt{\sum_{i=1}^n x_i^2}, \qquad [\mathbf{A}\mathbf{B}]_{ij} = \sum_{\ell} a_{i\ell} b_{\ell j}
+\mathbf{x}^\top \mathbf{y} = \sum_{i=1}^n x_i y_i, \qquad \|\mathbf{x}\| = \sqrt{\mathbf{x}^\top \mathbf{x}} = \sqrt{\sum_{i=1}^n x_i^2}, \qquad [\mathbf{A}\mathbf{B}]_{ij} = \sum_{\ell} a_{i\ell} b_{\ell j}
 $$
 
-내적은 따로 기호를 두지 않고 언제나 $\mathbf{x}^T \mathbf{y}$로 쓰며, 노름은 따로 말하지 않는 한 유클리드 노름($L^2$ 노름)이다. 두 벡터가 **직교**한다는 것은 $\mathbf{x}^T\mathbf{y} = 0$이라는 뜻이고, 이를 $\mathbf{x} \perp \mathbf{y}$로 쓴다.
+내적은 따로 기호를 두지 않고 언제나 $\mathbf{x}^\top \mathbf{y}$로 쓰며, 노름은 따로 말하지 않는 한 유클리드 노름($L^2$ 노름)이다. 두 벡터가 **직교**한다는 것은 $\mathbf{x}^\top\mathbf{y} = 0$이라는 뜻이고, 이를 $\mathbf{x} \perp \mathbf{y}$로 쓴다.
 
-**외적** $\mathbf{x} \mathbf{y}^T \in \mathbb{R}^{n \times m}$($\mathbf{x} \in \mathbb{R}^n$, $\mathbf{y} \in \mathbb{R}^m$)은 계수가 많아야 1이다. **대각합**은 $\operatorname{tr}(\mathbf{A}) = \sum_i a_{ii}$이다. **행렬식** $\det(\mathbf{A})$는 부호를 가진 부피 배율을 나타내며, $\mathbf{A}$가 가역일 때에 한해 0이 아니다.
+**외적** $\mathbf{x} \mathbf{y}^\top \in \mathbb{R}^{n \times m}$($\mathbf{x} \in \mathbb{R}^n$, $\mathbf{y} \in \mathbb{R}^m$)은 계수가 많아야 1이다. **대각합**은 $\operatorname{tr}(\mathbf{A}) = \sum_i a_{ii}$이다. **행렬식** $\det(\mathbf{A})$는 부호를 가진 부피 배율을 나타내며, $\mathbf{A}$가 가역일 때에 한해 0이 아니다.
 
 </div>
 
@@ -34,7 +34,7 @@ $$
 
 **계획행렬(design matrix)** $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $n$개의 관측을 행 방향으로 쌓은 것이다. $i$번째 행에는 관측 $i$의 설명변수 값이 들어 있다. $\mathbf{X}$의 열공간은 $p$개 열의 모든 선형결합으로 이루어진 집합, 즉 최소제곱으로 도달할 수 있는 적합값의 공간이다.
 
-**$p$의 셈법을 분명히 해 두자.** 이 책의 0장에서 $p$는 **절편 열을 포함한 열의 개수**다. 절편이 있는 모형이면 첫 열이 $\mathbf{1} = (1, \ldots, 1)^T$이고 나머지 $p-1$개가 설명변수다. 그래서 뒤에 나오는 $\operatorname{tr}(\mathbf{H}) = p$와 잔차 자유도 $n - p$가 그대로 성립한다. 13장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해 계획행렬을 $n \times (p+1)$로 쓰므로, 그쪽의 $p$와 여기의 $p$가 $1$만큼 어긋난다는 점에 주의하라.
+**$p$의 셈법을 분명히 해 두자.** 이 책의 0장에서 $p$는 **절편 열을 포함한 열의 개수**다. 절편이 있는 모형이면 첫 열이 $\mathbf{1} = (1, \ldots, 1)^\top$이고 나머지 $p-1$개가 설명변수다. 그래서 뒤에 나오는 $\operatorname{tr}(\mathbf{H}) = p$와 잔차 자유도 $n - p$가 그대로 성립한다. 13장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해 계획행렬을 $n \times (p+1)$로 쓰므로, 그쪽의 $p$와 여기의 $p$가 $1$만큼 어긋난다는 점에 주의하라.
 
 </div>
 
@@ -46,10 +46,10 @@ $\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해:
 
 - $\operatorname{col}(\mathbf{A}) \subseteq \mathbb{R}^m$ (열공간)
 - $\ker(\mathbf{A}) \subseteq \mathbb{R}^n$ (우영공간)
-- $\operatorname{col}(\mathbf{A}^T) \subseteq \mathbb{R}^n$ (행공간)
-- $\ker(\mathbf{A}^T) \subseteq \mathbb{R}^m$ (좌영공간)
+- $\operatorname{col}(\mathbf{A}^\top) \subseteq \mathbb{R}^n$ (행공간)
+- $\ker(\mathbf{A}^\top) \subseteq \mathbb{R}^m$ (좌영공간)
 
-이고, $\operatorname{rank}(\mathbf{A}) + \dim \ker(\mathbf{A}) = n$(계수–퇴화차수 정리)이며 $\operatorname{col}(\mathbf{A}^T) \perp \ker(\mathbf{A})$이다. 열공간을 $\operatorname{col}(\cdot)$로, 영공간을 $\ker(\cdot)$로 쓰는 것이 이 책의 표기이며 0.3절에서 그대로 이어진다.
+이고, $\operatorname{rank}(\mathbf{A}) + \dim \ker(\mathbf{A}) = n$(계수–퇴화차수 정리)이며 $\operatorname{col}(\mathbf{A}^\top) \perp \ker(\mathbf{A})$이다. 열공간을 $\operatorname{col}(\cdot)$로, 영공간을 $\ker(\cdot)$로 쓰는 것이 이 책의 표기이며 0.3절에서 그대로 이어진다.
 
 </div>
 
@@ -65,42 +65,42 @@ $$
 
 오른쪽 그림은 한 열이 다른 열의 배수일 때, 곧 $\mathbf{a}_2 = 2\mathbf{a}_1$일 때 무슨 일이 생기는지를 보여 준다. 어떤 배합비를 고르더라도 $x_1\mathbf{a}_1 + x_2\mathbf{a}_2 = (x_1 + 2x_2)\mathbf{a}_1$이므로 **도달할 수 있는 점 전체가 직선 하나로 쪼그라든다.** $\operatorname{rank}(\mathbf{A}) = 1$이고 $\det \mathbf{A} = 0$이다. 목표 $\mathbf{y} = (5.5,\,1.5)$는 그 직선 위에 없으므로 어떤 $\mathbf{x}$로도 정확히 맞힐 수 없고, 할 수 있는 최선은 직선 위에서 가장 가까운 점을 잡는 것이다. 그 점이 $\hat{\mathbf{y}} = (5,\,2.5)$이며 잔차는 $\mathbf{y} - \hat{\mathbf{y}} = (0.5,\,-1)$, 길이 $1.118034$다. 잔차와 $\mathbf{a}_1$의 내적이 $0.5 \cdot 2 + (-1)\cdot 1 = 0$이라는 것, 즉 **잔차가 열공간에 수직**이라는 것이 최소제곱을 규정하는 조건이며, 그림의 직각 표시가 바로 그 사실이다.
 
-이 두 그림 사이의 차이가 회귀에서 무엇이 식별되고 무엇이 식별되지 않는지를 가른다. 오른쪽에서 $\hat{\mathbf{y}} = 2.5\,\mathbf{a}_1$에 도달하는 배합비는 $x_1 + 2x_2 = 2.5$를 만족하는 모든 쌍, 곧 $(2.5,\,0)$, $(0.5,\,1)$, $(-1.5,\,2)$ 등 무한히 많다. **사영 $\hat{\mathbf{y}}$는 유일하지만 그것을 만드는 계수는 유일하지 않다.** 적합값은 멀쩡한데 계수의 부호와 크기는 해석할 수 없는 다중공선성의 상황이 이 한 문장이다(연습문제 6과 7). 뒤에 나오는 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$는 오른쪽 그림의 사영을 $\mathbb{R}^n$에서 일반적으로 수행하는 장치이고, $(\mathbf{X}^T\mathbf{X})^{-1}$이 존재한다는 조건은 왼쪽 그림처럼 열들이 서로 겹치지 않는다는 조건이다.
+이 두 그림 사이의 차이가 회귀에서 무엇이 식별되고 무엇이 식별되지 않는지를 가른다. 오른쪽에서 $\hat{\mathbf{y}} = 2.5\,\mathbf{a}_1$에 도달하는 배합비는 $x_1 + 2x_2 = 2.5$를 만족하는 모든 쌍, 곧 $(2.5,\,0)$, $(0.5,\,1)$, $(-1.5,\,2)$ 등 무한히 많다. **사영 $\hat{\mathbf{y}}$는 유일하지만 그것을 만드는 계수는 유일하지 않다.** 적합값은 멀쩡한데 계수의 부호와 크기는 해석할 수 없는 다중공선성의 상황이 이 한 문장이다(연습문제 6과 7). 뒤에 나오는 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$는 오른쪽 그림의 사영을 $\mathbb{R}^n$에서 일반적으로 수행하는 장치이고, $(\mathbf{X}^\top\mathbf{X})^{-1}$이 존재한다는 조건은 왼쪽 그림처럼 열들이 서로 겹치지 않는다는 조건이다.
 
 ## 이 책에서 끊임없이 쓰이는 항등식
 
-- $(\mathbf{A}\mathbf{B})^T = \mathbf{B}^T \mathbf{A}^T$
+- $(\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top \mathbf{A}^\top$
 - $(\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1} \mathbf{A}^{-1}$
 - $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$ (순환 성질)
 - 정사각 $\mathbf{A}$에 대해 $\operatorname{tr}(\mathbf{A}) = \sum_i \lambda_i(\mathbf{A})$, $\det(\mathbf{A}) = \prod_i \lambda_i(\mathbf{A})$
-- $\mathbf{X}$가 확률벡터일 때 $\operatorname{Cov}(\mathbf{A} \mathbf{X}) = \mathbf{A}\, \operatorname{Cov}(\mathbf{X})\, \mathbf{A}^T$
-- $\mathbb{E}[\mathbf{X}^T \mathbf{A} \mathbf{X}] = \operatorname{tr}(\mathbf{A}\, \operatorname{Cov}(\mathbf{X})) + \boldsymbol{\mu}^T \mathbf{A} \boldsymbol{\mu}$ (이차형식의 기댓값)
+- $\mathbf{X}$가 확률벡터일 때 $\operatorname{Cov}(\mathbf{A} \mathbf{X}) = \mathbf{A}\, \operatorname{Cov}(\mathbf{X})\, \mathbf{A}^\top$
+- $\mathbb{E}[\mathbf{X}^\top \mathbf{A} \mathbf{X}] = \operatorname{tr}(\mathbf{A}\, \operatorname{Cov}(\mathbf{X})) + \boldsymbol{\mu}^\top \mathbf{A} \boldsymbol{\mu}$ (이차형식의 기댓값)
 
 ## 고윳값과 스펙트럼 정리
 
-$\mathbf{A} \in \mathbb{R}^{n \times n}$에 대해 $\mathbf{A}\mathbf{v} = \lambda \mathbf{v}$가 고윳값–고유벡터 쌍을 정의한다. **대칭** $\mathbf{A}$(모든 공분산행렬, 모든 $\mathbf{X}^T \mathbf{X}$, 모든 모자 행렬이 여기 해당한다)에 대해 **스펙트럼 정리**는
+$\mathbf{A} \in \mathbb{R}^{n \times n}$에 대해 $\mathbf{A}\mathbf{v} = \lambda \mathbf{v}$가 고윳값–고유벡터 쌍을 정의한다. **대칭** $\mathbf{A}$(모든 공분산행렬, 모든 $\mathbf{X}^\top \mathbf{X}$, 모든 모자 행렬이 여기 해당한다)에 대해 **스펙트럼 정리**는
 
 $$
-\mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T
+\mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^\top
 $$
 
-을 보장한다. 여기서 $\mathbf{Q}$는 직교행렬($\mathbf{Q}^T \mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda}$는 실수 고윳값으로 이루어진 대각행렬이다. 이것이 주성분분석, 다변량 정규 이론, 이차형식의 카이제곱분포를 떠받치는 원동력이다. 증명과 자세한 논의는 0.3절 **대칭행렬**에 있다.
+을 보장한다. 여기서 $\mathbf{Q}$는 직교행렬($\mathbf{Q}^\top \mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda}$는 실수 고윳값으로 이루어진 대각행렬이다. 이것이 주성분분석, 다변량 정규 이론, 이차형식의 카이제곱분포를 떠받치는 원동력이다. 증명과 자세한 논의는 0.3절 **대칭행렬**에 있다.
 
 ## 양(반)정치성
 
-모든 $\mathbf{x}$에 대해 $\mathbf{x}^T \mathbf{A} \mathbf{x} \ge 0$이면 $\mathbf{A}$가 **양반정치(positive semidefinite)** 라 하고($\mathbf{A} \succeq 0$), 이는 모든 고윳값이 $\ge 0$인 것과 동치다. **양정치(positive definite)** ($\mathbf{A} \succ 0$)는 두 부등식을 모두 엄격 부등식으로 바꾼 것이다. 공분산행렬은 언제나 양반정치이며, 어떤 변수도 다른 변수들의 결정론적 선형결합이 아닐 때 양정치가 된다. 양정치성은 $(\mathbf{X}^T \mathbf{X})^{-1}$이 존재하고 최소제곱해가 유일하게 정해지기 위해 필요한 바로 그 조건이다. 이차형식에 의한 특성화와 고윳값에 의한 특성화가 왜 동치인지는 0.3절 **양정치행렬**에서 증명한다.
+모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top \mathbf{A} \mathbf{x} \ge 0$이면 $\mathbf{A}$가 **양반정치(positive semidefinite)** 라 하고($\mathbf{A} \succeq 0$), 이는 모든 고윳값이 $\ge 0$인 것과 동치다. **양정치(positive definite)** ($\mathbf{A} \succ 0$)는 두 부등식을 모두 엄격 부등식으로 바꾼 것이다. 공분산행렬은 언제나 양반정치이며, 어떤 변수도 다른 변수들의 결정론적 선형결합이 아닐 때 양정치가 된다. 양정치성은 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하고 최소제곱해가 유일하게 정해지기 위해 필요한 바로 그 조건이다. 이차형식에 의한 특성화와 고윳값에 의한 특성화가 왜 동치인지는 0.3절 **양정치행렬**에서 증명한다.
 
 ## 사영과 모자 행렬
 
 **최소제곱의 모자 행렬(hat matrix)**
 
 $$
-\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T
+\mathbf{H} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top
 $$
 
 은 $\mathbf{y} \in \mathbb{R}^n$을 $\mathbf{X}$의 열공간 위로 직교사영한다. 이 행렬을 규정하는 성질은 다음과 같다.
 
-- **대칭성**: $\mathbf{H}^T = \mathbf{H}$.
+- **대칭성**: $\mathbf{H}^\top = \mathbf{H}$.
 - **멱등성**: $\mathbf{H}^2 = \mathbf{H}$.
 - **대각합 = 계수**: $\operatorname{tr}(\mathbf{H}) = p$ (모형의 자유도).
 - **고윳값은 0 또는 1**: 1이 $p$개(열공간), 0이 $n - p$개(잔차공간).
@@ -109,17 +109,17 @@ $$
 
 ## 최소제곱을 위한 행렬 미적분
 
-$\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$을 최소화하기 위해 기울기를 0으로 두면 정규방정식 $\mathbf{X}^T \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^T \mathbf{y}$를 얻고, 따라서
+$\|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\top(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})$을 최소화하기 위해 기울기를 0으로 두면 정규방정식 $\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y}$를 얻고, 따라서
 
 $$
-\hat{\boldsymbol{\beta}} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}
+\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
 $$
 
 이다. 이 하나의 공식과 그 뒤에 있는 사영 해석이 13장 선형회귀 전체의 바탕이 되며, 0.4절에서는 여기에 정규분포 가정을 얹어 $\hat{\boldsymbol{\beta}}$의 정확한 표본분포를 구한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 모자 행렬의 네 가지 성질. $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 선형독립이라 하고 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$라 두자.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모자 행렬의 네 가지 성질. $\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 선형독립이라 하고 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$라 두자.
 
 **(1)** $\mathbf{H}$가 대칭이고 멱등임을 보이고, $\operatorname{tr}(\mathbf{H}) = p$를 유도하시오. 이어서 $\mathbf{H}$의 고윳값이 $0$ 또는 $1$뿐이며 $1$이 정확히 $p$개임을 보이시오.
 
@@ -129,26 +129,26 @@ $$
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** 네 성질이 모두 $(\mathbf{X}^T\mathbf{X})^{-1}$의 존재 하나에서 나온다.
+    **(1) 해석적으로.** 네 성질이 모두 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 존재 하나에서 나온다.
 
-    **대칭성.** $\mathbf{X}^T\mathbf{X}$가 대칭이므로 그 역행렬도 대칭이고, $(\mathbf{A}\mathbf{B})^T = \mathbf{B}^T\mathbf{A}^T$를 두 번 쓰면
+    **대칭성.** $\mathbf{X}^\top\mathbf{X}$가 대칭이므로 그 역행렬도 대칭이고, $(\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top\mathbf{A}^\top$를 두 번 쓰면
 
     $$
-    \mathbf{H}^T = \big(\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\big)^T = \mathbf{X}\big((\mathbf{X}^T\mathbf{X})^{-1}\big)^T\mathbf{X}^T = \mathbf{H}
+    \mathbf{H}^\top = \big(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\big)^\top = \mathbf{X}\big((\mathbf{X}^\top\mathbf{X})^{-1}\big)^\top\mathbf{X}^\top = \mathbf{H}
     $$
 
     이다.
 
-    **멱등성.** 가운데에서 $(\mathbf{X}^T\mathbf{X})^{-1}(\mathbf{X}^T\mathbf{X}) = \mathbf{I}_p$가 지워진다.
+    **멱등성.** 가운데에서 $(\mathbf{X}^\top\mathbf{X})^{-1}(\mathbf{X}^\top\mathbf{X}) = \mathbf{I}_p$가 지워진다.
 
     $$
-    \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\underbrace{\mathbf{X}^T\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}}_{\mathbf{I}_p}\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
+    \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\underbrace{\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}}_{\mathbf{I}_p}\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}
     $$
 
-    **대각합.** 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$를 $\mathbf{A} = \mathbf{X}$, $\mathbf{B} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$로 쓰면
+    **대각합.** 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$를 $\mathbf{A} = \mathbf{X}$, $\mathbf{B} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$로 쓰면
 
     $$
-    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\big((\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{X}\big) = \operatorname{tr}(\mathbf{I}_p) = p
+    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\big((\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{X}\big) = \operatorname{tr}(\mathbf{I}_p) = p
     $$
 
     이다. $n \times n$ 행렬의 대각합이 $n$에 무관하게 $p$로 정해지는 것이 요점이다.
@@ -217,9 +217,9 @@ $$
 
     네 성질이 모두 맞는다. $\operatorname{tr}(\mathbf{H}) = 3.0$이 $p = 3$과 같고, $50 \times 50$ 행렬인 $\mathbf{H}$의 고윳값은 $1$이 $3$개, $0$이 $47 = n - p$개다. 유도한 대로 $\mathbf{H}$는 $\mathbb{R}^{50}$을 3차원 열공간과 47차원 잔차공간으로 쪼개며, **$n$이 아무리 커져도 열공간의 차원은 $p$에 묶여 있다.**
 
-    추정값 $(1.9711, -0.9500, 0.4159)$는 참값 $(2, -1, 0.5)$과 다르다. 유도가 틀린 것이 아니라 자료에 잡음이 있어서다. $\operatorname{Cov}(\hat{\boldsymbol\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$이 주는 표준오차가 $(0.0710, 0.0882, 0.1041)$인데, 실제 벗어난 폭을 그것으로 나누면 $(-0.41, 0.57, -0.81)$로 셋 다 1 표준오차 안이다. **이만큼 벗어나는 것이 정상이라는 뜻이다.**
+    추정값 $(1.9711, -0.9500, 0.4159)$는 참값 $(2, -1, 0.5)$과 다르다. 유도가 틀린 것이 아니라 자료에 잡음이 있어서다. $\operatorname{Cov}(\hat{\boldsymbol\beta}) = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$이 주는 표준오차가 $(0.0710, 0.0882, 0.1041)$인데, 실제 벗어난 폭을 그것으로 나누면 $(-0.41, 0.57, -0.81)$로 셋 다 1 표준오차 안이다. **이만큼 벗어나는 것이 정상이라는 뜻이다.**
 
-    $\mathbf{X}^T\mathbf{X}$ 쪽에서는 고윳값의 합 $109.97$이 대각합과 정확히 같다는 것, 그리고 조건수가 $2.51$로 작다는 것을 볼 수 있다. 조건수가 작으니 열들이 서로 충분히 갈라져 있어 $(\mathbf{X}^T\mathbf{X})^{-1}$을 안심하고 쓸 수 있다. 앞에서 본 오른쪽 그림처럼 한 열이 다른 열의 배수에 가까워지면 가장 작은 고윳값이 $0$으로 내려가고 조건수가 터져, 같은 공식이 수치적으로 못 쓰게 된다.
+    $\mathbf{X}^\top\mathbf{X}$ 쪽에서는 고윳값의 합 $109.97$이 대각합과 정확히 같다는 것, 그리고 조건수가 $2.51$로 작다는 것을 볼 수 있다. 조건수가 작으니 열들이 서로 충분히 갈라져 있어 $(\mathbf{X}^\top\mathbf{X})^{-1}$을 안심하고 쓸 수 있다. 앞에서 본 오른쪽 그림처럼 한 열이 다른 열의 배수에 가까워지면 가장 작은 고윳값이 $0$으로 내려가고 조건수가 터져, 같은 공식이 수치적으로 못 쓰게 된다.
 
 ## 연습문제
 
@@ -232,22 +232,22 @@ $$
 \mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 4 \\ 1 & 6 \end{pmatrix}, \qquad \mathbf{y} = \begin{pmatrix} 5 \\ 9 \\ 13 \end{pmatrix}
 $$
 
-**(a)** $\mathbf{X}^T \mathbf{X}$와 $\mathbf{X}^T \mathbf{y}$를 계산하라.
+**(a)** $\mathbf{X}^\top \mathbf{X}$와 $\mathbf{X}^\top \mathbf{y}$를 계산하라.
 **(b)** 정규방정식을 풀어 $\hat{\boldsymbol{\beta}}$를 구하라.
 **(c)** 적합값 $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}$와 잔차를 계산하라.
 
 </div>
 
 ??? success "풀이"
-    (a) $\mathbf{X}^T \mathbf{X} = \begin{pmatrix} 3 & 12 \\ 12 & 56 \end{pmatrix}$, $\mathbf{X}^T \mathbf{y} = \begin{pmatrix} 27 \\ 124 \end{pmatrix}$.
+    (a) $\mathbf{X}^\top \mathbf{X} = \begin{pmatrix} 3 & 12 \\ 12 & 56 \end{pmatrix}$, $\mathbf{X}^\top \mathbf{y} = \begin{pmatrix} 27 \\ 124 \end{pmatrix}$.
 
-    (b) $\det(\mathbf{X}^T \mathbf{X}) = 168 - 144 = 24$이므로
+    (b) $\det(\mathbf{X}^\top \mathbf{X}) = 168 - 144 = 24$이므로
 
     $$
-    (\mathbf{X}^T \mathbf{X})^{-1} = \frac{1}{24}\begin{pmatrix} 56 & -12 \\ -12 & 3 \end{pmatrix}, \quad \hat{\boldsymbol{\beta}} = \frac{1}{24}\begin{pmatrix} 24 \\ 48 \end{pmatrix} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}
+    (\mathbf{X}^\top \mathbf{X})^{-1} = \frac{1}{24}\begin{pmatrix} 56 & -12 \\ -12 & 3 \end{pmatrix}, \quad \hat{\boldsymbol{\beta}} = \frac{1}{24}\begin{pmatrix} 24 \\ 48 \end{pmatrix} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}
     $$
 
-    (c) $\hat{\mathbf{y}} = (5, 9, 13)^T = \mathbf{y}$이고 잔차는 모두 0이다. 세 점이 한 직선 위에 있으므로 적합이 정확하다.
+    (c) $\hat{\mathbf{y}} = (5, 9, 13)^\top = \mathbf{y}$이고 잔차는 모두 0이다. 세 점이 한 직선 위에 있으므로 적합이 정확하다.
 
 <div class="drillbox" markdown>
 
@@ -268,27 +268,27 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\operatorname{rank}(\mathbf{X}) = p \le n$). $\mathbf{H} = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T$가 대칭이고 멱등이며 대각합이 $p$임을 증명하라.
+$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하자($\operatorname{rank}(\mathbf{X}) = p \le n$). $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top$가 대칭이고 멱등이며 대각합이 $p$임을 증명하라.
 
 </div>
 
 ??? success "풀이"
-    **대칭성:** $(\mathbf{X}^T \mathbf{X})^{-1}$은 대칭이므로(대칭행렬의 역행렬)
+    **대칭성:** $(\mathbf{X}^\top \mathbf{X})^{-1}$은 대칭이므로(대칭행렬의 역행렬)
 
     $$
-    \mathbf{H}^T = \left(\mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T\right)^T = \mathbf{X}\left((\mathbf{X}^T \mathbf{X})^{-1}\right)^T \mathbf{X}^T = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{H}
+    \mathbf{H}^\top = \left(\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top\right)^\top = \mathbf{X}\left((\mathbf{X}^\top \mathbf{X})^{-1}\right)^\top \mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top = \mathbf{H}
     $$
 
     **멱등성:**
 
     $$
-    \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1}\underbrace{\mathbf{X}^T \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1}}_{= \mathbf{I}_p}\mathbf{X}^T = \mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1}\mathbf{X}^T = \mathbf{H}
+    \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\underbrace{\mathbf{X}^\top \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}}_{= \mathbf{I}_p}\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}
     $$
 
     **대각합:** 순환 성질에 의해
 
     $$
-    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\!\left(\mathbf{X}(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T\right) = \operatorname{tr}\!\left((\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{X}\right) = \operatorname{tr}(\mathbf{I}_p) = p
+    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\!\left(\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top\right) = \operatorname{tr}\!\left((\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{X}\right) = \operatorname{tr}(\mathbf{I}_p) = p
     $$
 
     $\square$
@@ -296,21 +296,21 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-$\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 $\mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T$라 하자. $\operatorname{tr}(\mathbf{A}) = \sum_i \lambda_i$이고 $\det(\mathbf{A}) = \prod_i \lambda_i$임을 증명하라.
+$\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 $\mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^\top$라 하자. $\operatorname{tr}(\mathbf{A}) = \sum_i \lambda_i$이고 $\det(\mathbf{A}) = \prod_i \lambda_i$임을 증명하라.
 
 </div>
 
 ??? success "풀이"
-    순환 성질과 $\mathbf{Q}^T \mathbf{Q} = \mathbf{I}$를 쓰면
+    순환 성질과 $\mathbf{Q}^\top \mathbf{Q} = \mathbf{I}$를 쓰면
 
     $$
-    \operatorname{tr}(\mathbf{A}) = \operatorname{tr}(\mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T) = \operatorname{tr}(\boldsymbol{\Lambda} \mathbf{Q}^T \mathbf{Q}) = \operatorname{tr}(\boldsymbol{\Lambda}) = \sum_i \lambda_i
+    \operatorname{tr}(\mathbf{A}) = \operatorname{tr}(\mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^\top) = \operatorname{tr}(\boldsymbol{\Lambda} \mathbf{Q}^\top \mathbf{Q}) = \operatorname{tr}(\boldsymbol{\Lambda}) = \sum_i \lambda_i
     $$
 
     이다. 행렬식의 경우, $\det$는 곱셈적이고 직교행렬 $\mathbf{Q}$에 대해 $\det(\mathbf{Q}) = \pm 1$이므로
 
     $$
-    \det(\mathbf{A}) = \det(\mathbf{Q}) \det(\boldsymbol{\Lambda}) \det(\mathbf{Q}^T) = \det(\mathbf{Q})^2 \prod_i \lambda_i = \prod_i \lambda_i
+    \det(\mathbf{A}) = \det(\mathbf{Q}) \det(\boldsymbol{\Lambda}) \det(\mathbf{Q}^\top) = \det(\mathbf{Q})^2 \prod_i \lambda_i = \prod_i \lambda_i
     $$
 
     이다. $\square$
@@ -321,7 +321,7 @@ $\mathbf{A} \in \mathbb{R}^{n \times n}$이 대칭이고 스펙트럼 분해가 
 $\mathbf{X}$가 평균 $\boldsymbol{\mu}$, 공분산 $\boldsymbol{\Sigma}$인 확률벡터라 하자. 대칭행렬 $\mathbf{A}$에 대해
 
 $$
-\mathbb{E}[\mathbf{X}^T \mathbf{A} \mathbf{X}] = \operatorname{tr}(\mathbf{A} \boldsymbol{\Sigma}) + \boldsymbol{\mu}^T \mathbf{A} \boldsymbol{\mu}
+\mathbb{E}[\mathbf{X}^\top \mathbf{A} \mathbf{X}] = \operatorname{tr}(\mathbf{A} \boldsymbol{\Sigma}) + \boldsymbol{\mu}^\top \mathbf{A} \boldsymbol{\mu}
 $$
 
 임을 보여라.
@@ -332,13 +332,13 @@ $$
     $\mathbb{E}[\mathbf{Z}] = 0$이고 $\operatorname{Cov}(\mathbf{Z}) = \boldsymbol{\Sigma}$인 $\mathbf{Z}$를 써서 $\mathbf{X} = \boldsymbol{\mu} + \mathbf{Z}$로 놓자. 전개하면($\mathbf{A}$의 대칭성을 이용한다)
 
     $$
-    \mathbf{X}^T \mathbf{A} \mathbf{X} = \boldsymbol{\mu}^T \mathbf{A} \boldsymbol{\mu} + 2 \boldsymbol{\mu}^T \mathbf{A} \mathbf{Z} + \mathbf{Z}^T \mathbf{A} \mathbf{Z}
+    \mathbf{X}^\top \mathbf{A} \mathbf{X} = \boldsymbol{\mu}^\top \mathbf{A} \boldsymbol{\mu} + 2 \boldsymbol{\mu}^\top \mathbf{A} \mathbf{Z} + \mathbf{Z}^\top \mathbf{A} \mathbf{Z}
     $$
 
-    이다. 기댓값을 취하면 $\mathbb{E}[\mathbf{Z}] = 0$이므로 가운데 항이 사라진다. 마지막 항의 경우 $\mathbf{Z}^T \mathbf{A} \mathbf{Z}$가 스칼라이므로 자기 자신의 대각합과 같고,
+    이다. 기댓값을 취하면 $\mathbb{E}[\mathbf{Z}] = 0$이므로 가운데 항이 사라진다. 마지막 항의 경우 $\mathbf{Z}^\top \mathbf{A} \mathbf{Z}$가 스칼라이므로 자기 자신의 대각합과 같고,
 
     $$
-    \mathbb{E}[\mathbf{Z}^T \mathbf{A} \mathbf{Z}] = \mathbb{E}[\operatorname{tr}(\mathbf{Z}^T \mathbf{A} \mathbf{Z})] = \mathbb{E}[\operatorname{tr}(\mathbf{A} \mathbf{Z} \mathbf{Z}^T)] = \operatorname{tr}(\mathbf{A}\, \mathbb{E}[\mathbf{Z} \mathbf{Z}^T]) = \operatorname{tr}(\mathbf{A} \boldsymbol{\Sigma})
+    \mathbb{E}[\mathbf{Z}^\top \mathbf{A} \mathbf{Z}] = \mathbb{E}[\operatorname{tr}(\mathbf{Z}^\top \mathbf{A} \mathbf{Z})] = \mathbb{E}[\operatorname{tr}(\mathbf{A} \mathbf{Z} \mathbf{Z}^\top)] = \operatorname{tr}(\mathbf{A}\, \mathbb{E}[\mathbf{Z} \mathbf{Z}^\top]) = \operatorname{tr}(\mathbf{A} \boldsymbol{\Sigma})
     $$
 
     이다. 여기에 결정론적인 항을 더하면 결과를 얻는다. $\square$
@@ -346,14 +346,14 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-$\mathbf{X}^T \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 열계수를 갖지 않으면) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$이 유일하게 정해지지 않는 이유를 서로 보완적인 두 방식으로 설명하라. (a) 대수적으로, (b) 기하적으로.
+$\mathbf{X}^\top \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 열계수를 갖지 않으면) 최소제곱추정량 $\hat{\boldsymbol{\beta}}$이 유일하게 정해지지 않는 이유를 서로 보완적인 두 방식으로 설명하라. (a) 대수적으로, (b) 기하적으로.
 
 </div>
 
 ??? success "풀이"
-    **(a) 대수적으로:** 특이성은 $\det(\mathbf{X}^T \mathbf{X}) = 0$을 뜻하므로 $(\mathbf{X}^T \mathbf{X})^{-1}$이 존재하지 않는다. 정규방정식 $\mathbf{X}^T \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^T \mathbf{y}$은 (우변이 $\mathbf{X}^T \mathbf{X}$의 열공간 안에 있으므로) 해를 갖지만 무한히 많다. $\boldsymbol{\beta}^*$가 해이고 $\mathbf{v} \in \ker(\mathbf{X})$이면 $\mathbf{X}\mathbf{v} = \mathbf{0}$이므로 $\boldsymbol{\beta}^* + \mathbf{v}$도 이 방정식을 만족한다.
+    **(a) 대수적으로:** 특이성은 $\det(\mathbf{X}^\top \mathbf{X}) = 0$을 뜻하므로 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하지 않는다. 정규방정식 $\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y}$은 (우변이 $\mathbf{X}^\top \mathbf{X}$의 열공간 안에 있으므로) 해를 갖지만 무한히 많다. $\boldsymbol{\beta}^*$가 해이고 $\mathbf{v} \in \ker(\mathbf{X})$이면 $\mathbf{X}\mathbf{v} = \mathbf{0}$이므로 $\boldsymbol{\beta}^* + \mathbf{v}$도 이 방정식을 만족한다.
 
-    **(b) 기하적으로:** $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$는 여전히 $\mathbf{y}$를 $\operatorname{col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀($\mathbf{X}^T \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(최소 노름 해를 준다)을 쓰는 것이다. $\square$
+    **(b) 기하적으로:** $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$는 여전히 $\mathbf{y}$를 $\operatorname{col}(\mathbf{X})$ 위로 직교사영한 유일한 벡터다. 그러나 $\mathbf{X}$의 열들이 선형종속이면 그 사영을 열들의 선형결합으로 나타내는 방법이 무한히 많고, 각각이 타당한 $\hat{\boldsymbol{\beta}}$을 준다. 적합값은 식별되지만 계수는 식별되지 않는다. 해결책은 종속인 열을 제거하거나, 능형회귀($\mathbf{X}^\top \mathbf{X}$에 $\lambda \mathbf{I}$를 더해 가역성을 회복한다), 또는 유사역행렬(최소 노름 해를 준다)을 쓰는 것이다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -364,7 +364,7 @@ $$
 \mathbf{X} = \begin{pmatrix} 1 & 2 & 3 \\ 1 & 3 & 4 \\ 1 & 4 & 5 \\ 1 & 5 & 6 \end{pmatrix}
 $$
 
-에 대해 네 가지 기본 부분공간의 차원을 구하고, 계수–퇴화차수 정리와 $\operatorname{col}(\mathbf{X}^T) \perp \ker(\mathbf{X})$을 확인하라. 이 자료로 회귀를 돌리면 어떤 일이 일어나는가?
+에 대해 네 가지 기본 부분공간의 차원을 구하고, 계수–퇴화차수 정리와 $\operatorname{col}(\mathbf{X}^\top) \perp \ker(\mathbf{X})$을 확인하라. 이 자료로 회귀를 돌리면 어떤 일이 일어나는가?
 
 </div>
 
@@ -375,8 +375,8 @@ $$
     |---|---|---|
     | $\operatorname{col}(\mathbf{X})$ | $2$ | $\mathbb{R}^4$ |
     | $\ker(\mathbf{X})$ | $3 - 2 = 1$ | $\mathbb{R}^3$ |
-    | $\operatorname{col}(\mathbf{X}^T)$ (행공간) | $2$ | $\mathbb{R}^3$ |
-    | $\ker(\mathbf{X}^T)$ | $4 - 2 = 2$ | $\mathbb{R}^4$ |
+    | $\operatorname{col}(\mathbf{X}^\top)$ (행공간) | $2$ | $\mathbb{R}^3$ |
+    | $\ker(\mathbf{X}^\top)$ | $4 - 2 = 2$ | $\mathbb{R}^4$ |
 
     ```python
     import numpy as np
@@ -410,14 +410,14 @@ $$
 
     세 번째 특잇값이 정확히 $0$이라는 것이 계수 결손의 신호다. 영공간 기저 $\propto (1, 1, -1)$은 "첫째 열 더하기 둘째 열 빼기 셋째 열 = 0"이라는 종속관계를 그대로 읽어 준다.
 
-    **회귀를 돌리면.** $\mathbf{X}^T\mathbf{X}$가 특이행렬이라 $\hat{\boldsymbol{\beta}}$이 유일하지 않다(연습문제 6). $\boldsymbol{\beta}^*$가 해이면 임의의 $c$에 대해 $\boldsymbol{\beta}^* + c(1,1,-1)^T$도 해이며, 넷 모두 **똑같은 적합값**을 준다. `np.linalg.lstsq`는 오류를 내지 않고 최소 노름 해 하나를 조용히 돌려주므로 더 위험하다. 계수의 부호나 크기를 해석하려 들면 아무 의미 없는 수를 해석하게 된다.
+    **회귀를 돌리면.** $\mathbf{X}^\top\mathbf{X}$가 특이행렬이라 $\hat{\boldsymbol{\beta}}$이 유일하지 않다(연습문제 6). $\boldsymbol{\beta}^*$가 해이면 임의의 $c$에 대해 $\boldsymbol{\beta}^* + c(1,1,-1)^\top$도 해이며, 넷 모두 **똑같은 적합값**을 준다. `np.linalg.lstsq`는 오류를 내지 않고 최소 노름 해 하나를 조용히 돌려주므로 더 위험하다. 계수의 부호나 크기를 해석하려 들면 아무 의미 없는 수를 해석하게 된다.
 
     실무에서 이 상황은 완전한 다중공선성으로 나타난다. 가장 흔한 원인은 범주형 변수를 원-핫 인코딩하면서 기준 범주를 빼지 않은 것이다(더미변수 함정). $\square$
 
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-$\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\mathbf{X})\,\mathbf{A}^T$를 증명하고, 이로부터 공분산행렬이 항상 양반정치임을 보여라. 세 자산 포트폴리오에 적용해 분산투자 효과를 확인하라.
+$\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\mathbf{X})\,\mathbf{A}^\top$를 증명하고, 이로부터 공분산행렬이 항상 양반정치임을 보여라. 세 자산 포트폴리오에 적용해 분산투자 효과를 확인하라.
 
 </div>
 
@@ -425,20 +425,20 @@ $\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\math
     $\boldsymbol{\mu} = \mathbb{E}[\mathbf{X}]$라 하면 $\mathbb{E}[\mathbf{A}\mathbf{X}] = \mathbf{A}\boldsymbol{\mu}$이므로
 
     $$
-    \operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbb{E}\!\left[\mathbf{A}(\mathbf{X}-\boldsymbol{\mu})(\mathbf{X}-\boldsymbol{\mu})^T\mathbf{A}^T\right]
-    = \mathbf{A}\,\mathbb{E}\!\left[(\mathbf{X}-\boldsymbol{\mu})(\mathbf{X}-\boldsymbol{\mu})^T\right]\mathbf{A}^T
-    = \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^T
+    \operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbb{E}\!\left[\mathbf{A}(\mathbf{X}-\boldsymbol{\mu})(\mathbf{X}-\boldsymbol{\mu})^\top\mathbf{A}^\top\right]
+    = \mathbf{A}\,\mathbb{E}\!\left[(\mathbf{X}-\boldsymbol{\mu})(\mathbf{X}-\boldsymbol{\mu})^\top\right]\mathbf{A}^\top
+    = \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^\top
     $$
 
     이다. $\mathbf{A}$가 상수라 기댓값 밖으로 빠져나온 것이 전부다.
 
-    **양반정치성.** $\mathbf{A}$ 자리에 행벡터 $\mathbf{c}^T$를 넣으면 좌변이 스칼라 확률변수의 분산이므로
+    **양반정치성.** $\mathbf{A}$ 자리에 행벡터 $\mathbf{c}^\top$를 넣으면 좌변이 스칼라 확률변수의 분산이므로
 
     $$
-    \mathbf{c}^T\boldsymbol{\Sigma}\mathbf{c} = \operatorname{Var}(\mathbf{c}^T\mathbf{X}) \ge 0
+    \mathbf{c}^\top\boldsymbol{\Sigma}\mathbf{c} = \operatorname{Var}(\mathbf{c}^\top\mathbf{X}) \ge 0
     $$
 
-    이고, 이것이 모든 $\mathbf{c}$에 대해 성립한다. 즉 **공분산행렬의 양반정치성은 "분산은 음수가 될 수 없다"를 행렬로 옮겨 적은 것일 뿐이다.** 등호는 $\mathbf{c}^T\mathbf{X}$가 상수일 때, 곧 변수들 사이에 완전한 선형관계가 있을 때만 성립한다. $\square$
+    이고, 이것이 모든 $\mathbf{c}$에 대해 성립한다. 즉 **공분산행렬의 양반정치성은 "분산은 음수가 될 수 없다"를 행렬로 옮겨 적은 것일 뿐이다.** 등호는 $\mathbf{c}^\top\mathbf{X}$가 상수일 때, 곧 변수들 사이에 완전한 선형관계가 있을 때만 성립한다. $\square$
 
     ```python
     import numpy as np
@@ -470,22 +470,22 @@ $\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\math
     최소분산 표준편차: 0.1563
     ```
 
-    동일가중 포트폴리오의 표준편차 $0.1758$은 개별 표준편차의 평균 $0.3$보다 훨씬 작다. **이것이 분산투자다.** 비대각 성분이 작거나 음수라서 $\mathbf{w}^T\boldsymbol{\Sigma}\mathbf{w}$가 대각 성분의 가중평균보다 작아지는 것이다.
+    동일가중 포트폴리오의 표준편차 $0.1758$은 개별 표준편차의 평균 $0.3$보다 훨씬 작다. **이것이 분산투자다.** 비대각 성분이 작거나 음수라서 $\mathbf{w}^\top\boldsymbol{\Sigma}\mathbf{w}$가 대각 성분의 가중평균보다 작아지는 것이다.
 
     최소분산 포트폴리오는 여기서 더 나아가 $0.1563$까지 낮추는데, 변동성이 가장 낮은 첫 자산에 가장 큰 비중($0.57$)을 준다. 상관이 완전하다면($\rho = 1$) 비대각 성분이 커져 이런 이득이 사라진다. 위기 때 상관이 $1$로 몰리면서 분산투자 효과가 증발하는 현상이 바로 이 계산에 들어 있다.
 
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-행렬 미적분으로 정규방정식을 유도하라. 필요한 기울기 규칙 $\nabla_{\mathbf{x}}(\mathbf{a}^T\mathbf{x}) = \mathbf{a}$와 $\nabla_{\mathbf{x}}(\mathbf{x}^T\mathbf{A}\mathbf{x}) = 2\mathbf{A}\mathbf{x}$($\mathbf{A}$ 대칭)를 먼저 증명하고, 헤세행렬을 확인해 얻은 점이 정말 최소점임을 보여라.
+행렬 미적분으로 정규방정식을 유도하라. 필요한 기울기 규칙 $\nabla_{\mathbf{x}}(\mathbf{a}^\top\mathbf{x}) = \mathbf{a}$와 $\nabla_{\mathbf{x}}(\mathbf{x}^\top\mathbf{A}\mathbf{x}) = 2\mathbf{A}\mathbf{x}$($\mathbf{A}$ 대칭)를 먼저 증명하고, 헤세행렬을 확인해 얻은 점이 정말 최소점임을 보여라.
 
 </div>
 
 ??? success "풀이"
-    **기울기 규칙.** $\mathbf{a}^T\mathbf{x} = \sum_j a_j x_j$이므로 $\partial/\partial x_k = a_k$, 곧 $\nabla = \mathbf{a}$이다. 이차형식은 $\mathbf{x}^T\mathbf{A}\mathbf{x} = \sum_{i,j}a_{ij}x_ix_j$이므로
+    **기울기 규칙.** $\mathbf{a}^\top\mathbf{x} = \sum_j a_j x_j$이므로 $\partial/\partial x_k = a_k$, 곧 $\nabla = \mathbf{a}$이다. 이차형식은 $\mathbf{x}^\top\mathbf{A}\mathbf{x} = \sum_{i,j}a_{ij}x_ix_j$이므로
 
     $$
-    \frac{\partial}{\partial x_k} = \sum_j a_{kj}x_j + \sum_i a_{ik}x_i = [\mathbf{A}\mathbf{x}]_k + [\mathbf{A}^T\mathbf{x}]_k
+    \frac{\partial}{\partial x_k} = \sum_j a_{kj}x_j + \sum_i a_{ik}x_i = [\mathbf{A}\mathbf{x}]_k + [\mathbf{A}^\top\mathbf{x}]_k
     $$
 
     이고, $\mathbf{A}$가 대칭이면 $2\mathbf{A}\mathbf{x}$가 된다.
@@ -494,21 +494,21 @@ $\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\math
 
     $$
     S(\boldsymbol{\beta}) = \|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|^2
-    = \mathbf{y}^T\mathbf{y} - 2\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} + \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
+    = \mathbf{y}^\top\mathbf{y} - 2\boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{y} + \boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}
     $$
 
-    이다($\mathbf{y}^T\mathbf{X}\boldsymbol{\beta}$가 스칼라라 전치와 같으므로 두 교차항이 합쳐졌다). 위의 두 규칙을 쓰면
+    이다($\mathbf{y}^\top\mathbf{X}\boldsymbol{\beta}$가 스칼라라 전치와 같으므로 두 교차항이 합쳐졌다). 위의 두 규칙을 쓰면
 
     $$
-    \nabla S = -2\mathbf{X}^T\mathbf{y} + 2\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{0}
+    \nabla S = -2\mathbf{X}^\top\mathbf{y} + 2\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{0}
     \quad\Longrightarrow\quad
-    \mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^T\mathbf{y}
+    \mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^\top\mathbf{y}
     $$
 
-    **최소점 확인.** 헤세행렬은 $\nabla^2 S = 2\mathbf{X}^T\mathbf{X}$이고, 임의의 $\mathbf{v} \ne \mathbf{0}$에 대해
+    **최소점 확인.** 헤세행렬은 $\nabla^2 S = 2\mathbf{X}^\top\mathbf{X}$이고, 임의의 $\mathbf{v} \ne \mathbf{0}$에 대해
 
     $$
-    \mathbf{v}^T(\mathbf{X}^T\mathbf{X})\mathbf{v} = \|\mathbf{X}\mathbf{v}\|^2 \ge 0
+    \mathbf{v}^\top(\mathbf{X}^\top\mathbf{X})\mathbf{v} = \|\mathbf{X}\mathbf{v}\|^2 \ge 0
     $$
 
     이다. $\mathbf{X}$가 완전 열계수이면 $\mathbf{X}\mathbf{v} \ne \mathbf{0}$이라 엄격한 양정치가 되어 $S$가 순볼록이고, 정류점은 유일한 전역 최소점이다. $\square$
@@ -555,7 +555,7 @@ $\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\math
 **(하나 빼기 항등식)** 관측 $i$를 빼고 적합한 회귀의 예측오차가
 
 $$
-y_i - \mathbf{x}_i^T\hat{\boldsymbol{\beta}}_{(i)} = \frac{e_i}{1 - h_{ii}}
+y_i - \mathbf{x}_i^\top\hat{\boldsymbol{\beta}}_{(i)} = \frac{e_i}{1 - h_{ii}}
 $$
 
 임이 알려져 있다. 여기서 $e_i$는 통상 잔차이고 $h_{ii}$는 지렛값이다. 이 공식을 수치로 확인하고, $h_{ii}$가 $1$에 가까우면 어떤 일이 벌어지는지 설명하라.
@@ -614,10 +614,10 @@ $$
 
 - **계획행렬 $\mathbf{X}$.** 행이 관측, 열이 예측변수다. $\operatorname{col}(\mathbf{X})$ 가 최소제곱으로 도달할 수 있는 적합값 전체이며, 회귀란 $\mathbf{y}$ 를 이 공간으로 사영하는 일이다.
 - **네 가지 기본 부분공간과 계수–퇴화차수 정리.** 자유도가 어디서 오는지를 세는 장치다. 잔차가 $p$ 개의 제약을 받아 자유도가 $n-p$ 로 줄어든다는 사실이 여기서 나온다.
-- **스펙트럼 정리.** 대칭행렬은 $\mathbf{Q}\boldsymbol\Lambda\mathbf{Q}^T$ 로 분해된다. 공분산행렬, $\mathbf{X}^T\mathbf{X}$, 모자 행렬이 모두 대칭이므로 이 정리가 주성분분석·다변량 정규·이차형식의 카이제곱분포를 한꺼번에 떠받친다.
-- **양(반)정치성.** 공분산행렬은 언제나 $\succeq 0$ 이고, $\succ 0$ 인 것이 곧 $(\mathbf{X}^T\mathbf{X})^{-1}$ 이 존재해 최소제곱해가 유일해지는 조건이다.
-- **모자 행렬 $\mathbf{H}=\mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$.** 대칭이고 멱등이다. 이 두 성질만으로 잔차제곱합의 분포가 정해진다.
+- **스펙트럼 정리.** 대칭행렬은 $\mathbf{Q}\boldsymbol\Lambda\mathbf{Q}^\top$ 로 분해된다. 공분산행렬, $\mathbf{X}^\top\mathbf{X}$, 모자 행렬이 모두 대칭이므로 이 정리가 주성분분석·다변량 정규·이차형식의 카이제곱분포를 한꺼번에 떠받친다.
+- **양(반)정치성.** 공분산행렬은 언제나 $\succeq 0$ 이고, $\succ 0$ 인 것이 곧 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 존재해 최소제곱해가 유일해지는 조건이다.
+- **모자 행렬 $\mathbf{H}=\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$.** 대칭이고 멱등이다. 이 두 성질만으로 잔차제곱합의 분포가 정해진다.
 
-**두 항등식이 특히 자주 쓰인다.** $\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\mathbf{X})\,\mathbf{A}^T$ 가 선형변환의 분산을 주고, $\mathbb{E}[\mathbf{X}^T\mathbf{A}\mathbf{X}] = \operatorname{tr}(\mathbf{A}\,\operatorname{Cov}(\mathbf{X})) + \boldsymbol\mu^T\mathbf{A}\boldsymbol\mu$ 가 이차형식의 기댓값을 준다. 뒤에서 $\mathbb{E}[\text{SSE}]$ 를 계산할 때 쓰는 것이 두 번째 식이다.
+**두 항등식이 특히 자주 쓰인다.** $\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\mathbf{X})\,\mathbf{A}^\top$ 가 선형변환의 분산을 주고, $\mathbb{E}[\mathbf{X}^\top\mathbf{A}\mathbf{X}] = \operatorname{tr}(\mathbf{A}\,\operatorname{Cov}(\mathbf{X})) + \boldsymbol\mu^\top\mathbf{A}\boldsymbol\mu$ 가 이차형식의 기댓값을 준다. 뒤에서 $\mathbb{E}[\text{SSE}]$ 를 계산할 때 쓰는 것이 두 번째 식이다.
 
 다음 절부터는 **계산 도구**로 넘어간다. 파이썬·NumPy·pandas·Matplotlib 으로 여기 적은 연산을 실제로 수행하고, 자료를 눈으로 확인하는 법을 익힌다.

@@ -74,12 +74,12 @@ $$
 
 ## 빗각 사영 대 직교사영
 
-사영 $\mathbf{P}$가 $\mathbf{P} = \mathbf{P}^T$이면(사영이 대칭이면) **직교사영**이라 하고, 그렇지 않으면 **빗각 사영**이라 한다.
+사영 $\mathbf{P}$가 $\mathbf{P} = \mathbf{P}^\top$이면(사영이 대칭이면) **직교사영**이라 하고, 그렇지 않으면 **빗각 사영**이라 한다.
 
 | 성질 | 직교사영 | 빗각 사영 |
 |---|---|---|
 | $\mathbf{P}^2 = \mathbf{P}$ | 예 | 예 |
-| $\mathbf{P}^T = \mathbf{P}$ | 예 | 아니오 |
+| $\mathbf{P}^\top = \mathbf{P}$ | 예 | 아니오 |
 | $\ker(\mathbf{P}) \perp \operatorname{col}(\mathbf{P})$ | 예 | 아니오 |
 | $\lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert$을 최소화 | 예 | (일반적으로) 아니오 |
 
@@ -87,17 +87,17 @@ $$
 
 ![같은 직선 위로의 빗각 사영과 직교사영을 나란히 놓은 그림. 두 경우 모두 목표 부분공간은 x축이고 사영되는 벡터도 (3,2)로 같지만, 눌러 없애는 방향이 달라 상이 (1,0)과 (3,0)으로 갈린다](./img/oblique_vs_orthogonal.png)
 
-두 그림에서 **목표 부분공간도 같고 사영되는 벡터도 같다.** 둘 다 $\mathcal{V} = \operatorname{span}\{(1,0)^T\}$ 위로 $\mathbf{x} = (3,2)^T$를 보낸다. 그런데 왼쪽의 상은 $(1,0)^T$, 오른쪽의 상은 $(3,0)^T$다. 달라진 것은 하나뿐이다. 눌러 없애는 방향 $\mathcal{W}$가 왼쪽은 $\operatorname{span}\{(1,1)^T\}$, 오른쪽은 $\mathcal{V}^\perp = \operatorname{span}\{(0,1)^T\}$다.
+두 그림에서 **목표 부분공간도 같고 사영되는 벡터도 같다.** 둘 다 $\mathcal{V} = \operatorname{span}\{(1,0)^\top\}$ 위로 $\mathbf{x} = (3,2)^\top$를 보낸다. 그런데 왼쪽의 상은 $(1,0)^\top$, 오른쪽의 상은 $(3,0)^\top$다. 달라진 것은 하나뿐이다. 눌러 없애는 방향 $\mathcal{W}$가 왼쪽은 $\operatorname{span}\{(1,1)^\top\}$, 오른쪽은 $\mathcal{V}^\perp = \operatorname{span}\{(0,1)^\top\}$다.
 
 옅은 점선 다발은 영공간 $\mathcal{W}$를 평행이동한 직선들이다. 한 직선 위의 점들은 모두 같은 곳으로 간다. 사영이란 결국 이 다발을 따라 $\mathcal{V}$로 미끄러뜨리는 일이고, 다발의 기울기를 바꾸면 도착지가 바뀐다. 이것이 정리 2가 말하는 바다. 목표 부분공간 $\mathcal{V}$만으로는 사영이 정해지지 않으며, $\mathcal{W}$까지 지정해야 비로소 하나로 정해진다.
 
-두 상까지의 거리를 재면 빗각 쪽이 $\lVert(2,2)^T\rVert = 2.828$, 직교 쪽이 $\lVert(0,2)^T\rVert = 2.000$이다. 같은 직선 위의 점인데도 직교사영이 더 가깝다. 오른쪽에만 직각 표시가 붙어 있는 것이 그 이유다. 잔차가 $\mathcal{V}$에 수직일 때에만 그 발이 최근접점이 되며, 이 사실이 다음 절의 주제이자 최소제곱이 직교사영인 이유다.
+두 상까지의 거리를 재면 빗각 쪽이 $\lVert(2,2)^\top\rVert = 2.828$, 직교 쪽이 $\lVert(0,2)^\top\rVert = 2.000$이다. 같은 직선 위의 점인데도 직교사영이 더 가깝다. 오른쪽에만 직각 표시가 붙어 있는 것이 그 이유다. 잔차가 $\mathcal{V}$에 수직일 때에만 그 발이 최근접점이 되며, 이 사실이 다음 절의 주제이자 최소제곱이 직교사영인 이유다.
 
 ## 예 — 빗각 사영
 
-$\mathbb{R}^2$에서 $\mathcal{W} = \operatorname{span}\{(1, 1)^T\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^T\}$ 위로 사영하는 경우를 생각하자.
+$\mathbb{R}^2$에서 $\mathcal{W} = \operatorname{span}\{(1, 1)^\top\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^\top\}$ 위로 사영하는 경우를 생각하자.
 
-임의의 벡터 $\mathbf{x} = (x_1, x_2)^T$는 $\alpha = x_1 - x_2$, $\beta = x_2$에 대해 $\mathbf{x} = \alpha(1, 0)^T + \beta(1, 1)^T$로 분해된다. $\mathcal{W}$ 방향을 따라 $\mathcal{V}$ 위로 사영하면 $\mathcal{V}$ 성분만 남는다.
+임의의 벡터 $\mathbf{x} = (x_1, x_2)^\top$는 $\alpha = x_1 - x_2$, $\beta = x_2$에 대해 $\mathbf{x} = \alpha(1, 0)^\top + \beta(1, 1)^\top$로 분해된다. $\mathcal{W}$ 방향을 따라 $\mathcal{V}$ 위로 사영하면 $\mathcal{V}$ 성분만 남는다.
 
 $$
 \mathbf{P}\mathbf{x} = \alpha\begin{pmatrix}1 \\ 0\end{pmatrix} = \begin{pmatrix}x_1 - x_2 \\ 0\end{pmatrix}
@@ -111,17 +111,17 @@ $$
 
 이다.
 
-**확인:** $\mathbf{P}^2 = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \mathbf{P}$. 이 행렬은 멱등이지만 대칭이 아니므로($\mathbf{P} \neq \mathbf{P}^T$) 빗각 사영이다.
+**확인:** $\mathbf{P}^2 = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \mathbf{P}$. 이 행렬은 멱등이지만 대칭이 아니므로($\mathbf{P} \neq \mathbf{P}^\top$) 빗각 사영이다.
 
 ## 예 — 1차원에서의 직교사영
 
-$\mathcal{V}^\perp = \operatorname{span}\{(0, 1)^T\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^T\}$ 위로 사영하는 행렬은
+$\mathcal{V}^\perp = \operatorname{span}\{(0, 1)^\top\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^\top\}$ 위로 사영하는 행렬은
 
 $$
 \mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}
 $$
 
-이다. 이것은 멱등이면서 대칭이므로 직교사영이다. 두 번째 성분을 떨어뜨려 $(x_1, x_2)^T$를 $(x_1, 0)^T$로 보낸다.
+이다. 이것은 멱등이면서 대칭이므로 직교사영이다. 두 번째 성분을 떨어뜨려 $(x_1, x_2)^\top$를 $(x_1, 0)^\top$로 보낸다.
 
 ## 유일성
 
@@ -184,7 +184,7 @@ $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임�
     \mathbf{P}^2 = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} = \mathbf{P}
     $$
 
-    $\mathbf{P}$의 열공간은 $\text{span}\{(1, 0)^T\}$이므로 $\mathbf{P}$는 $x_1$축 위로 사영한다. 여집합 사영은
+    $\mathbf{P}$의 열공간은 $\text{span}\{(1, 0)^\top\}$이므로 $\mathbf{P}$는 $x_1$축 위로 사영한다. 여집합 사영은
 
     $$
     \mathbf{I} - \mathbf{P} = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}
@@ -222,9 +222,9 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
     \mathbf{P}^2 = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \mathbf{P}
     $$
 
-    그러나 $\mathbf{P}^T = \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix} \neq \mathbf{P}$이므로 $\mathbf{P}$는 대칭이 아니다.
+    그러나 $\mathbf{P}^\top = \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix} \neq \mathbf{P}$이므로 $\mathbf{P}$는 대칭이 아니다.
 
-    이 행렬은 $\ker(\mathbf{P}) = \text{span}\{(-1, 1)^T\}$ 방향을 따라 $\text{span}\{(1, 0)^T\}$ 위로 사영한다. 사영 방향이 목표 부분공간에 대해 빗각이다(수직이 아니다).
+    이 행렬은 $\ker(\mathbf{P}) = \text{span}\{(-1, 1)^\top\}$ 방향을 따라 $\text{span}\{(1, 0)^\top\}$ 위로 사영한다. 사영 방향이 목표 부분공간에 대해 빗각이다(수직이 아니다).
 
 <div class="drillbox" markdown>
 
@@ -237,7 +237,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
     $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$와 $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$의 직교성에는 $\mathbf{H}$가 (멱등일 뿐 아니라) 대칭이어야 한다. 대칭성이 있으면
 
     $$
-    \hat{\mathbf{y}}^T\mathbf{e} = \mathbf{y}^T\mathbf{H}^T(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^T\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^T(\mathbf{H} - \mathbf{H}^2)\mathbf{y} = \mathbf{0}
+    \hat{\mathbf{y}}^\top\mathbf{e} = \mathbf{y}^\top\mathbf{H}^\top(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top\mathbf{H}(\mathbf{I} - \mathbf{H})\mathbf{y} = \mathbf{y}^\top(\mathbf{H} - \mathbf{H}^2)\mathbf{y} = \mathbf{0}
     $$
 
     이다. $\mathbf{H}$가 멱등이지만 대칭이 아니라면(빗각 사영이라면) 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$는 여전히 성립하지만 두 성분이 직교하지는 않는다. 최소제곱의 모자 행렬은 멱등이면서 대칭이며, 그 덕분에 제곱합 분해와 피타고라스 정리가 작동한다.
@@ -245,21 +245,21 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff hard" title="어려움"></span>
-$\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 따라 사영하는 행렬을 만드는 일반 공식은 $\mathbf{P} = \mathbf{V}(\mathbf{U}^T\mathbf{V})^{-1}\mathbf{U}^T$이다. 여기서 $\mathbf{U}$의 열들은 $\mathcal{W}$의 직교여공간을 편다. 이 $\mathbf{P}$가 사영임을 보이고, 본문의 빗각 사영 예를 이 공식으로 재현하라.
+$\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 따라 사영하는 행렬을 만드는 일반 공식은 $\mathbf{P} = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top$이다. 여기서 $\mathbf{U}$의 열들은 $\mathcal{W}$의 직교여공간을 편다. 이 $\mathbf{P}$가 사영임을 보이고, 본문의 빗각 사영 예를 이 공식으로 재현하라.
 
 </div>
 
 ??? success "풀이"
-    **멱등성.** 가운데에서 $\mathbf{U}^T\mathbf{V}$와 그 역행렬이 상쇄된다.
+    **멱등성.** 가운데에서 $\mathbf{U}^\top\mathbf{V}$와 그 역행렬이 상쇄된다.
 
     $$
-    \mathbf{P}^2 = \mathbf{V}(\mathbf{U}^T\mathbf{V})^{-1}\underbrace{\mathbf{U}^T\mathbf{V}}_{}(\mathbf{U}^T\mathbf{V})^{-1}\mathbf{U}^T
-    = \mathbf{V}(\mathbf{U}^T\mathbf{V})^{-1}\mathbf{U}^T = \mathbf{P}
+    \mathbf{P}^2 = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\underbrace{\mathbf{U}^\top\mathbf{V}}_{}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top
+    = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top = \mathbf{P}
     $$
 
-    **치역과 영공간.** $\mathbf{P}\mathbf{x}$는 언제나 $\mathbf{V}$의 열들의 일차결합이므로 $\operatorname{col}(\mathbf{P}) \subseteq \mathcal{V}$이다. 또 $\mathbf{P}\mathbf{x} = \mathbf{0}$일 필요충분조건은 $\mathbf{U}^T\mathbf{x} = \mathbf{0}$이므로 $\ker(\mathbf{P}) = \operatorname{col}(\mathbf{U})^\perp = \mathcal{W}$이다.
+    **치역과 영공간.** $\mathbf{P}\mathbf{x}$는 언제나 $\mathbf{V}$의 열들의 일차결합이므로 $\operatorname{col}(\mathbf{P}) \subseteq \mathcal{V}$이다. 또 $\mathbf{P}\mathbf{x} = \mathbf{0}$일 필요충분조건은 $\mathbf{U}^\top\mathbf{x} = \mathbf{0}$이므로 $\ker(\mathbf{P}) = \operatorname{col}(\mathbf{U})^\perp = \mathcal{W}$이다.
 
-    본문의 예는 $\mathcal{V} = \operatorname{span}\{(1,0)^T\}$, $\mathcal{W} = \operatorname{span}\{(1,1)^T\}$이었다. $\mathcal{W}^\perp = \operatorname{span}\{(1,-1)^T\}$이므로 $\mathbf{U} = (1,-1)^T$로 둔다.
+    본문의 예는 $\mathcal{V} = \operatorname{span}\{(1,0)^\top\}$, $\mathcal{W} = \operatorname{span}\{(1,1)^\top\}$이었다. $\mathcal{W}^\perp = \operatorname{span}\{(1,-1)^\top\}$이므로 $\mathbf{U} = (1,-1)^\top$로 둔다.
 
     ```python
     import numpy as np
@@ -285,9 +285,9 @@ $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 �
     (1,1) 을 보내면: [0. 0.]
     ```
 
-    본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$이 그대로 나오고, 눌러 없애기로 한 방향 $(1,1)^T$이 실제로 $\mathbf{0}$으로 간다.
+    본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$이 그대로 나오고, 눌러 없애기로 한 방향 $(1,1)^\top$이 실제로 $\mathbf{0}$으로 간다.
 
-    **직교사영은 특수한 경우다.** $\mathcal{W} = \mathcal{V}^\perp$로 두면 $\mathbf{U} = \mathbf{V}$가 되어 $\mathbf{P} = \mathbf{V}(\mathbf{V}^T\mathbf{V})^{-1}\mathbf{V}^T$, 곧 모자 행렬의 꼴이 된다. $\square$
+    **직교사영은 특수한 경우다.** $\mathcal{W} = \mathcal{V}^\perp$로 두면 $\mathbf{U} = \mathbf{V}$가 되어 $\mathbf{P} = \mathbf{V}(\mathbf{V}^\top\mathbf{V})^{-1}\mathbf{V}^\top$, 곧 모자 행렬의 꼴이 된다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -411,14 +411,14 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
 </div>
 
 ??? success "풀이"
-    $\mathbf{J} = \mathbf{1}\mathbf{1}^T$이고 $\mathbf{1}^T\mathbf{1} = n$이므로 $\mathbf{J}^2 = \mathbf{1}(\mathbf{1}^T\mathbf{1})\mathbf{1}^T = n\mathbf{J}$이다. 따라서
+    $\mathbf{J} = \mathbf{1}\mathbf{1}^\top$이고 $\mathbf{1}^\top\mathbf{1} = n$이므로 $\mathbf{J}^2 = \mathbf{1}(\mathbf{1}^\top\mathbf{1})\mathbf{1}^\top = n\mathbf{J}$이다. 따라서
 
     $$
     \mathbf{C}^2 = \mathbf{I} - \frac{2}{n}\mathbf{J} + \frac{1}{n^2}\mathbf{J}^2
     = \mathbf{I} - \frac{2}{n}\mathbf{J} + \frac{1}{n}\mathbf{J} = \mathbf{C}
     $$
 
-    이고, $\mathbf{J}^T = \mathbf{J}$이므로 $\mathbf{C}^T = \mathbf{C}$다. 멱등이면서 대칭이므로 **직교사영**이다.
+    이고, $\mathbf{J}^\top = \mathbf{J}$이므로 $\mathbf{C}^\top = \mathbf{C}$다. 멱등이면서 대칭이므로 **직교사영**이다.
 
     $\mathbf{C}\mathbf{x} = \mathbf{x} - \bar{x}\mathbf{1}$이므로 $\mathbf{C}$는 $\mathbf{1}$과 직교인 부분공간, 곧 **성분의 합이 0인 벡터들의 공간** 위로 사영한다. 눌러 없애는 방향은 $\operatorname{span}\{\mathbf{1}\}$이다.
 
@@ -453,15 +453,15 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-빗각 사영은 거리를 최소화하지 않는다. 본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$과 같은 부분공간 위로의 직교사영을 $\mathbf{x} = (0, 1)^T$에 적용해 $\lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert$를 비교하라.
+빗각 사영은 거리를 최소화하지 않는다. 본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$과 같은 부분공간 위로의 직교사영을 $\mathbf{x} = (0, 1)^\top$에 적용해 $\lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert$를 비교하라.
 
 </div>
 
 ??? success "풀이"
-    두 사영 모두 치역이 $\operatorname{span}\{(1,0)^T\}$로 같지만 눌러 없애는 방향이 다르다.
+    두 사영 모두 치역이 $\operatorname{span}\{(1,0)^\top\}$로 같지만 눌러 없애는 방향이 다르다.
 
-    - 직교사영 $\mathbf{P}_\perp = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$: $\mathbf{P}_\perp\mathbf{x} = (0,0)^T$, 거리 $\lVert(0,1)^T\rVert = 1$.
-    - 빗각 사영 $\mathbf{P}$: $\mathbf{P}\mathbf{x} = (-1, 0)^T$, 거리 $\lVert(1,1)^T\rVert = \sqrt{2} \approx 1.414$.
+    - 직교사영 $\mathbf{P}_\perp = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$: $\mathbf{P}_\perp\mathbf{x} = (0,0)^\top$, 거리 $\lVert(0,1)^\top\rVert = 1$.
+    - 빗각 사영 $\mathbf{P}$: $\mathbf{P}\mathbf{x} = (-1, 0)^\top$, 거리 $\lVert(1,1)^\top\rVert = \sqrt{2} \approx 1.414$.
 
     ```python
     import numpy as np

@@ -69,7 +69,7 @@ Python에는 회귀 모형화를 위한 주요 라이브러리가 둘 있다. **
 
     # MASS 패키지의 Boston 자료 (Rdatasets 미러). sklearn에서는 1.2판에 제거되었다.
     url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
-           "master/csv/MASS/Boston.csv")
+           "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/MASS/Boston.csv")
     boston = pd.read_csv(url)
     df = boston.rename(columns={"rm": "RM", "lstat": "LSTAT",
                                 "ptratio": "PTRATIO", "medv": "PRICE"})

@@ -73,7 +73,7 @@ $C=2$이면 다항 로지스틱 회귀는 보통의 로지스틱 회귀로 환�
 
 $$
 \log\frac{P(Y=1\mid\mathbf{x})}{P(Y=0\mid\mathbf{x})}
-= (\mathbf{w}_1-\mathbf{w}_0)^T\mathbf{x} + (b_1-b_0)
+= (\mathbf{w}_1-\mathbf{w}_0)^\top\mathbf{x} + (b_1-b_0)
 $$
 
 ## 모수가 과잉이라는 말의 뜻
@@ -131,10 +131,10 @@ $\boldsymbol\theta$가 소프트맥스의 $\mathbf{w}_0$, $\mathbf{w}_1$과 어�
     = \frac{1}{1+e^{-(z_1-z_0)}} = \sigma(z_1 - z_0)
     $$
 
-    이고 $z_k = \mathbf{w}_k^T\mathbf{x} + b_k$이므로
+    이고 $z_k = \mathbf{w}_k^\top\mathbf{x} + b_k$이므로
 
     $$
-    z_1 - z_0 = (\mathbf{w}_1-\mathbf{w}_0)^T\mathbf{x} + (b_1-b_0)
+    z_1 - z_0 = (\mathbf{w}_1-\mathbf{w}_0)^\top\mathbf{x} + (b_1-b_0)
     $$
 
     이다. 따라서 소프트맥스는 계수
@@ -192,7 +192,7 @@ MNIST($p = 784$, $C = 10$)에서 단층 소프트맥스 모형과 은닉 노드 
 
 **연습문제 3.** <span class="diff hard" title="어려움"></span>
 단층 소프트맥스 모형에서 교차엔트로피 손실의 $\mathbf{W}$에 대한 기울기가
-$\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
+$\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^\top(\hat{\mathbf{Y}} - \mathbf{Y})$
 임을 유도하라.
 
 </div>
@@ -228,15 +228,15 @@ $\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
     $$
     \frac{\partial \mathcal{L}}{\partial W_{jk}} = \sum_i X_{ij}(\hat Y_{ik} - Y_{ik})
     \quad\Longrightarrow\quad
-    \nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^T(\hat{\mathbf{Y}} - \mathbf{Y})
+    \nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^\top(\hat{\mathbf{Y}} - \mathbf{Y})
     $$
 
-    이다. 편향은 $\nabla_{\mathbf{b}}\mathcal{L} = \mathbf{1}^T(\hat{\mathbf{Y}} - \mathbf{Y})$
+    이다. 편향은 $\nabla_{\mathbf{b}}\mathcal{L} = \mathbf{1}^\top(\hat{\mathbf{Y}} - \mathbf{Y})$
     이다.
 
     이 결과가 우아한 이유는, 소프트맥스 야코비의 복잡한 항들이 교차엔트로피의 $1/\hat Y$와
     정확히 소거되기 때문이다. 이는 우연이 아니라 **로짓이 다항분포의 정준연결**이라는 사실의
-    귀결이며, 19장에서 로지스틱 회귀의 기울기가 $A^T(\boldsymbol\sigma - \mathbf{y})$였던
+    귀결이며, 19장에서 로지스틱 회귀의 기울기가 $A^\top(\boldsymbol\sigma - \mathbf{y})$였던
     것과 같은 이유다. $\square$
 
 <div class="drillbox" markdown>
@@ -288,7 +288,7 @@ MNIST 화소값을 $[0, 255]$가 아니라 $[0,1]$로 척도화하는 이유는 
        은닉층의 시그모이드는 도함수 $\sigma(1-\sigma) \approx 0$이 되어 학습이 멈춘다.
 
     2. **학습률 문제.** 19장 연습문제 3에서 보았듯 허용 가능한 학습률의 상한은
-       $\lambda_{\max}(\mathbf{X}^T\mathbf{X})$에 반비례한다. 입력을 255배 키우면 이 값이
+       $\lambda_{\max}(\mathbf{X}^\top\mathbf{X})$에 반비례한다. 입력을 255배 키우면 이 값이
        $255^2 \approx 65{,}000$배 커지므로 학습률을 그만큼 줄여야 하고, 그러면 수렴이 그만큼
        느려진다.
 

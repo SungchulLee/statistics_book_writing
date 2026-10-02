@@ -50,6 +50,9 @@
     ```python
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     # 과일 바구니의 구성. 원그래프는 "전체를 이루는 부분"에만 쓸 수 있다.
     labels = '사과', '바나나', '체리', '대추야자'
     sizes = [215, 130, 245, 210]     # 개수. 합이 800이며 자동으로 백분율로 환산된다
@@ -171,6 +174,9 @@
     ```python
     import matplotlib.pyplot as plt
     import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     sizes = [215, 130, 245, 210]
     labels = ['사과', '바나나', '체리', '대추야자']
@@ -312,6 +318,9 @@
     ```python
     import matplotlib.pyplot as plt
     import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     sizes = [215, 130, 245, 210]
     labels = ['사과', '바나나', '체리', '대추야자']
@@ -493,6 +502,9 @@
     import matplotlib.pyplot as plt
     import numpy as np
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     labels = ["A팀", "B팀", "C팀", "D팀", "E팀", "F팀"]
     values = np.array([23, 19, 18, 17, 12, 11])
 
@@ -583,6 +595,9 @@
     ```python
     import matplotlib.pyplot as plt
     import numpy as np
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     groups = ["2021", "2022", "2023", "2024"]
     cats = ["A", "B", "C"]

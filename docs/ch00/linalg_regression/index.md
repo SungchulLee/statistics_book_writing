@@ -26,9 +26,9 @@
 | 4 | 멱등행렬 | $\mathbf{A}^2 = \mathbf{A}$, 고윳값은 0 또는 1, $\operatorname{tr} = \operatorname{rank}$ |
 | 5 | 대칭행렬 | 스펙트럼 정리, 실수 고윳값, 직교 고유벡터 |
 | 6 | 양정치행렬 | 이차형식에 의한 특성화와 고윳값에 의한 특성화, 촐레스키 분해 |
-| 7 | 그람 행렬 | $\mathbf{X}^T\mathbf{X}$ 의 성질, $\operatorname{rank}(\mathbf{X}^T\mathbf{X}) = \operatorname{rank}(\mathbf{X})$ |
+| 7 | 그람 행렬 | $\mathbf{X}^\top\mathbf{X}$ 의 성질, $\operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = \operatorname{rank}(\mathbf{X})$ |
 | 8 | 사영행렬 | 치역과 영공간이 함께 사영을 정한다, 비직교 사영 |
-| 9 | 직교사영행렬 | 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T$, 회귀의 기하학 |
+| 9 | 직교사영행렬 | 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$, 회귀의 기하학 |
 
 ### 0.4 선형대수와 통계
 
@@ -36,7 +36,7 @@
 |---|---|---|
 | 1 | 카이제곱분포와 이차형식 | 정규벡터의 이차형식, 멱등행렬과 자유도, 코크런 정리 |
 | 2 | 표본분포 (단순 최소제곱) | 기울기·절편 추정량의 정확한 분포 |
-| 3 | 표본분포 (일반 최소제곱) | 행렬 표기로 쓴 $\hat{\boldsymbol\beta}$ 의 분포, $\operatorname{Var}(\hat{\boldsymbol\beta}) = \sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$ |
+| 3 | 표본분포 (일반 최소제곱) | 행렬 표기로 쓴 $\hat{\boldsymbol\beta}$ 의 분포, $\operatorname{Var}(\hat{\boldsymbol\beta}) = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$ |
 
 ## 읽는 순서
 
@@ -46,4 +46,4 @@
     이 두 절은 회귀와 다변량 정규분포를 다루는 뒷 장에서 계속 참조된다. 예컨대 4.3절의 이변량 정규분포는 공분산행렬의 고유분해를 쓰는데, 그 분해가 언제나 가능하다는 보장이 바로 0.3절의 스펙트럼 정리다. 행렬대수에 익숙한 독자는 이 내용을 훑어보고 필요할 때 해당 쪽으로 돌아오면 된다.
 
 !!! warning "표기 약속"
-    이 책 전체에서 벡터는 굵은 소문자 $\mathbf{x}$, 행렬은 굵은 대문자 $\mathbf{A}$, 전치는 $\mathbf{A}^T$ 로 쓴다. 자유도는 $d$ 로 쓴다. 자세한 표기 규약은 0.1절 "선형대수 표기와 관례"에 있다.
+    이 책 전체에서 벡터는 굵은 소문자 $\mathbf{x}$, 행렬은 굵은 대문자 $\mathbf{A}$, 전치는 $\mathbf{A}^\top$ 로 쓴다. 자유도는 $d$ 로 쓴다. 자세한 표기 규약은 0.1절 "선형대수 표기와 관례"에 있다.

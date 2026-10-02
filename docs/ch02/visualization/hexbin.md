@@ -63,6 +63,9 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(0)
     n = 20000
     x = rng.normal(0, 1, n)
@@ -190,6 +193,9 @@
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
     lon = rng.uniform(126.8, 127.2, 5000)
@@ -487,6 +493,9 @@
     ```python
     import matplotlib.pyplot as plt
     from scipy.stats import multivariate_normal
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     # ── 2차원 정규분포를 자료에 맞춘다 ──────────────────────────────────
     # 적합이라야 할 일이 두 줄뿐이다. 2차원 정규분포의 모수는
@@ -1105,6 +1114,9 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(0)
     n = 20_000
     x = rng.normal(0, 1, n)
@@ -1175,6 +1187,9 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
     import matplotlib.pyplot as plt
     from scipy.stats import gaussian_kde
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(1)
     n = 12_000
     x = np.concatenate([rng.normal(-1, 0.6, n // 2), rng.normal(1.5, 0.5, n // 2)])
@@ -1242,6 +1257,9 @@ $n = 20{,}000$인 자료에 `hexbin(gridsize=200)`을 썼더니 그림이 거의
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(2)
     n = 6000
@@ -1322,6 +1340,9 @@ hexbin으로 **두 집단을 비교**하려면 어떻게 해야 하는가? 나�
     import numpy as np
     import matplotlib.pyplot as plt
 
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
+
     rng = np.random.default_rng(3)
     nA, nB = 20_000, 5_000                       # 표본 크기가 다르다
     xa, ya = rng.normal(0, 1, nA), rng.normal(0, 1, nA)
@@ -1396,6 +1417,9 @@ hexbin이 **부적절한** 경우를 정리하라. 어떤 자료에 쓰면 안 �
     ```python
     import numpy as np
     import matplotlib.pyplot as plt
+
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(4)
 

@@ -442,7 +442,7 @@ NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순
     이다. `@`는 **행렬곱**이고, 1차원 배열 둘에 걸면 내적이 된다. 결과는 배열이 아니라 **스칼라**이므로 `ndim`이 $0$이고
 
     $$
-    a^T b = \sum_{i=1}^{5} a_i b_i = 10 + 40 + 90 + 160 + 250 = 550
+    a^\top b = \sum_{i=1}^{5} a_i b_i = 10 + 40 + 90 + 160 + 250 = 550
     $$
 
     이다.
@@ -872,7 +872,7 @@ NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순
 
 <div class="exbox" markdown>
 
-**보기 13.** <span class="diff easy" title="쉬움"></span> 행렬 연산과 선형방정식. $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 3 & 4\end{pmatrix}$, $\mathbf{B} = \begin{pmatrix} 2 & 3 \\ 0 & 1\end{pmatrix}$, $\mathbf{b} = (5, 11)^T$다.
+**보기 13.** <span class="diff easy" title="쉬움"></span> 행렬 연산과 선형방정식. $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 3 & 4\end{pmatrix}$, $\mathbf{B} = \begin{pmatrix} 2 & 3 \\ 0 & 1\end{pmatrix}$, $\mathbf{b} = (5, 11)^\top$다.
 
 **(1)** $\mathbf{A}\mathbf{B}$, $\mathbf{B}\mathbf{A}$, $\det \mathbf{A}$, $\mathbf{A}^{-1}$, $\mathbf{A}$의 고윳값, 그리고 $\mathbf{A}\mathbf{x} = \mathbf{b}$의 해를 손으로 구하시오.
 
@@ -910,7 +910,7 @@ NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순
     x_1 + 2x_2 = 5, \qquad 3x_1 + 4x_2 = 11
     $$
 
-    이고, 첫 식에 $3$을 곱해 빼면 $2x_2 = 4$, 곧 $x_2 = 2$이고 $x_1 = 1$이다. 해는 $(1, 2)^T$다.
+    이고, 첫 식에 $3$을 곱해 빼면 $2x_2 = 4$, 곧 $x_2 = 2$이고 $x_1 = 1$이다. 해는 $(1, 2)^\top$다.
 
     **(2) 정확히 $-2$가 아니다.** `np.linalg.det`는 $2 \times 2$라고 해서 $ad - bc$를 그대로 쓰지 않는다. 크기에 관계없이 같은 길로 가도록 **LU 분해를 한 뒤 대각원소를 곱한다.** 그 과정에 나눗셈이 들어가 반올림이 생기므로 결과가 $-2.0000000000000004$가 되고 `== -2`는 거짓이다.
 
@@ -959,7 +959,7 @@ NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순
     `np.linalg.eig`는 고윳값과 고유벡터를 함께 돌려주고, 대칭·에르미트 행렬에는 `np.linalg.eigh`가 더 빠르고 수치적으로 안정적이다.
 ### 통계적 응용: 최소제곱
 
-최소제곱추정량 $\hat{\boldsymbol\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$는 코드로 그대로 옮겨진다.
+최소제곱추정량 $\hat{\boldsymbol\beta} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$는 코드로 그대로 옮겨진다.
 
 <div class="exbox" markdown>
 
@@ -976,16 +976,16 @@ NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순
     **(1) 같을 수 없다.** $y$에 표준편차 $0.5$인 잡음을 얹었으므로 $\hat{\boldsymbol\beta}$도 확률변수다. 정규방정식의 해는
 
     $$
-    \hat{\boldsymbol\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y} = \boldsymbol\beta + (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\boldsymbol\varepsilon
+    \hat{\boldsymbol\beta} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \boldsymbol\beta + (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol\varepsilon
     $$
 
     이고, 둘째 항이 잡음이 남긴 흔들림이다. 기댓값은 $\boldsymbol\beta$지만 한 번의 표본에서는 $0$이 아니다. 그 흔들림의 크기는
 
     $$
-    \operatorname{Cov}(\hat{\boldsymbol\beta}) = \sigma^2 (\mathbf{X}^T\mathbf{X})^{-1}
+    \operatorname{Cov}(\hat{\boldsymbol\beta}) = \sigma^2 (\mathbf{X}^\top\mathbf{X})^{-1}
     $$
 
-    이 정해 주고, 각 성분의 표준오차는 이 행렬의 대각원소에 제곱근을 씌운 값이다. $\mathbf{X}$의 열이 표준정규라 $\mathbf{X}^T\mathbf{X} \approx n\mathbf{I}$이므로 대략
+    이 정해 주고, 각 성분의 표준오차는 이 행렬의 대각원소에 제곱근을 씌운 값이다. $\mathbf{X}$의 열이 표준정규라 $\mathbf{X}^\top\mathbf{X} \approx n\mathbf{I}$이므로 대략
 
     $$
     \mathrm{SE} \approx \frac{\sigma}{\sqrt n} = \frac{0.5}{\sqrt{50}} = 0.071
@@ -1108,10 +1108,10 @@ NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순
 다음에 대해 최소제곱 정규방정식의 해를 손으로, 그리고 NumPy로 확인하라.
 
 $$
-\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 4 \\ 1 & 6 \end{pmatrix}, \qquad \mathbf{y} = (5, 9, 13)^T
+\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 4 \\ 1 & 6 \end{pmatrix}, \qquad \mathbf{y} = (5, 9, 13)^\top
 $$
 
-$\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, 그리고 잔차 벡터를 계산하라.
+$\mathbf{X}^\top\mathbf{X}$, $\mathbf{X}^\top\mathbf{y}$, $\hat{\boldsymbol\beta}$, 그리고 잔차 벡터를 계산하라.
 
 </div>
 
@@ -1145,7 +1145,7 @@ $\mathbf{X}^T\mathbf{X}$, $\mathbf{X}^T\mathbf{y}$, $\hat{\boldsymbol\beta}$, �
     residuals = [0. 0. 0.]
     ```
 
-    기대되는 결과: $\hat{\boldsymbol\beta} = (1, 2)^T$이고 잔차는 모두 0이다(세 점이 완전히 한 직선 위에 있다).
+    기대되는 결과: $\hat{\boldsymbol\beta} = (1, 2)^\top$이고 잔차는 모두 0이다(세 점이 완전히 한 직선 위에 있다).
 
 <div class="drillbox" markdown>
 
@@ -1491,7 +1491,7 @@ $$
 
     **첨자 표기를 읽는 법.** `'ij,jk,ik->i'`는 $\sum_j \sum_k A_{ij} B_{jk} A_{ik}$를 뜻한다. 출력에 $i$만 남았으므로 관측마다 스칼라 하나가 나온다. $i$가 세 인자에 모두 나타나면서 출력에도 있다는 것이 "각 행을 자기 자신과만 짝지어라"라는 지시이며, 이것이 비대각 성분을 아예 계산하지 않게 해 준다.
 
-    마할라노비스 거리의 평균이 $p$에 가까운 것은 우연이 아니다. 표본공분산으로 표준화했으므로 $\mathbb{E}[(\mathbf{x}-\boldsymbol{\mu})^T\mathbf{S}^{-1}(\mathbf{x}-\boldsymbol{\mu})] \approx p$이다. 지렛값의 합이 정확히 $p$인 것과 같은 종류의 항등식이다.
+    마할라노비스 거리의 평균이 $p$에 가까운 것은 우연이 아니다. 표본공분산으로 표준화했으므로 $\mathbb{E}[(\mathbf{x}-\boldsymbol{\mu})^\top\mathbf{S}^{-1}(\mathbf{x}-\boldsymbol{\mu})] \approx p$이다. 지렛값의 합이 정확히 $p$인 것과 같은 종류의 항등식이다.
 
     **왜 중요한가: 메모리다.** $n = 5000$이면 모자 행렬은
 

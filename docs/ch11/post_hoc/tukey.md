@@ -78,7 +78,7 @@ $$
     from statsmodels.stats.anova import anova_lm
 
     # R 의 PlantGrowth 자료. 대조군과 처리군 둘, 모두 세 집단이다.
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2])
 
     # 분산분석이 먼저다. 여기서 유의하지 않으면 사후비교로 넘어갈 까닭이 없다.
@@ -103,7 +103,7 @@ $$
     import numpy as np
     import pandas as pd
 
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2])
     n, k = 10, 3
 
@@ -255,7 +255,7 @@ $$
     import pandas as pd
     from scipy import stats
 
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2])
     n, k, nu = 10, 3, 27
 
@@ -419,7 +419,7 @@ $$
     import pandas as pd
     from scipy import stats
 
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2])
     n, k, nu = 10, 3, 27
 
@@ -592,7 +592,7 @@ $$
 
     def load_data():
         """PlantGrowth 자료를 읽어 집단별로 나누고 자유도까지 함께 돌려준다."""
-        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
         df = pd.read_csv(url, usecols=[1, 2])
 
         grouped_data = df.groupby('group')
@@ -695,7 +695,7 @@ $$
     import pandas as pd
     from scipy import stats
 
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2])
     n, k, nu = 10, 3, 27
     g = df.groupby('group').weight
@@ -898,7 +898,7 @@ $$
     from statsmodels.stats.anova import anova_lm
 
     # ToothGrowth 자료. 보충제 종류(supp)와 투여량(dose) 두 요인이 있다.
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3])
 
     # 콜론이 교호작용 항이다. 두 요인의 효과가 서로 독립인지를 이 항이 묻는다.
@@ -923,7 +923,7 @@ $$
     import numpy as np
     import pandas as pd
 
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3])
     a, b, n = 2, 3, 10                      # supp 2 수준, dose 3 수준, 칸마다 10 개
 
@@ -1079,7 +1079,7 @@ $$
     import pandas as pd
     from scipy import stats
 
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3])
 
     gm = df.len.mean()
@@ -1217,7 +1217,7 @@ $$
     import pandas as pd
     from scipy import stats
 
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3])
     n, K, nu = 10, 6, 54
     cell = df.groupby(['supp', 'dose']).len.mean()
@@ -1401,7 +1401,7 @@ $$
     import pandas as pd
     from scipy import stats
 
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2, 3])
     n = 10
     gm = df.len.mean()

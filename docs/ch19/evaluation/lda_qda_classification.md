@@ -26,7 +26,7 @@ LDA는 각 범주의 조건부밀도가 **공유된** 공분산행렬 $\boldsymb
 
 $$
 f_k(\mathbf{x}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol\Sigma|^{1/2}}
-  \exp\!\Bigl(-\frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^T\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu_k)\Bigr)
+  \exp\!\Bigl(-\frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu_k)\Bigr)
 $$
 
 $\boldsymbol\Sigma$가 모든 범주에서 같으므로 범주 $k$와 $l$ 사이의 로그사후비가 $\mathbf{x}$에
@@ -37,7 +37,7 @@ $\boldsymbol\Sigma$가 모든 범주에서 같으므로 범주 $k$와 $l$ 사이
 범주 $k$의 선형판별함수는
 
 $$
-\delta_k(\mathbf{x}) = \mathbf{x}^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_k - \frac{1}{2}\boldsymbol\mu_k^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_k + \log\pi_k
+\delta_k(\mathbf{x}) = \mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_k - \frac{1}{2}\boldsymbol\mu_k^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_k + \log\pi_k
 $$
 
 이며, 관측치를 $\delta_k(\mathbf{x})$가 가장 큰 범주에 배정한다.
@@ -48,7 +48,7 @@ QDA는 공분산이 같다는 가정을 푼다. 각 범주가 자신의 $\boldsy
 
 $$
 f_k(\mathbf{x}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol\Sigma_k|^{1/2}}
-  \exp\!\Bigl(-\frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^T\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k)\Bigr)
+  \exp\!\Bigl(-\frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k)\Bigr)
 $$
 
 이제 로그사후비가 $\mathbf{x}$에 대해 **이차식**이 되어 결정경계가 곡선이 된다.
@@ -56,7 +56,7 @@ $$
 ### 판별함수
 
 $$
-\delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^T\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
+\delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
 $$
 
 ## 가우스 나이브 베이즈
@@ -76,7 +76,7 @@ $$
 두 시나리오가 각 방법이 언제 유리한지 보여준다.
 
 **시나리오 A(공유 공분산):** 두 범주가 $\boldsymbol\Sigma = \begin{pmatrix} 1 & 0.5 \\ 0.5 & 1 \end{pmatrix}$
-를 공유하고 평균은 $\boldsymbol\mu_0 = (0,0)^T$, $\boldsymbol\mu_1 = (2, 1.5)^T$다.
+를 공유하고 평균은 $\boldsymbol\mu_0 = (0,0)^\top$, $\boldsymbol\mu_1 = (2, 1.5)^\top$다.
 
 **시나리오 B(다른 공분산):** 범주 0은 $\boldsymbol\Sigma_0 = \begin{pmatrix} 1 & 0 \\ 0 & 0.3 \end{pmatrix}$,
 범주 1은 $\boldsymbol\Sigma_1 = \begin{pmatrix} 0.3 & 0 \\ 0 & 2 \end{pmatrix}$를 갖는다.
@@ -497,15 +497,15 @@ $$
     $\delta_0(\mathbf{x}) = \delta_1(\mathbf{x})$인 곳이다.
 
     $$
-    \mathbf{x}^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_0 - \tfrac{1}{2}\boldsymbol\mu_0^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_0
-    = \mathbf{x}^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_1 - \tfrac{1}{2}\boldsymbol\mu_1^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_1
+    \mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_0 - \tfrac{1}{2}\boldsymbol\mu_0^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_0
+    = \mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_1 - \tfrac{1}{2}\boldsymbol\mu_1^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_1
     $$
 
     정리하면
 
     $$
-    \mathbf{x}^T\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)
-    = \tfrac{1}{2}(\boldsymbol\mu_0 + \boldsymbol\mu_1)^T\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)
+    \mathbf{x}^\top\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)
+    = \tfrac{1}{2}(\boldsymbol\mu_0 + \boldsymbol\mu_1)^\top\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)
     $$
 
     이다. 이는 중점 $\frac{1}{2}(\boldsymbol\mu_0 + \boldsymbol\mu_1)$을 지나고 법선벡터가
@@ -572,13 +572,13 @@ QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유�
     이다. 정규밀도를 대입하면
 
     $$
-    \log f_k(\mathbf{x}) = -\frac{p}{2}\log(2\pi) - \frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^T\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k)
+    \log f_k(\mathbf{x}) = -\frac{p}{2}\log(2\pi) - \frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k)
     $$
 
     이고, $k$에 의존하지 않는 항($-\frac{p}{2}\log(2\pi)$와 베이즈 정리의 정규화 상수)을 버리면
 
     $$
-    \delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^T\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
+    \delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
     $$
 
     를 얻는다. 범주별 $\boldsymbol\Sigma_k^{-1}$에서 나오는 $\mathbf{x}$의 이차항이 QDA라는
@@ -656,7 +656,7 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
     QDA 판별함수는
 
     $$
-    \delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^T\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
+    \delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
     $$
 
     이다. 모든 $k$에 대해 $\boldsymbol\Sigma_k = \boldsymbol\Sigma$이면
@@ -664,15 +664,15 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
     이차형식을 전개하면
 
     $$
-    (\mathbf{x}-\boldsymbol\mu_k)^T\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu_k)
-    = \mathbf{x}^T\boldsymbol\Sigma^{-1}\mathbf{x} - 2\mathbf{x}^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_k + \boldsymbol\mu_k^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_k
+    (\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu_k)
+    = \mathbf{x}^\top\boldsymbol\Sigma^{-1}\mathbf{x} - 2\mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_k + \boldsymbol\mu_k^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_k
     $$
 
-    인데, $\mathbf{x}^T\boldsymbol\Sigma^{-1}\mathbf{x}$ 역시 $k$에 의존하지 않으므로 버릴 수
+    인데, $\mathbf{x}^\top\boldsymbol\Sigma^{-1}\mathbf{x}$ 역시 $k$에 의존하지 않으므로 버릴 수
     있다. 남는 것은
 
     $$
-    \delta_k(\mathbf{x}) = \mathbf{x}^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_k - \frac{1}{2}\boldsymbol\mu_k^T\boldsymbol\Sigma^{-1}\boldsymbol\mu_k + \log\pi_k
+    \delta_k(\mathbf{x}) = \mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_k - \frac{1}{2}\boldsymbol\mu_k^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_k + \log\pi_k
     $$
 
     으로 정확히 LDA 판별함수다. 따라서 범주별 공분산이 같으면 QDA는 LDA로 환원된다.

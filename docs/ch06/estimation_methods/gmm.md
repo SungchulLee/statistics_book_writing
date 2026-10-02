@@ -163,7 +163,7 @@ GMM은 추정의 지형에서 중심적인 위치를 차지한다:
 
     - $q < p$이면 과소식별(미지수보다 방정식이 적음)이어서 모수를 유일하게 결정할 수 없다.
     - $q = p$이면 정확식별이며, GMM 추정량이 적률 조건을 정확히 푼다(모든 표본 적률을 이론적 대응물과 같다고 둔다).
-    - $q > p$이면 과대식별(미지수보다 방정식이 많음)이어서 일반적으로 모든 적률 조건을 동시에 만족시킬 수 없다. GMM은 적률 조건의 가중 이차형식 $\hat{\theta} = \arg\min_\theta \mathbf{g}_n(\theta)^T \mathbf{W} \mathbf{g}_n(\theta)$를 최소화하며, 여기서 $\mathbf{W}$는 양의 정부호 가중행렬이고 $\mathbf{g}_n(\theta)$는 표본 적률 조건 벡터이다.
+    - $q > p$이면 과대식별(미지수보다 방정식이 많음)이어서 일반적으로 모든 적률 조건을 동시에 만족시킬 수 없다. GMM은 적률 조건의 가중 이차형식 $\hat{\theta} = \arg\min_\theta \mathbf{g}_n(\theta)^\top \mathbf{W} \mathbf{g}_n(\theta)$를 최소화하며, 여기서 $\mathbf{W}$는 양의 정부호 가중행렬이고 $\mathbf{g}_n(\theta)$는 표본 적률 조건 벡터이다.
 
 <div class="drillbox" markdown>
 
@@ -208,7 +208,7 @@ GMM은 추정의 지형에서 중심적인 위치를 차지한다:
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff hard" title="어려움"></span>
-Hansen J 검정(과대식별 검정)의 검정통계량은 모든 적률 조건이 타당하다는 귀무가설 아래에서 $J = n\,\mathbf{g}_n(\hat{\theta})^T \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$이다. 이 검정의 직관을 설명하라.
+Hansen J 검정(과대식별 검정)의 검정통계량은 모든 적률 조건이 타당하다는 귀무가설 아래에서 $J = n\,\mathbf{g}_n(\hat{\theta})^\top \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$이다. 이 검정의 직관을 설명하라.
 
 </div>
 

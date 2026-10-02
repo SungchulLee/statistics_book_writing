@@ -62,7 +62,7 @@
 
     # 타이타닉 승객 명부. index_col 로 승객번호를 색인으로 삼는다.
     URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-           "datasets/master/titanic.csv")
+           "datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv")
     df = pd.read_csv(URL, index_col="PassengerId")
 
     print(f"승객 {df.shape[0]}명, 변수 {df.shape[1]}개\n")
@@ -894,7 +894,7 @@ $$
     import pandas as pd
 
     URL = ("https://raw.githubusercontent.com/datasciencedojo/"
-           "datasets/master/titanic.csv")
+           "datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv")
     df = pd.read_csv(URL, index_col="PassengerId")
 
     for how, label in [("index", "행 기준 (성별 안에서)"),
@@ -1298,7 +1298,7 @@ $$
     ```python
     import pandas as pd, numpy as np
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
 
     def measures(a, b, c, d):          # a=여성생존 b=여성사망 c=남성생존 d=남성사망
@@ -1386,7 +1386,7 @@ $$
     ```python
     import pandas as pd, numpy as np
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
     ct = pd.crosstab(t.Sex, t.Survived)
     a, b = ct.loc['female', 1], ct.loc['female', 0]
@@ -1458,7 +1458,7 @@ $$
     ```python
     import numpy as np, pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
     n = len(t)
     p1 = (t.Sex == 'female').mean()
@@ -1507,7 +1507,7 @@ $$
     import numpy as np
     import pandas as pd
 
-    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    URL = "https://raw.githubusercontent.com/datasciencedojo/datasets/f0ccab6a7ceafdff780052166fb6fab3311398eb/titanic.csv"
     t = pd.read_csv(URL)
     a = t.dropna(subset=['Age']).copy()             # 나이 결측 177명 제외
     a['group'] = np.where(a.Age < 15, '어린이', '성인')

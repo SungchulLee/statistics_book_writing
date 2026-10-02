@@ -7,13 +7,13 @@
 설명변수의 선형함수로 놓는다는 점을 떠올리자.
 
 $$
-\operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^T\boldsymbol{\theta}
+\operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^\top\boldsymbol{\theta}
 $$
 
 이는
 
 $$
-\log\left(\frac{p}{1-p}\right) = \mathbf{x}^T\boldsymbol{\theta}
+\log\left(\frac{p}{1-p}\right) = \mathbf{x}^\top\boldsymbol{\theta}
 $$
 
 와 같으며, 여기서 $p = P(Y=1\mid\mathbf{x})$이다.

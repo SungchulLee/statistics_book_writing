@@ -103,7 +103,7 @@ $\beta_1 + \beta_3 X_2$라는 식이 그림으로는 무엇인지 보자. 참 �
 
     # Credit: 신용카드 잔액(Balance)과 소득(Income), 학생 여부(Student), 400명
     credit = pd.read_csv("https://raw.githubusercontent.com/vincentarelbundock/"
-                         "Rdatasets/master/csv/ISLR/Credit.csv", index_col=0)
+                         "Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/ISLR/Credit.csv", index_col=0)
 
     print(advertising[["TV", "Radio", "Sales"]].describe().round(2).to_string())
     print()

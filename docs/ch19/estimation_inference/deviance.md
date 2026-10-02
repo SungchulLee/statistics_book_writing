@@ -325,7 +325,7 @@ RSS가 됨을 보여라.
     분산이 $\sigma^2$로 알려진 정규 선형모형에서 로그가능도는
 
     $$
-    \ell(\boldsymbol{\beta}) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - \mathbf{x}_i^T\boldsymbol{\beta})^2
+    \ell(\boldsymbol{\beta}) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (y_i - \mathbf{x}_i^\top\boldsymbol{\beta})^2
     $$
 
     이다. 포화모형은 $\hat\mu_i = y_i$를 두므로 제곱합 항이 사라지고

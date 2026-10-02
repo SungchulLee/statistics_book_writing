@@ -53,7 +53,7 @@ $$m_k = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^k$$
 
 ### 일반적인 방법
 
-분포가 $p$개의 미지 모수 $\theta = (\theta_1, \ldots, \theta_p)^T$에 의존한다고 하자. 적률법은 다음과 같이 진행한다.
+분포가 $p$개의 미지 모수 $\theta = (\theta_1, \ldots, \theta_p)^\top$에 의존한다고 하자. 적률법은 다음과 같이 진행한다.
 
 **1단계.** 처음 $p$개의 모집단 적률을 모수의 함수로 나타낸다:
 
@@ -241,7 +241,7 @@ $$\bar{g}_n(\theta) = \frac{1}{n}\sum_{i=1}^n g(X_i, \theta)$$
 
 $q > p$이면 $q$개의 표본 적률을 모두 정확히 0으로 만들 수 없다. 대신 GMM은 이차형식을 최소화한다:
 
-$$\hat{\theta}_{\text{GMM}} = \arg\min_\theta \bar{g}_n(\theta)^T W \bar{g}_n(\theta)$$
+$$\hat{\theta}_{\text{GMM}} = \arg\min_\theta \bar{g}_n(\theta)^\top W \bar{g}_n(\theta)$$
 
 여기서 $W$는 양의 정부호 **가중행렬**이다.
 
@@ -249,7 +249,7 @@ $$\hat{\theta}_{\text{GMM}} = \arg\min_\theta \bar{g}_n(\theta)^T W \bar{g}_n(\t
 
 **효율적 GMM** 추정량은 최적 가중행렬을 사용한다:
 
-$$W^* = \left[E[g(X_i, \theta_0) g(X_i, \theta_0)^T]\right]^{-1} = S^{-1}$$
+$$W^* = \left[E[g(X_i, \theta_0) g(X_i, \theta_0)^\top]\right]^{-1} = S^{-1}$$
 
 여기서 $S$는 적률 조건의 장기 공분산행렬이다. 이것이 $W$의 모든 선택 중에서 가장 효율적인 GMM 추정량을 준다.
 
@@ -263,7 +263,7 @@ $$W^* = \left[E[g(X_i, \theta_0) g(X_i, \theta_0)^T]\right]^{-1} = S^{-1}$$
 
 모수보다 적률 조건이 많으면($q > p$) **과대식별 제약**을 검정할 수 있다. **J 통계량**은:
 
-$$J = n \cdot \bar{g}_n(\hat{\theta})^T \hat{S}^{-1} \bar{g}_n(\hat{\theta}) \xrightarrow{d} \chi^2_{q-p}$$
+$$J = n \cdot \bar{g}_n(\hat{\theta})^\top \hat{S}^{-1} \bar{g}_n(\hat{\theta}) \xrightarrow{d} \chi^2_{q-p}$$
 
 J 통계량이 크면 모형의 적률 조건이 자료와 양립하지 않음을 시사한다.
 
@@ -317,9 +317,9 @@ SMM은 가능도를 다루기 어려운 복잡한 금융 모형(예: 행위자 �
 |----------|---------|
 | $k$차 표본 적률 | $m_k' = \frac{1}{n}\sum_{i=1}^n X_i^k$ |
 | 적률방정식 | $k = 1, \ldots, p$에 대해 $\mu_k'(\theta) = m_k'$ |
-| GMM 목적함수 | $\min_\theta \bar{g}_n(\theta)^T W \bar{g}_n(\theta)$ |
+| GMM 목적함수 | $\min_\theta \bar{g}_n(\theta)^\top W \bar{g}_n(\theta)$ |
 | 최적 가중 | $W^* = S^{-1}$ |
-| J 검정 | $J = n \bar{g}_n(\hat{\theta})^T \hat{S}^{-1} \bar{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$ |
+| J 검정 | $J = n \bar{g}_n(\hat{\theta})^\top \hat{S}^{-1} \bar{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$ |
 
 ## 연습문제
 
