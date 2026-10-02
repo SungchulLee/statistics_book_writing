@@ -25,78 +25,274 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균 검정 계산기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균 검정 계산기. 요약통계량 $(\bar x, s, n)$만 받아 $z$-검정과 $t$-검정을 모두 처리하는 함수를 만들려 한다. 양측 p-값은 $P(\lvert T \rvert \ge \lvert t_{\text{obs}} \rvert)$로 정의한다.
+
+**(1)** 귀무분포가 $0$에 대해 대칭인 연속분포이고 그 분포함수를 $F$라 할 때,
+
+$$
+P(\lvert T \rvert \ge \lvert t_{\text{obs}} \rvert) = 2\min\{F(t_{\text{obs}}),\ 1 - F(t_{\text{obs}})\}
+$$
+
+임을 보이시오. 또 이 식이 성립하지 않는 검정의 예를 드시오.
+
+**(2)** (1)의 식을 써서 두 검정을 함께 처리하는 함수를 작성하고, 원자료가 있는 경우 `scipy.stats.ttest_1samp`와 같은 값을 주는지 확인하시오.
 
 </div>
 
-```python
-import math
-from scipy.stats import t as tdist, norm
+??? success "풀이"
 
-def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
-                         alternative="two-sided", alpha=0.05):
-    """known_sigma를 주면 z-검정, 아니면 표본 sd로 t-검정.
+    **(1) 해석적으로.** $F$가 $0$에 대해 대칭이면 $F(-u) = 1 - F(u)$이다. $t = t_{\text{obs}}$로 줄여 쓰면
 
-    원자료가 아니라 요약통계량(xbar, n, sd)만 받는다.
-    검정에 필요한 것이 그것뿐이기 때문이다.
-    alternative는 scipy의 관례를 그대로 따른다.
-    돌려주는 값은 (통계량, p-값, 기각 여부, 이름)이다.
-    """
-    if known_sigma is not None:
-        se = known_sigma / math.sqrt(n)
-        z = (xbar - mu0) / se
+    $$
+    P(\lvert T \rvert \ge \lvert t \rvert)
+    = P(T \le -\lvert t \rvert) + P(T \ge \lvert t \rvert)
+    = F(-\lvert t \rvert) + \bigl(1 - F(\lvert t \rvert)\bigr)
+    = 2\bigl(1 - F(\lvert t \rvert)\bigr)
+    $$
+
+    이다. 남은 것은 $1 - F(\lvert t \rvert) = \min\{F(t),\ 1-F(t)\}$를 보이는 일이고, 부호로 나누면 끝난다.
+
+    - $t \ge 0$이면 $\lvert t \rvert = t$이므로 $1 - F(\lvert t \rvert) = 1 - F(t)$이다. 대칭성에서 $F(0) = 1/2$이고 $F$가 비감소이므로 $F(t) \ge 1/2 \ge 1 - F(t)$, 따라서 최솟값은 $1 - F(t)$다.
+    - $t < 0$이면 $\lvert t \rvert = -t$이므로 $1 - F(\lvert t \rvert) = 1 - F(-t) = F(t)$이고, 이번에는 $F(t) < 1/2 < 1 - F(t)$이므로 최솟값이 $F(t)$다.
+
+    두 경우가 모두 $2\min\{F(t), 1-F(t)\}$를 준다. $\square$
+
+    **두 검정이 한 함수에 들어가는 까닭이 이 식에 있다.** $z$-검정과 $t$-검정은 분자·분모가 같은 꼴이고 $F$만 $\Phi$에서 $t_{n-1}$의 분포함수로 바뀐다. 둘 다 $0$에 대해 대칭이므로 위 식이 그대로 쓰인다.
+
+    **성립하지 않는 예.** 귀무분포가 대칭이 아니면 쓸 수 없다. 모분산 검정의 $\chi^2_{n-1}$, 분산비 검정의 $F_{n_1-1,\,n_2-1}$이 그렇다. 그때는 두 꼬리 확률을 따로 계산해 더하거나, 관례대로 작은 쪽 꼬리를 두 배 하는 **다른** 규칙을 쓴다고 명시해야 한다.
+
+    **(2) 수치적으로.** 먼저 함수를 만든다.
+
+    ```python
+    import math
+    from scipy.stats import t as tdist, norm
+
+    def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
+                             alternative="two-sided", alpha=0.05):
+        """known_sigma를 주면 z-검정, 아니면 표본 sd로 t-검정.
+
+        원자료가 아니라 요약통계량(xbar, n, sd)만 받는다.
+        검정에 필요한 것이 그것뿐이기 때문이다.
+        alternative는 scipy의 관례를 그대로 따른다.
+        돌려주는 값은 (통계량, p-값, 기각 여부, 이름)이다.
+        """
+        if known_sigma is not None:
+            se = known_sigma / math.sqrt(n)
+            z = (xbar - mu0) / se
+            if alternative == "two-sided":
+                # 작은 쪽 꼬리를 골라 두 배 한다. z의 부호를 따지지 않아도 되고
+                # 어느 쪽으로 치우쳐도 같은 식이 쓰인다.
+                p = 2 * min(norm.cdf(z), norm.sf(z))
+            elif alternative == "less":
+                p = norm.cdf(z)
+            else:
+                # 오른쪽 꼬리는 sf로 계산한다. 1 - cdf는 꼬리에서 정밀도를 잃는다.
+                p = norm.sf(z)
+            return z, p, (p < alpha), "z-test"
+
+        if sd is None:
+            raise ValueError("Provide sd for t-test or known_sigma for z-test.")
+        se = sd / math.sqrt(n)
+        df = n - 1               # sd를 자료에서 추정했으므로 자유도 하나를 잃는다
+        t = (xbar - mu0) / se
         if alternative == "two-sided":
-            # 작은 쪽 꼬리를 골라 두 배 한다. z의 부호를 따지지 않아도 되고
-            # 어느 쪽으로 치우쳐도 같은 식이 쓰인다.
-            p = 2 * min(norm.cdf(z), norm.sf(z))
+            p = 2 * min(tdist.cdf(t, df), tdist.sf(t, df))
         elif alternative == "less":
-            p = norm.cdf(z)
+            p = tdist.cdf(t, df)
         else:
-            # 오른쪽 꼬리는 sf로 계산한다. 1 - cdf는 꼬리에서 정밀도를 잃는다.
-            p = norm.sf(z)
-        return z, p, (p < alpha), "z-test"
+            p = tdist.sf(t, df)
+        return t, p, (p < alpha), f"t-test (df={df})"
+    ```
 
-    if sd is None:
-        raise ValueError("Provide sd for t-test or known_sigma for z-test.")
-    se = sd / math.sqrt(n)
-    df = n - 1               # sd를 자료에서 추정했으므로 자유도 하나를 잃는다
-    t = (xbar - mu0) / se
-    if alternative == "two-sided":
-        p = 2 * min(tdist.cdf(t, df), tdist.sf(t, df))
-    elif alternative == "less":
-        p = tdist.cdf(t, df)
-    else:
-        p = tdist.sf(t, df)
-    return t, p, (p < alpha), f"t-test (df={df})"
-```
+    원자료를 하나 만들어 `scipy.stats.ttest_1samp`와 맞추어 본다. 함수는 요약통계량만 받으므로 원자료에서 $\bar x$와 $s$를 뽑아 넘긴다. 대칭 항등식도 몇 점에서 직접 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(9)
+    x = rng.normal(3.4, 1.2, 25)
+    n, xbar, sd = len(x), x.mean(), x.std(ddof=1)
+    mu0 = 3.0
+
+    print(f"n = {n},  xbar = {xbar:.4f},  s = {sd:.4f}")
+    for alt in ("two-sided", "greater", "less"):
+        t_my, p_my, _, _ = test_mean_one_sample(xbar, n, mu0, sd=sd, alternative=alt)
+        r = stats.ttest_1samp(x, mu0, alternative=alt)
+        print(f"  {alt:>9s}:  요약통계량 p = {p_my:.8f}   scipy p = {r.pvalue:.8f}")
+
+    # 대칭 항등식 2 min(F(t), 1-F(t)) = P(|T| >= |t|) 를 여러 t 에서 확인한다.
+    grid = np.array([-3.1, -0.4, 0.0, 0.9, 2.7])
+    tail = 2 * stats.t.sf(np.abs(grid), n - 1)                                 # P(|T| >= |t|)
+    mins = 2 * np.minimum(stats.t.cdf(grid, n - 1), stats.t.sf(grid, n - 1))   # 함수가 쓰는 식
+    print(f"두 식의 최대 차이 = {np.max(np.abs(tail - mins)):.2e}")
+    ```
+
+    출력:
+
+    ```
+    n = 25,  xbar = 3.5836,  s = 1.3921
+      two-sided:  요약통계량 p = 0.04680592   scipy p = 0.04680592
+        greater:  요약통계량 p = 0.02340296   scipy p = 0.02340296
+           less:  요약통계량 p = 0.97659704   scipy p = 0.97659704
+    두 식의 최대 차이 = 0.00e+00
+    ```
+
+    세 대립가설 모두에서 소수 여덟째 자리까지 일치하고, 항등식의 두 식은 **부동소수점 수준에서 정확히** 같다. 단측 두 p-값이 $0.02340296 + 0.97659704 = 1$로 합이 1인 것도 확인할 수 있다. 연속분포이므로 $P(T \le t) + P(T \ge t) = 1$이기 때문이며, 이 합이 1이 아니라면 어느 한쪽 꼬리를 잘못 잡은 것이다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 평균 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> $\sigma$를 안다는 가정의 값. $\bar x = 3.2$, $s = 1.1$, $n = 25$로 $H_0\colon \mu = 3.0$ 대 $H_1\colon \mu > 3.0$을 검정한다. **같은 숫자 1.1**을 한 번은 표본표준편차 $s$로, 한 번은 알려진 $\sigma$로 넣어 두 검정을 나란히 돌린다.
+
+**(1)** 관측된 통계량이 같을 때 $t$ 검정의 p-값이 $z$ 검정의 p-값보다 **언제나** 크다는 것을 보이시오.
+
+**(2)** $\sigma$를 모르는데 안다고 가정하면, 곧 귀무분포가 $t_{n-1}$인데 정규 임계값 $1.96$으로 기각하면 실제 유의수준이 얼마가 되는지 $n$별로 구하시오.
 
 </div>
 
-```python
-stat, p, reject, label = test_mean_one_sample(
-    xbar=3.2, n=25, mu0=3.0, sd=1.1, alternative="greater"
-)
-print(label, "stat:", stat, "p:", p, "reject:", reject)
+??? success "풀이"
 
-# 같은 자료를 sigma=1.1을 안다고 가정하고 z-검정으로도 해 본다.
-stat_z, p_z, reject_z, label_z = test_mean_one_sample(
-    xbar=3.2, n=25, mu0=3.0, known_sigma=1.1, alternative="greater"
-)
-print(label_z, "stat:", stat_z, "p:", p_z, "reject:", reject_z)
-```
+    **(1) 해석적으로.** 두 통계량은 분자·분모가 같은 수이므로 $t_{\text{obs}} = z_{\text{obs}}$다. 달라지는 것은 그 수를 견주는 분포뿐이고, $t$ 분포를 **정규분포의 척도혼합**으로 적으면 부등식이 바로 나온다. $Z \sim N(0,1)$, $W \sim \chi^2_\nu$가 독립일 때
 
-출력:
+    $$
+    T_\nu = \frac{Z}{\sqrt{W/\nu}}
+    $$
 
-```
-t-test (df=24) stat: 0.9090909090909097 p: 0.18617076763866552 reject: False
-z-test stat: 0.9090909090909097 p: 0.1816510704434488 reject: False
-```
+    이므로, $W$로 조건을 걸면 $T_\nu$는 표준편차 $\sqrt{\nu/W}$인 정규분포다. $t > 0$에 대해 꼬리확률을 조건부 기댓값으로 풀면
 
-통계량은 같고 p-값만 다르다. 산포로 넣은 숫자가 1.1로 같으니 분자와 분모가 같을 수밖에 없고, 달라지는 것은 그 통계량을 어느 분포에 견주느냐뿐이다. $t_{24}$가 정규분포보다 꼬리가 두꺼워 같은 통계량에 더 큰 p-값을 준다. $\sigma$를 모른다는 사실의 값이 여기서는 0.0045만큼이다.
+    $$
+    P(T_\nu \ge t) = E\!\left[\bar\Phi\!\left(t\sqrt{W/\nu}\right)\right],
+    \qquad \bar\Phi(u) = 1 - \Phi(u)
+    $$
+
+    이다. 여기서 $\bar\Phi$는 $u > 0$에서 **볼록**하다. $\bar\Phi''(u) = u\varphi(u) > 0$이기 때문이다. $t > 0$이고 $W > 0$이니 안쪽 값이 늘 양수이므로 옌센 부등식을 그대로 쓸 수 있다.
+
+    $$
+    P(T_\nu \ge t) \;\ge\; \bar\Phi\!\left(t \cdot c_\nu\right),
+    \qquad
+    c_\nu = E\!\left[\sqrt{W/\nu}\right]
+    = \sqrt{\frac{2}{\nu}}\,\frac{\Gamma\!\left(\frac{\nu+1}{2}\right)}{\Gamma\!\left(\frac{\nu}{2}\right)}
+    $$
+
+    남은 것은 $c_\nu < 1$이다. 제곱근은 **엄격히 오목**하고 $W$는 상수가 아니므로 옌센 부등식이 반대 방향으로 엄격하게 성립한다.
+
+    $$
+    c_\nu = E\!\left[\sqrt{W/\nu}\right] < \sqrt{E[W]/\nu} = 1
+    $$
+
+    $\bar\Phi$가 감소함수이므로 $\bar\Phi(t c_\nu) > \bar\Phi(t)$이고, 두 부등식을 이으면
+
+    $$
+    P(T_\nu \ge t) \;>\; \bar\Phi(t) = P(Z \ge t)
+    \qquad (t > 0)
+    $$
+
+    이다. **$t$ 검정의 단측 p-값은 어떤 $t > 0$에서도 $z$ 검정의 것보다 크다.** 양측은 두 배이므로 그대로 따라온다. $\square$
+
+    옌센을 두 번 쓴 것이 각각 다른 일을 한다. 앞의 것은 **분모가 흔들린다**는 사실의 값이고, 뒤의 것은 그 흔들림의 중심이 1보다 **아래로** 내려앉는다는 사실의 값이다.
+
+    **(2) 임계값을 잘못 쓰면.** $\sigma$를 안다고 가정하면 $\pm 1.96$으로 기각하지만 참 귀무분포는 $t_{n-1}$이다. 그러므로 실제 유의수준은
+
+    $$
+    \alpha_{\text{실제}} = 2\left[1 - F_{t_{n-1}}(1.96)\right]
+    $$
+
+    이고 (1)에 의해 이 값은 명목 $0.05$보다 **언제나 크다.** 작은 자유도에서는 닫힌 꼴로 적을 수 있다. $\nu = 1$(코시)에서 $F(t) = \tfrac12 + \tfrac{1}{\pi}\arctan t$이므로
+
+    $$
+    \alpha_{\text{실제}} = 1 - \frac{2}{\pi}\arctan(1.96) = 0.3003
+    $$
+
+    이고, $\nu = 2$에서는 $F(t) = \tfrac12\left(1 + t/\sqrt{2+t^2}\right)$이므로
+
+    $$
+    \alpha_{\text{실제}} = 1 - \frac{1.96}{\sqrt{2 + 1.96^2}} = 0.1891
+    $$
+
+    이다. $n = 3$짜리 표본에서 $\sigma$를 안다고 둘러대면 5% 검정이 실제로는 19% 검정이 된다.
+
+    **수치로 확인한다.** 먼저 보기의 두 검정을 돌린다.
+
+    ```python
+    stat, p, reject, label = test_mean_one_sample(
+        xbar=3.2, n=25, mu0=3.0, sd=1.1, alternative="greater"
+    )
+    print(label, "stat:", stat, "p:", p, "reject:", reject)
+
+    # 같은 자료를 sigma=1.1을 안다고 가정하고 z-검정으로도 해 본다.
+    stat_z, p_z, reject_z, label_z = test_mean_one_sample(
+        xbar=3.2, n=25, mu0=3.0, known_sigma=1.1, alternative="greater"
+    )
+    print(label_z, "stat:", stat_z, "p:", p_z, "reject:", reject_z)
+    ```
+
+    출력:
+
+    ```
+    t-test (df=24) stat: 0.9090909090909097 p: 0.18617076763866552 reject: False
+    z-test stat: 0.9090909090909097 p: 0.1816510704434488 reject: False
+    ```
+
+    통계량은 같고 p-값만 다르다. 산포로 넣은 숫자가 1.1로 같으니 분자와 분모가 같을 수밖에 없고, 달라지는 것은 그 통계량을 어느 분포에 견주느냐뿐이다. **$\sigma$를 모른다는 사실의 값이 여기서는 0.0045만큼이다.**
+
+    이제 (1)의 부등식과 (2)의 표를 확인한다.
+
+    ```python
+    import math
+
+    import numpy as np
+    from scipy import stats
+    from scipy.special import gammaln
+
+    nu = 24
+    t_obs = 0.2 / (1.1 / math.sqrt(25))
+
+    # c_nu = E[sqrt(W/nu)],  W ~ chi2_nu.  1 보다 작다는 것이 요점이다.
+    c_nu = math.exp(0.5 * math.log(2 / nu) + gammaln((nu + 1) / 2) - gammaln(nu / 2))
+
+    print(f"t_obs = {t_obs:.6f},  c_24 = {c_nu:.6f}")
+    print(f"정규 꼬리   Phibar(t)      = {stats.norm.sf(t_obs):.6f}")
+    print(f"옌센 하한   Phibar(c t)    = {stats.norm.sf(c_nu * t_obs):.6f}")
+    print(f"t 꼬리      P(T_24 >= t)   = {stats.t.sf(t_obs, nu):.6f}")
+
+    # 부등식이 t 전체에서 성립하는지 격자로 훑는다.
+    tg = np.linspace(0.01, 8.0, 200_001)
+    gap = stats.t.sf(tg, nu) - stats.norm.sf(tg)
+    print(f"(t 꼬리 - 정규 꼬리) 의 최솟값 = {gap.min():.3e}")
+
+    # sigma 를 안다고 잘못 가정하면 실제 유의수준이 얼마가 되는가.
+    z975 = stats.norm.ppf(0.975)
+    print("\n    n      nu   실제 크기   올바른 임계값")
+    for n in (2, 3, 5, 11, 25, 61, 101, 1001):
+        print(f"{n:5d}  {n - 1:6d}      {2 * stats.t.sf(z975, n - 1):.4f}"
+              f"          {stats.t.ppf(0.975, n - 1):.3f}")
+    ```
+
+    출력:
+
+    ```
+    t_obs = 0.909091,  c_24 = 0.989640
+    정규 꼬리   Phibar(t)      = 0.181651
+    옌센 하한   Phibar(c t)    = 0.184147
+    t 꼬리      P(T_24 >= t)   = 0.186171
+    (t 꼬리 - 정규 꼬리) 의 최솟값 = 1.578e-08
+
+        n      nu   실제 크기   올바른 임계값
+        2       1      0.3003          12.706
+        3       2      0.1891          4.303
+        5       4      0.1216          2.776
+       11      10      0.0784          2.228
+       25      24      0.0617          2.064
+       61      60      0.0546          2.000
+      101     100      0.0528          1.984
+     1001    1000      0.0503          1.962
+    ```
+
+    세 수가 유도한 순서대로 놓인다. $0.181651 < 0.184147 \le 0.186171$, 곧 **정규 꼬리 < 옌센 하한 $\le$ $t$ 꼬리**다. 격자를 $(0,\,8]$로 훑어도 차이의 최솟값이 양수이고, 양 끝에서 0으로 수렴하므로 최솟값이 $10^{-8}$ 수준까지 내려가는 것은 수렴의 흔적일 뿐 부등호가 뒤집힌 것이 아니다.
+
+    표의 두 닫힌 꼴 $0.3003$과 $0.1891$이 (2)에서 손으로 구한 값과 자리까지 같다. **$n = 25$에서 실제 크기는 $0.0617$**로 명목의 1.23배이고, 명목을 맞추려면 임계값을 $1.96$이 아니라 $2.064$로 잡아야 한다. $n = 1001$에서야 $0.0503$으로 명목에 붙는다.
+
+    여기서 쓴 수 $1.1$을 "모표준편차"라고 부를 수 있었다면 p-값이 $0.1817$이었다. 실제로는 그 수를 자료에서 얻었으므로 $0.1862$가 옳다. 차이가 $0.0045$로 작아 보이지만, (2)의 표가 보이는 대로 **$n$이 작아질수록 그 대가가 급격히 커진다.**
 
 ### 해석
 

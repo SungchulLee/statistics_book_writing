@@ -38,69 +38,315 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 비율 검정 계산기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 비율 검정 계산기. 점수 $z$ 검정과 정확 이항검정을 한 함수에 담는다. 성공 횟수 $k$가 정수이므로 두 검정의 기각역은 모두 $\{0, 1, \dots, n\}$의 **부분집합**이고, 따라서 실제 유의수준을 전수 열거로 정확히 계산할 수 있다.
+
+**(1)** 명목 유의수준 $\alpha$의 점수 검정이 기각하는 $k$를 닫힌 꼴로 적고, $n = 5$, $p_0 = 0.5$, $\alpha = 0.05$에서 두 검정의 기각역을 각각 구하시오.
+
+**(2)** 그 기각역의 확률을 유리수로 정확히 더해 두 검정의 실제 크기를 구하고, 함수를 작성해 확인하시오.
 
 </div>
 
-```python
-from scipy.stats import norm, binomtest
-import math
+??? success "풀이"
 
-def test_prop_one_sample(k, n, p0=0.5, method="score",
-                         alt="two-sided", alpha=0.05):
-    """method='score'(정규근사) 또는 'exact'(이항).
+    **(1) 해석적으로.** 양측 p-값이 $2\min\{\Phi(z),\,1-\Phi(z)\}$이므로
 
-    정확검정에는 검정통계량이 따로 없다. 이항분포에서 꼬리확률을
-    바로 더하므로 표준화할 대상이 없기 때문이다. 그래서 None을 돌려준다.
-    """
-    phat = k / n
-    if method == "exact":
-        p = binomtest(k, n, p0, alternative=alt).pvalue
-        return None, p, (p < alpha), "exact binomial"
+    $$
+    p < \alpha
+    \iff \lvert z \rvert > z_{1-\alpha/2}
+    \iff \left\lvert \frac{k/n - p_0}{\sqrt{p_0(1-p_0)/n}} \right\rvert > z_{1-\alpha/2}
+    $$
 
-    # 표준오차에 phat이 아니라 **p0**을 넣는다.
-    # H0가 참이라는 가정 아래의 확률을 재는 것이 검정이기 때문이다.
-    # 신뢰구간에서는 phat을 넣었다. 목적이 다르면 대입하는 값도 다르다.
-    se0 = math.sqrt(p0 * (1 - p0) / n)
-    z = (phat - p0) / se0
-    if alt == "two-sided":
-        p = 2 * min(norm.cdf(z), 1 - norm.cdf(z))
-    elif alt == "less":
-        p = norm.cdf(z)
-    else:
-        p = 1 - norm.cdf(z)
-    return z, p, (p < alpha), "score z-test"
-```
+    이고, 양변에 $n$을 곱해 정리하면 **성공 횟수 자체에 대한 조건**이 된다.
+
+    $$
+    \lvert k - n p_0 \rvert > c,
+    \qquad c = z_{1-\alpha/2}\sqrt{n p_0 (1-p_0)}
+    $$
+
+    그러므로 점수 검정의 채택역은 구간 $[np_0 - c,\ np_0 + c]$에 들어가는 **정수**들이고, 기각역은 그 나머지다. $k$가 정수라는 사실이 여기서 처음 들어온다.
+
+    $n = 5$, $p_0 = 0.5$, $\alpha = 0.05$를 넣으면 $np_0 = 2.5$이고
+
+    $$
+    c = 1.96\sqrt{5 \times 0.25} = 1.96 \times 1.11803 = 2.19131
+    $$
+
+    이므로 채택 구간은 $[0.30869,\ 4.69131]$이다. 이 구간에 들어가는 정수는 $1, 2, 3, 4$이므로
+
+    $$
+    \text{점수 검정 기각역} = \{0,\ 5\}
+    $$
+
+    이다. 정확검정은 다르다. $p_0 = 0.5$에서 양측 정확 p-값을 $k$마다 적으면
+
+    $$
+    \frac{2}{32},\quad \frac{12}{32},\quad 1,\quad 1,\quad \frac{12}{32},\quad \frac{2}{32}
+    $$
+
+    곧 $0.0625,\ 0.375,\ 1,\ 1,\ 0.375,\ 0.0625$다. **가장 작은 값이 $0.0625$로 이미 $0.05$보다 크다.** 따라서
+
+    $$
+    \text{정확검정 기각역} = \varnothing
+    $$
+
+    이다. 무엇을 관측해도 기각할 수 없다.
+
+    **(2) 크기를 정확히 더한다.** 기각역의 확률을 그대로 더하면 된다. 점수 검정은
+
+    $$
+    \alpha_{\text{실제}} = P(K = 0) + P(K = 5) = \frac{1}{32} + \frac{1}{32} = \frac{1}{16} = 0.0625
+    $$
+
+    로 **명목 $0.05$를 넘고**, 정확검정은 기각역이 비었으므로
+
+    $$
+    \alpha_{\text{실제}} = 0
+    $$
+
+    이다. 정확히 0이다. 근사가 아니라 등식이다.
+
+    이 0이 언제 풀리는지도 바로 나온다. $p_0 = 0.5$에서 양측 정확 p-값의 최솟값은 양 끝 $k = 0$과 $k = n$에서 나오는 $2 \cdot 2^{-n} = 2^{1-n}$이므로, 기각역이 비지 않을 조건은
+
+    $$
+    2^{1-n} \le \alpha
+    \iff n \ge 1 + \log_2 \frac{1}{\alpha}
+    $$
+
+    이다. $\alpha = 0.05$이면 $1 + \log_2 20 = 5.32$이므로 **$n \ge 6$**이어야 한다. 동전을 다섯 번 던져서는 $p = 0.5$를 정확검정으로 반박할 길이 애초에 없다.
+
+    함수를 작성해 확인한다.
+
+    ```python
+    from scipy.stats import norm, binomtest
+    import math
+
+    def test_prop_one_sample(k, n, p0=0.5, method="score",
+                             alt="two-sided", alpha=0.05):
+        """method='score'(정규근사) 또는 'exact'(이항).
+
+        정확검정에는 검정통계량이 따로 없다. 이항분포에서 꼬리확률을
+        바로 더하므로 표준화할 대상이 없기 때문이다. 그래서 None을 돌려준다.
+        """
+        phat = k / n
+        if method == "exact":
+            p = binomtest(k, n, p0, alternative=alt).pvalue
+            return None, p, (p < alpha), "exact binomial"
+
+        # 표준오차에 phat이 아니라 **p0**을 넣는다.
+        # H0가 참이라는 가정 아래의 확률을 재는 것이 검정이기 때문이다.
+        # 신뢰구간에서는 phat을 넣었다. 목적이 다르면 대입하는 값도 다르다.
+        se0 = math.sqrt(p0 * (1 - p0) / n)
+        z = (phat - p0) / se0
+        if alt == "two-sided":
+            p = 2 * min(norm.cdf(z), 1 - norm.cdf(z))
+        elif alt == "less":
+            p = norm.cdf(z)
+        else:
+            p = 1 - norm.cdf(z)
+        return z, p, (p < alpha), "score z-test"
+    ```
+
+    기각역과 그 확률을 전수 열거로 구한다. 확률은 유리수로 더해 부동소수점
+    오차를 아예 없앤다.
+
+    ```python
+    from fractions import Fraction
+
+    z975 = norm.ppf(0.975)
+
+
+    def accept_interval(n, p0, z=z975):
+        """점수 검정이 채택하는 k 의 구간 [np0 - c, np0 + c]."""
+        c = z * math.sqrt(n * p0 * (1 - p0))
+        return n * p0 - c, n * p0 + c
+
+
+    def exact_size(reject, n, p0):
+        """기각역의 확률을 유리수로 정확히 더한다. 부동소수점 오차가 없다."""
+        q = Fraction(p0).limit_denominator()
+        return sum(Fraction(math.comb(n, k)) * q**k * (1 - q)**(n - k)
+                   for k in reject)
+
+
+    n, p0 = 5, 0.5
+    lo, hi = accept_interval(n, p0)
+    rej_score = [k for k in range(n + 1) if not (lo <= k <= hi)]
+    rej_exact = [k for k in range(n + 1) if binomtest(k, n, p0).pvalue <= 0.05]
+
+    print(f"n = {n}, p0 = {p0}:  채택 구간 = [{lo:.6f}, {hi:.6f}]")
+    print(f"  점수 검정 기각역 = {rej_score},  정확 크기 = "
+          f"{exact_size(rej_score, n, p0)} = {float(exact_size(rej_score, n, p0)):.4f}")
+    print(f"  정확검정 기각역 = {rej_exact},  정확 크기 = "
+          f"{exact_size(rej_exact, n, p0)}")
+    print("  k 마다의 정확 양측 p-값:",
+          [float(binomtest(k, n, p0).pvalue) for k in range(n + 1)])
+
+    print("\np0 = 0.5, 명목 0.05 에서 두 검정의 정확한 크기")
+    print("   n  점수 기각역                   크기     정확검정 기각역        크기")
+    for n in range(5, 15):
+        lo, hi = accept_interval(n, p0)
+        rs = [k for k in range(n + 1) if not (lo <= k <= hi)]
+        re_ = [k for k in range(n + 1) if binomtest(k, n, p0).pvalue <= 0.05]
+        print(f"{n:4d}  {str(rs):28s} {float(exact_size(rs, n, p0)):.4f}   "
+              f"{str(re_):20s} {float(exact_size(re_, n, p0)):.4f}")
+    ```
+
+    출력:
+
+    ```
+    n = 5, p0 = 0.5:  채택 구간 = [0.308694, 4.691306]
+      점수 검정 기각역 = [0, 5],  정확 크기 = 1/16 = 0.0625
+      정확검정 기각역 = [],  정확 크기 = 0
+      k 마다의 정확 양측 p-값: [0.0625, 0.375, 1.0, 1.0, 0.375, 0.0625]
+
+    p0 = 0.5, 명목 0.05 에서 두 검정의 정확한 크기
+       n  점수 기각역                   크기     정확검정 기각역        크기
+       5  [0, 5]                       0.0625   []                   0.0000
+       6  [0, 6]                       0.0312   [0, 6]               0.0312
+       7  [0, 7]                       0.0156   [0, 7]               0.0156
+       8  [0, 1, 7, 8]                 0.0703   [0, 8]               0.0078
+       9  [0, 1, 8, 9]                 0.0391   [0, 1, 8, 9]         0.0391
+      10  [0, 1, 9, 10]                0.0215   [0, 1, 9, 10]        0.0215
+      11  [0, 1, 2, 9, 10, 11]         0.0654   [0, 1, 10, 11]       0.0117
+      12  [0, 1, 2, 10, 11, 12]        0.0386   [0, 1, 2, 10, 11, 12] 0.0386
+      13  [0, 1, 2, 11, 12, 13]        0.0225   [0, 1, 2, 11, 12, 13] 0.0225
+      14  [0, 1, 2, 3, 11, 12, 13, 14] 0.0574   [0, 1, 2, 12, 13, 14] 0.0129
+    ```
+
+    채택 구간과 두 기각역, 그리고 $1/16$과 $0$이라는 두 크기가 (1)·(2)에서 손으로 구한 것과 모두 같다. $n = 6$에서 정확검정의 크기가 $0.0312$로 비로소 0을 벗어나는 것도 $n \ge 6$이라는 조건과 맞는다.
+
+    표를 아래로 읽으면 두 검정의 성격이 갈린다. **점수 검정은 $n = 5,\ 8,\ 11,\ 14$에서 명목을 넘는다**($0.0625$, $0.0703$, $0.0654$, $0.0574$). 기각역을 정수 격자 위에서 자르는데 그 경계가 $0.05$에 맞아떨어질 이유가 없기 때문이며, 넘을 때는 한 칸을 통째로 들이므로 꽤 크게 넘는다. **정확검정은 한 번도 넘지 않는다.** 최댓값이 $n = 9$의 $0.0391$이고, $n = 8$에서는 $0.0078$까지 내려간다. 같은 자료에 같은 명목 수준인데 실제 크기가 다섯 배 차이다.
+
+    같은 톱니를 $n = 10$부터 $120$까지 이어 그린 것이 아래 [해석](#해석)의 그림이다. 여기서 본 것은 그 톱니가 가장 거친 왼쪽 끝이다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 비율 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 근사와 정확이 갈리는 자리. $n = 50$ 가운데 성공이 $k = 12$인 자료로 $H_0\colon p = 0.2$를 양측 검정하면 점수 검정과 정확검정의 p-값이 $0.4795$와 $0.4797$로 거의 같다.
+
+**(1)** 같은 두 검정을 $k = 2$, $n = 10$, $p_0 = 0.5$에서 손으로 계산하고, 그 차이를 **연속성 보정**이 얼마나 메우는지 보이시오.
+
+**(2)** 두 자료에서 양측 p-값을 네 가지 방식으로 계산해, 가장 큰 차이를 만드는 것이 근사인지 관례인지 밝히시오.
 
 </div>
 
-```python
-stat, p, reject, label = test_prop_one_sample(
-    k=12, n=50, p0=0.2, method="score", alt="two-sided"
-)
-print(label, "stat:", stat, "p:", p, "reject:", reject)
+??? success "풀이"
 
-# 같은 자료의 정확한 이항검정
-stat_e, p_e, reject_e, label_e = test_prop_one_sample(
-    k=12, n=50, p0=0.2, method="exact", alt="two-sided"
-)
-print(label_e, "stat:", stat_e, "p:", p_e, "reject:", reject_e)
-```
+    **(1) 해석적으로.** $k = 2$, $n = 10$, $p_0 = 0.5$이면 $np_0 = 5$, $\sqrt{np_0(1-p_0)} = \sqrt{2.5} = 1.58114$다.
 
-출력:
+    점수 검정은
 
-```
-score z-test stat: 0.7071067811865471 p: 0.4795001221869537 reject: False
-exact binomial stat: None p: 0.47974220659401984 reject: False
-```
+    $$
+    z = \frac{k - np_0}{\sqrt{np_0(1-p_0)}} = \frac{2 - 5}{1.58114} = -1.89737,
+    \qquad p = 2\bar\Phi(1.89737) = 0.05778
+    $$
 
-두 p-값이 0.4795와 0.4797로 거의 같다. $n p_0 = 10$과 $n(1-p_0) = 40$으로 검정에 요구되는 [보수적 기준](../../ch04/discrete_distributions/binomial.md#언제-쓸-수-있는가-5와-10) $\ge 10$을 턱걸이로 만족하기 때문이다.
+    이다. 정확검정은 $p_0 = 0.5$라 분포가 대칭이므로 양 꼬리를 그대로 더하면 된다.
 
-이 일치를 일반적인 것으로 받아들이면 곤란하다. $k = 2$, $n = 10$, $p_0 = 0.5$처럼 표본이 작고 비율이 극단적인 경우로 바꿔 보면 점수 검정이 0.0578, 정확검정이 0.1094로 두 배 가까이 벌어진다. 5% 기준을 놓고 결론이 갈리는 자리다. 이항분포를 직접 쓸 수 있을 때는 정확검정 쪽이 안전하다.
+    $$
+    P(K \le 2) + P(K \ge 8)
+    = \frac{2\left[\binom{10}{0} + \binom{10}{1} + \binom{10}{2}\right]}{2^{10}}
+    = \frac{2(1 + 10 + 45)}{1024} = \frac{112}{1024} = \frac{7}{64} = 0.109375
+    $$
+
+    **두 값이 거의 두 배 차이다.** 명목 $0.05$를 놓고 결론이 갈리는 자리이기도 하다.
+
+    차이의 출처는 $K$가 정수라는 데 있다. 정규근사는 $K$를 연속량으로 보아 꼬리를 $k = 2$에서 자르는데, 정확확률 $P(K \le 2)$는 $2$라는 칸을 **통째로** 포함한다. 그러니 경계를 반 칸 밖으로 밀어 $2.5$에서 자르는 것이 옳다. 이것이 **연속성 보정**이다.
+
+    $$
+    z_{\text{cc}} = \frac{\lvert k - np_0 \rvert - 0.5}{\sqrt{np_0(1-p_0)}}
+    = \frac{3 - 0.5}{1.58114} = 1.58114,
+    \qquad p = 2\bar\Phi(1.58114) = 0.113846
+    $$
+
+    보정 전에는 정확값과 $0.0516$ 어긋났는데 보정 후에는 $0.0045$다. **열한 분의 일로 줄었다.** 반 칸이라는 작은 교정이 작은 표본에서는 거의 전부를 설명한다.
+
+    **(2) 수치적으로.** 먼저 보기의 두 검정을 돌린다.
+
+    ```python
+    stat, p, reject, label = test_prop_one_sample(
+        k=12, n=50, p0=0.2, method="score", alt="two-sided"
+    )
+    print(label, "stat:", stat, "p:", p, "reject:", reject)
+
+    # 같은 자료의 정확한 이항검정
+    stat_e, p_e, reject_e, label_e = test_prop_one_sample(
+        k=12, n=50, p0=0.2, method="exact", alt="two-sided"
+    )
+    print(label_e, "stat:", stat_e, "p:", p_e, "reject:", reject_e)
+    ```
+
+    출력:
+
+    ```
+    score z-test stat: 0.7071067811865471 p: 0.4795001221869537 reject: False
+    exact binomial stat: None p: 0.47974220659401984 reject: False
+    ```
+
+    두 p-값이 $0.4795$와 $0.4797$로 거의 같다. $np_0 = 10$과 $n(1-p_0) = 40$으로 검정에 요구되는 [보수적 기준](../../ch04/discrete_distributions/binomial.md#언제-쓸-수-있는가-5와-10) $\ge 10$을 턱걸이로 만족하기 때문이다.
+
+    이제 네 가지 방식을 한자리에 놓는다. 비대칭인 이항분포에서는 **"양측"을 정의하는 관례가 하나가 아니다.**
+
+    ```python
+    import math
+    from fractions import Fraction
+
+    from scipy.stats import norm, binomtest
+
+
+    def four_pvalues(k, n, p0):
+        """같은 자료에 대한 네 가지 양측 p-값."""
+        q = Fraction(p0).limit_denominator()
+        w = [Fraction(math.comb(n, j)) * q**j * (1 - q)**(n - j) for j in range(n + 1)]
+
+        sd = math.sqrt(n * p0 * (1 - p0))
+        z = (k - n * p0) / sd                      # 점수 z (k 단위로 적은 것)
+        p_score = 2 * norm.sf(abs(z))
+        z_cc = (abs(k - n * p0) - 0.5) / sd        # 경계를 반 칸 밖으로 민다
+        p_cc = 2 * norm.sf(z_cc)
+
+        # 정확 ①: 관측된 칸보다 확률이 작거나 같은 칸을 모두 더한다(scipy 의 기본).
+        p_small = sum(w[j] for j in range(n + 1) if w[j] <= w[k])
+        # 정확 ②: 작은 쪽 꼬리를 두 배 한다.
+        p_twice = 2 * min(sum(w[: k + 1]), sum(w[k:]))
+        return z, p_score, z_cc, p_cc, p_small, p_twice
+
+
+    for k, n, p0 in [(2, 10, 0.5), (12, 50, 0.2)]:
+        z, p_score, z_cc, p_cc, p_small, p_twice = four_pvalues(k, n, p0)
+        print(f"k = {k}, n = {n}, p0 = {p0}")
+        print(f"  점수            z = {z:+.6f}  p = {p_score:.6f}")
+        print(f"  연속성 보정    z = {z_cc:+.6f}  p = {p_cc:.6f}")
+        frac = f"  = {p_small}" if p_small.denominator < 10**6 else ""
+        print(f"  정확 (작은 확률 합)       p = {float(p_small):.6f}{frac}")
+        print(f"  정확 (작은 꼬리 두 배)    p = {float(p_twice):.6f}")
+        print(f"  scipy binomtest           p = {binomtest(k, n, p0).pvalue:.6f}")
+        print(f"  두 정확 관례의 차이 = {float(p_twice - p_small):.6f}")
+    ```
+
+    출력:
+
+    ```
+    k = 2, n = 10, p0 = 0.5
+      점수            z = -1.897367  p = 0.057780
+      연속성 보정    z = +1.581139  p = 0.113846
+      정확 (작은 확률 합)       p = 0.109375  = 7/64
+      정확 (작은 꼬리 두 배)    p = 0.109375
+      scipy binomtest           p = 0.109375
+      두 정확 관례의 차이 = 0.000000
+    k = 12, n = 50, p0 = 0.2
+      점수            z = +0.707107  p = 0.479500
+      연속성 보정    z = +0.530330  p = 0.595883
+      정확 (작은 확률 합)       p = 0.479742
+      정확 (작은 꼬리 두 배)    p = 0.578665
+      scipy binomtest           p = 0.479742
+      두 정확 관례의 차이 = 0.098923
+    ```
+
+    위쪽 자료에서 $z$, $z_{\text{cc}}$, $7/64$가 (1)에서 손으로 구한 값과 모두 같다. 두 정확 관례가 소수점까지 **똑같이** $0.109375$인 것은 $p_0 = 0.5$에서 분포가 대칭이라 "확률이 작은 칸"과 "꼬리"가 같은 집합이기 때문이다.
+
+    아래쪽 자료에서 이야기가 달라진다. 두 **정확** 관례가 $0.4797$과 $0.5787$로 $0.0989$ 어긋난다. **근사를 쓰느냐 마느냐($0.4795$ 대 $0.4797$, 차이 $0.00024$)보다 "양측"을 어떻게 정의하느냐가 400배 넘게 큰 차이를 만든다.** 연속성 보정이 $0.5959$를 주어 오히려 멀어지는 것도 같은 이유다. 보정은 중심에서 같은 거리만큼 떨어진 두 꼬리를 재므로 꼬리 두 배 쪽($0.5787$)의 근사이고, `binomtest`의 기본값은 확률이 작은 칸을 모으는 다른 관례($0.4797$)다. **$0.4795$와 $0.4797$의 일치는 서로 다른 두 가지가 우연히 만난 것이다.**
+
+    그러므로 보고할 때는 수만 적지 말고 어느 관례인지 함께 적어야 한다. 대칭인 $p_0 = 0.5$에서는 걱정할 일이 없지만, $p_0$이 치우치면 같은 자료가 $0.48$이 되기도 하고 $0.58$이 되기도 한다.
 
 ### 해석
 
