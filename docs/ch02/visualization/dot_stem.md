@@ -12,63 +12,180 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 점그림 그리기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 점그림 그리기, 그리고 히스토그램이 고르는 구간. 학급 $14$명의 나이 $\{5, 7, 5, 9, 7, 7, 6, 9, 9, 9, 10, 12, 12, 7\}$ 을 쓴다.
+
+**(1)** 점그림을 그리고 값마다 몇 명인지 읽으시오.
+
+**(2)** 같은 자료를 히스토그램으로 그린다면, 구간 폭을 정하고도 **경계를 어디에 두느냐**가 남는다. 정수 자료에서 구간 폭 $w$ 에 대해 서로 다른 히스토그램이 몇 가지인지 밝히고, $w = 2, 3, 4$ 에서 그것들을 모두 만들어 **최빈구간이 바뀌는지** 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
-plt.rcParams['axes.unicode_minus'] = False
+    **(1) 점그림.**
 
-data = [5, 7, 5, 9, 7, 7, 6, 9, 9, 9, 10, 12, 12, 7]
+    ```python
+    import matplotlib.pyplot as plt
 
-# 값마다 몇 번 나왔는지 센다
-age_freq = {}
-for age in data:
-    age_freq[age] = age_freq.get(age, 0) + 1
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
 
-fig, ax = plt.subplots(figsize=(12, 3))
+    data = [5, 7, 5, 9, 7, 7, 6, 9, 9, 9, 10, 12, 12, 7]
 
-# 점그림의 요령: 같은 값을 세로로 쌓는다.
-#   x = [age] * freq        가로 위치는 모두 같다
-#   y = 1, 2, ..., freq     세로로 한 칸씩 올라간다
-for age, freq in age_freq.items():
-    ax.plot([age] * freq, range(1, freq + 1), 'ok')
+    # 값마다 몇 번 나왔는지 센다
+    age_freq = {}
+    for age in data:
+        age_freq[age] = age_freq.get(age, 0) + 1
 
-ax.set_xlabel('나이 (세)')
-ax.set_ylabel('학생 수')
-ax.set_title("학급 학생들의 나이")
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.set_yticks([0, 1, 2, 3, 4])
-ax.spines["bottom"].set_position("zero")   # 가로축을 y=0에 붙인다
-plt.show()
+    fig, ax = plt.subplots(figsize=(12, 3))
 
-print(dict(sorted(age_freq.items())))
-```
+    # 점그림의 요령: 같은 값을 세로로 쌓는다.
+    #   x = [age] * freq        가로 위치는 모두 같다
+    #   y = 1, 2, ..., freq     세로로 한 칸씩 올라간다
+    for age, freq in age_freq.items():
+        ax.plot([age] * freq, range(1, freq + 1), 'ok')
 
-출력:
+    ax.set_xlabel('나이 (세)')
+    ax.set_ylabel('학생 수')
+    ax.set_title("학급 학생들의 나이")
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.set_yticks([0, 1, 2, 3, 4])
+    ax.spines["bottom"].set_position("zero")   # 가로축을 y=0에 붙인다
+    plt.show()
 
-```
-{5: 2, 6: 1, 7: 4, 9: 4, 10: 1, 12: 2}
-```
+    print(dict(sorted(age_freq.items())))
+    ```
 
-![점그림](./img/gc_dotplot.png)
+    출력:
 
-7세가 네 명, 9세가 네 명으로 가장 많고 나머지는 한둘씩이다. 8세와 11세는 한 명도 없다.
+    ```
+    {5: 2, 6: 1, 7: 4, 9: 4, 10: 1, 12: 2}
+    ```
 
-**히스토그램과 견주었을 때의 이점.**
+    ![점그림](./img/gc_dotplot.png)
 
-- **구간을 정할 필요가 없다.** 히스토그램은 구간 폭을 어떻게 잡느냐에 따라 봉우리가 하나로도 둘로도 보인다. 점그림에는 그런 선택이 없다.
-- **점의 개수를 셀 수 있다.** "여기에 네 명"이라는 것이 눈으로 확인된다.
-- **원자료가 보존된다.** 5, 5, 6, 7, 7, 7, 7, 9, ... 를 그림에서 그대로 읽을 수 있다.
+    7세가 네 명, 9세가 네 명으로 가장 많고 나머지는 한둘씩이다. 8세와 11세는 한 명도 없다.
 
-**한계는 자료가 많아지면 무너진다는 것이다.** 100개쯤 되면 점 기둥이 너무 높아져 읽기 어렵고, 1000개면 아예 불가능하다. 그때는 히스토그램이나 상자그림으로 넘어간다.
+    **히스토그램과 견주었을 때의 이점.**
+
+    - **구간을 정할 필요가 없다.** 히스토그램은 구간 폭을 어떻게 잡느냐에 따라 봉우리가 하나로도 둘로도 보인다. 점그림에는 그런 선택이 없다.
+    - **점의 개수를 셀 수 있다.** "여기에 네 명"이라는 것이 눈으로 확인된다.
+    - **원자료가 보존된다.** 5, 5, 6, 7, 7, 7, 7, 9, ... 를 그림에서 그대로 읽을 수 있다.
+
+    **한계는 자료가 많아지면 무너진다는 것이다.** 100개쯤 되면 점 기둥이 너무 높아져 읽기 어렵고, 1000개면 아예 불가능하다. 그때는 히스토그램이나 상자그림으로 넘어간다.
+
+    **(2) 히스토그램이 숨기고 있는 선택. 해석적으로.** 구간 폭 $w$ 를 정했다고 끝이 아니다. 경계를 $\ldots, o, o+w, o+2w, \ldots$ 어디에 놓을지가 남아 있다. 그런데 $o$ 를 $w$ 만큼 옮기면 경계의 집합이 **그대로**다. 곧 $o$ 와 $o + w$ 는 같은 히스토그램을 준다.
+
+    자료가 정수뿐이라면 경계를 정수가 아닌 자리에 두는 것이 자연스럽고(그래야 어느 값이 어느 구간에 들어갈지 애매하지 않다), 그 경우 서로 다른 경계의 위치는 $o \bmod w$ 로만 구별된다. 따라서
+
+    $$
+    \text{구간 폭이 } w \text{ 인 서로 다른 히스토그램의 개수} = w
+    $$
+
+    다. $w = 2$ 면 두 가지, $w = 4$ 면 네 가지다. **어느 하나를 고르는 순간 나머지 $w-1$ 가지는 보이지 않게 된다.**
+
+    점그림에는 이 선택이 없다. 값 하나가 곧 한 칸이므로 $w = 1$ 이고, $w = 1$ 일 때 히스토그램은 **한 가지뿐**이다. 점그림이 "구간을 정할 필요가 없다"는 말의 정확한 뜻이 이것이다.
+
+    **수치적으로.** $w$ 가지를 전부 만들어 최빈구간을 견준다.
+
+    ```python
+    import numpy as np
+
+    d = np.array(sorted(data))
+
+
+    def hist_bins(d, w, o):
+        """경계가 o (mod w) 에 놓이는 구간들의 (왼끝, 도수)."""
+        lo = (d.min() - o) // w * w + o
+        edges = np.arange(lo, d.max() + w + 1, w)
+        cnt, _ = np.histogram(d, bins=edges)
+        return [(int(edges[i]), int(cnt[i])) for i in range(len(cnt))]
+
+
+    for w in [2, 3, 4]:
+        print(f"구간 폭 w = {w}:  경계의 위치는 {w} 가지뿐이다")
+        for o in range(w):
+            bins = hist_bins(d, w, o)
+            mx = max(c for _, c in bins)
+            modes = [f"[{b},{b + w})" for b, c in bins if c == mx]
+            body = "  ".join(f"[{b},{b + w}):{c}" for b, c in bins)
+            print(f"   경계 ≡ {o} (mod {w}):  {body}")
+            print(f"       -> 최빈구간 {', '.join(modes)}   (도수 {mx})")
+        print()
+
+    vals, cnts = np.unique(d, return_counts=True)
+    print("점그림이 보여 주는 것 (구간 선택 없음):")
+    print("   " + "  ".join(f"{v}:{c}" for v, c in zip(vals, cnts)))
+    print(f"   최빈값 = {list(vals[cnts == cnts.max()])}  (각 {cnts.max()}명, 동점)")
+
+    fig, axes = plt.subplots(1, 3, figsize=(13, 3.2), sharey=True)
+    for v, c in zip(vals, cnts):
+        axes[0].plot([v] * c, range(1, c + 1), 'o', color="#1565C0", ms=7)
+    axes[0].set_title("점그림 — 7세와 9세가 각 4명", fontsize=11)
+    axes[0].set_ylabel("학생 수")
+    for ax, o in zip(axes[1:], [0, 1]):
+        bins = hist_bins(d, 2, o)
+        mx = max(c for _, c in bins)
+        ax.bar([b for b, _ in bins], [c for _, c in bins], width=2, align="edge",
+               color=["#E65100" if c == mx else "#DCEBFB" for _, c in bins],
+               edgecolor="#37474F")
+        mode = [b for b, c in bins if c == mx][0]
+        ax.set_title(f"히스토그램 (폭 2, 경계 ≡ {o})  최빈 [{mode},{mode + 2})",
+                     fontsize=11)
+    for ax in axes:
+        ax.set_xlabel("나이 (세)")
+        ax.set_xlim(3.5, 14.5)
+        ax.set_xticks(range(4, 15, 2))
+        ax.spines[["top", "right"]].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    구간 폭 w = 2:  경계의 위치는 2 가지뿐이다
+       경계 ≡ 0 (mod 2):  [4,6):2  [6,8):5  [8,10):4  [10,12):1  [12,14):2
+           -> 최빈구간 [6,8)   (도수 5)
+       경계 ≡ 1 (mod 2):  [5,7):3  [7,9):4  [9,11):5  [11,13):2
+           -> 최빈구간 [9,11)   (도수 5)
+
+    구간 폭 w = 3:  경계의 위치는 3 가지뿐이다
+       경계 ≡ 0 (mod 3):  [3,6):2  [6,9):5  [9,12):5  [12,15):2
+           -> 최빈구간 [6,9), [9,12)   (도수 5)
+       경계 ≡ 1 (mod 3):  [4,7):3  [7,10):8  [10,13):3
+           -> 최빈구간 [7,10)   (도수 8)
+       경계 ≡ 2 (mod 3):  [5,8):7  [8,11):5  [11,14):2
+           -> 최빈구간 [5,8)   (도수 7)
+
+    구간 폭 w = 4:  경계의 위치는 4 가지뿐이다
+       경계 ≡ 0 (mod 4):  [4,8):7  [8,12):5  [12,16):2
+           -> 최빈구간 [4,8)   (도수 7)
+       경계 ≡ 1 (mod 4):  [5,9):7  [9,13):7
+           -> 최빈구간 [5,9), [9,13)   (도수 7)
+       경계 ≡ 2 (mod 4):  [2,6):2  [6,10):9  [10,14):3
+           -> 최빈구간 [6,10)   (도수 9)
+       경계 ≡ 3 (mod 4):  [3,7):3  [7,11):9  [11,15):2
+           -> 최빈구간 [7,11)   (도수 9)
+
+    점그림이 보여 주는 것 (구간 선택 없음):
+       5:2  6:1  7:4  9:4  10:1  12:2
+       최빈값 = [7, 9]  (각 4명, 동점)
+    ```
+
+    ![점그림과 경계만 다른 두 히스토그램](./img/dot_stem_bins.png)
+
+    **같은 자료가 정반대로 읽힌다.** 구간 폭을 똑같이 $2$ 로 두고 경계만 한 칸 옮겼을 뿐인데, 한쪽은 **$[6,8)$ 이 최빈구간**이라 하고 다른 쪽은 **$[9,11)$ 이 최빈구간**이라 한다. 두 구간은 겹치지도 않는다. 도수는 둘 다 $5$ 로 같다.
+
+    까닭은 점그림이 보여 준다. 자료에는 $7$세 네 명과 $9$세 네 명이 **정확히 동점**으로 있다. 경계를 $\equiv 0$ 에 두면 $6$세 한 명이 $7$세 무리에 붙어 $5$가 되고, $\equiv 1$ 에 두면 $10$세 한 명이 $9$세 무리에 붙어 $5$가 된다. **동점을 깨뜨리는 것은 자료가 아니라 경계를 어디에 두었느냐다.**
+
+    $w = 3$ 과 $w = 4$ 는 더 심하다. 폭 $3$ 에서 최빈구간의 도수가 경계에 따라 $5, 8, 7$ 로 달라진다. 폭 $4$ 에서 경계를 $\equiv 1$ 에 두면 구간이 둘뿐인 $7 : 7$ 의 완전한 평형이 되고, $\equiv 2$ 로 한 칸 옮기면 $2 : 9 : 3$ 의 뚜렷한 단봉이 된다. **같은 $14$개 수에서 "평평하다"와 "가운데가 봉우리다"가 둘 다 나온다.**
+
+    점그림은 이 선택을 아예 하지 않는다. 그래서 $7$과 $9$가 각 $4$명으로 동점이라는 사실을 그대로 보여 주고, $8$세와 $11$세가 **한 명도 없다**는 것까지 보여 준다. 폭 $3$ 이상의 어떤 히스토그램도 이 빈자리를 보여 주지 못한다.
 
 ## 2. 줄기잎그림
 
@@ -78,80 +195,174 @@ print(dict(sorted(age_freq.items())))
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 줄기잎그림 직접 만들기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 줄기잎그림 직접 만들기. 점수 $15$개 $\{65, 93, 45, 73, 99, 70, 88, 46, 75, 34, 83, 100, 88, 72, 70\}$ 를 쓴다.
+
+**(1)** 줄기 단위 $10$으로 줄기잎그림을 만들고, 그 그림에서 원자료를 **그대로 복원할 수 있음**을 보이시오.
+
+**(2)** 줄기 단위를 $u$ 라 할 때 **줄의 개수**를 $u$ 의 식으로 쓰시오. 그것으로 "줄이 $5$–$15$개일 때 읽기 좋다"는 경험칙을 $u$ 의 범위로 옮기고, 실제로 세어 확인하시오.
 
 </div>
 
-```python
-from collections import defaultdict
+??? success "풀이"
 
-def stem_leaf(data, stem_unit=10):
-    """줄기잎그림을 문자열로 만든다.
-
-    stem_unit=10 이면 십의 자리가 줄기, 일의 자리가 잎이 된다.
-    예: 65 -> 줄기 6, 잎 5
-    """
-    buckets = defaultdict(list)
-    for v in sorted(data):                 # 잎이 오름차순이 되도록 먼저 정렬
-        buckets[int(v) // stem_unit].append(int(v) % stem_unit)
-
-    lines = ["줄기 | 잎", "-----+" + "-" * 20]
-    # 값이 없는 줄기도 건너뛰지 않고 빈 줄로 남긴다.
-    # 그래야 줄 길이가 도수에 비례해 분포 모양이 제대로 보인다.
-    for stem in range(min(buckets), max(buckets) + 1):
-        leaves = " ".join(str(leaf) for leaf in buckets.get(stem, []))
-        lines.append(f"{stem:4d} | {leaves}")
-    lines.append(f"\n줄기 단위 = {stem_unit}   (줄기 6, 잎 5  ->  65)")
-    return "\n".join(lines)
-
-scores = [65, 93, 45, 73, 99, 70, 88, 46, 75, 34, 83, 100, 88, 72, 70]
-print(stem_leaf(scores))
-```
-
-출력:
-
-```
-줄기 | 잎
------+--------------------
-   3 | 4
-   4 | 5 6
-   5 |
-   6 | 5
-   7 | 0 0 2 3 5
-   8 | 3 8 8
-   9 | 3 9
-  10 | 0
-
-줄기 단위 = 10   (줄기 6, 잎 5  ->  65)
-```
-
-옆으로 누운 히스토그램처럼 읽으면 된다. 70대가 다섯 명으로 가장 많고, 50대는 한 명도 없다.
-
-**히스토그램과 결정적으로 다른 점은 원자료가 남아 있다는 것이다.** 잎을 읽으면 70, 70, 72, 73, 75라는 실제 점수를 그대로 복원할 수 있다. 히스토그램은 "70~80 구간에 다섯 명"까지만 알려 주고 값은 버린다.
-
-!!! note "빈 줄기를 빼지 마라"
-    위 코드에서 `range(min, max+1)`로 돌린 이유가 있다. 50대에 값이 없다고 그 줄을 통째로 빼면 다음처럼 된다.
-
-    ```
-       3 | 4
-       4 | 5 6
-       6 | 5
-       7 | 0 0 2 3 5
-    ```
-
-    줄과 줄 사이의 간격이 값의 간격과 어긋나므로 **분포의 모양이 왜곡된다.** 빈 줄기를 남겨야 "여기에 자료가 없다"는 사실이 그림에 드러난다. 히스토그램에서 빈 구간의 막대를 지우지 않는 것과 같은 이유다.
-
-!!! note "`stemgraphic` 패키지"
-    `stemgraphic` 라이브러리를 쓰면 그림 형태의 줄기잎그림을 얻을 수 있다.
+    **(1) 만들어 본다.**
 
     ```python
-    import stemgraphic
-    fig, ax = stemgraphic.stem_graphic(scores, scale=10)
+    from collections import defaultdict
+
+    def stem_leaf(data, stem_unit=10):
+        """줄기잎그림을 문자열로 만든다.
+
+        stem_unit=10 이면 십의 자리가 줄기, 일의 자리가 잎이 된다.
+        예: 65 -> 줄기 6, 잎 5
+        """
+        buckets = defaultdict(list)
+        for v in sorted(data):                 # 잎이 오름차순이 되도록 먼저 정렬
+            buckets[int(v) // stem_unit].append(int(v) % stem_unit)
+
+        lines = ["줄기 | 잎", "-----+" + "-" * 20]
+        # 값이 없는 줄기도 건너뛰지 않고 빈 줄로 남긴다.
+        # 그래야 줄 길이가 도수에 비례해 분포 모양이 제대로 보인다.
+        for stem in range(min(buckets), max(buckets) + 1):
+            leaves = " ".join(str(leaf) for leaf in buckets.get(stem, []))
+            lines.append(f"{stem:4d} | {leaves}")
+        lines.append(f"\n줄기 단위 = {stem_unit}   (줄기 6, 잎 5  ->  65)")
+        return "\n".join(lines)
+
+    scores = [65, 93, 45, 73, 99, 70, 88, 46, 75, 34, 83, 100, 88, 72, 70]
+    print(stem_leaf(scores))
     ```
 
-    ![stemgraphic 으로 그린 줄기잎그림](./img/dot_stem_129.png)
+    출력:
 
-    다만 별도 설치가 필요하고, 위 코드처럼 직접 만들면 줄기와 잎을 나누는 원리가 그대로 드러난다.
+    ```
+    줄기 | 잎
+    -----+--------------------
+       3 | 4
+       4 | 5 6
+       5 |
+       6 | 5
+       7 | 0 0 2 3 5
+       8 | 3 8 8
+       9 | 3 9
+      10 | 0
+
+    줄기 단위 = 10   (줄기 6, 잎 5  ->  65)
+    ```
+
+    옆으로 누운 히스토그램처럼 읽으면 된다. 70대가 다섯 명으로 가장 많고, 50대는 한 명도 없다.
+
+    **히스토그램과 결정적으로 다른 점은 원자료가 남아 있다는 것이다.** 잎을 읽으면 70, 70, 72, 73, 75라는 실제 점수를 그대로 복원할 수 있다. 히스토그램은 "70~80 구간에 다섯 명"까지만 알려 주고 값은 버린다.
+
+    !!! note "빈 줄기를 빼지 마라"
+        위 코드에서 `range(min, max+1)`로 돌린 이유가 있다. 50대에 값이 없다고 그 줄을 통째로 빼면 다음처럼 된다.
+
+        ```
+           3 | 4
+           4 | 5 6
+           6 | 5
+           7 | 0 0 2 3 5
+        ```
+
+        줄과 줄 사이의 간격이 값의 간격과 어긋나므로 **분포의 모양이 왜곡된다.** 빈 줄기를 남겨야 "여기에 자료가 없다"는 사실이 그림에 드러난다. 히스토그램에서 빈 구간의 막대를 지우지 않는 것과 같은 이유다.
+
+    !!! note "`stemgraphic` 패키지"
+        `stemgraphic` 라이브러리를 쓰면 그림 형태의 줄기잎그림을 얻을 수 있다.
+
+        ```python
+        import stemgraphic
+        fig, ax = stemgraphic.stem_graphic(scores, scale=10)
+        ```
+
+        ![stemgraphic 으로 그린 줄기잎그림](./img/dot_stem_129.png)
+
+        다만 별도 설치가 필요하고, 위 코드처럼 직접 만들면 줄기와 잎을 나누는 원리가 그대로 드러난다.
+
+    **(2) 줄의 개수. 해석적으로.** 값 $v$ 가 들어가는 줄기는 $\lfloor v/u \rfloor$ 다. 빈 줄기도 남기므로 줄기는 $\lfloor x_{\min}/u \rfloor$ 부터 $\lfloor x_{\max}/u \rfloor$ 까지 하나씩 있고, 따라서
+
+    $$
+    \text{줄 수} = \left\lfloor \frac{x_{\max}}{u} \right\rfloor - \left\lfloor \frac{x_{\min}}{u} \right\rfloor + 1
+    $$
+
+    이다. 바닥함수를 걷어 내면 범위 $R = x_{\max} - x_{\min}$ 에 대해
+
+    $$
+    \frac{R}{u} < \text{줄 수} < \frac{R}{u} + 2,
+    \qquad\text{곧}\qquad \text{줄 수} \approx \frac{R}{u} + 1
+    $$
+
+    로 **오차가 $1$ 을 넘지 않는** 어림을 얻는다. 이 어림을 뒤집으면 경험칙이 $u$ 의 범위가 된다. 줄 수를 $r$ 이라 할 때 $u \approx R/(r-1)$ 이므로
+
+    $$
+    r = 15 \ \Rightarrow\ u \approx \frac{R}{14}, \qquad
+    r = 5 \ \Rightarrow\ u \approx \frac{R}{4}
+    $$
+
+    이다. 우리 자료는 $R = 100 - 34 = 66$ 이므로 $u$ 는 대략 $4.7$ 에서 $16.5$ 사이여야 한다. 십진법에서 쓸 만한 값은 $u = 5$ 와 $u = 10$ 둘뿐이고, 이것이 **줄기 쪼개기가 늘 반으로 쪼개는 까닭**이다. $u = 10$ 이 너무 거칠면 다음 선택지는 $u = 5$ 다.
+
+    **수치적으로.**
+
+    ```python
+    s = sorted(scores)
+    lo, hi, R = min(s), max(s), max(s) - min(s)
+    print(f"n = {len(s)},  최소 {lo},  최대 {hi},  범위 R = {R}")
+
+
+    def stems(data, u):
+        """줄기 -> 잎 목록. 빈 줄기도 남긴다."""
+        b = defaultdict(list)
+        for v in sorted(data):
+            b[int(v) // u].append(int(v) % u)
+        return list(range(min(b), max(b) + 1)), b
+
+
+    print(f"\n{'단위 u':>7}{'공식 ⌊hi/u⌋-⌊lo/u⌋+1':>22}{'실제 줄 수':>11}"
+          f"{'어림 R/u+1':>12}{'한 줄 평균 잎':>14}")
+    for u in [1, 2, 5, 10, 20, 25, 50]:
+        rs, _ = stems(s, u)
+        print(f"{u:>7}{hi // u - lo // u + 1:>22}{len(rs):>11}"
+              f"{R / u + 1:>12.2f}{len(s) / len(rs):>14.2f}")
+
+    ok = [u for u in range(1, R + 1) if 5 <= hi // u - lo // u + 1 <= 15]
+    print(f"\n줄이 5~15 개가 되는 u = {ok}")
+    print(f"어림식이 주는 범위:  R/14 = {R / 14:.2f}  ~  R/4 = {R / 4:.2f}")
+
+    # 잎에서 원자료를 복원할 수 있는가
+    u = 10
+    rs, b = stems(s, u)
+    restored = sorted(st * u + lf for st in rs for lf in b.get(st, []))
+    print(f"\n잎에서 복원한 자료 == 원자료(정렬): {restored == s}")
+    print(f"   {restored}")
+    ```
+
+    출력:
+
+    ```
+    n = 15,  최소 34,  최대 100,  범위 R = 66
+
+       단위 u    공식 ⌊hi/u⌋-⌊lo/u⌋+1     실제 줄 수    어림 R/u+1      한 줄 평균 잎
+          1                    67         67       67.00          0.22
+          2                    34         34       34.00          0.44
+          5                    15         15       14.20          1.00
+         10                     8          8        7.60          1.88
+         20                     5          5        4.30          3.00
+         25                     4          4        3.64          3.75
+         50                     3          3        2.32          5.00
+
+    줄이 5~15 개가 되는 u = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20]
+    어림식이 주는 범위:  R/14 = 4.71  ~  R/4 = 16.50
+
+    잎에서 복원한 자료 == 원자료(정렬): True
+       [34, 45, 46, 65, 70, 70, 72, 73, 75, 83, 88, 88, 93, 99, 100]
+    ```
+
+    **공식이 모든 $u$ 에서 실제 줄 수와 같다.** $\lfloor hi/u \rfloor - \lfloor lo/u \rfloor + 1$ 열과 실제 줄 수 열이 $67, 34, 15, 8, 5, 4, 3$ 으로 한 줄도 어긋나지 않는다. 어림 $R/u + 1$ 도 $u$ 가 작을 때는 정확히 맞고($u = 1, 2$ 에서 $67, 34$), 커질수록 바닥함수 때문에 최대 $1$ 만큼 작게 나온다($u = 20$ 에서 $4.30$ 대 $5$). 유도한 대로 오차가 $1$ 을 넘지 않는다.
+
+    **경험칙의 범위도 맞는다.** 어림이 준 $4.71 \le u \le 16.50$ 과 실제로 세어 얻은 집합 $\{5, \ldots, 16, 18, 19, 20\}$ 이 거의 겹친다. 아래 끝 $5$ 는 정확히 맞고 위쪽은 어림이 조금 보수적이다 — 바닥함수가 운 좋게 한 줄을 더 만들어 주는 $u = 18, 19, 20$ 이 어림의 바깥인데도 통과한다.
+
+    그런데 그 집합에 **$u = 17$ 이 빠져 있다.** $\lfloor 100/17 \rfloor - \lfloor 34/17 \rfloor + 1 = 5 - 2 + 1 = 4$ 로 한 줄이 모자란다. $u = 16$ 도 $18$ 도 되는데 그 사이의 $17$만 안 된다. 줄 수는 $u$ 에 대해 **단조롭지 않다.** 바닥함수가 자료의 최솟값·최댓값이 어느 줄기에 떨어지느냐에 따라 한 줄을 더 주기도 덜 주기도 하기 때문이다. 어림식을 지침으로 쓰되 **마지막에는 실제로 세어 보라**는 뜻이다.
+
+    **마지막 줄이 줄기잎그림의 존재 이유다.** 잎에서 되살린 $15$개 값이 원자료를 정렬한 것과 **정확히 같다**. 줄기잎그림은 그림이면서 동시에 자료다. 히스토그램은 같은 $u = 10$ 에서 "$70$대에 다섯 명"까지만 말하고 $70, 70, 72, 73, 75$ 라는 값은 버린다. 다만 이 되살림이 가능한 것은 $n$ 이 작기 때문이고, $n$ 이 수백이면 한 줄의 잎이 화면을 넘어가 그림으로서의 쓸모가 먼저 사라진다.
 
 ## 3. 줄기 단위 고르기
 

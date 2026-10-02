@@ -12,61 +12,143 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 파레토 그림 그리기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이 자료에서 $80$/$20$ 은 실제로 몇 대 몇인가. 어떤 공정의 한 달치 불량이 긁힘 $112$, 찌그러짐 $63$, 정렬 불량 $41$, 변색 $18$, 균열 $11$, 기타 $7$ 건이다.
+
+**(1)** 큰 순으로 정렬한 자료의 누적비율 곡선이 **위로 오목**함을 보이고, 이 자료에서 $80\%$ 를 넘기는 데 필요한 범주가 몇 가지인지 구하시오.
+
+**(2)** 파레토 그림을 그려 (1)을 확인하고, 집중도를 지니계수 한 수로 요약하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import pandas as pd
+??? success "풀이"
 
-# 어떤 공정에서 한 달간 기록된 불량 유형별 건수
-defects = pd.Series({'긁힘': 112, '찌그러짐': 63, '정렬 불량': 41,
-                     '변색': 18, '균열': 11, '기타': 7})
+    **(1) 해석적으로.** 범주가 $K$ 개이고 도수를 큰 순으로 늘어놓은 것을 $x_{(1)} \ge x_{(2)} \ge \cdots \ge x_{(K)}$, 총합을 $T = \sum_k x_{(k)}$ 라 하자. 누적비율은
 
-# 1단계: 큰 순으로 정렬한다. 파레토 그림에서 정렬은 선택이 아니라 필수다.
-#         정렬하지 않으면 누적선이 계단처럼 들쭉날쭉해져 읽을 수 없다.
-defects = defects.sort_values(ascending=False)
+    $$
+    C_k = \frac{1}{T}\sum_{j=1}^{k} x_{(j)}, \qquad C_0 = 0, \quad C_K = 1
+    $$
 
-# 2단계: 누적 비율을 계산한다. cumsum()이 왼쪽부터 차례로 더해 준다.
-cum = defects.cumsum() / defects.sum() * 100
+    이다. 한 칸 옮길 때의 증분이 바로 그 범주의 몫이다.
 
-fig, ax = plt.subplots(figsize=(9, 4))
+    $$
+    C_k - C_{k-1} = \frac{x_{(k)}}{T}
+    $$
 
-# 왼쪽 축: 건수 막대
-ax.bar(defects.index, defects.values, color='steelblue', width=0.6)
-ax.set_ylabel("건수")
-ax.set_xlabel("불량 유형")
+    **정렬했으므로 이 증분은 $k$ 가 커질 때 비증가한다.** 곧 누적선의 기울기가 단조감소하고, 누적곡선은 위로 오목하다. 가파르게 시작해 평평해지는 모양은 자료의 성질이 아니라 **정렬의 결과**다. 마지막 점이 언제나 $100\%$ 인 것도 마찬가지로 정의가 정한 것이다.
 
-# 오른쪽 축: 누적 비율 선. twinx()가 같은 x축을 공유하는 두 번째 y축을 만든다.
-ax2 = ax.twinx()
-ax2.plot(defects.index, cum.values, 'o-', color='crimson', lw=2)
-ax2.axhline(80, color='gray', ls='--', lw=1)   # 80% 기준선
-ax2.set_ylabel("누적 비율 (%)")
-ax2.set_ylim(0, 105)
+    그러므로 파레토 그림에서 읽을 것은 "오르다가 평평해진다"는 사실이 아니라 **얼마나 빨리 평평해지는가**다.
 
-ax.set_title("파레토 그림: 불량 유형")
-ax.spines['top'].set_visible(False)
-ax2.spines['top'].set_visible(False)
-plt.tight_layout()
-plt.show()
+    이 자료는 $T = 112 + 63 + 41 + 18 + 11 + 7 = 252$ 이므로
 
-print(cum.round(1))
-```
+    $$
+    C_1 = \tfrac{112}{252} = 0.4444, \quad
+    C_2 = \tfrac{175}{252} = 0.6944, \quad
+    C_3 = \tfrac{216}{252} = 0.8571
+    $$
 
-출력:
+    이다. $80\%$ 선을 처음 넘는 곳은 $k = 3$, 곧 **여섯 범주 중 세 가지**다. 상위 $20\%$ 는 $0.2 \times 6 = 1.2$ 개 범주이니 사실상 한 가지뿐인데 그것이 덮는 몫은 $44.4\%$ 다. **이 자료는 $80$/$20$ 이 아니라 $86$/$50$ 이다.**
 
-```
-긁힘        44.4
-찌그러짐      69.4
-정렬 불량     85.7
-변색        92.9
-균열        97.2
-기타       100.0
-dtype: float64
-```
+    **집중도를 한 수로.** 도수를 작은 순으로 $y_1 \le \cdots \le y_K$ 라 할 때 지니계수는
 
-![파레토 그림](./img/pareto.png)
+    $$
+    G = \frac{2\sum_{i=1}^{K} i\,y_i}{K\sum_{i=1}^{K} y_i} - \frac{K+1}{K}
+    $$
+
+    이다. $\sum i\,y_i = 1\cdot 7 + 2\cdot 11 + 3\cdot 18 + 4\cdot 41 + 5\cdot 63 + 6\cdot 112 = 1234$ 이므로
+
+    $$
+    G = \frac{2 \times 1234}{6 \times 252} - \frac{7}{6} = \frac{2468}{1512} - \frac{7}{6} = 0.4656
+    $$
+
+    이다. 모든 범주가 똑같으면 $G = 0$ 이고, 한 범주가 전부를 가지면 $G = (K-1)/K = 5/6 = 0.8333$ 이 상한이다. $0.4656$ 은 그 상한의 $56\%$ 다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+
+    # 어떤 공정에서 한 달간 기록된 불량 유형별 건수
+    defects = pd.Series({'긁힘': 112, '찌그러짐': 63, '정렬 불량': 41,
+                         '변색': 18, '균열': 11, '기타': 7})
+
+    # 1단계: 큰 순으로 정렬한다. 파레토 그림에서 정렬은 선택이 아니라 필수다.
+    #         정렬하지 않으면 누적선이 계단처럼 들쭉날쭉해져 읽을 수 없다.
+    defects = defects.sort_values(ascending=False)
+
+    # 2단계: 누적 비율을 계산한다. cumsum()이 왼쪽부터 차례로 더해 준다.
+    cum = defects.cumsum() / defects.sum() * 100
+
+    fig, ax = plt.subplots(figsize=(9, 4))
+
+    # 왼쪽 축: 건수 막대
+    ax.bar(defects.index, defects.values, color='steelblue', width=0.6)
+    ax.set_ylabel("건수")
+    ax.set_xlabel("불량 유형")
+
+    # 오른쪽 축: 누적 비율 선. twinx()가 같은 x축을 공유하는 두 번째 y축을 만든다.
+    ax2 = ax.twinx()
+    ax2.plot(defects.index, cum.values, 'o-', color='crimson', lw=2)
+    ax2.axhline(80, color='gray', ls='--', lw=1)   # 80% 기준선
+    ax2.set_ylabel("누적 비율 (%)")
+    ax2.set_ylim(0, 105)
+
+    ax.set_title("파레토 그림: 불량 유형")
+    ax.spines['top'].set_visible(False)
+    ax2.spines['top'].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+
+    print(cum.round(1))
+
+    # (1) 증분(= 각 범주의 몫)이 정말 비증가인가. 정렬했으므로 그래야 한다.
+    v = defects.values.astype(float)
+    T = v.sum()
+    c = np.cumsum(v) / T
+    inc = np.diff(np.concatenate([[0.0], c]))
+    print("\n증분  :", np.round(inc, 4))
+    print("비증가:", bool(np.all(np.diff(inc) <= 1e-12)))
+
+    # 80% 선을 처음 넘는 범주 수
+    k80 = int(np.searchsorted(c, 0.80)) + 1
+    print(f"80% 를 넘기는 데 필요한 범주 {k80} 개 / {len(v)} 개"
+          f"  (= 상위 {k80/len(v):.0%}),  그때 누적 {c[k80-1]:.4f}")
+    print(f"상위 20% (= {0.2*len(v):.1f} 개 → 1 개) 의 몫 {c[0]:.4f}")
+
+    # 지니계수 — 작은 순으로 늘어놓고 쓴다
+    y = np.sort(v)
+    K = len(y)
+    i = np.arange(1, K + 1)
+    gini = 2 * np.sum(i * y) / (K * y.sum()) - (K + 1) / K
+    print(f"\nsum i*y = {np.sum(i * y):.0f},  지니계수 G = {gini:.4f}"
+          f"  (상한 (K-1)/K = {(K-1)/K:.4f},  그 {gini/((K-1)/K):.0%})")
+    ```
+
+    출력:
+
+    ```
+    긁힘        44.4
+    찌그러짐      69.4
+    정렬 불량     85.7
+    변색        92.9
+    균열        97.2
+    기타       100.0
+    dtype: float64
+
+    증분  : [0.4444 0.25   0.1627 0.0714 0.0437 0.0278]
+    비증가: True
+    80% 를 넘기는 데 필요한 범주 3 개 / 6 개  (= 상위 50%),  그때 누적 0.8571
+    상위 20% (= 1.2 개 → 1 개) 의 몫 0.4444
+
+    sum i*y = 1234,  지니계수 G = 0.4656  (상한 (K-1)/K = 0.8333,  그 56%)
+    ```
+
+    ![파레토 그림](./img/pareto.png)
+
+    **(1)의 세 수가 모두 맞는다.** 증분이 $0.4444 \to 0.0278$ 로 단조감소하고(`비증가: True`), $80\%$ 선을 넘는 곳이 세 번째 범주이며 그때 누적이 $0.8571$ 이다. 지니계수도 손으로 구한 $0.4656$ 과 같다.
+
+    **그래서 이 자료의 비율은 $80$/$20$ 이 아니다.** 상위 $20\%$ 가 덮는 것은 $80\%$ 가 아니라 $44\%$ 이고, $80\%$ 를 덮으려면 범주의 절반을 손봐야 한다. $80$/$20$ 은 확인해야 할 경험칙일 뿐이고, **파레토 그림이 하는 일은 그 비율을 실제로 재는 것**이다(연습문제 3).
 
 ## 2. 읽는 법
 

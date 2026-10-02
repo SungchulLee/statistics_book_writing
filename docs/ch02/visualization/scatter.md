@@ -8,59 +8,141 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> plot 과 scatter 의 차이
+**보기 1.** <span class="diff easy" title="쉬움"></span> `plot` 과 `scatter` 의 차이, 그리고 점의 크기가 뜻하는 것.
+
+**(1)** 같은 $10$개 점을 `ax.plot` 과 `ax.scatter` 로 그려 무엇이 다른지 보이시오.
+
+**(2)** `scatter` 의 `s` 인자는 마커의 **넓이**인가 **지름**인가. 실제로 그려진 마커를 재어 밝히고, 값을 지름(반지름)에 비례시키면 인상이 얼마나 부풀려지는지 식으로 구하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
-num_samples = 10
-x = stats.norm().rvs(size=num_samples)
-noise = 0.7 * stats.norm().rvs(size=num_samples)
-y = 1 + 2 * x + noise
+    **(1) 두 함수를 견준다.**
 
-fig, (ax_plot, ax_scatter) = plt.subplots(1, 2, figsize=(12, 3))
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
 
-point_sizes = 100 * stats.norm().rvs(size=num_samples) ** 2
-color_values = stats.uniform().rvs(size=num_samples)
+    np.random.seed(0)
+    num_samples = 10
+    x = stats.norm().rvs(size=num_samples)
+    noise = 0.7 * stats.norm().rvs(size=num_samples)
+    y = 1 + 2 * x + noise
 
-# ax.plot: 마커 속성이 모든 점에 똑같이 적용된다.
-#   markersize=10  모든 점의 크기가 10
-#   mec/mfc/mew    테두리색(red) / 채움색(blue) / 테두리굵기(3)
-ax_plot.plot(x, y, 'o', markersize=10, mec="red", mfc="blue", mew=3)
-ax_plot.set_title("ax.plot\n마커 크기가 모두 같다")
+    fig, (ax_plot, ax_scatter) = plt.subplots(1, 2, figsize=(12, 3))
 
-# ax.scatter: 점마다 다른 값을 줄 수 있다.
-#   s=배열  점마다 크기가 다르다  -> 세 번째 변수를 크기로 표현
-#   c=배열  점마다 색이 다르다    -> 네 번째 변수를 색으로 표현
-ax_scatter.scatter(x, y, s=point_sizes, c=color_values)
-ax_scatter.set_title("ax.scatter\n마커 크기와 색이 점마다 다르다")
+    point_sizes = 100 * stats.norm().rvs(size=num_samples) ** 2
+    color_values = stats.uniform().rvs(size=num_samples)
 
-for ax in (ax_plot, ax_scatter):
-    ax.set_xticks([])
-    ax.set_yticks([])
-    for spine in ['left', 'right', 'top', 'bottom']:
-        ax.spines[spine].set_visible(False)
+    # ax.plot: 마커 속성이 모든 점에 똑같이 적용된다.
+    #   markersize=10  모든 점의 크기가 10
+    #   mec/mfc/mew    테두리색(red) / 채움색(blue) / 테두리굵기(3)
+    ax_plot.plot(x, y, 'o', markersize=10, mec="red", mfc="blue", mew=3)
+    ax_plot.set_title("ax.plot\n마커 크기가 모두 같다")
 
-plt.show()
-```
+    # ax.scatter: 점마다 다른 값을 줄 수 있다.
+    #   s=배열  점마다 크기가 다르다  -> 세 번째 변수를 크기로 표현
+    #   c=배열  점마다 색이 다르다    -> 네 번째 변수를 색으로 표현
+    ax_scatter.scatter(x, y, s=point_sizes, c=color_values)
+    ax_scatter.set_title("ax.scatter\n마커 크기와 색이 점마다 다르다")
 
-![ax.plot과 ax.scatter의 비교](./img/gc_plot_vs_scatter.png)
+    for ax in (ax_plot, ax_scatter):
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for spine in ['left', 'right', 'top', 'bottom']:
+            ax.spines[spine].set_visible(False)
 
-**핵심 차이.** `ax.plot`은 마커의 크기와 색이 일정하여 단순한 점 표시에 이상적이고 빠르다. `ax.scatter`는 각 점마다 크기와 색을 달리할 수 있어 자료의 차원을 추가로 시각화할 수 있다.
+    plt.show()
+    ```
 
-같은 10개 점을 그렸는데 오른쪽 그림은 **네 개의 변수**를 담는다. 가로축, 세로축, 점의 크기, 점의 색이다.
+    ![ax.plot과 ax.scatter의 비교](./img/gc_plot_vs_scatter.png)
 
-!!! warning "크기와 색은 보조 정보에만"
-    앞서 원그래프 절에서 본 시각 부호화의 정확도 순위를 떠올려 보자. **위치**가 가장 정확하고 **넓이**와 **색의 진하기**가 가장 부정확하다.
+    **핵심 차이.** `ax.plot`은 마커의 크기와 색이 일정하여 단순한 점 표시에 이상적이고 빠르다. `ax.scatter`는 각 점마다 크기와 색을 달리할 수 있어 자료의 차원을 추가로 시각화할 수 있다.
 
-    산점도의 가로축·세로축은 위치를 쓰므로 정확하지만, 점의 크기는 넓이, 점의 색은 색상/진하기를 쓴다. 따라서 크기와 색으로 표현한 변수는 **대략적인 경향만** 읽어야 한다.
+    같은 10개 점을 그렸는데 오른쪽 그림은 **네 개의 변수**를 담는다. 가로축, 세로축, 점의 크기, 점의 색이다.
 
-    특히 점의 크기로 값을 나타낼 때는 **반지름이 아니라 넓이를 값에 비례**시켜야 한다. 반지름을 비례시키면 값이 두 배일 때 넓이는 네 배가 되어 크게 과장된다. matplotlib의 `s` 인자는 이미 넓이(points²)이므로 그냥 값을 주면 된다.
+    !!! warning "크기와 색은 보조 정보에만"
+        앞서 원그래프 절에서 본 시각 부호화의 정확도 순위를 떠올려 보자. **위치**가 가장 정확하고 **넓이**와 **색의 진하기**가 가장 부정확하다.
+
+        산점도의 가로축·세로축은 위치를 쓰므로 정확하지만, 점의 크기는 넓이, 점의 색은 색상/진하기를 쓴다. 따라서 크기와 색으로 표현한 변수는 **대략적인 경향만** 읽어야 한다.
+
+        특히 점의 크기로 값을 나타낼 때는 **반지름이 아니라 넓이를 값에 비례**시켜야 한다. 반지름을 비례시키면 값이 두 배일 때 넓이는 네 배가 되어 크게 과장된다. matplotlib의 `s` 인자는 이미 넓이(points²)이므로 그냥 값을 주면 된다.
+
+    **(2) `s` 는 넓이인가 지름인가. 해석적으로.** 마커가 원이고 지름이 $d$ 이면 넓이는 $A = \pi d^2/4$ 다. `s` 가 **넓이**에 비례한다면 $d \propto \sqrt{s}$ 여야 하고, **지름**에 비례한다면 $d \propto s$ 여야 한다. 둘은 $s$ 를 여러 값으로 주고 지름을 재어 **$d/\sqrt{s}$ 가 일정한지** 보면 가려진다.
+
+    이것이 왜 중요한가. 값 $v$ 를 점의 크기로 나타낸다고 하자.
+
+    - **넓이를 값에 비례**시키면($A = kv$) 값이 $\rho$ 배일 때 넓이도 $\rho$ 배다. 눈이 읽는 "덩어리의 크기"가 값과 같은 비율로 커진다.
+    - **지름을 값에 비례**시키면($d = kv$) 넓이가 $A = \pi k^2 v^2/4 \propto v^2$ 가 되어, 값이 $\rho$ 배일 때 넓이는 $\rho^2$ 배가 된다.
+
+    곧 지름에 비례시키면 **과장 배수가 $\rho^2/\rho = \rho$** 다. 값이 $4$배면 $4$배 과장되어 $16$배로 보인다($300\%$ 과장). 과장이 큰 값일수록 심해지므로, **가장 중요한 큰 값에서 가장 크게 틀린다.**
+
+    **수치적으로.**
+
+    ```python
+    from matplotlib.transforms import Affine2D
+
+    # s 를 바꾸며 실제로 그려진 마커의 지름을 잰다.
+    probe_fig, probe_ax = plt.subplots(figsize=(4, 4))
+    S = np.array([25., 100., 225., 400.])
+    sc = probe_ax.scatter(np.arange(len(S)), np.zeros(len(S)), s=S)
+    probe_fig.canvas.draw()
+    path = sc.get_paths()[0]
+    print(f"{'s':>7}{'잰 지름 d':>11}{'d/sqrt(s)':>12}{'원 넓이 pi d^2/4':>17}{'/ s':>8}")
+    for s, m in zip(S, sc.get_transforms()):
+        d = path.transformed(Affine2D(m)).get_extents().width
+        print(f"{s:>7.0f}{d:>11.4f}{d/np.sqrt(s):>12.6f}"
+              f"{np.pi*d*d/4:>17.4f}{np.pi*d*d/4/s:>8.4f}")
+    plt.close(probe_fig)
+
+    v = np.array([1., 2., 3., 4.])      # 나타내려는 값
+    print(f"\n값 {list(v.astype(int))} 을 보일 때")
+    print(f"  넓이에 비례시키면 (s = 100 v):  넓이 비 = {list(np.round(v/v[0],2))}"
+          f"   <- 값의 비와 같다")
+    print(f"  반지름에 비례시키면 (s = 100 v^2): 넓이 비 = "
+          f"{list(np.round((v/v[0])**2,2))}   <- 값의 비의 제곱")
+    print(f"  가장 큰 값은 {v[-1]/v[0]:.0f} 배인데 {((v[-1]/v[0])**2):.0f} 배로 보인다 "
+          f"({100*((v[-1]/v[0])**2/(v[-1]/v[0]) - 1):.0f}% 과장)")
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 2.6), sharey=True)
+    for ax, s, ttl in [(a1, 120 * v, "넓이에 비례 ($s \\propto v$) — 옳다"),
+                       (a2, 120 * v ** 2, "반지름에 비례 ($s \\propto v^2$) — 과장된다")]:
+        ax.scatter(np.arange(4), np.zeros(4), s=s, color="#1565C0")
+        for i, vv in enumerate(v):
+            ax.annotate(f"v = {vv:.0f}", (i, 0), xytext=(0, -38),
+                        textcoords="offset points", ha="center", fontsize=10)
+        ax.set_title(ttl, fontsize=11)
+        ax.set_xlim(-0.6, 3.8)
+        ax.set_ylim(-0.6, 0.6)
+        ax.axis("off")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+          s     잰 지름 d   d/sqrt(s)    원 넓이 pi d^2/4     / s
+         25     6.9444    1.388889          37.8761  1.5150
+        100    13.8889    1.388889         151.5043  1.5150
+        225    20.8333    1.388889         340.8846  1.5150
+        400    27.7778    1.388889         606.0171  1.5150
+
+    값 [1, 2, 3, 4] 을 보일 때
+      넓이에 비례시키면 (s = 100 v):  넓이 비 = [1.0, 2.0, 3.0, 4.0]   <- 값의 비와 같다
+      반지름에 비례시키면 (s = 100 v^2): 넓이 비 = [1.0, 4.0, 9.0, 16.0]   <- 값의 비의 제곱
+      가장 큰 값은 4 배인데 16 배로 보인다 (300% 과장)
+    ```
+
+    ![넓이에 비례시킨 점과 반지름에 비례시킨 점](./img/scatter_marker_area.png)
+
+    **`s` 는 넓이다.** $d/\sqrt{s}$ 가 네 값 모두에서 $1.388889$ 로 **소수 여섯째 자리까지 같다.** 곧 $d \propto \sqrt{s}$ 이고 넓이 $\pi d^2/4$ 는 $s$ 에 정확히 비례한다(비가 모두 $1.5150$). 상수 $1.388889 = 100/72$ 는 포인트와 픽셀을 바꾸는 환산값일 뿐이고, 여기서 중요한 것은 **그 값이 $s$ 에 따라 변하지 않는다는 것**뿐이다.
+
+    따라서 matplotlib에서는 `s=값` 이 **옳은 쓰임**이고 `s=값**2` 가 틀린 쓰임이다. 그림에서 왼쪽 네 점은 $v = 1, 2, 3, 4$ 를 넓이 비 $1 : 2 : 3 : 4$ 로 보여 주고, 오른쪽은 같은 값을 $1 : 4 : 9 : 16$ 으로 보여 준다. 오른쪽만 보면 $v = 4$ 가 $v = 1$ 의 열여섯 배쯤 되는 것으로 읽힌다.
+
+    **이 실수가 흔한 까닭은 `s` 를 "크기"라고 부르기 때문이다.** 사람은 "크기"라는 말을 길이로 상상하는데 matplotlib이 받는 것은 넓이다. 도구마다 규약이 다를 수 있으므로, 새 도구를 쓸 때는 **위처럼 $s$ 를 네 배로 주고 지름이 두 배가 되는지 재어 보는 것**이 가장 빠르고 확실하다. 두 배가 되면 넓이 규약, 네 배가 되면 지름 규약이다.
 
 ## 2. 과밀 문제
 
@@ -68,52 +150,172 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 점이 뭉칠 때
+**보기 2.** <span class="diff easy" title="쉬움"></span> 점이 뭉칠 때. $x \sim N(0,1)$, $y = 0.7x + \varepsilon$, $\varepsilon \sim N(0, 0.7^2)$ 에서 $n = 20{,}000$ 을 뽑는다.
+
+**(1)** 그대로 그린 산점도, 투명도를 준 산점도, 육각형 구간 그림을 나란히 놓고 무엇이 달라지는지 보이시오.
+
+**(2)** 이 자료의 **이론 상관계수**를 구하시오. 그리고 축의 척도나 가로세로비를 바꾸면 $r$ 과 **회귀기울기** 가운데 무엇이 달라지는지 보이시오. 끝으로 $n = 20{,}000$ 개 가운데 **몇 개가 이미 찍힌 자리에 덧칠될 뿐인지** 세시오.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-rng = np.random.default_rng(0)
-n = 20000
-x = rng.normal(0, 1, n)
-y = 0.7 * x + rng.normal(0, 0.7, n)
+    **(1) 세 가지로 그려 본다.**
 
-fig, axes = plt.subplots(1, 3, figsize=(13, 4))
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-# (1) 그냥 그리면 가운데가 다 뭉개진다
-axes[0].scatter(x, y, s=6)
-axes[0].set_title(f"산점도, n={n:,}\n(과밀)")
+    rng = np.random.default_rng(0)
+    n = 20000
+    x = rng.normal(0, 1, n)
+    y = 0.7 * x + rng.normal(0, 0.7, n)
 
-# (2) 투명도. alpha=0.03이면 점 하나가 3%만 진하다.
-#     같은 자리에 33개쯤 겹쳐야 완전히 진해지므로 밀도가 진하기로 드러난다.
-axes[1].scatter(x, y, s=6, alpha=0.03)
-axes[1].set_title("산점도 + 투명도 alpha=0.03")
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4))
 
-# (3) hexbin: 평면을 육각형으로 나누고 각 칸의 개수를 색으로 나타낸다.
-#     mincnt=1 은 점이 하나도 없는 칸을 그리지 않는다는 뜻
-hb = axes[2].hexbin(x, y, gridsize=40, cmap='Blues', mincnt=1)
-axes[2].set_title("육각형 구간 그림")
-plt.colorbar(hb, ax=axes[2], label='개수')
+    # (1) 그냥 그리면 가운데가 다 뭉개진다
+    axes[0].scatter(x, y, s=6)
+    axes[0].set_title(f"산점도, n={n:,}\n(과밀)")
 
-for ax in axes:
-    ax.set_xlabel('x')
-    ax.spines[['top', 'right']].set_visible(False)
-axes[0].set_ylabel('y')
+    # (2) 투명도. alpha=0.03이면 점 하나가 3%만 진하다.
+    #     같은 자리에 33개쯤 겹쳐야 완전히 진해지므로 밀도가 진하기로 드러난다.
+    axes[1].scatter(x, y, s=6, alpha=0.03)
+    axes[1].set_title("산점도 + 투명도 alpha=0.03")
 
-plt.tight_layout()
-plt.show()
-```
+    # (3) hexbin: 평면을 육각형으로 나누고 각 칸의 개수를 색으로 나타낸다.
+    #     mincnt=1 은 점이 하나도 없는 칸을 그리지 않는다는 뜻
+    hb = axes[2].hexbin(x, y, gridsize=40, cmap='Blues', mincnt=1)
+    axes[2].set_title("육각형 구간 그림")
+    plt.colorbar(hb, ax=axes[2], label='개수')
 
-![산점도의 과밀 문제와 해결](./img/scatter_overplotting.png)
+    for ax in axes:
+        ax.set_xlabel('x')
+        ax.spines[['top', 'right']].set_visible(False)
+    axes[0].set_ylabel('y')
 
-**왼쪽.** 20,000개를 그대로 찍으니 가운데가 단색 덩어리다. 자료의 대부분이 있는 곳에서 아무것도 읽을 수 없다. **바깥 테두리의 모양만 보이고, 그 테두리는 이상치가 결정한다.** 즉 이 그림은 자료의 1%에 대해서만 정보를 준다.
+    plt.tight_layout()
+    plt.show()
+    ```
 
-**가운데.** 투명도를 크게 낮췄다. 밀도가 높은 곳이 진해져 중심이 어디인지, 어느 방향으로 늘어져 있는지가 드러난다.
+    ![산점도의 과밀 문제와 해결](./img/scatter_overplotting.png)
 
-**오른쪽.** 육각형 구간으로 나누어 개수를 색으로 나타냈다. 밀도가 **눈금 있는 색으로** 표현되므로 "여기는 160개, 저기는 20개"라고 읽을 수 있다. 투명도는 그 정도를 알 수 없다.
+    **왼쪽.** 20,000개를 그대로 찍으니 가운데가 단색 덩어리다. 자료의 대부분이 있는 곳에서 아무것도 읽을 수 없다. **바깥 테두리의 모양만 보이고, 그 테두리는 이상치가 결정한다.** 즉 이 그림은 자료의 1%에 대해서만 정보를 준다.
+
+    **가운데.** 투명도를 크게 낮췄다. 밀도가 높은 곳이 진해져 중심이 어디인지, 어느 방향으로 늘어져 있는지가 드러난다.
+
+    **오른쪽.** 육각형 구간으로 나누어 개수를 색으로 나타냈다. 밀도가 **눈금 있는 색으로** 표현되므로 "여기는 160개, 저기는 20개"라고 읽을 수 있다. 투명도는 그 정도를 알 수 없다.
+
+    **(2) 이론 상관계수. 해석적으로.** $y = 0.7x + \varepsilon$ 에서 $x$ 와 $\varepsilon$ 이 독립이므로
+
+    $$
+    \operatorname{Cov}(x, y) = 0.7\operatorname{Var}(x) = 0.7,
+    \qquad
+    \operatorname{Var}(y) = 0.7^2 \operatorname{Var}(x) + 0.7^2 = 0.98
+    $$
+
+    이고 따라서
+
+    $$
+    r = \frac{0.7}{\sqrt{1}\cdot\sqrt{0.98}} = \frac{0.7}{0.7\sqrt{2}} = \frac{1}{\sqrt{2}} = 0.707107
+    $$
+
+    이다. 신호의 표준편차와 잡음의 표준편차가 똑같이 $0.7$ 이라 정확히 $1/\sqrt2$ 가 나온다.
+
+    **$r$ 은 축을 어떻게 바꾸어도 변하지 않는다.** $x' = ax + b$, $y' = cy + d$ ($a, c > 0$)로 바꾸면
+
+    $$
+    \operatorname{Cov}(x', y') = ac\operatorname{Cov}(x, y), \qquad
+    \sigma_{x'}\sigma_{y'} = ac\,\sigma_x \sigma_y
+    $$
+
+    이므로 $ac$ 가 약분되어 $r' = r$ 이다. **$r$ 은 표준화된 양이기 때문이다.** 반면 회귀기울기는
+
+    $$
+    b' = r\,\frac{\sigma_{y'}}{\sigma_{x'}} = \frac{c}{a}\,b
+    $$
+
+    로 바뀐다. 그리고 선그림 절에서 유도했듯 **화면에서 읽히는 각도**는 축상자의 가로세로비 $\alpha$ 와 자료 범위까지 끼어들어 $\theta = \arctan(b\,\alpha R_x/R_y)$ 로 정해진다. 곧
+
+    - $r$ — 자료만으로 정해진다. 그림을 어떻게 그리든 같다.
+    - 기울기 $b$ — 단위를 바꾸면 바뀐다.
+    - 눈에 보이는 기울어짐 $\theta$ — 단위와 그림 모양 둘 다에 따라 바뀐다.
+
+    사람이 산점도에서 "관계가 세다"고 느끼는 것은 $r$ 이 아니라 $\theta$ 와 띠의 두께에 가깝다. **그래서 같은 $r$ 이 그림에 따라 다르게 느껴진다.**
+
+    **수치적으로.**
+
+    ```python
+    r_true = 0.7 / np.sqrt(0.7 ** 2 + 0.7 ** 2)
+    print(f"이론 상관 r = 0.7 / sqrt(0.7^2 + 0.7^2) = 1/sqrt(2) = {r_true:.6f}")
+    r0 = np.corrcoef(x, y)[0, 1]
+    print(f"표본 상관 r = {r0:.6f}   (몬테카를로 오차 ~ (1-r^2)/sqrt(n) = "
+          f"{(1 - r_true ** 2) / np.sqrt(n):.6f})")
+
+    print("\n축을 바꾸어도 r 은 그대로인가")
+    cases = [("원자료", x, y), ("y 를 100 배", x, 100 * y),
+             ("x 를 1/50 배 + 7", x / 50 + 7, y),
+             ("둘 다 표준화", (x - x.mean()) / x.std(), (y - y.mean()) / y.std())]
+    for nm, xx, yy in cases:
+        print(f"  {nm:<16} r = {np.corrcoef(xx, yy)[0, 1]:.12f}   "
+              f"회귀기울기 b = {np.polyfit(xx, yy, 1)[0]:+.6f}")
+
+    print("\n몇 개의 점이 가려지는가 (figsize=(4.33, 4), dpi=170)")
+    for s in [6, 1]:
+        fig, ax = plt.subplots(figsize=(4.33, 4), dpi=170)
+        ax.scatter(x, y, s=s)
+        fig.canvas.draw()
+        px = ax.transData.transform(np.column_stack([x, y]))
+        d = np.sqrt(s) * fig.dpi / 72                  # 마커 지름 (픽셀)
+        uniq = len(np.unique(np.floor(px / d).astype(np.int64), axis=0))
+        print(f"  s={s}: 마커 지름 {d:.2f} px,  마커 크기 격자의 서로 다른 칸 {uniq:,},  "
+              f"덧칠되는 점 {n - uniq:,} ({100 * (n - uniq) / n:.1f}%)")
+        plt.close(fig)
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 3.6),
+                                 gridspec_kw={"width_ratios": [2.4, 1]})
+    for ax, yy, ttl in [(a1, y, "납작한 축, $y$ 그대로"),
+                        (a2, 100 * y, "길쭉한 축, $y$ 를 100 배")]:
+        ax.scatter(x, yy, s=4, alpha=0.05, color="#1565C0")
+        b, c = np.polyfit(x, yy, 1)
+        xs = np.array([x.min(), x.max()])
+        ax.plot(xs, b * xs + c, color="#D32F2F", lw=1.8)
+        ax.set_title(f"{ttl}\n$r$ = {np.corrcoef(x, yy)[0,1]:.6f},  기울기 = {b:.3f}",
+                     fontsize=10)
+        ax.set_xlabel("$x$")
+        ax.spines[["top", "right"]].set_visible(False)
+    a1.set_ylabel("$y$")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    이론 상관 r = 0.7 / sqrt(0.7^2 + 0.7^2) = 1/sqrt(2) = 0.707107
+    표본 상관 r = 0.704212   (몬테카를로 오차 ~ (1-r^2)/sqrt(n) = 0.003536)
+
+    축을 바꾸어도 r 은 그대로인가
+      원자료              r = 0.704211695820   회귀기울기 b = +0.702388
+      y 를 100 배        r = 0.704211695820   회귀기울기 b = +70.238787
+      x 를 1/50 배 + 7   r = 0.704211695820   회귀기울기 b = +35.119393
+      둘 다 표준화          r = 0.704211695820   회귀기울기 b = +0.704212
+
+    몇 개의 점이 가려지는가 (figsize=(4.33, 4), dpi=170)
+      s=6: 마커 지름 5.78 px,  마커 크기 격자의 서로 다른 칸 2,195,  덧칠되는 점 17,805 (89.0%)
+      s=1: 마커 지름 2.36 px,  마커 크기 격자의 서로 다른 칸 7,558,  덧칠되는 점 12,442 (62.2%)
+    ```
+
+    ![같은 자료, 같은 상관계수, 다른 인상](./img/scatter_r_invariance.png)
+
+    **이론 상관이 맞는다.** 참값 $0.707107$ 에 표본이 $0.704212$ 다. 차이 $0.0029$ 는 몬테카를로 오차 $(1 - r^2)/\sqrt{n} = 0.0035$ 보다 작다.
+
+    **그리고 $r$ 은 소수 열두째 자리까지 꿈쩍도 하지 않는다.** $y$ 를 백 배로 늘려도, $x$ 를 $1/50$ 로 줄이고 $7$ 을 더해도, 둘 다 표준화해도 네 줄 모두 $0.704211695820$ 이다. 그런데 **회귀기울기는 $0.702$, $70.239$, $35.119$, $0.704$ 로 백 배씩 널뛴다.** 유도한 $b' = (c/a)b$ 그대로다 — $y$ 를 $100$ 배 하면 $0.702388 \times 100 = 70.2388$, $x$ 를 $1/50$ 배 하면 $0.702388 \times 50 = 35.1194$.
+
+    그림 두 패널이 그 요점이다. **같은 $20{,}000$개 점, 같은 $r = 0.704212$ 인데** 왼쪽은 완만한 띠로, 오른쪽은 가파르고 좁은 띠로 보인다. 축 이름표를 가리고 보면 오른쪽이 "더 강한 관계"로 읽힌다. $r$ 을 적어 두지 않으면 그 인상을 바로잡을 길이 없다. **산점도에는 상관계수를 함께 적으라.**
+
+    **끝으로 과밀의 크기다.** 점 크기 $s = 6$ 이면 마커 지름이 $5.78$ 픽셀이고, 그 크기의 격자로 평면을 나누면 $20{,}000$개의 점이 겨우 **$2{,}195$ 칸**에만 떨어진다. 나머지 $17{,}805$개($89.0\%$)는 이미 칠해진 칸을 덧칠할 뿐이다. 점을 $s = 1$ 로 줄여도 $12{,}442$개($62.2\%$)가 그렇다. **왼쪽 패널에서 "20,000개를 그렸다"고 말하지만 눈에 들어오는 서로 다른 자국은 이천 개 남짓이다.**
+
+    그래서 투명도와 육각형 구간이 필요하다. 투명도는 겹친 횟수를 **진하기**로 되살리고, 육각형 구간은 아예 **개수로** 세어 색에 싣는다. 둘 다 "겹쳐서 버려지던 정보"를 되찾는 방법이다.
 
 ## 3. 이산값과 지터
 
@@ -121,57 +323,168 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 이산값과 지터
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이산값과 지터. $1$–$5$ 의 정수 평점 $300$쌍을 뽑는다.
+
+**(1)** 그대로 그린 산점도와 지터를 준 산점도를 견주시오.
+
+**(2)** 가능한 자리가 $K = 25$ 개뿐이므로 점이 겹친다. **차 있는 자리의 기대 개수**를 식으로 구하고, $300$개 가운데 **몇 개가 완전히 가려지는지** 세시오. $n$ 을 바꾸면 그 비율이 어떻게 되는가.
 
 </div>
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-rng = np.random.default_rng(0)
+    **(1) 그려 본다.**
 
-# 1~5의 정수 평점 300쌍
-xs = rng.integers(1, 6, 300)
-ys = rng.integers(1, 6, 300)
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-fig, (a, b) = plt.subplots(1, 2, figsize=(12, 4))
+    rng = np.random.default_rng(0)
 
-# 그냥 그리면 300개가 25개 자리에 완전히 포개진다
-a.scatter(xs, ys, s=20)
-a.set_title("이산 자료 — 점이 정확히 포개진다")
-a.set_xlabel("평점 x")
-a.set_ylabel("평점 y")
+    # 1~5의 정수 평점 300쌍
+    xs = rng.integers(1, 6, 300)
+    ys = rng.integers(1, 6, 300)
 
-# 지터: 각 점을 ±0.2 범위에서 무작위로 민다.
-# 값을 바꾸는 것이므로 그림 설명에 반드시 밝혀야 한다.
-b.scatter(xs + rng.uniform(-.2, .2, 300),
-          ys + rng.uniform(-.2, .2, 300), s=20, alpha=.5)
-b.set_title("지터와 투명도를 준 뒤")
-b.set_xlabel("평점 x")
+    fig, (a, b) = plt.subplots(1, 2, figsize=(12, 4))
 
-for ax in (a, b):
-    ax.spines[['top', 'right']].set_visible(False)
-plt.tight_layout()
-plt.show()
-```
+    # 그냥 그리면 300개가 25개 자리에 완전히 포개진다
+    a.scatter(xs, ys, s=20)
+    a.set_title("이산 자료 — 점이 정확히 포개진다")
+    a.set_xlabel("평점 x")
+    a.set_ylabel("평점 y")
 
-![이산 자료의 지터](./img/scatter_jitter.png)
+    # 지터: 각 점을 ±0.2 범위에서 무작위로 민다.
+    # 값을 바꾸는 것이므로 그림 설명에 반드시 밝혀야 한다.
+    b.scatter(xs + rng.uniform(-.2, .2, 300),
+              ys + rng.uniform(-.2, .2, 300), s=20, alpha=.5)
+    b.set_title("지터와 투명도를 준 뒤")
+    b.set_xlabel("평점 x")
 
-**왼쪽 그림에는 300개의 점이 있지만 25개만 보인다.** 각 자리에 몇 개가 겹쳤는지 전혀 알 수 없다. 이 그림만 보면 25개 조합이 모두 똑같이 흔하다고 오해하게 된다.
+    for ax in (a, b):
+        ax.spines[['top', 'right']].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+    ```
 
-**오른쪽**은 각 점을 조금씩 흔들었다. 이제 각 자리의 점 뭉치 크기가 도수를 나타낸다.
+    ![이산 자료의 지터](./img/scatter_jitter.png)
 
-!!! danger "지터는 자료를 바꾸는 일이다"
-    지터는 **없는 값을 만들어 낸다.** 오른쪽 그림에는 평점 3.87 같은 점이 있지만, 실제 자료에 그런 값은 없다.
+    **왼쪽 그림에는 300개의 점이 있지만 25개만 보인다.** 각 자리에 몇 개가 겹쳤는지 전혀 알 수 없다. 이 그림만 보면 25개 조합이 모두 똑같이 흔하다고 오해하게 된다.
 
-    따라서
+    **오른쪽**은 각 점을 조금씩 흔들었다. 이제 각 자리의 점 뭉치 크기가 도수를 나타낸다.
 
-    - **그림 설명에 지터를 썼다고 반드시 밝힌다.**
-    - 지터 폭을 값의 최소 간격보다 훨씬 작게 잡는다. 위에서는 간격이 1인데 ±0.2를 썼으므로 범주가 섞이지 않는다.
-    - **지터한 자료로 통계량을 계산하지 않는다.** 지터는 그림에만 쓴다.
+    !!! danger "지터는 자료를 바꾸는 일이다"
+        지터는 **없는 값을 만들어 낸다.** 오른쪽 그림에는 평점 3.87 같은 점이 있지만, 실제 자료에 그런 값은 없다.
 
-    지터를 쓰기 싫다면 **점의 크기를 도수에 비례**시키거나(버블 산점도), 앞의 hexbin/2차원 히스토그램을 쓰면 된다. 이쪽은 자료를 바꾸지 않는다.
+        따라서
+
+        - **그림 설명에 지터를 썼다고 반드시 밝힌다.**
+        - 지터 폭을 값의 최소 간격보다 훨씬 작게 잡는다. 위에서는 간격이 1인데 ±0.2를 썼으므로 범주가 섞이지 않는다.
+        - **지터한 자료로 통계량을 계산하지 않는다.** 지터는 그림에만 쓴다.
+
+        지터를 쓰기 싫다면 **점의 크기를 도수에 비례**시키거나(버블 산점도), 앞의 hexbin/2차원 히스토그램을 쓰면 된다. 이쪽은 자료를 바꾸지 않는다.
+
+    **(2) 몇 개가 가려지는가. 해석적으로.** 자리가 $K = 5 \times 5 = 25$ 개뿐이고 각 관측이 어느 자리에 가든 확률이 $1/K$ 로 같다. 자리 하나가 **비어 있을** 확률은 $n$ 번 모두 그 자리를 피할 확률이므로 $(1 - 1/K)^n$ 이고, 따라서
+
+    $$
+    E[\text{차 있는 자리}] = K\left[1 - \left(1 - \frac{1}{K}\right)^{n}\right]
+    $$
+
+    이다(쿠폰 수집가 문제와 같은 꼴이다). 그림에 생기는 **서로 다른 자국의 수**가 바로 이 값이고, 나머지
+
+    $$
+    n - K\left[1 - \left(1 - \tfrac{1}{K}\right)^{n}\right]
+    $$
+
+    개는 이미 찍힌 점 **바로 위에 완전히 포개져** 한 픽셀도 새로 칠하지 못한다. $n = 300$, $K = 25$ 에서
+
+    $$
+    \left(1 - \tfrac{1}{25}\right)^{300} = 0.96^{300} = 4.80\times 10^{-6}
+    $$
+
+    이므로 기댓값이 $25 \times (1 - 4.80\times10^{-6}) = 24.99988$ 이다. **사실상 $25$ 자리가 모두 차고, $300 - 25 = 275$ 개($91.7\%$)가 보이지 않는다.**
+
+    $n$ 이 커지면 차 있는 자리는 $K$ 에서 멈추는데 $n$ 은 계속 커지므로 가려지는 비율이 $1 - K/n \to 1$ 로 간다. **자료를 더 모을수록 그림이 더 많이 숨긴다.**
+
+    **수치적으로.**
+
+    ```python
+    N, K = 300, 25
+    print(f"관측 {N} 개,  가능한 자리 {K} 개")
+    occ = len(set(zip(xs.tolist(), ys.tolist())))
+    E = K * (1 - (1 - 1/K) ** N)
+    print(f"차 있는 자리: 실제 {occ},  기댓값 K(1-(1-1/K)^n) = {E:.6f}")
+    print(f"  (1-1/25)^300 = {(1-1/K)**N:.3e}  -> 빈 자리가 있을 확률이 사실상 0")
+    print(f"가려지는 점 = {N} - {occ} = {N-occ}  ({100*(N-occ)/N:.1f}%)")
+
+    cnt = np.zeros((5, 5), int)
+    for a, b in zip(xs, ys):
+        cnt[a-1, b-1] += 1
+    print(f"한 자리의 도수: 최소 {cnt.min()}, 최대 {cnt.max()}, 평균 {cnt.mean():.1f}")
+    print("도수표 (행 = 평점 x, 열 = 평점 y):")
+    for i in range(5):
+        print("   " + " ".join(f"{c:3d}" for c in cnt[i]))
+
+    print(f"\n{'n':>6}{'기대 차 있는 자리':>18}{'가려지는 비율':>14}")
+    for n2 in [10, 25, 50, 100, 300, 1000]:
+        e = K * (1 - (1 - 1/K) ** n2)
+        print(f"{n2:>6}{e:>18.2f}{100*(1-e/n2):>13.1f}%")
+
+    fig, (p1, p2, p3) = plt.subplots(1, 3, figsize=(13, 3.8), sharey=True)
+    p1.scatter(xs, ys, s=20, color="#1565C0")
+    p1.set_title(f"그대로 — 점 300개가 자국 {occ}개", fontsize=11)
+    p1.set_ylabel("평점 y")
+    p2.scatter(xs + rng.uniform(-.2, .2, N), ys + rng.uniform(-.2, .2, N),
+               s=20, alpha=.5, color="#1565C0")
+    p2.set_title("지터 + 투명도 — 뭉치의 크기가 도수", fontsize=11)
+    gx, gy = np.meshgrid(np.arange(1, 6), np.arange(1, 6), indexing="ij")
+    p3.scatter(gx.ravel(), gy.ravel(), s=12 * cnt.ravel(), color="#E65100")
+    for i in range(5):
+        for j in range(5):
+            p3.annotate(f"{cnt[i, j]}", (i + 1, j + 1), xytext=(0, 14),
+                        textcoords="offset points", ha="center", fontsize=8)
+    p3.set_title("거품 산점도 — 넓이가 도수 (자료를 바꾸지 않는다)", fontsize=11)
+    for ax in (p1, p2, p3):
+        ax.set_xlabel("평점 x")
+        ax.set_xlim(0.3, 5.7)
+        ax.set_ylim(0.3, 5.9)
+        ax.spines[["top", "right"]].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    관측 300 개,  가능한 자리 25 개
+    차 있는 자리: 실제 25,  기댓값 K(1-(1-1/K)^n) = 24.999880
+      (1-1/25)^300 = 4.801e-06  -> 빈 자리가 있을 확률이 사실상 0
+    가려지는 점 = 300 - 25 = 275  (91.7%)
+    한 자리의 도수: 최소 6, 최대 18, 평균 12.0
+    도수표 (행 = 평점 x, 열 = 평점 y):
+         8  14  12  12  11
+        14   6  13   6  11
+        13   9  13  13  11
+         9  13  10  16  11
+        17   9  18  13  18
+
+         n        기대 차 있는 자리       가려지는 비율
+        10              8.38         16.2%
+        25             15.99         36.0%
+        50             21.75         56.5%
+       100             24.58         75.4%
+       300             25.00         91.7%
+      1000             25.00         97.5%
+    ```
+
+    ![이산 자료에서 가려지는 점과 그 대안](./img/scatter_hidden_points.png)
+
+    **기댓값이 맞는다.** $24.99988$ 을 예측했고 실제로 $25$ 자리가 모두 찼다. 곧 $275$개($91.7\%$)가 완전히 가려진다. **왼쪽 패널은 $300$개를 그렸다고 하지만 눈에 보이는 것은 $25$개의 똑같은 점이고, 그것은 "$25$개 조합이 모두 똑같이 흔하다"는 거짓 인상을 준다.**
+
+    실제 도수표를 보면 전혀 균일하지 않다. **최소 $6$, 최대 $18$ 로 세 배 차이**가 난다($(x,y) = (2,2)$ 와 $(2,4)$ 에 $6$ 명, $(5,3)$ 과 $(5,5)$ 에 $18$ 명). 평균 $12$ 주위로 흩어진 이 변동이 왼쪽 패널에서는 **한 점도 보이지 않는다.**
+
+    가운데 패널은 지터로, 오른쪽 패널은 거품 크기로 그 도수를 되살린 것이다. **거품 쪽이 더 정직하다** — 지터는 평점 $3.87$ 같은 없는 값을 만들어 내지만, 거품은 자료를 한 글자도 바꾸지 않고 보기 1에서 확인한 대로 **넓이를 도수에 비례**시킨다(`s = 12 * cnt`). 다만 넓이는 위치보다 읽기 어려운 부호화이므로 위 그림처럼 숫자를 함께 적어 주는 것이 좋다.
+
+    표의 마지막 부분이 더 중요한 이야기를 한다. **$n$ 이 커질수록 상황이 나빠진다.** $n = 10$ 이면 $16.2\%$ 만 가려지지만 $n = 100$ 이면 $75.4\%$, $n = 1000$ 이면 $97.5\%$ 다. 차 있는 자리는 $25$ 에서 포화하는데 $n$ 은 멈추지 않기 때문이다. **이산 자료의 산점도는 표본이 클수록 쓸모가 없어진다.** 자료가 많아질수록 그림이 좋아지는 보통의 직관과 정반대다.
 
 ## 4. 산점도에서 무엇을 읽는가
 

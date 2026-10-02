@@ -10,182 +10,328 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 제곱화 배치 알고리즘
+**보기 1.** <span class="diff easy" title="쉬움"></span> 트리맵이 반드시 지켜야 하는 것과 지킬 수 없는 것. 값 $6, 6, 4, 3, 2, 2, 1$ 을 $6 \times 4$ 직사각형에 제곱화 배치로 담는다.
+
+**(1)** 타일 넓이의 합이 반드시 전체 넓이와 같음을 보이고, 그 결과 트리맵에 **담을 수 없는 값**이 무엇인지 말하시오.
+
+**(2)** 한 줄에 여러 타일을 놓을 때 각 타일의 가로세로비를 **줄의 폭과 타일 넓이만으로** 적으시오. 그 식에서 **작은 타일이 왜 반드시 길쭉해지는지** 밝히시오.
+
+**(3)** 배치해 넓이와 가로세로비를 재어 (1), (2)를 확인하고, 가장 큰 타일과 가장 작은 타일의 가로세로비를 적으시오.
 
 </div>
 
-가장 널리 쓰이는 방법은 **제곱화(squarified)** 배치다. 사각형의 **가로세로비를 되도록 1에 가깝게** 유지한다. 길쭉한 조각은 넓이를 가늠하기 어렵기 때문이다.
+??? success "풀이"
 
-```python
-def squarify(values, x, y, dx, dy):
-    """넓이가 values 에 비례하는 사각형들로 (x,y,dx,dy) 직사각형을 덮는다.
+    가장 널리 쓰이는 방법은 **제곱화(squarified)** 배치다. 사각형의 **가로세로비를 되도록 $1$ 에 가깝게** 유지한다. 길쭉한 조각은 넓이를 가늠하기 어렵기 때문이다.
 
-    브륄스-허잇-판빅(1999)의 제곱화 알고리즘.
-    values 는 내림차순으로 정렬되어 있다고 가정한다.
-    """
-    rects = []
-    vals = list(values)
-    total = sum(vals)
-    if total <= 0:
-        return rects
-    # 값을 실제 화면 넓이 단위로 환산한다.
-    vals = [v * dx * dy / total for v in vals]
+    **(1) 해석적으로.** 값 $v_1, \ldots, v_K$ 를 가로 $DX$, 세로 $DY$ 인 영역에 담을 때, 타일 $k$ 의 넓이를
 
-    def worst(row, length):
-        """한 줄에 row 를 놓았을 때 가로세로비의 최악값."""
-        s = sum(row)
-        if s == 0 or length == 0:
-            return float("inf")
-        mx, mn = max(row), min(row)
-        return max(length * length * mx / (s * s), s * s / (length * length * mn))
+    $$
+    a_k = v_k \cdot \frac{DX \cdot DY}{\sum_j v_j}
+    $$
 
-    def layout_row(row, x, y, dx, dy):
-        """row 를 짧은 변에 맞춰 한 줄로 배치하고 남은 영역을 돌려준다."""
-        s = sum(row)
-        out = []
-        if dx >= dy:                      # 남은 영역이 가로로 길면 세로 열로 쌓는다
-            w = s / dy if dy else 0
-            cy = y
-            for v in row:
-                h = v / w if w else 0
-                out.append((x, cy, w, h))
-                cy += h
-            return out, (x + w, y, dx - w, dy)
-        else:                             # 세로로 길면 가로 행으로 쌓는다
-            h = s / dx if dx else 0
-            cx = x
-            for v in row:
-                w = v / h if h else 0
-                out.append((cx, y, w, h))
-                cx += w
-            return out, (x, y + h, dx, dy - h)
+    로 정한다. 그러면
 
-    # 한 줄에 계속 더해 보다가, 더 넣으면 가로세로비가 나빠지는 순간 줄을 확정한다.
-    row = []
-    i = 0
-    while i < len(vals):
-        length = min(dx, dy)
-        if not row or worst(row + [vals[i]], length) <= worst(row, length):
-            row.append(vals[i]); i += 1
-        else:
-            placed, (x, y, dx, dy) = layout_row(row, x, y, dx, dy)
+    $$
+    \sum_{k=1}^{K} a_k = \frac{DX \cdot DY}{\sum_j v_j}\sum_{k} v_k = DX \cdot DY
+    $$
+
+    로 **타일 넓이의 합이 전체 넓이와 정확히 같다.** 트리맵은 영역을 빈틈도 겹침도 없이 분할하므로 이것은 선택이 아니라 **구조가 강제하는 항등식**이다. 배치 알고리즘을 어떻게 바꾸어도 깨지지 않는다.
+
+    그 대가로 **넓이가 될 수 없는 값은 담을 수 없다.**
+
+    - **음수.** $v_k < 0$ 이면 $a_k < 0$ 인데 넓이가 음수인 사각형이 없다. 손익, 증감, 편차는 트리맵에 넣을 수 없다. 실무에서 흔한 잘못이 손익을 트리맵으로 그리는 것인데, 그러면 음수를 절댓값으로 바꾸고 색으로 부호를 나타내는 식이 되어 **넓이와 색이 같은 변수를 두 번 말하게** 된다.
+    - **합이 $0$ 이거나 음수인 목록.** 분모 $\sum v_j$ 가 $0$ 이면 식이 정의되지 않는다. 코드가 `total <= 0` 에서 빈 목록을 돌려주는 까닭이다.
+    - **합이 뜻 없는 값.** 비율, 순위, 온도처럼 더해서 뜻이 생기지 않는 양은 "전체를 나눈 몫" 이 될 수 없다. 원그래프와 같은 제약이다([원그래프](pie_charts.md) 보기 1).
+
+    **(2) 가로세로비는 줄의 폭이 정한다.** 제곱화 배치는 타일을 한 줄씩 묶어 놓는다. 줄에 담긴 넓이의 합이 $s$ 이고 그 줄이 길이 $L$ 인 변에 붙는다면 줄의 폭은
+
+    $$
+    w = \frac{s}{L}
+    $$
+
+    이고, 그 줄의 타일 $i$ 는 폭이 $w$ 로 같으므로 높이가 $h_i = a_i/w$ 다. 따라서 가로세로비는
+
+    $$
+    \rho_i = \max\!\left(\frac{w}{h_i},\ \frac{h_i}{w}\right)
+    = \max\!\left(\frac{w^2}{a_i},\ \frac{a_i}{w^2}\right)
+    $$
+
+    로 **줄의 폭과 자기 넓이만으로 정해진다.** $w = s/L$ 을 넣으면
+
+    $$
+    \rho_i = \max\!\left(\frac{s^2}{L^2 a_i},\ \frac{L^2 a_i}{s^2}\right)
+    $$
+
+    이고, 한 줄의 최악값은 $a_i$ 가 가장 작거나 가장 클 때 나온다.
+
+    $$
+    \text{worst}(\text{줄}, L) = \max\!\left(\frac{L^2 a_{\max}}{s^2},\ \frac{s^2}{L^2 a_{\min}}\right)
+    $$
+
+    **아래 코드의 `worst` 함수가 바로 이 식이다.** 알고리즘은 한 줄에 타일을 계속 더해 보다가 이 값이 나빠지는 순간 줄을 끊는다.
+
+    **작은 타일이 길쭉해지는 까닭도 이 식에 있다.** 같은 줄 안에서는 $w$ 가 공통이므로 $\rho_i \ge w^2/a_i$ 이고, 이것은 $a_i$ 에 **반비례**한다. 곧 같은 줄의 두 타일이 넓이로 $t$ 배 차이 나면 가로세로비도 최대 $t$ 배까지 벌어진다. **알고리즘이 쓸 수 있는 유일한 손잡이는 "어느 타일을 한 줄에 묶을까" 뿐이고, 한 타일의 넓이가 정해진 이상 모양을 완전히 맞출 방법은 없다.**
+
+    **(3) 수치적으로.**
+
+    ```python
+    def squarify(values, x, y, dx, dy):
+        """넓이가 values 에 비례하는 사각형들로 (x,y,dx,dy) 직사각형을 덮는다.
+
+        브륄스-허잇-판빅(1999)의 제곱화 알고리즘.
+        values 는 내림차순으로 정렬되어 있다고 가정한다.
+        """
+        rects = []
+        vals = list(values)
+        total = sum(vals)
+        if total <= 0:
+            return rects
+        # 값을 실제 화면 넓이 단위로 환산한다.
+        vals = [v * dx * dy / total for v in vals]
+
+        def worst(row, length):
+            """한 줄에 row 를 놓았을 때 가로세로비의 최악값."""
+            s = sum(row)
+            if s == 0 or length == 0:
+                return float("inf")
+            mx, mn = max(row), min(row)
+            return max(length * length * mx / (s * s), s * s / (length * length * mn))
+
+        def layout_row(row, x, y, dx, dy):
+            """row 를 짧은 변에 맞춰 한 줄로 배치하고 남은 영역을 돌려준다."""
+            s = sum(row)
+            out = []
+            if dx >= dy:                      # 남은 영역이 가로로 길면 세로 열로 쌓는다
+                w = s / dy if dy else 0
+                cy = y
+                for v in row:
+                    h = v / w if w else 0
+                    out.append((x, cy, w, h))
+                    cy += h
+                return out, (x + w, y, dx - w, dy)
+            else:                             # 세로로 길면 가로 행으로 쌓는다
+                h = s / dx if dx else 0
+                cx = x
+                for v in row:
+                    w = v / h if h else 0
+                    out.append((cx, y, w, h))
+                    cx += w
+                return out, (x, y + h, dx, dy - h)
+
+        # 한 줄에 계속 더해 보다가, 더 넣으면 가로세로비가 나빠지는 순간 줄을 확정한다.
+        row = []
+        i = 0
+        while i < len(vals):
+            length = min(dx, dy)
+            if not row or worst(row + [vals[i]], length) <= worst(row, length):
+                row.append(vals[i]); i += 1
+            else:
+                placed, (x, y, dx, dy) = layout_row(row, x, y, dx, dy)
+                rects += placed
+                row = []
+        if row:
+            placed, _ = layout_row(row, x, y, dx, dy)
             rects += placed
-            row = []
-    if row:
-        placed, _ = layout_row(row, x, y, dx, dy)
-        rects += placed
-    return rects
+        return rects
 
 
-# 넓이가 정확히 값에 비례하는지 확인한다.
-v = sorted([6, 6, 4, 3, 2, 2, 1], reverse=True)
-R = squarify(v, 0, 0, 6, 4)
-print(f"값 {v},  전체 넓이 {6 * 4}")
-print(f"{'값':>4s}{'넓이':>10s}{'기대':>10s}{'가로세로비':>11s}")
-for val, (x0, y0, w, h) in zip(v, R):
-    print(f"{val:>4d}{w * h:>10.4f}{val * 24 / sum(v):>10.4f}"
-          f"{max(w / h, h / w):>11.2f}")
-print(f"넓이 합 {sum(w * h for _, _, w, h in R):.6f}")
-```
+    # 넓이가 정확히 값에 비례하는지 확인한다.
+    v = sorted([6, 6, 4, 3, 2, 2, 1], reverse=True)
+    R = squarify(v, 0, 0, 6, 4)
+    print(f"값 {v},  전체 넓이 {6 * 4}")
+    print(f"{'값':>4s}{'넓이':>10s}{'기대':>10s}{'가로세로비':>11s}{'max(w^2/a, a/w^2)':>20s}")
+    for val, (x0, y0, w, h) in zip(v, R):
+        a = w * h
+        print(f"{val:>4d}{a:>10.4f}{val * 24 / sum(v):>10.4f}"
+              f"{max(w / h, h / w):>11.2f}{max(w*w/a, a/(w*w)):>20.2f}")
+    print(f"넓이 합 {sum(w * h for _, _, w, h in R):.6f}   전체 넓이 {6*4}")
+    print(f"차이 {sum(w * h for _, _, w, h in R) - 24:.3e}")
 
-```text
-값 [6, 6, 4, 3, 2, 2, 1],  전체 넓이 24
-   값        넓이        기대      가로세로비
-   6    6.0000    6.0000       1.50
-   6    6.0000    6.0000       1.50
-   4    4.0000    4.0000       1.36
-   3    3.0000    3.0000       1.81
-   2    2.0000    2.0000       1.39
-   2    2.0000    2.0000       1.39
-   1    1.0000    1.0000       2.78
-넓이 합 24.000000
-```
+    ratios = [max(w / h, h / w) for _, _, w, h in R]
+    print(f"\n가장 큰 값 {v[0]} 의 가로세로비 {ratios[0]:.2f},  "
+          f"가장 작은 값 {v[-1]} 의 가로세로비 {ratios[-1]:.2f}")
+    print(f"가로세로비 범위 {min(ratios):.2f} ~ {max(ratios):.2f}")
 
-**넓이가 값과 정확히 비례한다.** 이것은 배치 방법과 무관하게 반드시 성립해야 하는 성질이다.
+    # (1) 넓이가 될 수 없는 값은 담을 수 없다.
+    print("\n음수가 섞인 값 [6, -2, 4] 의 합 =", 6 - 2 + 4,
+          "  →  -2 에 줄 넓이가 없다")
+    print("합이 0 인 값 [0, 0, 0]:", squarify([0, 0, 0], 0, 0, 6, 4), "(빈 목록)")
+    ```
 
-**가로세로비는 1.36~2.78로 대체로 정사각형에 가깝다.** 가장 작은 값(1)이 2.78로 가장 길쭉한데, **작은 조각일수록 모양을 맞추기 어렵다**는 것이 이 알고리즘의 알려진 한계다.
+    ```text
+    값 [6, 6, 4, 3, 2, 2, 1],  전체 넓이 24
+       값        넓이        기대      가로세로비   max(w^2/a, a/w^2)
+       6    6.0000    6.0000       1.50                1.50
+       6    6.0000    6.0000       1.50                1.50
+       4    4.0000    4.0000       1.36                1.36
+       3    3.0000    3.0000       1.81                1.81
+       2    2.0000    2.0000       1.39                1.39
+       2    2.0000    2.0000       1.39                1.39
+       1    1.0000    1.0000       2.78                2.78
+    넓이 합 24.000000   전체 넓이 24
+    차이 0.000e+00
+
+    가장 큰 값 6 의 가로세로비 1.50,  가장 작은 값 1 의 가로세로비 2.78
+    가로세로비 범위 1.36 ~ 2.78
+
+    음수가 섞인 값 [6, -2, 4] 의 합 = 8   →  -2 에 줄 넓이가 없다
+    합이 0 인 값 [0, 0, 0]: [] (빈 목록)
+    ```
+
+    **(1)이 확인된다.** 넓이가 값과 정확히 비례하고, 넓이의 합이 전체 넓이 $24$ 와 **부동소수 오차조차 없이**(`차이 0.000e+00`) 같다. 이것은 배치 방법과 무관하게 반드시 성립해야 하는 성질이다. 합이 $0$ 인 목록에는 아무 타일도 만들지 못한다.
+
+    **(2)도 확인된다.** 네 번째 열의 측정값과 다섯 번째 열의 $\max(w^2/a,\ a/w^2)$ 가 모든 타일에서 같다. 가로세로비가 **줄의 폭과 자기 넓이만으로** 결정된다는 것이다.
+
+    **가로세로비는 $1.36$ 에서 $2.78$ 까지로 대체로 정사각형에 가깝다.** 그런데 그 양 끝을 보라.
+
+    | | 값 | 가로세로비 |
+    |---|---|---|
+    | 가장 큰 타일 | $6$ | $\mathbf{1.50}$ |
+    | 가장 작은 타일 | $1$ | $\mathbf{2.78}$ |
+
+    **가장 작은 타일이 가장 길쭉하다.** 넓이가 $6$ 배 작으니 (2)의 $\rho_i \ge w^2/a_i$ 가 최대 $6$ 배까지 나빠질 수 있다고 예고했고, 실제로 $1.50 \to 2.78$ 로 $1.85$ 배 나빠졌다. **작은 조각일수록 모양을 맞추기 어렵다**는 것이 이 알고리즘의 알려진 한계이고, 그것은 구현의 흠이 아니라 **넓이를 고정한 채 모양을 고르려는 일의 산술적 한계**다. 종목 수백 개를 담는 실제 시황 지도에서 작은 칸의 넓이 판독이 무너지는 까닭이 이것이다(보기 5).
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 배치 규칙을 바꾸면
+**보기 2.** <span class="diff easy" title="쉬움"></span> 배치 규칙을 바꾸면 모양이 얼마나 나빠지는가. 파레토 분포로 만든 값 $24$ 개(합 $533.5$, 가장 작은 값 $1.0$)를 $10 \times 6$ 영역에 담는다.
+
+**(1)** 한 방향으로만 차례로 자르는 배치(slice-and-dice)에서 타일 $k$ 의 가로세로비를 비중 $p_k$ 와 영역 크기 $DX$, $DY$ 로 **닫힌 꼴**로 적고, 최악값을 $p_{\min}$ 으로 나타내시오.
+
+**(2)** 그 식으로 최악 가로세로비와 중앙값을 예측하고, 두 배치를 실제로 재어 확인하시오.
 
 </div>
 
-가장 단순한 배치는 **한 방향으로만 차례로 자르는** 방법이다(slice-and-dice). 구현이 쉽고 **순서가 보존**된다는 장점이 있다.
+??? success "풀이"
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+    가장 단순한 배치는 **한 방향으로만 차례로 자르는** 방법이다(slice-and-dice). 구현이 쉽고 **순서가 보존**된다는 장점이 있다.
+
+    **(1) 해석적으로.** 세로로만 자르면 타일 $k$ 는 폭이 $DX \cdot p_k$, 높이가 $DY$ 로 **영역 전체의 높이**다. 그러므로
+
+    $$
+    \rho_k = \max\!\left(\frac{DX\, p_k}{DY},\ \frac{DY}{DX\, p_k}\right)
+    $$
+
+    다. 보기 1 의 식에서 줄 길이가 $L = DY$ 로 고정되고 줄마다 타일이 하나뿐인 특수한 경우다.
+
+    $p_k$ 가 작으면 둘째 항이 커지므로
+
+    $$
+    \rho_k \approx \frac{DY}{DX\, p_k} \ \propto\ \frac{1}{p_k}
+    $$
+
+    **비중에 반비례한다.** 최악값은 가장 작은 비중에서 나오고
+
+    $$
+    \rho_{\max} = \frac{DY}{DX\, p_{\min}} = \frac{DY \sum_j v_j}{DX\, v_{\min}}
+    $$
+
+    이다. 이 자료는 $DX = 10$, $DY = 6$, $\sum v = 533.5$, $v_{\min} = 1.0$ 이므로
+
+    $$
+    \rho_{\max} = \frac{6 \times 533.5}{10 \times 1.0} = 320.1
+    $$
+
+    을 예측한다. **자료가 치우칠수록 $p_{\min}$ 이 작아져 최악값이 그만큼 선형으로 나빠진다.** 제곱화 배치는 여러 타일을 한 줄로 묶어 $L$ 과 줄 폭을 조절하므로 이 선형 폭발을 피한다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
 
-def slice_dice(values, x, y, dx, dy, vertical=True):
-    """단순 분할: 한 방향으로만 차례로 자른다."""
-    out = []
-    tot = sum(values)
-    pos = x if vertical else y
-    for v in values:
-        if vertical:
-            w = dx * v / tot
-            out.append((pos, y, w, dy)); pos += w
-        else:
-            h = dy * v / tot
-            out.append((x, pos, dx, h)); pos += h
-    return out
+    def slice_dice(values, x, y, dx, dy, vertical=True):
+        """단순 분할: 한 방향으로만 차례로 자른다."""
+        out = []
+        tot = sum(values)
+        pos = x if vertical else y
+        for v in values:
+            if vertical:
+                w = dx * v / tot
+                out.append((pos, y, w, dy)); pos += w
+            else:
+                h = dy * v / tot
+                out.append((x, pos, dx, h)); pos += h
+        return out
 
 
-rng = np.random.default_rng(3)
-# 파레토 분포로 '몇 개가 아주 크고 대부분 작은' 현실적인 값을 만든다.
-vals = sorted(np.round(rng.pareto(1.1, 24) * 10 + 1, 1), reverse=True)
+    rng = np.random.default_rng(3)
+    # 파레토 분포로 '몇 개가 아주 크고 대부분 작은' 현실적인 값을 만든다.
+    vals = sorted(np.round(rng.pareto(1.1, 24) * 10 + 1, 1), reverse=True)
 
-fig, ax = plt.subplots(1, 3, figsize=(16, 4.4))
-for a, (R, title) in zip(ax, [(slice_dice(vals, 0, 0, 10, 6), "슬라이스-앤-다이스"),
-                              (squarify(vals, 0, 0, 10, 6), "제곱화")]):
-    ratios = [max(w / h, h / w) for _, _, w, h in R]
-    cm = plt.get_cmap("Blues")
-    for v_, (x0, y0, w, h) in zip(vals, R):
-        a.add_patch(plt.Rectangle((x0, y0), w, h,
-                    facecolor=cm(0.2 + 0.6 * v_ / max(vals)),
-                    edgecolor="white", linewidth=1.2))
-    a.set_xlim(0, 10); a.set_ylim(0, 6)
-    a.set_xticks([]); a.set_yticks([])
-    a.set_title(f"{title}\n가로세로비 중앙값 {np.median(ratios):.2f}, "
-                f"최악 {max(ratios):.1f}")
+    fig, ax = plt.subplots(1, 3, figsize=(16, 4.4))
+    for a, (R, title) in zip(ax, [(slice_dice(vals, 0, 0, 10, 6), "슬라이스-앤-다이스"),
+                                  (squarify(vals, 0, 0, 10, 6), "제곱화")]):
+        ratios = [max(w / h, h / w) for _, _, w, h in R]
+        cm = plt.get_cmap("Blues")
+        for v_, (x0, y0, w, h) in zip(vals, R):
+            a.add_patch(plt.Rectangle((x0, y0), w, h,
+                        facecolor=cm(0.2 + 0.6 * v_ / max(vals)),
+                        edgecolor="white", linewidth=1.2))
+        a.set_xlim(0, 10); a.set_ylim(0, 6)
+        a.set_xticks([]); a.set_yticks([])
+        a.set_title(f"{title}\n가로세로비 중앙값 {np.median(ratios):.2f}, "
+                    f"최악 {max(ratios):.1f}")
 
-r1 = [max(w / h, h / w) for _, _, w, h in slice_dice(vals, 0, 0, 10, 6)]
-r2 = [max(w / h, h / w) for _, _, w, h in squarify(vals, 0, 0, 10, 6)]
-ax[2].boxplot([r1, r2], labels=["슬라이스-앤-다이스", "제곱화"])
-ax[2].set_yscale("log")
-ax[2].axhline(1, color="red", ls="--", lw=1, label="이상적인 값 = 1")
-ax[2].set_ylabel("가로세로비 (로그 눈금)"); ax[2].set_title("가로세로비 분포")
-ax[2].legend(); ax[2].grid(alpha=0.25)
+    r1 = [max(w / h, h / w) for _, _, w, h in slice_dice(vals, 0, 0, 10, 6)]
+    r2 = [max(w / h, h / w) for _, _, w, h in squarify(vals, 0, 0, 10, 6)]
+    ax[2].boxplot([r1, r2], labels=["슬라이스-앤-다이스", "제곱화"])
+    ax[2].set_yscale("log")
+    ax[2].axhline(1, color="red", ls="--", lw=1, label="이상적인 값 = 1")
+    ax[2].set_ylabel("가로세로비 (로그 눈금)"); ax[2].set_title("가로세로비 분포")
+    ax[2].legend(); ax[2].grid(alpha=0.25)
 
-fig.suptitle("같은 24개 값, 두 가지 배치 규칙", y=1.02)
-fig.tight_layout()
-plt.show()
+    fig.suptitle("같은 24개 값, 두 가지 배치 규칙", y=1.02)
+    fig.tight_layout()
+    plt.show()
 
-print(f"slice-and-dice: 중앙값 {np.median(r1):.2f}, 최악 {max(r1):.1f}")
-print(f"squarified:     중앙값 {np.median(r2):.2f}, 최악 {max(r2):.1f}")
-```
+    print(f"slice-and-dice: 중앙값 {np.median(r1):.2f}, 최악 {max(r1):.1f}")
+    print(f"squarified:     중앙값 {np.median(r2):.2f}, 최악 {max(r2):.1f}")
 
-![두 배치 규칙 비교](./img/treemap_layout.png)
+    # (1) 닫힌 꼴이 실측과 맞는지 확인한다.
+    p = np.array(vals, float) / sum(vals)
+    DX, DY = 10.0, 6.0
+    pred = np.maximum(DX * p / DY, DY / (DX * p))
+    print(f"\n값 {len(vals)}개, 합 {sum(vals):.1f}, 가장 작은 값 {min(vals):.1f}")
+    print(f"닫힌 꼴과 실측이 같은가 {np.allclose(pred, r1)}"
+          f"   최대 차이 {np.abs(pred - np.array(r1)).max():.1e}")
+    print(f"가장 작은 비중 p_min = {p.min():.6f}")
+    print(f"  예측 최악 DY/(DX*p_min) = {DY/(DX*p.min()):.1f}   실측 {max(r1):.1f}")
+    print(f"  예측 중앙값             = {np.median(pred):.2f}    실측 {np.median(r1):.2f}")
+    print(f"\n제곱화 / 슬라이스-앤-다이스 중앙값 비 "
+          f"{np.median(r1)/np.median(r2):.1f} 배")
+    ```
 
-```text
-slice-and-dice: 중앙값 49.10, 최악 320.1
-squarified:     중앙값 1.29, 최악 2.3
-```
+    ![두 배치 규칙 비교](./img/treemap_layout.png)
 
-**같은 값인데 왼쪽은 읽을 수 없다.** 가로세로비의 중앙값이 **49.10**이고 최악은 **320.1**이다. 폭이 1픽셀도 안 되는 실오라기 같은 조각이 된다.
+    ```text
+    slice-and-dice: 중앙값 49.10, 최악 320.1
+    squarified:     중앙값 1.29, 최악 2.3
 
-| 배치 | 가로세로비 중앙값 | 최악 |
-|---|---|---|
-| slice-and-dice | **49.10** | **320.1** |
-| **제곱화** | **1.29** | **2.3** |
+    값 24개, 합 533.5, 가장 작은 값 1.0
+    닫힌 꼴과 실측이 같은가 True   최대 차이 2.8e-14
+    가장 작은 비중 p_min = 0.001874
+      예측 최악 DY/(DX*p_min) = 320.1   실측 320.1
+      예측 중앙값             = 49.10    실측 49.10
 
-**38배 차이다.** 넓이는 양쪽 모두 정확한데, **읽을 수 있느냐가 완전히 다르다.**
+    제곱화 / 슬라이스-앤-다이스 중앙값 비 38.1 배
+    ```
 
-**이것이 트리맵의 첫 번째 함정이다.** 같은 자료·같은 넓이인데 **배치 알고리즘이라는 자의적 선택이 그림의 쓸모를 정한다.** 앞 절들에서 본 구조와 같다 — 자료가 아니라 분석자의 선택이 결과를 움직인다.
+    **닫힌 꼴이 실측과 소수 열넷째 자리까지 같다.** 예측한 최악값 $320.1$ 과 중앙값 $49.10$ 이 그대로 나왔다.
 
-**그래도 slice-and-dice에는 쓸모가 있다.** **순서가 보존**되므로 시간 순서나 크기 순위를 유지해야 할 때 쓴다. 제곱화 배치는 **인접 관계가 뒤죽박죽**이 되어 순서 정보를 잃는다.
+    **같은 값인데 왼쪽은 읽을 수 없다.** 가로세로비의 중앙값이 **$49.10$** 이고 최악은 **$320.1$** 이다. 폭이 $1$ 픽셀도 안 되는 실오라기 같은 조각이 된다.
+
+    | 배치 | 가로세로비 중앙값 | 최악 |
+    |---|---|---|
+    | slice-and-dice | **49.10** | **320.1** |
+    | **제곱화** | **1.29** | **2.3** |
+
+    **38배 차이다.** 넓이는 양쪽 모두 정확한데, **읽을 수 있느냐가 완전히 다르다.**
+
+    **이것이 트리맵의 첫 번째 함정이다.** 같은 자료·같은 넓이인데 **배치 알고리즘이라는 자의적 선택이 그림의 쓸모를 정한다.** 앞 절들에서 본 구조와 같다 — 자료가 아니라 분석자의 선택이 결과를 움직인다.
+
+    **그래도 slice-and-dice에는 쓸모가 있다.** **순서가 보존**되므로 시간 순서나 크기 순위를 유지해야 할 때 쓴다. 제곱화 배치는 **인접 관계가 뒤죽박죽**이 되어 순서 정보를 잃는다.
 
 ## 2. 모자이크 그림과 무엇이 다른가
 
@@ -193,347 +339,639 @@ squarified:     중앙값 1.29, 최악 2.3
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 같은 사각형, 다른 일
+**보기 3.** <span class="diff easy" title="쉬움"></span> 타일을 그리는 네 수 가운데 자료가 정하는 것은 몇 개인가.
+
+**(1)** 모자이크 타일의 $(x, y, w, h)$ 를 분할표의 확률로 모두 적으시오. 트리맵 타일에서는 자료가 묶는 식이 몇 개인가.
+
+**(2)** 그 차이를 확인하도록, 같은 값 목록을 가로세로비가 다른 네 영역에 담아 **넓이 비중은 그대로이고 모양은 달라짐**을 보이시오.
+
+**(3)** 모자이크 그림·트리맵·막대그림을 나란히 그려 세 도구가 받는 자료와 읽는 법을 정리하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
+??? success "풀이"
 
-fig, ax = plt.subplots(1, 3, figsize=(16, 4.6))
+    **(1) 해석적으로.** 모자이크 그림에서는 네 수가 모두 자료의 함수다. 행을 $i$, 열을 $j$ 라 하면
 
-# ── (1) 모자이크: 분할표를 받는다 ─────────────────────────────────
-tab = np.array([[28, 97], [35, 104]], float)     # SUV/비SUV x 사고/무사고
-n = tab.sum()
-colw = tab.sum(1) / n                            # 열 너비 = 주변확률
-x = 0
-for i, (w, row) in enumerate(zip(colw, tab)):
-    y = 0
-    for j, v in enumerate(row):
-        h = v / row.sum()                        # 높이 = 조건부확률
-        ax[0].add_patch(plt.Rectangle((x, y), w - 0.01, h - 0.006,
-                        facecolor=["#7fb3d5", "#f5b041"][j], edgecolor="white"))
-        ax[0].text(x + w / 2, y + h / 2, f"{int(v)}",
-                   ha="center", va="center", fontsize=10)
-        y += h
-    x += w
-ax[0].set_xlim(0, 1); ax[0].set_ylim(0, 1)
-ax[0].set_title("모자이크 그림\n(넓이 = 칸의 도수)")
-ax[0].set_xlabel("너비 = 행의 주변확률")
-ax[0].set_ylabel("높이 = 조건부확률")
+    $$
+    w_i = p_{i\cdot}, \qquad
+    h_{ij} = p_{j \mid i}, \qquad
+    x_i = \sum_{l < i} p_{l\cdot}, \qquad
+    y_{ij} = \sum_{l < j} p_{l \mid i}
+    $$
 
-# ── (2) 트리맵: 값의 목록을 받는다 ────────────────────────────────
-v = sorted([6, 6, 4, 3, 2, 2, 1], reverse=True)
-R = squarify(v, 0, 0, 6, 4)                      # 1절에서 만든 함수
-cmap = plt.get_cmap("Blues")
-for val, (x0, y0, w, h) in zip(v, R):
-    ax[1].add_patch(plt.Rectangle((x0, y0), w, h,
-                    facecolor=cmap(0.25 + 0.5 * val / max(v)),
-                    edgecolor="white", linewidth=2))
-    ax[1].text(x0 + w / 2, y0 + h / 2, str(val),
-               ha="center", va="center", fontweight="bold")
-ax[1].set_xlim(0, 6); ax[1].set_ylim(0, 4)
-ax[1].set_title("트리맵\n(넓이 = 값, 제곱화 배치)")
-ax[1].set_xticks([]); ax[1].set_yticks([])
+    이다([모자이크 그림](mosaic.md) 보기 3). **자료가 정하지 않는 것은 범주를 어느 순서로 늘어놓을지뿐이고, 좌표의 값 자체는 하나도 자유롭지 않다.** 그래서 분할선의 위치가 정보이고, 분할선이 나란하면 독립이라는 판정이 눈으로 가능하다.
 
-# ── (3) 같은 값을 막대로 ─────────────────────────────────────────
-ax[2].bar(range(len(v)), v,
-          color=[cmap(0.25 + 0.5 * z / max(v)) for z in v], edgecolor="black")
-ax[2].set_title("막대그림\n(길이 = 값)")
-ax[2].set_xticks(range(len(v))); ax[2].set_xticklabels([str(z) for z in v])
-ax[2].set_ylabel("값")
+    트리맵 타일에서는 자료가 묶는 식이
 
-fig.suptitle("어디나 사각형이지만 받는 자료가 다르다", y=1.02)
-fig.tight_layout()
-plt.show()
-```
+    $$
+    w_k h_k = a_k
+    $$
 
-![모자이크 그림, 트리맵, 막대그림 비교](./img/treemap_vs_mosaic.png)
+    **하나뿐이다.** 네 수 가운데 한 식만 제약되므로 나머지 세 자유도는 전부 **배치 알고리즘의 몫**이다. 그러므로
 
-**세 그림이 받는 자료부터 다르다.**
+    - 영역의 가로세로비를 바꾸면 모든 타일의 $w, h$ 가 달라지는데 $wh$ 만 그대로다.
+    - 알고리즘을 바꾸면 $x, y$ 도 전부 달라진다(보기 2).
+    - **두 칸이 이웃이라는 사실에 아무 뜻이 없다.** 트리맵에서 인접 관계로 무언가를 읽으면 그것은 알고리즘을 읽은 것이다.
 
-| | 모자이크 그림 | 트리맵 |
-|---|---|---|
-| **입력** | **분할표**(두 범주형 변수) | **값의 목록**(수량 하나) |
-| 넓이의 뜻 | **결합확률**(= 도수) | 그 값 자체 |
-| 너비·높이 | **주변확률 × 조건부확률** | 아무 뜻 없음 |
-| 위치 | **범주의 순서** | 아무 뜻 없음 |
-| 계층 | 보통 2~3개 변수 | **몇 단계든 중첩** |
-| 무엇을 보나 | **독립 여부**, 조건부확률 | **상대적 크기**, 구성 |
+    **(2)와 (3) 수치적으로.**
 
-**모자이크 그림에서는 너비와 높이가 각각 의미를 갖는다.** [모자이크 그림](mosaic.md) 절에서 보았듯 넓이 $=$ 너비 $\times$ 높이가 곧 **결합확률 $=$ 주변확률 $\times$ 조건부확률**이다. 그래서 **분할선이 나란하면 독립**이라는 판정이 눈으로 가능하다.
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
 
-**트리맵에는 그런 구조가 없다.** 넓이만 뜻이 있고 **가로세로 비와 위치는 배치 알고리즘이 정한 것**일 뿐이다. 같은 자료라도 알고리즘을 바꾸면 전혀 다르게 보인다(1절).
+    fig, ax = plt.subplots(1, 3, figsize=(16, 4.6))
 
-**막대그림 (3)이 값을 읽기에는 가장 정확하다.** [막대그림](bar_charts.md) 절의 지각 서열에서 **길이는 3위, 넓이는 5위**였다. 그러면 왜 트리맵을 쓰는가.
+    # ── (1) 모자이크: 분할표를 받는다 ─────────────────────────────────
+    tab = np.array([[28, 97], [35, 104]], float)     # SUV/비SUV x 사고/무사고
+    n = tab.sum()
+    colw = tab.sum(1) / n                            # 열 너비 = 주변확률
+    x = 0
+    for i, (w, row) in enumerate(zip(colw, tab)):
+        y = 0
+        for j, v in enumerate(row):
+            h = v / row.sum()                        # 높이 = 조건부확률
+            ax[0].add_patch(plt.Rectangle((x, y), w - 0.01, h - 0.006,
+                            facecolor=["#7fb3d5", "#f5b041"][j], edgecolor="white"))
+            ax[0].text(x + w / 2, y + h / 2, f"{int(v)}",
+                       ha="center", va="center", fontsize=10)
+            y += h
+        x += w
+    ax[0].set_xlim(0, 1); ax[0].set_ylim(0, 1)
+    ax[0].set_title("모자이크 그림\n(넓이 = 칸의 도수)")
+    ax[0].set_xlabel("너비 = 행의 주변확률")
+    ax[0].set_ylabel("높이 = 조건부확률")
 
-| 막대그림이 안 되는 상황 | 트리맵이 하는 일 |
-|---|---|
-| 항목이 수백 개 | **화면을 빈틈없이 채운다** |
-| 값의 규모 차가 100배 이상 | 작은 것도 자리를 갖는다 |
-| **계층 구조**(업종 → 종목) | **중첩으로 표현** |
-| 두 번째 변수도 보이고 싶다 | **색을 함께 쓴다** |
+    # ── (2) 트리맵: 값의 목록을 받는다 ────────────────────────────────
+    v = sorted([6, 6, 4, 3, 2, 2, 1], reverse=True)
+    R = squarify(v, 0, 0, 6, 4)                      # 1절에서 만든 함수
+    cmap = plt.get_cmap("Blues")
+    for val, (x0, y0, w, h) in zip(v, R):
+        ax[1].add_patch(plt.Rectangle((x0, y0), w, h,
+                        facecolor=cmap(0.25 + 0.5 * val / max(v)),
+                        edgecolor="white", linewidth=2))
+        ax[1].text(x0 + w / 2, y0 + h / 2, str(val),
+                   ha="center", va="center", fontweight="bold")
+    ax[1].set_xlim(0, 6); ax[1].set_ylim(0, 4)
+    ax[1].set_title("트리맵\n(넓이 = 값, 제곱화 배치)")
+    ax[1].set_xticks([]); ax[1].set_yticks([])
 
-**트리맵은 정밀한 비교가 아니라 훑어보기를 위한 도구**다. 이 구분이 이 절 전체를 관통한다.
+    # ── (3) 같은 값을 막대로 ─────────────────────────────────────────
+    ax[2].bar(range(len(v)), v,
+              color=[cmap(0.25 + 0.5 * z / max(v)) for z in v], edgecolor="black")
+    ax[2].set_title("막대그림\n(길이 = 값)")
+    ax[2].set_xticks(range(len(v))); ax[2].set_xticklabels([str(z) for z in v])
+    ax[2].set_ylabel("값")
+
+    fig.suptitle("어디나 사각형이지만 받는 자료가 다르다", y=1.02)
+    fig.tight_layout()
+    plt.show()
+
+    # (2) 같은 값을 네 영역에 담는다. 넓이 비중은 불변, 모양은 달라진다.
+    tot = sum(v)
+    print(f"{'영역':>12}{'넓이 비중이 v/sum(v) 인가':>26}"
+          f"{'가로세로비 중앙값':>20}{'최악':>9}{'가장 작은 타일':>14}")
+    for DX, DY in [(6.0, 4.0), (4.0, 6.0), (12.0, 2.0), (24.0, 1.0)]:
+        RR = squarify(v, 0, 0, DX, DY)
+        share = np.array([w * h / (DX * DY) for _, _, w, h in RR])
+        ok = np.allclose(share, np.array(v, float) / tot)
+        rho = np.array([max(w / h, h / w) for _, _, w, h in RR])
+        print(f"{f'{DX:g} x {DY:g}':>12}{str(ok):>26}{np.median(rho):>20.2f}"
+              f"{rho.max():>9.2f}{rho[-1]:>14.2f}")
+
+    # (1) 모자이크 타일은 네 수 모두 자료가 정한다.
+    n = tab.sum()
+    print("\n모자이크 타일의 네 수는 모두 자료가 정한다")
+    xx = 0.0
+    for i, row in enumerate(tab):
+        w = row.sum() / n
+        yy = 0.0
+        for j, val in enumerate(row):
+            h = val / row.sum()
+            print(f"  ({i},{j})  x={xx:.4f}  y={yy:.4f}  w={w:.4f}  h={h:.4f}"
+                  f"   넓이 {w*h:.4f} = 도수/n {val/n:.4f}")
+            yy += h
+        xx += w
+    ```
+
+    출력:
+
+    ```
+              영역        넓이 비중이 v/sum(v) 인가           가로세로비 중앙값       최악      가장 작은 타일
+           6 x 4                      True                1.50     2.78          2.78
+           4 x 6                      True                1.50     2.78          2.78
+          12 x 2                      True                1.50     4.00          4.00
+          24 x 1                      True                3.00     6.00          1.00
+
+    모자이크 타일의 네 수는 모두 자료가 정한다
+      (0,0)  x=0.0000  y=0.0000  w=0.4735  h=0.2240   넓이 0.1061 = 도수/n 0.1061
+      (0,1)  x=0.0000  y=0.2240  w=0.4735  h=0.7760   넓이 0.3674 = 도수/n 0.3674
+      (1,0)  x=0.4735  y=0.0000  w=0.5265  h=0.2518   넓이 0.1326 = 도수/n 0.1326
+      (1,1)  x=0.4735  y=0.2518  w=0.5265  h=0.7482   넓이 0.3939 = 도수/n 0.3939
+    ```
+
+    ![모자이크 그림, 트리맵, 막대그림 비교](./img/treemap_vs_mosaic.png)
+
+    **네 영역 모두 `True` 다 — 넓이 비중이 $v_k/\sum v$ 로 똑같다.** 그런데 가로세로비는 영역에 따라 중앙값 $1.50 \to 3.00$, 최악 $2.78 \to 6.00$ 으로 달라진다. 가장 작은 타일은 $6\times4$ 에서 $2.78$ 로 가장 길쭉한데 $24\times1$ 에서는 $1.00$, 곧 **정확한 정사각형**이 된다. **같은 자료, 같은 넓이, 다른 모양이다.** 자료가 묶는 식이 $wh = a_k$ 하나뿐이라는 (1)의 결론이 이 표다.
+
+    **모자이크는 그렇지 않다.** 네 칸의 $x, y, w, h$ 가 모두 확률로 적히고 넓이가 도수$/n$ 과 소수 넷째 자리까지 일치한다. 영역의 모양을 바꿀 여지가 없다 — 단위정사각형이 정해져 있기 때문이다.
+
+    **세 그림이 받는 자료부터 다르다.**
+
+    | | 모자이크 그림 | 트리맵 |
+    |---|---|---|
+    | **입력** | **분할표**(두 범주형 변수) | **값의 목록**(수량 하나) |
+    | 넓이의 뜻 | **결합확률**(= 도수) | 그 값 자체 |
+    | 너비·높이 | **주변확률 × 조건부확률** | 아무 뜻 없음 |
+    | 위치 | **범주의 순서** | 아무 뜻 없음 |
+    | 계층 | 보통 2~3개 변수 | **몇 단계든 중첩** |
+    | 무엇을 보나 | **독립 여부**, 조건부확률 | **상대적 크기**, 구성 |
+
+    **모자이크 그림에서는 너비와 높이가 각각 의미를 갖는다.** [모자이크 그림](mosaic.md) 절에서 보았듯 넓이 $=$ 너비 $\times$ 높이가 곧 **결합확률 $=$ 주변확률 $\times$ 조건부확률**이다. 그래서 **분할선이 나란하면 독립**이라는 판정이 눈으로 가능하다.
+
+    **트리맵에는 그런 구조가 없다.** 넓이만 뜻이 있고 **가로세로 비와 위치는 배치 알고리즘이 정한 것**일 뿐이다. 같은 자료라도 알고리즘을 바꾸면 전혀 다르게 보인다(1절).
+
+    **막대그림 (3)이 값을 읽기에는 가장 정확하다.** [막대그림](bar_charts.md) 절의 지각 서열에서 **길이는 3위, 넓이는 5위**였다. 그러면 왜 트리맵을 쓰는가.
+
+    | 막대그림이 안 되는 상황 | 트리맵이 하는 일 |
+    |---|---|
+    | 항목이 수백 개 | **화면을 빈틈없이 채운다** |
+    | 값의 규모 차가 100배 이상 | 작은 것도 자리를 갖는다 |
+    | **계층 구조**(업종 → 종목) | **중첩으로 표현** |
+    | 두 번째 변수도 보이고 싶다 | **색을 함께 쓴다** |
+
+    **트리맵은 정밀한 비교가 아니라 훑어보기를 위한 도구**다. 이 구분이 이 절 전체를 관통한다.
 
 그런데 두 그림이 **아주 무관한 것도 아니다.** 둘 다 **직사각형을 재귀적으로 쪼개 화면을 채운다**는 점에서 같은 가족이다. 그 관계를 정확히 짚어 두면 앞의 표가 왜 그렇게 되는지도 설명된다.
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 모자이크 그림은 슬라이스-앤-다이스 트리맵이다
+**보기 4.** <span class="diff easy" title="쉬움"></span> 두 그림이 같은 가족임을 좌표로 확인하기. SUV $\times$ 사고 분할표를 쓴다.
+
+**(1)** 분할표를 계층(행 $\to$ 열)으로 보고 **방향을 번갈아 가며 `slice_dice` 를 두 번** 적용하면 모자이크 그림의 좌표가 그대로 나옴을 식으로 보이시오.
+
+**(2)** 두 방식의 좌표를 실제로 계산해 맞대어 확인하시오.
+
+**(3)** 그러면 모자이크 그림과 트리맵을 가르는 것이 무엇인지 정리하시오.
 
 </div>
 
-**주장.** 분할표를 계층으로 보고(행 $\to$ 열), 잎의 값을 칸의 도수로 두고, **방향을 번갈아 가며 1절의 `slice_dice`를 두 번 적용하면 모자이크 그림이 그대로 나온다.**
+??? success "풀이"
 
-```python
-import numpy as np
+    **주장.** 분할표를 계층으로 보고(행 $\to$ 열), 잎의 값을 칸의 도수로 두고, **방향을 번갈아 가며 1절의 `slice_dice` 를 두 번 적용하면 모자이크 그림이 그대로 나온다.**
 
-tab = np.array([[28., 97.], [35., 104.]])      # SUV x 사고
-n = tab.sum()
+    **(1) 해석적으로.** 단위정사각형에서 시작한다.
 
-# (A) 모자이크를 정의대로 그린다: 열 너비 = 주변확률, 행 높이 = 조건부확률
-mosaic = []
-x = 0
-for i, row in enumerate(tab):
-    w = row.sum() / n                          # P(행)
-    y = 0
-    for j, v in enumerate(row):
-        h = v / row.sum()                      # P(열 | 행)
-        mosaic.append((i, j, x, y, w, h))
-        y += h
-    x += w
+    **1단계.** `slice_dice` 를 행의 주변비중 $p_{i\cdot} = n_{i\cdot}/n$ 에 세로 방향으로 적용하면, 행 $i$ 의 띠는
 
-# (B) slice_dice 를 계층 2단계로 적용한다 (방향을 번갈아)
-tm = []
-lvl1 = slice_dice(tab.sum(1) / n, 0, 0, 1, 1, vertical=True)     # 1단계: 세로로 분할
-for i, (gx, gy, gw, gh) in enumerate(lvl1):
-    lvl2 = slice_dice(tab[i] / tab[i].sum(), gx, gy, gw, gh,
-                      vertical=False)                            # 2단계: 가로로 분할
-    for j, (x0, y0, w, h) in enumerate(lvl2):
-        tm.append((i, j, x0, y0, w, h))
+    $$
+    x_i = \sum_{l<i} p_{l\cdot}, \quad w_i = p_{i\cdot}, \quad y = 0, \quad h = 1
+    $$
 
-print(f"{'칸':>6s}{'모자이크 (x,y,w,h)':>34s}{'트리맵 (x,y,w,h)':>34s}{'차이':>10s}")
-worst = 0.0
-for (i, j, *a), (_, _, *b) in zip(mosaic, tm):
-    dmax = max(abs(p - q) for p, q in zip(a, b))
-    worst = max(worst, dmax)
-    fa = "(%.4f,%.4f,%.4f,%.4f)" % tuple(a)
-    fb = "(%.4f,%.4f,%.4f,%.4f)" % tuple(b)
-    print(f"{f'({i},{j})':>6s}{fa:>34s}{fb:>34s}{dmax:>10.2e}")
+    을 얻는다. `slice_dice` 가 하는 일이 "비중에 비례해 한 방향으로 차례로 자르기" 이므로 폭이 곧 $p_{i\cdot}$ 다.
 
-print(f"\n두 방식의 최대 좌표 차이 {worst:.3e}")
-print("넓이가 도수/n 과 일치하는가:",
-      all(abs(w * h - tab[i, j] / n) < 1e-12 for i, j, _, _, w, h in tm))
-```
+    **2단계.** 그 띠 안에서 같은 함수를 **가로 방향으로** 조건부비중 $p_{j\mid i} = n_{ij}/n_{i\cdot}$ 에 적용하면
 
-```text
-     칸                    모자이크 (x,y,w,h)                     트리맵 (x,y,w,h)        차이
- (0,0)     (0.0000,0.0000,0.4735,0.2240)     (0.0000,0.0000,0.4735,0.2240)  0.00e+00
- (0,1)     (0.0000,0.2240,0.4735,0.7760)     (0.0000,0.2240,0.4735,0.7760)  0.00e+00
- (1,0)     (0.4735,0.0000,0.5265,0.2518)     (0.4735,0.0000,0.5265,0.2518)  0.00e+00
- (1,1)     (0.4735,0.2518,0.5265,0.7482)     (0.4735,0.2518,0.5265,0.7482)  0.00e+00
+    $$
+    y_{ij} = \sum_{l<j} p_{l \mid i}, \quad h_{ij} = p_{j\mid i}
+    $$
 
-두 방식의 최대 좌표 차이 0.000e+00
-넓이가 도수/n 과 일치하는가: True
-```
+    가 되고 $x, w$ 는 1단계의 값을 물려받는다. 네 수가 보기 3 에서 적은 모자이크 타일의 정의와 **글자 그대로 같다.**
 
-**네 칸의 좌표가 비트 단위로 같다.** 우연이 아니라 **정의가 같기 때문**이다.
+    넓이도 저절로 맞는다. 곱셈 규칙 때문이다.
 
-$$
-\underbrace{P(\text{행})}_{\text{1단계 분할 비율}}\times
-\underbrace{P(\text{열}\mid\text{행})}_{\text{2단계 분할 비율}}
-=\underbrace{P(\text{행},\text{열})}_{\text{칸의 넓이}}
-$$
+    $$
+    w_i \, h_{ij} = p_{i\cdot}\, p_{j\mid i} = p_{ij} = \frac{n_{ij}}{n}
+    $$
 
-**그러므로 "모자이크냐 트리맵이냐"는 잘못된 물음이다.** 올바른 물음은 **"어떤 계층에, 어떤 배치 규칙을 썼는가"**다.
+    **그러므로 좌표가 수치적으로도 비트 단위로 같아야 한다** — 같은 수를 같은 순서로 곱하고 더하기 때문이다. 아래에서 차이가 정확히 $0$ 인지 본다.
 
-| | 계층 | 잎의 값 | 배치 규칙 |
-|---|---|---|---|
-| **모자이크 그림** | 교차분류(행 $\to$ 열) | 칸의 도수 | **슬라이스-앤-다이스**(방향 번갈아) |
-| **시황 지도** | 업종 $\to$ 종목 | 시가총액 | **제곱화** |
+    ```python
+    import numpy as np
 
-**너비와 높이의 뜻은 슬라이스-앤-다이스가 주는 선물이다.** 방향을 번갈아 자르기 때문에 한 방향은 주변확률, 다른 방향은 조건부확률이 된다. **제곱화 배치는 그 구조를 버린다.** 가로세로비를 얻는 대가다.
+    tab = np.array([[28., 97.], [35., 104.]])      # SUV x 사고
+    n = tab.sum()
 
-| 배치 규칙 | 너비·높이의 뜻 | 사각형 모양 |
-|---|---|---|
-| **슬라이스-앤-다이스** | **있다**(주변·조건부확률) | **나쁘다** |
-| **제곱화** | **없다** | **좋다** |
+    # (A) 모자이크를 정의대로 그린다: 열 너비 = 주변확률, 행 높이 = 조건부확률
+    mosaic = []
+    x = 0
+    for i, row in enumerate(tab):
+        w = row.sum() / n                          # P(행)
+        y = 0
+        for j, v in enumerate(row):
+            h = v / row.sum()                      # P(열 | 행)
+            mosaic.append((i, j, x, y, w, h))
+            y += h
+        x += w
 
-**이 맞바꿈이 1절 보기 2의 수치를 설명한다.** 슬라이스-앤-다이스의 가로세로비 중앙값이 49.10이었다. **모자이크 그림이 작은 표에만 쓰이는 이유가 이것이다.** $2\times2$나 $3\times4$까지는 칸이 읽을 만하지만, 범주가 수십 개면 실오라기가 된다.
+    # (B) slice_dice 를 계층 2단계로 적용한다 (방향을 번갈아)
+    tm = []
+    lvl1 = slice_dice(tab.sum(1) / n, 0, 0, 1, 1, vertical=True)     # 1단계: 세로로 분할
+    for i, (gx, gy, gw, gh) in enumerate(lvl1):
+        lvl2 = slice_dice(tab[i] / tab[i].sum(), gx, gy, gw, gh,
+                          vertical=False)                            # 2단계: 가로로 분할
+        for j, (x0, y0, w, h) in enumerate(lvl2):
+            tm.append((i, j, x0, y0, w, h))
 
-**거꾸로, 시황 지도에 모자이크식 배치를 쓸 수 없는 이유**도 같다. 65종목을 슬라이스-앤-다이스로 자르면 세로줄 65개가 되어 아무것도 안 보인다.
+    print(f"{'칸':>6s}{'모자이크 (x,y,w,h)':>34s}{'트리맵 (x,y,w,h)':>34s}{'차이':>10s}")
+    worst = 0.0
+    for (i, j, *a), (_, _, *b) in zip(mosaic, tm):
+        dmax = max(abs(p - q) for p, q in zip(a, b))
+        worst = max(worst, dmax)
+        fa = "(%.4f,%.4f,%.4f,%.4f)" % tuple(a)
+        fb = "(%.4f,%.4f,%.4f,%.4f)" % tuple(b)
+        print(f"{f'({i},{j})':>6s}{fa:>34s}{fb:>34s}{dmax:>10.2e}")
+
+    print(f"\n두 방식의 최대 좌표 차이 {worst:.3e}")
+    print("넓이가 도수/n 과 일치하는가:",
+          all(abs(w * h - tab[i, j] / n) < 1e-12 for i, j, _, _, w, h in tm))
+    ```
+
+    ```text
+         칸                    모자이크 (x,y,w,h)                     트리맵 (x,y,w,h)        차이
+     (0,0)     (0.0000,0.0000,0.4735,0.2240)     (0.0000,0.0000,0.4735,0.2240)  0.00e+00
+     (0,1)     (0.0000,0.2240,0.4735,0.7760)     (0.0000,0.2240,0.4735,0.7760)  0.00e+00
+     (1,0)     (0.4735,0.0000,0.5265,0.2518)     (0.4735,0.0000,0.5265,0.2518)  0.00e+00
+     (1,1)     (0.4735,0.2518,0.5265,0.7482)     (0.4735,0.2518,0.5265,0.7482)  0.00e+00
+
+    두 방식의 최대 좌표 차이 0.000e+00
+    넓이가 도수/n 과 일치하는가: True
+    ```
+
+    **(2)가 확인된다. 네 칸의 좌표가 비트 단위로 같고 최대 차이가 정확히 $0$ 이다.** 우연이 아니라 **정의가 같기 때문**이다.
+
+    $$
+    \underbrace{P(\text{행})}_{\text{1단계 분할 비율}}\times
+    \underbrace{P(\text{열}\mid\text{행})}_{\text{2단계 분할 비율}}
+    =\underbrace{P(\text{행},\text{열})}_{\text{칸의 넓이}}
+    $$
+
+    **(3) 그러므로 "모자이크냐 트리맵이냐"는 잘못된 물음이다.** 올바른 물음은 **"어떤 계층에, 어떤 배치 규칙을 썼는가"**다.
+
+    | | 계층 | 잎의 값 | 배치 규칙 |
+    |---|---|---|---|
+    | **모자이크 그림** | 교차분류(행 $\to$ 열) | 칸의 도수 | **슬라이스-앤-다이스**(방향 번갈아) |
+    | **시황 지도** | 업종 $\to$ 종목 | 시가총액 | **제곱화** |
+
+    **너비와 높이의 뜻은 슬라이스-앤-다이스가 주는 선물이다.** 방향을 번갈아 자르기 때문에 한 방향은 주변확률, 다른 방향은 조건부확률이 된다. **제곱화 배치는 그 구조를 버린다.** 가로세로비를 얻는 대가다.
+
+    | 배치 규칙 | 너비·높이의 뜻 | 사각형 모양 |
+    |---|---|---|
+    | **슬라이스-앤-다이스** | **있다**(주변·조건부확률) | **나쁘다** |
+    | **제곱화** | **없다** | **좋다** |
+
+    **이 맞바꿈이 1절 보기 2의 수치를 설명한다.** 슬라이스-앤-다이스의 가로세로비 중앙값이 49.10이었다. **모자이크 그림이 작은 표에만 쓰이는 이유가 이것이다.** $2\times2$나 $3\times4$까지는 칸이 읽을 만하지만, 범주가 수십 개면 실오라기가 된다.
+
+    **거꾸로, 시황 지도에 모자이크식 배치를 쓸 수 없는 이유**도 같다. 65종목을 슬라이스-앤-다이스로 자르면 세로줄 65개가 되어 아무것도 안 보인다.
 
 ## 3. 실제 자료: 시가총액 지도
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 대형주 65종목의 시가총액과 등락률
+**보기 5.** <span class="diff easy" title="쉬움"></span> 넓이 비 $93$ 배가 눈에는 몇 배로 보이는가. 미국 대형주 $65$ 종목의 시가총액을 $100 \times 62$ 영역에 담는다.
+
+**(1)** 넓이가 값에 비례하므로 두 칸의 **변 길이** 비는 값 비의 제곱근임을 적고, 가장 큰 칸과 가장 작은 칸의 두 비를 구하시오.
+
+**(2)** 그림의 전체 넓이가 $6200$ 이고 넓이 $45$ 이상인 칸에만 이름표를 넣는다면 **몇 종목에 이름이 붙는지**, 그리고 이름 없는 칸들이 차지하는 비중이 얼마인지 구하시오.
+
+**(3)** 보기 2 의 닫힌 꼴로, 이 $65$ 종목을 슬라이스-앤-다이스로 자르면 최악 가로세로비가 얼마가 될지 예측하시오.
 
 </div>
 
-```python
-import warnings
-warnings.filterwarnings("ignore")
+??? success "풀이"
 
-import os
-import numpy as np
-import pandas as pd
-import yfinance as yf
+    **(1) 해석적으로.** 타일 $k$ 의 넓이가 $a_k = A\,w_k$ 이고($A$ 는 전체 넓이, $w_k$ 는 비중), 가로세로비 $\rho_k$ 를 알면 변 길이가
 
-# 11개 업종에서 대형주를 골랐다. 실제 지수 지도는 500종목을 쓰지만
-# 구조는 같고, 여기서는 내려받는 부담을 줄였다.
-SECTORS = {
-    "Technology": ["AAPL", "MSFT", "NVDA", "AVGO", "ORCL",
-                   "CRM", "AMD", "ADBE", "CSCO", "ACN"],
-    "Communication Services": ["GOOGL", "META", "NFLX", "DIS", "TMUS", "CMCSA"],
-    "Consumer Discretionary": ["AMZN", "TSLA", "HD", "MCD", "NKE", "LOW", "SBUX"],
-    "Financials": ["BRK-B", "JPM", "V", "MA", "BAC", "WFC", "GS", "AXP"],
-    "Healthcare": ["LLY", "UNH", "JNJ", "ABBV", "MRK", "TMO", "ABT", "PFE"],
-    "Consumer Staples": ["WMT", "COST", "PG", "KO", "PEP", "PM"],
-    "Industrials": ["GE", "CAT", "RTX", "UNP", "HON", "BA", "UPS"],
-    "Energy": ["XOM", "CVX", "COP", "SLB"],
-    "Utilities": ["NEE", "SO", "DUK"],
-    "Real Estate": ["PLD", "AMT", "EQIX"],
-    "Materials": ["LIN", "SHW", "APD"],
-}
-CACHE = "datasets/stocks/sp_big.csv"
+    $$
+    \text{긴 변} = \sqrt{a_k \rho_k}, \qquad \text{짧은 변} = \sqrt{a_k/\rho_k}
+    $$
 
-# 한 번 받은 자료를 저장해 두고 다시 쓴다.
-# 실행 시점마다 값이 달라지면 아래 출력이 재현되지 않기 때문이다.
-d = pd.read_csv(CACHE)
+    다. 두 칸의 가로세로비가 비슷하다면 변 길이의 비는
 
-d["mcap"] = d["shares"] * d["close_last"]             # 시가총액
-d["chg"] = (d["close_last"] / d["close_prev"] - 1) * 100   # 일별 등락률 (%)
-d["w"] = d["mcap"] / d["mcap"].sum()                  # 넓이 비중
+    $$
+    \frac{\sqrt{a_i}}{\sqrt{a_j}} = \sqrt{\frac{w_i}{w_j}}
+    $$
 
-print(f"종목 {len(d)}개, 업종 {d['sector'].nunique()}개")
-print(f"기간 {d['date_prev'].iloc[0]} -> {d['date_last'].iloc[0]}\n")
+    로 **값 비의 제곱근**이다. **넓이 부호화는 비를 제곱근으로 압축해 보여 준다.** 이 자료는 넓이 비가 $93.0$ 배이므로 변 길이 비는
 
-s = d.sort_values("mcap", ascending=False)
-cum = s["w"].cumsum().to_numpy()
-print("넓이가 몇 종목에 몰려 있나")
-for k in [1, 3, 5, 10, 20]:
-    print(f"  상위 {k:2d}종목 누적 비중 {cum[k - 1]:.4f}")
-print(f"  절반을 넘기는 데 필요한 종목 수 {int(np.argmax(cum >= 0.5)) + 1}\n")
+    $$
+    \sqrt{93.0} = 9.64
+    $$
 
-print(f"가장 큰 칸 {s.iloc[0]['ticker']}: 비중 {s.iloc[0]['w']:.4f}")
-print(f"가장 작은 칸 {s.iloc[-1]['ticker']}: 비중 {s.iloc[-1]['w']:.4f}")
-print(f"넓이 비 {s.iloc[0]['w'] / s.iloc[-1]['w']:.1f}배")
-```
+    배에 그친다. $93$ 배 차이가 눈에는 $9.6$ 배 차이로 다가오는 것이다. 막대그림이라면 길이 비가 그대로 $93$ 배다 — **트리맵은 큰 차이를 작아 보이게 만든다.** 작은 것도 화면에 자리를 얻는 것이 바로 이 압축 덕분이고, 동시에 그것이 이 그림의 왜곡이다.
 
-```text
-종목 65개, 업종 11개
-기간 2026-08-31 -> 2026-09-01
+    **(2) 이름표의 문턱.** 넓이 $45$ 는 비중으로
 
-넓이가 몇 종목에 몰려 있나
-  상위  1종목 누적 비중 0.1220
-  상위  3종목 누적 비중 0.3274
-  상위  5종목 누적 비중 0.4777
-  상위 10종목 누적 비중 0.6347
-  상위 20종목 누적 비중 0.7832
-  절반을 넘기는 데 필요한 종목 수 6
+    $$
+    \frac{45}{6200} = 0.007258
+    $$
 
-가장 큰 칸 NVDA: 비중 0.1220
-가장 작은 칸 NKE: 비중 0.0013
-넓이 비 93.0배
-```
+    이다. 이보다 작은 칸에는 이름이 들어가지 않는다. 아래에서 몇 종목이 걸리는지 센다.
 
-**여섯 종목이 화면의 절반을 차지한다.** 65종목 중 6개다.
+    **(3) 슬라이스-앤-다이스라면.** 보기 2 의 식에 $DX = 100$, $DY = 62$, $p_{\min} = 0.0013$ 을 넣으면
 
-**가장 큰 칸과 가장 작은 칸의 넓이 비가 93배**다. 막대그림으로 그리면 작은 막대가 보이지 않겠지만, **트리맵에서는 작은 칸도 자리를 갖는다.** 이것이 트리맵을 쓰는 이유다.
+    $$
+    \rho_{\max} = \frac{DY}{DX\, p_{\min}} = \frac{62}{100 \times 0.0013115} = 472.7
+    $$
 
-**동시에 이것이 문제이기도 하다.** 넓이가 93배 차이 나면 **작은 칸의 넓이를 서로 비교하는 일은 사실상 불가능**하다. 1픽셀 대 2픽셀의 차이를 눈이 구별하지 못한다.
+    이다. 가장 작은 칸이 **세로로 길이 $62$, 폭 $0.13$** 인 실오라기가 된다. 제곱화 배치를 쓰는 까닭이 이 한 수다.
+
+    **(4) 수치적으로.**
+
+    ```python
+    import warnings
+    warnings.filterwarnings("ignore")
+
+    import os
+    import numpy as np
+    import pandas as pd
+    import yfinance as yf
+
+    # 11개 업종에서 대형주를 골랐다. 실제 지수 지도는 500종목을 쓰지만
+    # 구조는 같고, 여기서는 내려받는 부담을 줄였다.
+    SECTORS = {
+        "Technology": ["AAPL", "MSFT", "NVDA", "AVGO", "ORCL",
+                       "CRM", "AMD", "ADBE", "CSCO", "ACN"],
+        "Communication Services": ["GOOGL", "META", "NFLX", "DIS", "TMUS", "CMCSA"],
+        "Consumer Discretionary": ["AMZN", "TSLA", "HD", "MCD", "NKE", "LOW", "SBUX"],
+        "Financials": ["BRK-B", "JPM", "V", "MA", "BAC", "WFC", "GS", "AXP"],
+        "Healthcare": ["LLY", "UNH", "JNJ", "ABBV", "MRK", "TMO", "ABT", "PFE"],
+        "Consumer Staples": ["WMT", "COST", "PG", "KO", "PEP", "PM"],
+        "Industrials": ["GE", "CAT", "RTX", "UNP", "HON", "BA", "UPS"],
+        "Energy": ["XOM", "CVX", "COP", "SLB"],
+        "Utilities": ["NEE", "SO", "DUK"],
+        "Real Estate": ["PLD", "AMT", "EQIX"],
+        "Materials": ["LIN", "SHW", "APD"],
+    }
+    CACHE = "datasets/stocks/sp_big.csv"
+
+    # 한 번 받은 자료를 저장해 두고 다시 쓴다.
+    # 실행 시점마다 값이 달라지면 아래 출력이 재현되지 않기 때문이다.
+    d = pd.read_csv(CACHE)
+
+    d["mcap"] = d["shares"] * d["close_last"]             # 시가총액
+    d["chg"] = (d["close_last"] / d["close_prev"] - 1) * 100   # 일별 등락률 (%)
+    d["w"] = d["mcap"] / d["mcap"].sum()                  # 넓이 비중
+
+    print(f"종목 {len(d)}개, 업종 {d['sector'].nunique()}개")
+    print(f"기간 {d['date_prev'].iloc[0]} -> {d['date_last'].iloc[0]}\n")
+
+    s = d.sort_values("mcap", ascending=False)
+    cum = s["w"].cumsum().to_numpy()
+    print("넓이가 몇 종목에 몰려 있나")
+    for k in [1, 3, 5, 10, 20]:
+        print(f"  상위 {k:2d}종목 누적 비중 {cum[k - 1]:.4f}")
+    print(f"  절반을 넘기는 데 필요한 종목 수 {int(np.argmax(cum >= 0.5)) + 1}\n")
+
+    print(f"가장 큰 칸 {s.iloc[0]['ticker']}: 비중 {s.iloc[0]['w']:.4f}")
+    print(f"가장 작은 칸 {s.iloc[-1]['ticker']}: 비중 {s.iloc[-1]['w']:.4f}")
+    print(f"넓이 비 {s.iloc[0]['w'] / s.iloc[-1]['w']:.1f}배")
+
+    # (1) 넓이 비는 변 길이에서 제곱근으로 압축된다.
+    AX, AY = 100.0, 62.0                      # 보기 6 이 쓰는 영역
+    A = AX * AY
+    ratio = s.iloc[0]["w"] / s.iloc[-1]["w"]
+    print(f"  변 길이 비 sqrt(넓이 비) = {np.sqrt(ratio):.2f}배")
+    print(f"  정사각형이라면 한 변: 가장 큰 칸 {np.sqrt(s.iloc[0]['w']*A):.2f}, "
+          f"가장 작은 칸 {np.sqrt(s.iloc[-1]['w']*A):.2f} 단위")
+
+    # (2) 이름표 문턱 — 넓이 45 미만에는 글씨를 넣지 않는다.
+    THR = 45.0
+    big = s["w"] * A > THR
+    print(f"\n전체 넓이 {A:.0f},  이름표 문턱 {THR:.0f}  →  비중 {THR/A:.6f}")
+    print(f"이름표가 붙는 칸 {big.sum()}개 / {len(s)}개 ({big.mean():.1%}),"
+          f"  그 넓이 합 {s.loc[big, 'w'].sum():.4f}")
+    print(f"이름 없는 칸 {(~big).sum()}개의 넓이 합 {s.loc[~big, 'w'].sum():.4f}")
+
+    # (3) 슬라이스-앤-다이스로 자르면 최악 가로세로비가 얼마인가.
+    print(f"\nslice-and-dice 최악 가로세로비 DY/(DX*p_min) = "
+          f"{AY / (AX * s.iloc[-1]['w']):.1f}")
+    ```
+
+    ```text
+    종목 65개, 업종 11개
+    기간 2026-08-31 -> 2026-09-01
+
+    넓이가 몇 종목에 몰려 있나
+      상위  1종목 누적 비중 0.1220
+      상위  3종목 누적 비중 0.3274
+      상위  5종목 누적 비중 0.4777
+      상위 10종목 누적 비중 0.6347
+      상위 20종목 누적 비중 0.7832
+      절반을 넘기는 데 필요한 종목 수 6
+
+    가장 큰 칸 NVDA: 비중 0.1220
+    가장 작은 칸 NKE: 비중 0.0013
+    넓이 비 93.0배
+      변 길이 비 sqrt(넓이 비) = 9.64배
+      정사각형이라면 한 변: 가장 큰 칸 27.50, 가장 작은 칸 2.85 단위
+
+    전체 넓이 6200,  이름표 문턱 45  →  비중 0.007258
+    이름표가 붙는 칸 31개 / 65개 (47.7%),  그 넓이 합 0.8771
+    이름 없는 칸 34개의 넓이 합 0.1229
+
+    slice-and-dice 최악 가로세로비 DY/(DX*p_min) = 472.7
+    ```
+
+    **여섯 종목이 화면의 절반을 차지한다.** $65$ 종목 중 $6$ 개다.
+
+    **(1)이 확인된다.** 가장 큰 칸과 가장 작은 칸의 넓이 비가 $93.0$ 배인데 변 길이 비는 $\sqrt{93.0} = 9.64$ 배다. 정사각형으로 그렸다면 한 변이 $27.50$ 단위 대 $2.85$ 단위다. 막대그림으로 그리면 작은 막대가 보이지 않겠지만, **트리맵에서는 작은 칸도 자리를 갖는다.** 이것이 트리맵을 쓰는 이유이고, 그 자리를 만들어 주는 것이 바로 제곱근 압축이다.
+
+    **동시에 이것이 문제이기도 하다.** 넓이가 $93$ 배 차이 나면 **작은 칸의 넓이를 서로 비교하는 일은 사실상 불가능**하다. 넓이 비중 $0.0013$ 과 $0.0026$ 은 변 길이로 $1.41$ 배 차이인데, 그런 작은 두 사각형의 변 길이 차를 눈이 구별하지 못한다.
+
+    **(2) 이름표가 붙는 칸은 절반이 안 된다.** $65$ 종목 중 $31$ 개($47.7\%$)만 넓이 $45$ 를 넘는다. 그 $31$ 개가 화면의 $87.71\%$ 를 차지하고, **이름 없는 $34$ 개가 나머지 $12.29\%$** 다. 곧 **그림의 $12\%$ 는 "무언가 있다" 는 것만 알려 주고 그것이 무엇인지는 말하지 않는다.** 트리맵이 가리는 것이 이것이다 — 작은 칸은 넓이도 읽히지 않고 이름도 사라지므로 **정보가 아니라 배경이 된다.**
+
+    **(3) 예측한 $472.7$ 이 그대로 나왔다.** 슬라이스-앤-다이스로 $65$ 종목을 자르면 가장 작은 칸이 가로세로비 $472.7$ 의 실오라기가 된다. 보기 4 의 마지막 문단에서 "세로줄 $65$ 개가 되어 아무것도 안 보인다" 고 한 것의 정확한 수다.
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 업종별로 묶은 시장 지도
+**보기 6.** <span class="diff easy" title="쉬움"></span> 업종으로 묶으면 넓이가 달라지는가. $65$ 종목을 업종 $\to$ 종목 두 단계로 배치한다.
+
+**(1)** 1단계가 업종 시총 합으로, 2단계가 업종 안의 종목 시총으로 나눈다면, **잎 칸의 넓이가 계층과 무관**함을 보이시오. 그렇다면 업종으로 묶는 일이 그림에 무엇을 더하는가.
+
+**(2)** 색을 $\pm 3\%$ 에서 자를 때 몇 종목의 색이 깎이는지 세고, 그것이 **양쪽 꼬리에 고르게** 작용하는지 확인하시오.
+
+**(3)** 지도를 그려 읽히는 것과 가려지는 것을 적으시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-from matplotlib.colors import TwoSlopeNorm
+??? success "풀이"
+
+    **(1) 해석적으로.** 전체 넓이를 $A$, 종목 $i$ 의 시총을 $m_i$, 업종 $g$ 의 합을 $M_g = \sum_{i \in g} m_i$, 전체 합을 $M = \sum_i m_i$ 라 하자.
+
+    **1단계**에서 업종 칸의 넓이는
+
+    $$
+    A_g = A \cdot \frac{M_g}{M}
+    $$
+
+    이고, **2단계**에서 그 칸 안의 종목 $i$ 의 넓이는
+
+    $$
+    a_i = A_g \cdot \frac{m_i}{M_g} = A \cdot \frac{M_g}{M}\cdot\frac{m_i}{M_g} = A \cdot \frac{m_i}{M}
+    $$
+
+    다. **$M_g$ 가 약분되어 사라진다.** 곧 잎 칸의 넓이는 업종을 어떻게 묶든, 몇 단계로 중첩하든, 아예 묶지 않고 평평하게 그리든 **똑같다.** 중첩 트리맵의 넓이는 이 약분 덕에 계층과 무관하다.
+
+    그러므로 업종 칸의 넓이도 저절로 맞는다.
+
+    $$
+    \sum_{i \in g} a_i = A\,\frac{M_g}{M} = A_g
+    $$
+
+    **계층이 더하는 것은 넓이가 아니라 위치다.** 같은 업종이 한 블록에 모여 그 블록의 넓이가 업종 비중으로 읽히고, 그 블록 안에서 종목을 찾게 된다. 넓이 판독에는 아무 영향이 없고 **찾기와 묶어 보기**가 쉬워진다. 보기 3 에서 "트리맵의 위치에는 뜻이 없다" 고 했는데, **계층을 넣는 것이 위치에 뜻을 주는 유일한 방법**이다.
+
+    **(2) 색 자르기.** `TwoSlopeNorm(vmin=-3, vcenter=0, vmax=3)` 과 `np.clip` 은 $\lvert \text{등락률}\rvert > 3\%$ 인 종목을 모두 양 끝 색으로 몰아넣는다. 그 종목들 사이의 차이는 그림에서 사라진다. 자르기가 **양쪽에 고르게** 작용하는지는 자료의 범위에 달렸으니 세어 보아야 한다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import TwoSlopeNorm
 
 
-def nested_treemap(groups, x=0.0, y=0.0, dx=1.0, dy=1.0):
-    """{그룹: [(이름, 값, 색값), ...]} 를 두 단계 트리맵으로 배치한다.
+    def nested_treemap(groups, x=0.0, y=0.0, dx=1.0, dy=1.0):
+        """{그룹: [(이름, 값, 색값), ...]} 를 두 단계 트리맵으로 배치한다.
 
-    1단계: 그룹의 값 합으로 전체를 나눈다.
-    2단계: 각 그룹 칸 안에서 개별 항목을 다시 나눈다.
-    """
-    gtot = {g: sum(v for _, v, _ in items) for g, items in groups.items()}
-    order = sorted(gtot, key=gtot.get, reverse=True)      # 큰 그룹부터
-    gr = squarify([gtot[g] for g in order], x, y, dx, dy)
-    out = []
-    for g, (gx, gy, gw, gh) in zip(order, gr):
-        items = sorted(groups[g], key=lambda z: -z[1])    # 그룹 안에서도 큰 것부터
-        rr = squarify([v for _, v, _ in items], gx, gy, gw, gh)
-        out.append((g, (gx, gy, gw, gh),
-                    [(nm, v, c, r) for (nm, v, c), r in zip(items, rr)]))
-    return out
+        1단계: 그룹의 값 합으로 전체를 나눈다.
+        2단계: 각 그룹 칸 안에서 개별 항목을 다시 나눈다.
+        """
+        gtot = {g: sum(v for _, v, _ in items) for g, items in groups.items()}
+        order = sorted(gtot, key=gtot.get, reverse=True)      # 큰 그룹부터
+        gr = squarify([gtot[g] for g in order], x, y, dx, dy)
+        out = []
+        for g, (gx, gy, gw, gh) in zip(order, gr):
+            items = sorted(groups[g], key=lambda z: -z[1])    # 그룹 안에서도 큰 것부터
+            rr = squarify([v for _, v, _ in items], gx, gy, gw, gh)
+            out.append((g, (gx, gy, gw, gh),
+                        [(nm, v, c, r) for (nm, v, c), r in zip(items, rr)]))
+        return out
 
 
-groups = {s: [(r.ticker, r.mcap, r.chg) for r in g.itertuples()]
-          for s, g in d.groupby("sector")}
-layout = nested_treemap(groups, 0, 0, 100, 62)
+    groups = {s: [(r.ticker, r.mcap, r.chg) for r in g.itertuples()]
+              for s, g in d.groupby("sector")}
+    layout = nested_treemap(groups, 0, 0, 100, 62)
 
-# 색은 0을 가운데 두고 ±3%에서 자른다.
-# 자르지 않으면 하루 -20% 같은 한 종목이 나머지 색을 전부 눌러 버린다.
-CLIP = 3.0
-norm = TwoSlopeNorm(vmin=-CLIP, vcenter=0.0, vmax=CLIP)
-cmap = plt.get_cmap("RdYlGn")
+    # 색은 0을 가운데 두고 ±3%에서 자른다.
+    # 자르지 않으면 하루 -20% 같은 한 종목이 나머지 색을 전부 눌러 버린다.
+    CLIP = 3.0
+    norm = TwoSlopeNorm(vmin=-CLIP, vcenter=0.0, vmax=CLIP)
+    cmap = plt.get_cmap("RdYlGn")
 
-fig, ax = plt.subplots(figsize=(13.5, 8.6))
-for sec, (gx, gy, gw, gh), items in layout:
-    for nm, v, c, (x0, y0, w, h) in items:
-        ax.add_patch(plt.Rectangle((x0, y0), w, h,
-                     facecolor=cmap(norm(np.clip(c, -CLIP, CLIP))),
-                     edgecolor="white", linewidth=0.8))
-        if w * h > 45:                       # 좁은 칸에는 글씨를 넣지 않는다
-            ax.text(x0 + w / 2, y0 + h / 2 + 0.6, nm, ha="center", va="center",
-                    fontsize=min(11, 5 + (w * h) ** 0.22), fontweight="bold")
-            ax.text(x0 + w / 2, y0 + h / 2 - 1.3, f"{c:+.2f}%",
-                    ha="center", va="center",
-                    fontsize=min(9, 4 + (w * h) ** 0.19))
-    ax.add_patch(plt.Rectangle((gx, gy), gw, gh, fill=False,
-                 edgecolor="black", linewidth=2.2))
-    SHORT = {"Technology": "기술", "Communication Services": "통신 서비스",
-             "Consumer Discretionary": "경기소비재", "Consumer Staples": "필수소비재",
-             "Financials": "금융", "Healthcare": "헬스케어",
-             "Industrials": "산업재", "Energy": "에너지",
-             "Utilities": "유틸리티", "Real Estate": "부동산", "Materials": "소재"}
-    lab = SHORT.get(sec, sec)
-    if gw < 12:
-        lab = lab[:5]
-    ax.text(gx + 0.5, gy + gh - 1.2, lab, fontsize=8.2, fontweight="bold",
-            va="top", ha="left", clip_on=True,
-            bbox=dict(boxstyle="square,pad=0.15", fc="white", ec="none", alpha=0.85))
+    fig, ax = plt.subplots(figsize=(13.5, 8.6))
+    for sec, (gx, gy, gw, gh), items in layout:
+        for nm, v, c, (x0, y0, w, h) in items:
+            ax.add_patch(plt.Rectangle((x0, y0), w, h,
+                         facecolor=cmap(norm(np.clip(c, -CLIP, CLIP))),
+                         edgecolor="white", linewidth=0.8))
+            if w * h > 45:                       # 좁은 칸에는 글씨를 넣지 않는다
+                ax.text(x0 + w / 2, y0 + h / 2 + 0.6, nm, ha="center", va="center",
+                        fontsize=min(11, 5 + (w * h) ** 0.22), fontweight="bold")
+                ax.text(x0 + w / 2, y0 + h / 2 - 1.3, f"{c:+.2f}%",
+                        ha="center", va="center",
+                        fontsize=min(9, 4 + (w * h) ** 0.19))
+        ax.add_patch(plt.Rectangle((gx, gy), gw, gh, fill=False,
+                     edgecolor="black", linewidth=2.2))
+        SHORT = {"Technology": "기술", "Communication Services": "통신 서비스",
+                 "Consumer Discretionary": "경기소비재", "Consumer Staples": "필수소비재",
+                 "Financials": "금융", "Healthcare": "헬스케어",
+                 "Industrials": "산업재", "Energy": "에너지",
+                 "Utilities": "유틸리티", "Real Estate": "부동산", "Materials": "소재"}
+        lab = SHORT.get(sec, sec)
+        if gw < 12:
+            lab = lab[:5]
+        ax.text(gx + 0.5, gy + gh - 1.2, lab, fontsize=8.2, fontweight="bold",
+                va="top", ha="left", clip_on=True,
+                bbox=dict(boxstyle="square,pad=0.15", fc="white", ec="none", alpha=0.85))
 
-ax.set_xlim(0, 100); ax.set_ylim(0, 62)
-ax.set_xticks([]); ax.set_yticks([]); ax.set_aspect("equal")
-sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm); sm.set_array([])
-cb = fig.colorbar(sm, ax=ax, fraction=0.03, pad=0.01)
-cb.set_label(f"일별 등락률 (%), ±{CLIP:.0f}%에서 자름")
-ax.set_title("미국 대형주 65종목: 넓이 = 시가총액, 색 = 일별 등락률\n"
-             f"{d['date_prev'].iloc[0]} → {d['date_last'].iloc[0]}", fontsize=12)
-fig.tight_layout()
-plt.show()
-```
+    ax.set_xlim(0, 100); ax.set_ylim(0, 62)
+    ax.set_xticks([]); ax.set_yticks([]); ax.set_aspect("equal")
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm); sm.set_array([])
+    cb = fig.colorbar(sm, ax=ax, fraction=0.03, pad=0.01)
+    cb.set_label(f"일별 등락률 (%), ±{CLIP:.0f}%에서 자름")
+    ax.set_title("미국 대형주 65종목: 넓이 = 시가총액, 색 = 일별 등락률\n"
+                 f"{d['date_prev'].iloc[0]} → {d['date_last'].iloc[0]}", fontsize=12)
+    fig.tight_layout()
+    plt.show()
 
-![업종별로 묶은 시가총액 지도](./img/treemap_market.png)
+    # (1) 잎 칸의 넓이는 계층과 무관하다. 평평한 배치와 맞대어 본다.
+    A = 100.0 * 62.0
+    leaf = {nm: w * h for _, _, items in layout for nm, v, c, (_, _, w, h) in items}
+    flat_v = d.sort_values("mcap", ascending=False)
+    flat = squarify(flat_v["mcap"].tolist(), 0, 0, 100.0, 62.0)
+    flat_area = {t: w * h for t, (_, _, w, h) in zip(flat_v["ticker"], flat)}
+    print(f"중첩 배치 대 평평한 배치, 잎 넓이 최대 차이 "
+          f"{max(abs(leaf[t] - flat_area[t]) for t in flat_area):.3e}")
+    print(f"중첩 배치 대 A*w, 최대 차이 "
+          f"{max(abs(leaf[r.ticker] - A * r.w) for r in d.itertuples()):.3e}")
+    print(f"잎 넓이의 합 {sum(leaf.values()):.6f}   전체 넓이 {A:.0f}")
 
-**두 변수가 한 그림에 들어 있다.** 넓이가 시가총액, 색이 등락률이다. 여기에 **업종이라는 계층**까지 세 번째 정보로 들어간다.
+    print(f"\n{'업종':>24}{'1단계 칸 넓이':>15}{'잎 넓이 합':>13}{'비중':>9}")
+    for sec, (gx, gy, gw, gh), items in layout:
+        sa = sum(w * h for _, _, _, (_, _, w, h) in items)
+        print(f"{sec:>24}{gw*gh:>15.2f}{sa:>13.2f}{gw*gh/A:>9.4f}")
 
-**한눈에 읽히는 것들.**
+    # (2) 색 자르기가 깎는 종목
+    clipped = d.loc[d["chg"].abs() > CLIP].sort_values("chg")
+    print(f"\n등락률 범위 {d['chg'].min():+.2f}% ~ {d['chg'].max():+.2f}%")
+    print(f"±{CLIP:.0f}% 에서 색이 깎이는 종목 {len(clipped)}개")
+    for r in clipped.itertuples():
+        print(f"  {r.ticker:>5}{r.chg:>+8.2f}%   넓이 비중 {r.w:.4f}")
+    print(f"  음수 {(clipped['chg'] < 0).sum()}개, 양수 {(clipped['chg'] > 0).sum()}개")
+    ```
 
-- **기술 업종이 화면의 40%**를 차지한다. 개별 종목을 보기 전에 덩어리 크기가 먼저 눈에 들어온다.
-- **에너지가 초록**이다. XOM과 CVX가 나란히 올랐다.
-- **AAPL만 기술 업종에서 진한 초록**이고 나머지는 대체로 빨강이다.
-- 오른쪽 아래 **소비재의 TSLA가 짙은 빨강**이다.
+    출력:
 
-**이것이 트리맵이 잘하는 일이다.** "어디를 들여다볼지" 고르게 해 준다.
+    ```
+    중첩 배치 대 평평한 배치, 잎 넓이 최대 차이 1.137e-13
+    중첩 배치 대 A*w, 최대 차이 1.137e-13
+    잎 넓이의 합 6200.000000   전체 넓이 6200
+
+                          업종       1단계 칸 넓이       잎 넓이 합       비중
+                  Technology        2522.50      2522.50   0.4069
+      Communication Services         918.97       918.97   0.1482
+      Consumer Discretionary         712.96       712.96   0.1150
+                  Financials         638.30       638.30   0.1030
+                  Healthcare         496.39       496.39   0.0801
+            Consumer Staples         354.09       354.09   0.0571
+                 Industrials         211.35       211.35   0.0341
+                      Energy         193.21       193.21   0.0312
+                   Materials          53.65        53.65   0.0087
+                   Utilities          53.03        53.03   0.0086
+                 Real Estate          45.54        45.54   0.0073
+
+    등락률 범위 -5.23% ~ +2.79%
+    ±3% 에서 색이 깎이는 종목 4개
+       ORCL   -5.23%   넓이 비중 0.0095
+        SLB   -4.91%   넓이 비중 0.0020
+        UNP   -3.34%   넓이 비중 0.0040
+       TSLA   -3.22%   넓이 비중 0.0327
+      음수 4개, 양수 0개
+    ```
+
+    ![업종별로 묶은 시가총액 지도](./img/treemap_market.png)
+
+    **(1)이 확인된다.** 중첩 배치의 잎 넓이가 평평한 배치의 넓이와, 그리고 $A \cdot w_i$ 와 $10^{-13}$ 자리까지 같다. 부동소수 연산 순서가 달라서 생긴 오차뿐이다. 잎 넓이의 합이 $6200$ 으로 전체 넓이와 정확히 같고, 업종 칸의 넓이가 그 업종 잎 넓이의 합과 소수 둘째 자리까지 일치한다. **계층은 넓이를 바꾸지 않는다.**
+
+    **(2)는 한쪽으로 치우쳐 있다.** 등락률이 $-5.23\%$ 에서 $+2.79\%$ 까지인데 자르기 문턱이 $\pm3\%$ 이므로 **깎이는 네 종목이 전부 음수다.** 양수는 하나도 걸리지 않는다. 곧 이 그림의 색표는 아래쪽 꼬리만 눌러 놓은 셈이고, **ORCL 의 $-5.23\%$ 와 TSLA 의 $-3.22\%$ 가 같은 진한 빨강으로 보인다.** 두 수가 $1.6$ 배 차이인데 그림에서는 구별되지 않는다.
+
+    **두 변수가 한 그림에 들어 있다.** 넓이가 시가총액, 색이 등락률이다. 여기에 **업종이라는 계층**까지 세 번째 정보로 들어간다.
+
+    **한눈에 읽히는 것들.**
+
+    - **기술 업종이 화면의 $40.7\%$** 를 차지한다. 개별 종목을 보기 전에 덩어리 크기가 먼저 눈에 들어온다.
+    - **에너지가 초록**이다. XOM $+2.24\%$, CVX $+2.38\%$, COP $+2.79\%$ 로 셋이 나란히 올랐다.
+    - **기술 업종에서 AAPL 만 진한 초록**($+2.61\%$)이고 나머지는 대체로 빨강이다.
+    - 오른쪽 아래 **경기소비재의 TSLA 가 짙은 빨강**($-3.22\%$)이다.
+
+    **가려지는 것도 적어 두어야 한다.**
+
+    - **이름 없는 칸 $34$ 개**(보기 5)의 색은 보이지만 종목은 알 수 없다.
+    - **자르기 밖의 네 종목**은 서로 구별되지 않는다.
+    - **아래쪽 비중 $0.01$ 미만의 업종 세 개**(소재 $0.0087$, 유틸리티 $0.0086$, 부동산 $0.0073$)는 칸 넓이가 $45$–$54$ 로 종목 이름표 문턱과 비슷해 거의 읽히지 않는다.
+    - **시간 변화를 전혀 보이지 못한다.** 이 그림은 하루의 단면이고, 어제와 견주려면 두 장을 나란히 놓고 칸을 눈으로 찾아 맞춰야 한다. 트리맵에 시계열을 담는 표준적인 방법은 없다.
+
+    **이것이 트리맵이 잘하는 일이다.** "어디를 들여다볼지" 고르게 해 준다.
 
 !!! warning "빨강-초록 색표의 문제"
     시장 지도에는 관례적으로 빨강-초록이 쓰이고 위 그림도 그 관례를 따랐다. 그러나 **적록색각 이상이 있는 독자에게는 읽히지 않는다.** 남성의 약 8%가 여기 해당한다.
@@ -548,84 +986,183 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> 초록 칸의 개수와 지수의 등락은 다르다
+**보기 7.** <span class="diff easy" title="쉬움"></span> 시총가중 평균이 동일가중 평균보다 큰 양은 정확히 무엇인가. $65$ 종목의 비중 $w_i$ 와 등락률 $r_i$ 가 있다.
+
+**(1)** 시총가중 평균 $\sum_i w_i r_i$ 에서 동일가중 평균 $\frac1K\sum_i r_i$ 를 뺀 값이 **비중과 등락률의 표본공분산**임을 보이시오.
+
+**(2)** 전체와 업종마다 그 항등식을 확인하고, 두 평균이 가장 크게 갈라지는 업종을 찾으시오.
+
+**(3)** 넓이 기준 "초록" 비율이 지수와 **다른 양**인 까닭을 적고, 눈이 세는 것과 지수가 재는 것이 어떻게 어긋날 수 있는지 밝히시오.
 
 </div>
 
-```python
-up = (d["chg"] > 0).sum()
-print(f"오른 종목 {up}개 / {len(d)}개  ({up / len(d):.1%})")
-print(f"넓이 기준 '초록' 비율      {d.loc[d['chg'] > 0, 'w'].sum():.4f}\n")
+??? success "풀이"
 
-print(f"동일가중 평균 등락률  {d['chg'].mean():+.4f}%")
-print(f"중앙값 등락률         {d['chg'].median():+.4f}%")
-print(f"시총가중 평균 등락률  {(d['w'] * d['chg']).sum():+.4f}%   <- 지수가 재는 값")
+    **(1) 해석적으로.** 비중의 평균은 $\bar w = \frac1K\sum_i w_i = \frac1K$ 이고(비중의 합이 $1$ 이므로), 등락률의 평균을 $\bar r = \frac1K\sum_i r_i$ 라 하자. 그러면
 
-print("\n업종별")
-g = (d.groupby("sector")
-     .apply(lambda x: pd.Series({
-         "n": len(x),
-         "시총비중": x["mcap"].sum() / d["mcap"].sum(),
-         "시총가중등락": (x["mcap"] * x["chg"]).sum() / x["mcap"].sum(),
-         "동일가중등락": x["chg"].mean()})))
-print(g.sort_values("시총비중", ascending=False).round(4).to_string())
-```
+    $$
+    \sum_i (w_i - \bar w)(r_i - \bar r)
+    = \sum_i w_i r_i - \bar r\sum_i w_i - \bar w\sum_i r_i + K\bar w\bar r
+    $$
 
-```text
-오른 종목 21개 / 65개  (32.3%)
-넓이 기준 '초록' 비율      0.3077
+    인데 $\sum_i w_i = 1$, $\bar w = 1/K$, $\sum_i r_i = K\bar r$ 이므로 뒤의 세 항이
 
-동일가중 평균 등락률  -0.7008%
-중앙값 등락률         -0.7556%
-시총가중 평균 등락률  -0.4801%   <- 지수가 재는 값
+    $$
+    -\bar r - \frac{K\bar r}{K} + K\cdot\frac1K\cdot\bar r = -\bar r
+    $$
 
-업종별
-                           n    시총비중  시총가중등락  동일가중등락
-sector                                              
-Technology              10.0  0.4069 -0.2835 -1.1534
-Communication Services   6.0  0.1482 -0.6088 -0.3291
-Consumer Discretionary   7.0  0.1150 -2.2272 -1.8919
-Financials               8.0  0.1030 -0.7700 -0.8813
-Healthcare               8.0  0.0801  0.7573  0.4006
-Consumer Staples         6.0  0.0571  0.2192  0.0181
-Industrials              7.0  0.0341 -1.7872 -1.7773
-Energy                   4.0  0.0312  1.8985  0.6257
-Materials                3.0  0.0087 -1.1535 -1.5096
-Utilities                3.0  0.0086  0.4668  0.4064
-Real Estate              3.0  0.0073 -0.6109 -0.6057
-```
+    로 줄어든다. 따라서
 
-**같은 하루에 대해 세 가지 숫자가 나온다.**
+    $$
+    \boxed{\ \sum_i w_i r_i - \frac1K\sum_i r_i = \sum_i (w_i - \bar w)(r_i - \bar r)\ }
+    $$
 
-| 요약 | 값 | 무엇을 재나 |
-|---|---|---|
-| 오른 종목 비율 | **32.3%** | **폭**(breadth) |
-| 동일가중 평균 | $-0.70\%$ | 종목 하나씩 똑같이 |
-| **시총가중 평균** | $\mathbf{-0.48\%}$ | **지수** |
+    **시총가중 평균과 동일가중 평균의 차는 비중과 등락률의 공분산(분모 없이 더한 것)이다.**
 
-**지수($-0.48\%$)가 동일가중 평균($-0.70\%$)보다 덜 나쁘다.** 큰 종목들이 상대적으로 잘 버텼기 때문이다.
+    읽는 법이 명확해진다.
 
-**기술 업종이 그 차이를 가장 잘 보여 준다.**
+    - **큰 종목이 더 올랐으면** 공분산이 양수이고 지수가 동일가중보다 **덜 나쁘다**.
+    - **큰 종목이 더 내렸으면** 음수이고 지수가 더 나쁘다.
+    - **크기와 등락이 무관하면** $0$ 이고 두 평균이 같다.
 
-$$
-\underbrace{-0.28\%}_{\text{시총가중}}
-\quad\text{대}\quad
-\underbrace{-1.15\%}_{\text{동일가중}}
-$$
+    같은 항등식이 업종 안에서도 성립한다. 업종 안의 비중 $u_i = m_i/M_g$ 역시 합이 $1$ 이기 때문이다.
 
-**같은 10종목인데 4배 차이**다. AAPL이 $+2.61\%$로 크게 올랐고 그 칸이 크기 때문이다. **"기술주가 어땠나"라는 질문에 두 개의 정답이 있다.**
+    **(2)와 (3) 수치적으로.**
 
-**여기서 눈이 하는 일이 문제가 된다.**
+    ```python
+    up = (d["chg"] > 0).sum()
+    print(f"오른 종목 {up}개 / {len(d)}개  ({up / len(d):.1%})")
+    print(f"넓이 기준 '초록' 비율      {d.loc[d['chg'] > 0, 'w'].sum():.4f}\n")
 
-```text
-눈은 칸의 '개수'를 센다        -> 32.3% 초록 -> "많이 내린 날"
-지수는 칸의 '넓이'로 평균낸다   -> -0.48%    -> "조금 내린 날"
+    print(f"동일가중 평균 등락률  {d['chg'].mean():+.4f}%")
+    print(f"중앙값 등락률         {d['chg'].median():+.4f}%")
+    print(f"시총가중 평균 등락률  {(d['w'] * d['chg']).sum():+.4f}%   <- 지수가 재는 값")
 
-트리맵은 넓이를 보여 주지만
-사람은 개수를 세는 쪽으로 기운다
-```
+    print("\n업종별")
+    g = (d.groupby("sector")
+         .apply(lambda x: pd.Series({
+             "n": len(x),
+             "시총비중": x["mcap"].sum() / d["mcap"].sum(),
+             "시총가중등락": (x["mcap"] * x["chg"]).sum() / x["mcap"].sum(),
+             "동일가중등락": x["chg"].mean()})))
+    print(g.sort_values("시총비중", ascending=False).round(4).to_string())
 
-**이 자료에서는 두 값이 우연히 가깝다**(개수 32.3% 대 넓이 30.8%). **그러나 일반적으로는 크게 벌어질 수 있다.** 메가캡 몇 개가 오르고 나머지가 전부 내리면, **지도는 온통 빨강인데 지수는 상승**한다.
+    # (1) 두 평균의 차는 비중과 등락률의 공분산이다.
+    K = len(d)
+    w = d["w"].to_numpy()
+    r = d["chg"].to_numpy()
+    eq, wt = r.mean(), (w * r).sum()
+    print(f"\n시총가중 - 동일가중     = {wt - eq:+.6f}")
+    print(f"sum (w - 1/K)(r - rbar) = {np.sum((w - 1/K) * (r - eq)):+.6f}")
+
+    # 업종 안에서도 같은 항등식이 성립한다.
+    print(f"\n{'업종':>24}{'n':>4}{'시총가중':>10}{'동일가중':>10}{'차':>10}{'공분산 항':>11}")
+    for sec, gg in d.groupby("sector"):
+        u = gg["mcap"].to_numpy() / gg["mcap"].sum()
+        rr = gg["chg"].to_numpy()
+        k = len(gg)
+        print(f"{sec:>24}{k:>4}{(u*rr).sum():>+10.4f}{rr.mean():>+10.4f}"
+              f"{(u*rr).sum()-rr.mean():>+10.4f}"
+              f"{np.sum((u - 1/k) * (rr - rr.mean())):>+11.4f}")
+
+    # (3) 넓이 기준 '초록' 비율은 부호만 보고 크기를 버린다.
+    print(f"\n초록 넓이 비율 {w[r>0].sum():.4f},  초록 칸 비율 {(r>0).mean():.4f}")
+    print(f"초록 칸의 넓이가중 기여 {np.sum(w[r>0]*r[r>0]):+.4f}, "
+          f"빨강 칸의 기여 {np.sum(w[r<0]*r[r<0]):+.4f},  합 {wt:+.4f}")
+    ```
+
+    ```text
+    오른 종목 21개 / 65개  (32.3%)
+    넓이 기준 '초록' 비율      0.3077
+
+    동일가중 평균 등락률  -0.7008%
+    중앙값 등락률         -0.7556%
+    시총가중 평균 등락률  -0.4801%   <- 지수가 재는 값
+
+    업종별
+                               n    시총비중  시총가중등락  동일가중등락
+    sector
+    Technology              10.0  0.4069 -0.2835 -1.1534
+    Communication Services   6.0  0.1482 -0.6088 -0.3291
+    Consumer Discretionary   7.0  0.1150 -2.2272 -1.8919
+    Financials               8.0  0.1030 -0.7700 -0.8813
+    Healthcare               8.0  0.0801  0.7573  0.4006
+    Consumer Staples         6.0  0.0571  0.2192  0.0181
+    Industrials              7.0  0.0341 -1.7872 -1.7773
+    Energy                   4.0  0.0312  1.8985  0.6257
+    Materials                3.0  0.0087 -1.1535 -1.5096
+    Utilities                3.0  0.0086  0.4668  0.4064
+    Real Estate              3.0  0.0073 -0.6109 -0.6057
+
+    시총가중 - 동일가중     = +0.220770
+    sum (w - 1/K)(r - rbar) = +0.220770
+
+                          업종   n      시총가중      동일가중         차      공분산 항
+      Communication Services   6   -0.6088   -0.3291   -0.2797    -0.2797
+      Consumer Discretionary   7   -2.2272   -1.8919   -0.3353    -0.3353
+            Consumer Staples   6   +0.2192   +0.0181   +0.2011    +0.2011
+                      Energy   4   +1.8985   +0.6257   +1.2728    +1.2728
+                  Financials   8   -0.7700   -0.8813   +0.1113    +0.1113
+                  Healthcare   8   +0.7573   +0.4006   +0.3567    +0.3567
+                 Industrials   7   -1.7872   -1.7773   -0.0099    -0.0099
+                   Materials   3   -1.1535   -1.5096   +0.3561    +0.3561
+                 Real Estate   3   -0.6109   -0.6057   -0.0052    -0.0052
+                  Technology  10   -0.2835   -1.1534   +0.8699    +0.8699
+                   Utilities   3   +0.4668   +0.4064   +0.0605    +0.0605
+
+    초록 넓이 비율 0.3077,  초록 칸 비율 0.3231
+    초록 칸의 넓이가중 기여 +0.5148, 빨강 칸의 기여 -0.9949,  합 -0.4801
+    ```
+
+    **(1)의 항등식이 소수 여섯째 자리까지 맞는다.** 시총가중과 동일가중의 차 $+0.220770$ 이 $\sum_i (w_i - 1/K)(r_i - \bar r)$ 와 같다. 업종 열한 개에서도 `차` 열과 `공분산 항` 열이 소수 넷째 자리까지 전부 일치한다.
+
+    **(2) 두 평균이 가장 크게 갈라지는 업종은 에너지다.** 차가 $+1.2728$ 으로 기술 업종의 $+0.8699$ 보다 크다. 네 종목뿐인데 큰 세 종목(XOM, CVX, COP)이 오르고 가장 작은 SLB 가 $-4.91\%$ 로 내렸기 때문이다. **비중과 등락의 공분산이 양수면 지수가 동일가중보다 좋게 나온다**는 (1)의 읽기가 그대로 적용된다. 반대로 경기소비재는 차가 $-0.3353$ 으로 음수다 — 큰 종목(TSLA)이 더 내렸다.
+
+    **같은 하루에 대해 세 가지 숫자가 나온다.**
+
+    | 요약 | 값 | 무엇을 재나 |
+    |---|---|---|
+    | 오른 종목 비율 | **32.3%** | **폭**(breadth) |
+    | 동일가중 평균 | $-0.70\%$ | 종목 하나씩 똑같이 |
+    | **시총가중 평균** | $\mathbf{-0.48\%}$ | **지수** |
+
+    **지수($-0.48\%$)가 동일가중 평균($-0.70\%$)보다 덜 나쁘다.** 큰 종목들이 상대적으로 잘 버텼기 때문이다.
+
+    **기술 업종이 그 차이를 가장 잘 보여 준다.**
+
+    $$
+    \underbrace{-0.28\%}_{\text{시총가중}}
+    \quad\text{대}\quad
+    \underbrace{-1.15\%}_{\text{동일가중}}
+    $$
+
+    **같은 10종목인데 4배 차이**다. AAPL 이 $+2.61\%$ 로 크게 올랐고 그 칸이 비중 $0.1102$ 로 크기 때문이다. **"기술주가 어땠나" 라는 질문에 두 개의 정답이 있다.**
+
+    **(3) 넓이 기준 "초록" 비율은 지수와 다른 양이다.** 초록 넓이 비율은
+
+    $$
+    \sum_{i:\,r_i > 0} w_i = 0.3077
+    $$
+
+    로 **부호만 보고 크기를 버린다.** 지수는
+
+    $$
+    \sum_i w_i r_i = \underbrace{+0.5148}_{\text{초록 칸의 기여}} \ \underbrace{-\ 0.9949}_{\text{빨강 칸의 기여}} = -0.4801
+    $$
+
+    로 부호와 크기를 함께 쓴다. **두 수는 서로를 결정하지 않는다.** 초록 넓이가 $0.3$ 뿐이어도 그 초록이 크게 오르고 빨강이 조금씩 내렸다면 지수는 양수가 된다.
+
+    **여기서 눈이 하는 일이 문제가 된다.**
+
+    ```text
+    눈은 칸의 '개수'를 센다        -> 32.3% 초록 -> "많이 내린 날"
+    지수는 칸의 '넓이'로 평균낸다   -> -0.48%    -> "조금 내린 날"
+
+    트리맵은 넓이를 보여 주지만
+    사람은 개수를 세는 쪽으로 기운다
+    ```
+
+    **이 자료에서는 두 값이 우연히 가깝다**(개수 32.3% 대 넓이 30.8%). **그러나 일반적으로는 크게 벌어질 수 있다.** 메가캡 몇 개가 오르고 나머지가 전부 내리면, **지도는 온통 빨강인데 지수는 상승**한다.
 
 !!! tip "이것이 '폭'이라는 지표가 따로 있는 이유"
     시장 분석에서 **상승 종목 수 대 하락 종목 수**를 따로 집계하는 관행이 있다. 지수(시총가중)가 담지 못하는 정보이기 때문이다.

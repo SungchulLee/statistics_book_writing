@@ -10,79 +10,217 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 스트립·스웜·상자그림 견주기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 스트립·스웜·상자그림 견주기, 그리고 스웜이 무너지는 자리. 세 집단에서 각 $18$개를 뽑아 세 가지로 그린다.
+
+**(1)** 세 그림을 나란히 그리고, **상자그림만으로는 알 수 없는 것**을 수치와 함께 적으시오.
+
+**(2)** 스웜 그림의 가로 폭이 무엇으로 정해지는지 유도하고, 표본 크기 $n$이 얼마를 넘으면 범주 폭이 모자라 배치가 무너지는지 가늠하시오. $n$을 키워 가며 폭을 재어 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-# 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
-plt.rcParams['axes.unicode_minus'] = False
+    **(1) 세 그림을 나란히.**
 
-rng = np.random.default_rng(1)
+    ```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
 
-# 세 집단, 각 18개. B와 C는 평균이 비슷하지만(7.0 vs 6.9) 퍼짐이 다르다.
-rows = []
-for g, mu in zip(['A', 'B', 'C'], [5, 7, 6.9]):
-    for v in rng.normal(mu, 1.2, 18):
-        rows.append({'group': g, 'value': v})
-d = pd.DataFrame(rows)
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
+    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams['axes.unicode_minus'] = False
 
-fig, axes = plt.subplots(1, 3, figsize=(13, 3.8), sharey=True)
+    rng = np.random.default_rng(1)
 
-# (1) 상자그림만: 다섯 숫자 요약
-sns.boxplot(data=d, x='group', y='value', ax=axes[0], color='lightgray')
-axes[0].set_title("상자그림만")
+    # 세 집단, 각 18개. B와 C는 평균이 비슷하지만(7.0 vs 6.9) 퍼짐이 다르다.
+    rows = []
+    for g, mu in zip(['A', 'B', 'C'], [5, 7, 6.9]):
+        for v in rng.normal(mu, 1.2, 18):
+            rows.append({'group': g, 'value': v})
+    d = pd.DataFrame(rows)
 
-# (2) 스트립 그림: 원자료 점만. jitter가 가로로 흔들어 겹침을 푼다.
-#     jitter=0.25 는 범주 폭의 ±25% 범위에서 무작위로 민다는 뜻
-sns.stripplot(data=d, x='group', y='value', ax=axes[1], jitter=0.25, alpha=.7)
-axes[1].set_title("스트립 그림 (지터)")
+    fig, axes = plt.subplots(1, 3, figsize=(13, 3.8), sharey=True)
 
-# (3) 상자 + 스웜: 요약과 원자료를 겹친다.
-#     showfliers=False 로 상자그림의 이상치 점을 끈다.
-#     끄지 않으면 같은 점이 두 번(상자의 이상치 + 스웜의 점) 그려진다.
-sns.boxplot(data=d, x='group', y='value', ax=axes[2],
-            color='lightgray', showfliers=False)
-sns.swarmplot(data=d, x='group', y='value', ax=axes[2], size=4)
-axes[2].set_title("상자 + 스웜")
+    # (1) 상자그림만: 다섯 숫자 요약
+    sns.boxplot(data=d, x='group', y='value', ax=axes[0], color='lightgray')
+    axes[0].set_title("상자그림만")
 
-for a in axes:
-    a.set_xlabel("집단")
-axes[0].set_ylabel("값")
+    # (2) 스트립 그림: 원자료 점만. jitter가 가로로 흔들어 겹침을 푼다.
+    #     jitter=0.25 는 범주 폭의 ±25% 범위에서 무작위로 민다는 뜻
+    sns.stripplot(data=d, x='group', y='value', ax=axes[1], jitter=0.25, alpha=.7)
+    axes[1].set_title("스트립 그림 (지터)")
 
-plt.tight_layout()
-plt.show()
+    # (3) 상자 + 스웜: 요약과 원자료를 겹친다.
+    #     showfliers=False 로 상자그림의 이상치 점을 끈다.
+    #     끄지 않으면 같은 점이 두 번(상자의 이상치 + 스웜의 점) 그려진다.
+    sns.boxplot(data=d, x='group', y='value', ax=axes[2],
+                color='lightgray', showfliers=False)
+    sns.swarmplot(data=d, x='group', y='value', ax=axes[2], size=4)
+    axes[2].set_title("상자 + 스웜")
 
-print("n per group:", d.groupby('group').size().to_dict())
-print(d.groupby('group')['value'].agg(['mean', 'median', 'std']).round(2))
-```
+    for a in axes:
+        a.set_xlabel("집단")
+    axes[0].set_ylabel("값")
 
-출력:
+    plt.tight_layout()
+    plt.show()
 
-```
-n per group: {'A': 18, 'B': 18, 'C': 18}
-       mean  median   std
-group
-A      5.12    5.37  0.70
-B      7.01    6.90  1.47
-C      6.63    6.80  0.82
-```
+    print("n per group:", d.groupby('group').size().to_dict())
+    print(d.groupby('group')['value'].agg(['mean', 'median', 'std']).round(2))
+    ```
 
-![스트립 그림과 스웜 그림](./img/strip_swarm.png)
+    출력:
 
-**왼쪽(상자그림만).** B가 가장 높고 A가 가장 낮다. B에 이상치 하나가 아래쪽에 있다. 여기까지가 전부다.
+    ```
+    n per group: {'A': 18, 'B': 18, 'C': 18}
+           mean  median   std
+    group
+    A      5.12    5.37  0.70
+    B      7.01    6.90  1.47
+    C      6.63    6.80  0.82
+    ```
 
-**가운데(스트립 그림).** 각 집단이 18개라는 것이 눈에 보인다. 상자그림에서는 알 수 없던 사실이다. B의 점들이 아래쪽 3.7부터 위쪽 9.5까지 넓게 흩어져 있고, C는 4.9에서 8.0 사이로 훨씬 좁게 뭉쳐 있다.
+    ![스트립 그림과 스웜 그림](./img/strip_swarm.png)
 
-**오른쪽(상자+스웜).** 둘을 합쳤다. 상자가 중심과 사분위수를 알려 주고, 점들이 실제 분포와 표본 크기를 알려 준다.
+    **왼쪽(상자그림만).** B가 가장 높고 A가 가장 낮다. B에 이상치 하나가 아래쪽에 있다. 여기까지가 전부다.
+
+    **가운데(스트립 그림).** 각 집단이 18개라는 것이 눈에 보인다. 상자그림에서는 알 수 없던 사실이다. B의 점들이 아래쪽 3.7부터 위쪽 9.5까지 넓게 흩어져 있고, C는 4.9에서 8.0 사이로 훨씬 좁게 뭉쳐 있다.
+
+    **오른쪽(상자+스웜).** 둘을 합쳤다. 상자가 중심과 사분위수를 알려 주고, 점들이 실제 분포와 표본 크기를 알려 준다.
+
+    **상자그림이 가린 것을 수로 적으면 이렇다.** B와 C는 중앙값이 $6.90$과 $6.80$으로 거의 같고 상자의 높이(사분위범위)도 $1.28$과 $0.95$로 $1.35$배밖에 차이가 나지 않는다. 그런데 실제 퍼짐은 그보다 훨씬 다르다. 표준편차가 $1.47$ 대 $0.82$로 $1.79$배, 전체 범위가 $5.79$ 대 $3.05$로 $1.90$배다. **상자는 가운데 절반만 보는 그릇이라 꼬리에서 벌어지는 차이를 줄여 보여 준다.** 그리고 상자그림은 $n$을 전혀 말해 주지 않는다. 여기서는 $18$개씩이라 이 정도 차이는 우연일 수도 있는데, 상자만 보면 그 판단에 필요한 $n$을 알 길이 없다.
+
+    **(2) 스웜의 가로 폭은 어디서 오는가.** 스웜은 표식이 서로 겹치지 않도록 점을 좌우로 민다. 표식의 지름을 자료 단위로 세로 $d_y$, 가로 $d_x$라 하자. 세로로 $d_y$ 안에 있는 점들은 서로 겹칠 수 있으므로 **모두 좌우로 갈라서야** 한다. 높이 $d_y$ 짜리 띠 안에 점이 $m$개 들어 있으면 그 띠가 차지하는 가로 폭은 $m\,d_x$, 곧 **반폭이 $m\,d_x/2$** 다.
+
+    $$
+    \text{반폭}(y) \;\approx\; \frac{d_x}{2}\,m(y),
+    \qquad m(y) \;\approx\; n f(y)\, d_y
+    $$
+
+    이 두 줄에서 세 가지가 따라 나온다.
+
+    - **스웜은 눕혀 놓은 히스토그램이다.** 띠 높이 $d_y$가 구간 폭이고 점 하나가 막대 한 칸이다. 그런데 그 구간 폭을 정한 것은 자료도 통계도 아니고 **표식의 크기**다. 바이올린의 띠폭이 모양을 정하듯, 스웜은 `size=` 가 모양을 정한다.
+    - **폭은 $n$에 비례한다.** $m \propto n$ 이므로 표본을 두 배로 하면 모든 띠의 폭이 두 배가 된다. 분포가 바뀌지 않아도 그렇다.
+    - **그래서 반드시 한계에 부딪힌다.** 범주 하나에 주어진 폭은 $W = 0.8$(seaborn 기본값)이므로 한 띠에 들어갈 수 있는 점은 $W/d_x$개뿐이다. 가장 붐비는 띠는 봉우리 $f(0) = 1/\sqrt{2\pi}$ 자리이므로
+
+    $$
+    n^{*} \;\approx\; \frac{W}{d_x}\cdot\frac{1}{f(0)\,d_y} = \frac{W}{d_x\,d_y}\sqrt{2\pi}
+    $$
+
+    를 넘으면 배치가 무너진다. **$n^{*}$ 는 자료가 아니라 그림의 치수가 정한다.**
+
+    아래 코드는 $d_y, d_x$ 를 실제로 재고 위 두 식을 확인한다. 배치는 `fig.canvas.draw()` 가 불릴 때 확정되므로 경고를 잡으려면 `draw()` 를 경고 수집 블록 **안에** 두어야 한다.
+
+    ```python
+    import warnings
+
+    SIZE = 4.0                       # 표식 지름 (포인트)
+    rng2 = np.random.default_rng(7)
+
+
+    def swarm_geometry(n, ax=None):
+        """스웜을 그리고 (점 좌표, 표식 지름 dy, dx, 놓지 못한 비율) 을 돌려준다."""
+        y = rng2.normal(0, 1, n)
+        own = ax is None
+        if own:
+            fig, ax = plt.subplots(figsize=(5, 5))
+        else:
+            fig = ax.figure
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            sns.swarmplot(x=np.zeros(n), y=y, ax=ax, size=SIZE)
+            ax.set_ylim(-4, 4)
+            fig.canvas.draw()        # 배치는 그리는 순간에 확정된다
+            pct = [str(m.message).split('%')[0] for m in caught
+                   if "cannot be placed" in str(m.message)]
+        bb = ax.get_window_extent()
+        d_px = SIZE * fig.dpi / 72                  # 표식 지름 (픽셀)
+        dy = d_px * 8.0 / bb.height                 # 세로 자료 단위로
+        dx = d_px * 1.0 / bb.width                  # 가로 자료 단위로
+        off = np.asarray(ax.collections[0].get_offsets())
+        if own:
+            plt.close(fig)
+        return off, dy, dx, (pct[0] if pct else None)
+
+
+    print(f"{'n':>6} {'붐빈 띠 m':>9} {'m 예측':>7} {'반폭 예측':>9} {'반폭 실제':>9} "
+          f"{'울타리 점':>9} {'놓지 못함':>9}")
+    for n in [50, 100, 200, 400, 800, 1600, 3200]:
+        off, dy, dx, pct = swarm_geometry(n)
+        ys, w = off[:, 1], np.abs(off[:, 0])
+        band = np.digitize(ys, np.arange(-4, 4 + dy, dy))   # 띠 높이 = 표식 지름
+        m = max((band == k).sum() for k in np.unique(band))
+        m_pred = n * dy / np.sqrt(2 * np.pi)                # n f(0) dy
+        pile = int((np.abs(w - 0.4) < 1e-9).sum())
+        print(f"{n:6d} {m:9d} {m_pred:7.1f} {m * dx / 2:9.4f} {w.max():9.4f} "
+              f"{pile:9d} {(pct + '%') if pct else '-':>9}")
+
+    print(f"\n표식 지름: 세로 dy = {dy:.4f},  가로 dx = {dx:.4f} (자료 단위)")
+    print(f"한 띠에 들어가는 점의 한계 = 0.8/dx = {0.8 / dx:.1f} 개")
+    print(f"가운데 띠가 그만큼 차는 n* = {0.8 / dx / (dy / np.sqrt(2 * np.pi)):.0f}")
+
+    # n 이 커질수록 스웜이 어떻게 무너지는지 눈으로 본다. 패널이 좁으므로
+    # 위 표(가로 5인치)보다 더 일찍 무너진다.
+    rng2 = np.random.default_rng(7)
+    fig, axes = plt.subplots(1, 3, figsize=(10, 4), sharey=True)
+    print()
+    for k, (ax, n) in enumerate(zip(axes, [200, 800, 3200])):
+        off, dy, dx, pct = swarm_geometry(n, ax=ax)
+        print(f"패널 n={n:4d}: dx = {dx:.4f},  한 띠의 한계 = {0.8 / dx:4.1f} 개,  "
+              f"놓지 못함 {pct if pct else '0'}%")
+        ax.axvline(-0.4, color="#D32F2F", ls=":", lw=1.2)
+        ax.axvline(0.4, color="#D32F2F", ls=":", lw=1.2)
+        ax.set_xlim(-0.55, 0.55)
+        ax.set_title(f"n = {n}" + (f"  (놓지 못함 {pct}%)" if pct else ""), fontsize=11)
+        ax.set_xticks([])
+        ax.set_xlabel("")
+        ax.spines[["top", "right", "bottom"]].set_visible(False)
+        if k:
+            ax.spines["left"].set_visible(False)
+            ax.tick_params(left=False)
+    axes[0].set_ylabel("값")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+         n    붐빈 띠 m    m 예측     반폭 예측     반폭 실제     울타리 점     놓지 못함
+        50         7     2.3    0.0502    0.0602         0         -
+       100         8     4.6    0.0573    0.0607         0         -
+       200        17     9.2    0.1219    0.1347         0         -
+       400        25    18.4    0.1792    0.2465         0         -
+       800        40    36.8    0.2867    0.3240         0         -
+      1600        82    73.7    0.5878    0.4000       161     10.1%
+      3200       158   147.4    1.1326    0.4000      1292     40.4%
+
+    표식 지름: 세로 dy = 0.1154,  가로 dx = 0.0143 (자료 단위)
+    한 띠에 들어가는 점의 한계 = 0.8/dx = 55.8 개
+    가운데 띠가 그만큼 차는 n* = 1212
+
+    패널 n= 200: dx = 0.0244,  한 띠의 한계 = 32.8 개,  놓지 못함 0%
+    패널 n= 800: dx = 0.0244,  한 띠의 한계 = 32.8 개,  놓지 못함 17.0%
+    패널 n=3200: dx = 0.0244,  한 띠의 한계 = 32.8 개,  놓지 못함 21.2%
+    ```
+
+    ![표본이 커질수록 스웜이 범주 폭에 막힌다](./img/strip_swarm_saturation.png)
+
+    **반폭 공식이 맞는다.** $m\,d_x/2$ 로 예측한 반폭과 실제 반폭이 $n = 100$에서 $0.0573$ 대 $0.0607$, $n = 200$에서 $0.1219$ 대 $0.1347$, $n = 800$에서 $0.2867$ 대 $0.3240$ 이다. 실제가 늘 $5\sim 15\%$ 크다. 점이 자기 띠의 이웃뿐 아니라 **위아래 띠의 이웃도 피해야** 하므로 완전히 한 줄로 채우지는 못하기 때문이다. 어림식의 방향도 크기도 맞는다.
+
+    **붐빈 띠의 점 개수도 맞는다.** $m \approx n f(0) d_y$ 가 예측한 값과 실제가 $n = 800$에서 $36.8$ 대 $40$, $n = 1600$에서 $73.7$ 대 $82$, $n = 3200$에서 $147.4$ 대 $158$ 이다. 실제가 조금 큰 것은 당연하다 — $m$은 여러 띠 가운데 **최댓값**이고 어림식은 **평균**이기 때문이다. $n$이 작은 $50, 100$에서 $7$ 대 $2.3$, $8$ 대 $4.6$ 으로 크게 어긋나는 것도 같은 이유다. 띠마다 점이 몇 개뿐이면 최댓값이 평균의 몇 배가 된다.
+
+    **그리고 예측한 자리에서 정확히 무너진다.** 한 띠에 들어갈 수 있는 점은 $0.8/d_x = 55.8$개다. $n = 800$ 에서 붐빈 띠는 $40$개로 아직 들어가고, $n = 1600$ 에서 $82$개가 되어 넘친다. $n^{*} = 1212$ 라는 어림이 $800$과 $1600$ 사이를 정확히 짚었다.
+
+    **넘치면 어떻게 되는가.** 반폭이 $0.4000$ 에서 **딱 멈춘다.** $n = 1600$ 과 $3200$ 에서 소수 넷째 자리까지 $0.4000$ 이다. 범주 폭의 절반이다. 자리를 못 찾은 점은 사라지지 않고 그 **울타리에 그대로 쌓인다.** $n = 1600$ 에서 $161$개, $n = 3200$ 에서 $1292$개가 $\lvert x\rvert = 0.4$ 에 정확히 놓였고, 이 수는 seaborn 이 경고로 알려 준 $10.1\%$, $40.4\%$ 와 정확히 맞는다($161/1600 = 10.06\%$, $1292/3200 = 40.4\%$). 그림 오른쪽 패널의 양 끝에 보이는 짙은 세로줄이 그 무더기다.
+
+    **이것이 스웜의 거짓말이다.** 폭이 밀도를 나타낸다는 약속이 깨졌는데도 그림은 여전히 "폭"을 보여 준다. 가운데가 넓은 것은 가운데 밀도가 높아서가 아니라 **더 넓어질 자리가 없어서**다. $n = 3200$ 패널은 밀도가 아니라 사각형을 그린다.
+
+    끝으로 그림의 세 패널은 같은 $n$에서도 표(가로 $5$인치)보다 더 일찍 무너졌다. 패널이 좁아 $d_x$가 $0.0143$ 에서 $0.0244$ 로 커졌고 한 띠의 한계가 $55.8$개에서 $32.8$개로 줄었기 때문이다. **같은 자료라도 그림을 좁게 그리면 더 빨리 거짓말을 시작한다.**
 
 ## 2. 스트립과 스웜의 차이
 

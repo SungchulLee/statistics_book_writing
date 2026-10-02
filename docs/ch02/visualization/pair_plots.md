@@ -8,34 +8,132 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 타이타닉 자료의 쌍그림
+**보기 1.** <span class="diff easy" title="쉬움"></span> 타이타닉 자료의 쌍그림. `Survived`, `Age`, `Sex_int` 세 변수로 $3 \times 3$ 격자를 그린다.
+
+**(1)** 쌍그림을 그리고 칸마다 무엇이 보이는지 적으시오.
+
+**(2)** 변수가 $k$ 개일 때 칸이 몇 개이고 **그 가운데 서로 다른 정보를 담은 칸이 몇 개**인지 세시오. 또 `Survived` 대 `Sex_int` 칸은 점이 네 개뿐인데, 그 칸이 **감추고 있는 수**를 밝히시오.
 
 </div>
 
-```python
-import seaborn as sns
-import pandas as pd
+??? success "풀이"
 
-url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
-df = pd.read_csv(url, index_col='PassengerId')
+    **(1) 그려 본다.**
 
-# 쌍그림은 수치형 변수만 받으므로 성별을 0/1로 부호화한다
-df['Sex_int'] = df['Sex'].apply(lambda x: 1 if x == 'male' else 0)
+    ```python
+    import seaborn as sns
+    import pandas as pd
 
-# 변수 k개를 주면 k x k 격자가 만들어진다.
-#   대각선   그 변수 하나의 분포 (히스토그램)
-#   비대각선 두 변수의 산점도
-# 결측이 있는 행(Age가 비어 있는 177명)은 자동으로 빠진다.
-sns.pairplot(df[["Survived", "Age", "Sex_int"]])
-```
+    url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+    df = pd.read_csv(url, index_col='PassengerId')
 
-![쌍그림](./img/gc_pairplot.png)
+    # 쌍그림은 수치형 변수만 받으므로 성별을 0/1로 부호화한다
+    df['Sex_int'] = df['Sex'].apply(lambda x: 1 if x == 'male' else 0)
 
-세 변수의 격자에서 읽을 것이 몇 가지 있다.
+    # 변수 k개를 주면 k x k 격자가 만들어진다.
+    #   대각선   그 변수 하나의 분포 (히스토그램)
+    #   비대각선 두 변수의 산점도
+    # 결측이 있는 행(Age가 비어 있는 177명)은 자동으로 빠진다.
+    sns.pairplot(df[["Survived", "Age", "Sex_int"]])
+    ```
 
-- **Survived와 Sex_int의 산점도**는 네 귀퉁이에 점이 몰린 모양이다. 두 변수가 모두 0/1이기 때문인데, 왼쪽 위(여성·생존)와 오른쪽 아래(남성·사망)가 짙다. 성별과 생존이 강하게 얽혀 있다는 신호다.
-- **Age의 히스토그램**(가운데 대각선)은 20–30대에 봉우리가 있고 오른쪽으로 약간 치우쳐 있다.
-- **Age와 Survived**는 뚜렷한 관계가 보이지 않는다. 다만 이런 산점도는 한쪽이 0/1일 때 겹침이 심해 읽기 어려우므로, 앞 절의 바이올린 그림이나 상자그림이 더 낫다.
+    ![쌍그림](./img/gc_pairplot.png)
+
+    세 변수의 격자에서 읽을 것이 몇 가지 있다.
+
+    - **Survived와 Sex_int의 산점도**는 네 귀퉁이에 점이 몰린 모양이다. 두 변수가 모두 0/1이기 때문인데, 왼쪽 위(여성·생존)와 오른쪽 아래(남성·사망)가 짙다. 성별과 생존이 강하게 얽혀 있다는 신호다.
+    - **Age의 히스토그램**(가운데 대각선)은 20–30대에 봉우리가 있고 오른쪽으로 약간 치우쳐 있다.
+    - **Age와 Survived**는 뚜렷한 관계가 보이지 않는다. 다만 이런 산점도는 한쪽이 0/1일 때 겹침이 심해 읽기 어려우므로, 앞 절의 바이올린 그림이나 상자그림이 더 낫다.
+
+    **(2) 칸은 몇 개이고 쓸모 있는 칸은 몇 개인가. 해석적으로.** 변수가 $k$ 개면 격자는 $k \times k$ 이므로 칸이 $k^2$ 개다. 그런데
+
+    - **대각선 $k$ 개**는 변수 하나의 분포다. 쌍의 관계는 아니다.
+    - **비대각선 $k^2 - k = k(k-1)$ 개**는 산점도인데, 칸 $(i,j)$ 와 칸 $(j,i)$ 는 **축만 뒤바뀐 같은 그림**이다. 점 $(x_i, x_j)$ 를 $(x_j, x_i)$ 로 바꾼 것이므로 담긴 정보가 똑같다.
+
+    따라서 **서로 다른 산점도는 $\binom{k}{2} = k(k-1)/2$ 개**뿐이고, 전체 칸에서 차지하는 몫은
+
+    $$
+    \frac{\binom{k}{2}}{k^2} = \frac{k-1}{2k} \;\xrightarrow[k \to \infty]{}\; \frac{1}{2}
+    $$
+
+    다. **격자의 절반 이상은 언제나 중복이거나 대각선이다.** $k = 8$ 이면 칸 $64$ 개에 서로 다른 쌍은 $28$ 개뿐이다. 이 중복이 낭비만은 아니다 — 본문 2절의 `PairGrid` 처럼 한쪽 삼각형을 **다른 용도로** 쓸 수 있다.
+
+    **그리고 $\mathrm{Survived} \times \mathrm{Sex\_int}$ 칸은 점이 네 개다.** 두 변수가 모두 $0/1$ 이므로 가능한 자리가 $2 \times 2 = 4$ 뿐이고, 결측을 뺀 $714$명이 그 네 자리에 포개진다. 네 자리의 도수를 $a, b, c, d$ 라 하면 두 이진변수의 피어슨 상관은 **파이 계수**와 정확히 같다.
+
+    $$
+    r = \phi = \frac{ad - bc}{\sqrt{(a+b)(c+d)(a+c)(b+d)}}
+    $$
+
+    산점도의 네 점은 이 네 수를 **보여 주지 않는다.** 분할표를 함께 내야 한다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    from math import comb
+
+    sub = df[["Survived", "Age", "Sex_int"]].dropna()
+
+    print(f"{'변수 k':>7}{'칸 k^2':>8}{'대각선':>8}{'서로 다른 쌍':>13}{'쌍이 차지하는 몫':>18}")
+    for k in [2, 3, 5, 8, 15]:
+        print(f"{k:>7}{k*k:>8}{k:>8}{comb(k,2):>13}{comb(k,2)/k**2:>17.4f}")
+
+    print(f"\n이 보기는 k = 3 이므로 칸 9 개에 서로 다른 산점도는 {comb(3,2)} 개뿐이다.")
+
+    tab = pd.crosstab(sub['Sex_int'], sub['Survived'])
+    print("\nSurvived x Sex_int 분할표 (행 = Sex_int, 열 = Survived):")
+    print(tab)
+    a, b = tab.iloc[0, 0], tab.iloc[0, 1]
+    c, d = tab.iloc[1, 0], tab.iloc[1, 1]
+    phi = (a*d - b*c) / np.sqrt((a+b)*(c+d)*(a+c)*(b+d))
+    print(f"\n파이 계수 (ad-bc)/sqrt((a+b)(c+d)(a+c)(b+d))")
+    print(f"  = ({a}*{d} - {b}*{c}) / sqrt({a+b}*{c+d}*{a+c}*{b+d}) = {phi:.6f}")
+    print(f"피어슨 상관 r(Survived, Sex_int)        = "
+          f"{np.corrcoef(sub.Survived, sub.Sex_int)[0,1]:.6f}")
+    print(f"\n그 산점도에 찍히는 서로 다른 자리 = {int((tab.values>0).sum())} 개")
+    print(f"  관측 {len(sub)} 개 중 {len(sub) - int((tab.values>0).sum())} 개"
+          f"({100*(1-(tab.values>0).sum()/len(sub)):.1f}%) 가 가려진다")
+    print(f"\n생존율: 여성 {b/(a+b):.4f},  남성 {d/(c+d):.4f}")
+    ```
+
+    출력:
+
+    ```
+       변수 k   칸 k^2     대각선      서로 다른 쌍         쌍이 차지하는 몫
+          2       4       2            1           0.2500
+          3       9       3            3           0.3333
+          5      25       5           10           0.4000
+          8      64       8           28           0.4375
+         15     225      15          105           0.4667
+
+    이 보기는 k = 3 이므로 칸 9 개에 서로 다른 산점도는 3 개뿐이다.
+
+    Survived x Sex_int 분할표 (행 = Sex_int, 열 = Survived):
+    Survived    0    1
+    Sex_int
+    0          64  197
+    1         360   93
+
+    파이 계수 (ad-bc)/sqrt((a+b)(c+d)(a+c)(b+d))
+      = (64*93 - 197*360) / sqrt(261*453*424*290) = -0.538826
+    피어슨 상관 r(Survived, Sex_int)        = -0.538826
+
+    그 산점도에 찍히는 서로 다른 자리 = 4 개
+      관측 714 개 중 710 개(99.4%) 가 가려진다
+
+    생존율: 여성 0.7548,  남성 0.2053
+    ```
+
+    **$3 \times 3$ 격자의 아홉 칸에 서로 다른 산점도는 세 개뿐이다.** 세 칸은 대각선이고 나머지 여섯 칸은 셋씩 짝을 이룬 거울상이다. $k$ 가 커져도 이 몫은 $0.25 \to 0.33 \to 0.40 \to 0.4375 \to 0.4667$ 로 $0.5$ 를 넘지 못한다. 유도한 $(k-1)/(2k)$ 그대로다.
+
+    **파이 계수와 피어슨 상관이 소수 여섯째 자리까지 같다.** 둘 다 $-0.538826$ 이다. 식이 맞는다.
+
+    **그리고 그 칸이 감추는 것이 드러난다.** 산점도에는 네 점뿐이고, 관측 $714$개 중 $710$개($99.4\%$)가 그 네 점 아래 포개져 있다. 네 점의 **크기가 모두 같으므로** 어느 칸이 많고 적은지 그림에서는 알 길이 없다. 분할표를 보아야
+
+    - 여성 $261$명 중 $197$명 생존 — **생존율 $75.5\%$**
+    - 남성 $453$명 중 $93$명 생존 — **생존율 $20.5\%$**
+
+    라는, 이 자료에서 가장 중요한 수가 나온다. **$r = -0.54$ 라는 한 숫자보다 이 두 비율이 훨씬 많은 것을 말해 준다.** 쌍그림의 그 칸은 "성별과 생존이 얽혀 있다"는 신호를 주는 데까지가 제 몫이고, **이진변수끼리의 칸은 분할표로 다시 보아야 한다.**
 
 ## 2. 격자의 구조
 
@@ -49,31 +147,148 @@ $k$개 변수를 주면 $k \times k$ 격자가 만들어진다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 격자의 구조 들여다보기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 격자의 구조 들여다보기, 그리고 쌍그림이 **원리상** 볼 수 없는 것.
+
+**(1)** `PairGrid` 로 아래쪽 삼각형에는 산점도, 대각선에는 밀도곡선, 위쪽 삼각형에는 상관계수를 채워 중복을 쓸모 있게 만드시오.
+
+**(2)** 쌍그림의 칸은 모두 **두 변수만의** 그림이다. 그래서 세 번째 변수를 고정했을 때에만 드러나는 관계는 어느 칸에도 나타나지 않는다. **주변상관이 $0$ 인데 편상관이 $-1$ 인** 세 변수를 만들어 보이시오.
 
 </div>
 
-```python
-import seaborn as sns
-import numpy as np
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-g = sns.PairGrid(df[["Survived", "Age", "Sex_int"]].dropna())
-g.map_lower(sns.scatterplot, s=10, alpha=.4)   # 아래쪽 삼각형: 산점도
-g.map_diag(sns.kdeplot)                        # 대각선: 밀도곡선
+    **(1) 삼각형마다 다른 그림을 채운다.**
 
-# 위쪽 삼각형: 상관계수를 숫자로 적는다
-def corr_text(x, y, **kwargs):
-    ax = plt.gca()
-    ax.annotate(f"r = {np.corrcoef(x, y)[0, 1]:.2f}",
-                xy=(.5, .5), xycoords='axes fraction',
-                ha='center', va='center', fontsize=13)
-    ax.set_axis_off()
+    ```python
+    import seaborn as sns
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-g.map_upper(corr_text)
-```
+    g = sns.PairGrid(df[["Survived", "Age", "Sex_int"]].dropna())
+    g.map_lower(sns.scatterplot, s=10, alpha=.4)   # 아래쪽 삼각형: 산점도
+    g.map_diag(sns.kdeplot)                        # 대각선: 밀도곡선
 
-![PairGrid로 삼각형마다 다른 그림 채우기](./img/pair_plots_44.png)
+    # 위쪽 삼각형: 상관계수를 숫자로 적는다
+    def corr_text(x, y, **kwargs):
+        ax = plt.gca()
+        ax.annotate(f"r = {np.corrcoef(x, y)[0, 1]:.2f}",
+                    xy=(.5, .5), xycoords='axes fraction',
+                    ha='center', va='center', fontsize=13)
+        ax.set_axis_off()
+
+    g.map_upper(corr_text)
+    ```
+
+    ![PairGrid로 삼각형마다 다른 그림 채우기](./img/pair_plots_44.png)
+
+    위쪽 삼각형이 비어 있지 않고 상관계수를 담았다. 보기 1에서 센 대로 위아래 삼각형은 같은 정보를 담으므로, 한쪽을 다른 요약으로 바꾸어도 **잃는 것이 없다.**
+
+    **(2) 쌍그림이 원리상 볼 수 없는 것. 해석적으로.** 쌍그림의 어느 칸도 두 변수만 본다. 그런데 **세 번째 변수를 고정해야만 드러나는 관계**가 있다. 가장 간단한 예를 만들자.
+
+    $x_1, x_2$ 를 **독립**인 표준정규라 하고 $x_3 = x_1 + x_2$ 로 두자. 그러면
+
+    $$
+    \operatorname{Cor}(x_1, x_2) = 0, \qquad
+    \operatorname{Cor}(x_1, x_3) = \operatorname{Cor}(x_2, x_3)
+    = \frac{\operatorname{Cov}(x_1, x_1 + x_2)}{1 \cdot \sqrt{2}} = \frac{1}{\sqrt{2}}
+    $$
+
+    이다. **쌍그림의 $x_1 \times x_2$ 칸은 완전히 둥근 구름**이고 $r = 0$ 이다. 그런데 $x_3$ 를 어떤 값 $c$ 로 **고정하면** $x_2 = c - x_1$ 이므로 둘은 기울기 $-1$ 의 직선 위에 정확히 놓인다.
+
+    이것을 재는 양이 **편상관**이다.
+
+    $$
+    r_{12\cdot 3} = \frac{r_{12} - r_{13}r_{23}}{\sqrt{(1 - r_{13}^2)(1 - r_{23}^2)}}
+    = \frac{0 - \tfrac{1}{2}}{\sqrt{\left(1 - \tfrac12\right)\left(1 - \tfrac12\right)}}
+    = \frac{-\tfrac12}{\tfrac12} = -1
+    $$
+
+    **주변으로는 $0$, 조건부로는 $-1$.** 이보다 더 극단적일 수 없다. 그런데 쌍그림의 세 칸 어디에도 이 $-1$ 은 나타나지 않는다. 이런 $x_3$ 를 **억제변수**(suppressor)라 부르며, 12장 상관 절에서 다시 다룬다.
+
+    **수치적으로.**
+
+    ```python
+    rng = np.random.default_rng(5)
+    n = 2000
+    x1 = rng.normal(0, 1, n)
+    x2 = rng.normal(0, 1, n)      # x1 과 독립
+    x3 = x1 + x2                  # 둘의 합
+
+    X = np.column_stack([x1, x2, x3])
+    C = np.corrcoef(X.T)
+    print("상관행렬 (쌍그림이 보여 주는 것):")
+    for i, nm in enumerate(["x1", "x2", "x3"]):
+        print("  " + nm + "  " + "  ".join(f"{v:+.4f}" for v in C[i]))
+    print(f"\n참값: r12 = 0,  r13 = r23 = 1/sqrt(2) = {1/np.sqrt(2):.6f}")
+
+    r12, r13, r23 = C[0, 1], C[0, 2], C[1, 2]
+    pc = (r12 - r13*r23)/np.sqrt((1-r13**2)*(1-r23**2))
+    print(f"\n편상관 r(12.3) = (r12 - r13 r23)/sqrt((1-r13^2)(1-r23^2))")
+    print(f"  = ({r12:+.4f} - {r13:+.4f}*{r23:+.4f}) / "
+          f"sqrt((1-{r13:.4f}^2)(1-{r23:.4f}^2)) = {pc:.6f}")
+    print(f"  참값 = (0 - 1/2)/sqrt((1/2)(1/2)) = -1")
+
+    # x3 를 좁은 띠로 고정해 보면
+    print(f"\nx3 를 좁은 띠로 고정했을 때의 r(x1, x2)")
+    edges = np.quantile(x3, [0.2, 0.4, 0.6, 0.8])
+    bands = [(-np.inf, edges[0]), (edges[0], edges[1]), (edges[1], edges[2]),
+             (edges[2], edges[3]), (edges[3], np.inf)]
+    for lo, hi in bands:
+        m = (x3 > lo) & (x3 <= hi)
+        print(f"  {lo:+7.3f} < x3 <= {hi:+7.3f}:  n={m.sum():4d},  "
+              f"r = {np.corrcoef(x1[m], x2[m])[0,1]:+.4f}")
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4), sharey=True)
+    a1.scatter(x1, x2, s=6, alpha=0.3, color="#90A4AE")
+    a1.set_title(f"$x_1$ 대 $x_2$ — 그냥 보면 $r$ = {r12:+.4f}", fontsize=11)
+    a1.set_xlabel("$x_1$")
+    a1.set_ylabel("$x_2$")
+    cols = ["#1565C0", "#E65100", "#33691E", "#6A1B9A", "#D32F2F"]
+    for (lo, hi), col in zip(bands, cols):
+        m = (x3 > lo) & (x3 <= hi)
+        a2.scatter(x1[m], x2[m], s=6, alpha=0.5, color=col,
+                   label=f"$x_3 \\in$ ({lo:+.2f}, {hi:+.2f}],  $r$ = "
+                         f"{np.corrcoef(x1[m], x2[m])[0,1]:+.3f}")
+    a2.set_title("$x_3$ 를 고정하면 완전한 음의 관계", fontsize=11)
+    a2.set_xlabel("$x_1$")
+    a2.legend(fontsize=7.5, loc="upper right")
+    for ax in (a1, a2):
+        ax.spines[["top", "right"]].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    상관행렬 (쌍그림이 보여 주는 것):
+      x1  +1.0000  +0.0123  +0.6987
+      x2  +0.0123  +1.0000  +0.7240
+      x3  +0.6987  +0.7240  +1.0000
+
+    참값: r12 = 0,  r13 = r23 = 1/sqrt(2) = 0.707107
+
+    편상관 r(12.3) = (r12 - r13 r23)/sqrt((1-r13^2)(1-r23^2))
+      = (+0.0123 - +0.6987*+0.7240) / sqrt((1-0.6987^2)(1-0.7240^2)) = -1.000000
+      참값 = (0 - 1/2)/sqrt((1/2)(1/2)) = -1
+
+    x3 를 좁은 띠로 고정했을 때의 r(x1, x2)
+         -inf < x3 <=  -1.157:  n= 400,  r = -0.6407
+       -1.157 < x3 <=  -0.316:  n= 400,  r = -0.9369
+       -0.316 < x3 <=  +0.459:  n= 400,  r = -0.9586
+       +0.459 < x3 <=  +1.291:  n= 400,  r = -0.9468
+       +1.291 < x3 <=    +inf:  n= 400,  r = -0.6898
+    ```
+
+    ![주변으로는 무상관, x3 를 고정하면 완전한 음의 관계](./img/pair_plots_suppressor.png)
+
+    **편상관이 정확히 $-1.000000$ 이다.** 표본의 $r_{12} = +0.0123$ 이 참값 $0$ 과 조금 다른데도 편상관은 어긋남 없이 $-1$ 이 나온다. $x_3 = x_1 + x_2$ 가 **표본에서도 정확히 성립하는 항등식**이기 때문이다. 세 상관계수 사이에 생기는 대수적 관계가 $r_{12}$ 의 표본오차까지 정확히 상쇄한다.
+
+    **쌍그림이 보여 주는 것은 $+0.0123$ 뿐이다.** 왼쪽 패널이 그 칸이고, 아무 구조도 없는 둥근 구름이다. 그런데 오른쪽 패널에서 같은 점들을 $x_3$ 의 다섯 띠로 색칠하면 **띠마다 기울기 $-1$ 의 선명한 직선 띠**가 나타난다. 같은 $2000$개 점이고 한 점도 옮기지 않았다.
+
+    띠 안의 $r$ 이 $-1$ 이 아니라 $-0.64 \sim -0.96$ 인 것은 띠에 **폭이 있어서** $x_3$ 가 완전히 고정되지 않았기 때문이다. 가운데 세 띠가 $-0.94$ 를 넘고 양 끝 띠가 $-0.64, -0.69$ 로 약한 것도 설명된다 — 양 끝은 $x_3$ 의 꼬리라 띠의 폭이 무한대로 열려 있다. **띠를 좁힐수록 $-1$ 에 가까워진다.**
+
+    **요점.** 쌍그림은 $\binom{k}{2}$ 개의 **주변** 관계를 보여 주는 도구이고, 조건부 관계는 그 설계상 담을 수 없다. 변수가 셋만 되어도 "쌍으로는 아무것도 없는데 함께 보면 완전한 관계"가 생길 수 있다. 쌍그림에서 "관계가 없다"는 인상을 받았을 때 그것을 **"관계가 없다"로 읽으면 안 되는** 가장 강한 이유가 이것이다.
 
 ## 3. 집단별로 색을 입힌다
 
@@ -81,21 +296,124 @@ g.map_upper(corr_text)
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 집단별로 색 입히기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 집단별로 색 입히기, 그리고 색을 입히지 않으면 부호가 뒤집히는 자료.
+
+**(1)** `hue="Sex"` 로 쌍그림에 색을 입히고 무엇이 달라지는지 적으시오.
+
+**(2)** 타이타닉의 `Age` 와 `Fare` 는 전체로 보면 **양의 상관**인데 객실 등급마다 보면 **세 등급 모두 음의 상관**이다. 이것이 어떻게 가능한지 공분산을 **집단 간**과 **집단 안**으로 쪼개어 보이시오.
 
 </div>
 
-```python
-# hue 에 범주형 열을 주면 집단마다 색이 갈린다. 변수 쌍마다 두 집단이
-# 겹치는지 갈리는지를 한 장에서 훑을 수 있다.
-# diag_kind="kde" 는 대각선의 히스토그램을 매끄러운 밀도곡선으로 바꾼다.
-sns.pairplot(df[["Survived", "Age", "Fare", "Sex"]], hue="Sex",
-             diag_kind="kde", plot_kws={"s": 12, "alpha": .5})
-```
+??? success "풀이"
 
-![성별로 색을 입힌 쌍그림](./img/pair_plots_68.png)
+    **(1) 색을 입혀 본다.**
 
-이렇게 하면 모든 산점도에서 두 집단이 색으로 나뉘고, 대각선에는 집단별 밀도곡선이 겹쳐 그려진다. **어느 변수 쌍에서 두 집단이 갈라지는지**가 한눈에 보인다. 분류 문제에서 어떤 변수가 유용할지 가늠하는 표준적인 첫 단계다.
+    ```python
+    # hue 에 범주형 열을 주면 집단마다 색이 갈린다. 변수 쌍마다 두 집단이
+    # 겹치는지 갈리는지를 한 장에서 훑을 수 있다.
+    # diag_kind="kde" 는 대각선의 히스토그램을 매끄러운 밀도곡선으로 바꾼다.
+    sns.pairplot(df[["Survived", "Age", "Fare", "Sex"]], hue="Sex",
+                 diag_kind="kde", plot_kws={"s": 12, "alpha": .5})
+    ```
+
+    ![성별로 색을 입힌 쌍그림](./img/pair_plots_68.png)
+
+    이렇게 하면 모든 산점도에서 두 집단이 색으로 나뉘고, 대각선에는 집단별 밀도곡선이 겹쳐 그려진다. **어느 변수 쌍에서 두 집단이 갈라지는지**가 한눈에 보인다. 분류 문제에서 어떤 변수가 유용할지 가늠하는 표준적인 첫 단계다.
+
+    **(2) 색을 입히지 않으면 부호가 뒤집힌다. 해석적으로.** 자료를 집단 $g = 1, \ldots, G$ 로 나누고 집단 $g$ 의 비중을 $w_g$, 집단 안 평균을 $(\bar x_g, \bar y_g)$ 라 하자. 전체 공분산은 **언제나** 두 조각으로 쪼개진다.
+
+    $$
+    \underbrace{\operatorname{Cov}(x, y)}_{\text{전체}}
+    = \underbrace{\sum_g w_g (\bar x_g - \bar x)(\bar y_g - \bar y)}_{\text{집단 간}}
+    + \underbrace{\sum_g w_g \operatorname{Cov}_g(x, y)}_{\text{집단 안}}
+    $$
+
+    (전체 분산을 집단 간과 집단 안으로 쪼개는 식의 두 변수판이다.) **두 조각의 부호가 다를 수 있다는 것**이 요점이다. 집단 간 항이 크고 양수이면, 집단 안 항이 모두 음수여도 합이 양수가 된다. 그러면
+
+    - 색을 입히지 않은 산점도 — 전체 공분산을 본다. **양.**
+    - 색을 입힌 산점도 — 집단 안 공분산을 본다. **음.**
+
+    이것이 **심슨의 역설**이고, 쌍그림의 `hue` 는 그 역설을 드러내는 가장 값싼 장치다.
+
+    **수치적으로.** 타이타닉에 실제로 이 구조가 있다. 객실 등급이 올라가면 승객이 **나이가 많고** 요금도 **비싸다.** 그래서 등급 사이에서는 나이와 요금이 함께 오른다. 그런데 **같은 등급 안에서는** 나이가 많을수록 요금이 싸다.
+
+    ```python
+    d = df[["Age", "Fare", "Pclass"]].dropna()
+    r_all = np.corrcoef(d.Age, d.Fare)[0, 1]
+    print(f"전체 r(Age, Fare) = {r_all:+.4f}   (n = {len(d)})")
+    print(f"\n{'Pclass':>7}{'n':>6}{'평균 Age':>10}{'평균 Fare':>11}{'집단 안 r':>11}")
+    for k, g in d.groupby("Pclass"):
+        print(f"{k:>7}{len(g):>6}{g.Age.mean():>10.2f}{g.Fare.mean():>11.2f}"
+              f"{np.corrcoef(g.Age, g.Fare)[0,1]:>11.4f}")
+
+    # 집단 평균 세 점 사이의 (가중) 상관
+    m = d.groupby("Pclass").agg(n=("Age", "size"), A=("Age", "mean"),
+                                F=("Fare", "mean"))
+    w = m.n / m.n.sum()
+    cov_b = (w * (m.A - (w*m.A).sum()) * (m.F - (w*m.F).sum())).sum()
+    sa = np.sqrt((w * (m.A - (w*m.A).sum()) ** 2).sum())
+    sf = np.sqrt((w * (m.F - (w*m.F).sum()) ** 2).sum())
+    print(f"\n집단 평균 세 점 사이의 (가중) 상관 = {cov_b/(sa*sf):+.4f}")
+    print(f"전체 공분산 = 집단 간 + 집단 안 으로 쪼개면")
+    cov_all = np.cov(d.Age, d.Fare, ddof=0)[0, 1]
+    cov_w = sum(w[k] * np.cov(g.Age, g.Fare, ddof=0)[0, 1]
+                for k, g in d.groupby("Pclass"))
+    print(f"  전체 {cov_all:+.4f} = 집단 간 {cov_b:+.4f} + 집단 안 {cov_w:+.4f}"
+          f"  (합 {cov_b+cov_w:+.4f})")
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4), sharey=True)
+    a1.scatter(d.Age, d.Fare, s=8, alpha=0.3, color="#90A4AE")
+    b, c = np.polyfit(d.Age, d.Fare, 1)
+    xs = np.array([d.Age.min(), d.Age.max()])
+    a1.plot(xs, b*xs + c, color="#37474F", lw=2)
+    a1.set_title(f"모두 합치면 $r$ = {r_all:+.4f} (양)", fontsize=11)
+    a1.set_xlabel("나이 (세)")
+    a1.set_ylabel("요금")
+    cols = {1: "#1565C0", 2: "#E65100", 3: "#33691E"}
+    for k, g in d.groupby("Pclass"):
+        a2.scatter(g.Age, g.Fare, s=8, alpha=0.4, color=cols[k])
+        bb, cc = np.polyfit(g.Age, g.Fare, 1)
+        xs = np.array([g.Age.min(), g.Age.max()])
+        a2.plot(xs, bb*xs + cc, color=cols[k], lw=2,
+                label=f"{k}등급  $r$ = {np.corrcoef(g.Age, g.Fare)[0,1]:+.3f}")
+    a2.set_title("등급으로 나누면 셋 다 음", fontsize=11)
+    a2.set_xlabel("나이 (세)")
+    a2.legend(fontsize=9)
+    for ax in (a1, a2):
+        ax.set_ylim(-10, 300)
+        ax.spines[["top", "right"]].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    전체 r(Age, Fare) = +0.0961   (n = 714)
+
+     Pclass     n    평균 Age    평균 Fare     집단 안 r
+          1   186     38.23      87.96    -0.2186
+          2   173     29.88      21.47    -0.1970
+          3   355     25.14      13.23    -0.2603
+
+    집단 평균 세 점 사이의 (가중) 상관 = +0.9674
+    전체 공분산 = 집단 간 + 집단 안 으로 쪼개면
+      전체 +73.7456 = 집단 간 +166.5030 + 집단 안 -92.7574  (합 +73.7456)
+    ```
+
+    ![합치면 양, 나누면 음 — 타이타닉의 나이와 요금](./img/pair_plots_simpson.png)
+
+    **쪼갠 식이 정확히 맞는다.** 집단 간 $+166.5030$ 과 집단 안 $-92.7574$ 를 더하면 $+73.7456$ 으로 전체 공분산과 소수 넷째 자리까지 같다.
+
+    **그리고 부호가 정말로 뒤집힌다.** 전체 $r = +0.0961$ 인데 세 등급 안에서는 $-0.2186$, $-0.1970$, $-0.2603$ 으로 **모두 음수**다. 한 등급만 그런 것이 아니라 셋 다 그렇다. 수가 들어맞는 이유도 표에 있다.
+
+    - 1등급: 평균 나이 $38.2$세, 평균 요금 $88.0$
+    - 2등급: 평균 나이 $29.9$세, 평균 요금 $21.5$
+    - 3등급: 평균 나이 $25.1$세, 평균 요금 $13.2$
+
+    **세 점만 보면 나이와 요금이 거의 완벽하게 함께 간다** — 집단 평균 사이의 상관이 $+0.9674$ 다. 이 강한 양의 관계가 집단 간 항을 크게 만들어 집단 안의 음수를 덮어 버린다.
+
+    **쌍그림에서 `hue` 가 필수인 까닭이 이것이다.** 색을 입히지 않은 $\mathrm{Age} \times \mathrm{Fare}$ 칸은 "나이가 많을수록 요금을 더 낸다"고 말하지만, 그것은 **나이 든 사람이 비싼 등급을 많이 탔다**는 사실의 그림자일 뿐이다. 같은 등급 안에서 보면 관계는 반대 방향이다. 그림 왼쪽과 오른쪽은 **같은 $714$개 점**이고 색 하나만 다르다.
 
 !!! warning "쌍그림은 결론을 내는 도구가 아니라 훑어보는 도구다"
     쌍그림의 각 칸은 아주 작다. 축 눈금이 촘촘하고 점도 작아서, 하나하나를 정확히 읽기는 어렵다.

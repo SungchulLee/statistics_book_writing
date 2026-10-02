@@ -10,63 +10,177 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 시계열 꺾은선그림
+**보기 1.** <span class="diff easy" title="쉬움"></span> 시계열 꺾은선그림과 가로세로비. 2023년 거래일 260일의 종가를 모의생성해 선그림으로 그린다. 선그림에서 읽는 것은 막대의 길이가 아니라 **기울기**인데, 기울기는 그리는 상자의 모양에 따라 눈에 달리 보인다.
+
+**(1)** 자료의 추세 기울기를 $b$(원/일), 축상자의 가로세로비를 $\alpha = H/W$, 두 축이 덮는 자료 범위를 $R_x, R_y$라 할 때 **화면에 보이는 각도** $\theta$를 식으로 구하시오. 그 각도를 $45^\circ$로 만드는 $\alpha$도 구하시오.
+
+**(2)** 같은 자료를 두 가지 $\alpha$로 그려, $b$는 같은데 $\theta$는 다름을 수치로 확인하시오. (1)의 식이 matplotlib의 좌표변환이 실제로 주는 각도와 맞는지도 보이시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 재현 가능하도록 주가를 모의생성한다. 실제 자료를 쓰는 법은 아래에 있다.
-# 로그수익률을 정규분포에서 뽑고 누적합의 지수를 취하면
-# 실제 주가와 비슷한 기하 브라운 운동 경로가 나온다.
-rng = np.random.default_rng(42)
-dates = pd.bdate_range("2023-01-01", "2023-12-31")   # 거래일만(주말 제외)
-returns = rng.normal(0.0004, 0.02, len(dates))        # 일평균 0.04%, 일변동성 2%
-price = 20000 * np.exp(np.cumsum(returns))            # 시작가 20,000원
-s = pd.Series(price, index=dates, name="Close")
+    **(1) 해석적으로.** 축상자의 너비를 $W$, 높이를 $H$라 하자(단위는 아무것이나 좋다. 비만 쓰인다). 가로축은 자료 범위 $R_x$를 너비 $W$에 펼치고 세로축은 $R_y$를 높이 $H$에 펼치므로, 자료에서의 변위 $(\Delta x, \Delta y)$는 화면에서
 
-print(f"거래일 수: {len(s)}")
-print(f"기간: {s.index.min().date()} ~ {s.index.max().date()}")
-print(f"시작가 {s.iloc[0]:,.0f}  종료가 {s.iloc[-1]:,.0f}")
-print(f"최저 {s.min():,.0f}  최고 {s.max():,.0f}")
+    $$
+    \left(\Delta x \cdot \frac{W}{R_x},\ \ \Delta y \cdot \frac{H}{R_y}\right)
+    $$
 
-fig, ax = plt.subplots(figsize=(12, 3))
+    로 옮겨진다. 따라서 화면에서 읽히는 각도는
 
-# 선그림의 핵심: 점을 시간 순서대로 이어 그린다.
-# 이 "이어 그리기" 때문에 추세와 변동이 눈에 들어온다.
-ax.plot(s.index, s.values, color="blue", lw=1.2, label="종가")
+    $$
+    \tan\theta = \frac{\Delta y \, H / R_y}{\Delta x \, W / R_x}
+    = \frac{\Delta y}{\Delta x}\cdot\frac{H}{W}\cdot\frac{R_x}{R_y}
+    = b\,\alpha\,\frac{R_x}{R_y},
+    \qquad \theta = \arctan\!\left(b\,\alpha\,\frac{R_x}{R_y}\right)
+    $$
 
-# 특정 날짜를 강조하고 싶으면 그 점 하나만 따로 찍는다.
-mark = pd.Timestamp("2023-10-19")
-ax.plot([mark], [s.loc[mark]], "or", ms=8,
-        label=f"{mark.date()}: {s.loc[mark]:,.0f}")
+    이다. 여기서 **$b$ 혼자는 그림에 나타나지 않는다.** 언제나 $\alpha R_x / R_y$ 가 곱해진 꼴로만 나타난다. $b, R_x, R_y$는 자료가 정하지만 $\alpha$는 **그리는 사람이 고르는 수**다. 곧 기울어진 정도의 인상은 절반이 자료, 절반이 결정이다.
 
-ax.set_xlabel("날짜")
-ax.set_ylabel("주가 (원)")
-ax.set_title("모의생성한 일별 종가, 2023년")
-ax.legend()
-ax.spines[['top', 'right']].set_visible(False)
-plt.tight_layout()
-plt.show()
-```
+    $\tan\theta$가 $\alpha$에 **정비례**하므로 상자를 두 배 길쭉하게 하면 기울기의 탄젠트가 정확히 두 배가 된다. 그리고 $\theta = 45^\circ$는 $\tan\theta = 1$이니
 
-출력:
+    $$
+    \alpha^{*} = \frac{R_y}{\lvert b\rvert\, R_x}
+    $$
 
-```
-거래일 수: 260
-기간: 2023-01-02 ~ 2023-12-29
-시작가 20,130  종료가 17,330
-최저 16,117  최고 22,786
-```
+    이다. 이것이 흔히 **45도로 눕히기**(banking to 45 degrees)라 부르는 선택이다. 기울기의 차이를 눈이 가장 잘 분간하는 각도가 $45^\circ$ 근처이기 때문이다.
 
-![모의생성한 일별 종가 선그림](./img/gc_lineplot_timeseries.png)
+    자료를 넣어 보면 $b = -13.7031$ 원/일, $R_x = 259$ 일, $R_y = 6{,}669$ 원이므로
 
-선그림이 하는 일이 여기 다 있다. 260개의 점을 시간 순서로 이었을 뿐인데 **추세**(연중 하락)와 **변동성**(오르내림의 폭)이 한눈에 들어온다.
+    $$
+    \alpha^{*} = \frac{6669}{13.7031 \times 259} = \frac{6669}{3549.1} = 1.879
+    $$
 
-**같은 260개 값을 히스토그램으로 그리면 이 두 가지가 모두 사라진다.** 히스토그램은 "16,000원대가 며칠, 20,000원대가 며칠"만 알려 주고, 어느 순서로 그랬는지는 버린다. 순서를 버리면 추세도 변동성도 없다.
+    로, **너비보다 1.9배 높은 상자**를 써야 추세선이 $45^\circ$가 된다. 보통 시계열을 납작하게 그리는 관행과는 정반대다.
+
+    **(2) 수치적으로.** 먼저 자료를 만들고 보통의 가로로 긴 상자에 그린다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    # 재현 가능하도록 주가를 모의생성한다. 실제 자료를 쓰는 법은 아래에 있다.
+    # 로그수익률을 정규분포에서 뽑고 누적합의 지수를 취하면
+    # 실제 주가와 비슷한 기하 브라운 운동 경로가 나온다.
+    rng = np.random.default_rng(42)
+    dates = pd.bdate_range("2023-01-01", "2023-12-31")   # 거래일만(주말 제외)
+    returns = rng.normal(0.0004, 0.02, len(dates))        # 일평균 0.04%, 일변동성 2%
+    price = 20000 * np.exp(np.cumsum(returns))            # 시작가 20,000원
+    s = pd.Series(price, index=dates, name="Close")
+
+    print(f"거래일 수: {len(s)}")
+    print(f"기간: {s.index.min().date()} ~ {s.index.max().date()}")
+    print(f"시작가 {s.iloc[0]:,.0f}  종료가 {s.iloc[-1]:,.0f}")
+    print(f"최저 {s.min():,.0f}  최고 {s.max():,.0f}")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+
+    # 선그림의 핵심: 점을 시간 순서대로 이어 그린다.
+    # 이 "이어 그리기" 때문에 추세와 변동이 눈에 들어온다.
+    ax.plot(s.index, s.values, color="blue", lw=1.2, label="종가")
+
+    # 특정 날짜를 강조하고 싶으면 그 점 하나만 따로 찍는다.
+    mark = pd.Timestamp("2023-10-19")
+    ax.plot([mark], [s.loc[mark]], "or", ms=8,
+            label=f"{mark.date()}: {s.loc[mark]:,.0f}")
+
+    ax.set_xlabel("날짜")
+    ax.set_ylabel("주가 (원)")
+    ax.set_title("모의생성한 일별 종가, 2023년")
+    ax.legend()
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    거래일 수: 260
+    기간: 2023-01-02 ~ 2023-12-29
+    시작가 20,130  종료가 17,330
+    최저 16,117  최고 22,786
+    ```
+
+    ![모의생성한 일별 종가 선그림](./img/gc_lineplot_timeseries.png)
+
+    선그림이 하는 일이 여기 다 있다. 260개의 점을 시간 순서로 이었을 뿐인데 **추세**(연중 하락)와 **변동성**(오르내림의 폭)이 한눈에 들어온다.
+
+    **같은 260개 값을 히스토그램으로 그리면 이 두 가지가 모두 사라진다.** 히스토그램은 "16,000원대가 며칠, 20,000원대가 며칠"만 알려 주고, 어느 순서로 그랬는지는 버린다. 순서를 버리면 추세도 변동성도 없다.
+
+    이제 **같은 자료를 두 가지 가로세로비로** 그려 (1)의 식을 시험한다. 축상자의 실제 크기는 `ax.get_window_extent()` 로 재고, matplotlib이 주는 각도는 `ax.transData` 로 두 점을 화면 좌표로 옮겨 잰다.
+
+    ```python
+    # 가로축을 "거래일 번호" 로 두면 기울기의 단위가 원/일 로 분명해진다.
+    t = np.arange(len(s), dtype=float)
+    y = s.values
+    b, c = np.polyfit(t, y, 1)      # 추세 기울기 b (원/일) 와 절편 c
+    Rx = t[-1] - t[0]               # 가로축이 덮는 자료 범위 (일)
+    Ry = y.max() - y.min()          # 세로축이 덮는 자료 범위 (원)
+    print(f"추세 기울기 b  = {b:+.4f} 원/일   <- 가로세로비와 무관한 자료의 값")
+    print(f"가로 폭 Rx = {Rx:.0f} 일,  세로 폭 Ry = {Ry:,.0f} 원")
+
+    fig = plt.figure(figsize=(11, 4.2))
+    gs = fig.add_gridspec(1, 2, width_ratios=[3.4, 1], wspace=0.35)
+    axes = [fig.add_subplot(gs[0, 0]), fig.add_subplot(gs[0, 1])]
+
+    for ax in axes:
+        ax.plot(t, y, color="#1565C0", lw=1.1)
+        ax.plot(t, b * t + c, color="#D32F2F", ls="--", lw=1.6)
+        ax.set_xlim(t[0], t[-1])     # 두 패널의 자료 범위를 똑같이 맞춘다
+        ax.set_ylim(y.min(), y.max())
+        ax.set_xlabel("거래일 번호")
+        ax.spines[["top", "right"]].set_visible(False)
+    axes[0].set_ylabel("주가 (원)")
+
+    fig.canvas.draw()   # 축상자의 실제 크기는 한 번 그린 뒤에만 알 수 있다.
+    for ax, name in zip(axes, ["납작한 축", "길쭉한 축"]):
+        bb = ax.get_window_extent()
+        alpha = bb.height / bb.width
+        # (1) 에서 유도한 식
+        theta_formula = np.degrees(np.arctan(b * alpha * Rx / Ry))
+        # matplotlib 의 좌표변환이 실제로 주는 각도
+        p0 = ax.transData.transform((t[0], y[0]))
+        p1 = ax.transData.transform((t[0] + Rx, y[0] + b * Rx))
+        theta_mpl = np.degrees(np.arctan2(p1[1] - p0[1], p1[0] - p0[0]))
+        print(f"{name}: 축상자 {bb.width:.0f}x{bb.height:.0f} px -> alpha = {alpha:.4f}")
+        print(f"    유도한 각도 {theta_formula:+.2f}도,  matplotlib 각도 {theta_mpl:+.2f}도")
+        ax.set_title(f"{name}:  $\\alpha$ = {alpha:.3f},  화면 각도 {theta_formula:+.1f}°",
+                     fontsize=11)
+
+    # 45 도로 눕히는 가로세로비. 추세를 기준으로 할 때와 하루치 선분을 기준으로
+    # 할 때가 전혀 다르다.
+    seg = np.abs(np.diff(y))
+    print(f"추세를 45도로 눕히는 비       alpha = Ry/(|b| Rx) = {Ry / (abs(b) * Rx):.3f}")
+    print(f"하루 선분(중앙값 {np.median(seg):,.1f} 원)을 45도로 눕히는 비 alpha = "
+          f"{Ry / (np.median(seg) * Rx):.4f}")
+
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    추세 기울기 b  = -13.7031 원/일   <- 가로세로비와 무관한 자료의 값
+    가로 폭 Rx = 259 일,  세로 폭 Ry = 6,669 원
+    납작한 축: 축상자 561x323 px -> alpha = 0.5768
+        유도한 각도 -17.07도,  matplotlib 각도 -17.07도
+    길쭉한 축: 축상자 165x323 px -> alpha = 1.9613
+        유도한 각도 -46.23도,  matplotlib 각도 -46.23도
+    추세를 45도로 눕히는 비       alpha = Ry/(|b| Rx) = 1.879
+    하루 선분(중앙값 255.3 원)을 45도로 눕히는 비 alpha = 0.1008
+    ```
+
+    ![같은 시계열을 두 가로세로비로 그린 선그림](./img/line_plots_aspect.png)
+
+    **유도한 각도와 matplotlib이 준 각도가 소수 둘째 자리까지 같다.** $-17.07^\circ$ 와 $-46.23^\circ$ 가 두 번씩 나왔다. $\theta = \arctan(b\,\alpha R_x/R_y)$ 가 맞다.
+
+    그런데 두 패널이 그리는 것은 **글자 그대로 같은 260개 수**다. 기울기 $b = -13.7031$ 원/일도 하나뿐이고 자료 범위도 같게 맞추어 두었다. 달라진 것은 축상자의 모양 하나, $\alpha$가 $0.577$에서 $1.961$로 3.4배 된 것뿐인데 화면의 각도는 $17^\circ$에서 $46^\circ$로 바뀐다. 왼쪽은 "완만한 하락", 오른쪽은 "가파른 붕괴"로 읽힌다. **막대그림의 축 자르기가 길이를 속이듯, 선그림의 가로세로비는 기울기를 속인다.** 축을 잘라도 된다는 것이 아무렇게나 그려도 된다는 뜻은 아니다.
+
+    길쭉한 쪽의 $\alpha = 1.961$ 이 (1)에서 구한 $\alpha^{*} = 1.879$ 와 가까워 각도도 $45^\circ$ 에 가까운 $46.2^\circ$ 가 나왔다. 식이 다시 한 번 맞는 셈이다.
+
+    **다만 "45도로 눕히기"는 자료가 매끈할 때의 처방이다.** 출력의 마지막 두 줄을 보라. 추세선을 $45^\circ$로 두려면 $\alpha = 1.879$ 이지만, 하루치 선분(변화의 중앙값 $255.3$ 원)을 $45^\circ$로 두려면 $\alpha = 0.1008$ 이다. **18.6배 차이다.** 이 자료에는 서로 다른 눈금의 기울기가 겹쳐 있기 때문이다 — 1년에 걸친 완만한 추세와 하루 단위의 거친 흔들림. 추세를 눕히면 하루치 선분은 거의 수직이 되고, 하루치 선분을 눕히면 추세는 거의 수평이 된다. **어느 쪽을 보일지 정하는 것이 가로세로비를 정하는 일이다.**
 
 !!! tip "실제 주가로 바꾸려면"
     `yfinance`로 실제 자료를 받아 같은 그림을 그릴 수 있다.
