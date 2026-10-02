@@ -20,35 +20,106 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 체류시간 순열검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 체류시간 순열검정. 각 $10$명의 체류시간에서 $\bar x_A - \bar x_B = -5.4$초를 얻었다. 이 설계는 $\binom{20}{10} = 184{,}756$가지를 모두 열거할 수 있으므로, $p$값뿐 아니라 **기각역 자체를 정확히 그릴 수 있다.**
+
+**(1)** 양측 $\alpha = 0.05$에서 기각하려면 평균차가 얼마나 커야 하는가. 열거한 귀무분포 위에서 그 문턱을 구하고, 관측된 $5.4$초가 그 몇 배인지 구하시오. 문턱 바로 아래 칸의 $p$값도 함께 적어 **이산성**이 무엇을 뜻하는지 보이시오.
+
+**(2)** 함수를 돌려 $p$값을 구하고 정확 열거값·Welch $t$ 검정과 견주시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# 앞 10개가 A 페이지, 뒤 10개가 B 페이지의 체류시간이다.
-times = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167,   # A 페이지
-                  173, 181, 182, 170, 169, 177, 168, 183, 169, 164])  # B 페이지
+    **(1) 해석적으로.** [이표본 순열검정](two_sample.md) 보기 1에서 이 자료의 귀무분포가 평균 $0$, 표준편차
 
-def perm_test_two_sample_means(data, nA, n_perms=9999, rng=None):
-    """두 집단의 평균 차이에 대한 순열검정.
+    $$
+    \operatorname{SD}(d^{*}) = S\sqrt{\frac{1}{10}+\frac{1}{10}} = 5.227257
+    $$
 
-    귀무가설이 참이라면 어느 값이 A 에서 나왔고 어느 값이 B 에서 나왔는지가
-    아무 뜻이 없다. 그래서 이름표를 마구 섞어 가며 차이를 다시 계산하면,
-    "차이가 없을 때 이 정도 차이가 얼마나 흔한가"를 직접 셀 수 있다.
-    """
-    rng = rng or np.random.default_rng(0)
-    obs_diff = data[:nA].mean() - data[nA:].mean()
-    perm_diffs = np.empty(n_perms)
-    for i in range(n_perms):
-        p = rng.permutation(data)
-        perm_diffs[i] = p[:nA].mean() - p[nA:].mean()
-    p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perms + 1)
-    return p_value, perm_diffs, obs_diff
-```
+    이고 값들이 간격 $0.2$인 격자에 놓임을 보았다. 정규근사로 어림하면 문턱이
 
-페이지 A의 평균은 $168.2$초, 페이지 B는 $173.6$초로 차이는 $-5.4$초이다. 순열검정은 $p = 0.327$을 준다.
+    $$
+    1.96 \times 5.227257 = 10.245
+    $$
+
+    쯤이고, 격자가 $0.2$ 간격이므로 $10.2$나 $10.4$가 후보다. 어느 쪽인지는 열거한 분포에서 직접 세어 정해야 한다. 아래 코드가 $10.2$를 고른다.
+
+    **$10.2$초는 관측된 $5.4$초의 거의 두 배다.** 이 자료의 흩어짐($S = 11.69$초)에 견주어 각 집단 $10$명은 그만큼 적은 수다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    import numpy as np
+
+    # 앞 10개가 A 페이지, 뒤 10개가 B 페이지의 체류시간이다.
+    times = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167,   # A 페이지
+                      173, 181, 182, 170, 169, 177, 168, 183, 169, 164])  # B 페이지
+
+    def perm_test_two_sample_means(data, nA, n_perms=9999, rng=None):
+        """두 집단의 평균 차이에 대한 순열검정.
+
+        귀무가설이 참이라면 어느 값이 A 에서 나왔고 어느 값이 B 에서 나왔는지가
+        아무 뜻이 없다. 그래서 이름표를 마구 섞어 가며 차이를 다시 계산하면,
+        "차이가 없을 때 이 정도 차이가 얼마나 흔한가"를 직접 셀 수 있다.
+        """
+        rng = rng or np.random.default_rng(0)
+        obs_diff = data[:nA].mean() - data[nA:].mean()
+        perm_diffs = np.empty(n_perms)
+        for i in range(n_perms):
+            p = rng.permutation(data)
+            perm_diffs[i] = p[:nA].mean() - p[nA:].mean()
+        p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perms + 1)
+        return p_value, perm_diffs, obs_diff
+    ```
+
+    돌려서 열거값과 견준다.
+
+    ```python
+    import itertools
+    from scipy import stats
+
+    p_value, perm_diffs, obs_diff = perm_test_two_sample_means(times, 10)
+    print(f"관측 차이 = {obs_diff:.2f},  순열 p (B=9999) = {p_value:.4f}")
+    print(f"Welch t 검정 p = "
+          f"{stats.ttest_ind(times[:10], times[10:], equal_var=False).pvalue:.4f}")
+
+    # C(20,10) = 184,756 가지를 모두 열거한다.
+    z = times.astype(float)
+    T = z.sum()
+    d = np.array([(2 * z[list(c)].sum() - T) / 10
+                  for c in itertools.combinations(range(20), 10)])
+    ad = np.abs(d)
+    print(f"\n정확 p = {(ad >= abs(obs_diff) - 1e-9).mean():.6f}"
+          f"   (SD(d*) = {d.std():.6f},  1.96 x SD = {1.96 * d.std():.4f})")
+
+    # alpha = 0.05 기각 문턱을 격자 위에서 찾는다.
+    for v in np.unique(np.round(ad, 6)):
+        if (ad >= v - 1e-9).mean() <= 0.05:
+            break
+    print(f"문턱 |d| = {v:.1f} 의 정확 p   = {(ad >= v - 1e-9).mean():.6f}")
+    print(f"한 칸 아래 {v - 0.2:.1f} 의 정확 p = {(ad >= v - 0.2 - 1e-9).mean():.6f}")
+    print(f"관측 |d| / 문턱 = {abs(obs_diff) / v:.4f}")
+    ```
+
+    출력:
+
+    ```
+    관측 차이 = -5.40,  순열 p (B=9999) = 0.3306
+    Welch t 검정 p = 0.3204
+
+    정확 p = 0.325586   (SD(d*) = 5.227257,  1.96 x SD = 10.2454)
+    문턱 |d| = 10.2 의 정확 p   = 0.049352
+    한 칸 아래 10.0 의 정확 p = 0.054580
+    관측 |d| / 문턱 = 0.5294
+    ```
+
+    **문턱은 $10.2$초다.** 정규근사가 가리킨 $10.245$ 바로 아래 칸이다. 그 자리의 정확 $p$값은 $0.049352$이고, **한 칸 아래인 $10.0$초로 내려가면 $0.054580$으로 올라가 더는 기각하지 못한다.**
+
+    이 두 수가 이산성의 뜻을 그대로 보여 준다. $\alpha = 0.05$로 검정한다고 말하지만 **실제 크기는 $0.049352$다.** 명목값에 꼭 맞출 수 없고 늘 그보다 조금 작은 쪽으로 떨어진다. 가능한 $p$값이 $1/184756$의 배수뿐이기 때문이며, 표본이 작을수록 이 틈이 커진다.
+
+    **관측값은 문턱의 $0.5294$배에 지나지 않는다.** 그러니 $p$값이 얼마로 나오든 결론은 미리 정해져 있었다. 세 수 — 순열 $0.3306$, 정확 $0.325586$, Welch $0.3204$ — 가 모두 $0.32$ 언저리다.
+
+    순열 $p$값이 난수에 따라 흔들린다는 점도 적어 둘 것. $B = 9{,}999$에서 $\hat p$의 표준편차가 $\sqrt{0.3256 \times 0.6744/9999} = 0.0047$이므로 **씨앗을 바꾸면 $0.32$에서 $0.34$ 사이를 오간다.** 본문이 적은 $0.327$과 위의 $0.3306$은 같은 분포에서 뽑은 두 값이며, 둘 다 정확값 $0.325586$에서 한 표준편차 안에 있다. 자릿수를 더 믿고 싶으면 $B$를 키우는 것이 아니라 **열거하는 것**이 답이다.
 
 결과를 Welch $t$ 검정과 비교한다.
 
@@ -77,31 +148,114 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 전환율 순열검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 전환율 순열검정. 대조군 $23{,}739$명 중 $200$명, 처치군 $22{,}588$명 중 $182$명이 전환했다. 처치군의 전환 수를 $X$라 하면 순열 귀무분포가 $X \sim \text{HG}(22588,\ 46327,\ 382)$이므로 **기각역을 전환 건수로 정확히 적을 수 있다.**
+
+**(1)** 전환 한 건이 비율차를 얼마나 움직이는지 구하시오. 그다음 $\alpha = 0.05$ 양측에서 기각되는 $X$의 값을 정확히 구하고, 관측된 $182$건이 그 경계에서 **몇 건** 떨어져 있는지 말하시오.
+
+**(2)** 함수를 돌려 $p$값을 구하고 Fisher 정확검정과 견주시오. 정규근사가 고르는 경계와 정확한 경계가 어긋나는지도 보시오.
 
 </div>
 
-```python
-def perm_test_proportion(n_control, conv_control, n_treatment, conv_treatment,
-                         n_perms=9999, rng=None):
-    """전환율 차이에 대한 순열검정.
+??? success "풀이"
 
-    이진 자료도 다를 것이 없다. 전체 전환 수만큼 1 을 채운 배열을 만들고
-    그것을 섞으면, "전환이 두 집단에 무작위로 흩어진" 상태가 된다.
-    """
-    rng = rng or np.random.default_rng(0)
-    binary = np.zeros(n_control + n_treatment)
-    binary[:conv_control + conv_treatment] = 1
-    obs_diff = conv_treatment / n_treatment - conv_control / n_control
+    **(1) 해석적으로.** 전체 전환 수 $K = 382$가 고정되므로 $\hat p_T - \hat p_C$는 $X$의 일차식이다.
 
-    perm_diffs = np.empty(n_perms)
-    for i in range(n_perms):
-        p = rng.permutation(binary)
-        perm_diffs[i] = p[n_control:].mean() - p[:n_control].mean()
+    $$
+    T^{(\pi)} = \frac{X}{n_T} - \frac{K - X}{n_C}
+    = X\left(\frac{1}{n_T} + \frac{1}{n_C}\right) - \frac{K}{n_C}
+    $$
 
-    p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perms + 1)
-    return p_value, perm_diffs, obs_diff
-```
+    따라서 **전환 한 건이 움직이는 비율차**가
+
+    $$
+    \frac{1}{22588} + \frac{1}{23739} = 8.640\times10^{-5} = 0.00864\%\text{p}
+    $$
+
+    다. 관측된 $-0.0368\%$p는 이 눈금의 $4.26$칸, 곧 **전환 네 건 남짓**에 해당한다.
+
+    $X$가 초기하분포를 따르므로 기각역은 $\lvert T\rvert$가 큰 쪽, 곧 $X$가 $E[X] = 186.25$에서 멀리 떨어진 쪽이다. 꼬리확률을 더해 $p \le 0.05$가 되는 경계를 찾으면 되고, 아래 코드가 $X \le 166$ 또는 $X \ge 206$을 준다.
+
+    어림은 정규근사로도 된다. 귀무분포의 표준편차가 $0.00084056$이므로 문턱이 $1.96 \times 0.00084056 = 0.0016475$이고, 이것을 눈금 $8.640\times10^{-5}$로 나누면 $19.07$건이다. 곧 $X$가 $186.25$에서 $19$건 넘게 벗어나야 한다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def perm_test_proportion(n_control, conv_control, n_treatment, conv_treatment,
+                             n_perms=9999, rng=None):
+        """전환율 차이에 대한 순열검정.
+
+        이진 자료도 다를 것이 없다. 전체 전환 수만큼 1 을 채운 배열을 만들고
+        그것을 섞으면, "전환이 두 집단에 무작위로 흩어진" 상태가 된다.
+        """
+        rng = rng or np.random.default_rng(0)
+        binary = np.zeros(n_control + n_treatment)
+        binary[:conv_control + conv_treatment] = 1
+        obs_diff = conv_treatment / n_treatment - conv_control / n_control
+
+        perm_diffs = np.empty(n_perms)
+        for i in range(n_perms):
+            p = rng.permutation(binary)
+            perm_diffs[i] = p[n_control:].mean() - p[:n_control].mean()
+
+        p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perms + 1)
+        return p_value, perm_diffs, obs_diff
+    ```
+
+    $B$는 $2{,}000$이면 충분하다. 어차피 정확값을 따로 계산할 참이고, 길이 $46{,}327$짜리 배열을 섞는 일은 비싸다.
+
+    ```python
+    from scipy import stats
+
+    p_value, perm_diffs, obs_diff = perm_test_proportion(23739, 200, 22588, 182,
+                                                         n_perms=2000)
+    print(f"관측 차이 = {obs_diff:.6f},  순열 p (B=2000) = {p_value:.4f}")
+    print(f"Fisher 정확검정 = "
+          f"{stats.fisher_exact([[200, 23739 - 200], [182, 22588 - 182]])[1]:.6f}")
+
+    n_c, c_c, n_t, c_t = 23739, 200, 22588, 182
+    N, K = n_c + n_t, c_c + c_t
+    step = 1 / n_t + 1 / n_c
+    x = np.arange(K + 1)
+    d = x * step - K / n_c
+    pmf = stats.hypergeom.pmf(x, N, K, n_t)
+
+    def p_exact(x_obs):
+        d_obs = x_obs * step - K / n_c
+        return pmf[np.abs(d) >= abs(d_obs) - 1e-18].sum()
+
+    EX = K * n_t / N
+    sd_null = np.sqrt(N / (N - 1) * (K / N) * (1 - K / N) * step)
+    print(f"\n전환 한 건이 움직이는 비율차 = {step:.3e},  E[X] = {EX:.2f}")
+    lo = max(v for v in range(0, 187) if p_exact(v) <= 0.05)
+    hi = min(v for v in range(187, K + 1) if p_exact(v) <= 0.05)
+    print(f"기각역: X <= {lo} (p = {p_exact(lo):.4f})  또는  X >= {hi} (p = {p_exact(hi):.4f})")
+    print(f"  경계 바로 안쪽: X = {lo + 1} 이면 p = {p_exact(lo + 1):.4f},"
+          f"  X = {hi - 1} 이면 p = {p_exact(hi - 1):.4f}")
+    print(f"정규근사 문턱 = {1.96 * sd_null / step:.2f} 건"
+          f"  ->  X <= {EX - 1.96 * sd_null / step:.2f} 또는 X >= {EX + 1.96 * sd_null / step:.2f}")
+    print(f"관측 X = {c_t}: 아래 경계까지 {c_t - lo} 건,  위 경계까지 {hi - c_t} 건")
+    print(f"정확 p (X = {c_t}) = {p_exact(c_t):.6f}")
+    ```
+
+    출력:
+
+    ```
+    관측 차이 = -0.000368,  순열 p (B=2000) = 0.6667
+    Fisher 정확검정 = 0.681128
+
+    전환 한 건이 움직이는 비율차 = 8.640e-05,  E[X] = 186.25
+    기각역: X <= 166 (p = 0.0397)  또는  X >= 206 (p = 0.0450)
+      경계 바로 안쪽: X = 167 이면 p = 0.0508,  X = 205 이면 p = 0.0572
+    정규근사 문턱 = 19.07 건  ->  X <= 167.19 또는 X >= 205.32
+    관측 X = 182: 아래 경계까지 16 건,  위 경계까지 24 건
+    정확 p (X = 182) = 0.681128
+    ```
+
+    **기각역이 전환 건수로 또렷하게 적힌다.** 이 실험은 처치군의 전환이 **$166$건 이하이거나 $206$건 이상**이어야 유의하다. 관측된 $182$건은 아래 경계에서 $16$건, 위 경계에서 $24$건 떨어져 있다. 사만 육천 명을 모았지만 **전환 스무 건 수준의 차이는 잡아내지 못하는 설계**였다는 뜻이다.
+
+    **정규근사와 정확한 경계가 한 칸씩 어긋난다.** 정규근사는 $X \le 167.19$ 또는 $X \ge 205.32$라 하여 정수로는 $X \le 167$, $X \ge 205$를 고르는데, 정확한 경계는 $X \le 166$, $X \ge 206$이다. 실제로 $X = 167$의 정확 $p$는 $0.0508$, $X = 205$는 $0.0572$로 **둘 다 $0.05$를 넘는다.** 근사를 그대로 썼다면 두 경우에 잘못 기각했을 것이다. 분포가 $E[X] = 186.25$에 대해 꼭 대칭이 아니라서 아래쪽과 위쪽의 틈도 다르다.
+
+    **$p$값 쪽은 느슨해도 된다.** $B = 2{,}000$이 준 $0.6667$은 정확값 $0.681128$에서 $-0.0145$ 떨어져 있는데 몬테카를로 표준편차 $\sqrt{0.6811 \times 0.3189/2000} = 0.0104$의 $1.4$배다. 어차피 Fisher 정확검정이 $0.681128$을 바로 주므로 **여기서 재표집을 돌릴 이유는 없다.** 기각역을 건수로 옮겨 읽는 위 계산도 재표집 없이 끝났다.
 
 비교 대상은 $2 \times 2$ 분할표에 대한 독립성 카이제곱 검정이다.
 

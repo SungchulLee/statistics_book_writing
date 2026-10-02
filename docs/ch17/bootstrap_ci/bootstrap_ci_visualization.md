@@ -18,36 +18,94 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 치우친 소득 모집단 만들기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 치우친 소득 모집단 만들기. $c = 20{,}000$, $1/\lambda = 50{,}000$인 이동 지수분포에서 $N = 5{,}000$개를 뽑아 "모집단"으로 삼는다. **이 $5{,}000$개도 표본이므로 참값에서 벗어난다.**
+
+**(1)** 이동 지수분포의 평균·중앙값·표준편차를 적으시오. 모의 모집단의 평균과 중앙값이 그 참값에서 벗어나는 폭(표준오차)을 각각 구하시오. **두 표준오차가 같다.**
+
+**(2)** 실행해 두 값이 몇 표준오차 벗어났는지 재시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def simulate_income_data(n=5000, seed=3):
-    """오른쪽으로 치우친 소득 자료를 만든다.
+    **(1) 해석적으로.** 밀도가 $f(x) = \lambda e^{-\lambda(x-c)}$, $x \ge c$이므로
 
-    모집단을 우리가 만들었으므로 참 평균을 알고 있다. 뒤에서 신뢰구간이
-    그 값을 정말 95% 담는지 세어 볼 수 있다.
-    """
-    rng = np.random.default_rng(seed)
-    return rng.exponential(scale=50_000, size=n) + 20_000
+    $$
+    \mu = c + \frac1\lambda = 70{,}000,
+    \qquad
+    m = c + \frac{\ln 2}{\lambda} = 54{,}657.4,
+    \qquad
+    \sigma = \frac1\lambda = 50{,}000
+    $$
 
-population = simulate_income_data()
-print(population.mean(), np.median(population))    # 69526  54542
+    이다. $N = 5{,}000$개를 뽑았을 때
 
-# 표본은 20개뿐이다. 치우친 모집단에서 이만큼만 뽑으면 붓스트랩 구간의
-# 실제 포함확률이 95%에 못 미친다 — 아래 모의실험에서 확인한다.
-rng = np.random.default_rng(303)
-sample = rng.choice(population, size=20, replace=False)
-```
+    $$
+    \operatorname{SE}(\bar X) = \frac{\sigma}{\sqrt N} = \frac{50000}{\sqrt{5000}} = 707.1
+    $$
 
-출력:
+    이고, 중앙값 쪽은 $f(m) = \lambda e^{-\ln 2} = \dfrac{\lambda}{2}$이므로
 
-```
-69525.69401218835 54541.90941528454
-```
+    $$
+    \operatorname{SE}(\tilde X) = \frac{1}{2 f(m)\sqrt N} = \frac{1}{\lambda\sqrt N} = \frac{\sigma}{\sqrt N} = 707.1
+    $$
+
+    로 **똑같다.** 지수분포에서는 중앙값이 평균만큼 효율적이다([붓스트랩 재표집 방법](../bootstrap/resampling_method.md) 보기 1이 같은 사실을 다룬다).
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    def simulate_income_data(n=5000, seed=3):
+        """오른쪽으로 치우친 소득 자료를 만든다.
+
+        모집단을 우리가 만들었으므로 참 평균을 알고 있다. 뒤에서 신뢰구간이
+        그 값을 정말 95% 담는지 세어 볼 수 있다.
+        """
+        rng = np.random.default_rng(seed)
+        return rng.exponential(scale=50_000, size=n) + 20_000
+
+    population = simulate_income_data()
+    print(population.mean(), np.median(population))    # 69526  54542
+
+    # 표본은 20개뿐이다. 치우친 모집단에서 이만큼만 뽑으면 붓스트랩 구간의
+    # 실제 포함확률이 95%에 못 미친다 — 아래 모의실험에서 확인한다.
+    rng = np.random.default_rng(303)
+    sample = rng.choice(population, size=20, replace=False)
+    ```
+
+    출력:
+
+    ```
+    69525.69401218835 54541.90941528454
+    ```
+
+    (1)의 수와 맞춘다.
+
+    ```python
+    c, sc, N = 20_000.0, 50_000.0, len(population)
+    print(f"이론: 평균 = c + 1/lam = {c + sc:,.1f},  중앙값 = c + ln2/lam = {c + sc*np.log(2):,.1f},"
+          f"  표준편차 = {sc:,.1f}")
+    print(f"모의 모집단: 평균 {population.mean():,.2f},  중앙값 {np.median(population):,.2f}")
+    se = sc / np.sqrt(N)
+    print(f"둘의 표준오차 = sigma/sqrt(N) = 1/(2 f(m) sqrt(N)) = {se:,.1f}")
+    print(f"벗어난 정도: 평균 {(population.mean() - (c + sc)) / se:+.2f} SE,"
+          f"  중앙값 {(np.median(population) - (c + sc * np.log(2))) / se:+.2f} SE")
+    ```
+
+    출력:
+
+    ```
+    이론: 평균 = c + 1/lam = 70,000.0,  중앙값 = c + ln2/lam = 54,657.4,  표준편차 = 50,000.0
+    모의 모집단: 평균 69,525.69,  중앙값 54,541.91
+    둘의 표준오차 = sigma/sqrt(N) = 1/(2 f(m) sqrt(N)) = 707.1
+    벗어난 정도: 평균 -0.67 SE,  중앙값 -0.16 SE
+    ```
+
+    **둘 다 제자리다.** 평균이 $-0.67$, 중앙값이 $-0.16$ 표준오차 벗어나 있다.
+
+    **그러나 뒤의 모의실험에서 "참값"으로 쓸 것은 $70{,}000$이 아니라 $69{,}525.69$다.** 표본을 이 $5{,}000$개에서 비복원으로 뽑으므로 실제 모집단은 이 유한집합이고, 그 평균이 $69{,}525.69$이기 때문이다. 둘의 차이 $474$는 구간 폭 $4$만 원대에 견주면 무시할 수준이지만, **무엇이 참값인지 먼저 정해 두어야 포함확률을 셀 수 있다.**
 
 ## 붓스트랩 표집분포
 
@@ -61,22 +119,85 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 표집분포
+**보기 2.** <span class="diff easy" title="쉬움"></span> 붓스트랩 표집분포. 보기 1이 뽑은 $n = 20$짜리 표본에 적용한다.
+
+**(1)** 붓스트랩 분포 $\{\bar x^{*}\}$의 평균·표준편차·왜도를 **표본의 적률만으로** 예측하시오. 또 이 분포가 어디에 갇혀 있는지 말하시오.
+
+**(2)** 실행해 세 예측을 확인하시오.
 
 </div>
 
-```python
-def bootstrap_sampling_distribution(sample, n_bootstrap=20_000, rng=None):
-    """표본평균의 붓스트랩 표집분포. 반복문 없이 한 번에 계산한다.
+??? success "풀이"
 
-    (n_bootstrap, n) 모양의 색인 배열을 만들어 한꺼번에 뽑으면 파이썬
-    반복문이 사라진다. 붓스트랩처럼 같은 일을 만 번 되풀이하는 계산에서
-    속도가 크게 달라진다.
-    """
-    rng = rng or np.random.default_rng(0)
-    n = len(sample)
-    return sample[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
-```
+    **(1) 해석적으로.** 붓스트랩 표본은 경험분포에서 i.i.d.로 $n$개 뽑은 것이다. 경험분포의 평균·분산·왜도가 각각 $\bar x$, $\hat\sigma^2 = \frac1n\sum_i(x_i-\bar x)^2$, $\hat\gamma_1$이므로 독립인 $n$개 평균의 적률 공식이 그대로 적용된다.
+
+    $$
+    E_*[\bar X^{*}] = \bar x,
+    \qquad
+    \operatorname{SD}_*(\bar X^{*}) = \frac{\hat\sigma}{\sqrt n},
+    \qquad
+    \gamma_1\!\left(\bar X^{*}\right) = \frac{\hat\gamma_1}{\sqrt n}
+    $$
+
+    **셋 다 $\sqrt n$ 하나로 정리된다.** 특히 왜도는 $\sqrt n$으로 나뉘므로, 자료가 아무리 치우쳐 있어도 평균의 붓스트랩 분포는 훨씬 덜 치우친다. 중심극한정리가 작동하는 모습이다.
+
+    **갇혀 있는 곳.** 재표본은 관측값만으로 이루어지므로
+
+    $$
+    \min_i x_i \;\le\; \bar x^{*} \;\le\; \max_i x_i
+    $$
+
+    이다. 두 끝은 같은 값만 $n$번 뽑았을 때라 확률이 $n^{-n}$으로 사실상 $0$이지만, **분포가 유계라는 사실 자체가 멀리 떨어진 꼬리에서 정규근사를 깨뜨린다.** 보기 3에서 그 결과를 본다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_sampling_distribution(sample, n_bootstrap=20_000, rng=None):
+        """표본평균의 붓스트랩 표집분포. 반복문 없이 한 번에 계산한다.
+
+        (n_bootstrap, n) 모양의 색인 배열을 만들어 한꺼번에 뽑으면 파이썬
+        반복문이 사라진다. 붓스트랩처럼 같은 일을 만 번 되풀이하는 계산에서
+        속도가 크게 달라진다.
+        """
+        rng = rng or np.random.default_rng(0)
+        n = len(sample)
+        return sample[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
+    ```
+
+    보기 1의 `sample`을 그대로 이어 쓴다.
+
+    ```python
+    from scipy import stats
+
+    bd = bootstrap_sampling_distribution(sample)
+    print(f"표본: 평균 {sample.mean():,.2f},  sigma-hat {sample.std(ddof=0):,.2f},"
+          f"  왜도 {stats.skew(sample):.4f}")
+    print(f"붓스트랩 평균 {bd.mean():,.2f}  (예측 = 표본평균)")
+    print(f"붓스트랩 SD   {bd.std(ddof=1):,.2f}  (예측 sigma-hat/sqrt(n) = "
+          f"{sample.std(ddof=0) / np.sqrt(20):,.2f},"
+          f"  몬테카를로 오차 {sample.std(ddof=0) / np.sqrt(20) / np.sqrt(2 * 20000):.1f})")
+    print(f"붓스트랩 왜도 {stats.skew(bd):.4f}  (예측 g1/sqrt(n) = "
+          f"{stats.skew(sample) / np.sqrt(20):.4f},"
+          f"  몬테카를로 오차 {np.sqrt(6 / 20000):.4f})")
+    print(f"붓스트랩 분포의 범위 [{bd.min():,.0f}, {bd.max():,.0f}]"
+          f"   자료의 범위 [{sample.min():,.0f}, {sample.max():,.0f}]")
+    ```
+
+    출력:
+
+    ```
+    표본: 평균 78,122.71,  sigma-hat 54,427.21,  왜도 1.3169
+    붓스트랩 평균 78,195.53  (예측 = 표본평균)
+    붓스트랩 SD   12,284.09  (예측 sigma-hat/sqrt(n) = 12,170.29,  몬테카를로 오차 60.9)
+    붓스트랩 왜도 0.3040  (예측 g1/sqrt(n) = 0.2945,  몬테카를로 오차 0.0173)
+    붓스트랩 분포의 범위 [38,491, 130,423]   자료의 범위 [24,550, 223,179]
+    ```
+
+    **세 예측이 모두 맞는다.** 평균 $78{,}195.53$은 $\bar x = 78{,}122.71$에서 $73$ 떨어져 있는데 평균의 몬테카를로 오차 $12284/\sqrt{20000} = 87$ 안이다. 표준편차 $12{,}284.09$는 예측 $12{,}170.29$에서 $114$ 떨어져 있어 몬테카를로 오차 $60.9$의 $1.9$배로 조금 큰 편이지만 범위 안이다. 왜도 $0.3040$도 예측 $0.2945$에 붙는다.
+
+    **치우침이 $1.3169$에서 $0.2945$로 줄었다.** $\sqrt{20} = 4.47$로 나뉜 결과다. 자료 자체는 뚜렷이 오른쪽으로 쏠려 있지만 **$20$개의 평균은 거의 대칭**이다.
+
+    **분포가 좁은 구간에 갇혀 있다는 것도 확인된다.** 자료는 $24{,}550$에서 $223{,}179$까지 뻗어 있는데 $20{,}000$개의 재표본평균은 $38{,}491$에서 $130{,}423$ 사이에만 나타났다. 평균을 내는 순간 극단이 서로 상쇄되기 때문이다.
 
 ## 여러 신뢰수준에서의 신뢰구간
 
@@ -96,23 +217,71 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 여러 신뢰수준의 구간
+**보기 3.** <span class="diff easy" title="쉬움"></span> 여러 신뢰수준의 구간. 보기 1이 뽑은 표본($\bar x = 78{,}123$)의 붓스트랩 분포에서 세 구간을 읽는다.
+
+**(1)** 붓스트랩 분포가 정규라면 각 구간의 폭이 $2 z_{1-\alpha/2}\widehat{\operatorname{SE}}$다. 세 폭을 예측하고 $99\%$와 $90\%$의 비를 구하시오. 보기 2에서 본 **유계성** 때문에 세 예측 가운데 어느 것이 가장 크게 어긋나겠는가.
+
+**(2)** 실행해 확인하시오.
 
 </div>
 
-```python
-def compute_confidence_intervals(bootstrap_dist):
-    """여러 신뢰수준에서의 백분위수 신뢰구간.
+??? success "풀이"
 
-    신뢰수준을 올리면 구간이 넓어진다. 확신을 더 얻는 대가로 말해 주는
-    범위가 흐려지는 맞바꿈이다.
-    """
-    return {
-        '90%': np.percentile(bootstrap_dist, [5, 95]),
-        '95%': np.percentile(bootstrap_dist, [2.5, 97.5]),
-        '99%': np.percentile(bootstrap_dist, [0.5, 99.5]),
-    }
-```
+    **(1) 해석적으로.** $\widehat{\operatorname{SE}} = 12{,}284.09$(보기 2)를 넣는다.
+
+    | 수준 | $z_{1-\alpha/2}$ | 예측 폭 $2z\widehat{\operatorname{SE}}$ |
+    |:---|---:|---:|
+    | $90\%$ | $1.644854$ | $40{,}411$ |
+    | $95\%$ | $1.959964$ | $48{,}153$ |
+    | $99\%$ | $2.575829$ | $63{,}283$ |
+
+    비는 $z$만으로 정해져 $\dfrac{2.575829}{1.644854} = 1.5660$이다.
+
+    **가장 크게 어긋날 것은 $99\%$다.** 보기 2에서 본 대로 붓스트랩 분포는 $[\min_i x_i,\ \max_i x_i]$ 안에 갇혀 있고, 정규곡선은 그 밖에도 질량을 둔다. 꼬리 쪽으로 멀리 갈수록 그 차이가 드러나므로, $0.5$/$99.5$ 백분위수를 읽는 $99\%$ 구간이 정규 예측보다 **좁게** 나올 것이다. $90\%$ 구간은 분포의 가운데에 가까워 거의 맞을 것이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def compute_confidence_intervals(bootstrap_dist):
+        """여러 신뢰수준에서의 백분위수 신뢰구간.
+
+        신뢰수준을 올리면 구간이 넓어진다. 확신을 더 얻는 대가로 말해 주는
+        범위가 흐려지는 맞바꿈이다.
+        """
+        return {
+            '90%': np.percentile(bootstrap_dist, [5, 95]),
+            '95%': np.percentile(bootstrap_dist, [2.5, 97.5]),
+            '99%': np.percentile(bootstrap_dist, [0.5, 99.5]),
+        }
+    ```
+
+    보기 2의 `bd`를 그대로 이어 쓴다.
+
+    ```python
+    cis = compute_confidence_intervals(bd)
+    se_b = bd.std(ddof=1)
+    for lab, z in (('90%', 1.644854), ('95%', 1.959964), ('99%', 2.575829)):
+        lo, hi = cis[lab]
+        print(f"{lab}: [{lo:,.0f}, {hi:,.0f}]  폭 {hi-lo:,.0f}"
+              f"   예측 2 z SE = {2*z*se_b:,.0f}   (비 {(hi-lo)/(2*z*se_b):.4f})")
+    w = {k: v[1] - v[0] for k, v in cis.items()}
+    print(f"폭의 비 99/90 = {w['99%']/w['90%']:.4f}   (정규이론 {2.575829/1.644854:.4f})")
+    ```
+
+    출력:
+
+    ```
+    90%: [59,118, 99,527]  폭 40,409   예측 2 z SE = 40,411   (비 1.0000)
+    95%: [56,169, 104,028]  폭 47,859   예측 2 z SE = 48,153   (비 0.9939)
+    99%: [50,628, 112,855]  폭 62,226   예측 2 z SE = 63,283   (비 0.9833)
+    폭의 비 99/90 = 1.5399   (정규이론 1.5660)
+    ```
+
+    **예측한 패턴이 그대로 나온다.** $90\%$ 폭이 $40{,}409$로 예측 $40{,}411$과 **소수 넷째 자리까지 같고**, $95\%$는 $0.6\%$, $99\%$는 $1.7\%$ 좁다. 멀리 갈수록 어긋남이 커지는 순서다.
+
+    그래서 폭의 비도 $1.5399$로 정규이론의 $1.5660$보다 작다. **"$99\%$ 구간이 $90\%$ 구간의 $1.57$배"라는 어림은 분포의 가운데에서 끌어온 것이고, 유계인 붓스트랩 분포의 바깥 꼬리에서는 $1.54$로 내려간다.**
+
+    신뢰수준이 $90\%$에서 $95\%$, $99\%$로 오르면 구간 폭이 커진다. 확신을 더 얻는 대가로 말해 주는 범위가 흐려지는 맞바꿈이다. 다만 여기에는 숨은 전제가 있다. **폭이 넓어진다고 포함확률이 약속대로 오르는 것은 아니다.** 보기 4가 그 점을 센다.
 
 표본평균이 \$67,895인 한 표본($n = 20$)에서:
 
@@ -152,28 +321,83 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 포함확률 모의실험
+**보기 4.** <span class="diff easy" title="쉬움"></span> 포함확률 모의실험. 보기 1의 모집단에서 $n = 20$을 뽑아 $95\%$ 백분위수 구간을 만드는 일을 $N = 2{,}000$번 되풀이한다.
+
+**(1)** 포함확률이 명목 $0.95$에 못 미치리라 예상되는 까닭을 적고, **빗나감이 어느 쪽으로 몰릴지** 미리 말하시오. 또 $N = 2{,}000$번으로 잰 포함확률의 몬테카를로 오차를 구하시오.
+
+**(2)** 실행해 포함확률을 재고, 빗나간 경우를 좌우로 나누어 세시오.
 
 </div>
 
-```python
-def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
-    """백분위수 붓스트랩 구간의 실제 포함확률을 센다.
+??? success "풀이"
 
-    모집단에서 표본을 새로 뽑는 일을 N 번 되풀이하며, 그때마다 만든 구간이
-    참 평균을 담는지 센다. 95%로 약속한 구간의 실제 성적표다.
-    """
-    rng = rng or np.random.default_rng(303)
-    hits = 0
-    for _ in range(N):
-        s = rng.choice(population, size=n, replace=False)
-        bm = s[rng.integers(0, n, (B, n))].mean(axis=1)
+    **(1) 해석적으로.** 유도할 닫힌 꼴은 없지만 방향은 미리 알 수 있다.
+
+    **왜 모자라는가.** 백분위수 구간은 붓스트랩 분포의 꼬리를 그대로 잘라 쓸 뿐 **치우침을 고치지 않는다**([붓스트랩 재표집 방법](../bootstrap/resampling_method.md) 보기 4가 같은 결함을 포함확률로 잰다). 게다가 $n = 20$에서는 $\hat\sigma$가 참 $\sigma$를 체계적으로 **작게** 추정한다. 모집단의 오른쪽 꼬리에서 큰 값을 못 뽑으면 $\bar x$도 작아지고 $\hat\sigma$도 함께 작아져, **구간이 왼쪽으로 치우친 채 좁아진다.** 두 결함이 같은 방향으로 겹친다.
+
+    **어느 쪽으로 빗나가는가.** 그러므로 빗나감은 **구간이 참값보다 왼쪽에 놓이는 쪽**, 곧 참값이 상한 위로 빠져나가는 쪽으로 몰릴 것이다. 오른쪽 꼬리를 많이 뽑은 표본은 $\bar x$가 크지만 $\hat\sigma$도 함께 커져 구간이 넓어지므로 반대쪽 실패는 드물다.
+
+    **몬테카를로 오차.** 포함확률 $p \approx 0.9$를 $N = 2{,}000$번으로 재므로
+
+    $$
+    \operatorname{SE} = \sqrt{\frac{0.9 \times 0.1}{2000}} = 0.0067
+    $$
+
+    이다. **소수 둘째 자리까지만 의미가 있다.**
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def simulate_coverage(population, true_mean, n=20, B=1000, N=2000, rng=None):
+        """백분위수 붓스트랩 구간의 실제 포함확률을 센다.
+
+        모집단에서 표본을 새로 뽑는 일을 N 번 되풀이하며, 그때마다 만든 구간이
+        참 평균을 담는지 센다. 95%로 약속한 구간의 실제 성적표다.
+        """
+        rng = rng or np.random.default_rng(303)
+        hits = 0
+        for _ in range(N):
+            s = rng.choice(population, size=n, replace=False)
+            bm = s[rng.integers(0, n, (B, n))].mean(axis=1)
+            lo, hi = np.percentile(bm, [2.5, 97.5])
+            hits += lo <= true_mean <= hi
+        return hits / N
+    ```
+
+    참값은 보기 1에서 정한 대로 유한 모집단의 평균 $69{,}525.69$를 쓴다.
+
+    ```python
+    cov = simulate_coverage(population, population.mean())
+    print(f"실제 포함확률 = {cov:.4f}"
+          f"   (N=2000 의 몬테카를로 오차 {np.sqrt(cov * (1 - cov) / 2000):.4f})")
+
+    rng2 = np.random.default_rng(303)
+    lo_miss = hi_miss = 0
+    for _ in range(2000):
+        s = rng2.choice(population, size=20, replace=False)
+        bm = s[rng2.integers(0, 20, (1000, 20))].mean(axis=1)
         lo, hi = np.percentile(bm, [2.5, 97.5])
-        hits += lo <= true_mean <= hi
-    return hits / N
-```
+        if population.mean() > hi:
+            hi_miss += 1
+        elif population.mean() < lo:
+            lo_miss += 1
+    print(f"구간이 참값보다 왼쪽에 (아래로 빗나감): {hi_miss / 2000:.4f}")
+    print(f"구간이 참값보다 오른쪽에 (위로 빗나감): {lo_miss / 2000:.4f}")
+    ```
 
-지수 소득 자료에 $n = 20$을 쓰면 백분위수 $95$% 구간의 실제 포함확률이 **$0.900$**으로 명목값에 크게 못 미친다. 분포의 왜도 때문이다. 표본크기를 늘리거나 BCa 보정을 쓰면 개선되지만, 연습문제 2에서 보듯 $n = 20$에서는 BCa도 큰 도움이 되지 않는다.
+    출력:
+
+    ```
+    실제 포함확률 = 0.9105   (N=2000 의 몬테카를로 오차 0.0064)
+    구간이 참값보다 왼쪽에 (아래로 빗나감): 0.0705
+    구간이 참값보다 오른쪽에 (위로 빗나감): 0.0190
+    ```
+
+    **포함확률이 $0.9105 \pm 0.0064$로 명목 $0.95$에 $4$%p 모자란다.** $\alpha = 0.05$로 약속한 절차가 실제로는 $\alpha = 0.09$짜리다.
+
+    **빗나감의 방향도 예측대로다.** 실패 $8.95\%$ 가운데 $7.05\%$가 "구간이 참값보다 왼쪽"이고 $1.90\%$만 반대쪽이다. **$3.7$배 기울어 있다.** 대칭이라면 양쪽이 $2.5\%$씩이어야 하므로, 왼쪽 실패가 세 배 가까이 부풀고 오른쪽 실패는 오히려 줄어든 꼴이다.
+
+    이 비대칭이 **결함의 출처가 왜도임을 가리킨다.** 단순히 구간이 좁기만 했다면 양쪽이 고르게 늘었을 것이다. 표본크기를 늘리거나 BCa 보정을 쓰면 개선되지만, 연습문제 2에서 보듯 $n = 20$에서는 BCa도 큰 도움이 되지 않는다.
 
 ## 표본 하나와 2000개의 표본
 

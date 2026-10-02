@@ -28,30 +28,100 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 판매량 자료
+**보기 1.** <span class="diff easy" title="쉬움"></span> 판매량 자료. 같은 $12$주를 전후로 측정했으므로 이 자료는 **대응자료**다. 그 구조를 쓰는 것과 쓰지 않는 것의 값을 미리 재어 둔다.
+
+**(1)** 주별 차이 $d_i$의 표본분산이 $s_d^2 = s_1^2 + s_2^2 - 2 r s_1 s_2$임을 보이시오($r$은 전후 상관). 이것으로 대응 표준오차와 비대응 표준오차의 비를 $r$, $s_1$, $s_2$로 적으시오.
+
+**(2)** 두 수를 계산해 비를 구하시오. 상관이 $0$이면 비가 얼마가 되는가.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# 판촉 전후 12주치 신발 판매량. 평균이 2.25 올랐는데, 이것이 판촉의
-# 효과인지 그저 주마다의 들쭉날쭉인지를 아래에서 가린다.
-BEFORE = np.array([23, 21, 19, 24, 35, 17, 18, 24, 33, 27, 21, 23])
-AFTER  = np.array([31, 28, 19, 24, 32, 27, 16, 28, 29, 26, 25, 27])
+    **(1) 해석적으로.** $d_i = x_{2i} - x_{1i}$이므로 분산의 성질에서 바로 나온다. 표본분산으로 적으면
 
-print(f"Before mean: {BEFORE.mean():.2f}")   # 23.75
-print(f"After  mean: {AFTER.mean():.2f}")    # 26.00
-print(f"Difference:  {AFTER.mean() - BEFORE.mean():.2f}")   # 2.25
-```
+    $$
+    s_d^2 = \frac{1}{n-1}\sum_i \big((x_{2i} - \bar x_2) - (x_{1i} - \bar x_1)\big)^2
+    = s_1^2 + s_2^2 - 2 s_{12}
+    $$
 
-출력:
+    이고 $s_{12} = r s_1 s_2$이므로
 
-```
-Before mean: 23.75
-After  mean: 26.00
-Difference:  2.25
-```
+    $$
+    s_d^2 = s_1^2 + s_2^2 - 2 r s_1 s_2
+    $$
+
+    다. 대응 $t$ 검정이 쓰는 표준오차는 $s_d/\sqrt n$이고, 짝을 무시한 이표본 쪽은 $\sqrt{(s_1^2+s_2^2)/n}$이다. 따라서 비가
+
+    $$
+    \frac{\operatorname{SE}_{\text{대응}}}{\operatorname{SE}_{\text{비대응}}}
+    = \sqrt{\frac{s_1^2 + s_2^2 - 2rs_1s_2}{s_1^2 + s_2^2}}
+    = \sqrt{1 - \frac{2 r s_1 s_2}{s_1^2 + s_2^2}}
+    $$
+
+    이다. **$r > 0$이면 언제나 $1$보다 작다.** 짝지은 두 측정이 같은 방향으로 움직이는 몫 $2rs_1s_2$가 차이를 취할 때 상쇄되기 때문이다. $r = 0$이면 비가 $1$이 되어 짝을 지어도 얻는 것이 없고, $r \to 1$이고 $s_1 = s_2$이면 비가 $0$으로 간다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    # 판촉 전후 12주치 신발 판매량. 평균이 2.25 올랐는데, 이것이 판촉의
+    # 효과인지 그저 주마다의 들쭉날쭉인지를 아래에서 가린다.
+    BEFORE = np.array([23, 21, 19, 24, 35, 17, 18, 24, 33, 27, 21, 23])
+    AFTER  = np.array([31, 28, 19, 24, 32, 27, 16, 28, 29, 26, 25, 27])
+
+    print(f"Before mean: {BEFORE.mean():.2f}")   # 23.75
+    print(f"After  mean: {AFTER.mean():.2f}")    # 26.00
+    print(f"Difference:  {AFTER.mean() - BEFORE.mean():.2f}")   # 2.25
+    ```
+
+    출력:
+
+    ```
+    Before mean: 23.75
+    After  mean: 26.00
+    Difference:  2.25
+    ```
+
+    (1)의 두 식을 잰다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    n = len(BEFORE)
+    s1, s2 = BEFORE.std(ddof=1), AFTER.std(ddof=1)
+    r = np.corrcoef(BEFORE, AFTER)[0, 1]
+    d = AFTER - BEFORE
+    print(f"s_전 = {s1:.6f},  s_후 = {s2:.6f},  r = {r:.6f}")
+    print(f"s_d^2 직접 = {d.var(ddof=1):.6f},  공식 = {s1 ** 2 + s2 ** 2 - 2 * r * s1 * s2:.6f}")
+
+    se_paired = d.std(ddof=1) / np.sqrt(n)
+    se_unpaired = np.sqrt((s1 ** 2 + s2 ** 2) / n)
+    print(f"대응 SE = {se_paired:.6f},  비대응 SE = {se_unpaired:.6f}")
+    print(f"비 = {se_paired / se_unpaired:.6f},"
+          f"  공식 = {np.sqrt(1 - 2 * r * s1 * s2 / (s1 ** 2 + s2 ** 2)):.6f}")
+
+    # 재표집 귀무분포의 표준편차로 견주어도 같은 이야기다.
+    z = np.concatenate([BEFORE, AFTER])
+    print(f"섞기 귀무 SD       = {z.std(ddof=1) * np.sqrt(2 / n):.6f}")
+    print(f"부호뒤집기 귀무 SD = {np.sqrt((d ** 2).sum()) / n:.6f}")
+    ```
+
+    출력:
+
+    ```
+    s_전 = 5.561638,  s_후 = 4.612237,  r = 0.609567
+    s_d^2 직접 = 20.931818,  공식 = 20.931818
+    대응 SE = 1.320726,  비대응 SE = 2.085756
+    비 = 0.633212,  공식 = 0.633212
+    섞기 귀무 SD       = 2.093165
+    부호뒤집기 귀무 SD = 1.421560
+    ```
+
+    **공식이 맞는다.** $s_d^2$을 차이에서 직접 구한 $20.931818$과 $s_1^2 + s_2^2 - 2rs_1s_2$가 여섯 자리까지 같고, 표준오차의 비도 $0.633212$로 일치한다. 전후 상관이 $r = 0.610$이라 **짝을 지으면 표준오차가 $37\%$ 줄어든다.** $r = 0$이었다면 비가 $1$이어서 아무것도 얻지 못했을 것이다.
+
+    재표집 쪽 눈금도 같은 방향을 가리킨다. $24$개를 통째로 섞은 귀무분포의 표준편차가 $2.093165$인데 주별 차이의 부호만 뒤집은 쪽은 $1.421560$으로 $32\%$ 좁다. 두 축소율이 꼭 같지는 않다. 앞의 것은 $t$ 검정의 눈금이고 뒤의 것은 순열검정의 눈금이라 $n-1$과 $n$, 그리고 관측된 효과를 품는 방식이 조금씩 다르기 때문이다. **그러나 결론은 하나다. 이 자료에서 짝을 버리면 눈금을 삼분의 일쯤 손해 본다.**
+
+    아래 분석은 그 손해를 감수한 비대응 판본이며, 둘을 견주려는 뜻이다.
 
 !!! warning "이 자료는 사실 대응자료이다"
     같은 $12$주를 전후로 측정했으므로 주별로 짝지어져 있다. 아래의 비대응 순열검정은 이 구조를 무시한다.
@@ -79,35 +149,103 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 순열검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 순열검정. 위 함수는 $B = 199{,}999$번 섞어 단측 $p$값을 구한다. 그런데 이 설계는 $\binom{24}{12} = 2{,}704{,}156$가지뿐이라 **몬테카를로 없이 다 셀 수 있다.**
+
+**(1)** 순열된 평균차 $\Delta^{(\pi)}$가 "후"로 간 $12$개의 **합** $S_a$ 하나로 정해짐을 보이고, $\Delta^{(\pi)} \ge 2.25$가 $S_a$에 대한 어떤 조건인지 적으시오. 관측된 $S_a$는 얼마인가.
+
+**(2)** 합이 그 값 이상인 $12$-부분집합의 수를 동적계획으로 세어 정확 단측 $p$값을 구하고, 함수의 몬테카를로값·Welch $t$ 검정과 견주시오.
 
 </div>
 
-```python
-def permutation_test(before, after, n_perm=199_999, rng=None):
-    """평균이 올랐는지에 대한 단측 순열검정.
+??? success "풀이"
 
-    "올랐는가"만 묻는 것이므로 오른쪽 꼬리만 본다. 양측으로 하면 p-값이
-    두 배가 되는데, 어느 쪽으로 할지는 자료를 보기 전에 정해야 한다.
-    """
-    rng = rng or np.random.default_rng(42)
-    observed_diff = after.mean() - before.mean()
-    combined = np.concatenate([before, after])
-    n_before = len(before)
+    **(1) 해석적으로.** $24$개 값의 총합 $T = 597$은 순열이 바뀌어도 그대로다. "후"로 간 $12$개의 합을 $S_a$라 하면 "전"의 합이 $T - S_a$이므로
 
-    P = np.array([rng.permutation(combined) for _ in range(n_perm)])
-    perm_diffs = P[:, n_before:].mean(axis=1) - P[:, :n_before].mean(axis=1)
-    p_value = ((perm_diffs >= observed_diff - 1e-12).sum() + 1) / (n_perm + 1)
-    return observed_diff, perm_diffs, p_value
-```
+    $$
+    \Delta^{(\pi)} = \frac{S_a}{12} - \frac{T - S_a}{12} = \frac{2S_a - T}{12}
+    $$
 
-| 검정 | $p$값 |
-|:---|---:|
-| 순열검정(단측) | **0.153** |
-| 순열검정(양측) | 0.308 |
-| Welch $t$ 검정(양측) | 0.293 |
+    이다. **합 하나가 모든 것을 정한다.** 관측된 "후"의 합은 $S_a = 312$이고 실제로 $(2 \times 312 - 597)/12 = 27/12 = 2.25$다. 따라서
 
-**기각하지 못한다.** $2.25$켤레의 증가는 우연으로 충분히 설명된다. 이 자료의 주간 변동이 크기 때문이다(표준편차 $5.56$과 $4.61$).
+    $$
+    \Delta^{(\pi)} \ge 2.25 \iff 2S_a - T \ge 27 \iff S_a \ge 312
+    $$
+
+    이다. 남은 일은 $24$개에서 $12$개를 골라 합이 $312$ 이상인 경우의 수를 세는 것뿐이다. $\binom{24}{12} = 2{,}704{,}156$가지를 하나하나 만들지 않고도, **합마다 몇 가지인지를 세는 표**를 값 하나씩 갱신해 가며 만들면 된다($k$개를 골랐을 때 합이 $s$인 가짓수 $N_k(s)$에 대해 $N_{k}(s) \leftarrow N_k(s) + N_{k-1}(s - v)$).
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def permutation_test(before, after, n_perm=199_999, rng=None):
+        """평균이 올랐는지에 대한 단측 순열검정.
+
+        "올랐는가"만 묻는 것이므로 오른쪽 꼬리만 본다. 양측으로 하면 p-값이
+        두 배가 되는데, 어느 쪽으로 할지는 자료를 보기 전에 정해야 한다.
+        """
+        rng = rng or np.random.default_rng(42)
+        observed_diff = after.mean() - before.mean()
+        combined = np.concatenate([before, after])
+        n_before = len(before)
+
+        P = np.array([rng.permutation(combined) for _ in range(n_perm)])
+        perm_diffs = P[:, n_before:].mean(axis=1) - P[:, :n_before].mean(axis=1)
+        p_value = ((perm_diffs >= observed_diff - 1e-12).sum() + 1) / (n_perm + 1)
+        return observed_diff, perm_diffs, p_value
+    ```
+
+    돌린 뒤 정확값을 따로 센다.
+
+    ```python
+    from collections import defaultdict
+    from scipy import stats
+
+    obs_diff, perm_diffs, p_value = permutation_test(BEFORE, AFTER)
+    print(f"관측 차이 = {obs_diff:.2f},  순열 단측 p (B=199999) = {p_value:.5f}")
+    print(f"순열 귀무 SD 모의 = {perm_diffs.std(ddof=1):.6f}")
+
+    zi = np.concatenate([BEFORE, AFTER]).astype(int)
+    total = int(zi.sum())
+    # k 개를 골랐을 때 합이 s 인 가짓수를 값 하나씩 갱신해 가며 센다.
+    dp = [defaultdict(int) for _ in range(n + 1)]
+    dp[0][0] = 1
+    for v in zi:
+        for k in range(n - 1, -1, -1):
+            for s, c in list(dp[k].items()):
+                dp[k + 1][s + v] += c
+    counts = dp[n]
+    n_subsets = sum(counts.values())
+    hit = sum(c for s, c in counts.items() if s >= AFTER.sum())
+    lo_ = sum(c for s, c in counts.items() if s <= total - AFTER.sum())
+
+    print(f"24개 중 12개를 고르는 방법 = {n_subsets:,}")
+    print(f"관측된 '후'의 합 = {AFTER.sum()},  전체 합 = {total}")
+    print(f"합이 {AFTER.sum()} 이상인 배정 = {hit:,}  ->  정확 단측 p = {hit / n_subsets:.6f}")
+    print(f"정확 양측 p = {(hit + lo_) / n_subsets:.6f}")
+    print(f"Welch t 검정 (양측) = {stats.ttest_ind(AFTER, BEFORE, equal_var=False).pvalue:.6f}")
+    ```
+
+    출력:
+
+    ```
+    관측 차이 = 2.25,  순열 단측 p (B=199999) = 0.15329
+    순열 귀무 SD 모의 = 2.094198
+    24개 중 12개를 고르는 방법 = 2,704,156
+    관측된 '후'의 합 = 312,  전체 합 = 597
+    합이 312 이상인 배정 = 417,216  ->  정확 단측 p = 0.154287
+    정확 양측 p = 0.308574
+    Welch t 검정 (양측) = 0.292782
+    ```
+
+    **셈이 맞는다.** $12$-부분집합의 총수가 $\binom{24}{12} = 2{,}704{,}156$으로 나오고, 그중 합이 $312$ 이상인 것이 $417{,}216$가지라 정확 단측 $p = 0.154287$이다. 몬테카를로값 $0.15329$는 거기서 $-0.001$ 떨어져 있는데, $B = 199{,}999$에서 $\hat p$의 표준편차가 $\sqrt{0.1543 \times 0.8457/199999} = 0.00081$이므로 $-1.2$배다. **$20$만 번을 돌려 얻은 것이 세 자리짜리 근사이고, 표를 한 번 만들어 얻은 것이 정확한 값이다.**
+
+    | 검정 | $p$값 |
+    |:---|---:|
+    | 순열검정(단측, 정확) | **0.154287** |
+    | 순열검정(단측, $B = 199{,}999$) | 0.153290 |
+    | 순열검정(양측, 정확) | 0.308574 |
+    | Welch $t$ 검정(양측) | 0.292782 |
+
+    **어느 쪽이든 기각하지 못한다.** $2.25$켤레의 증가는 우연으로 충분히 설명된다. 이 자료의 주간 변동이 크기 때문이다(표준편차 $5.56$과 $4.61$). 정확 양측값이 정확 단측값의 꼭 두 배인 것은 귀무분포가 $0$에 대해 대칭이기 때문이며, 섞기에서 "전"과 "후"를 맞바꾸면 $\Delta$의 부호가 뒤집혀 모든 배정이 짝을 이룬다.
 
 위 경고에서 말한 대로 이 자료는 대응자료이다. 짝을 무시한 대가가 얼마인지 그림으로 확인해 보자.
 
@@ -157,31 +295,106 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 붓스트랩 신뢰구간
+**보기 3.** <span class="diff easy" title="쉬움"></span> 붓스트랩 신뢰구간. 두 집단에서 따로 복원추출해 평균차의 백분위수 구간을 구한다.
+
+**(1)** 붓스트랩 표준오차가 $B \to \infty$에서 무엇으로 수렴하는지 적고, 고전적 $\sqrt{(s_1^2+s_2^2)/n}$과의 비를 구하시오. ([붓스트랩 표준오차](../../ch05/applications/bootstrap_standard_error.md) 보기 1이 일표본에서 유도한 것을 그대로 쓴다.)
+
+**(2)** 실행해 (1)을 확인하시오. 그리고 **표준오차는 안정한데 신뢰구간의 끝점은 그렇지 않다.** 씨앗을 바꾸어 가며 그 차이를 수로 보이고 까닭을 밝히시오.
 
 </div>
 
-```python
-def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
-    """평균 차이에 대한 백분위수 붓스트랩 신뢰구간.
+??? success "풀이"
 
-    검정은 "효과가 있다/없다"까지만 말한다. 판촉에 돈을 쓸지 정하려면
-    효과가 얼마나 되는지를 알아야 하고, 그것은 구간이 말해 준다.
-    """
-    rng = rng or np.random.default_rng(42)
-    b = before[rng.integers(0, len(before), (n_boot, len(before)))].mean(axis=1)
-    a = after[rng.integers(0, len(after), (n_boot, len(after)))].mean(axis=1)
-    diffs = a - b
-    lo = (100 - ci) / 2
-    return diffs, np.percentile(diffs, [lo, 100 - lo])
-```
+    **(1) 해석적으로.** 붓스트랩 표본은 각 집단의 경험분포에서 **독립으로** 뽑힌다. 한 집단의 경험분포는 관측값마다 질량 $1/n$을 주므로 그 분산이
 
-| 신뢰수준 | 구간 | 폭 |
-|:---|:---|---:|
-| 90% | $[-1.17,\ 5.42]$ | 6.59 |
-| 95% | $[-1.83,\ 5.92]$ | 7.75 |
+    $$
+    \hat\sigma^2 = \frac1n\sum_{i=1}^n (x_i - \bar x)^2
+    $$
 
-붓스트랩 표준오차는 $1.994$이다. **두 구간 모두 $0$을 포함한다.** 순열검정이 기각하지 못한 것과 일관된다.
+    이고($n-1$이 아니라 $n$으로 나눈다), 독립인 $n$개의 평균이므로 $\operatorname{Var}_*(\bar X^*) = \hat\sigma^2/n$이다. 여기까지가 [붓스트랩 표준오차](../../ch05/applications/bootstrap_standard_error.md) 보기 1의 결과다. 두 집단을 따로 재표집하면 두 평균이 독립이므로 분산이 더해져
+
+    $$
+    \widehat{\operatorname{SE}}_{\text{boot}}
+    \xrightarrow[B \to \infty]{}
+    \sqrt{\frac{\hat\sigma_1^2 + \hat\sigma_2^2}{n}}
+    $$
+
+    이다. $\hat\sigma^2 = \frac{n-1}{n}s^2$이므로 고전적 값과의 비가
+
+    $$
+    \frac{\sqrt{(\hat\sigma_1^2+\hat\sigma_2^2)/n}}{\sqrt{(s_1^2+s_2^2)/n}}
+    = \sqrt{\frac{n-1}{n}} = \sqrt{\frac{11}{12}} = 0.957427
+    $$
+
+    로 **붓스트랩 쪽이 체계적으로 $4.3\%$ 작다.** $B$를 아무리 키워도 남는 차이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_ci(before, after, n_boot=100_000, ci=95, rng=None):
+        """평균 차이에 대한 백분위수 붓스트랩 신뢰구간.
+
+        검정은 "효과가 있다/없다"까지만 말한다. 판촉에 돈을 쓸지 정하려면
+        효과가 얼마나 되는지를 알아야 하고, 그것은 구간이 말해 준다.
+        """
+        rng = rng or np.random.default_rng(42)
+        b = before[rng.integers(0, len(before), (n_boot, len(before)))].mean(axis=1)
+        a = after[rng.integers(0, len(after), (n_boot, len(after)))].mean(axis=1)
+        diffs = a - b
+        lo = (100 - ci) / 2
+        return diffs, np.percentile(diffs, [lo, 100 - lo])
+    ```
+
+    극한값을 확인하고, 씨앗을 $10$개 바꾸어 표준오차와 끝점의 흔들림을 나란히 잰다.
+
+    ```python
+    sig1, sig2 = BEFORE.std(ddof=0), AFTER.std(ddof=0)
+    print(f"붓스트랩 SE 의 극한 = {np.sqrt((sig1 ** 2 + sig2 ** 2) / n):.6f}")
+    print(f"고전 SE             = {se_unpaired:.6f}")
+    print(f"비 = sqrt((n-1)/n) = {np.sqrt((n - 1) / n):.6f}")
+
+    ups, los, ses = [], [], []
+    for s in range(10):
+        diffs_s, ci_s = bootstrap_ci(BEFORE, AFTER, rng=np.random.default_rng(s))
+        los.append(ci_s[0]); ups.append(ci_s[1]); ses.append(diffs_s.std(ddof=1))
+    print(f"\n씨앗 10 개에서")
+    print(f"  붓스트랩 SE : {min(ses):.4f} ~ {max(ses):.4f}")
+    print(f"  95% 하한    : {sorted(set(round(v, 4) for v in los))}")
+    print(f"  95% 상한    : {sorted(set(round(v, 4) for v in ups))}   (격자 간격 {1 / n:.4f})")
+
+    diffs, ci95 = bootstrap_ci(BEFORE, AFTER)
+    _, ci90 = bootstrap_ci(BEFORE, AFTER, ci=90)
+    print(f"\n기본 씨앗: 90% = [{ci90[0]:.4f}, {ci90[1]:.4f}],"
+          f"  95% = [{ci95[0]:.4f}, {ci95[1]:.4f}],  SE = {diffs.std(ddof=1):.6f}")
+    ```
+
+    출력:
+
+    ```
+    붓스트랩 SE 의 극한 = 1.996959
+    고전 SE             = 2.085756
+    비 = sqrt((n-1)/n) = 0.957427
+
+    씨앗 10 개에서
+      붓스트랩 SE : 1.9943 ~ 2.0050
+      95% 하한    : [-1.8333]
+      95% 상한    : [5.9167, 6.0]   (격자 간격 0.0833)
+
+    기본 씨앗: 90% = [-1.1667, 5.4167],  95% = [-1.8333, 6.0000],  SE = 1.997389
+    ```
+
+    **(1)이 맞는다.** 극한 $\sqrt{(\hat\sigma_1^2+\hat\sigma_2^2)/12} = 1.996959$에 대해 $B = 100{,}000$에서 나온 $1.997389$가 소수 셋째 자리까지 같고, 씨앗을 열 번 바꾸어도 $1.9943$–$2.0050$ 안에 머문다. **폭이 $0.5\%$다.** 고전적 $2.085756$과의 $4.3\%$ 차이는 $B$를 키워도 사라지지 않는 체계적인 몫이고, 씨앗에 따른 $0.5\%$는 몬테카를로 요동이다.
+
+    **끝점은 사정이 다르다.** 같은 열 번의 실행에서 $95\%$ 상한이 $5.9167$과 $6.0000$ 두 값 사이를 오간다. 하한은 $-1.8333$으로 붙박이다. 까닭은 **붓스트랩 평균차가 이산**이기 때문이다. 자료가 정수이고 $n = 12$이므로 재표본평균의 차는 $1/12 = 0.0833$ 간격의 격자에만 놓인다. $97.5$번째 백분위수가 두 격자점 $5.9167$과 $6.0000$의 **경계 바로 위**에 있어, 복제값 몇 개가 움직이면 어느 쪽으로든 넘어간다.
+
+    그래서 이 쪽의 표가 $95\%$ 상한을 $5.92$로 적는 것도, 위 실행이 $6.00$을 내는 것도 모두 같은 분포에서 나온 결과다. **$B$를 키워 없어지는 것은 표준오차의 요동이고, 격자의 거침은 $B$가 아니라 $n$이 정한다.** 백분위수 구간을 소수 둘째 자리까지 보고하려면 $n$이 더 커야 한다.
+
+    | 신뢰수준 | 구간 | 폭 |
+    |:---|:---|---:|
+    | 90% | $[-1.17,\ 5.42]$ | 6.59 |
+    | 95% | $[-1.83,\ 5.92]$ 또는 $[-1.83,\ 6.00]$ | 7.75--7.83 |
+
+    **두 구간 모두 $0$을 포함한다.** 순열검정이 기각하지 못한 것과 일관된다.
 
 ---
 

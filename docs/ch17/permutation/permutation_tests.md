@@ -25,28 +25,96 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이표본 순열검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이표본 순열검정의 구현. 위 절차를 그대로 옮긴 `perm_test_two_sample`을 쓰기 전에, **답을 손으로 아는 작은 자료**로 검산한다. $x = (1, 2, 3)$, $y = (4, 5, 6)$을 쓴다.
+
+**(1)** $\binom63 = 20$가지 라벨 배정을 손으로 따져 $\lvert T^{(\pi)}\rvert \ge \lvert T_{\text{obs}}\rvert$인 배정의 수를 세고 정확 $p$값을 분수로 구하시오. 순열 귀무분포의 표준편차도 닫힌 꼴로 구하시오.
+
+**(2)** 함수를 큰 $B$로 돌려 (1)의 두 수를 되찾아 오는지 확인하시오. $B$를 아무리 키워도 $p$값이 (1)의 분수에 **정확히** 닿지는 못하는 까닭도 적으시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def perm_test_two_sample(x, y, n_perm=9999, rng=None):
-    """평균 차이에 대한 이표본 순열검정.
+    **(1) 해석적으로.** 여섯 수가 $1, \ldots, 6$이고 $T = 21$이다. 집단 $X$로 간 세 수의 합을 $S$라 하면
 
-    두 집단을 합친 뒤 이름표를 섞어 차이를 다시 계산하는 일을 되풀이한다.
-    분포를 가정하지 않으므로 정규성도 등분산도 필요 없다.
-    """
-    rng = rng or np.random.default_rng(0)
-    obs_diff = x.mean() - y.mean()
-    pooled = np.concatenate([x, y])
-    m = len(x)
-    P = np.array([rng.permutation(pooled) for _ in range(n_perm)])
-    perm_diffs = P[:, :m].mean(axis=1) - P[:, m:].mean(axis=1)
-    p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perm + 1)
-    return obs_diff, p_value, perm_diffs
-```
+    $$
+    T^{(\pi)} = \frac{S}{3} - \frac{21 - S}{3} = \frac{2S - 21}{3}
+    $$
+
+    이므로 $\lvert T^{(\pi)}\rvert \ge 3$은 $\lvert 2S - 21\rvert \ge 9$, 곧 $S \le 6$ 또는 $S \ge 15$와 같다. $S$는 $1$부터 $6$ 중 셋을 더한 값이므로 $6$부터 $15$까지이고, $S = 6$은 $\{1,2,3\}$ 하나뿐, $S = 15$는 $\{4,5,6\}$ 하나뿐이다. 따라서
+
+    $$
+    p_{\text{정확}} = \frac{2}{20} = \frac{1}{10} = 0.1
+    $$
+
+    **관측된 배정이 가장 극단적이다.** 두 집단이 완전히 갈라져 있는데도 $p$가 $0.1$이니 $\alpha = 0.05$에서 기각할 수 없다. $n_1 = n_2 = 3$에서 가능한 최소 양측 $p$값이 $2/20$이기 때문이다.
+
+    표준편차는 [이표본 순열검정](two_sample.md) 보기 1에서 유도한 식을 그대로 쓴다. $S^2$를 합친 여섯 수의 표본분산 $3.5$라 하면
+
+    $$
+    \operatorname{SD}(T^{(\pi)}) = S\sqrt{\frac{1}{3} + \frac{1}{3}} = \sqrt{3.5 \times \frac23} = \sqrt{\frac73} = 1.5275252
+    $$
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    import numpy as np
+
+    def perm_test_two_sample(x, y, n_perm=9999, rng=None):
+        """평균 차이에 대한 이표본 순열검정.
+
+        두 집단을 합친 뒤 이름표를 섞어 차이를 다시 계산하는 일을 되풀이한다.
+        분포를 가정하지 않으므로 정규성도 등분산도 필요 없다.
+        """
+        rng = rng or np.random.default_rng(0)
+        obs_diff = x.mean() - y.mean()
+        pooled = np.concatenate([x, y])
+        m = len(x)
+        P = np.array([rng.permutation(pooled) for _ in range(n_perm)])
+        perm_diffs = P[:, :m].mean(axis=1) - P[:, m:].mean(axis=1)
+        p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perm + 1)
+        return obs_diff, p_value, perm_diffs
+    ```
+
+    작은 자료로 검산한다.
+
+    ```python
+    import itertools
+    from fractions import Fraction
+
+    x = np.array([1.0, 2.0, 3.0])
+    y = np.array([4.0, 5.0, 6.0])
+    z = np.concatenate([x, y])
+
+    # 20 가지를 모두 열거한다.
+    exact = np.array([z[list(c)].mean() - np.delete(z, list(c)).mean()
+                      for c in itertools.combinations(range(6), 3)])
+    hit = int((np.abs(exact) >= 3 - 1e-12).sum())
+    print(f"순열 수 = {len(exact)},  극단 배정 = {hit},  "
+          f"정확 p = {Fraction(hit, len(exact))} = {hit / len(exact):.4f}")
+    print(f"SD 열거 = {exact.std():.7f},  닫힌 꼴 = "
+          f"{z.std(ddof=1) * np.sqrt(1 / 3 + 1 / 3):.7f}")
+
+    for B in (999, 9_999, 99_999):
+        obs, p, perms = perm_test_two_sample(x, y, n_perm=B,
+                                             rng=np.random.default_rng(0))
+        print(f"B = {B:>6}:  obs = {obs:+.1f},  p = {p:.6f},  "
+              f"SD = {perms.std(ddof=1):.7f},  p 의 눈금 = 1/{B + 1}")
+    ```
+
+    출력:
+
+    ```
+    순열 수 = 20,  극단 배정 = 2,  정확 p = 1/10 = 0.1000
+    SD 열거 = 1.5275252,  닫힌 꼴 = 1.5275252
+    B =    999:  obs = -3.0,  p = 0.103000,  SD = 1.5101673,  p 의 눈금 = 1/1000
+    B =   9999:  obs = -3.0,  p = 0.102000,  SD = 1.5301857,  p 의 눈금 = 1/10000
+    B =  99999:  obs = -3.0,  p = 0.100650,  SD = 1.5315233,  p 의 눈금 = 1/100000
+    ```
+
+    **(1)의 두 수가 맞는다.** 열거한 표준편차와 닫힌 꼴이 일곱 자리까지 같고, 극단 배정이 $20$개 중 $2$개라 정확 $p$가 $1/10$이다. 함수의 $p$값은 $B$가 커지면서 $0.1030 \to 0.1020 \to 0.10065$로 $0.1$에 모여든다. $B = 99{,}999$에서 몬테카를로 표준편차가 $\sqrt{0.1 \times 0.9/10^5} = 0.00095$이고 실제 차이가 $0.00065$이니 그 $0.68$배로 제자리다. 표준편차도 $1.5315233$으로 닫힌 꼴에서 $0.004$ 떨어져 있는데, 표준편차 추정의 몬테카를로 오차 $1.5275/\sqrt{2B} = 0.0034$의 $1.2$배다.
+
+    **그럼에도 정확히 $1/10$이 되지는 않는다.** 함수의 $\hat p$는 $\dfrac{c+1}{B+1}$이라 분모가 $B+1$인 분수만 취할 수 있는데, $B = 999$면 $1/1000$ 눈금이라 $0.1$이 표현 가능하지만 $B = 9999$면 $1000.0/10000$이 되어야 하므로 $c = 999$를 정확히 맞출 확률은 작다. **몬테카를로는 열거를 흉내 낼 뿐 대신하지 못한다.** $\binom63 = 20$처럼 셀 수 있는 크기에서는 세는 것이 옳다.
 
 ## 다집단 순열검정
 
@@ -64,35 +132,119 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 다집단 순열검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 다집단 순열검정의 구현. `perm_test_multi_group`이 쓰는 통계량 $T = \operatorname{Var}(\bar x_1, \ldots, \bar x_k)$를 집단 크기가 모두 $n_g$인 경우에 따진다($N = k n_g$).
+
+**(1)** $T = \dfrac{SSB}{N}$임을 보이고, 순열 귀무분포에서 $E[T]$를 합친 표본의 분산 $S^2$으로 적으시오.
+
+**(2)** 집단이 $\{1,2\}$, $\{3,4\}$, $\{5,6\}$인 작은 자료에서 $6! = 720$가지를 모두 열거해 (1)과 정확 $p$값을 확인하고, 함수의 $p$값과 견주시오.
 
 </div>
 
-```python
-def perm_test_multi_group(groups, n_perm=9999, rng=None):
-    """집단평균의 분산을 통계량으로 쓰는 다집단 순열검정.
+??? success "풀이"
 
-    분산분석의 F 대신 집단평균들의 분산을 쓴다. 순열검정에서는 통계량이
-    어떤 분포를 따라야 할 까닭이 없으므로, 뜻만 통하면 무엇이든 쓸 수 있다.
-    집단 차이가 클수록 이 값이 커지므로 오른쪽 꼬리만 본다.
-    """
-    rng = rng or np.random.default_rng(0)
+    **(1) 해석적으로.** 집단 크기가 모두 같으면 집단평균들의 평균이 전체평균 $\bar x$와 같다. 따라서 $T$는 그냥
+
+    $$
+    T = \frac1k \sum_{i=1}^k (\bar x_i - \bar x)^2
+    $$
+
+    이고, 분산분석의 집단간제곱합이 $SSB = n_g \sum_i (\bar x_i - \bar x)^2$이므로
+
+    $$
+    T = \frac{SSB}{k\, n_g} = \frac{SSB}{N}
+    $$
+
+    이다. **$T$는 $SSB$를 상수로 나눈 것일 뿐이다.** 순열이 $\bar x$도 $SST$도 바꾸지 않으므로 $F = \dfrac{SSB/(k-1)}{(SST - SSB)/(N-k)}$ 역시 $SSB$의 순증가함수이고, 그래서 $T$로 매긴 순위와 $F$로 매긴 순위가 같다(뒤의 그림 (c)가 그것이다).
+
+    **$E[T]$.** 순열 아래에서 한 집단은 $N$개 중 $n_g$개를 비복원으로 고른 것이므로 $E[\bar x_i^{*}] = \bar x$이고
+
+    $$
+    \operatorname{Var}(\bar x_i^{*}) = \frac{S^2}{n_g}\cdot\frac{N - n_g}{N}
+    = \frac{S^2}{n_g}\cdot\frac{k-1}{k}
+    $$
+
+    이다($S^2$은 합친 $N$개의 표본분산). $\bar x$가 고정이므로 기댓값을 항별로 취해
+
+    $$
+    E[T] = \frac1k\sum_{i=1}^k E\big[(\bar x_i^{*} - \bar x)^2\big]
+    = \operatorname{Var}(\bar x_1^{*})
+    = \frac{(k-1)\,S^2}{k\,n_g}
+    = \frac{(k-1)\,S^2}{N}
+    $$
+
+    를 얻는다. 양변에 $N$을 곱하면 $E[SSB] = (k-1)S^2$으로, **분산분석이 $\sigma^2$에 대해 말하는 것과 같은 식**이다. 모집단 분산 자리에 합친 표본의 분산이 들어간 것만 다르다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def perm_test_multi_group(groups, n_perm=9999, rng=None):
+        """집단평균의 분산을 통계량으로 쓰는 다집단 순열검정.
+
+        분산분석의 F 대신 집단평균들의 분산을 쓴다. 순열검정에서는 통계량이
+        어떤 분포를 따라야 할 까닭이 없으므로, 뜻만 통하면 무엇이든 쓸 수 있다.
+        집단 차이가 클수록 이 값이 커지므로 오른쪽 꼬리만 본다.
+        """
+        rng = rng or np.random.default_rng(0)
+        pooled = np.concatenate(groups)
+        sizes = [len(g) for g in groups]
+        obs_var = np.var([g.mean() for g in groups])
+
+        perm_vars = np.empty(n_perm)
+        for i in range(n_perm):
+            p = rng.permutation(pooled)
+            idx, means = 0, []
+            for s in sizes:
+                means.append(p[idx:idx + s].mean())
+                idx += s
+            perm_vars[i] = np.var(means)
+
+        p_value = ((perm_vars >= obs_var).sum() + 1) / (n_perm + 1)
+        return obs_var, p_value, perm_vars
+    ```
+
+    세 집단 $\{1,2\}$, $\{3,4\}$, $\{5,6\}$으로 검산한다.
+
+    ```python
+    import itertools
+    from fractions import Fraction
+
+    groups = [np.array([1.0, 2.0]), np.array([3.0, 4.0]), np.array([5.0, 6.0])]
     pooled = np.concatenate(groups)
-    sizes = [len(g) for g in groups]
-    obs_var = np.var([g.mean() for g in groups])
+    k, n_g, N = len(groups), 2, len(pooled)
 
-    perm_vars = np.empty(n_perm)
-    for i in range(n_perm):
-        p = rng.permutation(pooled)
-        idx, means = 0, []
-        for s in sizes:
-            means.append(p[idx:idx + s].mean())
-            idx += s
-        perm_vars[i] = np.var(means)
+    T_obs = np.var([g.mean() for g in groups])
+    SSB = n_g * sum((g.mean() - pooled.mean()) ** 2 for g in groups)
+    print(f"T_obs = {T_obs:.7f},   SSB/N = {SSB / N:.7f}")
+    print(f"E[T] 닫힌 꼴 (k-1)S^2/N = {(k - 1) * pooled.var(ddof=1) / N:.7f}")
 
-    p_value = ((perm_vars >= obs_var).sum() + 1) / (n_perm + 1)
-    return obs_var, p_value, perm_vars
-```
+    # 6! = 720 가지 자리 배정을 모두 열거한다.
+    Ts = np.array([np.var([a[0:2].mean(), a[2:4].mean(), a[4:6].mean()])
+                   for a in (pooled[list(p)] for p in itertools.permutations(range(N)))])
+    hit = int((Ts >= T_obs - 1e-12).sum())
+    print(f"열거 수 = {len(Ts)},  열거 E[T] = {Ts.mean():.7f},  최댓값 = {Ts.max():.7f}")
+    print(f"T* >= T_obs 인 배정 = {hit} -> 정확 p = {Fraction(hit, len(Ts))} = {hit / len(Ts):.6f}")
+
+    for B in (999, 9999):
+        tv, p, pv = perm_test_multi_group(groups, n_perm=B, rng=np.random.default_rng(0))
+        print(f"B = {B:>5}: p = {p:.6f},  평균 T* = {pv.mean():.7f}")
+    ```
+
+    출력:
+
+    ```
+    T_obs = 2.6666667,   SSB/N = 2.6666667
+    E[T] 닫힌 꼴 (k-1)S^2/N = 1.1666667
+    열거 수 = 720,  열거 E[T] = 1.1666667,  최댓값 = 2.6666667
+    T* >= T_obs 인 배정 = 48 -> 정확 p = 1/15 = 0.066667
+    B =   999: p = 0.066000,  평균 T* = 1.1281281
+    B =  9999: p = 0.070300,  평균 T* = 1.1686835
+    ```
+
+    **(1)의 두 식이 모두 맞는다.** $T_{\text{obs}}$와 $SSB/N$이 일곱 자리까지 같고, 닫힌 꼴 $E[T] = (k-1)S^2/N = 2 \times 3.5/6 = 7/6$이 $720$가지의 평균과 정확히 일치한다.
+
+    **관측값이 최댓값이다.** $T^{*}$의 최댓값이 $8/3$으로 $T_{\text{obs}}$와 같다. 세 집단이 완전히 갈라진 배정이 가장 극단적이기 때문이다. 그런 배정은 집단의 **순서만 다른** $3! = 6$가지와 각 집단 안의 자리바꿈 $2^3 = 8$가지를 곱해 $48$가지이므로 정확 $p = 48/720 = 1/15 = 0.0667$이다. **$\alpha = 0.05$에서는 이 설계로 기각할 수 없다.**
+
+    함수의 $p$값은 $0.0660$과 $0.0703$으로 $1/15 = 0.0667$ 둘레에 있다. $B = 9{,}999$에서 몬테카를로 표준편차가 $\sqrt{0.0667 \times 0.9333/9999} = 0.0025$이니 $0.0703$은 $+1.4$ 표준편차다. 평균 $T^{*}$도 $1.1687$로 닫힌 꼴 $1.1667$에 붙는다.
 
 ## 비율에 대한 순열검정
 
@@ -106,46 +258,198 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 비율에 대한 순열검정
+**보기 3.** <span class="diff easy" title="쉬움"></span> 비율에 대한 순열검정의 구현. `perm_test_proportion`은 $0/1$ 배열을 섞는다. $n_A = n_B = 5$, $c_A = 4$, $c_B = 1$인 작은 표로 검산한다.
+
+**(1)** 집단 A의 전환 수 $X$만 정해지면 $T^{(\pi)}$가 정해짐을 보이고, $X$가 어떤 분포를 따르는지 적으시오. 그것으로 $\lvert T^{(\pi)}\rvert \ge 0.6$인 $X$의 값을 모두 찾아 정확 $p$값을 기약분수로 구하시오.
+
+**(2)** 함수를 돌려 (1)을 확인하고, 같은 값을 주는 고전적 검정의 이름을 대시오.
 
 </div>
 
-```python
-def perm_test_proportion(n_a, conv_a, n_b, conv_b, n_perm=9999, rng=None):
-    """두 비율에 대한 순열검정. A/B 검정에 그대로 쓴다.
+??? success "풀이"
 
-    전체 전환 수만큼 1 로 채운 배열을 섞으면, 전환이 두 집단에 무작위로
-    흩어진 상태가 된다. 표본이 크거나 전환율이 아주 낮아 정규근사가
-    미덥지 않을 때 쓸모가 있다.
-    """
-    rng = rng or np.random.default_rng(0)
-    obs_diff = conv_a / n_a - conv_b / n_b
-    pooled = np.zeros(n_a + n_b)
-    pooled[:conv_a + conv_b] = 1
+    **(1) 해석적으로.** 순열은 $N = n_A + n_B = 10$개의 $0/1$ 값 가운데 $n_A = 5$개를 골라 A라 부르는 일이고, 전체 전환 수 $K = c_A + c_B = 5$는 고정된다. A로 간 $1$의 개수를 $X$라 하면
 
-    perm_diffs = np.empty(n_perm)
-    for i in range(n_perm):
-        p = rng.permutation(pooled)
-        perm_diffs[i] = p[:n_a].mean() - p[n_a:].mean()
+    $$
+    T^{(\pi)} = \frac{X}{n_A} - \frac{K - X}{n_B}
+    = X\left(\frac{1}{n_A} + \frac{1}{n_B}\right) - \frac{K}{n_B}
+    = 0.4X - 1
+    $$
 
-    p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perm + 1)
-    return obs_diff, p_value, perm_diffs
-```
+    로 **$X$의 순증가 일차식**이다. 그리고 $N$개 중 $n_A$개를 비복원으로 고를 때 뽑힌 $1$의 개수는 정의 그대로
+
+    $$
+    X \sim \text{HG}(n_A, N, K) = \text{HG}(5, 10, 5)
+    $$
+
+    를 따른다. 관측값은 $T_{\text{obs}} = 4/5 - 1/5 = 0.6$이므로
+
+    $$
+    \lvert 0.4X - 1 \rvert \ge 0.6
+    \iff X \le 1 \;\text{또는}\; X \ge 4
+    $$
+
+    이다. $\binom{10}{5} = 252$가지 배정 가운데 해당하는 것을 센다.
+
+    $$
+    \#\{X = 0\} = \binom50\binom55 = 1, \quad
+    \#\{X = 1\} = \binom51\binom54 = 25
+    $$
+
+    이고 대칭으로 $X = 5$가 $1$가지, $X = 4$가 $25$가지다. 따라서
+
+    $$
+    p_{\text{정확}} = \frac{1 + 25 + 25 + 1}{252} = \frac{52}{252} = \frac{13}{63} = 0.206349
+    $$
+
+    **$5$명 중 $4$명 대 $5$명 중 $1$명이라는 꽤 큰 차이인데도 유의하지 않다.** 표가 너무 작아 가능한 $p$값의 눈금이 거칠기 때문이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def perm_test_proportion(n_a, conv_a, n_b, conv_b, n_perm=9999, rng=None):
+        """두 비율에 대한 순열검정. A/B 검정에 그대로 쓴다.
+
+        전체 전환 수만큼 1 로 채운 배열을 섞으면, 전환이 두 집단에 무작위로
+        흩어진 상태가 된다. 표본이 크거나 전환율이 아주 낮아 정규근사가
+        미덥지 않을 때 쓸모가 있다.
+        """
+        rng = rng or np.random.default_rng(0)
+        obs_diff = conv_a / n_a - conv_b / n_b
+        pooled = np.zeros(n_a + n_b)
+        pooled[:conv_a + conv_b] = 1
+
+        perm_diffs = np.empty(n_perm)
+        for i in range(n_perm):
+            p = rng.permutation(pooled)
+            perm_diffs[i] = p[:n_a].mean() - p[n_a:].mean()
+
+        p_value = ((np.abs(perm_diffs) >= abs(obs_diff)).sum() + 1) / (n_perm + 1)
+        return obs_diff, p_value, perm_diffs
+    ```
+
+    작은 표로 검산한다.
+
+    ```python
+    from scipy import stats
+    from fractions import Fraction
+    from math import comb
+
+    n_a, c_a, n_b, c_b = 5, 4, 5, 1
+    N, K = n_a + n_b, c_a + c_b
+    step = 1 / n_a + 1 / n_b
+    obs = c_a / n_a - c_b / n_b
+
+    x = np.arange(K + 1)
+    d = x * step - K / n_b
+    pmf = stats.hypergeom.pmf(x, N, K, n_a)
+    sel = np.abs(d) >= abs(obs) - 1e-12
+    p_frac = sum(Fraction(comb(K, int(v)) * comb(N - K, n_a - int(v)), comb(N, n_a))
+                 for v in x[sel])
+    print(f"obs = {obs:.4f},  격자 간격 = {step:.4f},  전체 배정 = C(10,5) = {comb(N, n_a)}")
+    print(f"걸리는 X = {x[sel]}")
+    print(f"정확 양측 p = {p_frac} = {float(p_frac):.6f}")
+    print(f"Fisher 정확검정 = {stats.fisher_exact([[c_a, n_a - c_a], [c_b, n_b - c_b]])[1]:.6f}")
+    print(f"SD 닫힌 꼴 = {np.sqrt(N / (N - 1) * (K / N) * (1 - K / N) * step):.7f}")
+    for B in (999, 9999):
+        _, p, pv = perm_test_proportion(n_a, c_a, n_b, c_b, n_perm=B,
+                                        rng=np.random.default_rng(0))
+        print(f"B = {B:>5}: p = {p:.6f},  SD = {pv.std(ddof=1):.7f}")
+    ```
+
+    출력:
+
+    ```
+    obs = 0.6000,  격자 간격 = 0.4000,  전체 배정 = C(10,5) = 252
+    걸리는 X = [0 1 4 5]
+    정확 양측 p = 13/63 = 0.206349
+    Fisher 정확검정 = 0.206349
+    SD 닫힌 꼴 = 0.3333333
+    B =   999: p = 0.208000,  SD = 0.3358819
+    B =  9999: p = 0.203000,  SD = 0.3312704
+    ```
+
+    **손으로 센 것이 맞는다.** 걸리는 $X$가 $\{0, 1, 4, 5\}$이고 정확 $p$가 $13/63 = 0.206349$다. 함수의 $p$값 $0.2080$과 $0.2030$이 그 둘레에 있다($B = 9{,}999$에서 몬테카를로 표준편차 $0.0040$의 $0.8$배 안).
+
+    **같은 값을 주는 고전적 검정은 Fisher 정확검정이다.** 자리를 바꾸어 말하면, 이진 자료의 이표본 순열검정은 **Fisher 정확검정을 몬테카를로로 근사하는 것**이다([기초](./foundations.md) 연습문제 4가 큰 자료에서 같은 것을 확인한다). 그러므로 이 함수를 쓸 이유는 하나뿐이다. 통계량을 비율차가 아닌 다른 것으로 바꾸고 싶을 때다.
 
 ## 실행 보기
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 난수 준비
+**보기 4.** <span class="diff easy" title="쉬움"></span> 난수 준비. 아래 실행 보기들은 자료를 만드는 난수 `rng_data`와 순열에 쓰는 난수 `rng`를 **따로** 둔다.
+
+**(1)** 난수를 하나만 쓰면 무엇이 깨지는지 적으시오. 구체적으로, 자료를 만든 뒤 순열검정을 돌리고 **그다음** 자료를 더 만드는 흐름에서 $B$를 바꾸면 어느 자료가 바뀌고 어느 자료가 바뀌지 않는가.
+
+**(2)** $B = 999$와 $B = 9{,}999$로 그 흐름을 두 번 돌려 (1)을 수로 보이시오.
 
 </div>
 
-```python
-# 자료를 만드는 난수와 순열에 쓰는 난수를 따로 둔다. 이래야 자료를 그대로
-# 두고 순열 횟수만 바꿔 보는 식의 실험이 가능하다.
-rng_data = np.random.default_rng(11)
-rng = np.random.default_rng(3)
-```
+??? success "풀이"
+
+    **(1) 무엇이 깨지는가.** 유도할 식이 있는 문제가 아니다. **난수 발생기는 상태를 가진 하나의 수열**이고, 뽑을 때마다 그 수열의 읽는 자리가 앞으로 밀린다는 사실이 전부다.
+
+    난수를 하나만 쓰면 이 쪽의 흐름이 이렇게 된다.
+
+    $$
+    \underbrace{\text{page\_a, page\_b}}_{76\text{개}}
+    \;\to\;
+    \underbrace{\text{순열 } B \text{번}}_{B \times 76\text{개}}
+    \;\to\;
+    \underbrace{\text{groups 네 개}}_{120\text{개}}
+    \;\to\; \cdots
+    $$
+
+    순열이 소비하는 난수의 양이 $B$에 비례하므로, **$B$를 바꾸면 그 뒤에 만들어지는 자료가 통째로 달라진다.** 앞서 만든 `page_a`, `page_b`는 순열보다 먼저 뽑혔으므로 그대로다. 곧
+
+    - **바뀌지 않는 것:** 순열검정보다 **앞서** 뽑은 자료
+    - **바뀌는 것:** 순열검정보다 **뒤에** 뽑는 자료 전부
+
+    이다. 이러면 "자료는 그대로 두고 $B$만 바꾸어 몬테카를로 오차를 본다"는 실험을 할 수 없다. $B$를 바꾼 효과와 자료가 바뀐 효과가 뒤섞이기 때문이다. **두 수열을 나누어 두면 자료 쪽 수열이 순열 횟수와 무관해진다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    # 자료를 만드는 난수와 순열에 쓰는 난수를 따로 둔다. 이래야 자료를 그대로
+    # 두고 순열 횟수만 바꿔 보는 식의 실험이 가능하다.
+    rng_data = np.random.default_rng(11)
+    rng = np.random.default_rng(3)
+    ```
+
+    나누었을 때와 하나로 썼을 때를 견준다. 아래는 위의 `rng_data`, `rng`를 건드리지 않도록 함수 안에서 따로 만든다.
+
+    ```python
+    def experiment(n_perm, split):
+        """자료와 순열에 난수를 나누어 쓸 때와 하나로 쓸 때를 견준다."""
+        if split:
+            gd, gp = np.random.default_rng(11), np.random.default_rng(3)
+        else:
+            gd = gp = np.random.default_rng(11)
+        a = gd.normal(120, 30, 36)
+        b = gd.normal(135, 30, 40)
+        perm_test_two_sample(a, b, n_perm=n_perm, rng=gp)     # 순열 난수를 소비한다
+        groups = [gd.normal(mu, 25, 30) for mu in [160, 170, 155, 180]]
+        return a.mean(), groups[0].mean()
+
+    for split, name in [(False, "난수 하나"), (True, "난수 둘  ")]:
+        a1, g1 = experiment(999, split)
+        a2, g2 = experiment(9999, split)
+        print(f"{name}  page_a.mean()    : {a1:.6f} / {a2:.6f}   같은가 {a1 == a2}")
+        print(f"{name}  groups[0].mean() : {g1:.6f} / {g2:.6f}   같은가 {g1 == g2}")
+    ```
+
+    출력:
+
+    ```
+    난수 하나  page_a.mean()    : 116.800393 / 116.800393   같은가 True
+    난수 하나  groups[0].mean() : 160.057513 / 158.822504   같은가 False
+    난수 둘    page_a.mean()    : 116.800393 / 116.800393   같은가 True
+    난수 둘    groups[0].mean() : 159.293090 / 159.293090   같은가 True
+    ```
+
+    **예측한 대로다.** 난수를 하나만 쓰면 `page_a`는 $116.800393$으로 그대로지만 `groups[0]`의 평균이 $160.057513$에서 $158.822504$로 바뀐다. 차이가 $1.235$인데, $30$개 평균의 표준오차가 $25/\sqrt{30} = 4.56$이니 **다른 표본을 뽑은 것과 다름없다.** 난수를 둘로 나누면 $159.293090$으로 양쪽이 같다.
+
+    여기에 이 쪽의 뒤 보기들이 의존한다. 보기 6의 집단평균 $159.29, 172.22, 160.02, 175.48$은 보기 5의 순열 횟수가 몇이든 같은 값이어야 한다. **재현 가능한 실험을 만들려면 난수 수열을 용도별로 갈라 두는 것이 가장 싼 방법이다.**
 
 ### 이표본: 페이지 체류시간
 
@@ -153,26 +457,100 @@ rng = np.random.default_rng(3)
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 체류시간 비교
+**보기 5.** <span class="diff easy" title="쉬움"></span> 체류시간 비교. 페이지 A는 $N(120, 30^2)$에서 $36$개, 페이지 B는 $N(135, 30^2)$에서 $40$개를 뽑는다. **참 차이가 $-15$라는 것을 우리가 안다.**
+
+**(1)** $\bar X_A - \bar X_B$의 참 표준오차를 구하시오. 또 순열 귀무분포의 표준편차를 합친 표본의 표준편차 $S$로 적으시오. 둘은 왜 서로 다른 양인가.
+
+**(2)** 실행해 관측된 차이가 참값 $-15$에서 몇 표준오차 떨어졌는지 재고, 순열 $p$값·정규근사·Welch $t$ 검정을 나란히 놓으시오. $B = 9{,}999$에서 이 세 수를 얼마나 세밀하게 구별할 수 있는가.
 
 </div>
 
-```python
-# 두 페이지의 체류시간. 참 평균이 15 만큼 다르다.
-page_a = rng_data.normal(120, 30, size=36)
-page_b = rng_data.normal(135, 30, size=40)
-diff, p, perms = perm_test_two_sample(page_a, page_b, rng=rng)
-print(page_a.mean(), page_b.mean(), diff, p)
-# 116.80  139.14  -22.34  0.0006
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 두 표본이 독립이고 분산이 $\sigma^2 = 900$으로 같으므로
 
-```
-116.80039289004895 139.1365870469421 -22.336194156893157 0.0006
-```
+    $$
+    \operatorname{SE}(\bar X_A - \bar X_B)
+    = \sigma\sqrt{\frac{1}{36} + \frac{1}{40}}
+    = 30\sqrt{0.0527778} = 6.892024
+    $$
 
-Welch $t$ 검정은 $p = 0.0003$을 준다. 두 방법 모두 $15$단위 이동을 확실히 탐지한다.
+    다. **이것은 표본을 다시 뽑았을 때 관측된 차이가 흔들리는 폭**이고, 참 차이 $-15$를 중심으로 한다.
+
+    순열 귀무분포의 표준편차는 [이표본 순열검정](two_sample.md) 보기 1의 식 그대로
+
+    $$
+    \operatorname{SD}(T^{(\pi)}) = S\sqrt{\frac{1}{36} + \frac{1}{40}}
+    $$
+
+    인데, $S$는 **관측된 $76$개를 합친** 표본표준편차다. 둘이 다른 양인 까닭은 재는 대상이 다르기 때문이다. 앞의 것은 **모집단에서 다시 뽑는** 변동이고 뒤의 것은 **자료를 고정한 채 라벨만 다시 붙이는** 변동이다. 앞의 것은 $\sigma$를 알아야 쓸 수 있고 뒤의 것은 자료만으로 계산된다.
+
+    두 수가 가까워야 할 까닭도 없다. $S$는 $\sigma$의 추정값일 뿐 아니라 **두 집단의 차이까지 끌어안은** 값이라 평균적으로는 $\sigma$보다 크다. 이 설계에서
+
+    $$
+    E[S^2] \approx \sigma^2 + \frac{n_A n_B}{N(N-1)}\delta^2
+    = 900 + \frac{36 \times 40}{76 \times 75}\times 225 = 956.84
+    $$
+
+    이므로 $E[S] \approx 30.93$이다. 다만 $S$ 자체의 표준오차가 $\sigma/\sqrt{2(N-1)} = 2.45$나 되므로, 한 표본에서 이보다 작게 나오는 일은 흔하다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    # 두 페이지의 체류시간. 참 평균이 15 만큼 다르다.
+    page_a = rng_data.normal(120, 30, size=36)
+    page_b = rng_data.normal(135, 30, size=40)
+    diff, p, perms = perm_test_two_sample(page_a, page_b, rng=rng)
+    print(page_a.mean(), page_b.mean(), diff, p)
+    # 116.80  139.14  -22.34  0.0006
+    ```
+
+    출력:
+
+    ```
+    116.80039289004895 139.1365870469421 -22.336194156893157 0.0006
+    ```
+
+    (1)의 두 수와 세 가지 $p$값을 함께 잰다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    from scipy import stats
+
+    z = np.concatenate([page_a, page_b])
+    m, n = len(page_a), len(page_b)
+    se_true = 30 * np.sqrt(1 / m + 1 / n)
+    sd_perm = z.std(ddof=1) * np.sqrt(1 / m + 1 / n)
+    print(f"참 SE = {se_true:.6f}   (관측 차이 {diff:.6f} 는 참값 -15 에서 "
+          f"{(diff + 15) / se_true:+.3f} SE)")
+    print(f"순열 귀무 SD 닫힌 꼴 = {sd_perm:.6f}   (합친 S = {z.std(ddof=1):.4f})")
+    print(f"순열 귀무 SD 모의    = {perms.std(ddof=1):.6f}"
+          f"   (몬테카를로 오차 {sd_perm / np.sqrt(2 * 9999):.6f})")
+    print(f"z = {diff / sd_perm:.6f},  정규근사 양측 p = "
+          f"{2 * stats.norm.sf(abs(diff / sd_perm)):.6f}")
+    print(f"순열 p = {p:.6f}  ->  초과 횟수 c = {round(p * 10000) - 1}")
+    print(f"Welch t 검정 p = {stats.ttest_ind(page_a, page_b, equal_var=False).pvalue:.6f}")
+    print(f"B = 9999 에서 가능한 최소 p = {1 / 10000}")
+    ```
+
+    출력:
+
+    ```
+    참 SE = 6.892024   (관측 차이 -22.336194 는 참값 -15 에서 -1.064 SE)
+    순열 귀무 SD 닫힌 꼴 = 6.441618   (합친 S = 28.0394)
+    순열 귀무 SD 모의    = 6.419883   (몬테카를로 오차 0.045551)
+    z = -3.467482,  정규근사 양측 p = 0.000525
+    순열 p = 0.000600  ->  초과 횟수 c = 5
+    Welch t 검정 p = 0.000345
+    B = 9999 에서 가능한 최소 p = 0.0001
+    ```
+
+    **관측된 차이는 제자리에 있다.** $-22.34$는 참값 $-15$에서 $-1.064$ 표준오차 떨어져 있다. 이만큼 벗어나는 것은 흔한 일이며, **"탐지했다"는 것이 "참값을 맞혔다"는 뜻이 아니라는 점**을 보여 준다. 점추정은 참 효과의 $1.5$배로 나왔다.
+
+    **순열 귀무분포의 표준편차도 맞는다.** 닫힌 꼴 $6.441618$과 모의값 $6.419883$의 차이가 $0.022$로 몬테카를로 오차 $0.046$의 절반이다. 합친 $S = 28.04$는 기대값 $30.93$보다 작은데, $S$의 표준오차 $2.45$로 재면 $-1.18$배라 흔한 흔들림이다.
+
+    **세 $p$값은 $0.0003$--$0.0006$에 모여 있다.** 순열 $0.000600$, 정규근사 $0.000525$, Welch $0.000345$다. 어느 쪽이든 $15$단위 이동을 확실히 탐지한다.
+
+    그러나 **이 세 수를 서로 구별할 수는 없다.** 순열 $p$값의 초과 횟수가 $c = 5$뿐이라 $c$가 $\text{Poisson}(5)$ 수준으로 흔들리고, $\hat p$의 표준편차가 $\sqrt{0.0005 \times 0.9995/9999} = 0.00022$로 $p$값 자체의 $37\%$다. **$B = 9{,}999$는 "유의하다"를 말하기에 충분하지만 "$p = 0.0006$이다"를 말하기에는 모자란다.** 가능한 최소값이 $0.0001$이므로 눈금 자체가 다섯 칸밖에 안 되는 자리에 있다. 네 자리 유효숫자가 필요하면 $B$를 백만으로 올려야 한다.
 
 ### 다집단: 네 개의 처치군
 
@@ -180,25 +558,78 @@ Welch $t$ 검정은 $p = 0.0003$을 준다. 두 방법 모두 $15$단위 이동�
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 네 처치군 비교
+**보기 6.** <span class="diff easy" title="쉬움"></span> 네 처치군 비교. 평균 $160, 170, 155, 180$, 표준편차 $25$인 정규분포에서 각 $30$개씩 뽑는다. 보기 2에서 유도한 $T = SSB/N$과 $E[T] = (k-1)S^2/N$을 실제 자료에서 확인한다.
+
+**(1)** 이 설계에서 $E[T]$를 합친 $120$개의 표본분산 $S^2$으로 적고, 관측된 $T_{\text{obs}}$가 그 몇 배여야 "유의하다"고 할 만한지 어림하시오.
+
+**(2)** 실행해 $T_{\text{obs}} = SSB/N$과 $E[T]$를 확인하고, 순열 $p$값이 일원분산분석의 $p$값과 왜 거의 같은지 밝히시오.
 
 </div>
 
-```python
-# 네 처치군. 참 평균이 모두 다르다.
-groups = [rng_data.normal(mu, 25, 30) for mu in [160, 170, 155, 180]]
-var_obs, p_multi, perm_vars = perm_test_multi_group(groups, rng=rng)
-print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
-# [159.29, 172.22, 160.02, 175.48]  51.759  0.0140
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** $k = 4$, $n_g = 30$, $N = 120$이므로 보기 2의 식에서
 
-```
-[159.29, 172.22, 160.02, 175.48] 51.75863218978212 0.014
-```
+    $$
+    E[T] = \frac{(k-1)S^2}{N} = \frac{3 S^2}{120} = \frac{S^2}{40}
+    $$
 
-일원분산분석은 $F = 3.715$, $p = 0.0135$를 준다. 순열검정의 $0.0140$과 사실상 같다.
+    이다. 관측된 $T_{\text{obs}}$가 이보다 **몇 배 큰가**가 증거의 크기다. 보기 2에서 $T = SSB/N$이고 $F = \dfrac{SSB/(k-1)}{(SST-SSB)/(N-k)}$이므로, $SSB$가 $SST$에 견주어 작을 때는
+
+    $$
+    F \approx \frac{N T/(k-1)}{SST/(N-k)}
+    = \frac{T}{E[T]}\cdot\frac{(N-1)}{(N-k)}\cdot\frac{(k-1)}{(k-1)}
+    \approx \frac{T}{E[T]}
+    $$
+
+    로 **$T/E[T]$가 대략 $F$ 값이다.** $F(3, 116)$의 $95\%$ 분위가 $2.68$이므로 $T_{\text{obs}}$가 $E[T]$의 세 배쯤 되면 유의해진다고 어림할 수 있다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    # 네 처치군. 참 평균이 모두 다르다.
+    groups = [rng_data.normal(mu, 25, 30) for mu in [160, 170, 155, 180]]
+    var_obs, p_multi, perm_vars = perm_test_multi_group(groups, rng=rng)
+    print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
+    # [159.29, 172.22, 160.02, 175.48]  51.759  0.0140
+    ```
+
+    출력:
+
+    ```
+    [159.29, 172.22, 160.02, 175.48] 51.75863218978212 0.014
+    ```
+
+    (1)의 두 식을 잰다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    pooled = np.concatenate(groups)
+    k, n_g, N = len(groups), 30, len(pooled)
+    print(f"T_obs = {var_obs:.6f},  SSB/N = "
+          f"{n_g * sum((g.mean() - pooled.mean()) ** 2 for g in groups) / N:.6f}")
+    print(f"E[T] 닫힌 꼴 = {(k - 1) * pooled.var(ddof=1) / N:.6f}")
+    print(f"모의 평균 T* = {perm_vars.mean():.6f}"
+          f"   (평균의 몬테카를로 오차 {perm_vars.std(ddof=1) / np.sqrt(9999):.6f})")
+    print(f"순열 p = {p_multi:.6f}  ->  초과 횟수 c = {round(p_multi * 10000) - 1}")
+    f, pa = stats.f_oneway(*groups)
+    print(f"일원분산분석 F = {f:.6f},  p = {pa:.6f}")
+    ```
+
+    출력:
+
+    ```
+    T_obs = 51.758632,  SSB/N = 51.758632
+    E[T] 닫힌 꼴 = 14.884560
+    모의 평균 T* = 14.808953   (평균의 몬테카를로 오차 0.118600)
+    순열 p = 0.014000  ->  초과 횟수 c = 139
+    일원분산분석 F = 3.715378,  p = 0.013538
+    ```
+
+    **보기 2의 두 식이 실제 자료에서도 맞는다.** $T_{\text{obs}}$와 $SSB/N$이 여섯 자리까지 같고, 닫힌 꼴 $E[T] = 14.884560$에 대해 $9{,}999$번 순열한 평균이 $14.808953$이다. 차이 $-0.0756$은 평균의 몬테카를로 오차 $0.1186$의 $0.64$배다.
+
+    **어림도 맞았다.** $T_{\text{obs}}/E[T] = 51.758632/14.884560 = 3.477$이고 분산분석의 $F$가 $3.715$다. 두 수가 정확히 같지는 않다 — (1)에서 쓴 근사가 $SSB$를 $SST$에 견주어 작다고 보았는데 여기서는 $SSB$가 $SST$의 $8.8\%$라 그만큼 어긋난다. 그래도 자릿수와 결론은 같다.
+
+    **두 $p$값이 거의 같은 까닭은 통계량이 사실상 하나이기 때문이다.** 보기 2에서 보았듯 순열은 $SST$를 바꾸지 않으므로 $T$와 $F$가 $SSB$를 통해 서로의 순증가함수가 된다. 따라서 **어느 쪽으로 세어도 극단으로 지목되는 배정이 같다.** 남는 차이는 참조분포뿐이다. 분산분석은 $F(3, 116)$이라는 매끄러운 곡선을 쓰고($p = 0.013538$), 순열검정은 자료가 만든 경험분포에서 $139$번을 세었다($p = 0.014000$). $\hat p$의 몬테카를로 표준편차가 $\sqrt{0.0135 \times 0.9865/9999} = 0.00115$이므로 둘의 차이 $0.00046$은 그 절반도 안 된다. **정규성이 참인 모의자료이므로 두 방법이 일치하는 것이 당연하고, 정규성이 깨질 때 갈라지는 쪽은 분산분석이다.**
 
 이 일치는 우연이 아니다. 세 칸으로 나누어 보면 이유가 드러난다.
 
@@ -216,24 +647,92 @@ print([round(g.mean(), 2) for g in groups], var_obs, p_multi)
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> 전환율 비교
+**보기 7.** <span class="diff easy" title="쉬움"></span> 전환율 비교. 대조군 $23{,}739$명 중 $200$명, 처치군 $22{,}588$명 중 $182$명이 전환했다. `perm_test_proportion`을 기본값 $B = 9{,}999$로 돌린다.
+
+**(1)** 이 호출이 섞는 원소가 모두 몇 개인지 세시오. 보기 3에서 보았듯 이 자료의 정확 순열 $p$값은 초기하분포로 **재표집 없이** 계산된다. 그 값을 구하고, $B = 9{,}999$짜리 $\hat p$의 평균과 표준편차를 예측하시오.
+
+**(2)** 실행해 (1)을 확인하시오. 이 자료에서 순열검정을 돌리는 것이 왜 낭비인지 적으시오.
 
 </div>
 
-```python
-# 전환율 A/B 검정. 표본이 2만 이상인데 전환은 200 안팎이라 전환율이
-# 1% 아래다. 이런 자료에서 순열검정이 쓸모 있다.
-diff_ab, p_ab, perms_ab = perm_test_proportion(23739, 200, 22588, 182, rng=rng)
-print(diff_ab)      # 0.000368
-```
+??? success "풀이"
 
-출력:
+    **(1) 해석적으로.** 함수는 길이 $N = 46{,}327$인 배열을 $B = 9{,}999$번 섞으므로 다루는 원소가
 
-```
-0.0003675791182059275
-```
+    $$
+    9{,}999 \times 46{,}327 = 463{,}223{,}673
+    $$
 
-전환율 차이 $0.0368$%p는 유의하지 않다. Fisher 정확검정이 $p = 0.6811$, 카이제곱 검정이 $p = 0.6996$을 준다.
+    개다. **$p$값 하나를 얻으려고 사억 번 넘게 자리를 옮긴다.**
+
+    보기 3에서 보았듯 집단 A의 전환 수 $X$가 $T^{(\pi)}$를 결정하고 $X \sim \text{HG}(23739,\ 46327,\ 382)$이므로, 정확 순열 $p$값은 초기하 확률질량을 더하면 끝이다. 그 값이 $0.681128$이고 Fisher 정확검정이 주는 값과 같다. 귀무분포의 표준편차도 닫힌 꼴로
+
+    $$
+    \operatorname{SD}(T^{(\pi)}) = \sqrt{\frac{N}{N-1}\bar p(1-\bar p)\left(\frac{1}{n_A}+\frac{1}{n_B}\right)} = 0.00084056
+    $$
+
+    이다. 보기 1 (1)의 식에 $p = 0.681128$, $B = 9{,}999$를 넣으면
+
+    $$
+    E[\hat p] = p + \frac{1-p}{B+1} = 0.681160,
+    \qquad
+    \operatorname{SD}(\hat p) = \frac{\sqrt{Bp(1-p)}}{B+1} = 0.004660
+    $$
+
+    이다. **곧 몬테카를로는 셋째 자리까지만 말해 준다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    # 전환율 A/B 검정. 표본이 2만 이상인데 전환은 200 안팎이라 전환율이
+    # 1% 아래다. 이런 자료에서 순열검정이 쓸모 있다.
+    diff_ab, p_ab, perms_ab = perm_test_proportion(23739, 200, 22588, 182, rng=rng)
+    print(diff_ab)      # 0.000368
+    ```
+
+    출력:
+
+    ```
+    0.0003675791182059275
+    ```
+
+    예측한 수들을 잰다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    N, K = 23739 + 22588, 200 + 182
+    step = 1 / 23739 + 1 / 22588
+    x = np.arange(K + 1)
+    d = x * step - K / 22588
+    pmf = stats.hypergeom.pmf(x, N, K, 23739)
+    p_exact = pmf[np.abs(d) >= abs(diff_ab) - 1e-18].sum()
+    sd_closed = np.sqrt(N / (N - 1) * (K / N) * (1 - K / N) * step)
+
+    print(f"순열 p (B=9999) = {p_ab:.6f}")
+    print(f"정확 순열 p     = {p_exact:.6f}   (E[p-hat] = {(9999 * p_exact + 1) / 10000:.6f},"
+          f"  SD = {np.sqrt(9999 * p_exact * (1 - p_exact)) / 10000:.6f})")
+    print(f"Fisher 정확검정 = "
+          f"{stats.fisher_exact([[200, 23739 - 200], [182, 22588 - 182]])[1]:.6f}")
+    print(f"귀무 SD 닫힌 꼴 = {sd_closed:.8f},  모의 = {perms_ab.std(ddof=1):.8f}")
+    print(f"섞은 원소의 수 = {9999 * N:,}")
+    ```
+
+    출력:
+
+    ```
+    순열 p (B=9999) = 0.681900
+    정확 순열 p     = 0.681128   (E[p-hat] = 0.681160,  SD = 0.004660)
+    Fisher 정확검정 = 0.681128
+    귀무 SD 닫힌 꼴 = 0.00084056,  모의 = 0.00084891
+    섞은 원소의 수 = 463,223,673
+    ```
+
+    **예측이 모두 맞는다.** 정확 순열 $p$값 $0.681128$이 Fisher 정확검정과 여섯 자리까지 같고, 모의값 $0.681900$은 예측 평균 $0.681160$에서 $+0.16$ 표준편차 떨어져 있다. 귀무분포의 표준편차도 닫힌 꼴 $0.00084056$에 대해 모의값이 $0.00084891$로, 차이 $8.4\times10^{-6}$이 몬테카를로 오차 $0.00084056/\sqrt{2B} = 5.9\times10^{-6}$의 $1.4$배다.
+
+    **그러므로 이 자료에서 순열검정은 낭비다.** 사억 번 넘게 자리를 옮겨 얻은 것은 $0.6819$인데, 초기하 확률질량 $383$개를 더하면 $0.681128$이 **정확히** 나온다. 그것도 즉시 나온다. 모의실험이 더해 준 것은 $\pm 0.0047$짜리 불확실성뿐이다.
+
+    전환율 차이 $0.0368$%p는 유의하지 않다. Fisher 정확검정이 $p = 0.6811$, 카이제곱 검정이 $p = 0.6996$을 준다.
+
+    **그렇다면 이 함수는 언제 쓰는가.** 통계량이 비율차가 아닐 때다. 두 집단의 전환율 **비**, 로그 오즈비, 혹은 광고비로 나눈 전환 효율처럼 조합론적 분포가 알려지지 않은 양으로 바꾸는 순간 정확 계산이 막히고 재표집만 남는다. 재표집의 값은 $p$값을 얻는 데 있지 않고 **통계량을 바꿀 자유**에 있다.
 
 ## 해석
 

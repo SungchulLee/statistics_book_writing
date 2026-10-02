@@ -19,114 +19,186 @@ $$[\hat{F}_{\alpha/2}^*, \, \hat{F}_{1-\alpha/2}^*]$$
 
 이며 $\hat{F}_q^*$는 붓스트랩 분포의 $q$번째 분위수이다.
 
+이 보기는 대출 자료로 평균 소득의 90%와 95% 신뢰구간을 만든다.
+
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 평균 소득의 붓스트랩 신뢰구간
+**보기 1.** <span class="diff easy" title="쉬움"></span> 평균 소득의 붓스트랩 신뢰구간. 치우친 모집단에서 $n = 20$을 뽑아 $B = 500$번 재표집한다.
+
+**(1)** 붓스트랩 분포의 표준편차가 $B \to \infty$에서 무엇으로 수렴하는지 적고 수를 구하시오. 그것으로 $90\%$와 $95\%$ 구간의 폭을 예측하고 둘의 비도 구하시오.
+
+**(2)** 실행해 확인하시오. $B = 500$으로 읽은 **구간의 끝점이 얼마나 흔들리는지** 씨앗을 바꾸어 가며 재고, $B$를 키우면 얼마나 가라앉는지 보시오.
 
 </div>
 
-이 보기는 대출 자료로 평균 소득의 90%와 95% 신뢰구간을 만든다.
+??? success "풀이"
 
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.utils import resample
+    **(1) 해석적으로.** 붓스트랩 표준오차의 극한은 [붓스트랩 표준오차](../../ch05/applications/bootstrap_standard_error.md) 보기 1의 결과대로 $\hat\sigma/\sqrt n$이다($\hat\sigma$는 경험분포의 표준편차, 곧 $n$으로 나눈 것). 이 표본에서
 
-# 난수 씨앗 고정
-np.random.seed(seed=3)
+    $$
+    \frac{\hat\sigma}{\sqrt{20}} = \frac{56{,}358}{4.4721} = 12{,}602
+    $$
 
-# 소득 자료를 흉내 낸다. 실제 대출 소득 자료를 읽어 써도 된다
-loans_income = np.random.exponential(scale=50000, size=5000) + 20000
+    다. 분포가 거의 정규라면 폭이 $2z_{1-\alpha/2}\widehat{\operatorname{SE}}$이므로
 
-# 모집단에서 크기 20 짜리 표본 하나를 뽑는다
-original_sample = resample(loans_income, n_samples=20, replace=False)
-original_mean = original_sample.mean()
+    $$
+    \text{폭}_{90} \approx 2 \times 1.6449 \times 12602 = 41{,}460,
+    \qquad
+    \text{폭}_{95} \approx 2 \times 1.9600 \times 12602 = 49{,}400
+    $$
 
-print(f"Original sample size: {len(original_sample)}")   # 20
-print(f"Original sample mean: ${original_mean:,.0f}")    # $67,846
+    이고 비가 $z_{0.975}/z_{0.95} = 1.9600/1.6449 = 1.1916$으로 **$19\%$ 넓다.**
 
-# 붓스트랩: 그 표본에서 500번 재표집한다
-bootstrap_means = []
-for _ in range(500):
-    bootstrap_sample = resample(original_sample)  # with replacement
-    bootstrap_means.append(bootstrap_sample.mean())
+    **(2) 수치적으로.**
 
-bootstrap_means = pd.Series(bootstrap_means)
+    ```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.utils import resample
 
-# 신뢰구간 계산
-ci_90_lower, ci_90_upper = bootstrap_means.quantile([0.05, 0.95])
-ci_95_lower, ci_95_upper = bootstrap_means.quantile([0.025, 0.975])
+    # 난수 씨앗 고정
+    np.random.seed(seed=3)
 
-print("90% CI: [${:,.0f}, ${:,.0f}]".format(ci_90_lower, ci_90_upper))
-# 90% CI: [$49,742, $90,491]
-print("95% CI: [${:,.0f}, ${:,.0f}]".format(ci_95_lower, ci_95_upper))
-# 95% CI: [$47,026, $95,545]
-print(f"Mean of bootstrap means: ${bootstrap_means.mean():,.0f}")   # $68,444
-```
+    # 소득 자료를 흉내 낸다. 실제 대출 소득 자료를 읽어 써도 된다
+    loans_income = np.random.exponential(scale=50000, size=5000) + 20000
 
-출력:
+    # 모집단에서 크기 20 짜리 표본 하나를 뽑는다
+    original_sample = resample(loans_income, n_samples=20, replace=False)
+    original_mean = original_sample.mean()
 
-```
-Original sample size: 20
-Original sample mean: $67,846
-90% CI: [$49,742, $90,491]
-95% CI: [$47,026, $95,545]
-Mean of bootstrap means: $68,444
-```
+    print(f"Original sample size: {len(original_sample)}")   # 20
+    print(f"Original sample mean: ${original_mean:,.0f}")    # $67,846
 
-참고로 이 모의 모집단의 참 평균은 $\$70{,}122$이다. 두 구간 모두 참값을 포함한다.
+    # 붓스트랩: 그 표본에서 500번 재표집한다
+    bootstrap_means = []
+    for _ in range(500):
+        bootstrap_sample = resample(original_sample)  # with replacement
+        bootstrap_means.append(bootstrap_sample.mean())
 
-시각화는 다음과 같이 한다.
+    bootstrap_means = pd.Series(bootstrap_means)
 
-```python
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+    # 신뢰구간 계산
+    ci_90_lower, ci_90_upper = bootstrap_means.quantile([0.05, 0.95])
+    ci_95_lower, ci_95_upper = bootstrap_means.quantile([0.025, 0.975])
 
-# 첫째 그림: 90% 신뢰구간
-ax1.hist(bootstrap_means, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
-ax1.axvline(ci_90_lower, color='darkred', linestyle='--', linewidth=2.5, label='90% CI limits')
-ax1.axvline(ci_90_upper, color='darkred', linestyle='--', linewidth=2.5)
-ax1.axvspan(ci_90_lower, ci_90_upper, alpha=0.2, color='green', label='90% CI')
+    print("90% CI: [${:,.0f}, ${:,.0f}]".format(ci_90_lower, ci_90_upper))
+    # 90% CI: [$49,742, $90,491]
+    print("95% CI: [${:,.0f}, ${:,.0f}]".format(ci_95_lower, ci_95_upper))
+    # 95% CI: [$47,026, $95,545]
+    print(f"Mean of bootstrap means: ${bootstrap_means.mean():,.0f}")   # $68,444
+    ```
 
-ci_90_mid = (ci_90_lower + ci_90_upper) / 2
-ax1.text(ci_90_mid, 35, f'90% CI\n[${ci_90_lower:,.0f}, ${ci_90_upper:,.0f}]',
-         ha='center', va='center', fontsize=10,
-         bbox=dict(boxstyle='round', facecolor='white', edgecolor='darkred', linewidth=1.5))
-ax1.axvline(original_mean, color='black', linestyle='-', linewidth=2,
-            label=f'Sample mean: ${original_mean:,.0f}')
+    출력:
 
-ax1.set_xlabel('Bootstrap Sample Mean ($)', fontsize=11)
-ax1.set_ylabel('Frequency', fontsize=11)
-ax1.set_title('90% Bootstrap Confidence Interval', fontsize=12, fontweight='bold')
-ax1.legend(loc='upper left', fontsize=9)
-ax1.spines[['top', 'right']].set_visible(False)
-ax1.grid(True, alpha=0.3, axis='y')
+    ```
+    Original sample size: 20
+    Original sample mean: $67,846
+    90% CI: [$49,742, $90,491]
+    95% CI: [$47,026, $95,545]
+    Mean of bootstrap means: $68,444
+    ```
 
-# 둘째 그림: 95% 신뢰구간
-ax2.hist(bootstrap_means, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
-ax2.axvline(ci_95_lower, color='darkblue', linestyle='--', linewidth=2.5, label='95% CI limits')
-ax2.axvline(ci_95_upper, color='darkblue', linestyle='--', linewidth=2.5)
-ax2.axvspan(ci_95_lower, ci_95_upper, alpha=0.2, color='orange', label='95% CI')
+    참고로 이 모의 모집단의 참 평균은 $\$70{,}122$이다. 두 구간 모두 참값을 포함한다.
 
-ci_95_mid = (ci_95_lower + ci_95_upper) / 2
-ax2.text(ci_95_mid, 35, f'95% CI\n[${ci_95_lower:,.0f}, ${ci_95_upper:,.0f}]',
-         ha='center', va='center', fontsize=10,
-         bbox=dict(boxstyle='round', facecolor='white', edgecolor='darkblue', linewidth=1.5))
-ax2.axvline(original_mean, color='black', linestyle='-', linewidth=2,
-            label=f'Sample mean: ${original_mean:,.0f}')
+    시각화는 다음과 같이 한다.
 
-ax2.set_xlabel('Bootstrap Sample Mean ($)', fontsize=11)
-ax2.set_ylabel('Frequency', fontsize=11)
-ax2.set_title('95% Bootstrap Confidence Interval', fontsize=12, fontweight='bold')
-ax2.legend(loc='upper left', fontsize=9)
-ax2.spines[['top', 'right']].set_visible(False)
-ax2.grid(True, alpha=0.3, axis='y')
+    ```python
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
-plt.tight_layout()
-plt.show()
-```
+    # 첫째 그림: 90% 신뢰구간
+    ax1.hist(bootstrap_means, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
+    ax1.axvline(ci_90_lower, color='darkred', linestyle='--', linewidth=2.5, label='90% CI limits')
+    ax1.axvline(ci_90_upper, color='darkred', linestyle='--', linewidth=2.5)
+    ax1.axvspan(ci_90_lower, ci_90_upper, alpha=0.2, color='green', label='90% CI')
 
-![신뢰수준에 따른 붓스트랩 신뢰구간](./img/visualization_confidence_levels_68.png)
+    ci_90_mid = (ci_90_lower + ci_90_upper) / 2
+    ax1.text(ci_90_mid, 35, f'90% CI\n[${ci_90_lower:,.0f}, ${ci_90_upper:,.0f}]',
+             ha='center', va='center', fontsize=10,
+             bbox=dict(boxstyle='round', facecolor='white', edgecolor='darkred', linewidth=1.5))
+    ax1.axvline(original_mean, color='black', linestyle='-', linewidth=2,
+                label=f'Sample mean: ${original_mean:,.0f}')
+
+    ax1.set_xlabel('Bootstrap Sample Mean ($)', fontsize=11)
+    ax1.set_ylabel('Frequency', fontsize=11)
+    ax1.set_title('90% Bootstrap Confidence Interval', fontsize=12, fontweight='bold')
+    ax1.legend(loc='upper left', fontsize=9)
+    ax1.spines[['top', 'right']].set_visible(False)
+    ax1.grid(True, alpha=0.3, axis='y')
+
+    # 둘째 그림: 95% 신뢰구간
+    ax2.hist(bootstrap_means, bins=30, color='steelblue', edgecolor='black', alpha=0.7)
+    ax2.axvline(ci_95_lower, color='darkblue', linestyle='--', linewidth=2.5, label='95% CI limits')
+    ax2.axvline(ci_95_upper, color='darkblue', linestyle='--', linewidth=2.5)
+    ax2.axvspan(ci_95_lower, ci_95_upper, alpha=0.2, color='orange', label='95% CI')
+
+    ci_95_mid = (ci_95_lower + ci_95_upper) / 2
+    ax2.text(ci_95_mid, 35, f'95% CI\n[${ci_95_lower:,.0f}, ${ci_95_upper:,.0f}]',
+             ha='center', va='center', fontsize=10,
+             bbox=dict(boxstyle='round', facecolor='white', edgecolor='darkblue', linewidth=1.5))
+    ax2.axvline(original_mean, color='black', linestyle='-', linewidth=2,
+                label=f'Sample mean: ${original_mean:,.0f}')
+
+    ax2.set_xlabel('Bootstrap Sample Mean ($)', fontsize=11)
+    ax2.set_ylabel('Frequency', fontsize=11)
+    ax2.set_title('95% Bootstrap Confidence Interval', fontsize=12, fontweight='bold')
+    ax2.legend(loc='upper left', fontsize=9)
+    ax2.spines[['top', 'right']].set_visible(False)
+    ax2.grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![신뢰수준에 따른 붓스트랩 신뢰구간](./img/visualization_confidence_levels_68.png)
+
+    (1)의 예측을 확인하고, $B = 500$으로 읽은 끝점이 얼마나 흔들리는지 잰다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    n = len(original_sample)
+    se_lim = original_sample.std(ddof=0) / np.sqrt(n)
+    print(f"sigma-hat = {original_sample.std(ddof=0):,.0f},  극한 SE = {se_lim:,.0f}"
+          f"   (B=500 모의 SD = {bootstrap_means.std():,.0f})")
+    for lab, z, lo, hi in (("90%", 1.644854, ci_90_lower, ci_90_upper),
+                           ("95%", 1.959964, ci_95_lower, ci_95_upper)):
+        print(f"{lab}: 폭 {hi - lo:,.0f}   예측 2 z SE = {2 * z * se_lim:,.0f}")
+    print(f"폭의 비 = {(ci_95_upper-ci_95_lower)/(ci_90_upper-ci_90_lower):.4f}"
+          f"   (정규이론 {1.959964/1.644854:.4f})")
+
+    print(f"\n{'B':>7}{'하한 평균':>12}{'하한 SD':>10}{'상한 평균':>12}{'상한 SD':>10}{'폭의 SD':>10}")
+    for B in (500, 2000, 10000):
+        los, his = [], []
+        for s in range(30):
+            r = np.random.default_rng(s)
+            bm = original_sample[r.integers(0, n, (B, n))].mean(axis=1)
+            lo, hi = np.percentile(bm, [2.5, 97.5])
+            los.append(lo); his.append(hi)
+        los, his = np.array(los), np.array(his)
+        print(f"{B:>7}{los.mean():>12,.0f}{los.std(ddof=1):>10,.0f}"
+              f"{his.mean():>12,.0f}{his.std(ddof=1):>10,.0f}{(his-los).std(ddof=1):>10,.0f}")
+    ```
+
+    출력:
+
+    ```
+    sigma-hat = 56,357,  극한 SE = 12,602   (B=500 모의 SD = 12,261)
+    90%: 폭 40,749   예측 2 z SE = 41,457
+    95%: 폭 48,519   예측 2 z SE = 49,399
+    폭의 비 = 1.1907   (정규이론 1.1916)
+
+          B       하한 평균     하한 SD       상한 평균     상한 SD     폭의 SD
+        500      46,568       906      94,860     1,654     1,832
+       2000      46,448       539      95,074       995     1,069
+      10000      46,366       192      95,099       414       459
+    ```
+
+    **폭의 예측이 맞는다.** $90\%$는 $40{,}749$ 대 $41{,}457$, $95\%$는 $48{,}519$ 대 $49{,}399$로 $2\%$ 안이고, 비는 $1.1907$로 정규이론의 $1.1916$과 소수 셋째 자리까지 같다.
+
+    **그러나 $B = 500$은 이 구간을 보고하기에 모자란다.** 씨앗만 바꾸어 $30$번 다시 읽으면 $2.5\%$ 끝점이 $\pm 906$, $97.5\%$ 끝점이 $\pm 1{,}654$ 흔들린다. 폭 자체도 $\pm 1{,}832$다. **구간 폭이 $4.8$만 원인데 그 폭을 재는 일에 $1.8$천 원의 불확실성이 붙어 있다는 뜻이다.**
+
+    $B$를 키우면 $1/\sqrt B$로 가라앉는다. $B$를 $20$배인 $10{,}000$으로 올리면 하한의 흔들림이 $906$에서 $192$로 $4.7$배 줄어 $\sqrt{20} = 4.47$에 맞는다. **이것은 $B$로 줄일 수 있는 몫이다.** 표본 $20$개가 주는 불확실성(폭 $4.8$만 원)은 $B$로 줄일 수 없다.
+
+    끝으로, 두 구간이 참 평균 $\$70{,}122$를 포함했다는 사실만으로 절차가 옳다고 말할 수는 없다. 구간 하나는 맞히거나 못 맞히거나 둘 중 하나일 뿐이다. **보기 2가 그 절차를 $2{,}000$번 시험한다.**
 
 ## 시각화에서 얻는 핵심 통찰
 
@@ -152,39 +224,93 @@ plt.show()
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 포함확률을 직접 세어 보기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 포함확률을 직접 세어 보기. 치우친 모집단에서 $n = 20$을 뽑아 $95\%$ 백분위수 구간을 만드는 일을 $2{,}000$번 되풀이한다.
+
+**(1)** $N = 2{,}000$번으로 잰 포함확률의 몬테카를로 오차를 구하고, $N = 100$이었다면 얼마가 되는지도 구하시오. $N = 100$으로 명목값과 실제값을 구별할 수 있는가.
+
+**(2)** 실행해 포함확률을 재시오. 표본크기를 $n = 50, 100, 200$으로 늘려 가며 부족분이 어떻게 줄어드는지 보시오.
 
 </div>
 
-```python
-# "95% 신뢰"는 한 번 만든 구간에 대한 확률이 아니라, 같은 절차를 되풀이할
-# 때 참값을 담는 비율에 대한 약속이다. 그 비율을 직접 세어 본다.
-np.random.seed(42)
+??? success "풀이"
 
-true_pop = np.random.exponential(scale=50000, size=10000) + 20000
-true_mean = true_pop.mean()
+    **(1) 해석적으로.** 포함 여부가 베르누이 시행이므로 $N$번 되풀이해 얻은 비율의 표준오차는 $\sqrt{p(1-p)/N}$이다. 참값이 $p \approx 0.90$이라면
 
-# 치우친 모집단에서 n=20 만 뽑으므로 실제 포함확률이 95%에 못 미친다.
-# 붓스트랩이 만능이 아니라는 것을 보여 주는 대목이다.
-n_simulations = 2000
-ci_covers = []
+    $$
+    N = 2{,}000: \ \sqrt{\frac{0.9 \times 0.1}{2000}} = 0.0067,
+    \qquad
+    N = 100: \ \sqrt{\frac{0.9 \times 0.1}{100}} = 0.030
+    $$
 
-for sim in range(n_simulations):
-    sample = np.random.choice(true_pop, size=20, replace=False)
-    boot_means = np.array([np.mean(np.random.choice(sample, size=len(sample)))
-                           for _ in range(500)])
-    ci_lower, ci_upper = np.percentile(boot_means, [2.5, 97.5])
-    ci_covers.append(ci_lower <= true_mean <= ci_upper)
+    이다. **$N = 100$에서는 $3$%p짜리 눈금으로 재는 셈이다.** 참값이 $0.90$인데 $0.95$가 나올 확률이
 
-print(f"Coverage across {n_simulations} simulations: {100*np.mean(ci_covers):.1f}%")
-# Coverage across 2000 simulations: 90.6%
-```
+    $$
+    \Pr\!\left(\hat p \ge 0.95\right) \approx 1 - \Phi\!\left(\frac{0.95 - 0.90}{0.030}\right) = 1 - \Phi(1.67) = 0.048
+    $$
 
-출력:
+    로 스무 번에 한 번꼴이다. 드물지 않다. **$N = 100$으로는 $0.90$과 $0.95$를 구별할 수 없다.** $N = 2{,}000$이면 차이가 $0.05/0.0067 = 7.5$ 표준오차가 되어 분명해진다.
 
-```
-Coverage across 2000 simulations: 90.9%
-```
+    **(2) 수치적으로.**
+
+    ```python
+    # "95% 신뢰"는 한 번 만든 구간에 대한 확률이 아니라, 같은 절차를 되풀이할
+    # 때 참값을 담는 비율에 대한 약속이다. 그 비율을 직접 세어 본다.
+    np.random.seed(42)
+
+    true_pop = np.random.exponential(scale=50000, size=10000) + 20000
+    true_mean = true_pop.mean()
+
+    # 치우친 모집단에서 n=20 만 뽑으므로 실제 포함확률이 95%에 못 미친다.
+    # 붓스트랩이 만능이 아니라는 것을 보여 주는 대목이다.
+    n_simulations = 2000
+    ci_covers = []
+
+    for sim in range(n_simulations):
+        sample = np.random.choice(true_pop, size=20, replace=False)
+        boot_means = np.array([np.mean(np.random.choice(sample, size=len(sample)))
+                               for _ in range(500)])
+        ci_lower, ci_upper = np.percentile(boot_means, [2.5, 97.5])
+        ci_covers.append(ci_lower <= true_mean <= ci_upper)
+
+    print(f"Coverage across {n_simulations} simulations: {100*np.mean(ci_covers):.1f}%")
+    # Coverage across 2000 simulations: 90.6%
+    ```
+
+    출력:
+
+    ```
+    Coverage across 2000 simulations: 90.9%
+    ```
+
+    표본크기를 바꾸어 가며 다시 센다. 위 블록의 `true_pop`, `true_mean`을 그대로 이어 쓴다.
+
+    ```python
+    rng = np.random.default_rng(7)
+    for nn in (20, 50, 100, 200):
+        cov, M = 0, 2000
+        for _ in range(M):
+            s = rng.choice(true_pop, size=nn, replace=False)
+            bm = s[rng.integers(0, nn, (500, nn))].mean(axis=1)
+            lo, hi = np.percentile(bm, [2.5, 97.5])
+            cov += lo <= true_mean <= hi
+        print(f"n={nn:>4}: 포함확률 {cov/M:.4f}   부족분 {0.95-cov/M:.4f}"
+              f"   (몬테카를로 오차 {np.sqrt((cov/M)*(1-cov/M)/M):.4f})")
+    ```
+
+    출력:
+
+    ```
+    n=  20: 포함확률 0.8980   부족분 0.0520   (몬테카를로 오차 0.0068)
+    n=  50: 포함확률 0.9270   부족분 0.0230   (몬테카를로 오차 0.0058)
+    n= 100: 포함확률 0.9405   부족분 0.0095   (몬테카를로 오차 0.0053)
+    n= 200: 포함확률 0.9420   부족분 0.0080   (몬테카를로 오차 0.0052)
+    ```
+
+    **$n = 20$의 $0.898$은 잡음이 아니다.** 몬테카를로 오차가 $0.0068$이므로 $0.95$와의 차이 $0.052$가 그 $7.6$배다. (쪽의 코드는 다른 난수열로 $0.909$를 내는데, 두 값의 차이는 몬테카를로 요동 안이다.)
+
+    **표본을 키우면 부족분이 빠르게 줄어든다.** $0.0520 \to 0.0230 \to 0.0095 \to 0.0080$이다. $n = 100$을 넘어서면 남은 부족분이 몬테카를로 오차 $0.005$와 같은 자릿수가 되어 더 재기 어려워진다. **문제의 뿌리는 붓스트랩이 아니라 $n = 20$이라는 작은 표본과 모집단의 치우침이다.**
+
+    여기서 (1)의 셈이 왜 중요한지 드러난다. 같은 실험을 $N = 100$번만 돌렸다면 $n = 20$에서도 $0.95$ 근처가 나올 수 있고, **결함이 통째로 숨었을 것이다.**
 
 !!! warning "$n = 20$에서 실제 포함확률은 95%가 아니다"
     모의실험 결과가 $90.6\%$이다. 명목값 $95\%$보다 $4.4$%p 낮다.
@@ -213,26 +339,91 @@ Coverage across 2000 simulations: 90.9%
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 백분위수법과 BCa
+**보기 3.** <span class="diff easy" title="쉬움"></span> 백분위수법과 BCa. 보기 1의 표본에 두 방법을 모두 적용한다.
+
+**(1)** 이 표본의 왜도로 BCa의 가속 $\hat a = \dfrac{\hat\gamma_1}{6\sqrt n}$을 구하고, $z_0$의 1차근사가 같은 값임을 써서 **조정된 백분위점**을 미리 계산하시오. BCa 구간이 백분위수 구간의 어느 쪽으로 옮겨 가겠는가.
+
+**(2)** 실행해 두 구간을 견주시오. 참 평균 $\$70{,}122$에 대해 어느 쪽이 나은가.
 
 </div>
 
-```python
-# 백분위수법 — 가장 간단하고 앞에서 쓴 방법이다.
-ci_percentile = (bootstrap_means.quantile(0.025), bootstrap_means.quantile(0.975))
+??? success "풀이"
 
-# BCa — 편향과 가속을 보정한다. scipy 가 이미 구현해 두었으므로
-# 직접 짤 필요가 없다. vectorized=True 는 통계량 함수가 축 인자를
-# 받는다는 뜻이고, 그래야 속도가 난다.
-from scipy.stats import bootstrap
+    **(1) 해석적으로.** [붓스트랩 신뢰구간 방법](bootstrap_ci.md) 보기 3에서 표본평균에 대해
 
-def statistic(x, axis=-1):
-    return np.mean(x, axis=axis)
+    $$
+    \hat a = \frac{\hat\gamma_1}{6\sqrt n},
+    \qquad
+    \hat z_0 \approx \frac{\hat\gamma_1}{6\sqrt n}
+    $$
 
-result = bootstrap((original_sample,), statistic, n_resamples=5000,
-                   method='bca', vectorized=True)
-ci_bca = result.confidence_interval
-```
+    임을 보았다. 이 표본의 왜도는 $\hat\gamma_1 = 2.1166$이고 $n = 20$이므로
+
+    $$
+    \hat a \approx \hat z_0 \approx \frac{2.1166}{6\sqrt{20}} = 0.0789
+    $$
+
+    다. 이것을 조정식에 넣으면 아래 코드가 $5.9\%$와 $99.4\%$를 준다. **두 절단점이 모두 오른쪽으로 크게 밀린다.**
+
+    **방향은 미리 알 수 있다.** 자료가 오른쪽으로 치우쳐 있으면 표본평균이 참 평균을 **작게** 추정하는 쪽으로 기우므로, 보정은 구간 전체를 **오른쪽으로** 옮긴다. 상한 쪽이 더 많이 밀려 구간이 넓어지기도 한다.
+
+    **(2) 수치적으로.** 보기 1의 `original_sample`과 `bootstrap_means`를 그대로 이어 쓴다.
+
+    ```python
+    # 백분위수법 — 가장 간단하고 앞에서 쓴 방법이다.
+    ci_percentile = (bootstrap_means.quantile(0.025), bootstrap_means.quantile(0.975))
+
+    # BCa — 편향과 가속을 보정한다. scipy 가 이미 구현해 두었으므로
+    # 직접 짤 필요가 없다. vectorized=True 는 통계량 함수가 축 인자를
+    # 받는다는 뜻이고, 그래야 속도가 난다.
+    from scipy.stats import bootstrap
+
+    def statistic(x, axis=-1):
+        return np.mean(x, axis=axis)
+
+    result = bootstrap((original_sample,), statistic, n_resamples=5000,
+                       method='bca', vectorized=True)
+    ci_bca = result.confidence_interval
+    ```
+
+    두 구간과 (1)의 수를 함께 찍는다.
+
+    ```python
+    from scipy import stats
+
+    n = len(original_sample)
+    g1 = stats.skew(original_sample)
+    a = g1 / (6 * np.sqrt(n))
+    bm = original_sample[np.random.default_rng(0).integers(0, n, (20000, n))].mean(axis=1)
+    z0 = stats.norm.ppf(np.mean(bm < original_sample.mean()))
+    za, z1 = stats.norm.ppf(0.025), stats.norm.ppf(0.975)
+    p_lo = stats.norm.cdf(z0 + (z0 + za) / (1 - a * (z0 + za)))
+    p_hi = stats.norm.cdf(z0 + (z0 + z1) / (1 - a * (z0 + z1)))
+
+    print(f"표본평균 {original_sample.mean():,.0f},  왜도 {g1:.4f}")
+    print(f"a = g1/(6 sqrt n) = {a:.6f},   z0 (B=20000) = {z0:.6f}")
+    print(f"조정된 백분위점 {100 * p_lo:.2f}% / {100 * p_hi:.2f}%  (보정 없으면 2.5% / 97.5%)")
+    print(f"백분위수 [{ci_percentile[0]:,.0f}, {ci_percentile[1]:,.0f}]"
+          f"   폭 {ci_percentile[1] - ci_percentile[0]:,.0f}")
+    print(f"BCa      [{ci_bca.low:,.0f}, {ci_bca.high:,.0f}]"
+          f"   폭 {ci_bca.high - ci_bca.low:,.0f}")
+    ```
+
+    출력:
+
+    ```
+    표본평균 67,846,  왜도 2.1166
+    a = g1/(6 sqrt n) = 0.078880,   z0 (B=20000) = 0.076527
+    조정된 백분위점 5.90% / 99.38%  (보정 없으면 2.5% / 97.5%)
+    백분위수 [47,026, 95,545]   폭 48,519
+    BCa      [50,525, 105,939]   폭 55,414
+    ```
+
+    **예측한 대로 움직였다.** $\hat a = 0.078880$이고 $z_0 = 0.076527$로 1차근사와 셋째 자리까지 같다. 두 절단점이 $2.5\% \to 5.90\%$, $97.5\% \to 99.38\%$로 **모두 오른쪽으로** 밀렸고, 그 결과 BCa 구간 $[50{,}525,\ 105{,}939]$가 백분위수 구간 $[47{,}026,\ 95{,}545]$보다 통째로 오른쪽에 있다. 폭도 $48{,}519$에서 $55{,}414$로 $14\%$ 넓어졌다.
+
+    **참 평균 $\$70{,}122$는 두 구간 모두에 들어 있다.** 한 표본으로는 우열을 가릴 수 없다는 뜻이다. 그러나 보기 2가 보인 대로 백분위수 구간의 포함확률이 $0.898$이고 실패가 **구간이 참값보다 왼쪽에 놓이는 쪽**으로 몰리므로, 구간을 오른쪽으로 옮기는 BCa의 보정이 올바른 방향이다.
+
+    다만 $n = 20$에서 BCa도 완전한 해법은 아니다. $\hat a$와 $\hat z_0$ 자체가 $20$개의 자료에서 추정한 값이라 크게 흔들리며, 보정된 $99.38$ 백분위수를 $B = 5{,}000$에서 읽는 것은 위쪽 $31$개 복제값에 기대는 일이다([BCa 방법](bca.md) 보기 1이 그 불안정을 잰다).
 
 !!! note "`scipy.stats.bootstrap`의 인자"
     `scipy.stats.bootstrap`은 기본적으로 `vectorized=True`를 가정하고 통계량 함수에 `axis` 인자를 넘긴다. `np.mean`처럼 `axis`를 받는 함수는 그대로 쓸 수 있지만, 직접 정의한 함수라면 `axis` 인자를 처리하거나 `vectorized=False`를 명시해야 한다.

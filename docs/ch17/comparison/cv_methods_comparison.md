@@ -18,37 +18,118 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 모의자료와 다항 파이프라인
+**보기 1.** <span class="diff easy" title="쉬움"></span> 모의자료와 다항 파이프라인. 참 관계가 $g(x) = \sin x + 0.3x$이고 잡음이 $\mathcal N(0, 0.5^2)$이므로, **어떤 모형도 넘을 수 없는 바닥**이 있다.
+
+**(1)** 어떤 차수를 쓰든 검정 MSE가 내려갈 수 없는 값을 적으시오. 또 $x \sim \text{Uniform}(-3,3)$에서 **$1$차 다항식**의 모집단 MSE를 적분으로 정확히 구하시오.
+
+**(2)** 그 두 수를 뒤의 LOOCV 표와 견주시오.
 
 </div>
 
-```python
-import numpy as np
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.linear_model import LinearRegression
-from sklearn.pipeline import Pipeline
+??? success "풀이"
 
-def generate_data(n=200, seed=42):
-    """sin 곡선에 선형 추세와 잡음을 얹은 자료를 만든다.
+    **(1) 해석적으로.** 관측은 $Y = g(X) + \varepsilon$이고 $\varepsilon$이 $X$와 독립이므로, 예측함수 $\hat g$의 모집단 MSE가
 
-    참 관계가 다항식이 아니므로 "옳은 차수"가 따로 없다. 세 교차검증
-    방법이 어느 차수를 고르는지 견주는 것이 목적이다.
-    """
-    rng = np.random.default_rng(seed)
-    x = rng.uniform(-3, 3, n)
-    y = np.sin(x) + 0.3 * x + rng.normal(0, 0.5, n)
-    return x.reshape(-1, 1), y
+    $$
+    E\left[(Y - \hat g(X))^2\right]
+    = \underbrace{\sigma^2}_{0.25}
+    + \underbrace{E\left[(g(X) - \hat g(X))^2\right]}_{\text{근사오차} \ \ge 0}
+    $$
 
-def poly_pipeline(degree):
-    """주어진 차수의 다항회귀 파이프라인."""
-    return Pipeline([
-        ("poly", PolynomialFeatures(degree=degree, include_bias=False)),
-        ("lr", LinearRegression()),
-    ])
+    로 쪼개진다. **바닥은 $\sigma^2 = 0.5^2 = 0.25$다.** 차수를 아무리 올려도 그 아래로 내려갈 수 없고, 교차검증 곡선이 $0.25$ 근처에 닿으면 더 얻을 것이 없다는 뜻이다.
 
-X, y = generate_data(n=200)
-degrees = range(1, 11)
-```
+    **$1$차의 근사오차.** 최선의 직선은 모집단 최소제곱 직선이므로, 근사오차가 $g$를 $1, x$에 사영하고 남은 분산이다.
+
+    $$
+    E\left[(g(X) - \hat g(X))^2\right] = \operatorname{Var}(g(X)) - \frac{\operatorname{Cov}(g(X), X)^2}{\operatorname{Var}(X)}
+    $$
+
+    $X \sim U(-3,3)$에서 $\operatorname{Var}(X) = 3$, $E[\sin X] = 0$(대칭)이고
+
+    $$
+    E[X\sin X] = \frac16\int_{-3}^{3} x\sin x\,dx = \frac13\big(\sin 3 - 3\cos 3\big) = 1.037032
+    $$
+
+    $$
+    E[\sin^2 X] = \frac16\int_{-3}^{3}\sin^2 x\,dx = \frac16\left(3 - \frac{\sin 6}{2}\right) = 0.523285
+    $$
+
+    이다. $g = \sin X + 0.3X$이므로
+
+    $$
+    \operatorname{Var}(g) = 0.523285 + 0.09 \times 3 + 0.6 \times 1.037032 = 1.415504,
+    \qquad
+    \operatorname{Cov}(g, X) = 1.037032 + 0.9 = 1.937032
+    $$
+
+    이고 근사오차가 $1.415504 - 1.937032^2/3 = 0.164806$이다. 따라서
+
+    $$
+    \text{1차의 모집단 MSE} = 0.25 + 0.164806 = 0.414806
+    $$
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.preprocessing import PolynomialFeatures
+    from sklearn.linear_model import LinearRegression
+    from sklearn.pipeline import Pipeline
+
+    def generate_data(n=200, seed=42):
+        """sin 곡선에 선형 추세와 잡음을 얹은 자료를 만든다.
+
+        참 관계가 다항식이 아니므로 "옳은 차수"가 따로 없다. 세 교차검증
+        방법이 어느 차수를 고르는지 견주는 것이 목적이다.
+        """
+        rng = np.random.default_rng(seed)
+        x = rng.uniform(-3, 3, n)
+        y = np.sin(x) + 0.3 * x + rng.normal(0, 0.5, n)
+        return x.reshape(-1, 1), y
+
+    def poly_pipeline(degree):
+        """주어진 차수의 다항회귀 파이프라인."""
+        return Pipeline([
+            ("poly", PolynomialFeatures(degree=degree, include_bias=False)),
+            ("lr", LinearRegression()),
+        ])
+
+    X, y = generate_data(n=200)
+    degrees = range(1, 11)
+    ```
+
+    (1)의 두 수를 계산한다.
+
+    ```python
+    from scipy import integrate
+
+    VarX = 3.0
+    Exsin = integrate.quad(lambda x: x * np.sin(x) / 6, -3, 3)[0]
+    Esin2 = integrate.quad(lambda x: np.sin(x) ** 2 / 6, -3, 3)[0]
+    Varg = Esin2 + 0.09 * VarX + 0.6 * Exsin
+    Cov = Exsin + 0.3 * VarX
+    print(f"E[X sin X] = {Exsin:.6f},  E[sin^2 X] = {Esin2:.6f}")
+    print(f"Var(g) = {Varg:.6f},  Cov(g, X) = {Cov:.6f},  최적 기울기 = {Cov/VarX:.6f}")
+    print(f"1차의 근사오차 = {Varg - Cov**2/VarX:.6f}")
+    print(f"바닥 sigma^2 = {0.25:.6f},  1차의 모집단 MSE = {0.25 + Varg - Cov**2/VarX:.6f}")
+    ```
+
+    출력:
+
+    ```
+    E[X sin X] = 1.037032,  E[sin^2 X] = 0.523285
+    Var(g) = 1.415504,  Cov(g, X) = 1.937032,  최적 기울기 = 0.645677
+    1차의 근사오차 = 0.164806
+    바닥 sigma^2 = 0.250000,  1차의 모집단 MSE = 0.414806
+    ```
+
+    **뒤의 표와 맞춰 보면 두 수가 모든 것을 설명한다.**
+
+    - $1$차의 LOOCV 값이 $0.4422$다. 예측한 모집단 MSE $0.414806$보다 $0.027$ 크고, 이는 모수 두 개를 자료에서 추정한 몫과 이 자료 하나의 요동을 합친 것이다.
+    - $6$차의 LOOCV 값이 $0.2577$로 **바닥 $0.25$에서 $0.0077$밖에 떨어져 있지 않다.** 모수 일곱 개를 추정하는 데 드는 몫만 해도 $\sigma^2 p/n = 0.25 \times 7/200 = 0.0088$이니, $6$차 다항식의 **근사오차는 사실상 $0$이다.**
+
+    그러므로 "어느 차수가 최적인가"라는 물음은 애초에 날이 서지 않는다. $3$차부터 이미 바닥에 거의 닿았고, 그 위에서 차수를 올려 얻는 것은 근사오차 $0.003$ 안팎이며 추정에 드는 비용이 그만큼씩 늘어난다. **교차검증 곡선이 평평한 것은 방법의 결함이 아니라 문제의 성질이다.**
+
 
 ---
 
@@ -66,37 +147,73 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 검증집합 방법
+**보기 2.** <span class="diff easy" title="쉬움"></span> 검증집합 방법. 자료를 절반으로 갈라 $100$개로 훈련하고 $100$개로 잰다. 분할을 열 번 다르게 해 본다.
+
+**(1)** 이 방법의 추정값이 **위로 치우치는** 까닭을 적고, 차수 $d$에서 치우침의 크기를 $\sigma^2$과 표본크기로 어림하시오. LOOCV와 견주면 얼마나 차이 나는가.
+
+**(2)** 실행해 열 번의 분할이 고른 차수가 얼마나 흩어지는지 재고, 치우침의 어림과 견주시오.
 
 </div>
 
-```python
-def validation_set_mse(X, y, degrees, n_splits=10, rng=None):
-    """검증집합 방법. 자료를 절반으로 갈라 한쪽으로 훈련하고 한쪽으로 잰다.
+??? success "풀이"
 
-    가장 간단하지만 두 가지 약점이 있다. 어떻게 가르느냐에 따라 결과가
-    들쭉날쭉하고(그래서 여기서는 10번 다르게 갈라 본다), 훈련에 절반밖에
-    쓰지 못해 성능을 실제보다 나쁘게 잡는다.
-    """
-    rng = rng or np.random.default_rng(7)
-    n = len(y); n_train = n // 2
-    all_mses = {d: [] for d in degrees}
-    for _ in range(n_splits):
-        perm = rng.permutation(n)
-        tr, te = perm[:n_train], perm[n_train:]
-        for d in degrees:
-            model = poly_pipeline(d).fit(X[tr], y[tr])
-            all_mses[d].append(np.mean((y[te] - model.predict(X[te])) ** 2))
-    return all_mses
-```
+    **(1) 해석적으로.** 모수 $p = d+1$개인 선형모형을 $n_{\text{tr}}$개로 적합해 **새 자료**에서 재면 기대 MSE가 대략
 
-$10$번의 분할에서 **각 분할이 고른 최적 차수**는
+    $$
+    E[\widehat{\text{MSE}}] \approx \sigma^2\left(1 + \frac{p}{n_{\text{tr}}}\right) + \text{근사오차}
+    $$
 
-$$
-10,\ 6,\ 9,\ 5,\ 5,\ 6,\ 6,\ 3,\ 3,\ 9
-$$
+    다. 추정한 계수들이 훈련자료의 잡음을 따라가므로 모수 하나당 $\sigma^2/n_{\text{tr}}$씩 벌점이 붙는다. **훈련자료가 적을수록 벌점이 커진다.**
 
-로 $3$부터 $10$까지 흩어진다(표준편차 $2.32$). **같은 자료, 같은 방법인데 분할의 난수만 바꾸어 얻은 결과이다.** 이것이 검증집합 방법의 근본적 문제이다.
+    검증집합 방법은 $n_{\text{tr}} = 100$만 쓰고 LOOCV는 $n_{\text{tr}} = 199$를 쓰므로, $d = 6$($p = 7$)에서 두 추정값의 차이가
+
+    $$
+    \sigma^2 p\left(\frac{1}{100} - \frac{1}{199}\right)
+    = 0.25 \times 7 \times 0.004975 = 0.0087
+    $$
+
+    쯤 된다. **검증집합 쪽이 그만큼 나쁘게 본다.** 모형이 실제보다 못하다고 말하는 셈이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def validation_set_mse(X, y, degrees, n_splits=10, rng=None):
+        """검증집합 방법. 자료를 절반으로 갈라 한쪽으로 훈련하고 한쪽으로 잰다.
+
+        가장 간단하지만 두 가지 약점이 있다. 어떻게 가르느냐에 따라 결과가
+        들쭉날쭉하고(그래서 여기서는 10번 다르게 갈라 본다), 훈련에 절반밖에
+        쓰지 못해 성능을 실제보다 나쁘게 잡는다.
+        """
+        rng = rng or np.random.default_rng(7)
+        n = len(y); n_train = n // 2
+        all_mses = {d: [] for d in degrees}
+        for _ in range(n_splits):
+            perm = rng.permutation(n)
+            tr, te = perm[:n_train], perm[n_train:]
+            for d in degrees:
+                model = poly_pipeline(d).fit(X[tr], y[tr])
+                all_mses[d].append(np.mean((y[te] - model.predict(X[te])) ** 2))
+        return all_mses
+
+    am = validation_set_mse(X, y, degrees)
+    M = np.array([am[d] for d in degrees])
+    best = M.argmin(axis=0) + 1
+    print(f"각 분할이 고른 차수 = {list(best)},  표준편차 = {best.std():.4f}")
+    print(f"차수 6: 열 번의 평균 {M[5].mean():.6f},  분할에 따른 SD {M[5].std(ddof=1):.6f}")
+    ```
+
+    출력:
+
+    ```
+    각 분할이 고른 차수 = [10, 6, 9, 5, 5, 6, 6, 3, 3, 9],  표준편차 = 2.3152
+    차수 6: 열 번의 평균 0.277278,  분할에 따른 SD 0.035057
+    ```
+
+    **고른 차수가 $3$에서 $10$까지 흩어진다.** 표준편차가 $2.32$다. **같은 자료, 같은 방법인데 분할의 난수만 바꾸어 얻은 결과이다.** 이것이 검증집합 방법의 근본적 문제이다.
+
+    **치우침의 어림도 맞는다.** $d = 6$에서 열 번의 평균이 $0.277278$인데 보기 3이 내놓을 LOOCV 값은 $0.257722$다. 차이 $0.0196$으로, (1)이 어림한 $0.0087$의 두 배쯤이다. 어림은 모수 벌점만 센 것이고 실제로는 훈련자료가 절반이라 **근사오차도 덩달아 커지기 때문**에 그만큼 더 벌어진다. 방향과 자릿수는 맞다.
+
+    **분할 하나로 얻은 값의 불확실성이 그 치우침보다 크다**는 점도 함께 보아야 한다. 차수 $6$의 분할별 표준편차가 $0.0351$로 치우침 $0.0196$의 거의 두 배다. 곧 **한 번 갈라 얻은 수치는 치우쳐 있을 뿐 아니라 흔들린다.** 이 두 결함을 각각 줄이려는 것이 보기 3(훈련자료를 거의 다 쓴다)과 보기 4(여러 겹을 평균한다)다.
 
 ---
 
@@ -116,30 +233,107 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 하나빼기 교차검증
+**보기 3.** <span class="diff easy" title="쉬움"></span> 하나빼기 교차검증. 선형모형에서는 $n$번 적합하지 않고도 **정확히** 같은 값을 얻을 수 있다.
+
+**(1)** 모자행렬 $H = Z(Z^{\top}Z)^{-1}Z^{\top}$과 잔차 $e_i = y_i - \hat y_i$에 대해
+
+$$
+\text{CV}_{(n)} = \frac1n \sum_{i=1}^{n}\left(\frac{e_i}{1 - h_{ii}}\right)^2
+$$
+
+임을 보이시오.
+
+**(2)** 열 가지 차수 모두에서 이 식과 `LeaveOneOut()`이 **같은 수**를 주는지 확인하고, 적합 횟수를 견주시오.
 
 </div>
 
-```python
-from sklearn.model_selection import cross_val_score, LeaveOneOut
-import time
+??? success "풀이"
 
-# 하나빼기 교차검증(LOOCV). 관측값 하나씩만 남기므로 훈련자료를 거의
-# 다 쓰고, 어떻게 가르느냐에 따른 흔들림도 없다. 대신 n 번 적합해야 한다.
-t0 = time.time()
-loocv_mses = [-cross_val_score(poly_pipeline(d), X, y, cv=LeaveOneOut(),
-                               scoring="neg_mean_squared_error").mean()
-              for d in degrees]
-elapsed = time.time() - t0        # 아래 주의 참조: 출력에는 싣지 않는다
+    **(1) 해석적으로.** $i$번째를 뺀 적합값을 $\hat y_i^{(-i)}$라 하자. 핵심은 **$i$번째 관측의 $y$값을 $\hat y_i^{(-i)}$로 바꿔 끼워도 적합이 달라지지 않는다**는 사실이다. 그 점에서 잔차가 $0$이 되어 최소제곱 목적함수에 아무 기여도 하지 않으므로, 나머지 $n-1$개만으로 적합한 것과 같아진다.
 
-print(f"Best degree (LOOCV): {int(np.argmin(loocv_mses)) + 1}")
-```
+    그러면 $\hat y_i^{(-i)}$는 자료 $\tilde y = (y_1, \ldots, \hat y_i^{(-i)}, \ldots, y_n)$에 $H$를 적용한 $i$번째 성분이다. $\tilde y = y - (y_i - \hat y_i^{(-i)})\mathbf e_i$이므로
 
-출력:
+    $$
+    \hat y_i^{(-i)} = (H\tilde y)_i = \hat y_i - h_{ii}\left(y_i - \hat y_i^{(-i)}\right)
+    $$
 
-```
-Best degree (LOOCV): 6
-```
+    다. $y_i$를 양변에서 빼고 $e_i^{(-i)} = y_i - \hat y_i^{(-i)}$라 두면
+
+    $$
+    e_i^{(-i)} = e_i + h_{ii}\,e_i^{(-i)}
+    \quad\Longrightarrow\quad
+    e_i^{(-i)} = \frac{e_i}{1 - h_{ii}}
+    $$
+
+    이고, 제곱해 평균하면 구하려던 식이 된다. $\square$
+
+    **$n$번의 적합이 **한 번**으로 줄어든다.** 지렛대가 큰 점($h_{ii}$가 $1$에 가까운 점)에서 분모가 작아져 그 점의 잔차가 크게 증폭되는 것도 이 식이 보여 주는 바다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from sklearn.model_selection import cross_val_score, LeaveOneOut
+    import time
+
+    # 하나빼기 교차검증(LOOCV). 관측값 하나씩만 남기므로 훈련자료를 거의
+    # 다 쓰고, 어떻게 가르느냐에 따른 흔들림도 없다. 대신 n 번 적합해야 한다.
+    t0 = time.time()
+    loocv_mses = [-cross_val_score(poly_pipeline(d), X, y, cv=LeaveOneOut(),
+                                   scoring="neg_mean_squared_error").mean()
+                  for d in degrees]
+    elapsed = time.time() - t0        # 아래 주의 참조: 출력에는 싣지 않는다
+
+    print(f"Best degree (LOOCV): {int(np.argmin(loocv_mses)) + 1}")
+    ```
+
+    출력:
+
+    ```
+    Best degree (LOOCV): 6
+    ```
+
+    모자행렬 식과 맞춰 본다.
+
+    ```python
+    from sklearn.preprocessing import PolynomialFeatures
+
+    def loocv_hat(X, y, d):
+        """모자행렬로 한 번에 구하는 LOOCV."""
+        Z = PolynomialFeatures(degree=d, include_bias=True).fit_transform(X)
+        H = Z @ np.linalg.pinv(Z.T @ Z) @ Z.T
+        e = y - H @ y
+        return np.mean((e / (1 - np.diag(H))) ** 2)
+
+    hat = [loocv_hat(X, y, d) for d in degrees]
+    print(f"{'d':>3}{'sklearn':>12}{'모자행렬':>12}{'차이':>12}")
+    for d, a, b in zip(degrees, loocv_mses, hat):
+        print(f"{d:>3}{a:>12.6f}{b:>12.6f}{a-b:>12.2e}")
+    print(f"적합 횟수: sklearn {200*10} 번,  모자행렬 {10} 번")
+    ```
+
+    출력:
+
+    ```
+      d     sklearn        모자행렬          차이
+      1    0.442177    0.442177    1.11e-16
+      2    0.447928    0.447928    0.00e+00
+      3    0.263086    0.263086   -5.55e-17
+      4    0.262563    0.262563    3.33e-16
+      5    0.259166    0.259166   -5.83e-15
+      6    0.257722    0.257722   -2.22e-16
+      7    0.261009    0.261009    1.14e-12
+      8    0.264039    0.264039    4.01e-14
+      9    0.262481    0.262481    1.95e-11
+     10    0.267918    0.267918    5.43e-11
+    적합 횟수: sklearn 2000 번,  모자행렬 10 번
+    ```
+
+    **열 가지 차수 모두에서 같은 수가 나온다.** 차이가 $10^{-16}$에서 $10^{-11}$ 사이로, 전부 부동소수 오차다. 높은 차수에서 차이가 조금 커지는 것은 $Z^{\top}Z$의 조건수가 나빠지기 때문이며($d = 10$이면 $x^{10}$까지 들어간다) 값 자체에는 영향이 없다.
+
+    **적합 횟수는 $2{,}000$ 대 $10$이다.** 자료가 $200$개이고 차수 후보가 $10$개이므로 `LeaveOneOut()`은 $200 \times 10$번 회귀를 돌리고, 모자행렬 식은 차수마다 한 번씩만 돌린다. **$n$에 비례해 벌어지므로 $n$이 커질수록 이 지름길의 값이 커진다.**
+
+    그러나 이 지름길은 **선형모형에만** 통한다. $\hat y = Hy$로 적을 수 있어야 유도가 성립하기 때문이며, 능형회귀나 평활 스플라인처럼 $H$가 있는 다른 선형 평활기에도 같은 꼴이 쓰인다. 임의의 기계학습 모형에서는 $n$번 다시 적합하는 수밖에 없고, 그래서 실무에서는 $k$겹을 쓴다.
+
 
 !!! note "소요 시간을 출력에 싣지 않은 이유"
     LOOCV의 요점 가운데 하나는 **비싸다**는 것이므로 시간을 재는 것 자체는
@@ -170,30 +364,116 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> k겹 교차검증
+**보기 4.** <span class="diff easy" title="쉬움"></span> $k$겹 교차검증. $k$가 커지면 편향은 줄고 분산은 는다고들 한다. **두 주장을 따로 재어 본다.**
+
+**(1)** $k$겹의 추정값이 위로 치우치는 크기를 보기 2의 식으로 어림하시오($d = 6$, $k = 5, 10$, LOOCV). 세 값의 **순서**는 어떻게 되어야 하는가.
+
+**(2)** 두 종류의 분산을 구별해 재시오. 하나는 **자료를 고정한 채 겹 배정만 바꿀 때**의 흔들림이고, 다른 하나는 **자료를 새로 뽑을 때**의 흔들림이다. 둘이 $k$에 대해 같은 방향으로 움직이는가.
 
 </div>
 
-```python
-from sklearn.model_selection import KFold
+??? success "풀이"
 
-# k겹 교차검증. 앞 두 방법의 절충이다. k 번만 적합하면 되고, 겹마다의
-# 훈련자료가 조금씩 겹쳐 LOOCV 보다 추정의 분산이 오히려 작다.
-# 실무에서 5 나 10 을 쓰는 까닭이 이것이다.
-for k in (5, 10):
-    kf = KFold(n_splits=k, shuffle=True, random_state=42)
-    mses = [-cross_val_score(poly_pipeline(d), X, y, cv=kf,
+    **(1) 해석적으로.** $k$겹은 매번 $n_{\text{tr}} = n(1 - 1/k)$개로 훈련하므로 보기 2의 어림에서
+
+    $$
+    E[\text{CV}_{(k)}] \approx \sigma^2\left(1 + \frac{p}{n(1-1/k)}\right) + \text{근사오차}
+    $$
+
+    다. $d = 6$($p = 7$), $n = 200$, $\sigma^2 = 0.25$를 넣으면 바닥 $0.25$ 위의 벌점이
+
+    | 방법 | $n_{\text{tr}}$ | 벌점 $\sigma^2 p/n_{\text{tr}}$ |
+    |:---|---:|---:|
+    | $5$겹 | $160$ | $0.01094$ |
+    | $10$겹 | $180$ | $0.00972$ |
+    | LOOCV | $199$ | $0.00879$ |
+
+    이다. **$k$가 커질수록 치우침이 줄어든다.** 따라서 세 추정값의 순서가 $\text{CV}_{(5)} > \text{CV}_{(10)} > \text{CV}_{(n)}$이어야 한다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from sklearn.model_selection import KFold
+
+    # k겹 교차검증. 앞 두 방법의 절충이다. k 번만 적합하면 되고, 겹마다의
+    # 훈련자료가 조금씩 겹쳐 LOOCV 보다 추정의 분산이 오히려 작다.
+    # 실무에서 5 나 10 을 쓰는 까닭이 이것이다.
+    for k in (5, 10):
+        kf = KFold(n_splits=k, shuffle=True, random_state=42)
+        mses = [-cross_val_score(poly_pipeline(d), X, y, cv=kf,
+                                 scoring="neg_mean_squared_error").mean()
+                for d in degrees]
+        print(f"Best degree ({k}-fold): {int(np.argmin(mses)) + 1}")
+    ```
+
+    출력:
+
+    ```
+    Best degree (5-fold): 6
+    Best degree (10-fold): 6
+    ```
+
+    두 종류의 분산을 따로 잰다.
+
+    ```python
+    # (가) 자료는 그대로 두고 겹 배정만 바꾼다.
+    for k in (5, 10):
+        vals = np.array([
+            -cross_val_score(poly_pipeline(6), X, y,
+                             cv=KFold(n_splits=k, shuffle=True, random_state=s),
                              scoring="neg_mean_squared_error").mean()
-            for d in degrees]
-    print(f"Best degree ({k}-fold): {int(np.argmin(mses)) + 1}")
-```
+            for s in range(20)])
+        print(f"k={k:2d}: 겹 배정 20 번의 평균 {vals.mean():.6f},  SD {vals.std(ddof=1):.6f}")
+    print(f"LOOCV: {loocv_hat(X, y, 6):.6f},  SD 0 (결정적)")
 
-출력:
+    # (나) 자료를 새로 뽑는다.
+    res = {5: [], 10: [], 'loo': []}
+    for s in range(100):
+        rng = np.random.default_rng(1000 + s)
+        xx = rng.uniform(-3, 3, 200)
+        yy = np.sin(xx) + 0.3 * xx + rng.normal(0, 0.5, 200)
+        XX = xx.reshape(-1, 1)
+        for k in (5, 10):
+            res[k].append(-cross_val_score(
+                poly_pipeline(6), XX, yy,
+                cv=KFold(n_splits=k, shuffle=True, random_state=s),
+                scoring="neg_mean_squared_error").mean())
+        res['loo'].append(loocv_hat(XX, yy, 6))
+    print(f"\n자료 100 개에서 (d=6)")
+    for k, lab in ((5, ' 5겹'), (10, '10겹'), ('loo', 'LOOCV')):
+        v = np.array(res[k])
+        print(f"  {lab}: 평균 {v.mean():.6f},  자료에 따른 SD {v.std(ddof=1):.6f}"
+              f"  (SD 추정의 오차 {v.std(ddof=1)/np.sqrt(2*100):.6f})")
+    ```
 
-```
-Best degree (5-fold): 6
-Best degree (10-fold): 6
-```
+    출력:
+
+    ```
+    k= 5: 겹 배정 20 번의 평균 0.260405,  SD 0.007121
+    k=10: 겹 배정 20 번의 평균 0.258382,  SD 0.003266
+    LOOCV: 0.257722,  SD 0 (결정적)
+
+    자료 100 개에서 (d=6)
+       5겹: 평균 0.265180,  자료에 따른 SD 0.026311  (SD 추정의 오차 0.001860)
+      10겹: 평균 0.262959,  자료에 따른 SD 0.026537  (SD 추정의 오차 0.001876)
+      LOOCV: 평균 0.261968,  자료에 따른 SD 0.025890  (SD 추정의 오차 0.001831)
+    ```
+
+    **편향의 순서는 예측대로다.** 자료 $100$개의 평균이 $0.265180 > 0.262959 > 0.261968$로 $k$가 커질수록 내려간다. 바닥 $0.25$ 위의 초과분이 $0.01518$, $0.01296$, $0.01197$인데, (1)이 어림한 벌점 $0.01094$, $0.00972$, $0.00879$보다 일정하게 $0.003$쯤 크다. **그 $0.003$이 $6$차 다항식의 근사오차**이고, 모든 방법에 공통으로 더해지므로 차이를 보면 사라진다. 실제로 $5$겹$-$LOOCV 차이가 $0.00321$, 어림은 $0.00215$로 같은 자릿수다.
+
+    **분산은 두 종류를 갈라 보아야 한다.**
+
+    | | $5$겹 | $10$겹 | LOOCV |
+    |:---|---:|---:|---:|
+    | 겹 배정에 따른 SD | $0.00712$ | $0.00327$ | $0$ |
+    | 자료에 따른 SD | $0.02631$ | $0.02654$ | $0.02589$ |
+
+    **겹 배정에 따른 흔들림은 $k$가 커질수록 줄어든다.** $k$개의 겹을 평균하므로 평균의 개수가 늘고, LOOCV는 아예 결정적이라 $0$이다. 이것이 "$k$를 키우면 안정된다"는 말의 내용이다.
+
+    **자료에 따른 흔들림은 셋이 거의 같다.** $0.0263$, $0.0265$, $0.0259$인데 SD 추정 자체의 오차가 $0.0019$이므로 **이 설정에서는 셋을 구별할 수 없다.** "LOOCV는 훈련집합끼리 많이 겹쳐 분산이 커진다"는 흔한 서술이 여기서는 눈에 띄지 않는다는 뜻이다. 그 효과는 모형이 불안정할 때(차수가 아주 높거나 $n$이 작을 때) 드러나며, $n = 200$에 $6$차 다항식인 이 설정은 그런 상황이 아니다.
+
+    **그리고 두 흔들림의 크기가 자릿수로 다르다는 점이 더 중요하다.** 자료에 따른 $0.026$이 겹 배정에 따른 $0.003$--$0.007$보다 네 배 이상 크다. **교차검증 값의 불확실성은 대부분 "어떤 자료를 뽑았는가"에서 오고, $k$를 고르는 일로 줄일 수 있는 몫은 그 일부뿐이다.**
+
 
 ---
 

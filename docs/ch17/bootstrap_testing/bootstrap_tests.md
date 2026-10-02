@@ -20,33 +20,105 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 붓스트랩 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 붓스트랩 검정. 중심이동이 무엇을 바꾸고 무엇을 바꾸지 않는지 따진다.
+
+**(1)** 중심화한 자료 $x_i^0 = x_i - \bar x + \mu_0$에서 재표집할 때 $\bar X^{*}$의 평균·표준편차·왜도를 적으시오. 셋 가운데 **중심이동이 바꾸는 것은 하나뿐**이다. 그것으로 정규근사 $p$값을 예측하시오.
+
+**(2)** 뒤의 보기 4가 쓰는 자료($n = 50$, $\mu_0 = 5$)로 확인하시오. 중심이동을 빼먹으면 $p$값이 얼마가 되는지도 보이시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def bootstrap_mean_test(data, mu_0=0, n_boot=10_000, rng=None):
-    """H0: 평균 = mu_0 에 대한 붓스트랩 검정. 양측 p-값을 돌려준다.
+    **(1) 해석적으로.** 평행이동은 분포의 **모양을 전혀 건드리지 않는다.** 중심화한 경험분포의 중심적률이
 
-    검정을 하려면 귀무가설이 참인 상태에서 뽑아야 한다. 그래서 자료의
-    중심을 mu_0 으로 옮긴 뒤 재표집한다. 이 중심 이동 한 줄이 신뢰구간을
-    만들 때와 검정을 할 때를 가르는 핵심이다.
-    """
-    rng = rng or np.random.default_rng(0)
+    $$
+    \text{평균} = \mu_0, \qquad
+    \hat\sigma^2 = \frac1n\sum_i (x_i - \bar x)^2, \qquad
+    \hat\gamma_1 = \frac{\hat\mu_3}{\hat\mu_2^{3/2}}
+    $$
+
+    로, 둘째와 셋째는 원자료의 것과 **같다.** 거기서 독립으로 $n$개 뽑아 평균을 내므로
+
+    $$
+    E_*[\bar X^{*}] = \mu_0,
+    \qquad
+    \operatorname{SD}_*(\bar X^{*}) = \frac{\hat\sigma}{\sqrt n},
+    \qquad
+    \gamma_1(\bar X^{*}) = \frac{\hat\gamma_1}{\sqrt n}
+    $$
+
+    이다. **중심이동이 바꾸는 것은 중심 하나뿐이고, 폭과 치우침은 그대로다.** 바로 그래서 이 한 줄이 "귀무가설만 참인 세계"를 만든다.
+
+    귀무분포가 정규라면 $p \approx 2\Phi(-|z|)$, $z = \dfrac{\bar x - \mu_0}{\hat\sigma/\sqrt n}$이다. 다만 왜도가 $\hat\gamma_1/\sqrt n$만큼 남아 있으므로 오른쪽 꼬리가 정규보다 두껍고, **실제 $p$값은 정규근사보다 클 것**이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    import numpy as np
+
+    def bootstrap_mean_test(data, mu_0=0, n_boot=10_000, rng=None):
+        """H0: 평균 = mu_0 에 대한 붓스트랩 검정. 양측 p-값을 돌려준다.
+
+        검정을 하려면 귀무가설이 참인 상태에서 뽑아야 한다. 그래서 자료의
+        중심을 mu_0 으로 옮긴 뒤 재표집한다. 이 중심 이동 한 줄이 신뢰구간을
+        만들 때와 검정을 할 때를 가르는 핵심이다.
+        """
+        rng = rng or np.random.default_rng(0)
+        n = len(data)
+        # 자료를 통째로 옮겨 평균이 정확히 mu_0 이 되게 한다. 퍼짐과 모양은
+        # 그대로 남으므로, 귀무가설만 참인 세계를 흉내 낸 셈이다.
+        centered = data - data.mean() + mu_0
+        boot_means = centered[rng.integers(0, n, (n_boot, n))].mean(axis=1)
+        obs_mean = data.mean()
+        # 분자와 분모에 1 을 더한다. 이래야 p-값이 0 이 되는 일을 막을 수 있다.
+        # 관측된 자료 자체도 하나의 가능한 재표본으로 세는 셈이다.
+        p_value = ((np.abs(boot_means - mu_0) >= abs(obs_mean - mu_0)).sum() + 1) \
+                  / (n_boot + 1)
+        return obs_mean, p_value, boot_means
+    ```
+
+    보기 4의 자료로 돌려 본다.
+
+    ```python
+    from scipy import stats
+
+    rng_data = np.random.default_rng(1)
+    rng = np.random.default_rng(7)
+    data = rng_data.exponential(scale=5, size=50) + 2
+    obs, p, boots = bootstrap_mean_test(data, mu_0=5.0, rng=rng)
+
     n = len(data)
-    # 자료를 통째로 옮겨 평균이 정확히 mu_0 이 되게 한다. 퍼짐과 모양은
-    # 그대로 남으므로, 귀무가설만 참인 세계를 흉내 낸 셈이다.
-    centered = data - data.mean() + mu_0
-    boot_means = centered[rng.integers(0, n, (n_boot, n))].mean(axis=1)
-    obs_mean = data.mean()
-    # 분자와 분모에 1 을 더한다. 이래야 p-값이 0 이 되는 일을 막을 수 있다.
-    # 관측된 자료 자체도 하나의 가능한 재표본으로 세는 셈이다.
-    p_value = ((np.abs(boot_means - mu_0) >= abs(obs_mean - mu_0)).sum() + 1) \
-              / (n_boot + 1)
-    return obs_mean, p_value, boot_means
-```
+    sig = data.std(ddof=0)
+    print(f"sigma-hat = {sig:.4f},  예측 귀무 SD = {sig/np.sqrt(n):.4f}"
+          f"   (모의 {boots.std(ddof=1):.4f},  몬테카를로 오차 {sig/np.sqrt(n)/np.sqrt(2*10000):.4f})")
+    print(f"귀무분포 평균 = {boots.mean():.4f}  (예측 mu_0 = 5)")
+    print(f"귀무분포 왜도 = {stats.skew(boots):.4f}  (예측 g1/sqrt(n) = {stats.skew(data)/np.sqrt(n):.4f})")
+    z = (obs - 5) / (sig / np.sqrt(n))
+    print(f"z = {z:.4f},  정규근사 양측 p = {2*stats.norm.sf(z):.4f}")
+    print(f"붓스트랩 p = {p:.4f},   t 검정 p = {stats.ttest_1samp(data, 5.0).pvalue:.4f}")
+
+    rng9 = np.random.default_rng(7)
+    bm_nc = data[rng9.integers(0, n, (10000, n))].mean(axis=1)
+    print(f"중심이동을 빼먹으면 p = {((np.abs(bm_nc-5)>=abs(obs-5)).sum()+1)/10001:.4f}")
+    ```
+
+    출력:
+
+    ```
+    sigma-hat = 7.2062,  예측 귀무 SD = 1.0191   (모의 1.0270,  몬테카를로 오차 0.0072)
+    귀무분포 평균 = 5.0088  (예측 mu_0 = 5)
+    귀무분포 왜도 = 0.3969  (예측 g1/sqrt(n) = 0.4257)
+    z = 3.1190,  정규근사 양측 p = 0.0018
+    붓스트랩 p = 0.0032,   t 검정 p = 0.0033
+    중심이동을 빼먹으면 p = 0.4741
+    ```
+
+    **세 적률이 모두 예측대로다.** 귀무분포의 평균이 $5.0088$로 $\mu_0 = 5$에 붙고(평균의 몬테카를로 오차 $0.0103$), 표준편차 $1.0270$이 예측 $1.0191$에서 $1.1$ 몬테카를로 오차 떨어져 있으며, 왜도 $0.3969$도 예측 $0.4257$ 근처다($\sqrt{6/B} = 0.0245$의 $1.2$배).
+
+    **정규근사보다 붓스트랩 $p$가 크다.** $0.0018$ 대 $0.0032$로 거의 두 배다. (1)에서 예상한 대로 귀무분포의 오른쪽 꼬리가 정규보다 두껍기 때문이며, $t$ 검정의 $0.0033$과는 오히려 잘 맞는다. **$t$ 분포도 정규보다 꼬리가 두껍다는 점에서 같은 방향의 보정을 하고 있는 셈이다.**
+
+    **중심이동을 빼먹으면 $p = 0.4741$이 된다.** 옮기지 않은 붓스트랩 분포는 $\bar x = 8.179$에 중심을 두므로 $\mu_0 = 5$에서 잰 거리가 복제값들의 거리와 비슷해지고, $p$값이 $0.5$ 근처에 머문다. **어떤 자료를 넣어도 기각하지 못한다.** 오류 없이 조용히 실패하는 종류의 버그다.
 
 !!! note "$+1$ 보정"
     분자와 분모의 $+1$은 관측된 자료 자신을 하나의 재표본으로 세는 것이다. 이 보정이 없으면 $p$값이 정확히 $0$이 될 수 있고, 검정의 크기가 명목수준을 미세하게 넘는다([대응 순열검정](../permutation/paired.md) 연습문제 3 참조).
@@ -62,26 +134,87 @@ $H_0\colon \mu_x = \mu_y$를 검정하기 위해 두 표본을 합치고 합친 
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 붓스트랩 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 붓스트랩 검정. 합쳐서 **복원추출**하는 이 방식은 라벨을 섞는 순열검정과 사촌이지만 똑같지는 않다.
+
+**(1)** 합친 자료의 경험분포 분산을 $\hat\sigma_p^2$이라 할 때 귀무분포 $\bar X^{*} - \bar Y^{*}$의 평균과 분산을 구하시오. 같은 자료의 **순열** 귀무분포와 표준편차의 비는 얼마인가.
+
+**(2)** 보기 4의 자료($m = n = 40$)로 확인하고, 붓스트랩 $p$값을 정규근사·Welch $t$ 검정과 견주시오.
 
 </div>
 
-```python
-def bootstrap_two_sample(x, y, n_boot=10_000, rng=None):
-    """H0: 두 평균이 같다에 대한 붓스트랩 검정.
+??? success "풀이"
 
-    귀무가설이 참이면 두 집단이 같은 모집단에서 나온 것이다. 그래서 둘을
-    합쳐 하나의 웅덩이로 만들고 거기서 다시 뽑는다.
-    """
-    rng = rng or np.random.default_rng(0)
-    obs_diff = x.mean() - y.mean()
-    pooled = np.concatenate([x, y])
-    m, N = len(x), len(pooled)
-    P = pooled[rng.integers(0, N, (n_boot, N))]
-    boot_diffs = P[:, :m].mean(axis=1) - P[:, m:].mean(axis=1)
-    p_value = ((np.abs(boot_diffs) >= abs(obs_diff)).sum() + 1) / (n_boot + 1)
-    return obs_diff, p_value, boot_diffs
-```
+    **(1) 해석적으로.** 합친 $N = m + n$개에서 **복원으로** $N$개를 뽑아 앞의 $m$개를 $X$, 나머지를 $Y$라 부른다. 뽑기가 독립이므로 두 집단의 평균도 독립이고, 각각의 분산이 $\hat\sigma_p^2/m$과 $\hat\sigma_p^2/n$이다. 따라서
+
+    $$
+    E_*\!\left[\bar X^{*} - \bar Y^{*}\right] = 0,
+    \qquad
+    \operatorname{Var}_*\!\left(\bar X^{*} - \bar Y^{*}\right)
+    = \hat\sigma_p^2\left(\frac1m + \frac1n\right)
+    $$
+
+    이다($\hat\sigma_p^2 = \frac1N\sum_i (z_i - \bar z)^2$, $z$는 합친 자료).
+
+    **순열검정과의 차이는 딱 하나다.** [이표본 순열검정](../permutation/two_sample.md) 보기 1에서 라벨을 **비복원으로** 섞을 때의 분산이 $S^2(1/m + 1/n)$임을 보았고, 여기서 $S^2$은 $N-1$로 나눈 표본분산이다. $\hat\sigma_p^2 = \frac{N-1}{N}S^2$이므로
+
+    $$
+    \frac{\operatorname{SD}_{\text{붓스트랩}}}{\operatorname{SD}_{\text{순열}}} = \sqrt{\frac{N-1}{N}}
+    $$
+
+    다. $N = 80$이면 $0.99373$으로 **$0.6\%$ 좁다.** 복원추출이 유한모집단 보정을 잃는 대신 집단의 크기를 고정하지 않기 때문이며, $N$이 크면 사라지는 차이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_two_sample(x, y, n_boot=10_000, rng=None):
+        """H0: 두 평균이 같다에 대한 붓스트랩 검정.
+
+        귀무가설이 참이면 두 집단이 같은 모집단에서 나온 것이다. 그래서 둘을
+        합쳐 하나의 웅덩이로 만들고 거기서 다시 뽑는다.
+        """
+        rng = rng or np.random.default_rng(0)
+        obs_diff = x.mean() - y.mean()
+        pooled = np.concatenate([x, y])
+        m, N = len(x), len(pooled)
+        P = pooled[rng.integers(0, N, (n_boot, N))]
+        boot_diffs = P[:, :m].mean(axis=1) - P[:, m:].mean(axis=1)
+        p_value = ((np.abs(boot_diffs) >= abs(obs_diff)).sum() + 1) / (n_boot + 1)
+        return obs_diff, p_value, boot_diffs
+    ```
+
+    보기 1의 블록에서 이어 쓴다.
+
+    ```python
+    x = rng_data.normal(52, 10, 40)
+    y = rng_data.normal(48, 10, 40)
+    diff, p2, boots2 = bootstrap_two_sample(x, y, rng=rng)
+
+    pooled = np.concatenate([x, y]); N = len(pooled); m = len(x)
+    sp = pooled.std(ddof=0)
+    print(f"합친 sigma-hat = {sp:.4f}")
+    print(f"예측 귀무 SD = sigma-hat*sqrt(1/m+1/n) = {sp*np.sqrt(1/m+1/(N-m)):.4f}"
+          f"   (모의 {boots2.std(ddof=1):.4f},  몬테카를로 오차 {sp*np.sqrt(2/m)/np.sqrt(2*10000):.4f})")
+    print(f"순열(비복원) 판본의 SD = S*sqrt(2/m) = {pooled.std(ddof=1)*np.sqrt(2/m):.4f}"
+          f"   비 = {sp/pooled.std(ddof=1):.6f}  (sqrt((N-1)/N) = {np.sqrt((N-1)/N):.6f})")
+    z2 = diff / (sp*np.sqrt(2/m))
+    print(f"z = {z2:.4f},  정규근사 양측 p = {2*stats.norm.sf(z2):.4f}")
+    w = stats.ttest_ind(x, y, equal_var=False)
+    print(f"붓스트랩 p = {p2:.4f},   Welch t p = {w.pvalue:.4f}")
+    ```
+
+    출력:
+
+    ```
+    합친 sigma-hat = 9.4434
+    예측 귀무 SD = sigma-hat*sqrt(1/m+1/n) = 2.1116   (모의 2.1242,  몬테카를로 오차 0.0149)
+    순열(비복원) 판본의 SD = S*sqrt(2/m) = 2.1249   비 = 0.993730  (sqrt((N-1)/N) = 0.993730)
+    z = 1.9657,  정규근사 양측 p = 0.0493
+    붓스트랩 p = 0.0518,   Welch t p = 0.0504
+    ```
+
+    **유도한 두 식이 맞는다.** 예측 $2.1116$에 대해 모의값 $2.1242$가 몬테카를로 오차 $0.0149$의 $0.8$배 안에 있고, 순열 판본과의 비 $0.993730$이 $\sqrt{79/80}$과 여섯 자리까지 같다.
+
+    **세 $p$값이 $0.05$ 양쪽에 걸쳐 있다.** 정규근사 $0.0493$은 턱걸이로 기각하고, 붓스트랩 $0.0518$과 Welch $0.0504$는 기각하지 못한다. **셋의 차이는 $0.0025$에 지나지 않지만 $\alpha = 0.05$라는 선 위에 걸려 결론이 갈린다.** 붓스트랩 $p$값 자체의 몬테카를로 표준오차가 $\sqrt{0.05 \times 0.95/10^4} = 0.0022$이므로, 이 자료에서 "유의한가"를 묻는 것은 의미가 없다. **구간을 보고하거나 자료를 더 모으는 것이 옳은 대응이다.**
 
 !!! warning "합치기는 등분산도 가정한다"
     합쳐진 자료에서 재표집하면 두 집단이 같은 분산을 갖게 된다. 두 집단의 분산이 실제로 다르고 표본크기가 불균형하면 이 검정의 제1종 오류율이 무너진다. 그때는 각 집단을 자기 평균으로 중심화한 뒤 **따로** 재표집해야 한다([두 평균에 대한 붓스트랩 검정](./two_means.md) 참조).
@@ -104,24 +237,81 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 중앙값의 표준오차와 편향
+**보기 3.** <span class="diff easy" title="쉬움"></span> 중앙값의 표준오차와 편향. 보기 4는 $\text{LogNormal}(10.5,\ 0.8^2)$에서 $n = 200$을 뽑아 이 함수를 쓴다.
+
+**(1)** 이 모집단에서 **표본중앙값이 놓인 자리**의 밀도를 구해 $\dfrac{1}{2f\sqrt n}$을 계산하시오. 붓스트랩 편향의 **부호**도 미리 말하고, 그 크기를 어떻게 판정할지 적으시오.
+
+**(2)** 실행해 (1)과 견주시오. 붓스트랩 중앙값이 몇 가지 값만 갖는지도 세시오.
 
 </div>
 
-```python
-def bootstrap_se_median(data, n_boot=10_000, rng=None):
-    """중앙값의 표준오차와 편향을 붓스트랩으로 추정한다.
+??? success "풀이"
 
-    편향은 붓스트랩 값들의 평균에서 원래 추정값을 뺀 것이다. 0 에서 멀면
-    그 통계량이 참값을 체계적으로 빗나간다는 뜻이다.
-    """
-    rng = rng or np.random.default_rng(0)
-    n = len(data)
-    boot_medians = np.median(data[rng.integers(0, n, (n_boot, n))], axis=1)
-    se = boot_medians.std(ddof=1)
-    bias = boot_medians.mean() - np.median(data)
-    return se, bias, boot_medians
-```
+    **(1) 해석적으로.** 로그정규 밀도는
+
+    $$
+    f(x) = \frac{1}{x\sigma\sqrt{2\pi}}\exp\!\left(-\frac{(\ln x - \mu)^2}{2\sigma^2}\right)
+    $$
+
+    이다. 표본중앙값 $\tilde x = 31{,}508.1$을 넣으면 $f(\tilde x) = 1.557962\times10^{-5}$이고
+
+    $$
+    \frac{1}{2 f(\tilde x)\sqrt{200}} = 2{,}269.3
+    $$
+
+    이다. **모집단 중앙값 $e^{10.5} = 36{,}315.5$ 자리의 값 $2{,}574.7$과 다르다**는 데 주의할 것. 표본중앙값이 참값보다 작게 나왔고, 로그정규는 그 언저리에서 밀도가 더 높으므로 표준오차가 작아진다.
+
+    **편향의 부호.** 붓스트랩 편향은 $\overline{\tilde x^{*}} - \tilde x$, 곧 붓스트랩 중앙값 분포의 **평균과 중앙값의 차이**에 가깝다. 모집단이 오른쪽으로 치우쳐 있으면 재표본 중앙값의 분포도 오른쪽으로 치우치고, 치우친 분포에서는 평균이 중앙값보다 크다. **그러므로 편향은 양수일 것이다.**
+
+    **크기 판정.** 편향은 절대 크기가 아니라 **표준오차에 견준 크기**로 본다. $\lvert\widehat{\text{bias}}\rvert/\widehat{\operatorname{SE}} < 0.25$이면 무시할 만하다는 것이 흔한 경험칙이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_se_median(data, n_boot=10_000, rng=None):
+        """중앙값의 표준오차와 편향을 붓스트랩으로 추정한다.
+
+        편향은 붓스트랩 값들의 평균에서 원래 추정값을 뺀 것이다. 0 에서 멀면
+        그 통계량이 참값을 체계적으로 빗나간다는 뜻이다.
+        """
+        rng = rng or np.random.default_rng(0)
+        n = len(data)
+        boot_medians = np.median(data[rng.integers(0, n, (n_boot, n))], axis=1)
+        se = boot_medians.std(ddof=1)
+        bias = boot_medians.mean() - np.median(data)
+        return se, bias, boot_medians
+    ```
+
+    보기 2의 블록에서 이어 쓴다.
+
+    ```python
+    income = rng_data.lognormal(mean=10.5, sigma=0.8, size=200)
+    se_med, bias, boot_med = bootstrap_se_median(income, rng=rng)
+
+    mu_, sg_ = 10.5, 0.8
+    m_s = np.median(income)
+    f_at = np.exp(-(np.log(m_s) - mu_) ** 2 / (2 * sg_ ** 2)) / (m_s * sg_ * np.sqrt(2 * np.pi))
+    print(f"표본중앙값 = {m_s:,.1f},  모집단 중앙값 = {np.exp(mu_):,.1f}")
+    print(f"표본중앙값 자리의 참 밀도 = {f_at:.6e}  ->  SE = {1/(2*f_at*np.sqrt(200)):,.1f}")
+    print(f"붓스트랩 SE = {se_med:,.1f},  편향 = {bias:,.1f},  |편향|/SE = {abs(bias)/se_med:.4f}")
+    print(f"붓스트랩 중앙값의 왜도 = {stats.skew(boot_med):.4f},"
+          f"  고유값 수 = {len(np.unique(boot_med))}")
+    ```
+
+    출력:
+
+    ```
+    표본중앙값 = 31,508.1,  모집단 중앙값 = 36,315.5
+    표본중앙값 자리의 참 밀도 = 1.557962e-05  ->  SE = 2,269.3
+    붓스트랩 SE = 1,912.2,  편향 = 269.2,  |편향|/SE = 0.1408
+    붓스트랩 중앙값의 왜도 = 0.2382,  고유값 수 = 263
+    ```
+
+    **편향의 부호를 맞혔다.** $+269.2$로 양수이고, 붓스트랩 중앙값 분포의 왜도가 $+0.2382$인 것이 그 까닭이다. $\lvert\text{편향}\rvert/\widehat{\operatorname{SE}} = 0.1408$로 경험칙 $0.25$를 밑돈다. **보정할 만큼 크지 않다.**
+
+    **표준오차는 $1{,}912.2$로 이론값 $2{,}269.3$보다 $16\%$ 작다.** $B = 10{,}000$의 몬테카를로 요동이 $1912/\sqrt{2B} = 13.5$뿐이므로 $B$ 탓이 아니다. 까닭은 [중앙값의 붓스트랩](../bootstrap_ci/bootstrap_median.md) 보기 1에서 본 그대로다. 붓스트랩이 쓰는 것은 참 밀도가 아니라 **표본중앙값 둘레의 관측 간격**이고, 이 표본은 그 자리가 모집단보다 촘촘했다. 중앙값의 표준오차를 붓스트랩으로 구할 때 한 자리 이상을 믿어서는 안 되는 이유다.
+
+    **값이 $263$가지뿐이라는 것도 눈여겨볼 것.** $10{,}000$개의 복제값이 서로 다른 값을 그만큼만 갖는다. 재표본 중앙값이 원자료 순서통계량 두 개의 평균일 수밖에 없기 때문이며, 그래서 중앙값의 붓스트랩 분포는 계단 모양이 된다.
 
 ## 시연
 
@@ -129,47 +319,76 @@ def bootstrap_se_median(data, n_boot=10_000, rng=None):
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 세 검정 실행
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 검정 실행. 앞의 세 함수를 모의자료에 한꺼번에 적용한다.
+
+**(1)** 세 결과에 각각 어떤 몬테카를로 오차가 붙는지 $B = 10{,}000$에서 구하시오. 셋 가운데 **고전적 비교 대상이 없는 것**은 무엇이며 왜 그런가.
+
+**(2)** 실행해 표를 채우고, 두 $p$값을 대응하는 $t$ 검정과 견주시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng_data = np.random.default_rng(1)
-rng = np.random.default_rng(7)
+    **(1) 해석적으로.** 몬테카를로 오차의 꼴이 양마다 다르다.
 
-# 1. 일표본 검정: 2 만큼 이동된 지수 자료
-data = rng_data.exponential(scale=5, size=50) + 2
-obs, p, boots = bootstrap_mean_test(data, mu_0=5.0, rng=rng)
-print(obs, p)                    # 8.1786  0.0032
+    | 양 | 몬테카를로 오차 | $B = 10{,}000$에서 |
+    |:---|:---|---:|
+    | $p$값 | $\sqrt{p(1-p)/B}$ | $p = 0.0032$에서 $0.00056$ |
+    | $p$값 | $\sqrt{p(1-p)/B}$ | $p = 0.0518$에서 $0.00222$ |
+    | 표준오차 | $\widehat{\operatorname{SE}}/\sqrt{2B}$ | $1912/141.4 = 13.5$ |
+    | 편향 | $\widehat{\operatorname{SE}}/\sqrt{B}$ | $1912/100 = 19.1$ |
 
-# 2. 이표본 검정: 두 정규 모집단
-x = rng_data.normal(52, 10, 40)
-y = rng_data.normal(48, 10, 40)
-diff, p2, boots2 = bootstrap_two_sample(x, y, rng=rng)
-print(diff, p2)                  # 4.151  0.0518
+    **둘째 줄이 문제가 된다.** $p = 0.0518$에 $\pm 0.0022$가 붙으므로 $\alpha = 0.05$라는 선을 사이에 두고 어느 쪽인지 말할 수 없다. 첫째 줄은 $0.0032 \pm 0.00056$으로 결론이 흔들리지 않는다.
 
-# 3. 중앙값의 붓스트랩 표준오차: 로그정규 소득
-income = rng_data.lognormal(mean=10.5, sigma=0.8, size=200)
-se_med, bias, boot_med = bootstrap_se_median(income, rng=rng)
-print(np.median(income), se_med, bias)   # 31508  1912  269
-```
+    **고전적 비교 대상이 없는 것은 셋째다.** 중앙값의 표준오차는 $\dfrac{1}{2f(m)\sqrt n}$인데 이 식에는 **모집단 밀도 $f(m)$**이 들어 있다. 평균의 $\sigma/\sqrt n$에서 $\sigma$를 $s$로 바꾸듯 $f(m)$을 자료에서 바로 바꿔 넣을 수가 없다. 밀도를 추정하려면 띠너비를 골라야 하고 그 선택이 답을 바꾼다. **붓스트랩은 그 선택을 하지 않고 같은 일을 해낸다.** 게다가 셋째는 애초에 검정이 아니라 **추정의 불확실성을 재는 일**이라 $p$값이 없다.
 
-출력:
+    **(2) 수치적으로.**
 
-```
-8.178614426992942 0.0031996800319968005
-4.150721066684774 0.051794820517948204
-31508.06500959787 1912.1800372703474 269.241019752415
-```
+    ```python
+    import numpy as np
+    from scipy import stats
 
-| 검정 | 결과 | 비교 대상 |
-|:---|:---|:---|
-| 일표본 ($H_0: \mu = 5$) | $\bar{x} = 8.179$, $p = 0.0032$ | $t$ 검정 $p = 0.0033$ |
-| 이표본 | $\bar{x} - \bar{y} = 4.151$, $p = 0.0518$ | Welch $t$ 검정 $p = 0.0504$ |
-| 중앙값 SE | $\tilde{x} = 31{,}508$, $\widehat{\text{SE}} = 1{,}912$ | 닫힌 형태 없음 |
+    rng_data = np.random.default_rng(1)
+    rng = np.random.default_rng(7)
+
+    # 1. 일표본 검정: 2 만큼 이동된 지수 자료
+    data = rng_data.exponential(scale=5, size=50) + 2
+    obs, p, boots = bootstrap_mean_test(data, mu_0=5.0, rng=rng)
+    print(obs, p)                    # 8.1786  0.0032
+
+    # 2. 이표본 검정: 두 정규 모집단
+    x = rng_data.normal(52, 10, 40)
+    y = rng_data.normal(48, 10, 40)
+    diff, p2, boots2 = bootstrap_two_sample(x, y, rng=rng)
+    print(diff, p2)                  # 4.151  0.0518
+
+    # 3. 중앙값의 붓스트랩 표준오차: 로그정규 소득
+    income = rng_data.lognormal(mean=10.5, sigma=0.8, size=200)
+    se_med, bias, boot_med = bootstrap_se_median(income, rng=rng)
+    print(np.median(income), se_med, bias)   # 31508  1912  269
+    ```
+
+    출력:
+
+    ```
+    8.178614426992942 0.0031996800319968005
+    4.150721066684774 0.051794820517948204
+    31508.06500959787 1912.1800372703474 269.241019752415
+    ```
+
+    **두 $p$값이 $t$ 검정과 거의 같다.**
+
+    | 검정 | 결과 | 비교 대상 |
+    |:---|:---|:---|
+    | 일표본 ($H_0: \mu = 5$) | $\bar{x} = 8.179$, $p = 0.0032 \pm 0.0006$ | $t$ 검정 $p = 0.0033$ |
+    | 이표본 | $\bar{x} - \bar{y} = 4.151$, $p = 0.0518 \pm 0.0022$ | Welch $t$ 검정 $p = 0.0504$ |
+    | 중앙값 SE | $\tilde{x} = 31{,}508$, $\widehat{\operatorname{SE}} = 1{,}912 \pm 14$ | 닫힌 형태 없음 |
+
+    **일표본 쪽은 사실상 일치한다.** $0.0032$ 대 $0.0033$으로 차이가 몬테카를로 오차 $0.0006$의 $0.2$배다. $n = 50$에서 정규근사가 이미 잘 통하고, 보기 1에서 보았듯 붓스트랩 귀무분포의 왜도가 $t_{49}$의 두꺼운 꼬리와 비슷한 보정을 하기 때문이다.
+
+    **이표본 쪽은 $0.0518$ 대 $0.0504$로 $\alpha = 0.05$의 양쪽에 걸쳐 있지만 구별할 수 없다.** 차이 $0.0014$가 몬테카를로 오차 $0.0022$보다 작다. **"유의하다/아니다"를 가르는 대신 차이의 구간을 보고해야 할 자료다.**
+
+    **셋째는 비교할 것이 없다.** 그것이 이 절차를 쓰는 이유다.
 
 ## 귀무분포를 어디서 얻는가
 

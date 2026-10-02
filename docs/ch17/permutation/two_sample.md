@@ -33,166 +33,346 @@
 
     분자·분모의 $+1$은 관측된 배열 자신을 세는 것이다. 이것이 검정의 크기를 $\alpha$ 이하로 보장한다([기초](foundations.md) 연습문제 2 참조).
 
+두 웹페이지의 사용자 참여도(세션 시간, 초)를 비교한다.
+
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 웹페이지 A/B 검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> 웹페이지 A/B 검정. 두 페이지의 체류시간을 각각 $n_1 = n_2 = 10$개 관측해 $T_{\text{obs}} = \lvert \bar x_1 - \bar x_2\rvert = 5.40$을 얻었다. 위 절차대로 $B = 10{,}000$번 순열하고 $p$값을 $\hat p = (c+1)/(B+1)$로 보고한다.
+
+**(1)** 참된 순열 $p$값을 $p$라 할 때 $\hat p$의 기댓값과 표준편차를 $p$와 $B$로 적으시오. $+1$ 보정이 가져오는 **치우침의 방향과 크기**는 얼마이며, 몬테카를로 요동에 견주어 언제 무시할 수 있는가.
+
+**(2)** $\binom{20}{10} = 184{,}756$가지를 모두 열거해 $p$를 정확히 구하고, (1)의 예측과 실행 결과를 견주시오. 귀무분포 히스토그램의 중심 $E[T]$도 미리 예측하고 확인하시오.
 
 </div>
 
-#### 자료
+??? success "풀이"
 
-두 웹페이지의 사용자 참여도(세션 시간, 초)를 비교한다.
+    **(1) 해석적으로.** $B$번의 순열을 서로 독립으로 뽑으므로 극단적인 횟수 $c$는 이항분포를 따른다. 곧 $c \sim \text{Binomial}(B, p)$이고
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
+    $$
+    E[\hat p] = \frac{Bp + 1}{B + 1} = p + \frac{1-p}{B+1},
+    \qquad
+    \operatorname{SD}(\hat p) = \frac{\sqrt{B p(1-p)}}{B+1} \approx \sqrt{\frac{p(1-p)}{B}}
+    $$
 
-# A 페이지와 B 페이지의 체류시간
-page_a = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167])
-page_b = np.array([173, 181, 182, 170, 169, 177, 168, 183, 169, 164])
+    이다. **치우침은 늘 위쪽이고 크기가 $\dfrac{1-p}{B+1}$다.** 보수적인 쪽으로만 틀리므로 검정의 크기를 지키는 데 해롭지 않다. 치우침은 $B$에 **반비례**해 줄고 요동은 $\sqrt B$에 반비례해 주므로, 둘의 비가
 
-obs_diff = np.abs(page_a.mean() - page_b.mean())
-print(f"Page A: mean = {page_a.mean():.2f}")    # 168.20
-print(f"Page B: mean = {page_b.mean():.2f}")    # 173.60
-print(f"Observed |difference|: {obs_diff:.2f}") # 5.40
-```
+    $$
+    \frac{\text{치우침}}{\operatorname{SD}(\hat p)}
+    \approx \frac{(1-p)/B}{\sqrt{p(1-p)/B}}
+    = \sqrt{\frac{1-p}{pB}}
+    $$
 
-출력:
+    이다. **$pB$가 크면 치우침은 요동에 묻히고, 작으면 묻히지 않는다.** 뒤에 볼 $p \approx 0.326$과 $B = 10{,}000$에서는 $\sqrt{0.674/3256} = 0.0144$로 요동의 $1.4\%$에 지나지 않는다. 그러나 $p = 0.001$, $B = 10{,}000$이면 $pB = 10$이어서 비가 $\sqrt{0.999/10} = 0.32$로 $32\%$가 되고, 연습문제 2에서 보듯 $B = 200$까지 내려가면 치우침이 $p$ 자체를 세 배로 부풀린다.
 
-```
-Page A: mean = 168.20
-Page B: mean = 173.60
-Observed |difference|: 5.40
-```
+    **$E[T]$의 예측.** $T = \lvert d^{*}\rvert$이고 $d^{*} = \bar X_1^{*} - \bar X_2^{*}$는 [기초](foundations.md) 보기 1에서 본 대로 평균 $0$, 표준편차
 
-#### 순열검정
+    $$
+    \operatorname{SD}(d^{*}) = S\sqrt{\frac{1}{n_1} + \frac{1}{n_2}} = 5.227257
+    $$
 
-```python
-def two_sample_permutation_test(x, y, n_perms=1000, seed=0):
-    """
-    Two-sample permutation test for a difference in means.
+    를 갖는다($S$는 합친 $20$개의 표본표준편차). $d^{*}$가 정규라면 반정규분포의 평균이 되어
 
-    Parameters
-    ----------
-    x, y : array-like
-        The two samples.
-    n_perms : int
-        Number of random permutations.
+    $$
+    E[T] = \operatorname{SD}(d^{*})\sqrt{\frac{2}{\pi}} = 5.227257 \times 0.797885 = 4.170747
+    $$
 
-    Returns
-    -------
-    p_value : float
-        Two-sided p-value, with the +1 correction.
-    perm_diffs : ndarray
-        The permutation distribution of |mean difference|.
-    """
-    rng = np.random.default_rng(seed)
-    obs_diff = np.abs(x.mean() - y.mean())
-    pooled = np.concatenate([x, y])
-    nx = len(x)
+    이다. **이것은 근사다.** $N = 20$짜리 열거분포는 정확히 정규가 아니므로 뒤에서 어긋남의 크기를 재어 본다.
 
-    perm_diffs = np.empty(n_perms)
-    for i in range(n_perms):
-        p = rng.permutation(pooled)
-        perm_diffs[i] = np.abs(p[:nx].mean() - p[nx:].mean())
+    **(2) 수치적으로.** 먼저 자료와 관측된 차이다.
 
-    p_value = ((perm_diffs >= obs_diff).sum() + 1) / (n_perms + 1)
-    return p_value, perm_diffs
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-p_val, perm_stats = two_sample_permutation_test(page_a, page_b, n_perms=10000)
+    # A 페이지와 B 페이지의 체류시간
+    page_a = np.array([185, 188, 142, 160, 161, 157, 182, 181, 159, 167])
+    page_b = np.array([173, 181, 182, 170, 169, 177, 168, 183, 169, 164])
 
-print(f"Permutation test p-value: {p_val:.4f}")
-print(f"Conclusion: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
-```
+    obs_diff = np.abs(page_a.mean() - page_b.mean())
+    print(f"Page A: mean = {page_a.mean():.2f}")    # 168.20
+    print(f"Page B: mean = {page_b.mean():.2f}")    # 173.60
+    print(f"Observed |difference|: {obs_diff:.2f}") # 5.40
+    ```
 
-출력:
+    출력:
 
-```
-Permutation test p-value: 0.3307
-Conclusion: Fail to reject H0
-```
+    ```
+    Page A: mean = 168.20
+    Page B: mean = 173.60
+    Observed |difference|: 5.40
+    ```
+
+    순열검정 자체다.
+
+    ```python
+    def two_sample_permutation_test(x, y, n_perms=1000, seed=0):
+        """
+        Two-sample permutation test for a difference in means.
+
+        Parameters
+        ----------
+        x, y : array-like
+            The two samples.
+        n_perms : int
+            Number of random permutations.
+
+        Returns
+        -------
+        p_value : float
+            Two-sided p-value, with the +1 correction.
+        perm_diffs : ndarray
+            The permutation distribution of |mean difference|.
+        """
+        rng = np.random.default_rng(seed)
+        obs_diff = np.abs(x.mean() - y.mean())
+        pooled = np.concatenate([x, y])
+        nx = len(x)
+
+        perm_diffs = np.empty(n_perms)
+        for i in range(n_perms):
+            p = rng.permutation(pooled)
+            perm_diffs[i] = np.abs(p[:nx].mean() - p[nx:].mean())
+
+        p_value = ((perm_diffs >= obs_diff).sum() + 1) / (n_perms + 1)
+        return p_value, perm_diffs
+
+    p_val, perm_stats = two_sample_permutation_test(page_a, page_b, n_perms=10000)
+
+    print(f"Permutation test p-value: {p_val:.4f}")
+    print(f"Conclusion: {'Reject H0' if p_val < 0.05 else 'Fail to reject H0'}")
+    ```
+
+    출력:
+
+    ```
+    Permutation test p-value: 0.3307
+    Conclusion: Fail to reject H0
+    ```
+
+    이제 열거로 정확값을 얻고 (1)의 예측과 맞춰 본다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    import itertools
+    from scipy import stats
+
+    z = np.concatenate([page_a, page_b]).astype(float)
+    n1, N, total = len(page_a), len(z), float(np.sum(page_a) + np.sum(page_b))
+
+    # 가능한 라벨 배정 184,756 가지를 모두 열거한다. d* 는 부호까지 담는다.
+    signed = np.array([(2 * z[list(c)].sum() - total) / n1
+                       for c in itertools.combinations(range(N), n1)])
+    exact = np.abs(signed)
+    p_exact = (exact >= obs_diff - 1e-9).mean()
+    print(f"순열 수 = {len(signed)},  정확 p = {p_exact:.6f}")
+
+    B = 10_000
+    mean_hat = (B * p_exact + 1) / (B + 1)
+    bias = (1 - p_exact) / (B + 1)
+    sd = np.sqrt(B * p_exact * (1 - p_exact)) / (B + 1)
+    print(f"E[p-hat] = {mean_hat:.6f}   (치우침 +{bias:.3e},  SD {sd:.6f},"
+          f"  치우침/SD = {bias / sd:.4f})")
+    print(f"실행값   = {p_val:.6f}   -> 예측에서 {(p_val - mean_hat) / sd:+.2f} SD")
+
+    sd_null = z.std(ddof=1) * np.sqrt(1 / n1 + 1 / (N - n1))
+    print(f"\nSD(d*) 닫힌 꼴      = {sd_null:.6f}")
+    print(f"열거한 d* 의 SD     = {signed.std(ddof=0):.6f}"
+          f"   (왜도 {stats.skew(signed):.1e}, 초과첨도 {stats.kurtosis(signed):+.4f})")
+    print(f"E[T] 반정규 예측    = {sd_null * np.sqrt(2 / np.pi):.6f}")
+    print(f"E[T] 정확 열거      = {exact.mean():.6f}   (SD 의 {exact.mean() / sd_null:.6f} 배)")
+    print(f"E[T] 모의 (B=10000) = {perm_stats.mean():.6f}"
+          f"   (평균의 몬테카를로 오차 {perm_stats.std(ddof=1) / np.sqrt(B):.6f})")
+    ```
+
+    출력:
+
+    ```
+    순열 수 = 184756,  정확 p = 0.325586
+    E[p-hat] = 0.325654   (치우침 +6.743e-05,  SD 0.004685,  치우침/SD = 0.0144)
+    실행값   = 0.330667   -> 예측에서 +1.07 SD
+
+    SD(d*) 닫힌 꼴      = 5.227257
+    열거한 d* 의 SD     = 5.227257   (왜도 -8.2e-17, 초과첨도 -0.3076)
+    E[T] 반정규 예측    = 4.170747
+    E[T] 정확 열거      = 4.234476   (SD 의 0.810076 배)
+    E[T] 모의 (B=10000) = 4.262900   (평균의 몬테카를로 오차 0.030767)
+    ```
+
+    **$p$값에 대한 예측이 맞는다.** 정확값은 $p = 0.325586$이고, $(1)$이 예측한 $\hat p$의 평균은 $0.325654$, 표준편차는 $0.004685$다. 실행값 $0.330667$은 그 평균에서 $+1.07$ 표준편차 떨어져 있다. 치우침 $6.743\times10^{-5}$은 요동의 $1.44\%$로, 예측한 $\sqrt{(1-p)/(pB)} = 0.0144$ 그대로다. **$B = 10{,}000$에서 $+1$ 보정의 대가는 사실상 없다.**
+
+    **$E[T]$의 예측은 반쯤 맞는다.** 닫힌 꼴 $5.227257$은 열거분포의 표준편차와 **열다섯 자리까지** 같다. 왜도도 $-8\times10^{-17}$로 $0$인데, 라벨을 뒤집으면 $d^{*}$의 부호가 바뀌어 모든 배정이 짝을 이루기 때문이다. 그러나 반정규 예측 $4.170747$은 정확값 $4.234476$보다 $1.5\%$ 작다. 까닭은 열거분포의 **초과첨도가 $-0.3076$**이어서 정규보다 꼬리가 가볍고 어깨가 두껍기 때문이다. 대칭분포에서 $E\lvert X\rvert/\operatorname{SD}(X)$는 꼬리가 가벼워질수록 커지며, 여기서는 정규의 $0.797885$ 대신 $0.810076$이 나온다. **표준편차는 분포의 모양과 무관하게 정확히 맞고, 절댓값의 평균은 모양에 기대므로 정규근사만큼만 맞는다.**
+
+    모의값 $4.262900$은 정확값에서 $+0.028$ 떨어져 있고 평균의 몬테카를로 오차 $0.030767$의 $0.92$배다. 셋이 모두 제자리에 있다.
+
+    아래는 그 귀무분포다.
+
+    ```python
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax.hist(perm_stats, bins=30, alpha=0.7, color='steelblue', edgecolor='black',
+            label='Permuted test statistics')
+
+    obs_stat = np.abs(page_a.mean() - page_b.mean())
+    ax.axvline(obs_stat, color='red', linewidth=2,
+               label=f'Observed difference = {obs_stat:.2f}')
+
+    rejection_region = perm_stats[perm_stats >= obs_stat]
+    ax.hist(rejection_region, bins=30, alpha=0.5, color='red',
+            label=f'P-value region (p = {p_val:.3f})')
+
+    ax.set_xlabel('Absolute Difference in Means')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Two-Sample Permutation Test Distribution')
+    ax.legend()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![이표본 순열검정의 귀무분포](./img/two_sample_103.png)
+
+    붉은 세로선 $5.40$이 분포의 중심 $4.23$ 바로 오른쪽에 서 있고 붉게 칠한 꼬리가 전체의 삼분의 일이다. **눈으로 보아도 기각할 자료가 아니다.**
 
 !!! warning "합친 배열을 제자리에서 섞지 말 것"
     `np.random.shuffle(pooled)`처럼 **제자리 섞기**를 쓰면 `pooled`가 매 반복마다 바뀐다. 이 코드처럼 순열 결과를 새 배열로 받으면(`rng.permutation`) 원본이 보존되어 디버깅이 쉽다.
 
     관측 통계량을 순열 루프 **이전에** 계산하는 것도 중요하다. 루프 안에서 원본이 이미 섞여버린 뒤에 계산하면 조용히 틀린 답이 나온다.
 
-#### 시각화
-
-```python
-fig, ax = plt.subplots(figsize=(10, 6))
-
-ax.hist(perm_stats, bins=30, alpha=0.7, color='steelblue', edgecolor='black',
-        label='Permuted test statistics')
-
-obs_stat = np.abs(page_a.mean() - page_b.mean())
-ax.axvline(obs_stat, color='red', linewidth=2,
-           label=f'Observed difference = {obs_stat:.2f}')
-
-rejection_region = perm_stats[perm_stats >= obs_stat]
-ax.hist(rejection_region, bins=30, alpha=0.5, color='red',
-        label=f'P-value region (p = {p_val:.3f})')
-
-ax.set_xlabel('Absolute Difference in Means')
-ax.set_ylabel('Frequency')
-ax.set_title('Two-Sample Permutation Test Distribution')
-ax.legend()
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-
-plt.tight_layout()
-plt.show()
-```
-
-![이표본 순열검정의 귀무분포](./img/two_sample_103.png)
+이진 결과(전환 = 1, 비전환 = 0)에서도 순열검정은 똑같이 작동한다.
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> A/B 전환율 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> A/B 전환율 검정. 대조군 $23{,}739$명 중 $200$명, 실험군 $22{,}588$명 중 $182$명이 전환해 비율차 $-0.000368$을 얻었다. 순열 귀무분포의 표준편차가 $\operatorname{SD}(d^{*}) = 0.00084056$임은 [기초](foundations.md) 보기 2에서 유도했다.
+
+**(1)** 이 실험이 $\alpha = 0.05$ 양측에서 **유의하다고 부를 수 있는 가장 작은 비율차**를 구하고, 그것이 기저 전환율 $\bar p = 0.00825$의 몇 %인지 말하시오. 관측된 차이는 그 문턱의 몇 배인가.
+
+**(2)** $B = 5{,}000$으로 $\hat p = (c+1)/(B+1)$을 구하시오. 정확 순열 $p$값은 초기하분포로 $0.681128$이다. 실행값과의 차이를 보기 1 (1)의 **치우침**과 **요동**으로 가르시오.
 
 </div>
 
-이진 결과(전환 = 1, 비전환 = 0)에서도 순열검정은 똑같이 작동한다.
+??? success "풀이"
 
-```python
-import numpy as np
-rng = np.random.default_rng(0)
+    **(1) 해석적으로.** 귀무분포가 평균 $0$, 표준편차 $\sigma_0 = 0.00084056$인 거의 정규인 분포이므로, 양측 $\alpha = 0.05$에서 기각되는 것은
 
-# 대조군: 23,739명 중 200명 전환
-# 실험군: 22,588명 중 182명 전환
-n_control, conv_control = 23739, 200
-n_treatment, conv_treat = 22588, 182
+    $$
+    \lvert d_{\text{obs}}\rvert \ge z_{0.975}\,\sigma_0 = 1.959964 \times 0.00084056 = 0.00164747
+    $$
 
-rate_control = conv_control / n_control
-rate_treatment = conv_treat / n_treatment
-obs_diff_rates = rate_treatment - rate_control
+    일 때다. 이 문턱을 기저 전환율로 나누면
 
-print(f"Control conversion rate:   {rate_control:.4f}")     # 0.0084
-print(f"Treatment conversion rate: {rate_treatment:.4f}")   # 0.0081
-print(f"Observed difference: {obs_diff_rates:.6f}")         # -0.000368
+    $$
+    \frac{0.00164747}{0.00824573} = 0.1998
+    $$
 
-# 이진 반응벡터. 앞의 (대조군 전환 + 실험군 전환) 개가 1 이다
-binary_response = np.zeros(n_control + n_treatment)
-binary_response[:conv_control + conv_treat] = 1
+    이다. **곧 이 실험은 전환율이 상대적으로 $20\%$ 움직여야 겨우 유의해진다.** 관측된 $0.000368$은 문턱의 $0.223$배에 지나지 않으므로, 어떤 $p$값이 나오든 기각과는 거리가 멀다.
 
-B = 5000
-perm_diffs = np.empty(B)
-for b in range(B):
-    p = rng.permutation(binary_response)
-    perm_diffs[b] = p[:n_treatment].mean() - p[n_treatment:].mean()
+    이것은 "유의해지는 최소 효과"이지 "검정력 있게 잡아내는 최소 효과"가 아니다. 참 효과가 정확히 문턱만 하면 기각할 확률이 $50\%$뿐이다. 검정력 $80\%$를 요구하면 $z_{0.975} + z_{0.80} = 2.801585$를 곱해야 하므로 문턱이 $1.43$배인 $0.0023549$, 상대적으로 $28.6\%$가 된다.
 
-p_value_ab = ((np.abs(perm_diffs) >= abs(obs_diff_rates)).sum() + 1) / (B + 1)
-print(f"A/B test p-value: {p_value_ab:.4f}")   # 0.68
-```
+    $\sigma_0 \propto \sqrt{1/n_T + 1/n_C}$이므로 **문턱은 표본크기의 제곱근에 반비례한다.** 상대 $10\%$ 변화를 잡으려면 지금의 네 배, 곧 집단마다 $9$만 명이 필요하다. $4.6$만 명이라는 큰 자료가 $0.8\%$짜리 희귀사건 앞에서는 결코 크지 않다는 뜻이다.
 
-출력:
+    **(2) 해석적으로.** 보기 1 (1)에서
 
-```
-Control conversion rate:   0.0084
-Treatment conversion rate: 0.0081
-Observed difference: -0.000368
-A/B test p-value: 0.6785
-```
+    $$
+    E[\hat p] = p + \frac{1-p}{B+1},
+    \qquad
+    \operatorname{SD}(\hat p) = \frac{\sqrt{Bp(1-p)}}{B+1}
+    $$
+
+    이었다. $p = 0.681128$, $B = 5{,}000$을 넣으면 치우침이 $+6.376\times10^{-5}$, 표준편차가 $0.006589$다. **치우침이 요동의 $1\%$도 되지 않으므로 차이는 거의 전부 요동일 것이다.**
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+
+    # 대조군: 23,739명 중 200명 전환
+    # 실험군: 22,588명 중 182명 전환
+    n_control, conv_control = 23739, 200
+    n_treatment, conv_treat = 22588, 182
+
+    rate_control = conv_control / n_control
+    rate_treatment = conv_treat / n_treatment
+    obs_diff_rates = rate_treatment - rate_control
+
+    print(f"Control conversion rate:   {rate_control:.4f}")     # 0.0084
+    print(f"Treatment conversion rate: {rate_treatment:.4f}")   # 0.0081
+    print(f"Observed difference: {obs_diff_rates:.6f}")         # -0.000368
+
+    # 이진 반응벡터. 앞의 (대조군 전환 + 실험군 전환) 개가 1 이다
+    binary_response = np.zeros(n_control + n_treatment)
+    binary_response[:conv_control + conv_treat] = 1
+
+    B = 5000
+    perm_diffs = np.empty(B)
+    for b in range(B):
+        p = rng.permutation(binary_response)
+        perm_diffs[b] = p[:n_treatment].mean() - p[n_treatment:].mean()
+
+    p_value_ab = ((np.abs(perm_diffs) >= abs(obs_diff_rates)).sum() + 1) / (B + 1)
+    print(f"A/B test p-value: {p_value_ab:.4f}")   # 0.68
+    ```
+
+    출력:
+
+    ```
+    Control conversion rate:   0.0084
+    Treatment conversion rate: 0.0081
+    Observed difference: -0.000368
+    A/B test p-value: 0.6785
+    ```
+
+    두 물음의 수를 모두 확인한다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    from scipy import stats
+
+    N = n_control + n_treatment
+    K = conv_control + conv_treat
+    pbar = K / N
+    step = 1 / n_treatment + 1 / n_control
+    sd_null = np.sqrt(N / (N - 1) * pbar * (1 - pbar) * step)
+
+    mde = stats.norm.ppf(0.975) * sd_null
+    print(f"SD(d*)        = {sd_null:.8f}")
+    print(f"탐지 가능한 최소 |차| = {mde:.8f}"
+          f"   (기저 전환율의 {100 * mde / pbar:.2f}%)")
+    print(f"관측 |차| / 문턱      = {abs(obs_diff_rates) / mde:.4f}")
+
+    # 정확 순열 p. 실험군 전환 수가 Hypergeometric(N, K, n_treatment) 을 따른다.
+    x = np.arange(K + 1)
+    d = x * step - K / n_control
+    pmf = stats.hypergeom.pmf(x, N, K, n_treatment)
+    p_exact = pmf[np.abs(d) >= abs(obs_diff_rates) - 1e-18].sum()
+
+    mean_hat = (B * p_exact + 1) / (B + 1)
+    bias = (1 - p_exact) / (B + 1)
+    sd = np.sqrt(B * p_exact * (1 - p_exact)) / (B + 1)
+    print(f"\n정확 순열 p   = {p_exact:.6f}")
+    print(f"E[p-hat]      = {mean_hat:.6f}   (치우침 +{bias:.3e},  SD {sd:.6f},"
+          f"  치우침/SD = {bias / sd:.4f})")
+    print(f"실행값        = {p_value_ab:.6f}   -> 예측에서 {(p_value_ab - mean_hat) / sd:+.2f} SD")
+    ```
+
+    출력:
+
+    ```
+    SD(d*)        = 0.00084056
+    탐지 가능한 최소 |차| = 0.00164747   (기저 전환율의 19.98%)
+    관측 |차| / 문턱      = 0.2231
+
+    정확 순열 p   = 0.681128
+    E[p-hat]      = 0.681192   (치우침 +6.376e-05,  SD 0.006589,  치우침/SD = 0.0097)
+    실행값        = 0.678464   -> 예측에서 -0.41 SD
+    ```
+
+    **(1)의 두 수가 맞는다.** 문턱이 $0.00164747$로 기저 전환율의 $19.98\%$이고, 관측된 차이는 그 $0.2231$배다.
+
+    **(2)의 분해도 맞는다.** 실행값 $0.678464$는 정확값 $0.681128$보다 $0.002664$ 작다. 치우침은 $+6.376\times10^{-5}$로 **방향이 반대이고 크기도 요동의 $0.97\%$**이므로, 차이는 전부 몬테카를로 요동이다. 실제로 예측 평균에서 $-0.41$ 표준편차 떨어져 있다. **$B$를 키우면 $0.6811$로 모여든다.**
+
+    여기서 한 가지가 분명해진다. 이 자료에서 순열 $p$값의 불확실성 $\pm 0.0066$은 **결론과 아무 상관이 없다.** $0.678$이든 $0.681$이든 기각하지 않는다. $B$를 키워 얻는 것은 $p$값의 소수점 자리일 뿐이고, 정작 부족한 것은 (1)이 보인 대로 **표본크기**다.
 
 !!! tip "이진 자료에서는 재표집이 필요 없다"
     이 상황의 순열분포는 **초기하분포**로 정확히 알려져 있다. 즉 이 순열검정은 Fisher 정확검정과 같은 것이며, `stats.fisher_exact`가 근사 없이 $p = 0.6811$을 곧바로 준다. 자세한 계산은 [기초](foundations.md) 연습문제 4에 있다.
@@ -221,27 +401,153 @@ A/B test p-value: 0.6785
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 순열검정과 t 검정 견주기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 순열검정과 $t$ 검정 견주기. 보기 1의 체류시간 자료를 그대로 쓴다. 합친 표본의 분산 $S^2$은 라벨을 어떻게 바꾸어도 변하지 않는다는 데서 출발한다.
+
+**(1)** 어떤 라벨 배정에서든 $(N-1)S^2 = (N - 2 + t^{*2})\,s_p^{*2}$임을 보이시오($s_p^{*2}$는 그 배정의 합동분산, $t^{*}$는 합동 $t$ 통계량). 이것으로 $\lvert d^{*}\rvert$로 매긴 순위와 $\lvert t^{*}\rvert$로 매긴 순위가 **완전히 같음**을 보이고, 두 통계량의 순열 $p$값이 어떻게 되는지 말하시오. 또 순열 귀무분포의 표준편차와 $t$ 검정 표준오차의 비를 $N$과 $t_{\text{obs}}$로 적으시오.
+
+**(2)** 실행해 (1)을 확인하시오. 그럼에도 순열 $p$값과 Welch $t$ 검정의 $p$값이 다른 **진짜 까닭**은 무엇인가.
 
 </div>
 
-```python
-from scipy import stats
+??? success "풀이"
 
-# 앞의 순열검정 결과를 Welch t 검정과 견준다. 자료가 정규에 가깝고
-# 표본이 넉넉하면 두 p-값이 거의 같게 나온다. 순열검정이 t 검정을
-# 대신하는 것이 아니라, 가정이 미덥지 않을 때 기댈 곳이 된다는 뜻이다.
-t_stat, p_ttest = stats.ttest_ind(page_a, page_b, equal_var=False)
-print(f"Welch's t-test p-value: {p_ttest:.4f}")
-print(f"Permutation test p-value: {p_val:.4f}")
-```
+    **(1) 해석적으로.** 어떤 라벨 배정을 잡아도 $N = n_1 + n_2$개의 수 전체는 그대로이므로 **총제곱합**
 
-출력:
+    $$
+    \text{SST} = \sum_{i=1}^N (x_i - \bar x)^2 = (N-1)S^2
+    $$
 
-```
-Welch's t-test p-value: 0.3204
-Permutation test p-value: 0.3307
-```
+    이 상수다. 한편 두 집단으로 가르면 총제곱합이 집단내와 집단간으로 쪼개진다.
+
+    $$
+    \text{SST} = \underbrace{(N-2)\,s_p^{*2}}_{\text{집단내}} \;+\; \underbrace{\frac{n_1 n_2}{N}\,d^{*2}}_{\text{집단간}}
+    $$
+
+    집단간 항을 $t^{*}$로 고쳐 쓴다. $t^{*} = d^{*}\big/\sqrt{s_p^{*2}(1/n_1 + 1/n_2)}$이고 $\dfrac{1}{1/n_1 + 1/n_2} = \dfrac{n_1 n_2}{N}$이므로 $\dfrac{n_1 n_2}{N}d^{*2} = t^{*2} s_p^{*2}$다. 따라서
+
+    $$
+    (N-1)S^2 = (N - 2 + t^{*2})\,s_p^{*2}
+    $$
+
+    **왼쪽이 상수라는 것이 전부다.** 이 식을 $s_p^{*2}$에 대해 풀어 $d^{*2} = t^{*2}s_p^{*2}(1/n_1+1/n_2)$에 넣으면
+
+    $$
+    d^{*2} = (N-1)S^2\left(\frac{1}{n_1}+\frac{1}{n_2}\right)\cdot\frac{t^{*2}}{N-2+t^{*2}}
+    $$
+
+    인데, $u \mapsto \dfrac{u}{N-2+u}$가 $u > 0$에서 **순증가**하므로 $\lvert d^{*}\rvert$와 $\lvert t^{*}\rvert$는 서로의 순증가함수다. 그러므로 $\lvert d^{*}\rvert \ge \lvert d_{\text{obs}}\rvert$인 배정과 $\lvert t^{*}\rvert \ge \lvert t_{\text{obs}}\rvert$인 배정이 **같은 집합**이고,
+
+    $$
+    p_{\text{perm}}(\lvert d\rvert) = p_{\text{perm}}(\lvert t\rvert)
+    $$
+
+    이다. **평균차로 순열검정을 하든 합동 $t$ 통계량으로 하든 $p$값이 한 글자도 다르지 않다.** 표준화할지 말지를 고민할 필요가 없다는 뜻이다. (등분산이 깨지면 이야기가 달라진다. 그때 쓰는 것은 합동분산이 아니라 **Welch 식 스튜던트화**이고, 그것은 $\lvert d^{*}\rvert$의 순증가함수가 아니다. [기초](foundations.md) 연습문제 1이 그 경우다.)
+
+    관측된 배정에 같은 항등식을 쓰면 두 척도의 비도 나온다. $\operatorname{SD}(d^{*}) = S\sqrt{1/n_1+1/n_2}$이고 $t$ 검정의 표준오차는 $s_p\sqrt{1/n_1+1/n_2}$이므로
+
+    $$
+    \frac{\operatorname{SD}(d^{*})}{\operatorname{SE}_t} = \frac{S}{s_p}
+    = \sqrt{\frac{N-2+t_{\text{obs}}^2}{N-1}}
+    $$
+
+    이다. **$\lvert t_{\text{obs}}\rvert > 1$이면 순열 쪽 눈금이 더 넓고, $\lvert t_{\text{obs}}\rvert < 1$이면 더 좁다.** 관측된 효과가 자기 자신의 귀무분포를 넓히기 때문이다. 이 자료는 $t_{\text{obs}} = -1.034980$이라 비가 $\sqrt{(18 + 1.07118)/19} = 1.001872$로 $0.19\%$ 넓다.
+
+    **(2) 수치적으로.** 먼저 쪽의 비교다. 보기 1의 변수를 그대로 이어 쓴다.
+
+    ```python
+    from scipy import stats
+
+    # 앞의 순열검정 결과를 Welch t 검정과 견준다. 자료가 정규에 가깝고
+    # 표본이 넉넉하면 두 p-값이 거의 같게 나온다. 순열검정이 t 검정을
+    # 대신하는 것이 아니라, 가정이 미덥지 않을 때 기댈 곳이 된다는 뜻이다.
+    t_stat, p_ttest = stats.ttest_ind(page_a, page_b, equal_var=False)
+    print(f"Welch's t-test p-value: {p_ttest:.4f}")
+    print(f"Permutation test p-value: {p_val:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Welch's t-test p-value: 0.3204
+    Permutation test p-value: 0.3307
+    ```
+
+    이제 (1)의 세 주장을 모두 확인한다.
+
+    ```python
+    import itertools
+    import numpy as np
+
+    z = np.concatenate([page_a, page_b]).astype(float)
+    n1, n2 = len(page_a), len(page_b)
+    N, T, Q = n1 + n2, z.sum(), (z ** 2).sum()
+
+    t_obs = stats.ttest_ind(page_a, page_b).statistic
+    sp2 = ((n1 - 1) * page_a.var(ddof=1) + (n2 - 1) * page_b.var(ddof=1)) / (N - 2)
+    S2 = z.var(ddof=1)
+    print(f"s_p^2 = {sp2:.6f},   S^2 = {S2:.6f},   t_obs = {t_obs:.6f}")
+    print(f"항등식  (N-1)S^2      = {(N - 1) * S2:.6f}")
+    print(f"        (N-2+t^2)s_p^2 = {(N - 2 + t_obs ** 2) * sp2:.6f}")
+    print(f"SD(d*)/SE_t  예측 = {np.sqrt((N - 2 + t_obs ** 2) / (N - 1)):.8f}")
+    print(f"SD(d*)/SE_t  실제 = {np.sqrt(S2 / sp2):.8f}")
+
+    # 모든 배정에서 |d*| 와 |t*| 를 함께 구한다.
+    # 둘 다 A 집단의 합 SA 하나로 정해진다.
+    SA = np.array([z[list(c)].sum() for c in itertools.combinations(range(N), n1)])
+    d = SA / n1 - (T - SA) / n2
+    sp2s = (Q - SA ** 2 / n1 - (T - SA) ** 2 / n2) / (N - 2)
+    t = d / np.sqrt(sp2s * (1 / n1 + 1 / n2))
+
+    obs_d = abs(page_a.mean() - page_b.mean())
+    print(f"\n정확 순열 p (|d*| 기준) = {(np.abs(d) >= obs_d - 1e-9).mean():.6f}")
+    print(f"정확 순열 p (|t*| 기준) = {(np.abs(t) >= abs(t_obs) - 1e-9).mean():.6f}")
+    order = np.argsort(np.abs(d))
+    print(f"|t*| 가 |d*| 의 증가함수인가: "
+          f"{bool(np.all(np.diff(np.abs(t)[order]) >= -1e-9))}")
+    print(f"두 기준이 고르는 배정 집합이 같은가: "
+          f"{np.array_equal(np.abs(d) >= obs_d - 1e-9, np.abs(t) >= abs(t_obs) - 1e-9)}")
+
+    w = stats.ttest_ind(page_a, page_b, equal_var=False)
+    print(f"\nWelch  t 검정 p = {w.pvalue:.6f}   (df = {w.df:.4f},  SE = "
+          f"{np.sqrt(page_a.var(ddof=1) / n1 + page_b.var(ddof=1) / n2):.6f})")
+    print(f"합동   t 검정 p = {stats.ttest_ind(page_a, page_b).pvalue:.6f}"
+          f"   (df = {N - 2},  SE = {np.sqrt(sp2 * (1 / n1 + 1 / n2)):.6f})")
+    print(f"순열   (B=10000) = {p_val:.6f}   (귀무분포 SD = {np.sqrt(S2 * (1 / n1 + 1 / n2)):.6f})")
+    ```
+
+    출력:
+
+    ```
+    s_p^2 = 136.111111,   S^2 = 136.621053,   t_obs = -1.034980
+    항등식  (N-1)S^2      = 2595.800000
+            (N-2+t^2)s_p^2 = 2595.800000
+    SD(d*)/SE_t  예측 = 1.00187150
+    SD(d*)/SE_t  실제 = 1.00187150
+
+    정확 순열 p (|d*| 기준) = 0.325586
+    정확 순열 p (|t*| 기준) = 0.325586
+    |t*| 가 |d*| 의 증가함수인가: True
+    두 기준이 고르는 배정 집합이 같은가: True
+
+    Welch  t 검정 p = 0.320403   (df = 12.4246,  SE = 5.217492)
+    합동   t 검정 p = 0.314384   (df = 18,  SE = 5.217492)
+    순열   (B=10000) = 0.330667   (귀무분포 SD = 5.227257)
+    ```
+
+    **셋 모두 맞는다.** 항등식의 두 변이 $2595.800000$으로 같고, 척도의 비가 예측 $1.00187150$과 여덟 자리까지 일치한다. $184{,}756$가지 배정에서 $\lvert t^{*}\rvert$가 $\lvert d^{*}\rvert$의 증가함수이며 두 기준이 고르는 극단 배정의 집합이 **완전히 같아서** 정확 $p$값이 둘 다 $0.325586$이다.
+
+    **그렇다면 $0.3307$과 $0.3204$의 차이는 어디서 오는가.** 통계량의 차이가 아니다. 이 자료는 $n_1 = n_2$라서 Welch의 표준오차 $5.217492$가 합동 표준오차와 소수점 이하까지 같다. **차이는 전부 참조분포에서 온다.**
+
+    | 검정 | 참조분포 | 표준오차 | $p$값 |
+    |:---|:---|---:|---:|
+    | 순열 (정확 열거) | $184{,}756$가지의 경험분포 | $5.227257$ | $0.325586$ |
+    | 순열 ($B = 10{,}000$) | 그 분포에서 뽑은 $10{,}000$개 | $5.227257$ | $0.330667$ |
+    | Welch $t$ | $t_{12.4246}$ | $5.217492$ | $0.320403$ |
+    | 합동 $t$ | $t_{18}$ | $5.217492$ | $0.314384$ |
+
+    정확 순열값 $0.325586$에 가장 가까운 모수적 값은 자유도를 깎은 Welch의 $0.320403$이고, 자유도를 다 쓴 합동 $t$의 $0.314384$가 가장 멀다. 두 집단의 분산이 $227.29$ 대 $44.93$으로 다섯 배 갈리는 자료이므로 Welch가 자유도를 $18$에서 $12.42$로 깎은 것이 옳은 쪽이었다. 순열 모의값 $0.330667$이 정확값보다 큰 것은 보기 1에서 본 대로 몬테카를로 요동($+1.07$ 표준편차)이다.
+
+    네 값이 $0.314$--$0.331$ 안에 모두 들어 있다. **어느 쪽을 보고하든 결론이 같고, 그 일치가 바로 가정을 점검한 결과다.** 순열검정이 $t$ 검정을 대신하는 것이 아니라, 가정이 미덥지 않을 때 기댈 곳이 된다는 뜻이다.
 
 ## 장점
 

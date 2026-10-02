@@ -36,23 +36,90 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 중앙값의 붓스트랩 분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 중앙값의 붓스트랩 분포. 아래 쪽들이 쓰는 소득 자료는 $\text{LogNormal}(10.5,\ 0.8^2)$에서 뽑은 $n = 200$개다. **모집단을 알고 있으므로 비교할 이론값이 있다.**
+
+**(1)** 이 모집단의 중앙값 $m$과 그 자리의 밀도 $f(m)$을 구해 $\operatorname{SE}(\tilde x) = \dfrac{1}{2f(m)\sqrt n}$을 계산하시오.
+
+**(2)** 붓스트랩 값과 견주시오. 어긋남이 $B$ 탓인지 따지고, 붓스트랩이 실제로 쓰고 있는 밀도 추정값이 얼마인지 거꾸로 풀어 보시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def bootstrap_median(data, n_bootstrap=10_000, rng=None):
-    """중앙값의 붓스트랩 분포.
+    **(1) 해석적으로.** $X = e^{\mu + \sigma Z}$이므로 중앙값은 $Z = 0$에 대응하는 값이다.
 
-    중앙값에는 평균의 sigma/sqrt(n) 같은 표준오차 공식이 없다. 붓스트랩이
-    특히 쓸모 있는 자리가 바로 이런 통계량이다.
-    """
-    rng = rng or np.random.default_rng(0)
-    n = len(data)
-    return np.median(data[rng.integers(0, n, (n_bootstrap, n))], axis=1)
-```
+    $$
+    m = e^{\mu} = e^{10.5} = 36{,}315.5
+    $$
+
+    로그정규밀도는 $f(x) = \dfrac{1}{x\sigma\sqrt{2\pi}}\exp\!\left(-\dfrac{(\ln x - \mu)^2}{2\sigma^2}\right)$이고 $x = m$에서 지수부가 $1$이 되므로
+
+    $$
+    f(m) = \frac{1}{m\,\sigma\sqrt{2\pi}}
+    = \frac{1}{36315.5 \times 0.8 \times 2.50663} = 1.373182\times10^{-5}
+    $$
+
+    다. 따라서
+
+    $$
+    \operatorname{SE}(\tilde x) = \frac{1}{2f(m)\sqrt n}
+    = \frac{m\,\sigma\sqrt{2\pi}}{2\sqrt n}
+    = \frac{36315.5 \times 0.8 \times 2.50663}{2\sqrt{200}} = 2{,}574.7
+    $$
+
+    이다. **중앙값의 표준오차가 중앙값 자신에 비례한다**는 것도 읽어 둘 것. 로그정규에서는 $\operatorname{SE}/m = \sigma\sqrt{2\pi}/(2\sqrt n)$로 $m$과 무관한 상대오차가 된다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    import numpy as np
+
+    def bootstrap_median(data, n_bootstrap=10_000, rng=None):
+        """중앙값의 붓스트랩 분포.
+
+        중앙값에는 평균의 sigma/sqrt(n) 같은 표준오차 공식이 없다. 붓스트랩이
+        특히 쓸모 있는 자리가 바로 이런 통계량이다.
+        """
+        rng = rng or np.random.default_rng(0)
+        n = len(data)
+        return np.median(data[rng.integers(0, n, (n_bootstrap, n))], axis=1)
+    ```
+
+    자료를 만들어 돌린다.
+
+    ```python
+    income = np.random.default_rng(5).lognormal(10.5, 0.8, 200)   # 쪽의 소득 자료
+    n = len(income)
+    print(f"표본평균 = {income.mean():,.0f},  표본중앙값 = {np.median(income):,.0f}")
+
+    boot_med = bootstrap_median(income)
+    print(f"붓스트랩 SE(중앙값) = {boot_med.std(ddof=1):,.1f}"
+          f"   (B=10000 의 몬테카를로 오차 {boot_med.std(ddof=1) / np.sqrt(2 * 10000):.1f})")
+
+    mu, sg = 10.5, 0.8
+    m_pop = np.exp(mu)
+    f_m = 1 / (m_pop * sg * np.sqrt(2 * np.pi))
+    print(f"모집단 중앙값 = {m_pop:,.1f},  f(m) = {f_m:.6e}")
+    print(f"이론 SE(중앙값) = 1/(2 f(m) sqrt(n)) = {1 / (2 * f_m * np.sqrt(n)):,.1f}")
+    fh = 1 / (2 * np.sqrt(n) * boot_med.std(ddof=1))
+    print(f"붓스트랩이 쓴 f-hat = {fh:.6e}   (참값의 {fh / f_m:.3f} 배)")
+    ```
+
+    출력:
+
+    ```
+    표본평균 = 47,303,  표본중앙값 = 33,458
+    붓스트랩 SE(중앙값) = 2,660.8   (B=10000 의 몬테카를로 오차 18.8)
+    모집단 중앙값 = 36,315.5,  f(m) = 1.373182e-05
+    이론 SE(중앙값) = 1/(2 f(m) sqrt(n)) = 2,574.7
+    붓스트랩이 쓴 f-hat = 1.328765e-05   (참값의 0.968 배)
+    ```
+
+    **붓스트랩이 $2{,}660.8$, 이론이 $2{,}574.7$로 $3.3\%$ 차이다.** 몬테카를로 요동이 $18.8$뿐이므로 $B$ 탓이 아니다. $86$은 그 $4.6$배다.
+
+    **어긋남의 정체는 밀도 추정이다.** 붓스트랩이 실제로 재는 것은 $\dfrac{1}{2\sqrt n\,\hat f(\hat m)}$인데, 여기서 $\hat f$는 표본중앙값 둘레의 관측 간격만으로 정해진다. 거꾸로 풀면 $\hat f = 1.3288\times10^{-5}$로 참값 $1.3732\times10^{-5}$의 $0.968$배다. 이 표본의 중앙 부근이 모집단보다 **$3.2\%$ 성글었다**는 뜻이고, 그만큼 표준오차를 크게 본 것이다.
+
+    **이것이 중앙값 붓스트랩의 성질이다.** 평균의 붓스트랩은 $n$개 전부가 들어가는 $\hat\sigma$에 기대지만, 중앙값의 붓스트랩은 가운데 몇십 개의 간격에만 기댄다. 표본이 달라지면 그만큼 크게 흔들린다([붓스트랩 재표집 방법](../bootstrap/resampling_method.md) 보기 1이 그 흔들림을 직접 잰다). **값은 쓸 만하지만 둘째 자리를 믿을 일은 아니다.**
 
 ## 중앙값과 평균의 비교
 
@@ -80,17 +147,106 @@ $\text{LogNormal}(10.5, 0.8^2)$에서 $n = 200$을 뽑은 예:
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 평균과 견주기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 평균과 견주기. 같은 $\text{LogNormal}(\mu, \sigma^2)$ 모집단에서 두 통계량의 표준오차를 이론으로 견준다.
+
+**(1)** $\operatorname{SE}(\bar x)$를 구하고, 보기 1의 $\operatorname{SE}(\tilde x)$와의 비가
+
+$$
+\frac{\operatorname{SE}(\tilde x)}{\operatorname{SE}(\bar x)}
+= \frac{\sigma\sqrt{2\pi}/2}{e^{\sigma^2/2}\sqrt{e^{\sigma^2}-1}}
+$$
+
+로 **$\mu$와 $n$에 전혀 의존하지 않음**을 보이시오. $\sigma \to 0$에서 이 값이 무엇이 되는가. $\sigma = 0.8$에서는 얼마인가.
+
+**(2)** 두 통계량의 붓스트랩 표준오차를 구해 (1)과 견주시오. 중앙값이 평균보다 정밀해지기 시작하는 $\sigma$도 구하시오.
 
 </div>
 
-```python
-def bootstrap_mean(data, n_bootstrap=10_000, rng=None):
-    """견주기 위한 평균의 붓스트랩 분포."""
-    rng = rng or np.random.default_rng(0)
-    n = len(data)
-    return data[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
-```
+??? success "풀이"
+
+    **(1) 해석적으로.** 로그정규의 평균과 분산은
+
+    $$
+    E[X] = e^{\mu + \sigma^2/2},
+    \qquad
+    \operatorname{Var}(X) = \left(e^{\sigma^2}-1\right)e^{2\mu+\sigma^2}
+    $$
+
+    이므로
+
+    $$
+    \operatorname{SE}(\bar x) = \frac{\sqrt{\operatorname{Var}(X)}}{\sqrt n}
+    = \frac{e^{\mu+\sigma^2/2}\sqrt{e^{\sigma^2}-1}}{\sqrt n}
+    $$
+
+    다. 보기 1에서 $\operatorname{SE}(\tilde x) = \dfrac{e^{\mu}\sigma\sqrt{2\pi}}{2\sqrt n}$이었으므로 비를 취하면 $e^{\mu}$와 $\sqrt n$이 **둘 다 약분된다.**
+
+    $$
+    \frac{\operatorname{SE}(\tilde x)}{\operatorname{SE}(\bar x)}
+    = \frac{\sigma\sqrt{2\pi}/2}{e^{\sigma^2/2}\sqrt{e^{\sigma^2}-1}}
+    $$
+
+    **치우침의 정도 $\sigma$ 하나가 모든 것을 정한다.** $\sigma \to 0$이면 $e^{\sigma^2/2} \to 1$이고 $\sqrt{e^{\sigma^2}-1} \to \sigma$이므로 비가
+
+    $$
+    \frac{\sigma\sqrt{2\pi}/2}{\sigma} = \sqrt{\frac{\pi}{2}} = 1.2533
+    $$
+
+    으로 간다. **정규분포에서 알려진 $\sqrt{\pi/2}$가 그대로 나온다.** 로그정규는 $\sigma \to 0$에서 정규로 가기 때문이다. $\sigma = 0.8$에서는
+
+    $$
+    \frac{0.8 \times 2.50663/2}{e^{0.32}\sqrt{e^{0.64}-1}}
+    = \frac{1.002650}{1.377128 \times 0.946826} = 0.768963
+    $$
+
+    으로 **중앙값 쪽이 $23\%$ 작다.** 꼬리가 두꺼워지면 평균이 소수의 극단값에 끌려 흔들리기 때문이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_mean(data, n_bootstrap=10_000, rng=None):
+        """견주기 위한 평균의 붓스트랩 분포."""
+        rng = rng or np.random.default_rng(0)
+        n = len(data)
+        return data[rng.integers(0, n, (n_bootstrap, n))].mean(axis=1)
+    ```
+
+    보기 1의 `income`을 그대로 이어 쓴다.
+
+    ```python
+    from scipy.optimize import brentq
+
+    boot_mean = bootstrap_mean(income)
+    print(f"붓스트랩 SE(평균)   = {boot_mean.std(ddof=1):,.1f}")
+    print(f"극한 sigma-hat/sqrt(n) = {income.std(ddof=0) / np.sqrt(n):,.1f}"
+          f"   (몬테카를로 오차 {income.std(ddof=0) / np.sqrt(n) / np.sqrt(2 * 10000):.1f})")
+
+    mean_pop = np.exp(mu + sg ** 2 / 2)
+    se_mean_pop = mean_pop * np.sqrt(np.exp(sg ** 2) - 1) / np.sqrt(n)
+    se_med_pop = 1 / (2 * f_m * np.sqrt(n))
+    print(f"이론 SE(평균) = {se_mean_pop:,.1f},  이론 SE(중앙값) = {se_med_pop:,.1f}")
+    ratio = (sg * np.sqrt(2 * np.pi) / 2) / (np.exp(sg ** 2 / 2) * np.sqrt(np.exp(sg ** 2) - 1))
+    print(f"이론 비 = {se_med_pop / se_mean_pop:.6f},  공식 = {ratio:.6f}")
+
+    f = lambda s: s * np.sqrt(2 * np.pi) / 2 - np.exp(s ** 2 / 2) * np.sqrt(np.exp(s ** 2) - 1)
+    print(f"비가 1 이 되는 sigma = {brentq(f, 0.1, 1.5):.6f}")
+    ```
+
+    출력:
+
+    ```
+    붓스트랩 SE(평균)   = 3,158.2
+    극한 sigma-hat/sqrt(n) = 3,158.9   (몬테카를로 오차 22.3)
+    이론 SE(평균) = 3,348.3,  이론 SE(중앙값) = 2,574.7
+    이론 비 = 0.768963,  공식 = 0.768963
+    비가 1 이 되는 sigma = 0.546425
+    ```
+
+    **평균 쪽은 붓스트랩이 정확하다.** $3{,}158.2$가 극한 $\hat\sigma/\sqrt n = 3{,}158.9$와 거의 같다(차이 $0.7$, 몬테카를로 오차 $22.3$). 보기 1에서 중앙값 쪽이 $86$이나 벗어났던 것과 대조된다. **평균의 붓스트랩은 $n$개 전부가 들어간 $\hat\sigma$에 기대기 때문이다.**
+
+    **순서는 이론이 말한 대로다.** 중앙값 $2{,}660.8$ < 평균 $3{,}158.2$로 중앙값이 더 정밀하고, 비 $0.843$이 이론값 $0.769$와 같은 방향이다(두 추정값 각각이 자기 이론값에서 벗어난 몫이 섞여 있다).
+
+    **분기점은 $\sigma = 0.546425$다.** 이보다 치우침이 작으면 평균이, 크면 중앙값이 정밀하다. 소득·의료비·보험금 자료의 로그표준편차는 대개 $0.7$ 이상이므로 **이 영역에서는 중앙값이 로버스트하면서 동시에 더 정밀하다.** 절충이 아니라 순수한 이득이다.
 
 ## 이상값에 대한 로버스트성
 
@@ -113,23 +269,84 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 이상치 하나가 바꾸는 것
+**보기 3.** <span class="diff easy" title="쉬움"></span> 이상치 하나가 바꾸는 것. $n = 200$인 소득 자료에 $x_0 = 1{,}000{,}000$ 하나를 덧붙인다. 위의 영향함수 이야기를 **정확한 공식**으로 바꿀 수 있다.
+
+**(1)** 평균과 중앙값의 상대변화를 $n$, $\bar x$, 순서통계량으로 **정확히** 적으시오($x_0$이 자료의 최댓값보다 크고 $n$이 짝수인 경우). 두 식에서 $x_0$이 어떻게 들어가는지 견주시오.
+
+**(2)** 수를 넣어 쪽의 $+10.02\%$와 $+1.51\%$를 되찾아 오시오.
 
 </div>
 
-```python
-def robustness_comparison(data, outlier=1_000_000):
-    """이상치 하나가 평균과 중앙값을 각각 얼마나 움직이는지 보인다.
+??? success "풀이"
 
-    100만짜리 값 하나를 덧붙인다. 평균은 크게 끌려가고 중앙값은 한 칸
-    옆으로 옮겨 갈 뿐이다.
-    """
-    with_out = np.append(data, outlier)
-    print(f"Mean change:   "
-          f"{(with_out.mean() - data.mean()) / data.mean() * 100:.2f}%")
-    print(f"Median change: "
-          f"{(np.median(with_out) - np.median(data)) / np.median(data) * 100:.2f}%")
-```
+    **(1) 해석적으로.** 관측이 $n$개에서 $n+1$개가 된다.
+
+    **평균.** 새 평균이 $\dfrac{n\bar x + x_0}{n+1}$이므로
+
+    $$
+    \frac{\bar x_{\text{new}} - \bar x}{\bar x}
+    = \frac{1}{\bar x}\left(\frac{n\bar x + x_0}{n+1} - \bar x\right)
+    = \frac{x_0 - \bar x}{(n+1)\,\bar x}
+    $$
+
+    다. **$x_0$이 분자에 그대로 들어간다.** $x_0 \to \infty$면 변화율도 무한히 커진다. 영향함수 $\text{IF}(x) = x - \mu$가 유계가 아니라는 말의 유한표본 판본이다.
+
+    **중앙값.** $n = 200$이 짝수이므로 원래 중앙값은 $\tilde x = \dfrac{x_{(100)} + x_{(101)}}{2}$다. $x_0$이 최댓값보다 크면 순서를 맨 뒤에 하나 더 붙일 뿐이므로, $n+1 = 201$개의 중앙값은 **$101$번째 값** $x_{(101)}$이 된다. 따라서
+
+    $$
+    \frac{\tilde x_{\text{new}} - \tilde x}{\tilde x}
+    = \frac{1}{\tilde x}\left(x_{(101)} - \frac{x_{(100)}+x_{(101)}}{2}\right)
+    = \frac{x_{(101)} - x_{(100)}}{2\,\tilde x}
+    $$
+
+    다. **$x_0$이 식에서 사라졌다.** 바뀌는 크기는 오직 가운데 두 순서통계량의 **간격**이 정한다. $x_0$이 백만이든 백억이든 답이 같다. 영향함수가 $\dfrac{\operatorname{sign}(x-m)}{2f(m)}$으로 유계라는 말이 이것이다. 실제로 간격의 기댓값이 대략 $1/(n f(m))$이므로 변화율이 $\dfrac{1}{2n f(m)\tilde x}$ 수준, 곧 $O(1/n)$이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def robustness_comparison(data, outlier=1_000_000):
+        """이상치 하나가 평균과 중앙값을 각각 얼마나 움직이는지 보인다.
+
+        100만짜리 값 하나를 덧붙인다. 평균은 크게 끌려가고 중앙값은 한 칸
+        옆으로 옮겨 갈 뿐이다.
+        """
+        with_out = np.append(data, outlier)
+        print(f"Mean change:   "
+              f"{(with_out.mean() - data.mean()) / data.mean() * 100:.2f}%")
+        print(f"Median change: "
+              f"{(np.median(with_out) - np.median(data)) / np.median(data) * 100:.2f}%")
+    ```
+
+    보기 1의 `income`을 그대로 이어 쓴다.
+
+    ```python
+    robustness_comparison(income)
+
+    xs = np.sort(income)
+    x0 = 1_000_000
+    print(f"평균 변화 식 (x0-xbar)/((n+1) xbar) = "
+          f"{(x0 - income.mean()) / ((n + 1) * income.mean()) * 100:.6f}%")
+    print(f"중앙값 변화 식 (x(101)-x(100))/(2 med) = "
+          f"{(xs[100] - xs[99]) / (2 * np.median(income)) * 100:.6f}%")
+    print(f"가운데 두 순서통계량 = {xs[99]:,.1f} 와 {xs[100]:,.1f}"
+          f"   (간격 {xs[100] - xs[99]:,.1f})")
+    ```
+
+    출력:
+
+    ```
+    Mean change:   10.02%
+    Median change: 1.51%
+    평균 변화 식 (x0-xbar)/((n+1) xbar) = 10.019957%
+    중앙값 변화 식 (x(101)-x(100))/(2 med) = 1.510654%
+    가운데 두 순서통계량 = 32,952.7 와 33,963.5   (간격 1,010.9)
+    ```
+
+    **두 식이 함수의 결과와 소수 여섯째 자리까지 같다.** 평균은 $+10.019957\%$, 중앙값은 $+1.510654\%$다.
+
+    **$x_0$을 바꾸어 보면 차이가 선명해진다.** 평균 쪽 식 $\dfrac{x_0 - \bar x}{201\,\bar x}$는 $x_0$에 비례하므로, 이상치를 $10^7$로 열 배 키우면 변화율이 $+10.02\%$에서 $+104.68\%$로 열 배 넘게 커진다. 중앙값 쪽 식에는 $x_0$이 없으므로 **$+1.510654\%$ 그대로다.** 가운데 간격이 $1{,}010.9$원이고 중앙값이 $33{,}458$원이라 그 절반의 비가 곧 답이다.
+
+    **중앙값이 "거의 변하지 않는다"는 말의 정확한 뜻이 이것이다.** 전혀 변하지 않는 것은 아니다. 짝수 $n$에서 홀수 $n$으로 넘어가며 가운데 자리가 반 칸 옮겨 가고, 그 반 칸의 크기는 자료의 중앙 밀도가 정한다.
 
 ## 중앙값의 붓스트랩 신뢰구간
 
@@ -141,24 +358,87 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 여러 신뢰수준의 구간
+**보기 4.** <span class="diff easy" title="쉬움"></span> 여러 신뢰수준의 구간. 중앙값에는 붓스트랩이 아니어도 쓸 수 있는 **정확한 무분포 신뢰구간**이 있다. 붓스트랩 구간을 그것과 맞춰 본다.
+
+**(1)** 순서통계량 $x_{(k)}$에 대해 $\Pr(x_{(k)} \le m \le x_{(n-k+1)})$을 이항분포로 적으시오. 그것으로 $n = 200$, $\alpha = 0.05$에서 쓸 $k$를 정하고 **실제 포함확률**을 구하시오. 왜 명목 $95\%$에 꼭 맞출 수 없는가.
+
+**(2)** 붓스트랩 백분위수 구간과 (1)의 구간을 세 신뢰수준에서 견주시오.
 
 </div>
 
-```python
-def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
-    """여러 신뢰수준에서의 백분위수 붓스트랩 신뢰구간.
+??? success "풀이"
 
-    중앙값의 붓스트랩 분포는 계단 모양이 된다. 재표본의 중앙값이 원래
-    자료에 있던 값 중 하나(또는 두 값의 평균)일 수밖에 없기 때문이다.
-    """
-    for cl in confidence_levels:
-        alpha = (100 - cl) / 2
-        lower, upper = np.percentile(bootstrap_dist, [alpha, 100 - alpha])
-        print(f"{cl}% CI: [{lower:,.0f}, {upper:,.0f}]  Width: {upper-lower:,.0f}")
-```
+    **(1) 해석적으로.** 관측 하나가 참 중앙값 $m$보다 작을 확률이 정확히 $1/2$이고 관측들이 독립이므로, $m$보다 작은 관측의 개수 $S$는 **자료의 분포와 무관하게**
 
-신뢰수준이 높을수록 구간이 넓어져 신뢰도와 정밀도의 절충을 반영한다.
+    $$
+    S \sim \text{Binomial}(n,\ 1/2)
+    $$
+
+    를 따른다. 그런데 $x_{(k)} > m$인 것은 $m$보다 작은 관측이 $k$개 미만이라는 것, 곧 $S \le k-1$과 같다. 위쪽도 대칭이므로
+
+    $$
+    \Pr\!\left(x_{(k)} \le m \le x_{(n-k+1)}\right)
+    = 1 - 2\Pr(S \le k-1)
+    $$
+
+    이다. **어떤 연속분포에서도 정확하다.** 밀도도, 정규성도, 붓스트랩도 필요 없다.
+
+    $n = 200$에서 $S$의 평균은 $100$, 표준편차는 $\sqrt{200}/2 = 7.071$이므로 $k - 1 \approx 100 - 1.96 \times 7.071 = 86.1$이 어림이다. $\Pr(S \le k-1) \le 0.025$를 만족하는 가장 큰 $k$를 고르면 $k = 86$이고, 그때 포함확률이 $1 - 2\Pr(S \le 85)$다.
+
+    **명목값에 꼭 맞출 수 없는 까닭은 $S$가 이산이기 때문이다.** $k$를 한 칸 옮길 때마다 포함확률이 뭉텅이로 바뀌므로, 고를 수 있는 수준이 띄엄띄엄하다. 보수적인 쪽으로 반올림하는 것이 관례다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def confidence_intervals(bootstrap_dist, confidence_levels=(90, 95, 99)):
+        """여러 신뢰수준에서의 백분위수 붓스트랩 신뢰구간.
+
+        중앙값의 붓스트랩 분포는 계단 모양이 된다. 재표본의 중앙값이 원래
+        자료에 있던 값 중 하나(또는 두 값의 평균)일 수밖에 없기 때문이다.
+        """
+        for cl in confidence_levels:
+            alpha = (100 - cl) / 2
+            lower, upper = np.percentile(bootstrap_dist, [alpha, 100 - alpha])
+            print(f"{cl}% CI: [{lower:,.0f}, {upper:,.0f}]  Width: {upper-lower:,.0f}")
+    ```
+
+    보기 1의 `income`, `boot_med`와 보기 3의 `xs`를 그대로 이어 쓴다.
+
+    ```python
+    from scipy import stats
+
+    confidence_intervals(boot_med)
+    print()
+    print(f"{'수준':>5}{'부호검정 구간':>34}{'정확 포함률':>12}")
+    for cl in (90, 95, 99):
+        alpha = (100 - cl) / 100
+        k = max(j for j in range(1, n // 2 + 1)
+                if stats.binom.cdf(j - 1, n, 0.5) <= alpha / 2)
+        cov = 1 - 2 * stats.binom.cdf(k - 1, n, 0.5)
+        print(f"{cl:>5}   x({k})..x({n-k+1}) = [{xs[k-1]:,.0f}, {xs[n-k]:,.0f}]{cov:>12.4f}")
+    print(f"\n붓스트랩 중앙값의 고유값 수 = {len(np.unique(boot_med))}  (복제값 10000 개 중)")
+    ```
+
+    출력:
+
+    ```
+    90% CI: [28,468, 36,771]  Width: 8,304
+    95% CI: [28,029, 37,269]  Width: 9,240
+    99% CI: [27,306, 37,836]  Width: 10,530
+
+       수준                           부호검정 구간      정확 포함률
+       90   x(88)..x(113) = [28,420, 36,922]      0.9232
+       95   x(86)..x(115) = [28,000, 37,289]      0.9600
+       99   x(82)..x(119) = [27,215, 37,931]      0.9913
+
+    붓스트랩 중앙값의 고유값 수 = 264  (복제값 10000 개 중)
+    ```
+
+    **두 구간이 거의 겹친다.** $95\%$에서 붓스트랩 $[28{,}029,\ 37{,}269]$ 대 정확 $[28{,}000,\ 37{,}289]$로 양 끝이 **순서통계량 한 칸 안쪽**이다. 실제로 붓스트랩 하한 $28{,}029$는 $x_{(86)} = 28{,}000$과 $x_{(87)} = 28{,}059$의 한가운데 값이다. $n$이 짝수라 재표본 중앙값이 두 순서통계량의 평균이기 때문이며, 그래서 복제값 $10{,}000$개가 서로 다른 값을 $264$가지밖에 갖지 못한다.
+
+    **정확 포함확률 쪽이 더 많은 것을 말해 준다.** "$90\%$"라 적은 구간의 실제 포함확률은 $0.9232$, "$99\%$"는 $0.9913$이다. 이항분포의 이산성 때문에 명목값에 맞출 수 없고 늘 보수적인 쪽으로 넘친다. $95\%$만은 $0.9600$으로 꽤 가깝다.
+
+    신뢰수준이 높을수록 구간이 넓어져 신뢰도와 정밀도의 절충을 반영한다. 폭이 $8{,}304 \to 9{,}240 \to 10{,}530$으로 늘고, 순서통계량으로는 $k$가 $88 \to 86 \to 82$로 바깥으로 밀린다. **중앙값에 대해서는 붓스트랩이 꼭 필요하지 않다는 것도 기억해 둘 것.** 부호검정 구간은 재표집 없이, 그것도 정확하게 같은 답을 준다. 붓스트랩의 값은 중앙값 **차이**나 중앙값의 **함수**처럼 이런 정확 구간이 없는 양으로 넘어갈 때 드러난다.
 
 ## 중앙값의 붓스트랩 분포는 계단이다
 

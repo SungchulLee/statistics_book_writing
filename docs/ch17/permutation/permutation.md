@@ -154,47 +154,184 @@ $5$% 수준에서는 유의하지 않다. 각 집단이 $5$개뿐이므로 가�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 상관에 대한 순열검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 상관에 대한 순열검정. $x = (1, 2, \ldots, 8)$과 $y = (2, 3, 5, 4, 6, 8, 7, 9)$에 대해 $y$만 뒤섞는 순열검정을 한다.
+
+**(1)** 이 자료에서는 피어슨 $r$이 **스피어만 $\rho$와 같다.** 그 까닭을 밝히고 $\rho = 1 - \dfrac{6\sum_i d_i^2}{n^3-n}$으로 $r$을 기약분수로 구하시오. 순열 귀무분포에서 $\rho^{*}$의 평균과 분산도 구하시오.
+
+**(2)** $\lvert \rho^{*}\rvert \ge r$인 순열이 어떤 것인지 $\sum_i d_i^2$으로 적고 그 개수를 **손으로 세어** 정확 $p$값을 분수로 구하시오. 실행값과 견주고, (1)의 분산으로 한 정규근사가 왜 쓸모없는지 밝히시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def permutation_correlation_test(x, y, n_permutations=10000, seed=0):
-    """상관계수의 유의성에 대한 순열검정.
+    **(1) 해석적으로.** $y$의 값을 작은 것부터 늘어놓으면 $2, 3, 4, 5, 6, 7, 8, 9$이니 **$y_i$는 자기 순위 $R_i$보다 꼭 $1$ 크다.** 곧 $y_i = R_i + 1$이다. 피어슨 상관은 두 변수 각각의 **양의 일차변환에 불변**이고, $x_i = i$는 그 자체가 $x$의 순위이므로
 
-    y 만 섞고 x 는 그대로 둔다. 이러면 두 변수의 짝만 부서지고 각각의
-    주변분포는 온전히 남으므로, "관계가 없다"는 상태를 정확히 흉내 낼 수
-    있다. 둘 다 섞으면 헛일이 되고, x 를 섞어도 결과는 같다.
-    """
-    rng = np.random.default_rng(seed)
-    observed_corr = np.corrcoef(x, y)[0, 1]
+    $$
+    r(x, y) = r(x, R + 1) = r(x, R) = \rho
+    $$
 
-    perm_corrs = np.empty(n_permutations)
-    for i in range(n_permutations):
-        perm_corrs[i] = np.corrcoef(x, rng.permutation(y))[0, 1]
+    가 된다. $R = (1, 2, 4, 3, 5, 7, 6, 8)$이므로 $d_i = i - R_i$가 $(0, 0, -1, 1, 0, -1, 1, 0)$이고 $\sum_i d_i^2 = 4$다. $n = 8$에서 $n^3 - n = 504$이므로
 
-    p_value = ((np.abs(perm_corrs) >= abs(observed_corr)).sum() + 1) \
-              / (n_permutations + 1)
-    return p_value, observed_corr, perm_corrs
+    $$
+    r = 1 - \frac{6 \times 4}{504} = 1 - \frac{1}{21} = \frac{20}{21} = 0.9523810
+    $$
 
-x = np.array([1, 2, 3, 4, 5, 6, 7, 8])
-y = np.array([2, 3, 5, 4, 6, 8, 7, 9])
+    **평균과 분산.** $y$를 뒤섞으면 그 순위벡터 $R^{*}$가 $1, \ldots, n$의 무작위 순열이 된다. $a_i = i - \frac{n+1}{2}$, $V = \sum_i a_i^2 = \frac{n(n^2-1)}{12}$라 두면 두 순위벡터의 분산이 같으므로
 
-p_value, observed_corr, _ = permutation_correlation_test(x, y)
-print(f"Observed Correlation: {observed_corr:.4f}")   # 0.9524
-print(f"Permutation P-value: {p_value:.4f}")          # 0.0011
-```
+    $$
+    \rho^{*} = \frac{1}{V}\sum_{i=1}^n a_i\, a_{\pi(i)}
+    $$
 
-출력:
+    로 적힌다($\pi$는 무작위 순열). $\pi$를 $i \mapsto n+1-\pi(i)$로 바꾸면 $\rho^{*}$의 부호만 뒤집히고 확률은 그대로이므로 $E[\rho^{*}] = 0$이다. 분산은 $\sum_i a_i = 0$을 쓰면 두 줄로 끝난다. $E[a_{\pi(i)}^2] = V/n$이고, $i \ne j$에서는
 
-```
-Observed Correlation: 0.9524
-Permutation P-value: 0.0013
-```
+    $$
+    E[a_{\pi(i)}a_{\pi(j)}] = \frac{\left(\sum_k a_k\right)^2 - \sum_k a_k^2}{n(n-1)} = \frac{-V}{n(n-1)}
+    $$
 
-$n = 8$이므로 $8! = 40{,}320$가지 순열을 모두 열거할 수 있고, 정확 $p$값은 $0.001141$이다.
+    이므로
+
+    $$
+    E\!\left[\Big(\textstyle\sum_i a_i a_{\pi(i)}\Big)^2\right]
+    = V\cdot\frac{V}{n} + \big(0 - V\big)\cdot\frac{-V}{n(n-1)}
+    = \frac{V^2}{n-1}
+    $$
+
+    이고 따라서
+
+    $$
+    \operatorname{Var}(\rho^{*}) = \frac{1}{n-1} = \frac17,
+    \qquad
+    \operatorname{SD}(\rho^{*}) = \frac{1}{\sqrt 7} = 0.3779645
+    $$
+
+    다. **자료가 무엇이든 상관없다.** 순위만 쓰므로 분산이 $n$만으로 정해진다.
+
+    **(2) 해석적으로.** 순열 통계량도 같은 공식을 따른다. $D^{*} = \sum_i (i - \pi(i))^2$이라 두면 $\rho^{*} = 1 - \dfrac{6D^{*}}{504}$이므로
+
+    $$
+    \rho^{*} \ge \frac{20}{21} \iff D^{*} \le 4,
+    \qquad
+    \rho^{*} \le -\frac{20}{21} \iff \frac{6D^{*}}{504} \ge \frac{41}{21} \iff D^{*} \ge 164
+    $$
+
+    이다. 먼저 $D^{*} \le 4$를 센다. $\sum_i (i - \pi(i)) = 0$이므로 홀수인 항의 개수가 짝수이고 따라서 **$D^{*}$는 언제나 짝수**다. 또 움직인 자리마다 적어도 $1$을 보태므로 $D^{*}$는 움직인 자리의 수 이상이다.
+
+    | $D^{*}$ | 어떤 순열인가 | 개수 |
+    |---:|:---|---:|
+    | $0$ | 항등 | $1$ |
+    | $2$ | 이웃 한 쌍의 맞바꿈($2 \times 1^2$) | $7$ |
+    | $4$ | 겹치지 않는 이웃 맞바꿈 두 개 | $\binom72 - 6 = 15$ |
+
+    $D^{*} = 2$에서 떨어진 두 자리를 맞바꾸면 $2(j-i)^2 \ge 8$이고 세 자리 이상을 움직이면 $D^{*} \ge 4$인데 제곱수 셋을 더해 $4$를 만들 수 없으므로($1+1+2$는 제곱이 아니다) 표가 전부다. $D^{*} = 4$의 $15$는 이웃 쌍 $7$개 중 자리를 공유하지 않는 두 개를 고르는 수다. 합이 $23$이다. $\pi$를 뒤집는 대응이 $D^{*} \le 4$와 $D^{*} \ge 164$를 일대일로 맞바꾸므로 뒤쪽도 $23$가지다. 따라서
+
+    $$
+    p_{\text{정확}} = \frac{2 \times 23}{8!} = \frac{46}{40320} = \frac{23}{20160} = 0.001141
+    $$
+
+    **정규근사는 여기서 쓸모가 없다.** $z = \dfrac{20/21}{1/\sqrt7} = 2.519763$이고 양측 $p \approx 0.011743$인데, 정확값의 $10$배가 넘는다. $\rho^{*}$는 $[-1, 1]$에 **갇혀 있고** 관측값 $20/21$이 그 경계 바로 앞에 있으므로, 경계를 모르는 정규곡선은 그 자리의 확률을 크게 어림잡는다. $n = 8$에서는 $40{,}320$가지를 다 세는 편이 빠르기도 하다.
+
+    **수치적으로.** 먼저 쪽의 몬테카를로 검정이다.
+
+    ```python
+    import numpy as np
+
+    def permutation_correlation_test(x, y, n_permutations=10000, seed=0):
+        """상관계수의 유의성에 대한 순열검정.
+
+        y 만 섞고 x 는 그대로 둔다. 이러면 두 변수의 짝만 부서지고 각각의
+        주변분포는 온전히 남으므로, "관계가 없다"는 상태를 정확히 흉내 낼 수
+        있다. 둘 다 섞으면 헛일이 되고, x 를 섞어도 결과는 같다.
+        """
+        rng = np.random.default_rng(seed)
+        observed_corr = np.corrcoef(x, y)[0, 1]
+
+        perm_corrs = np.empty(n_permutations)
+        for i in range(n_permutations):
+            perm_corrs[i] = np.corrcoef(x, rng.permutation(y))[0, 1]
+
+        p_value = ((np.abs(perm_corrs) >= abs(observed_corr)).sum() + 1) \
+                  / (n_permutations + 1)
+        return p_value, observed_corr, perm_corrs
+
+    x = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+    y = np.array([2, 3, 5, 4, 6, 8, 7, 9])
+
+    p_value, observed_corr, _ = permutation_correlation_test(x, y)
+    print(f"Observed Correlation: {observed_corr:.4f}")   # 0.9524
+    print(f"Permutation P-value: {p_value:.4f}")          # 0.0011
+    ```
+
+    출력:
+
+    ```
+    Observed Correlation: 0.9524
+    Permutation P-value: 0.0013
+    ```
+
+    이제 (1)과 (2)의 수를 모두 확인한다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    import itertools
+    from collections import Counter
+    from scipy import stats
+    from fractions import Fraction
+
+    n = len(x)
+    R = stats.rankdata(y)
+    print(f"y 의 순위 = {R.astype(int)},   y - 순위 = {(y - R).astype(int)}")
+    print(f"피어슨 r = {observed_corr:.10f}")
+    print(f"스피어만 rho = {stats.spearmanr(x, y).statistic:.10f}")
+    print(f"20/21 = {20 / 21:.10f},   sum d^2 = {int(((x - R) ** 2).sum())}")
+
+    # 8! = 40,320 가지 순위 배정을 모두 열거한다.
+    D = np.array([int(((x - np.array(p)) ** 2).sum())
+                  for p in itertools.permutations(range(1, n + 1))])
+    rho = 1 - 6 * D / (n ** 3 - n)
+    cnt = Counter(D.tolist())
+    print(f"\nD = 0, 2, 4 의 개수 = {cnt[0]}, {cnt[2]}, {cnt[4]}   (합 {cnt[0] + cnt[2] + cnt[4]})")
+    print(f"D >= 164 의 개수     = {int((D >= 164).sum())},   D 의 최댓값 = {D.max()}")
+    hit = int((np.abs(rho) >= 20 / 21 - 1e-12).sum())
+    print(f"|rho*| >= 20/21 인 순열 = {hit} 가지 / {len(D)}"
+          f"  =  {Fraction(hit, len(D))}  =  {hit / len(D):.6f}")
+
+    print(f"\nSD(rho*) 열거 = {rho.std():.10f},   1/sqrt(n-1) = {1 / np.sqrt(n - 1):.10f}")
+    z = (20 / 21) * np.sqrt(n - 1)
+    print(f"정규근사 z = {z:.6f},  양측 p = {2 * stats.norm.sf(z):.6f}"
+          f"   (정확값의 {2 * stats.norm.sf(z) / (hit / len(D)):.1f} 배)")
+
+    p_exact = hit / len(D)
+    B = 10_000
+    mean_hat = (B * p_exact + 1) / (B + 1)
+    sd = np.sqrt(B * p_exact * (1 - p_exact)) / (B + 1)
+    print(f"\n몬테카를로 실행값 = {p_value:.6f}")
+    print(f"E[p-hat] = {mean_hat:.6f},  SD = {sd:.6f}"
+          f"   -> 실행값은 {(p_value - mean_hat) / sd:+.2f} SD")
+    print(f"피어슨 t 검정 p = {stats.pearsonr(x, y).pvalue:.6f}")
+    ```
+
+    출력:
+
+    ```
+    y 의 순위 = [1 2 4 3 5 7 6 8],   y - 순위 = [1 1 1 1 1 1 1 1]
+    피어슨 r = 0.9523809524
+    스피어만 rho = 0.9523809524
+    20/21 = 0.9523809524,   sum d^2 = 4
+
+    D = 0, 2, 4 의 개수 = 1, 7, 15   (합 23)
+    D >= 164 의 개수     = 23,   D 의 최댓값 = 168
+    |rho*| >= 20/21 인 순열 = 46 가지 / 40320  =  23/20160  =  0.001141
+
+    SD(rho*) 열거 = 0.3779644730,   1/sqrt(n-1) = 0.3779644730
+    정규근사 z = 2.519763,  양측 p = 0.011743   (정확값의 10.3 배)
+
+    몬테카를로 실행값 = 0.001300
+    E[p-hat] = 0.001241,  SD = 0.000338   -> 실행값은 +0.18 SD
+    피어슨 t 검정 p = 0.000260
+    ```
+
+    **유도한 것이 모두 맞는다.** $y$에서 순위를 뺀 값이 여덟 자리 모두 $1$이라 $r$과 $\rho$가 열 자리까지 같고, 둘 다 $20/21$이다. 손으로 센 $1 + 7 + 15 = 23$이 열거 결과와 같고, $D^{*} \ge 164$ 쪽도 $23$이라 $46/40320 = 23/20160$이 나온다. $\operatorname{SD}(\rho^{*})$도 $1/\sqrt7$과 열 자리까지 일치한다.
+
+    **세 $p$값의 크기 차이를 읽어 둘 것.** 정확 $0.001141$, 몬테카를로 $0.001300$, 정규근사 $0.011743$, 피어슨 $t$ 검정 $0.000260$이다. 몬테카를로값은 예측 평균 $0.001241$에서 $+0.18$ 표준편차 떨어진 제자리이고, $B = 10{,}000$에서 $\hat p$의 표준편차가 $0.000338$이라 **유효숫자가 한 자리뿐이다.** 반면 정규근사는 $10.3$배 크고 $t$ 검정은 $4.4$배 작다. **둘 다 틀린 방향으로 틀렸고, 경계가 있는 이산 통계량에서는 세는 것 말고 믿을 것이 없다.**
 
 ---
 
@@ -204,47 +341,154 @@ $n = 8$이므로 $8! = 40{,}320$가지 순열을 모두 열거할 수 있고, �
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 대응자료의 부호 뒤집기 검정
+**보기 3.** <span class="diff easy" title="쉬움"></span> 대응자료의 부호 뒤집기 검정. 열 사람의 처치 전후 측정에서 차이 $d_i$를 얻고, 각 $d_i$의 부호를 독립으로 뒤집어 귀무분포를 만든다.
+
+**(1)** 부호 뒤집기 귀무분포에서 $\bar d^{*}$의 평균과 분산을 닫힌 꼴로 구하시오. 또 $d_i$가 **모두 같은 부호**이면 $\lvert \bar d^{*}\rvert$의 최댓값이 $\lvert \bar d_{\text{obs}}\rvert$ 자신이고 그것을 이루는 배정이 꼭 둘뿐임을 보여, 정확 $p$값을 구하시오.
+
+**(2)** 실행해 확인하고, (1)의 분산으로 한 정규근사와 대응 $t$ 검정이 각각 정확값과 얼마나 어긋나는지 재시오. 부호 뒤집기 귀무분포의 표준편차가 $t$ 검정의 표준오차보다 넓은 까닭도 밝히시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-def paired_permutation_test(before, after, n_permutations=10000, seed=0):
-    """대응자료에 대한 부호 뒤집기 순열검정.
+    **(1) 해석적으로.** 차이는 $d = (2, 1, 3, 5, 3, 2, 1, 2, 1, 4)$로 $\bar d_{\text{obs}} = 2.4$, $\sum_i d_i^2 = 74$다. 귀무가설 아래에서 각 차이의 분포가 $0$을 중심으로 대칭이므로, 독립인 부호 $\varepsilon_i \in \{-1, +1\}$을 각각 확률 $1/2$로 붙인
 
-    귀무가설 아래에서는 각 차이의 분포가 0 을 중심으로 대칭이다. 그러므로
-    어느 차이들의 부호를 뒤집든 똑같이 그럴듯하다. 대응자료에서 이름표를
-    섞으면 안 되는 대신 이 방법을 쓴다.
-    """
-    rng = np.random.default_rng(seed)
-    differences = np.asarray(after) - np.asarray(before)
-    observed_mean_diff = differences.mean()
+    $$
+    \bar d^{*} = \frac1n \sum_{i=1}^n \varepsilon_i d_i
+    $$
 
-    signs = rng.choice([-1, 1], size=(n_permutations, len(differences)))
-    perm_means = (signs * differences).mean(axis=1)
+    가 귀무분포다. $E[\varepsilon_i] = 0$, $\operatorname{Var}(\varepsilon_i) = 1$이고 $\varepsilon_i$들이 독립이므로
 
-    p_value = ((np.abs(perm_means) >= abs(observed_mean_diff)).sum() + 1) \
-              / (n_permutations + 1)
-    return p_value, observed_mean_diff
+    $$
+    E[\bar d^{*}] = 0,
+    \qquad
+    \operatorname{Var}(\bar d^{*}) = \frac{1}{n^2}\sum_{i=1}^n d_i^2
+    $$
 
-before = [70, 68, 75, 80, 72, 74, 69, 77, 73, 76]
-after = [72, 69, 78, 85, 75, 76, 70, 79, 74, 80]
+    이다. **차이의 크기만 쓰고 부호는 쓰지 않는다.** 수를 넣으면
 
-p_value, obs_diff = paired_permutation_test(before, after)
-print(f"Observed Mean Difference: {obs_diff:.2f}")   # 2.40
-print(f"P-value: {p_value:.4f}")                     # 0.002
-```
+    $$
+    \operatorname{SD}(\bar d^{*}) = \frac{\sqrt{74}}{10} = 0.8602325
+    $$
 
-출력:
+    **최댓값.** 삼각부등식에서
 
-```
-Observed Mean Difference: 2.40
-P-value: 0.0020
-```
+    $$
+    \lvert \bar d^{*}\rvert = \frac1n\left\lvert \sum_i \varepsilon_i d_i \right\rvert
+    \le \frac1n \sum_i \lvert d_i \rvert
+    $$
 
-$2^{10} = 1{,}024$가지 부호 배정을 모두 열거하면 정확 $p$값은 $2/1024 = 0.001953$이다. 이는 이 자료에서 가능한 **최소 $p$값**이다. 열 개의 차이가 모두 양수이므로, 관측된 배정과 그 전부를 뒤집은 배정만이 $|\bar{d}^*| \ge 2.4$를 만족한다.
+    이고, 등호는 모든 $\varepsilon_i d_i$의 부호가 같을 때, 곧 $\varepsilon$이 전부 $+1$이거나 전부 $-1$일 때만 성립한다. 이 자료는 $d_i$가 **열 개 모두 양수**이므로 $\frac1n\sum_i \lvert d_i\rvert = \bar d_{\text{obs}} = 2.4$이고, 등호를 이루는 배정은 관측된 것과 그것을 통째로 뒤집은 것 **둘뿐**이다. 따라서
+
+    $$
+    p_{\text{정확}} = \frac{2}{2^{10}} = \frac{2}{1024} = 0.001953
+    $$
+
+    이고, 이것은 $n = 10$인 부호 뒤집기 검정이 낼 수 있는 **가장 작은 양측 $p$값**이다(연습문제 2가 일반 $n$에서 같은 셈을 한다).
+
+    **(2) 수치적으로.** 먼저 쪽의 모의실험이다.
+
+    ```python
+    import numpy as np
+
+    def paired_permutation_test(before, after, n_permutations=10000, seed=0):
+        """대응자료에 대한 부호 뒤집기 순열검정.
+
+        귀무가설 아래에서는 각 차이의 분포가 0 을 중심으로 대칭이다. 그러므로
+        어느 차이들의 부호를 뒤집든 똑같이 그럴듯하다. 대응자료에서 이름표를
+        섞으면 안 되는 대신 이 방법을 쓴다.
+        """
+        rng = np.random.default_rng(seed)
+        differences = np.asarray(after) - np.asarray(before)
+        observed_mean_diff = differences.mean()
+
+        signs = rng.choice([-1, 1], size=(n_permutations, len(differences)))
+        perm_means = (signs * differences).mean(axis=1)
+
+        p_value = ((np.abs(perm_means) >= abs(observed_mean_diff)).sum() + 1) \
+                  / (n_permutations + 1)
+        return p_value, observed_mean_diff
+
+    before = [70, 68, 75, 80, 72, 74, 69, 77, 73, 76]
+    after = [72, 69, 78, 85, 75, 76, 70, 79, 74, 80]
+
+    p_value, obs_diff = paired_permutation_test(before, after)
+    print(f"Observed Mean Difference: {obs_diff:.2f}")   # 2.40
+    print(f"P-value: {p_value:.4f}")                     # 0.002
+    ```
+
+    출력:
+
+    ```
+    Observed Mean Difference: 2.40
+    P-value: 0.0020
+    ```
+
+    이제 $2^{10} = 1{,}024$가지를 모두 열거해 (1)을 확인한다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    import itertools
+    from scipy import stats
+
+    d = np.asarray(after) - np.asarray(before)
+    n = len(d)
+    print(f"d = {d},  모두 양수인가: {bool((d > 0).all())}")
+    print(f"d-bar = {d.mean():.4f},   sum d^2 = {int((d ** 2).sum())}")
+
+    sd_null = np.sqrt((d ** 2).sum()) / n
+    print(f"SD(d-bar*) 닫힌 꼴 = {sd_null:.7f}")
+
+    # 2^10 = 1,024 가지 부호 배정을 모두 열거한다.
+    S = np.array(list(itertools.product([1, -1], repeat=n)))
+    m = (S * d).mean(1)
+    hit = int((np.abs(m) >= abs(d.mean()) - 1e-12).sum())
+    print(f"열거한 SD         = {m.std():.7f}")
+    print(f"|d-bar*| 의 최댓값 = {np.abs(m).max():.4f}  (관측값 {d.mean():.4f})")
+    print(f"|d-bar*| >= 2.4 인 배정 = {hit} 가지 / {len(m)}  ->  정확 p = {hit / len(m):.9f}")
+
+    z = d.mean() / sd_null
+    print(f"\n정규근사 z = {z:.6f},  양측 p = {2 * stats.norm.sf(z):.6f}"
+          f"   (정확값의 {2 * stats.norm.sf(z) / (hit / len(m)):.2f} 배)")
+
+    tt = stats.ttest_rel(after, before)
+    se_t = d.std(ddof=1) / np.sqrt(n)
+    print(f"\n대응 t 검정: t = {tt.statistic:.6f},  p = {tt.pvalue:.6f},  SE = {se_t:.7f}")
+    print(f"SD(d-bar*)/SE_t  실제 = {sd_null / se_t:.7f}")
+    print(f"                 예측 = {np.sqrt((n - 1 + tt.statistic ** 2) / n):.7f}")
+    ```
+
+    출력:
+
+    ```
+    d = [2 1 3 5 3 2 1 2 1 4],  모두 양수인가: True
+    d-bar = 2.4000,   sum d^2 = 74
+    SD(d-bar*) 닫힌 꼴 = 0.8602325
+    열거한 SD         = 0.8602325
+    |d-bar*| 의 최댓값 = 2.4000  (관측값 2.4000)
+    |d-bar*| >= 2.4 인 배정 = 2 가지 / 1024  ->  정확 p = 0.001953125
+
+    정규근사 z = 2.789943,  양측 p = 0.005272   (정확값의 2.70 배)
+
+    대응 t 검정: t = 5.622255,  p = 0.000325,  SE = 0.4268749
+    SD(d-bar*)/SE_t  실제 = 2.0151862
+                     예측 = 2.0151862
+    ```
+
+    **(1)이 모두 맞는다.** 닫힌 꼴 $\sqrt{74}/10 = 0.8602325$가 열거한 표준편차와 일곱 자리까지 같고, $\lvert \bar d^{*}\rvert$의 최댓값이 정확히 관측값 $2.4$이며 그것을 이루는 배정이 $1{,}024$개 중 $2$개다. 몬테카를로값 $0.002000$도 예측 평균 $0.002053$에서 $-0.12$ 표준편차 떨어진 제자리다.
+
+    **정규근사는 $2.70$배 크고 $t$ 검정은 $6.0$배 작다.** 정규근사가 틀리는 까닭은 관측값이 분포의 **지지집합 끝점**에 놓였기 때문이다. $\bar d^{*}$는 $[-2.4, 2.4]$ 밖으로 나갈 수 없는데 정규곡선은 그 너머에도 질량을 두므로 꼬리를 과대평가한다. 여기서는 $0.005272$ 대 $0.001953$이다.
+
+    **$t$ 검정이 작은 값을 주는 까닭은 눈금이 좁기 때문이다.** $\sum_i d_i^2 = (n-1)s_d^2 + n\bar d^2$를 쓰고 $t = \bar d\sqrt n / s_d$를 넣으면
+
+    $$
+    \frac{\operatorname{SD}(\bar d^{*})}{\operatorname{SE}_t}
+    = \sqrt{\frac{\sum_i d_i^2}{n\, s_d^2}}
+    = \sqrt{\frac{n - 1 + t^2}{n}}
+    $$
+
+    이고, $t = 5.622255$에서 $\sqrt{(9 + 31.6098)/10} = 2.0151862$다. 코드가 낸 비와 일곱 자리까지 같다. **$t$ 검정은 효과를 뺀 나머지의 흩어짐 $s_d$로 눈금을 재고, 부호 뒤집기는 효과까지 포함한 $\sqrt{\sum d_i^2}$로 잰다.** 효과가 커서 $\lvert t\rvert > 1$ 이면 부호 뒤집기의 귀무분포가 더 넓어져 **스스로를 깎는다.** 여기서는 두 배가 넘게 넓다.
+
+    두 어긋남의 성격이 다르다는 것이 요점이다. 정규근사의 $2.70$배는 **근사의 실패**이고, $t$ 검정의 $6.0$배는 **다른 가정 아래의 다른 답**이다. 정규성을 믿을 수 없는 $n = 10$에서 믿을 것은 $0.001953$ 하나다.
 
 ---
 

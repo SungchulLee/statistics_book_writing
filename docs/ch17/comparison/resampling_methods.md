@@ -40,36 +40,101 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 세 가지 붓스트랩 신뢰구간
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 가지 붓스트랩 신뢰구간. 평균에 대해 정규·백분위수·기본 구간을 같은 복제값에서 읽는다.
+
+**(1)** 세 구간의 **폭**과 **중점** 사이에 성립하는 항등식을 적으시오. 구체적으로 어느 둘의 폭이 늘 같은가. 세 중점은 $\hat\theta$와 어떤 관계인가. 정규 구간의 폭이 $B \to \infty$에서 무엇으로 수렴하는가.
+
+**(2)** $\text{Exp}(3)$에서 $n = 30$을 뽑아 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def bootstrap_ci_demo(data, B=10_000, alpha=0.05, rng=None):
-    """평균에 대한 세 가지 붓스트랩 신뢰구간을 함께 구한다.
+    **(1) 해석적으로.** $\hat\theta^{*}_{q}$를 붓스트랩 분위수라 하고 $L = \hat\theta^{*}_{\alpha/2}$, $U = \hat\theta^{*}_{1-\alpha/2}$라 두자.
 
-    정규법은 붓스트랩으로 표준오차만 얻고 구간은 정규분포로 만든다.
-    백분위수법은 붓스트랩 분포의 분위점을 그대로 쓴다. 기본법은 그
-    분위점을 추정값 둘레로 되비춘다. 분포가 대칭이면 셋이 거의 같다.
-    """
-    rng = rng or np.random.default_rng(0)
-    n = len(data)
-    theta_hat = data.mean()
-    z = stats.norm.ppf(1 - alpha / 2)
+    - 백분위수 구간은 $[L,\ U]$, 기본 구간은 $[2\hat\theta - U,\ 2\hat\theta - L]$이다. **두 폭이 똑같이 $U - L$이다.** 기본 구간은 백분위수 구간을 $\hat\theta$에 대해 뒤집은 것일 뿐이라 길이가 보존된다.
+    - 중점은 각각 $\dfrac{L+U}{2}$와 $2\hat\theta - \dfrac{L+U}{2}$이므로 **두 중점의 합이 $2\hat\theta$**다. $\hat\theta$를 가운데 두고 정확히 대칭으로 벌어진다는 뜻이고, 붓스트랩 분포가 오른쪽으로 치우쳐 $L+U > 2\hat\theta$이면 백분위수가 오른쪽, 기본이 왼쪽으로 간다.
+    - 정규 구간 $[\hat\theta - z\widehat{\operatorname{SE}},\ \hat\theta + z\widehat{\operatorname{SE}}]$의 중점은 **언제나 $\hat\theta$**다. 셋 가운데 유일하게 치우침을 반영하지 않는다.
 
-    boot_means = data[rng.integers(0, n, (B, n))].mean(axis=1)
-    se_boot = boot_means.std(ddof=1)
-    lo_q, hi_q = np.percentile(boot_means, [100*alpha/2, 100*(1 - alpha/2)])
+    식으로 적으면 이렇다.
 
-    return {
-        "normal":     (theta_hat - z*se_boot, theta_hat + z*se_boot),
-        "percentile": (lo_q, hi_q),
-        "basic":      (2*theta_hat - hi_q, 2*theta_hat - lo_q),
-    }
-```
+    $$
+    \text{mid}_{\text{백분위수}} + \text{mid}_{\text{기본}} = 2\hat\theta,
+    \qquad
+    \text{mid}_{\text{정규}} = \hat\theta
+    $$
+
+    폭의 극한은 [붓스트랩 표준오차](../../ch05/applications/bootstrap_standard_error.md) 보기 1에서 $\widehat{\operatorname{SE}} \to \hat\sigma/\sqrt n$이므로
+
+    $$
+    \text{폭}_{\text{정규}} \xrightarrow[B\to\infty]{} 2 z_{1-\alpha/2}\,\frac{\hat\sigma}{\sqrt n}
+    $$
+
+    다. **셋이 모두 같아지는 것은 붓스트랩 분포가 $\hat\theta$에 대해 대칭이고 정규일 때뿐이다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def bootstrap_ci_demo(data, B=10_000, alpha=0.05, rng=None):
+        """평균에 대한 세 가지 붓스트랩 신뢰구간을 함께 구한다.
+
+        정규법은 붓스트랩으로 표준오차만 얻고 구간은 정규분포로 만든다.
+        백분위수법은 붓스트랩 분포의 분위점을 그대로 쓴다. 기본법은 그
+        분위점을 추정값 둘레로 되비춘다. 분포가 대칭이면 셋이 거의 같다.
+        """
+        rng = rng or np.random.default_rng(0)
+        n = len(data)
+        theta_hat = data.mean()
+        z = stats.norm.ppf(1 - alpha / 2)
+
+        boot_means = data[rng.integers(0, n, (B, n))].mean(axis=1)
+        se_boot = boot_means.std(ddof=1)
+        lo_q, hi_q = np.percentile(boot_means, [100*alpha/2, 100*(1 - alpha/2)])
+
+        return {
+            "normal":     (theta_hat - z*se_boot, theta_hat + z*se_boot),
+            "percentile": (lo_q, hi_q),
+            "basic":      (2*theta_hat - hi_q, 2*theta_hat - lo_q),
+        }
+    ```
+
+    $\text{Exp}(3)$에서 $n = 30$을 뽑아 확인한다.
+
+    ```python
+    d = np.random.default_rng(12).exponential(1/3, 30)
+    r = bootstrap_ci_demo(d)
+    th = d.mean()
+    for k, (a, b) in r.items():
+        print(f"{k:>11}: [{a:.6f}, {b:.6f}]  폭 {b-a:.6f}  중점 {(a+b)/2:.6f}")
+    print(f"theta_hat = {th:.6f}")
+    print(f"중점 합 (기본+백분위수) = {(sum(r['basic'])/2 + sum(r['percentile'])/2):.6f}"
+          f"  = 2*theta_hat = {2*th:.6f}")
+    print(f"정규 구간 폭 극한 = 2 z sigma-hat/sqrt(n) = "
+          f"{2*1.959964*d.std(ddof=0)/np.sqrt(30):.6f}")
+    ```
+
+    출력:
+
+    ```
+         normal: [0.257486, 0.511222]  폭 0.253736  중점 0.384354
+     percentile: [0.261750, 0.516883]  폭 0.255133  중점 0.389317
+          basic: [0.251825, 0.506958]  폭 0.255133  중점 0.379392
+    theta_hat = 0.384354
+    중점 합 (기본+백분위수) = 0.768708  = 2*theta_hat = 0.768708
+    정규 구간 폭 극한 = 2 z sigma-hat/sqrt(n) = 0.255376
+    ```
+
+    **세 항등식이 모두 확인된다.** 백분위수와 기본의 폭이 $0.255133$으로 **소수 여섯째 자리까지 같고**, 두 중점의 합 $0.768708$이 $2\hat\theta$와 같으며, 정규 구간의 중점이 $\hat\theta = 0.384354$와 정확히 일치한다.
+
+    **치우침이 보인다.** 백분위수 중점이 $\hat\theta$보다 $+0.0050$, 기본 중점이 $-0.0050$ 옮겨져 있다. 지수분포 자료라 붓스트랩 분포가 오른쪽으로 치우친 결과이며, **두 방법이 정반대 방향으로 움직인다**는 것이 핵심이다. 어느 쪽이 옳은지는 참 표집분포가 같은 방향으로 치우쳤는지에 달렸다.
+
+    정규 구간의 폭 $0.253736$도 극한 $0.255376$에 가깝다(차이 $0.0016$은 $B = 10{,}000$에서 $\widehat{\operatorname{SE}}$의 몬테카를로 요동이 폭으로 환산되어 $0.0018$인 범위 안).
+
+    **아래 포함확률 표가 보여 주듯 셋 다 $n = 30$에서는 명목값에 못 미친다.** 폭과 중점의 산수는 정확해도, 그 구간이 참값을 $95\%$ 담느냐는 별개의 물음이다.
+
 
 ## 붓스트랩 포함확률 모의실험
 
@@ -105,32 +170,107 @@ $\text{Exp}(3)$에서 $n = 30$을 뽑은 결과($M = 3{,}000$, $B = 2{,}000$):
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 순열검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 이표본 순열검정. 이 함수는 평균차를 기본 통계량으로 쓴다. 쪽 끝의 그림이 다루는 상황 — $X \sim N(5, 1^2)$을 $n_x = 20$, $Y \sim N(5, 3^2)$을 $n_y = 50$ — 에서 그 선택이 어떻게 되는지 수로 따진다.
+
+**(1)** $H_0$가 참일 때 $\bar x - \bar y$의 **참** 표준편차와, 라벨을 섞어 만든 **순열 귀무분포**의 표준편차를 각각 구하시오. 둘의 비는 얼마이며, 그 결과 제1종 오류율이 명목값보다 커지겠는가 작아지겠는가.
+
+**(2)** 모의실험으로 제1종 오류율을 재어 Welch $t$ 검정과 견주시오.
 
 </div>
 
-```python
-def permutation_test_two_sample(x, y, B=9999, stat_func=None, rng=None):
-    """이표본 순열검정. 통계량 함수를 바꿔 끼울 수 있다.
+??? success "풀이"
 
-    평균 차이든 중앙값 차이든 절사평균 차이든, 귀무가설 아래에서 이름표가
-    무의미하다는 논리는 그대로다. 순열검정이 통계량에 매이지 않는 까닭이다.
-    """
-    rng = rng or np.random.default_rng(0)
-    if stat_func is None:
-        stat_func = lambda a, b: a.mean() - b.mean()
-    t_obs = stat_func(x, y)
-    pooled = np.concatenate([x, y])
-    m = len(x)
+    **(1) 해석적으로.** 두 표본이 독립이므로 참 표준편차는
 
-    count = 0
-    for _ in range(B):
-        p = rng.permutation(pooled)
-        count += abs(stat_func(p[:m], p[m:])) >= abs(t_obs)
-    return t_obs, (count + 1) / (B + 1)
-```
+    $$
+    \operatorname{SD}(\bar X - \bar Y)
+    = \sqrt{\frac{\sigma_x^2}{n_x} + \frac{\sigma_y^2}{n_y}}
+    = \sqrt{\frac{1}{20} + \frac{9}{50}} = \sqrt{0.23} = 0.4796
+    $$
 
-처치군 대 대조군 자료에 적용하면 순열 $p$값이 대개 Welch $t$ 검정의 $p$값과 가깝다. **다만 분산이 다르고 표본이 불균형하면 그렇지 않다**(연습문제 2).
+    다. 반면 라벨을 섞으면 $70$개가 한 웅덩이가 되어 **모든 관측이 같은 분산을 갖게 된다.** 합친 자료의 분산은
+
+    $$
+    \bar\sigma^2 \approx \frac{n_x\sigma_x^2 + n_y\sigma_y^2}{n_x+n_y}
+    = \frac{20 \times 1 + 50 \times 9}{70} = 6.714
+    $$
+
+    이고, [이표본 순열검정](../permutation/two_sample.md) 보기 1의 식에 넣으면
+
+    $$
+    \operatorname{SD}(d^{*}) = S\sqrt{\frac{1}{n_x}+\frac{1}{n_y}}
+    \approx \sqrt{6.714 \times \frac{70}{69} \times 0.07} = 0.6905
+    $$
+
+    다. **비가 $0.6905/0.4796 = 1.44$로 귀무분포가 실제보다 $44\%$ 넓다.**
+
+    **그러므로 검정이 지나치게 보수적이 된다.** 관측된 차이는 참 표준편차 $0.4796$짜리 분포에서 나왔는데 $0.6905$짜리 자로 재니 좀처럼 극단으로 보이지 않는다. 제1종 오류율이 $0.05$에 **크게 못 미칠** 것이다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def permutation_test_two_sample(x, y, B=9999, stat_func=None, rng=None):
+        """이표본 순열검정. 통계량 함수를 바꿔 끼울 수 있다.
+
+        평균 차이든 중앙값 차이든 절사평균 차이든, 귀무가설 아래에서 이름표가
+        무의미하다는 논리는 그대로다. 순열검정이 통계량에 매이지 않는 까닭이다.
+        """
+        rng = rng or np.random.default_rng(0)
+        if stat_func is None:
+            stat_func = lambda a, b: a.mean() - b.mean()
+        t_obs = stat_func(x, y)
+        pooled = np.concatenate([x, y])
+        m = len(x)
+
+        count = 0
+        for _ in range(B):
+            p = rng.permutation(pooled)
+            count += abs(stat_func(p[:m], p[m:])) >= abs(t_obs)
+        return t_obs, (count + 1) / (B + 1)
+    ```
+
+    $H_0$가 참인 자료를 $1{,}000$번 만들어 기각률을 센다. 반복이 많으므로 벡터화해 쓴다.
+
+    ```python
+    nx, ny, sx, sy = 20, 50, 1.0, 3.0
+    true_sd = np.sqrt(sx**2/nx + sy**2/ny)
+    sbar2 = (nx*sx**2 + ny*sy**2)/(nx+ny)
+    perm_sd = np.sqrt(sbar2*(nx+ny)/(nx+ny-1)*(1/nx+1/ny))
+    print(f"참 SD(xbar-ybar) = {true_sd:.4f},  순열 귀무 SD 어림 = {perm_sd:.4f},"
+          f"  비 = {perm_sd/true_sd:.4f}")
+
+    rng = np.random.default_rng(21)
+    M, B = 1000, 499
+    rej_mean = rej_welch = 0
+    sds = []
+    for _ in range(M):
+        x = rng.normal(5, sx, nx); y = rng.normal(5, sy, ny)
+        obs = x.mean() - y.mean(); z = np.concatenate([x, y])
+        P = np.array([rng.permutation(z) for _ in range(B)])
+        dd = P[:, :nx].mean(1) - P[:, nx:].mean(1)
+        sds.append(dd.std(ddof=1))
+        rej_mean += ((np.abs(dd) >= abs(obs)).sum() + 1)/(B + 1) < 0.05
+        rej_welch += stats.ttest_ind(x, y, equal_var=False).pvalue < 0.05
+    print(f"순열 귀무 SD 의 평균(모의) = {np.mean(sds):.4f}")
+    print(f"제1종 오류율: 평균차 순열 {rej_mean/M:.3f},  Welch t {rej_welch/M:.3f}"
+          f"   (몬테카를로 오차 {np.sqrt(0.05*0.95/M):.4f})")
+    ```
+
+    출력:
+
+    ```
+    참 SD(xbar-ybar) = 0.4796,  순열 귀무 SD 어림 = 0.6905,  비 = 1.4398
+    순열 귀무 SD 의 평균(모의) = 0.6840
+    제1종 오류율: 평균차 순열 0.006,  Welch t 0.044   (몬테카를로 오차 0.0069)
+    ```
+
+    **어림이 맞는다.** 예측한 순열 귀무 SD $0.6905$에 대해 모의 평균이 $0.6840$이다.
+
+    **결과는 예측보다 극단적이다.** 제1종 오류율이 $0.006$으로 명목값 $0.05$의 **$8$분의 $1$**이다. Welch $t$ 검정은 $0.044$로 제자리를 지킨다. 귀무분포가 $1.44$배 넓어진 것이 꼬리확률에서는 이만큼 증폭된 셈이다.
+
+    **"보수적이니 안전하다"고 넘길 일이 아니다.** 크기가 $0.006$인 검정은 검정력도 그만큼 잃는다. 실제 차이가 있어도 잡아내지 못한다는 뜻이고, 이 설계에서는 **쓰지 말아야 할 검정**이다. 처방은 통계량을 Welch 식으로 스튜던트화하는 것이다([순열검정: 기초](../permutation/foundations.md) 연습문제 1).
+
+    처치군 대 대조군 자료에 적용하면 순열 $p$값이 대개 Welch $t$ 검정의 $p$값과 가깝다. **다만 분산이 다르고 표본이 불균형하면 그렇지 않다**(연습문제 2).
 
 ## 상관에 대한 순열검정
 
@@ -142,24 +282,85 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 상관에 대한 순열검정
+**보기 3.** <span class="diff easy" title="쉬움"></span> 상관에 대한 순열검정. 보기 2의 검정은 등분산이 깨지면 무너졌다. 이 검정은 그렇지 않다.
+
+**(1)** $X$와 $Y$가 **독립이기만 하면** 주변분포가 무엇이든 이 검정의 크기가 정확함을 설명하시오. 순열 귀무분포에서 $\operatorname{Var}(r^{*})$는 얼마인가. $B = 999$에 $(c+1)/(B+1) < 0.05$ 규칙을 쓰면 명목 크기가 정확히 얼마가 되는가.
+
+**(2)** $X \sim N(0,1)$, $Y \sim \text{Exp}(1)$을 독립으로 뽑아($n = 20$) 크기와 $p$값의 분포를 재시오.
 
 </div>
 
-```python
-def permutation_test_correlation(x, y, B=9999, rng=None):
-    """상관계수에 대한 순열검정.
+??? success "풀이"
 
-    한쪽만 섞는다. 그러면 두 변수의 짝은 부서지되 각각의 주변분포는
-    그대로 남으므로, "관계가 없다"는 상태를 정확히 흉내 낼 수 있다.
-    """
-    rng = rng or np.random.default_rng(0)
-    r_obs = np.corrcoef(x, y)[0, 1]
-    count = 0
-    for _ in range(B):
-        count += abs(np.corrcoef(x, rng.permutation(y))[0, 1]) >= abs(r_obs)
-    return r_obs, (count + 1) / (B + 1)
-```
+    **(1) 해석적으로.** $X$와 $Y$가 독립이면, 관측된 $y$값들을 어떤 순서로 $x$에 붙이든 **똑같이 그럴듯하다.** $n!$가지 짝짓기가 교환가능하므로 관측된 배열은 그중 무작위로 하나를 뽑은 것과 구별되지 않고, 따라서 $p$값이 정확하다. **두 변수의 주변분포는 아무 상관이 없다.** 보기 2가 무너진 까닭은 합치는 순간 두 집단의 분포가 뒤섞여 교환가능성이 깨졌기 때문인데, 여기서는 한쪽만 섞으므로 주변분포가 그대로 남는다.
+
+    분산은 [상관에 대한 순열검정](../permutation/correlation.md) 보기 1에서 유도한 대로 자료와 무관하게
+
+    $$
+    \operatorname{Var}(r^{*}) = \frac{1}{n-1}
+    $$
+
+    이고, $n = 20$이면 $\operatorname{SD}(r^{*}) = 1/\sqrt{19} = 0.229416$이다.
+
+    **명목 크기.** $\hat p = (c+1)/1000 < 0.05$는 $c + 1 \le 49$, 곧 $c \le 48$과 같다. 교환가능성에서 $c+1$이 $\{1, \ldots, 1000\}$ 위에 균등하므로
+
+    $$
+    \Pr(\hat p < 0.05) = \frac{49}{1000} = 0.049
+    $$
+
+    다. **$0.05$가 아니라 $0.049$가 이 규칙의 정확한 크기다.**
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def permutation_test_correlation(x, y, B=9999, rng=None):
+        """상관계수에 대한 순열검정.
+
+        한쪽만 섞는다. 그러면 두 변수의 짝은 부서지되 각각의 주변분포는
+        그대로 남으므로, "관계가 없다"는 상태를 정확히 흉내 낼 수 있다.
+        """
+        rng = rng or np.random.default_rng(0)
+        r_obs = np.corrcoef(x, y)[0, 1]
+        count = 0
+        for _ in range(B):
+            count += abs(np.corrcoef(x, rng.permutation(y))[0, 1]) >= abs(r_obs)
+        return r_obs, (count + 1) / (B + 1)
+    ```
+
+    주변분포를 일부러 서로 다르게 — 한쪽은 정규, 한쪽은 지수 — 두고 $1{,}000$번 돌린다.
+
+    ```python
+    rng = np.random.default_rng(31)
+    M, B, n = 1000, 999, 20
+    rej = 0
+    ps = []
+    for _ in range(M):
+        x = rng.normal(0, 1, n)
+        y = rng.exponential(1, n)          # 독립, 주변분포는 서로 다름
+        r = np.corrcoef(x, y)[0, 1]
+        perm = np.array([np.corrcoef(x, rng.permutation(y))[0, 1] for _ in range(B)])
+        p = ((np.abs(perm) >= abs(r)).sum() + 1) / (B + 1)
+        ps.append(p); rej += p < 0.05
+    ps = np.array(ps)
+    print(f"제1종 오류율 = {rej/M:.3f}  (몬테카를로 오차 {np.sqrt(0.05*0.95/M):.4f})")
+    print(f"p 값의 평균 = {ps.mean():.4f} (균등이면 0.5),"
+          f"  표준편차 {ps.std(ddof=1):.4f} (균등이면 0.2887)")
+    print(f"SD(r*) 닫힌 꼴 1/sqrt(n-1) = {1/np.sqrt(n-1):.6f}")
+    ```
+
+    출력:
+
+    ```
+    제1종 오류율 = 0.037  (몬테카를로 오차 0.0069)
+    p 값의 평균 = 0.5104 (균등이면 0.5),  표준편차 0.2904 (균등이면 0.2887)
+    SD(r*) 닫힌 꼴 1/sqrt(n-1) = 0.229416
+    ```
+
+    **크기가 지켜진다.** $0.037$은 명목값 $0.049$에서 $-1.7$ 몬테카를로 오차 떨어져 있어 우연의 범위다. 보기 2의 $0.006$과 견주면 차이가 분명하다.
+
+    **$p$값이 균등분포를 따른다.** 평균 $0.5104$(균등이면 $0.5$), 표준편차 $0.2904$(균등이면 $1/\sqrt{12} = 0.2887$)로 둘 다 맞는다. **$p$값이 균등하다는 것과 크기가 정확하다는 것은 같은 말이다.**
+
+    주변분포를 정규와 지수로 일부러 어긋나게 두었는데도 그렇다. **이것이 "한쪽만 섞는다"는 설계가 사는 지점이다.**
 
 ## 대응 순열검정 (부호 뒤집기)
 
@@ -171,25 +372,81 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 대응 순열검정
+**보기 4.** <span class="diff easy" title="쉬움"></span> 대응 순열검정. 주석이 말하듯 이 검정은 **"차이의 분포가 $0$에 대해 대칭"**이라는 가정 위에 서 있다. 그 가정이 깨지면 어떻게 되는지 잰다.
+
+**(1)** $E[d_i] = 0$이기만 하고 **대칭이 아니면** 왜 교환가능성이 깨지는지 적으시오. 제1종 오류율이 어느 방향으로 틀어지겠는가.
+
+**(2)** $n = 15$에서 차이를 (가) 정규, (나) $\text{Exp}(1) - 1$, (다) 중심화한 로그정규로 두고 각각 크기를 재시오.
 
 </div>
 
-```python
-def paired_permutation_test(x, y, B=9999, rng=None):
-    """차이의 부호를 뒤집는 대응 순열검정.
+??? success "풀이"
 
-    대응자료에서는 이름표를 섞으면 안 된다. 짝 자체가 자료의 구조이기
-    때문이다. 대신 귀무가설 아래에서 각 차이의 분포가 0 을 중심으로
-    대칭이므로, 부호를 아무렇게나 뒤집어도 똑같이 그럴듯하다.
-    """
-    rng = rng or np.random.default_rng(0)
-    d = np.asarray(x) - np.asarray(y)
-    t_obs = d.mean()
-    signs = rng.choice([-1, 1], size=(B, len(d)))
-    t_perm = (signs * d).mean(axis=1)
-    return t_obs, ((np.abs(t_perm) >= abs(t_obs)).sum() + 1) / (B + 1)
-```
+    **(1) 해석적으로.** 부호 뒤집기가 타당한 근거는 **$d_i$와 $-d_i$가 같은 분포를 갖는다**는 것 하나다. 그래야 $\varepsilon_i d_i$가 $d_i$와 교환가능해지고 $2^n$가지 배정이 모두 똑같이 그럴듯해진다.
+
+    평균만 $0$이고 분포가 치우쳐 있으면 그 전제가 깨진다. 예컨대 $d_i = E_i - 1$($E_i \sim \text{Exp}(1)$)이면 $d_i$는 $-1$ 아래로 못 가지만 $-d_i$는 $1$ 위로 뻗는다. **두 분포가 다르다.**
+
+    결과는 한쪽으로 치우친다. $d_i$가 오른쪽으로 치우쳐 있으면 큰 양수 하나가 $\bar d$를 끌어올리는 일이 잦은데, 부호를 뒤집어 만든 귀무분포는 그 큰 값을 양쪽에 고르게 배치하므로 **대칭이 되어 실제 $\bar d$의 분포보다 가운데가 두껍다.** 그래서 관측된 $\bar d$가 과하게 극단으로 보이고, **제1종 오류율이 명목값보다 커진다.**
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def paired_permutation_test(x, y, B=9999, rng=None):
+        """차이의 부호를 뒤집는 대응 순열검정.
+
+        대응자료에서는 이름표를 섞으면 안 된다. 짝 자체가 자료의 구조이기
+        때문이다. 대신 귀무가설 아래에서 각 차이의 분포가 0 을 중심으로
+        대칭이므로, 부호를 아무렇게나 뒤집어도 똑같이 그럴듯하다.
+        """
+        rng = rng or np.random.default_rng(0)
+        d = np.asarray(x) - np.asarray(y)
+        t_obs = d.mean()
+        signs = rng.choice([-1, 1], size=(B, len(d)))
+        t_perm = (signs * d).mean(axis=1)
+        return t_obs, ((np.abs(t_perm) >= abs(t_obs)).sum() + 1) / (B + 1)
+    ```
+
+    평균이 모두 $0$이고 치우침만 다른 세 분포에서 크기를 잰다.
+
+    ```python
+    rng = np.random.default_rng(41)
+    M, B, n = 2000, 999, 15
+    for name, gen in [
+            ("대칭 (정규)", lambda k: rng.normal(0, 1, k)),
+            ("치우침 (지수-1)", lambda k: rng.exponential(1, k) - 1),
+            ("강한 치우침 (로그정규 중심화)",
+             lambda k: np.exp(rng.normal(0, 1.5, k)) - np.exp(1.5**2/2))]:
+        rej = 0
+        for _ in range(M):
+            d = gen(n); t = d.mean()
+            S = rng.choice([-1, 1], size=(B, n))
+            tp = (S * d).mean(axis=1)
+            rej += ((np.abs(tp) >= abs(t)).sum() + 1)/(B + 1) < 0.05
+        print(f"{name:>22}: 제1종 오류율 {rej/M:.3f}"
+              f"  (몬테카를로 오차 {np.sqrt(0.05*0.95/M):.4f})")
+    ```
+
+    출력:
+
+    ```
+                   대칭 (정규): 제1종 오류율 0.045  (몬테카를로 오차 0.0049)
+                치우침 (지수-1): 제1종 오류율 0.088  (몬테카를로 오차 0.0049)
+         강한 치우침 (로그정규 중심화): 제1종 오류율 0.248  (몬테카를로 오차 0.0049)
+    ```
+
+    **예측한 방향으로, 예상보다 크게 틀어진다.**
+
+    | 차이의 분포 | 왜도 | 제1종 오류율 |
+    |:---|---:|---:|
+    | 정규 | $0$ | $0.045$ |
+    | $\text{Exp}(1) - 1$ | $2$ | $0.088$ |
+    | 중심화 로그정규 $(\sigma = 1.5)$ | $33.5$ | $0.248$ |
+
+    대칭일 때는 $0.045$로 명목값 $0.049$를 지킨다. 지수분포로 바꾸면 $0.088$로 **$1.8$배**, 로그정규로 더 밀면 $0.248$로 **$5$배**가 된다. $n = 15$에서 $\alpha = 0.05$라 믿고 썼는데 넷에 하나꼴로 헛되이 기각하는 셈이다.
+
+    **"대칭"은 장식이 아니다.** 순열검정이 "가정 없는 방법"으로 소개되곤 하지만, 정확히 말하면 가정이 **교환가능성 하나**로 줄어든 것일 뿐이다. 설계마다 그 하나가 다른 얼굴을 한다. 이표본에서는 $F_X = F_Y$였고(보기 2), 상관에서는 독립성이었으며(보기 3), 대응에서는 $0$에 대한 대칭이다. **셋 가운데 가장 깨지기 쉬운 것이 이 세 번째다.**
+
+    차이가 크게 치우쳐 있다면 부호검정(중앙값이 $0$인지만 묻는다)이나 차이를 로그 척도로 옮긴 뒤의 부호 뒤집기를 생각해야 한다.
 
 ## 붓스트랩과 순열: 나란히
 
@@ -206,29 +463,92 @@ def paired_permutation_test(x, y, B=9999, rng=None):
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 붓스트랩과 순열 나란히
+**보기 5.** <span class="diff easy" title="쉬움"></span> 붓스트랩과 순열 나란히. 위 표는 "$0$을 제외하는 신뢰구간"과 "기각하는 순열검정"이 **대개** 일치한다고 했다. 그 "대개"를 수로 재어 본다.
+
+**(1)** 두 절차가 쓰는 **눈금**이 어떻게 다른지 적으시오([붓스트랩과 순열검정 비교](comparison.md) 보기 2의 식을 쓴다). 어긋난다면 어느 쪽이 더 자주 기각하겠는가.
+
+**(2)** $X \sim N(0.5, 1)$, $Y \sim N(0, 1)$에서 각 $25$개씩 뽑는 일을 $500$번 되풀이해 두 결론이 갈리는 비율과 **방향**을 세시오.
 
 </div>
 
-```python
-def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
-    """붓스트랩 신뢰구간과 순열 p-값을 나란히 놓는다.
+??? success "풀이"
 
-    둘은 경쟁 관계가 아니다. 순열검정은 "차이가 있는가"에, 붓스트랩은
-    "차이가 얼마나 되는가"에 답한다. 보고할 때는 둘 다 싣는 편이 낫다.
-    """
-    rng = rng or np.random.default_rng(0)
-    diff_obs = x.mean() - y.mean()
+    **(1) 해석적으로.** 두 절차의 눈금이 다르다.
 
-    # 각 집단을 따로 재표집한 신뢰구간
-    bx = x[rng.integers(0, len(x), (B, len(x)))].mean(axis=1)
-    by = y[rng.integers(0, len(y), (B, len(y)))].mean(axis=1)
-    ci = np.percentile(bx - by, [2.5, 97.5])
+    - **붓스트랩 구간**은 집단을 나눈 채 따로 재표집하므로 폭이 $\sqrt{\hat\sigma_x^2/m + \hat\sigma_y^2/n}$ 수준이다. 집단 안의 흩어짐만 들어간다.
+    - **순열 귀무분포**는 합친 표본의 분산 $S^2$로 재므로 폭이 $S\sqrt{1/m + 1/n}$이다. [붓스트랩과 순열검정 비교](comparison.md) 보기 2에서 보았듯 $S^2$에는 **관측된 두 집단의 차이까지 들어 있다.**
 
-    # 순열 p 값
-    _, p_perm = permutation_test_two_sample(x, y, B=B, rng=rng)
-    return diff_obs, ci, p_perm
-```
+    둘째 눈금은 $t$ 통계량으로 다시 쓸 수 있다.
+
+    $$
+    \frac{\operatorname{SD}_{\text{순열}}}{\operatorname{SE}_t} = \sqrt{\frac{N-2+t^2}{N-1}}
+    $$
+
+    $\lvert t\rvert > 1$이면 이 비가 $1$보다 크다.
+
+    기각 여부를 가르는 자료는 $t$가 $2$ 언저리인 것들이므로, 그 영역에서 순열 눈금이 붓스트랩 눈금보다 넓다. **따라서 어긋난다면 "구간은 $0$을 제외하는데 순열은 기각하지 못하는" 쪽일 것이다.** 반대 방향은 드물어야 한다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_vs_permutation_comparison(x, y, B=9999, rng=None):
+        """붓스트랩 신뢰구간과 순열 p-값을 나란히 놓는다.
+
+        둘은 경쟁 관계가 아니다. 순열검정은 "차이가 있는가"에, 붓스트랩은
+        "차이가 얼마나 되는가"에 답한다. 보고할 때는 둘 다 싣는 편이 낫다.
+        """
+        rng = rng or np.random.default_rng(0)
+        diff_obs = x.mean() - y.mean()
+
+        # 각 집단을 따로 재표집한 신뢰구간
+        bx = x[rng.integers(0, len(x), (B, len(x)))].mean(axis=1)
+        by = y[rng.integers(0, len(y), (B, len(y)))].mean(axis=1)
+        ci = np.percentile(bx - by, [2.5, 97.5])
+
+        # 순열 p 값
+        _, p_perm = permutation_test_two_sample(x, y, B=B, rng=rng)
+        return diff_obs, ci, p_perm
+    ```
+
+    참 차이가 $0.5$인 자료를 $500$번 만들어 두 결론을 맞춰 본다.
+
+    ```python
+    rng = np.random.default_rng(51)
+    M, B = 500, 999
+    agree = ci_only = perm_only = 0
+    for _ in range(M):
+        x = rng.normal(0.5, 1, 25); y = rng.normal(0, 1, 25)
+        bx = x[rng.integers(0, 25, (B, 25))].mean(axis=1)
+        by = y[rng.integers(0, 25, (B, 25))].mean(axis=1)
+        ci = np.percentile(bx - by, [2.5, 97.5])
+        excl = not (ci[0] <= 0 <= ci[1])
+
+        z = np.concatenate([x, y]); obs = x.mean() - y.mean()
+        P = np.array([rng.permutation(z) for _ in range(B)])
+        dd = P[:, :25].mean(1) - P[:, 25:].mean(1)
+        rej = ((np.abs(dd) >= abs(obs)).sum() + 1)/(B + 1) < 0.05
+
+        agree += (excl == rej)
+        ci_only += (excl and not rej)
+        perm_only += (rej and not excl)
+    print(f"{M} 번 중 두 결론이 같은 횟수 = {agree} ({agree/M:.3f})")
+    print(f"  구간만 기각 = {ci_only} ({ci_only/M:.4f}),"
+          f"  순열만 기각 = {perm_only} ({perm_only/M:.4f})")
+    ```
+
+    출력:
+
+    ```
+    500 번 중 두 결론이 같은 횟수 = 481 (0.962)
+      구간만 기각 = 19 (0.0380),  순열만 기각 = 0 (0.0000)
+    ```
+
+    **$96.2\%$에서 일치한다.** "대개 일치한다"는 서술이 수로 확인된 셈이다.
+
+    **어긋남은 전부 한 방향이다.** $19$번 모두 **구간은 $0$을 제외하는데 순열은 기각하지 못했고**, 그 반대는 단 한 번도 없었다. (1)에서 예측한 방향 그대로다. 두 눈금의 비 $\sqrt{(N-2+t^2)/(N-1)}$이 경계 근처($t \approx 2$, $N = 50$)에서 $\sqrt{52/49} = 1.030$이라 $3\%$ 차이인데, 그 작은 차이가 기각 경계에 걸친 자료들을 한쪽으로 몰아낸다.
+
+    **실무적 함의는 분명하다.** 구간이 $0$을 아슬아슬하게 제외했다고 "유의하다"고 쓰면 순열검정보다 느슨한 기준을 쓰는 것이다. **둘을 함께 보고하되, 유의성 판정은 순열검정 쪽에 맡기는 것이 안전하다.** 붓스트랩 구간의 몫은 "차이가 얼마나 되는가"에 답하는 데 있다.
+
 
 ## 순열검정에서 통계량 선택이 결정적인 이유
 

@@ -58,36 +58,103 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 붓스트랩으로 구간 구하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 붓스트랩으로 구간 구하기. 집단 A $= (8,7,9,10,6)$, 집단 B $= (5,6,4,3,7)$로 각 $n = 5$다.
+
+**(1)** 집단마다 따로 복원추출할 때 $\bar A^{*} - \bar B^{*}$의 표준편차를 닫힌 꼴로 구하고, 고전적 $\sqrt{(s_a^2+s_b^2)/n}$과의 비를 구하시오. 복제값이 놓이는 **격자**의 간격도 구하시오.
+
+**(2)** 그것으로 $95\%$ 구간을 예측하고 실행 결과와 견주시오.
 
 </div>
 
-```python
-import numpy as np
-# 같은 자료에 붓스트랩과 순열검정을 각각 적용해 무엇이 다른지 본다.
-# 붓스트랩은 "차이가 얼마인가"에, 순열검정은 "차이가 있는가"에 답한다.
-rng = np.random.default_rng(55)
+??? success "풀이"
 
-group_a = np.array([8, 7, 9, 10, 6])
-group_b = np.array([5, 6, 4, 3, 7])
+    **(1) 해석적으로.** 두 집단을 독립으로 재표집하므로 두 재표본평균도 독립이고, 각각의 분산이 [붓스트랩 표준오차](../../ch05/applications/bootstrap_standard_error.md) 보기 1의 결과대로 $\hat\sigma^2/n$이다($\hat\sigma^2$은 $n$으로 나눈 경험분산). 따라서
 
-# 붓스트랩은 집단마다 따로 복원추출한다. 집단 구분을 그대로 둔 채
-# 차이의 분포를 얻으므로 신뢰구간이 나온다.
-n_resamples = 100_000
-A = group_a[rng.integers(0, 5, (n_resamples, 5))]
-B = group_b[rng.integers(0, 5, (n_resamples, 5))]
-boot_diffs = A.mean(axis=1) - B.mean(axis=1)
+    $$
+    \operatorname{SD}_*\!\left(\bar A^{*} - \bar B^{*}\right)
+    = \sqrt{\frac{\hat\sigma_a^2 + \hat\sigma_b^2}{n}}
+    $$
 
-ci = np.percentile(boot_diffs, [2.5, 97.5])
-print(f"Bootstrap 95% CI for mean difference: ({ci[0]:.2f}, {ci[1]:.2f})")
-# (1.20, 4.80)
-```
+    이다. 두 집단 모두 중심에서의 편차가 $(0,\pm1,\pm2)$ 꼴이라 $\hat\sigma_a^2 = \hat\sigma_b^2 = \frac{0+1+1+4+4}{5} = 2$이고
 
-출력:
+    $$
+    \operatorname{SD}_* = \sqrt{\frac{2+2}{5}} = \sqrt{0.8} = 0.894427
+    $$
 
-```
-Bootstrap 95% CI for mean difference: (1.20, 4.80)
-```
+    다. 고전적 값은 $s_a^2 = s_b^2 = 2.5$에서 $\sqrt{(2.5+2.5)/5} = 1$이므로 비가
+
+    $$
+    \frac{0.894427}{1} = \sqrt{\frac{n-1}{n}} = \sqrt{\frac45} = 0.894427
+    $$
+
+    로 **붓스트랩 쪽이 $10.6\%$ 좁다.** $n = 5$에서 $\sqrt{(n-1)/n}$ 보정이 가장 아프게 작용한다.
+
+    **격자.** 자료가 정수이므로 각 재표본의 합도 정수이고 평균은 $1/5$의 배수다. 두 평균의 차도 마찬가지이므로 복제값은 간격 $0.2$인 격자에만 놓인다.
+
+    **예측.** 분포가 거의 정규라면
+
+    $$
+    3 \pm 1.959964 \times 0.894427 = [1.246955,\ 4.753045]
+    $$
+
+    이고, 격자로 반올림하면 $[1.2,\ 4.8]$이 될 것이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    # 같은 자료에 붓스트랩과 순열검정을 각각 적용해 무엇이 다른지 본다.
+    # 붓스트랩은 "차이가 얼마인가"에, 순열검정은 "차이가 있는가"에 답한다.
+    rng = np.random.default_rng(55)
+
+    group_a = np.array([8, 7, 9, 10, 6])
+    group_b = np.array([5, 6, 4, 3, 7])
+
+    # 붓스트랩은 집단마다 따로 복원추출한다. 집단 구분을 그대로 둔 채
+    # 차이의 분포를 얻으므로 신뢰구간이 나온다.
+    n_resamples = 100_000
+    A = group_a[rng.integers(0, 5, (n_resamples, 5))]
+    B = group_b[rng.integers(0, 5, (n_resamples, 5))]
+    boot_diffs = A.mean(axis=1) - B.mean(axis=1)
+
+    ci = np.percentile(boot_diffs, [2.5, 97.5])
+    print(f"Bootstrap 95% CI for mean difference: ({ci[0]:.2f}, {ci[1]:.2f})")
+    # (1.20, 4.80)
+    ```
+
+    출력:
+
+    ```
+    Bootstrap 95% CI for mean difference: (1.20, 4.80)
+    ```
+
+    (1)의 수와 맞춘다.
+
+    ```python
+    print(f"붓스트랩 SD = {boot_diffs.std(ddof=1):.6f}"
+          f"   닫힌 꼴 = {np.sqrt((group_a.var(ddof=0)+group_b.var(ddof=0))/5):.6f}")
+    print(f"고전 SE = {np.sqrt((group_a.var(ddof=1)+group_b.var(ddof=1))/5):.6f}"
+          f"   비 = {np.sqrt(4/5):.6f}")
+    print(f"정규근사 구간 = [{3-1.959964*np.sqrt(0.8):.6f}, {3+1.959964*np.sqrt(0.8):.6f}]")
+    u = np.unique(np.round(boot_diffs, 6))
+    print(f"복제값의 고유값 수 = {len(u)},  최소 간격 = {np.diff(u).min():.4f}")
+    print(f"붓스트랩 꼬리확률 P(|d* - 3| >= 3) = {np.mean(np.abs(boot_diffs-3) >= 3-1e-12):.5f}")
+    ```
+
+    출력:
+
+    ```
+    붓스트랩 SD = 0.895799   닫힌 꼴 = 0.894427
+    고전 SE = 1.000000   비 = 0.894427
+    정규근사 구간 = [1.246955, 4.753045]
+    복제값의 고유값 수 = 35,  최소 간격 = 0.2000
+    붓스트랩 꼬리확률 P(|d* - 3| >= 3) = 0.00062
+    ```
+
+    **셋 다 예측대로다.** 모의 표준편차 $0.895799$가 닫힌 꼴 $0.894427$과 맞고($B = 10^5$의 몬테카를로 오차 $0.002$), 격자 간격이 $0.2$이며, 정규근사 구간 $[1.246955,\ 4.753045]$를 격자로 옮기면 실행값 $[1.20,\ 4.80]$ 그대로다.
+
+    **구간이 $0$에서 멀리 떨어져 있다.** 꼬리확률로 바꾸면 $0.00062$다. 그러나 **이 수를 $p$값으로 읽어서는 안 된다.** 보기 2가 보이듯 같은 자료의 정확 순열 $p$값은 $0.0397$로 $64$배 크다. 눈금이 다르기 때문이며, 그 차이의 정체를 보기 2에서 끝까지 따진다.
+
 
 ### 순열 접근
 
@@ -98,34 +165,125 @@ Bootstrap 95% CI for mean difference: (1.20, 4.80)
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 순열로 p-값 구하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 순열로 $p$값 구하기. 같은 자료에 라벨 섞기를 적용한다. $\binom{10}{5} = 252$가지뿐이라 **전부 열거할 수 있다.**
+
+**(1)** 순열 귀무분포의 표준편차를 닫힌 꼴로 구하고, 보기 1의 붓스트랩 표준편차와의 **비**를 구하시오. 그 비가 왜 $1$보다 큰지 $t$ 통계량으로 설명하시오.
+
+**(2)** 정확 $p$값을 구하고, 보기 1의 꼬리확률 $0.00062$와 $64$배 차이가 나는 까닭을 (1)로 설명하시오. 이 설계에서 가능한 **최소 $p$값**도 구하시오.
 
 </div>
 
-```python
-import numpy as np, itertools
+??? success "풀이"
 
-group_a = np.array([8, 7, 9, 10, 6])
-group_b = np.array([5, 6, 4, 3, 7])
-# 순열검정은 반대로 집단 이름표를 섞는다. 귀무가설이 참이라면 이름표가
-# 아무 뜻이 없다는 데서 나온 발상이라, p-값이 나온다.
-combined = np.concatenate([group_a, group_b])
-observed_diff = group_a.mean() - group_b.mean()
+    **(1) 해석적으로.** [이표본 순열검정](../permutation/two_sample.md) 보기 1에서 라벨을 섞을 때의 평균차가
 
-# 각 집단이 5개뿐이므로 C(10,5) = 252 가지를 전부 열거한다
-perm_diffs = np.array([
-    combined[list(c)].mean() - np.delete(combined, list(c)).mean()
-    for c in itertools.combinations(range(10), 5)
-])
-p_value = (np.abs(perm_diffs) >= abs(observed_diff) - 1e-12).mean()
-print(f"Exact permutation p-value: {p_value:.4f}")   # 0.0397
-```
+    $$
+    \operatorname{SD}(d^{*}) = S\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}
+    $$
 
-출력:
+    임을 보았다. 여기서 $S^2$은 **합친 $10$개**의 표본분산이다. 합친 자료의 평균이 $6.5$이고 편차제곱합이 $42.5$이므로 $S^2 = 42.5/9 = 4.722222$이고
 
-```
-Exact permutation p-value: 0.0397
-```
+    $$
+    \operatorname{SD}(d^{*}) = \sqrt{4.722222 \times 0.4} = 1.374369
+    $$
+
+    다. 보기 1의 붓스트랩 표준편차 $0.894427$에 견주면
+
+    $$
+    \frac{1.374369}{0.894427} = 1.536591
+    $$
+
+    로 **순열 쪽 눈금이 $1.54$배 넓다.**
+
+    **왜 넓은가.** 두 가지가 겹친다. 하나는 $\sqrt{(n-1)/n}$ 보정으로, 붓스트랩 쪽이 $0.894$배 좁다. 다른 하나가 더 크다. **합친 표본의 분산 $S^2$에는 두 집단 사이의 차이까지 들어 있다.** [이표본 순열검정](../permutation/two_sample.md) 보기 3의 항등식
+
+    $$
+    (N-1)S^2 = (N - 2 + t^2)\,s_p^2
+    $$
+
+    에 $N = 10$, $s_p^2 = 2.5$, $t = 3/1 = 3$을 넣으면 $9S^2 = 17 \times 2.5 = 42.5$로 맞는다. 곧
+
+    $$
+    \frac{\operatorname{SD}(d^{*})}{\operatorname{SE}_t} = \sqrt{\frac{N-2+t^2}{N-1}} = \sqrt{\frac{17}{9}} = 1.374369
+    $$
+
+    다. **관측된 효과가 클수록 순열 귀무분포가 스스로 넓어진다.** 붓스트랩은 집단을 나눈 채 재표집하므로 그 효과를 귀무분포에 넣지 않는다.
+
+    **최소 $p$값.** 양측으로는 관측된 배정과 그 보수(두 집단을 통째로 맞바꾼 것) 둘이 늘 걸리므로 $2/252 = 0.0079$ 아래로 내려갈 수 없다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np, itertools
+
+    group_a = np.array([8, 7, 9, 10, 6])
+    group_b = np.array([5, 6, 4, 3, 7])
+    # 순열검정은 반대로 집단 이름표를 섞는다. 귀무가설이 참이라면 이름표가
+    # 아무 뜻이 없다는 데서 나온 발상이라, p-값이 나온다.
+    combined = np.concatenate([group_a, group_b])
+    observed_diff = group_a.mean() - group_b.mean()
+
+    # 각 집단이 5개뿐이므로 C(10,5) = 252 가지를 전부 열거한다
+    perm_diffs = np.array([
+        combined[list(c)].mean() - np.delete(combined, list(c)).mean()
+        for c in itertools.combinations(range(10), 5)
+    ])
+    p_value = (np.abs(perm_diffs) >= abs(observed_diff) - 1e-12).mean()
+    print(f"Exact permutation p-value: {p_value:.4f}")   # 0.0397
+    ```
+
+    출력:
+
+    ```
+    Exact permutation p-value: 0.0397
+    ```
+
+    (1)의 수와 맞춘다.
+
+    ```python
+    from scipy import stats
+
+    S = combined.std(ddof=1)
+    sd_perm = S * np.sqrt(2 / 5)
+    sd_boot = np.sqrt((group_a.var(ddof=0) + group_b.var(ddof=0)) / 5)
+    sp2 = (4 * group_a.var(ddof=1) + 4 * group_b.var(ddof=1)) / 8
+    t = observed_diff / np.sqrt(sp2 * 0.4)
+
+    print(f"S^2 = {S**2:.6f},  순열 SD 닫힌 꼴 = {sd_perm:.6f}"
+          f"   (열거 SD = {perm_diffs.std():.6f})")
+    print(f"붓스트랩 SD = {sd_boot:.6f},   두 눈금의 비 = {sd_perm/sd_boot:.6f}")
+    print(f"s_p^2 = {sp2:.4f},  t = {t:.4f},"
+          f"  sqrt((N-2+t^2)/(N-1)) = {np.sqrt((10-2+t**2)/9):.6f}")
+    print(f"정확 p = {(np.abs(perm_diffs) >= abs(observed_diff)-1e-12).sum()}/252"
+          f" = {p_value:.6f},   가능한 최소 p = 2/252 = {2/252:.6f}")
+    print(f"순열 눈금의 정규근사 p = {2*stats.norm.sf(observed_diff/sd_perm):.6f}")
+    print(f"붓스트랩 눈금의 정규근사 p = {2*stats.norm.sf(observed_diff/sd_boot):.6f}")
+    ```
+
+    출력:
+
+    ```
+    S^2 = 4.722222,  순열 SD 닫힌 꼴 = 1.374369   (열거 SD = 1.374369)
+    붓스트랩 SD = 0.894427,   두 눈금의 비 = 1.536591
+    s_p^2 = 2.5000,  t = 3.0000,  sqrt((N-2+t^2)/(N-1)) = 1.374369
+    정확 p = 10/252 = 0.039683,   가능한 최소 p = 2/252 = 0.007937
+    순열 눈금의 정규근사 p = 0.029049
+    붓스트랩 눈금의 정규근사 p = 0.000796
+    ```
+
+    **항등식이 맞는다.** 닫힌 꼴 $1.374369$가 열거한 표준편차와 여섯 자리까지 같고, $\sqrt{(N-2+t^2)/(N-1)} = \sqrt{17/9}$도 같은 수다.
+
+    **$64$배 차이의 정체가 눈금이다.** 같은 관측값 $3.0$을 두 눈금으로 재면
+
+    - 붓스트랩 눈금($0.894427$)에서는 $3/0.894427 = 3.354$ 표준편차 → 정규근사 $p = 0.000796$
+    - 순열 눈금($1.374369$)에서는 $3/1.374369 = 2.183$ 표준편차 → 정규근사 $p = 0.02905$
+
+    로 $36$배가 벌어진다. **눈금의 비는 $1.54$뿐인데 꼬리확률의 비는 $36$배다.** 정규 꼬리가 지수적으로 떨어지기 때문이며, 여기에 이산성이 더해져 정확값 $0.0397$까지 올라가면 $0.00062$의 $64$배가 된다.
+
+    **어느 쪽이 옳은가.** 순열검정이다. $p$값은 **귀무가설이 참일 때** 관측값이 얼마나 드문지를 묻는 양인데, 붓스트랩의 집단별 재표집은 귀무가설을 전혀 강제하지 않는다. 그것이 답하는 물음은 "차이가 얼마인가"이지 "차이가 있는가"가 아니다. 구간은 그대로 쓰되 꼬리확률을 $p$값으로 바꿔 읽는 일만 하지 않으면 된다.
+
+    **그리고 이 설계의 한계도 보인다.** 가능한 최소 $p$값이 $2/252 = 0.0079$다. 자료가 아무리 극단적이어도 그 아래로 못 내려간다. $n = 5$가 담을 수 있는 증거의 총량이 그만큼이다.
+
 
 !!! danger "이 보기에서 두 방법이 심각하게 어긋난다"
     | 방법 | 결과 |

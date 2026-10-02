@@ -33,85 +33,186 @@
 3. **비교한다**: 순열 통계량 중 관측값만큼 극단적인 것을 센다.
 4. **$p$값을 계산한다**: $p = \dfrac{\text{극단적인 순열 통계량의 수}}{N_{\text{순열}}}$
 
+한 회사가 페이지 B에서 사용자가 페이지 A보다 오래 머무는지 검정한다. A/B 검정에서 순열검정의 고전적 응용이다.
+
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 웹페이지 체류시간 (A/B 검정)
+**보기 1.** <span class="diff easy" title="쉬움"></span> 웹페이지 체류시간 A/B 검정. 두 페이지에서 세션 시간(초)을 각각 $n_A = n_B = 10$개 관측했고, 평균차가 $d_{\text{obs}} = \bar x_B - \bar x_A = 5.40$초다.
+
+**(1)** 집단 라벨을 무작위로 뒤섞을 때의 평균차 $d^{*} = \bar X_B^{*} - \bar X_A^{*}$에 대해 $E[d^{*}]$와 $\operatorname{Var}(d^{*})$를 닫힌 꼴로 구하시오. 또 $d^{*}$가 가질 수 있는 값이 간격 $0.2$인 격자 위에만 놓이는 까닭을 밝히시오.
+
+**(2)** $B = 1{,}000$으로 순열 $p$값을 구하고, (1)의 표준편차로 정규근사한 값과 이표본 $t$ 검정의 값과 나란히 놓으시오. 세 수의 차이를 **체계적인 몫**과 **우연한 몫**으로 가르시오.
 
 </div>
 
-한 회사가 페이지 B에서 사용자가 페이지 A보다 오래 머무는지 검정한다. A/B 검정에서 순열검정의 고전적 응용이다.
+??? success "풀이"
 
-#### 자료와 관측된 차이
+    **(1) 해석적으로.** 순열검정이 하는 일은 관측된 $N = 20$개의 수 $x_1, \ldots, x_N$을 **그대로 둔 채** 그중 $n_B$개를 골라 B라 부르는 것이다. 곧 유한모집단 $\{x_1, \ldots, x_N\}$에서 크기 $n_B$의 **비복원 단순무작위추출**이다. 그러므로 아래 세 수는 어떤 순열에서도 변하지 않는다.
 
-각 페이지의 세션 시간(초)이 다음과 같다고 하자.
+    $$
+    T = \sum_{i=1}^N x_i = 3418, \qquad
+    \bar x = \frac{T}{N} = 170.9, \qquad
+    S^2 = \frac{1}{N-1}\sum_{i=1}^N (x_i - \bar x)^2 = 136.62105
+    $$
 
-```python
-import pandas as pd
-import numpy as np
-import random
+    **평균.** 각 $x_i$가 B에 들어갈 확률이 $n_B/N$로 모두 같으므로 $E[\bar X_B^{*}] = \bar x$이고, 같은 이유로 $E[\bar X_A^{*}] = \bar x$다. 따라서
 
-# 예시 자료. "Practical Statistics for Data Scientists" 에서 가져왔다
-session_times = pd.DataFrame({
-    'Time': [185, 188, 142, 160, 161, 157, 182, 181, 159, 167,
-             173, 181, 182, 170, 169, 177, 168, 183, 169, 164],
-    'Page': ['Page A']*10 + ['Page B']*10
-})
+    $$
+    E[d^{*}] = 0
+    $$
 
-mean_a = session_times[session_times.Page == 'Page A'].Time.mean()
-mean_b = session_times[session_times.Page == 'Page B'].Time.mean()
-observed_diff = mean_b - mean_a
+    이다. **순열 귀무분포가 $0$을 중심으로 놓이는 것은 가정이 아니라 셈의 결과다.**
 
-print(f"Page A mean: {mean_a:.2f} seconds")        # 168.20
-print(f"Page B mean: {mean_b:.2f} seconds")        # 173.60
-print(f"Observed difference: {observed_diff:.2f}") # 5.40
-```
+    **분산.** 두 집단의 합이 고정되어 있다는 것, 곧 $n_A \bar X_A^{*} + n_B \bar X_B^{*} = T$를 쓰면 $d^{*}$가 $\bar X_B^{*}$ 하나의 일차식이 된다.
 
-출력:
+    $$
+    d^{*} = \bar X_B^{*} - \frac{T - n_B \bar X_B^{*}}{n_A}
+    = \frac{N}{n_A}\,\bar X_B^{*} - \frac{T}{n_A}
+    $$
 
-```
-Page A mean: 168.20 seconds
-Page B mean: 173.60 seconds
-Observed difference: 5.40
-```
+    비복원추출에서 표본평균의 분산은 $\operatorname{Var}(\bar X_B^{*}) = \dfrac{S^2}{n_B}\cdot\dfrac{N - n_B}{N}$이고 $N - n_B = n_A$이므로
 
-#### 순열검정 구현
+    $$
+    \operatorname{Var}(d^{*})
+    = \frac{N^2}{n_A^2}\cdot\frac{S^2}{n_B}\cdot\frac{n_A}{N}
+    = \frac{N S^2}{n_A n_B}
+    = S^2\left(\frac{1}{n_A} + \frac{1}{n_B}\right)
+    $$
 
-```python
-def perm_fun(x, nA, nB):
-    """
-    Randomly shuffle group labels and compute difference of means.
+    를 얻는다. **합동분산 $s_p^2$를 합친 표본의 분산 $S^2$로 바꾼 것이 정확히 이표본 $t$ 검정의 표준오차다.** 두 검정이 같은 답을 주는 까닭이 여기 있다. 수를 넣으면
 
-    Parameters
-    ----------
-    x : pandas Series with a 0..n-1 integer index
-    nA, nB : group sizes
+    $$
+    \operatorname{SD}(d^{*}) = S\sqrt{\frac{1}{10} + \frac{1}{10}}
+    = 11.688501 \times \sqrt{0.2} = 5.227257
+    $$
 
-    Returns
-    -------
-    float : difference in means (B - A) for the permuted assignment
-    """
-    n = nA + nB
-    idx_B = set(random.sample(range(n), nB))
-    idx_A = set(range(n)) - idx_B
-    return x.loc[list(idx_B)].mean() - x.loc[list(idx_A)].mean()
+    이고 관측값은 이 폭의 $5.40/5.227257 = 1.03305$배다. **$1$ 표준편차 거리이므로 애초에 유의할 수 없는 자료다.** 정규근사로는 양측 $p \approx 2\Phi(-1.03305) = 0.3016$이다.
 
-nA = session_times[session_times.Page == 'Page A'].shape[0]
-nB = session_times[session_times.Page == 'Page B'].shape[0]
+    **격자.** 자료가 모두 정수이므로 B로 뽑힌 $10$개의 합 $S_B^{*}$도 정수다. $\bar X_A^{*} = (T - S_B^{*})/10$이므로
 
-random.seed(42)
-perm_diffs = [perm_fun(session_times.Time, nA, nB) for _ in range(1000)]
+    $$
+    d^{*} = \frac{S_B^{*}}{10} - \frac{T - S_B^{*}}{10} = \frac{2S_B^{*} - T}{10}
+    $$
 
-p_value = np.mean(np.abs(perm_diffs) >= np.abs(observed_diff))
-print(f"Permutation test p-value: {p_value:.4f}")   # 0.3310
-```
+    이고 $S_B^{*}$가 $1$ 늘 때 $d^{*}$는 $0.2$ 늘어난다. 관측값 $5.40$은 $S_B^{*} = (10 \times 5.40 + 3418)/2 = 1736$에 해당한다. **가능한 $d^{*}$가 이산이므로 가능한 $p$값도 이산이다.** 격자 간격이 $0.2$이니 반 칸은 $0.1$이고, 연속성보정을 넣은 정규근사는 $2\Phi(-5.30/5.227257) = 0.3106$이 된다.
 
-출력:
+    **(2) 수치적으로.** 먼저 자료와 관측된 차이다.
 
-```
-Permutation test p-value: 0.3310
-```
+    ```python
+    import pandas as pd
+    import numpy as np
+    import random
 
-비교를 위해 이표본 $t$ 검정은 $p = 0.3144$를 준다. 두 값이 가깝고 어느 쪽이든 $H_0$을 기각하지 않는다.
+    # 예시 자료. "Practical Statistics for Data Scientists" 에서 가져왔다
+    session_times = pd.DataFrame({
+        'Time': [185, 188, 142, 160, 161, 157, 182, 181, 159, 167,
+                 173, 181, 182, 170, 169, 177, 168, 183, 169, 164],
+        'Page': ['Page A']*10 + ['Page B']*10
+    })
+
+    mean_a = session_times[session_times.Page == 'Page A'].Time.mean()
+    mean_b = session_times[session_times.Page == 'Page B'].Time.mean()
+    observed_diff = mean_b - mean_a
+
+    print(f"Page A mean: {mean_a:.2f} seconds")        # 168.20
+    print(f"Page B mean: {mean_b:.2f} seconds")        # 173.60
+    print(f"Observed difference: {observed_diff:.2f}") # 5.40
+    ```
+
+    출력:
+
+    ```
+    Page A mean: 168.20 seconds
+    Page B mean: 173.60 seconds
+    Observed difference: 5.40
+    ```
+
+    라벨을 뒤섞는 일을 $1{,}000$번 되풀이한다.
+
+    ```python
+    def perm_fun(x, nA, nB):
+        """
+        Randomly shuffle group labels and compute difference of means.
+
+        Parameters
+        ----------
+        x : pandas Series with a 0..n-1 integer index
+        nA, nB : group sizes
+
+        Returns
+        -------
+        float : difference in means (B - A) for the permuted assignment
+        """
+        n = nA + nB
+        idx_B = set(random.sample(range(n), nB))
+        idx_A = set(range(n)) - idx_B
+        return x.loc[list(idx_B)].mean() - x.loc[list(idx_A)].mean()
+
+    nA = session_times[session_times.Page == 'Page A'].shape[0]
+    nB = session_times[session_times.Page == 'Page B'].shape[0]
+
+    random.seed(42)
+    perm_diffs = [perm_fun(session_times.Time, nA, nB) for _ in range(1000)]
+
+    p_value = np.mean(np.abs(perm_diffs) >= np.abs(observed_diff))
+    print(f"Permutation test p-value: {p_value:.4f}")   # 0.3310
+    ```
+
+    출력:
+
+    ```
+    Permutation test p-value: 0.3310
+    ```
+
+    이제 (1)에서 유도한 수들을 확인한다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    from scipy import stats
+
+    z = session_times.Time.to_numpy(float)
+    S = z.std(ddof=1)                          # 합친 20개의 표본표준편차
+    sd_theory = S * np.sqrt(1 / nA + 1 / nB)   # (1) 에서 유도한 닫힌 꼴
+
+    print(f"T = {z.sum():.0f},  xbar = {z.mean():.1f},  S^2 = {z.var(ddof=1):.5f}")
+    print(f"SD(d*) 닫힌 꼴      = {sd_theory:.6f}")
+    print(f"B=1000 순열분포의 SD = {np.std(perm_diffs, ddof=1):.6f}"
+          f"   (몬테카를로 오차 {sd_theory / np.sqrt(2 * 1000):.6f})")
+
+    gaps = np.diff(np.unique(np.round(perm_diffs, 6)))
+    print(f"순열값의 최소 간격   = {gaps.min():.6f}")
+
+    zobs = observed_diff / sd_theory
+    print(f"\n관측 d / SD        = {zobs:.5f}")
+    print(f"정규근사 양측 p     = {2 * stats.norm.sf(zobs):.4f}")
+    print(f"연속성보정 (반 칸 0.1) = {2 * stats.norm.sf((observed_diff - 0.1) / sd_theory):.4f}")
+    print(f"순열 p (B = 1000)   = {p_value:.4f}")
+    print(f"t 검정 (합동분산) p  = {stats.ttest_ind(z[10:], z[:10]).pvalue:.4f}")
+    ```
+
+    출력:
+
+    ```
+    T = 3418,  xbar = 170.9,  S^2 = 136.62105
+    SD(d*) 닫힌 꼴      = 5.227257
+    B=1000 순열분포의 SD = 5.100405   (몬테카를로 오차 0.116885)
+    순열값의 최소 간격   = 0.200000
+
+    관측 d / SD        = 1.03305
+    정규근사 양측 p     = 0.3016
+    연속성보정 (반 칸 0.1) = 0.3106
+    순열 p (B = 1000)   = 0.3310
+    t 검정 (합동분산) p  = 0.3144
+    ```
+
+    **유도한 것이 모두 맞는다.** 닫힌 꼴 $S\sqrt{1/n_A + 1/n_B} = 5.227257$에 대해 $B = 1{,}000$짜리 순열분포의 표준편차는 $5.100405$다. 차이 $-0.126852$는 표준편차 추정의 몬테카를로 오차 $\operatorname{SD}/\sqrt{2B} = 0.116885$의 $1.09$배이므로 정상 범위다. 순열값들의 최소 간격도 예측한 $0.200000$ 그대로다.
+
+    **네 개의 $p$값을 가른다.** 순열 $0.3310$, $t$ 검정 $0.3144$, 정규근사 $0.3016$, 연속성보정 $0.3106$이다.
+
+    **체계적인 몫**은 정규근사와 순열 사이에 있다. $N = 20$에서 순열분포는 $0.2$ 간격의 이산분포이므로 매끄러운 정규곡선과 어긋나며, 특히 $\lvert d^{*}\rvert \ge 5.40$으로 셀 때 $\pm 5.40$ 자리의 질량이 **통째로** 들어온다. 이 질량이 정규근사가 놓치는 부분이고, 반 칸을 보정한 $0.3106$이 보정 없는 $0.3016$보다 열거값에 가까워지는 것이 그 증거다. 뒤의 "이 절차를 그림으로"에서 $\binom{20}{10} = 184{,}756$가지를 모두 세면 정확 $p = 0.3256$이 나오는데, 보정값 $0.3106$이 보정 없는 값보다 $0.009$ 더 가깝다.
+
+    **우연한 몫**은 순열 $0.3310$과 정확값 $0.3256$ 사이에 있다. $B = 1{,}000$에서 몬테카를로 오차가 $\sqrt{0.3256 \times 0.6744/1000} = 0.0148$이므로 차이 $0.0054$는 $0.37$배에 지나지 않는다. **$B$를 키우면 사라지는 것이 이 몫이고, 정규근사와의 차이는 $B$를 키워도 남는다.**
+
+    $t$ 검정의 $0.3144$는 그 중간에 있다. (1)에서 본 대로 $t$ 검정은 순열검정과 **같은 표준오차**를 쓰고 다만 꼬리확률을 $t_{18}$에서 읽으므로, 정규근사보다는 순열에 가깝고 이산성은 여전히 반영하지 못한다. 네 값이 모두 $0.30$--$0.33$ 안에 있어 **어느 쪽이든 $H_0$을 기각하지 않는다.**
 
 !!! warning "`>` 가 아니라 `>=` 를 써야 한다"
     $p$값을 셀 때 `np.abs(perm_diffs) > np.abs(observed_diff)`처럼 **엄격한 부등호**를 쓰면 관측값과 정확히 같은 순열들이 빠진다. 이 자료에서 그 차이는 $0.3080$ 대 $0.3310$으로 작지 않다.
@@ -123,8 +224,6 @@ Permutation test p-value: 0.3310
     $$
 
     를 쓰면 검정의 크기가 $\alpha$ 이하로 보장된다([대응 순열검정](paired.md) 참조).
-
-#### 해석
 
 $p$값이 $0.05$ 이하이면 귀무가설을 기각하고 두 페이지의 세션 시간이 유의하게 다르다고 결론짓는다. 여기서는 $p = 0.33$이므로 기각하지 못한다.
 
@@ -140,47 +239,165 @@ $n = 20$이면 가능한 라벨 배정이 $\binom{20}{10} = 184{,}756$가지뿐�
 
 $\ge$와 $>$의 차이도 이 그림에서 직접 보인다. **$\pm 5.40$ 자리의 막대가 통째로 걸려 있어서**, 그것을 세면 $0.3256$이고 빼면 $0.3068$로 $0.019$가 사라진다. $n$이 작거나 자료가 이산이면 이 한 자리의 확률질량이 훨씬 커지고, 그만큼 부등호의 선택이 결론을 좌우하게 된다. 표준은 $\ge$이다.
 
+또 다른 흔한 A/B 검정 상황이다. 웹 인터페이스 변경이 전환율을 높이는지 검정한다.
+
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 전환율 A/B 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> 전환율 A/B 검정. 대조군 $n_C = 23{,}739$명 중 $200$명, 처치군 $n_T = 22{,}588$명 중 $182$명이 전환했다. 관측된 비율차는 $d_{\text{obs}} = \hat p_T - \hat p_C = -0.000368$이다.
+
+**(1)** 보기 1의 결과를 $0/1$ 자료에 그대로 적용해 $d^{*} = \hat p_T^{*} - \hat p_C^{*}$의 평균과 표준편차를 닫힌 꼴로 구하시오. 그 표준편차가 **합동비율을 쓴 두 비율 차의 고전적 표준오차**와 어떤 관계인지 밝히시오.
+
+**(2)** $B = 5{,}000$으로 순열 $p$값을 구하시오. 이 자료에서는 재표집하지 않고도 **정확** 순열 $p$값을 셀 수 있다. 그 까닭을 밝히고 정확값·정규근사값·몬테카를로값 셋을 나란히 놓으시오.
 
 </div>
 
-또 다른 흔한 A/B 검정 상황이다. 웹 인터페이스 변경이 전환율을 높이는지 검정한다.
+??? success "풀이"
 
-```python
-import numpy as np
-rng = np.random.default_rng(0)
+    **(1) 해석적으로.** 자료를 전환 $1$, 비전환 $0$으로 적으면 $N = n_T + n_C = 46{,}327$개의 $0/1$ 수가 되고, 순열검정은 그중 $n_T$개를 골라 처치군이라 부르는 일이다. **보기 1에서 유도한 두 식이 자료의 모양을 묻지 않았으므로 여기에도 그대로 쓰인다.**
 
-n_control, n_treat = 23739, 22588
-c_control, c_treat = 200, 182
+    $$
+    E[d^{*}] = 0,
+    \qquad
+    \operatorname{Var}(d^{*}) = S^2\left(\frac{1}{n_T} + \frac{1}{n_C}\right)
+    $$
 
-obs_diff = c_treat/n_treat - c_control/n_control
-print(f"{obs_diff:.6f}")        # -0.000368
+    달라지는 것은 $S^2$뿐이다. 전체 전환 수를 $K = 382$, 합동 전환율을 $\bar p = K/N$이라 두면 $0/1$ 자료에서
 
-# 1 = converted, 0 = did not convert
-total = n_control + n_treat
-conversion = np.zeros(total)
-conversion[:c_control + c_treat] = 1
+    $$
+    \sum_{i=1}^N (x_i - \bar p)^2 = K(1-\bar p)^2 + (N-K)\bar p^2 = N\bar p(1-\bar p)
+    $$
 
-B = 5000
-perm_diffs = np.empty(B)
-for b in range(B):
-    perm = rng.permutation(conversion)
-    perm_diffs[b] = perm[:n_treat].mean() - perm[n_treat:].mean()
+    이므로 $S^2 = \dfrac{N}{N-1}\bar p(1-\bar p)$다. 따라서
 
-p_value = np.mean(np.abs(perm_diffs) >= abs(obs_diff))
-print(f"Conversion A/B test p-value: {p_value:.4f}")   # 0.6784
-```
+    $$
+    \operatorname{SD}(d^{*})
+    = \sqrt{\frac{N}{N-1}\,\bar p(1-\bar p)\left(\frac{1}{n_T} + \frac{1}{n_C}\right)}
+    $$
 
-출력:
+    인데, 제곱근 안의 $N/(N-1)$만 빼면 이것이 바로 **합동비율을 쓴 두 비율 차의 고전적 표준오차** $\sqrt{\bar p(1-\bar p)(1/n_T + 1/n_C)}$다. 두 수의 비는 $\sqrt{N/(N-1)} = 1.0000108$이므로 $N$이 사만이 넘는 이 자료에서는 **여덟째 자리에서야 갈린다.** 순열검정과 합동 $z$ 검정이 사실상 같은 눈금을 쓰는 것이다. 수를 넣으면 $\bar p = 0.00824573$에서
 
-```
--0.000368
-Conversion A/B test p-value: 0.6784
-```
+    $$
+    \operatorname{SD}(d^{*}) = 0.0008405592,
+    \qquad
+    \frac{d_{\text{obs}}}{\operatorname{SD}(d^{*})} = -0.43730
+    $$
 
-관측된 차이가 $-0.000368$로 처리군의 전환율이 오히려 낮지만, $p = 0.678$로 우연으로 충분히 설명된다. 카이제곱 검정도 $p = 0.6996$으로 같은 결론을 준다.
+    이고 정규근사 양측 $p \approx 2\Phi(-0.43730) = 0.6619$다. **반 표준편차도 떨어지지 않았다.**
+
+    **(2) 수치적으로.** 먼저 쪽의 몬테카를로 순열검정이다.
+
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+
+    n_control, n_treat = 23739, 22588
+    c_control, c_treat = 200, 182
+
+    obs_diff = c_treat/n_treat - c_control/n_control
+    print(f"{obs_diff:.6f}")        # -0.000368
+
+    # 1 = converted, 0 = did not convert
+    total = n_control + n_treat
+    conversion = np.zeros(total)
+    conversion[:c_control + c_treat] = 1
+
+    B = 5000
+    perm_diffs = np.empty(B)
+    for b in range(B):
+        perm = rng.permutation(conversion)
+        perm_diffs[b] = perm[:n_treat].mean() - perm[n_treat:].mean()
+
+    p_value = np.mean(np.abs(perm_diffs) >= abs(obs_diff))
+    print(f"Conversion A/B test p-value: {p_value:.4f}")   # 0.6784
+    ```
+
+    출력:
+
+    ```
+    -0.000368
+    Conversion A/B test p-value: 0.6784
+    ```
+
+    **정확 $p$값을 셀 수 있는 까닭.** 전체 전환 수 $K = 382$가 순열에서 고정되므로, 처치군의 전환 수 $X$만 정해지면 나머지가 모두 따라온다. $\hat p_T^{*} = X/n_T$, $\hat p_C^{*} = (K - X)/n_C$이므로
+
+    $$
+    d^{*} = \frac{X}{n_T} - \frac{K - X}{n_C}
+    = X\left(\frac{1}{n_T} + \frac{1}{n_C}\right) - \frac{K}{n_C}
+    $$
+
+    로 $d^{*}$가 $X$의 **증가하는 일차식**이다. 그리고 $N$개 중 $n_T$개를 비복원으로 고를 때 뽑힌 $1$의 개수는 정의 그대로 $X \sim \text{HG}(n_T, N, K)$를 따른다. 그러므로 순열분포는 재표집 없이 초기하 확률질량으로 완전히 적힌다. 격자 간격은 $1/n_T + 1/n_C = 8.6396\times 10^{-5}$다. 아래는 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    from scipy import stats
+
+    N, K = total, c_control + c_treat
+    pbar = K / N
+    step = 1 / n_treat + 1 / n_control             # 순열값의 격자 간격
+
+    S2 = N / (N - 1) * pbar * (1 - pbar)           # 합친 0/1 자료의 표본분산
+    sd_theory = np.sqrt(S2 * step)                 # (1) 에서 유도한 닫힌 꼴
+    sd_pooled = np.sqrt(pbar * (1 - pbar) * step)  # 합동비율을 쓴 고전 표준오차
+
+    print(f"N = {N},  K = {K},  pbar = {pbar:.8f},  격자 간격 = {step:.4e}")
+    print(f"SD(d*) 닫힌 꼴    = {sd_theory:.10f}")
+    print(f"고전 합동 표준오차 = {sd_pooled:.10f}   (비 = {sd_theory / sd_pooled:.8f})")
+    print(f"B=5000 순열분포 SD = {perm_diffs.std(ddof=1):.10f}"
+          f"   (몬테카를로 오차 {sd_theory / np.sqrt(2 * B):.10f})")
+
+    zobs = obs_diff / sd_theory
+    print(f"\n관측 d / SD     = {zobs:.5f}")
+    print(f"정규근사 양측 p  = {2 * stats.norm.sf(abs(zobs)):.4f}")
+
+    # 정확 순열분포. 처치군 전환 수 X ~ Hypergeometric(N, K, n_treat) 이고
+    # d 는 X 의 증가하는 일차식이므로 X 의 분포만으로 정확 p 가 나온다.
+    x = np.arange(K + 1)
+    d = x * step - K / n_control
+    pmf = stats.hypergeom.pmf(x, N, K, n_treat)
+    sel = np.abs(d) >= abs(obs_diff) - 1e-18
+    x_lo = x[sel][d[sel] < 0].max()
+    x_hi = x[sel][d[sel] > 0].min()
+    print(f"정확 양측 순열 p = {pmf[sel].sum():.4f}"
+          f"   (걸리는 X: <= {x_lo} 또는 >= {x_hi})")
+    print(f"순열 p (B=5000)  = {p_value:.4f}")
+    print(f"참고: 단측 상측 P(X >= {c_treat}) = "
+          f"{stats.hypergeom.sf(c_treat - 1, N, K, n_treat):.4f}")
+
+    # 연속성보정. X 의 격자에서 양쪽으로 반 칸을 물려 잰다.
+    EX = K * n_treat / N
+    sdX = np.sqrt(n_treat * n_control * K * (N - K) / (N**2 * (N - 1)))
+    cc = stats.norm.cdf((x_lo + 0.5 - EX) / sdX) + stats.norm.sf((x_hi - 0.5 - EX) / sdX)
+    print(f"\nE[X] = {EX:.4f},  SD(X) = {sdX:.4f}")
+    print(f"연속성보정 정규근사 = {cc:.4f}")
+    ```
+
+    출력:
+
+    ```
+    N = 46327,  K = 382,  pbar = 0.00824573,  격자 간격 = 8.6396e-05
+    SD(d*) 닫힌 꼴    = 0.0008405592
+    고전 합동 표준오차 = 0.0008405501   (비 = 1.00001079)
+    B=5000 순열분포 SD = 0.0008365779   (몬테카를로 오차 0.0000084056)
+
+    관측 d / SD     = -0.43730
+    정규근사 양측 p  = 0.6619
+    정확 양측 순열 p = 0.6811   (걸리는 X: <= 182 또는 >= 191)
+    순열 p (B=5000)  = 0.6784
+    참고: 단측 상측 P(X >= 182) = 0.6873
+
+    E[X] = 186.2546,  SD(X) = 9.7291
+    연속성보정 정규근사 = 0.6811
+    ```
+
+    **(1)의 두 식이 모두 맞는다.** 닫힌 꼴 $0.0008405592$와 고전 합동 표준오차 $0.0008405501$의 비가 $1.00001079$로 예측한 $\sqrt{N/(N-1)}$ 그대로다. $B = 5{,}000$짜리 순열분포의 표준편차 $0.0008365779$는 닫힌 꼴과 $3.98\times10^{-6}$ 차이인데, 표준편차 추정의 몬테카를로 오차 $8.41\times10^{-6}$의 $0.47$배다.
+
+    **세 $p$값 가운데 하나만 정확하다.** 정확 순열값 $0.6811$, 몬테카를로값 $0.6784$, 정규근사 $0.6619$다.
+
+    - 몬테카를로값과 정확값의 차 $0.0027$은 **우연이다.** $\sqrt{0.6811 \times 0.3189/5000} = 0.0066$의 $0.41$배이고 $B$를 키우면 사라진다.
+    - 정규근사와 정확값의 차 $0.0192$는 **체계적이다.** $d^{*}$가 간격 $8.64\times10^{-5}$의 격자에 놓이는데 매끄러운 정규곡선으로 재기 때문이다. 양측 기각역이 $X \le 182$와 $X \ge 191$이고 분포의 중심이 $E[X] = 186.2546$이라, 아래쪽은 $4.25$칸, 위쪽은 $4.75$칸 떨어져 **비대칭**이다. 격자에서 반 칸씩 물려 다시 재면 $0.6811$로 정확값과 넷째 자리까지 맞는다. **차이의 정체가 이산성임이 이것으로 확정된다.**
+
+    **마지막 줄의 $0.6873$을 양측 $p$값으로 읽으면 안 된다.** 그것은 $P(X \ge 182)$로 "처치군이 더 낫다"는 단측 대립가설에 대한 $p$값이고, $182$가 기댓값 $186.25$보다 **작으므로** $0.5$를 넘는 큰 값이 되었다. 양측값 $0.6811$과 수가 비슷해 보이지만 재는 것이 다르다.
+
+    어느 쪽을 보아도 결론은 하나다. 관측된 차이가 $-0.000368$로 처치군의 전환율이 오히려 낮지만 **우연으로 충분히 설명된다.** 카이제곱 검정도 $p = 0.6996$으로 같은 결론을 준다.
 
 !!! tip "큰 자료에서는 벡터화가 필수이다"
     이 보기의 자료는 $46{,}327$개이다. `random.sample`과 파이썬 `set`으로 순열을 만들면 순열 하나에 수십 밀리초가 걸려 $B = 5000$에 몇 분이 든다.

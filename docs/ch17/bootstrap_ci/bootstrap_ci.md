@@ -20,29 +20,102 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 백분위수법
+**보기 1.** <span class="diff easy" title="쉬움"></span> 백분위수법의 구현. 이 방법에는 다른 방법에 없는 성질이 하나 있다. **척도를 바꾸어도 답이 달라지지 않는다.**
+
+**(1)** $g$가 순증가 함수일 때, $g(\theta)$에 대한 백분위수 구간이 $\theta$에 대한 백분위수 구간의 **상** $[g(\text{하한}),\ g(\text{상한})]$과 같음을 보이시오. 기본법은 왜 그렇지 않은가.
+
+**(2)** $\text{Exp}(1)$에서 $n = 30$을 뽑아 평균의 구간을 원 척도와 로그 척도에서 각각 구하고, 두 방법에 대해 (1)을 확인하시오.
 
 </div>
 
-```python
-def bootstrap_percentile_ci(data, statistic, n_boot=10_000, alpha=0.05, rng=None):
-    """백분위수 붓스트랩 신뢰구간.
+??? success "풀이"
 
-    붓스트랩 분포의 2.5·97.5 백분위점을 그대로 쓴다. 가장 간단하고
-    직관적이지만, 통계량이 치우쳐 있거나 편향이 있으면 어긋난다.
-    """
-    rng = rng or np.random.default_rng(0)
-    n = len(data)
-    boot_stats = np.array([
-        statistic(data[rng.integers(0, n, n)])
-        for _ in range(n_boot)
-    ])
-    lo = np.percentile(boot_stats, 100 * alpha / 2)
-    hi = np.percentile(boot_stats, 100 * (1 - alpha / 2))
-    return lo, hi, boot_stats
-```
+    **(1) 해석적으로.** 핵심은 **분위수가 순증가 변환과 교환된다**는 사실 하나다. $g$가 순증가이면 $g(X) \le g(q)$와 $X \le q$가 같은 사건이므로
 
-단순하고 직관적이지만 붓스트랩 분포가 편향되거나 치우쳐 있으면 포함확률이 명목값에 못 미칠 수 있다.
+    $$
+    q_p\big(g(X)\big) = g\big(q_p(X)\big)
+    $$
+
+    이다. 백분위수 구간은 붓스트랩 복제값의 분위수 두 개로만 만들어지므로, 복제값을 $\hat\theta^{*}$에서 $g(\hat\theta^{*})$로 바꾸면 구간의 끝점도 그대로 $g$를 통과한다.
+
+    $$
+    \text{CI}_{\text{pct}}\big(g(\theta)\big)
+    = \left[q_{\alpha/2}\big(g(\hat\theta^{*})\big),\; q_{1-\alpha/2}\big(g(\hat\theta^{*})\big)\right]
+    = \left[g\big(\hat\theta^{*}_{\alpha/2}\big),\; g\big(\hat\theta^{*}_{1-\alpha/2}\big)\right]
+    $$
+
+    **곧 로그 척도에서 구간을 만들고 지수를 취하든, 원 척도에서 바로 만들든 똑같다.** 어느 척도에서 작업할지 고민할 필요가 없다는 뜻이다.
+
+    기본법은 그렇지 않다. $2\hat\theta - \hat\theta^{*}_{1-\alpha/2}$에는 분위수뿐 아니라 **뺄셈**이 들어 있는데, 뺄셈은 비선형 변환과 교환되지 않는다. $g$가 비선형이면
+
+    $$
+    g^{-1}\!\left(2g(\hat\theta) - g(\hat\theta^{*})_{1-\alpha/2}\right)
+    \;\ne\; 2\hat\theta - \hat\theta^{*}_{1-\alpha/2}
+    $$
+
+    이다. **기본법은 "어느 척도에서 반사할 것인가"라는 자의적인 선택을 안고 있다.**
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_percentile_ci(data, statistic, n_boot=10_000, alpha=0.05, rng=None):
+        """백분위수 붓스트랩 신뢰구간.
+
+        붓스트랩 분포의 2.5·97.5 백분위점을 그대로 쓴다. 가장 간단하고
+        직관적이지만, 통계량이 치우쳐 있거나 편향이 있으면 어긋난다.
+        """
+        rng = rng or np.random.default_rng(0)
+        n = len(data)
+        boot_stats = np.array([
+            statistic(data[rng.integers(0, n, n)])
+            for _ in range(n_boot)
+        ])
+        lo = np.percentile(boot_stats, 100 * alpha / 2)
+        hi = np.percentile(boot_stats, 100 * (1 - alpha / 2))
+        return lo, hi, boot_stats
+    ```
+
+    치우친 자료로 확인한다. 복제값 한 벌을 두 척도에 돌려 써야 비교가 공정하다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(11)
+    d = rng.exponential(1.0, 30)
+    B = 10_000
+    bs = d[rng.integers(0, 30, (B, 30))].mean(axis=1)   # 복제값 한 벌을 돌려 쓴다
+    th = d.mean()
+
+    pc = np.percentile(bs, [2.5, 97.5])                 # 원 척도의 백분위수 구간
+    pc_log = np.percentile(np.log(bs), [2.5, 97.5])     # 로그 척도에서 구한 것
+    ba = np.array([2 * th - pc[1], 2 * th - pc[0]])     # 원 척도의 기본 구간
+    ba_log = np.array([2 * np.log(th) - pc_log[1],
+                       2 * np.log(th) - pc_log[0]])
+
+    print(f"theta_hat = {th:.6f}")
+    print(f"백분위수 (원 척도)  = [{pc[0]:.6f}, {pc[1]:.6f}]")
+    print(f"백분위수 (로그->역) = [{np.exp(pc_log[0]):.6f}, {np.exp(pc_log[1]):.6f}]"
+          f"   같은가 {np.allclose(pc, np.exp(pc_log))}")
+    print(f"기본     (원 척도)  = [{ba[0]:.6f}, {ba[1]:.6f}]")
+    print(f"기본     (로그->역) = [{np.exp(ba_log[0]):.6f}, {np.exp(ba_log[1]):.6f}]"
+          f"   같은가 {np.allclose(ba, np.exp(ba_log))}")
+    ```
+
+    출력:
+
+    ```
+    theta_hat = 1.087874
+    백분위수 (원 척도)  = [0.732291, 1.487806]
+    백분위수 (로그->역) = [0.732291, 1.487806]   같은가 True
+    기본     (원 척도)  = [0.687943, 1.443457]
+    기본     (로그->역) = [0.795447, 1.616120]   같은가 False
+    ```
+
+    **백분위수법은 열다섯 자리까지 같은 구간을 준다.** 같은 복제값에서 분위수만 읽으므로 당연한 결과이고, 그 당연함이 이 방법의 장점이다.
+
+    **기본법은 두 척도에서 다른 답을 준다.** 원 척도에서 $[0.688,\ 1.443]$, 로그 척도를 거치면 $[0.795,\ 1.616]$으로 하한이 $0.107$, 상한이 $0.173$ 움직인다. 폭도 $0.7555$에서 $0.8207$로 달라진다. **어느 쪽이 옳은지 자료는 말해 주지 않는다.** 척도를 고르는 일이 분석자에게 떠넘겨진 셈이다.
+
+    단순하고 직관적이지만 붓스트랩 분포가 편향되거나 치우쳐 있으면 포함확률이 명목값에 못 미칠 수 있다. 변환 동변성은 백분위수법이 가진 **유일한 이론적 우위**이며, 뒤의 BCa는 그 성질을 지키면서 치우침까지 고친다.
 
 ## 기본(역백분위수)법
 
@@ -54,26 +127,94 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 기본(역백분위수)법
+**보기 2.** <span class="diff easy" title="쉬움"></span> 기본(역백분위수)법의 구현. 반사는 공짜가 아니다. **반사된 끝점은 통계량이 가질 수 없는 값일 수도 있다.**
+
+**(1)** 기본 구간의 하한이 음수가 되는 조건을 $\hat\theta$와 붓스트랩 분위수로 적으시오. 붓스트랩 분포가 거의 정규이고 변동계수가 $c^{*}$이면 그 조건이 $c^{*} > 1/z_{1-\alpha/2}$가 됨을 보이고, $\text{Exp}(1)$ 자료의 **분산**을 추정할 때 어떤 $n$에서 문제가 되는지 어림하시오. 백분위수 구간에는 왜 같은 일이 생기지 않는가.
+
+**(2)** 모의실험으로 그 비율을 재시오.
 
 </div>
 
-```python
-def bootstrap_basic_ci(data, statistic, boot_stats, alpha=0.05):
-    """기본(역백분위수) 붓스트랩 신뢰구간.
+??? success "풀이"
 
-    백분위점을 추정값 둘레로 되비춘다. 붓스트랩 분포가 오른쪽으로 치우쳐
-    있으면 구간은 왼쪽으로 늘어나는데, 이는 "추정값이 참값보다 크게 나오는
-    경향이 있다면 구간을 아래쪽으로 넓혀야 한다"는 셈법에서 나온다.
-    백분위수법과 정반대 방향으로 움직이는 것이 처음에는 어리둥절하다.
-    """
-    theta_hat = statistic(data)
-    lo = 2 * theta_hat - np.percentile(boot_stats, 100 * (1 - alpha / 2))
-    hi = 2 * theta_hat - np.percentile(boot_stats, 100 * alpha / 2)
-    return lo, hi
-```
+    **(1) 해석적으로.** 기본 구간의 하한은 $2\hat\theta - \hat\theta^{*}_{1-\alpha/2}$이므로
 
-핵심 착상은 붓스트랩이 $\hat\theta$를 과대추정한다면 분위수를 $\hat\theta$에 대해 반사시켜 보정한다는 것이다.
+    $$
+    \text{하한} < 0 \iff \hat\theta^{*}_{1-\alpha/2} > 2\hat\theta
+    $$
+
+    다. **붓스트랩 분포의 위쪽 분위수가 추정값의 두 배를 넘으면 구간이 음수 영역으로 밀려난다.** 붓스트랩 분포가 평균 $\hat\theta$, 표준편차 $\hat\theta c^{*}$인 정규에 가깝다면 $\hat\theta^{*}_{1-\alpha/2} \approx \hat\theta(1 + z_{1-\alpha/2}c^{*})$이므로 조건이
+
+    $$
+    z_{1-\alpha/2}\, c^{*} > 1
+    \iff
+    c^{*} > \frac{1}{z_{1-\alpha/2}} = \frac{1}{1.96} = 0.510
+    $$
+
+    이 된다. 곧 **추정값의 절반이 넘는 표준오차**를 가진 통계량이면 위험하다.
+
+    $\text{Exp}(1)$ 자료에서 분산 $s^2$을 추정한다고 하자. 초과첨도가 $\gamma_2$인 분포에서 $\operatorname{Var}(s^2) \approx \sigma^4(\gamma_2+2)/n$이므로 변동계수가 $c^{*} \approx \sqrt{(\gamma_2+2)/n}$이고, 지수분포는 $\gamma_2 = 6$이라
+
+    $$
+    c^{*} \approx \sqrt{\frac{8}{n}} > 0.510
+    \iff
+    n < 1.96^2 \times 8 = 30.7
+    $$
+
+    이다. **$n$이 서른 안팎이면 기본 구간이 음의 분산을 내놓는다.**
+
+    백분위수 구간에는 이런 일이 없다. 그 끝점은 **실제 재표본에서 계산된 통계량의 값**이므로, 통계량이 음수를 가질 수 없으면 끝점도 음수가 될 수 없다. 반사는 그 보장을 버린다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_basic_ci(data, statistic, boot_stats, alpha=0.05):
+        """기본(역백분위수) 붓스트랩 신뢰구간.
+
+        백분위점을 추정값 둘레로 되비춘다. 붓스트랩 분포가 오른쪽으로 치우쳐
+        있으면 구간은 왼쪽으로 늘어나는데, 이는 "추정값이 참값보다 크게 나오는
+        경향이 있다면 구간을 아래쪽으로 넓혀야 한다"는 셈법에서 나온다.
+        백분위수법과 정반대 방향으로 움직이는 것이 처음에는 어리둥절하다.
+        """
+        theta_hat = statistic(data)
+        lo = 2 * theta_hat - np.percentile(boot_stats, 100 * (1 - alpha / 2))
+        hi = 2 * theta_hat - np.percentile(boot_stats, 100 * alpha / 2)
+        return lo, hi
+    ```
+
+    $\text{Exp}(1)$에서 표본을 $200$개씩 뽑아 분산의 구간을 만들고, 하한이 음수인 비율을 센다.
+
+    ```python
+    rng = np.random.default_rng(5)
+    M, Bb = 200, 1000
+    print(f"{'n':>5}{'기본 하한 < 0':>16}{'백분위수 하한 < 0':>20}")
+    for n in (10, 20, 30, 50):
+        neg_b = neg_p = 0
+        for _ in range(M):
+            x = rng.exponential(1.0, n)
+            bsv = np.var(x[rng.integers(0, n, (Bb, n))], axis=1, ddof=1)
+            t = x.var(ddof=1)
+            p = np.percentile(bsv, [2.5, 97.5])
+            neg_b += (2 * t - p[1]) < 0
+            neg_p += p[0] < 0
+        print(f"{n:>5}{neg_b / M:>16.3f}{neg_p / M:>20.3f}")
+    ```
+
+    출력:
+
+    ```
+        n       기본 하한 < 0         백분위수 하한 < 0
+       10           0.180               0.000
+       20           0.175               0.000
+       30           0.100               0.000
+       50           0.065               0.000
+    ```
+
+    **$n = 10$과 $n = 20$에서 다섯 번에 한 번꼴로 음의 분산이 나온다.** 백분위수법은 단 한 번도 그러지 않는다. 구조적으로 그럴 수 없기 때문이다.
+
+    어림한 문턱 $n < 30.7$도 방향은 맞지만 너무 낙관적이다. $n = 50$에서도 $6.5\%$가 남는다. 까닭이 둘이다. 하나는 $s^{2*}$의 붓스트랩 분포가 **오른쪽으로 치우쳐** 있어 $97.5$ 백분위점이 정규근사보다 위에 놓이는 것이고, 다른 하나는 $c^{*}$ 자체가 표본마다 크게 흔들린다는 것이다. 지수분포에서 표본첨도는 악명 높게 불안정하다.
+
+    핵심 착상은 붓스트랩이 $\hat\theta$를 과대추정한다면 분위수를 $\hat\theta$에 대해 반사시켜 보정한다는 것이다. **그 보정은 $\hat\theta - \theta$를 다루는 데서는 옳지만, 모수의 정의역을 지켜 주지는 않는다.** 로그 척도에서 반사한 뒤 되돌리면 양수가 보장되는데, 그러면 보기 1에서 본 척도 의존성 문제로 되돌아간다.
 
 ## BCa법 (편향보정 가속)
 
@@ -102,45 +243,170 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> BCa법
+**보기 3.** <span class="diff easy" title="쉬움"></span> BCa법의 구현. 두 보정계수 $z_0$와 $a$가 실제로 무엇인지 평균의 경우에 끝까지 계산한다.
+
+**(1)** $z_0 = 0$이고 $a = 0$이면 BCa가 백분위수법과 **정확히** 같아짐을 보이시오. 그다음 통계량이 표본평균일 때 잭나이프 가속이
+
+$$
+a = \frac{\hat\gamma_1}{6\sqrt n}
+$$
+
+임을 유도하시오($\hat\gamma_1$은 자료의 표본왜도). $z_0$의 1차근사가 같은 값이 되는 까닭도 밝히시오.
+
+**(2)** $\text{Exp}(1)$에서 $n = 30$을 뽑아 확인하고, BCa·백분위수·기본 세 구간이 어느 방향으로 갈리는지 보시오.
 
 </div>
 
-```python
-def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
-    """BCa(편향보정 가속) 붓스트랩 신뢰구간.
+??? success "풀이"
 
-    백분위점을 두 가지로 조정한다. z0 은 붓스트랩 분포가 추정값을 중심으로
-    치우친 정도(편향)를, a 는 통계량의 분산이 참값에 따라 달라지는 정도
-    (가속)를 잡는다. 셋 중 가장 정확하지만 계산이 가장 무겁다.
-    """
-    n = len(data)
-    theta_hat = statistic(data)
+    **(1) 해석적으로.** $z_0 = a = 0$을 조정식에 넣으면
 
-    # 편향보정 z0: 붓스트랩 값 중 관측된 추정값보다 작은 것의 비율을
-    # 정규 분위점으로 옮긴다. 치우침이 없으면 절반이라 z0 이 0 이 된다.
-    z0 = stats.norm.ppf(np.mean(boot_stats < theta_hat))
+    $$
+    \alpha_1 = \Phi\!\left(0 + \frac{0 + z_{\alpha/2}}{1 - 0}\right) = \Phi(z_{\alpha/2}) = \frac\alpha2
+    $$
 
-    # 가속 a: 잭나이프로 구한다. 관측값을 하나씩 빼 가며 통계량을 계산해,
-    # 그 값들의 왜도에서 얻는다.
-    jack = np.array([statistic(np.delete(data, i)) for i in range(n)])
-    jack_mean = jack.mean()
-    a_num = np.sum((jack_mean - jack) ** 3)
-    a_den = 6 * np.sum((jack_mean - jack) ** 2) ** 1.5
-    a = a_num / a_den if a_den != 0 else 0.0
+    이고 같은 식으로 $\alpha_2 = 1 - \alpha/2$다. **보정이 둘 다 꺼지면 원래의 $2.5\%$와 $97.5\%$로 되돌아간다.** BCa는 백분위수법에 두 개의 손잡이를 단 것이다.
 
-    # 두 보정을 반영해 백분위점을 옮긴다. z0=0, a=0 이면 원래 백분위수법과
-    # 정확히 같아진다.
-    z_alpha = stats.norm.ppf(alpha / 2)
-    z_1alpha = stats.norm.ppf(1 - alpha / 2)
+    **가속 $a$.** 통계량이 $\hat\theta = \bar x$이면 $i$번째를 뺀 잭나이프 값이
 
-    p_lo = stats.norm.cdf(z0 + (z0 + z_alpha) / (1 - a * (z0 + z_alpha)))
-    p_hi = stats.norm.cdf(z0 + (z0 + z_1alpha) / (1 - a * (z0 + z_1alpha)))
+    $$
+    \hat\theta_{(i)} = \frac{n\bar x - x_i}{n-1}
+    $$
 
-    lo = np.percentile(boot_stats, 100 * p_lo)
-    hi = np.percentile(boot_stats, 100 * p_hi)
-    return lo, hi, z0, a
-```
+    이고, 그 평균은 $\bar\theta_{(\cdot)} = \bar x$다. 따라서
+
+    $$
+    \bar\theta_{(\cdot)} - \hat\theta_{(i)} = \frac{x_i - \bar x}{n - 1}
+    $$
+
+    이 되어 $(n-1)$이 분자·분모에서 약분된다.
+
+    $$
+    a = \frac{\sum_i (x_i - \bar x)^3 / (n-1)^3}
+             {6\left[\sum_i (x_i - \bar x)^2/(n-1)^2\right]^{3/2}}
+      = \frac{\sum_i (x_i - \bar x)^3}{6\left[\sum_i (x_i - \bar x)^2\right]^{3/2}}
+    $$
+
+    여기에 $\hat\mu_k = \frac1n\sum_i (x_i-\bar x)^k$와 $\hat\gamma_1 = \hat\mu_3/\hat\mu_2^{3/2}$를 넣으면
+
+    $$
+    a = \frac{n\hat\mu_3}{6\,(n\hat\mu_2)^{3/2}}
+      = \frac{\hat\mu_3}{6\,\hat\mu_2^{3/2}\sqrt n}
+      = \frac{\hat\gamma_1}{6\sqrt n}
+    $$
+
+    이다. **가속은 자료의 왜도를 $6\sqrt n$으로 나눈 것일 뿐이다.** 대칭 자료에서는 $0$이고, $n$이 커지면 $n^{-1/2}$로 꺼진다.
+
+    **편향보정 $z_0$.** 정의는 $z_0 = \Phi^{-1}\!\big(P^{*}(\hat\theta^{*} < \hat\theta)\big)$다. $\hat\theta^{*}$의 분포가 평균 $\hat\theta$, 왜도 $\gamma_1^{*}$인 거의 정규인 분포이면 Cornish--Fisher로 중앙값이 평균보다 $\gamma_1^{*}\sigma^{*}/6$만큼 **왼쪽**에 있으므로
+
+    $$
+    P^{*}(\hat\theta^{*} < \hat\theta) \approx \frac12 + \phi(0)\,\frac{\gamma_1^{*}}{6},
+    \qquad
+    z_0 \approx \frac{\gamma_1^{*}}{6}
+    $$
+
+    이다. 표본평균의 붓스트랩 분포는 왜도가 $\gamma_1^{*} = \hat\gamma_1/\sqrt n$이므로
+
+    $$
+    z_0 \approx \frac{\hat\gamma_1}{6\sqrt n} = a
+    $$
+
+    가 된다. **평균에 대해서는 두 보정이 1차적으로 같은 수다.** 둘이 하는 일은 다르지만($z_0$은 중심을 옮기고 $a$는 분위점 간격을 비대칭으로 늘린다) 크기가 같아 같은 방향으로 힘을 보탠다.
+
+    **(2) 수치적으로.** 함수는 이렇다.
+
+    ```python
+    def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
+        """BCa(편향보정 가속) 붓스트랩 신뢰구간.
+
+        백분위점을 두 가지로 조정한다. z0 은 붓스트랩 분포가 추정값을 중심으로
+        치우친 정도(편향)를, a 는 통계량의 분산이 참값에 따라 달라지는 정도
+        (가속)를 잡는다. 셋 중 가장 정확하지만 계산이 가장 무겁다.
+        """
+        n = len(data)
+        theta_hat = statistic(data)
+
+        # 편향보정 z0: 붓스트랩 값 중 관측된 추정값보다 작은 것의 비율을
+        # 정규 분위점으로 옮긴다. 치우침이 없으면 절반이라 z0 이 0 이 된다.
+        z0 = stats.norm.ppf(np.mean(boot_stats < theta_hat))
+
+        # 가속 a: 잭나이프로 구한다. 관측값을 하나씩 빼 가며 통계량을 계산해,
+        # 그 값들의 왜도에서 얻는다.
+        jack = np.array([statistic(np.delete(data, i)) for i in range(n)])
+        jack_mean = jack.mean()
+        a_num = np.sum((jack_mean - jack) ** 3)
+        a_den = 6 * np.sum((jack_mean - jack) ** 2) ** 1.5
+        a = a_num / a_den if a_den != 0 else 0.0
+
+        # 두 보정을 반영해 백분위점을 옮긴다. z0=0, a=0 이면 원래 백분위수법과
+        # 정확히 같아진다.
+        z_alpha = stats.norm.ppf(alpha / 2)
+        z_1alpha = stats.norm.ppf(1 - alpha / 2)
+
+        p_lo = stats.norm.cdf(z0 + (z0 + z_alpha) / (1 - a * (z0 + z_alpha)))
+        p_hi = stats.norm.cdf(z0 + (z0 + z_1alpha) / (1 - a * (z0 + z_1alpha)))
+
+        lo = np.percentile(boot_stats, 100 * p_lo)
+        hi = np.percentile(boot_stats, 100 * p_hi)
+        return lo, hi, z0, a
+    ```
+
+    보기 1의 지수분포 자료 `d`와 그 복제값 `bs`를 그대로 쓴다. 조정된 백분위점까지 함께 찍어 본다.
+
+    ```python
+    from scipy import stats
+
+    def bca_parts(data, statistic, boot_stats, alpha=0.05):
+        n = len(data); th = statistic(data)
+        z0 = stats.norm.ppf(np.mean(boot_stats < th))
+        jack = np.array([statistic(np.delete(data, i)) for i in range(n)])
+        jm = jack.mean()
+        a = np.sum((jm - jack) ** 3) / (6 * np.sum((jm - jack) ** 2) ** 1.5)
+        za, z1 = stats.norm.ppf(alpha / 2), stats.norm.ppf(1 - alpha / 2)
+        p_lo = stats.norm.cdf(z0 + (z0 + za) / (1 - a * (z0 + za)))
+        p_hi = stats.norm.cdf(z0 + (z0 + z1) / (1 - a * (z0 + z1)))
+        return (np.percentile(boot_stats, 100 * p_lo),
+                np.percentile(boot_stats, 100 * p_hi), z0, a, p_lo, p_hi)
+
+    lo_b, hi_b, z0, a, p_lo, p_hi = bca_parts(d, np.mean, bs)
+    g1 = stats.skew(d)
+    print(f"자료 왜도 g1 = {g1:.6f},  a 닫힌 꼴 g1/(6 sqrt n) = {g1 / (6 * np.sqrt(30)):.8f}")
+    print(f"코드의 a = {a:.8f}")
+    print(f"z0 = {z0:.6f}   (1차근사 {g1 / (6 * np.sqrt(30)):.6f},"
+          f"  z0 의 몬테카를로 오차 {np.sqrt(0.25 / B) / stats.norm.pdf(0):.4f})")
+    print(f"조정된 백분위점: {100 * p_lo:.3f}% 와 {100 * p_hi:.3f}%  (보정 없으면 2.5% 와 97.5%)")
+    print(f"BCa      = [{lo_b:.6f}, {hi_b:.6f}]")
+    print(f"백분위수 = [{pc[0]:.6f}, {pc[1]:.6f}]")
+    print(f"기본     = [{ba[0]:.6f}, {ba[1]:.6f}]")
+    ```
+
+    출력:
+
+    ```
+    자료 왜도 g1 = 1.357052,  a 닫힌 꼴 g1/(6 sqrt n) = 0.04129377
+    코드의 a = 0.04129377
+    z0 = 0.037357   (1차근사 0.041294,  z0 의 몬테카를로 오차 0.0125)
+    조정된 백분위점: 4.059% 와 98.659%  (보정 없으면 2.5% 와 97.5%)
+    BCa      = [0.768921, 1.548148]
+    백분위수 = [0.732291, 1.487806]
+    기본     = [0.687943, 1.443457]
+    ```
+
+    **유도한 $a$가 코드와 여덟 자리까지 같다.** $\hat\gamma_1 = 1.357052$를 $6\sqrt{30} = 32.863$으로 나눈 $0.04129377$이다. $z_0 = 0.037357$도 1차근사 $0.041294$와 가깝고, 차이 $0.0039$는 $z_0$의 몬테카를로 오차 $0.0125$의 $0.31$배다.
+
+    **보정이 실제로 하는 일은 백분위점을 옮기는 것이다.** $2.5\%$가 $4.059\%$로, $97.5\%$가 $98.659\%$로 **둘 다 오른쪽으로** 밀렸다. 자료가 오른쪽으로 치우쳐 있어 표본평균이 참값을 **작게** 추정하는 쪽으로 기울기 때문이며, 구간 전체가 오른쪽으로 옮겨진다.
+
+    **세 구간이 갈리는 방향을 보라.**
+
+    | 방법 | 구간 | 중점 | 폭 |
+    |:---|:---|---:|---:|
+    | 기본 | $[0.6879,\ 1.4435]$ | $1.0657$ | $0.7555$ |
+    | 백분위수 | $[0.7323,\ 1.4878]$ | $1.1100$ | $0.7555$ |
+    | BCa | $[0.7689,\ 1.5481]$ | $1.1585$ | $0.7792$ |
+
+    $\hat\theta = 1.0879$를 기준으로 **기본법은 왼쪽으로, BCa는 오른쪽으로** 옮겨 놓았다. 백분위수법이 그 사이에 있다. 기본법과 백분위수법의 폭이 소수 넷째 자리까지 같은 것은 둘이 거울상이기 때문이고, BCa만 폭이 $0.0237$ 넓다. 가속 $a$가 위쪽 꼬리를 더 멀리 밀어내기 때문이다.
+
+    **어느 쪽이 옳은가.** 이 자료의 참 모수는 $1$이고 세 구간이 모두 그것을 덮지만, 그것만으로는 판정할 수 없다. 포함확률을 재야 하며, 치우친 자료에서 BCa가 나은 것이 [BCa 쪽](bca.md)과 [붓스트랩-t 쪽](bootstrap_t.md)의 모의실험이 보이는 바다.
 
 ## 포아송 자료에 적용하기
 
@@ -148,39 +414,127 @@ def bootstrap_bca_ci(data, statistic, boot_stats, alpha=0.05):
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 세 방법을 포아송 자료에
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 방법을 포아송 자료에. $\lambda = 3.5$인 포아송에서 $n = 80$을 뽑아 평균의 구간을 세 방법으로 구한다.
+
+**(1)** 붓스트랩 복제값 $\bar x^{*}$가 놓이는 격자의 간격과 붓스트랩 표준오차의 $B \to \infty$ 극한을 구하고, 그것으로 정규근사 구간을 예측하시오. 보기 3의 식으로 $a$와 $z_0$의 1차근사도 미리 구하시오.
+
+**(2)** 실행해 (1)을 확인하시오. 코드가 내놓는 $z_0$이 예측과 **부호가 반대**인데 그 까닭을 밝히시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 포아송 자료에 세 방법을 모두 적용해 구간을 견준다. 자료가 치우쳐
-# 있으므로 세 구간이 조금씩 어긋난다.
-rng = np.random.default_rng(0)
-data = stats.poisson.rvs(3.5, size=80, random_state=42)
-print(data.mean())          # 3.425
+    **(1) 해석적으로.** 자료가 정수이므로 크기 $n$짜리 재표본의 합도 정수이고, 따라서 $\bar x^{*}$는 간격 $1/n = 0.0125$인 격자에만 놓인다.
 
-lo_p, hi_p, boots = bootstrap_percentile_ci(data, np.mean, rng=rng)
-lo_b, hi_b = bootstrap_basic_ci(data, np.mean, boots)
-lo_bca, hi_bca, z0, a = bootstrap_bca_ci(data, np.mean, boots)
-print(z0, a)                # -0.0266  0.0126
+    붓스트랩 표준오차의 극한은 [붓스트랩 표준오차](../../ch05/applications/bootstrap_standard_error.md) 보기 1의 결과 그대로다. 경험분포의 분산을 $\hat\sigma^2 = \frac1n\sum_i(x_i-\bar x)^2$이라 하면
 
-for name, (lo, hi) in [("백분위수", (lo_p, hi_p)), ("기본", (lo_b, hi_b)),
-                       ("BCa", (lo_bca, hi_bca))]:
-    print(f"{name:>5}: [{lo:.4f}, {hi:.4f}]  폭 {hi - lo:.4f}")
-```
+    $$
+    \widehat{\operatorname{SE}}_{\text{boot}} \xrightarrow[B\to\infty]{} \frac{\hat\sigma}{\sqrt n}
+    $$
 
-출력:
+    이고, 자료에서 $\hat\sigma^2 = 3.169375$이므로 $0.199041$이다. 참값은 포아송의 $\sigma^2 = \lambda$에서 $\sqrt{3.5/80} = 0.209165$다. 이것을 쓰면 정규근사 구간이
 
-```
-3.425
--0.026573386823392654 0.012573560456423716
- 백분위수: [3.0375, 3.8250]  폭 0.7875
-   기본: [3.0250, 3.8125]  폭 0.7875
-  BCa: [3.0375, 3.8250]  폭 0.7875
-```
+    $$
+    \bar x \pm 1.959964 \times 0.199041 = [3.034887,\; 3.815113]
+    $$
+
+    이다. 격자 간격이 $0.0125$이니 **백분위수 구간의 끝점은 이 두 수에 가장 가까운 격자점**이 될 것이다.
+
+    보기 3의 식에 $\hat\gamma_1 = 0.674768$과 $n = 80$을 넣으면
+
+    $$
+    a = \frac{\hat\gamma_1}{6\sqrt n} = \frac{0.674768}{53.666} = 0.012574,
+    \qquad z_0 \approx a = +0.012574
+    $$
+
+    다. **둘 다 양수이고 아주 작다.** 보정이 거의 없으리라 예상된다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 포아송 자료에 세 방법을 모두 적용해 구간을 견준다. 자료가 치우쳐
+    # 있으므로 세 구간이 조금씩 어긋난다.
+    rng = np.random.default_rng(0)
+    data = stats.poisson.rvs(3.5, size=80, random_state=42)
+    print(data.mean())          # 3.425
+
+    lo_p, hi_p, boots = bootstrap_percentile_ci(data, np.mean, rng=rng)
+    lo_b, hi_b = bootstrap_basic_ci(data, np.mean, boots)
+    lo_bca, hi_bca, z0, a = bootstrap_bca_ci(data, np.mean, boots)
+    print(z0, a)                # -0.0266  0.0126
+
+    for name, (lo, hi) in [("백분위수", (lo_p, hi_p)), ("기본", (lo_b, hi_b)),
+                           ("BCa", (lo_bca, hi_bca))]:
+        print(f"{name:>5}: [{lo:.4f}, {hi:.4f}]  폭 {hi - lo:.4f}")
+    ```
+
+    출력:
+
+    ```
+    3.425
+    -0.026573386823392654 0.012573560456423716
+     백분위수: [3.0375, 3.8250]  폭 0.7875
+       기본: [3.0250, 3.8125]  폭 0.7875
+      BCa: [3.0375, 3.8250]  폭 0.7875
+    ```
+
+    (1)의 네 수를 확인한다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    n = len(data)
+    theta_hat = data.mean()
+    sig2 = data.var(ddof=0)                 # 경험분포의 분산
+    g1 = stats.skew(data)
+
+    print(f"격자 간격 = 1/n = {1 / n:.4f}")
+    print(f"붓스트랩 SE 극한 = {np.sqrt(sig2 / n):.6f}   (모의 {boots.std(ddof=1):.6f},"
+          f"  몬테카를로 오차 {np.sqrt(sig2 / n) / np.sqrt(2 * 10000):.6f})")
+    print(f"참 SE = sqrt(3.5/80) = {np.sqrt(3.5 / n):.6f}")
+    lo_z = theta_hat - 1.959964 * np.sqrt(sig2 / n)
+    hi_z = theta_hat + 1.959964 * np.sqrt(sig2 / n)
+    print(f"정규근사 구간 = [{lo_z:.6f}, {hi_z:.6f}]")
+    print(f"백분위수 구간 = [{lo_p:.6f}, {hi_p:.6f}]"
+          f"   -> 격자 눈금으로 {lo_p * n:.0f}/{n} 와 {hi_p * n:.0f}/{n}")
+
+    print(f"\n자료 왜도 g1 = {g1:.6f}")
+    print(f"a 의 닫힌 꼴 g1/(6 sqrt n) = {g1 / (6 * np.sqrt(n)):.8f}")
+    below = np.mean(boots < theta_hat)
+    eq = np.mean(np.isclose(boots, theta_hat))
+    print(f"P*(theta* < theta_hat) = {below:.4f},  P*(= ) = {eq:.4f},"
+          f"  P*(>) = {np.mean(boots > theta_hat):.4f}")
+    print(f"z0 (코드, 강한 부등호) = {stats.norm.ppf(below):+.6f}")
+    print(f"z0 (동점을 반씩 세면)  = {stats.norm.ppf(below + eq / 2):+.6f}")
+    print(f"z0 의 1차근사 = a = {g1 / (6 * np.sqrt(n)):+.6f}"
+          f"   (z0 의 몬테카를로 오차 {np.sqrt(0.25 / 10000) / stats.norm.pdf(0):.4f})")
+    ```
+
+    출력:
+
+    ```
+    격자 간격 = 1/n = 0.0125
+    붓스트랩 SE 극한 = 0.199041   (모의 0.199015,  몬테카를로 오차 0.001407)
+    참 SE = sqrt(3.5/80) = 0.209165
+    정규근사 구간 = [3.034887, 3.815113]
+    백분위수 구간 = [3.037500, 3.825000]   -> 격자 눈금으로 243/80 와 306/80
+
+    자료 왜도 g1 = 0.674768
+    a 의 닫힌 꼴 g1/(6 sqrt n) = 0.01257356
+    P*(theta* < theta_hat) = 0.4894,  P*(= ) = 0.0237,  P*(>) = 0.4869
+    z0 (코드, 강한 부등호) = -0.026573
+    z0 (동점을 반씩 세면)  = +0.003133
+    z0 의 1차근사 = a = +0.012574   (z0 의 몬테카를로 오차 0.0125)
+    ```
+
+    **예측한 것이 거의 다 맞는다.** 붓스트랩 표준오차가 극한 $0.199041$에 대해 모의값 $0.199015$로 몬테카를로 오차 $0.0014$ 안에 들고, 정규근사 구간 $[3.034887,\ 3.815113]$의 양 끝이 격자점 $243/80 = 3.0375$와 $306/80 = 3.825$ 바로 옆이다. **백분위수 구간의 끝점이 정확히 그 두 격자점이다.** 가속 $a$도 닫힌 꼴 $0.01257356$으로 코드와 같다.
+
+    **맞지 않은 것은 $z_0$ 하나다.** 예측은 $+0.012574$였는데 코드는 $-0.026573$을 준다. 부호가 반대다.
+
+    **까닭은 이산자료의 동점이다.** $\hat\theta = 3.425 = 274/80$ 자신이 격자점이므로 복제값 가운데 $2.37\%$가 **정확히 $\hat\theta$와 같다.** 코드가 쓰는 `boot_stats < theta_hat`은 강한 부등호라 이들을 통째로 버리고, 그 결과 $P^{*}(<) = 0.4894$로 절반을 밑돌아 $z_0$이 음수가 된다. 동점을 양쪽에 반씩 나누어 $P^{*}(<) + \tfrac12 P^{*}(=) = 0.5013$으로 세면 $z_0 = +0.003133$으로 부호가 제자리로 돌아오고, 1차근사 $+0.012574$와의 차이 $0.0094$도 $z_0$의 몬테카를로 오차 $0.0125$ 안이다.
+
+    **연속자료에서는 이 문제가 없다.** 복제값이 $\hat\theta$와 정확히 같아질 확률이 $0$이기 때문이다. 포아송·이항처럼 이산인 자료에서 BCa를 쓸 때만 조심하면 되고, 다행히 이 보기에서는 $z_0$이 워낙 작아 구간이 바뀌지 않았다.
 
 | 방법 | 하한 | 상한 | 폭 |
 |---|---|---|---|
