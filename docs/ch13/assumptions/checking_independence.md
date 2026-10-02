@@ -35,41 +35,126 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비. 이 페이지의 자료는 관측값을 **서로 독립**으로 만들었다. 그러니 독립이 깨졌을 때 무엇이 얼마나 틀어지는지를 먼저 재어 두자. 오차가 AR(1), 곧 $\varepsilon_t = \rho \varepsilon_{t-1} + u_t$이고 정상상태에서 $\operatorname{Var}(\varepsilon_t) = \sigma^2$, $\operatorname{Cov}(\varepsilon_t, \varepsilon_{t+k}) = \sigma^2 \rho^{\lvert k \rvert}$라 하자.
+
+**(1)** 표본평균 $\bar\varepsilon$의 분산이
+
+$$
+\operatorname{Var}(\bar\varepsilon) = \frac{\sigma^2}{n}\left(1 + 2\sum_{k=1}^{n-1}\Big(1 - \frac{k}{n}\Big)\rho^k\right)
+$$
+
+임을 보이고, $n \to \infty$에서 이것이 $\dfrac{\sigma^2}{n}\cdot\dfrac{1+\rho}{1-\rho}$에 가까워짐을 보이시오. $\rho = 0.5$면 참 분산이 독립을 가정한 $\sigma^2/n$의 몇 배인가.
+
+**(2)** 모형을 적합하고, (1)의 두 식을 모의실험으로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-import statsmodels.api as sm
+??? success "풀이"
 
-rng = np.random.default_rng(7)
-n = 120
+    **(1) 해석적으로.** 이중합을 펼친다.
 
-# X는 균등, Y는 X에 선형으로 의존하되 오차의 분산이 X와 함께 커진다.
-# 이렇게 두면 선형성은 성립하고 등분산성만 깨져, 각 진단이 무엇을
-# 잡아내고 무엇을 놓치는지 구분해 볼 수 있다.
-X = rng.uniform(0, 10, n)
-Y = 2.0 + 1.5 * X + rng.normal(0, 0.5 + 0.35 * X, n)
+    $$
+    \operatorname{Var}(\bar\varepsilon)
+    = \frac{1}{n^2}\sum_{s=1}^n \sum_{t=1}^n \operatorname{Cov}(\varepsilon_s, \varepsilon_t)
+    = \frac{\sigma^2}{n^2}\sum_{s=1}^n \sum_{t=1}^n \rho^{\lvert s-t \rvert}
+    $$
 
-df = pd.DataFrame({"X": X, "Y": Y})
-model = sm.OLS(Y, sm.add_constant(X)).fit()
-residuals = model.resid
-fitted = model.fittedvalues
+    $\lvert s - t \rvert = k$인 칸이 몇 개인지 세면 된다. $k = 0$인 대각선 칸이 $n$개이고, $k \ge 1$인 칸은 위아래로 각각 $n - k$개씩이다. 그러므로
 
-print(f"beta_hat = {model.params.round(4)}")
-print(f"R^2 = {model.rsquared:.4f}")
-```
+    $$
+    \operatorname{Var}(\bar\varepsilon)
+    = \frac{\sigma^2}{n^2}\left(n + 2\sum_{k=1}^{n-1}(n-k)\rho^k\right)
+    = \frac{\sigma^2}{n}\left(1 + 2\sum_{k=1}^{n-1}\Big(1-\frac{k}{n}\Big)\rho^k\right)
+    $$
 
-출력:
+    이다. $\lvert \rho \rvert < 1$이면 $n \to \infty$에서 $1 - k/n \to 1$이고 $\sum_{k\ge1}\rho^k = \rho/(1-\rho)$이므로
 
-```
-beta_hat = [1.5933 1.5317]
-R^2 = 0.7813
-```
+    $$
+    \operatorname{Var}(\bar\varepsilon) \;\longrightarrow\; \frac{\sigma^2}{n}\left(1 + \frac{2\rho}{1-\rho}\right) = \frac{\sigma^2}{n}\cdot\frac{1+\rho}{1-\rho}
+    $$
 
-기울기 추정값 1.53이 참값 1.5에 가깝다. 이분산이 있어도 OLS 추정값 자체는 불편이며, 흔들리는 것은 표준오차다.
+    이다. $\rho = 0.5$면 배수가 $1.5/0.5 = 3$, 곧 **참 분산이 독립을 가정한 값의 세 배**다. 표준오차로는 $\sqrt 3 = 1.73$배이므로, 독립을 믿고 계산한 신뢰구간은 참 폭의 $58\%$밖에 안 된다.
+
+    뒤집어 읽으면 **유효표본크기**가 된다. $n$개를 모았는데 실제로는
+
+    $$
+    n_{\text{eff}} = n \cdot \frac{1-\rho}{1+\rho}
+    $$
+
+    개를 모은 것과 같다. $\rho = 0.5$면 $120$개가 $40$개 값어치이고, $\rho = 0.8$이면 $120$개가 $13$개 값어치다. **독립성 위배는 추정값을 비틀지 않고 정보량을 깎는다.** 그래서 계수는 멀쩡해 보이는데 p-값만 터무니없이 작게 나온다.
+
+    **(2) 수치적으로.** 먼저 이 페이지의 모형을 적합한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    import statsmodels.api as sm
+
+    rng = np.random.default_rng(7)
+    n = 120
+
+    # X는 균등, Y는 X에 선형으로 의존하되 오차의 분산이 X와 함께 커진다.
+    # 이렇게 두면 선형성은 성립하고 등분산성만 깨져, 각 진단이 무엇을
+    # 잡아내고 무엇을 놓치는지 구분해 볼 수 있다.
+    X = rng.uniform(0, 10, n)
+    Y = 2.0 + 1.5 * X + rng.normal(0, 0.5 + 0.35 * X, n)
+
+    df = pd.DataFrame({"X": X, "Y": Y})
+    model = sm.OLS(Y, sm.add_constant(X)).fit()
+    residuals = model.resid
+    fitted = model.fittedvalues
+
+    print(f"beta_hat = {model.params.round(4)}")
+    print(f"R^2 = {model.rsquared:.4f}")
+    ```
+
+    출력:
+
+    ```
+    beta_hat = [1.5933 1.5317]
+    R^2 = 0.7813
+    ```
+
+    이제 (1)의 두 식을 확인한다. $\sigma = 1$로 두면 독립일 때의 값이 $1/n = 0.008333$이다.
+
+    ```python
+    import numpy as np
+
+    def exact_var(rho, n):
+        """AR(1) 오차를 가진 표본평균의 분산. sigma = 1 로 둔다."""
+        k = np.arange(1, n)
+        return (1 + 2 * np.sum((1 - k / n) * rho ** k)) / n
+
+    print(f"{'rho':>5}{'독립이면':>11}{'정확한 식':>12}{'극한식':>11}{'모의실험':>12}{'배수':>8}")
+    for rho in (0.0, 0.3, 0.5, 0.8):
+        r = np.random.default_rng(2024)
+        B = 40_000
+        u = r.normal(0, np.sqrt(1 - rho ** 2), (B, n))
+        eps = np.empty((B, n))
+        eps[:, 0] = r.normal(0, 1, B)
+        for t in range(1, n):
+            eps[:, t] = rho * eps[:, t - 1] + u[:, t]
+        sim = eps.mean(axis=1).var(ddof=1)
+        ex = exact_var(rho, n)
+        print(f"{rho:>5.1f}{1 / n:>11.6f}{ex:>12.6f}"
+              f"{(1 + rho) / (1 - rho) / n:>11.6f}{sim:>12.6f}{ex * n:>8.3f}")
+    ```
+
+    출력:
+
+    ```
+      rho       독립이면       정확한 식        극한식        모의실험      배수
+      0.0   0.008333    0.008333   0.008333    0.008380   1.000
+      0.3   0.008333    0.015391   0.015476    0.015479   1.847
+      0.5   0.008333    0.024722   0.025000    0.024866   2.967
+      0.8   0.008333    0.072222   0.075000    0.072615   8.667
+    ```
+
+    **정확한 식이 모의실험과 맞는다.** $\rho = 0.5$에서 공식이 $0.024722$, 모의실험이 $0.024866$이고, $\rho = 0.8$에서 $0.072222$ 대 $0.072615$다. 차이는 모두 $1\%$ 안이며 $40{,}000$회의 몬테카를로 오차 크기다.
+
+    **극한식은 $n = 120$에서 조금 큰 쪽으로 어긋난다.** $\rho = 0.8$에서 정확한 값 $0.0722$ 대 극한값 $0.0750$으로 $4\%$ 차이이고, $\rho = 0.5$에서는 $1.1\%$다. 유한한 $n$에서 $(1-k/n)$ 가중이 뒤쪽 항을 깎기 때문이며, $\rho$가 1에 가까울수록 멀리 있는 항이 중요해져 어긋남이 커진다. **상관이 강할수록 "$n$이 충분히 크다"가 요구하는 $n$도 커진다.**
+
+    배수를 보라. $\rho = 0.3$이라는, 그림으로는 거의 눈에 띄지 않을 약한 상관도 분산을 $1.85$배로 만든다. 표준오차를 $1.36$배 과소평가하고 그만큼 $t$값을 부풀린다는 뜻이다. **독립성은 그림으로 대충 보아 넘길 가정이 아니다.** 이 페이지의 나머지가 그것을 재는 도구들이다.
 
 ## 2. 자기상관을 위한 Durbin-Watson 검정
 
@@ -112,29 +197,109 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Durbin-Watson 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> Durbin-Watson 검정. 위에 적은 $DW \approx 2(1-\hat\rho)$는 근사가 아니라 **정확한 항등식에서 작은 항 하나를 버린 것**이다.
+
+**(1)** $\hat\rho_1 = \dfrac{\sum_{t=2}^n e_t e_{t-1}}{\sum_{t=1}^n e_t^2}$이라 두면
+
+$$
+DW = 2(1 - \hat\rho_1) - \frac{e_1^2 + e_n^2}{\sum_{t=1}^n e_t^2}
+$$
+
+임을 보이시오. 이것으로 $0 \le DW \le 4$도 설명되는가.
+
+**(2)** 검정을 돌려 (1)의 항등식을 소수점 열째 자리까지 확인하고, 버린 항의 크기를 재시오.
 
 </div>
 
-```python
-from statsmodels.stats.stattools import durbin_watson
+??? success "풀이"
 
-# Durbin-Watson 통계량은 0 에서 4 사이이고 2 가 무상관이다. 2 보다 뚜렷이
-# 작으면 양의 자기상관, 크면 음의 자기상관을 뜻한다. 이 검정은 잔차를
-# 주어진 순서 그대로 보므로, 순서가 뜻을 갖는 자료에서만 쓸 수 있다.
-dw_stat = durbin_watson(model.resid)
-print(f'Durbin-Watson statistic: {dw_stat}')
-```
+    **(1) 해석적으로.** 분자의 제곱을 펼친다.
 
-출력:
+    $$
+    \sum_{t=2}^n (e_t - e_{t-1})^2
+    = \sum_{t=2}^n e_t^2 + \sum_{t=2}^n e_{t-1}^2 - 2\sum_{t=2}^n e_t e_{t-1}
+    $$
 
-```
-Durbin-Watson statistic: 2.16161645652481
-```
+    앞의 두 합은 전체 제곱합 $S = \sum_{t=1}^n e_t^2$에서 각각 첫 항과 끝 항이 빠진 것이다. 곧 $\sum_{t=2}^n e_t^2 = S - e_1^2$이고 $\sum_{t=2}^n e_{t-1}^2 = S - e_n^2$이다. 따라서
 
-$d = 2.16$으로 2에 가까워 자기상관의 증거가 없다. 관측값을 서로 독립으로 생성했으니 옳은 판정이다.
+    $$
+    \sum_{t=2}^n (e_t - e_{t-1})^2 = 2S - e_1^2 - e_n^2 - 2\sum_{t=2}^n e_t e_{t-1}
+    $$
 
-다만 여기서 "순서"는 자료를 만든 순서일 뿐이다. 실제 연구에서는 측정 시각이나 공간 위치처럼 의미 있는 순서로 정렬해야 이 진단이 뜻을 갖는다.
+    이고, 양변을 $S$로 나누면
+
+    $$
+    DW = 2 - \frac{e_1^2 + e_n^2}{S} - 2\hat\rho_1 = 2(1 - \hat\rho_1) - \frac{e_1^2 + e_n^2}{S}
+    $$
+
+    이다. **근사 기호가 하나도 필요 없는 등식**이다. 버린 항은 $n$개의 제곱 가운데 두 개가 차지하는 몫이므로 $O(1/n)$이고, 그래서 표본이 조금만 커지면 $DW \approx 2(1-\hat\rho_1)$이 된다.
+
+    범위는 이 식만으로는 나오지 않는다. $\hat\rho_1$은 보통의 상관계수가 아니라 분모가 $S$로 고정된 양이라 $[-1,1]$에 갇힌다는 보장이 없기 때문이다. 범위는 분자·분모를 직접 보는 쪽이 빠르다. 분자가 제곱합이므로 $DW \ge 0$이고, 한편
+
+    $$
+    \sum_{t=2}^n (e_t - e_{t-1})^2 \le \sum_{t=2}^n 2(e_t^2 + e_{t-1}^2) \le 4S
+    $$
+
+    이므로 $DW \le 4$다. 첫 부등식은 $(a-b)^2 \le 2(a^2+b^2)$이고, 둘째는 각 $e_t^2$이 많아야 두 번씩 세어지기 때문이다. **$DW = 0$은 모든 잔차가 같을 때, $DW = 4$는 부호가 꼬박꼬박 뒤집히며 크기가 같을 때**에 가까워진다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    from statsmodels.stats.stattools import durbin_watson
+
+    # Durbin-Watson 통계량은 0 에서 4 사이이고 2 가 무상관이다. 2 보다 뚜렷이
+    # 작으면 양의 자기상관, 크면 음의 자기상관을 뜻한다. 이 검정은 잔차를
+    # 주어진 순서 그대로 보므로, 순서가 뜻을 갖는 자료에서만 쓸 수 있다.
+    dw_stat = durbin_watson(model.resid)
+    print(f'Durbin-Watson statistic: {dw_stat}')
+    ```
+
+    출력:
+
+    ```
+    Durbin-Watson statistic: 2.16161645652481
+    ```
+
+    항등식을 조각으로 나누어 확인한다.
+
+    ```python
+    import numpy as np
+
+    e = model.resid
+    S = (e ** 2).sum()
+
+    rho1 = (e[1:] * e[:-1]).sum() / S          # 1차 자기상관
+    edge = (e[0] ** 2 + e[-1] ** 2) / S        # 끝점 보정
+
+    print(f"rho_hat_1          = {rho1:+.10f}")
+    print(f"2(1 - rho_hat_1)   = {2 * (1 - rho1):.10f}")
+    print(f"끝점 보정          = {edge:.10f}")
+    print(f"2(1-rho) - 보정    = {2 * (1 - rho1) - edge:.10f}")
+    print(f"durbin_watson      = {durbin_watson(e):.10f}")
+
+    # 보정항의 크기는 O(1/n) 이다.
+    print(f"\n보정항 {edge:.6f} 대 2/n = {2 / len(e):.6f}")
+    ```
+
+    출력:
+
+    ```
+    rho_hat_1          = -0.0812166815
+    2(1 - rho_hat_1)   = 2.1624333631
+    끝점 보정          = 0.0008169065
+    2(1-rho) - 보정    = 2.1616164565
+    durbin_watson      = 2.1616164565
+
+    보정항 0.000817 대 2/n = 0.016667
+    ```
+
+    **항등식이 소수점 열째 자리까지 맞는다.** $2(1-\hat\rho_1) = 2.1624333631$에서 보정 $0.0008169065$를 빼면 `durbin_watson`이 돌려준 $2.1616164565$가 정확히 나온다.
+
+    **보정항이 $0.000817$로 아주 작다.** $2/n = 0.016667$보다도 스무 배 작은데, 하필 첫 잔차와 끝 잔차가 둘 다 작았기 때문이다. $e_1 = 0.727$, $e_{120} = 0.102$로 잔차의 표준편차 $2.34$에 견주면 거의 0이다. 이 항의 기댓값은 대략 $2/n$이고, 끝점에 큰 잔차가 걸리면 그보다 훨씬 커진다. **$DW$를 $2(1-\hat\rho_1)$로 환산해 읽을 때 소수 둘째 자리까지 믿지는 말라는 뜻이다.**
+
+    $\hat\rho_1 = -0.081$로 0 근처이고 $DW = 2.16$이 2 근처다. 자기상관의 증거가 없으며, 관측값을 서로 독립으로 생성했으니 옳은 판정이다.
+
+    다만 여기서 "순서"는 자료를 만든 순서일 뿐이다. 실제 연구에서는 측정 시각이나 공간 위치처럼 의미 있는 순서로 정렬해야 이 진단이 뜻을 갖는다. **그 점을 보기 3에서 수치로 확인한다.**
 
 **해석 지침:**
 
@@ -157,26 +322,72 @@ $d = 2.16$으로 2에 가까워 자기상관의 증거가 없다. 관측값을 �
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 순서에 대한 잔차 그림
+**보기 3.** <span class="diff easy" title="쉬움"></span> 순서에 대한 잔차 그림. 아래 코드는 가로축에 `X`를 두고 `plt.plot`으로 **점을 선으로 잇는다.**
+
+**(1)** 그림을 그려 보고, 이 그림이 왜 아무것도 읽을 수 없는 모양이 되었는지 설명하시오. 가로축 이름이 `Time or Sequence`인데 실제로 놓인 것은 무엇인가.
+
+**(2)** 독립성 진단이 **순서에 전적으로 의존한다**는 것을 수치로 보이시오. 같은 잔차를 순서만 바꾸어 $DW$를 다시 재고, 순서가 아무 뜻도 없을 때 $DW$가 어떤 분포를 갖는지 알아보시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 잔차를 시간 순서대로 잇는다. 위아래로 무작위하게 오가야 하고, 같은 쪽에
-# 여러 점이 몰려 다니면 독립이 깨진 것이다.
-plt.plot(X, model.resid)
-plt.xlabel('Time or Sequence')
-plt.ylabel('Residuals')
-plt.title('Residuals vs. Time/Order')
-plt.axhline(y=0, color='red', linestyle='--')
-plt.show()
-```
+    **(1) 그림이 왜 엉킨 실타래가 되었는가.** `plt.plot(X, model.resid)`는 가로 좌표를 `X`에 두고, **배열에 담긴 차례대로** 점을 선분으로 잇는다. 그런데 `X`는 균등난수라 정렬되어 있지 않다. 그래서 1번 점이 $x = 6.25$에, 2번 점이 $x = 8.97$에, 3번 점이 $x = 7.76$에, 4번 점이 $x = 2.25$에 놓이는 식으로 선이 좌우를 마구 가로지른다. 점 $120$개를 잇는 선분 $119$개가 겹쳐 아무 무늬도 읽히지 않는다.
 
-![순서에 대한 잔차](./img/checking_independence_130.png)
+    가로축 이름 `Time or Sequence`가 말하는 것은 관측 **순번** $1, 2, \ldots, 120$인데 실제로 놓인 것은 **설명변수의 값**이다. 둘은 전혀 다른 양이다. 순번에 대해 그리려면 `plt.plot(model.resid)`처럼 가로 좌표를 생략하거나 `np.arange(n)`을 주어야 한다.
 
-잔차가 0을 중심으로 무작위로 흩어져 있고 추세나 주기가 없다.
+    이 그림이 보여 주는 것이 하나 있기는 하다. **왼쪽에서 오른쪽으로 갈수록 실타래가 세로로 벌어진다.** 가로축이 $x$이므로 그것은 이분산이며, 독립성과는 무관하다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from statsmodels.stats.stattools import durbin_watson
+
+    # 잔차를 시간 순서대로 잇는다. 위아래로 무작위하게 오가야 하고, 같은 쪽에
+    # 여러 점이 몰려 다니면 독립이 깨진 것이다.
+    plt.plot(X, model.resid)
+    plt.xlabel('Time or Sequence')
+    plt.ylabel('Residuals')
+    plt.title('Residuals vs. Time/Order')
+    plt.axhline(y=0, color='red', linestyle='--')
+    plt.show()
+
+    e = model.resid
+
+    # 같은 잔차를 순서만 바꾸어 DW 를 다시 잰다.
+    print(f"생성 순서 그대로        DW = {durbin_watson(e):.4f}")
+    print(f"X 로 정렬한 뒤          DW = {durbin_watson(e[np.argsort(X)]):.4f}")
+
+    # 순서가 아무 뜻이 없다면 DW 는 어떤 분포를 갖는가
+    perm = np.random.default_rng(42)
+    dws = np.array([durbin_watson(e[perm.permutation(len(e))]) for _ in range(20_000)])
+    print(f"\n무작위로 20000번 섞었을 때  평균 {dws.mean():.4f},  표준편차 {dws.std():.4f}")
+    print(f"비교:  2/sqrt(n) = {2 / np.sqrt(len(e)):.4f}")
+    print(f"생성 순서의 DW 는 그 분포의 {(dws < durbin_watson(e)).mean():.1%} 분위에 있다")
+    ```
+
+    출력:
+
+    ```
+    생성 순서 그대로        DW = 2.1616
+    X 로 정렬한 뒤          DW = 2.0797
+
+    무작위로 20000번 섞었을 때  평균 1.9995,  표준편차 0.1826
+    비교:  2/sqrt(n) = 0.1826
+    생성 순서의 DW 는 그 분포의 81.2% 분위에 있다
+    ```
+
+    ![순서에 대한 잔차](./img/checking_independence_130.png)
+
+    **같은 잔차 $120$개인데 순서만 바꾸면 $DW$가 달라진다.** 생성 순서로는 $2.1616$, $x$로 정렬하면 $2.0797$이다. 잔차 집합은 한 치도 바뀌지 않았고 늘어놓은 차례만 바뀌었다. **$DW$는 잔차의 성질이 아니라 "잔차 + 순서"의 성질**이며, 순서가 자료에 내재하지 않으면 재는 값에 뜻이 없다.
+
+    순서를 완전히 무작위로 섞은 분포가 그 사실을 분명히 해 준다. 평균이 $1.9995$로 2이고 표준편차가 $0.1826$인데, 이 값이 $2/\sqrt n = 0.1826$과 소수점 넷째 자리까지 같다. **무상관인 수열에서 $DW$의 표준편차가 $2/\sqrt n$이라는 것**은 보기 2의 항등식에서 바로 나온다. $DW \approx 2(1-\hat\rho_1)$이고 $\hat\rho_1$의 표준오차가 $1/\sqrt n$이기 때문이다.
+
+    생성 순서의 $2.1616$은 그 분포의 $81$번째 백분위수다. 양측으로 보면 흔한 자리이므로 자기상관의 증거가 없다. 수치로 적으면 $2.1616$은 2에서 $0.88$ 표준편차 떨어져 있을 뿐이다.
+
+    **실제 연구에서 지켜야 할 것은 하나다.** 자료에 측정 시각이나 공간 좌표처럼 **의미 있는 순서**가 있으면 그것으로 정렬한 뒤 $DW$를 재고 그 순서로 잔차를 그린다. 순서가 없으면 $DW$는 아예 돌리지 말아야 한다. 돌리면 위 분포에서 뽑은 난수 하나가 나올 뿐인데, 스무 번에 한 번은 그 난수가 "유의"하게 나온다.
 
 **해석:**
 
@@ -221,27 +432,90 @@ $$
 
 **보기 4.** <span class="diff easy" title="쉬움"></span> Breusch-Godfrey 검정
 
+**(1)** 보조회귀를 직접 만들어 $\mathrm{LM} = nR^2$을 재현하고 $\chi^2(2)$에서 p-값을 계산하시오. 앞쪽의 없는 시차를 어떻게 다루어야 `statsmodels`와 맞는가.
+
+**(2)** 시차 하나만 보는 $\mathrm{BG}$와 $\hat\rho_1$로 계산한 $n\hat\rho_1^2$을 견주시오. 둘이 정확히 같지 않은 까닭은 무엇인가.
+
 </div>
 
-```python
-from statsmodels.stats.diagnostic import acorr_breusch_godfrey
+??? success "풀이"
 
-# Breusch-Godfrey 검정은 Durbin-Watson 과 달리 시차를 여럿 한꺼번에 본다.
-# nlags=2 는 한 시점 전과 두 시점 전의 잔차를 함께 살핀다는 뜻이다.
-# 설명변수에 시차 종속변수가 들어 있어도 쓸 수 있다는 점이 이점이다.
-bg_test = acorr_breusch_godfrey(model, nlags=2)
-print(f'Breusch-Godfrey LM statistic: {bg_test[0]}')
-print(f'Breusch-Godfrey p-value: {bg_test[1]}')
-```
+    **(1) 보조회귀를 그대로 만든다.** 보조회귀는
 
-출력:
+    $$
+    e_t = \alpha_0 + \alpha_1 x_t + \rho_1 e_{t-1} + \rho_2 e_{t-2} + u_t
+    $$
 
-```
-Breusch-Godfrey LM statistic: 1.584101499228634
-Breusch-Godfrey p-value: 0.4529150269303661
-```
+    인데 $t = 1$에는 $e_0$도 $e_{-1}$도 없고 $t = 2$에는 $e_0$이 없다. 두 가지 관례가 있다. 앞의 두 관측을 **버리는** 것과 없는 시차를 **0으로 채우는** 것이다. `statsmodels`는 뒤쪽을 쓰며, 그래야 $n$이 그대로 $120$으로 남아 $\mathrm{LM} = nR^2$의 $n$이 바뀌지 않는다.
 
-Breusch-Godfrey 검정도 $p = 0.45$로 자기상관의 증거를 찾지 못한다. Durbin-Watson이 1차 자기상관만 보는 반면 이 검정은 더 높은 차수까지 볼 수 있다는 점이 다르다.
+    **원래 모형의 설명변수 $x_t$를 보조회귀에 반드시 넣어야 한다.** $e$는 $x$와 직교하므로 $x$ 하나만으로는 아무것도 설명하지 못하지만, 시차 잔차와 함께 들어가면 $e_{t-1}$에 섞여 있는 $x$ 성분을 걷어 내는 몫을 한다. 이 항을 빼면 다른 수가 나온다.
+
+    ```python
+    from statsmodels.stats.diagnostic import acorr_breusch_godfrey
+
+    # Breusch-Godfrey 검정은 Durbin-Watson 과 달리 시차를 여럿 한꺼번에 본다.
+    # nlags=2 는 한 시점 전과 두 시점 전의 잔차를 함께 살핀다는 뜻이다.
+    # 설명변수에 시차 종속변수가 들어 있어도 쓸 수 있다는 점이 이점이다.
+    bg_test = acorr_breusch_godfrey(model, nlags=2)
+    print(f'Breusch-Godfrey LM statistic: {bg_test[0]}')
+    print(f'Breusch-Godfrey p-value: {bg_test[1]}')
+    ```
+
+    출력:
+
+    ```
+    Breusch-Godfrey LM statistic: 1.584101499228634
+    Breusch-Godfrey p-value: 0.4529150269303661
+    ```
+
+    직접 만들어 맞춰 본다.
+
+    ```python
+    import numpy as np
+    import statsmodels.api as sm
+    from scipy.stats import chi2
+
+    e = model.resid
+    n = len(e)
+
+    # 보조회귀: e_t 를 상수, X_t, e_{t-1}, e_{t-2} 에 회귀시킨다.
+    # 앞쪽에서 없는 시차는 0 으로 채운다 (statsmodels 의 방식).
+    lag1 = np.concatenate(([0.0], e[:-1]))
+    lag2 = np.concatenate(([0.0, 0.0], e[:-2]))
+    Z = np.column_stack([np.ones(n), X, lag1, lag2])
+    aux = sm.OLS(e, Z).fit()
+
+    print(f"보조회귀 R^2 = {aux.rsquared:.10f}")
+    print(f"LM = n R^2   = {n * aux.rsquared:.10f}")
+    print(f"statsmodels  = {acorr_breusch_godfrey(model, nlags=2)[0]:.10f}")
+    print(f"p = chi2(2).sf(LM) = {chi2.sf(n * aux.rsquared, 2):.10f}")
+
+    # 시차 하나만 보면 Durbin-Watson 과 무엇이 다른가
+    bg1 = acorr_breusch_godfrey(model, nlags=1)
+    rho1 = (e[1:] * e[:-1]).sum() / (e ** 2).sum()
+    print(f"\nBG(nlags=1) LM = {bg1[0]:.6f},  p = {bg1[1]:.6f}")
+    print(f"비교:  n * rho_hat_1^2 = {n * rho1 ** 2:.6f}")
+    ```
+
+    출력:
+
+    ```
+    보조회귀 R^2 = 0.0132008458
+    LM = n R^2   = 1.5841014992
+    statsmodels  = 1.5841014992
+    p = chi2(2).sf(LM) = 0.4529150269
+
+    BG(nlags=1) LM = 0.797528,  p = 0.371834
+    비교:  n * rho_hat_1^2 = 0.791538
+    ```
+
+    **보조회귀가 소수점 열째 자리까지 재현된다.** $R^2 = 0.01320$이 작은데, 두 시차가 잔차 변동의 $1.3\%$밖에 설명하지 못한다는 뜻이다. $\mathrm{LM} = 120 \times 0.01320 = 1.584$이고 $\chi^2(2)$에서 $p = 0.4529$다. 자기상관의 증거가 없다.
+
+    **(2) 시차 하나일 때.** $\mathrm{BG}$의 $\mathrm{LM}$이 $0.797528$, $n\hat\rho_1^2$이 $0.791538$로 **가깝지만 같지 않다.** 차이가 나는 이유는 둘이다. 첫째, $\mathrm{BG}$의 보조회귀에는 상수와 $x_t$가 함께 들어가 $e_{t-1}$의 기여가 그 둘을 걷어 낸 뒤의 몫으로 재어진다. 둘째, $\hat\rho_1$은 분모가 $\sum_t e_t^2$으로 고정된 양이라 보조회귀의 최소제곱 계수와 정확히 같지 않다. 두 수의 차이가 $0.8\%$인 것은 $x$와 $e_{t-1}$이 거의 직교했기 때문이며, 설명변수가 여럿이거나 시차 종속변수가 끼어 있으면 둘은 크게 갈린다.
+
+    $\mathrm{BG}$와 $DW$의 관계도 같은 자리에서 보인다. $DW = 2.1616$은 $\hat\rho_1 = -0.081$을 말하고, 그 제곱에 $n$을 곱한 $0.79$가 바로 $\mathrm{BG}(1)$ 통계량의 크기다. **$DW$와 $\mathrm{BG}(1)$은 사실상 같은 것을 다른 눈금으로 적은 것**이고, $\mathrm{BG}$가 더 나은 점은 시차를 여럿 묶을 수 있다는 것과 설명변수에 시차 종속변수가 있어도 분포가 흐트러지지 않는다는 것이다.
+
+    시차를 몇 개까지 볼 것인가는 공짜가 아니다. $\mathrm{nlags}$를 늘리면 자유도가 그만큼 늘어 [13.2절](checking_homoscedasticity.md)의 White 검정에서 본 것과 같은 희석이 일어난다. 자료의 주기를 짐작할 수 있으면 그만큼만 — 월별 자료면 $12$, 분기별이면 $4$ — 잡는 것이 보통이다.
 
 **해석:**
 
