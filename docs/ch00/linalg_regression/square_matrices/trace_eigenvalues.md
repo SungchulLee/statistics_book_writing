@@ -125,9 +125,9 @@ $$
 
 </div>
 
-??? proof "증명"
+??? proof "증명 — 두 가지"
 
-    $\mathbf{A}$의 특성다항식은
+    **첫째, 특성다항식으로.** $\mathbf{A}$의 특성다항식은
 
     $$
     p(\lambda) = \det(\lambda\mathbf{I} - \mathbf{A}) = \lambda^n - (\operatorname{tr}\mathbf{A})\lambda^{n-1} + \cdots + (-1)^n\det(\mathbf{A})
@@ -151,9 +151,7 @@ $$
 
     두 표현을 같다고 놓으면 $\operatorname{tr}(\mathbf{A}) = \lambda_1 + \lambda_2 + \cdots + \lambda_n$이다. $\square$
 
-??? proof "다른 증명"
-
-    $\mathbf{A}$가 (복소수 위에서) 대각화 가능한 경우에만 통하는 짧은 논법이다.
+    **둘째, 닮음 불변량으로.** $\mathbf{A}$가 (복소수 위에서) 대각화 가능한 경우에만 통하는 짧은 논법이다.
 
     대각합은 닮음 불변량이다. 순환 성질에 의해
 

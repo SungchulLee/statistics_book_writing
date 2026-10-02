@@ -158,9 +158,19 @@ $\mathbf{A} \succ 0$이면 모든 고윳값이 양수이므로 $\det(\mathbf{A})
 
 $\mathbf{A} \succ 0$이고 $\mathbf{B} \succ 0$이면 $\mathbf{A} + \mathbf{B} \succ 0$이고, 임의의 $c > 0$에 대해 $c\mathbf{A} \succ 0$이다. 양정치행렬 전체의 집합은 열린 볼록뿔을 이룬다.
 
-### 합동변환은 양정치성을 보존한다
+<div class="thmbox" markdown>
 
-$\mathbf{A} \succ 0$이고 $\mathbf{B}$가 $\operatorname{rank}(\mathbf{B}) = m$인 $n \times m$ 행렬이면 $\mathbf{B}^\top\mathbf{A}\mathbf{B} \succ 0$이다($\mathbb{R}^{m \times m}$에서).
+### 정리 2. 합동변환은 양정치성을 보존한다 { .thm }
+
+$\mathbf{A} \succ 0$이고 $\mathbf{B}$가 $\operatorname{rank}(\mathbf{B}) = m$인 $n \times m$ 행렬이면 $\mathbb{R}^{m \times m}$에서
+
+$$
+\mathbf{B}^\top\mathbf{A}\mathbf{B} \succ 0
+$$
+
+이다.
+
+</div>
 
 ??? proof "증명"
 
