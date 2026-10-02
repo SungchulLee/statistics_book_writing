@@ -20,10 +20,21 @@
 
 주의: 저장소 뿌리에서 돌리면 `savefig("x.png")` 처럼 상대경로로 저장하는 블록이
 뿌리에 PNG 를 흘린다. 돌린 뒤 `git status` 로 확인하라.
+
+시간제한은 **프로세스 무리째** 건다. `subprocess.run(timeout=)` 은 자식만 죽이므로
+`n_jobs=-1` 이 띄운 joblib 일꾼은 살아남아 계속 돈다. 그러면 다음 쪽부터는 남의
+일꾼과 코어를 다투게 된다. 자식을 `start_new_session` 으로 띄우고 `os.killpg` 로
+무리째 죽이는 까닭이다.
+
+시간제한은 **단조시계**로 재므로 맥이 잠든 동안은 흐르지 않는다. 밤에 걸어 두면
+`ps` 의 etime 은 한 시간이 넘는데 시간제한은 아직 차지 않은 일이 생긴다. 그런
+쪽을 만나면 멈춘 것인지 잠든 것인지 `pmset -g log` 로 먼저 가려라.
 """
 import json
+import os
 import pathlib
 import re
+import signal
 import subprocess
 import sys
 import tempfile
@@ -122,15 +133,36 @@ def check(path, timeout=1800):
         res = pathlib.Path(d, "res.json")
         run = pathlib.Path(d, "run.py")
         run.write_text(RUNNER, encoding="utf-8")
-        try:
-            subprocess.run([sys.executable, str(run), str(spec), str(res)],
-                           capture_output=True, text=True, timeout=timeout,
-                           cwd=str(pathlib.Path.cwd()))
-            got = json.loads(res.read_text(encoding="utf-8")) if res.exists() else None
-        except subprocess.TimeoutExpired:
-            got = None
+        log = pathlib.Path(d, "stderr.txt")
+        # 결과는 res.json 으로 받으므로 자식의 출력은 파이프가 아니라 파일로 뺀다.
+        # 파일이면 죽은 뒤에도 읽을 수 있어, 결과를 못 남기고 죽은 쪽의 마지막
+        # 줄을 알려 줄 수 있다.
+        with log.open("w", encoding="utf-8") as fh:
+            proc = subprocess.Popen(
+                [sys.executable, str(run), str(spec), str(res)],
+                stdout=fh, stderr=subprocess.STDOUT,
+                cwd=str(pathlib.Path.cwd()), start_new_session=True)
+            try:
+                proc.wait(timeout=timeout)
+                died = None
+            except subprocess.TimeoutExpired:
+                # 자식만 죽이면 joblib/multiprocessing 일꾼이 살아남아 다음 쪽과
+                # 코어를 다툰다. start_new_session 으로 따로 띄워 두었으므로
+                # 무리째 죽인다.
+                os.killpg(proc.pid, signal.SIGKILL)
+                try:
+                    proc.wait(timeout=30)
+                except subprocess.TimeoutExpired:
+                    pass
+                died = ("TIMEOUT", f"{timeout}s 안에 끝나지 않았다")
+        got = json.loads(res.read_text(encoding="utf-8")) if res.exists() else None
+        if got is None and died is None:
+            tail = [x for x in log.read_text(encoding="utf-8",
+                                             errors="replace").split("\n") if x.strip()]
+            died = ("DEAD", "결과를 남기지 못하고 죽었다"
+                            f" ({tail[-1][:70] if tail else '출력 없음'})")
     if got is None:
-        return [("TIMEOUT", meta[0][0], f"{timeout}s 안에 끝나지 않았다")]
+        return [(died[0], meta[0][0], died[1])]
 
     rows = []
     for (ln, exp), r in zip(meta, got):
