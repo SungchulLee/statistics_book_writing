@@ -6,11 +6,17 @@
 
 ## 표본평균의 편향
 
-### 불편성
+<div class="thmbox" markdown>
 
-표본평균 $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$은 $\mu = E[X]$에 대해 **불편**이다:
+### 정리. 표본평균의 불편성 { .thm }
 
-$$E[\bar{X}] = \mu \quad \text{모든 } n \geq 1 \text{에 대해}$$
+모든 $i$에 대해 $E[X_i] = \mu$이면 표본평균 $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$은 $\mu$에 대해 **불편**이다. 곧 모든 $n \geq 1$에 대해
+
+$$E[\bar{X}] = \mu$$
+
+이다.
+
+</div>
 
 ??? proof "증명"
 

@@ -8,11 +8,19 @@
 
 ## 1. 기울기 추정량
 
-### 결과
+<div class="thmbox" markdown>
+
+### 정리 1. 기울기 추정량의 t 분포 { .thm }
+
+정규오차 단순선형회귀 모형 아래에서
 
 $$
 \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2}
 $$
+
+이다.
+
+</div>
 
 ### 구성 요소
 
@@ -83,11 +91,19 @@ $$
 
 ## 2. 주어진 점에서의 반응의 기댓값
 
-### 결과
+<div class="thmbox" markdown>
+
+### 정리 2. 평균반응 추정량의 t 분포 { .thm }
+
+같은 모형에서 임의로 고정한 $x_0$에 대해
 
 $$
 \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2}
 $$
+
+이다.
+
+</div>
 
 ### 구성 요소
 
@@ -141,11 +157,19 @@ $$
 
 ## 3. 주어진 점에서의 반응(예측)
 
-### 결과
+<div class="thmbox" markdown>
+
+### 정리 3. 개별 반응 예측오차의 t 분포 { .thm }
+
+같은 모형에서 $x_0$에서의 새 관측값 $y_0 = \beta_0 + \beta_1 x_0 + \varepsilon$에 대해
 
 $$
 \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2}
 $$
+
+이다.
+
+</div>
 
 ### 구성 요소
 

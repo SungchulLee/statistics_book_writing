@@ -76,14 +76,23 @@ $$
 
 ## 이항분포의 극한으로서의 포아송분포
 
-포아송분포는 $n$이 크고 $p$가 작으며 $\lambda = np$가 일정하게 유지될 때 이항분포의 극한으로 나타난다:
+포아송분포는 $n$이 크고 $p$가 작으며 $\lambda = np$가 일정하게 유지될 때 이항분포의 극한으로 나타난다.
+
+<div class="thmbox" markdown>
+
+### 정리. 이항분포의 포아송 극한 { .thm }
+
+$p = \lambda/n$으로 두면 각 $k = 0, 1, 2, \ldots$에 대해
 
 $$
-\lim_{n \to \infty} \binom{n}{k} p^k (1-p)^{n-k} = \frac{e^{-\lambda}\lambda^k}{k!} \qquad \text{where } p = \frac{\lambda}{n}
+\lim_{n \to \infty} \binom{n}{k} p^k (1-p)^{n-k} = \frac{e^{-\lambda}\lambda^k}{k!}
 $$
+
+이다.
+
+</div>
 
 ??? proof "증명 개요"
-
 
     $p = \lambda/n$으로 두면:
 

@@ -85,14 +85,21 @@ $$
 
 ## 무기억성
 
-기하분포는 무기억성을 갖는 **유일한** 이산분포이다:
+<div class="thmbox" markdown>
+
+### 정리. 기하분포의 무기억성 { .thm }
+
+$X \sim \text{Geo}(p)$이면 모든 정수 $s, t \geq 0$에 대해
 
 $$
-P(X > s + t \mid X > s) = P(X > t) \quad \text{for all } s, t \geq 0
+P(X > s + t \mid X > s) = P(X > t)
 $$
+
+이다. 이산분포 가운데 이 성질을 갖는 것은 기하분포뿐이다.
+
+</div>
 
 ??? proof "증명"
-
 
     $$
     P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{(1-p)^{s+t}}{(1-p)^s} = (1-p)^t = P(X > t)

@@ -77,20 +77,29 @@ $$
 
 ## 무기억성
 
-지수분포는 무기억성을 갖는 **유일한** 연속분포이다:
+<div class="thmbox" markdown>
+
+### 정리 1. 지수분포의 무기억성 { .thm }
+
+$X \sim \text{Exp}(\lambda)$이면 모든 $s, t \geq 0$에 대해
 
 $$
-P(X > s + t \mid X > s) = P(X > t) \quad \text{for all } s, t \geq 0
+P(X > s + t \mid X > s) = P(X > t)
 $$
+
+이다.
+
+</div>
 
 ??? proof "증명"
-
 
     $$
     P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
     $$
 
     **해석:** 이미 $s$만큼의 시간을 기다렸더라도 남은 대기 시간의 분포는 방금 시작했을 때와 같다. 이 과정은 자신의 이력을 "잊어버린다".
+
+거꾸로, 이 성질을 갖는 연속분포는 지수분포뿐이다. 그 방향의 증명은 연습문제 2에서 다룬다.
 
 ---
 
@@ -145,14 +154,21 @@ $$
 
 ## 지수 확률변수의 최솟값
 
-$X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이면:
+<div class="thmbox" markdown>
+
+### 정리 2. 최솟값도 지수분포다 { .thm }
+
+$X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이면
 
 $$
 \min(X_1, X_2) \sim \text{Exp}(\lambda_1 + \lambda_2)
 $$
 
-??? proof "증명"
+이다.
 
+</div>
+
+??? proof "증명"
 
     $$
     P(\min(X_1, X_2) > t) = P(X_1 > t) \cdot P(X_2 > t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2)t}

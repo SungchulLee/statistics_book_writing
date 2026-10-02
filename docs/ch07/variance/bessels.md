@@ -18,12 +18,19 @@ $$S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
 ## 불편성의 증명
 
-### 주요 결과
+<div class="thmbox" markdown>
+
+### 정리 1. Bessel 수정 표본분산은 불편이다 { .thm }
+
+$X_1, \ldots, X_n$이 평균 $\mu$, 분산 $\sigma^2$을 갖는 독립인 확률변수이면
 
 $$E[S^2] = \sigma^2$$
 
-??? proof "증명"
+이다.
 
+</div>
+
+??? proof "증명"
 
     핵심 항등식에서 출발한다:
 

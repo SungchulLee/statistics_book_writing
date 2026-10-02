@@ -31,7 +31,9 @@ $$
 
 ## 1. 베타 추정량의 표집분포
 
-### 정리
+<div class="thmbox" markdown>
+
+### 정리 1. 회귀계수 추정량의 표집분포 { .thm }
 
 선형회귀 모형의 가정 아래에서
 
@@ -43,6 +45,8 @@ $$
 
 - **평균**: $E(\hat{\beta}) = \beta$ (불편),
 - **공분산**: $\text{Var}(\hat{\beta}) = \sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}$.
+
+</div>
 
 ??? proof "증명"
 
@@ -83,7 +87,9 @@ $$
 
 ## 2. s 제곱의 표집분포
 
-### 정리
+<div class="thmbox" markdown>
+
+### 정리 2. 잔차분산 추정량의 표집분포 { .thm }
 
 잔차분산 추정량
 
@@ -102,6 +108,8 @@ $$
 $$
 s^2 \sim \sigma^2 \frac{\chi^2_{N-p-1}}{N - p - 1}
 $$
+
+</div>
 
 ### 주요 성질
 
@@ -146,7 +154,9 @@ $$
 
 ## 3. 개별 회귀계수의 t 통계량
 
-### 정리
+<div class="thmbox" markdown>
+
+### 정리 3. 개별 회귀계수의 t 통계량 { .thm }
 
 귀무가설 $H_0: \beta_j = 0$ 아래에서 검정통계량
 
@@ -155,6 +165,8 @@ t_j = \frac{\hat{\beta}_j}{s\sqrt{v_j}} \sim t_{N-p-1}
 $$
 
 이다. 여기서 $v_j = \left((\mathbf{X}^\top\mathbf{X})^{-1}\right)_{jj}$는 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 $j$번째 대각원소이다.
+
+</div>
 
 ### 해석
 

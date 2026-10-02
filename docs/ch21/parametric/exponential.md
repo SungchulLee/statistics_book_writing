@@ -41,11 +41,21 @@ $$
 ## 무기억성
 
 상수 위험은 **무기억성**을 함의한다. 추가로 $s$만큼 더 생존할 확률이 이미 얼마나 오래
-생존했는지에 의존하지 않는다는 성질이다. 형식적으로,
+생존했는지에 의존하지 않는다는 성질이다.
+
+<div class="thmbox" markdown>
+
+### 정리. 지수 생존시간의 무기억성 { .thm }
+
+$T \sim \text{Exp}(\lambda)$이면 모든 $t, s \geq 0$에 대해
 
 $$
-P(T > t + s \mid T > t) = P(T > s) \qquad \text{for all } t, s \geq 0
+P(T > t + s \mid T > t) = P(T > s)
 $$
+
+이다.
+
+</div>
 
 ??? proof "증명"
 
