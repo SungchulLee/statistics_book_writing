@@ -153,165 +153,342 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 차와 t 통계량의 표집분포
+**보기 1.** <span class="diff easy" title="쉬움"></span> 차와 $t$ 통계량의 표집분포. $N(0,1)$과 $N(0.5,1)$에서 $n_1 = n_2 = 15$씩 뽑아 $\bar X_1 - \bar X_2$와 합동 $t$ 통계량을 10만 번 계산한다.
+
+**(1)** 두 통계량이 각각 어느 분포를 **정확히** 따르는지 유도하고, 차의 표준오차를 수로 구하시오.
+
+**(2)** $t_{28}$ 밀도와 $N(0,1)$ 밀도가 어디서 얼마나 갈리는지 미리 계산한 뒤, 모의실험이 (1)을 재현하는지 보이시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(1)
+    **(1) 해석적으로.** $\bar X_1$과 $\bar X_2$는 각각 정규표본의 평균이므로 정확히 정규이고
 
-n1 = n2 = 15
-mu1, mu2, sigma = 0.0, 0.5, 1.0
-B = 100_000
+    $$
+    \bar X_1 \sim N\!\left(0, \tfrac{1}{15}\right), \qquad \bar X_2 \sim N\!\left(0.5, \tfrac{1}{15}\right)
+    $$
 
-x1 = rng.normal(mu1, sigma, size=(B, n1))
-x2 = rng.normal(mu2, sigma, size=(B, n2))
+    이다. 두 표본이 독립이므로 두 평균도 독립이고, 독립인 정규확률변수의 차는 정규다. 평균은 빼고 분산은 더하므로
 
-d = x1.mean(axis=1) - x2.mean(axis=1)
-v1 = x1.var(axis=1, ddof=1)
-v2 = x2.var(axis=1, ddof=1)
-sp2 = ((n1 - 1) * v1 + (n2 - 1) * v2) / (n1 + n2 - 2)
-t = (d - (mu1 - mu2)) / np.sqrt(sp2 * (1 / n1 + 1 / n2))
+    $$
+    \bar X_1 - \bar X_2 \sim N\!\left(-0.5,\ \tfrac{1}{15}+\tfrac{1}{15}\right) = N(-0.5,\ 0.13333)
+    $$
 
-fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+    $$
+    \operatorname{SE}(\bar X_1-\bar X_2) = \sqrt{\tfrac{2}{15}} = 0.36515
+    $$
 
-# 왼쪽: 차 자체의 표집분포. 이론 정규밀도를 겹쳐 그린다.
-se = sigma * np.sqrt(1 / n1 + 1 / n2)
-g = np.linspace(d.min(), d.max(), 400)
-axes[0].hist(d, bins=70, density=True, alpha=0.5, edgecolor="white",
-             label=r"simulated $\bar X_1-\bar X_2$")
-axes[0].plot(g, stats.norm(mu1 - mu2, se).pdf(g), "--r", lw=2,
-             label=r"$N(-0.5,\ \sigma^2(1/n_1+1/n_2))$")
-axes[0].axvline(mu1 - mu2, color="gray", lw=1)
-axes[0].set_title(r"Difference of sample means  ($n_1=n_2=15$)")
-axes[0].set_xlabel(r"$\bar X_1-\bar X_2$")
-axes[0].set_ylabel("Density")
-axes[0].legend(fontsize=8)
+    **분산을 더한다는 것이 요점이다.** 두 집단의 불확실성은 상쇄되지 않고 쌓인다. 한 집단을 $n = 15$로 재는 일보다 두 집단의 차를 재는 일이 $\sqrt{2} = 1.41$배 어렵다.
 
-# 오른쪽: sigma 를 Sp 로 바꾼 t 통계량. t(28)과 N(0,1)을 함께 겹친다.
-df = n1 + n2 - 2
-g = np.linspace(-5, 5, 400)
-axes[1].hist(t, bins=100, range=(-5, 5), density=True, alpha=0.5,
-             edgecolor="white", label=r"simulated $T$")
-axes[1].plot(g, stats.t(df).pdf(g), "-r", lw=2, label=r"$t_{28}$ PDF")
-axes[1].plot(g, stats.norm.pdf(g), ":k", lw=2, label=r"$N(0,1)$ PDF")
-axes[1].set_title(r"Pooled $t$ statistic  (df $=n_1+n_2-2=28$)")
-axes[1].set_xlabel(r"$T$")
-axes[1].set_xlim(-5, 5)
-axes[1].legend(fontsize=8, loc="upper left")
+    여기서 $\sigma = 1$을 $S_p$로 바꾸면 정리 1에 따라
 
-# 두 밀도의 차이는 꼬리에서만 보인다. 확대해 둔다.
-inset = axes[1].inset_axes([0.60, 0.40, 0.37, 0.40])
-g2 = np.linspace(1.6, 4.0, 200)
-inset.plot(g2, stats.t(df).pdf(g2), "-r", lw=2)
-inset.plot(g2, stats.norm.pdf(g2), ":k", lw=2)
-inset.set_title("right tail", fontsize=7)
-inset.tick_params(labelsize=6)
+    $$
+    T = \frac{(\bar X_1-\bar X_2)-(-0.5)}{S_p\sqrt{2/15}} \sim t_{28}
+    $$
 
-plt.tight_layout()
-plt.show()
-```
+    이 **정확히** 성립한다. 자유도 $28 = 15+15-2$는 두 집단 평균을 각각 추정하는 데 하나씩 쓴 몫을 뺀 것이다. 두 분포 모두 근사가 아니라 등식이다.
 
-![차와 t 통계량의 표집분포](./img/diff_means_equal_fig1.png)
+    **(2) 두 밀도가 갈리는 자리.** $t_{28}$은 표준정규와 "꽤 비슷해 보인다"는 말로 넘기면 안 된다. 어디서 얼마나 다른지 미리 재어 두면 그림에서 무엇을 보아야 할지 정해진다.
 
-왼쪽에서 히스토그램과 빨간 곡선이 거의 완전히 겹친다. 중심도 폭도 맞는다. 5.6절의 $S^2$ 페이지들에서 폭이 어긋나던 그림과 대조적이다.
+    ```python
+    from scipy import stats
 
-오른쪽에서 히스토그램은 $t_{28}$ 곡선(실선)에 맞고 표준정규(점선)와는 미세하게 다르다. 가운데 부분만 보면 두 곡선을 구별하기 어렵지만, 확대한 꼬리에서는 $t_{28}$이 위에 있다. **기각 여부가 갈리는 자리가 바로 이 꼬리**이므로 이 작은 차이를 무시할 수 없다.
+    # t_28 과 N(0,1) 의 밀도비를 가운데서부터 꼬리까지 훑는다.
+    # 검정이 일어나는 자리는 |x| 가 2 를 넘는 구간이다.
+    print(f"{'x':>5}{'t28 밀도':>12}{'N(0,1) 밀도':>13}{'비':>8}")
+    for x in (0, 1, 2, 2.5, 3, 3.5):
+        print(f"{x:>5}{stats.t(28).pdf(x):>12.5f}{stats.norm.pdf(x):>13.5f}"
+              f"{stats.t(28).pdf(x) / stats.norm.pdf(x):>8.3f}")
 
-<div class="exbox" markdown>
+    print(f"\nP(|t28| > 1.96) = {2 * stats.t(28).sf(1.96):.4f}   (명목은 0.0500)")
+    print(f"P(|t28| > 3)    = {2 * stats.t(28).sf(3):.5f}   vs  P(|Z| > 3) = {2 * stats.norm.sf(3):.5f}")
+    ```
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 이론값과 포함률을 숫자로 확인
+    출력:
 
-</div>
+    ```
+        x      t28 밀도    N(0,1) 밀도       비
+        0     0.39540      0.39894   0.991
+        1     0.23771      0.24197   0.982
+        2     0.05704      0.05399   1.056
+      2.5     0.02129      0.01753   1.215
+        3     0.00695      0.00443   1.568
+      3.5     0.00205      0.00087   2.349
 
-```python
-# 보기 1에서 만든 d, sp2 를 그대로 쓴다.
-se_hat = np.sqrt(sp2 * (1 / n1 + 1 / n2))       # 추정된 표준오차
-se_true = sigma * np.sqrt(1 / n1 + 1 / n2)      # 참 표준오차
+    P(|t28| > 1.96) = 0.0600   (명목은 0.0500)
+    P(|t28| > 3)    = 0.00562   vs  P(|Z| > 3) = 0.00270
+    ```
 
-print(f"E[X1bar - X2bar]  이론 {mu1 - mu2:+.4f}   모의 {d.mean():+.4f}")
-print(f"SD[X1bar - X2bar] 이론 {se_true:.4f}   모의 {d.std(ddof=1):.4f}")
-print(f"E[Sp^2]           이론 {sigma**2:.4f}   모의 {sp2.mean():.4f}")
+    **가운데서는 $t_{28}$의 밀도가 오히려 조금 낮다.** $x = 0$에서 밀도비가 $0.991$, $x = 1$에서 $0.982$다. 두 밀도가 모두 전체 적분이 $1$이므로 꼬리로 보낸 확률만큼 가운데를 비워야 하기 때문이다. $|x| = 2$를 지나면서 비가 $1$을 넘고, $x = 3$에서 $1.57$배, $x = 3.5$에서 $2.35$배로 벌어진다. 꼬리확률로 적으면 $|T| > 3$일 확률이 $0.00562$ 대 $0.00270$, 곧 **두 배가 넘는다.**
 
-df = n1 + n2 - 2
-t_crit = stats.t(df).ppf(0.975)
-z_crit = stats.norm.ppf(0.975)
-lo = d - t_crit * se_hat
-hi = d + t_crit * se_hat
-print()
-print(f"임계값  t(28) = {t_crit:.4f},  z = {z_crit:.4f}")
-print(f"명목 95% 구간의 실제 포함률")
-print(f"  t(28) 임계값: {np.mean((lo <= mu1 - mu2) & (mu1 - mu2 <= hi)):.4f}")
-print(f"  z 임계값:     {np.mean(np.abs(d - (mu1 - mu2)) <= z_crit * se_hat):.4f}")
-```
+    **그림에서 볼 것이 이것으로 정해졌다.** 가운데 봉우리에서는 두 곡선을 눈으로 구별할 수 없고, 구별이 되는 자리는 $|x| > 2$의 꼬리뿐이며, 바로 거기가 기각 여부가 갈리는 자리다.
 
-출력:
+    **이제 모의실험.**
 
-```
-E[X1bar - X2bar]  이론 -0.5000   모의 -0.5017
-SD[X1bar - X2bar] 이론 0.3651   모의 0.3637
-E[Sp^2]           이론 1.0000   모의 0.9991
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
 
-임계값  t(28) = 2.0484,  z = 1.9600
-명목 95% 구간의 실제 포함률
-  t(28) 임계값: 0.9513
-  z 임계값:     0.9411
-```
+    rng = np.random.default_rng(1)
 
-평균, 표준편차, $E[S_p^2]$이 모두 이론값과 맞는다. 포함률은 $t$ 임계값으로 0.951, $z$ 임계값으로 0.941이다. 반복 10만 회에서 포함률 추정의 표준오차가 $\sqrt{0.95 \times 0.05/100000} = 0.0007$이므로 0.951은 0.95와 구별되지 않고, 0.941은 분명히 낮다. **$t$가 맞고 $z$는 틀렸다**는 것이 숫자로 갈린다.
+    n1 = n2 = 15
+    mu1, mu2, sigma = 0.0, 0.5, 1.0
+    B = 100_000
 
-<div class="exbox" markdown>
+    x1 = rng.normal(mu1, sigma, size=(B, n1))
+    x2 = rng.normal(mu2, sigma, size=(B, n2))
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 표본크기를 바꿔도 포함률은 그대로다
-
-</div>
-
-```python
-import numpy as np
-from scipy import stats
-
-rng = np.random.default_rng(1)
-B = 100_000
-delta = -0.5          # 참 차이 mu1 - mu2
-sigma = 1.0
-
-print("  n   포함률   검정력(모의)  검정력(비중심 t)")
-for n in (5, 15, 50):
-    x1 = rng.normal(0.0, sigma, size=(B, n))
-    x2 = rng.normal(0.5, sigma, size=(B, n))
     d = x1.mean(axis=1) - x2.mean(axis=1)
-    v1, v2 = x1.var(axis=1, ddof=1), x2.var(axis=1, ddof=1)
-    sp2 = (v1 + v2) / 2
-    se = np.sqrt(sp2 * 2 / n)
+    v1 = x1.var(axis=1, ddof=1)
+    v2 = x2.var(axis=1, ddof=1)
+    sp2 = ((n1 - 1) * v1 + (n2 - 1) * v2) / (n1 + n2 - 2)
+    t = (d - (mu1 - mu2)) / np.sqrt(sp2 * (1 / n1 + 1 / n2))
 
-    df = 2 * n - 2
-    crit = stats.t(df).ppf(0.975)
-    cover = np.mean(np.abs(d - delta) <= crit * se)     # 명목 95% 구간
-    power = np.mean(np.abs(d / se) > crit)              # H0: mu1 = mu2 기각률
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-    ncp = delta / (sigma * np.sqrt(2 / n))
-    exact = stats.nct(df, ncp).sf(crit) + stats.nct(df, ncp).cdf(-crit)
-    print(f"{n:>3}   {cover:.4f}     {power:.4f}       {exact:.4f}")
-```
+    # 왼쪽: 차 자체의 표집분포. 이론 정규밀도를 겹쳐 그린다.
+    se = sigma * np.sqrt(1 / n1 + 1 / n2)
+    g = np.linspace(d.min(), d.max(), 400)
+    axes[0].hist(d, bins=70, density=True, alpha=0.5, edgecolor="white",
+                 label=r"simulated $\bar X_1-\bar X_2$")
+    axes[0].plot(g, stats.norm(mu1 - mu2, se).pdf(g), "--r", lw=2,
+                 label=r"$N(-0.5,\ \sigma^2(1/n_1+1/n_2))$")
+    axes[0].axvline(mu1 - mu2, color="gray", lw=1)
+    axes[0].set_title(r"Difference of sample means  ($n_1=n_2=15$)")
+    axes[0].set_xlabel(r"$\bar X_1-\bar X_2$")
+    axes[0].set_ylabel("Density")
+    axes[0].legend(fontsize=8)
 
-출력:
+    # 오른쪽: sigma 를 Sp 로 바꾼 t 통계량. t(28)과 N(0,1)을 함께 겹친다.
+    df = n1 + n2 - 2
+    g = np.linspace(-5, 5, 400)
+    axes[1].hist(t, bins=100, range=(-5, 5), density=True, alpha=0.5,
+                 edgecolor="white", label=r"simulated $T$")
+    axes[1].plot(g, stats.t(df).pdf(g), "-r", lw=2, label=r"$t_{28}$ PDF")
+    axes[1].plot(g, stats.norm.pdf(g), ":k", lw=2, label=r"$N(0,1)$ PDF")
+    axes[1].set_title(r"Pooled $t$ statistic  (df $=n_1+n_2-2=28$)")
+    axes[1].set_xlabel(r"$T$")
+    axes[1].set_xlim(-5, 5)
+    axes[1].legend(fontsize=8, loc="upper left")
 
-```
-  n   포함률   검정력(모의)  검정력(비중심 t)
-  5   0.9508     0.1080       0.1077
- 15   0.9503     0.2626       0.2624
- 50   0.9521     0.6968       0.6969
-```
+    # 두 밀도의 차이는 꼬리에서만 보인다. 확대해 둔다.
+    inset = axes[1].inset_axes([0.60, 0.40, 0.37, 0.40])
+    g2 = np.linspace(1.6, 4.0, 200)
+    inset.plot(g2, stats.t(df).pdf(g2), "-r", lw=2)
+    inset.plot(g2, stats.norm.pdf(g2), ":k", lw=2)
+    inset.set_title("right tail", fontsize=7)
+    inset.tick_params(labelsize=6)
 
-두 가지를 읽을 수 있다.
+    plt.tight_layout()
+    plt.show()
+    ```
 
-첫째, **포함률이 $n$에 전혀 의존하지 않는다.** $n = 5$에서도 0.95다. 정리 1이 근사가 아니라 등식이므로 당연한 결과이며, 표본이 작을 때 정규근사에 기대는 방법들과 결정적으로 다른 점이다.
+    ![차와 t 통계량의 표집분포](./img/diff_means_equal_fig1.png)
 
-둘째, **검정력은 $n$에 크게 의존한다.** 효과크기 $0.5$를 집단당 15개로 잡아낼 확률은 0.26밖에 안 된다. 모의실험 값이 비중심 $t$ 분포로 계산한 이론값과 소수 셋째 자리까지 맞는다. 유효성(포함률)과 검정력은 다른 문제이며, 이 페이지의 "정확함"은 앞의 것만 보장한다.
+    왼쪽에서 히스토그램과 빨간 곡선이 거의 완전히 겹친다. 중심도 폭도 맞는다. 5.6절의 $S^2$ 페이지들에서 폭이 어긋나던 그림과 대조적이다.
+
+    오른쪽에서 히스토그램은 $t_{28}$ 곡선(실선)에 맞고 표준정규(점선)와는 미세하게 다르다. 가운데 부분만 보면 두 곡선을 구별하기 어렵지만, 확대한 꼬리에서는 $t_{28}$이 위에 있다. **기각 여부가 갈리는 자리가 바로 이 꼬리**이므로 이 작은 차이를 무시할 수 없다.
+
+    **눈으로 본 겹침을 수로 바꿔 두자.** $T$의 표본분위수를 $t_{28}$과 $N(0,1)$의 분위수에 나란히 놓으면 어느 곡선에 붙는지가 가려진다.
+
+    ```python
+    # 보기 1에서 만든 t 를 그대로 쓴다.
+    print(f"{'꼬리확률':>10}{'모의 분위수':>13}{'t(28)':>10}{'N(0,1)':>10}")
+    for q in (0.75, 0.90, 0.975, 0.995):
+        print(f"{q:>10.3f}{np.quantile(t, q):>13.4f}"
+              f"{stats.t(28).ppf(q):>10.4f}{stats.norm.ppf(q):>10.4f}")
+    ```
+
+    출력:
+
+    ```
+          꼬리확률       모의 분위수     t(28)    N(0,1)
+         0.750       0.6782    0.6834    0.6745
+         0.900       1.3089    1.3125    1.2816
+         0.975       2.0246    2.0484    1.9600
+         0.995       2.7217    2.7633    2.5758
+    ```
+
+    **위의 두 줄에서는 세 수가 거의 겹치고, 아래 두 줄에서 갈린다.** $0.975$ 분위수에서 모의값 $2.0246$은 $t_{28}$의 $2.0484$에서 $0.024$ 떨어져 있고 $N(0,1)$의 $1.9600$에서는 $0.065$ 떨어져 있다. $0.995$ 분위수에서는 $0.042$ 대 $0.146$으로 격차가 더 벌어진다. **어느 자리에서나 $t$ 쪽이 가깝다.**
+
+    모의값이 $t_{28}$보다 조금씩 작게 나온 것은 이 씨앗 탓이다. 10만 개로 잰 $0.975$ 분위수의 몬테카를로 오차는 $\sqrt{0.975 \times 0.025/100000}\big/f_{t_{28}}(2.0484) = 0.0087$이고, 씨앗을 여섯 개 바꿔 다시 재면 $2.025$에서 $2.060$ 사이를 오가며 $2.0484$를 둘러싼다. **체계적 어긋남이 아니라 몬테카를로 오차다.**
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 이론값과 포함률을 숫자로 확인. 보기 1의 10만 개 표본을 그대로 쓴다.
+
+**(1)** $E[\bar X_1-\bar X_2]$, $\operatorname{SD}(\bar X_1-\bar X_2)$, $E[S_p^2]$의 이론값을 적으시오.
+
+**(2)** 명목 95% 구간을 $t_{28}$ 임계값으로 만들 때와 $z$ 임계값으로 만들 때의 포함률이 각각 얼마가 되어야 하는지 계산하고, 모의실험으로 확인하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 이론값.** 세 값 모두 닫힌 꼴이다.
+
+    $$
+    E[\bar X_1-\bar X_2] = \mu_1-\mu_2 = -0.5,
+    \qquad
+    \operatorname{SD}(\bar X_1-\bar X_2) = \sigma\sqrt{\tfrac{1}{15}+\tfrac{1}{15}} = 0.3651
+    $$
+
+    $E[S_p^2] = \sigma^2 = 1$은 연습문제 2가 보이는 불편성이다. 자유도를 가중값으로 쓴 가중평균이고 가중값의 합이 $1$이므로 $E[S_p^2] = \sigma^2$이다.
+
+    **(2) 두 포함률의 이론값.** $t$ 임계값 쪽은 정리 1이 곧바로 답을 준다.
+
+    $$
+    P\!\left(|T| \le t_{0.975,\,28}\right) = 0.95 \quad \text{(정확히)}
+    $$
+
+    $z$ 임계값 쪽은 다르다. 구간의 폭만 $1.96$으로 좁혔을 뿐 $T$의 분포는 여전히 $t_{28}$이므로, 빗나갈 확률은 표준정규가 아니라 $t_{28}$의 꼬리에서 읽어야 한다.
+
+    $$
+    P\!\left(|T| > 1.96\right) = P\!\left(|t_{28}| > 1.96\right) = 0.0600
+    $$
+
+    따라서 $z$ 쪽 포함률은 $1 - 0.0600 = 0.9400$이어야 한다. **명목 95%가 실제로는 94%다.** 어긋남의 방향도 정해져 있다. $t_{28}$이 표준정규보다 꼬리가 무거우므로 $z$ 임계값은 **언제나** 너무 짧고, 포함률은 **언제나** 부족한 쪽으로 틀린다.
+
+    **이제 모의실험.**
+
+    ```python
+    # 보기 1에서 만든 d, sp2 를 그대로 쓴다.
+    se_hat = np.sqrt(sp2 * (1 / n1 + 1 / n2))       # 추정된 표준오차
+    se_true = sigma * np.sqrt(1 / n1 + 1 / n2)      # 참 표준오차
+
+    print(f"E[X1bar - X2bar]  이론 {mu1 - mu2:+.4f}   모의 {d.mean():+.4f}")
+    print(f"SD[X1bar - X2bar] 이론 {se_true:.4f}   모의 {d.std(ddof=1):.4f}")
+    print(f"E[Sp^2]           이론 {sigma**2:.4f}   모의 {sp2.mean():.4f}")
+
+    df = n1 + n2 - 2
+    t_crit = stats.t(df).ppf(0.975)
+    z_crit = stats.norm.ppf(0.975)
+    lo = d - t_crit * se_hat
+    hi = d + t_crit * se_hat
+    print()
+    print(f"임계값  t(28) = {t_crit:.4f},  z = {z_crit:.4f}")
+    print(f"명목 95% 구간의 실제 포함률")
+    print(f"  t(28) 임계값: {np.mean((lo <= mu1 - mu2) & (mu1 - mu2 <= hi)):.4f}")
+    print(f"  z 임계값:     {np.mean(np.abs(d - (mu1 - mu2)) <= z_crit * se_hat):.4f}")
+    ```
+
+    출력:
+
+    ```
+    E[X1bar - X2bar]  이론 -0.5000   모의 -0.5017
+    SD[X1bar - X2bar] 이론 0.3651   모의 0.3637
+    E[Sp^2]           이론 1.0000   모의 0.9991
+
+    임계값  t(28) = 2.0484,  z = 1.9600
+    명목 95% 구간의 실제 포함률
+      t(28) 임계값: 0.9513
+      z 임계값:     0.9411
+    ```
+
+    평균, 표준편차, $E[S_p^2]$이 모두 이론값과 맞는다. 포함률은 $t$ 임계값으로 0.951, $z$ 임계값으로 0.941이다. 반복 10만 회에서 포함률 추정의 표준오차가 $\sqrt{0.95 \times 0.05/100000} = 0.0007$이므로 0.951은 0.95와 구별되지 않고, 0.941은 분명히 낮다. **$t$가 맞고 $z$는 틀렸다**는 것이 숫자로 갈린다.
+
+    **이론과 모의를 나란히 두면 이렇다.** 반복 10만 회에서 포함률 추정의 몬테카를로 오차는 $\sqrt{0.95 \times 0.05/100000} = 0.0007$이다.
+
+    | 양 | 이론값 | 모의값 | 어긋남 |
+    |:---|---:|---:|:---|
+    | $E[\bar X_1-\bar X_2]$ | $-0.5000$ | $-0.5017$ | $-0.0017$ — 몬테카를로 오차 $0.0012$의 $1.5$배 |
+    | $\operatorname{SD}(\bar X_1-\bar X_2)$ | $0.3651$ | $0.3637$ | $-0.0014$ — 몬테카를로 오차 $0.0008$의 $1.7$배 |
+    | $E[S_p^2]$ | $1.0000$ | $0.9991$ | $-0.0009$ — 맞는다 |
+    | 포함률($t$) | $0.9500$ | $0.9513$ | $+0.0013$ — 오차 $0.0007$의 $1.9$배 |
+    | 포함률($z$) | $0.9400$ | $0.9411$ | $+0.0011$ — 오차 $0.0007$의 $1.6$배 |
+
+    다섯 줄이 모두 몬테카를로 오차의 두 배 안에 있다. 이 씨앗이 산포를 조금 작게 뽑은 쪽이어서 둘째 줄과 넷째 줄의 어긋남이 같은 방향으로 섰는데, 씨앗을 여섯 개 바꿔 $\operatorname{SD}$를 다시 재면 $0.3637$에서 $0.3657$ 사이를 오가며 이론값 $0.3651$을 둘러싼다. **체계적 차이가 아니라 몬테카를로 오차다.**
+
+    **$t$와 $z$의 갈림이 숫자로 섰다.** $0.9513$은 $0.95$와 구별되지 않고 $0.9411$은 $0.94$와 구별되지 않는다. 곧 $t$ 임계값은 맞고 $z$ 임계값은 1%포인트 모자라며, 그 1%포인트는 어림이 아니라 $P(|t_{28}|>1.96) = 0.0600$이라는 **미리 계산된 값**이다. 임계값을 $4.5\%$ 줄인 대가가 오류율을 $5\%$에서 $6\%$로 $20\%$ 늘리는 것으로 돌아온 셈이다.
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 표본크기를 바꿔도 포함률은 그대로다. 두 모집단을 $N(0,1)$과 $N(0.5,1)$로 두고 집단당 $n = 5, 15, 50$에서 명목 95% 구간의 포함률과 $H_0: \mu_1 = \mu_2$의 기각률을 10만 번씩 재어 본다.
+
+**(1)** 포함률이 $n$에 의존하지 **않아야** 하는 까닭을 적고, 기각률이 세 $n$에서 얼마가 되어야 하는지 비중심 $t$ 분포로 미리 계산하시오.
+
+**(2)** 모의실험으로 두 예측을 확인하고, 유효성과 검정력이 어떻게 다른지 말하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 이론값.** 두 물음의 답이 전혀 다른 곳에서 온다.
+
+    **포함률은 $n$과 무관하다.** 정리 1이 말하는 것은 $T \sim t_{n_1+n_2-2}$가 **등식**이라는 것이고, 등식에는 "$n$이 충분히 크면"이라는 조건이 붙지 않는다. 임계값을 $t_{0.975,\,2n-2}$로 잡으면 정의상
+
+    $$
+    P\!\left(|T| \le t_{0.975,\,2n-2}\right) = 0.95
+    $$
+
+    이 $n$에 관계없이 성립한다. $n$이 바뀌면 자유도가 바뀌고 임계값도 함께 바뀌어 꼬리확률이 늘 $0.05$로 맞춰지기 때문이다. $n = 5$에서는 자유도 8, 임계값 $2.3060$이고 $n = 50$에서는 자유도 98, 임계값 $1.9845$다. **값은 다르지만 그 값이 자르는 확률은 같다.**
+
+    **기각률은 $n$에 크게 의존한다.** $\mu_1 \ne \mu_2$일 때 $T$는 중심 $t$가 아니라 비중심모수
+
+    $$
+    \mathrm{ncp} = \frac{\mu_1-\mu_2}{\sigma\sqrt{1/n_1+1/n_2}} = \frac{-0.5}{\sqrt{2/n}}
+    $$
+
+    를 가진 비중심 $t$ 분포를 따른다. 검정력은 $P(|T| > t_{0.975,\,2n-2})$이고 이것은 닫힌 꼴이 아니라 수치적분으로 구한다.
+
+    | $n$ | 자유도 | 임계값 | $\mathrm{ncp}$ | 검정력(비중심 $t$) |
+    |---:|---:|---:|---:|---:|
+    | 5 | 8 | 2.3060 | $-0.7906$ | 0.1077 |
+    | 15 | 28 | 2.0484 | $-1.3693$ | 0.2624 |
+    | 50 | 98 | 1.9845 | $-2.5000$ | 0.6969 |
+
+    **예측은 이렇다.** 포함률 열은 세 줄 모두 $0.95$, 기각률 열은 $0.11 \to 0.26 \to 0.70$으로 오른다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    B = 100_000
+    delta = -0.5          # 참 차이 mu1 - mu2
+    sigma = 1.0
+
+    print("  n   포함률   검정력(모의)  검정력(비중심 t)")
+    for n in (5, 15, 50):
+        x1 = rng.normal(0.0, sigma, size=(B, n))
+        x2 = rng.normal(0.5, sigma, size=(B, n))
+        d = x1.mean(axis=1) - x2.mean(axis=1)
+        v1, v2 = x1.var(axis=1, ddof=1), x2.var(axis=1, ddof=1)
+        sp2 = (v1 + v2) / 2
+        se = np.sqrt(sp2 * 2 / n)
+
+        df = 2 * n - 2
+        crit = stats.t(df).ppf(0.975)
+        cover = np.mean(np.abs(d - delta) <= crit * se)     # 명목 95% 구간
+        power = np.mean(np.abs(d / se) > crit)              # H0: mu1 = mu2 기각률
+
+        ncp = delta / (sigma * np.sqrt(2 / n))
+        exact = stats.nct(df, ncp).sf(crit) + stats.nct(df, ncp).cdf(-crit)
+        print(f"{n:>3}   {cover:.4f}     {power:.4f}       {exact:.4f}")
+    ```
+
+    출력:
+
+    ```
+      n   포함률   검정력(모의)  검정력(비중심 t)
+      5   0.9508     0.1080       0.1077
+     15   0.9503     0.2626       0.2624
+     50   0.9521     0.6968       0.6969
+    ```
+
+    두 가지를 읽을 수 있다.
+
+    첫째, **포함률이 $n$에 전혀 의존하지 않는다.** $n = 5$에서도 0.95다. 정리 1이 근사가 아니라 등식이므로 당연한 결과이며, 표본이 작을 때 정규근사에 기대는 방법들과 결정적으로 다른 점이다.
+
+    둘째, **검정력은 $n$에 크게 의존한다.** 효과크기 $0.5$를 집단당 15개로 잡아낼 확률은 0.26밖에 안 된다. 모의실험 값이 비중심 $t$ 분포로 계산한 이론값과 소수 셋째 자리까지 맞는다. 유효성(포함률)과 검정력은 다른 문제이며, 이 페이지의 "정확함"은 앞의 것만 보장한다.
+
+    **예측이 그대로 맞았다.** 포함률은 $0.9508,\ 0.9503,\ 0.9521$로 셋 다 $0.95$이고, 반복 10만 회에서 포함률 추정의 몬테카를로 오차가 $\sqrt{0.95 \times 0.05/100000} = 0.0007$이므로 가장 멀리 간 $0.9521$조차 $3$ 오차 안이다. 기각률은 $0.1080,\ 0.2626,\ 0.6968$로 비중심 $t$가 준 $0.1077,\ 0.2624,\ 0.6969$와 소수 셋째 자리까지 맞는다.
+
+    **두 열이 함께 있는 것이 이 보기의 요점이다.** 왼쪽 열은 $n$을 다섯 개로 줄여도 꿈쩍하지 않고, 오른쪽 열은 $n$을 열 배로 늘려야 쓸 만해진다. 유효성은 정리가 보장하고 검정력은 설계가 사는 것이며, 이 쪽이 세 번 말한 "정확히"는 앞의 것만 두고 한 말이다. **구간이 95%를 담는다는 사실과 그 구간이 쓸모 있을 만큼 좁다는 사실은 서로 다른 이야기다.**
 
 ## 해석
 

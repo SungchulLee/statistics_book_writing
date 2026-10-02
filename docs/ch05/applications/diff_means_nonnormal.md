@@ -96,264 +96,590 @@ $1/\sqrt n$ 속도로 줄어든다. 표본을 10배로 늘려야 왜도가 3분�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 균형 설계에서 표본크기를 키운다
+**보기 1.** <span class="diff easy" title="쉬움"></span> 균형 설계에서 표본크기를 키운다. 정규·지수·로그정규 모집단에서 두 집단을 **같은 모집단에서 같은 크기로** 뽑아 $H_0$가 참인 자료를 만들고, 명목 5% 양측 Welch 검정의 기각률을 두 꼬리로 나누어 센다.
+
+**(1)** 두 꼬리의 기각률이 **정확히** 같아야 하는 까닭을 적으시오. 점근이 아니라 모든 $n$에서 성립하는 성질이다.
+
+**(2)** 합계가 $0.05$보다 커질지 작아질지 예측하고, 그 어긋남이 줄어드는 속도를 모의실험으로 재시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(1)
-B = 50_000
-alpha = 0.05
+    **(1) 대칭은 점근적 성질이 아니다.** $X_1,\ldots,X_n$과 $Y_1,\ldots,Y_n$을 **같은 분포에서 같은 개수**로 뽑았으므로 두 표본의 이름을 맞바꾸어도 자료 전체의 결합분포가 변하지 않는다. 이름을 바꾸면
+
+    $$
+    \bar X_1 - \bar X_2 \;\longmapsto\; -(\bar X_1-\bar X_2),
+    \qquad
+    \frac{S_1^2}{n}+\frac{S_2^2}{n} \;\longmapsto\; \text{그대로},
+    \qquad
+    \nu \;\longmapsto\; \text{그대로}
+    $$
+
+    이다. 분모와 자유도는 두 집단을 **대칭으로** 쓰고 분자만 부호가 뒤집히므로 $T \longmapsto -T$다. 따라서 $T$와 $-T$가 같은 분포를 따르고, 임계값도 $\nu$만으로 정해지므로
+
+    $$
+    P(T < -t_{0.975,\nu}) = P(T > t_{0.975,\nu})
+    $$
+
+    가 **모든 $n$과 모든 모집단에서** 정확히 성립한다. 왜도가 $6.18$이든 $0$이든 상관없다.
+
+    이것을 누적률로 다시 보면 본문의 식이 된다. $\sigma_1 = \sigma_2$, $n_1 = n_2$에서
+
+    $$
+    \kappa_3(\bar X_1-\bar X_2) = \gamma_1\left(\frac{\sigma^3}{n^2}-\frac{\sigma^3}{n^2}\right) = 0
+    $$
+
+    이고, 홀수 차수 누적률이 모두 같은 이유로 지워진다. **에지워스 전개의 맨 앞 $O(n^{-1/2})$ 항이 왜도에 비례하므로 그 항이 통째로 사라진다.** 남는 것은 첨도가 만드는 $O(n^{-1})$ 항이다.
+
+    **(2) 합계는 $0.05$보다 작아야 한다.** 꼬리가 무거운 모집단에서는 어쩌다 한 집단에 큰 값이 들어와 $S_i^2$이 몇 배로 뛴다. 그러면 Welch 통계량의 분모가 커져 $|T|$가 $0$ 쪽으로 눌리고, 동시에 $\nu$가 작아져 임계값이 커진다. **두 효과가 모두 기각을 줄이는 쪽**이다. 따라서
+
+    $$
+    \text{실제 오류율} < 0.05, \qquad 0.05 - (\text{실제}) = O(n^{-1})
+    $$
+
+    를 예측한다. 첨도가 클수록 어긋남이 크므로 정규 $0$, 지수 $6$, 로그정규 $110.9$ 순으로 벌어져야 한다.
+
+    **이제 모의실험.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    B = 50_000
+    alpha = 0.05
 
 
-def draw(pop, size):
-    if pop == "Exp":
-        return rng.exponential(1.0, size=size)          # 왜도 2
-    if pop == "LogN":
-        return rng.lognormal(0.0, 1.0, size=size)       # 왜도 6.18
-    return rng.normal(0.0, 1.0, size=size)              # 왜도 0
-
-
-def welch_reject(pop, n):
-    """두 집단을 같은 모집단에서 뽑아 H0가 참인 상황을 만든다."""
-    x1, x2 = draw(pop, (B, n)), draw(pop, (B, n))
-    a = x1.var(axis=1, ddof=1) / n
-    b = x2.var(axis=1, ddof=1) / n
-    t = (x1.mean(axis=1) - x2.mean(axis=1)) / np.sqrt(a + b)
-    nu = (a + b) ** 2 / (a ** 2 / (n - 1) + b ** 2 / (n - 1))
-    crit = stats.t(nu).ppf(1 - alpha / 2)
-    return np.mean(t < -crit), np.mean(t > crit)
-
-
-print("모집단     n    왼쪽꼬리  오른쪽꼬리   합계")
-for pop in ("Normal", "Exp", "LogN"):
-    for n in (10, 30, 100):
-        left, right = welch_reject(pop, n)
-        print(f"{pop:<8} {n:>4}     {left:.3f}     {right:.3f}    {left + right:.3f}")
-```
-
-출력:
-
-```
-모집단     n    왼쪽꼬리  오른쪽꼬리   합계
-Normal     10     0.025     0.024    0.049
-Normal     30     0.025     0.025    0.050
-Normal    100     0.024     0.025    0.049
-Exp        10     0.019     0.019    0.037
-Exp        30     0.024     0.022    0.046
-Exp       100     0.025     0.023    0.048
-LogN       10     0.013     0.014    0.027
-LogN       30     0.020     0.020    0.040
-LogN      100     0.022     0.023    0.045
-```
-
-세 가지를 읽는다.
-
-**첫째, 두 꼬리가 같다.** 어느 줄에서도 왼쪽과 오른쪽이 0.001 안쪽으로 붙어 있다. 이론에서 본 왜도의 상쇄가 그대로 나타난 것이다. 왜도 6.18짜리 모집단에서도 차의 분포는 대칭이다.
-
-**둘째, 어긋남이 보수적인 방향이다.** 로그정규 $n = 10$에서 0.027로 명목값의 절반 남짓이다. 위험한 쪽이 아니라 검정력을 잃는 쪽이다.
-
-**셋째, $n$을 키우면 사라진다.** 0.05와의 차이가 로그정규에서 0.023 → 0.010 → 0.005로 줄어든다. $n$이 3배가 될 때마다 절반 남짓으로 줄어드는 셈이어서, $O(n^{-1})$이 예측하는 3분의 1보다는 조금 느리다(연습문제 4).
-
-그러나 $n = 100$에서도 0.045다. **완전히 회복되지는 않았다.** 첨도 111짜리 모집단에서는 수백 개가 필요하다.
-
-<div class="exbox" markdown>
-
-**보기 2.** <span class="diff easy" title="쉬움"></span> 신뢰구간의 실제 포함률
-
-</div>
-
-```python
-import numpy as np
-from scipy import stats
-
-rng = np.random.default_rng(1)
-B = 50_000
-alpha = 0.05
-
-# 모집단 2는 모집단 1을 2배로 늘린 것이다. 따라서 mu2 = 2*mu1, sigma2 = 2*sigma1 이고
-# 참 차이는 delta = mu1 - mu2 = -mu1 이다. 비정규성과 이분산이 함께 들어 있다.
-pops = {"Exp": 1.0, "LogN": np.exp(0.5)}     # 각 모집단의 평균 mu1
-
-print("모집단     n    포함률   왼쪽으로 벗어남  오른쪽으로 벗어남   mean nu")
-for pop, mu1 in pops.items():
-    for n in (10, 30, 100):
+    def draw(pop, size):
         if pop == "Exp":
-            x1 = rng.exponential(1.0, size=(B, n))
-            x2 = 2.0 * rng.exponential(1.0, size=(B, n))
-        else:
-            x1 = rng.lognormal(0.0, 1.0, size=(B, n))
-            x2 = 2.0 * rng.lognormal(0.0, 1.0, size=(B, n))
-        delta = -mu1
+            return rng.exponential(1.0, size=size)          # 왜도 2
+        if pop == "LogN":
+            return rng.lognormal(0.0, 1.0, size=size)       # 왜도 6.18
+        return rng.normal(0.0, 1.0, size=size)              # 왜도 0
+
+
+    def welch_reject(pop, n):
+        """두 집단을 같은 모집단에서 뽑아 H0가 참인 상황을 만든다."""
+        x1, x2 = draw(pop, (B, n)), draw(pop, (B, n))
         a = x1.var(axis=1, ddof=1) / n
         b = x2.var(axis=1, ddof=1) / n
-        se = np.sqrt(a + b)
+        t = (x1.mean(axis=1) - x2.mean(axis=1)) / np.sqrt(a + b)
         nu = (a + b) ** 2 / (a ** 2 / (n - 1) + b ** 2 / (n - 1))
         crit = stats.t(nu).ppf(1 - alpha / 2)
+        return np.mean(t < -crit), np.mean(t > crit)
+
+
+    print("모집단     n    왼쪽꼬리  오른쪽꼬리   합계")
+    for pop in ("Normal", "Exp", "LogN"):
+        for n in (10, 30, 100):
+            left, right = welch_reject(pop, n)
+            print(f"{pop:<8} {n:>4}     {left:.3f}     {right:.3f}    {left + right:.3f}")
+    ```
+
+    출력:
+
+    ```
+    모집단     n    왼쪽꼬리  오른쪽꼬리   합계
+    Normal     10     0.025     0.024    0.049
+    Normal     30     0.025     0.025    0.050
+    Normal    100     0.024     0.025    0.049
+    Exp        10     0.019     0.019    0.037
+    Exp        30     0.024     0.022    0.046
+    Exp       100     0.025     0.023    0.048
+    LogN       10     0.013     0.014    0.027
+    LogN       30     0.020     0.020    0.040
+    LogN      100     0.022     0.023    0.045
+    ```
+
+    세 가지를 읽는다.
+
+    **첫째, 두 꼬리가 같다.** 어느 줄에서도 왼쪽과 오른쪽이 0.001 안쪽으로 붙어 있다. 이론에서 본 왜도의 상쇄가 그대로 나타난 것이다. 왜도 6.18짜리 모집단에서도 차의 분포는 대칭이다.
+
+    **둘째, 어긋남이 보수적인 방향이다.** 로그정규 $n = 10$에서 0.027로 명목값의 절반 남짓이다. 위험한 쪽이 아니라 검정력을 잃는 쪽이다.
+
+    **셋째, $n$을 키우면 사라진다.** 0.05와의 차이가 로그정규에서 0.023 → 0.010 → 0.005로 줄어든다. $n$이 3배가 될 때마다 절반 남짓으로 줄어드는 셈이어서, $O(n^{-1})$이 예측하는 3분의 1보다는 조금 느리다(연습문제 4).
+
+    그러나 $n = 100$에서도 0.045다. **완전히 회복되지는 않았다.** 첨도 111짜리 모집단에서는 수백 개가 필요하다.
+
+    **(1)이 그대로 확인된다.** 아홉 줄 어디에서도 두 꼬리가 $0.002$ 넘게 벌어지지 않는다. 반복 5만 회에서 두 꼬리 차의 몬테카를로 오차는
+
+    $$
+    \sqrt{\frac{p_L(1-p_L)+p_R(1-p_R)+2p_Lp_R}{B}} \approx 0.0010
+    $$
+
+    이므로 모든 줄이 $2$ 오차 안이다. 왜도 $6.18$짜리 모집단에서 $n = 10$으로도 $0.013$과 $0.014$다. **대칭은 표본크기가 벌어 주는 것이 아니라 설계가 거저 주는 것**이다.
+
+    **(2)의 방향도 맞는다.** 합계가 정규 $0.049$, 지수 $0.037$, 로그정규 $0.027$로 첨도 순서대로 아래로 내려간다. 모두 $0.05$보다 **작다.**
+
+    **속도는 따로 재야 한다.** 표의 합계는 몬테카를로 오차가 $0.001$인데 어긋남 자체가 $n = 100$에서 $0.002 \sim 0.005$라 자릿수가 모자란다. 반복을 50만 번으로 올리고 $n = 300$을 더해 다시 잰다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(7)
+    alpha, B = 0.05, 500_000
+
+    def gap(pop, n):
+        """0.05 와의 차이를 몬테카를로 오차 아래로 끌어내리려 반복을 50만 번으로 올린다."""
+        f = (rng.exponential if pop == "Exp" else rng.lognormal)
+        arg = (1.0,) if pop == "Exp" else (0.0, 1.0)
+        x1, x2 = f(*arg, size=(B, n)), f(*arg, size=(B, n))
+        a, b = x1.var(axis=1, ddof=1) / n, x2.var(axis=1, ddof=1) / n
+        t = (x1.mean(axis=1) - x2.mean(axis=1)) / np.sqrt(a + b)
+        nu = (a + b) ** 2 / (a ** 2 / (n - 1) + b ** 2 / (n - 1))
+        p = np.mean(np.abs(t) > stats.t(nu).ppf(1 - alpha / 2))
+        return p, np.sqrt(p * (1 - p) / B)
+
+    print(f"{'모집단':>6}{'n':>6}{'실제':>9}{'MC오차':>9}{'0.05-실제':>11}{'국소 기울기':>12}")
+    for pop in ("Exp", "LogN"):
+        prev = None
+        for n in (10, 30, 100, 300):
+            p, se = gap(pop, n)
+            g = 0.05 - p
+            slope = "" if prev is None else f"{np.log(prev[1] / g) / np.log(n / prev[0]):.2f}"
+            print(f"{pop:>6}{n:>6}{p:>9.4f}{se:>9.4f}{g:>11.4f}{slope:>12}".rstrip())
+            prev = (n, g)
+    ```
+
+    출력:
+
+    ```
+       모집단     n       실제     MC오차    0.05-실제      국소 기울기
+       Exp    10   0.0376   0.0003     0.0124
+       Exp    30   0.0467   0.0003     0.0033        1.21
+       Exp   100   0.0493   0.0003     0.0007        1.27
+       Exp   300   0.0499   0.0003     0.0001        2.28
+      LogN    10   0.0275   0.0002     0.0225
+      LogN    30   0.0394   0.0003     0.0106        0.68
+      LogN   100   0.0451   0.0003     0.0049        0.64
+      LogN   300   0.0477   0.0003     0.0023        0.68
+    ```
+
+    "국소 기울기"는 $\log(\Delta_{\text{앞}}/\Delta_{\text{뒤}})\big/\log(n_{\text{뒤}}/n_{\text{앞}})$이므로 $O(n^{-1})$이면 $1$, $O(n^{-1/2})$이면 $0.5$가 나와야 한다.
+
+    **지수는 예측대로 $O(n^{-1})$이다.** 기울기가 $1.21$과 $1.27$로 $1$ 둘레에 있고, $n = 300$의 $2.28$은 어긋남 $0.0001$이 몬테카를로 오차 $0.0003$보다 작아 읽을 수 없는 값이다. 어긋남이 $0.0124 \to 0.0001$로 두 자릿수 줄었다.
+
+    **로그정규는 기울기가 $0.64 \sim 0.68$에 머문다.** $O(n^{-1})$보다 뚜렷이 느리다. 왜도 항이 지워진 것은 맞지만 **첨도가 만드는 항이 아직 점근식에 들어가지 못했기 때문**이다. 전개의 크기를 재는 양이 초과첨도를 $n$으로 나눈 $\gamma_2/n = 110.9/n$인데, $n = 100$에서도 $1.1$로 아직 $1$을 넘는다. $O(n^{-1})$이라는 말이 뜻을 가지려면 이 양이 $1$보다 한참 작아야 한다.
+
+    **그래서 두 결론을 함께 적어야 정직하다.** 비정규성의 어긋남은 **분명히 사라진다** — 지수에서 $n = 300$이면 $0.0499$로 명목과 구별되지 않는다. 그러나 **빨리 사라진다는 보장은 없다** — 로그정규는 $n = 300$에서도 $0.0477$로 $0.0023$ 모자란다. "$n \ge 30$이면 중심극한정리"라는 어림은 왜도 $1$ 안팎의 온건한 모집단을 두고 한 말이며, 왜도 $6.18$·초과첨도 $110.9$짜리 모집단에는 통하지 않는다(연습문제 4).
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 신뢰구간의 실제 포함률. 모집단 2를 모집단 1의 2배로 두어($\mu_2 = 2\mu_1$, $\sigma_2 = 2\sigma_1$) 비정규성과 이분산이 함께 있는 자료를 만들고, 명목 95% Welch 구간이 참 차이를 담는 비율을 센다.
+
+**(1)** 이 설정에서 $\bar X_1 - \bar X_2$의 표준화 왜도를 닫힌 꼴로 구하고 세 표본크기에서 수를 내시오. 보기 1과 달리 왜도가 왜 상쇄되지 않는가.
+
+**(2)** 그 왜도의 **부호**가 구간이 어느 쪽으로 빗나가게 만드는지 예측하고, 모의실험으로 확인하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 상쇄 조건이 깨졌다.** 보기 1에서 두 항이 지워진 것은 $\sigma_1^3/n_1^2 = \sigma_2^3/n_2^2$였기 때문이다. 여기서는 $n_1 = n_2 = n$이지만 $\sigma_2 = 2\sigma_1$이므로
+
+    $$
+    \kappa_3(\bar X_1-\bar X_2)
+    = \gamma_1\!\left(\frac{\sigma_1^3}{n^2} - \frac{(2\sigma_1)^3}{n^2}\right)
+    = -\frac{7\gamma_1\sigma_1^3}{n^2}
+    $$
+
+    로 **지워지기는커녕 일곱 배가 되어 남는다.** 두 집단이 같은 모양이라 왜도의 부호도 같은데, 큰 쪽이 세제곱으로 들어가니 뺄셈이 오히려 키운 셈이다. 분산은
+
+    $$
+    \operatorname{Var}(\bar X_1-\bar X_2) = \frac{\sigma_1^2 + 4\sigma_1^2}{n} = \frac{5\sigma_1^2}{n}
+    $$
+
+    이므로 표준화 왜도는
+
+    $$
+    \frac{\kappa_3}{\operatorname{Var}^{3/2}}
+    = \frac{-7\gamma_1\sigma_1^3/n^2}{(5\sigma_1^2/n)^{3/2}}
+    = -\frac{7\gamma_1}{5^{3/2}\sqrt n}
+    = -\frac{0.6261\,\gamma_1}{\sqrt n}
+    $$
+
+    이다. **$\sigma_1$이 약분되어 사라지고 모집단의 왜도와 $n$만 남는다.** $\text{Exp}(1)$은 $\gamma_1 = 2$, $\text{LogNormal}(0,1)$은 $\gamma_1 = (e+2)\sqrt{e-1} = 6.1849$이므로
+
+    | 모집단 | $n=10$ | $n=30$ | $n=100$ |
+    |:---|---:|---:|---:|
+    | $\text{Exp}(1)$ | $-0.3960$ | $-0.2286$ | $-0.1252$ |
+    | $\text{LogNormal}(0,1)$ | $-1.2245$ | $-0.7070$ | $-0.3872$ |
+
+    이고 $1/\sqrt n$ 속도로만 준다. 모의로 재어 닫힌 꼴이 맞는지 확인해 둔다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def closed(g1, s1, s2, n1, n2):
+        """차의 표준화 왜도. 누적률은 더해지고 상수배에서 세제곱으로 늘어난다."""
+        k3 = g1 * (s1 ** 3 / n1 ** 2 - s2 ** 3 / n2 ** 2)
+        v = s1 ** 2 / n1 + s2 ** 2 / n2
+        return k3 / v ** 1.5
+
+    rng = np.random.default_rng(11)
+    s_exp, g_exp = 1.0, 2.0
+    s_log, g_log = np.sqrt(np.e ** 2 - np.e), (np.e + 2) * np.sqrt(np.e - 1)
+
+    print(f"{'모집단':>6}{'n':>5}{'닫힌 꼴':>10}{'모의':>10}")
+    for name, s, g, f in (("Exp", s_exp, g_exp, lambda sz: rng.exponential(1.0, sz)),
+                          ("LogN", s_log, g_log, lambda sz: rng.lognormal(0.0, 1.0, sz))):
+        for n in (10, 30, 100):
+            d = f((400_000, n)).mean(1) - 2.0 * f((400_000, n)).mean(1)
+            print(f"{name:>6}{n:>5}{closed(g, s, 2 * s, n, n):>10.4f}{stats.skew(d):>10.4f}")
+    ```
+
+    출력:
+
+    ```
+       모집단    n      닫힌 꼴        모의
+       Exp   10   -0.3960   -0.3991
+       Exp   30   -0.2286   -0.2239
+       Exp  100   -0.1252   -0.1263
+      LogN   10   -1.2245   -1.2428
+      LogN   30   -0.7070   -0.6955
+      LogN  100   -0.3872   -0.3976
+    ```
+
+    여섯 줄이 모두 셋째 자리까지 맞는다. 40만 번에서 왜도 추정의 몬테카를로 오차가 대략 $\sqrt{6/400000} = 0.0039$이므로 그 서너 배 안이며, 꼬리가 무거운 분포에서 표본왜도 자체가 느리게 수렴한다는 것을 감안하면 **닫힌 꼴이 맞다.**
+
+    **(2) 부호가 방향을 정한다.** 차의 왜도가 **음수**이므로 $\bar X_1 - \bar X_2$의 분포는 왼쪽 꼬리가 길고 **봉우리는 평균보다 오른쪽**에 있다. 그러면 대부분의 표본에서 $\bar X_1-\bar X_2$가 참값 $\delta$보다 **크게** 나오고, 그 둘레에 세운 구간도 $\delta$ 위쪽에 놓이기 쉽다.
+
+    $$
+    \text{예측: } P(\text{구간이 } \delta \text{ 위에}) \;\gg\; P(\text{구간이 } \delta \text{ 아래에})
+    $$
+
+    왼쪽 꼬리는 길지만 거기에 해당하는 표본에서는 큰 값 하나가 $S_2^2$도 함께 키워 구간이 넓어지므로 빗나가기보다 덮어 버린다. **그래서 모자라는 포함률의 거의 전부가 "위쪽으로 빗나감"으로 간다.**
+
+    **이제 모의실험.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    B = 50_000
+    alpha = 0.05
+
+    # 모집단 2는 모집단 1을 2배로 늘린 것이다. 따라서 mu2 = 2*mu1, sigma2 = 2*sigma1 이고
+    # 참 차이는 delta = mu1 - mu2 = -mu1 이다. 비정규성과 이분산이 함께 들어 있다.
+    pops = {"Exp": 1.0, "LogN": np.exp(0.5)}     # 각 모집단의 평균 mu1
+
+    print("모집단     n    포함률   왼쪽으로 벗어남  오른쪽으로 벗어남   mean nu")
+    for pop, mu1 in pops.items():
+        for n in (10, 30, 100):
+            if pop == "Exp":
+                x1 = rng.exponential(1.0, size=(B, n))
+                x2 = 2.0 * rng.exponential(1.0, size=(B, n))
+            else:
+                x1 = rng.lognormal(0.0, 1.0, size=(B, n))
+                x2 = 2.0 * rng.lognormal(0.0, 1.0, size=(B, n))
+            delta = -mu1
+            a = x1.var(axis=1, ddof=1) / n
+            b = x2.var(axis=1, ddof=1) / n
+            se = np.sqrt(a + b)
+            nu = (a + b) ** 2 / (a ** 2 / (n - 1) + b ** 2 / (n - 1))
+            crit = stats.t(nu).ppf(1 - alpha / 2)
+            d = x1.mean(axis=1) - x2.mean(axis=1)
+            lo, hi = d - crit * se, d + crit * se
+            cover = np.mean((lo <= delta) & (delta <= hi))
+            below = np.mean(hi < delta)      # 구간이 참값보다 아래에 놓인 경우
+            above = np.mean(lo > delta)
+            print(f"{pop:<8} {n:>4}   {cover:.3f}        {below:.3f}            {above:.3f}       {nu.mean():6.1f}")
+    ```
+
+    출력:
+
+    ```
+    모집단     n    포함률   왼쪽으로 벗어남  오른쪽으로 벗어남   mean nu
+    Exp        10   0.932        0.007            0.062         13.5
+    Exp        30   0.942        0.011            0.048         43.7
+    Exp       100   0.948        0.016            0.036        147.2
+    LogN       10   0.920        0.003            0.077         13.1
+    LogN       30   0.931        0.005            0.065         43.4
+    LogN      100   0.939        0.010            0.051        148.6
+    ```
+
+    여기서는 두 척도가 달라 왜도의 상쇄가 일어나지 않는다. 결과가 보기 1과 두 가지 면에서 다르다.
+
+    **포함률이 명목값보다 낮다.** 로그정규 $n=10$에서 0.920으로 3%포인트 모자란다. 보수적인 쪽이 아니라 **위험한 쪽**이다.
+
+    **벗어나는 방향이 한쪽으로 몰린다.** 두 꼬리가 각각 0.025여야 하는데 0.003과 0.077로 25배 차이가 난다. 치우친 모집단에서 $\bar X_2$는 참 평균보다 작게 나오는 일이 많으므로($\text{중앙값} < \text{평균}$) 차 $\bar X_1 - \bar X_2$가 참값보다 크게 나오고, 구간이 참값 위쪽에 놓이는 일이 잦다. **명목 95% 구간이지만 한쪽으로만 틀린다.**
+
+    $n$이 커지면 둘 다 고쳐진다. 로그정규에서 포함률이 0.920 → 0.931 → 0.939이고 두 꼬리도 0.010과 0.051로 가까워진다. 다만 그 속도가 $O(n^{-1/2})$이라 느리다.
+
+    **예측이 맞았다.** 로그정규 $n=10$에서 아래쪽이 $0.003$, 위쪽이 $0.077$로 25배 차이 난다. 명목대로라면 둘 다 $0.025$여야 한다. 반복 5만 회에서 $p \approx 0.077$의 몬테카를로 오차가 $0.0012$이므로 우연이 아니다.
+
+    | 모집단 | $n$ | 왜도 | 포함률 | 아래 | 위 | 위 $-$ 아래 |
+    |:---|---:|---:|---:|---:|---:|---:|
+    | Exp | 10 | $-0.396$ | 0.932 | 0.007 | 0.062 | 0.055 |
+    | Exp | 30 | $-0.229$ | 0.942 | 0.011 | 0.048 | 0.037 |
+    | Exp | 100 | $-0.125$ | 0.948 | 0.016 | 0.036 | 0.020 |
+    | LogN | 10 | $-1.225$ | 0.920 | 0.003 | 0.077 | 0.074 |
+    | LogN | 30 | $-0.707$ | 0.931 | 0.005 | 0.065 | 0.060 |
+    | LogN | 100 | $-0.387$ | 0.939 | 0.010 | 0.051 | 0.041 |
+
+    **두 가지를 읽는다.**
+
+    **첫째, 보기 1과 어긋남의 방향이 반대다.** 균형·동척도에서는 포함률이 명목보다 **높은** 쪽(검정으로 치면 보수적인 쪽)이었는데, 여기서는 $0.920$으로 **낮다.** 안전한 고장이 아니라 위험한 고장이다. 바뀐 것은 척도 하나뿐이고, 그것이 $\kappa_3$을 $0$에서 $-7\gamma_1\sigma_1^3/n^2$으로 옮겼다.
+
+    **둘째, 비대칭의 크기가 왜도를 따라간다.** 마지막 열을 왜도로 나누면 지수는 $0.139,\ 0.162,\ 0.160$, 로그정규는 $0.060,\ 0.085,\ 0.106$이다. 지수 쪽은 거의 일정해 **비대칭이 왜도에 비례**하고 따라서 $1/\sqrt n$로 준다. 로그정규 쪽은 그 비가 아직 올라가는 중이어서 비대칭이 왜도보다 **느리게** 준다. 실제로 $0.074 \to 0.060 \to 0.041$은 $n$을 열 배 키워 절반가량 준 것이고, $1/\sqrt n$이 예측하는 $1/\sqrt{10} = 0.32$배에 한참 못 미친다.
+
+    **까닭은 로그정규가 아직 점근 영역에 없기 때문이다.** 초과첨도가 $110.9$라 전개의 크기를 재는 양 $\gamma_2/n$이 $n = 100$에서도 $1.1$로 $1$을 넘는다. 왜도 항만으로 설명되지 않는 몫이 남아 있다는 뜻이고, 그 몫은 보기 1에서 측정한 $O(n^{-1})$ 항과 같은 자리에서 온다.
+
+    **포함률은 어느 쪽이든 $n$과 함께 회복된다.** 로그정규에서 $0.920 \to 0.931 \to 0.939$이고 두 꼬리도 $0.010$과 $0.051$로 가까워진다. 다만 그 속도가 $O(n^{-1/2})$이라 균형 설계의 $O(n^{-1})$보다 느리고, 척도를 맞추거나 표본크기를 $(\sigma_1/\sigma_2)^{3/2}$ 비로 배정하면(연습문제 6) 왜도 항을 되돌려 지울 수 있다.
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 치우침에 불균형까지 겹치면. 척도가 4배 다르고($\sigma_1/\sigma_2 = 4$) 표본비가 $1:4$인 설계에서 합동 $t$와 Welch $t$의 오류율을 함께 잰다.
+
+**(1)** 차 $\bar X_1 - \bar X_2$의 표준화 왜도를 세 표본크기에서 구하고, 그 부호가 **어느 쪽 꼬리**의 기각을 늘리는지 답하시오.
+
+**(2)** 모의실험으로 두 열을 재고, 합동 $t$ 열과 Welch 열이 왜 전혀 다르게 움직이는지 적으시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 왜도는 닫힌 꼴로 나온다.** 연습문제 6에서 유도한
+
+    $$
+    \kappa_3(\bar X_1 - \bar X_2) = \gamma_1\left(\frac{\sigma_1^3}{n_1^2} - \frac{\sigma_2^3}{n_2^2}\right),
+    \qquad
+    \operatorname{Var}(\bar X_1 - \bar X_2) = \frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}
+    $$
+
+    에 $\sigma_1 = 4$, $\sigma_2 = 1$을 넣으면 표준화 왜도가 본문의 표가 된다.
+
+    | $(n_1,n_2)$ | 계수 | $\text{Exp}(1)$ ($\gamma_1 = 2$) | $\text{LogNormal}$ ($\gamma_1 = 6.185$) |
+    |:---|---:|---:|---:|
+    | (10, 40) | 0.3087 | 0.617 | 1.909 |
+    | (30, 120) | 0.1782 | 0.356 | 1.102 |
+    | (100, 400) | 0.0976 | 0.195 | 0.604 |
+
+    $64/100$과 $1/1600$을 견주면 첫 항이 천 배 크다. **왜도의 거의 전부가 "작은 표본 + 큰 분산" 쪽 집단에서 온다.** 그리고 세 줄이 $1/\sqrt n$ 속도로 줄어든다. 균형 설계에서 통째로 사라졌던 $O(n^{-1/2})$ 항이 되살아난 것이다.
+
+    **부호를 꼬리로 옮기는 데 한 번 뒤집기가 들어간다.** 차의 왜도는 **양수**다. 그런데 기각을 세는 것은 차가 아니라 $t$ 통계량이고, 스튜던트화는 왜도의 부호를 **뒤집는다.** 큰 값 하나가 들어오면 분자 $\bar X_1 - \bar X_2$가 커지지만 분모 $\sqrt{S_1^2/n_1+S_2^2/n_2}$도 함께 커져 비가 도로 눌리고, 거꾸로 그 큰 값이 빠진 표본에서는 분자도 작고 분모는 더 작아 비가 크게 음수로 간다. 그래서
+
+    $$
+    \gamma_1(\bar X_1 - \bar X_2) > 0 \quad\Longrightarrow\quad T \text{는 왼쪽으로 치우친다}
+    $$
+
+    이고, **왼쪽 꼬리의 기각이 늘어야 한다.** 이 쪽 연습문제 2의 일표본 표가 같은 현상을 보인다. 오른쪽으로 치우친 모집단에 일표본 $t$를 걸면 왼쪽 꼬리가 0.095, 오른쪽이 0.004였다.
+
+    **(2) 모의실험.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    B = 50_000
+    alpha = 0.05
+
+
+    def rates(pop, n1, n2, scale1=4.0):
+        """모집단 1은 척도가 4배(분산 16배)이고 표본은 적다. 두 평균은 0으로 맞춘다."""
+        if pop == "Exp":
+            m = 1.0
+            x1 = scale1 * (rng.exponential(1.0, size=(B, n1)) - m)
+            x2 = rng.exponential(1.0, size=(B, n2)) - m
+        else:
+            m = np.exp(0.5)
+            x1 = scale1 * (rng.lognormal(0.0, 1.0, size=(B, n1)) - m)
+            x2 = rng.lognormal(0.0, 1.0, size=(B, n2)) - m
         d = x1.mean(axis=1) - x2.mean(axis=1)
-        lo, hi = d - crit * se, d + crit * se
-        cover = np.mean((lo <= delta) & (delta <= hi))
-        below = np.mean(hi < delta)      # 구간이 참값보다 아래에 놓인 경우
-        above = np.mean(lo > delta)
-        print(f"{pop:<8} {n:>4}   {cover:.3f}        {below:.3f}            {above:.3f}       {nu.mean():6.1f}")
-```
+        v1, v2 = x1.var(axis=1, ddof=1), x2.var(axis=1, ddof=1)
 
-출력:
+        sp2 = ((n1 - 1) * v1 + (n2 - 1) * v2) / (n1 + n2 - 2)
+        t_pool = d / np.sqrt(sp2 * (1 / n1 + 1 / n2))
+        rej_pool = np.mean(np.abs(t_pool) > stats.t(n1 + n2 - 2).ppf(1 - alpha / 2))
 
-```
-모집단     n    포함률   왼쪽으로 벗어남  오른쪽으로 벗어남   mean nu
-Exp        10   0.932        0.007            0.062         13.5
-Exp        30   0.942        0.011            0.048         43.7
-Exp       100   0.948        0.016            0.036        147.2
-LogN       10   0.920        0.003            0.077         13.1
-LogN       30   0.931        0.005            0.065         43.4
-LogN      100   0.939        0.010            0.051        148.6
-```
+        a, b = v1 / n1, v2 / n2
+        t_w = d / np.sqrt(a + b)
+        nu = (a + b) ** 2 / (a ** 2 / (n1 - 1) + b ** 2 / (n2 - 1))
+        crit = stats.t(nu).ppf(1 - alpha / 2)
+        return rej_pool, np.mean(np.abs(t_w) > crit), np.mean(t_w < -crit), np.mean(t_w > crit)
 
-여기서는 두 척도가 달라 왜도의 상쇄가 일어나지 않는다. 결과가 보기 1과 두 가지 면에서 다르다.
 
-**포함률이 명목값보다 낮다.** 로그정규 $n=10$에서 0.920으로 3%포인트 모자란다. 보수적인 쪽이 아니라 **위험한 쪽**이다.
+    print("치우침 + 이분산 + 불균형: sigma1/sigma2 = 4,  n1 : n2 = 1 : 4")
+    print("모집단    (n1,  n2)   pooled t   Welch t   (Welch 왼쪽 / 오른쪽)")
+    for pop in ("Exp", "LogN"):
+        for n1, n2 in ((10, 40), (30, 120), (100, 400)):
+            rp, rw, left, right = rates(pop, n1, n2)
+            print(f"{pop:<8} ({n1:>3}, {n2:>3})    {rp:.3f}      {rw:.3f}      {left:.3f} / {right:.3f}")
+    ```
 
-**벗어나는 방향이 한쪽으로 몰린다.** 두 꼬리가 각각 0.025여야 하는데 0.003과 0.077로 25배 차이가 난다. 치우친 모집단에서 $\bar X_2$는 참 평균보다 작게 나오는 일이 많으므로($\text{중앙값} < \text{평균}$) 차 $\bar X_1 - \bar X_2$가 참값보다 크게 나오고, 구간이 참값 위쪽에 놓이는 일이 잦다. **명목 95% 구간이지만 한쪽으로만 틀린다.**
+    출력:
 
-$n$이 커지면 둘 다 고쳐진다. 로그정규에서 포함률이 0.920 → 0.931 → 0.939이고 두 꼬리도 0.010과 0.051로 가까워진다. 다만 그 속도가 $O(n^{-1/2})$이라 느리다.
+    ```
+    치우침 + 이분산 + 불균형: sigma1/sigma2 = 4,  n1 : n2 = 1 : 4
+    모집단    (n1,  n2)   pooled t   Welch t   (Welch 왼쪽 / 오른쪽)
+    Exp      ( 10,  40)    0.316      0.100      0.096 / 0.004
+    Exp      ( 30, 120)    0.293      0.072      0.064 / 0.008
+    Exp      (100, 400)    0.282      0.058      0.045 / 0.013
+    LogN     ( 10,  40)    0.339      0.154      0.153 / 0.001
+    LogN     ( 30, 120)    0.310      0.111      0.109 / 0.002
+    LogN     (100, 400)    0.294      0.081      0.076 / 0.005
+    ```
+
+    **이 표가 이 절의 두 교훈을 한 화면에 담고 있다.**
+
+    합동 $t$ 열을 보라. 0.316 → 0.293 → 0.282, 0.339 → 0.310 → 0.294다. 표본을 10배로 늘려도 거의 움직이지 않는다. 앞 쪽에서 본 이분산·불균형의 어긋남이며, **표본크기가 고쳐 주지 않는다.**
+
+    Welch 열을 보라. 0.100 → 0.072 → 0.058, 0.154 → 0.111 → 0.081이다. 느리지만 **또박또박 0.05로 내려간다.** Welch는 이분산 문제를 이미 해결했으므로 남은 것은 비정규성뿐이고, 그것은 표본크기가 고쳐 준다. 감소 속도가 이론이 예측한 $O(n^{-1/2})$과 맞는다.
+
+    꼬리 분해를 보면 어긋남이 한쪽으로 완전히 몰려 있다. 로그정규 $(10,40)$에서 0.153 대 0.001이다. **사실상 단측검정이 되어 버렸다.** 균형 설계에서 두 꼬리가 0.013과 0.014로 맞아떨어지던 보기 1과 견주면 불균형이 무엇을 망가뜨리는지 분명하다.
+
+    **세 가지가 예측대로다.**
+
+    **첫째, 어긋남이 왼쪽 꼬리에 몰렸다.** 로그정규 $(10,40)$에서 $0.153$ 대 $0.001$이다. 명목 $0.025$씩이어야 할 두 꼬리가 150배 차이 난다. **양측검정이 사실상 단측검정이 되었다.** 균형 설계의 보기 1에서 두 꼬리가 $0.013$과 $0.014$로 맞아떨어지던 것과 견주면, 불균형이 지운 것이 무엇인지 분명하다.
+
+    **둘째, 어긋남의 크기가 왜도를 따라간다.** $0.05$를 넘는 초과분을 (1)의 왜도로 나누면 이렇다.
+
+    | 모집단 | $(n_1,n_2)$ | 왜도 | Welch 오류율 | 초과분 | 초과분/왜도 |
+    |:---|:---|---:|---:|---:|---:|
+    | Exp | (10, 40) | 0.617 | 0.100 | 0.050 | 0.081 |
+    | Exp | (30, 120) | 0.356 | 0.072 | 0.022 | 0.062 |
+    | Exp | (100, 400) | 0.195 | 0.058 | 0.008 | 0.041 |
+    | LogN | (10, 40) | 1.909 | 0.154 | 0.104 | 0.054 |
+    | LogN | (30, 120) | 1.102 | 0.111 | 0.061 | 0.055 |
+    | LogN | (100, 400) | 0.604 | 0.081 | 0.031 | 0.051 |
+
+    로그정규 세 줄의 마지막 열이 $0.054,\ 0.055,\ 0.051$로 거의 일정하다. **초과분이 왜도에 비례한다**는 뜻이고, 왜도가 $1/\sqrt n$으로 주니 초과분도 그 속도로 준다. 비례가 어디까지 가는지 한 칸 더 밀어 본다.
+
+    $(300,1200)$의 왜도는 $0.3485$이므로 비례가 이어지면 오류율이 $0.05 + 0.053 \times 0.3485 = 0.0685$쯤이어야 한다. 재어 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    alpha, B, m = 0.05, 50_000, np.exp(0.5)
+
+    # (300, 1200) 은 한 번에 올리면 6천만 개라 메모리가 모자란다. 200개씩 끊어 돈다.
+    n1, n2 = 300, 1200
+    rej = left = 0
+    for _ in range(B // 200):
+        x1 = 4.0 * (rng.lognormal(0.0, 1.0, (200, n1)) - m)
+        x2 = rng.lognormal(0.0, 1.0, (200, n2)) - m
+        a, b = x1.var(axis=1, ddof=1) / n1, x2.var(axis=1, ddof=1) / n2
+        t = (x1.mean(axis=1) - x2.mean(axis=1)) / np.sqrt(a + b)
+        nu = (a + b) ** 2 / (a ** 2 / (n1 - 1) + b ** 2 / (n2 - 1))
+        c = stats.t(nu).ppf(1 - alpha / 2)
+        rej += np.sum(np.abs(t) > c)
+        left += np.sum(t < -c)
+
+    p = rej / B
+    print(f"(300, 1200)  Welch 오류율 = {p:.4f}  (왼쪽 {left / B:.4f})")
+    print(f"             MC 오차 = {np.sqrt(p * (1 - p) / B):.4f}")
+    print(f"             초과분/왜도 = {(p - 0.05) / 0.3485:.3f}   (예측은 0.053)")
+    ```
+
+    출력:
+
+    ```
+    (300, 1200)  Welch 오류율 = 0.0648  (왼쪽 0.0563)
+                 MC 오차 = 0.0011
+                 초과분/왜도 = 0.042   (예측은 0.053)
+    ```
+
+    **예측 $0.0685$에 모의가 $0.0648$로 $0.004$ 못 미친다.** 몬테카를로 오차의 세 배가 넘으므로 우연이 아니다. 초과분/왜도가 $0.053$에서 $0.042$로 내려앉은 것이고, **비례는 어림이며 초과분이 왜도보다 조금 더 빨리 준다**는 뜻이다. 그래도 방향과 자릿수를 잡는 데에는 충분하며, 왼쪽 꼬리에 $0.0563$ 대 나머지라는 쏠림은 $n$이 300이 되어도 그대로 남는다.
+
+    **셋째, 두 열이 전혀 다른 일을 한다.** 합동 $t$ 열은 $0.316 \to 0.282$, $0.339 \to 0.294$로 표본을 10배 늘려도 거의 움직이지 않는다. Welch 열은 $0.100 \to 0.058$, $0.154 \to 0.081$로 또박또박 내려온다.
+
+    **까닭은 두 열이 앓는 병이 다르기 때문이다.** 합동 $t$는 이분산·불균형이라는 병과 비정규성이라는 병을 **둘 다** 앓는다. 앞의 병은 표본크기가 손댈 수 없으므로(앞 쪽 보기 3) 극한 $0.277$ 둘레에 눌러앉는다. Welch는 분모를 불편추정량으로 바꿔 앞의 병을 이미 고쳤고, 남은 것은 왜도가 만드는 $O(n^{-1/2})$ 항뿐이다. **그것은 표본크기가 고쳐 준다. 다만 느리게 고쳐 준다.**
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 치우침에 불균형까지 겹치면
+**보기 4.** <span class="diff easy" title="쉬움"></span> 두 실패를 나란히 그린다. 보기 1의 균형 설계와 보기 3의 불균형 설계를 세 패널에 함께 올린다.
+
+**(1)** 세 패널의 막대가 $n$과 함께 어떻게 움직여야 하는지 미리 적으시오. 어느 막대가 점선으로 다가가고 어느 막대가 제자리에 머무는가.
+
+**(2)** 그려서 확인하고, 이 그림이 **가리는 것**을 두 가지 짚으시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-rng = np.random.default_rng(1)
-B = 50_000
-alpha = 0.05
+    **(1) 그림이 될 모양은 앞의 두 표에 이미 있다.**
 
+    - **왼쪽 패널(균형, Welch).** 세 색 모두 점선 **아래**에서 출발해 $n$과 함께 **올라붙는다.** 회색(정규)은 처음부터 점선 위에 있고, 파랑(지수)은 $0.037 \to 0.046 \to 0.048$, 빨강(로그정규)은 $0.027 \to 0.040 \to 0.045$다. 어긋남이 **보수적인 쪽**이므로 막대가 점선을 뚫고 올라가는 일은 없다.
+    - **가운데·오른쪽 패널(불균형).** 빨간 막대(합동 $t$)는 $0.316 \to 0.282$, $0.339 \to 0.294$로 **거의 평평**하고, 파란 막대(Welch)는 $0.100 \to 0.058$, $0.154 \to 0.081$로 점선을 향해 **또박또박 내려온다.** 두 패널 모두 모든 막대가 점선 **위**에 있다.
 
-def rates(pop, n1, n2, scale1=4.0):
-    """모집단 1은 척도가 4배(분산 16배)이고 표본은 적다. 두 평균은 0으로 맞춘다."""
-    if pop == "Exp":
-        m = 1.0
-        x1 = scale1 * (rng.exponential(1.0, size=(B, n1)) - m)
-        x2 = rng.exponential(1.0, size=(B, n2)) - m
-    else:
-        m = np.exp(0.5)
-        x1 = scale1 * (rng.lognormal(0.0, 1.0, size=(B, n1)) - m)
-        x2 = rng.lognormal(0.0, 1.0, size=(B, n2)) - m
-    d = x1.mean(axis=1) - x2.mean(axis=1)
-    v1, v2 = x1.var(axis=1, ddof=1), x2.var(axis=1, ddof=1)
+    **한 그림 안에 세 가지가 함께 있어야 한다.** 올라가는 막대(균형·비정규), 내려오는 막대(불균형이지만 Welch), 움직이지 않는 막대(불균형에 합동 $t$)다.
 
-    sp2 = ((n1 - 1) * v1 + (n2 - 1) * v2) / (n1 + n2 - 2)
-    t_pool = d / np.sqrt(sp2 * (1 / n1 + 1 / n2))
-    rej_pool = np.mean(np.abs(t_pool) > stats.t(n1 + n2 - 2).ppf(1 - alpha / 2))
+    **(2) 그려서 확인한다.**
 
-    a, b = v1 / n1, v2 / n2
-    t_w = d / np.sqrt(a + b)
-    nu = (a + b) ** 2 / (a ** 2 / (n1 - 1) + b ** 2 / (n2 - 1))
-    crit = stats.t(nu).ppf(1 - alpha / 2)
-    return rej_pool, np.mean(np.abs(t_w) > crit), np.mean(t_w < -crit), np.mean(t_w > crit)
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
 
+    fig, axes = plt.subplots(1, 3, figsize=(12, 3.8))
 
-print("치우침 + 이분산 + 불균형: sigma1/sigma2 = 4,  n1 : n2 = 1 : 4")
-print("모집단    (n1,  n2)   pooled t   Welch t   (Welch 왼쪽 / 오른쪽)")
-for pop in ("Exp", "LogN"):
-    for n1, n2 in ((10, 40), (30, 120), (100, 400)):
-        rp, rw, left, right = rates(pop, n1, n2)
-        print(f"{pop:<8} ({n1:>3}, {n2:>3})    {rp:.3f}      {rw:.3f}      {left:.3f} / {right:.3f}")
-```
+    # 왼쪽: 균형 설계(n1 = n2 = n). 비정규성만 있는 경우 — 보기 1의 결과.
+    rng = np.random.default_rng(1)          # 보기 1과 같은 난수열을 쓴다
+    ns = [10, 30, 100]
+    xs = np.arange(len(ns))
+    colors = {"Normal": "#8c8c8c", "Exp": "#4c72b0", "LogN": "#c44e52"}
+    for k, pop in enumerate(("Normal", "Exp", "LogN")):
+        vals = [sum(welch_reject(pop, n)) for n in ns]     # 보기 1의 함수
+        off = (k - 1) * 0.27
+        axes[0].bar(xs + off, vals, 0.26, color=colors[pop], edgecolor="white", label=pop)
+        for x, v in zip(xs + off, vals):
+            axes[0].text(x, v + 0.001, f"{v:.3f}", ha="center", fontsize=7)
+    axes[0].axhline(0.05, color="black", ls="--", lw=1)
+    axes[0].set_xticks(xs)
+    axes[0].set_xticklabels([f"n = {n}" for n in ns])
+    axes[0].set_title(r"Balanced ($n_1=n_2$): Welch $t$")
+    axes[0].set_ylabel("actual type I error rate")
+    axes[0].set_ylim(0, 0.080)
+    axes[0].legend(fontsize=8, loc="upper left", ncol=3)
 
-출력:
+    # 가운데·오른쪽: 치우침 + 이분산 + 불균형 — 보기 3의 결과.
+    rng = np.random.default_rng(1)          # 보기 3과 같은 난수열을 쓴다
+    pairs = [(10, 40), (30, 120), (100, 400)]
+    xp = np.arange(len(pairs))
+    for ax, pop in zip(axes[1:], ("Exp", "LogN")):
+        pool, welch = [], []
+        for n1, n2 in pairs:
+            rp, rw, *_ = rates(pop, n1, n2)                # 보기 3의 함수
+            pool.append(rp)
+            welch.append(rw)
+        ax.bar(xp - 0.19, pool, 0.36, color="#c44e52", edgecolor="white", label="pooled $t$")
+        ax.bar(xp + 0.19, welch, 0.36, color="#4c72b0", edgecolor="white", label="Welch $t$")
+        for x, v in zip(xp - 0.19, pool):
+            ax.text(x, v + 0.008, f"{v:.3f}", ha="center", fontsize=7)
+        for x, v in zip(xp + 0.19, welch):
+            ax.text(x, v + 0.008, f"{v:.3f}", ha="center", fontsize=7)
+        ax.axhline(0.05, color="black", ls="--", lw=1)
+        ax.set_xticks(xp)
+        ax.set_xticklabels([f"({a}, {b})" for a, b in pairs], fontsize=8)
+        ax.set_xlabel(r"$(n_1,\ n_2)$")
+        ax.set_ylim(0, 0.42)
+        ax.set_title(rf"{pop}, $\sigma_1/\sigma_2=4$, $n_1{{:}}n_2=1{{:}}4$")
+    axes[1].set_ylabel("actual type I error rate")
+    axes[2].legend(fontsize=8, loc="upper right")
 
-```
-치우침 + 이분산 + 불균형: sigma1/sigma2 = 4,  n1 : n2 = 1 : 4
-모집단    (n1,  n2)   pooled t   Welch t   (Welch 왼쪽 / 오른쪽)
-Exp      ( 10,  40)    0.316      0.100      0.096 / 0.004
-Exp      ( 30, 120)    0.293      0.072      0.064 / 0.008
-Exp      (100, 400)    0.282      0.058      0.045 / 0.013
-LogN     ( 10,  40)    0.339      0.154      0.153 / 0.001
-LogN     ( 30, 120)    0.310      0.111      0.109 / 0.002
-LogN     (100, 400)    0.294      0.081      0.076 / 0.005
-```
+    plt.tight_layout()
+    plt.show()
+    ```
 
-**이 표가 이 절의 두 교훈을 한 화면에 담고 있다.**
+    ![비정규 모집단에서의 실제 제1종 오류율](./img/diff_means_nonnormal_fig1.png)
 
-합동 $t$ 열을 보라. 0.316 → 0.293 → 0.282, 0.339 → 0.310 → 0.294다. 표본을 10배로 늘려도 거의 움직이지 않는다. 앞 쪽에서 본 이분산·불균형의 어긋남이며, **표본크기가 고쳐 주지 않는다.**
+    왼쪽 패널에서 세 색깔의 막대가 $n$이 커지면서 점선으로 **올라붙는다.** 오른쪽 두 패널에서 파란 막대(Welch)는 점선을 향해 내려오지만 빨간 막대(합동)는 꼼짝하지 않는다.
 
-Welch 열을 보라. 0.100 → 0.072 → 0.058, 0.154 → 0.111 → 0.081이다. 느리지만 **또박또박 0.05로 내려간다.** Welch는 이분산 문제를 이미 해결했으므로 남은 것은 비정규성뿐이고, 그것은 표본크기가 고쳐 준다. 감소 속도가 이론이 예측한 $O(n^{-1/2})$과 맞는다.
+    **같은 그림 안에 고쳐지는 실패와 고쳐지지 않는 실패가 함께 있다.** 빨간 막대의 높이를 정하는 것은 분산비와 표본크기비이고, 그 둘은 $n$을 키워도 변하지 않는다.
 
-꼬리 분해를 보면 어긋남이 한쪽으로 완전히 몰려 있다. 로그정규 $(10,40)$에서 0.153 대 0.001이다. **사실상 단측검정이 되어 버렸다.** 균형 설계에서 두 꼬리가 0.013과 0.014로 맞아떨어지던 보기 1과 견주면 불균형이 무엇을 망가뜨리는지 분명하다.
+    **예측한 세 가지가 그대로 나왔다.** 막대 위의 수가 보기 1과 보기 3의 표와 한 자리도 다르지 않다. 같은 씨앗으로 같은 계산을 다시 돈 것이니 그래야 맞다.
 
-<div class="exbox" markdown>
+    **가리는 것 하나 — 세로축의 눈금이 패널마다 다르다.** 왼쪽은 $0$에서 $0.08$까지이고 가운데·오른쪽은 $0$에서 $0.42$까지다. 왼쪽 패널에서 점선과 $0.027$ 막대 사이의 간격이 화면에서 커 보이지만 실제 거리는 $0.023$이고, 오른쪽 패널에서 비슷해 보이는 간격은 $0.1$이 넘는다. **같은 눈금으로 그리면 왼쪽 패널의 세 막대는 점선에 붙어 구별되지 않는다.** 두 실패의 크기가 한 자릿수 다르다는 사실이 축의 재조정에 묻힌다.
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 두 실패를 나란히 그린다
+    **가리는 것 둘 — 점선의 위와 아래가 같은 색으로 그려져 있다.** 왼쪽 패널의 막대는 점선 **아래**에 있어 보수적이고, 오른쪽 두 패널의 막대는 점선 **위**에 있어 관대하다. 전자는 검정력을 잃는 고장이고 후자는 거짓 발견을 쏟는 고장이다. 그림은 "점선에서 얼마나 멀리 있는가"만 보일 뿐 **어느 쪽이 위험한 어긋남인지**를 말해 주지 않는다. 보기 1에서 로그정규 $n = 10$의 $0.027$과 보기 3에서 로그정규 $(10,40)$의 $0.154$는 점선에서의 거리가 $0.023$ 대 $0.104$로 네 배 차이지만, 실무에서 감당해야 할 위험으로 보면 종류가 아예 다르다.
 
-</div>
-
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-
-fig, axes = plt.subplots(1, 3, figsize=(12, 3.8))
-
-# 왼쪽: 균형 설계(n1 = n2 = n). 비정규성만 있는 경우 — 보기 1의 결과.
-rng = np.random.default_rng(1)          # 보기 1과 같은 난수열을 쓴다
-ns = [10, 30, 100]
-xs = np.arange(len(ns))
-colors = {"Normal": "#8c8c8c", "Exp": "#4c72b0", "LogN": "#c44e52"}
-for k, pop in enumerate(("Normal", "Exp", "LogN")):
-    vals = [sum(welch_reject(pop, n)) for n in ns]     # 보기 1의 함수
-    off = (k - 1) * 0.27
-    axes[0].bar(xs + off, vals, 0.26, color=colors[pop], edgecolor="white", label=pop)
-    for x, v in zip(xs + off, vals):
-        axes[0].text(x, v + 0.001, f"{v:.3f}", ha="center", fontsize=7)
-axes[0].axhline(0.05, color="black", ls="--", lw=1)
-axes[0].set_xticks(xs)
-axes[0].set_xticklabels([f"n = {n}" for n in ns])
-axes[0].set_title(r"Balanced ($n_1=n_2$): Welch $t$")
-axes[0].set_ylabel("actual type I error rate")
-axes[0].set_ylim(0, 0.080)
-axes[0].legend(fontsize=8, loc="upper left", ncol=3)
-
-# 가운데·오른쪽: 치우침 + 이분산 + 불균형 — 보기 3의 결과.
-rng = np.random.default_rng(1)          # 보기 3과 같은 난수열을 쓴다
-pairs = [(10, 40), (30, 120), (100, 400)]
-xp = np.arange(len(pairs))
-for ax, pop in zip(axes[1:], ("Exp", "LogN")):
-    pool, welch = [], []
-    for n1, n2 in pairs:
-        rp, rw, *_ = rates(pop, n1, n2)                # 보기 3의 함수
-        pool.append(rp)
-        welch.append(rw)
-    ax.bar(xp - 0.19, pool, 0.36, color="#c44e52", edgecolor="white", label="pooled $t$")
-    ax.bar(xp + 0.19, welch, 0.36, color="#4c72b0", edgecolor="white", label="Welch $t$")
-    for x, v in zip(xp - 0.19, pool):
-        ax.text(x, v + 0.008, f"{v:.3f}", ha="center", fontsize=7)
-    for x, v in zip(xp + 0.19, welch):
-        ax.text(x, v + 0.008, f"{v:.3f}", ha="center", fontsize=7)
-    ax.axhline(0.05, color="black", ls="--", lw=1)
-    ax.set_xticks(xp)
-    ax.set_xticklabels([f"({a}, {b})" for a, b in pairs], fontsize=8)
-    ax.set_xlabel(r"$(n_1,\ n_2)$")
-    ax.set_ylim(0, 0.42)
-    ax.set_title(rf"{pop}, $\sigma_1/\sigma_2=4$, $n_1{{:}}n_2=1{{:}}4$")
-axes[1].set_ylabel("actual type I error rate")
-axes[2].legend(fontsize=8, loc="upper right")
-
-plt.tight_layout()
-plt.show()
-```
-
-![비정규 모집단에서의 실제 제1종 오류율](./img/diff_means_nonnormal_fig1.png)
-
-왼쪽 패널에서 세 색깔의 막대가 $n$이 커지면서 점선으로 **올라붙는다.** 오른쪽 두 패널에서 파란 막대(Welch)는 점선을 향해 내려오지만 빨간 막대(합동)는 꼼짝하지 않는다.
-
-**같은 그림 안에 고쳐지는 실패와 고쳐지지 않는 실패가 함께 있다.** 빨간 막대의 높이를 정하는 것은 분산비와 표본크기비이고, 그 둘은 $n$을 키워도 변하지 않는다.
+    **그리고 평평해 보이는 빨간 막대가 정말로 평평하지는 않다.** $0.316 \to 0.293 \to 0.282$는 분명히 내려가고 있다. 다만 $0.05$가 아니라 $0.277$로 가는 중이라 그림에서 움직임이 보이지 않을 뿐이다(앞 쪽 보기 3). **"변하지 않는다"가 아니라 "엉뚱한 값으로 수렴한다"가 맞는 말이다.**
 
 ## 해석
 
@@ -751,7 +1077,7 @@ $\kappa_3(\bar X_1 - \bar X_2) = \gamma_1\left(\dfrac{\sigma_1^3}{n_1^2} - \dfra
     출력:
 
     ```
-         n1,n2      치우친 쪽      실제 오류율
+         n1,n2       치우친 쪽        실제 오류율
          15,15          동일        0.0530
          10,40       작은 표본        0.0933
          40,10        큰 표본        0.0507
