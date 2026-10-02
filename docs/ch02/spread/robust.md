@@ -28,32 +28,123 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 범위 구하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 범위는 애초에 **추정량이 아니다.** 대출 소득 자료 $50{,}000$ 개에서 범위가 $195{,}000$ 달러다.
+
+**(1)** 표본크기 $m$ 을 키우면 범위의 기댓값이 **단조증가**함을 보이시오. 그것이 "범위는 모수의 추정량이 될 수 없다"는 말과 어떻게 이어지는가.
+
+**(2)** $m = 100,\ 1000,\ 10000,\ 50000$ 에서 범위와 IQR 을 각각 재어 (1)을 확인하시오. 또 끝점 하나를 지우면 범위가 얼마나 변하는가 — 최솟값 쪽과 최댓값 쪽이 같은가.
 
 </div>
 
-```python
-import pandas as pd
+??? success "풀이"
 
-url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
-loans_data = pd.read_csv(url)
+    **(1) 해석적으로.** 크기 $m+1$ 인 표본에서 관측 하나를 빼면 크기 $m$ 인 표본이 되고, **부분집합의 최댓값은 더 작거나 같고 최솟값은 더 크거나 같다.** 그러므로 같은 추출 경로에서
 
-# 범위 = 최댓값 - 최솟값. 자료 전체에서 딱 두 점만 쓴다.
-data_range = loans_data['x'].max() - loans_data['x'].min()
-print(f"{data_range = }")
+    $$
+    R_m \le R_{m+1} \qquad (\text{모든 경로에서})
+    $$
 
-# 그 두 점이 무엇인지도 함께 보자. 범위가 왜 취약한지 바로 드러난다.
-print(f"최솟값 {loans_data['x'].min():,}  최댓값 {loans_data['x'].max():,}")
-print(f"관측값 {len(loans_data):,}개 중 단 2개가 이 값을 정한다")
-```
+    이고 기댓값을 취하면
 
-출력:
+    $$
+    E[R_m] \le E[R_{m+1}]
+    $$
 
-```
-data_range = 195000
-최솟값 4,000  최댓값 199,000
-관측값 50,000개 중 단 2개가 이 값을 정한다
-```
+    이다. **등호가 되는 것은 $m$ 개만으로도 이미 양 끝점을 잡았을 때뿐**이다.
+
+    이것이 결정적이다. 평균이나 분산은 $m$ 이 커지면 어떤 **고정된 값**으로 수렴하므로 "그 값을 추정한다"고 말할 수 있다. 범위는 수렴하지 않고 계속 자란다. 지지가 무계인 분포라면 $E[R_m] \to \infty$ 이고, 지지가 유계라면 지지의 폭으로 수렴한다. 어느 쪽이든 **$R_m$ 이 추정하는 대상이 $m$ 에 딸려 있다.** "표본의 범위가 $195{,}000$ 이다"는 자료에 대한 서술일 뿐, 모집단의 무엇에 대한 추정이 아니다.
+
+    여기서는 모집단을 $50{,}000$ 개의 경험분포로 보자. 최솟값 $4{,}000$ 이 한 개, 최댓값 $199{,}000$ 이 두 개 있으므로, 크기 $m = 100$ 의 비복원 표본이 범위 $195{,}000$ 을 재현할 확률은
+
+    $$
+    P(\text{최솟값 포함}) = \frac{m}{N} = \frac{100}{50000} = 0.002,
+    \qquad
+    P(\text{최댓값 둘 중 하나 포함}) = 1 - \frac{\binom{N-2}{m}}{\binom{N}{m}} = 0.004
+    $$
+
+    의 곱 수준, 곧 $8 \times 10^{-6}$ 이다. **만 번에 한 번도 안 된다.** 그러므로 $m = 100$ 에서 잰 범위는 $195{,}000$ 보다 한참 작을 수밖에 없다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    loans_data = pd.read_csv(url)
+
+    # 범위 = 최댓값 - 최솟값. 자료 전체에서 딱 두 점만 쓴다.
+    data_range = loans_data['x'].max() - loans_data['x'].min()
+    print(f"{data_range = }")
+
+    # 그 두 점이 무엇인지도 함께 보자. 범위가 왜 취약한지 바로 드러난다.
+    print(f"최솟값 {loans_data['x'].min():,}  최댓값 {loans_data['x'].max():,}")
+    print(f"관측값 {len(loans_data):,}개 중 단 2개가 이 값을 정한다")
+
+    x = loans_data['x'].astype(float).values
+    srt = np.sort(x)
+    N = len(x)
+
+    # 끝점 하나를 지우면 범위가 어떻게 되는가. 최솟값과 최댓값의 사정이 다르다.
+    print(f"\n최솟값 {srt[0]:,.0f} 은 {int((x == srt[0]).sum())}개, "
+          f"최댓값 {srt[-1]:,.0f} 은 {int((x == srt[-1]).sum())}개")
+    print(f"  최솟값 하나를 지우면 범위 {srt[-1] - srt[1]:,.0f}  ({srt[-1] - srt[1] - data_range:+,.0f})")
+    print(f"  최댓값 하나를 지우면 범위 {srt[-1] - srt[0]:,.0f}  (변화 없다 — 같은 값이 둘이다)")
+
+    # (1) 부분표본 크기 m 을 키우면 범위가 자란다. IQR 은 자라지 않는다.
+    rng = np.random.default_rng(0)
+    B = 200
+    print(f"\n부분표본 {B}회 추출 (비복원)")
+    print(f"{'m':>7}{'범위 평균':>13}{'범위 sd':>11}{'IQR 평균':>12}{'IQR sd':>10}")
+    for m in (100, 1000, 10000, 50000):
+        R, I = [], []
+        for _ in range(B):
+            s = rng.choice(x, m, replace=False)
+            R.append(s.max() - s.min())
+            I.append(np.subtract(*np.percentile(s, [75, 25])))
+        print(f"{m:>7}{np.mean(R):>13,.0f}{np.std(R, ddof=1):>11,.0f}"
+              f"{np.mean(I):>12,.0f}{np.std(I, ddof=1):>10,.0f}")
+
+    # m=100 에서 범위가 전체 범위와 같아질 확률을 정확히 센다.
+    from math import comb
+    m = 100
+    p_min = m / N                                   # 최솟값 1개가 뽑힐 확률
+    p_max = 1 - comb(N - 2, m) / comb(N, m)         # 최댓값 2개 중 하나라도 뽑힐 확률
+    print(f"\nm=100 에서  P(최솟값 포함) = {p_min:.5f},  P(최댓값 중 하나 포함) = {p_max:.5f}")
+    print(f"  P(범위 = 195,000) = 두 사건의 곱에 가까운 {p_min * p_max:.3e}")
+    ```
+
+    출력:
+
+    ```
+    data_range = 195000
+    최솟값 4,000  최댓값 199,000
+    관측값 50,000개 중 단 2개가 이 값을 정한다
+
+    최솟값 4,000 은 1개, 최댓값 199,000 은 2개
+      최솟값 하나를 지우면 범위 192,100  (-2,900)
+      최댓값 하나를 지우면 범위 195,000  (변화 없다 — 같은 값이 둘이다)
+
+    부분표본 200회 추출 (비복원)
+          m        범위 평균      범위 sd      IQR 평균    IQR sd
+        100      157,818     15,374      40,331     5,112
+       1000      183,628      4,335      41,029     1,720
+      10000      191,544      1,806      40,320       528
+      50000      195,000          0      40,000         0
+
+    m=100 에서  P(최솟값 포함) = 0.00200,  P(최댓값 중 하나 포함) = 0.00400
+      P(범위 = 195,000) = 두 사건의 곱에 가까운 7.992e-06
+    ```
+
+    **(1)이 그대로 드러난다.** 범위의 평균이 $157{,}818 \to 183{,}628 \to 191{,}544 \to 195{,}000$ 으로 **$m$ 과 함께 단조증가한다.** 반면 IQR 의 평균은 $40{,}331 \to 41{,}029 \to 40{,}320 \to 40{,}000$ 으로 **$m$ 과 무관하게 $40{,}000$ 근처에 머문다.** 자료를 더 모으면 IQR 은 같은 값을 더 정확히 맞추고(표준편차가 $5{,}112 \to 1{,}720 \to 528$ 로 줄어든다), 범위는 **다른 값으로 옮겨 간다.**
+
+    표의 증가폭이 몬테카를로 잡음이 아니라는 것도 확인할 수 있다. $m = 100$ 에서 범위의 표준편차가 $15{,}374$ 이므로 $200$ 회 평균의 표준오차는 $15{,}374/\sqrt{200} = 1{,}087$ 인데, $m = 100 \to 1000$ 의 증가폭은 $25{,}810$ 으로 그 **$24$ 배**다.
+
+    $m = 100$ 에서 평균 범위가 $157{,}818$, 곧 전체 범위의 $81\%$ 에 그치는 것도 (1)의 확률 계산과 맞는다. 양 끝을 둘 다 잡을 확률이 $8\times 10^{-6}$ 이니 $200$ 회에서는 한 번도 일어나지 않는다.
+
+    **(2)의 두 번째 물음에서 비대칭이 드러난다.** 최솟값 $4{,}000$ 은 유일하므로 그 하나를 지우면 다음 값이 $6{,}900$ 이라 범위가 $2{,}900$ 줄어든다. 그런데 최댓값 $199{,}000$ 은 **둘** 있어서 하나를 지워도 범위가 전혀 변하지 않는다.
+
+    그래서 "범위의 붕괴점이 $0$ 이다"라는 말은 **정확히는 "한 점으로 범위를 임의로 크게 만들 수 있다"**는 뜻이다. 작게 만드는 쪽은 사정이 다르다. 여기서는 $199{,}000$ 이 둘이므로 범위를 줄이려면 두 점을 손대야 한다. 참고로 $199{,}000$ 이 둘, 그리고 그 다음이 $198{,}425$ 라는 모양새는 이 자료가 어딘가에서 **잘렸을** 가능성을 시사한다. 범위를 보고하기 전에 끝값의 도수를 세어 보아야 하는 이유다.
 
 ### 한계
 
@@ -83,124 +174,250 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> IQR 과 표준편차 견주기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 세 칸을 나란히 놓고 무엇이 읽히는지 보기. 왼쪽은 평균 $\pm$ 표준편차, 가운데는 중앙값과 사분위수, 오른쪽은 같은 사분위수의 상자그림이다.
+
+**(1)** 왼쪽 칸의 "평균 $-$ 표준편차 $= 35{,}888$" 아래에는 자료의 몇 퍼센트가 있는가. 가운데 칸의 $Q_1 = 45{,}000$ 아래에는? 두 눈금 가운데 어느 쪽이 "아래쪽 사분의 일의 경계"라는 이름에 어울리는가.
+
+**(2)** 세 칸이 각각 **가리고 있는 것**은 무엇인가.
 
 </div>
 
-```python
-import matplotlib
-matplotlib.use("Agg")
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import stats
+??? success "풀이"
 
-# 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-# 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-plt.rcParams["font.family"] = "Apple SD Gothic Neo"
-plt.rcParams["axes.unicode_minus"] = False
+    유도할 "정답"이 있는 문제가 아니다. **그림의 눈금이 무엇을 가리키는지 수치로 확인하는 것**이 이 보기의 전부다.
 
-url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
-df = pd.read_csv(url)
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy import stats
 
-# 같은 자료를 두 짝의 측도로 요약한다.
-#   비강건한 짝: 평균 ± 표준편차   (모든 관측값을 다 쓴다)
-#   강건한 짝  : 중앙값, Q1, Q3    (순위만 쓴다)
-mean_income = df['x'].mean()
-median_income = df['x'].median()
-std_dev = df['x'].std()
-q1 = df['x'].quantile(0.25)
-q3 = df['x'].quantile(0.75)
-iqr = stats.iqr(df['x'])
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
+    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["axes.unicode_minus"] = False
 
-fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    df = pd.read_csv(url)
 
-# 왼쪽: 평균 ± 표준편차.
-# 소득은 오른쪽으로 치우쳐 있어 평균이 봉우리보다 오른쪽에 놓이고,
-# "평균 - 표준편차"가 자료가 별로 없는 곳을 가리킨다.
-ax1.hist(df['x'], bins=30, density=True, color="#DCEBFB", edgecolor="white")
-ax1.axvline(mean_income, color="#1565C0", linestyle='--', lw=2, label="평균")
-ax1.axvline(mean_income - std_dev, color="#D32F2F", linestyle='--', lw=2,
-            label="평균 - 표준편차")
-ax1.axvline(mean_income + std_dev, color="#E65100", linestyle='--', lw=2,
-            label="평균 + 표준편차")
-ax1.legend(fontsize=8)
-ax1.set_title("평균과 표준편차")
-ax1.set_xlabel("소득 (달러)")
-ax1.set_ylabel("밀도")
+    # 같은 자료를 두 짝의 측도로 요약한다.
+    #   비강건한 짝: 평균 ± 표준편차   (모든 관측값을 다 쓴다)
+    #   강건한 짝  : 중앙값, Q1, Q3    (순위만 쓴다)
+    mean_income = df['x'].mean()
+    median_income = df['x'].median()
+    std_dev = df['x'].std()
+    q1 = df['x'].quantile(0.25)
+    q3 = df['x'].quantile(0.75)
+    iqr = stats.iqr(df['x'])
 
-# 가운데: 중앙값과 사분위수.
-# Q1과 Q3 사이가 정확히 자료의 가운데 50%이며, 치우침에 흔들리지 않는다.
-ax2.hist(df['x'], bins=30, density=True, color="#DCEBFB", edgecolor="white")
-ax2.axvline(median_income, color="#1565C0", linestyle='--', lw=2, label="중앙값")
-ax2.axvline(q1, color="#D32F2F", linestyle='--', lw=2, label="$Q_1$")
-ax2.axvline(q3, color="#E65100", linestyle='--', lw=2, label="$Q_3$")
-ax2.legend(fontsize=8)
-ax2.set_title("중앙값과 사분위수")
-ax2.set_xlabel("소득 (달러)")
-ax2.set_ylabel("밀도")
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
 
-# 오른쪽: 같은 사분위수를 상자그림으로 옮긴 것
-ax3.boxplot(df['x'], vert=True, patch_artist=True, labels=["소득"])
-ax3.set_title("상자그림")
-ax3.set_ylabel("소득 (달러)")
+    # 왼쪽: 평균 ± 표준편차.
+    # 소득은 오른쪽으로 치우쳐 있어 평균이 봉우리보다 오른쪽에 놓이고,
+    # "평균 - 표준편차"가 자료가 별로 없는 곳을 가리킨다.
+    ax1.hist(df['x'], bins=30, density=True, color="#DCEBFB", edgecolor="white")
+    ax1.axvline(mean_income, color="#1565C0", linestyle='--', lw=2, label="평균")
+    ax1.axvline(mean_income - std_dev, color="#D32F2F", linestyle='--', lw=2,
+                label="평균 - 표준편차")
+    ax1.axvline(mean_income + std_dev, color="#E65100", linestyle='--', lw=2,
+                label="평균 + 표준편차")
+    ax1.legend(fontsize=8)
+    ax1.set_title("평균과 표준편차")
+    ax1.set_xlabel("소득 (달러)")
+    ax1.set_ylabel("밀도")
 
-fig.tight_layout()
-fig.savefig("robust_63.png", dpi=170, facecolor="white", bbox_inches="tight")
+    # 가운데: 중앙값과 사분위수.
+    # Q1과 Q3 사이가 정확히 자료의 가운데 50%이며, 치우침에 흔들리지 않는다.
+    ax2.hist(df['x'], bins=30, density=True, color="#DCEBFB", edgecolor="white")
+    ax2.axvline(median_income, color="#1565C0", linestyle='--', lw=2, label="중앙값")
+    ax2.axvline(q1, color="#D32F2F", linestyle='--', lw=2, label="$Q_1$")
+    ax2.axvline(q3, color="#E65100", linestyle='--', lw=2, label="$Q_3$")
+    ax2.legend(fontsize=8)
+    ax2.set_title("중앙값과 사분위수")
+    ax2.set_xlabel("소득 (달러)")
+    ax2.set_ylabel("밀도")
 
-# 두 짝의 숫자를 나란히 찍어 비교한다
-print(f"평균   {mean_income:>9,.0f}   표준편차 {std_dev:>9,.0f}")
-print(f"중앙값 {median_income:>9,.0f}   IQR      {iqr:>9,.0f}")
-print(f"평균 - 표준편차 = {mean_income - std_dev:>9,.0f}   "
-      f"(최솟값 {df['x'].min():,}보다 큰가? "
-      f"{'예' if mean_income - std_dev > df['x'].min() else '아니오'})")
-```
+    # 오른쪽: 같은 사분위수를 상자그림으로 옮긴 것
+    ax3.boxplot(df['x'], vert=True, patch_artist=True, labels=["소득"])
+    ax3.set_title("상자그림")
+    ax3.set_ylabel("소득 (달러)")
 
-출력:
+    fig.tight_layout()
+    fig.savefig("robust_63.png", dpi=170, facecolor="white", bbox_inches="tight")
 
-```
-평균      68,761   표준편차    32,872
-중앙값    62,000   IQR         40,000
-평균 - 표준편차 =    35,888   (최솟값 4,000보다 큰가? 예)
-```
+    # 두 짝의 숫자를 나란히 찍어 비교한다
+    print(f"평균   {mean_income:>9,.0f}   표준편차 {std_dev:>9,.0f}")
+    print(f"중앙값 {median_income:>9,.0f}   IQR      {iqr:>9,.0f}")
+    print(f"평균 - 표준편차 = {mean_income - std_dev:>9,.0f}   "
+          f"(최솟값 {df['x'].min():,}보다 큰가? "
+          f"{'예' if mean_income - std_dev > df['x'].min() else '아니오'})")
 
-![평균·표준편차와 중앙값·사분위수 비교](./img/robust_63.png)
+    # 그림의 눈금이 실제로 어디를 가리키는지 센다.
+    v = df['x'].astype(float).values
+    print(f"\n{'눈금':>12}{'값':>12}{'그 아래 자료 비율':>18}")
+    for name, val in (("평균 - s", mean_income - std_dev), ("Q1", q1),
+                      ("평균", mean_income), ("중앙값", median_income),
+                      ("Q3", q3), ("평균 + s", mean_income + std_dev)):
+        print(f"{name:>12}{val:>12,.0f}{np.mean(v < val):>18.4f}")
+    print(f"\n[평균-s, 평균+s] 안의 비율 {np.mean((v >= mean_income - std_dev) & (v <= mean_income + std_dev)):.4f}"
+          f"  (정규라면 0.6827)")
+    print(f"[Q1, Q3]          안의 비율 {np.mean((v >= q1) & (v <= q3)):.4f}  (정의상 0.5)")
+    print(f"\n왜도 {stats.skew(v):.4f}  초과첨도 {stats.kurtosis(v):.4f}")
+    print(f"IQR/1.349 = {iqr / 1.349:,.0f}  대  s = {std_dev:,.0f}   비 {std_dev / (iqr / 1.349):.4f}")
+    print(f"45,000 인 관측값 {int((v == 45000).sum()):,}개, 85,000 인 관측값 {int((v == 85000).sum()):,}개")
+    ```
+
+    출력:
+
+    ```
+    평균      68,761   표준편차    32,872
+    중앙값    62,000   IQR         40,000
+    평균 - 표준편차 =    35,888   (최솟값 4,000보다 큰가? 예)
+
+              눈금           값        그 아래 자료 비율
+          평균 - s      35,888            0.1275
+              Q1      45,000            0.2423
+              평균      68,761            0.5762
+             중앙값      62,000            0.4976
+              Q3      85,000            0.7350
+          평균 + s     101,633            0.8544
+
+    [평균-s, 평균+s] 안의 비율 0.7269  (정규라면 0.6827)
+    [Q1, Q3]          안의 비율 0.5100  (정의상 0.5)
+
+    왜도 1.0488  초과첨도 1.0808
+    IQR/1.349 = 29,652  대  s = 32,872   비 1.1086
+    45,000 인 관측값 1,300개, 85,000 인 관측값 863개
+    ```
+
+    ![평균·표준편차와 중앙값·사분위수 비교](./img/robust_63.png)
+
+    **(1) $Q_1$ 쪽이 이름에 어울린다.** "평균 $-$ 표준편차 $= 35{,}888$" 아래에는 자료의 **$12.75\%$** 밖에 없다. 그 눈금은 사분의 일도 아니고 $68\%$ 규칙의 $16\%$ 도 아닌 어중간한 자리를 가리킨다. 반면 $Q_1 = 45{,}000$ 아래에는 $24.23\%$ 가 있다. $25\%$ 에 정확히 떨어지지 않는 것은 **$45{,}000$ 인 관측이 $1{,}300$ 개나 있어서**다. 동점 덩어리가 $25\%$ 지점을 걸치고 있으므로 "미만"이 $24.23\%$, "이하"가 $26.83\%$ 다. 어느 쪽으로 세도 $12.75\%$ 와는 비교가 안 된다.
+
+    왼쪽 칸의 눈금이 어긋나는 까닭은 **분포가 치우쳤기 때문**이다. 왜도가 $1.0488$ 로 오른쪽 꼬리가 길어 평균 $68{,}761$ 이 중앙값 $62{,}000$ 보다 $6{,}761$ 달러 위에 있고(평균 아래에 $57.62\%$, 중앙값 아래에 $49.76\%$), 표준편차 $32{,}872$ 도 그 꼬리에 부풀려져 있다. 그래서 평균에서 한 걸음 내려가면 자료가 희박한 곳까지 내려가 버린다.
+
+    구간으로 보아도 같다. $[\text{평균}-s,\ \text{평균}+s]$ 는 자료의 $72.69\%$ 를 담는데 정규분포라면 $68.27\%$ 여야 한다. $[Q_1, Q_3]$ 는 $51.00\%$ 로 정의상의 $50\%$ 와 거의 같다(차이는 역시 동점 때문이다). **강건한 짝은 "자료의 가운데 절반"이라는 약속을 지키고, 고전적 짝은 지키지 않는다.**
+
+    **(2) 세 칸이 각각 다른 것을 가린다.**
+
+    **왼쪽 칸은 치우침을 가린다.** 히스토그램 자체는 오른쪽 꼬리를 보여 주지만, 그 위에 얹힌 세 세로선은 **대칭으로 그려진다.** 평균을 가운데 두고 양쪽으로 똑같이 $32{,}872$ 씩 뻗으므로, 눈은 "대칭인 분포에 중심과 폭을 표시한 그림"으로 읽게 된다. 실제로는 왼쪽 선 아래에 $12.75\%$, 오른쪽 선 위에 $14.56\%$ 가 있어 비대칭이다.
+
+    **가운데 칸은 꼬리를 가린다.** $Q_1$ 과 $Q_3$ 가 가운데 $50\%$ 를 정확히 잡아 주는 대신, 그 밖의 $50\%$ 에 대해서는 아무 말도 하지 않는다. 소득 자료에서 정작 중요한 질문("상위 $1\%$ 가 어디에 있는가")에 답하지 못한다. $Q_3 = 85{,}000$ 위에 $26.5\%$ 가 있고 그들이 $199{,}000$ 까지 퍼져 있다는 사실은 이 세 선에 담기지 않는다.
+
+    **오른쪽 칸은 분포의 모양 전체를 가린다.** 상자그림은 가운데 칸의 세 수에 수염과 이상치 점을 더한 것이고, **히스토그램이 보여 주던 봉우리의 생김새를 버린다.** 치우친 분포인지 이봉인지 구별되지 않는다. 그 대신 여러 집단을 나란히 놓고 견주기에는 상자그림이 훨씬 낫다. 한 변수만 볼 때 상자그림은 히스토그램보다 **덜** 보여 준다.
+
+    끝으로 두 척도를 같은 눈금에 올려 보면 $\text{IQR}/1.349 = 29{,}652$ 대 $s = 32{,}872$ 로 비가 $1.1086$ 이다(정규자료에서 $\text{IQR} \approx 1.349\,\sigma$ 이므로 $1.349$ 로 나누면 $\sigma$ 와 눈금이 맞는다). **$1$ 에서 $11\%$ 벗어났다는 것이 "꼬리가 정규보다 무겁다"의 정량적 표현**이고, 초과첨도 $1.0808$ 이 같은 말을 한다. 세 칸의 그림에서 받은 인상을 수 하나로 바꾼 것이다.
 
 ### 사분위수 계산하기
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 사분위수 구하기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 사분위수는 보간법에 따라 달라진다. 그런데 이 자료에서는 달라지지 않는다. $Q_1 = 45{,}000$, $Q_3 = 85{,}000$, IQR $= 40{,}000$ 이 깔끔한 수로 떨어지는 까닭을 본다.
+
+**(1)** `quantile(0.25)` 의 기본 보간법 `linear` 이 쓰는 순서통계량의 위치를 $n = 50{,}000$ 에 대해 계산하시오. 보간이 실제로 일어나는가.
+
+**(2)** 보간법을 `lower`, `higher`, `midpoint`, `nearest` 로 바꾸면 $Q_1$, $Q_3$, IQR 이 달라지는가. 왜 그런가.
 
 </div>
 
-```python
-import pandas as pd
+??? success "풀이"
 
-url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
-df = pd.read_csv(url)
+    **(1) 해석적으로.** `linear`(넘파이·판다스의 기본값)은 $p$ 분위수를 순서통계량의 **$h = (n-1)p$ 번째 위치**(0-기반)에서 읽고, 정수가 아니면 양옆을 선형보간한다. $n = 50{,}000$ 이므로
 
-# quantile(p)는 자료의 p 비율이 그 아래에 놓이는 값을 돌려준다.
-q1 = df['x'].quantile(0.25)      # 아래에서 25%
-q2 = df['x'].median()            # 아래에서 50% = 중앙값
-q3 = df['x'].quantile(0.75)      # 아래에서 75%
+    $$
+    h_{0.25} = 49999 \times 0.25 = 12499.75, \qquad
+    h_{0.75} = 49999 \times 0.75 = 37499.25
+    $$
 
-print(f"{q1 = }")
-print(f"{q2 = }")  # 중앙값
-print(f"{q3 = }")
+    다. 둘 다 정수가 아니므로 **보간식이 작동한다.** $Q_1$ 은 $x_{(12500)}$ 과 $x_{(12501)}$ 을 $0.75 : 0.25$ 로 섞고, $Q_3$ 은 $x_{(37500)}$ 과 $x_{(37501)}$ 을 $0.25 : 0.75$ 로 섞는다.
 
-# IQR은 Q3 - Q1. 자료의 가운데 절반이 차지하는 폭이다.
-print(f"IQR = {q3 - q1:,.0f}")
-```
+    **그런데 섞을 두 값이 같으면 보간이 아무 일도 하지 않는다.** 아래에서 확인하겠지만 $x_{(12500)} = x_{(12501)} = 45{,}000$ 이고 $x_{(37500)} = x_{(37501)} = 85{,}000$ 이다. 그러므로 보간식이 돌아가기는 해도 결과는 동점 값 그 자체다.
 
-출력:
+    **(2) 예측.** 다섯 보간법은 모두 $h$ 를 끼는 두 순서통계량 사이에서 값을 고른다. 두 값이 같으면 **어느 규칙을 써도 같은 답**이 나올 수밖에 없다. 그러므로 $Q_1$, $Q_3$, IQR 이 다섯 방법에서 모두 같아야 한다.
 
-```
-q1 = 45000.0
-q2 = 62000.0
-q3 = 85000.0
-IQR = 40,000
-```
+    까닭은 자료의 생김새다. $45{,}000$ 인 관측이 $1{,}300$ 개, $85{,}000$ 인 관측이 $863$ 개 있다. 보고된 소득이 천 단위로 몰려 있어 $50{,}000$ 개가 고유값 $5{,}271$ 개에 뭉쳐 있고, 사분위수 자리마다 두꺼운 동점 덩어리가 걸쳐 있다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    url = 'https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/loans_income.csv'
+    df = pd.read_csv(url)
+
+    # quantile(p)는 자료의 p 비율이 그 아래에 놓이는 값을 돌려준다.
+    q1 = df['x'].quantile(0.25)      # 아래에서 25%
+    q2 = df['x'].median()            # 아래에서 50% = 중앙값
+    q3 = df['x'].quantile(0.75)      # 아래에서 75%
+
+    print(f"{q1 = }")
+    print(f"{q2 = }")  # 중앙값
+    print(f"{q3 = }")
+
+    # IQR은 Q3 - Q1. 자료의 가운데 절반이 차지하는 폭이다.
+    print(f"IQR = {q3 - q1:,.0f}")
+
+    # (1) linear 이 읽는 위치와 그 양옆의 순서통계량
+    x = df['x'].astype(float).values
+    srt = np.sort(x)
+    n = len(x)
+    for p in (0.25, 0.75):
+        h = (n - 1) * p
+        lo, hi = int(np.floor(h)), int(np.floor(h)) + 1
+        print(f"\np={p}: h=(n-1)p={h}")
+        print(f"  x_({lo+1}) = {srt[lo]:,.0f},  x_({hi+1}) = {srt[hi]:,.0f}"
+              f"   {'같다 -> 보간해도 그대로' if srt[lo] == srt[hi] else '다르다 -> 보간이 값을 바꾼다'}")
+
+    # (2) 보간법을 바꿔 본다
+    print(f"\n{'method':>10}{'Q1':>12}{'Q3':>12}{'IQR':>12}")
+    for meth in ("linear", "lower", "higher", "midpoint", "nearest"):
+        a, b = np.percentile(x, [25, 75], method=meth)
+        print(f"{meth:>10}{a:>12,.0f}{b:>12,.0f}{b - a:>12,.0f}")
+
+    print(f"\n고유값 {len(np.unique(x)):,}개 / 관측값 {n:,}개")
+    print(f"  45,000 인 관측값 {int((x == 45000).sum()):,}개,"
+          f"  85,000 인 관측값 {int((x == 85000).sum()):,}개")
+    ```
+
+    출력:
+
+    ```
+    q1 = 45000.0
+    q2 = 62000.0
+    q3 = 85000.0
+    IQR = 40,000
+
+    p=0.25: h=(n-1)p=12499.75
+      x_(12500) = 45,000,  x_(12501) = 45,000   같다 -> 보간해도 그대로
+
+    p=0.75: h=(n-1)p=37499.25
+      x_(37500) = 85,000,  x_(37501) = 85,000   같다 -> 보간해도 그대로
+
+        method          Q1          Q3         IQR
+        linear      45,000      85,000      40,000
+         lower      45,000      85,000      40,000
+        higher      45,000      85,000      40,000
+      midpoint      45,000      85,000      40,000
+       nearest      45,000      85,000      40,000
+
+    고유값 5,271개 / 관측값 50,000개
+      45,000 인 관측값 1,300개,  85,000 인 관측값 863개
+    ```
+
+    **(1)과 (2)가 모두 맞는다.** 보간 위치는 $12499.75$ 와 $37499.25$ 로 정수가 아니지만 양옆의 순서통계량이 같은 값이라, 다섯 보간법이 전부 $Q_1 = 45{,}000$, $Q_3 = 85{,}000$, IQR $= 40{,}000$ 을 준다.
+
+    **그래서 이 자료에서 "보간법을 밝힐 필요가 없다"는 결론은 맞다. 그러나 그것은 자료의 성질이고 일반 규칙이 아니다.** 보간법이 답을 바꾸는 조건이 분명하다.
+
+    - **$n$ 이 작을 때.** 분위수 자리에 동점이 없어 양옆 값이 벌어진다. [중앙값 절대편차](median_absolute_deviation.md) 쪽 보기 5 에서 $n = 6$ 자료의 답이 보간법에 따라 두 배까지 갈리는 것을 본다.
+    - **고유값이 많을 때.** 연속 측정값이면 동점이 거의 없으므로 거의 늘 보간이 값을 바꾼다. 여기서는 $50{,}000$ 개가 고유값 $5{,}271$ 개에 뭉쳐 있어($관측 하나당 평균 9.5$ 개 동점) 안전했다.
+    - **꼬리 쪽 분위수를 볼 때.** $p = 0.99$ 나 $p = 0.001$ 처럼 끝으로 가면 동점이 얇아지고 $h$ 를 끼는 두 값의 간격이 커진다.
+
+    **실무의 처방은 간단하다. 분위수를 보고하기 전에 그 자리의 동점 수를 세어 보라.** 동점이 두껍다면 보간법은 아무 영향이 없고, 얇다면 `method` 를 명시해야 재현된다.
+
+    한편 **동점이 두껍다는 사실 자체가 정보**다. 소득이 $45{,}000$ 이라고 답한 사람이 $1{,}300$ 명이라는 것은 실제 소득이 그 값이었다는 뜻이 아니라 **보고할 때 천 단위로 반올림했다**는 뜻이다. 이 쏠림은 분위수에는 거의 영향을 주지 않지만, 분포의 모양을 잘게 보려 할 때는 걸림돌이 된다.
 
 ---
 
@@ -475,7 +692,7 @@ IQR의 붕괴점이 25%인 반면 범위의 붕괴점이 0%인 이유를 설명�
     출력:
 
     ```
-    n      E[범위]       범위 추정 MSE     s 의 MSE         범위의 상대효율
+         n      E[범위]       범위 추정 MSE     s 의 MSE         범위의 상대효율
          2     1.1334         0.57777     0.40699           0.7044
          5     2.3293         0.13812     0.11956           0.8657
         10     3.0792         0.06727     0.05507           0.8187

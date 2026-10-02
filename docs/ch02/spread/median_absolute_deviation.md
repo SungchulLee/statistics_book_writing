@@ -49,44 +49,151 @@ $0.6745 = \Phi^{-1}(0.75)$는 표준정규분포의 75번째 백분위수다. �
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 주 인구 자료에서 표준편차와 MAD
+**보기 1.** <span class="diff easy" title="쉬움"></span> 관측값 하나를 빼면 두 척도가 얼마나 움직이는가. 미국 50개 주의 인구에서 $s$ 와 보정 MAD 를 재고, 가장 큰 주(캘리포니아) 하나를 지운다.
+
+**(1)** 관측값 $x_k$ 하나를 지웠을 때의 제곱합 갱신식을 유도하시오. 그것으로 $s'$ 를 **정확히** 예측하고 변화율을 구하시오.
+
+**(2)** 코드로 (1)을 확인하시오. MAD 쪽 변화율은 어떻게 나오며, 그 변화가 캘리포니아의 **크기**에서 온 것인가.
 
 </div>
 
-```python
-import pandas as pd
-from statsmodels import robust
+??? success "풀이"
 
-# 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
-url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
-state = pd.read_csv(url)
+    **(1) 해석적으로.** $\text{SS} = \sum_{i=1}^{n}(x_i - \bar x)^2$ 에서 $x_k$ 를 지우면 평균이
 
-# 표준편차는 제곱을 쓰므로 멀리 떨어진 값 하나에 크게 흔들린다.
-std_dev = state['Population'].std()
-print(f"표준편차     : {std_dev:,.0f}")
+    $$
+    \bar x' = \frac{n\bar x - x_k}{n-1}, \qquad \bar x' - \bar x = \frac{\bar x - x_k}{n-1}
+    $$
 
-# statsmodels 의 mad 는 정규분포에서 표준편차와 눈금이 맞도록 이미 보정해 준다.
-mad = robust.scale.mad(state['Population'])
-print(f"MAD (보정)   : {mad:,.0f}")
+    로 움직인다. 남은 $n-1$ 개의 제곱합을 $\bar x$ 기준으로 풀어 쓰면
 
-# 정의대로 직접 구해 본다. 중앙값에서의 절대편차, 그 중앙값이다.
-median_pop = state['Population'].median()
-abs_deviations = abs(state['Population'] - median_pop)
-mad_manual = abs_deviations.median()
-# 0.6745 는 표준정규의 0.75 분위점이다. 이 값으로 나누면 위 mad 와 눈금이 맞는다.
-mad_standardized = mad_manual / 0.6744897501960817
-print(f"MAD (직접)   : {mad_standardized:,.0f}")
-```
+    $$
+    \text{SS}' = \sum_{i \ne k}\big[(x_i - \bar x) - (\bar x' - \bar x)\big]^2
+    = \sum_{i \ne k}(x_i - \bar x)^2 - 2(\bar x' - \bar x)\sum_{i \ne k}(x_i - \bar x) + (n-1)(\bar x' - \bar x)^2
+    $$
 
-출력:
+    이다. 여기서 $\sum_{i \ne k}(x_i - \bar x) = -(x_k - \bar x)$ 임을 쓰면 세 항이 각각
 
-```
-표준편차     : 6,848,235
-MAD (보정)   : 3,849,876
-MAD (직접)   : 3,849,876
-```
+    $$
+    \text{SS} - (x_k - \bar x)^2, \qquad
+    -\frac{2(x_k - \bar x)^2}{n-1}, \qquad
+    \frac{(x_k - \bar x)^2}{n-1}
+    $$
 
-캘리포니아의 극단적인 인구(중앙값 440만 명에 비해 3700만 명)가 표준편차에 큰 영향을 주어 값을 끌어올린다. 중앙값으로부터의 편차에 근거하는 MAD는 이 이상치의 영향을 덜 받는다.
+    이 되어 합치면 **갱신식**
+
+    $$
+    \boxed{\ \text{SS}' = \text{SS} - \frac{n}{n-1}\,(x_k - \bar x)^2\ }
+    $$
+
+    를 얻는다. 지운 값의 편차만 알면 되고 나머지 자료를 다시 훑을 필요가 없다. 그리고 $s' = \sqrt{\text{SS}'/(n-2)}$ 다.
+
+    자료를 넣어 보자. $n = 50$, $\bar x = 6{,}162{,}876.3$, $x_k = 37{,}253{,}956$ 이므로 편차가 $31{,}091{,}079.7$ 이고
+
+    $$
+    \frac{n}{n-1}(x_k - \bar x)^2 = \frac{50}{49}\times (3.10911\times 10^7)^2 = 9.8638\times 10^{14}
+    $$
+
+    이다. $\text{SS} = 2.29802\times 10^{15}$ 이므로 **한 점이 제곱합의 $42.9\%$ 를 차지한다.** 지우면 $\text{SS}' = 1.31164\times 10^{15}$ 이고
+
+    $$
+    s' = \sqrt{\frac{1.31164\times 10^{15}}{48}} = 5{,}227{,}402,
+    \qquad \frac{s'}{s} - 1 = \frac{5{,}227{,}402}{6{,}848{,}235} - 1 = -23.67\%
+    $$
+
+    이다. **관측값 50 개 가운데 하나를 지우고 $s$ 가 사분의 일 줄어든다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels import robust
+
+    # 미국 50개 주의 인구와 살인율. 오른쪽으로 크게 치우친 전형적인 자료다.
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    state = pd.read_csv(url)
+
+    # 표준편차는 제곱을 쓰므로 멀리 떨어진 값 하나에 크게 흔들린다.
+    std_dev = state['Population'].std()
+    print(f"표준편차     : {std_dev:,.0f}")
+
+    # statsmodels 의 mad 는 정규분포에서 표준편차와 눈금이 맞도록 이미 보정해 준다.
+    mad = robust.scale.mad(state['Population'])
+    print(f"MAD (보정)   : {mad:,.0f}")
+
+    # 정의대로 직접 구해 본다. 중앙값에서의 절대편차, 그 중앙값이다.
+    median_pop = state['Population'].median()
+    abs_deviations = abs(state['Population'] - median_pop)
+    mad_manual = abs_deviations.median()
+    # 0.6745 는 표준정규의 0.75 분위점이다. 이 값으로 나누면 위 mad 와 눈금이 맞는다.
+    mad_standardized = mad_manual / 0.6744897501960817
+    print(f"MAD (직접)   : {mad_standardized:,.0f}")
+    print(f"보정 전 MAD  : {mad_manual:,.0f}")
+    print(f"s / MAD(보정) = {std_dev / mad:.4f}   <- 정규자료라면 1 쯤이어야 한다")
+
+    # --- 최댓값 하나를 빼면 두 척도가 각각 얼마나 움직이는가 ---
+    pop = state['Population'].astype(float)
+    n = len(pop)
+    xbar = pop.mean()
+    SS = ((pop - xbar) ** 2).sum()
+    k = pop.idxmax()
+    xk = pop[k]
+    print(f"\n최댓값 {state.loc[k, 'State']} = {xk:,.0f},  평균 {xbar:,.1f}")
+    print(f"  그 한 점이 제곱합에서 차지하는 몫 = {n / (n - 1) * (xk - xbar) ** 2 / SS:.4f}")
+
+    # 제곱합 갱신식 SS' = SS - n/(n-1) (x_k - xbar)^2 으로 s' 를 미리 계산한다.
+    SS_new = SS - n / (n - 1) * (xk - xbar) ** 2
+    s_pred = np.sqrt(SS_new / (n - 2))
+    pop2 = pop.drop(k)
+    print(f"  SS  = {SS:.6e} -> SS' 예측 {SS_new:.6e},  실제 {((pop2 - pop2.mean()) ** 2).sum():.6e}")
+    print(f"  s   = {std_dev:,.2f} -> s'  예측 {s_pred:,.2f},  실제 {pop2.std():,.2f}"
+          f"   ({100 * (s_pred / std_dev - 1):+.2f}%)")
+    mad2 = robust.scale.mad(pop2)
+    print(f"  MAD = {mad:,.2f} -> MAD' 실제 {mad2:,.2f}   ({100 * (mad2 / mad - 1):+.2f}%)")
+
+    # MAD 가 왜 거의 안 움직이는지는 순위만 보면 안다.
+    srt, srt2 = np.sort(pop.values), np.sort(pop2.values)
+    d1 = np.sort(np.abs(pop.values - np.median(pop.values)))
+    d2 = np.sort(np.abs(pop2.values - np.median(pop2.values)))
+    print(f"\n  n=50 중앙값 = (x_(25)+x_(26))/2 = ({srt[24]:,.0f}+{srt[25]:,.0f})/2 = {np.median(pop):,.1f}")
+    print(f"  n=49 중앙값 = x_(25)             = {srt2[24]:,.0f}")
+    print(f"  n=50 MAD(보정 전) = (d_(25)+d_(26))/2 = "
+          f"({d1[24]:,.0f}+{d1[25]:,.0f})/2 = {(d1[24] + d1[25]) / 2:,.1f}")
+    print(f"  n=49 MAD(보정 전) = d_(25)            = {d2[24]:,.0f}")
+    ```
+
+    출력:
+
+    ```
+    표준편차     : 6,848,235
+    MAD (보정)   : 3,849,876
+    MAD (직접)   : 3,849,876
+    보정 전 MAD  : 2,596,702
+    s / MAD(보정) = 1.7788   <- 정규자료라면 1 쯤이어야 한다
+
+    최댓값 California = 37,253,956,  평균 6,162,876.3
+      그 한 점이 제곱합에서 차지하는 몫 = 0.4292
+      SS  = 2.298018e+15 -> SS' 예측 1.311635e+15,  실제 1.311635e+15
+      s   = 6,848,235.35 -> s'  예측 5,227,402.05,  실제 5,227,402.05   (-23.67%)
+      MAD = 3,849,876.15 -> MAD' 실제 3,686,302.13   (-4.25%)
+
+      n=50 중앙값 = (x_(25)+x_(26))/2 = (4,339,367+4,533,372)/2 = 4,436,369.5
+      n=49 중앙값 = x_(25)             = 4,339,367
+      n=50 MAD(보정 전) = (d_(25)+d_(26))/2 = (2,583,376+2,610,028)/2 = 2,596,702.0
+      n=49 MAD(보정 전) = d_(25)            = 2,486,373
+    ```
+
+    **갱신식이 소수점까지 맞는다.** 예측 $\text{SS}' = 1.311635\times 10^{15}$ 과 실제가 같고, $s' = 5{,}227{,}402.05$ 도 예측과 실제가 센트 단위까지 같다. 변화율 $-23.67\%$ 도 (1)의 손계산과 같다.
+
+    **MAD 는 $-4.25\%$ 만 움직였다.** 그런데 중요한 것은 크기가 아니라 **그 변화가 캘리포니아의 크기에서 온 것이 아니라는 점**이다. MAD 는 순서통계량만 보기 때문이다. 출력의 마지막 네 줄이 그 셈을 그대로 보여 준다.
+
+    - $n = 50$ 에서 중앙값은 $(x_{(25)} + x_{(26)})/2 = (4{,}339{,}367 + 4{,}533{,}372)/2 = 4{,}436{,}369.5$ 이고,
+    - $n = 49$ 에서는 $x_{(25)} = 4{,}339{,}367$ 하나다.
+
+    캘리포니아는 어느 쪽에서도 **순위 맨 끝**에 있어서 중앙값 계산에 값으로 참여하지 않는다. 사라진 것은 "가장 큰 수"가 아니라 **관측 한 개**이고, 그래서 중앙값의 색인이 한 칸 밀린 것이 전부다. 보정 전 MAD 도 같은 방식으로 $(d_{(25)} + d_{(26)})/2 = 2{,}596{,}702$ 에서 $d_{(25)} = 2{,}486{,}373$ 으로 옮겨 갔다. 캘리포니아의 인구를 $37$ 백만이 아니라 $37$ 조로 바꿔도 이 네 줄은 한 글자도 달라지지 않는다. 보기 2 에서 그것을 직접 확인한다.
+
+    마지막으로 $s / \text{MAD}_{\text{보정}} = 1.7788$ 이다. 자료가 정규라면 두 값이 같은 $\sigma$ 를 추정하므로 이 비가 $1$ 근처여야 한다. $1.78$ 은 꼬리가 정규보다 훨씬 두껍다는 뜻이고, 그 꼬리의 정체가 캘리포니아·텍사스·뉴욕이다. 이 비를 진단 도구로 쓰는 법은 연습문제 10 에 정리되어 있다.
 
 ---
 
@@ -96,45 +203,119 @@ MAD (직접)   : 3,849,876
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 이상치를 넣으면 어떻게 달라지는가
+**보기 2.** <span class="diff easy" title="쉬움"></span> MAD 가 움직인 $11.0\%$ 는 어디서 왔는가. 인구 $1$ 억과 $1.5$ 억인 가상의 주 둘을 끼워 넣으면 $s$ 는 $258.3\%$, MAD 는 $11.0\%$ 늘어난다.
+
+**(1)** MAD 의 $11.0\%$ 가 **이상치의 크기와 아무 상관이 없음**을 보이시오. 두 이상치를 $10^{30}$, $10^{31}$ 로 바꾸었을 때의 MAD 를 미리 말할 수 있는가.
+
+**(2)** $s$ 쪽은 두 이상치가 제곱합의 몇 퍼센트를 차지하는지 구하고, 두 이상치만으로 $s$ 를 어림하시오.
 
 </div>
 
-```python
-import pandas as pd
-import numpy as np
-from statsmodels import robust
+??? success "풀이"
 
-# 먼저 원래 자료에서 두 척도를 재 둔다.
-url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
-state = pd.read_csv(url)
-original_std = state['Population'].std()
-original_mad = robust.scale.mad(state['Population'])
+    **(1) 해석적으로 — MAD 는 값이 아니라 순위를 본다.** 끼워 넣은 두 수는 원래 50 개보다 모두 크므로, 얼마나 크든 정렬하면 **$51$ 번째와 $52$ 번째 자리**에 놓인다. $n = 52$ 에서 중앙값은
 
-# 여기에 있을 수 없을 만큼 큰 가상의 주 둘을 끼워 넣는다.
-population_with_outliers = pd.concat([
-    state['Population'],
-    pd.Series([100_000_000, 150_000_000])
-])
+    $$
+    \text{median} = \frac{x_{(26)} + x_{(27)}}{2}
+    $$
 
-outlier_std = population_with_outliers.std()
-outlier_mad = robust.scale.mad(population_with_outliers)
+    이고 $x_{(26)}, x_{(27)}$ 은 둘 다 원래 자료의 값이다. 중앙값에서의 절대편차를 정렬해도 사정은 같다. 새 두 편차는 다른 모든 편차보다 크므로 $51, 52$ 번째 자리를 차지하고, MAD 는
 
-# 자료 52개 중 둘만 바뀌었는데 두 척도가 받는 충격은 전혀 다르다.
-print("이상치의 영향:")
-print(f"  표준편차: {original_std:,.0f} → {outlier_std:,.0f} ({100 * (outlier_std - original_std) / original_std:.1f}% 증가)")
-print(f"  MAD     : {original_mad:,.0f} → {outlier_mad:,.0f} ({100 * (outlier_mad - original_mad) / original_mad:.1f}% 증가)")
-```
+    $$
+    \text{MAD} = \frac{d_{(26)} + d_{(27)}}{2}
+    $$
 
-출력:
+    로 역시 원래 자료에서만 나온다. **그러므로 바뀐 MAD 는 원래 50 개의 값과 "두 개가 더 들어왔다"는 개수 정보만의 함수다.** $11.0\%$ 는 $n$ 이 $50$ 에서 $52$ 로 늘어 색인이 밀린 몫이고, 이상치의 크기와는 무관하다.
 
-```
-이상치의 영향:
-  표준편차: 6,848,235 → 24,537,372 (258.3% 증가)
-  MAD     : 3,849,876 → 4,273,462 (11.0% 증가)
-```
+    따라서 **$10^{30}$, $10^{31}$ 을 넣어도 MAD 는 똑같이 $4{,}273{,}462$ 다.** 이것이 "붕괴점 $50\%$"가 실제로 뜻하는 바다. 절반이 넘지 않는 한 오염된 값이 **얼마나** 나쁜지는 아무 영향이 없다.
 
-극단적인 이상치 두 개를 추가하면 표준편차는 극적으로 커지지만 MAD는 거의 변하지 않는다. 이것이 MAD의 강건성을 보여준다.
+    **(2) 해석적으로 — $s$ 는 제곱합의 몫만큼 따라간다.** 두 이상치가 제곱합의 비율 $\pi$ 를 차지하면, 그 둘만으로 어림한
+
+    $$
+    s_{\text{어림}} = \sqrt{\frac{(x_1 - \bar x)^2 + (x_2 - \bar x)^2}{n-1}}
+    $$
+
+    는 참값의 $\sqrt{\pi}$ 배다. $\pi$ 를 아래에서 재 보면 $0.8911$ 이고 $\sqrt{0.8911} = 0.9440$ 이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    import numpy as np
+    from statsmodels import robust
+
+    # 먼저 원래 자료에서 두 척도를 재 둔다.
+    url = ('https://raw.githubusercontent.com/gedeck/practical-statistics-for-data-scientists/master/data/state.csv')
+    state = pd.read_csv(url)
+    original_std = state['Population'].std()
+    original_mad = robust.scale.mad(state['Population'])
+
+    # 여기에 있을 수 없을 만큼 큰 가상의 주 둘을 끼워 넣는다.
+    population_with_outliers = pd.concat([
+        state['Population'],
+        pd.Series([100_000_000, 150_000_000])
+    ])
+
+    outlier_std = population_with_outliers.std()
+    outlier_mad = robust.scale.mad(population_with_outliers)
+
+    # 자료 52개 중 둘만 바뀌었는데 두 척도가 받는 충격은 전혀 다르다.
+    print("이상치의 영향:")
+    print(f"  표준편차: {original_std:,.0f} → {outlier_std:,.0f} ({100 * (outlier_std - original_std) / original_std:.1f}% 증가)")
+    print(f"  MAD     : {original_mad:,.0f} → {outlier_mad:,.0f} ({100 * (outlier_mad - original_mad) / original_mad:.1f}% 증가)")
+
+    # (1) MAD 의 11% 가 이상치의 크기와 무관함을 보인다. 크기만 바꿔 가며 다시 잰다.
+    print("\n이상치의 크기를 키워 가며:")
+    print(f"{'이상치 둘':>22}{'s':>14}{'MAD(보정)':>16}")
+    for a, b in [(1e8, 1.5e8), (1e9, 1e10), (1e12, 1e13), (1e30, 1e31)]:
+        q = pd.concat([state['Population'].astype(float), pd.Series([a, b])])
+        print(f"{a:>10.1e},{b:>10.1e}{q.std():>14.4e}{robust.scale.mad(q):>16,.0f}")
+
+    # 왜 그런가: MAD 는 순서통계량만 본다.
+    pw = population_with_outliers.astype(float).values
+    srt = np.sort(pw)
+    med = np.median(pw)
+    d = np.sort(np.abs(pw - med))
+    print(f"\n  n=52 중앙값 = (x_(26)+x_(27))/2 = ({srt[25]:,.0f}+{srt[26]:,.0f})/2 = {med:,.1f}")
+    print(f"  n=52 MAD(보정 전) = (d_(26)+d_(27))/2 = ({d[25]:,.0f}+{d[26]:,.0f})/2 = {(d[25] + d[26]) / 2:,.1f}")
+    print(f"  두 이상치의 편차는 순위 51, 52 번: {d[-2]:,.0f}, {d[-1]:,.0f}  (중앙값 계산에 쓰이지 않는다)")
+
+    # s 쪽은 두 이상치가 제곱합을 거의 독점한다.
+    pwm = pw.mean()
+    SS = ((pw - pwm) ** 2).sum()
+    share = ((1e8 - pwm) ** 2 + (1.5e8 - pwm) ** 2) / SS
+    print(f"\n  새 평균 {pwm:,.0f},  두 이상치가 제곱합에서 차지하는 몫 {share:.4f}")
+    print(f"  두 이상치만으로 어림한 s = {np.sqrt(((1e8 - pwm) ** 2 + (1.5e8 - pwm) ** 2) / 51):,.0f}"
+          f"  (실제 {outlier_std:,.0f},  비 {np.sqrt(share):.4f})")
+    ```
+
+    출력:
+
+    ```
+    이상치의 영향:
+      표준편차: 6,848,235 → 24,537,372 (258.3% 증가)
+      MAD     : 3,849,876 → 4,273,462 (11.0% 증가)
+
+    이상치의 크기를 키워 가며:
+                     이상치 둘             s         MAD(보정)
+       1.0e+08,   1.5e+08    2.4537e+07       4,273,462
+       1.0e+09,   1.0e+10    1.3901e+09       4,273,462
+       1.0e+12,   1.0e+13    1.3910e+12       4,273,462
+       1.0e+30,   1.0e+31    1.3910e+30       4,273,462
+
+      n=52 중앙값 = (x_(26)+x_(27))/2 = (4,533,372+4,625,364)/2 = 4,579,368.0
+      n=52 MAD(보정 전) = (d_(26)+d_(27))/2 = (2,753,027+3,011,786)/2 = 2,882,406.5
+      두 이상치의 편차는 순위 51, 52 번: 95,420,632, 145,420,632  (중앙값 계산에 쓰이지 않는다)
+
+      새 평균 10,733,535,  두 이상치가 제곱합에서 차지하는 몫 0.8911
+      두 이상치만으로 어림한 s = 23,163,380  (실제 24,537,372,  비 0.9440)
+    ```
+
+    **(1)이 그대로 확인된다. MAD 가 네 줄 모두 정확히 $4{,}273{,}462$ 다.** 이상치를 $1$ 억에서 $10^{31}$ 로, 곧 $23$ 자릿수나 키웠는데 보정 MAD 의 마지막 자리까지 같다. 그동안 $s$ 는 $2.45\times 10^{7}$ 에서 $1.39\times 10^{30}$ 으로 함께 올라간다. 그러므로 **"표준편차는 258% 늘고 MAD 는 11% 늘었다"는 비교는 MAD 쪽을 과장한 것이다.** 정직한 서술은 "$s$ 는 이상치의 크기에 비례해 한없이 커지고 MAD 는 아예 반응하지 않는다. $11\%$ 는 표본크기가 둘 늘어난 값이다"다.
+
+    순위 셈도 맞는다. $n = 52$ 의 중앙값이 원래 자료의 $x_{(26)} = 4{,}533{,}372$ 와 $x_{(27)} = 4{,}625{,}364$ 의 평균이고, 두 이상치의 편차 $95{,}420{,}632$ 와 $145{,}420{,}632$ 는 $51, 52$ 번째 자리에 밀려 계산에 참여하지 못한다.
+
+    **(2)도 맞는다.** 두 이상치가 제곱합의 $89.11\%$ 를 차지하고, 그 둘만으로 어림한 $s$ 가 $23{,}163{,}380$ 으로 실제 $24{,}537{,}372$ 의 $0.9440$ 배다. 예측한 $\sqrt{0.8911} = 0.9440$ 과 소수점 넷째 자리까지 같다. **$52$ 개 가운데 두 개가 $s$ 의 $94\%$ 를 정한다**는 뜻이고, 그래서 $s$ 는 그 두 개에 대한 보고서나 다름없다.
 
 ---
 
@@ -184,32 +365,125 @@ MAD는 오염이 절반에 이를 때까지 $\sigma = 1$ 근처에 머문다. 40
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 금융 수익률에서의 MAD
+**보기 3.** <span class="diff easy" title="쉬움"></span> 폭락 하루가 표준편차를 혼자 정한다. 일별 수익률 $13$ 개 가운데 마지막 하루가 $-50\%$ 다. $s = 0.1407$, 보정 MAD $= 0.0222$ 로 여섯 배 넘게 벌어진다.
+
+**(1)** 관측값 하나 $x_0$ 가 나머지를 압도할 때 $s \approx \lvert x_0\rvert / \sqrt{n}$ 임을 보이시오. $n = 13$ 에 $x_0 = -0.50$ 을 넣으면 얼마인가.
+
+**(2)** $n = 13$ 의 MAD 를 손으로 구한 뒤, 폭락 깊이를 $-50\%$, $-500\%$, $-5000\%$ 로 키워 가며 (1)을 확인하고 MAD 가 어떻게 되는지 보시오.
 
 </div>
 
-```python
-import pandas as pd
-from statsmodels import robust
+??? success "풀이"
 
-# 어느 주식의 일별 수익률이라고 하자. 마지막 하루가 폭락일(-50%)이다.
-returns = pd.Series([0.01, 0.02, -0.01, 0.015, -0.005, 0.03, -0.02,
-                      0.01, -0.01, 0.005, -0.015, 0.02, -0.50])
+    **(1) 해석적으로.** 나머지 $n-1$ 개가 $x_0$ 에 견주어 무시할 만하다고 보고 **정확히 $0$** 으로 놓자. 그러면 평균이 $\bar x = x_0/n$ 이고
 
-print(f"표준편차   : {returns.std():.4f}")
-print(f"MAD (보정) : {robust.scale.mad(returns):.4f}")
+    $$
+    \text{SS} = \left(x_0 - \frac{x_0}{n}\right)^2 + (n-1)\left(0 - \frac{x_0}{n}\right)^2
+    = x_0^2\,\frac{(n-1)^2}{n^2} + x_0^2\,\frac{n-1}{n^2}
+    = x_0^2\,\frac{(n-1)\big[(n-1) + 1\big]}{n^2}
+    = x_0^2\,\frac{n-1}{n}
+    $$
 
-# 폭락일 하루가 표준편차는 크게 부풀리지만 MAD 는 거의 건드리지 못한다.
-```
+    이다. 따라서
 
-출력:
+    $$
+    s^2 = \frac{\text{SS}}{n-1} = \frac{x_0^2}{n}, \qquad\qquad s = \frac{\lvert x_0\rvert}{\sqrt{n}}
+    $$
 
-```
-표준편차   : 0.1407
-MAD (보정) : 0.0222
-```
+    이다. 깔끔하게 떨어진다. $n = 13$, $x_0 = -0.50$ 이면
 
-폭락한 하루(-0.50)가 표준편차를 크게 키워 전형적인 일간 변동성을 과장할 수 있다. MAD는 일상적인 변동에 대해 더 선명한 그림을 준다.
+    $$
+    s \approx \frac{0.50}{\sqrt{13}} = \frac{0.50}{3.6056} = 0.1387
+    $$
+
+    이고 실제 $0.1407$ 과 $1.4\%$ 차이다. 나머지 수익률이 정말로 $0$ 은 아니기 때문이며, $x_0$ 가 커지면 그 몫이 줄어 어림이 좋아져야 한다.
+
+    **이것이 "표준편차의 붕괴점은 $0\%$"라는 말의 정량적 내용이다.** 한 점만 $\lvert x_0\rvert \to \infty$ 로 보내면 $s$ 도 그와 **비례해서** 한없이 커지고, 비례상수가 $1/\sqrt{n}$ 이다. 연습문제 3 의 "$M/\sqrt{n}$ 처럼 커진다"가 바로 이 식이다.
+
+    **손으로 구한 MAD.** $n = 13$ 은 홀수라 중앙값이 $7$ 번째 값 하나다. 정렬하면
+
+    $$
+    -0.5,\ -0.02,\ -0.015,\ -0.01,\ -0.01,\ -0.005,\ \mathbf{0.005},\ 0.01,\ 0.01,\ 0.015,\ 0.02,\ 0.02,\ 0.03
+    $$
+
+    이므로 중앙값은 $0.005$ 다. 거기서의 절대편차를 정렬하면
+
+    $$
+    0,\ 0.005,\ 0.005,\ 0.01,\ 0.01,\ 0.015,\ \mathbf{0.015},\ 0.015,\ 0.015,\ 0.02,\ 0.025,\ 0.025,\ 0.505
+    $$
+
+    이고 $7$ 번째가 $0.015$ 다. 보정하면 $0.015/0.6745 = 0.02224$ 다. **폭락일의 편차 $0.505$ 는 정렬된 목록의 맨 끝에 있어 쓰이지 않는다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels import robust
+
+    # 어느 주식의 일별 수익률이라고 하자. 마지막 하루가 폭락일(-50%)이다.
+    returns = pd.Series([0.01, 0.02, -0.01, 0.015, -0.005, 0.03, -0.02,
+                          0.01, -0.01, 0.005, -0.015, 0.02, -0.50])
+
+    print(f"표준편차   : {returns.std():.4f}")
+    print(f"MAD (보정) : {robust.scale.mad(returns):.4f}")
+    print(f"s / MAD    : {returns.std() / robust.scale.mad(returns):.4f}")
+
+    # 손계산을 따라가 본다. n = 13 이라 중앙값은 7번째 값 하나다.
+    n = len(returns)
+    srt = np.sort(returns.values)
+    med = srt[n // 2]
+    d = np.sort(np.abs(returns.values - med))
+    print(f"\nn = {n},  정렬한 수익률 {srt}")
+    print(f"중앙값 = x_(7) = {med}")
+    print(f"절대편차 정렬 {d}")
+    print(f"MAD(보정 전) = d_(7) = {d[n // 2]},  보정 후 {d[n // 2] / 0.6744897501960817:.6f}")
+
+    # (1) 한 점이 압도할 때 s = |x_0|/sqrt(n) 인가. 폭락 깊이를 키워 가며 본다.
+    print(f"\n{'폭락일':>10}{'s 실제':>12}{'|x0|/sqrt(n)':>15}{'비':>9}{'MAD(보정)':>12}")
+    for crash in (-0.50, -5.00, -50.00):
+        q = pd.Series(list(returns[:-1]) + [crash])
+        approx = abs(crash) / np.sqrt(n)
+        print(f"{crash:>10.2f}{q.std():>12.4f}{approx:>15.4f}"
+              f"{q.std() / approx:>9.4f}{robust.scale.mad(q):>12.4f}")
+
+    # 폭락일을 아예 빼면?
+    q0 = returns[:-1]
+    print(f"\n폭락일 제외 (n={len(q0)}):  s = {q0.std():.4f},  MAD(보정) = {robust.scale.mad(q0):.4f}")
+    print(f"  폭락일이 s 를 {returns.std() / q0.std():.2f}배, MAD 를 "
+          f"{robust.scale.mad(returns) / robust.scale.mad(q0):.2f}배로 만들었다")
+    ```
+
+    출력:
+
+    ```
+    표준편차   : 0.1407
+    MAD (보정) : 0.0222
+    s / MAD    : 6.3249
+
+    n = 13,  정렬한 수익률 [-0.5   -0.02  -0.015 -0.01  -0.01  -0.005  0.005  0.01   0.01   0.015
+      0.02   0.02   0.03 ]
+    중앙값 = x_(7) = 0.005
+    절대편차 정렬 [0.    0.005 0.005 0.01  0.01  0.015 0.015 0.015 0.015 0.02  0.025 0.025
+     0.505]
+    MAD(보정 전) = d_(7) = 0.015,  보정 후 0.022239
+
+           폭락일        s 실제   |x0|/sqrt(n)        비     MAD(보정)
+         -0.50      0.1407         0.1387   1.0143      0.0222
+         -5.00      1.3880         1.3868   1.0009      0.0222
+        -50.00     13.8687        13.8675   1.0001      0.0222
+
+    폭락일 제외 (n=12):  s = 0.0159,  MAD(보정) = 0.0185
+      폭락일이 s 를 8.83배, MAD 를 1.20배로 만들었다
+    ```
+
+    **어림식이 예상대로 좋아진다.** 실제 $s$ 를 $\lvert x_0\rvert/\sqrt{13}$ 으로 나눈 비가 $1.0143 \to 1.0009 \to 1.0001$ 로 $1$ 에 수렴한다. 폭락이 깊어질수록 나머지 $12$ 일이 상대적으로 작아지기 때문이다. **$-5000\%$ 에서는 $s = 13.8687$ 인데 어림값 $13.8675$ 와 소수점 셋째 자리까지 같다.** 곧 그 수치는 "하루치 수익률 하나를 $\sqrt{13}$ 으로 나눈 값"이지 그 주식의 변동성이 아니다.
+
+    **그동안 MAD 는 세 줄 모두 $0.0222$ 다.** 손계산이 보여 준 대로 폭락일의 편차는 정렬된 $13$ 개 중 맨 끝이라 어떤 값이든 쓰이지 않는다.
+
+    **그러나 MAD 가 폭락일에 전혀 영향을 받지 않는 것은 아니다.** 폭락일을 아예 빼면 $n = 12$ 가 되어 MAD 가 $0.0222$ 에서 $0.0185$ 로 내려간다. $1.20$ 배 차이다. 보기 2 와 똑같은 사정이다. 이 변화는 폭락의 **깊이**가 아니라 **관측 하나가 늘었다는 사실**에서 온다. 짝수·홀수가 바뀌어 중앙값 관례까지 달라지므로 작은 표본에서는 이 몫이 눈에 띈다. 같은 조건에서 $s$ 는 $0.0159$ 에서 $0.1407$ 로 $8.83$ 배가 된다.
+
+    **$s/\text{MAD} = 6.32$ 라는 비가 진단이다.** 정규자료라면 $1$ 근처여야 하는 수가 $6$ 을 넘었다는 것은 "이 표본에 정규분포로 설명되지 않는 관측이 있다"는 경보다. 여기서는 그것이 어느 날인지도 분명하다.
 
 ---
 
@@ -219,55 +493,169 @@ MAD (보정) : 0.0222
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> statsmodels 로 MAD 구하기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 값 여섯 개로 끝까지 손으로 따라가기. 자료는 $1, 2, 3, 4, 5, 100$ 이고 `robust.scale.mad` 가 $2.22$ 를 돌려준다.
+
+**(1)** $2.22$ 를 손으로 재현하시오. $n = 6$ 이라 중앙값을 두 번 — 자료에서 한 번, 절대편차에서 한 번 — 짝수 관례로 구해야 한다.
+
+**(2)** $100$ 을 $10^4$, $10^6$, $10^{12}$ 로 키우면 MAD 와 $s$ 가 각각 어떻게 되는가. 보기 3 의 어림식 $s \approx \lvert x_0\rvert/\sqrt{n}$ 이 여기서도 맞는가.
 
 </div>
 
-```python
-from statsmodels import robust
-import pandas as pd
+??? success "풀이"
 
-# 마지막 100 이 이상치다. 나머지 다섯 값은 1부터 5까지 고르게 놓여 있다.
-data = pd.Series([1, 2, 3, 4, 5, 100])
-mad = robust.scale.mad(data)
-print(f"MAD: {mad:.2f}")
-```
+    **(1) 해석적으로.** 자료가 이미 정렬되어 있다. $n = 6$ 이 짝수이므로 중앙값은 $3$ 번째와 $4$ 번째의 평균
 
-출력:
+    $$
+    M = \frac{x_{(3)} + x_{(4)}}{2} = \frac{3 + 4}{2} = 3.5
+    $$
 
-```
-MAD: 2.22
-```
+    다. 각 값의 절대편차는
+
+    $$
+    \lvert 1 - 3.5\rvert = 2.5,\quad 1.5,\quad 0.5,\quad 0.5,\quad 1.5,\quad \lvert 100 - 3.5\rvert = 96.5
+    $$
+
+    이고, 정렬하면 $0.5,\ 0.5,\ \mathbf{1.5},\ \mathbf{1.5},\ 2.5,\ 96.5$ 다. 다시 짝수 관례로
+
+    $$
+    \text{MAD} = \frac{d_{(3)} + d_{(4)}}{2} = \frac{1.5 + 1.5}{2} = 1.5
+    $$
+
+    이고 보정하면
+
+    $$
+    \frac{1.5}{0.6744898} = 2.2239
+    $$
+
+    이다. 소수 둘째 자리로 끊으면 $2.22$ 다. **이상치 $100$ 의 편차 $96.5$ 는 정렬된 목록의 맨 끝이라 쓰이지 않는다.** 쓰인 것은 $1.5$ 두 개, 곧 값 $2$ 와 $5$ 의 편차다.
+
+    **(2) 예측.** MAD 는 $100$ 의 자리가 바뀌지 않는 한(언제나 최댓값이다) **변하지 않아야** 한다. $s$ 는 보기 3 에서 유도한 대로 $\lvert x_0\rvert/\sqrt{6} = \lvert x_0\rvert/2.4495$ 를 따라야 한다. $x_0 = 100$ 일 때 $40.825$ 인데, 나머지 다섯 값이 $100$ 에 견주어 아주 작지는 않으므로 어림이 조금 어긋나고, $x_0$ 가 커지면 맞아들어가야 한다.
+
+    ```python
+    from statsmodels import robust
+    import numpy as np
+    import pandas as pd
+
+    # 마지막 100 이 이상치다. 나머지 다섯 값은 1부터 5까지 고르게 놓여 있다.
+    data = pd.Series([1, 2, 3, 4, 5, 100])
+    mad = robust.scale.mad(data)
+    print(f"MAD: {mad:.2f}")
+
+    # 손계산을 따라간다. n = 6 이라 중앙값은 3번째와 4번째의 평균이다.
+    srt = np.sort(data.values.astype(float))
+    med = (srt[2] + srt[3]) / 2
+    d = np.sort(np.abs(srt - med))
+    print(f"\n정렬 {srt},  중앙값 = ({srt[2]}+{srt[3]})/2 = {med}")
+    print(f"절대편차 정렬 {d}")
+    print(f"MAD(보정 전) = (d_(3)+d_(4))/2 = ({d[2]}+{d[3]})/2 = {(d[2] + d[3]) / 2}")
+    print(f"보정 후 = {(d[2] + d[3]) / 2 / 0.6744897501960817:.6f}")
+
+    # 이상치만 키워 가며 두 척도를 본다. s 는 보기 3 의 |x_0|/sqrt(n) 을 따라야 한다.
+    n = len(data)
+    print(f"\n{'최댓값':>10}{'MAD(보정)':>12}{'s 실제':>14}{'|x0|/sqrt(6)':>15}{'비':>9}")
+    for big in (100.0, 1e4, 1e6, 1e12):
+        dd = pd.Series([1, 2, 3, 4, 5, big])
+        approx = big / np.sqrt(n)
+        print(f"{big:>10.0e}{robust.scale.mad(dd):>12.4f}{dd.std():>14.4e}"
+              f"{approx:>15.4e}{dd.std() / approx:>9.4f}")
+    ```
+
+    출력:
+
+    ```
+    MAD: 2.22
+
+    정렬 [  1.   2.   3.   4.   5. 100.],  중앙값 = (3.0+4.0)/2 = 3.5
+    절대편차 정렬 [ 0.5  0.5  1.5  1.5  2.5 96.5]
+    MAD(보정 전) = (d_(3)+d_(4))/2 = (1.5+1.5)/2 = 1.5
+    보정 후 = 2.223903
+
+           최댓값     MAD(보정)          s 실제   |x0|/sqrt(6)        비
+         1e+02      2.2239    3.9625e+01     4.0825e+01   0.9706
+         1e+04      2.2239    4.0813e+03     4.0825e+03   0.9997
+         1e+06      2.2239    4.0825e+05     4.0825e+05   1.0000
+         1e+12      2.2239    4.0825e+11     4.0825e+11   1.0000
+    ```
+
+    **손계산이 그대로 재현된다.** 중앙값 $3.5$, 절대편차 $0.5, 0.5, 1.5, 1.5, 2.5, 96.5$, 보정 전 MAD $1.5$, 보정 후 $2.223903$ 이다.
+
+    **(2)의 두 예측도 맞는다.** MAD 는 네 줄 모두 $2.2239$ 로 **$10^{12}$ 까지 키워도 한 자리도 움직이지 않는다.** 한편 $s$ 는 $39.6 \to 4.08\times 10^{11}$ 로 $x_0$ 와 정비례해 자라고, 어림식과의 비가 $0.9706 \to 0.9997 \to 1.0000 \to 1.0000$ 으로 $1$ 에 붙는다. $10^6$ 부터는 유효숫자 네 자리까지 같다.
+
+    그러므로 이 자료에서 $s$ 가 보고하는 것은 **"$1, 2, 3, 4, 5$ 가 얼마나 퍼져 있는가"가 아니라 "여섯째 값이 얼마나 큰가"** 다. 같은 질문에 MAD 는 $2.22$ 라고 답하는데, 그 값은 $1$ 부터 $5$ 까지의 간격 $1$ 과 같은 눈금 위에 있다($1.4826 \times 1.5$).
 
 ### 직접 계산
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> MAD 를 정의대로 직접 구하기
+**보기 5.** <span class="diff easy" title="쉬움"></span> 직접 구현이 `robust.scale.mad` 와 같은 답을 주는 것은 당연한 일이 아니다. 두 구현이 일치하려면 세 가지가 같아야 한다 — **짝수 표본의 중앙값 관례**, **보정상수**, **분위수 보간법**.
+
+**(1)** 세 가지 가운데 보간법만 바꾸면 보기 4 의 자료에서 MAD 가 어떤 값들로 갈리는가. 가장 작은 값과 가장 큰 값의 비는 얼마인가.
+
+**(2)** `np.percentile` 의 `method` 를 바꾸어 확인하시오.
 
 </div>
 
-```python
-import pandas as pd
-import numpy as np
+??? success "풀이"
 
-data = pd.Series([1, 2, 3, 4, 5, 100])
+    **(1) 해석적으로.** 자료 $1, 2, 3, 4, 5, 100$ 에서 "$50$ 백분위수"는 $3$ 번째와 $4$ 번째 순서통계량 사이의 **아무 값이라도** 될 수 있다(보기 3 의 절대값 벌점에서 본 평평한 구간이 여기서는 $[3, 4]$ 다). 관례가 그중 하나를 고른다.
 
-# 정의를 세 줄로 그대로 옮긴 것이다: 중앙값 → 절대편차 → 그 중앙값.
-median = data.median()
-abs_dev = abs(data - median)
-mad = abs_dev.median()
+    - `linear` 와 `midpoint` 는 중점 $3.5$ 를 고른다. 그러면 절대편차 중앙값도 중점 관례로 $1.5$ 가 되어 보정값이 $1.5/0.6745 = 2.2239$ 다.
+    - `lower` 와 `nearest` 는 $3$ 을 고른다. 그러면 절대편차가 $2, 1, 0, 1, 2, 97$ 이고 정렬하면 $0, 1, 1, 2, 2, 97$ 이라 $3$ 번째 값 $1$ 이 MAD 가 된다. 보정값 $1/0.6745 = 1.4826$ 이다.
+    - `higher` 는 $4$ 를 고른다. 절대편차가 $3, 2, 1, 0, 1, 96$ 이고 정렬하면 $0, 1, 1, 2, 3, 96$ 이라 $4$ 번째 값 $2$ 가 MAD 다. 보정값 $2/0.6745 = 2.9652$ 다.
 
-# 정규분포에서 표준편차와 눈금을 맞추기 위한 보정상수다.
-mad_standardized = mad / 0.6744897501960817
-print(f"MAD (보정): {mad_standardized:.2f}")
-```
+    따라서 답이 $1.4826$, $2.2239$, $2.9652$ 세 가지로 갈리고 **가장 큰 값이 가장 작은 값의 정확히 두 배**다($2/1 = 2$). 같은 여섯 개 수에서 **"퍼짐"이 두 배 차이로 보고될 수 있다**는 뜻이다.
 
-출력:
+    `pandas` 의 `.median()`, `numpy` 의 `np.median`, `statsmodels` 의 `robust.scale.mad` 가 모두 `linear` 쪽을 쓰기 때문에 보기 4 와 이 보기가 같은 $2.22$ 를 준 것이고, 그것은 **우연이 아니라 같은 관례를 공유해서**다.
 
-```
-MAD (보정): 2.22
-```
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels import robust
+
+    data = pd.Series([1, 2, 3, 4, 5, 100])
+
+    # 정의를 세 줄로 그대로 옮긴 것이다: 중앙값 → 절대편차 → 그 중앙값.
+    median = data.median()
+    abs_dev = abs(data - median)
+    mad = abs_dev.median()
+
+    # 정규분포에서 표준편차와 눈금을 맞추기 위한 보정상수다.
+    mad_standardized = mad / 0.6744897501960817
+    print(f"MAD (보정): {mad_standardized:.2f}")
+    print(f"statsmodels: {robust.scale.mad(data):.2f}  "
+          f"(차 {mad_standardized - robust.scale.mad(data):.1e})")
+
+    # 두 답이 같은 것은 세 가지가 모두 일치했기 때문이다.
+    # 그 가운데 분위수 보간법만 바꾸면 답이 달라진다.
+    x = data.values.astype(float)
+    print(f"\n{'method':>10}{'중앙값':>9}{'MAD(보정 전)':>14}{'MAD(보정)':>12}")
+    for meth in ("linear", "lower", "higher", "midpoint", "nearest"):
+        m = np.percentile(x, 50, method=meth)
+        v = np.percentile(np.abs(x - m), 50, method=meth)
+        print(f"{meth:>10}{m:>9.2f}{v:>14.2f}{v / 0.6744897501960817:>12.4f}")
+    ```
+
+    출력:
+
+    ```
+    MAD (보정): 2.22
+    statsmodels: 2.22  (차 0.0e+00)
+
+        method      중앙값     MAD(보정 전)     MAD(보정)
+        linear     3.50          1.50      2.2239
+         lower     3.00          1.00      1.4826
+        higher     4.00          2.00      2.9652
+      midpoint     3.50          1.50      2.2239
+       nearest     3.00          1.00      1.4826
+    ```
+
+    **(1)의 세 값이 그대로 나온다.** 직접 구현과 `statsmodels` 의 차는 정확히 $0$ 이고, 보간법을 바꾸면 보정 MAD 가 $1.4826$, $2.2239$, $2.9652$ 로 갈린다. 비는 $2.9652/1.4826 = 2.00$ 이다.
+
+    **$n$ 이 작을 때만의 문제가 아니다.** 같은 선택이 $Q_1, Q_3$ 에 걸리면 IQR 이 달라지고, 그러면 IQR $\times 1.5$ 울타리로 판정하는 이상치의 개수까지 달라진다. `np.percentile` 에는 보간법이 아홉 가지 들어 있고 통계 소프트웨어마다 기본값이 다르다.
+
+    **실무의 처방은 간단하다. 보고할 때 보간법을 함께 적거나, 적어도 자료와 코드를 함께 남겨라.** "MAD = 2.22" 만으로는 재현되지 않는다. 그리고 이런 관례 차이가 결론을 바꿀 정도라면 그것은 **표본이 너무 작다는 신호**이기도 하다. $n = 6$ 에서 세 번째와 네 번째 순서통계량 사이가 $3$ 과 $4$ 로 벌어져 있다는 사실 자체가 추정의 불확실성을 말해 준다.
 
 ---
 
@@ -485,7 +873,7 @@ MAD에는 효율 말고도 개념적 한계가 있다. **비대칭 분포**에�
     출력:
 
     ```
-    분포   MAD x 1.4826        SD        아래쪽 편차        위쪽 편차       비
+            분포   MAD x 1.4826        SD        아래쪽 편차        위쪽 편차       비
             정규         1.0023    1.0012        0.6741       0.6776   1.005
             지수         0.7134    0.9997        0.4064       0.6928   1.704
           로그정규         0.8852    2.1585        0.4896       0.9543   1.949
