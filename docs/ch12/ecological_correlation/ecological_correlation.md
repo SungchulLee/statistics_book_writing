@@ -47,46 +47,167 @@ David Justice는 1995년과 1996년 **각각** Derek Jeter보다 타율이 높�
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> UC 버클리 입학 자료의 생태학적 오류
+**보기 1.** <span class="diff easy" title="쉬움"></span> 버클리 자료에서 생태 상관이 개인 상관의 몇 배인가. 전체 합격률은 남성 $44.52\%$, 여성 $30.33\%$ 로 $14.19$ 퍼센트포인트 차이다.
+
+**(1)** 이 $14.19$ 포인트를 **어디에 지원했는가**(구성 효과)와 **학과 안에서 얼마나 붙었는가**(합격률 효과)로 **정확히** 쪼개시오. 두 몫의 부호가 어떻게 갈리는가.
+
+**(2)** 학과 여섯 점으로 잰 생태 상관과 지원자 $4526$ 명으로 잰 개인 수준 상관을 각각 구해 견주시오. 생태 상관이 몇 배인가.
 
 </div>
 
-```python
-import pandas as pd
+??? success "풀이"
 
-def main():
-    major = ["A", "B", "C", "D", "E", "F"]
-    n_male = [825, 560, 325, 417, 191, 373]
-    p_male = [0.62, 0.63, 0.37, 0.33, 0.28, 0.06]
-    n_female = [108, 25, 593, 375, 393, 341]
-    p_female = [0.82, 0.68, 0.34, 0.35, 0.24, 0.07]
+    **(1) 가중평균의 차이는 두 몫으로 정확히 쪼개진다.** 학과 $d$ 에 대한 지원 비중을 $w_m(d)$, $w_f(d)$ 라 하고 합격률을 $p_m(d)$, $p_f(d)$ 라 하면 전체 격차는 $\sum_d w_m(d)p_m(d) - \sum_d w_f(d)p_f(d)$ 이다. 평균 $\bar p(d) = \frac{p_m(d)+p_f(d)}{2}$, $\bar w(d) = \frac{w_m(d)+w_f(d)}{2}$ 를 끼워 넣으면
 
-    data = {
-        "major": major, "n_male": n_male, "p_male": p_male,
-        "n_female": n_female, "p_female": p_female
-    }
-    df = pd.DataFrame(data).set_index("major")
+    $$
+    \sum_d w_m p_m - \sum_d w_f p_f
+    = \underbrace{\sum_d \big(w_m(d) - w_f(d)\big)\,\bar p(d)}_{\text{구성 효과}}
+    \;+\; \underbrace{\sum_d \bar w(d)\,\big(p_m(d) - p_f(d)\big)}_{\text{학과 안 효과}}
+    $$
 
-    prob_male_admitted = (df.n_male * df.p_male).sum() / df.n_male.sum()
-    prob_female_admitted = (df.n_female * df.p_female).sum() / df.n_female.sum()
+    가 된다. 곱을 전개하면 $\pm\frac12(w_m-w_f)(p_m-p_f)$ 가 서로 지워지므로 **근사가 아니라 항등식**이다. 수를 넣으면
 
-    # 학과별 합격률을 지원자 수로 가중평균한다.
-    # 단순평균이 아니라 가중평균인 것이 이 보기의 핵심이다.
-    print(f"Overall male admission rate:   {prob_male_admitted:.2%}")
-    print(f"Overall female admission rate: {prob_female_admitted:.2%}")
+    $$
+    +0.141860 \;=\; \underbrace{+0.176800}_{\text{구성}} \;+\; \underbrace{(-0.034940)}_{\text{학과 안}}
+    $$
 
-if __name__ == "__main__":
-    main()
-```
+    이다. **두 몫의 부호가 반대다.** 학과 안에서는 오히려 여성이 $3.49$ 포인트 더 많이 붙었는데, 지원 분포가 만든 $+17.68$ 포인트가 그것을 삼키고도 남아 전체에서는 남성이 $14.19$ 포인트 앞서 보인다.
 
-출력:
+    가중치 표를 보면 어디서 왔는지 분명하다.
 
-```
-Overall male admission rate:   44.52%
-Overall female admission rate: 30.33%
-```
+    | 학과 | $w_m$ | $w_f$ | $p_m$ | $p_f$ | $p_f - p_m$ |
+    |---|---|---|---|---|---|
+    | A | $0.3066$ | $0.0589$ | $0.62$ | $0.82$ | $+0.20$ |
+    | B | $0.2081$ | $0.0136$ | $0.63$ | $0.68$ | $+0.05$ |
+    | C | $0.1208$ | $0.3232$ | $0.37$ | $0.34$ | $-0.03$ |
+    | D | $0.1550$ | $0.2044$ | $0.33$ | $0.35$ | $+0.02$ |
+    | E | $0.0710$ | $0.2142$ | $0.28$ | $0.24$ | $-0.04$ |
+    | F | $0.1386$ | $0.1858$ | $0.06$ | $0.07$ | $+0.01$ |
 
-전체로 보면 남성 44.5%, 여성 30.3%로 14%p 차이다. 그런데 위 표를 학과별로 보면 여섯 학과 중 네 곳에서 **여성의 합격률이 더 높다**.
+    합격률이 가장 높은 A 와 B 에 남성은 지원의 $51\%$ 를 넣었고 여성은 $7\%$ 를 넣었다. **구성 효과 $+0.1768$ 의 거의 전부가 이 두 줄에서 나온다.**
+
+    **(2) 생태 상관이 개인 수준 상관의 $5.5$ 배다.**
+
+    | 무엇을 재는가 | 상관 |
+    |---|---|
+    | 학과 여섯 점: 여성 지원 비율 대 합격률 | $-0.7852$ |
+    | 지원자 $4526$ 명: 여성 대 합격 | $-0.1427$ |
+    | 학과 안의 몫만 남긴 개인 수준 상관 | $\mathbf{+0.0178}$ |
+
+    집계한 쪽이 훨씬 세게 나오는 것은 **집계가 집단 안의 변동을 지우기 때문**이다. 학과 평균만 남기면 같은 학과 안에서 사람마다 다른 부분이 통째로 사라지고, 남는 것은 학과 사이의 차이뿐이다. 분모의 흩어짐이 줄어드니 상관이 커진다.
+
+    이 관계는 3.4절의 **전체 공분산 법칙**으로 정확히 적힌다. 공분산이 "집단 안의 몫"과 "집단 사이의 몫"으로 정확히 쪼개지고, 생태 상관은 뒤의 몫만 보고 개인 수준 상관은 둘을 합쳐 본다. 항등식의 꼴과 그 유도는 [상관계수](../../ch03/rv/correlation.md) 절에 있으므로 여기서는 되풀이하지 않는다.
+
+    셋째 줄이 **양수**라는 점이 이 보기의 끝이다. 학과를 고정하고 보면 여성이 조금 **더** 붙었다. 그러므로 $-0.785$ 도 $-0.143$ 도 "합격 심사가 여성에게 불리했다"는 말의 근거가 될 수 없다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    def main():
+        major = ["A", "B", "C", "D", "E", "F"]
+        n_male = [825, 560, 325, 417, 191, 373]
+        p_male = [0.62, 0.63, 0.37, 0.33, 0.28, 0.06]
+        n_female = [108, 25, 593, 375, 393, 341]
+        p_female = [0.82, 0.68, 0.34, 0.35, 0.24, 0.07]
+
+        data = {
+            "major": major, "n_male": n_male, "p_male": p_male,
+            "n_female": n_female, "p_female": p_female
+        }
+        df = pd.DataFrame(data).set_index("major")
+
+        prob_male_admitted = (df.n_male * df.p_male).sum() / df.n_male.sum()
+        prob_female_admitted = (df.n_female * df.p_female).sum() / df.n_female.sum()
+
+        # 학과별 합격률을 지원자 수로 가중평균한다.
+        # 단순평균이 아니라 가중평균인 것이 이 보기의 핵심이다.
+        print(f"Overall male admission rate:   {prob_male_admitted:.2%}")
+        print(f"Overall female admission rate: {prob_female_admitted:.2%}")
+
+    if __name__ == "__main__":
+        main()
+
+    n_m = np.array([825, 560, 325, 417, 191, 373])
+    p_m = np.array([0.62, 0.63, 0.37, 0.33, 0.28, 0.06])
+    n_f = np.array([108, 25, 593, 375, 393, 341])
+    p_f = np.array([0.82, 0.68, 0.34, 0.35, 0.24, 0.07])
+    major = list("ABCDEF")
+
+    # (1) 전체 격차를 구성 효과와 학과 안 효과로 쪼갠다 (키타가와 분해).
+    w_m, w_f = n_m / n_m.sum(), n_f / n_f.sum()
+    gap = (w_m * p_m).sum() - (w_f * p_f).sum()
+    p_bar, w_bar = (p_m + p_f) / 2, (w_m + w_f) / 2
+    comp = ((w_m - w_f) * p_bar).sum()
+    within = (w_bar * (p_m - p_f)).sum()
+    print(f"\n전체 격차 (남 - 여)   = {gap:+.6f}")
+    print(f"  구성 효과 (어디 지원) = {comp:+.6f}")
+    print(f"  학과 안 효과 (합격률) = {within:+.6f}")
+    print(f"  두 몫의 합            = {comp + within:+.6f}   "
+          f"차이 {abs(gap - comp - within):.2e}")
+    print(f"\n{'학과':>4s} {'w_m':>7s} {'w_f':>7s} {'p_m':>6s} {'p_f':>6s} {'p_f-p_m':>8s}")
+    for i, d in enumerate(major):
+        print(f"{d:>4s} {w_m[i]:7.4f} {w_f[i]:7.4f} {p_m[i]:6.2f} {p_f[i]:6.2f} "
+              f"{p_f[i]-p_m[i]:+8.2f}")
+
+    # (2) 생태 상관과 개인 수준 상관
+    pct_f = n_f / (n_m + n_f)
+    rate = (n_m * p_m + n_f * p_f) / (n_m + n_f)
+    print(f"\n학과 여섯 점의 생태 상관 (여성 지원 비율 대 합격률) = "
+          f"{np.corrcoef(pct_f, rate)[0, 1]:+.4f}")
+
+    # 개인 4526 명을 실제로 펼쳐서 잰다
+    X, Y, dept = [], [], []
+    for i in range(6):
+        a_m, a_f = round(n_m[i] * p_m[i]), round(n_f[i] * p_f[i])
+        X += [0] * n_m[i] + [1] * n_f[i]
+        Y += [1] * a_m + [0] * (n_m[i] - a_m) + [1] * a_f + [0] * (n_f[i] - a_f)
+        dept += [i] * (n_m[i] + n_f[i])
+    X, Y, dept = np.array(X), np.array(Y), np.array(dept)
+    print(f"지원자 {len(X)} 명의 개인 수준 상관 (여성 대 합격)     = "
+          f"{np.corrcoef(X, Y)[0, 1]:+.4f}")
+
+    # 학과 안의 몫만 남기면 (3.4절 전체 공분산 법칙의 첫째 항)
+    cov0 = lambda a, b: np.mean((a - a.mean()) * (b - b.mean()))
+    w = np.array([(dept == i).sum() / len(X) for i in range(6)])
+    within_cov = sum(w[i] * cov0(X[dept == i], Y[dept == i]) for i in range(6))
+    sx = np.sqrt(sum(w[i] * X[dept == i].var() for i in range(6)))
+    sy = np.sqrt(sum(w[i] * Y[dept == i].var() for i in range(6)))
+    print(f"학과 안의 몫만 남긴 개인 수준 상관                 = "
+          f"{within_cov / (sx * sy):+.4f}")
+    print(f"\n생태 상관이 개인 수준 상관의 "
+          f"{abs(np.corrcoef(pct_f, rate)[0, 1] / np.corrcoef(X, Y)[0, 1]):.1f} 배다")
+    ```
+
+    출력:
+
+    ```
+    Overall male admission rate:   44.52%
+    Overall female admission rate: 30.33%
+
+    전체 격차 (남 - 여)   = +0.141860
+      구성 효과 (어디 지원) = +0.176800
+      학과 안 효과 (합격률) = -0.034940
+      두 몫의 합            = +0.141860   차이 0.00e+00
+
+      학과     w_m     w_f    p_m    p_f  p_f-p_m
+       A  0.3066  0.0589   0.62   0.82    +0.20
+       B  0.2081  0.0136   0.63   0.68    +0.05
+       C  0.1208  0.3232   0.37   0.34    -0.03
+       D  0.1550  0.2044   0.33   0.35    +0.02
+       E  0.0710  0.2142   0.28   0.24    -0.04
+       F  0.1386  0.1858   0.06   0.07    +0.01
+
+    학과 여섯 점의 생태 상관 (여성 지원 비율 대 합격률) = -0.7852
+    지원자 4526 명의 개인 수준 상관 (여성 대 합격)     = -0.1427
+    학과 안의 몫만 남긴 개인 수준 상관                 = +0.0178
+
+    생태 상관이 개인 수준 상관의 5.5 배다
+    ```
+
+    분해 항등식의 두 변이 비트 단위로 같고($0.00\mathrm{e}{+}00$), 표의 세 상관도 손으로 적은 값과 맞는다. 개인 수준 상관을 재려고 $4526$ 명을 펼칠 때 합격자 수를 $n \times p$ 의 반올림으로 잡았으므로 여성 전체 합격률이 $30.33\%$ 대신 $30.35\%$ 가 되지만, 소수 넷째 자리의 상관값에는 영향이 없다.
+
+    전체로 보면 남성 $44.5\%$, 여성 $30.3\%$ 로 $14$%p 차이다. 그런데 위 표를 학과별로 보면 여섯 학과 중 네 곳에서 **여성의 합격률이 더 높다**.
 
 모순이 아니라 가중치의 문제다. 여성 지원자는 합격률이 낮은 학과(C, E, F)에 몰려 있고 남성은 합격률이 높은 학과(A, B)에 몰려 있다. 집단 수준의 비율이 개인 수준의 관계를 뒤집어 보여주는 것이며, 이것이 Simpson의 역설이자 생태학적 오류의 대표적인 예다.
 

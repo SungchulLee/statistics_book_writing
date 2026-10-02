@@ -50,49 +50,177 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Cramer의 V로 효과크기 재기
+**보기 1.** <span class="diff easy" title="쉬움"></span> Cramer의 V로 효과크기 재기. 성별 × 주로 쓰는 손 표($3\times2$, $n = 2{,}237$)를 쓴다. 이 표의 $\chi^2 = 11.8061$ 은 $p = 0.0027$ 로 강하게 유의하다.
+
+**(1)** $p_{ij} = O_{ij}/n$ 이라 두면
+
+$$
+\chi^2 = n\left(\sum_{i,j}\frac{p_{ij}^2}{p_{i\cdot}\,p_{\cdot j}} - 1\right)
+$$
+
+임을 보이시오.
+
+**(2)** (1)로부터 $\chi^2 \le n\bigl(\min(r,c) - 1\bigr)$ 임을 보이고, 따라서 $0 \le V \le 1$ 임을 보이시오. 등호가 성립하는 표는 어떤 표인가.
+
+**(3)** 이 표의 $V$ 를 구해 해석 지침에 비추어 판정하시오. 같은 $n$ 에서 **$V$ 가 얼마를 넘어야** 유의해지는가. 거꾸로 이 $V$ 가 유의해지려면 $n$ 이 얼마여야 하는가.
+
+**(4)** 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def cramers_v(observed):
-    """분할표의 Cramér V를 계산한다.
+    **(1) 비율로 다시 쓰기.** 어긋남 제곱을 전개하는 대신 익숙한 변형을 쓴다.
 
-    V는 카이제곱을 표본크기로 나눠 정규화한 것이라 0과 1 사이에 놓인다.
-    카이제곱 통계량 자체는 n에 비례해 커지므로 연구 사이 비교에 쓸 수 없지만
-    V는 쓸 수 있다는 것이 요점이다.
-    """
-    chi2, p_value, df, expected = stats.chi2_contingency(observed)
+    $$
+    \chi^2 = \sum_{i,j}\frac{(O_{ij}-E_{ij})^2}{E_{ij}}
+    = \sum_{i,j}\frac{O_{ij}^2}{E_{ij}} - 2\sum_{i,j}O_{ij} + \sum_{i,j}E_{ij}
+    = \sum_{i,j}\frac{O_{ij}^2}{E_{ij}} - n
+    $$
+
+    마지막 등식은 $\sum O_{ij} = \sum E_{ij} = n$ 을 썼다. 이제 $O_{ij} = np_{ij}$, $E_{ij} = R_iC_j/n = n\,p_{i\cdot}p_{\cdot j}$ 를 넣으면
+
+    $$
+    \sum_{i,j}\frac{O_{ij}^2}{E_{ij}} = \sum_{i,j}\frac{n^2p_{ij}^2}{n\,p_{i\cdot}p_{\cdot j}} = n\sum_{i,j}\frac{p_{ij}^2}{p_{i\cdot}p_{\cdot j}}
+    $$
+
+    이므로 주장한 식이다. $\square$ **$\chi^2/n$ 은 비율만으로 적힌다.** 도수를 전부 $k$ 배 해도 $p_{ij}$ 는 그대로이므로 $\chi^2$ 은 정확히 $k$ 배가 된다. 효과크기를 $n$ 으로 나누어 정의해야 하는 까닭이 이 한 줄에 다 있다.
+
+    **(2) 상한.** $S = \sum_{i,j} p_{ij}^2/(p_{i\cdot}p_{\cdot j})$ 를 위에서 누른다. 열 $j$ 를 고정하고 행에 대해 먼저 더한다. $p_{ij} \le p_{i\cdot}$ 이므로 $p_{ij}/p_{i\cdot} \le 1$ 이고
+
+    $$
+    \sum_i \frac{p_{ij}^2}{p_{i\cdot}} = \sum_i p_{ij}\cdot\frac{p_{ij}}{p_{i\cdot}} \le \sum_i p_{ij} = p_{\cdot j}
+    $$
+
+    다. 이것을 $p_{\cdot j}$ 로 나누어 열에 대해 더하면
+
+    $$
+    S = \sum_j \frac{1}{p_{\cdot j}}\sum_i \frac{p_{ij}^2}{p_{i\cdot}} \le \sum_{j=1}^c \frac{p_{\cdot j}}{p_{\cdot j}} = c
+    $$
+
+    이므로 $\chi^2 = n(S-1) \le n(c-1)$ 이다. 행과 열의 역할을 바꾸어도 같은 계산이므로 $\chi^2 \le n(r-1)$ 이고, 합치면
+
+    $$
+    \chi^2 \le n\bigl(\min(r,c)-1\bigr) = n(q-1)
+    $$
+
+    이다. 따라서 $V^2 = \chi^2/\{n(q-1)\} \in [0,1]$ 이고 $0 \le V \le 1$ 이다. $\square$
+
+    **등호는 언제인가.** 위 부등식에서 $p_{ij}/p_{i\cdot} \le 1$ 이 등호가 되려면, $p_{ij} > 0$ 인 모든 칸에서 $p_{ij} = p_{i\cdot}$ 이어야 한다. 곧 **행마다 도수가 한 칸에만 몰려 있어야 한다**($c \le r$ 일 때). 행을 알면 열이 결정되는 표, 곧 **완전한 예측**이다. 예를 들어
+
+    $$
+    \begin{pmatrix} 50 & 0 \\ 0 & 50 \\ 30 & 0 \end{pmatrix}
+    \quad\Longrightarrow\quad
+    \chi^2 = 130 = n(q-1), \quad V = 1
+    $$
+
+    이다($n = 130$, $q = 2$).
+
+    **(3) 이 표의 $V$.** $q - 1 = \min(3,2) - 1 = 1$ 이므로
+
+    $$
+    V = \sqrt{\frac{11.8061}{2237 \times 1}} = \sqrt{0.0052777} = 0.072648
+    $$
+
+    해석 지침의 첫 칸 **"무시할 만함"($0.00 \sim 0.10$)** 에 들어간다. "작음" 의 경계인 $0.10$ 에도 못 미친다.
+
+    **유의해지는 문턱을 $V$ 로 적어 보면 사정이 분명해진다.** $\chi^2 = n(q-1)V^2$ 이므로 $\chi^2 \ge \chi^2_{2,\,0.05} = 5.99146$ 은
+
+    $$
+    V \ge \sqrt{\frac{5.99146}{2237}} = 0.051753
+    $$
+
+    과 같은 말이다. **$n = 2{,}237$ 에서는 $V$ 가 $0.0518$ 만 넘으면 유의해진다.** 관측된 $0.0726$ 은 그 문턱의 $1.4$ 배일 뿐이다.
+
+    거꾸로 $V = 0.072648$ 을 고정하고 $n$ 을 묻는다.
+
+    $$
+    n \ge \frac{5.99146}{0.072648^2} = \frac{5.99146}{0.0052777} = 1135.25
+    $$
+
+    곧 **같은 비율로 $1{,}136$ 명만 모았어도 유의했을 것이다.** 실제 표본은 그 두 배다. 반대로 $n = 300$ 이었다면 $\chi^2 = 300 \times 0.0052777 = 1.583$ 으로 $p = 0.45$, 전혀 유의하지 않다.
+
+    **같은 자료가 유의하기도 하고 아니기도 하다. 바뀐 것은 $n$ 뿐이다.** $V$ 는 그동안 $0.0726$ 에 그대로 있다. 참고로 $H_0$ 이 참일 때에도 $E[\chi^2] = \text{df} = 2$ 이므로 $V$ 는 $\sqrt{2/2237} = 0.0299$ 쯤 나온다. 관측된 $0.0726$ 은 그 $2.4$ 배다. **0 은 아니지만 크지도 않다** 는 것이 이 수들이 말하는 전부다.
+
+    **(4) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def cramers_v(observed):
+        """분할표의 Cramér V를 계산한다.
+
+        V는 카이제곱을 표본크기로 나눠 정규화한 것이라 0과 1 사이에 놓인다.
+        카이제곱 통계량 자체는 n에 비례해 커지므로 연구 사이 비교에 쓸 수 없지만
+        V는 쓸 수 있다는 것이 요점이다.
+        """
+        chi2, p_value, df, expected = stats.chi2_contingency(observed)
+        n = observed.sum()
+        # q는 행 수와 열 수 중 작은 것에서 1을 뺀 값이다.
+        # 카이제곱의 최댓값이 n*q라서 이것으로 나누면 상한이 1이 된다.
+        q = min(observed.shape) - 1
+        v = np.sqrt(chi2 / (n * q))
+        return v, chi2, p_value
+
+    # 보기: 성별과 손잡이
+    observed = np.array([[934, 1070], [113, 92], [20, 8]])
+    v, chi2, p_value = cramers_v(observed)
+
+    print(f"Chi-square statistic: {chi2:.4f}")
+    print(f"p-value: {p_value:.4f}")
+    print(f"Cramér's V: {v:.4f}")
+
+    # (1) 비율로 적은 항등식
     n = observed.sum()
-    # q는 행 수와 열 수 중 작은 것에서 1을 뺀 값이다.
-    # 카이제곱의 최댓값이 n*q라서 이것으로 나누면 상한이 1이 된다.
-    q = min(observed.shape) - 1
-    v = np.sqrt(chi2 / (n * q))
-    return v, chi2, p_value
+    P = observed / n
+    pr, pc = P.sum(1, keepdims=True), P.sum(0, keepdims=True)
+    print(f"\n항등식  n(S-1) = {n * ((P**2 / (pr * pc)).sum() - 1):.6f}"
+          f"   정의대로 = {chi2:.6f}")
 
-# 보기: 성별과 손잡이
-observed = np.array([[934, 1070], [113, 92], [20, 8]])
-v, chi2, p_value = cramers_v(observed)
+    # (2) 상한. 완전히 예측되는 표에서 등호가 성립한다.
+    perfect = np.array([[50, 0], [0, 50], [30, 0]])
+    c2p = stats.chi2_contingency(perfect)[0]
+    print(f"완전 예측 표: chi2 = {c2p:.1f}  n(q-1) = {perfect.sum() * 1}"
+          f"  V = {np.sqrt(c2p / perfect.sum()):.1f}")
 
-print(f"Chi-square statistic: {chi2:.4f}")
-print(f"p-value: {p_value:.4f}")
-print(f"Cramér's V: {v:.4f}")
-```
+    # (3) 유의 문턱을 V 로, 그리고 n 으로
+    crit = stats.chi2.ppf(0.95, 2)
+    print(f"\nn = {n:.0f} 에서 유의해지는 V 문턱 {np.sqrt(crit / n):.6f}")
+    print(f"V = {v:.6f} 가 유의해지는 n   {crit / v**2:.2f}")
+    print(f"H0 아래 V 의 대략적 크기 sqrt(df/n) = {np.sqrt(2 / n):.6f}")
+    for m in [300, 1136, 2237, 20000]:
+        x = m * v**2
+        print(f"  n = {m:6d}:  chi2 = {x:8.3f}   p = {stats.chi2(2).sf(x):.3g}"
+              f"   V = {v:.4f}")
+    ```
 
-출력:
+    출력:
 
-```
-Chi-square statistic: 11.8061
-p-value: 0.0027
-Cramér's V: 0.0726
-```
+    ```
+    Chi-square statistic: 11.8061
+    p-value: 0.0027
+    Cramér's V: 0.0726
 
-$p = 0.0027$로 강하게 기각되지만 Cramér의 V는 0.073에 불과하다. Cohen의 기준으로 "작음"인 0.10에도 못 미친다.
+    항등식  n(S-1) = 11.806135   정의대로 = 11.806135
+    완전 예측 표: chi2 = 130.0  n(q-1) = 130  V = 1.0
 
-$n = 2237$이라 아주 약한 연관도 통계적으로는 또렷하게 잡히기 때문이다. **p-값은 효과의 크기가 아니라 증거의 강도를 잰다.** 표가 큰 자료에서 카이제곱 검정 결과만 보고하고 효과크기를 빼면 독자가 오해하기 쉽다.
+    n = 2237 에서 유의해지는 V 문턱 0.051753
+    V = 0.072648 가 유의해지는 n   1135.25
+    H0 아래 V 의 대략적 크기 sqrt(df/n) = 0.029901
+      n =    300:  chi2 =    1.583   p = 0.453   V = 0.0726
+      n =   1136:  chi2 =    5.995   p = 0.0499   V = 0.0726
+      n =   2237:  chi2 =   11.806   p = 0.00273   V = 0.0726
+      n =  20000:  chi2 =  105.553   p = 1.2e-23   V = 0.0726
+    ```
+
+    (1)의 항등식이 여섯째 자리까지 맞는다. (2)의 상한도 완전히 예측되는 표에서 `chi2 = 130.0` 과 `n(q-1) = 130` 이 같아 **등호가 실제로 달성됨**을 보인다.
+
+    (3)의 두 문턱 `0.051753` 과 `1135.25` 도 손계산 그대로다. 마지막 표가 요점을 한눈에 보인다. **$V$ 열은 네 줄 모두 $0.0726$ 으로 똑같은데 p-값은 $0.45$ 에서 $1.2\times10^{-23}$ 까지 간다.**
+
+    $p = 0.0027$ 로 강하게 기각되지만 Cramér의 V는 $0.073$ 에 불과하다. Cohen의 기준으로 "작음"인 $0.10$ 에도 못 미친다.
+
+    $n = 2237$ 이라 아주 약한 연관도 통계적으로는 또렷하게 잡히기 때문이다. **p-값은 효과의 크기가 아니라 증거의 강도를 잰다.** 표가 큰 자료에서 카이제곱 검정 결과만 보고하고 효과크기를 빼면 독자가 오해하기 쉽다.
 
 ### 표본을 키우면 무엇이 변하고 무엇이 변하지 않는가
 

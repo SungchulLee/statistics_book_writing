@@ -31,39 +31,192 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 독립성 검정 템플릿 함수
+**보기 1.** <span class="diff easy" title="쉬움"></span> 독립성 검정 템플릿 함수. `scipy.stats.chi2_contingency` 는 $2\times2$ 표에서 **기본으로 예이츠 보정을 건다.** 그 기본값이 무엇을 바꾸는지 손으로 재어 본다. 표는
+
+$$
+\begin{pmatrix} a & b \\ c & d \end{pmatrix} = \begin{pmatrix} 10 & 5 \\ 3 & 12 \end{pmatrix},
+\qquad n = 30
+$$
+
+이다.
+
+**(1)** $2\times2$ 표에서 네 칸의 어긋남이 모두 $\pm(ad-bc)/n$ 임을 보이고, 이로부터 **닫힌 꼴**
+
+$$
+\chi^2 = \frac{n(ad-bc)^2}{(a+b)(c+d)(a+c)(b+d)}
+$$
+
+을 유도하여 이 표의 값을 **유리수로** 구하시오.
+
+**(2)** 예이츠 보정판도 닫힌 꼴로 적히는지 보이고, 두 통계량의 차가
+
+$$
+\chi^2 - \chi^2_{\text{Yates}} = \frac{n^2}{D}\left(\lvert ad-bc \rvert - \frac n4\right),
+\qquad D = (a+b)(c+d)(a+c)(b+d)
+$$
+
+임을 보이시오.
+
+**(3)** 자유도 1 에서는 p-값이 **표준정규로** 적힌다. 두 p-값을 구해 $\alpha = 0.05$ 와 $\alpha = 0.01$ 에서 각각 판정하시오.
+
+**(4)** 기본값을 `False` 로 못 박은 템플릿 함수를 짜고 두 값을 비교하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def chi2_independence(observed: np.ndarray, correction: bool = False):
-    """카이제곱 독립성 검정.
+    **(1) 네 칸이 한 수로 묶인다.** 행 합은 $R_1 = a+b$, $R_2 = c+d$, 열 합은 $C_1 = a+c$, $C_2 = b+d$, 총합은 $n$ 이다. 첫 칸의 어긋남을 계산한다.
 
-    correction의 기본값을 **False**로 두었다는 점에 주의하라.
-    scipy의 기본값은 True이며, 2x2 표에 Yates 연속성 보정을 자동으로 적용한다.
-    모르고 쓰면 작은 2x2 표에서 통계량이 조용히 줄어들어 결론이 달라질 수 있다.
-    돌려주는 값은 (통계량, p-값, 자유도, 기대도수).
-    """
-    return stats.chi2_contingency(observed, correction=correction)
+    $$
+    O_{11} - E_{11} = a - \frac{(a+b)(a+c)}{n} = \frac{an - (a+b)(a+c)}{n}
+    $$
+
+    분자를 $n = a+b+c+d$ 로 풀면
+
+    $$
+    a(a+b+c+d) - (a^2+ac+ab+bc) = a^2+ab+ac+ad - a^2-ac-ab-bc = ad - bc
+    $$
+
+    이므로 $O_{11} - E_{11} = (ad-bc)/n$ 이다. 행 합과 열 합이 보존되므로 나머지 셋은 부호만 뒤집힌다.
+
+    $$
+    O - E = \frac{ad-bc}{n}\begin{pmatrix} +1 & -1 \\ -1 & +1 \end{pmatrix}
+    $$
+
+    **$2\times2$ 표의 자유도가 1 이라는 말이 바로 이것이다.** 네 칸의 어긋남이 수 하나로 결정된다. 그러면
+
+    $$
+    \chi^2 = \frac{(ad-bc)^2}{n^2}\sum_{i,j}\frac{1}{E_{ij}}
+    = \frac{(ad-bc)^2}{n^2}\sum_{i,j}\frac{n}{R_i C_j}
+    = \frac{(ad-bc)^2}{n}\left(\frac1{R_1}+\frac1{R_2}\right)\!\left(\frac1{C_1}+\frac1{C_2}\right)
+    $$
+
+    인데 $R_1 + R_2 = C_1 + C_2 = n$ 이므로 두 괄호가 각각 $n/(R_1R_2)$, $n/(C_1C_2)$ 다. 따라서
+
+    $$
+    \chi^2 = \frac{(ad-bc)^2}{n}\cdot\frac{n^2}{R_1R_2C_1C_2} = \frac{n(ad-bc)^2}{(a+b)(c+d)(a+c)(b+d)}
+    $$
+
+    이다. $\square$ 수를 넣으면 $ad - bc = 120 - 15 = 105$ 이고 $D = 15 \cdot 15 \cdot 13 \cdot 17 = 49725$ 이므로
+
+    $$
+    \chi^2 = \frac{30 \times 105^2}{49725} = \frac{330750}{49725} = \frac{1470}{221} = 6.651584
+    $$
+
+    이다. 덧붙여 $\chi^2 = n\phi^2$ 이고 $\phi = (ad-bc)/\sqrt D = 105/\sqrt{49725} = 0.47087$ 이다. **$\chi^2$ 은 $n$ 에 비례하지만 $\phi$ 는 그렇지 않다.**
+
+    **(2) 예이츠판도 같은 꼴이다.** 보정은 각 칸에서 $\lvert O - E\rvert$ 를 $0.5$ 만큼 줄인다. (1)에서 네 칸의 $\lvert O-E\rvert$ 가 모두 $\Delta/n$ 으로 **같았으므로**($\Delta = \lvert ad-bc\rvert$) 줄인 뒤에도 네 칸이 모두 같다.
+
+    $$
+    \lvert O_{ij} - E_{ij}\rvert - \tfrac12 = \frac{\Delta}{n} - \frac12 = \frac{\Delta - n/2}{n}
+    $$
+
+    (1)의 계산에서 $\Delta$ 를 $\Delta - n/2$ 로 바꾸기만 하면 되므로
+
+    $$
+    \chi^2_{\text{Yates}} = \frac{n\left(\Delta - n/2\right)^2}{D}
+    $$
+
+    다. 단 $\Delta/n \ge 1/2$ 일 때의 이야기다(그렇지 않으면 보정 뒤 $0$ 으로 자른다). 여기서는 $\Delta/n = 3.5$ 이므로 괜찮다.
+
+    $$
+    \chi^2_{\text{Yates}} = \frac{30(105-15)^2}{49725} = \frac{243000}{49725} = \frac{1080}{221} = 4.886878
+    $$
+
+    차를 구하면 $x^2 - (x-h)^2 = h(2x-h)$ 를 $x = \Delta$, $h = n/2$ 에 쓴 것이다.
+
+    $$
+    \chi^2 - \chi^2_{\text{Yates}} = \frac nD\left[\Delta^2 - \left(\Delta-\frac n2\right)^{\!2}\right]
+    = \frac nD \cdot \frac n2\left(2\Delta - \frac n2\right)
+    = \frac{n^2}{D}\left(\Delta - \frac n4\right)
+    $$
+
+    $\square$ 수로는 $\dfrac{900}{49725}(105 - 7.5) = 0.0181 \times 97.5 = 1.764706 = \dfrac{390}{221}$ 이고, 실제로 $\dfrac{1470}{221} - \dfrac{1080}{221} = \dfrac{390}{221}$ 이다.
+
+    **(3) 자유도 1 의 p-값.** $\chi^2_1$ 은 표준정규의 제곱이므로 꼬리확률이 정규분포로 바로 적힌다.
+
+    $$
+    p = P(\chi^2_1 \ge x) = P(\lvert Z\rvert \ge \sqrt x) = 2\Phi(-\sqrt x)
+    $$
+
+    따라서
+
+    $$
+    p = 2\Phi(-\sqrt{6.651584}) = 2\Phi(-2.57907) = 0.0099068,
+    \qquad
+    p_{\text{Yates}} = 2\Phi(-\sqrt{4.886878}) = 2\Phi(-2.21063) = 0.0270616
+    $$
+
+    이다.
+
+    | | $\chi^2$ | $p$ | $\alpha = 0.05$ | $\alpha = 0.01$ |
+    |---|---:|---:|:---:|:---:|
+    | 보정 없음 | $6.6516$ | $0.00991$ | 기각 | **기각** |
+    | 예이츠 | $4.8869$ | $0.02706$ | 기각 | **기각 못 함** |
+
+    **$5\%$ 에서는 결론이 같고 $1\%$ 에서는 갈린다.** 1% 임계값이 $\chi^2_{1,\,0.01} = 6.6349$ 인데 보정 없는 $6.6516$ 이 그 선을 **$0.017$ 차이로** 간신히 넘고 보정판 $4.8869$ 는 한참 못 미친다. 통계량은 $1.76$ 줄었을 뿐인데 p-값은 $2.7$ 배가 되었다. 꼬리가 가파르게 얇아지는 구간이라 작은 이동이 크게 증폭된다.
+
+    **그러므로 `correction` 의 기본값을 모른 채 "1% 에서 기각" 이라고 적으면 그 문장의 진위가 기본값 하나에 달린다.** 템플릿에서 `False` 로 못 박아 두는 까닭이다.
+
+    **(4) 코드로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def chi2_independence(observed: np.ndarray, correction: bool = False):
+        """카이제곱 독립성 검정.
+
+        correction의 기본값을 **False**로 두었다는 점에 주의하라.
+        scipy의 기본값은 True이며, 2x2 표에 Yates 연속성 보정을 자동으로 적용한다.
+        모르고 쓰면 작은 2x2 표에서 통계량이 조용히 줄어들어 결론이 달라질 수 있다.
+        돌려주는 값은 (통계량, p-값, 자유도, 기대도수).
+        """
+        return stats.chi2_contingency(observed, correction=correction)
 
 
-# 기본값의 차이를 눈으로 확인한다.
-tab = np.array([[10, 5], [3, 12]], dtype=float)
-print("correction=False:", round(chi2_independence(tab, False)[0], 4))
-print("correction=True :", round(chi2_independence(tab, True)[0], 4))
-```
+    # 기본값의 차이를 눈으로 확인한다.
+    tab = np.array([[10, 5], [3, 12]], dtype=float)
+    print("correction=False:", round(chi2_independence(tab, False)[0], 4))
+    print("correction=True :", round(chi2_independence(tab, True)[0], 4))
 
-출력:
+    # (1)(2) 닫힌 꼴과 맞는지
+    (a, b), (c, d) = tab
+    n = tab.sum()
+    D = (a + b) * (c + d) * (a + c) * (b + d)
+    delta = abs(a * d - b * c)
+    print(f"\n닫힌 꼴  n(ad-bc)^2/D          = {n * delta**2 / D:.6f}")
+    print(f"예이츠   n(|ad-bc|-n/2)^2/D    = {n * (delta - n / 2)**2 / D:.6f}")
+    print(f"차       (n^2/D)(|ad-bc|-n/4)  = {n**2 / D * (delta - n / 4):.6f}")
+    phi = (a * d - b * c) / np.sqrt(D)
+    print(f"phi = (ad-bc)/sqrt(D) = {phi:.6f}   n*phi^2 = {n * phi**2:.6f}")
 
-```
-correction=False: 6.6516
-correction=True : 4.8869
-```
+    # (3) 자유도 1 의 p-값은 표준정규로 적힌다
+    for name, x in [("보정 없음", chi2_independence(tab, False)[0]),
+                    ("예이츠   ", chi2_independence(tab, True)[0])]:
+        print(f"{name}  chi2 = {x:.6f}  p(chi2) = {stats.chi2(1).sf(x):.7f}"
+              f"  2*Phi(-sqrt) = {2 * stats.norm.sf(np.sqrt(x)):.7f}")
+    print(f"1% 임계값 chi2_(1, 0.01) = {stats.chi2.ppf(0.99, 1):.6f}")
+    ```
 
-같은 표에서 통계량이 6.65와 4.89로 달라진다. p-값으로는 0.0099와 0.0270이라 5% 기준에서는 둘 다 기각이지만, 1% 기준에서는 결론이 갈린다.
+    출력:
+
+    ```
+    correction=False: 6.6516
+    correction=True : 4.8869
+
+    닫힌 꼴  n(ad-bc)^2/D          = 6.651584
+    예이츠   n(|ad-bc|-n/2)^2/D    = 4.886878
+    차       (n^2/D)(|ad-bc|-n/4)  = 1.764706
+    phi = (ad-bc)/sqrt(D) = 0.470871   n*phi^2 = 6.651584
+    보정 없음  chi2 = 6.651584  p(chi2) = 0.0099068  2*Phi(-sqrt) = 0.0099068
+    예이츠     chi2 = 4.886878  p(chi2) = 0.0270616  2*Phi(-sqrt) = 0.0270616
+    1% 임계값 chi2_(1, 0.01) = 6.634897
+    ```
+
+    닫힌 꼴 `6.651584` 와 `4.886878` 이 `scipy` 가 준 `6.6516`·`4.8869` 와 맞고, (1)·(2)의 유리수 $1470/221$·$1080/221$ 과도 소수 여섯째 자리까지 같다. 차 `1.764706` 이 $390/221$ 이다. $n\phi^2$ 도 $\chi^2$ 과 같은 값을 준다.
+
+    (3)의 요점도 그대로다. `p(chi2)` 와 `2*Phi(-sqrt)` 가 일곱 자리까지 **똑같다.** 자유도 1 에서 카이제곱 꼬리는 정규 꼬리를 두 배 한 것이다. 그리고 1% 임계값 `6.634897` 을 보정 없는 `6.651584` 가 $0.0167$ 차이로 넘고 예이츠판은 못 넘는다.
 
 #### 보정이 깎아 가는 양
 
@@ -81,30 +234,161 @@ correction=True : 4.8869
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 템플릿 사용 예
+**보기 2.** <span class="diff easy" title="쉬움"></span> 템플릿 사용 예. 이번에는 $2 \times 3$ 표다.
+
+$$
+\begin{array}{c|ccc|r}
+ & \text{열 1} & \text{열 2} & \text{열 3} & \text{행 합} \\ \hline
+\text{행 1} & 30 & 20 & 10 & 60 \\
+\text{행 2} & 12 & 25 & 18 & 55 \\ \hline
+\text{열 합} & 42 & 45 & 28 & 115
+\end{array}
+$$
+
+**(1)** 이 표에 `correction=True` 를 주면 어떻게 되는가. 왜 그런가.
+
+**(2)** 행이 둘뿐인 $2 \times c$ 표에서는 통계량이
+
+$$
+\chi^2 = \frac{n^2}{R_1 R_2}\sum_{j=1}^{c} \frac{e_j^2}{C_j},
+\qquad
+e_j = O_{1j} - \frac{R_1 C_j}{n}
+$$
+
+으로 줄어듦을 보이고 이 표의 $\chi^2$ 을 구하시오. 자유도 2 이므로 p-값은 **닫힌 꼴**이다.
+
+**(3)** 어느 칸이 통계량을 끌고 가는가. 조정 잔차로 보고 본페로니로 판정하시오.
+
+**(4)** 코드로 확인하시오.
 
 </div>
 
-```python
-observed = np.array([[30, 20, 10],
-                     [12, 25, 18]], dtype=float)
+??? success "풀이"
 
-# 2x2 표가 아니면 연속성 보정은 뜻이 없다. 그래서 correction=False 로 둔다.
-chi2, p, df, exp = chi2_independence(observed, correction=False)
-print(f"chi2 = {chi2:.3f}, p = {p:.4f}, df = {df}")
-print("expected:\n", exp)
-```
+    **(1) 보정은 걸리지 않는다.** 예이츠 보정은 $2\times2$ 표에서만 뜻이 있다. 보기 1 (2)에서 보았듯 그 보정이 성립한 것은 **네 칸의 $\lvert O-E \rvert$ 가 모두 같았기** 때문인데, $2\times3$ 표에서는 칸마다 어긋남이 달라 "0.5 를 뺀다" 는 조작이 근거를 잃는다. `scipy.stats.chi2_contingency` 도 표가 $2\times2$ 가 아니면 `correction` 인자를 **조용히 무시한다.** 그러니 이 표에서는 `True` 를 주든 `False` 를 주든 같은 값이 나온다.
 
-출력:
+    **(2) $2 \times c$ 의 닫힌 꼴.** 행이 둘뿐이면 "열 합이 보존된다" 는 제약이 한 열의 두 칸을 한 수로 묶는다. $j$ 열에서
 
-```
-chi2 = 10.358, p = 0.0056, df = 2
-expected:
- [[21.91304348 23.47826087 14.60869565]
- [20.08695652 21.52173913 13.39130435]]
-```
+    $$
+    (O_{1j}-E_{1j}) + (O_{2j}-E_{2j}) = C_j - C_j = 0
+    \quad\Longrightarrow\quad
+    O_{1j}-E_{1j} = e_j,\quad O_{2j}-E_{2j} = -e_j
+    $$
 
-자유도가 $(2-1)(3-1) = 2$이고, 기대도수는 주변 합계로부터 자동으로 계산된다.
+    이므로 $j$ 열의 기여는
+
+    $$
+    \frac{e_j^2}{E_{1j}} + \frac{e_j^2}{E_{2j}}
+    = e_j^2\left(\frac{n}{R_1 C_j} + \frac{n}{R_2 C_j}\right)
+    = \frac{e_j^2\,n}{C_j}\cdot\frac{R_1+R_2}{R_1R_2}
+    = \frac{n^2}{R_1R_2}\cdot\frac{e_j^2}{C_j}
+    $$
+
+    다($R_1 + R_2 = n$ 을 썼다). 열에 대해 더하면 주장한 식이다. $\square$
+
+    수를 넣는다. $R_1 = 60$, $R_2 = 55$, $n = 115$ 이므로
+
+    $$
+    e_1 = 30 - \frac{60 \cdot 42}{115} = 8.08696,
+    \qquad
+    e_2 = 20 - \frac{60 \cdot 45}{115} = -3.47826,
+    \qquad
+    e_3 = 10 - \frac{60 \cdot 28}{115} = -4.60870
+    $$
+
+    다. 행 합도 보존되므로 $e_1+e_2+e_3 = 0$ 이어야 하고 실제로 그렇다. 그러면
+
+    $$
+    \sum_{j} \frac{e_j^2}{C_j} = \frac{8.08696^2}{42} + \frac{3.47826^2}{45} + \frac{4.60870^2}{28}
+    = 1.55709 + 0.26880 + 0.75862 = 2.58451
+    $$
+
+    $$
+    \chi^2 = \frac{115^2}{60 \cdot 55}\times 2.58451 = 4.00758 \times 2.58451 = 10.35774
+    $$
+
+    이다. 자유도는 $(2-1)(3-1) = 2$ 이고, 자유도 2 의 밀도는 $\tfrac12 e^{-x/2}$ 이므로
+
+    $$
+    p = e^{-10.35774/2} = e^{-5.17887} = 0.0056344
+    $$
+
+    다. $p = 0.0056 < 0.05$ 이므로 $H_0$ 을 **기각한다.**
+
+    **(3) 첫 열이 끌고 간다.** 조정 잔차는 $\tilde R_{ij} = (O_{ij}-E_{ij})\big/\sqrt{E_{ij}(1-R_i/n)(1-C_j/n)}$ 이다. $2 \times c$ 표에서는 (2)에서 본 대로 $O_{2j}-E_{2j} = -(O_{1j}-E_{1j})$ 이므로 **두 행의 조정 잔차가 정확히 부호만 다르다.**
+
+    $$
+    \begin{array}{c|rrr}
+     & \text{열 1} & \text{열 2} & \text{열 3} \\ \hline
+    \text{행 1} & \mathbf{+3.1354} & -1.3304 & -2.0046 \\
+    \text{행 2} & -3.1354 & +1.3304 & +2.0046
+    \end{array}
+    $$
+
+    칸이 6 개이므로 본페로니 임계값은 $z_{1-0.025/6} = 2.6383$ 이다. **$\lvert 3.1354 \rvert$ 만 이를 넘는다.** 열 1 에서 행 1 이 기대 $21.91$ 에 대해 $30$ 으로 많고 행 2 가 기대 $20.09$ 에 대해 $12$ 로 적은 것, 그것이 이 표가 기각된 이유다.
+
+    칸별 기여로 보아도 같다. 열 1 의 두 칸이 전체 $10.358$ 의 $28.8\% + 31.4\% = 60.2\%$ 를 만든다.
+
+    **(4) 수치적으로.**
+
+    ```python
+    observed = np.array([[30, 20, 10],
+                         [12, 25, 18]], dtype=float)
+
+    # 2x2 표가 아니면 연속성 보정은 뜻이 없다. 그래서 correction=False 로 둔다.
+    chi2, p, df, exp = chi2_independence(observed, correction=False)
+    print(f"chi2 = {chi2:.3f}, p = {p:.4f}, df = {df}")
+    print("expected:\n", exp)
+
+    # (1) 2x3 에서는 correction 인자가 무시된다
+    print(f"\ncorrection=True 로 주면 {chi2_independence(observed, True)[0]:.6f}"
+          f"   (False 와 같다)")
+
+    # (2) 2 x c 의 닫힌 꼴
+    n = observed.sum()
+    R, C = observed.sum(1), observed.sum(0)
+    e = observed[0] - R[0] * C / n
+    closed = n**2 / (R[0] * R[1]) * np.sum(e**2 / C)
+    print(f"e_j = {np.round(e, 5)}   합 {e.sum():.1e}")
+    print(f"닫힌 꼴 {closed:.5f}   정의대로 {chi2:.5f}")
+    print(f"p = exp(-chi2/2) = {np.exp(-chi2 / 2):.7f}   sf = {p:.7f}")
+
+    # (3) 조정 잔차
+    adj = (observed - exp) / np.sqrt(exp * np.outer(1 - R / n, 1 - C / n))
+    print(f"\n조정 잔차\n{np.round(adj, 4)}")
+    print(f"본페로니 임계값 {stats.norm.ppf(1 - 0.025 / 6):.4f}")
+    print(f"칸별 기여 (%)\n{np.round((observed - exp)**2 / exp / chi2 * 100, 1)}")
+    ```
+
+    출력:
+
+    ```
+    chi2 = 10.358, p = 0.0056, df = 2
+    expected:
+     [[21.91304348 23.47826087 14.60869565]
+     [20.08695652 21.52173913 13.39130435]]
+
+    correction=True 로 주면 10.357744   (False 와 같다)
+    e_j = [ 8.08696 -3.47826 -4.6087 ]   합 -1.8e-15
+    닫힌 꼴 10.35774   정의대로 10.35774
+    p = exp(-chi2/2) = 0.0056344   sf = 0.0056344
+
+    조정 잔차
+    [[ 3.1354 -1.3304 -2.0046]
+     [-3.1354  1.3304  2.0046]]
+    본페로니 임계값 2.6383
+    칸별 기여 (%)
+    [[28.8  5.  14. ]
+     [31.4  5.4 15.3]]
+    ```
+
+    `correction=True` 를 주어도 `10.357744` 로 똑같다. (1)에서 말한 대로 $2\times2$ 가 아니면 인자가 무시된다.
+
+    닫힌 꼴 `10.35774` 가 정의대로 계산한 값과 다섯째 자리까지 같고, $e_j$ 세 수가 (2)의 손계산과 맞으며 합이 $-1.8\times10^{-15}$ 로 사실상 $0$ 이다. `exp(-chi2/2)` 와 `sf` 가 `0.0056344` 로 같은 것은 자유도 2 의 닫힌 꼴이다.
+
+    조정 잔차도 (3)의 표와 같고 **두 행이 정확히 부호만 다르다.** 열 1 의 두 칸이 기여의 $28.8 + 31.4 = 60.2\%$ 를 만든다.
+
+    자유도가 $(2-1)(3-1) = 2$ 이고, 기대도수는 주변 합계로부터 자동으로 계산된다.
 
 ## 템플릿을 언제 어떻게 쓰는가
 

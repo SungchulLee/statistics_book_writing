@@ -55,50 +55,215 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Fisher의 정확검정
+**보기 1.** <span class="diff easy" title="쉬움"></span> Fisher의 정확검정. 전체가 16명뿐인 $2\times2$ 표다.
+
+$$
+\begin{array}{c|cc|r}
+ & \text{성공} & \text{실패} & \text{행 합} \\ \hline
+\text{처치군} & 1 & 5 & 6 \\
+\text{대조군} & 8 & 2 & 10 \\ \hline
+\text{열 합} & 9 & 7 & 16
+\end{array}
+$$
+
+**(1)** 주변합을 고정하면 왼쪽 위 칸 $a$ 가 취할 수 있는 값이 몇 개인가. 일곱 표의 확률을 **유리수로 정확히** 구하시오. 분모가 모두 같아진다.
+
+**(2)** 양측 p-값을 유리수로 구하시오. "극단적" 의 기준이 무엇인가.
+
+**(3)** 같은 표에 카이제곱 검정을 걸면 얼마가 나오는가. 보정 유무로 나누어 구하고 (2)의 정확값과 견주시오. $\alpha = 0.05$ 에서 세 방법의 판정이 같은가.
+
+**(4)** 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 2x2 분할표
-#               성공   실패
-# 처치군          1      5
-# 대조군          8      2
-# 기대도수가 5에 못 미치는 칸이 있어 카이제곱 근사를 쓸 수 없는 상황이다.
-observed = np.array([[1, 5],
-                     [8, 2]])
+    **(1) 표본공간이 일곱 개뿐이다.** 행 합 $6, 10$ 과 열 합 $9, 7$ 을 고정하면 $a$ 하나로 표 전체가 정해진다($b = 6-a$, $c = 9-a$, $d = 1+a$). 네 칸이 모두 음이 아니려면
 
-print("Observed contingency table:")
-print(observed)
+    $$
+    \max(0,\, 6-7) = 0 \;\le\; a \;\le\; \min(6,\, 9) = 6
+    $$
 
-# Fisher의 정확검정. 근사가 전혀 없고 초기하분포로 확률을 직접 더한다.
-# 주변 합계를 고정한 채 가능한 표들을 모두 나열할 수 있기 때문에 가능한 일이다.
-odds_ratio, p_value = stats.fisher_exact(observed)
+    이므로 $a \in \{0,1,\ldots,6\}$ 의 **일곱 가지**다. $H_0$ 아래에서 $a$ 는 초기하분포를 따른다. 16명 가운데 성공한 9명을 고르는 모든 방법 가운데, 그중 $a$ 명이 처치군 6명에서 나오는 경우를 세면
 
-print(f"Odds ratio : {odds_ratio:.4f}")
-print(f"p-value    : {p_value:.4f}")
+    $$
+    P(a) = \frac{\binom{6}{a}\binom{10}{9-a}}{\binom{16}{9}},
+    \qquad \binom{16}{9} = 11440
+    $$
 
-if p_value < 0.05:
-    print("Reject H0: significant association (alpha = 0.05).")
-else:
-    print("Fail to reject H0: no significant association (alpha = 0.05).")
-```
+    이다. **분모가 일곱 표에서 모두 $11440$ 으로 같으므로 분자만 세면 된다.**
 
-출력:
+    $$
+    \begin{array}{c|ccccccc|c}
+    a & 0 & 1 & 2 & 3 & 4 & 5 & 6 & \text{합} \\ \hline
+    \binom6a\binom{10}{9-a} & 10 & 270 & 1800 & 4200 & 3780 & 1260 & 120 & 11440 \\
+    P(a) & \tfrac{10}{11440} & \tfrac{270}{11440} & \tfrac{1800}{11440} & \tfrac{4200}{11440} & \tfrac{3780}{11440} & \tfrac{1260}{11440} & \tfrac{120}{11440} & 1 \\
+    \text{소수} & 0.00087 & 0.02360 & 0.15734 & 0.36713 & 0.33042 & 0.11014 & 0.01049 &
+    \end{array}
+    $$
 
-```
-Observed contingency table:
-[[1 5]
- [8 2]]
-Odds ratio : 0.0500
-p-value    : 0.0350
-Reject H0: significant association (alpha = 0.05).
-```
+    분자의 합이 $11440$ 으로 분모와 **정확히** 같다. 이것이 방더몬드 항등식 $\sum_a \binom6a\binom{10}{9-a} = \binom{16}{9}$ 이고, 좋은 검산이다.
 
-오즈비 $\text{OR} = (1 \times 2)/(5 \times 8) = 0.05$이고, p-값은 초기하분포로 정확히 계산되어 0.0350이다. 전체가 16명뿐인데도 유의하다.
+    **근사가 한 군데도 쓰이지 않았다.** 표본공간이 일곱 개짜리 유한집합이니 근사할 것이 없다. 이것이 "정확" 이라는 말의 뜻이다.
+
+    **(2) 양측 p-값.** 관측된 표는 $a = 1$ 이고 그 확률은 $270/11440 = 0.02360$ 이다. 양측검정에서 "관측된 것만큼 또는 그보다 극단적" 의 기준은 **확률 자체**다. $P(a) \le P(1)$ 인 표를 모은다.
+
+    $$
+    P(0) = 0.00087 \le P(1), \qquad P(6) = 0.01049 \le P(1), \qquad P(1) = P(1)
+    $$
+
+    나머지 넷은 모두 $P(1)$ 보다 크다. 따라서
+
+    $$
+    p = P(0) + P(1) + P(6) = \frac{10 + 270 + 120}{11440} = \frac{400}{11440} = \frac{5}{143} = 0.034965
+    $$
+
+    다. $p < 0.05$ 이므로 $H_0$ 을 **기각한다.** 전체가 16명뿐인데도 유의하다.
+
+    **$a = 6$ 이 들어간 것에 주목하라.** $a=6$ 인 표 $\begin{pmatrix}6&0\\3&7\end{pmatrix}$ 은 오즈비가 무한대인, **관측된 표와 정반대 방향**의 극단이다. 양측검정이라 반대쪽 꼬리도 센다. 처치가 나쁘다는 쪽만 보는 단측검정이었다면 $a \le 1$ 만 더해 $280/11440 = 0.02448$ 을 얻었을 것이다.
+
+    오즈비는 $\text{OR} = ad/(bc) = (1\times2)/(5\times8) = 1/20 = 0.05$ 다. 처치군의 성공 오즈가 대조군의 **20분의 1** 이다.
+
+    **(3) 카이제곱과 견주면.** 먼저 조건부터 본다. 기대도수는
+
+    $$
+    E = \frac{1}{16}\begin{pmatrix}6\\10\end{pmatrix}\begin{pmatrix}9 & 7\end{pmatrix}
+    = \begin{pmatrix} 3.375 & 2.625 \\ 5.625 & 4.375 \end{pmatrix}
+    $$
+
+    로 **네 칸 가운데 둘이 5 미만**이다. 경험 법칙을 어겼으니 애초에 카이제곱을 쓸 자리가 아니다. 그래도 계산해 본다. $2\times2$ 닫힌 꼴 $\chi^2 = n(ad-bc)^2/D$ 에서 $ad-bc = 2-40 = -38$ 이고 $D = 6\cdot10\cdot9\cdot7 = 3780$ 이므로
+
+    $$
+    \chi^2 = \frac{16 \times 38^2}{3780} = \frac{23104}{3780} = \frac{5776}{945} = 6.11217,
+    \qquad p = 0.013425
+    $$
+
+    $$
+    \chi^2_{\text{Yates}} = \frac{16(38-8)^2}{3780} = \frac{14400}{3780} = \frac{80}{21} = 3.80952,
+    \qquad p = 0.050962
+    $$
+
+    세 값을 늘어놓는다.
+
+    | 방법 | p-값 | $\alpha=0.05$ 판정 |
+    |---|---:|:---:|
+    | 비보정 $\chi^2$ | $0.013425$ | 기각 |
+    | **Fisher 정확** | $0.034965$ | 기각 |
+    | 예이츠 $\chi^2$ | $0.050962$ | **기각 못 함** |
+
+    **세 방법이 갈린다.** 비보정판은 정확값의 **$0.38$ 배**로 너무 작고, 예이츠판은 **$1.46$ 배**로 너무 크다. 그리고 하필 예이츠판이 $0.05$ 를 $0.001$ 차이로 넘어 **결론이 뒤집힌다.** 기대도수가 5 에 못 미치는 표에서 카이제곱을 쓰면 안 되는 이유가 이것이다.
+
+    **정확검정의 한계도 같은 자리에 있다.** 더할 수 있는 확률 덩어리가 일곱 개뿐이므로 p-값도 일곱 값만 가진다. 관측된 $a$ 마다 양측 p-값을 계산해 보면 $0.0009,\ 0.0350,\ 0.3024,\ 1.0000,\ 0.6329,\ 0.1451,\ 0.0114$ 이고, 이 가운데 $0.05$ 이하인 것은 $a \in \{0, 1, 6\}$ 셋이다. 그러므로 **명목 $5\%$ 검정의 실제 크기는**
+
+    $$
+    P(0) + P(1) + P(6) = \frac{5}{143} = 0.034965
+    $$
+
+    **로 $5\%$ 가 아니라 $3.50\%$ 다.** $0.05$ 에 딱 맞춰 경계를 세울 방법이 없기 때문이다. 정확검정이 보수적이라고 말하는 것이 이 뜻이다. **"정확" 은 p-값이 정확하다는 말이지 크기가 명목값과 같다는 말이 아니다.**
+
+    **(4) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 2x2 분할표
+    #               성공   실패
+    # 처치군          1      5
+    # 대조군          8      2
+    # 기대도수가 5에 못 미치는 칸이 있어 카이제곱 근사를 쓸 수 없는 상황이다.
+    observed = np.array([[1, 5],
+                         [8, 2]])
+
+    print("Observed contingency table:")
+    print(observed)
+
+    # Fisher의 정확검정. 근사가 전혀 없고 초기하분포로 확률을 직접 더한다.
+    # 주변 합계를 고정한 채 가능한 표들을 모두 나열할 수 있기 때문에 가능한 일이다.
+    odds_ratio, p_value = stats.fisher_exact(observed)
+
+    print(f"Odds ratio : {odds_ratio:.4f}")
+    print(f"p-value    : {p_value:.4f}")
+
+    if p_value < 0.05:
+        print("Reject H0: significant association (alpha = 0.05).")
+    else:
+        print("Fail to reject H0: no significant association (alpha = 0.05).")
+
+    # (1) 일곱 표의 확률을 유리수로
+    from fractions import Fraction
+    from math import comb
+
+    n, r1, c1 = 16, 6, 9
+    denom = comb(n, c1)
+    prob = {a: Fraction(comb(r1, a) * comb(n - r1, c1 - a), denom) for a in range(r1 + 1)}
+    print(f"\n분모 C(16,9) = {denom}")
+    print("  a  분자   P(a)")
+    for a, pr in prob.items():
+        print(f"  {a}  {comb(r1, a) * comb(n - r1, c1 - a):5d}   {float(pr):.5f}")
+    print(f"  분자의 합 {sum(comb(r1, a) * comb(n - r1, c1 - a) for a in prob)}"
+          f"   확률의 합 {sum(prob.values())}")
+
+    # (2) 양측 p-값. 기준은 확률 자체.
+    extreme = [a for a in prob if prob[a] <= prob[1]]
+    p_exact = sum(prob[a] for a in extreme)
+    print(f"\n극단적인 표 {extreme}   p = {p_exact} = {float(p_exact):.6f}")
+
+    # (3) 카이제곱과 견주기
+    exp = np.outer(observed.sum(1), observed.sum(0)) / n
+    print(f"\n기대도수\n{exp}   최소 {exp.min():.3f}" + ("  < 5" if exp.min() < 5 else ""))
+    for name, corr in [("비보정", False), ("예이츠", True)]:
+        x, pv = stats.chi2_contingency(observed, correction=corr)[:2]
+        print(f"{name}  chi2 = {x:.5f}  p = {pv:.6f}   정확값의 {pv / float(p_exact):.2f} 배"
+              f"   {'기각' if pv < 0.05 else '기각 못 함'}")
+
+    # 명목 5% 검정의 실제 크기
+    size = sum(prob[a] for a in prob
+               if sum(prob[k] for k in prob if prob[k] <= prob[a]) <= Fraction(1, 20))
+    print(f"\n명목 5% 검정의 실제 크기 {size} = {float(size):.6f}")
+    ```
+
+    출력:
+
+    ```
+    Observed contingency table:
+    [[1 5]
+     [8 2]]
+    Odds ratio : 0.0500
+    p-value    : 0.0350
+    Reject H0: significant association (alpha = 0.05).
+
+    분모 C(16,9) = 11440
+      a  분자   P(a)
+      0     10   0.00087
+      1    270   0.02360
+      2   1800   0.15734
+      3   4200   0.36713
+      4   3780   0.33042
+      5   1260   0.11014
+      6    120   0.01049
+      분자의 합 11440   확률의 합 1
+
+    극단적인 표 [0, 1, 6]   p = 5/143 = 0.034965
+
+    기대도수
+    [[3.375 2.625]
+     [5.625 4.375]]   최소 2.625  < 5
+    비보정  chi2 = 6.11217  p = 0.013425   정확값의 0.38 배   기각
+    예이츠  chi2 = 3.80952  p = 0.050962   정확값의 1.46 배   기각 못 함
+
+    명목 5% 검정의 실제 크기 5/143 = 0.034965
+    ```
+
+    일곱 분자 `10 270 1800 4200 3780 1260 120` 이 (1)의 표와 같고, 합이 분모 `11440` 과 **정확히** 같다. 확률의 합도 `Fraction` 으로 딱 `1` 이다.
+
+    극단적인 표가 `[0, 1, 6]` 로 (2)에서 손으로 고른 셋과 같고, p-값이 **유리수 `5/143`** 로 나온다. `scipy.stats.fisher_exact` 가 준 `0.0350` 이 이 분수의 소수 표기다.
+
+    기대도수의 최솟값이 `2.625` 로 5 에 못 미치고, 그 자리에서 비보정 카이제곱은 정확값의 $0.38$ 배, 예이츠는 $1.46$ 배를 준다. **예이츠판만 기각하지 못한다.**
+
+    마지막 줄이 (3)의 끝에서 말한 것이다. 명목 $5\%$ 검정의 실제 크기가 `5/143` $= 3.50\%$ 다. 이 자료에서는 그 값이 관측된 p-값과 우연히 같은데, 기각역이 하필 $\{0,1,6\}$ 으로 (2)의 극단 집합과 같기 때문이다.
+
+    오즈비 $\text{OR} = (1 \times 2)/(5 \times 8) = 0.05$ 이고, p-값은 초기하분포로 정확히 계산되어 $5/143 = 0.0350$ 이다. 전체가 16명뿐인데도 유의하다.
 
 ## 해석
 

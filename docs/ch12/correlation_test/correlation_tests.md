@@ -12,66 +12,235 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 설정 모듈
+**보기 1.** <span class="diff easy" title="쉬움"></span> 재현을 위한 설정 모듈. 뒤의 모든 보기가 이 모듈이 정한 씨앗과 표본크기를 쓴다.
+
+**(1)** 주석은 노트북에서 `parse_args()` 가 커널을 멈춰 세운다고 한다. 노트북이 남기는 찌꺼기 인자를 흉내 내어 두 방식의 차이를 실제로 재현하시오.
+
+**(2)** `np.random.seed(1)` 이 고정하는 것과 고정하지 않는 것을 각각 말하시오. 뒤의 보기들이 `np.random.rand` 를 쓰는데, 중간에 `np.random.default_rng()` 를 섞어 쓰면 재현이 되는가.
 
 </div>
 
-```python
-import argparse
-import numpy as np
+??? success "풀이"
 
-parser = argparse.ArgumentParser(description='Correlation Test Examples')
-parser.add_argument('--seed', type=int, default=1, metavar='S',
-                    help='random seed (default: 1)')
-# parse_args()가 아니라 parse_known_args()를 쓴다.
-# 노트북이나 REPL에서는 sys.argv에 다른 인자가 들어 있어 parse_args()가
-# SystemExit을 던지며 커널을 멈춰 세운다.
-ARGS, _ = parser.parse_known_args()
+    **유도할 답이 없는 보기다.** 통계가 아니라 **재현성을 위한 장치**이므로, 풀이의 몫은 그 장치가 실제로 무엇을 막아 주는지 돌려서 확인하는 것이다.
 
-np.random.seed(ARGS.seed)
-ARGS.size = 1000
-```
+    **(1) 노트북의 `sys.argv` 에는 커널 설정 파일이 들어 있다.** `jupyter` 가 띄우는 프로세스의 인자는 대개
+
+    ```
+    ['ipykernel_launcher.py', '-f', '/tmp/kernel-abc.json']
+    ```
+
+    꼴이다. `parse_args()` 는 자기가 모르는 인자를 보면 **오류를 찍고 `SystemExit(2)` 를 던진다.** 노트북에서는 이것이 커널을 죽인 것처럼 보인다. `parse_known_args()` 는 모르는 인자를 둘째 반환값으로 **따로 담아 돌려주고** 아는 것만 파싱하므로 그냥 지나간다. 아래 출력에서 전자는 `error: unrecognized arguments: -f /tmp/kernel-abc.json` 를, 후자는 `seed = 1` 과 버린 인자 목록을 준다.
+
+    **(2) `np.random.seed` 는 넘파이의 전역 `RandomState` 하나만 고정한다.** 정확히는
+
+    - **고정하는 것**: `np.random.rand`, `np.random.randn`, `np.random.normal` 처럼 `np.random.` 으로 바로 부르는 옛 API. 이 보기들의 `load_data` 가 쓰는 것이 이쪽이다.
+    - **고정하지 않는 것**: `np.random.default_rng()` 로 **새로 만드는** 생성기. 씨앗 없이 부르면 운영체제의 엔트로피에서 씨앗을 가져오므로, `np.random.seed(1)` 을 아무리 걸어도 **매번 다른 수열**이 나온다. `random` 모듈이나 `torch` 같은 다른 라이브러리의 생성기도 마찬가지다.
+
+    그러므로 **옛 API 와 `default_rng()` 를 섞어 쓰면 재현이 깨진다.** 섞어 쓰려면 `default_rng(seed)` 처럼 씨앗을 명시해야 하고, 그러면 이번에는 `np.random.seed` 와 **무관하게** 재현된다. 두 체계는 서로 이야기하지 않는다.
+
+    ```python
+    import argparse
+    import numpy as np
+
+    parser = argparse.ArgumentParser(description='Correlation Test Examples')
+    parser.add_argument('--seed', type=int, default=1, metavar='S',
+                        help='random seed (default: 1)')
+    # parse_args()가 아니라 parse_known_args()를 쓴다.
+    # 노트북이나 REPL에서는 sys.argv에 다른 인자가 들어 있어 parse_args()가
+    # SystemExit을 던지며 커널을 멈춰 세운다.
+    ARGS, _ = parser.parse_known_args()
+
+    np.random.seed(ARGS.seed)
+    ARGS.size = 1000
+
+    # (1) 노트북이 남기는 찌꺼기 인자를 흉내 내어 두 방식을 견준다.
+    import sys
+    import contextlib
+    import io
+
+    saved = sys.argv
+    sys.argv = ['ipykernel_launcher.py', '-f', '/tmp/kernel-abc.json']
+    try:
+        a, unknown = parser.parse_known_args()
+        print(f"parse_known_args: 성공, seed = {a.seed}, 버린 인자 = {unknown}")
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            try:
+                parser.parse_args()
+                print("parse_args: 성공")
+            except SystemExit as ex:
+                msg = err.getvalue().strip().splitlines()[-1]
+                print(f"parse_args: SystemExit(code={ex.code}) — "
+                      f"error: {msg.split('error: ', 1)[-1]}")
+    finally:
+        sys.argv = saved
+
+    # (2) seed 가 고정하는 것과 고정하지 않는 것
+    np.random.seed(1)
+    a1 = np.random.rand(3)
+    np.random.seed(1)
+    a2 = np.random.rand(3)
+    print(f"\nnp.random.rand  1회차 {a1.round(6)}")
+    print(f"np.random.rand  2회차 {a2.round(6)}   같은가: {np.array_equal(a1, a2)}")
+
+    np.random.seed(1)
+    b1 = np.random.default_rng().random(3)
+    np.random.seed(1)
+    b2 = np.random.default_rng().random(3)
+    print(f"default_rng()   두 번 뽑아 같은가: {np.array_equal(b1, b2)}   "
+          f"(돌릴 때마다 값이 달라지므로 값은 적지 않는다)")
+
+    np.random.seed(1)
+    c1 = np.random.default_rng(1).random(3)
+    c2 = np.random.default_rng(1).random(3)
+    print(f"default_rng(1)  두 번  {c1.round(6)}   같은가: {np.array_equal(c1, c2)}")
+    print(f"  (np.random.seed(1) 을 걸어도 default_rng(1) 의 값은 그것과 무관하다)")
+    ```
+
+    출력:
+
+    ```
+    parse_known_args: 성공, seed = 1, 버린 인자 = ['-f', '/tmp/kernel-abc.json']
+    parse_args: SystemExit(code=2) — error: unrecognized arguments: -f /tmp/kernel-abc.json
+
+    np.random.rand  1회차 [4.17022e-01 7.20324e-01 1.14000e-04]
+    np.random.rand  2회차 [4.17022e-01 7.20324e-01 1.14000e-04]   같은가: True
+    default_rng()   두 번 뽑아 같은가: False   (돌릴 때마다 값이 달라지므로 값은 적지 않는다)
+    default_rng(1)  두 번  [0.511822 0.950464 0.14416 ]   같은가: True
+      (np.random.seed(1) 을 걸어도 default_rng(1) 의 값은 그것과 무관하다)
+    ```
+
+    씨앗 $1$ 의 첫 세 수 $0.417022$, $0.720324$, $0.000114$ 는 돌릴 때마다 같다. 이 세 수가 다르게 나오면 뒤 보기들의 상관값도 달라지므로, **이 줄이 뒷 보기 전체의 검산 기준**이다.
 
 ### `load_data.py`
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 자료 적재 모듈
+**보기 2.** <span class="diff easy" title="쉬움"></span> 세 자료가 무엇을 재게 하려고 만들어졌는가. $x \sim U(0,20)$, $\varepsilon \sim U(0,10)$ 이 독립이고 세 자료가 아래와 같다.
+
+| 자료 | $y$ | 노린 것 |
+|---|---|---|
+| 0 | 새 $U(0,20)$ | 관계 없음 |
+| 1 | $(x+\varepsilon)^3$ | 단조 비선형 |
+| 2 | $\sin(x+\varepsilon)$ | 비단조 |
+
+**(1)** 자료 1 의 $y$ 는 **$x$ 의 단조함수인가.** 아니라면 "단조 비선형"이라는 설명은 무엇을 뜻하는가. 세제곱이 순위 측도에 어떤 영향을 주는지도 함께 답하시오.
+
+**(2)** 자료 2 에서 $\sin$ 의 안쪽 $x + \varepsilon$ 이 훑는 범위는 얼마이고 사인이 몇 주기를 도는가. 그래서 모든 측도가 $0$ 근처가 되는 까닭을 말하시오.
 
 </div>
 
-```python
-import numpy as np
+??? success "풀이"
 
-# 위의 global_name_space.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
-#   from global_name_space import ARGS
+    **(1) 단조함수가 아니다.** $y$ 는 $x + \varepsilon$ 의 단조증가 함수이지 $x$ 의 함수가 아니다. $\varepsilon$ 이 $0$ 부터 $10$ 까지 흔들리므로 **$x$ 가 커져도 $x+\varepsilon$ 이 줄 수 있다.** 자료를 $x$ 로 정렬해 이웃한 $y$ 를 견주면 $999$ 곳 가운데 **$503$ 곳에서 $y$ 가 줄어든다.** 거의 절반이다. 예를 들어 $x = 0.0023 \to 0.0080$ 으로 커지는데 $y$ 는 $425.2 \to 21.1$ 로 떨어진다.
 
-def load_data(data_type=0):
-    data_dict = {}
+    그러므로 "자료 1 은 단조다"라는 말은 **$y$ 가 $x$ 의 단조함수라는 뜻이 아니라, 잡음을 걷어 낸 바탕 관계가 단조라는 뜻**으로 읽어야 한다. $r_s = 1$ 이 되지 않는 것도 그 때문이다.
 
-    x = np.random.rand(ARGS.size) * 20
-    eps = np.random.rand(ARGS.size) * 10
+    **세제곱은 순위 측도에 보이지 않는다.** $t \mapsto t^3$ 은 실수 전체에서 강한 증가함수이므로 **순위를 바꾸지 않는다.** 따라서
 
-    # 자료 0: 관계 없음
-    y = np.random.rand(ARGS.size) * 20
-    data_dict[0] = (x, y)
+    $$
+    \rho_s\big(x,\,(x+\varepsilon)^3\big) = \rho_s\big(x,\, x+\varepsilon\big),
+    \qquad
+    \tau\big(x,\,(x+\varepsilon)^3\big) = \tau\big(x,\, x+\varepsilon\big)
+    $$
 
-    # 자료 1: 단조이지만 곡선인 관계(삼차)
-    y = (x + eps) ** 3
-    data_dict[1] = (x, y)
+    이다. 실제로 둘 다 $0.900004$ 로 소수 여섯째 자리까지 같다. 반면 Pearson 은 $0.815408$ 과 $0.894142$ 로 **다르다.** 곧 **이 자료에서 "비선형"이라는 말이 뜻하는 것은 오로지 Pearson 에게만 보이는 성질**이고, 순위 측도가 보는 자료는 $(x,\, x+\varepsilon)$ 이라는 평범한 신호 더하기 잡음이다.
 
-    # 자료 2: 단조가 아닌 관계(사인)
-    y = np.sin(x + eps)
-    data_dict[2] = (x, y)
+    **(2) $x+\varepsilon$ 은 $(0, 30)$ 을 훑는다.** 표본에서는 $[0.5744,\; 29.6839]$ 이고, 사인의 주기가 $2\pi$ 이므로
 
-    return data_dict
-```
+    $$
+    \frac{29.6839 - 0.5744}{2\pi} = 4.633
+    $$
 
-세 자료가 나타내는 것:
+    곧 **$4.6$ 주기를 돈다.** $x$ 가 조금만 커져도 $\sin(x+\varepsilon)$ 이 올랐다 내렸다 하므로, $x$ 가 큰 쪽에서 $y$ 가 더 크다고 말할 만한 전역적 경향이 없다. Pearson 은 직선 하나를, Spearman 과 Kendall 은 단조 추세 하나를 찾는데 **셋 다 그런 것이 없다.** 그래서 세 측도가 모두 $0$ 근처에 머문다.
 
-- **자료 0**: 관계 없음 — 무작위 산포. Pearson과 순위 기반 상관 모두 0에 가까워야 한다.
-- **자료 1**: 단조 비선형 — Pearson은 선형성을 재므로 관계를 과소평가할 수 있지만 (단조성을 재는) Spearman과 Kendall은 이를 탐지해야 한다.
-- **자료 2**: 비단조(사인) — 관계가 주기적이고 단조도 선형도 아니므로 모든 상관 측도가 약해야 한다.
+    다만 **정확히 $0$ 은 아니다.** 주기가 정수가 아니어서 반 토막이 남기 때문이다. 자료 2 의 모집단 Pearson 상관은 보기 3에서 적분으로 $0.0280$ 임을 보인다.
+
+    **세 자료가 $x$ 를 공유한다는 점**도 짚어 둔다. `load_data` 는 $x$ 와 $\varepsilon$ 을 한 번만 뽑아 세 자료에 모두 쓴다(자료 0 의 $y$ 만 새로 뽑는다). 그래서 세 그림의 가로축 점 배치가 같고, 셋을 나란히 놓고 견주는 것이 공정해진다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 위의 global_name_space.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
+    #   from global_name_space import ARGS
+
+    def load_data(data_type=0):
+        data_dict = {}
+
+        x = np.random.rand(ARGS.size) * 20
+        eps = np.random.rand(ARGS.size) * 10
+
+        # 자료 0: 관계 없음
+        y = np.random.rand(ARGS.size) * 20
+        data_dict[0] = (x, y)
+
+        # 자료 1: 단조이지만 곡선인 관계(삼차)
+        y = (x + eps) ** 3
+        data_dict[1] = (x, y)
+
+        # 자료 2: 단조가 아닌 관계(사인)
+        y = np.sin(x + eps)
+        data_dict[2] = (x, y)
+
+        return data_dict
+
+    np.random.seed(1)
+    class ARGS: size = 1000
+    d = load_data()
+
+    # (1) 세 자료가 x 를 공유하는가
+    print(f"자료 0 과 1 의 x 가 같은 배열인가: {np.array_equal(d[0][0], d[1][0])}")
+    print(f"자료 1 과 2 의 x 가 같은 배열인가: {np.array_equal(d[1][0], d[2][0])}")
+
+    # (2) 자료 1 의 y 가 x 의 단조함수인가 — 반례를 찾는다
+    x, y = d[1]
+    o = np.argsort(x)
+    xs, ys = x[o], y[o]
+    bad = np.flatnonzero(np.diff(ys) < 0)
+    print(f"\n자료 1: x 를 오름차순으로 놓았을 때 y 가 줄어드는 자리 = "
+          f"{len(bad)} 곳 / {len(x)-1}")
+    i = bad[0]
+    print(f"  예: x = {xs[i]:.4f} -> {xs[i+1]:.4f} 인데 y = {ys[i]:.1f} -> {ys[i+1]:.1f}")
+    print(f"  (x 가 커져도 eps 가 더 작으면 x+eps 가 줄 수 있다)")
+
+    # 세제곱은 순위를 바꾸지 않는다. y = (x+eps)^3 이므로 cbrt(y) = x+eps 다.
+    print(f"\n세제곱은 순위를 바꾸지 않는다:")
+    print(f"  spearman(x, (x+eps)^3) = {stats.spearmanr(x, y).statistic:.6f}")
+    print(f"  spearman(x,  x+eps   ) = {stats.spearmanr(x, np.cbrt(y)).statistic:.6f}")
+    print(f"  pearson (x, (x+eps)^3) = {stats.pearsonr(x, y).statistic:.6f}")
+    print(f"  pearson (x,  x+eps   ) = {stats.pearsonr(x, np.cbrt(y)).statistic:.6f}")
+
+    # (3) 자료 2 가 도는 주기 수
+    u2 = np.cbrt(d[1][1])          # = x + eps
+    print(f"\n자료 2: x+eps 의 범위 = [{u2.min():.4f}, {u2.max():.4f}],  "
+          f"sin 이 도는 주기 = {(u2.max() - u2.min()) / (2 * np.pi):.3f}")
+    ```
+
+    출력:
+
+    ```
+    자료 0 과 1 의 x 가 같은 배열인가: True
+    자료 1 과 2 의 x 가 같은 배열인가: True
+
+    자료 1: x 를 오름차순으로 놓았을 때 y 가 줄어드는 자리 = 503 곳 / 999
+      예: x = 0.0023 -> 0.0080 인데 y = 425.2 -> 21.1
+      (x 가 커져도 eps 가 더 작으면 x+eps 가 줄 수 있다)
+
+    세제곱은 순위를 바꾸지 않는다:
+      spearman(x, (x+eps)^3) = 0.900004
+      spearman(x,  x+eps   ) = 0.900004
+      pearson (x, (x+eps)^3) = 0.815408
+      pearson (x,  x+eps   ) = 0.894142
+
+    자료 2: x+eps 의 범위 = [0.5744, 29.6839],  sin 이 도는 주기 = 4.633
+    ```
+
+    세 자료가 나타내는 것을 다시 적으면 이렇다.
+
+    - **자료 0**: 관계 없음 — 무작위 산포. 세 측도 모두 $0$ 에 가까워야 한다.
+    - **자료 1**: 바탕 관계가 단조인 비선형 — Pearson 은 세제곱의 굽음에 값을 깎이지만 순위 측도는 그 굽음을 보지 못한다.
+    - **자료 2**: 비단조(사인) — $4.6$ 주기를 돌므로 선형도 단조도 아니고, 세 측도가 모두 약하다.
 
 ---
 
@@ -83,37 +252,163 @@ Pearson의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Pearson 상관 검정
+**보기 3.** <span class="diff easy" title="쉬움"></span> 세 자료의 Pearson $r$ 를 참값과 견주기. 그림은 $r = 0.0348,\; 0.8154,\; -0.0183$ 을 준다.
+
+**(1)** 자료 1 의 **모집단** Pearson 상관을 적률로 유도하시오. $X \sim U(0,20)$, $\varepsilon \sim U(0,10)$ 이 독립이고 $U = X + \varepsilon$, $Y = U^3$ 이다.
+
+**(2)** 자료 0 과 자료 2 의 모집단 상관은 각각 얼마인가. 둘 다 $0$ 인가. 세 표본값이 참값에서 몇 표준오차 떨어져 있는지 적으시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import scipy.stats as stats
+??? success "풀이"
 
-# 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
-#   from load_data import load_data
+    **(1) 균등분포의 적률만 있으면 된다.** $E[X^k] = 20^k/(k+1)$, $E[\varepsilon^k] = 10^k/(k+1)$ 이고 둘이 독립이다. 분자부터 적는다.
 
-def main():
-    data_dict = load_data()
-    _, axes = plt.subplots(1, len(data_dict), figsize=(12, 3))
+    $$
+    E[XU^3] = E\!\left[X(X+\varepsilon)^3\right]
+    = E[X^4] + 3E[X^3]E[\varepsilon] + 3E[X^2]E[\varepsilon^2] + E[X]E[\varepsilon^3]
+    $$
 
-    for ax, (x, y) in zip(axes, data_dict.values()):
-        ax.plot(x, y, ".k")
-        coef, p_val = stats.pearsonr(x, y)
-        ax.set_title(f"Pearson's r: {coef:.4f}\np-value: {p_val:.4f}")
-    plt.tight_layout()
-    plt.show()
+    $$
+    = 32000 + 3(2000)(5) + 3\!\left(\tfrac{400}{3}\right)\!\left(\tfrac{100}{3}\right) + 10(250)
+    = \frac{233500}{3}
+    $$
 
-if __name__ == "__main__":
-    main()
-```
+    $$
+    E[U^3] = E[X^3] + 3E[X^2]E[\varepsilon] + 3E[X]E[\varepsilon^2] + E[\varepsilon^3]
+    = 2000 + 2000 + 1000 + 250 = 5250
+    $$
 
-![Pearson 상관: 세 자료](./img/correlation_tests_72.png)
+    $$
+    \operatorname{Cov}(X, U^3) = \frac{233500}{3} - 10 \times 5250 = \frac{76000}{3}
+    $$
 
-왼쪽부터 무관계, 단조 관계, 사인 관계다. Pearson은 가운데에서만 큰 값을 준다. 오른쪽 사인 자료는 눈으로는 뚜렷한 구조가 있지만 $r$이 0 근처다.
+    분모는 두 분산이다. $\operatorname{Var}(X) = \frac{400}{3} - 100 = \frac{100}{3}$ 이고, $U^3$ 의 분산에는 $U$ 의 여섯째 적률이 든다.
 
-**언제 쓰는가**: 두 변수가 모두 연속형이고 **선형** 관계를 예상할 때. Pearson의 $r$은 이상점에 민감하며 p-값이 정확하려면 이변량 정규성을 가정한다.
+    $$
+    E[U^6] = \sum_{k=0}^{6}\binom{6}{k} E[X^{6-k}]\,E[\varepsilon^{k}] = \frac{394000000}{7},
+    \qquad
+    \operatorname{Var}(U^3) = \frac{394000000}{7} - 5250^2 = \frac{201062500}{7}
+    $$
+
+    따라서
+
+    $$
+    \rho = \frac{76000/3}{\sqrt{\dfrac{100}{3} \cdot \dfrac{201062500}{7}}}
+    = \frac{152\sqrt{67557}}{48255}
+    = 0.818722
+    $$
+
+    이다.
+
+    **(2) 자료 0 은 정확히 $0$ 이지만 자료 2 는 아니다.** 자료 0 의 $y$ 는 $x$ 와 **독립으로 새로 뽑은** 균등난수이므로 공분산이 $0$ 이다. 자료 2 는 다르다. $\operatorname{Cov}(X, \sin U)$ 를 같은 영역에서 적분하면
+
+    $$
+    \rho = 0.027999
+    $$
+
+    로 작지만 $0$ 이 아니다. 사인이 $4.633$ 주기를 도는데 **정수 주기가 아니어서** 잘린 반 토막이 아주 약한 추세를 남기기 때문이다. $\rho$ 가 정확히 $0$ 이 되려면 $x+\varepsilon$ 의 범위가 $2\pi$ 의 정수배여야 한다.
+
+    세 표본값을 참값과 견주면 이렇다. $\rho$ 근처에서 $\operatorname{SE}(r) \approx (1-\rho^2)/\sqrt{n}$ 이다.
+
+    | 자료 | 표본 $r$ | 모집단 $\rho$ | $\operatorname{SE}$ | $z$ |
+    |---|---|---|---|---|
+    | 0 | $+0.034844$ | $0$ | $0.031623$ | $+1.102$ |
+    | 1 | $+0.815408$ | $+0.818722$ | $0.010426$ | $-0.318$ |
+    | 2 | $-0.018298$ | $+0.027999$ | $0.031598$ | $-1.465$ |
+
+    **셋 다 $\lvert z \rvert < 2$ 로 맞는다.** 특히 자료 2 의 표본값이 **음수**인데 참값은 **양수**라는 점을 눈여겨볼 만하다. $0.028$ 짜리 상관을 $n = 1000$ 으로는 잴 수 없다. 부호조차 못 맞춘다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+
+    # 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
+    #   from load_data import load_data
+
+    def main():
+        data_dict = load_data()
+        _, axes = plt.subplots(1, len(data_dict), figsize=(12, 3))
+
+        for ax, (x, y) in zip(axes, data_dict.values()):
+            ax.plot(x, y, ".k")
+            coef, p_val = stats.pearsonr(x, y)
+            ax.set_title(f"Pearson's r: {coef:.4f}\np-value: {p_val:.4f}")
+        plt.tight_layout()
+        plt.show()
+
+    np.random.seed(1)          # 보기 1 의 설정 모듈이 하는 일 (별도 실행이면 자동으로 된다)
+
+    if __name__ == "__main__":
+        main()
+
+    # 모집단 값을 적률로 정확히 구한다.
+    from fractions import Fraction as F
+    from math import comb
+
+    # E[X^k] = 20^k/(k+1),  E[eps^k] = 10^k/(k+1)
+    EX = [F(20**k, k + 1) for k in range(7)]
+    EE = [F(10**k, k + 1) for k in range(7)]
+    EU = lambda m: sum(comb(m, k) * EX[m - k] * EE[k] for k in range(m + 1))
+
+    EXU3 = EX[4] + 3 * EX[3] * EE[1] + 3 * EX[2] * EE[2] + EX[1] * EE[3]
+    cov = EXU3 - EX[1] * EU(3)
+    varX = EX[2] - EX[1] ** 2
+    varU3 = EU(6) - EU(3) ** 2
+    rho1 = float(cov) / np.sqrt(float(varX) * float(varU3))
+    print("자료 1 의 모집단 Pearson 상관")
+    print(f"  E[X U^3] = {EXU3} = {float(EXU3):.4f}")
+    print(f"  E[U^3]   = {EU(3)} = {float(EU(3)):.4f}")
+    print(f"  Cov      = {cov} = {float(cov):.4f}")
+    print(f"  Var(X)   = {varX} = {float(varX):.4f}")
+    print(f"  E[U^6]   = {EU(6)} = {float(EU(6)):.4f}")
+    print(f"  Var(U^3) = {varU3} = {float(varU3):.4f}")
+    print(f"  rho      = {rho1:.6f}")
+
+    # 자료 2 는 사인이 들어가 적률로 떨어지지 않으므로 수치적분으로 구한다.
+    from scipy import integrate
+    Es = integrate.dblquad(lambda e, x: np.sin(x + e) / 200, 0, 20, 0, 10)[0]
+    Exs = integrate.dblquad(lambda e, x: x * np.sin(x + e) / 200, 0, 20, 0, 10)[0]
+    Es2 = integrate.dblquad(lambda e, x: np.sin(x + e) ** 2 / 200, 0, 20, 0, 10)[0]
+    rho2 = (Exs - 10 * Es) / np.sqrt(float(varX) * (Es2 - Es ** 2))
+    print(f"\n자료 2 의 모집단 Pearson 상관 = {rho2:.6f}   (정확히 0 이 아니다)")
+
+    np.random.seed(1)          # 그림이 쓴 것과 같은 자료를 다시 얻는다
+    d = load_data()
+    print(f"\n{'자료':>4s} {'표본 r':>10s} {'모집단 rho':>11s} {'SE':>8s} {'z':>7s} {'p':>8s}")
+    pop = [0.0, rho1, rho2]
+    for k, (x, y) in d.items():
+        r, p = stats.pearsonr(x, y)
+        se = (1 - pop[k] ** 2) / np.sqrt(ARGS.size)
+        print(f"{k:4d} {r:+10.6f} {pop[k]:+11.6f} {se:8.6f} {(r - pop[k]) / se:+7.3f} {p:8.4f}")
+    ```
+
+    출력:
+
+    ```
+    자료 1 의 모집단 Pearson 상관
+      E[X U^3] = 233500/3 = 77833.3333
+      E[U^3]   = 5250 = 5250.0000
+      Cov      = 76000/3 = 25333.3333
+      Var(X)   = 100/3 = 33.3333
+      E[U^6]   = 394000000/7 = 56285714.2857
+      Var(U^3) = 201062500/7 = 28723214.2857
+      rho      = 0.818722
+
+    자료 2 의 모집단 Pearson 상관 = 0.027999   (정확히 0 이 아니다)
+
+      자료       표본 r     모집단 rho       SE       z        p
+       0  +0.034844   +0.000000 0.031623  +1.102   0.2710
+       1  +0.815408   +0.818722 0.010426  -0.318   0.0000
+       2  -0.018298   +0.027999 0.031598  -1.465   0.5633
+    ```
+
+    ![Pearson 상관: 세 자료](./img/correlation_tests_72.png)
+
+    손으로 적은 분수 $233500/3$, $76000/3$, $100/3$, $394000000/7$, $201062500/7$ 이 모두 맞고 $\rho = 0.818722$ 도 맞는다. 그림의 세 제목 $0.0348$, $0.8154$, $-0.0183$ 도 표의 표본값과 같다.
+
+    **언제 쓰는가**: 두 변수가 모두 연속형이고 **선형** 관계를 예상할 때. Pearson 의 $r$ 은 이상점에 민감하며 p-값이 정확하려면 이변량 정규성을 가정한다. 여기서는 $x$ 가 균등이고 $y$ 가 세제곱이라 그 가정이 깨져 있지만, $n = 1000$ 이라 p-값은 쓸 만하다.
 
 ---
 
@@ -126,37 +421,152 @@ Spearman의 $\rho_s$는 두 변수 사이의 **단조** 관계를 잰다. 원자
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> Spearman 순위상관 검정
+**보기 4.** <span class="diff easy" title="쉬움"></span> 자료 1 의 모집단 $\rho_s$ 가 딱 떨어진다. 그림은 $\rho_s = 0.0365,\; 0.9000,\; -0.0176$ 을 준다.
+
+**(1)** 보기 2에서 세제곱이 순위를 바꾸지 않음을 보았다. 이 사실과 복사 항등식 $\rho_s = 12\,E[F_X(X)F_Y(Y)] - 3$ 을 써서 자료 1 의 모집단 $\rho_s$ 를 구하시오.
+
+**(2)** 보기 3의 $\rho = 0.818722$ 와 견주면 $\rho_s$ 가 더 크다. 자료 2 의 모집단 $\rho_s$ 도 구해 세 표본값을 참값과 맞추시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import scipy.stats as stats
+??? success "풀이"
 
-# 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
-#   from load_data import load_data
+    **(1) 먼저 세제곱을 벗긴다.** $t \mapsto t^3$ 이 강한 증가함수이므로 $Y = U^3$ 의 순위는 $U = X+\varepsilon$ 의 순위와 **같다.** 따라서
 
-def main():
-    data_dict = load_data()
-    _, axes = plt.subplots(1, len(data_dict), figsize=(12, 3))
+    $$
+    \rho_s\big(X,\, U^3\big) = \rho_s\big(X,\, U\big)
+    $$
 
-    for ax, (x, y) in zip(axes, data_dict.values()):
-        ax.plot(x, y, ".k")
-        coef, p_val = stats.spearmanr(x, y)
-        ax.set_title(f"Spearman rho: {coef:.4f}\np-value: {p_val:.4f}")
-    plt.tight_layout()
-    plt.show()
+    이고, 세제곱은 계산에서 아예 사라진다. **자료 1 의 순위 상관을 정하는 것은 곡선이 아니라 잡음 $\varepsilon$ 뿐이다.**
 
-if __name__ == "__main__":
-    main()
-```
+    이제 연속 주변분포에 대해 성립하는 복사 항등식
 
-![Spearman 순위상관: 세 자료](./img/correlation_tests_105.png)
+    $$
+    \rho_s = 12\,E\!\left[F_X(X)\,F_U(U)\right] - 3
+    $$
 
-단조 자료에서 Spearman이 Pearson보다 높은 값을 준다. 사인 자료에서는 둘 다 0 근처인데, 관계가 단조가 아니어서 순위로 바꾸는 것도 도움이 되지 않기 때문이다.
+    을 쓴다. $F_X(x) = x/20$ 이고 $F_U$ 는 $U(0,20)$ 과 $U(0,10)$ 의 합성곱이라 **사다리꼴**이다.
 
-**언제 쓰는가**: 관계가 단조일 수 있으나 반드시 선형은 아닐 때, 또는 자료에 이상점이 있거나 순서형일 때.
+    $$
+    F_U(u) =
+    \begin{cases}
+    \dfrac{u^2}{400}, & 0 \le u \le 10,\\[6pt]
+    \dfrac14 + \dfrac{u-10}{20}, & 10 \le u \le 20,\\[6pt]
+    1 - \dfrac{(30-u)^2}{400}, & 20 \le u \le 30.
+    \end{cases}
+    $$
+
+    결합밀도가 $1/200$ 이므로
+
+    $$
+    E\!\left[F_X(X)F_U(U)\right]
+    = \frac{1}{200}\int_0^{20}\!\!\int_0^{10} \frac{x}{20}\,F_U(x+e)\,de\,dx
+    = \frac{13}{40}
+    $$
+
+    이고 따라서
+
+    $$
+    \rho_s = 12 \times \frac{13}{40} - 3 = \frac{39}{10} - 3 = \frac{9}{10} = 0.9
+    $$
+
+    이다. **정확히 $0.9$ 다.**
+
+    **(2) $\rho_s > \rho$ 인 까닭은 세제곱뿐이다.** 보기 3의 $\rho = 0.818722$ 는 세제곱의 굽음에 값을 깎인 것이고, $\rho_s = 0.9$ 는 그 굽음을 보지 못한다. 실제로 보기 2에서 세제곱을 벗긴 $(x,\, x+\varepsilon)$ 의 표본 Pearson 이 $0.894142$ 로 $0.9$ 에 다가간다. **차이 $0.0846$ 은 전부 "세제곱" 한 단어에서 온다.**
+
+    자료 2 는 닫힌 꼴이 없으므로 아주 큰 표본으로 잰다. $\rho_s = 0.027899 \pm 0.000549$ 로 보기 3의 Pearson 참값 $0.027999$ 와 사실상 같다. 세 표본값을 참값과 맞추면
+
+    | 자료 | 표본 $r_s$ | 모집단 $\rho_s$ | $\operatorname{SE}$(어림) | $z$ |
+    |---|---|---|---|---|
+    | 0 | $+0.036465$ | $0$ | $0.031623$ | $+1.153$ |
+    | 1 | $+0.900004$ | $+0.900000$ | $0.006008$ | $+0.001$ |
+    | 2 | $-0.017612$ | $+0.027899$ | $0.031598$ | $-1.440$ |
+
+    이다. 자료 1 의 $z = +0.001$ 은 **운이 좋았을 뿐**이다. 표준오차가 $0.006$ 이니 보통은 $0.894$ 와 $0.906$ 사이 어디에 떨어진다. 소수 다섯째 자리까지 맞은 것을 공식이 그만큼 정확하다는 뜻으로 읽으면 안 된다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+
+    # 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
+    #   from load_data import load_data
+
+    def main():
+        data_dict = load_data()
+        _, axes = plt.subplots(1, len(data_dict), figsize=(12, 3))
+
+        for ax, (x, y) in zip(axes, data_dict.values()):
+            ax.plot(x, y, ".k")
+            coef, p_val = stats.spearmanr(x, y)
+            ax.set_title(f"Spearman rho: {coef:.4f}\np-value: {p_val:.4f}")
+        plt.tight_layout()
+        plt.show()
+
+    np.random.seed(1)          # 보기 1 의 설정 모듈이 하는 일 (별도 실행이면 자동으로 된다)
+
+    if __name__ == "__main__":
+        main()
+
+    # 복사 항등식을 기호적분으로 확인한다.
+    import sympy as sp
+
+    x_, e_ = sp.symbols('x e', real=True)
+    # U = X + eps 의 분포함수 (U(0,20) 과 U(0,10) 의 합성곱, 사다리꼴)
+    u_ = x_ + e_
+    F_U = sp.Piecewise((u_**2 / 400, u_ <= 10),
+                       (sp.Rational(1, 4) + (u_ - 10) / 20, u_ <= 20),
+                       (1 - (30 - u_)**2 / 400, True))
+    # E[F_X(X) F_U(U)],  F_X(x) = x/20,  결합밀도 1/200
+    EFF = sp.integrate(sp.integrate((x_ / 20) * F_U / 200, (e_, 0, 10)), (x_, 0, 20))
+    EFF = sp.nsimplify(sp.simplify(EFF))
+    rho_s = sp.simplify(12 * EFF - 3)
+    print(f"E[F_X(X) F_U(U)] = {EFF} = {float(EFF):.6f}")
+    print(f"rho_s = 12 E[...] - 3 = {rho_s} = {float(rho_s):.6f}")
+
+    # 아주 큰 표본으로 확인
+    rng = np.random.default_rng(99)
+    vals = [stats.spearmanr(a := rng.random(200_000) * 20,
+                            (a + rng.random(200_000) * 10) ** 3).statistic
+            for _ in range(20)]
+    print(f"모의 rho_s = {np.mean(vals):.6f} +- {np.std(vals) / np.sqrt(20):.6f}")
+
+    # 자료 2 의 모집단 rho_s 는 닫힌 꼴이 없으므로 모의로 잰다
+    vals2 = [stats.spearmanr(a := rng.random(200_000) * 20,
+                             np.sin(a + rng.random(200_000) * 10)).statistic
+             for _ in range(20)]
+    rho_s2 = np.mean(vals2)
+    print(f"자료 2 모의 rho_s = {rho_s2:.6f} +- {np.std(vals2) / np.sqrt(20):.6f}")
+
+    np.random.seed(1)          # 그림이 쓴 것과 같은 자료를 다시 얻는다
+    d = load_data()
+    pop = [0.0, float(rho_s), rho_s2]
+    print(f"\n{'자료':>4s} {'표본 r_s':>10s} {'모집단':>10s} {'SE':>8s} {'z':>7s}")
+    for k, (x, y) in d.items():
+        rs = stats.spearmanr(x, y).statistic
+        se = (1 - pop[k] ** 2) / np.sqrt(ARGS.size)
+        print(f"{k:4d} {rs:+10.6f} {pop[k]:+10.6f} {se:8.6f} {(rs - pop[k]) / se:+7.3f}")
+    ```
+
+    출력:
+
+    ```
+    E[F_X(X) F_U(U)] = 13/40 = 0.325000
+    rho_s = 12 E[...] - 3 = 9/10 = 0.900000
+    모의 rho_s = 0.900015 +- 0.000088
+    자료 2 모의 rho_s = 0.027899 +- 0.000549
+
+      자료     표본 r_s        모집단       SE       z
+       0  +0.036465  +0.000000 0.031623  +1.153
+       1  +0.900004  +0.900000 0.006008  +0.001
+       2  -0.017612  +0.027899 0.031598  -1.440
+    ```
+
+    ![Spearman 순위상관: 세 자료](./img/correlation_tests_105.png)
+
+    기호적분이 $13/40$ 과 $9/10$ 을 정확히 주고, $200{,}000$ 짜리 표본 스무 번의 평균 $0.900015 \pm 0.000088$ 이 그것과 맞는다. 그림의 세 제목도 표의 표본값과 같다.
+
+    **언제 쓰는가**: 관계가 단조일 수 있으나 반드시 선형은 아닐 때, 또는 자료에 이상점이 있거나 순서형일 때. 자료 2 를 보면 **단조가 아닌 관계에는 순위도 도움이 되지 않는다.** $\rho_s$ 와 $\rho$ 가 $0.0279$ 와 $0.0280$ 으로 사실상 같다.
 
 ---
 
@@ -174,37 +584,168 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> Kendall의 타우 검정
+**보기 5.** <span class="diff easy" title="쉬움"></span> 자료 1 의 모집단 $\tau$ 를 기하확률로 구하기. 그림은 $\tau = 0.0238,\; 0.7094,\; -0.0123$ 을 준다.
+
+**(1)** 자료 1 의 모집단 $\tau$ 를 **닫힌 꼴로** 구하시오. 두 관측 $(X_1, U_1)$, $(X_2, U_2)$ 를 뽑았을 때 $D = X_1 - X_2$ 와 $G = \varepsilon_1 - \varepsilon_2$ 의 분포를 쓰면 된다.
+
+**(2)** 같은 자료에서 $\tau = 0.708$, $\rho_s = 0.900$, $\rho = 0.819$ 로 셋이 모두 다르다. $\tau$ 가 가장 작은 것이 관계가 약하다는 뜻인가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import scipy.stats as stats
+??? success "풀이"
 
-# 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
-#   from load_data import load_data
+    **(1) 부호만 보면 되므로 세제곱이 또 사라진다.** $\tau$ 는 두 쌍의 일치 확률에서 불일치 확률을 뺀 것이고, 세제곱은 $U_1 - U_2$ 의 **부호를 바꾸지 않으므로**
 
-def main():
-    data_dict = load_data()
-    _, axes = plt.subplots(1, len(data_dict), figsize=(12, 3))
+    $$
+    \tau\big(X,\, U^3\big) = \tau\big(X,\, U\big)
+    $$
 
-    for ax, (x, y) in zip(axes, data_dict.values()):
-        ax.plot(x, y, ".k")
-        coef, p_val = stats.kendalltau(x, y)
-        ax.set_title(f"Kendall's tau: {coef:.4f}\np-value: {p_val:.4f}")
-    plt.tight_layout()
-    plt.show()
+    이다. $D = X_1 - X_2$, $G = \varepsilon_1 - \varepsilon_2$ 로 두면 $U_1 - U_2 = D + G$ 이고 $D$ 와 $G$ 는 독립이다. 그러면
 
-if __name__ == "__main__":
-    main()
-```
+    $$
+    \tau = P\big(D(D+G) > 0\big) - P\big(D(D+G) < 0\big) = 1 - 2\,P\big(D(D+G) < 0\big)
+    $$
 
-![Kendall의 타우: 세 자료](./img/correlation_tests_143.png)
+    이다. **곧 $\tau$ 를 정하는 것은 "잡음이 순서를 뒤집을 확률" 하나뿐이다.**
 
-Kendall의 $\tau$는 세 자료 모두에서 Spearman과 같은 방향을 가리키되 절댓값이 작다. 척도가 다르기 때문이며, 두 계수를 직접 비교하면 안 된다.
+    두 차이는 균등분포의 차이이므로 **삼각분포**다.
 
-**언제 쓰는가**: Spearman의 $\rho_s$와 비슷한 상황이지만, 표본이 작거나 쌍별 일치에 기반한 더 해석하기 쉬운 측도를 원할 때 선호된다.
+    $$
+    f_D(d) = \frac{20 - \lvert d \rvert}{400}\ \ (\lvert d \rvert < 20),
+    \qquad
+    f_G(g) = \frac{10 - \lvert g \rvert}{100}\ \ (\lvert g \rvert < 10)
+    $$
+
+    둘 다 $0$ 에 대칭이므로 $P(D(D+G) < 0) = 2\,P(D > 0,\; D + G < 0)$ 이다. $G > -10$ 이므로 $d < 10$ 인 자리만 기여하고, $0 < d < 10$ 에서
+
+    $$
+    P(G < -d) = \int_{-10}^{-d}\frac{10+g}{100}\,dg = \frac{(10-d)^2}{200}
+    $$
+
+    이다. 따라서
+
+    $$
+    P(D>0,\, D+G<0) = \int_0^{10}\frac{20-d}{400}\cdot\frac{(10-d)^2}{200}\,dd
+    = \frac{1}{80000}\int_0^{10}(20-d)(10-d)^2\,dd
+    $$
+
+    이고, $u = 10-d$ 로 바꾸면
+
+    $$
+    \int_0^{10}(10+u)u^2\,du = \left[\frac{10u^3}{3} + \frac{u^4}{4}\right]_0^{10}
+    = \frac{10000}{3} + 2500 = \frac{17500}{3}
+    $$
+
+    이므로 $P(D>0,\, D+G<0) = \dfrac{17500}{240000} = \dfrac{7}{96}$ 이다. 그러면
+
+    $$
+    P\big(D(D+G)<0\big) = \frac{7}{48},
+    \qquad
+    \tau = 1 - 2\cdot\frac{7}{48} = \frac{17}{24} = 0.708333
+    $$
+
+    이다. 곧 **무작위로 고른 두 점 가운데 $14.58\%$ 에서 잡음이 순서를 뒤집는다.**
+
+    **(2) 아니다. 눈금이 다를 뿐이다.** 세 값은 같은 관계를 서로 다른 자로 잰 것이다.
+
+    | 측도 | 모집단 값 | 재는 것 |
+    |---|---|---|
+    | Pearson $\rho$ | $0.818722$ | 직선에서 벗어난 정도까지 벌한다 |
+    | Spearman $\rho_s$ | $0.900000$ | 순위의 선형 상관 |
+    | **Kendall $\tau$** | $17/24 = 0.708333$ | **순서가 맞는 쌍의 비율에서 틀린 쌍의 비율을 뺀 것** |
+
+    $\tau$ 의 눈금은 아주 구체적이다. $\tau = 0.708$ 은 **일치쌍이 $85.4\%$, 불일치쌍이 $14.6\%$** 라는 뜻이다. $\rho_s = 0.9$ 에는 그런 직접적인 셈이 없다. 그러므로 $\tau$ 가 작은 것은 약하다는 신호가 아니라 **쌍을 세는 자가 더 촘촘하다는 뜻**이고, 두 계수를 숫자 그대로 견주면 안 된다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+    from fractions import Fraction as F
+
+    # 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
+    #   from load_data import load_data
+
+    def main():
+        data_dict = load_data()
+        _, axes = plt.subplots(1, len(data_dict), figsize=(12, 3))
+
+        for ax, (x, y) in zip(axes, data_dict.values()):
+            ax.plot(x, y, ".k")
+            coef, p_val = stats.kendalltau(x, y)
+            ax.set_title(f"Kendall's tau: {coef:.4f}\np-value: {p_val:.4f}")
+        plt.tight_layout()
+        plt.show()
+
+    np.random.seed(1)          # 보기 1 의 설정 모듈이 하는 일 (별도 실행이면 자동으로 된다)
+
+    if __name__ == "__main__":
+        main()
+
+    tau_exact = F(17, 24)
+    print(f"자료 1 의 모집단 tau = {tau_exact} = {float(tau_exact):.6f}")
+
+    # 유도의 중간값들을 수치적분으로 확인한다.
+    from scipy import integrate
+    fD = lambda d: (20 - abs(d)) / 400          # D = X1 - X2 의 밀도 (삼각)
+    fG = lambda g: (10 - abs(g)) / 100          # G = e1 - e2 의 밀도 (삼각)
+    PG = lambda d: integrate.quad(fG, -10, -d)[0]
+    half = integrate.quad(lambda d: fD(d) * PG(d), 0, 10)[0]
+    print(f"  P(D>0, D+G<0) = {half:.8f}   손계산 7/96 = {float(F(7,96)):.8f}")
+    print(f"  P(부호 뒤집힘) = {2*half:.8f}   손계산 7/48 = {float(F(7,48)):.8f}")
+    print(f"  tau = 1 - 2*{2*half:.6f} = {1 - 4*half:.6f}")
+
+    rng = np.random.default_rng(99)
+    vals = [stats.kendalltau(a := rng.random(100_000) * 20,
+                             (a + rng.random(100_000) * 10) ** 3).statistic
+            for _ in range(20)]
+    print(f"  모의 tau = {np.mean(vals):.6f} +- {np.std(vals) / np.sqrt(20):.6f}")
+
+    vals2 = [stats.kendalltau(a := rng.random(100_000) * 20,
+                              np.sin(a + rng.random(100_000) * 10)).statistic
+             for _ in range(20)]
+    tau2 = np.mean(vals2)
+    print(f"\n자료 2 모의 tau = {tau2:.6f} +- {np.std(vals2) / np.sqrt(20):.6f}")
+
+    n = ARGS.size
+    se0 = np.sqrt(2 * (2 * n + 5) / (9 * n * (n - 1)))   # H0 아래 tau 의 표준편차
+    print(f"\nH0 아래 sd(tau) = sqrt(2(2n+5)/(9n(n-1))) = {se0:.6f}")
+
+    np.random.seed(1)          # 그림이 쓴 것과 같은 자료를 다시 얻는다
+    d = load_data()
+    pop = [0.0, float(tau_exact), tau2]
+    print(f"\n{'자료':>4s} {'표본 tau':>10s} {'모집단':>10s} {'비교용 rho_s':>12s}")
+    for k, (x, y) in d.items():
+        t = stats.kendalltau(x, y).statistic
+        rs = stats.spearmanr(x, y).statistic
+        print(f"{k:4d} {t:+10.6f} {pop[k]:+10.6f} {rs:+12.6f}")
+    ```
+
+    출력:
+
+    ```
+    자료 1 의 모집단 tau = 17/24 = 0.708333
+      P(D>0, D+G<0) = 0.07291667   손계산 7/96 = 0.07291667
+      P(부호 뒤집힘) = 0.14583333   손계산 7/48 = 0.14583333
+      tau = 1 - 2*0.145833 = 0.708333
+      모의 tau = 0.708444 +- 0.000187
+
+    자료 2 모의 tau = 0.018885 +- 0.000400
+
+    H0 아래 sd(tau) = sqrt(2(2n+5)/(9n(n-1))) = 0.021119
+
+      자료     표본 tau        모집단    비교용 rho_s
+       0  +0.023764  +0.000000    +0.036465
+       1  +0.709373  +0.708333    +0.900004
+       2  -0.012344  +0.018885    -0.017612
+    ```
+
+    ![Kendall의 타우: 세 자료](./img/correlation_tests_143.png)
+
+    손으로 구한 $7/96$ 과 $7/48$ 이 수치적분과 소수 여덟째 자리까지 맞고, $\tau = 17/24 = 0.708333$ 도 $100{,}000$ 짜리 모의실험의 $0.708444 \pm 0.000187$ 과 맞는다. 표본값 $0.709373$ 은 참값에서 $0.001$ 떨어져 있다.
+
+    자료 0 의 $\tau = 0.0238$ 은 귀무분포의 표준편차 $0.0211$ 의 $1.13$ 배라 유의하지 않다. 자료 2 는 참값이 $0.0189$ 인데 표본이 $-0.0123$ 으로 **부호가 반대**이고, 이는 보기 3·4 에서 Pearson 과 Spearman 이 겪은 것과 같은 일이다. $n = 1000$ 으로는 $0.02$ 짜리 연관을 잡을 수 없다.
+
+    **언제 쓰는가**: Spearman 의 $\rho_s$ 와 비슷한 상황이지만, 표본이 작거나 쌍별 일치에 기반한 더 해석하기 쉬운 측도를 원할 때 선호된다.
 
 ---
 
@@ -223,61 +764,160 @@ Kendall의 $\tau$는 세 자료 모두에서 Spearman과 같은 방향을 가리
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 나이와 소득
-
-</div>
-
-**문제**: $\alpha = 0.05$에서 나이와 소득이 관련되어 있는지 검정하라.
+**보기 6.** <span class="diff easy" title="쉬움"></span> 순위 상관이 $1$ 일 때 p-값은 믿을 수 있는가. $\alpha = 0.05$ 에서 나이와 소득이 관련되어 있는지 검정한다.
 
 ```
 age    = [18, 25, 57, 45, 26, 64, 37, 40, 24, 33]
 income = [15000, 29000, 68000, 52000, 32000, 80000, 41000, 45000, 26000, 33000]
 ```
 
-#### 풀이
+세 계수는 $0.9923$, $1.0000$, $1.0000$ 이고 p-값은 셋 다 `0.0000` 으로 찍힌다.
 
-세 검정 모두 $p \approx 0.0000$을 주어 나이와 소득 사이에 강하고 통계적으로 유의한 관계가 있음을 나타낸다.
+**(1)** 순위 측도 둘이 정확히 $1$ 인 것은 자료에 대해 무엇을 말하는가. 관계가 **지수**인지 직선인지는 어떻게 가리는가.
 
-```python
-import matplotlib.pyplot as plt
-import scipy.stats as stats
+**(2)** 세 p-값을 자릿수까지 열어 견주시오. 그 가운데 하나는 숫자가 아니라 **반올림 오차의 산물**이다. 어느 것이며, 순위 측도의 정확한 p-값은 얼마인가.
 
-def main():
-    x = [18, 25, 57, 45, 26, 64, 37, 40, 24, 33]
-    y = [15_000, 29_000, 68_000, 52_000, 32_000, 80_000, 41_000, 45_000, 26_000, 33_000]
+</div>
 
-    coef, p_val = stats.pearsonr(x, y)
-    print(f"Pearson's r:   coef = {coef:.4f},  p-value = {p_val:.4f}")
+??? success "풀이"
 
-    coef, p_val = stats.spearmanr(x, y)
-    print(f"Spearman rho:  coef = {coef:.4f},  p-value = {p_val:.4f}")
+    **(1) $\rho_s = \tau = 1$ 은 "순서가 완벽히 맞는다"는 뜻뿐이다.** 나이 오름차순으로 늘어놓으면 소득도 빠짐없이 오름차순이다.
 
-    coef, p_val = stats.kendalltau(x, y)
-    print(f"Kendall's tau: coef = {coef:.4f},  p-value = {p_val:.4f}")
+    ```
+    나이 : 18  24  25  26  33  37  40  45  57  64
+    소득 : 15  26  29  32  33  41  45  52  68  80   (천 달러)
+    ```
 
-    fig, ax = plt.subplots(figsize=(12, 3))
-    ax.plot(x, y, "ok")
-    ax.set_xlabel("Age")
-    ax.set_ylabel("Income")
-    plt.show()
+    순위 측도는 **순서만 보고 간격은 보지 않으므로** 여기서 천장에 닿는다. 반면 Pearson 은 점들이 **한 직선 위에** 있어야 $1$ 이 되고, 여기서는 $0.9923$ 에 그친다. 곧 $0.0077$ 의 차이는 "순서는 완벽한데 간격이 꼭 비례하지는 않는다"는 뜻이다.
 
-if __name__ == "__main__":
-    main()
-```
+    **"지수 관계"는 아니다.** 어느 눈금에서 가장 직선에 가까운지 Pearson 으로 재면
 
-출력:
+    | 눈금 | $r$ |
+    |---|---|
+    | **$y$ 대 $x$ (직선)** | $\mathbf{0.992285}$ |
+    | $\log y$ 대 $x$ (지수) | $0.957012$ |
+    | $\log y$ 대 $\log x$ (거듭제곱) | $0.982551$ |
 
-```
-Pearson's r:   coef = 0.9923,  p-value = 0.0000
-Spearman rho:  coef = 1.0000,  p-value = 0.0000
-Kendall's tau: coef = 1.0000,  p-value = 0.0000
-```
+    이다. **원래 눈금의 $0.992$ 가 가장 크다.** 지수 모형으로 바꾸면 오히려 나빠지므로 이 자료는 지수가 아니라 **직선에 가장 가깝다.** $\rho_s = 1$ 인데 $r < 1$ 인 것은 곡선이기 때문이 아니라 단지 점들이 직선에서 조금씩 벗어나 있기 때문이다.
 
-![세 검정의 비교](./img/correlation_tests_195.png)
+    **(2) Spearman 의 p-값이 가짜다.**
 
-지수 관계라 단조이지만 선형은 아니다. 순위만 보는 Spearman과 Kendall이 정확히 1.0을 주는 반면 Pearson은 0.9923에 그친다.
+    | 검정 | p-값 |
+    |---|---|
+    | Pearson | $1.535456 \times 10^{-8}$ |
+    | **Spearman** | $6.646897 \times 10^{-64}$ |
+    | Kendall | $5.511464 \times 10^{-7}$ |
 
-**해석**: 모든 p-값이 $\alpha = 0.05$보다 훨씬 작으므로 $H_0: \rho = 0$을 기각하고 이 표본에서 나이와 소득 사이에 통계적으로 유의한 양의 관계가 있다고 결론짓는다. 다만 이것이 인과관계를 확립하지는 않는다. 경력, 학력, 업종 같은 교란요인이 두 변수 모두에 영향을 줄 수 있다.
+    Spearman 의 값은 $t = r_s\sqrt{(n-2)/(1-r_s^2)}$ 의 **분모가 $0$ 으로 가면서 생긴 것**이다. 부동소수점에서 $r_s$ 는 $1$ 이 아니라 $0.9999999999999999$ 로 저장되고, 그래서 $1 - r_s^2 = 2.22 \times 10^{-16}$ 이라는 **반올림 찌꺼기**가 남는다. 이것을 분모에 넣으면
+
+    $$
+    t = \frac{1 \times \sqrt{8}}{\sqrt{2.22\times10^{-16}}} = 1.898 \times 10^{8}
+    $$
+
+    이 되고, 자유도 $8$ 인 $t$ 의 꼬리가 $10^{-64}$ 로 떨어진다. **이 수에는 자료의 정보가 조금도 들어 있지 않다.** 찌꺼기의 크기가 조금만 달라져도 지수가 통째로 바뀐다.
+
+    **정확한 값은 순열에서 나온다.** $H_0$ 아래 $n = 10$ 의 순위 배열은 $10! = 3{,}628{,}800$ 가지이고 모두 똑같이 그럴듯하다. $\lvert \rho_s \rvert = 1$ 이 되는 것은 **항등 배열과 거꾸로 배열 둘뿐**이고, $\lvert \tau \rvert = 1$ 도 같은 둘뿐이다. 따라서 두 검정의 정확 양측 p-값은
+
+    $$
+    p = \frac{2}{10!} = \frac{2}{3628800} = 5.511464 \times 10^{-7}
+    $$
+
+    이다. **`kendalltau` 가 돌려준 값과 자릿수 끝까지 같다.** 작은 표본에서 동점이 없으면 `scipy` 가 정확분포를 쓰기 때문이다. `spearmanr` 은 그러지 않고 $t$ 근사를 쓰므로, 참값보다 $10^{57}$ 배 작은 수를 돌려준다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.stats as stats
+    from math import factorial
+
+    def main():
+        x = [18, 25, 57, 45, 26, 64, 37, 40, 24, 33]
+        y = [15_000, 29_000, 68_000, 52_000, 32_000, 80_000, 41_000, 45_000, 26_000, 33_000]
+
+        coef, p_val = stats.pearsonr(x, y)
+        print(f"Pearson's r:   coef = {coef:.4f},  p-value = {p_val:.4f}")
+
+        coef, p_val = stats.spearmanr(x, y)
+        print(f"Spearman rho:  coef = {coef:.4f},  p-value = {p_val:.4f}")
+
+        coef, p_val = stats.kendalltau(x, y)
+        print(f"Kendall's tau: coef = {coef:.4f},  p-value = {p_val:.4f}")
+
+        fig, ax = plt.subplots(figsize=(12, 3))
+        ax.plot(x, y, "ok")
+        ax.set_xlabel("Age")
+        ax.set_ylabel("Income")
+        plt.show()
+
+    if __name__ == "__main__":
+        main()
+
+    x = np.array([18, 25, 57, 45, 26, 64, 37, 40, 24, 33])
+    y = np.array([15_000, 29_000, 68_000, 52_000, 32_000, 80_000,
+                  41_000, 45_000, 26_000, 33_000])
+    n = len(x)
+
+    # (1) 순위가 완전히 맞아떨어지는가
+    o = np.argsort(x)
+    print(f"\n나이 오름차순 : {x[o].tolist()}")
+    print(f"그때의 소득    : {y[o].tolist()}")
+    print(f"소득도 오름차순인가: {bool(np.all(np.diff(y[o]) > 0))}")
+
+    # 지수 관계인가 — 세 가지 눈금에서 Pearson 을 재 본다
+    print(f"\nr(x, y)         = {stats.pearsonr(x, y).statistic:.6f}   (직선)")
+    print(f"r(x, log y)     = {stats.pearsonr(x, np.log(y)).statistic:.6f}   (지수)")
+    print(f"r(log x, log y) = {stats.pearsonr(np.log(x), np.log(y)).statistic:.6f}   (거듭제곱)")
+
+    # (2) 세 p-값
+    print(f"\nPearson  p = {stats.pearsonr(x, y).pvalue:.6e}")
+    rs = stats.spearmanr(x, y)
+    print(f"Spearman p = {rs.pvalue:.6e}   <- 이 값은 무엇인가")
+    print(f"  r_s = {rs.statistic!r}")
+    print(f"  1 - r_s^2 = {1 - rs.statistic**2:.6e}  (0 이어야 하는데 반올림 오차가 남는다)")
+    print(f"  t = r_s sqrt((n-2)/(1-r_s^2)) = "
+          f"{rs.statistic * np.sqrt((n-2)/(1-rs.statistic**2)):.6e}")
+    kt = stats.kendalltau(x, y)
+    print(f"Kendall  p = {kt.pvalue:.6e}")
+    exact = 2 / factorial(n)
+    print(f"\n순위가 완전히 맞을 확률 (정확 순열): 2/{n}! = {exact:.6e}")
+    print(f"  Kendall 의 p 와 같은가: {kt.pvalue == exact}")
+    print(f"  Spearman 의 p 와의 비: {rs.pvalue / exact:.3e}")
+    ```
+
+    출력:
+
+    ```
+    Pearson's r:   coef = 0.9923,  p-value = 0.0000
+    Spearman rho:  coef = 1.0000,  p-value = 0.0000
+    Kendall's tau: coef = 1.0000,  p-value = 0.0000
+
+    나이 오름차순 : [18, 24, 25, 26, 33, 37, 40, 45, 57, 64]
+    그때의 소득    : [15000, 26000, 29000, 32000, 33000, 41000, 45000, 52000, 68000, 80000]
+    소득도 오름차순인가: True
+
+    r(x, y)         = 0.992285   (직선)
+    r(x, log y)     = 0.957012   (지수)
+    r(log x, log y) = 0.982551   (거듭제곱)
+
+    Pearson  p = 1.535456e-08
+    Spearman p = 6.646897e-64   <- 이 값은 무엇인가
+      r_s = 0.9999999999999999
+      1 - r_s^2 = 2.220446e-16  (0 이어야 하는데 반올림 오차가 남는다)
+      t = r_s sqrt((n-2)/(1-r_s^2)) = 1.898125e+08
+    Kendall  p = 5.511464e-07
+
+    순위가 완전히 맞을 확률 (정확 순열): 2/10! = 5.511464e-07
+      Kendall 의 p 와 같은가: True
+      Spearman 의 p 와의 비: 1.206e-57
+    ```
+
+    ![세 검정의 비교](./img/correlation_tests_195.png)
+
+    손으로 적은 $2/10! = 5.511464\times10^{-7}$ 이 `kendalltau` 의 p-값과 정확히 같다. 세 눈금의 $r$ 값 $0.992285 > 0.982551 > 0.957012$ 도 맞는다.
+
+    **해석**: 세 검정 모두 $\alpha = 0.05$ 에서 $H_0$ 을 기각하므로 결론은 같다. 나이와 소득 사이에 통계적으로 유의한 양의 관계가 있다. 다만 이것이 인과관계를 확립하지는 않는다. 경력, 학력, 업종 같은 교란요인이 두 변수 모두에 영향을 줄 수 있다.
+
+    **그리고 p-값의 자릿수를 근거로 쓰지 말라.** $10^{-64}$ 가 $10^{-7}$ 보다 "더 강한 증거"가 아니다. $n = 10$ 짜리 자료가 줄 수 있는 가장 강한 증거는 **$2/10!$ 이 전부**이고, 그보다 작은 수가 찍혔다면 그것은 자료가 아니라 산술에서 나온 것이다.
 
 ## 연습문제
 

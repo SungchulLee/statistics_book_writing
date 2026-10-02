@@ -132,38 +132,147 @@ Pearson을 쓸 때:
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 단조 곡선에서의 Spearman
+**보기 2.** <span class="diff easy" title="쉬움"></span> 단조 곡선에서의 Spearman. 보기 1 의 자료 $x = 1,\ldots,8$, $y = e^x$ 를 코드로 다룬다. $r_s = 1$ 이고 Pearson $r = 0.7758$ 이다.
+
+**(1)** $y$ 대신 $\log y$ 를 쓰면 두 계수가 각각 어떻게 되는가. 그 까닭을 한 문장으로 적으시오.
+
+**(2)** Pearson 이 $1$ 에 그렇게 못 미치는 까닭을 **수로** 적으시오. 마지막 점 $(8,\ e^8)$ 이 $S_{yy}$ 와 $S_{xy}$ 에서 차지하는 몫을 구하시오.
+
+**(3)** `stats.spearmanr` 가 돌려주는 p-값이 `0.000000` 으로 찍힌다. 정말 $0$ 인가. $n = 8$ 에서 $r_s = 1$ 의 **정확한** p-값을 구하시오.
+
+**(4)** 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# y 는 x 의 지수함수다. 곡선이지만 x 가 커지면 y 도 반드시 커지는 단조 관계다.
-x = np.array([1, 2, 3, 4, 5, 6, 7, 8])
-y = np.exp(x)
+    **(1) 로그를 씌우면 Pearson 만 움직인다.** $\log y = x$ 이므로 $(x, \log y)$ 는 **완전한 직선**이고 Pearson $r = 1$ 이 된다. Spearman 은 $1$ 그대로다.
 
-# 스피어만은 값 대신 순위만 보므로 단조이기만 하면 정확히 1 이 된다.
-r_s, p_value = stats.spearmanr(x, y)
-print(f"Spearman r_s = {r_s:.4f}, p-value = {p_value:.6f}")
+    $$
+    \begin{array}{l|cc}
+     & (x,\ y) & (x,\ \log y) \\ \hline
+    \text{Pearson } r & 0.7758 & 1 \\
+    \text{Spearman } r_s & 1 & 1
+    \end{array}
+    $$
 
-# 피어슨은 직선에서 얼마나 벗어났는지를 재므로 1 에 못 미친다.
-# 관계가 곡선일 때 두 측도가 갈리는 전형적인 모습이다.
-r_p, p_p = stats.pearsonr(x, y)
-print(f"Pearson  r   = {r_p:.4f}, p-value = {p_p:.6f}")
-```
+    **$\log$ 가 증가함수이기 때문이다.** 증가함수는 순위를 하나도 바꾸지 않으므로 순위만 보는 Spearman 은 어떤 단조변환에도 불변이다. 반대로 Pearson 은 **값**을 보므로 변환에 따라 춤춘다. 3.4절에서 상관계수가 불변인 변환은 **양의 일차변환** $y \mapsto \gamma y + \delta$ 까지였다는 것을 떠올리면 된다. $\log$ 는 일차변환이 아니다.
 
-출력:
+    실무적으로는 이 말이다. **Pearson 이 작게 나왔을 때 "관계가 약하다" 가 아니라 "내가 잘못된 눈금에서 보고 있다" 일 수 있다.**
 
-```
-Spearman r_s = 1.0000, p-value = 0.000000
-Pearson  r   = 0.7758, p-value = 0.023636
-```
+    **(2) 지수함수는 마지막 점에 몰린다.** $y$ 의 평균은
 
-$y = e^x$은 완전한 **단조** 관계지만 선형은 아니다. Spearman은 순위만 보므로 정확히 1.0을 주고, Pearson은 곡률 때문에 0.776에 그친다.
+    $$
+    \bar y = \frac{1}{8}\sum_{k=1}^{8} e^k = 589.278
+    $$
 
-이것이 두 계수의 차이를 가장 선명하게 보여주는 예다. "관계가 있는가"를 묻는다면 Spearman이, "직선 관계가 있는가"를 묻는다면 Pearson이 맞는 도구다.
+    인데 마지막 값 $e^8 = 2980.958$ 은 그 **5 배**다. 편차 제곱합에서 이 한 점이 차지하는 몫을 센다.
+
+    $$
+    \frac{(e^8 - \bar y)^2}{S_{yy}} = \frac{(2980.958 - 589.278)^2}{7{,}498{,}954} = \frac{5{,}720{,}132}{7{,}498{,}954} = 0.7628
+    $$
+
+    **$y$ 의 변동 가운데 $76.3\%$ 가 점 하나에서 나온다.** 마지막 두 점을 합치면 $79.7\%$ 다. $S_{xy}$ 에서도 마찬가지로 그 점 혼자 $60.8\%$ 를 낸다.
+
+    그런데 $x$ 쪽은 $1$ 부터 $8$ 까지 고르게 퍼져 있어 $S_{xx} = n(n^2-1)/12 = 8\cdot63/12 = 42$ 이고, 마지막 점의 몫은 $3.5^2/42 = 29.2\%$ 에 지나지 않는다. **$x$ 는 고르고 $y$ 는 한쪽에 쏠려 있다.** 직선으로는 이 둘을 동시에 맞출 수 없으니 $r$ 이 $1$ 에서 멀어진다.
+
+    $$
+    r = \frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}} = \frac{13768.872}{\sqrt{42 \times 7498953.8}} = 0.775842
+    $$
+
+    **(3) `0.000000` 은 $0$ 이 아니다.** 여기서 멈추고 따져 볼 만하다.
+
+    $n = 8$ 이고 $x$ 에 동점이 없으므로, $H_0$("두 순위가 무관하다") 아래에서 $y$ 의 순위배열은 $8! = 40320$ 가지 가운데 하나다. $r_s = 1$ 이 되는 배열은 **완전히 같은 순서 하나**뿐이고, $r_s = -1$ 이 되는 배열은 **완전히 뒤집힌 순서 하나**뿐이다. 양측이므로
+
+    $$
+    p_{\text{exact}} = \frac{2}{8!} = \frac{2}{40320} = \frac{1}{20160} = 4.96032\times10^{-5}
+    $$
+
+    다. **$0$ 이 아니라 2만분의 1 쯤이다.**
+
+    `scipy` 가 $0$ 을 내놓는 것은 기본적으로 $t$ 근사
+
+    $$
+    t = r_s\sqrt{\frac{n-2}{1-r_s^2}}
+    $$
+
+    를 쓰기 때문이다. $r_s = 1$ 이면 분모가 $0$ 이라 $t = \infty$ 가 되고 꼬리확률이 $0$ 으로 떨어진다. **근사식이 정의되지 않는 자리에서 그대로 $0$ 을 내준 것이다.** 자료 여덟 쌍으로 "확률 정확히 0" 을 주장할 수 있을 리 없다.
+
+    표본이 작고 $\lvert r_s\rvert$ 가 $1$ 에 가까우면 p-값을 근사에 맡기지 말고 순열로 세는 편이 안전하다. 참고로 Pearson 쪽 p-값 $0.0236$ 은 $t$ 근사가 멀쩡히 작동한 값이다.
+
+    **(4) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # y 는 x 의 지수함수다. 곡선이지만 x 가 커지면 y 도 반드시 커지는 단조 관계다.
+    x = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+    y = np.exp(x)
+
+    # 스피어만은 값 대신 순위만 보므로 단조이기만 하면 정확히 1 이 된다.
+    r_s, p_value = stats.spearmanr(x, y)
+    print(f"Spearman r_s = {r_s:.4f}, p-value = {p_value:.6f}")
+
+    # 피어슨은 직선에서 얼마나 벗어났는지를 재므로 1 에 못 미친다.
+    # 관계가 곡선일 때 두 측도가 갈리는 전형적인 모습이다.
+    r_p, p_p = stats.pearsonr(x, y)
+    print(f"Pearson  r   = {r_p:.4f}, p-value = {p_p:.6f}")
+
+    # (1) 로그를 씌우면 피어슨만 움직인다
+    print(f"\nlog y 로 바꾸면  Pearson {stats.pearsonr(x, np.log(y)).statistic:.6f}"
+          f"   Spearman {stats.spearmanr(x, np.log(y)).statistic:.6f}")
+
+    # (2) 마지막 점이 차지하는 몫
+    Sxx = ((x - x.mean())**2).sum()
+    Syy = ((y - y.mean())**2).sum()
+    Sxy = ((x - x.mean()) * (y - y.mean())).sum()
+    print(f"\nybar = {y.mean():.3f}   e^8 = {y[-1]:.3f}   배수 {y[-1] / y.mean():.2f}")
+    print(f"마지막 점의 Syy 몫 {(y[-1] - y.mean())**2 / Syy:.4f}"
+          f"   Sxy 몫 {(x[-1] - x.mean()) * (y[-1] - y.mean()) / Sxy:.4f}"
+          f"   Sxx 몫 {(x[-1] - x.mean())**2 / Sxx:.4f}")
+    print(f"Sxx = {Sxx:.0f}   Syy = {Syy:.1f}   Sxy = {Sxy:.3f}"
+          f"   r = {Sxy / np.sqrt(Sxx * Syy):.6f}")
+
+    # (3) p-값이 정말 0 인가. n = 8 의 순열을 전부 센다.
+    from itertools import permutations
+    from math import factorial
+
+    ranks = np.arange(1, 9)
+    exact = sum(1 for q in permutations(ranks)
+                if abs(stats.spearmanr(ranks, q).statistic) >= 1 - 1e-12)
+    print(f"\nr_s = ±1 이 되는 배열 {exact} / {factorial(8)}"
+          f"   정확 p = {exact / factorial(8):.6e}")
+    print(f"scipy 가 돌려준 p = {p_value}")
+    ```
+
+    출력:
+
+    ```
+    Spearman r_s = 1.0000, p-value = 0.000000
+    Pearson  r   = 0.7758, p-value = 0.023636
+
+    log y 로 바꾸면  Pearson 1.000000   Spearman 1.000000
+
+    ybar = 589.278   e^8 = 2980.958   배수 5.06
+    마지막 점의 Syy 몫 0.7628   Sxy 몫 0.6080   Sxx 몫 0.2917
+    Sxx = 42   Syy = 7498953.8   Sxy = 13768.872   r = 0.775842
+
+    r_s = ±1 이 되는 배열 2 / 40320   정확 p = 4.960317e-05
+    scipy 가 돌려준 p = 0.0
+    ```
+
+    $y = e^x$은 완전한 **단조** 관계지만 선형은 아니다. Spearman은 순위만 보므로 정확히 1.0을 주고, Pearson은 곡률 때문에 0.776에 그친다.
+
+    (1)이 그 사정을 한 줄로 보인다. `log y 로 바꾸면 Pearson 1.000000 Spearman 1.000000`. **로그를 씌우자 Pearson 이 $0.7758$ 에서 $1$ 로 뛰고 Spearman 은 꿈쩍도 하지 않는다.**
+
+    (2)의 세 몫도 손계산과 맞는다. 마지막 점 하나가 $S_{yy}$ 의 $76.3\%$, $S_{xy}$ 의 $60.8\%$ 를 내는데 $S_{xx}$ 에서는 $29.2\%$ 에 그친다. **한쪽만 쏠려 있으니 직선이 맞을 수가 없다.**
+
+    (3)이 이 보기에서 가장 쓸모 있는 줄이다. $8!$ 가지 순열을 전부 돌려 보면 $\lvert r_s\rvert = 1$ 이 되는 배열은 **정확히 둘**(원래 순서와 뒤집힌 순서)이고 정확 p-값은 $2/40320 = 4.96\times10^{-5}$ 다. 그런데 `scipy 가 돌려준 p = 0.0` 이다. **출력의 `0.000000` 은 반올림이 아니라 진짜 `0.0`이고, 그것은 틀렸다.** $t = r_s\sqrt{(n-2)/(1-r_s^2)}$ 의 분모가 $0$ 이 되어 생긴 일이다.
+
+    표본이 작고 $\lvert r_s \rvert$ 가 $1$ 에 가까울 때에는 p-값을 근사에 맡기지 말아야 한다는 뜻이다.
+
+    이것이 두 계수의 차이를 가장 선명하게 보여주는 예다. "관계가 있는가"를 묻는다면 Spearman이, "직선 관계가 있는가"를 묻는다면 Pearson이 맞는 도구다.
 
 `scipy.stats.spearmanr` 함수는 중간순위를 써서 동점을 자동으로 처리한다. 가설검정의 자세한 내용은 [Spearman의 rho 검정](../correlation_test/test_spearman.md)을 보라.
 

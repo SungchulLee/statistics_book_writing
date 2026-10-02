@@ -169,44 +169,233 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 점이연상관과 파이계수
+**보기 3.** <span class="diff easy" title="쉬움"></span> 점이연상관과 파이계수. 보기 1 의 점수 자료와 보기 2 의 $2\times2$ 표를 코드로 다룬다. 두 계수는 **이름만 다른 피어슨 상관**이라는 것을 확인한다.
+
+**(1)** $X \in \{0,1\}$ 이고 $Y$ 가 연속일 때, 0/1 에 피어슨 공식을 그대로 넣으면 점이연 공식
+
+$$
+r_{pb} = \frac{\bar Y_1 - \bar Y_0}{S_Y}\sqrt{\frac{n_0 n_1}{n^2}}
+$$
+
+이 나옴을 보이시오($S_Y$ 는 $n$ 으로 나눈 표준편차).
+
+**(2)** $X, Y$ 가 모두 0/1 일 때 피어슨 상관이 파이계수가 되고 $\chi^2 = n\phi^2$ 임을 보이시오.
+
+**(3)** 모집단 수준에서 $p = P(X=1)$, $d = (\mu_1-\mu_0)/\sigma$ 라 할 때
+
+$$
+\rho_{pb} = \frac{d}{\sqrt{d^2 + \dfrac{1}{p(1-p)}}}
+$$
+
+임을 보이시오. 보기 1 의 자료에서 이 식이 맞는가. 보기 2 의 $\phi$ 는 천장의 몇 배인가.
+
+**(4)** 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 점이연상관: 한쪽이 이분변수(0/1), 다른 쪽이 연속변수인 경우다.
-group = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
-scores = np.array([65, 70, 68, 72, 66, 78, 82, 85, 80, 76])
+    **(1) 0/1 을 넣어 보면 저절로 나온다.** $X$ 가 $n_1$ 번 1 이고 $n_0$ 번 0 이면 $\bar X = n_1/n$ 이고
 
-r_pb, p_val = stats.pointbiserialr(group, scores)
-print(f"Point-biserial r = {r_pb:.4f}, p-value = {p_val:.4f}")
+    $$
+    S_{XX} = n_1\left(1-\frac{n_1}{n}\right)^{\!2} + n_0\left(\frac{n_1}{n}\right)^{\!2}
+    = \frac{n_1 n_0^2 + n_0 n_1^2}{n^2} = \frac{n_0n_1(n_0+n_1)}{n^2} = \frac{n_0n_1}{n}
+    $$
 
-# 사실 점이연상관은 0/1 에 그대로 피어슨을 쓴 것과 같다. 이름만 다를 뿐이다.
-r_pearson, _ = stats.pearsonr(group, scores)
-print(f"Pearson r        = {r_pearson:.4f}")
+    이다. 다음은 $S_{XY}$ 다. $X=1$ 인 사람은 $x$ 편차가 $1 - n_1/n = n_0/n$, $X=0$ 인 사람은 $-n_1/n$ 이므로
 
-# 파이계수: 양쪽이 모두 이분변수인 경우다. 2x2 표에서 카이제곱을 전체
-# 도수로 나눈 뒤 제곱근을 취하면 나온다. 이 또한 0/1 에 대한 피어슨과 같다.
-table = np.array([[60, 30], [40, 70]])
-chi2, p, dof, expected = stats.chi2_contingency(table, correction=False)
-phi = np.sqrt(chi2 / table.sum())
-print(f"Phi coefficient  = {phi:.4f}")
-```
+    $$
+    S_{XY} = \frac{n_0}{n}\sum_{X_i=1}(Y_i-\bar Y) - \frac{n_1}{n}\sum_{X_i=0}(Y_i-\bar Y)
+    = \frac{n_0}{n}\,n_1(\bar Y_1 - \bar Y) - \frac{n_1}{n}\,n_0(\bar Y_0 - \bar Y)
+    $$
 
-출력:
+    $$
+    = \frac{n_0n_1}{n}\bigl[(\bar Y_1 - \bar Y) - (\bar Y_0 - \bar Y)\bigr]
+    = \frac{n_0n_1}{n}\,(\bar Y_1 - \bar Y_0)
+    $$
 
-```
-Point-biserial r = 0.9029, p-value = 0.0003
-Pearson r        = 0.9029
-Phi coefficient  = 0.3015
-```
+    다. $\bar Y$ 가 깨끗이 사라진다. 마지막으로 $S_{YY} = n S_Y^2$ 이므로
 
-점이연 상관과 Pearson 상관이 **정확히 같다**. 점이연 상관은 별개의 공식이 아니라, 한 변수가 0/1일 때의 Pearson 상관에 붙인 이름일 뿐이다.
+    $$
+    r = \frac{S_{XY}}{\sqrt{S_{XX}S_{YY}}}
+    = \frac{\dfrac{n_0n_1}{n}(\bar Y_1-\bar Y_0)}{\sqrt{\dfrac{n_0n_1}{n}\cdot n S_Y^2}}
+    = \frac{(\bar Y_1-\bar Y_0)}{S_Y}\cdot\frac{\sqrt{n_0n_1}}{n}
+    $$
 
-파이 계수도 마찬가지로 두 이진 변수에 대한 Pearson 상관과 같다. 값이 0.30으로 작은 것은 다른 자료($2 \times 2$ 표)를 쓰기 때문이지 계수의 성질 때문이 아니다.
+    이고 $\sqrt{n_0n_1}/n = \sqrt{n_0n_1/n^2}$ 이므로 주장한 식이다. $\square$
+
+    **점이연 상관은 새로운 계수가 아니다.** 0/1 변수에 피어슨을 쓰면 식이 저절로 저 꼴로 정리될 뿐이다.
+
+    **(2) 둘 다 0/1 이면 파이계수.** 표를 $2\times2$ 로 적는다($a$: $X=1,Y=1$ 등).
+
+    $$
+    \begin{array}{c|cc|c}
+     & Y=1 & Y=0 & \text{합} \\ \hline
+    X=1 & a & b & a+b \\
+    X=0 & c & d & c+d \\ \hline
+    \text{합} & a+c & b+d & n
+    \end{array}
+    $$
+
+    $XY = 1$ 인 사람은 $a$ 명뿐이므로 $\sum X_iY_i = a$ 이고
+
+    $$
+    S_{XY} = \sum X_iY_i - n\bar X\bar Y = a - \frac{(a+b)(a+c)}{n} = \frac{ad-bc}{n}
+    $$
+
+    다(10장 독립성 검정에서 본 것과 같은 계산이다). (1)의 $S_{XX} = n_0n_1/n$ 을 두 변수에 각각 쓰면
+
+    $$
+    S_{XX} = \frac{(a+b)(c+d)}{n},
+    \qquad
+    S_{YY} = \frac{(a+c)(b+d)}{n}
+    $$
+
+    이므로
+
+    $$
+    \phi = \frac{(ad-bc)/n}{\sqrt{\dfrac{(a+b)(c+d)(a+c)(b+d)}{n^2}}}
+    = \frac{ad-bc}{\sqrt{(a+b)(c+d)(a+c)(b+d)}}
+    $$
+
+    다. 그리고 10장에서 본 $2\times2$ 닫힌 꼴이 $\chi^2 = n(ad-bc)^2/\{(a+b)(c+d)(a+c)(b+d)\}$ 였으므로
+
+    $$
+    \chi^2 = n\phi^2
+    $$
+
+    이다. $\square$ **카이제곱을 $n$ 으로 나누고 제곱근을 씌우면 피어슨 상관이 나온다**는 뜻이고, 크래머 $V$ 가 이것의 일반화다.
+
+    **(3) 모집단 꼴과 천장.** $X \sim \text{Bern}(p)$ 이고 두 집단의 $Y$ 분산이 모두 $\sigma^2$, 평균이 $\mu_0, \mu_1$ 이라 하자. $\Delta = \mu_1-\mu_0$ 이라 두면
+
+    $$
+    \operatorname{Var}(X) = p(1-p),
+    \qquad
+    \operatorname{Cov}(X,Y) = p(1-p)\Delta,
+    \qquad
+    \operatorname{Var}(Y) = \sigma^2 + p(1-p)\Delta^2
+    $$
+
+    이다(마지막은 전분산 공식 — 집단 안의 분산 $\sigma^2$ 에 집단 평균의 분산 $p(1-p)\Delta^2$ 을 더한 것이다). 따라서
+
+    $$
+    \rho_{pb} = \frac{p(1-p)\Delta}{\sqrt{p(1-p)}\sqrt{\sigma^2 + p(1-p)\Delta^2}}
+    = \frac{\sqrt{p(1-p)}\,\Delta}{\sqrt{\sigma^2+p(1-p)\Delta^2}}
+    $$
+
+    이고 분자·분모를 $\sigma\sqrt{p(1-p)}$ 로 나누면 $d = \Delta/\sigma$ 로
+
+    $$
+    \rho_{pb} = \frac{d}{\sqrt{\dfrac{1}{p(1-p)} + d^2}}
+    $$
+
+    이다. $\square$ $p = 1/2$ 이면 $1/\{p(1-p)\} = 4$ 라서 $\rho_{pb} = d/\sqrt{d^2+4}$ 이고, 이것이 앞 그림의 가운데 곡선이다. $d$ 가 아무리 커도 $\rho_{pb} < 1$ 이고, $p$ 가 치우치면 $1/\{p(1-p)\}$ 가 커져 같은 $d$ 에서도 $\rho_{pb}$ 가 주저앉는다.
+
+    보기 1 의 자료로 확인한다. 두 집단 안의 표준편차($n$ 으로 나눈 것)를 묶으면 $\sigma = 2.856571$, $\Delta = 12$ 이므로 $d = 4.200840$ 이고 $p = 1/2$ 다.
+
+    $$
+    \frac{4.200840}{\sqrt{4.200840^2 + 4}} = \frac{4.200840}{4.652921} = 0.902894
+    $$
+
+    로 (1)이 준 $r_{pb} = 0.902894$ 와 **여섯째 자리까지 같다.**
+
+    **보기 2 의 $\phi$ 는 천장의 정확히 3분의 1 이다.** 먼저 $\phi$ 를 깔끔하게 적으면
+
+    $$
+    \phi = \frac{60\cdot70 - 30\cdot40}{\sqrt{90\cdot110\cdot100\cdot100}} = \frac{3000}{1000\sqrt{99}} = \frac{3}{\sqrt{99}} = \frac{1}{\sqrt{11}} = 0.301511
+    $$
+
+    이고 $\chi^2 = n\phi^2 = 200/11 = 18.1818$ 이다. 한편 $p = 90/200 = 0.45 \le q = 100/200 = 0.5$ 이므로 천장은
+
+    $$
+    \lvert\phi\rvert_{\max} = \sqrt{\frac{p(1-q)}{q(1-p)}} = \sqrt{\frac{0.45 \times 0.5}{0.5\times0.55}} = \sqrt{\frac{9}{11}} = \frac{3}{\sqrt{11}} = 0.904534
+    $$
+
+    다. 둘 다 $\sqrt{11}$ 이 분모에 있으므로
+
+    $$
+    \frac{\phi}{\lvert\phi\rvert_{\max}} = \frac{1/\sqrt{11}}{3/\sqrt{11}} = \frac13
+    $$
+
+    **정확히 $1/3$ 이다.** $\phi = 0.30$ 이 "약한 연관" 으로 보이지만, 주변분포가 허락하는 최대치의 3분의 1 이라고 적으면 인상이 달라진다.
+
+    **(4) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 점이연상관: 한쪽이 이분변수(0/1), 다른 쪽이 연속변수인 경우다.
+    group = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
+    scores = np.array([65, 70, 68, 72, 66, 78, 82, 85, 80, 76])
+
+    r_pb, p_val = stats.pointbiserialr(group, scores)
+    print(f"Point-biserial r = {r_pb:.4f}, p-value = {p_val:.4f}")
+
+    # 사실 점이연상관은 0/1 에 그대로 피어슨을 쓴 것과 같다. 이름만 다를 뿐이다.
+    r_pearson, _ = stats.pearsonr(group, scores)
+    print(f"Pearson r        = {r_pearson:.4f}")
+
+    # 파이계수: 양쪽이 모두 이분변수인 경우다. 2x2 표에서 카이제곱을 전체
+    # 도수로 나눈 뒤 제곱근을 취하면 나온다. 이 또한 0/1 에 대한 피어슨과 같다.
+    table = np.array([[60, 30], [40, 70]])
+    chi2, p, dof, expected = stats.chi2_contingency(table, correction=False)
+    phi = np.sqrt(chi2 / table.sum())
+    print(f"Phi coefficient  = {phi:.4f}")
+
+    # (1) 점이연 공식과 직접 비교
+    n0, n1, N = 5, 5, 10
+    m0, m1 = scores[:5].mean(), scores[5:].mean()
+    S_Y = scores.std(ddof=0)
+    print(f"\n(1) (m1-m0)/S_Y * sqrt(n0*n1/n^2)"
+          f" = ({m1:.1f}-{m0:.1f})/{S_Y:.6f} * {np.sqrt(n0 * n1 / N**2):.1f}"
+          f" = {(m1 - m0) / S_Y * np.sqrt(n0 * n1 / N**2):.6f}")
+
+    # (2) 파이계수는 0/1 자료에 그대로 피어슨을 쓴 것이다
+    (a, b), (c, d) = table
+    xs = np.r_[np.ones(a + b), np.zeros(c + d)]
+    ys = np.r_[np.ones(a), np.zeros(b), np.ones(c), np.zeros(d)]
+    print(f"\n(2) 0/1 자료의 피어슨 {stats.pearsonr(xs, ys)[0]:.6f}")
+    print(f"    (ad-bc)/sqrt(...)  "
+          f"{(a * d - b * c) / np.sqrt((a + b) * (c + d) * (a + c) * (b + d)):.6f}")
+    print(f"    chi2 = {chi2:.6f}   n*phi^2 = {table.sum() * phi**2:.6f}"
+          f"   200/11 = {200 / 11:.6f}")
+
+    # (3) 모집단 꼴과 천장
+    sigma = np.sqrt((((scores[:5] - m0)**2).sum() + ((scores[5:] - m1)**2).sum()) / N)
+    d_eff = (m1 - m0) / sigma
+    print(f"\n(3) sigma = {sigma:.6f}  d = {d_eff:.6f}"
+          f"  d/sqrt(d^2+4) = {d_eff / np.sqrt(d_eff**2 + 4):.6f}")
+    pp, qq = (a + b) / table.sum(), (a + c) / table.sum()
+    ceiling = np.sqrt(pp * (1 - qq) / (qq * (1 - pp)))
+    print(f"    phi = 1/sqrt(11) = {1 / np.sqrt(11):.6f}"
+          f"   천장 3/sqrt(11) = {ceiling:.6f}   비 {phi / ceiling:.6f}")
+    ```
+
+    출력:
+
+    ```
+    Point-biserial r = 0.9029, p-value = 0.0003
+    Pearson r        = 0.9029
+    Phi coefficient  = 0.3015
+
+    (1) (m1-m0)/S_Y * sqrt(n0*n1/n^2) = (80.2-68.2)/6.645299 * 0.5 = 0.902894
+
+    (2) 0/1 자료의 피어슨 0.301511
+        (ad-bc)/sqrt(...)  0.301511
+        chi2 = 18.181818   n*phi^2 = 18.181818   200/11 = 18.181818
+
+    (3) sigma = 2.856571  d = 4.200840  d/sqrt(d^2+4) = 0.902894
+        phi = 1/sqrt(11) = 0.301511   천장 3/sqrt(11) = 0.904534   비 0.333333
+    ```
+
+    점이연 상관과 Pearson 상관이 **정확히 같다**. 점이연 상관은 별개의 공식이 아니라, 한 변수가 0/1일 때의 Pearson 상관에 붙인 이름일 뿐이다. (1)의 손계산 `0.902894` 가 `pointbiserialr` 과 `pearsonr` 둘 다와 같다.
+
+    (2)도 세 길이 한 점에서 만난다. **0/1 자료에 그냥 피어슨을 쓴 값, 파이계수 공식, 그리고 $\sqrt{\chi^2/n}$ 이 모두 `0.301511` 이다.** $\chi^2 = 18.181818$ 과 $n\phi^2$, 그리고 유리수 $200/11$ 도 여섯째 자리까지 같다.
+
+    (3)에서 모집단 꼴 `d/sqrt(d^2+4) = 0.902894` 가 표본 $r_{pb}$ 와 **정확히 일치한다.** 집단 안의 표준편차를 $n$ 으로 나눈 것으로 맞추었기 때문이다. 그리고 $\phi$ 대 천장의 비가 `0.333333`, 곧 **정확히 $1/3$** 이다.
+
+    파이 계수도 마찬가지로 두 이진 변수에 대한 Pearson 상관과 같다. 값이 0.30으로 작은 것은 다른 자료($2 \times 2$ 표)를 쓰기 때문이지 계수의 성질 때문이 아니다.
 
 ---
 

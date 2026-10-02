@@ -40,99 +40,302 @@ $p_{ij}^{\text{Bonf}} < \alpha$이면 그 칸을 유의하다고 표시한다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 잔차로 어느 칸이 어긋났는지 찾기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 잔차로 어느 칸이 어긋났는지 찾기. 모집단 셋에서 **각각 100명씩** 뽑아 네 범주 가운데 하나를 고르게 했다.
+
+$$
+\begin{array}{c|cccc|r}
+ & \text{범주 1} & \text{범주 2} & \text{범주 3} & \text{범주 4} & \text{행 합} \\ \hline
+\text{모집단 1} & 25 & 30 & 20 & 25 & 100 \\
+\text{모집단 2} & 18 & 22 & 35 & 25 & 100 \\
+\text{모집단 3} & 30 & 25 & 15 & 30 & 100 \\ \hline
+\text{열 합} & 73 & 77 & 70 & 80 & 300
+\end{array}
+$$
+
+**(1)** 기대도수가 **열에만 의존**함을 보이고 유리수로 구하시오. 표준화 잔차 $R_{ij}$ 가운데 절댓값이 가장 큰 칸을 찾으시오.
+
+**(2)** $\chi^2 = \sum_{ij} R_{ij}^2$ 로 전체 통계량과 p-값을 구해 $\alpha = 0.05$ 에서 판정하시오.
+
+**(3)** $R_{ij}$ 를 표준정규로 보고 칸별 z-검정을 하는 것은 **보수적**이다. 행 합이 $n_i$ 로 고정된 설계에서
+
+$$
+\operatorname{Var}(O_{ij} - E_{ij}) = n_i\left(1 - \frac{n_i}{n}\right)p_j(1-p_j),
+\qquad\text{곧}\qquad
+\operatorname{Var}(R_{ij}) = \left(1 - \frac{R_i}{n}\right)\!\left(1 - \frac{C_j}{n}\right)
+$$
+
+임을 보이고, 이 표에서 그 값이 얼마인지 구하시오. 또 $\sum_{ij}\operatorname{Var}(R_{ij}) = (r-1)(c-1)$ 임을 보이시오.
+
+**(4)** 그러면 **조정 잔차** $\tilde R_{ij} = R_{ij}\big/\sqrt{(1-R_i/n)(1-C_j/n)}$ 로 다시 판정할 때 결론이 달라지는가. 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
-from statsmodels.stats.multitest import multipletests
+??? success "풀이"
 
-observed = np.array([
-    [25, 30, 20, 25],
-    [18, 22, 35, 25],
-    [30, 25, 15, 30],
-], dtype=float)
+    **(1) 기대도수와 잔차.** 행 합이 셋 다 $100$ 이므로
 
-row_tot = observed.sum(axis=1, keepdims=True)
-col_tot = observed.sum(axis=0, keepdims=True)
-tot = observed.sum()
-expected = (row_tot @ col_tot) / tot
+    $$
+    E_{ij} = \frac{R_i C_j}{n} = \frac{100 \cdot C_j}{300} = \frac{C_j}{3}
+    $$
 
-# Pearson 표준화 잔차. 제곱해서 모두 더하면 카이제곱 통계량이 된다.
-# 분모가 sqrt(E)인 것은 H0 아래에서 각 칸 도수의 분산이 근사적으로 E이기 때문이다.
-resid = (observed - expected) / np.sqrt(expected)
+    이고 **$i$ 가 식에서 사라진다.** 세 행의 기대도수가 똑같다. 균형설계라 그렇다.
 
-# 칸마다 z-검정을 하는 셈이라 다중검정 문제가 생긴다. 그래서 아래에서 보정한다.
-z = resid.ravel()
-pvals = 2 * (1 - stats.norm.cdf(np.abs(z)))
-reject, pvals_bonf, _, _ = multipletests(pvals, method="bonferroni")
-pvals_bonf = pvals_bonf.reshape(observed.shape)
-reject = reject.reshape(observed.shape)
+    $$
+    E_{\cdot 1} = \frac{73}{3} = 24.3\overline{3}, \quad
+    E_{\cdot 2} = \frac{77}{3} = 25.6\overline{6}, \quad
+    E_{\cdot 3} = \frac{70}{3} = 23.3\overline{3}, \quad
+    E_{\cdot 4} = \frac{80}{3} = 26.6\overline{6}
+    $$
 
-print("Standardized residuals:")
-print(resid)
-print()
-print("Bonferroni-adjusted per-cell p-values:")
-print(pvals_bonf)
-```
+    잔차 $R_{ij} = (O_{ij}-E_{ij})/\sqrt{E_{ij}}$ 를 칸마다 적는다.
 
-출력:
+    $$
+    \begin{array}{c|rrrr}
+     & \text{범주 1} & \text{범주 2} & \text{범주 3} & \text{범주 4} \\ \hline
+    \text{모집단 1} & +0.1351 & +0.8553 & -0.6901 & -0.3227 \\
+    \text{모집단 2} & -1.2839 & -0.7237 & \mathbf{+2.4152} & -0.3227 \\
+    \text{모집단 3} & +1.1488 & -0.1316 & -1.7252 & +0.6455
+    \end{array}
+    $$
 
-```
-Standardized residuals:
-[[ 0.13514748  0.8553372  -0.69006556 -0.32274861]
- [-1.28390102 -0.72374686  2.41522946 -0.32274861]
- [ 1.14875354 -0.13159034 -1.7251639   0.64549722]]
+    **가장 큰 칸은 (모집단 2, 범주 3)의 $+2.4152$ 다.** 손으로 확인해 보면
 
-Bonferroni-adjusted per-cell p-values:
-[[1.        1.        1.        1.       ]
- [1.        1.        0.1887036 1.       ]
- [1.        1.        1.        1.       ]]
-```
+    $$
+    R_{23} = \frac{35 - 70/3}{\sqrt{70/3}} = \frac{35/3}{\sqrt{70/3}} = 2.41523
+    $$
 
-전체 검정은 $p = 0.028$로 기각했는데(앞 페이지) 칸별로 보면 Bonferroni 보정 후 유의한 칸이 하나도 없다. 가장 큰 잔차인 2.415(모집단 2, 범주 3)조차 보정 후 $p = 0.189$다.
+    이다. 두 번째로 큰 것은 같은 열의 $-1.7252$(모집단 3, 범주 3)이다. **범주 3 이 모집단 2 에 몰리고 모집단 3 에서 빠진 것**이 이 표의 주된 구조다.
 
-이런 어긋남은 흔하다. 전체 검정은 12개 칸의 어긋남을 **모아서** 보고, 칸별 검정은 12번의 검정에 대한 대가를 각각 치른다. 전체 검정이 유의한데 어느 칸도 유의하지 않은 것은 모순이 아니라, 증거가 한 칸에 몰려 있지 않고 흩어져 있다는 뜻이다.
+    **열 방향의 검산이 공짜로 따라온다.** 이 표에서는 $E$ 가 열마다 상수이므로
 
-여기서 Bonferroni는 상당히 보수적이기도 하다. 잔차들은 서로 독립이 아니라 주변 합계 제약으로 묶여 있으므로(제곱합이 카이제곱 통계량으로 고정된다) 12로 곱하는 것은 필요 이상이다.
+    $$
+    \sum_{i} R_{ij} = \frac{1}{\sqrt{E_{\cdot j}}}\sum_i (O_{ij} - E_{ij}) = 0
+    $$
+
+    이다. 실제로 범주 3 열은 $-0.6901 + 2.4152 - 1.7252 = 0$ 이다. 반면 **행 방향으로는 0 이 아니다.** 행 안에서는 $E$ 가 칸마다 달라 $\sqrt{E}$ 가 무게를 바꾸기 때문이다(모집단 1 의 행 합은 $-0.0223$).
+
+    **(2) 전체 검정.** 잔차를 제곱해 모두 더한다.
+
+    $$
+    \chi^2 = \sum_{ij} R_{ij}^2 = 14.1697,
+    \qquad
+    \text{df} = (3-1)(4-1) = 6,
+    \qquad
+    p = P(\chi^2_6 \ge 14.1697) = 0.02780
+    $$
+
+    $p = 0.0278 < 0.05$ 이므로 $H_0$ 을 **기각한다.** 세 모집단의 범주 분포가 같지는 않다.
+
+    **(3) 표준화 잔차는 분산이 1 이 아니다.** 여기가 핵심이다. 행 합 $n_i$ 가 설계로 고정되어 있으므로 행마다 독립인 다항표본이고 $O_{ij} \sim \text{Bin}(n_i, p_j)$ 다. 그런데 $E_{ij} = n_i C_j/n$ 의 $C_j = \sum_k O_{kj}$ 는 **자료에서 온 양**이다. 그러므로 $O_{ij}$ 를 따로 떼어 분산을 재면 안 되고, $E_{ij}$ 가 함께 흔들리는 것을 같이 세어야 한다. $a = n_i/n$ 이라 두면
+
+    $$
+    O_{ij} - E_{ij} = O_{ij} - a\sum_k O_{kj} = (1-a)\,O_{ij} - a\sum_{k \ne i} O_{kj}
+    $$
+
+    이고 행이 서로 독립이므로
+
+    $$
+    \operatorname{Var}(O_{ij}-E_{ij})
+    = (1-a)^2 n_i p_j q_j + a^2 \sum_{k\ne i} n_k p_j q_j
+    = p_j q_j\Bigl[(1-a)^2 n a + a^2 n(1-a)\Bigr]
+    $$
+
+    $$
+    = n\,p_j q_j\, a(1-a)\bigl[(1-a) + a\bigr]
+    = n_i\left(1 - \frac{n_i}{n}\right) p_j (1-p_j)
+    $$
+
+    다($q_j = 1 - p_j$, $\sum_{k \ne i} n_k = n - n_i$ 를 썼다). **근사가 전혀 쓰이지 않았다.** $E_{ij} = n_i p_j$ 로 나누면
+
+    $$
+    \operatorname{Var}(R_{ij}) = \frac{n_i(1-n_i/n)p_j(1-p_j)}{n_i p_j} = \left(1-\frac{n_i}{n}\right)(1-p_j)
+    = \left(1-\frac{R_i}{n}\right)\!\left(1-\frac{C_j}{n}\right)
+    $$
+
+    이다. 이 표에서 $R_i/n = 100/300 = 1/3$ 이므로 첫 인수는 모든 행에서 $2/3$ 이고, $C_j/n$ 이 $0.2433 \sim 0.2667$ 이므로 둘째 인수는 $0.7333 \sim 0.7567$ 이다. 곱하면
+
+    $$
+    \operatorname{Var}(R_{ij}) = 0.4889 \sim 0.5111
+    $$
+
+    **약 $1/2$ 다.** $R_{ij}$ 의 표준편차가 $1$ 이 아니라 $0.70$ 쯤이라는 뜻이다. 그런데도 $R_{ij}$ 를 표준정규 $z$ 로 읽으면 분포를 실제보다 **넓게** 잡는 것이 되어 p-값이 커진다. **잔차가 작아 보이는 것이 아니라 자가 늘어나 있는 것이다.**
+
+    합도 깔끔하다. 곱의 합이 합의 곱으로 갈라지므로
+
+    $$
+    \sum_{i,j}\operatorname{Var}(R_{ij})
+    = \left(\sum_{i=1}^r \Bigl(1-\frac{R_i}{n}\Bigr)\right)\!\left(\sum_{j=1}^c \Bigl(1-\frac{C_j}{n}\Bigr)\right)
+    = (r-1)(c-1)
+    $$
+
+    이다. 괄호 안이 각각 $r - \sum_i R_i/n = r-1$, $c - 1$ 이기 때문이다. 여기서는 $2 \times 3 = 6$ 으로 **자유도와 정확히 같다.** 앞 장에서 본 $E[\chi^2] = \text{df}$ 가 이 식의 다른 얼굴이다. 칸마다 분산이 1 이라면 $E[\chi^2]$ 가 $rc = 12$ 가 되어야 하는데 실제로는 6 이다. **칸별로 "분산 1 인 $z$" 가 12 개 있는 것이 아니라, 반쪽짜리가 12 개 있는 것이다.**
+
+    **(4) 조정 잔차로 다시 보면 결론이 뒤집힌다.** $\tilde R_{ij} = R_{ij}/\sqrt{(1-R_i/n)(1-C_j/n)}$ 은 정의상 분산이 1 이다. 가장 큰 칸에서
+
+    $$
+    \tilde R_{23} = \frac{2.41523}{\sqrt{(2/3)(1 - 70/300)}} = \frac{2.41523}{\sqrt{0.51111}} = 3.3783
+    $$
+
+    이다. 칸이 12 개이므로 본페로니 임계값은 $z_{1-0.025/12} = 2.8653$ 인데 $3.3783$ 이 이를 넘는다. **표준화 잔차로는 하나도 유의하지 않았지만 조정 잔차로는 (모집단 2, 범주 3)이 유의하다.** 보정 p-값으로 적으면 $0.1887$ 에서 $0.0088$ 로 **21 배** 줄어든다.
+
+    분모에 $\sqrt{(1-R_i/n)(1-C_j/n)}$ 한 줄을 넣고 말고가 결론을 가른다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from statsmodels.stats.multitest import multipletests
+
+    observed = np.array([
+        [25, 30, 20, 25],
+        [18, 22, 35, 25],
+        [30, 25, 15, 30],
+    ], dtype=float)
+
+    row_tot = observed.sum(axis=1, keepdims=True)
+    col_tot = observed.sum(axis=0, keepdims=True)
+    tot = observed.sum()
+    expected = (row_tot @ col_tot) / tot
+
+    # Pearson 표준화 잔차. 제곱해서 모두 더하면 카이제곱 통계량이 된다.
+    # 분모가 sqrt(E)인 것은 H0 아래에서 각 칸 도수의 분산이 근사적으로 E이기 때문이다.
+    resid = (observed - expected) / np.sqrt(expected)
+
+    # 칸마다 z-검정을 하는 셈이라 다중검정 문제가 생긴다. 그래서 아래에서 보정한다.
+    z = resid.ravel()
+    pvals = 2 * (1 - stats.norm.cdf(np.abs(z)))
+    reject, pvals_bonf, _, _ = multipletests(pvals, method="bonferroni")
+    pvals_bonf = pvals_bonf.reshape(observed.shape)
+    reject = reject.reshape(observed.shape)
+
+    print("Standardized residuals:")
+    print(resid)
+    print()
+    print("Bonferroni-adjusted per-cell p-values:")
+    print(pvals_bonf)
+
+    # (2) 전체 검정
+    chi2 = (resid ** 2).sum()
+    df = (observed.shape[0] - 1) * (observed.shape[1] - 1)
+    print(f"\nchi2 = {chi2:.4f}, df = {df}, p = {stats.chi2(df).sf(chi2):.5f}")
+
+    # (3) 표준화 잔차의 분산은 1 이 아니다
+    var_factor = (1 - row_tot / tot) * (1 - col_tot / tot)
+    print(f"Var(R_ij) 범위  {var_factor.min():.4f} ~ {var_factor.max():.4f}")
+    print(f"Var(R_ij) 의 합 {var_factor.sum():.4f}   (r-1)(c-1) = {df}")
+
+    # (4) 조정 잔차
+    adj = resid / np.sqrt(var_factor)
+    adj_bonf = np.minimum(1.0, 12 * 2 * stats.norm.sf(np.abs(adj)))
+    print(f"\n조정 잔차\n{np.round(adj, 4)}")
+    print(f"최대 |조정 잔차| {np.abs(adj).max():.4f}  "
+          f"본페로니 임계값 {stats.norm.ppf(1 - 0.025 / 12):.4f}")
+    print(f"그 칸의 보정 p-값  표준화 {pvals_bonf.min():.4f}  ->  조정 {adj_bonf.min():.4f}")
+    ```
+
+    출력:
+
+    ```
+    Standardized residuals:
+    [[ 0.13514748  0.8553372  -0.69006556 -0.32274861]
+     [-1.28390102 -0.72374686  2.41522946 -0.32274861]
+     [ 1.14875354 -0.13159034 -1.7251639   0.64549722]]
+
+    Bonferroni-adjusted per-cell p-values:
+    [[1.        1.        1.        1.       ]
+     [1.        1.        0.1887036 1.       ]
+     [1.        1.        1.        1.       ]]
+
+    chi2 = 14.1697, df = 6, p = 0.02780
+    Var(R_ij) 범위  0.4889 ~ 0.5111
+    Var(R_ij) 의 합 6.0000   (r-1)(c-1) = 6
+
+    조정 잔차
+    [[ 0.1903  1.215  -0.9652 -0.4616]
+     [-1.8077 -1.0281  3.3783 -0.4616]
+     [ 1.6174 -0.1869 -2.4131  0.9232]]
+    최대 |조정 잔차| 3.3783  본페로니 임계값 2.8653
+    그 칸의 보정 p-값  표준화 0.1887  ->  조정 0.0088
+    ```
+
+    표준화 잔차 열두 개가 (1)의 표와 네 자리까지 같고, `chi2 = 14.1697`, `p = 0.02780` 이 (2)와 맞는다. `Var(R_ij) 의 합 6.0000` 이 $(r-1)(c-1) = 6$ 과 **정확히** 같은 것이 (3)에서 유도한 식이다. 조정 잔차의 최댓값 `3.3783` 과 임계값 `2.8653` 도 (4)의 손계산 그대로다.
+
+    **두 결론이 갈린다.** 표준화 잔차로 보면 보정 뒤 유의한 칸이 하나도 없고(가장 작은 보정 p-값이 $0.1887$), 조정 잔차로 보면 (모집단 2, 범주 3)이 $0.0088$ 로 유의하다.
+
+    표준화 잔차 쪽만 보고 "전체 검정은 유의한데 어느 칸도 유의하지 않다" 고 적으면, 그것은 증거가 흩어져 있다는 말처럼 들린다. 그러나 여기서는 그렇지 않았다. **증거는 한 칸에 몰려 있었고, 자가 틀려서 보이지 않았을 뿐이다.**
+
+    본페로니가 보수적인 것도 사실이다. 열두 잔차는 서로 독립이 아니라 주변합 제약으로 묶여 있으므로(제곱합이 $\chi^2$ 으로 고정된다) 12 를 곱하는 것은 필요 이상이다. 다만 그 보수성만으로는 $0.1887$ 과 $0.0088$ 사이의 21 배를 설명하지 못한다. **둘 다 똑같이 12 를 곱한 값**이기 때문이다.
 
 ### 열지도 시각화
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 잔차를 열지도로 보기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 잔차를 열지도로 보기. 보기 1 의 잔차 행렬을 `imshow` 로 칠하고 칸마다 값을 적는다.
+
+**(1)** 그려 보고 **표에서는 잘 안 보이던 것**이 무엇인지 말하시오. 수치와 함께 적으시오.
+
+**(2)** 이 그림이 **잘못 읽히기 쉬운 점** 셋을 짚으시오. 색지도의 선택, 별표의 뜻, 칸들 사이의 제약을 보시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-fig, ax = plt.subplots(figsize=(6, 4))
-im = ax.imshow(resid, aspect="auto")
-ax.set_title("Standardized residuals heatmap")
-ax.set_xlabel("Category")
-ax.set_ylabel("Population")
-plt.colorbar(im, ax=ax, shrink=0.8)
+    **(1) 그림에서 읽히는 것 — 세 번째 열이 전부다.**
 
-# 본페로니 보정 뒤에도 유의한 칸에 표시를 남긴다
-for i in range(observed.shape[0]):
-    for j in range(observed.shape[1]):
-        # 보정 후 유의한 칸에만 별표를 붙인다. 이 보기에서는 하나도 없다.
-        mark = "*" if reject[i, j] else ""
-        ax.text(j, i, f"{resid[i, j]:.2f}{mark}",
-                ha="center", va="center", fontsize=10)
+    가장 밝은 칸이 (모집단 2, 범주 3)의 $+2.42$, 가장 어두운 칸이 **바로 아래** (모집단 3, 범주 3)의 $-1.73$ 이다. **표에서 가장 큰 두 수가 같은 열에 위아래로 붙어 있다**는 것이 색으로 보면 즉시 눈에 들어온다. 나머지 아홉 칸은 $\lvert R \rvert \le 1.29$ 로 모두 중간색 언저리에 뭉쳐 있다.
 
-plt.tight_layout()
-plt.show()
-```
+    범주 3 열만 떼어 보면 $(-0.69,\ +2.42,\ -1.73)$ 이고, 제곱해 더하면 $0.476 + 5.833 + 2.976 = 9.286$ 이다. 전체 $\chi^2 = 14.1697$ 의 **$66\%$** 다. 칸이 12 개인데 **한 열 세 칸이 통계량의 3분의 2를 만든다.**
 
-![표준화 잔차 열지도](./img/homogeneity_residuals_78.png)
+    원자료로 되돌리면 범주 3 을 고른 사람이 모집단별로 $20, 35, 15$ 명이다. 셋 다 기대 $23.3$ 명인데 모집단 2 에서 $1.5$ 배, 모집단 3 에서 $0.64$ 배다. **"세 모집단이 다르다" 가 아니라 "모집단 2 가 범주 3 을 유난히 좋아한다" 가 이 자료의 내용**이다.
 
-색으로 어느 칸이 기대보다 많고 적은지 한눈에 보인다. 모집단 2의 범주 3이 가장 밝고(+2.42), 모집단 3의 범주 3이 가장 어둡다(−1.73). 즉 범주 3의 선호가 모집단에 따라 갈리는 것이 이 표의 주된 구조다.
+    **(2) 잘못 읽히기 쉬운 점 셋.**
 
-`*`로 표시된 칸은 Bonferroni 보정 후에도 통계적으로 유의한 칸이다. 색의 변화 덕분에 어느 칸의 잔차가 가장 크게 양(과다 대표)이거나 음(과소 대표)인지 쉽게 알아볼 수 있다.
+    **첫째, 색지도가 0 을 중심으로 대칭이 아니다.** `imshow` 의 기본 색지도는 어두운 보라에서 밝은 노랑으로 **한 방향으로** 가는 연속 색지도이고, 범위는 자료의 최솟값 $-1.73$ 에서 최댓값 $+2.42$ 로 잡힌다. 그러면 **$0$ 이 색 띠의 가운데에 놓이지 않는다.**
+
+    $$
+    \frac{0 - (-1.7252)}{2.4152 - (-1.7252)} = \frac{1.7252}{4.1404} = 0.417
+    $$
+
+    곧 $0$ 이 색 띠의 $41.7\%$ 지점에 있다. 그래서 $+0.14$ 와 $-0.13$ 처럼 **크기가 거의 같고 부호만 다른 두 칸이 같은 색으로 보인다.** 잔차처럼 부호에 뜻이 있는 양에는 $0$ 을 가운데에 고정한 **발산형 색지도**(예: `cmap="coolwarm", vmin=-2.5, vmax=2.5`)를 써야 한다. 그래야 "기대보다 많다 / 적다" 가 색으로 갈린다.
+
+    **둘째, 별표가 없다는 것이 "유의한 칸이 없다"는 뜻이 아니다.** 코드의 `reject` 는 **표준화** 잔차로 계산한 것이다. 보기 1 (4)에서 보았듯 그 잣대는 분산이 $0.5$ 인 양을 분산 $1$ 로 재는 잘못된 자이고, 조정 잔차로 바꾸면 $+2.42$ 칸은 보정 p-값 $0.0088$ 로 **유의하다.** 그림에 별표가 하나도 없는 것은 자료의 성질이 아니라 **코드가 고른 잔차의 성질**이다.
+
+    **셋째, 칸들이 서로 묶여 있다.** 보기 1 (1)에서 보았듯 이 표에서는 열마다 $\sum_i R_{ij} = 0$ 이다. 그래서 **범주 3 열에서 모집단 2 가 밝으면 다른 두 모집단은 반드시 어두워야 한다.** 밝은 칸 하나와 어두운 칸 하나를 "두 개의 발견" 으로 세면 안 된다. 독립인 발견은 하나뿐이고, 자유도가 $12$ 가 아니라 $6$ 인 것이 그 사정이다.
+
+    덧붙여 축 눈금이 $-0.5, 0.0, 0.5, \ldots$ 로 **칸 경계에 걸쳐** 찍혀 있다. `set_xticks([0,1,2,3])` 로 범주 이름을 직접 달아 주는 편이 낫다.
+
+    **정리.** 이 열지도는 **"어디를 볼 것인가" 를 찾는 데는 좋고 "유의한가" 를 판정하는 데는 쓸 수 없다.** 전자는 범주 3 열이라고 즉시 답해 주고, 후자는 보기 1 의 조정 잔차와 본페로니 문턱이 있어야 답할 수 있다.
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(figsize=(6, 4))
+    im = ax.imshow(resid, aspect="auto")
+    ax.set_title("Standardized residuals heatmap")
+    ax.set_xlabel("Category")
+    ax.set_ylabel("Population")
+    plt.colorbar(im, ax=ax, shrink=0.8)
+
+    # 본페로니 보정 뒤에도 유의한 칸에 표시를 남긴다
+    for i in range(observed.shape[0]):
+        for j in range(observed.shape[1]):
+            # 보정 후 유의한 칸에만 별표를 붙인다. 이 보기에서는 하나도 없다.
+            mark = "*" if reject[i, j] else ""
+            ax.text(j, i, f"{resid[i, j]:.2f}{mark}",
+                    ha="center", va="center", fontsize=10)
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![표준화 잔차 열지도](./img/homogeneity_residuals_78.png)
+
+    모집단 2 의 범주 3 이 가장 밝고($+2.42$), 모집단 3 의 범주 3 이 가장 어둡다($-1.73$). (1)에서 말한 대로 **가장 밝은 칸과 가장 어두운 칸이 같은 열에 위아래로 붙어 있다.** 나머지 아홉 칸은 색이 서로 비슷해 중간에 뭉쳐 있다.
+
+    `*` 는 보정 뒤에도 유의한 칸에 붙는 표시인데 **이 그림에는 하나도 없다.** (2)에서 본 대로 `reject` 를 표준화 잔차로 계산했기 때문이고, 조정 잔차로 바꾸면 $+2.42$ 칸에 별표가 붙는다. 색 띠의 가운데가 $0$ 이 아니라 $-0.13$ 쯤에 놓여 있다는 것도 눈금을 따라가 보면 확인된다.
 
 ## 해석
 

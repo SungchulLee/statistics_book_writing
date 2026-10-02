@@ -24,58 +24,189 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 양의 상관 시각화
+**보기 1.** <span class="diff easy" title="쉬움"></span> 양의 상관 시각화. 평균 $0$, 분산 $1$, 상관 $\rho$ 인 이변량 정규분포에서 100 개씩 뽑아 $\rho = 0,\ 0.4,\ 0.6,\ 0.8,\ 0.9,\ 0.95$ 의 산점도를 나란히 그린다.
+
+**(1)** 공분산행렬 $\Sigma = \begin{pmatrix}1 & \rho \\ \rho & 1\end{pmatrix}$ 의 고윳값과 고유벡터를 구하시오. 등밀도 **타원의 장축 대 단축 비**가
+
+$$
+\sqrt{\frac{1+\lvert\rho\rvert}{1-\lvert\rho\rvert}}
+$$
+
+임을 보이고 여섯 $\rho$ 에 대해 값을 적으시오.
+
+**(2)** (1)의 수로 "$\rho = 0.4$ 와 $0.6$ 의 그림이 생각보다 비슷하다" 는 인상을 설명하시오. 같은 $0.05$ 를 더해도 $\rho$ 가 어디쯤인지에 따라 그림이 얼마나 달라지는가.
+
+**(3)** $n = 100$ 이므로 표본상관이 $\rho$ 에서 조금 어긋난다. 표준오차 $(1-\rho^2)/\sqrt n$ 을 쓰고, 여섯 판의 표본 $r$ 과 표본 축비가 이론값과 맞는지 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 타원의 모양은 고윳값이 정한다.** $\Sigma$ 는 대칭이므로 고유벡터가 직교한다. 곧바로 확인된다.
 
-def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
-    """이변량 정규분포에서 표본을 뽑는다.
+    $$
+    \Sigma\begin{pmatrix}1\\1\end{pmatrix} = (1+\rho)\begin{pmatrix}1\\1\end{pmatrix},
+    \qquad
+    \Sigma\begin{pmatrix}1\\-1\end{pmatrix} = (1-\rho)\begin{pmatrix}1\\-1\end{pmatrix}
+    $$
 
-    상관계수 rho 는 공분산행렬의 비대각 원소로 들어간다.
-    공분산 = rho * sigma_1 * sigma_2 이므로, 표준편차를 1 로 두면
-    공분산이 곧 상관계수가 된다.
+    고윳값은 $1+\rho$ 와 $1-\rho$ 이고 고유벡터는 $\pm45^\circ$ 방향이다. **$\rho$ 가 무엇이든 축의 방향은 늘 $\pm45^\circ$ 다.** 분산이 둘 다 1 이라서 그렇다.
 
-    돌려주는 것은 모양 (n, 2) 인 배열이다.
-    """
-    covariance_matrix = [
-        [sigma_1**2, rho * sigma_1 * sigma_2],
-        [rho * sigma_1 * sigma_2, sigma_2**2]
-    ]
-    return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
+    등밀도 곡선 $\mathbf z^\top \Sigma^{-1}\mathbf z = c$ 는 타원이고 그 반축의 길이는 $\sqrt{c\lambda_i}$ 에 비례하므로, 장축 대 단축의 비는
 
-def plot_correlations():
-    """rho 를 0 에서 0.95 까지 키우며 점구름이 어떻게 좁아지는지 본다.
+    $$
+    \sqrt{\frac{\lambda_{\max}}{\lambda_{\min}}} = \sqrt{\frac{1+\lvert\rho\rvert}{1-\lvert\rho\rvert}}
+    $$
 
-    0.4 와 0.6 의 그림 차이가 생각보다 작다는 점을 눈여겨볼 만하다.
-    상관계수는 눈에 보이는 것보다 느리게 움직인다.
-    """
-    fig, axes = plt.subplots(1, 6, figsize=(15, 4))
-    correlation_coefficients = (0.00, 0.40, 0.60, 0.80, 0.90, 0.95)
+    이다($\rho > 0$ 이면 $45^\circ$ 방향이 길고 $\rho < 0$ 이면 $-45^\circ$ 방향이 길다). $\square$
 
-    for ax, rho in zip(axes, correlation_coefficients):
-        xy = generate_samples(0, 0, 1, 1, rho, 100)
-        ax.plot(xy[:, 0], xy[:, 1], 'ok')
-        ax.set_title(f'rho = {rho}')
-        ax.axis('off')
-        ax.axis('equal')
-        for loc in ('left', 'right', 'top', 'bottom'):
-            ax.spines[loc].set_visible(False)
-    plt.show()
+    $$
+    \begin{array}{c|cccccc}
+    \rho & 0 & 0.40 & 0.60 & 0.80 & 0.90 & 0.95 \\ \hline
+    \text{축비} & 1.000 & 1.528 & 2.000 & 3.000 & 4.359 & 6.245
+    \end{array}
+    $$
 
-if __name__ == "__main__":
-    plot_correlations()
-```
+    **(2) 눈금이 고르지 않다.** $\rho$ 를 $0.05$ 씩 더해도 그림이 달라지는 정도가 전혀 같지 않다.
 
-![양의 상관](./img/understanding_25.png)
+    | 구간 | 축비의 변화 | 폭 |
+    |---|---|---:|
+    | $\rho: 0 \to 0.05$ | $1.000 \to 1.051$ | $+0.051$ |
+    | $\rho: 0.40 \to 0.45$ | $1.528 \to 1.624$ | $+0.096$ |
+    | $\rho: 0.90 \to 0.95$ | $4.359 \to 6.245$ | $+1.886$ |
 
-두 변수가 함께 커진다. 점들이 왼쪽 아래에서 오른쪽 위로 향하는 띠를 이룬다.
+    **같은 $0.05$ 가 $\rho = 0$ 근처에서는 축비를 $0.05$ 올리고 $\rho = 0.9$ 근처에서는 $1.9$ 올린다. 37 배 차이다.** 축비가 $\rho \to 1$ 에서 발산하기 때문이다.
+
+    그래서 $0.40$ 과 $0.60$ 의 두 판은 축비가 $1.53$ 대 $2.00$, 곧 $31\%$ 차이밖에 나지 않아 한눈에 구별되지 않는다. 반면 $0.90$ 과 $0.95$ 는 $4.36$ 대 $6.25$ 로 $43\%$ 차이이면서 절대적인 가늘기 자체가 달라 뚜렷이 갈린다.
+
+    설명된 변동으로 읽어도 같다. $\rho = 0.4$ 는 $\rho^2 = 0.16$, 곧 **$y$ 변동의 $16\%$ 만** 설명한다. "중간 정도의 상관" 이라는 말이 주는 인상보다 훨씬 약하다. **상관계수를 선형 눈금으로 읽으면 안 된다.**
+
+    **(3) 표본은 조금씩 어긋난다.** $\operatorname{SE}(r) \approx (1-\rho^2)/\sqrt n = (1-\rho^2)/10$ 이다. $\rho$ 가 클수록 표준오차가 작아진다는 것에 주의하라. $\rho = 0.95$ 에서는 $0.0098$ 에 지나지 않는다.
+
+    | $\rho$ | 표본 $r$ | 차 | SE | 차/SE | 표본 축비 | 이론 축비 |
+    |---:|---:|---:|---:|---:|---:|---:|
+    | $0.00$ | $-0.0240$ | $-0.0240$ | $0.1000$ | $-0.24$ | $1.025$ | $1.000$ |
+    | $0.40$ | $+0.4377$ | $+0.0377$ | $0.0840$ | $+0.45$ | $1.611$ | $1.528$ |
+    | $0.60$ | $+0.6116$ | $+0.0116$ | $0.0640$ | $+0.18$ | $2.045$ | $2.000$ |
+    | $0.80$ | $+0.7572$ | $-0.0428$ | $0.0360$ | $-1.19$ | $2.690$ | $3.000$ |
+    | $0.90$ | $+0.8858$ | $-0.0142$ | $0.0190$ | $-0.75$ | $4.067$ | $4.359$ |
+    | $0.95$ | $+0.9591$ | $+0.0091$ | $0.0098$ | $+0.93$ | $6.923$ | $6.245$ |
+
+    **여섯 어긋남이 모두 $1.2$ 표준오차 안쪽이다.** 표본 축비는 이론값 주위에서 더 크게 흔들리는데(표본 100 개로 고윳값 둘을 재는 것이라 그렇다) 추세는 그대로 따라간다.
+
+    그림에서 눈으로 세는 것과 표의 수가 맞는지 확인해 보면 좋다. $\rho = 0.95$ 판의 점구름이 다른 판보다 뚜렷이 가늘고, $\rho = 0$ 판은 방향을 읽을 수 없는 둥근 구름이다.
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
+        """이변량 정규분포에서 표본을 뽑는다.
+
+        상관계수 rho 는 공분산행렬의 비대각 원소로 들어간다.
+        공분산 = rho * sigma_1 * sigma_2 이므로, 표준편차를 1 로 두면
+        공분산이 곧 상관계수가 된다.
+
+        돌려주는 것은 모양 (n, 2) 인 배열이다.
+        """
+        covariance_matrix = [
+            [sigma_1**2, rho * sigma_1 * sigma_2],
+            [rho * sigma_1 * sigma_2, sigma_2**2]
+        ]
+        return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
+
+    def plot_correlations():
+        """rho 를 0 에서 0.95 까지 키우며 점구름이 어떻게 좁아지는지 본다.
+
+        0.4 와 0.6 의 그림 차이가 생각보다 작다는 점을 눈여겨볼 만하다.
+        상관계수는 눈에 보이는 것보다 느리게 움직인다.
+        """
+        fig, axes = plt.subplots(1, 6, figsize=(15, 4))
+        correlation_coefficients = (0.00, 0.40, 0.60, 0.80, 0.90, 0.95)
+
+        for ax, rho in zip(axes, correlation_coefficients):
+            xy = generate_samples(0, 0, 1, 1, rho, 100)
+            ax.plot(xy[:, 0], xy[:, 1], 'ok')
+            ax.set_title(f'rho = {rho}')
+            ax.axis('off')
+            ax.axis('equal')
+            for loc in ('left', 'right', 'top', 'bottom'):
+                ax.spines[loc].set_visible(False)
+        plt.show()
+
+    if __name__ == "__main__":
+        plot_correlations()
+    ```
+
+    ![양의 상관](./img/understanding_25.png)
+
+    두 변수가 함께 커진다. 점들이 왼쪽 아래에서 오른쪽 위로 향하는 띠를 이룬다.
+
+    이제 (1)\~(3)의 수를 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def generate_samples(rho, n=100):
+        return stats.multivariate_normal([0, 0], [[1, rho], [rho, 1]]).rvs(size=n)
+
+    rhos = (0.00, 0.40, 0.60, 0.80, 0.90, 0.95)
+
+    # (1)(2) 축비는 고윳값의 비의 제곱근이다
+    print("rho    축비   (이론)")
+    for rho in rhos:
+        print(f"{rho:5.2f}  {np.sqrt((1 + abs(rho)) / (1 - abs(rho))):6.3f}")
+    for a, b in [(0.00, 0.05), (0.40, 0.45), (0.90, 0.95)]:
+        f = lambda r: np.sqrt((1 + r) / (1 - r))
+        print(f"  {a:.2f} -> {b:.2f}:  {f(a):.3f} -> {f(b):.3f}"
+              f"   폭 {f(b) - f(a):+.3f}")
+
+    # (3) 표본 r 과 표본 축비
+    np.random.seed(0)
+    print("\n rho    표본 r      차      SE   차/SE   표본축비  이론축비")
+    for rho in rhos:
+        xy = generate_samples(rho)
+        r = np.corrcoef(xy.T)[0, 1]
+        ev = np.linalg.eigvalsh(np.cov(xy.T))
+        se = (1 - rho**2) / np.sqrt(len(xy))
+        print(f"{rho:5.2f}  {r:+.4f}  {r - rho:+.4f}  {se:.4f}  {(r - rho) / se:+6.2f}"
+              f"    {np.sqrt(ev[1] / ev[0]):6.3f}   {np.sqrt((1 + abs(rho)) / (1 - abs(rho))):6.3f}")
+    ```
+
+    출력:
+
+    ```
+    rho    축비   (이론)
+     0.00   1.000
+     0.40   1.528
+     0.60   2.000
+     0.80   3.000
+     0.90   4.359
+     0.95   6.245
+      0.00 -> 0.05:  1.000 -> 1.051   폭 +0.051
+      0.40 -> 0.45:  1.528 -> 1.624   폭 +0.096
+      0.90 -> 0.95:  4.359 -> 6.245   폭 +1.886
+
+     rho    표본 r      차      SE   차/SE   표본축비  이론축비
+     0.00  -0.0240  -0.0240  0.1000   -0.24     1.025    1.000
+     0.40  +0.4377  +0.0377  0.0840   +0.45     1.611    1.528
+     0.60  +0.6116  +0.0116  0.0640   +0.18     2.045    2.000
+     0.80  +0.7572  -0.0428  0.0360   -1.19     2.690    3.000
+     0.90  +0.8858  -0.0142  0.0190   -0.75     4.067    4.359
+     0.95  +0.9591  +0.0091  0.0098   +0.93     6.923    6.245
+    ```
+
+    (1)의 축비 여섯 수가 그대로 나온다. $\rho = 0.6$ 에서 정확히 $2.000$ 인 것은 $\sqrt{1.6/0.4} = \sqrt4 = 2$ 이기 때문이고, $\rho = 0.8$ 의 $3.000$ 도 $\sqrt{1.8/0.2} = \sqrt9$ 로 정수다.
+
+    (2)의 세 줄이 요점이다. **같은 $0.05$ 가 축비를 $+0.051$ 올리기도 하고 $+1.886$ 올리기도 한다.** 37 배 차이다.
+
+    (3)의 어긋남은 모두 $\lvert$차/SE$\rvert \le 1.19$ 로 우연의 범위다. 표본 축비는 이론값 주위에서 더 크게 흔들리지만($2.690$ 대 $3.000$, $6.923$ 대 $6.245$) 추세를 그대로 따른다. 100 개 표본으로 고윳값 둘을 각각 재는 일이라 $r$ 보다 불안정하다.
 
 ---
 
@@ -85,46 +216,162 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 음의 상관 시각화
+**보기 2.** <span class="diff easy" title="쉬움"></span> 음의 상관 시각화. 보기 1 과 똑같은 코드에서 $\rho$ 의 부호만 뒤집어 $\rho = 0,\ -0.4,\ -0.6,\ -0.8,\ -0.9,\ -0.95$ 를 그린다.
+
+**(1)** $(X, Y)$ 의 상관이 $\rho$ 일 때 $(X, -Y)$ 의 상관이 $-\rho$ 임을 보이시오. 그러면 음의 상관 그림은 양의 상관 그림과 **모양이 다른가.**
+
+**(2)** 보기 1 의 축비 공식에 $\lvert\rho\rvert$ 가 들어간 것이 (1)과 어떻게 이어지는가.
+
+**(3)** 두 보기의 코드는 `np.random.seed(0)` 을 똑같이 쓴다. 그러면 여섯 판의 표본 $r$ 사이에 어떤 관계가 있겠는가. 실제로 확인하고, 두 점구름이 **정확히 어떤 변환**으로 이어지는지 찾으시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 부호만 뒤집힌다.** 공분산은 두 번째 인수에 대해 선형이므로
 
-def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
-    covariance_matrix = [
-        [sigma_1**2, rho * sigma_1 * sigma_2],
-        [rho * sigma_1 * sigma_2, sigma_2**2]
-    ]
-    return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
+    $$
+    \operatorname{Cov}(X, -Y) = -\operatorname{Cov}(X, Y),
+    \qquad
+    \operatorname{Var}(-Y) = \operatorname{Var}(Y)
+    $$
 
-def plot_negative_correlations():
-    """같은 일을 음의 상관에서 되풀이한다. 모양은 같고 기울기만 뒤집힌다."""
-    fig, axes = plt.subplots(1, 6, figsize=(15, 4))
-    correlation_coefficients = (0.00, -0.40, -0.60, -0.80, -0.90, -0.95)
+    다. 분모는 그대로이고 분자만 부호가 바뀌므로
 
-    for ax, rho in zip(axes, correlation_coefficients):
-        xy = generate_samples(0, 0, 1, 1, rho, 100)
-        ax.plot(xy[:, 0], xy[:, 1], 'ok')
-        ax.set_title(f'rho = {rho}')
-        ax.axis('off')
-        ax.axis('equal')
-        for loc in ('left', 'right', 'top', 'bottom'):
-            ax.spines[loc].set_visible(False)
-    plt.show()
+    $$
+    \rho_{X,-Y} = \frac{-\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y} = -\rho_{X,Y}
+    $$
 
-if __name__ == "__main__":
-    plot_negative_correlations()
-```
+    이다. $\square$ 더구나 $(X,Y)$ 가 이변량 정규이면 $(X,-Y)$ 도 이변량 정규다. 선형변환이기 때문이다. **그러므로 상관이 $-\rho$ 인 그림은 상관이 $+\rho$ 인 그림을 가로축에 대해 뒤집은 것일 뿐이고, 새로 배울 모양이 없다.**
 
-![음의 상관](./img/understanding_75.png)
+    이것이 상관의 성질 (3)이 $a > 0$ 을 달고 있는 까닭이기도 하다. $a < 0$ 이면 $\rho_{aX,Y} = -\rho_{X,Y}$ 로 부호가 뒤집힌다.
 
-한 변수가 커지면 다른 변수가 작아진다. 띠의 방향만 반대일 뿐 구조는 같다.
+    **(2) 모양은 $\lvert\rho\rvert$ 만 안다.** 보기 1 (1)에서 공분산행렬의 고윳값은 $1+\rho$ 와 $1-\rho$ 였다. $\rho$ 의 부호가 바뀌면 두 고윳값이 **자리를 바꿀 뿐** 집합으로는 $\{1+\lvert\rho\rvert,\ 1-\lvert\rho\rvert\}$ 로 같다. 바뀌는 것은 **어느 방향이 긴가**다.
+
+    $$
+    \rho > 0 \;\Rightarrow\; 45^\circ \text{ 방향이 길다},
+    \qquad
+    \rho < 0 \;\Rightarrow\; -45^\circ \text{ 방향이 길다}
+    $$
+
+    그래서 축비는
+
+    $$
+    \sqrt{\frac{\lambda_{\max}}{\lambda_{\min}}} = \sqrt{\frac{1+\lvert\rho\rvert}{1-\lvert\rho\rvert}}
+    $$
+
+    로 $\lvert\rho\rvert$ 에만 달려 있다. **$\rho$ 의 부호는 기울기의 방향을, 크기는 가늘기를 정한다.**
+
+    **(3) 씨앗이 같으니 수도 짝을 이룬다.** 두 코드가 같은 난수에서 출발하므로 여섯 판의 표본상관이 정확히 부호만 다를 것이라 짐작할 수 있고, 실제로 그렇다.
+
+    $$
+    \begin{array}{c|rrrrrr}
+    \lvert\rho\rvert & 0 & 0.40 & 0.60 & 0.80 & 0.90 & 0.95 \\ \hline
+    \text{양수 판 } r & -0.0240 & +0.4377 & +0.6116 & +0.7572 & +0.8858 & +0.9591 \\
+    \text{음수 판 } r & -0.0240 & -0.4377 & -0.6116 & -0.7572 & -0.8858 & -0.9591
+    \end{array}
+    $$
+
+    소수 열여섯째 자리까지 정확히 부호만 다르다. 표본 축비도 자리마다 똑같다.
+
+    **변환의 정체는 $90^\circ$ 회전이다.** 점을 하나씩 맞춰 보면
+
+    $$
+    (x_i,\ y_i) \;\longmapsto\; (y_i,\ -x_i)
+    $$
+
+    가 성립한다(아래 코드가 `True` 를 돌려준다). 가로축 뒤집기 $(x,-y)$ 가 아니라 회전이다. 두 변수의 분산이 모두 1 이라서 회전이 분산을 보존하고, 그러면서
+
+    $$
+    \operatorname{Cov}(Y, -X) = -\operatorname{Cov}(X,Y)
+    $$
+
+    로 상관의 부호만 뒤집는다. **분산이 같지 않았다면 이 회전은 상관의 부호를 뒤집으면서 분산도 섞어 버렸을 것이다.**
+
+    까닭은 `scipy` 의 표본 추출 방식에 있다. $\Sigma$ 를 고유분해해 $\sqrt{\lambda}$ 를 곱하는데, 고윳값을 **오름차순**으로 정렬하므로 $\rho$ 의 부호가 바뀌면 $45^\circ$ 와 $-45^\circ$ 두 방향에 곱해지는 수가 서로 자리를 바꾼다. 그 결과가 꼭 $90^\circ$ 회전이다.
+
+    $\rho = 0$ 판만 예외로 **두 그림이 완전히 같다.** $\Sigma$ 가 단위행렬이라 부호를 뒤집을 것이 없기 때문이고, 그래서 표본 $r$ 도 양쪽 다 $-0.0240$ 으로 부호가 같다.
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
+        covariance_matrix = [
+            [sigma_1**2, rho * sigma_1 * sigma_2],
+            [rho * sigma_1 * sigma_2, sigma_2**2]
+        ]
+        return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
+
+    def plot_negative_correlations():
+        """같은 일을 음의 상관에서 되풀이한다. 모양은 같고 기울기만 뒤집힌다."""
+        fig, axes = plt.subplots(1, 6, figsize=(15, 4))
+        correlation_coefficients = (0.00, -0.40, -0.60, -0.80, -0.90, -0.95)
+
+        for ax, rho in zip(axes, correlation_coefficients):
+            xy = generate_samples(0, 0, 1, 1, rho, 100)
+            ax.plot(xy[:, 0], xy[:, 1], 'ok')
+            ax.set_title(f'rho = {rho}')
+            ax.axis('off')
+            ax.axis('equal')
+            for loc in ('left', 'right', 'top', 'bottom'):
+                ax.spines[loc].set_visible(False)
+        plt.show()
+
+    if __name__ == "__main__":
+        plot_negative_correlations()
+    ```
+
+    ![음의 상관](./img/understanding_75.png)
+
+    한 변수가 커지면 다른 변수가 작아진다. 띠의 방향만 반대일 뿐 구조는 같다.
+
+    (3)을 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def generate_samples(rho, n=100):
+        return stats.multivariate_normal([0, 0], [[1, rho], [rho, 1]]).rvs(size=n)
+
+    pos = (0.00, 0.40, 0.60, 0.80, 0.90, 0.95)
+    neg = tuple(-r for r in pos)
+
+    np.random.seed(0)
+    A = [generate_samples(r) for r in pos]
+    np.random.seed(0)
+    B = [generate_samples(r) for r in neg]
+
+    print("|rho|    양수 판 r             음수 판 r             합        90도 회전인가")
+    for rho, a, b in zip(pos, A, B):
+        ra, rb = np.corrcoef(a.T)[0, 1], np.corrcoef(b.T)[0, 1]
+        rot = np.allclose(b[:, 0], a[:, 1]) and np.allclose(b[:, 1], -a[:, 0])
+        print(f"{rho:5.2f}  {ra:+.16f}  {rb:+.16f}  {ra + rb:+.1e}   {rot}")
+    ```
+
+    출력:
+
+    ```
+    |rho|    양수 판 r             음수 판 r             합        90도 회전인가
+     0.00  -0.0240052014940784  -0.0240052014940784  -4.8e-02   False
+     0.40  +0.4376998281800900  -0.4376998281800900  +0.0e+00   True
+     0.60  +0.6116463353944882  -0.6116463353944882  +0.0e+00   True
+     0.80  +0.7571693721126749  -0.7571693721126749  +0.0e+00   True
+     0.90  +0.8858200908150257  -0.8858200908150257  +0.0e+00   True
+     0.95  +0.9590898844142728  -0.9590898844142730  -2.2e-16   True
+    ```
+
+    **두 판의 표본상관이 합쳐서 정확히 $0$ 이다.** $\rho = 0.95$ 줄의 $-2.2\times10^{-16}$ 은 부동소수점 반올림이고, 나머지는 자릿수까지 완전히 상쇄된다.
+
+    마지막 열이 변환의 정체다. $\rho \ne 0$ 인 다섯 판에서 `True`, 곧 음수 판의 점이 양수 판의 점을 $(x,y) \mapsto (y,-x)$ 로 옮긴 것이다. **가로축 뒤집기가 아니라 $90^\circ$ 회전이다.**
+
+    $\rho = 0$ 줄만 `False` 이고 두 $r$ 의 합이 $-0.048$ 로 $0$ 이 아니다. 이 판에서는 두 그림이 **아예 같은 그림**이라 그렇다. $\Sigma$ 가 단위행렬이면 뒤집을 부호가 없다.
 
 ---
 
@@ -134,49 +381,158 @@ if __name__ == "__main__":
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 강한 음에서 강한 양까지
+**보기 3.** <span class="diff easy" title="쉬움"></span> 강한 음에서 강한 양까지. $\rho = -0.95$ 부터 $+0.95$ 까지 열한 판을 한 줄에 늘어놓는다. 판마다 **새로** 100 개를 뽑는다.
+
+**(1)** 그려 보고 무엇이 읽히는지 **수치와 함께** 말하시오.
+
+**(2)** 이 그림이 **잘못 읽히기 쉬운 점** 셋을 짚으시오. 눈금, 표본의 흔들림, 그리고 이 그림이 아예 다루지 않는 자료를 보시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(0)
+    **(1) 읽히는 것.**
 
-def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
-    covariance_matrix = [
-        [sigma_1**2, rho * sigma_1 * sigma_2],
-        [rho * sigma_1 * sigma_2, sigma_2**2]
-    ]
-    return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
+    **가운데가 둥글고 양끝이 가늘다.** $\rho = 0$ 판은 방향을 읽을 수 없는 둥근 구름이고, 양끝 $\pm0.95$ 판은 거의 선분이다. 보기 1 (1)의 축비로 적으면 $1.00 \to 6.25$ 다.
 
-def plot_all_correlations():
-    """-0.95 부터 0.95 까지 열한 칸에 늘어놓아 한눈에 견준다."""
-    fig, axes = plt.subplots(1, 11, figsize=(20, 2))
+    **부호는 기울기, 크기는 가늘기.** 왼쪽 절반은 왼쪽 위에서 오른쪽 아래로, 오른쪽 절반은 그 반대로 기운다. 가운데를 거울로 놓으면 좌우가 포개진다. 보기 2 (2)에서 본 대로 모양은 $\lvert\rho\rvert$ 만 알기 때문이다.
+
+    **눈금이 일부러 고르지 않다.** 가로로 늘어놓은 값은 $0,\ \pm0.4,\ \pm0.6,\ \pm0.8,\ \pm0.9,\ \pm0.95$ 로 **$1$ 에 가까울수록 촘촘하다.** 보기 1 (2)에서 본 대로 $\rho$ 가 $1$ 에 가까울수록 같은 간격이 그림을 더 크게 바꾸므로, 고르게 $0.2$ 씩 늘어놓았다면 끝의 두세 판이 서로 전혀 달라 보였을 것이다.
+
+    **(2) 잘못 읽히기 쉬운 점 셋.**
+
+    **첫째, 판의 제목은 $\rho$ 이지 $r$ 이 아니다.** 각 판은 모상관 $\rho$ 에서 뽑은 **표본 100 개**이고 표본상관은 그것과 다르다. 실제로 재어 보면
+
+    $$
+    \begin{array}{c|rrrrr|r|rrrrr}
+    \rho & -0.95 & -0.90 & -0.80 & -0.60 & -0.40 & 0 & 0.40 & 0.60 & 0.80 & 0.90 & 0.95 \\ \hline
+    r & -0.951 & -0.909 & -0.807 & \mathbf{-0.526} & -0.338 & \mathbf{+0.107} & +0.340 & +0.653 & +0.805 & +0.879 & +0.956
+    \end{array}
+    $$
+
+    다. **$\rho = -0.60$ 판에 실제로 그려진 것은 $r = -0.526$ 이고, $\rho = 0$ 판은 $r = +0.107$ 이다.** 제목을 믿고 "이것이 $-0.6$ 의 모습" 이라고 외우면 안 된다. 표준오차가 $\rho = 0$ 에서 $0.10$, $\rho = 0.6$ 에서 $0.064$ 이니 이 정도 어긋남은 늘 일어난다.
+
+    같은 이유로 **좌우가 정확한 거울이 아니다.** $\rho = +0.60$ 판은 $r = +0.653$ 인데 $\rho = -0.60$ 판은 $r = -0.526$ 이다. 보기 1 과 2 에서는 씨앗이 같아 정확히 짝지어졌지만, 여기서는 열한 판을 **차례로** 뽑으므로 판마다 다른 난수를 쓴다.
+
+    **둘째, 이웃한 두 판의 순서가 뒤집힐 수 있다.** $n = 100$ 에서 $\rho = 0.4$ 인 표본의 $r$ 이 $\rho = 0.6$ 인 표본의 $r$ 보다 클 확률을 피셔 $z$ 로 재면
+
+    $$
+    P(r_{0.4} > r_{0.6}) = 0.0303
+    $$
+
+    다. **서른 번에 한 번은 두 판의 가늘기가 뒤바뀐다.** 이 그림은 열한 판 가운데 하나를 보여 줄 뿐이고, 다시 뽑으면 다르게 나온다.
+
+    **셋째, 이 그림은 "$\rho$ 가 재는 것" 을 과장한다.** 열한 판이 모두 **이변량 정규**다. 곧 관계가 직선이고 이상점이 없으며 꼬리가 두텁지 않다. 그 세계 안에서는 $\rho$ 하나가 관계를 완전히 요약하므로 그림이 아름답게 정렬된다. 그러나
+
+    - $Y = X^2$ 처럼 휘어 있으면 $\rho = 0$ 인데도 $Y$ 가 $X$ 로 **완전히 결정**된다.
+    - 이상점 하나가 $r$ 을 $+1$ 에서 $-0.65$ 로 뒤집을 수 있다.
+    - 두 집단을 섞으면 각 집단 안의 부호와 전체의 부호가 반대일 수 있다.
+
+    이런 자료는 이 열한 판 어디에도 없다. **"$r = 0.4$ 짜리 자료는 이렇게 생겼다" 가 아니라 "이변량 정규라면 이렇게 생겼다" 로 읽어야 한다.**
+
+    덧붙여 $\rho$ 를 선형 눈금으로 읽는 버릇도 조심해야 한다. 설명된 변동으로 적으면
+
+    $$
+    \begin{array}{c|ccccc}
+    \lvert\rho\rvert & 0.40 & 0.60 & 0.80 & 0.90 & 0.95 \\ \hline
+    \rho^2 & 0.16 & 0.36 & 0.64 & 0.81 & 0.90
+    \end{array}
+    $$
+
+    이다. **$\rho = 0.4$ 가 설명하는 것은 $16\%$ 뿐**인데 그림의 네 번째 판은 꽤 또렷한 띠로 보인다.
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(0)
+
+    def generate_samples(mu_1, mu_2, sigma_1, sigma_2, rho, n):
+        covariance_matrix = [
+            [sigma_1**2, rho * sigma_1 * sigma_2],
+            [rho * sigma_1 * sigma_2, sigma_2**2]
+        ]
+        return stats.multivariate_normal([mu_1, mu_2], covariance_matrix).rvs(size=n)
+
+    def plot_all_correlations():
+        """-0.95 부터 0.95 까지 열한 칸에 늘어놓아 한눈에 견준다."""
+        fig, axes = plt.subplots(1, 11, figsize=(20, 2))
+        rhos = (-0.95, -0.90, -0.80, -0.60, -0.40,
+                 0.00,  0.40,  0.60,  0.80,  0.90, 0.95)
+
+        for ax, rho in zip(axes, rhos):
+            xy = generate_samples(0, 0, 1, 1, rho, 100)
+            ax.plot(xy[:, 0], xy[:, 1], 'ok')
+            ax.set_title(f'rho = {rho}')
+            ax.axis('off')
+            ax.axis('equal')
+            for loc in ('left', 'right', 'top', 'bottom'):
+                ax.spines[loc].set_visible(False)
+        plt.show()
+
+    if __name__ == "__main__":
+        plot_all_correlations()
+    ```
+
+    ![상관의 전체 스펙트럼](./img/understanding_113.png)
+
+    $r$이 $-1$에서 $+1$로 갈수록 구름이 좁은 타원으로 조여든다. $r = 0$ 근처에서는 방향을 알아볼 수 없는 둥근 구름이고, $|r|$이 커질수록 직선에 가까워진다.
+
+    $r$의 부호는 기울기의 방향을, 크기는 흩어짐의 정도를 나타낸다는 것이 이 그림 하나에 담겨 있다.
+
+    (2)에서 말한 두 가지를 수로 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
     rhos = (-0.95, -0.90, -0.80, -0.60, -0.40,
              0.00,  0.40,  0.60,  0.80,  0.90, 0.95)
 
-    for ax, rho in zip(axes, rhos):
-        xy = generate_samples(0, 0, 1, 1, rho, 100)
-        ax.plot(xy[:, 0], xy[:, 1], 'ok')
-        ax.set_title(f'rho = {rho}')
-        ax.axis('off')
-        ax.axis('equal')
-        for loc in ('left', 'right', 'top', 'bottom'):
-            ax.spines[loc].set_visible(False)
-    plt.show()
+    np.random.seed(0)
+    print("  rho     표본 r    rho^2")
+    for rho in rhos:
+        xy = stats.multivariate_normal([0, 0], [[1, rho], [rho, 1]]).rvs(size=100)
+        print(f"{rho:+6.2f}   {np.corrcoef(xy.T)[0, 1]:+.3f}   {rho**2:.2f}")
 
-if __name__ == "__main__":
-    plot_all_correlations()
-```
+    # 이웃한 두 판의 순서가 뒤집힐 확률 (피셔 z)
+    se = 1 / np.sqrt(100 - 3)
+    print("\n이웃 판의 순서가 뒤집힐 확률")
+    for a, b in [(0.00, 0.40), (0.40, 0.60), (0.60, 0.80), (0.80, 0.90), (0.90, 0.95)]:
+        d = (np.arctanh(b) - np.arctanh(a)) / (se * np.sqrt(2))
+        print(f"  P(r_{a:.2f} > r_{b:.2f}) = {stats.norm.sf(d):.4f}")
+    ```
 
-![상관의 전체 스펙트럼](./img/understanding_113.png)
+    출력:
 
-$r$이 $-1$에서 $+1$로 갈수록 구름이 좁은 타원으로 조여든다. $r = 0$ 근처에서는 방향을 알아볼 수 없는 둥근 구름이고, $|r|$이 커질수록 직선에 가까워진다.
+    ```
+      rho     표본 r    rho^2
+     -0.95   -0.951   0.90
+     -0.90   -0.909   0.81
+     -0.80   -0.807   0.64
+     -0.60   -0.526   0.36
+     -0.40   -0.338   0.16
+     +0.00   +0.107   0.00
+     +0.40   +0.340   0.16
+     +0.60   +0.653   0.36
+     +0.80   +0.805   0.64
+     +0.90   +0.879   0.81
+     +0.95   +0.956   0.90
 
-$r$의 부호는 기울기의 방향을, 크기는 흩어짐의 정도를 나타낸다는 것이 이 그림 하나에 담겨 있다.
+    이웃 판의 순서가 뒤집힐 확률
+      P(r_0.00 > r_0.40) = 0.0016
+      P(r_0.40 > r_0.60) = 0.0303
+      P(r_0.60 > r_0.80) = 0.0024
+      P(r_0.80 > r_0.90) = 0.0046
+      P(r_0.90 > r_0.95) = 0.0061
+    ```
+
+    표의 가운데 줄들이 (2)의 첫째 요점이다. **$\rho = -0.60$ 판에 실제로 그려진 것은 $-0.526$ 이고, $\rho = 0$ 판은 $+0.107$ 이다.** $\rho = +0.60$ 판의 $+0.653$ 과 견주면 좌우가 정확한 거울이 아니라는 것도 보인다.
+
+    아래쪽이 둘째 요점이다. $\rho = 0.4$ 와 $0.6$ 사이가 가장 위태로워 **$3\%$ 확률로 두 판의 가늘기가 뒤바뀐다.** 두 $\rho$ 의 간격이 $0.2$ 로 가장 넓은데도 그렇다. 피셔 $z$ 눈금에서는 $0.4 \to 0.6$ 의 간격($0.270$)이 $0.9 \to 0.95$ 의 간격($0.360$)보다 **좁기** 때문이다.
 
 ---
 
@@ -244,40 +600,178 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 키와 몸무게
+**보기 4.** <span class="diff easy" title="쉬움"></span> 키와 몸무게. `openintro` 의 `bdims` 자료(성인 507명의 신체 치수)에서 남성만 걸러 키 대 몸무게를 그린다.
+
+**(1)** 그려 보고 무엇이 읽히는지 **수치와 함께** 말하시오. 상관계수, 설명된 변동, 회귀직선의 기울기를 적으시오.
+
+**(2)** 코드의 `[:300]` 은 실제로 몇 개를 남기는가. 그림 아래 본문이 "남성 300명" 이라 적은 것이 맞는가.
+
+**(3)** 남성만, 여성만, 전체의 상관계수를 각각 구하시오. **전체가 가장 큰** 까닭을 설명하고, 성별을 통제한 편상관이 어디에 놓이는지 확인하시오.
 
 </div>
 
-실제 자료에서 볼 수 있는 고전적인 양의 상관이다.
+??? success "풀이"
 
-```python
-import matplotlib.pyplot as plt
-import pandas as pd
+    **(1) 그림에서 읽히는 것.**
 
-def plot_height_weight_scatter():
-    # openintro의 bdims 자료: 성인 507명의 신체 치수.
-    # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+    **오른쪽 위로 향하지만 꽤 넓게 흩어져 있다.** 상관계수를 재면
+
+    $$
+    r = 0.5347,
+    \qquad
+    r^2 = 0.2859
+    $$
+
+    다. **키가 설명하는 것은 몸무게 변동의 $29\%$ 뿐**이고 나머지 $71\%$ 는 키와 무관한 흩어짐이다. 그림의 점구름이 띠라기보다 둥근 덩어리에 가까운 것이 그 $71\%$ 다. 보기 1 (1)의 축비로 적으면 $\sqrt{1.535/0.465} = 1.82$ 로, 열한 판짜리 그림의 $\rho = 0.6$ 판보다도 통통하다.
+
+    회귀직선의 기울기는
+
+    $$
+    \hat b = r\,\frac{s_{\text{몸무게}}}{s_{\text{키}}} = 0.5347 \times \frac{10.51}{7.18} = 0.783\ \text{kg/cm}
+    $$
+
+    다. **키가 $1$ cm 클 때 몸무게가 평균 $0.78$ kg 무겁다**는 말이고, $10$ cm 차이가 $7.8$ kg 에 해당한다. 자료의 키는 $157.2$\~$198.1$ cm, 몸무게는 $53.9$\~$116.4$ kg 에 퍼져 있다.
+
+    **(2) `[:300]` 은 아무것도 자르지 않는다.** `bdims` 의 507명 가운데 남성은 **247명**뿐이다. 앞 300개를 잘라내라고 했지만 애초에 300개가 없으므로 247명이 그대로 남는다. **그림에 찍힌 점은 300개가 아니라 247개다.**
+
+    그러니 그림 아래의 "남성 300명" 은 **틀린 문장**이다. 코드에 `[:300]` 이 적혀 있는 것을 보고 그대로 옮겨 적은 것으로 보인다. 자료를 열어 세어 보지 않으면 잡히지 않는 종류의 오류이고, **코드에 적힌 수와 실제로 쓰인 수가 다를 수 있다**는 흔한 함정이다. 다행히 $r = 0.5347$ 이라는 값 자체는 영향을 받지 않는다. 자르기가 일어나지 않았으므로 "남성 전원" 의 상관이 맞다.
+
+    **(3) 섞으면 커진다.** 세 상관을 나란히 적는다.
+
+    $$
+    \begin{array}{l|c|c|c}
+     & n & r & r^2 \\ \hline
+    \text{남성만} & 247 & 0.5347 & 0.286 \\
+    \text{여성만} & 260 & 0.4311 & 0.186 \\
+    \textbf{전체} & 507 & \mathbf{0.7173} & 0.515
+    \end{array}
+    $$
+
+    **전체가 두 집단 각각보다 훨씬 크다.** 평균을 각각 적어 보면 까닭이 보인다.
+
+    $$
+    \begin{array}{l|cc}
+     & \text{키 평균} & \text{몸무게 평균} \\ \hline
+    \text{남성} & 177.75\ \text{cm} & 78.14\ \text{kg} \\
+    \text{여성} & 164.87\ \text{cm} & 60.60\ \text{kg} \\ \hline
+    \text{차} & 12.87\ \text{cm} & 17.54\ \text{kg}
+    \end{array}
+    $$
+
+    **남성이 여성보다 키도 크고 몸무게도 무겁다.** 두 집단을 한 그릇에 부으면 집단 평균 두 점이 오른쪽 위로 나란히 놓이고, 그 자체가 강한 양의 추세를 만든다. 전체 상관은 **집단 안의 관계와 집단 사이의 관계를 섞은 것**이다.
+
+    실제로 성별 평균을 각 집단에서 빼고 남은 잔차의 상관을 재면
+
+    $$
+    r_{\text{잔차}} = 0.4863
+    $$
+
+    이고, 이것은 성별을 통제한 **편상관** $r_{\text{키,몸무게}\cdot\text{성별}} = 0.4863$ 과 같은 값이다(12.4절). **$0.4863$ 이 남성의 $0.5347$ 과 여성의 $0.4311$ 사이에 있다.** 두 집단 안의 상관을 묶은 값이니 당연한 자리다.
+
+    $$
+    0.4311 \;<\; 0.4863 \;<\; 0.5347 \;\ll\; 0.7173
+    $$
+
+    **$0.717$ 과 $0.486$ 의 간격이 성별이 만든 가짜 몫이다.** 3.4절에서 집단을 섞으면 부호까지 뒤집힐 수 있다고 했는데, 여기서는 부호는 그대로이고 크기만 부풀었다. 어느 쪽이든 교훈은 같다. **상관을 재기 전에 자료가 하나의 집단인지 먼저 물어야 한다.**
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import pandas as pd
+
+    def plot_height_weight_scatter():
+        # openintro의 bdims 자료: 성인 507명의 신체 치수.
+        # hgt(cm), wgt(kg), sex(1 = 남성, 0 = 여성) 열을 쓴다.
+        url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
+               "master/csv/openintro/bdims.csv")
+        data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
+        data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
+        filtered = data[data.Gender == "Male"][:300]
+
+        fig, ax = plt.subplots(figsize=(10, 10))
+        ax.plot(filtered.Height, filtered.Weight, '.k')
+        ax.set_xlabel('Height', fontsize=15)
+        ax.set_ylabel('Weight', fontsize=15)
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        plt.show()
+
+    if __name__ == "__main__":
+        plot_height_weight_scatter()
+    ```
+
+    ![남성의 키와 몸무게](./img/understanding_214.png)
+
+    오른쪽 위로 향하는 관계가 보이지만 점들이 꽤 넓게 흩어져 있다. 그림의 설명문은 "남성 300명" 이라 적었으나 (2)에서 본 대로 실제로 찍힌 점은 **247개**다.
+
+    이제 (1)\~(3)의 수를 확인한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
     url = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
            "master/csv/openintro/bdims.csv")
     data = pd.read_csv(url).rename(columns={"hgt": "Height", "wgt": "Weight"})
     data["Gender"] = data["sex"].map({1: "Male", 0: "Female"})
-    filtered = data[data.Gender == "Male"][:300]
 
-    fig, ax = plt.subplots(figsize=(10, 10))
-    ax.plot(filtered.Height, filtered.Weight, '.k')
-    ax.set_xlabel('Height', fontsize=15)
-    ax.set_ylabel('Weight', fontsize=15)
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    plt.show()
+    # (2) [:300] 은 몇 개를 남기는가
+    male = data[data.Gender == "Male"]
+    print(f"남성 전체 {len(male)}명   [:300] 뒤 {len(male[:300])}명"
+          f"   잘린 수 {len(male) - len(male[:300])}")
 
-if __name__ == "__main__":
-    plot_height_weight_scatter()
-```
+    # (1) 남성의 상관, 설명된 변동, 기울기
+    r = male.Height.corr(male.Weight)
+    b = r * male.Weight.std() / male.Height.std()
+    print(f"\nr = {r:.4f}   r^2 = {r**2:.4f}   기울기 = {b:.4f} kg/cm")
+    print(f"키 {male.Height.min()}~{male.Height.max()} cm   "
+          f"몸무게 {male.Weight.min()}~{male.Weight.max()} kg")
+    print(f"sd  키 {male.Height.std():.2f}   몸무게 {male.Weight.std():.2f}")
 
-![남성의 키와 몸무게](./img/understanding_214.png)
+    # (3) 집단별과 전체
+    print()
+    for label, sub in [("남성", male),
+                       ("여성", data[data.Gender == "Female"]),
+                       ("전체", data)]:
+        rr = sub.Height.corr(sub.Weight)
+        print(f"{label}: n = {len(sub):3d}   r = {rr:.4f}   r^2 = {rr**2:.4f}"
+              f"   키평균 {sub.Height.mean():6.2f}   몸무게평균 {sub.Weight.mean():5.2f}")
 
-남성 300명의 키와 몸무게다. 오른쪽 위로 향하는 관계가 보이지만 점들이 꽤 넓게 흩어져 있다. 뒤에서 계산하면 $r = 0.53$이다.
+    # 성별 평균을 뺀 잔차의 상관 = 성별을 통제한 편상관
+    res_h = data.Height - data.groupby("Gender").Height.transform("mean")
+    res_w = data.Weight - data.groupby("Gender").Weight.transform("mean")
+    c = data[["Height", "Weight"]].assign(S=data.sex).corr()
+    rxy, rxs, rws = c.loc["Height", "Weight"], c.loc["Height", "S"], c.loc["Weight", "S"]
+    print(f"\n잔차의 상관   {res_h.corr(res_w):.4f}")
+    print(f"편상관 공식   "
+          f"{(rxy - rxs * rws) / np.sqrt((1 - rxs**2) * (1 - rws**2)):.4f}")
+    ```
+
+    출력:
+
+    ```
+    남성 전체 247명   [:300] 뒤 247명   잘린 수 0
+
+    r = 0.5347   r^2 = 0.2859   기울기 = 0.7826 kg/cm
+    키 157.2~198.1 cm   몸무게 53.9~116.4 kg
+    sd  키 7.18   몸무게 10.51
+
+    남성: n = 247   r = 0.5347   r^2 = 0.2859   키평균 177.75   몸무게평균 78.14
+    여성: n = 260   r = 0.4311   r^2 = 0.1858   키평균 164.87   몸무게평균 60.60
+    전체: n = 507   r = 0.7173   r^2 = 0.5145   키평균 171.14   몸무게평균 69.15
+
+    잔차의 상관   0.4863
+    편상관 공식   0.4863
+    ```
+
+    첫 줄이 (2)다. **`[:300]` 이 잘라낸 수가 0 이다.** 남성이 247명뿐이라 자르기가 일어나지 않았고, 그래서 그림의 점도 247개다.
+
+    (1)의 세 수 `r = 0.5347`, `r^2 = 0.2859`, 기울기 `0.7826 kg/cm` 가 손계산과 맞는다.
+
+    (3)이 요점이다. 집단 안에서는 $0.5347$ 과 $0.4311$ 인데 둘을 합치면 $0.7173$ 으로 **뛴다.** 같은 줄의 평균을 보면 까닭이 바로 보인다. 남성이 키도 $12.9$ cm 크고 몸무게도 $17.5$ kg 무겁다.
+
+    마지막 두 줄은 **잔차의 상관과 편상관 공식이 네 자리까지 같다**는 확인이다. $0.4863$ 은 남성의 $0.5347$ 과 여성의 $0.4311$ **사이**에 있고, 전체의 $0.7173$ 과는 한참 떨어져 있다. 그 간격이 성별이 만든 몫이다.
 
 #### 실습 1: 여성에 대한 산점도
 

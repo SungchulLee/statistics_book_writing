@@ -43,125 +43,327 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 기대도수 계산
+**보기 1.** <span class="diff easy" title="쉬움"></span> 기대도수 계산. 성별과 주로 쓰는 손을 기록한 $3 \times 2$ 표를 쓴다.
+
+$$
+\begin{array}{crr|r}
+ & \text{남성} & \text{여성} & \text{행 합} \\ \hline
+\text{오른손잡이} & 934 & 1{,}070 & 2{,}004 \\
+\text{왼손잡이} & 113 & 92 & 205 \\
+\text{양손잡이} & 20 & 8 & 28 \\ \hline
+\text{열 합} & 1{,}067 & 1{,}170 & 2{,}237
+\end{array}
+$$
+
+**(1)** 여섯 칸의 기대도수를 **유리수로 정확히** 구하시오. 정수인 칸이 하나도 없는 까닭은 무엇인가.
+
+**(2)** 기대표가 관측표의 **행 합과 열 합을 그대로 보존**함을 보이시오.
+
+**(3)** $E = \mathbf r \mathbf c^\top / n$ 은 언제나 **랭크 1** 이다. 그래서 모든 칸이 양수인 관측표에 대해
+
+$$
+\chi^2 = 0
+\quad \Longleftrightarrow \quad
+\operatorname{rank}(O) = 1
+$$
+
+임을 보이시오.
+
+**(4)** 기대도수를 계산하는 코드를 돌려 (1)·(2)를 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def compute_expected(observed_counts: np.ndarray) -> np.ndarray:
-    """독립이라는 가정 아래의 기대도수. E_ij = (행합 x 열합) / 전체."""
-    # 이 공식이 곧 독립의 정의다. P(A and B) = P(A)P(B)의 양변에 n을 곱하면
-    # n * (행합/n) * (열합/n) = 행합 * 열합 / n 이 된다.
-    row_totals = observed_counts.sum(axis=1, keepdims=True)
-    col_totals = observed_counts.sum(axis=0, keepdims=True)
-    total = observed_counts.sum()
-    return (row_totals @ col_totals) / total
+    **(1) 기대도수를 유리수로.** 독립이면 결합확률이 주변확률의 곱이다. 주변확률을 표본에서 읽으면 $\hat P(i\text{행}) = R_i/n$, $\hat P(j\text{열}) = C_j/n$ 이므로
+
+    $$
+    E_{ij} = n \cdot \frac{R_i}{n}\cdot\frac{C_j}{n} = \frac{R_i C_j}{n}
+    $$
+
+    이다. $n = 2237$ 로 나누기만 하면 된다.
+
+    $$
+    \begin{array}{c|cc}
+     & \text{남성} & \text{여성} \\ \hline
+    \text{오른손} & \dfrac{2004 \cdot 1067}{2237} = \dfrac{2138268}{2237} & \dfrac{2004 \cdot 1170}{2237} = \dfrac{2344680}{2237} \\[2mm]
+    \text{왼손} & \dfrac{205 \cdot 1067}{2237} = \dfrac{218735}{2237} & \dfrac{205 \cdot 1170}{2237} = \dfrac{239850}{2237} \\[2mm]
+    \text{양손} & \dfrac{28 \cdot 1067}{2237} = \dfrac{29876}{2237} & \dfrac{28 \cdot 1170}{2237} = \dfrac{32760}{2237}
+    \end{array}
+    $$
+
+    소수로는 각각 $955.8641,\ 1048.1359,\ 97.7805,\ 107.2195,\ 13.3554,\ 14.6446$ 이다.
+
+    **분수가 하나도 약분되지 않았다.** $2237$ 이 **소수**이기 때문이다($47^2 = 2209 < 2237 < 2809 = 53^2$ 이므로 $47$ 까지만 나누어 보면 된다). $R_i C_j$ 가 $2237$ 로 나누어떨어지려면 $R_i$ 나 $C_j$ 가 $2237$ 의 배수여야 하는데 둘 다 $n$ 보다 작으므로 불가능하다. **총합이 소수인 표에서는 기대도수에 정수가 나올 수 없다.**
+
+    **(2) 주변합 보존.** 행으로 더하면
+
+    $$
+    \sum_{j=1}^c E_{ij} = \sum_{j=1}^c \frac{R_i C_j}{n} = \frac{R_i}{n}\sum_{j=1}^c C_j = \frac{R_i}{n}\cdot n = R_i
+    $$
+
+    이고, 열로 더하면 똑같은 계산으로 $\sum_i E_{ij} = C_j$ 다. 첫 행에서 직접 확인하면 $955.8641 + 1048.1359 = 2004$ 로 딱 맞는다.
+
+    **보존이 곧 자유도의 정체다.** 어긋남 $O_{ij} - E_{ij}$ 는 칸마다 하나씩 $rc$ 개 있지만 행마다 합이 $0$, 열마다 합이 $0$ 이라는 제약을 받는다. 제약이 $r + c$ 개인데 전체 합이 $0$ 이라는 사실이 두 번 세어지므로 독립인 제약은 $r + c - 1$ 개다. 남는 것은
+
+    $$
+    rc - (r + c - 1) = (r-1)(c-1)
+    $$
+
+    이고 여기서는 $(3-1)(2-1) = 2$ 다. **$3 \times 2$ 표에서 주변합을 고정하고 자유롭게 정할 수 있는 칸은 둘뿐이다.**
+
+    **(3) 랭크 1 이라는 것.** $E = \mathbf r \mathbf c^\top / n$ 은 열벡터와 행벡터의 곱, 곧 **외적**이다. 외적의 모든 열은 $\mathbf r$ 의 스칼라배이므로 열공간이 1차원이고 $\operatorname{rank}(E) = 1$ 이다. 기대표는 표의 크기와 상관없이 **언제나 랭크 1** 이다.
+
+    ($\Leftarrow$) $O$ 가 랭크 1 이고 모든 칸이 양수이면 $O = \mathbf u \mathbf v^\top$, 곧 $O_{ij} = u_i v_j$ 로 적힌다. 그러면
+
+    $$
+    R_i = u_i \textstyle\sum_j v_j, \qquad C_j = v_j \textstyle\sum_i u_i, \qquad n = \Bigl(\textstyle\sum_i u_i\Bigr)\Bigl(\textstyle\sum_j v_j\Bigr)
+    $$
+
+    이므로
+
+    $$
+    \frac{R_i C_j}{n} = \frac{u_i \sum_j v_j \cdot v_j \sum_i u_i}{\bigl(\sum_i u_i\bigr)\bigl(\sum_j v_j\bigr)} = u_i v_j = O_{ij}
+    $$
+
+    다. 곧 $O = E$ 이고 모든 항이 $0$ 이므로 $\chi^2 = 0$ 이다.
+
+    ($\Rightarrow$) $\chi^2 = 0$ 이면 모든 $E_{ij} > 0$ 아래에서 항마다 $(O_{ij}-E_{ij})^2 = 0$, 곧 $O = E$ 다. $E$ 가 랭크 1 이므로 $O$ 도 랭크 1 이다. $\square$
+
+    **읽는 법.** 독립성 검정은 결국 **"관측표가 랭크 1 에서 얼마나 멀리 있는가"** 를 재는 것이다. 자유도 $(r-1)(c-1)$ 은 $r \times c$ 행렬이 랭크 1 에서 벗어날 수 있는 방향의 수와 같다.
+
+    **(4) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def compute_expected(observed_counts: np.ndarray) -> np.ndarray:
+        """독립이라는 가정 아래의 기대도수. E_ij = (행합 x 열합) / 전체."""
+        # 이 공식이 곧 독립의 정의다. P(A and B) = P(A)P(B)의 양변에 n을 곱하면
+        # n * (행합/n) * (열합/n) = 행합 * 열합 / n 이 된다.
+        row_totals = observed_counts.sum(axis=1, keepdims=True)
+        col_totals = observed_counts.sum(axis=0, keepdims=True)
+        total = observed_counts.sum()
+        return (row_totals @ col_totals) / total
 
 
-# 확인: 기대도수의 행합과 열합은 관측도수의 것과 정확히 같아야 한다.
-demo = np.array([[934., 1070.], [113., 92.], [20., 8.]])
-E = compute_expected(demo)
-print(np.round(E, 2))
-print("행합 일치:", np.allclose(E.sum(axis=1), demo.sum(axis=1)))
-print("열합 일치:", np.allclose(E.sum(axis=0), demo.sum(axis=0)))
-```
+    # 확인: 기대도수의 행합과 열합은 관측도수의 것과 정확히 같아야 한다.
+    demo = np.array([[934., 1070.], [113., 92.], [20., 8.]])
+    E = compute_expected(demo)
+    print(np.round(E, 2))
+    print("행합 일치:", np.allclose(E.sum(axis=1), demo.sum(axis=1)))
+    print("열합 일치:", np.allclose(E.sum(axis=0), demo.sum(axis=0)))
+    print("rank(E) =", np.linalg.matrix_rank(E))
+    ```
 
-출력:
+    출력:
 
-```
-[[ 955.86 1048.14]
- [  97.78  107.22]
- [  13.36   14.64]]
-행합 일치: True
-열합 일치: True
-```
+    ```
+    [[ 955.86 1048.14]
+     [  97.78  107.22]
+     [  13.36   14.64]]
+    행합 일치: True
+    열합 일치: True
+    rank(E) = 1
+    ```
 
-주변 합계가 보존된다는 것이 자유도가 $rc$가 아니라 $(r-1)(c-1)$인 이유다. 행합과 열합이 고정되면 $3 \times 2$ 표에서 자유롭게 정할 수 있는 칸은 2개뿐이다.
+    출력의 여섯 수 `955.86 1048.14 97.78 107.22 13.36 14.64` 가 (1)의 유리수를 소수 둘째 자리에서 끊은 것과 **모두 같다.** 행합·열합이 `True` 로 보존되는 것이 (2)이고, `rank(E) = 1` 이 (3)의 앞부분이다.
 
-`keepdims=True` 인자는 2차원 모양을 유지하여 행렬 곱 `row_totals @ col_totals`이 $r \times c$ 기대도수 행렬로 올바르게 계산되도록 한다.
+    `keepdims=True` 인자는 2차원 모양을 유지하여 행렬 곱 `row_totals @ col_totals`이 $r \times c$ 기대도수 행렬로 올바르게 계산되도록 한다. 이것을 빼면 1차원 배열 둘의 `@` 가 **내적(스칼라)** 으로 해석된다. 이 표에서는 길이가 3 과 2 로 달라 다행히 오류가 나지만, 정방 표에서는 조용히 틀린 값이 나온다. 연습문제 9 가 그 장면을 직접 보인다.
 
 ### 전체 계산
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 독립성 검정 손계산
+**보기 2.** <span class="diff easy" title="쉬움"></span> 독립성 검정 손계산. 보기 1 의 기대도수를 그대로 쓴다.
+
+**(1)** 여섯 칸의 기여 $(O_{ij}-E_{ij})^2/E_{ij}$ 를 각각 구해 $\chi^2$ 을 얻으시오. 어느 칸이 가장 크게 기여하는가. **어긋남이 가장 큰 칸과 기여가 가장 큰 칸이 다른 까닭**을 적으시오.
+
+**(2)** 자유도를 구하고 p-값을 적으시오. 자유도 2 에서는 p-값이 **닫힌 꼴**로 적힌다.
+
+**(3)** 코드로 (1)·(2)를 확인하시오. 같은 표를 `scipy.stats.chi2_contingency` 에 넣어도 같은 값이 나오는가.
 
 </div>
 
-```python
-# 행이 한 변수의 수준, 열이 다른 변수의 수준이다.
-# 실수로 나눗셈을 하게 되므로 dtype=float 로 만들어 둔다.
-observed_counts = np.array([[934, 1070],
-                            [113,   92],
-                            [ 20,    8]], dtype=float)
+??? success "풀이"
 
-expected_counts = compute_expected(observed_counts)
-df = (observed_counts.shape[0] - 1) * (observed_counts.shape[1] - 1)
+    **(1) 칸별 기여.** 먼저 어긋남 $O_{ij} - E_{ij}$ 를 적는다. 보기 1 (2)에서 행 합과 열 합이 보존되므로 여섯 수 가운데 **자유로운 것은 하나**다. 왼쪽 열의 세 어긋남을 $d_1, d_2, d_3$ 라 하면 오른쪽 열은 $-d_1, -d_2, -d_3$ 이고 $d_1 + d_2 + d_3 = 0$ 이다.
 
-chi2 = np.sum((observed_counts - expected_counts)**2 / expected_counts)
-p_value = stats.chi2(df).sf(chi2)      # 언제나 우측검정
+    $$
+    d_1 = 934 - 955.8641 = -21.8641,
+    \qquad
+    d_2 = 113 - 97.7805 = +15.2195,
+    \qquad
+    d_3 = 20 - 13.3554 = +6.6446
+    $$
 
-print(f"chi_squared_statistic = {chi2:.2f}")
-print(f"p_value = {p_value:.2%}")
-```
+    합이 $-21.8641 + 15.2195 + 6.6446 = 0$ 으로 맞는다. **좋은 검산이다.** 이제 칸마다 $d^2/E$ 를 만든다.
 
-출력:
+    $$
+    \begin{array}{c|cc|c}
+     & \text{남성} & \text{여성} & \text{행 합} \\ \hline
+    \text{오른손} & \dfrac{21.8641^2}{955.8641} = 0.5001 & \dfrac{21.8641^2}{1048.1359} = 0.4561 & 0.9562 \\[2mm]
+    \text{왼손} & \dfrac{15.2195^2}{97.7805} = 2.3689 & \dfrac{15.2195^2}{107.2195} = 2.1604 & 4.5293 \\[2mm]
+    \text{양손} & \dfrac{6.6446^2}{13.3554} = 3.3058 & \dfrac{6.6446^2}{14.6446} = 3.0148 & 6.3206 \\ \hline
+    \text{열 합} & 6.1748 & 5.6313 & 11.8061
+    \end{array}
+    $$
 
-```
-chi_squared_statistic = 11.81
-p_value = 0.27%
-```
+    $$
+    \chi^2 = 11.8061
+    $$
 
-`scipy.stats.chi2_contingency`에 같은 표를 넣어도 같은 값이 나온다. 다만 그 함수는 $2 \times 2$ 표에 한해 Yates 연속성 보정을 기본으로 적용하므로, 이 $3 \times 2$ 표에서만 결과가 일치한다.
+    **어긋남이 가장 큰 행은 오른손잡이($\lvert d_1 \rvert = 21.9$)인데 기여는 가장 작다**($0.956$, 전체의 $8\%$). 거꾸로 양손잡이는 어긋남이 $6.6$ 으로 가장 작은데 기여가 가장 크다($6.32$, 전체의 $54\%$). 분모가 $E_{ij}$ 이기 때문이다. 같은 $d$ 라도 기대도수가 작은 칸에서는 훨씬 크게 울린다.
+
+    $$
+    \frac{d^2}{E} \quad\text{에서}\quad E_{\text{오른손}} \approx 1000, \quad E_{\text{양손}} \approx 14
+    \quad \Longrightarrow \quad \text{70 배 차이}
+    $$
+
+    **어긋남은 그 칸이 얼마나 큰지에 비추어 재야 한다.** 양손잡이 28 명 가운데 $6.6$ 명이 어긋난 것(상대적으로 $24\%$)이 오른손잡이 2,004 명 가운데 $21.9$ 명이 어긋난 것($1\%$)보다 훨씬 심각하다.
+
+    **(2) 자유도와 p-값.** $\text{df} = (3-1)(2-1) = 2$ 다.
+
+    자유도 2 는 특별하다. $\chi^2_2$ 의 밀도가 $\tfrac12 e^{-x/2}$, 곧 평균 2 인 지수분포라서 꼬리확률이 바로 적분된다.
+
+    $$
+    p = P(\chi^2_2 \ge 11.8061) = \int_{11.8061}^{\infty} \tfrac12 e^{-x/2}\,dx = e^{-11.8061/2} = e^{-5.90307} = 0.0027311
+    $$
+
+    **특수함수가 전혀 쓰이지 않는다.** 지수함수 한 번으로 끝난다. 임계값도 같은 식을 뒤집어 $\chi^2_{2,\,0.05} = -2\ln 0.05 = 5.9915$ 로 얻는다. $11.8061 > 5.9915$ 이고 $p = 0.0027 < 0.05$ 이므로 $H_0$ 을 **기각한다.** 성별과 주로 쓰는 손은 독립이 아니다.
+
+    다만 $n = 2{,}237$ 이 크다. 크래머 $V = \sqrt{\chi^2/(n \cdot \min(r-1,c-1))} = \sqrt{11.8061/2237} = 0.0726$ 에 지나지 않아 **연관의 세기 자체는 아주 약하다.** 유의성과 중요성은 다른 말이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    # 행이 한 변수의 수준, 열이 다른 변수의 수준이다.
+    # 실수로 나눗셈을 하게 되므로 dtype=float 로 만들어 둔다.
+    observed_counts = np.array([[934, 1070],
+                                [113,   92],
+                                [ 20,    8]], dtype=float)
+
+    expected_counts = compute_expected(observed_counts)
+    df = (observed_counts.shape[0] - 1) * (observed_counts.shape[1] - 1)
+
+    chi2 = np.sum((observed_counts - expected_counts)**2 / expected_counts)
+    p_value = stats.chi2(df).sf(chi2)      # 언제나 우측검정
+
+    print(f"chi_squared_statistic = {chi2:.2f}")
+    print(f"p_value = {p_value:.2%}")
+
+    # 칸별 기여와, 자유도 2 의 닫힌 꼴
+    print(f"칸별 기여\n{np.round((observed_counts - expected_counts)**2 / expected_counts, 4)}")
+    print(f"exp(-chi2/2) = {np.exp(-chi2 / 2):.7f}   sf = {p_value:.7f}")
+    print(f"크래머 V = {np.sqrt(chi2 / observed_counts.sum()):.4f}")
+
+    # 같은 표를 scipy 에 넣는다
+    c2, p2, df2, _ = stats.chi2_contingency(observed_counts)
+    print(f"chi2_contingency: chi2 = {c2:.4f}, df = {df2}, p = {p2:.7f}")
+    ```
+
+    출력:
+
+    ```
+    chi_squared_statistic = 11.81
+    p_value = 0.27%
+    칸별 기여
+    [[0.5001 0.4561]
+     [2.3689 2.1604]
+     [3.3058 3.0148]]
+    exp(-chi2/2) = 0.0027311   sf = 0.0027311
+    크래머 V = 0.0726
+    chi2_contingency: chi2 = 11.8061, df = 2, p = 0.0027311
+    ```
+
+    여섯 칸의 기여 `0.5001 0.4561 2.3689 2.1604 3.3058 3.0148` 이 (1)의 표와 **네 자리까지 모두 같다.** `exp(-chi2/2)` 와 `sf` 가 `0.0027311` 로 같은 것은 (2)에서 유도한 닫힌 꼴 $p = e^{-\chi^2/2}$ 이 자유도 2 에서 정확히 성립한다는 뜻이다. $V = 0.0726$ 도 손계산과 맞는다.
+
+    `scipy.stats.chi2_contingency` 가 돌려준 `11.8061`, `df = 2`, `0.0027311` 도 같다. 다만 그 함수는 $2 \times 2$ 표에 한해 Yates 연속성 보정을 **기본으로** 적용한다. 이 $3 \times 2$ 표에서 일치한 것은 보정이 적용되지 않았기 때문이고, $2 \times 2$ 표에서 손계산과 맞추려면 `correction=False` 를 주어야 한다.
 
 ### 시각화
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 검정 결과를 그림으로
+**보기 3.** <span class="diff easy" title="쉬움"></span> 검정 결과를 그림으로. 보기 2 의 $\chi^2_2$ 밀도를 그리고 통계량 $11.8061$ 을 경계로 좌우를 칠한다.
+
+**(1)** 그려 보고 무엇이 읽히는지 말하시오. 세로축 절편, 곡선의 모양, 통계량의 위치, 임계값과의 관계를 **수치와 함께** 적으시오.
+
+**(2)** 이 그림이 **가리는 것**은 무엇인가. 칠해진 오른쪽 꼬리의 넓이가 p-값이라고 했는데, 그림에서 그 넓이를 눈으로 읽을 수 있는가.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 카이제곱 분포를 그리고 통계량을 경계로 좌우를 나눠 칠한다.
-# 오른쪽 넓이가 p-값이다. 이 검정은 방향이 없어 언제나 우측만 본다.
-fig, ax = plt.subplots(figsize=(12, 4))
+    **(1) 그림에서 읽히는 것.**
 
-x_left = np.linspace(0, chi2, 200)
-y_left = stats.chi2(df).pdf(x_left)
-ax.plot(x_left, y_left, linewidth=3)
-x_fill = np.concatenate([[0], x_left, [chi2], [0]])
-y_fill = np.concatenate([[0], y_left, [0], [0]])
-ax.fill(x_fill, y_fill, alpha=0.1)
+    **세로축 절편이 정확히 $0.5$ 다.** 자유도 2 의 밀도가 $f(x) = \tfrac12 e^{-x/2}$ 이므로 $f(0) = 1/2$ 이다. 그리고 곡선은 봉우리가 없이 $0$ 에서부터 **단조감소하는 순수한 지수곡선**이다. 자유도 2 는 $\chi^2$ 족에서 밀도가 $0$ 에서 유한하면서 봉우리가 없는 유일한 경우다($d < 2$ 면 발산하고 $d > 2$ 면 $x = d-2$ 에 봉우리가 생긴다).
 
-x_right = np.linspace(chi2, max(20, chi2 + 5), 200)
-y_right = stats.chi2(df).pdf(x_right)
-ax.plot(x_right, y_right, linewidth=3)
-x_fill_r = np.concatenate([[chi2], x_right, [max(20, chi2 + 5)], [chi2]])
-y_fill_r = np.concatenate([[0], y_right, [0], [0]])
-ax.fill(x_fill_r, y_fill_r, alpha=0.1)
+    **통계량이 오른쪽 끝에 있다.** 분포의 중앙값은 $2\ln 2 = 1.3863$, 평균은 $2$ 인데 관측값은 $11.8061$ 로 **평균의 5.9 배**다. 5% 임계값 $-2\ln 0.05 = 5.9915$ 의 거의 정확히 두 배이기도 하다.
 
-ax.annotate(f"p_value = {p_value:.2%}",
-            xy=(chi2 * 0.8, y_left.max() * 0.15),
-            xytext=(chi2 * 0.9 + 5, y_left.max() * 0.6),
-            fontsize=12, arrowprops=dict(width=0.2, headwidth=8))
+    **파란 영역이 그림의 거의 전부다.** 파란 넓이가 $1 - 0.0027 = 0.9973$ 이다. $H_0$ 이 참인 세상을 2,237 명 표본으로 1,000 번 되풀이하면 997 번은 파란 영역에, 3 번만 빨간 영역에 떨어진다.
 
-ax.spines["right"].set_visible(False)
-ax.spines["top"].set_visible(False)
-ax.spines["bottom"].set_position("zero")
-ax.spines["left"].set_position("zero")
-plt.tight_layout()
-plt.show()
-```
+    **(2) 그림이 가리는 것 — 꼬리는 보이지 않는다.** 빨간 곡선은 가로축에 붙은 **직선처럼** 보인다. 눈금이 속이는 것이 아니라 실제로 그렇게 납작하다.
 
-![카이제곱 분포와 p-값](./img/independence_manual_78.png)
+    $$
+    f(11.8061) = \tfrac12 e^{-5.90307} = 0.0013655,
+    \qquad
+    \frac{f(0)}{f(11.8061)} = \frac{0.5}{0.0013655} = 366
+    $$
 
-칠해진 오른쪽 꼬리가 p-값 0.27%다. 자유도 2인 카이제곱분포에서 11.81은 오른쪽으로 한참 벗어난 값이다.
+    꼬리 쪽 높이가 절편의 **366 분의 1** 이다. 세로 길이 350 픽셀짜리 그림이라면 빨간 영역의 가장 높은 곳이 **1 픽셀**이다. 그 아래 넓이가 $0.0027$ 이라는 것을 그림에서 눈으로 읽어 낼 방법은 없다.
+
+    **그래서 이 그림이 해 주는 일과 못 하는 일이 갈린다.**
+
+    | 그림이 해 주는 것 | 그림이 못 하는 것 |
+    |---|---|
+    | 통계량이 분포의 어느 쪽에 있는지 | p-값이 $0.0027$ 인지 $0.0001$ 인지 구별 |
+    | 검정이 **우측검정**임을 보임 | 꼬리 넓이의 크기를 읽기 |
+    | 자유도 2 의 밀도 모양 | 연관의 **세기**($V = 0.073$) |
+
+    **작은 p-값을 보이는 데 꼬리 그림은 적절한 도구가 아니다.** 넓이가 작을수록 그릴 수 없게 된다. 그래서 주석으로 `p_value = 0.27%` 라고 **글자를 써 붙인다.** 그림은 "오른쪽 꼬리를 본다"는 **절차**를 설명하는 그림이지 p-값의 크기를 전달하는 그림이 아니다.
+
+    또 하나. 그림을 $x = 20$ 에서 끊었으므로 칠해진 빨간 넓이는 사실 $P(11.8061 \le \chi^2_2 \le 20) = 0.0026857$ 로, 참 p-값 $0.0027311$ 보다 $0.0000454$ 작다. 잘려 나간 $x > 20$ 쪽에 그만큼이 남아 있다. **p-값의 $1.7\%$ 를 그림에서 잘라 버린 셈**이지만, 어차피 보이지 않는 넓이라 그림의 뜻은 달라지지 않는다.
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    # 카이제곱 분포를 그리고 통계량을 경계로 좌우를 나눠 칠한다.
+    # 오른쪽 넓이가 p-값이다. 이 검정은 방향이 없어 언제나 우측만 본다.
+    fig, ax = plt.subplots(figsize=(12, 4))
+
+    x_left = np.linspace(0, chi2, 200)
+    y_left = stats.chi2(df).pdf(x_left)
+    ax.plot(x_left, y_left, linewidth=3)
+    x_fill = np.concatenate([[0], x_left, [chi2], [0]])
+    y_fill = np.concatenate([[0], y_left, [0], [0]])
+    ax.fill(x_fill, y_fill, alpha=0.1)
+
+    x_right = np.linspace(chi2, max(20, chi2 + 5), 200)
+    y_right = stats.chi2(df).pdf(x_right)
+    ax.plot(x_right, y_right, linewidth=3)
+    x_fill_r = np.concatenate([[chi2], x_right, [max(20, chi2 + 5)], [chi2]])
+    y_fill_r = np.concatenate([[0], y_right, [0], [0]])
+    ax.fill(x_fill_r, y_fill_r, alpha=0.1)
+
+    ax.annotate(f"p_value = {p_value:.2%}",
+                xy=(chi2 * 0.8, y_left.max() * 0.15),
+                xytext=(chi2 * 0.9 + 5, y_left.max() * 0.6),
+                fontsize=12, arrowprops=dict(width=0.2, headwidth=8))
+
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["bottom"].set_position("zero")
+    ax.spines["left"].set_position("zero")
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![카이제곱 분포와 p-값](./img/independence_manual_78.png)
+
+    그림이 (1)·(2)에서 말한 것을 그대로 보인다. 세로축 절편이 $0.5$, 곡선은 봉우리 없는 지수감소, 통계량 $11.81$ 은 오른쪽 끝에 있고, 그 오른쪽의 빨간 영역은 **가로축에 붙은 선으로밖에 보이지 않는다.** 주석의 `p_value = 0.27%` 가 그림이 전하지 못하는 수를 글자로 대신한다.
 
 ## 해석
 

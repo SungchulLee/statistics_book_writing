@@ -22,41 +22,113 @@ $Y$는 오직 $C$에만 의존하므로 $T$가 $Y$에 미치는 참 인과효과
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 교란된 자료 만들기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 참 효과가 0인데 상관은 얼마나 커지는가. 위 자료생성과정에서 $\rho_{TC} = 0.8$, $\varepsilon \sim \mathcal{N}(0,1)$ 이다.
+
+**(1)** $\operatorname{Corr}(T, Y)$ 의 **모집단 값**을 닫힌 꼴로 구하시오. 표본값 $0.5282$ 가 그 값과 맞는가.
+
+**(2)** 교란만으로 겉보기 상관을 $1$ 에 얼마나 가깝게 만들 수 있는가. $\rho_{TC}$ 를 $1$ 까지 올려도 넘을 수 없는 상한이 있는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-np.random.seed(42)
+    **(1) 공분산은 $C$ 를 타고만 흐른다.** $Y = C + \varepsilon$ 이고 $\varepsilon$ 이 $T$ 와 독립이므로
+
+    $$
+    \operatorname{Cov}(T, Y) = \operatorname{Cov}(T, C) + \operatorname{Cov}(T, \varepsilon) = \rho_{TC} + 0 = 0.8
+    $$
+
+    이다. 분산은 $\operatorname{Var}(T) = 1$ 이고
+
+    $$
+    \operatorname{Var}(Y) = \operatorname{Var}(C) + \operatorname{Var}(\varepsilon) = 1 + 1 = 2
+    $$
+
+    이므로
+
+    $$
+    \operatorname{Corr}(T, Y) = \frac{\rho_{TC}}{\sqrt{1 + \sigma_\varepsilon^2}} = \frac{0.8}{\sqrt2} = 0.565685
+    $$
+
+    이다. 표본값 $0.5282$ 와 견주면 $\operatorname{SE}(r) \approx (1-\rho^2)/\sqrt{n} = (1 - 0.32)/\sqrt{500} = 0.0304$ 이므로
+
+    $$
+    z = \frac{0.5282 - 0.5657}{0.0304} = -1.231
+    $$
+
+    로 맞는다. $\operatorname{corr}(T,C)$ 쪽도 $0.7908$ 대 $0.8$ 로 $z = -0.574$ 다.
+
+    **(2) 상한은 $1/\sqrt{1+\sigma_\varepsilon^2}$ 이다.** 식을 보면 $\rho_{TC}$ 는 분자에만 들어가므로 $\rho_{TC} \to 1$ 에서 최대가 되고, 그 값이
+
+    $$
+    \max_{\rho_{TC}} \operatorname{Corr}(T, Y) = \frac{1}{\sqrt{1 + \sigma_\varepsilon^2}}
+    $$
+
+    이다. 여기서는 $\sigma_\varepsilon = 1$ 이라 $1/\sqrt2 = 0.7071$ 을 넘을 수 없다. 교란변수를 아무리 강하게 걸어도 $T$ 와 $Y$ 의 상관은 $0.71$ 에서 막힌다.
+
+    | $\sigma_\varepsilon$ | 상한 |
+    |---|---|
+    | $0.5$ | $0.8944$ |
+    | $1.0$ | $0.7071$ |
+    | $2.0$ | $0.4472$ |
+    | $3.0$ | $0.3162$ |
+
+    **이 상한은 교란의 세기가 아니라 $Y$ 안의 잡음이 정한다.** $Y$ 가 $C$ 로 거의 다 설명되는 변수라면($\sigma_\varepsilon$ 이 작으면) 교란만으로도 $r \approx 1$ 을 만들 수 있다. 그러므로 **"상관이 $0.95$ 나 되는데 인과가 아닐 리 없다"는 추론은 성립하지 않는다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
 
 
-def simulate_confounded_data(n=500, rho_tc=0.8):
-    mean = [0, 0]
-    cov = [[1, rho_tc], [rho_tc, 1]]
-    tc = np.random.multivariate_normal(mean, cov, n)
-    t = tc[:, 0]
-    c = tc[:, 1]
-    # Y는 오직 C에만 의존한다. T가 Y에 미치는 참 효과는 정확히 0이다.
-    y = c + np.random.normal(0, 1, n)
-    return t, c, y
+    def simulate_confounded_data(n=500, rho_tc=0.8):
+        mean = [0, 0]
+        cov = [[1, rho_tc], [rho_tc, 1]]
+        tc = np.random.multivariate_normal(mean, cov, n)
+        t = tc[:, 0]
+        c = tc[:, 1]
+        # Y는 오직 C에만 의존한다. T가 Y에 미치는 참 효과는 정확히 0이다.
+        y = c + np.random.normal(0, 1, n)
+        return t, c, y
 
 
-t, c, y = simulate_confounded_data()
-print(f"corr(T, C) = {np.corrcoef(t, c)[0, 1]:.4f}")
-print(f"corr(T, Y) = {np.corrcoef(t, y)[0, 1]:.4f}   (참 인과효과는 0)")
-```
+    t, c, y = simulate_confounded_data()
+    print(f"corr(T, C) = {np.corrcoef(t, c)[0, 1]:.4f}")
+    print(f"corr(T, Y) = {np.corrcoef(t, y)[0, 1]:.4f}   (참 인과효과는 0)")
 
-출력:
+    # 닫힌 꼴과 견준다.
+    n, rho_tc, sigma = len(t), 0.8, 1.0
+    for lab, pop, samp in [("corr(T,C)", rho_tc, np.corrcoef(t, c)[0, 1]),
+                           ("corr(T,Y)", rho_tc / np.sqrt(1 + sigma**2),
+                            np.corrcoef(t, y)[0, 1])]:
+        se = (1 - pop**2) / np.sqrt(n)
+        print(f"\n{lab}: 모집단 {pop:.6f}  표본 {samp:.4f}  "
+              f"SE {se:.4f}  z {(samp - pop) / se:+.3f}")
 
-```
-corr(T, C) = 0.7908
-corr(T, Y) = 0.5282   (참 인과효과는 0)
-```
+    print(f"\n교란만으로 만들 수 있는 상관의 상한 = 1/sqrt(1+sigma^2)")
+    for s in (0.5, 1.0, 2.0, 3.0):
+        print(f"  sigma = {s:.1f}  ->  {1 / np.sqrt(1 + s**2):.4f}")
+    ```
 
-$T$와 $Y$의 상관이 0.53이나 되지만 $T$는 $Y$에 아무 영향도 주지 않는다. 오직 $C$를 공유할 뿐이다.
+    출력:
+
+    ```
+    corr(T, C) = 0.7908
+    corr(T, Y) = 0.5282   (참 인과효과는 0)
+
+    corr(T,C): 모집단 0.800000  표본 0.7908  SE 0.0161  z -0.574
+
+    corr(T,Y): 모집단 0.565685  표본 0.5282  SE 0.0304  z -1.231
+
+    교란만으로 만들 수 있는 상관의 상한 = 1/sqrt(1+sigma^2)
+      sigma = 0.5  ->  0.8944
+      sigma = 1.0  ->  0.7071
+      sigma = 2.0  ->  0.4472
+      sigma = 3.0  ->  0.3162
+    ```
+
+    두 $z$ 값이 모두 $\lvert z \rvert < 2$ 이므로 닫힌 꼴과 표본이 맞는다. $T$ 와 $Y$ 의 상관이 $0.53$ 이나 되지만 **$T$ 는 $Y$ 에 아무 영향도 주지 않는다.** 오직 $C$ 를 공유할 뿐이다.
 
 ### 짧은 회귀와 긴 회귀
 
@@ -74,47 +146,114 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 짧은 회귀와 긴 회귀
+**보기 2.** <span class="diff easy" title="쉬움"></span> 누락변수 편향을 항등식으로 쪼개기. 짧은 회귀는 $\beta_T^{\text{short}} = 0.7772$, 긴 회귀는 $\beta_T^{\text{long}} = -0.1000$, $\beta_C^{\text{long}} = 1.0915$ 를 준다.
+
+**(1)** 두 기울기의 **모집단 값**을 각각 구하시오.
+
+**(2)** 누락변수 편향 공식
+
+$$
+\beta_T^{\text{short}} = \beta_T^{\text{long}} + \delta \gamma
+$$
+
+에서 $\delta$ 와 $\gamma$ 가 무엇인지 적고, 표본에서 이 식이 **근사가 아니라 항등식**임을 확인하시오.
 
 </div>
 
-```python
-def compute_regressions(t, c, y):
-    """교란변수를 빼고 넣은 두 회귀를 나란히 돌린다.
+??? success "풀이"
 
-    짧은 회귀는 T 만 넣고, 긴 회귀는 C 까지 넣는다. 참 효과가 0 인데도
-    짧은 회귀의 계수가 크게 나오는 것이 누락변수 편향이다.
-    """
-    # 짧은 회귀: Y ~ T
-    slope_short, _, r_short, p_short, _ = stats.linregress(t, y)
+    **(1) 둘 다 손으로 적을 수 있다.** 짧은 회귀의 기울기는 단순회귀 공식 그대로다.
 
-    # 긴 회귀: Y ~ T + C. 절편을 위해 1 로 된 열을 앞에 붙인다.
-    X = np.column_stack([np.ones(len(t)), t, c])
-    beta = np.linalg.lstsq(X, y, rcond=None)[0]
+    $$
+    \beta_T^{\text{short}} = \frac{\operatorname{Cov}(T, Y)}{\operatorname{Var}(T)} = \frac{0.8}{1} = 0.8
+    $$
 
-    return {
-        "short_slope": slope_short,
-        "short_p": p_short,
-        "long_beta_T": beta[1],
-        "long_beta_C": beta[2],
-    }
+    긴 회귀의 $T$ 계수는 $C$ 를 고정한 채 본 $T$ 의 효과인데, 자료생성과정에서 $Y = C + \varepsilon$ 이고 $\varepsilon \perp (T, C)$ 이므로 $C$ 를 고정하면 $T$ 는 $Y$ 에 **아무 정보도 주지 않는다.** 따라서
+
+    $$
+    \beta_T^{\text{long}} = 0,
+    \qquad
+    \beta_C^{\text{long}} = 1
+    $$
+
+    이다. 표본값 $0.7772$, $-0.0999$, $1.0915$ 가 각각 $0.8$, $0$, $1$ 의 추정이다.
+
+    **(2) $\delta$ 는 긴 회귀의 $C$ 계수, $\gamma$ 는 빠뜨린 $C$ 를 $T$ 에 회귀한 기울기다.** 모집단에서는
+
+    $$
+    \gamma = \frac{\operatorname{Cov}(T,C)}{\operatorname{Var}(T)} = 0.8,
+    \qquad
+    \delta = 1
+    \qquad\Longrightarrow\qquad
+    \beta_T^{\text{short}} = 0 + 1 \times 0.8 = 0.8
+    $$
+
+    로 (1)과 맞는다. **편향 $\delta\gamma$ 의 두 요소가 각각 "$C$ 가 $Y$ 에 얼마나 세게 들어가는가"와 "$C$ 가 $T$ 와 얼마나 얽혀 있는가"다.** 둘 중 하나라도 $0$ 이면 편향이 사라진다. 이것이 교란의 정의 — $C \to T$, $C \to Y$ 두 화살표가 **모두** 있어야 한다 — 를 수로 적은 것이다.
+
+    표본에서도 이 식은 **최소제곱의 대수적 항등식**이라 근사가 아니다. 실제로
+
+    $$
+    0.777199 = -0.099974 + 1.091524 \times 0.803622
+    $$
+
+    이고 두 변의 차이가 $0$ 이다(부동소수점 오차조차 없다).
+
+    ```python
+    def compute_regressions(t, c, y):
+        """교란변수를 빼고 넣은 두 회귀를 나란히 돌린다.
+
+        짧은 회귀는 T 만 넣고, 긴 회귀는 C 까지 넣는다. 참 효과가 0 인데도
+        짧은 회귀의 계수가 크게 나오는 것이 누락변수 편향이다.
+        """
+        # 짧은 회귀: Y ~ T
+        slope_short, _, r_short, p_short, _ = stats.linregress(t, y)
+
+        # 긴 회귀: Y ~ T + C. 절편을 위해 1 로 된 열을 앞에 붙인다.
+        X = np.column_stack([np.ones(len(t)), t, c])
+        beta = np.linalg.lstsq(X, y, rcond=None)[0]
+
+        return {
+            "short_slope": slope_short,
+            "short_p": p_short,
+            "long_beta_T": beta[1],
+            "long_beta_C": beta[2],
+        }
 
 
-res = compute_regressions(t, c, y)
-print(f"short_slope  = {res['short_slope']:>8.4f}   (p = {res['short_p']:.1e})")
-print(f"long_beta_T  = {res['long_beta_T']:>8.4f}")
-print(f"long_beta_C  = {res['long_beta_C']:>8.4f}")
-```
+    res = compute_regressions(t, c, y)
+    print(f"short_slope  = {res['short_slope']:>8.4f}   (p = {res['short_p']:.1e})")
+    print(f"long_beta_T  = {res['long_beta_T']:>8.4f}")
+    print(f"long_beta_C  = {res['long_beta_C']:>8.4f}")
 
-출력:
+    # 누락변수 편향 항등식을 확인한다.
+    gamma = stats.linregress(t, c).slope      # 빠뜨린 C 를 T 에 회귀한 기울기
+    delta = res["long_beta_C"]                # 긴 회귀의 C 계수
+    rhs = res["long_beta_T"] + delta * gamma
+    print(f"\n모집단 값: short = 0.8,  long = 0,  delta = 1,  gamma = 0.8")
+    print(f"표본  gamma = {gamma:.6f},  delta = {delta:.6f}")
+    print(f"  long + delta*gamma = {res['long_beta_T']:.6f} + "
+          f"{delta:.6f}*{gamma:.6f} = {rhs:.6f}")
+    print(f"  short              = {res['short_slope']:.6f}")
+    print(f"  두 변의 차         = {abs(res['short_slope'] - rhs):.2e}")
+    ```
 
-```
-short_slope  =   0.7772   (p = 2.8e-37)
-long_beta_T  =  -0.1000
-long_beta_C  =   1.0915
-```
+    출력:
 
-$T$에 아무런 인과효과가 없는데도 짧은 회귀는 $\beta_T^{\text{short}} = 0.777$이라는 압도적으로 유의한 기울기를 내놓는다. 긴 회귀는 $\beta_T^{\text{long}} \approx 0$을 올바르게 추정한다.
+    ```
+    short_slope  =   0.7772   (p = 2.8e-37)
+    long_beta_T  =  -0.1000
+    long_beta_C  =   1.0915
+
+    모집단 값: short = 0.8,  long = 0,  delta = 1,  gamma = 0.8
+    표본  gamma = 0.803622,  delta = 1.091524
+      long + delta*gamma = -0.099974 + 1.091524*0.803622 = 0.777199
+      short              = 0.777199
+      두 변의 차         = 0.00e+00
+    ```
+
+    **항등식의 두 변이 비트 단위로 같다.** 세 표본값 $0.7772$, $-0.0999$, $1.0915$ 가 각각 모집단 값 $0.8$, $0$, $1$ 의 추정이다. 참 효과가 정확히 $0$ 이므로 짧은 회귀가 보고하는 $0.7772$ 는 **전부 편향**이고, 그 거의 전부가 $\delta\gamma = 1.0915 \times 0.8036 = 0.8772$ 라는 한 곱에서 나온다.
+
+    $T$ 에 아무런 인과효과가 없는데도 짧은 회귀는 $\beta_T^{\text{short}} = 0.777$ 이라는 압도적으로 유의한 기울기를 내놓는다($p = 2.8\times10^{-37}$). **p-값은 편향을 알아채지 못한다.** 표본을 키우면 $p$ 는 더 작아지고 추정값은 참값이 아니라 $0.8$ 로 수렴한다.
 
 ### 부분회귀(Frisch-Waugh-Lovell)
 
@@ -130,27 +269,72 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 부분회귀로 같은 값 얻기
+**보기 3.** <span class="diff easy" title="쉬움"></span> "통제한다"는 말이 실제로 하는 일. $T$ 와 $Y$ 를 각각 $C$ 에 회귀시켜 잔차 $e_T$, $e_Y$ 를 얻고 그 잔차끼리 회귀한다.
+
+**(1)** 이 기울기가 왜 긴 회귀의 $\beta_T^{\text{long}}$ 과 **같을 수밖에 없는지** 잔차의 직교성으로 설명하시오.
+
+**(2)** 같은 논리라면 $e_Y$ 대신 **원래의 $Y$** 를 $e_T$ 에 회귀시켜도 같은 값이 나와야 한다. 맞는가. 세 값을 소수 여섯째 자리까지 견주시오.
 
 </div>
 
-```python
-# Frisch-Waugh-Lovell 정리: T 와 Y 에서 각각 C 로 설명되는 몫을 걷어 낸 뒤
-# 남은 잔차끼리 회귀하면, 긴 회귀의 T 계수와 똑같은 값이 나온다.
-# "C 를 통제한다"는 말이 실제로 무엇을 하는 일인지 보여 주는 계산이다.
-t_resid = t - stats.linregress(c, t).slope * c
-y_resid = y - stats.linregress(c, y).slope * c
-slope_partial = stats.linregress(t_resid, y_resid).slope
-print(f"slope_partial = {slope_partial:.4f}")
-```
+??? success "풀이"
 
-출력:
+    **(1) 핵심은 $e_T \perp C$ 라는 한 줄이다.** 최소제곱의 정의상 $T$ 를 $C$ 에 회귀한 잔차 $e_T$ 는 $C$ 와 표본상관이 $0$ 이다. 이제 $Y$ 를 $(C,\, e_T)$ 두 설명변수에 회귀한다고 하자. 두 설명변수가 **직교하므로** 다중회귀가 단순회귀 둘로 쪼개지고
 
-```
-slope_partial = -0.1000
-```
+    $$
+    \hat\beta_{e_T} = \frac{\operatorname{Cov}(e_T,\, Y)}{\operatorname{Var}(e_T)}
+    $$
 
-이렇게 얻은 `slope_partial`은 $-0.1000$으로 긴 회귀의 $\beta_T^{\text{long}}$과 소수점 넷째 자리까지 일치한다. **Frisch-Waugh-Lovell 정리**가 작동하는 모습이다. 긴 회귀에서 $T$의 계수는 $e_Y$를 $e_T$에 회귀시킨 기울기와 같다.
+    가 된다. 한편 $T = \hat\gamma_1 C + e_T$ 이므로 $(C, T)$ 가 펼치는 공간과 $(C, e_T)$ 가 펼치는 공간은 **같다.** 같은 공간에 사영한 결과는 하나뿐이고, 그 안에서 $T$ 의 계수와 $e_T$ 의 계수가 일치한다. 따라서
+
+    $$
+    \beta_T^{\text{long}} = \frac{\operatorname{Cov}(e_T,\, Y)}{\operatorname{Var}(e_T)}
+    $$
+
+    이다. 이것이 **Frisch–Waugh–Lovell 정리**다. 수치적 우연이 아니라 **사영의 항등식**이므로 자료가 무엇이든 성립한다.
+
+    **(2) 맞는다. $e_Y$ 를 써도 되고 $Y$ 를 그대로 써도 된다.** $Y = e_Y + \hat\gamma_2 C$ 인데 $e_T \perp C$ 이므로
+
+    $$
+    \operatorname{Cov}(e_T,\, Y) = \operatorname{Cov}(e_T,\, e_Y) + \hat\gamma_2 \underbrace{\operatorname{Cov}(e_T,\, C)}_{=\,0}
+    = \operatorname{Cov}(e_T,\, e_Y)
+    $$
+
+    이다. **$Y$ 에서 $C$ 몫을 빼든 안 빼든 $e_T$ 와의 공분산은 같다.** 그러므로 $Y$ 쪽을 굳이 씻어 낼 필요가 없다. 씻어 내는 쪽은 $T$ 하나로 충분하다.
+
+    세 값이 소수 여섯째 자리까지 $-0.099974$ 로 같고, $\operatorname{corr}(e_T, C) = 1.24\times10^{-17}$ 로 직교성도 기계 정밀도까지 확인된다.
+
+    ```python
+    # Frisch-Waugh-Lovell 정리: T 와 Y 에서 각각 C 로 설명되는 몫을 걷어 낸 뒤
+    # 남은 잔차끼리 회귀하면, 긴 회귀의 T 계수와 똑같은 값이 나온다.
+    # "C 를 통제한다"는 말이 실제로 무엇을 하는 일인지 보여 주는 계산이다.
+    t_resid = t - stats.linregress(c, t).slope * c
+    y_resid = y - stats.linregress(c, y).slope * c
+    slope_partial = stats.linregress(t_resid, y_resid).slope
+    print(f"slope_partial = {slope_partial:.4f}")
+
+    # (1) 직교성과 (2) Y 를 씻어 내지 않아도 되는지 확인한다.
+    print(f"\ncorr(e_T, C) = {np.corrcoef(t_resid, c)[0, 1]:.2e}   (0 이어야 한다)")
+    print(f"e_Y 를 e_T 에 회귀  = {stats.linregress(t_resid, y_resid).slope:.6f}")
+    print(f"원래 Y 를 e_T 에 회귀 = {stats.linregress(t_resid, y).slope:.6f}")
+    print(f"긴 회귀의 beta_T    = {res['long_beta_T']:.6f}")
+    print(f"셋이 모두 같은가: "
+          f"{np.allclose([stats.linregress(t_resid, y_resid).slope, stats.linregress(t_resid, y).slope], res['long_beta_T'])}")
+    ```
+
+    출력:
+
+    ```
+    slope_partial = -0.1000
+
+    corr(e_T, C) = 1.24e-17   (0 이어야 한다)
+    e_Y 를 e_T 에 회귀  = -0.099974
+    원래 Y 를 e_T 에 회귀 = -0.099974
+    긴 회귀의 beta_T    = -0.099974
+    셋이 모두 같은가: True
+    ```
+
+    **세 값이 소수 여섯째 자리까지 같다.** "$C$ 를 통제한다"는 말이 비유가 아니라 **$C$ 방향 성분을 빼고 남은 것끼리만 견준다**는 구체적인 연산임을 보여 준다. 보기 2의 누락변수 편향도 같은 그림에서 읽힌다. $C$ 를 빼먹으면 $T$ 안에 남아 있는 $C$ 방향 성분이 $Y$ 의 $C$ 방향 성분과 짝지어져 기울기로 들어간다.
 
 ---
 
@@ -174,38 +358,135 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 심슨의 역설과 층화
+**보기 4.** <span class="diff easy" title="쉬움"></span> 소박한 ATE 는 왜 하필 $-3$ 인가. 중증도가 $P(S=1) = 0.5$ 로 반반이고, 처치 확률이 $0.7$ 대 $0.3$ 이며, $Y = 50 - 20S + 5T + \varepsilon$ 이다.
+
+**(1)** 소박한 ATE 와 조정된 ATE 의 **이론값**을 각각 구하시오. 베이즈 정리로 $P(S=1 \mid T=1)$ 과 $P(S=1 \mid T=0)$ 부터 구하면 된다.
+
+**(2)** $n = 1000$ 짜리 모의실험 한 번이 주는 네 값이 이론값과 맞는가. 네 추정량의 표집 표준편차를 재어 판정하시오.
 
 </div>
 
-```python
-def simpson_paradox_demo(n=1000):
-    """중증도가 치료 배정과 결과를 함께 좌우할 때 생기는 역설을 보인다.
+??? success "풀이"
 
-    중증 환자가 치료를 더 많이 받고(0.7 대 0.3), 중증 자체가 결과를 크게
-    낮춘다. 그래서 치료가 실제로는 결과를 5 만큼 올리는데도, 층을 나누지
-    않고 보면 치료군의 결과가 더 나빠 보인다.
-    """
-    severity = np.random.binomial(1, 0.5, n)
-    p_treat = np.where(severity == 1, 0.7, 0.3)
-    treatment = np.random.binomial(1, p_treat)
+    **(1) 베이즈 정리 두 줄이면 끝난다.** $P(T=1) = 0.5 \times 0.7 + 0.5 \times 0.3 = 0.5$ 이므로
 
-    y = (50 - 20 * severity + 5 * treatment
-         + np.random.normal(0, 5, n))
+    $$
+    P(S=1 \mid T=1) = \frac{0.5 \times 0.7}{0.5} = 0.7,
+    \qquad
+    P(S=1 \mid T=0) = \frac{0.5 \times 0.3}{0.5} = 0.3
+    $$
 
-    # 층을 나누지 않은 순진한 평균처치효과
-    ate_naive = y[treatment == 1].mean() - y[treatment == 0].mean()
+    이다. **처치군의 중증 비율이 비처치군의 두 배를 넘는다.** 이제 각 군의 평균 결과를 적으면
 
-    # 중증도로 층을 나눠 각 층에서 효과를 구한 뒤, 층의 크기로 가중해 합친다.
-    ate_mild = (y[(treatment == 1) & (severity == 0)].mean()
-                - y[(treatment == 0) & (severity == 0)].mean())
-    ate_severe = (y[(treatment == 1) & (severity == 1)].mean()
-                  - y[(treatment == 0) & (severity == 1)].mean())
-    p_severe = severity.mean()
-    ate_adjusted = (1 - p_severe) * ate_mild + p_severe * ate_severe
+    $$
+    E[Y \mid T=1] = 50 - 20 \times 0.7 + 5 = 41,
+    \qquad
+    E[Y \mid T=0] = 50 - 20 \times 0.3 + 0 = 44
+    $$
 
-    return ate_naive, ate_mild, ate_severe, ate_adjusted
-```
+    이므로
+
+    $$
+    \text{ATE}_{\text{naive}} = 41 - 44 = -3
+    $$
+
+    이다. 일반식으로 쓰면
+
+    $$
+    \text{ATE}_{\text{naive}} = \underbrace{5}_{\text{참 효과}} + \underbrace{(-20)\big[P(S{=}1\mid T{=}1) - P(S{=}1\mid T{=}0)\big]}_{\text{교란}}
+    = 5 - 20 \times 0.4 = -3
+    $$
+
+    로, **참 효과 $+5$ 에 교란 $-8$ 이 얹혀 부호가 뒤집힌다.** 조정된 쪽은 층 안에서 중증도가 고정되므로 두 층 모두 효과가 정확히 $+5$ 이고, 가중평균도
+
+    $$
+    \text{ATE}_{\text{adj}} = 0.5 \times 5 + 0.5 \times 5 = 5
+    $$
+
+    다.
+
+    **(2) 네 값 모두 맞는다.** 한 번의 모의실험은 $-2.62$, $5.22$, $6.07$, $5.64$ 를 준다. 같은 모의를 $5000$ 번 되풀이해 표집 표준편차를 재면
+
+    | 추정량 | 이론 | 모의 평균 | 표준편차 | 위 한 번 | $z$ |
+    |---|---|---|---|---|---|
+    | ate_naive | $-3.0$ | $-3.0109$ | $0.6591$ | $-2.6184$ | $+0.579$ |
+    | ate_mild | $+5.0$ | $+4.9957$ | $0.4848$ | $+5.2238$ | $+0.462$ |
+    | **ate_severe** | $+5.0$ | $+4.9927$ | $0.4909$ | $+6.0716$ | $\mathbf{+2.183}$ |
+    | ate_adjusted | $+5.0$ | $+4.9945$ | $0.3385$ | $+5.6400$ | $+1.891$ |
+
+    이다. 모의 평균 넷이 모두 이론값과 소수 둘째 자리까지 맞으므로 **네 추정량이 모두 비편향**이고, 소박한 ATE 가 겨냥하는 값이 $+5$ 가 아니라 $-3$ 임이 확인된다.
+
+    한 번의 값은 셋이 $\lvert z \rvert < 2$ 이고 `ate_severe` 하나가 $+2.18$ 로 조금 크다. 양측 $p \approx 0.03$ 이라 네 개를 보면 이 정도는 나올 만하다. **이 운 나쁜 한 칸이 `ate_adjusted` 를 $5.64$ 까지 밀어 올린 것**이고, $5.64$ 자체도 참값에서 $1.89$ 표준편차라 범위 안이다.
+
+    표준편차를 견주면 층화의 값어치도 보인다. `ate_adjusted` 의 $0.3385$ 는 두 층의 $0.4848$, $0.4909$ 보다 **작다.** 두 층이 서로 다른 환자를 쓰므로 거의 독립이고, 가중평균이 $\sqrt{0.5^2(0.485^2 + 0.491^2)} = 0.345$ 로 줄어들기 때문이다. **층을 나누면 편향이 사라질 뿐 아니라 분산도 줄어든다.**
+
+    ```python
+    def simpson_paradox_demo(n=1000):
+        """중증도가 치료 배정과 결과를 함께 좌우할 때 생기는 역설을 보인다.
+
+        중증 환자가 치료를 더 많이 받고(0.7 대 0.3), 중증 자체가 결과를 크게
+        낮춘다. 그래서 치료가 실제로는 결과를 5 만큼 올리는데도, 층을 나누지
+        않고 보면 치료군의 결과가 더 나빠 보인다.
+        """
+        severity = np.random.binomial(1, 0.5, n)
+        p_treat = np.where(severity == 1, 0.7, 0.3)
+        treatment = np.random.binomial(1, p_treat)
+
+        y = (50 - 20 * severity + 5 * treatment
+             + np.random.normal(0, 5, n))
+
+        # 층을 나누지 않은 순진한 평균처치효과
+        ate_naive = y[treatment == 1].mean() - y[treatment == 0].mean()
+
+        # 중증도로 층을 나눠 각 층에서 효과를 구한 뒤, 층의 크기로 가중해 합친다.
+        ate_mild = (y[(treatment == 1) & (severity == 0)].mean()
+                    - y[(treatment == 0) & (severity == 0)].mean())
+        ate_severe = (y[(treatment == 1) & (severity == 1)].mean()
+                      - y[(treatment == 0) & (severity == 1)].mean())
+        p_severe = severity.mean()
+        ate_adjusted = (1 - p_severe) * ate_mild + p_severe * ate_severe
+
+        return ate_naive, ate_mild, ate_severe, ate_adjusted
+
+
+    # 모의 한 번 돌린 결과
+    ate_naive, ate_mild, ate_severe, ate_adjusted = simpson_paradox_demo(1000)
+    print(f"ate_naive    = {ate_naive:>6.2f}   (이론 -3)")
+    print(f"ate_mild     = {ate_mild:>6.2f}   (이론 +5)")
+    print(f"ate_severe   = {ate_severe:>6.2f}   (이론 +5)")
+    print(f"ate_adjusted = {ate_adjusted:>6.2f}   (이론 +5)")
+
+    # n = 1000 에서 네 추정량이 얼마나 흔들리는지 재어, 위 한 번의 값을 판정한다.
+    reps = np.array([simpson_paradox_demo(1000) for _ in range(5000)])
+    theory = [-3.0, 5.0, 5.0, 5.0]
+    names = ["ate_naive", "ate_mild", "ate_severe", "ate_adjusted"]
+    print(f"\n5000 번 되풀이 (n = 1000)")
+    print(f"{'추정량':>14s} {'이론':>6s} {'모의 평균':>10s} {'표준편차':>9s} "
+          f"{'위 한 번':>9s} {'z':>7s}")
+    once = [ate_naive, ate_mild, ate_severe, ate_adjusted]
+    for j, nm in enumerate(names):
+        sd = reps[:, j].std(ddof=1)
+        print(f"{nm:>14s} {theory[j]:6.1f} {reps[:, j].mean():+10.4f} {sd:9.4f} "
+              f"{once[j]:+9.4f} {(once[j] - theory[j]) / sd:+7.3f}")
+    ```
+
+    출력:
+
+    ```
+    ate_naive    =  -2.62   (이론 -3)
+    ate_mild     =   5.22   (이론 +5)
+    ate_severe   =   6.07   (이론 +5)
+    ate_adjusted =   5.64   (이론 +5)
+
+    5000 번 되풀이 (n = 1000)
+               추정량     이론      모의 평균      표준편차     위 한 번       z
+         ate_naive   -3.0    -3.0109    0.6591   -2.6184  +0.579
+          ate_mild    5.0    +4.9957    0.4848   +5.2238  +0.462
+        ate_severe    5.0    +4.9927    0.4909   +6.0716  +2.183
+      ate_adjusted    5.0    +4.9945    0.3385   +5.6400  +1.891
+    ```
+
+    모의 평균 $-3.0109$, $4.9957$, $4.9927$, $4.9945$ 가 손으로 구한 $-3$, $5$, $5$, $5$ 와 모두 맞는다. 몬테카를로 오차가 $0.66/\sqrt{5000} = 0.009$ 쯤이므로 $-3.0109$ 의 $0.011$ 어긋남도 그 안이다.
 
 ### 역설
 

@@ -53,84 +53,297 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> McNemar 검정 직접 구현
+**보기 1.** <span class="diff easy" title="쉬움"></span> McNemar 검정 직접 구현. 공식 $(|b-c|-1)^2/(b+c)$ 에는 대각선 $a, d$ 가 아예 없다. 왜 그런지, 그리고 $-1$ 이 어디서 오는지 밝힌 뒤 코드로 옮긴다.
+
+**(1)** 불일치 쌍의 수 $m = b+c$ 를 **고정하고 보면** $H_0$ 아래에서 $b \sim \text{Bin}(m, 1/2)$ 임을 설명하시오. $a$ 와 $d$ 가 식에 들어올 자리가 없는 까닭이 여기에 있다.
+
+**(2)** (1)의 이항분포를 정규로 근사하면 **보정 없는** McNemar 통계량
+
+$$
+\chi^2 = \frac{(b-c)^2}{b+c}
+$$
+
+가 그대로 $z^2$ 임을 보이시오.
+
+**(3)** 연속성 보정 $\dfrac{(\lvert b-c\rvert - 1)^2}{b+c}$ 의 $-1$ 이 어디서 오는지 보이시오. 왜 $-0.5$ 가 아니라 $-1$ 인가.
+
+**(4)** 공식을 그대로 옮긴 함수를 짜시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-def mcnemar_test(table):
-    """
-    Perform McNemar's test on a 2x2 table of paired counts.
+    **(1) 불일치 쌍만 남는다.** 대상 한 사람이 네 패턴 가운데 하나에 들어간다. 확률을 $p_a, p_b, p_c, p_d$ 라 하면 귀무가설은 **$p_b = p_c$** 다. 양쪽으로 바뀔 확률이 같다는 것일 뿐 $p_a$ 나 $p_d$ 에 대해서는 아무 말도 하지 않는다.
 
-    Parameters
-    ----------
-    table : array-like, shape (2, 2)
-        Contingency table where off-diagonal cells (b, c)
-        represent discordant pairs:
-            [[a, b],
-             [c, d]]
+    그러므로 $a$ 와 $d$ 는 $H_0$ 을 판정하는 데 **쓸 수가 없다.** 상태가 바뀌지 않은 사람은 "어느 방향으로 더 잘 바뀌는가" 라는 물음에 할 말이 없기 때문이다.
 
-    Returns
-    -------
-    statistic : float   McNemar chi-square statistic (continuity-corrected)
-    p_value   : float   Two-sided p-value from chi-square(1)
-    """
-    table = np.asarray(table)
-    # 대각선의 a와 d는 아예 쓰이지 않는다.
-    # 두 시점에서 상태가 **바뀐** 쌍만이 변화의 증거이기 때문이다.
-    # 그래서 표본이 500쌍이어도 실제 정보량은 b + c에 달려 있다.
-    b = table[0, 1]
-    c = table[1, 0]
-    # 연속성 보정: |b - c|에서 1을 뺀다.
-    # 이산인 이항분포를 연속인 카이제곱으로 근사하는 데서 오는 편향을 줄인다.
-    chi2 = (abs(b - c) - 1) ** 2 / (b + c)
-    p_value = stats.chi2(1).sf(chi2)
-    return chi2, p_value
-```
+    불일치 쌍의 수 $m = b + c$ 를 조건으로 걸면, 그 $m$ 명 각각이 $b$ 쪽일 조건부 확률은
+
+    $$
+    \frac{p_b}{p_b + p_c} \;\overset{H_0}{=}\; \frac12
+    $$
+
+    이고 사람끼리 독립이므로
+
+    $$
+    b \mid m \;\sim\; \text{Bin}\!\left(m, \tfrac12\right)
+    $$
+
+    이다. **McNemar 검정은 결국 동전 $m$ 번 던지기다.** 그래서 이것을 *부호검정* 이라고 불러도 된다.
+
+    **(2) 정규근사가 바로 그 공식을 준다.** $b \sim \text{Bin}(m, 1/2)$ 이면 평균이 $m/2$, 분산이 $m/4$ 다. 표준화하면
+
+    $$
+    z = \frac{b - m/2}{\sqrt{m}/2} = \frac{2b - m}{\sqrt m} = \frac{2b - (b+c)}{\sqrt{b+c}} = \frac{b-c}{\sqrt{b+c}}
+    $$
+
+    이고, 제곱하면
+
+    $$
+    z^2 = \frac{(b-c)^2}{b+c}
+    $$
+
+    다. $\square$ **보정 없는 McNemar 통계량은 "동전이 공정한가" 를 묻는 $z$ 의 제곱**이다. 자유도가 1 인 것도 당연하다. $z$ 가 하나뿐이기 때문이다.
+
+    **(3) $-1$ 의 정체.** 이항분포는 정수 위에 있고 정규분포는 연속이다. $P(b \ge b_0)$ 를 정규로 잴 때 경계를 $b_0$ 가 아니라 $b_0 - \tfrac12$ 로 잡는 것이 연속성 보정이고, 이는 **분자에서 $\tfrac12$ 을 덜어 내는** 것이다.
+
+    $$
+    z_{\text{corr}} = \frac{\lvert b - m/2\rvert - \tfrac12}{\sqrt m/2}
+    = \frac{2\left(\lvert b - m/2\rvert - \tfrac12\right)}{\sqrt m}
+    = \frac{\lvert 2b - m\rvert - 1}{\sqrt m}
+    = \frac{\lvert b-c\rvert - 1}{\sqrt m}
+    $$
+
+    제곱하면 $(\lvert b-c\rvert-1)^2/(b+c)$ 다. $\square$
+
+    **$-0.5$ 가 $-1$ 이 된 것은 $2$ 가 곱해졌기 때문이다.** 보정은 $b$ 의 눈금에서 $\tfrac12$ 을 덜어 내는데, 식을 $b-c = 2b - m$ 으로 바꾸어 적으면서 눈금이 두 배로 늘어났다. **$b$ 가 1 늘면 $b-c$ 는 2 늘기** 때문이다. 공식만 외우면 $-1$ 이 뜬금없어 보이지만 유도해 보면 자리가 분명하다.
+
+    **(4) 코드로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def mcnemar_test(table):
+        """
+        Perform McNemar's test on a 2x2 table of paired counts.
+
+        Parameters
+        ----------
+        table : array-like, shape (2, 2)
+            Contingency table where off-diagonal cells (b, c)
+            represent discordant pairs:
+                [[a, b],
+                 [c, d]]
+
+        Returns
+        -------
+        statistic : float   McNemar chi-square statistic (continuity-corrected)
+        p_value   : float   Two-sided p-value from chi-square(1)
+        """
+        table = np.asarray(table)
+        # 대각선의 a와 d는 아예 쓰이지 않는다.
+        # 두 시점에서 상태가 **바뀐** 쌍만이 변화의 증거이기 때문이다.
+        # 그래서 표본이 500쌍이어도 실제 정보량은 b + c에 달려 있다.
+        b = table[0, 1]
+        c = table[1, 0]
+        # 연속성 보정: |b - c|에서 1을 뺀다.
+        # 이산인 이항분포를 연속인 카이제곱으로 근사하는 데서 오는 편향을 줄인다.
+        chi2 = (abs(b - c) - 1) ** 2 / (b + c)
+        p_value = stats.chi2(1).sf(chi2)
+        return chi2, p_value
+    ```
+
+    대각선을 읽지도 않는다는 것이 코드에서 그대로 보인다. `table[0, 1]` 과 `table[1, 0]` 만 꺼내 쓴다. **표본이 몇 쌍이든 이 검정이 실제로 쓰는 정보는 $b+c$ 에 들어 있다.**
+
+    보정판을 기본으로 두었지만, 보기 2 에서 보듯 보정은 **지나치게** 보수적일 수 있다. 불일치 쌍이 적을 때에는 아예 정확 이항검정 `stats.binomtest(b, b + c, 0.5)` 을 쓰는 편이 낫다.
 
 ### 검정 실행
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 치료 전후 자료로 검정하기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 치료 전후 자료로 검정하기. 같은 사람 314명의 질병 상태를 치료 전후에 기록했다.
+
+$$
+\begin{array}{c|cc|r}
+ & \text{치료후 +} & \text{치료후 -} & \text{행 합} \\ \hline
+\text{치료전 +} & 101 & 121 & 222 \\
+\text{치료전 -} & 59 & 33 & 92 \\ \hline
+\text{열 합} & 160 & 154 & 314
+\end{array}
+$$
+
+**(1)** 보정판과 비보정판 통계량을 **유리수로** 구하고 p-값을 적으시오.
+
+**(2)** 보기 1 (1)에 따르면 정확한 p-값은 $\text{Bin}(180, 1/2)$ 에서 바로 나온다. 세 p-값을 견주시오. 연속성 보정은 어느 쪽으로 치우치는가.
+
+**(3)** 효과크기를 적으시오. 양성 비율의 변화량과 그 신뢰구간을 구하고, **대응을 무시했다면** 표준오차를 얼마로 잡게 되었을지 견주시오.
+
+**(4)** 코드로 확인하시오.
 
 </div>
 
-```python
-# 치료 전후의 질병 상태. 같은 사람을 두 번 관찰한 대응자료다.
-#                  치료후+  치료후-
-# 치료전+            101      121
-# 치료전-             59       33
-table = np.array([[101, 121],
-                  [ 59,  33]])
+??? success "풀이"
 
-chi2, p = mcnemar_test(table)
+    **(1) 통계량.** 불일치 쌍은 $b = 121$(호전), $c = 59$(악화)이고 $m = b+c = 180$ 이다.
 
-print(f"McNemar chi2 = {chi2:.4f}")
-print(f"p-value      = {p:.4e}")
+    $$
+    \chi^2_{\text{corr}} = \frac{(\lvert 121-59\rvert - 1)^2}{180} = \frac{61^2}{180} = \frac{3721}{180} = 20.67222
+    $$
 
-if p < 0.05:
-    print("Reject H0: significant change after treatment (alpha = 0.05).")
-else:
-    print("Fail to reject H0: no significant change (alpha = 0.05).")
-```
+    $$
+    \chi^2_{\text{raw}} = \frac{(121-59)^2}{180} = \frac{62^2}{180} = \frac{3844}{180} = \frac{961}{45} = 21.35556
+    $$
 
-출력:
+    보기 1 (2)의 $z$ 로는 $z = 62/\sqrt{180} = 4.62121$ 이고 $z^2 = 21.35556$ 으로 맞는다. 자유도 1 이므로 p-값은 $2\Phi(-\sqrt{\chi^2})$ 다.
 
-```
-McNemar chi2 = 20.6722
-p-value      = 5.4501e-06
-Reject H0: significant change after treatment (alpha = 0.05).
-```
+    $$
+    p_{\text{corr}} = 5.4501 \times 10^{-6},
+    \qquad
+    p_{\text{raw}} = 3.8151 \times 10^{-6}
+    $$
 
-**이 보기의 주요 값:**
+    어느 쪽이든 $0.05$ 보다 압도적으로 작아 $H_0$ 을 **기각한다.** 호전이 악화보다 유의하게 흔하다.
 
-- 불일치 쌍의 도수: $b = 121$, $c = 59$.
-- 통계량은 양성에서 음성으로 바뀐 121명이 음성에서 양성으로 바뀐 59명과 유의하게 다른지를 검정한다.
-- $\chi^2 = (|121-59| - 1)^2 / 180 = 61^2/180 \approx 20.67$이고 p-값은 약 $5.4 \times 10^{-6}$이다.
+    **(2) 정확값은 두 근사 사이에 있다.** 보기 1 (1)에서 $b \mid m \sim \text{Bin}(180, 1/2)$ 였으므로 양측 정확 p-값은
+
+    $$
+    p_{\text{exact}} = 2\,P\bigl(\text{Bin}(180, \tfrac12) \le 59\bigr) = 4.4344\times10^{-6}
+    $$
+
+    다. 세 값을 늘어놓는다.
+
+    | 방법 | p-값 | 정확값 대비 |
+    |---|---:|:---|
+    | 비보정 $\chi^2$ | $3.8151\times10^{-6}$ | $0.86$ 배 — **너무 작다** |
+    | **정확 이항** | $4.4344\times10^{-6}$ | 기준 |
+    | 연속성 보정 $\chi^2$ | $5.4501\times10^{-6}$ | $1.23$ 배 — **너무 크다** |
+
+    **정확값이 두 근사 사이에 놓인다.** 비보정판은 이산인 분포를 연속으로 재면서 꼬리를 과소평가해 **기각하는 쪽으로** 기울고, 연속성 보정은 그것을 바로잡으려다 **지나치게 되돌려** 보수적으로 간다. 흔히 하는 말과 달리 보정이 "정확해지는" 조작은 아니다. **더 보수적이 되는** 조작이다.
+
+    여기서는 세 값 모두 $10^{-6}$ 자리라 결론이 같다. $m = 180$ 으로 커서 상대오차가 그 정도에 그친 것이고, 권장 기준 $b+c \ge 25$ 가 뜻하는 바가 이것이다. 불일치 쌍이 적다면 근사 둘 다 버리고 `stats.binomtest(b, b + c, 0.5)` 을 쓰면 된다.
+
+    **(3) 효과크기와 신뢰구간.** 검정은 "다르다" 만 말한다. 얼마나 다른지는 양성 비율의 변화로 적는다.
+
+    $$
+    \hat p_{\text{전}} = \frac{222}{314} = 0.70701,
+    \qquad
+    \hat p_{\text{후}} = \frac{160}{314} = 0.50955
+    $$
+
+    $$
+    \hat d = \hat p_{\text{전}} - \hat p_{\text{후}} = \frac{b-c}{n} = \frac{62}{314} = 0.19745
+    $$
+
+    **차이가 $(b-c)/n$ 으로 깔끔하게 적힌다.** 대각선이 양쪽 비율에 똑같이 들어 있어 빼면 사라지기 때문이다. 대응자료에서 이 차이의 분산은
+
+    $$
+    \widehat{\operatorname{Var}}(\hat d) = \frac{1}{n^2}\left(b + c - \frac{(b-c)^2}{n}\right)
+    = \frac{180 - 3844/314}{314^2} = 0.00170147
+    $$
+
+    이므로 $\operatorname{SE} = 0.041249$ 이고 $95\%$ 구간은
+
+    $$
+    0.19745 \pm 1.96 \times 0.041249 = [0.1166,\ 0.2783]
+    $$
+
+    다. **치료 뒤 양성 비율이 12\~28\%p 줄었다.** 구간이 0 에서 한참 떨어져 있어 (1)의 판정과 일관된다.
+
+    **대응을 무시했다면.** 두 비율을 서로 **독립인** 표본에서 나온 것처럼 다루면
+
+    $$
+    \operatorname{SE}_{\text{독립}} = \sqrt{\frac{\hat p_{\text{전}}(1-\hat p_{\text{전}})}{n} + \frac{\hat p_{\text{후}}(1-\hat p_{\text{후}})}{n}} = 0.038152
+    $$
+
+    로 잡게 된다. 참값 $0.041249$ 보다 **작다.** 둘의 관계는 공분산 한 항이다.
+
+    $$
+    \operatorname{Var}(\hat p_{\text{전}} - \hat p_{\text{후}})
+    = \operatorname{Var}_{\text{전}} + \operatorname{Var}_{\text{후}} - 2\operatorname{Cov},
+    \qquad
+    \widehat{\operatorname{Cov}} = \frac{1}{n}\left(\frac an - \hat p_{\text{전}}\hat p_{\text{후}}\right) = -0.00012294
+    $$
+
+    **공분산이 음수다.** 치료 전 상태와 후 상태의 파이계수가 $\phi = (ad-bc)/\sqrt{R_1R_2C_1C_2} = -0.1697$ 로 음이기 때문이다. 그래서 $-2\operatorname{Cov}$ 가 양수로 더해져 대응 분산이 **더 커진다.**
+
+    **대응설계가 언제나 이득은 아니다.** 같은 사람을 두 번 재면 보통 두 측정이 양의 상관을 가지고, 그때 공분산이 양수라 분산이 줄어든다. 이 자료는 반대다. 치료 전에 양성이던 사람이 치료 후에는 오히려 음성이 되기 쉬웠으므로(그것이 치료 효과다) 전후 상태가 음으로 얽혔다. **이득이 되느냐는 자료가 결정하지 설계 이름이 결정하지 않는다.**
+
+    **(4) 수치적으로.**
+
+    ```python
+    # 치료 전후의 질병 상태. 같은 사람을 두 번 관찰한 대응자료다.
+    #                  치료후+  치료후-
+    # 치료전+            101      121
+    # 치료전-             59       33
+    table = np.array([[101, 121],
+                      [ 59,  33]])
+
+    chi2, p = mcnemar_test(table)
+
+    print(f"McNemar chi2 = {chi2:.4f}")
+    print(f"p-value      = {p:.4e}")
+
+    if p < 0.05:
+        print("Reject H0: significant change after treatment (alpha = 0.05).")
+    else:
+        print("Fail to reject H0: no significant change (alpha = 0.05).")
+
+    # (1) 비보정판과 z
+    (a, b), (c, d) = table
+    m, n = b + c, table.sum()
+    raw = (b - c) ** 2 / m
+    print(f"\n비보정 chi2 = {raw:.5f}   z = {(b - c) / np.sqrt(m):.5f}"
+          f"   p = {stats.chi2(1).sf(raw):.4e}")
+
+    # (2) 정확 이항검정
+    exact = stats.binomtest(int(b), int(m), 0.5).pvalue
+    print(f"정확 이항 p = {exact:.4e}")
+    print(f"  비보정/정확 = {stats.chi2(1).sf(raw) / exact:.2f} 배")
+    print(f"  보정  /정확 = {p / exact:.2f} 배")
+
+    # (3) 효과크기와 신뢰구간
+    p_before, p_after = (a + b) / n, (a + c) / n
+    d_hat = (b - c) / n
+    var_paired = (m - (b - c) ** 2 / n) / n ** 2
+    se_paired = np.sqrt(var_paired)
+    se_indep = np.sqrt(p_before * (1 - p_before) / n + p_after * (1 - p_after) / n)
+    cov = (a / n - p_before * p_after) / n
+    phi = (a * d - b * c) / np.sqrt((a + b) * (c + d) * (a + c) * (b + d))
+    print(f"\n전 {p_before:.5f}  후 {p_after:.5f}  차 {d_hat:.5f}")
+    print(f"대응 SE {se_paired:.6f}   독립이라 보면 {se_indep:.6f}")
+    print(f"cov {cov:.8f}   Var_독립 - 2cov = {se_indep**2 - 2 * cov:.8f}"
+          f"   Var_대응 = {var_paired:.8f}")
+    print(f"phi = {phi:.4f}")
+    print(f"95% 구간 [{d_hat - 1.96 * se_paired:.4f}, {d_hat + 1.96 * se_paired:.4f}]")
+    ```
+
+    출력:
+
+    ```
+    McNemar chi2 = 20.6722
+    p-value      = 5.4501e-06
+    Reject H0: significant change after treatment (alpha = 0.05).
+
+    비보정 chi2 = 21.35556   z = 4.62121   p = 3.8151e-06
+    정확 이항 p = 4.4344e-06
+      비보정/정확 = 0.86 배
+      보정  /정확 = 1.23 배
+
+    전 0.70701  후 0.50955  차 0.19745
+    대응 SE 0.041249   독립이라 보면 0.038152
+    cov -0.00012294   Var_독립 - 2cov = 0.00170147   Var_대응 = 0.00170147
+    phi = -0.1697
+    95% 구간 [0.1166, 0.2783]
+    ```
+
+    `McNemar chi2 = 20.6722` 가 (1)의 $3721/180$ 과, `비보정 chi2 = 21.35556` 이 $961/45$ 와 맞는다. $z = 4.62121$ 을 제곱하면 비보정 통계량이다.
+
+    (2)의 세 p-값도 그대로다. 비보정이 정확값의 $0.86$ 배, 보정이 $1.23$ 배다. **정확값이 가운데 있다.**
+
+    (3)에서 가장 중요한 줄은 `Var_독립 - 2cov = 0.00170147   Var_대응 = 0.00170147` 이다. **여덟 자리까지 같다.** 두 분산이 공분산 한 항만큼 차이 난다는 항등식이 수로 확인된 것이고, 그 공분산이 음수($-0.00012294$, $\phi = -0.1697$)라서 대응 쪽 표준오차가 $0.041249$ 로 더 크다.
+
+    **대응을 무시했다면 신뢰구간을 실제보다 $7.5\%$ 좁게 그렸을 것이다.**
 
 ## 해석
 

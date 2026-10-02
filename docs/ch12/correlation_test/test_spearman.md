@@ -112,43 +112,135 @@ Spearman의 $r_s$ 검정은 다음을 요구한다:
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Spearman 상관 검정과 손계산
+**보기 2.** <span class="diff easy" title="쉬움"></span> $t$ 근사가 $n = 12$ 에서 얼마나 맞는가. 아래 $x$, $y$ 는 둘 다 $1, \ldots, 12$ 의 치환이라 동점이 없다.
+
+**(1)** 간편 공식 $r_s = 1 - 6\sum_i d_i^2 / [n(n^2-1)]$ 로 $r_s$ 를 손계산해 `spearmanr` 과 맞추시오.
+
+**(2)** 귀무가설 아래 $r_s$ 의 평균과 분산을 **닫힌 꼴로** 구하시오. 그 다음 순열로 귀무분포를 직접 만들어, `scipy` 가 주는 $t$ 근사 p-값 $0.0202$ 가 맞는지 보시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-x = np.array([3, 1, 6, 4, 8, 2, 7, 5, 10, 9, 11, 12])
-y = np.array([5, 2, 8, 3, 11, 1, 9, 6, 12, 7, 10, 4])
+    **(1) 동점이 없으므로 간편 공식이 정확하다.** $d_i = R(x_i) - R(y_i)$ 의 제곱합이 $\sum d_i^2 = 98$ 이고 $n(n^2-1) = 12 \times 143 = 1716$ 이므로
 
-# 순위만 쓰므로 정규성이 필요 없고 이상치에도 강하다.
-r_s, p_value = stats.spearmanr(x, y)
-print(f"Spearman r_s = {r_s:.4f}")
-print(f"p-value      = {p_value:.4f}")
+    $$
+    r_s = 1 - \frac{6 \times 98}{1716} = 1 - \frac{588}{1716} = 1 - 0.342657 = 0.657343
+    $$
 
-# 피어슨과 같은 꼴의 t 통계량으로 손계산해 확인한다. 순위에 피어슨을
-# 적용한 것이 스피어만이므로 검정 방식도 그대로 따라온다.
-n = len(x)
-t_stat = r_s * np.sqrt((n - 2) / (1 - r_s**2))
-p_manual = 2 * (1 - stats.t.cdf(abs(t_stat), df=n - 2))
-print(f"t-statistic  = {t_stat:.4f}")
-print(f"Manual p     = {p_manual:.4f}")
-```
+    이다. `spearmanr` 도 $0.657343$ 을 준다. 두 값이 같은 것은 우연이 아니라 **간편 공식이 동점 없는 경우의 항등식**이기 때문이다. 동점이 생겨 중간순위를 쓰면 순위의 제곱합이 $n(n^2-1)/12$ 보다 작아져 이 식이 깨진다.
 
-출력:
+    **(2) 평균과 분산은 손으로 적을 수 있다.** 귀무가설 아래에서는 $y$ 의 순위가 $x$ 의 순위와 무관한 **균등한 치환**이다. $a_i = R(x_i) - \frac{n+1}{2}$, $b_i = R(y_i) - \frac{n+1}{2}$ 로 중심화하면 $\sum_i a_i = \sum_i b_i = 0$ 이고
 
-```
-Spearman r_s = 0.6573
-p-value      = 0.0202
-t-statistic  = 2.7584
-Manual p     = 0.0202
-```
+    $$
+    \sum_i a_i^2 = \sum_i b_i^2 = \frac{n(n^2-1)}{12} \;=:\; S,
+    \qquad
+    r_s = \frac{1}{S}\sum_i a_i b_{\sigma(i)}
+    $$
 
-scipy의 p-값과 $t$ 근사로 손계산한 값이 소수점 넷째 자리까지 같다. Spearman 검정의 p-값이 자유도 $n-2$인 $t$-분포에서 나온다는 것을 확인해 준다.
+    이다. $\sigma$ 가 균등 치환이므로 $E[b_{\sigma(i)}] = \frac1n \sum_j b_j = 0$ 이고 따라서
 
-`scipy.stats.spearmanr` 함수는 표본이 크면 t 근사를 쓰며 동점도 처리한다.
+    $$
+    E[r_s] = 0
+    $$
+
+    이다. 분산은 중심화된 두 벡터를 치환으로 짝지을 때의 표준 결과
+
+    $$
+    \operatorname{Var}\!\left(\sum_i a_i b_{\sigma(i)}\right) = \frac{1}{n-1}\left(\sum_i a_i^2\right)\left(\sum_j b_j^2\right) = \frac{S^2}{n-1}
+    $$
+
+    에서 나온다. 양변을 $S^2$ 으로 나누면
+
+    $$
+    \operatorname{Var}(r_s) = \frac{1}{n-1},
+    \qquad
+    \operatorname{SE}(r_s) = \frac{1}{\sqrt{n-1}} = \frac{1}{\sqrt{11}} = 0.301511
+    $$
+
+    이다. **$n$ 에만 의존하고 자료에는 전혀 의존하지 않는다.** 관측값은 $z = r_s\sqrt{n-1} = 2.1802$ 표준편차 떨어져 있다.
+
+    이제 세 가지 p-값을 견준다.
+
+    | 방법 | p-값 |
+    |---|---|
+    | $t_{10}$ 근사 (`spearmanr` 의 값) | $0.02019$ |
+    | **순열 ($B = 200{,}000$)** | $\mathbf{0.02377 \pm 0.00034}$ |
+    | 정규 근사 $z = r_s\sqrt{n-1}$ | $0.02925$ |
+
+    **$t$ 근사가 참값보다 작다.** 차이 $0.0036$ 은 몬테카를로 오차 $0.0003$ 의 **$10$ 배가 넘으므로 우연이 아니다.** 곧 $n = 12$ 에서 $t$ 근사는 **반보수적**이어서 귀무가설을 실제보다 조금 쉽게 기각한다. 반대로 정규 근사는 $0.0293$ 으로 너무 크다. $t$ 근사가 정규 근사보다 낫지만 둘 다 맞지는 않는다.
+
+    **결론이 바뀌지는 않는다.** 세 값 모두 $\alpha = 0.05$ 아래이므로 단조 연관이 있다는 판정은 같다. 그러나 $p$ 가 $0.04$ 쯤이었다면 근사 하나로 결론이 갈렸을 것이다. **$n \le 20$ 에서는 순열로 다시 재는 것이 안전하고, 비용도 $1$ 초가 안 든다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    x = np.array([3, 1, 6, 4, 8, 2, 7, 5, 10, 9, 11, 12])
+    y = np.array([5, 2, 8, 3, 11, 1, 9, 6, 12, 7, 10, 4])
+
+    # 순위만 쓰므로 정규성이 필요 없고 이상치에도 강하다.
+    r_s, p_value = stats.spearmanr(x, y)
+    print(f"Spearman r_s = {r_s:.4f}")
+    print(f"p-value      = {p_value:.4f}")
+
+    # 피어슨과 같은 꼴의 t 통계량으로 손계산해 확인한다. 순위에 피어슨을
+    # 적용한 것이 스피어만이므로 검정 방식도 그대로 따라온다.
+    n = len(x)
+    t_stat = r_s * np.sqrt((n - 2) / (1 - r_s**2))
+    p_manual = 2 * (1 - stats.t.cdf(abs(t_stat), df=n - 2))
+    print(f"t-statistic  = {t_stat:.4f}")
+    print(f"Manual p     = {p_manual:.4f}")
+
+    # (1) 동점이 없으므로 간편 공식이 정확하다.
+    rx, ry = stats.rankdata(x), stats.rankdata(y)
+    print(f"\nx 가 1..{n} 의 치환인가: {sorted(x) == list(range(1, n + 1))},  "
+          f"y 는: {sorted(y) == list(range(1, n + 1))}")
+    d2 = np.sum((rx - ry) ** 2)
+    print(f"sum d^2 = {d2:.0f},  n(n^2-1) = {n * (n**2 - 1)}")
+    print(f"간편 공식 1 - 6*{d2:.0f}/{n * (n**2 - 1)} = "
+          f"{1 - 6 * d2 / (n * (n**2 - 1)):.6f}")
+    print(f"spearmanr                     = {r_s:.6f}")
+
+    # (2) 귀무분포를 순열로 직접 만든다. H0 에서 두 순위열은 서로 독립인 치환이다.
+    rng = np.random.default_rng(12)
+    B = 200_000
+    base = np.arange(1, n + 1)
+    perms = rng.permuted(np.tile(base, (B, 1)), axis=1)
+    vals = 1 - 6 * ((base - perms) ** 2).sum(axis=1) / (n * (n**2 - 1))
+    hit = (np.abs(vals) >= abs(r_s) - 1e-12).sum()
+    p_perm = (hit + 1) / (B + 1)
+    print(f"\n귀무분포: 평균 {vals.mean():+.5f}  표준편차 {vals.std(ddof=1):.5f}   "
+          f"이론 0 과 1/sqrt(n-1) = {1 / np.sqrt(n - 1):.5f}")
+    print(f"순열 p   = {p_perm:.5f}  (B = {B:,}, 몬테카를로 SE = "
+          f"{np.sqrt(p_perm * (1 - p_perm) / B):.5f})")
+    print(f"t 근사 p = {2 * stats.t.sf(abs(t_stat), n - 2):.5f}")
+    print(f"정규 근사 p = {2 * stats.norm.sf(abs(r_s) * np.sqrt(n - 1)):.5f}   "
+          f"(z = r_s sqrt(n-1) = {r_s * np.sqrt(n - 1):.4f})")
+    ```
+
+    출력:
+
+    ```
+    Spearman r_s = 0.6573
+    p-value      = 0.0202
+    t-statistic  = 2.7584
+    Manual p     = 0.0202
+
+    x 가 1..12 의 치환인가: True,  y 는: True
+    sum d^2 = 98,  n(n^2-1) = 1716
+    간편 공식 1 - 6*98/1716 = 0.657343
+    spearmanr                     = 0.657343
+
+    귀무분포: 평균 -0.00028  표준편차 0.30186   이론 0 과 1/sqrt(n-1) = 0.30151
+    순열 p   = 0.02377  (B = 200,000, 몬테카를로 SE = 0.00034)
+    t 근사 p = 0.02019
+    정규 근사 p = 0.02925   (z = r_s sqrt(n-1) = 2.1802)
+    ```
+
+    손으로 구한 $r_s = 0.657343$ 이 `spearmanr` 과 소수 여섯째 자리까지 같다. 귀무분포의 평균 $-0.00028$ 과 표준편차 $0.30186$ 도 닫힌 꼴 $0$ 과 $0.30151$ 과 맞는다. $200{,}000$ 번의 모의실험에서 표준편차의 몬테카를로 오차가 $0.00048$ 쯤이므로 $0.00035$ 의 차이는 그 안이다.
+
+    **왜 $t$ 근사가 어긋나는가.** $t_{n-2}$ 라는 꼴은 $(X, Y)$ 가 이변량 정규일 때 **순위가 아닌 원자료의** Pearson $r$ 에 대해 정확한 결과다. 순위에 그대로 가져다 쓰면 귀무분포가 치환 위의 **이산분포**라는 사실을 무시하게 된다. $n = 12$ 에서 $r_s$ 가 가질 수 있는 값은 $\sum d_i^2$ 이 짝수 정수인 자리뿐이라 띄엄띄엄하다. $n$ 이 커지면 이 틈이 메워져 근사가 좋아진다.
 
 ---
 

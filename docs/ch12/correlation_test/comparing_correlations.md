@@ -113,45 +113,156 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 독립인 두 상관의 비교
+**보기 2.** <span class="diff easy" title="쉬움"></span> $0.65$ 와 $0.40$ 의 차이를 잡으려면 몇 명이 필요한가. 독립인 두 집단에서 $r_1 = 0.65\,(n_1 = 50)$, $r_2 = 0.40\,(n_2 = 60)$ 을 얻었다.
+
+**(1)** $Z$ 와 양측 p-값을 손으로 구하시오. 또 $\zeta_1 - \zeta_2$ 의 $95\%$ 신뢰구간을 적고, 양끝에 $\tanh$ 를 씌운 것이 왜 $\rho_1 - \rho_2$ 의 구간이 **아닌지** 수로 보이시오.
+
+**(2)** 참값이 정말 $\rho_1 = 0.65$, $\rho_2 = 0.40$ 이라 하자. $\alpha = 0.05$ 에서 검정력 $0.80$ 을 얻으려면 집단당 몇 명이 필요한가. **닫힌 꼴로** 풀고 모의실험으로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# 서로 다른 두 표본에서 얻은 상관계수를 견준다. 표본이 겹치지 않아야
-# 이 방법을 쓸 수 있다. 같은 사람에게서 잰 두 상관이라면 다른 검정이 필요하다.
-r1, n1 = 0.65, 50
-r2, n2 = 0.40, 60
+    **(1) 피셔 눈금에서 두 수를 빼면 끝이다.**
 
-# 두 r 을 각각 z 로 옮긴다. z 는 거의 정규이고 분산이 표본크기로만 정해진다.
-z1 = np.arctanh(r1)
-z2 = np.arctanh(r2)
-# 두 z 가 독립이므로 차이의 분산은 각 분산의 합이다.
-se = np.sqrt(1 / (n1 - 3) + 1 / (n2 - 3))
-Z_stat = (z1 - z2) / se
-p_value = 2 * (1 - stats.norm.cdf(abs(Z_stat)))
+    $$
+    z_1 = \operatorname{arctanh}(0.65) = 0.7753,
+    \qquad
+    z_2 = \operatorname{arctanh}(0.40) = 0.4236
+    $$
 
-print(f"z1 = {z1:.4f}, z2 = {z2:.4f}")
-print(f"Z statistic = {Z_stat:.4f}")
-print(f"Two-sided p-value = {p_value:.4f}")
-```
+    이고 두 표본이 독립이므로 차이의 분산은 두 분산의 합이다.
 
-출력:
+    $$
+    \operatorname{SE} = \sqrt{\frac{1}{n_1-3} + \frac{1}{n_2-3}} = \sqrt{\frac{1}{47} + \frac{1}{57}} = 0.197029
+    $$
 
-```
-z1 = 0.7753, z2 = 0.4236
-Z statistic = 1.7848
-Two-sided p-value = 0.0743
-```
+    $$
+    Z = \frac{0.7753 - 0.4236}{0.197029} = 1.7848,
+    \qquad
+    p = 2\,\Phi(-1.7848) = 0.0743
+    $$
 
-상관 0.65와 0.40의 차이가 $p = 0.074$로 5% 수준에서는 유의하지 않다. 상관계수를 비교하려면 상관을 추정할 때보다 훨씬 큰 표본이 필요하다.
+    이다. $\alpha = 0.05$ 에서 기각하지 못한다. $\zeta_1 - \zeta_2$ 의 $95\%$ 구간은
 
-Fisher의 $z$ 변환이 하는 일도 숫자로 드러난다. $r = 0.65$가 $z = 0.775$로, $r = 0.40$이 $z = 0.424$로 바뀌는데, 이 변환 뒤에야 분산이 $1/(n-3)$으로 $r$에 의존하지 않게 되어 정규근사를 쓸 수 있다.
+    $$
+    0.3517 \pm 1.96 \times 0.197029 = (-0.0345,\; +0.7378)
+    $$
 
-종속인 상관의 비교에는 `pingouin` 라이브러리의 `pingouin.corr`가 겹치는 상관 비교 옵션을 제공하고, R의 `cocor` 패키지가 다양한 비교 검정을 제공한다.
+    로 $0$ 을 품으므로 검정 결과와 맞는다.
+
+    **$\tanh$ 를 씌우면 안 되는 까닭은 $\tanh$ 가 비선형이기 때문이다.** $\tanh$ 는 합과 차를 보존하지 않으므로
+
+    $$
+    \tanh(z_1 - z_2) \ne \tanh(z_1) - \tanh(z_2) = r_1 - r_2
+    $$
+
+    이다. 실제로 $\tanh(0.3517) = 0.3378$ 인데 $r_1 - r_2 = 0.2500$ 이다. **점추정부터 $0.088$ 만큼 어긋난다.** 그러니 $(\tanh(-0.0345),\, \tanh(0.7378)) = (-0.0345,\, 0.6278)$ 은 $\rho_1 - \rho_2$ 를 덮는 구간이 아니다. 신뢰구간은 $\zeta_1 - \zeta_2$ 에 대한 것이고, 그 척도에서 보고하거나 아예 붓스트랩으로 $\rho_1 - \rho_2$ 를 직접 잡아야 한다.
+
+    **(2) 검정력 식도 닫힌 꼴이다.** 두 집단 크기를 $n$ 으로 같게 두면 $\operatorname{SE} = \sqrt{2/(n-3)}$ 이고, $Z$ 는 평균이 $\delta/\operatorname{SE}$ 인 정규를 따른다. 여기서 $\delta = \zeta_1 - \zeta_2$ 다. 양측 검정의 검정력이 $1-\beta$ 이려면 (한쪽 꼬리는 무시할 만하므로)
+
+    $$
+    \frac{\lvert \delta \rvert}{\sqrt{2/(n-3)}} \;=\; z_{\alpha/2} + z_{\beta}
+    \qquad\Longrightarrow\qquad
+    n \;=\; 3 + 2\left(\frac{z_{\alpha/2} + z_{\beta}}{\delta}\right)^{2}
+    $$
+
+    이다. $\delta = \operatorname{arctanh}(0.65) - \operatorname{arctanh}(0.40) = 0.351650$ 이고 $z_{0.025} + z_{0.20} = 1.959964 + 0.841621 = 2.801585$ 이므로
+
+    $$
+    n = 3 + 2\left(\frac{2.801585}{0.351650}\right)^2 = 3 + 2 \times 63.47 = 129.95
+    $$
+
+    곧 **집단당 $130$ 명**이다. 이 $n$ 에서 이론 검정력은 $0.8002$ 다.
+
+    이 수가 이 보기의 핵심이다. 상관 하나를 "$0$ 과 다르다"고 말하려면 $r = 0.4$ 에서 $n = 47$ 이면 족하다. 그런데 **두 상관이 $0.65$ 와 $0.40$ 만큼 벌어져 있는데도 그 차이를 가리려면 집단마다 $130$ 명씩, 모두 $260$ 명이 든다.** 이 보기의 $50$ 과 $60$ 으로는 검정력이 한참 모자라고, $p = 0.074$ 는 "차이가 없다"가 아니라 **"이 표본으로는 알 수 없다"** 로 읽어야 한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 서로 다른 두 표본에서 얻은 상관계수를 견준다. 표본이 겹치지 않아야
+    # 이 방법을 쓸 수 있다. 같은 사람에게서 잰 두 상관이라면 다른 검정이 필요하다.
+    r1, n1 = 0.65, 50
+    r2, n2 = 0.40, 60
+
+    # 두 r 을 각각 z 로 옮긴다. z 는 거의 정규이고 분산이 표본크기로만 정해진다.
+    z1 = np.arctanh(r1)
+    z2 = np.arctanh(r2)
+    # 두 z 가 독립이므로 차이의 분산은 각 분산의 합이다.
+    se = np.sqrt(1 / (n1 - 3) + 1 / (n2 - 3))
+    Z_stat = (z1 - z2) / se
+    p_value = 2 * (1 - stats.norm.cdf(abs(Z_stat)))
+
+    print(f"z1 = {z1:.4f}, z2 = {z2:.4f}")
+    print(f"Z statistic = {Z_stat:.4f}")
+    print(f"Two-sided p-value = {p_value:.4f}")
+
+    # (1) zeta1 - zeta2 의 95% 구간과, 그것을 tanh 로 되돌리면 안 되는 까닭
+    lo, hi = (z1 - z2) - 1.96 * se, (z1 - z2) + 1.96 * se
+    print(f"\nSE = sqrt(1/{n1-3} + 1/{n2-3}) = {se:.6f}")
+    print(f"zeta1 - zeta2 의 95% 구간 = ({lo:+.4f}, {hi:+.4f})   0 을 품는가: {lo < 0 < hi}")
+    print(f"끝점에 tanh 를 씌우면      = ({np.tanh(lo):+.4f}, {np.tanh(hi):+.4f})")
+    print(f"그러나 rho1 - rho2 의 점추정은 {r1 - r2:+.4f} 이고 "
+          f"tanh(z1-z2) = {np.tanh(z1 - z2):+.4f} 로 서로 다르다")
+
+    # (2) 검정력 0.80 에 필요한 집단당 표본크기
+    zeta1, zeta2 = np.arctanh(0.65), np.arctanh(0.40)
+    delta = zeta1 - zeta2
+    need = stats.norm.ppf(0.975) + stats.norm.ppf(0.80)
+    n_req = 3 + 2 * (need / delta) ** 2
+    print(f"\ndelta = zeta1 - zeta2 = {delta:.6f}")
+    print(f"z_0.025 + z_0.20 = {need:.6f}")
+    print(f"필요한 n = 3 + 2*(need/delta)^2 = {n_req:.2f}  ->  "
+          f"집단당 {int(np.ceil(n_req))} 명")
+
+    n = int(np.ceil(n_req))
+    ncp = delta / np.sqrt(2 / (n - 3))
+    print(f"이론 검정력 = {stats.norm.sf(1.96 - ncp) + stats.norm.cdf(-1.96 - ncp):.4f}")
+
+    rng = np.random.default_rng(7)
+    B = 20_000
+    def sample_r(rho, m, B):
+        a = rng.standard_normal((B, m))
+        b = rho * a + np.sqrt(1 - rho**2) * rng.standard_normal((B, m))
+        a = a - a.mean(axis=1, keepdims=True)
+        b = b - b.mean(axis=1, keepdims=True)
+        return (a * b).sum(axis=1) / np.sqrt((a**2).sum(axis=1) * (b**2).sum(axis=1))
+
+    R1, R2 = sample_r(0.65, n, B), sample_r(0.40, n, B)
+    Zs = (np.arctanh(R1) - np.arctanh(R2)) / np.sqrt(2 / (n - 3))
+    print(f"모의 검정력 ({B:,}회, n = {n}) = {np.mean(np.abs(Zs) > 1.96):.4f}  "
+          f"+- {np.std(np.abs(Zs) > 1.96) / np.sqrt(B):.4f}")
+
+    # 1종 오류도 함께 본다 (rho1 = rho2 = 0.65)
+    R1, R2 = sample_r(0.65, n, B), sample_r(0.65, n, B)
+    Zs = (np.arctanh(R1) - np.arctanh(R2)) / np.sqrt(2 / (n - 3))
+    print(f"모의 1종 오류 (rho1 = rho2 = 0.65) = {np.mean(np.abs(Zs) > 1.96):.4f}  (명목 0.05)")
+    ```
+
+    출력:
+
+    ```
+    z1 = 0.7753, z2 = 0.4236
+    Z statistic = 1.7848
+    Two-sided p-value = 0.0743
+
+    SE = sqrt(1/47 + 1/57) = 0.197029
+    zeta1 - zeta2 의 95% 구간 = (-0.0345, +0.7378)   0 을 품는가: True
+    끝점에 tanh 를 씌우면      = (-0.0345, +0.6278)
+    그러나 rho1 - rho2 의 점추정은 +0.2500 이고 tanh(z1-z2) = +0.3378 로 서로 다르다
+
+    delta = zeta1 - zeta2 = 0.351650
+    z_0.025 + z_0.20 = 2.801585
+    필요한 n = 3 + 2*(need/delta)^2 = 129.95  ->  집단당 130 명
+    이론 검정력 = 0.8002
+    모의 검정력 (20,000회, n = 130) = 0.8009  +- 0.0028
+    모의 1종 오류 (rho1 = rho2 = 0.65) = 0.0498  (명목 0.05)
+    ```
+
+    **이론 검정력 $0.8002$ 와 모의 검정력 $0.8009 \pm 0.0028$ 이 맞는다.** 차이 $0.0007$ 은 몬테카를로 오차의 $4$ 분의 $1$ 이다. 귀무가설이 참일 때의 기각률도 $0.0498$ 로 명목 $0.05$ 와 맞으므로, 피셔 $z$ 근사가 $n = 130$ 에서 제 몫을 한다.
+
+    **표본이 겹치면 이 식을 쓸 수 없다.** 분산을 합으로 쓴 자리가 바로 두 $z$ 의 독립을 쓴 곳이다. 같은 사람에게서 잰 $r_{XY}$ 와 $r_{XZ}$ 는 $X$ 를 공유하므로 서로 독립이 아니고, 둘의 공분산은 $r_{YZ}$ 에 달려 있다. $r_{YZ}$ 가 크면 차이의 분산이 **합보다 한참 작아진다.** 실제로 $r_{XY} = r_{XZ} = 0.5$, $n = 200$ 에서 재어 보면 $r_{YZ} = 0.9$ 일 때 차이의 분산이 독립 가정이 주는 $2/(n-3)$ 의 **$0.13$ 배**, $r_{YZ} = 0.5$ 일 때 $0.56$ 배다. 그만큼 독립 공식은 분산을 부풀려 **지나치게 보수적인** 검정이 된다. 그래서 이 절 앞부분의 Steiger 식처럼 $r_{YZ}$ 가 들어간 별도의 공식이 필요하다.
 
 ---
 

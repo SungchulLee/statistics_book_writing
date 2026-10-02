@@ -105,11 +105,157 @@
 
 <div class="exbox" markdown>
 
-**보기 7.** <span class="diff easy" title="쉬움"></span> 주택 자료
+**보기 7.** <span class="diff easy" title="쉬움"></span> 주택 자료에서 교란을 실제로 찾아보기. 캘리포니아 주택 자료에서 중위소득과 중위집값의 상관은 $r = 0.6881$ 이다.
+
+**(1)** 이 상관이 **위치** 때문에 생긴 것은 아닌지 의심해 보자. 편상관의 닫힌 꼴
+
+$$
+\rho_{XY\cdot Z} = \frac{r_{XY} - r_{XZ}r_{YZ}}{\sqrt{(1-r_{XZ}^2)(1-r_{YZ}^2)}}
+$$
+
+로 위도를 통제한 값을 구하고, 잔차 회귀로 같은 값이 나오는지 확인하시오. 여러 변수를 통제하면 어떻게 되는가.
+
+**(2)** 집값이 $500{,}001$ 달러에서 **잘려 있다.** 잘린 구역을 빼고 다시 재면 $r$ 가 오르는가 내리는가. 그 까닭을 소득의 퍼짐으로 설명하고, 회귀 기울기도 같이 움직이는지 보시오.
 
 </div>
 
-캘리포니아 주택 자료는 상관과 잠재적 교란 관계를 탐색하는 실습 보기를 제공한다.
+??? success "풀이"
+
+    **(1) 위치는 교란변수가 아니다.** 위도 하나를 통제하면
+
+    $$
+    r_{XZ} = -0.0798,\qquad r_{YZ} = -0.1442
+    $$
+
+    이므로
+
+    $$
+    \rho_{XY\cdot Z} = \frac{0.6881 - (-0.0798)(-0.1442)}{\sqrt{(1-0.0798^2)(1-0.1442^2)}}
+    = \frac{0.6766}{0.9865} = 0.6859
+    $$
+
+    로 **$0.0022$ 밖에 안 움직인다.** 잔차 회귀로 구한 값도 $0.6859$ 로 소수 넷째 자리까지 같다. 닫힌 꼴과 "각자 $Z$ 에 회귀한 잔차끼리의 상관"이 같은 것이라는 사실이 그대로 확인된다.
+
+    통제할 변수를 바꿔 가며 재어도 마찬가지다.
+
+    | 통제한 변수 | 편상관 |
+    |---|---|
+    | 없음 | $0.6881$ |
+    | 위도 | $0.6859$ |
+    | 경도 | $0.6882$ |
+    | 위도 + 경도 | $0.6717$ |
+    | 주택연령 | $0.7096$ |
+    | 인구 | $0.6884$ |
+    | 넷 모두 | $0.6800$ |
+
+    **어느 것을 통제해도 $0.67$ 과 $0.71$ 사이를 벗어나지 않는다.** 교란이라면 통제했을 때 상관이 무너져야 하는데 그런 일이 일어나지 않는다. 주택연령을 통제하면 오히려 **올라간다**는 점도 눈여겨볼 만하다. 교란변수를 통제하면 상관이 줄고, 억제변수(suppressor)를 통제하면 늘 수 있다.
+
+    다만 **"교란이 없다"고 결론지을 수는 없다.** 이 자료에 들어 있지 않은 변수(학군, 직업 구성, 토지 규제 등)는 어떤 통제로도 다룰 수 없다. 편상관이 할 수 있는 말은 **"내가 재어 본 이 변수들로는 설명되지 않는다"** 까지다.
+
+    **(2) 내려간다. $0.6881 \to 0.6426$ 이다.** 집값이 $500{,}001$ 인 구역이 $965$ 개로 전체의 $4.68\%$ 다. 이 구역들의 소득 평균은 $7.825$ 로 나머지 $3.677$ 의 두 배가 넘는다. **즉 잘린 구역은 소득이 가장 높은 쪽에 몰려 있다.** 그래서 이들을 빼면 소득의 표준편차가
+
+    $$
+    1.8998 \;\longrightarrow\; 1.5703 \qquad (-17.3\%)
+    $$
+
+    로 줄어든다. **범위 제한**이다.
+
+    범위 제한이 상관을 깎는다는 것은 $r = \hat\beta \cdot s_X/s_Y$ 에서 바로 읽힌다. 기울기는 $41794 \to 39987$ 로 $4.3\%$ 만 변했는데 $s_X$ 가 $17\%$ 줄었다. **기울기는 관계의 기울기라 범위에 거의 무관하고, $r$ 는 $X$ 가 얼마나 퍼져 있느냐에 직접 달려 있다.**
+
+    그러므로 $r$ 가 떨어진 것을 "절단을 없애니 참값이 나왔다"로 읽으면 안 된다. 둘 다 각자의 모집단에 대해 옳고, **모집단이 달라졌을 뿐**이다.
+
+    ```python
+    import os
+    import tarfile
+    import urllib.request
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
+    HOUSING_PATH = os.path.join("datasets", "housing")
+    HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
+
+    def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
+        if not os.path.isdir(housing_path):
+            os.makedirs(housing_path)
+        tgz_path = os.path.join(housing_path, "housing.tgz")
+        urllib.request.urlretrieve(housing_url, tgz_path)
+        with tarfile.open(tgz_path) as housing_tgz:
+            housing_tgz.extractall(path=housing_path)
+
+    def load_housing_data(housing_path=HOUSING_PATH):
+        return pd.read_csv(os.path.join(housing_path, "housing.csv"))
+
+    fetch_housing_data()
+    df = load_housing_data()
+
+    X, Y = "median_income", "median_house_value"
+
+    # (1) 편상관의 닫힌 꼴과 잔차 회귀가 같은 값을 주는지 본다.
+    def partial_corr(d, x, y, zs):
+        """z 들을 통제한 x, y 의 편상관. 각자 z 에 회귀한 잔차끼리의 상관이다."""
+        Z = np.column_stack([np.ones(len(d))] + [d[z].values for z in zs])
+        ex = d[x].values - Z @ np.linalg.lstsq(Z, d[x].values, rcond=None)[0]
+        ey = d[y].values - Z @ np.linalg.lstsq(Z, d[y].values, rcond=None)[0]
+        return np.corrcoef(ex, ey)[0, 1]
+
+    r_xy = df[X].corr(df[Y])
+    z = "latitude"
+    r_xz, r_yz = df[X].corr(df[z]), df[Y].corr(df[z])
+    closed = (r_xy - r_xz * r_yz) / np.sqrt((1 - r_xz**2) * (1 - r_yz**2))
+    print(f"통제 전 r = {r_xy:.4f}")
+    print(f"\n위도 하나를 통제")
+    print(f"  r_xz = {r_xz:+.4f},  r_yz = {r_yz:+.4f}")
+    print(f"  닫힌 꼴   = {closed:.4f}")
+    print(f"  잔차 회귀 = {partial_corr(df, X, Y, [z]):.4f}")
+
+    print(f"\n무엇을 통제하든 거의 움직이지 않는다")
+    for zs in (["latitude"], ["longitude"], ["latitude", "longitude"],
+               ["housing_median_age"], ["population"],
+               ["latitude", "longitude", "housing_median_age", "population"]):
+        print(f"  {'+'.join(zs):>50s} -> {partial_corr(df, X, Y, zs):.4f}")
+
+    # (2) 집값이 잘린 구역을 빼면 어떻게 되는가
+    cap = df[Y].max()
+    m = df[Y] == cap
+    print(f"\n집값이 {cap:.0f} 로 잘린 구역 = {m.sum()} 개 ({m.mean():.2%})")
+    print(f"  그 구역의 소득 평균 {df[X][m].mean():.3f},  나머지 {df[X][~m].mean():.3f}")
+    print(f"  소득 표준편차: 전체 {df[X].std():.4f}  ->  제외 후 {df[X][~m].std():.4f}")
+    print(f"  상관:          전체 {r_xy:.4f}  ->  제외 후 {df[X][~m].corr(df[Y][~m]):.4f}")
+    s1 = stats.linregress(df[X], df[Y]).slope
+    s2 = stats.linregress(df[X][~m], df[Y][~m]).slope
+    print(f"  회귀 기울기:   전체 {s1:.1f}  ->  제외 후 {s2:.1f}  ({s2/s1 - 1:+.1%})")
+    ```
+
+    출력:
+
+    ```
+    통제 전 r = 0.6881
+
+    위도 하나를 통제
+      r_xz = -0.0798,  r_yz = -0.1442
+      닫힌 꼴   = 0.6859
+      잔차 회귀 = 0.6859
+
+    무엇을 통제하든 거의 움직이지 않는다
+                                                latitude -> 0.6859
+                                               longitude -> 0.6882
+                                      latitude+longitude -> 0.6717
+                                      housing_median_age -> 0.7096
+                                              population -> 0.6884
+        latitude+longitude+housing_median_age+population -> 0.6800
+
+    집값이 500001 로 잘린 구역 = 965 개 (4.68%)
+      그 구역의 소득 평균 7.825,  나머지 3.677
+      소득 표준편차: 전체 1.8998  ->  제외 후 1.5703
+      상관:          전체 0.6881  ->  제외 후 0.6426
+      회귀 기울기:   전체 41793.8  ->  제외 후 39987.0  (-4.3%)
+    ```
+
+    닫힌 꼴 $0.6859$ 와 잔차 회귀 $0.6859$ 가 맞고, 범위 제한의 $-17.3\%$ 와 기울기의 $-4.3\%$ 도 맞는다. 앞 보기들과 달리 **여기서는 교란이 잡히지 않았다.** 교란을 찾는 절차를 돌렸을 때 "찾지 못했다"가 나오는 경우를 한 번 보아 두는 것이 이 보기의 몫이다.
+
+    아래 실습들은 이 자료로 상관을 직접 계산하고 그려 보는 연습이다.
 
 ```python
 import os

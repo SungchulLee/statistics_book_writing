@@ -136,51 +136,147 @@ Kendall 검정과 Spearman 검정은 모두 단조 연관에 대한 비모수 �
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Kendall 타우 검정과 손계산
+**보기 2.** <span class="diff easy" title="쉬움"></span> $n = 5$ 에서 정확값과 근사가 갈린다. $x = (1,2,3,4,5)$, $y = (3,5,4,2,1)$ 이다. `scipy` 는 $p = 0.2333$ 을 주는데 정규근사로 손계산하면 $0.1416$ 이 나온다.
+
+**(1)** $5! = 120$ 개 순열을 모두 세어 $H_0$ 아래 $S$ 의 정확분포를 적고, $P(\lvert S \rvert \ge 6)$ 을 **분수로** 구하시오. `scipy` 의 값과 맞는가.
+
+**(2)** 어긋남의 $0.09$ 가운데 얼마가 **이산성** 때문인가. $S$ 가 띄엄띄엄한 격자 위에 있다는 사실을 연속성 보정으로 반영하면 근사가 얼마나 좋아지는가.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-x = np.array([1, 2, 3, 4, 5])
-y = np.array([3, 5, 4, 2, 1])
+    **(1) 정확분포는 손으로 셀 수 있다.** $x$ 가 이미 오름차순이므로 $S$ 는 $y$ 의 순열이 가진 **역위 수**(discordant pair 수) $D$ 만으로 정해진다. 쌍이 $\binom52 = 10$ 개이므로
 
-# 귀무가설은 "두 변수가 독립"이다. 표본이 작으면 scipy 가 정확분포를 쓴다.
-tau, p_value = stats.kendalltau(x, y)
-print(f"Kendall tau = {tau:.4f}")
-print(f"p-value     = {p_value:.4f}")
+    $$
+    S = C - D = (10 - D) - D = 10 - 2D
+    $$
 
-# 정의대로 손으로 구해 확인한다. 모든 쌍을 돌며 같은 방향이면 +1,
-# 반대 방향이면 -1 을 더한다. 그 합이 S 다.
-n = len(x)
-S = 0
-for i in range(n):
-    for j in range(i + 1, n):
-        S += np.sign(x[j] - x[i]) * np.sign(y[j] - y[i])
+    이고, $D$ 가 $0$ 부터 $10$ 까지 가므로 $S$ 는 $10, 8, \ldots, -10$ 의 **열한 값**만 갖는다. 각 $D$ 에 해당하는 순열의 수는 잘 알려진 마호니안 수열
 
-# 귀무가설 아래에서 S 의 분산은 이 공식으로 주어진다. 표본이 크면
-# S 가 정규에 가까워지므로 z 검정을 쓸 수 있다.
-var_S = n * (n - 1) * (2 * n + 5) / 18
-Z = S / np.sqrt(var_S)
-p_manual = 2 * (1 - stats.norm.cdf(abs(Z)))
-print(f"S = {S}, Z = {Z:.4f}, Manual p = {p_manual:.4f}")
-```
+    $$
+    1,\; 4,\; 9,\; 15,\; 20,\; 22,\; 20,\; 15,\; 9,\; 4,\; 1
+    \qquad (D = 0, 1, \ldots, 10)
+    $$
 
-출력:
+    이고 합이 $120$ 이다. 관측값은 $S = -6$ 이므로 $\lvert S \rvert \ge 6$ 은 $D \le 2$ 또는 $D \ge 8$ 을 뜻한다. 양끝 세 개씩 더하면
 
-```
-Kendall tau = -0.6000
-p-value     = 0.2333
-S = -6, Z = -1.4697, Manual p = 0.1416
-```
+    $$
+    P(\lvert S \rvert \ge 6) = \frac{(1 + 4 + 9) + (9 + 4 + 1)}{120} = \frac{28}{120} = \frac{7}{30} = 0.2333\overline{3}
+    $$
 
-scipy의 $p = 0.233$과 손으로 계산한 정규근사의 $p = 0.142$가 꽤 다르다.
+    이다. **`scipy` 의 $0.233333$ 과 자릿수 끝까지 같다.** 작은 표본에서 `kendalltau` 가 쓰는 것이 바로 이 열거이기 때문이다.
 
-$n = 5$에서는 정규근사가 통하지 않기 때문이다. scipy는 표본이 작으면 정확한 순열분포를 쓰고, 손계산은 $Z$ 근사를 쓴다. 순열 개수가 $5! = 120$뿐이라 $\tau$가 취할 수 있는 값도 띄엄띄엄하고, 그 이산성이 근사와 정확값을 갈라놓는다.
+    **(2) 거의 전부가 이산성 탓이다.** $S$ 의 가능한 값이 $2$ 칸씩 떨어져 있으므로 연속분포로 바꿔 재려면 경계를 **반 칸, 곧 $1$ 만큼** 안쪽으로 당겨야 한다. $\operatorname{Var}(S) = \frac{5 \times 4 \times 15}{18} = \frac{300}{18} = 16.6667$, $\operatorname{sd}(S) = 4.0825$ 이므로
 
-`scipy.stats.kendalltau` 함수는 타우-b를 계산하고 분산 공식에서 동점을 자동으로 처리한다.
+    $$
+    Z_{\text{보정}} = \frac{\lvert S \rvert - 1}{\operatorname{sd}(S)} = \frac{5}{4.0825} = 1.2247,
+    \qquad
+    p = 2\,\Phi(-1.2247) = 0.2207
+    $$
+
+    이다.
+
+    | 방법 | $Z$ | $p$ | 정확값과의 차 |
+    |---|---|---|---|
+    | 보정 없는 정규근사 | $1.4697$ | $0.1416$ | $0.0917$ |
+    | **연속성 보정** | $1.2247$ | $\mathbf{0.2207}$ | $\mathbf{0.0127}$ |
+    | 정확 열거 | — | $0.2333$ | $0$ |
+
+    **오차가 $0.0917$ 에서 $0.0127$ 로, 일곱 배 넘게 줄어든다.** 곧 어긋남의 $86\%$ 가 "막대를 곡선으로 쟀다"는 한 가지 이유에서 왔다. 남은 $0.0127$ 이 $n = 5$ 에서 $S$ 의 분포가 정규와 다른 몫이다.
+
+    경계 막대 하나의 무게를 보면 더 분명하다. $S = \pm 6$ 인 순열이 각각 $9$ 개, 곧 확률 $0.075$ 씩이다. 두 개를 합치면 $0.15$ 로 **p-값 $0.233$ 의 절반을 넘는다.** 이렇게 굵은 막대를 매끄러운 곡선이 제대로 잡을 수 없다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from itertools import permutations
+    from collections import Counter
+    from fractions import Fraction
+
+    x = np.array([1, 2, 3, 4, 5])
+    y = np.array([3, 5, 4, 2, 1])
+
+    # 귀무가설은 "두 변수가 독립"이다. 표본이 작으면 scipy 가 정확분포를 쓴다.
+    tau, p_value = stats.kendalltau(x, y)
+    print(f"Kendall tau = {tau:.4f}")
+    print(f"p-value     = {p_value:.4f}")
+
+    # 정의대로 손으로 구해 확인한다. 모든 쌍을 돌며 같은 방향이면 +1,
+    # 반대 방향이면 -1 을 더한다. 그 합이 S 다.
+    n = len(x)
+    S = 0
+    for i in range(n):
+        for j in range(i + 1, n):
+            S += np.sign(x[j] - x[i]) * np.sign(y[j] - y[i])
+
+    # 귀무가설 아래에서 S 의 분산은 이 공식으로 주어진다. 표본이 크면
+    # S 가 정규에 가까워지므로 z 검정을 쓸 수 있다.
+    var_S = n * (n - 1) * (2 * n + 5) / 18
+    Z = S / np.sqrt(var_S)
+    p_manual = 2 * (1 - stats.norm.cdf(abs(Z)))
+    print(f"S = {S}, Z = {Z:.4f}, Manual p = {p_manual:.4f}")
+
+    # (1) 5! = 120 개 순열을 모두 세어 S 의 정확 귀무분포를 만든다.
+    def s_of(perm):
+        m = len(perm)
+        return sum(np.sign(j - i) * np.sign(perm[j] - perm[i])
+                   for i in range(m) for j in range(i + 1, m))
+
+    dist = Counter(s_of(p) for p in permutations(range(1, n + 1)))
+    print(f"\n{n}! = {sum(dist.values())} 개 순열이 주는 S 의 분포")
+    print(f"{'S':>5s} {'개수':>5s} {'확률':>9s}")
+    for s in sorted(dist):
+        print(f"{s:5d} {dist[s]:5d} {dist[s] / 120:9.5f}")
+    hit = sum(c for s, c in dist.items() if abs(s) >= abs(S))
+    print(f"\n|S| >= {abs(S)} 인 순열 = {hit} / 120 = {Fraction(hit, 120)} = {hit / 120:.6f}")
+    print(f"scipy 의 p-값              = {p_value:.6f}")
+    print(f"둘이 같은가: {abs(hit / 120 - p_value) < 1e-12}")
+
+    # (2) 연속성 보정. S 가 2 칸씩 띄엄띄엄하므로 보정폭은 그 절반인 1 이다.
+    Zc = (abs(S) - 1) / np.sqrt(var_S)
+    print(f"\nVar(S) = {n}*{n-1}*{2*n+5}/18 = {var_S:.4f},  sd = {np.sqrt(var_S):.4f}")
+    print(f"보정 없음 : Z = {abs(Z):.4f}  p = {2 * stats.norm.sf(abs(Z)):.4f}  "
+          f"(정확값과 차 {abs(2 * stats.norm.sf(abs(Z)) - hit / 120):.4f})")
+    print(f"연속성 보정: Z = {Zc:.4f}  p = {2 * stats.norm.sf(Zc):.4f}  "
+          f"(정확값과 차 {abs(2 * stats.norm.sf(Zc) - hit / 120):.4f})")
+    print(f"정확값     : p = {hit / 120:.4f}")
+    ```
+
+    출력:
+
+    ```
+    Kendall tau = -0.6000
+    p-value     = 0.2333
+    S = -6, Z = -1.4697, Manual p = 0.1416
+
+    5! = 120 개 순열이 주는 S 의 분포
+        S    개수        확률
+      -10     1   0.00833
+       -8     4   0.03333
+       -6     9   0.07500
+       -4    15   0.12500
+       -2    20   0.16667
+        0    22   0.18333
+        2    20   0.16667
+        4    15   0.12500
+        6     9   0.07500
+        8     4   0.03333
+       10     1   0.00833
+
+    |S| >= 6 인 순열 = 28 / 120 = 7/30 = 0.233333
+    scipy 의 p-값              = 0.233333
+    둘이 같은가: True
+
+    Var(S) = 5*4*15/18 = 16.6667,  sd = 4.0825
+    보정 없음 : Z = 1.4697  p = 0.1416  (정확값과 차 0.0917)
+    연속성 보정: Z = 1.2247  p = 0.2207  (정확값과 차 0.0127)
+    정확값     : p = 0.2333
+    ```
+
+    열거한 개수 $1, 4, 9, 15, 20, 22, 20, 15, 9, 4, 1$ 이 손으로 적은 마호니안 수열과 같고, $28/120 = 7/30$ 이 `scipy` 의 p-값과 같다. 연속성 보정값 $0.2207$ 도 맞는다.
+
+    **읽는 법.** $p = 0.233$ 이든 $0.142$ 든 $\alpha = 0.05$ 에서는 기각하지 못하므로 이 자료의 결론은 바뀌지 않는다. 그러나 **보정 없는 정규근사가 p-값을 절반 가까이 깎아 내린다**는 사실 자체가 경고다. $n$ 이 작을 때 그 방향은 늘 같아서, 보정하지 않으면 **없는 연관을 있다고 말하기 쉬워진다.** `scipy.stats.kendalltau` 는 동점이 없고 표본이 작으면 알아서 정확분포를 쓰므로 이 함정을 피해 준다. 직접 $Z$ 를 계산할 때만 조심하면 된다.
 
 ---
 

@@ -141,39 +141,167 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> Kendall의 타우 구하기
+**보기 1.** <span class="diff easy" title="쉬움"></span> Kendall의 타우 구하기. 앞에서 손으로 센 자료 $x = (1,2,3,4,5)$, $y = (3,5,4,2,1)$ 을 코드로 다룬다. $C = 2$, $D = 8$ 이므로 $\tau = -0.6$ 이다.
+
+**(1)** 같은 자료의 Spearman $r_s$ 를 간편 공식 $1 - 6\sum d_i^2/\{n(n^2-1)\}$ 로 구하시오. $\lvert\tau\rvert$ 와 $\lvert r_s\rvert$ 가운데 어느 쪽이 큰가.
+
+**(2)** 두 계수는 서로 묶여 있어 아무 값이나 짝지을 수 없다. $n = 5, 6, 7$ 의 순열을 **전부** 돌려
+
+$$
+\lvert\, 3\tau - 2r_s \,\rvert \le 1
+$$
+
+이 성립하는지 확인하시오. 이 자료에서 $3\tau - 2r_s$ 는 얼마인가.
+
+**(3)** $n = 5$ 이므로 $5! = 120$ 가지 순열을 모두 셀 수 있다. $\tau$ 와 $r_s$ 의 **정확한** 양측 p-값을 유리수로 구하고, `scipy` 가 돌려주는 두 p-값과 견주시오.
+
+**(4)** 코드로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-from scipy import stats
+??? success "풀이"
 
-# x 는 오름차순인데 y 는 올랐다 내려간다. 일치쌍과 불일치쌍이 섞인 자료다.
-x = np.array([1, 2, 3, 4, 5])
-y = np.array([3, 5, 4, 2, 1])
+    **(1) Spearman.** $x$ 의 순위는 $(1,2,3,4,5)$, $y = (3,5,4,2,1)$ 의 순위도 값 그대로 $(3,5,4,2,1)$ 이다. 차를 적으면
 
-# 타우는 (일치쌍 - 불일치쌍) / 전체 쌍이다. "무작위로 두 점을 골랐을 때
-# 같은 방향으로 움직일 확률에서 반대 방향일 확률을 뺀 값"으로 읽을 수 있다.
-tau, p_value = stats.kendalltau(x, y)
-print(f"Kendall tau-b = {tau:.4f}, p-value = {p_value:.4f}")
+    $$
+    d = (1-3,\ 2-5,\ 3-4,\ 4-2,\ 5-1) = (-2,\ -3,\ -1,\ +2,\ +4),
+    \qquad
+    \sum d_i^2 = 4+9+1+4+16 = 34
+    $$
 
-# 스피어만과 견준다. 둘 다 순위만 쓰지만 눈금이 달라 타우 쪽이 늘 더 작다.
-# 표본이 작거나 이상치가 있을 때는 타우가 더 안정적이다.
-r_s, p_s = stats.spearmanr(x, y)
-print(f"Spearman r_s  = {r_s:.4f}, p-value = {p_s:.4f}")
-```
+    이고 동점이 없으므로 간편 공식을 쓸 수 있다.
 
-출력:
+    $$
+    r_s = 1 - \frac{6 \times 34}{5(25-1)} = 1 - \frac{204}{120} = 1 - 1.7 = -0.7
+    $$
 
-```
-Kendall tau-b = -0.6000, p-value = 0.2333
-Spearman r_s  = -0.7000, p-value = 0.1881
-```
+    **$\lvert r_s \rvert = 0.7 > 0.6 = \lvert\tau\rvert$ 다.** 앞 절에서 본 대로 타우가 늘 0 에 더 가깝다.
 
-Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우연이 아니라 일반적인 경향이다. 두 계수는 대체로 $\tau \approx \frac{2}{\pi}\arcsin(r_s)$ 관계에 있어 $|\tau| \le |r_s|$가 된다. 두 값을 직접 비교하면 안 되고, 각자의 척도에서 읽어야 한다.
+    **(2) 두 계수는 함께 움직인다.** 같은 순위자료에서 나온 두 수이니 자유롭게 떨어질 수 없다. 이 자료에서는
 
-관측값이 5개뿐이라 두 p-값 모두 유의하지 않다.
+    $$
+    3\tau - 2r_s = 3(-0.6) - 2(-0.7) = -1.8 + 1.4 = -0.4
+    $$
+
+    로 $[-1, 1]$ 안에 있다. 이것이 우연인지 보려면 세어 보면 된다. $n = 5, 6, 7$ 에 대해 $n!$ 가지 순열을 전부 돌려 $\lvert 3\tau - 2r_s\rvert$ 의 **최댓값**을 찾으면 세 경우 모두 정확히 $1$ 이 나온다(아래 코드). 곧
+
+    $$
+    -1 \le 3\tau - 2r_s \le 1
+    $$
+
+    이 성립하고, **등호가 실제로 달성되므로 더 좁힐 수 없는 한계**다. 이 부등식을 뒤집어 읽으면
+
+    $$
+    \frac{3\tau - 1}{2} \le r_s \le \frac{3\tau + 1}{2}
+    $$
+
+    이다. $\tau = -0.6$ 이면 $r_s \in [-1.4, -0.4]$, 곧 실제로는 $[-1, -0.4]$ 다. 관측된 $-0.7$ 이 그 안에 있다.
+
+    **쓸모.** 논문에 $\tau$ 만 적혀 있어도 $r_s$ 의 범위를 알 수 있고, 거꾸로도 된다. 둘이 크게 어긋나 보이면 **계산이 틀렸을 가능성**을 먼저 의심하면 된다.
+
+    **(3) 정확 p-값.** $n = 5$ 이고 동점이 없으므로 $H_0$ 아래의 표본공간은 $y$ 순위의 $5! = 120$ 가지 배열이다. 전부 세면
+
+    $$
+    \#\{\lvert\tau\rvert \ge 0.6\} = 28
+    \quad\Longrightarrow\quad
+    p_\tau = \frac{28}{120} = \frac{7}{30} = 0.233333
+    $$
+
+    $$
+    \#\{\lvert r_s\rvert \ge 0.7\} = 28
+    \quad\Longrightarrow\quad
+    p_{r_s} = \frac{28}{120} = \frac{7}{30} = 0.233333
+    $$
+
+    **두 정확 p-값이 똑같이 $7/30$ 이다.** 이 자료에서 두 통계량이 같은 28 개 배열을 "이만큼 극단적" 으로 골라내기 때문이다(일반적으로 늘 같지는 않다).
+
+    이제 `scipy` 와 견준다.
+
+    | | 통계량 | `scipy` p | 정확 p | |
+    |---|---:|---:|---:|---|
+    | Kendall $\tau$ | $-0.6$ | $0.233333$ | $7/30 = 0.233333$ | **정확히 같다** |
+    | Spearman $r_s$ | $-0.7$ | $0.188120$ | $7/30 = 0.233333$ | 너무 작다 |
+
+    **`kendalltau` 는 작은 표본에서 정확분포를 쓰고 `spearmanr` 는 $t$ 근사를 쓴다.** 그래서 Kendall 쪽은 $7/30$ 과 소수 여섯째 자리까지 맞고, Spearman 쪽은 $0.1881$ 로 참값보다 $0.045$ 작다. **근사가 기각하는 쪽으로 기울어 있다.** 관측값 다섯 개로 $t$ 분포를 믿은 대가다.
+
+    여기서는 $0.1881$ 이든 $0.2333$ 이든 $0.05$ 보다 크므로 결론이 같다. 애초에 $n = 5$ 에서 얻을 수 있는 가장 작은 양측 p-값이 $2/120 = 1/60 = 0.0167$ 이니, 완전한 단조관계가 아니고서는 유의해질 수 없다.
+
+    **(4) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # x 는 오름차순인데 y 는 올랐다 내려간다. 일치쌍과 불일치쌍이 섞인 자료다.
+    x = np.array([1, 2, 3, 4, 5])
+    y = np.array([3, 5, 4, 2, 1])
+
+    # 타우는 (일치쌍 - 불일치쌍) / 전체 쌍이다. "무작위로 두 점을 골랐을 때
+    # 같은 방향으로 움직일 확률에서 반대 방향일 확률을 뺀 값"으로 읽을 수 있다.
+    tau, p_value = stats.kendalltau(x, y)
+    print(f"Kendall tau-b = {tau:.4f}, p-value = {p_value:.4f}")
+
+    # 스피어만과 견준다. 둘 다 순위만 쓰지만 눈금이 달라 타우 쪽이 늘 더 작다.
+    # 표본이 작거나 이상치가 있을 때는 타우가 더 안정적이다.
+    r_s, p_s = stats.spearmanr(x, y)
+    print(f"Spearman r_s  = {r_s:.4f}, p-value = {p_s:.4f}")
+
+    # (1) 간편 공식으로 r_s 를 직접
+    d = stats.rankdata(x) - stats.rankdata(y)
+    n = len(x)
+    print(f"\nd = {d.astype(int).tolist()}   sum d^2 = {int((d**2).sum())}"
+          f"   r_s = {1 - 6 * (d**2).sum() / (n * (n**2 - 1)):.4f}")
+    print(f"3*tau - 2*r_s = {3 * tau - 2 * r_s:.4f}")
+
+    # (2) n! 가지 순열을 전부 돌려 |3tau - 2r_s| 의 최댓값을 본다
+    from itertools import permutations
+
+    for m in (5, 6, 7):
+        xs = np.arange(1, m + 1)
+        worst = max(abs(3 * stats.kendalltau(xs, q).statistic
+                        - 2 * stats.spearmanr(xs, q).statistic)
+                    for q in permutations(xs))
+        print(f"n = {m}:  max |3tau - 2r_s| = {worst:.6f}")
+
+    # (3) 정확 p-값. 120 가지를 모두 센다.
+    perms = list(permutations(range(1, 6)))
+    taus = np.array([stats.kendalltau(x, q).statistic for q in perms])
+    rss = np.array([stats.spearmanr(x, q).statistic for q in perms])
+    n_tau = int((np.abs(taus) >= abs(tau) - 1e-9).sum())
+    n_rs = int((np.abs(rss) >= abs(r_s) - 1e-9).sum())
+    print(f"\n|tau| >= 0.6 인 배열 {n_tau}/120   정확 p = {n_tau / 120:.6f}"
+          f"   scipy = {p_value:.6f}")
+    print(f"|r_s| >= 0.7 인 배열 {n_rs}/120   정확 p = {n_rs / 120:.6f}"
+          f"   scipy = {p_s:.6f}")
+    print(f"가장 작은 양측 p-값 2/120 = {2 / 120:.6f}")
+    ```
+
+    출력:
+
+    ```
+    Kendall tau-b = -0.6000, p-value = 0.2333
+    Spearman r_s  = -0.7000, p-value = 0.1881
+
+    d = [-2, -3, -1, 2, 4]   sum d^2 = 34   r_s = -0.7000
+    3*tau - 2*r_s = -0.4000
+    n = 5:  max |3tau - 2r_s| = 1.000000
+    n = 6:  max |3tau - 2r_s| = 1.000000
+    n = 7:  max |3tau - 2r_s| = 1.000000
+
+    |tau| >= 0.6 인 배열 28/120   정확 p = 0.233333   scipy = 0.233333
+    |r_s| >= 0.7 인 배열 28/120   정확 p = 0.233333   scipy = 0.188120
+    가장 작은 양측 p-값 2/120 = 0.016667
+    ```
+
+    Kendall의 $\tau = -0.60$이 Spearman의 $r_s = -0.70$보다 0에 가깝다. 우연이 아니라 일반적인 경향이다. 두 계수는 대체로 $\tau \approx \frac{2}{\pi}\arcsin(r_s)$ 관계에 있어 $|\tau| \le |r_s|$가 된다. 두 값을 직접 비교하면 안 되고, 각자의 척도에서 읽어야 한다.
+
+    (1)의 간편 공식이 $\sum d_i^2 = 34$ 에서 `r_s = -0.7000` 을 그대로 준다.
+
+    (2)의 `max |3tau - 2r_s| = 1.000000` 이 세 번 똑같이 나온다. **$n = 5, 6, 7$ 의 모든 순열에서 $\lvert 3\tau - 2r_s\rvert$ 가 $1$ 을 넘지 않으면서 $1$ 에 도달한다.** 이 자료의 $-0.4$ 는 그 안쪽에 넉넉히 들어 있다.
+
+    (3)이 요점이다. $\lvert\tau\rvert \ge 0.6$ 인 배열과 $\lvert r_s\rvert \ge 0.7$ 인 배열이 **둘 다 28 개**여서 정확 p-값이 $28/120 = 7/30 = 0.233333$ 으로 같다. 그런데 `scipy` 의 두 값은 다르다. **`kendalltau` 는 `0.233333` 으로 정확값과 맞고 `spearmanr` 는 `0.188120` 으로 작다.** 앞의 것은 정확분포를, 뒤의 것은 $t$ 근사를 쓰기 때문이다.
+
+    관측값이 5개뿐이라 두 p-값 모두 유의하지 않다. 애초에 이 표본크기에서 나올 수 있는 가장 작은 양측 p-값이 `0.016667` 이다.
 
 `scipy.stats.kendalltau` 함수는 기본으로 타우-b를 계산한다. 가설검정의 자세한 내용은 [Kendall의 타우 검정](../correlation_test/test_kendall.md)을 보라.
 

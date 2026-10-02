@@ -34,60 +34,135 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 타원으로 상관행렬 그리기
+**보기 1.** <span class="diff easy" title="쉬움"></span> 타원으로 상관행렬 그리기. 코드는 칸마다 너비 $w = 1.01$, 높이 $h = 0.99 - \lvert r\rvert$, 각도 $45^\circ\cdot\operatorname{sign}(r)$ 인 타원을 놓는다.
+
+**(1)** 이 부호화에서 타원의 **가로세로비**를 $\lvert r\rvert$ 의 함수로 적으시오.
+
+**(2)** 한편 분산이 같은 이변량 정규분포의 **등밀도 타원**은 축비가 $\sqrt{(1+\lvert r\rvert)/(1-\lvert r\rvert)}$ 다(12.1절 보기 1). 두 부호화를 $\lvert r\rvert = 0,\ 0.3,\ 0.5,\ 0.8,\ 0.97$ 에서 견주시오. **작은 상관을 눈에 보이게 하는 데 어느 쪽이 나은가.**
+
+**(3)** 대각선 칸($r = 1$)에서 $h$ 는 얼마인가. 문제가 없는가.
+
+**(4)** 함수를 짜시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.collections import EllipseCollection
-from matplotlib.colors import Normalize
+??? success "풀이"
+
+    **(1) 가로세로비.** 너비가 $1.01$ 로 고정이고 높이가 $0.99 - \lvert r\rvert$ 이므로
+
+    $$
+    \text{가로세로비} = \frac{1.01}{\lvert\,0.99 - \lvert r\rvert\,\rvert}
+    $$
+
+    다. $\lvert r\rvert = 0$ 이면 $1.01/0.99 = 1.02$ 로 거의 원이고, $\lvert r\rvert \to 0.99$ 면 분모가 $0$ 으로 가서 **발산한다.**
+
+    **(2) 두 부호화는 다른 곡선이다.** 수를 넣어 본다.
+
+    | $\lvert r\rvert$ | 코드의 비 $\dfrac{1.01}{0.99-\lvert r\rvert}$ | 참 타원 $\sqrt{\dfrac{1+\lvert r\rvert}{1-\lvert r\rvert}}$ |
+    |---:|---:|---:|
+    | $0$ | $1.020$ | $1.000$ |
+    | $0.3$ | $1.464$ | $1.363$ |
+    | $0.5$ | $2.061$ | $1.732$ |
+    | $0.8$ | $5.316$ | $3.000$ |
+    | $0.97$ | $50.5$ | $8.10$ |
+
+    **큰 $\lvert r\rvert$ 에서 코드 쪽이 훨씬 가파르다.** $\lvert r\rvert = 0.8$ 에서 이미 $5.3$ 대 $3.0$ 이고, $0.97$ 에서는 $50$ 대 $8$ 로 여섯 배 차이다. 코드의 분모가 $0.99-\lvert r\rvert$ 로 **일차로** 사라지는 반면 참 타원의 비는 $\sqrt{2/(1-\lvert r\rvert)}$ 꼴로 **제곱근으로** 느리게 자라기 때문이다.
+
+    **그러나 작은 상관을 보이는 데에는 어느 쪽도 쓸모가 없다.** $\lvert r\rvert = 0.3$ 에서 코드는 $1.46$, 참 타원은 $1.36$ 이다. 가로세로비 $1.4$ 짜리 타원은 **눈으로 원과 거의 구별되지 않는다.** 단축이 장축의 $70\%$ 쯤이기 때문이다.
+
+    **이것이 타원 그림의 가장 큰 한계다.** $\lvert r\rvert \le 0.3$ 구간이 전부 "동그란 것" 으로 뭉개진다. 그런데 실제 분석에서 흥미로운 상관은 흔히 바로 그 구간에 있다. 다행히 이 코드는 **색도 함께** 쓰므로($\texttt{array=M.ravel()}$), 모양으로 안 보이는 것을 색이 보완한다. 모양만으로 읽어야 하는 흑백 인쇄에서는 약한 상관이 사라진다는 점을 알고 써야 한다.
+
+    **(3) 대각선에서 높이가 음수가 된다.** $r = 1$ 이면
+
+    $$
+    h = 0.99 - 1 = -0.01
+    $$
+
+    로 **음수**다. 타원의 방정식에는 높이가 제곱으로 들어가므로 `matplotlib` 은 $\lvert h\rvert = 0.01$ 인 타원을 그리고, 결과적으로 가로세로비 $101$ 짜리 선분이 나온다. 보기에는 멀쩡하지만 **의도한 것이 아니라 우연히 맞은 것**이다.
+
+    $\lvert r\rvert > 0.99$ 인 칸은 모두 같은 처지다. $\lvert r\rvert = 0.995$ 와 $\lvert r\rvert = 0.985$ 의 높이가 똑같이 $0.005$ 가 되어 **구별되지 않는다.** 안전하게 쓰려면 `h = np.maximum(1 - np.abs(M).ravel(), 0.01)` 처럼 아래에서 잘라 주는 편이 낫다.
+
+    **(4) 함수.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from matplotlib.collections import EllipseCollection
+    from matplotlib.colors import Normalize
 
 
-def plot_corr_ellipses(data, figsize=None, **kwargs):
-    """상관행렬을 타원 격자로 그린다.
+    def plot_corr_ellipses(data, figsize=None, **kwargs):
+        """상관행렬을 타원 격자로 그린다.
 
-    칸마다 타원 하나를 놓는다. 타원이 납작할수록 상관이 강하고, 원에
-    가까울수록 약하다. 기울기의 방향이 부호를 나타낸다. 색과 모양이
-    같은 정보를 두 번 실어 주므로 흑백으로 인쇄해도 읽힌다.
-    """
-    M = np.array(data)
-    fig, ax = plt.subplots(1, 1, figsize=figsize,
-                           subplot_kw={'aspect': 'equal'})
-    ax.set_xlim(-0.5, M.shape[1] - 0.5)
-    ax.set_ylim(-0.5, M.shape[0] - 0.5)
-    ax.invert_yaxis()
+        칸마다 타원 하나를 놓는다. 타원이 납작할수록 상관이 강하고, 원에
+        가까울수록 약하다. 기울기의 방향이 부호를 나타낸다. 색과 모양이
+        같은 정보를 두 번 실어 주므로 흑백으로 인쇄해도 읽힌다.
+        """
+        M = np.array(data)
+        fig, ax = plt.subplots(1, 1, figsize=figsize,
+                               subplot_kw={'aspect': 'equal'})
+        ax.set_xlim(-0.5, M.shape[1] - 0.5)
+        ax.set_ylim(-0.5, M.shape[0] - 0.5)
+        ax.invert_yaxis()
 
-    # 칸의 중심 좌표. [::-1] 로 (행, 열)을 (x, y) 순서로 뒤집는다.
-    xy = np.indices(M.shape)[::-1].reshape(2, -1).T
+        # 칸의 중심 좌표. [::-1] 로 (행, 열)을 (x, y) 순서로 뒤집는다.
+        xy = np.indices(M.shape)[::-1].reshape(2, -1).T
 
-    # 너비는 고정하고 높이만 |r| 에 따라 줄인다. r=1 이면 선분처럼 납작해지고
-    # r=0 이면 원이 된다. 기울기는 부호를 따라 ±45도로 놓는다.
+        # 너비는 고정하고 높이만 |r| 에 따라 줄인다. r=1 이면 선분처럼 납작해지고
+        # r=0 이면 원이 된다. 기울기는 부호를 따라 ±45도로 놓는다.
 
-    w = np.ones_like(M).ravel() + 0.01
-    h = 1 - np.abs(M).ravel() - 0.01
-    a = 45 * np.sign(M).ravel()
+        w = np.ones_like(M).ravel() + 0.01
+        h = 1 - np.abs(M).ravel() - 0.01
+        a = 45 * np.sign(M).ravel()
 
-    ec = EllipseCollection(
-        widths=w, heights=h, angles=a,
-        units='x', offsets=xy,
-        norm=Normalize(vmin=-1, vmax=1),
-        offset_transform=ax.transData,
-        array=M.ravel(),
-        **kwargs
-    )
-    ax.add_collection(ec)
+        ec = EllipseCollection(
+            widths=w, heights=h, angles=a,
+            units='x', offsets=xy,
+            norm=Normalize(vmin=-1, vmax=1),
+            offset_transform=ax.transData,
+            array=M.ravel(),
+            **kwargs
+        )
+        ax.add_collection(ec)
 
-    if isinstance(data, pd.DataFrame):
-        ax.set_xticks(np.arange(M.shape[1]))
-        ax.set_xticklabels(data.columns, rotation=90)
-        ax.set_yticks(np.arange(M.shape[0]))
-        ax.set_yticklabels(data.index)
+        if isinstance(data, pd.DataFrame):
+            ax.set_xticks(np.arange(M.shape[1]))
+            ax.set_xticklabels(data.columns, rotation=90)
+            ax.set_yticks(np.arange(M.shape[0]))
+            ax.set_yticklabels(data.index)
 
-    return ec, ax
-```
+        return ec, ax
+    ```
+
+    (2)의 두 곡선을 수로 확인한다.
+
+    ```python
+    import numpy as np
+
+    print("  |r|     코드의 비    참 타원     h = 0.99-|r|")
+    for r in (0.0, 0.3, 0.5, 0.8, 0.97, 1.0):
+        h = 0.99 - r
+        enc = 1.01 / abs(h)
+        tru = np.sqrt((1 + r) / (1 - r)) if r < 1 else np.inf
+        print(f"{r:5.2f}   {enc:10.3f}  {tru:9.3f}      {h:+.3f}")
+    ```
+
+    출력:
+
+    ```
+      |r|     코드의 비    참 타원     h = 0.99-|r|
+     0.00        1.020      1.000      +0.990
+     0.30        1.464      1.363      +0.690
+     0.50        2.061      1.732      +0.490
+     0.80        5.316      3.000      +0.190
+     0.97       50.500      8.103      +0.020
+     1.00      101.000        inf      -0.010
+    ```
+
+    (2)의 표가 그대로 나온다. $\lvert r\rvert = 0.3$ 에서 두 비가 $1.464$ 와 $1.363$ 으로 **둘 다 $1.5$ 에 못 미친다.** 단축이 장축의 $68\%$ 와 $73\%$ 이니 눈으로는 원과 다름없다.
+
+    마지막 줄이 (3)이다. $h = -0.010$ 으로 **음수**다. 그래도 그림이 그려지는 것은 타원 방정식이 높이를 제곱으로 쓰기 때문이고, 설계가 옳아서가 아니다.
 
 ---
 
@@ -97,41 +172,227 @@ def plot_corr_ellipses(data, figsize=None, **kwargs):
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 업종 수익률 자료로 그려 보기
+**보기 2.** <span class="diff easy" title="쉬움"></span> 업종 수익률 자료로 그려 보기. 독립인 $z_1, z_2, e \sim N(0,1)$ 과 독립인 $x_5 \sim N(0,1)$ 로 다섯 변수를 만든다.
+
+$$
+\begin{aligned}
+x_1 &= z_1 & &(\text{Tech}) \\
+x_2 &= 0.8z_1 + 0.2z_2 & &(\text{Finance}) \\
+x_3 &= -0.6z_1 + 0.7e & &(\text{Utilities}) \\
+x_4 &= 0.3z_1 + 0.7z_2 & &(\text{Energy}) \\
+x_5 &= \text{독립} & &(\text{Commodity})
+\end{aligned}
+$$
+
+**(1)** 열 쌍의 **모상관**을 닫힌 꼴로 구하시오.
+
+**(2)** $n = 200$ 표본의 상관과 견주시오. 표준오차 $(1-\rho^2)/\sqrt n$ 에 비추어 어긋남이 우연의 범위인지 판정하시오.
+
+**(3)** 그림 아래 본문은 Tech–Finance 를 $r \approx 0.8$, Tech–Utilities 를 $r \approx -0.6$ 이라 읽었다. 맞는가.
+
+**(4)** 코드로 확인하시오.
 
 </div>
 
-```python
-np.random.seed(42)
-n = 200
+??? success "풀이"
 
-# 업종별 수익률을 흉내 낸 자료다. 공통 요인 z1 을 섞는 비율로 상관을 만든다.
-z1 = np.random.randn(n)
-z2 = np.random.randn(n)
+    **(1) 모상관.** 세 잡음이 독립이고 분산이 모두 1 이므로 분산과 공분산이 계수의 내적으로 바로 나온다.
 
-x1 = z1
-x2 = 0.8 * z1 + 0.2 * z2
-x3 = -0.6 * z1 + np.random.randn(n) * 0.7
-x4 = 0.3 * z1 + 0.7 * z2
-x5 = np.random.randn(n)
+    $$
+    \operatorname{Var}(x_1) = 1, \quad
+    \operatorname{Var}(x_2) = 0.8^2+0.2^2 = 0.68, \quad
+    \operatorname{Var}(x_3) = 0.6^2+0.7^2 = 0.85,
+    $$
 
-df = pd.DataFrame(
-    np.column_stack([x1, x2, x3, x4, x5]),
-    columns=['Tech', 'Finance', 'Utilities', 'Energy', 'Commodity']
-)
+    $$
+    \operatorname{Var}(x_4) = 0.3^2+0.7^2 = 0.58, \quad
+    \operatorname{Var}(x_5) = 1
+    $$
 
-corr_matrix = df.corr()
+    공분산은 $z_1$ 계수끼리, $z_2$ 계수끼리 곱해 더하면 된다($e$ 는 $x_3$ 에만 있다).
 
-ec, ax = plot_corr_ellipses(corr_matrix, figsize=(6, 5), cmap='bwr_r')
-plt.colorbar(ec, ax=ax, label='Correlation Coefficient')
-ax.set_title('Correlation Matrix: Ellipse Visualization')
-plt.tight_layout()
-plt.show()
-```
+    $$
+    \rho_{12} = \frac{0.8}{\sqrt{0.68}} = 0.9701,
+    \qquad
+    \rho_{13} = \frac{-0.6}{\sqrt{0.85}} = -0.6508,
+    \qquad
+    \rho_{14} = \frac{0.3}{\sqrt{0.58}} = 0.3939
+    $$
 
-![이변량 정규분포의 등고선](./img/correlation_ellipses_82.png)
+    $$
+    \rho_{23} = \frac{0.8 \times (-0.6)}{\sqrt{0.68 \times 0.85}} = \frac{-0.48}{0.7603} = -0.6314,
+    \qquad
+    \rho_{24} = \frac{0.8\cdot0.3 + 0.2\cdot0.7}{\sqrt{0.68 \times 0.58}} = \frac{0.38}{0.6280} = 0.6051
+    $$
 
-밀도의 등고선이 타원이라는 것이 이변량 정규분포의 정의적 성질이다.
+    $$
+    \rho_{34} = \frac{(-0.6)(0.3)}{\sqrt{0.85 \times 0.58}} = \frac{-0.18}{0.7021} = -0.2564
+    $$
+
+    $x_5$ 는 다른 넷과 독립이므로 $\rho_{15} = \rho_{25} = \rho_{35} = \rho_{45} = 0$ 이다. 모상관행렬은
+
+    $$
+    \begin{array}{l|rrrrr}
+     & \text{Tech} & \text{Finance} & \text{Util} & \text{Energy} & \text{Comm} \\ \hline
+    \text{Tech} & 1 & 0.9701 & -0.6508 & 0.3939 & 0 \\
+    \text{Finance} & & 1 & -0.6314 & 0.6051 & 0 \\
+    \text{Utilities} & & & 1 & -0.2564 & 0 \\
+    \text{Energy} & & & & 1 & 0 \\
+    \text{Commodity} & & & & & 1
+    \end{array}
+    $$
+
+    다.
+
+    **(2) 표본과 이론.** $n = 200$ 이므로 $\operatorname{SE}(r) \approx (1-\rho^2)/\sqrt{200}$ 이다.
+
+    | 쌍 | 표본 $r$ | 이론 $\rho$ | 차 | SE | 차/SE |
+    |---|---:|---:|---:|---:|---:|
+    | Tech–Finance | $+0.9684$ | $+0.9701$ | $-0.0017$ | $0.0042$ | $-0.41$ |
+    | Tech–Utilities | $-0.6870$ | $-0.6508$ | $-0.0363$ | $0.0408$ | $-0.89$ |
+    | Tech–Energy | $+0.4484$ | $+0.3939$ | $+0.0545$ | $0.0597$ | $+0.91$ |
+    | Tech–Commodity | $+0.0654$ | $0$ | $+0.0654$ | $0.0707$ | $+0.92$ |
+    | Finance–Utilities | $-0.6690$ | $-0.6314$ | $-0.0376$ | $0.0425$ | $-0.89$ |
+    | Finance–Energy | $+0.6570$ | $+0.6051$ | $+0.0519$ | $0.0448$ | $+1.16$ |
+    | Finance–Commodity | $+0.0364$ | $0$ | $+0.0364$ | $0.0707$ | $+0.51$ |
+    | Utilities–Energy | $-0.3212$ | $-0.2564$ | $-0.0648$ | $0.0661$ | $-0.98$ |
+    | Utilities–Commodity | $+0.0392$ | $0$ | $+0.0392$ | $0.0707$ | $+0.55$ |
+    | Energy–Commodity | $-0.0673$ | $0$ | $-0.0673$ | $0.0707$ | $-0.95$ |
+
+    **열 쌍 모두 $1.2$ 표준오차 안쪽이다.** 모의가 의도대로 되었다.
+
+    눈여겨볼 것은 **표준오차가 $\rho$ 에 따라 크게 다르다**는 점이다. Tech–Finance 는 $\rho$ 가 $1$ 에 가까워 SE 가 $0.0042$ 에 지나지 않는 반면, Commodity 가 끼는 네 쌍은 $\rho = 0$ 이라 SE 가 $0.0707$ 로 **열일곱 배**다. 그래서 Commodity 열의 표본 상관이 $\pm0.07$ 쯤 흔들리는 것은 당연한 일이고, 그림에서 그 칸들이 완전한 원이 아닌 것도 그 때문이다.
+
+    **(3) 본문의 두 수는 틀렸다.** 계수와 상관을 혼동한 것이다.
+
+    | | 본문 | 이론 $\rho$ | 표본 $r$ |
+    |---|---:|---:|---:|
+    | Tech–Finance | $\approx 0.8$ | $0.9701$ | $0.9684$ |
+    | Tech–Utilities | $\approx -0.6$ | $-0.6508$ | $-0.6870$ |
+
+    $0.8$ 과 $-0.6$ 은 자료를 만들 때 $z_1$ 에 곱한 **계수**이지 상관이 아니다. 상관은 분모에 $\sqrt{\operatorname{Var}}$ 가 들어가는데, $x_2$ 의 분산이 $0.68 < 1$ 이라 나누면 값이 **커진다.**
+
+    $$
+    \rho_{12} = \frac{0.8}{\sqrt{0.68}} = \frac{0.8}{0.8246} = 0.9701
+    $$
+
+    Tech–Utilities 도 $-0.6/\sqrt{0.85} = -0.6508$ 로 $-0.6$ 보다 조금 세다. 공교롭게 이쪽은 차이가 작아 "$\approx -0.6$" 이 대충 맞아 보이지만, Tech–Finance 는 $0.8$ 과 $0.97$ 로 전혀 다르다.
+
+    **그림이 본문보다 정직하다.** 그림의 Tech–Finance 칸은 대각선의 $r = 1$ 칸과 거의 구별되지 않는 가는 선이다. 보기 1 (2)의 표에 따르면 $\lvert r\rvert = 0.8$ 이면 가로세로비가 $5.3$ 이라 아직 눈에 띄는 타원이어야 하는데, 실제 그림은 $1.01/(0.99-0.9684) = 46.9$ 짜리 선분이다. **눈으로만 봐도 $0.8$ 이 아니다.**
+
+    **(4) 수치적으로.**
+
+    ```python
+    np.random.seed(42)
+    n = 200
+
+    # 업종별 수익률을 흉내 낸 자료다. 공통 요인 z1 을 섞는 비율로 상관을 만든다.
+    z1 = np.random.randn(n)
+    z2 = np.random.randn(n)
+
+    x1 = z1
+    x2 = 0.8 * z1 + 0.2 * z2
+    x3 = -0.6 * z1 + np.random.randn(n) * 0.7
+    x4 = 0.3 * z1 + 0.7 * z2
+    x5 = np.random.randn(n)
+
+    df = pd.DataFrame(
+        np.column_stack([x1, x2, x3, x4, x5]),
+        columns=['Tech', 'Finance', 'Utilities', 'Energy', 'Commodity']
+    )
+
+    corr_matrix = df.corr()
+
+    ec, ax = plot_corr_ellipses(corr_matrix, figsize=(6, 5), cmap='bwr_r')
+    plt.colorbar(ec, ax=ax, label='Correlation Coefficient')
+    ax.set_title('Correlation Matrix: Ellipse Visualization')
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![업종 수익률 상관행렬의 타원 그림](./img/correlation_ellipses_82.png)
+
+    대각선 위아래가 거울상이고, Tech–Finance 칸이 대각선 칸과 거의 같은 가는 선이다. Utilities 행·열은 $-45^\circ$ 로 기운 빨간 타원, Commodity 행·열은 거의 완전한 원이다.
+
+    이제 (1)\~(3)의 수를 확인한다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    names = ['Tech', 'Finance', 'Utilities', 'Energy', 'Commodity']
+
+    # (1) 계수행렬로부터 모상관을 닫힌 꼴로.  행 = 변수, 열 = (z1, z2, e, x5)
+    A = np.array([[ 1.0, 0.0, 0.0, 0.0],
+                  [ 0.8, 0.2, 0.0, 0.0],
+                  [-0.6, 0.0, 0.7, 0.0],
+                  [ 0.3, 0.7, 0.0, 0.0],
+                  [ 0.0, 0.0, 0.0, 1.0]])
+    S = A @ A.T
+    d = np.sqrt(np.diag(S))
+    R = S / np.outer(d, d)
+    print("분산", np.round(np.diag(S), 4))
+    print("모상관\n", pd.DataFrame(np.round(R, 4), index=names, columns=names))
+
+    # (2) 표본과 견주기
+    np.random.seed(42)
+    n = 200
+    z1, z2 = np.random.randn(n), np.random.randn(n)
+    cols = [z1, 0.8 * z1 + 0.2 * z2, -0.6 * z1 + np.random.randn(n) * 0.7,
+            0.3 * z1 + 0.7 * z2, np.random.randn(n)]
+    C = pd.DataFrame(np.column_stack(cols), columns=names).corr().values
+
+    print("\n쌍                     표본      이론       차      SE   차/SE")
+    for i in range(5):
+        for j in range(i + 1, 5):
+            s, th = C[i, j], R[i, j]
+            se = (1 - th**2) / np.sqrt(n)
+            print(f"{names[i]:9s}-{names[j]:9s} {s:+.4f}  {th:+.4f}  {s - th:+.4f}"
+                  f"  {se:.4f}  {(s - th) / se:+.2f}")
+
+    # (3) 본문의 두 수와 견주기
+    print(f"\nTech-Finance   본문 0.8   이론 {R[0, 1]:.4f}   표본 {C[0, 1]:.4f}")
+    print(f"Tech-Utilities 본문 -0.6  이론 {R[0, 2]:.4f}   표본 {C[0, 2]:.4f}")
+    print(f"0.8 / sqrt(0.68) = {0.8 / np.sqrt(0.68):.4f}")
+    print(f"그림의 Tech-Finance 가로세로비 {1.01 / (0.99 - C[0, 1]):.1f}"
+          f"   (|r|=0.8 이라면 {1.01 / (0.99 - 0.8):.1f})")
+    ```
+
+    출력:
+
+    ```
+    분산 [1.   0.68 0.85 0.58 1.  ]
+    모상관
+                  Tech  Finance  Utilities  Energy  Commodity
+    Tech       1.0000   0.9701    -0.6508  0.3939        0.0
+    Finance    0.9701   1.0000    -0.6314  0.6051        0.0
+    Utilities -0.6508  -0.6314     1.0000 -0.2564        0.0
+    Energy     0.3939   0.6051    -0.2564  1.0000        0.0
+    Commodity  0.0000   0.0000     0.0000  0.0000        1.0
+
+    쌍                     표본      이론       차      SE   차/SE
+    Tech     -Finance   +0.9684  +0.9701  -0.0017  0.0042  -0.41
+    Tech     -Utilities -0.6870  -0.6508  -0.0363  0.0408  -0.89
+    Tech     -Energy    +0.4484  +0.3939  +0.0545  0.0597  +0.91
+    Tech     -Commodity +0.0654  +0.0000  +0.0654  0.0707  +0.92
+    Finance  -Utilities -0.6690  -0.6314  -0.0376  0.0425  -0.89
+    Finance  -Energy    +0.6570  +0.6051  +0.0519  0.0448  +1.16
+    Finance  -Commodity +0.0364  +0.0000  +0.0364  0.0707  +0.51
+    Utilities-Energy    -0.3212  -0.2564  -0.0648  0.0661  -0.98
+    Utilities-Commodity +0.0392  +0.0000  +0.0392  0.0707  +0.55
+    Energy   -Commodity -0.0673  +0.0000  -0.0673  0.0707  -0.95
+
+    Tech-Finance   본문 0.8   이론 0.9701   표본 0.9684
+    Tech-Utilities 본문 -0.6  이론 -0.6508   표본 -0.6870
+    0.8 / sqrt(0.68) = 0.9701
+    그림의 Tech-Finance 가로세로비 46.9   (|r|=0.8 이라면 5.3)
+    ```
+
+    분산 `[1. 0.68 0.85 0.58 1.]` 과 모상관행렬이 (1)의 손계산과 넷째 자리까지 같다.
+
+    (2)의 열 쌍 모두 $\lvert$차/SE$\rvert \le 1.16$ 이다. SE 열을 보면 $0.0042$ 에서 $0.0707$ 까지 **열일곱 배** 벌어진다. 같은 $n = 200$ 인데도 그렇다.
+
+    (3)이 요점이다. `0.8 / sqrt(0.68) = 0.9701` 한 줄이 본문의 오류를 설명한다. **$0.8$ 은 계수이고 상관은 $0.97$ 이다.** 마지막 줄은 그림으로도 확인된다. 그려진 타원의 가로세로비가 $46.9$ 인데 $\lvert r\rvert = 0.8$ 이었다면 $5.3$ 이었을 것이다.
 
 ---
 
@@ -139,8 +400,8 @@ plt.show()
 
 출력을 살펴보면 다음을 알 수 있다:
 
-- **Tech–Finance**: $+45°$로 기울어진 좁은 타원. 강한 양의 상관($r \approx 0.8$)을 나타낸다.
-- **Tech–Utilities**: $-45°$로 기울어진 좁은 타원. 중간 정도의 음의 상관($r \approx -0.6$)을 나타낸다.
+- **Tech–Finance**: $+45°$로 기울어진 좁은 타원. 아주 강한 양의 상관($\rho = 0.8/\sqrt{0.68} = 0.9701$)을 나타낸다. $0.8$은 자료를 만들 때 쓴 **계수**이지 상관이 아니다(보기 2).
+- **Tech–Utilities**: $-45°$로 기울어진 좁은 타원. 중간 정도의 음의 상관($\rho = -0.6/\sqrt{0.85} = -0.6508$)을 나타낸다.
 - **Commodity** 행/열: 거의 원에 가까운 타원. 다른 모든 변수와 상관이 0에 가깝다.
 - **대각선**: $r = 1$에 해당하는 퇴화한 타원($+45°$의 선).
 

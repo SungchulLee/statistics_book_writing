@@ -253,42 +253,110 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 라이브러리 결과와 맞춰 보기
+**보기 3.** <span class="diff easy" title="쉬움"></span> 라이브러리 결과와 맞춰 보기. 보기 2 의 씨앗 `42` 로 만든 **한 벌**의 자료에서 손으로 만든 구현과 `pandas`·`numpy` 를 맞춰 본다.
+
+**(1)** 세 경로가 같은 값을 주어야 하는 까닭을 나누는 수의 규약으로 설명하시오. `np.cov` 의 기본 규약은 무엇인가. 그것을 바꾸면 이 자료에서 공분산이 얼마가 되는가.
+
+**(2)** 얻은 $\operatorname{Cov} = 10.5691$ 과 $r = 0.9753$ 이 보기 2 의 이론값 $E[\operatorname{Cov}] = 10.2215$, $E[r] = 0.96986$ 과 어긋난다. 보기 2 가 모의로 잰 표집 표준편차 $0.3788$ 과 $0.00631$ 에 비추어 판정하시오.
+
+**(3)** 코드로 확인하시오.
 
 </div>
 
-```python
-import pandas as pd
+??? success "풀이"
 
-cov, x_dev, y_dev = covariance_step_by_step(CA, NY)
-r = pearson_r_step_by_step(CA, NY)
+    **(1) 나누는 수를 맞추면 세 길이 만난다.** 보기 1 (2)에서 본 대로 $r$ 에는 규약 문제가 없다. 분자와 분모에서 $1/m$ 이 그대로 약분되기 때문이다. 그래서 `pandas` 든 `numpy` 든 $r$ 은 언제나 같다.
 
-print(f"CA mean     = {CA.mean():.4f}")
-print(f"NY mean     = {NY.mean():.4f}")
-print(f"Covariance  = {cov:.4f}")
-print(f"Pearson r   = {r:.4f}")
+    **문제가 되는 것은 공분산뿐이다.** 규약을 적어 두면
 
-# 직접 구한 값이 라이브러리와 맞는지 확인한다. pandas 의 cov 는 ddof=1 이므로
-# 위 구현도 n-1 로 나눠야 값이 맞는다.
-df = pd.DataFrame({"CA": CA, "NY": NY})
-print(f"pandas cov  = {df['CA'].cov(df['NY']):.4f}")
-print(f"pandas corr = {df['CA'].corr(df['NY']):.4f}")
-print(f"numpy corr  = {np.corrcoef(CA, NY)[0, 1]:.4f}")
-```
+    | 함수 | 기본 규약 |
+    |---|---|
+    | `pandas` 의 `.cov()` | $n-1$ (`ddof=1`) |
+    | `numpy` 의 `np.cov` | $n-1$ (`bias=False`) |
+    | `numpy` 의 `np.var` | $n$ (`ddof=0`) |
 
-출력:
+    **`np.cov` 와 `np.var` 의 기본값이 서로 다르다는 것이 함정이다.** 공분산은 $n-1$ 로, 분산은 $n$ 으로 나누게 되어 보기 1 (1)에서 본 $\lvert r\rvert > 1$ 사고가 바로 일어난다.
 
-```text
-CA mean     = 241.8974
-NY mean     = 345.1893
-Covariance  = 10.5691
-Pearson r   = 0.9753
-pandas cov  = 10.5691
-pandas corr = 0.9753
-numpy corr  = 0.9753
-```
+    이 자료에서 `np.cov(CA, NY, bias=True)` 를 쓰면
 
-세 방법이 모두 같은 값을 내놓으므로 밑바닥부터 만든 구현이 옳음을 확인할 수 있다.
+    $$
+    10.5691 \times \frac{47}{48} = 10.3489
+    $$
+
+    가 되어 $0.22$ 만큼 작아진다. $n = 48$ 이라 $2\%$ 차이지만, 작은 표본에서는 훨씬 커진다.
+
+    **(2) 한 표본은 이론값 둘레에서 흔들린다.** 보기 2 는 같은 설정을 20만 번 되풀이해 $\operatorname{Cov}$ 의 평균 $10.2217$ 과 표준편차 $0.3788$, $r$ 의 평균 $0.96986$ 과 표준편차 $0.00631$ 을 얻었다. 그 자에 대어 본다.
+
+    | | 이 표본 | 이론 평균 | 차 | 표집 SD | 차/SD |
+    |---|---:|---:|---:|---:|---:|
+    | $\operatorname{Cov}$ | $10.5691$ | $10.2215$ | $+0.3476$ | $0.3788$ | $+0.92$ |
+    | $r$ | $0.97525$ | $0.96986$ | $+0.00539$ | $0.00631$ | $+0.85$ |
+
+    **둘 다 1 표준편차 안쪽이다.** 어긋난 것이 아니라 흔들린 것이다. 씨앗 `42` 가 우연히 평균보다 조금 위쪽 자료를 준 것뿐이다.
+
+    **표집 표준편차의 크기를 눈여겨볼 만하다.** $\operatorname{Cov}$ 는 $10.22 \pm 0.38$ 로 상대오차가 $3.7\%$ 인데 $r$ 은 $0.970 \pm 0.006$ 으로 $0.65\%$ 다. **$r$ 이 훨씬 안정적이다.** 보기 2 의 풀이가 말한 대로 분자와 분모가 같은 자료에서 함께 흔들려 비가 안정되기 때문이다.
+
+    **그러므로 "손계산이 라이브러리와 맞는다" 와 "자료가 이론과 맞는다" 는 다른 확인이다.** 앞의 것은 소수 넷째 자리까지 **똑같아야** 하고, 뒤의 것은 표집 표준편차만큼 어긋나는 것이 **정상**이다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import pandas as pd
+
+    cov, x_dev, y_dev = covariance_step_by_step(CA, NY)
+    r = pearson_r_step_by_step(CA, NY)
+
+    print(f"CA mean     = {CA.mean():.4f}")
+    print(f"NY mean     = {NY.mean():.4f}")
+    print(f"Covariance  = {cov:.4f}")
+    print(f"Pearson r   = {r:.4f}")
+
+    # 직접 구한 값이 라이브러리와 맞는지 확인한다. pandas 의 cov 는 ddof=1 이므로
+    # 위 구현도 n-1 로 나눠야 값이 맞는다.
+    df = pd.DataFrame({"CA": CA, "NY": NY})
+    print(f"pandas cov  = {df['CA'].cov(df['NY']):.4f}")
+    print(f"pandas corr = {df['CA'].corr(df['NY']):.4f}")
+    print(f"numpy corr  = {np.corrcoef(CA, NY)[0, 1]:.4f}")
+
+    # (1) 나누는 수의 규약
+    print(f"\nnp.cov 기본(n-1)      = {np.cov(CA, NY)[0, 1]:.4f}")
+    print(f"np.cov bias=True(n)   = {np.cov(CA, NY, bias=True)[0, 1]:.4f}"
+          f"   = 위 값 x 47/48 = {np.cov(CA, NY)[0, 1] * 47 / 48:.4f}")
+
+    # (2) 보기 2 의 이론값·표집 표준편차에 대어 보기
+    E_cov, sd_cov = 10.2215, 0.3788
+    E_r, sd_r = 0.96986, 0.00631
+    print(f"\nCov  이 표본 {cov:.4f}  이론 {E_cov:.4f}"
+          f"  차 {cov - E_cov:+.4f}  SD {sd_cov}  -> {(cov - E_cov) / sd_cov:+.2f}")
+    print(f"r    이 표본 {r:.5f}  이론 {E_r:.5f}"
+          f"  차 {r - E_r:+.5f}  SD {sd_r}  -> {(r - E_r) / sd_r:+.2f}")
+    print(f"상대적 흔들림  Cov {sd_cov / E_cov:.4f}   r {sd_r / E_r:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    CA mean     = 241.8974
+    NY mean     = 345.1893
+    Covariance  = 10.5691
+    Pearson r   = 0.9753
+    pandas cov  = 10.5691
+    pandas corr = 0.9753
+    numpy corr  = 0.9753
+
+    np.cov 기본(n-1)      = 10.5691
+    np.cov bias=True(n)   = 10.3489   = 위 값 x 47/48 = 10.3489
+
+    Cov  이 표본 10.5691  이론 10.2215  차 +0.3476  SD 0.3788  -> +0.92
+    r    이 표본 0.97525  이론 0.96986  차 +0.00539  SD 0.00631  -> +0.85
+    상대적 흔들림  Cov 0.0371   r 0.0065
+    ```
+
+    세 방법이 모두 같은 값을 내놓으므로 밑바닥부터 만든 구현이 옳음을 확인할 수 있다. 손계산 `10.5691`·`0.9753` 이 `pandas`·`numpy` 와 **표시된 자리까지 모두 같다.**
+
+    (1)의 규약도 확인된다. `bias=True` 로 바꾸면 `10.3489` 로 떨어지고, 그것이 정확히 $47/48$ 배다.
+
+    (2)가 요점이다. 이 표본의 $\operatorname{Cov}$ 는 이론 평균보다 $+0.92$ 표준편차, $r$ 은 $+0.85$ 표준편차 위에 있다. **둘 다 1 안쪽이니 어긋난 것이 아니다.** 마지막 줄의 상대적 흔들림을 보면 $\operatorname{Cov}$ 가 $3.7\%$, $r$ 이 $0.65\%$ 로 **$r$ 이 여섯 배 안정적**이다.
 
 ---
 
@@ -298,50 +366,174 @@ numpy corr  = 0.9753
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 세 그림으로 이해하기
+**보기 4.** <span class="diff easy" title="쉬움"></span> 세 그림으로 이해하기. 같은 자료를 세 가지로 그린다. 왼쪽은 산점도와 회귀직선, 가운데는 주마다의 편차곱 $(x_t-\bar x)(y_t-\bar y)$, 오른쪽은 두 시계열이다.
+
+**(1)** 세 판을 그려 보고 각각에서 무엇이 읽히는지 **수치와 함께** 말하시오. 가운데 판의 막대들과 공분산 $10.5691$ 은 어떤 관계인가.
+
+**(2)** 가운데 판은 **시간 순서로** 그려져 있다. 막대의 높이가 왜 양끝에서 크고 가운데에서 작은가.
+
+**(3)** 세 판 가운데 **어느 것도 혼자서는 보여 주지 못하는 것**이 있다. $r = 0.975$ 가 공통 추세에서 온 것임을 보이려면 무엇을 더 해야 하는가. 그 수를 구하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
+    **(1) 세 판에서 읽히는 것.**
 
-# 왼쪽: 산점도와 회귀직선
-axes[0].scatter(CA, NY, alpha=0.6, edgecolors="grey")
-z = np.polyfit(CA, NY, 1)
-axes[0].plot(np.sort(CA), np.polyval(z, np.sort(CA)),
-             color="red", linewidth=2)
-axes[0].set_xlabel("CA Price (\\$)")
-axes[0].set_ylabel("NY Price (\\$)")
-axes[0].set_title(f"Scatter (r = {r:.3f})")
+    **왼쪽 — 거의 직선이다.** 점 48개가 붉은 회귀직선 둘레에 좁게 붙어 있고 $r = 0.975$, $r^2 = 0.951$ 이다. 회귀직선의 기울기는
 
-# 가운데: 주마다의 편차곱. 공분산은 이 막대들의 평균이다.
-# 파란 막대(양)가 빨간 막대(음)를 압도하면 공분산이 양이 된다.
-products = x_dev * y_dev
-colours = ["steelblue" if p > 0 else "salmon" for p in products]
-axes[1].bar(range(WEEKS), products, color=colours, edgecolor="white")
-axes[1].axhline(0, color="black", linewidth=0.5)
-axes[1].set_xlabel("Week")
-axes[1].set_ylabel("$(x - \\bar{x})(y - \\bar{y})$")
-axes[1].set_title("Deviation Products")
+    $$
+    \hat b = r\,\frac{s_{\text{NY}}}{s_{\text{CA}}} = 0.7816
+    $$
 
-# 오른쪽: 두 시계열. 함께 내려가는 모습이 위 편차곱의 부호를 설명한다.
-weeks = np.arange(WEEKS)
-axes[2].plot(weeks, CA, label="CA", marker="o", markersize=3)
-axes[2].plot(weeks, NY, label="NY", marker="s", markersize=3)
-axes[2].set_xlabel("Week")
-axes[2].set_ylabel("Price (\\$)")
-axes[2].set_title("Common Trend")
-axes[2].legend()
+    인데, 자료를 만들 때 NY 에 실은 추세 계수가 $0.8$ 이었다. **CA 가 $1$ 달러 떨어질 때 NY 가 $0.78$ 달러 떨어진다**는 것이 그림의 기울기다. 축의 범위를 보면 CA 가 $236.0$\~$248.2$, NY 가 $339.5$\~$350.2$ 로 **둘 다 폭이 $11$\~$12$ 쯤**이라는 것도 읽힌다.
 
-plt.tight_layout()
-plt.show()
-```
+    **가운데 — 거의 다 파랗다.** 48개 막대 가운데 **46개가 양수**이고 음수는 2개뿐이다. 공분산은 이 막대들의 평균을 $n-1$ 로 재조정한 것이다.
 
-![공분산의 시각적 분해](./img/covariance_from_scratch_129.png)
+    $$
+    \frac{1}{48}\sum_t (x_t-\bar x)(y_t-\bar y) = 10.3489,
+    \qquad
+    \frac{1}{47}\sum_t (\cdot) = 10.5691 = \operatorname{Cov}
+    $$
 
-세 번째 그림에서 두 계열이 나란히 내려가는 것이 보인다. 이 공통 추세가 곧 상관의 원천이다.
+    **막대그림의 평균 높이가 곧 공분산이다.** 가장 큰 막대가 $31.86$ 으로 평균의 세 배가 넘고, 가장 작은 것은 $-0.50$ 에 지나지 않는다. 음수 막대 둘은 눈에 띄지도 않을 만큼 작다.
+
+    **오른쪽 — 함께 내려간다.** 두 계열이 48주에 걸쳐 나란히 하락한다. 직선을 맞춰 보면 CA 가 주당 $-0.2606$ 달러, NY 가 주당 $-0.2067$ 달러이고 비가 $0.2067/0.2606 = 0.793$ 이다. 왼쪽 판의 기울기 $0.7816$ 과 거의 같다. **두 판이 같은 사실을 다르게 보고 있다.**
+
+    **(2) 평균에서 멀수록 크다.** 편차곱은 $(x_t-\bar x)(y_t-\bar y)$ 인데, 두 계열이 모두 시간에 대해 단조감소하므로 **$t$ 가 가운데일 때 두 편차가 모두 $0$ 에 가깝다.** 추세만 남겨 두고 보면
+
+    $$
+    (x_t - \bar x)(y_t-\bar y) \approx 0.8\,(T_t - \bar T)^2
+    $$
+
+    이고 $T_t$ 가 $t$ 에 대한 일차식이므로 **막대 높이가 $t$ 의 이차함수**, 곧 가운데가 바닥인 포물선이 된다. 실제로 그림은 양끝이 $30$ 쯤, 가운데가 $0$ 근처인 U 자다.
+
+    **음수 막대 둘이 가운데에 몰려 있는 것도 같은 까닭이다.** 가운데에서는 추세가 주는 몫이 거의 $0$ 이라 잡음이 부호를 정한다. 양끝에서는 추세의 몫이 압도적이라 잡음이 부호를 뒤집을 수 없다.
+
+    **그래서 가운데 판은 "자료의 어느 부분이 공분산을 만드는가" 를 보여 준다.** 가장 큰 다섯 막대가 전체 합의 $29\%$ 를 낸다. **처음과 끝의 몇 주가 결과를 끌고 간다.**
+
+    **(3) 세 판 모두 "왜" 를 말하지 못한다.** 왼쪽과 가운데는 시간을 아예 모르고, 오른쪽은 시간을 보여 주지만 두 계열이 **함께 내려가는 것**과 **서로를 끌어내리는 것**을 구별하지 못한다. 그림을 아무리 들여다보아도
+
+    - CA 가 NY 를 움직인다
+    - NY 가 CA 를 움직인다
+    - 제3의 공통 요인이 둘을 함께 움직인다
+
+    를 가를 수 없다.
+
+    **해야 할 일은 추세를 빼고 다시 재는 것이다.** 두 계열을 각각 시간에 회귀해 잔차를 구하고 그 상관을 보면 된다. 12.4절의 편상관과 같은 생각이고, 통제변수가 $t$ 일 뿐이다.
+
+    $$
+    r_{\text{CA},\text{NY}} = 0.9753
+    \qquad\longrightarrow\qquad
+    r_{\text{잔차}} = 0.0320 \quad (p = 0.83)
+    $$
+
+    **$0.975$ 가 $0.032$ 로 주저앉는다.** 자료를 만들 때 두 잡음을 서로 독립으로 두었으므로 참값은 $0$ 이고, 관측된 $0.032$ 는 $n = 48$ 에서의 흔들림($\operatorname{SE} \approx 1/\sqrt{45} = 0.149$)의 $0.2$ 배다. **추세를 걷어내면 아무 관계도 남지 않는다.**
+
+    잔차의 표준편차도 확인해 두면 좋다. $0.455$ 와 $0.556$ 으로 자료를 만들 때 쓴 $0.5$ 와 $0.6$ 에 가깝다.
+
+    **한 문장.** $r = 0.975$ 는 두 가격 사이의 관계가 아니라 **둘 다 달력과 맺은 관계**였다. 세 그림은 그 사실을 암시할 뿐 증명하지 못하고, 증명은 추세를 빼 보는 한 줄이 한다.
+
+    **수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
+
+    # 왼쪽: 산점도와 회귀직선
+    axes[0].scatter(CA, NY, alpha=0.6, edgecolors="grey")
+    z = np.polyfit(CA, NY, 1)
+    axes[0].plot(np.sort(CA), np.polyval(z, np.sort(CA)),
+                 color="red", linewidth=2)
+    axes[0].set_xlabel("CA Price (\\$)")
+    axes[0].set_ylabel("NY Price (\\$)")
+    axes[0].set_title(f"Scatter (r = {r:.3f})")
+
+    # 가운데: 주마다의 편차곱. 공분산은 이 막대들의 평균이다.
+    # 파란 막대(양)가 빨간 막대(음)를 압도하면 공분산이 양이 된다.
+    products = x_dev * y_dev
+    colours = ["steelblue" if p > 0 else "salmon" for p in products]
+    axes[1].bar(range(WEEKS), products, color=colours, edgecolor="white")
+    axes[1].axhline(0, color="black", linewidth=0.5)
+    axes[1].set_xlabel("Week")
+    axes[1].set_ylabel("$(x - \\bar{x})(y - \\bar{y})$")
+    axes[1].set_title("Deviation Products")
+
+    # 오른쪽: 두 시계열. 함께 내려가는 모습이 위 편차곱의 부호를 설명한다.
+    weeks = np.arange(WEEKS)
+    axes[2].plot(weeks, CA, label="CA", marker="o", markersize=3)
+    axes[2].plot(weeks, NY, label="NY", marker="s", markersize=3)
+    axes[2].set_xlabel("Week")
+    axes[2].set_ylabel("Price (\\$)")
+    axes[2].set_title("Common Trend")
+    axes[2].legend()
+
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![공분산의 시각적 분해](./img/covariance_from_scratch_129.png)
+
+    세 번째 그림에서 두 계열이 나란히 내려가는 것이 보인다. 이 공통 추세가 곧 상관의 원천이다.
+
+    (1)\~(3)의 수를 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # (1) 왼쪽 판
+    print(f"r = {r:.4f}   r^2 = {r**2:.4f}   기울기 = {np.polyfit(CA, NY, 1)[0]:.4f}")
+    print(f"CA {CA.min():.1f}~{CA.max():.1f}   NY {NY.min():.1f}~{NY.max():.1f}")
+
+    # (1) 가운데 판
+    prod = x_dev * y_dev
+    print(f"\n편차곱: 양수 {(prod > 0).sum()}개  음수 {(prod < 0).sum()}개")
+    print(f"  합/n = {prod.mean():.4f}   합/(n-1) = {prod.sum() / (WEEKS - 1):.4f} = Cov")
+    print(f"  최대 {prod.max():.2f}   최소 {prod.min():.2f}"
+          f"   상위 5개가 차지하는 몫 {np.sort(prod)[-5:].sum() / prod.sum():.4f}")
+
+    # (1) 오른쪽 판 — 주당 기울기
+    t = np.arange(WEEKS)
+    bCA, bNY = np.polyfit(t, CA, 1)[0], np.polyfit(t, NY, 1)[0]
+    print(f"\n주당 기울기  CA {bCA:.4f}   NY {bNY:.4f}   비 {bNY / bCA:.4f}")
+
+    # (3) 추세를 빼고 다시 재기
+    res_CA = CA - np.polyval(np.polyfit(t, CA, 1), t)
+    res_NY = NY - np.polyval(np.polyfit(t, NY, 1), t)
+    rr, pp = stats.pearsonr(res_CA, res_NY)
+    print(f"\n추세 제거 전 r = {r:.4f}")
+    print(f"추세 제거 후 r = {rr:.4f}   p = {pp:.4f}"
+          f"   SE ~ 1/sqrt(n-3) = {1 / np.sqrt(WEEKS - 3):.4f}")
+    print(f"잔차 표준편차 {res_CA.std(ddof=1):.4f} / {res_NY.std(ddof=1):.4f}"
+          f"   (만들 때 쓴 값 0.5 / 0.6)")
+    ```
+
+    출력:
+
+    ```text
+    r = 0.9753   r^2 = 0.9511   기울기 = 0.7816
+    CA 236.0~248.2   NY 339.5~350.2
+
+    편차곱: 양수 46개  음수 2개
+      합/n = 10.3489   합/(n-1) = 10.5691 = Cov
+      최대 31.86   최소 -0.50   상위 5개가 차지하는 몫 0.2915
+
+    주당 기울기  CA -0.2606   NY -0.2067   비 0.7932
+
+    추세 제거 전 r = 0.9753
+    추세 제거 후 r = 0.0320   p = 0.8292   SE ~ 1/sqrt(n-3) = 0.1491
+    잔차 표준편차 0.4553 / 0.5557   (만들 때 쓴 값 0.5 / 0.6)
+    ```
+
+    (1)의 수가 모두 맞는다. 기울기 `0.7816` 이 자료를 만들 때 쓴 추세 계수 $0.8$ 에 가깝고, 편차곱은 **양수 46개 음수 2개**다. `합/(n-1) = 10.5691 = Cov` 가 "막대의 평균이 공분산" 이라는 말을 그대로 보인다. 상위 다섯 막대가 전체의 $29.15\%$ 를 낸다.
+
+    주당 기울기의 비 `0.7932` 도 $0.8$ 근처다. **왼쪽 판의 기울기 $0.7816$ 과 오른쪽 판의 기울기 비 $0.7932$ 가 같은 수를 두 길로 잰 것**이다.
+
+    (3)이 결정적이다. **`추세 제거 후 r = 0.0320`, `p = 0.8292`.** $0.975$ 가 $0.032$ 로 내려앉고 유의성도 사라진다. 참값은 $0$ 이고, $0.032$ 는 표준오차 $0.149$ 의 $0.2$ 배이니 $0$ 과 구별되지 않는다. 잔차 표준편차 $0.4553$ 과 $0.5557$ 도 만들 때 쓴 $0.5$·$0.6$ 에 가깝다.
+
+    **세 그림이 암시한 것을 이 한 줄이 증명한다.** 두 가격 사이에는 아무 관계도 없고, 있었던 것은 달력과의 관계뿐이다.
 
 ---
 
