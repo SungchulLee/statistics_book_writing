@@ -375,7 +375,9 @@ $$
 
     # 불비례배분: 작은 집단을 과대표집
     n_alloc = np.full(3, np.ceil(n_sub))
-    print(f"불비례배분(집단당 {n_sub:.0f}명씩) → n = {n_alloc.sum():.0f}")
+    # n_sub 를 그대로 찍으면 384.146 이 반올림되어 384 로 나오는데, 배분에 쓴
+    # 것은 올림한 385 다. 그러면 384 x 3 = 1152 로 옆의 합 1155 와 어긋난다.
+    print(f"불비례배분(집단당 {n_alloc[0]:.0f}명씩) → n = {n_alloc.sum():.0f}")
     w = shares
     var_st = (w**2 * 0.25 / n_alloc).sum()
     print(f"  이때 전체 추정의 오차한계 {z * np.sqrt(var_st):.4f}")
