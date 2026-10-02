@@ -14,47 +14,143 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비. 세 집단 각 $n = 20$에 **서로 독립인** 오차를 주고 `response ~ C(group)`을 적합한다.
+
+**(1)** 최소제곱 잔차 $e = y - X\hat\beta$가 설계행렬의 열과 직교함을 보이고, 거기서 **집단마다 잔차의 합이 각각 $0$**임을 끌어내시오.
+
+**(2)** 그 제약 때문에 **오차가 독립이어도 잔차는 독립이 아니다.** 일원배치 모형에서 같은 집단에 속한 두 잔차의 상관이 $-1/(n-1)$이고 다른 집단 사이에서는 $0$임을 보이고, $n = 20$에서 모의실험으로 확인하시오.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-# 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
-# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
-# (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
-rng = np.random.default_rng(42)
-n = 20
-data = pd.DataFrame({
-    "group": np.repeat(["A", "B", "C"], n),
-    "response": np.concatenate([
-        rng.normal(10.0, 1.0, n),
-        rng.normal(10.8, 1.3, n),
-        rng.normal(12.0, 1.6, n),
-    ]),
-})
-model = ols("response ~ C(group)", data=data).fit()
+    **(1) 해석적으로.** 최소제곱은 정규방정식 $X^\top X\hat\beta = X^\top y$를 만족하므로
 
-print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
-print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
-```
+    $$
+    X^\top e = X^\top\bigl(y - X\hat\beta\bigr) = 0
+    $$
 
-출력:
+    이다. `response ~ C(group)`의 설계행렬은 절편 $\mathbf 1$과 더미 $\mathbf 1_B$, $\mathbf 1_C$ 세 열이고, 이들이 지시벡터 $\mathbf 1_A, \mathbf 1_B, \mathbf 1_C$와 같은 공간을 펼친다($\mathbf 1 = \mathbf 1_A + \mathbf 1_B + \mathbf 1_C$). 그러므로
 
-```
-       count    mean    std
-group                      
-A         20   9.967  0.870
-B         20  10.942  1.034
-C         20  12.191  1.145
+    $$
+    \sum_{i \in A} e_i = \sum_{i \in B} e_i = \sum_{i \in C} e_i = 0
+    $$
 
-F = 23.7708, p = 0.0000
-```
+    이고 전체 합도 $0$이다. **집단마다 잔차의 합이 각각 $0$이다.** 적합값이 집단평균 $\bar y_g$인 것을 쓰면 $\sum_{i \in g}(y_i - \bar y_g) = 0$으로 바로 보인다. 컴퓨터로 재면 반올림이 쌓여 $10^{-13}$ 정도의 찌꺼기가 남는다.
 
-표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
+    **(2) 해석적으로.** 이 제약에 값이 있다. **집단 안에서 $20$개 잔차 가운데 $19$개를 알면 남은 하나가 결정된다.** 그러니 오차 $\varepsilon_i$가 서로 독립이었더라도 잔차는 그럴 수 없다. 얼마나 아닌지를 재 보자.
+
+    집단 $g$에 속한 관측의 잔차는 $e_i = y_i - \bar y_g = \varepsilon_i - \bar\varepsilon_g$다. $\varepsilon_i$가 평균 $0$, 분산 $\sigma^2$으로 독립이면 $\operatorname{Var}(\bar\varepsilon_g) = \sigma^2/n$이고 $\operatorname{Cov}(\varepsilon_i, \bar\varepsilon_g) = \sigma^2/n$이므로
+
+    $$
+    \operatorname{Var}(e_i) = \sigma^2 - 2\cdot\frac{\sigma^2}{n} + \frac{\sigma^2}{n}
+    = \sigma^2\left(1 - \frac{1}{n}\right)
+    $$
+
+    이다. 같은 집단의 $i \ne j$에 대해서는
+
+    $$
+    \operatorname{Cov}(e_i, e_j)
+    = \operatorname{Cov}(\varepsilon_i - \bar\varepsilon_g,\ \varepsilon_j - \bar\varepsilon_g)
+    = 0 - \frac{\sigma^2}{n} - \frac{\sigma^2}{n} + \frac{\sigma^2}{n}
+    = -\frac{\sigma^2}{n}
+    $$
+
+    이고, 따라서
+
+    $$
+    \operatorname{corr}(e_i, e_j)
+    = \frac{-\sigma^2/n}{\sigma^2\bigl(1 - 1/n\bigr)}
+    = -\frac{1}{n-1}
+    $$
+
+    이다. 집단이 다르면 $\bar\varepsilon_g$가 서로 다른 오차들로 만들어지므로 공분산이 $0$이고 상관도 $0$이다.
+
+    $n = 20$에서 $-1/19 = -0.052632$다. **음수인 것이 요점이다.** 집단 안의 잔차는 "하나가 크면 나머지가 조금씩 작아져야" 하므로 약하게 서로 밀어낸다. 크기는 $5\%$ 남짓이라 실용적으로는 작지만, **"잔차가 독립인가"를 검정하면 $0$이 아닌 것을 재게 된다**는 사실 자체가 아래 Durbin-Watson을 읽을 때 쓰인다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.formula.api import ols
+
+    # 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
+    # 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
+    # (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
+    rng = np.random.default_rng(42)
+    n = 20
+    data = pd.DataFrame({
+        "group": np.repeat(["A", "B", "C"], n),
+        "response": np.concatenate([
+            rng.normal(10.0, 1.0, n),
+            rng.normal(10.8, 1.3, n),
+            rng.normal(12.0, 1.6, n),
+        ]),
+    })
+    model = ols("response ~ C(group)", data=data).fit()
+
+    print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+    print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+
+    e = model.resid
+    print(f"\n잔차 전체의 합 = {e.sum():+.3e}")
+    print("집단별 잔차 합:", "  ".join(f"{g}: {v.sum():+.1e}"
+                                    for g, v in e.groupby(data["group"])))
+
+    # (2) 에서 유도한 잔차 사이의 상관을 모의로 확인한다.
+    print(f"\n이론  같은 집단 corr(e_i, e_j) = -1/(n-1) = {-1 / (n - 1):+.6f}")
+    print("      다른 집단 corr                        = +0.000000")
+
+    rng_sim = np.random.default_rng(123)
+    B = 2000
+    w1, w2, b1, b2 = [], [], [], []
+    for _ in range(B):
+        eps = rng_sim.normal(0, 1, (3, n))          # 서로 독립인 오차
+        r = eps - eps.mean(axis=1, keepdims=True)   # 집단평균만 뺀 잔차
+        for g in range(3):
+            w1.append(r[g, 0]); w2.append(r[g, 1])
+        b1.append(r[0, 0]); b2.append(r[1, 0])
+    print(f"모의  같은 집단 corr = {np.corrcoef(w1, w2)[0, 1]:+.6f}"
+          f"   ({3 * B}쌍, 오차 {1 / np.sqrt(3 * B):.4f})")
+    print(f"      다른 집단 corr = {np.corrcoef(b1, b2)[0, 1]:+.6f}"
+          f"   ({B}쌍, 오차 {1 / np.sqrt(B):.4f})")
+
+    # 이 쪽에서 쓸 양: 잔차가 놓인 순서. 자료프레임은 집단별로 묶여 있다.
+    print("\n행 순서대로 본 집단 (처음 25행)")
+    print("  " + "".join(data["group"].values[:25]))
+    ```
+
+    출력:
+
+    ```
+           count    mean    std
+    group                      
+    A         20   9.967  0.870
+    B         20  10.942  1.034
+    C         20  12.191  1.145
+
+    F = 23.7708, p = 0.0000
+
+    잔차 전체의 합 = -2.469e-13
+    집단별 잔차 합: A: -7.1e-14  B: -5.3e-15  C: -1.7e-13
+
+    이론  같은 집단 corr(e_i, e_j) = -1/(n-1) = -0.052632
+          다른 집단 corr                        = +0.000000
+    모의  같은 집단 corr = -0.058448   (6000쌍, 오차 0.0129)
+          다른 집단 corr = -0.004901   (2000쌍, 오차 0.0224)
+
+    행 순서대로 본 집단 (처음 25행)
+      AAAAAAAAAAAAAAAAAAAABBBBB
+    ```
+
+    **(1)이 확인된다.** 집단별 잔차 합이 $-7.1\times 10^{-14}$, $-5.3\times 10^{-15}$, $-1.7\times 10^{-13}$으로 모두 기계 정밀도의 찌꺼기다.
+
+    **(2)도 확인된다.** 같은 집단 안의 상관이 모의로 $-0.058448$인데 유도한 값은 $-0.052632$다. 쌍 $6000$개에서 상관의 오차가 $1/\sqrt{6000} = 0.0129$이니 두 수의 간격 $0.0058$은 $0.5$ 오차 안쪽이다. 다른 집단 사이는 $-0.004901$로 오차 $0.0224$ 안에서 $0$과 구별되지 않는다.
+
+    마지막 줄이 이 쪽의 함정을 미리 보여 준다. **행 순서가 `AAAAAAAAAAAAAAAAAAAABBBBB…`, 곧 집단별로 묶여 있다.** 이 순서는 자료를 만든 코드가 정한 것일 뿐 **측정 순서가 아니다.** 아래 Durbin-Watson과 순서 대 잔차 그림은 둘 다 "잔차가 놓인 순서"를 입력으로 받으므로, 그 순서가 무엇인지 모르면 두 진단 모두 뜻을 잃는다.
+
+    표본표준편차가 $0.870,\ 1.034,\ 1.145$로 나온 것도 적어 둔다. 참값이 $1.0,\ 1.3,\ 1.6$이었으니 $n = 20$에서 추정값이 이만큼 눌린다. 등분산성은 이 쪽의 주제가 아니지만, 아래 진단들이 모두 이 잔차를 입력으로 받는다는 점에서 함께 보아야 한다.
 
 ## 확인 방법
 
@@ -88,27 +184,248 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Durbin-Watson 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> Durbin-Watson 검정. 보기 1의 잔차에 $d$를 계산한다.
+
+**(1)** $0 \le d \le 4$임을 보이고, $\hat\rho = \sum_{i=2}^{n} e_i e_{i-1} / \sum_i e_i^2$에 대해 **정확한** 분해
+
+$$
+d = 2 - 2\hat\rho - \frac{e_1^2 + e_n^2}{\sum_i e_i^2}
+$$
+
+를 유도하시오. 여기서 흔히 쓰는 $d \approx 2(1-\hat\rho)$가 무엇을 버린 근사인지 밝히고, 두 값을 이 자료에서 비교하시오.
+
+**(2)** 잔차가 **완전한 등차수열**일 때(가장 매끄럽게 흘러가는 극단적인 경우)
+
+$$
+d = \frac{12}{n(n+1)}
+$$
+
+임을 보이고 $n = 5, 10, 20, 50, 101$에서 확인하시오. 이것이 "$d$가 $0$에 가깝다"의 뜻이다.
+
+**(3)** `durbin_watson`은 잔차를 **받은 순서 그대로** 쓴다. 집단별로 정렬된 일원배치 잔차에서 $d$의 중심이 $2$가 아니라 $2\bigl(1 + \tfrac{k-1}{N}\bigr)$임을 보이고, 자기상관이 실제로 있는 자료에 순서를 잘못 주면 어떻게 되는지 보이시오.
 
 </div>
 
-```python
-from statsmodels.stats.stattools import durbin_watson
+??? success "풀이"
 
-# durbin_watson은 잔차를 **주어진 순서 그대로** 본다.
-# 그래서 자료가 수집 순서대로 정렬되어 있어야 의미가 있다.
-# 집단별로 정렬된 자료에 그냥 적용하면 집단 효과를 자기상관으로 오인할 수 있다.
-dw_stat = durbin_watson(model.resid)
-print(f"Durbin-Watson Statistic: {dw_stat:.4f}")
-```
+    **(1) 해석적으로.** 분자를 그대로 펼친다.
 
-출력:
+    $$
+    \sum_{i=2}^{n}(e_i - e_{i-1})^2
+    = \sum_{i=2}^{n} e_i^2 + \sum_{i=2}^{n} e_{i-1}^2 - 2\sum_{i=2}^{n} e_i e_{i-1}
+    $$
 
-```
-Durbin-Watson Statistic: 2.1101
-```
+    첫 합은 $e_1^2$이 빠진 전체 제곱합이고 둘째 합은 $e_n^2$이 빠진 전체 제곱합이다. $S = \sum_{i=1}^{n} e_i^2$으로 쓰면
 
-$d = 2.11$로 2에 가까워 자기상관의 증거가 없다. 자료를 서로 독립으로 생성했으니 기대한 결과다.
+    $$
+    \sum_{i=2}^{n}(e_i-e_{i-1})^2 = (S - e_1^2) + (S - e_n^2) - 2\hat\rho S
+    = S\left(2 - 2\hat\rho - \frac{e_1^2+e_n^2}{S}\right)
+    $$
+
+    이고 $S$로 나누면 묻는 식이 나온다. **근사가 아니라 등식이다.** 흔히 쓰는 $d \approx 2(1-\hat\rho)$는 **끝점 두 개의 기여 $(e_1^2+e_n^2)/S$를 버린 것**이고, 그 크기는 대략 $2/n$이다($e_i^2$이 고르게 $S/n$씩 기여하므로).
+
+    범위도 바로 나온다. 분자는 음이 아니므로 $d \ge 0$이다. 위 등식에서 코시-슈바르츠로 $\lvert\hat\rho\rvert \le 1$이고 끝점 항이 음이 아니므로
+
+    $$
+    d = 2 - 2\hat\rho - \frac{e_1^2+e_n^2}{S} \le 2 + 2 = 4
+    $$
+
+    이다. 곧 $d \in [0, 4]$다. $\hat\rho$가 $1$에 가까우면(인접한 잔차가 같이 움직이면) $d$가 $0$ 쪽으로, $-1$에 가까우면(부호가 번갈아 나오면) $4$ 쪽으로 간다. **독립이면 $\hat\rho \approx 0$이라 $d \approx 2$다.**
+
+    **(2) 해석적으로.** 잔차가 등차수열이면 공차를 $1$로 잡아도 $d$는 바뀌지 않는다($d$는 $e$의 상수배에 불변이다). 평균을 빼 $e_i = i - \frac{n+1}{2}$로 두면 $\sum_i e_i = 0$이고 계산이 깔끔해진다.
+
+    분자는 차가 모두 $1$이므로 항이 $n-1$개다.
+
+    $$
+    \sum_{i=2}^{n}(e_i - e_{i-1})^2 = (n-1)\cdot 1^2 = n-1
+    $$
+
+    분모는 $1, \ldots, n$의 편차제곱합, 곧 표본분산의 분자다.
+
+    $$
+    S = \sum_{i=1}^{n}\left(i - \frac{n+1}{2}\right)^2
+    = \sum_{i=1}^n i^2 - n\left(\frac{n+1}{2}\right)^2
+    = \frac{n(n+1)(2n+1)}{6} - \frac{n(n+1)^2}{4}
+    = \frac{n(n^2-1)}{12}
+    $$
+
+    (마지막은 $\frac{n(n+1)}{12}\bigl[2(2n+1) - 3(n+1)\bigr] = \frac{n(n+1)(n-1)}{12}$로 묶은 것이다.) 그러므로
+
+    $$
+    d = \frac{n-1}{n(n^2-1)/12} = \frac{12(n-1)}{n(n-1)(n+1)} = \frac{12}{n(n+1)}
+    $$
+
+    이다. $n = 20$이면 $12/420 = 0.0285714$, $n = 100$이면 $0.0011881$이다. **$n$이 커질수록 $0$으로 간다.**
+
+    이것이 "$d$가 작다"의 뜻을 정확히 말해 준다. 잔차가 한 방향으로 매끄럽게 흘러가면 인접한 차는 $n$에 무관하게 작은데 전체 제곱합은 $n^3$으로 커지므로, $d$가 $0$으로 짜부라진다. **$d \approx 0$은 "잔차가 추세를 타고 흘러간다"는 신호다.**
+
+    **(3) 이론이 예측하는 값.** 보기 1에서 같은 집단 안의 잔차 상관이 $-1/(n-1)$임을 보았다. 그 때문에 $d$의 중심이 $2$에서 조금 밀려난다. 분자의 기댓값을 항별로 계산하면 **같은 집단에 속한 인접쌍**은
+
+    $$
+    E\bigl[(e_i-e_{i-1})^2\bigr]
+    = 2\sigma^2\left(1-\frac{1}{n}\right) - 2\left(-\frac{\sigma^2}{n}\right) = 2\sigma^2
+    $$
+
+    로 음의 상관이 분산의 눌림을 **정확히 상쇄**한다. **집단 경계를 넘는 인접쌍**은 상관이 $0$이므로 $2\sigma^2(1-1/n)$이다. 균형 설계에서 전자는 $k(n-1)$개, 후자는 $k-1$개이니
+
+    $$
+    E[\text{분자}] = 2\sigma^2 k(n-1) + 2\sigma^2(k-1)\frac{n-1}{n},
+    \qquad
+    E[\text{분모}] = N\sigma^2\frac{n-1}{n}
+    $$
+
+    이고 ($N = kn$), 비를 정리하면
+
+    $$
+    \frac{E[\text{분자}]}{E[\text{분모}]}
+    = \frac{2(kn + k - 1)}{kn}
+    = 2\left(1 + \frac{k-1}{N}\right)
+    $$
+
+    이다. $k = 3$, $N = 60$이면 $2 \times \frac{31}{30} = 2.06667$이다. **독립이어도 $d$의 중심이 $2$보다 약간 크다.**
+
+    **수치적으로.** 먼저 (1)과 (2)를 확인한다.
+
+    ```python
+    import numpy as np
+    from statsmodels.stats.stattools import durbin_watson
+
+    # durbin_watson은 잔차를 **주어진 순서 그대로** 본다.
+    # 그래서 자료가 수집 순서대로 정렬되어 있어야 의미가 있다.
+    # 집단별로 정렬된 자료에 그냥 적용하면 집단 효과를 자기상관으로 오인할 수 있다.
+    dw_stat = durbin_watson(model.resid)
+    print(f"Durbin-Watson Statistic: {dw_stat:.4f}")
+
+    # (1) 의 정확한 분해 d = 2 - 2*rho - (e_1^2 + e_n^2)/S 을 확인한다.
+    e = model.resid.values
+    S = (e ** 2).sum()
+    rho = (e[1:] * e[:-1]).sum() / S
+    edge = (e[0] ** 2 + e[-1] ** 2) / S
+    print(f"rho-hat                        = {rho:+.8f}")
+    print(f"2(1 - rho-hat)                 = {2 * (1 - rho):.8f}   <- 흔히 쓰는 근사")
+    print(f"끝점 보정 (e_1^2 + e_n^2)/S    = {edge:.8f}")
+    print(f"2 - 2*rho - 끝점 보정          = {2 - 2 * rho - edge:.8f}")
+    print(f"durbin_watson 과의 차이        = {abs(2 - 2 * rho - edge - dw_stat):.3e}")
+
+    # (2) 완전한 등차수열 잔차에서는 d = 12 / (n(n+1)) 인가
+    print(f"\n{'n':>5s} {'직접 계산':>13s} {'12/(n(n+1))':>13s} {'차이':>9s}")
+    for m in [5, 10, 20, 50, 101]:
+        a = np.arange(1, m + 1) - (m + 1) / 2     # 합이 0 인 등차수열
+        d_direct, d_formula = durbin_watson(a), 12 / (m * (m + 1))
+        print(f"{m:5d} {d_direct:13.10f} {d_formula:13.10f} {d_direct - d_formula:9.1e}")
+    ```
+
+    출력:
+
+    ```
+    Durbin-Watson Statistic: 2.1101
+    rho-hat                        = -0.07149872
+    2(1 - rho-hat)                 = 2.14299745   <- 흔히 쓰는 근사
+    끝점 보정 (e_1^2 + e_n^2)/S    = 0.03287376
+    2 - 2*rho - 끝점 보정          = 2.11012369
+    durbin_watson 과의 차이        = 0.000e+00
+
+        n         직접 계산   12/(n(n+1))        차이
+        5  0.4000000000  0.4000000000   0.0e+00
+       10  0.1090909091  0.1090909091   0.0e+00
+       20  0.0285714286  0.0285714286   0.0e+00
+       50  0.0047058824  0.0047058824   0.0e+00
+      101  0.0011648224  0.0011648224   0.0e+00
+    ```
+
+    **(1)의 분해가 정확히 맞는다.** 차이가 $0$이다. 그리고 근사가 얼마나 어긋나는지도 보인다. $2(1-\hat\rho) = 2.1430$인데 참값은 $d = 2.1101$이고, 그 간격이 바로 끝점 보정 $0.0329$다. 예측한 크기 $2/n = 2/60 = 0.0333$과 거의 같다. **$n$이 작을 때 $d \approx 2(1-\hat\rho)$를 쓰면 이만큼 틀린다.**
+
+    **(2)의 항등식도 맞는다.** 다섯 개 $n$ 전부에서 직접 계산과 공식이 **차이 $0$**으로 같다. $n = 101$에서 $d = 0.00116$이니 $d$가 아래로 얼마나 멀리 갈 수 있는지 알 수 있다.
+
+    이제 (3)이다. 먼저 $d$의 중심을 모의로 잰다.
+
+    ```python
+    import numpy as np
+
+    # 집단별로 묶인 순서에서 d 의 중심이 정말 2(1 + (k-1)/N) 인가.
+    # 오차를 서로 독립으로 만들므로 귀무가설은 참이다.
+    rng_sim = np.random.default_rng(2026)
+    B = 20_000
+    print(f"{'k':>3s} {'n':>4s} {'모의 E[분자]/E[분모]':>20s} {'2(1+(k-1)/N)':>14s} {'차이':>9s}")
+    for k, m in [(2, 10), (3, 20), (5, 8), (4, 25)]:
+        N = k * m
+        num = np.empty(B)
+        den = np.empty(B)
+        for b in range(B):
+            eps = rng_sim.normal(0, 1, (k, m))
+            r = (eps - eps.mean(axis=1, keepdims=True)).ravel()   # 집단 순서로 늘어놓는다
+            num[b] = (np.diff(r) ** 2).sum()
+            den[b] = (r ** 2).sum()
+        sim = num.mean() / den.mean()
+        th = 2 * (1 + (k - 1) / N)
+        print(f"{k:3d} {m:4d} {sim:20.5f} {th:14.5f} {sim - th:+9.5f}")
+    ```
+
+    출력:
+
+    ```
+      k    n       모의 E[분자]/E[분모]   2(1+(k-1)/N)        차이
+      2   10              2.10028        2.10000  +0.00028
+      3   20              2.06733        2.06667  +0.00066
+      5    8              2.20555        2.20000  +0.00555
+      4   25              2.05902        2.06000  -0.00098
+    ```
+
+    **네 설계 모두에서 공식이 맞는다.** 어긋남이 $0.001$ 안쪽이고, 가장 큰 $+0.00555$는 $N = 40$으로 표본이 가장 작은 설계에서 나왔다. 부호가 설계마다 바뀌므로 몬테카를로 오차이고 체계적인 치우침이 아니다.
+
+    그래서 이 자료의 $d = 2.1101$을 어떻게 읽어야 하는가. **$2$와 비교하면 안 되고 $2.0667$과 비교해야 한다.** 간격이 $0.043$으로 줄어든다. 자료를 서로 독립으로 만들었으니 기대한 결과이며, **"$d$가 $2$보다 크니 음의 자기상관이 있다"고 읽으면 틀린다.** 집단평균을 적합한 것만으로 생기는 밀림이다.
+
+    이제 (3)의 함정이다.
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.stattools import durbin_watson
+
+    # 자기상관이 **정말로 있는** 자료를 만든다. 측정은 수집 순서대로 AR(1) 오차를
+    # 받지만, 자료프레임에는 집단별로 묶여 저장된다. 실제 자료가 흔히 이 꼴이다.
+    rng_ar = np.random.default_rng(7)
+    N, rho_true = 60, 0.8
+    grp = np.repeat(["A", "B", "C"], 20)
+    mu = {"A": 10.0, "B": 10.8, "C": 12.0}
+
+    order = rng_ar.permutation(N)      # t 번째로 수집된 관측이 들어갈 행 번호
+    eps, x = np.empty(N), 0.0
+    for t in range(N):
+        x = rho_true * x + rng_ar.normal(0, 1)
+        eps[t] = x
+
+    y = np.empty(N)
+    for t in range(N):
+        y[order[t]] = mu[grp[order[t]]] + eps[t]
+
+    df = pd.DataFrame({"group": grp, "response": y})
+    df["t"] = np.argsort(order)         # 각 행이 몇 번째로 수집되었는가
+    m_ar = ols("response ~ C(group)", data=df).fit()
+    r = m_ar.resid.values
+
+    print(f"참 자기상관 rho = {rho_true}")
+    print(f"집단순 잔차의 d = {durbin_watson(r):.4f}   <- 자료프레임 행 순서")
+    print(f"수집순 잔차의 d = {durbin_watson(r[np.argsort(df['t'].values)]):.4f}"
+          f"   <- 측정 순서")
+    ```
+
+    출력:
+
+    ```
+    참 자기상관 rho = 0.8
+    집단순 잔차의 d = 1.8443   <- 자료프레임 행 순서
+    수집순 잔차의 d = 0.7927   <- 측정 순서
+    ```
+
+    **같은 잔차 $60$개에서 $d$가 $1.8443$과 $0.7927$로 갈린다.** 다른 것은 **순서 하나뿐**이다.
+
+    참 자기상관이 $\rho = 0.8$이니 $d \approx 2(1-0.8) = 0.4$ 근처를 기대하고, 측정 순서로 재면 $0.7927$로 분명히 작다. 자기상관이 잡힌다. 그런데 자료프레임 행 순서로 재면 $1.8443$이다. **$2$에 가까우므로 "자기상관 없음"으로 읽히고, 실제로 있는 심한 자기상관이 완전히 가려진다.**
+
+    까닭은 간단하다. 집단별 정렬은 측정 순서를 뒤섞은 것이고, 뒤섞인 수열에서 인접한 두 잔차는 **측정 시각이 멀리 떨어진** 두 관측이다. AR(1)의 상관은 시차에 따라 기하적으로 줄어들므로 뒤섞으면 거의 $0$이 된다. $1.8443$이 $2.0667$보다 조금 작은 것은 남은 우연일 뿐이다.
+
+    **그러므로 Durbin-Watson을 쓸 때는 먼저 "이 순서가 무슨 순서인가"를 답해야 한다.** 보기 1에서 본 대로 이 쪽의 자료프레임은 `AAAA…BBBB…CCCC` 로 묶여 있어 **측정 순서가 아니다.** 측정 시각이나 실험 순서를 따로 기록해 두지 않았다면 이 검정은 할 수 없다. 돌아가기는 하고 수도 하나 내놓지만, 그 수는 가정에 대해 아무것도 말해 주지 않는다.
 
 ### 순서에 대한 잔차 그림
 
@@ -116,34 +433,123 @@ $d = 2.11$로 2에 가까워 자기상관의 증거가 없다. 자료를 서로 
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 순서에 대한 잔차 그림
+**보기 3.** <span class="diff easy" title="쉬움"></span> 순서에 대한 잔차 그림. 보기 1의 잔차 $60$개를 행 번호에 대해 찍는다.
+
+**(1)** 그림을 그리고 무엇을 읽을 수 있는지 말하시오. 살펴볼 것으로 꼽히는 **추세·주기·군집** 세 가지를 각각 **수치로** 재어 판단을 뒷받침하시오.
+
+**(2)** 이 그림이 **가리는 것**은 무엇인가. 보기 2에서 만든 $\rho = 0.8$ 자기상관 자료를 같은 세 수치로 재어, 그림이 아무것도 못 보이는 경우를 보이시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 잔차를 관측 순서대로 찍는다. 이웃한 점들이 같은 쪽으로 몰려 다니면
-# 독립이 아니라는 신호다. 순서가 뜻을 갖는 자료(시간·공간)에서만 쓸 수 있다.
-plt.scatter(range(len(model.resid)), model.resid, alpha=0.6)
-plt.axhline(y=0, color='r', linestyle='--')
-plt.xlabel("Observation Order")
-plt.ylabel("Residuals")
-plt.title("Residuals vs. Observation Order")
-plt.show()
-```
+    이 보기에는 유도할 식이 없다. 그림에서 무엇을 읽어야 하는지가 전부다. 그러므로 눈으로 보는 세 가지를 각각 수로 바꾸는 일에 집중한다.
 
-![순서에 대한 잔차](./img/independence_94.png)
+    - **추세**는 잔차를 순서에 회귀한 **기울기**로 잰다.
+    - **주기와 자기상관**은 **시차 $1$ 상관 $\hat\rho$와 $d$**로 잰다.
+    - **군집**은 부호의 **런(run) 개수**로 잰다. 부호가 바뀌는 횟수에 $1$을 더한 수이며, 독립이면 양수 $n_1$개, 음수 $n_2$개일 때 기댓값이 $2n_1n_2/N + 1$이다. 군집이 있으면 부호가 몰려 다니므로 런이 **적어진다.**
 
-점들이 0을 중심으로 고르게 흩어져 있고 추세도 주기도 보이지 않는다.
+    **(1) 그림이 말하는 것.**
 
-다만 이 그림에는 한계가 있다. 가로축이 실제 수집 순서가 아니라 자료프레임의 행 번호(집단 A 20개, B 20개, C 20개 순)이기 때문이다. 실제 연구에서는 측정 시각이나 실험 순서를 따로 기록해 두어야 이 진단이 의미를 갖는다. **독립성은 자료를 들여다봐서 확인하는 것이 아니라 설계로 확보하는 것이다.**
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+    from statsmodels.stats.stattools import durbin_watson
 
-살펴볼 것:
+    # 그림에서 읽으려는 세 가지를 먼저 수로 적어 둔다.
+    e = model.resid.values
+    idx = np.arange(len(e))
 
-- **추세:** 체계적인 증가나 감소는 시간 효과를 시사한다.
-- **주기:** 주기적인 패턴은 자기상관을 나타낸다.
-- **군집:** 비슷한 잔차의 무리는 블록 효과를 시사한다.
+    # 추세: 잔차를 행 번호에 회귀한 기울기
+    sl = stats.linregress(idx, e)
+    print(f"추세   기울기 {sl.slope:+.6f} (표준오차 {sl.stderr:.6f}), p = {sl.pvalue:.4f}")
+
+    # 자기상관: 시차 1 상관과 d
+    rho1 = (e[1:] * e[:-1]).sum() / (e ** 2).sum()
+    print(f"자기상관  시차 1 rho-hat = {rho1:+.4f},  d = {durbin_watson(e):.4f}"
+          f"  (집단순 중심 {2 * (1 + 2 / 60):.4f})")
+
+    # 군집: 부호의 런 수. 기대값 2*n1*n2/N + 1
+    sign = e > 0
+    runs = 1 + (sign[1:] != sign[:-1]).sum()
+    n1, n2 = sign.sum(), (~sign).sum()
+    N = n1 + n2
+    mu_r = 2 * n1 * n2 / N + 1
+    sd_r = np.sqrt(2 * n1 * n2 * (2 * n1 * n2 - N) / (N ** 2 * (N - 1)))
+    print(f"군집   양수 {n1}개, 음수 {n2}개,  런 {runs}개"
+          f"  (기대 {mu_r:.2f}, 표준편차 {sd_r:.2f}, z = {(runs - mu_r) / sd_r:+.2f})")
+
+    # 잔차를 관측 순서대로 찍는다. 이웃한 점들이 같은 쪽으로 몰려 다니면
+    # 독립이 아니라는 신호다. 순서가 뜻을 갖는 자료(시간·공간)에서만 쓸 수 있다.
+    plt.scatter(range(len(model.resid)), model.resid, alpha=0.6)
+    plt.axhline(y=0, color='r', linestyle='--')
+    plt.xlabel("Observation Order")
+    plt.ylabel("Residuals")
+    plt.title("Residuals vs. Observation Order")
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    추세   기울기 -0.000381 (표준오차 0.007556), p = 0.9600
+    자기상관  시차 1 rho-hat = -0.0715,  d = 2.1101  (집단순 중심 2.0667)
+    군집   양수 32개, 음수 28개,  런 31개  (기대 30.87, 표준편차 3.82, z = +0.03)
+    ```
+
+    ![순서에 대한 잔차](./img/independence_94.png)
+
+    **점들이 $0$을 중심으로 고르게 흩어져 있고 추세도 주기도 군집도 보이지 않는다.** 그 세 판단의 정량적 내용이 위 세 줄이다.
+
+    - **추세 없음**: 기울기 $-0.000381$에 표준오차 $0.007556$이니 $t = -0.05$, $p = 0.9600$이다. $60$개 전체에서 잔차가 올라가거나 내려간 양은 기울기 $\times 59 = -0.022$로, 잔차 표준편차 $1.005$의 $2\%$다. 사실상 평평하다.
+    - **자기상관 없음**: $\hat\rho = -0.0715$이고 $d = 2.1101$이다. 보기 2에서 본 대로 비교 기준은 $2$가 아니라 $2.0667$이며, 간격이 $0.043$이다.
+    - **군집 없음**: 런이 $31$개인데 독립일 때 기댓값이 $30.87$이다. $z = +0.03$으로 이보다 가까울 수가 없다.
+
+    **(2) 그림이 가리는 것.** 이 그림의 치명적 한계는 가로축이 **실제 수집 순서가 아니라 자료프레임의 행 번호**(집단 A $20$개, B $20$개, C $20$개 순)라는 것이다. 보기 2에서 만든 자료로 그 결과를 직접 보자.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from statsmodels.stats.stattools import durbin_watson
+
+    # 보기 2 의 AR(1) 자료(참 rho = 0.8)를 두 순서로 같은 세 가지 수치로 재 본다.
+    def read_three(v, label):
+        i = np.arange(len(v))
+        sl = stats.linregress(i, v)
+        sign = v > 0
+        runs = 1 + (sign[1:] != sign[:-1]).sum()
+        n1, n2 = sign.sum(), (~sign).sum()
+        N = n1 + n2
+        mu_r = 2 * n1 * n2 / N + 1
+        sd_r = np.sqrt(2 * n1 * n2 * (2 * n1 * n2 - N) / (N ** 2 * (N - 1)))
+        print(f"{label}  기울기 p = {sl.pvalue:.4f},  d = {durbin_watson(v):.4f},  "
+              f"런 {runs}개 (기대 {mu_r:.1f}, z = {(runs - mu_r) / sd_r:+.2f})")
+
+    read_three(r, "집단순")
+    read_three(r[np.argsort(df["t"].values)], "수집순")
+    ```
+
+    출력:
+
+    ```
+    집단순  기울기 p = 0.4481,  d = 1.8443,  런 24개 (기대 30.9, z = -1.80)
+    수집순  기울기 p = 0.5023,  d = 0.7927,  런 14개 (기대 30.9, z = -4.41)
+    ```
+
+    **같은 잔차 $60$개인데 순서만 바꾸면 진단이 뒤집힌다.** 측정 순서로 재면 $d = 0.7927$, 런 $14$개로 $z = -4.41$이다. 어느 기준으로도 압도적으로 독립을 기각한다. 그런데 자료프레임 행 순서로 재면 $d = 1.8443$, 런 $24$개로 $z = -1.80$이고, $5\%$ 수준에서 기각하지 못한다. **참 자기상관이 $0.8$인 자료를 "문제 없음"으로 통과시킨다.**
+
+    그림으로도 마찬가지다. 가로축을 행 번호로 두고 그리면 점들이 흩어져 보이고, 수집 순서로 두고 그려야 비로소 점들이 몰려 다니는 것이 보인다.
+
+    기울기 $p$가 두 순서에서 모두 $0.45$ 안팎인 것도 짚어 둘 만하다. **추세 진단은 자기상관을 못 잡는다.** AR(1)은 평균이 일정하고 흔들림만 상관되어 있으므로 직선 기울기에는 흔적을 남기지 않는다. 세 수치가 서로 다른 것을 재고 있다는 뜻이고, 셋을 함께 보아야 한다.
+
+    살펴볼 것:
+
+    - **추세:** 체계적인 증가나 감소는 시간 효과를 시사한다.
+    - **주기:** 주기적인 패턴은 자기상관을 나타낸다.
+    - **군집:** 비슷한 잔차의 무리는 블록 효과를 시사한다.
+
+    그러나 **셋 모두 가로축이 뜻을 가질 때에만 쓸 수 있다.** 실제 연구에서는 측정 시각이나 실험 순서를 따로 기록해 두어야 한다. 기록해 두지 않았다면 이 그림은 그릴 수 있어도 읽을 수 없다. **독립성은 자료를 들여다봐서 확인하는 것이 아니라 설계로 확보하는 것이다.**
 
 ## 독립성이 어긋날 때
 

@@ -12,47 +12,136 @@
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비
+**보기 1.** <span class="diff easy" title="쉬움"></span> 진단에 쓸 모형 준비. 세 집단 각 $n = 20$에 모표준편차를 $1.0,\ 1.3,\ 1.6$으로 다르게 주고 `response ~ C(group)`을 적합한다.
+
+**(1)** 최소제곱 잔차 $e = y - X\hat\beta$가 설계행렬 $X$의 열과 직교함을 보이고, 거기서 **잔차 전체의 합이 $0$**이며 나아가 **집단마다 잔차의 합이 각각 $0$**임을 끌어내시오. 코드로 재면 정확히 $0$이 나오겠는가.
+
+**(2)** 균형 설계에서 합동분산 $s_p^2$을 집단별 잔차 분산 $s_g^2$으로 쓰고, 그것이 `model.mse_resid`와 같음을 확인하시오. 이 쪽의 등분산 검정은 모두 이 세 수에서 나온다.
 
 </div>
 
-```python
-import numpy as np
-import pandas as pd
-from statsmodels.formula.api import ols
+??? success "풀이"
 
-# 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
-# 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
-# (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
-rng = np.random.default_rng(42)
-n = 20
-data = pd.DataFrame({
-    "group": np.repeat(["A", "B", "C"], n),
-    "response": np.concatenate([
-        rng.normal(10.0, 1.0, n),
-        rng.normal(10.8, 1.3, n),
-        rng.normal(12.0, 1.6, n),
-    ]),
-})
-model = ols("response ~ C(group)", data=data).fit()
+    **(1) 해석적으로.** 최소제곱은 $\lVert y - X\beta\rVert^2$을 최소화하므로 정규방정식 $X^\top X\hat\beta = X^\top y$를 만족한다. 옮겨 쓰면
 
-print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
-print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
-```
+    $$
+    X^\top e = X^\top\bigl(y - X\hat\beta\bigr) = 0
+    $$
 
-출력:
+    이다. **잔차는 설계행렬의 모든 열과 직교한다.** 아래는 전부 이 한 식에서 읽는 것이다.
 
-```
-       count    mean    std
-group                      
-A         20   9.967  0.870
-B         20  10.942  1.034
-C         20  12.191  1.145
+    `response ~ C(group)`의 설계행렬은 절편 $\mathbf 1$과 더미 $\mathbf 1_B$, $\mathbf 1_C$ 세 열이다. $X^\top e = 0$의 첫 성분이 바로
 
-F = 23.7708, p = 0.0000
-```
+    $$
+    \mathbf 1^\top e = \sum_{i=1}^{N} e_i = 0
+    $$
 
-표본표준편차가 0.87, 1.03, 1.15로 나왔다. 참값이 1.0, 1.3, 1.6이었는데도 추정값이 이만큼 눌린 것은 집단당 20개로는 표준편차를 정확히 추정하기 어렵기 때문이다. 이 점이 아래 등분산 검정의 결과를 읽을 때 중요하다.
+    이고, 둘째와 셋째 성분은 $\sum_{i \in B} e_i = 0$, $\sum_{i \in C} e_i = 0$이다. 그러면 집단 A의 합은 뺄셈으로 나온다.
+
+    $$
+    \sum_{i \in A} e_i = \sum_{i=1}^{N} e_i - \sum_{i \in B} e_i - \sum_{i \in C} e_i = 0
+    $$
+
+    **집단마다 잔차의 합이 각각 $0$이다.** 세 열이 지시벡터 셋과 같은 공간을 펼치기 때문이며($\mathbf 1 = \mathbf 1_A + \mathbf 1_B + \mathbf 1_C$), 직접 보아도 같다. 적합값이 집단평균 $\bar y_g$이므로 $\sum_{i \in g}(y_i - \bar y_g) = 0$이다.
+
+    **코드로 재면 정확히 $0$이 나오지 않는다.** 위 등식은 실수에서 성립하는 것이고, 컴퓨터는 집단평균을 나눗셈으로 구한 뒤 $20$개를 더한다. 그 과정에서 반올림이 쌓이므로 **기계 정밀도 수준의 찌꺼기**가 남는다. 값의 크기가 $10$ 정도이고 배정밀도의 상대 오차가 $2^{-52} \approx 2.2 \times 10^{-16}$이니 $10^{-15}$에서 $10^{-13}$ 사이의 수를 기대해야 한다. 이것을 미리 적어 두는 것이 이 확인의 요점이다. **$0$이 아니라고 놀라서는 안 되고, $10^{-5}$ 같은 수가 나오면 그때 놀라야 한다.**
+
+    **(2) 해석적으로.** 집단 내 제곱합은 집단별 잔차 분산으로 쓰면 $SSW = \sum_g (n_g - 1)s_g^2$이고 합동분산은 그것을 자유도로 나눈 것이다.
+
+    $$
+    s_p^2 = \frac{SSW}{N-k} = \frac{\sum_g (n_g-1)s_g^2}{N-k}
+    $$
+
+    균형 설계에서는 $n_g = n$이 모두 같아 가중값이 사라진다.
+
+    $$
+    s_p^2 = \frac{(n-1)\sum_g s_g^2}{k(n-1)} = \frac{1}{k}\sum_{g=1}^{k} s_g^2
+    $$
+
+    곧 **집단별 분산의 산술평균**이다. $F$-검정의 분모가 이것이고, 아래 Bartlett과 Levene도 이 세 수를 서로 다른 방식으로 비교하는 것이다.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from statsmodels.formula.api import ols
+
+    # 이 페이지의 모든 진단은 아래 모형 하나를 놓고 수행한다.
+    # 집단마다 표준편차를 1.0, 1.3, 1.6으로 다르게 주어 진단이 무엇을 잡아내는지
+    # (그리고 무엇을 못 잡아내는지) 볼 수 있게 했다.
+    rng = np.random.default_rng(42)
+    n = 20
+    data = pd.DataFrame({
+        "group": np.repeat(["A", "B", "C"], n),
+        "response": np.concatenate([
+            rng.normal(10.0, 1.0, n),
+            rng.normal(10.8, 1.3, n),
+            rng.normal(12.0, 1.6, n),
+        ]),
+    })
+    model = ols("response ~ C(group)", data=data).fit()
+
+    print(data.groupby("group").response.agg(["count", "mean", "std"]).round(3))
+    print(f"\nF = {model.fvalue:.4f}, p = {model.f_pvalue:.4f}")
+
+    e = model.resid
+    print(f"\n잔차 전체의 합 = {e.sum():+.3e}")
+    print("집단별 잔차 합")
+    for g, v in e.groupby(data["group"]):
+        print(f"  {g}: {v.sum():+.3e}")
+
+    # 설계행렬의 세 열(절편, B 더미, C 더미)에 잔차를 직접 내적해 본다.
+    X = model.model.exog
+    print("\n설계행렬 열이름:", model.model.exog_names)
+    print("X^T e        =", np.array2string(X.T @ e.values, precision=3))
+
+    # 이 쪽에서 쓸 양: 집단별 잔차 분산과 그 합동값
+    s2 = e.groupby(data["group"]).var(ddof=1)
+    print("\n집단별 잔차 분산 s_g^2")
+    print(s2.round(6).to_string())
+    print(f"\n합동분산 (s_A^2+s_B^2+s_C^2)/3 = {s2.mean():.10f}")
+    print(f"model.mse_resid               = {model.mse_resid:.10f}")
+    print(f"분산의 최대/최소 = {s2.max() / s2.min():.4f},  "
+          f"표준편차의 최대/최소 = {np.sqrt(s2.max() / s2.min()):.4f}")
+    ```
+
+    출력:
+
+    ```
+           count    mean    std
+    group                      
+    A         20   9.967  0.870
+    B         20  10.942  1.034
+    C         20  12.191  1.145
+
+    F = 23.7708, p = 0.0000
+
+    잔차 전체의 합 = -2.469e-13
+    집단별 잔차 합
+      A: -7.105e-14
+      B: -5.329e-15
+      C: -1.705e-13
+
+    설계행렬 열이름: ['Intercept', 'C(group)[T.B]', 'C(group)[T.C]']
+    X^T e        = [-2.469e-13 -5.329e-15 -1.705e-13]
+
+    집단별 잔차 분산 s_g^2
+    group
+    A    0.757209
+    B    1.068200
+    C    1.311068
+
+    합동분산 (s_A^2+s_B^2+s_C^2)/3 = 1.0454926260
+    model.mse_resid               = 1.0454926260
+    분산의 최대/최소 = 1.7314,  표준편차의 최대/최소 = 1.3158
+    ```
+
+    **(1)이 예측한 대로다.** 잔차 전체의 합이 $-2.469 \times 10^{-13}$, 집단별 합이 $-7.1\times 10^{-14}$, $-5.3\times 10^{-15}$, $-1.7\times 10^{-13}$이다. 모두 **기계 정밀도의 찌꺼기**이고 수학적으로는 $0$이다. $X^\top e$의 세 성분이 전체 합, B의 합, C의 합과 글자 그대로 같은 수인 것도 확인된다. 절편 열이 전체 합을, 더미 두 열이 각 집단의 합을 재고 있다는 유도가 그대로 보인다.
+
+    **(2)도 맞는다.** 세 분산의 평균이 $1.0454926260$이고 `model.mse_resid`가 같은 수다. 균형 설계에서 합동분산이 단순평균이라는 유도가 소수 열째 자리까지 확인된다.
+
+    남은 것은 이 세 수를 읽는 일이다. 표본표준편차가 $0.870,\ 1.034,\ 1.145$로 나왔다. 참값이 $1.0,\ 1.3,\ 1.6$이었으니 **참 비는 $1.6$인데 관측된 비는 $1.3158$로 눌렸다.** 집단당 $20$개로는 표준편차를 정확히 추정할 수 없기 때문이며(정규성 쪽 보기 1에서 $\operatorname{SD}(S)/\sigma = 16.1\%$로 재어 두었다), 아래의 Levene과 Bartlett이 이 자료의 분산 차이를 잡아내지 못하는 까닭이 바로 이 눌림이다. **검정 결과를 읽기 전에 세 수가 얼마나 흔들리는지를 먼저 알아야 한다.**
 
 ## 확인 방법
 
@@ -64,34 +153,131 @@ Levene 검정은 모분산이 집단 사이에서 같다는 귀무가설을 평�
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Levene 검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> Levene 검정. 보기 1의 모형에 `scipy.stats.levene`을 돌린다.
+
+**(1)** `levene`이 실제로 하는 계산은 무엇인가. 집단 중위수 $\tilde y_g$에 대한 절대편차 $z_{gi} = \lvert y_{gi} - \tilde y_g \rvert$에 **일원배치 $F$-검정을 돌리는 것**임을 `scipy.stats.f_oneway`로 확인하시오. 아울러 정규모형에서 $E\lvert Y - \mu\rvert$를 $\sigma$로 쓰고, 그래서 분산 비교가 평균 비교로 바뀌는 까닭을 밝히시오.
+
+**(2)** 중심을 중위수로 잡는 것이 왜 중요한가. 등분산이 **참**인 자료를 대칭·치우침·심한 치우침 세 분포에서 만들어 `center='median'`과 `center='mean'`의 기각률을 재고 명목수준 $0.05$와 비교하시오.
 
 </div>
 
-```python
-from scipy.stats import levene
+??? success "풀이"
 
-group1 = data[data['group'] == 'A']['response']
-group2 = data[data['group'] == 'B']['response']
-group3 = data[data['group'] == 'C']['response']
+    **(1) 해석적으로.** Levene 검정은 새로운 분포를 쓰는 검정이 아니다. 자료를 한 번 바꾸고 **그 바뀐 자료에 보통의 분산분석을 돌리는 것**이 전부다. 집단 $g$의 중위수를 $\tilde y_g$라 하고
 
-# scipy의 기본값은 center='median'(Brown-Forsythe 변형)이다.
-# 원래의 Levene(1960)은 평균을 쓰지만 이상점에 약해 기본값이 중앙값으로 바뀌었다.
-stat, p_value = levene(group1, group2, group3)
-print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
-```
+    $$
+    z_{gi} = \lvert y_{gi} - \tilde y_g \rvert
+    $$
 
-출력:
+    로 두면, Levene 통계량은 $z$ 를 자료로 한 일원배치 $F = MSB_z/MSW_z$와 **같은 수**다. 그러므로 자유도도 $(k-1,\ N-k)$로 그대로다.
 
-```
-Levene's Test: F = 0.4091, p-value = 0.6662
-```
+    왜 이것이 분산 검정이 되는가. $Y \sim N(\mu, \sigma^2)$이면 반절정규분포의 평균으로
 
-$p = 0.67$로 등분산을 기각하지 못한다. 그런데 이 자료는 표준편차를 1.0, 1.3, 1.6으로 **실제로 다르게** 만든 것이다.
+    $$
+    E\lvert Y - \mu \rvert = \sigma\sqrt{\frac{2}{\pi}} \approx 0.7979\,\sigma
+    $$
 
-검정이 틀린 것이 아니라 검정력이 부족한 것이다. 집단당 20개로는 1.6배의 표준편차 차이도 잡아내지 못한다. 등분산 검정이 기각하지 않았다는 사실을 "분산이 같다"는 근거로 삼으면 안 되는 이유가 여기 있다.
+    이다. **절대편차의 기댓값이 $\sigma$에 정비례한다.** 따라서 "$\sigma_g$가 집단마다 같은가"라는 물음이 "$z$의 평균이 집단마다 같은가"로 바뀌고, 뒤쪽은 분산분석이 이미 답할 수 있는 물음이다. 중심을 중위수로 바꾸면 비례상수가 분포에 따라 조금 달라지지만, **같은 분포 모양에서는 세 집단에 같은 상수가 걸리므로** 귀무가설이 보존된다.
 
-결과가 유의하면($p < 0.05$) 등분산 가정이 어긋났음을 나타낸다. Levene 검정과 관련된 로버스트 분산 검정의 자세한 내용은 [로버스트 분산 검정](../../ch15/robust_tests/levene.md)을 보라.
+    **(2) 이론이 예측하는 값.** 등분산이 참인 자료에서 명목수준 $0.05$ 검정의 기각률은 $0.05$여야 한다. 그것뿐이다. $0.05$에서 얼마나 멀어지는지가 그 검정이 그 자료에서 쓸 만한지를 말해 준다.
+
+    **수치적으로.** 먼저 (1)의 항등식을 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy.stats import f_oneway, levene
+
+    group1 = data[data['group'] == 'A']['response']
+    group2 = data[data['group'] == 'B']['response']
+    group3 = data[data['group'] == 'C']['response']
+
+    # scipy의 기본값은 center='median'(Brown-Forsythe 변형)이다.
+    # 원래의 Levene(1960)은 평균을 쓰지만 이상점에 약해 기본값이 중앙값으로 바뀌었다.
+    stat, p_value = levene(group1, group2, group3)
+    print(f"Levene's Test: F = {stat:.4f}, p-value = {p_value:.4f}")
+
+    # Levene 검정은 z = |y - 집단중위수| 에 돌린 일원배치 F-검정과 같은 것이다.
+    zs = [np.abs(g - np.median(g)) for g in (group1, group2, group3)]
+    F_hand, p_hand = f_oneway(*zs)
+    print(f"|y - 중위수| 의 F-검정: F = {F_hand:.4f}, p-value = {p_hand:.4f}")
+    print(f"두 F 의 차이: {abs(F_hand - stat):.3e}")
+
+    print(f"\n{'z 평균':>8s} {'0.7979 s':>9s} {'s':>8s}  집단")
+    for name, g, z in zip("ABC", (group1, group2, group3), zs):
+        s = g.std(ddof=1)
+        print(f"{z.mean():8.4f} {np.sqrt(2 / np.pi) * s:9.4f} {s:8.4f}  {name}")
+    ```
+
+    출력:
+
+    ```
+    Levene's Test: F = 0.4091, p-value = 0.6662
+    |y - 중위수| 의 F-검정: F = 0.4091, p-value = 0.6662
+    두 F 의 차이: 5.551e-17
+
+        z 평균  0.7979 s        s  집단
+      0.6952    0.6943   0.8702  A
+      0.8180    0.8246   1.0335  B
+      0.8773    0.9136   1.1450  C
+    ```
+
+    **항등식이 맞는다.** 두 $F$ 의 차이가 $5.55 \times 10^{-17}$, 곧 배정밀도의 마지막 비트다. `levene`은 `f_oneway`를 감싼 것이고 숨은 계산이 따로 없다.
+
+    $E\lvert Y-\mu\rvert = 0.7979\sigma$도 확인된다. 집단 A에서 $z$의 평균이 $0.6952$인데 $0.7979 \times 0.8702 = 0.6943$이다. B는 $0.8180$ 대 $0.8246$, C는 $0.8773$ 대 $0.9136$으로 조금 벌어지는데, 식은 **평균**으로부터의 편차를 말하는데 코드는 **중위수**로부터 재기 때문이고 $n = 20$의 표집 변동도 섞여 있다. 비례 관계 자체는 그대로 보인다.
+
+    이 자료에서는 $p = 0.6662$로 등분산을 기각하지 못한다. **그런데 이 자료는 표준편차를 $1.0,\ 1.3,\ 1.6$으로 실제로 다르게 만든 것이다.** 검정이 틀린 것이 아니라 검정력이 부족하다. 위 표의 $z$ 평균이 $0.6952,\ 0.8180,\ 0.8773$인데 $z$ 안의 흩어짐이 그만큼 크므로 $F = 0.41$밖에 되지 않는다. 보기 1에서 본 대로 $s$ 자체가 $\pm 16\%$로 흔들리니 당연한 결과다. **등분산 검정이 기각하지 않았다는 사실을 "분산이 같다"의 근거로 삼으면 안 되는 이유가 여기 있다.**
+
+    이제 (2)의 모의실험이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 등분산이 **참**인 자료를 만들어 기각률을 잰다. 이론값은 명목수준 0.05 다.
+    rng = np.random.default_rng(2026)
+    k, n, B = 3, 30, 2000
+    mc = np.sqrt(0.05 * 0.95 / B)      # 몬테카를로 오차
+
+    cases = [
+        ("정규 (대칭)", lambda: rng.normal(0, 1, n)),
+        ("지수 (치우침)", lambda: rng.exponential(1.0, n)),
+        ("로그정규 (심한 치우침)", lambda: rng.lognormal(0, 1, n)),
+    ]
+
+    print(f"집단 {k}개, 각 n = {n}, 반복 {B}회, 명목수준 0.05, "
+          f"몬테카를로 오차 {mc:.4f}")
+    print(f"\n{'median':>8s} {'mean':>8s} {'왜도':>6s}  자료 분포")
+    for name, draw in cases:
+        cm = ca = 0
+        skew = []
+        for _ in range(B):
+            gs = [draw() for _ in range(k)]
+            cm += stats.levene(*gs, center="median").pvalue < 0.05
+            ca += stats.levene(*gs, center="mean").pvalue < 0.05
+            skew.append(stats.skew(gs[0]))
+        print(f"{cm / B:8.4f} {ca / B:8.4f} {np.mean(skew):6.2f}  {name}")
+    ```
+
+    출력:
+
+    ```
+    집단 3개, 각 n = 30, 반복 2000회, 명목수준 0.05, 몬테카를로 오차 0.0049
+
+      median     mean     왜도  자료 분포
+      0.0370   0.0460  -0.01  정규 (대칭)
+      0.0465   0.1765   1.47  지수 (치우침)
+      0.0340   0.2505   2.19  로그정규 (심한 치우침)
+    ```
+
+    **중위수 중심은 세 분포 모두에서 버틴다.** $0.0370$, $0.0465$, $0.0340$으로 명목 $0.05$ 둘레에 머물고, 약간 보수적인 쪽으로 기운다. 몬테카를로 오차가 $0.0049$이니 세 수 모두 $0.05$에서 두세 오차 안쪽이며, 어긋나는 방향이 **덜 기각하는 쪽**이다. 제1종 오류 쪽으로는 안전하다.
+
+    **평균 중심은 치우침에서 무너진다.** 지수분포에서 $0.1765$, 로그정규에서 $0.2505$다. 분산이 모두 같은 자료인데 **네 번에 한 번 "분산이 다르다"고 선언한다.** 명목의 다섯 배이고 몬테카를로 오차의 사십 배가 넘는 어긋남이다.
+
+    까닭은 간단하다. 치우친 분포에서 표본평균은 긴 꼬리 쪽으로 끌려가고, 그 끌림의 크기가 표본마다 다르다. $\lvert y_{gi} - \bar y_g\rvert$는 그 끌림까지 함께 재므로 **꼬리의 모양을 분산 차이로 오해한다.** 중위수는 꼬리에 끌려가지 않으므로 이 오해가 생기지 않는다.
+
+    **대칭 분포에서는 두 중심이 거의 같다.** 정규에서 $0.0370$ 대 $0.0460$으로 둘 다 $0.05$ 근처다. 그러므로 **"중위수 중심이 언제나 평균 중심보다 견딘다"고 말하면 과장이다.** 중위수가 버는 것은 **치우침에 대한 견딤성**이고, 대칭 분포에서는 평균 중심도 쓸 수 있다. 다만 실제 자료가 대칭인지 미리 알 수 없으므로 기본값을 중위수로 두는 것이 옳다.
+
+    결과가 유의하면($p < 0.05$) 등분산 가정이 어긋났음을 나타낸다. Levene 검정과 관련된 로버스트 분산 검정의 자세한 내용은 [로버스트 분산 검정](../../ch15/robust_tests/levene.md)을 보라.
 
 ### Bartlett 검정
 
@@ -99,28 +285,139 @@ Bartlett 검정은 분산의 동질성에 대한 또 다른 검정이다. 자료
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Bartlett 검정
+**보기 3.** <span class="diff easy" title="쉬움"></span> Bartlett 검정. Levene과 달리 이 검정은 **닫힌 꼴**이 있다.
+
+**(1)** Bartlett 통계량은 합동분산 $s_p^2$과 보정계수 $C$로
+
+$$
+T = \frac{1}{C}\left[(N-k)\ln s_p^2 - \sum_{g=1}^{k}(n_g-1)\ln s_g^2\right],
+\qquad
+C = 1 + \frac{1}{3(k-1)}\left[\sum_{g=1}^{k}\frac{1}{n_g-1} - \frac{1}{N-k}\right]
+$$
+
+이고 $H_0$ 아래에서 근사적으로 $\chi^2_{k-1}$을 따른다. 이 식을 손으로 계산해 `scipy.stats.bartlett`이 주는 값과 맞추시오. 또 $T \ge 0$이고 $T = 0$이 되는 때가 언제인지 말하시오.
+
+**(2)** Bartlett은 정규성을 깔고 있다. 분산이 **모두 같은** 자료를 정규분포와 $t_3$에서 각각 만들어 Bartlett과 Levene의 기각률을 재고, 명목수준 $0.05$와 비교하시오.
 
 </div>
 
-```python
-from scipy.stats import bartlett
+??? success "풀이"
 
-# Bartlett 검정은 Levene 보다 검정력이 높지만 정규성을 전제한다.
-# 자료가 정규에서 조금만 벗어나도 등분산을 지나치게 자주 기각한다.
-stat, p_value = bartlett(group1, group2, group3)
-print(f"Bartlett's Test: chi2 = {stat:.4f}, p-value = {p_value:.4f}")
-```
+    **(1) 해석적으로.** 식의 뼈대는 산술평균과 기하평균의 비교다. 균형 설계($n_g = n$)에서 $N - k = k(n-1)$이므로 괄호 안은
 
-출력:
+    $$
+    (n-1)\left[k\ln s_p^2 - \sum_g \ln s_g^2\right]
+    = k(n-1)\ln\frac{s_p^2}{\bigl(\prod_g s_g^2\bigr)^{1/k}}
+    $$
 
-```
-Bartlett's Test: chi2 = 1.3880, p-value = 0.4996
-```
+    이 된다. 분자는 **집단분산의 산술평균**(보기 1에서 본 $s_p^2$)이고 분모는 **기하평균**이다. 산술평균-기하평균 부등식이 $s_p^2 \ge (\prod s_g^2)^{1/k}$를 보장하므로 로그가 $0$ 이상이고, 따라서 $T \ge 0$이다. 등호는 **$s_1^2 = \cdots = s_k^2$일 때에만** 성립한다. 곧 $T = 0$은 표본분산이 전부 똑같다는 뜻이고, 그 외에는 어느 방향으로 흩어지든 $T$가 커진다. **분산의 불일치를 산술평균과 기하평균의 간격으로 재는 것**이 Bartlett 통계량이다.
 
-Bartlett도 기각하지 못한다. 자료가 정규분포에서 나왔으므로 Bartlett이 Levene보다 유리한 상황인데도 그렇다. 표본크기가 문제다.
+    보정계수 $C > 1$은 $T$의 분포를 $\chi^2_{k-1}$에 더 가깝게 맞추는 Bartlett 자신의 보정이다. $n_g$가 커지면 $C \to 1$이다.
 
-Bartlett 검정의 전체 논의는 [Bartlett 검정](../../ch15/bartlett_test/bartlett_test.md)을 보라.
+    **(2) 이론이 예측하는 값.** 분산이 모두 같은 자료에서 명목 $0.05$ 검정의 기각률은 $0.05$다. $t_3$은 자유도 $3$이라 분산이 $3/(3-2) = 3$으로 유한하고 **대칭**이다. 세 집단에 같은 분포를 주었으니 등분산 귀무가설은 참이며, 정규와 다른 것은 **꼬리 두께뿐**이다.
+
+    **수치적으로.** 먼저 닫힌 꼴을 맞춘다.
+
+    ```python
+    import numpy as np
+    from scipy.stats import bartlett, chi2
+
+    # Bartlett 검정은 Levene 보다 검정력이 높지만 정규성을 전제한다.
+    # 자료가 정규에서 조금만 벗어나도 등분산을 지나치게 자주 기각한다.
+    stat, p_value = bartlett(group1, group2, group3)
+    print(f"Bartlett's Test: chi2 = {stat:.4f}, p-value = {p_value:.4f}")
+
+    # 닫힌 꼴을 손으로 계산해 맞춰 본다.
+    gs = [group1.values, group2.values, group3.values]
+    ns = np.array([len(g) for g in gs])
+    s2 = np.array([g.var(ddof=1) for g in gs])
+    k, N = len(gs), ns.sum()
+    sp2 = ((ns - 1) * s2).sum() / (N - k)
+    num = (N - k) * np.log(sp2) - ((ns - 1) * np.log(s2)).sum()
+    corr = 1 + (1 / (3 * (k - 1))) * ((1 / (ns - 1)).sum() - 1 / (N - k))
+    T = num / corr
+    print(f"\ns_g^2        = {np.array2string(s2, precision=6)}")
+    print(f"s_p^2        = {sp2:.10f}   (model.mse_resid = {model.mse_resid:.10f})")
+    print(f"분자 M       = {num:.10f}")
+    print(f"보정계수 C   = {corr:.10f}")
+    print(f"T = M / C    = {T:.10f}")
+    print(f"p = P(chi2_2 > T) = {chi2.sf(T, k - 1):.10f}")
+    print(f"scipy 와의 차이: {abs(T - stat):.3e}")
+    ```
+
+    출력:
+
+    ```
+    Bartlett's Test: chi2 = 1.3880, p-value = 0.4996
+
+    s_g^2        = [0.757209 1.0682   1.311068]
+    s_p^2        = 1.0454926260   (model.mse_resid = 1.0454926260)
+    분자 M       = 1.4204884460
+    보정계수 C   = 1.0233918129
+    T = M / C    = 1.3880201386
+    p = P(chi2_2 > T) = 0.4995687417
+    scipy 와의 차이: 0.000e+00
+    ```
+
+    **손계산이 `scipy.stats.bartlett`와 한 비트까지 같다.** 차이가 $0$이다. 보정계수가 $C = 1.0234$로 $1$에 가까운 것은 $n_g - 1 = 19$가 충분히 크기 때문이고, 보정 전 $M = 1.4205$가 보정 후 $T = 1.3880$으로 $2.3\%$ 줄었다.
+
+    $s_p^2 = 1.0454926260$이 보기 1의 `model.mse_resid`와 같은 수인 것도 확인된다. **Bartlett이 쓰는 재료는 보기 1에서 꺼내 둔 세 분산 하나뿐**이다.
+
+    $p = 0.4996$으로 Bartlett도 기각하지 못한다. 자료가 정규분포에서 나왔으니 Bartlett이 Levene보다 유리한 상황인데도 그렇다. 표본크기가 문제다.
+
+    이제 (2)의 모의실험이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 분산이 **모두 같은** 자료를 만들어 기각률을 잰다. 이론값은 0.05 다.
+    rng = np.random.default_rng(2026)
+    k, n, B = 3, 30, 2000
+    mc = np.sqrt(0.05 * 0.95 / B)
+
+    # t_3 는 분산이 3/(3-2) = 3 이다. 세 집단에 같은 분포를 주었으니
+    # 등분산 귀무가설은 참이다. 다른 것은 꼬리 두께뿐이다.
+    cases = [
+        ("정규 — Bartlett 의 가정이 성립", lambda: rng.normal(0, 1, n)),
+        ("t_3 — 대칭이지만 꼬리가 두껍다", lambda: rng.standard_t(3, n)),
+    ]
+
+    print(f"집단 {k}개, 각 n = {n}, 반복 {B}회, 명목수준 0.05, "
+          f"몬테카를로 오차 {mc:.4f}")
+    print(f"\n{'Bartlett':>9s} {'Levene':>8s} {'초과첨도':>8s}  자료 분포")
+    for name, draw in cases:
+        cb = cl = 0
+        kurt = []
+        for _ in range(B):
+            gs = [draw() for _ in range(k)]
+            cb += stats.bartlett(*gs).pvalue < 0.05
+            cl += stats.levene(*gs).pvalue < 0.05
+            kurt.append(stats.kurtosis(gs[0]))
+        print(f"{cb / B:9.4f} {cl / B:8.4f} {np.mean(kurt):8.2f}  {name}")
+    ```
+
+    출력:
+
+    ```
+    집단 3개, 각 n = 30, 반복 2000회, 명목수준 0.05, 몬테카를로 오차 0.0049
+
+     Bartlett   Levene     초과첨도  자료 분포
+       0.0435   0.0370    -0.22  정규 — Bartlett 의 가정이 성립
+       0.4720   0.0440     2.60  t_3 — 대칭이지만 꼬리가 두껍다
+    ```
+
+    **정규에서는 Bartlett이 제자리에 있다.** 기각률 $0.0435$로 명목 $0.05$와 몬테카를로 오차 $0.0049$ 안에서 맞는다. 유도한 $\chi^2_{k-1}$ 근사가 $n = 30$에서 이미 정확하다는 뜻이다.
+
+    **$t_3$에서는 $0.4720$으로 간다.** 분산이 모두 같은 자료인데 **명목 $5\%$ 검정이 열 번에 네 번 넘게 기각한다.** 명목의 아홉 배다. 꼬리가 두꺼울 뿐 치우치지도 않았는데 이렇게 된다.
+
+    까닭은 $T$의 유도가 $s_g^2$의 분포를 정규성에서 나온 $\chi^2$로 놓았다는 데 있다. 꼬리가 두꺼우면 $s_g^2$의 분산이 $\chi^2$ 근사보다 훨씬 커서(초과첨도 $2.60$이 바로 그 크기다) 세 분산이 실제보다 많이 흩어지고, 산술평균과 기하평균의 간격이 그만큼 벌어진다. **$T$는 그 벌어짐을 전부 "분산이 다르다"로 읽는다.**
+
+    **Levene은 같은 자료에서 $0.0370$과 $0.0440$으로 버틴다.** 정규든 $t_3$든 거의 움직이지 않는다. 이것이 실무에서 Levene을 먼저 쓰는 이유다.
+
+    정리하면 **Bartlett은 정규성이 확실할 때에만 쓰는 검정**이다. 그런데 정규성이 확실한지를 알려면 정규성 검정을 통과해야 하고, 그 검정도 $n$이 작으면 어지간한 벗어남을 못 잡는다(정규성 쪽 보기 3). **정규성을 확인한 뒤 Bartlett을 쓴다는 2단계 절차가 실제로는 믿을 만하지 않다**는 것이 이 표의 실용적 함의다.
+
+    Bartlett 검정의 전체 논의는 [Bartlett 검정](../../ch15/bartlett_test/bartlett_test.md)을 보라.
 
 ### 두 집단의 등분산 F-검정
 
@@ -155,33 +452,88 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 잔차 대 적합값 그림
+**보기 4.** <span class="diff easy" title="쉬움"></span> 잔차 대 적합값 그림. 보기 1의 모형으로 그린다.
+
+**(1)** 그림을 그리고 무엇을 읽을 수 있는지 말하시오. "오른쪽이 더 넓게 퍼졌다"는 판단을 **수치로** 뒷받침하시오.
+
+**(2)** 이 그림이 **가리는 것**은 무엇인가. 일원배치에서 이 그림으로 판정할 수 없는 것을 적으시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
+??? success "풀이"
 
-# 일원배치 분산분석에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
-# 회귀분석의 잔차 그림처럼 연속적으로 퍼지지 않는다.
-plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
-plt.axhline(y=0, color='r', linestyle='--')
-plt.xlabel("Fitted Values")
-plt.ylabel("Residuals")
-plt.title("Residuals vs. Fitted Values")
-plt.show()
-```
+    이 보기에는 유도할 식이 없다. 그림에서 무엇을 읽어야 하는지가 전부다. 그러므로 읽히는 것을 수로 적는 일에 집중한다.
 
-![잔차 대 적합값](./img/homoscedasticity_116.png)
+    **(1) 그림이 말하는 것.**
 
-세로줄 세 개가 각 집단이다. 오른쪽 줄(집단 C)이 왼쪽 줄(집단 A)보다 위아래로 넓게 퍼져 있다. 형식적 검정이 놓친 분산 차이가 그림에서는 보인다.
+    ```python
+    import matplotlib.pyplot as plt
+    import pandas as pd
 
-이것이 진단 그림을 검정과 함께 보아야 하는 이유다. 검정은 "이 크기의 표본으로 확신할 수 있는가"를 답하지만, 그림은 "실제로 어떤 모양인가"를 보여준다.
+    # 그림에서 읽으려는 것을 먼저 수로 적어 둔다.
+    e, g = model.resid, data["group"]
+    tab = pd.DataFrame({
+        "적합값": model.fittedvalues.groupby(g).first().round(4),
+        "잔차 s": e.groupby(g).std(ddof=1).round(4),
+        "최소": e.groupby(g).min().round(4),
+        "최대": e.groupby(g).max().round(4),
+    })
+    tab["범위"] = (tab["최대"] - tab["최소"]).round(4)
+    print(tab.to_string())
 
-살펴볼 것:
+    sd = e.groupby(g).std(ddof=1)
+    print(f"\n서로 다른 적합값이 {model.fittedvalues.nunique()}개뿐이다 (세로 띠 세 줄)")
+    print(f"잔차 s 의 최대/최소 = {sd.max() / sd.min():.4f}   (모표준편차의 참 비는 1.6)")
+    print(f"범위의 최대/최소    = {tab['범위'].max() / tab['범위'].min():.4f}")
 
-- **깔때기 모양:** 넓어지거나 좁아지는 패턴은 이분산을 나타낸다.
-- **일정한 띠:** 모든 적합값에서 잔차가 0을 중심으로 고르게 흩어져 있으면 등분산성을 확인해 준다.
+    # 일원배치 분산분석에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
+    # 회귀분석의 잔차 그림처럼 연속적으로 퍼지지 않는다.
+    plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
+    plt.axhline(y=0, color='r', linestyle='--')
+    plt.xlabel("Fitted Values")
+    plt.ylabel("Residuals")
+    plt.title("Residuals vs. Fitted Values")
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+               적합값    잔차 s      최소      최대      범위
+    group                                         
+    A       9.9671  0.8702 -1.9181  1.1602  3.0783
+    B      10.9423  1.0335 -1.2345  2.6418  3.8763
+    C      12.1909  1.1450 -2.5224  2.2010  4.7234
+
+    서로 다른 적합값이 3개뿐이다 (세로 띠 세 줄)
+    잔차 s 의 최대/최소 = 1.3158   (모표준편차의 참 비는 1.6)
+    범위의 최대/최소    = 1.5344
+    ```
+
+    ![잔차 대 적합값](./img/homoscedasticity_116.png)
+
+    **세로줄 세 개가 각 집단이고, 가로 위치는 집단평균 $9.9671$, $10.9423$, $12.1909$다.** 적합값이 세 값뿐이므로 점들이 세 줄에 몰린다. 일원배치에서는 늘 이렇게 되고, 회귀의 잔차 그림처럼 가로로 퍼지지 않는다.
+
+    **"오른쪽이 넓다"의 정량적 내용은 두 수다.** 잔차 표준편차가 $0.8702 \to 1.0335 \to 1.1450$으로 단조증가하며 **최대/최소 $= 1.3158$**이고, 눈에 더 직접 보이는 세로 길이, 곧 잔차의 범위는 $3.0783 \to 3.8763 \to 4.7234$로 **최대/최소 $= 1.5344$**다. 보기 2와 보기 3의 검정이 놓친 분산 차이가 그림에서는 보인다. 다만 보이는 비가 참 비 $1.6$보다 작다는 것도 함께 적어 두어야 한다.
+
+    범위의 비가 표준편차의 비보다 큰 것은 **범위가 최댓값에 끌려가는 통계량**이기 때문이다. 집단 C의 최소 잔차 $-2.5224$ 하나가 범위를 끌어올렸다. 그림에서 세로 길이로 흩어짐을 비교하면 이렇게 과장된다.
+
+    이것이 진단 그림을 검정과 함께 보아야 하는 이유다. 검정은 "이 크기의 표본으로 확신할 수 있는가"를 답하지만, 그림은 "실제로 어떤 모양인가"를 보여준다.
+
+    살펴볼 것:
+
+    - **깔때기 모양:** 넓어지거나 좁아지는 패턴은 이분산을 나타낸다.
+    - **일정한 띠:** 모든 적합값에서 잔차가 0을 중심으로 고르게 흩어져 있으면 등분산성을 확인해 준다.
+
+    **(2) 그림이 가리는 것.** 셋이다.
+
+    **첫째, 집단이 적으면 깔때기를 판정할 수 없다.** 깔때기 모양은 "적합값이 커질수록 흩어짐이 커진다"는 **추세**인데, 이 그림에는 점이 세 줄뿐이므로 추세를 재려면 점 세 개에 직선을 맞추는 셈이다. 게다가 가로축의 순서는 **집단평균의 순서**이고 그것은 분산과 아무 관계가 없다. 이 자료에서 하필 평균과 표준편차가 같은 방향으로 커졌기 때문에 깔때기처럼 보이는 것이다. 집단 C의 평균을 $12.0$ 대신 $9.0$으로 주었다면 **잔차는 하나도 바뀌지 않는데 그림은 오른쪽이 좁아지는 모양**이 된다. 세 줄짜리 그림에서 읽은 "깔때기"는 그만큼 믿을 것이 아니고, 보기 1의 표에 적은 $s_g$ 세 수를 보는 것이 낫다.
+
+    **둘째, 순서를 지운다.** 가로축이 적합값이므로 같은 집단의 $20$개는 한 줄에 겹쳐 쌓인다. 잔차가 수집 순서로 상관되어 있어도(독립성 위반) 이 그림에는 전혀 나타나지 않는다. 독립성 쪽의 순서 대 잔차 그림이 따로 필요한 까닭이다.
+
+    **셋째, 분포 모양을 지운다.** 한 줄 안의 $20$개가 정규인지 두꺼운 꼬리인지, 이봉인지는 수직으로 겹친 점들에서 읽히지 않는다. 정규성 쪽의 Q-Q 그림이 따로 필요한 까닭이다.
+
+    **세 그림은 같은 잔차를 보지만 각각 다른 축을 버린다.** 하나로 셋을 대신할 수 없다.
 
 ## 등분산성이 어긋날 때
 

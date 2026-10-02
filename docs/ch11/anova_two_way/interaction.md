@@ -269,89 +269,264 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> Tukey HSD로 하는 사후검정
+**보기 2.** <span class="diff easy" title="쉬움"></span> Tukey HSD로 하는 사후검정. 보기 1의 ToothGrowth 자료를 쓴다.
+
+**(1)** Tukey HSD는 **스튜던트화 범위 분포**를 쓴다. 균형설계에서 집단당 $m$개일 때
+
+$$
+q_{ij} = \frac{\lvert \bar y_i - \bar y_j \rvert}{\sqrt{MSE/m}},
+\qquad
+\text{신뢰구간} = (\bar y_i - \bar y_j) \pm q_\alpha(k,\ N-k)\sqrt{MSE/m}
+$$
+
+임을 적고, 왜 이것이 **집단별오류율(FWER)을 정확히** $\alpha$로 맞추는지 설명하시오. 그리고 `dose` 주효과 표의 세 줄을 손계산으로 맞추시오.
+
+**(2)** Tukey를 쓰려면 $F$-검정이 먼저 유의해야 하는가. "보호된 LSD"($F$가 유의할 때만 짝비교)와 나란히, **완전 영가설**(모든 평균이 같음)과 **부분 영가설**(한 집단만 멀리 떨어짐)에서 FWER를 재어 답하시오.
 
 </div>
 
-```python
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
+??? success "풀이"
 
-# 1단계: 이원배치 분산분석
-url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
-df = pd.read_csv(url, usecols=[1, 2, 3])
-model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
-anova_results = anova_lm(model)
-print(anova_results, end="\n\n")
+    **(1) 해석적으로.** 핵심은 "최대"를 쓴다는 것이다. 균형 일원배치에서 완전 영가설 $\mu_1 = \cdots = \mu_k$ 아래의 **스튜던트화 범위**
 
-# 2단계: 주효과에 대한 Tukey HSD
-tukey_dose = pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05)
-print(tukey_dose, end="\n\n")
+    $$
+    Q = \frac{\max_i \bar y_i - \min_i \bar y_i}{\sqrt{MSE/m}}
+    $$
 
-tukey_supp = pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05)
-print(tukey_supp, end="\n\n")
+    는 모수 $k$와 $N-k$를 갖는 스튜던트화 범위 분포를 따른다. 여기서 $\sqrt{MSE/m}$은 **집단평균 하나의 표준오차**다.
 
-# Step 3: 교호작용에 대한 사후검정
-# 두 요인을 붙여 하나의 요인으로 만든다. 수준이 2 x 3 = 6개가 되고
-# 비교는 15쌍으로 늘어난다. 그만큼 Tukey의 보정도 커진다.
-df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
-tukey_interaction = pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05)
-print(tukey_interaction, end="\n\n")
-```
+    이제 모든 쌍을 동시에 보자. 어떤 쌍이든 그 차의 절댓값은 최대와 최소의 차를 넘지 못하므로
 
-출력:
+    $$
+    \max_{i<j} \lvert \bar y_i - \bar y_j \rvert = \max_i \bar y_i - \min_i \bar y_i
+    $$
 
-```
-                   df       sum_sq      mean_sq          F        PR(>F)
-C(supp)           1.0   205.350000   205.350000  15.571979  2.311828e-04
-C(dose)           2.0  2426.434333  1213.217167  91.999965  4.046291e-18
-C(supp):C(dose)   2.0   108.319000    54.159500   4.106991  2.186027e-02
-Residual         54.0   712.106000    13.187148        NaN           NaN
+    이다. 곧 **"어느 한 쌍이라도 임계값을 넘는다"는 사건과 "범위가 임계값을 넘는다"는 사건이 같은 사건이다.** 따라서
 
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-===================================================
-group1 group2 meandiff p-adj  lower   upper  reject
----------------------------------------------------
-   0.5    1.0     9.13   0.0  5.9018 12.3582   True
-   0.5    2.0   15.495   0.0 12.2668 18.7232   True
-   1.0    2.0    6.365   0.0  3.1368  9.5932   True
----------------------------------------------------
+    $$
+    P\left(\text{어떤 쌍에서라도 } q_{ij} > q_\alpha \right)
+    = P(Q > q_\alpha) = \alpha
+    $$
 
-Multiple Comparison of Means - Tukey HSD, FWER=0.05
-=================================================
-group1 group2 meandiff p-adj  lower  upper reject
--------------------------------------------------
-    OJ     VC     -3.7 0.0604 -7.567 0.167  False
--------------------------------------------------
+    이고, FWER가 $\alpha$ **이하**가 아니라 **정확히** $\alpha$다. 본페로니처럼 부등식으로 느슨하게 막는 것이 아니라, 최대의 분포를 직접 써서 딱 맞춘다. 이 등식이 성립하려면 모든 쌍의 표준오차가 같아야 하므로 **균형설계**가 필요하다. 불균형이면 $\sqrt{MSE/m}$이 쌍마다 달라지고 Tukey-Kramer 수정이 보수적인 부등식으로 바뀐다.
 
- Multiple Comparison of Means - Tukey HSD, FWER=0.05  
-======================================================
-group1 group2 meandiff p-adj   lower    upper   reject
-------------------------------------------------------
-OJ_0.5 OJ_1.0     9.47    0.0   4.6719  14.2681   True
-OJ_0.5 OJ_2.0    12.83    0.0   8.0319  17.6281   True
-OJ_0.5 VC_0.5    -5.25 0.0243 -10.0481  -0.4519   True
-OJ_0.5 VC_1.0     3.54  0.264  -1.2581   8.3381  False
-OJ_0.5 VC_2.0    12.91    0.0   8.1119  17.7081   True
-OJ_1.0 OJ_2.0     3.36 0.3187  -1.4381   8.1581  False
-OJ_1.0 VC_0.5   -14.72    0.0 -19.5181  -9.9219   True
-OJ_1.0 VC_1.0    -5.93 0.0074 -10.7281  -1.1319   True
-OJ_1.0 VC_2.0     3.44 0.2936  -1.3581   8.2381  False
-OJ_2.0 VC_0.5   -18.08    0.0 -22.8781 -13.2819   True
-OJ_2.0 VC_1.0    -9.29    0.0 -14.0881  -4.4919   True
-OJ_2.0 VC_2.0     0.08    1.0  -4.7181   4.8781  False
-VC_0.5 VC_1.0     8.79    0.0   3.9919  13.5881   True
-VC_0.5 VC_2.0    18.16    0.0  13.3619  22.9581   True
-VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
-------------------------------------------------------
-```
+    신뢰구간의 폭이 $q_\alpha\sqrt{MSE/m}$으로 **모든 쌍에서 같다**는 점도 여기서 나온다. 이 공통 폭을 "정직한 유의차(honestly significant difference)"라 부르고 그래서 이름이 HSD다. 조정 $p$-값은 $p_{ij} = P(Q > q_{ij})$다.
 
-세 표를 함께 읽어야 한다.
+    **$F$-검정은 필요하지 않다.** 위 유도에 $F$가 등장하지 않는다. FWER 보증이 범위의 분포에서 **무조건적으로** 나오므로, $F$를 먼저 통과시키라는 요구는 보증에 아무것도 더하지 않고 검정력만 깎는다.
 
-- **용량**의 주효과: 세 수준이 서로 모두 유의하게 다르다. 용량이 오를수록 치아가 길어진다.
-- **보충제**의 주효과: OJ와 VC의 차이가 $p = 0.060$으로 유의하지 않다. 그런데 분산분석표의 `C(supp)`는 $p = 0.00023$으로 강하게 유의하다. 모순처럼 보이지만 그렇지 않다. 분산분석은 용량을 모형에 넣은 채 보충제의 효과를 보는 반면, 여기 Tukey는 용량을 무시하고 OJ와 VC를 통째로 비교한다. 용량이 만들어 내는 큰 변동이 잡음으로 남아 차이를 덮는다.
-- **교호작용**: 마지막 표의 `OJ_2.0 VC_2.0` 행을 보라. 평균 차이가 0.08이고 $p = 1.0$이다. 용량 2.0에서는 두 보충제가 사실상 같다. 반면 용량 0.5에서는 차이가 $-5.25$($p = 0.024$)로 유의하다. **보충제의 효과가 용량에 따라 달라진다**는 것이 곧 교호작용이며, 분산분석표의 $p = 0.022$가 이를 뒷받침한다.
+    **(2) 이론이 예측하는 값.** 두 절차 모두 명목 FWER가 $0.05$다. 재어 보면 Tukey는 어느 상황에서도 $0.05$를 넘지 않는 반면, 보호된 LSD는 **$F$의 보호가 작동하지 않는 상황**에서 무너질 것이다. $F$는 "모든 평균이 같다"를 검정하므로, 한 집단만 멀리 떨어져 있으면 $F$가 거의 언제나 유의해 **문이 늘 열려 있다.** 그러면 남은 집단들 사이의 짝비교가 보정 없이 수행되고, 쌍이 $r$개면 FWER가 대략 $1-(1-0.05)^r$까지 올라간다.
 
-**교호작용 사후검정의 핵심 결과**: 낮은 용량에서는 OJ가 VC보다 유의하게 긴 치아 성장을 낳는 경향이 있다. 가장 높은 용량(2.0)에서는 두 보충제의 효과가 비슷하다(OJ_2.0 대 VC_2.0: 평균차 = 0.08, p = 1.0).
+    **수치적으로.** 먼저 패키지를 돌린다.
+
+    ```python
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+    # 1단계: 이원배치 분산분석
+    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/ToothGrowth.csv'
+    df = pd.read_csv(url, usecols=[1, 2, 3])
+    model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
+    anova_results = anova_lm(model)
+    print(anova_results, end="\n\n")
+
+    # 2단계: 주효과에 대한 Tukey HSD
+    tukey_dose = pairwise_tukeyhsd(endog=df['len'], groups=df['dose'], alpha=0.05)
+    print(tukey_dose, end="\n\n")
+
+    tukey_supp = pairwise_tukeyhsd(endog=df['len'], groups=df['supp'], alpha=0.05)
+    print(tukey_supp, end="\n\n")
+
+    # Step 3: 교호작용에 대한 사후검정
+    # 두 요인을 붙여 하나의 요인으로 만든다. 수준이 2 x 3 = 6개가 되고
+    # 비교는 15쌍으로 늘어난다. 그만큼 Tukey의 보정도 커진다.
+    df['supp_dose'] = df['supp'].astype(str) + "_" + df['dose'].astype(str)
+    tukey_interaction = pairwise_tukeyhsd(endog=df['len'], groups=df['supp_dose'], alpha=0.05)
+    print(tukey_interaction, end="\n\n")
+    ```
+
+    출력:
+
+    ```
+                       df       sum_sq      mean_sq          F        PR(>F)
+    C(supp)           1.0   205.350000   205.350000  15.571979  2.311828e-04
+    C(dose)           2.0  2426.434333  1213.217167  91.999965  4.046291e-18
+    C(supp):C(dose)   2.0   108.319000    54.159500   4.106991  2.186027e-02
+    Residual         54.0   712.106000    13.187148        NaN           NaN
+
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj  lower   upper  reject
+    ---------------------------------------------------
+       0.5    1.0     9.13   0.0  5.9018 12.3582   True
+       0.5    2.0   15.495   0.0 12.2668 18.7232   True
+       1.0    2.0    6.365   0.0  3.1368  9.5932   True
+    ---------------------------------------------------
+
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    =================================================
+    group1 group2 meandiff p-adj  lower  upper reject
+    -------------------------------------------------
+        OJ     VC     -3.7 0.0604 -7.567 0.167  False
+    -------------------------------------------------
+
+     Multiple Comparison of Means - Tukey HSD, FWER=0.05  
+    ======================================================
+    group1 group2 meandiff p-adj   lower    upper   reject
+    ------------------------------------------------------
+    OJ_0.5 OJ_1.0     9.47    0.0   4.6719  14.2681   True
+    OJ_0.5 OJ_2.0    12.83    0.0   8.0319  17.6281   True
+    OJ_0.5 VC_0.5    -5.25 0.0243 -10.0481  -0.4519   True
+    OJ_0.5 VC_1.0     3.54  0.264  -1.2581   8.3381  False
+    OJ_0.5 VC_2.0    12.91    0.0   8.1119  17.7081   True
+    OJ_1.0 OJ_2.0     3.36 0.3187  -1.4381   8.1581  False
+    OJ_1.0 VC_0.5   -14.72    0.0 -19.5181  -9.9219   True
+    OJ_1.0 VC_1.0    -5.93 0.0074 -10.7281  -1.1319   True
+    OJ_1.0 VC_2.0     3.44 0.2936  -1.3581   8.2381  False
+    OJ_2.0 VC_0.5   -18.08    0.0 -22.8781 -13.2819   True
+    OJ_2.0 VC_1.0    -9.29    0.0 -14.0881  -4.4919   True
+    OJ_2.0 VC_2.0     0.08    1.0  -4.7181   4.8781  False
+    VC_0.5 VC_1.0     8.79    0.0   3.9919  13.5881   True
+    VC_0.5 VC_2.0    18.16    0.0  13.3619  22.9581   True
+    VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
+    ------------------------------------------------------
+    ```
+
+    세 표를 함께 읽어야 한다.
+
+    - **용량**의 주효과: 세 수준이 서로 모두 유의하게 다르다. 용량이 오를수록 치아가 길어진다.
+    - **보충제**의 주효과: OJ와 VC의 차이가 $p = 0.060$으로 유의하지 않다. 그런데 분산분석표의 `C(supp)`는 $p = 0.00023$으로 강하게 유의하다. 모순처럼 보이지만 그렇지 않다. 분산분석은 용량을 모형에 넣은 채 보충제의 효과를 보는 반면, 여기 Tukey는 용량을 무시하고 OJ와 VC를 통째로 비교한다. 용량이 만들어 내는 큰 변동이 잡음으로 남아 차이를 덮는다.
+    - **교호작용**: 마지막 표의 `OJ_2.0 VC_2.0` 행을 보라. 평균 차이가 0.08이고 $p = 1.0$이다. 용량 2.0에서는 두 보충제가 사실상 같다. 반면 용량 0.5에서는 차이가 $-5.25$($p = 0.024$)로 유의하다. **보충제의 효과가 용량에 따라 달라진다**는 것이 곧 교호작용이며, 분산분석표의 $p = 0.022$가 이를 뒷받침한다.
+
+    **교호작용 사후검정의 핵심 결과**: 낮은 용량에서는 OJ가 VC보다 유의하게 긴 치아 성장을 낳는 경향이 있다. 가장 높은 용량(2.0)에서는 두 보충제의 효과가 비슷하다(OJ_2.0 대 VC_2.0: 평균차 = 0.08, p = 1.0).
+
+    이제 `dose` 표를 (1)의 식으로 손계산해 맞춘다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # dose 주효과 Tukey 표를 스튜던트화 범위 분포로 직접 만든다.
+    g = df.groupby('dose')['len']
+    m_i = g.mean().values
+    n_i = g.count().values
+    k, N = len(n_i), n_i.sum()
+    dfe = N - k
+    MSE = ((n_i - 1) * g.var(ddof=1).values).sum() / dfe
+    se = np.sqrt(MSE / n_i[0])                      # 집단평균 하나의 표준오차
+    q_crit = stats.studentized_range.ppf(0.95, k, dfe)
+
+    print(f"MSE = {MSE:.6f},  오차 자유도 = {dfe}")
+    print(f"집단평균 하나의 표준오차 sqrt(MSE/m) = {se:.6f}")
+    print(f"q_crit(0.05, k={k}, df={dfe}) = {q_crit:.4f}")
+    print(f"HSD = q_crit * sqrt(MSE/m)   = {q_crit * se:.4f}   <- 모든 쌍에 같은 폭")
+    print(f"대조: 보정 없는 t 임계값 {stats.t.ppf(0.975, dfe):.4f},  "
+          f"Tukey 는 t 척도로 {q_crit / np.sqrt(2):.4f}")
+
+    lv = g.mean().index.values
+    print(f"\n{'group1':>6s} {'group2':>6s} {'meandiff':>9s} {'q':>8s} "
+          f"{'p-adj':>9s} {'lower':>9s} {'upper':>9s}")
+    for a in range(k):
+        for b in range(a + 1, k):
+            d = m_i[b] - m_i[a]
+            q = abs(d) / se
+            print(f"{lv[a]:>6.1f} {lv[b]:>6.1f} {d:9.4f} {q:8.4f} "
+                  f"{stats.studentized_range.sf(q, k, dfe):9.6f} "
+                  f"{d - q_crit * se:9.4f} {d + q_crit * se:9.4f}")
+    ```
+
+    출력:
+
+    ```
+    MSE = 17.996053,  오차 자유도 = 57
+    집단평균 하나의 표준오차 sqrt(MSE/m) = 0.948579
+    q_crit(0.05, k=3, df=57) = 3.4032
+    HSD = q_crit * sqrt(MSE/m)   = 3.2282   <- 모든 쌍에 같은 폭
+    대조: 보정 없는 t 임계값 2.0025,  Tukey 는 t 척도로 2.4064
+
+    group1 group2  meandiff        q     p-adj     lower     upper
+       0.5    1.0    9.1300   9.6249  0.000000    5.9018   12.3582
+       0.5    2.0   15.4950  16.3350  0.000000   12.2668   18.7232
+       1.0    2.0    6.3650   6.7100  0.000042    3.1368    9.5932
+    ```
+
+    **세 줄이 패키지 표와 똑같다.** `meandiff` $9.13$, $15.495$, $6.365$가 같고 신뢰구간 $[5.9018,\ 12.3582]$, $[12.2668,\ 18.7232]$, $[3.1368,\ 9.5932]$도 넷째 자리까지 같다. **`pairwise_tukeyhsd`는 위 두 줄의 식을 계산하는 것 이상을 하지 않는다.**
+
+    **구간 폭이 모든 쌍에서 $\pm 3.2282$로 같다.** 균형설계($m = 20$)여서 표준오차가 쌍마다 같기 때문이고, 그래서 "정직한 유의차"라는 이름이 붙었다. 보정의 크기도 한눈에 보인다. 보정 없는 $t$ 임계값이 $2.0025$인데 Tukey는 $t$ 척도로 $2.4064$를 요구한다. **$20\%$만 더 엄격하다.** 세 쌍에 본페로니를 쓰면 $t_{1-0.05/6,\,57}$을 써야 하므로 이보다 더 엄격해진다.
+
+    이제 (2)의 물음에 답한다.
+
+    ```python
+    import numpy as np
+    from itertools import combinations
+    from scipy import stats
+
+    # 평균이 서로 같은 집단들 사이에서 "한 번이라도 거짓 기각이 나는" 확률을 센다.
+    # 이것이 집단별오류율(FWER)이고 이론값은 0.05 다.
+    rng_sim = np.random.default_rng(2026)
+    n, B = 10, 2000
+    print(f"집단당 n = {n}, 반복 {B}회, 명목 FWER 0.05, "
+          f"몬테카를로 오차 {np.sqrt(0.05 * 0.95 / B):.4f}")
+    print(f"\n{'k':>3s} {'delta':>6s} {'같은쌍':>7s} {'F 유의':>7s} "
+          f"{'Tukey':>7s} {'보호 LSD':>9s}")
+    for k in [3, 4, 5, 6]:
+        dfe = k * n - k
+        q_crit = stats.studentized_range.ppf(0.95, k, dfe)
+        t_crit = stats.t.ppf(0.975, dfe)
+        f_crit = stats.f.ppf(0.95, k - 1, dfe)
+        for delta in [0.0, 8.0]:
+            # delta = 0 이면 완전 영가설, delta = 8 이면 한 집단만 멀리 떨어진 부분 영가설
+            mu = np.array([0.0] * (k - 1) + [delta])
+            pairs = (list(combinations(range(k), 2)) if delta == 0.0
+                     else list(combinations(range(k - 1), 2)))
+            Y = rng_sim.normal(mu[None, :, None], 1.0, size=(B, k, n))
+            gm = Y.mean(axis=2)
+            MSW = ((Y - gm[:, :, None]) ** 2).sum(axis=(1, 2)) / dfe
+            SSB = (n * (gm - gm.mean(axis=1, keepdims=True)) ** 2).sum(axis=1)
+            sig_F = (SSB / (k - 1)) / MSW > f_crit
+
+            any_tukey = np.zeros(B, bool)
+            any_lsd = np.zeros(B, bool)
+            for a, b in pairs:
+                d = np.abs(gm[:, a] - gm[:, b])
+                any_tukey |= d / np.sqrt(MSW / n) > q_crit
+                any_lsd |= d / np.sqrt(MSW * 2 / n) > t_crit
+            print(f"{k:3d} {delta:6g} {len(pairs):7d} {sig_F.mean():7.4f} "
+                  f"{any_tukey.mean():7.4f} {(sig_F & any_lsd).mean():9.4f}")
+    ```
+
+    출력:
+
+    ```
+    집단당 n = 10, 반복 2000회, 명목 FWER 0.05, 몬테카를로 오차 0.0049
+
+      k  delta     같은쌍    F 유의   Tukey    보호 LSD
+      3      0       3  0.0595  0.0560    0.0595
+      3      8       1  1.0000  0.0195    0.0520
+      4      0       6  0.0480  0.0425    0.0480
+      4      8       3  1.0000  0.0320    0.1185
+      5      0      10  0.0500  0.0495    0.0500
+      5      8       6  1.0000  0.0355    0.1980
+      6      0      15  0.0525  0.0545    0.0525
+      6      8      10  1.0000  0.0330    0.2810
+    ```
+
+    **완전 영가설($\delta = 0$)에서는 둘 다 맞는다.** Tukey의 FWER가 $0.0560$, $0.0425$, $0.0495$, $0.0545$로 네 $k$ 전부에서 명목 $0.05$와 몬테카를로 오차 $0.0049$의 두 배 안쪽이다. **(1)에서 "정확히 $\alpha$"라고 유도한 것이 수로 확인된다** — 보수적으로 $0.03$ 같은 값이 나오는 것이 아니라 $0.05$에 붙어 있다. 보호된 LSD도 $F$ 유의 비율과 같은 값($0.0595$, $0.0480$, $0.0500$, $0.0525$)으로 통제된다. 완전 영가설에서는 $F$가 $5\%$만 문을 열어 주므로 그 뒤에서 무슨 짓을 해도 FWER가 $5\%$를 넘지 못한다.
+
+    **부분 영가설($\delta = 8$)에서 갈린다.** $F$ 유의 비율이 네 경우 모두 $1.0000$이다. 한 집단이 $8\sigma$ 떨어져 있으니 $F$는 **언제나** 유의하고, **보호가 작동하지 않는다.** 그러면 남은 $k-1$개 집단(평균이 모두 같다) 사이의 짝비교가 보정 없이 수행된다.
+
+    | $k$ | 같은 평균 쌍 수 | 보호된 LSD | $1-0.95^r$ | Tukey |
+    |---|---|---|---|---|
+    | 3 | 1 | $0.0520$ | $0.050$ | $0.0195$ |
+    | 4 | 3 | $0.1185$ | $0.143$ | $0.0320$ |
+    | 5 | 6 | $\mathbf{0.1980}$ | $0.265$ | $0.0355$ |
+    | 6 | 10 | $\mathbf{0.2810}$ | $0.401$ | $0.0330$ |
+
+    **$k = 6$에서 보호된 LSD의 거짓 기각 확률이 $0.2810$이다.** 명목 $5\%$라고 적어 놓고 실제로는 **네 번에 한 번** 틀린 결론을 내놓는다. $1-0.95^r$로 어림한 값보다 작은 것은 짝비교들이 같은 $MSW$와 같은 집단평균을 공유해 서로 양의 상관을 갖기 때문이다.
+
+    **$k = 3$만 예외다.** 쌍이 하나뿐이니 다중성이 없고 보호된 LSD가 $0.0520$으로 맞는다. Fisher의 LSD가 "세 집단에서는 괜찮다"고 알려져 온 까닭이 이것이며, **집단이 넷 이상이면 그 면제가 사라진다.**
+
+    **Tukey는 어디서나 $0.05$ 아래다.** $0.0195$에서 $0.0355$ 사이인데, 명목보다 작은 것은 부분 영가설에서 **거짓 기각이 가능한 쌍이 전체 쌍의 일부**이기 때문이다. Tukey는 모든 쌍에 걸쳐 FWER를 $0.05$로 맞추므로, 그 가운데 일부만 보면 당연히 그보다 작게 나온다. **보증이 느슨해서가 아니라 더 넓은 범위를 지키고 있어서 그렇다.**
+
+    **그래서 (2)의 답은 "아니다"다.** Tukey는 $F$-검정을 먼저 통과시킬 필요가 없다. FWER 보증이 $F$와 무관하게 성립하므로, $F$로 문을 만드는 것은 검정력만 깎는 군더더기다. 거꾸로 LSD는 $F$의 보호가 **필요한데도 그 보호가 가장 필요한 상황에서 작동하지 않는다.** 한 집단만 멀리 떨어진 자료야말로 실무에서 흔한 모양이고(처치 하나만 효과가 있는 경우), 바로 그때 보호가 사라진다. **"왜 Tukey인가"의 답이 이 표다.**
 
 ## 3. 보기: 교수법과 학습시간에 따른 시험 점수
 
@@ -371,17 +546,17 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
 </div>
 
 ??? success "풀이"
-    #### 1단계: 전체 평균 계산
+    **1단계: 전체 평균 계산**
 
     $$\bar{X} = \frac{534}{8} = 66.75$$
 
-    #### 2단계: 요인별 평균과 칸 평균 계산
+    **2단계: 요인별 평균과 칸 평균 계산**
 
     - 전통식: 65, 온라인: 68.5
     - 1시간: 62.5, 2시간: 71
     - 칸 평균: 전통식/1시간 = 61, 전통식/2시간 = 69, 온라인/1시간 = 64, 온라인/2시간 = 73
 
-    #### 3단계: 제곱합 계산
+    **3단계: 제곱합 계산**
 
     - $SS_{\text{Total}} = 177.5$
     - $SS_A = 4 \times ((65 - 66.75)^2 + (68.5 - 66.75)^2) = 24.5$
@@ -389,7 +564,7 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
     - $SS_{AB} = 0.5$ (각 칸이 0.125씩 기여)
     - $SS_E = 177.5 - 24.5 - 144.5 - 0.5 = 8$
 
-    #### 4단계: 자유도, 평균제곱, F-통계량
+    **4단계: 자유도, 평균제곱, F-통계량**
 
     | 원천         | SS     | df | MS      | F      | PR(>F)   |
     |----------------|--------|----|---------|--------|----------|
@@ -399,7 +574,7 @@ VC_1.0 VC_2.0     9.37    0.0   4.5719  14.1681   True
     | 오차          | 8.0    | 4  | 2.0     |        |          |
     | 전체          | 177.5  | 7  |         |        |          |
 
-    #### 해석
+    **해석**
 
     - **요인 A(교수법)**: $F_A = 12.25$, $p = 0.0249$로 0.05에서 유의하다. 교수법이 시험 점수에 유의한 효과를 갖는다.
     - **요인 B(학습시간)**: $F_B = 72.25$, $p = 0.0011$로 0.01에서 유의하다. 학습시간이 시험 점수에 유의한 효과를 갖는다.

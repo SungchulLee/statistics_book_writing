@@ -338,83 +338,210 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> statsmodels로 하는 일원배치 분산분석
+**보기 2.** <span class="diff easy" title="쉬움"></span> statsmodels로 하는 일원배치 분산분석. 같은 PlantGrowth 자료에 `anova_lm` 을 돌린다.
+
+**(1)** 제곱합 분해
+
+$$
+SST = SSB + SSW
+$$
+
+가 **아무 가정 없이 성립하는 항등식**임을 교차항이 정확히 사라지는 것으로 보이시오. 아울러 `anova_lm` 의 기본값은 `typ=1`(순차적 제곱합)인데 일원배치에서는 제1·2·3 유형이 모두 같다. 왜 그런가.
+
+**(2)** `anova_lm` 표의 `df`·`sum_sq`·`mean_sq`·`F`·`PR(>F)` 를 **집단크기와 집단평균만으로** 손계산해 맞추고, `typ=1,2,3` 과 `f_oneway` 가 모두 같은 수를 주는지 확인하시오.
 
 </div>
 
-```python
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from scipy import stats
-from statsmodels.formula.api import ols
-from statsmodels.stats.anova import anova_lm
-def load_data():
-    """
-    Load and preprocess plant growth data for ANOVA.
-    """
-    url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
-    df = pd.read_csv(url, usecols=[1, 2])
-    group_data = df.groupby('group')
-    data_ctrl = group_data.get_group('ctrl').weight
-    data_trt1 = group_data.get_group('trt1').weight
-    data_trt2 = group_data.get_group('trt2').weight
-    data = (data_ctrl, data_trt1, data_trt2)
-    total_samples = data_ctrl.shape[0] + data_trt1.shape[0] + data_trt2.shape[0]
-    num_groups = len(data)
-    df1 = num_groups - 1
-    df2 = total_samples - num_groups
-    return df, data, df1, df2
-def perform_anova(df):
-    """
-    Perform one-way ANOVA using statsmodels.
-    """
+??? success "풀이"
+
+    **(1) 해석적으로.** 관측값에서 전체평균을 뺀 것을 두 토막으로 쪼갠다.
+
+    $$
+    y_{ij} - \bar y_{\cdot\cdot}
+    = \underbrace{(y_{ij} - \bar y_{i\cdot})}_{\text{집단 안의 벗어남}}
+    + \underbrace{(\bar y_{i\cdot} - \bar y_{\cdot\cdot})}_{\text{집단 사이의 벗어남}}
+    $$
+
+    제곱해서 모두 더하면 세 덩어리가 나온다.
+
+    $$
+    SST = \underbrace{\sum_{i,j}(y_{ij}-\bar y_{i\cdot})^2}_{SSW}
+    + \underbrace{\sum_{i,j}(\bar y_{i\cdot}-\bar y_{\cdot\cdot})^2}_{SSB}
+    + 2\sum_{i}(\bar y_{i\cdot}-\bar y_{\cdot\cdot})\sum_{j=1}^{n_i}(y_{ij}-\bar y_{i\cdot})
+    $$
+
+    마지막 교차항에서 안쪽 합이
+
+    $$
+    \sum_{j=1}^{n_i}(y_{ij} - \bar y_{i\cdot}) = n_i\bar y_{i\cdot} - n_i \bar y_{i\cdot} = 0
+    $$
+
+    이다. **집단평균의 정의 하나로 교차항이 사라진다.** 그러므로 $SST = SSB + SSW$다.
+
+    이 유도에 쓴 가정이 무엇인지 보라. **아무것도 없다.** 정규성도, 독립성도, 등분산도 쓰지 않았다. $\bar y_{i\cdot}$가 집단 $i$ 관측값들의 평균이라는 사실만 썼다. **제곱합 분해는 통계적 명제가 아니라 대수적 항등식**이고, 분산분석의 가정들은 그 뒤에 $SSB/SSW$의 **분포**를 말할 때 비로소 필요해진다.
+
+    기하로 읽으면 더 선명하다. 안쪽 합이 $0$이라는 말은 잔차 벡터가 집단 지시벡터 $\mathbf 1_i$ 와 직교한다는 뜻, 곧 $X^\top e = 0$이다(가정 쪽 등분산성 보기 1에서 같은 식을 썼다). 직교하는 두 벡터의 합의 길이를 재면 피타고라스 정리가 되고, 그것이 $SST = SSB + SSW$다.
+
+    **유형 문제.** 제곱합의 "유형"은 **한 항의 제곱합을 어떤 항들을 이미 넣은 상태에서 재는가**의 규약이다.
+
+    - **제1유형**(순차적): 수식에 적힌 순서대로, 앞의 항들을 넣은 뒤 그 항이 더 설명하는 양.
+    - **제2유형**: 같은 차수 이하의 다른 모든 항을 넣은 뒤.
+    - **제3유형**: 다른 모든 항(교호작용 포함)을 넣은 뒤.
+
+    일원배치에는 **요인이 하나뿐**이다. 절편 말고는 앞에 넣을 항도, 함께 넣을 항도, 교호작용도 없다. 그러니 세 규약이 모두 **똑같은 두 모형의 비교** — 절편만 있는 모형 대 절편 + 요인 모형 — 로 귀착한다. 비교하는 모형이 같으면 제곱합도 같다. **요인이 둘 이상이고 설계가 불균형일 때 비로소 세 유형이 갈린다.**
+
+    **(2) 수치적으로.** 먼저 `anova_lm` 을 돌린다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+    def load_data():
+        """
+        Load and preprocess plant growth data for ANOVA.
+        """
+        url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/PlantGrowth.csv'
+        df = pd.read_csv(url, usecols=[1, 2])
+        group_data = df.groupby('group')
+        data_ctrl = group_data.get_group('ctrl').weight
+        data_trt1 = group_data.get_group('trt1').weight
+        data_trt2 = group_data.get_group('trt2').weight
+        data = (data_ctrl, data_trt1, data_trt2)
+        total_samples = data_ctrl.shape[0] + data_trt1.shape[0] + data_trt2.shape[0]
+        num_groups = len(data)
+        df1 = num_groups - 1
+        df2 = total_samples - num_groups
+        return df, data, df1, df2
+    def perform_anova(df):
+        """
+        Perform one-way ANOVA using statsmodels.
+        """
+        model = ols('weight ~ C(group)', data=df).fit()
+        anova_results = anova_lm(model)
+        statistic = anova_results['F'].iloc[0]
+        p_value = anova_results['PR(>F)'].iloc[0]
+        print("\nANOVA Results:\n", anova_results)
+        return statistic, p_value
+    def plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value):
+        """
+        Plot boxplot of weights for each group and F-distribution with critical region.
+        """
+        fig, (ax_box, ax_pdf) = plt.subplots(1, 2, figsize=(12, 4))
+        ax_box.boxplot([data_ctrl, data_trt1, data_trt2], labels=['ctrl', 'trt1', 'trt2'])
+        ax_box.set_ylim(3, 7)
+        ax_box.set_xlabel('Group')
+        ax_box.set_ylabel('Weight')
+        x_vals = np.linspace(0, 6, 100)
+        pdf_vals = stats.f(df1, df2).pdf(x_vals)
+        ax_pdf.plot(x_vals, pdf_vals, label='F-distribution PDF')
+        ax_pdf.fill_between(x_vals[x_vals >= statistic], pdf_vals[x_vals >= statistic], color='red', alpha=0.3)
+        ax_pdf.spines['top'].set_visible(False)
+        ax_pdf.spines['right'].set_visible(False)
+        ax_pdf.set_title("F-distribution and Critical Region")
+        ax_pdf.legend()
+        ax_pdf.annotate(f'P-Value = {p_value:.2%}', xy=(5.0, 0.1), xytext=(5.0, 0.8),
+                        arrowprops=dict(color='k', width=0.2, headwidth=8), fontsize=12)
+        plt.tight_layout()
+        plt.show()
+    # 자료 읽기 → 분산분석 → 그림 순으로 돌린다
+    df, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
+    statistic, p_value = perform_anova(df)
+    plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
+    ```
+
+    출력:
+
+    ```
+
+    ANOVA Results:
+                 df    sum_sq   mean_sq         F   PR(>F)
+    C(group)   2.0   3.76634  1.883170  4.846088  0.01591
+    Residual  27.0  10.49209  0.388596       NaN      NaN
+    ```
+
+    ![상자그림과 F-분포](./img/f_test_199.png)
+
+    `f_oneway`가 F와 p 두 값만 주는 데 비해 `anova_lm`은 제곱합과 자유도까지 담은 분산분석표를 준다. F와 p는 앞과 정확히 같다.
+
+    이제 이 표의 모든 칸을 집단크기와 집단평균만으로 다시 만들어 본다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    # 분산분석표의 네 칸을 집단평균과 집단크기만으로 다시 만든다.
     model = ols('weight ~ C(group)', data=df).fit()
-    anova_results = anova_lm(model)
-    statistic = anova_results['F'].iloc[0]
-    p_value = anova_results['PR(>F)'].iloc[0]
-    print("\nANOVA Results:\n", anova_results)
-    return statistic, p_value
-def plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value):
-    """
-    Plot boxplot of weights for each group and F-distribution with critical region.
-    """
-    fig, (ax_box, ax_pdf) = plt.subplots(1, 2, figsize=(12, 4))
-    ax_box.boxplot([data_ctrl, data_trt1, data_trt2], labels=['ctrl', 'trt1', 'trt2'])
-    ax_box.set_ylim(3, 7)
-    ax_box.set_xlabel('Group')
-    ax_box.set_ylabel('Weight')
-    x_vals = np.linspace(0, 6, 100)
-    pdf_vals = stats.f(df1, df2).pdf(x_vals)
-    ax_pdf.plot(x_vals, pdf_vals, label='F-distribution PDF')
-    ax_pdf.fill_between(x_vals[x_vals >= statistic], pdf_vals[x_vals >= statistic], color='red', alpha=0.3)
-    ax_pdf.spines['top'].set_visible(False)
-    ax_pdf.spines['right'].set_visible(False)
-    ax_pdf.set_title("F-distribution and Critical Region")
-    ax_pdf.legend()
-    ax_pdf.annotate(f'P-Value = {p_value:.2%}', xy=(5.0, 0.1), xytext=(5.0, 0.8),
-                    arrowprops=dict(color='k', width=0.2, headwidth=8), fontsize=12)
-    plt.tight_layout()
-    plt.show()
-# 자료 읽기 → 분산분석 → 그림 순으로 돌린다
-df, (data_ctrl, data_trt1, data_trt2), df1, df2 = load_data()
-statistic, p_value = perform_anova(df)
-plot_data(data_ctrl, data_trt1, data_trt2, df1, df2, statistic, p_value)
-```
+    table = anova_lm(model)
 
-출력:
+    grp = df.groupby('group').weight
+    n_i = grp.count().values
+    ybar_i = grp.mean().values
+    ybar = df.weight.mean()
+    k, N = len(n_i), n_i.sum()
 
-```
+    SSB = (n_i * (ybar_i - ybar) ** 2).sum()
+    SSW = ((n_i - 1) * grp.var(ddof=1).values).sum()
+    SST = ((df.weight - ybar) ** 2).sum()
+    MSB, MSW = SSB / (k - 1), SSW / (N - k)
+    F_hand = MSB / MSW
+    p_hand = stats.f.sf(F_hand, k - 1, N - k)
 
-ANOVA Results:
-             df    sum_sq   mean_sq         F   PR(>F)
-C(group)   2.0   3.76634  1.883170  4.846088  0.01591
-Residual  27.0  10.49209  0.388596       NaN      NaN
-```
+    print(f"집단크기 {n_i},  집단평균 {ybar_i.round(5)},  전체평균 {ybar:.5f}")
+    print(f"\nSSB  = {SSB:.6f}   (표: {table['sum_sq'].iloc[0]:.6f})")
+    print(f"SSW  = {SSW:.6f}   (표: {table['sum_sq'].iloc[1]:.6f})")
+    print(f"SST  = {SST:.6f} = SSB + SSW = {SSB + SSW:.6f}   (차이 {abs(SST - SSB - SSW):.1e})")
+    print(f"MSB  = {MSB:.6f}   (표: {table['mean_sq'].iloc[0]:.6f})")
+    print(f"MSW  = {MSW:.6f}   (표: {table['mean_sq'].iloc[1]:.6f})")
+    print(f"F    = {F_hand:.6f}   (표: {table['F'].iloc[0]:.6f})")
+    print(f"p    = {p_hand:.6f}   (표: {table['PR(>F)'].iloc[0]:.6f})")
 
-![상자그림과 F-분포](./img/f_test_199.png)
+    # 제1·2·3 유형이 정말 같은 수를 주는가
+    print()
+    for t in (1, 2, 3):
+        row = anova_lm(model, typ=t).loc['C(group)']
+        print(f"typ={t}:  sum_sq = {row['sum_sq']:.6f},  F = {row['F']:.6f}")
 
-`f_oneway`가 F와 p 두 값만 주는 데 비해 `anova_lm`은 제곱합과 자유도까지 담은 분산분석표를 준다. F와 p는 앞과 정확히 같다.
+    # f_oneway 와도 맞는가
+    res = stats.f_oneway(*[g.values for _, g in grp])
+    print(f"\nf_oneway:  F = {res.statistic:.6f},  p = {res.pvalue:.6f}")
+    print(f"anova_lm:  F = {statistic:.6f},  p = {p_value:.6f}")
+    ```
+
+    출력:
+
+    ```
+    집단크기 [10 10 10],  집단평균 [5.032 4.661 5.526],  전체평균 5.07300
+
+    SSB  = 3.766340   (표: 3.766340)
+    SSW  = 10.492090   (표: 10.492090)
+    SST  = 14.258430 = SSB + SSW = 14.258430   (차이 1.8e-15)
+    MSB  = 1.883170   (표: 1.883170)
+    MSW  = 0.388596   (표: 0.388596)
+    F    = 4.846088   (표: 4.846088)
+    p    = 0.015910   (표: 0.015910)
+
+    typ=1:  sum_sq = 3.766340,  F = 4.846088
+    typ=2:  sum_sq = 3.766340,  F = 4.846088
+    typ=3:  sum_sq = 3.766340,  F = 4.846088
+
+    f_oneway:  F = 4.846088,  p = 0.015910
+    anova_lm:  F = 4.846088,  p = 0.015910
+    ```
+
+    **표의 모든 칸이 손계산과 맞는다.** $SSB = 3.766340$, $SSW = 10.492090$, $MSB = 1.883170$, $MSW = 0.388596$, $F = 4.846088$, $p = 0.015910$이 소수 여섯째 자리까지 같다. 쓴 재료는 **집단크기 $(10, 10, 10)$과 집단평균 $(5.032,\ 4.661,\ 5.526)$, 그리고 집단별 표본분산**뿐이다. 원자료 $30$개가 필요한 곳은 $SSW$ 하나이고 그것도 집단분산으로 요약된다. **분산분석표는 집단별 요약통계량만으로 완전히 정해진다.**
+
+    **(1)의 분해도 확인된다.** $SST = 14.258430$이고 $SSB + SSW$도 같은 수다. 차이가 $1.8 \times 10^{-15}$인데 이것은 유도가 틀려서 남은 것이 아니라 **배정밀도 덧셈의 반올림**이다. 교차항이 사라진다는 유도는 실수에서 정확한 등식이고, 컴퓨터는 $14.2$ 정도 크기의 수를 $30$번 더하면서 상대오차 $10^{-16}$씩을 쌓는다. **정확히 $0$이 아닌 것이 오히려 정상이다.**
+
+    **세 유형이 같은 수를 준다.** `typ=1,2,3` 모두 $SSB = 3.766340$, $F = 4.846088$이다. (1)에서 말한 대로 요인이 하나뿐이라 세 규약이 같은 두 모형을 비교하기 때문이다. **이원배치로 넘어가면 사정이 달라지므로**, `anova_lm` 의 기본값이 `typ=1`이라는 것을 기억해 두어야 한다.
+
+    **`f_oneway` 와도 같다.** $F = 4.846088$, $p = 0.015910$으로 두 함수가 여섯째 자리까지 일치한다. 같은 공식을 계산하는 서로 다른 구현이니 당연하지만, 확인해 두면 어느 쪽을 써도 된다는 것을 알 수 있다. `f_oneway` 는 가볍고 `anova_lm` 은 제곱합과 자유도까지 준다.
+
+    **한 가지 주의.** 수식에서 범주형 변수를 감쌀 때 쓰는 `C(...)` 는 patsy 가 제공하는 함수다. 코드 어딘가에서 `C` 를 변수 이름으로 쓰면 그 함수가 가려져 수식이 깨진다. 위 코드에서 집단 수를 `k`, 전체 크기를 `N` 으로 쓴 까닭이 이것이다. **`C` 는 변수명으로 쓰지 말 것.**
 
 ## 3. 보기: 음료 종류에 따른 반응시간
 
@@ -435,13 +562,13 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 </div>
 
 ??? success "풀이"
-    #### 1단계: 가설 세우기
+    **1단계: 가설 세우기**
 
     **귀무가설 ($H_0$)**: 세 집단의 평균 반응시간이 같다.
 
     **대립가설 ($H_a$)**: 적어도 한 집단의 평균 반응시간이 다르다.
 
-    #### 2단계: 전체 평균과 집단 평균 계산
+    **2단계: 전체 평균과 집단 평균 계산**
 
     1. **전체 평균 ($\bar{X}$)**:
 
@@ -454,7 +581,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
        - **에너지 드링크 집단**: $(20 + 22 + 19 + 21 + 20) / 5 = 20.4$
        - **커피 집단**: $(18 + 17 + 16 + 19 + 20) / 5 = 18.0$
 
-    #### 3단계: 전체 변동(총제곱합) SST 계산
+    **3단계: 전체 변동(총제곱합) SST 계산**
 
     총제곱합(SST)은 전체 평균에 대한 자료의 전체 변동을 잰다.
 
@@ -476,7 +603,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
     SST = 0 + 1 + 4 + 1 + 1 + 1 + 9 + 0 + 4 + 1 + 1 + 4 + 9 + 0 + 1 = 37
     $$
 
-    #### 4단계: 집단 내 변동 SSW 계산
+    **4단계: 집단 내 변동 SSW 계산**
 
     집단 내 제곱합(SSW)은 각 집단 안의 변동을 잰다.
 
@@ -508,7 +635,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
     SSW = 5.20 + 5.20 + 10.00 = 20.40
     $$
 
-    #### 5단계: 집단 간 변동 SSB 계산
+    **5단계: 집단 간 변동 SSB 계산**
 
     집단 간 제곱합(SSB)은 집단 평균과 전체 평균 사이의 변동을 잰다.
 
@@ -528,7 +655,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
     SSB = 1.8 + 9.8 + 5.0 = 16.6
     $$
 
-    #### 6단계: 전체 변동의 분해 확인
+    **6단계: 전체 변동의 분해 확인**
 
     이제 다음이 성립하는지 확인하자:
 
@@ -541,7 +668,7 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
 
     값이 일치하므로 계산이 일관됨을 확인할 수 있다.
 
-    #### 7단계: F-통계량 계산
+    **7단계: F-통계량 계산**
 
     **F-통계량**은 다음으로 계산한다:
 
@@ -560,17 +687,17 @@ Residual  27.0  10.49209  0.388596       NaN      NaN
     F = \frac{8.3}{1.70} = 4.88
     $$
 
-    #### 8단계: 임계값 또는 p-값 구하기
+    **8단계: 임계값 또는 p-값 구하기**
 
     p-값을 구하기 위해 F-통계량을 $df_1 = 2$(집단 간), $df_2 = 12$(집단 내)인 F-분포의 임계값과 비교한다.
 
     이 자유도에서 **$F = 4.88$의 p-값**은 약 **0.03**이다.
 
-    #### 9단계: 판정
+    **9단계: 판정**
 
     p-값이 **0.03**으로 **통상적인 유의수준 $\alpha = 0.05$보다 작으므로** **귀무가설을 기각한다**. 세 집단의 평균 사이에 유의한 차이가 있다는 뜻이다.
 
-    #### 10단계: 사후검정
+    **10단계: 사후검정**
 
     결과가 유의성 경계에 가까웠다면 표본크기를 늘리거나 다른 유의수준을 써서 가설을 더 검토할 수 있다. 아니면 **사후**검정을 수행하여 집단 사이의 좀 더 미세한 차이를 이해할 수 있다.
 
