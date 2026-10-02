@@ -84,7 +84,7 @@ Matplotlib에는 두 개의 인터페이스가 있다.
     **(2) 네 설정이 각각 막는 것.**
 
     - **`matplotlib.use("Agg")`** 는 화면 없는 환경(CI, 원격 서버, 스크립트 실행)에서 창을 띄우려다 실패하는 것을 막는다. 반드시 `pyplot`을 임포트하기 **전에** 불러야 한다. 뒤에 부르면 이미 정해진 백엔드가 바뀌지 않는다.
-    - **`font.family`** 를 지정하지 않으면 기본 글꼴(DejaVu Sans)에 한글 글리프가 없어 제목·축이름의 한글이 모두 네모(□)로 찍힌다. 오류도 나지 않고 그림만 조용히 망가진다.
+    - **`font.family`** 를 지정하지 않으면 기본 글꼴(DejaVu Sans)에 한글 글리프가 없어 제목·축이름의 한글이 모두 네모(□)로 찍힌다. 오류도 나지 않고 그림만 조용히 망가진다. 글꼴 이름을 하나만 박으면 그 운영체제에서만 쓸 수 있으므로, **`font.sans-serif`에 후보를 늘어놓고 `font.family`는 `"sans-serif"`로 둔다.** matplotlib이 그 목록에서 설치된 첫 글꼴을 집는다. 목록을 거치지 않고 `font.family`에 직접 여러 이름을 주면 그림은 제대로 나오지만 없는 글꼴마다 `findfont: ... not found` 경고가 쏟아진다.
     - **`axes.unicode_minus = False`** 가 없으면 음수 눈금의 빼기 기호가 유니코드 U+2212로 그려지는데, 한글 글꼴에 그 글리프가 없어 또 네모가 된다. 이 설정은 그것을 ASCII 하이픈으로 바꾼다. 위 그림의 $x$축 눈금 `-3`, `-2`, `-1`이 제대로 보이는 것이 그 덕이다.
     - **저장 인수 셋.** `dpi=170`은 해상도, `facecolor="white"`는 투명·어두운 배경 문제, `bbox_inches="tight"`는 가장자리 여백을 맡는다. 셋 다 저장 시점에만 효과가 있고, `fig.tight_layout()`과는 다른 일을 한다.
 
@@ -98,10 +98,12 @@ Matplotlib에는 두 개의 인터페이스가 있다.
     import numpy as np
     import matplotlib.pyplot as plt
 
-    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 후보를 늘어놓으면 matplotlib 가
+    # 설치된 첫 번째를 집으므로, 리눅스('NanumGothic')·맥('Apple SD Gothic Neo')·
+    # 윈도우('Malgun Gothic')에서 코드를 고치지 않고 그대로 돌릴 수 있다.
     # 글꼴을 바꾸면 마이너스 기호(U+2212)가 깨지므로 unicode_minus 도 함께 꺼 준다.
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 이 책이 쓰는 팔레트. 같은 뜻에는 언제나 같은 색을 쓴다.
@@ -208,7 +210,8 @@ Matplotlib에는 두 개의 인터페이스가 있다.
     import matplotlib.pyplot as plt
     import numpy as np
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     x = np.linspace(0, 20, 400)
@@ -281,7 +284,8 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
     import pandas as pd
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
@@ -368,7 +372,8 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
     import matplotlib.pyplot as plt
     from scipy.stats import norm, probplot
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(42)
@@ -607,7 +612,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     import matplotlib.pyplot as plt
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
@@ -665,7 +671,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     x = np.linspace(1, 100, 500)
@@ -733,7 +740,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     groups = ["A", "B", "C", "D"]
@@ -793,7 +801,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)

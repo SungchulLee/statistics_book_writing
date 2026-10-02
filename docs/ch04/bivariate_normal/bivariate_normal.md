@@ -89,7 +89,8 @@ $$
     import matplotlib.pyplot as plt
     from scipy.stats import multivariate_normal
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 공분산행렬 [[var_X, cov], [cov, var_Y]] 를 네 가지로 바꿔 가며 본다.

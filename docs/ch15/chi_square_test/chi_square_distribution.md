@@ -104,7 +104,8 @@ $$
     import scipy.stats as stats
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 자유도 5 인 카이제곱의 밀도와 분포함수. 0 이상에서만 정의되고
@@ -226,7 +227,8 @@ $$
     **(2) 수치적으로.** 그림만으로는 "비슷해 보인다"에서 멈추므로 적률과 적합도검정을 함께 찍는다.
 
     ```python
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     df, seed = 5, 1

@@ -192,7 +192,8 @@ $$
     import numpy as np
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     n, p = 10, 0.6                # 시행 10번, 각 시행의 성공확률 0.6

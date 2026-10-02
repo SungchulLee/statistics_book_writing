@@ -264,7 +264,8 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     INK, BLUE, ORANGE, GREEN, MUTED = "#37474F", "#1565C0", "#E65100", "#33691E", "#90A4AE"

@@ -69,7 +69,8 @@
     import numpy as np
     import pandas as pd
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     # 어떤 공정에서 한 달간 기록된 불량 유형별 건수
@@ -323,7 +324,8 @@
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     labels = ["결제 오류", "배송 지연", "상품 불량", "회원가입 문제", "환불 요청", "기타"]

@@ -403,7 +403,8 @@ $$
     import numpy as np
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     mu, sigma = 1, 2
@@ -574,7 +575,8 @@ $$
     import numpy as np
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     mu, sigma = 0, 1
@@ -1434,7 +1436,8 @@ $$
     **그림은 나오지 않는다.** 코드가 `shade_area`를 **정의만 해 두고 한 번도 부르지 않기** 때문이다. `plt.subplots`도 `plt.show`도 없으니 세 줄의 확률만 출력되고 끝난다. 함수에 `ax=None`이 기본값으로 걸려 있는데 그대로 부르면 `None.plot(...)`에서 멈추므로, 쓰려면 축을 만들어 넘겨야 한다. 그렇게 세 번 불러 보면 이렇다.
 
     ```python
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 제목에 한글을 쓴다
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     fig, axes = plt.subplots(1, 3, figsize=(12, 2.6))

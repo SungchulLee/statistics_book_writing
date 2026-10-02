@@ -164,7 +164,8 @@ $k$개 변수를 주면 $k \times k$ 격자가 만들어진다.
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     g = sns.PairGrid(df[["Survived", "Age", "Sex_int"]].dropna())
@@ -589,7 +590,8 @@ $k$가 커지면 다음 중 하나로 간다.
     import matplotlib.pyplot as plt
     import seaborn as sns
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(2)
@@ -718,7 +720,8 @@ $k$가 커지면 다음 중 하나로 간다.
     import matplotlib.pyplot as plt
     import seaborn as sns
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(5)

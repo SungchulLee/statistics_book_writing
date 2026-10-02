@@ -191,7 +191,8 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
     import matplotlib.pyplot as plt
     from scipy import stats
 
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     def berry_esseen_visualization(dist_name, rvs_fn, mu, sigma, rho, sample_sizes):
@@ -340,7 +341,8 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     def convergence_rate_comparison():

@@ -153,7 +153,8 @@ Q-Q 그림은 관측된 잔차의 분위수를 정규분포의 이론적 분위�
     import statsmodels.api as sm
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 그림에서 읽으려는 것을 먼저 수로 적어 둔다.
@@ -389,7 +390,8 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 그림에서 읽으려는 것을 먼저 수로 적어 둔다.

@@ -25,7 +25,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     np.random.seed(0)
@@ -169,7 +170,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
@@ -345,7 +347,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)
@@ -644,7 +647,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(3)
@@ -714,7 +718,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import matplotlib.pyplot as plt
     import matplotlib.ticker as mticker
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(4)
@@ -782,7 +787,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(6)
@@ -862,7 +868,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import matplotlib.pyplot as plt
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(7)
@@ -933,7 +940,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     values = np.array([1, 2, 4, 8, 16], float)
@@ -1005,7 +1013,8 @@ Matplotlib은 점을 찍는 방법을 둘 제공하는데, 기능이 다르다.
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"   # 한글 글꼴
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False            # 음수 기호가 네모가 되지 않게
 
     rng = np.random.default_rng(0)

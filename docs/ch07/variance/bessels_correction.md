@@ -170,7 +170,8 @@ $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$$
     import matplotlib.pyplot as plt
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def chi_squared_verification(sigma=3.0, n_sim=100_000, seed=42):

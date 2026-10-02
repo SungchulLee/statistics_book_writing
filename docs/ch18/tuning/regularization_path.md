@@ -173,7 +173,8 @@ CV 오차가 최소인 lambda 선택
     import numpy as np
     from sklearn.linear_model import lasso_path, LassoCV
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 예시 자료: 참으로 관련 있는 변수 4개와 잡음 변수 8개

@@ -157,7 +157,8 @@ $$
     import matplotlib.pyplot as plt
     import numpy as np
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 설명변수가 하나뿐이면 산점도가 선형성을 보는 가장 곧은 방법이다.

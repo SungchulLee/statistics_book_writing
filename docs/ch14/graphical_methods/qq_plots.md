@@ -25,7 +25,8 @@
     import matplotlib.pyplot as plt
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
@@ -146,7 +147,8 @@
     import matplotlib.pyplot as plt
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):
@@ -247,7 +249,8 @@
     import matplotlib.pyplot as plt
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def plot_qq_with_custom_spines(data, dist="norm", sparams=(), figsize=(12, 3)):

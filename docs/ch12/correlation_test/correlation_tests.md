@@ -324,7 +324,8 @@ Pearson의 $r$은 두 변수 사이의 **선형** 관계를 잰다. 귀무가설
     import matplotlib.pyplot as plt
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
@@ -492,7 +493,8 @@ Spearman의 $\rho_s$는 두 변수 사이의 **단조** 관계를 잰다. 원자
     import matplotlib.pyplot as plt
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
@@ -668,7 +670,8 @@ $$
     import scipy.stats as stats
     from fractions import Fraction as F
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 위의 load_data.py를 파일로 저장했다면 다음 한 줄로 대신할 수 있다.
@@ -839,7 +842,8 @@ income = [15000, 29000, 68000, 52000, 32000, 80000, 41000, 45000, 26000, 33000]
     import scipy.stats as stats
     from math import factorial
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def main():

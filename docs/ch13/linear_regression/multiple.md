@@ -73,7 +73,8 @@ $$
     from sklearn.model_selection import train_test_split
     from sklearn.linear_model import LinearRegression
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 광고비와 매출 자료. TV·라디오·신문 광고비와 매출이 들어 있다.
@@ -428,7 +429,8 @@ $$
     import statsmodels.formula.api as sm
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
 

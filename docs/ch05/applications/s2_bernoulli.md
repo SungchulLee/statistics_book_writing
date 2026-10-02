@@ -195,7 +195,8 @@ $p = 1/2$에서는 위 식이 $0/0$이 되고 실제 상관계수는 0이다. �
     import numpy as np
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(1)

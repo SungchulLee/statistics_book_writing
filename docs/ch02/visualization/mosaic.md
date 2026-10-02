@@ -310,7 +310,8 @@ $$
     import pandas as pd
     from statsmodels.graphics.mosaicplot import mosaic
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     data = {'SUV': 28*['예'] + 35*['아니오'] + 97*['예'] + 104*['아니오'],
@@ -452,7 +453,8 @@ $$
     from scipy import stats
     from statsmodels.graphics.mosaicplot import mosaic
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(7)

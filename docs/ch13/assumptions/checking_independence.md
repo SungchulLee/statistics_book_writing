@@ -345,7 +345,8 @@ $$
     import numpy as np
     from statsmodels.stats.stattools import durbin_watson
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 잔차를 시간 순서대로 잇는다. 위아래로 무작위하게 오가야 하고, 같은 쪽에

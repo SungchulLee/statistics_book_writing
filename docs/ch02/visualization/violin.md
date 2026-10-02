@@ -34,10 +34,12 @@
     import matplotlib.pyplot as plt
     import numpy as np
 
-    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 후보를 늘어놓으면 matplotlib 가
+    # 설치된 첫 번째를 집으므로, 리눅스('NanumGothic')·맥('Apple SD Gothic Neo')·
+    # 윈도우('Malgun Gothic')에서 코드를 고치지 않고 그대로 돌릴 수 있다.
     # 글꼴을 바꾸면 마이너스 기호가 깨지므로 unicode_minus 도 함께 꺼 준다.
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     np.random.seed(0)
@@ -258,7 +260,8 @@ Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을
     import matplotlib.pyplot as plt
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     # 자료를 인터넷에서 내려받으므로 실행에 연결이 필요하다.
@@ -568,7 +571,8 @@ Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을
     from scipy.stats import gaussian_kde
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(0)
@@ -634,7 +638,8 @@ Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을
     from scipy.stats import gaussian_kde
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(1)
@@ -711,7 +716,8 @@ Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을
     from scipy.stats import gaussian_kde
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(2)
@@ -784,7 +790,8 @@ Seaborn은 집단화 기능이 내장된 더 다듬어진 바이올린 그림을
     from scipy.stats import gaussian_kde
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(0)

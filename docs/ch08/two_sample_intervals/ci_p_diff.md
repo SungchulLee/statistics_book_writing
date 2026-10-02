@@ -270,7 +270,8 @@ $p_N - p_S$의 90% 신뢰구간을 구성하라.
     import matplotlib.pyplot as plt
     from scipy.stats import norm, beta
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng_seed = 42        # 아래 그림을 재현하려면 고정한다

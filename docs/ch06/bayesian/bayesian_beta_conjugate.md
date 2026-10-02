@@ -322,7 +322,8 @@ $a + b$는 **사전 유효 표본크기**로 작동한다. 이 값이 클수록 
     ```python
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     theta = np.linspace(0, 1, 1000)

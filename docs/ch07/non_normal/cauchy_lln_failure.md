@@ -78,7 +78,8 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
     import numpy as np
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(42)
@@ -222,7 +223,8 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
     ```python
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def sample_mean_distributions(dist, n_vals, n_reps=10_000):

@@ -139,7 +139,8 @@ $p = 0.1$은 어느 쪽에도 딱 맞지 않는 어중간한 자리다. 아래 �
     import numpy as np
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     n = 100

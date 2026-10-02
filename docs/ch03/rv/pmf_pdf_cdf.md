@@ -119,7 +119,8 @@ $$
     import numpy as np
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 왼쪽에 PDF, 오른쪽에 CDF, 가운데에는 둘의 관계를 나타내는 화살표를 놓는다.
@@ -413,7 +414,8 @@ $$
     import numpy as np
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     fig, ax = plt.subplots(figsize=(12, 3))
@@ -550,7 +552,8 @@ $$
     import numpy as np
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(0)
@@ -671,7 +674,8 @@ $$
     import numpy as np
     import scipy.stats as stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     np.random.seed(42)

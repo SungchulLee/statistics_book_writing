@@ -142,7 +142,8 @@ $$
     from statsmodels.stats.anova import anova_lm
     from statsmodels.graphics.factorplots import interaction_plot
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def load_data():

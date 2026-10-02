@@ -142,7 +142,8 @@ $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
     모의실험으로 두 답을 확인한다.
 
     ```python
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def return_precision_simulation(seed=42):
@@ -376,7 +377,8 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
     그림을 그린 뒤 (2)의 두 비용을 수로 재어 본다.
 
     ```python
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def realized_volatility_windows(seed=42):

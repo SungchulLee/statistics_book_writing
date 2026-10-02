@@ -51,7 +51,8 @@ $p$값은 대립가설에 따라 달라진다.
     import matplotlib.pyplot as plt
     from scipy.stats import f
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     sample1 = [12, 15, 14, 10, 13, 14, 12, 11]
@@ -137,7 +138,8 @@ $p$값은 대립가설에 따라 달라진다.
     import numpy as np
     from scipy.stats import f
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     INK, BLUE, BLUEL = "#37474F", "#1565C0", "#DCEBFB"

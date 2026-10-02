@@ -33,9 +33,11 @@
     import matplotlib.pyplot as plt
     import pandas as pd
 
-    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 맥이면 'Apple SD Gothic Neo',
-    # 윈도우면 'Malgun Gothic', 리눅스면 'NanumGothic' 정도가 무난하다.
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    # 그림에 한글을 쓰므로 한글 글꼴을 지정한다. 후보를 늘어놓으면 matplotlib 가
+    # 설치된 첫 번째를 집으므로, 리눅스('NanumGothic')·맥('Apple SD Gothic Neo')·
+    # 윈도우('Malgun Gothic')에서 코드를 고치지 않고 그대로 돌릴 수 있다.
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     # 자료를 인터넷에서 내려받으므로 실행에 연결이 필요하다.
@@ -241,7 +243,8 @@ $$
     import scipy.stats as stats
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     np.random.seed(0)
@@ -427,7 +430,8 @@ $$
     import matplotlib.pyplot as plt
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     # 표본 크기를 10^4, 5*10^4, 10^5 로 늘려 가며 얻은 몬테카를로 추정 오차를 흉내 낸 자료다.
@@ -709,7 +713,8 @@ X반의 시험 점수 상자그림은 중앙값 75, $Q_1 = 65$, $Q_3 = 85$, 아�
     import matplotlib.pyplot as plt
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(0)
@@ -897,7 +902,8 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
     import matplotlib.pyplot as plt
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(7)
@@ -946,7 +952,8 @@ $1.5 \times \mathrm{IQR}$ 규칙은 **대칭 분포를 전제로 설계되었다
     import matplotlib.pyplot as plt
 
     # 그림에 한글이 들어가므로 한글 글꼴을 지정한다(지정하지 않으면 네모로 깨진다).
-    plt.rcParams['font.family'] = 'Apple SD Gothic Neo'
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams['axes.unicode_minus'] = False
 
     rng = np.random.default_rng(5)

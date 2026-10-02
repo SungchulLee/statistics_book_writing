@@ -212,7 +212,8 @@ $B$가 크면 두 방식이 거의 같은 답을 준다.
     # 보기 1 의 data, n, boot_means, se_bootstrap, plt, np 를 그대로 이어 쓴다.
     from scipy import stats
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))

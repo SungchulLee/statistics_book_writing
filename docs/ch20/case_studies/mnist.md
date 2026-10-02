@@ -289,7 +289,8 @@
     그러나 "참값과 독립"이 "열 범주에 고르게"를 뜻하지는 **않는다.** 가중치는 무작위라도 **한 번 뽑히고 나면 고정**이고, 그 고정된 $\mathbf{W}, \mathbf{b}$가 어느 범주의 로짓을 체계적으로 크게 만들 수 있다. MNIST 이미지가 서로 닮아 있으므로(가운데 밝고 테두리 $0$) **거의 모든 이미지가 같은 범주로 쏠릴 것**이라고 보는 편이 맞다. 아직 아무것도 배우지 않은 모형은 "무작위로 고르는 모형"이 아니라 **"한 가지 답만 외치는 모형"**에 가깝다.
 
     ```python
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def show_images(images, true_labels, pred_labels, title):

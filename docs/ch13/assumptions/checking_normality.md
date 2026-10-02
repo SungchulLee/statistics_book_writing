@@ -189,7 +189,8 @@ $$
     import numpy as np
     from scipy.stats import norm, skew, kurtosis
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 정규성은 자료가 아니라 잔차에 요구되는 가정이다. 게다가 계수 추정의
@@ -314,7 +315,8 @@ $$
     import scipy.stats as stats
     import matplotlib.pyplot as plt
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     residuals = model.resid

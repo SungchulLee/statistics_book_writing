@@ -341,7 +341,8 @@ Turner 외(2008)의 표에서 "긍정이 아닌데 긍정으로 읽히게 출판
     from scipy import stats
 
     # 축이름과 제목이 한글이므로 한글 글꼴을 지정한다.
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     rng = np.random.default_rng(0)

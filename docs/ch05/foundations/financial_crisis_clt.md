@@ -211,7 +211,8 @@ $\theta$를 적분해 없애면 둘째 모형에서 $D$의 분포를 손으로 �
     유도할 답이 있는 문제가 아니다. **그림에서 무엇이 읽히고 무엇이 읽히지 않는가**가 이 보기의 전부이므로, 눈으로 본 것을 수치로 바꿔 가며 읽는다. 아래 코드는 보기 1의 `d_indep`, `d_dep`, `n`, `p`를 그대로 이어받는다.
 
     ```python
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 그림에서 읽을 수치를 미리 찍어 둔다.

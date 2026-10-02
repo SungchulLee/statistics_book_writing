@@ -218,7 +218,8 @@ $$\begin{array}{lll}
     import numpy as np
     from sklearn.linear_model import LinearRegression
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     def generate_data(n=50, noise_level=3.0, seed=0):

@@ -457,7 +457,8 @@ $$
     from scipy import stats
     from statsmodels.stats.stattools import durbin_watson
 
-    plt.rcParams["font.family"] = "Apple SD Gothic Neo"
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
     # 그림에서 읽으려는 세 가지를 먼저 수로 적어 둔다.
