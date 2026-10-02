@@ -1799,7 +1799,7 @@ $$
 ```python
 import os
 import tarfile
-import urllib
+import urllib.request   # urllib 만 가져오면 urllib.request 가 없다
 from sklearn import metrics
 from sklearn.linear_model import LinearRegression
 
@@ -1835,7 +1835,7 @@ if __name__ == "__main__":
     ```python
     import os
     import tarfile
-    import urllib
+    import urllib.request   # urllib 만 가져오면 urllib.request 가 없다
     import numpy as np
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -1890,13 +1890,17 @@ if __name__ == "__main__":
 
     ![주택 자료의 회귀직선](./img/simple_927.png)
 
-    잔차제곱합이 379,436이다. 이 값 자체보다 중요한 것은 그것이 **최소**라는 사실이다. 다른 어떤 직선을 골라도 이보다 큰 값이 나온다.
+    **(a)** 점 2 만여 개를 `','` 로 찍고 그 위에 적합된 직선을 겹쳐 그렸다.
 
-    ![회귀직선과 잔차](./img/simple_885.png)
+    **(b) $379{,}436$ 은 예측값이다.** 적합된 직선이 `median_house_value = 45085.58 + 41793.85 * median_income` 이므로
 
-    (a)와 (b)를 각각 계산하고 잔차제곱합 379,436을 얻는다.
+    $$
+    45085.58 + 41793.85 \times 8 = 379{,}436.38
+    $$
 
-    (b)에서 적합된 직선은 `median_house_value = 45085.58 + 41793.85 * median_income`이므로 `median_income = 8`에서의 예측값은 379,436달러이다. 다만 이 자료의 `median_house_value`는 500,001에서 절단되어 있고(전체의 4.7%가 이 값이다) 그 때문에 고소득 구간에서 직선이 체계적으로 어긋난다는 점에 유의하라.
+    이고, 이것이 `model.predict([[8]])` 이 찍은 수다. **잔차제곱합이 아니다.** 잔차제곱합은 2 만여 가구의 제곱합이라 $10^{12}$ 자릿수이며 위 코드는 그것을 계산하지도 않는다. 최소제곱이 최소화하는 것이 잔차제곱합이라는 사실과, 이 자리에서 찍힌 수가 무엇인가는 별개다.
+
+    **절단에 유의하라.** 이 자료의 `median_house_value` 는 $500{,}001$ 에서 잘려 있고(전체의 $4.7\%$ 가 이 값이다), 그래서 고소득 구간에서 직선이 체계적으로 어긋난다. $x = 8$ 은 그 구간에 가까우므로 위 예측값도 그만큼 낮게 끌려 있다.
 
 ---
 
