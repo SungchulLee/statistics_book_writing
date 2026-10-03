@@ -32,36 +32,65 @@ $$
 
 </div>
 
-### 성질
-
-$$
-\begin{aligned}
-E[Y] &= \frac{r}{p} \\[4pt]
-\text{Var}(Y) &= \frac{r(1-p)}{p^2}
-\end{aligned}
-$$
-
 ### 기하 확률변수의 합을 통한 유도
 
-$r$번째 성공까지 걸린 시행을 **성공이 나올 때마다 끊어** 토막으로 나누어 보자. 첫 토막은 처음부터 첫 성공까지, 둘째 토막은 그 직후부터 둘째 성공까지, 이런 식이다.
+<div class="thmbox" markdown>
+
+### 정리 1. 음이항은 기하확률변수의 합이다 { .thm }
+
+$Y \sim \text{NegBin}(r, p)$ 이면 독립인
 
 $$
-\underbrace{\texttt{FFS}}_{X_1}\;\underbrace{\texttt{FS}}_{X_2}\;\underbrace{\texttt{FFFFS}}_{X_3}\;\cdots
+X_1, X_2, \ldots, X_r \overset{\text{iid}}{\sim} \text{Geometric}(p)
 $$
 
-$X_i$를 $i$번째 토막의 길이라 하면 정의에 따라 $Y = X_1 + \cdots + X_r$이다. 그런데 각 토막은 **"성공이 나올 때까지 던진 횟수"** 라는 같은 실험이다. 시행들이 독립이고 성공확률이 늘 $p$이므로, 앞 토막에서 무슨 일이 있었는지가 다음 토막에 아무 영향을 주지 않는다. 따라서
+가 있어 $Y = X_1 + X_2 + \cdots + X_r$ 로 쓸 수 있다.
+
+</div>
+
+??? proof "증명"
+
+    $r$번째 성공까지 걸린 시행을 **성공이 나올 때마다 끊어** 토막으로 나누어 보자. 첫 토막은 처음부터 첫 성공까지, 둘째 토막은 그 직후부터 둘째 성공까지, 이런 식이다.
+
+    $$
+    \underbrace{\texttt{FFS}}_{X_1}\;\underbrace{\texttt{FS}}_{X_2}\;\underbrace{\texttt{FFFFS}}_{X_3}\;\cdots
+    $$
+
+    $X_i$를 $i$번째 토막의 길이라 하면 정의에 따라 $Y = X_1 + \cdots + X_r$이다. 그런데 각 토막은 **"성공이 나올 때까지 던진 횟수"** 라는 같은 실험이다. 시행들이 독립이고 성공확률이 늘 $p$이므로, 앞 토막에서 무슨 일이 있었는지가 다음 토막에 아무 영향을 주지 않는다. 따라서
+
+    $$
+    X_1, X_2, \ldots, X_r \overset{\text{iid}}{\sim} \text{Geometric}(p), \qquad Y = \sum_{i=1}^r X_i
+    $$
+
+    이다. 기하분포의 무기억성을 다른 말로 한 것이기도 하다. 성공 하나를 보고 나면 계수기가 처음으로 되돌아간다.
+
+    $\square$
+
+<div class="thmbox" markdown>
+
+### 정리 2. 음이항분포의 평균과 분산 { .thm }
+
+$Y \sim \text{NegBin}(r, p)$ 이면
 
 $$
-X_1, X_2, \ldots, X_r \overset{\text{iid}}{\sim} \text{Geometric}(p), \qquad Y = \sum_{i=1}^r X_i
+E[Y] = \frac{r}{p}, \qquad \operatorname{Var}(Y) = \frac{r(1-p)}{p^2}
 $$
 
-이다. 기하분포의 무기억성을 다른 말로 한 것이기도 하다. 성공 하나를 보고 나면 계수기가 처음으로 되돌아간다.
+이다. 둘 다 기하분포의 값에 **정확히 $r$ 배**다.
 
-평균은 선형성으로 곧바로 더해지고, 분산은 토막들이 독립이라 교차항 없이 더해진다.
+</div>
 
-$$
-E[Y] = \sum_{i=1}^r E[X_i] = \frac{r}{p}, \qquad \text{Var}(Y) = \sum_{i=1}^r \text{Var}(X_i) = \frac{r(1-p)}{p^2}
-$$
+??? proof "증명"
+
+    정리 1 로 $Y = \sum_{i=1}^{r} X_i$ 이고 $X_i$ 들이 독립이며 $\text{Geo}(p)$ 를 따른다. [기하분포](geometric.md) 쪽 정리 2 에서 평균과 분산이 $1/p$ 와 $(1-p)/p^2$ 이므로
+
+    $$
+    E[Y] = \sum_{i=1}^r E[X_i] = \frac{r}{p}, \qquad \operatorname{Var}(Y) = \sum_{i=1}^r \operatorname{Var}(X_i) = \frac{r(1-p)}{p^2}
+    $$
+
+    다. 평균은 선형성으로 곧바로 더해지고, 분산은 **토막들이 독립이라** 교차항 없이 더해진다. $\square$
+
+    **쪼개는 길의 값어치가 여기 있다.** PMF 에서 $\binom{k-1}{r-1}$ 를 안고 직접 급수를 계산하려면 번거로운데, 토막으로 나누어 보면 기하분포에서 이미 한 계산을 $r$ 번 재사용하는 것으로 끝난다. 이항분포를 베르누이로 쪼갠 것(이항분포 쪽 정리 2)과 같은 수법이다.
 
 <div class="exbox" markdown>
 
@@ -562,8 +591,48 @@ $$
 
 음이항분포는 두 가지 서로 다른 길로 포아송분포에 닿는다. 4.1절 사슬의 마지막 고리다.
 
-- **극한으로서.** $r \to \infty$, $p \to 1$이면서 $r(1-p)/p \to \lambda$로 고정하면 실패 횟수를 세는 음이항분포가 $\text{Poisson}(\lambda)$로 수렴한다. 성공이 너무 흔해져서 실패가 드문 사건이 되는 상황이다.
+- **극한으로서.** 성공이 너무 흔해져서 실패가 드문 사건이 되면 포아송이 나온다(정리 3).
 - **혼합으로서.** 포아송분포의 비율 $\lambda$ 자체를 감마분포를 따르는 확률변수로 두고 섞으면 음이항분포가 나온다(연습문제 7). 방향을 거꾸로 읽으면, 음이항분포는 **포아송분포에 산포를 하나 더 얹은 것**이다. $\theta \to 0$이면 포아송으로 되돌아간다.
+
+<div class="thmbox" markdown>
+
+### 정리 3. 음이항분포의 포아송 극한 { .thm }
+
+실패 횟수 $K = Y - r$ 의 분포에서 $r \to \infty$, $p \to 1$ 이면서
+
+$$
+\mu = \frac{r(1-p)}{p} \to \lambda
+$$
+
+로 고정하면 각 $k = 0, 1, 2, \ldots$ 에 대해 $P(K = k) \to e^{-\lambda}\lambda^k/k!$ 다.
+
+</div>
+
+??? proof "증명"
+
+    MGF 로 간다. 실패 횟수 판본의 MGF 는
+
+    $$
+    M_K(t) = \left(\frac{p}{1 - (1-p)e^{t}}\right)^{r}
+    $$
+
+    이다. $\mu = r(1-p)/p$ 를 고정하고 $r \to \infty$ 로 보내려면 $1-p = \frac{\mu/r}{1 + \mu/r}$, 곧 $p = \frac{1}{1+\mu/r}$ 로 두면 된다. 이를 넣으면
+
+    $$
+    M_K(t) = \left(\frac{1}{1 + \frac{\mu}{r}\left(1 - e^{t}\right)}\right)^{r}
+    = \left(1 - \frac{\mu(e^t - 1)}{r}\right)^{-r}
+    $$
+
+    이다. 여기서 $\lim_{r\to\infty}(1 - x/r)^{-r} = e^{x}$ 이므로 $\mu \to \lambda$ 일 때
+
+    $$
+    M_K(t) \;\longrightarrow\; \exp\bigl(\lambda(e^t - 1)\bigr)
+    $$
+
+    로 **포아송분포의 MGF** 다(포아송 쪽 정리 4 의 증명에서 쓴 것과 같은 식이다). MGF 가 0 의 근방에서 수렴하면 분포수렴이 따라오므로 결론이 나온다. $\square$
+
+    **$(1 - x/r)^{-r} \to e^x$ 가 이 극한의 전부다.** 이항분포가 포아송으로 갈 때 $(1 - \lambda/n)^{n} \to e^{-\lambda}$ 를 썼던 것과 같은 극한이고, 지수가 음수로 바뀐 것뿐이다. **드문 사건을 세는 분포는 결국 포아송으로 모인다.**
+
 
 실제 계수 자료에서 분산이 평균보다 크면(과대산포) 포아송 대신 음이항을 쓰는 관행이 여기에서 나온다.
 

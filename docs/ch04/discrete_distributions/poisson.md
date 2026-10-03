@@ -32,11 +32,31 @@ $$
 
 ### PMF의 합이 1임을 확인하기
 
+<div class="thmbox" markdown>
+
+### 정리 1. 포아송분포의 PMF 는 확률분포다 { .thm }
+
+$\lambda > 0$ 이면
+
 $$
-\sum_{k=0}^{\infty} \frac{e^{-\lambda} \lambda^k}{k!} = e^{-\lambda} \sum_{k=0}^{\infty} \frac{\lambda^k}{k!} = e^{-\lambda} \cdot e^{\lambda} = 1
+\sum_{k=0}^{\infty} \frac{e^{-\lambda} \lambda^k}{k!} = 1
 $$
 
-$e^{\lambda}$의 Taylor 전개를 사용했다.
+이다.
+
+</div>
+
+??? proof "증명"
+
+    $e^{\lambda}$ 의 테일러 급수 $\sum_{k=0}^{\infty} \lambda^k/k! = e^{\lambda}$ 가 모든 실수 $\lambda$ 에서 수렴한다. 상수 $e^{-\lambda}$ 를 합 밖으로 빼면
+
+    $$
+    \sum_{k=0}^{\infty} \frac{e^{-\lambda} \lambda^k}{k!} = e^{-\lambda} \sum_{k=0}^{\infty} \frac{\lambda^k}{k!} = e^{-\lambda} \cdot e^{\lambda} = 1
+    $$
+
+    이다. $\square$
+
+    **앞의 $e^{-\lambda}$ 는 정규화 상수일 뿐이다.** 분포의 모양을 정하는 것은 $\lambda^k/k!$ 이고, $e^{-\lambda}$ 는 그 합을 1 로 맞추려고 붙은 수다. 어떤 분포의 밀도든 PMF 든 **모양을 보는 부분과 눈금을 맞추는 부분**으로 갈라 읽는 습관이 여기서부터 쓸모가 있다.
 
 <div class="exbox" markdown>
 
@@ -263,35 +283,47 @@ $e^{\lambda}$의 Taylor 전개를 사용했다.
 
 ## 2. 성질
 
-$$
-\begin{aligned}
-E[X] &= \lambda \\
-\text{Var}(X) &= \lambda \\
-\text{SD}(X) &= \sqrt{\lambda}
-\end{aligned}
-$$
+<div class="thmbox" markdown>
 
-평균과 분산이 같다는 것은 포아송분포를 규정하는 특징이며, 진단 점검에 자주 쓰인다.
+### 정리 2. 포아송분포의 평균과 분산 { .thm }
 
-### 평균의 유도
+$X \sim \text{Poisson}(\lambda)$ 이면
 
 $$
-E[X] = \sum_{k=0}^{\infty} k \cdot \frac{e^{-\lambda}\lambda^k}{k!} = \lambda e^{-\lambda} \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!} = \lambda e^{-\lambda} \cdot e^{\lambda} = \lambda
+E[X] = \lambda, \qquad \operatorname{Var}(X) = \lambda, \qquad \operatorname{SD}(X) = \sqrt{\lambda}
 $$
 
-### 분산의 유도
+이다. **평균과 분산이 같다.**
 
-먼저 $E[X(X-1)]$을 계산한다:
+</div>
 
-$$
-E[X(X-1)] = \sum_{k=2}^{\infty} k(k-1) \frac{e^{-\lambda}\lambda^k}{k!} = \lambda^2 e^{-\lambda} \sum_{k=2}^{\infty} \frac{\lambda^{k-2}}{(k-2)!} = \lambda^2
-$$
+??? proof "증명"
 
-그러면:
+    두 계산 모두 **계승을 깎아 테일러 급수를 되살리는 것**이 요령이다.
 
-$$
-\text{Var}(X) = E[X^2] - (E[X])^2 = E[X(X-1)] + E[X] - (E[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda
-$$
+    **평균.** $k/k! = 1/(k-1)!$ 이므로 $k = 0$ 인 항이 사라지고 지수가 하나 내려간다.
+
+    $$
+    E[X] = \sum_{k=0}^{\infty} k \cdot \frac{e^{-\lambda}\lambda^k}{k!} = \lambda e^{-\lambda} \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!} = \lambda e^{-\lambda} \cdot e^{\lambda} = \lambda
+    $$
+
+    남은 합이 다시 $e^{\lambda}$ 라 정규화 상수와 약분된다.
+
+    **분산.** $E[X^2]$ 을 직접 구하지 않고 **하강계승적률** $E[X(X-1)]$ 을 구한다. $k(k-1)/k! = 1/(k-2)!$ 로 계승을 두 번 깎을 수 있기 때문이다.
+
+    $$
+    E[X(X-1)] = \sum_{k=2}^{\infty} k(k-1) \frac{e^{-\lambda}\lambda^k}{k!} = \lambda^2 e^{-\lambda} \sum_{k=2}^{\infty} \frac{\lambda^{k-2}}{(k-2)!} = \lambda^2
+    $$
+
+    $X^2 = X(X-1) + X$ 이므로
+
+    $$
+    \operatorname{Var}(X) = E[X(X-1)] + E[X] - (E[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda
+    $$
+
+    이다. $\square$
+
+    **$\lambda^2$ 이 지워지는 것이 포아송의 성격을 만든다.** 이항분포에서는 $n(n-1)p^2$ 과 $n^2p^2$ 가 완전히 지워지지 않고 $-np^2$ 이 남아 분산이 평균보다 작았다. 포아송은 그 남는 항마저 없어 분산이 평균과 같아진다. 평균과 분산이 같다는 것은 포아송분포를 규정하는 특징이며, 진단 점검에 자주 쓰인다.
 
 <div class="exbox" markdown>
 
@@ -415,7 +447,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리. 이항분포의 포아송 극한 { .thm }
+### 정리 3. 이항분포의 포아송 극한 { .thm }
 
 $p = \lambda/n$으로 두면 각 $k = 0, 1, 2, \ldots$에 대해
 
@@ -581,13 +613,46 @@ $$
 
 ## 5. 가법성
 
-$X_1 \sim \text{Poisson}(\lambda_1)$과 $X_2 \sim \text{Poisson}(\lambda_2)$가 독립이면:
+<div class="thmbox" markdown>
+
+### 정리 4. 포아송분포의 가법성 { .thm }
+
+$X_1 \sim \text{Poisson}(\lambda_1)$ 과 $X_2 \sim \text{Poisson}(\lambda_2)$ 가 독립이면
 
 $$
 X_1 + X_2 \sim \text{Poisson}(\lambda_1 + \lambda_2)
 $$
 
-이는 독립인 포아송 확률변수의 임의의 유한 합으로 확장된다.
+이다. 독립인 포아송 확률변수의 임의의 유한 합으로 확장된다.
+
+</div>
+
+??? proof "증명"
+
+    **적률생성함수로.** 포아송의 MGF 는 $M(t) = \exp\bigl(\lambda(e^t - 1)\bigr)$ 이다. 독립이면 MGF 가 곱해지므로
+
+    $$
+    M_{X_1+X_2}(t) = e^{\lambda_1(e^t-1)}\,e^{\lambda_2(e^t-1)} = e^{(\lambda_1+\lambda_2)(e^t-1)}
+    $$
+
+    이고 이것이 모수 $\lambda_1 + \lambda_2$ 인 포아송의 MGF 다. MGF 가 0 의 근방에서 유한하면 분포를 하나로 결정하므로 합의 분포가 정해진다.
+
+    **직접 더해도 같다.** $X_1 + X_2 = m$ 이 되는 길을 $X_1 = k$ 로 나누어 센다.
+
+    $$
+    P(X_1 + X_2 = m) = \sum_{k=0}^{m} \frac{e^{-\lambda_1}\lambda_1^{k}}{k!}\cdot\frac{e^{-\lambda_2}\lambda_2^{m-k}}{(m-k)!}
+    = \frac{e^{-(\lambda_1+\lambda_2)}}{m!}\sum_{k=0}^{m}\binom{m}{k}\lambda_1^{k}\lambda_2^{m-k}
+    $$
+
+    $1/(k!(m-k)!) = \binom{m}{k}/m!$ 로 고쳐 쓴 것이다. 남은 합은 이항정리로 $(\lambda_1+\lambda_2)^m$ 이므로
+
+    $$
+    P(X_1+X_2 = m) = \frac{e^{-(\lambda_1+\lambda_2)}(\lambda_1+\lambda_2)^m}{m!}
+    $$
+
+    다. $\square$
+
+    **포아송 과정의 구간을 이어 붙이는 것**이 이 정리의 뜻이다. 두 시간 구간에서 센 사건 수를 더하면 이어 붙인 구간에서 센 것과 같다. 비율 $\lambda$ 가 더해지는 까닭은 구간의 길이가 더해지기 때문이다.
 
 ---
 

@@ -34,52 +34,83 @@ $$
 
 ### PMF의 합이 1임을 확인하기
 
-$$
-\sum_{k=1}^{\infty} (1-p)^{k-1} p = p \sum_{j=0}^{\infty} (1-p)^j = p \cdot \frac{1}{1 - (1-p)} = 1
-$$
+<div class="thmbox" markdown>
 
-공비 $|1-p| < 1$인 등비급수 공식을 사용했다.
+### 정리 1. 기하분포의 PMF 는 확률분포다 { .thm }
 
-### 성질
+$0 < p \le 1$ 이면
 
 $$
-\begin{aligned}
-E[X] &= \frac{1}{p} \\[4pt]
-\text{Var}(X) &= \frac{1 - p}{p^2}
-\end{aligned}
+\sum_{k=1}^{\infty} (1-p)^{k-1} p = 1
 $$
 
-### 평균의 유도
+이다.
+
+</div>
+
+??? proof "증명"
+
+    $j = k-1$ 로 놓으면 공비 $q = 1-p$ 인 등비급수가 된다. $0 < p \le 1$ 이므로 $|q| < 1$ 이고 급수가 수렴한다.
+
+    $$
+    \sum_{k=1}^{\infty} (1-p)^{k-1} p = p \sum_{j=0}^{\infty} (1-p)^j = p \cdot \frac{1}{1 - (1-p)} = \frac{p}{p} = 1
+    $$
+
+    $\square$
+
+    **언젠가는 반드시 성공한다**는 말을 식으로 적은 것이다. $p > 0$ 이기만 하면 영원히 실패할 확률이 0 이다. 그 확률이 $\lim_{k\to\infty}(1-p)^k = 0$ 이기 때문이다.
+
+<div class="thmbox" markdown>
+
+### 정리 2. 기하분포의 평균과 분산 { .thm }
+
+$X \sim \text{Geo}(p)$ 이면
 
 $$
-E[X] = \sum_{k=1}^{\infty} k(1-p)^{k-1} p = p \cdot \frac{d}{dq}\left[\sum_{k=0}^{\infty} q^k \right]_{q=1-p} \!\!\!\!= p \cdot \frac{1}{(1-q)^2}\bigg|_{q=1-p} = \frac{1}{p}
+E[X] = \frac{1}{p}, \qquad \operatorname{Var}(X) = \frac{1-p}{p^2}
 $$
 
-### 분산의 유도
+이다.
 
-$E[X^2]$을 직접 구하려 하면 $k^2$ 때문에 급수가 다루기 나빠진다. 대신 **하강계승적률** $E[X(X-1)]$을 구한다. $k(k-1)$은 $q^k$를 두 번 미분할 때 그대로 나오는 계수이기 때문이다.
+</div>
 
-$$
-\sum_{k=0}^{\infty} q^k = \frac{1}{1-q}
-\;\;\xrightarrow{\ \text{두 번 미분}\ }\;\;
-\sum_{k=2}^{\infty} k(k-1)q^{k-2} = \frac{2}{(1-q)^3}
-$$
+??? proof "증명"
 
-양변에 $q$를 곱해 지수를 $k-1$로 맞추고 $p$를 곱한 뒤 $q = 1-p$를 넣으면($1-q = p$이다)
+    **등비급수를 미분하는 것**이 두 적률을 모두 준다. 한 번 미분하면 평균, 두 번 미분하면 하강계승적률이다.
 
-$$
-E[X(X-1)] = p\sum_{k=2}^{\infty} k(k-1)q^{k-1} = p \cdot \frac{2q}{(1-q)^3} = p\cdot\frac{2(1-p)}{p^3} = \frac{2(1-p)}{p^2}
-$$
+    **평균.** $\sum_{k=0}^{\infty} q^k = (1-q)^{-1}$ 을 $q$ 로 미분하면 $\sum_{k=1}^{\infty} kq^{k-1} = (1-q)^{-2}$ 다. $q = 1-p$ 를 넣고 $p$ 를 곱하면
 
-이다. 평균을 구할 때 한 번 미분했던 것을 한 번 더 미분한 것뿐이다. 이제 $X^2 = X(X-1) + X$를 쓰면
+    $$
+    E[X] = \sum_{k=1}^{\infty} k(1-p)^{k-1} p = p \cdot \frac{1}{(1-q)^2}\bigg|_{q=1-p} = \frac{p}{p^2} = \frac{1}{p}
+    $$
 
-$$
-E[X^2] = E[X(X-1)] + E[X] = \frac{2(1-p)}{p^2} + \frac{1}{p}
-$$
+    이다. $1-q = p$ 라는 것만 챙기면 된다.
 
-$$
-\text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2(1-p)}{p^2} + \frac{1}{p} - \frac{1}{p^2} = \frac{1-p}{p^2}
-$$
+    **분산.** $E[X^2]$을 직접 구하려 하면 $k^2$ 때문에 급수가 다루기 나빠진다. 대신 **하강계승적률** $E[X(X-1)]$을 구한다. $k(k-1)$은 $q^k$를 두 번 미분할 때 그대로 나오는 계수이기 때문이다.
+
+    $$
+    \sum_{k=0}^{\infty} q^k = \frac{1}{1-q}
+    \;\;\xrightarrow{\ \text{두 번 미분}\ }\;\;
+    \sum_{k=2}^{\infty} k(k-1)q^{k-2} = \frac{2}{(1-q)^3}
+    $$
+
+    양변에 $q$를 곱해 지수를 $k-1$로 맞추고 $p$를 곱한 뒤 $q = 1-p$를 넣으면($1-q = p$이다)
+
+    $$
+    E[X(X-1)] = p\sum_{k=2}^{\infty} k(k-1)q^{k-1} = p \cdot \frac{2q}{(1-q)^3} = p\cdot\frac{2(1-p)}{p^3} = \frac{2(1-p)}{p^2}
+    $$
+
+    이다. 평균을 구할 때 한 번 미분했던 것을 한 번 더 미분한 것뿐이다. 이제 $X^2 = X(X-1) + X$를 쓰면
+
+    $$
+    E[X^2] = E[X(X-1)] + E[X] = \frac{2(1-p)}{p^2} + \frac{1}{p}
+    $$
+
+    $$
+    \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2(1-p)}{p^2} + \frac{1}{p} - \frac{1}{p^2} = \frac{1-p}{p^2}
+    $$
+
+    $\square$
 
 <div class="exbox" markdown>
 
@@ -348,7 +379,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리. 기하분포의 무기억성 { .thm }
+### 정리 3. 기하분포의 무기억성 { .thm }
 
 $X \sim \text{Geo}(p)$이면 모든 정수 $s, t \geq 0$에 대해
 
