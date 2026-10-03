@@ -36,7 +36,47 @@ $$
 M_k = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^k \quad \text{(sample central moment)}
 $$
 
-큰수의 법칙에 의해 $n \to \infty$일 때 $M_k' \xrightarrow{p} \mu_k'$이고 $M_k \xrightarrow{p} \mu_k$이므로, 표본 적률이 대응하는 모집단 적률을 일치추정한다.
+<div class="thmbox" markdown>
+
+### 정리 1. 표본 적률은 모집단 적률의 일치추정량이다 { .thm }
+
+$k$ 차 적률이 유한하면 $n \to \infty$ 일 때
+
+$$
+M_k' \xrightarrow{P} \mu_k',
+\qquad
+M_k \xrightarrow{P} \mu_k
+$$
+
+이다. **이것이 적률법 전체를 떠받치는 근거다** — 표본 적률을 모집단 적률 자리에 놓아도 되는 까닭이 여기 있다.
+
+</div>
+
+??? proof "증명"
+
+    **원적률.** $Y_i = X_i^k$ 라 두면 $Y_i$ 는 i.i.d. 이고 $E[Y_i] = \mu_k'$ 이 유한하다. $M_k' = \bar Y$ 이므로 큰수의 법칙(3.5절 정리 2)이 그대로 적용되어
+
+    $$
+    M_k' = \frac1n\sum_i X_i^k \xrightarrow{P} E[X^k] = \mu_k'
+    $$
+
+    다. **$X_i^k$ 도 i.i.d. 라는 한 가지 관찰이 전부다.**
+
+    **중심적률.** 이쪽은 $\bar X$ 가 끼어 있어 한 걸음 더 간다. 이항정리로 전개하면
+
+    $$
+    M_k = \frac1n\sum_i (X_i - \bar X)^k
+    = \sum_{j=0}^{k}\binom kj (-\bar X)^{k-j}\,\frac1n\sum_i X_i^{j}
+    = \sum_{j=0}^{k}\binom kj (-\bar X)^{k-j} M_j'
+    $$
+
+    로 **원적률들과 $\bar X$ 의 연속함수**가 된다. 각 $M_j' \xrightarrow{P} \mu_j'$ 이고 $\bar X \xrightarrow{P} \mu$ 이므로, 연속사상정리에 의해 그 연속함수도 대응하는 극한으로 수렴한다. 그 극한이 같은 전개를 모집단 적률로 적은 $\mu_k$ 다. $\square$
+
+    **적률법이 일치성을 공짜로 얻는 구조가 이것이다.** 모수를 적률의 연속함수로 풀 수 있다면, 그 함수에 표본 적률을 넣은 추정량도 연속사상정리로 일치한다. 그래서 적률법 추정량은 **거의 언제나 일치추정량**이다.
+
+    **대가는 효율이다.** 일치성은 쉽게 얻지만 분산이 MLE 보다 큰 경우가 많고, 적률을 높은 차수까지 쓰면 그 차이가 커진다. 높은 차 적률은 꼬리에 민감해서 흔들림이 크기 때문이다.
+
+
 
 ---
 

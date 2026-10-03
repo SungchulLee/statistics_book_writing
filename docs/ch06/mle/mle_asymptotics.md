@@ -32,19 +32,46 @@
 
 좋은 추정량이라면 자료를 더 모을수록 참값으로 수렴해야 한다. **일치성**은 이 최소한의 요구를 형식화한다.
 
-위의 정칙 조건 아래에서 MLE는 일치한다:
+<div class="thmbox" markdown>
+
+### 정리 1. MLE 의 일치성 { .thm }
+
+정칙 조건 아래에서
 
 $$
-\hat{\theta}_{\text{MLE}} \xrightarrow{P} \theta_0 \quad \text{as } n \to \infty
+\hat{\theta}_{\text{MLE}} \xrightarrow{P} \theta_0
+\qquad (n \to \infty)
 $$
 
-이는 임의의 $\epsilon > 0$에 대해 다음이 성립함을 뜻한다:
+이다. 곧 임의의 $\epsilon > 0$ 에 대해 $P\bigl(|\hat\theta_{\text{MLE}} - \theta_0| > \epsilon\bigr) \to 0$ 이다.
 
-$$
-P(|\hat{\theta}_{\text{MLE}} - \theta_0| > \epsilon) \to 0 \quad \text{as } n \to \infty
-$$
+</div>
 
-증명은 로그가능도비 $\ell(\theta) - \ell(\theta_0)$이 Kullback-Leibler 발산 $-\text{KL}(f_{\theta_0} \| f_\theta)$으로 균등수렴하고, 식별 가능성에 의해 이것이 $\theta = \theta_0$에서 유일하게 최대가 된다는 사실에 의존한다.
+??? proof "증명 개요"
+
+    **왜 참값이 이기는가**를 큰수의 법칙과 쿨백–라이블러 발산으로 볼 수 있다. 완전한 증명은 가능도의 균등수렴을 다루어야 하므로 여기서는 뼈대만 적는다.
+
+    표본당 로그가능도비를 본다.
+
+    $$
+    \frac1n\bigl[\ell(\theta) - \ell(\theta_0)\bigr]
+    = \frac1n\sum_{i=1}^{n} \log\frac{f(X_i;\theta)}{f(X_i;\theta_0)}
+    $$
+
+    오른쪽은 i.i.d. 항의 평균이므로 큰수의 법칙(3.5절 정리 2)에 의해 그 기댓값으로 수렴한다. 그 기댓값은 **$\theta_0$ 아래에서** 잰 것이므로
+
+    $$
+    E_{\theta_0}\!\left[\log\frac{f(X;\theta)}{f(X;\theta_0)}\right]
+    = -\operatorname{KL}\bigl(f_{\theta_0}\,\|\,f_\theta\bigr)
+    $$
+
+    다. **쿨백–라이블러 발산은 음이 아니고, 0 이 되는 것은 두 분포가 같을 때뿐이다**(옌센 부등식에서 나온다). 식별 가능성 조건이 "두 분포가 같으면 $\theta = \theta_0$"을 보장하므로, 극한 함수가 $\theta = \theta_0$ 에서만 최댓값 0 을 갖고 다른 곳에서는 **엄격히 음수**다.
+
+    그러므로 큰 $n$ 에서 $\theta \ne \theta_0$ 이면 $\ell(\theta) < \ell(\theta_0)$ 이고, $\ell$ 을 최대화하는 점이 $\theta_0$ 근방에 갇힌다. $\square$
+
+    **참값이 평균적으로 가장 높은 가능도를 준다**는 것이 일치성의 알맹이다. 자료는 $\theta_0$ 에서 나왔으므로 $\theta_0$ 의 밀도가 그 자료에 평균적으로 가장 잘 맞고, 표본이 커지면 그 평균적 우위가 흔들림을 압도한다.
+
+    **식별 가능성이 없으면 무너진다.** 두 모수값이 같은 분포를 주면 가능도가 둘을 구별하지 못하고 MLE 가 그 사이에서 오간다.
 
 !!! tip "일치성은 필요하지만 충분하지는 않다"
 
@@ -56,17 +83,57 @@ $$
 
 MLE의 점근적 성질 중 실무적으로 가장 중요한 것은 $n$이 클 때 표본분포가 근사적으로 정규가 된다는 점이다.
 
-정칙 조건 아래에서 MLE는 다음을 만족한다:
+<div class="thmbox" markdown>
+
+### 정리 2. MLE 의 점근정규성 { .thm }
+
+정칙 조건 아래에서
 
 $$
-\sqrt{n}(\hat{\theta}_{\text{MLE}} - \theta_0) \xrightarrow{d} N\left(0, \frac{1}{I(\theta_0)}\right)
+\sqrt{n}\bigl(\hat{\theta}_{\text{MLE}} - \theta_0\bigr) \xrightarrow{d} N\!\left(0, \frac{1}{I(\theta_0)}\right)
 $$
 
-동등하게, $n$이 크면:
+이고, 동등하게 $n$ 이 크면 $\hat\theta_{\text{MLE}} \;\dot\sim\; N\bigl(\theta_0,\, 1/(nI(\theta_0))\bigr)$ 다. **점근분산이 Fisher 정보량의 역수**이므로 MLE 는 크래머–라오 하한을 점근적으로 달성한다.
 
-$$
-\hat{\theta}_{\text{MLE}} \overset{\text{approx}}{\sim} N\left(\theta_0, \frac{1}{nI(\theta_0)}\right)
-$$
+</div>
+
+??? proof "증명 개요"
+
+    점수함수를 참값 둘레에서 **테일러 전개하는 것**이 길이다. MLE 는 점수의 합을 0 으로 만드는 점이므로
+
+    $$
+    0 = \ell'(\hat\theta) = \ell'(\theta_0) + \ell''(\theta_0)\bigl(\hat\theta - \theta_0\bigr) + \cdots
+    $$
+
+    다(0장 테일러 정리). 나머지를 버리고 풀어 $\sqrt n$ 을 곱하면
+
+    $$
+    \sqrt n\bigl(\hat\theta - \theta_0\bigr)
+    \;\approx\;
+    \frac{\dfrac{1}{\sqrt n}\,\ell'(\theta_0)}{-\dfrac1n\,\ell''(\theta_0)}
+    $$
+
+    가 된다. 분자와 분모를 따로 본다.
+
+    **분자.** $\ell'(\theta_0) = \sum_i s(X_i;\theta_0)$ 은 i.i.d. 점수의 합이다. 점수의 평균이 0 이고([Fisher 정보량](fisher_information.md) 정리 1) 분산이 $I(\theta_0)$ 이므로(같은 쪽 정의 2), 중심극한정리에서
+
+    $$
+    \frac{1}{\sqrt n}\ell'(\theta_0) \xrightarrow{d} N\bigl(0,\, I(\theta_0)\bigr)
+    $$
+
+    다. **점수의 평균이 0 이라는 정리가 여기서 쓰인다** — 그래서 따로 중심화할 것이 없다.
+
+    **분모.** $-\frac1n\ell''(\theta_0)$ 은 i.i.d. 항의 평균이므로 큰수의 법칙에서 기댓값으로 수렴하고, 그 기댓값이 바로 $I(\theta_0)$ 다(같은 쪽 정리 2).
+
+    분모가 상수로 굳고 분자가 정규로 가므로 슬러츠키 정리에 의해
+
+    $$
+    \sqrt n\bigl(\hat\theta-\theta_0\bigr) \xrightarrow{d} \frac{N\bigl(0, I(\theta_0)\bigr)}{I(\theta_0)} = N\!\left(0, \frac{1}{I(\theta_0)}\right)
+    $$
+
+    다. $\square$
+
+    **정보량이 두 번, 서로 다른 모습으로 들어온다.** 분자에서는 점수의 **분산**으로, 분모에서는 로그가능도의 **곡률**로 들어오는데, 바틀릿 항등식(정보량 쪽 정리 2)이 그 둘을 같다고 말해 주기 때문에 하나가 약분되고 $1/I$ 가 남는다. **그 항등식이 없으면 이 깔끔한 결과가 나오지 않는다.**
 
 "점근적으로"라는 단서가 실제로 무엇을 뜻하는지는 유한한 $n$에서 확인해 보아야 안다.
 

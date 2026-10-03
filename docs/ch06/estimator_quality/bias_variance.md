@@ -10,6 +10,8 @@
 
 ## 1. 편향과 분산
 
+맞바꿈의 바탕은 [평균제곱오차](mse.md) 정리 1 의 분해 $\operatorname{MSE} = \operatorname{Var} + \operatorname{Bias}^2$ 이고, 그 증명이 두 항이 **제곱으로 합쳐진다**는 것을 보인다. 합이 제곱의 합이므로 한쪽을 조금 늘려 다른 쪽을 많이 줄이면 전체가 줄어들 수 있다 — 이 틈이 아래의 모든 이야기다.
+
 
 <div class="defn" markdown>
 

@@ -10,37 +10,116 @@
 
 Fisher 정보량을 정의하기 위해 먼저 **점수함수**를 소개한다. $X$를 확률밀도함수 또는 확률질량함수가 $f(x; \theta)$인 확률변수라 하자. 점수함수는 로그가능도를 $\theta$에 대해 미분한 것이다:
 
+<div class="defn" markdown>
+
+### 정의 1. 점수함수 { .dfn }
+
 $$
 s(x; \theta) = \frac{\partial}{\partial \theta} \log f(x; \theta)
 $$
 
+</div>
+
 점수함수는 로그가능도가 $\theta$의 변화에 얼마나 민감한지를 담아낸다. $\theta$가 변할 때 로그가능도가 급격히 달라지면 자료가 $\theta$에 관해 많은 정보를 담고 있는 것이고, 평평하면 정보가 거의 없는 것이다.
 
-정칙 조건 아래에서, 구체적으로 지지집합 $\{x : f(x; \theta) > 0\}$이 $\theta$에 의존하지 않고 미분과 적분을 교환할 수 있을 때, 점수함수는 핵심적인 성질을 갖는다:
+<div class="thmbox" markdown>
+
+### 정리 1. 점수함수의 기댓값은 0 이다 { .thm }
+
+정칙 조건 아래에서 — 지지집합 $\{x : f(x;\theta) > 0\}$ 이 $\theta$ 에 의존하지 않고 미분과 적분을 교환할 수 있을 때 —
 
 $$
-E[s(X; \theta)] = 0
+E\bigl[s(X; \theta)\bigr] = 0
 $$
 
-즉 점수함수는 0을 중심으로 하며, 그 분산이 로그가능도 기울기의 전형적인 크기를 잰다.
+이다. 따라서 점수함수의 **분산이 곧 2차 적률**이다.
+
+</div>
+
+??? proof "증명"
+
+    밀도의 적분이 1 이라는 사실을 $\theta$ 로 미분하는 것이 전부다.
+
+    $$
+    \int f(x;\theta)\,dx = 1
+    \qquad\Longrightarrow\qquad
+    \frac{\partial}{\partial\theta}\int f(x;\theta)\,dx = 0
+    $$
+
+    정칙 조건이 미분을 적분 안으로 들여보내게 해 준다.
+
+    $$
+    0 = \int \frac{\partial f(x;\theta)}{\partial\theta}\,dx
+    = \int \underbrace{\frac{\partial \log f(x;\theta)}{\partial\theta}}_{s(x;\theta)} f(x;\theta)\,dx
+    = E\bigl[s(X;\theta)\bigr]
+    $$
+
+    가운데 등식은 연쇄법칙 $\frac{\partial \log f}{\partial\theta} = \frac{1}{f}\frac{\partial f}{\partial\theta}$ 를 거꾸로 쓴 것이다. $\square$
+
+    **$1$ 을 미분하면 0 이라는 한 줄이 이 정리의 전부다.** 그래서 "자료가 무엇이든 평균적으로는 기울기가 0"이고, 참값 $\theta$ 에서 로그가능도가 **평균적으로 평평하다**는 뜻이 된다. 그 평평한 자리 둘레로 기울기가 얼마나 흔들리는지가 정보량이다.
+
+    정칙 조건이 왜 필요한지는 깨지는 예를 보면 분명하다. $\text{Unif}(0,\theta)$ 는 지지집합이 $\theta$ 에 의존하므로 이 정리가 성립하지 않고, 실제로 그 MLE(표본최댓값)는 점근정규가 아니다.
 
 ---
 
 ## 2. Fisher 정보량의 정의
 
-관측값 하나에 대한 **Fisher 정보량**은 점수함수의 분산이다:
+<div class="defn" markdown>
+
+### 정의 2. Fisher 정보량 { .dfn }
+
+관측값 하나에 대한 **Fisher 정보량**은 점수함수의 분산이다.
 
 $$
-I(\theta) = E\left[\left(\frac{\partial}{\partial \theta} \log f(X;\theta)\right)^2\right] = \text{Var}(s(X; \theta))
+I(\theta) = \operatorname{Var}\bigl(s(X;\theta)\bigr) = E\left[\left(\frac{\partial}{\partial \theta} \log f(X;\theta)\right)^{\!2}\right]
 $$
 
-같은 정칙 조건(미분과 적분의 교환) 아래에서 이는 로그가능도의 기대 곡률에 음수를 취한 것과 동등하다:
+(정리 1 에서 점수의 평균이 0 이므로 분산과 2차 적률이 같다.)
+
+</div>
+
+<div class="thmbox" markdown>
+
+### 정리 2. 정보량의 두 꼴은 같다 { .thm }
+
+같은 정칙 조건 아래에서
 
 $$
 I(\theta) = -E\left[\frac{\partial^2}{\partial\theta^2} \log f(X;\theta)\right]
 $$
 
-두 번째 형태가 계산하기 더 쉬운 경우가 많다. 기하적인 직관도 준다. 로그가능도가 급하게 휘어 있으면(큰 $I(\theta)$) 자료가 모수를 강하게 제약하는 것이고, 평평하면(작은 $I(\theta)$) 자료가 정보를 주지 못하는 것이다.
+이다. 곧 **점수의 분산**과 **로그가능도의 기대 곡률에 음수를 취한 것**이 같다.
+
+</div>
+
+??? proof "증명"
+
+    정리 1 의 식 $\int s(x;\theta)f(x;\theta)\,dx = 0$ 을 **한 번 더 미분한다.**
+
+    $$
+    0 = \frac{\partial}{\partial\theta}\int s\,f\,dx
+    = \int \frac{\partial s}{\partial\theta}f\,dx + \int s\,\frac{\partial f}{\partial\theta}\,dx
+    $$
+
+    곱의 미분이다. 첫 적분은 $E\bigl[\partial^2 \log f/\partial\theta^2\bigr]$ 이고, 둘째 적분은 $\frac{\partial f}{\partial\theta} = s f$ 를 넣으면
+
+    $$
+    \int s \cdot s f\,dx = E\bigl[s^2\bigr] = I(\theta)
+    $$
+
+    다. 두 항의 합이 0 이므로
+
+    $$
+    E\left[\frac{\partial^2 \log f}{\partial\theta^2}\right] + I(\theta) = 0
+    \quad\Longrightarrow\quad
+    I(\theta) = -E\left[\frac{\partial^2 \log f}{\partial\theta^2}\right]
+    $$
+
+    이다. $\square$
+
+    **정리 1 은 1 을 한 번 미분한 것이고 정리 2 는 두 번 미분한 것이다.** 같은 항등식에서 차례로 나오는 두 결과이며, 이 둘을 묶어 **바틀릿 항등식**이라 부른다.
+
+    두 번째 형태가 계산하기 더 쉬운 경우가 많다. 기하적인 직관도 준다 — 로그가능도가 급하게 휘어 있으면(큰 $I$) 자료가 모수를 강하게 제약하고, 평평하면(작은 $I$) 넓은 범위의 $\theta$ 가 자료를 거의 같은 정도로 설명한다. 기하적인 직관도 준다. 로그가능도가 급하게 휘어 있으면(큰 $I(\theta)$) 자료가 모수를 강하게 제약하는 것이고, 평평하면(작은 $I(\theta)$) 자료가 정보를 주지 못하는 것이다.
 
 독립이고 동일한 분포를 따르는 $n$개의 관측값 $X_1, \ldots, X_n$에 대해 전체 Fisher 정보량은 가법적이다:
 

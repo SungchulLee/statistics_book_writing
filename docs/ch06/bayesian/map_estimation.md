@@ -8,27 +8,54 @@
 
 ### 정의 1. MAP 추정량 { .dfn }
 
-MAP 추정량은 사후밀도를 최대화하는 모수값을 고른다:
+MAP 추정량은 사후밀도를 최대화하는 모수값을 고른다.
 
 $$
 \hat{\theta}_{\text{MAP}} = \arg\max_{\theta}\; \pi(\theta \mid \mathbf{x})
 $$
 
-베이즈 정리가 $\pi(\theta \mid \mathbf{x}) = f(\mathbf{x} \mid \theta)\,\pi(\theta) / f(\mathbf{x})$를 주고 주변가능도 $f(\mathbf{x})$가 $\theta$에 의존하지 않으므로, 사후분포를 최대화하는 것은 분자를 최대화하는 것과 동등하다:
+</div>
+
+<div class="thmbox" markdown>
+
+### 정리 1. MAP 는 로그가능도에 로그 사전분포를 더해 최대화한다 { .thm }
 
 $$
-\hat{\theta}_{\text{MAP}} = \arg\max_{\theta}\; f(\mathbf{x} \mid \theta)\,\pi(\theta)
+\hat{\theta}_{\text{MAP}}
+= \arg\max_{\theta}\; \bigl[\log f(\mathbf{x} \mid \theta) + \log \pi(\theta)\bigr]
 $$
 
-(최대점을 보존하는 단조변환인) 로그를 취하면 다음이 된다:
-
-$$
-\hat{\theta}_{\text{MAP}} = \arg\max_{\theta}\; \bigl[\log f(\mathbf{x} \mid \theta) + \log \pi(\theta)\bigr]
-$$
-
-따라서 MAP 추정값은 로그가능도에 로그 사전분포 항을 더한 것을 최대화한다. 이 덧셈 구조가 MAP와 MLE, 그리고 정칙화의 연결을 이해하는 열쇠이다.
+이다. 특히 사전분포가 **평평하면**($\pi(\theta)$ 가 상수) $\hat\theta_{\text{MAP}} = \hat\theta_{\text{MLE}}$ 다.
 
 </div>
+
+??? proof "증명"
+
+    베이즈 정리에서
+
+    $$
+    \pi(\theta \mid \mathbf x) = \frac{f(\mathbf x \mid \theta)\,\pi(\theta)}{f(\mathbf x)}
+    $$
+
+    인데 **분모 $f(\mathbf x)$ 는 $\theta$ 를 담지 않는다.** 양수인 상수로 나누는 일은 최대점을 바꾸지 않으므로
+
+    $$
+    \arg\max_\theta \pi(\theta \mid \mathbf x) = \arg\max_\theta f(\mathbf x \mid \theta)\,\pi(\theta)
+    $$
+
+    다. 로그는 강증가 함수이므로 역시 최대점을 보존하고, 곱이 합으로 바뀐다.
+
+    $$
+    = \arg\max_\theta \bigl[\log f(\mathbf x \mid \theta) + \log\pi(\theta)\bigr]
+    $$
+
+    사전분포가 상수이면 둘째 항이 $\theta$ 와 무관하므로 최대점이 첫 항만으로 정해지고, 그것이 MLE 의 정의다. $\square$
+
+    **주변가능도를 계산하지 않아도 된다는 것이 실무적으로 결정적이다.** $f(\mathbf x) = \int f(\mathbf x\mid\theta)\pi(\theta)d\theta$ 는 대개 닫힌 꼴이 없는데, 점추정값만 원한다면 그 적분을 아예 피할 수 있다.
+
+    **이 덧셈 구조가 MAP·MLE·정칙화를 잇는 열쇠다.** 로그 사전분포에 음수를 붙이면 벌점이 되므로 **사전분포를 고르는 일과 벌점을 고르는 일이 같은 일**이 된다. 정규 사전분포는 $\ell_2$ 벌점(능형)이 되고 라플라스 사전분포는 $\ell_1$ 벌점(라소)이 된다 — 18장에서 그 대응을 다룬다.
+
+    **MAP 는 사후분포를 한 점으로 요약하는 여러 방식 가운데 하나일 뿐이다.** 사후평균은 제곱손실을, 사후중앙값은 절대손실을 최소화하는데(2장 정리 1·2 가 표본에서 한 일과 같다), MAP 는 $0$–$1$ 손실에 대응한다. 사후분포가 치우쳐 있으면 세 값이 꽤 벌어진다.
 
 ![MAP는 로그가능도에 로그 사전분포를 더한다](./img/map_vs_mle_penalty.png)
 

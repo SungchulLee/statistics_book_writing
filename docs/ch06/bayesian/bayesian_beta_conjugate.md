@@ -8,29 +8,57 @@
 
 ## 1. 베타-이항 켤레 갱신
 
-성공확률 $\theta$가 미지인 독립 베르누이 시행 $n$번에서 $k$번 성공을 관측했다고 하자. $\theta$의 사전분포가
+<div class="thmbox" markdown>
+
+### 정리 1. 베타–이항 켤레성 { .thm }
+
+성공확률 $\theta$ 가 미지인 독립 베르누이 시행 $n$ 번에서 $k$ 번 성공을 관측했고 사전분포가 $\theta \sim \text{Beta}(a,b)$ 이면, 사후분포도 **베타**다.
 
 $$
-\theta \sim \text{Beta}(a, b)
+\theta \mid k, n \;\sim\; \text{Beta}(a + k,\; b + n - k)
 $$
 
-이면 자료를 관측한 뒤의 사후분포는:
+사후평균은 사전평균과 MLE 의 **가중평균**이다.
 
 $$
-\theta \mid k, n \sim \text{Beta}(a + k, \; b + n - k)
+E[\theta \mid k,n] = \frac{a+k}{a+b+n}
+= \underbrace{\frac{a+b}{a+b+n}}_{w_{\text{사전}}}\cdot\frac{a}{a+b}
++ \underbrace{\frac{n}{a+b+n}}_{w_{\text{자료}}}\cdot\frac{k}{n}
 $$
 
-사후평균은:
+</div>
 
-$$
-E[\theta \mid k, n] = \frac{a + k}{a + b + n}
-$$
+??? proof "증명"
 
-이는 사전평균 $a/(a+b)$와 MLE $\hat{\theta} = k/n$의 가중평균이다:
+    베이즈 정리에서 사후분포는 가능도와 사전분포의 곱에 비례한다. $\theta$ 를 담지 않는 인수는 모두 정규화 상수로 흘려보낸다.
 
-$$
-E[\theta \mid k, n] = \frac{a + b}{a + b + n} \cdot \frac{a}{a + b} + \frac{n}{a + b + n} \cdot \frac{k}{n}
-$$
+    $$
+    p(\theta \mid k) \;\propto\; \underbrace{\theta^k(1-\theta)^{n-k}}_{\text{가능도}} \cdot \underbrace{\theta^{a-1}(1-\theta)^{b-1}}_{\text{사전분포}}
+    = \theta^{(a+k)-1}(1-\theta)^{(b+n-k)-1}
+    $$
+
+    **지수가 그냥 더해진다.** 오른쪽은 $\text{Beta}(a+k,\, b+n-k)$ 의 밀도에서 상수를 뗀 꼴이고, 밀도는 적분이 1 이 되게 하는 상수까지 포함해 하나로 정해지므로 사후분포가 그 베타다.
+
+    **왜 베타가 다시 베타가 되는가**가 이 계산에 드러난다. 베타 밀도와 이항 가능도가 **같은 꼴** $\theta^{\bullet}(1-\theta)^{\bullet}$ 이라서, 곱해도 모양이 바뀌지 않고 지수만 움직인다. 그것이 켤레성의 정의다.
+
+    **사후평균.** $\text{Beta}(\alpha,\beta)$ 의 평균이 $\alpha/(\alpha+\beta)$ 이므로
+
+    $$
+    E[\theta \mid k,n] = \frac{a+k}{(a+k)+(b+n-k)} = \frac{a+k}{a+b+n}
+    $$
+
+    다. 분자를 $a$ 와 $k$ 로 갈라 각각 $\frac{a+b}{a+b}$ 와 $\frac nn$ 을 곱해 두면
+
+    $$
+    \frac{a+k}{a+b+n}
+    = \frac{a+b}{a+b+n}\cdot\frac{a}{a+b} + \frac{n}{a+b+n}\cdot\frac kn
+    $$
+
+    이고 두 가중치의 합이 1 이다. $\square$
+
+    **$a+b$ 가 사전 유효 표본크기처럼 작동한다.** 가중치가 $(a+b)$ 대 $n$ 으로 갈리므로, 사전분포는 **$a+b$ 번의 가상 관측**과 같은 무게를 갖는다. $\text{Beta}(1,1)$ 은 균등분포이면서 관측 두 번어치의 무게를 갖는 셈이고, 그래서 $k=7, n=10$ 에서 사후평균이 $8/12 = 0.6667$ 로 MLE $0.7$ 보다 $1/2$ 쪽으로 조금 당겨진다.
+
+    **$n \to \infty$ 이면 자료가 이긴다.** $w_{\text{자료}} \to 1$ 이므로 사후평균이 MLE 로 수렴한다. 사전분포의 영향이 사라지는 속도가 $O(1/n)$ 이라는 것도 식에서 읽힌다.
 
 $a + b$는 **사전 유효 표본크기**로 작동한다. 이 값이 클수록 자료에 비해 사전분포의 영향이 커진다.
 
