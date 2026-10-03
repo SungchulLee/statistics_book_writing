@@ -30,7 +30,9 @@ $n$개의 i.i.d. 관측값에서 전체 Fisher 정보량은 $I_n(\theta) = nI(\t
 
 </div>
 
-## 주요 이론 결과
+---
+
+## 1. 주요 이론 결과
 
 !!! info "Cramér-Rao 하한"
     임의의 불편추정량 $\hat{\theta}$에 대해:
@@ -50,7 +52,9 @@ $n$개의 i.i.d. 관측값에서 전체 Fisher 정보량은 $I_n(\theta) = nI(\t
 
     MLE는 점근적으로 효율적이며 그 분산이 CRLB를 달성한다.
 
-## 해석적 보기
+---
+
+## 2. 해석적 보기
 
 ### 정규분포의 평균
 
@@ -100,7 +104,9 @@ $$
 I(\lambda) = \frac{1}{\lambda^2}
 $$
 
-## Fisher 정보량의 수치적 계산
+---
+
+## 3. Fisher 정보량의 수치적 계산
 
 Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법으로 수치적으로 추정할 수 있다:
 
@@ -245,7 +251,9 @@ Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법�
 
     수치적 방법의 쓸모는 여기에 있다. **로그밀도를 미분할 수만 있으면 분포가 무엇이든 같은 코드가 통한다.** 해석적으로 기댓값을 구하기 어려운 모형에서 특히 그렇다. 다만 지금 본 대로 정규분포의 평균처럼 로그밀도가 이차식인 경우가 아니면 중심차분의 $O(\delta^2)$ 항이 살아 있어, $\delta$를 너무 크게 잡으면 절단오차가, 너무 작게 잡으면 자리 손실이 끼어든다.
 
-## Cramér-Rao 한계 확인
+---
+
+## 4. Cramér-Rao 한계 확인
 
 정규분포의 평균에 대해 표본평균이 CRLB를 달성하는지 확인할 수 있다.
 
@@ -372,7 +380,9 @@ Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법�
 !!! note "중앙값의 효율"
     정규분포에서 평균 대비 중앙값의 점근 상대효율은 $2/\pi \approx 0.637$이다. 중앙값은 자료가 담은 정보의 약 64%만 사용한다.
 
-## 다모수 Fisher 정보행렬
+---
+
+## 5. 다모수 Fisher 정보행렬
 
 모수 벡터 $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_k)$에 대해 Fisher 정보량은 $k \times k$ 행렬이다:
 
@@ -388,11 +398,15 @@ $$
 
 비대각 성분이 0이라는 것은 $\mu$와 $\sigma^2$이 정보적으로 직교함을 보여 준다.
 
-## 해석
+---
+
+## 6. 해석
 
 - Fisher 정보량은 참 모수에서 로그가능도의 **곡률**을 잰다. 곡률이 크면 자료가 정보를 많이 담고 있고 MLE가 정밀하다.
 - $I(\theta)$가 클수록 Cramér-Rao 한계가 좁아지므로 추정량이 더 정밀할 수 있다.
 - Fisher 정보량은 참 모수값에 의존한다. 예를 들어 베르누이의 $I(p) = 1/[p(1-p)]$는 $p$가 0이나 1에 가까울 때 가장 크고(관측값 하나하나가 많은 정보를 준다) $p = 0.5$에서 가장 작다(불확실성이 최대이다).
+
+---
 
 ## 연습문제
 
@@ -412,6 +426,8 @@ $$
     **2계도함수의 음수:** $-\partial^2\log f/\partial\lambda^2 = X/\lambda^2$이므로 $E[-\partial^2\log f/\partial\lambda^2] = E[X]/\lambda^2 = \lambda/\lambda^2 = 1/\lambda$.
 
     둘 다 $I(\lambda) = 1/\lambda$를 준다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -434,6 +450,8 @@ $$
 
     MLE는 $\hat{\lambda} = 1/\bar{X}$이다. 델타 방법에 의해 $n$이 크면 $\text{Var}(\hat{\lambda}) \approx \lambda^2/n$이므로 MLE가 점근적으로 이 한계를 달성한다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span> 베르누이분포에서 Fisher 정보량 $I(p) = 1/[p(1-p)]$이 $p = 1/2$에서 최소가 됨을 보여라. 동전 던지기의 관점에서 이 결과를 해석하라.
@@ -447,36 +465,11 @@ $$
 
     **해석:** 공정한 동전($p = 1/2$)이 인접한 값들과 구별하기 가장 어렵다. 결과가 가장 불확실할 때 던지기 한 번이 $p$에 관해 가장 적은 정보를 준다. 반대로 $p$가 0이나 1에 가까우면 결과가 매우 예측 가능하므로 던지기 한 번이 큰 정보를 주며, 그 양상에서 벗어나는 결과는 강한 진단 신호가 된다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff hard" title="어려움"></span> $\text{Gamma}(\alpha, \beta)$ 분포의 $\alpha$에 대한 Fisher 정보량은 trigamma 함수 $\psi_1(\alpha)$를 포함한다: $I_{\alpha\alpha} = \psi_1(\alpha)$. `scipy.special.polygamma(1, alpha)`를 사용하여 $\alpha = 3$에서 $n = 100$개의 관측값으로 $\alpha$를 추정할 때의 CRLB를 수치적으로 계산하라.
-
-</div>
-
-??? success "풀이"
-    ```python
-    from scipy.special import polygamma
-
-    alpha = 3.0
-    n = 100
-    I_alpha = polygamma(1, alpha)  # trigamma function
-    crlb = 1 / (n * I_alpha)
-    print(f"Trigamma(alpha=3) = {I_alpha:.6f}")
-    print(f"CRLB for alpha:     {crlb:.6f}")
-    ```
-
-    출력:
-
-    ```
-    Trigamma(alpha=3) = 0.394934
-    CRLB for alpha:     0.025321
-    ```
-
-    trigamma 함수 값이 $\psi_1(3) \approx 0.3949$이므로 CRLB는 약 $1/(100 \times 0.3949) \approx 0.0253$이다. 관측값 100개로는 $\alpha$의 어떤 불편추정량도 분산이 약 0.025보다 작을 수 없다는 뜻이다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span> Fisher 정보량이 가법성을 만족함을 증명하라. $n$개의 i.i.d. 관측값에서 $I_n(\theta) = nI_1(\theta)$이다. 이것이 직관적으로 타당한 이유는 무엇인가?
+**연습문제 4.** <span class="diff med" title="중간"></span> Fisher 정보량이 가법성을 만족함을 증명하라. $n$개의 i.i.d. 관측값에서 $I_n(\theta) = nI_1(\theta)$이다. 이것이 직관적으로 타당한 이유는 무엇인가?
 
 </div>
 
@@ -497,9 +490,11 @@ $$
 
     **직관:** 독립인 각 관측값이 $\theta$에 관해 같은 양의 정보를 기여한다. 표본크기를 두 배로 하면 전체 정보량이 두 배가 되고, 그러면 CRLB가 절반이 되어 달성 가능한 최소 분산도 절반이 된다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 Fisher 정보량을 **수치 미분**으로 계산할 때 생기는 문제를 설명하고, 더 나은 방법을 두 가지 적어라.
 
 </div>
@@ -537,9 +532,11 @@ Fisher 정보량을 **수치 미분**으로 계산할 때 생기는 문제를 �
 
     **실용적 절충.** 많은 최적화 라이브러리가 준뉴턴법(BFGS)으로 헤시안의 근사를 이미 만들어 두므로 그것을 재활용할 수 있다. 다만 BFGS 근사는 최적화를 위한 것이라 표준오차 계산에 쓰기에는 정확도가 부족한 경우가 있어, 최종 표준오차는 위 방법으로 다시 계산하는 편이 안전하다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 Fisher 정보량이 **가법적**이라는 성질을 이용해, 서로 다른 실험 두 개에서 같은 모수를 추정할 때 결과를 어떻게 합치는지 설명하라.
 
 </div>
@@ -571,9 +568,11 @@ Fisher 정보량이 **가법적**이라는 성질을 이용해, 서로 다른 �
 
     또 **연구 간 이질성**이 있으면 $\theta$가 실험마다 다를 수 있고, 그때는 고정효과가 아니라 변량효과 모형이 필요하다. 정보량 가중은 "같은 $\theta$를 추정하고 있다"는 가정 위에서만 옳다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 관측 Fisher 정보량 $\hat I = -\ell''(\hat\theta)$과 $n$개 관측값의 점수 제곱합 $\sum_i s(x_i;\hat\theta)^2$은 둘 다 $I_n$을 추정한다. 둘의 차이와 각각의 쓰임을 밝혀라.
 
 </div>
@@ -605,9 +604,11 @@ Fisher 정보량이 **가법적**이라는 성질을 이용해, 서로 다른 �
 
     OPG가 널리 쓰이는 이유는 **점수만으로 계산되고 언제나 양반정부호**여서다. 복잡한 모형에서 헤시안을 구하기 어려울 때 실용적인 대안이 되며, 계량경제학에서 특히 흔하다. 다만 소표본에서 정보량을 과대평가하는 경향이 있어 표준오차가 너무 작게 나올 수 있다는 점은 알려진 단점이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 $\text{Gamma}(\alpha,\beta)$의 Fisher 정보행렬을 구하고, $\alpha$와 $\beta$가 **직교하지 않음**을 확인하라. 이것이 $\alpha$ 추정에 어떤 대가를 치르게 하는가?
 
 </div>
@@ -653,9 +654,11 @@ $\text{Gamma}(\alpha,\beta)$의 Fisher 정보행렬을 구하고, $\alpha$와 $\
 
     **직교 모수화.** $(\alpha, \mu)$($\mu = \alpha/\beta$가 평균)로 바꾸면 정보행렬이 대각에 가까워진다. 실제로 이 모수화에서 비대각이 0이 되어 두 모수가 직교하며, 일반화선형모형이 감마분포를 평균 모수화로 다루는 이유 중 하나다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 Fisher 정보량은 **표본크기**뿐 아니라 **관측의 질**에도 의존한다. 측정오차가 있는 경우($X$ 대신 $X+\varepsilon$을 관측) 정보량이 어떻게 줄어드는지 정규 모형에서 확인하라.
 
 </div>
@@ -700,6 +703,35 @@ Fisher 정보량은 **표본크기**뿐 아니라 **관측의 질**에도 의존
     **함의.** **표본크기를 늘리는 것과 측정을 정밀하게 하는 것은 서로 대체 가능하다.** 정보량이 $n\kappa/\sigma^2$이므로, 측정 정밀도를 두 배 좋게 하는 것($\tau^2$을 절반으로)과 표본을 일정 비율 늘리는 것이 같은 효과를 낸다. 어느 쪽이 싼지가 설계의 문제다.
 
     반복 측정도 방법이다. 같은 대상을 $k$번 재어 평균하면 오차분산이 $\tau^2/k$로 줄어 신뢰도가 올라간다. 심리측정에서 문항 수를 늘려 신뢰도를 높이는 것(스피어만-브라운 공식)이 같은 원리다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span> $\text{Gamma}(\alpha, \beta)$ 분포의 $\alpha$에 대한 Fisher 정보량은 trigamma 함수 $\psi_1(\alpha)$를 포함한다: $I_{\alpha\alpha} = \psi_1(\alpha)$. `scipy.special.polygamma(1, alpha)`를 사용하여 $\alpha = 3$에서 $n = 100$개의 관측값으로 $\alpha$를 추정할 때의 CRLB를 수치적으로 계산하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    from scipy.special import polygamma
+
+    alpha = 3.0
+    n = 100
+    I_alpha = polygamma(1, alpha)  # trigamma function
+    crlb = 1 / (n * I_alpha)
+    print(f"Trigamma(alpha=3) = {I_alpha:.6f}")
+    print(f"CRLB for alpha:     {crlb:.6f}")
+    ```
+
+    출력:
+
+    ```
+    Trigamma(alpha=3) = 0.394934
+    CRLB for alpha:     0.025321
+    ```
+
+    trigamma 함수 값이 $\psi_1(3) \approx 0.3949$이므로 CRLB는 약 $1/(100 \times 0.3949) \approx 0.0253$이다. 관측값 100개로는 $\alpha$의 어떤 불편추정량도 분산이 약 0.025보다 작을 수 없다는 뜻이다. $\square$
 
 ---
 

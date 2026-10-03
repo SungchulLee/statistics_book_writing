@@ -27,8 +27,9 @@ ax = axes[0, 1]    # row 0, column 1
 
 </div>
 
+---
 
-## 두 가지 API
+## 1. 두 가지 API
 
 Matplotlib에는 두 개의 인터페이스가 있다.
 
@@ -37,7 +38,9 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 
 이 책은 객체지향 형태만 쓴다. pyplot 형태는 `plt.subplots`, `plt.show`, `plt.savefig`에만 남겨 둔다.
 
-## 이 책의 그림 규약
+---
+
+## 2. 이 책의 그림 규약
 
 이 책의 그림은 한글 이름표를 달고, 정해진 팔레트를 쓰고, 같은 방식으로 저장된다. 모든 그림 코드가 아래 머리글로 시작하므로 그대로 베껴 쓰면 된다. 뒤의 보기와 연습문제에서는 지면을 아끼려고 이 머리글을 되풀이하지 않지만, **직접 실행할 때는 반드시 앞에 붙여야 한다.** 붙이지 않으면 그림 속 한글이 모두 네모(□)로 나온다.
 
@@ -174,7 +177,9 @@ Matplotlib에는 두 개의 인터페이스가 있다.
     U+2212가 한글 글꼴에 없어 `Glyph 8722 missing from current font` 경고와 함께 네모로
     찍힌다. 이 설정은 빼기 기호를 평범한 ASCII 하이픈으로 바꾸어 그 문제를 없앤다.
 
-## 통계를 위한 핵심 그림 유형
+---
+
+## 3. 통계를 위한 핵심 그림 유형
 
 | 그림 | 메서드 | 쓰임새 |
 |---|---|---|
@@ -185,7 +190,9 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 | 막대 | `ax.bar(categories, heights)` | 범주 간 비교 |
 | Q-Q 그림 | `scipy.stats.probplot(x, plot=ax)` | 정규성 진단 |
 
-## 사용자화의 핵심
+---
+
+## 4. 사용자화의 핵심
 
 <div class="exbox" markdown>
 
@@ -262,7 +269,9 @@ Matplotlib에는 두 개의 인터페이스가 있다.
 
     **그래서 둘은 서로를 대신하지 못한다.** `tight_layout()`은 캔버스 **안에서** 축의 자리를 조정해 이름표가 잘리지 않게 하고, `bbox_inches="tight"`는 저장할 때 캔버스 **경계**를 다시 잡는다. 이 책의 규약이 둘을 함께 쓰는 것은 그 때문이다. 해상도는 앞 절에서 정한 대로 `dpi=170`을 쓴다. 화면과 대부분의 인쇄 용도에 충분하며, `dpi=300`은 최종 출판용이 아니라면 과하다.
 
-## pandas와의 연동
+---
+
+## 5. pandas와의 연동
 
 DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 
@@ -432,6 +441,8 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 
     두 그림이 서로를 메운다. 히스토그램은 구간 나누기에 따라 모양이 크게 바뀌어 적합도 판정에 약하지만 봉우리가 몇 개인지를 보인다. Q-Q 그림은 구간 나누기가 없어 적합도에 훨씬 민감하지만 **이봉 분포를 잘 못 보인다.** 통계적인 그림은 이 둘 중 하나 없이는 완성되는 일이 드물다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -462,6 +473,8 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
     ![표준정규 표본 500개](./img/matplotlib_basics_129.png)
 
     `axvline`은 고정된 $x$ 좌표에 수직 참조선을 그리며, 평균·중앙값·임계값을 표시할 때 유용하다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -495,27 +508,11 @@ DataFrame은 Matplotlib을 감싼 자체 그림 메서드를 갖고 있다.
 
     `sharey=True`는 두 y축을 묶고, `fig.supylabel`은 그림 전체에 걸치는 하나의 y축 이름표를 추가한다.
 
-<div class="drillbox" markdown>
-
-**연습문제 3.** <span class="diff med" title="중간"></span>
-여러 패널이 있는 그림에서 `plt.plot()`보다 `ax.plot()`이 선호되는 이유는 무엇인가? pyplot 형태가 조용히 엉뚱한 subplot에 그리게 되는 구체적인 예를 하나 들어라.
-
-</div>
-
-??? success "풀이"
-    `plt.plot()`은 전역 상태인 "현재" Axes를 대상으로 삼는다. 그림을 두 개 만드는 노트북 셀이나 여러 subplot을 갖는 그림 하나에서는, "현재" Axes가 가장 최근에 만들어지거나 활성화된 것 — 보통은 저자가 의도한 것이 아니라 **마지막** subplot — 이 된다.
-
-    ```python
-    fig, axes = plt.subplots(1, 2)
-    axes[0].set_title("Panel A")        # explicit — correct
-    plt.plot([1, 2, 3])                 # silently lands on axes[1] because it was created last
-    ```
-
-    객체지향 형태 `axes[0].plot([1, 2, 3])`는 대상을 명시하므로 이런 모호함을 완전히 없앤다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff easy" title="쉬움"></span>
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
 $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스토그램을 그리고 참된 밀도를 겹쳐 그려라. 경험적 곡선과 이론적 곡선이 일치함을 눈으로 확인하라.
 
 </div>
@@ -543,9 +540,53 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 
     `density=True`는 막대 전체 넓이가 1이 되도록 히스토그램을 다시 크기 조정하여 확률밀도함수와 직접 비교할 수 있게 한다. 막대의 너비는 `bins`가 결정한다. 구간이 너무 적으면 구조를 감추고, 너무 많으면 없는 구조를 만들어낸다.
 
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
+연습문제 6의 그림을 이 책의 저장 규약대로 디스크에 저장하라. `dpi`, `facecolor`, `bbox_inches` 세 인수는 각각 무엇을 하며 언제 중요한가?
+
+</div>
+
+??? success "풀이"
+    ```python
+    fig.savefig("residuals.png", dpi=170, facecolor="white", bbox_inches="tight")
+    ```
+
+    `dpi=170`은 래스터화 해상도를 조절한다. 값이 작으면 글자가 뭉개지고 크면 파일만 무거워지는데, $170$이 화면과 인쇄 사이의 타협점이라 이 책의 기본값이다.
+
+    `facecolor="white"`는 그림 바깥 여백의 배경색을 흰색으로 못 박는다. 이것이 없으면 저장본의 배경이 `figure.facecolor` 기본값을 따르는데, 어두운 배경의 문서나 투명 배경으로 저장한 경우 검은 축 이름표가 보이지 않게 된다.
+
+    `bbox_inches="tight"`는 가장자리의 빈 여백을 제외하도록 그림의 경계 상자를 다시 계산한다. 그림을 다른 문서(LaTeX, 워드, 슬라이드)에 끼워 넣을 때 가장 중요하다. 이 옵션이 없으면 savefig가 쓰이지 않은 공간까지 포함한 캔버스 전체를 저장하여, 삽입된 이미지에 보기 싫은 흰 테두리가 생긴다.
+
+    `dpi=170, facecolor="white", bbox_inches="tight"` 세 인수를 묶은 것이 이 책에 실리는 모든 그림의 저장 규약이다.
+
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
+여러 패널이 있는 그림에서 `plt.plot()`보다 `ax.plot()`이 선호되는 이유는 무엇인가? pyplot 형태가 조용히 엉뚱한 subplot에 그리게 되는 구체적인 예를 하나 들어라.
+
+</div>
+
+??? success "풀이"
+    `plt.plot()`은 전역 상태인 "현재" Axes를 대상으로 삼는다. 그림을 두 개 만드는 노트북 셀이나 여러 subplot을 갖는 그림 하나에서는, "현재" Axes가 가장 최근에 만들어지거나 활성화된 것 — 보통은 저자가 의도한 것이 아니라 **마지막** subplot — 이 된다.
+
+    ```python
+    fig, axes = plt.subplots(1, 2)
+    axes[0].set_title("Panel A")        # explicit — correct
+    plt.plot([1, 2, 3])                 # silently lands on axes[1] because it was created last
+    ```
+
+    객체지향 형태 `axes[0].plot([1, 2, 3])`는 대상을 명시하므로 이런 모호함을 완전히 없앤다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span>
 잔차 그림을 만들어라. $y = 1 + 2x + \varepsilon$에서 나온 잡음 섞인 점 50개에 최소제곱 직선을 적합한 뒤, 잔차를 적합값에 대해 그리고 0에 수평 참조선을 그어라. 선형성 가정이 위배되었음을 나타내는 패턴은 무엇인가?
 
 </div>
@@ -577,25 +618,7 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 
     제대로 지정된 선형모형은 뚜렷한 추세 없이 0 주위에 무작위로 흩어진 잔차를 만든다. 잔차 대 적합값 그림에서 **휘어진**(U자나 아치 모양) 패턴은 빠진 비선형 항을 알리는 신호이고, **깔때기** 모양은 분산이 일정하지 않음(이분산성)을 알리는 신호다. 제13장에서 이 진단들을 형식적으로 전개한다.
 
-<div class="drillbox" markdown>
-
-**연습문제 6.** <span class="diff easy" title="쉬움"></span>
-연습문제 5의 그림을 이 책의 저장 규약대로 디스크에 저장하라. `dpi`, `facecolor`, `bbox_inches` 세 인수는 각각 무엇을 하며 언제 중요한가?
-
-</div>
-
-??? success "풀이"
-    ```python
-    fig.savefig("residuals.png", dpi=170, facecolor="white", bbox_inches="tight")
-    ```
-
-    `dpi=170`은 래스터화 해상도를 조절한다. 값이 작으면 글자가 뭉개지고 크면 파일만 무거워지는데, $170$이 화면과 인쇄 사이의 타협점이라 이 책의 기본값이다.
-
-    `facecolor="white"`는 그림 바깥 여백의 배경색을 흰색으로 못 박는다. 이것이 없으면 저장본의 배경이 `figure.facecolor` 기본값을 따르는데, 어두운 배경의 문서나 투명 배경으로 저장한 경우 검은 축 이름표가 보이지 않게 된다.
-
-    `bbox_inches="tight"`는 가장자리의 빈 여백을 제외하도록 그림의 경계 상자를 다시 계산한다. 그림을 다른 문서(LaTeX, 워드, 슬라이드)에 끼워 넣을 때 가장 중요하다. 이 옵션이 없으면 savefig가 쓰이지 않은 공간까지 포함한 캔버스 전체를 저장하여, 삽입된 이미지에 보기 싫은 흰 테두리가 생긴다.
-
-    `dpi=170, facecolor="white", bbox_inches="tight"` 세 인수를 묶은 것이 이 책에 실리는 모든 그림의 저장 규약이다.
+---
 
 <div class="drillbox" markdown>
 
@@ -658,6 +681,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     반대로 양 끝이 안쪽으로 휘면 꼬리가 얇은 것이고, 한쪽만 휘면 비대칭이다.
 
     **왜 히스토그램보다 나은가.** 히스토그램은 구간 개수에 민감하고 꼬리에서 관측이 몇 개뿐이라 거의 보이지 않는다. Q–Q 그림은 모든 관측을 하나씩 쓰고 꼬리를 그림의 양 끝에 펼쳐 놓는다. **정규성 판단은 대부분 꼬리에서 갈리므로** 이 차이가 결정적이다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -728,6 +753,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
 
     **주의.** 로그 눈금은 $0$이나 음수를 표현할 수 없다. 자료에 $0$이 있으면 `symlog` 눈금을 쓰거나, $\log(x + 1)$처럼 옮겨서 변환하되 그 사실을 반드시 밝혀야 한다. 로그 눈금은 큰 값 쪽의 차이를 시각적으로 압축하므로, 눈금 표시를 분명히 하지 않으면 오해를 부른다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
@@ -788,6 +815,8 @@ $N(5, 4)$(평균 5, 분산 4)에서 뽑은 표본 1000개의 정규화된 히스
     | 산점도 | 아니다 | 위치가 값을 나타낸다 |
 
     작은 차이를 정직하게 강조하고 싶다면, 축을 자르는 대신 **차이 자체를 그려라**(기준 대비 편차) 또는 신뢰구간을 함께 표시해 그 차이가 잡음보다 큰지 보여 주어라. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

@@ -2,7 +2,9 @@
 
 어떤 추정량이 불편이고 일치한다는 것을 확인하고 나면 자연스럽게 다음 질문이 따라온다: 얼마나 정밀할 수 있는가? 같은 모수의 불편추정량들 중에서도 어떤 것은 다른 것보다 분산이 작다. 가능한 가장 작은 분산 — Cramér–Rao 하한 — 에 도달하는 추정량을 **효율적**이라고 한다. 이 절에서는 표본평균이 언제, 왜 그 이름을 얻는지, 그리고 정규성이 깨지면 어떻게 되는지 살펴본다.
 
-## 효율성의 정의
+---
+
+## 1. 효율성의 정의
 
 모수 $\theta$의 불편추정량 $\hat{\theta}$는 그 분산이 Cramér–Rao 하한(CRLB)과 같을 때 **효율적**이라고 한다:
 
@@ -12,7 +14,9 @@ $$
 
 여기서 $I(\theta)$는 관측값 하나에 대한 Fisher 정보량이다. 이 등식을 만족하는 불편추정량은 $\theta$의 모든 불편추정량 중에서 달성 가능한 가장 작은 분산을 갖는다.
 
-## 정규분포 평균에 대한 CRLB
+---
+
+## 2. 정규분포 평균에 대한 CRLB
 
 정규족 $X \sim N(\mu, \sigma^2)$은 CRLB가 성립하기 위한 정칙조건을 만족한다(받침이 $\mu$에 의존하지 않고, 로그가능도가 두 번 미분 가능하며 기댓값과 미분의 순서를 바꿀 수 있다). 관측값 하나에 대한 Fisher 정보량은 $I(\mu) = 1/\sigma^2$이므로 CRLB는 다음을 준다:
 
@@ -22,7 +26,9 @@ $$
 
 표본평균 $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$의 분산은 $\operatorname{Var}(\bar{X}) = \sigma^2 / n$으로 이 하한과 정확히 일치한다. 정규성 아래에서 $\bar{X}$는 최대가능도추정량이자 $\mu$의 균일최소분산불편추정량(UMVUE)이므로, $\mu$의 모든 불편추정량 중에서 효율적이다.
 
-## 점근 상대효율
+---
+
+## 3. 점근 상대효율
 
 표본평균은 정규성 아래에서 효율적이지만, 실제 자료는 흔히 정규 모형에서 벗어난다. 꼬리가 두껍거나 치우친 분포에서는 표본평균이 효율성의 우위를 잃는다. **점근 상대효율(ARE)**은 같은 정밀도를 얻기 위해 한 추정량이 다른 추정량에 비해 관측값이 몇 개나 필요한지를 재어 두 추정량을 비교하는 방법이다.
 
@@ -67,6 +73,8 @@ $$
 !!! tip "실무 지침"
     바탕 분포가 근사적으로 정규이면 표본평균이 최선의 선택이다. 두꺼운 꼬리나 이상점이 있으면 절사평균이나 중앙값 같은 로버스트한 대안이 정규성 아래에서 약간의 효율을 희생하는 대신 더 나은 정밀도를 준다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -82,6 +90,8 @@ $$
     (b) $t_3$에서 0에서의 밀도는 $\Gamma(2)/(\sqrt{3\pi}\Gamma(3/2)) \approx 0.368$이다. 평균의 분산은 유한하지만($\mathrm{Var}(X) = 3$이므로 $\mathrm{Var}(\bar X) = 3/n$) 크다. 중앙값의 점근분산은 $1/[4(0.368)^2 n] \approx 1.85/n$으로 훨씬 작다. **꼬리가 두꺼우면 중앙값이 크게 이긴다.**
 
     모의실험이 이를 확인해 준다: 정규에서는 평균의 분산 $\approx 1/n$ 대 중앙값 $\approx \pi/(2n)$. $t_3$에서는 평균의 분산 $3/n$이 중앙값의 $1.85/n$보다 크며, 자유도가 2에 가까워질수록 격차가 벌어진다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -99,41 +109,11 @@ $$
 
     (c) $\lambda^*$가 미지의 $\mu$에 의존한다. 대입한 $\hat\lambda$는 그 자체의 변동성을 갖는다. James-Stein 추정량이 이를 다룬다: 표본자료를 적응적으로 사용하는 경험적 Bayes 축소인자로, $p \ge 3$에서 MLE를 지배한다.
 
-<div class="drillbox" markdown>
-
-**연습문제 3.** <span class="diff hard" title="어려움"></span>
-**James-Stein 추정량.** $p \ge 3$인 $\mathbf X \sim N(\boldsymbol\mu, I_p)$에서 $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2)\mathbf X$와 MLE를 비교하라.
-
-</div>
-
-??? success "풀이"
-    ```python
-    import numpy as np
-    rng = np.random.default_rng(0)
-    p, R = 10, 20_000
-    mu = np.ones(p) * 0.5
-    mse_mle = mse_js = 0.0
-    for _ in range(R):
-        x = mu + rng.standard_normal(p)
-        js = (1 - (p - 2)/np.dot(x, x)) * x
-        mse_mle += np.sum((x - mu)**2)
-        mse_js += np.sum((js - mu)**2)
-    print(f"MSE MLE={mse_mle/R:.3f}  JS={mse_js/R:.3f}")
-    ```
-
-    출력:
-
-    ```
-    MSE MLE=10.024  JS=3.625
-    ```
-
-    예상 결과: $p \ge 3$일 때 모든 $\boldsymbol\mu$에 대해 MSE(JS) < MSE(MLE)이다 (Stein, 1956). MLE는 차원 3 이상에서 **허용 불가능**하다 — 언제나 더 나은 추정량이 존재한다.
-
-    실무적 영향: 현대 축소법(능형회귀, 계층적 Bayes, 라소)의 토대이다. 성분 $\mu_i$들이 서로 무관해도 함께 축소하면 전체 평균제곱오차가 개선된다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 **효율적 = CRLB 달성.** $N(\mu, \sigma^2)$에서 $\bar X$가 점근적으로만이 아니라 모든 $n$에서 효율적임(CRLB를 달성함)을 보여라.
 
 </div>
@@ -147,9 +127,11 @@ $$
 
     CRLB의 등호는 드물다 — 보통 MLE는 점근적으로만 CRLB에 도달한다. 정규분포 평균의 $\bar X$는 임의의 $n$에서 정확히 효율적인 몇 안 되는 사례이다. 점수함수 $\partial \log f/\partial\mu = (X - \mu)/\sigma^2$가 $X$에 대해 선형이어서, (CRLB 유도의 바탕이 되는) Cauchy-Schwarz 부등식이 등호로 성립하기 때문이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **효율성과 충분통계량.** 효율성을 충분성과 연결하라: $\bar X$는 $\mu$에 대해 충분하기 때문에 효율적이다.
 
 </div>
@@ -165,9 +147,11 @@ $$
 
     ($X_1$ 같은) 비효율적 추정량은 표본 전체를 쓰지 않아 정보를 버린다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **고차원에서의 맞바꿈.** 축소추정량이 고차원에서는 MLE를 지배하지만 저차원에서는 그렇지 않은 이유는 무엇인가?
 
 </div>
@@ -185,9 +169,11 @@ $$
 
     실무적 귀결: 고차원 회귀(예측변수 $p$개)에서는 축소법(능형, 라소, 엘라스틱 넷)이 비슷한 원리로 OLS를 일상적으로 능가한다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 **$\alpha$ 절사평균**의 점근분산을 서술하고, 정규분포와 $t_3$에서 $\alpha=0, 0.1, 0.2, 0.5$의 효율을 비교하라.
 
 </div>
@@ -220,9 +206,11 @@ $$
 
     **윈저화와의 비교.** 윈저화 평균은 버리는 대신 경계값으로 바꾼다. 효율이 절사평균과 비슷하고, 표준오차 계산이 조금 더 자연스럽다(윈저화 분산을 그대로 쓴다). 어느 쪽이든 **$\alpha$를 자료를 보고 고르면 안 된다.** 미리 정해야 한다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 **후버 M-추정량**의 $\psi$ 함수를 쓰고, 조율상수 $c$가 효율과 강건성을 어떻게 조절하는지 설명하라. $c=1.345$가 왜 널리 쓰이는가?
 
 </div>
@@ -264,9 +252,11 @@ $$
 
     **주의.** 후버 추정량은 $\psi$가 유계이지만 **0으로 되돌아가지는 않는다.** 따라서 극단적인 이상치도 여전히 상수 크기의 영향을 준다. 완전히 무시하려면 터키의 이중가중치처럼 재하강하는 것을 써야 하는데, 그러면 수렴 문제가 생긴다. 실무에서는 **후버로 시작해 그 해를 초기값으로 재하강 추정량을 돌리는** 이단계 방식을 쓴다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 **붕괴점**과 **영향함수**를 정의하고, 표본평균·중앙값·절사평균·후버 추정량에 대해 각각 계산하라. 두 개념은 무엇이 다른가?
 
 </div>
@@ -303,9 +293,11 @@ $$
 
     **실무 요령.** 영향함수를 자료에서 근사할 수 있다. 관측값 $i$를 뺐을 때의 추정값 변화 $\hat\theta-\hat\theta_{(-i)}$가 그것이며, 이를 $i$에 대해 그린 그림이 **영향력 진단**이다. 몇몇 점이 두드러지게 튀면 그 관측값들이 결과를 지배하고 있다는 뜻이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 자기상관이 있는 시계열에서 평균을 추정할 때 **가중치를 최적화**하면 표본평균보다 나아지는가? 언제 그러한지 논하라.
 
 </div>
@@ -346,6 +338,40 @@ $$
     - **결측이 불규칙할 때.** 관측 간격이 들쭉날쭉하면 가중이 실질적인 차이를 만든다.
 
     **한 문장으로.** **자기상관 자료에서 노력을 들일 곳은 추정량이 아니라 분산 추정이다.** 뉴이-웨스트 같은 HAC 추정량이 실무의 표준인 이유다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+**James-Stein 추정량.** $p \ge 3$인 $\mathbf X \sim N(\boldsymbol\mu, I_p)$에서 $\hat{\boldsymbol\mu}_{\text{JS}} = (1 - (p-2)/\|\mathbf X\|^2)\mathbf X$와 MLE를 비교하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    rng = np.random.default_rng(0)
+    p, R = 10, 20_000
+    mu = np.ones(p) * 0.5
+    mse_mle = mse_js = 0.0
+    for _ in range(R):
+        x = mu + rng.standard_normal(p)
+        js = (1 - (p - 2)/np.dot(x, x)) * x
+        mse_mle += np.sum((x - mu)**2)
+        mse_js += np.sum((js - mu)**2)
+    print(f"MSE MLE={mse_mle/R:.3f}  JS={mse_js/R:.3f}")
+    ```
+
+    출력:
+
+    ```
+    MSE MLE=10.024  JS=3.625
+    ```
+
+    예상 결과: $p \ge 3$일 때 모든 $\boldsymbol\mu$에 대해 MSE(JS) < MSE(MLE)이다 (Stein, 1956). MLE는 차원 3 이상에서 **허용 불가능**하다 — 언제나 더 나은 추정량이 존재한다.
+
+    실무적 영향: 현대 축소법(능형회귀, 계층적 Bayes, 라소)의 토대이다. 성분 $\mu_i$들이 서로 무관해도 함께 축소하면 전체 평균제곱오차가 개선된다.
 
 ---
 

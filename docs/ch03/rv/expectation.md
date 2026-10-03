@@ -8,6 +8,8 @@
 
 이 절은 세 개의 정리로 이루어진다. 기댓값의 정의(정리 1), 함수의 기댓값을 분포 유도 없이 구하는 방법(정리 2), 그리고 선형성(정리 3)이다.
 
+---
+
 ## 1. 무게중심을 구한다
 
 정의는 "값 곱하기 무게를 모두 더한다"이다. 이산이면 더하고 연속이면 적분한다 — 앞 절의 대응이 그대로 적용된다.
@@ -88,6 +90,8 @@ $$
 
     이다. 도착률이 $\lambda$면 평균 대기시간이 $1/\lambda$라는 익숙한 관계다.
 
+---
+
 ## 2. 함수의 기댓값은 분포를 몰라도 된다
 
 $X$의 분포는 아는데 $X^2$이나 $e^X$의 기댓값이 필요한 경우가 자주 있다. 원칙대로라면 $Y = g(X)$의 분포를 먼저 유도해야 하는데, 그 과정이 대개 번거롭다. 다행히 건너뛸 수 있다.
@@ -135,6 +139,8 @@ $$
 이름이 재미있다. 이 공식을 아무 생각 없이 써도 맞기 때문에 "무의식적 통계학자의 법칙(Law of the Unconscious Statistician)"이라 부른다. 실제로는 위와 같이 증명이 필요한 정리이며, 그 증명이 "여러 $x$가 같은 $g(x)$로 옮겨질 때 무게가 합쳐진다"는 [3.3절 이산확률변수](discrete.md)의 정리 2를 형식화한 것이다.
 
 LOTUS는 곧바로 쓰인다. 다음 쪽의 분산 $\text{Var}(X) = E[(X - \mu)^2]$이 $g(x) = (x-\mu)^2$인 경우이고, 이 절 마지막 쪽의 적률생성함수 $E[e^{tX}]$가 $g(x) = e^{tx}$인 경우다.
+
+---
 
 ## 3. 합의 기댓값은 언제나 기댓값의 합이다
 
@@ -505,6 +511,8 @@ $$
 
     **정리하면 이렇다.** 같은 $(X, Y)$ 한 쌍에서 선형성은 정확히 성립하고 곱 규칙은 $1.5$ 배, 분산의 덧셈은 $1.97$ 배 빗나간다. 독립이 필요한 자리와 필요 없는 자리가 이렇게 갈린다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -526,6 +534,8 @@ $$
     $$
 
     이다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -549,6 +559,8 @@ $X_1, X_2, \ldots, X_{100}$을 독립인 동전 던지기 100번의 지시변수
 
     이다. 100번 던지면 앞면이 50번 나올 것으로 기대한다. 중요한 점은 선형성이 던지기의 독립 여부와 무관하게 성립한다는 것이다. 던지기가 종속이더라도 같은 답이 나온다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff easy" title="쉬움"></span>
@@ -568,6 +580,8 @@ $X_1, X_2, \ldots, X_{100}$을 독립인 동전 던지기 100번의 지시변수
     $$
 
     이다. 참고로 $E[X] = 3.5$이므로 이는 정확히 공정한 주사위의 $\text{Var}(X)$다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -595,6 +609,8 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
     이다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
@@ -619,6 +635,8 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
     **용도:** 꼬리합 공식을 쓰면 생존확률로부터 기댓값을 계산할 수 있다(표준적인 확률밀도함수 적분보다 쉬울 때가 있다). 예: 첫 성공까지의 시행 횟수를 세는 기하확률변수에서 $P(X > n) = (1 - p)^n$이므로 $\mathbb{E}[X] = \sum_{n=0}^\infty (1 - p)^n = 1/p$이다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
@@ -639,6 +657,8 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
     - **탑 성질**(반복 기댓값): $\mathbb{E}[X] = \mathbb{E}[\mathbb{E}[X \mid Y]] = \mathbb{E}[\mathbb{E}[\mathbb{E}[X \mid Y, Z] \mid Y]]$ 등.
     - **MCMC / 분산 감소**: (가능할 때) $X$를 $\mathbb{E}[X \mid Y]$로 대체하면 라오–블랙웰 정리를 통해 추정량의 분산이 줄어든다.
     - **강화학습**: 벨만 방정식 $V(s) = \mathbb{E}[R + \gamma V(s') \mid s]$이 반복된 조건부 기댓값이다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -691,6 +711,8 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
     **어디서 코시를 만나는가.** 두 독립 정규의 비 $Z_1/Z_2$가 코시이며, 그래서 **비를 다룰 때 조심해야 한다.** 회귀계수의 비, 두 추정값의 비, 각도 측정에서 코시가 자연스럽게 나타난다.
 
     **처방.** 평균이 없으면 **중앙값을 쓴다.** 코시분포의 중앙값은 잘 정의되고, 표본중앙값이 그것으로 수렴한다(2장 평균·중앙값 문서 연습문제 8에서 본 대로 코시에서 중앙값이 압도적으로 낫다). $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -757,80 +779,11 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
     **함의.** 회귀분석의 목표가 $\mathbb{E}[Y\mid X]$를 추정하는 것이며, 모형의 유연성이 곧 **함수공간을 얼마나 넓게 잡느냐**다. 1장에서 본 편향–분산 절충이 이 선택의 다른 이름이다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
-항의 **개수 자체가 확률변수**인 합의 기댓값은 어떻게 되는가? **왈드 항등식**을 진술하고 확인하라.
-
-</div>
-
-??? success "풀이"
-    $N$이 확률변수이고 $X_1, X_2, \ldots$가 i.i.d.이며 $N$과 독립일 때
-
-    $$
-    \mathbb{E}\!\left[\sum_{i=1}^{N}X_i\right] = \mathbb{E}[N]\,\mathbb{E}[X]
-    $$
-
-    이다. 분산은 조금 더 복잡하다.
-
-    $$
-    \operatorname{Var}\!\left(\sum_{i=1}^{N}X_i\right) = \mathbb{E}[N]\operatorname{Var}(X) + \operatorname{Var}(N)\,\mathbb{E}[X]^2
-    $$
-
-    **증명은 전기댓값의 법칙이다.** $N$으로 조건을 걸면 $\mathbb{E}[S \mid N=n] = n\mathbb{E}[X]$이므로
-
-    $$
-    \mathbb{E}[S] = \mathbb{E}\!\left[\mathbb{E}[S\mid N]\right] = \mathbb{E}[N\,\mathbb{E}[X]] = \mathbb{E}[N]\mathbb{E}[X]
-    $$
-
-    이다. 분산도 총분산의 법칙으로 같은 방식으로 나온다. $\square$
-
-    ```python
-    import numpy as np
-
-    rng = np.random.default_rng(0)
-    lam, mu, sigma = 4.0, 3.0, 1.0
-
-    N = rng.poisson(lam, 50_000)
-    S = np.array([rng.normal(mu, sigma, k).sum() if k else 0.0 for k in N])
-
-    print(f"E[S]   모의 {S.mean():.4f}   이론 E[N]E[X] = {lam * mu:.4f}")
-    print(f"Var(S) 모의 {S.var():.4f}   이론 E[N]Var(X) + Var(N)E[X]^2 = "
-          f"{lam * sigma ** 2 + lam * mu ** 2:.4f}")
-    ```
-
-    출력:
-
-    ```
-    E[S]   모의 12.0062   이론 E[N]E[X] = 12.0000
-    Var(S) 모의 40.1686   이론 E[N]Var(X) + Var(N)E[X]^2 = 40.0000
-    ```
-
-    **두 공식이 모두 맞는다.**
-
-    **분산 공식의 두 항이 각각 무엇인가.**
-
-    - $\mathbb{E}[N]\operatorname{Var}(X)$: 항의 개수가 고정이었다면 있었을 변동
-    - $\operatorname{Var}(N)\mathbb{E}[X]^2$: **개수가 흔들려서 추가로 생기는 변동**
-
-    포아송이면 $\operatorname{Var}(N) = \mathbb{E}[N]$이라 둘째 항이 $\lambda\mu^2$로 커진다. 위 예에서 $4 + 36 = 40$ 중 $36$이 개수의 변동에서 온다. **개수의 불확실성이 지배적**이다.
-
-    **어디에 쓰이는가.**
-
-    | 응용 | $N$ | $X$ |
-    |---|---|---|
-    | 보험 총 청구액 | 청구 건수 | 건당 금액 |
-    | 웹사이트 총 매출 | 방문자 수 | 방문당 지출 |
-    | 대기행렬의 총 서비스 시간 | 도착 수 | 서비스 시간 |
-    | 순차 검정의 총 표본 | 정지 시각 | 관측 |
-
-    **복합 포아송 모형**이 이 구조의 표준 이름이며, 보험 수리의 기본 도구다.
-
-    **주의: $N$과 $X_i$가 독립이어야 한다.** 독립이 아니면 공식이 깨진다. 순차 검정처럼 $N$이 관측에 의존해 정해지는 경우에는 **정지시각**이라는 조건이 필요하며, 그것이 왈드 항등식의 원래 형태다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 연습문제 $2$의 지시변수 기법을 더 밀고 나가라. **쿠폰 수집가 문제**와 **매칭 문제**를 풀어라.
 
 </div>
@@ -913,6 +866,80 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
     **이것이 이 절의 핵심 도구다.** 복잡한 확률변수를 지시변수의 합으로 쪼개면, 각 지시변수의 기댓값은 단순한 확률 하나이고 선형성이 나머지를 해 준다. 분산은 종속성 때문에 더 어렵지만(공분산 항이 필요하다), 기댓값만큼은 언제나 쉽다. $\square$
 
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+항의 **개수 자체가 확률변수**인 합의 기댓값은 어떻게 되는가? **왈드 항등식**을 진술하고 확인하라.
+
+</div>
+
+??? success "풀이"
+    $N$이 확률변수이고 $X_1, X_2, \ldots$가 i.i.d.이며 $N$과 독립일 때
+
+    $$
+    \mathbb{E}\!\left[\sum_{i=1}^{N}X_i\right] = \mathbb{E}[N]\,\mathbb{E}[X]
+    $$
+
+    이다. 분산은 조금 더 복잡하다.
+
+    $$
+    \operatorname{Var}\!\left(\sum_{i=1}^{N}X_i\right) = \mathbb{E}[N]\operatorname{Var}(X) + \operatorname{Var}(N)\,\mathbb{E}[X]^2
+    $$
+
+    **증명은 전기댓값의 법칙이다.** $N$으로 조건을 걸면 $\mathbb{E}[S \mid N=n] = n\mathbb{E}[X]$이므로
+
+    $$
+    \mathbb{E}[S] = \mathbb{E}\!\left[\mathbb{E}[S\mid N]\right] = \mathbb{E}[N\,\mathbb{E}[X]] = \mathbb{E}[N]\mathbb{E}[X]
+    $$
+
+    이다. 분산도 총분산의 법칙으로 같은 방식으로 나온다. $\square$
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    lam, mu, sigma = 4.0, 3.0, 1.0
+
+    N = rng.poisson(lam, 50_000)
+    S = np.array([rng.normal(mu, sigma, k).sum() if k else 0.0 for k in N])
+
+    print(f"E[S]   모의 {S.mean():.4f}   이론 E[N]E[X] = {lam * mu:.4f}")
+    print(f"Var(S) 모의 {S.var():.4f}   이론 E[N]Var(X) + Var(N)E[X]^2 = "
+          f"{lam * sigma ** 2 + lam * mu ** 2:.4f}")
+    ```
+
+    출력:
+
+    ```
+    E[S]   모의 12.0062   이론 E[N]E[X] = 12.0000
+    Var(S) 모의 40.1686   이론 E[N]Var(X) + Var(N)E[X]^2 = 40.0000
+    ```
+
+    **두 공식이 모두 맞는다.**
+
+    **분산 공식의 두 항이 각각 무엇인가.**
+
+    - $\mathbb{E}[N]\operatorname{Var}(X)$: 항의 개수가 고정이었다면 있었을 변동
+    - $\operatorname{Var}(N)\mathbb{E}[X]^2$: **개수가 흔들려서 추가로 생기는 변동**
+
+    포아송이면 $\operatorname{Var}(N) = \mathbb{E}[N]$이라 둘째 항이 $\lambda\mu^2$로 커진다. 위 예에서 $4 + 36 = 40$ 중 $36$이 개수의 변동에서 온다. **개수의 불확실성이 지배적**이다.
+
+    **어디에 쓰이는가.**
+
+    | 응용 | $N$ | $X$ |
+    |---|---|---|
+    | 보험 총 청구액 | 청구 건수 | 건당 금액 |
+    | 웹사이트 총 매출 | 방문자 수 | 방문당 지출 |
+    | 대기행렬의 총 서비스 시간 | 도착 수 | 서비스 시간 |
+    | 순차 검정의 총 표본 | 정지 시각 | 관측 |
+
+    **복합 포아송 모형**이 이 구조의 표준 이름이며, 보험 수리의 기본 도구다.
+
+    **주의: $N$과 $X_i$가 독립이어야 한다.** 독립이 아니면 공식이 깨진다. 순차 검정처럼 $N$이 관측에 의존해 정해지는 경우에는 **정지시각**이라는 조건이 필요하며, 그것이 왈드 항등식의 원래 형태다. $\square$
+
+---
 
 ## 정리하며
 

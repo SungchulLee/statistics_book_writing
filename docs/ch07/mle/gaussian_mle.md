@@ -1,16 +1,20 @@
 # μ와 σ²의 MLE
 
-## 들어가며
+## 1. 들어가며
 
 **Gaussian(정규) 분포 모수의 최대가능도추정량**은 통계학에서 가장 중요한 결과에 속한다. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$에 대해 MLE는 평균 $\mu$와 분산 $\sigma^2$ 모두에 대한 닫힌 형태의 추정량을 준다. 이 절에서는 이 추정량들을 유도하고, 성질을 분석하며, 그 결과를 더 넓은 추정이론과 연결한다.
 
-## 정규 로그가능도
+---
+
+## 2. 정규 로그가능도
 
 $N(\mu, \sigma^2)$에서 얻은 i.i.d. 표본 $x_1, \ldots, x_n$에 대해 로그가능도는:
 
 $$\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2$$
 
-## MLE의 유도
+---
+
+## 3. MLE의 유도
 
 ### mu의 MLE
 $\mu$에 대해 미분하면:
@@ -46,7 +50,9 @@ $$H = \begin{pmatrix} -n/\hat{\sigma}^2 & 0 \\ 0 & -n/(2\hat{\sigma}^4) \end{pma
 
 대각 성분이 모두 음수이므로 음정부호이며, 최댓값임이 확인된다.
 
-## Gaussian MLE의 성질
+---
+
+## 4. Gaussian MLE의 성질
 
 ### mu-hat = X-bar의 성질
 | 성질 | 결과 |
@@ -73,7 +79,9 @@ $$H = \begin{pmatrix} -n/\hat{\sigma}^2 & 0 \\ 0 & -n/(2\hat{\sigma}^4) \end{pma
 
 $\hat{\mu}$과 $\hat{\sigma}^2$은 (Cochran 정리에 의해) **독립**이다. 정규분포에만 있는 특별한 성질이며 $t$-분포를 유도하는 데 결정적이다.
 
-## Fisher 정보행렬
+---
+
+## 5. Fisher 정보행렬
 
 $(\mu, \sigma^2)$에 대한 Fisher 정보행렬은:
 
@@ -87,7 +95,9 @@ $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \quad \text{Var}(\hat{\sigma}^2
 
 $\mu$의 MLE는 CRLB를 정확히 달성한다. $\sigma^2$의 MLE는 유한표본에서는 CRLB에 도달하지 *못하지만*(분산이 $2(n-1)\sigma^4/n^2 < 2\sigma^4/n$이다) 점근적으로는 도달한다.
 
-## 다른 모수화: (mu, sigma)
+---
+
+## 6. 다른 모수화: (mu, sigma)
 $(\mu, \sigma^2)$ 대신 $(\mu, \sigma)$로 모수화하면 $\sigma$의 MLE는:
 
 $$\hat{\sigma}_{\text{MLE}} = \sqrt{\hat{\sigma}^2_{\text{MLE}}} = \sqrt{\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2}$$
@@ -96,7 +106,9 @@ $$\hat{\sigma}_{\text{MLE}} = \sqrt{\hat{\sigma}^2_{\text{MLE}}} = \sqrt{\frac{1
 
 $\hat{\sigma}_{\text{MLE}}$은 $\sigma$에 대해 편향되어 있음에 유의하라(Jensen 부등식에 의해 $E[\sqrt{X}] < \sqrt{E[X]}$).
 
-## 편향 보정 추정량
+---
+
+## 7. 편향 보정 추정량
 
 $\sigma^2$의 불편추정량은:
 
@@ -110,7 +122,9 @@ $$S^2 = \frac{n}{n-1}\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n-1}\sum_{i=1}^n (X_
 | Bessel | $\frac{1}{n-1}\sum(X_i - \bar{X})^2$ | $\sigma^2$ | $\frac{2}{n-1}\sigma^4$ |
 | 평균제곱오차 최적 | $\frac{1}{n+1}\sum(X_i - \bar{X})^2$ | $\frac{n-1}{n+1}\sigma^2$ | 최소 |
 
-## 로그가능도 곡면
+---
+
+## 8. 로그가능도 곡면
 
 로그가능도함수 $\ell(\mu, \sigma^2)$은 $(\mu, \sigma^2)$ 평면 위의 곡면을 이룬다:
 
@@ -129,7 +143,9 @@ $N(5, 2^2)$에서 뽑은 $n = 5$짜리 표본 하나로 이 곡면을 실제로 
 
 다만 그 차이가 얼마나 작은지도 함께 보아 둘 만하다. 꼭대기와 초록 점의 로그가능도 차이는 $0.058$에 불과하다. 가능도비로는 $e^{-0.058} \approx 0.94$ — 자료가 $S^2 = 3.79$를 $\hat{\sigma}^2 = 3.03$보다 6% 덜 지지한다는 뜻일 뿐이다. 꼭대기 근처가 이토록 평평하다는 사실은 두 가지를 동시에 말해 준다. 어느 쪽을 쓰든 자료와의 적합도 차이는 미미하다는 것, 그리고 **바로 그렇기 때문에 $n$으로 나눌지 $n-1$로 나눌지가 가능도만으로는 결정되지 않는다**는 것이다.
 
-## 가능도로부터의 신뢰영역
+---
+
+## 9. 가능도로부터의 신뢰영역
 
 ### mu에 대해 (σ²를 아는 경우)
 
@@ -145,7 +161,9 @@ $$\bar{X} \pm t_{n-1, \alpha/2}\frac{S}{\sqrt{n}}$$
 
 $$\left(\frac{(n-1)S^2}{\chi^2_{n-1, \alpha/2}}, \quad \frac{(n-1)S^2}{\chi^2_{n-1, 1-\alpha/2}}\right)$$
 
-## 제약 아래에서의 MLE
+---
+
+## 10. 제약 아래에서의 MLE
 
 ### 평균을 아는 경우
 
@@ -163,7 +181,9 @@ $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar
 
 불편 버전은 $n_1 + n_2 - 2$로 나눈다.
 
-## 금융과의 연결
+---
+
+## 11. 금융과의 연결
 
 - **수익률 모형화**: 로그수익률이 $r_t \sim N(\mu, \sigma^2)$이라는 가정이 많은 금융 모형의 토대이다. MLE $\hat{\mu} = \bar{r}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(r_t - \bar{r})^2$이 표준적인 추정값이다.
 
@@ -175,11 +195,15 @@ $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar
 
 - **정규성 검정**: Gaussian MLE를 쓰기 전에 정규분포가 적절한지 검정해야 한다. 금융 수익률은 흔히 두꺼운 꼬리를 보이므로 Gaussian MLE가 최적이 아니게 된다.
 
-## 요약
+---
+
+## 12. 요약
 
 Gaussian MLE — $\hat{\mu} = \bar{X}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2$ — 는 닫힌 형태이고 계산이 아주 쉬우며 훌륭한 성질을 갖는다. 평균추정량은 불편이고 효율적이며, 분산추정량은 편향되어 있지만 일치하고 불편 대안보다 평균제곱오차가 작다. (정규분포에만 있는) 이들의 독립성 덕분에 $t$와 $\chi^2$ 분포를 통한 정확한 추론이 가능하다. 이 추정량들은 고전적 통계추론의 토대이며 금융 모수추정의 출발점이다.
 
-## 핵심 공식
+---
+
+## 13. 핵심 공식
 
 | 양 | 공식 |
 |----------|---------|
@@ -190,6 +214,8 @@ Gaussian MLE — $\hat{\mu} = \bar{X}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i 
 | $\hat{\mu}$의 분포 | $N(\mu, \sigma^2/n)$ |
 | $n\hat{\sigma}^2/\sigma^2$의 분포 | $\chi^2_{n-1}$ |
 | $t$-통계량 | $(\bar{X}-\mu)/(S/\sqrt{n}) \sim t_{n-1}$ |
+
+---
 
 ## 연습문제
 

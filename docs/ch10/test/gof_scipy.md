@@ -4,12 +4,16 @@
 
 이 페이지에서는 편의 함수 `scipy.stats.chisquare`로 카이제곱 적합도 검정을 수행하는 방법을 보인다. 통계량과 p-값을 손으로 계산하는 대신 `chisquare`에 관측도수와 기대도수 배열을 넘기면 두 값을 바로 돌려준다. 바탕에 있는 수학을 이해한 뒤라면 실무 코드에서는 이 방식을 권한다.
 
-## 가설
+---
+
+## 1. 가설
 
 - **귀무가설** ($H_0$): 관측도수가 지정된 기대분포를 따른다.
 - **대립가설** ($H_A$): 관측도수가 지정된 기대분포를 따르지 않는다.
 
-## 검정통계량
+---
+
+## 2. 검정통계량
 
 이 함수는 내부적으로
 
@@ -156,7 +160,9 @@ $$
 
     그런데 **명목 $5\%$ 기각역의 실제 오류율은 $0.049902$ 로 거의 정확하다.** p-값 하나에서는 $10\%$ 어긋났지만 임계값 근처에서는 계단이 운 좋게 잘 맞는다. $0.0724$ 든 $0.0800$ 든 결론은 "기각하지 못한다" 로 같다.
 
-## f_exp를 생략해도 되는 경우
+---
+
+## 3. f_exp를 생략해도 되는 경우
 
 귀무가설이 균등분포를 지정한다면 `f_exp`를 아예 생략해도 된다:
 
@@ -221,7 +227,9 @@ $$
 
     네 번째 줄이 (2)의 요점이다. $16/3$ 은 이진 부동소수점으로 정확히 표현되지 않아 `5.333333333333333` 로 저장되는데, 생략한 쪽과 명시한 쪽이 **같은 부정확한 값**을 쓰므로 `==` 비교가 `True` 다. 세 번째 줄의 $\chi^2 = 0$ 은 관측이 기대와 완전히 일치하는 극단으로, 통계량이 음수가 될 수 없음을 상기시킨다.
 
-## 균등하지 않은 기대 비율
+---
+
+## 4. 균등하지 않은 기대 비율
 
 귀무가설이 서로 다른 비율 $p_1, p_2, \ldots, p_k$를 지정하면 기대도수를 $E_i = n \cdot p_i$로 계산하여 명시적으로 넘긴다:
 
@@ -325,7 +333,9 @@ $$
 
     **예측과 직접 계산이 소수 넷째 자리까지 같다.** 보기 1 (1)에서 교차항이 사라진다고 한 유도가 맞다는 뜻이다. 합이 맞지 않는 `f_exp` 는 조금 틀린 답을 주는 것이 아니라 **자료와 무관한 수를 더해 버린다.**
 
-## 해석
+---
+
+## 5. 해석
 
 가위바위보 보기에서 이 함수는 $\chi^2 = 5.25$와 $p \approx 0.0725$를 준다. 유의수준 $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. 경기 결과가 균등분포에서 벗어난다는 증거가 충분하지 않다.
 
@@ -342,6 +352,8 @@ $$
 기대도수가 8이라 "모두 5 이상"이라는 경험 법칙은 만족한다. 실제로 근사의 품질을 다른 방식으로 재 보면, $\chi^2_2$의 5% 임계값 5.991을 기각 경계로 썼을 때 진짜 제1종 오류율은 0.0499로 명목값 0.05에 거의 정확히 맞는다. 계단이 성근데도 평균적으로는 잘 맞는다는 뜻이다.
 
 한 가지만 덧붙이자. 같은 비율이 세 배 규모의 72경기에서 나왔다면 통계량도 세 배인 15.75가 되어 $p = 0.0004$가 된다. 기각하지 못한 것은 4대 13이라는 치우침이 작아서가 아니라 24경기가 적어서다. 표본이 작으면 꽤 큰 차이도 우연의 범위 안에 들어온다.
+
+---
 
 ## 연습문제
 
@@ -362,9 +374,104 @@ $$
 
     이다. $\text{df} = 2$에서 p-값은 $P(\chi^2_2 \ge 10) \approx 0.0067$이므로 $\alpha = 0.05$에서 $H_0$을 기각한다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
+`scipy`로 적합도 검정을 할 때의 **함수 선택표와 흔한 함정**을 정리하라.
+
+</div>
+
+??? success "풀이"
+
+    **함수 선택표.**
+
+    | 상황 | 함수 | 핵심 인자 |
+    |---|---|---|
+    | 범주형 1차원, 적합도 | `stats.chisquare` | `f_exp`, `ddof` |
+    | 계열 통계량 비교 | `stats.power_divergence` | `lambda_` |
+    | 분할표, 독립성·동질성 | `stats.chi2_contingency` | `correction` |
+    | $2\times2$, 소표본 | `stats.fisher_exact` | `alternative` |
+    | $2\times2$, 무조건부 | `stats.barnard_exact` | — |
+    | 대응 $2\times2$ | `statsmodels`의 `mcnemar` | `exact` |
+    | 정규성 | `stats.shapiro` | — |
+    | 임의 분포 적합도(연속) | `stats.kstest`, `stats.anderson` | `dist` |
+
+    **함정 여덟.**
+
+    | # | 함정 | 증상·대처 |
+    |---|---|---|
+    | 1 | `f_exp` 합이 $n$과 다름 | `ValueError` — $n$을 곱해 도수로 |
+    | 2 | `f_exp`를 생략 | 조용히 **균등분포**를 가정 |
+    | 3 | 모수 추정 후 `ddof` 누락 | $p$가 커져 모형이 통과 |
+    | 4 | 분할표를 `chisquare`에 | 다른 가설을 검정하게 됨 |
+    | 5 | `chi2_contingency`의 `correction` 기본값 | $2\times2$에서 자동으로 야츠 보정 |
+    | 6 | 백분율을 도수 자리에 | 사실상 $n=100$ 고정 |
+    | 7 | 0인 칸 | $G^2$에서 `log(0)` 문제 |
+    | 8 | 연속형을 구간화 | 검정력 손실 |
+
+    **2번과 5번은 오류가 나지 않아 특히 위험하다.**
+
+    ```python
+    from scipy import stats
+
+    obs = [90, 70, 40]
+    print(f"f_exp 생략     → p = {stats.chisquare(f_obs=obs).pvalue:.6f}")
+    print(f"f_exp 명시     → p = "
+          f"{stats.chisquare(f_obs=obs, f_exp=[100, 60, 40]).pvalue:.6f}")
+    ```
+
+    ```text
+    f_exp 생략     → p = 0.000075
+    f_exp 명시     → p = 0.263597
+    ```
+
+    **같은 자료인데 $p$가 3500배 차이난다.** 귀무가설이 다르니 당연하지만, **코드만 보고는 어느 가설을 검정했는지 알기 어렵다.** `f_exp`를 언제나 명시하는 습관이 안전하다.
+
+    **권장 작성 방식.**
+
+    ```python
+    def run_gof(obs, ratios, n_estimated=0, label=""):
+        """의도를 코드에 드러내는 적합도 검정 래퍼."""
+        import numpy as np
+        obs = np.asarray(obs, float)
+        p = np.asarray(ratios, float)
+        p = p / p.sum()
+        exp = obs.sum() * p
+        r = stats.chisquare(f_obs=obs, f_exp=exp, ddof=n_estimated)
+        df = len(obs) - 1 - n_estimated
+        print(f"{label}: χ²={r.statistic:.4f}, df={df}, p={r.pvalue:.4f}, "
+              f"E_min={exp.min():.2f}")
+        if exp.min() < 5:
+            print("   ⚠ 기대도수가 5 미만인 칸이 있다. 병합이나 정확검정을 고려하라.")
+        return r
+
+    run_gof([90, 70, 40], [0.5, 0.3, 0.2], label="주머니 구슬")
+    run_gof([4, 13, 7], [1, 1, 1], label="가위바위보")
+    run_gof([30, 12, 5, 2], [0.6, 0.25, 0.1, 0.05], label="소표본 예")
+    ```
+
+    ```text
+    주머니 구슬: χ²=2.6667, df=2, p=0.2636, E_min=40.00
+    가위바위보: χ²=5.2500, df=2, p=0.0724, E_min=8.00
+    소표본 예: χ²=0.1020, df=3, p=0.9916, E_min=2.45
+       ⚠ 기대도수가 5 미만인 칸이 있다. 병합이나 정확검정을 고려하라.
+    ```
+
+    **이런 래퍼의 이득 셋.**
+
+    1. **기대비율을 반드시 적게** 만들어 2번 함정을 막는다.
+    2. **$E_{\min}$을 자동으로 경고**해 4번·8번을 줄인다.
+    3. **자유도를 함께 출력**해 3번을 눈에 띄게 한다.
+
+    **한 문장.** `scipy` 함수는 짧지만, **무엇을 귀무가설로 두었는지가 인자에 숨어 있다.** 그것을 코드 표면에 드러내는 것이 재현 가능한 분석의 첫걸음이다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span>
 어떤 연구자가 자료에 포아송 모형을 적합하고 표본으로부터 모수 $\lambda$를 추정했다. 자료의 범주는 5개이다. `ddof` 인자에 어떤 값을 넘겨야 하며 이유는 무엇인가?
 
 </div>
@@ -373,9 +480,11 @@ $$
 
     모수 하나($\lambda$)를 자료로부터 추정했으므로 자유도를 하나 더 잃는다. `ddof=1`을 넘기면 $\text{df} = k - 1 - \text{ddof} = 5 - 1 - 1 = 3$이 된다. `ddof` 인자는 자료로부터 추정한 모수가 표준 기준선 $k-1$보다 자유도를 더 줄이는 것을 반영한다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 `f_exp`의 합이 `f_obs`의 합과 같지 않으면 어떻게 되는가? `stats.chisquare(f_obs=[10, 20], f_exp=[5, 5])`로 시험해 보고 결과를 설명하라.
 
 </div>
@@ -384,9 +493,11 @@ $$
 
     기대도수의 합(10)이 관측도수의 합(30)과 맞지 않으므로 SciPy는 오류를 내거나 오도하는 결과를 준다. 구체적으로 `stats.chisquare`는 `f_exp`를 자동으로 다시 축척하지 **않는다**. 검정이 의미를 가지려면 기대도수의 합이 관측도수의 합과 같아야 한다. 올바른 호출은 `f_exp=[15, 15]`처럼 다시 축척하거나, 비율에 관측 총합을 곱해서 쓰는 것이다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 카이제곱 통계량이 다음과 같이 다시 쓰일 수 있음을 대수적으로 보여라:
 
 $$
@@ -417,9 +528,11 @@ $$
 
     으로 단순해진다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 어떤 주머니에 빨강 50%, 파랑 30%, 초록 20%의 구슬이 들어 있다고 한다. 구슬 200개를 (복원으로) 뽑아 $[90, 70, 40]$을 관측했다. `stats.chisquare`로 $\alpha = 0.01$에서 이 주장을 검정하고 결론을 서술하라.
 
 </div>
@@ -446,9 +559,11 @@ $$
 
     $\text{df} = 2$에서 p-값은 약 $0.2636$이다. $p = 0.2636 > 0.01 = \alpha$이므로 $H_0$을 **기각하지 못한다**. 1% 유의수준에서 자료는 주장된 비율과 부합한다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 `scipy.stats.power_divergence`의 `lambda_` 인자로 카이제곱 계열의 여러 통계량을 한 번에 계산하고 비교하라.
 
 </div>
@@ -531,9 +646,11 @@ $$
     | 소표본이 걱정 | `lambda_=2/3` 또는 정확검정 |
     | 절대 쓰지 말 것 | `lambda_=-2`(네이만) |
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 `chisquare`, `chi2_contingency`, `fisher_exact`의 **입력과 용도**가 어떻게 다른지 정리하고, 같은 자료에 잘못 적용했을 때 무슨 일이 생기는지 보여라.
 
 </div>
@@ -611,10 +728,12 @@ $$
 
     **보정 여부로 $p$가 두 배 차이난다**(0.0049 대 0.0026). 앞 절에서 본 대로 야츠 보정은 지나치게 보수적이므로, **$2\times2$에서 `correction=False`를 명시하는 습관**을 권한다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
-연습문제 3이 확인한 "`f_exp`의 합이 맞아야 한다"는 제약을 **실무에서 어떻게 다루는지** 정리하라. 기대**비율**만 알 때의 올바른 코드를 작성하라.
+**연습문제 9.** <span class="diff med" title="중간"></span>
+연습문제 4이 확인한 "`f_exp`의 합이 맞아야 한다"는 제약을 **실무에서 어떻게 다루는지** 정리하라. 기대**비율**만 알 때의 올바른 코드를 작성하라.
 
 </div>
 
@@ -701,9 +820,11 @@ $$
 
     **`ratios=None`(균등 가정)일 때 $p=0.0001$로 크게 다르다.** 귀무가설이 달라졌으니 당연하다. **"기대분포를 무엇으로 둘 것인가"가 검정의 핵심**이고, `f_exp`를 생략하면 조용히 균등분포가 가정된다는 점을 잊으면 안 된다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 10.** <span class="diff med" title="중간"></span>
 연속형 자료에 대해 `chisquare`와 **전용 적합도 검정들**을 같은 자료에 적용해 비교하라.
 
 </div>
@@ -814,97 +935,6 @@ $$
     4. **전용 검정이 더 안정적이다.** 샤피로·윌크와 앤더슨·달링은 세 자료 모두에서 일관된 판정을 내렸다.
 
     **주의 — 콜모고로프·스미르노프의 함정.** 위 코드처럼 표본의 $\bar x,s$로 표준화한 뒤 `kstest`를 부르면, **모수를 추정했다는 사실을 반영하지 않아 지나치게 보수적**이다. 올바르게 하려면 릴리포스 검정(`statsmodels`의 `lilliefors`)을 쓰거나 모의실험으로 임계값을 얻어야 한다.
-
-<div class="drillbox" markdown>
-
-**연습문제 10.** <span class="diff easy" title="쉬움"></span>
-`scipy`로 적합도 검정을 할 때의 **함수 선택표와 흔한 함정**을 정리하라.
-
-</div>
-
-??? success "풀이"
-
-    **함수 선택표.**
-
-    | 상황 | 함수 | 핵심 인자 |
-    |---|---|---|
-    | 범주형 1차원, 적합도 | `stats.chisquare` | `f_exp`, `ddof` |
-    | 계열 통계량 비교 | `stats.power_divergence` | `lambda_` |
-    | 분할표, 독립성·동질성 | `stats.chi2_contingency` | `correction` |
-    | $2\times2$, 소표본 | `stats.fisher_exact` | `alternative` |
-    | $2\times2$, 무조건부 | `stats.barnard_exact` | — |
-    | 대응 $2\times2$ | `statsmodels`의 `mcnemar` | `exact` |
-    | 정규성 | `stats.shapiro` | — |
-    | 임의 분포 적합도(연속) | `stats.kstest`, `stats.anderson` | `dist` |
-
-    **함정 여덟.**
-
-    | # | 함정 | 증상·대처 |
-    |---|---|---|
-    | 1 | `f_exp` 합이 $n$과 다름 | `ValueError` — $n$을 곱해 도수로 |
-    | 2 | `f_exp`를 생략 | 조용히 **균등분포**를 가정 |
-    | 3 | 모수 추정 후 `ddof` 누락 | $p$가 커져 모형이 통과 |
-    | 4 | 분할표를 `chisquare`에 | 다른 가설을 검정하게 됨 |
-    | 5 | `chi2_contingency`의 `correction` 기본값 | $2\times2$에서 자동으로 야츠 보정 |
-    | 6 | 백분율을 도수 자리에 | 사실상 $n=100$ 고정 |
-    | 7 | 0인 칸 | $G^2$에서 `log(0)` 문제 |
-    | 8 | 연속형을 구간화 | 검정력 손실 |
-
-    **2번과 5번은 오류가 나지 않아 특히 위험하다.**
-
-    ```python
-    from scipy import stats
-
-    obs = [90, 70, 40]
-    print(f"f_exp 생략     → p = {stats.chisquare(f_obs=obs).pvalue:.6f}")
-    print(f"f_exp 명시     → p = "
-          f"{stats.chisquare(f_obs=obs, f_exp=[100, 60, 40]).pvalue:.6f}")
-    ```
-
-    ```text
-    f_exp 생략     → p = 0.000075
-    f_exp 명시     → p = 0.263597
-    ```
-
-    **같은 자료인데 $p$가 3500배 차이난다.** 귀무가설이 다르니 당연하지만, **코드만 보고는 어느 가설을 검정했는지 알기 어렵다.** `f_exp`를 언제나 명시하는 습관이 안전하다.
-
-    **권장 작성 방식.**
-
-    ```python
-    def run_gof(obs, ratios, n_estimated=0, label=""):
-        """의도를 코드에 드러내는 적합도 검정 래퍼."""
-        import numpy as np
-        obs = np.asarray(obs, float)
-        p = np.asarray(ratios, float)
-        p = p / p.sum()
-        exp = obs.sum() * p
-        r = stats.chisquare(f_obs=obs, f_exp=exp, ddof=n_estimated)
-        df = len(obs) - 1 - n_estimated
-        print(f"{label}: χ²={r.statistic:.4f}, df={df}, p={r.pvalue:.4f}, "
-              f"E_min={exp.min():.2f}")
-        if exp.min() < 5:
-            print("   ⚠ 기대도수가 5 미만인 칸이 있다. 병합이나 정확검정을 고려하라.")
-        return r
-
-    run_gof([90, 70, 40], [0.5, 0.3, 0.2], label="주머니 구슬")
-    run_gof([4, 13, 7], [1, 1, 1], label="가위바위보")
-    run_gof([30, 12, 5, 2], [0.6, 0.25, 0.1, 0.05], label="소표본 예")
-    ```
-
-    ```text
-    주머니 구슬: χ²=2.6667, df=2, p=0.2636, E_min=40.00
-    가위바위보: χ²=5.2500, df=2, p=0.0724, E_min=8.00
-    소표본 예: χ²=0.1020, df=3, p=0.9916, E_min=2.45
-       ⚠ 기대도수가 5 미만인 칸이 있다. 병합이나 정확검정을 고려하라.
-    ```
-
-    **이런 래퍼의 이득 셋.**
-
-    1. **기대비율을 반드시 적게** 만들어 2번 함정을 막는다.
-    2. **$E_{\min}$을 자동으로 경고**해 4번·8번을 줄인다.
-    3. **자유도를 함께 출력**해 3번을 눈에 띄게 한다.
-
-    **한 문장.** `scipy` 함수는 짧지만, **무엇을 귀무가설로 두었는지가 인자에 숨어 있다.** 그것을 코드 표면에 드러내는 것이 재현 가능한 분석의 첫걸음이다.
 
 ---
 

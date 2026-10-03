@@ -18,7 +18,9 @@ $$
 
 기하적 직관은 간단하다. $\mathbf{A}$가 표준기저에 대해 선형사상 $T: \mathbb{R}^n \to \mathbb{R}^n$을 나타내고 $\mathbf{P}$의 열들이 새 기저의 벡터들이라면, $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$는 같은 사상 $T$를 새 기저로 표현한 행렬이다.
 
-## 닮음은 동치관계다
+---
+
+## 1. 닮음은 동치관계다
 
 닮음은 $n \times n$ 행렬 전체를 동치류로 분할한다.
 
@@ -38,7 +40,9 @@ $$
 
 이므로 $\mathbf{C}$는 $\mathbf{R} = \mathbf{P}\mathbf{Q}$를 통해 $\mathbf{A}$와 닮았다.
 
-## 닮음에 대한 불변량
+---
+
+## 2. 닮음에 대한 불변량
 
 닮음이 중요한 핵심 이유는 많은 중요한 행렬 관련 양이 **불변량**이라는 데 있다. 즉 한 닮음류에 속한 모든 행렬에 대해 같은 값을 갖는다.
 
@@ -82,7 +86,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathb
     \operatorname{tr}(\mathbf{B}) = \operatorname{tr}(\mathbf{P}^{-1}(\mathbf{A}\mathbf{P})) = \operatorname{tr}((\mathbf{A}\mathbf{P})\mathbf{P}^{-1}) = \operatorname{tr}(\mathbf{A})
     $$
 
-    이다(연습문제 2).
+    이다(연습문제 4).
 
     **4 (행렬식).** $\det$의 곱셈성에서 $\det(\mathbf{B}) = \det(\mathbf{P}^{-1})\det(\mathbf{A})\det(\mathbf{P}) = \det(\mathbf{A})$이다. 1번의 특성다항식에 $\lambda = 0$을 넣어도 같은 결론이 나온다.
 
@@ -94,7 +98,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathb
 
     이다.
 
-    **6 (최소다항식).** 임의의 다항식 $f$에 대해 $f(\mathbf{B}) = \mathbf{P}^{-1}f(\mathbf{A})\mathbf{P}$이다(연습문제 6). 따라서 $f(\mathbf{A}) = \mathbf{O}$와 $f(\mathbf{B}) = \mathbf{O}$가 동등하므로, $\mathbf{A}$를 없애는 다항식 전체와 $\mathbf{B}$를 없애는 다항식 전체가 같은 집합이고, 그중 최고차항의 계수가 1인 최소 차수 원소도 같다.
+    **6 (최소다항식).** 임의의 다항식 $f$에 대해 $f(\mathbf{B}) = \mathbf{P}^{-1}f(\mathbf{A})\mathbf{P}$이다(연습문제 8). 따라서 $f(\mathbf{A}) = \mathbf{O}$와 $f(\mathbf{B}) = \mathbf{O}$가 동등하므로, $\mathbf{A}$를 없애는 다항식 전체와 $\mathbf{B}$를 없애는 다항식 전체가 같은 집합이고, 그중 최고차항의 계수가 1인 최소 차수 원소도 같다.
 
     **7 (기하적 중복도).** $\mathbf{B} - \lambda\mathbf{I} = \mathbf{P}^{-1}(\mathbf{A} - \lambda\mathbf{I})\mathbf{P}$이므로 5번을 $\mathbf{A} - \lambda\mathbf{I}$에 적용하면 계수가 같고, 따라서 차원정리에 의해 영공간의 차원도 같다. $\square$
 
@@ -132,20 +136,24 @@ $\mathbf{A}, \mathbf{B} \in \mathbb{C}^{n \times n}$에 대해, $\mathbf{A}$와 
     \mathbf{N} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \qquad \mathbf{O} = \begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix}
     $$
 
-    이다. 둘 다 특성다항식이 $\lambda^2$이고 $\operatorname{tr} = \det = 0$이다. 그러나 $\operatorname{rank}(\mathbf{N}) = 1 \neq 0 = \operatorname{rank}(\mathbf{O})$이므로 정리 1 의 5번에 걸려 닮을 수 없다. 계수까지 맞춰 놓아도 여전히 부족하다. 연습문제 3 의 $2\mathbf{I}$와 $\begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$는 특성다항식·대각합·행렬식·계수가 모두 같지만 기하적 중복도가 달라 닮지 않는다.
+    이다. 둘 다 특성다항식이 $\lambda^2$이고 $\operatorname{tr} = \det = 0$이다. 그러나 $\operatorname{rank}(\mathbf{N}) = 1 \neq 0 = \operatorname{rank}(\mathbf{O})$이므로 정리 1 의 5번에 걸려 닮을 수 없다. 계수까지 맞춰 놓아도 여전히 부족하다. 연습문제 5 의 $2\mathbf{I}$와 $\begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$는 특성다항식·대각합·행렬식·계수가 모두 같지만 기하적 중복도가 달라 닮지 않는다.
 
-## 불변량이 아닌 성질
+---
+
+## 3. 불변량이 아닌 성질
 
 모든 행렬 성질이 닮음에서 보존되는 것은 아니다. 특히 다음과 같다.
 
 - **고유벡터**는 불변이 아니다. 고윳값은 공유하지만 고유벡터는 공유하지 않는다. $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$이면 $\mathbf{B}(\mathbf{P}^{-1}\mathbf{v}) = \mathbf{P}^{-1}\mathbf{A}\mathbf{v} = \lambda(\mathbf{P}^{-1}\mathbf{v})$이므로, $\mathbf{B}$의 고유벡터는 $\mathbf{A}$의 고유벡터를 $\mathbf{P}^{-1}$로 옮긴 것이다. 고유공간은 **대응**되지만 같지는 않다. 고윳값은 변환의 성질이고 고유벡터는 좌표의 성질이기 때문이다.
-- **대칭성**은 불변이 아니다. 대칭행렬이 대칭이 아닌 행렬과 닮을 수 있다(연습문제 7). 기저변환행렬 $\mathbf{P}$가 직교행렬일 필요는 없다.
+- **대칭성**은 불변이 아니다. 대칭행렬이 대칭이 아닌 행렬과 닮을 수 있다(연습문제 2). 기저변환행렬 $\mathbf{P}$가 직교행렬일 필요는 없다.
 - **양정치성**은 불변이 아니다. 여기서 양정치성은 모든 $\mathbf{x} \neq \mathbf{0}$에 대해 $\mathbf{x}^\top\mathbf{A}\mathbf{x} > 0$인 것을 말한다. $\mathbf{A} = \operatorname{diag}(1, 100)$과 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$을 잡으면 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 1 & -99 \\ 0 & 100 \end{pmatrix}$인데, $\mathbf{x} = (1, t)^\top$에서 $\mathbf{x}^\top\mathbf{B}\mathbf{x} = 1 - 99t + 100t^2$이고 이 이차식의 판별식 $99^2 - 400 > 0$이라 어떤 $t$에서 음수가 된다. **고윳값이 모두 양수라는 성질은 불변이지만, 이차형식의 부호는 불변이 아니다.** 둘이 동등해지는 것은 행렬이 대칭일 때뿐이다(이 절의 "양정치행렬" 쪽).
 - **개별 성분**은 당연히 바뀐다.
 
-기저변환행렬 $\mathbf{P}$를 직교행렬($\mathbf{P}^\top = \mathbf{P}^{-1}$)로 제한하면, 그 결과인 **직교닮음** $\mathbf{B} = \mathbf{P}^\top\mathbf{A}\mathbf{P}$는 대칭성을 보존한다(연습문제 8). 스펙트럼 정리가 직교대각화를 내놓는 이유가 여기에 있다.
+기저변환행렬 $\mathbf{P}$를 직교행렬($\mathbf{P}^\top = \mathbf{P}^{-1}$)로 제한하면, 그 결과인 **직교닮음** $\mathbf{B} = \mathbf{P}^\top\mathbf{A}\mathbf{P}$는 대칭성을 보존한다(연습문제 3). 스펙트럼 정리가 직교대각화를 내놓는 이유가 여기에 있다.
 
-## 예
+---
+
+## 4. 예
 
 다음 행렬을 생각하자.
 
@@ -183,7 +191,9 @@ $$
 
 **닮은 행렬이란 같은 일을 다른 말로 받아 적은 것이다.** 성분은 번역의 산물이라 기저를 고르는 사람 마음대로 바뀌지만, 대각합·행렬식·고윳값은 화살표 자체의 성질이므로 번역에 흔들리지 않는다. 다음 절의 대각화는 이 자유를 가장 유리하게 쓴 특수한 경우, 곧 $\mathbf{B}$가 대각이 되도록 기저를 고르는 경우일 뿐이다.
 
-## 통계와의 연결
+---
+
+## 5. 통계와의 연결
 
 닮은 행렬은 다변량 통계 전반에 등장한다.
 
@@ -191,7 +201,9 @@ $$
 
 - **이차형식의 단순화.** 마할라노비스 거리 $(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1}$이 대각이 되는 고유기저로 옮겨서 분석할 수 있다. 이것이 정규확률벡터의 이차형식이 카이제곱분포를 따름을 유도하는 근거다.
 
-- **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$다. 다만 그 이유는 닮음이 아니다. 재매개변수화 $\mathbf{X} \mapsto \mathbf{X}\mathbf{C}$는 그람 행렬을 $\mathbf{C}^\top\mathbf{X}^\top\mathbf{X}\mathbf{C}$로 보내는 **합동변환**이며, $\mathbf{C}$가 직교행렬이 아니면 닮음변환이 아니라서 고윳값도 보존하지 않는다. $\operatorname{tr}(\mathbf{H})$가 보존되는 것은 열공간이 그대로여서 $\mathbf{H}$ 자체가 아예 바뀌지 않기 때문이다(연습문제 4).
+- **모자 행렬 대각합의 불변성.** 회귀에서 예측변수를 어떻게 코딩하거나 척도를 바꾸든 $\operatorname{tr}(\mathbf{H}) = p$다. 다만 그 이유는 닮음이 아니다. 재매개변수화 $\mathbf{X} \mapsto \mathbf{X}\mathbf{C}$는 그람 행렬을 $\mathbf{C}^\top\mathbf{X}^\top\mathbf{X}\mathbf{C}$로 보내는 **합동변환**이며, $\mathbf{C}$가 직교행렬이 아니면 닮음변환이 아니라서 고윳값도 보존하지 않는다. $\operatorname{tr}(\mathbf{H})$가 보존되는 것은 열공간이 그대로여서 $\mathbf{H}$ 자체가 아예 바뀌지 않기 때문이다(연습문제 6).
+
+---
 
 ## 연습문제
 
@@ -211,9 +223,81 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 
     확인: $\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 0 & 1 \\ 1 & -1 \end{pmatrix}\begin{pmatrix} 1 & 2 \\ 0 & 3 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} = \begin{pmatrix} 3 & 0 \\ 0 & 1 \end{pmatrix} = \mathbf{B}$.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
+대칭행렬이 대칭이 아닌 행렬과 닮을 수 있음을 구체적인 예로 보여라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{A} = \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}$(대칭)과 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$(직교가 **아닌** 가역행렬)을 잡으면
+
+    $$
+    \mathbf{P}^{-1}\mathbf{A}\mathbf{P}
+    = \begin{pmatrix} 1 & -1 \\ 0 & 1 \end{pmatrix}
+      \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}
+      \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}
+    = \begin{pmatrix} 1 & -1 \\ 0 & 2 \end{pmatrix}
+    $$
+
+    이다. 오른쪽은 대칭이 아니지만 고윳값은 여전히 $\{1, 2\}$다.
+
+    ```python
+    import numpy as np
+
+    A = np.diag([1., 2.])
+    P = np.array([[1., 1.], [0., 1.]])
+    B = np.linalg.inv(P) @ A @ P
+
+    print("B =\n", B)
+    print("B가 대칭인가:", np.allclose(B, B.T))
+    print("A의 고윳값:", np.sort(np.linalg.eigvals(A)))
+    print("B의 고윳값:", np.sort(np.linalg.eigvals(B)))
+    ```
+
+    출력:
+
+    ```
+    B =
+     [[ 1. -1.]
+     [ 0.  2.]]
+    B가 대칭인가: False
+    A의 고윳값: [1. 2.]
+    B의 고윳값: [1. 2.]
+    ```
+
+    **대칭성은 닮음 불변량이 아니다.** 기저를 직교가 아닌 방향으로 비틀면 대칭성이 깨진다. 반면 고윳값은 그대로다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
+$\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top\mathbf{A}\mathbf{Q}$도 대칭임을 보여라. 연습문제 2과 견주어 무엇이 달라졌는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{Q}$가 직교이므로 $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이고, 따라서 $\mathbf{Q}^\top\mathbf{A}\mathbf{Q}$는 닮음변환이다. 전치를 취하면
+
+    $$
+    (\mathbf{Q}^\top\mathbf{A}\mathbf{Q})^\top = \mathbf{Q}^\top \mathbf{A}^\top (\mathbf{Q}^\top)^\top = \mathbf{Q}^\top\mathbf{A}\mathbf{Q}
+    $$
+
+    이다($\mathbf{A}^\top = \mathbf{A}$를 썼다). 곧 대칭이다.
+
+    연습문제 2과의 차이는 **$\mathbf{P}$에 건 제약** 하나뿐이다. 일반적인 가역행렬에서는 $\mathbf{P}^{-1} \neq \mathbf{P}^\top$이므로 위 계산의 마지막 단계가 성립하지 않는다.
+
+    이것이 **직교닮음**을 따로 구분하는 이유다. 스펙트럼 정리가 대칭행렬에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$를 보장할 때, 대각화가 하필 직교행렬로 이루어진다는 점이 결정적이다. 그 덕분에 공분산행렬을 대각화해도 대칭성과 양정치성이 함께 보존된다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff med" title="중간"></span>
 닮은 행렬은 행렬식이 같고 대각합도 같음을 증명하라.
 
 </div>
@@ -233,9 +317,11 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 
     이다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 고윳값, 대각합, 행렬식이 모두 같지만 닮지는 않은 두 개의 $2 \times 2$ 행렬의 예를 들어라.
 
 </div>
@@ -247,9 +333,11 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 
     그러나 $\mathbf{A} = 2\mathbf{I}$는 모든 행렬과 교환되므로 임의의 가역 $\mathbf{P}$에 대해 $\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \mathbf{P}^{-1}(2\mathbf{I})\mathbf{P} = 2\mathbf{I} = \mathbf{A}$이다. $\mathbf{B} \neq \mathbf{A}$이므로 어떤 닮음변환도 $\mathbf{A}$를 $\mathbf{B}$로 바꿀 수 없다. 차이는 $\mathbf{A}$가 대각화 가능한 반면(기하적 중복도 2) $\mathbf{B}$는 그렇지 않다는 데 있다(기하적 중복도 1).
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 회귀모형을 재매개변수화하면(예: 예측변수를 중심화하면) $\operatorname{tr}(\mathbf{H})$는 바뀌지 않는데 $\mathbf{X}^\top\mathbf{X}$의 고윳값은 바뀔 수 있다. **닮음**과 **합동**의 차이로 이 비대칭을 설명하고 수치로 확인하라.
 
 </div>
@@ -298,9 +386,11 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 
     모자 행렬은 성분 하나까지 같은데 그람 행렬의 고윳값은 $\{5.21,\ 1593.15\}$에서 $\{50.00,\ 166.03\}$으로 전혀 다른 값이 된다. **중심화가 조건수를 $306$에서 $3.3$으로 줄여 놓았는데, 적합값과 자유도는 하나도 달라지지 않았다.** 다중공선성 진단에 쓰는 조건수가 중심화 여부에 이토록 민감한 이유가 여기에 있고, 그러면서도 그 진단이 적합 자체와 무관한 이유도 여기에 있다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에 대해 $\mathbf{B}^k = \mathbf{P}^{-1}\mathbf{A}^k\mathbf{P}$임을 보여라. 이를 이용해 본문의 $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}$에 대해 $\mathbf{A}^{10}$을 구하라.
 
 </div>
@@ -340,15 +430,17 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에
 
     직접 $10$번 곱한 결과와 대각화를 거친 결과가 같다. 행렬이 커지고 $k$가 커질수록 이 차이가 결정적이 된다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 다항식 $f(x) = c_0 + c_1 x + \cdots + c_m x^m$에 대해, $\mathbf{A}$와 $\mathbf{B}$가 닮았으면 $f(\mathbf{A})$와 $f(\mathbf{B})$도 같은 $\mathbf{P}$로 닮았음을 보여라.
 
 </div>
 
 ??? success "풀이"
-    연습문제 5에서 $\mathbf{B}^k = \mathbf{P}^{-1}\mathbf{A}^k\mathbf{P}$이고, $k = 0$일 때도 $\mathbf{B}^0 = \mathbf{I} = \mathbf{P}^{-1}\mathbf{I}\mathbf{P}$로 성립한다. 따라서
+    연습문제 7에서 $\mathbf{B}^k = \mathbf{P}^{-1}\mathbf{A}^k\mathbf{P}$이고, $k = 0$일 때도 $\mathbf{B}^0 = \mathbf{I} = \mathbf{P}^{-1}\mathbf{I}\mathbf{P}$로 성립한다. 따라서
 
     $$
     f(\mathbf{B}) = \sum_{k=0}^{m} c_k \mathbf{B}^k
@@ -363,71 +455,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 모든 자연수 $k$에
 
     이 성질은 다항식을 넘어 수렴하는 멱급수에도 그대로 확장된다. 예컨대 행렬 지수함수는 $e^{\mathbf{B}} = \mathbf{P}^{-1}e^{\mathbf{A}}\mathbf{P}$를 만족한다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 7.** <span class="diff easy" title="쉬움"></span>
-대칭행렬이 대칭이 아닌 행렬과 닮을 수 있음을 구체적인 예로 보여라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{A} = \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}$(대칭)과 $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$(직교가 **아닌** 가역행렬)을 잡으면
-
-    $$
-    \mathbf{P}^{-1}\mathbf{A}\mathbf{P}
-    = \begin{pmatrix} 1 & -1 \\ 0 & 1 \end{pmatrix}
-      \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}
-      \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}
-    = \begin{pmatrix} 1 & -1 \\ 0 & 2 \end{pmatrix}
-    $$
-
-    이다. 오른쪽은 대칭이 아니지만 고윳값은 여전히 $\{1, 2\}$다.
-
-    ```python
-    import numpy as np
-
-    A = np.diag([1., 2.])
-    P = np.array([[1., 1.], [0., 1.]])
-    B = np.linalg.inv(P) @ A @ P
-
-    print("B =\n", B)
-    print("B가 대칭인가:", np.allclose(B, B.T))
-    print("A의 고윳값:", np.sort(np.linalg.eigvals(A)))
-    print("B의 고윳값:", np.sort(np.linalg.eigvals(B)))
-    ```
-
-    출력:
-
-    ```
-    B =
-     [[ 1. -1.]
-     [ 0.  2.]]
-    B가 대칭인가: False
-    A의 고윳값: [1. 2.]
-    B의 고윳값: [1. 2.]
-    ```
-
-    **대칭성은 닮음 불변량이 아니다.** 기저를 직교가 아닌 방향으로 비틀면 대칭성이 깨진다. 반면 고윳값은 그대로다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 8.** <span class="diff easy" title="쉬움"></span>
-$\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top\mathbf{A}\mathbf{Q}$도 대칭임을 보여라. 연습문제 7과 견주어 무엇이 달라졌는지 설명하라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{Q}$가 직교이므로 $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이고, 따라서 $\mathbf{Q}^\top\mathbf{A}\mathbf{Q}$는 닮음변환이다. 전치를 취하면
-
-    $$
-    (\mathbf{Q}^\top\mathbf{A}\mathbf{Q})^\top = \mathbf{Q}^\top \mathbf{A}^\top (\mathbf{Q}^\top)^\top = \mathbf{Q}^\top\mathbf{A}\mathbf{Q}
-    $$
-
-    이다($\mathbf{A}^\top = \mathbf{A}$를 썼다). 곧 대칭이다.
-
-    연습문제 7과의 차이는 **$\mathbf{P}$에 건 제약** 하나뿐이다. 일반적인 가역행렬에서는 $\mathbf{P}^{-1} \neq \mathbf{P}^\top$이므로 위 계산의 마지막 단계가 성립하지 않는다.
-
-    이것이 **직교닮음**을 따로 구분하는 이유다. 스펙트럼 정리가 대칭행렬에 대해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$를 보장할 때, 대각화가 하필 직교행렬로 이루어진다는 점이 결정적이다. 그 덕분에 공분산행렬을 대각화해도 대칭성과 양정치성이 함께 보존된다. $\square$
+---
 
 <div class="drillbox" markdown>
 
@@ -484,6 +512,8 @@ $\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top
     성분은 서로 아무 관련이 없어 보이지만 네 가지 불변량은 소수점 아래까지 일치한다.
 
     수치적으로 한 가지 주의할 점이 있다. $\mathbf{P}$가 특이행렬에 가까우면 $\mathbf{P}^{-1}$의 성분이 커져 반올림 오차가 증폭된다. 그래서 실무에서는 **직교행렬**을 기저변환에 쓴다. $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이므로 역행렬을 계산할 필요조차 없고 수치적으로도 안정하다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

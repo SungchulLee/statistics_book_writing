@@ -22,7 +22,9 @@ $$
 
 이 성립한다. 곧 대칭성은 "영공간이 열공간의 직교여공간"이라는 기하적 조건과 정확히 같은 말이다. 이 동등성은 [멱등행렬](./idempotent.md) 쪽의 정리 3에서 증명했으므로 여기서는 인용만 한다.
 
-## 최선근사 성질
+---
+
+## 1. 최선근사 성질
 
 직교사영을 규정하는 기하적 성질은 가장 가까운 점 문제를 푼다는 것이다.
 
@@ -64,7 +66,9 @@ $$
 
 오른쪽 그림은 그 식을 $\mathbf{v}$의 위치에 대한 함수로 그린 것이다. 부분공간 안에서 $\hat{\mathbf{y}}$로부터 멀어진 거리를 가로축에 놓으면 거리의 제곱은 꼭짓점이 $\mathbf{v} = \hat{\mathbf{y}}$인 포물선이 되고, 바닥 높이가 $\lVert\mathbf{e}\rVert^2 = 6.25$다. 잔차제곱합은 아무리 잘 해도 이 아래로 내려가지 않으며, 그 바닥에 닿는 점은 단 하나다. 최소제곱해가 존재하고 유일하다는 말의 기하가 이 포물선이다.
 
-## 열공간 위로의 직교사영 공식
+---
+
+## 2. 열공간 위로의 직교사영 공식
 
 <div class="thmbox" markdown>
 
@@ -98,7 +102,9 @@ $$
 
     마지막 단계에서는 $(\mathbf{X}^\top\mathbf{X})^{-1}$이 대칭이라는 사실을 썼다(대칭행렬의 역행렬은 대칭이다). $\square$
 
-## 성질
+---
+
+## 3. 성질
 
 ### 고윳값
 
@@ -132,7 +138,9 @@ $$
 
 벡터 $\mathbf{v}$가 $\operatorname{col}(\mathbf{X})$에 속할 필요충분조건은 $\mathbf{P}_{\mathbf{X}}\mathbf{v} = \mathbf{v}$이고, $\mathbf{v}$가 $\operatorname{col}(\mathbf{X})$에 직교할 필요충분조건은 $\mathbf{P}_{\mathbf{X}}\mathbf{v} = \mathbf{0}$이다.
 
-## 하나의 벡터 위로의 사영
+---
+
+## 4. 하나의 벡터 위로의 사영
 
 부분공간이 1차원일 때, 즉 0이 아닌 벡터 $\mathbf{u}$에 대해 $\mathcal{V} = \operatorname{span}\{\mathbf{u}\}$일 때 사영 공식은
 
@@ -148,7 +156,9 @@ $$
 
 스칼라 $\frac{\mathbf{u}^\top\mathbf{x}}{\mathbf{u}^\top\mathbf{u}}$가 $\mathbf{u}$ 위로 사영된 $\mathbf{x}$의 계수다.
 
-## 예 — 중심화행렬
+---
+
+## 5. 예 — 중심화행렬
 
 **중심화행렬**은
 
@@ -170,7 +180,9 @@ $$
 
 이며, 여기서 $\bar{x} = \frac{1}{n}\sum_i x_i$는 표본평균이다. 자료를 중심화하는 것은 하나의 직교사영이다.
 
-## 예 — 모자 행렬
+---
+
+## 6. 예 — 모자 행렬
 
 완전 열계수를 갖는 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대한 선형모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$에서 **모자 행렬**은
 
@@ -188,7 +200,9 @@ $$
 - $\operatorname{tr}(\mathbf{H}) = p$ (모형 자유도)
 - $\operatorname{tr}(\mathbf{I} - \mathbf{H}) = n - p$ (잔차 자유도)
 
-## 회귀에서의 피타고라스 정리
+---
+
+## 7. 회귀에서의 피타고라스 정리
 
 직교성 $\hat{\mathbf{y}} \perp \mathbf{e}$가 피타고라스 정리를 준다.
 
@@ -208,7 +222,9 @@ $$
 R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\lVert\mathbf{e}\rVert^2}{\lVert\mathbf{y} - \bar{y}\mathbf{1}\rVert^2}
 $$
 
-이고, 이는 중심화한 두 벡터 $\mathbf{y} - \bar{y}\mathbf{1}$과 $\hat{\mathbf{y}} - \bar{y}\mathbf{1}$ 사이 각의 코사인의 제곱이다. 중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$도 같은 기하적 의미를 갖지만 기준점이 평균이 아니라 **원점**이어서 값이 다르다. 절편이 있는 모형에서는 평균 수준 $\bar{y}$를 절편이 언제나 정확히 맞히므로 중심화하지 않은 비가 부풀려진다. 두 양을 섞지 않는 것이 중요하다(연습문제 4, 10).
+이고, 이는 중심화한 두 벡터 $\mathbf{y} - \bar{y}\mathbf{1}$과 $\hat{\mathbf{y}} - \bar{y}\mathbf{1}$ 사이 각의 코사인의 제곱이다. 중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$도 같은 기하적 의미를 갖지만 기준점이 평균이 아니라 **원점**이어서 값이 다르다. 절편이 있는 모형에서는 평균 수준 $\bar{y}$를 절편이 언제나 정확히 맞히므로 중심화하지 않은 비가 부풀려진다. 두 양을 섞지 않는 것이 중요하다(연습문제 3, 10).
+
+---
 
 ## 연습문제
 
@@ -234,6 +250,8 @@ $\mathbf{X} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{pmatrix}$이라 하�
 
     이다. 대각합은 $\operatorname{tr}(\mathbf{H}) = (5 + 2 + 5)/6 = 12/6 = 2$로 $\mathbf{X}$의 열 개수($p = 2$)와 같다. 이는 일반적인 결과 $\operatorname{tr}(\mathbf{H}) = \operatorname{rank}(\mathbf{H}) = p$를 확인해 준다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
@@ -256,27 +274,11 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$, $\mathbf{e} = (\mathbf{I} - \mathbf{H
 
     $\mathbf{H}(\mathbf{I} - \mathbf{H}) = \mathbf{H} - \mathbf{H}^2 = \mathbf{H} - \mathbf{H} = \mathbf{0}$이므로 교차항이 0이 되어 $\lVert \mathbf{y} \rVert^2 = \lVert \hat{\mathbf{y}} \rVert^2 + \lVert \mathbf{e} \rVert^2$를 얻는다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 3.** <span class="diff hard" title="어려움"></span>
-$\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 $\mathbf{y}$에 가장 가까운 점임을 증명하여, 모자 행렬 $\mathbf{H}$가 $\lVert \mathbf{y} - \mathbf{X}\boldsymbol{\beta} \rVert^2$을 최소화함을 보여라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{z} = \mathbf{X}\boldsymbol{\beta}$을 $\text{col}(\mathbf{X})$의 임의의 벡터라 하자. $\lVert \mathbf{y} - \hat{\mathbf{y}} \rVert \leq \lVert \mathbf{y} - \mathbf{z} \rVert$를 보이면 된다.
-
-    $\mathbf{y} - \mathbf{z} = (\mathbf{y} - \hat{\mathbf{y}}) + (\hat{\mathbf{y}} - \mathbf{z})$로 쓰자. $\mathbf{y} - \hat{\mathbf{y}} = \mathbf{e} \in \text{col}(\mathbf{X})^\perp$이고 $\hat{\mathbf{y}} - \mathbf{z} \in \text{col}(\mathbf{X})$이므로 이 두 벡터는 직교한다. 피타고라스 정리에 의해
-
-    $$
-    \lVert \mathbf{y} - \mathbf{z} \rVert^2 = \lVert \mathbf{y} - \hat{\mathbf{y}} \rVert^2 + \lVert \hat{\mathbf{y}} - \mathbf{z} \rVert^2 \geq \lVert \mathbf{y} - \hat{\mathbf{y}} \rVert^2
-    $$
-
-    이다. 등호는 $\mathbf{z} = \hat{\mathbf{y}}$일 때에 한해 성립하므로 $\hat{\mathbf{y}}$이 유일한 최근접점임이 확인된다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 절편을 포함하는 모형에서 $R^2 = \text{SSR}/\text{SST}$를 각의 코사인 제곱으로 해석하라. $R^2 = 1$과 $R^2 = 0$은 기하적으로 각각 무엇을 뜻하는가? 중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 무엇이 다른가?
 
 </div>
@@ -292,11 +294,13 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 
     $R^2 = 1$은 $\theta = 0$, 곧 $\mathbf{e} = \mathbf{0}$이므로 $\mathbf{y}$가 정확히 $\text{col}(\mathbf{X})$ 안에 놓인다는 뜻이다. 자료가 잔차 없이 모형에 완벽히 들어맞는다. $R^2 = 0$은 $\tilde{\mathbf{y}}_{\!*} = \mathbf{0}$, 곧 $\hat{\mathbf{y}} = \bar{y}\mathbf{1}$이므로 사영이 절편 방향밖에 쓰지 못한 경우다. 예측변수가 아무것도 설명하지 못한다.
 
-    중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 같은 계산을 **원점** 기준으로 한 것이어서 $\mathbf{y}$와 $\hat{\mathbf{y}}$ 사이 각의 코사인 제곱이다. 절편이 있는 모형에서는 $\lVert\mathbf{y}\rVert^2$ 안에 평균 수준 $n\bar{y}^2$이 들어 있고 그 부분은 절편이 언제나 정확히 맞히므로, 이 비는 중심화한 $R^2$보다 크게 나온다. 실제로 $\lVert\hat{\mathbf{y}}\rVert^2 = \text{SSR} + n\bar{y}^2$, $\lVert\mathbf{y}\rVert^2 = \text{SST} + n\bar{y}^2$이므로 분자와 분모에 같은 양을 더한 꼴이며, 두 값이 일치하는 것은 $\bar{y} = 0$이거나 $R^2 = 1$일 때뿐이다. 연습문제 10에서 같은 자료에 대해 두 값을 나란히 계산한다.
+    중심화하지 않은 비 $\lVert\hat{\mathbf{y}}\rVert^2/\lVert\mathbf{y}\rVert^2$은 같은 계산을 **원점** 기준으로 한 것이어서 $\mathbf{y}$와 $\hat{\mathbf{y}}$ 사이 각의 코사인 제곱이다. 절편이 있는 모형에서는 $\lVert\mathbf{y}\rVert^2$ 안에 평균 수준 $n\bar{y}^2$이 들어 있고 그 부분은 절편이 언제나 정확히 맞히므로, 이 비는 중심화한 $R^2$보다 크게 나온다. 실제로 $\lVert\hat{\mathbf{y}}\rVert^2 = \text{SSR} + n\bar{y}^2$, $\lVert\mathbf{y}\rVert^2 = \text{SST} + n\bar{y}^2$이므로 분자와 분모에 같은 양을 더한 꼴이며, 두 값이 일치하는 것은 $\bar{y} = 0$이거나 $R^2 = 1$일 때뿐이다. 연습문제 7에서 같은 자료에 대해 두 값을 나란히 계산한다.
+
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 영이 아닌 벡터 $\mathbf{a}$ 하나가 펼치는 직선 위로의 직교사영이 $\mathbf{P} = \dfrac{\mathbf{a}\mathbf{a}^\top}{\mathbf{a}^\top\mathbf{a}}$임을 보이고, 이것이 절편 없는 단순회귀와 어떻게 연결되는지 설명하라.
 
 </div>
@@ -346,9 +350,11 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 
     벡터 하나 위로의 사영은 앞으로 계속 쓰인다. 중심화행렬의 여집합 $\frac{1}{n}\mathbf{J}$가 $\mathbf{1}$ 위로의 사영이고, 그람–슈미트의 각 단계도 이 형태다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 모자 행렬의 대각 성분 $h_{ii}$를 **지렛대**라 한다. $0 \le h_{ii} \le 1$이고 $\sum_i h_{ii} = p$임을 보여라. $h_{ii} = 1$이면 무엇을 뜻하는가?
 
 </div>
@@ -388,57 +394,11 @@ $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 
 
     지렛대의 평균이 $p/n$이므로 **$2p/n$을 넘는 점을 주의해서 보라**는 실무 규칙이 여기서 나온다. [2.3절 이상치와 지렛대점](../../../ch02/shape/outliers.md)의 논의와 이어진다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 7.** <span class="diff hard" title="어려움"></span>
-$\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이고 각각의 사영을 $\mathbf{H}_1$, $\mathbf{H}_2$라 하자. $\mathbf{H}_2\mathbf{H}_1 = \mathbf{H}_1\mathbf{H}_2 = \mathbf{H}_1$임을 보여라.
-
-</div>
-
-??? success "풀이"
-    임의의 $\mathbf{x}$에 대해 $\mathbf{H}_1\mathbf{x} \in \operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이다. 사영은 자기 치역의 벡터를 그대로 두므로 $\mathbf{H}_2(\mathbf{H}_1\mathbf{x}) = \mathbf{H}_1\mathbf{x}$이고, 따라서 $\mathbf{H}_2\mathbf{H}_1 = \mathbf{H}_1$이다.
-
-    두 행렬 모두 대칭이므로 전치를 취하면
-
-    $$
-    \mathbf{H}_1 = \mathbf{H}_1^\top = (\mathbf{H}_2\mathbf{H}_1)^\top = \mathbf{H}_1^\top\mathbf{H}_2^\top = \mathbf{H}_1\mathbf{H}_2
-    $$
-
-    이다.
-
-    **F 검정의 근거.** 이 성질에서 $\mathbf{H}_2 - \mathbf{H}_1$도 사영임이 따라 나온다.
-
-    $$
-    (\mathbf{H}_2 - \mathbf{H}_1)^2 = \mathbf{H}_2 - \mathbf{H}_2\mathbf{H}_1 - \mathbf{H}_1\mathbf{H}_2 + \mathbf{H}_1 = \mathbf{H}_2 - \mathbf{H}_1
-    $$
-
-    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$이 (정규성 아래에서) 독립인 카이제곱이 되고, 그 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.** $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff hard" title="어려움"></span>
-부분공간 $\mathcal{V}$가 주어지면 그 위로의 직교사영행렬은 **유일**함을 보여라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{P}_1$과 $\mathbf{P}_2$가 모두 $\mathcal{V}$ 위로의 직교사영이라 하자. 연습문제 7의 논법을 양방향으로 쓴다. 두 치역이 같으므로 $\mathbf{P}_2\mathbf{P}_1 = \mathbf{P}_1$이고 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2$다.
-
-    대칭성에서
-
-    $$
-    \mathbf{P}_1 = (\mathbf{P}_2\mathbf{P}_1)^\top = \mathbf{P}_1^\top\mathbf{P}_2^\top = \mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2
-    $$
-
-    이므로 둘은 같다.
-
-    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 계획행렬(예: 예측변수를 재척도화하거나 선형결합한 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
-
-    빗각 사영에서는 이 유일성이 성립하지 않는다. 치역이 같아도 눌러 없애는 방향이 다르면 다른 사영이다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생성행렬이라 하자. $\mathbf{y}$를 $[\mathbf{X}_1, \mathbf{x}_2]$에 회귀했을 때 $\mathbf{x}_2$의 계수가, $\mathbf{M}_1\mathbf{y}$를 $\mathbf{M}_1\mathbf{x}_2$에 회귀한 계수와 같음을 수치로 확인하라.
 
 </div>
@@ -481,10 +441,12 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
 
     **해석적 의미가 크다.** 다중회귀의 계수 $\hat\beta_3$은 "$x_3$이 한 단위 늘 때 $y$의 변화"가 아니라 "**다른 변수로 설명되지 않는 부분의** $x_3$이 한 단위 늘 때, **다른 변수로 설명되지 않는 부분의** $y$의 변화"다. 이것이 다중회귀 계수를 "다른 변수를 통제했을 때의 효과"로 읽는 근거이며, [13.5절](../../../ch13/assumptions/checking_linearity.md)의 **부분회귀 그림**(추가변수 그림)의 바탕이기도 하다. 그 그림은 정확히 $\mathbf{M}_1\mathbf{y}$를 $\mathbf{M}_1\mathbf{x}_2$에 대해 찍은 산점도다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
-계획행렬 하나를 잡아 $\mathbf{H}$의 성질(대칭·멱등·대각합), $\hat{\mathbf{y}} \perp \mathbf{e}$, 피타고라스 분해, 그리고 $R^2 = \cos^2\theta$(연습문제 4)를 모두 수치로 확인하라.
+**연습문제 7.** <span class="diff med" title="중간"></span>
+계획행렬 하나를 잡아 $\mathbf{H}$의 성질(대칭·멱등·대각합), $\hat{\mathbf{y}} \perp \mathbf{e}$, 피타고라스 분해, 그리고 $R^2 = \cos^2\theta$(연습문제 3)를 모두 수치로 확인하라.
 
 </div>
 
@@ -541,6 +503,78 @@ $\mathbf{M}_1 = \mathbf{I} - \mathbf{H}_1$을 $\mathbf{X}_1$에 대한 잔차생
     네 성질이 모두 확인된다. 잔차와 적합값의 내적은 반올림 오차 수준에서 0이고, 피타고라스 분해는 원점 기준($158.337856$)과 평균 기준($121.938838$) 양쪽에서 모두 성립한다.
 
     **두 $R^2$이 다르다.** 원점 기준 값은 $0.885583$이고 보고되는 통상의 $R^2$은 $0.851430$이다. 차이는 $\bar{y} = 1.1015$ 때문이다. $\lVert\mathbf{y}\rVert^2 = \text{SST} + n\bar{y}^2 = 121.938838 + 30 \times 1.1015^2 = 158.34$에서 보듯, 원점 기준 비는 **절편이 공짜로 맞히는 평균 수준까지 설명력으로 세는** 셈이다. $R^2$을 보고할 때는 $\mathbf{1}$ 위로의 사영을 먼저 걷어낸 중심화된 쪽을 쓴다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+$\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 $\text{col}(\mathbf{X})$ 안에서 $\mathbf{y}$에 가장 가까운 점임을 증명하여, 모자 행렬 $\mathbf{H}$가 $\lVert \mathbf{y} - \mathbf{X}\boldsymbol{\beta} \rVert^2$을 최소화함을 보여라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{z} = \mathbf{X}\boldsymbol{\beta}$을 $\text{col}(\mathbf{X})$의 임의의 벡터라 하자. $\lVert \mathbf{y} - \hat{\mathbf{y}} \rVert \leq \lVert \mathbf{y} - \mathbf{z} \rVert$를 보이면 된다.
+
+    $\mathbf{y} - \mathbf{z} = (\mathbf{y} - \hat{\mathbf{y}}) + (\hat{\mathbf{y}} - \mathbf{z})$로 쓰자. $\mathbf{y} - \hat{\mathbf{y}} = \mathbf{e} \in \text{col}(\mathbf{X})^\perp$이고 $\hat{\mathbf{y}} - \mathbf{z} \in \text{col}(\mathbf{X})$이므로 이 두 벡터는 직교한다. 피타고라스 정리에 의해
+
+    $$
+    \lVert \mathbf{y} - \mathbf{z} \rVert^2 = \lVert \mathbf{y} - \hat{\mathbf{y}} \rVert^2 + \lVert \hat{\mathbf{y}} - \mathbf{z} \rVert^2 \geq \lVert \mathbf{y} - \hat{\mathbf{y}} \rVert^2
+    $$
+
+    이다. 등호는 $\mathbf{z} = \hat{\mathbf{y}}$일 때에 한해 성립하므로 $\hat{\mathbf{y}}$이 유일한 최근접점임이 확인된다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+$\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이고 각각의 사영을 $\mathbf{H}_1$, $\mathbf{H}_2$라 하자. $\mathbf{H}_2\mathbf{H}_1 = \mathbf{H}_1\mathbf{H}_2 = \mathbf{H}_1$임을 보여라.
+
+</div>
+
+??? success "풀이"
+    임의의 $\mathbf{x}$에 대해 $\mathbf{H}_1\mathbf{x} \in \operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이다. 사영은 자기 치역의 벡터를 그대로 두므로 $\mathbf{H}_2(\mathbf{H}_1\mathbf{x}) = \mathbf{H}_1\mathbf{x}$이고, 따라서 $\mathbf{H}_2\mathbf{H}_1 = \mathbf{H}_1$이다.
+
+    두 행렬 모두 대칭이므로 전치를 취하면
+
+    $$
+    \mathbf{H}_1 = \mathbf{H}_1^\top = (\mathbf{H}_2\mathbf{H}_1)^\top = \mathbf{H}_1^\top\mathbf{H}_2^\top = \mathbf{H}_1\mathbf{H}_2
+    $$
+
+    이다.
+
+    **F 검정의 근거.** 이 성질에서 $\mathbf{H}_2 - \mathbf{H}_1$도 사영임이 따라 나온다.
+
+    $$
+    (\mathbf{H}_2 - \mathbf{H}_1)^2 = \mathbf{H}_2 - \mathbf{H}_2\mathbf{H}_1 - \mathbf{H}_1\mathbf{H}_2 + \mathbf{H}_1 = \mathbf{H}_2 - \mathbf{H}_1
+    $$
+
+    게다가 $(\mathbf{H}_2 - \mathbf{H}_1)(\mathbf{I} - \mathbf{H}_2) = \mathbf{O}$이므로 두 사영이 직교한다. 그래서 큰 모형과 작은 모형의 제곱합 차이 $\lVert(\mathbf{H}_2 - \mathbf{H}_1)\mathbf{y}\rVert^2$과 잔차제곱합 $\lVert(\mathbf{I}-\mathbf{H}_2)\mathbf{y}\rVert^2$이 (정규성 아래에서) 독립인 카이제곱이 되고, 그 비가 $F$ 분포를 따른다. **내포모형 F 검정의 기하가 바로 이것이다.** $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+부분공간 $\mathcal{V}$가 주어지면 그 위로의 직교사영행렬은 **유일**함을 보여라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{P}_1$과 $\mathbf{P}_2$가 모두 $\mathcal{V}$ 위로의 직교사영이라 하자. 연습문제 9의 논법을 양방향으로 쓴다. 두 치역이 같으므로 $\mathbf{P}_2\mathbf{P}_1 = \mathbf{P}_1$이고 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2$다.
+
+    대칭성에서
+
+    $$
+    \mathbf{P}_1 = (\mathbf{P}_2\mathbf{P}_1)^\top = \mathbf{P}_1^\top\mathbf{P}_2^\top = \mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2
+    $$
+
+    이므로 둘은 같다.
+
+    **왜 중요한가.** 사영 공식 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$은 겉보기에 $\mathbf{X}$에 의존하지만, 실제로는 **$\operatorname{col}(\mathbf{X})$에만 의존한다.** 같은 열공간을 주는 다른 계획행렬(예: 예측변수를 재척도화하거나 선형결합한 것)을 써도 모자 행렬은 똑같다. 회귀에서 적합값 $\hat{\mathbf{y}}$과 $R^2$이 모수화 방식에 영향받지 않는 이유가 이것이다. 반면 계수 $\hat{\boldsymbol{\beta}}$은 모수화에 따라 달라진다.
+
+    빗각 사영에서는 이 유일성이 성립하지 않는다. 치역이 같아도 눌러 없애는 방향이 다르면 다른 사영이다. $\square$
 
 ---
 

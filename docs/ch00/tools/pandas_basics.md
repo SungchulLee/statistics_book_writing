@@ -12,8 +12,9 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 
 </div>
 
+---
 
-## 불러오기와 살펴보기
+## 1. 불러오기와 살펴보기
 
 <div class="exbox" markdown>
 
@@ -94,7 +95,9 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 
     `read_csv`는 `parse_dates`, `dtype`, `na_values`, `usecols`, `chunksize`를 받는다. 자료 품질 문제는 대부분 나중이 아니라 불러오는 시점에 처리하는 것이 가장 좋다.
 
-## 행과 열 선택하기
+---
+
+## 2. 행과 열 선택하기
 
 반드시 구별해야 할 서로 독립적인 연산이 셋 있다.
 
@@ -107,7 +110,9 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 
 `loc`과 `iloc`은 행 인덱스가 기본값 `0, 1, 2, ...`가 아닐 때 정확히 갈린다. 인덱스를 정렬했거나 설정했거나 걸러낸 뒤에는 언제나 명시적인 형태를 쓰라.
 
-## 결측값 정제
+---
+
+## 3. 결측값 정제
 
 <div class="exbox" markdown>
 
@@ -194,7 +199,9 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
 
     "옳은" 대체 전략이란 없다. 무엇을 고를지(삭제, 평균, 중앙값, 모형 기반, 다중대체)는 결측 기제에 달려 있다. pandas는 도구를 줄 뿐 결정은 사용자에게 맡긴다.
 
-## 그룹화: 분할–적용–결합
+---
+
+## 4. 그룹화: 분할–적용–결합
 
 pandas에서 가장 강력한 하나의 패턴이다.
 
@@ -275,7 +282,9 @@ pandas에서 가장 강력한 하나의 패턴이다.
 
 이 구분이 초보자가 가장 자주 막히는 자리다. "집단별 평균을 구하라"는 요약표를 원하는 것이므로 `agg`이지만, "각 값을 자기 집단의 평균으로부터의 편차로 바꾸라"는 원래 자료를 그대로 둔 채 열 하나를 더 얻고 싶은 것이므로 `transform`이다. 집단 내 표준화, 집단 평균으로 결측 메우기, 집단별 순위 매기기가 모두 뒤쪽에 속한다. **결과의 행 수가 원래와 같아야 하는지를 먼저 묻고 나서 둘 중 하나를 고르면 틀리지 않는다.** 연습문제 8에서 두 형태를 나란히 놓고 다시 확인한다.
 
-## 기술통계와 공식의 대응
+---
+
+## 5. 기술통계와 공식의 대응
 
 | pandas 호출 | 계산하는 것 | ddof 기본값 |
 |---|---|---|
@@ -407,6 +416,8 @@ pandas에서 가장 강력한 하나의 패턴이다.
 
     **피벗표는 칸의 개수를 숨긴다.** `aggfunc="mean"` 한 번만 부르면 각 수가 몇 개로 지어진 것인지 알 수 없고, $12$개의 평균과 $23$개의 평균이 같은 꼴로 나란히 찍힌다. **피벗표를 믿으려면 같은 피벗을 `aggfunc="count"`로 한 번 더 불러 보아야 한다.** `200`개를 $3 \times 4 = 12$칸으로 쪼개면 칸마다 $17$개 정도가 남는데, 이 정도 표본에서 칸 평균을 비교하는 것은 애초에 무리다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -436,6 +447,8 @@ pandas에서 가장 강력한 하나의 패턴이다.
     4    Eve     95    True
     ```
     피연산자가 파이썬 스칼라가 아니라 pandas 불리언 Series이므로 `and`가 아니라 비트 연산자 `&`를 써야 한다. 각 비교식은 괄호로 묶어라. 연산자 우선순위상 `&`가 `>`보다 높기 때문이다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -469,6 +482,8 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
     ```
     `agg`는 출력 열 이름을 문자열 집계 이름이나 호출 가능 객체에 대응시키는 키워드 인수를 받는다. 람다를 쓰면 이름 있는 함수를 따로 정의하지 않고 "범위"를 하나의 표현식으로 나타낼 수 있다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff easy" title="쉬움"></span>
@@ -496,9 +511,38 @@ df = pd.DataFrame({"group": ["A","A","B","B","B"], "x": [1, 3, 2, 8, 5]})
 
     인덱스가 (기본값인) `RangeIndex(0, n)`이고 행 순서가 바뀌지 않았다면 둘은 일치한다. `df.sort_values()`, `df.set_index()`, 불리언 필터링을 거치고 나면 둘이 갈라지며, 이 둘을 조용히 혼동하는 것이 흔한 버그의 원천이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
+`pd.Series.var()`의 기본값은 `ddof=1`이고 NumPy의 `np.var()`는 `ddof=0`이다. 값 다섯 개짜리 Series를 만들어 두 방식으로 분산을 계산하고, 어느 쪽이 불편추정량이며 그 이유가 무엇인지 설명하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import pandas as pd
+    s = pd.Series([2, 4, 4, 4, 5])
+    print("pandas s.var()  :", s.var())            # ddof=1, divides by n-1=4
+    print("numpy  np.var() :", np.var(s.values))   # ddof=0, divides by n=5
+    ```
+
+    출력:
+
+    ```
+    pandas s.var()  : 1.2
+    numpy  np.var() : 0.96
+    ```
+
+    `ddof=1`이면 $S^2 = \frac{1}{n-1}\sum(x_i - \bar x)^2$이 불편이다: $\mathbb{E}[S^2] = \sigma^2$. `ddof=0`이면 $\tilde S^2 = \frac{1}{n}\sum(x_i - \bar x)^2$인데, 이는 정규 자료에 대한 **최대가능도** 분산이지만 $(n-1)/n$배만큼 아래로 편향된다. 두 라이브러리의 기본값이 서로 반대라는 점은 늘 혼란의 원천이므로, 어느 쪽이 쓰이고 있는지 항상 확인하라.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff med" title="중간"></span>
 다음 CSV 형식 문자열을 불러와 결측값을 열 중앙값으로 채우고 상관행렬을 계산하라.
 
 ```text
@@ -538,30 +582,7 @@ x,y,z
 
     중앙값 대체는 평균 대체보다 이상치에 강건하지만, 결측이 정보를 담고 있을 때는 여전히 분산과 상관을 왜곡한다. 실제 분석에서는 모형 기반 대체나 다중대체가 낫다. 결측 기제(MCAR·MAR·MNAR)와 그에 따른 처리는 1.4절 "편향과 무응답"과 7.1절에서 다룬다.
 
-<div class="drillbox" markdown>
-
-**연습문제 5.** <span class="diff easy" title="쉬움"></span>
-`pd.Series.var()`의 기본값은 `ddof=1`이고 NumPy의 `np.var()`는 `ddof=0`이다. 값 다섯 개짜리 Series를 만들어 두 방식으로 분산을 계산하고, 어느 쪽이 불편추정량이며 그 이유가 무엇인지 설명하라.
-
-</div>
-
-??? success "풀이"
-    ```python
-    import numpy as np
-    import pandas as pd
-    s = pd.Series([2, 4, 4, 4, 5])
-    print("pandas s.var()  :", s.var())            # ddof=1, divides by n-1=4
-    print("numpy  np.var() :", np.var(s.values))   # ddof=0, divides by n=5
-    ```
-
-    출력:
-
-    ```
-    pandas s.var()  : 1.2
-    numpy  np.var() : 0.96
-    ```
-
-    `ddof=1`이면 $S^2 = \frac{1}{n-1}\sum(x_i - \bar x)^2$이 불편이다: $\mathbb{E}[S^2] = \sigma^2$. `ddof=0`이면 $\tilde S^2 = \frac{1}{n}\sum(x_i - \bar x)^2$인데, 이는 정규 자료에 대한 **최대가능도** 분산이지만 $(n-1)/n$배만큼 아래로 편향된다. 두 라이브러리의 기본값이 서로 반대라는 점은 늘 혼란의 원천이므로, 어느 쪽이 쓰이고 있는지 항상 확인하라.
+---
 
 <div class="drillbox" markdown>
 
@@ -605,6 +626,8 @@ x,y,z
     ```
 
     `indicator=True` 플래그는 각 행이 어디서 왔는지 알려주는 `_merge` 열을 추가하여, 조용히 실패한 조인을 드러낸다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -685,6 +708,8 @@ x,y,z
     규칙은 간단하다. **연쇄 대입(`df[...][...] = ...`)을 쓰지 마라.** 원본을 고치려면 `.loc[행조건, 열] = 값` 한 번으로 끝내고, 부분집합을 따로 가지고 놀 것이라면 `.copy()`를 명시하라.
 
     이것은 앞 절 NumPy 연습문제의 뷰/복사본 문제와 정확히 같은 구조다. 다만 pandas는 어느 쪽인지조차 보장하지 않아 한 겹 더 나쁘다. (pandas 3.0의 Copy-on-Write 방식은 "언제나 복사본처럼 동작한다"로 규칙을 통일해 이 모호함을 없앤다.) $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -772,6 +797,8 @@ x,y,z
 
     `agg`는 그룹을 하나의 값으로 **줄이고**($5$행 → $2$행), `transform`은 결과를 원래 행에 **되돌려 붙인다**($5$행 → $5$행). 그룹 내 표준화, 그룹 평균 대비 편차, 그룹 평균으로 결측 채우기처럼 "그룹 통계량을 원래 자료에 다시 쓰는" 작업은 모두 `transform`이다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
@@ -834,6 +861,8 @@ x,y,z
     넓은 형식이 유리한 곳도 있다. 사람이 표로 읽기에 좋고, 상관행렬 계산(`wide.corr()`)이나 대응표본 $t$ 검정처럼 짝지어진 열이 필요한 계산에는 넓은 형식이 자연스럽다. **분석 단계마다 필요한 형식이 다르므로 두 방향 변환을 모두 익혀 두어야 한다.**
 
     실무 주의사항. `pivot`은 `index`와 `columns`의 조합이 유일할 것을 요구하며, 중복이 있으면 오류를 낸다. 중복을 집계로 처리하려면 `pivot_table(aggfunc=...)`을 쓴다. 오류가 나는 쪽이 낫다. 중복이 있다는 것은 보통 자료 구조를 잘못 이해했다는 신호이기 때문이다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

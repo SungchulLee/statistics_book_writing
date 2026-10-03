@@ -683,6 +683,8 @@ p값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지
 !!! tip "언제 statsmodels를 쓰는가"
     주된 목표가 통계적 추론일 때 `statsmodels`를 쓴다. 곧 계수에 대한 가설검정, 신뢰구간 구성, 모형 가정 진단이 목적일 때이다. 추론이 필요 없는 순수 예측 작업에는 `sklearn.linear_model.LinearRegression`이 더 간단한 인터페이스를 제공한다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>

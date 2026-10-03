@@ -18,7 +18,9 @@ $$
 
 $\mathbf{P}$의 열은 $\mathbf{A}$의 고유벡터이고, $\boldsymbol{\Lambda}$의 대각 성분은 그에 대응하는 고윳값이다. $\mathbf{P} = (\mathbf{v}_1 \mid \mathbf{v}_2 \mid \cdots \mid \mathbf{v}_n)$으로 쓰면 분해 $\mathbf{A}\mathbf{P} = \mathbf{P}\boldsymbol{\Lambda}$는 각 $i$에 대해 $\mathbf{A}\mathbf{v}_i = \lambda_i \mathbf{v}_i$인 것과 동등하다.
 
-## 언제 행렬이 대각화 가능한가
+---
+
+## 1. 언제 행렬이 대각화 가능한가
 
 <div class="thmbox" markdown>
 
@@ -155,7 +157,9 @@ $\mathbf{A} \in \mathbb{R}^{n \times n}$이 (실수 위에서) 대각화 가능�
 
     반대로, 고윳값이 겹치면 대각화가 **깨질 수 있을 뿐** 반드시 깨지는 것도 아니다. 실제 판정은 언제나 정리 2 의 2번, 곧 겹친 고윳값에서 기하적 중복도가 대수적 중복도를 따라오는지를 보는 것이다.
 
-## 거듭제곱과 지수
+---
+
+## 2. 거듭제곱과 지수
 
 이제 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 대각화 가능하다고 하자. 대각형은 행렬의 거듭제곱을 극적으로 단순화한다.
 
@@ -177,7 +181,9 @@ $$
 
 이다.
 
-## 예 — 대각화 가능한 행렬
+---
+
+## 3. 예 — 대각화 가능한 행렬
 
 다음을 생각하자.
 
@@ -213,7 +219,9 @@ $$
 
 거듭제곱이 쉬워지는 이유도 이 그림에 있다. 오른쪽 좌표에서 $k$번 반복하면 각 축이 $2^k$배와 $3^k$배로 늘어날 뿐이므로 $\boldsymbol{\Lambda}^k$는 대각 성분의 스칼라 거듭제곱이다. $\mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1}$은 "고유좌표로 옮겨 가서 축마다 늘이고 되돌아온다"를 식으로 적은 것에 지나지 않는다.
 
-## 예 — 대각화 불가능한 행렬
+---
+
+## 4. 예 — 대각화 불가능한 행렬
 
 행렬
 
@@ -225,7 +233,9 @@ $$
 
 앞의 회전행렬과는 실패의 종류가 다르다는 점을 짚어 두자. 회전행렬은 고윳값이 실수가 아니어서 실패했을 뿐 $\mathbb{C}$ 위에서는 대각화되지만, 이 행렬은 고윳값이 실수인데도 고유벡터가 모자라 **복소수를 허용해도 대각화되지 않는다.** 중복도 계산이 $\mathbb{C}$ 위에서도 그대로여서 $m_g = 1 < 2 = m_a$이기 때문이다. 이런 행렬은 대각형까지는 못 가고 조르당 표준형이라 부르는 준대각형까지만 갈 수 있는데, 다행히 통계에서 다루는 행렬은 거의 모두 대칭이고 대칭행렬은 언제나 대각화 가능하다.
 
-## 통계와의 연결
+---
+
+## 5. 통계와의 연결
 
 대각화는 여러 핵심 통계 방법을 떠받치는 계산 엔진이다.
 
@@ -240,6 +250,8 @@ $$
 이다. 여기서 $\mathbf{z} = \mathbf{Q}^\top\mathbf{x}$이다. 이는 이차형식을 가중된 제곱합으로 분리해 주며, 카이제곱분포를 유도하는 데 필수적이다.
 
 - **행렬의 역.** $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$가 양정치일 때 $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^\top = \mathbf{Q}\operatorname{diag}(1/\lambda_1, \dots, 1/\lambda_n)\mathbf{Q}^\top$이며, 이는 계산 효율이 좋고 수치적으로도 안정적이다.
+
+---
 
 ## 연습문제
 
@@ -263,27 +275,11 @@ $$
     \mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 1 \end{pmatrix}, \quad \boldsymbol{\Lambda} = \begin{pmatrix} 4 & 0 \\ 0 & 3 \end{pmatrix}, \quad \mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}
     $$
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff med" title="중간"></span>
-$\mathbf{A}$가 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 대각화 가능하면 임의의 양의 정수 $k$에 대해 $\mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1}$임을 증명하라.
-
-</div>
-
-??? success "풀이"
-    귀납법으로 진행한다. 기저 단계 $k = 1$은 정의에 의해 성립한다.
-
-    $\mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1}$이라고 가정하자. 그러면
-
-    $$
-    \mathbf{A}^{k+1} = \mathbf{A}^k \cdot \mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1} \cdot \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1} = \mathbf{P}\boldsymbol{\Lambda}^k\boldsymbol{\Lambda}\mathbf{P}^{-1} = \mathbf{P}\boldsymbol{\Lambda}^{k+1}\mathbf{P}^{-1}
-    $$
-
-    이다. 핵심은 $\mathbf{P}^{-1}\mathbf{P} = \mathbf{I}$로 상쇄되는 것이다. $\boldsymbol{\Lambda}^k = \operatorname{diag}(\lambda_1^k, \dots, \lambda_n^k)$이므로 행렬의 거듭제곱 계산이 고윳값의 스칼라 거듭제곱 계산으로 환원된다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff easy" title="쉬움"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2 \times 2$ 공분산행렬이라 하자. $\boldsymbol{\Sigma}$를 명시적으로 계산하지 않고 $\operatorname{tr}(\boldsymbol{\Sigma})$, $\det(\boldsymbol{\Sigma})$, 그리고 $\boldsymbol{\Sigma}^{-1}$의 고윳값을 구하라.
 
 </div>
@@ -307,6 +303,28 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
     \lambda_1(\boldsymbol{\Sigma}^{-1}) = \frac{1}{5} = 0.2, \quad \lambda_2(\boldsymbol{\Sigma}^{-1}) = \frac{1}{2} = 0.5
     $$
 
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span>
+$\mathbf{A}$가 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$로 대각화 가능하면 임의의 양의 정수 $k$에 대해 $\mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1}$임을 증명하라.
+
+</div>
+
+??? success "풀이"
+    귀납법으로 진행한다. 기저 단계 $k = 1$은 정의에 의해 성립한다.
+
+    $\mathbf{A}^k = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1}$이라고 가정하자. 그러면
+
+    $$
+    \mathbf{A}^{k+1} = \mathbf{A}^k \cdot \mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}^k\mathbf{P}^{-1} \cdot \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1} = \mathbf{P}\boldsymbol{\Lambda}^k\boldsymbol{\Lambda}\mathbf{P}^{-1} = \mathbf{P}\boldsymbol{\Lambda}^{k+1}\mathbf{P}^{-1}
+    $$
+
+    이다. 핵심은 $\mathbf{P}^{-1}\mathbf{P} = \mathbf{I}$로 상쇄되는 것이다. $\boldsymbol{\Lambda}^k = \operatorname{diag}(\lambda_1^k, \dots, \lambda_n^k)$이므로 행렬의 거듭제곱 계산이 고윳값의 스칼라 거듭제곱 계산으로 환원된다. $\square$
+
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
@@ -327,6 +345,8 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
 
     $\mathbf{P}$를 만들려면 일차독립인 고유벡터가 2개 필요한데 1개뿐이므로 이 행렬은 대각화 가능하지 않다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
@@ -338,6 +358,8 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
     스펙트럼 정리는 모든 실대칭행렬이 (중복도를 세어) $n$개의 실수 고윳값과 $n$개의 정규직교 고유벡터를 온전히 가짐을 보장한다. 구체적으로, 서로 다른 고윳값에 대응하는 고유벡터는 직교하고, 중복 고윳값의 경우 그 고유공간을 그람–슈미트로 정규직교화할 수 있다. 이 고유벡터들을 $\mathbf{Q}$의 열로 배열하면 직교행렬($\mathbf{Q}^\top\mathbf{Q} = \mathbf{I}$)이 되므로 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$이다.
 
     공분산행렬 $\boldsymbol{\Sigma}$에 대해 이 스펙트럼 분해가 주성분분석(PCA)의 토대다. 고유벡터가 주성분 방향을 주고, 고윳값이 각 성분이 설명하는 분산을 주며, $\mathbf{Q}$의 직교성은 주성분들이 서로 무상관임을 뜻한다. 이 분해는 계산도 단순하게 만든다: $\boldsymbol{\Sigma}^{-1} = \mathbf{Q}\boldsymbol{\Lambda}^{-1}\mathbf{Q}^\top$이고 $\boldsymbol{\Sigma}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}^{1/2}\mathbf{Q}^\top$이다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -380,6 +402,8 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
 
     반대 방향의 함정도 하나 더 있다. 고윳값이 **서로 다르기만** 해서는 실수 대각화가 보장되지 않는다. 회전행렬의 두 고윳값 $\pm i$는 서로 다르지만 실수가 아니어서 정리 2 의 1번이 깨진다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
@@ -419,6 +443,8 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
     비대칭 행렬의 두 고유벡터는 내적이 $-0.707$로 직교하지 않는다. 대각화는 되지만 $\mathbf{P}$가 직교행렬이 아니어서 $\mathbf{P}^{-1} \neq \mathbf{P}^\top$다. 대칭행렬에서는 내적이 정확히 0이다.
 
     **통계에서 왜 중요한가.** 공분산행렬이 대칭이므로 주성분들이 서로 **직교**한다. 직교성 덕분에 (1) 총분산이 성분별로 깔끔하게 쪼개지고, (2) 좌표변환이 회전이어서 거리가 보존되며, (3) $\mathbf{P}^{-1}$을 계산할 필요 없이 전치만 쓰면 되어 수치적으로 안정하다. 비대칭 행렬을 대각화할 때는 이 세 가지를 모두 잃는다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -465,6 +491,8 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
     $\mathbf{P}^{50}$의 두 행이 모두 $(2/3, 1/3)$로 같아진다. **출발 상태와 무관하게 같은 분포로 수렴한다**는 뜻이며, 이 $\boldsymbol{\pi} = (2/3, 1/3)$이 정상분포다.
 
     수렴 속도는 **두 번째로 큰 고윳값**이 정한다. 여기서는 $0.7$이므로 오차가 매 단계 $0.7$배로 줄어든다. 이 값을 **스펙트럼 간격**이라 하며, MCMC의 수렴 속도를 지배하는 양이기도 하다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -517,6 +545,8 @@ $\boldsymbol{\Sigma}$가 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 갖는 $2
     백색화가 쓰이는 곳은 많다. 마할라노비스 거리는 백색화 후의 유클리드 거리이고, 일반화최소제곱은 오차를 백색화한 뒤 보통최소제곱을 적용하는 것이며, 여러 기계학습 방법이 전처리로 이 변환을 쓴다.
 
     **주의.** 백색화 행렬은 유일하지 않다. 임의의 직교행렬 $\mathbf{U}$에 대해 $\mathbf{U}\mathbf{W}$도 백색화한다. 위의 것은 PCA 백색화이고, 대칭인 $\boldsymbol{\Sigma}^{-1/2}$을 쓰는 ZCA 백색화도 흔하다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

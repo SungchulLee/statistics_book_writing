@@ -1,6 +1,6 @@
 # 뉴턴-랩슨과 반복재가중최소제곱
 
-## 반복 알고리즘이 필요한 이유
+## 1. 반복 알고리즘이 필요한 이유
 
 선형회귀에서 최소제곱 추정량은 닫힌 형태의 해
 $\hat{\boldsymbol{\theta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$를 갖는다.
@@ -8,7 +8,9 @@ $\hat{\boldsymbol{\theta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mat
 반복적 수치 최적화로 찾아야 한다. 이 절에서는 가장 널리 쓰이는 두 알고리즘, **뉴턴-랩슨**과
 **반복재가중최소제곱(IRLS)**을 전개한다.
 
-## 로지스틱 회귀의 로그가능도
+---
+
+## 2. 로지스틱 회귀의 로그가능도
 
 [가능도 절](../logistic_regression/likelihood.md)에서 보았듯이, $y_i \in \{0,1\}$인 독립
 관측치 $(y_i, \mathbf{x}_i)$ $n$개에 대한 로그가능도는
@@ -23,7 +25,9 @@ $$
 예측확률은 $\hat{p}_i = \sigma(\mathbf{x}_i^\top\boldsymbol{\theta})$이고 $\sigma$는 시그모이드
 함수다.
 
-## 점수방정식
+---
+
+## 3. 점수방정식
 
 **점수**(로그가능도의 기울기)는
 
@@ -39,7 +43,9 @@ $\hat{\mathbf{p}} = (\hat{p}_1, \ldots, \hat{p}_n)^\top$이다. 점수를 0으�
 방정식계를 얻는다. $\hat{\mathbf{p}}$가 시그모이드를 통해 $\boldsymbol{\theta}$에 의존하므로
 닫힌 형태의 해가 없다.
 
-## 헤세행렬
+---
+
+## 4. 헤세행렬
 
 로그가능도의 이차도함수가 **헤세행렬**이다.
 
@@ -61,7 +67,9 @@ $\mathbf{W}$의 대각원소는 모두 양수이므로, $\mathbf{X}$가 완전�
     강오목은 아니다. 이때 최대점은 유일하지 않고, $\mathbf{X}^\top\mathbf{W}\mathbf{X}$가
     특이행렬이 되어 뉴턴 단계 자체가 정의되지 않는다.
 
-## 뉴턴-랩슨 알고리즘
+---
+
+## 5. 뉴턴-랩슨 알고리즘
 
 뉴턴-랩슨은 다음 반복으로 점수방정식의 근을 찾는다.
 
@@ -90,7 +98,9 @@ $\boldsymbol{\theta}^{(t)}$에서 평가한 것이다.
 수렴은 **이차적**이다. 즉 반복마다 정확한 자릿수가 대략 두 배가 된다. 실무에서는 3회에서 8회면
 충분한 경우가 많다.
 
-## 피셔 점수법과 IRLS
+---
+
+## 6. 피셔 점수법과 IRLS
 
 **피셔 점수법**은 관측 헤세행렬을 그 기댓값으로 대체한다. 로지스틱 회귀에서는 두 양이 일치한다.
 
@@ -125,7 +135,9 @@ $$
 이다. 각 반복은 가중치 $\mathbf{W}^{(t)}$와 반응변수 $\mathbf{z}^{(t)}$를 갖는 **가중최소제곱**
 문제를 푼다. 가중치가 단계마다 바뀌므로 이 절차를 **반복재가중최소제곱**이라 부른다.
 
-## 알고리즘 요약
+---
+
+## 7. 알고리즘 요약
 
 | 단계 | 내용 |
 |---|---|
@@ -170,9 +182,11 @@ $$
 
         반복마다 $\theta_0$이 약 $5$씩, $\theta_1$이 약 $-2$씩 커진다. 이차 수렴이 아니라
         발산이며, 아래 "분리와 비수렴" 절에서 설명하는 그대로다. 비분리 자료에서 알고리즘이
-        어떻게 행동하는지는 연습문제 3에서 다룬다.
+        어떻게 행동하는지는 연습문제 1에서 다룬다.
 
-## 분리와 비수렴
+---
+
+## 8. 분리와 비수렴
 
 두 범주가 **완전히 분리**되어 있으면 — 특성공간의 어떤 초평면이 모든 훈련점을 정확히 분류하면 —
 MLE가 존재하지 않는다. $\lVert\boldsymbol{\theta}\rVert \to \infty$일 때 로그가능도가 상한에
@@ -183,7 +197,9 @@ MLE가 존재하지 않는다. $\lVert\boldsymbol{\theta}\rVert \to \infty$일 �
     해결책으로는 작은 능형 벌점을 더하거나(파스의 벌점가능도), 정확 조건부 로지스틱 회귀를 쓰는
     방법이 있다.
 
-## 경사하강과의 관계
+---
+
+## 9. 경사하강과의 관계
 
 경사하강은 고정된 보폭 $\eta$로
 $\boldsymbol{\theta}^{(t+1)} = \boldsymbol{\theta}^{(t)} + \eta\,\mathbf{s}(\boldsymbol{\theta}^{(t)})$
@@ -192,7 +208,9 @@ $\boldsymbol{\theta}^{(t+1)} = \boldsymbol{\theta}^{(t)} + \eta\,\mathbf{s}(\bol
 비용이 든다. $p$가 큰 고차원 문제에서는 L-BFGS 같은 준뉴턴법이 헤세행렬을 근사하여 계산 비용을
 줄인다.
 
-## 두 알고리즘을 나란히 보기
+---
+
+## 10. 두 알고리즘을 나란히 보기
 
 "이차 수렴"과 "발산"은 말로만 들으면 정도의 차이처럼 들린다. 실제로 재 보면 차원이 다른
 이야기다. 아래 왼쪽은 19.1절의 공부 시간 자료 300건에서 최적값까지 남은 음의 로그가능도를
@@ -218,83 +236,13 @@ $-8.63$, $t=20$에서 $-38.67$이 되고, 곡선은 계단함수로 수렴해 �
 상한 0에 도달하지는 못하므로 최대점이 존재하지 않는다. 알고리즘이 고장 난 것이 아니라, 찾으라고
 시킨 것이 없는 것이다. 수렴 판정이 계수의 변화량에 걸려 있다면 이 반복은 영원히 멈추지 않는다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff hard" title="어려움"></span>
-뉴턴-랩슨 갱신식으로부터 IRLS의 작업 반응변수
-$\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1}(\mathbf{y} - \hat{\mathbf{p}}^{(t)})$
-를 유도하라.
-
-</div>
-
-??? success "풀이"
-
-    표기를 줄이기 위해 위첨자 $(t)$를 생략하고 $\mathbf{W}$, $\hat{\mathbf{p}}$,
-    $\boldsymbol{\theta}$로 쓴다. 뉴턴 갱신은
-
-    $$
-    \boldsymbol{\theta}^{+}
-    = \boldsymbol{\theta} + (\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^\top(\mathbf{y} - \hat{\mathbf{p}})
-    $$
-
-    이다. 첫 항 앞에 항등원 $(\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}(\mathbf{X}^\top\mathbf{W}\mathbf{X})$
-    를 끼워 넣으면
-
-    $$
-    \boldsymbol{\theta}^{+}
-    = (\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}
-      \bigl[\mathbf{X}^\top\mathbf{W}\mathbf{X}\boldsymbol{\theta} + \mathbf{X}^\top(\mathbf{y} - \hat{\mathbf{p}})\bigr]
-    $$
-
-    이고, 대괄호 안에서 $\mathbf{X}^\top\mathbf{W}$를 묶어 내면
-
-    $$
-    = (\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{W}
-      \underbrace{\bigl[\mathbf{X}\boldsymbol{\theta} + \mathbf{W}^{-1}(\mathbf{y} - \hat{\mathbf{p}})\bigr]}_{\mathbf{z}}
-    $$
-
-    를 얻는다. 이는 반응변수 $\mathbf{z}$와 가중치 $\mathbf{W}$를 갖는 가중최소제곱의
-    정규방정식이다.
-
-    $\mathbf{W}$가 가역이어야 하는데, $0 < \hat{p}_i < 1$인 한 대각원소가 모두 양수이므로
-    성립한다. $\hat{p}_i$가 0이나 1에 수치적으로 도달하면 $\mathbf{W}^{-1}$이 발산하며, 이것이
-    분리가 있을 때 IRLS 구현이 깨지는 지점이다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff med" title="중간"></span>
-로지스틱 회귀에서 관측정보와 기대정보가 일치하는 이유를 설명하라. 이 성질이 성립하지 않는
-이항 모형의 예를 하나 들어라.
-
-</div>
-
-??? success "풀이"
-
-    관측정보는 $-\mathbf{H}(\boldsymbol{\theta})$이고 기대정보는
-    $\mathcal{I}(\boldsymbol{\theta}) = \mathbb{E}[-\mathbf{H}(\boldsymbol{\theta})]$이다.
-    로지스틱 회귀에서
-
-    $$
-    -\mathbf{H} = \sum_i \hat{p}_i(1-\hat{p}_i)\mathbf{x}_i\mathbf{x}_i^\top
-    $$
-
-    인데, 이 식에는 $y_i$가 **전혀 나타나지 않는다.** $\mathbf{x}_i$를 조건부로 고정하면
-    $-\mathbf{H}$는 상수이므로 기댓값을 취해도 그대로다. 따라서 두 정보가 같다.
-
-    이는 우연이 아니라 **로짓이 이항분포의 정준연결**이기 때문이다. 정준연결을 쓰는 일반화선형
-    모형에서는 언제나 관측정보와 기대정보가 일치하고, 뉴턴-랩슨과 피셔 점수법이 같아진다.
-
-    **성립하지 않는 예:** 프로빗 모형 $P(Y=1) = \Phi(\mathbf{x}^\top\boldsymbol{\theta})$은
-    정준연결을 쓰지 않는다. 그 로그가능도의 이차도함수에는 $y_i$가 남아 있어 관측정보와
-    기대정보가 다르며, 뉴턴-랩슨과 피셔 점수법이 서로 다른 반복열을 만든다. 여담이지만 이 경우
-    피셔 점수법이 더 안정적인 경우가 많다. 기대정보는 항상 양반정치이지만 관측정보는 최적점에서
-    멀리 떨어진 곳에서 그렇지 않을 수 있기 때문이다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 3.** <span class="diff easy" title="쉬움"></span>
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 설명변수 $x = (1,2,3,4,5,6)$과 반응변수 $y = (0,0,1,0,1,1)$에 대해 $\boldsymbol{\theta}^{(0)} = \mathbf{0}$
 에서 출발하는 IRLS를 구현하라. 반복마다 $\lVert\boldsymbol{\theta}^{(t)} - \hat{\boldsymbol{\theta}}\rVert$
 를 기록하고 수렴이 이차적임을 확인하라.
@@ -362,9 +310,43 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
     $4(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top(\mathbf{y} - \tfrac12\mathbf{1})$로 환원된다.
     $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff med" title="중간"></span>
+로지스틱 회귀에서 관측정보와 기대정보가 일치하는 이유를 설명하라. 이 성질이 성립하지 않는
+이항 모형의 예를 하나 들어라.
+
+</div>
+
+??? success "풀이"
+
+    관측정보는 $-\mathbf{H}(\boldsymbol{\theta})$이고 기대정보는
+    $\mathcal{I}(\boldsymbol{\theta}) = \mathbb{E}[-\mathbf{H}(\boldsymbol{\theta})]$이다.
+    로지스틱 회귀에서
+
+    $$
+    -\mathbf{H} = \sum_i \hat{p}_i(1-\hat{p}_i)\mathbf{x}_i\mathbf{x}_i^\top
+    $$
+
+    인데, 이 식에는 $y_i$가 **전혀 나타나지 않는다.** $\mathbf{x}_i$를 조건부로 고정하면
+    $-\mathbf{H}$는 상수이므로 기댓값을 취해도 그대로다. 따라서 두 정보가 같다.
+
+    이는 우연이 아니라 **로짓이 이항분포의 정준연결**이기 때문이다. 정준연결을 쓰는 일반화선형
+    모형에서는 언제나 관측정보와 기대정보가 일치하고, 뉴턴-랩슨과 피셔 점수법이 같아진다.
+
+    **성립하지 않는 예:** 프로빗 모형 $P(Y=1) = \Phi(\mathbf{x}^\top\boldsymbol{\theta})$은
+    정준연결을 쓰지 않는다. 그 로그가능도의 이차도함수에는 $y_i$가 남아 있어 관측정보와
+    기대정보가 다르며, 뉴턴-랩슨과 피셔 점수법이 서로 다른 반복열을 만든다. 여담이지만 이 경우
+    피셔 점수법이 더 안정적인 경우가 많다. 기대정보는 항상 양반정치이지만 관측정보는 최적점에서
+    멀리 떨어진 곳에서 그렇지 않을 수 있기 때문이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span>
 반복당 계산 비용을 뉴턴-랩슨과 경사하강에 대해 $n$과 $p$로 나타내라. $n = 10^6$, $p = 10^4$일 때
 어느 쪽을 쓰겠는가?
 
@@ -396,9 +378,11 @@ $\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1
     $O(np + mp)$다. scikit-learn의 `LogisticRegression`이 기본 해법기로 L-BFGS를 쓰는 이유가
     바로 이것이다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 IRLS의 작업 반응변수 $\mathbf{z}^{(t)}$의 각 성분은 어떤 의미를 갖는가?
 $\hat{p}_i$가 0이나 1에 가까울 때 $z_i$에 무슨 일이 일어나는지 설명하고, 실무적 대응책을
 제시하라.
@@ -434,6 +418,50 @@ $\hat{p}_i$가 0이나 1에 가까울 때 $z_i$에 무슨 일이 일어나는지
        벌점을 넣거나 문제의 변수를 제거하라.
 
     $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+뉴턴-랩슨 갱신식으로부터 IRLS의 작업 반응변수
+$\mathbf{z}^{(t)} = \mathbf{X}\boldsymbol{\theta}^{(t)} + (\mathbf{W}^{(t)})^{-1}(\mathbf{y} - \hat{\mathbf{p}}^{(t)})$
+를 유도하라.
+
+</div>
+
+??? success "풀이"
+
+    표기를 줄이기 위해 위첨자 $(t)$를 생략하고 $\mathbf{W}$, $\hat{\mathbf{p}}$,
+    $\boldsymbol{\theta}$로 쓴다. 뉴턴 갱신은
+
+    $$
+    \boldsymbol{\theta}^{+}
+    = \boldsymbol{\theta} + (\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^\top(\mathbf{y} - \hat{\mathbf{p}})
+    $$
+
+    이다. 첫 항 앞에 항등원 $(\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}(\mathbf{X}^\top\mathbf{W}\mathbf{X})$
+    를 끼워 넣으면
+
+    $$
+    \boldsymbol{\theta}^{+}
+    = (\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}
+      \bigl[\mathbf{X}^\top\mathbf{W}\mathbf{X}\boldsymbol{\theta} + \mathbf{X}^\top(\mathbf{y} - \hat{\mathbf{p}})\bigr]
+    $$
+
+    이고, 대괄호 안에서 $\mathbf{X}^\top\mathbf{W}$를 묶어 내면
+
+    $$
+    = (\mathbf{X}^\top\mathbf{W}\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{W}
+      \underbrace{\bigl[\mathbf{X}\boldsymbol{\theta} + \mathbf{W}^{-1}(\mathbf{y} - \hat{\mathbf{p}})\bigr]}_{\mathbf{z}}
+    $$
+
+    를 얻는다. 이는 반응변수 $\mathbf{z}$와 가중치 $\mathbf{W}$를 갖는 가중최소제곱의
+    정규방정식이다.
+
+    $\mathbf{W}$가 가역이어야 하는데, $0 < \hat{p}_i < 1$인 한 대각원소가 모두 양수이므로
+    성립한다. $\hat{p}_i$가 0이나 1에 수치적으로 도달하면 $\mathbf{W}^{-1}$이 발산하며, 이것이
+    분리가 있을 때 IRLS 구현이 깨지는 지점이다. $\square$
 
 ---
 

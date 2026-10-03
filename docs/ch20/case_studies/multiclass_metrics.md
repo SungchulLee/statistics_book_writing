@@ -9,7 +9,7 @@
 
 ---
 
-## 혼동행렬
+## 1. 혼동행렬
 
 $C \times C$ 혼동행렬 $\mathbf{M}$의 원소 $M_{jk}$는 참 범주가 $j$이고 예측 범주가 $k$인 관측치의
 수다. 완벽한 분류기는 대각행렬을 만든다.
@@ -208,7 +208,7 @@ $C \times C$ 혼동행렬 $\mathbf{M}$의 원소 $M_{jk}$는 참 범주가 $j$�
 
 ---
 
-## 전체 정확도
+## 2. 전체 정확도
 
 정확도는 옳은 예측의 비율이며, 혼동행렬의 대각합을 전체 관측치 수로 나눈 값과 같다.
 
@@ -277,7 +277,7 @@ $$
 
 ---
 
-## 범주별 정밀도, 재현율, F1
+## 3. 범주별 정밀도, 재현율, F1
 
 각 범주를 일대다 이항 문제로 보면 혼동행렬에서 범주별 지표를 뽑아낼 수 있다.
 
@@ -383,7 +383,7 @@ $$
 
 ---
 
-## 거시평균과 미시평균
+## 4. 거시평균과 미시평균
 
 **거시평균**은 각 범주에 대해 지표를 독립적으로 계산한 뒤 가중치 없이 평균한다.
 
@@ -398,7 +398,7 @@ $$
 \text{Recall}_{\text{micro}} = \frac{\sum_c \text{TP}_c}{\sum_c \text{TP}_c + \sum_c \text{FN}_c}
 $$
 
-단일 이름표 문제에서는 미시평균 정밀도와 미시평균 재현율이 같고 그 값이 정확도와 같다(연습문제 2).
+단일 이름표 문제에서는 미시평균 정밀도와 미시평균 재현율이 같고 그 값이 정확도와 같다(연습문제 4).
 
 <div class="exbox" markdown>
 
@@ -440,7 +440,7 @@ $$
 
     **(2) 두 일치는 성격이 다르다.**
 
-    **미시 $=$ 정확도는 언제나 참이다.** 연습문제 2에서 증명하듯, 단일 이름표 문제에서는
+    **미시 $=$ 정확도는 언제나 참이다.** 연습문제 4에서 증명하듯, 단일 이름표 문제에서는
 
     $$
     \sum_c \text{FP}_c = \sum_c \text{FN}_c = n - \operatorname{tr}(\mathbf{M})
@@ -450,7 +450,7 @@ $$
 
     **거시 $=$ 미시는 이 자료에서만이다.** 거시평균이 $2/3$이 된 것은 범주별 F1이 셋 다 $2/3$이었기 때문이고, 그것은 보기 2의 순환 구조가 만든 우연이다. 범주 크기나 오류 분포가 치우치면 곧바로 어긋난다.
 
-    **어긋나는 보기.** 이 쪽 연습문제 3의 의학 선별검사가 극단적인 예다. 건강 $900$명, 질환 A $70$명, 질환 B $30$명인 자료에서 언제나 "건강"만 예측하면
+    **어긋나는 보기.** 이 쪽 연습문제 2의 의학 선별검사가 극단적인 예다. 건강 $900$명, 질환 A $70$명, 질환 B $30$명인 자료에서 언제나 "건강"만 예측하면
 
     $$
     \text{Accuracy} = F_1^{\text{micro}} = 0.900,
@@ -515,7 +515,7 @@ $$
 
 ---
 
-## scikit-learn과의 검증
+## 5. scikit-learn과의 검증
 
 붓꽃 자료에 소프트맥스 회귀 모형을 학습시키고, 직접 만든 지표를 scikit-learn의
 `classification_report`와 비교한다.
@@ -633,7 +633,7 @@ $$
 
 ---
 
-## 혼동행렬 시각화
+## 6. 혼동행렬 시각화
 
 열지도로 그리면 체계적인 오분류 양상을 쉽게 찾을 수 있다.
 
@@ -737,7 +737,7 @@ $$
 
 ---
 
-## 해석
+## 7. 해석
 
 직접 구현해 보면 몇 가지 핵심이 드러난다.
 
@@ -795,49 +795,11 @@ $$
     F_1^{\text{macro}} = \frac{0.860 + 0.700 + 0.800 + 0.824}{4} = \frac{3.184}{4} = 0.796
     $$
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff hard" title="어려움"></span>
-단일 이름표 다범주 문제에서 미시평균 정밀도 = 미시평균 재현율 = 전체 정확도임을 보여라.
-(힌트: $\sum_c \text{FP}_c$와 $\sum_c \text{FN}_c$를 $\mathbf{M}$의 비대각 원소와 연결하라.)
-
-</div>
-
-??? success "풀이"
-    각 범주 $c$에 대해,
-
-    - $\text{TP}_c = M_{cc}$
-    - $\text{FP}_c = \sum_{j \neq c} M_{jc}$(열 $c$의 다른 행들)
-    - $\text{FN}_c = \sum_{k \neq c} M_{ck}$(행 $c$의 다른 열들)
-
-    모든 범주에 대해 더하면,
-
-    $$
-    \sum_c \text{TP}_c = \sum_c M_{cc} = \operatorname{tr}(\mathbf{M})
-    $$
-
-    $$
-    \sum_c \text{FP}_c = \sum_c \sum_{j \neq c} M_{jc} = \sum_{j,c} M_{jc} - \sum_c M_{cc} = n - \operatorname{tr}(\mathbf{M})
-    $$
-
-    마찬가지로,
-
-    $$
-    \sum_c \text{FN}_c = \sum_c \sum_{k \neq c} M_{ck} = n - \operatorname{tr}(\mathbf{M})
-    $$
-
-    따라서 $\sum_c \text{FP}_c = \sum_c \text{FN}_c$이고,
-
-    $$
-    \text{Precision}_{\text{micro}} = \frac{\operatorname{tr}(\mathbf{M})}{\operatorname{tr}(\mathbf{M}) + (n - \operatorname{tr}(\mathbf{M}))} = \frac{\operatorname{tr}(\mathbf{M})}{n} = \text{Accuracy}
-    $$
-
-    재현율에도 같은 계산이 적용된다. 미시 정밀도와 미시 재현율이 같으므로 미시 F1도 정확도와
-    같다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff easy" title="쉬움"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 어떤 의학적 선별검사가 환자를 건강(0), 질환 A(1), 질환 B(2)의 세 범주로 분류한다. 환자
 1000명 중 건강 900명, 질환 A 70명, 질환 B 30명이다. 언제나 "건강"을 예측하는 분류기는 정확도
 90%를 달성한다. 이 무의미한 분류기의 거시평균 F1을 계산하고, 이 문제에서 거시 F1이 정확도보다
@@ -878,9 +840,11 @@ $$
         기본값은 0이며, 이 예에서는 그것이 옳은 선택이다. 예측을 아예 하지 않은 범주를
         평균에서 빼 주면 아무것도 예측하지 않는 분류기가 가장 좋아 보이게 되기 때문이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 각 범주의 F1 점수를 지지도(실제 사례 수)로 가중하여 가중평균 F1을 계산하는 `weighted_f1`
 함수를 구현하라. 균형 잡힌 자료에서는 가중 F1이 거시 F1과 같아짐을 보여라.
 
@@ -907,6 +871,50 @@ $$
     $$
 
     가중치 $s/Cs = 1/C$가 균일해져 비가중 평균으로 환원된다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
+단일 이름표 다범주 문제에서 미시평균 정밀도 = 미시평균 재현율 = 전체 정확도임을 보여라.
+(힌트: $\sum_c \text{FP}_c$와 $\sum_c \text{FN}_c$를 $\mathbf{M}$의 비대각 원소와 연결하라.)
+
+</div>
+
+??? success "풀이"
+    각 범주 $c$에 대해,
+
+    - $\text{TP}_c = M_{cc}$
+    - $\text{FP}_c = \sum_{j \neq c} M_{jc}$(열 $c$의 다른 행들)
+    - $\text{FN}_c = \sum_{k \neq c} M_{ck}$(행 $c$의 다른 열들)
+
+    모든 범주에 대해 더하면,
+
+    $$
+    \sum_c \text{TP}_c = \sum_c M_{cc} = \operatorname{tr}(\mathbf{M})
+    $$
+
+    $$
+    \sum_c \text{FP}_c = \sum_c \sum_{j \neq c} M_{jc} = \sum_{j,c} M_{jc} - \sum_c M_{cc} = n - \operatorname{tr}(\mathbf{M})
+    $$
+
+    마찬가지로,
+
+    $$
+    \sum_c \text{FN}_c = \sum_c \sum_{k \neq c} M_{ck} = n - \operatorname{tr}(\mathbf{M})
+    $$
+
+    따라서 $\sum_c \text{FP}_c = \sum_c \text{FN}_c$이고,
+
+    $$
+    \text{Precision}_{\text{micro}} = \frac{\operatorname{tr}(\mathbf{M})}{\operatorname{tr}(\mathbf{M}) + (n - \operatorname{tr}(\mathbf{M}))} = \frac{\operatorname{tr}(\mathbf{M})}{n} = \text{Accuracy}
+    $$
+
+    재현율에도 같은 계산이 적용된다. 미시 정밀도와 미시 재현율이 같으므로 미시 F1도 정확도와
+    같다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

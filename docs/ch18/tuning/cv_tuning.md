@@ -6,7 +6,9 @@
 고르는 일은 결정적이다. 너무 작으면 모형이 과적합하고, 너무 크면 과소적합한다. 교차검증(CV)은
 표본 밖 예측오차를 추정함으로써 $\lambda$를 자료에 근거해 원리적으로 선택하는 방법이다.
 
-## 조율 문제
+---
+
+## 1. 조율 문제
 
 어떤 벌점회귀에서든 표본 내 손실은 $\lambda$가 0으로 줄어들수록 단조적으로 감소한다(정칙화가
 약할수록 훈련자료에 더 잘 맞는다). 그러나 표본 밖 예측오차는 대개 U자 곡선을 그린다.
@@ -18,7 +20,9 @@ $$
 여기서 $\text{MSE}^{(-k)}$는 나머지 $K - 1$개 겹으로 모형을 적합했을 때 겹 $k$에서의
 평균제곱오차다. 최적 $\lambda$는 이 곡선을 최소화한다.
 
-## K-겹 교차검증
+---
+
+## 2. K-겹 교차검증
 
 표준 절차는 다음과 같다.
 
@@ -31,7 +35,9 @@ $$
 
 $K = 5$ 또는 $K = 10$이 흔히 쓰인다.
 
-## 람다 격자
+---
+
+## 3. 람다 격자
 
 후보 $\lambda$ 격자는 보통 로그 척도로 잡는다.
 
@@ -46,7 +52,9 @@ $$
 - 격자는 $\lambda_{\max}$에서 시작해 그 작은 배수 $\epsilon \cdot \lambda_{\max}$까지 내려간다
   (예: $\epsilon = 10^{-4}$).
 
-## 코드: 기본 교차검증 시연
+---
+
+## 4. 코드: 기본 교차검증 시연
 
 <div class="exbox" markdown>
 
@@ -71,7 +79,7 @@ $$
 
     이다. 교차항은 $\varepsilon_0$이 $\hat\beta$와 독립이고 평균이 0이라 사라진다. **바닥은 $\sigma^2 = 1$이고, 이는 $\beta$를 완벽히 알아도 줄일 수 없는 몫이다.**
 
-    천장은 반대쪽 끝에 있다. $\lambda \ge \lambda_{\max} = \lVert X^\top y\rVert_\infty / n$이면 라쏘 해가 영벡터이므로(연습문제 1) 예측값이 절편뿐이고, 그때의 예측오차는 $y$의 분산 $\operatorname{Var}(y) = \beta^\top\Sigma\beta + \sigma^2$이 된다. 설계가 독립 표준정규이므로 $\Sigma = I$이고
+    천장은 반대쪽 끝에 있다. $\lambda \ge \lambda_{\max} = \lVert X^\top y\rVert_\infty / n$이면 라쏘 해가 영벡터이므로(연습문제 4) 예측값이 절편뿐이고, 그때의 예측오차는 $y$의 분산 $\operatorname{Var}(y) = \beta^\top\Sigma\beta + \sigma^2$이 된다. 설계가 독립 표준정규이므로 $\Sigma = I$이고
 
     $$
     \operatorname{Var}(y) \approx 3^2 + (-2)^2 + 1.5^2 + 1 = 17.25
@@ -160,7 +168,9 @@ $$
 
     최소 CV 규칙은 잡음 변수를 여섯 개나 남겼지만, 1-표준오차 규칙은 다섯 개만 남겼다. 참으로 쓰인 변수가 셋임을 생각하면 뒤쪽이 더 나은 선택이다. **다만 CV가 겨냥하는 것은 예측오차이지 올바른 변수집합이 아니다.** 둘 다 과다선택을 한 것은 CV가 실패했기 때문이 아니라, 계수가 거의 0인 잡음변수를 하나 더 넣어도 예측오차가 거의 늘지 않기 때문이다.
 
-## 1-표준오차 규칙
+---
+
+## 5. 1-표준오차 규칙
 
 $\hat{\lambda}$를 CV 곡선의 정확한 최소점으로 잡는 대신, CV 오차가 최솟값으로부터 1 표준오차
 이내인 $\lambda$ 중 가장 큰 것을 고르는 보수적 규칙이 널리 쓰인다.
@@ -181,7 +191,9 @@ $$
 
 그 선택이 실제로 무엇을 바꾸는지는 계수를 세어 보면 안다. $\lambda_{\min}$은 변수 9개를, $\lambda_{1\text{SE}}$는 5개를 남긴다. 참으로 쓰인 변수는 3개이므로 **둘 다 과다선택이지만 후자가 진실에 가깝다.** 예측 정확도를 마지막 한 자리까지 다투는 상황이 아니라면, 곡선이 평평한 구간에서는 오른쪽 끝을 고르는 것이 합리적이다.
 
-## 실무상의 고려사항
+---
+
+## 6. 실무상의 고려사항
 
 - **표준화.** 교차검증 전에 항상 설명변수를 표준화하라. 단, 표준화에 쓰는 평균과 표준편차는
   전체 자료가 아니라 훈련 겹에서만 계산해야 자료 누설을 피할 수 있다.
@@ -191,39 +203,22 @@ $$
   극적으로 빠르게 한다.
 - **무작위 분할.** 분할 전에 섞거나 반복 교차검증을 쓰면 특정 분할에 대한 민감도가 줄어든다.
 
-## 해석
+---
+
+## 7. 해석
 
 - CV 곡선은 U자(적어도 비단조) 모양이어야 한다. 가장 작은 $\lambda$에서도 여전히 감소 중이라면
   격자를 더 작은 쪽으로 넓혀라.
 - 가장 큰 $\lambda$에서도 여전히 감소 중이라면 그 자료에는 정칙화가 필요 없을 수도 있다.
 - 1SE 규칙은 예측오차를 조금 희생하는 대신 더 희소하고 해석하기 좋은 모형을 준다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff hard" title="어려움"></span> 라쏘에 대해 $\lambda_{\max} = \frac{1}{n}\|X^\top y\|_\infty$를 유도하라. 즉
-$\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여라.
-
-</div>
-
-??? success "풀이"
-
-    라쏘 목적함수는 $f(\beta) = \frac{1}{2n}\|y - X\beta\|_2^2 + \lambda\|\beta\|_1$이다.
-    $\beta = 0$에서의 부분미분은
-
-    $$
-    \partial f(0) = \left\{-\frac{1}{n}X^\top y + \lambda s : s \in \partial\|\cdot\|_1(0)\right\} = \left\{-\frac{1}{n}X^\top y + \lambda s : s_j \in [-1,1]\right\}
-    $$
-
-    이다. 최적성 조건 $0 \in \partial f(0)$은 $|s_j| \le 1$인 어떤 $s$에 대해
-    $\frac{1}{n}X^\top y = \lambda s$가 성립할 것을 요구한다. 이는 모든 $j$에 대해
-    $\frac{1}{n}|X_j^\top y| \le \lambda$일 때, 그리고 그때에만 가능하다. 즉
-    $\lambda \ge \frac{1}{n}\|X^\top y\|_\infty = \lambda_{\max}$이다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff med" title="중간"></span> 교차검증 전에 전체 자료로 설명변수를 표준화하면 왜 자료 누설이 생기는지
+**연습문제 1.** <span class="diff med" title="중간"></span> 교차검증 전에 전체 자료로 설명변수를 표준화하면 왜 자료 누설이 생기는지
 설명하고, 올바른 절차를 서술하라.
 
 </div>
@@ -266,9 +261,11 @@ $\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여�
 
     이렇게 하면 검증 겹이 진정으로 미관측 상태로 남는다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span> 1-표준오차 규칙을 구현하라. 배열 `lambdas`, `cv_mean`, `cv_se`(각 $\lambda$의
+**연습문제 2.** <span class="diff med" title="중간"></span> 1-표준오차 규칙을 구현하라. 배열 `lambdas`, `cv_mean`, `cv_se`(각 $\lambda$의
 CV MSE 평균과 표준오차)가 주어졌을 때 $\hat{\lambda}_{1\text{SE}}$를 반환하는 함수를 작성하라.
 
 </div>
@@ -301,9 +298,11 @@ CV MSE 평균과 표준오차)가 주어졌을 때 $\hat{\lambda}_{1\text{SE}}$�
         위처럼 $\lambda$ 값 자체에 `argmax`를 취하면 정렬 순서와 무관하게 항상 옳다.
     $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span> 인공자료($n = 200$, $p = 30$, 참 계수 중 5개만 0이 아님)에 대해 로그 등간격
+**연습문제 3.** <span class="diff med" title="중간"></span> 인공자료($n = 200$, $p = 30$, 참 계수 중 5개만 0이 아님)에 대해 로그 등간격
 $\lambda$ 50개 위에서 라쏘의 5-겹 교차검증을 수행하라. 오차막대($\pm 1$ SE)를 포함한 CV 곡선을
 그리고 $\hat{\lambda}_{\min}$과 $\hat{\lambda}_{1\text{SE}}$를 모두 표시하라.
 
@@ -363,6 +362,31 @@ $\lambda$ 50개 위에서 라쏘의 5-겹 교차검증을 수행하라. 오차�
     모형이 훨씬 희소해진다. 곡선은 특징적인 U자 모양이며, 잡음변수 25개 중 상당수가 여전히
     선택된다는 점은 교차검증이 **예측**을 최적화할 뿐 **변수선택**을 최적화하지는 않음을
     보여준다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff hard" title="어려움"></span> 라쏘에 대해 $\lambda_{\max} = \frac{1}{n}\|X^\top y\|_\infty$를 유도하라. 즉
+$\lambda \ge \lambda_{\max}$이면 라쏘 해가 $\hat{\beta} = 0$임을 보여라.
+
+</div>
+
+??? success "풀이"
+
+    라쏘 목적함수는 $f(\beta) = \frac{1}{2n}\|y - X\beta\|_2^2 + \lambda\|\beta\|_1$이다.
+    $\beta = 0$에서의 부분미분은
+
+    $$
+    \partial f(0) = \left\{-\frac{1}{n}X^\top y + \lambda s : s \in \partial\|\cdot\|_1(0)\right\} = \left\{-\frac{1}{n}X^\top y + \lambda s : s_j \in [-1,1]\right\}
+    $$
+
+    이다. 최적성 조건 $0 \in \partial f(0)$은 $|s_j| \le 1$인 어떤 $s$에 대해
+    $\frac{1}{n}X^\top y = \lambda s$가 성립할 것을 요구한다. 이는 모든 $j$에 대해
+    $\frac{1}{n}|X_j^\top y| \le \lambda$일 때, 그리고 그때에만 가능하다. 즉
+    $\lambda \ge \frac{1}{n}\|X^\top y\|_\infty = \lambda_{\max}$이다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

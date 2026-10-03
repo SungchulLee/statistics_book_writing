@@ -1,10 +1,12 @@
 # 적률법과 MLE의 비교
 
-## 왜 두 방법을 비교하는가?
+## 1. 왜 두 방법을 비교하는가?
 
 적률법(MoM)과 최대가능도추정(MLE)을 각각의 틀로 살펴보았으니 자연스러운 물음이 떠오른다. 언제 어느 쪽을 선호해야 하는가? 두 접근 모두 적절한 조건에서 일치추정량을 주지만 계산 복잡도, 통계적 효율성, 모형 가정에 대한 민감도가 다르다. 이 맞바꿈을 이해하는 것이 실무에서 원리 있는 선택을 하는 데 필수적이다.
 
-## 나란히 놓고 보기
+---
+
+## 2. 나란히 놓고 보기
 
 다음 표는 적률법과 MLE의 주요 차이를 요약한다. 각 기준은 이어지는 절에서 자세히 다룬다.
 
@@ -16,7 +18,9 @@
 | 불변성 | 일반적으로 아니오 | 예 (함수적 불변성) |
 | 로버스트성 | 분포 설정 오류에 덜 민감 | 모형 설정 오류에 민감 |
 
-## 상세 비교
+---
+
+## 3. 상세 비교
 
 ### 계산
 
@@ -84,7 +88,9 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 
 반면 MLE는 완전한 가능도함수를 사용하므로 설정 오류에 더 민감하다. 가정한 모형이 틀리면 MLE는 참 분포에서 가정한 모형족까지의 Kullback-Leibler 발산을 최소화하는 모수값으로 수렴하는데, 이것이 의미 있는 양에 대응하지 않을 수 있다.
 
-## 어느 쪽을 언제 쓰는가
+---
+
+## 4. 어느 쪽을 언제 쓰는가
 
 ### 적률법을 선호할 때
 
@@ -101,6 +107,8 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 !!! tip "실용적인 전략"
 
     두 방법을 결합하는 작업 흐름이 흔하다. 적률법으로 빠르게 초기 추정값을 얻은 뒤 MLE로 다듬어 최적의 효율을 얻는 것이다. 이 혼합 접근은 각 방법의 강점을 살리면서 개별적인 약점을 피한다.
+
+---
 
 ## 연습문제
 
@@ -121,6 +129,8 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
     (d) **같다.** 기하분포에서 MLE와 적률법이 일치하며, 둘 다 표본평균의 역수이다.
 
     이런 일은 모수 $\theta$가 1차 적률과 일대일로 대응하고 고차 적률 제약이 없을 때마다 일어난다. "단일모수이면서 평균으로 결정되는" 분포 대부분(Bernoulli, Poisson, Exponential, Geometric)에서 MLE = 적률법이다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -161,6 +171,8 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 
     예상되는 결과: 모든 $n$에서 MLE의 평균제곱오차가 더 작고, $n$이 작을수록 격차가 크다. 둘 다 $1/n$의 비율로 줄어든다. MLE는 점근적으로 효율적이고 적률법은 일치하지만 효율적이지는 않다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
@@ -183,6 +195,8 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
     - MLE를 다루기 어려운 분포.
     - 로버스트성 고려(적률법이 모형 설정 오류에 덜 민감할 수 있다).
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
@@ -199,31 +213,11 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 
     이런 사례들 때문에 점근적 비효율성에도 불구하고 적률법이 계속 쓰인다.
 
-<div class="drillbox" markdown>
-
-**연습문제 5.** <span class="diff hard" title="어려움"></span>
-**파레토의 적률법과 MLE.** $x \ge 1$에서 $X \sim \mathrm{Pareto}(\alpha)$일 때 둘을 유도하고 점근 상대효율을 논하라.
-
-</div>
-
-??? success "풀이"
-    $[1, \infty)$ 위의 Pareto$(\alpha)$: $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이고 $\alpha > 1$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다.
-
-    **적률법:** $\bar X = \alpha/(\alpha - 1) \Rightarrow \hat\alpha_{\text{MoM}} = \bar X/(\bar X - 1)$.
-
-    **MLE:** $\hat\alpha_{\text{MLE}} = n/\sum \ln X_i$.
-
-    **적률법의 존재 조건:** 적률법의 점근분산을 델타 방법으로 구하려면 $\mathbb{E}[X^2] < \infty$가 필요하며, 이는 $\alpha > 2$일 때만 성립한다. $\alpha \le 2$이면 표본분산이 발산하여 적률법의 점근이론이 아예 성립하지 않는다.
-
-    **MLE의 점근분산:** $\mathrm{Var}(\hat\alpha_{\text{MLE}}) \to \alpha^2/n$이며 이것이 CRLB이다.
-
-    **ARE:** 적률법이 정의되는 전형적인 경우인 $\alpha = 3$에서도 적률법의 분산이 MLE보다 훨씬 크다. $\alpha \le 2$이면 적률법은 정의조차 되지 않는다.
-
-    **함의:** 꼬리가 두꺼운 분포에서는 MLE가 필수적이다. 적률법은 정의되지 않을 수도 있다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **MLE의 출발값으로서의 적률법.** 반복적인 MLE 최적화의 초기값으로 $\hat\theta_{\text{MoM}}$을 쓰는 것이 왜 좋은 생각인가?
 
 </div>
@@ -254,9 +248,11 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 
     `scipy.stats.fit`을 비롯한 라이브러리들이 사용하는 표준적인 방식이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 적률법과 MLE가 **일치하는** 분포의 공통 구조를 밝혀라. 어떤 조건에서 둘이 같아지는가?
 
 </div>
@@ -305,9 +301,11 @@ MLE는 강력한 **함수적 불변성**을 갖는다. $\hat{\theta}$가 $\theta
 
     **교훈.** **"어떤 적률을 쓰느냐"가 방법을 정한다.** 충분통계량의 적률을 쓰면 자동으로 최대가능도가 되며, 그래서 GMM에서 점수함수를 적률 조건으로 쓰면 MLE가 나온다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 MLE가 적률법보다 **나쁠 수 있는** 구체적인 상황을 세 가지 들어라.
 
 </div>
@@ -331,9 +329,11 @@ MLE가 적률법보다 **나쁠 수 있는** 구체적인 상황을 세 가지 �
 
     **덧붙여.** 위 세 가지가 서로 얽혀 있다는 점도 중요하다. 모형이 미덥지 않고 표본이 작고 계산이 어려운 상황은 대개 함께 온다. 그런 문제에서 "MLE가 이론적으로 효율적"이라는 사실은 실질적 위안이 되지 못한다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 두 방법의 **점근상대효율**을 계산하는 일반 절차를 정리하고, $\text{Uniform}(0,\theta)$에서 적용해 보라.
 
 </div>
@@ -381,9 +381,11 @@ MLE가 적률법보다 **나쁠 수 있는** 구체적인 상황을 세 가지 �
 
     **주의.** 이 예는 정칙 조건이 깨진 경우라 표준 이론이 적용되지 않는다. 정칙 문제에서는 두 방법 모두 $O(n^{-1})$이고 ARE가 0과 1 사이의 상수로 나온다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 실무에서 "먼저 적률법, 그다음 MLE"라는 순서가 왜 좋은 관행인지 정리하라.
 
 </div>
@@ -410,6 +412,30 @@ MLE가 적률법보다 **나쁠 수 있는** 구체적인 상황을 세 가지 �
     **이유 4 — 실패 대비.** 최적화가 수렴하지 않거나 가능도가 퇴화하면 적률법 추정값이 **대체 답**이 된다. 완전하지 않아도 아무것도 없는 것보다 낫다.
 
     **덧붙일 것.** 순서에 하나를 더하면 좋다. **먼저 그림을 본다.** 히스토그램과 Q-Q 그림으로 분포족이 그럴듯한지 확인한 뒤 적률법으로 대략의 값을 잡고 MLE로 마무리하며, 마지막에 적합된 밀도를 자료 위에 겹쳐 그려 확인한다. **추정은 계산이기 이전에 확인의 연속이다.**
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+**파레토의 적률법과 MLE.** $x \ge 1$에서 $X \sim \mathrm{Pareto}(\alpha)$일 때 둘을 유도하고 점근 상대효율을 논하라.
+
+</div>
+
+??? success "풀이"
+    $[1, \infty)$ 위의 Pareto$(\alpha)$: $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이고 $\alpha > 1$에서 $\mathbb{E}[X] = \alpha/(\alpha - 1)$이다.
+
+    **적률법:** $\bar X = \alpha/(\alpha - 1) \Rightarrow \hat\alpha_{\text{MoM}} = \bar X/(\bar X - 1)$.
+
+    **MLE:** $\hat\alpha_{\text{MLE}} = n/\sum \ln X_i$.
+
+    **적률법의 존재 조건:** 적률법의 점근분산을 델타 방법으로 구하려면 $\mathbb{E}[X^2] < \infty$가 필요하며, 이는 $\alpha > 2$일 때만 성립한다. $\alpha \le 2$이면 표본분산이 발산하여 적률법의 점근이론이 아예 성립하지 않는다.
+
+    **MLE의 점근분산:** $\mathrm{Var}(\hat\alpha_{\text{MLE}}) \to \alpha^2/n$이며 이것이 CRLB이다.
+
+    **ARE:** 적률법이 정의되는 전형적인 경우인 $\alpha = 3$에서도 적률법의 분산이 MLE보다 훨씬 크다. $\alpha \le 2$이면 적률법은 정의조차 되지 않는다.
+
+    **함의:** 꼬리가 두꺼운 분포에서는 MLE가 필수적이다. 적률법은 정의되지 않을 수도 있다.
 
 ---
 

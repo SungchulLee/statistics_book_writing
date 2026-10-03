@@ -8,7 +8,9 @@
 
 이 단순한 관찰이 5장 전체의 출발점이다. 표본에서 계산한 값은 고정된 수가 아니라 **표본이 바뀌면 함께 바뀌는 양**, 곧 확률변수다. 그 값들이 어떻게 흩어지는지를 다루는 것이 표본분포 이론이고, 신뢰구간과 가설검정은 모두 그 위에 서 있다.
 
-## 뽑기 전과 뽑은 뒤
+---
+
+## 1. 뽑기 전과 뽑은 뒤
 
 절차를 그림으로 적으면 이렇다.
 
@@ -28,7 +30,9 @@ $$
 
 그래서 이 책은 뽑기 전의 것을 대문자 $\mathbf{X}$로, 뽑은 뒤의 것을 소문자 $\mathbf{x}$로 적는다. 얼핏 성가신 관례 같지만, "$\bar X$의 분포"라는 말과 "$\bar x = 68.3$"이라는 말을 구별해 주는 장치다. 앞의 것은 아직 일어나지 않은 일에 대한 이야기이고, 뒤의 것은 이미 일어난 일의 기록이다.
 
-## 모수는 고정되어 있고 통계량은 흔들린다
+---
+
+## 2. 모수는 고정되어 있고 통계량은 흔들린다
 
 모집단에도 평균이 있다. 그것을 $\mu$라 쓰고 **모수**라 부른다. 표본에서 계산한 $\bar X$와 모집단의 $\mu$는 성격이 정반대다.
 
@@ -83,7 +87,9 @@ $20$세 남자의 키를 $\mu = 170$, $\sigma = 6$인 모집단으로 두고 $n 
 | 표본비율 | $\hat{p} = \frac{1}{n}\sum_{i=1}^n X_i$ (0/1 자료) | 모비율 $p$ |
 | 표본중앙값 | $\text{Med}(\mathbf{X})$ | 모집단 중앙값 |
 
-## 흔들림에도 규칙이 있다
+---
+
+## 3. 흔들림에도 규칙이 있다
 
 통계량이 표본마다 다르다면 그것으로 무엇을 말할 수 있을까. 아무 값이나 나오는 것이 아니라 흔들림에 규칙이 있다는 것이 답이다. 가장 기본적인 규칙이 **불편성**이다.
 
@@ -313,7 +319,9 @@ $$
 
     그림에서 한 가지 더 눈에 띄는 것이 있다. 점들이 가로축의 아무 데나 찍히지 않고 **정수 자리에만** 찍힌다. 공에 정수만 적혀 있고 다섯 개 중 가운데 값을 고르므로 표본중앙값도 정수일 수밖에 없다. 통계량의 분포는 이렇게 모집단의 성격을 물려받는다.
 
-## 좋은 추정량을 어떻게 만드는가
+---
+
+## 4. 좋은 추정량을 어떻게 만드는가
 
 지금까지는 추정량이 주어져 있다고 보고 그 성질을 따졌다. 그렇다면 추정량은 애초에 어디서 오는가. 평균을 추정할 때 표본평균을 쓰는 것은 자연스러워 보이지만, 모집단이 낯선 분포일 때는 무엇을 계산해야 할지 막막하다.
 
@@ -649,6 +657,8 @@ $$
 
 연습문제에서는 이 절차를 직접 밟아 본다. 포획–재포획과 베르누이·정규의 최대가능도를 손으로 유도하고, 불편성과 일치성이 어떻게 다른지, 그리고 불편성을 포기하면 오히려 오차가 줄어드는 경우가 있는지까지 따져 본다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -665,6 +675,8 @@ $$
 
     포획–재포획은 야생동물 개체수 추정의 기본 방법이다. 변형(폐쇄/개방 모집단, 여러 번의 재포획, 표지 손실)을 통해 풍부한 추정량 계열이 만들어진다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
@@ -678,6 +690,8 @@ $$
     (b) 로그가능도: $\ell(p) = 40\ln p + 60\ln(1-p)$. 미분하면 $40/p - 60/(1-p) = 0 \Rightarrow p = 0.4$.
 
     $\hat p_{\text{MLE}} = 0.4$로 표본비율과 같다. 일반적으로 $X \sim \mathrm{Binomial}(n, p)$에 대해 MLE는 $\hat p = X/n$이다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -697,31 +711,11 @@ $$
 
     MLE와 불편추정량의 구별은 반복해서 나타나는 주제이다. MLE는 점근적으로 최적이지만 유한표본에서는 편향될 수 있다.
 
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff hard" title="어려움"></span>
-**충분통계량.** 조건부분포 $X \mid T$가 $\theta$에 의존하지 않으면 통계량 $T(X)$가 $\theta$에 대해 **충분**하다고 한다. **Fisher-Neyman 인수분해 정리**를 서술하고, 이를 사용하여 $X_i \sim \mathrm{Poisson}(\lambda)$일 때 $\sum X_i$가 $\lambda$에 대해 충분함을 확인하라.
-
-</div>
-
-??? success "풀이"
-    **Fisher-Neyman 인수분해 정리:** $T(X)$가 $\theta$에 대해 충분일 필요충분조건은 결합밀도가 다음과 같이 인수분해되는 것이다.
-
-    $$
-    f(x \mid \theta) = g(T(x), \theta) \cdot h(x)
-    $$
-
-    여기서 $g$는 $T(x)$를 통해서만 $\theta$에 의존하고 $h$는 $\theta$에 의존하지 않는다.
-
-    **포아송의 경우:** $f(x_1, \ldots, x_n \mid \lambda) = \prod_i \frac{e^{-\lambda} \lambda^{x_i}}{x_i!} = e^{-n\lambda} \lambda^{\sum x_i} / \prod_i x_i!$.
-
-    가능도가 $g(\sum x_i, \lambda) \cdot h(x) = (e^{-n\lambda} \lambda^{\sum x_i}) \cdot (1/\prod x_i!)$로 인수분해된다. 따라서 $T(X) = \sum X_i$는 충분통계량이다.
-
-    **의의:** $\lambda$에 관해 $X_1, \ldots, X_n$이 담고 있는 정보가 모두 $\sum X_i$에 집약되어 있다. MLE는 자료에 오직 $T$를 통해서만 의존하며, 추론에 자료 전체가 필요하지 않다. 이것이 Rao-Blackwell 정리를 통한 효율적 추정의 토대이다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **Fisher 정보량.** $\sigma^2$이 알려진 $X \sim N(\mu, \sigma^2)$에 대해 $\mu$에 관한 Fisher 정보량을 계산하라. 이 양이 왜 중요한가?
 
 </div>
@@ -737,30 +731,11 @@ $$
 
     Fisher 정보량은 모수에 관해 표본이 담은 "정보량"을 정량화하고 추정량 분산의 하한을 준다. MLE의 점근이론, 실험설계, 정보기하학에서 쓰인다.
 
-<div class="drillbox" markdown>
-
-**연습문제 6.** <span class="diff hard" title="어려움"></span>
-**MLE의 점근정규성.** 일반적인 결과를 서술하라: $\sqrt n (\hat\theta_{\text{MLE}} - \theta) \xrightarrow{d} N(0, 1/I(\theta))$이며 $I(\theta)$는 관측값 하나당 Fisher 정보량이다. 포아송에 대해 확인하라.
-
-</div>
-
-??? success "풀이"
-    Poisson($\lambda$)에서 $\hat\lambda_{\text{MLE}} = \bar X$이다. 관측값 하나당 Fisher 정보량은 $I(\lambda) = 1/\lambda$이다($\partial \log f/\partial \lambda = X/\lambda - 1$이고 $\mathbb{E}[(X/\lambda - 1)^2] = \mathrm{Var}(X)/\lambda^2 = 1/\lambda$이므로).
-
-    점근분포: $\sqrt n(\bar X - \lambda) \xrightarrow{d} N(0, \lambda)$이며, 이는 $1/I(\lambda) = \lambda$와 일치한다.
-
-    중심극한정리로 직접 확인: $\mathrm{Var}(X_i) = \lambda$인 $\bar X = (1/n)\sum X_i$이므로 중심극한정리에 의해 $\sqrt n(\bar X - \lambda) \to N(0, \lambda)$. ✓
-
-    **일반적 의의:** MLE는 점근적으로 정규분포를 따르며 그 분산은 관측값 하나당 Fisher 정보량의 역수이다. 이로부터 다음을 얻는다:
-
-    - **점근 신뢰구간:** $\hat\theta \pm 1.96/\sqrt{n I(\hat\theta)}$ ($I(\theta)$의 대입추정값으로 $I(\hat\theta)$를 사용).
-    - **점근 효율성:** MLE는 점근적으로 Cramér-Rao 하한을 달성한다.
-
-    이 결과들이 현대 통계학에서 가능도 기반 추론이 중심적 위치를 차지하는 이유이다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **적률법.** 표본에서 $\bar x = 4.2$, $s^2 = 8.4$를 얻었고 자료가 $\text{Gamma}(\text{형상}=k,\ \text{척도}=\theta)$에서 나왔다고 하자. 적률법으로 $k$와 $\theta$를 추정하라. 최대가능도추정과 견주면 어떤 장단점이 있는가?
 
 </div>
@@ -792,9 +767,11 @@ $$
 
     실무에서는 적률법을 **초기값이나 빠른 점검**으로 쓰고 최종 추정은 최대가능도로 하는 조합이 흔하다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 정규모집단에서 $\hat\sigma^2_c = c\sum_i(X_i-\bar X)^2$ 꼴의 추정량을 생각하자. 평균제곱오차를 최소로 하는 $c$를 구하고, $c = 1/(n-1)$(불편)과 $c = 1/n$(최대가능도)과 견주어라.
 
 </div>
@@ -834,9 +811,11 @@ $$
 
     그런데도 실무에서 $n-1$을 쓰는 이유가 있다. 첫째, 불편성이 여러 표본을 결합할 때 좋은 성질을 준다(분산분석에서 제곱평균들을 더하고 나눌 때 편향이 누적되지 않는다). 둘째, 최소 MSE인 $c=1/(n+1)$은 모집단이 정규일 때만 최적이라 일반성이 없다. 셋째, $n$이 크면 셋의 차이가 $O(1/n^2)$로 사라진다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 **MLE의 불변성.** $\hat\theta$가 $\theta$의 MLE이면 임의의 함수 $g$에 대해 $g(\hat\theta)$가 $g(\theta)$의 MLE임을 설명하라. $X_i \sim \text{Bernoulli}(p)$에서 오즈 $p/(1-p)$의 MLE를 구하라. 불편성에도 같은 성질이 있는가?
 
 </div>
@@ -858,9 +837,11 @@ $$
 
     이 대비가 두 성질의 성격을 잘 보여 준다. **불변성은 "어떤 모수화로 문제를 적든 답이 같다"는 뜻**이고, 불편성은 특정 모수화에 묶여 있다. 표준편차의 불편추정량이 분산의 불편추정량의 제곱근이 아니라는 사실도 같은 이야기다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 **일치성과 불편성은 다르다.** (가) 불편이지만 일치가 아닌 추정량, (나) 편향되었지만 일치인 추정량의 예를 각각 들어라.
 
 </div>
@@ -885,9 +866,56 @@ $$
     - **불편성**: $E[\hat\theta_n] = \theta$. 고정된 $n$에서의 성질이며, "평균적으로 맞다"는 뜻이다.
     - **일치성**: $\hat\theta_n \xrightarrow{p} \theta$. $n\to\infty$에서의 성질이며, "자료를 모으면 결국 맞는다"는 뜻이다.
 
-    실무에서 더 중요한 쪽은 **일치성**이다. 일치가 아닌 추정량은 자료를 아무리 모아도 참값에 다가가지 않으므로 쓸 수 없다. 편향은 크기가 작고 $n$과 함께 사라지면 대개 감수할 만하며, 연습문제 8에서 보았듯 일부러 편향을 들여 오차를 줄이기도 한다.
+    실무에서 더 중요한 쪽은 **일치성**이다. 일치가 아닌 추정량은 자료를 아무리 모아도 참값에 다가가지 않으므로 쓸 수 없다. 편향은 크기가 작고 $n$과 함께 사라지면 대개 감수할 만하며, 연습문제 6에서 보았듯 일부러 편향을 들여 오차를 줄이기도 한다.
 
     충분조건 하나를 기억해 두면 편하다. **편향과 분산이 모두 0으로 가면 일치이다**(MSE 수렴이 확률수렴을 함의하므로).
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+**충분통계량.** 조건부분포 $X \mid T$가 $\theta$에 의존하지 않으면 통계량 $T(X)$가 $\theta$에 대해 **충분**하다고 한다. **Fisher-Neyman 인수분해 정리**를 서술하고, 이를 사용하여 $X_i \sim \mathrm{Poisson}(\lambda)$일 때 $\sum X_i$가 $\lambda$에 대해 충분함을 확인하라.
+
+</div>
+
+??? success "풀이"
+    **Fisher-Neyman 인수분해 정리:** $T(X)$가 $\theta$에 대해 충분일 필요충분조건은 결합밀도가 다음과 같이 인수분해되는 것이다.
+
+    $$
+    f(x \mid \theta) = g(T(x), \theta) \cdot h(x)
+    $$
+
+    여기서 $g$는 $T(x)$를 통해서만 $\theta$에 의존하고 $h$는 $\theta$에 의존하지 않는다.
+
+    **포아송의 경우:** $f(x_1, \ldots, x_n \mid \lambda) = \prod_i \frac{e^{-\lambda} \lambda^{x_i}}{x_i!} = e^{-n\lambda} \lambda^{\sum x_i} / \prod_i x_i!$.
+
+    가능도가 $g(\sum x_i, \lambda) \cdot h(x) = (e^{-n\lambda} \lambda^{\sum x_i}) \cdot (1/\prod x_i!)$로 인수분해된다. 따라서 $T(X) = \sum X_i$는 충분통계량이다.
+
+    **의의:** $\lambda$에 관해 $X_1, \ldots, X_n$이 담고 있는 정보가 모두 $\sum X_i$에 집약되어 있다. MLE는 자료에 오직 $T$를 통해서만 의존하며, 추론에 자료 전체가 필요하지 않다. 이것이 Rao-Blackwell 정리를 통한 효율적 추정의 토대이다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+**MLE의 점근정규성.** 일반적인 결과를 서술하라: $\sqrt n (\hat\theta_{\text{MLE}} - \theta) \xrightarrow{d} N(0, 1/I(\theta))$이며 $I(\theta)$는 관측값 하나당 Fisher 정보량이다. 포아송에 대해 확인하라.
+
+</div>
+
+??? success "풀이"
+    Poisson($\lambda$)에서 $\hat\lambda_{\text{MLE}} = \bar X$이다. 관측값 하나당 Fisher 정보량은 $I(\lambda) = 1/\lambda$이다($\partial \log f/\partial \lambda = X/\lambda - 1$이고 $\mathbb{E}[(X/\lambda - 1)^2] = \mathrm{Var}(X)/\lambda^2 = 1/\lambda$이므로).
+
+    점근분포: $\sqrt n(\bar X - \lambda) \xrightarrow{d} N(0, \lambda)$이며, 이는 $1/I(\lambda) = \lambda$와 일치한다.
+
+    중심극한정리로 직접 확인: $\mathrm{Var}(X_i) = \lambda$인 $\bar X = (1/n)\sum X_i$이므로 중심극한정리에 의해 $\sqrt n(\bar X - \lambda) \to N(0, \lambda)$. ✓
+
+    **일반적 의의:** MLE는 점근적으로 정규분포를 따르며 그 분산은 관측값 하나당 Fisher 정보량의 역수이다. 이로부터 다음을 얻는다:
+
+    - **점근 신뢰구간:** $\hat\theta \pm 1.96/\sqrt{n I(\hat\theta)}$ ($I(\theta)$의 대입추정값으로 $I(\hat\theta)$를 사용).
+    - **점근 효율성:** MLE는 점근적으로 Cramér-Rao 하한을 달성한다.
+
+    이 결과들이 현대 통계학에서 가능도 기반 추론이 중심적 위치를 차지하는 이유이다.
 
 ---
 

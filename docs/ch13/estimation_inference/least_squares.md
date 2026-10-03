@@ -311,6 +311,8 @@ $$
     J(\boldsymbol{\theta}) = \frac{1}{2m} \| \mathbf{X}\boldsymbol{\theta} - \mathbf{y} \|^2 = \frac{1}{2m} (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})^\top (\mathbf{X}\boldsymbol{\theta} - \mathbf{y})
     $$
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>

@@ -2,7 +2,9 @@
 
 시각적 방법과 기술통계가 자료 분포에 대한 통찰을 주는 반면, 형식적 통계검정은 정규성을 평가하는 더 엄밀한 방법을 제공한다. 이 검정들은 관측된 자료가 기대되는 정규분포에서 유의하게 벗어나는지 평가하여 판단의 통계적 근거를 제공한다.
 
-## Kolmogorov-Smirnov 검정
+---
+
+## 1. Kolmogorov-Smirnov 검정
 
 **Kolmogorov-Smirnov(K-S) 검정**은 표본자료의 경험적 누적분포함수(ECDF)를 기준분포(여기서는 정규분포)의 누적분포함수(CDF)와 비교하는 비모수 검정이다. 두 분포의 중심위치와 전반적 모양(분산) 양쪽의 차이에 민감하다.
 
@@ -200,7 +202,7 @@ K-S 검정은 분포의 중심위치와 모양의 차이를 탐지하는 데 효
 
 ---
 
-## Kolmogorov-Smirnov 검정과 Lilliefors 검정
+## 2. Kolmogorov-Smirnov 검정과 Lilliefors 검정
 
 SciPy의 `stats.kstest` 함수는 **Kolmogorov-Smirnov(K-S) 검정**을 수행하며 **Lilliefors 검정**이 아니다. 두 검정의 차이는 다음과 같다.
 
@@ -365,7 +367,7 @@ SciPy의 `stats.kstest` 함수는 **Kolmogorov-Smirnov(K-S) 검정**을 수행�
 
 ---
 
-## 어느 검정을 고를 것인가
+## 3. 어느 검정을 고를 것인가
 
 ### `stats.kstest`(Kolmogorov-Smirnov 검정)를 고를 때
 
@@ -386,11 +388,29 @@ SciPy의 `stats.kstest` 함수는 **Kolmogorov-Smirnov(K-S) 검정**을 수행�
 - **일반적인 분포 검정**(예: 모수가 고정된 지수분포나 와이불분포에 자료가 맞는지 확인)에는 **`stats.kstest`**가 낫다.
 - **모수가 미지인 정규성 검정**에는 모수 추정 과정을 반영하여 더 정확하게 평가하는 **`statsmodels`의 `lilliefors`**가 선호된다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff med" title="중간"></span>
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
+관측값 $n = 30$개에 대한 Lilliefors 검정에서 $D_n = 0.14$를 얻었다. $\alpha = 0.05$의 임계값은 $0.161$이다. 결론은 무엇인가?
+
+</div>
+
+??? success "풀이"
+    $D_n = 0.14 < 0.161$이므로 $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. Lilliefors 검정에 따르면 자료가 정규성과 일관된다.
+
+    (참고로 이 임계값은 잘 알려진 근사식 $0.886/\sqrt{n} = 0.886/\sqrt{30} = 0.1618$과 일치한다.)
+
+    다만 $n = 30$이면 검정력이 제한적이다. 특히 가벼운 두꺼운 꼬리 같은 미묘한 대립가설에 대해 그렇다. 기각하지 못했다는 것이 정규성을 증명하지는 않으며, 표본크기가 부족했음을 반영할 뿐일 수 있다. Q-Q 그림을 함께 보면 이탈의 성격과 정도에 대한 추가적인 시각적 증거를 얻을 수 있다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 2.** <span class="diff med" title="중간"></span>
 Kolmogorov-Smirnov 검정과 Lilliefors 검정의 차이를 설명하라. KS 대신 Lilliefors를 반드시 써야 하는 경우는 언제인가?
 
 </div>
@@ -402,9 +422,11 @@ Kolmogorov-Smirnov 검정과 Lilliefors 검정의 차이를 설명하라. KS 대
 
     검정 대상과 같은 자료에서 모수를 추정하는 경우에는 반드시 KS가 아니라 Lilliefors를 써야 한다. 추정된 모수로 KS 임계값을 쓰는 것은 타당하지 않다. 모수를 추정하면 경험적 CDF가 이론적 CDF에 더 가까워지므로(적합이 최적화되므로) KS의 $p$값이 지나치게 커지고(보수적이 되고) 검정력을 잃는다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 KS 검정통계량은 $D_n = \sup_x |F_n(x) - F_0(x)|$이다. 이것이 기하학적으로 무엇을 재는지 설명하라.
 
 </div>
@@ -414,9 +436,11 @@ KS 검정통계량은 $D_n = \sup_x |F_n(x) - F_0(x)|$이다. 이것이 기하�
 
     자료가 $F_0$에서 왔다면 Glivenko-Cantelli 정리에 의해 경험적 CDF가 이론적 CDF를 가깝게 따라가므로 $D_n$이 작아야 한다. $D_n$이 크다는 것은 분포의 어느 지점에서 관측 자료가 이론적 분포의 예측에서 크게 벗어난다는 뜻이다. 어떤 구역에 관측값이 너무 많거나 너무 적다는 것이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 비정규성 탐지에서 KS/Lilliefors 검정이 Shapiro-Wilk나 Anderson-Darling 검정보다 대체로 검정력이 낮은 이유는 무엇인가?
 
 </div>
@@ -429,20 +453,6 @@ KS 검정통계량은 $D_n = \sup_x |F_n(x) - F_0(x)|$이다. 이것이 기하�
     2. **한 점에만 초점:** 상한만 쓰므로 KS는 이탈의 패턴을 무시한다. Shapiro-Wilk 검정은 상관 기반 계산에 모든 순서통계량을 써서 자료에서 더 많은 정보를 뽑아낸다.
 
     KS 검정은 (임의의 분포에 대한) 일반적 적합도 검정으로 설계되었지 정규성 전용이 아니다. Shapiro-Wilk 같은 특화된 검정은 정규분포의 구조를 활용한다.
-
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff easy" title="쉬움"></span>
-관측값 $n = 30$개에 대한 Lilliefors 검정에서 $D_n = 0.14$를 얻었다. $\alpha = 0.05$의 임계값은 $0.161$이다. 결론은 무엇인가?
-
-</div>
-
-??? success "풀이"
-    $D_n = 0.14 < 0.161$이므로 $\alpha = 0.05$에서 $H_0$을 기각하지 못한다. Lilliefors 검정에 따르면 자료가 정규성과 일관된다.
-
-    (참고로 이 임계값은 잘 알려진 근사식 $0.886/\sqrt{n} = 0.886/\sqrt{30} = 0.1618$과 일치한다.)
-
-    다만 $n = 30$이면 검정력이 제한적이다. 특히 가벼운 두꺼운 꼬리 같은 미묘한 대립가설에 대해 그렇다. 기각하지 못했다는 것이 정규성을 증명하지는 않으며, 표본크기가 부족했음을 반영할 뿐일 수 있다. Q-Q 그림을 함께 보면 이탈의 성격과 정도에 대한 추가적인 시각적 증거를 얻을 수 있다.
 
 ---
 

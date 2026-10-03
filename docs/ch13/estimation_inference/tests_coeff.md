@@ -6,7 +6,7 @@
 
 ---
 
-## 준비: 다중선형회귀 모형
+## 1. 준비: 다중선형회귀 모형
 
 행렬 형태의 모형을 생각하자.
 
@@ -29,7 +29,7 @@ $$
 
 ---
 
-## 1. 베타 추정량의 표집분포
+## 2. 베타 추정량의 표집분포
 
 <div class="thmbox" markdown>
 
@@ -85,7 +85,7 @@ $$
 
 ---
 
-## 2. s 제곱의 표집분포
+## 3. s 제곱의 표집분포
 
 <div class="thmbox" markdown>
 
@@ -152,7 +152,7 @@ $$
 
 ---
 
-## 3. 개별 회귀계수의 t 통계량
+## 4. 개별 회귀계수의 t 통계량
 
 <div class="thmbox" markdown>
 
@@ -227,7 +227,7 @@ $$
 
 ---
 
-## 문제: 선형회귀 출력 재현
+## 5. 문제: 선형회귀 출력 재현
 
 <div class="probox" markdown>
 
@@ -343,6 +343,8 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
 
     - [Khan Academy: Using Least-Squares Regression Output](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/least-squares-regression/v/using-least-squares-regression-output)
     - [Khan Academy: Interpreting Computer Regression Data](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/interpreting-computer-regression-data)
+
+---
 
 ## 연습문제
 

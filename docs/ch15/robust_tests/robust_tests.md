@@ -1,7 +1,7 @@
 # 분산 동일성에 대한 로버스트 검정
 
 
-## Levene 검정과 Brown-Forsythe 검정
+## 1. Levene 검정과 Brown-Forsythe 검정
 
 Levene 검정(집단평균 사용)과 Brown-Forsythe 검정(집단중앙값 사용)은 여러 집단에 걸친 분산의 동일성을 평가하는 로버스트한 통계검정이다. 정규성 이탈에 매우 민감한 F 검정과 달리 비정규 자료에 더 로버스트하다. 평균 대신 중앙값을 쓰는 Brown-Forsythe 검정은 자료에 이상점이 있을 때 특히 효과적이다.
 
@@ -158,7 +158,7 @@ $W = 0.2824 < 3.8853$이므로 $H_0$을 기각하지 못한다. 네 검정 모�
 
 ---
 
-## Fligner-Killeen 검정
+## 2. Fligner-Killeen 검정
 
 Fligner-Killeen 검정은 여러 집단의 분산을 비교하는 비모수 검정이다. Brown-Forsythe 검정처럼 집단중앙값으로부터의 절대편차를 산포의 측도로 쓴다. 그러나 원래의 편차를 그대로 쓰는 대신 **순위**로 변환하고, 다시 정규점수로 바꾸어 분석한다.
 
@@ -258,6 +258,7 @@ $$
 \chi^2_{\text{FK}} > \chi^2_{\text{critical}} \quad \Rightarrow \quad H_0 \text{ 기각}
 $$
 
+---
 
 ## 연습문제
 

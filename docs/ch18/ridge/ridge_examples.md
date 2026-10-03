@@ -7,7 +7,9 @@
 가깝거나 그보다 클 때 특히 효과적이다. 이 절에서는 능형 추정량을 유도하고, 편향-분산 절충을
 살펴보며, 조율모수 $\lambda$가 계수 추정치에 미치는 영향을 확인한다.
 
-## 능형 목적함수
+---
+
+## 1. 능형 목적함수
 
 계획행렬 $X \in \mathbb{R}^{n \times p}$와 반응변수 $y \in \mathbb{R}^n$이 주어졌을 때
 능형회귀 문제는
@@ -30,7 +32,9 @@ $$
 를 얻는다. $\lambda = 0$이면 OLS 추정량이 되고, $\lambda \to \infty$이면 모든 계수가 0으로
 축소된다.
 
-## 편향-분산 절충
+---
+
+## 2. 편향-분산 절충
 
 능형회귀는 편향을 감수하는 대신 분산을 줄인다. 능형 추정량의 평균제곱오차(MSE)는
 
@@ -41,7 +45,9 @@ $$
 으로 분해된다. $\lambda$가 작으면 추정량은 거의 불편이지만 분산이 크고(OLS에 가깝다),
 $\lambda$가 크면 분산은 작지만 편향이 크다. 최적의 $\lambda$는 둘의 합인 MSE를 최소화한다.
 
-## 코드: 자료 생성과 능형 적합
+---
+
+## 3. 코드: 자료 생성과 능형 적합
 
 $\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값과의 거리가 어디에서 가장
 작아지는지를 본다.
@@ -58,7 +64,7 @@ $\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** $X = UDV^\top$를 특이값분해라 하면 (연습문제 2에서 유도하듯)
+    **(1) 해석적으로.** $X = UDV^\top$를 특이값분해라 하면 (연습문제 4에서 유도하듯)
 
     $$
     \hat\beta^{\text{ridge}}(\lambda) = \sum_{j=1}^p \frac{d_j}{d_j^2+\lambda}\,(u_j^\top y)\,v_j
@@ -187,7 +193,9 @@ $\lambda$를 키워 가며 계수가 어떻게 줄어드는지, 그리고 참값
 
     여기서 실무적 함정 하나가 보인다. 계수가 작아지는 것은 눈에 잘 띄지만 정확도가 나빠지는 것은 눈에 띄지 않는다. $\lambda = 100$에서 계수의 크기는 $1.091$로 "아주 깔끔하게 정리된" 모형처럼 보이는데, 실제로는 참값에서 $3.026$만큼 떨어져 OLS보다 세 배 나쁘다. **계수가 작다는 것은 좋은 모형의 증거가 아니다.** 어디가 바닥인지는 오직 자료로 추정해야 하며, 그 방법이 교차검증이다.
 
-## 표준화
+---
+
+## 4. 표준화
 
 $L_2$ 벌점은 모든 계수를 동등하게 취급하므로, 적합 전에 설명변수를 표준화해야 한다.
 
@@ -198,7 +206,9 @@ $$
 여기서 $\bar{x}_j$와 $s_j$는 $j$번째 설명변수의 표본평균과 표본표준편차다. 표준화하지 않으면
 벌점이 단위가 큰 변수의 계수를 부당하게 더 많이 축소한다.
 
-## 정칙화 경로
+---
+
+## 5. 정칙화 경로
 
 **정칙화 경로**는 각 계수 $\hat{\beta}_j^{\text{ridge}}$를 $\lambda$(또는
 $\log_{10}\lambda$)의 함수로 그린 그림이다. 주요 관찰 사항은 다음과 같다.
@@ -207,7 +217,9 @@ $\log_{10}\lambda$)의 함수로 그린 그림이다. 주요 관찰 사항은 �
 - $\lambda$가 커짐에 따라 계수는 매끄럽게 0을 향해 축소된다.
 - 중요한 설명변수의 계수는 더 넓은 $\lambda$ 범위에서 큰 값을 유지한다.
 
-## 해석
+---
+
+## 6. 해석
 
 - **능형회귀는 변수선택을 하지 않는다.** $\lambda$와 무관하게 모든 설명변수가 모형에 남는다.
   희소성을 통한 해석 가능성이 필요하면 라쏘나 엘라스틱넷을 고려하라.
@@ -215,6 +227,8 @@ $\log_{10}\lambda$)의 함수로 그린 그림이다. 주요 관찰 사항은 �
   추정치를 안정화한다.
 - **$\lambda$의 선택.** 교차검증(예: 5-겹 또는 10-겹)이 표준적인 방법이다. 교차검증 예측오차를
   최소화하는 $\lambda$를 고른다.
+
+---
 
 ## 연습문제
 
@@ -251,36 +265,11 @@ $\hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y$를 유도�
     \hat{\beta}^{\text{ridge}} = (X^\top X + \lambda I_p)^{-1} X^\top y. \quad \square
     $$
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff hard" title="어려움"></span> $X = U D V^\top$를 특이값분해(SVD)라 할 때, 능형 추정량이
-$\hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}\, \frac{u_j^\top y}{d_j}\, v_j$
-로 표현됨을 보여라.
-
-</div>
-
-??? success "풀이"
-
-    $X = U D V^\top$이고 $D = \text{diag}(d_1, \dots, d_p)$라 하자. 그러면
-    $X^\top X = V D^2 V^\top$, $X^\top y = V D U^\top y$이므로
-
-    $$
-    \hat{\beta}^{\text{ridge}} = (V D^2 V^\top + \lambda I)^{-1} V D U^\top y = V (D^2 + \lambda I)^{-1} D U^\top y
-    $$
-
-    이다. 성분으로 쓰면 $V^\top \hat{\beta}^{\text{ridge}}$의 $j$번째 원소가
-    $\frac{d_j}{d_j^2 + \lambda} u_j^\top y$이므로
-
-    $$
-    \hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda} \cdot \frac{u_j^\top y}{d_j} \cdot v_j
-    $$
-
-    를 얻는다. 인자 $d_j^2 / (d_j^2 + \lambda) \in [0, 1)$은 특이값이 작은 방향을 더 강하게
-    축소한다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span> $X^\top X = I_p$(정규직교 계획)라 하자. $\hat{\beta}_j^{\text{ridge}}$를
+**연습문제 2.** <span class="diff med" title="중간"></span> $X^\top X = I_p$(정규직교 계획)라 하자. $\hat{\beta}_j^{\text{ridge}}$를
 $\hat{\beta}_j^{\text{OLS}}$와 $\lambda$로 표현하라.
 
 </div>
@@ -297,9 +286,11 @@ $\hat{\beta}_j^{\text{OLS}}$와 $\lambda$로 표현하라.
     이 된다. 즉 모든 계수가 $1/(1 + \lambda)$배로 균일하게 축소된다. 이는 능형회귀가 비례
     축소를 수행함을 확인해 준다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span> 다중공선성이 있는 인공자료($n = 200$, $p = 10$)에 대해 5-겹 교차검증으로
+**연습문제 3.** <span class="diff med" title="중간"></span> 다중공선성이 있는 인공자료($n = 200$, $p = 10$)에 대해 5-겹 교차검증으로
 격자 $\lambda \in \{10^{-3}, 10^{-2}, \dots, 10^{3}\}$에서 최적 $\lambda$를 찾아라. 최적
 $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
 
@@ -365,6 +356,37 @@ $\lambda$의 교차검증 RMSE를 보고하고 OLS의 RMSE와 비교하라.
     $\lambda$의 위치는 자료에 따라 다르며, 여기서는 $n = 200$이 $p = 10$에 비해 충분히
     커서 OLS 자체가 이미 안정적이므로 개선폭이 작다. 개선폭은 $p/n$이 커질수록 뚜렷해진다.
     $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff hard" title="어려움"></span> $X = U D V^\top$를 특이값분해(SVD)라 할 때, 능형 추정량이
+$\hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda}\, \frac{u_j^\top y}{d_j}\, v_j$
+로 표현됨을 보여라.
+
+</div>
+
+??? success "풀이"
+
+    $X = U D V^\top$이고 $D = \text{diag}(d_1, \dots, d_p)$라 하자. 그러면
+    $X^\top X = V D^2 V^\top$, $X^\top y = V D U^\top y$이므로
+
+    $$
+    \hat{\beta}^{\text{ridge}} = (V D^2 V^\top + \lambda I)^{-1} V D U^\top y = V (D^2 + \lambda I)^{-1} D U^\top y
+    $$
+
+    이다. 성분으로 쓰면 $V^\top \hat{\beta}^{\text{ridge}}$의 $j$번째 원소가
+    $\frac{d_j}{d_j^2 + \lambda} u_j^\top y$이므로
+
+    $$
+    \hat{\beta}^{\text{ridge}} = \sum_{j=1}^{p} \frac{d_j^2}{d_j^2 + \lambda} \cdot \frac{u_j^\top y}{d_j} \cdot v_j
+    $$
+
+    를 얻는다. 인자 $d_j^2 / (d_j^2 + \lambda) \in [0, 1)$은 특이값이 작은 방향을 더 강하게
+    축소한다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

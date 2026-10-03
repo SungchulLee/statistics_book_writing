@@ -18,7 +18,9 @@ $$
 
 대칭행렬은 대각과 그 위쪽 성분만으로 결정된다. $n^2$개의 성분 중 $n(n+1)/2$개만 자유롭다.
 
-## 스펙트럼 정리
+---
+
+## 1. 스펙트럼 정리
 
 스펙트럼 정리는 대칭행렬에 관한 가장 중요한 결과다.
 
@@ -74,7 +76,7 @@ $$
 
     이므로 $\mathbf{A}\mathbf{w} \in \mathcal{W}$이기 때문이다. $\mathcal{W}$의 정규직교기저를 열로 갖는 $n \times (n-1)$ 행렬을 $\mathbf{W}$라 하면($\mathbf{W}^\top\mathbf{W} = \mathbf{I}_{n-1}$), $\mathcal{W}$ 위에서의 $\mathbf{A}$의 표현 $\mathbf{A}' = \mathbf{W}^\top\mathbf{A}\mathbf{W}$는 $(n-1) \times (n-1)$ 대칭행렬이다($\mathbf{A}'^\top = \mathbf{W}^\top\mathbf{A}^\top\mathbf{W} = \mathbf{A}'$). 귀납가정에 의해 $\mathbf{A}'$은 정규직교 고유기저를 갖는다. $\mathbf{A}'\mathbf{v} = \mu\mathbf{v}$이면 $\mathbf{q} = \mathbf{W}\mathbf{v}$가 $\mathbf{A}$의 고유벡터가 되는데, 불변성에 의해 $\mathbf{A}\mathbf{q} \in \mathcal{W}$이므로 $\mathbf{A}\mathbf{q} = \mathbf{W}\mathbf{W}^\top\mathbf{A}\mathbf{W}\mathbf{v} = \mathbf{W}(\mu\mathbf{v}) = \mu\mathbf{q}$이기 때문이다. $\mathbf{W}$가 정규직교이므로 이렇게 얻은 $\mathbf{q}_2, \dots, \mathbf{q}_n$도 정규직교다. $\mathbf{q}_1$은 $\mathcal{W}$에 직교하므로 이들 모두와 직교하고, 따라서 $\mathbf{Q} = (\mathbf{q}_1 \mid \cdots \mid \mathbf{q}_n)$이 직교행렬이며 $\mathbf{A}\mathbf{Q} = \mathbf{Q}\boldsymbol{\Lambda}$, 곧 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$이다. $\square$
 
-    귀납법 대신 이렇게 정리해도 된다. 서로 다른 고윳값의 고유공간들은 (2)에 의해 서로 직교하므로, 각 고유공간 안에서 그람–슈미트를 돌려 정규직교기저를 얻고 그것들을 이어 붙이면 $\mathbf{Q}$가 된다(연습문제 6). 다만 이 방식은 각 고유공간의 차원이 고윳값의 대수적 중복도와 같다는 사실 — 곧 대칭행렬이 대각화 가능하다는 사실 — 을 따로 확보해야 하므로, 위 귀납법이 더 자족적이다.
+    귀납법 대신 이렇게 정리해도 된다. 서로 다른 고윳값의 고유공간들은 (2)에 의해 서로 직교하므로, 각 고유공간 안에서 그람–슈미트를 돌려 정규직교기저를 얻고 그것들을 이어 붙이면 $\mathbf{Q}$가 된다(연습문제 4). 다만 이 방식은 각 고유공간의 차원이 고윳값의 대수적 중복도와 같다는 사실 — 곧 대칭행렬이 대각화 가능하다는 사실 — 을 따로 확보해야 하므로, 위 귀납법이 더 자족적이다.
 
 !!! note "직교성이 결론의 일부다"
     "대칭이면 대각화 가능하다"는 것만으로는 스펙트럼 정리를 다 말한 것이 아니다. 대각화 가능성은 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$인 가역 $\mathbf{P}$의 존재만 주장하지만, 스펙트럼 정리는 그 $\mathbf{P}$를 **직교행렬**로 잡을 수 있다고 말한다. 뒤에서 쓰는 것은 거의 전부 이 직교성이다. $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이므로 역행렬을 계산할 필요가 없고, $\mathbf{z} = \mathbf{Q}^\top\mathbf{x}$가 길이와 각을 보존하므로 $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$가 유지되며(0.4절의 이차형식과 카이제곱분포), 주성분들이 무상관이 된다.
@@ -93,7 +95,9 @@ $$
 
 이 직각 하나가 이후의 거의 모든 편의를 낳는다. 고유벡터를 열로 세운 $\mathbf{Q}$가 직교행렬이 되므로 $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이고, 좌표변환 $\mathbf{z} = \mathbf{Q}^\top\mathbf{x}$가 길이와 각을 보존하는 회전이 되며, 그래서 주성분들이 서로 무상관이 된다. 오른쪽 그림의 비스듬한 기저에서는 이 셋을 모두 잃는다.
 
-## 외적 형태
+---
+
+## 2. 외적 형태
 
 스펙트럼 분해를 열 단위로 쓰면 **외적 형태**를 얻는다.
 
@@ -103,7 +107,9 @@ $$
 
 각 $\mathbf{q}_i \mathbf{q}_i^\top$는 $\mathbf{q}_i$ 위로의 계수 1인 직교사영자다. 대칭행렬은 고윳값으로 가중된 1차원 조각들로 지어진다. 주성분분석에서 공분산행렬을 주성분들의 합으로 제시하는 것과 같은 발상이다.
 
-## 성질
+---
+
+## 3. 성질
 
 ### 직교대각화
 
@@ -139,7 +145,9 @@ $$
 
 회전된 독립 좌표들의 가중 제곱합이며, 정규벡터 이차형식의 카이제곱분포로 건너가는 다리다.
 
-## 예
+---
+
+## 4. 예
 
 $$
 \boldsymbol{\Sigma} = \begin{pmatrix} 5 & 2 \\ 2 & 2 \end{pmatrix}
@@ -157,7 +165,9 @@ $$
 
 검산: $\operatorname{tr}(\boldsymbol{\Sigma}) = 7 = 6 + 1$이고 $\det(\boldsymbol{\Sigma}) = 6 = 6 \cdot 1$이다. 총분산은 7이고, 그중 6단위가 첫 번째 주축을 따라, 1단위가 두 번째 주축을 따라 몰려 있다.
 
-## 통계와의 연결
+---
+
+## 5. 통계와의 연결
 
 ### 공분산행렬
 
@@ -170,6 +180,8 @@ $\mathbf{X}^\top \mathbf{X}$는 대칭이다. 그 고윳값이 최소제곱해�
 ### 신뢰타원체
 
 $\boldsymbol{\beta} \sim N(\hat{\boldsymbol{\beta}}, \boldsymbol{\Sigma})$일 때 수준집합 $\{\boldsymbol{\beta} : (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}})^\top \boldsymbol{\Sigma}^{-1} (\boldsymbol{\beta} - \hat{\boldsymbol{\beta}}) \le c\}$은 타원체이며, 그 축은 $\boldsymbol{\Sigma}$의 고유벡터 방향을 향하고 길이는 $\sqrt{\lambda_i}$에 비례한다.
+
+---
 
 ## 연습문제
 
@@ -190,6 +202,8 @@ $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$의 고윳값, 고유
     \mathbf{A} = \frac{1}{2}\begin{pmatrix} 1 & 1 \\ -1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 3 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ 1 & 1 \end{pmatrix}
     $$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
@@ -204,6 +218,8 @@ $\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$의 고윳값, 고유
     - $\mathbf{A} = \mathbf{A}^\top$를 써서 $(\mathbf{A}\mathbf{u})^\top \mathbf{v} = (\alpha\mathbf{u})^\top\mathbf{v} = \alpha\, \mathbf{u}^\top\mathbf{v}$로 계산.
 
     따라서 $\alpha\, \mathbf{u}^\top\mathbf{v} = \beta\, \mathbf{u}^\top\mathbf{v}$, 즉 $(\alpha - \beta)\mathbf{u}^\top\mathbf{v} = 0$이다. $\alpha \ne \beta$이므로 $\mathbf{u}^\top\mathbf{v} = 0$이다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -221,57 +237,11 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
 
     이다. $\mathbf{A}$가 멱등일 필요충분조건은 $\mathbf{A}^2 = \mathbf{A}$, 즉 모든 $i$에 대해 $\lambda_i^2 = \lambda_i$인 것이다. 동등하게 $\lambda_i \in \{0, 1\}$이다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff hard" title="어려움"></span>
-**레일리 몫.** $\mathbf{A}$가 최소·최대 고윳값이 $\lambda_\min, \lambda_\max$인 대칭행렬이라 하자. 모든 0이 아닌 $\mathbf{x} \in \mathbb{R}^n$에 대해
-
-$$
-\lambda_\min \le \frac{\mathbf{x}^\top\mathbf{A}\mathbf{x}}{\mathbf{x}^\top\mathbf{x}} \le \lambda_\max
-$$
-
-임을 증명하라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{x}$를 고유기저로 전개한다: $c_i = \mathbf{q}_i^\top \mathbf{x}$에 대해 $\mathbf{x} = \sum_i c_i \mathbf{q}_i$. 정규직교성을 쓰면
-
-    $$
-    \mathbf{x}^\top\mathbf{A}\mathbf{x} = \sum_i \lambda_i c_i^2, \qquad \mathbf{x}^\top\mathbf{x} = \sum_i c_i^2
-    $$
-
-    이다. 따라서 레일리 몫은 가중치 $c_i^2 / \sum_j c_j^2$를 갖는 고윳값들의 볼록결합이다. 수들의 볼록결합은 언제나 그 최솟값과 최댓값 사이에 있다.
-
-    $$
-    \lambda_\min = \lambda_\min \sum_i \frac{c_i^2}{\sum_j c_j^2} \le \sum_i \lambda_i \frac{c_i^2}{\sum_j c_j^2} \le \lambda_\max
-    $$
-
-    $\lambda_\min$에서 등호는 $\mathbf{x}$가 $\lambda_\min$의 고유벡터일 때 성립하고 $\lambda_\max$도 마찬가지다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff hard" title="어려움"></span>
-모든 대칭 양반정치행렬 $\mathbf{A}$가 $\mathbf{A}^{1/2} \mathbf{A}^{1/2} = \mathbf{A}$를 만족하는 유일한 대칭 양반정치 제곱근 $\mathbf{A}^{1/2}$을 가짐을 보여라.
-
-</div>
-
-??? success "풀이"
-    **존재성:** $\lambda_i \ge 0$인 스펙트럼 분해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$로부터
-
-    $$
-    \mathbf{A}^{1/2} := \mathbf{Q}\operatorname{diag}(\sqrt{\lambda_1}, \dots, \sqrt{\lambda_n})\mathbf{Q}^\top
-    $$
-
-    로 정의한다. 이것은 대칭이고(대칭 조각들의 곱 $\mathbf{Q}\mathbf{D}\mathbf{Q}^\top$) 양반정치다($\sqrt{\lambda_i} \ge 0$). 직접 확인하면 $\mathbf{A}^{1/2}\mathbf{A}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top = \mathbf{A}$이다.
-
-    **유일성:** $\mathbf{B}$가 $\mathbf{B}^2 = \mathbf{A}$인 대칭 양반정치행렬이라 하자. $\mu_i \ge 0$인 $\mathbf{M} = \operatorname{diag}(\mu_i)$로 $\mathbf{B} = \mathbf{Q}'\mathbf{M}\mathbf{Q}'^\top$와 같이 대각화한다. 그러면 $\mathbf{B}^2 = \mathbf{Q}'\mathbf{M}^2 \mathbf{Q}'^\top = \mathbf{A}$이므로 $\mathbf{B}$는 $\mu_i^2 = \lambda_i$인 고윳값과 $\mathbf{A}$의 고유벡터를 공유한다. $\mu_i \ge 0$이므로 $\mu_i = \sqrt{\lambda_i}$가 강제되어 위 공식이 복원된다. $\square$
-
-    통계적 쓰임: **마할라노비스 백색화 변환** $\mathbf{Z} = \boldsymbol{\Sigma}^{-1/2}(\mathbf{X} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1/2}$이 존재할 때 공분산이 단위행렬인 벡터를 만들어낸다.
-
-<div class="drillbox" markdown>
-
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 대칭이 아니면서도 대각화 가능한 행렬의 예를 하나 들어라(즉 대칭성은 대각화 가능성의 충분조건이지 필요조건은 아니다). 그리고 *중복* 고윳값의 고유벡터에 그람–슈미트를 적용해 명시적인 정규직교기저를 얻는 대칭행렬의 예도 하나 들어라.
 
 </div>
@@ -295,9 +265,11 @@ $$
 
     고윳값 $2$는 중복도가 2이고 고유공간은 $\operatorname{span}\{(1,0,0)^\top, (0,1,1)^\top\}$이다. 이 두 벡터는 이미 직교하므로(그람–슈미트가 필요 없다) 정규화하면 정규직교기저를 얻는다. 세 번째 고유벡터와 함께 쌓으면 스펙트럼 정리가 약속한 직교행렬 $\mathbf{Q}$가 만들어진다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 임의의 정사각행렬 $\mathbf{A}$는 대칭부분과 반대칭부분의 합으로 유일하게 분해된다. 이차형식 $\mathbf{x}^\top\mathbf{A}\mathbf{x}$가 **대칭부분에만** 의존함을 보여라.
 
 </div>
@@ -342,54 +314,11 @@ $$
 
     **왜 중요한가.** 이차형식으로 나타나는 양(분산, 마할라노비스 거리, 제곱합)을 다룰 때 **행렬을 대칭으로 가정해도 일반성을 잃지 않는다.** 비대칭 부분은 어차피 보이지 않기 때문이다. 통계 문헌이 이차형식의 행렬을 늘 대칭으로 두는 이유다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 8.** <span class="diff hard" title="어려움"></span>
-공분산행렬 $\boldsymbol{\Sigma}$에 대해 $\max_{\lVert\mathbf{v}\rVert=1}\operatorname{Var}(\mathbf{v}^\top\mathbf{X}) = \lambda_{\max}$이고 최댓값을 주는 방향이 대응하는 고유벡터임을 확인하라. 이것이 주성분분석과 어떻게 연결되는가?
-
-</div>
-
-??? success "풀이"
-    $\operatorname{Var}(\mathbf{v}^\top\mathbf{X}) = \mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v}$이므로 이는 레일리 몫(연습문제 4)의 최대화 문제이고, 최댓값은 $\lambda_{\max}$, 최대점은 그 고유벡터다.
-
-    ```python
-    import numpy as np
-
-    Sigma = np.array([[4., 2., 0.],
-                      [2., 3., 1.],
-                      [0., 1., 2.]])
-    lam, Q = np.linalg.eigh(Sigma)
-
-    rng = np.random.default_rng(0)
-    best, arg = -np.inf, None
-    for _ in range(200_000):                      # 단위구에서 무작위 탐색
-        v = rng.normal(size=3)
-        v /= np.linalg.norm(v)
-        val = v @ Sigma @ v
-        if val > best:
-            best, arg = val, v
-
-    print(f"무작위 탐색 최댓값: {best:.6f}")
-    print(f"lambda_max        : {lam.max():.6f}")
-    print("최대 고유벡터와의 |내적|:",
-          round(abs(arg @ Q[:, np.argmax(lam)]), 4), "(1 에 가까울수록 같은 방향)")
-    ```
-
-    출력:
-
-    ```
-    무작위 탐색 최댓값: 5.668956
-    lambda_max        : 5.669079
-    최대 고유벡터와의 |내적|: 1.0 (1 에 가까울수록 같은 방향)
-    ```
-
-    무작위 탐색으로 얻은 최댓값이 $\lambda_{\max}$에 거의 닿고, 그 방향이 최대 고유벡터와 거의 평행하다.
-
-    **PCA와의 연결.** 제1주성분은 정확히 "분산을 최대로 하는 단위 방향"으로 정의된다. 스펙트럼 정리가 그 답이 $\lambda_{\max}$의 고유벡터임을 알려 준다. 제2주성분은 첫 방향과 직교하는 것들 중 분산을 최대로 하는 방향이고, 그 답은 두 번째 고유벡터다. **주성분 전체가 스펙트럼 분해에서 한꺼번에 나온다.** $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 대칭행렬 $\mathbf{A}$에 대해 $\lVert\mathbf{A}\rVert_F^2 = \sum_i \lambda_i^2$이고 스펙트럼 노름이 $\max_i|\lambda_i|$임을 보여라.
 
 </div>
@@ -427,6 +356,107 @@ $$
     ```
 
     두 노름은 서로 다른 것을 잰다. 프로베니우스 노름은 **모든** 고윳값을 합치고, 스펙트럼 노름은 **가장 큰 하나만** 본다. 공분산행렬이라면 전자는 총분산에 대응하고 후자는 제1주성분의 분산에 대응한다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
+**레일리 몫.** $\mathbf{A}$가 최소·최대 고윳값이 $\lambda_\min, \lambda_\max$인 대칭행렬이라 하자. 모든 0이 아닌 $\mathbf{x} \in \mathbb{R}^n$에 대해
+
+$$
+\lambda_\min \le \frac{\mathbf{x}^\top\mathbf{A}\mathbf{x}}{\mathbf{x}^\top\mathbf{x}} \le \lambda_\max
+$$
+
+임을 증명하라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{x}$를 고유기저로 전개한다: $c_i = \mathbf{q}_i^\top \mathbf{x}$에 대해 $\mathbf{x} = \sum_i c_i \mathbf{q}_i$. 정규직교성을 쓰면
+
+    $$
+    \mathbf{x}^\top\mathbf{A}\mathbf{x} = \sum_i \lambda_i c_i^2, \qquad \mathbf{x}^\top\mathbf{x} = \sum_i c_i^2
+    $$
+
+    이다. 따라서 레일리 몫은 가중치 $c_i^2 / \sum_j c_j^2$를 갖는 고윳값들의 볼록결합이다. 수들의 볼록결합은 언제나 그 최솟값과 최댓값 사이에 있다.
+
+    $$
+    \lambda_\min = \lambda_\min \sum_i \frac{c_i^2}{\sum_j c_j^2} \le \sum_i \lambda_i \frac{c_i^2}{\sum_j c_j^2} \le \lambda_\max
+    $$
+
+    $\lambda_\min$에서 등호는 $\mathbf{x}$가 $\lambda_\min$의 고유벡터일 때 성립하고 $\lambda_\max$도 마찬가지다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+모든 대칭 양반정치행렬 $\mathbf{A}$가 $\mathbf{A}^{1/2} \mathbf{A}^{1/2} = \mathbf{A}$를 만족하는 유일한 대칭 양반정치 제곱근 $\mathbf{A}^{1/2}$을 가짐을 보여라.
+
+</div>
+
+??? success "풀이"
+    **존재성:** $\lambda_i \ge 0$인 스펙트럼 분해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$로부터
+
+    $$
+    \mathbf{A}^{1/2} := \mathbf{Q}\operatorname{diag}(\sqrt{\lambda_1}, \dots, \sqrt{\lambda_n})\mathbf{Q}^\top
+    $$
+
+    로 정의한다. 이것은 대칭이고(대칭 조각들의 곱 $\mathbf{Q}\mathbf{D}\mathbf{Q}^\top$) 양반정치다($\sqrt{\lambda_i} \ge 0$). 직접 확인하면 $\mathbf{A}^{1/2}\mathbf{A}^{1/2} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top = \mathbf{A}$이다.
+
+    **유일성:** $\mathbf{B}$가 $\mathbf{B}^2 = \mathbf{A}$인 대칭 양반정치행렬이라 하자. $\mu_i \ge 0$인 $\mathbf{M} = \operatorname{diag}(\mu_i)$로 $\mathbf{B} = \mathbf{Q}'\mathbf{M}\mathbf{Q}'^\top$와 같이 대각화한다. 그러면 $\mathbf{B}^2 = \mathbf{Q}'\mathbf{M}^2 \mathbf{Q}'^\top = \mathbf{A}$이므로 $\mathbf{B}$는 $\mu_i^2 = \lambda_i$인 고윳값과 $\mathbf{A}$의 고유벡터를 공유한다. $\mu_i \ge 0$이므로 $\mu_i = \sqrt{\lambda_i}$가 강제되어 위 공식이 복원된다. $\square$
+
+    통계적 쓰임: **마할라노비스 백색화 변환** $\mathbf{Z} = \boldsymbol{\Sigma}^{-1/2}(\mathbf{X} - \boldsymbol{\mu})$는 $\boldsymbol{\Sigma}^{-1/2}$이 존재할 때 공분산이 단위행렬인 벡터를 만들어낸다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+공분산행렬 $\boldsymbol{\Sigma}$에 대해 $\max_{\lVert\mathbf{v}\rVert=1}\operatorname{Var}(\mathbf{v}^\top\mathbf{X}) = \lambda_{\max}$이고 최댓값을 주는 방향이 대응하는 고유벡터임을 확인하라. 이것이 주성분분석과 어떻게 연결되는가?
+
+</div>
+
+??? success "풀이"
+    $\operatorname{Var}(\mathbf{v}^\top\mathbf{X}) = \mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v}$이므로 이는 레일리 몫(연습문제 7)의 최대화 문제이고, 최댓값은 $\lambda_{\max}$, 최대점은 그 고유벡터다.
+
+    ```python
+    import numpy as np
+
+    Sigma = np.array([[4., 2., 0.],
+                      [2., 3., 1.],
+                      [0., 1., 2.]])
+    lam, Q = np.linalg.eigh(Sigma)
+
+    rng = np.random.default_rng(0)
+    best, arg = -np.inf, None
+    for _ in range(200_000):                      # 단위구에서 무작위 탐색
+        v = rng.normal(size=3)
+        v /= np.linalg.norm(v)
+        val = v @ Sigma @ v
+        if val > best:
+            best, arg = val, v
+
+    print(f"무작위 탐색 최댓값: {best:.6f}")
+    print(f"lambda_max        : {lam.max():.6f}")
+    print("최대 고유벡터와의 |내적|:",
+          round(abs(arg @ Q[:, np.argmax(lam)]), 4), "(1 에 가까울수록 같은 방향)")
+    ```
+
+    출력:
+
+    ```
+    무작위 탐색 최댓값: 5.668956
+    lambda_max        : 5.669079
+    최대 고유벡터와의 |내적|: 1.0 (1 에 가까울수록 같은 방향)
+    ```
+
+    무작위 탐색으로 얻은 최댓값이 $\lambda_{\max}$에 거의 닿고, 그 방향이 최대 고유벡터와 거의 평행하다.
+
+    **PCA와의 연결.** 제1주성분은 정확히 "분산을 최대로 하는 단위 방향"으로 정의된다. 스펙트럼 정리가 그 답이 $\lambda_{\max}$의 고유벡터임을 알려 준다. 제2주성분은 첫 방향과 직교하는 것들 중 분산을 최대로 하는 방향이고, 그 답은 두 번째 고유벡터다. **주성분 전체가 스펙트럼 분해에서 한꺼번에 나온다.** $\square$
+
+---
 
 <div class="drillbox" markdown>
 

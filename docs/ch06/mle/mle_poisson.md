@@ -1,10 +1,12 @@
 # 포아송분포의 MLE
 
-## 동기
+## 1. 동기
 
 포아송분포는 계수 자료의 표준 모형이다. 시간당 받는 이메일 수, 제품 하나당 결함 수, 교차로에서 연간 발생하는 사고 수 등이 그렇다. 관측된 계수로부터 비율 모수 $\lambda$를 추정하는 것은 가장 흔한 통계 작업 중 하나이다. 포아송의 MLE는 표본평균으로 밝혀지며, 모든 불편추정량 중에서 가능한 최선의 정밀도를 달성한다.
 
-## 설정
+---
+
+## 2. 설정
 
 비율 모수가 $\lambda > 0$인 포아송분포에서 독립적으로 뽑은 확률표본 $X_1, X_2, \ldots, X_n$을 생각하자. 각 관측값은 다음 확률질량함수를 가지고 $\{0, 1, 2, \ldots\}$의 값을 취한다:
 
@@ -14,7 +16,9 @@ $$
 
 목표는 관측된 계수를 가장 그럴듯하게 만드는 $\lambda$ 값을 찾는 것이다.
 
-## 유도
+---
+
+## 3. 유도
 
 관측값이 독립이므로 결합 PMF는 개별 질량함수의 곱이다. 로그를 취하면 로그가능도를 얻는다:
 
@@ -61,7 +65,9 @@ $$
 
 오른쪽 로그가능도의 봉우리가 그 $\bar x$에 있다. 점선은 꼭대기에서 $1.92$만큼 내려온 높이인데, 곡선이 그 위에 머무는 구간이 **가능도비 방식의 95% 신뢰구간**이다($\chi^2_1$의 95% 분위수 $3.84$의 절반이 $1.92$다). 정규근사로 $\hat\lambda \pm 1.96\sqrt{\hat\lambda/n}$을 쓰면 거의 같은 구간이 나오지만, 가능도비 쪽은 $\lambda$가 작아 분포가 치우칠 때도 좌우 폭을 다르게 잡아 준다.
 
-## 성질
+---
+
+## 4. 성질
 
 MLE를 구했으니 이제 그 통계적 특성을 살펴보자. 불편인지, 얼마나 정밀한지, 다른 불편추정량이 더 나을 수 있는지를 본다.
 
@@ -83,33 +89,13 @@ $$
 
 $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계를 정확히 달성한다. $\lambda$의 어떤 불편추정량도 이보다 작은 분산을 가질 수 없으며, 따라서 $\bar{X}$는 포아송 비율에 대한 일률최소분산불편추정량(UMVUE)이다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff med" title="중간"></span>
-확률표본 $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$에 대해 $\lambda$의 MLE를 유도하라.
-
-</div>
-
-??? success "풀이"
-    로그가능도는:
-
-    $$
-    \ell(\lambda) = \sum_{i=1}^n \bigl(x_i \log\lambda - \lambda - \log(x_i!)\bigr) = \left(\sum x_i\right)\log\lambda - n\lambda - \sum\log(x_i!)
-    $$
-
-    도함수를 0으로 두면:
-
-    $$
-    \frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0 \implies \hat{\lambda} = \frac{\sum x_i}{n} = \bar{X}
-    $$
-
-    2계도함수가 ($\sum x_i > 0$일 때) $-\sum x_i / \lambda^2 < 0$이므로 최댓값임이 확인된다.
-
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff easy" title="쉬움"></span>
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 어떤 병원 응급실이 24시간 동안 시간당 도착 환자 수를 기록했고 총합이 168명이다. 시간당 도착률 $\lambda$의 MLE를 구하고 근사적인 95% 신뢰구간을 구성하라.
 
 </div>
@@ -135,6 +121,32 @@ $\text{Var}(\bar{X}) = \text{Var}(X_1)/n = \lambda/n$이므로 MLE가 이 한계
     7.0 \pm 1.96 \times 0.5401 = 7.0 \pm 1.059 = (5.94, 8.06)
     $$
 
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 2.** <span class="diff med" title="중간"></span>
+확률표본 $X_1, \dots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$에 대해 $\lambda$의 MLE를 유도하라.
+
+</div>
+
+??? success "풀이"
+    로그가능도는:
+
+    $$
+    \ell(\lambda) = \sum_{i=1}^n \bigl(x_i \log\lambda - \lambda - \log(x_i!)\bigr) = \left(\sum x_i\right)\log\lambda - n\lambda - \sum\log(x_i!)
+    $$
+
+    도함수를 0으로 두면:
+
+    $$
+    \frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0 \implies \hat{\lambda} = \frac{\sum x_i}{n} = \bar{X}
+    $$
+
+    2계도함수가 ($\sum x_i > 0$일 때) $-\sum x_i / \lambda^2 < 0$이므로 최댓값임이 확인된다.
+
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
@@ -159,23 +171,11 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
     이는 정확히 Cramér-Rao 하한 $1/(nI(\lambda)) = \lambda/n$이므로 $\hat{\lambda} = \bar{X}$는 $\lambda$에 대한 UMVUE(일률최소분산불편추정량)이다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff hard" title="어려움"></span>
-포아송의 MLE $\hat{\lambda} = \bar{X}$는 (척도를 제외하면) 충분통계량이기도 하다. Rao-Blackwell 정리를 사용하여 다른 어떤 불편추정량도 더 작은 분산을 가질 수 없는 이유를 설명하라.
-
-</div>
-
-??? success "풀이"
-    (인수분해 정리에 의해) $\lambda$에 대한 충분통계량은 $T = \sum X_i$이다. MLE $\hat{\lambda} = T/n$은 이미 $T$의 함수이다.
-
-    Rao-Blackwell 정리에 의해 $T$로 조건화한 임의의 불편추정량은 원래보다 분산이 크지 않다. $\hat{\lambda}$가 이미 $T$의 함수이므로, 다른 어떤 불편추정량을 $T$로 조건화해도 $\hat{\lambda}$보다 나아질 수 없다.
-
-    나아가 포아송 족은 완비 지수족이므로 Lehmann-Scheffé 정리가 $\hat{\lambda} = T/n$이 유일한 UMVUE임을 보장한다. 그 분산 $\lambda/n$이 Cramér-Rao 하한과 같으므로 (선형추정량뿐 아니라) 어떤 불편추정량도 이보다 나을 수 없음이 확인된다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 관측 단위마다 **노출량**이 다른 경우를 생각하자. 지역 $i$의 인구가 $t_i$이고 사건 수가 $X_i \sim \text{Poisson}(\lambda t_i)$일 때 $\lambda$의 MLE를 구하라. 각 지역의 비율 $X_i/t_i$를 단순평균한 것과 어떻게 다른가?
 
 </div>
@@ -213,9 +213,11 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
     **일반화.** 이 구조가 **포아송 회귀의 오프셋**이다. $\ln E[X_i] = \ln t_i + \mathbf{x}_i^\top\boldsymbol\beta$로 두면 $\ln t_i$가 계수 1로 고정된 항(오프셋)이 되고, 모형이 계수(count)가 아니라 비율(rate)을 설명하게 된다. 관찰 기간, 인구, 노출 면적이 다른 자료에서 반드시 필요한 장치다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 0을 관측할 수 없는 자료(예: 병원에 온 환자만 기록하므로 방문 횟수가 1 이상)의 분포는 **영절단 포아송**이다. 그 PMF를 쓰고 MLE 방정식을 유도하라. $\bar x = 2.5$일 때 $\hat\lambda$를 어림하라.
 
 </div>
@@ -261,9 +263,11 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
     같은 발상이 절단 정규분포, 절단 회귀(토빗 모형), 길이편향 표집 보정에 쓰인다. **표본이 어떻게 관측되었는지가 가능도에 반영되어야 한다**는 것이 요점이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 지역 A에서 10년간 45건, 지역 B에서 10년간 30건의 사고가 났다. 두 지역의 사고율이 같은지 우도비 검정으로 판정하라. 조건부 이항검정과 견주어라.
 
 </div>
@@ -291,9 +295,11 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
     **어느 쪽을 쓸 것인가.** 사건 수가 충분히 많으면(각각 10건 이상) 둘이 가까워지므로 계산이 편한 쪽을 쓴다. 사건 수가 적으면 **정확검정**이 안전하다. 조건부 접근의 또 다른 장점은 성가신 모수(전체 사건률)가 조건화로 사라진다는 점이며, 노출 기간이 달라도 $t_A/(t_A+t_B)$를 성공확률로 두면 그대로 통한다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 계수 자료에 포아송 MLE를 적합한 뒤 가정을 점검하려 한다. **이탈도**와 **피어슨 카이제곱**을 정의하고, 과대산포를 어떻게 진단하는지 적어라.
 
 </div>
@@ -335,9 +341,58 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
     **주의.** 이탈도를 적합도 검정에 쓰려면 $\hat\mu_i$가 충분히 커야 한다($\ge5$ 정도). 계수가 작으면 이탈도의 $\chi^2$ 근사가 나쁘고, 특히 0이 많은 자료에서는 믿을 수 없다. 그때는 잔차 그림이나 예측분포와 관측분포의 비교(루트그램)가 더 유용하다.
 
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff med" title="중간"></span>
+포아송 자료에 $\sqrt{X}$ 변환을 쓰면 분산이 안정된다고 알려져 있다. 델타 방법으로 확인하고, 그럼에도 요즘은 변환보다 포아송 회귀를 권하는 이유를 적어라.
+
+</div>
+
+??? success "풀이"
+    **분산안정화 확인.** $g(x) = \sqrt x$이므로 $g'(\lambda) = 1/(2\sqrt\lambda)$이고 $\operatorname{Var}(X) = \lambda$이므로
+
+    $$
+    \operatorname{Var}(\sqrt X) \approx \left(\frac{1}{2\sqrt\lambda}\right)^2\lambda = \frac14
+    $$
+
+    로 **$\lambda$에 무관한 상수**가 된다. $\square$
+
+    일반 원리로 $\operatorname{Var}(X) = V(\mu)$일 때 $g(\mu) = \int d\mu/\sqrt{V(\mu)}$가 분산을 안정시키며, 포아송은 $V(\mu)=\mu$라 제곱근이 나온다. 이항의 $\arcsin\sqrt{\hat p}$, 상관계수의 $\operatorname{arctanh}$도 같은 계산이다.
+
+    실무에서는 $\lambda$가 작을 때 근사가 나빠져 **안스콤 변환** $2\sqrt{X+3/8}$이나 프리먼-튜키 변환 $\sqrt X + \sqrt{X+1}$을 쓴다.
+
+    **그럼에도 변환을 권하지 않는 이유.**
+
+    1. **해석이 망가진다.** $\sqrt{X}$의 평균은 $\sqrt{E[X]}$가 아니다(옌센 부등식). 변환 척도에서 얻은 결과를 되돌리면 편향이 생기고, 회귀계수를 원래 척도의 효과로 읽을 수 없다.
+    2. **0을 다루기 어렵다.** 계수 자료에는 0이 많은데 $\sqrt0 = 0$이 경계에 붙어 정규성이 깨진다. 로그 변환이라면 아예 정의되지 않아 $\ln(x+1)$ 같은 임시방편을 쓰게 되고, 더하는 상수에 따라 결과가 달라진다.
+    3. **한 가지 문제만 고친다.** 변환은 등분산을 겨냥하지만 정규성과 선형성까지 동시에 만족시킨다는 보장이 없다. 세 가지를 한 변환으로 맞추는 것은 대개 불가능하다.
+    4. **일반화선형모형이 더 낫다.** 포아송 회귀는 **원래 척도에서 평균을 모형화**하면서 분산구조를 따로 지정한다. 변환할 필요가 없고, 계수가 비율비로 바로 해석되며, 과대산포도 준포아송이나 음이항으로 자연스럽게 확장된다.
+
+    분산안정화 변환은 컴퓨터가 귀하던 시절에 선형모형 도구를 계수 자료에 억지로 맞추려던 장치였다. **원리를 아는 것은 여전히 유용하지만, 분석의 기본 도구로 쓸 이유는 없다.**
+
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
+포아송의 MLE $\hat{\lambda} = \bar{X}$는 (척도를 제외하면) 충분통계량이기도 하다. Rao-Blackwell 정리를 사용하여 다른 어떤 불편추정량도 더 작은 분산을 가질 수 없는 이유를 설명하라.
+
+</div>
+
+??? success "풀이"
+    (인수분해 정리에 의해) $\lambda$에 대한 충분통계량은 $T = \sum X_i$이다. MLE $\hat{\lambda} = T/n$은 이미 $T$의 함수이다.
+
+    Rao-Blackwell 정리에 의해 $T$로 조건화한 임의의 불편추정량은 원래보다 분산이 크지 않다. $\hat{\lambda}$가 이미 $T$의 함수이므로, 다른 어떤 불편추정량을 $T$로 조건화해도 $\hat{\lambda}$보다 나아질 수 없다.
+
+    나아가 포아송 족은 완비 지수족이므로 Lehmann-Scheffé 정리가 $\hat{\lambda} = T/n$이 유일한 UMVUE임을 보장한다. 그 분산 $\lambda/n$이 Cramér-Rao 하한과 같으므로 (선형추정량뿐 아니라) 어떤 불편추정량도 이보다 나을 수 없음이 확인된다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 설명변수가 있는 **포아송 회귀** $\ln\mu_i = \mathbf{x}_i^\top\boldsymbol\beta$의 로그가능도를 쓰고 점수방정식을 유도하라. 왜 로그연결함수를 쓰며, 닫힌 해가 없는 이유는 무엇인가?
 
 </div>
@@ -372,35 +427,6 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
     3. **곱셈적 해석.** $\ln\mu = \beta_0+\beta_1x$이면 $x$가 1 늘 때 $\mu$가 $e^{\beta_1}$배가 된다. 비율의 상대적 변화로 읽히며, 이는 계수 자료에 자연스러운 해석이다.
 
     **닫힌 해가 없는 이유.** 점수방정식에 $\boldsymbol\beta$가 지수함수 **안**에 들어 있다. 선형모형이라면 $\sum(y_i-\mathbf{x}_i^\top\boldsymbol\beta)\mathbf{x}_i=0$이 $\boldsymbol\beta$에 대한 선형방정식이라 정규방정식으로 풀리지만, 여기서는 $e^{\mathbf{x}_i^\top\boldsymbol\beta}$ 때문에 초월방정식이 된다. 일반화선형모형 대부분이 같은 이유로 반복 알고리즘을 필요로 한다.
-
-<div class="drillbox" markdown>
-
-**연습문제 10.** <span class="diff med" title="중간"></span>
-포아송 자료에 $\sqrt{X}$ 변환을 쓰면 분산이 안정된다고 알려져 있다. 델타 방법으로 확인하고, 그럼에도 요즘은 변환보다 포아송 회귀를 권하는 이유를 적어라.
-
-</div>
-
-??? success "풀이"
-    **분산안정화 확인.** $g(x) = \sqrt x$이므로 $g'(\lambda) = 1/(2\sqrt\lambda)$이고 $\operatorname{Var}(X) = \lambda$이므로
-
-    $$
-    \operatorname{Var}(\sqrt X) \approx \left(\frac{1}{2\sqrt\lambda}\right)^2\lambda = \frac14
-    $$
-
-    로 **$\lambda$에 무관한 상수**가 된다. $\square$
-
-    일반 원리로 $\operatorname{Var}(X) = V(\mu)$일 때 $g(\mu) = \int d\mu/\sqrt{V(\mu)}$가 분산을 안정시키며, 포아송은 $V(\mu)=\mu$라 제곱근이 나온다. 이항의 $\arcsin\sqrt{\hat p}$, 상관계수의 $\operatorname{arctanh}$도 같은 계산이다.
-
-    실무에서는 $\lambda$가 작을 때 근사가 나빠져 **안스콤 변환** $2\sqrt{X+3/8}$이나 프리먼-튜키 변환 $\sqrt X + \sqrt{X+1}$을 쓴다.
-
-    **그럼에도 변환을 권하지 않는 이유.**
-
-    1. **해석이 망가진다.** $\sqrt{X}$의 평균은 $\sqrt{E[X]}$가 아니다(옌센 부등식). 변환 척도에서 얻은 결과를 되돌리면 편향이 생기고, 회귀계수를 원래 척도의 효과로 읽을 수 없다.
-    2. **0을 다루기 어렵다.** 계수 자료에는 0이 많은데 $\sqrt0 = 0$이 경계에 붙어 정규성이 깨진다. 로그 변환이라면 아예 정의되지 않아 $\ln(x+1)$ 같은 임시방편을 쓰게 되고, 더하는 상수에 따라 결과가 달라진다.
-    3. **한 가지 문제만 고친다.** 변환은 등분산을 겨냥하지만 정규성과 선형성까지 동시에 만족시킨다는 보장이 없다. 세 가지를 한 변환으로 맞추는 것은 대개 불가능하다.
-    4. **일반화선형모형이 더 낫다.** 포아송 회귀는 **원래 척도에서 평균을 모형화**하면서 분산구조를 따로 지정한다. 변환할 필요가 없고, 계수가 비율비로 바로 해석되며, 과대산포도 준포아송이나 음이항으로 자연스럽게 확장된다.
-
-    분산안정화 변환은 컴퓨터가 귀하던 시절에 선형모형 도구를 계수 자료에 억지로 맞추려던 장치였다. **원리를 아는 것은 여전히 유용하지만, 분석의 기본 도구로 쓸 이유는 없다.**
 
 ---
 

@@ -1,6 +1,6 @@
 # 성능 척도
 
-## 결정계수
+## 1. 결정계수
 
 <div class="defn" markdown>
 
@@ -70,7 +70,9 @@ $$
     - [R-squared or coefficient of determination (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/r-squared-or-coefficient-of-determination)
     - [R-squared intuition (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/a/r-squared-intuition)
 
-## 수정 결정계수
+---
+
+## 2. 수정 결정계수
 
 <div class="defn" markdown>
 
@@ -102,7 +104,9 @@ $$
 - **모형 비교**: 설명변수 개수가 다른 모형들을 비교할 때는 수정 $R^2$가 낫다.
 - **방향**: 모형을 개선하지 못하는 설명변수를 넣으면 수정 $R^2$는 줄어들 수 있지만 $R^2$는 커지기만 한다.
 
-## 그 밖의 성능 척도
+---
+
+## 3. 그 밖의 성능 척도
 
 $$
 \begin{array}{lll}
@@ -284,7 +288,9 @@ $$
 
     **교훈은 둘을 함께 보라는 것이다.** MSE 하나만 보면 "시험이 더 좋다" 는 엉뚱한 결론에 이르고, MAE 를 함께 보면 바로잡힌다. 그리고 두 척도가 엇갈리는 바로 그 자리가 이상점이 사는 곳이다.
 
-## 척도가 엇갈릴 때
+---
+
+## 4. 척도가 엇갈릴 때
 
 위 보기에서는 네 척도가 모두 같은 방향을 가리켰다. 늘 그렇지는 않다.
 
@@ -295,6 +301,8 @@ $$
 오른쪽이 두 자로 잰 결과다. MAE로 재면 모형 A가 $3.19$로 모형 B의 $3.51$보다 낫다. 그런데 RMSE로 재면 모형 A가 $4.00$, 모형 B가 $3.82$로 순위가 **뒤집힌다.** 제곱이 큰 오차를 증폭하기 때문이다. 모형 A의 $|e| > 8$짜리 오차들은 개수로는 전체의 $4.6\%$에 지나지 않지만 MSE에서는 훨씬 큰 몫을 차지한다. 두 모형의 $\text{RMSE}/\text{MAE}$ 비를 내 보면 A가 $1.25$, B가 $1.09$로 이 차이가 그대로 드러난다.
 
 어느 쪽이 "더 나은 모형"인가? 자료만으로는 답할 수 없다. 큰 오차가 특별히 비싼 문제라면 — 재고를 크게 잘못 잡으면 결품이 나거나 창고가 넘치는 경우, 구조물의 하중을 과소평가하면 붕괴하는 경우 — 모형 B를 골라야 한다. 오차의 비용이 크기에 비례할 뿐이라면 모형 A가 낫다. 곧 **척도를 고르는 일은 자료 분석의 문제가 아니라 문제 정의의 문제다.** 모형을 적합하기 전에 "빗나감의 비용이 오차 크기에 어떻게 달라지는가"를 먼저 정해야 하는 이유가 여기에 있다.
+
+---
 
 ## 연습문제
 

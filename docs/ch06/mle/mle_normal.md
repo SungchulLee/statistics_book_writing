@@ -11,7 +11,9 @@ $$
 \end{array}
 $$
 
-## 유도
+---
+
+## 1. 유도
 
 ### 자료
 
@@ -78,7 +80,9 @@ $$
 
 오른쪽은 그 꼭대기가 고른 분포를 자료 위에 얹은 것이다. 최대가능도가 하는 일은 결국 이 곡선을 자료에 가장 잘 맞추는 일이다.
 
-## 핵심 관찰
+---
+
+## 2. 핵심 관찰
 
 | 추정량 | MLE | 불편인가? |
 |-----------|-----|-----------|
@@ -92,7 +96,9 @@ $$
     S^2 = \frac{\sum_{i=1}^m (x^{(i)} - \hat{\mu})^2}{m - 1}
     $$
 
-## 최소제곱과의 연결
+---
+
+## 3. 최소제곱과의 연결
 
 ($\sigma^2$을 고정한) $\mu$에 대한 비용함수는:
 
@@ -102,11 +108,41 @@ $$
 
 이는 정확히 **최소제곱** 목적함수이다. 따라서 정규분포 평균의 MLE는 최소제곱 추정값과 동등하며, 이는 MLE와 회귀분석 사이의 깊은 연결이다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff med" title="중간"></span>
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
+정규분포에서 얻은 관측값 5개가 3, 5, 7, 9, 11이다. $\mu$와 $\sigma^2$의 MLE를 모두 계산하라.
+
+</div>
+
+??? success "풀이"
+    $\mu$의 MLE는 표본평균이다:
+
+    $$
+    \hat{\mu} = \frac{3+5+7+9+11}{5} = \frac{35}{5} = 7
+    $$
+
+    $\sigma^2$의 MLE는 ($n-1$이 아니라) $n$으로 나눈다:
+
+    $$
+    \hat{\sigma}^2 = \frac{1}{5}\sum(x_i - 7)^2 = \frac{(3-7)^2 + (5-7)^2 + (7-7)^2 + (9-7)^2 + (11-7)^2}{5}
+    $$
+
+    $$
+    = \frac{16 + 4 + 0 + 4 + 16}{5} = \frac{40}{5} = 8
+    $$
+
+    참고: 불편추정값은 $S^2 = 40/4 = 10$이다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 로그가능도를 $\mu$에 대해 미분하여 $\mu$의 MLE를 유도하라.
 
 </div>
@@ -132,9 +168,11 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 
     2계도함수가 $-n/\sigma^2 < 0$이므로 최댓값임이 확인된다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음을 보이고 $E[\hat{\sigma}^2]$을 계산하라.
 
 </div>
@@ -148,9 +186,11 @@ MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음�
 
     편향은 $E[\hat{\sigma}^2] - \sigma^2 = -\sigma^2/n$이다. MLE는 참 분산을 과소추정한다. 이 때문에 불편추정량으로 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$을 쓰게 된다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 정규 로그가능도를 $\mu$에 대해 최대화하는 것과 잔차제곱합을 최소화하는 것 사이의 연결을 설명하라. 정규가 아닌 분포에서는 이 연결이 왜 깨지는가?
 
 </div>
@@ -166,31 +206,7 @@ MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음�
 
     정규가 아닌 분포에서는 로그가능도가 $(x_i - \mu)$의 다른 함수를 포함한다. 예를 들어 라플라스분포에서는 $\ell(\mu) \propto -\sum |x_i - \mu|$이므로 MLE가 절대편차의 합을 최소화하며 평균이 아니라 중앙값을 준다. 최소제곱과의 연결은 정규분포의 이차 지수부에 특유한 것이다.
 
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff easy" title="쉬움"></span>
-정규분포에서 얻은 관측값 5개가 3, 5, 7, 9, 11이다. $\mu$와 $\sigma^2$의 MLE를 모두 계산하라.
-
-</div>
-
-??? success "풀이"
-    $\mu$의 MLE는 표본평균이다:
-
-    $$
-    \hat{\mu} = \frac{3+5+7+9+11}{5} = \frac{35}{5} = 7
-    $$
-
-    $\sigma^2$의 MLE는 ($n-1$이 아니라) $n$으로 나눈다:
-
-    $$
-    \hat{\sigma}^2 = \frac{1}{5}\sum(x_i - 7)^2 = \frac{(3-7)^2 + (5-7)^2 + (7-7)^2 + (9-7)^2 + (11-7)^2}{5}
-    $$
-
-    $$
-    = \frac{16 + 4 + 0 + 4 + 16}{5} = \frac{40}{5} = 8
-    $$
-
-    참고: 불편추정값은 $S^2 = 40/4 = 10$이다.
+---
 
 <div class="drillbox" markdown>
 
@@ -229,6 +245,8 @@ MLE $\hat{\sigma}^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$이 편향되어 있음�
     - **프로파일 가능도가 다루기 쉽다.** $\mu$를 프로파일링할 때 $\sigma^2$을 최적화해 없애도 곡률이 크게 바뀌지 않는다.
 
     직교하지 않는 예로 감마분포의 $(k,\theta)$가 있다. 그 경우 형상모수를 모른다는 사실이 척도모수 추정의 정밀도를 떨어뜨린다. **모수화를 직교하도록 고르면 추론이 단순해진다**는 것이 일반적인 원리이며, 감마분포에서 $(k, k\theta)$로 다시 매개하면 직교에 가까워진다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -275,6 +293,8 @@ $\sigma^2$을 모를 때 $\mu$의 프로파일 로그가능도를 구하고, 그
 
     **일반 교훈.** 정규모형에서 우도비 방법은 익숙한 $t$ 절차를 **재발견**한다. 우도비가 특별히 새로운 답을 주는 것이 아니라, 정확한 해가 없는 일반 모형으로 같은 발상을 확장하는 도구라는 점이 요점이다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
@@ -317,6 +337,8 @@ $\sigma^2$을 모를 때 $\mu$의 프로파일 로그가능도를 구하고, 그
 
     AIC 같은 정보기준은 $\hat\sigma^2_{\text{MLE}}$를 쓰되 모수 개수에 벌점을 주어 같은 문제를 다른 방식으로 다룬다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
@@ -353,61 +375,11 @@ $\sigma^2$을 모를 때 $\mu$의 프로파일 로그가능도를 구하고, 그
 
     **$\nu$의 선택.** $\nu \to \infty$이면 정규로 돌아가 강건성이 사라지고, $\nu$가 작으면 강건하지만 효율을 잃는다. 실무에서는 $\nu = 4$ 정도로 고정하거나 자료에서 함께 추정한다. $\nu$를 추정하면 자료가 "얼마나 두꺼운 꼬리를 요구하는지"를 스스로 말하게 하는 셈이다.
 
-<div class="drillbox" markdown>
-
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
-$\hat\mu$와 $\hat\sigma^2_{\text{MLE}}$의 결합 점근분포를 구하고, 델타 방법으로 $\hat\sigma = \sqrt{\hat\sigma^2}$의 점근분산을 유도하라.
-
-</div>
-
-??? success "풀이"
-    **결합 점근분포.** MLE의 일반이론에 따라
-
-    $$
-    \sqrt n\begin{pmatrix}\hat\mu-\mu\\ \hat\sigma^2-\sigma^2\end{pmatrix} \xrightarrow{d} N\!\left(\mathbf{0},\ I_1^{-1}\right)
-    $$
-
-    이고 연습문제 5에서 $I_1 = \operatorname{diag}(1/\sigma^2,\ 1/(2\sigma^4))$이므로
-
-    $$
-    I_1^{-1} = \begin{pmatrix}\sigma^2 & 0\\ 0 & 2\sigma^4\end{pmatrix}
-    $$
-
-    이다. 즉
-
-    $$
-    \hat\mu \approx N\!\left(\mu, \frac{\sigma^2}{n}\right), \qquad \hat\sigma^2 \approx N\!\left(\sigma^2, \frac{2\sigma^4}{n}\right), \qquad \text{점근독립}
-    $$
-
-    이다. $\hat\sigma^2$의 점근분산 $2\sigma^4/n$은 앞서 본 정확한 값 $2\sigma^4/(n-1)$($S^2$의 경우)과 $O(1/n^2)$만큼 다르다.
-
-    **델타 방법.** $g(v) = \sqrt v$이고 $g'(\sigma^2) = 1/(2\sigma)$이므로
-
-    $$
-    \operatorname{Var}(\hat\sigma) \approx \left(\frac{1}{2\sigma}\right)^2\cdot\frac{2\sigma^4}{n} = \frac{\sigma^2}{2n}
-    $$
-
-    이고
-
-    $$
-    \operatorname{SE}(\hat\sigma) \approx \frac{\sigma}{\sqrt{2n}}
-    $$
-
-    이다. $\square$
-
-    **읽는 법.** 상대 표준오차가
-
-    $$
-    \frac{\operatorname{SE}(\hat\sigma)}{\sigma} = \frac{1}{\sqrt{2n}}
-    $$
-
-    로 $\hat\mu$의 상대 정밀도와 비교하면 $\sqrt2$배 나쁘다(변동계수가 1일 때 기준). **산포를 재는 것이 중심을 재는 것보다 어렵다**는 사실이 다시 확인된다.
-
-    한 가지 더. $\ln\hat\sigma$의 점근분산은 델타 방법으로 $1/(2n)$이 되어 **$\sigma$에 전혀 의존하지 않는다.** 그래서 표준편차의 신뢰구간은 로그 척도에서 만들고 되돌리는 것이 자연스럽고, 그렇게 하면 자동으로 양수이면서 비대칭인 구간을 얻는다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 같은 $\mu$를 재는 두 측정기의 정밀도가 다르다. 측정기 1로 $n_1$번, 측정기 2로 $n_2$번 재었고 $\sigma_1, \sigma_2$를 안다. $\mu$의 MLE를 구하고, 그것이 단순히 전체 평균이 아닌 이유를 설명하라.
 
 </div>
@@ -456,6 +428,60 @@ $\hat\mu$와 $\hat\sigma^2_{\text{MLE}}$의 결합 점근분포를 구하고, �
     $$
 
     이고, 이것이 **가중최소제곱**의 가장 단순한 경우다. 회귀로 확장하면 $\hat{\boldsymbol\beta} = (X^\top W X)^{-1}X^\top W\mathbf{y}$($W = \operatorname{diag}(1/\sigma_i^2)$)가 되며, 이분산이 있을 때 최소제곱보다 효율적인 추정량을 준다. 메타분석의 역분산 가중도 정확히 이 공식이다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+$\hat\mu$와 $\hat\sigma^2_{\text{MLE}}$의 결합 점근분포를 구하고, 델타 방법으로 $\hat\sigma = \sqrt{\hat\sigma^2}$의 점근분산을 유도하라.
+
+</div>
+
+??? success "풀이"
+    **결합 점근분포.** MLE의 일반이론에 따라
+
+    $$
+    \sqrt n\begin{pmatrix}\hat\mu-\mu\\ \hat\sigma^2-\sigma^2\end{pmatrix} \xrightarrow{d} N\!\left(\mathbf{0},\ I_1^{-1}\right)
+    $$
+
+    이고 연습문제 5에서 $I_1 = \operatorname{diag}(1/\sigma^2,\ 1/(2\sigma^4))$이므로
+
+    $$
+    I_1^{-1} = \begin{pmatrix}\sigma^2 & 0\\ 0 & 2\sigma^4\end{pmatrix}
+    $$
+
+    이다. 즉
+
+    $$
+    \hat\mu \approx N\!\left(\mu, \frac{\sigma^2}{n}\right), \qquad \hat\sigma^2 \approx N\!\left(\sigma^2, \frac{2\sigma^4}{n}\right), \qquad \text{점근독립}
+    $$
+
+    이다. $\hat\sigma^2$의 점근분산 $2\sigma^4/n$은 앞서 본 정확한 값 $2\sigma^4/(n-1)$($S^2$의 경우)과 $O(1/n^2)$만큼 다르다.
+
+    **델타 방법.** $g(v) = \sqrt v$이고 $g'(\sigma^2) = 1/(2\sigma)$이므로
+
+    $$
+    \operatorname{Var}(\hat\sigma) \approx \left(\frac{1}{2\sigma}\right)^2\cdot\frac{2\sigma^4}{n} = \frac{\sigma^2}{2n}
+    $$
+
+    이고
+
+    $$
+    \operatorname{SE}(\hat\sigma) \approx \frac{\sigma}{\sqrt{2n}}
+    $$
+
+    이다. $\square$
+
+    **읽는 법.** 상대 표준오차가
+
+    $$
+    \frac{\operatorname{SE}(\hat\sigma)}{\sigma} = \frac{1}{\sqrt{2n}}
+    $$
+
+    로 $\hat\mu$의 상대 정밀도와 비교하면 $\sqrt2$배 나쁘다(변동계수가 1일 때 기준). **산포를 재는 것이 중심을 재는 것보다 어렵다**는 사실이 다시 확인된다.
+
+    한 가지 더. $\ln\hat\sigma$의 점근분산은 델타 방법으로 $1/(2n)$이 되어 **$\sigma$에 전혀 의존하지 않는다.** 그래서 표준편차의 신뢰구간은 로그 척도에서 만들고 되돌리는 것이 자연스럽고, 그렇게 하면 자동으로 양수이면서 비대칭인 구간을 얻는다.
 
 ---
 

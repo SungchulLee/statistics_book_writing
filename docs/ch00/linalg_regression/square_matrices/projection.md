@@ -21,7 +21,9 @@ $$
 - **치역**(열공간) $\mathcal{V} = \operatorname{col}(\mathbf{P})$: 벡터가 사영되어 놓이는 부분공간.
 - **영공간** $\mathcal{W} = \ker(\mathbf{P})$: 사영이 눌러 없애는 방향의 부분공간.
 
-## 공간의 분해
+---
+
+## 1. 공간의 분해
 
 <div class="thmbox" markdown>
 
@@ -46,7 +48,9 @@ $$
 
     합이 직합임을 보이려면, $\mathbf{v} \in \operatorname{col}(\mathbf{P}) \cap \ker(\mathbf{P})$라 하자. 그러면 어떤 $\mathbf{u}$에 대해 $\mathbf{v} = \mathbf{P}\mathbf{u}$이고 $\mathbf{P}\mathbf{v} = \mathbf{0}$이다. 그런데 $\mathbf{P}\mathbf{v} = \mathbf{P}^2\mathbf{u} = \mathbf{P}\mathbf{u} = \mathbf{v}$이므로 $\mathbf{v} = \mathbf{0}$이다. $\square$
 
-## 여집합 사영
+---
+
+## 2. 여집합 사영
 
 $\mathbf{P}$가 멱등이므로 여집합 행렬 $\mathbf{I} - \mathbf{P}$도 멱등이다.
 
@@ -62,7 +66,9 @@ $$
 \operatorname{rank}(\mathbf{P}) + \operatorname{rank}(\mathbf{I} - \mathbf{P}) = n
 $$
 
-## 고윳값과 대각합
+---
+
+## 3. 고윳값과 대각합
 
 모든 사영이 멱등이므로 그 고윳값은 $\{0, 1\}$로 제한되고
 
@@ -72,7 +78,9 @@ $$
 
 이다. 대각합은 $\mathbf{P}$가 사영하는 부분공간의 차원을 센다.
 
-## 빗각 사영 대 직교사영
+---
+
+## 4. 빗각 사영 대 직교사영
 
 사영 $\mathbf{P}$가 $\mathbf{P} = \mathbf{P}^\top$이면(사영이 대칭이면) **직교사영**이라 하고, 그렇지 않으면 **빗각 사영**이라 한다.
 
@@ -93,7 +101,9 @@ $$
 
 두 상까지의 거리를 재면 빗각 쪽이 $\lVert(2,2)^\top\rVert = 2.828$, 직교 쪽이 $\lVert(0,2)^\top\rVert = 2.000$이다. 같은 직선 위의 점인데도 직교사영이 더 가깝다. 오른쪽에만 직각 표시가 붙어 있는 것이 그 이유다. 잔차가 $\mathcal{V}$에 수직일 때에만 그 발이 최근접점이 되며, 이 사실이 다음 절의 주제이자 최소제곱이 직교사영인 이유다.
 
-## 예 — 빗각 사영
+---
+
+## 5. 예 — 빗각 사영
 
 $\mathbb{R}^2$에서 $\mathcal{W} = \operatorname{span}\{(1, 1)^\top\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^\top\}$ 위로 사영하는 경우를 생각하자.
 
@@ -113,7 +123,9 @@ $$
 
 **확인:** $\mathbf{P}^2 = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \mathbf{P}$. 이 행렬은 멱등이지만 대칭이 아니므로($\mathbf{P} \neq \mathbf{P}^\top$) 빗각 사영이다.
 
-## 예 — 1차원에서의 직교사영
+---
+
+## 6. 예 — 1차원에서의 직교사영
 
 $\mathcal{V}^\perp = \operatorname{span}\{(0, 1)^\top\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^\top\}$ 위로 사영하는 행렬은
 
@@ -123,7 +135,9 @@ $$
 
 이다. 이것은 멱등이면서 대칭이므로 직교사영이다. 두 번째 성분을 떨어뜨려 $(x_1, x_2)^\top$를 $(x_1, 0)^\top$로 보낸다.
 
-## 유일성
+---
+
+## 7. 유일성
 
 <div class="thmbox" markdown>
 
@@ -158,7 +172,9 @@ $$
 
 이는 목표 부분공간 $\mathcal{V}$만 지정해서는 사영이 유일하게 결정되지 않음을 뜻한다. 눌러 없애는 방향 $\mathcal{W}$도 함께 지정해야 한다. $\mathcal{W} = \mathcal{V}^\perp$일 때 그 사영은 직교사영이 되고, 이 특수한 경우에는 $\mathcal{V}$만으로 사영이 결정된다.
 
-## 통계와의 연결
+---
+
+## 8. 통계와의 연결
 
 ### 적합값과 잔차
 
@@ -167,6 +183,8 @@ $$
 ### 분산분석 분해
 
 분산분석의 총제곱합 분해는 모형 부분공간과 오차 부분공간 위로의 직교사영이 관여하는 이차형식들의 합으로 쓸 수 있다. 직교성 덕분에 (정규성 아래에서) 제곱합들이 서로 독립이 되며, 이것이 F-검정의 근거다.
+
+---
 
 ## 연습문제
 
@@ -192,6 +210,8 @@ $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임�
 
     이며 $x_2$축 위로 사영한다. $\mathbf{P}$는 대칭이기도 하므로 이것은 직교사영이다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
@@ -205,6 +225,8 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
     계수는 0이 아닌 고윳값의 개수와 같고, 이는 1인 고윳값의 개수다. 대각합은 모든 고윳값의 합인데, 나머지가 0이므로 이 또한 1인 고윳값의 개수다.
 
     따라서 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr}(\mathbf{P})$이다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -226,6 +248,8 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
     이 행렬은 $\ker(\mathbf{P}) = \text{span}\{(-1, 1)^\top\}$ 방향을 따라 $\text{span}\{(1, 0)^\top\}$ 위로 사영한다. 사영 방향이 목표 부분공간에 대해 빗각이다(수직이 아니다).
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
@@ -242,56 +266,11 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
     이다. $\mathbf{H}$가 멱등이지만 대칭이 아니라면(빗각 사영이라면) 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y}$는 여전히 성립하지만 두 성분이 직교하지는 않는다. 최소제곱의 모자 행렬은 멱등이면서 대칭이며, 그 덕분에 제곱합 분해와 피타고라스 정리가 작동한다.
 
-<div class="drillbox" markdown>
-
-**연습문제 5.** <span class="diff hard" title="어려움"></span>
-$\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 따라 사영하는 행렬을 만드는 일반 공식은 $\mathbf{P} = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top$이다. 여기서 $\mathbf{U}$의 열들은 $\mathcal{W}$의 직교여공간을 편다. 이 $\mathbf{P}$가 사영임을 보이고, 본문의 빗각 사영 예를 이 공식으로 재현하라.
-
-</div>
-
-??? success "풀이"
-    **멱등성.** 가운데에서 $\mathbf{U}^\top\mathbf{V}$와 그 역행렬이 상쇄된다.
-
-    $$
-    \mathbf{P}^2 = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\underbrace{\mathbf{U}^\top\mathbf{V}}_{}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top
-    = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top = \mathbf{P}
-    $$
-
-    **치역과 영공간.** $\mathbf{P}\mathbf{x}$는 언제나 $\mathbf{V}$의 열들의 일차결합이므로 $\operatorname{col}(\mathbf{P}) \subseteq \mathcal{V}$이다. 또 $\mathbf{P}\mathbf{x} = \mathbf{0}$일 필요충분조건은 $\mathbf{U}^\top\mathbf{x} = \mathbf{0}$이므로 $\ker(\mathbf{P}) = \operatorname{col}(\mathbf{U})^\perp = \mathcal{W}$이다.
-
-    본문의 예는 $\mathcal{V} = \operatorname{span}\{(1,0)^\top\}$, $\mathcal{W} = \operatorname{span}\{(1,1)^\top\}$이었다. $\mathcal{W}^\perp = \operatorname{span}\{(1,-1)^\top\}$이므로 $\mathbf{U} = (1,-1)^\top$로 둔다.
-
-    ```python
-    import numpy as np
-
-    V = np.array([[1.], [0.]])      # 사영해서 놓일 부분공간
-    U = np.array([[1.], [-1.]])     # 눌러 없앨 방향 span{(1,1)} 의 직교여공간
-
-    P = V @ np.linalg.inv(U.T @ V) @ U.T
-    print("P =\n", P)
-    print("멱등인가:", np.allclose(P @ P, P))
-    print("대칭인가:", np.allclose(P, P.T))
-    print("(1,1) 을 보내면:", (P @ np.array([1., 1.])).round(10))
-    ```
-
-    출력:
-
-    ```
-    P =
-     [[ 1. -1.]
-     [ 0.  0.]]
-    멱등인가: True
-    대칭인가: False
-    (1,1) 을 보내면: [0. 0.]
-    ```
-
-    본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$이 그대로 나오고, 눌러 없애기로 한 방향 $(1,1)^\top$이 실제로 $\mathbf{0}$으로 간다.
-
-    **직교사영은 특수한 경우다.** $\mathcal{W} = \mathcal{V}^\perp$로 두면 $\mathbf{U} = \mathbf{V}$가 되어 $\mathbf{P} = \mathbf{V}(\mathbf{V}^\top\mathbf{V})^{-1}\mathbf{V}^\top$, 곧 모자 행렬의 꼴이 된다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 모든 사영행렬은 대각화 가능하며, 적당한 기저에서 $\operatorname{diag}(1, \dots, 1, 0, \dots, 0)$과 닮았음을 보여라($1$이 $r = \operatorname{rank}(\mathbf{P})$개).
 
 </div>
@@ -314,9 +293,11 @@ $\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 �
 
     **주의.** 사영은 **언제나** 대각화 가능하다. 빗각 사영도 그렇다. 빗각 사영에서 부족한 것은 대각화 가능성이 아니라 **고유벡터들의 직교성**이다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\mathbf{I} - \mathbf{P}) = \operatorname{col}(\mathbf{P})$임을 보여라. 이로부터 $\operatorname{rank}(\mathbf{P}) + \operatorname{rank}(\mathbf{I} - \mathbf{P}) = n$을 유도하라.
 
 </div>
@@ -356,56 +337,11 @@ $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\ma
 
     **회귀에서의 의미.** $\operatorname{rank}(\mathbf{H}) = p$이고 $\operatorname{rank}(\mathbf{I} - \mathbf{H}) = n - p$인데, 이 $n - p$가 바로 **잔차의 자유도**다. $s^2 = \lVert\mathbf{e}\rVert^2/(n-p)$에서 $n-p$로 나누는 이유가 여기에 있다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 8.** <span class="diff hard" title="어려움"></span>
-$\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$가 사영이 될 필요충분조건이 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$임을 보여라.
-
-</div>
-
-??? success "풀이"
-    전개하면
-
-    $$
-    (\mathbf{P}_1 + \mathbf{P}_2)^2 = \mathbf{P}_1^2 + \mathbf{P}_1\mathbf{P}_2 + \mathbf{P}_2\mathbf{P}_1 + \mathbf{P}_2^2
-    = (\mathbf{P}_1 + \mathbf{P}_2) + (\mathbf{P}_1\mathbf{P}_2 + \mathbf{P}_2\mathbf{P}_1)
-    $$
-
-    이므로 멱등일 필요충분조건은 $\mathbf{P}_1\mathbf{P}_2 + \mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$이다.
-
-    이 조건에서 각각이 $\mathbf{O}$임을 끌어낼 수 있다. 위 식의 왼쪽에 $\mathbf{P}_1$을 곱하면 $\mathbf{P}_1\mathbf{P}_2 + \mathbf{P}_1\mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$이고, 오른쪽에 곱하면 $\mathbf{P}_1\mathbf{P}_2\mathbf{P}_1 + \mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$이다. 두 식을 빼면 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2\mathbf{P}_1$이고, 합이 $\mathbf{O}$이므로 $2\mathbf{P}_1\mathbf{P}_2 = \mathbf{O}$, 곧 둘 다 $\mathbf{O}$다.
-
-    **기하적 의미.** $\mathbf{P}_1\mathbf{P}_2 = \mathbf{O}$은 한 사영의 치역이 다른 사영의 영공간에 들어간다는 뜻이다. 직교사영이라면 **두 목표 부분공간이 서로 직교**한다는 말과 같다.
-
-    ```python
-    import numpy as np
-
-    P1 = np.diag([1., 0., 0.])
-    P2 = np.diag([0., 1., 0.])       # 서로 직교하는 축 위로의 사영
-    S = P1 + P2
-    print("P1 P2 = 0 인가:", np.allclose(P1 @ P2, 0))
-    print("합이 멱등인가 :", np.allclose(S @ S, S), " rank:", np.linalg.matrix_rank(S))
-
-    P3 = np.array([[.5, .5, 0], [.5, .5, 0], [0, 0, 0]])   # 직교하지 않는 사영
-    print("\nP1 P3 = 0 인가:", np.allclose(P1 @ P3, 0))
-    print("합이 멱등인가 :", np.allclose((P1 + P3) @ (P1 + P3), P1 + P3))
-    ```
-
-    출력:
-
-    ```
-    P1 P2 = 0 인가: True
-    합이 멱등인가 : True  rank: 2
-
-    P1 P3 = 0 인가: False
-    합이 멱등인가 : False
-    ```
-
-    이 성질이 분산분석의 제곱합 분해를 떠받친다. 총제곱합이 여러 성분으로 **깔끔하게 쪼개지려면** 대응하는 사영들이 서로 직교해야 한다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 중심화행렬 $\mathbf{C} = \mathbf{I} - \frac{1}{n}\mathbf{J}$($\mathbf{J}$는 모든 성분이 1인 $n \times n$ 행렬)가 직교사영임을 보이고, 무엇 위로 사영하는지 밝혀라. $\operatorname{tr}(\mathbf{C})$는 얼마인가?
 
 </div>
@@ -450,9 +386,11 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
 
     **자유도의 기원.** $\operatorname{tr}(\mathbf{C}) = n - 1$이 표본분산에서 $n-1$로 나누는 이유의 기하적 설명이다. 중심화된 잔차 벡터는 $n$차원이 아니라 $n-1$차원 부분공간에 놓인다. [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 기댓값 계산으로 확인하는데, 이 쪽의 $\operatorname{tr}(\mathbf{C}) = n-1$이 같은 사실의 기하적 판본이다. 회귀로 넘어가면 $\mathbf{C}$ 자리에 $\mathbf{I} - \mathbf{H}$가 들어가고 $n-1$이 $n-p$로 바뀐다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 빗각 사영은 거리를 최소화하지 않는다. 본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$과 같은 부분공간 위로의 직교사영을 $\mathbf{x} = (0, 1)^\top$에 적용해 $\lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert$를 비교하라.
 
 </div>
@@ -485,6 +423,104 @@ $\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$�
     빗각 사영의 거리가 더 크다. **치역이 같아도 어느 방향으로 누르느냐가 거리를 바꾼다.**
 
     직교사영만이 $\lVert\mathbf{x} - \mathbf{v}\rVert$를 $\mathbf{v} \in \mathcal{V}$ 위에서 최소화한다. 최소제곱이 잔차 제곱합을 최소화하는 추정량을 주는 것도, 모자 행렬이 **직교**사영이기 때문이다. 빗각 사영을 쓰면 여전히 $\mathcal{V}$ 안의 어떤 점을 얻지만 그 점은 가장 가까운 점이 아니다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+$\mathcal{V} = \operatorname{col}(\mathbf{V})$ 위로, $\mathcal{W}$ 방향을 따라 사영하는 행렬을 만드는 일반 공식은 $\mathbf{P} = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top$이다. 여기서 $\mathbf{U}$의 열들은 $\mathcal{W}$의 직교여공간을 편다. 이 $\mathbf{P}$가 사영임을 보이고, 본문의 빗각 사영 예를 이 공식으로 재현하라.
+
+</div>
+
+??? success "풀이"
+    **멱등성.** 가운데에서 $\mathbf{U}^\top\mathbf{V}$와 그 역행렬이 상쇄된다.
+
+    $$
+    \mathbf{P}^2 = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\underbrace{\mathbf{U}^\top\mathbf{V}}_{}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top
+    = \mathbf{V}(\mathbf{U}^\top\mathbf{V})^{-1}\mathbf{U}^\top = \mathbf{P}
+    $$
+
+    **치역과 영공간.** $\mathbf{P}\mathbf{x}$는 언제나 $\mathbf{V}$의 열들의 일차결합이므로 $\operatorname{col}(\mathbf{P}) \subseteq \mathcal{V}$이다. 또 $\mathbf{P}\mathbf{x} = \mathbf{0}$일 필요충분조건은 $\mathbf{U}^\top\mathbf{x} = \mathbf{0}$이므로 $\ker(\mathbf{P}) = \operatorname{col}(\mathbf{U})^\perp = \mathcal{W}$이다.
+
+    본문의 예는 $\mathcal{V} = \operatorname{span}\{(1,0)^\top\}$, $\mathcal{W} = \operatorname{span}\{(1,1)^\top\}$이었다. $\mathcal{W}^\perp = \operatorname{span}\{(1,-1)^\top\}$이므로 $\mathbf{U} = (1,-1)^\top$로 둔다.
+
+    ```python
+    import numpy as np
+
+    V = np.array([[1.], [0.]])      # 사영해서 놓일 부분공간
+    U = np.array([[1.], [-1.]])     # 눌러 없앨 방향 span{(1,1)} 의 직교여공간
+
+    P = V @ np.linalg.inv(U.T @ V) @ U.T
+    print("P =\n", P)
+    print("멱등인가:", np.allclose(P @ P, P))
+    print("대칭인가:", np.allclose(P, P.T))
+    print("(1,1) 을 보내면:", (P @ np.array([1., 1.])).round(10))
+    ```
+
+    출력:
+
+    ```
+    P =
+     [[ 1. -1.]
+     [ 0.  0.]]
+    멱등인가: True
+    대칭인가: False
+    (1,1) 을 보내면: [0. 0.]
+    ```
+
+    본문의 $\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}$이 그대로 나오고, 눌러 없애기로 한 방향 $(1,1)^\top$이 실제로 $\mathbf{0}$으로 간다.
+
+    **직교사영은 특수한 경우다.** $\mathcal{W} = \mathcal{V}^\perp$로 두면 $\mathbf{U} = \mathbf{V}$가 되어 $\mathbf{P} = \mathbf{V}(\mathbf{V}^\top\mathbf{V})^{-1}\mathbf{V}^\top$, 곧 모자 행렬의 꼴이 된다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+$\mathbf{P}_1$과 $\mathbf{P}_2$가 사영일 때 $\mathbf{P}_1 + \mathbf{P}_2$가 사영이 될 필요충분조건이 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$임을 보여라.
+
+</div>
+
+??? success "풀이"
+    전개하면
+
+    $$
+    (\mathbf{P}_1 + \mathbf{P}_2)^2 = \mathbf{P}_1^2 + \mathbf{P}_1\mathbf{P}_2 + \mathbf{P}_2\mathbf{P}_1 + \mathbf{P}_2^2
+    = (\mathbf{P}_1 + \mathbf{P}_2) + (\mathbf{P}_1\mathbf{P}_2 + \mathbf{P}_2\mathbf{P}_1)
+    $$
+
+    이므로 멱등일 필요충분조건은 $\mathbf{P}_1\mathbf{P}_2 + \mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$이다.
+
+    이 조건에서 각각이 $\mathbf{O}$임을 끌어낼 수 있다. 위 식의 왼쪽에 $\mathbf{P}_1$을 곱하면 $\mathbf{P}_1\mathbf{P}_2 + \mathbf{P}_1\mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$이고, 오른쪽에 곱하면 $\mathbf{P}_1\mathbf{P}_2\mathbf{P}_1 + \mathbf{P}_2\mathbf{P}_1 = \mathbf{O}$이다. 두 식을 빼면 $\mathbf{P}_1\mathbf{P}_2 = \mathbf{P}_2\mathbf{P}_1$이고, 합이 $\mathbf{O}$이므로 $2\mathbf{P}_1\mathbf{P}_2 = \mathbf{O}$, 곧 둘 다 $\mathbf{O}$다.
+
+    **기하적 의미.** $\mathbf{P}_1\mathbf{P}_2 = \mathbf{O}$은 한 사영의 치역이 다른 사영의 영공간에 들어간다는 뜻이다. 직교사영이라면 **두 목표 부분공간이 서로 직교**한다는 말과 같다.
+
+    ```python
+    import numpy as np
+
+    P1 = np.diag([1., 0., 0.])
+    P2 = np.diag([0., 1., 0.])       # 서로 직교하는 축 위로의 사영
+    S = P1 + P2
+    print("P1 P2 = 0 인가:", np.allclose(P1 @ P2, 0))
+    print("합이 멱등인가 :", np.allclose(S @ S, S), " rank:", np.linalg.matrix_rank(S))
+
+    P3 = np.array([[.5, .5, 0], [.5, .5, 0], [0, 0, 0]])   # 직교하지 않는 사영
+    print("\nP1 P3 = 0 인가:", np.allclose(P1 @ P3, 0))
+    print("합이 멱등인가 :", np.allclose((P1 + P3) @ (P1 + P3), P1 + P3))
+    ```
+
+    출력:
+
+    ```
+    P1 P2 = 0 인가: True
+    합이 멱등인가 : True  rank: 2
+
+    P1 P3 = 0 인가: False
+    합이 멱등인가 : False
+    ```
+
+    이 성질이 분산분석의 제곱합 분해를 떠받친다. 총제곱합이 여러 성분으로 **깔끔하게 쪼개지려면** 대응하는 사영들이 서로 직교해야 한다. $\square$
 
 ---
 

@@ -18,7 +18,9 @@
 !!! warning "대칭성을 전제한다"
     대칭이 아닌 행렬에 대해서도 양정치성을 정의하는 문헌이 있지만, 이 책에서는(그리고 통계학의 거의 전부에서는) 양정치성이 언제나 대칭행렬을 가리킨다.
 
-## 동치인 특성화
+---
+
+## 1. 동치인 특성화
 
 대칭행렬 $\mathbf{A} \in \mathbb{R}^{n \times n}$에 대해 다음 조건들은 서로 동치다.
 
@@ -98,11 +100,13 @@
 
 가운데는 양반정치다. $\mathbf{A} = \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}$의 고윳값은 $2$와 $0$이고 $q = (x_1 + x_2)^2$이다. 고윳값 하나가 $0$이 되면 그 방향으로는 곡면이 전혀 올라가지 않아 그릇이 골짜기로 납작해진다. 검은 점선이 그 바닥, 곧 $x_2 = -x_1$인 직선이며 그 위에서는 어디서나 $q = 0$이다. 등고선도 닫히지 않고 평행한 직선이 된다. **공분산행렬이 이 모양이면 자료가 한 직선 위에 갇혀 있다는 뜻이고, $\det = 0$이라 역행렬도 밀도도 존재하지 않는다.**
 
-오른쪽은 부정치다. $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$의 고윳값은 $3$과 $-1$이다. 부호가 엇갈리면 어떤 방향으로는 올라가고($\lambda = 3$의 고유벡터 $(1,1)^\top$ 방향) 어떤 방향으로는 내려가($\lambda = -1$의 고유벡터 $(1,-1)^\top$ 방향) 곡면이 안장이 된다. 주황으로 칠한 곳이 $q < 0$인 영역이고, 두 검은 점선이 $q = 0$인 두 직선 $x_1 = (-2 \pm \sqrt{3})\,x_2$이다. 등고선은 쌍곡선이라 중심을 에워싸지 못한다. 대각 성분이 모두 양수인데도 양정치가 아닐 수 있다는 연습문제 2의 경고가 이 그림이다.
+오른쪽은 부정치다. $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$의 고윳값은 $3$과 $-1$이다. 부호가 엇갈리면 어떤 방향으로는 올라가고($\lambda = 3$의 고유벡터 $(1,1)^\top$ 방향) 어떤 방향으로는 내려가($\lambda = -1$의 고유벡터 $(1,-1)^\top$ 방향) 곡면이 안장이 된다. 주황으로 칠한 곳이 $q < 0$인 영역이고, 두 검은 점선이 $q = 0$인 두 직선 $x_1 = (-2 \pm \sqrt{3})\,x_2$이다. 등고선은 쌍곡선이라 중심을 에워싸지 못한다. 대각 성분이 모두 양수인데도 양정치가 아닐 수 있다는 연습문제 3의 경고가 이 그림이다.
 
 세 판을 가르는 것은 성분이 아니라 고윳값의 부호다. 선행 주소행렬식도 촐레스키도 결국 이 부호를 다른 방식으로 확인하는 절차이며, 통계에서 "$\boldsymbol{\Sigma} \succ 0$을 요구한다"는 말은 그림의 첫째 판만 허용하겠다는 뜻이다.
 
-## 촐레스키 분해
+---
+
+## 2. 촐레스키 분해
 
 <div class="defn" markdown>
 
@@ -148,7 +152,9 @@ $$
 
 이다.
 
-## 성질
+---
+
+## 3. 성질
 
 ### 양정치행렬은 가역이다
 
@@ -188,7 +194,9 @@ $$
 
 으로 분할하면 **슈어 여인수** $\mathbf{S} = \mathbf{C} - \mathbf{B}^\top\mathbf{A}^{-1}\mathbf{B}$도 양정치다. 슈어 여인수는 다변량 정규분포의 조건부 분산에 등장한다.
 
-## 통계와의 연결
+---
+
+## 4. 통계와의 연결
 
 ### 공분산행렬
 
@@ -208,6 +216,8 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 
 마할라노비스 거리 $d^2 = (\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})$은 $\boldsymbol{\Sigma}^{-1}$에 대한 이차형식이고, $\boldsymbol{\Sigma}$가 양정치이면 $\boldsymbol{\Sigma}^{-1}$도 양정치다. 이 덕분에 $d^2 \geq 0$이고 등호는 $\mathbf{x} = \boldsymbol{\mu}$에서만 성립하여, 진짜 거리에 준하는 측도가 된다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -225,25 +235,11 @@ $\boldsymbol{\Sigma}$의 양정치성이 $|\boldsymbol{\Sigma}| > 0$을 보장�
 
     모든 선행 주소행렬식이 엄격히 양수이므로 $\mathbf{A}$는 양정치다. 동등하게 고윳값은 $\lambda = \frac{7 \pm \sqrt{49 - 32}}{2} = \frac{7 \pm \sqrt{17}}{2}$이며 둘 다 양수다.
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff med" title="중간"></span>
-$\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명하라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{e}_i$를 $i$번째 표준기저벡터라 하자($i$번째 자리가 $1$이고 나머지는 $0$). $\mathbf{e}_i \neq \mathbf{0}$이고 $\mathbf{A}$가 양정치이므로
-
-    $$
-    \mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i > 0
-    $$
-
-    이다. 그런데 $\mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i = a_{ii}$이므로 모든 $i$에 대해 $a_{ii} > 0$이다. 역은 성립하지 않음에 유의하라. 대각 성분이 양수라고 양정치성이 보장되지는 않는다(예를 들어 $\begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$은 대각 성분이 양수지만 고윳값이 $3$과 $-1$이다). $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff easy" title="쉬움"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분해 $\mathbf{A} = \mathbf{L}\mathbf{L}^\top$를 구하라.
 
 </div>
@@ -263,6 +259,26 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
 
     확인: $\mathbf{L}\mathbf{L}^\top = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix} = \mathbf{A}$.
 
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span>
+$\mathbf{A}$가 양정치이면 모든 대각 성분 $a_{ii} > 0$임을 증명하라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{e}_i$를 $i$번째 표준기저벡터라 하자($i$번째 자리가 $1$이고 나머지는 $0$). $\mathbf{e}_i \neq \mathbf{0}$이고 $\mathbf{A}$가 양정치이므로
+
+    $$
+    \mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i > 0
+    $$
+
+    이다. 그런데 $\mathbf{e}_i^\top \mathbf{A} \mathbf{e}_i = a_{ii}$이므로 모든 $i$에 대해 $a_{ii} > 0$이다. 역은 성립하지 않음에 유의하라. 대각 성분이 양수라고 양정치성이 보장되지는 않는다(예를 들어 $\begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$은 대각 성분이 양수지만 고윳값이 $3$과 $-1$이다). $\square$
+
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
@@ -279,6 +295,8 @@ $\mathbf{A} = \begin{pmatrix} 4 & 6 \\ 6 & 13 \end{pmatrix}$의 촐레스키 분
     - **거의 특이:** 가장 작은 고윳값 방향으로 자료가 거의 공선적이며, 이는 두 변수가 거의 완벽하게 상관되어 있다는 뜻이다.
     - **대응책:** 명시적인 역행렬 대신 촐레스키 분해를 쓰거나, 정칙화(능형회귀)를 적용하거나, 적절한 경우 유사역행렬을 쓴다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
@@ -294,6 +312,8 @@ $\boldsymbol{\Sigma}$가 양정치이면 마할라노비스 거리 $d^2(\mathbf{
     $\boldsymbol{\Sigma}^{-1}$의 양정치성에 의해 모든 $\mathbf{z}$에 대해 $\mathbf{z}^\top\boldsymbol{\Sigma}^{-1}\mathbf{z} \geq 0$이고, 등호는 $\mathbf{z} = \mathbf{0}$일 때에 한해 성립한다.
 
     따라서 $d^2 = 0$일 필요충분조건은 $\mathbf{x} - \boldsymbol{\mu} = \mathbf{0}$, 즉 $\mathbf{x} = \boldsymbol{\mu}$이다. 이는 마할라노비스 거리가 (정치성을 만족하는) 제대로 된 거리에 준하는 측도임을 확인해 준다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -344,6 +364,8 @@ $\mathbf{A}$가 양정치이면 $\mathbf{A}^{-1}$도 양정치임을 보여라. 
 
     제곱근 행렬은 **백색화**에 쓰인다. $\mathbf{X} \sim (\boldsymbol{\mu}, \boldsymbol{\Sigma})$일 때 $\boldsymbol{\Sigma}^{-1/2}(\mathbf{X}-\boldsymbol{\mu})$의 공분산은 $\mathbf{I}$가 된다. 마할라노비스 거리가 이 변환 뒤의 유클리드 거리와 같다는 것도 여기서 나온다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
@@ -391,6 +413,8 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
 
     다만 곱의 고윳값은 모두 양수다. $\mathbf{A}\mathbf{B}$가 $\mathbf{A}^{1/2}\mathbf{B}\mathbf{A}^{1/2}$(대칭 양정치)와 닮았기 때문이다. **고윳값은 양수지만 대칭이 아니므로 양정치행렬은 아니다.** $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
@@ -437,6 +461,8 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
     **직관.** 셋이 서로 강하게 음의 상관을 갖는 것은 불가능하다. $X_1$이 $X_2$와 반대로 움직이고 $X_2$가 $X_3$과 반대로 움직이면, $X_1$과 $X_3$은 오히려 **같이** 움직이는 경향이 생긴다. 변수가 많아질수록 제약은 더 강해져 하한이 $-1/(p-1)$이 된다.
 
     **실무적 함의.** 전문가에게 상관계수를 개별적으로 물어 행렬을 채우면 양반정치가 깨지기 쉽다. 그런 행렬로는 모의실험도 마할라노비스 거리 계산도 할 수 없다. 가장 가까운 양반정치행렬로 보정하는 절차가 따로 필요한 이유다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -489,6 +515,8 @@ $\mathbf{A}$, $\mathbf{B}$가 양정치이면 $\mathbf{A} + \mathbf{B}$도 양�
     **왜 촐레스키인가.** $\boldsymbol{\Sigma}^{1/2}$(연습문제 6)을 써도 되지만, 촐레스키는 고윳값 분해보다 약 두 배 빠르고 삼각행렬이라 곱셈도 싸다. 양정치성이 보장될 때 표준적인 선택이다.
 
     또한 촐레스키는 **양정치성 판정**에도 쓰인다. `np.linalg.cholesky`는 행렬이 양정치가 아니면 예외를 던지므로, 고윳값을 다 구하는 것보다 빠른 검사가 된다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

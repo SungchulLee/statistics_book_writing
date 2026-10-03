@@ -2,7 +2,9 @@
 
 앞 절의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성, 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 장에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
 
-## 일반 선형모형
+---
+
+## 1. 일반 선형모형
 
 행렬 형태의 모형은
 
@@ -23,7 +25,9 @@ $$
 
     이 장에서 $p$는 [0.1절 선형대수 표기](../../math/linear_algebra.md)에 적은 대로 **절편 열을 포함한 $\mathbf{X}$의 열의 개수**다. 절편이 있는 모형이면 설명변수는 $p-1$개이고 계수는 $\beta_0, \beta_1, \dots, \beta_{p-1}$로 적는다. 그래서 $\operatorname{tr}(\mathbf{H}) = p$, 잔차 자유도 $n - p$, $s^2 = \text{SSE}/(n-p)$가 된다. **13장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해** 계획행렬을 $n \times (p+1)$로 쓰므로 그쪽의 자유도가 $n - p - 1$로 적힌다. 두 표기의 $p$가 $1$만큼 어긋나는 것일 뿐이고 자유도 자체는 같다.
 
-## 최소제곱추정량
+---
+
+## 2. 최소제곱추정량
 
 최소제곱추정량은 $\lVert\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\rVert^2$을 최소화한다.
 
@@ -33,7 +37,9 @@ $$
 
 이것은 $\mathbf{y}$의 선형함수다. 행렬 $(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 $\mathbf{y}$를 $\hat{\boldsymbol{\beta}}$으로 보낸다.
 
-## 최소제곱추정량의 표본분포
+---
+
+## 3. 최소제곱추정량의 표본분포
 
 <div class="thmbox" markdown>
 
@@ -74,7 +80,9 @@ $$
 
     $j$번째 계수의 분산은 $\operatorname{Var}(\hat{\beta}_j) = \sigma^2[(\mathbf{X}^\top\mathbf{X})^{-1}]_{jj}$이다.
 
-## 그림으로 보는 공분산 구조
+---
+
+## 4. 그림으로 보는 공분산 구조
 
 ![왼쪽과 가운데는 계획행렬의 두 열이 직교할 때와 상관 0.9일 때 두 계수 추정값이 흩어지는 모양과 이론 95% 타원, 오른쪽은 열의 상관이 커질수록 계수의 분산이 부푸는 곡선](./img/beta_covariance_ellipse.png)
 
@@ -92,7 +100,9 @@ $$
 
 오른쪽 그림은 그 부풂을 $\rho$의 함수로 그린 것이다. 분산팽창은 정확히 $1/(1 - \rho^2)$이며, $\rho = 0.9$에서 모의값 $5.2552$ 대 이론값 $5.2632$, $\rho = 0.95$에서 $10.1603$ 대 $10.2564$로 맞는다. $\rho \to 1$에서 값이 발산하는 것은 두 열이 완전히 겹치면 $\mathbf{X}^\top\mathbf{X}$가 특이행렬이 되어 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 자체가 없어지기 때문이다. 모형의 가정에 $\operatorname{rank}(\mathbf{X}) = p$가 들어 있는 이유가 여기 있다. 그림이 덧붙이는 것은 그 가정이 있다와 없다로 갈리는 문제가 아니라 정도의 문제라는 사실이다. 동시에, 두 타원의 중심이 모두 참값 $(2, -1)$에 그대로 있다는 점도 눈여겨볼 만하다. **다중공선성은 추정값을 치우치게 하지 않는다.** $\hat{\boldsymbol{\beta}}$은 여전히 불편이며, 다만 분산이 부풀 뿐이다.
 
-## 적합값과 잔차
+---
+
+## 5. 적합값과 잔차
 
 적합값과 잔차는
 
@@ -114,7 +124,9 @@ $$
 
 $\mathbf{M}\mathbf{X} = \mathbf{0}$이므로 $\mathbf{e}$의 평균은 $\boldsymbol{\beta}$와 무관하게 0이지만, 공분산행렬 $\sigma^2\mathbf{M}$은 특이행렬이므로(계수 $n - p$) 잔차들끼리는 서로 독립이 아니다.
 
-## 잔차제곱합의 분포
+---
+
+## 6. 잔차제곱합의 분포
 
 <div class="thmbox" markdown>
 
@@ -160,7 +172,9 @@ $$
 
     이고, 나누는 수는 잔차의 개수 $n$이 아니라 **잔차가 놓인 부분공간의 차원** $n-p$다. 잔차 $\mathbf{e} = \mathbf{M}\mathbf{y}$가 $\mathbf{X}$의 $p$개 열에 모두 직교하도록 묶여 있어 자유롭게 움직일 수 있는 방향이 $n-p$개뿐이기 때문이다. [5.1절](../../../ch05/foundations/statistics_as_rv.md)의 $E[S^2] = \sigma^2$이 $\mathbf{X} = \mathbf{1}$, $p = 1$인 경우이고, 그때 $n - p = n - 1$로 정확히 일치한다.
 
-## 추정량과 SSE의 독립성
+---
+
+## 7. 추정량과 SSE의 독립성
 
 <div class="thmbox" markdown>
 
@@ -182,7 +196,9 @@ $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$는 독립이다.
 
     **무상관에서 독립으로 넘어가는 데 정규성이 쓰인다.** 가우스–마르코프 가정만으로는 $\operatorname{Cov}(\hat{\boldsymbol{\beta}}, \mathbf{e}) = \mathbf{O}$까지만 얻고 독립성은 얻지 못한다. 그래서 정리 6(가우스–마르코프)은 정규성 없이 성립하지만 정리 4와 정리 5의 $t$·$F$ 분포는 그렇지 않다.
 
-## 개별 계수에 대한 t-통계량
+---
+
+## 8. 개별 계수에 대한 t-통계량
 
 $\hat{\beta}_j$의 정규분포, $\text{SSE}/\sigma^2$의 카이제곱분포, 그리고 이 둘의 독립성을 결합하면 t-분포가 나온다.
 
@@ -218,7 +234,9 @@ $$
 
     **세 정리가 모두 쓰였다는 점에 주의하라.** 정규성(정리 1), 카이제곱(정리 2), 독립성(정리 3) 중 하나라도 없으면 이 비는 $t$ 분포를 따르지 않는다.
 
-## 여러 계수를 검정하는 F-통계량
+---
+
+## 9. 여러 계수를 검정하는 F-통계량
 
 계수의 부분집합이 동시에 0인지 검정하려면, 계수 $q$인 $q \times p$ 행렬 $\mathbf{C}$에 대해 $H_0: \mathbf{C}\boldsymbol{\beta} = \mathbf{0}$을 검정하는 것을 생각한다.
 
@@ -266,7 +284,9 @@ $$
 
 사영의 언어로는 $\text{SSR} = \lVert(\mathbf{H} - \tfrac{1}{n}\mathbf{J})\mathbf{y}\rVert^2$이다. 절편만 있는 모형의 사영 $\tfrac{1}{n}\mathbf{J}$를 $\mathbf{H}$에서 걷어낸 것이 계수 $p-1$인 직교사영이기 때문에 자유도가 $p$가 아니라 $p-1$이다.
 
-## 가우스–마르코프 정리
+---
+
+## 10. 가우스–마르코프 정리
 
 정규성을 가정하지 않아도 최소제곱추정량은 최적성을 갖는다.
 
@@ -294,11 +314,13 @@ $$
     \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{A}\mathbf{A}^\top = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1} + \sigma^2\mathbf{D}\mathbf{D}^\top
     $$
 
-    이다. $\mathbf{D}\mathbf{D}^\top \succeq 0$이므로 양반정치 순서에서 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) \succeq \operatorname{Var}(\hat{\boldsymbol{\beta}})$이고, 등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다. 연습문제 6에서 같은 계산을 다시 밟는다. $\square$
+    이다. $\mathbf{D}\mathbf{D}^\top \succeq 0$이므로 양반정치 순서에서 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) \succeq \operatorname{Var}(\hat{\boldsymbol{\beta}})$이고, 등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다. 연습문제 9에서 같은 계산을 다시 밟는다. $\square$
 
     **가정에서 무엇이 빠졌는지 보라.** 정규성은 쓰지 않았고 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$만 썼다. 반면 등분산 $\sigma^2\mathbf{I}$는 반드시 쓴다. 이것이 깨지면 최소제곱은 여전히 불편이지만 더 이상 최량이 아니다(연습문제 10).
 
-## 핵심 분포 요약
+---
+
+## 11. 핵심 분포 요약
 
 | 양 | 분포 | 자유도 |
 |---|---|---|
@@ -309,6 +331,8 @@ $$
 | 전체 F-검정 $F = \text{MSR}/\text{MSE}$ | $F_{p-1,\,n-p}$ | $p-1$과 $n-p$ |
 
 이 모든 분포는 세 가지 재료에 의존한다. (1) $\hat{\boldsymbol{\beta}}$이 정규벡터 $\mathbf{y}$의 선형함수이고, (2) $\mathbf{M}$이 대칭 멱등이며, (3) $\mathbf{X}^\top\mathbf{M} = \mathbf{0}$이므로 $\hat{\boldsymbol{\beta}}$과 $\text{SSE}$가 독립이라는 것이다.
+
+---
 
 ## 연습문제
 
@@ -330,6 +354,8 @@ $$
 
     개별 계수에 대한 t-통계량은 각자의 귀무가설 아래에서 $t_{n-p} = t_{26}$ 분포를 따른다. 각 t-통계량의 자유도는 $26$이다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
@@ -350,6 +376,8 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
 
     이는 잔차가 $\mathbf{X}$의 모든 열에 직교함을 보여주며, 이것이 정규방정식의 행렬 형태다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
@@ -366,13 +394,15 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
 
     이다. 여기서 $\text{SSE}_R$은 $X_2$와 $X_3$을 제외한(절편과 $X_1$만 적합한) 제약 모형의 잔차제곱합이고, $\text{SSE}_U$는 네 모수를 모두 갖는 완전(제약 없는) 모형의 잔차제곱합이다. F-통계량은 $X_2$와 $X_3$을 포함해서 줄어든 SSE가 잡음 수준 $s^2 = \text{SSE}_U/(n-4)$에 비해 충분히 큰지를 잰다.
 
-    **정리 5의 꼴과 같다.** 두 계획행렬을 $\mathbf{X}_R$, $\mathbf{X}_U$라 하고 각각의 모자 행렬을 $\mathbf{H}_R$, $\mathbf{H}_U$라 하면 $\operatorname{col}(\mathbf{X}_R) \subseteq \operatorname{col}(\mathbf{X}_U)$이므로 [직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽 연습문제 7에 의해 $\mathbf{H}_U - \mathbf{H}_R$이 계수 $q = 2$인 직교사영이고 $(\mathbf{H}_U - \mathbf{H}_R)(\mathbf{I} - \mathbf{H}_U) = \mathbf{O}$이다. 그런데
+    **정리 5의 꼴과 같다.** 두 계획행렬을 $\mathbf{X}_R$, $\mathbf{X}_U$라 하고 각각의 모자 행렬을 $\mathbf{H}_R$, $\mathbf{H}_U$라 하면 $\operatorname{col}(\mathbf{X}_R) \subseteq \operatorname{col}(\mathbf{X}_U)$이므로 [직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽 연습문제 5에 의해 $\mathbf{H}_U - \mathbf{H}_R$이 계수 $q = 2$인 직교사영이고 $(\mathbf{H}_U - \mathbf{H}_R)(\mathbf{I} - \mathbf{H}_U) = \mathbf{O}$이다. 그런데
 
     $$
     \text{SSE}_R - \text{SSE}_U = \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_R)\mathbf{y} - \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_U)\mathbf{y} = \mathbf{y}^\top(\mathbf{H}_U - \mathbf{H}_R)\mathbf{y}
     $$
 
     이므로 분자와 분모가 서로 직교하는 두 사영의 이차형식이고, 크레이그 정리로 독립인 두 카이제곱의 비가 된다. 곧 위 식은 정리 5를 제곱합의 차이로 다시 쓴 것일 뿐이다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -402,6 +432,8 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
 
     이다. 정규성 가정은 전혀 필요하지 않았고 $E[\boldsymbol{\varepsilon}] = \mathbf{0}$과 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$만 썼다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
@@ -414,50 +446,11 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
 
     $\mathbf{H}\mathbf{M} = \mathbf{0}$이므로 벡터 $\mathbf{H}\mathbf{y}$와 $\mathbf{M}\mathbf{y}$는 무상관이다. 정규성 가정 아래에서 무상관인 정규확률벡터는 독립이다. 이 직교 분해가 t-통계량과 F-통계량이 앞서 진술한 분포를 갖는 기하적 이유다.
 
-<div class="drillbox" markdown>
-
-**연습문제 6.** <span class="diff hard" title="어려움"></span>
-가우스–마르코프 정리를 증명하라. 임의의 선형 불편추정량 $\tilde{\boldsymbol{\beta}} = \mathbf{C}\mathbf{y}$에 대해 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}})$이 양반정치임을 보여라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{C} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top + \mathbf{D}$로 쓰자. 불편성은 모든 $\boldsymbol{\beta}$에 대해
-
-    $$
-    E[\tilde{\boldsymbol{\beta}}] = \mathbf{C}\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
-    \quad\Longrightarrow\quad \mathbf{C}\mathbf{X} = \mathbf{I}
-    \quad\Longrightarrow\quad \mathbf{D}\mathbf{X} = \mathbf{O}
-    $$
-
-    을 요구한다. 분산은
-
-    $$
-    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{C}\mathbf{C}^\top
-    = \sigma^2\left[(\mathbf{X}^\top\mathbf{X})^{-1} + \mathbf{D}\mathbf{D}^\top\right]
-    $$
-
-    이다. 교차항이 사라지는 것이 핵심인데, $\mathbf{D}\mathbf{X} = \mathbf{O}$이므로
-
-    $$
-    (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{D}^\top = (\mathbf{X}^\top\mathbf{X})^{-1}(\mathbf{D}\mathbf{X})^\top = \mathbf{O}
-    $$
-
-    이기 때문이다. 따라서
-
-    $$
-    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{D}\mathbf{D}^\top \succeq 0
-    $$
-
-    이다. 특히 임의의 $\mathbf{c}$에 대해 $\operatorname{Var}(\mathbf{c}^\top\tilde{\boldsymbol{\beta}}) \ge \operatorname{Var}(\mathbf{c}^\top\hat{\boldsymbol{\beta}})$이므로 최소제곱추정량이 **최량선형불편추정량(BLUE)**이다.
-
-    등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다.
-
-    **가정에 주의하라.** 이 증명은 정규성을 쓰지 않지만 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$는 반드시 쓴다. 등분산이 깨지면 최소제곱은 여전히 불편이지만 더 이상 최량이 아니다(연습문제 10). $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1})$을 모의실험으로 확인하라. 공분산행렬 전체를 이론값과 비교하라.
 
 </div>
@@ -500,9 +493,11 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 
     비대각 성분이 0이 아니라는 점이 중요하다. 계수 추정값들은 서로 **상관되어** 있으며, 그래서 계수를 하나씩 따로 검정하는 것과 여러 개를 한꺼번에 검정하는 것($F$ 검정)이 다른 결론을 낼 수 있다. 예측변수들이 직교하면 비대각 성분이 0이 되어 이 문제가 사라진다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 새로운 점 $\mathbf{x}_0$에서 평균반응의 분산이 $\sigma^2\mathbf{x}_0^\top(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{x}_0$임을 보이고 수치로 확인하라. 예측구간과 신뢰구간의 차이는 무엇인가?
 
 </div>
@@ -550,9 +545,11 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
 
     이 된다. 자료를 아무리 모아도 괄호 안의 $1$은 사라지지 않는다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 반응변수와 아무 관계 없는 예측변수를 추가하면 $R^2$은 반드시 커지지만 계수 추정의 분산도 커진다. 모의실험으로 확인하고, 수정 $R^2$이 왜 필요한지 설명하라.
 
 </div>
@@ -600,6 +597,51 @@ $\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\ma
     **왜 $R^2$이 반드시 커지는가.** 변수를 추가하면 열공간이 넓어지므로 사영이 $\mathbf{y}$에 더 가까워질 수밖에 없다. $\text{SSE}$는 절대 늘지 않는다. 따라서 $R^2$은 **모형 선택 기준이 될 수 없다.**
 
     수정 $R^2$은 $\text{SSE}$를 자유도 $n-p$로 나누어, 변수를 넣어 얻는 적합의 개선이 잃는 자유도만큼의 값어치가 있는지를 따진다. 같은 동기에서 AIC와 BIC가 나온다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+가우스–마르코프 정리를 증명하라. 임의의 선형 불편추정량 $\tilde{\boldsymbol{\beta}} = \mathbf{C}\mathbf{y}$에 대해 $\operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}})$이 양반정치임을 보여라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{C} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top + \mathbf{D}$로 쓰자. 불편성은 모든 $\boldsymbol{\beta}$에 대해
+
+    $$
+    E[\tilde{\boldsymbol{\beta}}] = \mathbf{C}\mathbf{X}\boldsymbol{\beta} = \boldsymbol{\beta}
+    \quad\Longrightarrow\quad \mathbf{C}\mathbf{X} = \mathbf{I}
+    \quad\Longrightarrow\quad \mathbf{D}\mathbf{X} = \mathbf{O}
+    $$
+
+    을 요구한다. 분산은
+
+    $$
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) = \sigma^2\mathbf{C}\mathbf{C}^\top
+    = \sigma^2\left[(\mathbf{X}^\top\mathbf{X})^{-1} + \mathbf{D}\mathbf{D}^\top\right]
+    $$
+
+    이다. 교차항이 사라지는 것이 핵심인데, $\mathbf{D}\mathbf{X} = \mathbf{O}$이므로
+
+    $$
+    (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{D}^\top = (\mathbf{X}^\top\mathbf{X})^{-1}(\mathbf{D}\mathbf{X})^\top = \mathbf{O}
+    $$
+
+    이기 때문이다. 따라서
+
+    $$
+    \operatorname{Var}(\tilde{\boldsymbol{\beta}}) - \operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{D}\mathbf{D}^\top \succeq 0
+    $$
+
+    이다. 특히 임의의 $\mathbf{c}$에 대해 $\operatorname{Var}(\mathbf{c}^\top\tilde{\boldsymbol{\beta}}) \ge \operatorname{Var}(\mathbf{c}^\top\hat{\boldsymbol{\beta}})$이므로 최소제곱추정량이 **최량선형불편추정량(BLUE)**이다.
+
+    등호는 $\mathbf{D} = \mathbf{O}$, 곧 $\tilde{\boldsymbol{\beta}} = \hat{\boldsymbol{\beta}}$일 때만 성립한다.
+
+    **가정에 주의하라.** 이 증명은 정규성을 쓰지 않지만 $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{I}$는 반드시 쓴다. 등분산이 깨지면 최소제곱은 여전히 불편이지만 더 이상 최량이 아니다(연습문제 10). $\square$
+
+---
 
 <div class="drillbox" markdown>
 

@@ -1,6 +1,6 @@
 # 수치적 안정성(로그-합-지수 기법)
 
-## 오버플로 문제
+## 1. 오버플로 문제
 
 소프트맥스를 계산하려면 로짓 $z_1, \ldots, z_C$를 지수화해야 한다. 64비트 부동소수점에서
 $e^{z}$는 $z \gtrsim 709$이면 무한대로 넘치고 $z \lesssim -745$이면 0으로 사라진다. 신경망이나
@@ -10,7 +10,9 @@ $e^{z}$는 $z \gtrsim 709$이면 무한대로 넘치고 $z \lesssim -745$이면 
 이 절에서는 수학적 결과를 바꾸지 않으면서 오버플로를 없애고 언더플로를 크게 줄이는 간단한
 대수적 항등식, **로그-합-지수(LSE) 기법**을 전개한다.
 
-## 소프트맥스의 평행이동 불변성
+---
+
+## 2. 소프트맥스의 평행이동 불변성
 
 [소프트맥스 절](softmax.md)에서 보았듯이 소프트맥스는 평행이동 불변이다. 임의의 스칼라 $c$에
 대해
@@ -24,7 +26,9 @@ $$
 가 성립한다. 분자와 분모에 $e^{-c}$를 곱하면 소거되기 때문이다. $c$를 잘 고르면 모든 지수를
 안전한 범위에 둘 수 있다.
 
-## 로그-합-지수 항등식
+---
+
+## 3. 로그-합-지수 항등식
 
 벡터 $\mathbf{z}$의 **로그-합-지수**는
 
@@ -47,7 +51,9 @@ $$
 - **언더플로 감소:** 최댓값보다 훨씬 작은 로짓만 0으로 사라지는데, 그런 항은 어차피 합에
   기여하는 바가 무시할 만하다.
 
-## LSE를 이용한 안정적인 소프트맥스
+---
+
+## 4. LSE를 이용한 안정적인 소프트맥스
 
 두 아이디어를 결합하면 수치적으로 안정한 소프트맥스는
 
@@ -61,7 +67,9 @@ $$
 $\operatorname{softmax}(\mathbf{z})_k = e^{\log\operatorname{softmax}(\mathbf{z})_k}$.
 가능한 한 오래 로그 공간에서 작업할수록 안정성이 좋아진다.
 
-## 안정적인 교차엔트로피 손실
+---
+
+## 5. 안정적인 교차엔트로피 손실
 
 참 범주가 $y$인 관측치 하나의 교차엔트로피 손실은
 
@@ -85,7 +93,9 @@ TensorFlow 같은 프레임워크는 확률이 아니라 원시 로짓을 받는
     `log(0)`이 `-inf`가 되기 때문이다. 프레임워크가 제공하는 융합 log-softmax나
     로짓 기반 교차엔트로피 함수를 항상 사용하라.
 
-## 단계별 알고리즘
+---
+
+## 6. 단계별 알고리즘
 
 | 단계 | 연산 | 목적 |
 |---|---|---|
@@ -112,7 +122,9 @@ TensorFlow 같은 프레임워크는 확률이 아니라 원시 로짓을 받는
 
     모든 연산이 안전한 범위에 머물고, 확률은 정확한 수학적 값과 일치한다.
 
-## 두 구현이 갈라지는 지점
+---
+
+## 7. 두 구현이 갈라지는 지점
 
 위 보기의 $\mathbf{z} = (1000,\ 1001,\ 999)$는 극단적으로 보이지만, 사실 벽은 그보다 훨씬 앞에
 있다. 로짓의 모양 $(-1,\ 0,\ -2)$는 그대로 두고 전체 크기만 $0$에서 $900$까지 밀어 올리며 두
@@ -146,7 +158,9 @@ $d = 800$이든 똑같이 $27.6$을 보고하므로, 보고된 손실만 보고�
 아니다. 수학적으로 **완전히 같은 값**을 계산하되 지수의 인자를 항상 $0$ 이하로 유지할 뿐이다.
 공짜로 얻는 안전이니 쓰지 않을 이유가 없다.
 
-## 두 항의 LSE(시그모이드)
+---
+
+## 8. 두 항의 LSE(시그모이드)
 
 이항 로지스틱 회귀($C = 2$)에서 LSE는
 
@@ -156,6 +170,8 @@ $$
 
 로 환원된다. 이 항등식은 지수 $-|z| \le 0$을 유지하여 오버플로를 막는다. 수치 라이브러리에서
 **softplus** 함수의 표준 구현이다.
+
+---
 
 ## 연습문제
 
@@ -225,44 +241,11 @@ $$
     뿐이다). (3) 따라서 로그 안의 합이 최소 1이므로 $\log$ 값이 0 이상이고, 최종 결과
     $m + (\text{0 이상})$이 잘 정의된다.
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff hard" title="어려움"></span>
-$\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf{z})$임을 보여라.
-이 사실이 왜 유용한가?
-
-</div>
-
-??? success "풀이"
-
-    $\operatorname{LSE}(\mathbf{z}) = \log\sum_j e^{z_j}$를 $z_k$로 미분하면
-
-    $$
-    \frac{\partial}{\partial z_k}\operatorname{LSE}(\mathbf{z})
-    = \frac{e^{z_k}}{\sum_j e^{z_j}} = \operatorname{softmax}(\mathbf{z})_k
-    $$
-
-    이다. 즉 $\nabla \operatorname{LSE}(\mathbf{z}) = \operatorname{softmax}(\mathbf{z})$다.
-
-    **유용한 이유 세 가지.**
-
-    1. **기울기 유도가 즉시 나온다.** 교차엔트로피 손실이
-       $\mathcal{L} = -z_y + \operatorname{LSE}(\mathbf{z})$이므로
-       $\nabla_{\mathbf{z}}\mathcal{L} = -\mathbf{e}_y + \operatorname{softmax}(\mathbf{z})
-       = \hat{\mathbf{y}} - \mathbf{y}$가 한 줄로 나온다. 소프트맥스 야코비를 전개할 필요가
-       없다.
-    2. **볼록성이 따라온다.** LSE의 헤세행렬은
-       $\operatorname{diag}(\mathbf{p}) - \mathbf{p}\mathbf{p}^\top$인데, 임의의 $v$에 대해
-       $v^\top H v = \mathbb{E}_p[v^2] - (\mathbb{E}_p[v])^2 = \operatorname{Var}_p(v) \ge 0$
-       이므로 양반정치다. 따라서 LSE는 볼록이고 교차엔트로피 손실도 볼록이다.
-    3. **LSE는 최댓값의 매끄러운 근사다.** 실제로
-       $\max_j z_j \le \operatorname{LSE}(\mathbf{z}) \le \max_j z_j + \log C$이므로
-       "soft max"라는 이름이 여기에서 온다. 엄밀히 말해 소프트맥스 함수는 최댓값이 아니라
-       **arg max의 매끄러운 근사**이고, LSE가 최댓값의 매끄러운 근사다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff med" title="중간"></span>
 $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두 경우로 나누어
 증명하라. $z = 1000$에서 두 식을 각각 계산해 비교하라.
 
@@ -293,9 +276,11 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     참값은 $\log(1+e^{1000}) = 1000 + \log(1+e^{-1000}) \approx 1000$이므로 안정적인 식이
     정확하다. NumPy에서는 `np.logaddexp(0, z)`가 정확히 이 계산을 수행한다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 로짓이 $\mathbf{z} = (-1000, -1001, -999)$처럼 **모두 매우 작은** 경우에도 최댓값을 빼는 것이
 올바르게 작동하는지 확인하라. 최솟값을 빼면 어떻게 되는가?
 
@@ -318,9 +303,11 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     정의상 최댓값보다 $700$ 이상 작아 상대 기여가 $e^{-700} \approx 10^{-304}$이므로 무해하다.
     $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 구현이 `p = softmax(z)`를 계산한 뒤 `loss = -np.log(p[y])`로 손실을 구한다. 이 구현이
 실패하는 구체적인 상황을 제시하고, 왜 융합 연산이 필요한지 설명하라.
 
@@ -356,6 +343,43 @@ $\max(0, z) + \log(1 + e^{-|z|}) = \log(1 + e^z)$임을 $z > 0$과 $z \le 0$ 두
     `softmax_cross_entropy_with_logits`, scikit-learn 내부의 `log_logistic`이 모두 이렇게
     구현되어 있다. **모형의 출력층에 소프트맥스를 넣고 손실에 다시 로그를 취하는 것은 흔하지만
     잘못된 패턴이다.** 모형은 로짓을 내보내고, 손실함수가 로짓을 받도록 하라. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+$\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf{z})$임을 보여라.
+이 사실이 왜 유용한가?
+
+</div>
+
+??? success "풀이"
+
+    $\operatorname{LSE}(\mathbf{z}) = \log\sum_j e^{z_j}$를 $z_k$로 미분하면
+
+    $$
+    \frac{\partial}{\partial z_k}\operatorname{LSE}(\mathbf{z})
+    = \frac{e^{z_k}}{\sum_j e^{z_j}} = \operatorname{softmax}(\mathbf{z})_k
+    $$
+
+    이다. 즉 $\nabla \operatorname{LSE}(\mathbf{z}) = \operatorname{softmax}(\mathbf{z})$다.
+
+    **유용한 이유 세 가지.**
+
+    1. **기울기 유도가 즉시 나온다.** 교차엔트로피 손실이
+       $\mathcal{L} = -z_y + \operatorname{LSE}(\mathbf{z})$이므로
+       $\nabla_{\mathbf{z}}\mathcal{L} = -\mathbf{e}_y + \operatorname{softmax}(\mathbf{z})
+       = \hat{\mathbf{y}} - \mathbf{y}$가 한 줄로 나온다. 소프트맥스 야코비를 전개할 필요가
+       없다.
+    2. **볼록성이 따라온다.** LSE의 헤세행렬은
+       $\operatorname{diag}(\mathbf{p}) - \mathbf{p}\mathbf{p}^\top$인데, 임의의 $v$에 대해
+       $v^\top H v = \mathbb{E}_p[v^2] - (\mathbb{E}_p[v])^2 = \operatorname{Var}_p(v) \ge 0$
+       이므로 양반정치다. 따라서 LSE는 볼록이고 교차엔트로피 손실도 볼록이다.
+    3. **LSE는 최댓값의 매끄러운 근사다.** 실제로
+       $\max_j z_j \le \operatorname{LSE}(\mathbf{z}) \le \max_j z_j + \log C$이므로
+       "soft max"라는 이름이 여기에서 온다. 엄밀히 말해 소프트맥스 함수는 최댓값이 아니라
+       **arg max의 매끄러운 근사**이고, LSE가 최댓값의 매끄러운 근사다. $\square$
 
 ---
 

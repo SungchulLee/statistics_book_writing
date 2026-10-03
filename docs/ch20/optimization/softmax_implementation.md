@@ -8,7 +8,7 @@
 
 ---
 
-## 소프트맥스 함수
+## 1. 소프트맥스 함수
 
 소프트맥스 함수는 실숫값 로짓 벡터 $\mathbf{z} = (z_1, \ldots, z_C)^\top$를 $C$개 범주에 대한
 확률분포로 옮긴다.
@@ -187,7 +187,7 @@ $$
 
 ---
 
-## 교차엔트로피 손실
+## 2. 교차엔트로피 손실
 
 원-핫 부호화된 이름표 $\mathbf{Y} \in \{0,1\}^{n \times C}$와 예측확률
 $\hat{\mathbf{Y}} \in (0,1)^{n \times C}$를 갖는 관측치 $n$개에 대해 교차엔트로피 손실은
@@ -282,13 +282,13 @@ $\varepsilon$이 $\log(0)$을 막는다.
 !!! warning "$\varepsilon$ 보정은 손실값만 보호한다"
     이 $\varepsilon$ 기법은 `nan`을 막아 주지만 목적함수를 미세하게 바꾼다. 확신에 찬 오답의
     손실이 $-\log(\varepsilon) = 27.6$에서 잘리기 때문이다
-    ([가능도 절](../../ch19/logistic_regression/likelihood.md)의 연습문제 4 참조). 학습 자체는
+    ([가능도 절](../../ch19/logistic_regression/likelihood.md)의 연습문제 5 참조). 학습 자체는
     기울기만 쓰므로 영향을 받지 않지만, 보고되는 손실값은 참값이 아니다. 로짓에서 직접
     log-softmax를 계산하는 편이 정확하다.
 
 ---
 
-## 로짓에 대한 손실의 기울기
+## 3. 로짓에 대한 손실의 기울기
 
 소프트맥스 회귀에서 가장 우아한 결과 중 하나는, 교차엔트로피 손실의 로짓행렬
 $\mathbf{Z} = \mathbf{X}\mathbf{W} + \mathbf{b}^\top$에 대한 기울기가
@@ -412,7 +412,7 @@ $$
 
 ---
 
-## 원-핫 부호화
+## 4. 원-핫 부호화
 
 훈련 이름표 $y_i \in \{0, 1, \ldots, C-1\}$을 원-핫 벡터로 바꿔야 한다. 이름표가 $y_i = k$이면
 원-핫 벡터는 위치 $k$에 1, 나머지에 0을 갖는다.
@@ -499,7 +499,7 @@ $$
 
 ---
 
-## 전부 합치기 --- 학습 루프
+## 5. 전부 합치기 --- 학습 루프
 
 이제 구성요소들을 모아 완전한 경사하강 학습 루프를 만든다.
 
@@ -608,7 +608,7 @@ $$
 
 ---
 
-## 평가
+## 6. 평가
 
 학습 후 검정자료에 대한 예측을 계산하고 정확도를 보고한다.
 
@@ -704,7 +704,7 @@ $$
 
 ---
 
-## scikit-learn과의 검증
+## 7. scikit-learn과의 검증
 
 직접 만든 구현을 scikit-learn의 `LogisticRegression`(다범주 문제에서 소프트맥스를 사용)과
 비교하면 유용한 검산이 된다.
@@ -803,7 +803,7 @@ $$
 
 ---
 
-## 학습된 모형을 눈으로 보기
+## 8. 학습된 모형을 눈으로 보기
 
 정확도 $1.0000$이라는 숫자 하나로는 모형이 무엇을 배웠는지 알 수 없다. 특성 4개는 그릴 수
 없으니 꽃잎 길이와 꽃잎 너비 2개만 남겨 위 학습 루프를 그대로 돌려 보자. 같은 `lr = 0.5`,
@@ -835,7 +835,7 @@ $x \approx 0.03$에서 $0.9357$까지만 올라간다. 양쪽에서 이웃 범�
 
 ---
 
-## 해석
+## 9. 해석
 
 소프트맥스 회귀 구현에서 몇 가지 중요한 점이 드러난다.
 
@@ -854,41 +854,7 @@ $x \approx 0.03$에서 $0.9357$까지만 올라간다. 양쪽에서 이웃 범�
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff hard" title="어려움"></span>
-교차엔트로피 손실 $J = -\frac{1}{n}\sum_i \sum_c y_{ic}\log\hat{y}_{ic}$과 소프트맥스 정의
-$\hat{y}_{ic} = e^{z_{ic}} / \sum_{j} e^{z_{ij}}$에서 출발하여, 관측치 $i$ 하나에 대해
-$\partial J / \partial z_{ik} = (\hat{y}_{ik} - y_{ik})/n$을 유도하라.
-
-</div>
-
-??? success "풀이"
-    관측치 $i$를 고정하고 명확성을 위해 $1/n$ 인자를 잠시 뺀다. 이 관측치의 손실은
-
-    $$
-    \ell_i = -\sum_c y_{ic} \log \hat{y}_{ic}
-    $$
-
-    이다. 소프트맥스 야코비는
-    $\partial \hat{y}_{ic} / \partial z_{ik} = \hat{y}_{ic}(\delta_{ck} - \hat{y}_{ik})$이고
-    $\delta_{ck}$는 크로네커 델타다. 연쇄법칙을 적용하면
-
-    $$
-    \frac{\partial \ell_i}{\partial z_{ik}} = -\sum_c y_{ic} \frac{1}{\hat{y}_{ic}} \cdot \hat{y}_{ic}(\delta_{ck} - \hat{y}_{ik})
-    = -\sum_c y_{ic}(\delta_{ck} - \hat{y}_{ik})
-    $$
-
-    이고, 전개하면
-
-    $$
-    = -y_{ik} + \hat{y}_{ik}\sum_c y_{ic} = -y_{ik} + \hat{y}_{ik} \cdot 1 = \hat{y}_{ik} - y_{ik}
-    $$
-
-    이다. 여기서 $\sum_c y_{ic} = 1$(원-핫)을 썼다. $1/n$ 인자를 포함하면
-    $\partial J / \partial z_{ik} = (\hat{y}_{ik} - y_{ik})/n$이다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff med" title="중간"></span>
+**연습문제 1.** <span class="diff med" title="중간"></span>
 $L_2$ 정칙화 판본의 학습 루프를 구현하라. 손실에 벌점항 $\frac{\lambda}{2}\|\mathbf{W}\|_F^2$을
 더하고 기울기를 그에 맞게 수정하라. $\lambda = 0.1$로 붓꽃 자료에서 학습하고 벌점 없는 판본과
 검정 정확도를 비교하라.
@@ -949,9 +915,11 @@ $L_2$ 정칙화 판본의 학습 루프를 구현하라. 손실에 벌점항 $\f
     기대로 임의의 값을 쓰면 이렇게 성능이 떨어진다. 정칙화의 이득은 $d$가 $n$에 비해 크거나
     특성에 잡음이 많을 때 나타난다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff med" title="중간"></span>
 소프트맥스는 평행이동 불변이다:
 $\operatorname{softmax}(\mathbf{z} + c\mathbf{1}) = \operatorname{softmax}(\mathbf{z})$.
 $\mathbf{z} = (1000, 1001, 999)^\top$에 대해 최댓값을 빼는 기법을 쓴 경우와 쓰지 않은 경우의
@@ -991,50 +959,11 @@ NumPy 실험을 작성하라.
     NumPy는 예외를 던지지 않고 경고만 내므로, 경고를 무시하도록 설정된 환경에서는 이 오류가
     조용히 지나갈 수 있다는 점에 유의하라.
 
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff hard" title="어려움"></span>
-소프트맥스 회귀에서 범주 $j$와 $k$ 사이의 결정경계가 초평면임을 증명하라. 즉 집합
-$\{\mathbf{x} : \hat{p}_j(\mathbf{x}) = \hat{p}_k(\mathbf{x})\}$가 $\mathbb{R}^d$의
-$(d-1)$차원 아핀 부분공간임을 보여라.
-
-</div>
-
-??? success "풀이"
-    예측확률은 $\hat{p}_c(\mathbf{x}) = \operatorname{softmax}(\mathbf{W}\mathbf{x} + \mathbf{b})_c$
-    이다. $\hat{p}_j = \hat{p}_k$로 놓으면
-
-    $$
-    \frac{e^{\mathbf{w}_j^\top \mathbf{x} + b_j}}{\sum_m e^{\mathbf{w}_m^\top \mathbf{x} + b_m}}
-    = \frac{e^{\mathbf{w}_k^\top \mathbf{x} + b_k}}{\sum_m e^{\mathbf{w}_m^\top \mathbf{x} + b_m}}
-    $$
-
-    이고, 분모가 소거되어
-    $e^{\mathbf{w}_j^\top \mathbf{x} + b_j} = e^{\mathbf{w}_k^\top \mathbf{x} + b_k}$가 된다.
-    로그를 취하면
-
-    $$
-    \mathbf{w}_j^\top \mathbf{x} + b_j = \mathbf{w}_k^\top \mathbf{x} + b_k
-    $$
-
-    이고 정리하면
-
-    $$
-    (\mathbf{w}_j - \mathbf{w}_k)^\top \mathbf{x} + (b_j - b_k) = 0
-    $$
-
-    이다. 이는 법선벡터가 $\mathbf{w}_j - \mathbf{w}_k$이고 상수항이 $b_j - b_k$인 초평면의
-    방정식이다. $\mathbf{w}_j \neq \mathbf{w}_k$인 한 이는 $(d-1)$차원 아핀 부분공간을 정의한다.
-
-    **주의할 점:** 이 집합은 "두 범주의 확률이 같은 곳"이지 **결정경계 자체가 아니다.**
-    실제 결정경계는 $\hat p_j$와 $\hat p_k$가 **동시에 최대**인 곳이므로, 위 초평면의 일부만
-    실제 경계가 된다. 세 번째 범주 $m$이 그 초평면 위 어딘가에서 $\hat p_m$을 더 크게 만들면
-    그 부분은 경계가 아니다. 그래서 소프트맥스의 결정영역은 초평면들이 잘라 만드는 **볼록
-    다면체**가 되고, 두 범주 사이의 실제 경계는 초평면의 다면체 조각이다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 50 에포크마다 학습률에 감쇠인자 $\gamma = 0.95$를 곱하는 학습률 일정을 구현하라. 초기 학습률
 $\eta_0 = 1.0$으로 붓꽃 자료에서 500 에포크 학습하고, 훈련 손실 곡선을 고정 학습률 판본과
 비교하라.
@@ -1103,6 +1032,85 @@ $\eta_0 = 1.0$으로 붓꽃 자료에서 500 에포크 학습하고, 훈련 손�
         $\sum_t \eta_t = \infty$이고 $\sum_t \eta_t^2 < \infty$인데, 지수 감쇠는 첫 조건을
         만족하지 못한다(등비급수는 수렴한다). 이론적으로는 $\eta_t = \eta_0/t$나
         $\eta_0/\sqrt{t}$가 안전한 선택이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
+교차엔트로피 손실 $J = -\frac{1}{n}\sum_i \sum_c y_{ic}\log\hat{y}_{ic}$과 소프트맥스 정의
+$\hat{y}_{ic} = e^{z_{ic}} / \sum_{j} e^{z_{ij}}$에서 출발하여, 관측치 $i$ 하나에 대해
+$\partial J / \partial z_{ik} = (\hat{y}_{ik} - y_{ik})/n$을 유도하라.
+
+</div>
+
+??? success "풀이"
+    관측치 $i$를 고정하고 명확성을 위해 $1/n$ 인자를 잠시 뺀다. 이 관측치의 손실은
+
+    $$
+    \ell_i = -\sum_c y_{ic} \log \hat{y}_{ic}
+    $$
+
+    이다. 소프트맥스 야코비는
+    $\partial \hat{y}_{ic} / \partial z_{ik} = \hat{y}_{ic}(\delta_{ck} - \hat{y}_{ik})$이고
+    $\delta_{ck}$는 크로네커 델타다. 연쇄법칙을 적용하면
+
+    $$
+    \frac{\partial \ell_i}{\partial z_{ik}} = -\sum_c y_{ic} \frac{1}{\hat{y}_{ic}} \cdot \hat{y}_{ic}(\delta_{ck} - \hat{y}_{ik})
+    = -\sum_c y_{ic}(\delta_{ck} - \hat{y}_{ik})
+    $$
+
+    이고, 전개하면
+
+    $$
+    = -y_{ik} + \hat{y}_{ik}\sum_c y_{ic} = -y_{ik} + \hat{y}_{ik} \cdot 1 = \hat{y}_{ik} - y_{ik}
+    $$
+
+    이다. 여기서 $\sum_c y_{ic} = 1$(원-핫)을 썼다. $1/n$ 인자를 포함하면
+    $\partial J / \partial z_{ik} = (\hat{y}_{ik} - y_{ik})/n$이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+소프트맥스 회귀에서 범주 $j$와 $k$ 사이의 결정경계가 초평면임을 증명하라. 즉 집합
+$\{\mathbf{x} : \hat{p}_j(\mathbf{x}) = \hat{p}_k(\mathbf{x})\}$가 $\mathbb{R}^d$의
+$(d-1)$차원 아핀 부분공간임을 보여라.
+
+</div>
+
+??? success "풀이"
+    예측확률은 $\hat{p}_c(\mathbf{x}) = \operatorname{softmax}(\mathbf{W}\mathbf{x} + \mathbf{b})_c$
+    이다. $\hat{p}_j = \hat{p}_k$로 놓으면
+
+    $$
+    \frac{e^{\mathbf{w}_j^\top \mathbf{x} + b_j}}{\sum_m e^{\mathbf{w}_m^\top \mathbf{x} + b_m}}
+    = \frac{e^{\mathbf{w}_k^\top \mathbf{x} + b_k}}{\sum_m e^{\mathbf{w}_m^\top \mathbf{x} + b_m}}
+    $$
+
+    이고, 분모가 소거되어
+    $e^{\mathbf{w}_j^\top \mathbf{x} + b_j} = e^{\mathbf{w}_k^\top \mathbf{x} + b_k}$가 된다.
+    로그를 취하면
+
+    $$
+    \mathbf{w}_j^\top \mathbf{x} + b_j = \mathbf{w}_k^\top \mathbf{x} + b_k
+    $$
+
+    이고 정리하면
+
+    $$
+    (\mathbf{w}_j - \mathbf{w}_k)^\top \mathbf{x} + (b_j - b_k) = 0
+    $$
+
+    이다. 이는 법선벡터가 $\mathbf{w}_j - \mathbf{w}_k$이고 상수항이 $b_j - b_k$인 초평면의
+    방정식이다. $\mathbf{w}_j \neq \mathbf{w}_k$인 한 이는 $(d-1)$차원 아핀 부분공간을 정의한다.
+
+    **주의할 점:** 이 집합은 "두 범주의 확률이 같은 곳"이지 **결정경계 자체가 아니다.**
+    실제 결정경계는 $\hat p_j$와 $\hat p_k$가 **동시에 최대**인 곳이므로, 위 초평면의 일부만
+    실제 경계가 된다. 세 번째 범주 $m$이 그 초평면 위 어딘가에서 $\hat p_m$을 더 크게 만들면
+    그 부분은 경계가 아니다. 그래서 소프트맥스의 결정영역은 초평면들이 잘라 만드는 **볼록
+    다면체**가 되고, 두 범주 사이의 실제 경계는 초평면의 다면체 조각이다. $\square$
 
 ---
 

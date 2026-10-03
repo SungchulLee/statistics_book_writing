@@ -18,7 +18,9 @@ $$
 
 대각 성분 $g_{ii} = \mathbf{v}_i^\top\mathbf{v}_i = \lVert\mathbf{v}_i\rVert^2$는 벡터 길이의 제곱이고, 비대각 성분 $g_{ij} = \mathbf{v}_i^\top\mathbf{v}_j$는 두 벡터가 얼마나 같은 방향을 향하는지를 잰다.
 
-## 대칭성과 양반정치성
+---
+
+## 1. 대칭성과 양반정치성
 
 <div class="thmbox" markdown>
 
@@ -41,7 +43,9 @@ $$
 
     이다. 이차형식이 $\mathbf{X}\mathbf{y}$의 유클리드 노름의 제곱과 같으므로 언제나 음이 아니다. $\square$
 
-## 그람 행렬이 언제 양정치인가
+---
+
+## 2. 그람 행렬이 언제 양정치인가
 
 <div class="thmbox" markdown>
 
@@ -62,7 +66,9 @@ $$
 
     회귀에서 **완전 공선성**이 치명적인 이유가 정확히 이것이다. 이를테면 $k$개 수준을 갖는 범주형 변수의 모든 수준에 지시변수를 주면서 절편까지 넣으면 지시변수들의 합이 절편 열 $\mathbf{1}$과 같아져 열이 종속이 되고($\mathbf{c} = (1, -1, \dots, -1)^\top$가 영공간에 들어간다), $(\mathbf{X}^\top\mathbf{X})^{-1}$이 존재하지 않는다. 이른바 더미변수 함정이다. **거의** 공선인 경우는 역행렬이 존재하기는 하지만 최소고윳값이 0 에 가까워 추정이 불안정해지며, 이것이 아래에서 다루는 다중공선성이다.
 
-## 계수 보존
+---
+
+## 3. 계수 보존
 
 특이해질 수 있다고 해서 그람 행렬이 정보를 잃는 것은 아니다. $\mathbf{X}^\top\mathbf{X}$의 계수는 $\mathbf{X}$의 계수를 정확히 그대로 물려받는다.
 
@@ -106,7 +112,9 @@ $$
 
 정리 2 와 정리 3 은 같은 사실의 두 얼굴이다. $\operatorname{rank}(\mathbf{X}) = p$이면 $\operatorname{rank}(\mathbf{X}^\top\mathbf{X}) = p$라 $p \times p$ 행렬이 가역이고, $\operatorname{rank}(\mathbf{X}) < p$이면 계수가 정확히 그만큼 부족해 특이행렬이 된다. 정리 3 이 덧붙여 주는 것은 **얼마나** 부족한지까지 알려 준다는 점이다. 계수가 $r$인 $\mathbf{X}$에 대해 $\mathbf{X}^\top\mathbf{X}$는 양의 고윳값을 정확히 $r$개, 0 인 고윳값을 정확히 $p - r$개 갖는다.
 
-## 그람 행렬의 고윳값
+---
+
+## 4. 그람 행렬의 고윳값
 
 $\mathbf{G} = \mathbf{X}^\top\mathbf{X}$가 대칭 양반정치이므로 그 고윳값 $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$은 모두 음이 아니다. 이 고윳값들은 $\mathbf{X}$의 **특이값**의 제곱이다. $\mathbf{X} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\top$가 특이값분해(SVD)라면
 
@@ -136,7 +144,9 @@ $$
 
 여기서 눈여겨볼 것은 **자료가 줄어든 것이 하나도 없다는 점이다.** 두 열의 길이는 처음부터 끝까지 그대로이고 관측 개수도 같다. 그럼에도 추정이 불안정해지는 까닭은 두 열이 같은 방향을 가리켜 서로 겹치는 정보를 주기 때문이다. 다중공선성은 정보의 양이 아니라 정보의 방향에 관한 문제다.
 
-## 예
+---
+
+## 5. 예
 
 계획행렬이 (간단히 하기 위해 절편을 무시하고) 두 개의 예측변수 열을 갖는다고 하자.
 
@@ -158,7 +168,9 @@ $$
 
 **해석:** 성분 $g_{11} = 14 = \lVert\mathbf{v}_1\rVert^2$은 첫 번째 예측변수의 제곱합이다. 성분 $g_{12} = 13 = \mathbf{v}_1^\top\mathbf{v}_2$는 두 예측변수가 얼마나 같은 방향을 향하는지를 잰다. 예측변수들이 직교했다면 이 성분이 0이 되고 그람 행렬은 대각행렬이 되었을 것이다.
 
-## 두 개의 그람 행렬
+---
+
+## 6. 두 개의 그람 행렬
 
 임의의 $\mathbf{X} \in \mathbb{R}^{n \times p}$에 대해 사실 그람 행렬은 두 개다.
 
@@ -169,7 +181,9 @@ $$
 
 둘은 0이 아닌 고윳값을 공유한다($\mathbf{A}^\top\mathbf{A}$와 $\mathbf{A}\mathbf{A}^\top$의 일반적 성질). $n \gg p$일 때는 $p \times p$ 그람 행렬로 작업하는 편이 훨씬 효율적이고, $p \gg n$인 고차원 상황에서는 $n \times n$ 쪽이 선호된다(이것이 "커널 트릭"이다).
 
-## 그람 행렬과 직교성
+---
+
+## 7. 그람 행렬과 직교성
 
 그람 행렬은 열벡터들의 직교 구조를 부호화한다.
 
@@ -178,7 +192,9 @@ $$
 
 계획행렬의 열들이 직교하면 정규방정식이 분리되고 최소제곱추정량이 각 예측변수 $j$에 대해 독립적으로 $\hat{\beta}_j = \mathbf{v}_j^\top\mathbf{y}/\lVert\mathbf{v}_j\rVert^2$로 간단해진다. 예측변수를 (그람–슈미트나 QR 분해로) 직교화하면 회귀의 계산과 해석이 단순해지는 이유가 이것이다.
 
-## 통계와의 연결
+---
+
+## 8. 통계와의 연결
 
 ### 정규방정식
 
@@ -197,6 +213,8 @@ $$
 ### 표본 공분산행렬
 
 $\mathbf{X}$가 중심화된 자료행렬(관측값에서 열 평균을 뺀 것)일 때 표본 공분산행렬은 $\mathbf{S} = \frac{1}{n-1}\mathbf{X}^\top\mathbf{X}$로, 크기가 조정된 그람 행렬이다.
+
+---
 
 ## 연습문제
 
@@ -218,6 +236,8 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 
     대칭성은 $(\mathbf{X}^\top\mathbf{X})^\top = \mathbf{X}^\top\mathbf{X}$로부터 곧바로 따라온다. 양정치성의 경우 선행 주소행렬식이 $3 > 0$이고 $\det = 3 \times 38 - 10^2 = 114 - 100 = 14 > 0$이므로 $\mathbf{X}^\top\mathbf{X}$는 양정치다. 동등하게 $\mathbf{X}$의 계수가 2이므로(두 열이 일차독립이므로) $\mathbf{X}^\top\mathbf{X}$가 양정치다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
@@ -234,6 +254,8 @@ $\mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 3 \\ 1 & 5 \end{pmatrix}$이라 하�
 
     이다. 이것이 0일 필요충분조건은 $\mathbf{X}\mathbf{v} = \mathbf{0}$, 즉 $\mathbf{v} \in \ker(\mathbf{X})$인 것이다. $\mathbf{X}$가 완전 열계수를 가지면 $\ker(\mathbf{X}) = \{\mathbf{0}\}$이므로 모든 $\mathbf{v} \neq \mathbf{0}$에 대해 $\mathbf{v}^\top(\mathbf{X}^\top\mathbf{X})\mathbf{v} > 0$이고 이것이 양정치성이다. 역으로 $\mathbf{X}$가 완전 열계수를 갖지 않으면 $\mathbf{X}\mathbf{v} = \mathbf{0}$인 $\mathbf{v} \neq \mathbf{0}$이 존재하여 이차형식이 0이 된다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
@@ -245,6 +267,8 @@ $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^\top\mathbf{X}$의
     $\mathbf{X}^\top\mathbf{X}$의 조건수는 $\kappa = \lambda_{\max}/\lambda_{\min}$이며, 여기서 $\lambda_{\max}$와 $\lambda_{\min}$은 최대·최소 고윳값이다.
 
     열들이 거의 공선적이면 $\lambda_{\min}$이 0에 가까워져 $\kappa$가 매우 커진다. $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$이고 $(\mathbf{X}^\top\mathbf{X})^{-1}$의 고윳값이 $1/\lambda_i$이므로, $\lambda_{\min}$이 작으면 그에 대응하는 고유벡터 방향으로 분산 $\sigma^2/\lambda_{\min}$이 커진다. 조건수가 크다는 것은 또한 $\mathbf{y}$의 작은 섭동이 $\hat{\boldsymbol{\beta}}$을 크게 변화시킨다는 뜻이며, 추정값이 수치적으로 불안정해진다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -261,6 +285,8 @@ $\mathbf{X}$의 열들이 거의 공선적일 때 $\mathbf{X}^\top\mathbf{X}$의
     $$
 
     $\mathbf{S}$가 양정치일 필요충분조건은 $\mathbf{X}_c$가 완전 열계수를 갖는 것이며, 이를 위해서는 $n - 1 \geq p$가 필요하다(중심화가 계수를 많아야 1만큼 줄이기 때문이다). 실무적으로는 표본 공분산행렬이 가역이려면 변수보다 관측값이 많아야 한다는($n > p$) 뜻이다. $p > n$이면 $\mathbf{S}$가 특이행렬이 되어 정칙화나 차원축소 같은 기법이 필요하다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -312,6 +338,8 @@ $\mathbf{X}$의 열들이 서로 직교하면 그람 행렬이 대각행렬이 �
 
     **통계적 의미가 크다.** 예측변수가 직교하면 한 변수를 모형에 넣거나 빼도 다른 변수의 계수가 **전혀 변하지 않는다.** 실험계획에서 직교설계를 선호하는 이유이며, 관측자료에서 계수가 모형 설정에 따라 요동치는 이유이기도 하다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
@@ -354,49 +382,11 @@ $\mathbf{X}^\top\mathbf{X}$($p \times p$)와 $\mathbf{X}\mathbf{X}^\top$($n \tim
 
     **$p \gg n$이면 $n \times n$인 $\mathbf{X}\mathbf{X}^\top$로 계산해야 한다.** 유전체 자료처럼 $p$가 수만이고 $n$이 수백인 상황에서 $p \times p$ 행렬은 다루기 어렵지만 $n \times n$은 작다. 두 행렬이 같은 정보를 담고 있으므로 손해가 없다. 이것이 **커널 트릭**의 대수적 근거다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 7.** <span class="diff hard" title="어려움"></span>
-$\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 $p$차원 부피 $V$에 대해 $\det(\mathbf{X}^\top\mathbf{X}) = V^2$이 성립한다. 이 사실을 이용해 그람 행렬의 행렬식이 0이 되는 기하적 의미를 설명하라.
-
-</div>
-
-??? success "풀이"
-    $\det(\mathbf{X}^\top\mathbf{X})$를 **그람 행렬식**이라 하며 열들이 펼치는 평행육면체 부피의 제곱과 같다.
-
-    ```python
-    import numpy as np
-
-    # 서로 직교하고 길이가 1, 2인 두 벡터 -> 넓이 2, 그람 행렬식 4
-    X1 = np.array([[1., 0.], [0., 2.], [0., 0.]])
-    print("직교:      det =", round(np.linalg.det(X1.T @ X1), 6), " (넓이^2 = 4)")
-
-    # 같은 길이지만 방향이 겹치면 넓이가 줄어든다
-    X2 = np.array([[1., 1.], [0., 1.], [0., 0.]])
-    print("비스듬함:  det =", round(np.linalg.det(X2.T @ X2), 6))
-
-    # 두 열이 일차종속이면 부피가 0
-    X3 = np.array([[1., 2.], [0., 0.], [0., 0.]])
-    print("공선:      det =", round(np.linalg.det(X3.T @ X3), 6))
-    ```
-
-    출력:
-
-    ```
-    직교:      det = 4.0  (넓이^2 = 4)
-    비스듬함:  det = 1.0
-    공선:      det = 0.0
-    ```
-
-    **기하적 의미.** $\det(\mathbf{X}^\top\mathbf{X}) = 0$은 부피가 0이라는 뜻이고, 이는 열들이 더 낮은 차원의 부분공간에 눌려 있다는 것, 곧 **일차종속**이라는 뜻이다.
-
-    이것이 본문의 양정치성 정리와 정확히 같은 이야기를 기하로 옮긴 것이다. 완전 열계수 $\iff$ 부피 $> 0$ $\iff$ $\mathbf{X}^\top\mathbf{X} \succ 0$ $\iff$ 최소제곱해가 유일하다.
-
-    부피가 0은 아니지만 매우 작은 경우가 곧 **다중공선성**이다. 해가 존재하기는 하지만 납작한 평행육면체 위에서 결정되므로 불안정하다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf{Z}$라 하자. $\mathbf{Z}^\top\mathbf{Z}$가 무엇이 되는지 밝히고, 그람 행렬과 상관행렬의 관계를 설명하라.
 
 </div>
@@ -450,9 +440,11 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
 
     상관행렬이 언제나 양반정치인 이유도 여기서 나온다. **상관행렬 역시 그람 행렬이기 때문이다.** $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 기존 예측변수와 거의 같은 열을 하나 추가하면 조건수와 $\operatorname{Var}(\hat{\boldsymbol{\beta}})$가 어떻게 변하는지 수치로 보여라.
 
 </div>
@@ -491,6 +483,50 @@ $\mathbf{X}$의 각 열을 평균 0, 길이 1로 표준화한 행렬을 $\mathbf
     **대수적 이유.** $\mathbf{x}_3 \approx \mathbf{x}_1$이면 $\mathbf{y} = \mathbf{x}_3 - \mathbf{x}_1$ 방향에서 $\mathbf{X}\mathbf{y} \approx \mathbf{0}$이므로 $\mathbf{y}^\top\mathbf{G}\mathbf{y} = \lVert\mathbf{X}\mathbf{y}\rVert^2 \approx 0$이다. 곧 $\lambda_{\min} \approx 0$이고, $\operatorname{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2\mathbf{G}^{-1}$의 고윳값 $\sigma^2/\lambda_{\min}$이 폭발한다.
 
     자료가 늘어난 것이 아니라 **거의 같은 정보를 두 번 넣은 것**이므로 추정이 불안정해지는 것이 당연하다. 18장의 능형회귀는 $\mathbf{G} + \lambda\mathbf{I}$로 최소고윳값을 끌어올려 이 문제를 완화한다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+$\mathbf{X} \in \mathbb{R}^{n \times p}$의 열이 만드는 평행육면체의 $p$차원 부피 $V$에 대해 $\det(\mathbf{X}^\top\mathbf{X}) = V^2$이 성립한다. 이 사실을 이용해 그람 행렬의 행렬식이 0이 되는 기하적 의미를 설명하라.
+
+</div>
+
+??? success "풀이"
+    $\det(\mathbf{X}^\top\mathbf{X})$를 **그람 행렬식**이라 하며 열들이 펼치는 평행육면체 부피의 제곱과 같다.
+
+    ```python
+    import numpy as np
+
+    # 서로 직교하고 길이가 1, 2인 두 벡터 -> 넓이 2, 그람 행렬식 4
+    X1 = np.array([[1., 0.], [0., 2.], [0., 0.]])
+    print("직교:      det =", round(np.linalg.det(X1.T @ X1), 6), " (넓이^2 = 4)")
+
+    # 같은 길이지만 방향이 겹치면 넓이가 줄어든다
+    X2 = np.array([[1., 1.], [0., 1.], [0., 0.]])
+    print("비스듬함:  det =", round(np.linalg.det(X2.T @ X2), 6))
+
+    # 두 열이 일차종속이면 부피가 0
+    X3 = np.array([[1., 2.], [0., 0.], [0., 0.]])
+    print("공선:      det =", round(np.linalg.det(X3.T @ X3), 6))
+    ```
+
+    출력:
+
+    ```
+    직교:      det = 4.0  (넓이^2 = 4)
+    비스듬함:  det = 1.0
+    공선:      det = 0.0
+    ```
+
+    **기하적 의미.** $\det(\mathbf{X}^\top\mathbf{X}) = 0$은 부피가 0이라는 뜻이고, 이는 열들이 더 낮은 차원의 부분공간에 눌려 있다는 것, 곧 **일차종속**이라는 뜻이다.
+
+    이것이 본문의 양정치성 정리와 정확히 같은 이야기를 기하로 옮긴 것이다. 완전 열계수 $\iff$ 부피 $> 0$ $\iff$ $\mathbf{X}^\top\mathbf{X} \succ 0$ $\iff$ 최소제곱해가 유일하다.
+
+    부피가 0은 아니지만 매우 작은 경우가 곧 **다중공선성**이다. 해가 존재하기는 하지만 납작한 평행육면체 위에서 결정되므로 불안정하다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

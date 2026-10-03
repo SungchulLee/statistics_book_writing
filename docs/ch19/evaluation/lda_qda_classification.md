@@ -8,7 +8,9 @@
 로지스틱 회귀를 두 가지 시나리오의 2차원 인공자료에서 비교한다. 하나는 공분산이 같은 경우
 (LDA에 유리)이고 다른 하나는 공분산이 다른 경우(QDA에 유리)다.
 
-## 생성 분류의 틀
+---
+
+## 1. 생성 분류의 틀
 
 $K$개 범주에 대해 각 생성 분류기는 범주별 조건부밀도
 $f_k(\mathbf{x}) = p(\mathbf{x} \mid Y = k)$를 모형화하고 베이즈 정리를 적용한다.
@@ -19,7 +21,9 @@ $$
 
 여기서 $\pi_k = P(Y = k)$는 범주 $k$의 사전확률이다.
 
-## LDA: 공유 공분산
+---
+
+## 2. LDA: 공유 공분산
 
 LDA는 각 범주의 조건부밀도가 **공유된** 공분산행렬 $\boldsymbol\Sigma$를 갖는 다변량
 정규분포라고 가정한다.
@@ -42,7 +46,9 @@ $$
 
 이며, 관측치를 $\delta_k(\mathbf{x})$가 가장 큰 범주에 배정한다.
 
-## QDA: 범주별 공분산
+---
+
+## 3. QDA: 범주별 공분산
 
 QDA는 공분산이 같다는 가정을 푼다. 각 범주가 자신의 $\boldsymbol\Sigma_k$를 갖는다.
 
@@ -59,7 +65,9 @@ $$
 \delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
 $$
 
-## 가우스 나이브 베이즈
+---
+
+## 4. 가우스 나이브 베이즈
 
 나이브 베이즈는 각 범주 안에서 특성들이 **조건부 독립**이라고 가정하여 $\boldsymbol\Sigma_k$를
 대각행렬로 만든다.
@@ -71,7 +79,9 @@ $$
 여기서 각 $f_{kj}$는 일변량 정규분포다. 이로써 범주당 모수의 개수가 $O(p^2)$에서 $O(p)$로
 크게 줄어든다.
 
-## 자료 생성
+---
+
+## 5. 자료 생성
 
 두 시나리오가 각 방법이 언제 유리한지 보여준다.
 
@@ -226,7 +236,9 @@ $$
     때는 완전히 다른 자료가 나온다. 재현 가능한 결과를 원한다면 각 함수 안에서
     `rng = np.random.default_rng(seed)`를 만들어 쓰라.
 
-## 분류기 적합과 비교
+---
+
+## 6. 분류기 적합과 비교
 
 <div class="exbox" markdown>
 
@@ -338,7 +350,9 @@ $$
 
     마지막으로 **베이즈 한계와 견주면 두 시나리오의 평가가 뒤집힌다.** 시나리오 A의 $0.8825$는 천장 $0.8510$을 **넘어선다.** 분류기가 신통해서가 아니라 이 표본 하나가 운이 좋았기 때문이다($\sqrt{0.851\times0.149/400} = 0.0178$이므로 $1.8$ 표준오차다). 반대로 시나리오 B의 $0.8575$는 천장 $0.8937$에 $0.036$, 곧 $2.3$ 표준오차만큼 못 미친다. **날값만 보면 A가 더 잘한 것 같지만, 천장까지의 거리로 보면 B 쪽이 훨씬 아쉽다.**
 
-## 결정경계 시각화
+---
+
+## 7. 결정경계 시각화
 
 <div class="exbox" markdown>
 
@@ -449,7 +463,9 @@ $$
 
     덧붙여 모양 자체도 읽어 둘 만하다. **LDA와 로지스틱 회귀는 직선, QDA는 자유로운 곡선, 나이브 베이즈는 축에 정렬된 곡선**을 그린다. 윗줄 나이브 베이즈 칸의 경계가 QDA 칸과 미묘하게 다른 것은 상관계수 $0.5$를 $0$으로 보도록 강제했기 때문이다.
 
-## 해석
+---
+
+## 8. 해석
 
 - **공유 공분산 시나리오:** LDA와 로지스틱 회귀가 비슷한 성능을 낸다. 참 경계가 선형이기
   때문이다. QDA와 나이브 베이즈도 잘 작동하지만 불필요하게 모수를 더 쓴다.
@@ -485,112 +501,13 @@ $$
 
     **교훈:** 단일 자료에서의 CV 정확도 차이로 방법을 비교하지 말라. 반복이 필요하다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff med" title="중간"></span>
-사전확률이 같은($\pi_0 = \pi_1 = 0.5$) 두 범주 LDA에서, 결정경계가 두 범주 평균으로부터
-(마할라노비스 의미로) 등거리인 점들의 집합임을 보여라.
-
-</div>
-
-??? success "풀이"
-
-    사전확률이 같으면 $\log\pi_k$ 항이 소거된다. 결정경계는
-    $\delta_0(\mathbf{x}) = \delta_1(\mathbf{x})$인 곳이다.
-
-    $$
-    \mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_0 - \tfrac{1}{2}\boldsymbol\mu_0^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_0
-    = \mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_1 - \tfrac{1}{2}\boldsymbol\mu_1^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_1
-    $$
-
-    정리하면
-
-    $$
-    \mathbf{x}^\top\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)
-    = \tfrac{1}{2}(\boldsymbol\mu_0 + \boldsymbol\mu_1)^\top\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)
-    $$
-
-    이다. 이는 중점 $\frac{1}{2}(\boldsymbol\mu_0 + \boldsymbol\mu_1)$을 지나고 법선벡터가
-    $\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)$인 초평면을 정의한다. 이
-    초평면 위의 점들은 두 평균으로부터 마할라노비스 거리가 같다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff med" title="중간"></span>
-QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유연함에도 LDA를 선호하게 되는 상황을
-서술하라.
-
-</div>
-
-??? success "풀이"
-
-    QDA는 범주마다 별도의 $p \times p$ 공분산행렬을 추정하므로 공분산 구조에만
-    $K \cdot p(p+1)/2$개의 모수가 필요하다. LDA는 $p(p+1)/2$개면 된다. 범주당 표본크기가
-    $p$에 비해 작으면 QDA의 많은 모수가 큰 분산과 과적합을 낳는다.
-
-    다음과 같을 때 LDA를 선호한다.
-
-    - 훈련표본이 $p^2$에 비해 작을 때.
-    - 탐색적 분석에서 범주별 공분산이 비슷해 보일 때.
-    - 교차검증에서 QDA가 LDA보다 나아지지 않을 때.
-
-    경험칙으로, 어떤 범주에서든 $n_k / p^2$가 대략 5보다 작으면 QDA의 공분산 추정을 믿기
-    어렵다.
-
-    !!! tip "중간 지점도 있다"
-        LDA와 QDA 사이를 연속적으로 잇는 **정칙화 판별분석(RDA)**이 있다. 범주별 공분산을
-        공유 공분산 쪽으로 축소한다.
-
-        $$
-        \hat{\boldsymbol\Sigma}_k(\gamma) = \gamma\,\hat{\boldsymbol\Sigma}_k + (1-\gamma)\,\hat{\boldsymbol\Sigma}_{\text{pooled}}
-        $$
-
-        $\gamma$를 교차검증으로 고르면 $\gamma = 1$(QDA)과 $\gamma = 0$(LDA) 사이에서 자료가
-        지지하는 만큼의 유연성을 얻는다. scikit-learn에서는
-        `LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto')`가 관련된 축소를
-        제공한다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 3.** <span class="diff hard" title="어려움"></span>
-다변량 정규밀도와 베이즈 정리에서 출발하여 QDA 판별함수 $\delta_k(\mathbf{x})$를 유도하라.
-
-</div>
-
-??? success "풀이"
-
-    사후확률은
-
-    $$
-    P(Y=k \mid \mathbf{x}) \propto \pi_k\,f_k(\mathbf{x})
-    $$
-
-    이고 로그를 취하면
-
-    $$
-    \log P(Y=k \mid \mathbf{x}) = \log\pi_k + \log f_k(\mathbf{x}) + \text{const}
-    $$
-
-    이다. 정규밀도를 대입하면
-
-    $$
-    \log f_k(\mathbf{x}) = -\frac{p}{2}\log(2\pi) - \frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k)
-    $$
-
-    이고, $k$에 의존하지 않는 항($-\frac{p}{2}\log(2\pi)$와 베이즈 정리의 정규화 상수)을 버리면
-
-    $$
-    \delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
-    $$
-
-    를 얻는다. 범주별 $\boldsymbol\Sigma_k^{-1}$에서 나오는 $\mathbf{x}$의 이차항이 QDA라는
-    이름과 곡선 결정경계의 근원이다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff easy" title="쉬움"></span>
+**연습문제 1.** <span class="diff easy" title="쉬움"></span>
 위에서 생성한 공유 공분산 자료에 대해, 합동 공분산행렬·범주 평균·판별함수를 직접 계산하여
 LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnalysis`와 비교하라.
 
@@ -647,9 +564,80 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
 
     $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff med" title="중간"></span>
+사전확률이 같은($\pi_0 = \pi_1 = 0.5$) 두 범주 LDA에서, 결정경계가 두 범주 평균으로부터
+(마할라노비스 의미로) 등거리인 점들의 집합임을 보여라.
+
+</div>
+
+??? success "풀이"
+
+    사전확률이 같으면 $\log\pi_k$ 항이 소거된다. 결정경계는
+    $\delta_0(\mathbf{x}) = \delta_1(\mathbf{x})$인 곳이다.
+
+    $$
+    \mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_0 - \tfrac{1}{2}\boldsymbol\mu_0^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_0
+    = \mathbf{x}^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_1 - \tfrac{1}{2}\boldsymbol\mu_1^\top\boldsymbol\Sigma^{-1}\boldsymbol\mu_1
+    $$
+
+    정리하면
+
+    $$
+    \mathbf{x}^\top\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)
+    = \tfrac{1}{2}(\boldsymbol\mu_0 + \boldsymbol\mu_1)^\top\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)
+    $$
+
+    이다. 이는 중점 $\frac{1}{2}(\boldsymbol\mu_0 + \boldsymbol\mu_1)$을 지나고 법선벡터가
+    $\boldsymbol\Sigma^{-1}(\boldsymbol\mu_0 - \boldsymbol\mu_1)$인 초평면을 정의한다. 이
+    초평면 위의 점들은 두 평균으로부터 마할라노비스 거리가 같다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span>
+QDA가 LDA보다 과적합 위험이 큰 이유를 설명하고, QDA가 더 유연함에도 LDA를 선호하게 되는 상황을
+서술하라.
+
+</div>
+
+??? success "풀이"
+
+    QDA는 범주마다 별도의 $p \times p$ 공분산행렬을 추정하므로 공분산 구조에만
+    $K \cdot p(p+1)/2$개의 모수가 필요하다. LDA는 $p(p+1)/2$개면 된다. 범주당 표본크기가
+    $p$에 비해 작으면 QDA의 많은 모수가 큰 분산과 과적합을 낳는다.
+
+    다음과 같을 때 LDA를 선호한다.
+
+    - 훈련표본이 $p^2$에 비해 작을 때.
+    - 탐색적 분석에서 범주별 공분산이 비슷해 보일 때.
+    - 교차검증에서 QDA가 LDA보다 나아지지 않을 때.
+
+    경험칙으로, 어떤 범주에서든 $n_k / p^2$가 대략 5보다 작으면 QDA의 공분산 추정을 믿기
+    어렵다.
+
+    !!! tip "중간 지점도 있다"
+        LDA와 QDA 사이를 연속적으로 잇는 **정칙화 판별분석(RDA)**이 있다. 범주별 공분산을
+        공유 공분산 쪽으로 축소한다.
+
+        $$
+        \hat{\boldsymbol\Sigma}_k(\gamma) = \gamma\,\hat{\boldsymbol\Sigma}_k + (1-\gamma)\,\hat{\boldsymbol\Sigma}_{\text{pooled}}
+        $$
+
+        $\gamma$를 교차검증으로 고르면 $\gamma = 1$(QDA)과 $\gamma = 0$(LDA) 사이에서 자료가
+        지지하는 만큼의 유연성을 얻는다. scikit-learn에서는
+        `LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto')`가 관련된 축소를
+        제공한다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff med" title="중간"></span>
 범주별 공분산이 같으면($\boldsymbol\Sigma_k = \boldsymbol\Sigma$) QDA가 LDA로 환원됨을
 증명하라.
 
@@ -687,6 +675,44 @@ LDA를 손으로 적합하라. 예측을 scikit-learn의 `LinearDiscriminantAnal
     다르다. 그래서 실제 QDA는 LDA와 정확히 같아지지 않으며 분산만 더 크다. 본문 표에서
     시나리오 A의 두 값이 우연히 같게 나온 것이지, 두 방법이 같은 예측을 한 것은 아니다.
     $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+다변량 정규밀도와 베이즈 정리에서 출발하여 QDA 판별함수 $\delta_k(\mathbf{x})$를 유도하라.
+
+</div>
+
+??? success "풀이"
+
+    사후확률은
+
+    $$
+    P(Y=k \mid \mathbf{x}) \propto \pi_k\,f_k(\mathbf{x})
+    $$
+
+    이고 로그를 취하면
+
+    $$
+    \log P(Y=k \mid \mathbf{x}) = \log\pi_k + \log f_k(\mathbf{x}) + \text{const}
+    $$
+
+    이다. 정규밀도를 대입하면
+
+    $$
+    \log f_k(\mathbf{x}) = -\frac{p}{2}\log(2\pi) - \frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k)
+    $$
+
+    이고, $k$에 의존하지 않는 항($-\frac{p}{2}\log(2\pi)$와 베이즈 정리의 정규화 상수)을 버리면
+
+    $$
+    \delta_k(\mathbf{x}) = -\frac{1}{2}\log|\boldsymbol\Sigma_k| - \frac{1}{2}(\mathbf{x}-\boldsymbol\mu_k)^\top\boldsymbol\Sigma_k^{-1}(\mathbf{x}-\boldsymbol\mu_k) + \log\pi_k
+    $$
+
+    를 얻는다. 범주별 $\boldsymbol\Sigma_k^{-1}$에서 나오는 $\mathbf{x}$의 이차항이 QDA라는
+    이름과 곡선 결정경계의 근원이다. $\square$
 
 ---
 

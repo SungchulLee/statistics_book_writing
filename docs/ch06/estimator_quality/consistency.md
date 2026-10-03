@@ -16,7 +16,9 @@ $$
 
     위의 정의를 **약한 일치성**이라 부르기도 한다. 더 강한 개념인 **강한 일치성**은 거의 확실한 수렴 $P(\hat{\theta}_n \to \theta) = 1$을 요구한다. 강한 일치성은 약한 일치성을 함의하지만 그 역은 성립하지 않는다. 실무에서 흔히 쓰는 많은 추정량은 둘 다 만족한다.
 
-## 일치성의 충분조건
+---
+
+## 1. 일치성의 충분조건
 
 정의에서 곧바로 일치성을 확인하려면 모든 $n$에 대해 $\hat{\theta}_n$의 분포 전체를 분석해야 해서 어려울 수 있다. 더 간단한 방법은 평균제곱오차를 쓰는 것이다. $\operatorname{Bias}(\hat{\theta}_n) = E[\hat{\theta}_n] - \theta$이고 $\operatorname{Var}(\hat{\theta}_n) = E\bigl[(\hat{\theta}_n - E[\hat{\theta}_n])^2\bigr]$임을 떠올리자.
 
@@ -32,7 +34,9 @@ $\operatorname{MSE}(\hat{\theta}_n) = \operatorname{Bias}^2(\hat{\theta}_n) + \o
 
     $X_1, \ldots, X_n$을 평균이 $\mu$이고 분산이 유한한 $\sigma^2$인 i.i.d. 확률변수라 하자. 표본평균 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$는 $\operatorname{Bias}(\bar{X}_n) = 0$이고 $\operatorname{Var}(\bar{X}_n) = \sigma^2 / n \to 0$을 만족한다. 두 조건이 모두 성립하므로 $\bar{X}_n$은 $\mu$에 대해 일치한다.
 
-## 점근정규성
+---
+
+## 2. 점근정규성
 
 일치성은 $\hat{\theta}_n$이 $\theta$로 수렴한다고 알려 주지만, 얼마나 빨리 집중되는지 또는 $n$이 클 때 어떤 분포를 따르는지는 말해 주지 않는다. 점근정규성은 이 두 물음에 답하며 대표본 추론의 토대를 제공한다.
 
@@ -59,6 +63,8 @@ $$
 $$
 
 여기서 $z_{\alpha/2}$는 표준정규 임계값이고 $\sigma / \sqrt{n}$은 점근 표준오차이다.
+
+---
 
 ## 연습문제
 

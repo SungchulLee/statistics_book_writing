@@ -2,7 +2,9 @@
 
 행렬의 대각합 — 대각 성분의 합 — 은 계산하기 가장 쉬운 행렬 관련 양 중 하나다. 그런데도 깊은 정보를 담고 있다. 임의의 정사각행렬에서 대각합은 고윳값의 합과 같다. 이 연결은 통계에 끊임없이 등장한다. 공분산행렬의 대각합은 총분산을 주고, 모자 행렬의 대각합은 추정된 모수의 개수를 주며, 이차형식 $\mathbf{z}^\top\mathbf{A}\mathbf{z}$의 기댓값은 $\operatorname{tr}(\mathbf{A})$로 표현할 수 있다. 이 쪽에서는 대각합과 고윳값의 관계, 그리고 그 핵심 성질을 전개한다.
 
-## 정의와 기본 성질
+---
+
+## 1. 정의와 기본 성질
 
 <div class="defn" markdown>
 
@@ -111,7 +113,9 @@ $$
 
 이다. 이는 순환 성질에서 따라온다: $\operatorname{tr}(\mathbf{a}\mathbf{b}^\top) = \operatorname{tr}(\mathbf{b}^\top\mathbf{a}) = \mathbf{b}^\top\mathbf{a}$이며, 마지막 등호는 $\mathbf{b}^\top\mathbf{a}$가 $1 \times 1$ 행렬(스칼라)이기 때문에 성립한다.
 
-## 대각합은 고윳값의 합과 같다
+---
+
+## 2. 대각합은 고윳값의 합과 같다
 
 <div class="thmbox" markdown>
 
@@ -163,7 +167,9 @@ $$
 
     위의 특성다항식 증명과 달리 이 논법은 대각화 가능한 행렬에만 통한다. 앞 쪽에서 본 $\begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$ 같은 행렬에는 쓸 수 없고, 그래도 정리 2 는 성립한다($\operatorname{tr} = 4 = 2 + 2$). 다행히 통계에서 만나는 행렬은 대부분 대칭이어서 늘 대각화 가능하다. $\square$
 
-## 행렬식은 고윳값의 곱과 같다
+---
+
+## 3. 행렬식은 고윳값의 곱과 같다
 
 이와 짝을 이루는 결과가 행렬식과 고윳값을 잇는다.
 
@@ -189,7 +195,9 @@ $$
 
     이고, 왼쪽은 $(-1)^n\det(\mathbf{A})$, 오른쪽은 $(-1)^n\prod_i\lambda_i$다. $(-1)^n$을 약분하면 결론이 나온다. $\square$
 
-## 예
+---
+
+## 4. 예
 
 다음 행렬을 생각하자.
 
@@ -215,7 +223,9 @@ $$
 
 통계에서 이 두 막대는 각각 이름이 있다. 공분산행렬이라면 위 막대는 변수별 분산이고 아래 막대는 주성분별 분산이며, 총분산이라는 총량은 어느 쪽으로 세든 같다. 주성분분석이 하는 일은 총량을 건드리지 않고 앞쪽 칸으로 몰아주는 재분배다. 반면 행렬식은 곱이므로 한 방향이라도 $\lambda_i = 0$이면 통째로 $0$이 된다. 일반화 분산이 퇴화를 예민하게 잡아내는 이유가 이 차이에 있다.
 
-## 통계에서의 응용
+---
+
+## 5. 통계에서의 응용
 
 ### 총분산
 
@@ -247,6 +257,8 @@ $$
 
 이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$로 간단해진다. 제곱합이 자료벡터의 이차형식인 분산분석에서 이 항등식이 근본적으로 쓰인다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -263,77 +275,11 @@ $\mathbf{A} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$이라 하자. $\oper
 
     고윳값의 합: $4 + 2 = 6 = \operatorname{tr}(\mathbf{A})$. 또한 $\det(\mathbf{A}) = 9 - 1 = 8 = 4 \times 2 = \lambda_1 \lambda_2$이다.
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff med" title="중간"></span>
-순환 성질을 이용해 임의의 행렬 $\mathbf{A}$($m \times n$)와 $\mathbf{B}$($n \times m$)에 대해 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$임을 증명하라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{A}\mathbf{B}$의 $(i,i)$ 성분은 $\sum_{k=1}^n a_{ik} b_{ki}$이므로
-
-    $$
-    \operatorname{tr}(\mathbf{A}\mathbf{B}) = \sum_{i=1}^m \sum_{k=1}^n a_{ik} b_{ki}
-    $$
-
-    이다. $\mathbf{B}\mathbf{A}$의 $(k,k)$ 성분은 $\sum_{i=1}^m b_{ki} a_{ik}$이므로
-
-    $$
-    \operatorname{tr}(\mathbf{B}\mathbf{A}) = \sum_{k=1}^n \sum_{i=1}^m b_{ki} a_{ik}
-    $$
-
-    이다. 두 이중합 모두 $i = 1, \dots, m$과 $k = 1, \dots, n$에 대한 같은 항 $a_{ik} b_{ki}$를 더한 것이다. 덧셈의 교환법칙에 의해
-
-    $$
-    \operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})
-    $$
-
-    이다. 참고로 $\mathbf{A}\mathbf{B}$는 $m \times m$이고 $\mathbf{B}\mathbf{A}$는 $n \times n$이다. 크기는 다를 수 있지만 대각합은 언제나 같다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
-$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수라 하자. 순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$의 대각합이 (절편을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
-
-</div>
-
-??? success "풀이"
-    인자를 묶어 순환 성질을 적용한다.
-
-    $$
-    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\bigl(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\bigr) = \operatorname{tr}\bigl(\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
-    $$
-
-    순환 이동이 $\mathbf{X}^\top$를 맨 뒤에서 맨 앞으로 옮겨 $p \times p$ 단위행렬을 만들어낸다. 이 결과는 $n$이나 $\mathbf{X}$의 구체적인 성분과 무관하게 성립한다.
-
-    완전 열계수 가정이 어디에 쓰였는지 짚어 두자. 그 가정 없이는 $\mathbf{X}^\top\mathbf{X}$가 가역이 아니어서 $\mathbf{H}$ 자체가 정의되지 않는다. 계수가 $r < p$인 경우에는 일반화 역행렬을 써서 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{+}\mathbf{X}^\top$로 정의하며, 그때는 $\operatorname{tr}(\mathbf{H}) = r$이 된다.
-
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff med" title="중간"></span>
-$\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이라 하자. 항등식 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$를 이용해 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = r$임을 보여라.
-
-</div>
-
-??? success "풀이"
-    $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이므로 $\boldsymbol{\mu} = \mathbf{0}$이고, 항등식에 의해
-
-    $$
-    E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})
-    $$
-
-    이다. $\mathbf{A}$가 대칭 멱등이므로 고윳값은 모두 0 또는 1이고, 1인 고윳값의 개수가 계수 $r$이다. 따라서
-
-    $$
-    \operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i = r \cdot 1 + (n-r) \cdot 0 = r
-    $$
-
-    이다. 이 결과가 $\text{SSE}/\sigma^2 \sim \chi^2_{n-p}$인 이유를 설명해 준다. 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$의 계수가 $n - p$이므로 $E[\text{SSE}/\sigma^2] = \operatorname{tr}(\mathbf{M}) = n - p$이고, 이는 $\chi^2_{n-p}$ 분포의 평균과 일치한다.
-
-<div class="drillbox" markdown>
-
-**연습문제 5.** <span class="diff easy" title="쉬움"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
 대각합이 선형임을 보여라: $\operatorname{tr}(a\mathbf{A} + b\mathbf{B}) = a\operatorname{tr}(\mathbf{A}) + b\operatorname{tr}(\mathbf{B})$. 그러나 곱에 대해서는 $\operatorname{tr}(\mathbf{A}\mathbf{B}) \neq \operatorname{tr}(\mathbf{A})\operatorname{tr}(\mathbf{B})$임을 반례로 보여라.
 
 </div>
@@ -371,6 +317,82 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$�
     ```
 
     대각합은 **덧셈에 대해서는** 잘 행동하지만 곱에 대해서는 그렇지 않다. 곱에서 성립하는 것은 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$뿐이다. 참고로 행렬식은 정반대다. $\det(\mathbf{A}\mathbf{B}) = \det(\mathbf{A})\det(\mathbf{B})$는 성립하지만 $\det(\mathbf{A}+\mathbf{B})$에는 간단한 공식이 없다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span>
+순환 성질을 이용해 임의의 행렬 $\mathbf{A}$($m \times n$)와 $\mathbf{B}$($n \times m$)에 대해 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$임을 증명하라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{A}\mathbf{B}$의 $(i,i)$ 성분은 $\sum_{k=1}^n a_{ik} b_{ki}$이므로
+
+    $$
+    \operatorname{tr}(\mathbf{A}\mathbf{B}) = \sum_{i=1}^m \sum_{k=1}^n a_{ik} b_{ki}
+    $$
+
+    이다. $\mathbf{B}\mathbf{A}$의 $(k,k)$ 성분은 $\sum_{i=1}^m b_{ki} a_{ik}$이므로
+
+    $$
+    \operatorname{tr}(\mathbf{B}\mathbf{A}) = \sum_{k=1}^n \sum_{i=1}^m b_{ki} a_{ik}
+    $$
+
+    이다. 두 이중합 모두 $i = 1, \dots, m$과 $k = 1, \dots, n$에 대한 같은 항 $a_{ik} b_{ki}$를 더한 것이다. 덧셈의 교환법칙에 의해
+
+    $$
+    \operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})
+    $$
+
+    이다. 참고로 $\mathbf{A}\mathbf{B}$는 $m \times m$이고 $\mathbf{B}\mathbf{A}$는 $n \times n$이다. 크기는 다를 수 있지만 대각합은 언제나 같다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff med" title="중간"></span>
+$\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수라 하자. 순환 성질을 이용해, 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$의 대각합이 (절편을 포함한) 예측변수의 개수 $p$와 같음을 보여라.
+
+</div>
+
+??? success "풀이"
+    인자를 묶어 순환 성질을 적용한다.
+
+    $$
+    \operatorname{tr}(\mathbf{H}) = \operatorname{tr}\bigl(\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\bigr) = \operatorname{tr}\bigl(\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\bigr) = \operatorname{tr}(\mathbf{I}_p) = p
+    $$
+
+    순환 이동이 $\mathbf{X}^\top$를 맨 뒤에서 맨 앞으로 옮겨 $p \times p$ 단위행렬을 만들어낸다. 이 결과는 $n$이나 $\mathbf{X}$의 구체적인 성분과 무관하게 성립한다.
+
+    완전 열계수 가정이 어디에 쓰였는지 짚어 두자. 그 가정 없이는 $\mathbf{X}^\top\mathbf{X}$가 가역이 아니어서 $\mathbf{H}$ 자체가 정의되지 않는다. 계수가 $r < p$인 경우에는 일반화 역행렬을 써서 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{+}\mathbf{X}^\top$로 정의하며, 그때는 $\operatorname{tr}(\mathbf{H}) = r$이 된다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff med" title="중간"></span>
+$\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이고 $\mathbf{A}$가 계수 $r$인 대칭 멱등행렬이라 하자. 항등식 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$를 이용해 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = r$임을 보여라.
+
+</div>
+
+??? success "풀이"
+    $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$이므로 $\boldsymbol{\mu} = \mathbf{0}$이고, 항등식에 의해
+
+    $$
+    E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})
+    $$
+
+    이다. $\mathbf{A}$가 대칭 멱등이므로 고윳값은 모두 0 또는 1이고, 1인 고윳값의 개수가 계수 $r$이다. 따라서
+
+    $$
+    \operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i = r \cdot 1 + (n-r) \cdot 0 = r
+    $$
+
+    이다. 이 결과가 $\text{SSE}/\sigma^2 \sim \chi^2_{n-p}$인 이유를 설명해 준다. 잔차생성행렬 $\mathbf{M} = \mathbf{I} - \mathbf{H}$의 계수가 $n - p$이므로 $E[\text{SSE}/\sigma^2] = \operatorname{tr}(\mathbf{M}) = n - p$이고, 이는 $\chi^2_{n-p}$ 분포의 평균과 일치한다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -416,6 +438,8 @@ $\operatorname{tr}(\mathbf{A}^\top\mathbf{A}) = \sum_{i,j} a_{ij}^2 = \lVert\mat
 
     **통계적 의미.** $\mathbf{A}$가 중심화된 자료행렬이면 $\operatorname{tr}(\mathbf{A}^\top\mathbf{A})$는 총제곱합이고, 특이값 제곱은 각 주성분이 설명하는 몫이다. "첫 $k$개 성분이 설명하는 비율"이 $\sum_{i \le k}\sigma_i^2 / \sum_i \sigma_i^2$인 것이 이 등식에서 나온다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
@@ -447,6 +471,8 @@ $E[\mathbf{z}] = \boldsymbol{\mu}$, $\operatorname{Var}(\mathbf{z}) = \boldsymbo
     이다(마지막에서 다시 순환 성질을 썼다).
 
     $\boldsymbol{\Sigma} = \mathbf{I}$로 두면 본문의 공식이 된다. **이 유도에서 정규성은 전혀 쓰이지 않았다.** 평균과 공분산만 있으면 성립한다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -494,6 +520,8 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 
     **회전은 총분산을 보존하지만 척도변환은 그렇지 않다.** PCA가 회전만 하는 이유가 여기에 있다. 분산의 총량은 그대로 두고 축 사이의 배분만 바꾼다. 반대로 변수를 표준화하는 것은 척도변환이므로 총분산이 바뀐다(표준화하면 $\operatorname{tr} = p$가 된다). 공분산행렬로 PCA를 하는 것과 상관행렬로 하는 것이 다른 결과를 주는 이유다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
@@ -533,6 +561,8 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
     $90^\circ$ 회전행렬은 고윳값이 $\pm i$로 순허수다. 실벡터 중 방향이 보존되는 것이 하나도 없으므로 당연하다. 그럼에도 합은 $0 = \operatorname{tr}(\mathbf{R})$, 곱은 $1 = \det(\mathbf{R})$로 실수다.
 
     **대칭행렬에서는 이런 일이 없다.** 스펙트럼 정리가 고윳값이 모두 실수임을 보장한다. 통계에서 다루는 공분산행렬과 사영행렬이 모두 대칭이므로, 실무에서 복소 고윳값을 만날 일은 드물다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 

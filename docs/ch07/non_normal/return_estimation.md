@@ -4,7 +4,9 @@
 
 금융 자료로 기대수익률과 변동성을 추정하는 일은 추정이론의 가장 중요하면서도 가장 어려운 응용에 속한다. 기대수익률은 (신호 대 잡음 비가 매우 낮아) 악명 높을 만큼 부정확하게 추정되고, Sharpe 비율은 이 부정확성을 그대로 물려받으며, 변동성 추정값은 추정 구간의 선택에 크게 좌우된다. 이 페이지에서는 추정 정밀도, Sharpe 비율의 불확실성, 실현변동성 구간, 연율화 관례를 모의실험으로 탐구한다.
 
-## 기대수익률의 정밀도
+---
+
+## 1. 기대수익률의 정밀도
 
 $T$년치 자료로 추정한 연간 수익률의 표준오차는:
 
@@ -195,7 +197,9 @@ $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
 
     그림의 두 판을 견주면 같은 이야기가 눈에 보인다. 왼쪽 히스토그램은 회색 점선($0$)을 한참 넘어 왼쪽까지 퍼져 있고, 오른쪽은 $0$에 거의 닿지 않는다. **두 판의 폭 비는 $\sqrt{50/10} = 2.24$**이며, $40$년을 더 기다려 얻는 것이 고작 그만큼이다.
 
-## Sharpe 비율의 불확실성
+---
+
+## 2. Sharpe 비율의 불확실성
 
 **Sharpe 비율** $\text{SR} = \mu/\sigma$(또는 초과수익률을 변동성으로 나눈 값)는 위험조정 성과의 표준적인 측도이다. 그 추정 불확실성은 대략:
 
@@ -321,7 +325,9 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 !!! note "펀드 평가에 대한 함의"
     자료가 3년치뿐이면 참 Sharpe 비율이 0.5인 펀드도 추정 Sharpe 비율이 *음수*로 나올 확률이 약 20%이다. 10년치라도 참값 주위의 표준편차가 약 0.3이다. 실력 있는 운용자와 그렇지 않은 운용자를 믿을 만하게 구분하려면 수십 년치 자료가 필요하다.
 
-## 실현변동성의 구간
+---
+
+## 3. 실현변동성의 구간
 
 실제로 변동성은 시간에 따라 변한다(GARCH 효과). 추정 구간의 선택에는 **편향–분산 맞바꿈**이 따른다:
 
@@ -468,7 +474,9 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 !!! info "실무 지침"
     유일하게 "옳은" 구간은 없다. 실무자들은 단기 위험관리에는 21일(월간) 구간을, 전략적 자산배분에는 252일(연간) 구간을 흔히 쓴다. 더 정교한 접근(지수가중, GARCH 모형)은 이 맞바꿈을 더 명시적으로 다룬다.
 
-## 연율화 관례
+---
+
+## 4. 연율화 관례
 
 금융 자료는 서로 다른 빈도로 수집된다. 표준적인 연율화는 수익률이 i.i.d.라고 가정한다:
 
@@ -572,13 +580,17 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 !!! warning "i.i.d. 가정"
     연율화 공식은 수익률이 i.i.d.라고 가정한다. 수익률의 자기상관(모멘텀이나 평균회귀)과 변동성 군집(GARCH 효과)은 단순한 $\sqrt{T}$ 축척 규칙을 무너뜨린다. 실무에서는 유용한 근사이지만 그 한계를 인식하고 써야 한다.
 
-## 해석
+---
+
+## 5. 해석
 
 - 금융에서 **기대수익률 추정**은 본질적으로 부정확하다. 신호 대 잡음 비 $\mu/\sigma$가 대개 작아서(일별로 약 0.03) 의미 있는 정밀도를 얻으려면 수십 년치 자료가 필요하다.
 - **Sharpe 비율**은 잡음이 큰 추정값이다. 3년의 실적으로는 운용자에게 실력이 있는지 믿을 만하게 판단할 수 없다.
 - **변동성 추정**은 수익률 추정보다 훨씬 정밀하다(변동성은 고빈도 자료에서 관측할 수 있지만 기대수익률은 그렇지 않다). 위험 모형이 수익률 예측보다 믿을 만한 이유가 여기에 있다.
 - 구간 선택에서의 **편향–분산 맞바꿈**은 고전적 맞바꿈이 실무에 드러난 모습이다: 짧은 구간은 편향이 작고 분산이 크며, 긴 구간은 그 반대이다.
 - **연율화**는 i.i.d. 가정 아래에서는 간단하지만 수익률에 계열 종속성이 있으면 조심스럽게 해석해야 한다.
+
+---
 
 ## 연습문제
 
@@ -602,39 +614,11 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 
     참 기대수익률이 10%인데도 5년치 자료로는 음수 값을 추정할 확률이 약 7%이다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff hard" title="어려움"></span>
-델타 방법을 써서 추정 Sharpe 비율의 근사 표준오차 $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/T}$를 유도하라.
-
-</div>
-
-??? success "풀이"
-    Sharpe 비율은 $g(a, b) = a/\sqrt{b}$에 대해 $\text{SR} = \mu/\sigma = g(\mu, \sigma^2)$이다.
-
-    델타 방법에 의해 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = S^2$에 대해:
-
-    $$\text{Var}(\widehat{\text{SR}}) \approx \nabla g^\top \Sigma \nabla g$$
-
-    여기서 $\Sigma = \text{Cov}(\hat{\mu}, \hat{\sigma}^2)$이다. 정규 자료에서는 $\hat{\mu}$과 $\hat{\sigma}^2$이 독립이므로 $\Sigma$가 대각행렬이다:
-
-    $$\Sigma = \begin{pmatrix} \sigma^2/n & 0 \\ 0 & 2\sigma^4/(n-1) \end{pmatrix}$$
-
-    $g(\mu, \sigma^2) = \mu(\sigma^2)^{-1/2}$의 기울기는:
-
-    $$\frac{\partial g}{\partial \mu} = \frac{1}{\sigma}, \qquad \frac{\partial g}{\partial \sigma^2} = -\frac{\mu}{2\sigma^3}$$
-
-    따라서:
-
-    $$\text{Var}(\widehat{\text{SR}}) \approx \frac{1}{\sigma^2}\cdot\frac{\sigma^2}{n} + \frac{\mu^2}{4\sigma^6}\cdot\frac{2\sigma^4}{n} = \frac{1}{n}\left(1 + \frac{\mu^2}{2\sigma^2}\right) = \frac{1}{n}\left(1 + \frac{\text{SR}^2}{2}\right)$$
-
-    제곱근을 취하면 $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/n}$이다.
-
-    연간 자료에서는 $n = T$(년)이므로 위 공식이 된다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff med" title="중간"></span>
 표본추출 빈도를 높이는 것이(예: 월별에서 일별로) 기대수익률 추정의 정밀도는 개선하지 못하면서 변동성 추정은 개선하는 이유를 설명하라.
 
 </div>
@@ -650,9 +634,11 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 
     직관적으로, 각 일별 수익률은 (제곱 크기를 통해) 현재 분산에 대한 정보를 드러내므로 더 자주 표본을 뽑는 것이 실제로 도움이 된다. 반면 각 일별 수익률이 추세에 대해 담고 있는 신호는 아주 작고, 그 신호는 관측을 자주 한다고 해서 더 빨리 쌓이지 않는다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 3.** <span class="diff med" title="중간"></span>
 GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.90$이다. 무조건(장기) 연율화 변동성을 계산하라. 이 과정은 정상인가?
 
 </div>
@@ -672,9 +658,11 @@ GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.9
 
     $\alpha + \beta = 0.98$이 1에 가깝다는 것은 변동성의 지속성이 높다는 뜻이다 — 변동성 충격이 천천히 감쇠한다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 어떤 실무자가 일별 수익률이 대체로 i.i.d.이므로 월별 Sharpe 비율에 $\sqrt{12}$를 곱하면 연간 Sharpe 비율이 된다고 주장한다. 어떤 조건에서 맞고, 언제 틀릴 수 있는가?
 
 </div>
@@ -696,9 +684,11 @@ GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.9
 
     실무에서 $\sqrt{T}$ 규칙은 유용한 근사이지만 해당 빈도에서 직접 계산한 값과 대조해 검증해야 한다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 수익률 자료의 **자기상관**이 샤프비율 연율화에 미치는 영향을 정량화하라. 헤지펀드 수익률에서 이 문제가 왜 특히 심각한가?
 
 </div>
@@ -746,9 +736,11 @@ GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.9
     - **긴 기간 수익률을 직접 쓴다.** 분기나 연 단위 수익률로 계산하면 평활화의 영향이 줄어든다.
     - **자기상관 계수를 보고 요구**한다. 실사에서 표준적인 점검 항목이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 GARCH(1,1)에서 **정상성 조건**과 **4차 적률 존재 조건**을 각각 적고, 실제 추정값이 그 경계에 가까울 때 무엇을 조심해야 하는지 논하라.
 
 </div>
@@ -803,9 +795,11 @@ GARCH(1,1)에서 **정상성 조건**과 **4차 적률 존재 조건**을 각각
 
     **권고.** 추정 후 $\alpha+\beta$와 4차 적률 조건을 **반드시 계산해 보고**한다. 경계에 가까우면 부트스트랩이나 강건 표준오차를 쓰고, 구조 변화 검정을 함께 한다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 수익률 예측에서 **표본 밖 $R^2$이 음수**가 나오는 일이 흔하다. 무슨 뜻이며 왜 그런지 설명하라.
 
 </div>
@@ -846,9 +840,11 @@ GARCH(1,1)에서 **정상성 조건**과 **4차 적률 존재 조건**을 각각
     - **표본 밖 평가를 기본으로.** 표본 안 $R^2$이나 $t$ 통계량을 예측력의 증거로 삼지 않는다.
     - **경제적 유의성을 본다.** 통계적 $R^2$이 작아도 포트폴리오 성과로는 의미 있을 수 있다. 효용 기반 평가가 더 직접적이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 수익률 자료에 **구조 변화**가 있을 때 전체 기간의 표본평균이 무엇을 추정하는지 논하고, 대처법을 적어라.
 
 </div>
@@ -893,9 +889,11 @@ GARCH(1,1)에서 **정상성 조건**과 **4차 적률 존재 조건**을 각각
 
     **가장 중요한 것.** **"평균"이 잘 정의된 양인지 먼저 묻는 것이다.** 비정상 자료에서 평균을 추정하는 것은 존재하지 않는 대상을 추정하는 일이며, 정밀도를 아무리 높여도 소용이 없다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 과거 수익률로 미래를 추정할 때 부딪히는 근본적 한계를 정리하고, 실무에서 어떻게 대응하는지 적어라.
 
 </div>
@@ -918,6 +916,38 @@ GARCH(1,1)에서 **정상성 조건**과 **4차 적률 존재 조건**을 각각
     - **불확실성을 명시한다.** 점추정값이 아니라 구간을, 하나의 시나리오가 아니라 범위를 보고한다.
 
     **한 문장으로.** **금융 자료의 근본 문제는 표본이 작다는 것이다.** 관측이 수천 개여도 독립적인 경제 체제는 몇 개뿐이며, 그 수를 늘릴 방법이 없다. 이 제약을 인정하는 것이 정교한 기법보다 중요하다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+델타 방법을 써서 추정 Sharpe 비율의 근사 표준오차 $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/T}$를 유도하라.
+
+</div>
+
+??? success "풀이"
+    Sharpe 비율은 $g(a, b) = a/\sqrt{b}$에 대해 $\text{SR} = \mu/\sigma = g(\mu, \sigma^2)$이다.
+
+    델타 방법에 의해 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = S^2$에 대해:
+
+    $$\text{Var}(\widehat{\text{SR}}) \approx \nabla g^\top \Sigma \nabla g$$
+
+    여기서 $\Sigma = \text{Cov}(\hat{\mu}, \hat{\sigma}^2)$이다. 정규 자료에서는 $\hat{\mu}$과 $\hat{\sigma}^2$이 독립이므로 $\Sigma$가 대각행렬이다:
+
+    $$\Sigma = \begin{pmatrix} \sigma^2/n & 0 \\ 0 & 2\sigma^4/(n-1) \end{pmatrix}$$
+
+    $g(\mu, \sigma^2) = \mu(\sigma^2)^{-1/2}$의 기울기는:
+
+    $$\frac{\partial g}{\partial \mu} = \frac{1}{\sigma}, \qquad \frac{\partial g}{\partial \sigma^2} = -\frac{\mu}{2\sigma^3}$$
+
+    따라서:
+
+    $$\text{Var}(\widehat{\text{SR}}) \approx \frac{1}{\sigma^2}\cdot\frac{\sigma^2}{n} + \frac{\mu^2}{4\sigma^6}\cdot\frac{2\sigma^4}{n} = \frac{1}{n}\left(1 + \frac{\mu^2}{2\sigma^2}\right) = \frac{1}{n}\left(1 + \frac{\text{SR}^2}{2}\right)$$
+
+    제곱근을 취하면 $\text{SE}(\widehat{\text{SR}}) \approx \sqrt{(1 + \text{SR}^2/2)/n}$이다.
+
+    연간 자료에서는 $n = T$(년)이므로 위 공식이 된다. $\square$
 
 ---
 

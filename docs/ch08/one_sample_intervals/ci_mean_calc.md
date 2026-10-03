@@ -4,7 +4,9 @@
 
 이 페이지에서는 모평균 $\mu$에 대한 일표본 신뢰구간을 실제로 계산하는 방법을 다룬다. 두 가지 방법을 다룬다: 모표준편차 $\sigma$를 아는 경우의 $z$-구간과, $\sigma$를 모르고 표본표준편차 $s$로 추정하는 경우의 $t$-구간. Python 구현은 원자료와 요약통계량 어느 쪽이든 받는다.
 
-## z-구간 (분산을 아는 경우)
+---
+
+## 1. z-구간 (분산을 아는 경우)
 
 $\sigma$를 알 때 $\mu$의 $(1-\alpha)100\%$ 신뢰구간은
 
@@ -14,7 +16,9 @@ $$
 
 표준오차는 $\text{SE} = \sigma / \sqrt{n}$이고 오차한계는 $\text{MOE} = z_{\alpha/2} \cdot \text{SE}$이다.
 
-## t-구간 (분산을 모르는 경우)
+---
+
+## 2. t-구간 (분산을 모르는 경우)
 
 $\sigma$를 모르면 $s$로 바꾸고 자유도 $\text{df} = n - 1$인 $t$-분포를 쓴다:
 
@@ -229,12 +233,16 @@ python ci_mean_calc.py --n 25 --mean 3.2 --sd 1.1 --known-sigma 1.0 --method z
 python ci_mean_calc.py --csv data.csv --cl 0.99
 ```
 
-## 해석
+---
+
+## 3. 해석
 
 - **신뢰수준** $1 - \alpha$는 절차의 장기적 성공률을 기술한다: 연구를 여러 번 반복하며 매번 신뢰구간을 만들면 그중 약 $(1-\alpha)100\%$가 $\mu$를 담는다.
 - **구간이 넓다는 것**은 불확실성이 크다는 뜻이다. $n$이 줄거나, $s$(또는 $\sigma$)가 커지거나, 신뢰수준이 올라가면 너비가 늘어난다.
 - $t$-구간은 언제나 대응하는 $z$-구간 이상으로 넓다. $n \ge 30$이면 $t_{\alpha/2,\,n-1} \approx z_{\alpha/2}$이므로 차이가 작다.
 - 자료가 강하게 비정규이고 $n$이 작으면 $t$-구간이 명목 포함확률을 달성하지 못할 수 있다. 이럴 때는 비모수 붓스트랩 신뢰구간을 고려하라.
+
+---
 
 ## 연습문제
 
@@ -254,25 +262,11 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
     99% 구간은 95% 구간의 $11.788/8.524 = 1.38$배 넓다. 더 높은 확신을 위해서는 더 넓은 범위의 그럴듯한 값을 받아들여야 한다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff med" title="중간"></span> $z$-구간의 오차한계가 $n$의 감소함수임을 보이고 감소 속도를 구하라.
-
-</div>
-
-??? success "풀이"
-
-    오차한계는 $\text{MOE} = z_{\alpha/2} \cdot \sigma / \sqrt{n}$이다. $z_{\alpha/2}$와 $\sigma$가 상수이므로:
-
-    $$
-    \frac{d(\text{MOE})}{dn} = z_{\alpha/2} \cdot \sigma \cdot \left(-\frac{1}{2}\right) n^{-3/2} < 0
-    $$
-
-    따라서 오차한계는 $n$에 대해 순감소한다. 감소 속도는 $O(n^{-1/2})$이다: $n$을 두 배로 하면 오차한계가 $1/\sqrt{2} \approx 0.707$배가 되어 약 29% 줄어든다. 오차한계를 절반으로 줄이려면 표본크기를 네 배로 해야 한다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff easy" title="쉬움"></span> 어떤 연구자가 $n = 100$, $s = 10$일 때 $\mu$의 95% $t$-구간과 $z$-구간이 "사실상 같다"고 주장한다. 수치로 확인하라.
+**연습문제 2.** <span class="diff easy" title="쉬움"></span> 어떤 연구자가 $n = 100$, $s = 10$일 때 $\mu$의 95% $t$-구간과 $z$-구간이 "사실상 같다"고 주장한다. 수치로 확인하라.
 
 </div>
 
@@ -290,31 +284,11 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
     차이는 $1.984 - 1.960 = 0.024$로 $z$-오차한계의 1.3% 미만이다. 표본평균이 예컨대 50이라면 $z$-구간은 $(48.040, 51.960)$, $t$-구간은 $(48.016, 51.984)$이다. 연구자의 주장이 옳다: 양쪽 끝에서 0.024 단위만 다르다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 4.** <span class="diff med" title="중간"></span> $\nu \to \infty$일 때 $t_{\alpha/2,\,\nu} \to z_{\alpha/2}$임을 증명하라.
-
-</div>
-
-??? success "풀이"
-
-    $T \sim t_\nu$이면 $T = Z / \sqrt{V/\nu}$이며 여기서 $Z \sim N(0,1)$과 $V \sim \chi^2_\nu$는 독립이다. 대수의법칙에 의해 $\nu \to \infty$일 때 $V/\nu \xrightarrow{P} 1$이다. 따라서 Slutsky 정리에 의해
-
-    $$
-    T = \frac{Z}{\sqrt{V/\nu}} \xrightarrow{d} \frac{Z}{1} = Z \sim N(0,1)
-    $$
-
-    이다. $t_\nu$의 누적분포함수가 표준정규 누적분포함수로 점별 수렴하므로 분위수도 수렴한다:
-
-    $$
-    t_{\alpha/2,\,\nu} \to z_{\alpha/2} \quad (\nu \to \infty)
-    $$
-
-    $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff easy" title="쉬움"></span> 원자료 $\{12, 15, 14, 10, 13, 16, 11, 14, 13, 12\}$에 대해 $\mu$의 90% $t$-구간을 손으로 계산하고 코드로 확인하라.
+**연습문제 3.** <span class="diff easy" title="쉬움"></span> 원자료 $\{12, 15, 14, 10, 13, 16, 11, 14, 13, 12\}$에 대해 $\mu$의 90% $t$-구간을 손으로 계산하고 코드로 확인하라.
 
 </div>
 
@@ -359,9 +333,11 @@ python ci_mean_calc.py --csv data.csv --cl 0.99
 
     $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff easy" title="쉬움"></span>
+**연습문제 4.** <span class="diff easy" title="쉬움"></span>
 $n=16$인 자료에서 90%, 95%, 99% $t$-구간의 폭을 비교하라. 신뢰수준을 95%에서 99%로 올리면 폭이 몇 배가 되는가?
 
 </div>
@@ -399,9 +375,11 @@ $n=16$인 자료에서 90%, 95%, 99% $t$-구간의 폭을 비교하라. 신뢰�
 
     **수확체감.** 99.9%로 가면 폭이 1.91배, 같은 폭을 위한 표본은 3.65배다. **신뢰수준을 높이는 비용이 가속적으로 커진다.** 95%가 관행이 된 데는 이런 균형이 있다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff easy" title="쉬움"></span>
+**연습문제 5.** <span class="diff easy" title="쉬움"></span>
 $n=16$, $\bar x=50$, $s=8$인 자료에서 **단측** 95% 하한과 상한을 각각 구하고, 양측 구간과 비교하라.
 
 </div>
@@ -446,6 +424,50 @@ $n=16$, $\bar x=50$, $s=8$인 자료에서 **단측** 95% 하한과 상한을 �
     2. **단측 95% 하한은 양측 90% 구간의 하한과 같다.** 두 단측 구간을 모두 보고하면 그것은 90% 양측 구간이지 95%가 아니다.
 
     **언제 단측인가.** 오염물질 농도의 상한, 재료 강도의 하한, 약의 비열등성처럼 **한 방향만 실무적 의미**가 있을 때다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span> $z$-구간의 오차한계가 $n$의 감소함수임을 보이고 감소 속도를 구하라.
+
+</div>
+
+??? success "풀이"
+
+    오차한계는 $\text{MOE} = z_{\alpha/2} \cdot \sigma / \sqrt{n}$이다. $z_{\alpha/2}$와 $\sigma$가 상수이므로:
+
+    $$
+    \frac{d(\text{MOE})}{dn} = z_{\alpha/2} \cdot \sigma \cdot \left(-\frac{1}{2}\right) n^{-3/2} < 0
+    $$
+
+    따라서 오차한계는 $n$에 대해 순감소한다. 감소 속도는 $O(n^{-1/2})$이다: $n$을 두 배로 하면 오차한계가 $1/\sqrt{2} \approx 0.707$배가 되어 약 29% 줄어든다. 오차한계를 절반으로 줄이려면 표본크기를 네 배로 해야 한다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span> $\nu \to \infty$일 때 $t_{\alpha/2,\,\nu} \to z_{\alpha/2}$임을 증명하라.
+
+</div>
+
+??? success "풀이"
+
+    $T \sim t_\nu$이면 $T = Z / \sqrt{V/\nu}$이며 여기서 $Z \sim N(0,1)$과 $V \sim \chi^2_\nu$는 독립이다. 대수의법칙에 의해 $\nu \to \infty$일 때 $V/\nu \xrightarrow{P} 1$이다. 따라서 Slutsky 정리에 의해
+
+    $$
+    T = \frac{Z}{\sqrt{V/\nu}} \xrightarrow{d} \frac{Z}{1} = Z \sim N(0,1)
+    $$
+
+    이다. $t_\nu$의 누적분포함수가 표준정규 누적분포함수로 점별 수렴하므로 분위수도 수렴한다:
+
+    $$
+    t_{\alpha/2,\,\nu} \to z_{\alpha/2} \quad (\nu \to \infty)
+    $$
+
+    $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -504,6 +526,8 @@ $t$-구간이 **아핀변환에 불변**임을 보이고, 섭씨 자료의 구�
     **비선형 변환에서는 성립하지 않는다.** $\mu$의 구간에 $\exp$를 취한 것은 $E[e^X]$의 구간이 **아니다**. 앞서 본 대로 $E[e^X]\ne e^{E[X]}$이기 때문이다. 그것은 **기하평균**에 대한 구간이다.
 
     **실무적 의미.** 단위를 바꿔도 결론이 바뀌지 않는다는 것은 절차의 최소 요건이다. 왈드 구간이 비율이나 오즈비에서 **척도에 따라 달라지는** 것과 대비된다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -565,6 +589,8 @@ $t$-구간이 **아핀변환에 불변**임을 보이고, 섭씨 자료의 구�
     - 다만 가중치를 **추정된 분산**으로 정하면 소표본에서 편향이 생긴다. $n_i$가 작으면 주의한다.
 
     **더 중요한 질문.** 세 공장의 평균이 **정말 같은가?** 그렇지 않다면 "전체 평균"이 무엇을 뜻하는지 불분명하다. 앞서 본 심프슨의 역설처럼, 집단을 뭉개면 해석이 왜곡될 수 있다. 분산분석으로 먼저 확인하는 것이 순서다.
+
+---
 
 <div class="drillbox" markdown>
 

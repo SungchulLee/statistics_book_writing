@@ -7,7 +7,9 @@
 대개 관측값이 독립이고 연속분포에서 나왔다는 것뿐이다. 정규성을 정당화할 수 없거나,
 자료가 순서형이거나, 이상치가 우려될 때 없어서는 안 될 도구이다.
 
-## 비모수 검정의 분류
+---
+
+## 1. 비모수 검정의 분류
 
 아래 표는 주요 검정을 실험설계에 따라 정리한 것이다.
 
@@ -21,7 +23,9 @@
 | $k$개 독립표본 | Mood 중앙값검정 | 전체 중앙값 위/아래 도수 |
 | 무작위성 | Wald--Wolfowitz 런 검정 | 이진 수열의 런 |
 
-## 검정력과 가정
+---
+
+## 2. 검정력과 가정
 
 각 검정은 일반성과 검정력 사이의 스펙트럼 위에 놓인다.
 
@@ -66,7 +70,9 @@ $$
 **Mood 중앙값검정.** 각 관측값을 "전체 중앙값 위/아래"라는 이진 지시값으로만 쓰는,
 다집단 검정 중 가장 로버스트한 방법이다.
 
-## 선택 지침
+---
+
+## 3. 선택 지침
 
 다음 흐름이 선택 과정을 요약한다.
 
@@ -92,7 +98,7 @@ $$
 \text{ARE}(\text{윌콕슨}, t) = 12\,\sigma^2\left(\int_{-\infty}^{\infty} f(x)^2\,dx\right)^2
 $$
 
-이다. 정규·로지스틱·이중지수·균등에서 부호검정의 $4\sigma^2 f(0)^2$(연습문제 2)과 함께 계산하시오.
+이다. 정규·로지스틱·이중지수·균등에서 부호검정의 $4\sigma^2 f(0)^2$(연습문제 5)과 함께 계산하시오.
 
 </div>
 
@@ -262,7 +268,9 @@ $p$값이 16배로 벌어진 이유는 같은 자료를 두 방식으로 그려 
 
 대응설계의 가치가 여기에 있다. 대응은 "자료를 두 번 재는 번거로운 방법"이 아니라 **개인차라는 가장 큰 잡음원을 차이 계산 한 번으로 제거하는 장치**이다. 그 구조를 분석에서 버리면 설계로 벌어 둔 검정력을 고스란히 반납하게 된다. 이 자료에서는 그 값이 $p$값 16배였다.
 
-## 해석
+---
+
+## 4. 해석
 
 - **비모수 $\neq$ 무가정.** 모든 검정이 여전히 독립성을 요구한다. 부호순위검정은
   대칭성을 추가로 요구한다. Kruskal--Wallis는 집단 분포의 모양이 같지 않으면
@@ -273,97 +281,13 @@ $p$값이 16배로 벌어진 이유는 같은 자료를 두 방식으로 그려 
 - **다중비교.** Kruskal--Wallis가 $H_0$을 기각하면 사후 쌍별 검정(예: Dunn 검정)에
   Bonferroni나 Holm 보정을 적용하여 어느 집단이 다른지 밝힌다.
 
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff med" title="중간"></span> 한 연구자가 대응 관측값 12개를 갖고 있는데 차이가 대칭인지 확신할 수
-없다. 부호검정과 Wilcoxon 부호순위검정 중 무엇을 써야 하는가? 근거와 맞교환을 설명하라.
-
-</div>
-
-??? success "풀이"
-
-    **부호검정**을 써야 한다. Wilcoxon 부호순위검정은 $H_0$ 아래에서 차이의 분포가
-    중앙값을 중심으로 대칭임을 요구한다. 이 가정이 깨지면 $W^+$의 귀무분포가 틀리고
-    제1종 오류가 부풀려질 수 있다.
-
-    맞교환은 **검정력**이다. 부호검정은 차이의 부호만 쓰고 크기 정보를 버리므로,
-    대칭성이 실제로 성립한다면 검정력이 낮다. 그러나 이 경우에는 연구자가 대칭성을
-    확인할 수 없으므로 제1종 오류를 통제하는 안전성이 검정력보다 중요하다.
-
-    표본이 더 크다면 차이의 히스토그램으로 대칭성을 평가한 뒤 부호순위검정으로
-    바꿀 수 있다. 다만 $n = 12$로는 히스토그램으로 대칭성을 판정하기 어렵다.
-    맥락 지식(예: "이 측정값은 바닥효과가 있어 차이가 오른쪽으로 치우친다")이
-    있다면 그것이 더 믿을 만한 근거이다. $\square$
-
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff hard" title="어려움"></span> 정규성 아래에서 부호검정의 일표본 $t$ 검정 대비 점근상대효율이
-$2/\pi \approx 0.637$임을 보여라.
-
-</div>
-
-??? success "풀이"
-
-    ARE는 두 검정의 **효능**(efficacy) 제곱의 비이다. 검정통계량 $T_n$의 효능은
-
-    $$
-    c = \lim_{n \to \infty} \frac{\frac{d}{d\delta}\operatorname{E}_\delta[T_n]\big|_{\delta=0}}{\sqrt{n \operatorname{Var}_0(T_n)}}
-    $$
-
-    으로 정의된다.
-
-    **$t$ 검정.** $T_n = \bar{D}$이고 $\operatorname{E}_\delta[\bar D] = \delta$이므로
-    미분값이 $1$이다. $\operatorname{Var}_0(\bar D) = \sigma^2/n$이므로
-
-    $$
-    c_t = \frac{1}{\sqrt{n \cdot \sigma^2/n}} = \frac{1}{\sigma}.
-    $$
-
-    **부호검정.** $T_n = \hat{p} = n_+/n$이라 하자. $D_i \sim \mathcal{N}(\delta, \sigma^2)$이면
-
-    $$
-    \operatorname{E}_\delta[\hat p] = P(D_i > 0) = \Phi\!\left(\frac{\delta}{\sigma}\right)
-    $$
-
-    이고, $\delta = 0$에서 미분하면
-
-    $$
-    \frac{d}{d\delta}\Phi\!\left(\frac{\delta}{\sigma}\right)\bigg|_{\delta=0}
-    = \frac{1}{\sigma}\varphi(0) = \frac{1}{\sigma\sqrt{2\pi}} = f(0)
-    $$
-
-    이다($f$는 $D_i$의 밀도함수). $\operatorname{Var}_0(\hat p) = 1/(4n)$이므로
-
-    $$
-    c_{\text{sign}} = \frac{f(0)}{\sqrt{n \cdot 1/(4n)}} = 2 f(0) = \frac{2}{\sigma\sqrt{2\pi}}.
-    $$
-
-    **ARE.**
-
-    $$
-    \text{ARE}(\text{부호}, t) = \left(\frac{c_{\text{sign}}}{c_t}\right)^2
-    = \left(\frac{2/(\sigma\sqrt{2\pi})}{1/\sigma}\right)^2
-    = \frac{4}{2\pi} = \frac{2}{\pi} \approx 0.637. \quad \square
-    $$
-
-    일반적으로 밀도 $f$와 표준편차 $\sigma$를 갖는 대칭분포에서
-    $\text{ARE}(\text{부호}, t) = 4\sigma^2 f(0)^2$이다. 이 공식이 유용한 것은
-    다른 분포에서도 바로 계산할 수 있기 때문이다.
-
-    | 분포 | $\sigma^2$ | $f(0)$ | ARE |
-    |:---|:---:|:---:|---:|
-    | Normal | $1$ | $1/\sqrt{2\pi} = 0.3989$ | $0.637$ |
-    | Laplace ($\text{Var} = 1$) | $1$ | $1/\sqrt{2} = 0.7071$ | $2.000$ |
-    | Uniform$(-\sqrt3, \sqrt3)$ | $1$ | $1/(2\sqrt3) = 0.2887$ | $0.333$ |
-
-    라플라스에서 부호검정이 $t$ 검정보다 **두 배 효율적**임에 주목하라. 꼬리가
-    두꺼울수록 $f(0)$이 커지고 부호검정이 유리해진다.
-
-<div class="drillbox" markdown>
-
-**연습문제 3.** <span class="diff easy" title="쉬움"></span> 독립인 세 집단이 다음 자료를 냈다.
+**연습문제 1.** <span class="diff easy" title="쉬움"></span> 독립인 세 집단이 다음 자료를 냈다.
 
 - 집단 A: $5, 8, 12, 15$
 - 집단 B: $7, 11, 14, 18, 20$
@@ -424,9 +348,35 @@ Kruskal--Wallis 검정과 Mood 중앙값검정을 파이썬으로 수행하고 $
     자료를 본 뒤 $p$값이 작은 검정을 고르면 실제 유의수준이 명목값을 크게 넘는다.
     $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span> Kruskal--Wallis가 단순한 중앙값 검정이 아닌 이유를 설명하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 한 연구자가 대응 관측값 12개를 갖고 있는데 차이가 대칭인지 확신할 수
+없다. 부호검정과 Wilcoxon 부호순위검정 중 무엇을 써야 하는가? 근거와 맞교환을 설명하라.
+
+</div>
+
+??? success "풀이"
+
+    **부호검정**을 써야 한다. Wilcoxon 부호순위검정은 $H_0$ 아래에서 차이의 분포가
+    중앙값을 중심으로 대칭임을 요구한다. 이 가정이 깨지면 $W^+$의 귀무분포가 틀리고
+    제1종 오류가 부풀려질 수 있다.
+
+    맞교환은 **검정력**이다. 부호검정은 차이의 부호만 쓰고 크기 정보를 버리므로,
+    대칭성이 실제로 성립한다면 검정력이 낮다. 그러나 이 경우에는 연구자가 대칭성을
+    확인할 수 없으므로 제1종 오류를 통제하는 안전성이 검정력보다 중요하다.
+
+    표본이 더 크다면 차이의 히스토그램으로 대칭성을 평가한 뒤 부호순위검정으로
+    바꿀 수 있다. 다만 $n = 12$로는 히스토그램으로 대칭성을 판정하기 어렵다.
+    맥락 지식(예: "이 측정값은 바닥효과가 있어 차이가 오른쪽으로 치우친다")이
+    있다면 그것이 더 믿을 만한 근거이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span> Kruskal--Wallis가 단순한 중앙값 검정이 아닌 이유를 설명하라.
 실제로 무엇을 검정하며, 어떤 추가 가정 아래에서 위치이동 검정이 되는가?
 
 </div>
@@ -445,13 +395,15 @@ Kruskal--Wallis 검정과 Mood 중앙값검정을 파이썬으로 수행하고 $
     위치이동 가정이 없으면 유의한 Kruskal--Wallis 결과가 중심이 아니라 산포의
     차이를 반영할 수 있고, 이를 중앙값 검정으로 해석하는 연구자를 오도한다.
 
-    [Kruskal-Wallis](../multi_group_nonparametric/kruskal_wallis.md) 연습문제 3에서
+    [Kruskal-Wallis](../multi_group_nonparametric/kruskal_wallis.md) 연습문제 1에서
     이를 정량적으로 확인했다. 중앙값이 모두 정확히 0이지만 왜도가 다른 세 집단에서
     $n = 100$일 때 기각률이 $0.614$까지 올라간다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span> Kruskal--Wallis 결과가 유의한 뒤 어느 쌍이 다른지 알고 싶다.
+**연습문제 4.** <span class="diff med" title="중간"></span> Kruskal--Wallis 결과가 유의한 뒤 어느 쌍이 다른지 알고 싶다.
 Dunn 검정을 기술하고 다중비교 보정이 왜 필요한지 설명하라.
 
 </div>
@@ -490,6 +442,72 @@ Dunn 검정을 기술하고 다중비교 보정이 왜 필요한지 설명하라
         쌍별 비교는 같은 순위를 공유하므로 서로 상관되어 있고, 실제 FWER은 이보다
         낮다. 그럼에도 보정 없이는 $\alpha$를 넘으므로 보정이 필요하다.
         Bonferroni는 독립 여부와 무관하게 유효하다는 것이 그 장점이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span> 정규성 아래에서 부호검정의 일표본 $t$ 검정 대비 점근상대효율이
+$2/\pi \approx 0.637$임을 보여라.
+
+</div>
+
+??? success "풀이"
+
+    ARE는 두 검정의 **효능**(efficacy) 제곱의 비이다. 검정통계량 $T_n$의 효능은
+
+    $$
+    c = \lim_{n \to \infty} \frac{\frac{d}{d\delta}\operatorname{E}_\delta[T_n]\big|_{\delta=0}}{\sqrt{n \operatorname{Var}_0(T_n)}}
+    $$
+
+    으로 정의된다.
+
+    **$t$ 검정.** $T_n = \bar{D}$이고 $\operatorname{E}_\delta[\bar D] = \delta$이므로
+    미분값이 $1$이다. $\operatorname{Var}_0(\bar D) = \sigma^2/n$이므로
+
+    $$
+    c_t = \frac{1}{\sqrt{n \cdot \sigma^2/n}} = \frac{1}{\sigma}.
+    $$
+
+    **부호검정.** $T_n = \hat{p} = n_+/n$이라 하자. $D_i \sim \mathcal{N}(\delta, \sigma^2)$이면
+
+    $$
+    \operatorname{E}_\delta[\hat p] = P(D_i > 0) = \Phi\!\left(\frac{\delta}{\sigma}\right)
+    $$
+
+    이고, $\delta = 0$에서 미분하면
+
+    $$
+    \frac{d}{d\delta}\Phi\!\left(\frac{\delta}{\sigma}\right)\bigg|_{\delta=0}
+    = \frac{1}{\sigma}\varphi(0) = \frac{1}{\sigma\sqrt{2\pi}} = f(0)
+    $$
+
+    이다($f$는 $D_i$의 밀도함수). $\operatorname{Var}_0(\hat p) = 1/(4n)$이므로
+
+    $$
+    c_{\text{sign}} = \frac{f(0)}{\sqrt{n \cdot 1/(4n)}} = 2 f(0) = \frac{2}{\sigma\sqrt{2\pi}}.
+    $$
+
+    **ARE.**
+
+    $$
+    \text{ARE}(\text{부호}, t) = \left(\frac{c_{\text{sign}}}{c_t}\right)^2
+    = \left(\frac{2/(\sigma\sqrt{2\pi})}{1/\sigma}\right)^2
+    = \frac{4}{2\pi} = \frac{2}{\pi} \approx 0.637. \quad \square
+    $$
+
+    일반적으로 밀도 $f$와 표준편차 $\sigma$를 갖는 대칭분포에서
+    $\text{ARE}(\text{부호}, t) = 4\sigma^2 f(0)^2$이다. 이 공식이 유용한 것은
+    다른 분포에서도 바로 계산할 수 있기 때문이다.
+
+    | 분포 | $\sigma^2$ | $f(0)$ | ARE |
+    |:---|:---:|:---:|---:|
+    | Normal | $1$ | $1/\sqrt{2\pi} = 0.3989$ | $0.637$ |
+    | Laplace ($\text{Var} = 1$) | $1$ | $1/\sqrt{2} = 0.7071$ | $2.000$ |
+    | Uniform$(-\sqrt3, \sqrt3)$ | $1$ | $1/(2\sqrt3) = 0.2887$ | $0.333$ |
+
+    라플라스에서 부호검정이 $t$ 검정보다 **두 배 효율적**임에 주목하라. 꼬리가
+    두꺼울수록 $f(0)$이 커지고 부호검정이 유리해진다.
 
 ---
 

@@ -2,7 +2,9 @@
 
 일반적인 다중회귀 이론을 전개하기 전에 **단순선형회귀** — 예측변수가 하나인 모형 — 에서 추정량의 표본분포를 유도해 보면 도움이 된다. 단순한 경우를 직접 따라가 보면 오차의 정규성이 어떻게 추정량의 정규성으로 전파되는지, 자유도가 왜 $n - 2$인지, t-통계량이 어떻게 나오는지에 대한 직관이 생긴다. 단순한 경우의 공식은 또한 각 대수적 양(제곱합, 교차곱)의 역할을 행렬 표기가 가릴 수 있는 방식과 달리 투명하게 드러낸다.
 
-## 단순선형회귀 모형
+---
+
+## 1. 단순선형회귀 모형
 
 모형은
 
@@ -19,7 +21,9 @@ $$
 
 $\varepsilon_i \sim N(0, \sigma^2)$이고 $x_i$가 고정되어 있으므로 각 반응은 독립적으로 $Y_i \sim N(\beta_0 + \beta_1 x_i, \sigma^2)$이다.
 
-## 최소제곱추정량
+---
+
+## 2. 최소제곱추정량
 
 최소제곱추정량은 $\sum_{i=1}^n (Y_i - \beta_0 - \beta_1 x_i)^2$을 최소화한다. 닫힌 형태의 해는 다음과 같다.
 
@@ -33,7 +37,9 @@ $$
 
 여기서 $\bar{x} = \frac{1}{n}\sum_i x_i$, $\bar{Y} = \frac{1}{n}\sum_i Y_i$, $S_{xx} = \sum_i(x_i - \bar{x})^2$, $S_{xy} = \sum_i(x_i - \bar{x})(Y_i - \bar{Y})$이다.
 
-## 추정량의 선형성
+---
+
+## 3. 추정량의 선형성
 
 핵심적인 관찰은 두 추정량이 모두 반응 $Y_1, \dots, Y_n$의 **선형함수**라는 점이다.
 
@@ -51,7 +57,9 @@ $$
 
 $\hat{\beta}_1$이 독립인 정규확률변수들의 선형결합이므로 그 자체가 정규분포를 따른다.
 
-## 기울기의 표본분포
+---
+
+## 4. 기울기의 표본분포
 
 <div class="thmbox" markdown>
 
@@ -90,7 +98,9 @@ $$
 
     *정규성:* $\hat{\beta}_1$이 독립인 정규확률변수들의 선형결합이므로 정규분포를 따른다. $\square$
 
-## 그림으로 보는 기울기의 분산
+---
+
+## 5. 그림으로 보는 기울기의 분산
 
 ![위 두 그림은 x를 넓게 퍼뜨린 설계와 좁게 몰아둔 설계에서 60번씩 적합한 직선의 다발, 아래 왼쪽은 두 설계에서 기울기 추정량의 표본분포, 아래 오른쪽은 기울기의 분산이 Sxx에 반비례함을 보이는 곡선](./img/slope_variance_spread.png)
 
@@ -102,7 +112,9 @@ $$
 
 아래 오른쪽 그림은 $x = 5 \pm w$의 반폭 $w$를 $1$에서 $5$까지 바꾸며 측정한 분산을 곡선 $\sigma^2/S_{xx}$ 위에 얹은 것이다. $w = 1$에서 모의값 $0.24781$ 대 이론값 $0.24545$, $w = 5$에서 $0.00973$ 대 $0.00982$로 일치한다. 이 곡선이 왼쪽에서 가파르고 오른쪽에서 평평하다는 사실이 실무에서 중요하다. $x$가 이미 넉넉히 퍼져 있으면 더 벌려도 얻는 것이 적지만, $x$가 좁게 몰려 있으면 조금만 벌려도 크게 얻는다. 정밀도를 높이는 길이 표본 크기를 늘리는 것뿐만은 아니라는 뜻이다(다만 무작정 양 끝으로 몰 때의 대가는 연습문제 10에서 따진다).
 
-## 절편의 표본분포
+---
+
+## 6. 절편의 표본분포
 
 <div class="thmbox" markdown>
 
@@ -129,7 +141,9 @@ $$
 
     $\square$
 
-## 잔차제곱합과 분산의 추정
+---
+
+## 7. 잔차제곱합과 분산의 추정
 
 잔차제곱합은
 
@@ -193,7 +207,9 @@ $$
 
 이고 $E[s^2] = \sigma^2$이다. 이는 [5.1절](../../../ch05/foundations/statistics_as_rv.md)에서 $E[S^2] = \sigma^2$을 보인 것과 **같은 구조**다. 5.1절은 모평균 $\mu$ 대신 $\bar{X}$를 쓰느라 제곱합이 $\sigma^2$만큼 줄어 분모가 $n-1$이 된다고 설명했다. 여기서는 모수를 두 개 추정하느라 두 방향을 잃어 분모가 $n-2$가 된다. 절편만 있는 모형이 $p=1$인 경우이고, 그때 $s^2$이 정확히 $S^2$으로 돌아간다.
 
-## t-통계량
+---
+
+## 8. t-통계량
 
 실무에서는 $\sigma^2$을 모르므로 표준오차에서 이를 $s^2$으로 대체한다. 그러면 정규분포가 t-분포로 바뀐다.
 
@@ -231,7 +247,9 @@ $$
 
     이다.
 
-## 신뢰구간
+---
+
+## 9. 신뢰구간
 
 t-분포 결과는 곧바로 신뢰구간을 준다.
 
@@ -249,7 +267,9 @@ $$
 
 이다. 여기서 $t_{\alpha/2,\,n-2}$는 $t_{n-2}$ 분포의 상위 $\alpha/2$ 분위수다.
 
-## 예
+---
+
+## 10. 예
 
 $n = 5$개의 자료점에서 $\bar{x} = 3$, $S_{xx} = 10$, $\hat{\beta}_1 = 2.5$, $\hat{\beta}_0 = 1.0$, $\text{SSE} = 6.0$이라 하자.
 
@@ -257,6 +277,8 @@ $n = 5$개의 자료점에서 $\bar{x} = 3$, $S_{xx} = 10$, $\hat{\beta}_1 = 2.5
 - **기울기의 표준오차:** $\text{SE}(\hat{\beta}_1) = s/\sqrt{S_{xx}} = \sqrt{2}/\sqrt{10} = \sqrt{0.2} \approx 0.447$.
 - **$H_0: \beta_1 = 0$에 대한 t-통계량:** $T = 2.5 / 0.447 \approx 5.59$이며 $t_{3}$과 비교한다.
 - **기울기의 95% 신뢰구간:** $t_{0.025, 3} = 3.182$를 쓰면 $2.5 \pm 3.182 \times 0.447 \approx 2.5 \pm 1.42 = (1.08, 3.92)$.
+
+---
 
 ## 연습문제
 
@@ -288,9 +310,75 @@ $n = 5$개의 자료점에서 $\bar{x} = 3$, $S_{xx} = 10$, $\hat{\beta}_1 = 2.5
 
     이다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
+$\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n - 2$인지 설명하라.
+
+</div>
+
+??? success "풀이"
+    잔차제곱합은 ($\sigma^2$으로 나눈 뒤) 모자 행렬 $\mathbf{H}$에 대해 $\text{SSE} = \mathbf{Y}^\top(\mathbf{I} - \mathbf{H})\mathbf{Y}/\sigma^2$로 쓸 수 있다. 행렬 $\mathbf{I} - \mathbf{H}$는 계수가 $n - 2$인 멱등행렬이다(단순회귀에서는 절편과 기울기에 대응하여 $\text{rank}(\mathbf{H}) = 2$이므로).
+
+    멱등행렬의 계수가 결과로 나오는 카이제곱분포의 자유도와 같다. 직관적으로는, $\mathbf{Y}$에 $n$개의 독립적인 정보 조각이 있는 상태에서 출발하지만 두 모수 $\beta_0$과 $\beta_1$을 적합하는 데 자유도 2를 "써버려" $\sigma^2$을 추정할 자유도로 $n - 2$가 남는다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff easy" title="쉬움"></span>
+$\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(1)
+    x = np.arange(1., 9.)
+    n, b0, b1, sig = len(x), 2., 3., 1.5
+    Sxx = ((x - x.mean()) ** 2).sum()
+
+    B = 200_000
+    Y = b0 + b1 * x + rng.normal(0, sig, size=(B, n))
+    X = np.column_stack([np.ones(n), x])
+    beta = Y @ X @ np.linalg.inv(X.T @ X)
+    b1_hat = beta[:, 1]
+
+    print(f"평균   모의 {b1_hat.mean():.4f}   이론 {b1:.4f}")
+    print(f"분산   모의 {b1_hat.var():.6f}   이론 {sig**2/Sxx:.6f}")
+
+    # 정규성: 표준화한 뒤 분위수를 비교한다
+    z = (b1_hat - b1) / np.sqrt(sig**2 / Sxx)
+    for q in (0.05, 0.25, 0.5, 0.75, 0.95):
+        print(f"  q={q:<5} 모의 {np.quantile(z, q):+.4f}   N(0,1) {stats.norm.ppf(q):+.4f}")
+    ```
+
+    출력:
+
+    ```
+    평균   모의 2.9992   이론 3.0000
+    분산   모의 0.053105   이론 0.053571
+      q=0.05  모의 -1.6431   N(0,1) -1.6449
+      q=0.25  모의 -0.6756   N(0,1) -0.6745
+      q=0.5   모의 -0.0028   N(0,1) +0.0000
+      q=0.75  모의 +0.6678   N(0,1) +0.6745
+      q=0.95  모의 +1.6347   N(0,1) +1.6449
+    ```
+
+    평균과 분산이 이론값과 맞고 분위수도 표준정규와 일치한다.
+
+    **왜 정확히 정규인가.** $\hat{\beta}_1 = \sum_i c_i Y_i$가 독립 정규확률변수의 **선형결합**이기 때문이다. 중심극한정리에 기댄 근사가 아니라 $n$이 작아도 정확히 성립한다. 여기서도 $n = 8$뿐이다. 다만 이는 오차가 정규일 때의 이야기이며, 오차가 정규가 아니면 $\hat{\beta}_1$의 정규성은 $n$이 커질 때의 근사로만 성립한다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $c_i = (x_i - \bar{x})/S_{xx}$에 대해 $\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i$임을 증명하고, 이를 이용해 $\operatorname{Var}(\hat{\beta}_1) = \sigma^2 / S_{xx}$을 유도하라.
 
 </div>
@@ -312,22 +400,12 @@ $c_i = (x_i - \bar{x})/S_{xx}$에 대해 $\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i$�
 
     이다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 3.** <span class="diff easy" title="쉬움"></span>
-$\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n - 2$인지 설명하라.
-
-</div>
-
-??? success "풀이"
-    잔차제곱합은 ($\sigma^2$으로 나눈 뒤) 모자 행렬 $\mathbf{H}$에 대해 $\text{SSE} = \mathbf{Y}^\top(\mathbf{I} - \mathbf{H})\mathbf{Y}/\sigma^2$로 쓸 수 있다. 행렬 $\mathbf{I} - \mathbf{H}$는 계수가 $n - 2$인 멱등행렬이다(단순회귀에서는 절편과 기울기에 대응하여 $\text{rank}(\mathbf{H}) = 2$이므로).
-
-    멱등행렬의 계수가 결과로 나오는 카이제곱분포의 자유도와 같다. 직관적으로는, $\mathbf{Y}$에 $n$개의 독립적인 정보 조각이 있는 상태에서 출발하지만 두 모수 $\beta_0$과 $\beta_1$을 적합하는 데 자유도 2를 "써버려" $\sigma^2$을 추정할 자유도로 $n - 2$가 남는다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
-연습문제 2를 절편에 대해 되풀이하라. $d_i = \dfrac{1}{n} - \bar{x}\,c_i$로 두면 $\hat{\beta}_0 = \sum_{i=1}^n d_i Y_i$임을 보이고, 이 가중치로부터 정리 2의 $\operatorname{Var}(\hat{\beta}_0) = \sigma^2\!\left(\dfrac{1}{n} + \dfrac{\bar{x}^2}{S_{xx}}\right)$을 유도하라.
+**연습문제 5.** <span class="diff med" title="중간"></span>
+연습문제 4를 절편에 대해 되풀이하라. $d_i = \dfrac{1}{n} - \bar{x}\,c_i$로 두면 $\hat{\beta}_0 = \sum_{i=1}^n d_i Y_i$임을 보이고, 이 가중치로부터 정리 2의 $\operatorname{Var}(\hat{\beta}_0) = \sigma^2\!\left(\dfrac{1}{n} + \dfrac{\bar{x}^2}{S_{xx}}\right)$을 유도하라.
 
 </div>
 
@@ -393,9 +471,11 @@ $\text{SSE}/\sigma^2 \sim \chi^2_{n-2}$의 자유도가 왜 $n$이 아니라 $n 
 
     $\bar{x} = 4.5$, $S_{xx} = 42$인 이 설계에서 절편의 분산은 $1.366$인데 기울기의 분산은 $0.054$에 불과하다. $\bar{x}^2/S_{xx} = 0.482$가 $1/n = 0.125$를 압도하기 때문이다. **$x$가 원점에서 멀면 절편은 자료로부터 멀리 외삽한 값이 되고, 그 대가가 이 항에 그대로 나타난다.** $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{S_{xx}}$임을 보여라. 두 추정량이 무상관이 되는 조건은 무엇인가?
 
 </div>
@@ -446,9 +526,11 @@ $\operatorname{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{S_
 
     중심화하면 공분산이 0에 가까워진다. **예측변수를 중심화하는 실무 관행의 한 가지 근거**가 이것이다. 절편과 기울기의 추정이 서로 얽히지 않는다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 $x = x_0$에서의 평균반응 추정량 $\hat{\mu}_0 = \hat{\beta}_0 + \hat{\beta}_1 x_0$의 분산이
 
 $$
@@ -479,53 +561,7 @@ $$
 
     괄호 안의 $1$이 결정적이다. $n \to \infty$이면 신뢰구간의 폭은 0으로 가지만 예측구간의 폭은 $2z_{\alpha/2}\sigma$로 남는다. **자료를 아무리 모아도 개별 관측의 무작위성은 사라지지 않는다.** $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 7.** <span class="diff easy" title="쉬움"></span>
-$\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하라.
-
-</div>
-
-??? success "풀이"
-    ```python
-    import numpy as np
-    from scipy import stats
-
-    rng = np.random.default_rng(1)
-    x = np.arange(1., 9.)
-    n, b0, b1, sig = len(x), 2., 3., 1.5
-    Sxx = ((x - x.mean()) ** 2).sum()
-
-    B = 200_000
-    Y = b0 + b1 * x + rng.normal(0, sig, size=(B, n))
-    X = np.column_stack([np.ones(n), x])
-    beta = Y @ X @ np.linalg.inv(X.T @ X)
-    b1_hat = beta[:, 1]
-
-    print(f"평균   모의 {b1_hat.mean():.4f}   이론 {b1:.4f}")
-    print(f"분산   모의 {b1_hat.var():.6f}   이론 {sig**2/Sxx:.6f}")
-
-    # 정규성: 표준화한 뒤 분위수를 비교한다
-    z = (b1_hat - b1) / np.sqrt(sig**2 / Sxx)
-    for q in (0.05, 0.25, 0.5, 0.75, 0.95):
-        print(f"  q={q:<5} 모의 {np.quantile(z, q):+.4f}   N(0,1) {stats.norm.ppf(q):+.4f}")
-    ```
-
-    출력:
-
-    ```
-    평균   모의 2.9992   이론 3.0000
-    분산   모의 0.053105   이론 0.053571
-      q=0.05  모의 -1.6431   N(0,1) -1.6449
-      q=0.25  모의 -0.6756   N(0,1) -0.6745
-      q=0.5   모의 -0.0028   N(0,1) +0.0000
-      q=0.75  모의 +0.6678   N(0,1) +0.6745
-      q=0.95  모의 +1.6347   N(0,1) +1.6449
-    ```
-
-    평균과 분산이 이론값과 맞고 분위수도 표준정규와 일치한다.
-
-    **왜 정확히 정규인가.** $\hat{\beta}_1 = \sum_i c_i Y_i$가 독립 정규확률변수의 **선형결합**이기 때문이다. 중심극한정리에 기댄 근사가 아니라 $n$이 작아도 정확히 성립한다. 여기서도 $n = 8$뿐이다. 다만 이는 오차가 정규일 때의 이야기이며, 오차가 정규가 아니면 $\hat{\beta}_1$의 정규성은 $n$이 커질 때의 근사로만 성립한다. $\square$
+---
 
 <div class="drillbox" markdown>
 
@@ -577,6 +613,8 @@ $\hat{\beta}_1 \sim N(\beta_1, \sigma^2/S_{xx})$를 모의실험으로 확인하
 
     예측변수가 $p$개인 다중회귀에서는 제약이 $p$개(절편 포함)가 되어 자유도가 $n - p$다. $\operatorname{tr}(\mathbf{I} - \mathbf{H}) = n - p$가 같은 사실의 행렬 표현이다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
@@ -627,6 +665,8 @@ $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$이고 이것이 $\hat{\beta}_1$과 독립�
     독립성은 기하에서 나온다. $\hat{\boldsymbol{\beta}}$은 $\operatorname{col}(\mathbf{X})$ 안의 사영으로 결정되고 $s^2$은 그 직교여공간의 잔차로 결정되는데, 정규분포에서 직교하는 성분은 독립이기 때문이다.
 
     **같은 이야기를 이미 한 번 했다.** [4.2절 정규분포](../../../ch04/continuous_distributions/normal.md)의 연습문제 28에서 $\bar{X}$와 $S^2$의 독립성을 증명할 때, 첫 행이 $\mathbf{1}/\sqrt{n}$인 직교행렬 $\mathbf{Q}$로 회전시켜 $\bar{X}$는 $Y_1$만의 함수, $S^2$은 $Y_2, \dots, Y_n$만의 함수임을 보였다. 그 $Y_1$ 방향이 여기서는 $\operatorname{col}(\mathbf{X})$이고 나머지 $n-1$개 방향이 그 직교여공간이다. 절편만 있는 모형이 정확히 그 경우이며, 설명변수를 넣으면 $\operatorname{col}(\mathbf{X})$의 차원이 1에서 2로 늘어나 잔차 쪽이 $n-1$에서 $n-2$로 줄어든다. **직교변환으로 쓰던 논법을 사영의 언어로 옮겨 적은 것이 전부다.** $\square$
+
+---
 
 <div class="drillbox" markdown>
 

@@ -4,7 +4,9 @@
 
 이 페이지에서는 모비율 $p$의 신뢰구간을 만드는 네 가지 방법 — Wald, Wilson score, Agresti–Coull, Clopper–Pearson(정확) 구간 — 의 포함 성능을 살펴본다. 몬테카를로 모의실험으로 베르누이 표본을 반복 생성하고 각 방법으로 신뢰구간을 만든 뒤 그 구간이 참 $p$를 잡아내는지 기록한다. 그 결과는 $n$이 작거나 $p$가 극단적일 때 Wald 구간을 믿을 수 없는 이유를 부각한다.
 
-## 네 가지 구간 방법
+---
+
+## 1. 네 가지 구간 방법
 
 ### Wald 구간
 
@@ -281,12 +283,16 @@ Wald가 91%로 떨어지는 이유는 $k$별로 따져 보면 분명하다. 이 
 
 Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 차이는 "$\hat p$가 작은 쪽에서 구간이 0 쪽으로 쏠리는가"에서 갈린다.
 
-## 해석
+---
+
+## 2. 해석
 
 - **Wald** 구간은 $n$이 작거나 $p$가 경계 0 또는 1에 가까우면 포함확률이 극적으로 낮아질 수 있다. 구간에 쓰는 [보수적 기준](../../ch04/discrete_distributions/binomial.md#언제-쓸-수-있는가-5와-10)은 $n\hat{p} \ge 10$이고 $n(1-\hat{p}) \ge 10$일 것을 요구하지만, 이것만으로 늘 충분하지는 않다. 4장에서 보았듯 문턱값을 10으로 올려도 왈드 구간의 실제 포함확률은 명목 95%에 정확히 앉지 않는다. 문턱값을 높이는 것으로 왈드 구간의 결함이 사라지지는 않으며, 구간이 중요하면 애초에 더 나은 구간을 쓰는 편이 낫다.
 - **Wilson**과 **Agresti–Coull** 구간은 중심을 $1/2$ 쪽으로 옮기고 구간을 약간 넓혀, 넓은 범위의 $n$과 $p$에서 훨씬 믿을 만한 포함확률을 준다.
 - **Clopper–Pearson**은 구성상 적어도 명목 포함확률을 보장하지만 (필요보다 넓게) 보수적이며 특히 $n$이 작을 때 그렇다.
 - 크기 $N$인 유한모집단에서 비복원으로 표본을 뽑을 때 이항 모형은 $n \le 0.10 N$일 때 타당한 근사이다. 표본추출 비율이 더 크면 초기하분포에 기반한 구간이 더 적절하다.
+
+---
 
 ## 연습문제
 
@@ -328,51 +334,11 @@ Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 
 
     Wilson이나 Clopper–Pearson으로 바꾸면 $k = 0$일 때도 위쪽으로 폭이 있는 구간이 나오므로 이 실패 방식이 사라진다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 2.** <span class="diff hard" title="어려움"></span> $Z = (\hat{p} - p)/\sqrt{p(1-p)/n}$일 때 부등식 $|Z| \le z_{\alpha/2}$에서 출발하여 Wilson score 구간을 유도하라.
-
-</div>
-
-??? success "풀이"
-
-    검정 뒤집기 방식은 다음을 만족하는 모든 $p$를 구한다:
-
-    $$
-    \left|\frac{\hat{p} - p}{\sqrt{p(1-p)/n}}\right| \le z_{\alpha/2}
-    $$
-
-    양변을 제곱하면:
-
-    $$
-    \frac{(\hat{p} - p)^2}{p(1-p)/n} \le z^2
-    $$
-
-    $$
-    n(\hat{p} - p)^2 \le z^2 p(1-p)
-    $$
-
-    전개하고 $p$에 대해 정리하면:
-
-    $$
-    n\hat{p}^2 - 2n\hat{p}\,p + np^2 \le z^2 p - z^2 p^2
-    $$
-
-    $$
-    (n + z^2)p^2 - (2n\hat{p} + z^2)p + n\hat{p}^2 \le 0
-    $$
-
-    $p$에 대한 이차식이다. 근의 공식을 적용하면
-
-    $$
-    p = \frac{2n\hat{p} + z^2 \pm \sqrt{z^4 + 4n z^2 \hat{p}(1-\hat{p})}}{2(n + z^2)}
-    $$
-
-    이며 이것이 정리되어 Wilson 구간의 끝점이 된다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span> 95% 수준의 Agresti–Coull 구간이 자료에 가상의 성공 약 2개와 가상의 실패 약 2개를 더하는 것임을 보여라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 95% 수준의 Agresti–Coull 구간이 자료에 가상의 성공 약 2개와 가상의 실패 약 2개를 더하는 것임을 보여라.
 
 </div>
 
@@ -386,9 +352,11 @@ Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 
 
     따라서 가상의 성공과 실패를 각각 약 2개씩 더하는 셈이고, 보정된 표본크기는 $\tilde{n} = n + z^2 \approx n + 4$이다. 이 "성공 2개와 실패 2개를 더하기" 규칙 때문에 Agresti–Coull 방법을 "plus-four" 구간이라고 부르기도 한다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span> 어떤 의학 연구에서 환자 200명 중 3명에게 이상반응이 관찰되었다. Wald, Wilson, Clopper–Pearson 95% 구간을 계산하고 차이를 논하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 어떤 의학 연구에서 환자 200명 중 3명에게 이상반응이 관찰되었다. Wald, Wilson, Clopper–Pearson 95% 구간을 계산하고 차이를 논하라.
 
 </div>
 
@@ -404,37 +372,11 @@ Wilson의 실패 4번은 $k = 0$ 하나와 $k = 8$ 셋이다. 즉 두 방법의 
 
     Wald 구간은 (비율에서는 불가능한) 음수를 포함하며 더 좁다. Wilson과 Clopper–Pearson은 서로 비슷하고 더 합리적인 구간을 준다. Clopper–Pearson의 하한이 약간 더 작은데, 이는 그 보수성을 반영한다. $\square$
 
-<div class="drillbox" markdown>
-
-**연습문제 5.** <span class="diff hard" title="어려움"></span> Clopper–Pearson 구간의 포함확률이 모든 $p \in (0,1)$에서 적어도 $(1-\alpha)$임을 증명하라.
-
-</div>
-
-??? success "풀이"
-
-    Clopper–Pearson 구간 $[L(k), U(k)]$은 두 개의 단측 이항검정을 뒤집어 정의한다. 구체적으로 $L(k)$는 다음을 만족하는 $p$이다:
-
-    $$
-    P(X \ge k \mid p = L(k)) = \alpha/2, \quad X \sim \text{Binomial}(n, p)
-    $$
-
-    그리고 $U(k)$는 다음을 만족하는 $p$이다:
-
-    $$
-    P(X \le k \mid p = U(k)) = \alpha/2
-    $$
-
-    임의의 참 $p$에 대해 사건 $p \notin [L(K), U(K)]$은 $p < L(K)$이거나 $p > U(K)$임을 뜻한다. 구성상 $p < L(K)$는 주어진 $p$에 비해 $K$가 "너무 크다"는 뜻이고 이 꼬리 확률은 최대 $\alpha/2$이다. 마찬가지로 $p > U(K)$는 $K$가 "너무 작다"는 뜻이며 꼬리 확률이 최대 $\alpha/2$이다. 이항 누적분포함수가 계단함수이므로 어떤 $p$에서는 꼬리 확률이 $\alpha/2$보다 엄격히 작을 수 있지만 결코 크지는 않다. 따라서
-
-    $$
-    P(p \notin [L(K), U(K)]) \le \frac{\alpha}{2} + \frac{\alpha}{2} = \alpha
-    $$
-
-    이고 모든 $p \in (0,1)$에서 포함확률 $P(p \in [L(K), U(K)]) \ge 1 - \alpha$이다. $\square$
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 $n=40$에서 다섯 방법의 **기대 폭**을 $p$별로 정확히 계산하고, 포함확률과 함께 놓고 판단하라.
 
 </div>
@@ -512,9 +454,11 @@ $n=40$에서 다섯 방법의 **기대 폭**을 $p$별로 정확히 계산하고
 
     **CP의 대가.** $p=0.05$에서 윌슨보다 8% 넓고, $p=0.50$에서 9% 넓다. 그 대가로 얻는 것은 **모든 $p$에서 $\ge0.95$라는 보장**이다. 규제 환경에서는 값어치가 있고, 탐색적 분석에서는 낭비다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **최소 포함확률**을 $p$ 격자에서 계산하여 방법들을 비교하라. $n$이 커지면 최소 포함확률이 어떻게 변하는가?
 
 </div>
@@ -582,9 +526,11 @@ $n=40$에서 다섯 방법의 **기대 폭**을 $p$별로 정확히 계산하고
     - **$p$가 대략 어디쯤인지 알면** 그 근방의 포함확률만 보면 된다. $p\approx0.3$이라면 윌슨으로 충분하다.
     - **왈드는 어떤 경우에도 권하지 않는다.**
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 희귀사건($np<5$)에서 **포아송 근사** 구간이 쓸 만한지 확인하라. $n=1000$, $p=0.002$에서 이항 기반 구간과 비교하라.
 
 </div>
@@ -651,9 +597,156 @@ $n=40$에서 다섯 방법의 **기대 폭**을 $p$별로 정확히 계산하고
 
     **3의 법칙 확인.** $k=0$일 때 상한이 $3.689/1000=0.00369$로, "$3/n=0.003$"이라는 어림이 양측 구간에는 조금 낮다. 3의 법칙은 **단측 95% 상한**에 대한 것이다($\chi^2_{2,0.95}/2=2.996$).
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
+포함확률 모의실험을 설계할 때 **정확한 계산이 가능한지** 먼저 확인해야 하는 이유를 설명하고, 이 절의 모의실험을 정확 계산으로 바꿔라.
+
+</div>
+
+??? success "풀이"
+    **이항에서는 모의실험이 필요 없다.** 표본공간이 $\{0,1,\dots,n\}$으로 유한하므로, 모든 결과에 대해 구간을 만들고 확률을 더하면 **오차 없는 답**이 나온다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def exact_coverage(n, p, alpha=0.05):
+        z = stats.norm.ppf(1 - alpha / 2)
+        k = np.arange(n + 1)
+        ph = k / n
+        se = np.sqrt(ph * (1 - ph) / n)
+        inside = (ph - z * se <= p) & (p <= ph + z * se)
+        return stats.binom.pmf(k, n, p)[inside].sum()
+
+    def mc_coverage(n, p, M, seed, alpha=0.05):
+        rng = np.random.default_rng(seed)
+        z = stats.norm.ppf(1 - alpha / 2)
+        ph = rng.binomial(n, p, M) / n
+        se = np.sqrt(ph * (1 - ph) / n)
+        return np.mean((ph - z * se <= p) & (p <= ph + z * se))
+
+    n, p = 20, 0.05
+    exact = exact_coverage(n, p)
+    print(f"정확 계산      {exact:.6f}")
+    for M in [1_000, 10_000, 100_000]:
+        est = mc_coverage(n, p, M, 1)
+        print(f"모의실험 M={M:>7,d}  {est:.6f}   오차 {est - exact:+.6f}   "
+              f"MCSE {np.sqrt(exact * (1 - exact) / M):.6f}")
+    ```
+
+    ```text
+    정확 계산      0.638940
+    모의실험 M=  1,000  0.636000   오차 -0.002940   MCSE 0.015189
+    모의실험 M= 10,000  0.643000   오차 +0.004060   MCSE 0.004803
+    모의실험 M=100,000  0.637680   오차 -0.001260   MCSE 0.001519
+    ```
+
+    **정확 계산이 나은 이유.**
+
+    1. **오차가 0이다.** 10만 번 돌려도 0.0013의 오차가 남는데, 정확 계산은 순간이다.
+    2. **훨씬 빠르다.** $n+1$개 항을 더하는 것이 10만 번 난수 생성보다 수천 배 빠르다.
+    3. **재현성이 완벽하다.** 씨앗이나 난수 생성기에 의존하지 않는다.
+    4. **미세한 차이를 본다.** 방법 간 0.001의 차이도 확실히 구별된다. 모의실험으로 하려면 $M\approx10^6$이 필요하다.
+
+    **정확 계산이 가능한 조건.**
+
+    | 상황 | 가능? |
+    |---|---|
+    | 이항, 포아송(절단), 초기하 | **가능**(유한 또는 빠르게 수렴하는 합) |
+    | 정규 평균의 $t$ 구간 | 가능(포함확률이 정확히 $1-\alpha$) |
+    | 정규가 아닌 모집단의 $t$ 구간 | 불가(다중적분) |
+    | 부트스트랩 구간 | 불가(재표본 자체가 확률적) |
+    | 복잡한 모형의 우도비 구간 | 대개 불가 |
+
+    **실무 지침.**
+
+    1. **먼저 정확 계산을 시도**한다. 이산 표본공간이거나 추축량이 있으면 대개 가능하다.
+    2. **반만이라도 정확히.** 일부는 해석적으로, 일부는 수치적분으로 처리하면 모의실험 오차가 크게 준다(라오-블랙웰화).
+    3. **모의실험이 불가피하면** $M$과 MCSE를 반드시 보고한다.
+    4. **정확 계산으로 모의실험 코드를 검증**한다. 정확한 답을 아는 경우에 코드를 돌려 보아 일치하면, 그 코드를 정확 계산이 불가능한 경우로 확장할 수 있다. **이것이 모의실험 코드의 단위검사다.**
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span> $Z = (\hat{p} - p)/\sqrt{p(1-p)/n}$일 때 부등식 $|Z| \le z_{\alpha/2}$에서 출발하여 Wilson score 구간을 유도하라.
+
+</div>
+
+??? success "풀이"
+
+    검정 뒤집기 방식은 다음을 만족하는 모든 $p$를 구한다:
+
+    $$
+    \left|\frac{\hat{p} - p}{\sqrt{p(1-p)/n}}\right| \le z_{\alpha/2}
+    $$
+
+    양변을 제곱하면:
+
+    $$
+    \frac{(\hat{p} - p)^2}{p(1-p)/n} \le z^2
+    $$
+
+    $$
+    n(\hat{p} - p)^2 \le z^2 p(1-p)
+    $$
+
+    전개하고 $p$에 대해 정리하면:
+
+    $$
+    n\hat{p}^2 - 2n\hat{p}\,p + np^2 \le z^2 p - z^2 p^2
+    $$
+
+    $$
+    (n + z^2)p^2 - (2n\hat{p} + z^2)p + n\hat{p}^2 \le 0
+    $$
+
+    $p$에 대한 이차식이다. 근의 공식을 적용하면
+
+    $$
+    p = \frac{2n\hat{p} + z^2 \pm \sqrt{z^4 + 4n z^2 \hat{p}(1-\hat{p})}}{2(n + z^2)}
+    $$
+
+    이며 이것이 정리되어 Wilson 구간의 끝점이 된다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span> Clopper–Pearson 구간의 포함확률이 모든 $p \in (0,1)$에서 적어도 $(1-\alpha)$임을 증명하라.
+
+</div>
+
+??? success "풀이"
+
+    Clopper–Pearson 구간 $[L(k), U(k)]$은 두 개의 단측 이항검정을 뒤집어 정의한다. 구체적으로 $L(k)$는 다음을 만족하는 $p$이다:
+
+    $$
+    P(X \ge k \mid p = L(k)) = \alpha/2, \quad X \sim \text{Binomial}(n, p)
+    $$
+
+    그리고 $U(k)$는 다음을 만족하는 $p$이다:
+
+    $$
+    P(X \le k \mid p = U(k)) = \alpha/2
+    $$
+
+    임의의 참 $p$에 대해 사건 $p \notin [L(K), U(K)]$은 $p < L(K)$이거나 $p > U(K)$임을 뜻한다. 구성상 $p < L(K)$는 주어진 $p$에 비해 $K$가 "너무 크다"는 뜻이고 이 꼬리 확률은 최대 $\alpha/2$이다. 마찬가지로 $p > U(K)$는 $K$가 "너무 작다"는 뜻이며 꼬리 확률이 최대 $\alpha/2$이다. 이항 누적분포함수가 계단함수이므로 어떤 $p$에서는 꼬리 확률이 $\alpha/2$보다 엄격히 작을 수 있지만 결코 크지는 않다. 따라서
+
+    $$
+    P(p \notin [L(K), U(K)]) \le \frac{\alpha}{2} + \frac{\alpha}{2} = \alpha
+    $$
+
+    이고 모든 $p \in (0,1)$에서 포함확률 $P(p \in [L(K), U(K)]) \ge 1 - \alpha$이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 이항비율에 **부트스트랩 백분위** 구간을 적용하면 어떤 일이 벌어지는지 여러 $p$에서 확인하고, 왜 그런지 설명하라.
 
 </div>
@@ -724,75 +817,6 @@ $n=40$에서 다섯 방법의 **기대 폭**을 $p$별로 정확히 계산하고
     - **모수가 모수공간의 경계**에 있을 때
 
     다. 비율에는 윌슨이나 제프리스처럼 **문제에 맞춘 방법**이 훨씬 낫다.
-
-<div class="drillbox" markdown>
-
-**연습문제 10.** <span class="diff med" title="중간"></span>
-포함확률 모의실험을 설계할 때 **정확한 계산이 가능한지** 먼저 확인해야 하는 이유를 설명하고, 이 절의 모의실험을 정확 계산으로 바꿔라.
-
-</div>
-
-??? success "풀이"
-    **이항에서는 모의실험이 필요 없다.** 표본공간이 $\{0,1,\dots,n\}$으로 유한하므로, 모든 결과에 대해 구간을 만들고 확률을 더하면 **오차 없는 답**이 나온다.
-
-    ```python
-    import numpy as np
-    from scipy import stats
-
-    def exact_coverage(n, p, alpha=0.05):
-        z = stats.norm.ppf(1 - alpha / 2)
-        k = np.arange(n + 1)
-        ph = k / n
-        se = np.sqrt(ph * (1 - ph) / n)
-        inside = (ph - z * se <= p) & (p <= ph + z * se)
-        return stats.binom.pmf(k, n, p)[inside].sum()
-
-    def mc_coverage(n, p, M, seed, alpha=0.05):
-        rng = np.random.default_rng(seed)
-        z = stats.norm.ppf(1 - alpha / 2)
-        ph = rng.binomial(n, p, M) / n
-        se = np.sqrt(ph * (1 - ph) / n)
-        return np.mean((ph - z * se <= p) & (p <= ph + z * se))
-
-    n, p = 20, 0.05
-    exact = exact_coverage(n, p)
-    print(f"정확 계산      {exact:.6f}")
-    for M in [1_000, 10_000, 100_000]:
-        est = mc_coverage(n, p, M, 1)
-        print(f"모의실험 M={M:>7,d}  {est:.6f}   오차 {est - exact:+.6f}   "
-              f"MCSE {np.sqrt(exact * (1 - exact) / M):.6f}")
-    ```
-
-    ```text
-    정확 계산      0.638940
-    모의실험 M=  1,000  0.636000   오차 -0.002940   MCSE 0.015189
-    모의실험 M= 10,000  0.643000   오차 +0.004060   MCSE 0.004803
-    모의실험 M=100,000  0.637680   오차 -0.001260   MCSE 0.001519
-    ```
-
-    **정확 계산이 나은 이유.**
-
-    1. **오차가 0이다.** 10만 번 돌려도 0.0013의 오차가 남는데, 정확 계산은 순간이다.
-    2. **훨씬 빠르다.** $n+1$개 항을 더하는 것이 10만 번 난수 생성보다 수천 배 빠르다.
-    3. **재현성이 완벽하다.** 씨앗이나 난수 생성기에 의존하지 않는다.
-    4. **미세한 차이를 본다.** 방법 간 0.001의 차이도 확실히 구별된다. 모의실험으로 하려면 $M\approx10^6$이 필요하다.
-
-    **정확 계산이 가능한 조건.**
-
-    | 상황 | 가능? |
-    |---|---|
-    | 이항, 포아송(절단), 초기하 | **가능**(유한 또는 빠르게 수렴하는 합) |
-    | 정규 평균의 $t$ 구간 | 가능(포함확률이 정확히 $1-\alpha$) |
-    | 정규가 아닌 모집단의 $t$ 구간 | 불가(다중적분) |
-    | 부트스트랩 구간 | 불가(재표본 자체가 확률적) |
-    | 복잡한 모형의 우도비 구간 | 대개 불가 |
-
-    **실무 지침.**
-
-    1. **먼저 정확 계산을 시도**한다. 이산 표본공간이거나 추축량이 있으면 대개 가능하다.
-    2. **반만이라도 정확히.** 일부는 해석적으로, 일부는 수치적분으로 처리하면 모의실험 오차가 크게 준다(라오-블랙웰화).
-    3. **모의실험이 불가피하면** $M$과 MCSE를 반드시 보고한다.
-    4. **정확 계산으로 모의실험 코드를 검증**한다. 정확한 답을 아는 경우에 코드를 돌려 보아 일치하면, 그 코드를 정확 계산이 불가능한 경우로 확장할 수 있다. **이것이 모의실험 코드의 단위검사다.**
 
 ---
 
