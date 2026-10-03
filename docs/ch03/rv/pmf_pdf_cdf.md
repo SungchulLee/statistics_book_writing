@@ -49,7 +49,7 @@ $$
 
     넷 모두 3.1절의 공리와 그 따름정리에서 나온다.
 
-    **비감소.** $x \le y$ 이면 $\{X \le x\} \subseteq \{X \le y\}$ 이므로 단조성(3.1절 정리 1)에서 $F(x) \le F(y)$ 다.
+    **비감소.** $x \le y$ 이면 $\{X \le x\} \subseteq \{X \le y\}$ 이므로 단조성(3.1절 공리 정리 1)에서 $F(x) \le F(y)$ 다.
 
     **구간의 확률.** $a < b$ 이면 $\{X \le b\}$ 를 서로소인 둘로 가를 수 있다.
 
@@ -59,7 +59,7 @@ $$
 
     유한가법성에서 $F(b) = F(a) + P(a < X \le b)$ 이므로 옮기면 된다. **이 한 줄이 CDF 를 쓸모 있게 만든다** — 어떤 구간의 확률이든 두 값의 뺄셈으로 끝난다.
 
-    **두 극한과 오른쪽 연속성.** 측도의 연속성(3.1절 정리 2)이 쓰이는 자리다. $x_n \downarrow -\infty$ 이면 사건 $\{X \le x_n\}$ 이 줄어들며 공집합으로 가므로 $F(x_n) \to P(\emptyset) = 0$ 이고, $x_n \uparrow +\infty$ 이면 사건이 커지며 $\Omega$ 로 쌓이므로 $F(x_n) \to P(\Omega) = 1$ 이다. 오른쪽 연속성도 같다. $x_n \downarrow x$ 이면
+    **두 극한과 오른쪽 연속성.** 측도의 연속성(3.1절 공리 정리 2)이 쓰이는 자리다. $x_n \downarrow -\infty$ 이면 사건 $\{X \le x_n\}$ 이 줄어들며 공집합으로 가므로 $F(x_n) \to P(\emptyset) = 0$ 이고, $x_n \uparrow +\infty$ 이면 사건이 커지며 $\Omega$ 로 쌓이므로 $F(x_n) \to P(\Omega) = 1$ 이다. 오른쪽 연속성도 같다. $x_n \downarrow x$ 이면
 
     $$
     \bigcap_n \{X \le x_n\} = \{X \le x\}

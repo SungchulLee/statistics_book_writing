@@ -147,13 +147,13 @@ $$
 
     $g(X)$ 와 $h(Y)$ 의 독립은 지시함수를 넣으면 나온다. $g(x) = \mathbb{1}[g(x) \in A]$ 꼴로 바꾸어 적용하면 두 사건의 확률이 곱으로 갈라지므로, 정의 1 이 $g(X), h(Y)$ 에 대해서도 성립한다.
 
-    $g(x) = x$, $h(y) = y$ 를 넣으면 $E[XY] = E[X]E[Y]$ 이므로 공분산의 계산 꼴(3.4절 정리 2)에서
+    $g(x) = x$, $h(y) = y$ 를 넣으면 $E[XY] = E[X]E[Y]$ 이므로 공분산의 계산 꼴(3.4절 분산과 공분산 정리 2)에서
 
     $$
     \operatorname{Cov}(X,Y) = E[XY] - E[X]E[Y] = 0
     $$
 
-    이고, 합의 분산(3.4절 정리 3)의 교차항이 사라져 $\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y)$ 다. $\square$
+    이고, 합의 분산(3.4절 분산과 공분산 정리 3)의 교차항이 사라져 $\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y)$ 다. $\square$
 
 **역은 성립하지 않는다.** 공분산이 $0$이어도 독립이 아닐 수 있다. 공분산은 **선형** 관계만 재기 때문이며, 그 간극을 연습문제 $8$에서 직접 만들어 보고 [3.4절 독립성과 무상관성의 차이](independence_vs_zero_corr.md)에서 정면으로 다룬다.
 

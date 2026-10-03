@@ -190,7 +190,7 @@ $$
 
     다. **자료는 사실상 $y \approx 2x$ 다.** 설명된 변동의 몫은 $r^2 = 0.9992193$ 이고 남는 것이 $1 - r^2 = 0.00078$, 곧 $0.08\%$ 뿐이다.
 
-    **(2) 척도불변.** 3.4절 정리 1 이 말한 대로다. $x' = \alpha x + \beta$, $y' = \gamma y + \delta$ ($\alpha, \gamma > 0$)이면
+    **(2) 척도불변.** 3.4절 상관계수 정리 1 이 말한 대로다. $x' = \alpha x + \beta$, $y' = \gamma y + \delta$ ($\alpha, \gamma > 0$)이면
 
     $$
     S_{x'y'} = \alpha\gamma S_{xy}, \qquad S_{x'x'} = \alpha^2 S_{xx}, \qquad S_{y'y'} = \gamma^2 S_{yy}
