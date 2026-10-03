@@ -194,7 +194,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 1. { .thm }
+### 정리 1. 정규모집단의 표본평균은 정확히 정규다 { .thm }
 
 $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \sim N(\mu, \sigma^2/n)$이다.
 

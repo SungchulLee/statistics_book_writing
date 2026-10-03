@@ -36,12 +36,43 @@ $$
 
 그런데 이 모집단에는 다른 예에 없는 이점이 하나 더 있다. 모양까지 정확히 알 수 있다는 것이다.
 
-!!! info "정확한 분포"
-    합 $S_n = \sum_{i=1}^n X_i$는 감마분포를 따른다: $S_n \sim \text{Gamma}(n, \lambda)$. 따라서 $\bar{X} = S_n/n \sim \text{Gamma}(n, n\lambda)$이며 형상이 $n$, 비율이 $n\lambda$이다. $n \to \infty$일 때 중심극한정리는 다음을 보장한다:
+<div class="thmbox" markdown>
+
+### 정리 1. 지수모집단의 표본평균은 정확히 감마다 { .thm }
+
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$ 이면 합과 평균의 분포를 **근사 없이** 알 수 있다.
+
+$$
+S_n = \sum_{i=1}^n X_i \sim \text{Gamma}(n,\, \lambda),
+\qquad
+\bar X \sim \text{Gamma}(n,\, n\lambda)
+$$
+
+또 $2n\lambda\bar X \sim \chi^2_{2n}$ 이므로 카이제곱 표로도 정확한 확률을 읽을 수 있다.
+
+</div>
+
+??? proof "증명"
+
+    적률생성함수로 간다. $\text{Exp}(\lambda)$ 의 MGF 는 $t < \lambda$ 에서
 
     $$
-    \bar{X} \;\dot{\sim}\; N\!\left(\frac{1}{\lambda},\; \frac{1}{n\lambda^2}\right)
+    M_X(t) = \frac{\lambda}{\lambda - t} = \left(1 - \frac{t}{\lambda}\right)^{-1}
     $$
+
+    이다. 독립이면 MGF 가 곱해지므로(3.4절 적률생성함수 정리 3)
+
+    $$
+    M_{S_n}(t) = \left(1 - \frac{t}{\lambda}\right)^{-n}
+    $$
+
+    이고, 이것이 형상 $n$ · 비율 $\lambda$ 인 감마분포의 MGF 다. MGF 가 분포를 유일하게 결정하므로(같은 쪽 정리 2) $S_n \sim \text{Gamma}(n, \lambda)$ 다.
+
+    $\bar X = S_n/n$ 의 MGF 는 $M_{S_n}(t/n) = (1 - t/(n\lambda))^{-n}$ 이므로 비율이 $n\lambda$ 로 바뀐 감마다. **형상은 그대로이고 비율만 $n$ 배가 된다** — 모양이 같은 채로 폭만 줄어드는 것이 아니라, 형상이 $n$ 이라 $n$ 이 커질수록 감마 자체가 종 모양에 가까워진다.
+
+    카이제곱 꼴은 척도를 맞추면 나온다. $\text{Gamma}(k, \text{비율}\ \beta)$ 에 $2\beta$ 를 곱하면 $\text{Gamma}(k, 1/2)$ 이고, 그것이 자유도 $2k$ 인 카이제곱이다([카이제곱분포](../../ch04/continuous_distributions/chi_square.md) 쪽 §6 의 감마–카이제곱 대응). $k = n$, $\beta = n\lambda$ 를 넣으면 $2n\lambda\bar X \sim \chi^2_{2n}$ 이다. $\square$
+
+    **지수분포가 특별한 까닭은 합이 닫혀 있다는 것이다.** 감마족 안에서 형상만 더해지므로 유한한 $n$ 에서의 분포를 그대로 적을 수 있다. 균등분포나 베르누이에서는 이런 닫힌 꼴이 없거나(어윈–홀) 이산이라, 정규근사의 오차를 **정확한 값과 견주어** 잴 수 있는 이 쪽이 드문 기회다.
 
 덕분에 정규근사가 얼마나 빗나가는지를 어림이 아니라 정확한 값과 견주어 잴 수 있다. 연습문제 3과 9에서 그 대조가 이 쪽의 결론을 수치로 못 박는다.
 

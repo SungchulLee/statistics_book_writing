@@ -18,11 +18,51 @@ $$
 S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2
 $$
 
-이렇게 나누면 기댓값이 정확히 모분산과 같아진다.
+<div class="defn" markdown>
+
+### 정의 1. 표본분산 { .dfn }
+
+$$
+S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2
+$$
+
+분모의 $n-1$ 을 **자유도**라 한다.
+
+</div>
+
+<div class="thmbox" markdown>
+
+### 정리 1. 표본분산은 불편이다 { .thm }
+
+$X_1, \ldots, X_n$ 이 평균 $\mu$, 분산 $\sigma^2 < \infty$ 인 모집단에서 뽑은 i.i.d. 표본이면
 
 $$
 E[S^2] = \sigma^2
 $$
+
+이다. **모집단의 모양에 아무 조건이 붙지 않는다.**
+
+</div>
+
+??? proof "증명"
+
+    $\bar X$ 가 제곱편차합을 최소화한다는 분해([평균, 중앙값, 최빈값](../../ch02/center/mean_median_mode.md) 정리 1)에 $\mu$ 를 넣는다.
+
+    $$
+    \sum_i (X_i - \mu)^2 = \sum_i (X_i - \bar X)^2 + n(\bar X - \mu)^2
+    $$
+
+    양변의 기댓값을 취한다. 왼쪽은 각 항이 $\sigma^2$ 이므로 $n\sigma^2$ 이고, 오른쪽 둘째 항은 $E[(\bar X - \mu)^2] = \operatorname{Var}(\bar X) = \sigma^2/n$ 이므로 $\sigma^2$ 이다. 따라서
+
+    $$
+    E\!\left[\sum_i (X_i - \bar X)^2\right] = n\sigma^2 - \sigma^2 = (n-1)\sigma^2
+    $$
+
+    이고, $n-1$ 로 나누면 기댓값이 정확히 $\sigma^2$ 다. $\square$
+
+    **빠져나간 것이 정확히 $\sigma^2$ 한 몫이다.** 모르는 $\mu$ 자리에 자료에서 계산한 $\bar X$ 를 넣었는데, $\bar X$ 는 **그 자료에 가장 가까이 붙어 있는 값**이라 제곱편차합이 그만큼 작게 나온다. 그 부족분의 평균이 $\sigma^2$ 이고, 분모에서 1 을 깎아 보충한다.
+
+    **모집단의 모양이 전혀 쓰이지 않았다.** 쓴 것은 평균의 분해와 $\operatorname{Var}(\bar X) = \sigma^2/n$ 둘뿐이다. 그래서 불편성은 어떤 모집단에서나 성립한다. 문제는 그다음부터다 — **분포**를 알려면 가정이 필요하다.
 
 $n$이 아니라 $n-1$(자유도)로 나누는 이유가 바로 이 불편성이다. 모르는 $\mu$ 자리에 자료에서 계산한 $\bar{X}$를 넣었는데, $\bar{X}$는 그 자료에 가장 가까이 붙어 있는 값이라 편차제곱의 합이 참 평균을 썼을 때보다 작게 나온다. Bessel 수정은 표본으로부터 $\mu$를 추정하면서 잃어버린 자유도 하나를 보상해 그만큼을 되돌려 준다.
 
@@ -32,11 +72,63 @@ $n$이 아니라 $n-1$(자유도)로 나누는 이유가 바로 이 불편성이
 
 ## 2. 정규모집단에서는 카이제곱이 된다
 
-$S^2$의 기댓값과 달리 $S^2$의 **분포**를 알려면 모집단이 정규라는 가정이 필요하다. 모집단이 정규이면 척도를 맞춘 표본분산이 정확히 카이제곱 분포를 따른다.
+$S^2$의 기댓값과 달리 $S^2$의 **분포**를 알려면 모집단이 정규라는 가정이 필요하다.
+
+<div class="thmbox" markdown>
+
+### 정리 2. 정규모집단에서 표본분산은 카이제곱이다 { .thm }
+
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$ 이면
 
 $$
-\frac{(n-1)S^2}{\sigma^2} = \sum_{i=1}^n \left(\frac{X_i - \bar{X}}{\sigma}\right)^2 \sim \chi^2_{n-1}
+\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
 $$
+
+이고, 따라서
+
+$$
+\operatorname{Var}(S^2) = \frac{2\sigma^4}{n-1},
+\qquad
+\operatorname{SE}(S^2) = \sigma^2\sqrt{\frac{2}{n-1}}
+$$
+
+다. 또 $S^2$ 과 $\bar X$ 는 **독립**이다.
+
+</div>
+
+??? proof "증명"
+
+    자유도가 $n$ 이 아니라 $n-1$ 이 되는 자리를 보는 것이 이 증명의 알맹이다. 표준화해 $Z_i = (X_i - \mu)/\sigma$ 로 두면 $Z_i \overset{\text{iid}}{\sim} N(0,1)$ 이고, 정리 1 의 증명에서 쓴 분해를 $Z$ 로 다시 적으면
+
+    $$
+    \underbrace{\sum_{i=1}^n Z_i^2}_{\chi^2_n}
+    = \underbrace{\frac{(n-1)S^2}{\sigma^2}}_{?}
+    + \underbrace{n\bar Z^2}_{\chi^2_1}
+    $$
+
+    다. 왼쪽은 독립인 표준정규 $n$ 개의 제곱합이므로 $\chi^2_n$ 이고([카이제곱분포](../../ch04/continuous_distributions/chi_square.md) 정의 1), 오른쪽 둘째 항은 $\sqrt n\,\bar Z \sim N(0,1)$ 의 제곱이므로 $\chi^2_1$ 이다.
+
+    **코크런 정리**에 따라 오른쪽 두 항은 독립이고 각각 카이제곱을 따른다. 그러면 카이제곱의 가법성([같은 쪽](../../ch04/continuous_distributions/chi_square.md) 정리 4)이 **자유도 장부를 맞춰 준다**.
+
+    $$
+    n = (n-1) + 1
+    $$
+
+    곧 첫 항이 $\chi^2_{n-1}$ 이다. 독립성도 코크런 정리가 함께 준다 — $S^2$ 은 첫 항의 함수이고 $\bar X$ 는 둘째 항의 함수다.
+
+    분산은 카이제곱에서 바로 나온다. $\operatorname{Var}(\chi^2_{n-1}) = 2(n-1)$ 이므로([같은 쪽](../../ch04/continuous_distributions/chi_square.md) 정리 3)
+
+    $$
+    \operatorname{Var}\!\left(\frac{(n-1)S^2}{\sigma^2}\right) = 2(n-1)
+    \quad\Longrightarrow\quad
+    \operatorname{Var}(S^2) = \frac{\sigma^4}{(n-1)^2}\cdot 2(n-1) = \frac{2\sigma^4}{n-1}
+    $$
+
+    다. $\square$
+
+    **$\bar X$ 를 끼워 넣은 대가가 자유도 하나다.** 편차 $n$ 개의 합이 0 이어야 하므로 $n-1$ 개를 알면 나머지가 정해진다. 그 제약이 제곱합에서 $\chi^2_1$ 한 몫을 떼어 간다.
+
+    **$\bar X$ 와 $S^2$ 의 독립성은 정규분포에서만 성립한다.** 다른 모집단에서는 둘이 상관되어 있고, 그래서 $t$ 통계량의 분자와 분모가 얽혀 정확한 $t$ 분포가 나오지 않는다. 뒤의 쪽들이 그 어긋남을 모집단별로 잰다.
 
 달리 적으면 $S^2$ 자체가 카이제곱을 척도조정한 것이다.
 
@@ -44,18 +136,7 @@ $$
 S^2 \sim \frac{\sigma^2}{n-1} \cdot \chi^2_{n-1}
 $$
 
-$S^2$의 퍼짐이 여기서 바로 따라 나온다. $\text{Var}(\chi^2_{n-1}) = 2(n-1)$이므로
-
-$$
-\text{Var}\!\left(\frac{(n-1)S^2}{\sigma^2}\right) = 2(n-1) \;\;\Longrightarrow\;\;
-\text{Var}(S^2) = \frac{2\sigma^4}{n-1}
-$$
-
-이고, 제곱근을 취한 것이 표준오차다.
-
-$$
-\text{SE}(S^2) = \sigma^2 \sqrt{\frac{2}{n-1}} \sim O\!\left(\frac{1}{\sqrt{n}}\right)
-$$
+표준오차가 $O(1/\sqrt n)$ 으로 줄어든다는 점은 표본평균과 같다.
 
 ---
 

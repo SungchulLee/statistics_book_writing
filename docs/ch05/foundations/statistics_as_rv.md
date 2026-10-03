@@ -105,7 +105,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리. 표본평균과 표본분산은 불편이다 { .thm }
+### 정리 1. 표본평균과 표본분산은 불편이다 { .thm }
 
 $X_1, \ldots, X_n$이 평균 $\mu$, 분산 $\sigma^2$인 i.i.d. 확률변수이면
 

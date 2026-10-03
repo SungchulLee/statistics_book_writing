@@ -20,22 +20,79 @@ $$
 
 성공에 1을, 실패에 0을 적어 두었으므로 합 $\sum X_i$는 성공한 횟수이고, 그것을 $n$으로 나눈 값이 곧 성공 비율이다. 이름은 표본비율이지만 계산하는 방식으로 보면 표본평균이며, 그래서 $\bar{X}$에 대해 아는 것이 그대로 옮겨 온다.
 
-먼저 중심이다. $\hat{p}$은 모비율의 **불편추정량**이다.
+<div class="defn" markdown>
+
+### 정의 1. 표본비율 { .dfn }
+
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$ 에 대해
 
 $$
-E[\hat{p}] = p
+\hat{p} = \frac{1}{n}\sum_{i=1}^n X_i = \frac{\text{성공 횟수}}{n}
 $$
 
-한 번의 조사가 맞는다는 뜻이 아니라, 되풀이해 얻은 값들이 한쪽으로 치우쳐 빗나가지는 않는다는 뜻이다.
+를 **표본비율**이라 한다.
 
-다음은 퍼짐이다. $\text{Var}(X_i) = p(1-p)$이고 관측값들이 독립이므로
+</div>
+
+<div class="thmbox" markdown>
+
+### 정리 1. 표본비율의 중심과 폭 { .thm }
 
 $$
-\text{Var}(\hat{p}) = \frac{p(1-p)}{n}, \qquad
-\text{SE}(\hat{p}) = \sqrt{\frac{p(1-p)}{n}}
+E[\hat p] = p,
+\qquad
+\operatorname{Var}(\hat p) = \frac{p(1-p)}{n},
+\qquad
+\operatorname{SE}(\hat p) = \sqrt{\frac{p(1-p)}{n}}
 $$
 
-이다. 표본을 늘리면 표준오차가 $1/\sqrt{n}$의 속도로 줄어드는 것은 평균과 같다. 그러나 분자가 다르고, 그 차이가 이 쪽에서 가장 중요한 대목이다.
+이다. 표본평균과 달리 **표준오차가 모수 $p$ 자체에 의존한다.**
+
+</div>
+
+??? proof "증명"
+
+    $\hat p$ 은 $\text{Bernoulli}(p)$ 표본의 표본평균이므로 [표본평균](sample_mean.md) 정리 1 을 $\mu = p$, $\sigma^2 = p(1-p)$ 에 그대로 적용하면 된다. 베르누이의 평균과 분산이 그 값이라는 것은 [베르누이분포](../../ch04/discrete_distributions/bernoulli.md) 정리 2 다.
+
+    $$
+    E[\hat p] = p,
+    \qquad
+    \operatorname{Var}(\hat p) = \frac{p(1-p)}{n}
+    $$
+
+    $\square$
+
+    **새로 증명할 것이 없다는 점이 요점이다.** 비율은 0 과 1 의 평균이므로 표본평균에 대해 아는 것이 모두 그대로 통한다. 이름만 다른 같은 대상이다.
+
+    다만 **$\sigma^2$ 이 모수와 얽혀 있다**는 차이가 뒤따른다. $\operatorname{SE}(\bar X) = \sigma/\sqrt n$ 에서는 $\sigma$ 가 중심과 따로였지만, 여기서는 $p$ 하나가 중심과 폭을 함께 정한다. 그래서 신뢰구간을 세울 때 **분모에 추정값을 넣을지 가설값을 넣을지**가 문제가 되고, 왈드 구간과 윌슨 구간이 갈라진다([왈드와 윌슨](phat_wald_wilson.md)).
+
+    $p(1-p)$ 가 $p = 1/2$ 에서 최대라는 것([분산과 표준편차](../../ch02/spread/variance_std.md) 정리 2 가 아니라 [베르누이](../../ch04/discrete_distributions/bernoulli.md) 정리 3)도 여기서 쓰인다. **표본크기를 정할 때 $p = 1/2$ 로 잡으면 어떤 $p$ 에서도 모자라지 않는다.**
+
+<div class="thmbox" markdown>
+
+### 정리 2. 모양은 근사다 { .thm }
+
+$n \to \infty$ 일 때
+
+$$
+\frac{\hat{p} - p}{\sqrt{p(1-p)/n}} \xrightarrow{d} N(0, 1)
+$$
+
+이다. 유한한 $n$ 에서 이 근사를 쓸 만한지 가늠하는 **느슨한 기준**이
+
+$$
+np \geq 5 \quad\text{그리고}\quad n(1-p) \geq 5
+$$
+
+다.
+
+</div>
+
+??? proof "증명"
+
+    $\hat p$ 은 유한한 분산을 갖는 i.i.d. 합의 평균이므로 중심극한정리(3.5절 정리 1)가 그대로 적용된다. 값이 둘뿐이라는 사실은 아무 방해가 되지 않는다 — **중심극한정리는 모집단이 어떻게 생겼는지 묻지 않는다.** $\square$
+
+    문턱값은 정리가 아니라 **관례**다. 표본크기 $n$ 이 아니라 $np$ 와 $n(1-p)$ 를 보는 데에는 까닭이 있다. 수렴을 늦추는 것은 작은 $n$ 이 아니라 **치우침**이고, 이항분포의 왜도가 $(1-2p)/\sqrt{np(1-p)}$ 이므로 $np$ 가 그 치우침을 통제한다. $p$ 가 0 이나 1 에 가까우면 $n$ 이 꽤 커도 성공(또는 실패)이 몇 개뿐이어서 근사가 듣지 않는다. 두 문턱값 5 와 10 을 가르는 근거는 [이항분포의 정규근사](../../ch04/discrete_distributions/binomial.md#언제-쓸-수-있는가-5와-10)에 있다.
 
 !!! note
     $\text{SE}(\bar{X}) = \sigma/\sqrt{n}$과 달리 $\hat{p}$의 표준오차는 모수 $p$ 자체에 의존한다. 실무에서는 $p$를 모르므로 $\hat{p}$로 대체한다:
