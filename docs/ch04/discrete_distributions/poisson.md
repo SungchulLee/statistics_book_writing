@@ -14,7 +14,7 @@ $$
 
 ---
 
-## 포아송분포와 PMF
+## 1. 포아송분포와 PMF
 
 <div class="defn" markdown>
 
@@ -37,133 +37,6 @@ $$
 $$
 
 $e^{\lambda}$의 Taylor 전개를 사용했다.
-
----
-
-## 성질
-
-$$
-\begin{aligned}
-E[X] &= \lambda \\
-\text{Var}(X) &= \lambda \\
-\text{SD}(X) &= \sqrt{\lambda}
-\end{aligned}
-$$
-
-평균과 분산이 같다는 것은 포아송분포를 규정하는 특징이며, 진단 점검에 자주 쓰인다.
-
-### 평균의 유도
-
-$$
-E[X] = \sum_{k=0}^{\infty} k \cdot \frac{e^{-\lambda}\lambda^k}{k!} = \lambda e^{-\lambda} \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!} = \lambda e^{-\lambda} \cdot e^{\lambda} = \lambda
-$$
-
-### 분산의 유도
-
-먼저 $E[X(X-1)]$을 계산한다:
-
-$$
-E[X(X-1)] = \sum_{k=2}^{\infty} k(k-1) \frac{e^{-\lambda}\lambda^k}{k!} = \lambda^2 e^{-\lambda} \sum_{k=2}^{\infty} \frac{\lambda^{k-2}}{(k-2)!} = \lambda^2
-$$
-
-그러면:
-
-$$
-\text{Var}(X) = E[X^2] - (E[X])^2 = E[X(X-1)] + E[X] - (E[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda
-$$
-
----
-
-## 이항분포의 극한으로서의 포아송분포
-
-포아송분포는 $n$이 크고 $p$가 작으며 $\lambda = np$가 일정하게 유지될 때 이항분포의 극한으로 나타난다.
-
-<div class="thmbox" markdown>
-
-### 정리. 이항분포의 포아송 극한 { .thm }
-
-$p = \lambda/n$으로 두면 각 $k = 0, 1, 2, \ldots$에 대해
-
-$$
-\lim_{n \to \infty} \binom{n}{k} p^k (1-p)^{n-k} = \frac{e^{-\lambda}\lambda^k}{k!}
-$$
-
-이다.
-
-</div>
-
-??? proof "증명 개요"
-
-    $p = \lambda/n$으로 두면:
-
-    $$
-    \binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1 - \frac{\lambda}{n}\right)^{n-k}
-    = \frac{n!}{k!(n-k)!} \cdot \frac{\lambda^k}{n^k} \cdot \left(1 - \frac{\lambda}{n}\right)^n \cdot \left(1 - \frac{\lambda}{n}\right)^{-k}
-    $$
-
-    $n \to \infty$일 때 $\frac{n!}{(n-k)! \, n^k} \to 1$, $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$, $\left(1 - \frac{\lambda}{n}\right)^{-k} \to 1$이다.
-
-    **경험 법칙:** $n \geq 20$이고 $p \leq 0.05$일 때(더 보수적으로는 $n \geq 100$이고 $np \leq 10$일 때) 포아송 근사를 사용한다.
-
----
-
-## 포아송분포로 모이는 세 갈래
-
-이항분포만 포아송분포로 가는 것이 아니다. 4.1절에서 본 분포들이 모두 조건만 맞으면 같은 자리에 모인다.
-
-| 출발점 | 조건 | 도착점 |
-|---|---|---|
-| $B(n, p)$ | $n \to \infty$, $p \to 0$, $np \to \lambda$ | $\text{Poisson}(\lambda)$ |
-| $\text{HG}(n, N, M)$ | $M, n, N \to \infty$, $nN/M \to \lambda$ | $\text{Poisson}(\lambda)$ |
-| $\text{NB}(r, p)$ | $r \to \infty$, $p \to 1$, $r(1-p)/p \to \lambda$ | $\text{Poisson}(\lambda)$ |
-
-초기하분포가 포아송분포로 가는 길은 두 극한을 이어 붙인 것이다. 모집단이 커지면 비복원과 복원의 차이가 사라져 이항분포가 되고, 거기서 다시 희귀사건 극한을 타면 포아송분포가 된다.
-
-세 줄에 공통된 것은 **"기회는 아주 많고 각 기회의 확률은 아주 작은데 그 곱이 적당하다"**는 구조다. 출발점이 무엇이든 이 구조에 놓이면 같은 분포가 나온다. 3.5절에서 본 중심극한정리가 "독립인 것을 많이 더하면 정규분포"라는 보편성을 말하듯, 이것은 "드문 것을 많이 세면 포아송"이라는 보편성이다.
-
----
-
-## 가법성
-
-$X_1 \sim \text{Poisson}(\lambda_1)$과 $X_2 \sim \text{Poisson}(\lambda_2)$가 독립이면:
-
-$$
-X_1 + X_2 \sim \text{Poisson}(\lambda_1 + \lambda_2)
-$$
-
-이는 독립인 포아송 확률변수의 임의의 유한 합으로 확장된다.
-
----
-
-## 포아송 과정과의 연결
-
-포아송분포는 **포아송 과정**과 밀접하게 연결되어 있다. 사건이 단위시간당 일정한 비율 $\lambda$로 도착하고 도착들이 서로 독립이면, 길이 $t$인 구간에서의 사건 수는 $\text{Poisson}(\lambda t)$를 따르고, 연속한 사건 사이의 시간은 $\text{Exponential}(\lambda)$를 따른다.
-
----
-
-## 문제
-
-<div class="probox" markdown>
-
-**문제:** <span class="diff easy" title="쉬움"></span> 어떤 증권거래소는 시간당 평균 3건의 대량 블록 거래를 처리한다. 특정 한 시간 동안 정확히 5건의 블록 거래가 관측될 확률은? 2건 이하가 관측될 확률은?
-
-</div>
-
-??? success "풀이"
-
-    $$
-    P(X = 5) = \frac{e^{-3} \cdot 3^5}{5!} = \frac{0.0498 \cdot 243}{120} = 0.1008
-    $$
-
-    $$
-    P(X \leq 2) = \sum_{k=0}^{2} \frac{e^{-3} \cdot 3^k}{k!} = e^{-3}(1 + 3 + 4.5) = 0.0498 \cdot 8.5 = 0.4232
-    $$
-
----
-
-## Python: PMF, CDF, 표본추출
-
-### PMF와 CDF
 
 <div class="exbox" markdown>
 
@@ -283,8 +156,6 @@ $$
 
     꼬리는 $P(X \ge 20) = 3.45 \times 10^{-7}$이라 코드 주석의 "1e-6 수준"과 맞는다. 평균 $5$에서 $20$은 $(20-5)/\sqrt5 = 6.7$ 표준편차 밖이니 그림에서 잘라도 좋다.
 
-### 비율에 따른 비교
-
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 비율모수에 따른 포아송 비교. $\lambda = 1, 4, 10$인 세 포아송 PMF를 한 그림에 겹쳐 그린다. $\lambda$가 커질수록 봉우리가 오른쪽으로 가면서 **낮아진다.**
@@ -372,11 +243,206 @@ $$
 
     높이가 늘 $1/\sqrt{2\pi\lambda}$보다 **작다**는 것도 우연이 아니다. 스털링 근사는 $\lambda!$를 아래로 잡으므로($\lambda! > \sqrt{2\pi\lambda}\lambda^\lambda e^{-\lambda}$) 그것으로 나눈 $p(\lambda)$는 위로 잡히게 된다.
 
-### 이항 극한으로서의 포아송분포
+<div class="probox" markdown>
+
+**문제 1.** <span class="diff easy" title="쉬움"></span> 어떤 증권거래소는 시간당 평균 3건의 대량 블록 거래를 처리한다. 특정 한 시간 동안 정확히 5건의 블록 거래가 관측될 확률은? 2건 이하가 관측될 확률은?
+
+</div>
+
+??? success "풀이"
+
+    $$
+    P(X = 5) = \frac{e^{-3} \cdot 3^5}{5!} = \frac{0.0498 \cdot 243}{120} = 0.1008
+    $$
+
+    $$
+    P(X \leq 2) = \sum_{k=0}^{2} \frac{e^{-3} \cdot 3^k}{k!} = e^{-3}(1 + 3 + 4.5) = 0.0498 \cdot 8.5 = 0.4232
+    $$
+
+---
+
+## 2. 성질
+
+$$
+\begin{aligned}
+E[X] &= \lambda \\
+\text{Var}(X) &= \lambda \\
+\text{SD}(X) &= \sqrt{\lambda}
+\end{aligned}
+$$
+
+평균과 분산이 같다는 것은 포아송분포를 규정하는 특징이며, 진단 점검에 자주 쓰인다.
+
+### 평균의 유도
+
+$$
+E[X] = \sum_{k=0}^{\infty} k \cdot \frac{e^{-\lambda}\lambda^k}{k!} = \lambda e^{-\lambda} \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!} = \lambda e^{-\lambda} \cdot e^{\lambda} = \lambda
+$$
+
+### 분산의 유도
+
+먼저 $E[X(X-1)]$을 계산한다:
+
+$$
+E[X(X-1)] = \sum_{k=2}^{\infty} k(k-1) \frac{e^{-\lambda}\lambda^k}{k!} = \lambda^2 e^{-\lambda} \sum_{k=2}^{\infty} \frac{\lambda^{k-2}}{(k-2)!} = \lambda^2
+$$
+
+그러면:
+
+$$
+\text{Var}(X) = E[X^2] - (E[X])^2 = E[X(X-1)] + E[X] - (E[X])^2 = \lambda^2 + \lambda - \lambda^2 = \lambda
+$$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 이항분포의 극한으로서의 포아송. $\lambda = 5$를 고정하고 $n = 20, 50, 200$에 대해 $B(n, \lambda/n)$의 PMF를 $\text{Poisson}(5)$ 위에 겹쳐 그린다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 포아송의 평균과 분산이 같음을 확인. $\text{Poisson}(7)$에서 $n = 10^5$개를 뽑아 표본평균과 표본분산을 잰다.
+
+**(1)** 표본평균과 표본분산이 각각 얼마나 흔들리는지, 곧 두 표준오차를 구하시오. 분산 쪽에는 포아송의 4차 중심적률이 필요하다.
+
+**(2)** 코드가 준 두 값이 (1)의 표준오차로 재어 몇 배 안에 들어오는지 확인하시오. 코드의 `atol=0.1`은 적절한 허용폭인가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 평균 쪽은 쉽다. $\text{Var}(X) = \lambda$이므로
+
+    $$
+    \text{SE}(\bar X) = \frac{\text{SD}(X)}{\sqrt n} = \sqrt{\frac{\lambda}{n}}
+    = \sqrt{\frac{7}{10^5}} = 0.008367
+    $$
+
+    이다. 분산 쪽은 표본분산의 분산을 알아야 하고, 큰 $n$에서 그것은
+
+    $$
+    \text{Var}(S^2) \approx \frac{\mu_4 - \sigma^4}{n}, \qquad
+    \mu_4 = E\big[(X-\lambda)^4\big]
+    $$
+
+    이다. 포아송의 4차 중심적률을 계승적률로 구한다. $E[X]=\lambda$, $E[X(X-1)]=\lambda^2$, $E[X(X-1)(X-2)]=\lambda^3$, $E[X(X-1)(X-2)(X-3)]=\lambda^4$임은 본문의 평균 유도와 같은 계산을 반복하면 나온다. 이것을 모으면
+
+    $$
+    \mu_4 = 3\lambda^2 + \lambda
+    $$
+
+    이다. 따라서 $\sigma^4 = \lambda^2$를 빼면
+
+    $$
+    \text{Var}(S^2) \approx \frac{3\lambda^2 + \lambda - \lambda^2}{n} = \frac{2\lambda^2 + \lambda}{n},
+    \qquad
+    \text{SE}(S^2) = \sqrt{\frac{2\lambda^2 + \lambda}{n}}
+    $$
+
+    이고 $\lambda = 7$, $n = 10^5$에서
+
+    $$
+    \text{SE}(S^2) = \sqrt{\frac{2 \cdot 49 + 7}{10^5}} = \sqrt{1.05 \times 10^{-3}} = 0.03240
+    $$
+
+    이다. **분산이 평균보다 네 배 가까이 더 흔들린다.** 분산은 제곱을 평균하므로 꼬리의 큰 값에 훨씬 민감하고, 그 비는 $\sqrt{(2\lambda^2+\lambda)/\lambda} = \sqrt{2\lambda+1}$이라 $\lambda$가 커지면 더 벌어진다.
+
+    **(2) 수치적으로.** 먼저 쪽의 코드를 그대로 돌린다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    lam = 7
+    samples = stats.poisson(lam).rvs(100_000)
+
+    # 포아송의 특징: 평균과 분산이 **같다**.
+    # 실제 계수 자료에서 표본분산이 표본평균보다 뚜렷이 크면
+    # 포아송 가정이 깨졌다는 신호이며(과산포), 음이항분포 등을 고려해야 한다.
+
+    print(f"Theoretical mean: {lam},  Sample mean: {samples.mean():.4f}")
+    print(f"Theoretical var:  {lam},  Sample var:  {samples.var():.4f}")
+    print(f"Mean ≈ Var: {np.isclose(samples.mean(), samples.var(), atol=0.1)}")
+    ```
+
+    출력:
+
+    ```
+    Theoretical mean: 7,  Sample mean: 7.0065
+    Theoretical var:  7,  Sample var:  7.0213
+    Mean ≈ Var: True
+    ```
+
+    이 두 값이 "가깝다"고 말할 자격이 있는지 (1)의 표준오차로 재 본다.
+
+    ```python
+    import numpy as np
+    from math import sqrt
+    from scipy import stats
+
+    lam, n = 7, 100_000
+    np.random.seed(42)
+    samples = stats.poisson(lam).rvs(n)
+
+    # 포아송의 4차 중심적률이 정말 3*lam^2 + lam 인지 먼저 확인한다.
+    k = np.arange(0, 200)
+    mu4 = (((k - lam) ** 4) * stats.poisson(lam).pmf(k)).sum()
+    print(f"mu4 = {mu4:.4f},   3*lam^2 + lam = {3 * lam**2 + lam}")
+
+    se_mean = sqrt(lam / n)                      # SD(X)/sqrt(n) = sqrt(lam/n)
+    se_var = sqrt((2 * lam**2 + lam) / n)        # (mu4 - sigma^4)/n = (2 lam^2 + lam)/n
+
+    for name, value, se in (("표본평균", samples.mean(), se_mean),
+                            ("표본분산", samples.var(), se_var)):
+        print(f"{name} {value:.4f}   이론값 {lam}   SE {se:.4f}   z = {(value - lam) / se:+.3f}")
+
+    print(f"산포비 s^2/xbar = {samples.var() / samples.mean():.4f}   (SE 약 {se_var / lam:.4f})")
+    ```
+
+    출력:
+
+    ```
+    mu4 = 154.0000,   3*lam^2 + lam = 154
+    표본평균 7.0065   이론값 7   SE 0.0084   z = +0.771
+    표본분산 7.0213   이론값 7   SE 0.0324   z = +0.658
+    산포비 s^2/xbar = 1.0021   (SE 약 0.0046)
+    ```
+
+    4차 중심적률이 $154$로 유도한 $3\lambda^2 + \lambda = 147 + 7 = 154$와 정확히 맞고, 표준오차도 유도한 $0.008367$과 $0.03240$을 그대로 재현한다. 두 표본값은 각각 $+0.77$ SE, $+0.66$ SE 떨어져 있으니 **몬테카를로 오차 범위 안**이다. 이상적인 어긋남이 아니라 있어야 할 만큼의 어긋남이다.
+
+    **`atol=0.1`은 느슨하다.** 분산의 SE가 $0.032$이니 $0.1$은 약 $3$ SE에 해당한다. 포아송이 맞을 때 통과하기는 하지만, 평균이 $7$인데 분산이 $7.09$인 자료(산포비 $1.013$)도 통과시킨다. 산포 자체를 판정하려면 절대 허용폭 대신 **산포비** $s^2/\bar x$를 쓰고 그 표준오차 $\text{SE}(S^2)/\lambda \approx \sqrt{(2\lambda+1)/(n\lambda)} = 0.0046$으로 재는 것이 옳다. 관측된 $1.0021$은 $0.46$ SE이므로 역시 문제가 없다. 연습문제 7의 산포 검정이 이 생각을 $\chi^2$ 분포로 정식화한 것이다.
+
+---
+
+## 3. 이항분포의 극한으로서의 포아송분포
+
+포아송분포는 $n$이 크고 $p$가 작으며 $\lambda = np$가 일정하게 유지될 때 이항분포의 극한으로 나타난다.
+
+<div class="thmbox" markdown>
+
+### 정리. 이항분포의 포아송 극한 { .thm }
+
+$p = \lambda/n$으로 두면 각 $k = 0, 1, 2, \ldots$에 대해
+
+$$
+\lim_{n \to \infty} \binom{n}{k} p^k (1-p)^{n-k} = \frac{e^{-\lambda}\lambda^k}{k!}
+$$
+
+이다.
+
+</div>
+
+??? proof "증명 개요"
+
+    $p = \lambda/n$으로 두면:
+
+    $$
+    \binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1 - \frac{\lambda}{n}\right)^{n-k}
+    = \frac{n!}{k!(n-k)!} \cdot \frac{\lambda^k}{n^k} \cdot \left(1 - \frac{\lambda}{n}\right)^n \cdot \left(1 - \frac{\lambda}{n}\right)^{-k}
+    $$
+
+    $n \to \infty$일 때 $\frac{n!}{(n-k)! \, n^k} \to 1$, $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$, $\left(1 - \frac{\lambda}{n}\right)^{-k} \to 1$이다.
+
+    **경험 법칙:** $n \geq 20$이고 $p \leq 0.05$일 때(더 보수적으로는 $n \geq 100$이고 $np \leq 10$일 때) 포아송 근사를 사용한다.
+
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> 이항분포의 극한으로서의 포아송. $\lambda = 5$를 고정하고 $n = 20, 50, 200$에 대해 $B(n, \lambda/n)$의 PMF를 $\text{Poisson}(5)$ 위에 겹쳐 그린다.
 
 **(1)** $k$를 고정하고 $n \to \infty$일 때 $B(n, \lambda/n)$의 PMF가 포아송 PMF로 간다는 것을 보이고, $k = 0$에서 **수렴 속도**가 어떤 꼴인지 구하시오.
 
@@ -495,125 +561,50 @@ $$
 
     모든 $n$에서 비가 $1$보다 작다는 것도 유도와 같다. 이항은 "$0$번 성공"을 포아송보다 드물게 낸다.
 
-### 표본추출과 평균–분산 점검
+---
 
-<div class="exbox" markdown>
+## 4. 포아송분포로 모이는 세 갈래
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 포아송의 평균과 분산이 같음을 확인. $\text{Poisson}(7)$에서 $n = 10^5$개를 뽑아 표본평균과 표본분산을 잰다.
+이항분포만 포아송분포로 가는 것이 아니다. 4.1절에서 본 분포들이 모두 조건만 맞으면 같은 자리에 모인다.
 
-**(1)** 표본평균과 표본분산이 각각 얼마나 흔들리는지, 곧 두 표준오차를 구하시오. 분산 쪽에는 포아송의 4차 중심적률이 필요하다.
+| 출발점 | 조건 | 도착점 |
+|---|---|---|
+| $B(n, p)$ | $n \to \infty$, $p \to 0$, $np \to \lambda$ | $\text{Poisson}(\lambda)$ |
+| $\text{HG}(n, N, M)$ | $M, n, N \to \infty$, $nN/M \to \lambda$ | $\text{Poisson}(\lambda)$ |
+| $\text{NB}(r, p)$ | $r \to \infty$, $p \to 1$, $r(1-p)/p \to \lambda$ | $\text{Poisson}(\lambda)$ |
 
-**(2)** 코드가 준 두 값이 (1)의 표준오차로 재어 몇 배 안에 들어오는지 확인하시오. 코드의 `atol=0.1`은 적절한 허용폭인가.
+초기하분포가 포아송분포로 가는 길은 두 극한을 이어 붙인 것이다. 모집단이 커지면 비복원과 복원의 차이가 사라져 이항분포가 되고, 거기서 다시 희귀사건 극한을 타면 포아송분포가 된다.
 
-</div>
-
-??? success "풀이"
-
-    **(1) 해석적으로.** 평균 쪽은 쉽다. $\text{Var}(X) = \lambda$이므로
-
-    $$
-    \text{SE}(\bar X) = \frac{\text{SD}(X)}{\sqrt n} = \sqrt{\frac{\lambda}{n}}
-    = \sqrt{\frac{7}{10^5}} = 0.008367
-    $$
-
-    이다. 분산 쪽은 표본분산의 분산을 알아야 하고, 큰 $n$에서 그것은
-
-    $$
-    \text{Var}(S^2) \approx \frac{\mu_4 - \sigma^4}{n}, \qquad
-    \mu_4 = E\big[(X-\lambda)^4\big]
-    $$
-
-    이다. 포아송의 4차 중심적률을 계승적률로 구한다. $E[X]=\lambda$, $E[X(X-1)]=\lambda^2$, $E[X(X-1)(X-2)]=\lambda^3$, $E[X(X-1)(X-2)(X-3)]=\lambda^4$임은 본문의 평균 유도와 같은 계산을 반복하면 나온다. 이것을 모으면
-
-    $$
-    \mu_4 = 3\lambda^2 + \lambda
-    $$
-
-    이다. 따라서 $\sigma^4 = \lambda^2$를 빼면
-
-    $$
-    \text{Var}(S^2) \approx \frac{3\lambda^2 + \lambda - \lambda^2}{n} = \frac{2\lambda^2 + \lambda}{n},
-    \qquad
-    \text{SE}(S^2) = \sqrt{\frac{2\lambda^2 + \lambda}{n}}
-    $$
-
-    이고 $\lambda = 7$, $n = 10^5$에서
-
-    $$
-    \text{SE}(S^2) = \sqrt{\frac{2 \cdot 49 + 7}{10^5}} = \sqrt{1.05 \times 10^{-3}} = 0.03240
-    $$
-
-    이다. **분산이 평균보다 네 배 가까이 더 흔들린다.** 분산은 제곱을 평균하므로 꼬리의 큰 값에 훨씬 민감하고, 그 비는 $\sqrt{(2\lambda^2+\lambda)/\lambda} = \sqrt{2\lambda+1}$이라 $\lambda$가 커지면 더 벌어진다.
-
-    **(2) 수치적으로.** 먼저 쪽의 코드를 그대로 돌린다.
-
-    ```python
-    import numpy as np
-    from scipy import stats
-
-    np.random.seed(42)
-    lam = 7
-    samples = stats.poisson(lam).rvs(100_000)
-
-    # 포아송의 특징: 평균과 분산이 **같다**.
-    # 실제 계수 자료에서 표본분산이 표본평균보다 뚜렷이 크면
-    # 포아송 가정이 깨졌다는 신호이며(과산포), 음이항분포 등을 고려해야 한다.
-
-    print(f"Theoretical mean: {lam},  Sample mean: {samples.mean():.4f}")
-    print(f"Theoretical var:  {lam},  Sample var:  {samples.var():.4f}")
-    print(f"Mean ≈ Var: {np.isclose(samples.mean(), samples.var(), atol=0.1)}")
-    ```
-
-    출력:
-
-    ```
-    Theoretical mean: 7,  Sample mean: 7.0065
-    Theoretical var:  7,  Sample var:  7.0213
-    Mean ≈ Var: True
-    ```
-
-    이 두 값이 "가깝다"고 말할 자격이 있는지 (1)의 표준오차로 재 본다.
-
-    ```python
-    import numpy as np
-    from math import sqrt
-    from scipy import stats
-
-    lam, n = 7, 100_000
-    np.random.seed(42)
-    samples = stats.poisson(lam).rvs(n)
-
-    # 포아송의 4차 중심적률이 정말 3*lam^2 + lam 인지 먼저 확인한다.
-    k = np.arange(0, 200)
-    mu4 = (((k - lam) ** 4) * stats.poisson(lam).pmf(k)).sum()
-    print(f"mu4 = {mu4:.4f},   3*lam^2 + lam = {3 * lam**2 + lam}")
-
-    se_mean = sqrt(lam / n)                      # SD(X)/sqrt(n) = sqrt(lam/n)
-    se_var = sqrt((2 * lam**2 + lam) / n)        # (mu4 - sigma^4)/n = (2 lam^2 + lam)/n
-
-    for name, value, se in (("표본평균", samples.mean(), se_mean),
-                            ("표본분산", samples.var(), se_var)):
-        print(f"{name} {value:.4f}   이론값 {lam}   SE {se:.4f}   z = {(value - lam) / se:+.3f}")
-
-    print(f"산포비 s^2/xbar = {samples.var() / samples.mean():.4f}   (SE 약 {se_var / lam:.4f})")
-    ```
-
-    출력:
-
-    ```
-    mu4 = 154.0000,   3*lam^2 + lam = 154
-    표본평균 7.0065   이론값 7   SE 0.0084   z = +0.771
-    표본분산 7.0213   이론값 7   SE 0.0324   z = +0.658
-    산포비 s^2/xbar = 1.0021   (SE 약 0.0046)
-    ```
-
-    4차 중심적률이 $154$로 유도한 $3\lambda^2 + \lambda = 147 + 7 = 154$와 정확히 맞고, 표준오차도 유도한 $0.008367$과 $0.03240$을 그대로 재현한다. 두 표본값은 각각 $+0.77$ SE, $+0.66$ SE 떨어져 있으니 **몬테카를로 오차 범위 안**이다. 이상적인 어긋남이 아니라 있어야 할 만큼의 어긋남이다.
-
-    **`atol=0.1`은 느슨하다.** 분산의 SE가 $0.032$이니 $0.1$은 약 $3$ SE에 해당한다. 포아송이 맞을 때 통과하기는 하지만, 평균이 $7$인데 분산이 $7.09$인 자료(산포비 $1.013$)도 통과시킨다. 산포 자체를 판정하려면 절대 허용폭 대신 **산포비** $s^2/\bar x$를 쓰고 그 표준오차 $\text{SE}(S^2)/\lambda \approx \sqrt{(2\lambda+1)/(n\lambda)} = 0.0046$으로 재는 것이 옳다. 관측된 $1.0021$은 $0.46$ SE이므로 역시 문제가 없다. 연습문제 6의 산포 검정이 이 생각을 $\chi^2$ 분포로 정식화한 것이다.
+세 줄에 공통된 것은 **"기회는 아주 많고 각 기회의 확률은 아주 작은데 그 곱이 적당하다"**는 구조다. 출발점이 무엇이든 이 구조에 놓이면 같은 분포가 나온다. 3.5절에서 본 중심극한정리가 "독립인 것을 많이 더하면 정규분포"라는 보편성을 말하듯, 이것은 "드문 것을 많이 세면 포아송"이라는 보편성이다.
 
 ---
 
-## 사슬을 닫으며: 네 이산분포 한눈에
+## 5. 가법성
+
+$X_1 \sim \text{Poisson}(\lambda_1)$과 $X_2 \sim \text{Poisson}(\lambda_2)$가 독립이면:
+
+$$
+X_1 + X_2 \sim \text{Poisson}(\lambda_1 + \lambda_2)
+$$
+
+이는 독립인 포아송 확률변수의 임의의 유한 합으로 확장된다.
+
+---
+
+## 6. 포아송 과정과의 연결
+
+포아송분포는 **포아송 과정**과 밀접하게 연결되어 있다. 사건이 단위시간당 일정한 비율 $\lambda$로 도착하고 도착들이 서로 독립이면, 길이 $t$인 구간에서의 사건 수는 $\text{Poisson}(\lambda t)$를 따르고, 연속한 사건 사이의 시간은 $\text{Exponential}(\lambda)$를 따른다.
+
+---
+
+
+
+
+
+
+---
+
+## 7. 사슬을 닫으며: 네 이산분포 한눈에
 
 4.1절에서 다룬 분포들을 나란히 놓고 보면, 서로 다른 것은 모양이 아니라 **무엇을 세는가**임이 드러난다. 고르는 기준은 "무엇이 고정되어 있고 무엇이 확률변수인가"다.
 
@@ -751,6 +742,7 @@ $$
 
     셋째, **잘린 꼬리가 보이지 않는다.** 포아송과 기하는 상한이 없는데 각각 $k \le 9$, $k \le 19$에서 끊었다. 기하의 경우 $P(\text{실패} \ge 20) = 0.7^{20} = 7.98 \times 10^{-4}$라 버려도 좋지만, 그림만 보면 분포에 상한이 있는 것처럼 읽힌다. 이항·초기하의 가로축 끝은 **진짜 상한**($n = 50$, $d = 5$)이어서 성질이 전혀 다른데도 그림에서는 똑같이 "끝"으로 보인다.
 
+
 ---
 
 ## 연습문제
@@ -771,9 +763,33 @@ $$
 
     (d) 정규근사: $\mu = 4$, $\sigma = 2$. 연속성 수정을 적용하면 $P(N \ge 8) \approx P(Z \ge (7.5 - 4)/2) = P(Z \ge 1.75) = 0.040$. 정확한 값은 $0.051$이다. $\lambda = 4$에서는 분포가 아직 오른쪽으로 치우쳐 있어 근사가 거칠다. $\lambda \ge 30$이면 정확도가 크게 좋아진다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span>
+**연습문제 2.** <span class="diff easy" title="쉬움"></span>
+다음 각 상황에 알맞은 분포를 고르고 모수를 밝혀라.
+
+1. 공장에서 하루 생산한 200개 중 불량이 몇 개인가(각 제품이 독립적으로 2% 확률로 불량).
+2. 한 시간 동안 응급실에 몇 명이 오는가(평균 6명).
+3. 면접에서 합격자가 나올 때까지 몇 명을 보아야 하는가(합격률 10%).
+4. 로또 공 45개 중 당첨번호가 6개일 때, 내가 고른 6개 중 몇 개가 맞는가.
+
+</div>
+
+??? success "풀이"
+    1. **이항분포** $\text{Binomial}(200, 0.02)$. 시행 수가 고정이고 각 시행이 독립이며 성공확률이 같다. 참고로 $n$이 크고 $p$가 작아 $\text{Poisson}(4)$로 근사해도 좋다.
+    2. **포아송분포** $\text{Poisson}(6)$. 고정된 구간에서 상한 없이 세며, 도착이 서로 독립이다.
+    3. **기하분포** $\text{Geometric}(0.1)$. 첫 성공까지의 대기 횟수다. 시행 번호를 세면 평균 10명, 실패 횟수를 세면 평균 9명이다.
+    4. **초기하분포** $\text{HG}(n=6, N=6, M=45)$. 비복원추출이고 모집단이 작아 이항근사를 쓸 수 없다($n/M = 0.133$).
+
+    **고르는 순서.** 먼저 "시행 횟수가 정해져 있는가"를 묻는다. 정해져 있으면 이항 또는 초기하이고, 그다음 "복원인가"로 갈린다. 정해져 있지 않으면 "구간당 개수를 세는가(포아송)" 아니면 "성공까지 기다리는가(기하·음이항)"로 갈린다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 3.** <span class="diff med" title="중간"></span>
 포아송 근사: 500쪽의 책에서 각 쪽이 독립적으로 확률 $p = 0.004$로 오탈자를 포함한다. (a) 정확한 분포는? (b) 포아송 근사의 모수는? (c) 포아송 근사로 $P(X = 0)$, $P(X = 1)$, $P(X \ge 4)$를 구하라.
 
 </div>
@@ -787,9 +803,11 @@ $$
 
     정확한 이항 계산은 $P(X = 2) \approx 0.2712$를 주는데 포아송 근사는 $0.2707$이다. 소수점 셋째 자리까지 일치하며, 이 영역에서 포아송 근사가 매우 잘 작동함을 보여 준다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span>
+**연습문제 4.** <span class="diff med" title="중간"></span>
 **도착 간 시간의 무기억성.** 사건이 비율 $\lambda$인 포아송 과정에 따라 발생하면 도착 간 시간이 비율 $\lambda$인 지수분포를 따름을 증명하라.
 
 </div>
@@ -803,9 +821,11 @@ $$
 
     이 연결 덕분에 포아송 과정은 "완전히 무작위한" 사건 발생, 즉 과거의 기억 없이 일정한 비율로 도착하는 사건에 대한 표준 모형이 된다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span>
+**연습문제 5.** <span class="diff med" title="중간"></span>
 **합과 중첩.** 비율이 $\lambda_1, \lambda_2$인 독립 포아송 과정을 중첩한다. 합쳐진 과정이 비율 $\lambda_1 + \lambda_2$인 포아송 과정임을 보여라.
 
 </div>
@@ -821,9 +841,11 @@ $$
 
     **응용:** 어떤 상점의 고객 도착이 두 유형(온라인과 방문)으로 나뉘고 각각이 포아송이면, 전체 도착은 두 비율을 합한 포아송 과정을 이룬다. 이는 여러 포아송 원천을 하나의 모형으로 합치는 것을 정당화한다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span>
+**연습문제 6.** <span class="diff med" title="중간"></span>
 포아송분포에서 **분산이 평균과 같음**을 보여라. $X \sim \mathrm{Poisson}(\lambda)$에 대해 PMF로부터 직접 $\mathbb{E}[X], \mathbb{E}[X^2]$를 계산하라.
 
 </div>
@@ -845,9 +867,11 @@ $$
 
     **구별되는 특징:** 평균 = 분산은 포아송분포의 표식이다. 실제 계수 자료에서 분산이 평균보다 크게 나타나면(**과대산포**) 포아송 모형은 부적절하며, 보통 음이항 모형을 대신 사용한다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 6.** <span class="diff med" title="중간"></span>
+**연습문제 7.** <span class="diff med" title="중간"></span>
 **포아송 가정에 대한 검정.** 계수 표본 $X_1, \ldots, X_n$이 주어졌을 때, 표본분산과 표본평균의 비를 이용한 간단한 **산포 검정**을 제안하라.
 
 </div>
@@ -864,9 +888,11 @@ $$
 
     현대의 계수 자료 분석에서는 포아송 모형을 아예 건너뛰고 더 유연한 모형(Negative Binomial, 영과잉 Poisson, 허들 모형)을 쓰는 경우가 많다. 포아송분포는 유연한 적합 도구라기보다 (포아송 과정에서의) *기본 구성요소*로서 더 유용하다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 7.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 **포아송 씨닝.** 비율 $\lambda$인 포아송 과정의 각 사건을 서로 독립적으로 확률 $q$로 표시한다. 표시된 사건의 개수 $Y$와 표시되지 않은 사건의 개수 $Z$의 분포를 구하고, 두 개수가 **독립**임을 보여라.
 
 </div>
@@ -896,9 +922,11 @@ $$
 
     응용이 많다. 사고 중 중상과 경상, 접속 중 구매와 이탈, 방사성 붕괴 중 검출된 것과 놓친 것이 모두 이 구조다. 특히 검출 효율이 $q$인 계수기로 잰 값도 여전히 포아송을 따르므로, 검출 효율을 모르더라도 포아송 통계를 그대로 쓸 수 있다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 어떤 구역에서 1년 동안 12건의 사고가 있었다. $\lambda$(연간 사고율)의 정확한 95% 신뢰구간을 구하고, 왈드 구간 $\hat\lambda \pm 1.96\sqrt{\hat\lambda}$와 견주어라.
 
 </div>
@@ -930,39 +958,7 @@ $$
 
     정확 구간의 근거는 4.2절 지수분포에서 볼 카이제곱-감마 관계다. $P(X \ge x \mid \lambda) = P(\chi^2_{2x} \le 2\lambda)$라는 항등식에서 나오며, 실제로 위 하한에서 $P(X \ge 12) = 0.025$, 상한에서 $P(X \le 12) = 0.025$임을 확인할 수 있다. 정확하다는 대가로 실제 포함확률이 0.95보다 **크게** 나오는 보수성이 있는데, 이산분포에서 정확 구간의 피할 수 없는 성질이다.
 
-<div class="drillbox" markdown>
-
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
-$X \sim \text{Poisson}(\lambda_1)$과 $Y \sim \text{Poisson}(\lambda_2)$가 독립일 때, $X + Y = n$이 주어진 조건 아래 $X$의 분포를 구하라. 이 결과로 두 계수의 비율이 같은지 검정하는 방법을 설명하라.
-
-</div>
-
-??? success "풀이"
-    $X+Y \sim \text{Poisson}(\lambda_1+\lambda_2)$이므로
-
-    $$
-    P(X = k \mid X+Y = n) = \frac{P(X=k)P(Y=n-k)}{P(X+Y=n)} = \frac{\dfrac{e^{-\lambda_1}\lambda_1^k}{k!}\cdot\dfrac{e^{-\lambda_2}\lambda_2^{n-k}}{(n-k)!}}{\dfrac{e^{-(\lambda_1+\lambda_2)}(\lambda_1+\lambda_2)^n}{n!}}
-    $$
-
-    이다. 지수항이 모두 약분되고 $n!/\{k!(n-k)!\}$을 묶으면
-
-    $$
-    = \binom{n}{k}\left(\frac{\lambda_1}{\lambda_1+\lambda_2}\right)^k\left(\frac{\lambda_2}{\lambda_1+\lambda_2}\right)^{n-k}
-    $$
-
-    로 $X \mid X+Y=n \sim \text{Binomial}\left(n,\ \dfrac{\lambda_1}{\lambda_1+\lambda_2}\right)$이다. $\square$
-
-    조건부 분포에서 $\lambda_1$과 $\lambda_2$가 오직 **비율**로만 나타난다. 전체 규모는 사라지고 배분만 남는다.
-
-    **검정 방법.** 두 구역에서 관측기간 $t_1$, $t_2$ 동안 각각 $x$건과 $y$건이 났다고 하자. $H_0: \lambda_1 = \lambda_2$ 아래에서
-
-    $$
-    \frac{\lambda_1 t_1}{\lambda_1 t_1 + \lambda_2 t_2} = \frac{t_1}{t_1+t_2}
-    $$
-
-    이므로, 총합 $n = x+y$를 고정하고 $x \sim \text{Binomial}\left(n,\ \frac{t_1}{t_1+t_2}\right)$인지를 **이항검정**하면 된다. 관측기간이 같으면 $p_0 = 0.5$인 동전 검정이 된다.
-
-    이 방법을 조건부 검정 또는 이항 비율 검정이라 하며, 장점이 뚜렷하다. 성가신 모수 $\lambda_1+\lambda_2$가 조건화로 완전히 제거되므로 **정확검정**이 가능하고, 계수가 작아도(한쪽이 0이어도) 정규근사에 기대지 않는다. 같은 착상이 2×2 분할표에서 총합을 고정해 초기하분포를 얻는 피셔의 정확검정으로 이어진다.
+---
 
 <div class="drillbox" markdown>
 
@@ -996,29 +992,11 @@ $X \sim \text{Poisson}(\lambda_1)$과 $Y \sim \text{Poisson}(\lambda_2)$가 독�
 
     한 가지 주의할 점은 **과대산포와 영과잉이 겹쳐 보인다**는 것이다. 0이 많으면 분산도 커지므로, 음이항분포만으로도 0의 초과분이 상당히 설명되는 경우가 흔하다. 먼저 음이항을 적합해 보고 그래도 0이 남으면 영과잉 음이항으로 가는 것이 순서다.
 
-<div class="drillbox" markdown>
-
-**연습문제 11.** <span class="diff easy" title="쉬움"></span>
-다음 각 상황에 알맞은 분포를 고르고 모수를 밝혀라.
-
-1. 공장에서 하루 생산한 200개 중 불량이 몇 개인가(각 제품이 독립적으로 2% 확률로 불량).
-2. 한 시간 동안 응급실에 몇 명이 오는가(평균 6명).
-3. 면접에서 합격자가 나올 때까지 몇 명을 보아야 하는가(합격률 10%).
-4. 로또 공 45개 중 당첨번호가 6개일 때, 내가 고른 6개 중 몇 개가 맞는가.
-
-</div>
-
-??? success "풀이"
-    1. **이항분포** $\text{Binomial}(200, 0.02)$. 시행 수가 고정이고 각 시행이 독립이며 성공확률이 같다. 참고로 $n$이 크고 $p$가 작아 $\text{Poisson}(4)$로 근사해도 좋다.
-    2. **포아송분포** $\text{Poisson}(6)$. 고정된 구간에서 상한 없이 세며, 도착이 서로 독립이다.
-    3. **기하분포** $\text{Geometric}(0.1)$. 첫 성공까지의 대기 횟수다. 시행 번호를 세면 평균 10명, 실패 횟수를 세면 평균 9명이다.
-    4. **초기하분포** $\text{HG}(n=6, N=6, M=45)$. 비복원추출이고 모집단이 작아 이항근사를 쓸 수 없다($n/M = 0.133$).
-
-    **고르는 순서.** 먼저 "시행 횟수가 정해져 있는가"를 묻는다. 정해져 있으면 이항 또는 초기하이고, 그다음 "복원인가"로 갈린다. 정해져 있지 않으면 "구간당 개수를 세는가(포아송)" 아니면 "성공까지 기다리는가(기하·음이항)"로 갈린다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 12.** <span class="diff med" title="중간"></span>
+**연습문제 11.** <span class="diff med" title="중간"></span>
 네 분포의 **분산 대 평균 비**를 각각 구하고, 계수 자료를 보았을 때 이 비가 분포 선택에 어떤 단서를 주는지 정리하라.
 
 </div>
@@ -1041,6 +1019,42 @@ $X \sim \text{Poisson}(\lambda_1)$과 $Y \sim \text{Poisson}(\lambda_2)$가 독�
     - **1보다 크다(과대산포).** 가장 흔한 경우다. 개체마다 발생률이 다르거나(이질성), 사건이 뭉쳐서 일어나거나, 0이 지나치게 많다는 뜻이다. 음이항, 영과잉 모형을 고려한다.
 
     다만 이 비는 **진단의 출발점이지 결론이 아니다.** 설명변수를 넣은 회귀모형에서는 조건부 분산을 보아야 하며, 설명변수가 이질성을 흡수하면 겉보기 과대산포가 사라지기도 한다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff hard" title="어려움"></span>
+$X \sim \text{Poisson}(\lambda_1)$과 $Y \sim \text{Poisson}(\lambda_2)$가 독립일 때, $X + Y = n$이 주어진 조건 아래 $X$의 분포를 구하라. 이 결과로 두 계수의 비율이 같은지 검정하는 방법을 설명하라.
+
+</div>
+
+??? success "풀이"
+    $X+Y \sim \text{Poisson}(\lambda_1+\lambda_2)$이므로
+
+    $$
+    P(X = k \mid X+Y = n) = \frac{P(X=k)P(Y=n-k)}{P(X+Y=n)} = \frac{\dfrac{e^{-\lambda_1}\lambda_1^k}{k!}\cdot\dfrac{e^{-\lambda_2}\lambda_2^{n-k}}{(n-k)!}}{\dfrac{e^{-(\lambda_1+\lambda_2)}(\lambda_1+\lambda_2)^n}{n!}}
+    $$
+
+    이다. 지수항이 모두 약분되고 $n!/\{k!(n-k)!\}$을 묶으면
+
+    $$
+    = \binom{n}{k}\left(\frac{\lambda_1}{\lambda_1+\lambda_2}\right)^k\left(\frac{\lambda_2}{\lambda_1+\lambda_2}\right)^{n-k}
+    $$
+
+    로 $X \mid X+Y=n \sim \text{Binomial}\left(n,\ \dfrac{\lambda_1}{\lambda_1+\lambda_2}\right)$이다. $\square$
+
+    조건부 분포에서 $\lambda_1$과 $\lambda_2$가 오직 **비율**로만 나타난다. 전체 규모는 사라지고 배분만 남는다.
+
+    **검정 방법.** 두 구역에서 관측기간 $t_1$, $t_2$ 동안 각각 $x$건과 $y$건이 났다고 하자. $H_0: \lambda_1 = \lambda_2$ 아래에서
+
+    $$
+    \frac{\lambda_1 t_1}{\lambda_1 t_1 + \lambda_2 t_2} = \frac{t_1}{t_1+t_2}
+    $$
+
+    이므로, 총합 $n = x+y$를 고정하고 $x \sim \text{Binomial}\left(n,\ \frac{t_1}{t_1+t_2}\right)$인지를 **이항검정**하면 된다. 관측기간이 같으면 $p_0 = 0.5$인 동전 검정이 된다.
+
+    이 방법을 조건부 검정 또는 이항 비율 검정이라 하며, 장점이 뚜렷하다. 성가신 모수 $\lambda_1+\lambda_2$가 조건화로 완전히 제거되므로 **정확검정**이 가능하고, 계수가 작아도(한쪽이 0이어도) 정규근사에 기대지 않는다. 같은 착상이 2×2 분할표에서 총합을 고정해 초기하분포를 얻는 피셔의 정확검정으로 이어진다.
 
 ---
 
