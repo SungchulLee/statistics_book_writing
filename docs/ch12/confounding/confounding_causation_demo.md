@@ -759,6 +759,534 @@ $$
 
 ---
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
+보기 1 은 $Y = C + \varepsilon$ 에서 겉보기 상관의 상한 $1/\sqrt{1+\sigma_\varepsilon^2}$ 을 얻었고, $\sigma_\varepsilon = 1$ 이면 $0.7071$ 을 넘을 수 없다고 했다. 이제 $C$ 가 $Y$ 에 들어가는 세기를 풀어 주어
+
+$$
+Y = \lambda C + \varepsilon, \qquad \varepsilon \sim \mathcal{N}(0, \sigma_\varepsilon^2), \quad \varepsilon \perp (T, C)
+$$
+
+로 두자. $(T, C)$ 는 그대로 상관이 $\rho_{TC}$ 인 표준이변량정규다.
+
+**(1)** $\operatorname{Corr}(T, Y)$ 와 $\beta_T^{\text{short}}$ 를 $\lambda$, $\sigma_\varepsilon$, $\rho_{TC}$ 로 쓰시오.
+
+**(2)** $\rho_{TC} = 0.8$, $\sigma_\varepsilon = 1$ 을 고정하고 $\lambda$ 만 키운다. 둘 중 하나는 유계이고 하나는 그렇지 않음을 보이시오. 겉보기 상관이 보기 1 의 상한 $0.7071$ 을 넘게 하는 $\lambda$ 의 범위를 구하고, $\beta_T^{\text{short}} = 8$ 이 되는 $\lambda$ 에서 상관이 얼마인지 구하시오.
+
+**(3)** "상관이 $0.1$ 밖에 안 되니 교란이 걱정할 만한 크기가 아니다"는 추론을 반례로 꺾으시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 공분산은 여전히 $C$ 를 타고만 흐른다.** $\operatorname{Cov}(T, Y) = \lambda \operatorname{Cov}(T, C) = \lambda \rho_{TC}$ 이고 $\operatorname{Var}(Y) = \lambda^2 + \sigma_\varepsilon^2$, $\operatorname{Var}(T) = 1$ 이므로
+
+    $$
+    \operatorname{Corr}(T, Y) = \frac{\lambda \rho_{TC}}{\sqrt{\lambda^2 + \sigma_\varepsilon^2}}
+    = \frac{\rho_{TC}}{\sqrt{1 + \sigma_\varepsilon^2/\lambda^2}},
+    \qquad
+    \beta_T^{\text{short}} = \frac{\operatorname{Cov}(T,Y)}{\operatorname{Var}(T)} = \lambda \rho_{TC}
+    $$
+
+    이다. $\lambda = 1$ 을 넣으면 보기 1 의 두 값 $\rho_{TC}/\sqrt{1+\sigma_\varepsilon^2}$ 와 $\rho_{TC}$ 가 그대로 나온다.
+
+    **(2) 상관은 $\rho_{TC}$ 에 막히고 기울기는 막히지 않는다.** 오른쪽 꼴을 보면 $\operatorname{Corr}(T,Y)$ 는 $\lambda$ 에 대해 증가하면서
+
+    $$
+    \sup_{\lambda > 0} \operatorname{Corr}(T, Y) = \rho_{TC} = 0.8
+    $$
+
+    에 다가가고 결코 넘지 못한다(도달하지도 못한다). 반면 $\beta_T^{\text{short}} = 0.8\lambda$ 는 $\lambda$ 와 함께 **한없이 커진다.** 상한을 정하는 것은 $\lambda$ 와 $\sigma_\varepsilon$ 의 **비**뿐이고, 기울기는 $\lambda$ 의 **크기**를 그대로 받기 때문이다.
+
+    상관이 $1/\sqrt2$ 를 넘는 조건은
+
+    $$
+    \frac{0.64\lambda^2}{\lambda^2 + 1} > \frac12
+    \quad\Longleftrightarrow\quad
+    0.14 \lambda^2 > 0.5
+    \quad\Longleftrightarrow\quad
+    \lambda^2 > \frac{25}{7} = 3.571429
+    $$
+
+    이므로 $\lambda > 5/\sqrt7 = 1.889822$ 다. 보기 1 의 상한은 **$\lambda = 1$ 이라는 우연에 붙은 값**이었을 뿐이다.
+
+    $\beta_T^{\text{short}} = 8$ 은 $\lambda = 10$ 에서 생기고, 그때
+
+    $$
+    \operatorname{Corr}(T, Y) = \frac{8}{\sqrt{101}} = 0.796030
+    $$
+
+    이다. 참 효과가 $0$ 인데 **기울기 편향이 $8$ 인 자료의 상관이 $0.796$ 에 지나지 않는다.**
+
+    | $\lambda$ | $\beta_T^{\text{short}}$ | $\operatorname{Corr}(T,Y)$ |
+    |---|---|---|
+    | $1$ | $0.8$ | $0.565685$ |
+    | $2$ | $1.6$ | $0.715542$ |
+    | $5$ | $4.0$ | $0.784465$ |
+    | $10$ | $8.0$ | $0.796030$ |
+    | $100$ | $80.0$ | $0.799960$ |
+
+    **(3) $\rho_{TC} = 0.1$, $\lambda = 100$, $\sigma_\varepsilon = 1$ 이 반례다.** 이때
+
+    $$
+    \operatorname{Corr}(T, Y) = \frac{100 \times 0.1}{\sqrt{10001}} = 0.099995,
+    \qquad
+    \beta_T^{\text{short}} = 100 \times 0.1 = 10
+    $$
+
+    이다. 상관은 $0.1$ 인데 짧은 회귀는 참값 $0$ 을 $10$ 이라고 보고한다. $Y$ 를 측정하는 단위를 바꾸면 $\lambda$ 가 같이 바뀌므로 $\beta_T^{\text{short}}$ 는 얼마든지 커질 수 있고, 상관은 단위를 모르므로 꼼짝하지 않는다. **상관은 편향의 크기를 재는 자가 아니다.** 상관이 작다는 말은 "$Y$ 의 변동 가운데 $T$ 로 설명되는 몫이 작다"는 뜻일 뿐, "처치효과 추정값이 참값에 가깝다"는 뜻이 아니다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
+보기 4 의 설정에서 처치확률 $P(T{=}1 \mid S{=}1) = 0.7$, $P(T{=}1 \mid S{=}0) = 0.3$ 과 결과식 $Y = 50 - 20S + 5T + \varepsilon$ 은 그대로 두고, 중증 비율만 $P(S=1) = p \in (0,1)$ 로 바꾼다.
+
+**(1)** $\Delta(p) = P(S{=}1 \mid T{=}1) - P(S{=}1 \mid T{=}0)$ 을 $p$ 의 닫힌 꼴로 구하고 $\text{ATE}_{\text{naive}}(p) = 5 - 20\,\Delta(p)$ 를 적으시오.
+
+**(2)** $\Delta$ 가 $p = 1/2$ 에서 최대임을 보이고 그 값이 보기 4 의 $0.4$ 임을 확인하시오. 보기 4 는 교란이 가장 센 자리를 고른 것인가.
+
+**(3)** 소박한 ATE 의 **부호가 뒤집히는** $p$ 의 범위를 구하시오. 경계는 소수 넷째 자리까지 적으시오.
+
+**(4)** $p \to 0$ 과 $p \to 1$ 에서 소박한 ATE 가 어디로 가는가. 그 까닭을 보기 2 의 $\delta\gamma$ 꼴로 설명하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 베이즈 정리를 $p$ 를 남긴 채 쓴다.** $P(T=1) = 0.7p + 0.3(1-p) = 0.3 + 0.4p$ 이고 $P(T=0) = 0.7 - 0.4p$ 이므로
+
+    $$
+    P(S{=}1 \mid T{=}1) = \frac{0.7p}{0.3 + 0.4p},
+    \qquad
+    P(S{=}1 \mid T{=}0) = \frac{0.3p}{0.7 - 0.4p}
+    $$
+
+    이다. 두 분수를 묶으면 분자가
+
+    $$
+    p\big[0.7(0.7 - 0.4p) - 0.3(0.3 + 0.4p)\big] = p(0.4 - 0.4p) = 0.4\,p(1-p)
+    $$
+
+    이고 분모가 $(0.3+0.4p)(0.7-0.4p) = 0.21 + 0.16\,p(1-p)$ 이므로
+
+    $$
+    \Delta(p) = \frac{0.4\,p(1-p)}{0.21 + 0.16\,p(1-p)},
+    \qquad
+    \text{ATE}_{\text{naive}}(p) = 5 - 20\,\Delta(p)
+    $$
+
+    다. **$\Delta$ 가 $p$ 에 대칭적으로, 그리고 오직 $p(1-p)$ 를 통해서만 들어간다.**
+
+    **(2) 맞는다. 보기 4 는 최악의 자리다.** $u = p(1-p)$ 로 두면 $\Delta = 0.4u/(0.21 + 0.16u)$ 인데
+
+    $$
+    \frac{d}{du}\frac{0.4u}{0.21 + 0.16u} = \frac{0.4 \times 0.21}{(0.21+0.16u)^2} > 0
+    $$
+
+    이라 $\Delta$ 는 $u$ 의 증가함수다. $u = p(1-p)$ 는 $p = 1/2$ 에서 최대 $1/4$ 이므로
+
+    $$
+    \max_p \Delta = \frac{0.4 \times 0.25}{0.21 + 0.16\times 0.25} = \frac{0.1}{0.25} = 0.4,
+    \qquad
+    \min_p \text{ATE}_{\text{naive}} = 5 - 8 = -3
+    $$
+
+    이고 이것이 보기 4 의 값이다. 즉 **보기 4 의 $-3$ 은 이 처치확률에서 가능한 가장 심한 교란**이고, 중증 비율이 반반에서 벗어나면 역설은 반드시 약해진다.
+
+    **(3) $p \in (0.1773,\ 0.8227)$ 에서만 뒤집힌다.** $\text{ATE}_{\text{naive}} < 0$ 은 $\Delta > 1/4$ 와 같고
+
+    $$
+    0.4u > 0.25(0.21 + 0.16u)
+    \quad\Longleftrightarrow\quad
+    0.36 u > 0.0525
+    \quad\Longleftrightarrow\quad
+    u > \frac{7}{48} = 0.145833
+    $$
+
+    이다. $p(1-p) > 7/48$ 을 풀면 $p^2 - p + 7/48 < 0$ 이고 근이
+
+    $$
+    p = \frac{1 \pm \sqrt{1 - 7/12}}{2} = \frac{1 \pm \sqrt{5/12}}{2}
+    = \frac{1 \pm 0.645497}{2}
+    $$
+
+    이므로 $p \in (0.177251,\ 0.822749)$, 소수 넷째 자리로 $(0.1773,\ 0.8227)$ 이다. 값을 몇 개 찍어 보면
+
+    | $p$ | $\Delta(p)$ | $\text{ATE}_{\text{naive}}$ |
+    |---|---|---|
+    | $0.10$ | $0.160428$ | $+1.7914$ |
+    | $0.1773$ | $0.250000$ | $0.0000$ |
+    | $0.30$ | $0.344828$ | $-1.8966$ |
+    | $0.50$ | $0.400000$ | $-3.0000$ |
+    | $0.70$ | $0.344828$ | $-1.8966$ |
+    | $0.8227$ | $0.250000$ | $0.0000$ |
+    | $0.90$ | $0.160428$ | $+1.7914$ |
+
+    이다. 경계 바로 안쪽에서는 소박한 ATE 가 $0$ 에 붙는다. **부호가 뒤집히는 것보다 더 흔한 사고는 효과가 사라져 보이는 것**이고, 그쪽은 눈에 띄지도 않는다.
+
+    **(4) 둘 다 $+5$ 로, 즉 참값으로 간다.** $p \to 0$ 또는 $p \to 1$ 에서 $u = p(1-p) \to 0$ 이므로 $\Delta \to 0$ 이고 $\text{ATE}_{\text{naive}} \to 5$ 다. 이진 $T$ 에서는
+
+    $$
+    \operatorname{Cov}(T, S) = P(T{=}1)P(T{=}0)\big[E[S \mid T{=}1] - E[S \mid T{=}0]\big]
+    = \operatorname{Var}(T)\,\Delta(p)
+    $$
+
+    이므로 $\Delta(p) = \operatorname{Cov}(T,S)/\operatorname{Var}(T) = \gamma$ 이고, 소박한 ATE 는 바로 보기 2 의 항등식
+
+    $$
+    \text{ATE}_{\text{naive}} = \underbrace{5}_{\beta_T^{\text{long}}} + \underbrace{(-20)}_{\delta}\cdot \underbrace{\Delta(p)}_{\gamma}
+    $$
+
+    이다. 실제로 분자 $\operatorname{Cov}(T,S) = 0.4\,p(1-p)$ 와 분모 $\operatorname{Var}(T) = 0.21 + 0.16\,p(1-p)$ 가 (1) 에서 얻은 두 식 그대로다. **$\gamma$ 안에는 교란변수 자신의 분산 $p(1-p)$ 가 들어 있다.** 거의 모두 중증인(또는 모두 경증인) 모집단에서는 중증도가 변하지 않으므로, 두 화살표 $S \to T$($0.7$ 대 $0.3$)와 $S \to Y$($-20$)가 아무리 세도 교란할 거리가 없다. 교란의 세기는 **화살표의 세기 곱 교란변수의 변동**이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+보기 3 의 **(2)** 는 $e_Y$ 대신 **원래의 $Y$** 를 $e_T$ 에 회귀시켜도 $\beta_T^{\text{long}}$ 이 그대로 나온다고 했다. 그러면 거울상 주장도 맞는가. 즉 $T$ 쪽은 씻지 않고 $Y$ 쪽만 씻어 **$e_Y$ 를 원래의 $T$ 에 회귀**시켜도 되는가.
+
+**(1)** 판정하시오. 틀리면 그 기울기가 $\beta_T^{\text{long}}$ 의 몇 배인지 $r_{TC} = \operatorname{corr}(T, C)$ 로 적으시오.
+
+**(2)** 보기 1 과 같은 자료($n = 500$, $\rho_{TC} = 0.8$, 씨앗 $42$)에서 네 기울기 — $e_Y \sim e_T$, $Y \sim e_T$, $e_Y \sim T$, 그리고 긴 회귀의 $\beta_T^{\text{long}}$ — 를 소수 여섯째 자리까지 견주어 (1) 을 확인하시오.
+
+**(3)** 왜 $T$ 쪽을 씻어 내는 일은 생략할 수 없는지 한 줄로 적으시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 틀린다. 기울기가 $1 - r_{TC}^2$ 배로 줄어든다.** 기울기는 분자와 분모로 되어 있고, 두 자리의 사정이 다르다.
+
+    분자는 괜찮다. $T$ 를 $C$ 에 회귀한 적합값을 $\hat T = \hat a + \hat\gamma_1 C$ 라 하면 $T = \hat T + e_T$ 이고, $e_Y$ 는 $C$ 와 직교하므로
+
+    $$
+    \operatorname{Cov}(T,\, e_Y) = \hat\gamma_1 \underbrace{\operatorname{Cov}(C,\, e_Y)}_{=\,0} + \operatorname{Cov}(e_T,\, e_Y) = \operatorname{Cov}(e_T,\, e_Y)
+    $$
+
+    다. 그런데 분모가 $\operatorname{Var}(e_T)$ 가 아니라 $\operatorname{Var}(T)$ 로 바뀐다.
+
+    $$
+    \text{slope}(e_Y \sim T) = \frac{\operatorname{Cov}(e_T, e_Y)}{\operatorname{Var}(T)}
+    = \frac{\operatorname{Cov}(e_T, e_Y)}{\operatorname{Var}(e_T)} \cdot \frac{\operatorname{Var}(e_T)}{\operatorname{Var}(T)}
+    = \beta_T^{\text{long}} \,\big(1 - r_{TC}^2\big)
+    $$
+
+    마지막 등식에는 $\operatorname{Var}(e_T) = \operatorname{Var}(T)(1 - r_{TC}^2)$ 를 썼다. **보기 3 의 (2) 가 통한 까닭은 $Y$ 가 분자에만 나타나기 때문**이고, $T$ 는 분자와 분모에 **둘 다** 나타나므로 같은 요령이 통하지 않는다.
+
+    **(2) 네 값 가운데 셋은 같고 하나만 다르다.** 아래 출력에서 앞의 세 기울기가 $-0.099974$ 로 같고, $e_Y \sim T$ 만 $-0.037462$ 다. 표본에서 $r_{TC} = 0.790751$ 이므로 예측된 배수가 $1 - r_{TC}^2 = 0.374713$ 이고
+
+    $$
+    -0.099974 \times 0.374713 = -0.037462
+    $$
+
+    로 소수 여섯째 자리까지 맞는다(두 변의 차가 $8.3\times10^{-17}$). 모집단에서는 $1 - \rho_{TC}^2 = 1 - 0.64 = 0.36$ 배다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 500
+    tc = np.random.multivariate_normal([0, 0], [[1, 0.8], [0.8, 1]], n)
+    t, c = tc[:, 0], tc[:, 1]
+    y = c + np.random.normal(0, 1, n)
+
+    # 긴 회귀의 T 계수
+    X = np.column_stack([np.ones(n), t, c])
+    beta_long = np.linalg.lstsq(X, y, rcond=None)[0][1]
+
+
+    def resid_on_c(v):
+        """v 에서 C 로 설명되는 몫(절편까지)을 걷어 낸 잔차."""
+        lr = stats.linregress(c, v)
+        return v - (lr.intercept + lr.slope * c)
+
+
+    e_t, e_y = resid_on_c(t), resid_on_c(y)
+
+    both = stats.linregress(e_t, e_y).slope      # 둘 다 씻음
+    only_t = stats.linregress(e_t, y).slope      # T 만 씻음
+    only_y = stats.linregress(t, e_y).slope      # Y 만 씻음
+
+    r = np.corrcoef(t, c)[0, 1]
+    print(f"beta_long(T)        = {beta_long:.6f}")
+    print(f"e_Y ~ e_T           = {both:.6f}")
+    print(f"Y   ~ e_T           = {only_t:.6f}")
+    print(f"e_Y ~ T             = {only_y:.6f}   <- 혼자 다르다")
+    print()
+    print(f"corr(T,C) = {r:.6f},  1 - r^2 = {1 - r**2:.6f}")
+    print(f"Var(e_T)/Var(T)                  = {e_t.var(ddof=1)/t.var(ddof=1):.6f}")
+    print(f"beta_long * (1 - r^2)            = {beta_long*(1-r**2):.6f}")
+    print(f"(e_Y ~ T) 와의 차                = {abs(only_y - beta_long*(1-r**2)):.2e}")
+    ```
+
+    출력:
+
+    ```text
+    beta_long(T)        = -0.099974
+    e_Y ~ e_T           = -0.099974
+    Y   ~ e_T           = -0.099974
+    e_Y ~ T             = -0.037462   <- 혼자 다르다
+
+    corr(T,C) = 0.790751,  1 - r^2 = 0.374713
+    Var(e_T)/Var(T)                  = 0.374713
+    beta_long * (1 - r^2)            = -0.037462
+    (e_Y ~ T) 와의 차                = 8.33e-17
+    ```
+
+    **(3) 통제란 설명변수에서 $C$ 방향을 걷어 내는 일이다.** $Y$ 쪽만 씻으면 비교의 분모에 아직 $C$ 방향 변동이 남아 있어, 기울기가 $1 - r_{TC}^2$ 배만큼 $0$ 쪽으로 눌린다. 교란이 셀수록($r_{TC} \to 1$) 눌림이 심해지므로 — 이 자료에서도 $0.37$ 배다 — **유의성 판정까지 함께 망가진다.** $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+보기 4 는 처치효과가 두 층에서 똑같이 $+5$ 라고 두었다. 이제 경증에서 $+2$, 중증에서 $+8$ 로 바꾼다.
+
+$$
+Y = 50 - 20 S + (2 + 6S)\,T + \varepsilon, \qquad \varepsilon \sim \mathcal{N}(0, 5^2)
+$$
+
+나머지는 그대로다($P(S{=}1) = 0.5$, 처치확률 $0.7$ 대 $0.3$).
+
+**(1)** $\text{ATE} = E[Y(1) - Y(0)]$, $\text{ATT} = E[Y(1) - Y(0) \mid T{=}1]$, 그리고 소박한 차이의 **이론값**을 각각 구하시오.
+
+**(2)** 소박한 차이를 $\text{ATT} + (\text{선택편향})$ 으로 쪼개고, 선택편향이 $E[Y(0) \mid T{=}1] - E[Y(0) \mid T{=}0]$ 과 같음을 수치로 확인하시오.
+
+**(3)** 모의로 네 값을 확인하시오($n = 2000$, 씨앗 고정). 보기 4 에서는 왜 ATE 와 ATT 를 구별할 필요가 없었는가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 층별 효과는 같고 가중값만 다르다.** 효과는 $\tau_0 = 2$(경증), $\tau_1 = 8$(중증)이다. 모집단 구성이 반반이므로
+
+    $$
+    \text{ATE} = 0.5 \times 2 + 0.5 \times 8 = 5
+    $$
+
+    이고, 보기 4 에서 본 대로 $P(S{=}1 \mid T{=}1) = 0.7$ 이므로
+
+    $$
+    \text{ATT} = 0.3 \times 2 + 0.7 \times 8 = 0.6 + 5.6 = 6.2
+    $$
+
+    다. **처치받은 사람 쪽에 효과가 큰 중증이 몰려 있으니 ATT 가 ATE 보다 크다.** 소박한 차이는
+
+    $$
+    E[Y \mid T{=}1] = 50 - 20(0.7) + 6.2 = 42.2,
+    \qquad
+    E[Y \mid T{=}0] = 50 - 20(0.3) + 0 = 44
+    $$
+
+    에서 $42.2 - 44 = -1.8$ 이다.
+
+    **(2) 선택편향은 $-8$ 이다.** 처치가 없었을 때의 결과는 $Y(0) = 50 - 20S$ 이므로
+
+    $$
+    E[Y(0) \mid T{=}1] = 50 - 20(0.7) = 36,
+    \qquad
+    E[Y(0) \mid T{=}0] = 50 - 20(0.3) = 44
+    $$
+
+    이고 선택편향 $= 36 - 44 = -8$ 이다. 한편 $E[Y \mid T{=}1] = E[Y(1) \mid T{=}1] = E[Y(0)\mid T{=}1] + \text{ATT}$ 이므로
+
+    $$
+    \text{소박한 차이} = \underbrace{\text{ATT}}_{+6.2} + \underbrace{E[Y(0)\mid T{=}1] - E[Y(0)\mid T{=}0]}_{-8} = -1.8
+    $$
+
+    로 (1) 과 맞는다. **거친 차이가 겨냥하는 것은 ATE 도 ATT 도 아니라 "ATT 더하기 선택편향"이다.** 참 효과가 두 층 모두 양수인데도 합친 차이가 음수인 까닭이 이 한 줄에 다 있다.
+
+    **(3) 네 값 모두 맞는다.** 모의 평균이 $-1.8072$, $1.9920$, $7.9982$, $4.9950$, $6.1967$ 로 이론값 $-1.8$, $2$, $8$, $5$, $6.2$ 와 소수 둘째 자리까지 맞는다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+
+
+    def heterogeneous_demo(n=2000):
+        """층별 효과가 +2 와 +8 로 다른 자료. 나머지 설정은 보기 4 와 같다."""
+        s = rng.binomial(1, 0.5, n)                 # 중증도
+        t = rng.binomial(1, np.where(s == 1, 0.7, 0.3))
+        y = 50 - 20 * s + (2 + 6 * s) * t + rng.normal(0, 5, n)
+
+        naive = y[t == 1].mean() - y[t == 0].mean()
+        tau = [y[(t == 1) & (s == k)].mean() - y[(t == 0) & (s == k)].mean()
+               for k in (0, 1)]
+
+        # 같은 층별 효과를 서로 다른 가중값으로 합친다.
+        w_pop = [np.mean(s == k) for k in (0, 1)]          # 모집단 구성 -> ATE
+        w_trt = [np.mean(s[t == 1] == k) for k in (0, 1)]  # 처치군 구성 -> ATT
+        ate = sum(w * a for w, a in zip(w_pop, tau))
+        att = sum(w * a for w, a in zip(w_trt, tau))
+        return naive, tau[0], tau[1], ate, att
+
+
+    names = ["naive", "tau_mild", "tau_severe", "ATE", "ATT"]
+    theory = [-1.8, 2.0, 8.0, 5.0, 6.2]
+
+    once = heterogeneous_demo()
+    print("모의 한 번 (n = 2000)")
+    for nm, th, v in zip(names, theory, once):
+        print(f"  {nm:>10s} = {v:+7.3f}   (이론 {th:+.1f})")
+
+    reps = np.array([heterogeneous_demo() for _ in range(5000)])
+    print(f"\n5000 번 되풀이")
+    print(f"{'추정량':>12s} {'이론':>6s} {'모의 평균':>10s} {'표준편차':>9s} {'z':>7s}")
+    for j, nm in enumerate(names):
+        sd = reps[:, j].std(ddof=1)
+        print(f"{nm:>12s} {theory[j]:6.1f} {reps[:, j].mean():+10.4f} {sd:9.4f} "
+              f"{(once[j] - theory[j]) / sd:+7.3f}")
+    ```
+
+    출력:
+
+    ```text
+    모의 한 번 (n = 2000)
+           naive =  -2.009   (이론 -1.8)
+        tau_mild =  +2.122   (이론 +2.0)
+      tau_severe =  +7.937   (이론 +8.0)
+             ATE =  +5.009   (이론 +5.0)
+             ATT =  +6.222   (이론 +6.2)
+
+    5000 번 되풀이
+             추정량     이론      모의 평균      표준편차       z
+           naive   -1.8    -1.8072    0.4176  -0.501
+        tau_mild    2.0    +1.9920    0.3485  +0.349
+      tau_severe    8.0    +7.9982    0.3427  -0.184
+             ATE    5.0    +4.9950    0.2528  +0.035
+             ATT    6.2    +6.1967    0.2742  +0.079
+    ```
+
+    다섯 $z$ 값이 모두 $\lvert z \rvert < 1$ 이다.
+
+    **보기 4 에서는 효과가 동질($\tau_0 = \tau_1 = 5$)이라 가중값이 무엇이든 가중평균이 $5$ 였다.** 그래서 ATE 와 ATT 가 겹쳐 보였고, 층화만 하면 "그" 효과가 하나로 정해졌다. 효과가 층마다 다르면 층화는 **편향을 없애 주지만 답을 하나로 정해 주지는 않는다.** 같은 두 수 $2$ 와 $8$ 에서 가중값에 따라 $5$(ATE), $6.2$(ATT), $3.8$(비처치군 구성으로 가중한 ATU)이 모두 나온다. 교란을 지운 다음에 남는 질문은 **"누구의 효과를 묻는가"** 이고, 자료는 그 질문을 골라 주지 않는다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+연습문제 9 의 자료를 층화 대신 **회귀**로 조정해 보자. 상호작용 없이 $S$ 를 설명변수로 넣어
+
+$$
+Y = a + b\,T + c\,S + u
+$$
+
+를 최소제곱으로 맞춘다. 일반적으로 $P(S{=}1) = p$, $e_0 = P(T{=}1 \mid S{=}0)$, $e_1 = P(T{=}1 \mid S{=}1)$, 층별 효과를 $\tau_0, \tau_1$ 이라 하자.
+
+**(1)** 보기 3 의 Frisch–Waugh–Lovell 을 써서 모집단에서
+
+$$
+b = \frac{(1-p)\,e_0(1-e_0)\,\tau_0 + p\,e_1(1-e_1)\,\tau_1}{(1-p)\,e_0(1-e_0) + p\,e_1(1-e_1)}
+$$
+
+임을 보이시오. $S$ 가 이진이므로 $T$ 를 $(1, S)$ 에 회귀한 적합값이 정확히 $E[T \mid S]$ 임을 쓰라.
+
+**(2)** 연습문제 9 의 수치($p = 0.5$, $e_0 = 0.3$, $e_1 = 0.7$, $\tau_0 = 2$, $\tau_1 = 8$)에서 $b$ 를 구하시오. ATE 와 같은가. 하필 같은 까닭은 무엇인가.
+
+**(3)** 처치확률만 $e_1 = 0.9$ 로 바꾼다. $b$, ATE, ATT, 소박한 차이를 각각 구하여 네 수가 모두 다름을 보이고, 회귀조정이 겨냥하는 값에 이름을 붙이기 어려운 까닭을 한 줄로 적으시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 씻어 낸 처치가 층 안의 편차가 된다.** FWL 에 따르면 $b$ 는 $T$ 에서 $S$ 로 설명되는 몫을 걷어 낸 잔차 $\tilde T$ 로 쓴
+
+    $$
+    b = \frac{\operatorname{Cov}(\tilde T,\, Y)}{\operatorname{Var}(\tilde T)},
+    \qquad
+    \tilde T = T - E[T \mid S]
+    $$
+
+    이다. $S$ 가 이진이면 $(1, S)$ 가 두 층의 지시함수를 펼치므로 선형회귀가 **포화**되어 적합값이 정확히 조건부평균 $E[T\mid S] = e_S$ 가 된다. 따라서 $\tilde T = T - e_S$ 이고 $E[\tilde T \mid S] = 0$, $E[\tilde T] = 0$ 이다.
+
+    분모는 전분산공식의 안쪽 항만 남아
+
+    $$
+    \operatorname{Var}(\tilde T) = E\big[\operatorname{Var}(T \mid S)\big]
+    = (1-p)\,e_0(1-e_0) + p\,e_1(1-e_1)
+    $$
+
+    이다. 분자는 층별로 끊어 계산한다. 층 $S = s$ 안에서 $Y = \mu_s + \tau_s T + \varepsilon$ 이고 $\varepsilon \perp T$ 이므로
+
+    $$
+    E\big[(T - e_s)\,Y \,\big|\, S = s\big]
+    = \mu_s \underbrace{E[T - e_s \mid s]}_{=\,0} + \tau_s \underbrace{E[(T-e_s)T \mid s]}_{=\,\operatorname{Var}(T\mid s)}
+    = \tau_s\, e_s(1-e_s)
+    $$
+
+    다. 이것을 $S$ 에 대해 평균하면
+
+    $$
+    \operatorname{Cov}(\tilde T, Y) = E[\tilde T\, Y]
+    = (1-p)\,e_0(1-e_0)\,\tau_0 + p\,e_1(1-e_1)\,\tau_1
+    $$
+
+    이고, 분자를 분모로 나누면 주어진 식이 된다. **회귀조정도 층별 효과의 가중평균이지만, 가중값이 층의 크기 $P(S=s)$ 가 아니라 "층의 크기 곱 처치의 층내 분산" $P(S=s)\,e_s(1-e_s)$ 다.** $\square$
+
+    **(2) $b = 5 = \text{ATE}$ 이지만 우연이다.** 가중값을 계산하면
+
+    $$
+    (1-p)e_0(1-e_0) = 0.5 \times 0.3 \times 0.7 = 0.105,
+    \qquad
+    p\,e_1(1-e_1) = 0.5 \times 0.7 \times 0.3 = 0.105
+    $$
+
+    로 **똑같다.** 그래서
+
+    $$
+    b = \frac{0.105 \times 2 + 0.105 \times 8}{0.21} = \frac{2 + 8}{2} = 5 = \text{ATE}
+    $$
+
+    다. 같아진 까닭은 두 가지가 겹쳤기 때문이다. 층이 반반이고($p = 1/2$), 보기 4 의 처치확률이 $e_1 = 1 - e_0$ 이라 $e_0(1-e_0) = e_1(1-e_1) = 0.21$ 이 된다. **대칭이 깨지면 바로 어긋난다.**
+
+    **(3) 네 수가 $3.8$, $5$, $6.5$, $-6$ 으로 다 다르다.** $e_1 = 0.9$ 에서 가중값은
+
+    $$
+    (1-p)e_0(1-e_0) = 0.5 \times 0.21 = 0.105,
+    \qquad
+    p\,e_1(1-e_1) = 0.5 \times 0.09 = 0.045
+    $$
+
+    이므로
+
+    $$
+    b = \frac{0.105 \times 2 + 0.045 \times 8}{0.105 + 0.045} = \frac{0.21 + 0.36}{0.15} = \frac{0.57}{0.15} = 3.8
+    $$
+
+    이다. ATE 는 모집단 구성 그대로 $0.5\times2 + 0.5\times8 = 5$ 다. ATT 는 $P(T{=}1) = 0.5(0.9) + 0.5(0.3) = 0.6$ 에서 $P(S{=}1\mid T{=}1) = 0.45/0.6 = 0.75$ 이므로
+
+    $$
+    \text{ATT} = 0.25 \times 2 + 0.75 \times 8 = 6.5
+    $$
+
+    다. 소박한 차이는 $P(S{=}1 \mid T{=}0) = 0.05/0.4 = 0.125$ 를 써서
+
+    $$
+    E[Y\mid T{=}1] = 50 - 20(0.75) + 6.5 = 41.5,
+    \qquad
+    E[Y\mid T{=}0] = 50 - 20(0.125) = 47.5
+    $$
+
+    이고 $41.5 - 47.5 = -6$ 이다.
+
+    | 양 | 가중값 | 값 |
+    |---|---|---|
+    | 회귀계수 $b$ | $P(s)\,e_s(1-e_s)$ 비례: $0.70,\ 0.30$ | $3.8$ |
+    | ATE | 모집단 구성: $0.50,\ 0.50$ | $5.0$ |
+    | ATT | 처치군 구성: $0.25,\ 0.75$ | $6.5$ |
+    | 소박한 차이 | — (교란이 섞여 있다) | $-6.0$ |
+
+    **회귀조정은 처치 배정이 반반에 가까운 층을 가장 무겁게 센다.** 그 층에서 비교할 짝이 가장 많으니 최소제곱이 거기에 기대는 것이 자연스럽지만, 그렇게 얻은 $3.8$ 은 어떤 모집단의 평균효과도 아니다 — 가중값이 자료의 **정보량**에서 나왔고 관심 모집단에서 나오지 않았기 때문이다. 효과가 동질이면($\tau_0 = \tau_1$) 가중값이 무엇이든 답이 같아 이 문제가 보이지 않는다. 보기 4 가 바로 그 경우였다. ATE 를 원하면 상호작용 $T \cdot S$ 를 넣어 층별 효과를 따로 추정한 뒤 **층 비율로 직접 가중**해야 한다. $\square$
+
+---
+
 ## 정리하며
 
 교란을 **자료생성과정에서 직접 만들어** 확인했다.

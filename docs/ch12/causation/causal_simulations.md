@@ -781,6 +781,425 @@ $X \perp Y \mid Z$($Z$가 주어졌을 때의 조건부 독립)이고 세 변수
 
     이 된다. 결합정규 변수에서는 역도 성립한다. $\rho_{XY \cdot Z} = 0$이면 $X \perp Y \mid Z$이다. 이는 다변량 정규분포의 특별한 성질이다. $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
+보기 2의 (2)에서 충돌부 $Z = X + Y + \varepsilon$ 의 잡음을 $\varepsilon \sim \mathcal N(0,1)$ 로 고정해 두고 편상관 $-1/2$ 를 얻었다. 이제 $X, Y \sim \mathcal N(0,1)$ 은 그대로 독립이고 $\varepsilon \sim \mathcal N(0, \sigma^2)$ 이라 하자.
+
+**(1)** $\rho_{XY\cdot Z}$ 를 $\sigma^2$ 의 함수로 구하시오. $\sigma = 1$ 에서 $-1/2$ 가 되는지 확인하고, $\sigma \to 0$ 과 $\sigma \to \infty$ 의 극한을 구하시오.
+
+**(2)** 보기 1의 교란이 만든 가짜 상관은 $\rho_{XY} = 0.651450$ 이었다. 충돌부를 통제해서 생기는 가짜 상관의 크기가 이것과 **똑같아지는** $\sigma$ 를 구하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 잡음이 작을수록 충돌부 편향이 커진다.** $\operatorname{Var}(Z) = 1 + 1 + \sigma^2 = 2 + \sigma^2$ 이고 $\operatorname{Cov}(X,Z) = \operatorname{Cov}(Y,Z) = 1$ 이므로
+
+    $$
+    \rho_{XZ} = \rho_{YZ} = \frac{1}{\sqrt{2+\sigma^2}},
+    \qquad
+    \rho_{XY} = 0
+    $$
+
+    이다. $t = \rho_{XZ}^2 = 1/(2+\sigma^2)$ 로 두면 두 상관이 같으므로 편상관의 분모가 $1 - t$ 로 간단해져
+
+    $$
+    \rho_{XY\cdot Z} = \frac{0 - t}{\sqrt{(1-t)(1-t)}} = -\frac{t}{1-t}
+    = -\frac{1/(2+\sigma^2)}{(1+\sigma^2)/(2+\sigma^2)} = -\frac{1}{1+\sigma^2}
+    $$
+
+    을 얻는다. $\sigma = 1$ 에서 $-1/2$ 로 본문 값과 맞고, 극한은
+
+    $$
+    \lim_{\sigma \to 0} \rho_{XY\cdot Z} = -1,
+    \qquad
+    \lim_{\sigma \to \infty} \rho_{XY\cdot Z} = 0
+    $$
+
+    이다. $\sigma \to 0$ 이면 $Z = X + Y$ 가 되어 $Z$ 를 한 값에 묶는 순간 $Y = Z - X$ 가 **완전히 결정된다.** 그래서 편상관이 $-1$ 까지 간다. 거꾸로 잡음이 아주 크면 $Z$ 가 $X, Y$ 에 대해 알려 주는 것이 없어 통제해도 아무 일이 일어나지 않는다.
+
+    **(2) 두 가짜 상관의 크기를 맞춘다.** $1/(1+\sigma^2) = 0.651450$ 을 풀면
+
+    $$
+    1 + \sigma^2 = \frac{1}{0.651450} = 1.535036,
+    \qquad
+    \sigma^2 = 0.535036,
+    \qquad
+    \sigma = 0.731462
+    $$
+
+    이다. 곧 잡음 표준편차가 $0.73$ 쯤인 충돌부를 통제하면, 보기 1의 교란을 통제하지 **않고** 내버려 둔 것과 똑같은 크기 $0.6515$ 의 가짜 상관을 얻는다. 부호만 반대다.
+
+    **통제는 중립적인 조작이 아니다.** 어느 변수를 넣느냐에 따라 같은 크기의 거짓을 지우기도 하고 새로 만들기도 하며, 잡음이 적은 충돌부일수록 그 해가 크다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
+보기 4에서 집단 B의 $y$ 기준선을 $45$ 대신 $30 + d$ 로 두자(본문은 $d = 15$). 나머지는 그대로다. 곧 집단 안 기울기는 $-0.4$, $x$ 범위는 A가 $[10,30]$, B가 $[25,50]$, 잡음 표준편차는 $2$, 집단 크기는 반반이다.
+
+**(1)** 합친 자료의 $\operatorname{Cov}(x,y)$, $\operatorname{Var}(x)$, $\operatorname{Var}(y)$ 를 $d$ 의 함수로 적고 합친 상관 $\rho(d)$ 를 쓰시오. $d = 15$ 에서 본문의 $0.316703$ 을 되찾는지 확인하시오.
+
+**(2)** 두 집단을 아주 멀리 떼어 놓으면($d \to \infty$) 합친 상관이 $1$ 에 가까워지는가. $\rho(d)$ 가 $d$ 에 대해 단조증가임을 보이고 상한을 구하시오. 그 상한이 무엇을 재는 수인지 말하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) $d$ 는 세 양 가운데 둘에만 들어간다.** 집단별 $x$ 평균은 $20$, $37.5$ 로 $d$ 와 무관하고, $y$ 평균은 $22$ 와 $-0.4 \times 37.5 + 30 + d = 15 + d$ 이므로 그 차이는 $u \coloneqq d - 7$ 이다. 보기 4의 분해를 그대로 쓰면 집단 안 몫은 $d$ 에 전혀 의존하지 않고
+
+    $$
+    V_{\text{안}} = \frac{33.3333 + 52.0833}{2} = 42.7083,
+    \qquad
+    V_{\text{사이}} = \left(\frac{17.5}{2}\right)^2 = 76.5625
+    $$
+
+    이다. 집단 사이 공분산은 두 집단이 반반이므로 $\left(\tfrac{17.5}{2}\right)\left(\tfrac{u}{2}\right) = 4.375u$ 다. 따라서
+
+    $$
+    \operatorname{Cov}(x,y) = 4.375\,u - 0.4 \times 42.7083 = 4.375\,u - 17.0833
+    $$
+
+    $$
+    \operatorname{Var}(x) = 42.7083 + 76.5625 = 119.2708
+    \quad (\text{$d$ 와 무관}),
+    \qquad
+    \operatorname{Var}(y) = 10.8333 + \frac{u^2}{4}
+    $$
+
+    이고
+
+    $$
+    \rho(d) = \frac{4.375\,u - 17.0833}{\sqrt{119.2708\left(10.8333 + u^2/4\right)}},
+    \qquad u = d - 7
+    $$
+
+    이다. $d = 15$ 면 $u = 8$ 이므로 분자가 $35 - 17.0833 = 17.9167$, 분모가 $\sqrt{119.2708 \times 26.8333} = 56.5724$ 이고
+
+    $$
+    \rho(15) = \frac{17.9167}{56.5724} = 0.316703
+    $$
+
+    으로 본문 값과 같다.
+
+    **(2) 상한은 $1$ 이 아니라 $0.8012$ 다.** $A = 4.375$, $B = 17.0833$, $C = 10.8333$, $K = 119.2708$ 로 쓰면 $\rho = (Au - B)/\sqrt{K(C + u^2/4)}$ 이고, 분모의 $-3/2$ 승을 묶어 내면 도함수의 부호는
+
+    $$
+    A\left(C + \frac{u^2}{4}\right) - (Au - B)\frac{u}{4}
+    = AC + \frac{Au^2}{4} - \frac{Au^2}{4} + \frac{Bu}{4}
+    = AC + \frac{Bu}{4}
+    $$
+
+    의 부호와 같다. 이것은 $u > -4AC/B = -11.0976$, 곧 $d > -4.0976$ 에서 늘 양수이므로 **$\rho$ 는 우리가 볼 모든 $d$ 에서 엄격히 증가한다.** 그런데 $u \to \infty$ 에서는
+
+    $$
+    \rho(d) \longrightarrow \frac{Au}{\sqrt{K}\,(u/2)} = \frac{2A}{\sqrt{K}}
+    = \frac{8.75}{\sqrt{119.2708}} = \frac{8.75}{10.9211} = 0.801200
+    $$
+
+    에 머문다. 이 수의 정체는 분자 $8.75 = \sqrt{V_{\text{사이}}}$ 를 보면 드러난다.
+
+    $$
+    0.801200 = \sqrt{\frac{V_{\text{사이}}}{V_{\text{안}} + V_{\text{사이}}}}
+    = \sqrt{\frac{76.5625}{119.2708}}
+    = \lvert \operatorname{Corr}(x,\, \text{집단 꼬리표}) \rvert
+    $$
+
+    곧 **$x$ 와 집단 꼬리표의 상관**이다. $d$ 를 키우면 $y$ 의 흩어짐이 거의 전부 집단 사이 몫이 되어 $y$ 가 사실상 집단 꼬리표가 되고, 그러면 $x$ 와 $y$ 의 상관은 $x$ 와 꼬리표의 상관을 넘을 수 없다. 두 집단의 $x$ 분포가 겹쳐 있어 집단 안 몫이 집단 사이 몫의 $0.558$ 배나 남아 있는 한, 그 상관은 $0.8012$ 에서 막힌다.
+
+    **합쳐서 생기는 가짜 상관의 크기에는 천장이 있고, 그 천장을 정하는 것은 기준선 차이가 아니라 집단과 $x$ 가 얼마나 엉켜 있는가다.** $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+보기 2는 "변수를 많이 넣을수록 안전하다"가 틀렸음을 **편상관**으로 보였다. 같은 이야기를 실무에서 실제로 쓰는 꼴, 곧 $Y$ 를 $X$ 와 $Z$ 에 **함께 회귀**해서 다시 보자. 두 모형 모두 $X$ 가 $Y$ 에 주는 참 직접효과는 $0$ 이다.
+
+- 모형 A(보기 1의 교란): $\operatorname{Var}(X) = 0.61$, $\operatorname{Var}(Z) = 1$, $\operatorname{Cov}(X,Z) = 0.6$, $\operatorname{Cov}(Y,X) = 0.48$, $\operatorname{Cov}(Y,Z) = 0.8$.
+- 모형 B(보기 2의 충돌부): $X, Y, \varepsilon \sim \mathcal N(0,1)$ 이 독립이고 $Z = X + Y + \varepsilon$.
+
+**(1)** 두 모형에서 모집단 회귀계수 $(\beta_X, \beta_Z)$ 를 정규방정식으로 각각 구하시오.
+
+**(2)** $n = 400{,}000$ 으로 모의실험해 (1)을 확인하고, 어느 쪽에서 "$X$ 는 $Y$ 에 직접 효과가 없다"는 참이 회복되는지 말하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) $2 \times 2$ 연립방정식 둘.** 중심화된 변수에서 $(\beta_X, \beta_Z)$ 는
+
+    $$
+    \begin{pmatrix} \operatorname{Var}(X) & \operatorname{Cov}(X,Z) \\ \operatorname{Cov}(X,Z) & \operatorname{Var}(Z) \end{pmatrix}
+    \begin{pmatrix} \beta_X \\ \beta_Z \end{pmatrix}
+    =
+    \begin{pmatrix} \operatorname{Cov}(Y,X) \\ \operatorname{Cov}(Y,Z) \end{pmatrix}
+    $$
+
+    의 해다. 모형 A는 행렬식이 $0.61 \times 1 - 0.6^2 = 0.25$ 이므로
+
+    $$
+    \beta_X = \frac{0.48 \times 1 - 0.6 \times 0.8}{0.25} = \frac{0.48 - 0.48}{0.25} = 0,
+    \qquad
+    \beta_Z = \frac{0.61 \times 0.8 - 0.6 \times 0.48}{0.25} = \frac{0.2}{0.25} = 0.8
+    $$
+
+    이다. 모형 B는 $\operatorname{Var}(X) = 1$, $\operatorname{Var}(Z) = 3$, $\operatorname{Cov}(X,Z) = 1$, $\operatorname{Cov}(Y,X) = 0$, $\operatorname{Cov}(Y,Z) = 1$ 이라 행렬식이 $3 - 1 = 2$ 이고
+
+    $$
+    \beta_X = \frac{0 \times 3 - 1 \times 1}{2} = -\frac12,
+    \qquad
+    \beta_Z = \frac{1 \times 1 - 1 \times 0}{2} = \frac12
+    $$
+
+    이다.
+
+    **(2) 같은 회귀, 반대의 판결.** 모형 A에서는 $\beta_X = 0$ 으로 참값을 정확히 되찾고, 생성식의 계수 $0.8$ 도 $\beta_Z$ 에서 그대로 나온다. 모형 B에서는 $X$ 가 $Y$ 를 전혀 건드리지 않는데도 $\beta_X = -0.5$ 라는 **없는 효과**가 나온다. 편상관과 회귀계수는
+
+    $$
+    \beta_X = r_{XY\cdot Z}\,\frac{s_Y\sqrt{1-r_{YZ}^2}}{s_X\sqrt{1-r_{XZ}^2}}
+    $$
+
+    로 늘 같은 부호이므로, 보기 2의 표를 회귀의 말로 옮긴 것이 바로 이 두 줄이다.
+
+    ```python
+    import numpy as np
+
+    # (1) 교란 모형: Z 가 X 와 Y 를 함께 끈다. Y 에 대한 X 의 참 직접효과는 0 이다.
+    S_conf = np.array([[0.61, 0.60],      # Var(X), Cov(X,Z)
+                       [0.60, 1.00]])     # Cov(X,Z), Var(Z)
+    c_conf = np.array([0.48, 0.80])       # Cov(Y,X), Cov(Y,Z)
+    b_conf = np.linalg.solve(S_conf, c_conf).round(10) + 0.0
+
+    # (2) 충돌부 모형: X, Y 는 독립이고 Z = X + Y + e 다. 참 직접효과도 0 이다.
+    S_coll = np.array([[1.0, 1.0],        # Var(X), Cov(X,Z)
+                       [1.0, 3.0]])       # Cov(X,Z), Var(Z)
+    c_coll = np.array([0.0, 1.0])         # Cov(Y,X) = 0, Cov(Y,Z)
+    b_coll = np.linalg.solve(S_coll, c_coll).round(10) + 0.0
+
+    print(f"교란  X<-Z->Y : beta_X = {b_conf[0]:+.6f},  beta_Z = {b_conf[1]:+.6f}")
+    print(f"충돌부 X->Z<-Y : beta_X = {b_coll[0]:+.6f},  beta_Z = {b_coll[1]:+.6f}")
+
+    # 모의실험으로 확인한다.
+    rng = np.random.default_rng(0)
+    m = 400_000
+
+    Zc = rng.standard_normal(m)
+    Xc = 0.6 * Zc + 0.5 * rng.standard_normal(m)
+    Yc = 0.8 * Zc + 0.5 * rng.standard_normal(m)
+    A = np.column_stack([np.ones(m), Xc, Zc])
+    hat_conf = np.linalg.lstsq(A, Yc, rcond=None)[0]
+
+    Xk = rng.standard_normal(m)
+    Yk = rng.standard_normal(m)
+    Zk = Xk + Yk + rng.standard_normal(m)
+    B = np.column_stack([np.ones(m), Xk, Zk])
+    hat_coll = np.linalg.lstsq(B, Yk, rcond=None)[0]
+
+    print(f"\n모의 교란  : beta_X = {hat_conf[1]:+.4f},  beta_Z = {hat_conf[2]:+.4f}")
+    print(f"모의 충돌부: beta_X = {hat_coll[1]:+.4f},  beta_Z = {hat_coll[2]:+.4f}")
+    print(f"\nZ 를 넣은 뒤 X 의 계수: 교란에서는 참값 0 을 맞히고, "
+          f"충돌부에서는 {b_coll[0]:+.1f} 로 틀린다.")
+    ```
+
+    출력:
+
+    ```text
+    교란  X<-Z->Y : beta_X = +0.000000,  beta_Z = +0.800000
+    충돌부 X->Z<-Y : beta_X = -0.500000,  beta_Z = +0.500000
+
+    모의 교란  : beta_X = +0.0002,  beta_Z = +0.8003
+    모의 충돌부: beta_X = -0.5015,  beta_Z = +0.5006
+
+    Z 를 넣은 뒤 X 의 계수: 교란에서는 참값 0 을 맞히고, 충돌부에서는 -0.5 로 틀린다.
+    ```
+
+    닫힌 꼴 $(0,\, 0.8)$ 과 $(-0.5,\, 0.5)$ 가 모의값 $(+0.0002,\, 0.8003)$, $(-0.5015,\, 0.5006)$ 과 맞는다.
+
+    **두 모형은 자료를 똑같이 생긴 회귀표로 내놓지만 하나는 참을 말하고 하나는 거짓을 말한다.** 어느 쪽인지는 표를 아무리 들여다봐도 알 수 없고, $Z$ 가 공통원인인지 결과의 결과인지라는 **구조**만이 정한다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+보기 4의 (2)는 $y$ 기준선 차이가 $d > 10.905$ 를 넘으면 합친 상관의 부호가 뒤집힌다고 했다. 그 문턱을 정확히 하고, 문턱을 갓 넘은 자료에서 역설이 **표본에서도** 보이는지 묻는다. 설정은 연습문제 7과 같다.
+
+**(1)** 문턱 $d^*$ 를 기약분수로 정확히 구하시오.
+
+**(2)** 코드로 $\rho(d)$ 표를 만들고, $d = d^*,\ 11.5,\ 12,\ 15$ 각각에서 집단마다 $n = 100$ 인 표본을 $2000$ 번 뽑아 **표본 $r$ 이 양수가 되는 비율**을 재시오. 문턱을 갓 넘은 자료를 두고 "합치면 양의 상관"이라고 보고할 수 있는가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) $d^* = 229/21$.** 보기 4의 문턱 조건은 집단 사이 기울기 $b = (d-7)/17.5$ 가 $0.4\,V_{\text{안}}/V_{\text{사이}}$ 를 넘는 것이었다. 분산을 분수로 적으면
+
+    $$
+    V_{\text{안}} = \frac{1}{2}\left(\frac{400}{12} + \frac{625}{12}\right) = \frac{1025}{24},
+    \qquad
+    V_{\text{사이}} = \left(\frac{35}{4}\right)^2 = \frac{1225}{16}
+    $$
+
+    이므로
+
+    $$
+    b^* = \frac{2}{5} \cdot \frac{1025}{24} \cdot \frac{16}{1225} = \frac{32800}{147000} = \frac{164}{735} = 0.223129
+    $$
+
+    이고
+
+    $$
+    d^* = 7 + \frac{35}{2} \cdot \frac{164}{735} = 7 + \frac{82}{21} = \frac{229}{21} = 10.904762
+    $$
+
+    다.
+
+    **(2) 문턱 바로 위에서는 동전 던지기다.** $d = d^*$ 에서는 모집단 상관이 정확히 $0$ 이므로 표본 $r$ 의 부호는 절반씩 나온다(모의값 $0.511$). $d = 11.5$ 에서 이론 상관은 $0.0598$ 뿐이라 열 번 가운데 한 번쯤은 아직 음수가 나오고($0.913$), $d = 12$ 에서야 $0.994$ 로 거의 굳고 $d = 15$ 에서 $1.000$ 이 된다.
+
+    ```python
+    import numpy as np
+
+    V_w = (20**2 / 12 + 25**2 / 12) / 2      # 집단 안 Var(x) 평균 = 1025/24
+    V_b = (37.5 - 20) ** 2 / 4               # 집단 사이 Var(x)   = 1225/16
+
+
+    def theory(d):
+        """y 기준선 차이가 d 일 때 합친 기울기와 합친 상관의 이론값."""
+        dy = d - 7.0                          # 집단 y 평균의 차이
+        cov = 0.25 * 17.5 * dy - 0.4 * V_w    # 집단 사이 몫 + 집단 안 몫
+        VX = V_w + V_b
+        VY = (0.4**2 * (20**2 / 12) + 4 + 0.4**2 * (25**2 / 12) + 4) / 2 + dy**2 / 4
+        return cov / VX, cov / np.sqrt(VX * VY)
+
+
+    d_star = 7 + 17.5 * 0.4 * V_w / V_b
+    print(f"문턱 d* = 7 + 17.5 * 0.4 * {V_w:.4f} / {V_b:.4f} = {d_star:.6f}  (= 229/21)")
+    print(f"\n{'d':>8s} {'기울기':>12s} {'상관':>12s}")
+    for d in [8, 10, d_star, 12, 15, 30, 100, 1000]:
+        b, r = theory(d)
+        print(f"{d:8.4f} {b:+12.6f} {r:+12.6f}")
+    print(f"\nd -> 무한의 상한 = 8.75 / sqrt({V_w + V_b:.4f}) = "
+          f"{8.75 / np.sqrt(V_w + V_b):.6f}")
+
+    # 문턱 바로 위아래에서 표본 r 의 부호가 얼마나 믿을 만한가.
+    rng2 = np.random.default_rng(1)
+    print(f"\n{'d':>8s} {'이론 r':>10s} {'표본 r > 0 비율':>16s}")
+    for d in [d_star, 11.5, 12, 15]:
+        pos = 0
+        reps = 2000
+        for _ in range(reps):
+            xa = rng2.uniform(10, 30, 100)
+            ya = -0.4 * xa + 30 + rng2.normal(0, 2, 100)
+            xb = rng2.uniform(25, 50, 100)
+            yb = -0.4 * xb + 30 + d + rng2.normal(0, 2, 100)
+            r = np.corrcoef(np.r_[xa, xb], np.r_[ya, yb])[0, 1]
+            pos += r > 0
+        print(f"{d:8.4f} {theory(d)[1]:+10.4f} {pos / reps:16.3f}")
+    ```
+
+    출력:
+
+    ```text
+    문턱 d* = 7 + 17.5 * 0.4 * 42.7083 / 76.5625 = 10.904762  (= 229/21)
+
+           d          기울기           상관
+      8.0000    -0.106550    -0.349531
+     10.0000    -0.033188    -0.100204
+     10.9048    +0.000000    +0.000000
+     12.0000    +0.040175    +0.106153
+     15.0000    +0.150218    +0.316703
+     30.0000    +0.700437    +0.639501
+    100.0000    +3.268122    +0.765645
+    1000.0000   +36.281223    +0.798032
+
+    d -> 무한의 상한 = 8.75 / sqrt(119.2708) = 0.801200
+
+           d       이론 r      표본 r > 0 비율
+     10.9048    +0.0000            0.511
+     11.5000    +0.0598            0.913
+     12.0000    +0.1062            0.994
+     15.0000    +0.3167            1.000
+    ```
+
+    표의 $d = 10.9048$ 줄에서 기울기와 상관이 함께 $0$ 이 되어 (1)의 분수 문턱이 확인되고, 마지막 줄들에서 $\rho$ 가 연습문제 7의 상한 $0.801200$ 으로 기어 올라간다. $d = 8$ 에서는 $\rho = -0.3495$ 로 집단 안 부호와 같아 **역설이 아예 없다.**
+
+    **문턱은 역설이 "가능해지는" 자리일 뿐 "보이는" 자리가 아니다.** 부호가 뒤집혔다고 보고하려면 문턱을 조금 넘는 것으로는 모자라고, 뒤집힌 상관이 표집오차보다 커질 만큼 넘어야 한다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+보기 1의 (2)는 $(X,Y)$ 만 재어서는 교란과 직접효과를 가를 수 없음을 보였다. 이제 $Z$ 까지 쟀다고 하자. 보기 1의 세 변수 공분산행렬은 $(X, Y, Z)$ 순서로
+
+$$
+\Sigma =
+\begin{pmatrix}
+0.61 & 0.48 & 0.60 \\
+0.48 & 0.89 & 0.80 \\
+0.60 & 0.80 & 1.00
+\end{pmatrix}
+$$
+
+이다.
+
+**(1)** 사슬 $X \to Z \to Y$ 꼴의 선형 정규 모형으로 **똑같은 $\Sigma$** 를 내는 것을 계수와 잡음분산까지 구체적으로 적으시오. 같은 일을 $Y \to Z \to X$ 에 대해서도 하시오.
+
+**(2)** 충돌부 $X \to Z \leftarrow Y$ ($X, Y$ 가 외생이고 서로 독립)로는 이 $\Sigma$ 를 낼 수 **없음**을 보이시오.
+
+**(3)** 그러면 $Z$ 를 재는 것은 네 DAG 가운데 몇 개를 걸러 내는가. 그 결과가 "$Z$ 를 통제해야 하는가"라는 실무의 물음에 답을 주는가. 사슬이 참일 때 $Z$ 를 통제하면 무엇을 잃는지 수로 적으시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 사슬도 같은 $\Sigma$ 를 낸다.** $X \to Z \to Y$ 를
+
+    $$
+    X \sim \mathcal N(0,\, 0.61),
+    \qquad
+    Z = aX + u,
+    \qquad
+    Y = cZ + v
+    $$
+
+    로 두고 $u \perp X$, $v \perp (X,Z)$ 라 하자. $\operatorname{Cov}(X,Z) = 0.61a = 0.60$ 에서
+
+    $$
+    a = \frac{0.60}{0.61} = 0.983607,
+    \qquad
+    \operatorname{Var}(u) = 1 - a^2 \times 0.61 = 1 - 0.590164 = 0.409836
+    $$
+
+    이고($0.409836 = 0.25/0.61$ 이다) $\operatorname{Cov}(Y,Z) = c \times 1 = 0.80$ 에서 $c = 0.8$, 이어서
+
+    $$
+    \operatorname{Var}(v) = 0.89 - c^2 \times 1 = 0.89 - 0.64 = 0.25
+    $$
+
+    이다. 남은 한 칸은 **저절로 맞는다**. $\operatorname{Cov}(X,Y) = c \operatorname{Cov}(X,Z) = 0.8 \times 0.6 = 0.48$. 거꾸로 돌린 사슬 $Y \to Z \to X$ 도 같은 방식으로
+
+    $$
+    Y \sim \mathcal N(0,\, 0.89),
+    \qquad
+    Z = 0.898876\,Y + w,
+    \quad \operatorname{Var}(w) = \frac{0.25}{0.89} = 0.280899,
+    \qquad
+    X = 0.6\,Z + f,
+    \quad \operatorname{Var}(f) = 0.25
+    $$
+
+    가 되고($0.898876 = 0.80/0.89$), $\operatorname{Var}(Z) = 0.8 \times 0.898876 + 0.280899 = 1$, $\operatorname{Cov}(X,Y) = 0.6 \times 0.8 = 0.48$ 로 모두 맞는다.
+
+    **(2) 충돌부는 걸러진다.** $X, Y$ 가 외생이고 독립이면 $\operatorname{Cov}(X,Y) = 0$ 이어야 한다. 그런데 $\Sigma$ 는 $\operatorname{Cov}(X,Y) = 0.48 \ne 0$ 을 말한다. 조건부독립의 말로 적으면 더 분명하다. 충돌부가 함의하는 것은 **주변**독립 $X \perp Y$ 인데 $\Sigma$ 에서는 $\rho_{XY} = 0.651450$ 이고, 반대로 $\Sigma$ 가 만족하는 것은 보기 2의 (1)에서 본 **조건부**독립 $X \perp Y \mid Z$ ($\rho_{XY\cdot Z} = 0$)다. 두 함의가 어긋나므로 충돌부는 불가능하다.
+
+    **(3) 넷에서 셋으로 줄지만 거기서 멈춘다.** 걸러지는 것은 충돌부 하나뿐이고, 교란 $X \leftarrow Z \rightarrow Y$ 와 두 사슬은 모두 $X \perp Y \mid Z$ 하나만을 함의하는 **마르코프 동등** DAG 들이라 $\Sigma$ 만으로는 영원히 갈라지지 않는다. 그런데 통제의 처방은 셋에서 서로 다르다.
+
+    | 참 구조 | $X \to Y$ 의 참 효과 | $Z$ 를 통제하면 |
+    |---|---|---|
+    | 교란 $X \leftarrow Z \rightarrow Y$ | $0$ | $\hat\beta_X = 0$, 맞는 답 |
+    | 사슬 $X \to Z \to Y$ | $ac = 0.786885$ | $\hat\beta_X = 0$, 효과를 **전부** 잃는다 |
+    | 사슬 $Y \to Z \to X$ | $0$ ($Y$ 가 원인이다) | 방향 자체를 못 본다 |
+
+    가운데 줄의 수를 확인해 두자. 사슬에서 $X$ 가 $Y$ 에 주는 총효과는 $a c = 0.983607 \times 0.8 = 0.786885$ 이고, 이것은 보기 1의 (2)에서 구한 회귀계수 $0.48/0.61 = 0.786885$ 와 **같은 수**다. 그런데 $Z$ 는 그 경로의 유일한 매개변수이므로 통제하면 경로가 끊겨 $\hat\beta_X = 0$ 이 된다(연습문제 8의 모형 A가 바로 그 계산이다).
+
+    **곧 같은 자료, 같은 회귀에서 $\hat\beta_X = 0$ 이 한 번은 "직접효과가 없다"는 참이고 한 번은 "$0.787$ 의 효과를 통제로 지워 버렸다"는 거짓이다.** $Z$ 를 재는 것은 충돌부라는 한 가지 오류만 막아 주며, 남은 갈림길은 실험이나 자료 바깥의 지식이 아니면 끝내 가릴 수 없다. $\square$
+
 ---
 
 ## 정리하며
