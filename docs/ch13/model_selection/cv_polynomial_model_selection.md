@@ -119,12 +119,7 @@ $$
             val_mse_multiple[run, i] = np.mean((y[val_idx] - model.predict(X_va)) ** 2)
     ```
 
-    20번의 무작위 분할이 고른 최적 차수는
-
-    ```text
-    [5, 6, 3, 3, 2, 3, 8, 6, 2, 2, 9, 9, 2, 8, 9, 2, 3, 3, 3, 5]
-    ```
-
+    20번의 무작위 분할이 고른 최적 차수와 그 흔들림을 찍어 본다.
 
     ```python
     import collections

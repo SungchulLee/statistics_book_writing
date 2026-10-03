@@ -21,6 +21,11 @@
 주의: 저장소 뿌리에서 돌리면 `savefig("x.png")` 처럼 상대경로로 저장하는 블록이
 뿌리에 PNG 를 흘린다. 돌린 뒤 `git status` 로 확인하라.
 
+출력이 **일부러** 재현되지 않는 블록은 코드 안에 `# verify: skip` 을 적어 두면
+출력 비교를 건너뛴다(코드는 그대로 돌려 오류는 잡는다). 씨앗 없는 난수가 돌릴
+때마다 달라지는 것을 보여 주는 보기가 그런 경우다. **결함을 덮는 데 쓰지 말 것** —
+재현되지 않는 수를 실어 놓고 이 표시로 가리면 독자가 속는다.
+
 시간제한은 **프로세스 무리째** 건다. `subprocess.run(timeout=)` 은 자식만 죽이므로
 `n_jobs=-1` 이 띄운 joblib 일꾼은 살아남아 계속 돈다. 그러면 다음 쪽부터는 남의
 일꾼과 코어를 다투게 된다. 자식을 `start_new_session` 으로 띄우고 `os.killpg` 로
@@ -73,6 +78,9 @@ json.dump(_out, open(_result, "w", encoding="utf-8"))
 '''
 
 
+SKIP_OUT = re.compile(r"#\s*(verify|검증)\s*:\s*(skip|출력무시|출력\s*무시)")
+
+
 def blocks(path):
     """[(종류, 시작줄, 코드)] — 종류는 'python' 또는 출력('', 'text')."""
     lines = path.read_text(encoding="utf-8").split("\n")
@@ -122,6 +130,12 @@ def check(path, timeout=1800):
         exp = None
         if k + 1 < len(bs) and bs[k + 1][0] in ("", "text"):
             exp = bs[k + 1][2]
+        # 쪽이 "이 블록의 출력은 재현되지 않는다" 고 스스로 선언할 수 있다.
+        # 결함이 아니라 교육 목적인 경우가 있다 — 씨앗 없는 난수가 돌릴 때마다
+        # 달라지는 것을 보여 주는 보기가 그렇다. 코드는 그대로 돌려 오류를
+        # 잡되, 출력은 맞춰 보지 않는다.
+        if SKIP_OUT.search(code):
+            exp = None
         codes.append((pre + "\n" + code) if (pre and not codes) else code)
         meta.append((ln, exp))
     if not codes:
