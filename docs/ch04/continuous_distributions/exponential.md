@@ -14,7 +14,7 @@ $$
 
 ---
 
-## 지수분포와 누적분포함수
+## 지수분포
 
 <div class="defn" markdown>
 
@@ -29,6 +29,8 @@ $$
 **다른 모수화:** 어떤 교재에서는 척도 모수 $\beta = 1/\lambda$를 사용하여 $f(x) = \frac{1}{\beta}e^{-x/\beta}$로 쓴다. SciPy는 척도 모수화를 사용한다.
 
 </div>
+
+## 누적분포함수
 
 <div class="thmbox" markdown>
 
