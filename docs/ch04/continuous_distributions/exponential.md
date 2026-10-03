@@ -69,17 +69,12 @@ $F$ 가 아니라 $S$ 를 들고 계산한다.
 
 <div class="thmbox" markdown>
 
-### 정리 2. 지수분포의 평균·분산·중앙값 { .thm }
+### 정리 2. 지수분포의 평균과 분산 { .thm }
 
 $X \sim \text{Exp}(\lambda)$이면
 
 $$
-\begin{aligned}
-E[X] &= \frac{1}{\lambda} \\[4pt]
-\text{Var}(X) &= \frac{1}{\lambda^2} \\[4pt]
-\text{SD}(X) &= \frac{1}{\lambda} \\[4pt]
-\text{Median} &= \frac{\ln 2}{\lambda}
-\end{aligned}
+E[X] = \frac{1}{\lambda}, \qquad \text{Var}(X) = \frac{1}{\lambda^2}
 $$
 
 이다.
@@ -101,18 +96,12 @@ $$
     $$
 
     $$
-    \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
+    \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2} \qquad \square
     $$
 
-    **표준편차.** 분산의 양의 제곱근이므로 $\text{SD}(X) = 1/\lambda$다.
+표준편차는 분산의 양의 제곱근이므로 $\text{SD}(X) = 1/\lambda$다. 곧 $\text{평균} = \text{표준편차} = 1/\lambda$인데, 이것이 지수분포의 두드러진 특징이다.
 
-    **중앙값.** $F(m) = 1/2$를 풀면 된다. $1 - e^{-\lambda m} = 1/2$에서 $e^{-\lambda m} = 1/2$이고, 양변에 로그를 취하면
-
-    $$
-    m = \frac{\ln 2}{\lambda} \qquad \square
-    $$
-
-$\text{평균} = \text{표준편차} = 1/\lambda$라는 점에 주목하라. 지수분포의 두드러진 특징이다. 중앙값은 평균보다 작다($\ln 2 \approx 0.693$). 오른쪽으로 긴 꼬리가 평균을 끌어올리기 때문이다.
+중앙값은 $F(m) = 1/2$를 풀면 나온다. $1 - e^{-\lambda m} = 1/2$에서 $e^{-\lambda m} = 1/2$이므로 양변에 로그를 취하면 $m = (\ln 2)/\lambda$다. 이것은 평균보다 작다($\ln 2 \approx 0.693$). 오른쪽으로 긴 꼬리가 평균을 끌어올리기 때문이다.
 
 ---
 
