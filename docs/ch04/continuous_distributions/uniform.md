@@ -10,7 +10,7 @@
 
 ---
 
-## 1. 연속 균등분포와 누적분포함수
+## 1. 연속 균등분포
 
 <div class="defn" markdown>
 
@@ -26,15 +26,185 @@ PDF는 구간에서 상수이며, 이는 모든 값이 동일하게 나타날 �
 
 </div>
 
-### CDF
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 폭 하나가 모든 것을 정한다. 구간이 서로 다른 세 균등분포 $\text{Uniform}(0,1)$, $\text{Uniform}(-2,2)$, $\text{Uniform}(1,5)$의 밀도를 겹쳐 그린다.
+
+**(1)** 밀도의 높이 $h$와 표준편차 $\sigma$가 둘 다 폭 $w = b - a$ 하나로 정해짐을 보이고, 곱 $h\sigma$가 구간과 무관한 상수임을 구하시오.
+
+**(2)** 그 상수를 세 분포에서 수치로 확인하고, 그림에서 높이가 같은 두 곡선이 서로 무엇이 다른지 말하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 정의 1 에서 보듯 전체 넓이가 $1$이라는 요구가 높이를 정한다.
+
+    $$
+    h = \frac{1}{w}, \qquad w = b - a
+    $$
+
+    **폭이 넓어지면 높이는 그에 반비례해 낮아진다.** 직사각형의 넓이가 언제나 $1$이어야 하기 때문이고, 그림에서 폭 $1$인 곡선만 혼자 높이 솟아 있는 까닭이 이것이다.
+
+    표준편차도 폭 하나로 정해진다. 위 **성질** 절에서 $\operatorname{Var}(X) = w^2/12$였으므로
+
+    $$
+    \sigma = \frac{w}{2\sqrt3}
+    $$
+
+    이다. 둘을 곱하면 $w$가 지워진다.
+
+    $$
+    h\,\sigma = \frac{1}{w}\cdot\frac{w}{2\sqrt3} = \frac{1}{2\sqrt3} = \frac{\sqrt3}{6} \approx 0.288675
+    $$
+
+    **어떤 구간의 균등분포든 이 값이 같다.** 같은 식을 분산 쪽으로 돌려 적으면
+
+    $$
+    \operatorname{Var}(X) = \frac{1}{12\,h^2}
+    $$
+
+    이라, 밀도의 높이만 보면 분산을 알 수 있다는 뜻이 된다.
+
+    이 상수가 뜻을 갖는 까닭은 **무차원**이기 때문이다. $h$의 단위는 $1/[x]$이고 $\sigma$의 단위는 $[x]$라 곱하면 단위가 사라진다. 그래서 $x$를 센티미터로 재든 인치로 재든 $0.288675$가 나온다. 보기 2의 교차점 $a+1$이 단위를 바꾸면 옮겨 가 버리던 것과 정반대이고, **이쪽이 분포의 모양에 관한 진짜 정보**다.
+
+    모양에 관한 정보이므로 다른 분포와 견줄 수 있다. 봉우리 높이에 표준편차를 곱한 같은 양을 재 보면
+
+    $$
+    \text{균등} \frac{1}{2\sqrt3} \approx 0.2887, \qquad
+    \text{정규 } \varphi(0)\,\sigma = \frac{1}{\sqrt{2\pi}} \approx 0.3989, \qquad
+    \text{지수 } \lambda \cdot \frac1\lambda = 1
+    $$
+
+    이다. **같은 표준편차를 갖도록 맞춰 놓으면 균등분포의 봉우리가 셋 중 가장 낮다.** 균등분포는 질량을 가운데 쌓지 않고 끝까지 고르게 펴 놓으므로, 같은 퍼짐을 내는 데 높이가 덜 필요하다. 반대로 지수분포는 $0$ 근처에 몰아 두어 봉우리가 가장 높다.
+
+    **(2) 수치적으로.** 먼저 그림이다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    # 구간 [a, b]를 셋 준비한다. 폭이 1, 4, 4로 다르다.
+    intervals = [(0, 1), (-2, 2), (1, 5)]
+    x = np.linspace(-3, 6, 500)
+
+    fig, ax = plt.subplots(figsize=(12, 4))
+    for a, b in intervals:
+        # scipy의 균등분포 매개변수화에 주의하라.
+        # loc = 시작점 a, scale = **폭** (b가 아니라 b - a) 이다.
+        # stats.uniform(1, 5) 는 [1, 5]가 아니라 [1, 6]을 뜻한다.
+        rv = stats.uniform(loc=a, scale=b - a)
+        # 밀도는 구간 안에서 1/(b-a)로 일정하고 밖에서는 0이다.
+        # 폭이 좁을수록 높이가 높아진다. 전체 넓이가 언제나 1이어야 하기 때문이다.
+        ax.plot(x, rv.pdf(x), label=f'Uniform({a}, {b})')
+    ax.set_xlabel('x')
+    ax.set_ylabel('f(x)')
+    ax.set_title('Uniform Distribution — PDF')
+    ax.legend()
+    ax.set_ylim(bottom=-0.05)
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![Uniform Distribution — PDF](./img/uniform_pdf_26.png)
+
+    평균과 분산을 손으로 한 적분 대신 `quad`로 다시 구해 닫힌 꼴과 맞추고, $h\sigma$도 재 본다.
+
+    ```python
+    import numpy as np
+    from scipy import integrate, stats
+
+    print(f"{'구간':>10}{'폭 w':>7}{'높이 h':>9}{'quad 평균':>12}{'quad 분산':>12}"
+          f"{'w^2/12':>10}{'SD':>10}{'h*SD':>12}")
+    for a, b in [(0, 1), (-2, 2), (1, 5)]:
+        w = b - a
+        h = 1 / w
+        rv = stats.uniform(loc=a, scale=w)
+        # 평균과 분산을 손이 아니라 quad 로 다시 구해 닫힌 꼴과 맞춘다.
+        m1, _ = integrate.quad(lambda x: x * h, a, b)
+        m2, _ = integrate.quad(lambda x: x * x * h, a, b)
+        var = m2 - m1 ** 2
+        sd = np.sqrt(var)
+        print(f"{f'[{a}, {b}]':>10}{w:>7}{h:>9.4f}{m1:>12.6f}{var:>12.6f}"
+              f"{w ** 2 / 12:>10.6f}{sd:>10.6f}{h * sd:>12.8f}")
+
+    print(f"유도한 h*SD = 1/(2 sqrt(3)) = {1 / (2 * np.sqrt(3)):.8f}")
+
+    # 같은 양을 다른 분포에서도 재 본다. 봉우리 높이 x 표준편차는 무차원이다.
+    print()
+    print("봉우리 높이 x 표준편차 (무차원)")
+    print(f"  균등     : {1 / (2 * np.sqrt(3)):.6f}")
+    nrm = stats.norm(loc=0, scale=2.5)
+    print(f"  정규     : {nrm.pdf(0) * nrm.std():.6f}   (= 1/sqrt(2 pi) = {1 / np.sqrt(2 * np.pi):.6f})")
+    exp = stats.expon(scale=1 / 3)
+    print(f"  지수     : {exp.pdf(0) * exp.std():.6f}   (= 1)")
+    ```
+
+    출력:
+
+    ```
+            구간    폭 w     높이 h     quad 평균     quad 분산    w^2/12        SD        h*SD
+        [0, 1]      1   1.0000    0.500000    0.083333  0.083333  0.288675  0.28867513
+       [-2, 2]      4   0.2500    0.000000    1.333333  1.333333  1.154701  0.28867513
+        [1, 5]      4   0.2500    3.000000    1.333333  1.333333  1.154701  0.28867513
+    유도한 h*SD = 1/(2 sqrt(3)) = 0.28867513
+
+    봉우리 높이 x 표준편차 (무차원)
+      균등     : 0.288675
+      정규     : 0.398942   (= 1/sqrt(2 pi) = 0.398942)
+      지수     : 1.000000   (= 1)
+    ```
+
+    **맞는다.** `quad`가 낸 분산이 세 경우 모두 $w^2/12$와 소수 여섯째 자리까지 같고, $h\sigma$는 구간이 어디든 $0.28867513$으로 똑같다. 정규와 지수에서 잰 값도 각각 $1/\sqrt{2\pi}$와 $1$에 맞는다. 정규분포에 척도 $2.5$를, 지수분포에 $\lambda = 3$을 넣었는데도 그 수들이 결과에서 사라지는 것이 무차원 양의 성질이다.
+
+    **그림에서 읽히는 것.** 세로축을 보면 $\text{Uniform}(0,1)$만 높이 $1.0$이고 나머지 둘은 $0.25$다. 폭이 $1$에서 $4$로 네 배가 되자 높이가 정확히 사분의 일이 되었고, 분산은 $0.0833$에서 $1.3333$으로 $16$배, 곧 폭의 제곱배가 되었다.
+
+    **높이가 같은 두 곡선은 위치만 다르다.** $\text{Uniform}(-2,2)$와 $\text{Uniform}(1,5)$는 폭이 둘 다 $4$라 높이도 분산도 $1.3333$으로 같고, 평균만 $0$과 $3$으로 다르다. 뒤엣것은 앞엣것을 오른쪽으로 $3$만큼 민 것일 뿐이다. 표준 균등분포 절의 $X = a + (b-a)U$에서 $a$는 밀거나 당기기만 하고 $b-a$만 모양을 바꾼다는 사실이 그림에 그대로 나와 있다. **위치는 중점이, 퍼짐은 폭만이 결정한다.**
+
+    눈으로 재기 어려운 것도 있다. $[1,2]$ 구간에서는 주황과 초록이 똑같은 높이로 겹쳐 있어 **선 하나만 보인다.** 겹친 자리에서 어느 곡선이 밑에 깔렸는지 그림만으로는 알 수 없고, 범례의 순서를 알아야 한다.
+
+---
+
+
+---
+
+## 2. 누적분포함수
+
+<div class="thmbox" markdown>
+
+### 정리 1. 균등분포의 누적분포함수 { .thm }
+
+$X \sim \text{Uniform}(a, b)$이면
 
 $$
-F(x) = \begin{cases} 0 & x < a \\ \frac{x - a}{b - a} & a \leq x \leq b \\ 1 & x > b \end{cases}
+F(x) = \begin{cases} 0 & x < a \\[4pt] \dfrac{x - a}{b - a} & a \leq x \leq b \\[4pt] 1 & x > b \end{cases}
 $$
+
+이다. $F$ 는 $\mathbb{R}$ 전체에서 연속이고, 구간 안에서는 기울기 $1/(b-a)$ 인 직선이다.
+
+</div>
+
+??? proof "증명"
+
+    밀도를 왼쪽부터 쌓는다. $x < a$ 이면 피적분함수가 내내 $0$ 이므로 $F(x) = 0$ 이고,
+    $a \le x \le b$ 이면
+
+    $$
+    F(x) = \int_a^x \frac{dt}{b-a} = \frac{x-a}{b-a}
+    $$
+
+    이며, $x > b$ 이면 $[a,b]$ 전체를 다 쌓았으므로 $F(x) = 1$ 이다.
+
+    **이어 붙는 것까지 확인해야 한다.** 가운데 조각에 $x = a$ 를 넣으면 $0$, $x = b$ 를 넣으면
+    $1$ 이라 양옆 조각과 값이 맞는다. 곧 $f$ 가 $a$ 와 $b$ 에서 뛰는데도 $F$ 는 어디서도 뛰지
+    않는다. 적분이 뜀을 한 단계 매끄럽게 만든 것이다. 다만 완전히 매끄럽지는 않아 $F'$ 가
+    두 끝점에서 튀므로, **$F$ 는 연속이지만 $a$ 와 $b$ 에서 미분불가**이고 그 밖에서 $F' = f$ 다.
+    $\square$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 밀도를 적분하면 분포함수가 된다. $X \sim \text{Uniform}(a, b)$의 밀도와 분포함수를 한 축에 겹쳐 그린다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 밀도를 적분하면 분포함수가 된다. $X \sim \text{Uniform}(a, b)$의 밀도와 분포함수를 한 축에 겹쳐 그린다.
 
 **(1)** 밀도 $f$를 적분해 $F$를 구하시오. $f$는 $x = a$와 $x = b$에서 뛰는데 $F$는 그 자리에서 어떠한가.
 
@@ -183,171 +353,63 @@ $$
 
     **그림이 가리는 것도 있다.** 수직으로 보이는 PDF의 양쪽 변은 사실 **선이 아니다.** 밀도는 $x = 2$에서 $0$ 아니면 $1/6$이지 그 사이 값을 갖지 않는데, `plot`이 격자점 $300$개를 선분으로 이어 붙이느라 없는 변을 그려 넣은 것이다. 같은 이유로 꼭짓점이 살짝 둥글게 보이기도 한다. 불연속함수를 꺾은선으로 그릴 때면 늘 따라붙는 군더더기다.
 
-<div class="exbox" markdown>
+---
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 폭 하나가 모든 것을 정한다. 구간이 서로 다른 세 균등분포 $\text{Uniform}(0,1)$, $\text{Uniform}(-2,2)$, $\text{Uniform}(1,5)$의 밀도를 겹쳐 그린다.
+## 3. 성질
 
-**(1)** 밀도의 높이 $h$와 표준편차 $\sigma$가 둘 다 폭 $w = b - a$ 하나로 정해짐을 보이고, 곱 $h\sigma$가 구간과 무관한 상수임을 구하시오.
+<div class="thmbox" markdown>
 
-**(2)** 그 상수를 세 분포에서 수치로 확인하고, 그림에서 높이가 같은 두 곡선이 서로 무엇이 다른지 말하시오.
+### 정리 2. 균등분포의 평균과 분산 { .thm }
+
+$X \sim \text{Uniform}(a, b)$이면
+
+$$
+E[X] = \frac{a + b}{2}, \qquad \text{Var}(X) = \frac{(b - a)^2}{12}
+$$
+
+이다.
 
 </div>
 
-??? success "풀이"
+??? proof "증명"
 
-    **(1) 해석적으로.** 보기 1에서 보았듯 전체 넓이가 $1$이라는 요구가 높이를 정한다.
-
-    $$
-    h = \frac{1}{w}, \qquad w = b - a
-    $$
-
-    **폭이 넓어지면 높이는 그에 반비례해 낮아진다.** 직사각형의 넓이가 언제나 $1$이어야 하기 때문이고, 그림에서 폭 $1$인 곡선만 혼자 높이 솟아 있는 까닭이 이것이다.
-
-    표준편차도 폭 하나로 정해진다. 위 **성질** 절에서 $\operatorname{Var}(X) = w^2/12$였으므로
+    **평균.** 밀도가 상수이므로 적분이 그대로 넘어간다.
 
     $$
-    \sigma = \frac{w}{2\sqrt3}
+    E[X] = \int_a^b x \cdot \frac{1}{b-a}\,dx
+    = \frac{1}{b-a} \cdot \frac{x^2}{2}\bigg|_a^b
+    = \frac{b^2 - a^2}{2(b-a)} = \frac{a+b}{2}
     $$
 
-    이다. 둘을 곱하면 $w$가 지워진다.
+    마지막 등호에서 $b^2 - a^2 = (b-a)(b+a)$ 로 인수분해해 $b - a$ 를 약분했다. 결과가
+    구간의 **중점**인 것은 대칭성에서 미리 알 수 있다.
+
+    **분산.** 이차적률을 구한 뒤 평균의 제곱을 뺀다.
 
     $$
-    h\,\sigma = \frac{1}{w}\cdot\frac{w}{2\sqrt3} = \frac{1}{2\sqrt3} = \frac{\sqrt3}{6} \approx 0.288675
+    E[X^2] = \int_a^b x^2 \cdot \frac{1}{b-a}\,dx
+    = \frac{1}{b-a} \cdot \frac{x^3}{3}\bigg|_a^b
+    = \frac{b^3 - a^3}{3(b-a)} = \frac{a^2 + ab + b^2}{3}
     $$
 
-    **어떤 구간의 균등분포든 이 값이 같다.** 같은 식을 분산 쪽으로 돌려 적으면
+    이고($b^3 - a^3 = (b-a)(b^2+ab+a^2)$ 를 썼다)
 
     $$
-    \operatorname{Var}(X) = \frac{1}{12\,h^2}
+    \text{Var}(X) = \frac{a^2 + ab + b^2}{3} - \frac{(a+b)^2}{4}
+    = \frac{4(a^2+ab+b^2) - 3(a+b)^2}{12}
+    = \frac{a^2 - 2ab + b^2}{12} = \frac{(b-a)^2}{12}
     $$
 
-    이라, 밀도의 높이만 보면 분산을 알 수 있다는 뜻이 된다.
+    이다. $\square$
 
-    이 상수가 뜻을 갖는 까닭은 **무차원**이기 때문이다. $h$의 단위는 $1/[x]$이고 $\sigma$의 단위는 $[x]$라 곱하면 단위가 사라진다. 그래서 $x$를 센티미터로 재든 인치로 재든 $0.288675$가 나온다. 보기 1의 교차점 $a+1$이 단위를 바꾸면 옮겨 가 버리던 것과 정반대이고, **이쪽이 분포의 모양에 관한 진짜 정보**다.
-
-    모양에 관한 정보이므로 다른 분포와 견줄 수 있다. 봉우리 높이에 표준편차를 곱한 같은 양을 재 보면
-
-    $$
-    \text{균등} \frac{1}{2\sqrt3} \approx 0.2887, \qquad
-    \text{정규 } \varphi(0)\,\sigma = \frac{1}{\sqrt{2\pi}} \approx 0.3989, \qquad
-    \text{지수 } \lambda \cdot \frac1\lambda = 1
-    $$
-
-    이다. **같은 표준편차를 갖도록 맞춰 놓으면 균등분포의 봉우리가 셋 중 가장 낮다.** 균등분포는 질량을 가운데 쌓지 않고 끝까지 고르게 펴 놓으므로, 같은 퍼짐을 내는 데 높이가 덜 필요하다. 반대로 지수분포는 $0$ 근처에 몰아 두어 봉우리가 가장 높다.
-
-    **(2) 수치적으로.** 먼저 그림이다.
-
-    ```python
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import scipy.stats as stats
-
-    # 구간 [a, b]를 셋 준비한다. 폭이 1, 4, 4로 다르다.
-    intervals = [(0, 1), (-2, 2), (1, 5)]
-    x = np.linspace(-3, 6, 500)
-
-    fig, ax = plt.subplots(figsize=(12, 4))
-    for a, b in intervals:
-        # scipy의 균등분포 매개변수화에 주의하라.
-        # loc = 시작점 a, scale = **폭** (b가 아니라 b - a) 이다.
-        # stats.uniform(1, 5) 는 [1, 5]가 아니라 [1, 6]을 뜻한다.
-        rv = stats.uniform(loc=a, scale=b - a)
-        # 밀도는 구간 안에서 1/(b-a)로 일정하고 밖에서는 0이다.
-        # 폭이 좁을수록 높이가 높아진다. 전체 넓이가 언제나 1이어야 하기 때문이다.
-        ax.plot(x, rv.pdf(x), label=f'Uniform({a}, {b})')
-    ax.set_xlabel('x')
-    ax.set_ylabel('f(x)')
-    ax.set_title('Uniform Distribution — PDF')
-    ax.legend()
-    ax.set_ylim(bottom=-0.05)
-    plt.tight_layout()
-    plt.show()
-    ```
-
-    ![Uniform Distribution — PDF](./img/uniform_pdf_26.png)
-
-    평균과 분산을 손으로 한 적분 대신 `quad`로 다시 구해 닫힌 꼴과 맞추고, $h\sigma$도 재 본다.
-
-    ```python
-    import numpy as np
-    from scipy import integrate, stats
-
-    print(f"{'구간':>10}{'폭 w':>7}{'높이 h':>9}{'quad 평균':>12}{'quad 분산':>12}"
-          f"{'w^2/12':>10}{'SD':>10}{'h*SD':>12}")
-    for a, b in [(0, 1), (-2, 2), (1, 5)]:
-        w = b - a
-        h = 1 / w
-        rv = stats.uniform(loc=a, scale=w)
-        # 평균과 분산을 손이 아니라 quad 로 다시 구해 닫힌 꼴과 맞춘다.
-        m1, _ = integrate.quad(lambda x: x * h, a, b)
-        m2, _ = integrate.quad(lambda x: x * x * h, a, b)
-        var = m2 - m1 ** 2
-        sd = np.sqrt(var)
-        print(f"{f'[{a}, {b}]':>10}{w:>7}{h:>9.4f}{m1:>12.6f}{var:>12.6f}"
-              f"{w ** 2 / 12:>10.6f}{sd:>10.6f}{h * sd:>12.8f}")
-
-    print(f"유도한 h*SD = 1/(2 sqrt(3)) = {1 / (2 * np.sqrt(3)):.8f}")
-
-    # 같은 양을 다른 분포에서도 재 본다. 봉우리 높이 x 표준편차는 무차원이다.
-    print()
-    print("봉우리 높이 x 표준편차 (무차원)")
-    print(f"  균등     : {1 / (2 * np.sqrt(3)):.6f}")
-    nrm = stats.norm(loc=0, scale=2.5)
-    print(f"  정규     : {nrm.pdf(0) * nrm.std():.6f}   (= 1/sqrt(2 pi) = {1 / np.sqrt(2 * np.pi):.6f})")
-    exp = stats.expon(scale=1 / 3)
-    print(f"  지수     : {exp.pdf(0) * exp.std():.6f}   (= 1)")
-    ```
-
-    출력:
-
-    ```
-            구간    폭 w     높이 h     quad 평균     quad 분산    w^2/12        SD        h*SD
-        [0, 1]      1   1.0000    0.500000    0.083333  0.083333  0.288675  0.28867513
-       [-2, 2]      4   0.2500    0.000000    1.333333  1.333333  1.154701  0.28867513
-        [1, 5]      4   0.2500    3.000000    1.333333  1.333333  1.154701  0.28867513
-    유도한 h*SD = 1/(2 sqrt(3)) = 0.28867513
-
-    봉우리 높이 x 표준편차 (무차원)
-      균등     : 0.288675
-      정규     : 0.398942   (= 1/sqrt(2 pi) = 0.398942)
-      지수     : 1.000000   (= 1)
-    ```
-
-    **맞는다.** `quad`가 낸 분산이 세 경우 모두 $w^2/12$와 소수 여섯째 자리까지 같고, $h\sigma$는 구간이 어디든 $0.28867513$으로 똑같다. 정규와 지수에서 잰 값도 각각 $1/\sqrt{2\pi}$와 $1$에 맞는다. 정규분포에 척도 $2.5$를, 지수분포에 $\lambda = 3$을 넣었는데도 그 수들이 결과에서 사라지는 것이 무차원 양의 성질이다.
-
-    **그림에서 읽히는 것.** 세로축을 보면 $\text{Uniform}(0,1)$만 높이 $1.0$이고 나머지 둘은 $0.25$다. 폭이 $1$에서 $4$로 네 배가 되자 높이가 정확히 사분의 일이 되었고, 분산은 $0.0833$에서 $1.3333$으로 $16$배, 곧 폭의 제곱배가 되었다.
-
-    **높이가 같은 두 곡선은 위치만 다르다.** $\text{Uniform}(-2,2)$와 $\text{Uniform}(1,5)$는 폭이 둘 다 $4$라 높이도 분산도 $1.3333$으로 같고, 평균만 $0$과 $3$으로 다르다. 뒤엣것은 앞엣것을 오른쪽으로 $3$만큼 민 것일 뿐이다. 표준 균등분포 절의 $X = a + (b-a)U$에서 $a$는 밀거나 당기기만 하고 $b-a$만 모양을 바꾼다는 사실이 그림에 그대로 나와 있다. **위치는 중점이, 퍼짐은 폭만이 결정한다.**
-
-    눈으로 재기 어려운 것도 있다. $[1,2]$ 구간에서는 주황과 초록이 똑같은 높이로 겹쳐 있어 **선 하나만 보인다.** 겹친 자리에서 어느 곡선이 밑에 깔렸는지 그림만으로는 알 수 없고, 범례의 순서를 알아야 한다.
-
----
-
-## 2. 성질
+표준편차는 분산의 양의 제곱근이므로
 
 $$
-\begin{aligned}
-E[X] &= \frac{a + b}{2} \\[4pt]
-\text{Var}(X) &= \frac{(b - a)^2}{12} \\[4pt]
-\text{SD}(X) &= \frac{b - a}{2\sqrt{3}}
-\end{aligned}
+\text{SD}(X) = \frac{b-a}{2\sqrt3} = 0.288675\,(b-a)
 $$
 
-### 평균의 유도
-
-$$
-E[X] = \int_a^b x \cdot \frac{1}{b-a}\,dx = \frac{1}{b-a} \cdot \frac{x^2}{2}\bigg|_a^b = \frac{b^2 - a^2}{2(b-a)} = \frac{a+b}{2}
-$$
-
-### 분산의 유도
-
-$$
-E[X^2] = \int_a^b x^2 \cdot \frac{1}{b-a}\,dx = \frac{1}{b-a} \cdot \frac{x^3}{3}\bigg|_a^b = \frac{a^2 + ab + b^2}{3}
-$$
-
-$$
-\text{Var}(X) = E[X^2] - (E[X])^2 = \frac{a^2 + ab + b^2}{3} - \frac{(a+b)^2}{4} = \frac{(b-a)^2}{12}
-$$
+다. **분산이 폭의 제곱에만 의존하고 위치에는 전혀 의존하지 않는다**는 점이 중요하다. 구간을
+통째로 옮겨도 퍼짐은 그대로다.
 
 <div class="exbox" markdown>
 
@@ -528,29 +590,68 @@ $$
 
 ---
 
-## 3. 표준 균등분포
+## 4. 표준 균등분포
 
-특수한 경우인 $U \sim \text{Uniform}(0, 1)$을 **표준 균등분포**라 한다. 모든 균등확률변수는 이것과 다음과 같이 연결된다:
+특수한 경우인 $U \sim \text{Uniform}(0, 1)$ 을 **표준 균등분포**라 한다. 모든 균등확률변수가
+이것의 위치–척도 변환으로 얻어진다.
+
+<div class="thmbox" markdown>
+
+### 정리 3. 모든 균등분포는 표준 균등분포를 늘린 것이다 { .thm }
+
+$U \sim \text{Uniform}(0,1)$ 이면
 
 $$
-X = a + (b - a)U \sim \text{Uniform}(a, b) \quad \text{where } U \sim \text{Uniform}(0, 1)
+X = a + (b-a)U \sim \text{Uniform}(a, b)
 $$
 
-역으로:
+이고, 거꾸로 $X \sim \text{Uniform}(a,b)$ 이면
 
 $$
-U = \frac{X - a}{b - a} \sim \text{Uniform}(0, 1) \quad \text{where } X \sim \text{Uniform}(a, b)
+U = \frac{X-a}{b-a} \sim \text{Uniform}(0,1)
 $$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    분포함수를 직접 계산한다. $b > a$ 이므로 $u \mapsto a + (b-a)u$ 는 **강증가**이고,
+    $a \le x \le b$ 에 대해
+
+    $$
+    P(X \le x) = P\bigl(a + (b-a)U \le x\bigr)
+    = P\!\left(U \le \frac{x-a}{b-a}\right)
+    = \frac{x-a}{b-a}
+    $$
+
+    다. 마지막 등호는 $U$ 의 분포함수가 $[0,1]$ 에서 항등함수이고
+    $(x-a)/(b-a) \in [0,1]$ 이기 때문이다. 이것이 정리 1 의 $F$ 와 같으므로
+    $X \sim \text{Uniform}(a,b)$ 다.
+
+    역방향은 같은 계산을 뒤집으면 된다. $0 \le u \le 1$ 에 대해
+
+    $$
+    P\!\left(\frac{X-a}{b-a} \le u\right) = P\bigl(X \le a + (b-a)u\bigr)
+    = \frac{(a + (b-a)u) - a}{b-a} = u
+    $$
+
+    이고, 이것이 $\text{Uniform}(0,1)$ 의 분포함수다. $\square$
+
+    따름으로 정리 2 가 다시 나온다. $E[U] = 1/2$, $\text{Var}(U) = 1/12$ 만 알면
+    $E[X] = a + (b-a)/2 = (a+b)/2$ 이고 $\text{Var}(X) = (b-a)^2/12$ 다. **적분을 한 번만
+    해 두면 나머지는 선형변환의 성질로 끝난다.**
 
 ---
 
-## 4. 확률적분변환
+## 5. 확률적분변환
 
 균등분포는 **확률적분변환**을 통해 시뮬레이션에서 핵심적인 역할을 한다.
 
 <div class="thmbox" markdown>
 
-### 정리. 확률적분변환 { .thm }
+### 정리 4. 확률적분변환 { .thm }
 
 $X$가 CDF $F$를 갖는 연속확률변수이면 $F(X) \sim \text{Uniform}(0, 1)$이다.
 
@@ -731,17 +832,61 @@ $X$가 CDF $F$를 갖는 연속확률변수이면 $F(X) \sim \text{Uniform}(0, 1
 
 ---
 
-## 5. 이산 균등분포
+## 6. 이산 균등분포
 
-이산형 대응물은 유한집합 $\{a, a+1, \ldots, b\}$의 각 값에 동일한 확률을 부여한다:
+이산형 대응물은 유한집합 $\{a, a+1, \ldots, b\}$ 의 각 값에 같은 확률을 부여한다.
 
 $$
 P(X = k) = \frac{1}{b - a + 1}, \quad k = a, a+1, \ldots, b
 $$
 
+<div class="thmbox" markdown>
+
+### 정리 5. 이산 균등분포의 평균과 분산 { .thm }
+
+$X$ 가 $\{a, a+1, \ldots, b\}$ 위의 이산 균등분포를 따르고 $m = b - a + 1$ 이면
+
 $$
-E[X] = \frac{a + b}{2}, \qquad \text{Var}(X) = \frac{(b - a + 1)^2 - 1}{12}
+E[X] = \frac{a + b}{2}, \qquad \text{Var}(X) = \frac{m^2 - 1}{12}
 $$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    $X = a + K$ 로 두면 $K$ 는 $\{0, 1, \ldots, m-1\}$ 위의 균등분포이고, 평균과 분산은
+    위치 이동에 대해 각각 $a$ 만큼 옮겨지고 그대로이므로 $K$ 만 다루면 된다.
+
+    **평균.** 연속한 정수의 합 공식을 쓴다.
+
+    $$
+    E[K] = \frac1m \sum_{k=0}^{m-1} k = \frac1m \cdot \frac{(m-1)m}{2} = \frac{m-1}{2}
+    $$
+
+    이므로 $E[X] = a + \dfrac{m-1}{2} = a + \dfrac{b-a}{2} = \dfrac{a+b}{2}$ 다.
+
+    **분산.** 제곱합 공식 $\sum_{k=0}^{m-1}k^2 = \dfrac{(m-1)m(2m-1)}{6}$ 에서
+
+    $$
+    E[K^2] = \frac{(m-1)(2m-1)}{6}
+    $$
+
+    이고, 따라서
+
+    $$
+    \text{Var}(K) = \frac{(m-1)(2m-1)}{6} - \left(\frac{m-1}{2}\right)^2
+    = \frac{(m-1)\bigl[2(2m-1) - 3(m-1)\bigr]}{12}
+    = \frac{(m-1)(m+1)}{12} = \frac{m^2-1}{12}
+    $$
+
+    이다. $\square$
+
+연속판과 견주면 $\text{Var}$ 의 분자가 $(b-a)^2$ 에서 $m^2 - 1 = (b-a+1)^2 - 1$ 로 바뀐
+것뿐이다. $m$ 이 커지면 둘의 비가 $1$ 로 가므로, **눈금이 촘촘해질수록 이산 균등분포가 연속
+균등분포에 가까워진다.** 그 $-1$ 이 반올림 보정 $w^2/12$ 과 맞물리는 자리는 연습문제 11 에서
+다룬다.
 
 ---
 
