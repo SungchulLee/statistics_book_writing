@@ -427,6 +427,322 @@ $$
 
     단순회귀 계수 $\tilde{\beta}_1$은 Radio와 Sales 사이의 전체 연관을 포착하며, 여기에는 TV를 거치는 간접 연관도 들어 있다(예: Radio에 많이 쓰는 기업이 TV에도 많이 쓴다면). 부분계수 $\hat{\beta}_1$은 Radio와 Sales 양쪽에서 TV의 선형 영향을 제거한 뒤 Radio의 직접 효과만 분리한다. 형식적으로 $\hat{\beta}_1$은 Sales를 TV에 회귀시킨 잔차를 Radio를 TV에 회귀시킨 잔차에 회귀시킨 기울기와 같다(Frisch-Waugh-Lovell 정리). 두 계수는 Radio와 TV가 무상관일 때에만 일치한다. $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span> 보기 3 은 "TV 를 천 달러 단위에서 백만 달러 단위로 바꾸면 $\hat\beta_2$ 가 $0.0413$ 에서 $41.3$ 으로 커지고 비가 $\sqrt{1 + 41.3^2} \approx 41.3$ 이 된다" 고 했다. $\text{TV}' = \text{TV}/1000$ 으로 같은 자료를 다시 적합한다고 하자.
+
+**(1)** $\hat\beta_0$, $\hat\beta_1$, $\hat\beta_2$, 잔차 $e_i$, $R^2$ 가 각각 어떻게 바뀌는지 적합값의 식으로 보이시오.
+
+**(2)** 새 비 $\sqrt{1 + \hat\beta_1^2 + (\hat\beta_2')^2}$ 와, 보기 3 의 가장 큰 잔차 $5.0688$ 에 대응하는 평면까지의 최단거리를 구하시오.
+
+**(3)** TV 를 $10^k$ 로 나누어 단위를 계속 키우면 최단거리는 어디로 가는가. 그 극한이 "최단거리의 제곱합을 최소화한다"는 기준에 대해 무엇을 말해 주는가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 기울기 하나만 바뀌고 나머지는 전부 그대로다.** 적합값이
+
+    $$
+    \hat y_i = \hat\beta_0 + \hat\beta_1 r_i + \hat\beta_2' \frac{t_i}{1000}
+    $$
+
+    인데 $\hat\beta_2' = 1000\,\hat\beta_2$ 로 두면 모든 $i$ 에서 원래 적합값과 **완전히 같아진다.** 최소제곱해는 $X$ 가 완전계수이면 유일하므로, 새 문제의 해가 바로 이것이다. 곧
+
+    $$
+    \hat\beta_0 = 5.089605, \qquad \hat\beta_1 = 0.142954, \qquad \hat\beta_2' = 1000 \times 0.041303 = 41.302687
+    $$
+
+    이고 잔차 $e_i$ 는 하나도 달라지지 않으므로 $\mathrm{RSS} = 286.2067$, $\mathrm{TSS} = 3025.5718$, $R^2 = 0.905404$ 도 그대로다. 일반적으로 설명변수의 열을 $c$ 로 나누면 그 계수가 $c$ 배 되고 적합은 불변이다. **OLS 는 설명변수의 단위에 대해 등변(equivariant)이다.**
+
+    **(2) 비가 $41.3$ 으로 뛴다.**
+
+    $$
+    \sqrt{1 + 0.142954^2 + 41.302687^2} = \sqrt{1706.9336} = 41.315038
+    $$
+
+    이므로 가장 큰 잔차에 대응하는 최단거리는
+
+    $$
+    d_{\max} = \frac{5.0688}{41.315038} = 0.122686
+    $$
+
+    이다. 원래 단위에서는 $5.0688/1.011010 = 5.0136$ 이었다. **수직 잔차는 $5.0688$ 에서 꼼짝도 하지 않았는데 "평면까지의 최단거리"만 $40.9$ 배 줄었다.**
+
+    **(3) $0$ 으로 간다.** TV 를 $10^k$ 로 나누면 그 계수가 $10^k \hat\beta_2$ 이므로
+
+    $$
+    \sqrt{1 + \hat\beta_1^2 + (10^k \hat\beta_2)^2} \sim 10^k \lvert \hat\beta_2 \rvert
+    \quad \Longrightarrow \quad
+    d_i \sim \frac{\lvert e_i \rvert}{10^k \times 0.041303} \to 0
+    $$
+
+    이다. 적합이 글자 하나 바뀌지 않았는데도 최단거리는 단위 선택만으로 **얼마든지 작게** 만들 수 있다. 그러므로 최단거리의 제곱합은 **두 축의 단위가 서로 견줄 수 있을 때에만 뜻이 있는 양**이다. 수직거리는 $y$ 축의 단위만 쓰므로 설명변수를 어떻게 재든 영향받지 않는다. 보기 3 이 두 거리가 비슷해 보이는 것을 "우연한 단위 선택의 결과"라 한 까닭이 이것이다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff med" title="중간"></span> 보기 3 은 $\mathrm{RSS} = 286.2067$, $\mathrm{TSS} = 3025.5718$, $n = 150$ 을 주었다. 설명변수가 $k$ 개일 때 수정 결정계수는 $\bar R^2 = 1 - \dfrac{\mathrm{RSS}/(n-k-1)}{\mathrm{TSS}/(n-1)}$ 이다.
+
+**(1)** 이 모형($k=2$)의 $\bar R^2$ 를 구하고 $R^2 = 0.905404$ 와 견주시오.
+
+**(2)** 연습문제 1 처럼 Newspaper 를 넣어 $k=3$ 으로 늘렸을 때 $\bar R^2$ 가 **커지려면** RSS 가 적어도 얼마나 줄어야 하는가. 그것은 RSS 의 몇 %이며 어떤 양과 같은가.
+
+**(3)** (2)의 조건을 새 변수의 부분 $F$ 통계량 $F = \dfrac{\mathrm{RSS}_2 - \mathrm{RSS}_3}{\mathrm{RSS}_3/(n-4)}$ 로 다시 적고, 유의수준 $5\%$ 의 문턱 $F_{1,146;\,0.95} = 3.9059$ 와 견주시오. $\bar R^2$ 를 변수 선택의 기준으로 쓸 때 무엇을 조심해야 하는가.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** $\mathrm{RSS}/(n-k-1) = 286.2067/147 = 1.946984$ 이고 $\mathrm{TSS}/(n-1) = 3025.5718/149 = 20.305851$ 이므로
+
+    $$
+    \bar R^2 = 1 - \frac{1.946984}{20.305851} = 1 - 0.095883 = 0.904117
+    $$
+
+    이다. $R^2 = 0.905404$ 보다 $0.001287$ 작다. 분자 $1.946984$ 는 보기 1 의 $s = 1.3953$ 의 제곱, 곧 **잔차평균제곱** $s^2$ 다.
+
+    **(2) $s^2 = 1.946984$ 보다 많이 줄어야 한다.** $\mathrm{TSS}$ 는 변수를 더해도 그대로이므로 $\bar R^2$ 가 커지는 것은 $\mathrm{RSS}/(n-k-1)$ 이 작아지는 것과 같다. 따라서
+
+    $$
+    \frac{\mathrm{RSS}_3}{146} < \frac{286.2067}{147} = 1.946984
+    \quad \Longleftrightarrow \quad
+    \mathrm{RSS}_3 < 284.259716
+    $$
+
+    이고 감소량은 $\Delta = 286.2067 - 284.259716 = 1.946984$ 를 넘어야 한다. 이것이 RSS 의 $1/147 = 0.68\%$ 다. 하한이 하필 $s^2$ 과 같은 것은 우연이 아니다. 자유도 하나를 쓰는 값이 잔차평균제곱 한 몫이기 때문이다. 이 문턱에서 $R^2$ 는 $1 - 284.2597/3025.5718 = 0.906048$ 로 $0.000644$ 만 오른다.
+
+    **(3) 조건은 정확히 $F > 1$ 이다.** $\mathrm{RSS}_2 = \mathrm{RSS}_3 + \Delta$ 를 넣으면
+
+    $$
+    \Delta > \frac{\mathrm{RSS}_2}{147} = \frac{\mathrm{RSS}_3 + \Delta}{147}
+    \ \Longleftrightarrow\ 146\,\Delta > \mathrm{RSS}_3
+    \ \Longleftrightarrow\ \frac{\Delta}{\mathrm{RSS}_3/146} > 1
+    \ \Longleftrightarrow\ F > 1
+    $$
+
+    이다. 유의성의 문턱은 $F > 3.9059$, 곧 $\lvert t \rvert > 1.9763$ 인데 $\bar R^2$ 의 문턱은 $F > 1$, 곧 $\lvert t \rvert > 1$ 이다. **$\lvert t \rvert$ 가 $1$ 과 $1.9763$ 사이인 변수는 유의하지 않은데도 $\bar R^2$ 를 올린다.** 더구나 쓸모가 전혀 없는 변수($\beta_3 = 0$)라도 $F_{1,146} > 1$ 일 확률이 $0.3190$ 이니, 무작위 변수를 셋 던져 넣으면 하나쯤은 $\bar R^2$ 를 올려 준다.
+
+    그러므로 $\bar R^2$ 는 $R^2$ 처럼 변수를 넣을수록 반드시 오르지는 않는다는 점에서 개선이지만, **벌점이 자유도 하나에 $s^2$ 한 몫뿐이라 매우 느슨하다.** 변수 선택을 하려면 벌점이 더 센 기준($\mathrm{AIC}$ 는 $2$, $\mathrm{BIC}$ 는 $\ln 150 = 5.01$ 에 해당)이나 검정을 써야 한다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span> 보기 3 (2)는 "그림에서 다중공선성이 보이지 않는다" 며 $\operatorname{corr}(\text{TV}, \text{Radio}) = 0.0357$ 을 들었다. 보이지 않는 그 효과를 수로 잰다. 설명변수가 둘일 때 정확한 식은
+
+$$
+\operatorname{se}(\hat\beta_1) = \frac{s}{\sqrt{S_{11}(1 - \rho^2)}}, \qquad \rho = \operatorname{corr}(x_1, x_2)
+$$
+
+이며, 보기 1 의 근사식은 여기서 $1 - \rho^2$ 를 뺀 것이다.
+
+**(1)** $s = 1.395344$, $S_{\text{RR}} = 31633.01$, $\rho = 0.035691$ 로 보기 1 의 $\operatorname{se}(\hat\beta_{\text{Radio}}) = 0.007850$ 을 되살리고, 공선성이 부풀린 몫이 몇 %인지 말하시오.
+
+**(2)** $s$, $S_{\text{RR}}$, 추정값 $\hat\beta_{\text{Radio}} = 0.142954$ 는 그대로이고 $\rho$ 만 커진다고 하자. 표준오차가 두 배가 되는 $\rho$ 는 얼마인가.
+
+**(3)** $95\%$ 신뢰구간이 $0$ 을 품으려면 $\rho$ 가 얼마나 커야 하는가($t_{0.975,\,147} = 1.97623$). 분산팽창계수 $\mathrm{VIF} = 1/(1-\rho^2)$ 로도 적고, 이 수에서 읽을 것을 한 줄로 쓰시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 부풀린 몫이 $0.064\%$ 다.** 먼저 $1 - \rho^2$ 를 뺀 값이
+
+    $$
+    \frac{s}{\sqrt{S_{\text{RR}}}} = \frac{1.395344}{177.8567} = 0.0078453
+    $$
+
+    이고 팽창인자가 $1/\sqrt{1 - 0.035691^2} = 1.000638$ 이므로
+
+    $$
+    \operatorname{se}(\hat\beta_{\text{Radio}}) = 0.0078453 \times 1.000638 = 0.0078503
+    $$
+
+    로 보기 1 이 statsmodels 에서 받은 $0.007850$ 과 같다. 공선성이 더한 몫은 $0.064\%$, 곧 소수 여섯째 자리에서 겨우 보인다. **보기 1 의 근사식이 잘 맞은 까닭이 바로 이것이다.**
+
+    **(2) $\rho = \sqrt3/2 = 0.866025$.** 팽창인자가 $2$ 가 되려면
+
+    $$
+    \frac{1}{\sqrt{1-\rho^2}} = 2 \ \Longrightarrow\ 1 - \rho^2 = \frac14 \ \Longrightarrow\ \rho = \frac{\sqrt3}{2} = 0.866025
+    $$
+
+    이고 이때 $\mathrm{VIF} = 4$, $\operatorname{se} = 0.015691$ 이다. **상관이 $0.866$ 이나 되어야 표준오차가 겨우 두 배다.** 참고로 $\rho = 0.9$ 에서도 $\mathrm{VIF} = 5.263$, 팽창인자 $2.294$ 에 그친다.
+
+    **(3) $\rho = 0.994101$, $\mathrm{VIF} = 85.02$.** 신뢰구간이 $0$ 을 품는 것은 $\lvert t \rvert < 1.97623$ 과 같고
+
+    $$
+    \frac{0.142954}{\operatorname{se}} < 1.97623
+    \quad \Longleftrightarrow \quad
+    \operatorname{se} > \frac{0.142954}{1.97623} = 0.072337
+    $$
+
+    이다. 필요한 팽창인자는 $0.072337/0.0078453 = 9.2204$ 이므로
+
+    $$
+    \frac{1}{1-\rho^2} = 9.2204^2 = 85.0156
+    \ \Longrightarrow\ 1 - \rho^2 = 0.011762
+    \ \Longrightarrow\ \rho = 0.994101
+    $$
+
+    이다. **공선성은 $t$ 값을 $\sqrt{1-\rho^2}$ 배로 깎을 뿐이다.** $\rho = 0$ 에서 $t = 0.142954/0.0078453 = 18.22$ 인 이 자료는 $9.22$ 배나 깎여야 유의성을 잃으므로 $\rho = 0.99$ 로도 꺾이지 않는다. 거꾸로 $t$ 가 $3$ 쯤인 변수라면 $3/1.97623 = 1.518$ 배만 깎여도 유의성을 잃으니 $\rho \approx 0.752$ 로 충분하다. 곧 **공선성이 얼마나 치명적인지는 $\rho$ 혼자가 아니라 $\rho$ 와 신호 세기가 함께 정한다.** 보기 3 이 "평면의 기울기가 불안정해진다"고 말한 것은 추정값의 **분산**에 관한 말이고, 유의성이 사라진다는 말은 아니다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span> 연습문제 5 는 부분계수 $\hat\beta_1$ 과 Sales 를 Radio 에만 회귀시킨 계수 $\tilde\beta_1$ 이 "Radio 와 TV 가 무상관일 때에만" 일치한다고 했다. 그 어긋남을 식으로 적는다.
+
+**(1)** 연습문제 4 의 직교성 $\sum_i e_i = 0$, $\sum_i x_{ij} e_i = 0$ 만 써서
+
+$$
+\tilde\beta_1 = \hat\beta_1 + \hat\beta_2 \delta, \qquad \delta = \frac{S_{\text{RT}}}{S_{\text{RR}}}
+$$
+
+를 유도하시오. 여기서 $S_{\text{RT}} = \sum_i (r_i - \bar r)(t_i - \bar t)$ 이고 $\delta$ 는 TV 를 Radio 에 단순회귀한 기울기이다.
+
+**(2)** 이 자료에서 $\delta$ 와 $\tilde\beta_1$ 을 $\rho = 0.035691$, $S_{\text{RR}} = 31633.01$, $S_{\text{TT}} = 1179148.00$ 으로 손으로 계산한 뒤 코드로 확인하시오. 어긋남은 표준오차 $0.007850$ 의 몇 배인가. 상관이 $0.036$ 밖에 안 되는데도 어긋남이 그만큼 나오는 까닭은 무엇인가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 유도.** 적합의 항등식 $y_i = \hat\beta_0 + \hat\beta_1 r_i + \hat\beta_2 t_i + e_i$ 를 중심화하여 $r$ 과의 교차적을 잡으면
+
+    $$
+    S_{\text{R}y} = \sum_i (r_i - \bar r)(y_i - \bar y)
+    = \hat\beta_1 S_{\text{RR}} + \hat\beta_2 S_{\text{RT}} + \sum_i (r_i - \bar r) e_i
+    $$
+
+    이다. 마지막 항은
+
+    $$
+    \sum_i (r_i - \bar r) e_i = \sum_i r_i e_i - \bar r \sum_i e_i = 0 - 0 = 0
+    $$
+
+    으로 **연습문제 4 의 두 직교성이 그대로 지워 버린다.** 단순회귀 기울기가 $\tilde\beta_1 = S_{\text{R}y}/S_{\text{RR}}$ 이므로 양변을 $S_{\text{RR}}$ 로 나누면
+
+    $$
+    \tilde\beta_1 = \hat\beta_1 + \hat\beta_2 \frac{S_{\text{RT}}}{S_{\text{RR}}} = \hat\beta_1 + \hat\beta_2 \delta
+    $$
+
+    를 얻는다. $\delta = 0$, 곧 $S_{\text{RT}} = 0$ 일 때만 두 계수가 같다. $\square$
+
+    **(2) 손으로.** $\delta$ 를 상관으로 적으면 $\delta = \rho \sqrt{S_{\text{TT}}/S_{\text{RR}}}$ 이고
+
+    $$
+    \sqrt{\frac{1179148.00}{31633.01}} = \sqrt{37.2756} = 6.105397,
+    \qquad \delta = 0.035691 \times 6.105397 = 0.217908
+    $$
+
+    이므로
+
+    $$
+    \tilde\beta_{\text{Radio}} = 0.142954 + 0.041303 \times 0.217908 = 0.142954 + 0.009000 = 0.151954
+    $$
+
+    이다. 어긋남 $0.009000$ 은 표준오차 $0.007850$ 의 $1.1465$ 배다.
+
+    ```python
+    # 연습문제 4 의 직교성만 쓰면 단순회귀 기울기가 부분계수에서 바로 나온다.
+    Rc, Tc, yc = Radio - Radio.mean(), TV - TV.mean(), y - y.mean()
+    S_RR, S_RT, S_TT = (Rc ** 2).sum(), (Rc * Tc).sum(), (Tc ** 2).sum()
+    delta = S_RT / S_RR      # TV 를 Radio 에 단순회귀한 기울기
+    gamma = S_RT / S_TT      # Radio 를 TV 에 단순회귀한 기울기
+
+    simple_R = (Rc * yc).sum() / S_RR    # Sales 를 Radio 에만 회귀
+    simple_T = (Tc * yc).sum() / S_TT    # Sales 를 TV 에만 회귀
+
+    print(f"S_RT = {S_RT:.4f},  delta = S_RT/S_RR = {delta:.6f},  gamma = S_RT/S_TT = {gamma:.8f}")
+    print()
+    print(f"Radio  부분계수 {beta_1:.6f}   단순회귀 {simple_R:.6f}   "
+          f"공식 b1+b2*delta = {beta_1 + beta_2 * delta:.6f}   차이 {simple_R - beta_1:+.6f}")
+    print(f"TV     부분계수 {beta_2:.6f}   단순회귀 {simple_T:.6f}   "
+          f"공식 b2+b1*gamma = {beta_2 + beta_1 * gamma:.6f}   차이 {simple_T - beta_2:+.6f}")
+    print()
+    print(f"Radio 쪽 차이는 se(b_Radio) = 0.007850 의 {(simple_R - beta_1) / 0.007850:.4f} 배")
+    tol = 1e-6
+    print(f"직교성(연습문제 4) 확인:  |sum(e)|, |sum(Radio*e)|, |sum(TV*e)| 모두 {tol:g} 미만인가 "
+          f"{bool(max(abs(residuals.sum()), abs((Radio * residuals).sum()), abs((TV * residuals).sum())) < tol)}")
+    ```
+
+    출력:
+
+    ```text
+    S_RT = 6893.1340,  delta = S_RT/S_RR = 0.217910,  gamma = S_RT/S_TT = 0.00584586
+
+    Radio  부분계수 0.142954   단순회귀 0.151954   공식 b1+b2*delta = 0.151954   차이 +0.009000
+    TV     부분계수 0.041303   단순회귀 0.042138   공식 b2+b1*gamma = 0.042138   차이 +0.000836
+
+    Radio 쪽 차이는 se(b_Radio) = 0.007850 의 1.1465 배
+    직교성(연습문제 4) 확인:  |sum(e)|, |sum(Radio*e)|, |sum(TV*e)| 모두 1e-06 미만인가 True
+    ```
+
+    **공식이 소수 여섯째 자리까지 단순회귀 기울기를 맞힌다.** Radio 는 $0.151954$, TV 는 $0.042138$ 로 양쪽 모두 정확하다.
+
+    까닭은 $\delta = \rho \sqrt{S_{\text{TT}}/S_{\text{RR}}}$ 에 있다. **$\rho = 0.0357$ 이라는 작은 상관이 두 변수의 퍼짐 비 $6.105$ 배로 증폭되어 $\delta = 0.2179$ 가 된다.** 그래서 $\hat\beta_2 \delta = 0.0090$ 이라는, 표준오차의 $1.15$ 배나 되는 치우침이 생긴다. 반대 방향은 $\gamma = \rho\sqrt{S_{\text{RR}}/S_{\text{TT}}} = 0.00585$ 로 $1/6.105$ 배 **축소**되어 TV 쪽 어긋남은 $0.000836$, 표준오차 $0.001286$ 의 $0.65$ 배에 그친다.
+
+    요점은 **무상관성이 "상관계수가 작다"가 아니라 "$S_{\text{RT}} = 0$"이어야 한다**는 것이고, 독립으로 뽑은 유한 표본에서 그것은 거의 일어나지 않는다는 것이다. 보기 1 이 "독립이므로 $0$ 에 가깝다"고 넘긴 $0.0357$ 이 여기서는 표준오차 한 몫만큼의 차이를 만든다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span> 보기 3 (1)은 계수가 고정되면 수직 잔차와 최단거리가 비례하지만 "최소제곱이 수직거리의 제곱합을 최소화하는 일과 최단거리의 제곱합을 최소화하는 일이 같은 평면을 주지 않는다"고 했다. 그것을 미분으로 확인한다. 보기 3 (1)의 거리식이 모든 $\boldsymbol\beta = (\beta_0, \beta_1, \beta_2)$ 에서 성립하므로 최단거리의 제곱합은
+
+$$
+D(\boldsymbol\beta) = \sum_i d_i^2 = \frac{\mathrm{RSS}(\boldsymbol\beta)}{1 + \beta_1^2 + \beta_2^2}
+$$
+
+이다.
+
+**(1)** OLS 해 $\hat{\boldsymbol\beta}$ 에서 $\partial D/\partial\beta_0 = 0$ 임을 보이고, 그것이 뜻하는 바를 말하시오.
+
+**(2)** $\hat{\boldsymbol\beta}$ 에서 $\partial D/\partial\beta_1$ 과 $\partial D/\partial\beta_2$ 를 구하시오($\mathrm{RSS} = 286.2067$, $\hat\beta_1 = 0.142954$, $\hat\beta_2 = 0.041303$). 그 부호에서 $D$ 를 최소화하는 평면의 기울기가 OLS 보다 **큰지 작은지** 판정하시오.
+
+**(3)** 이 기울기벡터가 $(\hat\beta_1, \hat\beta_2)$ 와 나란함을 보이시오. 그런데 실제로 $D$ 를 최소화하면 $\hat\beta_1$ 은 $0.89\%$, $\hat\beta_2$ 는 $0.006\%$ 밖에 커지지 않는다. 두 기울기가 같은 비율로 움직이지 않는 까닭을 $S_{\text{RR}} = 31633.01$, $S_{\text{TT}} = 1179148.00$ 으로 설명하시오.
+
+</div>
+
+??? success "풀이"
+
+    $f(\boldsymbol\beta) = 1 + \beta_1^2 + \beta_2^2$ 로 줄여 쓰면 $D = \mathrm{RSS}/f$ 이고
+
+    $$
+    \frac{\partial D}{\partial \beta_j} = \frac{1}{f}\frac{\partial \mathrm{RSS}}{\partial \beta_j} - \frac{\mathrm{RSS}}{f^2}\frac{\partial f}{\partial \beta_j}
+    $$
+
+    이다. OLS 해에서는 정규방정식이 $\partial \mathrm{RSS}/\partial\beta_j = -2\sum_i x_{ij} e_i = 0$ 을 모든 $j$ 에 대해 보장하므로(연습문제 4) **첫 항이 세 성분 모두에서 사라진다.** 남는 것은 둘째 항뿐이다.
+
+    **(1) $\partial f/\partial\beta_0 = 0$ 이므로 $0$ 이다.** 절편은 $f$ 에 들어 있지 않으니 둘째 항도 사라지고, 첫 항은 $\partial\mathrm{RSS}/\partial\beta_0 = -2\sum_i e_i = 0$ 으로 사라진다. 뜻은 분명하다. **두 기준이 다투는 것은 기울기뿐이고 절편은 아니다.** 어느 기준에서든 평면은 자료의 중심 $(\bar r, \bar t, \bar y)$ 를 지나며, 기울기가 정해지면 절편은 그 조건으로 따라 나온다.
+
+    **(2) 둘 다 음수이므로 최단거리 기준의 기울기가 더 크다.** $\partial f/\partial\beta_j = 2\beta_j$ 이므로
+
+    $$
+    \left.\frac{\partial D}{\partial \beta_j}\right|_{\hat{\boldsymbol\beta}} = -\frac{2\,\mathrm{RSS}\,\hat\beta_j}{f^2}, \qquad f = 1.0221416, \quad f^2 = 1.0447735
+    $$
+
+    이고 수치를 넣으면
+
+    $$
+    \frac{\partial D}{\partial \beta_1} = -\frac{2 \times 286.2067 \times 0.142954}{1.0447735} = -78.3218, \qquad
+    \frac{\partial D}{\partial \beta_2} = -\frac{2 \times 286.2067 \times 0.041303}{1.0447735} = -22.6290
+    $$
+
+    이다. 둘 다 음수이므로 $\beta_1$ 과 $\beta_2$ 를 **키우는** 쪽으로 $D$ 가 줄어든다. 곧 OLS 해는 $D$ 의 정류점이 **아니고**, 최단거리를 최소화하는 평면(전직교회귀)의 기울기는 OLS 보다 절댓값이 크다. 실제로 풀면 $(0.144230,\ 0.041305)$ 로 둘 다 커지고 $D$ 는 $280.0068$ 에서 $279.9569$ 로 줄며, 그 평면의 $\mathrm{RSS}$ 는 $286.2582$ 로 OLS 의 $286.2067$ 보다 크다. **두 기준이 서로 다른 평면을 고른다는 것이 수로 확인된다.**
+
+    **(3) 평행하다.** 위 식이 $\nabla_{(\beta_1,\beta_2)} D = -\dfrac{2\,\mathrm{RSS}}{f^2}(\hat\beta_1, \hat\beta_2)$ 이므로 기울기벡터는 $(\hat\beta_1,\hat\beta_2)$ 의 음의 상수배다. 비를 보아도
+
+    $$
+    \frac{78.3218}{22.6290} = 3.4611 = \frac{0.142954}{0.041303}
+    $$
+
+    로 같다. 곧 $D$ 를 줄이는 **첫 걸음**은 기울기벡터를 방사 방향으로 늘리는 것이다.
+
+    그런데 걸음의 **크기**는 방향마다 다르다. $\mathrm{RSS}$ 는 $\beta_j$ 를 $\Delta_j$ 만큼 흔들면 약 $S_{jj}\Delta_j^2$ 만큼 늘어나므로, 1차 근사로 $2 S_{jj}\Delta_j \approx 2\,\mathrm{RSS}\,\hat\beta_j / f$ 를 놓으면
+
+    $$
+    \Delta_j \approx \frac{\mathrm{RSS}\,\hat\beta_j}{S_{jj}\,f}, \qquad
+    \Delta_1 \approx \frac{286.2067 \times 0.142954}{31633.01 \times 1.0221418} = 0.001265
+    $$
+
+    로 실제 이동량 $0.144230 - 0.142954 = 0.001276$ 과 맞는다. **TV 쪽은 $S_{\text{TT}}$ 가 $37.3$ 배 크므로 같은 이득을 얻는 데 드는 값이 $37.3$ 배 비싸고**, 그래서 $\hat\beta_2$ 는 거의 움직이지 않는다. 기울기가 방사 방향을 가리켜도 실제 경로는 **싼 방향으로 휜다.**
+
+    마지막으로 이 기준이 왜 쓰이지 않는지가 드러난다. $D$ 는 $\beta_1, \beta_2$ 를 $y$ 의 단위와 섞어 재므로 단위에 매달린다. 연습문제 6 처럼 TV 를 백만 달러 단위로 바꾸어 전직교회귀를 풀면 TV 계수가 원래 단위로 $0.047184$ 가 나와 $0.041305$ 에서 $14\%$ 어긋난다. **OLS 는 어떤 단위에서도 같은 평면을 주지만 최단거리 기준은 단위마다 다른 평면을 준다.** $\square$
+
 ---
 
 ## 정리하며

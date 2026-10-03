@@ -381,6 +381,463 @@ OLS 잔차의 합이 0임을 보여라. 곧 $e_i = y_i - \hat{y}_i$일 때 $\sum
 
     기하학적으로 OLS는 $X$의 열공간에서 유클리드 거리로 $Y$에 가장 가까운 점을 찾는다. 피타고라스 정리에서 분해 $\|Y\|^2 = \|\hat{Y}\|^2 + \|e\|^2$을 얻으며, 이는 ($Y$와 $\hat{Y}$를 중심화하면) $\text{SST} = \text{SSR} + \text{SSE}$에 해당한다.
 
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
+1절 그림의 오른쪽 판은 $(\alpha, \beta)$ 2500쌍에 대해 $(\mathrm{RSS}, \ln L)$을 찍은 것이고, 점들이 기울기 $-1/(2\sigma^2) = -0.50$인 직선 위에 정확히 놓인다. 자료는 $m = 12$, $\sigma = 1$이며 최적점에서 $\mathrm{RSS} = 4.80$이다.
+
+**(a)** 상수를 생략하지 말고 $\ln L(\alpha, \beta)$를 $\mathrm{RSS}$의 함수로 적어라. 그 직선이 $\mathrm{RSS} = 0$에서 가지는 값은 얼마인가?
+
+**(b)** 최대 로그가능도 $\ln L(\hat\alpha, \hat\beta)$의 값을 소수 넷째 자리까지 구하라.
+
+**(c)** 이제 $\sigma^2$도 추정해야 하는 모수라고 하자. $\hat\sigma^2$의 MLE와 그때의 최대 로그가능도를 구하라. $\sigma = 1$로 고정했을 때보다 값이 커지는가 작아지는가?
+
+**(d)** (c)의 설정에서 그림의 오른쪽 판을 다시 그리면 점들은 여전히 직선 위에 놓이는가? 그래도 "가능도 최대 = RSS 최소"는 유지되는가?
+
+</div>
+
+??? success "풀이"
+    **(a)** 1절의 가능도함수에 로그를 취하면 상수까지 포함해
+
+    $$
+    \ln L(\alpha, \beta) = -\frac{m}{2}\ln(2\pi\sigma^2) - \frac{\mathrm{RSS}(\alpha,\beta)}{2\sigma^2},
+    \qquad \mathrm{RSS}(\alpha,\beta) = \sum_{i=1}^m \left(y^{(i)} - \alpha - \beta x^{(i)}\right)^2
+    $$
+
+    이다. 이것은 $\mathrm{RSS}$의 **일차함수**이고 기울기가 $-1/(2\sigma^2) = -0.50$이다. $\mathrm{RSS} = 0$에서의 값은 절편
+
+    $$
+    -\frac{m}{2}\ln(2\pi\sigma^2) = -6\ln(2\pi) = -11.0273
+    $$
+
+    이다. 곧 그림의 직선은 $\ln L = -11.0273 - 0.50\,\mathrm{RSS}$이다.
+
+    **(b)** $\mathrm{RSS} = 4.80$을 넣으면
+
+    $$
+    \ln L(\hat\alpha, \hat\beta) = -11.0273 - 0.50 \times 4.80 = -13.4273
+    $$
+
+    **(c)** $\sigma^2$까지 모수로 보면 $(\alpha, \beta)$에 대한 최대화는 $\sigma^2$과 무관하게 여전히 $\mathrm{RSS}$ 최소화이므로 $\hat\alpha, \hat\beta$는 그대로다. $\mathrm{RSS} = 4.80$을 고정한 뒤 $\sigma^2$에 대해 미분하면
+
+    $$
+    \frac{\partial}{\partial \sigma^2}\left(-\frac{m}{2}\ln(2\pi\sigma^2) - \frac{\mathrm{RSS}}{2\sigma^2}\right)
+    = -\frac{m}{2\sigma^2} + \frac{\mathrm{RSS}}{2(\sigma^2)^2} = 0
+    \quad\Longrightarrow\quad
+    \hat\sigma^2 = \frac{\mathrm{RSS}}{m} = \frac{4.80}{12} = 0.40
+    $$
+
+    이를 되넣으면
+
+    $$
+    \ln L(\hat\alpha, \hat\beta, \hat\sigma^2)
+    = -\frac{m}{2}\ln\!\left(2\pi \cdot 0.40\right) - \frac{m}{2}
+    = -6 \times 0.9216 - 6 = -11.5295
+    $$
+
+    $-11.5295 > -13.4273$이므로 **커진다**. 자유 모수를 하나 더 풀어 주었으니 최대가능도는 줄어들 수 없다. 여기서는 $\hat\sigma = \sqrt{0.40} = 0.6325$가 참값 $\sigma = 1$보다 작게 나왔고(불편추정값으로 보아도 $\mathrm{RSS}/(m-2) = 0.48$), 가능도는 "자료가 실제보다 더 촘촘하다"고 믿는 쪽에서 더 높아진다.
+
+    **(d)** $\sigma^2$을 프로파일링하면 로그가능도는
+
+    $$
+    \ln L_{\text{prof}}(\mathrm{RSS}) = -\frac{m}{2}\ln\!\left(\frac{2\pi\,\mathrm{RSS}}{m}\right) - \frac{m}{2}
+    $$
+
+    로 $\mathrm{RSS}$의 **로그함수**가 된다. 따라서 점들은 직선이 아니라 아래로 볼록한(감소하는) 곡선 위에 놓이고 피어슨 상관계수도 $-1$이 아니다. 그러나 이 함수는 $\mathrm{RSS}$에 대해 **강하게 감소**하므로 순서는 완전히 뒤집힌 채 보존되어, 가능도를 최대로 만드는 $(\alpha, \beta)$는 여전히 $\mathrm{RSS}$를 최소로 만드는 점이다. 곧 MLE $=$ OLS에 필요한 것은 "직선"이 아니라 "단조"이고, $\sigma^2$이 $(\alpha,\beta)$에 의존하지 않는다는 점이다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+4절의 표준화 예측식 $\dfrac{y - \bar y}{s_y} = \rho \dfrac{x - \bar x}{s_x}$를 쓴다.
+
+**(a)** 같은 자료에서 역할을 바꾸어 $x$를 $y$로 회귀한 직선의 식을 같은 꼴로 적고, 두 직선의 기울기(둘 다 $x$–$y$ 평면에서 재어) $b_{y\mid x}$와 $1/b_{x\mid y}$의 비가 $\rho^2$임을 보여라.
+
+**(b)** $\rho = 0.5$라 하자. $x = \bar x + 2 s_x$에서 $y$를 예측하고, 그 예측값 $y$를 다시 $x$–on–$y$ 직선에 넣어 $x$를 예측하라. 처음의 $x$로 돌아오는가?
+
+**(c)** (b)가 모순이 아닌 이유를 설명하고, 두 직선이 일치하는 $\rho$를 구하라. $\rho \to 0$일 때 두 직선은 각각 무엇이 되는가?
+
+</div>
+
+??? success "풀이"
+    **(a)** 역할을 바꾸면 같은 유도가 글자만 바꾸어 되풀이되므로
+
+    $$
+    \frac{x - \bar x}{s_x} = \rho \frac{y - \bar y}{s_y}
+    $$
+
+    이다. $x$–$y$ 평면에서 두 직선의 기울기는
+
+    $$
+    b_{y\mid x} = \rho \frac{s_y}{s_x}, \qquad
+    b_{x\mid y} = \rho \frac{s_x}{s_y} \ \Rightarrow\ \frac{1}{b_{x\mid y}} = \frac{1}{\rho}\frac{s_y}{s_x}
+    $$
+
+    이고, 따라서
+
+    $$
+    \frac{b_{y\mid x}}{1/b_{x\mid y}} = b_{y\mid x}\, b_{x\mid y} = \rho^2
+    $$
+
+    이다. 두 직선은 모두 $(\bar x, \bar y)$를 지난다(각 식에 $x = \bar x$ 또는 $y = \bar y$를 넣으면 다른 쪽도 평균이 된다).
+
+    **(b)** $\rho = 0.5$, $x = \bar x + 2s_x$이면 표준화 좌표에서 $(x - \bar x)/s_x = 2$이므로
+
+    $$
+    \frac{y - \bar y}{s_y} = 0.5 \times 2 = 1
+    \quad\Longrightarrow\quad
+    y = \bar y + s_y
+    $$
+
+    이 $y$를 $x$–on–$y$ 직선에 넣으면
+
+    $$
+    \frac{x - \bar x}{s_x} = 0.5 \times 1 = 0.5
+    \quad\Longrightarrow\quad
+    x = \bar x + 0.5\, s_x
+    $$
+
+    처음의 $\bar x + 2 s_x$로 돌아오지 **않는다**.
+
+    **(c)** 두 식은 같은 직선을 두 방향으로 푼 것이 아니라, **서로 다른 조건부 평균**을 재는 두 직선이다. 각 회귀는 자기 쪽 반응변수의 평균으로 예측을 끌어당긴다. 표준화 좌표에서 예측은 항상 $\rho$배로 줄어들므로, 두 번 예측하면 $\rho^2 = 0.25$배가 되어 $2 \to 1 \to 0.5$가 된다. 두 직선이 일치하는 것은 기울기의 곱 $\rho^2 = 1$, 곧 $\rho = \pm 1$일 때뿐이고 그때는 점들이 한 직선 위에 놓여 끌어당길 여지가 없다. $\rho \to 0$이면 $y$–on–$x$ 직선은 수평선 $y = \bar y$, $x$–on–$y$ 직선은 수직선 $x = \bar x$가 되어 두 직선이 직각으로 갈라진다. 이것이 "평균으로의 회귀"이며, 되돌아오지 않는 것은 결함이 아니라 $\lvert \rho \rvert < 1$의 필연적 결과다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
+1절 끝에서 "오차가 라플라스분포면 MLE는 최소절대편차 회귀가 된다"고 했다. 이를 확인하고 끝까지 밀어붙여 보자. 오차의 밀도가 $f(\varepsilon) = \dfrac{1}{2b}\exp\!\left(-\dfrac{\lvert \varepsilon \rvert}{b}\right)$라 하자.
+
+**(a)** 로그가능도함수를 적고, MLE가 $\sum_i \lvert y^{(i)} - \alpha - \beta x^{(i)} \rvert$를 최소화하는 것과 같음을 보여라.
+
+**(b)** 설명변수가 없는 모형 $y^{(i)} = \alpha + \varepsilon^{(i)}$, 자료 $y = (0, 1, 10)$에서 정규오차의 MLE(= OLS)와 라플라스오차의 MLE를 각각 구하라. 뒤쪽은 미분 대신 조각마다의 기울기를 세어 구하라.
+
+**(c)** 두 추정값을 두 기준에 각각 넣어 네 값을 비교하라.
+
+**(d)** $y^{(3)} = t$로 두고 $t \to \infty$를 보내면 두 추정값은 어떻게 되는가?
+
+</div>
+
+??? success "풀이"
+    **(a)** $y^{(i)} - \alpha - \beta x^{(i)} = \varepsilon^{(i)}$이 독립이므로
+
+    $$
+    L = \prod_{i=1}^m \frac{1}{2b}\exp\!\left(-\frac{\lvert y^{(i)} - \alpha - \beta x^{(i)} \rvert}{b}\right),
+    \qquad
+    l = -m\ln(2b) - \frac{1}{b}\sum_{i=1}^m \left\lvert y^{(i)} - \alpha - \beta x^{(i)} \right\rvert
+    $$
+
+    $b > 0$과 $-m\ln(2b)$는 $(\alpha, \beta)$에 의존하지 않으므로 $l$을 최대화하는 것은 절댓값 합을 최소화하는 것과 같다. 정규오차에서 지수가 제곱이었던 자리에 절댓값이 들어온 것이 전부이며, "제곱"은 정규 가정이 준 것임을 다시 확인한다.
+
+    **(b)** 정규오차: $J(\alpha) = \sum (y^{(i)} - \alpha)^2$의 미분을 0으로 두면 $\hat\alpha = \bar y = \dfrac{0 + 1 + 10}{3} = \dfrac{11}{3} \approx 3.6667$.
+
+    라플라스오차: $g(\alpha) = \lvert 0 - \alpha \rvert + \lvert 1 - \alpha \rvert + \lvert 10 - \alpha \rvert$는 조각마다 일차함수이고, 꺾이지 않는 구간에서의 기울기는
+
+    $$
+    g'(\alpha) = \#\{i: y^{(i)} < \alpha\} - \#\{i: y^{(i)} > \alpha\}
+    $$
+
+    이다. $\alpha \in (0, 1)$에서는 $1 - 2 = -1 < 0$, $\alpha \in (1, 10)$에서는 $2 - 1 = +1 > 0$이므로 $g$는 $\alpha = 1$에서 내려오던 것을 멈추고 올라간다. 따라서 유일한 최소점은 **중앙값** $\hat\alpha = 1$이다($\alpha < 0$에서는 기울기 $-3$, $\alpha > 10$에서는 $+3$이므로 바깥은 볼 필요가 없다).
+
+    **(c)** 두 기준의 값은 다음과 같다.
+
+    $$
+    \begin{array}{lcc}
+     & \textstyle\sum (y^{(i)} - \alpha)^2 & \textstyle\sum \lvert y^{(i)} - \alpha \rvert \\
+    \alpha = \bar y = 11/3 & 546/9 \approx 60.67 & 38/3 \approx 12.67 \\
+    \alpha = \text{중앙값} = 1 & 82 & 10
+    \end{array}
+    $$
+
+    각 추정값은 자기 기준에서만 이긴다. 평균은 제곱합을, 중앙값은 절댓값합을 최소화하므로 두 열의 승자가 서로 바뀌는 것이 당연하다.
+
+    **(d)** $y = (0, 1, t)$, $t \ge 1$에서 $\bar y = (1 + t)/3 \to \infty$이지만 중앙값은 $t \ge 1$인 동안 언제나 $1$로 **변하지 않는다**. 한 점 하나가 OLS 추정값을 원하는 어디로든 끌고 갈 수 있는 반면 중앙값은 꿈쩍하지 않는다. 그래서 라플라스 꼬리를 가정하는 것(= 최소절대편차)이 이상점에 강건하다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
+연습문제 2는 $\sum_i e_i = 0$을 얻었고 연습문제 3은 $\|Y\|^2 = \|\hat Y\|^2 + \|e\|^2$에서 $\mathrm{SST} = \mathrm{SSR} + \mathrm{SSE}$를 읽었다. 두 결론이 어디까지 가는지 절편 없는 모형으로 시험한다. 모형 $y = \beta x$(절편을 0으로 강제)와 자료 $(x, y) = (1, 0), (2, 3)$을 쓴다.
+
+**(a)** 정규방정식 $\mathbf X^\top \mathbf X \beta = \mathbf X^\top \mathbf y$에서 $\hat\beta$, 적합값, 잔차를 구하고 $\sum_i e_i \ne 0$임을 확인하라.
+
+**(b)** 그런데도 $\sum_i x_i e_i = 0$과 $\sum_i \hat y_i e_i = 0$, 따라서 $\|y\|^2 = \|\hat y\|^2 + \|e\|^2$은 성립한다. 수치로 확인하고, 행렬식 $\mathbf X^\top e = \mathbf 0$으로 (a)와 (b)를 함께 설명하라.
+
+**(c)** 이 자료에서 $\mathrm{SST}$, $\mathrm{SSR}$, $\mathrm{SSE}$를 평균을 빼고 계산하라. $\mathrm{SST} = \mathrm{SSR} + \mathrm{SSE}$가 성립하는가? $R^2$을 $1 - \mathrm{SSE}/\mathrm{SST}$로 재느냐 $\mathrm{SSR}/\mathrm{SST}$로 재느냐에 따라 값이 어떻게 갈리는가?
+
+</div>
+
+??? success "풀이"
+    **(a)** 설계행렬은 열이 하나인 $\mathbf X = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$, $\mathbf y = \begin{bmatrix} 0 \\ 3 \end{bmatrix}$이다. $\mathbf X^\top \mathbf X = 5$, $\mathbf X^\top \mathbf y = 1\cdot 0 + 2 \cdot 3 = 6$이므로
+
+    $$
+    \hat\beta = \frac{6}{5} = 1.2, \qquad
+    \hat y = (1.2,\ 2.4), \qquad
+    e = (0 - 1.2,\ 3 - 2.4) = (-1.2,\ 0.6)
+    $$
+
+    $\sum_i e_i = -1.2 + 0.6 = -0.6 \ne 0$이다.
+
+    **(b)** 직접 재면
+
+    $$
+    \sum_i x_i e_i = 1(-1.2) + 2(0.6) = 0, \qquad
+    \sum_i \hat y_i e_i = 1.2(-1.2) + 2.4(0.6) = -1.44 + 1.44 = 0
+    $$
+
+    $$
+    \|y\|^2 = 0 + 9 = 9, \qquad
+    \|\hat y\|^2 = 1.44 + 5.76 = 7.2, \qquad
+    \|e\|^2 = 1.44 + 0.36 = 1.8, \qquad 7.2 + 1.8 = 9
+    $$
+
+    설명은 정규방정식을 $\mathbf X^\top(\mathbf y - \mathbf X\hat{\boldsymbol\theta}) = \mathbf X^\top e = \mathbf 0$으로 다시 쓰는 데 있다. 이 식이 말하는 것은 "잔차가 **설계행렬의 각 열**과 직교한다"는 것뿐이다. 연습문제 2의 $\sum_i e_i = 0$은 1로만 채워진 **절편 열**에 대응하는 한 줄이므로, 그 열이 없으면 아무것도 $\sum_i e_i = 0$을 강제하지 않는다. 반면 $\hat y = \mathbf X \hat{\boldsymbol\theta}$는 언제나 열공간 안에 있으므로 $\hat y^\top e = \hat{\boldsymbol\theta}^\top \mathbf X^\top e = 0$이고, 중심화하지 않은 피타고라스 분해는 절편 없이도 그대로 성립한다.
+
+    **(c)** $\bar y = 1.5$, $\bar{\hat y} = 1.8$이다($\bar{\hat y} \ne \bar y$인 것이 이미 경고다).
+
+    $$
+    \mathrm{SST} = (0 - 1.5)^2 + (3 - 1.5)^2 = 4.5, \qquad
+    \mathrm{SSR} = (1.2 - 1.5)^2 + (2.4 - 1.5)^2 = 0.9, \qquad
+    \mathrm{SSE} = 1.8
+    $$
+
+    $\mathrm{SSR} + \mathrm{SSE} = 2.7 \ne 4.5 = \mathrm{SST}$이므로 **성립하지 않는다**. 따라서
+
+    $$
+    1 - \frac{\mathrm{SSE}}{\mathrm{SST}} = 1 - \frac{1.8}{4.5} = 0.6,
+    \qquad
+    \frac{\mathrm{SSR}}{\mathrm{SST}} = \frac{0.9}{4.5} = 0.2
+    $$
+
+    로 두 $R^2$ 정의가 어긋난다. 간극의 정체는 교차항이다. $y_i - \bar y = (\hat y_i - \bar y) + e_i$를 제곱해 더하면
+
+    $$
+    \mathrm{SST} = \mathrm{SSR} + \mathrm{SSE} + 2\sum_i (\hat y_i - \bar y) e_i,
+    \qquad
+    \sum_i (\hat y_i - \bar y) e_i = \underbrace{\sum_i \hat y_i e_i}_{= 0} - \bar y \sum_i e_i = -1.5 \times (-0.6) = 0.9
+    $$
+
+    이고 실제로 $0.9 + 1.8 + 2(0.9) = 4.5$로 맞는다. 절편이 있을 때 이 교차항을 0으로 만들어 주던 것이 바로 $\sum_i e_i = 0$이었다. 절편 없는 회귀의 $R^2$을 보고할 때 어느 정의를 썼는지 반드시 밝혀야 하는 이유다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+3절의 주석은 $\mathbf X^\top \mathbf X$가 가역인 것이 $\mathbf X$가 완전 열계수를 가질 때뿐이라고 했다. 그 경계에서 무엇이 무너지고 무엇이 살아남는지 본다. 설명변수가 $d = 2$개이고 $x_2^{(i)} = 2x_1^{(i)}$인 자료
+
+$$
+x_1 = (1, 2, 3), \qquad x_2 = (2, 4, 6), \qquad \mathbf y = (1, 2, 4)
+$$
+
+를 절편을 포함한 설계행렬 $\mathbf X = [\mathbf 1, x_1, x_2]$로 다룬다.
+
+**(a)** $\mathbf X^\top \mathbf X$와 $\mathbf X^\top \mathbf y$를 계산하고 $\det(\mathbf X^\top \mathbf X) = 0$임을 확인하라.
+
+**(b)** 정규방정식을 만족하는 $\boldsymbol\theta$ 전체를 구하라.
+
+**(c)** (b)의 어느 해를 골라도 적합값 $\hat{\mathbf y}$와 $\mathrm{RSS}$가 같음을 보여라. 왜 그런가?
+
+**(d)** (b)의 해 가운데 $\theta_1^2 + \theta_2^2$이 가장 작은 것을 구하라. 주석이 말한 릿지 회귀가 $\lambda \to 0^+$에서 고르는 해가 이것이다.
+
+</div>
+
+??? success "풀이"
+    **(a)** $\sum x_1 = 6$, $\sum x_2 = 12$, $\sum x_1^2 = 14$, $\sum x_1 x_2 = 28$, $\sum x_2^2 = 56$이므로
+
+    $$
+    \mathbf X^\top \mathbf X =
+    \begin{bmatrix}
+    3 & 6 & 12 \\
+    6 & 14 & 28 \\
+    12 & 28 & 56
+    \end{bmatrix},
+    \qquad
+    \mathbf X^\top \mathbf y =
+    \begin{bmatrix} 7 \\ 17 \\ 34 \end{bmatrix}
+    $$
+
+    셋째 열이 둘째 열의 정확히 2배이므로 $\det(\mathbf X^\top \mathbf X) = 0$이다. $\mathbf X$의 셋째 열이 둘째 열의 2배였던 것이 그대로 옮겨 온 것이다.
+
+    **(b)** $\theta_1 x_1 + \theta_2 x_2 = (\theta_1 + 2\theta_2) x_1$이므로 적합값은 $\theta_1$과 $\theta_2$를 따로 보지 않고 $\gamma := \theta_1 + 2\theta_2$만 본다. 곧 문제는 $\mathbf 1$과 $x_1$ 위에서의 단순회귀로 줄고, 2절의 공식에서
+
+    $$
+    \gamma = \frac{\sum (x_{1i} - \bar x_1)(y_i - \bar y)}{\sum (x_{1i} - \bar x_1)^2} = \frac{3}{2} = 1.5,
+    \qquad
+    \theta_0 = \bar y - \gamma \bar x_1 = \frac{7}{3} - 3 = -\frac{2}{3}
+    $$
+
+    (여기서 $\bar x_1 = 2$, $\bar y = 7/3$, 분자 $= (-1)(-4/3) + 0 + (1)(5/3) = 3$, 분모 $= 2$.) 따라서 해집합은 직선
+
+    $$
+    \boldsymbol\theta = \left(-\tfrac{2}{3},\ \tfrac{3}{2} - 2t,\ t\right), \qquad t \in \mathbb{R}
+    $$
+
+    이다. 실제로 $t = 0$인 $(-2/3, 3/2, 0)$을 넣으면 $3(-\frac23) + 6(\frac32) = 7$, $6(-\frac23) + 14(\frac32) = 17$, $12(-\frac23) + 28(\frac32) = 34$로 세 정규방정식이 모두 맞는다.
+
+    **(c)** 적합값은 $\hat y_i = \theta_0 + \gamma x_{1i}$로 $t$가 사라진 꼴이므로
+
+    $$
+    \hat{\mathbf y} = \left(\tfrac{5}{6},\ \tfrac{7}{3},\ \tfrac{23}{6}\right), \qquad
+    e = \left(\tfrac{1}{6},\ -\tfrac{1}{3},\ \tfrac{1}{6}\right), \qquad
+    \mathrm{RSS} = \frac{1 + 4 + 1}{36} = \frac{1}{6}
+    $$
+
+    로 $t$와 무관하다. 이유는 기하다. 비용함수는 $\boldsymbol\theta$를 $\mathbf X \boldsymbol\theta$로만 보고, $\mathbf X$의 영공간 방향 $(0, -2, 1)$로 아무리 움직여도 $\mathbf X \boldsymbol\theta$는 변하지 않는다. 열공간 위로의 사영 $\hat{\mathbf y}$는 유일하고, 그것을 만들어 내는 좌표 $\boldsymbol\theta$만 유일하지 않다. 바꾸어 말해 **예측은 멀쩡하고 계수 해석만 무너진다**.
+
+    **(d)** $\theta_1 + 2\theta_2 = 3/2$ 아래에서 $\theta_1^2 + \theta_2^2$을 최소화한다. 제약평면에 수직인 방향이 $(1, 2)$이므로 최소점은 $(\theta_1, \theta_2) = c(1, 2)$ 꼴이고 $c + 4c = 3/2$에서 $c = 3/10$이다. 곧
+
+    $$
+    (\theta_1, \theta_2) = (0.3,\ 0.6), \qquad \theta_1^2 + \theta_2^2 = 0.45
+    $$
+
+    ($t = 0$인 해의 $1.5^2 = 2.25$보다 훨씬 작다.) 릿지는 같은 $\mathrm{RSS}$를 주는 해들 가운데 계수 노름이 작은 쪽을 고르므로, 완전공선인 두 변수에 계수를 $\theta_1 : \theta_2 = 1 : 2$ 비율로 **나누어** 싣는다. 가역성이 무너진 자리에서 유일한 답을 되돌려 주는 것이 바로 이 추가 기준이다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+3절은 $J(\boldsymbol\theta) = \frac{1}{2m}\|\mathbf X \boldsymbol\theta - \mathbf y\|^2$의 일차조건으로 정규방정식을 얻었다. 일차조건만으로는 그 점이 최솟값인지 안장점인지 알 수 없다. 미분 없이 결론을 내는 항등식을 만든다.
+
+**(a)** $\hat{\boldsymbol\theta}$가 정규방정식의 해이면 모든 $\boldsymbol\theta$에 대해
+
+$$
+J(\boldsymbol\theta) = J(\hat{\boldsymbol\theta}) + \frac{1}{2m}\left\|\mathbf X(\boldsymbol\theta - \hat{\boldsymbol\theta})\right\|^2
+$$
+
+임을 보여라.
+
+**(b)** (a)에서 $\hat{\boldsymbol\theta}$가 전역최소점이라는 것, 그리고 최소점이 유일한 것이 $\mathbf X$가 완전 열계수를 가질 때뿐이라는 것을 읽어라. 연습문제 8의 $\boldsymbol\theta = (-\frac23, \frac32 - 2t, t)$에 (a)를 적용하면 무엇이 보이는가?
+
+**(c)** $J$의 헤세행렬을 구해 (b)와 같은 결론을 미분으로도 확인하라.
+
+**(d)** 1절 그림의 오른쪽 판에서 2500개 점이 모두 $\mathrm{RSS} \ge 4.80$, $\ln L \le -13.4273$ 쪽에만 놓이는 이유를 (a)로 설명하라.
+
+</div>
+
+??? success "풀이"
+    **(a)** $r := \mathbf y - \mathbf X \hat{\boldsymbol\theta}$라 두면 정규방정식은 $\mathbf X^\top r = \mathbf 0$이다. $\mathbf u := \boldsymbol\theta - \hat{\boldsymbol\theta}$로 쓰면
+
+    $$
+    \mathbf X \boldsymbol\theta - \mathbf y = \mathbf X(\hat{\boldsymbol\theta} + \mathbf u) - \mathbf y = \mathbf X \mathbf u - r
+    $$
+
+    이므로
+
+    $$
+    \|\mathbf X\boldsymbol\theta - \mathbf y\|^2
+    = \|\mathbf X \mathbf u\|^2 - 2\, (\mathbf X \mathbf u)^\top r + \|r\|^2
+    = \|\mathbf X \mathbf u\|^2 - 2\, \mathbf u^\top (\mathbf X^\top r) + \|r\|^2
+    = \|\mathbf X \mathbf u\|^2 + \|r\|^2
+    $$
+
+    이다. 가운데 항이 사라지는 것이 정규방정식 그 자체다. 양변을 $2m$으로 나누면 구하는 항등식을 얻는다.
+
+    **(b)** 둘째 항은 제곱노름이라 항상 $\ge 0$이므로 모든 $\boldsymbol\theta$에서 $J(\boldsymbol\theta) \ge J(\hat{\boldsymbol\theta})$이다. 미분도 볼록성 언급도 필요 없이 $\hat{\boldsymbol\theta}$는 **전역최소점**이다. 등호는 $\mathbf X \mathbf u = \mathbf 0$일 때뿐이므로, 최소점이 유일한 것은 $\mathbf X \mathbf u = \mathbf 0 \Rightarrow \mathbf u = \mathbf 0$, 곧 $\mathbf X$가 완전 열계수를 가질 때에 한한다. 연습문제 8에서는 $\mathbf u = t(0, -2, 1)$이고 $\mathbf X \mathbf u = t(-2 x_1 + x_2) = \mathbf 0$이므로 둘째 항이 모든 $t$에서 0이다. 그래서 $J$가 그 직선 위에서 **완전히 평평**하고, 거기 놓인 모든 $\boldsymbol\theta$가 똑같이 최소점이다.
+
+    **(c)** 3절의 미분 결과 $\dfrac{\partial J}{\partial \boldsymbol\theta} = \dfrac{1}{m}(\mathbf X^\top \mathbf X \boldsymbol\theta - \mathbf X^\top \mathbf y)$를 한 번 더 미분하면
+
+    $$
+    \frac{\partial^2 J}{\partial \boldsymbol\theta \, \partial \boldsymbol\theta^\top} = \frac{1}{m}\mathbf X^\top \mathbf X
+    $$
+
+    이다. 임의의 $\mathbf u$에 대해 $\mathbf u^\top \mathbf X^\top \mathbf X \mathbf u = \|\mathbf X\mathbf u\|^2 \ge 0$이므로 헤세행렬은 준양정부호이고 $J$는 볼록하다. 완전 열계수이면 $\mathbf u \ne \mathbf 0$에서 $\|\mathbf X \mathbf u\|^2 > 0$이라 양정부호가 되어 강볼록, 최소점이 유일하다. 계수가 모자라면 $\mathbf X^\top \mathbf X$의 고윳값 0에 해당하는 방향이 (b)의 평평한 방향이다. 안장점은 애초에 생길 수 없다.
+
+    **(d)** 그 그림의 $\mathrm{RSS}(\alpha, \beta) = 2m\,J(\alpha,\beta)$에 (a)를 적용하면
+
+    $$
+    \mathrm{RSS}(\alpha, \beta) = 4.80 + \left\|\mathbf X\left(\boldsymbol\theta - \hat{\boldsymbol\theta}\right)\right\|^2 \ \ge\ 4.80
+    $$
+
+    이다. 무작위로 뽑은 $(\alpha, \beta)$가 무엇이든 $\mathrm{RSS}$는 최적점 값보다 작아질 수 없고, $\ln L = -11.0273 - 0.50\,\mathrm{RSS}$가 $\mathrm{RSS}$의 감소함수이므로 $\ln L \le -13.4273$이다. 붉은 별이 직선의 **오른쪽 아래가 아니라 왼쪽 위 끝**에 놓이는 것이 이 때문이다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+1절은 동등성이 "어디까지" 가는지 물으며 $\sigma^2$이 $(\alpha, \beta)$에 의존하지 않아야 한다고 했다. 이번에는 $\sigma^2$이 관측마다 다른 경우를 본다. $\varepsilon^{(i)} \sim N(0, \sigma^2 / w_i)$이고 가중값 $w_i > 0$은 알려져 있으며 서로 독립이라 하자.
+
+**(a)** 로그가능도함수를 적고, MLE가 **가중** 잔차제곱합 $\sum_i w_i (y^{(i)} - \alpha - \beta x^{(i)})^2$을 최소화하는 것과 같음을 보여라.
+
+**(b)** 행렬 표기로 $\mathbf W = \mathrm{diag}(w_1, \ldots, w_m)$을 두고 가중 정규방정식을 유도하라. 모든 $w_i$가 같으면 3절의 결과로 돌아오는가?
+
+**(c)** 각 행에 $\sqrt{w_i}$를 곱하는 변환으로 (b)가 3절의 유도를 글자 그대로 되쓴 것임을 설명하라.
+
+**(d)** $x = (0, 1, 2)$, $y = (0, 2, 2)$, $w = (1, 1, 4)$에서 OLS 적합과 가중 적합을 모두 구하라. 두 적합의 가중 $\mathrm{RSS}$와 보통 $\mathrm{RSS}$를 비교하라.
+
+</div>
+
+??? success "풀이"
+    **(a)** $y^{(i)} \sim N(\alpha + \beta x^{(i)},\ \sigma^2/w_i)$이므로
+
+    $$
+    L = \prod_{i=1}^m \sqrt{\frac{w_i}{2\pi\sigma^2}}\,
+    \exp\!\left(-\frac{w_i}{2\sigma^2}\left(y^{(i)} - \alpha - \beta x^{(i)}\right)^2\right)
+    $$
+
+    $$
+    l = -\frac{m}{2}\ln(2\pi\sigma^2) + \frac12 \sum_{i=1}^m \ln w_i
+    - \frac{1}{2\sigma^2}\sum_{i=1}^m w_i \left(y^{(i)} - \alpha - \beta x^{(i)}\right)^2
+    $$
+
+    앞의 두 항은 $(\alpha, \beta)$에 의존하지 않으므로 $l$의 최대화는 가중 잔차제곱합의 최소화와 같다. 분산이 큰 관측은 $w_i$가 작아 덜 믿어 주는 것이 가능도가 저절로 하는 일이다.
+
+    **(b)** 가중 비용함수는
+
+    $$
+    J_{\mathbf W}(\boldsymbol\theta) = \frac{1}{2m}(\mathbf X\boldsymbol\theta - \mathbf y)^\top \mathbf W (\mathbf X\boldsymbol\theta - \mathbf y)
+    = \frac{1}{2m}\left(\boldsymbol\theta^\top \mathbf X^\top \mathbf W \mathbf X \boldsymbol\theta - 2\boldsymbol\theta^\top \mathbf X^\top \mathbf W \mathbf y + \mathbf y^\top \mathbf W \mathbf y\right)
+    $$
+
+    이고($\mathbf W$가 대칭이라 가운데 두 항이 합쳐진다), 3절과 같은 항등식으로 미분하면
+
+    $$
+    \frac{\partial J_{\mathbf W}}{\partial \boldsymbol\theta} = \frac{1}{m}\left(\mathbf X^\top \mathbf W \mathbf X \boldsymbol\theta - \mathbf X^\top \mathbf W \mathbf y\right) = \mathbf 0
+    \quad\Longrightarrow\quad
+    \hat{\boldsymbol\theta}_{\mathbf W} = \left(\mathbf X^\top \mathbf W \mathbf X\right)^{-1}\mathbf X^\top \mathbf W \mathbf y
+    $$
+
+    $\mathbf W = c\mathbf I$이면 $c$가 분자와 분모에서 약분되어 $\hat{\boldsymbol\theta} = (\mathbf X^\top \mathbf X)^{-1}\mathbf X^\top \mathbf y$로 돌아온다. 곧 **가중값이 모두 같으면 가중 자체가 아무 일도 하지 않는다**.
+
+    **(c)** $\mathbf W^{1/2} = \mathrm{diag}(\sqrt{w_1}, \ldots, \sqrt{w_m})$으로 $\tilde{\mathbf X} = \mathbf W^{1/2}\mathbf X$, $\tilde{\mathbf y} = \mathbf W^{1/2}\mathbf y$를 만들면
+
+    $$
+    (\mathbf X\boldsymbol\theta - \mathbf y)^\top \mathbf W (\mathbf X\boldsymbol\theta - \mathbf y) = \|\tilde{\mathbf X}\boldsymbol\theta - \tilde{\mathbf y}\|^2
+    $$
+
+    이다. 변환된 자료의 오차는 $\sqrt{w_i}\,\varepsilon^{(i)} \sim N(0, \sigma^2)$으로 등분산이 되었으므로, 3절의 유도를 글자 하나 바꾸지 않고 적용해 $\tilde{\mathbf X}^\top \tilde{\mathbf X}\boldsymbol\theta = \tilde{\mathbf X}^\top \tilde{\mathbf y}$, 곧 $\mathbf X^\top \mathbf W \mathbf X \boldsymbol\theta = \mathbf X^\top \mathbf W \mathbf y$를 얻는다. 가중최소제곱은 새 방법이 아니라 **좌표를 바꾼 최소제곱**이다.
+
+    **(d)** OLS: $\bar x = 1$, $\bar y = 4/3$, $\sum (x_i - \bar x)^2 = 2$, $\sum (x_i - \bar x)(y_i - \bar y) = (-1)(-\tfrac43) + 0 + (1)(\tfrac23) = 2$이므로
+
+    $$
+    \hat\beta = 1, \qquad \hat\alpha = \frac43 - 1 = \frac13, \qquad
+    \hat y = \left(\tfrac13,\ \tfrac43,\ \tfrac73\right), \qquad
+    e = \left(-\tfrac13,\ \tfrac23,\ -\tfrac13\right)
+    $$
+
+    가중 적합: 가중평균이 $\bar x_w = \dfrac{0 + 1 + 8}{6} = 1.5$, $\bar y_w = \dfrac{0 + 2 + 8}{6} = \dfrac53$이고
+
+    $$
+    \sum w_i (x_i - \bar x_w)^2 = 2.25 + 0.25 + 1 = 3.5, \qquad
+    \sum w_i (x_i - \bar x_w)(y_i - \bar y_w) = 2.5 - \tfrac16 + \tfrac23 = 3
+    $$
+
+    이므로
+
+    $$
+    \hat\beta_{\mathbf W} = \frac{3}{3.5} = \frac67 \approx 0.8571, \qquad
+    \hat\alpha_{\mathbf W} = \frac53 - \frac67 \cdot \frac32 = \frac{35 - 27}{21} = \frac{8}{21} \approx 0.3810
+    $$
+
+    $$
+    \hat y_{\mathbf W} = \left(\tfrac{8}{21},\ \tfrac{26}{21},\ \tfrac{44}{21}\right), \qquad
+    e_{\mathbf W} = \left(-\tfrac{8}{21},\ \tfrac{16}{21},\ -\tfrac{2}{21}\right)
+    $$
+
+    두 기준의 값은
+
+    $$
+    \begin{array}{lcc}
+     & \textstyle\sum w_i e_i^2 & \textstyle\sum e_i^2 \\
+    \text{OLS 적합} & 1 & 6/9 \approx 0.6667 \\
+    \text{가중 적합} & 336/441 \approx 0.7619 & 324/441 \approx 0.7347
+    \end{array}
+    $$
+
+    각 적합이 자기 기준에서만 이긴다. 가중 적합은 네 배로 믿는 셋째 점($x = 2$)의 잔차를 $-1/3$에서 $-2/21 \approx -0.095$로 줄이는 대신 첫째 점의 잔차를 키웠다. 가중값이 맞다면 이쪽이 MLE이며, 여기서 OLS를 쓰면 추정량은 여전히 불편이지만 최소분산은 아니다. 가우스–마르코프 정리가 요구하는 등분산 가정이 깨졌기 때문이다. $\square$
+
 ---
 
 ## 정리하며

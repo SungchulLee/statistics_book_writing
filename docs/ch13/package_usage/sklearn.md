@@ -891,6 +891,447 @@ scikit-learn의 `LinearRegression`이 계수의 p값이나 신뢰구간을 제�
 
     참고: sklearn은 점수가 클수록 좋다는 관례(채점기는 최대화되어야 한다)를 지키기 위해 음의 MSE(`neg_mean_squared_error`)를 쓴다.
 
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+보기 2 는 레버리지 $h(\mathbf{x}) = \tilde{\mathbf{x}}^\top (\mathbf{X}_{\text{design}}^\top\mathbf{X}_{\text{design}})^{-1} \tilde{\mathbf{x}}$ 를 두 점에서 계산해 $0.02896$ 과 $0.05179$ 를 얻었고, 훈련점의 레버리지 평균이 $p/n = 0.03$ 이라고 했다.
+
+**(1)** 보기 7 **(2)** 에서 쓴 "가역행렬을 오른쪽에 곱해도 열공간이 바뀌지 않는다"는 수법을 그대로 써서
+
+$$
+h(\mathbf{x}) = \frac{1}{n} + (\mathbf{x} - \bar{\mathbf{x}})^\top \mathbf{S}^{-1}(\mathbf{x} - \bar{\mathbf{x}}),
+\qquad
+\mathbf{S} = \sum_{i=1}^{n}(\mathbf{x}_i - \bar{\mathbf{x}})(\mathbf{x}_i - \bar{\mathbf{x}})^\top
+$$
+
+임을 보이시오.
+
+**(2)** 이 식에서 $h$ 가 가질 수 있는 가장 작은 값과 그 값이 나오는 점을 말하시오. 보기 2 의 두 점에서 둘째 항은 각각 얼마인가. 또 적합값의 표준오차($s = 0.5349$)가 가장 작아질 수 있는 값을 구해 보기 2 의 $0.0910$ 과 견주시오.
+
+</div>
+
+??? success "풀이"
+    **(1) 중심화로 블록을 떼어 낸다.** $\mathbf{X}^c = \mathbf{X} - \mathbf{1}\bar{\mathbf{x}}^\top$ 라 하면
+
+    $$
+    \mathbf{X}_{\text{design}} = [\,\mathbf{1} \;\; \mathbf{X}\,]
+    = [\,\mathbf{1} \;\; \mathbf{X}^c\,]
+      \underbrace{\begin{pmatrix} 1 & \bar{\mathbf{x}}^\top \\ \mathbf{0} & \mathbf{I}\end{pmatrix}}_{=\ \mathbf{A}}
+    $$
+
+    이다(오른쪽을 곱해 보면 둘째 블록이 $\mathbf{1}\bar{\mathbf{x}}^\top + \mathbf{X}^c = \mathbf{X}$ 다). 중심화한 열은 $\mathbf{1}^\top\mathbf{X}^c = \mathbf{0}^\top$ 으로 $\mathbf{1}$ 과 직교하므로
+
+    $$
+    [\,\mathbf{1} \;\; \mathbf{X}^c\,]^\top [\,\mathbf{1} \;\; \mathbf{X}^c\,]
+    = \begin{pmatrix} n & \mathbf{0}^\top \\ \mathbf{0} & \mathbf{S}\end{pmatrix}
+    $$
+
+    처럼 **블록대각**이 된다. 따라서 $\mathbf{X}_{\text{design}}^\top\mathbf{X}_{\text{design}} = \mathbf{A}^\top \operatorname{diag}(n, \mathbf{S})\,\mathbf{A}$ 이고
+
+    $$
+    (\mathbf{X}_{\text{design}}^\top\mathbf{X}_{\text{design}})^{-1}
+    = \mathbf{A}^{-1}\begin{pmatrix} 1/n & \mathbf{0}^\top \\ \mathbf{0} & \mathbf{S}^{-1}\end{pmatrix}\mathbf{A}^{-\top}
+    $$
+
+    이다. $\mathbf{A}^{-1} = \begin{pmatrix} 1 & -\bar{\mathbf{x}}^\top \\ \mathbf{0} & \mathbf{I}\end{pmatrix}$ 이므로 $\tilde{\mathbf{x}} = (1, \mathbf{x})^\top$ 에 대해
+
+    $$
+    \mathbf{A}^{-\top}\tilde{\mathbf{x}}
+    = \begin{pmatrix} 1 & \mathbf{0}^\top \\ -\bar{\mathbf{x}} & \mathbf{I}\end{pmatrix}\begin{pmatrix} 1 \\ \mathbf{x}\end{pmatrix}
+    = \begin{pmatrix} 1 \\ \mathbf{x} - \bar{\mathbf{x}}\end{pmatrix}
+    $$
+
+    이고, 이것을 가운데 블록대각 행렬에 끼워 넣으면
+
+    $$
+    h(\mathbf{x}) = \frac{1}{n} + (\mathbf{x} - \bar{\mathbf{x}})^\top\mathbf{S}^{-1}(\mathbf{x} - \bar{\mathbf{x}})
+    $$
+
+    가 나온다. $\square$
+
+    **(2) 바닥은 $1/n$ 이다.** $\mathbf{S}$ 가 양정부호이므로 둘째 항은 $0$ 이상이고, $\mathbf{x} = \bar{\mathbf{x}}$ 일 때만 $0$ 이다. 그러므로
+
+    $$
+    h_{\min} = \frac{1}{n} = 0.01 \quad\text{(자료의 무게중심 } \bar{\mathbf{x}} = (-0.1156,\ 0.0340) \text{ 에서)}
+    $$
+
+    이다. 보기 2 의 두 점에서 둘째 항은 각각 $0.02896 - 0.01 = 0.01896$ 과 $0.05179 - 0.01 = 0.04179$ 다. $\mathbf{S} = (n-1)\widehat{\boldsymbol\Sigma}$ 이므로 둘째 항은 마할라노비스 거리의 제곱을 $n-1$ 로 나눈 것이고, 거리로 되돌리면 $\sqrt{99 \times 0.01896} = 1.370$ 과 $\sqrt{99 \times 0.04179} = 2.034$ 다. 중심에서 각각 $1.37$ 과 $2.03$ 만큼 떨어져 있다는 뜻이다.
+
+    표준오차의 바닥은
+
+    $$
+    \mathrm{SE}_{\min} = s\sqrt{h_{\min}} = 0.5349 \times \sqrt{0.01} = 0.05349
+    $$
+
+    이고, 보기 2 의 첫째 점은 $0.0910 = 1.70 \times 0.05349$ 다. 그 배수가 $\sqrt{h/h_{\min}} = \sqrt{0.02896/0.01} = 1.702$ 로 설명된다.
+
+    **읽을 거리는 평균 레버리지의 뜻이다.** 훈련점의 레버리지 합은 사영행렬의 대각합이라 $p = 3$ 이고 평균이 $0.03$ 이다. 그러나 **평균 레버리지의 점은 "가장 좋은" 점이 아니다.** 바닥이 $0.01$ 이므로 평균짜리 점조차 중심의 점보다 표준오차가 $\sqrt{3} = 1.73$ 배 크다. 보기 2 가 "첫째 점은 평균과 거의 같으니 전형적인 점" 이라고 한 것은 맞지만, 전형적이라는 것이 정확하다는 뜻은 아니다.
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
+보기 4 **(2)** 는 잔차가 정규일 때 $\mathrm{MAE}/\mathrm{RMSE} \to \sqrt{2/\pi} = 0.79788$ 임을 보이고, 이 비가 잔차분포의 **모양**을 재는 눈금이라고 했다.
+
+**(1)** 이 비가 **절대값** $\lvert\varepsilon\rvert$ 의 변동계수 $\mathrm{CV} = \sqrt{\operatorname{Var}\lvert\varepsilon\rvert}\,/\,E\lvert\varepsilon\rvert$ 하나로 정해짐을 보이시오. 곧 극한값이 $1/\sqrt{1 + \mathrm{CV}^2}$ 임을 보이시오.
+
+**(2)** 그 식으로 라플라스분포($f(x) = \frac{1}{2b}e^{-\lvert x\rvert/b}$)와 균등분포 $U(-a, a)$ 에서 비의 극한값을 구하고, 정규분포의 $0.79788$ 과 함께 크기순으로 늘어놓으시오. 보기 4 가 적어 둔 세 줄 해석과 어긋나지 않는가. 이 비가 정확히 $1$ 이 되는 분포는 무엇이고, $0$ 에 얼마든지 가깝게 만들 수 있는가.
+
+</div>
+
+??? success "풀이"
+    **(1) 제곱하면 변동계수만 남는다.** 큰 수의 법칙으로 $\mathrm{MAE} \to E\lvert\varepsilon\rvert$, $\mathrm{RMSE} \to \sqrt{E[\varepsilon^2]}$ 이다. $E[\varepsilon^2] = E[\lvert\varepsilon\rvert^2] = (E\lvert\varepsilon\rvert)^2 + \operatorname{Var}\lvert\varepsilon\rvert$ 이므로
+
+    $$
+    \left(\frac{\mathrm{MAE}}{\mathrm{RMSE}}\right)^{\!2}
+    \longrightarrow \frac{(E\lvert\varepsilon\rvert)^2}{(E\lvert\varepsilon\rvert)^2 + \operatorname{Var}\lvert\varepsilon\rvert}
+    = \frac{1}{1 + \mathrm{CV}^2}
+    $$
+
+    이고 따라서 $\mathrm{MAE}/\mathrm{RMSE} \to (1 + \mathrm{CV}^2)^{-1/2}$ 다. **잔차의 부호와 크기 눈금은 모두 약분되고, 남는 것은 "잔차의 크기가 서로 얼마나 다른가" 뿐이다.**
+
+    **(2) 세 분포를 넣어 본다.**
+
+    라플라스라면 $\lvert\varepsilon\rvert \sim \mathrm{Exp}(b)$ 이고 지수분포는 평균과 표준편차가 모두 $b$ 이므로 $\mathrm{CV} = 1$ 이다.
+
+    $$
+    \frac{\mathrm{MAE}}{\mathrm{RMSE}} \to \frac{1}{\sqrt{2}} = 0.70711
+    $$
+
+    직접 세어도 같다. $E\lvert\varepsilon\rvert = b$, $E[\varepsilon^2] = 2b^2$ 이므로 $b/(b\sqrt{2})$ 다.
+
+    균등분포라면 $\lvert\varepsilon\rvert \sim U(0, a)$ 이고 평균 $a/2$, 분산 $a^2/12$ 이므로 $\mathrm{CV}^2 = (a^2/12)/(a^2/4) = 1/3$ 이다.
+
+    $$
+    \frac{\mathrm{MAE}}{\mathrm{RMSE}} \to \frac{1}{\sqrt{4/3}} = \frac{\sqrt{3}}{2} = 0.86603
+    $$
+
+    역시 직접 세면 $E\lvert\varepsilon\rvert = a/2$, $\sqrt{E[\varepsilon^2]} = a/\sqrt3$ 로 같은 값이다. 정규분포도 확인된다. 반정규의 $\mathrm{CV}^2 = (1 - 2/\pi)/(2/\pi) = \pi/2 - 1$ 이므로 $(1 + \pi/2 - 1)^{-1/2} = \sqrt{2/\pi}$ 다.
+
+    크기순으로는
+
+    $$
+    \underbrace{0.70711}_{\text{라플라스}} \;<\; \underbrace{0.79788}_{\text{정규}} \;<\; \underbrace{0.86603}_{\text{균등}} \;<\; 1
+    $$
+
+    이고 첨도가 $6 > 3 > 1.8$ 로 정확히 거꾸로다. **꼬리가 두꺼울수록 비가 작다**는 보기 4 의 세 줄과 어긋나지 않는다.
+
+    비가 $1$ 이 되는 것은 $\mathrm{CV} = 0$, 곧 $\lvert\varepsilon\rvert$ 가 상수일 때뿐이다. 잔차가 $\pm c$ 두 값만 갖는 분포가 그것이며, 보기 4 **(1)** 의 코시-슈바르츠 등호 조건("모든 $a_i$ 가 같다")과 같은 조건이다.
+
+    아래로는 $0$ 에 얼마든지 가까워진다. 확률 $1-p$ 로 $0$, 확률 $p$ 로 $\pm c$ 인 잔차를 두면 $E\lvert\varepsilon\rvert = pc$, $E[\varepsilon^2] = pc^2$ 이므로
+
+    $$
+    \frac{\mathrm{MAE}}{\mathrm{RMSE}} = \frac{pc}{c\sqrt{p}} = \sqrt{p} \;\xrightarrow[p \to 0]{}\; 0
+    $$
+
+    이다. 그러므로 이 눈금의 범위는 $(0, 1]$ 이다. **"거의 모든 잔차가 0 이고 몇 개만 크다" 가 비를 0 으로 미는 극단**이며, 그것이 꼬리가 두꺼운 쪽의 끝이다. 보기 4 가 "비가 $0.6$ 쯤이면 이상치를 찾아보라" 고 한 까닭이 여기서 수로 보인다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
+보기 3 은 네 수를 $0.9783$(모집단) $\to 0.9687$(이 표본의 천장) $\to 0.9691$(참 $\beta$) $\to 0.9706$(최소제곱)로 늘어놓았다. 이 사슬의 첫 걸음과 마지막 걸음은 **성질이 다르다.**
+
+**(1)** 같은 자료에서 $R^2_{\text{OLS}} \ge R^2_{\text{참}\,\beta}$ 가 **어떤 표본에서도** 성립함을 보이시오. 또 그 차이의 기댓값이 근사적으로 $p\sigma^2/(n\operatorname{Var}(y))$ 임을 보이고 보기 3 의 설정에서 수를 구하시오.
+
+**(2)** 반면 "이 표본의 천장이 모집단 $R^2$ 보다 낮다"는 것은 표본마다 달라지는 말이다. 표본 $2000$ 개를 새로 만들어 두 주장이 성립하는 비율과, (1) 의 차이의 평균·최소·최대를 재어 (1) 을 확인하시오.
+
+</div>
+
+??? success "풀이"
+    **(1) 분모가 같으므로 부등식이 된다.** 두 $R^2$ 는 같은 $\mathbf{y}$ 로 계산하니 분모 $\mathrm{TSS}$ 가 같고, 분자만 다르다. 최소제곱은 절편과 기울기를 모두 움직여 $\mathrm{RSS}$ 를 최소화하며 참값 $(2.0,\ 3.0,\ 1.5)$ 도 그 후보 가운데 하나다. 그러므로
+
+    $$
+    \mathrm{RSS}_{\text{OLS}} \le \mathrm{RSS}_{\text{참}\,\beta}
+    \quad\Longrightarrow\quad
+    R^2_{\text{OLS}} \ge R^2_{\text{참}\,\beta}
+    $$
+
+    이고, 등호는 최소제곱 해가 참값과 정확히 같을 때뿐이므로 확률 $0$ 이다. **표본을 보고 나서 정하는 부등식이 아니라 언제나 성립하는 부등식**이다.
+
+    차이의 크기는 두 기댓값에서 나온다.
+
+    $$
+    E[\mathrm{RSS}_{\text{OLS}}] = \sigma^2(n - p),
+    \qquad
+    E[\mathrm{RSS}_{\text{참}\,\beta}] = E\Bigl[\sum_i \varepsilon_i^2\Bigr] = \sigma^2 n
+    $$
+
+    이므로 분자의 차이가 $p\sigma^2$ 이고, $\mathrm{TSS} \approx n\operatorname{Var}(y)$ 로 나누면
+
+    $$
+    E\bigl[R^2_{\text{OLS}} - R^2_{\text{참}\,\beta}\bigr]
+    \approx \frac{p\sigma^2}{n\operatorname{Var}(y)}
+    = \frac{3 \times 0.25}{100 \times 11.5}
+    = 0.000652
+    $$
+
+    다. 보기 3 에서 실제로 본 차이는 $0.970625 - 0.969088 = 0.001537$ 로 이 평균의 $2.4$ 배다. 차이가 $\sigma^2\chi^2_p/\mathrm{TSS}$ 꼴이어서 표준편차가 평균의 $\sqrt{2/p} = 0.82$ 배나 되므로 그만큼 흔들린다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+
+    rng = np.random.default_rng(0)
+    beta_true = np.array([3.0, 1.5])
+    n, reps = 100, 2000
+    gap, ols_wins, ceil_low = [], 0, 0
+
+    for _ in range(reps):
+        Xr = rng.normal(size=(n, 2))
+        eps = rng.normal(scale=0.5, size=n)
+        yr = Xr @ beta_true + 2.0 + eps
+        tss = ((yr - yr.mean()) ** 2).sum()
+
+        r2_ols = LinearRegression().fit(Xr, yr).score(Xr, yr)
+        r2_oracle = 1 - ((yr - (Xr @ beta_true + 2.0)) ** 2).sum() / tss
+        gap.append(r2_ols - r2_oracle)
+        ols_wins += r2_ols >= r2_oracle
+
+        v_sig = (Xr @ beta_true).var(ddof=1)        # 이 표본에서 실현된 신호의 분산
+        ceil_low += v_sig / (v_sig + eps.var(ddof=1)) < 11.25 / 11.5
+
+    gap = np.array(gap)
+    print(f"R^2(OLS) >= R^2(참 beta) 인 비율 = {ols_wins / reps:.4f}")
+    print(f"차이의 평균 = {gap.mean():.6f}   (유도 p sigma^2/(n Var y) = {3 * 0.25 / (n * 11.5):.6f})")
+    print(f"차이의 최소 = {gap.min():.6f},  최대 = {gap.max():.6f}")
+    print(f"이 표본의 천장이 0.978261 보다 낮은 비율 = {ceil_low / reps:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    R^2(OLS) >= R^2(참 beta) 인 비율 = 1.0000
+    차이의 평균 = 0.000658   (유도 p sigma^2/(n Var y) = 0.000652)
+    차이의 최소 = 0.000001,  최대 = 0.004182
+    이 표본의 천장이 0.978261 보다 낮은 비율 = 0.4845
+    ```
+
+    **부등식은 $2000$ 번 가운데 $2000$ 번 성립했다.** 비율이 $1.0000$ 이고 차이의 최소값이 $0.000001$ 로 한 번도 $0$ 을 넘어가지 않았다. 평균 $0.000658$ 은 유도한 $0.000652$ 와 $1\%$ 차이다. 최대값이 $0.004182$ 로 평균의 $6$ 배까지 벌어지는 것은 $\chi^2_3$ 의 긴 꼬리 때문이다.
+
+    **반면 첫 걸음은 동전 던지기다.** "이 표본의 천장이 모집단 $0.978261$ 보다 낮다"가 성립한 비율이 $0.4845$ 로 반이다. 보기 3 의 표본에서 천장이 $0.968689$ 로 낮게 나온 것은 **그 표본의 운**이고, 다른 표본에서는 거꾸로 $0.978261$ 보다 높은 천장이 나온다.
+
+    정리하면 보기 3 의 사슬에서 마지막 걸음은 **법칙**이고 첫 걸음은 **운**이다. 그래서 훈련 $R^2$ 는 모집단 $R^2$ 보다 클 수도 작을 수도 있지만, 참 $\beta$ 로 계산한 $R^2$ 보다는 반드시 크다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+보기 7 **(2)** 는 `StandardScaler` 가 OLS 의 예측을 바꾸지 못함을 $\mathbf{A}$ 가 가역이라는 것으로 보였다. 그 $\mathbf{A}$ 의 첫 행이 설계행렬의 $\mathbf{1}$ 열에 곱해진다는 것에 주의하라.
+
+**(1)** `LinearRegression(fit_intercept=False)` 로 바꾸면 이 결론이 깨진다. 중심화($-\bar x_j$)와 척도화($/s_j$) 가운데 어느 쪽이 깨뜨리는지 가리고, `StandardScaler(with_mean=False)` 는 `fit_intercept=False` 에서도 예측을 바꾸지 못함을 보이시오.
+
+**(2)** $n = 2$, $p = 1$ 의 가장 작은 반례를 만들어 (1) 을 확인하시오. 그리고 `fit_intercept=False` 에서도 중심화가 예측을 바꾸지 못하는 조건을 적고, 그 조건이 보기 7 의 증명에서 어디에 숨어 있었는지 말하시오.
+
+</div>
+
+??? success "풀이"
+    **(1) 깨뜨리는 것은 중심화다.** 두 연산을 따로 보아야 한다.
+
+    척도화만 하면 설계행렬이 $\mathbf{X}\mathbf{D}^{-1}$ 이고 $\mathbf{D}^{-1}$ 은 $p \times p$ 가역행렬이다. 가역행렬을 오른쪽에 곱하는 것은 열공간을 바꾸지 않으므로
+
+    $$
+    \mathcal{C}(\mathbf{X}\mathbf{D}^{-1}) = \mathcal{C}(\mathbf{X})
+    $$
+
+    이고 사영이 같아 적합값과 예측이 모두 그대로다. 계수만 $\hat{\boldsymbol\beta}_{\text{new}} = \mathbf{D}\hat{\boldsymbol\beta}$ 로 바뀐다. **그러므로 `with_mean=False` 는 절편이 없어도 안전하다.**
+
+    중심화를 하면 설계행렬이 $\mathbf{X}^c = \mathbf{X} - \mathbf{1}\bar{\mathbf{x}}^\top$ 이 된다. 이 열들은 $\mathcal{C}([\,\mathbf{1}\;\;\mathbf{X}\,])$ 안에 있지만 $\mathcal{C}(\mathbf{X})$ 안에 있을 이유가 없다. 보기 7 의 $\mathbf{A}$ 에서 중심화가 만들어 낸 항이 첫 행의 $-\bar{\mathbf{x}}^\top\mathbf{D}^{-1}$ 이었고, 그것이 곱해지는 상대가 바로 $\mathbf{1}$ 열이다. **$\mathbf{1}$ 열이 중심화를 흡수해 주었기 때문에 열공간이 보존된 것이고, 그 열이 없으면 흡수할 데가 없다.**
+
+    **(2) 가장 작은 반례.** $n = 2$, $p = 1$, $\mathbf{x} = (1, 3)^\top$, $\mathbf{y} = (0, 1)^\top$ 을 절편 없이 적합한다.
+
+    원래 자료로는
+
+    $$
+    \hat\beta = \frac{\mathbf{x}^\top\mathbf{y}}{\mathbf{x}^\top\mathbf{x}} = \frac{3}{10} = 0.3,
+    \qquad \hat{\mathbf{y}} = (0.3,\ 0.9)^\top,
+    \qquad \mathrm{RSS} = 0.09 + 0.01 = 0.10
+    $$
+
+    이다. 중심화하면 $\bar x = 2$, $\mathbf{x}^c = (-1, 1)^\top$ 이므로
+
+    $$
+    \hat\beta = \frac{(-1)\cdot 0 + 1 \cdot 1}{1 + 1} = 0.5,
+    \qquad \hat{\mathbf{y}} = (-0.5,\ 0.5)^\top,
+    \qquad \mathrm{RSS} = 0.25 + 0.25 = 0.50
+    $$
+
+    다. 예측이 $(0.3, 0.9)$ 에서 $(-0.5, 0.5)$ 로 완전히 달라지고 $\mathrm{RSS}$ 가 다섯 배가 되었다. 중심화한 쪽은 열이 $(-1, 1)$ 뿐이라 **$\mathbf{y}$ 의 평균 $0.5$ 를 맞출 길이 아예 없다.** 척도화를 더해도 ($\mathbf{x}^c/s$) 적합값은 그대로이니, 범인이 중심화임이 분명하다.
+
+    **조건은 "$\mathbf{1}\bar{\mathbf{x}}^\top$ 의 열이 $\mathcal{C}(\mathbf{X})$ 안에 있다" 다.** 곧 다음 둘 가운데 하나다.
+
+    - $\bar{\mathbf{x}} = \mathbf{0}$: 각 열의 평균이 $0$ 이면 중심화가 아무 일도 하지 않는다.
+    - $\mathbf{1} \in \mathcal{C}(\mathbf{X})$: 설계행렬이 이미 절편을 품고 있으면 $\mathbf{1}\bar{\mathbf{x}}^\top$ 을 빼도 열공간을 벗어나지 않는다.
+
+    `fit_intercept=True` 는 $\mathbf{1}$ 열을 직접 붙여 두 번째 조건을 **보장한다.** 보기 7 의 증명이 조건을 따로 적지 않은 까닭이 이것이며, 조건은 그 $\mathbf{1}$ 열 안에 숨어 있었다.
+
+    단서 하나를 붙여 둔다. $\mathbf{1} \in \mathcal{C}(\mathbf{X})$ 라도 중심화가 **랭크를 떨어뜨리면** 예측이 달라진다. $\mathbf{X}$ 의 한 열이 $\mathbf{1}$ 그 자체이면 중심화가 그 열을 $\mathbf{0}$ 으로 만들어 차원이 하나 줄기 때문이다. 보기 1 의 끝에서 "`X` 에 $1$ 로 채운 열을 붙이면 안 된다" 고 한 자리와 같은 함정이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+보기 6 **(1)** 은 `cv=5` 가 `shuffle=False` 로 자료를 통째로 다섯 토막 낸다는 것을 보이고 "자료가 시간순이거나 집단별로 정렬되어 있으면 함정이 된다"고 했다. 그 함정의 크기를 재어 보자. 보기 1 의 자료 $100$ 개를 **$y$ 가 커지는 순서로 줄 세운 뒤** 똑같이 `cross_val_score(..., cv=5)` 를 부른다.
+
+**(1)** 다섯 점수를 수로 보이고, 음수가 되는 겹이 생기는 까닭을 $R^2 = 1 - \mathrm{RSS}/\mathrm{TSS}$ 의 분자와 분모로 나누어 설명하시오. **모형의 예측이 나빠진 것인가.**
+
+**(2)** `KFold(n_splits=5, shuffle=True, random_state=0)` 를 `cv` 에 넘기면 되돌아오는지 확인하고, 이 함정이 보기 6 의 자료에서는 드러나지 않았던 까닭을 말하시오.
+
+</div>
+
+??? success "풀이"
+    먼저 무슨 일이 일어날지 생각해 두자. 줄 세운 뒤의 겹 하나는 "$y$ 가 서로 비슷한 $20$ 개" 다. 모형은 나머지 $80$ 개로 적합되므로 예측 자체는 멀쩡하겠지만, $R^2$ 의 분모는 **그 겹 안에서의 $y$ 의 흩어짐**으로 계산된다. 그 흩어짐이 거의 없으니 분모가 작아져 비가 폭발할 것이다.
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import KFold, cross_val_score
+
+    # 보기 1 의 자료를 그대로 다시 만든다.
+    np.random.seed(42)
+    n = 100
+    Xo = np.random.randn(n, 2)
+    yo = Xo @ np.array([3.0, 1.5]) + 2.0 + np.random.randn(n) * 0.5
+
+    order = np.argsort(yo)                      # y 가 커지는 순서로 줄 세운다
+    Xs, ys = Xo[order], yo[order]
+
+    print("원래 순서   :", cross_val_score(LinearRegression(), Xo, yo, cv=5, scoring='r2').round(4))
+    print("y 로 정렬   :", cross_val_score(LinearRegression(), Xs, ys, cv=5, scoring='r2').round(4))
+    kf_shuffle = KFold(n_splits=5, shuffle=True, random_state=0)
+    print("정렬 + 섞기 :", cross_val_score(LinearRegression(), Xs, ys, cv=kf_shuffle, scoring='r2').round(4))
+
+    print(f"전체 분산 = {((yo - yo.mean()) ** 2).mean():.4f}")
+    for i, (tr, te) in enumerate(KFold(n_splits=5).split(Xs)):
+        m = LinearRegression().fit(Xs[tr], ys[tr])
+        rss = ((ys[te] - m.predict(Xs[te])) ** 2).mean()
+        tss = ((ys[te] - ys[te].mean()) ** 2).mean()
+        print(f"  겹 {i}: y 범위 {ys[te].min():6.2f} ~ {ys[te].max():5.2f}   겹 안 분산 {tss:7.4f}"
+              f"   평균제곱오차 {rss:.4f}   R^2 = {1 - rss / tss:8.4f}")
+    ```
+
+    출력:
+
+    ```text
+    원래 순서   : [0.9602 0.9678 0.9761 0.9656 0.9717]
+    y 로 정렬   : [ 0.759  -0.3969 -0.0976  0.1281  0.6808]
+    정렬 + 섞기 : [0.9828 0.9718 0.9374 0.9671 0.9566]
+    전체 분산 = 9.4472
+      겹 0: y 범위  -4.53 ~ -0.78   겹 안 분산  1.3962   평균제곱오차 0.3365   R^2 =   0.7590
+      겹 1: y 범위  -0.74 ~  0.63   겹 안 분산  0.1613   평균제곱오차 0.2254   R^2 =  -0.3969
+      겹 2: y 범위   0.72 ~  2.49   겹 안 분산  0.2215   평균제곱오차 0.2431   R^2 =  -0.0976
+      겹 3: y 범위   2.52 ~  4.53   겹 안 분산  0.3446   평균제곱오차 0.3004   R^2 =   0.1281
+      겹 4: y 범위   4.58 ~  8.44   겹 안 분산  1.2130   평균제곱오차 0.3872   R^2 =   0.6808
+    ```
+
+    **(1) 짧아진 것은 자(尺)이고 모형은 그대로다.** 점수가 $0.96$ 대에서 $0.759,\ -0.397,\ -0.098,\ 0.128,\ 0.681$ 로 주저앉고 가운데 두 겹이 음수다. 분자와 분모를 따로 보라.
+
+    분자(평균제곱오차)는 거의 그대로다. 겹 $1$ 의 $0.2254$ 는 보기 4 에서 본 전체 MSE $0.2775$ 보다 **오히려 작다.** 예측은 전혀 나빠지지 않았다.
+
+    분모가 무너졌다. 전체 분산이 $9.4472$ 인데 겹 $1$ 의 겹 안 분산은 $0.1613$ 으로 **$59$ 배 작다.** $y$ 로 줄 세운 $20$ 개는 $-0.74$ 에서 $0.63$ 사이에 몰려 있으니 당연하다. 그래서 $1 - 0.2254/0.1613 = -0.397$ 이 된다.
+
+    $R^2$ 가 재는 것은 "모형이 **그 겹의 $y$ 평균**보다 얼마나 나은가" 다. $y$ 로 줄 세운 겹 안에서는 그 평균이 이미 아주 좋은 예측이어서 모형이 이기기 어렵다. **$R^2$ 가 음수라는 말은 "평균보다 못하다"일 뿐이며, 여기서는 상대가 반칙으로 강해진 것이다.**
+
+    양 끝 겹은 사정이 둘이다. 겹 안 분산이 $1.40$, $1.21$ 로 가운데보다 넓고(분포의 꼬리라 퍼져 있다), 평균제곱오차도 $0.3365$, $0.3872$ 로 조금 나쁘다. 훈련자료에 그 겹의 $y$ 범위가 없어 **외삽**이기 때문이다. 그래도 분모가 살아 있어 $0.759$, $0.681$ 로 버틴다.
+
+    **(2) 섞으면 돌아온다.** `shuffle=True` 로 바꾼 점수가 $[0.9828,\ 0.9718,\ 0.9374,\ 0.9671,\ 0.9566]$ 으로 원래 순서의 $0.96$ 대와 같다. 각 겹이 $y$ 의 전 범위를 담으므로 분모가 제자리를 찾는다.
+
+    보기 6 에서 드러나지 않은 까닭은 그 자료를 `np.random.randn` 으로 만들어 **행의 순서에 뜻이 없었기** 때문이다. 섞지 않은 겹이 우연히 섞은 겹과 같은 구실을 했다. 그러나 실제 자료는 날짜순·지역순·환자번호순으로 정렬되어 들어오는 일이 흔하고, 그러면 `cv=5` 한 줄이 조용히 위의 실험을 한다. **교차검증 점수가 설명 없이 낮게(또는 높게) 나오면 겹의 짜임을 먼저 의심하라.**
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+보기 5 **(1)** 은 두 기댓값 식
+
+$$
+E[\mathrm{RSS}_{\text{train}}] = \sigma^2(n_{\text{train}} - p),
+\qquad
+E[\mathrm{RSS}_{\text{test}}] \approx \sigma^2 n_{\text{test}}\Bigl(1 + \frac{p}{n_{\text{train}}}\Bigr)
+$$
+
+을 썼다.
+
+**(1)** 둘을 **관측값당 평균제곱오차**로 고쳐 쓰고, 보기 5 의 설정($\sigma = 0.5$, $n_{\text{train}} = 80$, $p = 3$)에서 두 수와 그 비를 계산하시오. $\operatorname{Var}(y) = 11.5$ 를 써서 그것을 $R^2$ 눈금으로 옮기면 훈련과 시험의 차이는 얼마인가.
+
+**(2)** 같은 설정의 자료를 $5000$ 번 새로 만들어 $80/20$ 으로 나누고 두 평균제곱오차의 평균을 재어 (1) 과 맞추시오. 그 값을 보기 5 에서 관측한 차이 $0.0011$ 과 분할 잡음 $0.0151$ 과 함께 놓으면, 한 번의 분할로 과적합을 재려 할 때 무슨 일이 생기는가.
+
+</div>
+
+??? success "풀이"
+    **(1) 관측값당으로 고친다.** 양변을 관측값 수로 나누면 $p$ 가 $n_{\text{train}}$ 에 대한 비율로만 남는다.
+
+    $$
+    E[\mathrm{MSE}_{\text{train}}] = \sigma^2\Bigl(1 - \frac{p}{n_{\text{train}}}\Bigr)
+    = 0.25 \times 0.9625 = 0.240625,
+    \qquad
+    E[\mathrm{MSE}_{\text{test}}] \approx \sigma^2\Bigl(1 + \frac{p}{n_{\text{train}}}\Bigr)
+    = 0.25 \times 1.0375 = 0.259375
+    $$
+
+    이고 비는
+
+    $$
+    \frac{1 + p/n_{\text{train}}}{1 - p/n_{\text{train}}} = \frac{1.0375}{0.9625} = 1.0779
+    $$
+
+    다. $R^2 = 1 - \mathrm{MSE}/\operatorname{Var}(y)$ 이므로 $R^2$ 눈금으로 옮기면
+
+    $$
+    E[R^2_{\text{train}} - R^2_{\text{test}}]
+    \approx \frac{0.259375 - 0.240625}{11.5} = \frac{0.018750}{11.5} = 0.001630
+    $$
+
+    이다. **$n_{\text{train}} = 80$, $p = 3$ 짜리 모형이 지닌 과적합의 참 크기가 $R^2$ 로 $0.0016$ 이라는 뜻이다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error
+
+    rng = np.random.default_rng(1)
+    beta_true = np.array([3.0, 1.5])
+    reps = 5000
+    mse_tr, mse_te = [], []
+
+    for _ in range(reps):
+        Xr = rng.normal(size=(100, 2))
+        yr = Xr @ beta_true + 2.0 + rng.normal(scale=0.5, size=100)
+        a, b, c, d = train_test_split(Xr, yr, test_size=0.2, random_state=0)
+        m = LinearRegression().fit(a, c)
+        mse_tr.append(mean_squared_error(c, m.predict(a)))
+        mse_te.append(mean_squared_error(d, m.predict(b)))
+
+    mse_tr, mse_te = np.array(mse_tr), np.array(mse_te)
+    se_tr = mse_tr.std(ddof=1) / np.sqrt(reps)
+    se_te = mse_te.std(ddof=1) / np.sqrt(reps)
+    print(f"훈련 MSE 평균 = {mse_tr.mean():.6f} +- {se_tr:.6f}   (유도 {0.25 * (1 - 3 / 80):.6f})")
+    print(f"시험 MSE 평균 = {mse_te.mean():.6f} +- {se_te:.6f}   (유도 {0.25 * (1 + 3 / 80):.6f})")
+    print(f"두 평균의 비 = {mse_te.mean() / mse_tr.mean():.4f}   (유도 1.0375/0.9625 = {1.0375 / 0.9625:.4f})")
+    print(f"R^2 눈금으로 옮긴 차이 = {(mse_te.mean() - mse_tr.mean()) / 11.5:.6f}   (유도 {0.01875 / 11.5:.6f})")
+    ```
+
+    출력:
+
+    ```text
+    훈련 MSE 평균 = 0.240032 +- 0.000554   (유도 0.240625)
+    시험 MSE 평균 = 0.259584 +- 0.001158   (유도 0.259375)
+    두 평균의 비 = 1.0815   (유도 1.0375/0.9625 = 1.0779)
+    R^2 눈금으로 옮긴 차이 = 0.001700   (유도 0.001630)
+    ```
+
+    **네 수가 모두 모의오차 안에서 맞는다.** 훈련 $0.240032 \pm 0.000554$ 가 유도한 $0.240625$ 와 $1.1$ 표준오차, 시험 $0.259584 \pm 0.001158$ 이 $0.259375$ 와 $0.2$ 표준오차 차이다. 참고로 시험 쪽의 더 정확한 식은 $\sigma^2\bigl(1 + p/(n_{\text{train}} - p - 1)\bigr) = 0.25(1 + 3/76) = 0.259868$ 인데, 표본 $5000$ 개로도 $0.259375$ 와 구별되지 않는다. 그 둘의 차이 $0.0005$ 가 표준오차 $0.0012$ 보다 작기 때문이다.
+
+    **그리고 여기서 보기 5 의 수수께끼가 완전히 풀린다.** 과적합의 참 간격은 $R^2$ 로 $0.0016$ 이다. 그런데 보기 5 에서 잰 분할 잡음은 $0.0151$ 이었다. 신호가 잡음의 $1/9$ 다.
+
+    $$
+    \frac{\text{재려는 간격}}{\text{분할 잡음}} = \frac{0.0016}{0.0151} = 0.11
+    $$
+
+    표준편차의 $0.11$ 배짜리 차이는 한 번 재서 보이지 않는다. 실제로 `random_state=42` 의 한 분할은 간격을 $0.9664 - 0.9855 = -0.0191$, 곧 **부호까지 거꾸로** 내놓았다. $200$ 번 다시 나눈 뒤에야 $0.9664$ 대 $0.9653$ 으로 $+0.0011$ 이라는 바른 부호가 나왔고, 그 평균의 표준오차 $0.0151/\sqrt{200} = 0.0011$ 을 생각하면 유도값 $0.0016$ 과도 구별되지 않는다.
+
+    **그러므로 한 번 분할의 훈련-시험 차이는 과적합의 척도가 아니다.** 「왜 한 번 나누는 것으로는 부족한가」의 그림이 오차의 표준편차 $0.085$ 대 $0.044$ 로 같은 말을 했고, 여기서는 **재려는 양 자체가 $0.0016$ 밖에 안 된다**는 쪽에서 본 셈이다. 과적합이 걱정되면 분할을 되풀이해 평균을 보거나, 애초에 $p/n_{\text{train}}$ 을 보라. 식이 알려 주는 간격이 $2p\sigma^2/n_{\text{train}}$ 이니 모수의 개수와 훈련자료의 크기만 알면 그 크기를 미리 가늠할 수 있다.
+
 ---
 
 ## 정리하며
