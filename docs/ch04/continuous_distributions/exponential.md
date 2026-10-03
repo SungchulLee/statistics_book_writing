@@ -26,9 +26,12 @@ $$
 X \sim \text{Exponential}(\lambda), \qquad f(x) = \lambda e^{-\lambda x}, \quad x \geq 0
 $$
 
-**다른 모수화:** 어떤 교재에서는 척도 모수 $\beta = 1/\lambda$를 사용하여 $f(x) = \frac{1}{\beta}e^{-x/\beta}$로 쓴다. SciPy는 척도 모수화를 사용한다.
+**다른 모수화:** 어떤 교재에서는 척도 모수 $\beta = 1/\lambda$를 사용하여 $f(x) = \frac{1}{\beta}e^{-x/\beta}$로 쓴다.
 
 </div>
+
+!!! warning "SciPy 모수화"
+    SciPy는 비율 $\lambda$가 아니라 **척도** $1/\lambda$를 받는다. `stats.expon(scale=1/lam)`이며, 척도가 곧 평균이다. 비율을 그대로 넣으면 뜻이 정확히 뒤집히므로(평균 2인 분포를 원했는데 평균 0.5가 나온다) 이 책에서 가장 자주 마주치는 함정이다. 처음 쓸 때 `mean()`으로 검산하는 습관을 들이면 좋다(연습문제 11).
 
 ![비율모수 0.5, 1, 2에 대한 지수분포의 밀도곡선. 세 곡선 모두 x=0에서 가장 높고 단조감소하며, x=0에서의 높이가 각각 비율모수와 같다. 평균 1/λ의 자리가 가로축에 삼각형으로 표시되어 있다](./img/exponential_density.png)
 
@@ -272,9 +275,6 @@ $$
 ---
 
 ## Python: PDF, CDF, 표본추출
-
-!!! warning "SciPy 모수화"
-    SciPy는 비율 $\lambda$가 아니라 **척도** $1/\lambda$를 받는다. `stats.expon(scale=1/lam)`이며, 척도가 곧 평균이다. 비율을 그대로 넣으면 뜻이 정확히 뒤집히므로(평균 2인 분포를 원했는데 평균 0.5가 나온다) 이 책에서 가장 자주 마주치는 함정이다. 처음 쓸 때 `mean()`으로 검산하는 습관을 들이면 좋다(연습문제 11).
 
 ### PDF와 CDF
 
