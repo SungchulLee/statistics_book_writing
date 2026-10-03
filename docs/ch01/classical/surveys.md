@@ -1,5 +1,7 @@
 # 표본조사
 
+## 개요
+
 표본조사는 전체에 대한 추론을 뒷받침하기 위해 모집단의 대표성 있는 부분집합에서 자료를 수집한다. 표집 설계 — 부분집합을 어떻게 고르는가 — 의 선택은 적어도 표본 크기만큼이나 정확도에 큰 영향을 미친다. 작은 확률표본이 큰 편의표본을 안정적으로 능가한다. 이 절에서는 네 가지 표준 확률표집 설계와 그 정밀도 성질, 그리고 실무에서 설계 선택을 좌우하는 고려사항을 다룬다.
 
 <div class="defn" markdown>
@@ -92,6 +94,59 @@ $\{1, \ldots, k\}$에서 무작위 시작점을 고르고 $k$번째마다 표집
 ---
 
 ## 7. 표본 크기의 수확체감
+
+<div class="thmbox" markdown>
+
+### 정리 1. 층화는 표준오차를 키울 수 없다 { .thm }
+
+층 $h$ 의 가중치를 $w_h$, 층평균을 $\mu_h$, 층내분산을 $\sigma_h^2$ 라 하자. 전체 분산은 두 몫으로 갈린다.
+
+$$
+\sigma^2 = \underbrace{\sum_h w_h \sigma_h^2}_{\text{층내}} + \underbrace{\sum_h w_h (\mu_h - \mu)^2}_{\text{층간}}
+$$
+
+층별로 $w_h$ 에 비례해 뽑는 **비례배분 층화표집**의 분산은 층내 몫뿐이므로
+
+$$
+\operatorname{Var}(\bar y_{\text{층화}}) = \frac{1}{n}\sum_h w_h\sigma_h^2
+\;\le\;
+\frac{\sigma^2}{n} = \operatorname{Var}(\bar y_{\text{SRS}})
+$$
+
+다. 등호는 **모든 층평균이 같을 때**에만 성립한다.
+
+</div>
+
+??? proof "증명"
+
+    분산 분해는 전체 분산의 법칙(3.3절 조건부분포 정리 1)에 층 번호를 조건으로 넣은 것이다. $H$ 를 층 번호라 하면
+
+    $$
+    \sigma^2 = \underbrace{E\bigl[\operatorname{Var}(Y \mid H)\bigr]}_{\sum_h w_h\sigma_h^2}
+    + \underbrace{\operatorname{Var}\bigl(E[Y \mid H]\bigr)}_{\sum_h w_h(\mu_h - \mu)^2}
+    $$
+
+    이다.
+
+    층화 추정량은 $\bar y_{\text{층화}} = \sum_h w_h \bar y_h$ 이고 층마다 독립으로 $n_h = w_h n$ 개를 뽑으므로
+
+    $$
+    \operatorname{Var}(\bar y_{\text{층화}}) = \sum_h w_h^2\,\frac{\sigma_h^2}{n_h}
+    = \sum_h w_h^2\,\frac{\sigma_h^2}{w_h n}
+    = \frac1n\sum_h w_h \sigma_h^2
+    $$
+
+    다. 이것은 분해식의 **첫 몫만** 담고 있고, 둘째 몫은 음이 아니므로
+
+    $$
+    \frac1n\sum_h w_h\sigma_h^2 \le \frac{1}{n}\Bigl(\sum_h w_h\sigma_h^2 + \sum_h w_h(\mu_h-\mu)^2\Bigr) = \frac{\sigma^2}{n}
+    $$
+
+    이다. 등호는 둘째 몫이 0 일 때, 곧 모든 $\mu_h$ 가 같을 때다. $\square$
+
+    **층화가 없애 주는 것이 층간 분산이다.** 층을 나누어 각 층에서 정해진 개수를 뽑으면 **"어느 층이 몇 개 뽑힐지"라는 흔들림이 사라진다.** SRS 에서는 그 흔들림이 남아 있고, 그것이 둘째 몫이다.
+
+    실무적 귀결이 분명하다. **층을 잘 잡는다는 것은 층간 차이를 크게, 층내 차이를 작게 만드는 것**이다. 결과와 무관한 변수로 층을 나누면 $\mu_h$ 가 모두 같아 이득이 0 이고, 손해도 없다. 보기 1 이 소득 자료에서 그 이득을 수로 잰다.
 
 SRS에서 $\mathrm{SE}(\bar y) = \sigma/\sqrt{n}$이다. $n$을 네 배로 하면 표준오차는 절반이 된다. 오차한계를 절반으로 줄이려면 자료가 *네 배* 필요하며, 이 기본적인 경제학이 조사 예산을 좌우한다.
 
