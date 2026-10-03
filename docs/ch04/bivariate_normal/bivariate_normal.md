@@ -2,17 +2,74 @@
 
 ## 개요
 
-**이변량 정규분포**는 일변량 정규분포를 2차원으로 확장한 것이다. 확률벡터 $(X_1, X_2)^\top$의 PDF가 다음과 같으면 평균 $\boldsymbol{\mu}$, 공분산행렬 $\boldsymbol{\Sigma}$인 이변량 정규분포를 따른다:
+**이변량 정규분포**는 일변량 정규분포를 2차원으로 확장한 것이다. 평균벡터가 중심을 옮기고 **공분산행렬이 모양을 모두 정한다.** 이 쪽에서는 공분산행렬을 네 가지로 바꾸어 가며 밀도 곡면과 등고선이 어떻게 달라지는지 보고, 그 변화를 고윳값과 행렬식으로 읽는 법을 익힌다.
+
+---
+
+## 1. 이변량 정규분포
+
+<div class="defn" markdown>
+
+### 정의 1. 이변량 정규분포 { .dfn }
+
+확률벡터 $\mathbf{X} = (X_1, X_2)^\top$ 의 밀도가 양정부호 행렬 $\boldsymbol\Sigma$ 와 벡터 $\boldsymbol\mu$ 에 대해
 
 $$
 f(\mathbf{x}) = \frac{1}{2\pi|\boldsymbol{\Sigma}|^{1/2}} \exp\!\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu})\right)
 $$
 
-밀도 등고선(타원)의 모양은 전적으로 $\boldsymbol{\Sigma}$가 결정한다.
+이면 $\mathbf{X}$ 는 평균 $\boldsymbol\mu$, 공분산행렬 $\boldsymbol\Sigma$ 인 **이변량 정규분포**를 따른다고 하고 $\mathbf{X} \sim N_2(\boldsymbol\mu, \boldsymbol\Sigma)$ 로 적는다. 두 분산과 상관계수로 적으면
+
+$$
+\boldsymbol\Sigma = \begin{pmatrix} \sigma_1^2 & \rho\sigma_1\sigma_2 \\ \rho\sigma_1\sigma_2 & \sigma_2^2\end{pmatrix}, \qquad |\boldsymbol\Sigma| = \sigma_1^2\sigma_2^2(1 - \rho^2)
+$$
+
+이다.
+
+</div>
+
+지수에 들어 있는 $(\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)$ 를 **마할라노비스 거리의 제곱**이라 한다. 일변량의 $\left(\frac{x-\mu}{\sigma}\right)^2$ 를 2차원으로 옮긴 것이고, 나누는 일을 역행렬이 맡는다.
+
+<div class="thmbox" markdown>
+
+### 정리 1. 이변량 정규에서는 무상관이 곧 독립 { .thm }
+
+$\mathbf{X} \sim N_2(\boldsymbol\mu, \boldsymbol\Sigma)$ 이면
+
+$$
+\rho = 0 \quad \Longleftrightarrow \quad X_1 \text{ 과 } X_2 \text{ 가 독립}
+$$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    독립이면 공분산이 0 이고 따라서 $\rho = 0$ 이라는 방향은 어떤 분포에서나 성립한다. 보일 것은 그 역이다.
+
+    $\rho = 0$ 이면 $\boldsymbol\Sigma = \operatorname{diag}(\sigma_1^2, \sigma_2^2)$ 가 대각이므로 역행렬도 대각이고 $|\boldsymbol\Sigma| = \sigma_1^2\sigma_2^2$ 다. 지수의 이차형식이 **교차항 없이** 두 항으로 갈라진다.
+
+    $$
+    (\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)
+    = \frac{(x_1-\mu_1)^2}{\sigma_1^2} + \frac{(x_2-\mu_2)^2}{\sigma_2^2}
+    $$
+
+    지수의 합은 곱이 되므로 밀도가 두 일변량 정규밀도의 곱으로 쪼개진다.
+
+    $$
+    f(\mathbf{x}) = \underbrace{\frac{1}{\sqrt{2\pi}\sigma_1}e^{-\frac{(x_1-\mu_1)^2}{2\sigma_1^2}}}_{f_1(x_1)}
+    \cdot \underbrace{\frac{1}{\sqrt{2\pi}\sigma_2}e^{-\frac{(x_2-\mu_2)^2}{2\sigma_2^2}}}_{f_2(x_2)}
+    $$
+
+    결합밀도가 각 변수만의 함수들의 곱이면 두 변수는 독립이다. $\square$
+
+!!! warning "결합정규가 아니면 이 정리는 거짓이다"
+    "무상관이면 독립"은 **이변량 정규라는 가정 위에서만** 참이다. 각각이 정규이기만 해서는 안 된다. $Z \sim N(0,1)$ 과 독립인 부호 $S = \pm1$ 로 $Y = SZ$ 를 만들면 $Z$ 와 $Y$ 는 각각 표준정규이고 $\operatorname{Cov}(Z, Y) = 0$ 인데도 $|Y| = |Z|$ 라 전혀 독립이 아니다(연습문제 9). 이때 $(Z, Y)$ 의 결합분포는 이변량 정규가 아니다.
 
 ---
 
-## 1. 공분산 구조의 효과
+## 2. 공분산 구조의 효과
 
 네 가지 설정을 3차원 곡면과 등고선 그림으로 시각화한다:
 
@@ -212,14 +269,58 @@ $$
 
 ---
 
-## 2. 해석
+## 3. 등고선 타원 읽기
 
 - **$\rho = 0$이고 분산이 같을 때:** 등고선이 원이다. $X_1$과 $X_2$가 독립이며 퍼짐이 동일하다.
 - **$\rho > 0$:** 타원이 $X_1 = X_2$ 대각선 방향으로 기운다. 양의 연관성이다.
 - **$\rho < 0$:** 타원이 $X_1 = -X_2$ 방향으로 기운다. 음의 연관성이다.
 - **분산이 다를 때:** 분산이 큰 축 방향으로 타원이 길쭉해진다.
 
-등고선 타원은 상수 $c$에 대해 $(\mathbf{x} - \boldsymbol{\mu})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu}) = c$를 만족한다. 축은 $\boldsymbol{\Sigma}$의 고유벡터 방향과 일치하고, 축의 길이는 $\sqrt{\lambda_i}$(고윳값의 제곱근)에 비례한다.
+<div class="thmbox" markdown>
+
+### 정리 2. 봉우리 높이와 타원 넓이의 곱은 공분산행렬과 무관하다 { .thm }
+
+$\mathbf{X} \sim N_2(\boldsymbol\mu, \boldsymbol\Sigma)$ 의 등밀도 집합
+
+$$
+E_c = \{\mathbf{x} : (\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu) \le c\}
+$$
+
+는 축 방향이 $\boldsymbol\Sigma$ 의 고유벡터이고 반길이가 $\sqrt{\lambda_i c}$ 인 타원이며, 그 넓이는 $\pi c \sqrt{|\boldsymbol\Sigma|}$ 다. 밀도의 봉우리 높이가 $f(\boldsymbol\mu) = \bigl(2\pi\sqrt{|\boldsymbol\Sigma|}\bigr)^{-1}$ 이므로
+
+$$
+f(\boldsymbol\mu) \times \bigl|E_c\bigr| = \frac{c}{2}
+$$
+
+로 **$\boldsymbol\Sigma$ 에 전혀 의존하지 않는다.**
+
+</div>
+
+??? proof "증명"
+
+    $\boldsymbol\Sigma$ 는 대칭이고 양정부호이므로 $\boldsymbol\Sigma = V\Lambda V^\top$ 로 **직교 대각화**된다. $V$ 의 열이 고유벡터, $\Lambda = \operatorname{diag}(\lambda_1, \lambda_2)$ 이고 $\lambda_i > 0$ 이다. $\mathbf{y} = V^\top(\mathbf{x}-\boldsymbol\mu)$ 로 좌표를 돌리면 $\boldsymbol\Sigma^{-1} = V\Lambda^{-1}V^\top$ 이므로 이차형식이
+
+    $$
+    (\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu) = \mathbf{y}^\top\Lambda^{-1}\mathbf{y} = \frac{y_1^2}{\lambda_1} + \frac{y_2^2}{\lambda_2}
+    $$
+
+    가 된다. 곧 $E_c$ 는 돌린 좌표계에서 **좌표축에 정렬된** 타원 $\frac{y_1^2}{\lambda_1 c} + \frac{y_2^2}{\lambda_2 c} \le 1$ 이고 반길이가 $\sqrt{\lambda_i c}$ 다. 축 방향은 $\mathbf{y}$ 축을 되돌린 것, 곧 고유벡터다.
+
+    $V$ 가 직교행렬이라 $|\det V| = 1$ 이므로 **회전은 넓이를 바꾸지 않는다.** 따라서
+
+    $$
+    |E_c| = \pi\sqrt{\lambda_1 c}\sqrt{\lambda_2 c} = \pi c\sqrt{\lambda_1\lambda_2} = \pi c\sqrt{|\boldsymbol\Sigma|}
+    $$
+
+    다. $|\boldsymbol\Sigma| = \lambda_1\lambda_2$ 를 썼다. 봉우리는 지수가 0 이 되는 $\mathbf{x} = \boldsymbol\mu$ 에서이고 그 값은 앞의 상수뿐이다. 두 양을 곱하면
+
+    $$
+    \frac{1}{2\pi\sqrt{|\boldsymbol\Sigma|}}\cdot \pi c\sqrt{|\boldsymbol\Sigma|} = \frac{c}{2}
+    $$
+
+    로 $\sqrt{|\boldsymbol\Sigma|}$ 가 깨끗이 지워진다. $\square$
+
+    **부피 1 이라는 제약이 이 보존을 만든다.** 넓게 퍼지면 반드시 낮아지고 좁게 모이면 반드시 높아진다. 그래서 $|\boldsymbol\Sigma|$ 를 **일반화분산**이라 부르며, 2차원에서 그것이 뜻하는 바가 곧 타원의 넓이다. 보기 1 에서 네 설정의 수를 모두 잰다.
 
 ---
 

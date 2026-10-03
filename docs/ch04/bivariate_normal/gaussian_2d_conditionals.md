@@ -12,13 +12,54 @@ $$
 
 ---
 
-## 1. 일반적인 경우
+## 1. 조건부분포
 
-평균이 $\mu_a, \mu_b$, 분산이 $\sigma_a^2, \sigma_b^2$, 상관계수가 $\rho$인 이변량 정규분포에 대해:
+<div class="thmbox" markdown>
+
+### 정리 1. 이변량 정규의 조건부분포 { .thm }
+
+$(a, b)^\top$ 가 평균 $\mu_a, \mu_b$, 분산 $\sigma_a^2, \sigma_b^2$, 상관계수 $\rho$ 인 이변량 정규분포를 따르면 모든 $a_0$ 에 대해
 
 $$
 b \mid a = a_0 \;\sim\; N\!\left(\mu_b + \rho\frac{\sigma_b}{\sigma_a}(a_0 - \mu_a),\; \sigma_b^2(1 - \rho^2)\right)
 $$
+
+이다. 조건부 평균은 $a_0$ 의 **일차함수**이고, 조건부 분산은 $a_0$ 에 **의존하지 않는다.**
+
+</div>
+
+??? proof "증명"
+
+    표준화해 두면 계산이 짧아진다. $u = (a-\mu_a)/\sigma_a$, $v = (b-\mu_b)/\sigma_b$ 로 놓으면 $(u,v)$ 는 상관계수 $\rho$ 인 **표준** 이변량 정규를 따르고, 그 결합밀도는
+
+    $$
+    f(u,v) = \frac{1}{2\pi\sqrt{1-\rho^2}}\exp\!\left(-\frac{u^2 - 2\rho uv + v^2}{2(1-\rho^2)}\right)
+    $$
+
+    다. 조건부밀도는 $f(v \mid u) = f(u,v)/f(u)$ 이고 $f(u)$ 가 $v$ 를 담지 않으므로, **지수를 $v$ 에 대해 완전제곱으로 묶는 것**만 하면 된다.
+
+    $$
+    u^2 - 2\rho uv + v^2 = (v - \rho u)^2 + u^2(1 - \rho^2)
+    $$
+
+    뒤 항은 $v$ 와 무관하다. 지수에 넣으면
+
+    $$
+    f(u,v) = \underbrace{\frac{1}{\sqrt{2\pi}}e^{-u^2/2}}_{f(u)}
+    \cdot \underbrace{\frac{1}{\sqrt{2\pi}\sqrt{1-\rho^2}}\exp\!\left(-\frac{(v-\rho u)^2}{2(1-\rho^2)}\right)}_{f(v\mid u)}
+    $$
+
+    로 갈라지고, 뒤 인수가 평균 $\rho u$, 분산 $1-\rho^2$ 인 정규밀도다. 곧 $v \mid u \sim N(\rho u,\, 1-\rho^2)$ 다.
+
+    **조건부 분산이 $u$ 와 무관한 까닭이 여기서 보인다.** 완전제곱으로 묶을 때 $u$ 는 평균을 옮기는 자리로만 들어가고, $v$ 의 제곱에 붙는 계수 $\frac{1}{1-\rho^2}$ 는 $u$ 를 담지 않는다. **퍼짐을 정하는 것은 제곱항의 계수뿐이다.**
+
+    표준화를 풀면 $v = (b-\mu_b)/\sigma_b$, $u = (a_0-\mu_a)/\sigma_a$ 이므로
+
+    $$
+    b \mid a = a_0 \sim N\!\left(\mu_b + \sigma_b\rho\frac{a_0-\mu_a}{\sigma_a},\; \sigma_b^2(1-\rho^2)\right)
+    $$
+
+    다. 평균은 위치와 척도를 되돌리고 분산은 척도의 제곱을 되돌린 것뿐이다. $\square$
 
 !!! tip "핵심 통찰"
     조건부 평균은 정확히 $a$에 대한 $b$의 **회귀직선**이다. 조건부 분산은 선형 관계를 반영하고 남은 잔차분산이다.
@@ -238,7 +279,47 @@ $$
 
 ---
 
-## 2. 해석
+## 2. 분산의 분해
+
+조건부 분산이 $\sigma_b^2$ 에서 $\sigma_b^2(1-\rho^2)$ 로 줄어든 만큼이 **$a$ 가 알려 준 것**이다. 이 장부가 정확히 맞는다.
+
+<div class="thmbox" markdown>
+
+### 정리 2. 설명된 분산과 남은 분산 { .thm }
+
+정리 1 의 설정에서
+
+$$
+\underbrace{\operatorname{Var}\bigl(E[b \mid a]\bigr)}_{\text{설명된 분산}} = \rho^2\sigma_b^2,
+\qquad
+\underbrace{E\bigl[\operatorname{Var}(b \mid a)\bigr]}_{\text{남은 분산}} = (1-\rho^2)\sigma_b^2
+$$
+
+이고 둘을 더하면 $\sigma_b^2$ 다. 곧 $\rho^2$ 은 **$a$ 가 설명하는 $b$ 의 분산 비율**이다.
+
+</div>
+
+??? proof "증명"
+
+    정리 1 에서 $E[b \mid a] = \mu_b + \rho\frac{\sigma_b}{\sigma_a}(a - \mu_a)$ 는 $a$ 의 일차함수다. 상수항은 분산에 영향을 주지 않고 계수는 제곱으로 나오므로
+
+    $$
+    \operatorname{Var}\bigl(E[b\mid a]\bigr) = \left(\rho\frac{\sigma_b}{\sigma_a}\right)^2\operatorname{Var}(a) = \rho^2\frac{\sigma_b^2}{\sigma_a^2}\cdot\sigma_a^2 = \rho^2\sigma_b^2
+    $$
+
+    다. 또 $\operatorname{Var}(b \mid a) = \sigma_b^2(1-\rho^2)$ 가 **$a$ 에 의존하지 않는 상수**이므로 그 기댓값도 그 자신이다.
+
+    $$
+    E\bigl[\operatorname{Var}(b \mid a)\bigr] = \sigma_b^2(1-\rho^2)
+    $$
+
+    두 값을 더하면 $\rho^2\sigma_b^2 + (1-\rho^2)\sigma_b^2 = \sigma_b^2 = \operatorname{Var}(b)$ 이고, 이것이 **전체분산의 법칙** $\operatorname{Var}(b) = \operatorname{Var}(E[b\mid a]) + E[\operatorname{Var}(b\mid a)]$ 가 성립하는 모습이다. $\square$
+
+    **$\rho^2$ 이 결정계수다.** 13장의 단순회귀에서 $R^2$ 이 "설명된 분산의 비율"로 등장하는데, 이변량 정규에서는 그것이 모수 $\rho$ 의 제곱과 정확히 같다. 회귀가 조건부 평균을 추정하는 일이라는 것을 여기서 미리 볼 수 있다.
+
+---
+
+## 3. 해석
 
 | $\rho$ | $E[b \mid a=1]$ | $\text{Var}(b \mid a=1)$ | 효과 |
 |---|---|---|---|

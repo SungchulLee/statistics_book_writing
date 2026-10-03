@@ -14,18 +14,88 @@ $$
 
 ## 1. 기하적 해석
 
-이변량 정규분포의 등밀도 등고선은 다음을 만족한다:
+<div class="thmbox" markdown>
+
+### 정리 1. 등고선 타원의 축은 고유벡터다 { .thm }
+
+$\boldsymbol\Sigma = \mathbf{U}\mathbf{D}\mathbf{U}^\top$ 가 고유분해이고 $\mathbf{D} = \operatorname{diag}(\lambda_1, \lambda_2)$, $\lambda_1 \ge \lambda_2 > 0$ 이면, 등밀도 등고선
 
 $$
 (\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu}) = c
 $$
 
-이 타원들은:
+은 중심이 $\boldsymbol\mu$ 이고 **축 방향이 $\mathbf{U}$ 의 열(고유벡터)** 이며 **반길이가 $\sqrt{\lambda_i c}$** 인 타원이다.
 
-- **축 방향**이 $\boldsymbol{\Sigma}$의 고유벡터와 일치하고
-- **축의 반길이**가 $\sqrt{\lambda_i}$에 비례한다
+</div>
 
-이는 고유분해의 직접적인 결과이다. $\mathbf{U}$가 정의하는 회전된 좌표계에서 공분산행렬은 대각행렬이 되고 타원은 좌표축에 정렬된다.
+??? proof "증명"
+
+    $\boldsymbol\Sigma$ 는 대칭이므로 **스펙트럼 정리**에 따라 직교행렬 $\mathbf{U}$ 로 대각화되고, 양정부호이므로 $\lambda_i > 0$ 이다. $\boldsymbol\Sigma^{-1} = \mathbf{U}\mathbf{D}^{-1}\mathbf{U}^\top$ 이므로 $\mathbf{y} = \mathbf{U}^\top(\mathbf{x}-\boldsymbol\mu)$ 로 좌표를 돌리면
+
+    $$
+    (\mathbf{x}-\boldsymbol\mu)^\top\boldsymbol\Sigma^{-1}(\mathbf{x}-\boldsymbol\mu)
+    = \mathbf{y}^\top\mathbf{D}^{-1}\mathbf{y}
+    = \frac{y_1^2}{\lambda_1} + \frac{y_2^2}{\lambda_2}
+    $$
+
+    가 된다. **교차항이 사라졌다.** 등고선 조건은 돌린 좌표계에서
+
+    $$
+    \frac{y_1^2}{\lambda_1 c} + \frac{y_2^2}{\lambda_2 c} = 1
+    $$
+
+    이라 축에 정렬된 타원이고 반길이가 $\sqrt{\lambda_i c}$ 다. $\mathbf{U}$ 가 직교행렬이라 이 변환은 **회전(과 반사)뿐**이므로, 원래 좌표계에서도 같은 타원이고 축만 $\mathbf{U}$ 의 열 방향으로 돌아가 있다. $\mathbf{y}$ 축의 $i$ 번째 방향을 되돌린 것이 $\mathbf{U}$ 의 $i$ 번째 열이다. $\square$
+
+    고윳값이 겹치면($\lambda_1 = \lambda_2$) 등고선이 **원**이 되고 축 방향이 정해지지 않는다. 결함이 아니다. 그때는 모든 방향이 고유벡터이고, 수치 고유분해가 돌려주는 축은 알고리즘이 고른 것일 뿐이다.
+
+<div class="thmbox" markdown>
+
+### 정리 2. 고윳값과 장축의 각도 { .thm }
+
+$\boldsymbol\Sigma = \begin{pmatrix} a & c \\ c & b\end{pmatrix}$ 이면
+
+$$
+\lambda_{1,2} = \frac{a+b}{2} \pm \sqrt{\left(\frac{a-b}{2}\right)^2 + c^2}
+$$
+
+이고, 장축이 $x$ 축과 이루는 각 $\theta$ 는
+
+$$
+\tan 2\theta = \frac{2c}{a-b}
+$$
+
+를 만족한다. 특히 $a = b$ 이고 $c \ne 0$ 이면 $\theta = 45^\circ$ 로 **상관계수와 무관**하다.
+
+</div>
+
+??? proof "증명"
+
+    **고윳값.** 특성방정식은 $(a-\lambda)(b-\lambda) - c^2 = 0$, 곧
+
+    $$
+    \lambda^2 - (a+b)\lambda + (ab - c^2) = 0
+    $$
+
+    이다. 근의 공식의 판별식이 $(a+b)^2 - 4(ab-c^2) = (a-b)^2 + 4c^2$ 이므로 위 식이 나온다. 두 고윳값의 합이 $\operatorname{tr}\boldsymbol\Sigma$, 곱이 $\det\boldsymbol\Sigma$ 라는 것도 그대로 읽힌다. 제곱근 안이 $c \ne 0$ 이면 양수이므로 **두 고윳값이 서로 다르고 장축이 하나로 정해진다.**
+
+    **각도.** 장축 방향을 $\mathbf{v} = (\cos\theta, \sin\theta)^\top$ 라 두고 $\boldsymbol\Sigma\mathbf{v} = \lambda_1\mathbf{v}$ 의 두 성분을 적으면
+
+    $$
+    a\cos\theta + c\sin\theta = \lambda_1\cos\theta, \qquad
+    c\cos\theta + b\sin\theta = \lambda_1\sin\theta
+    $$
+
+    이다. 첫 식을 $\cos\theta$ 로, 둘째 식을 $\sin\theta$ 로 나누면 $\lambda_1 - a = c\tan\theta$ 와 $\lambda_1 - b = c\cot\theta$ 를 얻고, 두 식을 빼면 $\lambda_1$ 이 사라져
+
+    $$
+    b - a = c(\tan\theta - \cot\theta)
+    $$
+
+    가 남는다. 삼각항등식 $\tan\theta - \cot\theta = -2\cot 2\theta$ 를 쓰면 $b - a = -2c\cot 2\theta$, 곧 $\tan 2\theta = \frac{2c}{a-b}$ 다.
+
+    $a = b$ 이면 분모가 0 이라 $\tan 2\theta$ 가 발산하므로 $2\theta = 90^\circ$, 곧 $\theta = 45^\circ$ 다. 이 결론에 $c$ 의 크기가 들어오지 않는다. $\square$
+
+    **각도는 $\rho$ 만으로 정해지지 않는다.** 식의 분자는 공분산이고 분모는 **두 분산의 차이**다. 상관이 약해도 분산 차이가 작으면 많이 기울고, 상관이 강해도 분산 차이가 크면 덜 기운다. $\rho$ 는 타원이 얼마나 납작한지($\lambda_2/\lambda_1$)에 주로 작용하고 각도는 이 비가 정한다. 보기 1 에서 세 설정의 수로 그 분업을 확인한다.
 
 <div class="exbox" markdown>
 
