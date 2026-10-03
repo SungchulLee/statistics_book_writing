@@ -626,7 +626,7 @@ $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$이고 이것이 $\hat{\beta}_1$과 독립�
 
     독립성은 기하에서 나온다. $\hat{\boldsymbol{\beta}}$은 $\operatorname{col}(\mathbf{X})$ 안의 사영으로 결정되고 $s^2$은 그 직교여공간의 잔차로 결정되는데, 정규분포에서 직교하는 성분은 독립이기 때문이다.
 
-    **같은 이야기를 이미 한 번 했다.** [4.2절 정규분포](../../../ch04/continuous_distributions/normal.md)의 연습문제 7에서 $\bar{X}$와 $S^2$의 독립성을 증명할 때, 첫 행이 $\mathbf{1}/\sqrt{n}$인 직교행렬 $\mathbf{Q}$로 회전시켜 $\bar{X}$는 $Y_1$만의 함수, $S^2$은 $Y_2, \dots, Y_n$만의 함수임을 보였다. 그 $Y_1$ 방향이 여기서는 $\operatorname{col}(\mathbf{X})$이고 나머지 $n-1$개 방향이 그 직교여공간이다. 절편만 있는 모형이 정확히 그 경우이며, 설명변수를 넣으면 $\operatorname{col}(\mathbf{X})$의 차원이 1에서 2로 늘어나 잔차 쪽이 $n-1$에서 $n-2$로 줄어든다. **직교변환으로 쓰던 논법을 사영의 언어로 옮겨 적은 것이 전부다.** $\square$
+    **같은 이야기를 이미 한 번 했다.** [4.2절 정규분포](../../../ch04/continuous_distributions/normal.md)의 연습문제 28에서 $\bar{X}$와 $S^2$의 독립성을 증명할 때, 첫 행이 $\mathbf{1}/\sqrt{n}$인 직교행렬 $\mathbf{Q}$로 회전시켜 $\bar{X}$는 $Y_1$만의 함수, $S^2$은 $Y_2, \dots, Y_n$만의 함수임을 보였다. 그 $Y_1$ 방향이 여기서는 $\operatorname{col}(\mathbf{X})$이고 나머지 $n-1$개 방향이 그 직교여공간이다. 절편만 있는 모형이 정확히 그 경우이며, 설명변수를 넣으면 $\operatorname{col}(\mathbf{X})$의 차원이 1에서 2로 늘어나 잔차 쪽이 $n-1$에서 $n-2$로 줄어든다. **직교변환으로 쓰던 논법을 사영의 언어로 옮겨 적은 것이 전부다.** $\square$
 
 <div class="drillbox" markdown>
 
