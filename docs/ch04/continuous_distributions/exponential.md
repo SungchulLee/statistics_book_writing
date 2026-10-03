@@ -14,7 +14,7 @@ $$
 
 ---
 
-## 지수분포
+## 1. 지수분포
 
 <div class="defn" markdown>
 
@@ -37,389 +37,9 @@ $$
 
 밀도가 **$x = 0$에서 가장 높다.** 지수분포에서 가장 있을 법한 대기시간은 0에 가까운 값이고, 봉우리가 가운데 있는 정규분포와 여기서 갈린다. $\lambda$가 커지면 시작 높이가 그만큼 올라가고 더 빨리 줄어드는데, 넓이는 언제나 1이어야 하므로 둘이 맞물려 있다. 평균 $1/\lambda$는 봉우리가 아니라 **꼬리가 끌어낸 무게중심**의 자리다.
 
-## 누적분포함수
-
-<div class="thmbox" markdown>
-
-### 정리 1. 누적분포함수와 생존함수 { .thm }
-
-$X \sim \text{Exp}(\lambda)$이면 $x \geq 0$에 대해
-
-$$
-F(x) = 1 - e^{-\lambda x}, \qquad S(x) = P(X > x) = e^{-\lambda x}
-$$
-
-이다. $x < 0$이면 $F(x) = 0$, $S(x) = 1$이다.
-
-</div>
-
-??? proof "증명"
-
-    밀도를 $0$부터 $x$까지 적분한다.
-
-    $$
-    F(x) = \int_0^x \lambda e^{-\lambda t}\,dt = \left[-e^{-\lambda t}\right]_0^x = 1 - e^{-\lambda x}
-    $$
-
-    생존함수는 그 여사건의 확률이므로
-
-    $$
-    S(x) = P(X > x) = 1 - F(x) = e^{-\lambda x} \qquad \square
-    $$
-
-![왼쪽은 지수분포의 밀도이고 x0을 기준으로 왼쪽 넓이가 F(x0), 오른쪽 넓이가 S(x0)으로 색이 갈려 있다. 오른쪽은 같은 두 양을 x의 함수로 그린 것으로, 증가하는 F와 감소하는 S가 중앙값에서 만난다](./img/exponential_cdf_survival.png)
-
-왼쪽이 증명이 한 일이다. 밀도 아래 넓이를 $x_0$에서 자르면 왼쪽 조각이 $F(x_0)$,
-오른쪽 조각이 $S(x_0)$이고 합이 1이다. 오른쪽은 그 두 조각을 $x$의 함수로 따라간
-것이다. 합이 1이므로 두 곡선은 $y = 1/2$에 대해 서로를 뒤집은 꼴이고, 그래서
-**둘이 만나는 자리가 중앙값**이다.
-
-지수분포는 **생존함수가 더 간단한** 드문 분포다. 뒤에서 무기억성을 따질 때도
-$F$ 가 아니라 $S$ 를 들고 계산한다.
-
----
-
-## 성질
-
-<div class="thmbox" markdown>
-
-### 정리 2. 지수분포의 평균과 분산 { .thm }
-
-$X \sim \text{Exp}(\lambda)$이면
-
-$$
-E[X] = \frac{1}{\lambda}, \qquad \text{Var}(X) = \frac{1}{\lambda^2}
-$$
-
-이다.
-
-</div>
-
-??? proof "증명"
-
-    **평균.** 부분적분을 한 번 쓴다.
-
-    $$
-    E[X] = \int_0^{\infty} x \lambda e^{-\lambda x}\,dx = \left[-x e^{-\lambda x}\right]_0^{\infty} + \int_0^{\infty} e^{-\lambda x}\,dx = \frac{1}{\lambda}
-    $$
-
-    **분산.** 같은 방식으로 이차적률을 구한 뒤 평균의 제곱을 뺀다.
-
-    $$
-    E[X^2] = \int_0^{\infty} x^2 \lambda e^{-\lambda x}\,dx = \frac{2}{\lambda^2}
-    $$
-
-    $$
-    \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2} \qquad \square
-    $$
-
-표준편차는 분산의 양의 제곱근이므로 $\text{SD}(X) = 1/\lambda$다. 곧 $\text{평균} = \text{표준편차} = 1/\lambda$인데, 이것이 지수분포의 두드러진 특징이다.
-
-중앙값은 $F(m) = 1/2$를 풀면 나온다. $1 - e^{-\lambda m} = 1/2$에서 $e^{-\lambda m} = 1/2$이므로 양변에 로그를 취하면 $m = (\ln 2)/\lambda$다. 이것은 평균보다 작다($\ln 2 \approx 0.693$). 오른쪽으로 긴 꼬리가 평균을 끌어올리기 때문이다.
-
----
-
-## 무기억성
-
-<div class="thmbox" markdown>
-
-### 정리 3. 지수분포의 무기억성 { .thm }
-
-$X \sim \text{Exp}(\lambda)$이면 모든 $s, t \geq 0$에 대해
-
-$$
-P(X > s + t \mid X > s) = P(X > t)
-$$
-
-이다.
-
-</div>
-
-??? proof "증명"
-
-    $$
-    P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
-    $$
-
-    **해석:** 이미 $s$만큼의 시간을 기다렸더라도 남은 대기 시간의 분포는 방금 시작했을 때와 같다. 이 과정은 자신의 이력을 "잊어버린다".
-
-거꾸로, 이 성질을 갖는 연속분포는 지수분포뿐이다. 그 방향의 증명은 연습문제 2에서 다룬다.
-
----
-
-## 기하분포에서 건너오는 다리
-
-무기억성을 갖는 이산분포가 하나 있었다. [기하분포](../discrete_distributions/geometric.md)다. 두 분포가 같은 성질을 공유하는 것은 우연이 아니라, 하나가 다른 하나의 극한이기 때문이다. 4.1절의 사슬과 4.2절의 사슬이 만나는 자리가 여기다.
-
-동전을 아주 빠르게 던진다고 하자. $1/n$초에 한 번씩 던지되 앞면이 나올 확률을 $p = \lambda/n$로 낮춘다. 던지는 속도를 올린 만큼 성공을 어렵게 만든 셈이라, 단위 시간당 기대 성공 횟수 $np$는 $\lambda$로 붙들려 있다. 첫 앞면이 나오기까지의 **시행 횟수**를 $X \sim \text{Geo}(p)$라 하면, 첫 앞면까지의 **시간**은 $T = X/n$이다.
-
-$T$의 생존함수를 계산해 보면 된다. $T > t$라는 것은 처음 $nt$번의 시행이 모두 실패했다는 뜻이므로
-
-$$
-P(T > t) = P(X > nt) = (1-p)^{\lfloor nt \rfloor} = \left(1 - \frac{\lambda}{n}\right)^{\lfloor nt \rfloor} \;\xrightarrow[n \to \infty]{}\; e^{-\lambda t}
-$$
-
-이고, 이것이 바로 $\text{Exp}(\lambda)$의 생존함수다. 평균과 분산도 따라온다. $E[X] = 1/p = n/\lambda$이므로 $E[T] = E[X]/n = 1/\lambda$이고, $\text{Var}(X) = (1-p)/p^2$이므로
-
-$$
-\text{Var}(T) = \frac{\text{Var}(X)}{n^2} = \frac{1 - \lambda/n}{\lambda^2} \;\xrightarrow[n \to \infty]{}\; \frac{1}{\lambda^2}
-$$
-
-이다. 기하분포의 $1/p$와 $(1-p)/p^2$이 지수분포의 $1/\lambda$와 $1/\lambda^2$로 정확히 옮겨 간다. 시간 간격 $\Delta t$를 직접 붙들고 같은 극한을 취하는 방식은 [기하분포](../discrete_distributions/geometric.md) 쪽 연습문제에서 다룬다.
-
-### 같은 극한의 두 얼굴
-
-이 극한은 처음 보는 것이 아니다. $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$으로 보내는 것은 [포아송분포](../discrete_distributions/poisson.md)를 얻을 때 쓴 바로 그 극한이다. 달라지는 것은 무엇을 묻느냐뿐이다.
-
-**세는 쪽**에서 물으면, 곧 "단위 시간 안에 앞면이 몇 번 나왔는가"를 물으면 $B(n, p) \to \text{Poisson}(\lambda)$다. **기다리는 쪽**에서 물으면, 곧 "첫 앞면까지 얼마나 걸렸는가"를 물으면 $\frac{1}{n}\text{Geo}(p) \to \text{Exp}(\lambda)$다. 같은 실험을 두 방향에서 본 것이고, 그래서 두 결과가 같은 하나의 대상을 기술한다. 그 대상이 다음 절의 **포아송 과정**이다.
-
-$$
-\begin{array}{ccc}
-B(n, p) & \longrightarrow & \text{Poisson}(\lambda) \\
-\text{Geo}(p)/n & \longrightarrow & \text{Exp}(\lambda)
-\end{array}
-$$
-
-윗줄이 사건의 개수를 세고 아랫줄이 사건 사이의 시간을 잰다. 무기억성이 기하분포에서 지수분포로 고스란히 건너온 것도 이 그림 안에서 자연스럽다. 매 시행이 과거를 기억하지 않으니, 시행을 아무리 잘게 쪼개도 그 성질이 남는다.
-
-## 포아송 과정과의 연결
-
-사건이 비율 $\lambda$인 포아송 과정에 따라 도착하면:
-
-$$
-\begin{aligned}
-\text{Number of events in } [0, t] &\sim \text{Poisson}(\lambda t) \\
-\text{Time between consecutive events} &\sim \text{Exponential}(\lambda) \\
-\text{Time to the } n\text{-th event} &\sim \text{Gamma}(n, \lambda)
-\end{aligned}
-$$
-
----
-
-## 지수 확률변수의 최솟값
-
-<div class="thmbox" markdown>
-
-### 정리 4. 최솟값도 지수분포다 { .thm }
-
-$X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이면
-
-$$
-\min(X_1, X_2) \sim \text{Exp}(\lambda_1 + \lambda_2)
-$$
-
-이다.
-
-</div>
-
-??? proof "증명"
-
-    $$
-    P(\min(X_1, X_2) > t) = P(X_1 > t) \cdot P(X_2 > t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2)t}
-    $$
-
-    이는 $n$개의 독립인 지수 확률변수로 일반화된다: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
-
----
-
-## 다음 고리: 더하면 정규분포로 간다
-
-최솟값을 취하면 지수분포가 그대로 남지만, **더하면** 이야기가 달라진다.
-
-$$
-X_1 + X_2 + \cdots + X_n \sim \text{Gamma}(n, \lambda)
-$$
-
-감마분포의 모양은 $n$이 커질수록 점점 대칭인 종 모양이 된다. 중심극한정리를 쓰면 그 이유가 곧바로 설명된다. $E[X_i] = 1/\lambda$, $\text{Var}(X_i) = 1/\lambda^2$이므로
-
-$$
-\frac{\sum_{i=1}^n X_i - n/\lambda}{\sqrt n/\lambda} \;\xrightarrow{\;n \to \infty\;}\; N(0, 1)
-$$
-
-이다. 즉 $\text{Gamma}(n, \lambda) \approx N(n/\lambda,\ n/\lambda^2)$이다.
-
-### 얼마나 많이 더해야 하는가
-
-지수분포는 왜도가 2로, 연속분포 가운데 상당히 치우친 편이다. $n$개를 더한 합의 왜도는 $2/\sqrt n$로 줄어들지만 그 속도가 빠르지 않다.
-
-| $n$ | 합의 왜도 |
-|---|---|
-| 1 | 2.00 |
-| 5 | 0.89 |
-| 20 | 0.45 |
-| 50 | 0.28 |
-| 100 | 0.20 |
-
-"$n \ge 30$이면 중심극한정리가 듣는다"는 흔한 규칙이 지수분포 같은 치우친 모집단에서는 부족하다는 것을 알 수 있다. 자료가 치우쳐 있을수록 더 큰 표본이 필요하며, 특히 **꼬리 확률**을 다룰 때는 훨씬 더 그렇다. 3장의 베리–에센 정리가 이 수렴 속도를 정량적으로 말해 준다.
-
-이 다리를 건너면 정규분포에 닿고, 그다음은 정규분포를 제곱하거나 나누는 것만 남는다.
-
----
-
-## 문제
-
-<div class="probox" markdown>
-
-**문제:** <span class="diff easy" title="쉬움"></span> 어떤 트레이딩 데스크에 주문이 시간당 평균 12건 도착한다. 연속한 주문 사이의 시간이 10분을 넘을 확률은?
-
-</div>
-
-??? success "풀이"
-    비율은 시간당 $\lambda = 12$, 즉 분당 $0.2$이다.
-
-    $$
-    P(X > 10) = e^{-0.2 \times 10} = e^{-2} \approx 0.1353
-    $$
-
-    주문 사이의 기대 시간: $E[X] = 1/0.2 = 5$분.
----
-
-## Python: PDF, CDF, 표본추출
-
-### PDF와 CDF
-
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 지수분포의 밀도함수와 분포함수. $X \sim \text{Exp}(\lambda)$의 밀도 $f$와 분포함수 $F$를 한 축에 겹쳐 그린다.
-
-**(1)** 밀도를 적분해 $F$를 유도하고, 두 곡선 $y = f(x)$와 $y = F(x)$가 만나는 자리를 $\lambda$의 식으로 구하시오. 모두 몇 번 만나는가.
-
-**(2)** $\lambda = 2$에서 그 자리를 수치로 확인하고, 밀도와 분포함수를 한 축에 겹쳐 그리는 것이 무엇을 가리는지 말하시오.
-
-</div>
-
-??? success "풀이"
-
-    **(1) 해석적으로.** 밀도를 $0$부터 $x$까지 적분한다. $\lambda e^{-\lambda u}$의 원시함수가 $-e^{-\lambda u}$이므로
-
-    $$
-    F(x) = \int_0^x \lambda e^{-\lambda u}\,du
-    = \left[-e^{-\lambda u}\right]_0^x
-    = 1 - e^{-\lambda x}, \qquad x \ge 0
-    $$
-
-    이다. 여기서 눈여겨볼 것은 **$f$는 $0$에서 불연속인데 $F$는 연속**이라는 점이다. $f(0^-) = 0$이고 $f(0^+) = \lambda$로 밀도가 원점에서 $\lambda$만큼 수직으로 뛰어오르는데, 적분은 그 도약을 뭉개므로 $F(0) = 0$에서 끊김 없이 올라간다. 밀도의 불연속은 분포함수의 **꺾임**으로만 남는다. $F'(0^+) = \lambda$이고 $F'(0^-) = 0$이어서 $F$는 원점에서 미분가능하지 않다.
-
-    이 모양에서 곧바로 따라오는 것이 **최빈값이 $0$**이라는 사실이다. $f' (x) = -\lambda^2 e^{-\lambda x} < 0$으로 밀도가 정의역 전체에서 강감소하므로 봉우리가 왼쪽 끝점에 붙어 있다. 가장 있을 법한 대기시간이 $0$ 근처라는 뜻이고, 평균 $1/\lambda$와는 전혀 다른 자리다.
-
-    이제 두 곡선이 만나는 자리를 찾는다. $f(x) = F(x)$는
-
-    $$
-    \lambda e^{-\lambda x} = 1 - e^{-\lambda x}
-    $$
-
-    인데, $u = e^{-\lambda x} \in (0, 1]$로 바꾸면 $\lambda u = 1 - u$, 곧 $u = 1/(1+\lambda)$라는 **일차방정식**이 된다. 되돌리면
-
-    $$
-    x^* = \frac{\ln(1+\lambda)}{\lambda}, \qquad
-    f(x^*) = F(x^*) = \frac{\lambda}{1+\lambda}
-    $$
-
-    이다. 치환 한 번으로 닫힌 꼴이 나왔다.
-
-    교차 횟수는 $g(x) = f(x) - F(x)$의 단조성이 정한다.
-
-    $$
-    g'(x) = -\lambda^2 e^{-\lambda x} - \lambda e^{-\lambda x} = -\lambda(\lambda+1)e^{-\lambda x} < 0
-    $$
-
-    이므로 $g$는 $[0, \infty)$에서 **강감소**다. 끝값은 $g(0) = \lambda - 0 = \lambda > 0$과 $g(\infty) = 0 - 1 = -1 < 0$이니, 강감소 함수가 양수에서 음수로 내려가는 동안 영점은
-
-    $$
-    \text{교차 횟수} = 1
-    $$
-
-    로 정확히 하나뿐이다. 치환으로 얻은 해가 유일한 해였던 셈이다.
-
-    $x^*$가 중앙값 $\ln 2/\lambda$보다 큰지는 $\lambda$가 정한다. 두 식의 분모가 같으므로 $x^* > \ln 2/\lambda \iff \ln(1+\lambda) > \ln 2 \iff \lambda > 1$이다.
-
-    **(2) 수치적으로.** 먼저 쪽의 그림이다.
-
-    ```python
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from scipy import stats
-
-    lam = 2.0                      # 비율모수. 단위 시간당 평균 2회 발생.
-    x = np.linspace(0, 4, 200)     # 지수분포는 x >= 0 에서만 정의된다
-
-    fig, ax = plt.subplots(figsize=(12, 3))
-    # scipy는 rate가 아니라 scale = 1/rate 를 받는다. 이 책에서 반복되는 함정이다.
-    # PDF는 x=0 에서 lam(=2)으로 시작해 단조 감소한다.
-    #   -> 지수분포에서 가장 있을 법한 대기시간은 **0에 가까운 값**이다.
-    # CDF는 0에서 1로 오르며 1 - e^{-lam x} 다.
-    ax.plot(x, stats.expon(scale=1/lam).pdf(x), label='PDF')
-    ax.plot(x, stats.expon(scale=1/lam).cdf(x), label='CDF')
-    ax.spines[['top', 'right']].set_visible(False)
-    ax.legend()
-    plt.show()
-    ```
-
-    ![지수분포의 밀도함수와 분포함수를 한 축에 겹쳐 그린 그림](./img/exponential_132.png)
-
-    (1)이 유도한 것을 하나씩 확인한다.
-
-    ```python
-    import numpy as np
-    from scipy import integrate, optimize, stats
-
-    lam = 2.0
-    d = stats.expon(scale=1/lam)
-
-    # (1) 의 CDF 유도를 수치적분으로 맞춰 본다.
-    print(f"{'x':>8}{'quad':>14}{'1-e^(-lam x)':>14}")
-    for x in (0.25, 1.0, 2.0):
-        print(f"{x:>8.2f}{integrate.quad(d.pdf, 0, x)[0]:>14.9f}{1 - np.exp(-lam*x):>14.9f}")
-
-    # 교차점: 닫힌 꼴 ln(1+lam)/lam 과 수치해를 견준다.
-    x_star = np.log(1 + lam) / lam
-    root = optimize.brentq(lambda x: d.pdf(x) - d.cdf(x), 1e-9, 50)
-    print(f"\n닫힌 꼴 x* = ln(1+lam)/lam = {x_star:.9f}")
-    print(f"수치해   x* =               {root:.9f}")
-    print(f"공통 높이 lam/(1+lam) = {lam/(1+lam):.9f}, f(x*) = {d.pdf(x_star):.9f}, F(x*) = {d.cdf(x_star):.9f}")
-
-    # g = f - F 가 강감소이므로 영점은 하나뿐이다. 부호 변화를 세어 확인한다.
-    xs = np.linspace(0, 20, 200_001)
-    g = np.sign(d.pdf(xs) - d.cdf(xs))
-    print(f"g(0) = {d.pdf(0) - d.cdf(0):.4f},  g(20) = {d.pdf(20) - d.cdf(20):.6f},  부호 변화 = {int(np.sum(g[1:] != g[:-1]))}")
-
-    # 중앙값과 교차점의 순서. lam > 1 이면 x* 가 중앙값보다 크다.
-    print(f"\n{'lam':>6}{'x*':>12}{'중앙값 ln2/lam':>16}{'x* > 중앙값':>12}")
-    for L in (0.5, 1.0, 2.0, 5.0):
-        print(f"{L:>6.1f}{np.log(1+L)/L:>12.6f}{np.log(2)/L:>16.6f}{str(np.log(1+L) > np.log(2)):>12}")
-    ```
-
-    출력:
-
-    ```
-           x          quad  1-e^(-lam x)
-        0.25   0.393469340   0.393469340
-        1.00   0.864664717   0.864664717
-        2.00   0.981684361   0.981684361
-
-    닫힌 꼴 x* = ln(1+lam)/lam = 0.549306144
-    수치해   x* =               0.549306144
-    공통 높이 lam/(1+lam) = 0.666666667, f(x*) = 0.666666667, F(x*) = 0.666666667
-    g(0) = 2.0000,  g(20) = -1.000000,  부호 변화 = 1
-
-       lam          x*     중앙값 ln2/lam    x* > 중앙값
-       0.5    0.810930        1.386294       False
-       1.0    0.693147        0.693147       False
-       2.0    0.549306        0.346574        True
-       5.0    0.358352        0.138629        True
-    ```
-
-    **유도한 것이 모두 맞는다.** 수치적분이 $1 - e^{-\lambda x}$와 아홉째 자리까지 같고, 닫힌 꼴 $x^* = 0.549306144$가 `brentq`의 해와 아홉째 자리까지 같으며, 공통 높이는 $\lambda/(1+\lambda) = 2/3$다. 부호 변화가 한 번이라는 것도 강감소 논증과 맞는다. 표의 마지막 칸은 $\lambda > 1$에서만 $x^*$가 중앙값보다 크다는 조건을 그대로 보여 주고, $\lambda = 1$에서는 $\ln(1+\lambda) = \ln 2$라 둘이 정확히 겹친다.
-
-    **그런데 이 그림이 가리는 것이 하나 있다. 두 곡선은 서로 견줄 수 있는 양이 아니다.** $F$는 확률이라 단위가 없고 $0$과 $1$ 사이에 갇혀 있지만, $f$는 **밀도**라서 단위가 시간의 역수이고 $1$을 넘을 수 있다. 실제로 $\lambda = 2$에서 $f(0) = 2 > 1$이다. 둘을 같은 세로축에 올려놓으면 눈금의 뜻이 두 개가 되고, 그래서 교차점 $x^*$는 **그림을 그린 방식이 만들어 낸 자리일 뿐 확률론적인 뜻이 없다.** $\lambda$의 단위를 분에서 초로 바꾸면 $f$만 $60$배가 되어 $x^*$도 옮겨 간다. (1)에서 $x^*$를 닫힌 꼴로 구할 수 있었던 것은 수학적으로 깔끔한 일이지만, 그 값이 분포에 대해 말해 주는 바는 없다.
-
-    같은 축에 겹쳐 그리는 것이 값싸게 알려 주는 것은 따로 있다. **$f$가 내려가는 동안 $F$가 올라간다**는 것, 곧 밀도가 분포함수의 기울기라는 관계다. $f$가 가장 높은 $x = 0$에서 $F$가 가장 급하게 오르고, $f$가 $0$으로 잦아드는 오른쪽 끝에서 $F$가 $1$에 눕는다.
-
-### 비율에 따른 비교
-
-<div class="exbox" markdown>
-
-**보기 2.** <span class="diff easy" title="쉬움"></span> 비율모수에 따른 지수분포 비교. $\lambda \in \{0.5, 1, 2, 5\}$인 네 밀도를 $[0, 6]$에 겹쳐 그린다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 비율모수에 따른 지수분포 비교. $\lambda \in \{0.5, 1, 2, 5\}$인 네 밀도를 $[0, 6]$에 겹쳐 그린다.
 
 **(1)** 지수분포족이 **척도족**임을 보이고, 서로 다른 두 밀도 $f_{\lambda_1}$, $f_{\lambda_2}$가 만나는 자리를 닫힌 꼴로 구하시오. 한 쌍은 몇 번 만나는가.
 
@@ -567,7 +187,239 @@ $$
 
     교차점도 그림에서는 잘 안 보인다. 여섯 쌍의 교차가 $x^* = 0.305$에서 $1.386$ 사이에 몰려 있는데, 이 구간은 가로축 $[0, 6]$의 왼쪽 $4$분의 $1$도 안 되는 곳이라 선들이 뒤엉켜 있다. 가장 바깥 쌍인 $(0.5, 5.0)$의 교차 높이가 $0.387$인 데 비해 세로축이 $5$까지 뻗어 있는 것도 불리하다.
 
-### 표본추출과 검증
+---
+
+## 2. 누적분포함수
+
+<div class="thmbox" markdown>
+
+### 정리 1. 누적분포함수와 생존함수 { .thm }
+
+$X \sim \text{Exp}(\lambda)$이면 $x \geq 0$에 대해
+
+$$
+F(x) = 1 - e^{-\lambda x}, \qquad S(x) = P(X > x) = e^{-\lambda x}
+$$
+
+이다. $x < 0$이면 $F(x) = 0$, $S(x) = 1$이다.
+
+</div>
+
+??? proof "증명"
+
+    밀도를 $0$부터 $x$까지 적분한다.
+
+    $$
+    F(x) = \int_0^x \lambda e^{-\lambda t}\,dt = \left[-e^{-\lambda t}\right]_0^x = 1 - e^{-\lambda x}
+    $$
+
+    생존함수는 그 여사건의 확률이므로
+
+    $$
+    S(x) = P(X > x) = 1 - F(x) = e^{-\lambda x} \qquad \square
+    $$
+
+![왼쪽은 지수분포의 밀도이고 x0을 기준으로 왼쪽 넓이가 F(x0), 오른쪽 넓이가 S(x0)으로 색이 갈려 있다. 오른쪽은 같은 두 양을 x의 함수로 그린 것으로, 증가하는 F와 감소하는 S가 중앙값에서 만난다](./img/exponential_cdf_survival.png)
+
+왼쪽이 증명이 한 일이다. 밀도 아래 넓이를 $x_0$에서 자르면 왼쪽 조각이 $F(x_0)$,
+오른쪽 조각이 $S(x_0)$이고 합이 1이다. 오른쪽은 그 두 조각을 $x$의 함수로 따라간
+것이다. 합이 1이므로 두 곡선은 $y = 1/2$에 대해 서로를 뒤집은 꼴이고, 그래서
+**둘이 만나는 자리가 중앙값**이다.
+
+지수분포는 **생존함수가 더 간단한** 드문 분포다. 뒤에서 무기억성을 따질 때도
+$F$ 가 아니라 $S$ 를 들고 계산한다.
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 지수분포의 밀도함수와 분포함수. $X \sim \text{Exp}(\lambda)$의 밀도 $f$와 분포함수 $F$를 한 축에 겹쳐 그린다.
+
+**(1)** 밀도를 적분해 $F$를 유도하고, 두 곡선 $y = f(x)$와 $y = F(x)$가 만나는 자리를 $\lambda$의 식으로 구하시오. 모두 몇 번 만나는가.
+
+**(2)** $\lambda = 2$에서 그 자리를 수치로 확인하고, 밀도와 분포함수를 한 축에 겹쳐 그리는 것이 무엇을 가리는지 말하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 밀도를 $0$부터 $x$까지 적분한다. $\lambda e^{-\lambda u}$의 원시함수가 $-e^{-\lambda u}$이므로
+
+    $$
+    F(x) = \int_0^x \lambda e^{-\lambda u}\,du
+    = \left[-e^{-\lambda u}\right]_0^x
+    = 1 - e^{-\lambda x}, \qquad x \ge 0
+    $$
+
+    이다. 여기서 눈여겨볼 것은 **$f$는 $0$에서 불연속인데 $F$는 연속**이라는 점이다. $f(0^-) = 0$이고 $f(0^+) = \lambda$로 밀도가 원점에서 $\lambda$만큼 수직으로 뛰어오르는데, 적분은 그 도약을 뭉개므로 $F(0) = 0$에서 끊김 없이 올라간다. 밀도의 불연속은 분포함수의 **꺾임**으로만 남는다. $F'(0^+) = \lambda$이고 $F'(0^-) = 0$이어서 $F$는 원점에서 미분가능하지 않다.
+
+    이 모양에서 곧바로 따라오는 것이 **최빈값이 $0$**이라는 사실이다. $f' (x) = -\lambda^2 e^{-\lambda x} < 0$으로 밀도가 정의역 전체에서 강감소하므로 봉우리가 왼쪽 끝점에 붙어 있다. 가장 있을 법한 대기시간이 $0$ 근처라는 뜻이고, 평균 $1/\lambda$와는 전혀 다른 자리다.
+
+    이제 두 곡선이 만나는 자리를 찾는다. $f(x) = F(x)$는
+
+    $$
+    \lambda e^{-\lambda x} = 1 - e^{-\lambda x}
+    $$
+
+    인데, $u = e^{-\lambda x} \in (0, 1]$로 바꾸면 $\lambda u = 1 - u$, 곧 $u = 1/(1+\lambda)$라는 **일차방정식**이 된다. 되돌리면
+
+    $$
+    x^* = \frac{\ln(1+\lambda)}{\lambda}, \qquad
+    f(x^*) = F(x^*) = \frac{\lambda}{1+\lambda}
+    $$
+
+    이다. 치환 한 번으로 닫힌 꼴이 나왔다.
+
+    교차 횟수는 $g(x) = f(x) - F(x)$의 단조성이 정한다.
+
+    $$
+    g'(x) = -\lambda^2 e^{-\lambda x} - \lambda e^{-\lambda x} = -\lambda(\lambda+1)e^{-\lambda x} < 0
+    $$
+
+    이므로 $g$는 $[0, \infty)$에서 **강감소**다. 끝값은 $g(0) = \lambda - 0 = \lambda > 0$과 $g(\infty) = 0 - 1 = -1 < 0$이니, 강감소 함수가 양수에서 음수로 내려가는 동안 영점은
+
+    $$
+    \text{교차 횟수} = 1
+    $$
+
+    로 정확히 하나뿐이다. 치환으로 얻은 해가 유일한 해였던 셈이다.
+
+    $x^*$가 중앙값 $\ln 2/\lambda$보다 큰지는 $\lambda$가 정한다. 두 식의 분모가 같으므로 $x^* > \ln 2/\lambda \iff \ln(1+\lambda) > \ln 2 \iff \lambda > 1$이다.
+
+    **(2) 수치적으로.** 먼저 쪽의 그림이다.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    lam = 2.0                      # 비율모수. 단위 시간당 평균 2회 발생.
+    x = np.linspace(0, 4, 200)     # 지수분포는 x >= 0 에서만 정의된다
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    # scipy는 rate가 아니라 scale = 1/rate 를 받는다. 이 책에서 반복되는 함정이다.
+    # PDF는 x=0 에서 lam(=2)으로 시작해 단조 감소한다.
+    #   -> 지수분포에서 가장 있을 법한 대기시간은 **0에 가까운 값**이다.
+    # CDF는 0에서 1로 오르며 1 - e^{-lam x} 다.
+    ax.plot(x, stats.expon(scale=1/lam).pdf(x), label='PDF')
+    ax.plot(x, stats.expon(scale=1/lam).cdf(x), label='CDF')
+    ax.spines[['top', 'right']].set_visible(False)
+    ax.legend()
+    plt.show()
+    ```
+
+    ![지수분포의 밀도함수와 분포함수를 한 축에 겹쳐 그린 그림](./img/exponential_132.png)
+
+    (1)이 유도한 것을 하나씩 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import integrate, optimize, stats
+
+    lam = 2.0
+    d = stats.expon(scale=1/lam)
+
+    # (1) 의 CDF 유도를 수치적분으로 맞춰 본다.
+    print(f"{'x':>8}{'quad':>14}{'1-e^(-lam x)':>14}")
+    for x in (0.25, 1.0, 2.0):
+        print(f"{x:>8.2f}{integrate.quad(d.pdf, 0, x)[0]:>14.9f}{1 - np.exp(-lam*x):>14.9f}")
+
+    # 교차점: 닫힌 꼴 ln(1+lam)/lam 과 수치해를 견준다.
+    x_star = np.log(1 + lam) / lam
+    root = optimize.brentq(lambda x: d.pdf(x) - d.cdf(x), 1e-9, 50)
+    print(f"\n닫힌 꼴 x* = ln(1+lam)/lam = {x_star:.9f}")
+    print(f"수치해   x* =               {root:.9f}")
+    print(f"공통 높이 lam/(1+lam) = {lam/(1+lam):.9f}, f(x*) = {d.pdf(x_star):.9f}, F(x*) = {d.cdf(x_star):.9f}")
+
+    # g = f - F 가 강감소이므로 영점은 하나뿐이다. 부호 변화를 세어 확인한다.
+    xs = np.linspace(0, 20, 200_001)
+    g = np.sign(d.pdf(xs) - d.cdf(xs))
+    print(f"g(0) = {d.pdf(0) - d.cdf(0):.4f},  g(20) = {d.pdf(20) - d.cdf(20):.6f},  부호 변화 = {int(np.sum(g[1:] != g[:-1]))}")
+
+    # 중앙값과 교차점의 순서. lam > 1 이면 x* 가 중앙값보다 크다.
+    print(f"\n{'lam':>6}{'x*':>12}{'중앙값 ln2/lam':>16}{'x* > 중앙값':>12}")
+    for L in (0.5, 1.0, 2.0, 5.0):
+        print(f"{L:>6.1f}{np.log(1+L)/L:>12.6f}{np.log(2)/L:>16.6f}{str(np.log(1+L) > np.log(2)):>12}")
+    ```
+
+    출력:
+
+    ```
+           x          quad  1-e^(-lam x)
+        0.25   0.393469340   0.393469340
+        1.00   0.864664717   0.864664717
+        2.00   0.981684361   0.981684361
+
+    닫힌 꼴 x* = ln(1+lam)/lam = 0.549306144
+    수치해   x* =               0.549306144
+    공통 높이 lam/(1+lam) = 0.666666667, f(x*) = 0.666666667, F(x*) = 0.666666667
+    g(0) = 2.0000,  g(20) = -1.000000,  부호 변화 = 1
+
+       lam          x*     중앙값 ln2/lam    x* > 중앙값
+       0.5    0.810930        1.386294       False
+       1.0    0.693147        0.693147       False
+       2.0    0.549306        0.346574        True
+       5.0    0.358352        0.138629        True
+    ```
+
+    **유도한 것이 모두 맞는다.** 수치적분이 $1 - e^{-\lambda x}$와 아홉째 자리까지 같고, 닫힌 꼴 $x^* = 0.549306144$가 `brentq`의 해와 아홉째 자리까지 같으며, 공통 높이는 $\lambda/(1+\lambda) = 2/3$다. 부호 변화가 한 번이라는 것도 강감소 논증과 맞는다. 표의 마지막 칸은 $\lambda > 1$에서만 $x^*$가 중앙값보다 크다는 조건을 그대로 보여 주고, $\lambda = 1$에서는 $\ln(1+\lambda) = \ln 2$라 둘이 정확히 겹친다.
+
+    **그런데 이 그림이 가리는 것이 하나 있다. 두 곡선은 서로 견줄 수 있는 양이 아니다.** $F$는 확률이라 단위가 없고 $0$과 $1$ 사이에 갇혀 있지만, $f$는 **밀도**라서 단위가 시간의 역수이고 $1$을 넘을 수 있다. 실제로 $\lambda = 2$에서 $f(0) = 2 > 1$이다. 둘을 같은 세로축에 올려놓으면 눈금의 뜻이 두 개가 되고, 그래서 교차점 $x^*$는 **그림을 그린 방식이 만들어 낸 자리일 뿐 확률론적인 뜻이 없다.** $\lambda$의 단위를 분에서 초로 바꾸면 $f$만 $60$배가 되어 $x^*$도 옮겨 간다. (1)에서 $x^*$를 닫힌 꼴로 구할 수 있었던 것은 수학적으로 깔끔한 일이지만, 그 값이 분포에 대해 말해 주는 바는 없다.
+
+    같은 축에 겹쳐 그리는 것이 값싸게 알려 주는 것은 따로 있다. **$f$가 내려가는 동안 $F$가 올라간다**는 것, 곧 밀도가 분포함수의 기울기라는 관계다. $f$가 가장 높은 $x = 0$에서 $F$가 가장 급하게 오르고, $f$가 $0$으로 잦아드는 오른쪽 끝에서 $F$가 $1$에 눕는다.
+
+<div class="probox" markdown>
+
+**문제 1.** <span class="diff easy" title="쉬움"></span> 어떤 트레이딩 데스크에 주문이 시간당 평균 12건 도착한다. 연속한 주문 사이의 시간이 10분을 넘을 확률은?
+
+</div>
+
+??? success "풀이"
+    비율은 시간당 $\lambda = 12$, 즉 분당 $0.2$이다.
+
+    $$
+    P(X > 10) = e^{-0.2 \times 10} = e^{-2} \approx 0.1353
+    $$
+
+    주문 사이의 기대 시간: $E[X] = 1/0.2 = 5$분.
+
+---
+
+## 3. 성질
+
+<div class="thmbox" markdown>
+
+### 정리 2. 지수분포의 평균과 분산 { .thm }
+
+$X \sim \text{Exp}(\lambda)$이면
+
+$$
+E[X] = \frac{1}{\lambda}, \qquad \text{Var}(X) = \frac{1}{\lambda^2}
+$$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    **평균.** 부분적분을 한 번 쓴다.
+
+    $$
+    E[X] = \int_0^{\infty} x \lambda e^{-\lambda x}\,dx = \left[-x e^{-\lambda x}\right]_0^{\infty} + \int_0^{\infty} e^{-\lambda x}\,dx = \frac{1}{\lambda}
+    $$
+
+    **분산.** 같은 방식으로 이차적률을 구한 뒤 평균의 제곱을 뺀다.
+
+    $$
+    E[X^2] = \int_0^{\infty} x^2 \lambda e^{-\lambda x}\,dx = \frac{2}{\lambda^2}
+    $$
+
+    $$
+    \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2} \qquad \square
+    $$
+
+표준편차는 분산의 양의 제곱근이므로 $\text{SD}(X) = 1/\lambda$다. 곧 $\text{평균} = \text{표준편차} = 1/\lambda$인데, 이것이 지수분포의 두드러진 특징이다.
+
+중앙값은 $F(m) = 1/2$를 풀면 나온다. $1 - e^{-\lambda m} = 1/2$에서 $e^{-\lambda m} = 1/2$이므로 양변에 로그를 취하면 $m = (\ln 2)/\lambda$다. 이것은 평균보다 작다($\ln 2 \approx 0.693$). 오른쪽으로 긴 꼬리가 평균을 끌어올리기 때문이다.
 
 <div class="exbox" markdown>
 
@@ -611,7 +463,7 @@ $$
     \mathrm{CV} = \frac{\operatorname{SD}(X)}{E[X]} = \frac{1/\lambda}{1/\lambda} = 1
     $$
 
-    로 정확히 $1$이고 $\lambda$에 의존하지 않는다. 보기 2에서 본 척도족 논증이 곧바로 설명해 준다. **CV 는 무차원 양이라 눈금을 바꾸어도 변할 수 없다.**
+    로 정확히 $1$이고 $\lambda$에 의존하지 않는다. 보기 1에서 본 척도족 논증이 곧바로 설명해 준다. **CV 는 무차원 양이라 눈금을 바꾸어도 변할 수 없다.**
 
     여기서 흔한 혼동을 하나 짚어 둔다. 지수분포는 **평균 $=$ 표준편차**이고 포아송분포는 **평균 $=$ 분산**이다. 차원을 따져 보면 어느 쪽이 맞는지 헷갈릴 일이 없다. 지수분포의 $X$는 시간이므로 평균과 표준편차가 같은 단위를 갖고 견줄 수 있지만, 분산은 시간의 제곱이라 평균과 같아질 수 없다. 실제로 $\lambda = 3$에서 평균은 $0.3333$인데 분산은 $0.1111$로 전혀 다르다.
 
@@ -723,9 +575,35 @@ $$
 
     게다가 기준 `atol=0.01`이 지나치게 느슨하다. 실제 차이는 $0.001$이라 기준의 $10$분의 $1$인데, 거꾸로 말하면 참값에서 $3\%$쯤 벗어난 분포도 이 검사를 통과한다는 뜻이다.
 
-    둘을 가르려면 CV 가 아닌 다른 양을 보아야 한다. 보기 2에서 본 $P(X > E[X]) = e^{-1} = 0.3679$가 좋은 후보다. 로그정규 쪽은 $0.3386$으로 뚜렷이 다르고, 모의표본은 $0.3674$로 지수분포 쪽에 붙는다. **적률 두 개를 맞추는 것으로 분포를 확인했다고 할 수 없고, 분포함수 전체를 보는 검정(보기 4의 콜모고로프–스미르노프 같은 것)이 따로 필요하다.**
+    둘을 가르려면 CV 가 아닌 다른 양을 보아야 한다. 보기 1에서 본 $P(X > E[X]) = e^{-1} = 0.3679$가 좋은 후보다. 로그정규 쪽은 $0.3386$으로 뚜렷이 다르고, 모의표본은 $0.3674$로 지수분포 쪽에 붙는다. **적률 두 개를 맞추는 것으로 분포를 확인했다고 할 수 없고, 분포함수 전체를 보는 검정(보기 4의 콜모고로프–스미르노프 같은 것)이 따로 필요하다.**
 
-### 무기억성 확인하기
+---
+
+## 4. 무기억성
+
+<div class="thmbox" markdown>
+
+### 정리 3. 지수분포의 무기억성 { .thm }
+
+$X \sim \text{Exp}(\lambda)$이면 모든 $s, t \geq 0$에 대해
+
+$$
+P(X > s + t \mid X > s) = P(X > t)
+$$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    $$
+    P(X > s + t \mid X > s) = \frac{P(X > s + t)}{P(X > s)} = \frac{e^{-\lambda(s+t)}}{e^{-\lambda s}} = e^{-\lambda t} = P(X > t)
+    $$
+
+    **해석:** 이미 $s$만큼의 시간을 기다렸더라도 남은 대기 시간의 분포는 방금 시작했을 때와 같다. 이 과정은 자신의 이력을 "잊어버린다".
+
+거꾸로, 이 성질을 갖는 연속분포는 지수분포뿐이다. 그 방향의 증명은 연습문제 2에서 다룬다.
 
 <div class="exbox" markdown>
 
@@ -868,7 +746,56 @@ $$
 
     덧붙여 둘 것이 있다. 이 모의실험은 무기억성이 지수분포에서 **성립함**을 보일 뿐, 지수분포가 그 성질을 갖는 **유일한** 연속분포라는 것은 보이지 못한다. 유일성은 모의실험으로 닿을 수 없는 주장이며, $S(s+t) = S(s)S(t)$라는 함수방정식을 푸는 일이다. 연습문제 2 가 그 몫을 맡는다.
 
-### 포아송 과정 모의실험
+---
+
+## 5. 기하분포에서 건너오는 다리
+
+무기억성을 갖는 이산분포가 하나 있었다. [기하분포](../discrete_distributions/geometric.md)다. 두 분포가 같은 성질을 공유하는 것은 우연이 아니라, 하나가 다른 하나의 극한이기 때문이다. 4.1절의 사슬과 4.2절의 사슬이 만나는 자리가 여기다.
+
+동전을 아주 빠르게 던진다고 하자. $1/n$초에 한 번씩 던지되 앞면이 나올 확률을 $p = \lambda/n$로 낮춘다. 던지는 속도를 올린 만큼 성공을 어렵게 만든 셈이라, 단위 시간당 기대 성공 횟수 $np$는 $\lambda$로 붙들려 있다. 첫 앞면이 나오기까지의 **시행 횟수**를 $X \sim \text{Geo}(p)$라 하면, 첫 앞면까지의 **시간**은 $T = X/n$이다.
+
+$T$의 생존함수를 계산해 보면 된다. $T > t$라는 것은 처음 $nt$번의 시행이 모두 실패했다는 뜻이므로
+
+$$
+P(T > t) = P(X > nt) = (1-p)^{\lfloor nt \rfloor} = \left(1 - \frac{\lambda}{n}\right)^{\lfloor nt \rfloor} \;\xrightarrow[n \to \infty]{}\; e^{-\lambda t}
+$$
+
+이고, 이것이 바로 $\text{Exp}(\lambda)$의 생존함수다. 평균과 분산도 따라온다. $E[X] = 1/p = n/\lambda$이므로 $E[T] = E[X]/n = 1/\lambda$이고, $\text{Var}(X) = (1-p)/p^2$이므로
+
+$$
+\text{Var}(T) = \frac{\text{Var}(X)}{n^2} = \frac{1 - \lambda/n}{\lambda^2} \;\xrightarrow[n \to \infty]{}\; \frac{1}{\lambda^2}
+$$
+
+이다. 기하분포의 $1/p$와 $(1-p)/p^2$이 지수분포의 $1/\lambda$와 $1/\lambda^2$로 정확히 옮겨 간다. 시간 간격 $\Delta t$를 직접 붙들고 같은 극한을 취하는 방식은 [기하분포](../discrete_distributions/geometric.md) 쪽 연습문제에서 다룬다.
+
+### 같은 극한의 두 얼굴
+
+이 극한은 처음 보는 것이 아니다. $np = \lambda$를 고정한 채 $n \to \infty$, $p \to 0$으로 보내는 것은 [포아송분포](../discrete_distributions/poisson.md)를 얻을 때 쓴 바로 그 극한이다. 달라지는 것은 무엇을 묻느냐뿐이다.
+
+**세는 쪽**에서 물으면, 곧 "단위 시간 안에 앞면이 몇 번 나왔는가"를 물으면 $B(n, p) \to \text{Poisson}(\lambda)$다. **기다리는 쪽**에서 물으면, 곧 "첫 앞면까지 얼마나 걸렸는가"를 물으면 $\frac{1}{n}\text{Geo}(p) \to \text{Exp}(\lambda)$다. 같은 실험을 두 방향에서 본 것이고, 그래서 두 결과가 같은 하나의 대상을 기술한다. 그 대상이 다음 절의 **포아송 과정**이다.
+
+$$
+\begin{array}{ccc}
+B(n, p) & \longrightarrow & \text{Poisson}(\lambda) \\
+\text{Geo}(p)/n & \longrightarrow & \text{Exp}(\lambda)
+\end{array}
+$$
+
+윗줄이 사건의 개수를 세고 아랫줄이 사건 사이의 시간을 잰다. 무기억성이 기하분포에서 지수분포로 고스란히 건너온 것도 이 그림 안에서 자연스럽다. 매 시행이 과거를 기억하지 않으니, 시행을 아무리 잘게 쪼개도 그 성질이 남는다.
+
+---
+
+## 6. 포아송 과정과의 연결
+
+사건이 비율 $\lambda$인 포아송 과정에 따라 도착하면:
+
+$$
+\begin{aligned}
+\text{Number of events in } [0, t] &\sim \text{Poisson}(\lambda t) \\
+\text{Time between consecutive events} &\sim \text{Exponential}(\lambda) \\
+\text{Time to the } n\text{-th event} &\sim \text{Gamma}(n, \lambda)
+\end{aligned}
+$$
 
 <div class="exbox" markdown>
 
@@ -1036,6 +963,66 @@ $$
     **이 그림이 가리는 것이 둘 있다.** 하나는 가로축의 끝이 자료에 따라 달라진다는 점이다. 사건 수를 $50$으로 **고정하고** 시간을 흐르게 한 그림이므로, 눈에 보이는 전체 기울기는 $50/S_{50}$이라는 비이고 $\lambda$의 추정값이지 $\lambda$가 아니다. 시간 $t$를 고정하고 사건 수를 세는 쪽으로 물었다면 $N_t \sim \text{Poisson}(\lambda t)$라는 (1)의 결론이 직접 눈에 들어왔을 것이다.
 
     다른 하나는 **뭉침**이다. 계단만 보면 사건이 고르게 흩어진 듯한 인상을 주는데, 실제 간격은 최솟값이 $0$에 거의 붙고 최댓값이 $1.1679$로 평균의 네 배가 넘는다. 독립 지수 간격 $50$개의 최댓값은 기댓값이 $H_{50}/\lambda = 1.4997$($H_n$은 조화수)이므로 이 정도 긴 공백은 **있어야 정상**이다. 최빈값이 $0$인 분포에서 뽑으니 짧은 간격이 몰려 나오고 그 사이사이에 긴 공백이 생긴다. "완전히 무작위"가 "고르게 퍼짐"이 아니라는 것이 포아송 과정의 가장 자주 오해되는 대목이며, 연습문제 10 의 균등 순서통계량 결과가 그 까닭을 말해 준다.
+
+---
+
+## 7. 지수 확률변수의 최솟값
+
+<div class="thmbox" markdown>
+
+### 정리 4. 최솟값도 지수분포다 { .thm }
+
+$X_1 \sim \text{Exp}(\lambda_1)$과 $X_2 \sim \text{Exp}(\lambda_2)$가 독립이면
+
+$$
+\min(X_1, X_2) \sim \text{Exp}(\lambda_1 + \lambda_2)
+$$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    $$
+    P(\min(X_1, X_2) > t) = P(X_1 > t) \cdot P(X_2 > t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2)t}
+    $$
+
+    이는 $n$개의 독립인 지수 확률변수로 일반화된다: $\min(X_1, \ldots, X_n) \sim \text{Exp}\left(\sum_{i=1}^n \lambda_i\right)$.
+
+---
+
+## 8. 다음 고리: 더하면 정규분포로 간다
+
+최솟값을 취하면 지수분포가 그대로 남지만, **더하면** 이야기가 달라진다.
+
+$$
+X_1 + X_2 + \cdots + X_n \sim \text{Gamma}(n, \lambda)
+$$
+
+감마분포의 모양은 $n$이 커질수록 점점 대칭인 종 모양이 된다. 중심극한정리를 쓰면 그 이유가 곧바로 설명된다. $E[X_i] = 1/\lambda$, $\text{Var}(X_i) = 1/\lambda^2$이므로
+
+$$
+\frac{\sum_{i=1}^n X_i - n/\lambda}{\sqrt n/\lambda} \;\xrightarrow{\;n \to \infty\;}\; N(0, 1)
+$$
+
+이다. 즉 $\text{Gamma}(n, \lambda) \approx N(n/\lambda,\ n/\lambda^2)$이다.
+
+### 얼마나 많이 더해야 하는가
+
+지수분포는 왜도가 2로, 연속분포 가운데 상당히 치우친 편이다. $n$개를 더한 합의 왜도는 $2/\sqrt n$로 줄어들지만 그 속도가 빠르지 않다.
+
+| $n$ | 합의 왜도 |
+|---|---|
+| 1 | 2.00 |
+| 5 | 0.89 |
+| 20 | 0.45 |
+| 50 | 0.28 |
+| 100 | 0.20 |
+
+"$n \ge 30$이면 중심극한정리가 듣는다"는 흔한 규칙이 지수분포 같은 치우친 모집단에서는 부족하다는 것을 알 수 있다. 자료가 치우쳐 있을수록 더 큰 표본이 필요하며, 특히 **꼬리 확률**을 다룰 때는 훨씬 더 그렇다. 3장의 베리–에센 정리가 이 수렴 속도를 정량적으로 말해 준다.
+
+이 다리를 건너면 정규분포에 닿고, 그다음은 정규분포를 제곱하거나 나누는 것만 남는다.
 
 ---
 
