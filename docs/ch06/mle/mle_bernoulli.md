@@ -57,15 +57,51 @@ $$
 
 ### MLE 해
 
+<div class="thmbox" markdown>
+
+### 정리 1. 베르누이분포의 MLE { .thm }
+
+$x^{(1)}, \ldots, x^{(m)} \overset{\text{iid}}{\sim} B(p)$ 에 대해 로그가능도를 최대화하는 값은 **표본비율**이다.
+
 $$
-\begin{array}{llcll}
-\displaystyle\frac{\partial J}{\partial p} = 0
-&\Rightarrow&
-\displaystyle\sum_{i=1}^m \frac{x^{(i)}}{p} - \frac{1 - x^{(i)}}{1 - p} = 0
-&\Rightarrow&
-\displaystyle\hat{p} = \frac{\sum_{i=1}^m x^{(i)}}{m}
-\end{array}
+\hat p = \frac{1}{m}\sum_{i=1}^{m} x^{(i)} = \bar x
 $$
+
+이것은 유일한 최대점이며, $0 < \bar x < 1$ 이면 내부점이다.
+
+</div>
+
+??? proof "증명"
+
+    로그가능도를 성공 횟수 $s = \sum_i x^{(i)}$ 로 묶어 적으면
+
+    $$
+    \ell(p) = s\log p + (m - s)\log(1-p)
+    $$
+
+    다. 미분해 0 으로 둔다.
+
+    $$
+    \ell'(p) = \frac{s}{p} - \frac{m-s}{1-p} = 0
+    \quad\Longrightarrow\quad
+    s(1-p) = (m-s)p
+    \quad\Longrightarrow\quad
+    p = \frac{s}{m}
+    $$
+
+    **$p$ 가 분모에서 빠져나와 한 번에 풀린다.** 이것이 유일한 정류점이다.
+
+    최대점임을 확인한다. 두 번 미분하면
+
+    $$
+    \ell''(p) = -\frac{s}{p^2} - \frac{m-s}{(1-p)^2} < 0
+    $$
+
+    로 $0 < p < 1$ 에서 **언제나 음수**다. 곧 $\ell$ 이 **엄격 오목**이므로 정류점이 유일한 최대점이다. $\square$
+
+    **$s = 0$ 이거나 $s = m$ 이면 최대점이 경계에 있다.** 그때 $\ell$ 은 단조이고 $\hat p = 0$ 또는 $1$ 이 되는데, 미분으로는 잡히지 않으므로 따로 보아야 한다. 추정값이 경계에 붙는 이 현상이 5장에서 본 왈드 구간의 붕괴([왈드와 윌슨](../../ch05/applications/phat_wald_wilson.md) 정리 1)와 같은 뿌리를 갖는다.
+
+    **MLE 가 표본비율이라는 결과는 뜻밖이 아니다.** 그러나 "자연스러워 보이는 추정값"과 "가능도를 최대화하는 값"이 일치한다는 것은 증명해야 아는 일이고, 늘 그렇지도 않다 — 균등분포의 MLE 가 표본최댓값이 되는 것처럼 직관과 어긋나는 경우가 있다.
 
 ---
 

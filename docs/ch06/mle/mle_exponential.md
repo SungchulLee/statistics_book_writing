@@ -1,12 +1,12 @@
 # 지수분포의 MLE
 
-## 1. 동기
+## 개요
 
 지수분포는 포아송 과정에서 연속한 사건 사이의 대기 시간을 모형화한다. 예를 들어 고객 도착 사이의 시간, 부품 고장 사이의 시간, 방사성 붕괴 사이의 시간이 그렇다. 관측된 대기 시간으로부터 비율 모수 $\lambda$를 추정하는 것은 기본적인 응용 문제이다. 지수의 경우 깔끔한 닫힌 형태의 MLE가 나오며, 동시에 비선형 변환이 추정량에 어떻게 편향을 들여오는지도 보여 준다.
 
 ---
 
-## 2. 설정
+## 1. 설정
 
 비율 모수가 $\lambda > 0$인 지수분포에서 독립적으로 뽑은 확률표본 $X_1, X_2, \ldots, X_n$을 생각하자. 각 관측값의 밀도는
 
@@ -18,33 +18,49 @@ $$
 
 ---
 
-## 3. 유도
+## 2. 유도
 
-관측값이 독립이므로 결합밀도는 개별 밀도의 곱이다. 로그를 취하면 이 곱이 합으로 바뀌어 로그가능도함수를 얻는다:
+<div class="thmbox" markdown>
 
-$$
-\ell(\lambda) = \sum_{i=1}^n \log f(x_i; \lambda) = n \log \lambda - \lambda \sum_{i=1}^n x_i
-$$
+### 정리 1. 지수분포의 MLE { .thm }
 
-로그가능도를 최대화하는 $\lambda$ 값을 찾기 위해 $\lambda$에 대해 미분하고 결과를 0으로 둔다:
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Exp}(\lambda)$ 에 대해
 
 $$
-\frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0
+\hat\lambda_{\text{MLE}} = \frac{1}{\bar X}
 $$
 
-$\lambda$에 대해 풀면 최대가능도추정량을 얻는다:
+이고, 이것이 모수공간 전체에서 유일한 전역 최대점이다.
 
-$$
-\hat{\lambda}_{\text{MLE}} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{X}}
-$$
+</div>
 
-이 임계점이 실제로 최댓값임을 확인하기 위해 2계도함수를 살펴본다:
+??? proof "증명"
 
-$$
-\frac{d^2\ell}{d\lambda^2} = -\frac{n}{\lambda^2} < 0 \quad \text{for all } \lambda > 0
-$$
+    독립이므로 결합밀도가 곱이고, 로그를 취하면 곱이 합으로 바뀐다.
 
-2계도함수가 모수공간 전체에서 엄격하게 음수이므로 임계점 $\hat{\lambda}_{\text{MLE}} = 1/\bar{X}$는 로그가능도의 전역 최댓값이다.
+    $$
+    \ell(\lambda) = \sum_{i=1}^n \log\bigl(\lambda e^{-\lambda x_i}\bigr) = n\log\lambda - \lambda\sum_{i=1}^n x_i
+    $$
+
+    미분해 0 으로 둔다.
+
+    $$
+    \ell'(\lambda) = \frac{n}{\lambda} - \sum_i x_i = 0
+    \quad\Longrightarrow\quad
+    \hat\lambda = \frac{n}{\sum_i x_i} = \frac{1}{\bar X}
+    $$
+
+    두 번 미분하면
+
+    $$
+    \ell''(\lambda) = -\frac{n}{\lambda^2} < 0 \qquad (\lambda > 0)
+    $$
+
+    으로 **모수공간 전체에서 엄격하게 음수**다. 자료에 의존하지도 않는다. 따라서 $\ell$ 이 엄격 오목이고 정류점이 유일한 전역 최대점이다. $\square$
+
+    **포아송과 나란히 놓고 보면 대조가 선명하다.** 포아송의 $\ell''$ 은 $-\sum x_i/\lambda^2$ 로 자료를 담아 모든 관측값이 0 이면 0 이 되었지만, 지수의 $\ell''$ 은 $-n/\lambda^2$ 로 자료와 무관하게 늘 음수다. **지수분포에서는 경계 문제가 생기지 않는다.**
+
+    **MLE 가 표본평균의 역수라는 점도 눈여겨볼 만하다.** 평균이 $1/\lambda$ 이므로 $\bar X$ 가 $1/\lambda$ 를 추정하고 그것을 뒤집은 것인데, 이것이 바로 아래에서 보는 **함수적 불변성**의 가장 짧은 예다. 다만 $E[1/\bar X] \ne \lambda$ 이므로 **불변성이 불편성을 물려주지는 않는다.**
 
 <div class="exbox" markdown>
 
@@ -73,7 +89,7 @@ $$
 
 ---
 
-## 4. 성질
+## 3. 성질
 
 MLE를 손에 넣었으니 이제 그 통계적 성질을 살펴보자. 평균적으로 참 모수를 맞히는지, 그리고 표본크기가 커질 때 $\lambda$를 얼마나 정밀하게 추정하는지를 본다.
 

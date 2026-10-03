@@ -4,13 +4,19 @@
 
 자료를 더 모을수록 추정값이 좋아지기를 기대한다. 그런데 어떤 추정 절차가 표본크기가 커질 때 실제로 참 모수값으로 수렴하는가? 일치성은 이 보장을 형식화한다. 일치추정량은 소표본에서 어떻게 거동하든 결국 참값 주위로 모여든다.
 
-추정량 $\hat{\theta}_n$이 $\theta$로 확률수렴하면 $\theta$에 대해 **일치**한다고 한다:
+<div class="defn" markdown>
+
+### 정의 1. 일치성 { .dfn }
+
+추정량 $\hat{\theta}_n$ 이 $\theta$ 로 **확률수렴**하면 $\theta$ 에 대해 **일치**한다고 한다.
 
 $$
-\hat{\theta}_n \xrightarrow{P} \theta \quad \text{as } n \to \infty
+\hat{\theta}_n \xrightarrow{P} \theta
+\qquad\text{곧}\qquad
+\forall \varepsilon > 0:\quad P\bigl(|\hat{\theta}_n - \theta| > \varepsilon\bigr) \to 0
 $$
 
-이는 모든 $\varepsilon > 0$에 대해 $n \to \infty$일 때 $P(|\hat{\theta}_n - \theta| > \varepsilon) \to 0$임을 뜻한다.
+</div>
 
 !!! note "약한 일치성과 강한 일치성"
 
@@ -22,13 +28,37 @@ $$
 
 정의에서 곧바로 일치성을 확인하려면 모든 $n$에 대해 $\hat{\theta}_n$의 분포 전체를 분석해야 해서 어려울 수 있다. 더 간단한 방법은 평균제곱오차를 쓰는 것이다. $\operatorname{Bias}(\hat{\theta}_n) = E[\hat{\theta}_n] - \theta$이고 $\operatorname{Var}(\hat{\theta}_n) = E\bigl[(\hat{\theta}_n - E[\hat{\theta}_n])^2\bigr]$임을 떠올리자.
 
-일치성의 **충분조건**(필요조건은 아니다)은 $n \to \infty$일 때 편향과 분산이 모두 사라지는 것이다:
+<div class="thmbox" markdown>
+
+### 정리 1. 평균제곱오차가 0 으로 가면 일치한다 { .thm }
 
 $$
-\operatorname{Bias}(\hat{\theta}_n) \to 0 \quad \text{and} \quad \operatorname{Var}(\hat{\theta}_n) \to 0 \quad \text{as } n \to \infty
+\operatorname{MSE}(\hat\theta_n) \to 0
+\qquad\Longrightarrow\qquad
+\hat\theta_n \xrightarrow{P} \theta
 $$
 
-$\operatorname{MSE}(\hat{\theta}_n) = \operatorname{Bias}^2(\hat{\theta}_n) + \operatorname{Var}(\hat{\theta}_n)$이므로 두 조건이 함께 성립하면 $\operatorname{MSE} \to 0$이 되고, 이는 다시 확률수렴을 함의하기 때문이다.
+이다. [편향–분산 분해](mse.md) 정리 1 에 따라 이는 **편향과 분산이 모두 0 으로 가는 것**과 같고, 그것이 일치성의 **충분조건**이다(필요조건은 아니다).
+
+</div>
+
+??? proof "증명"
+
+    체비쇼프 부등식을 $\hat\theta_n$ 과 $\theta$ 사이에 쓴다. 임의로 고정한 $\varepsilon > 0$ 에 대해
+
+    $$
+    P\bigl(|\hat\theta_n - \theta| > \varepsilon\bigr)
+    \;\le\; \frac{E\bigl[(\hat\theta_n - \theta)^2\bigr]}{\varepsilon^2}
+    = \frac{\operatorname{MSE}(\hat\theta_n)}{\varepsilon^2}
+    $$
+
+    다. 오른쪽이 0 으로 가므로 왼쪽도 0 으로 간다. 이것이 정의 1 이다.
+
+    편향·분산과의 관계는 분해식에서 바로 나온다. $\operatorname{MSE} = \operatorname{Var} + \operatorname{Bias}^2$ 이고 **두 항이 모두 음이 아니므로**, 합이 0 으로 가는 것과 각 항이 0 으로 가는 것이 같다. $\square$
+
+    **충분조건일 뿐 필요조건은 아니다.** $\operatorname{MSE}$ 가 아예 존재하지 않는데도(2차 적률이 무한) 일치인 추정량이 있다. 표본중앙값이 코시분포의 중심에 대해 일치하는 것이 그 예다 — 코시는 평균조차 없으므로 $\operatorname{MSE}$ 를 말할 수 없는데도 중앙값은 참값으로 수렴한다.
+
+    **이 정리의 값어치는 분포 전체를 몰라도 된다는 것이다.** 정의로 일치성을 확인하려면 모든 $n$ 에서 $\hat\theta_n$ 의 분포를 다루어야 하는데, 두 적률만 보면 끝난다.
 
 !!! example "표본평균은 모평균에 대해 일치한다"
 

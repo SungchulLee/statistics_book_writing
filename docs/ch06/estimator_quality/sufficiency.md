@@ -4,7 +4,16 @@
 
 추정이론에서는 자료를 표본평균이나 표본분산 같은 요약통계량으로 압축하는 일이 일상적이다. 여기서 근본적인 물음이 생긴다. 이 요약은 원래 자료가 미지의 모수에 관해 담고 있던 정보를 모두 보존하는가? 그렇다면 자료 전체 대신 요약만 가지고 작업해도 잃는 것이 없다. 충분성은 이러한 무손실 자료 축약이라는 착상을 형식화한다.
 
-$T$의 치역에 속하는 임의의 $t$에 대해 $T(\mathbf{X}) = t$가 주어졌을 때 $\mathbf{X}$의 조건부분포가 $\theta$에 의존하지 않으면, 통계량 $T(\mathbf{X})$가 모수 $\theta$에 대해 **충분**하다고 한다. 직관적으로, 충분통계량의 값을 알고 나면 자료에 남은 무작위성은 $\theta$에 관해 아무런 추가 정보도 담고 있지 않다.
+<div class="defn" markdown>
+
+### 정의 1. 충분통계량 { .dfn }
+
+$T$ 의 치역에 속하는 임의의 $t$ 에 대해, $T(\mathbf X) = t$ 가 주어졌을 때 $\mathbf X$ 의 **조건부분포가 $\theta$ 에 의존하지 않으면** 통계량 $T(\mathbf X)$ 가 $\theta$ 에 대해 **충분**하다고 한다.
+
+</div>
+
+조건부분포가 $\theta$ 를 담지 않는다는 것은 **$T$ 를 알고 난 뒤의 자료에는 $\theta$ 에 관한 정보가 더 없다**는 뜻이다. 그래서 "충분"이다.
+
 
 ---
 
@@ -12,13 +21,44 @@ $T$의 치역에 속하는 임의의 $t$에 대해 $T(\mathbf{X}) = t$가 주어
 
 정의에서 곧바로 충분성을 확인하려면 조건부분포를 계산해야 해서 대수적으로 까다로울 수 있다. Fisher–Neyman 인수분해 정리는 훨씬 간단한 기준을 준다. 결합밀도를 두 조각으로 인수분해하기만 하면 된다.
 
-**정리 (Fisher–Neyman 인수분해).** 통계량 $T(\mathbf{X})$가 $\theta$에 대해 충분일 필요충분조건은 표본공간의 모든 $\mathbf{x}$와 모수공간의 모든 $\theta$에 대해 결합밀도(또는 질량함수)를 다음과 같이 쓸 수 있는 것이다.
+<div class="thmbox" markdown>
+
+### 정리 1. Fisher–Neyman 인수분해 정리 { .thm }
+
+통계량 $T(\mathbf{X})$ 가 $\theta$ 에 대해 충분할 **필요충분조건**은, 모든 $\mathbf x$ 와 모든 $\theta$ 에 대해 결합밀도가
 
 $$
 f(\mathbf{x}; \theta) = g\bigl(T(\mathbf{x}),\, \theta\bigr) \cdot h(\mathbf{x})
 $$
 
-여기서 $g \geq 0$은 자료에 오직 $T(\mathbf{x})$를 통해서만 의존하고 $\theta$에 의존할 수 있는 함수이며, $h \geq 0$은 $\mathbf{x}$만의 함수로 $\theta$에 의존하지 않는다.
+로 인수분해되는 것이다. 여기서 $g \ge 0$ 은 자료에 **오직 $T(\mathbf x)$ 를 통해서만** 의존하고, $h \ge 0$ 은 $\mathbf x$ 만의 함수로 $\theta$ 를 담지 않는다.
+
+</div>
+
+??? proof "증명 (이산인 경우)"
+
+    **($\Leftarrow$) 인수분해되면 충분하다.** $T$ 가 이산이라 하고 $A_t = \{\mathbf x : T(\mathbf x) = t\}$ 라 두면
+
+    $$
+    P(\mathbf X = \mathbf x \mid T = t)
+    = \frac{f(\mathbf x; \theta)}{\sum_{\mathbf y \in A_t} f(\mathbf y; \theta)}
+    = \frac{g(t,\theta)h(\mathbf x)}{g(t,\theta)\sum_{\mathbf y \in A_t} h(\mathbf y)}
+    = \frac{h(\mathbf x)}{\sum_{\mathbf y \in A_t} h(\mathbf y)}
+    $$
+
+    다($\mathbf x \in A_t$ 인 경우. 아니면 확률이 0 이다). **$g(t,\theta)$ 가 분자와 분모에 똑같이 들어 있어 약분된다** — 이것이 증명의 알맹이다. 남은 식에 $\theta$ 가 없으므로 정의 1 에 따라 $T$ 가 충분하다.
+
+    **($\Rightarrow$) 충분하면 인수분해된다.** $T$ 가 충분하다고 하자. 확률의 곱셈 규칙으로
+
+    $$
+    f(\mathbf x; \theta) = P(\mathbf X = \mathbf x)
+    = \underbrace{P\bigl(T = T(\mathbf x)\bigr)}_{\theta\text{ 에 의존, } T(\mathbf x)\text{ 만 통해}}
+    \cdot \underbrace{P\bigl(\mathbf X = \mathbf x \mid T = T(\mathbf x)\bigr)}_{\theta\text{ 에 의존하지 않음}}
+    $$
+
+    인데, 첫 인수가 $g(T(\mathbf x), \theta)$ 이고 둘째 인수가 충분성 가정에 의해 $\theta$ 를 담지 않으므로 $h(\mathbf x)$ 다. $\square$
+
+    **정의로 확인하려면 조건부분포를 계산해야 하는데, 이 정리는 밀도를 쳐다보기만 하면 되게 해 준다.** 가능도를 적어 놓고 "$\theta$ 와 자료가 어디서 만나는가"를 보면 그 만나는 자리의 자료 함수가 충분통계량이다. 지수족에서 이 작업이 특히 쉽다.
 
 !!! example "포아송 표본의 인수분해"
 
@@ -44,10 +84,45 @@ $$
 
 충분성은 단지 이론적 개념에 그치지 않고 추정량의 품질에 직접 영향을 준다. 충분통계량이 $\theta$에 관한 모든 정보를 담고 있으므로, 추정량을 그것으로 조건화해도 유용한 정보를 잃지 않으며 오히려 변동성을 줄일 수 있다. Rao–Blackwell 정리가 이를 정확하게 말해 준다.
 
-**정리 (Rao–Blackwell).** $\hat{\theta}$가 $\theta$의 불편추정량이고 $T$가 $\theta$에 대한 충분통계량이면 $\tilde{\theta} = E[\hat{\theta} \mid T]$는 다음을 만족한다:
+<div class="thmbox" markdown>
 
-1. $\tilde{\theta}$도 $\theta$에 대해 불편이고,
-2. $\operatorname{Var}(\tilde{\theta}) \leq \operatorname{Var}(\hat{\theta})$이며, 등호는 $\hat{\theta}$가 이미 거의 확실하게 $T$의 함수일 때에만 성립한다.
+### 정리 2. Rao–Blackwell 정리 { .thm }
+
+$\hat\theta$ 가 $\theta$ 의 불편추정량이고 $T$ 가 $\theta$ 에 대한 충분통계량이면 $\tilde\theta = E[\hat\theta \mid T]$ 는
+
+1. 여전히 **불편**이고,
+2. $\operatorname{Var}(\tilde\theta) \le \operatorname{Var}(\hat\theta)$
+
+를 만족한다. 등호는 $\hat\theta$ 가 이미 거의 확실하게 $T$ 의 함수일 때에만 성립한다.
+
+</div>
+
+??? proof "증명"
+
+    먼저 $\tilde\theta$ 가 **통계량**이라는 점을 확인해 두자. $E[\hat\theta \mid T]$ 는 일반적으로 $\theta$ 를 담을 수 있어 통계량이 아닐 수 있는데, $T$ 가 **충분**하므로 조건부분포가 $\theta$ 를 담지 않아 이 기댓값이 자료만의 함수다. **충분성이 쓰이는 자리가 여기 하나뿐이다.**
+
+    **불편성.** 전체 기댓값의 법칙(3.3절 조건부분포 정리 1)에서
+
+    $$
+    E[\tilde\theta] = E\bigl[E[\hat\theta \mid T]\bigr] = E[\hat\theta] = \theta
+    $$
+
+    다.
+
+    **분산.** 전체 분산의 법칙을 $\hat\theta$ 에 적용한다.
+
+    $$
+    \operatorname{Var}(\hat\theta)
+    = \underbrace{E\bigl[\operatorname{Var}(\hat\theta \mid T)\bigr]}_{\ge\, 0}
+    + \operatorname{Var}\bigl(\underbrace{E[\hat\theta \mid T]}_{=\,\tilde\theta}\bigr)
+    \;\ge\; \operatorname{Var}(\tilde\theta)
+    $$
+
+    첫 항이 분산의 기댓값이므로 음이 아니고, 그만큼이 **덜어진 몫**이다. 등호는 $E[\operatorname{Var}(\hat\theta \mid T)] = 0$ 일 때, 곧 $T$ 를 알면 $\hat\theta$ 가 확률 1 로 정해질 때다. 그것이 $\hat\theta$ 가 이미 $T$ 의 함수라는 말이다. $\square$
+
+    **Eve 의 법칙 한 줄이 정리의 전부다.** 조건을 걸어 평균하면 **$T$ 와 무관한 요동만 골라 없어지고** 중심은 그대로 남는다. 그래서 중심은 유지되고 폭만 줄어든다.
+
+    최소충분통계량과 함께 쓰면 이 절차가 자료에서 가능한 최대의 압축을 준다. 여기에 완비성까지 갖추면 레만–셰페 정리가 그 결과를 **유일한 최소분산 불편추정량(UMVUE)** 으로 못 박는다.
 
 ![압축의 사다리와 Rao–Blackwell](./img/sufficiency_ladder.png)
 

@@ -1,6 +1,6 @@
 # 평균제곱오차
 
-## 1. 소개
+## 개요
 
 **평균제곱오차(MSE)**는 통계적 추정량의 품질을 평가하는 데 가장 널리 쓰이는 기준이다. 추정량이 참 모수값에서 벗어난 제곱편차의 평균을 재며, 체계적 오차(편향)와 무작위 요동(분산)을 하나의 양에 함께 담는다.
 
@@ -8,7 +8,7 @@
 
 ---
 
-## 2. 평균제곱오차
+## 1. 평균제곱오차
 
 <div class="defn" markdown>
 
@@ -22,19 +22,50 @@ $$\text{MSE}(\hat{\theta}) = E\left[(\hat{\theta} - \theta)^2\right]$$
 
 </div>
 
-### 동등한 표현
+<div class="thmbox" markdown>
 
-평균제곱오차는 여러 동등한 방식으로 계산할 수 있다:
+### 정리 1. 편향–분산 분해 { .thm }
 
-$$\text{MSE}(\hat{\theta}) = E[\hat{\theta}^2] - 2\theta E[\hat{\theta}] + \theta^2$$
+임의의 추정량 $\hat\theta$ 에 대해
 
-$$= \text{Var}(\hat{\theta}) + [E[\hat{\theta}]]^2 - 2\theta E[\hat{\theta}] + \theta^2$$
+$$
+\text{MSE}(\hat{\theta}) = \operatorname{Var}(\hat{\theta}) + \bigl[\text{Bias}(\hat{\theta})\bigr]^2
+$$
 
-$$= \text{Var}(\hat{\theta}) + (E[\hat{\theta}] - \theta)^2$$
+이다. 여기서 $\text{Bias}(\hat\theta) = E[\hat\theta] - \theta$ 다. 두 항이 모두 음이 아니므로
 
-$$= \text{Var}(\hat{\theta}) + [\text{Bias}(\hat{\theta})]^2$$
+$$
+\text{MSE}(\hat\theta) \ge \operatorname{Var}(\hat\theta),
+\qquad
+\text{MSE}(\hat\theta) \ge \bigl[\text{Bias}(\hat\theta)\bigr]^2
+$$
 
-마지막 형태가 **편향–분산 분해**이다.
+이고, $\hat\theta$ 가 불편이면 $\text{MSE}(\hat\theta) = \operatorname{Var}(\hat\theta)$ 다.
+
+</div>
+
+??? proof "증명"
+
+    $E[\hat\theta]$ 를 **끼워 넣고 빼는 것**이 전부다. $\mu_{\hat\theta} = E[\hat\theta]$ 라 두면
+
+    $$
+    \hat\theta - \theta = \underbrace{(\hat\theta - \mu_{\hat\theta})}_{\text{무작위 요동}} + \underbrace{(\mu_{\hat\theta} - \theta)}_{\text{상수 — 편향}}
+    $$
+
+    다. 제곱해 기댓값을 취하면 세 항이 나온다.
+
+    $$
+    E\bigl[(\hat\theta-\theta)^2\bigr]
+    = E\bigl[(\hat\theta - \mu_{\hat\theta})^2\bigr]
+    + 2(\mu_{\hat\theta}-\theta)\,\underbrace{E\bigl[\hat\theta - \mu_{\hat\theta}\bigr]}_{=\,0}
+    + (\mu_{\hat\theta}-\theta)^2
+    $$
+
+    가운데 항이 **편차의 기댓값이 0 이라서** 사라진다. 둘째 항의 $(\mu_{\hat\theta}-\theta)$ 는 상수이므로 기댓값 밖으로 나올 수 있었다. 남은 두 항이 분산과 편향의 제곱이다. $\square$
+
+    **2장에서 본 분해와 같은 꼴이다.** 평균이 제곱편차를 최소화한다는 정리([평균, 중앙값, 최빈값](../../ch02/center/mean_median_mode.md) 정리 1)가 $\sum(x_i-a)^2 = \sum(x_i-\bar x)^2 + n(\bar x - a)^2$ 를 주었는데, 여기서는 표본 대신 추정량의 표본분포 위에서 같은 일을 한다. **"중심에서 벗어난 만큼 제곱으로 손해"** 라는 구조가 되풀이된다.
+
+    **합치는 방식이 제곱의 합이라는 점이 중요하다.** 편향을 조금 늘리고 분산을 많이 줄이면 합이 줄어들 수 있다. 그 가능성이 [편향–분산 맞바꿈](bias_variance.md)의 출발점이고, 능형회귀·라소·축소추정량이 모두 그 틈을 노린다.
 
 추정량의 표본분포 위에 두 항을 표시하면 이 식이 무엇을 말하는지 한눈에 보인다.
 
@@ -46,7 +77,7 @@ $$= \text{Var}(\hat{\theta}) + [\text{Bias}(\hat{\theta})]^2$$
 
 ---
 
-## 3. 평균제곱오차의 성질
+## 2. 평균제곱오차의 성질
 
 ### 비음성
 
@@ -71,7 +102,7 @@ Chebyshev 부등식에 의해 평균제곱오차 일치성은 확률적 일치�
 
 ---
 
-## 4. 추정량 사이의 평균제곱오차 비교
+## 3. 추정량 사이의 평균제곱오차 비교
 
 ### 상대효율
 
@@ -97,7 +128,7 @@ $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } 
 
 ---
 
-## 5. 보기
+## 4. 보기
 
 <div class="exbox" markdown>
 
@@ -170,7 +201,7 @@ $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } 
 
 ---
 
-## 6. 다른 손실함수와의 연결
+## 5. 다른 손실함수와의 연결
 
 ### 평균절대오차 (MAE)
 
@@ -194,7 +225,7 @@ $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
 
 ---
 
-## 7. 금융에서의 평균제곱오차
+## 6. 금융에서의 평균제곱오차
 
 평균제곱오차는 계량금융 전반에 나타난다:
 
@@ -205,13 +236,13 @@ $$\text{Var}(\hat{\theta}) \geq \frac{1}{I(\theta)}$$
 
 ---
 
-## 8. 요약
+## 7. 요약
 
 평균제곱오차는 추정량의 품질을 평가하는 근본 기준이다. 분산과 편향의 제곱으로 분해되면서 추정에 내재한 맞바꿈을 드러내고, 경쟁하는 추정량들 사이에서 고르는 원리적인 틀을 제공한다. 불편성은 바람직하지만, 평균제곱오차는 최선의 추정량이 전체 오차를 최소화하는 것임을 일깨워 준다. 약간의 편향이 큰 분산 감소를 얻어 낼 만한 값어치를 할 수 있다.
 
 ---
 
-## 9. 주요 공식
+## 8. 주요 공식
 
 | 양 | 공식 |
 |----------|---------|

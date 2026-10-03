@@ -1,12 +1,12 @@
 # 포아송분포의 MLE
 
-## 1. 동기
+## 개요
 
 포아송분포는 계수 자료의 표준 모형이다. 시간당 받는 이메일 수, 제품 하나당 결함 수, 교차로에서 연간 발생하는 사고 수 등이 그렇다. 관측된 계수로부터 비율 모수 $\lambda$를 추정하는 것은 가장 흔한 통계 작업 중 하나이다. 포아송의 MLE는 표본평균으로 밝혀지며, 모든 불편추정량 중에서 가능한 최선의 정밀도를 달성한다.
 
 ---
 
-## 2. 설정
+## 1. 설정
 
 비율 모수가 $\lambda > 0$인 포아송분포에서 독립적으로 뽑은 확률표본 $X_1, X_2, \ldots, X_n$을 생각하자. 각 관측값은 다음 확률질량함수를 가지고 $\{0, 1, 2, \ldots\}$의 값을 취한다:
 
@@ -18,33 +18,49 @@ $$
 
 ---
 
-## 3. 유도
+## 2. 유도
 
-관측값이 독립이므로 결합 PMF는 개별 질량함수의 곱이다. 로그를 취하면 로그가능도를 얻는다:
+<div class="thmbox" markdown>
 
-$$
-\ell(\lambda) = \left(\sum_{i=1}^n x_i\right) \log \lambda - n\lambda - \sum_{i=1}^n \log(x_i!)
-$$
+### 정리 1. 포아송분포의 MLE { .thm }
 
-마지막 항은 $\lambda$에 의존하지 않으므로 최적화에서 아무 역할도 하지 않는다. 로그가능도를 최대화하기 위해 $\lambda$에 대해 미분하고 결과를 0으로 둔다:
+$X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$ 에 대해
 
 $$
-\frac{d\ell}{d\lambda} = \frac{\sum_{i=1}^n x_i}{\lambda} - n = 0
+\hat\lambda_{\text{MLE}} = \bar X
 $$
 
-$\lambda$에 대해 풀면 최대가능도추정량을 얻는다:
+이고, 적어도 하나의 관측값이 양수이면 이것이 유일한 전역 최대점이다.
 
-$$
-\hat{\lambda}_{\text{MLE}} = \frac{\sum_{i=1}^n x_i}{n} = \bar{X}
-$$
+</div>
 
-이 임계점이 최댓값임을 확인하기 위해 2계도함수를 살펴본다:
+??? proof "증명"
 
-$$
-\frac{d^2\ell}{d\lambda^2} = -\frac{\sum_{i=1}^n x_i}{\lambda^2} \leq 0
-$$
+    관측값이 독립이므로 결합 PMF 가 곱이고, 로그를 취하면
 
-관측값 중 적어도 하나가 양수이면 엄격하게 음수이며, $\lambda > 0$일 때 거의 언제나 그러하다. 따라서 이 임계점은 로그가능도의 전역 최댓값이다.
+    $$
+    \ell(\lambda) = \left(\sum_{i=1}^n x_i\right)\log\lambda - n\lambda - \sum_{i=1}^n \log(x_i!)
+    $$
+
+    다. **마지막 항은 $\lambda$ 를 담지 않으므로 최적화에서 아무 역할도 하지 않는다.** 미분해 0 으로 둔다.
+
+    $$
+    \ell'(\lambda) = \frac{\sum_i x_i}{\lambda} - n = 0
+    \quad\Longrightarrow\quad
+    \hat\lambda = \frac{\sum_i x_i}{n} = \bar X
+    $$
+
+    두 번 미분하면
+
+    $$
+    \ell''(\lambda) = -\frac{\sum_i x_i}{\lambda^2} \le 0
+    $$
+
+    이고, 관측값 중 적어도 하나가 양수이면 **엄격하게 음수**다. 그러면 $\ell$ 이 엄격 오목이므로 정류점이 유일한 전역 최대점이다. $\square$
+
+    **모든 관측값이 0 이면 사정이 다르다.** 그때 $\ell(\lambda) = -n\lambda$ 는 단조 감소이므로 최대점이 경계 $\hat\lambda = 0$ 이고, 미분으로는 잡히지 않는다. 베르누이에서 $s = 0$ 인 경우와 같은 상황이다.
+
+    **표본평균 하나가 분포 전체를 정한다.** 포아송은 모수가 하나뿐이므로 $\bar x$ 를 알면 모든 막대의 높이가 정해진다. 그 $\bar x$ 가 $\sum x_i$ 의 함수라는 점도 눈여겨볼 만하다 — $\sum x_i$ 가 충분통계량이라는 사실([충분성](../estimator_quality/sufficiency.md) 정리 1 의 포아송 예)이 여기서 다시 나타난다.
 
 <div class="exbox" markdown>
 
@@ -67,7 +83,7 @@ $$
 
 ---
 
-## 4. 성질
+## 3. 성질
 
 MLE를 구했으니 이제 그 통계적 특성을 살펴보자. 불편인지, 얼마나 정밀한지, 다른 불편추정량이 더 나을 수 있는지를 본다.
 

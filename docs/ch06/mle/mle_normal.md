@@ -57,20 +57,59 @@ $$
 
 ### MLE 해
 
+<div class="thmbox" markdown>
+
+### 정리 1. 정규분포의 MLE { .thm }
+
+$x^{(1)}, \ldots, x^{(m)} \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$ 에 대해
+
 $$
-\begin{array}{llcll}
-\displaystyle\frac{\partial J}{\partial \mu} = 0
-&\Rightarrow&
-\displaystyle\sum_{i=1}^m (x^{(i)} - \mu) = 0
-&\Rightarrow&
-\displaystyle\hat{\mu} = \frac{\sum_{i=1}^m x^{(i)}}{m} \\[16pt]
-\displaystyle\frac{\partial J}{\partial \sigma^2} = 0
-&\Rightarrow&
-\cdots
-&\Rightarrow&
-\displaystyle\hat{\sigma}^2 = \frac{\sum_{i=1}^m (x^{(i)} - \hat{\mu})^2}{m}
-\end{array}
+\hat\mu = \frac{1}{m}\sum_{i=1}^m x^{(i)} = \bar x,
+\qquad
+\hat\sigma^2 = \frac{1}{m}\sum_{i=1}^m \bigl(x^{(i)} - \bar x\bigr)^2
 $$
+
+이다. $\hat\mu$ 는 $\sigma^2$ 과 **무관하게** 정해지고, $\hat\sigma^2$ 은 **$m$ 으로** 나눈다 — 곧 $\hat\sigma^2$ 은 **편향추정량**이며 $E[\hat\sigma^2] = \frac{m-1}{m}\sigma^2$ 다.
+
+</div>
+
+??? proof "증명"
+
+    비용함수 $J(\mu, \sigma^2) = \frac{1}{2\sigma^2}\sum_i (x^{(i)}-\mu)^2 + \frac m2\log\sigma^2$ 를 최소화한다.
+
+    **$\mu$ 쪽.** $\sigma^2 > 0$ 이 곱해진 상수이므로 미분하면
+
+    $$
+    \frac{\partial J}{\partial\mu} = -\frac{1}{\sigma^2}\sum_i (x^{(i)}-\mu) = 0
+    \quad\Longrightarrow\quad
+    \sum_i (x^{(i)} - \mu) = 0
+    \quad\Longrightarrow\quad
+    \hat\mu = \bar x
+    $$
+
+    **$\sigma^2$ 이 식에서 통째로 약분된다.** 그래서 $\hat\mu$ 가 $\sigma^2$ 을 모르고도 정해지고, 등고선의 축이 좌표축과 나란해진다. 같은 결론을 미분 없이 얻을 수도 있다 — 제곱편차합을 최소화하는 값이 평균이기 때문이다([평균, 중앙값, 최빈값](../../ch02/center/mean_median_mode.md) 정리 1).
+
+    **$\sigma^2$ 쪽.** $v = \sigma^2$ 으로 두고 미분한다.
+
+    $$
+    \frac{\partial J}{\partial v} = -\frac{1}{2v^2}\sum_i (x^{(i)}-\hat\mu)^2 + \frac{m}{2v} = 0
+    \quad\Longrightarrow\quad
+    \hat v = \frac{1}{m}\sum_i (x^{(i)}-\hat\mu)^2
+    $$
+
+    양변에 $2v^2$ 을 곱해 정리한 것이다. 두 번 미분하면 $\hat v$ 에서 $\partial^2 J/\partial v^2 = m/(2\hat v^2) > 0$ 이므로 최소점이다.
+
+    **편향.** 분자는 $(m-1)S^2$ 이고 $E[S^2] = \sigma^2$ 이므로([표본분산](../../ch05/applications/sample_variance.md) 정리 1)
+
+    $$
+    E[\hat\sigma^2] = \frac{(m-1)\sigma^2}{m} = \frac{m-1}{m}\sigma^2 < \sigma^2
+    $$
+
+    다. $\square$
+
+    **MLE 가 불편성을 보장하지 않는다는 가장 흔한 예가 이것이다.** 가능도를 최대화하는 일과 기댓값을 맞히는 일은 서로 다른 요구이고, 정규분포의 분산에서 그 둘이 어긋난다. 어긋나는 양이 정확히 $\frac{m-1}{m}$ 배이며, 2장·5장에서 본 베셀 보정이 바로 그 어긋남을 되돌리는 일이다.
+
+    **그래도 MLE 는 일치추정량이다.** $\frac{m-1}{m} \to 1$ 이므로 편향이 0 으로 가고 분산도 0 으로 가므로, [일치성](../estimator_quality/consistency.md) 정리 1 에 따라 $\hat\sigma^2 \xrightarrow{P} \sigma^2$ 다. **유한표본에서 치우쳐 있을 뿐 큰 표본에서는 바로잡힌다.**
 
 ![두 모수의 로그가능도 지형](./img/normal_loglik_surface.png)
 
