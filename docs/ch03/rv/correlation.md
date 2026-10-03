@@ -1,5 +1,7 @@
 # 상관계수
 
+## 개요
+
 [앞 쪽](variance_covariance.md)에서 **공분산**을 정의했다. $\operatorname{Cov}(X,Y) = E[XY] - E[X]E[Y]$는 곱 규칙이 깨지는 정도를 재는 양이었다.
 
 그런데 공분산에는 실용적인 결함이 하나 있다. **단위가 붙어 있다.** 키와 몸무게의 공분산은 cm·kg 단위로 나오고, 키를 m로 바꿔 재면 같은 자료인데도 값이 100분의 1이 된다. 크기만 보고 "관계가 세다"고 말할 수 없다는 뜻이다.
@@ -12,7 +14,9 @@
 
 <div class="thmbox" markdown>
 
-### 정리 1. 피어슨 상관계수와 그 범위 { .thm }
+### 정리 1. 상관계수의 범위와 등호 조건 { .thm }
+
+[앞 쪽](variance_covariance.md) 정의 2 의 상관계수
 
 $$
 \rho(X, Y) = \frac{\operatorname{Cov}(X, Y)}{\sigma_X \, \sigma_Y}
@@ -24,7 +28,7 @@ $$
 -1 \le \rho(X,Y) \le 1
 $$
 
-이다. $\rho = \pm 1$일 필요충분조건은 $Y = aX + b$ 꼴의 **완전한 선형관계**($a \ne 0$)다.
+이다. 또 $\rho = \pm 1$ 일 필요충분조건은 $Y = aX + b$ 꼴의 **완전한 선형관계**($a \ne 0$)가 확률 1 로 성립하는 것이다.
 
 </div>
 
@@ -257,29 +261,39 @@ $\rho$는 두 가지를 하지 **못한다.**
 
 변수가 둘일 때는 공분산이 수 하나였다. 셋 이상이면 쌍마다 하나씩 생기므로 표로 묶는 편이 낫다.
 
-<div class="thmbox" markdown>
+<div class="defn" markdown>
 
-### 정리 3. 공분산행렬과 상관행렬 { .thm }
+### 정의 1. 공분산행렬과 상관행렬 { .dfn }
 
-$\mathbf X = (X_1, \ldots, X_p)^\top$에 대해 공분산행렬은 $(i,j)$ 자리에 $\operatorname{Cov}(X_i, X_j)$를 놓은 $p \times p$ 행렬이다.
+$\mathbf X = (X_1, \ldots, X_p)^\top$ 의 **공분산행렬**은 $(i,j)$ 자리에 $\operatorname{Cov}(X_i, X_j)$ 를 놓은 $p \times p$ 행렬
 
 $$
 \boldsymbol\Sigma = E\bigl[(\mathbf X - \boldsymbol\mu)(\mathbf X - \boldsymbol\mu)^\top\bigr]
 $$
 
-대각선에는 각 변수의 **분산**이 앉고, 그 밖에는 공분산이 앉는다. 곧 $\Sigma_{ij} = \operatorname{Cov}(X_i, X_j)$이고 $\Sigma_{ii} = \operatorname{Var}(X_i)$다. $\boldsymbol\Sigma$는 **대칭**이며 **양반정치**(positive semidefinite)다. 곧 임의의 $\mathbf a \in \mathbb{R}^p$에 대해
-
-$$
-\operatorname{Var}(\mathbf a^\top \mathbf X) = \mathbf a^\top \boldsymbol\Sigma\, \mathbf a \;\ge\; 0
-$$
-
-이다. 각 원소를 $\sigma_i \sigma_j$로 나누어 표준화한 것이 **상관행렬**이다.
+이고, 각 원소를 $\sigma_i \sigma_j$ 로 나누어 표준화한
 
 $$
 R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii}\,\Sigma_{jj}}} = \rho(X_i, X_j)
 $$
 
-$\mathbf R$ 역시 대칭이고 양반정치이며, 대각선은 모두 $1$이다.
+를 **상관행렬**이라 한다.
+
+</div>
+
+대각선에는 각 변수의 **분산**이 앉고, 그 밖에는 공분산이 앉는다. 곧 $\Sigma_{ii} = \operatorname{Var}(X_i)$ 다.
+
+<div class="thmbox" markdown>
+
+### 정리 3. 공분산행렬은 대칭이고 양반정치다 { .thm }
+
+$\boldsymbol\Sigma$ 는 **대칭**이며 **양반정치**(positive semidefinite)다. 곧 임의의 $\mathbf a \in \mathbb{R}^p$ 에 대해
+
+$$
+\operatorname{Var}(\mathbf a^\top \mathbf X) = \mathbf a^\top \boldsymbol\Sigma\, \mathbf a \;\ge\; 0
+$$
+
+이다. 상관행렬 $\mathbf R$ 역시 대칭이고 양반정치이며, 대각선은 모두 $1$ 이다.
 
 </div>
 
@@ -287,7 +301,7 @@ $\mathbf R$ 역시 대칭이고 양반정치이며, 대각선은 모두 $1$이�
 
     $(i,j)$ 원소가 $\operatorname{Cov}(X_i,X_j)$라는 것은 $(\mathbf X - \boldsymbol\mu)(\mathbf X - \boldsymbol\mu)^\top$의 $(i,j)$ 성분이 $(X_i - \mu_i)(X_j - \mu_j)$이고, 기댓값을 성분별로 취한 것이기 때문이다. 대칭성은 그 성분이 $i$와 $j$를 바꾸어도 같다는 데서 나온다.
 
-    양반정치는 **분산이 음수가 될 수 없다**는 사실 하나에서 나온다. 임의의 상수벡터 $\mathbf a$에 대해 $\mathbf a^\top \mathbf X = \sum_i a_i X_i$는 확률변수이고, 앞 쪽 정리 3의 이중합 형태를 쓰면
+    양반정치는 **분산이 음수가 될 수 없다**는 사실 하나에서 나온다. 임의의 상수벡터 $\mathbf a$에 대해 $\mathbf a^\top \mathbf X = \sum_i a_i X_i$는 확률변수이고, [앞 쪽](variance_covariance.md) 정리 3 의 이중합 형태를 쓰면
 
     $$
     \operatorname{Var}\!\left(\sum_i a_i X_i\right)
@@ -1278,7 +1292,7 @@ $X \sim \text{Uniform}(0,1)$이고 $Y = X^5$일 때 피어슨 상관계수와 �
 
 - **정리 1**은 $\rho = \operatorname{Cov}(X,Y)/(\sigma_X\sigma_Y)$가 단위 없는 수이며 언제나 $[-1,1]$에 놓임을 보였다. 증명의 재료는 "분산은 음수가 될 수 없다" 하나뿐이고, 등호는 $Y = aX + b$라는 **완전한 직선**에서만 성립한다.
 - **정리 2**는 $\rho$가 못 하는 두 가지를 밝혔다. **비선형** 관계를 보지 못하고, 잰 **집단**을 바꾸면 값이, 심지어 부호까지 달라진다. 붓꽃 자료에서 전체 $-0.118$이 품종별로는 $+0.743$, $+0.526$, $+0.457$이 되는 것이 그 실례다.
-- **정리 3**은 변수가 여럿일 때 공분산행렬·상관행렬로 묶었다. 이 행렬이 **양반정치**여야 한다는 제약은 장식이 아니라 상관계수들 사이에 삼각부등식 꼴의 관계를 강요한다(연습문제 9).
+- **정의 1**은 변수가 여럿일 때 공분산행렬·상관행렬로 묶었고 **정리 3**은 그것이 대칭 양반정치임을 보였다. 이 행렬이 **양반정치**여야 한다는 제약은 장식이 아니라 상관계수들 사이에 삼각부등식 꼴의 관계를 강요한다(연습문제 9).
 
 단위를 지운 대가는 정보의 손실이다. $\rho$만으로는 회귀 기울기를 복원할 수 없고 두 표준편차를 함께 알아야 한다(연습문제 2).
 
