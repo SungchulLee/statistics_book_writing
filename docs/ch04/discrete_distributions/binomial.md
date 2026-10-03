@@ -12,7 +12,7 @@ $$
 
 ---
 
-## 정의
+## 1. 정의
 
 <div class="defn" markdown>
 
@@ -96,50 +96,6 @@ $$
 $$
 \sum_{k=0}^n \binom{n}{k} p^k (1-p)^{n-k} = (p + (1-p))^n = 1^n = 1
 $$
-
----
-
-## 이항계수 항등식
-
-이항분포를 다룰 때 유용한 항등식이 여럿 있다:
-
-$$
-\begin{aligned}
-(1) &\quad \binom{n}{k} = \binom{n}{n-k} \quad \text{(대칭성)} \\[4pt]
-(2) &\quad \binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k} \quad \text{(Pascal 규칙)} \\[4pt]
-(3) &\quad k\binom{n}{k} = n\binom{n-1}{k-1} \quad \text{(흡수 항등식)}
-\end{aligned}
-$$
-
-흡수 항등식은 PMF로부터 $E[Y]$를 직접 계산할 때 특히 유용하다:
-
-$$
-E[Y] = \sum_{k=0}^n k \binom{n}{k} p^k (1-p)^{n-k} = np \sum_{k=1}^n \binom{n-1}{k-1} p^{k-1} (1-p)^{n-k} = np
-$$
-
----
-
-## 문제
-
-<div class="probox" markdown>
-
-**문제:** <span class="diff easy" title="쉬움"></span> 어떤 주식이 하루에 상승할 확률이 60%이고 날짜별로 독립이라 하자. 10 거래일 동안 정확히 7일 상승할 확률은 얼마인가?
-
-</div>
-
-??? success "풀이"
-
-    $$
-    P(Y = 7) = \binom{10}{7} (0.6)^7 (0.4)^3 = 120 \cdot 0.0280 \cdot 0.064 = 0.2150
-    $$
-
-    상승일 수의 기댓값: $E[Y] = 10 \times 0.6 = 6$.
-
----
-
-## Python: PMF, CDF, 표본추출
-
-### PMF와 CDF
 
 <div class="exbox" markdown>
 
@@ -273,8 +229,6 @@ $$
 
     $n = 9$로 바꾸면 $(n+1)p = 6$이 정수가 되고, $P(5)$와 $P(6)$이 분수로 **한 치도 다르지 않다**($489888/1953125$). 그런데 부동소수점으로는 $1.7 \times 10^{-16}$만큼 어긋나서 `flatnonzero(pmf == pmf.max())`가 동점을 못 보고 $6$ 하나만 집는다. **이 어긋남은 수학이 아니라 배정도 실수의 반올림이다.** 동점을 보려면 분수로 재야 한다.
 
-### 모수에 따른 비교
-
 <div class="exbox" markdown>
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 모수에 따른 이항분포 비교. $(n, p) = (10, 0.5)$, $(20, 0.5)$, $(20, 0.7)$인 세 PMF를 한 그림에 겹쳐 그린다.
@@ -393,8 +347,6 @@ $$
     **높이.** $n$을 $10$에서 $20$으로 키우면 봉우리가 $0.2461 \to 0.1762$로 내려가는데 비가 $0.716$이고 예측한 $1/\sqrt2 = 0.707$에 가깝다. $p$를 $0.5$에서 $0.7$로 옮기면 $0.1762 \to 0.1916$으로 **올라가는데** 비가 $1.087$이고 예측한 $\sqrt{5/4.2} = 1.091$과 맞는다. **"오른쪽으로 가면 낮아진다"가 아니라 "분산이 커지면 낮아진다"**는 것이 올바른 읽기다. 포아송은 모수가 하나라 둘이 늘 같이 움직였지만, 이항은 모수가 둘이라 갈라진다.
 
     **보정항.** 마지막 두 열이 $-2.46$ 대 $-2.50$, $-1.24$ 대 $-1.25$, $-1.55$ 대 $-1.57$로 소수점 둘째 자리까지 맞는다. 셋 다 음수라는 것도 $pq < 1$에서 예측한 대로다. 버린 $O(1/n^2)$ 항이 $0.02$퍼센트포인트 남짓 남은 것이고, **근사가 어긋나는 쪽으로도 예측이 맞는다**는 것이 확인의 요점이다.
-
-### 표본추출과 검증
 
 <div class="exbox" markdown>
 
@@ -519,9 +471,49 @@ $$
 
     **산포비.** $s^2/\bar y = 0.3975$가 이론값 $\text{Var}(Y)/E[Y] = npq/np = 1 - p = 0.4$와 맞는다. $1 - p < 1$이므로 이항분포는 언제나 **과소산포**다. 포아송분포가 비 $1$이고 기하분포가 $1/p > 1$이므로, 계수 자료를 받았을 때 $s^2/\bar y$를 먼저 재면 세 모형 가운데 어느 쪽인지 가려낼 수 있다. 다만 여기서 $1 - p$를 쓰려면 **시행 횟수 $n$을 알아야** 하는데, 자료만 보고는 $n$을 모르는 경우가 많다는 것이 이항 쪽의 어려움이다.
 
+<div class="probox" markdown>
+
+**문제 1.** <span class="diff easy" title="쉬움"></span> 어떤 주식이 하루에 상승할 확률이 60%이고 날짜별로 독립이라 하자. 10 거래일 동안 정확히 7일 상승할 확률은 얼마인가?
+
+</div>
+
+??? success "풀이"
+
+    $$
+    P(Y = 7) = \binom{10}{7} (0.6)^7 (0.4)^3 = 120 \cdot 0.0280 \cdot 0.064 = 0.2150
+    $$
+
+    상승일 수의 기댓값: $E[Y] = 10 \times 0.6 = 6$.
+
 ---
 
-## 이항분포의 정규근사
+## 2. 이항계수 항등식
+
+이항분포를 다룰 때 유용한 항등식이 여럿 있다:
+
+$$
+\begin{aligned}
+(1) &\quad \binom{n}{k} = \binom{n}{n-k} \quad \text{(대칭성)} \\[4pt]
+(2) &\quad \binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k} \quad \text{(Pascal 규칙)} \\[4pt]
+(3) &\quad k\binom{n}{k} = n\binom{n-1}{k-1} \quad \text{(흡수 항등식)}
+\end{aligned}
+$$
+
+흡수 항등식은 PMF로부터 $E[Y]$를 직접 계산할 때 특히 유용하다:
+
+$$
+E[Y] = \sum_{k=0}^n k \binom{n}{k} p^k (1-p)^{n-k} = np \sum_{k=1}^n \binom{n-1}{k-1} p^{k-1} (1-p)^{n-k} = np
+$$
+
+---
+
+
+
+
+
+---
+
+## 3. 이항분포의 정규근사
 
 $n$이 크면 이항분포는 정규분포로 잘 근사된다.
 
@@ -726,9 +718,10 @@ $np = 5$에서 **모양은 이미 쓸 만하다.** 누적확률의 오차가 최
 
     **본문 표와의 맞춤.** 마지막 두 줄이 $np = 5$에서 $0.0027 \sim 0.0244$, $np = 10$에서 $0.0014 \sim 0.0175$를 주어 위 표의 "0.003 ~ 0.024", "0.001 ~ 0.018"과 맞는다. 곧 **본문 표의 오차는 연속성 수정을 적용한 쪽**이다. 수정 없이 재면 같은 조건에서 $0.12$, $0.09$ 수준이 되어 표와 전혀 다른 이야기가 된다.
 
+
 ---
 
-## 이항분포에서 갈라지는 길
+## 4. 이항분포에서 갈라지는 길
 
 이항분포는 네 가지 가정 위에 서 있다. **시행 횟수 $n$이 고정**이고, 각 시행이 **독립**이며, 성공확률 $p$가 **일정**하고, 세는 것은 **성공 횟수**다. 가정을 하나씩 바꾸면 4장의 다른 분포들이 차례로 나온다.
 
@@ -739,7 +732,7 @@ $np = 5$에서 **모양은 이미 쓸 만하다.** 누적확률의 오차가 최
 | $n \to \infty$, $p \to 0$, $np \to \lambda$ | $\text{Poisson}(\lambda)$ | 4.1 |
 | $n \to \infty$, $p$ 고정 | $N(np,\, np(1-p))$ | 4.2 |
 
-바로 위 절에서 다룬 정규근사가 마지막 줄이고, 연습문제 8이 셋째 줄이며, 연습문제 9가 첫째 줄의 맛보기다. 다음 페이지에서 그 첫째 줄을 제대로 다룬다.
+바로 위 절에서 다룬 정규근사가 마지막 줄이고, 연습문제 10이 셋째 줄이며, 연습문제 8가 첫째 줄의 맛보기다. 다음 페이지에서 그 첫째 줄을 제대로 다룬다.
 
 ---
 
@@ -760,6 +753,8 @@ $np = 5$에서 **모양은 이미 쓸 만하다.** 누적확률의 오차가 최
     (c) $P(X \ge 3) = 1 - P(X \le 2)$. $P(X = 0) = (0.85)^{10} \approx 0.197$, $P(X = 1) = 10 \cdot 0.15 \cdot (0.85)^9 \approx 0.347$, $P(X = 2) \approx 0.276$를 계산하면 $P(X \ge 3) = 1 - 0.820 = 0.180$.
 
     (d) $\mathbb{E}[X] = np = 1.5$. $\mathrm{Var}(X) = np(1-p) = 10 \cdot 0.15 \cdot 0.85 = 1.275$.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -783,6 +778,8 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
     지시함수의 합으로 나타내는 표현이 가장 깔끔한 유도이다. PMF로부터 직접 계산해도 되지만 흡수 항등식 $k\binom{n}{k} = n\binom{n-1}{k-1}$이 필요하다. $\square$
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
@@ -798,6 +795,8 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
     **MGF를 통한 확인:** $M_{X+Y}(t) = M_X(t) M_Y(t) = (1 - p + pe^t)^{n_1}(1 - p + pe^t)^{n_2} = (1 - p + pe^t)^{n_1 + n_2}$이며, 이는 Binomial$(n_1 + n_2, p)$의 MGF이다.
 
     **주의:** *$p$가 공통이라는 점*이 본질적이다. $p$가 다르면 합은 이항이 아니다(Poisson-binomial 분포를 따른다).
+
+---
 
 <div class="drillbox" markdown>
 
@@ -827,6 +826,8 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
     이산분포를 연속분포로 근사할 때는 항상 연속성 수정을 사용하라.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
@@ -854,6 +855,8 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
     신뢰구간: $((0.3692 - 0.0954)/1.0384, (0.3692 + 0.0954)/1.0384) = (0.264, 0.448)$.
 
     **비교:** Wilson 구간은 $\hat p$를 중심으로 비대칭이며(0.5 쪽으로 약간 이동), $\hat p$가 0이나 1에 가까울 때도 포함확률이 보장된다. Wald 구간은 극단적인 $\hat p$에서 퇴화할 수 있지만(0 아래나 1 위로 뻗어 나간다) Wilson 구간은 결코 그렇지 않다. 현대적 관행에서는 특히 작은 표본에서 이항 신뢰구간으로 Wald보다 Wilson을 선호한다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -889,6 +892,8 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
     $n = 20$이면 $np = n(1-p) = 10$으로 흔히 말하는 근사 조건을 만족하는데도 수정 없는 근사의 오차가 이만큼 크다. **$p$-값처럼 꼬리를 다루는 양에서는 근사의 오차가 상대적으로 훨씬 크게 나타난다.** 중앙 부근의 확률은 잘 맞아도 꼬리는 그렇지 않다. 요즘은 정확검정이 순식간에 계산되므로 이항검정에 정규근사를 쓸 이유가 거의 없다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
@@ -917,45 +922,11 @@ $\text{Binomial}(n, p)$의 최빈값이 $\lfloor (n+1)p \rfloor$임을 보여라
 
     이 "이웃 비" 요령은 이산분포의 모양을 파악하는 표준적인 방법이며, 포아송분포($\lfloor\lambda\rfloor$)와 음이항분포에도 그대로 통한다.
 
-<div class="drillbox" markdown>
-
-**연습문제 8.** <span class="diff hard" title="어려움"></span>
-$n \to \infty$, $p \to 0$이면서 $np \to \lambda$로 고정될 때 $\text{Binomial}(n,p)$의 PMF가 $\text{Poisson}(\lambda)$의 PMF로 수렴함을 보여라.
-
-</div>
-
-??? success "풀이"
-    $p = \lambda/n$으로 두고 고정된 $k$에 대해
-
-    $$
-    P(X=k) = \binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1-\frac{\lambda}{n}\right)^{n-k}
-    $$
-
-    를 세 조각으로 나눈다.
-
-    $$
-    = \underbrace{\frac{n(n-1)\cdots(n-k+1)}{n^k}}_{(\text{가})}\cdot\frac{\lambda^k}{k!}\cdot\underbrace{\left(1-\frac{\lambda}{n}\right)^{n}}_{(\text{나})}\cdot\underbrace{\left(1-\frac{\lambda}{n}\right)^{-k}}_{(\text{다})}
-    $$
-
-    - (가)는 $k$개의 인수를 각각 $n$으로 나눈 $\prod_{j=0}^{k-1}(1 - j/n)$이고, $k$가 고정이므로 $n\to\infty$에서 1로 간다.
-    - (나)는 잘 알려진 극한 $(1-\lambda/n)^n \to e^{-\lambda}$이다.
-    - (다)는 밑이 1로 가고 지수가 고정이므로 1로 간다.
-
-    따라서
-
-    $$
-    P(X=k) \to \frac{\lambda^k e^{-\lambda}}{k!}
-    $$
-
-    이다. $\square$
-
-    **뜻.** 시행 횟수는 아주 많고 각 시행의 성공확률은 아주 작은데 그 곱이 적당한 상황이 포아송분포를 낳는다. "희귀사건의 법칙"이라 불리는 까닭이다. 웹사이트의 분당 접속 수, 하루에 걸려 오는 응급 전화 수, 한 페이지의 오타 수가 모두 이 구조다. 무수한 기회 각각이 작은 확률로 사건을 일으킨다.
-
-    실용적으로는 $n \ge 20$이고 $p \le 0.05$이면 근사가 쓸 만하고, $n \ge 100$이고 $np \le 10$이면 매우 좋다. 정규근사가 $p$가 0.5 근처일 때 잘 듣는 것과 정확히 반대 영역을 맡는다. **$p$가 극단적이면 포아송으로, 중간이면 정규분포로** 간다고 기억하면 된다.
+---
 
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff med" title="중간"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
 크기 $M = 500$인 상자에 불량품이 $N = 100$개 들어 있다. 20개를 **비복원**으로 뽑을 때 불량품 개수의 분포는 무엇인가? 이항분포로 근사하면 분산이 얼마나 어긋나는가?
 
 </div>
@@ -989,9 +960,11 @@ $n \to \infty$, $p \to 0$이면서 $np \to \lambda$로 고정될 때 $\text{Bino
 
     초기하분포의 유도와 성질은 다음 페이지에서 본격적으로 다룬다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff med" title="중간"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
 이항분포를 결과가 셋 이상인 경우로 넓힌 것이 **다항분포**이다. PMF를 적고, 각 성분의 주변분포와 두 성분의 공분산을 구하라.
 
 </div>
@@ -1020,6 +993,46 @@ $n \to \infty$, $p \to 0$이면서 $np \to \lambda$로 고정될 때 $\text{Bino
     이다. 언제나 **음수**이며, $n$이 고정되어 있어 한 범주가 늘면 다른 범주가 줄어야 하기 때문이다.
 
     다항분포는 분할표 분석의 밑바탕이다. 카이제곱 적합도 검정의 통계량 $\sum (O_j - E_j)^2/E_j$가 근사적으로 $\chi^2_{m-1}$을 따르는데, 자유도가 $m$이 아니라 $m-1$인 이유가 바로 $\sum X_j = n$이라는 제약, 즉 위의 음의 공분산 구조 때문이다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+$n \to \infty$, $p \to 0$이면서 $np \to \lambda$로 고정될 때 $\text{Binomial}(n,p)$의 PMF가 $\text{Poisson}(\lambda)$의 PMF로 수렴함을 보여라.
+
+</div>
+
+??? success "풀이"
+    $p = \lambda/n$으로 두고 고정된 $k$에 대해
+
+    $$
+    P(X=k) = \binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1-\frac{\lambda}{n}\right)^{n-k}
+    $$
+
+    를 세 조각으로 나눈다.
+
+    $$
+    = \underbrace{\frac{n(n-1)\cdots(n-k+1)}{n^k}}_{(\text{가})}\cdot\frac{\lambda^k}{k!}\cdot\underbrace{\left(1-\frac{\lambda}{n}\right)^{n}}_{(\text{나})}\cdot\underbrace{\left(1-\frac{\lambda}{n}\right)^{-k}}_{(\text{다})}
+    $$
+
+    - (가)는 $k$개의 인수를 각각 $n$으로 나눈 $\prod_{j=0}^{k-1}(1 - j/n)$이고, $k$가 고정이므로 $n\to\infty$에서 1로 간다.
+    - (나)는 잘 알려진 극한 $(1-\lambda/n)^n \to e^{-\lambda}$이다.
+    - (다)는 밑이 1로 가고 지수가 고정이므로 1로 간다.
+
+    따라서
+
+    $$
+    P(X=k) \to \frac{\lambda^k e^{-\lambda}}{k!}
+    $$
+
+    이다. $\square$
+
+    **뜻.** 시행 횟수는 아주 많고 각 시행의 성공확률은 아주 작은데 그 곱이 적당한 상황이 포아송분포를 낳는다. "희귀사건의 법칙"이라 불리는 까닭이다. 웹사이트의 분당 접속 수, 하루에 걸려 오는 응급 전화 수, 한 페이지의 오타 수가 모두 이 구조다. 무수한 기회 각각이 작은 확률로 사건을 일으킨다.
+
+    실용적으로는 $n \ge 20$이고 $p \le 0.05$이면 근사가 쓸 만하고, $n \ge 100$이고 $np \le 10$이면 매우 좋다. 정규근사가 $p$가 0.5 근처일 때 잘 듣는 것과 정확히 반대 영역을 맡는다. **$p$가 극단적이면 포아송으로, 중간이면 정규분포로** 간다고 기억하면 된다.
+
+---
 
 <div class="drillbox" markdown>
 
