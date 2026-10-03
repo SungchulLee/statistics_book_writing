@@ -169,46 +169,132 @@ $$
 
 ## 2. 표준화
 
-모든 정규확률변수는 **Z-점수 변환**을 통해 표준정규확률변수로 바꿀 수 있다:
+모든 정규확률변수는 **Z-점수 변환**을 통해 표준정규확률변수로 바꿀 수 있다.
+
+<div class="thmbox" markdown>
+
+### 정리 1. 표준화 { .thm }
+
+$X \sim N(\mu, \sigma^2)$이면
 
 $$
-\begin{aligned}
-\textbf{Standardization:} \quad & X \sim N(\mu, \sigma^2) \implies Z = \frac{X - \mu}{\sigma} \sim N(0, 1) \\[6pt]
-\textbf{Reverse:} \quad & Z \sim N(0, 1) \implies X = Z\sigma + \mu \sim N(\mu, \sigma^2)
-\end{aligned}
+Z = \frac{X - \mu}{\sigma} \sim N(0, 1)
 $$
+
+이고, 거꾸로 $Z \sim N(0,1)$이면 $X = \sigma Z + \mu \sim N(\mu, \sigma^2)$이다.
+
+</div>
+
+??? proof "증명"
+
+    분포함수를 직접 계산한다. $\sigma > 0$이므로 부등식의 방향이 보존되어
+
+    $$
+    P(Z \le z) = P\!\left(\frac{X-\mu}{\sigma} \le z\right) = P(X \le \mu + \sigma z)
+    = \int_{-\infty}^{\mu + \sigma z} \frac{1}{\sqrt{2\pi\sigma^2}}
+      e^{-\frac{(s-\mu)^2}{2\sigma^2}}\,ds
+    $$
+
+    다. $s = \mu + \sigma u$로 치환하면 $ds = \sigma\,du$이고 적분 구간의 위끝이 $z$가 되므로
+
+    $$
+    P(Z \le z) = \int_{-\infty}^{z} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-u^2/2}\,\sigma\,du
+    = \int_{-\infty}^{z} \frac{1}{\sqrt{2\pi}} e^{-u^2/2}\,du
+    $$
+
+    로 $\sigma$가 약분된다. 이것이 표준정규분포의 분포함수이므로 $Z \sim N(0,1)$이다.
+    역방향은 같은 치환을 반대로 하면 되고, 정리 2 의 특수한 경우이기도 하다. $\square$
+
+    **이 한 줄이 정규분포표가 하나뿐인 까닭이다.** 모수가 둘인 분포족인데도 표를 하나만
+    만들어 두면 되는 것은, 모든 구성원이 표준정규를 늘리고 옮긴 것에 지나지 않기 때문이다.
 
 ---
 
 ## 3. 정규분포의 성질
 
-### 닫힘 성질
+정규분포가 통계학의 중심에 있는 까닭은 **닫혀 있기** 때문이다. 늘리고 옮겨도, 독립인 것끼리
+더해도 정규분포를 벗어나지 않는다.
+
+<div class="thmbox" markdown>
+
+### 정리 2. 선형변환에 대한 닫힘 { .thm }
+
+$X \sim N(\mu, \sigma^2)$이고 $a \ne 0$이면
 
 $$
-\begin{aligned}
-(1) &\quad X \sim \text{Normal} \implies aX + b \sim \text{Normal} \\[4pt]
-(2) &\quad X \sim \text{Normal}, \; Y \sim \text{Normal}, \; X \perp Y \implies X + Y \sim \text{Normal} \\[4pt]
-(3) &\quad (X, Y) \sim \text{Multivariate Normal} \implies X + Y \sim \text{Normal}
-\end{aligned}
+aX + b \sim N(a\mu + b,\; a^2\sigma^2)
 $$
 
-**주의:** $X \sim \text{Normal}$이고 $Y \sim \text{Normal}$이라고 해서 $X + Y \sim \text{Normal}$인 것은 **아니다**. 독립성이나 결합정규성이 있어야 한다.
+이다.
 
-### 성질 (1)의 증명
+</div>
 
-$a > 0$이고 $X \sim N(\mu, \sigma^2)$일 때:
+??? proof "증명"
+
+    $a > 0$인 경우를 먼저 본다. 분포함수는
+
+    $$
+    P(aX + b \le x) = P\!\left(X \le \frac{x-b}{a}\right)
+    = \int_{-\infty}^{(x-b)/a} \frac{1}{\sqrt{2\pi\sigma^2}}
+      e^{-\frac{(s-\mu)^2}{2\sigma^2}}\,ds
+    $$
+
+    이고, 양변을 $x$에 대해 미분하면(미적분학의 기본정리와 연쇄법칙)
+
+    $$
+    f_{aX+b}(x) = \frac{1}{a}\cdot\frac{1}{\sqrt{2\pi\sigma^2}}
+    \exp\!\left(-\frac{\bigl(\frac{x-b}{a}-\mu\bigr)^2}{2\sigma^2}\right)
+    = \frac{1}{\sqrt{2\pi(a\sigma)^2}}
+    \exp\!\left(-\frac{(x - (a\mu+b))^2}{2a^2\sigma^2}\right)
+    $$
+
+    다. 괄호 안을 정리할 때 $\bigl(\frac{x-b}{a}-\mu\bigr)^2 = \frac{(x-b-a\mu)^2}{a^2}$
+    를 썼다. 이것이 $N(a\mu+b,\,a^2\sigma^2)$의 밀도다.
+
+    $a < 0$이면 부등식의 방향이 뒤집혀 $P(aX+b \le x) = P\bigl(X \ge \frac{x-b}{a}\bigr)$
+    가 되고, 미분하면서 부호가 한 번 더 바뀌어 $1/|a|$가 나온다. 밀도에는 $a^2$만 들어가므로
+    결과는 같다. $\square$
+
+<div class="thmbox" markdown>
+
+### 정리 3. 독립인 정규확률변수의 합 { .thm }
+
+$X \sim N(\mu_1, \sigma_1^2)$, $Y \sim N(\mu_2, \sigma_2^2)$가 **독립**이면
 
 $$
-P(aX + b \leq x) = P\left(X \leq \frac{x - b}{a}\right) = \int_{-\infty}^{(x-b)/a} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(s-\mu)^2}{2\sigma^2}} ds
+X + Y \sim N(\mu_1 + \mu_2,\; \sigma_1^2 + \sigma_2^2)
 $$
 
-$x$에 대해 미분하면:
+이다. 독립이 아니더라도 $(X, Y)$가 **결합정규**이면 같은 결론이 성립하며, 이때 분산은
+$\sigma_1^2 + \sigma_2^2 + 2\operatorname{Cov}(X,Y)$다.
 
-$$
-f_{aX+b}(x) = \frac{1}{\sqrt{2\pi(a\sigma)^2}} \exp\left(-\frac{(x - (a\mu + b))^2}{2a^2\sigma^2}\right)
-$$
+</div>
 
-따라서 $aX + b \sim N(a\mu + b, \, a^2\sigma^2)$이다.
+??? proof "증명"
+
+    적률생성함수를 쓴다. $X \sim N(\mu,\sigma^2)$의 MGF 는
+
+    $$
+    M_X(t) = E[e^{tX}] = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
+    $$
+
+    이다(지수의 제곱을 완성하면 정규밀도의 적분이 $1$ 로 떨어진다). 독립이면 MGF 가 곱해지므로
+
+    $$
+    M_{X+Y}(t) = M_X(t)\,M_Y(t)
+    = \exp\!\left((\mu_1+\mu_2)t + \frac{(\sigma_1^2+\sigma_2^2)t^2}{2}\right)
+    $$
+
+    이고, 이것이 $N(\mu_1+\mu_2,\ \sigma_1^2+\sigma_2^2)$의 MGF 다. MGF 가 원점 둘레에서
+    유한하면 분포를 하나로 정하므로 증명이 끝난다. $\square$
+
+!!! warning "정규 둘을 더한다고 늘 정규가 되지는 않는다"
+
+    $X \sim \text{Normal}$ 이고 $Y \sim \text{Normal}$ 이라는 것만으로는 부족하다.
+    **독립성이나 결합정규성**이 있어야 한다. 반례는 간단하다. $X \sim N(0,1)$ 이고
+    $S$ 가 $X$ 와 독립이며 $\pm 1$ 을 확률 $1/2$ 씩 취할 때 $Y = SX$ 로 두면 $Y$ 도
+    $N(0,1)$ 이지만 $X + Y$ 는 확률 $1/2$ 로 $0$ 이라 연속분포조차 아니다. 4.3절 이변량
+    정규분포 쪽 연습문제 9 가 이 반례를 다룬다.
 
 ### 주요 기하적 성질
 
@@ -216,15 +302,40 @@ $$
 - **종 모양:** 대부분의 자료가 평균 근처에 몰려 있다.
 - **무한한 꼬리:** 꼬리는 $\pm\infty$까지 뻗지만 확률은 빠르게 감소한다.
 
-### 68–95–99.7 규칙
+<div class="thmbox" markdown>
+
+### 정리 4. 68-95-99.7 규칙 { .thm }
+
+$X \sim N(\mu, \sigma^2)$이면
 
 $$
-\begin{aligned}
-P(\mu - \sigma < X < \mu + \sigma) &\approx 68\% \\
-P(\mu - 2\sigma < X < \mu + 2\sigma) &\approx 95\% \\
-P(\mu - 3\sigma < X < \mu + 3\sigma) &\approx 99.7\%
-\end{aligned}
+P(|X - \mu| < k\sigma) = 2\Phi(k) - 1 =
+\begin{cases}
+0.6827 & k = 1 \\
+0.9545 & k = 2 \\
+0.9973 & k = 3
+\end{cases}
 $$
+
+이다. 특히 이 값들은 $\mu$ 와 $\sigma$ 에 **의존하지 않는다.**
+
+</div>
+
+??? proof "증명"
+
+    정리 1 로 표준화하면 $|X-\mu| < k\sigma \iff |Z| < k$ 이므로
+
+    $$
+    P(|X-\mu| < k\sigma) = P(-k < Z < k) = \Phi(k) - \Phi(-k) = 2\Phi(k) - 1
+    $$
+
+    이다. 마지막 등호는 대칭성 $\Phi(-k) = 1 - \Phi(k)$(정리 6)에서 나온다. $\Phi$ 를
+    수치적으로 계산하면 $\Phi(1) = 0.84134$, $\Phi(2) = 0.97725$, $\Phi(3) = 0.99865$ 이고
+    각각 $0.68269$, $0.95450$, $0.99730$ 을 준다. $\square$
+
+    **$\mu$ 와 $\sigma$ 가 사라진 자리를 눈여겨볼 것.** 이 규칙이 모든 정규분포에 똑같이
+    적용되는 것은 표준화가 모수를 지워 버리기 때문이다. 거꾸로 $95\%$ 를 정확히 주는 값은
+    $k = 2$ 가 아니라 $1.95996$ 이고, 신뢰구간에서 $1.96$ 을 쓰는 까닭이 여기 있다.
 
 <div class="exbox" markdown>
 
@@ -369,31 +480,58 @@ $$
 
 ---
 
-## 4. 표준정규분포의 PDF: 주요 성질 확인
+## 4. 표준정규밀도의 적률
 
-$N(0, 1)$의 PDF는 $f(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$이다. 다음을 확인한다:
+<div class="thmbox" markdown>
 
-### (1) 전체 질량이 1이다
+### 정리 5. 표준정규밀도의 적률 { .thm }
 
-$I = \int_{-\infty}^{\infty} e^{-x^2/2}\,dx$라 하자. 그러면:
-
-$$
-I^2 = \int\!\!\int e^{-(x^2+y^2)/2}\,dx\,dy = \int_0^{2\pi}\!\int_0^{\infty} e^{-r^2/2}\,r\,dr\,d\theta = 2\pi
-$$
-
-따라서 $I = \sqrt{2\pi}$이고 $\int f(x)\,dx = 1$임이 확인된다.
-
-### (2) 평균이 0이다
-
-피적분함수 $x \cdot e^{-x^2/2}$는 **기함수**이므로 $(-\infty, \infty)$ 위의 적분은 0이다.
-
-### (3) 분산이 1이다
-
-부분적분에 의해:
+$\varphi(x) = \dfrac{1}{\sqrt{2\pi}}e^{-x^2/2}$ 에 대해
 
 $$
-\frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} x^2 e^{-x^2/2}\,dx = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} e^{-x^2/2}\,dx = 1
+\int_{-\infty}^{\infty}\varphi(x)\,dx = 1, \qquad
+\int_{-\infty}^{\infty}x\,\varphi(x)\,dx = 0, \qquad
+\int_{-\infty}^{\infty}x^2\varphi(x)\,dx = 1
 $$
+
+이다. 곧 $\varphi$ 는 밀도이고 그 평균은 $0$, 분산은 $1$ 이다.
+
+</div>
+
+??? proof "증명"
+
+    **(1) 전체 질량이 1이다.** $I = \int_{-\infty}^{\infty} e^{-x^2/2}dx$ 라 두면
+    원시함수가 초등함수가 아니므로 직접 적분할 수 없다. 대신 **제곱해서 이중적분으로 옮긴다.**
+
+    $$
+    I^2 = \int_{-\infty}^{\infty}\!\int_{-\infty}^{\infty} e^{-(x^2+y^2)/2}\,dx\,dy
+    = \int_0^{2\pi}\!\!\int_0^{\infty} e^{-r^2/2}\,r\,dr\,d\theta
+    $$
+
+    극좌표 $x = r\cos\theta$, $y = r\sin\theta$ 로 바꾸면서 야코비안 $r$ 이 나왔는데,
+    **그 $r$ 덕분에 안쪽 적분이 풀린다.** $u = r^2/2$ 로 치환하면
+    $\int_0^\infty e^{-r^2/2}r\,dr = \int_0^\infty e^{-u}du = 1$ 이므로
+    $I^2 = 2\pi$, 곧 $I = \sqrt{2\pi}$ 다. 따라서 $\int\varphi = I/\sqrt{2\pi} = 1$ 이다.
+    정규밀도의 분모에 하필 $\sqrt{2\pi}$ 가 붙어 있는 까닭이 이 계산이다.
+
+    **(2) 평균이 0이다.** 피적분함수 $x\,e^{-x^2/2}$ 는 **기함수**이고 적분 구간이 원점에
+    대해 대칭이므로 적분이 $0$ 이다. 절댓값의 적분이 유한하다는 것(가적분성)도 함께
+    확인되어야 하는데, $\int_0^\infty x e^{-x^2/2}dx = 1 < \infty$ 이므로 문제없다.
+
+    **(3) 분산이 1이다.** $x^2 e^{-x^2/2} = x \cdot \bigl(x e^{-x^2/2}\bigr)$ 로 보고
+    부분적분한다. $u = x$, $dv = x e^{-x^2/2}dx$ 로 두면 $v = -e^{-x^2/2}$ 이므로
+
+    $$
+    \int_{-\infty}^{\infty} x^2 e^{-x^2/2}dx
+    = \underbrace{\Bigl[-x e^{-x^2/2}\Bigr]_{-\infty}^{\infty}}_{=\,0}
+    + \int_{-\infty}^{\infty} e^{-x^2/2}dx = I
+    $$
+
+    다. 경계항이 $0$ 인 것은 지수가 다항식을 압도하기 때문이다. 양변을 $\sqrt{2\pi}$ 로
+    나누면 $E[Z^2] = 1$ 이고, (2)에서 $E[Z] = 0$ 이므로 분산도 $1$ 이다. $\square$
+
+    같은 부분적분을 되풀이하면 $E[Z^{2k}] = (2k-1)!!$ 라는 점화식이 나온다.
+    $E[Z^4] = 3$ 이라 정규분포의 첨도가 $3$ 인 것이 여기서 온다.
 
 <div class="exbox" markdown>
 
@@ -843,16 +981,48 @@ $$
 \mathcal{N}(x) = N(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-s^2/2}\,ds
 $$
 
-### Phi의 성질
+<div class="thmbox" markdown>
+
+### 정리 6. 표준정규 분포함수의 성질 { .thm }
+
+$Z \sim N(0,1)$ 이고 $\Phi$ 를 그 분포함수라 하면
 
 $$
 \begin{aligned}
-(1) &\quad P(a \leq Z \leq b) = \mathcal{N}(b) - \mathcal{N}(a) \\
-(2) &\quad P(Z \geq x) = P(Z \leq -x) = \mathcal{N}(-x) \\
-(3) &\quad P(Z \geq x) = 1 - \mathcal{N}(x) \\
-(4) &\quad P(Z \leq 0) = P(Z \geq 0) = 0.5
+(1)&\quad P(a \le Z \le b) = \Phi(b) - \Phi(a) \\[2pt]
+(2)&\quad \Phi(-x) = 1 - \Phi(x) \\[2pt]
+(3)&\quad P(Z \ge x) = 1 - \Phi(x) = \Phi(-x) \\[2pt]
+(4)&\quad \Phi(0) = \tfrac12
 \end{aligned}
 $$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    **(1)** 은 분포함수의 정의에서 바로 나온다. $\{a \le Z \le b\}$ 를
+    $\{Z \le b\} \setminus \{Z < a\}$ 로 쪼개면 되고, 연속분포라 $P(Z = a) = 0$ 이므로
+    등호의 유무가 값을 바꾸지 않는다.
+
+    **(2)** 가 나머지를 떠받친다. 밀도 $\varphi$ 가 **우함수**($\varphi(-u) = \varphi(u)$)
+    이므로 $u = -s$ 로 치환하면
+
+    $$
+    \Phi(-x) = \int_{-\infty}^{-x}\varphi(s)\,ds
+    = \int_{x}^{\infty}\varphi(u)\,du
+    = 1 - \Phi(x)
+    $$
+
+    다. 마지막 등호는 전체 적분이 $1$ 이라는 정리 5 다.
+
+    **(3)** $P(Z \ge x) = 1 - \Phi(x)$ 는 여사건이고, 이것이 $\Phi(-x)$ 와 같다는 것이
+    바로 (2)다. **꼬리확률을 왼쪽 꼬리로 옮겨 읽을 수 있다**는 이 성질 덕분에 정규분포표가
+    한쪽만 실려도 충분하다.
+
+    **(4)** (2)에 $x = 0$ 을 넣으면 $\Phi(0) = 1 - \Phi(0)$ 이므로 $\Phi(0) = 1/2$ 다.
+    $\square$
 
 <div class="exbox" markdown>
 
@@ -1636,6 +1806,67 @@ $$
 
 !!! warning "$\mu$와 $\sigma$는 $Y$의 것이 아니다"
     **$\mu$와 $\sigma$는 로그를 취한 뒤의 평균과 표준편차**다. $Y$ 자체의 평균은 $e^{\mu+\sigma^2/2}$로 $e^\mu$보다 크다. SciPy도 헷갈리기 쉽게 되어 있어서 `stats.lognorm(s=sigma, scale=np.exp(mu))`로 써야 한다. `s`가 $\sigma$이고 `scale`이 **중앙값** $e^\mu$다.
+
+<div class="thmbox" markdown>
+
+### 정리 7. 로그정규분포의 대푯값과 적률 { .thm }
+
+$Y = e^X$ 이고 $X \sim N(\mu, \sigma^2)$ 이면
+
+$$
+\text{중앙값} = e^{\mu}, \qquad
+\text{최빈값} = e^{\mu - \sigma^2}, \qquad
+E[Y] = e^{\mu + \sigma^2/2}
+$$
+
+$$
+\operatorname{Var}(Y) = \bigl(e^{\sigma^2}-1\bigr)e^{2\mu+\sigma^2}, \qquad
+\text{CV} = \sqrt{e^{\sigma^2}-1}
+$$
+
+이다. 변동계수는 $\mu$ 에 의존하지 않는다.
+
+</div>
+
+??? proof "증명"
+
+    **중앙값.** $y \mapsto e^y$ 가 강증가이므로 사건 $\{Y \le e^\mu\}$ 와
+    $\{X \le \mu\}$ 가 같고, 따라서 $P(Y \le e^\mu) = 1/2$ 다. 같은 논법이 모든
+    분위수에 통해 $Q_Y(p) = e^{Q_X(p)}$ 다. **단조변환은 분위수를 보존한다.**
+
+    **적률.** $X$ 의 MGF 가 $M_X(t) = e^{\mu t + \sigma^2 t^2/2}$ 이므로
+
+    $$
+    E[Y^k] = E\bigl[e^{kX}\bigr] = M_X(k) = e^{k\mu + k^2\sigma^2/2}
+    $$
+
+    다. $k = 1$ 에서 $E[Y] = e^{\mu + \sigma^2/2}$, $k = 2$ 에서
+    $E[Y^2] = e^{2\mu + 2\sigma^2}$ 이고
+
+    $$
+    \operatorname{Var}(Y) = e^{2\mu+2\sigma^2} - e^{2\mu+\sigma^2}
+    = \bigl(e^{\sigma^2}-1\bigr)e^{2\mu+\sigma^2}
+    $$
+
+    이다. 변동계수는 표준편차를 평균으로 나눈 것이므로
+
+    $$
+    \text{CV} = \frac{\sqrt{(e^{\sigma^2}-1)}\,e^{\mu+\sigma^2/2}}{e^{\mu+\sigma^2/2}}
+    = \sqrt{e^{\sigma^2}-1}
+    $$
+
+    로 $\mu$ 가 약분된다. **$\mu$ 는 눈금만 바꾸는 모수**라 무차원 양에는 남을 수 없다.
+
+    **최빈값.** 밀도 $f(y) = \frac{1}{y\sigma\sqrt{2\pi}}
+    \exp\bigl(-\frac{(\ln y - \mu)^2}{2\sigma^2}\bigr)$ 의 로그를 미분한다.
+
+    $$
+    \frac{d}{dy}\log f = -\frac1y - \frac{\ln y - \mu}{\sigma^2 y} = 0
+    \quad\Longrightarrow\quad
+    \ln y = \mu - \sigma^2
+    $$
+
+    이므로 최빈값은 $e^{\mu-\sigma^2}$ 다. $\square$
 
 | 성질 | 값 |
 |---|---|
