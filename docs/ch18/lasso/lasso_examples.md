@@ -600,7 +600,14 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
     신호를 **모두** 되찾지만, 예측오차를 최소화하는 $\lambda$는 잡음변수도 상당수 함께
     들여보낸다. 이는 라쏘 자체의 결함이라기보다 교차검증이 **예측**을 최적화하기 때문이다.
     지지집합을 정확히 복원하려면 더 큰 $\lambda$(1-표준오차 규칙)나 사후 라쏘, 안정성 선택
-    같은 추가 절차가 필요하다. $\square$
+    같은 추가 절차가 필요하다.
+
+    한 가지 덧붙일 것이 있다. 위 코드는 표준화를 **폴드 밖에서** 한 번에 해 놓고 `cv_lasso` 에
+    넘긴다. 검증 폴드의 평균·표준편차가 훈련에 새어 들어간 것이므로 엄밀하게는 누수다. 여기서는
+    열마다 평균·표준편차 두 수만 새고 설명변수가 반응과 무관하게 생성되었으므로 $\hat\lambda$가
+    눈에 띄게 달라지지 않지만, 실제 자료에서는 표준화를 폴드 **안**에서 훈련 부분만으로 추정해
+    검증 부분에 적용해야 한다. `sklearn` 의 `Pipeline` 에 `StandardScaler` 를 넣는 까닭이
+    바로 이것이다. $\square$
 
 <div class="drillbox" markdown>
 
@@ -637,6 +644,562 @@ $r = y - X\beta$를 쓰면 무엇이 잘못되는가?
     $\{(\beta_1, \beta_2) : \beta_1 + \beta_2 = s^*,\ \beta_1\beta_2 \ge 0\}$이라는 선분 전체다.
     예컨대 $s^* = 1$이면 $(\alpha, 1-\alpha)$가 모든 $\alpha \in [0,1]$에 대해 최적이다.
     즉 해가 유일하지 않다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span> 보기 1(1)은 `lasso_cd` 의 갱신식이 옳으려면
+$a_j = \lVert x_j \rVert_2^2 / n = 1$이어야 함을 보였다. 그 조건이 깨지면 **정확히 얼마나** 틀리는지를
+수로 짚어라. $p = 1$로 두고 $\lVert x \rVert_2^2/n = 1$인 열 $x$와 상수 $c > 0$에 대해 설계를
+$\tilde{x} = cx$라 하자(변수의 단위를 바꾼 것이다). $c_0 = x^\top y / n$이라 쓴다.
+
+**(1)** 같은 $\lambda$에서 $\tilde{x}$에 대한 **참** 라쏘 해 $\tilde\beta$를 $c_0, \lambda, c$로 적어라.
+단위를 바꾸기 전의 해 $\hat\beta = S(c_0, \lambda)$에 대해 $\tilde\beta = \hat\beta / c$가 성립하는가.
+
+**(2)** `lasso_cd` 에 $\tilde{x}$를 넣으면 무엇이 돌아오는가. 그것이 참값의 몇 배인지 $c$로 적어라.
+
+**(3)** $c_0 = 0.8$, $\lambda = 0.3$, $c = 2$에서 (1)(2)에 나온 세 수를 적어라. 끝으로, $\lambda$를
+다시 고르는 것만으로 `lasso_cd` 의 오류를 $p \ge 2$에서 고칠 수 있는가.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 목적함수는 $\frac{1}{2n}\lVert y - cx\beta \rVert_2^2 + \lambda\lvert\beta\rvert$이다.
+    $\gamma = c\beta$로 바꾸어 쓰면
+
+    $$
+    \frac{1}{2n}\lVert y - x\gamma \rVert_2^2 + \frac{\lambda}{c}\lvert\gamma\rvert
+    $$
+
+    이고, $\lVert x\rVert_2^2/n = 1$이므로 이것은 보기 4(1)의 직교 꼴이다. 따라서
+    $\gamma^* = S(c_0,\ \lambda/c)$이고
+
+    $$
+    \tilde\beta = \frac{1}{c}\,S\!\left(c_0,\ \frac{\lambda}{c}\right)
+    = \frac{\operatorname{sign}(c_0)}{c}\left(\lvert c_0\rvert - \frac{\lambda}{c}\right)_+
+    $$
+
+    이다. **$\tilde\beta = \hat\beta/c$는 성립하지 않는다.** 단위를 $c$배 하면 계수는 $1/c$배가
+    되어야 하는데, 벌점 $\lambda\lvert\beta\rvert$는 그 작아진 계수에 걸리므로 **유효 벌점이
+    $\lambda/c$로 함께 묽어진다.** 적합을 그대로 보존하려면 $\lambda \mapsto \lambda/c$로 벌점까지
+    같이 바꾸어야 하고, 그때에만 $\tilde\beta = \hat\beta/c$다. 이것이 "라쏘는 척도동등이 아니다"의
+    가장 작은 보기다.
+
+    **(2)** $p = 1$이면 부분잔차가 $r_1 = y - \tilde{x}\beta + \tilde{x}\beta = y$이므로
+    $\rho_1 = \tilde{x}^\top y / n = c\,c_0$이고, 코드는 분모 $a_1 = c^2$ 없이
+
+    $$
+    \beta^{\text{code}} = S(c\,c_0,\ \lambda)
+    $$
+
+    를 돌려준다(다음 바퀴에도 같은 값이 나오므로 고정점이고 반복이 끝난다). 한편
+
+    $$
+    c^2\,\tilde\beta = c\,S\!\left(c_0, \frac{\lambda}{c}\right)
+    = \operatorname{sign}(c_0)\left(c\lvert c_0\rvert - \lambda\right)_+
+    = S(c\,c_0,\ \lambda)
+    $$
+
+    이므로
+
+    $$
+    \beta^{\text{code}} = c^2\,\tilde\beta
+    $$
+
+    이다. **오류는 정확히 $c^2 = a_1$배다.** 길이를 센티미터에서 미터로 바꾸면($c = 1/100$)
+    코드의 답이 참값의 $10^{-4}$배가 된다.
+
+    **(3)** $c_0 = 0.8$, $\lambda = 0.3$, $c = 2$에서
+
+    - 참 라쏘 해: $\tilde\beta = S(0.8,\ 0.15)/2 = 0.65/2 = 0.325$
+    - 척도동등이 성립했다면: $\hat\beta/c = S(0.8,\ 0.3)/2 = 0.5/2 = 0.25$
+    - 코드가 돌려주는 값: $S(1.6,\ 0.3) = 1.3 = 4 \times 0.325$
+
+    세 수가 모두 다르다. 가운데 수와 첫 수의 차이는 **벌점이 척도에 불변이 아니라서** 생기고,
+    셋째 수와 첫 수의 차이는 **코드가 $a_j$를 빠뜨려서** 생긴다. 두 결함은 서로 다른 것이다.
+
+    $\lambda$를 다시 고르는 것으로는 고칠 수 없다. $p = 1$이면 $S(1.6, \lambda') = 0.325$가 되도록
+    $\lambda' = 1.275$를 쓰면 되지만, $p \ge 2$에서 열마다 $c_j$가 다르면 좌표별로
+    $\lambda/c_j^2$ 꼴의 **서로 다른** 벌점이 필요하다. 하나의 $\lambda$로는 불가능하다. 고치는 길은
+    갱신식에 $1/a_j$를 넣거나, 보기 1처럼 **먼저 표준화해서 $a_j = 1$로 만드는 것**뿐이다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span> 보기 2의 코드는 $\lambda_{\max}$를
+`np.abs(X.T @ (y - y.mean())).max() / n` 로 재면서, 해는 `lasso_cd(X, y, lam)` 로 **중심화하지 않은**
+`y` 에 대해 구하고 절편도 두지 않는다. 보기 4의 자료에서 $\bar y = 0.2049 \ne 0$이므로 이것은
+어긋나 보인다.
+
+**(1)** 두 식이 같은 수를 주는 까닭을 보이고, 더 나아가 `lasso_cd(X, y, lam)` 와
+`lasso_cd(X, y - y.mean(), lam)` 이 **모든 $\lambda$에서 같은 해**를 준다는 것을 증명하라.
+
+**(2)** 그렇다면 절편은 어디로 갔는가. 절편을 벌점에서 제외한 모형
+$\min_{\beta_0, \beta} \frac{1}{2n}\lVert y - \beta_0\mathbf{1} - X\beta \rVert_2^2 + \lambda\lVert\beta\rVert_1$
+의 해에서 $\hat\beta_0$을 구하고, $\hat\beta$가 (1)의 해와 같음을 보여라.
+
+**(3)** `X` 자리에 중심화하지 않은 `X_raw` 를 넣었다면 (1)(2) 중 무엇이 깨지는가. 보기 4의
+자료에서 그 어긋남을 수로 보여라($\lambda_{\max}$를 두 식으로 재면 각각 $3.7689$와 $3.7585$다).
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 보기 4가 `X = (X_raw - X_mean) / X_std` 로 열마다 평균을 뺐으므로 $X$의 모든 열이
+    중심화되어 있고, 따라서
+
+    $$
+    X^\top \mathbf{1} = 0
+    $$
+
+    이다. 이 한 줄이 전부다. 먼저 $\lambda_{\max}$는
+
+    $$
+    X^\top(y - \bar y\mathbf{1}) = X^\top y - \bar y\,X^\top\mathbf{1} = X^\top y
+    $$
+
+    이므로 중심화하든 않든 **똑같은 벡터**이고 두 식의 값이 같다.
+
+    해도 같다. $\mathbf{1}^\top(y - \bar y\mathbf{1}) = 0$과 $\mathbf{1}^\top X\beta = 0$을 쓰면
+
+    $$
+    \lVert y - X\beta \rVert_2^2
+    = \lVert (y - \bar y\mathbf{1}) - X\beta \rVert_2^2
+      + 2\bar y\,\mathbf{1}^\top\!\big[(y - \bar y\mathbf{1}) - X\beta\big] + n\bar y^2
+    = \lVert (y - \bar y\mathbf{1}) - X\beta \rVert_2^2 + n\bar y^2
+    $$
+
+    이 되어 교차항이 사라진다. 두 목적함수가 $\beta$와 무관한 상수 $\bar y^2/2$만큼 차이 나므로
+    최소점의 집합이 **완전히 같다.** 실제로 보기 4의 자료에 $\lambda = 0.2212$를 넣고 두 가지로
+    풀면 계수 차이가 $10^{-15}$ 수준으로 부동소수점 오차뿐이다.
+
+    **(2)** $\beta$를 고정하고 $\beta_0$에 대해 최소화하면 $\hat\beta_0 = \frac{1}{n}\mathbf{1}^\top(y - X\beta)$
+    이고, $\mathbf{1}^\top X = 0$이므로
+
+    $$
+    \hat\beta_0 = \bar y = 0.2049
+    $$
+
+    다. **$\beta$가 무엇이든 절편은 $\bar y$다.** 이것을 다시 넣으면 남는 문제가
+
+    $$
+    \min_{\beta}\ \frac{1}{2n}\lVert (y - \bar y\mathbf{1}) - X\beta \rVert_2^2 + \lambda\lVert\beta\rVert_1
+    $$
+
+    이고 (1)에 의해 그 해가 `lasso_cd(X, y, lam)` 의 해와 같다. 곧 **열을 중심화하면 절편이
+    기울기 문제에서 완전히 분리된다.** 보기 4가 절편을 보고하지 않은 것은 빠뜨린 것이 아니라
+    $\bar y$로 이미 알고 있기 때문이고, 절편에 벌점을 걸지 않는 관례가 이 분리를 깨지 않는
+    까닭도 같다.
+
+    **(3)** `X_raw` 를 쓰면 $X_{\text{raw}}^\top\mathbf{1} \ne 0$이므로 (1)과 (2)가 **동시에** 깨진다.
+    보기 4의 자료에서 $\max_j \lvert \mathbf{1}^\top x_j \rvert / n = 0.1340$으로 0이 아니고,
+    그 결과
+
+    $$
+    \frac{\lVert X_{\text{raw}}^\top(y - \bar y\mathbf{1})\rVert_\infty}{n} = 3.7689
+    \ne
+    \frac{\lVert X_{\text{raw}}^\top y\rVert_\infty}{n} = 3.7585
+    $$
+
+    로 $\lambda_{\max}$가 어느 식을 쓰는지에 따라 달라진다. 더 나쁜 것은 (2)인데,
+    $\hat\beta_0 = \bar y - \frac{1}{n}\mathbf{1}^\top X_{\text{raw}}\hat\beta$가 $\hat\beta$에 의존하므로
+    절편과 기울기가 뒤엉킨다. 절편 없이 중심화하지 않은 $y$로 푼 해는 절편 있는 모형의 해와
+    다르고, 그 차이는 $\lambda$가 커질수록 벌어진다. 거기에 연습문제 6의 $a_j \ne 1$ 오류까지
+    겹친다.
+
+    **표준화는 벌점을 공평하게 걸기 위한 권고에 그치지 않는다.** 중심화는 절편을 떼어 내고,
+    척도 맞추기는 갱신식을 옳게 만든다. 둘 다 이 구현의 전제조건이다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span> 상관된 두 변수에서 라쏘가 하나를
+버리는 자리를 종이에서 끝까지 구한다. 표준화된 설계 $X \in \mathbb{R}^{n \times 2}$가
+
+$$
+\frac{X^\top X}{n} = \begin{pmatrix} 1 & 0.8 \\ 0.8 & 1 \end{pmatrix},
+\qquad
+\frac{X^\top y}{n} = \begin{pmatrix} 1.0 \\ 0.9 \end{pmatrix}
+$$
+
+를 만족한다고 하자. 이 쪽의 목적함수
+$\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_1$에 대해 답하라.
+
+**(1)** $\lambda_{\max}$를 구하라.
+
+**(2)** 모든 $\lambda > 0$에 대한 라쏘 해 $\hat\beta(\lambda)$를 구간으로 나누어 닫힌 꼴로 적어라.
+특히 $\hat\beta_2$가 0이 되는 $\lambda$를 구하고, 상관계수 $\rho$와 $c = X^\top y/n$에 대한
+일반식 $\lambda_2^\ast = (c_2 - \rho c_1)/(1 - \rho)$를 유도하라.
+
+**(3)** $\hat\beta_2$가 떨어진 뒤 $\hat\beta_1$이 $x_2$를 아예 본 적 없는 단순회귀의 연성 문턱과
+같아짐을 확인하라. 같은 설계에서 능형 해 $\hat\beta^{\text{ridge}}(\lambda) = (X^\top X/n + \lambda I)^{-1}X^\top y/n$을
+구해 $\lambda = 0,\ 0.5,\ 10$에서 두 방법을 견주고, 무엇이 다른지 한 줄로 적어라.
+
+</div>
+
+??? success "풀이"
+
+    $G = X^\top X/n$, $c = X^\top y/n$으로 쓰면 목적함수는 상수를 뺀 꼴로
+
+    $$
+    \frac{1}{2}\beta^\top G\beta - c^\top\beta + \lambda\lVert\beta\rVert_1
+    $$
+
+    이고, 최적조건(하위기울기)은 $j$마다
+
+    $$
+    (G\beta)_j - c_j + \lambda\, \partial\lvert\beta_j\rvert \ni 0,
+    \qquad
+    \partial\lvert\beta_j\rvert =
+    \begin{cases}
+    \{\operatorname{sign}(\beta_j)\} & \beta_j \ne 0,\\
+    [-1, 1] & \beta_j = 0
+    \end{cases}
+    $$
+
+    이다.
+
+    **(1)** $\beta = 0$이 해일 조건은 $\lvert c_j \rvert \le \lambda$가 모두에서 성립하는 것이므로
+
+    $$
+    \lambda_{\max} = \max_j \lvert c_j \rvert = \max(1.0,\ 0.9) = 1.0
+    $$
+
+    이다.
+
+    **(2)** 먼저 두 좌표가 모두 양수인 구간을 찾는다. 그때 조건은 $G\beta = c - \lambda\mathbf{1}$,
+    곧
+
+    $$
+    \beta_1 + 0.8\beta_2 = 1.0 - \lambda,
+    \qquad
+    0.8\beta_1 + \beta_2 = 0.9 - \lambda
+    $$
+
+    이다. 두 식을 빼면 $0.2(\beta_1 - \beta_2) = 0.1$에서
+
+    $$
+    \beta_1 - \beta_2 = 0.5
+    $$
+
+    로 **$\lambda$와 무관한** 차이가 나오고, 더하면 $1.8(\beta_1 + \beta_2) = 1.9 - 2\lambda$에서
+
+    $$
+    \beta_1 + \beta_2 = \frac{1.9 - 2\lambda}{1.8}
+    $$
+
+    이다. 따라서
+
+    $$
+    \hat\beta_1 = 0.25 + \frac{1.9 - 2\lambda}{3.6},
+    \qquad
+    \hat\beta_2 = -0.25 + \frac{1.9 - 2\lambda}{3.6}.
+    $$
+
+    $\lambda = 0$을 넣으면 최소제곱 해 $\hat\beta^{\text{OLS}} = (7/9,\ 5/18) = (0.7778,\ 0.2778)$이다.
+    이 꼴이 유효한 것은 $\hat\beta_2 \ge 0$인 동안, 곧
+
+    $$
+    \frac{1.9 - 2\lambda}{3.6} \ge 0.25
+    \iff 1.9 - 2\lambda \ge 0.9
+    \iff \lambda \le 0.5
+    $$
+
+    일 때다. $\lambda > 0.5$에서는 $\hat\beta_2 = 0$이고 첫 조건만 남아
+    $\hat\beta_1 = S(c_1, \lambda) = 1 - \lambda$다. 이것이 정말 해인지는 둘째 좌표의 하위기울기
+    조건으로 확인한다.
+
+    $$
+    \lvert (G\hat\beta)_2 - c_2 \rvert = \lvert 0.8(1-\lambda) - 0.9 \rvert = 0.1 + 0.8\lambda \le \lambda
+    \iff \lambda \ge 0.5
+    $$
+
+    로 정확히 맞아떨어진다. $\lambda \ge 1$에서는 (1)에 의해 둘 다 0이다. 모아 적으면
+
+    $$
+    \hat\beta(\lambda) =
+    \begin{cases}
+    \left(0.25 + \dfrac{1.9 - 2\lambda}{3.6},\ \ -0.25 + \dfrac{1.9 - 2\lambda}{3.6}\right), & 0 \le \lambda \le 0.5,\\[3mm]
+    (1 - \lambda,\ 0), & 0.5 \le \lambda \le 1,\\[2mm]
+    (0,\ 0), & \lambda \ge 1
+    \end{cases}
+    $$
+
+    이고 $\lambda = 0.5$에서 $(0.5,\ 0)$으로, $\lambda = 1$에서 $(0,\ 0)$으로 두 꺾임점이 모두
+    연속이다.
+
+    일반식은 같은 계산을 문자로 하면 나온다. $G = \begin{pmatrix} 1 & \rho \\ \rho & 1\end{pmatrix}$에서
+    $\hat\beta = G^{-1}(c - \lambda\mathbf{1})$이므로
+
+    $$
+    \hat\beta_2 = \frac{(c_2 - \lambda) - \rho(c_1 - \lambda)}{1 - \rho^2}
+    = \frac{(c_2 - \rho c_1) - \lambda(1 - \rho)}{1 - \rho^2}
+    $$
+
+    이고 $\hat\beta_2 \ge 0 \iff \lambda \le \lambda_2^\ast = \dfrac{c_2 - \rho c_1}{1 - \rho}$다.
+    여기서는 $(0.9 - 0.8)/(1 - 0.8) = 0.5$다. **분모 $1 - \rho$가 열쇠다.** $\rho \to 1$이면
+    $\lambda_2^\ast \to \pm\infty$ 쪽으로 터지면서, 아주 조금만 약한 변수도 거의 모든 $\lambda$에서
+    즉시 떨어진다. 상관이 높을수록 라쏘가 둘 중 하나를 더 매몰차게 버린다는 뜻이다.
+
+    **(3)** $\lambda > 0.5$에서 $\hat\beta_1 = 1 - \lambda = S(c_1, \lambda)$인데, 이것은 $x_1$만 넣은
+    단순회귀($\lVert x_1\rVert_2^2/n = 1$이므로 직교설계)의 라쏘 해와 **글자까지 같다.** 한 변수가
+    떨어지면 남은 변수는 상관 $0.8$을 처음부터 없었던 것처럼 푼다.
+
+    능형은 $\big((1+\lambda)^2 - 0.64\big)$를 분모로 하여
+
+    $$
+    \hat\beta^{\text{ridge}}(\lambda)
+    = \frac{1}{(1+\lambda)^2 - 0.64}
+      \begin{pmatrix} 0.28 + \lambda \\ 0.1 + 0.9\lambda \end{pmatrix}
+    $$
+
+    이다. 값을 넣으면
+
+    | $\lambda$ | 라쏘 | 능형 | 능형의 $\hat\beta_2/\hat\beta_1$ |
+    |---|---|---|---|
+    | $0$ | $(0.7778,\ 0.2778)$ | $(0.7778,\ 0.2778)$ | $0.357$ |
+    | $0.5$ | $(0.5000,\ 0)$ | $(0.4845,\ 0.3416)$ | $0.705$ |
+    | $10$ | $(0,\ 0)$ | $(0.0854,\ 0.0756)$ | $0.885$ |
+
+    **능형의 $\hat\beta_2$는 어떤 $\lambda$에서도 0이 아니다.** 분자 $0.1 + 0.9\lambda$가
+    $\lambda \ge 0$에서 양수이기 때문이다. 게다가 $\lambda = 0$에서 $0.2778$이던 것이 $\lambda = 0.5$에서
+    $0.3416$으로 **올라간다** — 상관된 짝의 계수를 서로 끌어당겨 비율을 $0.357 \to 0.705 \to 0.885$로
+    1에 가깝게 만드는 것이 능형이 하는 일이고, 그래서 능형은 변수선택을 하지 못한다. 라쏘는
+    거꾸로 $\lambda = 0.5$에서 짝을 끊어 하나만 남긴다. 같은 "축소"라는 말로 덮을 수 없는 두 가지
+    행동이다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span> 연습문제 5가 증명한 비유일성을 수로
+보여라. 연습문제 3의 `lasso_cd_warm` 에 $X = [x \mid x]$(완전히 같은 두 열)와 여러 초기값을 주어,
+
+**(1)** 초기값에 따라 **개별 계수가 달라지고**,
+
+**(2)** 그런데도 $\hat\beta_1 + \hat\beta_2$, 적합값 $X\hat\beta$, 목적함수값은 **모두 같고**,
+
+**(3)** 그 합이 연습문제 5에서 환원한 일변량 문제의 닫힌 꼴 $s^\ast = S(x^\top y/n,\ \lambda)$와 **같음**
+
+을 확인하라. $m = 200$, $\lambda = 0.3$, $y = 2x + \varepsilon$, $\varepsilon \sim N(0, 0.5^2)$으로 하라.
+끝으로, 왜 개별 계수는 싣지 말고 합만 실어야 하는지 한 줄로 적어라.
+
+</div>
+
+??? success "풀이"
+
+    ```python
+    rng = np.random.default_rng(0)
+    m = 200
+    x_d = rng.standard_normal(m)
+    x_d = (x_d - x_d.mean()) / x_d.std()          # ||x||^2 / m = 1
+    y_d = 2.0 * x_d + rng.standard_normal(m) * 0.5
+    X_d = np.column_stack([x_d, x_d])             # 두 열이 완전히 같다
+    lam_d = 0.3
+
+    # 환원된 일변량 문제의 닫힌 꼴: s* = S(x'y/m, lam)
+    c_d = x_d @ y_d / m
+    s_star = soft_threshold(c_d, lam_d)
+    print(f"x'y/m = {c_d:.4f},   닫힌 꼴 s* = S(x'y/m, lam) = {s_star:.4f}")
+
+    def obj_d(b):
+        """이 쪽의 라쏘 목적함수."""
+        return np.sum((y_d - X_d @ b) ** 2) / (2 * m) + lam_d * np.abs(b).sum()
+
+    ref = None
+    for b0 in (np.zeros(2), np.array([1.0, 1.0]),
+               np.array([-1.0, 3.0]), np.array([0.6, 0.6])):
+        b = lasso_cd_warm(X_d, y_d, lam_d, beta_init=b0, max_iter=100000, tol=1e-12)
+        if ref is None:
+            ref = X_d @ b
+        same = bool(np.abs(X_d @ b - ref).max() < 1e-12)
+        print(f"초기값 ({b0[0]:5.1f},{b0[1]:5.1f}) -> 해 ({b[0]:.4f}, {b[1]:.4f})   "
+              f"합 {b.sum():.4f}   목적함수 {obj_d(b):.6f}   예측 같음 {same}")
+    ```
+
+    출력:
+
+    ```text
+    x'y/m = 1.9667,   닫힌 꼴 s* = S(x'y/m, lam) = 1.6667
+    초기값 (  0.0,  0.0) -> 해 (1.6667, 0.0000)   합 1.6667   목적함수 0.676845   예측 같음 True
+    초기값 (  1.0,  1.0) -> 해 (0.6667, 1.0000)   합 1.6667   목적함수 0.676845   예측 같음 True
+    초기값 ( -1.0,  3.0) -> 해 (0.0000, 1.6667)   합 1.6667   목적함수 0.676845   예측 같음 True
+    초기값 (  0.6,  0.6) -> 해 (1.0667, 0.6000)   합 1.6667   목적함수 0.676845   예측 같음 True
+    ```
+
+    **네 개별 해가 전부 다르다.** $(1.6667,\ 0)$, $(0.6667,\ 1.0)$, $(0,\ 1.6667)$,
+    $(1.0667,\ 0.6)$ — 연습문제 5가 예고한 선분
+    $\{(\beta_1,\beta_2) : \beta_1 + \beta_2 = s^\ast,\ \beta_1\beta_2 \ge 0\}$의 네 점이고,
+    양 끝점 $(s^\ast, 0)$과 $(0, s^\ast)$까지 실제로 나온다. 알고리즘은 틀린 것이 아니다. 선분
+    위의 어느 점이든 전역최소점이므로 **초기값이 답을 고른다.**
+
+    왜 그런지는 갱신식 한 줄로 보인다. $\lVert x\rVert_2^2/m = 1$이고 $c_d = x^\top y/m$일 때
+    두 갱신은
+
+    $$
+    \beta_1 \leftarrow S(c_d - \beta_2,\ \lambda),
+    \qquad
+    \beta_2 \leftarrow S(c_d - \beta_1,\ \lambda)
+    $$
+
+    이다. $\beta_1 = t \in [0, s^\ast]$, $\beta_2 = s^\ast - t$를 넣으면
+    $S(c_d - s^\ast + t,\ \lambda) = S(\lambda + t,\ \lambda) = t$로 **그 자리가 고정점**이다.
+    선분 전체가 좌표하강의 고정점이니 한 바퀴만 돌아도 멈춘다.
+
+    **유일한 양은 정확히 재현된다.** 합이 네 번 모두 $1.6667$로 닫힌 꼴
+    $s^\ast = S(1.9667,\ 0.3) = 1.6667$과 같고, 적합값 $X\hat\beta = x\,(\beta_1+\beta_2)$가 $10^{-12}$
+    안에서 일치하고, 목적함수도 $0.676845$로 같다. 목적함수가 $\beta$에 $s = \beta_1 + \beta_2$를
+    통해서만 의존하고(적합항), $\lVert\beta\rVert_1 = \lvert s\rvert$ 역시 부호가 같은 한 $s$로만
+    정해지기 때문이다.
+
+    그러므로 **개별 계수는 보고할 수 없고 합·적합값·목적함수만 보고할 수 있다.** 개별 계수는
+    초기값·좌표를 훑는 순서·수렴 허용오차에 따라 달라지는 양이고, 그런 수를 소수점까지 싣는
+    글은 다른 사람의 컴퓨터에서 재현되지 않는다. 설명변수가 거의 중복인 실제 자료에서
+    "라쏘가 고른 변수"를 단정해서는 안 되는 까닭도 같다 — 자료를 조금 흔들면 고르는 쪽이
+    바뀐다. 엘라스틱넷이 $L_2$ 항을 조금 섞어 목적함수를 강볼록으로 만드는 것이 바로 이
+    선분을 한 점 $(s^\ast/2,\ s^\ast/2)$으로 줄이기 위한 장치다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span> 보기 4(1)은 직교설계에서 라쏘가
+최소제곱 해의 연성 문턱임을 보였다. 그 축소가 **언제나 이득인가**를 묻는다. 직교설계
+$X^\top X/n = I$에서 좌표마다 $\hat\beta^{\text{OLS}} \sim N(\beta,\ \tau^2)$이고 독립이라 하자
+($\tau^2 = \sigma^2/n$). 한 좌표만 떼어 $\beta \ne 0$, $\hat\beta \sim N(\beta, \tau^2)$,
+$\delta_\lambda = S(\hat\beta, \lambda)$로 쓰고 $R(\lambda) = E\big[(\delta_\lambda - \beta)^2\big]$라 하자.
+
+**(1)** $\lambda$가 작을 때 $R(\lambda) = \tau^2 - 4\tau\varphi(\beta/\tau)\,\lambda + \lambda^2 + O(\lambda^3)$
+임을 보이고, 이로부터
+
+$$
+R'(0^+) = -4\tau\,\varphi(\beta/\tau) < 0,
+\qquad \varphi(z) = \frac{1}{\sqrt{2\pi}}e^{-z^2/2}
+$$
+
+를 유도하라. (힌트: $A = \{\lvert\hat\beta\rvert \le \lambda\}$에서 참 손실과
+$\hat\beta - \lambda\operatorname{sign}(\hat\beta)$의 손실이 얼마나 다른지, 그리고 $P(A)$가 얼마나
+작은지를 함께 보라. 또 $\hat\beta = \beta + \tau u$로 두고
+$E\big[u\operatorname{sign}(u + \beta/\tau)\big]$를 구하라.)
+
+**(2)** (1)이 말하는 것을 한 줄로 적어라. 또 $\varphi(\beta/\tau)$가 들어온 것이 왜 자연스러운지,
+신호 대 잡음 $\beta/\tau$가 클 때와 작을 때로 나누어 설명하라.
+
+**(3)** $\tau = 1$, $\beta = 1.5$에서 2차항까지의 근사로 최적 $\lambda$와 그때의 $R$를 구하고,
+최소제곱($\lambda = 0$)보다 몇 퍼센트 나은지 적어라.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** $A = \{\lvert\hat\beta\rvert \le \lambda\}$라 하고, 매끄러운 대역 추정량
+    $\tilde\delta_\lambda = \hat\beta - \lambda\operatorname{sign}(\hat\beta)$를 둔다. $A^c$에서는
+    $\delta_\lambda = \tilde\delta_\lambda$로 **똑같다.** $A$에서는 $\delta_\lambda = 0$이고
+    $\lvert\tilde\delta_\lambda\rvert \le 2\lambda$이므로 두 손실의 차이는
+
+    $$
+    \left\lvert (\delta_\lambda - \beta)^2 - (\tilde\delta_\lambda - \beta)^2 \right\rvert
+    = \left\lvert \tilde\delta_\lambda\left(\tilde\delta_\lambda - 2\beta\right) \right\rvert
+    \le 2\lambda\big(2\lambda + 2\lvert\beta\rvert\big) = O(\lambda)
+    $$
+
+    다. 한편 $\hat\beta$의 밀도가 유계이고 $\beta \ne 0$이므로 $\lambda$가 작을 때
+
+    $$
+    P(A) = \int_{-\lambda}^{\lambda} \frac{1}{\tau}\varphi\!\left(\frac{t - \beta}{\tau}\right)dt
+    = \frac{2\lambda}{\tau}\varphi\!\left(\frac{\beta}{\tau}\right) + O(\lambda^3)
+    = O(\lambda)
+    $$
+
+    이다. 둘을 곱하면 $A$가 기여하는 차이가 $O(\lambda) \cdot O(\lambda) = O(\lambda^2)$이므로
+    **1차항까지는 $\delta_\lambda$를 $\tilde\delta_\lambda$로 바꾸어도 된다.**
+
+    더 세게 말할 수도 있다. $A$에서 두 손실의 차이는
+    $2\beta\big(\hat\beta - \lambda\operatorname{sign}(\hat\beta)\big) + O(\lambda^2)$인데
+    $\hat\beta$와 $\lambda\operatorname{sign}(\hat\beta)$는 모두 $\hat\beta \mapsto -\hat\beta$에 대해
+    **홀함수**이고 $A = [-\lambda, \lambda]$는 대칭이다. 밀도를 $\beta$에서 1차까지 펴면
+    상수항이 주는 적분이 대칭성으로 지워지고 $O(\lambda^3)$만 남는다. 그래서 아래 전개의
+    $\lambda^2$ 계수까지가 **정확**하고, (3)에서 2차식을 최소화하는 것이 뜻을 갖는다.
+    실제로 $\tau = 1$, $\beta = 1.5$에서 나머지를 수치적으로 재면 $\lambda^3$에 비례해
+    $-0.2806\lambda^3$으로 줄어든다.
+
+    이제 매끄러운 쪽을 전개한다.
+
+    $$
+    E\big[(\tilde\delta_\lambda - \beta)^2\big]
+    = E\big[(\hat\beta - \beta)^2\big]
+      - 2\lambda\,E\big[(\hat\beta - \beta)\operatorname{sign}(\hat\beta)\big]
+      + \lambda^2 E\big[\operatorname{sign}(\hat\beta)^2\big]
+    $$
+
+    에서 첫 항은 $\tau^2$, 셋째 항은 $\lambda^2$다($P(\hat\beta = 0) = 0$). 가운데를 구한다.
+    $\hat\beta = \beta + \tau u$, $u \sim N(0,1)$, $a = \beta/\tau$라 두면
+
+    $$
+    E\big[(\hat\beta - \beta)\operatorname{sign}(\hat\beta)\big]
+    = \tau\,E\big[u\operatorname{sign}(u + a)\big]
+    $$
+
+    이고 $\operatorname{sign}(u + a) = 1 - 2\cdot\mathbf{1}\{u < -a\}$이므로
+
+    $$
+    E\big[u\operatorname{sign}(u + a)\big]
+    = E[u] - 2E\big[u\,\mathbf{1}\{u < -a\}\big]
+    = 0 - 2\big(-\varphi(-a)\big)
+    = 2\varphi(a)
+    $$
+
+    다(여기서 $E[u\mathbf{1}\{u < c\}] = \int_{-\infty}^{c} u\varphi(u)\,du = -\varphi(c)$를 썼고
+    $\varphi$가 짝함수임을 썼다). 따라서
+    $E\big[(\hat\beta - \beta)\operatorname{sign}(\hat\beta)\big] = 2\tau\varphi(\beta/\tau)$이고
+
+    $$
+    R(\lambda) = \tau^2 - 4\tau\varphi\!\left(\frac{\beta}{\tau}\right)\lambda + \lambda^2 + O(\lambda^3)
+    $$
+
+    에서
+
+    $$
+    R'(0^+) = -4\tau\,\varphi\!\left(\frac{\beta}{\tau}\right) < 0
+    $$
+
+    이다. $\varphi > 0$이므로 **도함수가 반드시 음수다.** $\square$
+
+    **(2)** $R(0) = \tau^2$가 최소제곱의 MSE인데 $R'(0^+) < 0$이므로, **아무리 좋은 자료에서도
+    최소제곱보다 MSE가 작은 $\lambda > 0$이 반드시 존재한다.** 편향을 조금 사서 분산을 더 많이
+    파는 거래가 $\lambda = 0$ 근방에서는 언제나 남는 장사라는 뜻이다. 6장 정리 1의 분해로 읽으면
+    $\lambda$의 1차에서 편향제곱은 $O(\lambda^2)$로 늦게 자라는데 분산은 $O(\lambda)$로 먼저
+    줄어드는 것이다.
+
+    $\varphi(\beta/\tau)$가 들어온 것도 자연스럽다. 축소가 이득이 되는 것은 $\hat\beta$의 부호가
+    $\beta$의 부호와 **같을** 때뿐인데(그때만 $\lambda$만큼 깎는 것이 참값 쪽으로 가는 걸음이다),
+    부호가 뒤집힐 위험의 크기를 재는 양이 바로 $0$에서의 밀도 $\varphi(\beta/\tau)/\tau$다.
+
+    - **$\beta/\tau$가 크면**(신호가 깨끗하면) $\varphi(\beta/\tau)$가 지수적으로 작아져 이득이
+      거의 없다. $\beta = 3\tau$면 $\varphi(3) = 0.0044$로 기울기가 $-0.018\tau$에 불과하다.
+      이미 잘 추정된 큰 계수를 깎아서 얻을 것은 없다.
+    - **$\beta/\tau$가 작으면** $\varphi(0) = 0.3989$가 되어 기울기가 $-1.596\tau$로 가장 급하다.
+      잡음에 묻힌 작은 계수일수록 0으로 당기는 이득이 크고, 이것이 희소한 참 계수에서 라쏘가
+      이기는 까닭이다. 실제로 $\beta = 0$이면 $A$에서 $\delta_\lambda = 0$이 **정답**이어서
+      이득이 더 커진다.
+
+    **(3)** $\tau = 1$, $\beta = 1.5$면 $\varphi(1.5) = 0.129518$이므로
+
+    $$
+    R'(0^+) = -4 \times 0.129518 = -0.518070,
+    \qquad
+    R(\lambda) \approx 1 - 0.518070\,\lambda + \lambda^2
+    $$
+
+    이다. 이 2차식의 최소는
+
+    $$
+    \lambda^\ast \approx \frac{0.518070}{2} = 0.2590,
+    \qquad
+    R(\lambda^\ast) \approx 1 - \frac{0.518070^2}{4} = 0.9329
+    $$
+
+    에서 일어난다. 최소제곱의 $R(0) = 1$에 비해 $6.7\%$ 작다.
+
+    2차 근사이므로 $\lambda^\ast$ 자체는 참 최적값과 조금 다르다($O(\lambda^3)$ 항을 버렸고,
+    그 자리는 이미 $P(A)$가 무시할 만큼 작지 않은 영역이다). 그러나 **이득이 있다는 결론은
+    1차항 하나로 이미 결정된다.** $\lambda$를 $0$에서 아주 조금 올리는 것만으로 MSE가 기울기
+    $-0.518$로 내려가기 시작하고, 그것을 뒤집을 수 있는 항은 없다. 보기 4의 교차검증이
+    $\hat\lambda = 0.2212 > 0$을 고른 것은 우연이 아니라 이 부등식이 보장한 바다. $\square$
 
 ---
 

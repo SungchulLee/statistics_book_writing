@@ -183,17 +183,19 @@ $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 1
         m.fit(Xtr, ytr)
         mse = ((yte - m.predict(Xte))**2).mean()
         nz = (np.abs(m.coef_) > 1e-8).sum()
-        print(name, mse, nz)
+        print(f"{name:6s} 검정MSE = {mse:.3f}   0이 아닌 계수 = {nz:2d}")
     ```
 
     출력:
 
+    ```text
+    OLS    검정MSE = 1.792   0이 아닌 계수 = 20
+    Ridge  검정MSE = 1.799   0이 아닌 계수 = 20
+    Lasso  검정MSE = 1.260   0이 아닌 계수 =  9
+    ENet   검정MSE = 1.260   0이 아닌 계수 =  9
     ```
-    OLS 1.7921322992720217 20
-    Ridge 1.7989353465017053 20
-    Lasso 1.259628016657471 9
-    ENet 1.259628016657471 9
-    ```
+
+    (라쏘와 엘라스틱넷의 수가 같은 것은 `ElasticNetCV`가 `l1_ratio = 1`, 곧 라쏘를 고른 결과다. 좌표하강의 해는 수렴 허용오차만큼 흔들리므로 소수 셋째 자리까지만 적었다.)
 
     **(a), (b)** 기대되는 양상은 다음과 같다.
 
@@ -222,6 +224,494 @@ $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 1
 **(c)** 라쏘가 고르는 예측변수는 무엇인가? 이동창을 옮겨도 안정적인가?
 
 </div>
+
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff hard" title="어려움"></span>
+**벌점은 척도에 불변이 아니다.** $n = 4$, $p = 2$의 중심화된 설계
+
+$$
+\mathbf{x}_1 = (1,\ 1,\ -1,\ -1)^\top, \qquad
+\mathbf{x}_2 = (1,\ -1,\ 1,\ -1)^\top, \qquad
+\mathbf{y} = (6,\ 2,\ -2,\ -6)^\top
+$$
+
+을 생각하자. 세 벡터의 성분합이 모두 0이므로 절편은 적합하지 않는다. 목적함수는 1 절의 것을 쓴다.
+
+**(a)** $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$임을 확인하고 OLS 해와 $\lambda = 1$에서의 능형·라쏘 해를 4 절의 공식으로 구하라.
+
+**(b)** $\mathbf{x}_1$의 단위만 바꿔 $\tilde{\mathbf{x}}_1 = 10\,\mathbf{x}_1$으로 두고($\mathbf{x}_2$와 $\mathbf{y}$는 그대로) 같은 $\lambda = 1$로 다시 풀어라. 원래 단위로 환산한 기여 $10\,\tilde\beta_1$을 (a)와 비교하고 두 좌표의 축소비를 각각 적어라.
+
+**(c)** 반대로 $\tilde{\mathbf{x}}_1 = 0.1\,\mathbf{x}_1$으로 두면 $\lambda = 1$의 라쏘에서 무슨 일이 일어나는가? 표준화하지 않은 설계행렬을 `sklearn`의 `Ridge`·`Lasso`에 그대로 넣으면 무엇을 잃는지 한 줄로 적어라.
+
+</div>
+
+??? success "풀이"
+    **일반 공식.** 열이 서로 직교하면($\mathbf{x}_j^\top\mathbf{x}_k = 0$, $j \neq k$) 1 절의 목적함수가 좌표별로 분리되어
+
+    $$
+    \frac{1}{2n}\bigl(\beta_j^2\,\mathbf{x}_j^\top\mathbf{x}_j - 2\beta_j\,\mathbf{x}_j^\top\mathbf{y}\bigr) + \lambda P(\beta_j) + \text{(상수)}
+    $$
+
+    가 된다. $c_j = \mathbf{x}_j^\top\mathbf{x}_j/n$, $z_j = \mathbf{x}_j^\top\mathbf{y}/n$라 두고 미분하면
+
+    $$
+    \hat\beta_j^{\text{ridge}} = \frac{z_j}{c_j + \lambda}, \qquad
+    \hat\beta_j^{\text{lasso}} = \frac{\operatorname{sign}(z_j)\max(\lvert z_j\rvert - \lambda,\ 0)}{c_j}
+    $$
+
+    이다. $c_j = 1$(표준화된 열)일 때만 4 절의 공식으로 돌아간다.
+
+    **(a)** $\mathbf{x}_1^\top\mathbf{x}_1 = \mathbf{x}_2^\top\mathbf{x}_2 = 4 = n$이고 $\mathbf{x}_1^\top\mathbf{x}_2 = 1 - 1 - 1 + 1 = 0$이므로 $\mathbf{X}^\top\mathbf{X} = 4\mathbf{I} = n\mathbf{I}$다. 또
+
+    $$
+    z_1 = \frac{16}{4} = 4, \qquad z_2 = \frac{8}{4} = 2
+    $$
+
+    이므로 $\hat{\boldsymbol\beta}^{\text{OLS}} = (4,\ 2)$, $\hat{\boldsymbol\beta}^{\text{ridge}} = (4/2,\ 2/2) = (2,\ 1)$, $\hat{\boldsymbol\beta}^{\text{lasso}} = (4-1,\ 2-1) = (3,\ 1)$이다.
+
+    **(b)** $\tilde{\mathbf{x}}_1 = 10\mathbf{x}_1$이면 $c_1 = 400/4 = 100$, $z_1 = 160/4 = 40$이다. 따라서
+
+    $$
+    \tilde\beta_1^{\text{ridge}} = \frac{40}{100 + 1} = 0.3960, \qquad
+    \tilde\beta_1^{\text{lasso}} = \frac{40 - 1}{100} = 0.3900
+    $$
+
+    이고 원래 단위로 환산하면 $10\tilde\beta_1 = 3.9604$(능형), $3.9000$(라쏘)이다. $\mathbf{x}_2$는 건드리지 않았으므로 $\tilde\beta_2$는 (a)와 똑같이 $1$이다.
+
+    축소비를 보면 차이가 선명하다. 능형의 축소비는 $c_j/(c_j+\lambda)$이므로
+
+    | 좌표 | $c_j$ | 능형 축소비 |
+    |:---|---:|---:|
+    | 단위를 바꾼 $\tilde{\mathbf{x}}_1$ | $100$ | $100/101 = 0.9901$ |
+    | 그대로인 $\mathbf{x}_2$ | $1$ | $1/2 = 0.5000$ |
+
+    **단위를 10배로 늘린 변수는 벌점을 거의 받지 않는다.** $\lambda$는 그대로인데 자료가 주는 신호 $c_j$가 100배로 커졌으므로 벌점의 상대적 무게가 사라진 것이다.
+
+    **(c)** $\tilde{\mathbf{x}}_1 = 0.1\mathbf{x}_1$이면 $c_1 = 0.04/4 = 0.01$, $z_1 = 1.6/4 = 0.4$다. 라쏘의 0 조건은 $\lvert z_1\rvert \le \lambda$인데 $0.4 \le 1$이므로
+
+    $$
+    \tilde\beta_1^{\text{lasso}} = 0.
+    $$
+
+    **단위를 미터에서 킬로미터로 바꾼 것만으로 변수가 모형에서 쫓겨났다.** 척도 $c$에 대해 환산된 기여를 일반식으로 적으면 능형은 $4c^2/(c^2+1)$, 라쏘는 $4c > 1$일 때 $(4c-1)/c$이고 그렇지 않으면 $0$이다.
+
+    | $c$ | 능형(환산) | 라쏘(환산) |
+    |---:|---:|---:|
+    | $0.1$ | $0.0396$ | $0$ |
+    | $1$ | $2.0000$ | $3.0000$ |
+    | $10$ | $3.9604$ | $3.9000$ |
+
+    $c \to \infty$에서 둘 다 OLS 값 $4$로 가고 $c \to 0$에서 둘 다 $0$으로 간다. 즉 **단위를 고르는 것이 $\lambda$를 고르는 것과 같은 일을 한다.**
+
+    `sklearn`의 `Ridge`와 `Lasso`는 설명변수를 표준화해 주지 않는다. 표준화 없이 넣으면 같은 $\lambda$가 변수마다 다른 세기의 벌점이 되어 **벌점의 의미와 변수 사이의 비교가 함께 무너진다.** 반드시 `StandardScaler`를 앞에 두되([분산과 표준편차](../../ch02/spread/variance_std.md) 정리 2), 뒤의 연습문제 9가 보이듯 그 표준화도 교차검증 폴드 **안에서** 해야 한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff hard" title="어려움"></span>
+**$\alpha$와 $\lambda$를 섞으면 수가 전부 틀어진다.** 이 쪽은 1 절의 목적함수 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda P(\boldsymbol\beta)$를 쓰고 `sklearn`의 `Lasso(alpha=·)`도 같은 꼴을 쓴다. 그런데 많은 교과서는 벌점 없는 꼴 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda_{\text{tb}}\lVert\boldsymbol\beta\rVert_1$을 쓴다.
+
+**(a)** 두 목적함수가 같은 해를 주는 $\lambda$와 $\lambda_{\text{tb}}$의 관계를 구하라.
+
+**(b)** 3 절의 그림은 $n = 80$이고 $x_4$가 $\lambda = 0.99$에서 사라진다. 이를 $\lambda_{\text{tb}}$로 환산하라.
+
+**(c)** $n = 100$, 표준화된 직교 설계에서 $\mathbf{z} = (0.6,\ 0.3,\ 0.1)$이라 하자. $\lambda = 0.25$의 라쏘 해를 구하고, 이를 $\lambda_{\text{tb}}$로 환산한 값을 **그대로** `Lasso(alpha=·)`에 넣으면 어떤 해가 나오는지 구하라.
+
+</div>
+
+??? success "풀이"
+    **(a)** 둘째 목적함수를 $2n$으로 나누어도 최소점은 바뀌지 않는다.
+
+    $$
+    \frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \frac{\lambda_{\text{tb}}}{2n}\lVert\boldsymbol\beta\rVert_1
+    $$
+
+    이 1 절의 꼴과 일치하므로
+
+    $$
+    \lambda = \frac{\lambda_{\text{tb}}}{2n}, \qquad \lambda_{\text{tb}} = 2n\lambda .
+    $$
+
+    **(b)** $\lambda_{\text{tb}} = 2 \times 80 \times 0.99 = 158.4$. 같은 적합을 가리키는 두 수가 $0.99$와 $158.4$다. **어느 쪽 규약인지 적어 두지 않은 $\lambda$ 값은 아무 뜻이 없다.**
+
+    **(c)** $\lambda = 0.25$의 연성 문턱은
+
+    $$
+    \hat{\boldsymbol\beta} = \bigl(0.6 - 0.25,\ 0.3 - 0.25,\ 0\bigr) = (0.35,\ 0.05,\ 0)
+    $$
+
+    이다($\lvert 0.1\rvert \le 0.25$이므로 셋째 좌표는 0). 환산하면 $\lambda_{\text{tb}} = 2 \times 100 \times 0.25 = 50$이다. 이 $50$을 `Lasso(alpha=50)`에 넣으면 그것은 $\lambda = 50$을 뜻하고, 라쏘가 모두 0이 되는 문턱은 $\lambda \ge \max_j\lvert z_j\rvert = 0.6$이므로
+
+    $$
+    \hat{\boldsymbol\beta} = (0,\ 0,\ 0).
+    $$
+
+    **200배 센 벌점을 걸어 모형을 통째로 비운 것이다.** 규약을 섞은 대가가 "조금 틀린 수"가 아니라 "빈 모형"이라는 점을 기억해 두라. 덧붙여 $\lambda_{\text{tb}}$를 고정한 채 $n$을 키우면 $\lambda = \lambda_{\text{tb}}/(2n) \to 0$이 되어 벌점이 사라진다. 표본이 커질 때 비교 가능한 양은 $\lambda_{\text{tb}}$가 아니라 $\lambda$ 쪽이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
+**능형이 OLS를 이기는 $\lambda$는 반드시 있다.** 표준화된 직교 설계 $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$에서 $\mathbf{y} = \mathbf{X}\boldsymbol\beta + \boldsymbol\varepsilon$, $\boldsymbol\varepsilon \sim N(\mathbf{0}, \sigma^2\mathbf{I})$라 하자. $z_j = \mathbf{x}_j^\top\mathbf{y}/n$이다.
+
+**(a)** $z_j \sim N(\beta_j, \sigma^2/n)$이고 서로 독립임을 보이고, 총 MSE $\;\text{MSE}(\lambda) = \sum_{j=1}^p \mathbb{E}(\hat\beta_j^{\text{ridge}} - \beta_j)^2$를 $B = \lVert\boldsymbol\beta\rVert_2^2$와 $C = p\sigma^2/n$으로 적어라.
+
+**(b)** $\text{MSE}'(0) < 0$임을 보이고 최소점 $\lambda^\ast$와 $\text{MSE}(\lambda^\ast)/\text{MSE}(0)$을 구하라.
+
+**(c)** 3 절 그림의 참 계수 $(2.5,\ 2.0,\ -1.6,\ 0.8,\ 0,\ 0,\ 0,\ 0)$, $n = 80$, $\sigma^2 = 1$에 넣어 $\lambda^\ast$와 MSE 감소율을 구하라. 같은 $p$, $n$에서 참 계수가 모두 $0.1$이면 어떻게 되는가? 6 절의 "상황 1"과 "상황 2"가 어느 쪽인지 말하라.
+
+</div>
+
+??? success "풀이"
+    **(a)** $z_j = \mathbf{x}_j^\top(\mathbf{X}\boldsymbol\beta + \boldsymbol\varepsilon)/n$이고 직교성에서 $\mathbf{x}_j^\top\mathbf{X}\boldsymbol\beta = n\beta_j$이므로 $z_j = \beta_j + \mathbf{x}_j^\top\boldsymbol\varepsilon/n$이다. 따라서 $\mathbb{E}z_j = \beta_j$이고
+
+    $$
+    \operatorname{Var}(z_j) = \frac{\sigma^2\,\mathbf{x}_j^\top\mathbf{x}_j}{n^2} = \frac{\sigma^2 n}{n^2} = \frac{\sigma^2}{n},
+    \qquad \operatorname{Cov}(z_j, z_k) = \frac{\sigma^2\,\mathbf{x}_j^\top\mathbf{x}_k}{n^2} = 0 .
+    $$
+
+    정규벡터의 성분이 무상관이면 독립이다. 이제 $\hat\beta_j^{\text{ridge}} = z_j/(1+\lambda)$이므로 편향과 분산이
+
+    $$
+    \mathbb{E}\hat\beta_j^{\text{ridge}} - \beta_j = -\frac{\lambda\beta_j}{1+\lambda}, \qquad
+    \operatorname{Var}(\hat\beta_j^{\text{ridge}}) = \frac{\sigma^2/n}{(1+\lambda)^2}
+    $$
+
+    이고, 편향-분산 분해([평균제곱오차](../../ch06/estimator_quality/mse.md) 정리 1)를 좌표마다 더하면
+
+    $$
+    \text{MSE}(\lambda) = \frac{\lambda^2 B + C}{(1+\lambda)^2}, \qquad B = \lVert\boldsymbol\beta\rVert_2^2, \quad C = \frac{p\sigma^2}{n}.
+    $$
+
+    $\lambda = 0$에서 $\text{MSE}(0) = C$로 OLS의 MSE가 된다.
+
+    **(b)** 미분하면
+
+    $$
+    \text{MSE}'(\lambda) = \frac{2\lambda B(1+\lambda)^2 - 2(1+\lambda)(\lambda^2 B + C)}{(1+\lambda)^4}
+    = \frac{2(\lambda B - C)}{(1+\lambda)^3}
+    $$
+
+    이다. 따라서 $\text{MSE}'(0) = -2C < 0$이고($\sigma^2 > 0$이면 $C > 0$), $\lambda < C/B$에서 감소, $\lambda > C/B$에서 증가하므로
+
+    $$
+    \lambda^\ast = \frac{C}{B} = \frac{p\sigma^2}{n\lVert\boldsymbol\beta\rVert_2^2}, \qquad
+    \text{MSE}(\lambda^\ast) = \frac{(C/B)^2B + C}{(1+C/B)^2} = \frac{BC}{B+C}
+    $$
+
+    이고
+
+    $$
+    \frac{\text{MSE}(\lambda^\ast)}{\text{MSE}(0)} = \frac{B}{B+C} < 1 .
+    $$
+
+    $\lambda = 0$에서 도함수가 **엄격히 음수**라는 것이 "편향을 사서 분산을 판다"는 거래가 언제나 처음 한 걸음은 이득이라는 뜻이다. 처음에는 편향이 $O(\lambda^2)$으로 늘지만 분산은 $O(\lambda)$로 줄기 때문이다. $\boldsymbol\beta = \mathbf{0}$이면 $B = 0$이라 $\lambda^\ast = \infty$이고 극한 MSE가 0이 된다.
+
+    **(c)** $B = 2.5^2 + 2^2 + 1.6^2 + 0.8^2 = 6.25 + 4 + 2.56 + 0.64 = 13.45$, $C = 8 \times 1/80 = 0.1$이므로
+
+    $$
+    \lambda^\ast = \frac{0.1}{13.45} = 0.007435, \qquad
+    \frac{\text{MSE}(\lambda^\ast)}{\text{MSE}(0)} = \frac{13.45}{13.55} = 0.9926 .
+    $$
+
+    **이득이 보장되기는 하지만 0.74 %뿐이다.** 신호가 세고 잡음이 작으니 팔 분산이 거의 없다. 반면 참 계수가 모두 $0.1$이면 $B = 8 \times 0.01 = 0.08$이고 $C = 0.1$은 그대로여서
+
+    $$
+    \lambda^\ast = \frac{0.1}{0.08} = 1.25, \qquad
+    \frac{\text{MSE}(\lambda^\ast)}{\text{MSE}(0)} = \frac{0.08}{0.18} = 0.4444
+    $$
+
+    로 MSE가 **55.6 %** 줄어든다. 앞은 큰 효과 넷과 잡음변수 넷이 섞인 희소한 설정으로 6 절의 **상황 2**(라쏘가 유리)이고, 뒤는 작은 효과가 고르게 퍼진 **상황 1**(능형이 유리)이다. 능형의 이득이 $C/B$, 곧 **잡음 대 신호의 비**로 결정된다는 것이 두 상황을 가르는 한 줄이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
+**두 공식이 어긋나는 자리.** 2 절의 표는 능형의 유효자유도를 $\sum_j d_j^2/(d_j^2 + \lambda)$로 적었다($d_j$는 $\mathbf{X}$의 특잇값).
+
+**(a)** 1 절의 목적함수에서 능형의 정규방정식과 모자행렬 $\mathbf{H}_\lambda$($\hat{\mathbf{y}} = \mathbf{H}_\lambda\mathbf{y}$)를 구하고 $\operatorname{tr}\mathbf{H}_\lambda$를 $d_j$와 $\lambda$로 적어라. 2 절 표의 $\lambda$는 1 절의 $\lambda$와 어떤 관계인가?
+
+**(b)** 표준화된 직교 설계 $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$에서 (a)의 결과가 $p/(1+\lambda)$로 정리됨을 보이고, 4 절의 축소 공식에서도 같은 값이 나오는지 확인하라.
+
+**(c)** $n = 80$, $p = 8$의 직교 설계에서 $\lambda = 10$일 때 유효자유도를 구하라. 2 절 표의 공식에 1 절의 $\lambda$를 그대로 넣으면 얼마가 나오는가? 3 절에서 라쏘는 $\lambda \ge 4.7$에서 모든 계수가 0이었다. 같은 $\lambda = 10$에서 라쏘의 유효자유도는 얼마인가?
+
+**(d)** 라쏘가 참 변수 넷만 남긴 적합과 유효자유도를 맞추려면 능형의 $\lambda$를 얼마로 해야 하는가?
+
+</div>
+
+??? success "풀이"
+    **(a)** 1 절의 목적함수 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \frac{\lambda}{2}\lVert\boldsymbol\beta\rVert_2^2$를 미분하면
+
+    $$
+    -\frac{1}{n}\mathbf{X}^\top(\mathbf{y}-\mathbf{X}\boldsymbol\beta) + \lambda\boldsymbol\beta = \mathbf{0}
+    \;\Longrightarrow\;
+    (\mathbf{X}^\top\mathbf{X} + n\lambda\mathbf{I})\hat{\boldsymbol\beta} = \mathbf{X}^\top\mathbf{y}
+    $$
+
+    이므로 $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^\top\mathbf{X} + n\lambda\mathbf{I})^{-1}\mathbf{X}^\top$이다. 특잇값분해 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$를 넣으면 $\mathbf{H}_\lambda = \mathbf{U}\operatorname{diag}\bigl(d_j^2/(d_j^2+n\lambda)\bigr)\mathbf{U}^\top$이고
+
+    $$
+    \operatorname{tr}\mathbf{H}_\lambda = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + n\lambda}.
+    $$
+
+    2 절 표의 공식과 비교하면 $\lambda_{\text{표}} = n\lambda$다. 표의 공식은 $\frac{1}{n}$ 없는 목적함수 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda_{\text{표}}\lVert\boldsymbol\beta\rVert_2^2$에 딸린 것이다(연습문제 5와 같은 종류의 어긋남이고, 여기서는 배수가 $2n$이 아니라 $n$이다 — 능형 벌점에 $\frac12$이 붙어 있기 때문이다).
+
+    **(b)** $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$이면 모든 특잇값이 $d_j^2 = n$이므로
+
+    $$
+    \operatorname{tr}\mathbf{H}_\lambda = \sum_{j=1}^p \frac{n}{n + n\lambda} = \frac{p}{1+\lambda}.
+    $$
+
+    4 절의 공식으로도 같다. $\hat\beta_j = z_j/(1+\lambda)$이므로 적합값이 각 좌표에서 $1/(1+\lambda)$배로 줄고, 유효자유도는 그 축소비의 합 $p/(1+\lambda)$다.
+
+    **(c)** $\lambda = 10$에서
+
+    $$
+    \operatorname{tr}\mathbf{H}_{10} = \frac{8}{11} = 0.7273 .
+    $$
+
+    여덟 개의 설명변수로 적합했는데 **유효 모수가 한 개도 못 된다.** 3 절에서 $\lambda = 10$의 가장 작은 능형 계수가 $0.0006$이었던 것과 같은 사실의 다른 표현이다. 반면 표의 공식에 1 절의 $\lambda$를 그대로 넣으면 $d_j^2 = n = 80$이므로
+
+    $$
+    \sum_j \frac{80}{80 + 10} = \frac{8 \times 80}{90} = 7.1111
+    $$
+
+    로 거의 OLS($\text{df} = 8$)처럼 보인다. **$0.73$과 $7.11$ 사이에 열 배의 간극이 있고, 정보기준으로 모형을 고르면 그 간극이 그대로 선택을 뒤집는다.**
+
+    라쏘는 $\lambda = 10 > 4.7$이므로 계수가 모두 0이고, 2 절 표에 따라 유효자유도가 0이 아닌 계수의 개수이므로
+
+    $$
+    \text{df}^{\text{lasso}} = 0 .
+    $$
+
+    **능형의 자유도는 0에 닿지 못하고 라쏘는 닿는다.** 2 절 표의 "정확한 0" 행이 자유도의 말로 다시 나타난 것이다.
+
+    **(d)** $p/(1+\lambda) = 4$에서 $8/(1+\lambda) = 4$, 곧 $\lambda = 1$이다. 같은 자유도를 쓰면서 한쪽은 변수 넷을 버리고 다른 쪽은 여덟을 모두 반만큼 쓴다. **유효자유도가 같아도 "어떻게 쓰는가"는 전혀 다르다.**
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+**닫힌 꼴로 라이브러리를 검산하라.** $\pm 1$로 된 직교 설계($n = 8$, $p = 4$, $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$)를 만들고 OLS 해가 정확히 $\mathbf{z} = (4,\ 2,\ 0.8,\ 0.1)$이 되도록 $\mathbf{y} = \mathbf{X}\mathbf{z}$로 두자.
+
+**(a)** $\lambda = 1$, $\alpha = 0.5$에서 4 절의 세 닫힌 꼴 값을 손으로 구하라.
+
+**(b)** `sklearn`의 `Ridge`는 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \texttt{alpha}\cdot\lVert\boldsymbol\beta\rVert_2^2$를, `Lasso`·`ElasticNet`은 1 절의 꼴을 최소화한다. 각각 `alpha`를 어떻게 주어야 $\lambda = 1$이 되는지 정하고, 코드로 (a)를 확인하라.
+
+**(c)** `Ridge(alpha=1)`을 그대로 부르면 어떤 $\lambda$의 해가 나오는가? 수로 확인하라.
+
+</div>
+
+??? success "풀이"
+    **(a)** $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$이므로 4 절의 공식이 그대로 쓰인다. $\lambda = 1$, $\alpha = 0.5$에서
+
+    | 방법 | 공식 | $\hat{\boldsymbol\beta}$ |
+    |:---|:---|:---|
+    | 능형 | $z_j/(1+\lambda)$ | $(2,\ 1,\ 0.4,\ 0.05)$ |
+    | 라쏘 | $\operatorname{sign}(z_j)(\lvert z_j\rvert - \lambda)_+$ | $(3,\ 1,\ 0,\ 0)$ |
+    | 엘라스틱넷 | $\operatorname{sign}(z_j)(\lvert z_j\rvert - \alpha\lambda)_+/(1+(1-\alpha)\lambda)$ | $(7/3,\ 1,\ 0.2,\ 0)$ |
+
+    엘라스틱넷의 첫 좌표는 $(4-0.5)/1.5 = 2.3333$이고, 셋째 좌표는 $(0.8-0.5)/1.5 = 0.2$로 **라쏘가 죽인 변수를 살려 놓는다.** 넷째는 $\lvert 0.1\rvert \le 0.5$라 0이다.
+
+    **(b)** `Ridge`의 목적함수를 $2n$으로 나누면 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \frac{\texttt{alpha}}{2n}\lVert\boldsymbol\beta\rVert_2^2$이고 1 절의 능형 벌점은 $\frac{\lambda}{2}\lVert\boldsymbol\beta\rVert_2^2$이므로 $\texttt{alpha} = n\lambda = 8$이다. `Lasso`·`ElasticNet`은 규약이 같으므로 $\texttt{alpha} = \lambda = 1$이고, `ElasticNet`의 `l1_ratio`가 1 절의 $\alpha$다.
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge, Lasso, ElasticNet
+
+    # === 직교 설계: X^T X = n I (n = 8, p = 4) ===
+    bits = np.array([[(i >> k) & 1 for k in range(3)] for i in range(8)])
+    s = 1.0 - 2.0 * bits                        # +-1 로 된 열 세 개
+    X = np.column_stack([s[:, 0], s[:, 1], s[:, 2], s.prod(1)])
+    n, p = X.shape
+    print("X^T X / n 이 단위행렬인가:", np.allclose(X.T @ X / n, np.eye(p)))
+
+    # === OLS 해가 정확히 z 가 되도록 y 를 만든다 ===
+    z = np.array([4.0, 2.0, 0.8, 0.1])
+    y = X @ z
+    lam, a = 1.0, 0.5
+
+    # === 이 쪽 4 절의 닫힌 꼴 ===
+    hand = {
+        "ridge": z / (1 + lam),
+        "lasso": np.sign(z) * np.maximum(np.abs(z) - lam, 0.0),
+        "enet ": np.sign(z) * np.maximum(np.abs(z) - a * lam, 0.0)
+                 / (1 + (1 - a) * lam),
+    }
+
+    # === sklearn: Ridge 는 alpha = n*lam, Lasso/ElasticNet 은 alpha = lam ===
+    fit = {
+        "ridge": Ridge(alpha=n * lam, fit_intercept=False),
+        "lasso": Lasso(alpha=lam, fit_intercept=False, max_iter=100000, tol=1e-12),
+        "enet ": ElasticNet(alpha=lam, l1_ratio=a, fit_intercept=False,
+                            max_iter=100000, tol=1e-12),
+    }
+    for nm in hand:
+        c = fit[nm].fit(X, y).coef_
+        print(nm, "손:", " ".join(f"{v:.4f}" for v in hand[nm]),
+              "| sklearn:", " ".join(f"{v:.4f}" for v in c))
+
+    # === 정규화를 틀리면: Ridge(alpha=1) 은 lam = 1/n 에 해당한다 ===
+    bad = Ridge(alpha=1.0, fit_intercept=False).fit(X, y).coef_
+    print("Ridge(alpha=1):", " ".join(f"{v:.4f}" for v in bad))
+    print("z/(1+1/8)     :", " ".join(f"{v:.4f}" for v in z / (1 + 1 / n)))
+    ```
+
+    출력:
+
+    ```text
+    X^T X / n 이 단위행렬인가: True
+    ridge 손: 2.0000 1.0000 0.4000 0.0500 | sklearn: 2.0000 1.0000 0.4000 0.0500
+    lasso 손: 3.0000 1.0000 0.0000 0.0000 | sklearn: 3.0000 1.0000 0.0000 0.0000
+    enet  손: 2.3333 1.0000 0.2000 0.0000 | sklearn: 2.3333 1.0000 0.2000 0.0000
+    Ridge(alpha=1): 3.5556 1.7778 0.7111 0.0889
+    z/(1+1/8)     : 3.5556 1.7778 0.7111 0.0889
+    ```
+
+    세 방법 모두 손으로 구한 값과 소수 넷째 자리까지 일치한다. 절편을 적합하지 않은 것(`fit_intercept=False`)은 열의 성분합이 0이고 $\mathbf{y}$도 그렇기 때문이며, 절편을 벌점에서 빼는 일반 규약과도 어긋나지 않는다.
+
+    **(c)** $\texttt{alpha} = n\lambda$에서 $\texttt{alpha} = 1$이면 $\lambda = 1/n = 0.125$다. 따라서 해는 $\mathbf{z}/1.125 = (3.5556,\ 1.7778,\ 0.7111,\ 0.0889)$이고 출력의 마지막 두 줄이 그것을 확인한다. **의도한 $\lambda = 1$보다 8배 약한 벌점을 건 셈이고, $n$이 커질수록 그 오차는 커진다.** 직교 설계처럼 손으로 검산할 수 있는 작은 자료를 하나 들고 있으면 이런 규약 사고를 적합 전에 잡을 수 있다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+**교차검증이 새 나가면 어떤 수가 나오는가.** 참 계수가 **전부 0**인 자료($n = 50$, $p = 200$, $\mathbf{y}$가 $\mathbf{X}$와 무관한 잡음)를 만들고, 반응변수와의 표본상관의 절댓값이 가장 큰 열 10개를 골라 OLS를 적합한 뒤 5-겹 교차검증 MSE를 재자.
+
+**(a)** 변수선택을 **전체 자료로 한 번** 하는 절차와 **폴드마다 훈련부분만으로** 하는 절차를 각각 구현하고, 두 CV MSE와 기준선($\bar y_{\text{훈련}}$으로만 예측) MSE를 비교하라.
+
+**(b)** 참 신호가 0인데도 누수 절차의 표본외 $R^2$가 양수로 나오는 이유를 설명하라. 정직한 절차의 $R^2$가 **음수**인 것은 무엇을 뜻하는가?
+
+**(c)** 이 실험이 라쏘·엘라스틱넷의 $\lambda$를 교차검증으로 고를 때 지켜야 할 규칙으로 무엇을 말해 주는가?
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import KFold
+
+    # === 신호가 전혀 없는 자료: 참 beta = 0 ===
+    rng = np.random.default_rng(1)
+    n, p, k = 50, 200, 10
+    X = rng.normal(size=(n, p))
+    y = rng.normal(size=n)
+
+
+    # === |상관| 이 큰 k 개 열의 번호 ===
+    def top_k(Xa, ya, k):
+        Xc, yc = Xa - Xa.mean(0), ya - ya.mean()
+        r = np.abs(Xc.T @ yc) / (np.linalg.norm(Xc, axis=0) * np.linalg.norm(yc))
+        return np.argsort(-r)[:k], r
+
+
+    sel_all, r_all = top_k(X, y, k)          # 전체 자료로 한 번 (누수)
+    print(f"전체 자료에서 고른 열의 |상관|: "
+          f"{r_all[sel_all].max():.4f} ~ {r_all[sel_all].min():.4f}")
+
+    kf = KFold(n_splits=5)
+    leak, hon, base = [], [], []
+    for tr, te in kf.split(X):
+        m = LinearRegression().fit(X[tr][:, sel_all], y[tr])
+        leak.append(((y[te] - m.predict(X[te][:, sel_all])) ** 2).mean())
+
+        s, _ = top_k(X[tr], y[tr], k)        # 폴드 안에서 다시 (정직)
+        m2 = LinearRegression().fit(X[tr][:, s], y[tr])
+        hon.append(((y[te] - m2.predict(X[te][:, s])) ** 2).mean())
+
+        base.append(((y[te] - y[tr].mean()) ** 2).mean())
+
+    L, H, B = np.mean(leak), np.mean(hon), np.mean(base)
+    print(f"누수 CV MSE    = {L:.4f}   (R^2 = {1 - L / B:.4f})")
+    print(f"정직한 CV MSE  = {H:.4f}   (R^2 = {1 - H / B:.4f})")
+    print(f"기준선 MSE     = {B:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    전체 자료에서 고른 열의 |상관|: 0.3759 ~ 0.2825
+    누수 CV MSE    = 0.7049   (R^2 = 0.3708)
+    정직한 CV MSE  = 1.8843   (R^2 = -0.6819)
+    기준선 MSE     = 1.1203
+    ```
+
+    **(a)** 참 계수가 전부 0이므로 어떤 정직한 절차도 기준선 $1.1203$을 이길 수 없다. 그런데 누수 절차는 $0.7049$를 보고한다. **기준선보다 37 %나 좋은 예측력을 없는 신호에서 만들어 낸 것이다.** 폴드 안에서 다시 고르면 $1.8843$으로 기준선보다 **나빠진다.**
+
+    **(b)** $p = 200$개의 무관한 열 가운데 표본상관의 절댓값이 가장 큰 것들을 고르면, $n = 50$에서 그 값이 $0.2825$에서 $0.3759$까지 간다(순수한 잡음인데도!). 이 선택을 **전체 자료**로 했으므로 고른 열들은 검증 폴드에 든 $y$ 값과도 우연히 맞아떨어진다. 검증 폴드는 이미 선택 단계에서 사용되었으므로 "표본외"가 아니다. 이것이 누수다.
+
+    정직한 절차의 $R^2 = -0.6819 < 0$은 **훈련부분에서 고른 열 10개로 적합한 모형이 단순히 평균으로 예측하는 것보다 못하다**는 뜻이다. 신호가 없으니 당연하고, 이 음수가 오히려 올바른 답이다. 교차검증의 임무는 좋은 수를 만드는 것이 아니라 **정직한 수를 만드는 것**이다.
+
+    **(c)** $\lambda$를 교차검증으로 고를 때 **훈련부분을 보고 하는 모든 결정**이 폴드 안에 들어가야 한다. 표준화(연습문제 4의 평균과 표준편차), 변수선택, 결측 대치, 그리고 $\lambda$ 자체의 선택까지다. `sklearn`에서는 `make_pipeline(StandardScaler(), LassoCV(...))`처럼 파이프라인을 만들어 `cross_val_score`에 넘기면 변환이 폴드마다 다시 적합된다. $\lambda$를 고르는 데 쓴 교차검증 오차를 **그 모형의 성능 추정값으로 다시 쓰는 것**도 같은 종류의 누수이므로, 성능이 필요하면 바깥 겹을 하나 더 두어야 한다([람다 선택을 위한 교차검증](../tuning/cross_validation.md)).
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+**사후평균은 희소하지 않다.** 2 절 표의 마지막 두 줄은 능형이 가우스 사전분포, 라쏘가 Laplace 사전분포의 MAP 임을 말한다([MAP 추정](../../ch06/bayesian/map_estimation.md) 정리 1). $\mathbf{y} \mid \boldsymbol\beta \sim N(\mathbf{X}\boldsymbol\beta,\ \sigma^2\mathbf{I})$라 하자.
+
+**(a)** 사전분포 $\beta_j \overset{\text{iid}}{\sim} N(0, \tau^2)$와 $\pi(\beta_j) \propto e^{-\lvert\beta_j\rvert/b}$에 대해 MAP 추정값이 1 절의 능형·라쏘 해와 같아지는 $\lambda$를 각각 $\sigma^2, n, \tau^2, b$로 적어라.
+
+**(b)** $n = 100$, $\sigma^2 = 1$, $b = 0.5$라 하자. 같은 $\lambda$를 주는 $\tau^2$를 구하고 두 사전분포의 **분산**을 비교하라.
+
+**(c)** $p = 1$, $\lVert\mathbf{x}\rVert^2 = n$인 경우를 보자. Laplace 사전분포의 사후밀도를 적고, $z = \mathbf{x}^\top\mathbf{y}/n \neq 0$이면 사후평균이 **결코 0이 아님**을 보여라. 2 절 표의 "정확한 0" 행을 베이즈 쪽에서 다시 읽으면 무엇이라고 해야 하는가?
+
+</div>
+
+??? success "풀이"
+    **(a)** 로그사후를 적는다. 가우스 사전분포에서 MAP은
+
+    $$
+    \min_{\boldsymbol\beta}\left\{\frac{1}{2\sigma^2}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \frac{1}{2\tau^2}\lVert\boldsymbol\beta\rVert_2^2\right\}
+    $$
+
+    의 해다. 목적함수에 $\sigma^2/n$을 곱해도 최소점은 그대로이므로
+
+    $$
+    \frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \frac{\sigma^2}{n\tau^2}\cdot\frac12\lVert\boldsymbol\beta\rVert_2^2
+    \;\Longrightarrow\;
+    \lambda_{\text{ridge}} = \frac{\sigma^2}{n\tau^2}.
+    $$
+
+    Laplace 사전분포에서는 벌점이 $\lVert\boldsymbol\beta\rVert_1/b$이므로 같은 식으로
+
+    $$
+    \lambda_{\text{lasso}} = \frac{\sigma^2}{nb}.
+    $$
+
+    둘 다 **잡음이 크면 벌점이 커지고 사전분포가 퍼지면($\tau^2$ 또는 $b$가 크면) 벌점이 작아지고 표본이 커지면 벌점이 작아진다.**
+
+    **(b)** $\lambda_{\text{lasso}} = 1/(100 \times 0.5) = 0.02$다. 같은 값을 능형에서 얻으려면
+
+    $$
+    \tau^2 = \frac{\sigma^2}{n\lambda} = \frac{1}{100 \times 0.02} = 0.5 .
+    $$
+
+    한편 Laplace$(0, b)$의 분산은 $2b^2 = 2 \times 0.25 = 0.5$다. **두 사전분포가 분산까지 같다.** 그런데도 하나는 정확한 0을 만들고 다른 하나는 못 만든다. 차이는 퍼짐이 아니라 **0에서의 모양**(Laplace는 0에서 꼭짓점을 가진다)이며, 이것이 연습문제 1에서 본 "0에서의 도함수" 이야기의 베이즈 판본이다.
+
+    **(c)** $p = 1$, $\lVert\mathbf{x}\rVert^2 = n$이면 $\lVert\mathbf{y}-\mathbf{x}\beta\rVert^2 = n(\beta - z)^2 + \text{(상수)}$이므로 사후밀도가
+
+    $$
+    \pi(\beta \mid \mathbf{y}) \propto \exp\left\{-\frac{n}{2\sigma^2}(\beta - z)^2 - \frac{\lvert\beta\rvert}{b}\right\}
+    $$
+
+    다. $z > 0$이라 하고 $t > 0$에 대해 $\beta = t$와 $\beta = -t$의 밀도를 비교하면, $\lvert t\rvert = \lvert -t\rvert$라 벌점항이 지워지고
+
+    $$
+    (t - z)^2 - (-t - z)^2 = -4tz
+    $$
+
+    이므로
+
+    $$
+    \frac{\pi(t \mid \mathbf{y})}{\pi(-t \mid \mathbf{y})} = \exp\left\{\frac{2ntz}{\sigma^2}\right\} > 1 .
+    $$
+
+    즉 모든 $t > 0$에서 사후밀도가 양수 쪽에 더 많은 질량을 둔다. 따라서
+
+    $$
+    \mathbb{E}[\beta \mid \mathbf{y}] = \int_0^\infty t\,\bigl\{\pi(t\mid\mathbf{y}) - \pi(-t\mid\mathbf{y})\bigr\}\,dt > 0
+    $$
+
+    이고 ($z < 0$이면 부호를 바꾸어 $< 0$), $z \neq 0$인 한 사후평균은 **결코 0이 아니다.** 사후분포는 연속이므로 $P(\beta = 0 \mid \mathbf{y}) = 0$이기도 하다.
+
+    그러므로 2 절 표의 "정확한 0" 행은 베이즈 쪽에서 이렇게 읽어야 한다. **라쏘의 희소성은 Laplace 사전분포의 성질이 아니라 사후분포를 최빈값으로 요약한 결과다.** 같은 사전분포로 사후평균을 쓰면(이른바 베이즈 라쏘) 계수는 매끄럽게 축소되기만 하고 변수선택은 일어나지 않는다. 희소성이 필요하면 점질량을 0에 둔 사전분포(스파이크-슬랩)가 필요하고, 그것이 라쏘의 MAP 해석이 끝나는 자리다.
 
 ---
 

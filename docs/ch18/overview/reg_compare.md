@@ -745,6 +745,456 @@ $\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^
 
 ---
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff hard" title="어려움"></span> 정규직교 계획 $X^\top X = I_p$에서 $y = X\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2 I_n)$이라 하자. 절 6의 축소 연산자에 따라 능형 추정량은 $\hat\beta^{\text{R}}(\lambda) = \hat\beta^{\text{OLS}}/(1+\lambda)$이다.
+
+**(1)** $\operatorname{MSE}(\lambda) = E\lVert \hat\beta^{\text{R}}(\lambda) - \beta\rVert_2^2$를 $\lambda$, $\lVert\beta\rVert_2^2$, $p\sigma^2$만으로 적으시오. 그리고 $\lambda = 0$에서 도함수가 음수임을 보여 **OLS보다 나은 $\lambda$가 반드시 있음**을 증명하시오.
+
+**(2)** MSE를 최소로 하는 $\lambda^*$와 그때의 MSE를 구하시오.
+
+**(3)** 능형이 OLS를 이기는 $\lambda$의 범위를 구하고, 보기 1의 설정($p = 20$, $\sigma^2 = 1$, $\beta = (3,-2,1.5,-1,0.5,0,\dots,0)$)에서 그 범위와 $\lambda^*$를 수로 구하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** $X^\top X = I_p$이면 $\hat\beta^{\text{OLS}} = X^\top y$이고 $\operatorname{Cov}(\hat\beta^{\text{OLS}}) = \sigma^2(X^\top X)^{-1} = \sigma^2 I_p$다. 좌표마다 독립이므로 MSE는 좌표별 편향제곱과 분산의 합으로 갈라진다. 좌표 $j$에서
+
+    $$
+    E\!\left[\frac{\hat\beta_j^{\text{OLS}}}{1+\lambda}\right] - \beta_j = -\frac{\lambda\beta_j}{1+\lambda},
+    \qquad
+    \operatorname{Var}\!\left(\frac{\hat\beta_j^{\text{OLS}}}{1+\lambda}\right) = \frac{\sigma^2}{(1+\lambda)^2}
+    $$
+
+    이므로 6장 정리 1(편향-분산 분해)을 좌표마다 적용해 더하면
+
+    $$
+    \operatorname{MSE}(\lambda)
+    = \sum_{j=1}^p \left[\frac{\lambda^2\beta_j^2}{(1+\lambda)^2} + \frac{\sigma^2}{(1+\lambda)^2}\right]
+    = \frac{\lambda^2\lVert\beta\rVert_2^2 + p\sigma^2}{(1+\lambda)^2}
+    $$
+
+    이다. 미분한다. 분자를 $N(\lambda) = \lambda^2 B + p\sigma^2$($B = \lVert\beta\rVert_2^2$)로 줄여 쓰면
+
+    $$
+    \operatorname{MSE}'(\lambda)
+    = \frac{2\lambda B(1+\lambda)^2 - 2(1+\lambda)(\lambda^2 B + p\sigma^2)}{(1+\lambda)^4}
+    = \frac{2\left(\lambda B - p\sigma^2\right)}{(1+\lambda)^3}
+    $$
+
+    이다. 괄호 안에서 $\lambda^2 B$가 서로 지워지는 것이 요점이다. 따라서
+
+    $$
+    \operatorname{MSE}'(0) = -2p\sigma^2 < 0
+    $$
+
+    이다. **$\lambda = 0$에서 MSE가 감소하므로 충분히 작은 $\lambda > 0$에서는 반드시 $\operatorname{MSE}(\lambda) < \operatorname{MSE}(0) = p\sigma^2$다.** 분산을 줄이는 이득이 처음에는 $\lambda$의 1차로 들어오고 편향이 늘어나는 손해는 $\lambda^2$으로 들어오기 때문이다. 벌점을 **조금** 걸면 거래는 언제나 남는 장사다.
+
+    **(2)** $\operatorname{MSE}'(\lambda) = 0$은 $\lambda B = p\sigma^2$이므로
+
+    $$
+    \lambda^* = \frac{p\sigma^2}{\lVert\beta\rVert_2^2}
+    $$
+
+    이고, 도함수의 부호가 $\lambda < \lambda^*$에서 음, $\lambda > \lambda^*$에서 양이므로 이것이 유일한 최솟점이다. $1 + \lambda^* = (B + p\sigma^2)/B$를 넣으면
+
+    $$
+    \operatorname{MSE}(\lambda^*)
+    = \frac{p^2\sigma^4/B + p\sigma^2}{\left(\frac{B+p\sigma^2}{B}\right)^2}
+    = \frac{p\sigma^2(p\sigma^2+B)}{B}\cdot\frac{B^2}{(B+p\sigma^2)^2}
+    = \frac{p\sigma^2\lVert\beta\rVert_2^2}{\lVert\beta\rVert_2^2 + p\sigma^2}
+    $$
+
+    이다. OLS의 MSE가 $p\sigma^2$이므로 비율은
+
+    $$
+    \frac{\operatorname{MSE}(\lambda^*)}{\operatorname{MSE}(0)} = \frac{\lVert\beta\rVert_2^2}{\lVert\beta\rVert_2^2 + p\sigma^2} < 1
+    $$
+
+    로 **항상** 1보다 작다. $\lambda^*$는 잡음 총량 $p\sigma^2$을 신호 총량 $\lVert\beta\rVert_2^2$로 나눈 값이다. 신호가 약하거나 차원이 높으면 더 센 벌점을 걸어야 한다.
+
+    **(3)** $\operatorname{MSE}(\lambda) < p\sigma^2$을 풀면
+
+    $$
+    \lambda^2 B + p\sigma^2 < p\sigma^2(1 + 2\lambda + \lambda^2)
+    \iff
+    \lambda^2 B < p\sigma^2(2\lambda + \lambda^2)
+    $$
+
+    이고, $\lambda > 0$으로 나누면 $\lambda B < p\sigma^2(2+\lambda)$, 곧
+
+    $$
+    \lambda\left(\lVert\beta\rVert_2^2 - p\sigma^2\right) < 2p\sigma^2
+    $$
+
+    이다. 경우가 갈린다. $\lVert\beta\rVert_2^2 \le p\sigma^2$이면 왼쪽이 0 이하이므로 **모든** $\lambda > 0$에서 능형이 이긴다. $\lVert\beta\rVert_2^2 > p\sigma^2$이면
+
+    $$
+    0 < \lambda < \frac{2p\sigma^2}{\lVert\beta\rVert_2^2 - p\sigma^2}
+    $$
+
+    이다. 벌점이 너무 세면 편향이 이겨 OLS보다 나빠진다.
+
+    보기 1의 수를 넣는다. $\lVert\beta\rVert_2^2 = 9 + 4 + 2.25 + 1 + 0.25 = 16.5$이고 $p\sigma^2 = 20$이다.
+
+    | 양 | 값 |
+    |---|---:|
+    | $\lVert\beta\rVert_2^2$ | $16.5$ |
+    | $p\sigma^2$ | $20$ |
+    | $\lambda^* = 20/16.5$ | $1.2121$ |
+    | $\operatorname{MSE}(0) = p\sigma^2$ | $20$ |
+    | $\operatorname{MSE}(\lambda^*) = 20\cdot 16.5/36.5$ | $9.0411$ |
+
+    최적 벌점에서 MSE가 $20 \to 9.0411$로 $54.8\%$ 줄어든다. 그리고 $\lVert\beta\rVert_2^2 = 16.5 < 20 = p\sigma^2$이므로 **이 설정에서는 어떤 $\lambda > 0$을 써도 능형이 OLS를 이긴다.** $\lambda \to \infty$의 극한 MSE는 $\lVert\beta\rVert_2^2 = 16.5$인데 이것조차 $20$보다 작다. 곧 **계수를 전부 0으로 보내 버리는 추정량도 OLS보다 낫다.** 신호의 크기가 차원당 잡음에 못 미치면 OLS는 잡음을 20차원에서 다 받아 적는 셈이고, 그 손해가 $\beta$를 통째로 버리는 손해보다 크다.
+
+    주의할 것은 이 유도가 $\beta$를 아는 척하고 얻은 것이라는 점이다. $\lambda^*$는 쓸 수 없는 값이고, 보기 2에서 교차검증이 하는 일은 자료만 가지고 이 $\lambda^*$를 더듬어 찾는 것이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span> 설명변수 두 개가 **완전히 같은** 자료 $x_1 = x_2 = x$를 생각하자. $\lVert x\rVert_2^2 = 1$이고 $z = x^\top y = 1$이다. 벌점은 교과서 꼴로 쓰고 $\lambda = 1$로 둔다. 곧 라쏘는 $\lVert y - X\beta\rVert_2^2 + \lVert\beta\rVert_1$, 엘라스틱넷은 $\lVert y - X\beta\rVert_2^2 + \alpha\lVert\beta\rVert_1 + \frac{1-\alpha}{2}\lVert\beta\rVert_2^2$를 최소화한다.
+
+**(1)** 라쏘의 해집합을 모두 구하시오. 해가 여럿일 때 그래도 **유일하게 정해지는 양**은 무엇인가.
+
+**(2)** $\alpha = 0.5$인 엘라스틱넷의 해를 구하고, 왜 유일하며 왜 두 계수가 **같은 값**이 되는지 설명하시오.
+
+**(3)** 좌표하강이 (1)의 해집합 가운데 한 점을 돌려줄 때, 그 점을 "라쏘가 고른 변수"로 보고해서는 안 되는 까닭을 말하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 두 열이 같으므로 $X\beta = (\beta_1+\beta_2)x$다. $s = \beta_1 + \beta_2$로 두면 적합 항은 $s$에만 의존한다. $\lVert x\rVert_2^2 = 1$, $z = x^\top y = 1$이므로
+
+    $$
+    \lVert y - X\beta\rVert_2^2 = \lVert y\rVert_2^2 - 2sz + s^2 = \lVert y\rVert_2^2 - 2s + s^2
+    $$
+
+    이다. 벌점은 $\lvert\beta_1\rvert + \lvert\beta_2\rvert$인데 삼각부등식으로 $\lvert\beta_1\rvert + \lvert\beta_2\rvert \ge \lvert s\rvert$이고, 등호는 $\beta_1\beta_2 \ge 0$(둘이 같은 부호이거나 하나가 0)일 때 성립한다. 그러므로 **$s$를 고정한 뒤 벌점을 최소로 하는 분배는 등호를 주는 모든 분배이고, 거기서 목적함수가 똑같다.** 남은 일은 한 변수 문제
+
+    $$
+    \min_s \;\; s^2 - 2s + \lvert s\rvert
+    $$
+
+    를 푸는 것이다. $s > 0$에서는 $s^2 - s$로 $s = 1/2$에서 $-1/4$, $s < 0$에서는 $s^2 - 3s$로 $s \to 0^-$에서 상한 $0$에 다가가며 음수가 되지 못한다. 따라서 $s^* = 1/2$이고, 이는 일반식 $s^* = S(z, \lambda/2) = S(1, 0.5) = 0.5$와 맞는다. 해집합은
+
+    $$
+    \left\{(t,\; 0.5 - t) \;:\; 0 \le t \le 0.5\right\}
+    $$
+
+    로 길이 $0.5\sqrt 2$인 **선분 전체**다. $(0.5, 0)$, $(0, 0.5)$, $(0.25, 0.25)$가 모두 해이고 목적함수값이 $\lVert y\rVert_2^2 - 0.25$로 똑같다.
+
+    해가 여럿이어도 유일하게 정해지는 양은 셋이다. **계수의 합** $\beta_1 + \beta_2 = 0.5$, **적합값** $X\hat\beta = 0.5\,x$, 그리고 **벌점값과 목적함수값**이다. 유일하지 않은 것은 개별 계수와 영이 아닌 계수의 개수($1$개일 수도 $2$개일 수도 있다)다.
+
+    **(2)** 적합 항은 (1)과 같이 $s$에만 의존하고 $L_1$ 항도 같은 부호 쪽에서는 $\alpha\lvert s\rvert$로 고정이다. 달라지는 것은 $L_2$ 항이다. $s$를 고정했을 때
+
+    $$
+    \beta_1^2 + \beta_2^2 = \frac{s^2}{2} + \frac{(\beta_1-\beta_2)^2}{2}
+    $$
+
+    이므로 $\beta_1 = \beta_2 = s/2$에서만 최소다. **$L_2$ 벌점이 분배를 한 점으로 묶는다** — 이것이 묶음 효과의 알맹이다. 그러므로 벌점은 $\alpha\lvert s\rvert + \frac{1-\alpha}{2}\cdot\frac{s^2}{2}$이고 $s$에 대한 문제는
+
+    $$
+    \min_s \;\; s^2 - 2zs + \alpha\lvert s\rvert + \frac{1-\alpha}{4}s^2
+    $$
+
+    가 된다. $s > 0$에서 미분하면 $2s - 2z + \alpha + \frac{1-\alpha}{2}s = 0$이므로
+
+    $$
+    s^* = \frac{2z - \alpha}{2 + \frac{1-\alpha}{2}}
+    = \frac{2 - 0.5}{2 + 0.25}
+    = \frac{1.5}{2.25}
+    = \frac{2}{3}
+    $$
+
+    이고 따라서 유일해는
+
+    $$
+    \hat\beta = \left(\tfrac13,\; \tfrac13\right)
+    $$
+
+    이다. 유일한 까닭은 목적함수가 **강볼록**이기 때문이다. 적합 항의 헤세행렬 $2X^\top X$는 $\beta_1 - \beta_2$ 방향으로 평평하지만($X^\top X$가 특이하다), $L_2$ 벌점이 헤세행렬에 $\frac{1-\alpha}{2}\cdot 2I = (1-\alpha)I$를 더해 그 방향을 메운다. 강볼록 함수에 볼록인 $L_1$을 더해도 강볼록이므로 최소점이 하나다(연습문제 10이 이 논증의 일반형이다).
+
+    라쏘 해 중 $L_2$ 노름이 가장 작은 점도 $(0.25, 0.25)$로 균등 분배인데, 엘라스틱넷의 합 $2/3$은 라쏘의 합 $0.5$보다 크다. $L_1$ 몫이 $\alpha = 0.5$로 줄어 **문턱이 $\lambda/2 = 0.5$에서 $\lambda\alpha/2 = 0.25$로 낮아졌기 때문**이고, 대신 $L_2$ 항이 $1/(1 + \frac{1-\alpha}{4}) $배로 다시 눌러 $0.75/1.125 = 2/3$이 된 것이다.
+
+    **(3)** (1)의 선분 위 모든 점이 목적함수를 똑같이 최소화하므로, 좌표하강이 돌려주는 한 점은 **초기값과 좌표를 훑는 순서가 정한 결과**일 뿐 자료가 정한 결과가 아니다. 실제로 $(0.5, 0)$에서 시작하면 그 점에, $(0, 0.5)$에서 시작하면 그 점에, $(0.25,0.25)$에서 시작하면 그 점에 머문다. "라쏘가 $x_1$을 골랐다"는 보고는 알고리즘의 구현 사항을 자료의 발견으로 바꿔치기한 것이다.
+
+    보고해도 되는 것은 모든 해가 공유하는 양, 곧 합·적합값·목적함수값이다. **그래서 완전히 상관된 설계에서는 개별 계수를 출력하지 않는다.** $\rho = 1$은 극단이지만 $\rho = 0.99$라면 골짜기가 거의 평평해 자료를 조금만 흔들어도 어느 변수가 살아남는지가 바뀐다. 보기 3의 거짓 양성 자리 6, 13, 16을 "이 표본에서 골랐다"로만 읽어야 한다는 경고가 바로 이 이야기이고, 표 8의 "해의 유일성" 행과 "상관된 집단" 행이 이 한 계산에서 나온다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span> 정규직교 계획의 한 좌표만 본다. $b = \hat\beta_j^{\text{OLS}}$라 하면 $b \mid \beta_j \sim N(\beta_j, \sigma^2)$이고, 사전분포는 라플라스 $\pi(\beta) = \frac{1}{2s}e^{-\lvert\beta\rvert/s}$라 하자.
+
+**(1)** 사후최빈값이 연성 문턱화 $S(b, \sigma^2/s)$임을 보이시오. 이것이 "라쏘는 라플라스 사전분포의 MAP"이라는 말의 내용이다.
+
+**(2)** 사후평균을 닫힌 꼴로 구하시오. $\sigma = 1$, $s = 1$(곧 $\lambda = 1$)에서 $b = 0.6$과 $b = 2.5$의 사후평균을 소수 넷째 자리까지 구하시오.
+
+**(3)** 사후평균이 정확히 0이 되는 $b$는 $b = 0$ 하나뿐임을 보이시오. 힌트로 사후분포가 자연모수 $b/\sigma^2$를 갖는 지수가족임을 쓰면 $\frac{d}{db}E[\beta \mid b] = \operatorname{Var}(\beta \mid b)/\sigma^2$이다. 이 사실이 라쏘의 희소성을 어떻게 다시 보게 하는가.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 사후밀도는 가능도와 사전분포의 곱이므로
+
+    $$
+    p(\beta \mid b) \propto \exp\!\left[-\frac{(b-\beta)^2}{2\sigma^2}\right]\exp\!\left[-\frac{\lvert\beta\rvert}{s}\right]
+    $$
+
+    이고, 음의 로그를 취해 $\sigma^2$을 곱하면 최빈값은
+
+    $$
+    \arg\min_\beta \;\; \frac{1}{2}(b - \beta)^2 + \frac{\sigma^2}{s}\lvert\beta\rvert
+    $$
+
+    의 해다. 이것이 바로 연습문제 5에서 푼 일변량 라쏘 문제이므로 해는 $S(b, \sigma^2/s)$이고 $\lambda = \sigma^2/s$다. **사전분포가 넓어질수록($s$가 클수록) 벌점이 약해진다.** 6장 MAP 정리 1과 같은 대응이며, 라쏘가 희소한 답을 주는 까닭은 라플라스 밀도가 0에서 뾰족해 그 자리에 최빈값이 걸릴 수 있기 때문이다.
+
+    **(2)** $\lambda = \sigma^2/s$로 쓰면 $\lvert\beta\rvert/s = \lambda\lvert\beta\rvert/\sigma^2$다. 지수를 반쪽씩 완전제곱으로 고친다. $\beta > 0$에서
+
+    $$
+    -\frac{(\beta-b)^2}{2\sigma^2} - \frac{\lambda\beta}{\sigma^2}
+    = -\frac{\left(\beta - m_+\right)^2}{2\sigma^2} + \frac{m_+^2 - b^2}{2\sigma^2},
+    \qquad m_+ = b - \lambda
+    $$
+
+    이고, $\beta < 0$에서는 같은 계산으로 중심이 $m_- = b + \lambda$가 된다. 그러므로 **사후분포는 절단정규 두 개의 혼합**이다. $N(m_+, \sigma^2)$을 $(0,\infty)$로 자른 것과 $N(m_-,\sigma^2)$을 $(-\infty,0)$으로 자른 것이며, 무게는 각 조각의 적분
+
+    $$
+    A_+ = e^{(m_+^2-b^2)/(2\sigma^2)}\,\Phi\!\left(\frac{m_+}{\sigma}\right),
+    \qquad
+    A_- = e^{(m_-^2-b^2)/(2\sigma^2)}\,\Phi\!\left(-\frac{m_-}{\sigma}\right)
+    $$
+
+    에 비례한다. 절단정규의 평균 공식을 쓰면
+
+    $$
+    E_+ = m_+ + \sigma\frac{\phi(m_+/\sigma)}{\Phi(m_+/\sigma)},
+    \qquad
+    E_- = m_- - \sigma\frac{\phi(m_-/\sigma)}{\Phi(-m_-/\sigma)}
+    $$
+
+    이고 따라서
+
+    $$
+    E[\beta \mid b] = \frac{A_+E_+ + A_-E_-}{A_+ + A_-}
+    $$
+
+    이다. $\sigma = 1$, $\lambda = 1$에서 두 값을 넣는다.
+
+    $b = 0.6$이면 $m_+ = -0.4$, $m_- = 1.6$이다. $\Phi(-0.4) = 0.344578$, $\phi(0.4) = 0.368270$, $\Phi(-1.6) = 0.054799$, $\phi(1.6) = 0.110921$이므로
+
+    $$
+    A_+ = e^{-0.1}(0.344578) = 0.311787,
+    \qquad
+    A_- = e^{1.1}(0.054799) = 0.164626
+    $$
+
+    이고 $E_+ = -0.4 + 0.368270/0.344578 = 0.668756$, $E_- = 1.6 - 0.110921/0.054799 = -0.424129$다. 무게를 섞으면
+
+    $$
+    E[\beta \mid b=0.6] = \frac{(0.311787)(0.668756) + (0.164626)(-0.424129)}{0.311787 + 0.164626} = 0.2911
+    $$
+
+    이다. 같은 자리에서 **MAP은 $S(0.6, 1) = 0$**이다.
+
+    $b = 2.5$이면 $m_+ = 1.5$, $m_- = 3.5$이고 $A_+ = 0.126294$, $A_- = 0.004672$, $E_+ = 1.638790$, $E_- = -0.251391$이므로
+
+    $$
+    E[\beta \mid b=2.5] = 1.5714,
+    \qquad \text{MAP} = S(2.5, 1) = 1.5
+    $$
+
+    다. 큰 신호에서는 음의 조각 무게가 $A_-/(A_++A_-) = 0.0357$로 작아져 사후평균이 $m_+ = 1.5$ 근처에 놓이지만, 그래도 연성 문턱값보다 $0.0714$ 크다. **사후평균은 라쏘보다 덜 깎는다.**
+
+    **(3)** 사후밀도를 $b$가 들어간 자리만 남기고 쓰면
+
+    $$
+    p(\beta \mid b) \propto \exp\!\left(\frac{b\beta}{\sigma^2}\right)h(\beta),
+    \qquad
+    h(\beta) = \exp\!\left(-\frac{\beta^2}{2\sigma^2}\right)\pi(\beta)
+    $$
+
+    로 자연모수 $\theta = b/\sigma^2$, 충분통계량 $\beta$인 지수가족이다. 지수가족의 로그분할함수 $\psi(\theta) = \log\int e^{\theta\beta}h(\beta)\,d\beta$는 $\psi'(\theta) = E[\beta\mid b]$, $\psi''(\theta) = \operatorname{Var}(\beta\mid b)$를 만족하므로 연쇄법칙으로
+
+    $$
+    \frac{d}{db}E[\beta \mid b] = \frac{1}{\sigma^2}\operatorname{Var}(\beta \mid b) > 0
+    $$
+
+    이다. 사후분포가 한 점에 몰린 분포가 아니므로 분산이 양이고, 따라서 $b \mapsto E[\beta\mid b]$는 **순증가 함수**다. 한편 $b = 0$이면 사후밀도가 $\beta \mapsto -\beta$ 아래 대칭이므로 사후평균은 0이다. 순증가 함수가 값 0을 두 번 가질 수 없으므로 $E[\beta\mid b] = 0$인 $b$는 $b = 0$뿐이다. $\square$
+
+    **다시 보게 하는 것.** 제곱손실에서 최적인 베이즈 추정량은 사후평균이고, 그것은 **라플라스 사전분포 아래에서도 희소하지 않다.** 라쏘의 0은 사후분포의 성질이 아니라 **최빈값이라는 특정 요약을 골랐기 때문에** 생긴다. $b = 0.6$에서 라쏘는 "이 변수는 없다"고 말하지만 같은 사전분포 아래 베이즈 평균은 $0.2911$이고, 이는 같은 $\lambda = 1$의 능형이 주는 $0.6/2 = 0.3$에 오히려 가깝다. 변수선택이 필요하면 라쏘를, 예측이 필요하면 축소를 택하라는 말이 베이즈 쪽에서도 같은 모양으로 나온다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span> 신호가 **전혀 없는** 자료를 만든다. $n = 60$, $p = 500$이고 $y$는 $X$와 독립인 표준정규다. 어떤 모형도 $\operatorname{Var}(y)$보다 작은 예측오차를 낼 수 없는 자료다.
+
+**(1)** $y$와의 상관이 큰 $10$개를 **전체 자료로 한 번에** 고른 뒤 그 $10$개로 $10$-겹 교차검증 오차를 재는 경우와, **폴드마다 훈련 부분에서만** 고르는 경우를 각각 계산하시오. 두 값을 $\operatorname{Var}(y)$와 견주어 어느 쪽이 거짓말인지 말하시오.
+
+**(2)** 같은 자료에 `LassoCV` 를 그대로 쓰면 몇 개를 고르는가. 이 결과가 (1)과 어떻게 이어지는지 설명하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 왜 누수가 생기는가.** 전체 자료로 변수를 고르는 순간 **검증 폴드의 $y$가 선택에 쓰인다.** $p = 500$개 가운데 $n = 60$짜리 표본에서 가장 상관이 큰 열을 뽑으면, 그 열은 60개 관측 **전부**에 대해 우연히 잘 맞는 열이다. 그 60개 중 6개를 뒤에 검증용으로 떼어 놓아도 이미 선택 단계에서 그 6개를 보고 고른 것이므로 검증이 독립이 아니다. 교차검증이 재는 것은 "새 자료에서의 오차"가 아니라 "이미 본 자료에서의 오차"가 된다.
+
+    ```python
+    import numpy as np
+    from sklearn.model_selection import KFold
+    from sklearn.linear_model import LassoCV
+
+    # 신호가 전혀 없는 자료다. y 가 X 와 독립이므로 어떤 모형도 Var(y) 보다
+    # 작은 예측오차를 낼 수 없다. 그런데도 전체 자료로 변수를 먼저 솎아 내면
+    # 교차검증 오차가 그 한계 아래로 내려간다 — 그것이 누수다.
+    rng = np.random.default_rng(0)
+    n, p, k = 60, 500, 10
+    X = rng.standard_normal((n, p))
+    y = rng.standard_normal(n)
+
+    def top_k(Xa, ya, k):
+        """ya 와의 표본상관이 절댓값으로 가장 큰 열 k 개의 번호를 돌려준다."""
+        Xc = Xa - Xa.mean(axis=0)
+        yc = ya - ya.mean()
+        num = Xc.T @ yc
+        den = np.sqrt((Xc**2).sum(axis=0) * (yc**2).sum())
+        return np.argsort(-np.abs(num / den))[:k]
+
+    def cv_mse(cols_fn):
+        """10-겹 교차검증 예측오차. cols_fn 이 폴드마다 쓸 열 번호를 준다."""
+        kf = KFold(n_splits=10, shuffle=True, random_state=0)
+        total = 0.0
+        for tr, te in kf.split(X):
+            cols = cols_fn(tr)
+            A = np.hstack([np.ones((len(tr), 1)), X[np.ix_(tr, cols)]])
+            b = np.linalg.lstsq(A, y[tr], rcond=None)[0]
+            B = np.hstack([np.ones((len(te), 1)), X[np.ix_(te, cols)]])
+            total += ((y[te] - B @ b) ** 2).sum()
+        return total / n
+
+    sel_all = top_k(X, y, k)                              # 폴드 밖에서 한 번에 고른다
+    leak = cv_mse(lambda tr: sel_all)                     # 누수가 있는 교차검증
+    honest = cv_mse(lambda tr: top_k(X[tr], y[tr], k))    # 폴드 안에서 고른다
+
+    v = y.var()
+    print(f"y 의 분산 (아무것도 안 한 기준)  = {v:.4f}")
+    print(f"(가) 전체 자료로 변수 선택  CV MSE = {leak:.4f}   CV R^2 = {1 - leak/v:+.4f}")
+    print(f"(나) 폴드 안에서 변수 선택  CV MSE = {honest:.4f}   CV R^2 = {1 - honest/v:+.4f}")
+
+    lcv = LassoCV(cv=10, max_iter=100000, tol=1e-6, random_state=0).fit(X, y)
+    nz = int(np.sum(np.abs(lcv.coef_) > 1e-8))
+    print(f"(다) LassoCV: alpha={lcv.alpha_:.4f}   0 이 아닌 계수 {nz} 개")
+    ```
+
+    출력:
+
+    ```text
+    y 의 분산 (아무것도 안 한 기준)  = 1.2775
+    (가) 전체 자료로 변수 선택  CV MSE = 0.7481   CV R^2 = +0.4144
+    (나) 폴드 안에서 변수 선택  CV MSE = 2.2627   CV R^2 = -0.7712
+    (다) LassoCV: alpha=0.4476   0 이 아닌 계수 0 개
+    ```
+
+    **거짓말하는 쪽은 (가)다.** 신호가 하나도 없는 자료인데 교차검증 $R^2$이 $+0.4144$로 나왔다. "설명변수가 $y$의 변동의 $41\%$를 설명한다"는 보고가 그대로 쓰여 나갈 수 있는 수이고, 전부 누수다. 선택 단계에서 $500$개를 훑어 60개 관측에 가장 잘 맞는 10개를 뽑았으니, 그 10개는 검증 폴드에서도 잘 맞을 수밖에 없다.
+
+    (나)는 $2.2627$로 $\operatorname{Var}(y) = 1.2775$보다 **크고** $R^2$이 $-0.7712$다. 음수가 바른 답이다. 폴드 안에서 고른 10개는 그 폴드의 훈련 부분에만 맞춘 열이라 검증 폴드에서는 아무 쓸모가 없고, 거기에 $54$개 관측으로 절편까지 11개 모수를 적합했으니 과적합 손해만 남는다. **아무것도 안 하고 $\bar y$로 예측하는 것보다 나쁘다**는 결론이 정직한 결론이며, 자료에 신호가 없다는 사실을 정확히 알려 준다.
+
+    두 수의 간격이 $0.7481$ 대 $2.2627$로 세 배다. 누수는 "조금 낙관적인 오차"가 아니라 **부호를 뒤집는 오차**다.
+
+    **(2)** `LassoCV` 는 $0$개를 골랐다. 교차검증이 고른 $\alpha = 0.4476$에서 모든 계수가 정확히 0이고, 곧 예측이 상수 $\bar y$다. 보기 4의 $\lambda_{\max} = \max_j \lvert x_j^\top y\rvert/n$보다 큰 벌점을 골랐다는 뜻이다.
+
+    이것이 (1)과 이어지는 자리가 핵심이다. **라쏘는 벌점의 세기를 교차검증으로 고르면서 변수선택까지 같은 폴드 안에서 한다.** `LassoCV` 는 폴드마다 그 폴드의 훈련 부분으로만 적합하므로 (나)의 바른 절차를 저절로 밟고, 그래서 "고를 것이 없다"는 바른 답을 낸다. 반면 (가)처럼 라쏘 **앞에** 상관 솎아내기를 끼워 넣으면, 라쏘가 아무리 보수적으로 벌점을 걸어도 이미 솎아낸 10개가 누수된 열이므로 손쓸 수 없다.
+
+    규칙은 하나다. **$y$를 쓰는 모든 단계가 폴드 안에 들어가야 한다.** 표준화($x$만 쓰므로 누수가 약하다)보다 변수선택($y$를 쓴다)이 훨씬 위험하고, 13장 교차검증에서 "전처리를 파이프라인에 넣으라"고 한 까닭이 이 세 배의 간격이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span> 교과서 꼴 엘라스틱넷 $\lVert y - X\beta\rVert_2^2 + \lambda_2\lVert\beta\rVert_2^2 + \lambda_1\lVert\beta\rVert_1$을 생각하고, 자료를 다음처럼 늘린다($\lambda_2 > 0$).
+
+$$
+X^* = \begin{pmatrix} X \\ \sqrt{\lambda_2}\,I_p \end{pmatrix} \in \mathbb{R}^{(n+p)\times p},
+\qquad
+y^* = \begin{pmatrix} y \\ 0_p \end{pmatrix}
+$$
+
+**(1)** 엘라스틱넷 문제가 $(X^*, y^*)$에 대한 **라쏘 문제와 같음**을 보이시오.
+
+**(2)** 이로부터 $\lambda_2 > 0$이면 $p > n$이어도 해가 유일함을 증명하시오(표 8의 "항상($\alpha<1$)" 행). 라쏘에서는 같은 논증이 어디서 막히는가.
+
+**(3)** 증강자료에서 $x_j^{*\top}y^*$를 계산하여 **$L_2$ 벌점이 "모든 계수가 0이 되는 문턱"을 바꾸지 않음**을 보이시오. 절 1의 척도로 그 문턱을 쓰고, 보기 4의 $\lambda_{\max} = 1.9458$과 보기 2가 고른 `l1_ratio` $= 0.95$에서 수로 구하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 증강된 잔차제곱합을 쪼개 쓴다. 위 $n$개 행과 아래 $p$개 행이 분리되므로
+
+    $$
+    \lVert y^* - X^*\beta\rVert_2^2
+    = \lVert y - X\beta\rVert_2^2 + \lVert 0_p - \sqrt{\lambda_2}\,\beta\rVert_2^2
+    = \lVert y - X\beta\rVert_2^2 + \lambda_2\lVert\beta\rVert_2^2
+    $$
+
+    이다. $L_1$ 항은 $\beta$만의 함수라 자료를 늘려도 그대로다. 따라서
+
+    $$
+    \lVert y^* - X^*\beta\rVert_2^2 + \lambda_1\lVert\beta\rVert_1
+    = \lVert y - X\beta\rVert_2^2 + \lambda_2\lVert\beta\rVert_2^2 + \lambda_1\lVert\beta\rVert_1
+    $$
+
+    로 두 목적함수가 **항마다** 같다. 같은 함수를 최소화하므로 해집합도 같다. $\square$
+
+    **읽을 것.** $L_2$ 벌점은 **"$x_j$ 하나만 값 $\sqrt{\lambda_2}$를 갖고 반응이 0인 가짜 관측" $p$개**와 정확히 같은 일을 한다. 모든 계수를 0 쪽으로 끌어당기는 증거를 $p$줄 보태는 셈이고, $\lambda_2$가 그 증거의 세기다. 그래서 $p > n$이어도 증강 설계는 행이 $n + p \ge p$개가 되어 계수를 다 식별할 수 있다.
+
+    **(2)** $X^{*\top}X^* = X^\top X + \lambda_2 I_p$다. 임의의 $v \ne 0$에 대해
+
+    $$
+    v^\top X^{*\top}X^* v = \lVert Xv\rVert_2^2 + \lambda_2\lVert v\rVert_2^2 \ge \lambda_2\lVert v\rVert_2^2 > 0
+    $$
+
+    이므로 $X^{*\top}X^*$는 **양정치**다. 그러면 $\beta \mapsto \lVert y^* - X^*\beta\rVert_2^2$의 헤세행렬이 $2(X^\top X + \lambda_2 I) \succeq 2\lambda_2 I \succ 0$으로 상수이고 양정치이므로 이 함수는 계수 $2\lambda_2$의 강볼록 함수다. 강볼록 함수에 볼록함수 $\lambda_1\lVert\beta\rVert_1$을 더하면 여전히 강볼록이고, **강볼록 함수의 최소점은 유일하다**(두 최소점 $\beta_a \ne \beta_b$가 있으면 중점에서 값이 엄격히 작아져 모순이다). 차원 $p$가 $n$보다 커도 이 논증에 $n$이 전혀 들어가지 않는다.
+
+    라쏘는 $\lambda_2 = 0$이므로 위 부등식의 받침대가 사라진다. $p > n$이면 $\operatorname{rank}(X) \le n < p$라 $Xv = 0$인 $v \ne 0$이 있고, 그 방향으로 적합 항이 **완전히 평평하다.** $L_1$ 항이 그 방향에서도 엄격히 볼록하면 유일성을 건질 수 있지만, $\lVert\beta\rVert_1$은 조각별 선형이라 엄격히 볼록한 적이 없다. 실제로 연습문제 7이 그 반례다. $v = (1,-1)$ 방향에서 $Xv = 0$이고 $\lVert\beta\rVert_1$조차 $\beta_1\beta_2 \ge 0$인 구간에서 평평해, 해가 선분 전체가 되었다.
+
+    **(3)** 증강 설계의 $j$번째 열은 $x_j^* = (x_j^\top, \sqrt{\lambda_2}\,e_j^\top)^\top$이고 증강된 반응은 아래쪽이 0이다. 그러므로
+
+    $$
+    x_j^{*\top}y^* = x_j^\top y + \sqrt{\lambda_2}\,e_j^\top 0_p = x_j^\top y
+    $$
+
+    로 **$\lambda_2$가 들어오지 않는다.** 보기 4에서 본 대로 $\hat\beta = 0$이 해가 될 조건은 모든 $j$에서 $\lvert x_j^{*\top}y^*\rvert$가 $L_1$ 벌점 세기 이하라는 것뿐이므로, 그 문턱은 $L_2$ 벌점과 **무관**하다. $L_2$는 영벡터를 벗어나는 문턱을 옮기지 않고, 벗어난 뒤의 **분배**만 바꾼다. 연습문제 7의 $(1/3, 1/3)$이 그 분배였다.
+
+    절 1의 척도로 다시 쓰면 선명해진다. 목적함수가 $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda[\alpha\lVert\beta\rVert_1 + \frac{1-\alpha}{2}\lVert\beta\rVert_2^2]$이므로 $\beta = 0$에서의 하위기울기 조건은 매끄러운 두 항의 기울기
+
+    $$
+    -\frac{1}{n}x_j^\top y + \lambda(1-\alpha)\cdot 0
+    $$
+
+    가 $\lambda\alpha[-1,1]$ 안에 들어가는 것, 곧 모든 $j$에서 $\lvert x_j^\top y\rvert/n \le \lambda\alpha$다. **$L_2$ 항의 기울기가 $\beta = 0$에서 0이라 조건에 아무 기여를 못 한다.** 따라서
+
+    $$
+    \lambda_{\max}^{\text{enet}}(\alpha) = \frac{1}{\alpha}\max_j\frac{\lvert x_j^\top y\rvert}{n} = \frac{\lambda_{\max}^{\text{lasso}}}{\alpha}
+    $$
+
+    이고 보기 4의 $\lambda_{\max}^{\text{lasso}} = 1.9458$, 보기 2의 `l1_ratio` $\alpha = 0.95$를 넣으면
+
+    $$
+    \lambda_{\max}^{\text{enet}} = \frac{1.9458}{0.95} = 2.0482
+    $$
+
+    다. $\alpha$로 나누는 것이 전부이고, $\alpha \to 0$(순수 능형)에서 이 값이 무한으로 발산하는 것이 "능형에는 그런 문턱이 없다"는 보기 4의 결론과 맞아떨어진다.
+
+    끝으로 보기 2가 고른 엘라스틱넷의 벌점은 $0.0253$이었다. 문턱 $2.0482$에 견주면 $0.0253/2.0482 = 0.0124$로 **$1.2\%$**에 지나지 않는다. 교차검증은 이 자료에서 벌점을 아주 약하게 걸기로 결정한 것이고, 그래서 계수 20개 중 8개가 살아남았다. 문턱을 알고 나면 교차검증이 고른 벌점이 경로의 어느 구석에 놓였는지 비율로 읽을 수 있다. $\square$
+
+---
+
 ## 정리하며
 
 세 정칙화를 **같은 자료에서** 견주었다.

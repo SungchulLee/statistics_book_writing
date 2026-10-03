@@ -603,6 +603,321 @@ $\min \|y - X\beta\|_2^2$ subject to $\|\beta\|_1 \le t$의 제약 경계 $t$ �
         단조성을 주장해서는 안 된다.
     $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff med" title="중간"></span> sklearn 의 `Lasso` 는
+
+$$
+\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \alpha\lVert\beta\rVert_1
+$$
+
+을 최소화하고, 교과서는 흔히 $\lVert y - X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_1$ 을 쓴다.
+
+**(1)** 두 벌점모수 사이에 $\lambda = 2n\alpha$ 가 성립함을 보이시오.
+
+**(2)** 보기 4 가 고른 $\hat\alpha = 100$ 과 보기 3 의 $\lambda_{\max} = 267{,}905.8$ 을 각각 교과서 척도로 옮기시오. 보기 3 의 공식 $\max_j \lvert x_j^\top y\rvert / n$ 이 어느 척도의 값인지 먼저 밝히시오.
+
+**(3)** 7 절의 경로 그림은 가로축이 $10$ 에서 $10^5$ 까지이고 $\hat\lambda = 1{,}264$ 에 점선이 서 있다. 이 그림의 가로축이 둘 중 어느 척도인지 판정하고, $\hat\lambda/\lambda_{\max}$ 는 척도를 바꾸어도 같음을 확인하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 목적함수에 양수 $2n$ 을 곱해도 최소점은 바뀌지 않는다.
+
+    $$
+    2n\left[\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \alpha\lVert\beta\rVert_1\right]
+    = \lVert y - X\beta\rVert_2^2 + 2n\alpha\lVert\beta\rVert_1
+    $$
+
+    이므로 두 문제는 $\lambda = 2n\alpha$ 일 때 **같은 해**를 준다. 거꾸로 $\alpha = \lambda/(2n)$ 이다. 표본크기가 들어간다는 점이 중요하다 — 같은 $\alpha$ 라도 $n$ 이 달라지면 교과서 척도의 벌점은 달라진다.
+
+    **(2)** 보기 3 의 조건은 "$\beta = 0$ 이 해다"를 sklearn 목적함수의 하위기울기로 적은 것이다. $\beta = 0$ 에서 제곱항의 기울기가 $-x_j^\top y/n$ 이고 벌점의 하위기울기가 $[-\alpha, \alpha]$ 이므로 조건은 $\lvert x_j^\top y\rvert/n \le \alpha$ 다. 따라서 $\max_j \lvert x_j^\top y\rvert/n$ 은 **$\alpha$ 척도의 값**이다.
+
+    $n = 22{,}687$ 이므로 $2n = 45{,}374$ 이고
+
+    $$
+    \hat\lambda = 45{,}374 \times 100 = 4{,}537{,}400,
+    \qquad
+    \lambda_{\max} = 45{,}374 \times 267{,}905.8 \approx 1.2156\times10^{10}
+    $$
+
+    이다. 교과서 척도로 적으면 수가 $10^{10}$ 까지 올라간다.
+
+    **(3)** $\alpha$ 척도의 $\alpha_{\max} = 2.679\times10^5$ 은 가로축의 오른쪽 끝 $10^5$ 과 같은 자릿수이고, 그림에서 실제로 오른쪽 끝에서 계수가 거의 다 죽는다. 반면 교과서 척도라면 모든 계수가 죽는 자리가 $1.2\times10^{10}$ 이라 $10^5$ 에서는 아무 일도 일어나지 않아야 한다. 그러므로 **가로축은 $\alpha$ 척도**이고 $\hat\lambda = 1{,}264$ 는 $\alpha$ 다(교과서 척도로는 $45{,}374 \times 1{,}264 = 57{,}352{,}736$).
+
+    비는 척도에 영향받지 않는다. 분자와 분모에 똑같이 $2n$ 이 붙으므로
+
+    $$
+    \frac{\hat\lambda}{\lambda_{\max}} = \frac{1{,}264}{267{,}905.8}
+    = \frac{57{,}352{,}736}{1.2156\times10^{10}} = 4.72\times10^{-3}
+    $$
+
+    이다. 보기 3 이 $\alpha = 100$ 에 대해 찍은 $3.73\times10^{-4}$ 도 같은 뜻의 수다.
+
+    **그러므로 벌점의 절댓값을 보고하는 것은 거의 쓸모가 없다.** $\alpha = 100$ 이 크냐 작으냐는 반응의 단위, 표본크기, 라이브러리의 규약에 모두 달려 있다. 척도에 불변인 양은 $\hat\lambda/\lambda_{\max}$ 이며, 논문이나 보고서에서 벌점을 적을 때 이 비를 함께 적어야 다른 사람이 재현할 수 있다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span> 이 쪽은 모든 열을 표준편차로 나누었으므로 $x_j^\top x_j = n$ 이고 $R = X^\top X/n$ 은 설명변수의 **상관행렬**이다. 먼저 설계가 직교, 곧 $R = I$ 라고 가정한다.
+
+**(1)** sklearn 의 목적함수가 좌표별로 분리됨을 보이고, 해가
+
+$$
+\hat\beta_j = \operatorname{sign}(\hat\beta_j^{\text{OLS}})\left(\lvert\hat\beta_j^{\text{OLS}}\rvert - \alpha\right)_+
+$$
+
+임을 유도하시오. 이때 $\alpha$ 의 단위가 무엇인지 적으시오.
+
+**(2)** 보기 4 에서 $\alpha = 100$ 일 때 $0$ 이 된 변수는 `NbrLivingUnits` 이고 그 OLS 계수는 $914.4$ 달러다. (1)의 공식은 이 변수에 어떤 값을 주는가. 보기 4 의 출력과 어긋나는 자리를 지적하시오.
+
+**(3)** 어긋남의 원인을 KKT 조건으로 설명하시오. $X^\top(y - X\beta)/n = R(\hat\beta^{\text{OLS}} - \beta)$ 를 쓰면 $\hat\beta_j = 0$ 일 조건이 어떻게 적히는지 보이고, 교차항 $\sum_{k \ne j}\rho_{jk}(\hat\beta_k^{\text{OLS}} - \hat\beta_k^{\text{lasso}})$ 가 얼마쯤이어야 하는지 수로 적으시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** $X^\top X = nI$ 이므로 $\hat\beta^{\text{OLS}} = (X^\top X)^{-1}X^\top y = X^\top y/n$ 이다. 목적함수를 펼치면
+
+    $$
+    \frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \alpha\lVert\beta\rVert_1
+    = \frac{y^\top y}{2n} + \sum_{j=1}^p\left[\frac{1}{2}\beta_j^2 - \beta_j\hat\beta_j^{\text{OLS}} + \alpha\lvert\beta_j\rvert\right]
+    $$
+
+    로 **좌표별로 분리된다**($\beta^\top X^\top X\beta/(2n) = \lVert\beta\rVert_2^2/2$ 와 $\beta^\top X^\top y/n = \beta^\top\hat\beta^{\text{OLS}}$ 를 썼다). 한 좌표의 함수 $g(b) = b^2/2 - b\hat\beta_j + \alpha\lvert b\rvert$ 를 보면, $b > 0$ 에서 $g'(b) = b - \hat\beta_j + \alpha = 0$ 이므로 $b = \hat\beta_j - \alpha$ 이고 이것이 양수일 조건이 $\hat\beta_j > \alpha$ 다. $b < 0$ 에서는 대칭으로 $b = \hat\beta_j + \alpha$ 이고 $\hat\beta_j < -\alpha$ 일 때 뜻이 있다. 두 경우가 모두 아니면, 곧 $\lvert\hat\beta_j\rvert \le \alpha$ 면 $0$ 이 최소점이다($g$ 의 $0$ 에서의 하위기울기 $[-\hat\beta_j - \alpha,\, -\hat\beta_j + \alpha]$ 가 $0$ 을 품는다). 이것이 연성문턱이다.
+
+    $\alpha$ 의 단위는 **계수와 같은 단위**, 곧 달러다. 직교설계에서 라쏘는 모든 계수를 정확히 $\alpha$ 달러씩 원점 쪽으로 끌어당기고 끌다 남은 것이 없으면 $0$ 에 붙인다. 능형의 $\hat\beta^{\text{OLS}}/(1+\lambda/n)$ 이 **비례 축소**인 것과 달리 **정액 축소**다. $0$ 을 만드는 능력이 여기서 나온다.
+
+    **(2)** $\lvert\hat\beta_j^{\text{OLS}}\rvert = 914.4 > 100 = \alpha$ 이므로 (1)의 공식은
+
+    $$
+    \hat\beta_j = 914.4 - 100 = 814.4
+    $$
+
+    을 준다. 곧 **이 변수는 죽지 않아야 한다.** 그런데 보기 4 는 $0$ 이 아닌 계수가 $11$ 개라고 찍었고 죽은 것이 바로 이 변수다. 직교설계의 공식과 실제 출력이 어긋난다.
+
+    **(3)** sklearn 목적함수의 KKT 조건은 $-X_j^\top(y - X\beta)/n + \alpha s_j = 0$, $s_j \in \partial\lvert\beta_j\rvert$ 다. $X^\top(y - X\hat\beta^{\text{OLS}}) = 0$ 이므로
+
+    $$
+    \frac{X^\top(y - X\beta)}{n} = \frac{X^\top X}{n}(\hat\beta^{\text{OLS}} - \beta) = R(\hat\beta^{\text{OLS}} - \beta)
+    $$
+
+    이고, $\hat\beta_j^{\text{lasso}} = 0$ 일 조건은 $s_j \in [-1, 1]$ 이므로
+
+    $$
+    \left\lvert\hat\beta_j^{\text{OLS}} + \sum_{k \ne j}\rho_{jk}\left(\hat\beta_k^{\text{OLS}} - \hat\beta_k^{\text{lasso}}\right)\right\rvert \le \alpha
+    $$
+
+    가 된다($\rho_{jj} = 1$ 을 따로 떼어 적었다). $R = I$ 면 교차항이 사라져 $\lvert\hat\beta_j^{\text{OLS}}\rvert \le \alpha$ 라는 (1)의 조건으로 돌아간다. **어긋남의 원인은 $R \ne I$, 곧 설명변수들의 상관이다.**
+
+    수로 보자(아래 수는 좌표하강을 `tol=1e-10` 으로 수렴시킨 값이다. 보기 4 의 기본 `tol` 에서는 교차항이 $-1{,}001.5$ 로 $4$ 달러쯤 다른데, 벌점 근처에서 멈춘 좌표의 마지막 몇 달러는 허용오차에 달려 있으므로 넷째 자리까지 믿어서는 안 된다. 어느 쪽이든 아래 부등식의 결론은 같다). $\hat\beta_j^{\text{OLS}} = 914.4$ 이고 $\alpha = 100$ 이므로 교차항은
+
+    $$
+    -1{,}014.4 \;\le\; \sum_{k \ne j}\rho_{jk}\left(\hat\beta_k^{\text{OLS}} - \hat\beta_k^{\text{lasso}}\right) \;\le\; -814.4
+    $$
+
+    를 만족해야 한다. 실제로 계산하면 교차항이 $-997.4$ 이고 괄호 안이 $-83.1$ 로 $\lvert-83.1\rvert \le 100$ 이 성립한다. 교차항의 대부분은 한 변수에서 온다. `PropertyType_Single Family` 와의 상관이 $\rho = -0.2745$ 이고 그 계수가 $8{,}434.1$ 에서 $5{,}048.5$ 로 $3{,}385.6$ 달러 축소되었으므로 기여가 $-0.2745 \times 3{,}385.6 = -929.5$ 다.
+
+    **라쏘가 상관된 가변수를 축소하면서 `NbrLivingUnits` 가 설명하던 몫을 가져가 버렸고, 그 결과 이 좌표의 부분잔차 상관이 문턱 $100$ 아래로 떨어졌다.** 직교설계의 연성문턱 공식은 "계수가 작은 변수가 먼저 죽는다"는 그림을 주지만, 실제 자료에서 죽는 변수는 **계수가 작은 변수가 아니라 다른 변수로 대체되는 변수**다. 공식을 믿고 $\lvert\hat\beta^{\text{OLS}}\rvert$ 의 차례로 변수가 빠질 것이라 예측하면 틀린다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span> 보기 5 는 $\alpha = 242$ 에서 유효자유도 $\operatorname{df} = 11.4669$ 를 얻었다. 표준화한 $X$ 에서 $\sum_j d_j^2 = \operatorname{tr}(X^\top X) = np$ 임을 쓴다.
+
+**(1)** 특잇값이 모두 같아 $d_j^2 = n$ 이라면 $\operatorname{df}(242)$ 가 얼마인가. 실제 값과의 차이를 적으시오.
+
+**(2)** 결손 $p - \operatorname{df}(\alpha) = \sum_j \alpha/(d_j^2+\alpha)$ 를 쓰고, **$12$ 개 항 가운데 가장 큰 항은 평균보다 작지 않다**는 사실만으로 $d_{\min}^2$ 의 상한을 구하시오. 그 상한은 $n$ 의 몇 %인가.
+
+**(3)** (2)의 결론이 보기 5 의 풀이 (1)에 적힌 어림("공선성이 심할 가능성은 낮다")과 어떻게 어긋나는지, 그리고 능형이 실제로 깎는 것이 무엇인지 적으시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** $d_j^2 = n = 22{,}687$ 를 열두 개 모두에 넣으면
+
+    $$
+    \operatorname{df}(242) = \sum_{j=1}^{12}\frac{n}{n+242} = \frac{12 \times 22{,}687}{22{,}929} = \frac{272{,}244}{22{,}929} = 11.8733
+    $$
+
+    이다. 결손이 $12 - 11.8733 = 0.1267$ 인데 실제 결손은 $12 - 11.4669 = 0.5331$ 로 **$4.2$ 배 크다.** 같은 $\alpha$ 로 자유도가 어림보다 네 배나 깎였으니 특잇값이 모두 같을 수는 없다.
+
+    **(2)** 결손을 그대로 적으면
+
+    $$
+    \sum_{j=1}^{12}\frac{242}{d_j^2+242} = 0.5331
+    \quad\Longrightarrow\quad
+    \sum_{j=1}^{12}\frac{1}{d_j^2+242} = \frac{0.5331}{242} = 2.2029\times10^{-3}
+    $$
+
+    이다. 가장 큰 항은 $d_j^2$ 이 가장 작은 항이고, 가장 큰 항은 평균 이상이므로
+
+    $$
+    \frac{1}{d_{\min}^2+242} \ge \frac{2.2029\times10^{-3}}{12} = 1.8358\times10^{-4}
+    $$
+
+    이다. 뒤집으면 $d_{\min}^2 + 242 \le 5{,}447.3$, 곧
+
+    $$
+    d_{\min}^2 \le 5{,}205.3 = 0.2294\,n
+    $$
+
+    이다. **가장 작은 특잇값의 제곱이 $n$ 의 $22.9\%$ 를 넘지 못한다.** 평균이 $\sum_j d_j^2/p = n$ 이므로 적어도 한 방향은 평균의 $4$ 분의 $1$ 도 안 되는 분산을 가진다. (실제로 특잇값분해를 돌리면 $d_{\min}^2 = 559.4$, 곧 $n$ 의 $2.5\%$ 에 지나지 않는다. 상한은 느슨하지만 공선성의 존재를 **보기 5 의 출력 세 줄만으로** 증명한다.)
+
+    **(3)** 보기 5 의 풀이 (1)은 "$p$ 가 열둘뿐이고 $n$ 이 $2$ 만을 넘으므로 아주 작은 $d_j$ 가 있을 가능성은 낮다"고 어림했는데, (2)는 그 어림이 틀렸음을 같은 쪽의 수로 보인다. **표본이 크다는 것과 설계가 직교에 가깝다는 것은 아무 관계가 없다.** $d_{\min}^2/n$ 은 상관행렬 $R = X^\top X/n$ 의 가장 작은 고유값이므로 $n$ 을 키워도 $0$ 으로 가지 않는다. 열이 서로 상관되어 있으면($13$ 장의 다중공선성) 자료를 아무리 모아도 그 방향의 정보는 생기지 않는다. 실제로 이 자료에는 면적·욕실 수·건물등급처럼 서로 얽힌 변수가 여럿 있다.
+
+    능형이 깎는 것이 변수 하나가 아니라 **방향**이라는 점이 이 계산의 뜻이다. $\operatorname{df}(\alpha) = \sum_j d_j^2/(d_j^2+\alpha)$ 에서 $d_j^2 \gg \alpha$ 인 방향은 거의 그대로 남고 $d_j^2 \lesssim \alpha$ 인 방향이 집중적으로 축소된다. $\alpha = 242$ 와 $d_{\min}^2 = 559.4$ 를 비교하면 그 방향 하나가 $242/801.4 = 0.302$, 곧 결손 $0.5331$ 의 절반을 홀로 짊어진다. **능형이 가장 먼저 지우는 방향이 공선성 방향이고, 그래서 능형이 분산을 줄이는 방식이 공선성 처방이 된다.** $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span> 연습문제 3 은 공정한 비교의 둘째 조건으로 "각 겹 안에서 훈련 겹의 통계량만으로 표준화한다"를 들었다. **변수선택도 폴드 안에서** 해야 한다. 그 누수의 크기를 수로 보이시오.
+
+$X$ 와 $y$ 가 서로 독립인 **순수 잡음** 자료($n = 80$, $p = 2{,}000$, 참 $R^2 = 0$)에서 $\lvert$상관$\rvert$ 이 가장 큰 열 $10$ 개를 고르고 그 열로 최소제곱을 적합하는 절차를 둘로 나눈다. (가) 전체 자료로 한 번 고른 뒤 $5$-겹 교차검증, (나) 폴드마다 훈련 겹만 보고 다시 고르며 $5$-겹 교차검증. 두 CV RMSE 와 CV $R^2$ 를 구하고, 왜 (가)의 $R^2$ 가 양수가 되는지, 왜 (나)의 $R^2$ 가 음수가 되는지 설명하시오. 연습문제 4 의 실험에는 이 누수가 있는가.
+
+</div>
+
+??? success "풀이"
+
+    ```python
+    import numpy as np
+
+    # 반응이 설명변수와 아무 관계도 없는 자료. 참 R^2 은 0 이다.
+    rng = np.random.default_rng(0)
+    n, p, k, K = 80, 2000, 10, 5
+    X = rng.standard_normal((n, p))
+    y = rng.standard_normal(n)
+    folds = np.array_split(rng.permutation(n), K)
+    all_rows = np.arange(n)
+
+    def screen(rows, k):
+        """주어진 행에서 |상관| 이 가장 큰 열 k 개를 고른다."""
+        Xc = X[rows] - X[rows].mean(axis=0)
+        yc = y[rows] - y[rows].mean()
+        c = (Xc.T @ yc) / np.linalg.norm(Xc, axis=0)
+        return np.argsort(-np.abs(c))[:k]
+
+    def cv_rmse(select_inside):
+        cols_leak = screen(all_rows, k)          # 검증 폴드까지 보고 고른 열
+        sse = 0.0
+        for te in folds:
+            tr = np.setdiff1d(all_rows, te)
+            cols = screen(tr, k) if select_inside else cols_leak
+            A = np.column_stack([np.ones(len(tr)), X[np.ix_(tr, cols)]])
+            beta = np.linalg.lstsq(A, y[tr], rcond=None)[0]
+            B = np.column_stack([np.ones(len(te)), X[np.ix_(te, cols)]])
+            sse += np.sum((y[te] - B @ beta) ** 2)
+        return np.sqrt(sse / n)
+
+    r_leak, r_honest, s = cv_rmse(False), cv_rmse(True), y.std(ddof=0)
+    print(f"sd(y) = {s:.4f}   (아무것도 안 하고 y 평균만 쓰면 이만큼 틀린다)")
+    print(f"전체 자료로 먼저 고름(누수): CV RMSE = {r_leak:.4f}, CV R^2 = {1 - (r_leak/s)**2:+.4f}")
+    print(f"폴드 안에서 고름(정직)    : CV RMSE = {r_honest:.4f}, CV R^2 = {1 - (r_honest/s)**2:+.4f}")
+    ```
+
+    출력:
+
+    ```
+    sd(y) = 0.9962   (아무것도 안 하고 y 평균만 쓰면 이만큼 틀린다)
+    전체 자료로 먼저 고름(누수): CV RMSE = 0.8227, CV R^2 = +0.3179
+    폴드 안에서 고름(정직)    : CV RMSE = 1.1921, CV R^2 = -0.4322
+    ```
+
+    **아무 신호도 없는 자료에서 교차검증이 $R^2 = 0.32$ 를 보고했다.** 교차검증을 했다는 사실만으로는 아무것도 보증되지 않는다는 것이 이 한 줄이다.
+
+    **(가)가 양수인 까닭.** 열을 고를 때 이미 $80$ 개 행 전부를, 곧 뒤에 검증 폴드로 쓸 $16$ 개 행까지 보았다. $p = 2{,}000$ 개 가운데 $\lvert$상관$\rvert$ 최대 $10$ 개를 뽑으면 그 열들은 **검증 폴드 안에서도** $y$ 와 같은 방향으로 움직인다. 순수한 우연이 자료 전체에 걸쳐 고정되어 있으므로, 폴드를 가르는 일이 그 우연을 가르지 못한다. 교차검증은 "모형 적합"만 폴드 안에 두었고 "변수선택"은 폴드 밖에 두었다 — **모형 선택의 일부가 밖에 남으면 그만큼 누수다.**
+
+    **(나)가 음수인 까닭.** 참 $R^2$ 가 $0$ 이므로 정직한 절차의 기대 CV $R^2$ 는 $0$ 보다 작아야 정상이다. 훈련 겹 $64$ 개 행으로 모수 $11$ 개를 추정하면 그 추정값의 분산이 그대로 예측오차에 더해진다. 대략 $\mathrm{MSE} \approx \sigma^2(1 + 11/64) = 1.17\sigma^2$ 이고 $\sqrt{1.17} = 1.08$ 이니, 관측값 $1.1921/0.9962 = 1.197$ 은 거기에 "$2{,}000$ 개 중 최대를 고르는 선택편향"이 겹쳐 더 나빠진 것이다. **잡음 변수를 고르면 $y$ 평균만 쓰는 것보다 나쁘다**는 올바른 결론이 (나)에서만 나온다.
+
+    **연습문제 4 에는 선택 누수가 없다.** `LassoCV` 가 겹 안에서 라쏘를 다시 적합하므로 어느 계수를 $0$ 으로 둘지는 훈련 겹만 보고 정한다. 다만 `X_scaled` 의 표준화는 전체 자료로 한 번 했으므로 **표준화 누수**는 남아 있다. 표준화는 열마다 두 개의 통계량($\bar x_j$, $s_j$)만 쓰고 $y$ 를 전혀 보지 않으며 $n = 22{,}687$ 이라 그 영향은 무시할 만하다. 누수의 크기를 정하는 것은 "밖에서 본 자료의 양"이 아니라 **밖에서 $y$ 를 보고 고른 선택지의 수**다. 여기서는 $y$ 를 보고 $2{,}000$ 개 중 $10$ 개를 골랐고, 연습문제 4 에서는 $y$ 를 보고 고른 것이 하나도 없다. $\square$
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span> 참 모형 $y = X\beta + \varepsilon$, $\operatorname{E}\varepsilon = 0$, $\operatorname{Var}\varepsilon = \sigma^2 I$ 와 직교 표준화 설계 $X^\top X = nI$ 를 가정하고, 능형을 $\lVert y - X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_2^2$ 로 적는다(sklearn `Ridge` 의 규약과 같다). $B = \lVert\beta\rVert_2^2$, $V = p\sigma^2/n$ 으로 둔다.
+
+**(1)** $\hat\beta^{\text{ridge}} = \hat\beta^{\text{OLS}}/(1+\lambda/n)$ 임을 보이고 $\operatorname{MSE}(\lambda) = \sum_j\operatorname{E}(\hat\beta_j^{\text{ridge}} - \beta_j)^2$ 를 $B$, $V$ 와 축소율 $c = n/(n+\lambda)$ 로 적으시오.
+
+**(2)** $\lambda^\star = p\sigma^2/B$ 에서 최소가 되고 $\operatorname{MSE}(\lambda^\star)/\operatorname{MSE}(0) = B/(B+V)$ 임을 보이시오. 또 $\lambda = 0$ 에서의 도함수를 구해 **OLS 를 이기는 $\lambda > 0$ 이 반드시 있음**을 확인하시오.
+
+**(3)** 보기 2 의 수를 넣으시오. $\sigma$ 를 RMSE $245{,}393.8$ 로, $B$ 의 하한을 계수 큰 셋 $181{,}498.5$, $162{,}034.6$, $-108{,}345.8$ 로 잡아 $\lambda^\star$ 의 상한과 MSE 이득의 상한을 구하고, 예측 RMSE 로는 몇 달러를 아낄 수 있는지 적으시오. 보기 5 가 고른 $\alpha = 242$ 와 "차이 $0.014\%$"를 이 수로 설명하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 정규방정식이 $(X^\top X + \lambda I)\hat\beta = X^\top y$ 이고 $X^\top X = nI$ 이므로
+
+    $$
+    \hat\beta^{\text{ridge}} = \frac{X^\top y}{n+\lambda} = \frac{n}{n+\lambda}\cdot\frac{X^\top y}{n} = c\,\hat\beta^{\text{OLS}},
+    \qquad c = \frac{n}{n+\lambda}
+    $$
+
+    이다. $\operatorname{E}\hat\beta^{\text{OLS}} = \beta$ 이고 $\operatorname{Var}\hat\beta_j^{\text{OLS}} = \sigma^2/n$ 이므로 좌표마다 편향이 $(c-1)\beta_j$, 분산이 $c^2\sigma^2/n$ 이고
+
+    $$
+    \operatorname{MSE}(\lambda) = \sum_j\left[(1-c)^2\beta_j^2 + c^2\frac{\sigma^2}{n}\right]
+    = (1-c)^2 B + c^2 V
+    $$
+
+    이다($6$ 장 정리 1 의 편향–분산 분해). $c = 1$ 이 OLS 이고 $\operatorname{MSE}(0) = V$, $c = 0$ 이 영모형이고 값이 $B$ 다.
+
+    **(2)** $c$ 에 대해 미분하면 $-2(1-c)B + 2cV = 0$ 이므로
+
+    $$
+    c^\star = \frac{B}{B+V} \in (0, 1),
+    \qquad
+    \lambda^\star = n\,\frac{1-c^\star}{c^\star} = \frac{nV}{B} = \frac{p\sigma^2}{B}
+    $$
+
+    이다(두 번 미분하면 $2(B+V) > 0$ 이라 최소다). 값을 넣으면
+
+    $$
+    \operatorname{MSE}(\lambda^\star) = \left(\frac{V}{B+V}\right)^2 B + \left(\frac{B}{B+V}\right)^2 V
+    = \frac{BV(V+B)}{(B+V)^2} = \frac{BV}{B+V}
+    $$
+
+    이므로 $\operatorname{MSE}(\lambda^\star)/\operatorname{MSE}(0) = B/(B+V) < 1$ 이다.
+
+    도함수로도 보자. $dc/d\lambda = -n/(n+\lambda)^2$ 이므로 $\lambda = 0$ 에서 $dc/d\lambda = -1/n$ 이고 $d\operatorname{MSE}/dc = -2(1-c)B + 2cV$ 가 $c = 1$ 에서 $2V$ 이므로
+
+    $$
+    \left.\frac{d\operatorname{MSE}}{d\lambda}\right\rvert_{\lambda=0} = 2V\cdot\left(-\frac{1}{n}\right) = -\frac{2V}{n} < 0
+    $$
+
+    이다. **$\lambda = 0$ 에서 MSE 가 반드시 내려가므로 OLS 를 이기는 $\lambda$ 가 언제나 존재한다.** 편향은 $\lambda$ 에 대해 이차로 늘고 분산은 일차로 줄기 때문이며, $B$ 를 모르더라도 결론 자체는 성립한다.
+
+    **(3)** $\sigma^2 \approx 245{,}393.8^2 = 6.0218\times10^{10}$ 이고(표본 내 RMSE 라 조금 작게 추정되지만 $n/(n-13) = 1.0006$ 이라 차이가 없다) $n = 22{,}687$, $p = 12$ 이므로
+
+    $$
+    V = \frac{p\sigma^2}{n} = \frac{12 \times 6.0218\times10^{10}}{22{,}687} = 3.1852\times10^{7}
+    $$
+
+    이다. 계수 큰 셋만 더하면
+
+    $$
+    B \ge 181{,}498.5^2 + 162{,}034.6^2 + 108{,}345.8^2 = 7.0936\times10^{10}
+    $$
+
+    이고, $\lambda^\star$ 와 이득은 둘 다 $B$ 의 감소함수이므로 이 하한이 상한을 준다.
+
+    $$
+    \lambda^\star = \frac{p\sigma^2}{B} \le \frac{12 \times 6.0218\times10^{10}}{7.0936\times10^{10}} = 10.19,
+    \qquad
+    1 - \frac{B}{B+V} = \frac{V}{B+V} \le 4.49\times10^{-4}
+    $$
+
+    **계수 MSE 를 아무리 잘 줄여도 $0.045\%$ 다.** 예측으로 옮기면 더 작아진다. 새 관측의 예측 MSE 는 $\sigma^2 + \operatorname{MSE}(\lambda)$ 이므로 상대이득이
+
+    $$
+    \frac{V - BV/(B+V)}{\sigma^2 + V} \approx \frac{p}{n}\cdot\frac{V}{B}
+    = 5.29\times10^{-4} \times 4.49\times10^{-4} = 2.4\times10^{-7}
+    $$
+
+    이고 RMSE 로는 그 절반인 $1.2\times10^{-7}$, 곧 $245{,}393.8 \times 1.2\times10^{-7} = 0.03$ 달러다. **최적으로 조정한 능형이 이 자료에서 아낄 수 있는 예측오차는 $3$ 센트다.**
+
+    두 가지가 이로써 설명된다. 첫째, 보기 5 가 고른 $\alpha = 242$ 는 MSE 를 최소화하는 $\lambda^\star \le 10.2$ 보다 **$23$ 배 이상 크다.** 이득 곡선이 $3$ 센트 깊이로 평평하니 교차검증이 어디를 찍든 차이를 분간할 수 없고, 그 선택은 사실상 겹 분할의 잡음이다. 둘째, 보기 5 가 보고한 세 RMSE 의 차이 $35.4$ 달러는 아낄 수 있는 $3$ 센트보다 $1{,}000$ 배 크므로 **정칙화의 효과가 아니다.** 그것은 표본 내 지표를 쓴 데서 온 값이고(OLS 가 표본 내 1 등인 것은 정의상 당연하다), 방향도 정칙화에 불리한 쪽이다.
+
+    까닭은 한 줄로 요약된다. 정칙화는 편향을 사서 분산을 파는 거래인데 $V/B \le 4.5\times10^{-4}$, 곧 **팔 분산이 신호의 $0.05\%$ 밖에 없다.** $n/p = 1{,}890$ 인 자료에서는 $\lambda^\star = p\sigma^2/B$ 자체가 $0$ 에 가까우므로 거래가 성립하지 않는다. 정칙화를 쓸 자리는 $p$ 가 $n$ 에 가까워 $V$ 가 $B$ 와 겨룰 만할 때다. $\square$
+
 ---
 
 ## 정리하며

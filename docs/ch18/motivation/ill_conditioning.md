@@ -250,6 +250,545 @@ $$
 
         3단계를 건너뛰고 `alpha=1.0` 같은 기본값을 쓰면, 문제의 규모에 따라 아무 효과가 없거나 지나치게 강한 정칙화가 된다.
 
+<div class="drillbox" markdown>
+
+**연습문제 4.** <span class="diff med" title="중간"></span>
+연습문제 1의 두 표에서 "$\lambda$가 $\lambda_{\min}$과 같아지면 조건수가 대략 절반이 된다"는 관찰이 나왔다. 이 관찰을 정확한 공식으로 바꾸어라. $\Sigma$의 최대·최소 고윳값을 $\lambda_{\max}, \lambda_{\min}$이라 쓴다.
+
+(1) $\kappa(\Sigma + \lambda\mathbf{I}) = \kappa(\Sigma)/k$가 되는 $\lambda$를 $\lambda_{\max}, \lambda_{\min}, k$로 풀어라.
+(2) $\lambda_{\max} \gg k\lambda_{\min}$일 때 $\lambda \approx (k-1)\lambda_{\min}$임을 보여라.
+(3) $p = 8$, $\rho = 0.999$에서 $k = 2$와 $k = 11$에 해당하는 $\lambda$를 구해 연습문제 1의 표와 맞춰 보라.
+(4) 이 공식이 $k$에 걸는 상한은 무엇이고 무슨 뜻인가.
+
+</div>
+
+??? success "풀이"
+    **(1)** $\kappa(\Sigma + \lambda\mathbf{I}) = (\lambda_{\max} + \lambda)/(\lambda_{\min} + \lambda)$이고 $\kappa(\Sigma) = \lambda_{\max}/\lambda_{\min}$이다. 편의상 $a = \lambda_{\max}$, $b = \lambda_{\min}$이라 쓰면 조건은
+
+    $$
+    \frac{a + \lambda}{b + \lambda} = \frac{a}{kb}
+    $$
+
+    이다. 양변에 $kb(b+\lambda)$를 곱하면 $kb(a + \lambda) = a(b + \lambda)$, 즉 $kab + kb\lambda = ab + a\lambda$이고 정리하면
+
+    $$
+    (k-1)ab = \lambda(a - kb), \qquad \lambda = \frac{(k-1)ab}{a - kb} = \frac{(k-1)\lambda_{\min}}{1 - k\lambda_{\min}/\lambda_{\max}}
+    $$
+
+    이다.
+
+    **(2)** $a \gg kb$이면 분모의 $k\lambda_{\min}/\lambda_{\max} \approx 0$이므로 $\lambda \approx (k-1)\lambda_{\min}$이다. **조건수를 $k$배 줄이는 데 드는 $\lambda$는 $\lambda_{\min}$의 $k-1$배다.**
+
+    **(3)** $p = 8$, $\rho = 0.999$이면 $a = 1 + 7(0.999) = 7.993$, $b = 1 - 0.999 = 0.001$, $\kappa(\Sigma) = 7993$이다.
+
+    | $k$ | 정확한 $\lambda$ | $(k-1)\lambda_{\min}$ | $\kappa(\Sigma + \lambda\mathbf{I})$ |
+    |---:|---:|---:|---:|
+    | 2 | $\dfrac{0.007993}{7.991} = 0.0010003$ | 0.001 | $7993/2 = 3996.5$ |
+    | 11 | $\dfrac{0.07993}{7.982} = 0.0100138$ | 0.010 | $7993/11 = 726.6$ |
+
+    연습문제 1의 표와 맞다. 그 표에서 $\lambda = 0.001$은 조건수를 $7993 \to 3997$로 정확히 절반 만들었고($k = 2.0$), $\lambda = 0.01$은 $7993 \to 727.5$, 즉 $k = 7993/727.5 = 10.99$배 줄였다. 공식이 예측한 $k = 11$이다. $\rho = 0.99$ 표도 같다. 거기서는 $b = 0.01$이므로 $\lambda = 0.01$이 $k = 2$에 해당하고($793 \to 397.0$), $\lambda = 0.1$이 $k \approx 11$에 해당한다($793 \to 73.0$, $k = 10.86$).
+
+    **(4)** $\lambda > 0$이려면 분모 $a - kb > 0$, 즉
+
+    $$
+    k < \frac{\lambda_{\max}}{\lambda_{\min}} = \kappa(\Sigma)
+    $$
+
+    여야 한다. 당연한 결과다. $\lambda \to \infty$에서 $\kappa(\Sigma + \lambda\mathbf{I}) \to 1$이므로 줄일 수 있는 최대 배수가 원래 조건수 $\kappa(\Sigma)$ 자신이고, $k$를 그 값에 가까이 가져가면 필요한 $\lambda$가 발산한다.
+
+    본문의 "$\lambda$를 고를 때 기준으로 삼아야 할 눈금은 $\lambda_{\min} = d_p^2$이지 $1.0$ 같은 기본값이 아니다"가 이 공식에서 수가 된다. $\lambda$를 $\lambda_{\min}$ 단위로 읽어라 — $\lambda/\lambda_{\min} + 1$이 곧 조건수 감소 배수다.
+
+<div class="drillbox" markdown>
+
+**연습문제 5.** <span class="diff med" title="중간"></span>
+본문 2절의 "척도 불일치"를 수로 확인하라. 첫 열이 거리(km), 둘째 열이 소요시간(h)인 $n = 60$, $p = 2$ 자료에서 **첫 열의 단위만** km에서 m로 바꾼다(열에 1000을 곱한다). (가) $\kappa(\mathbf{X}^\top\mathbf{X})$는 어떻게 변하는가. (나) OLS 적합값은 변하는가. (다) $\lambda = 1$인 능형의 적합값은 변하는가. (라) 두 열을 표준화한 뒤에는 어떻게 되는가. sklearn의 `Ridge(alpha=1.0)`이 푸는 문제가 (다)와 같은 문제임을 생각하면 어떤 교훈이 나오는가.
+
+</div>
+
+??? success "풀이"
+    먼저 손으로 보자. 열 척도조정은 $\tilde{\mathbf{X}} = \mathbf{X}\mathbf{S}$, $\mathbf{S} = \operatorname{diag}(s_1, \ldots, s_p)$, $s_j > 0$이다.
+
+    **OLS는 척도조정에 공변이다.**
+
+    $$
+    \hat{\boldsymbol{\beta}}(\tilde{\mathbf{X}}) = (\mathbf{S}\mathbf{X}^\top\mathbf{X}\mathbf{S})^{-1}\mathbf{S}\mathbf{X}^\top\mathbf{y} = \mathbf{S}^{-1}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \mathbf{S}^{-1}\hat{\boldsymbol{\beta}}(\mathbf{X})
+    $$
+
+    이므로 적합값 $\tilde{\mathbf{X}}\hat{\boldsymbol{\beta}}(\tilde{\mathbf{X}}) = \mathbf{X}\mathbf{S}\mathbf{S}^{-1}\hat{\boldsymbol{\beta}}(\mathbf{X}) = \mathbf{X}\hat{\boldsymbol{\beta}}(\mathbf{X})$가 **정확히** 같다. 단위를 바꾸어도 예측은 한 치도 안 변한다.
+
+    **능형은 그렇지 않다.** 척도조정한 자료의 능형 정규방정식은
+
+    $$
+    \mathbf{S}\mathbf{X}^\top\mathbf{X}\mathbf{S} + \lambda\mathbf{I} = \mathbf{S}\left(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{S}^{-2}\right)\mathbf{S}
+    $$
+
+    이다. $\lambda\mathbf{I}$는 $\mathbf{S}$를 따라 변환되지 않으므로, 척도조정한 자료에 $\lambda$를 똑같이 쓰는 것은 **원래 자료에 열마다 다른 벌점 $\lambda/s_j^2$를 쓰는 것**과 같다. $s_1 = 1000$이면 첫 열의 벌점이 $\lambda/10^6$으로, 사실상 벌점이 사라진다.
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(18)
+    n = 60
+    x1 = rng.normal(2.0, 0.5, n)            # 거리 (km)
+    x2 = 0.8*x1 + rng.normal(0, 0.3, n)     # 소요시간 (h)
+    X = np.column_stack([x1, x2]); X -= X.mean(axis=0)
+    y = X @ np.array([2.0, -1.0]) + rng.normal(0, 0.2, n); y -= y.mean()
+
+    S = np.diag([1000.0, 1.0])              # 첫 열을 km -> m 로
+    Xm = X @ S
+
+    def ridge(A, y, lam):
+        return np.linalg.solve(A.T @ A + lam*np.eye(A.shape[1]), A.T @ y)
+
+    print(f"kappa(X'X)   km 단위 : {np.linalg.cond(X.T@X):.1f}")
+    print(f"kappa(X'X)   m  단위 : {np.linalg.cond(Xm.T@Xm):.1f}")
+
+    for lam, tag in ((0.0, "OLS     "), (1.0, "능형 l=1")):
+        b_km, b_m = ridge(X, y, lam), ridge(Xm, y, lam)
+        print(f"{tag} km 계수        : " + " ".join(f"{v:8.4f}" for v in b_km))
+        print(f"{tag} m 계수(km 환산): " + " ".join(f"{v:8.4f}" for v in S @ b_m))
+        print(f"{tag} 적합값 최대차이 : {np.max(np.abs(X@b_km - Xm@b_m)):.4f}")
+
+    sdk, sdm = X.std(axis=0), Xm.std(axis=0)
+    Zk, Zm = X/sdk, Xm/sdm
+    ck, cm = ridge(Zk, y, 1.0), ridge(Zm, y, 1.0)
+    print("표준화 후 km 계수        : " + " ".join(f"{v:8.4f}" for v in ck))
+    print("표준화 후 m  계수        : " + " ".join(f"{v:8.4f}" for v in cm))
+    print(f"표준화 후 적합값 최대차이 : {np.max(np.abs(Zk@ck - Zm@cm)):.4f}")
+    ```
+
+    출력:
+
+    ```text
+    kappa(X'X)   km 단위 : 11.6
+    kappa(X'X)   m  단위 : 3280882.1
+    OLS      km 계수        :   2.0911  -1.0880
+    OLS      m 계수(km 환산):   2.0911  -1.0880
+    OLS      적합값 최대차이 : 0.0000
+    능형 l=1 km 계수        :   1.6076  -0.6490
+    능형 l=1 m 계수(km 환산):   1.9248  -0.8947
+    능형 l=1 적합값 최대차이 : 0.2458
+    표준화 후 km 계수        :   0.9731  -0.4850
+    표준화 후 m  계수        :   0.9731  -0.4850
+    표준화 후 적합값 최대차이 : 0.0000
+    ```
+
+    **(가)** $\kappa(\mathbf{X}^\top\mathbf{X})$가 $11.6$에서 $3{,}280{,}882$로 뛴다. 283,000배다. 그런데 자료는 하나도 안 바뀌었다. 단위만 바꿨다. 본문 6절의 진단표를 그대로 적용하면 이 자료는 "심각한 불량조건"으로 분류된다.
+
+    **(나)** OLS 적합값의 최대차이가 $0$이다(기계 정밀도까지). 위 공변성 그대로다. **큰 조건수가 척도 불일치에서 왔다면 OLS에는 아무 통계적 해악이 없다.** 조건수는 척도에 불변인 양이 아니므로, 표준화하기 전의 조건수는 "진짜 준선형종속"과 "단위 선택"을 뒤섞어 보여 준다.
+
+    **(다)** 능형 적합값은 최대 $0.2458$ 차이가 난다. $y$의 표준편차가 $1$ 정도인 자료에서 작지 않은 차이다. 계수를 km 단위로 환산해 비교하면 $(1.6076, -0.6490)$ 대 $(1.9248, -0.8947)$인데, m 단위에서 푼 쪽이 OLS $(2.0911, -1.0880)$에 훨씬 가깝다. 예상대로다. 거리 열의 유효 벌점이 $1/10^6$로 줄어 거의 벌점이 없는 것과 같아졌다.
+
+    **(라)** 표준화하면 두 계수가 소수 넷째 자리까지 같고 적합값 차이도 $0$이다. $\mathbf{Z} = \mathbf{X}\operatorname{diag}(1/\hat\sigma_j)$가 단위에 무관하므로, 표준화는 척도조정의 자유를 아예 지워 능형을 단위 불변으로 만든다.
+
+    **교훈.** sklearn의 `Ridge(alpha=1.0)`은 $\lVert\mathbf{y} - \mathbf{X}\boldsymbol\beta\rVert^2 + \alpha\lVert\boldsymbol\beta\rVert^2$를 최소화하며, **설명변수를 표준화해 주지 않는다.** 위 (다)가 바로 그 상황이다. 표준화를 빼먹으면 단위를 바꾸는 것만으로 모형이 달라지고, 척도가 큰 변수가 벌점을 피해 간다. 그러므로 `StandardScaler`를 **파이프라인 안에** 넣어야 한다 — 전체 자료로 먼저 표준화하면 교차검증 폴드로 정보가 새 나간다. 절편은 벌점에서 빼야 하므로 $\mathbf{X}$와 $\mathbf{y}$를 중심화하거나 `fit_intercept=True`를 쓴다.
+
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff hard" title="어려움"></span>
+능형 적합값은 $\hat{\mathbf{y}} = \mathbf{H}_\lambda\mathbf{y}$, $\mathbf{H}_\lambda = \mathbf{X}(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top$으로 쓸 수 있다. **유효 자유도**를 $\operatorname{tr}\mathbf{H}_\lambda$로 정의한다.
+
+(1) SVD를 써서 $\operatorname{tr}\mathbf{H}_\lambda = \sum_j d_j^2/(d_j^2 + \lambda)$임을 보여라. 5절의 축소인자와 같은 양이다.
+(2) $\mathbf{X}^\top\mathbf{X}$가 연습문제 1의 등상관 행렬($p = 8$, $\rho = 0.999$)이라 하자. $\lambda = 0.001, 0.01, 0.1, 1$에서 유효 자유도를 구해 연습문제 1의 조건수와 나란히 적어라.
+(3) 연습문제 4의 $\lambda \approx (k-1)\lambda_{\min}$을 넣어 유효 자유도가 약 $1 + (p-1)/k$임을 보여라. 조건수를 $k$배 줄이는 일이 자유도에 무엇을 하는가.
+(4) $\lambda = 1$에서 유효 자유도가 $1$보다 작다. 무슨 뜻인가.
+
+</div>
+
+??? success "풀이"
+    **(1)** 경제적 SVD $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$($\mathbf{U}$는 $n \times p$ 직교열, $\mathbf{D} = \operatorname{diag}(d_1,\ldots,d_p)$, $\mathbf{V}$는 $p \times p$ 직교)를 쓰면 $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I} = \mathbf{V}(\mathbf{D}^2 + \lambda\mathbf{I})\mathbf{V}^\top$이므로
+
+    $$
+    \mathbf{H}_\lambda = \mathbf{U}\mathbf{D}\mathbf{V}^\top\,\mathbf{V}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{V}^\top\,\mathbf{V}\mathbf{D}\mathbf{U}^\top = \mathbf{U}\,\mathbf{D}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{D}\,\mathbf{U}^\top = \mathbf{U}\operatorname{diag}\!\left(\frac{d_j^2}{d_j^2+\lambda}\right)\mathbf{U}^\top
+    $$
+
+    이다. $\mathbf{U}^\top\mathbf{U} = \mathbf{I}_p$이므로
+
+    $$
+    \operatorname{tr}\mathbf{H}_\lambda = \operatorname{tr}\!\left[\operatorname{diag}\!\left(\frac{d_j^2}{d_j^2+\lambda}\right)\mathbf{U}^\top\mathbf{U}\right] = \sum_{j=1}^{p}\frac{d_j^2}{d_j^2+\lambda}
+    $$
+
+    이다. $\lambda = 0$이면 모든 항이 $1$이어서 $\operatorname{tr}\mathbf{H}_0 = p$, 즉 OLS의 자유도다. $\square$
+
+    **(2)** 등상관 행렬의 고윳값은 $7.993$ 하나와 $0.001$ 일곱 개다. $d_j^2$에 이 값을 넣는다.
+
+    $$
+    \operatorname{tr}\mathbf{H}_\lambda = \frac{7.993}{7.993+\lambda} + 7\cdot\frac{0.001}{0.001+\lambda}
+    $$
+
+    | $\lambda$ | $\kappa$ | 감소 배수 $k$ | 유효 자유도 | $1 + (p-1)/k$ |
+    |---:|---:|---:|---:|---:|
+    | 0 | 7993.0 | — | 8.0000 | — |
+    | 0.001 | 3997.0 | 2.0 | 4.4999 | 4.50 |
+    | 0.01 | 727.5 | 11.0 | 1.6351 | 1.64 |
+    | 0.1 | 80.1 | 99.8 | 1.0570 | 1.07 |
+    | 1.0 | 8.98 | 890 | 0.8958 | 1.01 |
+
+    셋째 행을 손으로 확인해 두자. $7.993/8.003 = 0.9988$, $7 \times 0.001/0.011 = 7 \times 0.090909 = 0.6364$, 합이 $1.6351$이다.
+
+    **(3)** $\lambda = (k-1)\lambda_{\min} = (k-1)b$를 넣는다. 작은 고윳값 $p-1$개는 각각
+
+    $$
+    \frac{b}{b + (k-1)b} = \frac{1}{k}
+    $$
+
+    를 내놓고, 큰 고윳값은 $a/(a + (k-1)b) \approx 1$을 내놓는다($a \gg kb$일 때). 따라서
+
+    $$
+    \operatorname{tr}\mathbf{H}_\lambda \approx 1 + \frac{p-1}{k}
+    $$
+
+    이다. 표의 마지막 열이 이것이고 $k = 2, 11, 99.8$에서 실제값과 소수 둘째 자리까지 맞는다. $k = 890$인 행만 어긋나는데($1.01$ 대 $0.8958$), 거기서는 $\lambda = 1$이 $\lambda_{\max} = 7.993$에 비해 더는 작지 않아 **큰 고윳값 방향까지 축소되기 시작**한 탓이다. 근사는 $k \ll \kappa(\Sigma)$에서만 쓸 수 있다.
+
+    읽어야 할 것은 이것이다. **조건수를 $k$배 줄이면 잘 결정되지 않는 $p-1$개 방향의 자유도가 그대로 $1/k$배로 깎인다.** 조건수 반감의 가격은 자유도 반감이다($8 \to 4.5$). 이것이 이 장의 거래를 가장 간결하게 적은 식이다 — $\lambda$는 조건수와 자유도를 같은 비율로 동시에 끌어내린다. 안정성만 공짜로 사 올 수는 없다.
+
+    **(4)** $\lambda = 1$에서 $\operatorname{tr}\mathbf{H}_1 = 0.8958$이다. 설명변수 여덟 개를 넣었지만 모형이 쓰는 유효 모수가 **한 개도 안 된다**. 자료가 결정해 주는 방향이 애초에 하나뿐이고($7.993$에 해당하는 방향), $\lambda = 1$은 그 하나조차 $1 - 0.8888 = 11\%$ 축소한다. 조건수를 $890$배 줄인 대가가 이것이다. $\rho = 0.999$짜리 여덟 변수를 넣는 일은 거의 변수 하나를 넣는 일과 같고, 정칙화는 그 사실을 숨기지 않고 자유도로 드러내 준다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span>
+본문 2절은 $p > n$이면 OLS 해가 유일하지 않다고 했다. 벌점이 유일성을 되돌려 주는지 보자. $\mathbf{X} = [\,\mathbf{x}\ \ \mathbf{x}\,]$로 두 열이 완전히 같고, $\lVert\mathbf{x}\rVert = 1$, $\mathbf{x}^\top\mathbf{y} = 1$, $\lambda = 1$이라 하자.
+
+(1) 능형 해를 구하고, 목적함수의 헤세행렬로 유일함을 설명하라.
+(2) 라쏘 목적함수 $\lVert\mathbf{y} - \mathbf{X}\boldsymbol\beta\rVert^2 + \lambda\lVert\boldsymbol\beta\rVert_1$의 최소점 **전체**를 구하라.
+(3) 두 벌점의 차이가 어디서 왔는지 말하고, 완전상관 설계에서 개별 라쏘 계수를 출력하면 안 되는 까닭을 쓰라.
+
+</div>
+
+??? success "풀이"
+    $s = \beta_1 + \beta_2$라 쓰면 $\mathbf{X}\boldsymbol\beta = s\mathbf{x}$이므로 잔차제곱합은 $s$만의 함수다.
+
+    $$
+    \lVert\mathbf{y} - s\mathbf{x}\rVert^2 = \lVert\mathbf{y}\rVert^2 - 2s\,\mathbf{x}^\top\mathbf{y} + s^2\lVert\mathbf{x}\rVert^2 = \lVert\mathbf{y}\rVert^2 - 2s + s^2
+    $$
+
+    **(1) 능형.** $s$를 고정하면 $\beta_1^2 + \beta_2^2$는 $\beta_1 = \beta_2 = s/2$에서 최소이고 그 값이 $s^2/2$다. 그러므로 목적함수는
+
+    $$
+    \lVert\mathbf{y}\rVert^2 - 2s + s^2 + \frac{\lambda s^2}{2} = \lVert\mathbf{y}\rVert^2 - 2s + \frac{3}{2}s^2 \quad (\lambda = 1)
+    $$
+
+    이고 $-2 + 3s = 0$에서 $s = 2/3$이다. 따라서
+
+    $$
+    \hat{\boldsymbol\beta}_{\text{ridge}} = \left(\tfrac{1}{3},\ \tfrac{1}{3}\right)
+    $$
+
+    이다. 직접 검산해도 같다. $\mathbf{X}^\top\mathbf{X} = \begin{pmatrix}1&1\\1&1\end{pmatrix}$, $\mathbf{X}^\top\mathbf{y} = (1,1)^\top$이므로
+
+    $$
+    (\mathbf{X}^\top\mathbf{X}+\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y} = \begin{pmatrix}2&1\\1&2\end{pmatrix}^{-1}\begin{pmatrix}1\\1\end{pmatrix} = \frac{1}{3}\begin{pmatrix}2&-1\\-1&2\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix} = \frac{1}{3}\begin{pmatrix}1\\1\end{pmatrix}
+    $$
+
+    유일성은 헤세행렬에서 나온다. 능형 목적함수의 헤세행렬은 $2(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I})$이고 그 고윳값은 $2(2 + \lambda) = 6$과 $2(0 + \lambda) = 2$다. 둘 다 양수이므로 **강볼록**이고 최소점이 하나다. $\mathbf{X}^\top\mathbf{X}$의 고윳값 $0$을 $\lambda$가 들어올린 것이 결정적이다 — 본문 4절이 고윳값 바닥을 올린다고 한 그 일이 여기서는 유일성 복구로 나타난다.
+
+    **(2) 라쏘.** $s$를 고정하면 $\lvert\beta_1\rvert + \lvert\beta_2\rvert \geq \lvert\beta_1 + \beta_2\rvert = \lvert s\rvert$이고, 등호는 $\beta_1, \beta_2$가 **같은 부호**(또는 하나가 0)일 때 성립한다. 그러므로 목적함수의 최솟값은
+
+    $$
+    h(s) = \lVert\mathbf{y}\rVert^2 - 2s + s^2 + \lambda\lvert s\rvert
+    $$
+
+    의 최솟값이다. $s \geq 0$에서 $h(s) = \lVert\mathbf{y}\rVert^2 - s + s^2$이고 $s = 1/2$에서 최소, 값은 $\lVert\mathbf{y}\rVert^2 - 1/4$다. $s < 0$에서는 $h$가 증가하므로 더 나쁘다. 연성문턱 꼴로도 같다.
+
+    $$
+    s^\ast = \operatorname{sign}(\mathbf{x}^\top\mathbf{y})\left(\lvert\mathbf{x}^\top\mathbf{y}\rvert - \frac{\lambda}{2}\right)_{+} = 1 - \frac{1}{2} = \frac{1}{2}
+    $$
+
+    따라서 최소점의 **집합**은
+
+    $$
+    \left\{(\beta_1,\beta_2) : \beta_1 + \beta_2 = \tfrac{1}{2},\ \beta_1 \geq 0,\ \beta_2 \geq 0\right\}
+    $$
+
+    이다. $(\tfrac12, 0)$, $(0, \tfrac12)$, $(\tfrac14,\tfrac14)$가 모두 최소점이고 목적함숫값은 셋 다 $\lVert\mathbf{y}\rVert^2 - 1/4$다. 선분 하나가 통째로 해집합이다.
+
+    **(3)** 매끄러운 부분의 헤세행렬은 $2\mathbf{X}^\top\mathbf{X}$이고 방향 $(1,-1)$에서 고윳값이 $0$, 즉 **평평하다**. L2 벌점은 그 방향에 $2\lambda$를 더해 평평함을 없앤다. L1 벌점은 양의 사분면 안에서 $\lvert\beta_1\rvert + \lvert\beta_2\rvert = \beta_1 + \beta_2$로 **$(1,-1)$ 방향에 상수**이므로, 하필 평평한 그 방향에 아무것도 더하지 못한다. 그래서 라쏘는 유일성을 복구하지 못한다.
+
+    유일한 양과 유일하지 않은 양을 가려야 한다. 적합값 $\hat{\mathbf{y}} = s^\ast\mathbf{x} = \tfrac12\mathbf{x}$, 합 $\beta_1 + \beta_2 = \tfrac12$, 목적함숫값은 유일하다. **개별 계수는 유일하지 않다.** 좌표하강이 어느 점에 멈추는지는 초기값·갱신 순서·수렴 허용오차에, 결국 라이브러리와 판본에 달려 있다. 완전상관(또는 거의 완전상관) 설계에서 개별 라쏘 계수를 소수 자리까지 실으면 그 수는 재현되지 않는다. 합이나 예측값처럼 유일한 양을 싣거나 능형을 쓰라.
+
+    덧붙여, 능형이 고른 해는 $\beta_1 = \beta_2$였다. 상관된 변수에 계수를 똑같이 나눠 주는 성질이고, 엘라스틱넷의 묶음 효과가 L2 성분에서 오는 까닭이 이 두 줄 계산에 들어 있다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span>
+조건수가 $1$이어도 정칙화가 이득인지 따져라. $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_p$인 직교설계에서는 모든 $\lambda \geq 0$에 대해 $\kappa(\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}) = 1$이므로 본문 4절의 수치적 논거는 할 말이 없다.
+
+(1) $\hat{\boldsymbol\beta}_{\text{ridge}} = \hat{\boldsymbol\beta}_{\text{OLS}}/(1+\lambda)$임을 보여라.
+(2) $\operatorname{Var}(\hat{\boldsymbol\beta}_{\text{OLS}}) = \sigma^2\mathbf{I}$일 때 $g(\lambda) = \mathbb{E}\lVert\hat{\boldsymbol\beta}_{\text{ridge}} - \boldsymbol\beta\rVert^2$을 $\lambda$의 함수로 적어라.
+(3) $g'(0) < 0$임을 보이고 최소점 $\lambda^\ast$와 $g(\lambda^\ast)$를 구하라.
+(4) $p = 8$, $\sigma^2 = 1$, $\boldsymbol\beta = (1,\ldots,1)^\top$에 수를 넣고, 이것이 무엇을 말하는지 쓰라.
+
+</div>
+
+??? success "풀이"
+    **(1)** $\mathbf{X}^\top\mathbf{X} = \mathbf{I}$이므로 $\hat{\boldsymbol\beta}_{\text{OLS}} = \mathbf{X}^\top\mathbf{y}$이고
+
+    $$
+    \hat{\boldsymbol\beta}_{\text{ridge}} = (\mathbf{I} + \lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y} = \frac{\mathbf{X}^\top\mathbf{y}}{1+\lambda} = \frac{\hat{\boldsymbol\beta}_{\text{OLS}}}{1+\lambda}
+    $$
+
+    이다. 모든 좌표를 같은 비율로 줄이는 **비례 축소**이고, $\lambda < \infty$에서는 어떤 좌표도 정확히 $0$이 되지 않는다. $\square$
+
+    **(2)** $\mathbb{E}\hat{\boldsymbol\beta}_{\text{ridge}} = \boldsymbol\beta/(1+\lambda)$이므로 편향은 $-\lambda\boldsymbol\beta/(1+\lambda)$이고 편향제곱합은 $\lambda^2\lVert\boldsymbol\beta\rVert^2/(1+\lambda)^2$다. 분산합은 $p\sigma^2/(1+\lambda)^2$다. 6장 정리 1(편향–분산 분해)에 의해
+
+    $$
+    g(\lambda) = \frac{p\sigma^2 + \lambda^2\lVert\boldsymbol\beta\rVert^2}{(1+\lambda)^2}
+    $$
+
+    이다.
+
+    **(3)** $c = p\sigma^2$, $B = \lVert\boldsymbol\beta\rVert^2$이라 쓰고 미분한다.
+
+    $$
+    g'(\lambda) = \frac{2\lambda B(1+\lambda)^2 - 2(1+\lambda)(c + \lambda^2 B)}{(1+\lambda)^4} = \frac{2\left[\lambda B(1+\lambda) - c - \lambda^2 B\right]}{(1+\lambda)^3} = \frac{2(\lambda B - c)}{(1+\lambda)^3}
+    $$
+
+    분자가 $\lambda$의 일차식이라는 것이 핵심이다. $g'(0) = -2c = -2p\sigma^2 < 0$이므로 $\lambda = 0$(OLS)에서 $g$는 **반드시 감소 중**이다. 즉 $g(\lambda) < g(0)$인 $\lambda > 0$이 언제나 존재한다. 유일한 영점은
+
+    $$
+    \lambda^\ast = \frac{c}{B} = \frac{p\sigma^2}{\lVert\boldsymbol\beta\rVert^2}
+    $$
+
+    이고 그 전에는 $g' < 0$, 그 후에는 $g' > 0$이므로 전역 최소다. 값은
+
+    $$
+    g(\lambda^\ast) = \frac{c + (c^2/B^2)B}{(1 + c/B)^2} = \frac{c(1 + c/B)}{\left((B+c)/B\right)^2} = \frac{cB}{B+c} = \frac{p\sigma^2\lVert\boldsymbol\beta\rVert^2}{p\sigma^2 + \lVert\boldsymbol\beta\rVert^2}
+    $$
+
+    로 $p\sigma^2$과 $\lVert\boldsymbol\beta\rVert^2$의 조화평균의 절반 꼴이다. $g(0) = p\sigma^2 = c$이므로 감소비는
+
+    $$
+    \frac{g(\lambda^\ast)}{g(0)} = \frac{B}{B+c} < 1
+    $$
+
+    이다.
+
+    **(4)** $c = p\sigma^2 = 8$, $B = \lVert\boldsymbol\beta\rVert^2 = 8$이므로
+
+    $$
+    \lambda^\ast = \frac{8}{8} = 1, \qquad g(0) = 8, \qquad g(1) = \frac{8 \times 8}{16} = 4
+    $$
+
+    로 MSE가 정확히 절반이 된다. 그때 유효 자유도는 연습문제 6의 식으로 $\sum_j 1/(1+\lambda) = p/(1+\lambda) = 4$다. 모수 여덟 개 중 네 개를 포기해 오차를 반으로 줄인 셈이다.
+
+    **말하는 것은 두 가지다.** 첫째, 조건수가 완벽히 $1$인 설계에서도 능형이 OLS를 이긴다. **정칙화를 정당화하는 두 논거 — 수치적 안정화와 편향–분산 거래 — 는 서로 독립이다.** 본문 4절은 전자만 다루지만, 실무에서 더 흔한 이득의 원천은 후자다. 불량조건은 능형이 필요한 충분조건도 필요조건도 아니다.
+
+    둘째, $\lambda^\ast = p\sigma^2/\lVert\boldsymbol\beta\rVert^2$는 잡음 대 신호 비다. 잡음이 크거나($\sigma^2 \uparrow$) 변수가 많거나($p \uparrow$) 신호가 약할수록($\lVert\boldsymbol\beta\rVert \downarrow$) 더 세게 축소해야 한다. $\lambda^\ast$가 $\boldsymbol\beta$에 의존하므로 자료 없이 정할 수 없고, 그래서 교차검증이 필요하다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
+본문 6절의 표는 $\kappa > 10^4$를 "중간 정도의 불량조건"으로 읽으라고 한다. 조건수를 그 문턱 아래로 내리는 $\lambda$가 통계적으로도 좋은 $\lambda$인지 확인하라. 연습문제 2의 자료($n = 40$, $p = 8$, $\rho = 0.999$, 씨앗 11)에서 $\sigma = 1$, $\boldsymbol\beta = (1,\ldots,1)^\top$로 두고 능형 계수 MSE의 **정확한 값**을 쓴다(모의실험이 아니라 닫힌 꼴이다). $\boldsymbol\theta = \mathbf{V}^\top\boldsymbol\beta$라 할 때
+
+$$
+\mathbb{E}\lVert\hat{\boldsymbol\beta}_\lambda - \boldsymbol\beta\rVert^2 = \sum_{j}\frac{\lambda^2\theta_j^2}{(d_j^2+\lambda)^2} + \sigma^2\sum_j\frac{d_j^2}{(d_j^2+\lambda)^2}
+$$
+
+임을 먼저 유도하라. 이어서 $\boldsymbol\beta$의 방향을 $\mathbf{v}_1$과 $\mathbf{v}_p$(단위벡터)로 바꾸어 같은 계산을 하고, 왜 조건수만으로는 $\lambda$를 고를 수 없는지 설명하라.
+
+</div>
+
+??? success "풀이"
+    **유도.** $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$이면
+
+    $$
+    \hat{\boldsymbol\beta}_\lambda = (\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y} = \mathbf{V}\operatorname{diag}\!\left(\frac{d_j}{d_j^2+\lambda}\right)\mathbf{U}^\top\mathbf{y}
+    $$
+
+    이고 $\mathbf{y} = \mathbf{X}\boldsymbol\beta + \boldsymbol\varepsilon$을 넣으면
+
+    $$
+    \hat{\boldsymbol\beta}_\lambda = \mathbf{V}\operatorname{diag}\!\left(\frac{d_j^2}{d_j^2+\lambda}\right)\boldsymbol\theta + \mathbf{V}\operatorname{diag}\!\left(\frac{d_j}{d_j^2+\lambda}\right)\mathbf{U}^\top\boldsymbol\varepsilon
+    $$
+
+    이다($\boldsymbol\theta = \mathbf{V}^\top\boldsymbol\beta$). $\mathbf{V}$가 직교이므로 노름을 고유기저에서 재면 되고, $j$번째 좌표의 편향은
+
+    $$
+    \frac{d_j^2}{d_j^2+\lambda}\theta_j - \theta_j = -\frac{\lambda\theta_j}{d_j^2+\lambda}
+    $$
+
+    분산은 $\sigma^2 d_j^2/(d_j^2+\lambda)^2$이다. 좌표별로 더하면 문제의 식이다. $\lambda = 0$에서 편향항이 사라지고 $\mathbb{E}\lVert\hat{\boldsymbol\beta}_0 - \boldsymbol\beta\rVert^2 = \sigma^2\sum_j 1/d_j^2$이 되는데, 이 값은 $\boldsymbol\beta$에 전혀 의존하지 않는다. $\square$
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(11)
+    n, p, rho, sig = 40, 8, 0.999, 1.0
+    S = rho*np.ones((p, p)) + (1-rho)*np.eye(p)
+    X = rng.normal(size=(n, p)) @ np.linalg.cholesky(S).T
+
+    # === X 의 SVD 로 능형 계수 MSE 의 정확한 값을 쓴다 (모의실험이 아니다) ===
+    U, d, Vt = np.linalg.svd(X, full_matrices=False)
+    d2 = d**2
+    kappa = lambda lam: (d2[0] + lam)/(d2[-1] + lam)
+    dof = lambda lam: np.sum(d2/(d2 + lam))
+
+    def mse(beta, lam):
+        th = Vt @ beta                                  # 고유기저에서 본 참계수
+        return np.sum((lam*th/(d2 + lam))**2) + sig**2*np.sum(d2/(d2 + lam)**2)
+
+    grid = np.concatenate([[0.0], np.logspace(-4, 4, 80001)])
+    one = np.ones(p)
+    lam_star = grid[int(np.argmin([mse(one, l) for l in grid]))]
+    lam_1e4 = (d2[0] - 1e4*d2[-1])/(1e4 - 1)            # kappa = 10^4 가 되는 lambda
+
+    print(f"kappa(X'X) = {kappa(0.0):.1f}   d_1^2 = {d2[0]:.2f}   d_p^2 = {d2[-1]:.4f}")
+    print(f"kappa 를 10^4 로 내리는 lambda = {lam_1e4:.4f}")
+    print(f"계수 MSE 를 최소로 하는 lambda* = {lam_star:.4f}")
+    print(f"\nbeta = (1,...,1)")
+    print(f"{'lambda':>10}{'kappa':>12}{'유효자유도':>12}{'계수 MSE':>12}")
+    for lam in (0.0, lam_1e4, 0.1, 1.0, lam_star, 100.0):
+        print(f"{lam:10.4f}{kappa(lam):12.2f}{dof(lam):12.4f}{mse(one, lam):12.4f}")
+
+    print(f"\nbeta 의 방향을 바꾼다 (둘 다 단위벡터)")
+    print(f"{'lambda':>10}{'beta = v_1':>14}{'beta = v_p':>14}")
+    for lam in (0.0, lam_1e4, 1.0, lam_star, 100.0, 10000.0):
+        print(f"{lam:10.4f}{mse(Vt[0], lam):14.4f}{mse(Vt[-1], lam):14.4f}")
+    ```
+
+    출력:
+
+    ```text
+    kappa(X'X) = 16601.7   d_1^2 = 265.27   d_p^2 = 0.0160
+    kappa 를 10^4 로 내리는 lambda = 0.0105
+    계수 MSE 를 최소로 하는 lambda* = 6.9695
+
+    beta = (1,...,1)
+        lambda       kappa       유효자유도      계수 MSE
+        0.0000    16601.66      8.0000    232.8516
+        0.0105    10000.00      6.2403    120.9866
+        0.1000     2288.11      2.7784     12.8852
+        1.0000      262.08      1.2346      0.2331
+        6.9695       38.97      1.0098      0.0140
+      100.0000        3.65      0.7287      0.6017
+
+    beta 의 방향을 바꾼다 (둘 다 단위벡터)
+        lambda    beta = v_1    beta = v_p
+        0.0000      232.8516      232.8516
+        0.0105      120.9866      121.1448
+        1.0000        0.2329        1.2017
+        6.9695        0.0093        1.0041
+      100.0000        0.0770        1.0017
+    10000.0000        0.9490        1.0000
+    ```
+
+    **조건수 문턱은 처방이 아니다.** 조건수를 $10^4$로 딱 내리는 $\lambda$는 $0.0105$이고 그때 MSE는 $232.85 \to 120.99$로 절반이 된다. 그런데 MSE를 최소로 하는 $\lambda^\ast = 6.9695$에서는 MSE가 $0.0140$, 네 자리 줄어든다. **통계적으로 최적인 $\lambda$가 조건수 문턱이 요구하는 값의 $664$배다.** 본문 6절 표를 "$\lambda$를 여기까지만 올려라"로 읽으면 크게 손해를 본다. 문턱은 경보일 뿐이다. 그리고 $\lambda^\ast$에서도 조건수는 $38.97$까지 내려가 있으니, **MSE를 최적화하면 조건수는 알아서 따라 내려온다.** 거꾸로는 성립하지 않는다.
+
+    유효 자유도 열을 같이 보라. $\lambda^\ast$에서 $1.0098$이다. 여덟 변수 중 사실상 하나만 남기는 것이 최적이고, $\rho = 0.999$짜리 자료에서 그것이 옳다.
+
+    **조건수는 신호가 어디 있는지 모른다.** $\lambda = 0$의 MSE는 $\sigma^2\sum_j 1/d_j^2 = 232.85$로 $\boldsymbol\beta$와 무관하다(유도의 마지막 줄). 그래서 $\boldsymbol\beta = \mathbf{v}_1$과 $\boldsymbol\beta = \mathbf{v}_p$의 첫 행이 같다. 그러나 $\lambda > 0$에서는 완전히 갈린다.
+
+    - $\boldsymbol\beta = \mathbf{v}_1$: 신호가 가장 잘 결정된 방향에 있다. 축소해도 편향이 거의 안 생기므로 MSE가 $0.0093$까지 떨어진다. 정칙화가 거의 공짜다.
+    - $\boldsymbol\beta = \mathbf{v}_p$: 신호가 가장 잘 결정되지 않은 방향에 있다. 그 방향의 OLS 표준오차가 $1/d_p = 7.9$인데 신호 크기는 $1$이므로, 어떤 $\lambda$도 MSE를 $1.0$ 아래로 못 내린다. $\lambda \to \infty$의 극한값 $\lVert\boldsymbol\beta\rVert^2 = 1$이 최선이고, 이는 **그 계수를 아예 버리는 것**이다.
+
+    두 경우에서 $\mathbf{X}$가 같으니 조건수도 같다. 그런데 최적 $\lambda$와 얻을 수 있는 이득은 전혀 다르다. 그러므로 조건수는 $\lambda$ 탐색 **범위**를 잡는 데만 쓰고(본문의 실무 절차 3단계), 값 자체는 교차검증으로 골라야 한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
+본문 2절은 $p > n$이면 OLS 해가 유일하지 않다고 했다. 반면 $\lambda > 0$이면 능형 해는 유일하다(연습문제 7). 그렇다면 $\lambda \downarrow 0$에서 능형은 수많은 OLS 해 가운데 **어느 것**으로 가는가.
+
+(1) $(\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})^{-1}\mathbf{X}^\top = \mathbf{X}^\top(\mathbf{X}\mathbf{X}^\top+\lambda\mathbf{I})^{-1}$을 증명하라($\lambda > 0$).
+(2) SVD로 $\lim_{\lambda\downarrow 0}\hat{\boldsymbol\beta}_\lambda = \mathbf{X}^{+}\mathbf{y}$임을 보이고, 이것이 잔차를 $0$으로 만드는 해들 가운데 $\lVert\boldsymbol\beta\rVert$가 가장 작은 것임을 보여라.
+(3) $n = 20$, $p = 30$짜리 난수 자료에서 수치로 확인하고, $\lVert\hat{\boldsymbol\beta}_\lambda - \mathbf{X}^{+}\mathbf{y}\rVert$가 $\lambda$에 **비례**함을 확인하라.
+
+</div>
+
+??? success "풀이"
+    **(1)** 양변에 곱해 보면 끝난다.
+
+    $$
+    \mathbf{X}^\top(\mathbf{X}\mathbf{X}^\top + \lambda\mathbf{I}) = \mathbf{X}^\top\mathbf{X}\mathbf{X}^\top + \lambda\mathbf{X}^\top = (\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})\mathbf{X}^\top
+    $$
+
+    $\lambda > 0$이면 $\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I}$($p\times p$)와 $\mathbf{X}\mathbf{X}^\top+\lambda\mathbf{I}$($n\times n$)가 모두 양정치라 역행렬이 있다. 왼쪽에 $(\mathbf{X}^\top\mathbf{X}+\lambda\mathbf{I})^{-1}$을, 오른쪽에 $(\mathbf{X}\mathbf{X}^\top+\lambda\mathbf{I})^{-1}$을 곱하면 주장한 등식이다. $\square$
+
+    실무적 이득이 둘이다. $p > n$이면 역행렬 크기가 $p \times p$에서 $n \times n$으로 줄고, 더 중요하게는 왼쪽 식이 $\lambda \downarrow 0$에서 $\kappa \to \infty$로 터지는 반면 오른쪽 식의 $\mathbf{X}\mathbf{X}^\top$은 계수 완전 행렬이라 안정하다. 아래 코드가 오른쪽 식을 쓰는 까닭이다.
+
+    **(2)** $\operatorname{rank}(\mathbf{X}) = n$($p > n$)이라 하고 $\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^\top$, $\mathbf{U}$는 $n\times n$ 직교, $\mathbf{D} = \operatorname{diag}(d_1,\ldots,d_n)$, $\mathbf{V}$는 $p \times n$ 직교열이라 하자. $\mathbf{X}\mathbf{X}^\top = \mathbf{U}\mathbf{D}^2\mathbf{U}^\top$이므로
+
+    $$
+    \hat{\boldsymbol\beta}_\lambda = \mathbf{X}^\top(\mathbf{X}\mathbf{X}^\top+\lambda\mathbf{I})^{-1}\mathbf{y} = \mathbf{V}\mathbf{D}\mathbf{U}^\top\,\mathbf{U}(\mathbf{D}^2+\lambda\mathbf{I})^{-1}\mathbf{U}^\top\mathbf{y} = \sum_{j=1}^{n}\frac{d_j}{d_j^2+\lambda}\left(\mathbf{u}_j^\top\mathbf{y}\right)\mathbf{v}_j
+    $$
+
+    이고 $\lambda \downarrow 0$에서 각 계수가 $1/d_j$로 수렴하므로
+
+    $$
+    \lim_{\lambda \downarrow 0}\hat{\boldsymbol\beta}_\lambda = \sum_{j=1}^{n}\frac{\mathbf{u}_j^\top\mathbf{y}}{d_j}\mathbf{v}_j = \mathbf{X}^{+}\mathbf{y}
+    $$
+
+    다. 또 $\mathbf{X}\mathbf{X}^{+}\mathbf{y} = \sum_j(\mathbf{u}_j^\top\mathbf{y})\mathbf{u}_j = \mathbf{y}$($\mathbf{u}_1,\ldots,\mathbf{u}_n$이 $\mathbb{R}^n$의 정규직교기저)이므로 잔차가 $0$, 즉 완전적합이다.
+
+    최소노름임을 보인다. 잔차를 $0$으로 만드는 임의의 해는 $\boldsymbol\beta = \mathbf{X}^{+}\mathbf{y} + \mathbf{z}$, $\mathbf{z} \in \ker\mathbf{X}$ 꼴이다. $\mathbf{X}^{+}\mathbf{y}$는 $\mathbf{v}_j$들의 선형결합이므로 $\mathbf{X}$의 행공간에 있고, 행공간은 $\ker\mathbf{X}$의 직교보공간이므로 $\mathbf{X}^{+}\mathbf{y} \perp \mathbf{z}$다. 따라서
+
+    $$
+    \lVert\boldsymbol\beta\rVert^2 = \lVert\mathbf{X}^{+}\mathbf{y}\rVert^2 + \lVert\mathbf{z}\rVert^2 \geq \lVert\mathbf{X}^{+}\mathbf{y}\rVert^2
+    $$
+
+    이고 등호는 $\mathbf{z} = \mathbf{0}$에서만 성립한다. $\square$
+
+    **(3)**
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(7)
+    n, p = 20, 30
+    X = rng.normal(size=(n, p))
+    y = X @ np.concatenate([np.ones(5), np.zeros(p-5)]) + rng.normal(0, 0.5, n)
+
+    # === 쌍대 꼴 (X'X + lam I)^{-1} X' = X'(XX' + lam I)^{-1} 로 n x n 만 역행렬 ===
+    G = X @ X.T
+    ridge = lambda lam: X.T @ np.linalg.solve(G + lam*np.eye(n), y)
+    b_min = np.linalg.pinv(X) @ y
+
+    print(f"rank(X) = {np.linalg.matrix_rank(X)}  (p = {p} 이므로 X'X 는 특이행렬)")
+    print(f"kappa(XX') = {np.linalg.cond(G):.2f}")
+    print(f"||pinv(X)y|| = {np.linalg.norm(b_min):.6f}")
+
+    print(f"\n{'lambda':>8}{'||b(lam)||':>13}{'||b(lam)-pinv(X)y||':>22}{'비율/lambda':>13}{'잔차':>10}")
+    for lam in (1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6):
+        b = ridge(lam)
+        gap = np.linalg.norm(b - b_min)
+        print(f"{lam:8.0e}{np.linalg.norm(b):13.6f}{gap:22.8f}{gap/lam:13.4f}"
+              f"{np.linalg.norm(y - X@b):10.4f}")
+
+    # === 완전적합을 주는 다른 해들의 노름 ===
+    N = np.linalg.svd(X, full_matrices=True)[2][n:].T    # 영공간 기저, 차원 p-n
+    print(f"\nX 의 영공간 차원 = {N.shape[1]}")
+    print(f"{'c':>6}{'||beta||':>12}{'잔차':>10}")
+    for c in (0.0, 0.5, 1.0, 2.0):
+        alt = b_min + N @ (c*np.ones(N.shape[1]))
+        print(f"{c:6.1f}{np.linalg.norm(alt):12.6f}{np.linalg.norm(y - X@alt):10.4f}")
+    ```
+
+    출력:
+
+    ```text
+    rank(X) = 20  (p = 30 이므로 X'X 는 특이행렬)
+    kappa(XX') = 79.47
+    ||pinv(X)y|| = 2.505100
+
+      lambda   ||b(lam)||   ||b(lam)-pinv(X)y||    비율/lambda        잔차
+       1e-01     2.400815            0.13743155       1.3743    0.1570
+       1e-02     2.493799            0.01479896       1.4799    0.0168
+       1e-03     2.503961            0.00149142       1.4914    0.0017
+       1e-04     2.504986            0.00014926       1.4926    0.0002
+       1e-05     2.505089            0.00001493       1.4927    0.0000
+       1e-06     2.505099            0.00000149       1.4927    0.0000
+
+    X 의 영공간 차원 = 10
+         c    ||beta||        잔차
+       0.0    2.505100    0.0000
+       0.5    2.962352    0.0000
+       1.0    4.034294    0.0000
+       2.0    6.802612    0.0000
+    ```
+
+    세 가지가 확인된다. 첫째, $\lVert\hat{\boldsymbol\beta}_\lambda\rVert$가 $\lVert\mathbf{X}^{+}\mathbf{y}\rVert = 2.505100$으로 **아래에서** 올라가며 수렴한다. 능형은 항상 최소노름해보다도 짧다. 둘째, 차이를 $\lambda$로 나눈 열이 $1.4927$로 수렴한다. 즉 $\lVert\hat{\boldsymbol\beta}_\lambda - \mathbf{X}^{+}\mathbf{y}\rVert = O(\lambda)$다. SVD 식에서 $d_j/(d_j^2+\lambda) - 1/d_j = -\lambda/(d_j(d_j^2+\lambda))$이므로 $\lambda$의 일차항이 나오는 것이 맞다. 셋째, 영공간 방향을 더한 다른 완전적합 해들은 잔차가 똑같이 $0$인데 노름은 $2.5051 \to 2.9624 \to 4.0343 \to 6.8026$으로 커진다. 영공간 기저가 정규직교이므로 $\lVert\boldsymbol\beta\rVert^2 = 2.5051^2 + 10c^2$이고, $c = 0.5$에서 $\sqrt{6.2755 + 2.5} = 2.9624$다. (2)의 직교분해가 수로 보인다.
+
+    **읽을 것.** $p > n$에서 "$\lambda$를 $0$으로 보내 정칙화를 끈" 추정량이란 것은 없다. 끄는 시늉을 하면 수많은 완전적합 해 가운데 **최소노름해를 조용히 고르게 된다.** 정칙화를 끌 수는 없고 어떤 정칙화를 쓸지만 고를 수 있다. 과모수화된 모형이 명시적 벌점 없이도 종종 잘 맞는 현상을 설명할 때 이 사실이 출발점이 된다.
+
 ---
 
 ## 정리하며

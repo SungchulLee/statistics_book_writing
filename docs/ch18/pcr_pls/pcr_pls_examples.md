@@ -582,6 +582,507 @@ PLS는 다음과 같은 상황에서 PCR을 능가하는 경향이 있다.
     이다. 즉 첫 PLS 방향은 각 설명변수와 반응변수의 주변공분산을 모은 벡터를 정규화한 것에
     지나지 않는다. $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 6.** <span class="diff hard" title="어려움"></span> 보기 4 는 능형이 고른 $\lambda = 335.16$ 에서 유효자유도가 $\operatorname{df}(\lambda) = \sum_{m} d_m^2/(d_m^2+\lambda) = 8.7301$ 이라 했다. 이제 **능형을 PCR 과 같은 자유도에 세워 보자.**
+
+**(1)** $\operatorname{df}$ 가 $[0,\infty)$ 에서 연속이고 순강감소이며 $\operatorname{df}(0) = p$, $\lim_{\lambda\to\infty}\operatorname{df}(\lambda) = 0$ 임을 보여라. 따라서 $0 < M < p$ 인 임의의 $M$ 에 대해 $\operatorname{df}(\lambda) = M$ 인 $\lambda$ 가 **단 하나**임을 결론하라.
+
+**(2)** 보기 1 이 찍은 상관행렬 고윳값과 $d_m^2 = (n-1)\lambda_m$, $n = 22{,}687$ 을 써서 $\operatorname{df}(\lambda) = 7$ 인 $\lambda_\star$ 를 이분법으로 구하라. 그 $\lambda_\star$ 에서 능형의 축소 인자 아홉 개를 PCR$(M=7)$ 의 $(1,1,1,1,1,1,1,0,0)$ 과 견주고, **"같은 자유도"가 "같은 모형"을 뜻하지 않는다**는 것을 수로 말하라.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 항별로 $g_m(\lambda) = d_m^2/(d_m^2+\lambda)$ 라 두면 $X$ 가 계수 $p$ 이므로 모든 $d_m^2 > 0$ 이고
+
+    $$
+    g_m'(\lambda) = -\frac{d_m^2}{(d_m^2+\lambda)^2} < 0
+    $$
+
+    이다. 따라서
+
+    $$
+    \operatorname{df}'(\lambda) = -\sum_{m=1}^{p}\frac{d_m^2}{(d_m^2+\lambda)^2} < 0
+    $$
+
+    으로 $\operatorname{df}$ 는 순강감소다. $\lambda = 0$ 에서 $g_m(0) = 1$ 이므로 $\operatorname{df}(0) = p$ 이고, $\lambda \to \infty$ 에서 $g_m(\lambda) \to 0$ 이므로 $\operatorname{df}(\lambda) \to 0$ 이다. 유리함수의 합이므로 $[0,\infty)$ 에서 연속이다.
+
+    연속이고 끝값이 $p$ 와 $0$ 이므로 중간값정리로 $\operatorname{df}(\lambda) = M$ 인 $\lambda$ 가 **존재**하고, 순강감소이므로 단사라서 그 $\lambda$ 가 **유일**하다. 그러므로 "능형의 자유도를 $M$ 에 맞춘다"는 말이 잘 정의된다. $\square$
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+
+    # 보기 1 이 찍은 상관행렬 고윳값과 표본크기. 자료를 다시 읽지 않는다.
+    lam_corr = np.array([3.2464, 1.4904, 1.0379, 0.9616, 0.87,
+                         0.5566, 0.4485, 0.25, 0.1388])
+    n = 22687
+    d2 = (n - 1) * lam_corr          # d_m^2 = (n-1) x (상관행렬 고윳값)
+
+    def df(lmbda):
+        return float(np.sum(d2 / (d2 + lmbda)))
+
+    print("d_m^2 =", np.round(d2, 1))
+    print(f"df(0)      = {df(0.0):.4f}")
+    print(f"df(335.16) = {df(335.16):.4f}   <- 보기 4 는 8.7301")
+
+    # df 는 lambda 에 대해 순강감소이므로 이분법이 쓸 수 있다
+    lo, hi = 0.0, 1.0e6
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if df(mid) > 7.0:
+            lo = mid
+        else:
+            hi = mid
+    lam_star = 0.5 * (lo + hi)
+
+    print(f"df(lambda) = 7 인 lambda* = {lam_star:,.2f}  (df = {df(lam_star):.6f})")
+    s = d2 / (d2 + lam_star)
+    print("lambda* 에서 능형의 성분별 축소 인자:")
+    print("  ", np.round(s, 4))
+    print("같은 자유도를 쓰는 PCR(M=7) 의 축소 인자:")
+    print("  ", np.array([1.0] * 7 + [0.0] * 2))
+    print(f"가장 작은 성분에 남는 몫: 능형 {s[-1]:.4f},  PCR 0.0000")
+    print(f"가장 큰 성분에서 깎인 몫: 능형 {1 - s[0]:.4f},  PCR 0.0000")
+    ```
+
+    출력:
+
+    ```text
+    d_m^2 = [73647.8 33811.2 23545.8 21814.9 19736.8 12627.  10174.7  5671.5  3148.8]
+    df(0)      = 9.0000
+    df(335.16) = 8.7300   <- 보기 4 는 8.7301
+    df(lambda) = 7 인 lambda* = 3,663.55  (df = 7.000000)
+    lambda* 에서 능형의 성분별 축소 인자:
+       [0.9526 0.9022 0.8654 0.8562 0.8434 0.7751 0.7353 0.6075 0.4622]
+    같은 자유도를 쓰는 PCR(M=7) 의 축소 인자:
+       [1. 1. 1. 1. 1. 1. 1. 0. 0.]
+    가장 작은 성분에 남는 몫: 능형 0.4622,  PCR 0.0000
+    가장 큰 성분에서 깎인 몫: 능형 0.0474,  PCR 0.0000
+    ```
+
+    $\operatorname{df}(335.16) = 8.7300$ 으로 보기 4 의 $8.7301$ 과 소수 넷째 자리에서 $1$ 만큼 어긋난다. 고윳값을 소수 넷째 자리로 반올림해 썼기 때문이며, 어긋남의 크기가 반올림 오차 그대로다. 이것으로 $d_m^2 = (n-1)\lambda_m$ 이라는 환산이 맞음을 확인한다.
+
+    **자유도 $7$ 을 쓰는 두 방식.** $\lambda_\star = 3{,}663.55$ 다. 같은 복잡도 예산 $7$ 을 능형은 **아홉 성분에서 조금씩 떼어** 쓴다. 가장 큰 성분에서도 $4.74\%$ 를 깎고, 가장 작은 성분은 $46.22\%$ 만 남긴다. PCR$(M=7)$ 은 **일곱 성분을 전혀 건드리지 않고 두 성분을 통째로 버린다.** 축소 인자 벡터를 나란히 놓으면
+
+    $$
+    (0.9526, \ldots, 0.7353,\ 0.6075,\ 0.4622)
+    \quad \text{대} \quad
+    (1, \ldots, 1,\ 0,\ 0)
+    $$
+
+    으로, 아홉 자리 가운데 **한 자리도 같지 않다.** 두 모형은 예측도 다르고 계수도 다르다.
+
+    **어느 쪽이 나은지는 자료가 정한다.** 보기 2 에서 $7$ 번 성분이 $X$ 의 분산을 $4.98\%$ 밖에 설명하지 않으면서 CV RMSE 를 $275{,}200$ 에서 $246{,}949$ 로 떨어뜨렸다. 작은 성분에도 신호가 있다는 뜻이고, 그렇다면 $8$, $9$ 번 성분을 $0.6075$, $0.4622$ 로 **남겨 쓰는** 능형 쪽이 통째로 버리는 PCR 보다 안전하다. 유효자유도는 모형이 아니라 **복잡도 예산의 총액**이며, 그 예산을 어디에 쓰는지가 방법을 가른다.
+
+<div class="drillbox" markdown>
+
+**연습문제 7.** <span class="diff hard" title="어려움"></span> 연습문제 1 은 $M = p$ 에서 PCR 이 OLS 와 같음을 보였다. 이제 $M < p$ 에서 PCR 이 OLS **계수벡터**에 무슨 일을 하는지 적는다.
+
+**(1)** $V_M = [v_1 \mid \cdots \mid v_M]$ 이라 할 때
+
+$$
+\hat\beta^{\text{PCR}}_M = V_M V_M^\top \hat\beta^{\text{OLS}}
+$$
+
+임을 보이고, 이로부터 $\lVert \hat\beta^{\text{PCR}}_M \rVert \le \lVert \hat\beta^{\text{OLS}} \rVert$ 임을 보여라.
+
+**(2)** 그런데도 PCR 은 **좌표별 축소가 아니다.** $p = 2$ 와
+
+$$
+X^\top X = \begin{pmatrix} 10 & 8 \\ 8 & 10 \end{pmatrix},
+\qquad
+X^\top y = \begin{pmatrix} 34 \\ 38 \end{pmatrix}
+$$
+
+에서 $\hat\beta^{\text{OLS}}$ 와 $\hat\beta^{\text{PCR}}_{M=1}$ 을 손으로 구해 $\lvert \hat\beta^{\text{PCR}}_1 \rvert > \lvert \hat\beta^{\text{OLS}}_1 \rvert$ 인 반례를 만들어라. 능형에서도 같은 일이 일어날 수 있는가? $\lambda = 2$ 에서 확인하라.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** $X = UDV^\top$ 에서 $Z_M = XV_M$ 이고 $Z_M^\top Z_M = V_M^\top X^\top X V_M = D_M^2 = \operatorname{diag}(d_1^2,\dots,d_M^2)$ 이다. PCR 계수는 성분 좌표의 해를 $V_M$ 으로 되돌린 것이므로
+
+    $$
+    \hat\beta^{\text{PCR}}_M = V_M (Z_M^\top Z_M)^{-1} Z_M^\top y = V_M D_M^{-2} V_M^\top X^\top y
+    $$
+
+    다. 한편 $\hat\beta^{\text{OLS}} = (X^\top X)^{-1}X^\top y = V D^{-2} V^\top X^\top y$ 이므로
+
+    $$
+    V_M V_M^\top \hat\beta^{\text{OLS}} = V_M V_M^\top V D^{-2} V^\top X^\top y = V_M D_M^{-2} V_M^\top X^\top y = \hat\beta^{\text{PCR}}_M
+    $$
+
+    이다. 가운데 등호는 $V_M^\top V = [\,I_M \mid 0\,]$ 라서 $D^{-2}$ 의 앞 $M$ 개 대각원소만 살아남기 때문이다.
+
+    $P_M = V_M V_M^\top$ 은 $\operatorname{span}(v_1,\dots,v_M)$ 위로의 **직교사영**이다($P_M^2 = P_M = P_M^\top$). 사영은 노름을 늘리지 않으므로
+
+    $$
+    \lVert \hat\beta^{\text{PCR}}_M \rVert = \lVert P_M \hat\beta^{\text{OLS}} \rVert \le \lVert \hat\beta^{\text{OLS}} \rVert
+    $$
+
+    이다. 곧 PCR 은 **회전된 좌표 $\gamma = V^\top\beta$ 에서** 뒤쪽 $p-M$ 개를 $0$ 으로 눌러 버리는 일이고, 그 결과 전체 길이가 줄어든다. $\square$
+
+    **(2) 손으로.** $X^\top X$ 의 고유분해부터. 행렬이 $\begin{pmatrix} a & b \\ b & a\end{pmatrix}$ 꼴이므로 고유벡터가 $v_1 = (1,1)^\top/\sqrt2$, $v_2 = (1,-1)^\top/\sqrt2$ 이고 고윳값은 $d_1^2 = 10+8 = 18$, $d_2^2 = 10-8 = 2$ 다.
+
+    OLS 는 $\det(X^\top X) = 100 - 64 = 36$ 이므로
+
+    $$
+    \hat\beta^{\text{OLS}} = \frac{1}{36}\begin{pmatrix} 10 & -8 \\ -8 & 10\end{pmatrix}\begin{pmatrix}34\\38\end{pmatrix} = \frac{1}{36}\begin{pmatrix}340-304\\-272+380\end{pmatrix} = \frac{1}{36}\begin{pmatrix}36\\108\end{pmatrix} = \begin{pmatrix}1\\3\end{pmatrix}
+    $$
+
+    다. (1) 을 쓰면 $M = 1$ 의 PCR 은
+
+    $$
+    \hat\beta^{\text{PCR}}_{M=1} = v_1 v_1^\top \begin{pmatrix}1\\3\end{pmatrix} = \frac{1+3}{2}\begin{pmatrix}1\\1\end{pmatrix} = \begin{pmatrix}2\\2\end{pmatrix}
+    $$
+
+    이다. **첫 좌표가 $1$ 에서 $2$ 로 두 배 커졌다.** 그런데 길이는
+
+    $$
+    \lVert \hat\beta^{\text{PCR}} \rVert = \sqrt{8} = 2.8284 \;\le\; \sqrt{10} = 3.1623 = \lVert \hat\beta^{\text{OLS}} \rVert
+    $$
+
+    로 (1) 그대로 줄었다. 모순이 아니다. 사영은 **벡터의 길이**를 줄이지만 **각 좌표**를 줄인다는 보장은 없다. 여기서는 $\hat\beta^{\text{OLS}}$ 가 $v_2$ 쪽 성분 $\hat\gamma_2 = v_2^\top(1,3)^\top = -2/\sqrt2 = -1.4142$ 를 가지고 있고, 그것을 버리면서 첫 좌표에 실려 있던 음의 기여가 함께 사라진 것이다.
+
+    **능형도 같다.** $\hat\gamma = V^\top(1,3)^\top = (4/\sqrt2,\, -2/\sqrt2)^\top = (2.8284,\, -1.4142)^\top$ 이고 $\lambda = 2$ 에서 축소 인자는
+
+    $$
+    s_1 = \frac{18}{18+2} = 0.9, \qquad s_2 = \frac{2}{2+2} = 0.5
+    $$
+
+    다. 되돌리면
+
+    $$
+    \hat\beta^{\text{ridge}}(2) = v_1 s_1 \hat\gamma_1 + v_2 s_2 \hat\gamma_2 = 2(0.9)\begin{pmatrix}1\\1\end{pmatrix} + (-1)(0.5)\begin{pmatrix}1\\-1\end{pmatrix} = \begin{pmatrix}1.3\\2.3\end{pmatrix}
+    $$
+
+    이다. 첫 좌표가 $1 \to 1.3$ 으로 **커졌다.** 길이는 $\lVert(1.3, 2.3)\rVert = 2.6420 < 3.1623$ 로 줄었다.
+
+    까닭이 같다. 능형과 PCR 은 모두 $V$ 로 회전한 좌표에서만 축소이고, 원래 좌표로 되돌릴 때 성분들이 섞인다. $s_1 \ne s_2$ 이면 섞이는 비율이 달라져 좌표가 커질 수 있다. **"능형은 계수를 줄인다"는 말은 $\lVert\beta\rVert$ 에 대한 진술이지 $\beta_j$ 하나하나에 대한 진술이 아니다.** 좌표별 축소가 보장되는 것은 $X$ 가 직교설계여서 $V = I$ 일 때뿐이고, 그때 능형은 $\hat\beta_j^{\text{OLS}}/(1+\lambda/d_j^2)$ 로 비례축소가 된다.
+
+<div class="drillbox" markdown>
+
+**연습문제 8.** <span class="diff hard" title="어려움"></span> 연습문제 7 과 **같은 설계**에 반응만 바꾼다. $x_1 = (2,1,-1,-2)^\top$, $x_2 = (1,2,-2,-1)^\top$, $y = (1,-1,1,-1)^\top$ 이라 하면 세 벡터 모두 중심화되어 있고
+
+$$
+X^\top X = \begin{pmatrix} 10 & 8 \\ 8 & 10 \end{pmatrix},
+\qquad
+X^\top y = \begin{pmatrix} 2 \\ -2 \end{pmatrix},
+\qquad
+y^\top y = 4
+$$
+
+이다. 두 열의 노름이 같으므로 표준화해도 주성분 방향이 바뀌지 않는다.
+
+**(1)** $\hat\beta^{\text{OLS}}$ 와 OLS 의 $R^2$ 를 구하라.
+
+**(2)** PCR$(M=1)$ 의 $R^2$ 를 구하고 그 값이 나오는 까닭을 말하라.
+
+**(3)** PLS 의 첫 가중 $w_1$ 과 PLS$(M=1)$ 의 $R^2$ 를 구하라.
+
+**(4)** 능형의 성분별 축소 인자를 적고, 능형이 PCR 과 **같은 병**에 걸리는지 판정하라. $\lambda = 2$ 와 $\lambda = 18$ 에서 $R^2$ 를 구하라.
+
+</div>
+
+??? success "풀이"
+
+    연습문제 7 에서 이미 $v_1 = (1,1)^\top/\sqrt2$, $d_1^2 = 18$, $v_2 = (1,-1)^\top/\sqrt2$, $d_2^2 = 2$ 를 얻었다.
+
+    **(1)** $\det(X^\top X) = 36$ 이므로
+
+    $$
+    \hat\beta^{\text{OLS}} = \frac{1}{36}\begin{pmatrix}10 & -8\\ -8 & 10\end{pmatrix}\begin{pmatrix}2\\-2\end{pmatrix} = \frac{1}{36}\begin{pmatrix}20+16\\-16-20\end{pmatrix} = \begin{pmatrix}1\\-1\end{pmatrix}
+    $$
+
+    다. 적합값은 $\hat y = x_1 - x_2 = (1,-1,1,-1)^\top = y$ 로 $y$ 와 **정확히** 같다. 따라서 $\text{RSS} = 0$, $R^2 = 1$ 이다.
+
+    **(2)** 첫 주성분의 점수는 $z_1 = Xv_1 = (x_1+x_2)/\sqrt2 = (3,3,-3,-3)^\top/\sqrt2$ 다. 그런데
+
+    $$
+    z_1^\top y = v_1^\top X^\top y = \frac{1}{\sqrt2}(2 + (-2)) = 0
+    $$
+
+    이다. **첫 주성분이 $y$ 와 직교한다.** 그러므로 $\hat\gamma_1 = 0$, $\hat\beta^{\text{PCR}}_{M=1} = \mathbf 0$, $\hat y = \mathbf 0$ 이고
+
+    $$
+    R^2_{\text{PCR}(M=1)} = 1 - \frac{4}{4} = 0
+    $$
+
+    이다. $X$ 의 분산을 $18/20 = 90\%$ 설명하는 성분 하나를 쓰고도 **설명력이 전혀 없다.** 신호가 전부 분산이 작은 둘째 방향 $v_2$ 에 들어 있기 때문이다. 실제로 $\hat\gamma_2 = v_2^\top\hat\beta^{\text{OLS}} = (1+1)/\sqrt2 = \sqrt2 \ne 0$ 이다.
+
+    **(3)** $w_1 \propto X^\top y = (2,-2)^\top$ 이므로
+
+    $$
+    w_1 = \frac{(2,-2)^\top}{\lVert (2,-2)^\top \rVert} = \frac{1}{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix} = v_2
+    $$
+
+    다. PLS 의 첫 가중이 **둘째 주성분 방향을 정확히 집어낸다.** 성분은 $t_1 = Xw_1 = (x_1-x_2)/\sqrt2 = y/\sqrt2$ 이고
+
+    $$
+    t_1^\top y = \frac{1}{\sqrt2}(2+2) = 2\sqrt2,
+    \qquad
+    \lVert t_1 \rVert^2 = w_1^\top X^\top X w_1 = \frac{1}{2}\,(1,-1)\begin{pmatrix}2\\-2\end{pmatrix} = 2
+    $$
+
+    이므로 회귀계수는 $2\sqrt2/2 = \sqrt2$ 이고 적합값은 $\hat y = \sqrt2\, t_1 = y$ 다. $\text{RSS} = 0$, 곧
+
+    $$
+    R^2_{\text{PLS}(M=1)} = 1
+    $$
+
+    이다. **성분 하나로 끝난다.** PLS 는 $X^\top y$ 를 보고 방향을 정하므로 분산이 작든 크든 상관하지 않는다.
+
+    **(4)** 축소 인자는 $s_1 = 18/(18+\lambda)$, $s_2 = 2/(2+\lambda)$ 다. $\hat\gamma_1 = 0$ 이므로 적합값에는 둘째 성분만 남고
+
+    $$
+    \hat y^{\text{ridge}}(\lambda) = s_2 \, z_2 \hat\gamma_2 = \frac{2}{2+\lambda}\, y,
+    \qquad
+    R^2 = 1 - \left(\frac{\lambda}{2+\lambda}\right)^2
+    $$
+
+    이다. $\lambda = 2$ 에서 $s_1 = 0.9$, $s_2 = 0.5$ 이고 $R^2 = 1 - 0.25 = 0.75$ 다. $\lambda = 18$ 에서 $s_1 = 0.5$, $s_2 = 0.1$ 이고 $R^2 = 1 - 0.81 = 0.19$ 다.
+
+    **능형은 같은 병에 걸린다. 다만 정도가 다르다.** 어느 $\lambda$ 에서도 $s_2 < s_1$ 이므로 능형은 **신호가 들어 있는 방향을 가장 세게 깎는다.** $\lambda = 18$ 에서 분산이 큰 쪽은 절반을 남기는데 정작 쓸모 있는 쪽은 $10\%$ 만 남는다. 다만 $s_2 > 0$ 이므로 $R^2$ 가 $0$ 으로 떨어지지는 않는다. PCR$(M=1)$ 은 $s_2 = 0$ 이라 $R^2 = 0$ 까지 간다.
+
+    세 방법을 한 줄에 놓으면 이 쪽의 요지가 수로 드러난다.
+
+    - PCR$(M=1)$: $R^2 = 0$. 성분을 $X$ 의 분산으로만 고르므로 신호를 통째로 버렸다.
+    - 능형: $R^2 = 1 - (\lambda/(2+\lambda))^2$. 버리지는 않지만 신호 방향을 가장 많이 깎는다.
+    - PLS$(M=1)$: $R^2 = 1$. $y$ 를 보았으므로 첫 성분에서 신호를 잡았다.
+
+    보기 2 에서 $7$ 번 주성분이 분산 $4.98\%$ 로 CV RMSE 를 통째로 바꿔 놓은 일이 이 설계의 **완화된 판본**이다. 여기서는 그 어긋남을 극단으로 밀어 $R^2$ 가 $0$ 과 $1$ 로 갈라지게 했다.
+
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span> 연습문제 2 는 PCR 에 표준화가 필요하다고 **정성적으로** 말했다. 그 대가를 수로 재자. 중심화만 하고 척도화는 하지 않은 설계에서
+
+$$
+X^\top X = \begin{pmatrix} 6 & 2 \\ 2 & 9 \end{pmatrix},
+\qquad
+X^\top y = \begin{pmatrix} 12 \\ 6 \end{pmatrix},
+\qquad
+y^\top y = 40
+$$
+
+이라 하자($y$ 는 중심화되어 있다).
+
+**(1)** 척도화하지 않은 $X$ 의 주성분 방향과 고윳값을 구하고, PCR$(M=1)$ 의 계수와 $R^2$ 를 구하라.
+
+**(2)** 각 열을 $\tilde x_j = x_j/\lVert x_j \rVert$ 로 바꾼 뒤 같은 일을 하라. 모든 열에 **같은** 상수를 곱하는 것은 주성분 방향도 열공간도 바꾸지 않으므로, 이 결과는 분산 $1$ 로 맞추는 통상의 표준화와 같다.
+
+**(3)** OLS 의 $R^2$ 를 구하고, (1) 과 (2) 에서 OLS 의 적합값이 왜 바뀌지 않는지 보여라.
+
+</div>
+
+??? success "풀이"
+
+    적합값이 사영이므로 어느 경우든 $\text{RSS} = y^\top y - \hat\beta^\top X^\top y$ 로 계산된다(PCR 도 성분 공간 위로의 사영이다). 이 식을 반복해 쓴다.
+
+    **(1) 척도화하지 않은 PCR.** $\begin{pmatrix}6&2\\2&9\end{pmatrix}$ 의 고유벡터를 찾자. $(1,2)^\top$ 을 넣으면 $(6+4,\, 2+18)^\top = (10, 20)^\top = 10\,(1,2)^\top$ 이므로
+
+    $$
+    v_1 = \frac{1}{\sqrt5}\begin{pmatrix}1\\2\end{pmatrix},\quad d_1^2 = 10,
+    \qquad
+    v_2 = \frac{1}{\sqrt5}\begin{pmatrix}2\\-1\end{pmatrix},\quad d_2^2 = 5
+    $$
+
+    다(대각합 $15 = 10+5$ 로 검산된다). **$x_2$ 의 노름이 더 커서 첫 주성분이 $x_2$ 쪽으로 기울었다.**
+
+    $v_1^\top X^\top y = (12 + 12)/\sqrt5 = 24/\sqrt5$ 이므로 $\hat\gamma_1 = (24/\sqrt5)/10$ 이고
+
+    $$
+    \hat\beta^{\text{PCR}} = v_1 \hat\gamma_1 = \frac{24}{50}\begin{pmatrix}1\\2\end{pmatrix} = \begin{pmatrix}0.48\\0.96\end{pmatrix}
+    $$
+
+    다. 적합제곱합은 $\hat\beta^\top X^\top y = 0.48(12) + 0.96(6) = 5.76 + 5.76 = 11.52$ 이므로
+
+    $$
+    R^2 = \frac{11.52}{40} = 0.2880
+    $$
+
+    이다.
+
+    **(2) 척도화한 PCR.** $\lVert x_1 \rVert = \sqrt6$, $\lVert x_2 \rVert = 3$ 이므로 $S = \operatorname{diag}(1/\sqrt6,\, 1/3)$, $\tilde X = XS$ 다. 그러면
+
+    $$
+    \tilde X^\top \tilde X = S X^\top X S = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix},
+    \qquad
+    \rho = \frac{2}{3\sqrt6} = 0.2722
+    $$
+
+    이고 $\tilde X^\top y = SX^\top y = (12/\sqrt6,\, 2)^\top = (4.8990,\, 2)^\top$ 이다. 상관행렬 꼴이므로 고유벡터는
+
+    $$
+    \tilde v_1 = \frac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix},\ \tilde d_1^2 = 1+\rho = 1.2722,
+    \qquad
+    \tilde v_2 = \frac{1}{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix},\ \tilde d_2^2 = 1-\rho = 0.7278
+    $$
+
+    다. **방향이 $(1,2)/\sqrt5$ 에서 $(1,1)/\sqrt2$ 로 바뀌었다.**
+
+    $\tilde v_1^\top \tilde X^\top y = (4.8990+2)/\sqrt2 = 4.8783$ 이므로 $\hat{\tilde\gamma}_1 = 4.8783/1.2722 = 3.8347$ 이고
+
+    $$
+    \hat{\tilde\beta}^{\text{PCR}} = \tilde v_1 \hat{\tilde\gamma}_1 = \frac{3.8347}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix} = \begin{pmatrix}2.7115\\2.7115\end{pmatrix}
+    $$
+
+    다. 원래 단위로 되돌리면 $\hat\beta = S\hat{\tilde\beta} = (2.7115/\sqrt6,\ 2.7115/3)^\top = (1.1070,\, 0.9038)^\top$ 이고 적합제곱합은
+
+    $$
+    \hat\beta^\top X^\top y = 1.1070(12) + 0.9038(6) = 13.2836 + 5.4230 = 18.7066
+    $$
+
+    이므로
+
+    $$
+    R^2 = \frac{18.7066}{40} = 0.4677
+    $$
+
+    이다.
+
+    **(3) OLS.** $\det(X^\top X) = 54 - 4 = 50$ 이므로
+
+    $$
+    \hat\beta^{\text{OLS}} = \frac{1}{50}\begin{pmatrix}9 & -2\\ -2 & 6\end{pmatrix}\begin{pmatrix}12\\6\end{pmatrix} = \frac{1}{50}\begin{pmatrix}108-12\\-24+36\end{pmatrix} = \begin{pmatrix}1.92\\0.24\end{pmatrix}
+    $$
+
+    이고 적합제곱합이 $1.92(12)+0.24(6) = 23.04+1.44 = 24.48$ 이라 $R^2 = 24.48/40 = 0.6120$ 이다.
+
+    척도를 바꾸어도 OLS 가 바뀌지 않는 까닭은 **열공간이 그대로**이기 때문이다. $\tilde X = XS$ 에서 $S$ 가 가역이므로 $\operatorname{col}(\tilde X) = \operatorname{col}(X)$ 이고, OLS 적합값은 그 공간 위로의 사영이므로 좌표계와 무관하다. 계수만 $\hat{\tilde\beta} = S^{-1}\hat\beta^{\text{OLS}}$ 로 환산된다. $\square$
+
+    **정리.** 세 $R^2$ 를 나란히 놓으면
+
+    $$
+    0.2880 \;(\text{척도화 없는 PCR})
+    \;<\; 0.4677 \;(\text{척도화한 PCR})
+    \;<\; 0.6120 \;(\text{OLS})
+    $$
+
+    다. **표준화를 빠뜨린 것만으로 PCR 이 설명력의 $38\%$ 를 잃었다**($1 - 0.2880/0.4677 = 0.384$). 까닭은 $\hat\beta^{\text{OLS}} = (1.92, 0.24)^\top$ 이 말해 준다. $y$ 는 $x_1$ 쪽에 쏠려 있는데, $\lVert x_2\rVert^2 = 9 > 6 = \lVert x_1 \rVert^2$ 이라 척도화하지 않은 첫 주성분은 $x_2$ 쪽으로 기울어 $(1,2)/\sqrt5$ 가 된다. **$x_2$ 의 단위가 큰 것이 "중요하다"로 번역된 것이다.**
+
+    그러므로 PCR 에서 표준화는 중립적 전처리가 아니라 **모형 가정**이다. $x_2$ 의 단위를 바꾸면 $\rho$ 는 그대로여도 척도화하지 않은 PCR 의 해는 달라진다. OLS 가 척도에 불변인 것과 대조하면, PCR·PLS·능형이 모두 "어떤 단위에서 분산을 재는가"라는 선택을 안고 있다는 것이 보인다. 표준화는 그 선택을 "모든 변수를 같은 무게로"로 고정하는 것이고, 그것 역시 하나의 선택이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span> $y = X\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2 I_n)$ 이고 $X = UDV^\top$ 는 계수 $p$ 로 고정되어 있다고 하자. $\gamma = V^\top \beta$, $\hat\gamma(\lambda) = V^\top \hat\beta^{\text{ridge}}(\lambda)$ 라 쓴다.
+
+**(1)** $\hat\gamma_m(\lambda) = s_m \hat\gamma_m^{\text{OLS}}$ 이고 $s_m = d_m^2/(d_m^2+\lambda)$ 이며, $\hat\gamma_m^{\text{OLS}} \sim N(\gamma_m,\ \sigma^2/d_m^2)$ 이 서로 독립임을 보여라.
+
+**(2)** 다음을 유도하라.
+
+$$
+\operatorname{MSE}(\lambda) = \mathbb E \lVert \hat\beta^{\text{ridge}}(\lambda) - \beta \rVert^2 = \sum_{m=1}^{p} \frac{\lambda^2\gamma_m^2 + \sigma^2 d_m^2}{(d_m^2+\lambda)^2}
+$$
+
+**(3)** $\operatorname{MSE}'(0) = -2\sigma^2 \sum_m d_m^{-4} < 0$ 임을 보이고, 따라서 **OLS 보다 나은 $\lambda > 0$ 이 반드시 있음**을 결론하라.
+
+**(4)** 성분 하나만 떼어 보면 최적 벌점이 $\lambda_m^\star = \sigma^2/\gamma_m^2$ 으로 $d_m$ 에 **의존하지 않음**을 보여라. 그런데 (3) 의 이득은 $d_m$ 이 가장 작은 방향에서 나온다. 이 둘을 함께 읽어 PCR 이 작은 성분을 **통째로 버리는** 것이 언제 옳은지 말하라.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** 능형해는 $\hat\beta(\lambda) = (X^\top X+\lambda I)^{-1}X^\top y$ 이고 $X^\top X = VD^2V^\top$ 이므로
+
+    $$
+    \hat\beta(\lambda) = V(D^2+\lambda I)^{-1}D\,U^\top y,
+    \qquad
+    \hat\gamma_m(\lambda) = \frac{d_m}{d_m^2+\lambda}\,u_m^\top y
+    $$
+
+    다. $\lambda = 0$ 을 넣으면 $\hat\gamma_m^{\text{OLS}} = u_m^\top y / d_m$ 이므로
+
+    $$
+    \hat\gamma_m(\lambda) = \frac{d_m^2}{d_m^2+\lambda}\cdot\frac{u_m^\top y}{d_m} = s_m \hat\gamma_m^{\text{OLS}}
+    $$
+
+    이다. 분포를 보자. $u_m^\top y \sim N(u_m^\top X\beta,\ \sigma^2)$ 이고 $u_m^\top X = u_m^\top UDV^\top = d_m v_m^\top$ 이므로 $u_m^\top X\beta = d_m \gamma_m$ 이다. 따라서
+
+    $$
+    \hat\gamma_m^{\text{OLS}} = \frac{u_m^\top y}{d_m} \sim N\!\left(\gamma_m,\ \frac{\sigma^2}{d_m^2}\right)
+    $$
+
+    다. $u_1,\dots,u_p$ 가 정규직교이므로 $\operatorname{Cov}(u_m^\top y, u_k^\top y) = \sigma^2 u_m^\top u_k = 0$ $(m\ne k)$ 이고, 정규라서 무상관이 독립이다. $\square$
+
+    **(2)** $V$ 가 직교이므로 노름이 보존된다.
+
+    $$
+    \lVert \hat\beta(\lambda)-\beta \rVert^2 = \lVert V^\top(\hat\beta(\lambda)-\beta) \rVert^2 = \sum_{m=1}^{p}\left(\hat\gamma_m(\lambda)-\gamma_m\right)^2
+    $$
+
+    항마다 편향–분산 분해(6 장 정리 1)를 쓴다. $\mathbb E[\hat\gamma_m(\lambda)] = s_m\gamma_m$ 이고 $\operatorname{Var}(\hat\gamma_m(\lambda)) = s_m^2\sigma^2/d_m^2$ 이므로
+
+    $$
+    \mathbb E(\hat\gamma_m(\lambda)-\gamma_m)^2 = (s_m-1)^2\gamma_m^2 + s_m^2\frac{\sigma^2}{d_m^2}
+    $$
+
+    다. 여기서
+
+    $$
+    s_m - 1 = -\frac{\lambda}{d_m^2+\lambda},
+    \qquad
+    \frac{s_m^2}{d_m^2} = \frac{d_m^4}{(d_m^2+\lambda)^2 d_m^2} = \frac{d_m^2}{(d_m^2+\lambda)^2}
+    $$
+
+    이므로 두 항을 합하면
+
+    $$
+    \mathbb E(\hat\gamma_m(\lambda)-\gamma_m)^2 = \frac{\lambda^2\gamma_m^2}{(d_m^2+\lambda)^2} + \frac{\sigma^2 d_m^2}{(d_m^2+\lambda)^2} = \frac{\lambda^2\gamma_m^2+\sigma^2 d_m^2}{(d_m^2+\lambda)^2}
+    $$
+
+    다. $m$ 에 대해 더하면 구하는 식이다. $\square$
+
+    **(3)** $f_m(\lambda) = (\lambda^2\gamma_m^2+\sigma^2 d_m^2)/(d_m^2+\lambda)^2$ 라 두고 미분한다. 분자를 $N$, 분모를 $(d_m^2+\lambda)^2$ 이라 하면
+
+    $$
+    f_m'(\lambda) = \frac{2\lambda\gamma_m^2(d_m^2+\lambda)^2 - N\cdot 2(d_m^2+\lambda)}{(d_m^2+\lambda)^4} = \frac{2\left[\lambda\gamma_m^2(d_m^2+\lambda) - \lambda^2\gamma_m^2 - \sigma^2 d_m^2\right]}{(d_m^2+\lambda)^3}
+    $$
+
+    이고 대괄호 안이 $\lambda\gamma_m^2 d_m^2 - \sigma^2 d_m^2 = d_m^2(\lambda\gamma_m^2 - \sigma^2)$ 로 정리되므로
+
+    $$
+    f_m'(\lambda) = \frac{2 d_m^2\left(\lambda\gamma_m^2 - \sigma^2\right)}{(d_m^2+\lambda)^3}
+    $$
+
+    다. $\lambda = 0$ 을 넣으면
+
+    $$
+    f_m'(0) = \frac{2d_m^2(-\sigma^2)}{d_m^6} = -\frac{2\sigma^2}{d_m^4},
+    \qquad
+    \operatorname{MSE}'(0) = -2\sigma^2\sum_{m=1}^{p}\frac{1}{d_m^4} < 0
+    $$
+
+    이다. $\operatorname{MSE}$ 가 $\lambda = 0$ 에서 미분가능하고 도함수가 **엄격히 음수**이므로, 충분히 작은 $\lambda > 0$ 에서 $\operatorname{MSE}(\lambda) < \operatorname{MSE}(0) = \operatorname{MSE}_{\text{OLS}}$ 다. 곧 **어떤 $\beta$, 어떤 $X$ 에서도 OLS 를 이기는 능형이 존재한다.** $\square$
+
+    왜 그런지는 도함수의 출처를 보면 된다. $\lambda = 0$ 근방에서 편향은 $\lambda^2$ 으로 자라고 분산은 $\lambda$ 의 **일차**로 줄어든다. 처음 한 걸음은 분산이 이기게 되어 있다. 이것이 "편향을 사서 분산을 판다"는 거래가 $\lambda = 0$ 에서 반드시 이득인 까닭이다.
+
+    **(4)** $f_m'(\lambda) = 0$ 은 $\lambda\gamma_m^2 = \sigma^2$, 곧
+
+    $$
+    \lambda_m^\star = \frac{\sigma^2}{\gamma_m^2}
+    $$
+
+    이다. $\lambda < \lambda_m^\star$ 에서 $f_m' < 0$, $\lambda > \lambda_m^\star$ 에서 $f_m' > 0$ 이므로 이 점이 유일한 최소다. **$d_m$ 이 식에 전혀 들어 있지 않다.** 그 자리의 최적 벌점은 특잇값이 아니라 **신호 대 잡음비** $\gamma_m^2/\sigma^2$ 가 정한다. 거기서의 축소 인자는
+
+    $$
+    s_m^\star = \frac{d_m^2}{d_m^2 + \sigma^2/\gamma_m^2} \in (0,1)
+    $$
+
+    이다.
+
+    반면 **이득의 크기**는 $d_m$ 이 정한다. $f_m(0) = \sigma^2/d_m^2$ 이고 $f_m'(0) = -2\sigma^2/d_m^4$ 이므로, $d_m$ 이 작은 방향은 손실도 크고 깎을 때 줄어드는 속도도 빠르다. $\sum_m d_m^{-4}$ 는 가장 작은 $d_m$ 이 지배한다. **어느 $\lambda$ 가 좋은지는 신호가 정하고, 얼마나 얻을 수 있는지는 특잇값이 정한다.**
+
+    이제 PCR 을 이 틀에 넣어 보자. PCR$(M)$ 은 $s_m \in \{0,1\}$ 만 쓴다. $s_m^\star$ 가 $0$ 이 되는 것은 $\lambda_m^\star = \infty$ 일 때, 곧 $\gamma_m = 0$ 일 때뿐이고 $s_m^\star = 1$ 이 되는 것은 $\sigma^2 = 0$ 일 때뿐이다. 따라서
+
+    - **버리는 성분의 $\gamma_m$ 이 정확히 $0$ 이면** PCR 의 $s_m = 0$ 이 최적이고, 그때 PCR 은 옳다.
+    - **$\gamma_m \ne 0$ 인 성분을 버리면** 최적값 $s_m^\star > 0$ 을 $0$ 으로 바꾼 것이므로 손해다. 그 성분의 $d_m$ 이 작을수록 $f_m$ 의 곡면이 가파르므로 손해가 크다.
+    - **남기는 성분에 $s_m = 1$ 을 쓰는 것도** $\sigma^2 > 0$ 인 한 최적이 아니다. 앞쪽 성분조차 조금은 깎아야 한다.
+
+    그러므로 PCR 은 "$\gamma_m$ 이 앞쪽 $M$ 개에서만 $0$ 이 아니다"라는 **강한 가정**을 깔고 있다. 그 가정이 맞으면 깔끔하고, 틀리면 연습문제 8 처럼 $R^2$ 가 $0$ 까지 떨어진다. 능형은 같은 자리에서 $s_m$ 을 $(0,1)$ 안의 값으로 두어 가정을 피하는 대신, 하나의 $\lambda$ 로 모든 성분을 다루므로 $\lambda = \lambda_m^\star$ 를 성분마다 맞추지는 못한다(모든 $\lvert\gamma_m\rvert$ 가 같을 때만 가능하다). **연속적 축소는 이산적 선택보다 덜 틀리지만, 하나의 손잡이로 $p$ 개의 최적을 맞출 수는 없다** — 이것이 성분 수 $M$ 과 벌점 $\lambda$ 를 모두 교차검증으로 고를 수밖에 없는 까닭이다.
+
 ---
 
 ## 정리하며
