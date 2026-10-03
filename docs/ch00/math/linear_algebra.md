@@ -1,5 +1,7 @@
 # 선형대수 표기와 관례
 
+## 개요
+
 선형대수는 다변량 통계의 언어다. 회귀, 다변량 분석, 차원축소, 그리고 현대 추정 이론에 등장하는 거의 모든 양이 벡터나 행렬 표현이다. 이 절은 책 전체에서 쓰는 표기를 정하고, 가장 자주 되풀이되는 연산과 항등식을 복습한다.
 
 ---
@@ -73,16 +75,77 @@ $$
 
 ## 2. 이 책에서 끊임없이 쓰이는 항등식
 
-- $(\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top \mathbf{A}^\top$
-- $(\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1} \mathbf{A}^{-1}$
-- $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$ (순환 성질)
-- 정사각 $\mathbf{A}$에 대해 $\operatorname{tr}(\mathbf{A}) = \sum_i \lambda_i(\mathbf{A})$, $\det(\mathbf{A}) = \prod_i \lambda_i(\mathbf{A})$
-- $\mathbf{X}$가 확률벡터일 때 $\operatorname{Cov}(\mathbf{A} \mathbf{X}) = \mathbf{A}\, \operatorname{Cov}(\mathbf{X})\, \mathbf{A}^\top$
-- $\mathbb{E}[\mathbf{X}^\top \mathbf{A} \mathbf{X}] = \operatorname{tr}(\mathbf{A}\, \operatorname{Cov}(\mathbf{X})) + \boldsymbol{\mu}^\top \mathbf{A} \boldsymbol{\mu}$ (이차형식의 기댓값)
+<div class="thmbox" markdown>
+
+### 정리 1. 전치·역행렬과 확률벡터의 항등식 { .thm }
+
+$$
+(\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top \mathbf{A}^\top,
+\qquad
+(\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1} \mathbf{A}^{-1}
+$$
+
+이고, $\mathbf{X}$ 가 평균 $\boldsymbol\mu$, 공분산 $\boldsymbol\Sigma$ 인 확률벡터이면
+
+$$
+\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\boldsymbol\Sigma\mathbf{A}^\top,
+\qquad
+\mathbb{E}\bigl[\mathbf{X}^\top\mathbf{A}\mathbf{X}\bigr]
+= \operatorname{tr}(\mathbf{A}\boldsymbol\Sigma) + \boldsymbol\mu^\top\mathbf{A}\boldsymbol\mu
+$$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    **전치.** 성분으로 적으면 $\bigl[(\mathbf{AB})^\top\bigr]_{ij} = [\mathbf{AB}]_{ji} = \sum_k A_{jk}B_{ki}$ 이고, 한편 $[\mathbf{B}^\top\mathbf{A}^\top]_{ij} = \sum_k B_{ki}A_{jk}$ 다. 같은 합이다. **순서가 뒤집히는 까닭은 첨자가 뒤집히기 때문**이다.
+
+    **역행렬.** $(\mathbf{AB})(\mathbf{B}^{-1}\mathbf{A}^{-1}) = \mathbf{A}(\mathbf{B}\mathbf{B}^{-1})\mathbf{A}^{-1} = \mathbf{I}$ 이고 반대쪽도 같다. 역행렬은 유일하므로 그것이 $(\mathbf{AB})^{-1}$ 이다.
+
+    **공분산.** $E[\mathbf{AX}] = \mathbf{A}\boldsymbol\mu$ 이므로
+
+    $$
+    \operatorname{Cov}(\mathbf{AX})
+    = E\bigl[\mathbf{A}(\mathbf{X} - \boldsymbol\mu)(\mathbf{X}-\boldsymbol\mu)^\top\mathbf{A}^\top\bigr]
+    = \mathbf{A}\,\boldsymbol\Sigma\,\mathbf{A}^\top
+    $$
+
+    다. 전치 규칙으로 $(\mathbf{A}\mathbf{v})^\top = \mathbf{v}^\top\mathbf{A}^\top$ 를 쓰고 상수행렬을 기댓값 밖으로 뺐다. **$\mathbf{A}$ 가 양쪽에 붙고 한쪽은 전치된다**는 것이 요점이다.
+
+    **이차형식의 기댓값.** $\mathbf{Z} = \mathbf{X}-\boldsymbol\mu$ 로 두고 전개하면
+
+    $$
+    \mathbf{X}^\top\mathbf{A}\mathbf{X}
+    = \mathbf{Z}^\top\mathbf{A}\mathbf{Z}
+    + \boldsymbol\mu^\top\mathbf{A}\mathbf{Z} + \mathbf{Z}^\top\mathbf{A}\boldsymbol\mu
+    + \boldsymbol\mu^\top\mathbf{A}\boldsymbol\mu
+    $$
+
+    이고 가운데 두 항은 $E[\mathbf{Z}] = \mathbf{0}$ 이라 사라진다. 첫 항은 **스칼라이므로 대각합을 씌워도 같고**, 대각합의 순환 성질([대각합과 고윳값](../linalg_regression/square_matrices/trace_eigenvalues.md) 정리 1)을 쓰면
+
+    $$
+    E\bigl[\mathbf{Z}^\top\mathbf{A}\mathbf{Z}\bigr]
+    = E\bigl[\operatorname{tr}(\mathbf{A}\mathbf{Z}\mathbf{Z}^\top)\bigr]
+    = \operatorname{tr}\bigl(\mathbf{A}\,E[\mathbf{Z}\mathbf{Z}^\top]\bigr)
+    = \operatorname{tr}(\mathbf{A}\boldsymbol\Sigma)
+    $$
+
+    다. 대각합과 기댓값이 둘 다 선형이라 자리를 바꿀 수 있다. $\square$
+
+    **마지막 항등식이 5장과 13장에서 되풀이 쓰인다.** 잔차제곱합의 기댓값을 구할 때 $\mathbf{A}$ 자리에 사영행렬을 넣으면 $\operatorname{tr}$ 이 **자유도를 세어 주고**, 그것이 $s^2$ 의 비편향성과 $n-p$ 라는 분모의 근거다.
+
+나머지 항등식은 전용 쪽에서 증명한다.
+
+- $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$ (순환 성질) — [대각합과 고윳값](../linalg_regression/square_matrices/trace_eigenvalues.md) 정리 1
+- $\operatorname{tr}(\mathbf{A}) = \sum_i \lambda_i$, $\det(\mathbf{A}) = \prod_i \lambda_i$ — 같은 쪽 정리 2 와 정리 3
 
 ---
 
 ## 3. 고윳값과 스펙트럼 정리
+
+이 절의 주장은 [대칭행렬](../linalg_regression/square_matrices/symmetric.md) 정리 1(스펙트럼 정리)에서 증명한다.
 
 $\mathbf{A} \in \mathbb{R}^{n \times n}$에 대해 $\mathbf{A}\mathbf{v} = \lambda \mathbf{v}$가 고윳값–고유벡터 쌍을 정의한다. **대칭** $\mathbf{A}$(모든 공분산행렬, 모든 $\mathbf{X}^\top \mathbf{X}$, 모든 모자 행렬이 여기 해당한다)에 대해 **스펙트럼 정리**는
 
@@ -96,11 +159,15 @@ $$
 
 ## 4. 양(반)정치성
 
+동치 조건과 촐레스키 분해는 [양정치행렬](../linalg_regression/square_matrices/positive_definite.md) 정리 1·2 에서 증명한다.
+
 모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top \mathbf{A} \mathbf{x} \ge 0$이면 $\mathbf{A}$가 **양반정치(positive semidefinite)** 라 하고($\mathbf{A} \succeq 0$), 이는 모든 고윳값이 $\ge 0$인 것과 동치다. **양정치(positive definite)** ($\mathbf{A} \succ 0$)는 두 부등식을 모두 엄격 부등식으로 바꾼 것이다. 공분산행렬은 언제나 양반정치이며, 어떤 변수도 다른 변수들의 결정론적 선형결합이 아닐 때 양정치가 된다. 양정치성은 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하고 최소제곱해가 유일하게 정해지기 위해 필요한 바로 그 조건이다. 이차형식에 의한 특성화와 고윳값에 의한 특성화가 왜 동치인지는 0.3절 **양정치행렬**에서 증명한다.
 
 ---
 
 ## 5. 사영과 모자 행렬
+
+아래 네 성질은 [멱등행렬](../linalg_regression/square_matrices/idempotent.md) 정리 1·2·3 과 [직교사영](../linalg_regression/square_matrices/orthogonal_projection.md) 정리 1·2 에서 증명한다.
 
 **최소제곱의 모자 행렬(hat matrix)**
 

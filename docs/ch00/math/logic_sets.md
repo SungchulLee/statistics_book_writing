@@ -1,5 +1,7 @@
 # 집합, 함수, 논리
 
+## 개요
+
 이 절은 책 전체에서 쓰이는 기초적인 수학 언어를 세운다. 논리, 집합, 함수를 정확히 정의해 두면 나중에 확률공간(집합, $\sigma$-대수, 측도의 세 쌍, 3.1절), 확률변수(가측함수, 3.3절), 통계적 추론(논리 구조를 이용해 모집단에 대한 주장을 다루는 일, 9장)을 도입할 때 모호함이 생기지 않는다.
 
 ---
@@ -68,7 +70,11 @@ $$
 
 ## 2. 한정기호와 그 부정
 
-**한정기호(quantifier)** 는 "모든"($\forall$)과 "존재한다"($\exists$)를 형식화한다. 부정을 취하면 둘이 뒤바뀌고 안쪽 술어가 부정된다.
+**한정기호(quantifier)** 는 "모든"($\forall$)과 "존재한다"($\exists$)를 형식화한다.
+
+<div class="thmbox" markdown>
+
+### 정리 1. 한정기호의 부정 { .thm }
 
 $$
 \neg(\forall\, x \in A,\; P(x)) \;\Leftrightarrow\; \exists\, x \in A \text{ s.t. } \neg P(x)
@@ -78,23 +84,55 @@ $$
 \neg(\exists\, x \in A,\; P(x)) \;\Leftrightarrow\; \forall\, x \in A,\; \neg P(x)
 $$
 
+곧 **부정을 안으로 밀어 넣으면 한정기호가 뒤바뀌고 술어가 부정된다.**
+
+</div>
+
+??? proof "증명"
+
+    첫 식의 왼쪽은 "$A$ 의 모든 원소가 $P$ 를 만족한다"가 **거짓**이라는 말이다. 그 주장이 거짓이려면 만족하지 않는 원소가 **적어도 하나** 있어야 하고, 거꾸로 그런 원소가 하나라도 있으면 "모두 만족한다"가 거짓이다. 두 방향이 모두 통하므로 동치다.
+
+    둘째 식은 첫 식에 $P$ 대신 $\neg P$ 를 넣고 양변을 다시 부정하면 나온다. $\neg\neg Q \Leftrightarrow Q$ 를 쓴다. $\square$
+
+    **이 규칙이 통계학의 글을 읽는 데 바로 쓰인다.** "이 추정량은 모든 분포에서 비편향이다"의 부정은 "어떤 분포에서도 비편향이 아니다"가 **아니라** "비편향이 아닌 분포가 하나 있다"다. 반례 하나로 전칭명제가 무너지는 까닭이고, 9장에서 귀무가설을 기각하는 논법의 모양이기도 하다.
+
 한정기호의 순서가 중요하다. $\forall x \exists y\, P(x, y)$(각 $x$마다 어떤 $y$가 통한다)는 $\exists y \forall x\, P(x, y)$(하나의 $y$가 모든 $x$에 통한다)보다 논리적으로 약하다. 수렴의 정의 $\forall \varepsilon \, \exists N \, \forall n > N$이 이런 중첩 구조를 가지며, 앞의 두 한정기호를 뒤바꾸면 균등수렴이 되어 엄격히 더 강한 조건이 된다.
 
 ---
 
 ## 3. 드모르간 법칙
 
-집합에 대해,
+<div class="thmbox" markdown>
+
+### 정리 2. 드모르간 법칙 { .thm }
+
+임의의 집합족 $\{A_\alpha\}$ 에 대해
 
 $$
-(A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c
+\left(\bigcup_{\alpha} A_\alpha\right)^{\!c} = \bigcap_{\alpha} A_\alpha^c,
+\qquad
+\left(\bigcap_{\alpha} A_\alpha\right)^{\!c} = \bigcup_{\alpha} A_\alpha^c
 $$
 
-이는 임의의(심지어 비가산인) 모임으로 일반화된다.
+이다. 두 집합인 경우가 $(A \cup B)^c = A^c \cap B^c$ 와 $(A \cap B)^c = A^c \cup B^c$ 다. 첨자집합이 비가산이어도 성립한다.
 
-$$
-\left(\bigcup_{\alpha} A_\alpha\right)^{\!c} = \bigcap_{\alpha} A_\alpha^c, \qquad \left(\bigcap_{\alpha} A_\alpha\right)^{\!c} = \bigcup_{\alpha} A_\alpha^c
-$$
+</div>
+
+??? proof "증명"
+
+    원소가 양쪽에 속하는 조건을 적어 비교한다. $x \in \left(\bigcup_\alpha A_\alpha\right)^c$ 라는 것은
+
+    $$
+    \neg\bigl(\exists\,\alpha,\ x \in A_\alpha\bigr)
+    $$
+
+    이고, **정리 1 의 둘째 식**을 쓰면 이것이 $\forall\alpha,\ x \notin A_\alpha$ 와 같다. 그런데 그 말이 곧 $x \in \bigcap_\alpha A_\alpha^c$ 다. 두 집합의 원소 조건이 같으므로 두 집합이 같다.
+
+    둘째 식은 첫 식을 $A_\alpha^c$ 에 적용하고 양변의 여집합을 취하면 나온다. $\square$
+
+    **드모르간 법칙은 정리 1 을 집합의 말로 옮긴 것이다.** 합집합이 "적어도 하나"($\exists$)이고 교집합이 "모두"($\forall$)이므로, 여집합을 씌우는 일이 부정을 안으로 미는 일과 같다. 첨자집합의 크기가 들어오지 않는 까닭도 이것이다 — 논리 규칙은 개수를 세지 않는다.
+
+    확률에서 이 법칙은 **"적어도 하나가 일어난다"를 "하나도 일어나지 않는다"의 여사건으로 바꾸는** 수법으로 끊임없이 쓰인다. 본페로니 부등식(3.1절)과 독립 사건의 $1 - (1-p)^n$ 이 모두 그 모양이다.
 
 이것은 "적어도 하나"와 "모두" 사이를 오가는 핵심 도구이며, 확률에서 사건들의 합집합의 여집합을 계산할 때 늘 쓰이는 수법이다.
 

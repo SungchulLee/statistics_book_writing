@@ -1,5 +1,7 @@
 # 직교사영행렬
 
+## 개요
+
 직교사영행렬은 모든 벡터를 어떤 부분공간 안에서 가장 가까운 점으로 보내며, 여기서 "가깝다"는 유클리드 거리로 잰다. 이것이 통상 최소제곱의 기하학적 내용이다. 적합값 벡터 $\hat{\mathbf{y}}$는 반응벡터 $\mathbf{y}$를 계획행렬 $\mathbf{X}$의 열공간 위로 직교사영한 것이고, 잔차벡터 $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$는 그 열공간에 수직이다. 직교사영은 멱등이면서 대칭인 것으로 특징지어지며, 그 명시적 공식 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이 회귀의 모자 행렬이다. 이 공식은 $\mathbf{X}$의 **열이 선형독립일 때**에만 뜻을 갖는다. 그때에만 $\mathbf{X}^\top\mathbf{X}$가 가역이기 때문이다(정리 2).
 
 <div class="defn" markdown>

@@ -1,5 +1,7 @@
 # 수열, 극한, 점근
 
+## 개요
+
 수열과 그 극한 행동은 통계적 추론의 뼈대다. 큰수의 법칙, 중심극한정리, 추정량의 일치성, 그리고 이 책에 나오는 거의 모든 점근 결과가 극한에 관한 진술이다. 이 개념들을 확률적 수열로 끌어올리기 전에, 확률 기계장치가 매달릴 해석학적 골격인 결정론적 수열에 익숙해져야 한다.
 
 ---
@@ -76,7 +78,61 @@ $$
 
 ## 2. 극한 법칙
 
-$a_n \to L$이고 $b_n \to M$이면 $a_n + b_n \to L + M$, $a_n b_n \to LM$이며, $M \ne 0$일 때 $a_n / b_n \to L/M$이다. 조임 정리: 결국 $a_n \le b_n \le c_n$이고 $a_n, c_n \to L$이면 $b_n \to L$이다. 연속함수는 극한을 보존한다. $g$가 $L$에서 연속이면 $a_n \to L \Rightarrow g(a_n) \to g(L)$이다.
+<div class="thmbox" markdown>
+
+### 정리 1. 극한 법칙 { .thm }
+
+$a_n \to L$ 이고 $b_n \to M$ 이면
+
+$$
+a_n + b_n \to L + M,
+\qquad
+a_n b_n \to LM,
+\qquad
+\frac{a_n}{b_n} \to \frac{L}{M} \;\;(M \ne 0)
+$$
+
+이다.
+
+</div>
+
+??? proof "증명"
+
+    **합.** $\varepsilon > 0$ 을 주면, 가정에서 $N_1$ 과 $N_2$ 가 있어 $n > N_1$ 이면 $\lvert a_n - L\rvert < \varepsilon/2$, $n > N_2$ 이면 $\lvert b_n - M\rvert < \varepsilon/2$ 다. $N = \max(N_1, N_2)$ 로 두면 삼각부등식에서
+
+    $$
+    \lvert (a_n + b_n) - (L+M)\rvert \le \lvert a_n - L\rvert + \lvert b_n - M\rvert < \varepsilon
+    $$
+
+    이다. **$\varepsilon$ 을 반씩 나누어 쓰는 것**이 요령이다.
+
+    **곱.** 차를 두 조각으로 가른다.
+
+    $$
+    a_nb_n - LM = (a_n - L)b_n + L(b_n - M)
+    $$
+
+    수렴하는 수열은 유계이므로 $\lvert b_n\rvert \le B$ 인 $B$ 가 있고, 따라서
+
+    $$
+    \lvert a_nb_n - LM\rvert \le B\lvert a_n - L\rvert + \lvert L\rvert\,\lvert b_n - M\rvert
+    $$
+
+    다. 오른쪽 두 항을 각각 $\varepsilon/2$ 아래로 만들 수 있다. **중간항을 끼워 넣어 한 번에 하나씩만 움직이게 하는 것**이 핵심이다.
+
+    **몫.** $1/b_n \to 1/M$ 만 보이면 곱의 결과를 쓸 수 있다. $M \ne 0$ 이므로 충분히 큰 $n$ 에서 $\lvert b_n\rvert > \lvert M\rvert/2$ 이고
+
+    $$
+    \left\lvert \frac{1}{b_n} - \frac1M \right\rvert = \frac{\lvert M - b_n\rvert}{\lvert b_n\rvert\,\lvert M\rvert} < \frac{2}{M^2}\,\lvert b_n - M\rvert \to 0
+    $$
+
+    이다. $\square$
+
+    **$M \ne 0$ 이라는 단서가 왜 필요한지 증명에 드러난다.** 분모를 아래에서 묶을 수 없으면 마지막 부등식이 성립하지 않는다. 통계에서 이 단서가 실제로 문제가 되는 자리가 있다 — 비의 극한을 다룰 때 분모가 0 으로 가면 극한이 아예 없을 수도 있고, 그때는 슬러츠키 정리처럼 조건을 갖춘 도구가 필요하다(3.5절).
+
+    세 법칙은 확률수렴과 분포수렴으로도 옮겨 간다. 다만 **분포수렴에서는 곱과 합의 법칙이 그대로 성립하지 않는다** — 두 수열이 각각 수렴해도 결합분포를 모르면 합의 분포를 알 수 없기 때문이다. 그 틈을 메우는 것이 슬러츠키 정리이고, 한쪽이 상수로 수렴할 것을 요구한다.
+
+조임 정리: 결국 $a_n \le b_n \le c_n$이고 $a_n, c_n \to L$이면 $b_n \to L$이다. 연속함수는 극한을 보존한다. $g$가 $L$에서 연속이면 $a_n \to L \Rightarrow g(a_n) \to g(L)$이다.
 
 ---
 
@@ -95,13 +151,45 @@ $a_n \to L$이고 $b_n \to M$이면 $a_n + b_n \to L + M$, $a_n b_n \to LM$이�
 
 ## 4. 테일러 전개
 
-$f$가 $a$에서 충분히 매끄러우면,
+<div class="thmbox" markdown>
+
+### 정리 2. 테일러 정리 { .thm }
+
+$f$ 가 $a$ 의 근방에서 $k$ 번 미분가능하면
 
 $$
 f(x) = f(a) + f'(a)(x - a) + \tfrac{1}{2} f''(a)(x - a)^2 + \cdots + \tfrac{1}{k!} f^{(k)}(a)(x - a)^k + R_k(x)
 $$
 
-이고 나머지는 $x \to a$일 때 $R_k(x) = o((x - a)^k)$이다. 다음 두 귀결이 반복해서 쓰인다.
+이고 나머지는 $x \to a$ 일 때
+
+$$
+R_k(x) = o\bigl((x-a)^k\bigr)
+$$
+
+이다. 곧 **차수를 하나 올릴 때마다 나머지가 그만큼 더 빨리 0 으로 간다.**
+
+</div>
+
+??? proof "증명 개요"
+
+    $P_k$ 를 위 다항식이라 하고 $R_k = f - P_k$ 라 두면, 미분을 $k$ 번까지 해 보면 $a$ 에서
+
+    $$
+    R_k(a) = R_k'(a) = \cdots = R_k^{(k)}(a) = 0
+    $$
+
+    이다. **다항식의 계수를 그렇게 되도록 고른 것**이 테일러 다항식의 정의다. 이제 로피탈 규칙을 $k$ 번 적용하면
+
+    $$
+    \lim_{x \to a}\frac{R_k(x)}{(x-a)^k}
+    = \lim_{x \to a}\frac{R_k^{(k)}(x)}{k!}
+    = \frac{R_k^{(k)}(a)}{k!} = 0
+    $$
+
+    이고, 이것이 $R_k(x) = o((x-a)^k)$ 의 정의다($R_k^{(k)}$ 의 연속성을 썼다). $\square$
+
+    **통계에서 테일러 전개를 쓰는 방식은 거의 언제나 "2차까지 남기고 나머지를 버리는" 것이다.** 버려도 되는 근거가 바로 이 $o$ 항이다. 다음 두 자리에서 되풀이 쓰인다. 다음 두 귀결이 반복해서 쓰인다.
 
 - **델타 방법**: $\sqrt{n}(\hat{\theta}_n - \theta) \xrightarrow{d} N(0, \sigma^2)$이고 $g$가 $\theta$에서 미분가능하면 $\sqrt{n}(g(\hat{\theta}_n) - g(\theta)) \xrightarrow{d} N(0, [g'(\theta)]^2 \sigma^2)$이다.
 - **적률생성함수를 이용한 중심극한정리 유도**: $M_X(t/\sqrt{n})$을 $0$ 주위로 2차까지 전개하면, 살아남는 항이 분산의 기여분이다.
