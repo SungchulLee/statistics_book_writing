@@ -12,7 +12,7 @@ $$
 
 ---
 
-## 기하적 해석
+## 1. 기하적 해석
 
 이변량 정규분포의 등밀도 등고선은 다음을 만족한다:
 
@@ -26,10 +26,6 @@ $$
 - **축의 반길이**가 $\sqrt{\lambda_i}$에 비례한다
 
 이는 고유분해의 직접적인 결과이다. $\mathbf{U}$가 정의하는 회전된 좌표계에서 공분산행렬은 대각행렬이 되고 타원은 좌표축에 정렬된다.
-
----
-
-## 코드
 
 <div class="exbox" markdown>
 
@@ -257,7 +253,11 @@ $$
 
 ---
 
-## 해석
+
+
+---
+
+## 2. 해석
 
 $\boldsymbol{\Sigma} = \begin{pmatrix}0.5 & 0.3 \\ 0.3 & 0.5\end{pmatrix}$에 대해:
 
@@ -281,6 +281,8 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}1 & 0 \\ 0 & 0.3\end{pmatrix}$의 고윳�
 ??? success "풀이"
     $\boldsymbol{\Sigma}$가 대각행렬이므로 고윳값은 $\lambda_1 = 1$, $\lambda_2 = 0.3$이고 고유벡터는 $\mathbf{e}_1 = (1, 0)^\top$, $\mathbf{e}_2 = (0, 1)^\top$이다. 등고선은 좌표축에 정렬된 타원이며 ($\lambda_1 > \lambda_2$이므로) $x_1$ 축 방향으로 길쭉하다. 축 길이의 비는 $\sqrt{1/0.3} \approx 1.83$이다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
@@ -296,6 +298,8 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}1 & 0 \\ 0 & 0.3\end{pmatrix}$의 고윳�
     $$
 
     따라서 $\lambda \ge 0$이다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -317,6 +321,8 @@ $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$이고 $|\boldsymbol{\Si
 
     주어진 행렬에 대해 $\text{tr} = 0.5 + 0.5 = 1.0$이고 $\lambda_1 + \lambda_2 = 0.8 + 0.2 = 1.0$이다. 또한 $|\boldsymbol{\Sigma}| = 0.25 - 0.09 = 0.16$이고 $\lambda_1\lambda_2 = 0.8 \times 0.2 = 0.16$이다. 두 항등식 모두 성립한다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
@@ -332,6 +338,8 @@ $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$이고 $|\boldsymbol{\Si
     $$
 
     이는 각 성분을 $\sqrt{\lambda_i}$로 나눈 유클리드 거리의 제곱이다. Mahalanobis 거리는 각 주방향을 그 표준편차로 "표준화"하므로 척도와 상관에 불변이 된다. $\square$
+
+---
 
 <div class="drillbox" markdown>
 
@@ -362,6 +370,8 @@ $\boldsymbol\Sigma^{1/2} = \mathbf{U}\mathbf{D}^{1/2}\mathbf{U}^\top$로 두면 
 
     **백색화(whitening)에는 대칭 제곱근이 쓸모 있다.** $\mathbf{Z} = \boldsymbol\Sigma^{-1/2}(\mathbf{X}-\boldsymbol\mu)$는 성분이 독립인 표준정규가 되는데, 대칭 제곱근을 쓰면 변환된 좌표가 원래 좌표와 **최대한 가깝게** 유지된다(모든 백색화 변환 중 $E\|\mathbf{Z}-\mathbf{X}\|^2$을 최소로 한다). 해석 가능성을 지키고 싶을 때 이 성질이 중요하며, ZCA 백색화라 불린다.
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
@@ -389,6 +399,8 @@ $\boldsymbol\Sigma = \begin{pmatrix}0.5&0.3\\0.3&0.5\end{pmatrix}$에서 첫 주
     이 관계에서 **분산이 같은 두 변수의 첫 주성분은 설명비율이 최소 50%**임을 알 수 있다($\rho=0$일 때). 상관이 전혀 없어도 절반은 설명한다는 뜻이므로, "첫 주성분이 분산의 절반 이상을 설명한다"는 말 자체에는 정보가 거의 없다. 판단하려면 기준선과 견주어야 한다.
 
     분산이 서로 다르면 사정이 달라진다. 보기 세 번째 행렬 $\begin{pmatrix}0.2&0.14\\0.14&0.8\end{pmatrix}$은 $\rho = 0.14/\sqrt{0.16} = 0.35$로 상관이 약한데도 첫 주성분이 83%를 설명한다. 상관이 아니라 **분산의 불균형**이 만든 결과이며, 다음 연습문제에서 이것이 왜 문제가 되는지 본다.
+
+---
 
 <div class="drillbox" markdown>
 
@@ -434,6 +446,8 @@ $$
 
     셋째 경우가 특히 시사적이다. 상관이 있어 타원이 기울기는 하지만, 분산 차이가 압도적이라 장축이 $y$축($90^\circ$)에서 겨우 $12.5^\circ$만 벗어난다. **분산이 크게 다르면 주성분은 사실상 분산이 큰 변수 하나를 골라내는 일에 그친다.**
 
+---
+
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
@@ -459,9 +473,38 @@ $$
 
     실무에서는 상관행렬 쪽이 기본값에 가깝다. 다만 표준화가 공짜는 아니다. 분산이 작은 잡음 변수도 분산 1로 부풀려지므로, 의미 없는 변수가 주성분에 끼어들 수 있다. 어느 쪽을 택했는지 반드시 보고해야 하며, 둘 다 해 보고 결과가 크게 다르면 그 이유를 따져 보는 것이 안전하다.
 
+---
+
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
+**연습문제 9.** <span class="diff med" title="중간"></span>
+$\boldsymbol\Sigma$의 조건수를 $\kappa = \lambda_1/\lambda_2$로 정의한다. 보기의 세 행렬에 대해 $\kappa$를 구하고, $\kappa$가 매우 클 때 어떤 계산상의 어려움이 생기는지 설명하라.
+
+</div>
+
+??? success "풀이"
+
+    | $\boldsymbol\Sigma$ | $\lambda_1$ | $\lambda_2$ | $\kappa$ |
+    |---|---|---|---|
+    | $\begin{pmatrix}0.5&0.3\\0.3&0.5\end{pmatrix}$ | 0.8 | 0.2 | 4.0 |
+    | $\begin{pmatrix}1&0\\0&0.3\end{pmatrix}$ | 1.0 | 0.3 | 3.3 |
+    | $\begin{pmatrix}0.2&0.14\\0.14&0.8\end{pmatrix}$ | 0.831 | 0.169 | 4.9 |
+
+    셋 다 5 이하로 문제가 없다.
+
+    **$\kappa$가 클 때의 어려움.**
+
+    - **역행렬의 불안정.** $\boldsymbol\Sigma^{-1}$의 고윳값이 $1/\lambda_i$이므로 작은 $\lambda_2$가 큰 값으로 뒤집힌다. 자료의 미세한 변화가 $\boldsymbol\Sigma^{-1}$을 크게 흔들고, 마할라노비스 거리나 회귀계수가 함께 요동친다. 수치적으로도 유효숫자를 $\log_{10}\kappa$ 자리만큼 잃는다.
+    - **추정의 불안정.** 표본 공분산의 가장 작은 고윳값은 참값보다 작게, 가장 큰 것은 크게 추정되는 편향이 있다. 그래서 표본에서 계산한 $\kappa$는 참 $\kappa$보다 과장되며, $d$가 $n$에 가까울수록 심해진다.
+    - **해석의 불안정.** $\lambda_1$과 $\lambda_2$가 가까우면(즉 $\kappa \approx 1$이면) 반대 문제가 생긴다. 고유벡터의 방향이 거의 임의가 되어 표본마다 크게 달라진다. 주성분의 방향을 해석할 때는 고윳값이 충분히 갈라져 있는지 먼저 확인해야 한다.
+
+    회귀에서 설명변수 행렬의 조건수가 큰 것이 곧 **다중공선성**이다. 대처법은 같다. 능형회귀처럼 대각선에 $\delta I$를 더해 작은 고윳값을 $\lambda_2+\delta$로 밀어 올리거나(축소 추정), 작은 고윳값에 해당하는 방향을 아예 버린다(주성분회귀). 둘 다 약간의 편향을 받아들이는 대신 분산을 크게 줄이는 거래다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 마할라노비스 거리로 다변량 이상치를 찾으려 한다. 판정 기준을 세우고, 표본 평균과 표본 공분산을 그대로 쓸 때 생기는 **가리기 효과**를 설명하라.
 
 </div>
@@ -487,31 +530,6 @@ $$
     **해결.** 평균과 공분산을 강건하게 추정한다. 대표적인 것이 **최소공분산행렬식(MCD)** 추정량으로, $n$개 중 $h \approx 0.75n$개의 부분집합 가운데 공분산행렬식이 가장 작은 것을 골라 그 부분집합으로만 평균과 공분산을 계산한다. 이상치는 어느 밀집된 부분집합에도 들어가지 못하므로 추정에 영향을 주지 못하고, 그 결과 거리가 제대로 커진다. `sklearn.covariance.MinCovDet`이 이를 구현한다.
 
     강건 추정을 쓰면 $d_M^2$의 분포가 정확히 $\chi^2_d$는 아니므로 임계값도 보정해야 하지만, 가리기를 방치하는 것보다는 훨씬 낫다.
-
-<div class="drillbox" markdown>
-
-**연습문제 10.** <span class="diff med" title="중간"></span>
-$\boldsymbol\Sigma$의 조건수를 $\kappa = \lambda_1/\lambda_2$로 정의한다. 보기의 세 행렬에 대해 $\kappa$를 구하고, $\kappa$가 매우 클 때 어떤 계산상의 어려움이 생기는지 설명하라.
-
-</div>
-
-??? success "풀이"
-
-    | $\boldsymbol\Sigma$ | $\lambda_1$ | $\lambda_2$ | $\kappa$ |
-    |---|---|---|---|
-    | $\begin{pmatrix}0.5&0.3\\0.3&0.5\end{pmatrix}$ | 0.8 | 0.2 | 4.0 |
-    | $\begin{pmatrix}1&0\\0&0.3\end{pmatrix}$ | 1.0 | 0.3 | 3.3 |
-    | $\begin{pmatrix}0.2&0.14\\0.14&0.8\end{pmatrix}$ | 0.831 | 0.169 | 4.9 |
-
-    셋 다 5 이하로 문제가 없다.
-
-    **$\kappa$가 클 때의 어려움.**
-
-    - **역행렬의 불안정.** $\boldsymbol\Sigma^{-1}$의 고윳값이 $1/\lambda_i$이므로 작은 $\lambda_2$가 큰 값으로 뒤집힌다. 자료의 미세한 변화가 $\boldsymbol\Sigma^{-1}$을 크게 흔들고, 마할라노비스 거리나 회귀계수가 함께 요동친다. 수치적으로도 유효숫자를 $\log_{10}\kappa$ 자리만큼 잃는다.
-    - **추정의 불안정.** 표본 공분산의 가장 작은 고윳값은 참값보다 작게, 가장 큰 것은 크게 추정되는 편향이 있다. 그래서 표본에서 계산한 $\kappa$는 참 $\kappa$보다 과장되며, $d$가 $n$에 가까울수록 심해진다.
-    - **해석의 불안정.** $\lambda_1$과 $\lambda_2$가 가까우면(즉 $\kappa \approx 1$이면) 반대 문제가 생긴다. 고유벡터의 방향이 거의 임의가 되어 표본마다 크게 달라진다. 주성분의 방향을 해석할 때는 고윳값이 충분히 갈라져 있는지 먼저 확인해야 한다.
-
-    회귀에서 설명변수 행렬의 조건수가 큰 것이 곧 **다중공선성**이다. 대처법은 같다. 능형회귀처럼 대각선에 $\delta I$를 더해 작은 고윳값을 $\lambda_2+\delta$로 밀어 올리거나(축소 추정), 작은 고윳값에 해당하는 방향을 아예 버린다(주성분회귀). 둘 다 약간의 편향을 받아들이는 대신 분산을 크게 줄이는 거래다.
 
 ---
 
