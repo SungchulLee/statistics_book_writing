@@ -20,9 +20,19 @@ $$
 
 표준오차는 표본 전체를 받아 수 하나를 내놓는 통계량 $\hat\theta$의 분산에서 나온다.
 
+<div class="defn" markdown>
+
+### 정의 1. 표준편차와 표준오차 { .dfn }
+
+**표준편차**는 관측값 하나를 나타내는 확률변수의 산포이고, **표준오차**는 통계량의 표본분포의 표준편차다.
+
 $$
-\text{SE} = \sqrt{\text{Var}(\hat{\theta}(X_1, \dots, X_n))}
+\text{SD} = \sqrt{\operatorname{Var}(X)},
+\qquad
+\text{SE} = \sqrt{\operatorname{Var}\bigl(\hat{\theta}(X_1, \dots, X_n)\bigr)}
 $$
+
+</div>
 
 제곱근 안에 들어 있는 것이 다르다. 앞의 것은 **개별 자료점**이 평균 주위로 퍼진 정도를 재고, 뒤의 것은 표본을 다시 뽑을 때마다 **계산 결과**가 참 모수 주위로 얼마나 튀는지를 잰다.
 
