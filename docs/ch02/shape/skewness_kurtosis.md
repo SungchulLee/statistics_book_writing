@@ -1181,6 +1181,86 @@ $$
 
 </div>
 
+<div class="thmbox" markdown>
+
+### 정리 1. 왜도와 첨도는 위치와 척도에 영향받지 않는다 { .thm }
+
+$Y = aX + b$ ($a > 0$)이면
+
+$$
+\gamma_1(Y) = \gamma_1(X), \qquad \beta_2(Y) = \beta_2(X)
+$$
+
+이다. $a < 0$ 이면 왜도의 **부호만** 뒤집히고 첨도는 그대로다.
+
+</div>
+
+??? proof "증명"
+
+    $Y = aX + b$ 이면 $\mu_Y = a\mu_X + b$ 이고 $\sigma_Y = \lvert a\rvert\,\sigma_X$ 다. 표준화한 양을 적으면
+
+    $$
+    \frac{Y - \mu_Y}{\sigma_Y} = \frac{a(X - \mu_X)}{\lvert a\rvert\,\sigma_X} = \operatorname{sgn}(a)\cdot\frac{X - \mu_X}{\sigma_X}
+    $$
+
+    로 **$b$ 가 빠지고 $a$ 는 부호만 남는다.** 세제곱하면 부호가 살아남고 네제곱하면 사라지므로
+
+    $$
+    \gamma_1(Y) = \operatorname{sgn}(a)^3\,\gamma_1(X) = \operatorname{sgn}(a)\,\gamma_1(X),
+    \qquad
+    \beta_2(Y) = \operatorname{sgn}(a)^4\,\beta_2(X) = \beta_2(X)
+    $$
+
+    다. $\square$
+
+    **표준화 적률이라 부르는 까닭이 이것이다.** 자료를 센티미터로 재든 인치로 재든, 섭씨로 적든 화씨로 적든 왜도와 첨도는 같은 수다. 모양만 보는 양이므로 서로 다른 자료의 치우침과 꼬리를 **직접 견줄 수 있다.** 평균과 표준편차는 그렇지 못하다.
+
+<div class="thmbox" markdown>
+
+### 정리 2. 첨도는 1 + 왜도제곱 아래로 내려갈 수 없다 { .thm }
+
+$\sigma > 0$ 이고 네 번째 적률이 유한한 임의의 분포에 대해
+
+$$
+\beta_2 \;\ge\; 1 + \gamma_1^2 \;\ge\; 1
+$$
+
+이다. 등호는 $X$ 가 **두 값만 갖는** 경우에만 성립한다.
+
+</div>
+
+??? proof "증명"
+
+    표준화한 $Z = (X - \mu)/\sigma$ 로 적으면 $E[Z] = 0$, $E[Z^2] = 1$, $E[Z^3] = \gamma_1$, $E[Z^4] = \beta_2$ 다.
+
+    $Z$ 와 $Z^2$ 의 공분산을 본다.
+
+    $$
+    \operatorname{Cov}(Z, Z^2) = E[Z^3] - E[Z]E[Z^2] = \gamma_1 - 0 = \gamma_1
+    $$
+
+    또 $\operatorname{Var}(Z) = 1$ 이고
+
+    $$
+    \operatorname{Var}(Z^2) = E[Z^4] - \bigl(E[Z^2]\bigr)^2 = \beta_2 - 1
+    $$
+
+    이다. 여기에 코시–슈바르츠 부등식 $\operatorname{Cov}(U,V)^2 \le \operatorname{Var}(U)\operatorname{Var}(V)$ 를 쓰면
+
+    $$
+    \gamma_1^2 \;\le\; 1 \cdot (\beta_2 - 1)
+    \qquad\Longrightarrow\qquad
+    \beta_2 \ge 1 + \gamma_1^2
+    $$
+
+    다. $\gamma_1^2 \ge 0$ 이므로 $\beta_2 \ge 1$ 도 따라온다.
+
+    등호는 코시–슈바르츠의 등호 조건, 곧 $Z^2$ 이 $Z$ 의 **일차함수**일 때다. $Z^2 = \alpha Z + \beta$ 는 $Z$ 에 대한 이차방정식이므로 근이 둘뿐이고, 따라서 $Z$ 가 **두 값만** 갖는다. $\square$
+
+    **$\beta_2 \ge 1$ 은 분산이 음수가 아니라는 말의 다른 표현이다.** $\operatorname{Var}(Z^2) = \beta_2 - 1$ 이므로 그렇다. 등호가 되는 것은 $Z^2$ 이 상수, 곧 $Z = \pm 1$ 을 반반씩 갖는 경우다. **첨도가 가장 작은 분포는 공정한 동전**이고 그 값이 1 이다. 정규분포의 3 은 그보다 꽤 큰 수이며, 초과첨도가 $-2$ 보다 작아질 수 없는 까닭도 이 하한이다.
+
+    치우친 분포는 꼬리가 두꺼울 수밖에 없다는 것도 읽힌다. 왜도가 $\pm 2$ 이면 첨도가 적어도 5 다. **치우침과 꼬리는 따로 고를 수 없다.**
+
 ### 첨도 모의실험
 
 <div class="exbox" markdown>
