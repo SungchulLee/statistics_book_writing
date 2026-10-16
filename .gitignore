@@ -26,9 +26,11 @@ datasets/
 data/
 model/
 
-# ch00 matplotlib 예제가 savefig로 만드는 파일
-/figure.png
-/residuals.png
+# 본문 예제 코드를 저장소 뿌리에서 돌리면 savefig 가 상대경로로 그림을
+# 뿌리에 쏟아 놓는다(tools/verify_outputs.py 를 뿌리에서 돌릴 때도 그렇다).
+# 진짜 그림은 docs/**/img/ 에만 있어야 하므로 뿌리의 PNG 는 전부 무시한다.
+# 맨 앞 / 때문에 docs/ 안의 그림에는 영향이 없다.
+/*.png
 
 # 시험지와 정답 — 절대 커밋하지 않는다.
 # main 에 올리면 GitHub Pages 로 자동 배포되므로 시험 전에 새어 나간다.
