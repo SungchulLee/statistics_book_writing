@@ -29,3 +29,10 @@ model/
 # ch00 matplotlib 예제가 savefig로 만드는 파일
 /figure.png
 /residuals.png
+
+# 시험지와 정답 — 절대 커밋하지 않는다.
+# main 에 올리면 GitHub Pages 로 자동 배포되므로 시험 전에 새어 나간다.
+/midterm_exam*.pdf
+/final_exam*.pdf
+/*_exam*.pdf
+/*_solutions.pdf
