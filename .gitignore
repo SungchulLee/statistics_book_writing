@@ -32,7 +32,10 @@ model/
 
 # 시험지와 정답 — 절대 커밋하지 않는다.
 # main 에 올리면 GitHub Pages 로 자동 배포되므로 시험 전에 새어 나간다.
-/midterm_exam*.pdf
-/final_exam*.pdf
-/*_exam*.pdf
-/*_solutions.pdf
+# 앞의 / 를 빼서 어느 깊이에 있든 걸리게 한다.
+exam_papers_do_not_push/
+*_exam*.pdf
+*exam_solutions*.pdf
+*_solutions.pdf
+midterm*.pdf
+final*.pdf
