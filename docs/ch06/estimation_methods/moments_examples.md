@@ -468,14 +468,38 @@ $\text{Weibull}(k,\lambda)$의 적률법 추정량을 유도하라. 왜 닫힌 �
     3. 그다음 $\hat\lambda = \bar x/\Gamma(1+1/\hat k)$로 얻는다.
 
     ```python
+    import numpy as np
     from scipy.optimize import brentq
     from scipy.special import gamma
-    h = lambda k: gamma(1 + 2/k) / gamma(1 + 1/k)**2 - 1
-    k_hat = brentq(lambda k: h(k) - (s/xbar)**2, 0.1, 50)
-    lam_hat = xbar / gamma(1 + 1/k_hat)
+
+    rng = np.random.default_rng(6)
+
+    # 참값을 아는 자료를 만들어 그 값을 되찾아 본다.
+    k_true, lam_true = 2.5, 10.0
+    x = lam_true * rng.weibull(k_true, size=5000)
+
+    xbar = x.mean()
+    s = x.std()                      # 이 쪽의 M_2 와 같게 1/n 로 나눈다
+    c_hat = s / xbar                 # 1단계: 변동계수
+
+    h = lambda k: gamma(1 + 2/k) / gamma(1 + 1/k)**2 - 1   # k 의 순감소함수
+    k_hat = brentq(lambda k: h(k) - c_hat**2, 0.1, 50)     # 2단계: 수치해
+    lam_hat = xbar / gamma(1 + 1/k_hat)                    # 3단계
+
+    print(f"변동계수 c_hat = {c_hat:.4f}")
+    print(f"k      : 참값 {k_true}   적률법 {k_hat:.4f}   어림공식 {c_hat**-1.086:.4f}")
+    print(f"lambda : 참값 {lam_true}  적률법 {lam_hat:.4f}")
     ```
 
-    **어림 공식.** $\hat k \approx \hat c^{-1.086}$이라는 근사가 널리 쓰인다($0.1 < \hat c < 1$ 범위에서 꽤 정확하다). 수치해의 좋은 초기값이 된다.
+    ```
+    변동계수 c_hat = 0.4214
+    k      : 참값 2.5   적률법 2.5432   어림공식 2.5562
+    lambda : 참값 10.0  적률법 9.9197
+    ```
+
+    **어림 공식.** $\hat k \approx \hat c^{-1.086}$이라는 근사가 널리 쓰인다($0.1 < \hat c < 1$ 범위에서 꽤 정확하다). 위 출력에서 $\hat c = 0.4214$가 그 범위 안에 있고, 어림값 $2.5562$가 수치해 $2.5432$와 소수 둘째 자리에서 갈린다. 수치해의 좋은 초기값이 되는 까닭이다.
+
+    **모양모수가 더 어렵다.** $n = 5000$에서도 $\hat k = 2.5432$로 참값에서 $1.7\%$ 어긋나는 반면 $\hat\lambda = 9.9197$은 $0.8\%$다. 같은 자료를 $n = 500$으로 줄이면 $\hat k$가 $2.72$까지 튄다. **척도모수는 평균 하나로 거의 정해지지만 모양모수는 둘째 적률에 기대므로 훨씬 흔들린다.**
 
     **덧붙임.** 와이불의 MLE도 닫힌 해가 없어 수치적으로 풀어야 하므로, 적률법의 "계산이 쉽다"는 장점이 여기서는 크지 않다. 그래도 **MLE 반복의 초기값**으로 쓰기에 좋고, 중도절단이 없는 완전 자료에서는 결과가 크게 다르지 않다.
 
