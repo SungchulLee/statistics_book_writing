@@ -43,3 +43,11 @@ exam_papers_do_not_push/
 *_solutions.pdf
 midterm*.pdf
 final*.pdf
+quiz*.pdf
+# 한글 이름으로 저장해도 막히게 한다. 저장소에 한글 이름 파일은 하나도
+# 없으므로(확인함) 이 패턴이 본문을 잘못 잡을 일은 없다.
+*중간고사*
+*기말고사*
+*시험지*
+*시험문제*
+*답안*
