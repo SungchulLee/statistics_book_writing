@@ -415,12 +415,12 @@
 | 379 | `ch07/conditional/stratified_reversal.md` | 그림 | 심슨은 만화가 아니다 | `—` | `cd__bletchley.png` | Wikimedia Commons, 촬영 DeFacto, CC BY-SA 4.0 | 대기 |
 | 380 | `ch07/conditional/stratified_reversal.md` | 그림 | 소송이 될 뻔한 입학 통계 | `—` | `cd__berkeley.png` | Wikimedia Commons, 촬영 Daderot, CC0 | 대기 |
 | 381 | `ch07/conditional/total_probability.md` | 그림 | 바다를 칸으로 나누고 하나씩 지워 나간 기록 | `ch03/probability/conditional.md` | `cd__palomares1975_fig333.png` | 미국 공군 자료, PD-USGov | **옮김** |
-| 382 | `ch07/descriptive/central_tendency.md` | 그림 | 눈금이 없는 그래프 | `ch02/center/mean_median_mode.md` | `dsc__stamp_indonesia1969.png` | Wikimedia Commons, PD | 대기 |
+| 382 | `ch07/descriptive/central_tendency.md` | 그림 | 눈금이 없는 그래프 | `ch02/center/mean_median_mode.md` | `dsc__stamp_indonesia1969.png` | Wikimedia Commons, PD | **옮김** |
 | 383 | `ch07/descriptive/covariance_correlation.md` | 그림 | 「회귀」라는 이름이 나온 그림 | `ch03/rv/correlation.md` | `dc__galton1886_plate10.png` | Wikimedia Commons, PD-Art | **옮김** |
-| 384 | `ch07/descriptive/dispersion.md` | 그림 | 백분위수를 종이에 그린 것 | `ch02/spread/variance_std.md` | `dsc__growth_chart_cdc2000.png` | Wikimedia Commons, PD-USGov-HHS-CDC | 대기 |
-| 385 | `ch07/descriptive/frequency_distribution.md` | 그림 | 통계학이라는 말보다 먼저 있던 도수분포표 | `ch02/exploration/histograms.md` | `fd__bills_of_mortality_1665.png` | Wikimedia Commons, Wellcome Collection, CC BY 4.0 | 대기 |
-| 386 | `ch07/descriptive/frequency_distribution.md` | 그림 | 히스토그램을 둥글게 말아 의회에 내민 그림 | `ch02/exploration/histograms.md` | `fd__nightingale1858.png` | Wikimedia Commons, PD-old | 대기 |
-| 387 | `ch07/descriptive/frequency_distribution.md` | 그림 | 날 수로 보면 가장 많은 쪽이 가장 적은 쪽이었다 | `ch02/exploration/histograms.md` | `fd__snow1855_p86.png` | — | 대기 |
+| 384 | `ch07/descriptive/dispersion.md` | 그림 | 백분위수를 종이에 그린 것 | `ch02/spread/robust.md` | `dsc__growth_chart_cdc2000.png` | Wikimedia Commons, PD-USGov-HHS-CDC | **옮김** |
+| 385 | `ch07/descriptive/frequency_distribution.md` | 그림 | 통계학이라는 말보다 먼저 있던 도수분포표 | `ch02/exploration/histograms.md` | `fd__bills_of_mortality_1665.png` | Wikimedia Commons, Wellcome Collection, CC BY 4.0 | **옮김** |
+| 386 | `ch07/descriptive/frequency_distribution.md` | 그림 | 히스토그램을 둥글게 말아 의회에 내민 그림 | `ch02/exploration/histograms.md` | `fd__nightingale1858.png` | Wikimedia Commons, PD-old | **옮김** |
+| 387 | `ch07/descriptive/frequency_distribution.md` | 그림 | 날 수로 보면 가장 많은 쪽이 가장 적은 쪽이었다 | `ch02/exploration/histograms.md` | `fd__snow1855_p86.png` | — | **옮김** |
 | 388 | `ch07/distributions/binomial_distribution.md` | 그림 | 이름이 된 책 | `ch04/discrete_distributions/bernoulli.md` | `bin__ars1713.png` | Wikimedia Commons, PD-old-100 | **옮김** |
 | 389 | `ch07/distributions/binomial_to_poisson.md` | 그림 | 말에 차여 죽은 사람을 센 표 | `ch04/discrete_distributions/poisson.md` | `binomial_to_poisson__bortkiewicz1898_p25.png` | Wikimedia Commons, PD-US-expired | **옮김** |
 | 390 | `ch07/distributions/exponential_distribution.md` | 그림 | 전화선을 몇 개 깔 것인가 | `ch04/continuous_distributions/exponential.md` | `ds__molina1927_p463.png` | — | **옮김** |
@@ -486,13 +486,13 @@
 | 450 | `ch07/random_walk/lattice_walk.md` | 그림 | 모눈종이 위에 연필로 그린 임의 보행 | `—` | `rw__perrin1916_p115.png` | Internet Archive, PD-US-expired | 대기 |
 | 451 | `ch07/random_walk/line_walk.md` | 그림 | 취한 사람은 집에 오고 취한 새는 못 온다 | `—` | `rw__polya.png` | Wikimedia Commons, 촬영 Thane Plambeck, CC BY 2.0 | 대기 |
 | 452 | `ch07/random_walk/trial_state.md` | 그림 | 홀짝이 매번 뒤집히는 항아리로 물리학의 다툼을 가라앉히다 | `—` | `rw__ehrenfest.png` | 이 책에서 그렸다 | 대기 |
-| 453 | `ch07/statistical_estimation/population_sample.md` | 그림 | 돌아온 비행기만 세었다 | `ch01/classical/population_sample.md` | `se__wald1943.png` | — | 대기 |
-| 454 | `ch07/statistical_estimation/population_sample.md` | 그림 | 눈을 가리면 고르게 섞이는가 | `ch01/classical/population_sample.md` | `se__draft_lottery.png` | — | 대기 |
-| 455 | `ch07/statistical_estimation/population_sample.md` | 그림 | 사람을 똑같은 그림으로 세면 | `ch01/classical/population_sample.md` | `se__stamp_india1977.png` | Wikimedia Commons, GODL-India | 대기 |
-| 456 | `ch07/statistical_estimation/proportion_difference.md` | 그림 | 이백삼십팔만 명에게 물어보고 틀렸다 | `ch05/applications/diff_proportions.md` | `se__truman1948.png` | Wikimedia Commons, PD-US-no notice | 대기 |
-| 457 | `ch07/statistical_estimation/proportion_difference.md` | 그림 | 두 병동의 수가 갈라져 있었다 | `ch05/applications/diff_proportions.md` | `se__semmelweis1861_p3.png` | — | 대기 |
+| 453 | `ch07/statistical_estimation/population_sample.md` | 그림 | 돌아온 비행기만 세었다 | `ch01/classical/survivorship_bias.md` | `se__wald1943.png` | — | **옮김** |
+| 454 | `ch07/statistical_estimation/population_sample.md` | 그림 | 눈을 가리면 고르게 섞이는가 | `ch01/classical/surveys.md` | `se__draft_lottery.png` | — | **옮김** |
+| 455 | `ch07/statistical_estimation/population_sample.md` | 그림 | 사람을 똑같은 그림으로 세면 | `ch01/classical/population_sample.md` | `se__stamp_india1977.png` | Wikimedia Commons, GODL-India | **옮김** |
+| 456 | `ch07/statistical_estimation/proportion_difference.md` | 그림 | 이백삼십팔만 명에게 물어보고 틀렸다 | `ch05/applications/sample_proportion.md` | `se__truman1948.png` | Wikimedia Commons, PD-US-no notice | **옮김** |
+| 457 | `ch07/statistical_estimation/proportion_difference.md` | 그림 | 두 병동의 수가 갈라져 있었다 | `ch05/applications/diff_proportions.md` | `se__semmelweis1861_p3.png` | — | **옮김** |
 | 458 | `ch07/statistical_estimation/sampling_estimation.md` | 그림 | 「확률」이라 부르지 않으려고 | `—` | `se__neyman.png` | Wikimedia Commons, 촬영 Konrad Jacobs, 오버볼파흐 수학연구소, CC BY-SA 2 | 대기 |
-| 459 | `ch07/statistical_estimation/standard_error.md` | 그림 | 맥주 회사가 이름을 쓰지 못하게 했다 | `ch05/applications/standard_error.md` | `se__student1908_p1.png` | — | 대기 |
+| 459 | `ch07/statistical_estimation/standard_error.md` | 그림 | 맥주 회사가 이름을 쓰지 못하게 했다 | `ch05/applications/standard_error.md` | `se__student1908_p1.png` | — | **옮김** |
 | 460 | `ch08/algorithms/algorithms.md` | 그림 | 기계가 밟을 절차를 표로 적은 쪽 | `—` | `al__lovelace1843_noteg.png` | Wikimedia Commons, PD-old-100 | 대기 |
 | 461 | `ch08/algorithms/algorithms.md` | 그림 | 사람 육만 사천 명이 밟을 절차 | `—` | `al__richardson1922_p184.png` | Internet Archive 스캔, 저작권 없음 | 대기 |
 | 462 | `ch08/algorithms/recurrences.md` | 그림 | 정리를 장난감으로 만들어 팔았다 | `—` | `recurrences__lucas1883.png` | Wikimedia Commons, PD-Art · PD-old-auto-expired | 대기 |
@@ -556,4 +556,4 @@
 | 520 | `numbers/expression/letters_expressions.md` | 그림 | 모르는 수에 글자 대신 자리를 준 사람들 | `—` | `le__siyuan_tianyuan.png` | Wikimedia Commons, 옛 필사본, 저작권 없음 | 대기 |
 | 521 | `numbers/expression/polynomial_operations.md` | 그림 | 곱셈 기호가 셋이던 쪽 | `—` | `po__oughtred1667_p10.png` | Internet Archive 스캔, PD-old | 대기 |
 
-합계 **521** 개 — 옮김 **41**, 보류 **0**, 대기 **480**
+합계 **521** 개 — 옮김 **52**, 보류 **0**, 대기 **469**

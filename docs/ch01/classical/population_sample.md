@@ -24,6 +24,27 @@ $$
 
 </div>
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 사람을 똑같은 그림으로 세면
+
+<figure markdown>
+  ![사람 모양 아이콘이 줄지어 늘어선 가운데 일부만 속이 비어 있는 1977년 인도 우표](./img/se__stamp_india1977.png){ width=185 align=right }
+  <figcaption markdown>인도 $1977$ 년, 액면 $2$ 루피. 뉴델리에서 열린 **국제통계학회 제 $41$ 차 총회** 기념이다. *(Wikimedia Commons, GODL-India)*</figcaption>
+</figure>
+
+도안을 보라. 사람 모양이 줄지어 늘어서 있는데, 어떤 것은 속이 **차 있고** 어떤 것은 **비어 있다**. 통계가 하는 일이 바로 이 그림이다 — 사람 하나하나를 **똑같이 생긴 표시 하나**로 바꾸어 놓고, 그중 몇이 어떠한지를 센다.
+
+이 바꿔치기가 통계의 힘이다. 키도 이름도 사정도 다른 사람들을 같은 단위로 만들어야 더하고 나눌 수 있다. 정의 1 이 모집단의 값 $x_1,\dots,x_N$ 과 표본 $X_1,\dots,X_n$ 을 그냥 **수의 열**로 적어 놓는 것이 그 약속이다.
+
+그리고 바로 거기에 이 절의 어려움이 있다. **누가 세어졌고 누가 세어지지 않았는가.** 우표에서 속이 빈 사람들이 어떤 기준으로 골라졌는지 우리는 알 수 없다. 실제 조사에서도 마찬가지다 — 전화를 받지 않은 사람, 명부에 없던 사람, 조사원이 찾아가지 못한 동네는 표시조차 되지 않는다.
+
+정의 1 의 마지막 줄이 말하는 것이 그것이다. 목표 모집단과 연구 모집단 사이의 간극은 **표본 크기로 없앨 수 없다.** 빠진 자리는 수를 늘려서 메울 수 없고, 그 사정을 식으로 적어 둔 것이 [무응답 편향](bias_nonresponse.md) 쪽의 정리 1 이다 — 편향 항에는 $n$ 이 아예 들어 있지 않다.
+
+*확인한 곳 — 우표는 인도 $1977$ 년 국제통계학회 제$41$ 차 총회 기념([Commons 파일](https://commons.wikimedia.org/wiki/File:Stamp_of_India_-_1977_-_Colnect_562156_-_41st_Session_of_Int_Statistical_Institute_New_Delhi.jpeg)) · 사람 모양 그림표의 유래는 [Wikipedia 「Isotype (picture language)」](https://en.wikipedia.org/wiki/Isotype_(picture_language))*
+
+</div>
+
 <div class="exbox" markdown>
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 모집단과 표본. $\mu = 170$, $\sigma = 10$인 정규분포에서 $10$만 명을 뽑아 **모집단으로 삼고**, 거기서 $n = 10, 100, 1000, 10000$을 비복원으로 뽑는다.
