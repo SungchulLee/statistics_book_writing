@@ -421,14 +421,14 @@
 | 385 | `ch07/descriptive/frequency_distribution.md` | 그림 | 통계학이라는 말보다 먼저 있던 도수분포표 | `ch02/exploration/histograms.md` | `fd__bills_of_mortality_1665.png` | Wikimedia Commons, Wellcome Collection, CC BY 4.0 | 대기 |
 | 386 | `ch07/descriptive/frequency_distribution.md` | 그림 | 히스토그램을 둥글게 말아 의회에 내민 그림 | `ch02/exploration/histograms.md` | `fd__nightingale1858.png` | Wikimedia Commons, PD-old | 대기 |
 | 387 | `ch07/descriptive/frequency_distribution.md` | 그림 | 날 수로 보면 가장 많은 쪽이 가장 적은 쪽이었다 | `ch02/exploration/histograms.md` | `fd__snow1855_p86.png` | — | 대기 |
-| 388 | `ch07/distributions/binomial_distribution.md` | 그림 | 이름이 된 책 | `ch04/discrete_distributions/binomial.md` | `bin__ars1713.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 389 | `ch07/distributions/binomial_to_poisson.md` | 그림 | 말에 차여 죽은 사람을 센 표 | `ch04/discrete_distributions/poisson.md` | `binomial_to_poisson__bortkiewicz1898_p25.png` | Wikimedia Commons, PD-US-expired | 대기 |
-| 390 | `ch07/distributions/exponential_distribution.md` | 그림 | 전화선을 몇 개 깔 것인가 | `ch04/continuous_distributions/exponential.md` | `ds__molina1927_p463.png` | — | 대기 |
-| 391 | `ch07/distributions/geometric_distribution.md` | AI | 기다린 보람이 없으므로 간격을 늘린다 | `ch04/discrete_distributions/geometric.md` | `—` | — | 대기 |
-| 392 | `ch07/distributions/geometric_distribution.md` | 그림 | 담뱃갑에 든 쉰 장, 다 모으려면 | `ch04/discrete_distributions/geometric.md` | `ds__cope_warriors_card.png` | Wikimedia Commons, 저작권 만료 | 대기 |
-| 393 | `ch07/distributions/hypergeometric_distribution.md` | 그림 | 검사를 얼마나 할 것인가 | `ch04/discrete_distributions/hypergeometric.md` | `ds__dodge1929_p629.png` | — | 대기 |
-| 394 | `ch07/distributions/poisson.md` | 그림 | 이름이 붙기 전의 포아송분포 | `ch04/discrete_distributions/poisson.md` | `poisson__poisson1837_p206.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 395 | `ch07/distributions/poisson.md` | 그림 | 에펠탑에 새겨진 이름 | `ch04/discrete_distributions/poisson.md` | `poisson__eiffel.png` | Wikimedia Commons, 촬영 Victor R. Ruiz, CC BY-SA 2.0 | 대기 |
+| 388 | `ch07/distributions/binomial_distribution.md` | 그림 | 이름이 된 책 | `ch04/discrete_distributions/bernoulli.md` | `bin__ars1713.png` | Wikimedia Commons, PD-old-100 | **옮김** |
+| 389 | `ch07/distributions/binomial_to_poisson.md` | 그림 | 말에 차여 죽은 사람을 센 표 | `ch04/discrete_distributions/poisson.md` | `binomial_to_poisson__bortkiewicz1898_p25.png` | Wikimedia Commons, PD-US-expired | **옮김** |
+| 390 | `ch07/distributions/exponential_distribution.md` | 그림 | 전화선을 몇 개 깔 것인가 | `ch04/continuous_distributions/exponential.md` | `ds__molina1927_p463.png` | — | **옮김** |
+| 391 | `ch07/distributions/geometric_distribution.md` | AI | 기다린 보람이 없으므로 간격을 늘린다 | `ch04/discrete_distributions/geometric.md` | `—` | — | **옮김** |
+| 392 | `ch07/distributions/geometric_distribution.md` | 그림 | 담뱃갑에 든 쉰 장, 다 모으려면 | `ch04/discrete_distributions/geometric.md` | `ds__cope_warriors_card.png` | Wikimedia Commons, 저작권 만료 | **옮김** |
+| 393 | `ch07/distributions/hypergeometric_distribution.md` | 그림 | 검사를 얼마나 할 것인가 | `ch04/discrete_distributions/hypergeometric.md` | `ds__dodge1929_p629.png` | — | **옮김** |
+| 394 | `ch07/distributions/poisson.md` | 그림 | 이름이 붙기 전의 포아송분포 | `ch04/discrete_distributions/poisson.md` | `poisson__poisson1837_p206.png` | Wikimedia Commons, PD-old-100 | **옮김** |
+| 395 | `ch07/distributions/poisson.md` | 그림 | 에펠탑에 새겨진 이름 | `ch04/discrete_distributions/poisson.md` | `poisson__eiffel.png` | Wikimedia Commons, 촬영 Victor R. Ruiz, CC BY-SA 2.0 | **옮김** |
 | 396 | `ch07/expectation_applications/conditional_expectation.md` | 그림 | 「검사를 얼마나 할 것인가」에 수로 답한 쪽 | `—` | `ce__dodge_romig1929_p621_628_629.png` | — | 대기 |
 | 397 | `ch07/expectation_applications/conditional_expectation.md` | AI | 기계가 찾아내는 것은 결국 $E[Y\mid X]$ 하나다 | `—` | `—` | — | 대기 |
 | 398 | `ch07/expectation_applications/expectation_counting.md` | 그림 | 가장자리는 싸고 안쪽은 비싸다 | `—` | `ec__hollerith1890.png` | Wikimedia Commons · 저작권 없음 | 대기 |
@@ -454,8 +454,8 @@
 | 418 | `ch07/normal_distribution/binomial_to_normal.md` | 그림 | 반 칸에 사람 이름이 붙은 자리 | `—` | `nd__yates_gain.png` | — | 대기 |
 | 419 | `ch07/normal_distribution/central_limit_theorem.md` | 그림 | 종 모양이 활자로 놓인 쪽 | `ch03/limits/clt.md` | `clt__doctrine1756_p243.png` | Internet Archive 원문 스캔, PD-old-100 | **옮김** |
 | 420 | `ch07/normal_distribution/normal_applications.md` | 그림 | 같은 높이로 튀었는데 한쪽만 이상이다 | `—` | `nd__shewhart1927_p726.png` | — | 대기 |
-| 421 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 지폐에 실린 확률밀도함수 | `ch04/continuous_distributions/normal.md` | `nd__note.png` | — | 대기 |
-| 422 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 구슬이 쌓아 올린 종 모양 | `ch04/continuous_distributions/normal.md` | `nd__galton.png` | Wikimedia Commons, PD | 대기 |
+| 421 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 지폐에 실린 확률밀도함수 | `ch04/continuous_distributions/normal.md` | `nd__note.png` | — | **옮김** |
+| 422 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 구슬이 쌓아 올린 종 모양 | `ch04/discrete_distributions/binomial.md` | `nd__galton.png` | Wikimedia Commons, PD | **옮김** |
 | 423 | `ch07/normal_distribution/normal_sum_percentile.md` | 그림 | 분산이 같은데 모양이 다르다 | `—` | `nd__lindeberg.png` | — | 대기 |
 | 424 | `ch07/normal_distribution/normal_sum_percentile.md` | AI | 층을 쌓을 때 $\sqrt n$ 으로 나누는 까닭 | `—` | `—` | — | 대기 |
 | 425 | `ch07/normal_distribution/normal_symmetry.md` | 그림 | 대칭을 눈금으로 새겨 둔 종이 | `—` | `nd__hazen.png` | — | 대기 |
@@ -476,8 +476,8 @@
 | 440 | `ch07/random_variable/random_variable.md` | 그림 | 주사위 셋의 합을 칠백 해 전에 적어 둔 표 | `ch03/rv/discrete.md` | `rv__devetula1534.png` | — | **옮김** |
 | 441 | `ch07/random_variable/random_variable_geometry.md` | 그림 | 「그때에야 비로소 셀 수 있다」 | `—` | `rv__crofton1868_p181.png` | Internet Archive 스캔, PD-old | 대기 |
 | 442 | `ch07/random_variable/random_variable_process.md` | 그림 | 시 두 만 자를 손으로 세어 얻은 두 수 | `—` | `rv__markov1913_p153.png` | Internet Archive 스캔, PD-old | 대기 |
-| 443 | `ch07/random_variable/uniform_distribution.md` | 그림 | 고르게 뽑으려고 돌을 깎았다 | `ch04/continuous_distributions/uniform.md` | `rv__kleroterion.png` | 촬영 Zde, Wikimedia Commons, CC BY-SA 4.0 | 대기 |
-| 444 | `ch07/random_variable/uniform_distribution.md` | AI | 난수 하나로 다음 낱말을 고르는 법 | `ch04/continuous_distributions/uniform.md` | `rv__uni_ai_inverse.png` | — | 대기 |
+| 443 | `ch07/random_variable/uniform_distribution.md` | 그림 | 고르게 뽑으려고 돌을 깎았다 | `ch04/continuous_distributions/uniform.md` | `rv__kleroterion.png` | 촬영 Zde, Wikimedia Commons, CC BY-SA 4.0 | **옮김** |
+| 444 | `ch07/random_variable/uniform_distribution.md` | AI | 난수 하나로 다음 낱말을 고르는 법 | `ch04/continuous_distributions/uniform.md` | `rv__uni_ai_inverse.png` | — | **옮김** |
 | 445 | `ch07/random_walk/conditional_sequential.md` | 그림 | 가장 센 패턴이 없는 놀이 | `—` | `rw__penney.png` | — | 대기 |
 | 446 | `ch07/random_walk/first_step_analysis.md` | 그림 | 「밑천이 무한하다면」이라고 적어 놓고 넘어간 쪽 | `—` | `fs__eb1911_p771.png` | Wikimedia Commons · 저작권 없음 | 대기 |
 | 447 | `ch07/random_walk/first_step_analysis.md` | AI | 기계는 이 점화식을 풀지 않고 외워 넣는다 | `—` | `—` | — | 대기 |
@@ -556,4 +556,4 @@
 | 520 | `numbers/expression/letters_expressions.md` | 그림 | 모르는 수에 글자 대신 자리를 준 사람들 | `—` | `le__siyuan_tianyuan.png` | Wikimedia Commons, 옛 필사본, 저작권 없음 | 대기 |
 | 521 | `numbers/expression/polynomial_operations.md` | 그림 | 곱셈 기호가 셋이던 쪽 | `—` | `po__oughtred1667_p10.png` | Internet Archive 스캔, PD-old | 대기 |
 
-합계 **521** 개 — 옮김 **29**, 보류 **0**, 대기 **492**
+합계 **521** 개 — 옮김 **41**, 보류 **0**, 대기 **480**

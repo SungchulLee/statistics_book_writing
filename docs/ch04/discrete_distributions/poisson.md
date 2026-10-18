@@ -58,6 +58,54 @@ $$
 
     **앞의 $e^{-\lambda}$ 는 정규화 상수일 뿐이다.** 분포의 모양을 정하는 것은 $\lambda^k/k!$ 이고, $e^{-\lambda}$ 는 그 합을 1 로 맞추려고 붙은 수다. 어떤 분포의 밀도든 PMF 든 **모양을 보는 부분과 눈금을 맞추는 부분**으로 갈라 읽는 습관이 여기서부터 쓸모가 있다.
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 이름이 붙기 전의 포아송분포
+
+<figure markdown>
+  ![프랑스어 본문 한 토막. 가운데에 P 를 괄호 안의 급수와 e 의 마이너스 오메가 제곱의 곱으로 적은 식이 인쇄되어 있다](./img/poisson__poisson1837_p206.png){ width=620 }
+  <figcaption markdown>푸아송 『형사와 민사 재판의 판결 확률에 관한 연구』(파리, 바슐리에, $1837$) $206$ 쪽. *(Wikimedia Commons, PD-old-100)*</figcaption>
+</figure>
+
+정의 1 은 $P(X=k)=\dfrac{e^{-\lambda}\lambda^k}{k!}$ 로 포아송분포를 세운다. 그 식이 인쇄된 자리가 위의 쪽이다.
+
+책의 주제는 분포가 아니라 **재판**이었다. 배심원이 유죄로 판단할 확률을 재판 기록에서 가늠해 보려는 책이고, 그 긴 논의 한가운데에 이 쪽이 끼어 있다.
+
+읽는 법만 알면 정의 1 과 다르지 않다. 푸아송은 계승을 $1.2.3\dots n$ 으로 적고, 우리가 $\lambda$ 라 쓰는 것을 $\omega$ 로 적었다. 그래서 인쇄된 식
+
+$$
+P=\left(1+\omega+\frac{\omega^2}{1\cdot 2}+\cdots+\frac{\omega^n}{1\cdot 2\cdot 3\cdots n}\right)e^{-\omega}
+$$
+
+은 $\displaystyle\sum_{k=0}^{n}\frac{e^{-\omega}\omega^k}{k!}$, 곧 $P(X\le n)$ 이다. 바로 아래 줄에서 그는 $n=0$ 이면 이 값이 $e^{-\omega}$ 로 줄어든다고 덧붙이는데, 그것이 정의 1 에서 $k=0$ 인 경우다.
+
+식 아래 문장도 그대로 옮겨 볼 만하다 — 「한 번의 시행에서 일어날 가능성이 아주 작은 분수 $\omega/\mu$ 인 사건이, 아주 많은 횟수 $\mu$ 의 시행에서 $n$ 번을 넘지 않을 확률」. 시행 횟수 $\mu$ 에 한 번의 확률 $\omega/\mu$ 를 곱하면 $\omega$ 다. 곧 아래 절 3 의 **정리 3** 이 말하는 극한이 정의보다 먼저 적혀 있는 셈이다. 푸아송에게 이 식은 세워야 할 분포가 아니라 **이항분포를 밀어붙여 얻은 근삿값**이었고, 이름이 붙은 것은 훨씬 뒤의 일이다.
+
+*확인한 곳 — 푸아송 『형사와 민사 재판의 판결 확률에 관한 연구』(파리, $1837$) $206$ 쪽 — [Commons 의 사본](https://commons.wikimedia.org/wiki/File:Poisson_-_Recherches_sur_la_probabilit%C3%A9_des_jugements_en_mati%C3%A8re_criminelle_et_en_mati%C3%A8re_civile,_1837.djvu) 에서 그 쪽을 썼고, 인쇄된 식을 오늘의 기호로 옮긴 것은 이 쪽에서 직접 했다*
+
+</div>
+
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 2.** 에펠탑에 새겨진 이름
+
+<figure markdown>
+  ![에펠탑 일층 둘레의 띠에 ARAGO POISSON MONGE 가 금빛 글자로 새겨져 있다](./img/poisson__eiffel.png){ width=330 align=right }
+  <figcaption markdown>에펠탑 일층 둘레의 띠. 아라고와 몽주 사이에 **POISSON** 이 새겨져 있다. *(Wikimedia Commons, 촬영 Victor R. Ruiz, CC BY-SA 2.0)*</figcaption>
+</figure>
+
+그러면 **푸아송**은 누구인가. 시메옹 드니 푸아송($1781$–$1840$)은 프랑스 사람으로, 확률만 한 것이 아니라 전기와 자기, 역학, 천체의 운동까지 손댄 사람이다. 지금도 그의 이름은 분포 말고도 여러 군데 붙어 있다.
+
+사진은 **에펠탑**이다. 에펠은 탑이 흉하다는 비난에 시달리자 일층 둘레에 프랑스 과학자 $72$ 명의 이름을 금빛으로 새겨 넣었는데, 그 가운데 하나가 푸아송이다. 파리 한복판에 이름이 새겨질 만큼 당대에 큰 사람이었다는 뜻이다.
+
+그런데 정작 **이 쪽의 분포는 그가 중요하게 여기지 않았다.** 상자 1 에서 본 대로 그것은 재판을 다루는 책 $206$ 쪽에 끼어 있던 근삿값이었고, 그는 거기에 이름을 붙이지도, 따로 다루지도 않았다. 탑에 새겨진 것은 전기와 역학을 한 푸아송이지 분포를 만든 푸아송이 아니다.
+
+이름이 붙는 자리와 일한 자리가 어긋나는 일은 흔하다. 분포에 「푸아송」이 붙은 것은 그가 죽고 한참 뒤, 다른 사람이 그 식을 꺼내 쓰기 시작하면서다. 그 일을 한 사람이 보르트키에비치이고, 그가 $1898$ 년에 들고나온 말발굽 자료는 아래 절 3 의 상자 3 에 그 인쇄된 표 그대로 실려 있다.
+
+*확인한 곳 — [Wikipedia 「List of the 72 names on the Eiffel Tower」](https://en.wikipedia.org/wiki/List_of_the_72_names_on_the_Eiffel_Tower) · [MacTutor 「Siméon-Denis Poisson」](https://mathshistory.st-andrews.ac.uk/Biographies/Poisson/) · $206$ 쪽이라는 것은 같은 쪽 상자 1 이 쓴 [Commons 의 사본](https://commons.wikimedia.org/wiki/File:Poisson_-_Recherches_sur_la_probabilit%C3%A9_des_jugements_en_mati%C3%A8re_criminelle_et_en_mati%C3%A8re_civile,_1837.djvu) 에서 확인한 것이다*
+
+</div>
+
 <div class="exbox" markdown>
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 포아송분포의 확률질량함수와 분포함수. $X \sim \text{Poisson}(5)$의 PMF와 CDF를 $k = 0, \ldots, 19$에서 나란히 그린다.
@@ -471,6 +519,42 @@ $$
     $n \to \infty$일 때 $\frac{n!}{(n-k)! \, n^k} \to 1$, $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$, $\left(1 - \frac{\lambda}{n}\right)^{-k} \to 1$이다.
 
     **경험 법칙:** $n \geq 20$이고 $p \leq 0.05$일 때(더 보수적으로는 $n \geq 100$이고 $np \leq 10$일 때) 포아송 근사를 사용한다.
+
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 3.** 말에 차여 죽은 사람을 센 표
+
+<figure markdown>
+  ![독일어 표 하나. 왼쪽 칸에 0 부터 5 이상까지, 가운데 칸에 109 65 22 3 1, 오른쪽 칸에 108,7 66,3 20,2 4,1 0,6 0,1 이 적혀 있다](./img/binomial_to_poisson__bortkiewicz1898_p25.png){ width=600 }
+  <figcaption markdown>보르트키에비치 『작은 수의 법칙』($1898$) $25$ 쪽. 가운데 칸이 실제로 일어난 횟수, 오른쪽 칸이 기대되던 횟수다. *(Wikimedia Commons, PD-US-expired)*</figcaption>
+</figure>
+
+정리 3 은 시행 횟수가 아주 많고 한 번의 확률이 아주 작으며 그 곱이 일정할 때 이항분포가 포아송분포로 간다고 말한다. 그 말이 실제 자료에서 그대로 들어맞는 것을 보인 표가 위의 것이다.
+
+두 쪽 앞인 $23$ 쪽에 이 절(§ 12)의 제목이 이렇게 적혀 있다 — 「네 번째 보기: 프로이센 군에서 말에 차여 죽은 사람들」. 그 다음 $24$ 쪽이 군단별·해별 원자료 표이고, 위 그림은 그것을 요약한 $25$ 쪽이다. **보르트키에비치**는 $1875$ 년부터 $1894$ 년까지 $20$ 년 동안 군단마다 해마다 말에 차여 죽은 군인이 몇인지를 프로이센 공식 통계에서 옮겨 적었다. 편성이 남다른 근위군단과 제1·제6·제11 군단을 덜어 내면 군단 $10$ 개 $\times$ 해 $20$ 개, 곧 $200$ 개의 「군단-해」가 남는다.
+
+| 그 해에 죽은 수 | 그런 군단-해의 개수 | 기대되던 개수 |
+|---|---|---|
+| $0$ | $109$ | $108.7$ |
+| $1$ | $65$ | $66.3$ |
+| $2$ | $22$ | $20.2$ |
+| $3$ | $3$ | $4.1$ |
+| $4$ | $1$ | $0.6$ |
+| $5$ 이상 | $0$ | $0.1$ |
+
+왼쪽 두 칸에서 평균을 내면
+
+$$
+\frac{0\cdot109+1\cdot65+2\cdot22+3\cdot3+4\cdot1}{200}=\frac{122}{200}=0.61
+$$
+
+이고, 오른쪽 칸은 $200\cdot\dfrac{e^{-0.61}(0.61)^k}{k!}$ 를 계산한 값이다. 실제로 $200e^{-0.61}=108.7$ 이다. 표 아래에 인쇄된 $0{,}61$ 과 $0{,}78$ 은 이 $200$ 개 수의 흩어짐을 잰 값인데 $0.78^2=0.61$ 이니, **분산이 평균과 같다** — 정리 2 가 말하는 포아송분포의 표시다.
+
+정리 3 의 $n$ 과 $p$ 가 여기서 무엇인지 보아 두자. $n$ 은 한 군단의 사람 수라 수만이고, $p$ 는 그 가운데 한 사람이 한 해에 말에 차여 죽을 확률이라 아주 작다. 둘 다 알 수 없지만 곱 $np=0.61$ 하나만 알면 표가 정해진다. 그가 이 책에 붙인 제목이 「작은 수의 법칙」인 까닭이다. 왼쪽 칸과 오른쪽 칸이 얼마나 맞는지를 수 하나로 재는 일이 10장의 [적합도 검정](../../ch10/test/gof.md)이다.
+
+*확인한 곳 — 보르트키에비치 『작은 수의 법칙』($1898$) [원본 스캔](https://archive.org/stream/dasgesetzderklei00bortrich/dasgesetzderklei00bortrich_djvu.txt) — 「§ 12. 4. Beispiel: Die durch Schlag eines Pferdes im preußischen Heere Getöteten」이 $23$ 쪽, 군단별 원표가 $24$ 쪽, 위 요약표가 $25$ 쪽임을 그 전문에서 확인했다 · 인물은 [Wikipedia 「Ladislaus Bortkiewicz」](https://en.wikipedia.org/wiki/Ladislaus_Bortkiewicz) · 표 아래의 $0{,}61$ 과 $0{,}78$ 은 사진에서 직접 읽었고, 평균 $0.61$ 과 기대도수는 이 쪽에서 직접 셈해 맞추었다*
+
+</div>
 
 <div class="exbox" markdown>
 
