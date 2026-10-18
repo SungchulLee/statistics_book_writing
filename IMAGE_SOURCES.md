@@ -35,7 +35,7 @@
 | # | 원본 | 상자 | 제목 | 옮긴 곳 | 이미지 | 라이선스 | 상태 |
 |---|---|---|---|---|---|---|---|
 | 1 | `ch00/equation_setup/arithmetic_geometric_mean.md` | 그림 | 파피루스에 그림으로 남은 같은 사실 | `—` | `agm__papyrus.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 2 | `ch00/equation_setup/cauchy_schwarz.md` | 그림 | 항등식 한 줄 뒤에 부등식이 따라 나온 쪽 | `—` | `cs__cauchy1821_p456.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 2 | `ch00/equation_setup/cauchy_schwarz.md` | 그림 | 항등식 한 줄 뒤에 부등식이 따라 나온 쪽 | `ch03/rv/correlation.md` | `cs__cauchy1821_p456.png` | Wikimedia Commons, PD-old-100-expired | **옮김** |
 | 3 | `ch00/equation_setup/cauchy_schwarz.md` | AI | 닮은 정도를 $-1$ 과 $1$ 사이에 가두는 것 | `—` | `cs__ai_cosine.png` | — | 대기 |
 | 4 | `ch00/equation_setup/circle_equation.md` | 그림 | 계수가 같을 것, 그리고 각이 직각일 것 | `—` | `ce__fermat1679_p5.png` | 페르마의 해석기하와 원의 방정식 — 붙을 정의·정리가 없다 | 보류 |
 | 5 | `ch00/equation_setup/coordinate_setup.md` | 그림 | 돌에 새겨 벽에 걸어 둔 좌표평면 | `—` | `cd__orange_cadastre_wall.png`, `cd__orange_cadastre_detail.png` | 로마 지적도의 좌표 체계 — 통계 내용이 없다 | 보류 |
@@ -75,12 +75,12 @@
 | 39 | `ch01/functions/function.md` | 그림 | 어긋남을 결함이 아니라 정의로 삼은 사람 | `—` | `fn__cantor.png` | Wikimedia Commons, PD-old | 대기 |
 | 40 | `ch01/functions/inverse.md` | 그림 | $f^{-1}$ 을 쓰면서 그 자리에 달아 둔 각주 | `—` | `inv__herschel1813_p10.png` | 역함수 표기의 역사 — 대응하는 통계 내용 없음 | 보류 |
 | 41 | `ch01/functions/inverse.md` | AI | 되돌아오게 만들어 두어야 하는 길 | `—` | `—` | 토큰화 — 그것을 다루는 쪽이 없다 | 보류 |
-| 42 | `ch01/functions/irrational.md` | AI | 요즘 언어모델이 꼭 $\sqrt{d}$ 로 나누는 까닭 | `—` | `—` | — | 대기 |
+| 42 | `ch01/functions/irrational.md` | AI | 요즘 언어모델이 꼭 $\sqrt{d}$ 로 나누는 까닭 | `ch03/rv/variance_covariance.md` | `—` | — | **옮김** |
 | 43 | `ch01/functions/irrational.md` | 그림 | 제곱과 제곱근을 한 쪽에 나란히 찍어 둔 책 | `—` | `irr__barlow1914_p30.png` | 수표(바로 표) — 역함수 표기 이야기 | 보류 |
 | 44 | `ch01/functions/proportion.md` | 그림 | 비례상수를 재지 않고 정해 버렸다 | `—` | `prp__vitruvius_hodometer.png` | 비트루비우스의 거리 재는 수레 — 통계 내용 없음 | 보류 |
 | 45 | `ch01/functions/rational_function.md` | 그림 | 아무도 재지 않은 수를 적어 넣은 열 | `—` | `rf__boyle1662_p60.png` | 보일의 법칙과 반비례함수 — 알맹이가 통계가 아니다 | 보류 |
 | 46 | `ch01/functions/set.md` | 그림 | 무엇이든 모으면 집합인가 | `—` | `fn__russell1907.png` | 러셀 역설 — logic_sets.md 가 그 물음을 세우지 않는다 | 보류 |
-| 47 | `ch01/functions/set.md` | 그림 | 식당 창문에 끼운 세 개의 원 | `—` | `fn__venn_window.png` | Wikimedia Commons, 촬영 Schutz, CC BY-SA 2.5 | 대기 |
+| 47 | `ch01/functions/set.md` | 그림 | 식당 창문에 끼운 세 개의 원 | `ch03/probability/axioms.md` | `fn__venn_window.png` | Wikimedia Commons, 촬영 Schutz, CC BY-SA 2.5 | **옮김** |
 | 48 | `ch01/matrix/linear_transformation.md` | 그림 | 격자를 비틀었더니 다른 종이 되었다 | `—` | `lt__thompson1917_p748.png` | 다시 톰프슨의 변환 이론 — 생물 형태학 | 보류 |
 | 49 | `ch01/matrix/linear_transformation.md` | AI | 층 하나가 곧 일차변환이다 | `—` | `—` | — | 대기 |
 | 50 | `ch01/matrix/matrix.md` | 그림 | 정리 1 이 활자로 놓인 자리 | `—` | `mx__cayley1858_p23.png` | 케일리–해밀턴 정리 — 이 책에서 쓰지 않는다 | 보류 |
@@ -360,7 +360,7 @@
 | 324 | `ch06/binomial/vandermonde_convolution.md` | 그림 | 이름은 붙었는데 그의 것이 아닌 것 | `—` | `bn__vandermonde.png` | Wikimedia Commons, PD-old-100 | 대기 |
 | 325 | `ch06/counting_applications/count_equation.md` | 그림 | 답 셋을 적어 두고 「그 이치를 다할 길이 없다」고 덧붙였다 | `—` | `ca__zhangqiujian_baiji.png` | 백계문제(부정방정식) — 대응하는 통계 내용 없음 | 보류 |
 | 326 | `ch06/counting_applications/count_functions.md` | 그림 | 「함수를 센다」로 바꾸었더니 열두 칸이 되었다 | `—` | `ca__rota1970.png` | 로타의 십이로 — 세는 법을 정리하는 쪽이 없다 | 보류 |
-| 327 | `ch06/counting_applications/distribute_balls.md` | 그림 | 틀린 셈이 맞는 답을 냈다 | `—` | `ca__bose1925.png` | Wikimedia Commons, PD-India | 대기 |
+| 327 | `ch06/counting_applications/distribute_balls.md` | 그림 | 틀린 셈이 맞는 답을 냈다 | `ch03/probability/sample_space.md` | `ca__bose1925.png` | Wikimedia Commons, PD-India | **옮김** |
 | 328 | `ch06/counting_applications/lattice_paths.md` | 그림 | 세지 않고 재는 대신, 재지 않고 세기 | `—` | `ca__pick.png` | 픽의 정리 — 대응하는 통계 내용 없음 | 보류 |
 | 329 | `ch06/counting_applications/lattice_shortest_path.md` | 그림 | 반사가 한 번도 나오지 않는 「반사원리」 | `—` | `ca__andre1887_p436.png` | 앙드레의 반사원리 — 확률보행을 다루는 쪽이 없다 | 보류 |
 | 330 | `ch06/counting_techniques/case_split.md` | 그림 | 갈래가 이천 가지라 사람이 다 볼 수 없었다 | `—` | `ct__fourcolors1976.png` | 사색정리와 컴퓨터 증명 — 대응하는 통계 내용 없음 | 보류 |
@@ -368,7 +368,7 @@
 | 332 | `ch06/counting_techniques/complement_counting.md` | AI | 「한 번만 맞으면 된다」를 재는 법 | `—` | `ct__passk_estimator.png` | — | 대기 |
 | 333 | `ch06/counting_techniques/correspondence_count.md` | 그림 | 세지 않고 같음을 확인하던 나뭇조각 | `—` | `ct__tally_sticks.png` | 엄대와 전단사 — 대응하는 통계 내용 없음 | 보류 |
 | 334 | `ch06/counting_techniques/graph_counting.md` | 그림 | 「행복한 결말 문제」라는 이름이 붙은 까닭 | `—` | `ct__szekeres2001.png` | 에르되시–세케레시 — 대응하는 통계 내용 없음 | 보류 |
-| 335 | `ch06/counting_techniques/inclusion_exclusion.md` | 그림 | 이름이 둘 붙었는데 둘 다 처음이 아니다 | `—` | `ct__dasilva.png` | Wikimedia Commons, PD-old-assumed | 대기 |
+| 335 | `ch06/counting_techniques/inclusion_exclusion.md` | 그림 | 이름이 둘 붙었는데 둘 다 처음이 아니다 | `ch03/probability/axioms.md` | `ct__dasilva.png` | Wikimedia Commons, PD-old-assumed | **옮김** |
 | 336 | `ch06/counting_techniques/magic_square.md` | 그림 | 마방진 안에 제작연도를 숨긴 판화 | `—` | `ct__durer1514_square.png` | 뒤러의 마방진 — 대응하는 통계 내용 없음 | 보류 |
 | 337 | `ch06/counting_techniques/magic_square.md` | 그림 | 첫 우표에 실린 사람이 마방진을 만들었다 | `—` | `ct__stamp_usa1847.png` | 프랭클린의 마방진 — 대응하는 통계 내용 없음 | 보류 |
 | 338 | `ch06/permutation_combination/combination.md` | 그림 | 파스칼보다 삼백 년 앞선 그림 | `—` | `comb__yanghui.png` | Wikimedia Commons, PD-old-100 | 대기 |
@@ -377,7 +377,7 @@
 | 341 | `ch06/permutation_combination/repeated_combination.md` | 그림 | 서른두 장인데 얼굴은 스물한 가지 | `—` | `rc__paigow32.png` | 골패와 중복조합 — 중복조합을 다루는 쪽이 없다 | 보류 |
 | 342 | `ch06/permutation_combination/repeated_combination.md` | AI | 순서를 버리면 가짓수가 몇 자리나 줄어드는가 | `—` | `rc__bagofwords.png` | 낱말 가방 — 텍스트 표현을 다루는 쪽이 없다 | 보류 |
 | 343 | `ch06/permutation_combination/repeated_permutation.md` | 그림 | 손끝 하나에 들어가는 개수가 글자 수를 정했다 | `—` | `rp__braille1829.png` | 점자와 2^6 — 대응하는 통계 내용 없음 | 보류 |
-| 344 | `ch06/recurrence_generating/generating_function.md` | 그림 | 「A 를 나는 생성함수라 부른다」 | `—` | `rg__laplace1886_p29_p40.png` | Internet Archive 스캔, 캘리포니아 대학 소장본 | 대기 |
+| 344 | `ch06/recurrence_generating/generating_function.md` | 그림 | 「A 를 나는 생성함수라 부른다」 | `ch03/rv/mgf.md` | `rg__laplace1886_p29_p40.png` | Internet Archive 스캔, 캘리포니아 대학 소장본 | **옮김** |
 | 345 | `ch06/recurrence_generating/recurrence_count.md` | 그림 | 세 해를 기다리는 소 | `—` | `rg__ganita_kaumudi1936.png` | 나라야나의 소 문제 — 대응하는 통계 내용 없음 | 보류 |
 | 346 | `ch06/special_numbers/catalan_numbers.md` | 그림 | 이름을 가장 늦게 얻은 수 | `—` | `sn__catalan.png` | 카탈란 수 — 대응하는 통계 내용 없음 | 보류 |
 | 347 | `ch06/special_numbers/catalan_numbers.md` | 그림 | 다각형을 자르다가 나온 점화식 | `—` | `sn__segner.png` | 제그너의 점화식 — 대응하는 통계 내용 없음 | 보류 |
@@ -556,4 +556,4 @@
 | 520 | `numbers/expression/letters_expressions.md` | 그림 | 모르는 수에 글자 대신 자리를 준 사람들 | `—` | `le__siyuan_tianyuan.png` | 천원술 — 대응하는 통계 내용 없음 | 보류 |
 | 521 | `numbers/expression/polynomial_operations.md` | 그림 | 곱셈 기호가 셋이던 쪽 | `—` | `po__oughtred1667_p10.png` | 오트레드의 곱셈 기호 — 대응하는 통계 내용 없음 | 보류 |
 
-합계 **521** 개 — 옮김 **52**, 보류 **333**, 대기 **136**
+합계 **521** 개 — 옮김 **58**, 보류 **333**, 대기 **130**

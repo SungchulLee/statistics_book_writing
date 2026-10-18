@@ -68,6 +68,41 @@ E[X^2] = M_X''(0), \qquad
 \text{Var}(X) = M_X''(0) - \big[M_X'(0)\big]^2
 $$
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 「A 를 나는 생성함수라 부른다」
+
+<figure markdown>
+  ![옛 프랑스어 활자로 인쇄된 두 쪽을 위아래로 이어 붙인 그림. 위쪽 머리글에 XXIX, 아래쪽에 XL 이 보인다](./img/rg__laplace1886_p29_p40.png){ width=700 }
+  <figcaption markdown>라플라스 『확률의 해석적 이론』 서설의 두 쪽. 위는 인쇄 $\mathrm{XXIX}$ 쪽으로 「$\mathrm A$ 를 나는 생성함수라 부른다」가, 아래는 $\mathrm{XL}$ 쪽으로 「나는 앞의 방법들을 묶어 생성함수의 계산이라 이름 지었다」가 있다. 머리글의 쪽 번호와 두 문단은 그림에서 직접 읽었다. 실린 판은 『라플라스 전집』 제 $7$ 권(파리, 고티에빌라르, $1886$) 이다. *(Internet Archive 스캔, 캘리포니아 대학 소장본)*</figcaption>
+</figure>
+
+정리 1 의 증명이 보인 대로 $M_X(t)=\sum_k \dfrac{t^k}{k!}E[X^k]$ 다. 적률의 열
+$E[X],\,E[X^2],\,\dots$ 하나에 **함수 하나**를 붙인 것이고, 적률은 그 급수의 계수로
+들어앉아 있다. 수열에 함수를 붙이는 이 생각에 **이름이 붙는 자리**가 사진에 있다.
+
+위쪽 쪽의 마지막 문단을 옮기면 이렇다.
+
+> Si l'on conçoit une fonction $\mathrm A$, d'une variable $t$, développée dans une série ascendante par rapport aux puissances de cette variable, le coefficient de l'une quelconque de ces puissances sera une fonction de l'exposant ou indice de cette puissance. $\mathrm A$ est ce que je nomme *fonction génératrice* de ce coefficient ou de la fonction de l'indice.
+>
+> (변수 $t$ 의 함수 $\mathrm A$ 를 그 변수의 거듭제곱에 관한 오름차순 급수로 펼친다고 하자. 그 거듭제곱 가운데 어느 것의 계수든 그 거듭제곱의 지수, 곧 **지표의 함수**가 된다. $\mathrm A$ 를 나는 그 계수의, 또는 그 지표 함수의 **생성함수**라 부른다.)
+
+이 쪽이 하는 일과 글자 그대로 같다. 라플라스의 「계수를 지표의 함수로 본다」를 적률생성함수로 옮기면 정리 1 의 $M_X^{(n)}(0)=E[X^n]$ 이다 — 급수의 $n$ 번째 계수를 읽어 내는 일을 **미분이 대신한다.**
+
+눈여겨볼 것은 **그 바로 앞 문단**이다. 라플라스는 자기 방법을 내놓기 전에 먼저 **드무아브르**를 적는다 — 그가 점화수열을 두 등비수열로 쪼개고 그 비를 이차방정식의 두 근으로 찾았다는 것, 그 방법이 사실 달랑베르와 라그랑주가 뒤에 쓴 것과 같다는 것까지. 그러고 나서야 「모든 이런 방정식을 적분하는 **가장 일반적이고 가장 간단한** 방법은 생성함수를 생각하는 데 있는 것 같다」고 쓴다. 그 생각이 이 쪽에서 가장 크게 쓰이는 자리가 **정리 3** 이다 — 합을 쪼개는 대신 **급수를 곱한다.**
+
+열한 쪽 뒤에서 그는 방법 전체에 이름을 붙인다.
+
+> J'ai nommé *Calcul des fonctions génératrices* l'ensemble des méthodes précédentes; ce calcul sert de fondement à l'Ouvrage que j'ai publié sous ce titre : *Théorie analytique des Probabilités*.
+>
+> (나는 앞의 방법들을 묶어 **생성함수의 계산**이라 이름 지었다. 이 계산이 내가 『확률의 해석적 이론』이라는 제목으로 펴낸 책의 토대가 된다.)
+
+이름을 붙인다는 것은 작은 일처럼 보인다. 그러나 「계수의 열」을 「하나의 함수」로 **보기로 한** 순간, 합은 급수의 곱셈이 되고 적률을 구하는 일은 계수를 읽는 일이 된다. 라플라스가 같은 쪽에서 데카르트의 지수 표기를 들어 「표기는 사소해 보이지만 잘 고른 표기는 새 계산의 씨앗이 된다」고 적은 것이 그 이야기다. 중심극한정리의 증명이 이 씨앗에서 자란 것이다.
+
+*확인한 곳 — 라플라스 『Théorie analytique des probabilités』 서설, 『Œuvres complètes de Laplace』 제 $7$ 권(파리, 고티에빌라르, $1886$) [Internet Archive 스캔](https://archive.org/details/theorieanaldepro00laplrich) — 두 문단과 머리글의 쪽 번호 $\mathrm{XXIX}$·$\mathrm{XL}$, 드무아브르를 적은 대목, 간행 연도 $\mathrm{M\,DCCC\,LXXXVI}$ 는 모두 이 스캔에서 직접 읽었다(낱장 n$44$·n$55$, 표제지는 낱장 n$0$) · 데카르트의 지수 표기를 들어 「이 표기는 사소하다(est peu de chose)」고 적고 곧이어 「잘 고른 표기는 새 계산의 씨앗이다(autant de germes de nouveaux calculs)」로 받는 대목은 $\mathrm{XL}$ 쪽, 바로 그 이름 붙이는 문단의 이어지는 자리에서 읽었다 · 책 자체가 $1812$ 년에 처음 나왔다는 것은 같은 스캔의 편집자 주에 적혀 있다*
+
+</div>
+
 <div class="exbox" markdown>
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포. $X \sim N(\mu, \sigma^2)$의 적률생성함수는
