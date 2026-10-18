@@ -46,6 +46,39 @@ $$
 
 </div>
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 곱하지 않은 목록
+
+<figure markdown>
+  ![옛 영어 책의 한 쪽. CHAPTER IV 아래 대문자 제목이 두 줄로 있고, 본문 가운데에 기울임꼴이 섞인 네 항목의 번호 목록이 있다](./img/gt__bentham_ch4.png){ width=640 }
+  <figcaption markdown>제러미 벤담 『도덕과 입법의 원리 서설』 제 $4$ 장. 제목이 **「쾌와 불쾌 한 묶음의 값, 어떻게 잴 것인가」**이고, 본문 II 에서 「한 사람을 두고 볼 때 쾌나 불쾌의 값은 **다음 네 가지 사정**에 따라 크거나 작다」고 한 뒤 목록을 든다 — **$1$. 그 강도. $2$. 그 지속. $3$. 그 확실함 또는 불확실함. $4$. 그 가까움 또는 멂.** 오른쪽 여백의 작은 글씨는 이 대목이 무엇을 다루는지 적은 난외주다. *(Internet Archive, 저작권 없음)*</figcaption>
+</figure>
+
+앞 쪽의 기댓값은 결과에 수를 붙인 뒤 확률을 곱해 **하나의 수**로 만든다. 그렇게 해야
+한다고 처음 또박또박 적은 사람이 사진의 책을 쓴 **제러미 벤담**($1748$–$1832$)이다.
+$1780$ 년에 찍고 $1789$ 년에 펴낸 책이다.
+
+눈여겨볼 것은 **세 번째 항목**이다. 「그 확실함 또는 불확실함」 — 값을 재려면 확률을 보아야 한다는 말이 $1789$ 년에 목록으로 올라 있다.
+
+그런데 벤담은 **거기서 멈춘다.** 네 가지를 어떻게 하라고 했는가. 같은 장 V 의 다섯째 항목에서 그는 「한쪽의 모든 쾌의 값을 **모두 더하고** 다른 쪽의 모든 불쾌의 값을 모두 더하여, 그 차가 쾌 쪽에 있으면 좋은 쪽」이라고 한다. **더하라는 것이다.** 강도와 확실함을 **곱하라**는 말은 이 장 어디에도 없다. 그 곱셈이 기댓값 $E[X]=\sum x_i p_i$ 다.
+
+더 눈여겨볼 것은 그 곱셈이 **벤담보다 먼저 있었다**는 점이다. 다니엘 베르누이는 벤담의 책이 나오기 쉰 해쯤 앞선 $1738$ 년 논문을 「기하학자들이 운의 크기를 재기 시작한 뒤로 모두 이렇게 해 왔다 — 기대되는 값마다 그것이 나오는 경우의 수를 **곱하고**, 곱한 것들을 더해 전체 경우의 수로 나눈다」로 연다. 그러니 어려웠던 것은 곱셈을 **발명하는** 일이 아니라 두 갈래를 **같은 자리에 놓는** 일이었다.
+
+**그리고 벤담에게 없던 것이 하나 더 있다 — 바로 정의 1 이다.** 네 항목 어디에도 「흩어짐」이 없다. $100$ 을 확실히 받는 것과 $200$ 과 $0$ 을 반반으로 받는 것은 기댓값이 둘 다 $100$ 이지만, 정의 1 로 재면 분산이 $0$ 과
+
+$$
+\operatorname{Var}(X)=E[(X-100)^2]=\tfrac12(100)^2+\tfrac12(-100)^2=10{,}000
+$$
+
+으로 갈린다. 「같은 값인데 다른 선택」이 생기는 자리이고, 벤담의 목록으로는 그 둘을
+구별할 길이 없다. 이 쪽이 기댓값 다음에 따로 서는 까닭이 그것이다 — **중심 하나로는
+모자란다.**
+
+_확인한 곳 — 장 번호와 제목 「CHAPTER IV. VALUE OF A LOT OF PLEASURE OR PAIN, HOW TO BE MEASURED」, 본문 II 의 「the four following circumstances」와 네 항목(「$1$. Its *intensity*. $2$. Its *duration*. $3$. Its *certainty* or *uncertainty*. $4$. Its *propinquity* or *remoteness*.」)은 위 **사진에서 직접 읽었다** · 같은 장 V 의 다섯째 항목 「Sum up all the values of all the pleasures on the one side, and those of all the pains on the other. The balance, if it be on the side of pleasure, will give the good tendency」는 **사진에 실린 장 첫 쪽에는 없다** — 같은 스캔 [Internet Archive 『An Introduction to the Principles of Morals and Legislation』(클래런던판)](https://archive.org/details/anintroductiont03bentgoog) 의 전문에서 쪽 머리글 「IV.] how to be Measured. $31$」 아래로 이어지는 인쇄 $31$ 쪽에서 확인했다 · 이 책이 $1780$ 년에 인쇄되어 $1789$ 년에 출간되었다는 것은 [Wikipedia 「An Introduction to the Principles of Morals and Legislation」](https://en.wikipedia.org/wiki/An_Introduction_to_the_Principles_of_Morals_and_Legislation) · 베르누이가 $1738$ 년 논문을 「cum valores singuli expectati multiplicentur per numerum casuum quibus obtingere possunt aggregatumque productorum dividatur per summam omnium casuum」으로 연다는 것은 [『Commentarii Academiae Scientiarum Imperialis Petropolitanae』 제 $5$ 권 스캔](https://archive.org/details/commentariiacade05impe) 의 인쇄 $175$ 쪽(그 논문 제 $1$ 절의 첫 문장) · 두 선택지의 기댓값이 같고 분산이 $0$ 과 $10\,000$ 이라는 것은 **이 쪽에서 직접 계산해 보았다**_
+
+</div>
+
 <div class="thmbox" markdown>
 
 ### 정리 1. 분산의 계산 꼴 { .thm }
@@ -447,7 +480,7 @@ $$
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 1.** 표준편차가 아니라 분산에 이름을 붙인 까닭
+**그림으로 보는 통계학 2.** 표준편차가 아니라 분산에 이름을 붙인 까닭
 
 <figure markdown>
   ![1918년 학술지 논문의 첫 쪽. 제목 줄 아래 본문 한 문단이 놓이고 그 가운데에 두 시그마의 제곱을 더해 제곱근을 씌운 식이 한 줄 섞여 있다](./img/ev__fisher1918_variance.png){ width=680 }
@@ -593,6 +626,78 @@ $0.362$ 로 내려와, 한 곳을 더 보면서도 나머지를 버리지는 않
 ![Diversification: Portfolio Risk vs. Allocation](./img/variance_covariance_187.png)
 
 $\rho = 1$인 곡선만 직선이고 나머지는 아래로 휘어 있다. 그 휨의 크기가 곧 분산투자의 이득이다.
+
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 3.** 「서로 독립이면」이라는 단서에 상을 준 까닭
+
+<figure markdown>
+  ![나누어 담는 자산의 수가 늘 때 묶음의 분산이 줄어드는 네 곡선. 상관계수가 0 이면 0 으로 내려가지만 0.1, 0.3, 0.5 이면 각각 그 값에서 멈춘다](./img/ea__vo_markowitz.png){ width=720 }
+  <figcaption markdown>돈을 자산 $n$ 개에 고르게 나누어 담았을 때 묶음의 분산이다(자산 하나의 분산을 $1$ 로 잡았다). 초록은 정리 6 이 말하는 **서로 독립인 경우**로 $\frac1n$ 을 따라 $0$ 으로 내려간다. 나머지 셋은 자산들이 상관계수 $\rho$ 로 함께 움직이는 경우이고, 아무리 많이 나누어 담아도 **$\rho$ 에서 멈춘다**. *(이 책에서 그렸다)*</figcaption>
+</figure>
+
+위 보기는 자산 **둘**을 다루었다. 정리 3 으로 $n$ 개까지 넓히면 어떻게 되는가. 돈을 자산
+$n$ 개에 고르게 나누어 담으면 묶음의 수익률은 $\frac1n\sum X_i$ 이고, 각 자산의 분산이
+$\sigma^2$ 이며 **서로 무상관이면** 정리 3 의 교차항이 사라져
+
+$$
+\operatorname{Var}\!\left(\frac1n\sum_{i=1}^n X_i\right)=\frac1{n^2}\cdot n\sigma^2=\frac{\sigma^2}{n}
+$$
+
+이다. 나누어 담을수록 위험이 사라지고, 끝없이 나누면 $0$ 이 된다. 이 계산 하나가 **경제학에
+노벨상을 가져왔다** — 정확히 말하면, 이 계산에 붙은 「서로 무상관이면」이라는 단서가 그랬다.
+
+$1952$ 년, 시카고대학의 스물넷짜리 대학원생 해리 마코위츠는 도서관에서 존 버 윌리엄스의
+『투자가치론』을 읽다가 걸리는 데가 있었다. 그 책대로라면 주식의 값어치는 앞으로 받을 배당의
+현재가치이고, 그러면 **가장 좋은 투자는 기댓값이 가장 큰 종목 하나에 전부 넣는 것**이 된다.
+그런데 현실의 누구도 그렇게 하지 않는다. 나누어 담는다. 뒷날 그는 「포트폴리오 이론의 기본
+개념이 어느 날 오후 도서관에서 윌리엄스의 책을 읽다가 떠올랐다」고 적었다.
+
+빠진 것이 무엇인지는 이 쪽의 도구로 바로 보인다. **기댓값만 보았기 때문**이다. 앞 쪽
+기댓값의 선형성에 따라 $E\left(\frac1n\sum X_i\right)=\frac1n\sum E(X_i)$ 이라 나누어 담아도
+평균치보다 좋아지지 않지만, 분산은 위 식처럼 $\frac1n$ 로 줄어든다. 그러니 나누어 담는 까닭은
+더 벌려는 것이 아니라 **덜 흔들리려는 것**이고, 그 흔들림을 재는 자가 바로 정의 1 의 분산이다.
+마코위츠는 기댓값과 분산 두 가지를 함께 보는 규칙을 세우고, 「기댓값이 같다면 분산이 작은 쪽,
+분산이 같다면 기댓값이 큰 쪽」만 남겨 그 경계를 그렸다.
+
+그런데 그의 진짜 기여는 분산을 쓰자고 한 데 있지 않다. **교차항이 사라진다는 단서가 현실에서는
+성립하지 않는다**는 것을 짚은 데 있다. 주식들은 함께 오르고 함께 내린다. 상관계수 $\rho$ 로
+함께 움직이면 정리 3 의 둘째 합이 살아남아 위 계산이 이렇게 바뀐다.
+
+$$
+\operatorname{Var}\!\left(\frac1n\sum X_i\right)=\sigma^2\left[\rho+\frac{1-\rho}{n}\right]
+$$
+
+$n$ 을 아무리 키워도 $\rho\sigma^2$ 밑으로는 내려가지 않는다. 사진의 곡선 셋이 저마다 제 높이에서
+멈추는 것이 그것이다. 나누어 담기로 없앨 수 있는 위험과 **무엇을 해도 남는 위험**이 갈리는
+자리이고, 둘을 가른 것이 그의 논문이 한 일이다. 정리 3 의 교차항이 $0$ 인지 아닌지가 「$0$ 까지
+내려간다」와 「$\rho$ 에서 멈춘다」를 가른다.
+
+이 논문이 처음부터 환영받은 것은 아니다. 박사학위 심사에서 밀턴 프리드먼은 **이것은 경제학이
+아니라**고 했다고 한다. 수학에는 문제가 없지만 경제학 논문이 아니므로 경제학 박사를 줄 수 없다는
+것이었다. 마코위츠 자신이 $1990$ 년 노벨상 강연에서 그 일을 꺼내며 이렇게 맺었다 — 「내가 논문을
+변호하던 그때 포트폴리오 이론이 경제학이 아니었다는 데는 기꺼이 동의한다. 그러나 지금은 경제학이다.」
+그가 노벨 경제학상을 받은 해가 바로 그해다.
+
+_확인한 곳 — 논문의 서지(해리 마코위츠 「Portfolio Selection」, 『The Journal of Finance』 제$7$ 권
+$1$ 호, $1952$ 년 $3$ 월, $77$–$91$ 쪽), 마코위츠의 생몰년($1927$–$2023$), $1990$ 년 노벨 경제학상,
+박사학위 심사에서 프리드먼이 「경제학이 아니다」라고 했다는 일, 그리고 자산들이 함께 움직이면
+나누어 담기로 위험을 다 없앨 수는 없다는 그의 핵심 통찰은
+[Wikipedia 「Harry Markowitz」](https://en.wikipedia.org/wiki/Harry_Markowitz) ·
+논문 원문은 [JSTOR](https://www.jstor.org/stable/2975974) 에 있다 ·
+「포트폴리오 이론의 기본 개념이 어느 날 오후 도서관에서 존 버 윌리엄스의 『투자가치론』을 읽다가
+떠올랐다」는 그 자신의 회고와, 윌리엄스의 논리대로라면 기댓값이 가장 큰 종목 하나에 전부 넣게
+된다는 것, 그리고 그가 $24$ 세의 시카고대학 대학원생이었다는 것은
+[UBS Nobel Perspectives 「Harry Markowitz」](https://www.ubs.com/global/en/our-firm/what-we-do/our-brand/nobel-perspectives/laureates/harry-markowitz.html) ·
+노벨상 강연의 맺음말(「at the time I defended my dissertation, portfolio theory was not part of
+Economics. But now it is」)은 그 강연을 인용한
+[Conversable Economist 의 글](https://conversableeconomist.com/2023/06/26/harry-markowitz-1927-1923-bringing-finance-into-economics/)
+에서 옮겼다. 다만 프리드먼은 뒷날 그 일을 기억하지 못한다고 말했다고 하므로, **주고받은 말의
+정확한 꼴은 마코위츠 쪽 기록임**을 밝혀 둔다 ·
+$\sigma^2\!\left[\rho+\frac{1-\rho}{n}\right]$ 과 사진의 네 곡선은 **이 쪽에서 직접 세우고 난수로
+맞추어 보았다**_
+
+</div>
 
 ---
 

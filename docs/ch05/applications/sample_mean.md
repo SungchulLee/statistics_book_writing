@@ -196,6 +196,65 @@ $$
 
 그래서 실무에서는 표본크기를 먼저 정해 놓고 정밀도를 확인하는 것이 아니라, 필요한 정밀도를 먼저 정하고 거꾸로 $n$을 푼다. 연습문제 4가 바로 그 계산이다. 여론조사의 표본수, 임상시험의 피험자 수, 품질검사의 표본 개수가 모두 이렇게 정해진다.
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 모눈종이 위에 연필로 그린 $\sqrt n$
+
+<figure markdown>
+  ![1916년 책의 한 쪽. 머리글에 LAWS OF THE BROWNIAN MOVEMENT 와 쪽 번호 115 가 있고, 가운데 모눈 위에 꺾인 선 세 자락이 점으로 이어져 그려져 있다](./img/rw__perrin1916_p115.png){ width=560 }
+  <figcaption markdown>장 페랭 『Atoms』($1916$, $1913$년 프랑스어판의 영역)의 인쇄 $115$ 쪽. 그림 $8$ 은 **같은 마스틱 알갱이**(반지름 $0.53\ \mu\mathrm m$)의 자리를 $30$ 초마다 찍어 이은 자취 세 자락이고, 본문에 「열여섯 칸이 $50$ 마이크론」·「자리는 $30$ 초마다 표시했다」가 적혀 있다. 모눈은 장식이 아니라 **자**다 — 아래 본문이 「각 선분의 가로세로 성분은 종이의 칸으로 바로 읽힌다」고 적는다. *(Internet Archive, PD-US-expired)*</figcaption>
+</figure>
+
+위 표는 표본을 네 배로 늘려야 오차가 절반이 된다고 말한다. 같은 $\sqrt n$ 을 **반대 방향으로**
+재어 보인 쪽이 사진이다 — 네 배 오래 기다리면 두 배 멀리 간다.
+
+둘은 같은 계산이다. 독립인 걸음 $Y_1,\dots,Y_n$ 을 평균 $0$, 분산 $\sigma^2$ 으로 더한 자리
+$S_n=\sum Y_i$ 를 생각하면, 정리 1 의 증명에 쓴 바로 그 계산에서 $\operatorname{Var}(S_n)
+=n\sigma^2$ 이므로 퍼지는 폭이 $\sigma\sqrt n$ 이다. 그것을 $n$ 으로 나눈 것이 표본평균이고,
+그래서 폭이 $\sigma/\sqrt n$ 으로 **줄어든다.** 더하면 $\sqrt n$ 으로 퍼지고 나누면
+$\sqrt n$ 으로 좁아진다.
+
+보이는 것은 꺾인 선 세 자락이다. 손으로 흔들어 그린 낙서가 아니라, 현미경에 붙인
+**투영기**로 알갱이가 있는 자리를 종이에 옮겨 찍고 $30$ 초마다 그 점을 이은 것이다.
+알갱이는 물에 띄운 마스틱 가루이고, 꺾이는 마디 하나하나가 걸음 하나에 해당한다.
+모눈이 깔려 있는 까닭도 분명하다 — **걸음의 성분을 자로 재지 않고 칸으로 세기 위해서**다.
+
+$1905$ 년에 아인슈타인이 이 흔들림을 분자의 충돌로 설명하는 식을 내놓았는데, 그것이 맞는지는
+누가 재어 보아야 했다. 페랭은 랑주뱅을 통해 그 이론을 알게 된 뒤 「그것을 실험의 시험대에
+올리는 일」을 자기 일로 삼았다고 적는다. 사진의 그림이 그 시험의 첫 장이다. 그리고 그 시험이
+확인한 것이 바로 위의 표와 같은 법칙이다 — 그는 시간을 네 배로 늘려 보았을 때 **옮겨 간
+거리가 두 배**가 되는 것을 확인했다. 거리의 제곱이 걸음 수에 비례한다는 말이고, 알갱이가
+$n$ 걸음 뒤에 처음 자리에서 $\sqrt n$ 쯤 떨어져 있다는 말이기도 하다. 표를 거꾸로 읽은
+것뿐이다.
+
+이 그림에는 솔직한 경고도 함께 붙어 있다. 페랭은 바로 다음 쪽에서, 이런 그림이 실제 자취에
+대해 「매우 빈약한 생각만 준다」고 적는다. 시간 간격을 백 배 더 잘게 잡으면 선분 하나하나가
+다시 이 그림 전체만큼 복잡한 꺾인 선으로 바뀌고, 또 그렇게 끝없이 간다는 것이다. 그래서
+그는 이렇게 맺는다. **「이런 종류의 자취에 접선을 말하는 것은 분명히 뜻을 잃는다.」** 사진에
+보이는 곧은 선분들은 알갱이가 실제로 지나간 길이 아니라 **$30$ 초마다 찍은 두 점을 이은
+것일 뿐**이라는 뜻이다.
+
+표본 쪽도 사정이 같다. 「관측값 하나」를 무엇으로 셀지는 우리가 정한 것이지 자연이 정해 준
+것이 아니다. 하루치를 한 점으로 셀 수도 있고 한 시간치를 한 점으로 셀 수도 있는데, 그에
+따라 $n$ 도 $\sigma$ 도 달라진다. $\sigma/\sqrt n$ 이라는 식이 흔들림 없이 서 있는 자리는
+**걸음을 무엇이라 부를지 정한 다음**부터다.
+
+_확인한 곳 — 인쇄 $115$ 쪽의 머리글과 그림 $8$, 「the scale being such that sixteen divisions
+represent $50$ microns」, 「the same mastic grain (radius equal to $\cdot53\ \mu$)」,
+「the positions were marked every $30$ seconds」, 「camera lucida (under known magnification)」,
+그리고 각 선분의 성분을 「as measured by the squares on the paper」로 읽는다는 것은
+[Internet Archive 『Atoms』($1916$)](https://archive.org/details/atomsjean00perrrich) 낱장 $137$ 에서
+**사진으로 직접 읽었다** · 이어지는 인쇄 $116$ 쪽의 「gives only a very meagre idea of the
+extraordinary discontinuity of the actual trajectory」·「Obviously it becomes meaningless to speak
+of a tangent to a trajectory of this kind」와, 시간 $1$ 과 $4$ 에 대한 변위의 비 $d'/d$ 의 평균이
+$2$ 라는 각주, 그리고 인쇄 $114$ 쪽의 「ever since I became, through M. Langevin, acquainted with
+the theory, it has been my aim to apply to it the test of experiment」는 같은 스캔의 그 쪽들에서
+읽었다 · $1916$ 년 영역본이 공유 저작물이라는 것은
+[Commons 의 파일 설명](https://commons.wikimedia.org/wiki/File:Atoms_(IA_atomsjean00perrrich).pdf)
+이 `PD-US-expired` 틀을 달고 있는 것으로 확인했다_
+
+</div>
+
 ---
 
 ## 6. 보기

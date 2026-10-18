@@ -104,6 +104,60 @@ $$
 
     마지막 단계에서는 $(\mathbf{X}^\top\mathbf{X})^{-1}$이 대칭이라는 사실을 썼다(대칭행렬의 역행렬은 대칭이다). $\square$
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 자료에 식을 맞추는 일은 수선의 발을 찾는 일이다
+
+정리 2 의 공식 $\mathbf{P}_{\mathbf{X}}=\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$ 을 거꾸로 읽으면 연립방정식 하나가 나온다. $\mathbf{P}_{\mathbf{X}}\mathbf{c}=\mathbf{X}\boldsymbol\beta$ 라 두면 $\mathbf{X}^\top\mathbf{X}\boldsymbol\beta=\mathbf{X}^\top\mathbf{c}$, 곧 **「남는 벡터가 $\mathbf{X}$ 의 모든 열에 수직」**이다. 기계가 자료에 식을 맞출 때 실제로 푸는 식이 바로 이것이다.
+
+세 번 잰 값 $c_1$, $c_2$, $c_3$ 을 두 설명값으로 $c_i\fallingdotseq s\,a_i+t\,b_i$ 꼴로 설명하려 한다고 하자. 세 쌍을 한꺼번에 벡터로 적으면 $\vec a$, $\vec b$, $\vec c$ 가 되고, $s\vec a+t\vec b$ 는 $\vec a$ 와 $\vec b$ 가 만드는 평면 — 곧 $\mathbf{X}=[\vec a\ \ \vec b]$ 의 열공간 — 위를 훑는다. 잰 값 $\vec c$ 는 대개 그 평면 위에 있지 않으므로 **가장 가까운 점**을 고르는데, 정리 1 이 그 점이 수선의 발임을 보장한다. 그래서 오차를 가장 작게 만드는 $s$, $t$ 는 수직조건
+
+$$
+(\vec c-s\vec a-t\vec b)\cdot\vec a=0,\qquad (\vec c-s\vec a-t\vec b)\cdot\vec b=0
+$$
+
+을 푼 값이다. 이것이 최소제곱법의 **정규방정식**이고, 위에서 $\mathbf{X}^\top\mathbf{X}\boldsymbol\beta=\mathbf{X}^\top\mathbf{c}$ 라 적은 식과 글자 그대로 같은 식이다.
+
+눈여겨볼 것은 **미분이 한 번도 나오지 않는다**는 점이다. 오차를 가장 작게 하라는 요구가 정리 1 에서 이미 「수선의 발을 찾으라」로 바뀌었기 때문에, 남은 일은 수직조건 둘을 적는 것뿐이다.
+
+```python
+# 세 번 잰 값 c 를 두 설명벡터 a, b 가 만드는 평면 위로 정사영한다.
+# 정리 2 가 말하는 「남는 벡터가 두 방향에 모두 수직」이 그대로 연립방정식이 된다.
+a = [1, 1, 1]          # 상수항에 붙는 벡터
+b = [0, 1, 2]          # 설명변수의 값
+c = [1, 3, 4]          # 실제로 잰 값 — 평면 위에 있지 않다
+
+dot = lambda u, v: sum(p * q for p, q in zip(u, v))   # 성분으로 적은 내적
+
+# (c - sa - tb)·a = 0, (c - sa - tb)·b = 0  — 수직조건 두 개
+A, B, C = dot(a, a), dot(a, b), dot(b, b)
+p, q = dot(c, a), dot(c, b)
+det = A * C - B * B                      # 두 설명벡터가 평행하지 않으면 0 이 아니다
+s, t = (p * C - q * B) / det, (A * q - B * p) / det
+
+fit = [s * ai + t * bi for ai, bi in zip(a, b)]       # 정사영 — 평면 위의 점
+res = [ci - fi for ci, fi in zip(c, fit)]             # 남는 벡터
+print("s, t      =", round(s, 4), round(t, 4))
+print("정사영     =", [round(v, 4) for v in fit])
+print("남는 벡터  =", [round(v, 4) for v in res])
+print("수직 확인  =", round(dot(res, a), 12) + 0, round(dot(res, b), 12) + 0)
+```
+
+실행하면 다음이 나온다.
+
+```text
+s, t      = 1.1667 1.5
+정사영     = [1.1667, 2.6667, 4.1667]
+남는 벡터  = [-0.1667, 0.3333, -0.1667]
+수직 확인  = 0.0 0.0
+```
+
+맞춘 값 $s=\dfrac76$, $t=\dfrac32$ 에서 정사영은 $\left(\dfrac76,\ \dfrac83,\ \dfrac{25}{6}\right)$ 이고, 남는 벡터 $\left(-\dfrac16,\ \dfrac13,\ -\dfrac16\right)$ 은 $\vec a$, $\vec b$ 와의 내적이 둘 다 $0$ 이다. 여기서 $A$, $B$, $C$ 로 적은 세 수가 바로 $\mathbf{X}^\top\mathbf{X}$ 의 네 성분이고 $\det$ 이 그 행렬식이니, 위 열 줄은 정리 2 의 $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$ 을 $p=2$ 에서 손으로 펼친 것이다. 설명값을 더 늘리면 벡터가 사는 공간의 차원만 커질 뿐, 푸는 식은 여전히 「남는 벡터가 모든 설명벡터에 수직」이다 — 아래 절 $6$ 의 모자 행렬이 그 일반형이고, 요즘 학습 모형이 마지막 층에서 하는 계산도 이 꼴에서 출발한다.
+
+한계는 분명하다. 이 계산은 **잰 값과 식 사이의 거리를 제곱해서 잰다**고 미리 정해 놓은 결과이고, 다른 방식으로 오차를 재면 답도 수선의 발이 아니게 된다.
+
+</div>
+
 ---
 
 ## 3. 성질

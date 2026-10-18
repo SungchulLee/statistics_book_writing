@@ -18,6 +18,109 @@ $$
 
 </div>
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 로그합지수를 미분하면 확률이 나온다
+
+지수함수와 자연로그의 도함수 $(e^{x})'=e^{x}$ 와 $(\ln x)'=\dfrac1x$ 는 서로 역함수인 둘을
+미분한 것이라 언뜻 당연해 보인다. 그런데 이 둘을 **연달아** 쓰면 오늘 기계가 무엇을 고를지
+배우는 방식이 통째로 떨어져 나온다.
+
+기계가 네 갈래 가운데 하나를 고르는 일을 배운다고 하자. 모형이 내놓는 것은 확률이 아니라
+갈래마다의 **점수** $z_1,\dots,z_C$ 다. 음수일 수도 있고 합이 $1$ 일 까닭도 없으니, 확률로
+바꾸려면 먼저 모두 양수로 만들고 합으로 나눈다 — 바로 위 정의 1 이 그 장치다. 이제 핵심이다.
+그 분모의 로그
+
+$$
+L(\mathbf z)=\ln\sum_j e^{z_j}
+$$
+
+를 $z_k$ 로 미분해 보자. $(\ln x)'=\dfrac1x$ 와 $(e^{x})'=e^{x}$ 를 연쇄법칙으로
+이으면 바깥에서 $\dfrac{1}{\sum_j e^{z_j}}$ 가, 안에서 $e^{z_k}$ 가 나와
+
+$$
+\frac{\partial L}{\partial z_k}=\frac{e^{z_k}}{\sum_j e^{z_j}}=p_k
+$$
+
+다. **로그합지수를 미분하면 소프트맥스가 그대로 나온다.** 학습에 쓰는 손실은 정답 갈래 $y$ 의
+확률에 로그를 씌워 뒤집은 $-\ln p_y=L(\mathbf z)-z_y$ 이므로, 그 기울기는
+
+$$
+\frac{\partial}{\partial z_k}\bigl(L(\mathbf z)-z_y\bigr)=p_k-[\,k=y\,]
+$$
+
+곧 **「내가 매긴 확률 빼기 정답」**이다. 고쳐야 할 방향이 뺄셈 한 번으로 끝난다.
+
+```python
+import numpy as np
+
+z = np.array([2.0, -1.0, 0.5, 3.0])          # 모형이 네 갈래에 매긴 점수
+y = 2                                         # 정답은 세 번째 (0 부터 센다)
+
+lse  = lambda z: np.log(np.sum(np.exp(z)))    # 로그합지수 L(z)
+loss = lambda z: lse(z) - z[y]                # 교차엔트로피 = -ln p_y
+
+p = np.exp(z) / np.sum(np.exp(z))             # 소프트맥스 — 점수를 확률로
+e, h = np.eye(len(z)), 1e-6
+num = np.array([(loss(z + h*v) - loss(z - h*v)) / (2*h) for v in e])   # 수치미분
+                                              # 손으로 얻은 기울기는 p - 정답
+hand = p - np.eye(len(z))[y]                  # 두 도함수를 이은 결과
+
+np.set_printoptions(precision=6, suppress=True)
+print("소프트맥스 p        ", p)
+print("p - 정답            ", hand)
+print("수치미분으로 잰 기울기", num)
+print("두 줄의 최대 차이    ", "%.2e" % np.max(np.abs(hand - num)))
+```
+
+실행하면 다음이 나온다.
+
+```text
+소프트맥스 p         [0.250551 0.012474 0.055906 0.681069]
+p - 정답             [ 0.250551  0.012474 -0.944094  0.681069]
+수치미분으로 잰 기울기 [ 0.250551  0.012474 -0.944094  0.681069]
+두 줄의 최대 차이     2.52e-10
+```
+
+손으로 얻은 $p-\text{정답}$ 과 기계가 수치미분으로 잰 기울기가 소수점 아래 열 자리까지
+같다. 정답 자리만 음수인 것도 읽을 거리다 — 그 갈래는 점수를 **올리라**는 뜻이고 나머지
+셋은 **내리라**는 뜻이며, 올리고 내리는 크기가 지금 매긴 확률에 그대로 비례한다. 확신에
+찬 오답일수록 세게 고쳐진다. 이 기울기를 가중치까지 밀고 내려가는 일이
+[교차엔트로피 손실](../optimization/cross_entropy.md)에서 하는 일이다.
+
+한 가지가 더 딸려 온다. $\sum_j e^{z_j}$ 를 적힌 대로 계산하면 점수가 조금만 커져도
+$e^{z}$ 가 넘쳐 버린다. 그래서 가장 큰 점수 $m$ 을 뽑아내어
+$L(\mathbf z)=m+\ln\sum_j e^{z_j-m}$ 으로 고쳐 쓴다. 이것은 로그의 덧셈 법칙
+$\ln(e^{m}X)=m+\ln X$ 한 줄일 뿐이다.
+
+```python
+zz = np.array([1000.0, 1001.0])               # 점수가 조금 큰 경우
+m  = zz.max()                                 # 가장 큰 점수를 뽑아낸다
+
+print("큰 점수에서 그대로 셈하면 — z = [1000, 1001]")
+print("  그대로       :", np.log(np.sum(np.exp(zz))))          # e^1000 이 넘친다
+print("  최댓값을 빼고 :", m + np.log(np.sum(np.exp(zz - m))))  # 지수가 0 과 -1 뿐
+```
+
+실행하면 다음이 나온다.
+
+```text
+큰 점수에서 그대로 셈하면 — z = [1000, 1001]
+  그대로       : inf
+  최댓값을 빼고 : 1001.3132616875182
+```
+
+(첫 줄의 `inf` 는 $e^{1000}$ 이 컴퓨터가 담을 수 있는 수를 넘겨 생긴 것이라, 실제로
+돌리면 위 출력과 함께 넘침을 알리는 경고 한 줄이 따로 뜬다.)
+
+이 고쳐 쓰기를 떠받치는 것이 바로 아래 **성질 4** 의 평행이동 불변성이고, 그 이야기를
+자세히 다루는 곳이 [수치적 안정성](numerical_stability.md)이다.
+
+다만 이 식이 말해 주는 것은 **어느 쪽으로 고칠지**까지다. 얼마나 갈지, 몇 번 갈지는
+한 줄로 떨어지지 않아서 지금도 손으로 더듬어 정한다.
+
+</div>
+
 ### 성질
 
 1. **비음성:** 모든 출력이 엄밀히 양수다.
@@ -27,6 +130,59 @@ $$
    $\operatorname{softmax}(\mathbf{z}+\alpha\mathbf{1}) = \operatorname{softmax}(\mathbf{z})$.
 
 성질 4는 수치적 안정성에 활용된다. 지수화하기 전에 $\max_c z_c$를 뺀다.
+
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 이 식의 분모에 이름을 붙인 쪽
+
+<figure markdown>
+  ![1902 년 영어 책의 한 쪽에서 오려낸 세 토막. 머리글은 CANONICAL DISTRIBUTION 이고 쪽 번호는 33 이다. 아래에 번호 붙은 식 넷이 있는데 적분이 1 이라는 식, 로그를 취한 식, 지수로 적은 식, 그리고 모든 상태에 대한 적분으로 상수를 정하는 식이다](./img/er__gibbs1902_p33.png){ width=660 }
+  <figcaption markdown>기브스 『통계역학의 기본 원리』(뉴욕, $1902$) 인쇄 $33$ 쪽. 머리글과 식 $(89)$~$(92)$ 를 잘라 붙였다. $(89)$ 는 「모두 더하면 $1$」, $(91)$ 이 $P=e^{(\psi-\epsilon)/\Theta}$, 그리고 $(92)$ 가 그 $\psi$ 를 정하는 식으로 **모든 상태에 걸쳐 $e^{-\epsilon/\Theta}$ 를 더한 것**이다. *(Internet Archive 스캔, PD-old)*</figcaption>
+</figure>
+
+정의 1 의 식이 물리학에서 먼저 쓰인 자리다. 사진의 두 식 $(91)$ 과 $(92)$ 를 합치면
+
+$$
+P=\frac{e^{-\epsilon/\Theta}}{\displaystyle\int e^{-\epsilon/\Theta}}
+$$
+
+이고, $z_c=-\dfrac{\epsilon_c}{\Theta}$ 로 두면 정의 1 의
+
+$$
+\operatorname{softmax}(\mathbf z)_c=\frac{e^{z_c}}{\sum_{c'}e^{z_{c'}}}
+$$
+
+와 **글자만 다른 같은 식**이다. 적분이 합으로 바뀌었을 뿐이다. 기브스는 이 분포에
+**정준분포**라는 이름을 붙이고, 에너지를 나누는 $\Theta$ 를 다음 쪽에서 **「분포의
+모듈러스」**라 부른다. 물리에서 그 자리에 들어가는 것이 온도다.
+
+식 $(92)$ 가 하는 일을 눈여겨볼 만하다. 그것은 **분모를 정하는 식**이다. 분자만으로는
+확률이 되지 않으니 전부 더해 $1$ 로 맞추는 것인데, 정의 1 이 분모에
+$\sum_{c'}e^{z_{c'}}$ 을 놓는 까닭과 똑같다. 물리에서는 이 분모에 따로 이름이 붙어 있다 —
+**분배함수**다.
+
+위의 성질 4, 곧 모든 $z_c$ 에 같은 수를 더해도 확률이 그대로라는 **평행이동 불변성**도
+여기서 보면 당연한 말이 된다. $\epsilon_c$ 를 모두 같은 만큼 올리는 것은 **에너지를
+어디서부터 재느냐를 바꾸는 일**일 뿐이고, 그것으로 계의 분포가 달라질 리 없다.
+식 $(91)$ 의 $\psi$ 가 바로 그 기준점을 흡수해 주는 자리다.
+
+이 식은 오늘 기계가 여러 후보 가운데 하나를 고를 때 그대로 쓰인다. 후보마다 점수 $z_c$ 를
+매기고 지수 비율로 바꾸어 확률처럼 다루는데, 그때 점수를 나누는 수를 지금도 **온도**라
+부른다 — $4$ 절의 $\tau$ 가 그것이고, 이름이 사진의 $\Theta$ 에서 건너온 것이다.
+
+_확인한 곳 — 머리글 「CANONICAL DISTRIBUTION. $33$」과 식 $(89)$·$(90)$·$(91)$·$(92)$ 는
+[Internet Archive: elementaryprinc00gibbgoog](https://archive.org/details/elementaryprinc00gibbgoog)
+(기브스 『Elementary Principles in Statistical Mechanics』, $1902$)의 낱장 n$59$ 에서
+**사진으로 직접 읽었다** · 「canonically distributed」와 「the modulus of distribution」이라는
+이름은 다음 낱장 n$60$(인쇄 $34$ 쪽)에서 읽었다 · 같은 쪽의 「the difference $\psi-\epsilon$ will
+represent a perfectly definite amount of energy, which is entirely independent of the zero of
+energy which we may choose to adopt」가 평행이동 불변성을 기브스 자신의 말로 적은 대목이다 ·
+발행지와 간행년은 같은 스캔의 표제지(낱장 n$11$)에서 「NEW YORK: CHARLES SCRIBNER'S SONS ·
+LONDON: EDWARD ARNOLD · $1902$」로 읽었다 · 분모를 분배함수라 부르는 것과, 기계학습에서
+같은 자리를 온도라 부르는 것은
+[Wikipedia 「Softmax function」](https://en.wikipedia.org/wiki/Softmax_function)_
+
+</div>
 
 ---
 

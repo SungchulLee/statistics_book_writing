@@ -42,6 +42,52 @@ $$
 
 사건이 부분집합이라는 점이 중요하다. 집합의 언어를 그대로 쓸 수 있기 때문이다. "$A$ 또는 $B$"는 $A \cup B$, "$A$ 그리고 $B$"는 $A \cap B$, "$A$가 아님"은 $A^c$다. 확률 문제의 말을 집합 연산으로 옮기는 것이 계산의 절반이다.
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 「그때에야 비로소 셀 수 있다」
+
+<figure markdown>
+  ![영문 학술지 두 쪽에서 오려낸 세 토막. 위는 쪽 번호 181 과 논문 제목·저자·접수 및 낭독 날짜이고, 아래는 쪽 번호 182 의 머리글과 「무작위」라는 말을 따지는 제 2 절의 두 문단이다](./img/rv__crofton1868_p181.png){ width=740 }
+  <figcaption markdown>크로프턴 「평면에 무작위로 그은 직선에 적용한 국소확률론, 그리고 그 방법을 넓혀 얻은 적분학의 새 정리들」 — 『Philosophical Transactions』 제$158$ 권($1868$)의 $181$·$182$ 쪽. 제목 쪽과, 「무작위」라는 말을 따지는 제 $2$ 절을 잘라 위아래로 붙였다. *(Internet Archive 스캔, PD-old)*</figcaption>
+</figure>
+
+정의 1 이 이 책의 맨 앞에 오는 까닭 — **셈을 시작하기 전에 무엇을 셀지부터 적어야 한다**는
+것 — 이 처음 또렷하게 활자가 된 자리가 사진이다. $1868$ 년 $2$ 월 $5$ 일에 접수되어
+$2$ 월 $27$ 일에 낭독되었다.
+
+크로프턴은 계산을 시작하기 전에 말부터 손본다. 제 $2$ 절이다 — 「수학적 확률에서 어떤
+것을 **무작위로** 집는다고 말할 때에는, 언제나 그것이 속해 있고 그로부터 집어내는
+**집합체**를 함께 가리키고 있다. … 우리가 어디에서 집는지, 그 집합체가 무엇인지를
+또렷이 알았을 때, **그때에야 비로소** 유리한 경우를 세어 나갈 수 있다.」
+
+그 「집합체」가 정의 1 의 $\Omega$ 다. 그리고 「그때에야 비로소 세어 나갈 수 있다」가
+정리 1 의 $P(A)=|A|/|\Omega|$ 다 — 분모를 적을 수 있게 되는 순간이 바로 그 「그때」다.
+
+이 말이 필요했던 까닭은 바로 앞 문단에 적혀 있다. 그 무렵 같은 물음에 서로 다른 답이
+나오고 있었다는 것이다(울하우스의 세 점 문제, 실베스터의 네 점 문제). 그는 그 어긋남이
+「주제 자체에 모호함이 있어서가 아니라 **쓰는 연장이 아직 약해서**」라고 적는다. 베르트랑이
+한 원에 세 개의 답을 나란히 적어 보이기(연습문제 10 과 그 뒤의 상자 4) **스물한 해 전**이다.
+
+그러니 이 쪽의 보기들이 하나같이 주사위 눈이나 던진 동전부터 적고 시작하는 것은 버릇이 아니라
+방법이다. 틀리는 자리는 세기를 잘못하는 데가 아니라 **무엇을 하나로 보았는가**이고, 그것은
+문제를 아무리 들여다보아도 문제가 말해 주지 않는다. 먼저 적어
+두어야 한다 — 크로프턴의 「그때에야 비로소」가 그 뜻이다.
+
+_확인한 곳 — 쪽 번호 $181$·$182$, 논문 제목과 저자 소개(「Morgan W. Crofton, B.A., of the
+Royal Military Academy, Woolwich … Communicated by J. J. Sylvester, F.R.S.」), 「Received
+February 5,—Read February 27, 1868」, 제 $2$ 절의 인용문(「when we speak of a thing of any kind
+taken at random, there is always a direct reference to the *assemblage of things* to which it belongs
+and from which it is taken … When we have a clear conception of what the assemblage is, from which
+we take, and not till then, we can proceed to sum up the favourable cases」), 그리고 바로 앞
+문단의 울하우스·실베스터 대목(「the now celebrated *three-point* problem, by Mr. Woolhouse, and
+the *four-point* problem of Professor Sylvester … not from any inherent ambiguity in the subject
+matter, but from the weakness of the instrument employed」)은
+[Internet Archive: philosophicaltra1581roya](https://archive.org/details/philosophicaltra1581roya)
+(『Philosophical Transactions』 v.$158$, $1868$)의 낱장 n$205$(인쇄 $181$ 쪽)·n$206$(인쇄 $182$ 쪽)에서
+**사진으로 직접 읽었다** · 베르트랑의 $1889$ 년은 아래 상자 4 에 적어 둔 것과 같다_
+
+</div>
+
 <div class="exbox" markdown>
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 육면체 주사위. 공정한 주사위를 굴릴 때
@@ -126,7 +172,7 @@ $$
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 1.** 네 면으로만 서는 주사위
+**그림으로 보는 통계학 2.** 네 면으로만 서는 주사위
 
 <figure markdown>
   ![왼쪽은 양의 복사뼈 열한 개, 오른쪽은 그리스 글자가 새겨진 돌 이십면체](./img/pb__ancient_dice.png){ width=720 }
@@ -160,7 +206,7 @@ $\binom{4+4-1}{4}=35$ 가지이고, 던지기마다 베누스·왕·독수리 �
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 2.** 틀린 셈이 맞는 답을 냈다
+**그림으로 보는 통계학 3.** 틀린 셈이 맞는 답을 냈다
 
 <figure markdown>
   ![둥근 안경을 쓴 1925년 무렵의 사티엔드라 나트 보스 초상 사진](./img/ca__bose1925.png){ width=155 align=right }
@@ -668,6 +714,27 @@ $\Omega = \{a, b, c\}$이고 $P(a) = 0.5$, $P(b) = 0.3$, $P(c) = 0.2$라 하자.
     **정리 $3$의 세 번째 경우가 어려운 이유가 이것이다.** 비가산 표본공간에서는 확률을 **부여해야** 하며, 그 부여가 모형 선택이다. 다음 절 공리 문서 연습문제 $10$–$11$에서 보듯, 공리는 어떤 부여가 허용되는지만 말하고 어느 것을 고를지는 말하지 않는다.
 
     **실무적 교훈.** 연속 확률 문제에서 "무작위로"라는 말을 보면 **어떤 절차로 무작위인지**를 물어야 한다. 뒤에 나올 조건부확률 문서의 두 아이 문제·몬티 홀과 같은 종류의 모호함이며, 여기서는 그것이 연속 세계에서 나타난 것이다. $\square$
+
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 4.** 세 답을 나란히 적고 물음이 틀렸다고 한 쪽
+
+<figure markdown>
+  ![프랑스어 본문 한 쪽. 세 문단이 차례로 3분의 1, 2분의 1, 4분의 1 이라는 분수로 끝나고 마지막 세 줄이 짧게 덧붙어 있다](./img/rv__bertrand1907_p5.png){ width=520 }
+  <figcaption markdown>베르트랑 『확률의 계산』 제1장 「경우를 세는 법」의 $5$ 쪽. 초판은 $1889$ 년이고 이 그림은 뒤에 다시 찍은 판이다. *(Wikimedia Commons, PD-US-expired)*</figcaption>
+</figure>
+
+위 풀이가 세 모형에서 $\dfrac13$, $\dfrac12$, $\dfrac14$ 을 얻었다. 그 셋이 한 쪽에 나란히 인쇄된 자리가 위의 쪽이다.
+
+**조제프 베르트랑**은 「원에 그은 현이 내접 정삼각형의 한 변보다 길 확률」을 묻고 세 번 답한다. 세 문단이 모두 「$\dots$ par définition, égale à $\dots$」— 「정의에 의하여 $\dots$ 와 같다」로 끝나고, 그 끝의 값이 차례로 $\dfrac13$, $\dfrac12$, $\dfrac14$ 다. 「정의에 의하여」라는 말이 세 번 똑같이 나오는 것이 요점이다 — 세 번 다 **무엇을 균등하게 볼지 먼저 정의해 놓고** 세었다는 뜻이다.
+
+첫 문단은 한 끝점을 붙들고 다른 끝점이 세 등분된 호 가운데 어디에 떨어지는지를 보는 끝점 모형, 둘째는 현의 방향을 정해 놓고 그에 수직인 지름 위에서 자리를 보는 평행현 모형, 셋째는 현의 중점이 넓이가 $4$ 분의 $1$ 인 안쪽 원에 드는지를 보는 중점 모형이다. 위 풀이의 세 가지가 그대로 이 세 문단이다.
+
+이 쪽의 값어치는 마지막 세 줄에 있다 — 「이 세 답 가운데 어느 것이 참인가? 셋 다 틀리지 않았고, 셋 다 옳지도 않다. 물음이 잘못 놓인 것이다.」 베르트랑이 한 일은 셋 중 하나를 고른 것이 아니라 **그 물음이 아직 확률 문제가 아니었음**을 보인 것이다. 정의 1 이 $\Omega$ 를 먼저 적으라고 요구하고, 상자 1 의 크로프턴이 「집합체를 먼저 밝혀라」라고 적어 둔 까닭이 여기에 있다.
+
+*확인한 곳 — 베르트랑 『확률론』($1889$) — [Wikipedia 「Bertrand paradox (probability)」](https://en.wikipedia.org/wiki/Bertrand_paradox_(probability)) · 프랑스어 문구와 세 값 $\tfrac13$, $\tfrac12$, $\tfrac14$ 은 사진의 쪽에서 직접 읽었다*
+
+</div>
 
 ---
 

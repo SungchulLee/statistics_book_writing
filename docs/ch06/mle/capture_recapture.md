@@ -35,6 +35,71 @@ $$
 3. **표지가 행동에 영향을 주지 않음**: 표지 과정이 재포획 가능성에 영향을 주지 않는다.
 4. **표지가 오래가고 눈에 띔**: 표지가 사라지지 않고 연구 기간 내내 식별 가능하다.
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 오리를 세지 않고 오리 수를 세는 법
+
+<figure markdown>
+  ![미국 농무부 회람의 첫 쪽과 둘째 쪽에서 오려낸 세 토막. 위는 「회람 118호, 1930년 5월, 미국 농무부」 머리글과 「표식 회수에 근거하여 물새의 수를 계산하기」라는 제목과 저자 줄이고, 아래는 쪽 번호 2 와 들여 쓴 가정 문단이다](./img/ev__lincoln1930.png){ width=720 }
+  <figcaption markdown>미국 농무부 회람 제$118$ 호($1930$ 년 $5$ 월) — 프레더릭 C. 링컨 「표식 회수에 근거하여 물새의 수를 계산하기」. 첫 쪽의 머리글·제목·저자와, $2$ 쪽에 들여 써 놓은 **가정**을 잘라 위아래로 붙였다. *(Internet Archive 스캔, 미국 정부 간행물)*</figcaption>
+</figure>
+
+위의 네 가정이 왜 그렇게 적혀 있는지는 이 방법이 처음 인쇄된 쪽을 보면 알 수 있다.
+사진 아래쪽에 들여 써 놓은 문단이 그것이고, 세려는 대상은 물고기도 공도 아닌 **야생
+오리**였다. 오리는 주머니에 들어 있지 않고 세어 볼 수도 없다.
+
+$2$ 쪽의 그 문단이 방법의 전부다 — 「한 철에 북아메리카에서 잡힌 들오리의 수를 어지간히
+정확히 알고 있다면, 그 철에 대륙에 있던 오리의 총수는 **표식을 단 오리 가운데 첫 철에 잡힌
+수가 표식을 단 전체 수에 대하여 가지는 비**에 바탕을 둔 백분율 계산으로 어림할 수 있다.」
+이 쪽의 기호로 옮기면, 전체 $N$ 마리 가운데 표지를 단 것이 $M$ 마리이고 그 철에 $n$ 마리가
+잡혔을 때 잡힌 것 중 표지를 단 수 $m$ 이 초기하분포를 따르므로, $E(m)=n\cdot\dfrac MN$ 에서
+
+$$
+\widehat N=\frac{Mn}{m}
+$$
+
+이 된다. 절 $1$ 의 넷째 단계가 그대로 이 줄이다. 링컨이 이 셈을 믿은 근거는 자료의
+한결같음이었다 — $1920$ 년부터 $1926$ 년까지 표식을 단 오리가 첫 철에 되돌아온 비율이
+$13.03\%$, $13.61\%$, $15.16\%$, $10.68\%$, $14.65\%$ 로 해마다 비슷했다.
+
+어림을 **얼마나 믿을 수 있는가**는 $m$ 이 얼마나 흔들리는가에 달려 있다. $m$ 이 분모에
+들어 있기 때문이다. 초기하분포의 분산은
+
+$$
+\operatorname{Var}(m)=n\cdot\frac MN\left(1-\frac MN\right)\cdot\frac{N-n}{N-1}
+$$
+
+이고, 마지막 인수가 **유한모집단 수정**이다. 이를테면 $N=1000$, $M=100$, $n=100$ 이면
+$E(m)=10$ 이고
+
+$$
+\operatorname{Var}(m)=100\cdot\frac1{10}\cdot\frac9{10}\cdot\frac{900}{999}=8.11
+$$
+
+로 복원추출로 보았을 때의 $9$ 보다 작다. 잡는 수가 전체에 견주어 커질수록 추정이 조금 더
+단단해진다는 뜻이다.
+
+다만 이 모든 것은 **표식을 단 오리가 나머지와 똑같이 섞여 똑같이 잡힌다**는 가정 위에 서
+있다 — 위의 가정 $2$ 와 $3$ 이 그것이고, 링컨 자신도 이것을 「예비적인 제안」이라 적었다.
+세지 않고 개수를 알아내는 또 다른 방법은
+[적률법의 보기](../estimation_methods/moments_examples.md) 절 $4$ 의 독일 탱크 문제다 —
+그쪽은 표지를 붙이는 대신 상대가 이미 찍어 둔 일련번호를 쓴다.
+
+_확인한 곳 — 머리글(「CIRCULAR No. 118 · MAY, 1930 · UNITED STATES DEPARTMENT OF
+AGRICULTURE」), 제목과 저자(「By Frederick C. Lincoln, Associate Biologist, Division of Biological
+Investigations, Bureau of Biological Survey」), 그리고 $2$ 쪽의 가정 문단(「Given a fairly accurate
+statement showing the number of wild ducks killed in North America in any one season, then the total
+number of ducks present on the continent for that season may be estimated by a percentage computation,
+based upon the relation that the total number of banded ducks killed during their first season as band
+carriers bears to the total number banded」)은
+[Internet Archive: calculatingwater118linc](https://archive.org/details/calculatingwater118linc)
+의 낱장 n$2$·n$3$ 에서 **사진으로 직접 읽었다** · $1920$–$1926$ 년의 회수 비율은 같은 글
+표 $1$ 의 수(표식 $238$/회수 $31$, $382$/$52$, $3774$/$572$, $4103$/$438$, $2266$/$332$)를 같은
+스캔의 OCR 전문에서 읽고 **백분율은 이 쪽에서 직접 계산해 보았다** · $\operatorname{Var}(m)=8.11$
+도 직접 계산한 값이다_
+
+</div>
+
 ---
 
 ## 3. 간단한 예

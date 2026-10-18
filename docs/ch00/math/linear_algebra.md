@@ -32,6 +32,50 @@ $$
 
 </div>
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 내적이 처음 인쇄된 쪽에는 가운뎃점이 없다
+
+<figure markdown>
+  ![1881년 소책자의 인쇄 쪽 5 — 머리글 VECTOR ANALYSIS 와 쪽 번호 5, 그 아래 Direct and Skew Products of Vectors 라는 절 제목과 번호 매긴 정의들](./img/pv__gibbs_vector_p5.png){ width=540 }
+  <figcaption markdown>기브스 『Elements of Vector Analysis』의 인쇄 쪽 $5$. 머리글에 쪽 번호가 찍혀 있고, 절 제목이 「$Direct\ and\ Skew\ Products\ of\ Vectors$」다. $13$ 번이 내적, $14$ 번이 외적, $17$ 번이 $i.i=j.j=k.k=1$ 과 $i.j=\dots=0$ 이다. *(Internet Archive 스캔, $1881$–$84$ 간행이라 PD)*</figcaption>
+</figure>
+
+정의 2 는 내적을 성분으로 곧바로 세운다 — $\mathbf{x}^\top\mathbf{y}=\sum_i x_iy_i$. 들어오는
+길이 하나 더 있다. 크기와 각으로 $\lVert\mathbf{x}\rVert\,\lVert\mathbf{y}\rVert\cos\theta$ 라
+세우는 길이다. 두 길이 같은 수에 닿는다는 것이 **처음 한 쪽에 나란히 인쇄된 자리**가 사진이다.
+
+$13$ 번이 기하 쪽 정의다. 「$\alpha$ 와 $\beta$ 의 **direct product**($\alpha.\beta$ 라
+쓴다)는 두 크기의 곱에 두 방향이 이루는 각의 코사인을 곱해 얻는 **스칼라**다.」
+$17$ 번이 성분 공식의 바탕이다 — $i.i=j.j=k.k=1$ 이고 $i.j$ 꼴은 모두 $0$ 이니(정의 2 가
+$\mathbf{x}\perp\mathbf{y}$ 라 적는 그 조건이다), 여기에 분배법칙을 쓰면 곧바로 정의 2 의
+$\sum_i x_iy_i$ 가 나온다.
+
+그런데 지금과 다른 것이 셋 있다. **이름이 다르다** — $dot$ 도 $cross$ 도 아니고
+$direct\ product$ 와 $skew\ product$ 다. **글자가 다르다** — 벡터를 굵은 라틴 문자가
+아니라 그리스 문자 $\alpha$, $\beta$ 로 적었다. 그리고 가장 눈에 띄는 것, **점의 높이가
+다르다.** $\alpha.\beta$ 의 점은 기준선에 내려앉은 **마침표**다. 같은 줄의
+$\alpha\times\beta$ 에서 곱셈 십자는 가운데 높이에 떠 있으니, 활자가 없어서가 아니라
+그렇게 짠 것이다. 우리가 쓰는 가운뎃점 $\mathbf{x}\cdot\mathbf{y}$ 는 **뒤에 올라간 것**이다.
+
+이 소책자는 출판된 적이 없다. 기브스가 $1881$ 년과 $1884$ 년에 예일 학생들에게 나누어
+주려고 뉴헤이븐에서 사쇄한 소책자다. 그는 출판을 꺼렸는데, 남들이 이미 한 말이라
+새로울 것이 없다고 여겼기 때문이다 — 실제로 이 소책자는 그라스만과 클리퍼드에게 빚을
+졌다고 밝히고 있다. $1888$ 년에 헤비사이드는 이 소책자가 「널리 알려질 만하다」고
+쓰면서도 「처음 배우는 사람에게는 너무 압축되어 있다」고 덧붙였다. 결국 제자 윌슨이
+이것을 바탕으로 $1901$ 년에 두꺼운 『Vector Analysis』를 냈고, 그 책을 거쳐 오늘의
+교과서가 되었다.
+
+$13$ 번의 문장은 백사십 년 전의 것이지만 뜻은 지금과 사실상 같다. 바뀐 것은 이름과
+글자와 점의 높이뿐이고, 이 책은 거기서 한 걸음 더 가 가운뎃점마저 버리고
+$\mathbf{x}^\top\mathbf{y}$ 로 적는다 — 내적을 행렬 곱의 한 경우로 보아야 정의 3 의
+계획행렬부터 $\mathbf{X}^\top\mathbf{X}$ 까지가 한 기호로 이어지기 때문이다.
+**수학이 굳는 일과 기호가 굳는 일은 같은 속도로 일어나지 않는다.**
+
+_확인한 곳 — 머리글의 쪽 번호 $5$, 절 제목 「Direct and Skew Products of Vectors」, $13$ 번의 정의 문장, $14$ 번의 skew product, $15$ 번의 $\alpha.\beta=\beta.\alpha$, $17$ 번의 $i.i=j.j=k.k=1$ 과 $i.j=j.i=\dots=0$, 그리고 **점이 기준선에 앉아 있고 $\times$ 는 가운데 높이에 떠 있다**는 것은 모두 위 사진에서 직접 읽었다(낱자를 네 배로 키워 확인했다) · 스캔은 [Internet Archive: elementsvectora00gibbgoog](https://archive.org/details/elementsvectora00gibbgoog) · $1881$ 년과 $1884$ 년에 학생을 위해 사쇄했다는 것, 새로울 것이 없다고 여겨 출판을 꺼렸다는 것, 제자 윌슨이 이를 바탕으로 $1901$ 년 『Vector Analysis』를 냈다는 것은 [ProofWiki 「Elements of Vector Analysis — Historical Note」](https://proofwiki.org/wiki/Book:J._Willard_Gibbs/Elements_of_Vector_Analysis/Historical_Note) · 소책자가 그라스만과 클리퍼드를 밝힌다는 것과 $1888$ 년 헤비사이드의 평(「처음 배우는 사람에게는 너무 압축되어 있다」)은 [Wikipedia 「Vector Analysis」](https://en.wikipedia.org/wiki/Vector_Analysis) · 어느 쪽이 $1881$ 년에 찍히고 어느 쪽이 $1884$ 년에 찍혔는지는 확인하지 못해 적지 않았다_
+
+</div>
+
 <div class="defn" markdown>
 
 ### 정의 3. 계획행렬 { .dfn }

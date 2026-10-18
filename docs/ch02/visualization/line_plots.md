@@ -12,6 +12,59 @@
 
 ## 1. 시계열 보기
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 넓이에 이름을 붙여 둔 그림
+
+<figure markdown>
+  ![1786년의 채색 동판 도표. 가로축은 1700 년부터 1780 년까지의 해, 세로축은 1 만 파운드 단위다. 수입선과 수출선 두 곡선 사이가 칠해져 있는데, 1750 년대 중반을 경계로 왼쪽은 분홍색에 「BALANCE AGAINST」, 오른쪽은 누런색에 「BALANCE in FAVOUR of ENGLAND」 라고 적혀 있다](./img/ftc__playfair1786.png){ width=720 }
+  <figcaption markdown>플레이페어 『상업·정치 도해집』($1786$)의 도판 — 「덴마크·노르웨이와 오간 수출과 수입, $1700$ 년부터 $1780$ 년까지」. 아래에 「맨 아래 줄은 해로, 오른쪽 세로줄은 $1$ 만 파운드씩 나눈 것이다」와 「법이 정한 대로 $1786$ 년 $5$ 월 $1$ 일 윌리엄 플레이페어가 펴냄」이 적혀 있다. *(Wikimedia Commons, PD-old-100)*</figcaption>
+</figure>
+
+시계열을 선으로 잇는다는 생각이 처음 인쇄된 자리가 위의 도판이다. 미적분 교과서가 아니라
+무역 통계를 그린 동판화이고, 때는 $1786$ 년이다. 가로축이 **해**라서 점을 이어도 된다는
+것 — 이 쪽 들머리가 말한 그 주장 — 이 여기서 처음 그림이 되었다.
+
+읽는 법은 간단하다. 곡선이 둘 있다 — 하나는 「Line of Imports」, 다른 하나는 「Line of
+Exports」. 두 선 사이가 칠해져 있는데, **어느 선이 위에 있느냐**에 따라 칠한 이름이 다르다.
+수입이 위인 왼쪽 덩어리에는 분홍으로 **「BALANCE AGAINST」**(영국에 불리한 수지), 수출이
+위로 올라선 $1750$ 년대 중반 뒤의 덩어리에는 누런색으로 **「BALANCE in FAVOUR of ENGLAND」**
+라고 적혀 있다. 색이 바뀌는 자리가 두 선이 교차하는 자리다.
+
+수학으로 옮기면 이렇다. 그 해의 수출에서 수입을 뺀 값을 $f(t)$ 라 하면 두 선의 **세로
+간격**은 $|f(t)|$ 이고, 칠한 덩어리의 **넓이**는 $\displaystyle\int|f|$ 다. 쌓인 수지가
+되려면 플레이페어가 적어 둔 **이름의 부호**를 붙여야 한다 — 누런 쪽(in FAVOUR)에 $+$,
+분홍 쪽(AGAINST)에 $-$ 를 붙여 더한 것이
+
+$$
+\int_{t_0}^{t_1} f(t)\,dt
+$$
+
+다. 곧 한 해의 수지가 아니라 여러 해에 걸쳐 **쌓인 양**이고, 적분이 넓이가 아니라
+**부호를 붙인 넓이**라는 말이 이것이다. 색이 바뀌는 교차점이 $f$ 의 부호가 바뀌는 자리이고,
+분홍 덩어리를 부호 없이 더해 버리면 그것은 쌓인 수지가 아니라 $\displaystyle\int|f|$ 가
+된다. **두 선 사이를 칠하면서 칠한 데마다 이름을 적어 넣은 것**이 플레이페어가 한 일이고,
+오늘날 선그림에서 두 선 사이를 색으로 메울 때 부호를 구별해 칠하는 관례가 여기서 왔다.
+
+플레이페어가 한 일은 수를 **표에서 그림으로** 옮긴 것이다. 아래에 적힌 「오른쪽 세로줄은
+$1$ 만 파운드씩」이 그 눈금이고, 그 덕에 높이가 금액이 되고 넓이가 쌓인 금액이 된다. 다만
+그림이 주는 것은 **방향과 크기의 느낌**이지 값이 아니다 — 어느 덩어리가 더 넓은지는 눈으로
+보이지만, 얼마나 더 넓은지는 결국 재어야 한다. 아래 보기 $1$ 이 바로 그 어긋남을 다룬다.
+같은 기울기도 상자의 모양을 바꾸면 눈에 다르게 보인다는 것, 곧 **그림이 보여 주는 것과
+자료가 말하는 것이 같지 않다**는 것이다.
+
+_확인한 곳 — 도판의 제목(「Exports and Imports to and from DENMARK & NORWAY from 1700 to
+1780.」), 두 곡선의 이름(「Line of Imports」·「Line of Exports」), 칠한 영역의 이름(「BALANCE
+AGAINST」·「BALANCE in FAVOUR of ENGLAND.」), 아래의 설명(「The Bottom line is divided into Years,
+the Right hand line into L10,000 each.」)과 간기(「Published as the Act directs, 1st May 1786, by
+W^m Playfair」, 「Neele sculpt 352, Strand, London」)는 모두 **그림에서 직접 읽었다** · 이 도판이
+윌리엄 플레이페어($1759$–$1823$)의 『The Commercial and Political Atlas』($1786$)에 실린 것이라는
+것, 그 책의 긴 제목이 스스로 「**채색 동판** 도표로써」(by Means of Stained Copper-Plate Charts)
+라고 밝힌다는 것, 그리고 파일의 라이선스는
+[Commons 파일 쪽](https://commons.wikimedia.org/wiki/File:Playfair_TimeSeries.png)(PD-old-100)_
+
+</div>
+
 <div class="exbox" markdown>
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 시계열 꺾은선그림과 가로세로비. 2023년 거래일 260일의 종가를 모의생성해 선그림으로 그린다. 선그림에서 읽는 것은 막대의 길이가 아니라 **기울기**인데, 기울기는 그리는 상자의 모양에 따라 눈에 달리 보인다.

@@ -22,6 +22,57 @@ $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad x \in \mathbb{R}$$
 !!! danger "대수의법칙이 적용되지 않는다"
     대수의법칙은 $E[|X|] < \infty$를 요구한다. 코시에서는 이것이 깨지므로 표본평균 $\bar{X}_n$은 어떤 값으로도 수렴하지 않는다. 사실 $\bar{X}_n$은 모든 $n$에서 정확히 같은 코시분포를 갖는다.
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 오역으로 마녀가 된 곡선
+
+<figure markdown>
+  ![1748년 이탈리아어 원본 381쪽의 「la Versiera」와 1801년 영역본 222쪽의 「the Witch」, 그리고 영역본에 실린 곡선 그림](./img/rational__agnesi_versiera_witch.png){ width=860 }
+  <figcaption markdown>위 — 아녜시 『이탈리아 젊은이를 위한 해석학 입문』($1748$) 제 $1$ 권 $381$ 쪽. 식 끝에 **「che dicesi la *Versiera*」**(베르시에라라 불린다)가 보인다. 아래 — 콜슨의 영역본($1801$) $222$ 쪽. 같은 자리가 **「vulgarly called the *Witch*」**로 바뀌었고, 여백에도 「the Witch」라 적혀 있다. 왼쪽의 Fig. $135$ 가 그 곡선이며, 세로로 선 지름 $\mathrm{AC}$ 가 아녜시가 $x$ 축이라 부른 방향이다. *(Internet Archive 스캔, PD-old)*</figcaption>
+</figure>
+
+위의 밀도 $f(x)=\dfrac1{\pi(1+x^{2})}$ 는 코시의 이름으로 불리지만, 곡선 자체는 그보다 먼저
+그려졌다. 그리고 그 이름이 **오역**이다.
+
+마리아 가에타나 아녜시($1718$–$1799$)는 밀라노 사람으로, $1748$ 년에 두 권짜리
+『이탈리아 젊은이를 위한 해석학 입문』을 냈다. 제목 그대로 가르치려고 쓴 책이고, 위
+그림의 제 $3$ 문제(제 $238$ 항)가 이 곡선이다. 지름 $\mathrm{AC}$ 위의 반원에서
+$\overline{\mathrm{AB}}:\overline{\mathrm{BD}}=\overline{\mathrm{AC}}:\overline{\mathrm{BM}}$
+을 만족하는 점 $\mathrm M$ 의 자취를 물었고, 답으로 얻은 식에 **「la Versiera」**라는
+이름을 적어 두었다. 돛을 돌리는 밧줄을 뜻하는 이탈리아 말이다.
+
+반세기 뒤 케임브리지의 존 콜슨이 이 책을 영어로 옮기면서 **「la versiera」를
+「l'aversiera」로 읽었다.** 한 글자 차이로 뜻이 「마녀」가 된다. 아래 그림에 그 결과가
+있다 — 본문은 「흔히 *마녀*라 불리는」이 되었고, 여백의 안내까지 「the Witch」다. 지금
+세계가 이 곡선을 「아녜시의 마녀」라 부르는 까닭이 이 한 줄이다. 정작 아녜시는 자기
+책에 그런 말을 쓴 적이 없다.
+
+식도 보아 둘 만하다. 그가 적은 것은 $y=\dfrac{a\sqrt{a-x}}{\sqrt x}$ 이고, 바로 뒤에
+$x=0$ 이면 $y$ 가 무한대이므로 직선 $\mathrm{AQ}$ 가 점근선이라고 밝힌다 — 그가 세운
+좌표에서 보면 우리가 말하는 수직점근선이다. 다만 그가 $x$ 축이라 부른 $\mathrm{AC}$ 가
+그림에서는 **세로**로 그어져 있어서, $x=0$ 인 직선 $\mathrm{AQ}$ 는 그림에서 바닥을
+가로지르는 **가로선**으로 보인다. 두 축의 이름을 맞바꾸면 같은 식이
+
+$$
+y=\frac{a^{3}}{x^{2}+a^{2}}
+$$
+
+이 된다. 분모가 $0$ 이 되는 자리가 없으니 수직점근선은 아예 사라지고, 분자의 차수 $0$ 이
+분모의 차수 $2$ 보다 낮으므로 꼬리가 $y=0$ 에 붙는다. 그림 속 종 모양이 이미 그 꼴이다.
+축을 어느 쪽으로 부르느냐가 「점근선이 세로냐 가로냐」를 통째로 뒤집는 셈인데, 차수의
+차만으로 점근선을 말할 수 있는 것은 축을 먼저 정해 두었기 때문이다.
+
+$a=1$ 로 두면 $y=\dfrac1{x^{2}+1}$ 이고, 여기에 넓이를 $1$ 로 맞추는 $\frac1\pi$ 만 곱하면
+위의 코시 밀도가 된다. **$1748$ 년의 그 곡선이 이 쪽의 반례와 같은 것**이다. 그리고 꼬리가
+$y=0$ 에 붙기는 하되 **지수가 아니라 $1/x^{2}$ 이라는 다항으로** 붙는다는 것, 바로 그
+느림에서 $E[\lvert X\rvert]=\infty$ 가 나온다 — $x\cdot x^{-2}=x^{-1}$ 의 적분이
+$\ln x$ 라서 발산하기 때문이다. 아녜시가 가르치려고 그려 둔 종 모양이 큰 수의 법칙을
+깨뜨리는 모양이기도 한 셈이다.
+
+*확인한 곳 — 아녜시 『Instituzioni analitiche ad uso della gioventù italiana』 제 $1$ 권($1748$, Milano) [원문 스캔](https://archive.org/details/A298183) — 위 그림은 그 $381$ 쪽이고, 제 $3$ 문제(제 $238$ 항)와 「che dicesi la Versiera」, 그리고 $\mathrm{AC}$ 를 $x$ 축, $\mathrm{AQ}$ 를 $y$ 축으로 삼아 $x=0$ 에서 $\mathrm{AQ}$ 가 점근선이 된다는 대목은 이 스캔에서 직접 폈다 · 지름 $\mathrm{AC}$ 가 세로로, $\mathrm{AQ}$ 가 가로로 그어져 있다는 것은 Fig. $135$ 에서 직접 읽었다 · 콜슨 영역본 『Analytical Institutions』($1801$) [원문 스캔](https://archive.org/details/analyticalinsti00masegoog) $222$ 쪽에서 「vulgarly called the Witch」와 여백 주를 직접 폈다 · 「versiera」를 「l'aversiera」로 잘못 읽은 경위와 아녜시의 생몰년은 [MacTutor 「Maria Gaetana Agnesi」](https://mathshistory.st-andrews.ac.uk/Biographies/Agnesi/) · 두 식이 축을 바꾼 같은 곡선이라는 것은 이 쪽에서 직접 계산해 보았다*
+
+</div>
+
 ---
 
 ## 2. 표본평균의 궤적
