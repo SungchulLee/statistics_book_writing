@@ -1,7 +1,13 @@
 # 「그림으로 보는 통계학」·「AI로 보는 통계학」 — 옮긴 상자와 이미지 출처
 
-`high_school_math` 10장(확률과 통계 = 그 책의 `ch07`·`ch09`)에 있는 상자 **114 개**를
-이 책으로 옮기는 작업의 대장이다. `docs/` 밖에 두어 빌드에 끼지 않는다.
+`high_school_math` 전체에 있는 상자 **521 개**를 이 책으로 옮기는 작업의 대장이다.
+`docs/` 밖에 두어 빌드에 끼지 않는다.
+
+처음에는 그 책 10장(확률과 통계 = `ch07`·`ch09`)의 **114 개**만 옮길 생각이었으나,
+나머지 장에도 이 책에 들어갈 상자가 많다. 「AI로 보는 수학」은 거의 모두 기계학습
+이야기이고 기계학습은 통계학이므로, 회귀(13장)·정칙화(18장)·로지스틱(19장)·
+다중분류(20장)·생존분석(21장)에 제자리가 있다. 그래서 **521 개 전부**를 하나씩
+따져 보기로 하고 대장을 늘렸다.
 
 **이 파일을 두는 까닭** — 옮긴 이미지는 대부분 우표·지폐·박물관 사진이고 CC0·PD·CC BY
 가 섞여 있다. 나중에 이 책을 공개하거나 출판할 일이 생기면 **이 파일만 훑으면** 저작권
@@ -9,133 +15,545 @@
 
 ⚠️ **라이선스는 틀 이름으로 판단한다.** 「Commons 에 있고 PD 라고 적혀 있다」로는 모자라다.
 자세한 기준은 `high_school_math/STAMP_SOURCES.md` 를 따른다.
+아직 옮기지 않은 줄의 라이선스 칸은 원본 그림 설명의 `*(…)*` 를 기계로 긁어 온 것이므로,
+**옮길 때 원문을 다시 확인한다.**
 
 ## 옮길 때 지키는 것
 
 1. 연재 이름 **수학 → 통계학**
 2. 그림 경로 `figures/` → `./img/` (이 책의 관례), 그림 파일도 함께 옮긴다
 3. **그림 설명의 출처·라이선스 문구는 글자 그대로 옮긴다**
-4. 원본 쪽의 정리/정의 번호를 부르는 문장은 **옮긴 쪽의 번호로 다시 맞춘다**
+4. 원본 쪽의 정리/정의 번호를 부르는 문장은 **옮긴 쪽의 번호로 다시 맞춘다**.
+   같은 것이 이 책에 없으면 그 문장을 홀로 서게 고쳐 쓴다
 5. 이 책에 없는 쪽으로 가는 링크는 **빼거나** 사실만 남긴다
-6. 자리는 그 상자가 이야기하는 정의/정리 **바로 뒤**(정리면 증명 뒤), 보기 앞
+6. 자리는 그 상자가 이야기하는 정의/정리 **바로 뒤**(정리면 증명 뒤), 보기 앞.
+   번호는 옮긴 쪽마다 $1$ 부터 다시 센다
+7. 제자리가 없는 상자는 **억지로 넣지 않고** `보류` 로 적고 까닭을 한 줄 남긴다
 
 ## 진행
 
 | # | 원본 | 상자 | 제목 | 옮긴 곳 | 이미지 | 라이선스 | 상태 |
 |---|---|---|---|---|---|---|---|
-| 1 | `ch07/basics/birthday_problem.md` | 그림 | 믿기지 않아서 발표하지 않았다 | `—` | `pb__vonmises.png` | 프랑스 국립도서관 소장, Wikimedia Commons, PD-US-expired | 대기 |
-| 2 | `ch07/basics/case_division_probability.md` | 그림 | 포탄이 어디에 떨어지는지 모를 때 쓰는 표 | `—` | `cs__fm640_1945_p19.png` | — | 대기 |
-| 3 | `ch07/basics/combination_probability.md` | 그림 | 열셋인지 열넷인지 아직 다투는 한 벌 | `—` | `pb__mamluk_cards.png` | 낱장 사진을 Countakeshi 가 이어 붙인 것, Wikimedia Commons, CC BY-SA 4. | 대기 |
-| 4 | `ch07/basics/complement_probability.md` | 그림 | 원숭이 백만 마리를 불러낸 까닭 | `ch03/probability/axioms.md` | `pb__borel1929.png` | Wikimedia Commons · 프랑스 국립도서관, 저작권 만료 | 대기 |
-| 5 | `ch07/basics/dice_pair_condition.md` | 그림 | 반듯하지 않은 주사위 | `—` | `prob__roman_dice.png` | Wikimedia Commons, CC BY-SA 3.0 | 대기 |
-| 6 | `ch07/basics/function_probability.md` | 그림 | 공을 칸에 던지면 함수가 하나 생긴다 | `—` | `fp__todhunter1889_p461.png` | — | 대기 |
-| 7 | `ch07/basics/integer_solution_probability.md` | 그림 | 「특별한 재주」라 부르던 증명 | `—` | `is__netto1901_p21.png` | — | 대기 |
-| 8 | `ch07/basics/permutation_probability.md` | 그림 | 열네 글자로 만든 자물쇠 | `—` | `pp__hooke1676_p31.png` | — | 대기 |
-| 9 | `ch07/basics/probability.md` | 그림 | 세 줄로 적은 확률 | `ch03/probability/axioms.md` | `prob__kolmogorov.png, prob__grundbegriffe1933.png` | Wikimedia Commons, 촬영 Konrad Jacobs, 오버볼파흐 수학연구소, CC BY-SA 2 | 대기 |
-| 10 | `ch07/basics/probability_addition.md` | 그림 | 인쇄 오류를 평생 미워한 사람의 이름이 붙은 부등식 | `ch03/probability/axioms.md` | `pb__bonferroni.png` | Wikimedia Commons, PD-Italy | 대기 |
-| 11 | `ch07/basics/sample_space.md` | 그림 | 네 면으로만 서는 주사위 | `ch03/probability/sample_space.md` | `pb__ancient_dice.png` | Wikimedia Commons, 촬영 Xocolatl, PD-self / 메트로폴리탄 미술관 10.130. | **옮김** |
-| 12 | `ch07/conditional/bayes.md` | 그림 | 되짚기가 활자로 놓인 자리 | `ch03/probability/bayes.md` | `cd__by_bayes1763_prop5.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 13 | `ch07/conditional/bayes.md` | 그림 | 곱하기를 더하기로 바꾸어 암호를 풀다 | `ch03/probability/bayes.md` | `cd__turing1936.png` | Wikimedia Commons, PD-US-not renewed | 대기 |
-| 14 | `ch07/conditional/classification_table.md` | 그림 | 네 칸짜리 표에 이름이 붙던 날 | `—` | `cd__pearson1904_p1.png` | — | 대기 |
-| 15 | `ch07/conditional/classification_table.md` | AI | 「정확도 $99$ 퍼센트」가 쓸모없을 수 있는 까닭 | `—` | `—` | — | 대기 |
-| 16 | `ch07/conditional/conditional_applications.md` | 그림 | 「적어도 하나」를 비밀 문서에 적어 둔 까닭 | `—` | `cd__morse_kimball1946_p89.png` | — | 대기 |
-| 17 | `ch07/conditional/conditional_applications.md` | AI | 장치를 늘릴수록 더 자주 멈추는 까닭 | `—` | `—` | — | 대기 |
-| 18 | `ch07/conditional/conditional_independence.md` | 그림 | 「서로 다른 기록을 섞을 때 생기는 오류」 | `ch03/probability/conditional_independence.md` | `cd__yule1903_p132.png` | — | 대기 |
-| 19 | `ch07/conditional/conditional_probability.md` | 그림 | 곱셈정리가 활자로 놓인 자리 | `ch03/probability/conditional.md` | `cd__demoivre_doctrine.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
-| 20 | `ch07/conditional/conditional_probability.md` | AI | 문장 하나의 확률을 낱말 하나씩 쪼개는 법 | `ch03/probability/conditional.md` | `cd__ai_chain_scale.png` | — | 대기 |
-| 21 | `ch07/conditional/conditional_state.md` | 그림 | 네 칸은 세어서 얻은 것이 아니라 $1$ 을 전개한 것 | `—` | `cd__boole1854_p76.png` | — | 대기 |
-| 22 | `ch07/conditional/conditional_two_stage.md` | 그림 | 사전확률을 적지 못한 채 돌린 계산 | `—` | `cd__bordereau1894.png` | 프랑스 국방사료원 소장, Wikimedia Commons, PD-old-70 | 대기 |
-| 23 | `ch07/conditional/game_probability.md` | 그림 | 모든 것을 모아 적은 책에, 풀지 못한 물음 하나 | `—` | `cd__pacioli1523_summa.png` | Stockholms Universitetsbibliotek 촬영, CC BY 2.0 | 대기 |
-| 24 | `ch07/conditional/independent_binomial.md` | 그림 | 신의 존재를 증명하려고 쓴 첫 가설검정 | `—` | `cd__arbuthnot1710_p186.png` | — | 대기 |
-| 25 | `ch07/conditional/independent_events.md` | 그림 | 완두 오백쉰여섯 알로 잰 독립 | `ch03/probability/independence.md` | `cd__mendel1866_p19.png` | — | 대기 |
-| 26 | `ch07/conditional/monty_hall.md` | 그림 | 이름만 빌려준 사람 | `ch03/probability/bayes.md` | `cd__monty_hall.png` | Wikimedia Commons, PD-Pre1978 | 대기 |
-| 27 | `ch07/conditional/monty_hall.md` | 그림 | 편지 만 통이 쏟아진 칼럼 | `ch03/probability/bayes.md` | `cd__erdos.png` | Topsy Kretts 촬영, Wikimedia Commons, CC BY 3.0 | 대기 |
-| 28 | `ch07/conditional/monty_hall.md` | 그림 | 몬티보다 백 년 먼저 나온 문제 | `ch03/probability/bayes.md` | `cd__bertrand.png` | Wikimedia Commons, PD-old | 대기 |
-| 29 | `ch07/conditional/stratified_reversal.md` | 그림 | 심슨은 만화가 아니다 | `—` | `cd__bletchley.png` | Wikimedia Commons, 촬영 DeFacto, CC BY-SA 4.0 | 대기 |
-| 30 | `ch07/conditional/stratified_reversal.md` | 그림 | 소송이 될 뻔한 입학 통계 | `—` | `cd__berkeley.png` | Wikimedia Commons, 촬영 Daderot, CC0 | 대기 |
-| 31 | `ch07/conditional/total_probability.md` | 그림 | 바다를 칸으로 나누고 하나씩 지워 나간 기록 | `ch03/probability/conditional.md` | `cd__palomares1975_fig333.png` | 미국 공군 자료, PD-USGov | 대기 |
-| 32 | `ch07/descriptive/central_tendency.md` | 그림 | 눈금이 없는 그래프 | `ch02/center/mean_median_mode.md` | `dsc__stamp_indonesia1969.png` | Wikimedia Commons, PD | 대기 |
-| 33 | `ch07/descriptive/covariance_correlation.md` | 그림 | 「회귀」라는 이름이 나온 그림 | `ch03/rv/correlation.md` | `dc__galton1886_plate10.png` | Wikimedia Commons, PD-Art | 대기 |
-| 34 | `ch07/descriptive/dispersion.md` | 그림 | 백분위수를 종이에 그린 것 | `ch02/spread/variance_std.md` | `dsc__growth_chart_cdc2000.png` | Wikimedia Commons, PD-USGov-HHS-CDC | 대기 |
-| 35 | `ch07/descriptive/frequency_distribution.md` | 그림 | 통계학이라는 말보다 먼저 있던 도수분포표 | `ch02/exploration/histograms.md` | `fd__bills_of_mortality_1665.png` | Wikimedia Commons, Wellcome Collection, CC BY 4.0 | 대기 |
-| 36 | `ch07/descriptive/frequency_distribution.md` | 그림 | 히스토그램을 둥글게 말아 의회에 내민 그림 | `ch02/exploration/histograms.md` | `fd__nightingale1858.png` | Wikimedia Commons, PD-old | 대기 |
-| 37 | `ch07/descriptive/frequency_distribution.md` | 그림 | 날 수로 보면 가장 많은 쪽이 가장 적은 쪽이었다 | `ch02/exploration/histograms.md` | `fd__snow1855_p86.png` | — | 대기 |
-| 38 | `ch07/distributions/binomial_distribution.md` | 그림 | 이름이 된 책 | `ch04/discrete_distributions/binomial.md` | `bin__ars1713.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 39 | `ch07/distributions/binomial_to_poisson.md` | 그림 | 말에 차여 죽은 사람을 센 표 | `ch04/discrete_distributions/poisson.md` | `binomial_to_poisson__bortkiewicz1898_p25.png` | Wikimedia Commons, PD-US-expired | 대기 |
-| 40 | `ch07/distributions/exponential_distribution.md` | 그림 | 전화선을 몇 개 깔 것인가 | `ch04/continuous_distributions/exponential.md` | `ds__molina1927_p463.png` | — | 대기 |
-| 41 | `ch07/distributions/geometric_distribution.md` | AI | 기다린 보람이 없으므로 간격을 늘린다 | `ch04/discrete_distributions/geometric.md` | `—` | — | 대기 |
-| 42 | `ch07/distributions/geometric_distribution.md` | 그림 | 담뱃갑에 든 쉰 장, 다 모으려면 | `ch04/discrete_distributions/geometric.md` | `ds__cope_warriors_card.png` | Wikimedia Commons, 저작권 만료 | 대기 |
-| 43 | `ch07/distributions/hypergeometric_distribution.md` | 그림 | 검사를 얼마나 할 것인가 | `ch04/discrete_distributions/hypergeometric.md` | `ds__dodge1929_p629.png` | — | 대기 |
-| 44 | `ch07/distributions/poisson.md` | 그림 | 이름이 붙기 전의 포아송분포 | `ch04/discrete_distributions/poisson.md` | `poisson__poisson1837_p206.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 45 | `ch07/distributions/poisson.md` | 그림 | 에펠탑에 새겨진 이름 | `ch04/discrete_distributions/poisson.md` | `poisson__eiffel.png` | Wikimedia Commons, 촬영 Victor R. Ruiz, CC BY-SA 2.0 | 대기 |
-| 46 | `ch07/expectation_applications/conditional_expectation.md` | 그림 | 「검사를 얼마나 할 것인가」에 수로 답한 쪽 | `—` | `ce__dodge_romig1929_p621_628_629.png` | — | 대기 |
-| 47 | `ch07/expectation_applications/conditional_expectation.md` | AI | 기계가 찾아내는 것은 결국 $E[Y\mid X]$ 하나 | `—` | `—` | — | 대기 |
-| 48 | `ch07/expectation_applications/expectation_counting.md` | 그림 | 가장자리는 싸고 안쪽은 비싸다 | `—` | `ec__hollerith1890.png` | Wikimedia Commons · 저작권 없음 | 대기 |
-| 49 | `ch07/expectation_applications/expectation_counting.md` | AI | 자료를 섞어 쓰는 일이 괜찮은 까닭 | `—` | `—` | — | 대기 |
-| 50 | `ch07/expectation_applications/expectation_equation.md` | 그림 | 차수를 백 배로 올려도 실근은 셋쯤 늘 뿐이다 | `—` | `ea__ee_kac.png` | — | 대기 |
-| 51 | `ch07/expectation_applications/expectation_geometry.md` | 그림 | 제곱을 떼는 순간 손이 닿지 않는다 | `—` | `—` | — | 대기 |
-| 52 | `ch07/expectation_applications/expectation_process.md` | 그림 | 「최대 $n$ 번까지만」을 떼어 내면 벌어지는 일 | `—` | `ea__dbernoulli.png` | ETH 취리히 도서관 소장, Wikimedia Commons, PD-old | 대기 |
-| 53 | `ch07/expectation_applications/expected_profit.md` | 그림 | 처음 이 셈을 한 곳은 가게가 아니라 은행 금고였다 | `—` | `ea__edgeworth1888_p113.png` | — | 대기 |
-| 54 | `ch07/expectation_applications/order_statistics.md` | 그림 | 전차를 세지 않고 전차 수를 센 사람들 | `—` | `ea__panther1944.png` | Archives Normandie, Wikimedia Commons, PD | 대기 |
-| 55 | `ch07/expectation_applications/variance_optimization.md` | 그림 | 「서로 독립이면」이라는 단서에 상을 준 까닭 | `—` | `ea__vo_markowitz.png` | — | 대기 |
-| 56 | `ch07/expectation_variance/distribution_table_variance.md` | 그림 | 손에게 좋은 공식이 기계에게는 나쁜 공식이다 | `—` | `ev__welford.png` | — | 대기 |
-| 57 | `ch07/expectation_variance/expectation.md` | 그림 | 확률보다 기댓값이 먼저 인쇄되었다 | `ch03/rv/expectation.md` | `ev__huygens1657.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 58 | `ch07/expectation_variance/expectation_coin_and_dice.md` | 그림 | 「공정하다」를 이만 육천 번 던져 재어 본 사람 | `—` | `ev__weldon1906.png` | Wikimedia Commons, PD-US | 대기 |
-| 59 | `ch07/expectation_variance/indicator_linearity.md` | AI | 점수는 더해서 나오지만 믿음은 거기서 나오지 않는다 | `—` | `ev__ai_indicator_dep.png` | — | 대기 |
-| 60 | `ch07/expectation_variance/indicator_linearity.md` | 그림 | 섞었다고 믿은 날 | `—` | `ev__lottery1969.png` | Wikimedia Commons, PD-USGov | 대기 |
-| 61 | `ch07/expectation_variance/indicator_variance.md` | AI | 답을 여러 개 모아도 줄지 않는 몫 | `—` | `ev__ai_ensemble_floor.png` | — | 대기 |
-| 62 | `ch07/expectation_variance/indicator_variance.md` | 그림 | 오리를 세지 않고 오리 수를 세는 법 | `—` | `ev__lincoln1930.png` | — | 대기 |
-| 63 | `ch07/expectation_variance/variance.md` | 그림 | 표준편차가 아니라 분산에 이름을 붙인 까닭 | `ch03/rv/variance_covariance.md` | `ev__fisher1918_variance.png` | — | 대기 |
-| 64 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 금 같은 정리 | `ch03/limits/lln.md` | `lln__arsconjectandi1713.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 65 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 부등식 하나로 밀어붙인 사람 | `ch03/limits/lln.md` | `lln__stamp_russia2021.png` | Wikimedia Commons, PD | 대기 |
-| 66 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 바늘로 잰 원주율 | `ch03/limits/lln.md` | `lln__buffon_statue.png` | Wikimedia Commons, 촬영 Celette, $2012$, CC BY-SA 4.0 | 대기 |
-| 67 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 카드 점을 치다 나온 계산법 | `ch03/limits/lln.md` | `lln__fermiac.png` | 로스앨러모스 국립연구소, Wikimedia Commons, PD-USGov | 대기 |
-| 68 | `ch07/normal_distribution/binomial_to_normal.md` | 그림 | 반 칸에 사람 이름이 붙은 자리 | `—` | `nd__yates_gain.png` | — | 대기 |
-| 69 | `ch07/normal_distribution/central_limit_theorem.md` | 그림 | 종 모양이 활자로 놓인 쪽 | `ch03/limits/clt.md` | `clt__doctrine1756_p243.png` | Internet Archive 원문 스캔, PD-old-100 | 대기 |
-| 70 | `ch07/normal_distribution/normal_applications.md` | 그림 | 같은 높이로 튀었는데 한쪽만 이상이다 | `—` | `nd__shewhart1927_p726.png` | — | 대기 |
-| 71 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 지폐에 실린 확률밀도함수 | `ch04/continuous_distributions/normal.md` | `nd__note.png` | — | 대기 |
-| 72 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 구슬이 쌓아 올린 종 모양 | `ch04/continuous_distributions/normal.md` | `nd__galton.png` | Wikimedia Commons, PD | 대기 |
-| 73 | `ch07/normal_distribution/normal_sum_percentile.md` | 그림 | 분산이 같은데 모양이 다르다 | `—` | `nd__lindeberg.png` | — | 대기 |
-| 74 | `ch07/normal_distribution/normal_sum_percentile.md` | AI | 층을 쌓을 때 $\sqrt n$ 으로 나누는 까닭 | `—` | `—` | — | 대기 |
-| 75 | `ch07/normal_distribution/normal_symmetry.md` | 그림 | 대칭을 눈금으로 새겨 둔 종이 | `—` | `nd__hazen.png` | — | 대기 |
-| 76 | `ch07/normal_distribution/normal_symmetry.md` | AI | 눈금을 맞추지 않으면 큰 눈금만 보게 된다 | `—` | `—` | — | 대기 |
-| 77 | `ch07/normal_distribution/repeated_trial_normal.md` | 그림 | 그 표를 만든 사람들은 음수를 다룰 줄 몰랐다 | `—` | `nd__tables.png` | — | 대기 |
-| 78 | `ch07/random_variable/continuous_random_variable.md` | AI | 상수를 구하지 못한 채 쓰는 밀도 | `ch03/rv/continuous.md` | `rv__crv_ai_ratio.png` | — | 대기 |
-| 79 | `ch07/random_variable/continuous_random_variable.md` | 그림 | 대칭인데 평균이 없는 밀도 | `ch03/rv/continuous.md` | `rv__crv_cauchy.png` | — | 대기 |
-| 80 | `ch07/random_variable/cumulative_distribution.md` | 그림 | 잡화상이 만든 첫 계단 | `ch03/rv/pmf_pdf_cdf.md` | `rv__graunt1662_p62.png` | — | 대기 |
-| 81 | `ch07/random_variable/geometric_probability.md` | 그림 | 세 답을 나란히 적고 물음이 틀렸다고 한 쪽 | `—` | `rv__bertrand1907_p5.png` | Wikimedia Commons, PD-US-expired | 대기 |
-| 82 | `ch07/random_variable/probability_density_applications.md` | 그림 | 넓이를 지키려고 위도를 눌러 놓은 지도 | `—` | `rv__pda_equalarea1921.png` | — | 대기 |
-| 83 | `ch07/random_variable/probability_density_applications.md` | AI | 공 위에 점을 고르게 뿌리려면 위도를 버려야 한다 | `—` | `rv__pda_ai_sphere.png` | — | 대기 |
-| 84 | `ch07/random_variable/probability_density_function.md` | AI | 어느 자 위에서 균등하게 뽑을 것인가 | `—` | `rv__pdf_ai_logscale.png` | — | 대기 |
-| 85 | `ch07/random_variable/probability_density_function.md` | 그림 | 측량 오차를 따지다 나온 분포 | `—` | `rv__pdf_helmert.png` | — | 대기 |
-| 86 | `ch07/random_variable/probability_density_graph.md` | 그림 | 눈금을 바꾸면 보이는 직선 | `—` | `rv__pdg_pareto.png` | — | 대기 |
-| 87 | `ch07/random_variable/probability_mass_function.md` | 그림 | 질량이 밀도로 건너가는 자리 | `ch03/rv/pmf_pdf_cdf.md` | `rv__simpson1757_p72.png` | Internet Archive 스캔, PD-old | 대기 |
-| 88 | `ch07/random_variable/probability_mass_function.md` | AI | 꼬리를 자르면 확률이 아니게 된다 | `ch03/rv/pmf_pdf_cdf.md` | `rv__pmf_ai_renorm.png` | — | 대기 |
-| 89 | `ch07/random_variable/probability_mass_function.md` | AI | 합이 $1$ 이라고 해서 확률인 것은 아니다 | `ch03/rv/pmf_pdf_cdf.md` | `—` | — | 대기 |
-| 90 | `ch07/random_variable/random_variable.md` | 그림 | 주사위 셋의 합을 칠백 해 전에 적어 둔 표 | `ch03/rv/discrete.md` | `rv__devetula1534.png` | — | 대기 |
-| 91 | `ch07/random_variable/random_variable_geometry.md` | 그림 | 「그때에야 비로소 셀 수 있다」 | `—` | `rv__crofton1868_p181.png` | Internet Archive 스캔, PD-old | 대기 |
-| 92 | `ch07/random_variable/random_variable_process.md` | 그림 | 시 두 만 자를 손으로 세어 얻은 두 수 | `—` | `rv__markov1913_p153.png` | Internet Archive 스캔, PD-old | 대기 |
-| 93 | `ch07/random_variable/uniform_distribution.md` | 그림 | 고르게 뽑으려고 돌을 깎았다 | `ch04/continuous_distributions/uniform.md` | `rv__kleroterion.png` | 촬영 Zde, Wikimedia Commons, CC BY-SA 4.0 | 대기 |
-| 94 | `ch07/random_variable/uniform_distribution.md` | AI | 난수 하나로 다음 낱말을 고르는 법 | `ch04/continuous_distributions/uniform.md` | `rv__uni_ai_inverse.png` | — | 대기 |
-| 95 | `ch07/random_walk/conditional_sequential.md` | 그림 | 가장 센 패턴이 없는 놀이 | `—` | `rw__penney.png` | — | 대기 |
-| 96 | `ch07/random_walk/first_step_analysis.md` | 그림 | 「밑천이 무한하다면」이라고 적어 놓고 넘어간 쪽 | `—` | `fs__eb1911_p771.png` | Wikimedia Commons · 저작권 없음 | 대기 |
-| 97 | `ch07/random_walk/first_step_analysis.md` | AI | 기계는 이 점화식을 풀지 않고 외워 넣는다 | `—` | `—` | — | 대기 |
-| 98 | `ch07/random_walk/graph_walk.md` | 그림 | 지나온 길은 묻지 않는다고 적어 둔 놀이판 | `—` | `gw__gyanchaupar.png` | 사진 Nomu420 · CC BY-SA 3.0 · Wikimedia Commons | 대기 |
-| 99 | `ch07/random_walk/graph_walk.md` | AI | 링크를 따라 걷는 사람이 매기는 순위 | `—` | `—` | — | 대기 |
-| 100 | `ch07/random_walk/lattice_walk.md` | 그림 | 모눈종이 위에 연필로 그린 임의 보행 | `—` | `rw__perrin1916_p115.png` | Internet Archive, PD-US-expired | 대기 |
-| 101 | `ch07/random_walk/line_walk.md` | 그림 | 취한 사람은 집에 오고 취한 새는 못 온다 | `—` | `rw__polya.png` | Wikimedia Commons, 촬영 Thane Plambeck, CC BY 2.0 | 대기 |
-| 102 | `ch07/random_walk/trial_state.md` | 그림 | 홀짝이 매번 뒤집히는 항아리로 물리학의 다툼을 가라앉히 | `—` | `rw__ehrenfest.png` | — | 대기 |
-| 103 | `ch07/statistical_estimation/population_sample.md` | 그림 | 돌아온 비행기만 세었다 | `ch01/classical/population_sample.md` | `se__wald1943.png` | — | 대기 |
-| 104 | `ch07/statistical_estimation/population_sample.md` | 그림 | 눈을 가리면 고르게 섞이는가 | `ch01/classical/population_sample.md` | `se__draft_lottery.png` | — | 대기 |
-| 105 | `ch07/statistical_estimation/population_sample.md` | 그림 | 사람을 똑같은 그림으로 세면 | `ch01/classical/population_sample.md` | `se__stamp_india1977.png` | Wikimedia Commons, GODL-India | 대기 |
-| 106 | `ch07/statistical_estimation/proportion_difference.md` | 그림 | 이백삼십팔만 명에게 물어보고 틀렸다 | `ch05/applications/diff_proportions.md` | `se__truman1948.png` | Wikimedia Commons, PD-US-no notice | 대기 |
-| 107 | `ch07/statistical_estimation/proportion_difference.md` | 그림 | 두 병동의 수가 갈라져 있었다 | `ch05/applications/diff_proportions.md` | `se__semmelweis1861_p3.png` | — | 대기 |
-| 108 | `ch07/statistical_estimation/sampling_estimation.md` | 그림 | 「확률」이라 부르지 않으려고 | `—` | `se__neyman.png` | Wikimedia Commons, 촬영 Konrad Jacobs, 오버볼파흐 수학연구소, CC BY-SA 2 | 대기 |
-| 109 | `ch07/statistical_estimation/standard_error.md` | 그림 | 맥주 회사가 이름을 쓰지 못하게 했다 | `ch05/applications/standard_error.md` | `se__student1908_p1.png` | — | 대기 |
-| 110 | `ch09/game_theory/constant_sum_game.md` | 그림 | 신분증 사진 한 장과 미니맥스 정리 | `—` | `gt__vonneumann.png` | Wikimedia Commons, PD-LosAlamos | 대기 |
-| 111 | `ch09/game_theory/dominant_strategy.md` | 그림 | 스물여섯 쪽짜리 학위논문 | `—` | `gt__nash.png` | Wikimedia Commons, 촬영 Peter Badge / Typos1, CC BY-SA 3.0 | 대기 |
-| 112 | `ch09/game_theory/game_theory.md` | 그림 | 두 곡선이 만나는 점, 내시보다 백열두 해 먼저 | `—` | `gt__cournot1838_fig2.png` | — | 대기 |
-| 113 | `ch09/game_theory/mixed_strategy.md` | 그림 | 「얼마나 더 자주인지는 계산이 알려 주지 않는다」 | `—` | `gt__montmort1713_p409.png` | — | 대기 |
-| 114 | `ch09/game_theory/payoff_utility.md` | 그림 | 곱하지 않은 목록 | `—` | `gt__bentham_ch4.png` | — | 대기 |
+| 1 | `ch00/equation_setup/arithmetic_geometric_mean.md` | 그림 | 파피루스에 그림으로 남은 같은 사실 | `—` | `agm__papyrus.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 2 | `ch00/equation_setup/cauchy_schwarz.md` | 그림 | 항등식 한 줄 뒤에 부등식이 따라 나온 쪽 | `—` | `cs__cauchy1821_p456.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 3 | `ch00/equation_setup/cauchy_schwarz.md` | AI | 닮은 정도를 $-1$ 과 $1$ 사이에 가두는 것 | `—` | `cs__ai_cosine.png` | — | 대기 |
+| 4 | `ch00/equation_setup/circle_equation.md` | 그림 | 계수가 같을 것, 그리고 각이 직각일 것 | `—` | `ce__fermat1679_p5.png` | Internet Archive, PD-old | 대기 |
+| 5 | `ch00/equation_setup/coordinate_setup.md` | 그림 | 돌에 새겨 벽에 걸어 둔 좌표평면 | `—` | `cd__orange_cadastre_wall.png`, `cd__orange_cadastre_detail.png` | Musée d'art et d'histoire, Orange · 사진 Mark Landon, CC BY 4.0 / Musée d'art et d'histoire, Orange, 조각 $135$ · 사진 Mark Landon, CC BY 4.0 | 대기 |
+| 6 | `ch00/equation_setup/coordinate_setup.md` | 그림 | 선분에 이름을 붙인 쪽 | `—` | `cd__descartes.png` | Wikimedia Commons, PD-old-70 | 대기 |
+| 7 | `ch00/equation_setup/coordinate_setup.md` | 그림 | 좌표는 「너는 어떻게 생겼느냐」를 묻지 않는다 | `—` | `cd__varignon.png` | 이 책에서 그렸다 | 대기 |
+| 8 | `ch00/equation_setup/distance_division.md` | 그림 | 가운데가 아닌 곳으로 나누어도 되는 중선정리 | `—` | `dd__stewart.png` | 이 책에서 그렸다 | 대기 |
+| 9 | `ch00/equation_setup/distance_division.md` | AI | 기계가 배우는 한 걸음은 내분점 하나다 | `—` | `dd__ai_ema.png` | 이 책에서 그렸다 | 대기 |
+| 10 | `ch00/equation_setup/inequality_properties.md` | 그림 | 부등호가 처음 인쇄된 쪽 | `—` | `ineq__harriot1631_p10.png` | Internet Archive, PD-old | 대기 |
+| 11 | `ch00/equation_setup/inequality_setup.md` | 그림 | 푸는 법이 없어 보인다고 적어 두고 답을 냈다 | `—` | `iq__stigler.png` | 이 책에서 그렸다 | 대기 |
+| 12 | `ch00/equation_setup/line_equation.md` | 그림 | 평평함을 $0$ 이 아니라 $\infty$ 로 적은 표지 | `—` | `line__gradient_post.png` | Wikimedia Commons · 사진 Glen Denny, geograph.org.uk, CC BY-SA 2.0 | 대기 |
+| 13 | `ch00/equation_setup/simultaneous.md` | AI | 가장 잘 맞는 직선은 연립방정식 하나로 끝난다 | `—` | `—` | — | 대기 |
+| 14 | `ch00/equation_setup/simultaneous.md` | 그림 | 산가지를 늘어놓고 지워 나간 사람들 | `—` | `sim__jiuzhang_fangcheng.png` | Wikimedia Commons, 옛 목판본, 저작권 없음 | 대기 |
+| 15 | `ch00/equation_setup/translation_reflection.md` | 그림 | 바뀌지 않는 것만 기하라고 부르기로 하다 | `—` | `tr__klein1872_p7.png` | Internet Archive, PD-old | 대기 |
+| 16 | `ch00/equation_setup/undetermined.md` | 그림 | 세 시간마다 하나씩만 적어 둔 표 | `—` | `uc__nautical_almanac1767.png` | Internet Archive · 저작권 없음 | 대기 |
+| 17 | `ch00/equation_setup/word_to_equation.md` | 그림 | 삼천오백 년 전의 문제집 | `—` | `wte__rhind.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 18 | `ch00/equation_setup/word_to_equation.md` | 그림 | 두 가지보다 더 같은 것은 없으므로 | `—` | `wte__recorde1557_equals.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 19 | `ch00/equation_setup/word_to_equation.md` | 그림 | 식을 세우지 않고 푸는 법 | `—` | `wte__jiuzhang_yingbuzu.png` | Wikimedia Commons, 옛 목판본, 저작권 없음 | 대기 |
+| 20 | `ch01/complex/complex.md` | 그림 | 답이 없어서가 아니라, 길이 그리로만 나 있어서 | `—` | `cx__bombelli1572_title.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 21 | `ch01/complex/complex.md` | 그림 | 다리 위에서 칼로 새긴 식 | `—` | `cx__hamilton_plaque.png` | — | 대기 |
+| 22 | `ch01/complex/complex_plane.md` | 그림 | 사분면마다 복소수를 하나씩 | `—` | `cxp__stamp_germany1977.png` | Wikimedia Commons, PD | 대기 |
+| 23 | `ch01/complex/complex_powers.md` | 그림 | 금빛 별에 남은 열일곱 등분 | `—` | `cx__gauss_star.png` | 직접 그림 | 대기 |
+| 24 | `ch01/exp_log/common_log.md` | 그림 | 가수만 새겨 놓고 지표는 사람에게 맡긴 자 | `—` | `el__slide_rule.png` | Wikimedia Commons, 촬영 Erkaha, CC BY-SA 4.0 | 대기 |
+| 25 | `ch01/exp_log/common_log.md` | 그림 | 로그표의 앞쪽이 먼저 닳았다 | `—` | `el__newcomb1881_p39.png` | JSTOR Early Journal Content, 공개 자료 | 대기 |
+| 26 | `ch01/exp_log/exp.md` | 그림 | 줄을 왼쪽으로 늘리자 $2^{0}$ 과 $2^{-1}$ 이 정해졌다 | `—` | `el__stifel1544_p237.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 27 | `ch01/exp_log/exp.md` | 그림 | 지수를 함수로 만든 사람 | `—` | `el__stamp_ussr1957.png` | Wikimedia Commons, PD-RU-exempt | 대기 |
+| 28 | `ch01/exp_log/exp.md` | 그림 | 거듭제곱이 가장 먼저 쓰인 곳은 빚 문서였다 | `—` | `el__enmetena_cone.png` | 촬영 Gary Todd, Wikimedia Commons, CC0 | 대기 |
+| 29 | `ch01/exp_log/exp_log.md` | 그림 | 로그표를 두 벌 만들지 않아도 되었던 까닭 | `—` | `el__hutton1811_p104.png` | Internet Archive · 저작권 없음 | 대기 |
+| 30 | `ch01/exp_log/exp_log.md` | AI | 같은 성적을 두 가지 단위로 적는다 | `—` | `—` | — | 대기 |
+| 31 | `ch01/exp_log/exponential_ratio.md` | 그림 | 이 식의 분모에 이름을 붙인 쪽 | `—` | `er__gibbs1902_p33.png` | Internet Archive 스캔, PD-old | 대기 |
+| 32 | `ch01/exp_log/exponential_ratio.md` | AI | 점수를 매길 수 없는 것을 둘씩 견주어 줄 세우기 | `—` | `—` | — | 대기 |
+| 33 | `ch01/exp_log/inverse_symmetry.md` | 그림 | 로그가 떨어지는 수를 밑으로 골랐다 | `—` | `el__pogson1856_p14.png` | Internet Archive · 저작권 없음 | 대기 |
+| 34 | `ch01/exp_log/log.md` | 그림 | 곱셈을 덧셈으로 바꾸려고 만든 책 | `—` | `el__napier1618.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 35 | `ch01/exp_log/log.md` | 그림 | 표에서 함수로 | `—` | `el__introductio1748.png` | Wikimedia Commons, PD-old | 대기 |
+| 36 | `ch01/exp_log/log.md` | 그림 | 쓰는 법을 빼고 표만 찍은 책 | `—` | `el__burgi1620_title.png` | Wikimedia Commons, PD-old | 대기 |
+| 37 | `ch01/exp_log/log.md` | AI | 곱을 합으로 바꾸는 일이 지금도 하는 일 | `—` | `el__ai_logprob.png` | — | 대기 |
+| 38 | `ch01/functions/composite.md` | 그림 | 흩트리는 손놀림인데, 되풀이하면 제자리로 돌아온다 | `—` | `cmp__rubik.png` | — | 대기 |
+| 39 | `ch01/functions/function.md` | 그림 | 어긋남을 결함이 아니라 정의로 삼은 사람 | `—` | `fn__cantor.png` | Wikimedia Commons, PD-old | 대기 |
+| 40 | `ch01/functions/inverse.md` | 그림 | $f^{-1}$ 을 쓰면서 그 자리에 달아 둔 각주 | `—` | `inv__herschel1813_p10.png` | Internet Archive · 저작권 없음 | 대기 |
+| 41 | `ch01/functions/inverse.md` | AI | 되돌아오게 만들어 두어야 하는 길 | `—` | `—` | — | 대기 |
+| 42 | `ch01/functions/irrational.md` | AI | 요즘 언어모델이 꼭 $\sqrt{d}$ 로 나누는 까닭 | `—` | `—` | — | 대기 |
+| 43 | `ch01/functions/irrational.md` | 그림 | 제곱과 제곱근을 한 쪽에 나란히 찍어 둔 책 | `—` | `irr__barlow1914_p30.png` | Internet Archive · 저작권 없음 | 대기 |
+| 44 | `ch01/functions/proportion.md` | 그림 | 비례상수를 재지 않고 정해 버렸다 | `—` | `prp__vitruvius_hodometer.png` | Internet Archive · 저작권 없음 | 대기 |
+| 45 | `ch01/functions/rational_function.md` | 그림 | 아무도 재지 않은 수를 적어 넣은 열 | `—` | `rf__boyle1662_p60.png` | Internet Archive · 저작권 없음 | 대기 |
+| 46 | `ch01/functions/set.md` | 그림 | 무엇이든 모으면 집합인가 | `—` | `fn__russell1907.png` | Wikimedia Commons, PD-Art | 대기 |
+| 47 | `ch01/functions/set.md` | 그림 | 식당 창문에 끼운 세 개의 원 | `—` | `fn__venn_window.png` | Wikimedia Commons, 촬영 Schutz, CC BY-SA 2.5 | 대기 |
+| 48 | `ch01/matrix/linear_transformation.md` | 그림 | 격자를 비틀었더니 다른 종이 되었다 | `—` | `lt__thompson1917_p748.png` | Internet Archive · 저작권 없음 | 대기 |
+| 49 | `ch01/matrix/linear_transformation.md` | AI | 층 하나가 곧 일차변환이다 | `—` | `—` | — | 대기 |
+| 50 | `ch01/matrix/matrix.md` | 그림 | 정리 1 이 활자로 놓인 자리 | `—` | `mx__cayley1858_p23.png` | Internet Archive 스캔, PD-old-100-expired | 대기 |
+| 51 | `ch01/matrix/matrix_operations.md` | 그림 | 위첨자는 거듭제곱이 아니라고 적어 두어야 했던 쪽 | `—` | `mo__cramer1750_p657.png` | Wikimedia Commons, PD-old | 대기 |
+| 52 | `ch01/polynomial/expand_factor.md` | 그림 | 넓이로 적은 완전제곱 | `—` | `ef__khwarizmi.png` | Wikimedia Commons, PD-Art | 대기 |
+| 53 | `ch01/polynomial/higher_equations.md` | 그림 | 비밀로 지키던 풀이법 | `—` | `he__arsmagna.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 54 | `ch01/polynomial/higher_equations.md` | 그림 | 공식이 없다는 것을 증명한 사람 | `—` | `he__stamp_norway1929.png` | Wikimedia Commons, PD | 대기 |
+| 55 | `ch01/polynomial/higher_equations.md` | 그림 | 시간이 없다 | `—` | `he__galois_letter.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 56 | `ch01/polynomial/polynomial.md` | 그림 | 산가지를 늘어놓은 자리가 곧 계수였다 | `—` | `pl__qin1247_kaifang.png` | Wikimedia Commons, PD-old · $1842$ 년 의가당 판 | 대기 |
+| 57 | `ch01/polynomial/quadratic.md` | 그림 | 여섯 개였던 공식 | `—` | `qd__stamp_ussr1983.png` | Wikimedia Commons, PD | 대기 |
+| 58 | `ch01/polynomial/quadratic_inequality.md` | 그림 | 운전면허 교본에 실린 이차부등식 | `—` | `qd__highwaycode.png`, `qd__stopping.png` | 영국 교통부 · Open Government Licence v3.0 | 대기 |
+| 59 | `ch01/polynomial/simultaneous_quadratic.md` | 그림 | 몇 개나 나올지는 풀기 전에 알 수 있다 | `—` | `sq__bezout.png` | 이 책에서 그렸다 | 대기 |
+| 60 | `ch01/polynomial/simultaneous_quadratic.md` | 그림 | 기호가 없어서 곡선으로 풀었다 | `—` | `he__khayyam1851_pxviij.png` | Internet Archive · 저작권 없음 | 대기 |
+| 61 | `ch01/polynomial/simultaneous_quadratic.md` | AI | 거리를 재지 않고 가까운 쪽을 고르는 법 | `—` | `he__centroid.png` | — | 대기 |
+| 62 | `ch01/trig_functions/sine_cosine_laws.md` | 그림 | 사인표의 조상은 현의 표였다 | `—` | `tr__ptolemy_chords.png` | Wikimedia Commons, PD-old | 대기 |
+| 63 | `ch01/trig_functions/sine_cosine_laws.md` | 그림 | 각을 하나도 재지 않고 넓이를 구한다 | `—` | `tr__aeolipile.png` | Wikimedia Commons, PD-old | 대기 |
+| 64 | `ch01/trig_functions/trig_addition.md` | 그림 | 로그가 나오기 전, 가장 빠른 곱셈 | `—` | `tr__tycho.png` | Wikimedia Commons, PD-Art | 대기 |
+| 65 | `ch01/trig_functions/trig_addition.md` | 그림 | $\pi$ 라는 글자가 지금 뜻으로 인쇄된 쪽 | `—` | `trig__jones1706_p263.png` | Internet Archive, PD-old | 대기 |
+| 66 | `ch01/trig_functions/trig_equations_inequalities.md` | 그림 | 시각마다 한 번씩 삼각방정식을 푼 자리 | `—` | `trig_equations_inequalities__sundial.png` | — | 대기 |
+| 67 | `ch01/trig_functions/trig_max_min.md` | 그림 | 손잡이가 셋뿐인 기계 | `—` | `tg__harmonograph1909_p8.png` | Internet Archive · 저작권 없음 | 대기 |
+| 68 | `ch01/trig_functions/trig_max_min.md` | AI | 「몇 시에 가장 붐비는가」를 기계가 배우는 법 | `—` | `—` | — | 대기 |
+| 69 | `ch01/trig_functions/trig_sums_sequences.md` | 그림 | 틈을 늘릴수록 뾰족해지는 봉우리 | `—` | `tg__grating.png` | — | 대기 |
+| 70 | `ch01/trig_functions/trig_values_double_angle.md` | 그림 | 세 변에 이름을 붙여 놓은 표 | `—` | `tg__rheticus1596.png` | Internet Archive · 저작권 없음 | 대기 |
+| 71 | `ch01/trig_functions/trig_values_double_angle.md` | AI | 낱말의 자리를 각도로 적는 법 | `—` | `—` | — | 대기 |
+| 72 | `ch02/sequence_limits/descent_recurrence.md` | 그림 | 방정식을 풀려다 내리막을 찾아낸 쪽 | `—` | `sl__cauchy1847_p536.png` | Internet Archive 스캔, PD-old | 대기 |
+| 73 | `ch02/sequence_limits/geometric_limit.md` | 그림 | 반을 가도 또 반이 남는다 | `—` | `sl__zeno.png` | Wikimedia Commons, [파일 쪽](https://commons.wikimedia.org/wiki/File:Zeno_of_Elea_Tibaldi_or_Carducci_Escorial.jpg), PD-Art / PD-old-100 | 대기 |
+| 74 | `ch02/sequence_limits/limit_general.md` | 그림 | lim 이라는 세 글자가 놓이던 쪽 | `—` | `sl__lhuilier_p24.png` | Gallica/BnF, 공개 자료 | 대기 |
+| 75 | `ch02/sequence_limits/monotone_convergence.md` | 그림 | 이 정리를 증명하지 못해 실수를 다시 세운 사람 | `—` | `sl__dedekind1872_p29.png` | Internet Archive 스캔, PD-old | 대기 |
+| 76 | `ch02/sequence_limits/recurrence.md` | 그림 | 변과 대각을 번갈아 키워 $\sqrt2$ 에 다가가기 | `—` | `sl__theon1878_p44.png` | Internet Archive 스캔, PD-old | 대기 |
+| 77 | `ch02/sequence_limits/squeeze.md` | 그림 | 구하지 못하는 값을 열여덟과 스물 사이에 가두다 | `—` | `sl__aristarchus_p377.png` | Internet Archive 스캔, PD-old | 대기 |
+| 78 | `ch02/sequences/arithmetic_sequence.md` | 그림 | 백 번 더하지 않은 아이 | `—` | `sq__gauss_statue.png` | Wikimedia Commons, 촬영 Abdeaitali, CC BY-SA 4.0 | 대기 |
+| 79 | `ch02/sequences/compound_interest.md` | 그림 | 이자를 잘게 쪼개다 만난 수 | `—` | `sq__bernoulli1690_p222.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 80 | `ch02/sequences/compound_interest.md` | 그림 | 오십 해마다 셈을 지우라고 새긴 종 | `—` | `ci__liberty_bell.png` | 촬영 William Zhang, Wikimedia Commons, CC BY 2.0 | 대기 |
+| 81 | `ch02/sequences/compound_interest.md` | 그림 | 한 살짜리의 연금이 열 살짜리보다 쌌다 | `—` | `sq__halley1693_p603.png` | JSTOR Early Journal Content, 공개 자료 | 대기 |
+| 82 | `ch02/sequences/consecutive_integer_sums.md` | 그림 | 수를 모양으로 보던 시절의 삼각수 | `—` | `ci__nicomachus_p241.png` | Internet Archive 스캔, PD-old | 대기 |
+| 83 | `ch02/sequences/counting_discrete.md` | 그림 | 가우스 기호를 $E$ 로 적던 쪽 | `—` | `cd__legendre1830_p387.png` | Internet Archive 스캔, PD-old | 대기 |
+| 84 | `ch02/sequences/divisors.md` | 그림 | 삼백 년을 버틴 열한 개짜리 목록 — 메르센, $1644$ | `—` | `sq__mersenne1644_praef19.png` | — | 대기 |
+| 85 | `ch02/sequences/geometric_sequence.md` | 그림 | 묘비에 새겨진 엉뚱한 나선 | `—` | `gs__bernoulli_tomb.png` | — | 대기 |
+| 86 | `ch02/sequences/geometric_sequence.md` | 그림 | 한 옥타브에 등비중항 열한 개를 끼워 넣기 | `—` | `sq__zhu1584_pipes.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 87 | `ch02/sequences/induction.md` | 그림 | 「그리고 이렇게 끝없이, 언제나 제13명제를 되풀이하여」 | `—` | `sq__maurolico1575_p7.png` | Internet Archive 스캔, PD Mark 1.0 | 대기 |
+| 88 | `ch02/sequences/periodic_sequence.md` | 그림 | 주기 $235$ 를 청동에 새겨 둔 사람들 | `—` | `sq__antikythera.png` | 사진 Marsyas, CC BY 2.5 · 도해 Tomisti, CC BY-SA 4.0, Freeth·Jones 의 복원을 따랐다. 둘을 나란히 놓았다 | 대기 |
+| 89 | `ch02/sequences/point_sequence.md` | 그림 | 배의 자리를 앞 자리에서 셈해 찍어 가던 그림 | `—` | `ps__bowditch1802_p93.png` | Internet Archive 스캔, PD-old | 대기 |
+| 90 | `ch02/sequences/procedure_count.md` | 그림 | 여백에 달마다 하나씩 적어 내려간 표 | `—` | `pc__liberabaci_f124r.png` | Wikimedia Commons, PD-Art | 대기 |
+| 91 | `ch02/sequences/recurrence.md` | 그림 | 우표에 인쇄된 점화식 | `—` | `seq__stamp_serbia2023.png` | Wikimedia Commons, PD | 대기 |
+| 92 | `ch02/sequences/recurrence.md` | 그림 | 핀을 만들듯 로그를 만들다 | `—` | `sq__babbage1846_p195.png` | Internet Archive 스캔 | 대기 |
+| 93 | `ch02/sequences/sequence_extremum.md` | 그림 | 한 사람은 하룻밤, 한 사람은 일 분 | `—` | `sq__kadane.png` | 이 책에서 그렸다 | 대기 |
+| 94 | `ch02/sequences/similar_figure_sequence.md` | 그림 | 닮음을 한 번에 하나씩 그려 주는 기계 | `—` | `sf__scheiner1631_p29.png` | Wikimedia Commons, PD-old | 대기 |
+| 95 | `ch02/series/double_sums.md` | 그림 | 시그마가 델타의 짝으로 태어난 쪽 | `—` | `ds__euler1755_p27.png` | Internet Archive 스캔, 바이에른 주립도서관, PD-old | 대기 |
+| 96 | `ch02/series/partial_fractions.md` | 그림 | 늘 갈라진다는 것을 그는 믿지 않았다 | `—` | `pf__leibniz1702_p218.png` | Internet Archive 스캔, PD-old | 대기 |
+| 97 | `ch02/series/partial_sum_general_term.md` | 그림 | 빼기를 거꾸로 돌려 표를 찍으려던 기계 | `—` | `ps__babbage1864_frontis.png` | 사진 Yaoshiiscool, Wikimedia Commons, CC BY-SA 4.0 — 시카고대학 도서관 소장본 | 대기 |
+| 98 | `ch02/series/series_telescoping.md` | 그림 | 합을 세로선으로 세우고 항을 그 사이의 차로 읽은 그림 | `—` | `tel__stirling1730_p19.png` | Internet Archive 스캔, PD-old | 대기 |
+| 99 | `ch02/series/shift_subtract.md` | 그림 | 「그러므로, 빼면」 한 줄로 닫은 이천이백 해 전의 합 | `—` | `ss__archimedes1897_p250.png` | Internet Archive 스캔, PD-old | 대기 |
+| 100 | `ch02/series/sum_formulas.md` | 그림 | 대학에 가 본 적 없는 계산장인 | `—` | `sm__faulhaber.png` | Wikimedia Commons, PD-Art | 대기 |
+| 101 | `ch02/series/sum_formulas.md` | 그림 | 같은 수가 지구 반대편에서 한 해 먼저 찍혀 나왔다 | `—` | `sm__seki1712_bernoulli.png` | Wikimedia Commons, PD-old | 대기 |
+| 102 | `ch02/series_limits/geometric_series.md` | 그림 | 합은 적혀 있고 조건은 빠져 있던 쪽 | `—` | `srl__euler1748_p47.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 103 | `ch02/series_limits/geometric_series.md` | 그림 | 끝이 없는 빚에 값이 매겨지는 까닭 | `—` | `srl__southsea1784.png` | 촬영 Osama Shukir Muhammed Amin, Wikimedia Commons, CC BY-SA 4.0 | 대기 |
+| 104 | `ch02/series_limits/series_convergence.md` | 그림 | 야자잎에 적힌 원주율 | `—` | `srl__yuktibhasa_whish.png` | Internet Archive / Wikimedia Commons, 저작권 없음 | 대기 |
+| 105 | `ch02/series_limits/series_convergence.md` | 그림 | 제목이 「분수의 덧셈」인 책 | `—` | `srl__mengoli1650.png` | Wikimedia Commons, PD-old-100-1923 | 대기 |
+| 106 | `ch02/series_limits/series_integral_squeeze.md` | 그림 | 「신비로 가득하다」는 비난에 칠백육십삼 쪽으로 답한 책 | `—` | `srl__maclaurin_integral_test.png` | 이 책에서 그렸다 | 대기 |
+| 107 | `ch02/series_limits/similar_figures_series.md` | 그림 | 넓이를 구하려던 그림이 아니었다 | `—` | `srl__sierpinski1915_p303.png` | Internet Archive 스캔, PD-old | 대기 |
+| 108 | `ch03/differentiation/angle_in_figures.md` | 그림 | 길이는 한 번만 재고, 나머지는 모두 각으로 | `—` | `angle__snellius.png` | 이 책에서 계산해 그렸다 | 대기 |
+| 109 | `ch03/differentiation/angle_in_figures.md` | AI | 두 구멍이 있는 공식 | `—` | `—` | — | 대기 |
+| 110 | `ch03/differentiation/composite.md` | AI | 역전파는 연쇄법칙을 거꾸로 읽은 것이다 | `—` | `chain__vanishing.png` | — | 대기 |
+| 111 | `ch03/differentiation/composite.md` | 그림 | 같은 수로 싸웠는데 한쪽만 남는다 | `—` | `chain__lanchester1916_p43.png` | Internet Archive · Google Books 스캔, 저작권 없음 | 대기 |
+| 112 | `ch03/differentiation/continuity_and_composition.md` | 그림 | 「계산의 수고 없이」 접선을 긋는 세 줄짜리 규칙 | `—` | `dif__sluse1673_p5143.png` | Internet Archive, PD-old | 대기 |
+| 113 | `ch03/differentiation/deriv_def.md` | 그림 | 밑과 지수가 함께 움직이는 것을 처음 미분한 쪽 | `—` | `dif__bernoulli1697_p125_129.png` | Internet Archive, PD-old | 대기 |
+| 114 | `ch03/differentiation/derivative.md` | 그림 | $dx$ 가 처음 인쇄된 쪽 | `—` | `der__leibniz1684.png` | Wikimedia Commons, PD-old-1923 | 대기 |
+| 115 | `ch03/differentiation/inverse.md` | 그림 | 이십 년 넘게 들키지 않은 두 자리 | `—` | `dv__shanks1873_p45.png` | Internet Archive · 저작권 없음 | 대기 |
+| 116 | `ch03/differentiation/param_rate.md` | AI | 푸는 과정을 따라가지 않고 미분하기 | `—` | `—` | — | 대기 |
+| 117 | `ch03/differentiation/param_rate.md` | 그림 | 크랭크는 고르게 도는데 피스톤은 그렇지 않다 | `—` | `pr__perry1897_p12_191_192.png` | Internet Archive · 저작권 없음 | 대기 |
+| 118 | `ch03/differentiation/trig_derivative.md` | 그림 | 도함수라는 말 없이 도함수를 적어 둔 쪽 | `—` | `dv__bhaskara_sine.png` | 이 책에서 그렸다 | 대기 |
+| 119 | `ch03/graph_extremum/cubic.md` | 그림 | 표지의 이름과 내용을 쓴 사람이 달랐던 책 | `—` | `ge__lhopital1716_p41.png` | Internet Archive 스캔, PD | 대기 |
+| 120 | `ch03/graph_extremum/cubic.md` | AI | 세 점만 재고도 정확한 넓이 | `—` | `—` | — | 대기 |
+| 121 | `ch03/graph_extremum/cubic_determine.md` | 그림 | 연립방정식을 세우지 않고 답을 바로 적는 법 | `—` | `ge__waring1779_p59.png`, `cubic__waring.png` | Internet Archive 스캔, 저작권 없음 / 이 책에서 계산해 그렸다 | 대기 |
+| 122 | `ch03/graph_extremum/cubic_determine.md` | AI | 화면의 곡선이 하필 삼차인 까닭 | `—` | `—` | — | 대기 |
+| 123 | `ch03/graph_extremum/cubic_roots_tangent.md` | AI | 풀기 전에 몇 개인지부터 센다 | `—` | `—` | — | 대기 |
+| 124 | `ch03/graph_extremum/cubic_roots_tangent.md` | 그림 | 부호만 적어 내려간 네 줄 | `—` | `cubic__sturm.png` | 이 책에서 그렸다 | 대기 |
+| 125 | `ch03/graph_extremum/inflection.md` | 그림 | 기차가 휘청이지 않게 하려면 | `—` | `ge__talbot1901_p1.png` | Internet Archive 스캔, 저작권 없음 | 대기 |
+| 126 | `ch03/graph_extremum/intersection.md` | 그림 | 원 하나가 근의 개수를 세어 주던 때 | `—` | `ge__runge1912_p11_12.png` | Internet Archive · 저작권 없음 | 대기 |
+| 127 | `ch03/graph_extremum/logistic_curve.md` | 그림 | 이 곡선에 이름이 붙던 도판 | `—` | `logistic__verhulst1845.png` | Wikimedia Commons, PD-old-100-1923 | 대기 |
+| 128 | `ch03/graph_extremum/optimization.md` | 그림 | 벌은 거의 옳다 | `—` | `optimization__honeycomb.png`, `optimization__cell_angle.png` | Wikimedia Commons · 사진 Richard Bartz, CC BY-SA 2.5 | 대기 |
+| 129 | `ch03/graph_extremum/piecewise_abs.md` | AI | 꺾인 점 하나로 버티는 함수 | `—` | `—` | — | 대기 |
+| 130 | `ch03/graph_extremum/piecewise_abs.md` | 그림 | 꺾인 점을 세 가지로 갈라 적어 둔 기계책의 각주 | `—` | `piecewise__willis1870_p26.png` | Internet Archive · 캘리포니아 대학 도서관 스캔, 저작권 없음 | 대기 |
+| 131 | `ch03/graph_extremum/quartic.md` | 그림 | 그림을 붙일 수 없었던 책이 스물여덟을 세는 법 | `—` | `quartic__plucker1839_p230_p253.png`, `quartic__bitangent28.png` | Internet Archive · $1839$ 년 간행, 저작권 없음 | 대기 |
+| 132 | `ch03/graph_extremum/quartic.md` | AI | 골짜기를 직선으로 덮어 버리기 | `—` | `—` | — | 대기 |
+| 133 | `ch03/graph_extremum/rational_standard_form.md` | 그림 | 쌍곡선을 S 자로 그린 쪽 | `—` | `ge__michaelis1913_p344.png` | Internet Archive · 저작권 없음 | 대기 |
+| 134 | `ch03/graph_extremum/transcendental.md` | 그림 | 「초월」이라는 말이 결판난 쪽 | `—` | `trans__lindemann1882_p223.png` | — | 대기 |
+| 135 | `ch03/graph_extremum/transcendental.md` | AI | 떼어 낸 양수 인수가 계산도 살린다 | `—` | `—` | — | 대기 |
+| 136 | `ch03/graph_extremum/transcendental_extremum.md` | 그림 | 지수가 $5$ 일 수밖에 없었던 까닭 | `—` | `ge__wien1896_p667.png` | Internet Archive · 저작권 없음 | 대기 |
+| 137 | `ch03/graph_sketch/cubic.md` | 그림 | 봉우리와 골짜기가 사라지던 온도 | `—` | `cubic__poynting1920_p194.png` | Internet Archive · 저작권 없음 | 대기 |
+| 138 | `ch03/graph_sketch/line.md` | 그림 | 스물넉 점에 그은 두 직선 | `—` | `line__hubble1929_p172.png` | Internet Archive · 저작권 없음 | 대기 |
+| 139 | `ch03/graph_sketch/log_exp.md` | 그림 | $0$ 에 눕는 곡선을 실제로 재어 그린 쪽 | `—` | `gs__rutherford1905_p366.png` | Internet Archive 스캔, $1905$ 년 발행 | 대기 |
+| 140 | `ch03/graph_sketch/order.md` | 그림 | 좌표가 생기기 삼백 년 전에 그린 그래프 | `—` | `gs__oresme1482.png` | Wikimedia Commons, PD-Art | 대기 |
+| 141 | `ch03/graph_sketch/parabola.md` | 그림 | 철도가 퇴짜 놓은 곡선 | `—` | `parabola__allen1903_p68.png` | Internet Archive · 저작권 없음 | 대기 |
+| 142 | `ch03/graph_sketch/polynomial.md` | AI | 자료를 꼭 맞추면 자료 밖이 달아난다 | `—` | `—` | — | 대기 |
+| 143 | `ch03/graph_sketch/polynomial.md` | 그림 | 굽히는 자가 곡선을 정하던 때 | `—` | `polynomial__ribbands1918_p39.png` | Internet Archive · 저작권 없음 | 대기 |
+| 144 | `ch03/graph_sketch/quartic.md` | 그림 | 들보가 내려앉는 모양은 사차곡선이다 | `—` | `quartic__merriman1909_p138_139.png` | Internet Archive · 저작권 없음 | 대기 |
+| 145 | `ch03/graph_sketch/quartic.md` | AI | 중심을 옮기지 않으면 계산이 무너진다 | `—` | `—` | — | 대기 |
+| 146 | `ch03/graph_sketch/rational.md` | 그림 | 오역으로 마녀가 된 곡선 | `—` | `rational__agnesi_versiera_witch.png` | Internet Archive 스캔, PD-old | 대기 |
+| 147 | `ch03/graph_sketch/trig.md` | 그림 | 사인곡선 넷을 줄 하나로 더하던 놋쇠 기계 | `—` | `trig__kelvin1913_tide.png` | 워싱턴대 Freshwater and Marine Image Bank · 공유마당 | 대기 |
+| 148 | `ch03/inequality/absolute_inequality_extremum.md` | AI | 기울기가 $0$ 이라고 바닥은 아니다 | `—` | `—` | — | 대기 |
+| 149 | `ch03/inequality/absolute_inequality_extremum.md` | 그림 | 같은 쪽으로 늘어서 있기만 하면 | `—` | `ineq__chebyshev.png` | 이 책에서 계산해 그렸다 | 대기 |
+| 150 | `ch03/inequality/am_gm_cauchy.md` | 그림 | 이름이 셋인 부등식, 풀에 덮인 가운데 사람 | `—` | `ineq__bunyakovsky_grave.png` | Blindpew100 촬영, Wikimedia Commons, CC BY-SA 4.0 | 대기 |
+| 151 | `ch03/inequality/am_gm_cauchy.md` | AI | 판별식이 내놓는 것은 고윳값이었다 | `—` | `—` | — | 대기 |
+| 152 | `ch03/inequality/convex_tangent.md` | 그림 | 전화국 기술부장이 퇴근하고 쓴 부등식 | `—` | `ineq__jensen.png` | Theodor Vilhelm Rieger 촬영, Wikimedia Commons, PD-Denmark50 | 대기 |
+| 153 | `ch03/inequality/convex_tangent.md` | AI | 한 점의 기울기만 보고 전체의 최솟값을 믿는 근거 | `—` | `convex_tangent__gd.png` | — | 대기 |
+| 154 | `ch03/inequality/deriv_ineq.md` | 그림 | 「예는 들지 않겠다」고 적고 넘어간 자리 | `—` | `ineq__lipschitz.png` | 이 책에서 계산해 그렸다 | 대기 |
+| 155 | `ch03/inequality/deriv_ineq.md` | AI | 보폭을 얼마로 할 것인가 — 기계가 매일 묻는 물음 | `—` | `—` | — | 대기 |
+| 156 | `ch03/inequality/impurity_function.md` | 그림 | 묘비에 새긴 로그 하나 | `—` | `impurity__boltzmann_tomb.png` | — | 대기 |
+| 157 | `ch03/inequality/integral_ineq.md` | 그림 | 첫 문장이 「로저스 씨가 보였듯이」로 시작하는 논문 | `—` | `ineq__hoelder1889_p38_39.png` | Wikimedia Commons, PD-old | 대기 |
+| 158 | `ch03/inequality/integral_ineq.md` | AI | 「평균을 대표하는 하나」는 어디까지 있는가 | `—` | `—` | — | 대기 |
+| 159 | `ch03/inequality/mvt_rolle.md` | 그림 | 미적분을 공격한 사람의 이름 | `—` | `iq__rolle.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 160 | `ch03/limits_continuity/continuity_diff.md` | 그림 | 역이 거짓임을 끝까지 밀어붙인 쪽 | `—` | `lc__weierstrass1872.png` | Internet Archive · 토론토 대학 스캔 『Mathematische Werke von Karl Weierstrass』 제$2$ 권, $1895$, 저작권 만료 | 대기 |
+| 161 | `ch03/limits_continuity/continuity_poly.md` | 그림 | 사잇값은 연속의 증표가 아니다 | `—` | `lc__darboux1875_p62_110.png` | Internet Archive · 저작권 없음 | 대기 |
+| 162 | `ch03/limits_continuity/exp_log.md` | 그림 | $e$ 라는 글자가 책에 처음 찍힌 쪽 — 수학책이 아니었다 | `—` | `el__euler1736_p68.png` | Internet Archive 스캔, PD-old | 대기 |
+| 163 | `ch03/limits_continuity/exp_log.md` | AI | 로그합지수를 미분하면 확률이 나온다 | `—` | `—` | — | 대기 |
+| 164 | `ch03/limits_continuity/function_limit_continuity.md` | 그림 | 사전의 한 칸에 이미 들어 있던 것 | `—` | `lc__encyclopedie1765_limite.png` | Wikimedia Commons, PD-US-expired | 대기 |
+| 165 | `ch03/limits_continuity/function_limit_continuity.md` | 그림 | 그림을 믿지 말자고 제목에 적은 책 | `—` | `lc__bolzano1817_s15.png` | Internet Archive · Google Books 스캔, 저작권 없음 | 대기 |
+| 166 | `ch03/limits_continuity/limit_defined.md` | 그림 | 그래프의 극한과 극한의 그래프 | `—` | `lc__gibbs1899_p606.png` | Internet Archive · 저작권 없음 | 대기 |
+| 167 | `ch03/limits_continuity/poly_rational.md` | 그림 | 자기 것이라 하지 않은 이름 | `—` | `lc__lhopital1716_p145.png` | Internet Archive 스캔, PD-old | 대기 |
+| 168 | `ch03/limits_continuity/trig_area_ratio.md` | 그림 | 종이쪽에 적혀 있던 $57.2957795130$ | `—` | `lc__cotes1722_p95.png` | Internet Archive, PD-old | 대기 |
+| 169 | `ch03/limits_continuity/trig_length_angle.md` | 그림 | 차수에 글자를 붙인 사람들 | `—` | `trig_length_angle__order.png` | 이 책에서 그렸다 | 대기 |
+| 170 | `ch03/limits_continuity/trig_length_angle.md` | 그림 | 유리에 새겨 둔 작은 각 | `—` | `lc__stadia1920_p233.png` | Internet Archive · 저작권 없음 | 대기 |
+| 171 | `ch03/limits_continuity/trig_length_angle.md` | AI | 걸음을 작게 하라는 말이 어디서 나오는가 | `—` | `—` | — | 대기 |
+| 172 | `ch03/tangent_normal/derivative_applications.md` | 그림 | 도함수가 없던 시절의 최댓값 | `—` | `tn__fermat1679.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 173 | `ch03/tangent_normal/functional_equation_tangent.md` | 그림 | 네 꼴을 한자리에 모아 번호를 붙인 쪽 | `—` | `fe__cauchy1821_p103.png` | Internet Archive 스캔, PD-old | 대기 |
+| 174 | `ch03/tangent_normal/functional_equation_tangent.md` | AI | 꺾인 자리가 쓸모가 될 때 | `—` | `—` | — | 대기 |
+| 175 | `ch03/tangent_normal/normal_locus.md` | 그림 | 「아무 등차수열이나 곱하라」 — 도함수를 모르고 쓴 도함수 | `—` | `tn__hudde1659_p507.png` | Internet Archive, PD-old | 대기 |
+| 176 | `ch03/tangent_normal/parabola_tangent_perpendicular.md` | 그림 | 직선만 그렸는데 곡선이 보인다 | `—` | `tn__clairaut.png` | 이 책에서 그렸다 | 대기 |
+| 177 | `ch03/tangent_normal/poly_tangent.md` | 그림 | 절편을 다시 집어넣은 사람 | `—` | `tn__raphson.png` | 이 책에서 그렸다 | 대기 |
+| 178 | `ch03/tangent_normal/tangent_area.md` | AI | 걸음을 열 배 줄이면 오차는 백 배 준다 | `—` | `—` | — | 대기 |
+| 179 | `ch03/tangent_normal/tangent_area.md` | 그림 | 점이 먼저 이름을 얻고, 직선이 뒤따라 얻었다 | `—` | `ta__chasles1837_p371.png` | — | 대기 |
+| 180 | `ch03/tangent_normal/tangent_count.md` | AI | 윤곽선은 접점을 모은 것이다 | `—` | `—` | — | 대기 |
+| 181 | `ch03/tangent_normal/tangent_count.md` | 그림 | 공통접선의 길이가 공장 편람에 실린 까닭 | `—` | `tn__rankine1887_p183.png` | Internet Archive · 캘리포니아 대학 도서관 스캔, 저작권 없음 | 대기 |
+| 182 | `ch03/tangent_normal/trans_tangent.md` | 그림 | 탁자 위를 끌려간 회중시계 | `—` | `tt__leibniz1693_tab5.png` | — | 대기 |
+| 183 | `ch03/tangent_normal/trans_tangent.md` | AI | 접선은 언제나 「곧 끝난다」고 말한다 | `—` | `—` | — | 대기 |
+| 184 | `ch04/arc_length/arc_length_limit.md` | 그림 | 굽은 선을 곧게 펼 수 있는가 | `—` | `al__wren.png` | Wikimedia Commons, PD-Art | 대기 |
+| 185 | `ch04/arc_length/arc_length_limit.md` | 그림 | 호가 현보다 얼마나 더 긴지를 한 항으로 적었다 | `—` | `al__shenkuo_arc.png` | 이 책에서 그렸다 | 대기 |
+| 186 | `ch04/arc_length/parametric_arc_length.md` | 그림 | 끝없이 감으면서도 길이는 유한한 길 | `—` | `al__loxodrome.png` | 이 책에서 그렸다 | 대기 |
+| 187 | `ch04/arc_length/piecewise_curve_analysis.md` | 그림 | 「나는 처음이라고 주장하지 않는다」 — 열여섯 해 뒤의 편지 세 통 | `—` | `al__neile1673_p6146_6150.png` | Internet Archive, PD-old | 대기 |
+| 188 | `ch04/area/area.md` | 그림 | 알고도 쉰아홉 해를 묻어 둔 넓이 | `—` | `ar__roberval_cycloid.png` | 이 책에서 그렸다 | 대기 |
+| 189 | `ch04/area/area_bisector.md` | 그림 | 밭을 가르던 사람들의 방법 | `—` | `ar__gillespie1875_p360.png` | Internet Archive 스캔, PD | 대기 |
+| 190 | `ch04/area/area_extremum_ratio.md` | 그림 | 황소 가죽 하나로 두를 수 있는 만큼 | `—` | `ar__vergil_aeneid_i367.png` | Internet Archive 스캔, PD | 대기 |
+| 191 | `ch04/area/area_extremum_ratio.md` | AI | 더해서 재는 평균과 곱해서 재는 평균 | `—` | `—` | — | 대기 |
+| 192 | `ch04/area/area_formulas.md` | 그림 | 긁어 지운 자리에 남은 넓이 | `—` | `ar__palimpsest.png` | Wikimedia Commons, CC BY 3.0 | 대기 |
+| 193 | `ch04/area/area_ratio.md` | 그림 | 적분을 가르치지 않는 책에 실린 $\dfrac23$ | `—` | `ar__mensuration1841_p68.png` | Internet Archive 스캔, PD | 대기 |
+| 194 | `ch04/area/area_ratio.md` | AI | 비로 말하면 단위가 지워진다 | `—` | `—` | — | 대기 |
+| 195 | `ch04/area/calculus_condition.md` | 그림 | 포탄의 길이 포물선이 아니라는 것을 처음 재어 본 사람 | `—` | `ca__robins1742_p132_133.png` | Internet Archive, PD-old | 대기 |
+| 196 | `ch04/area/tangent_and_area.md` | AI | 「왜 그렇게 답했는가」를 접선으로 대신 말하기 | `—` | `—` | — | 대기 |
+| 197 | `ch04/area/tangent_and_area.md` | 그림 | 접선에서 몇 치 내려오는가 | `—` | `ar__allen1903_p68.png` | Internet Archive 스캔, PD | 대기 |
+| 198 | `ch04/area/two_curve_area.md` | 그림 | 활이 휠수록 집중이 크다 | `—` | `ar__lorenz1905_p219.png` | Internet Archive · JSTOR Early Journal Content | 대기 |
+| 199 | `ch04/ftc/antiderivative.md` | 그림 | 편지에 붙어 다닌 적분 | `—` | `anti__stamp_ussr1976.png` | Wikimedia Commons, PD-RU-exempt | 대기 |
+| 200 | `ch04/ftc/area_motion.md` | 그림 | 썰지 않고 넓이를 읽어 내던 바퀴 | `—` | `ftc__houghtaling1906_p198.png` | Internet Archive · 저작권 없음 | 대기 |
+| 201 | `ch04/ftc/ftc.md` | 그림 | 접선으로 적힌 기본정리 | `—` | `ftc__barrow_lect10.png` | Wikimedia Commons, PD-old-100-1996 | 대기 |
+| 202 | `ch04/ftc/ftc_diff.md` | 그림 | 넓이를 수로 주지 않고 곡선으로 그려 주던 기계 | `—` | `ftc__abakanowicz1886_p2.png` | Internet Archive · 저작권 없음 | 대기 |
+| 203 | `ch04/ftc/ftc_diff.md` | AI | 적분값만 받아 들고 함수를 되살린다 — 몸을 자르지 않고 보는 법 | `—` | `ftc_diff__ct_recon.png` | — | 대기 |
+| 204 | `ch04/ftc/functional_equation_integral.md` | 그림 | 푸는 법이 먼저 있었고, 부르는 말이 예순 해 뒤에 왔다 | `—` | `ftc__bocher1909_p1.png` | — | 대기 |
+| 205 | `ch04/ftc/functional_equation_integral.md` | AI | 되돌아오는 고리를 푸는 두 가지 길 | `—` | `—` | — | 대기 |
+| 206 | `ch04/ftc/functional_equation_integral.md` | 그림 | 「적분을 반 번 하면 어떻게 됩니까」 | `—` | `ftc__fractional.png` | 두 그림 모두 이 책에서 계산해 그렸다 | 대기 |
+| 207 | `ch04/ftc/integral_defined_function.md` | 그림 | 쌓아 올린 곡선의 기울기를 읽던 사람들 | `—` | `ftc__meyer1917_p466.png` | Internet Archive · 저작권 없음 | 대기 |
+| 208 | `ch04/ftc/moving_limits.md` | 그림 | 파인만이 평생 써먹은 한 가지 연장을 배운 쪽 | `—` | `ftc__woods1926_p141.png` | Internet Archive, PD-old | 대기 |
+| 209 | `ch04/ftc/riemann_integral.md` | 그림 | 합 기호와 적분 기호를 나란히 | `—` | `ftc__stamp_ussr1966.png` | Wikimedia Commons, PD-RU-exempt | 대기 |
+| 210 | `ch04/ftc/signed_area.md` | 그림 | 넓이에 이름을 붙여 둔 그림 | `—` | `ftc__playfair1786.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 211 | `ch04/ftc/signed_area.md` | AI | 두 분포가 얼마나 다른가를 넓이로 잰다 | `—` | `ftc__cdf_gap.png` | — | 대기 |
+| 212 | `ch04/integral_equation/convolution_equation.md` | 그림 | 미끄러지는 시간을 주고 비탈을 되찾는 문제 | `—` | `ce__abel1881_p27.png` | Internet Archive 스캔, PD-old | 대기 |
+| 213 | `ch04/integral_equation/convolution_equation.md` | AI | 뒤집기를 생략해도 되는 까닭 | `—` | `—` | — | 대기 |
+| 214 | `ch04/integral_equation/integral_equation.md` | 그림 | 이 쪽이 가른 두 꼴에는 각각 이름이 있다 | `—` | `ie__volterra_fredholm.png` | Wikimedia Commons, PD-Italy / Wikimedia Commons, CC0 | 대기 |
+| 215 | `ch04/integral_equation/integral_zero.md` | 그림 | 아무 함수나 곱해도 $0$ 이라면 | `—` | `ie__bolza1904_p21.png` | Internet Archive 스캔, PD-old | 대기 |
+| 216 | `ch04/integral_equation/product_grouping.md` | 그림 | 곱의 미분법을 만든 사람이 처음에 틀리게 적은 쪽 | `—` | `pg__leibniz1675_p100.png` | Internet Archive 스캔, PD-old | 대기 |
+| 217 | `ch04/integral_equation/product_grouping.md` | 그림 | 두 단계까지는 묶음 인수로, 셋째부터는 다른 길로 | `—` | `ie__bateman1910_p423.png` | 스미스소니언 도서관 스캔, Internet Archive. 퍼블릭 도메인 | 대기 |
+| 218 | `ch04/integral_equation/product_grouping.md` | AI | 지난 것을 잊어 가며 평균 내기 | `—` | `—` | — | 대기 |
+| 219 | `ch04/integration_tricks/abs_piecewise_integral.md` | 그림 | 쉰세 해 뒤에야 활자가 된 두 막대 | `—` | `ap__weierstrass1894_p67.png` | Internet Archive 스캔, PD-old | 대기 |
+| 220 | `ch04/integration_tricks/abs_piecewise_integral.md` | AI | 상쇄되는 만큼 자료가 더 든다 | `—` | `—` | — | 대기 |
+| 221 | `ch04/integration_tricks/definite_integral_inequality.md` | 그림 | 몇 점까지 바꿔도 되는가 — 「측도 $0$」이라는 자 | `—` | `it__lebesgue1904_p29.png` | Internet Archive, PD-old | 대기 |
+| 222 | `ch04/integration_tricks/double_angle_integrals.md` | 그림 | 원을 재려다 나온 끝없는 곱 — 월리스, $1656$ | `—` | `it__wallis1656_p180.png` | — | 대기 |
+| 223 | `ch04/integration_tricks/even_odd_integral.md` | 그림 | 짝과 홀이라는 이름이 붙던 쪽 | `—` | `eo__euler1727_p98.png` | Internet Archive 스캔, PD-old | 대기 |
+| 224 | `ch04/integration_tricks/even_odd_integral.md` | AI | 대칭을 미리 알려 주면 배울 것이 줄어든다 | `—` | `—` | — | 대기 |
+| 225 | `ch04/integration_tricks/integration_applications.md` | 그림 | 뒤로 갈 때 바늘도 뒤로 돌게 만든 사람 | `—` | `it__outhier_odometre1742.png` | BnF Gallica · 저작권 없음 | 대기 |
+| 226 | `ch04/integration_tricks/integration_applications.md` | 그림 | 적분이 막히자 고도를 잘라 정리 2 로 간 사람 | `—` | `it__goddard1919_p9_p10.png` | — | 대기 |
+| 227 | `ch04/integration_tricks/integration_applications.md` | AI | 가속도만으로 길을 찾을 수 있는가 — 적분이 쌓는 것 | `—` | `it__ins_drift.png` | — | 대기 |
+| 228 | `ch04/integration_tricks/integration_by_parts.md` | 그림 | 네모가 적분 기호이던 시절의 부분적분 | `—` | `it__taylor1715_p38.png` | Internet Archive 스캔, PD-old | 대기 |
+| 229 | `ch04/integration_tricks/integration_by_substitution.md` | 그림 | 점을 지우고 $d$ 를 들여온 번역 | `—` | `it__lacroix1816.png` | Internet Archive 스캔, PD-old | 대기 |
+| 230 | `ch04/integration_tricks/integration_by_substitution.md` | AI | 난수를 원하는 모양으로 바꾸는 일은 치환적분이다 | `—` | `—` | — | 대기 |
+| 231 | `ch04/integration_tricks/inverse_derivative.md` | 그림 | 로그를 먼저 찾고, 지수를 나중에 만든 사람들 | `—` | `it__sarasa.png` | 이 책에서 계산해 그렸다 | 대기 |
+| 232 | `ch04/integration_tricks/inverse_derivative.md` | AI | 되돌릴 때 커지는 것 — 왜 확률이 아니라 점수를 들고 다니는가 | `—` | `—` | — | 대기 |
+| 233 | `ch04/integration_tricks/inverse_function_integral.md` | 그림 | 그림 없이 적힌 그림 | `—` | `it__young1912_p226.png` | Internet Archive · 저작권 없음 | 대기 |
+| 234 | `ch04/integration_tricks/log_integration.md` | 그림 | 나눗셈을 끝까지 해 본 사람 | `—` | `it__mercator1668_p30.png` | Internet Archive 스캔, PD-old | 대기 |
+| 235 | `ch04/integration_tricks/partial_fraction_and_parts.md` | 그림 | 없다는 것까지 답해 주는 절차 | `—` | `it__risch.png` | 이 책에서 그렸다 | 대기 |
+| 236 | `ch04/integration_tricks/periodic_integrals.md` | 그림 | 한 주기만 재어 계수를 하나씩 뽑아낸 쪽 | `—` | `it__fourier1822_p240.png` | Internet Archive · 저작권 없음 | 대기 |
+| 237 | `ch04/integration_tricks/repeated_parts.md` | 그림 | 멈추지 않고 끝까지 되풀이하면 | `—` | `it__todhunter1857_p58.png` | Internet Archive 스캔, PD | 대기 |
+| 238 | `ch04/integration_tricks/rolle_inverse_existence.md` | 그림 | 곡선이 축을 가로지르는 그림을 증명에서 몰아낸 쪽 | `—` | `it__bolzano1817_p4.png` | Internet Archive 스캔, PD | 대기 |
+| 239 | `ch04/integration_tricks/sum_integral_bound.md` | 그림 | 가두고 남은 틈에 이름이 붙었다 | `—` | `sib__euler1740_p157.png` | Internet Archive 스캔, PD-old | 대기 |
+| 240 | `ch04/integration_tricks/sum_integral_bound.md` | AI | 낱말을 몇 개나 외워 두어야 하는가 | `—` | `—` | — | 대기 |
+| 241 | `ch04/integration_tricks/symmetric_substitution.md` | 그림 | 솜씨가 모자라서가 아니라 아예 없는 것이다 | `—` | `it__liouville.png` | Wikimedia Commons, PD-old | 대기 |
+| 242 | `ch04/integration_tricks/trig_integrals.md` | 그림 | 미적분보다 일흔 해 먼저 만들어진 적분표 | `—` | `it__wright1610_p17.png` | Internet Archive 스캔 | 대기 |
+| 243 | `ch04/motion/velocity_distance.md` | 그림 | 속도 그래프 아래를 잰 쪽 | `—` | `vd__galilei1638.png` | Wikimedia Commons, PD-scan | 대기 |
+| 244 | `ch04/volume/cross_section_volume.md` | 그림 | 두께 없는 조각을 쌓은 사람 | `—` | `vl__cavalieri.png` | Wikimedia Commons, PD-old | 대기 |
+| 245 | `ch04/volume/cross_section_volume.md` | 그림 | 천백 년 앞서 같은 원리를 쓴 사람 | `—` | `vol__jiuzhang_zugeng.png` | Wikimedia Commons, PD | 대기 |
+| 246 | `ch04/volume/pappus_guldinus.md` | 그림 | 빈손으로 물러서지 않으려고 적어 둔 세 문장 | `—` | `pgu__pappus1588.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 247 | `ch04/volume/solid_of_revolution.md` | 그림 | 술통 값을 따지다 쓴 회전체 책 | `—` | `sor__kepler1615.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 248 | `ch04/volume/surface_of_revolution.md` | 그림 | 끝없이 긴데 부피는 유한하다 — 토리첼리, $1644$ | `—` | `vol__torricelli1644_p115.png` | — | 대기 |
+| 249 | `ch04/volume/volume.md` | 그림 | 배 한 척을 두 방향으로 썰어 본 쪽 | `—` | `vol__attwood1899_p19_20.png` | Internet Archive · 저작권 없음 | 대기 |
+| 250 | `ch04/volume/volume_condition.md` | 그림 | 반쪽과 삼분의 일이 합동일 수 있다 | `—` | `vol__hausdorff1914_p469.png` | Internet Archive, PD-old | 대기 |
+| 251 | `ch05/conics/conic_dandelin.md` | 그림 | 이름 하나가 덮지 못한 반쪽 | `—` | `cn__dandelin.png` | Wikimedia Commons, PD | 대기 |
+| 252 | `ch05/conics/ellipse.md` | 그림 | $8$ 분을 넘기지 않은 사람 | `—` | `cn__stamp_romania1971.png` | Wikimedia Commons, PD | 대기 |
+| 253 | `ch05/conics/ellipse_area.md` | 그림 | 원기둥과 원뿔을 하나의 같은 타원으로 자르다 | `—` | `cn__serenus1696_p18.png` | Internet Archive · 구글 스캔, 저작권 없음 | 대기 |
+| 254 | `ch05/conics/ellipse_parametric.md` | 그림 | 「길을 보여 주는 사람은 내게 위대한 아폴로니오스가 될 것이다」 | `—` | `cn__kepler1609_p300.png` | Internet Archive 스캔, $1609$ 년 간행이라 PD | 대기 |
+| 255 | `ch05/conics/envelope.md` | 그림 | 빛이 제 손으로 그려 놓는 포락선 | `—` | `cn__caustic_pan.png` | Theshadow27 촬영, Wikimedia Commons, CC BY-SA 3.0 / GFDL | 대기 |
+| 256 | `ch05/conics/hyperbola.md` | 그림 | 시간차가 그리는 바다 위의 쌍곡선 | `—` | `cn__loran_hyperbolic_fix.png` | Wikimedia Commons, PD-USGov · PD-USCG | 대기 |
+| 257 | `ch05/conics/locus_definition.md` | 그림 | 그 책이 우리에게 닿은 길 | `—` | `cn__apollonius_ms.png` | Bodleian Libraries, Wikimedia Commons, CC BY 4.0 | 대기 |
+| 258 | `ch05/conics/mixed_conics.md` | 그림 | 「모자람」·「꼭 맞음」·「넘침」 | `—` | `cn__apollonius1710_p31.png` | Internet Archive 스캔, $1710$ 년 간행이라 PD | 대기 |
+| 259 | `ch05/conics/parabola.md` | 그림 | 산비탈에 세운 포물선 | `—` | `cn__odeillo_solar_furnace.png` | Wikimedia Commons, cc-by-sa-4.0 | 대기 |
+| 260 | `ch05/conics/parabola_properties.md` | 그림 | 극을 초점에 놓자 증명이 한 줄로 줄었다 | `—` | `cn__salmon1869_p193.png` | Internet Archive · 캘리포니아 대학 도서관 스캔, 저작권 없음 | 대기 |
+| 261 | `ch05/plane_geometry/area_length.md` | 그림 | 세 거리를 마음대로 나누어 가져도 합은 그대로다 | `—` | `area_length__viviani.png` | 이 책에서 그렸다 | 대기 |
+| 262 | `ch05/plane_geometry/circle_tangent.md` | 그림 | 정리는 이미 있었고, 그가 한 일은 이름을 붙인 것이다 | `—` | `pg__steiner1826_p164.png` | 괴팅겐 대학도서관 디지털화센터 스캔, $1826$ 년 간행이라 PD | 대기 |
+| 263 | `ch05/plane_geometry/circumscribed_circle.md` | 그림 | 스물두 살에 쓴 한 줄 — $LS=\tfrac12R-r$ | `—` | `pg__feuerbach1822_p38.png` | Internet Archive · 바이에른 주립도서관 스캔, $1822$ 년 간행이라 PD | 대기 |
+| 264 | `ch05/plane_geometry/circumscribed_circle.md` | AI | 점을 면으로 잇는 일은 외접원이 정한다 | `—` | `—` | — | 대기 |
+| 265 | `ch05/plane_geometry/coord_locus.md` | 그림 | 거리 조건을 쇠막대로 걸어 자취를 손에 쥐다 | `—` | `pg__kempe1877_p12.png` | Internet Archive · 코넬대 도서관 스캔, 저작권 없음 | 대기 |
+| 266 | `ch05/plane_geometry/motion_optim.md` | 그림 | 거울이 굽으면 겨냥할 자리를 찾을 수 없다 | `—` | `pg__alhazen.png` | — | 대기 |
+| 267 | `ch05/plane_geometry/regular_polygon_circle.md` | AI | 낱말의 자리를 각으로 적는 법 | `—` | `—` | — | 대기 |
+| 268 | `ch05/plane_geometry/regular_polygon_circle.md` | 그림 | 자르고 또 잘라 더 자를 수 없는 데 이르면 | `—` | `pg__jiuzhang_liuhui.png` | Wikimedia Commons, 저작권 없음 | 대기 |
+| 269 | `ch05/plane_geometry/tangent_circles_between_lines.md` | 그림 | 둘로는 되는데 셋으로는 안 되는 까닭 | `—` | `pg__wantzel1837_p369.png` | Internet Archive 스캔, $1837$ 년 간행이라 PD | 대기 |
+| 270 | `ch05/plane_geometry/trapezoid_means.md` | 그림 | 여섯·여덟·아홉·열둘 | `—` | `pg__boethius1488_f47.png` | Internet Archive · 보스턴 공립도서관 소장본, $1488$ 년 간행이라 PD | 대기 |
+| 271 | `ch05/plane_geometry/triangle_similar.md` | 그림 | 선이 아니라 저울로 쓴 기하학 책 | `—` | `pg__ceva_statics.png` | — | 대기 |
+| 272 | `ch05/plane_geometry/trig_law.md` | 그림 | 삼각법만 다룬 첫 책의 제2권 첫 명제 | `—` | `trig_law__regiomontanus1533.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 273 | `ch05/plane_geometry/trig_law.md` | AI | 로봇 팔이 관절 각도를 정하는 식 | `—` | `—` | — | 대기 |
+| 274 | `ch05/plane_vectors/coord_component.md` | 그림 | 「방향을 가진 선」이라는 말이 붙은 쪽 | `—` | `pv__argand1806_p11.png` | Internet Archive 스캔, $1874$ 년 재간본. 원본은 $1806$ 년이라 PD | 대기 |
+| 275 | `ch05/plane_vectors/coord_component.md` | 그림 | 방위가 변하지 않으면 부딪친다 | `—` | `pv__knight1901_p234.png` | Internet Archive · 저작권 없음 | 대기 |
+| 276 | `ch05/plane_vectors/coordinate_vector_theory.md` | 그림 | 식에 점을 넣었더니 거리가 나왔다 | `—` | `pv__hesse1865_p16.png` | Internet Archive 스캔, $1865$ 년 간행이라 PD | 대기 |
+| 277 | `ch05/plane_vectors/inner_product.md` | 그림 | 내적이 처음 인쇄된 쪽에는 가운뎃점이 없다 | `—` | `pv__gibbs_vector_p5.png` | Internet Archive 스캔, $1881$–$84$ 간행이라 PD | 대기 |
+| 278 | `ch05/plane_vectors/locus_region.md` | 그림 | 점선 하나가 가른 구역 | `—` | `pv__snow1855_map.png` | Wikimedia Commons, PD | 대기 |
+| 279 | `ch05/plane_vectors/locus_region.md` | 그림 | 각 하나로 암초를 피하는 법 | `—` | `pv__knight1901_p268_269.png` | Internet Archive · 저작권 없음 | 대기 |
+| 280 | `ch05/plane_vectors/locus_region.md` | AI | 로봇을 점으로 만드는 법 | `—` | `—` | — | 대기 |
+| 281 | `ch05/plane_vectors/max_min.md` | 그림 | 「당나귀도 아는 것」 | `—` | `pv__heath1908_p287.png` | Internet Archive 스캔, $1908$ 년 간행이라 PD | 대기 |
+| 282 | `ch05/plane_vectors/parametric_velocity_inner_product.md` | 그림 | 답이 두 칸으로 나뉜 연습문제 | `—` | `pv__gunnery1917_p53.png` | Internet Archive · Google Books 스캔, 저작권 없음 | 대기 |
+| 283 | `ch05/plane_vectors/parametric_velocity_inner_product.md` | AI | 크기를 묶어 두면 걸음은 접선 방향뿐이다 | `—` | `—` | — | 대기 |
+| 284 | `ch05/plane_vectors/position_ratio.md` | 그림 | 좌표를 원점에서 재지 않고 꼭짓점에 얹은 사람 | `—` | `pv__moebius1827_p17.png` | Internet Archive · 바이에른 주립도서관 스캔, $1827$ 년 간행이라 PD | 대기 |
+| 285 | `ch05/plane_vectors/vector_basics.md` | 그림 | 「같은 시간에」 한 줄로 적은 평행사변형법 | `—` | `vb__newton1687.png` | Wikimedia Commons, PD-old-100-1996 | 대기 |
+| 286 | `ch05/plane_vectors/vector_lattice_inner_product.md` | 그림 | 「일」이라는 말과 $\tfrac12$ 을 함께 들여온 쪽 | `—` | `pv__coriolis1829_p3.png` | Internet Archive 스캔, $1829$ 년 간행이라 PD | 대기 |
+| 287 | `ch05/space_geometry/angle_distance_locus.md` | 그림 | 공간을 점이 아니라 직선으로 채우려 한 쪽 | `—` | `sg__plucker1865_p726.png` | — | 대기 |
+| 288 | `ch05/space_geometry/coord_vector.md` | 그림 | 두 차원짜리 종이에 세 차원을 적는 기술 | `—` | `sg__monge1798_p2.png` | Internet Archive 스캔. $18$ 세기 말 간행이라 PD | 대기 |
+| 289 | `ch05/space_geometry/coord_vector.md` | AI | 화면 밖의 것을 지우는 데 드는 곱셈 열여덟 번 | `—` | `—` | — | 대기 |
+| 290 | `ch05/space_geometry/projection_dihedral.md` | 그림 | 길이는 제멋대로인데 각은 언제나 같았다 | `—` | `sg__steno1669_crystals.png` | Internet Archive · 스미스소니언 도서관 스캔, $1669$ 년 간행이라 PD | 대기 |
+| 291 | `ch05/space_geometry/shadow_projection.md` | 그림 | 해는 평행하게 비추고 눈은 한 점에서 본다 | `—` | `sp__lastsupper.png` | Wikimedia Commons, PD-Art | 대기 |
+| 292 | `ch05/space_geometry/shadow_projection.md` | AI | 화면에 그리는 일은 나눗셈 한 번이다 | `—` | `—` | — | 대기 |
+| 293 | `ch05/space_geometry/solid_reasoning.md` | 그림 | 『원론』은 이 다섯으로 끝난다 | `—` | `sg__euclid1482_bk13.png` | Internet Archive, 저작권 없음 | 대기 |
+| 294 | `ch05/space_geometry/solid_rotation.md` | 그림 | 곧은 쇠막대만으로 세운 잘록한 탑 | `—` | `sg__shukhov1896.png` | 촬영 안드레이 카렐린, Wikimedia Commons, PD-old-100 | 대기 |
+| 295 | `ch05/space_geometry/solid_volume.md` | 그림 | 넓이를 맞추어 공정하게 만든 십사면체 | `—` | `sg__juryeonggu.png` | 국립경주문화재연구소 · 경주고적발굴단, 공공누리 제$1$ 유형 | 대기 |
+| 296 | `ch05/space_geometry/space_basics.md` | 그림 | 나사가 넷이면 흔들린다 | `—` | `sg__surveying1913_p196_197.png` | Internet Archive · 저작권 없음 | 대기 |
+| 297 | `ch05/space_geometry/space_projection_dot_product.md` | 그림 | 빛이 비스듬히 들면 왜 어두워지는가를 정사영으로 답한 쪽 | `—` | `sg__lambert1760_p27.png` | Internet Archive · 바이에른 주립도서관 스캔, 저작권 없음 | 대기 |
+| 298 | `ch05/space_geometry/space_projection_dot_product.md` | AI | 자료에 식을 맞추는 일은 수선의 발을 찾는 일이다 | `—` | `—` | — | 대기 |
+| 299 | `ch05/space_geometry/sphere_plane.md` | 그림 | 하늘을 고리 몇 개로 대신한 기계 | `—` | `sg__armillary_bhm2094c.png` | 촬영 Rama, Wikimedia Commons, CC BY-SA 3.0 fr | 대기 |
+| 300 | `ch06/arguments/chain_decomposition.md` | 그림 | 같은 한 줄을 뒤집으면 위쪽 경계가 나온다 | `—` | `ar__sperner1973.png` | Konrad Jacobs 촬영, Oberwolfach Photo Collection / Wikimedia Commons, CC BY-SA 2.0 de | 대기 |
+| 301 | `ch06/arguments/construction.md` | 그림 | 만우절의 유래를 묻는 물음들 사이에 끼어 있던 문제 | `—` | `ag__lgdiary1850_p48.png` | Wikimedia Commons, PD-old-70-1923 | 대기 |
+| 302 | `ch06/arguments/exchange_argument.md` | 그림 | 좋아지는 교환이 하나도 없는 자리를 만들어 낸 논문 | `—` | `ar__gale2003.png` | George Bergman 촬영, Oberwolfach Photo Collection / Wikimedia Commons, CC BY-SA 4.0 | 대기 |
+| 303 | `ch06/arguments/extremal.md` | 그림 | 한 줄짜리 원리를 어디에 쓸지 알아내는 데 오십 년 | `—` | `ar__sylvester.png` | Wikimedia Commons, PD-old | 대기 |
+| 304 | `ch06/arguments/invariant.md` | 그림 | 도달할 수 없는 자리를 「풀었다」고 크게 써 붙였다 | `—` | `ag__fifteen_poster1880.png` | Wikimedia Commons, PD-old-100-1923 | 대기 |
+| 305 | `ch06/arguments/monovariant.md` | 그림 | 단조량을 아흔 해째 못 찾은 조작 | `—` | `ar__collatz1984.png` | Wikipeter-HH 촬영, Wikimedia Commons, CC BY-SA 3.0 | 대기 |
+| 306 | `ch06/arguments/nim_game.md` | 그림 | 이름도 이 쪽에서 붙었다 | `—` | `nim__bouton1901_p35.png` | Wikimedia Commons, PD-US-expired | 대기 |
+| 307 | `ch06/arguments/optimum_bounds.md` | 그림 | 두 걸음이 아직 만나지 못한 수 | `—` | `ar__erdos1992.png` | Topsy Kretts 촬영, Wikimedia Commons, CC BY 3.0 | 대기 |
+| 308 | `ch06/arguments/optimum_search.md` | 그림 | 합판 공장에서 물어 온 한 가지 물음 | `—` | `ag__kantorovich1975.png` | Андрей Богданов 촬영, Wikimedia Commons, CC BY 3.0 | 대기 |
+| 309 | `ch06/arguments/optimum_search.md` | AI | 글을 토막 내는 일도 표를 채우는 일이다 | `—` | `ag__dp_segment.png` | — | 대기 |
+| 310 | `ch06/arguments/pigeonhole.md` | 그림 | 비둘기집이 아니라 서랍이었다 | `—` | `ar__dirichlet.png` | Wikimedia Commons, PD | 대기 |
+| 311 | `ch06/arguments/positional_construction.md` | 그림 | 접시가 둘이면 자릿수가 셋이 된다 | `—` | `ag__bachet1884_p154_155.png` | Internet Archive 스캔, $1884$ 년 간행 — PD | 대기 |
+| 312 | `ch06/arguments/set_construction.md` | 그림 | 가장 멀리 벌린 끝에 놓인 자 | `—` | `ar__golomb2011.png` | National Science Foundation, Wikimedia Commons, PD-USGov-NSF | 대기 |
+| 313 | `ch06/binomial/absorption_identity.md` | 그림 | 「대장을 반드시 넣어」 | `—` | `bn__whitworth1870_p45.png` | Internet Archive 스캔, PD | 대기 |
+| 314 | `ch06/binomial/absorption_identity.md` | AI | 기여를 나눌 때 무게가 층마다 꼭 $1/n$ 이 되는 까닭 | `—` | `bn__shapley_layers.png` | — | 대기 |
+| 315 | `ch06/binomial/absorption_identity.md` | 그림 | 느낌표가 생기기 전에 먼저 있던 것 | `—` | `bn__kramp.png` | 이 책에서 그렸다 | 대기 |
+| 316 | `ch06/binomial/binomial_calculus.md` | 그림 | 미분을 쓸 수 없던 교실에서 같은 합을 구하면 | `—` | `bn__hallknight1891_p334.png` | Internet Archive 스캔, PD | 대기 |
+| 317 | `ch06/binomial/binomial_calculus.md` | AI | 분배함수를 미분하면 확률이 떨어져 나온다 | `—` | `bn__softmax_grad.png` | — | 대기 |
+| 318 | `ch06/binomial/binomial_identities.md` | 그림 | 수는 다 적혀 있는데 합은 적혀 있지 않다 | `—` | `bn__tartaglia1556.png` | Wikimedia Commons, PD-old-100-1923 | 대기 |
+| 319 | `ch06/binomial/binomial_identities.md` | AI | 망 하나를 학습시키면서 $2^{\,n}$ 개를 학습시킨다 | `—` | `bn__dropout_subnets.png` | — | 대기 |
+| 320 | `ch06/binomial/binomial_theorem.md` | 그림 | 지수를 자연수 밖으로 밀어낸 편지 | `—` | `bt__newton1676.png` | Internet Archive 스캔, $1722$ 년 판, PD | 대기 |
+| 321 | `ch06/binomial/hockey_stick.md` | 그림 | 파스칼에게 이것은 「둘째 따름」이었다 | `—` | `bn__pascal_latin_f106.png` | 클레르몽오베르뉴 메트로폴 도서관 촬영, Wikimedia Commons, CC BY-SA 4.0 | 대기 |
+| 322 | `ch06/binomial/multinomial_theorem.md` | 그림 | 글자를 섞어 삼 년을 숨긴 문장 | `—` | `bn__huygens1659_p299.png` | Internet Archive 스캔, PD | 대기 |
+| 323 | `ch06/binomial/multinomial_theorem.md` | AI | 다항계수의 로그가 곧 「글자 하나에 몇 비트」다 | `—` | `bn__entropy_multinomial.png` | — | 대기 |
+| 324 | `ch06/binomial/vandermonde_convolution.md` | 그림 | 이름은 붙었는데 그의 것이 아닌 것 | `—` | `bn__vandermonde.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 325 | `ch06/counting_applications/count_equation.md` | 그림 | 답 셋을 적어 두고 「그 이치를 다할 길이 없다」고 덧붙였다 | `—` | `ca__zhangqiujian_baiji.png` | Wikimedia Commons, PD-scan | 대기 |
+| 326 | `ch06/counting_applications/count_functions.md` | 그림 | 「함수를 센다」로 바꾸었더니 열두 칸이 되었다 | `—` | `ca__rota1970.png` | Oberwolfach Photo Collection / Wikimedia Commons, CC BY-SA 2.0 de | 대기 |
+| 327 | `ch06/counting_applications/distribute_balls.md` | 그림 | 틀린 셈이 맞는 답을 냈다 | `—` | `ca__bose1925.png` | Wikimedia Commons, PD-India | 대기 |
+| 328 | `ch06/counting_applications/lattice_paths.md` | 그림 | 세지 않고 재는 대신, 재지 않고 세기 | `—` | `ca__pick.png` | Wikimedia Commons, PD-old | 대기 |
+| 329 | `ch06/counting_applications/lattice_shortest_path.md` | 그림 | 반사가 한 번도 나오지 않는 「반사원리」 | `—` | `ca__andre1887_p436.png` | 프랑스 국립도서관 스캔, $1887$ 년 간행이라 PD | 대기 |
+| 330 | `ch06/counting_techniques/case_split.md` | 그림 | 갈래가 이천 가지라 사람이 다 볼 수 없었다 | `—` | `ct__fourcolors1976.png` | Smithsonian NMAH $1999.0339.02$, PD-USGov | 대기 |
+| 331 | `ch06/counting_techniques/complement_counting.md` | 그림 | 오백 년 묵은 규칙에 이름이 붙기까지 | `—` | `ct__demorgan.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 332 | `ch06/counting_techniques/complement_counting.md` | AI | 「한 번만 맞으면 된다」를 재는 법 | `—` | `ct__passk_estimator.png` | — | 대기 |
+| 333 | `ch06/counting_techniques/correspondence_count.md` | 그림 | 세지 않고 같음을 확인하던 나뭇조각 | `—` | `ct__tally_sticks.png` | Winchester City Council Museums, Flickr, CC BY-SA 2.0 | 대기 |
+| 334 | `ch06/counting_techniques/graph_counting.md` | 그림 | 「행복한 결말 문제」라는 이름이 붙은 까닭 | `—` | `ct__szekeres2001.png` | David Harvey 촬영, Wikimedia Commons, 촬영자가 공유 저작물로 내놓았다 | 대기 |
+| 335 | `ch06/counting_techniques/inclusion_exclusion.md` | 그림 | 이름이 둘 붙었는데 둘 다 처음이 아니다 | `—` | `ct__dasilva.png` | Wikimedia Commons, PD-old-assumed | 대기 |
+| 336 | `ch06/counting_techniques/magic_square.md` | 그림 | 마방진 안에 제작연도를 숨긴 판화 | `—` | `ct__durer1514_square.png` | Wikimedia Commons, PD-old-100-1923 · PD-Art | 대기 |
+| 337 | `ch06/counting_techniques/magic_square.md` | 그림 | 첫 우표에 실린 사람이 마방진을 만들었다 | `—` | `ct__stamp_usa1847.png` | Wikimedia Commons, PD | 대기 |
+| 338 | `ch06/permutation_combination/combination.md` | 그림 | 파스칼보다 삼백 년 앞선 그림 | `—` | `comb__yanghui.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 339 | `ch06/permutation_combination/count_sum_product.md` | 그림 | 경우의 수가 크다고 안전한 것은 아니다 | `—` | `cs__enigma.png` | 블레츨리 파크 전시, Wikimedia Commons, 촬영 Tim Gage, CC BY-SA 2.0 | 대기 |
+| 340 | `ch06/permutation_combination/permutation.md` | 그림 | 종치기 교본에 실린 계승표 | `—` | `pc__stedman1677_p13.png` | Wikimedia Commons, PD-old-100-1996 | 대기 |
+| 341 | `ch06/permutation_combination/repeated_combination.md` | 그림 | 서른두 장인데 얼굴은 스물한 가지 | `—` | `rc__paigow32.png` | Roland Scheicher 촬영, Wikimedia Commons, PD-user-de | 대기 |
+| 342 | `ch06/permutation_combination/repeated_combination.md` | AI | 순서를 버리면 가짓수가 몇 자리나 줄어드는가 | `—` | `rc__bagofwords.png` | — | 대기 |
+| 343 | `ch06/permutation_combination/repeated_permutation.md` | 그림 | 손끝 하나에 들어가는 개수가 글자 수를 정했다 | `—` | `rp__braille1829.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 344 | `ch06/recurrence_generating/generating_function.md` | 그림 | 「A 를 나는 생성함수라 부른다」 | `—` | `rg__laplace1886_p29_p40.png` | Internet Archive 스캔, 캘리포니아 대학 소장본 | 대기 |
+| 345 | `ch06/recurrence_generating/recurrence_count.md` | 그림 | 세 해를 기다리는 소 | `—` | `rg__ganita_kaumudi1936.png` | Internet Archive, 저작권 없음 — 서지 사항만 활자로 적힌 표제지다 | 대기 |
+| 346 | `ch06/special_numbers/catalan_numbers.md` | 그림 | 이름을 가장 늦게 얻은 수 | `—` | `sn__catalan.png` | Wikimedia Commons, PD-Art | 대기 |
+| 347 | `ch06/special_numbers/catalan_numbers.md` | 그림 | 다각형을 자르다가 나온 점화식 | `—` | `sn__segner.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 348 | `ch06/special_numbers/count_derangements.md` | 그림 | 카드놀이에서 나온 문제 | `—` | `sn__montmort.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 349 | `ch06/special_numbers/integer_partition.md` | 그림 | 표를 손으로 $200$ 까지 채운 포병 소령 | `—` | `sn__macmahon.png` | Wikimedia Commons, PD-US | 대기 |
+| 350 | `ch06/special_numbers/stirling_numbers.md` | 그림 | 묘비에 「베네치아 사람」이라 새긴 수학자 | `—` | `sn__stirling_grave.png` | Wikimedia Commons, 촬영 Roegel, CC BY-SA 3.0 | 대기 |
+| 351 | `ch07/basics/birthday_problem.md` | 그림 | 믿기지 않아서 발표하지 않았다 | `—` | `pb__vonmises.png` | 프랑스 국립도서관 소장, Wikimedia Commons, PD-US-expired | 대기 |
+| 352 | `ch07/basics/case_division_probability.md` | 그림 | 포탄이 어디에 떨어지는지 모를 때 쓰는 표 | `—` | `cs__fm640_1945_p19.png` | — | 대기 |
+| 353 | `ch07/basics/combination_probability.md` | 그림 | 열셋인지 열넷인지 아직 다투는 한 벌 | `—` | `pb__mamluk_cards.png` | 낱장 사진을 Countakeshi 가 이어 붙인 것, Wikimedia Commons, CC BY-SA 4. | 대기 |
+| 354 | `ch07/basics/complement_probability.md` | 그림 | 원숭이 백만 마리를 불러낸 까닭 | `ch03/probability/axioms.md` | `pb__borel1929.png` | Wikimedia Commons · 프랑스 국립도서관, 저작권 만료 | **옮김** |
+| 355 | `ch07/basics/dice_pair_condition.md` | 그림 | 반듯하지 않은 주사위 | `—` | `prob__roman_dice.png` | Wikimedia Commons, CC BY-SA 3.0 | 대기 |
+| 356 | `ch07/basics/function_probability.md` | 그림 | 공을 칸에 던지면 함수가 하나 생긴다 | `—` | `fp__todhunter1889_p461.png` | — | 대기 |
+| 357 | `ch07/basics/integer_solution_probability.md` | 그림 | 「특별한 재주」라 부르던 증명 | `—` | `is__netto1901_p21.png` | — | 대기 |
+| 358 | `ch07/basics/permutation_probability.md` | 그림 | 열네 글자로 만든 자물쇠 | `—` | `pp__hooke1676_p31.png` | — | 대기 |
+| 359 | `ch07/basics/probability.md` | 그림 | 세 줄로 적은 확률 | `ch03/probability/axioms.md` | `prob__kolmogorov.png`, `prob__grundbegriffe1933.png` | Wikimedia Commons, 촬영 Konrad Jacobs, 오버볼파흐 수학연구소, CC BY-SA 2 | **옮김** |
+| 360 | `ch07/basics/probability_addition.md` | 그림 | 인쇄 오류를 평생 미워한 사람의 이름이 붙은 부등식 | `ch03/probability/axioms.md` | `pb__bonferroni.png` | Wikimedia Commons, PD-Italy | **옮김** |
+| 361 | `ch07/basics/sample_space.md` | 그림 | 네 면으로만 서는 주사위 | `ch03/probability/sample_space.md` | `pb__ancient_dice.png` | Wikimedia Commons, 촬영 Xocolatl, PD-self / 메트로폴리탄 미술관 10.130. | **옮김** |
+| 362 | `ch07/conditional/bayes.md` | 그림 | 되짚기가 활자로 놓인 자리 | `ch03/probability/bayes.md` | `cd__by_bayes1763_prop5.png` | Wikimedia Commons, PD-old-100 | **옮김** |
+| 363 | `ch07/conditional/bayes.md` | 그림 | 곱하기를 더하기로 바꾸어 암호를 풀다 | `ch03/probability/bayes.md` | `cd__turing1936.png` | Wikimedia Commons, PD-US-not renewed | **옮김** |
+| 364 | `ch07/conditional/classification_table.md` | 그림 | 네 칸짜리 표에 이름이 붙던 날 | `—` | `cd__pearson1904_p1.png` | — | 대기 |
+| 365 | `ch07/conditional/classification_table.md` | AI | 「정확도 $99$ 퍼센트」가 쓸모없을 수 있는 까닭 | `—` | `—` | — | 대기 |
+| 366 | `ch07/conditional/conditional_applications.md` | 그림 | 「적어도 하나」를 비밀 문서에 적어 둔 까닭 | `—` | `cd__morse_kimball1946_p89.png` | — | 대기 |
+| 367 | `ch07/conditional/conditional_applications.md` | AI | 장치를 늘릴수록 더 자주 멈추는 까닭 | `—` | `—` | — | 대기 |
+| 368 | `ch07/conditional/conditional_independence.md` | 그림 | 「서로 다른 기록을 섞을 때 생기는 오류」 | `ch03/probability/conditional_independence.md` | `cd__yule1903_p132.png` | — | **옮김** |
+| 369 | `ch07/conditional/conditional_probability.md` | 그림 | 곱셈정리가 활자로 놓인 자리 | `ch03/probability/conditional.md` | `cd__demoivre_doctrine.png` | Wikimedia Commons, PD-old-100-expired | **옮김** |
+| 370 | `ch07/conditional/conditional_probability.md` | AI | 문장 하나의 확률을 낱말 하나씩 쪼개는 법 | `ch03/probability/conditional.md` | `cd__ai_chain_scale.png` | — | **옮김** |
+| 371 | `ch07/conditional/conditional_state.md` | 그림 | 네 칸은 세어서 얻은 것이 아니라 $1$ 을 전개한 것이다 | `—` | `cd__boole1854_p76.png` | Internet Archive · 바이에른 주립도서관 스캔, 저작권 없음 | 대기 |
+| 372 | `ch07/conditional/conditional_two_stage.md` | 그림 | 사전확률을 적지 못한 채 돌린 계산 | `—` | `cd__bordereau1894.png` | 프랑스 국방사료원 소장, Wikimedia Commons, PD-old-70 | 대기 |
+| 373 | `ch07/conditional/game_probability.md` | 그림 | 모든 것을 모아 적은 책에, 풀지 못한 물음 하나 | `—` | `cd__pacioli1523_summa.png` | Stockholms Universitetsbibliotek 촬영, CC BY 2.0 | 대기 |
+| 374 | `ch07/conditional/independent_binomial.md` | 그림 | 신의 존재를 증명하려고 쓴 첫 가설검정 | `—` | `cd__arbuthnot1710_p186.png` | — | 대기 |
+| 375 | `ch07/conditional/independent_events.md` | 그림 | 완두 오백쉰여섯 알로 잰 독립 | `ch03/probability/independence.md` | `cd__mendel1866_p19.png` | — | **옮김** |
+| 376 | `ch07/conditional/monty_hall.md` | 그림 | 이름만 빌려준 사람 | `ch03/probability/conditional.md` | `cd__monty_hall.png` | Wikimedia Commons, PD-Pre1978 | **옮김** |
+| 377 | `ch07/conditional/monty_hall.md` | 그림 | 편지 만 통이 쏟아진 칼럼 | `ch03/probability/conditional.md` | `cd__erdos.png` | Topsy Kretts 촬영, Wikimedia Commons, CC BY 3.0 | **옮김** |
+| 378 | `ch07/conditional/monty_hall.md` | 그림 | 몬티보다 백 년 먼저 나온 문제 | `ch03/probability/bayes.md` | `cd__bertrand.png` | Wikimedia Commons, PD-old | **옮김** |
+| 379 | `ch07/conditional/stratified_reversal.md` | 그림 | 심슨은 만화가 아니다 | `—` | `cd__bletchley.png` | Wikimedia Commons, 촬영 DeFacto, CC BY-SA 4.0 | 대기 |
+| 380 | `ch07/conditional/stratified_reversal.md` | 그림 | 소송이 될 뻔한 입학 통계 | `—` | `cd__berkeley.png` | Wikimedia Commons, 촬영 Daderot, CC0 | 대기 |
+| 381 | `ch07/conditional/total_probability.md` | 그림 | 바다를 칸으로 나누고 하나씩 지워 나간 기록 | `ch03/probability/conditional.md` | `cd__palomares1975_fig333.png` | 미국 공군 자료, PD-USGov | **옮김** |
+| 382 | `ch07/descriptive/central_tendency.md` | 그림 | 눈금이 없는 그래프 | `ch02/center/mean_median_mode.md` | `dsc__stamp_indonesia1969.png` | Wikimedia Commons, PD | 대기 |
+| 383 | `ch07/descriptive/covariance_correlation.md` | 그림 | 「회귀」라는 이름이 나온 그림 | `ch03/rv/correlation.md` | `dc__galton1886_plate10.png` | Wikimedia Commons, PD-Art | 대기 |
+| 384 | `ch07/descriptive/dispersion.md` | 그림 | 백분위수를 종이에 그린 것 | `ch02/spread/variance_std.md` | `dsc__growth_chart_cdc2000.png` | Wikimedia Commons, PD-USGov-HHS-CDC | 대기 |
+| 385 | `ch07/descriptive/frequency_distribution.md` | 그림 | 통계학이라는 말보다 먼저 있던 도수분포표 | `ch02/exploration/histograms.md` | `fd__bills_of_mortality_1665.png` | Wikimedia Commons, Wellcome Collection, CC BY 4.0 | 대기 |
+| 386 | `ch07/descriptive/frequency_distribution.md` | 그림 | 히스토그램을 둥글게 말아 의회에 내민 그림 | `ch02/exploration/histograms.md` | `fd__nightingale1858.png` | Wikimedia Commons, PD-old | 대기 |
+| 387 | `ch07/descriptive/frequency_distribution.md` | 그림 | 날 수로 보면 가장 많은 쪽이 가장 적은 쪽이었다 | `ch02/exploration/histograms.md` | `fd__snow1855_p86.png` | — | 대기 |
+| 388 | `ch07/distributions/binomial_distribution.md` | 그림 | 이름이 된 책 | `ch04/discrete_distributions/binomial.md` | `bin__ars1713.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 389 | `ch07/distributions/binomial_to_poisson.md` | 그림 | 말에 차여 죽은 사람을 센 표 | `ch04/discrete_distributions/poisson.md` | `binomial_to_poisson__bortkiewicz1898_p25.png` | Wikimedia Commons, PD-US-expired | 대기 |
+| 390 | `ch07/distributions/exponential_distribution.md` | 그림 | 전화선을 몇 개 깔 것인가 | `ch04/continuous_distributions/exponential.md` | `ds__molina1927_p463.png` | — | 대기 |
+| 391 | `ch07/distributions/geometric_distribution.md` | AI | 기다린 보람이 없으므로 간격을 늘린다 | `ch04/discrete_distributions/geometric.md` | `—` | — | 대기 |
+| 392 | `ch07/distributions/geometric_distribution.md` | 그림 | 담뱃갑에 든 쉰 장, 다 모으려면 | `ch04/discrete_distributions/geometric.md` | `ds__cope_warriors_card.png` | Wikimedia Commons, 저작권 만료 | 대기 |
+| 393 | `ch07/distributions/hypergeometric_distribution.md` | 그림 | 검사를 얼마나 할 것인가 | `ch04/discrete_distributions/hypergeometric.md` | `ds__dodge1929_p629.png` | — | 대기 |
+| 394 | `ch07/distributions/poisson.md` | 그림 | 이름이 붙기 전의 포아송분포 | `ch04/discrete_distributions/poisson.md` | `poisson__poisson1837_p206.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 395 | `ch07/distributions/poisson.md` | 그림 | 에펠탑에 새겨진 이름 | `ch04/discrete_distributions/poisson.md` | `poisson__eiffel.png` | Wikimedia Commons, 촬영 Victor R. Ruiz, CC BY-SA 2.0 | 대기 |
+| 396 | `ch07/expectation_applications/conditional_expectation.md` | 그림 | 「검사를 얼마나 할 것인가」에 수로 답한 쪽 | `—` | `ce__dodge_romig1929_p621_628_629.png` | — | 대기 |
+| 397 | `ch07/expectation_applications/conditional_expectation.md` | AI | 기계가 찾아내는 것은 결국 $E[Y\mid X]$ 하나다 | `—` | `—` | — | 대기 |
+| 398 | `ch07/expectation_applications/expectation_counting.md` | 그림 | 가장자리는 싸고 안쪽은 비싸다 | `—` | `ec__hollerith1890.png` | Wikimedia Commons · 저작권 없음 | 대기 |
+| 399 | `ch07/expectation_applications/expectation_counting.md` | AI | 자료를 섞어 쓰는 일이 괜찮은 까닭 | `—` | `—` | — | 대기 |
+| 400 | `ch07/expectation_applications/expectation_equation.md` | 그림 | 차수를 백 배로 올려도 실근은 셋쯤 늘 뿐이다 | `—` | `ea__ee_kac.png` | — | 대기 |
+| 401 | `ch07/expectation_applications/expectation_geometry.md` | 그림 | 제곱을 떼는 순간 손이 닿지 않는다 | `—` | `—` | — | 대기 |
+| 402 | `ch07/expectation_applications/expectation_process.md` | 그림 | 「최대 $n$ 번까지만」을 떼어 내면 벌어지는 일 | `—` | `ea__dbernoulli.png` | ETH 취리히 도서관 소장, Wikimedia Commons, PD-old | 대기 |
+| 403 | `ch07/expectation_applications/expected_profit.md` | 그림 | 처음 이 셈을 한 곳은 가게가 아니라 은행 금고였다 | `—` | `ea__edgeworth1888_p113.png` | — | 대기 |
+| 404 | `ch07/expectation_applications/order_statistics.md` | 그림 | 전차를 세지 않고 전차 수를 센 사람들 | `—` | `ea__panther1944.png` | Archives Normandie, Wikimedia Commons, PD | 대기 |
+| 405 | `ch07/expectation_applications/variance_optimization.md` | 그림 | 「서로 독립이면」이라는 단서에 상을 준 까닭 | `—` | `ea__vo_markowitz.png` | — | 대기 |
+| 406 | `ch07/expectation_variance/distribution_table_variance.md` | 그림 | 손에게 좋은 공식이 기계에게는 나쁜 공식이다 | `—` | `ev__welford.png` | — | 대기 |
+| 407 | `ch07/expectation_variance/expectation.md` | 그림 | 확률보다 기댓값이 먼저 인쇄되었다 | `ch03/rv/expectation.md` | `ev__huygens1657.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 408 | `ch07/expectation_variance/expectation_coin_and_dice.md` | 그림 | 「공정하다」를 이만 육천 번 던져 재어 본 사람 | `—` | `ev__weldon1906.png` | Wikimedia Commons, PD-US | 대기 |
+| 409 | `ch07/expectation_variance/indicator_linearity.md` | AI | 점수는 더해서 나오지만 믿음은 거기서 나오지 않는다 | `—` | `ev__ai_indicator_dep.png` | — | 대기 |
+| 410 | `ch07/expectation_variance/indicator_linearity.md` | 그림 | 섞었다고 믿은 날 | `—` | `ev__lottery1969.png` | Wikimedia Commons, PD-USGov | 대기 |
+| 411 | `ch07/expectation_variance/indicator_variance.md` | AI | 답을 여러 개 모아도 줄지 않는 몫 | `—` | `ev__ai_ensemble_floor.png` | — | 대기 |
+| 412 | `ch07/expectation_variance/indicator_variance.md` | 그림 | 오리를 세지 않고 오리 수를 세는 법 | `—` | `ev__lincoln1930.png` | — | 대기 |
+| 413 | `ch07/expectation_variance/variance.md` | 그림 | 표준편차가 아니라 분산에 이름을 붙인 까닭 | `ch03/rv/variance_covariance.md` | `ev__fisher1918_variance.png` | — | 대기 |
+| 414 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 금 같은 정리 | `ch03/limits/lln.md` | `lln__arsconjectandi1713.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 415 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 부등식 하나로 밀어붙인 사람 | `ch03/limits/lln.md` | `lln__stamp_russia2021.png` | Wikimedia Commons, PD | 대기 |
+| 416 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 바늘로 잰 원주율 | `ch03/limits/lln.md` | `lln__buffon_statue.png` | Wikimedia Commons, 촬영 Celette, $2012$, CC BY-SA 4.0 | 대기 |
+| 417 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 카드 점을 치다 나온 계산법 | `ch03/limits/lln.md` | `lln__fermiac.png` | 로스앨러모스 국립연구소, Wikimedia Commons, PD-USGov | 대기 |
+| 418 | `ch07/normal_distribution/binomial_to_normal.md` | 그림 | 반 칸에 사람 이름이 붙은 자리 | `—` | `nd__yates_gain.png` | — | 대기 |
+| 419 | `ch07/normal_distribution/central_limit_theorem.md` | 그림 | 종 모양이 활자로 놓인 쪽 | `ch03/limits/clt.md` | `clt__doctrine1756_p243.png` | Internet Archive 원문 스캔, PD-old-100 | 대기 |
+| 420 | `ch07/normal_distribution/normal_applications.md` | 그림 | 같은 높이로 튀었는데 한쪽만 이상이다 | `—` | `nd__shewhart1927_p726.png` | — | 대기 |
+| 421 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 지폐에 실린 확률밀도함수 | `ch04/continuous_distributions/normal.md` | `nd__note.png` | — | 대기 |
+| 422 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 구슬이 쌓아 올린 종 모양 | `ch04/continuous_distributions/normal.md` | `nd__galton.png` | Wikimedia Commons, PD | 대기 |
+| 423 | `ch07/normal_distribution/normal_sum_percentile.md` | 그림 | 분산이 같은데 모양이 다르다 | `—` | `nd__lindeberg.png` | — | 대기 |
+| 424 | `ch07/normal_distribution/normal_sum_percentile.md` | AI | 층을 쌓을 때 $\sqrt n$ 으로 나누는 까닭 | `—` | `—` | — | 대기 |
+| 425 | `ch07/normal_distribution/normal_symmetry.md` | 그림 | 대칭을 눈금으로 새겨 둔 종이 | `—` | `nd__hazen.png` | — | 대기 |
+| 426 | `ch07/normal_distribution/normal_symmetry.md` | AI | 눈금을 맞추지 않으면 큰 눈금만 보게 된다 | `—` | `—` | — | 대기 |
+| 427 | `ch07/normal_distribution/repeated_trial_normal.md` | 그림 | 그 표를 만든 사람들은 음수를 다룰 줄 몰랐다 | `—` | `nd__tables.png` | — | 대기 |
+| 428 | `ch07/random_variable/continuous_random_variable.md` | AI | 상수를 구하지 못한 채 쓰는 밀도 | `ch03/rv/continuous.md` | `rv__crv_ai_ratio.png` | — | 대기 |
+| 429 | `ch07/random_variable/continuous_random_variable.md` | 그림 | 대칭인데 평균이 없는 밀도 | `ch03/rv/continuous.md` | `rv__crv_cauchy.png` | — | 대기 |
+| 430 | `ch07/random_variable/cumulative_distribution.md` | 그림 | 잡화상이 만든 첫 계단 | `ch03/rv/pmf_pdf_cdf.md` | `rv__graunt1662_p62.png` | — | 대기 |
+| 431 | `ch07/random_variable/geometric_probability.md` | 그림 | 세 답을 나란히 적고 물음이 틀렸다고 한 쪽 | `—` | `rv__bertrand1907_p5.png` | Wikimedia Commons, PD-US-expired | 대기 |
+| 432 | `ch07/random_variable/probability_density_applications.md` | 그림 | 넓이를 지키려고 위도를 눌러 놓은 지도 | `—` | `rv__pda_equalarea1921.png` | — | 대기 |
+| 433 | `ch07/random_variable/probability_density_applications.md` | AI | 공 위에 점을 고르게 뿌리려면 위도를 버려야 한다 | `—` | `rv__pda_ai_sphere.png` | — | 대기 |
+| 434 | `ch07/random_variable/probability_density_function.md` | AI | 어느 자 위에서 균등하게 뽑을 것인가 | `—` | `rv__pdf_ai_logscale.png` | — | 대기 |
+| 435 | `ch07/random_variable/probability_density_function.md` | 그림 | 측량 오차를 따지다 나온 분포 | `—` | `rv__pdf_helmert.png` | — | 대기 |
+| 436 | `ch07/random_variable/probability_density_graph.md` | 그림 | 눈금을 바꾸면 보이는 직선 | `—` | `rv__pdg_pareto.png` | — | 대기 |
+| 437 | `ch07/random_variable/probability_mass_function.md` | 그림 | 질량이 밀도로 건너가는 자리 | `ch03/rv/pmf_pdf_cdf.md` | `rv__simpson1757_p72.png` | Internet Archive 스캔, PD-old | 대기 |
+| 438 | `ch07/random_variable/probability_mass_function.md` | AI | 꼬리를 자르면 확률이 아니게 된다 | `ch03/rv/pmf_pdf_cdf.md` | `rv__pmf_ai_renorm.png` | — | 대기 |
+| 439 | `ch07/random_variable/probability_mass_function.md` | AI | 합이 $1$ 이라고 해서 확률인 것은 아니다 | `ch03/rv/pmf_pdf_cdf.md` | `—` | — | 대기 |
+| 440 | `ch07/random_variable/random_variable.md` | 그림 | 주사위 셋의 합을 칠백 해 전에 적어 둔 표 | `ch03/rv/discrete.md` | `rv__devetula1534.png` | — | 대기 |
+| 441 | `ch07/random_variable/random_variable_geometry.md` | 그림 | 「그때에야 비로소 셀 수 있다」 | `—` | `rv__crofton1868_p181.png` | Internet Archive 스캔, PD-old | 대기 |
+| 442 | `ch07/random_variable/random_variable_process.md` | 그림 | 시 두 만 자를 손으로 세어 얻은 두 수 | `—` | `rv__markov1913_p153.png` | Internet Archive 스캔, PD-old | 대기 |
+| 443 | `ch07/random_variable/uniform_distribution.md` | 그림 | 고르게 뽑으려고 돌을 깎았다 | `ch04/continuous_distributions/uniform.md` | `rv__kleroterion.png` | 촬영 Zde, Wikimedia Commons, CC BY-SA 4.0 | 대기 |
+| 444 | `ch07/random_variable/uniform_distribution.md` | AI | 난수 하나로 다음 낱말을 고르는 법 | `ch04/continuous_distributions/uniform.md` | `rv__uni_ai_inverse.png` | — | 대기 |
+| 445 | `ch07/random_walk/conditional_sequential.md` | 그림 | 가장 센 패턴이 없는 놀이 | `—` | `rw__penney.png` | — | 대기 |
+| 446 | `ch07/random_walk/first_step_analysis.md` | 그림 | 「밑천이 무한하다면」이라고 적어 놓고 넘어간 쪽 | `—` | `fs__eb1911_p771.png` | Wikimedia Commons · 저작권 없음 | 대기 |
+| 447 | `ch07/random_walk/first_step_analysis.md` | AI | 기계는 이 점화식을 풀지 않고 외워 넣는다 | `—` | `—` | — | 대기 |
+| 448 | `ch07/random_walk/graph_walk.md` | 그림 | 지나온 길은 묻지 않는다고 적어 둔 놀이판 | `—` | `gw__gyanchaupar.png` | 사진 Nomu420 · CC BY-SA 3.0 · Wikimedia Commons | 대기 |
+| 449 | `ch07/random_walk/graph_walk.md` | AI | 링크를 따라 걷는 사람이 매기는 순위 | `—` | `—` | — | 대기 |
+| 450 | `ch07/random_walk/lattice_walk.md` | 그림 | 모눈종이 위에 연필로 그린 임의 보행 | `—` | `rw__perrin1916_p115.png` | Internet Archive, PD-US-expired | 대기 |
+| 451 | `ch07/random_walk/line_walk.md` | 그림 | 취한 사람은 집에 오고 취한 새는 못 온다 | `—` | `rw__polya.png` | Wikimedia Commons, 촬영 Thane Plambeck, CC BY 2.0 | 대기 |
+| 452 | `ch07/random_walk/trial_state.md` | 그림 | 홀짝이 매번 뒤집히는 항아리로 물리학의 다툼을 가라앉히다 | `—` | `rw__ehrenfest.png` | 이 책에서 그렸다 | 대기 |
+| 453 | `ch07/statistical_estimation/population_sample.md` | 그림 | 돌아온 비행기만 세었다 | `ch01/classical/population_sample.md` | `se__wald1943.png` | — | 대기 |
+| 454 | `ch07/statistical_estimation/population_sample.md` | 그림 | 눈을 가리면 고르게 섞이는가 | `ch01/classical/population_sample.md` | `se__draft_lottery.png` | — | 대기 |
+| 455 | `ch07/statistical_estimation/population_sample.md` | 그림 | 사람을 똑같은 그림으로 세면 | `ch01/classical/population_sample.md` | `se__stamp_india1977.png` | Wikimedia Commons, GODL-India | 대기 |
+| 456 | `ch07/statistical_estimation/proportion_difference.md` | 그림 | 이백삼십팔만 명에게 물어보고 틀렸다 | `ch05/applications/diff_proportions.md` | `se__truman1948.png` | Wikimedia Commons, PD-US-no notice | 대기 |
+| 457 | `ch07/statistical_estimation/proportion_difference.md` | 그림 | 두 병동의 수가 갈라져 있었다 | `ch05/applications/diff_proportions.md` | `se__semmelweis1861_p3.png` | — | 대기 |
+| 458 | `ch07/statistical_estimation/sampling_estimation.md` | 그림 | 「확률」이라 부르지 않으려고 | `—` | `se__neyman.png` | Wikimedia Commons, 촬영 Konrad Jacobs, 오버볼파흐 수학연구소, CC BY-SA 2 | 대기 |
+| 459 | `ch07/statistical_estimation/standard_error.md` | 그림 | 맥주 회사가 이름을 쓰지 못하게 했다 | `ch05/applications/standard_error.md` | `se__student1908_p1.png` | — | 대기 |
+| 460 | `ch08/algorithms/algorithms.md` | 그림 | 기계가 밟을 절차를 표로 적은 쪽 | `—` | `al__lovelace1843_noteg.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 461 | `ch08/algorithms/algorithms.md` | 그림 | 사람 육만 사천 명이 밟을 절차 | `—` | `al__richardson1922_p184.png` | Internet Archive 스캔, 저작권 없음 | 대기 |
+| 462 | `ch08/algorithms/recurrences.md` | 그림 | 정리를 장난감으로 만들어 팔았다 | `—` | `recurrences__lucas1883.png` | Wikimedia Commons, PD-Art · PD-old-auto-expired | 대기 |
+| 463 | `ch08/algorithms/searching.md` | 그림 | 열여섯 해 동안 아무도 제대로 적지 못한 네 줄 | `—` | `al__knuth2005.png` | Jacob Appelbaum 촬영, Wikimedia Commons, CC BY-SA 2.5 | 대기 |
+| 464 | `ch08/graphs/graphs.md` | 그림 | 다리 일곱 개에서 시작한 것 | `—` | `gr__euler1741_p128.png` | Internet Archive 스캔, PD-old | 대기 |
+| 465 | `ch08/logic/logic.md` | 그림 | 「모두」를 원 안에 집어넣은 사람 | `—` | `lg__euler_circles_1768.png` | — | 대기 |
+| 466 | `ch08/number_theory/binary_digits.md` | 그림 | 셈하려고 그린 것이 아닌 $0$ 부터 $63$ 까지 | `—` | `nt__fuxi_leibniz1701.png` | Wikimedia Commons, PD-Art · PD-old-100-expired | 대기 |
+| 467 | `ch08/number_theory/combinatorial_nt.md` | 그림 | 상자도 비둘기도 없이, 머리카락으로 적은 증명 | `—` | `nt__recreation1629_p205.png` | Internet Archive 스캔, PD-old | 대기 |
+| 468 | `ch08/number_theory/congruence.md` | 그림 | 기호 $\equiv$ 가 처음 인쇄된 쪽 | `—` | `cong__gauss1801_p2.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 469 | `ch08/number_theory/congruence.md` | 그림 | 사람이 끼어들 자리를 없앤 개혁 | `—` | `nt__fasti_antiates.png` | Wikimedia Commons · 사진 Fabrizio Garrisi, CC0 | 대기 |
+| 470 | `ch08/number_theory/congruence.md` | 그림 | 이름에 나라가 들어간 까닭 | `—` | `nt__sunzi_suanjing.png` | Wikimedia Commons, 청나라 판본, 저작권 없음 | 대기 |
+| 471 | `ch08/number_theory/digits_bases.md` | 그림 | 점 하나가 수가 되기까지 | `—` | `nt__bakhshali.png` | Wikimedia Commons, PD-Art | 대기 |
+| 472 | `ch08/number_theory/digits_bases.md` | 그림 | 자릿값으로 셈은 했는데 적지는 못했다 | `—` | `nt__roman_abacus.png` | Wikimedia Commons · 사진 Sailko, CC BY-SA 3.0 | 대기 |
+| 473 | `ch08/number_theory/digits_bases.md` | 그림 | $\dfrac{1}{10}$ 을 끝까지 적지 못한 기계 | `—` | `nt__patriot1992_p15.png` | 미국 정부 보고서, PD | 대기 |
+| 474 | `ch08/number_theory/diophantine.md` | 그림 | 등호를 지워 버린 빨간 줄 | `—` | `nt__stamp_czech2000.png` | Wikimedia Commons, PD | 대기 |
+| 475 | `ch08/number_theory/diophantine.md` | 그림 | 정사각형의 대각선을 적어 본 사천 년 전 사람 | `—` | `nt__ybc7289.png` | Wikimedia Commons, CC0 | 대기 |
+| 476 | `ch08/number_theory/diophantine.md` | 그림 | 지어낸 초상, 지어낸 이야기 | `—` | `nt__hippasus.png` | Wikimedia Commons, PD-old | 대기 |
+| 477 | `ch08/number_theory/divisors_primes.md` | 그림 | 시시한 수는 없다 | `—` | `nt__stamp_india1962.png` | Wikimedia Commons, PD | 대기 |
+| 478 | `ch08/number_theory/divisors_primes.md` | 그림 | 바닥 기호가 생기기 백오십 년 전에 적힌 바닥함수의 합 | `—` | `nt__legendre1808_p9.png` | Internet Archive 스캔, PD | 대기 |
+| 479 | `ch09/game_theory/constant_sum_game.md` | 그림 | 신분증 사진 한 장과 미니맥스 정리 | `—` | `gt__vonneumann.png` | Wikimedia Commons, PD-LosAlamos | 대기 |
+| 480 | `ch09/game_theory/dominant_strategy.md` | 그림 | 스물여섯 쪽짜리 학위논문 | `—` | `gt__nash.png` | Wikimedia Commons, 촬영 Peter Badge / Typos1, CC BY-SA 3.0 | 대기 |
+| 481 | `ch09/game_theory/game_theory.md` | 그림 | 두 곡선이 만나는 점, 내시보다 백열두 해 먼저 | `—` | `gt__cournot1838_fig2.png` | — | 대기 |
+| 482 | `ch09/game_theory/mixed_strategy.md` | 그림 | 「얼마나 더 자주인지는 계산이 알려 주지 않는다」 | `—` | `gt__montmort1713_p409.png` | — | 대기 |
+| 483 | `ch09/game_theory/payoff_utility.md` | 그림 | 곱하지 않은 목록 | `—` | `gt__bentham_ch4.png` | — | 대기 |
+| 484 | `elementary_geometry/angles/angles.md` | 그림 | $360$ 은 땅이 아니라 하늘에서 왔다 | `—` | `ang__mulapin.png` | 대영박물관 BM 86378, Wikimedia Commons, CC BY-SA 4.0 | 대기 |
+| 485 | `elementary_geometry/area/circle_area.md` | 그림 | 「둘레는 서른, 지름은 열」 | `—` | `ca__molten_sea.png` | Wikimedia Commons, PD-US | 대기 |
+| 486 | `elementary_geometry/area/circle_area.md` | 그림 | 묘비에 새긴 것이 이름이 아니라 두 개의 부등호였다 | `—` | `ca__ceulen_tomb.png` | — | 대기 |
+| 487 | `elementary_geometry/area/circle_area.md` | 그림 | 머리카락 굵기만큼만 틀리게 | `—` | `ca__kashi_muhitiyya.png` | Wikimedia Commons, PD | 대기 |
+| 488 | `elementary_geometry/area/circle_area.md` | 그림 | 신사에 걸어 둔 문제판 | `—` | `ca__sangaku.png` | Wikimedia Commons, 촬영 Momotarou2012, CC BY-SA 3.0 | 대기 |
+| 489 | `elementary_geometry/area/perimeter.md` | 그림 | 벽에 걸어 둔 자 | `—` | `pm__metre.png` | Wikimedia Commons, CC BY-SA 3.0 | 대기 |
+| 490 | `elementary_geometry/area/polygon_area.md` | 그림 | 우표에 실린 「거의」 정사각형 | `—` | `ar__stamp_germany1998.png` | Wikimedia Commons, PD-shape | 대기 |
+| 491 | `elementary_geometry/centers/centroid.md` | 그림 | 지구를 들어 올리는 지렛대 | `—` | `cen__archimedes_lever1824.png` | Wikimedia Commons, PD-old-auto-1923 | 대기 |
+| 492 | `elementary_geometry/centers/euler_nine_point.md` | 그림 | 여섯 거리를 한자리에 늘어놓았더니 보인 것 | `—` | `cen__euler1767_p114.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 493 | `elementary_geometry/centers/orthocenter.md` | 그림 | 「그렇게 부르면 편리할 것이다」 | `—` | `cen__ferrers1866_p119.png` | Internet Archive 스캔, PD-old | 대기 |
+| 494 | `elementary_geometry/centers/tangent_centers.md` | 그림 | 이름 넷을 청해 셋이 살아남았다 | `—` | `cen__hudson1883_nature.png` | Internet Archive 스캔, PD-old | 대기 |
+| 495 | `elementary_geometry/circle/circle.md` | 그림 | 이 원 위에 서면 자기 위치를 알 수 없다 | `—` | `ci__station_pointer.png` | Wikimedia Commons, PD-UKGov | 대기 |
+| 496 | `elementary_geometry/circle/circle_packing.md` | 그림 | 대리석에서 원기둥 셋을 파내는 법을 적어 놓고, 틀렸다 | `—` | `cp__malfatti_p235.png` | Internet Archive, 1803년 간행물 | 대기 |
+| 497 | `elementary_geometry/congruence/congruence.md` | 그림 | 포개어 보는 것이 증명이 되는가 | `—` | `cong__hilbert1899_p12.png` | Internet Archive 스캔, PD-old | 대기 |
+| 498 | `elementary_geometry/construction/construction.md` | 그림 | 여백에 그림을 앉힌 첫 인쇄본 | `—` | `cons__euclid1482.png` | Wikimedia Commons, PD-old-100-1923 | 대기 |
+| 499 | `elementary_geometry/construction/construction.md` | 그림 | 둘 가운데 하나는 없어도 된다 | `—` | `cons__mascheroni1797.png` | Wikimedia Commons, PD-old-100-expired | 대기 |
+| 500 | `elementary_geometry/folding/fold_angle.md` | 그림 | 한 동작으로 펴지는 접기 무늬 | `—` | `fold__miura.png` | — | 대기 |
+| 501 | `elementary_geometry/folding/fold_area.md` | 그림 | 반으로 접어도 닮은 종이 | `—` | `fold__a_series.png` | — | 대기 |
+| 502 | `elementary_geometry/pythagoras/pythagoras.md` | 그림 | 얼굴이 아니라 정리를 새겼다 | `—` | `pyth__stamp_greece1955.png` | Wikimedia Commons, CC0 | 대기 |
+| 503 | `elementary_geometry/pythagoras/pythagoras.md` | 그림 | 빗변 위의 정사각형 하나로 끝낸 그림 | `—` | `pyth__zhoubi_xiantu.png` | Wikimedia Commons, 옛 목판본, 저작권 없음 | 대기 |
+| 504 | `elementary_geometry/quadrilateral/quadrilateral.md` | 그림 | 밧줄로는 변의 길이밖에 잴 수 없다 | `—` | `qd__menna.png` | 메트로폴리탄 미술관 모사도, Wikimedia Commons, CC0 | 대기 |
+| 505 | `elementary_geometry/similarity/similarity.md` | 그림 | 그림자로 잰 피라미드 | `—` | `sim__pyramid.png` | Wikimedia Commons, PD-old | 대기 |
+| 506 | `elementary_geometry/similarity/similarity.md` | 그림 | 닿을 수 없으면 두 번 재면 된다 | `—` | `sim__haidao_wanghaidao.png` | Wikimedia Commons, 옛 목판본, 저작권 없음 | 대기 |
+| 507 | `elementary_geometry/similarity/similarity.md` | 그림 | 이름은 지름을 따랐고 물은 넓이를 따랐다 | `—` | `sim__frontinus1722_p109.png` | Internet Archive · 저작권 없음 | 대기 |
+| 508 | `elementary_geometry/triangle_angles/triangle_angles.md` | 그림 | 증명하지 못하고 「본성에 어긋난다」고 적은 쪽 | `—` | `tri__saccheri_prop33.png` | Internet Archive, PD-old | 대기 |
+| 509 | `elementary_geometry/triangle_sides/triangle_sides.md` | 그림 | 글자를 버리고 색으로 적은 증명 | `—` | `side__byrne1847_prop5.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 510 | `elementary_geometry/trig_ratio/trig_ratio.md` | 그림 | 「사인」이라는 말에는 뜻이 없다 | `—` | `trg__aryabhatiya1874_p17.png` | Internet Archive, 저작권 없음 | 대기 |
+| 511 | `elementary_geometry/trig_ratio/trig_ratio.md` | 그림 | 산 하나에 올라 지구를 쟀다 | `—` | `trg__stamp_uzbekistan2023.png` | Wikimedia Commons, PD | 대기 |
+| 512 | `elementary_geometry/volume/volume_basics.md` | 그림 | 사천 년 전에 이미 적혀 있던 $\dfrac13$ | `—` | `vb__moscow_p14.png` | Wikimedia Commons, PD-old | 대기 |
+| 513 | `elementary_geometry/volume/volume_basics.md` | 그림 | 묘비에 새겨 달라던 그림 | `—` | `vb__tomb.png` | — | 대기 |
+| 514 | `elementary_geometry/volume/volume_basics.md` | 그림 | 거인이 있을 수 없는 까닭을 그린 쪽 | `—` | `vb__galileo_bone.png` | Wikimedia Commons, PD-scan | 대기 |
+| 515 | `numbers/arithmetic/rational_arithmetic.md` | 그림 | $+$ 와 $-$ 가 처음 인쇄된 쪽 | `—` | `ra__widmann1489.png` | Wikimedia Commons, PD-old | 대기 |
+| 516 | `numbers/arithmetic/square_root.md` | 그림 | 잴 수 없는 것을 비교하는 법 | `—` | `sq__euclid_bookV.png` | 프랑스 국립도서관 소장, Wikimedia Commons, PD | 대기 |
+| 517 | `numbers/arithmetic/square_root.md` | 그림 | 소수점이 없던 시절의 소수 | `—` | `sq__thiende1585.png` | Wikimedia Commons, PD-old | 대기 |
+| 518 | `numbers/arithmetic/unit_fractions.md` | 그림 | 욕심쟁이는 일곱 가운데 마지막이었다 | `—` | `uf__fibonacci1857_p82.png` | Internet Archive 스캔, PD | 대기 |
+| 519 | `numbers/expression/letters_expressions.md` | 그림 | 모음은 모르는 것, 자음은 아는 것 | `—` | `ex__viete.png` | Wikimedia Commons, PD-old | 대기 |
+| 520 | `numbers/expression/letters_expressions.md` | 그림 | 모르는 수에 글자 대신 자리를 준 사람들 | `—` | `le__siyuan_tianyuan.png` | Wikimedia Commons, 옛 필사본, 저작권 없음 | 대기 |
+| 521 | `numbers/expression/polynomial_operations.md` | 그림 | 곱셈 기호가 셋이던 쪽 | `—` | `po__oughtred1667_p10.png` | Internet Archive 스캔, PD-old | 대기 |
 
-합계 **114** 개 — 옮김 **1**, 대기 **113**
+합계 **521** 개 — 옮김 **14**, 보류 **0**, 대기 **507**
