@@ -114,6 +114,9 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
 - QED: `$\square$`
 - Every content page ends with `## Exercises` (interleaved solutions, collapsible)
 - Python: module docstring · `# ===` dividers · `if __name__ == "__main__":` guard
+- 두 연재 상자 — `<div class="storybox">` 「그림으로 보는 통계학」(호박·점선),
+  `<div class="aibox">` 「AI로 보는 통계학」(청록·왼쪽 띠). 증명·문항 사이클 밖이며
+  이야기하는 정의/정리 **바로 뒤**에 놓는다. 전체 규칙은 `agents/SKILL.md`
 
 ## Common Tasks
 
