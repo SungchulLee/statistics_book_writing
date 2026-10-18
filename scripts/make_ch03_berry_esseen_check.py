@@ -50,7 +50,7 @@ def measure(rng):
     su = 1 / np.sqrt(12)                        # Uniform(0,1) 의 sigma
     rho_u = np.mean(np.abs(rng.uniform(0, 1, 400_000) - 0.5) ** 3)
 
-    sup_e, sup_u, cov_true, cov_est = [], [], [], []
+    sup_e, sup_u, cov_true, cov_est, cov_t, cov_tu = [], [], [], [], [], []
     for n in NS:
         e = rng.exponential(1.0, (B, n))
         u = rng.uniform(0, 1, (B, n))
@@ -61,18 +61,24 @@ def measure(rng):
         cov_true.append(np.mean(np.abs(e.mean(1) - 1.0) <= 1.96 / np.sqrt(n)))
         cov_est.append(np.mean(np.abs(e.mean(1) - 1.0)
                                <= 1.96 * e.std(1, ddof=1) / np.sqrt(n)))
+        tc = stats.t.ppf(0.975, n - 1)          # 제대로 된 95% 구간의 임계값
+        cov_t.append(np.mean(np.abs(e.mean(1) - 1.0)
+                             <= tc * e.std(1, ddof=1) / np.sqrt(n)))
+        cov_tu.append(np.mean(np.abs(u.mean(1) - 0.5)
+                              <= tc * u.std(1, ddof=1) / np.sqrt(n)))
 
     nn = np.array(NS, float)
     return (np.array(sup_e), np.array(sup_u),
             C * 2.0 / np.sqrt(nn),                  # Exp(1): rho=2, sigma=1
             C * rho_u / (su ** 3 * np.sqrt(nn)),
-            np.array(cov_true), np.array(cov_est))
+            np.array(cov_true), np.array(cov_est),
+            np.array(cov_t), np.array(cov_tu))
 
 
 # === 그림 =========================================================
 def main():
     rng = np.random.default_rng(SEED)
-    sup_e, sup_u, be_e, be_u, cov_true, cov_est = measure(rng)
+    sup_e, sup_u, be_e, be_u, cov_true, cov_est, cov_t, cov_tu = measure(rng)
     nn = np.array(NS, float)
 
     fig, axes = plt.subplots(1, 2, figsize=(11.6, 4.9), constrained_layout=True)
@@ -106,9 +112,13 @@ def main():
     ax.axhline(95, color=MUTED, lw=1.6, ls="--")
     ax.text(nn[-1], 95.25, "명목 95%", ha="right", fontsize=10, color=MUTED)
     ax.plot(nn, cov_true * 100, marker="o", ms=7, lw=2.4, color=TEAL,
-            label="sigma 를 안다 — 거의 95%")
-    ax.plot(nn, cov_est * 100, marker="s", ms=7, lw=2.4, color=AMBER,
-            label="sigma 를 추정한다 — 크게 모자라다")
+            label="참 sigma + 1.96 — 왜도는 거의 상쇄된다")
+    ax.plot(nn, cov_t * 100, marker="s", ms=7, lw=2.4, color=AMBER,
+            label="추정 sigma + t — 제대로 된 95% 구간")
+    ax.plot(nn, cov_tu * 100, marker="s", ms=6, lw=1.8, color=AMBER, ls=":",
+            alpha=0.75, label="같은 것을 대칭 Uniform 에서")
+    ax.plot(nn, cov_est * 100, marker="x", ms=7, lw=1.8, color=MUTED, ls="--",
+            label="추정 sigma + 1.96 — 임계값을 잘못 쓴 것")
     ax.axvline(30, color=INK, lw=1.0, ls=":")
     ax.text(31, 82.5, "흔히 말하는 n = 30", fontsize=9.8, color=INK)
     ax.set_xscale("log")
@@ -116,10 +126,10 @@ def main():
     ax.minorticks_off()
     ax.set_xlabel("표본크기 n (로그 눈금)", fontsize=11.5)
     ax.set_ylabel("명목 95% 구간의 실제 포함률 (%)", fontsize=11.5)
-    ax.set_title("모자란 것은 왜도가 아니라 sigma 추정이다 — Exp(1)",
+    ax.set_title("임계값을 바로잡아도 치우친 쪽은 남는다 — Exp(1)",
                  fontsize=12.5, color=INK, pad=8)
-    ax.set_ylim(78, 97.5)
-    ax.legend(fontsize=9.6, loc="lower right", framealpha=0.92)
+    ax.set_ylim(78, 98.5)
+    ax.legend(fontsize=8.6, loc="lower right", framealpha=0.92)
     ax.grid(alpha=0.25)
 
     fig.suptitle("「n 이 30 이면 된다」가 무엇을 묻는 말인지에 달려 있다",
@@ -130,8 +140,9 @@ def main():
     plt.close(fig)
     print(f"saved {path}")
     for i, n in enumerate(NS):
-        print(f"    n={n:4d}  sup(Exp)={sup_e[i]:.4f}  상한={be_e[i]:.4f}"
-              f"  포함률 참σ={cov_true[i]*100:.2f}%  추정σ={cov_est[i]*100:.2f}%")
+        print(f"    n={n:4d}  sup={sup_e[i]:.4f} 상한={be_e[i]:.4f} | "
+              f"참σ+z {cov_true[i]*100:.2f}%  추정σ+t {cov_t[i]*100:.2f}%  "
+              f"추정σ+z {cov_est[i]*100:.2f}%  (대칭 t {cov_tu[i]*100:.2f}%)")
 
 
 if __name__ == "__main__":
