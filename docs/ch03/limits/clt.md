@@ -90,6 +90,29 @@ $$
 
 **왜 하필 정규분포인가.** 전개에서 살아남는 것이 평균과 분산뿐이기 때문이다. 3차 이상의 적률은 $n$으로 나뉘며 사라진다. 원래 분포가 아무리 치우쳐 있어도 그 치우침은 $1/\sqrt n$의 속도로 씻겨 나가고, 평균과 분산만으로 결정되는 분포 — 즉 정규분포 — 가 남는다.
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 종 모양이 활자로 놓인 쪽
+
+<figure markdown>
+  ![옛 활자로 인쇄된 책의 한 쪽. 머리글에 「The DOCTRINE of CHANCES.」 와 쪽 번호 243 이 찍혀 있고 그 아래 이탤릭체 제목이 다섯 줄에 걸쳐 있다](./img/clt__doctrine1756_p243.png){ width=720 }
+  <figcaption markdown>드무아브르 『우연의 교리』 제$3$ 판(런던, $1756$)의 $243$ 쪽. 제목은 「이항식 $(a+b)^n$ 을 전개한 항들의 합을 어림하는 법, 그리고 거기서 끌어낸, 실험에 얼마만큼의 믿음을 주어야 하는지를 가늠하는 몇 가지 실용적 규칙」이다. *(Internet Archive 원문 스캔, PD-old-100)*</figcaption>
+</figure>
+
+정리 1 은 **원래 분포가 무엇이든** 표준화하면 같은 곡선으로 간다고 말한다. 그 놀라운 사실이 처음 모습을 드러낸 자리는 뜻밖에도 아주 좁았다 — **동전 던지기** 하나였고, 그 자리가 사진의 쪽이다.
+
+머리글의 쪽 번호 $243$ 아래 다섯 줄짜리 제목이 보인다. 눈여겨볼 것은 「the Sum of the Terms of the Binomial」, 곧 이항식을 전개한 항들의 **합**이다. 공정한 동전을 $n$ 번 던져 앞면이 $k$ 번 나올 확률은 $\dfrac{1}{2^n}\dbinom nk$ 이고 「앞면이 몇 번에서 몇 번 사이일 확률」은 그 항들을 여럿 더한 것이므로, 제목이 말하는 「항들의 합을 어림하는 법」이 곧 오늘 우리가 $P(a\le Z_n\le b)$ 라 적는 것이다. 본문 첫 단락은 「매우 높은 거듭제곱에서는 이 일이 너무 수고롭고 어려워 손대 본 사람이 거의 없다」로 시작한다.
+
+$1733$ 년 $11$ 월 $12$ 일, 런던에서 개인 교습과 셈 자문으로 먹고살던 프랑스 출신 **아브라암 드무아브르**($1667$–$1754$)가 그 어림을 해냈다. 앞면 확률이 $\dfrac12$ 인 경우뿐이었고, 그마저 정식으로 출판하지 못해 라틴어로 몇 부 찍어 지인에게 돌린 낱장이었다. 사진의 쪽은 그가 죽고 두 해 뒤에 나온 제 $3$ 판에 그 낱장을 영어로 옮겨 실은 대목의 첫 쪽이다. 바로 다음 $244$ 쪽에서 그는 가운데 항이 전체 합에서 차지하는 비율을 $\dfrac{2}{B\sqrt n}$ 으로 적은 뒤, 그 $B$ 가 「반지름이 $1$ 인 원의 둘레의 제곱근」임을 친구 **제임스 스털링**이 알아냈다고 적는다. 반지름이 $1$ 인 원의 둘레는 $2\pi$ 이니 $B=\sqrt{2\pi}$ — 표준정규분포의 밀도 $\varphi(z)=\dfrac{1}{\sqrt{2\pi}}e^{-z^2/2}$ 의 분모에 앉아 있는 바로 그 수가 여기서 나온다.
+
+앞면 확률이 $\dfrac12$ 이 아닌 일반적인 경우로 넓힌 사람은 **라플라스**($1812$)이고, 거기서 다시 **동전이든 주사위든 무엇이든 좋다**는 정리 1 의 꼴까지 다듬어지는 데 또 백 년이 걸렸다. 이 정리가 「가우스 정리」라 불리지 않는 까닭도 여기 있다. 가우스가 한 일은 **그 곡선 자체**를 측정 오차의 분포로 세운 것이고(4장 [정규분포](../../ch04/continuous_distributions/normal.md)), **왜 그 곡선이 자꾸 나타나는가**를 밝힌 것은 드무아브르에서 라플라스로 이어진 이쪽 줄기다.
+
+같은 책의 표제지는 [조건부확률](../probability/conditional.md) 쪽의 「그림으로 보는 통계학 1」에 실려 있다. 곱셈정리가 활자로 놓인 자리가 그 책 서론의 $7$ 쪽이고 종 모양이 활자로 놓인 자리가 이 $243$ 쪽이니, 한 권이 두 장을 다 쥐고 있었던 셈이다. 다만 정리 1 이 말해 주는 것은 **합의 모양**까지다 — 얼마나 커야 그 모양에 가까워지는지는 아래 절 4 와 다음 쪽의 [베리–에센 정리](berry_esseen.md)가 따로 다룬다.
+
+_확인한 곳 — 드무아브르 『The Doctrine of Chances』 제$3$ 판(런던, A. Millar, $1756$)의 [원문 스캔](https://archive.org/details/doctrineofchance00moiv) 에서 직접 폈다: $243$ 쪽에 「A Method of approximating the Sum of the Terms of the Binomial … expanded into a Series」가 서 있고, 그 앞 $242$ 쪽 끝에 「a Paper of mine which was printed November 12, 1733, and communicated to some Friends, but never yet made public」가, $244$ 쪽에 「Mr. **James Stirling** … found that the Quantity B did denote the Square-root of the Circumference of a Circle whose Radius is Unity」와 비율 $\frac{2}{B\sqrt n}$ 이 있다. 쪽 번호와 제목은 사진에서 직접 읽었다 · [Wikipedia 「De Moivre–Laplace theorem」](https://en.wikipedia.org/wiki/De_Moivre%E2%80%93Laplace_theorem) · [Fischer 「From classical to modern central limit theorems」](https://arxiv.org/pdf/2405.19828)_
+
+</div>
+
 ---
 
 ## 2. 두 극한정리는 같은 것의 다른 배율이다

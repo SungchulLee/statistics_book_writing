@@ -445,6 +445,31 @@ $$
 
 이 식이 5장의 표준오차 $\sigma/\sqrt{n}$을 낳는다. 독립인 관측 $n$개의 합은 분산이 $n\sigma^2$이므로 평균의 분산은 $\sigma^2/n$이고, 제곱근을 취하면 $\sigma/\sqrt{n}$이다. **자료를 4배 모아야 정밀도가 2배가 되는** 그 관계가 여기서 나온다.
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 표준편차가 아니라 분산에 이름을 붙인 까닭
+
+<figure markdown>
+  ![1918년 학술지 논문의 첫 쪽. 제목 줄 아래 본문 한 문단이 놓이고 그 가운데에 두 시그마의 제곱을 더해 제곱근을 씌운 식이 한 줄 섞여 있다](./img/ev__fisher1918_variance.png){ width=680 }
+  <figcaption markdown>$1918$ 년 『에든버러 왕립학회 논문집』 제 $52$ 권에 실린 논문의 첫 쪽($399$ 쪽)에서 제목 줄과 본문 둘째 문단을 잘라 이어 붙였다. 아랫단 다섯째 줄에 「We shall term this quantity the **Variance**」가 있다. *(애들레이드 대학 R. A. Fisher Digital Archive 의 스캔)*</figcaption>
+</figure>
+
+정의 1 은 편차를 제곱하는 까닭을 적어 두었다 — 그냥 평균내면 $E[X-\mu]=0$ 이 되어 아무것도 남지 않으니 부호를 없애려고 제곱한다고. 틀린 말이 아니다. 그런데 **분산**이라는 낱말을 처음 쓴 사람이 든 까닭은 그것이 아니었고, 그가 든 까닭은 바로 위의 정리 3 이다.
+
+사진이 그 낱말이 활자가 된 자리다. 옮기면 이렇다.
+
+> 변이의 독립인 두 원인이 각각 표준편차 $\sigma_1$ 과 $\sigma_2$ 인 분포를 만들어 낸다면, 두 원인이 함께 작용할 때의 분포는 표준편차 $\sqrt{\sigma_1^2+\sigma_2^2}$ 을 갖는다는 것이 알려져 있다. 그러므로 변이의 원인을 분석할 때에는 **표준편차의 제곱**을 변이의 척도로 삼는 것이 바람직하다. 우리는 이 양을 그것이 가리키는 정규모집단의 **분산(Variance)** 이라 부르기로 한다.
+
+제곱을 고른 까닭이 부호가 아니라 **더해지기 때문**이라고 적혀 있다. $\sigma$ 끼리는 더해지지 않는데 $\sigma^2$ 끼리는 더해진다 — 정리 3 에서 교차항이 사라질 때 남는 바로 그 식이다. 새 이름이 필요했던 쪽은 **더해지는 쪽**이었다. (피셔는 「독립인 두 원인」이라 적었지만, 정리 3 이 보였듯 실제로 필요한 것은 독립이 아니라 **무상관**뿐이다.)
+
+이 낱말이 통계 논문이 아니라 **유전 논문**에서 태어난 것도 눈여겨볼 만하다. 제목 줄이 그대로 보여 준다 — 「멘델 유전을 가정했을 때 친족 사이의 상관」. 키처럼 연속으로 변하는 형질이 낱낱으로 갈라지는 멘델의 유전과 어떻게 어울리는지 따지려니, 변이를 원인별로 **쪼개어 더할** 수단이 있어야 했던 것이다. 같은 쪽 목차의 제 $21$ 절 제목에는 이미 「analysis of variance」, 곧 11장이 통째로 다루는 **분산분석**이 적혀 있다.
+
+정의 1 은 「제곱을 했으니 단위도 제곱이 되고, 원래 단위로 되돌리려고 제곱근을 취한 것이 표준편차」라고 적는다. 피셔에게는 그 왕복의 방향이 반대였다. 눈에 익은 것은 표준편차지만 **셈이 되는 것은 분산**이어서, 이름은 제곱 쪽에 붙었다.
+
+_확인한 곳 — 스캔은 애들레이드 대학 R. A. Fisher Digital Archive 의 문서 $9$ ([PDF 직접 주소](https://digital.library.adelaide.edu.au/server/api/core/bitstreams/0782aa50-014f-483f-b04f-48d4df737e69/content)). 제목 줄, 「We shall term this quantity the Variance of the normal population to which it refers」, 목차 제 $21$ 절의 「analysis of variance」는 모두 **그 첫 쪽에서 직접 읽었다** · 이 쪽이 $399$ 쪽인 것은 **다음 쪽 머리글이 「$400$ R. A. FISHER ON THE CORRELATION BETWEEN」임을 같은 스캔에서 확인**한 것이다 · 이 논문이 「variance」의 첫 쓰임이라는 것과, 먼저 런던 왕립학회에 보냈다가 에든버러에서 실리게 된 사정은 [Wikipedia 「The Correlation between Relatives on the Supposition of Mendelian Inheritance」](https://en.wikipedia.org/wiki/The_Correlation_between_Relatives_on_the_Supposition_of_Mendelian_Inheritance) · 본문은 $1918$ 년 발행이라 **미국에서 저작권이 만료**되었으나(발행 후 $95$ 년), 이 스캔 머리에는 「Reproduced by permission of the Royal Society of Edinburgh」가 적혀 있다_
+
+</div>
+
 <div class="exbox" markdown>
 
 **보기 4.** <span class="diff easy" title="쉬움"></span> 포트폴리오 분산. 수익률 $R_1, R_2$인 두 자산에 가중치 $w_1, w_2$($w_1 + w_2 = 1$)로 투자하면

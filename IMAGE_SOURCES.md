@@ -416,7 +416,7 @@
 | 380 | `ch07/conditional/stratified_reversal.md` | 그림 | 소송이 될 뻔한 입학 통계 | `—` | `cd__berkeley.png` | Wikimedia Commons, 촬영 Daderot, CC0 | 대기 |
 | 381 | `ch07/conditional/total_probability.md` | 그림 | 바다를 칸으로 나누고 하나씩 지워 나간 기록 | `ch03/probability/conditional.md` | `cd__palomares1975_fig333.png` | 미국 공군 자료, PD-USGov | **옮김** |
 | 382 | `ch07/descriptive/central_tendency.md` | 그림 | 눈금이 없는 그래프 | `ch02/center/mean_median_mode.md` | `dsc__stamp_indonesia1969.png` | Wikimedia Commons, PD | 대기 |
-| 383 | `ch07/descriptive/covariance_correlation.md` | 그림 | 「회귀」라는 이름이 나온 그림 | `ch03/rv/correlation.md` | `dc__galton1886_plate10.png` | Wikimedia Commons, PD-Art | 대기 |
+| 383 | `ch07/descriptive/covariance_correlation.md` | 그림 | 「회귀」라는 이름이 나온 그림 | `ch03/rv/correlation.md` | `dc__galton1886_plate10.png` | Wikimedia Commons, PD-Art | **옮김** |
 | 384 | `ch07/descriptive/dispersion.md` | 그림 | 백분위수를 종이에 그린 것 | `ch02/spread/variance_std.md` | `dsc__growth_chart_cdc2000.png` | Wikimedia Commons, PD-USGov-HHS-CDC | 대기 |
 | 385 | `ch07/descriptive/frequency_distribution.md` | 그림 | 통계학이라는 말보다 먼저 있던 도수분포표 | `ch02/exploration/histograms.md` | `fd__bills_of_mortality_1665.png` | Wikimedia Commons, Wellcome Collection, CC BY 4.0 | 대기 |
 | 386 | `ch07/descriptive/frequency_distribution.md` | 그림 | 히스토그램을 둥글게 말아 의회에 내민 그림 | `ch02/exploration/histograms.md` | `fd__nightingale1858.png` | Wikimedia Commons, PD-old | 대기 |
@@ -440,19 +440,19 @@
 | 404 | `ch07/expectation_applications/order_statistics.md` | 그림 | 전차를 세지 않고 전차 수를 센 사람들 | `—` | `ea__panther1944.png` | Archives Normandie, Wikimedia Commons, PD | 대기 |
 | 405 | `ch07/expectation_applications/variance_optimization.md` | 그림 | 「서로 독립이면」이라는 단서에 상을 준 까닭 | `—` | `ea__vo_markowitz.png` | — | 대기 |
 | 406 | `ch07/expectation_variance/distribution_table_variance.md` | 그림 | 손에게 좋은 공식이 기계에게는 나쁜 공식이다 | `—` | `ev__welford.png` | — | 대기 |
-| 407 | `ch07/expectation_variance/expectation.md` | 그림 | 확률보다 기댓값이 먼저 인쇄되었다 | `ch03/rv/expectation.md` | `ev__huygens1657.png` | Wikimedia Commons, PD-old-100 | 대기 |
+| 407 | `ch07/expectation_variance/expectation.md` | 그림 | 확률보다 기댓값이 먼저 인쇄되었다 | `ch03/rv/expectation.md` | `ev__huygens1657.png` | Wikimedia Commons, PD-old-100 | **옮김** |
 | 408 | `ch07/expectation_variance/expectation_coin_and_dice.md` | 그림 | 「공정하다」를 이만 육천 번 던져 재어 본 사람 | `—` | `ev__weldon1906.png` | Wikimedia Commons, PD-US | 대기 |
 | 409 | `ch07/expectation_variance/indicator_linearity.md` | AI | 점수는 더해서 나오지만 믿음은 거기서 나오지 않는다 | `—` | `ev__ai_indicator_dep.png` | — | 대기 |
 | 410 | `ch07/expectation_variance/indicator_linearity.md` | 그림 | 섞었다고 믿은 날 | `—` | `ev__lottery1969.png` | Wikimedia Commons, PD-USGov | 대기 |
 | 411 | `ch07/expectation_variance/indicator_variance.md` | AI | 답을 여러 개 모아도 줄지 않는 몫 | `—` | `ev__ai_ensemble_floor.png` | — | 대기 |
 | 412 | `ch07/expectation_variance/indicator_variance.md` | 그림 | 오리를 세지 않고 오리 수를 세는 법 | `—` | `ev__lincoln1930.png` | — | 대기 |
-| 413 | `ch07/expectation_variance/variance.md` | 그림 | 표준편차가 아니라 분산에 이름을 붙인 까닭 | `ch03/rv/variance_covariance.md` | `ev__fisher1918_variance.png` | — | 대기 |
-| 414 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 금 같은 정리 | `ch03/limits/lln.md` | `lln__arsconjectandi1713.png` | Wikimedia Commons, PD-old-100 | 대기 |
-| 415 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 부등식 하나로 밀어붙인 사람 | `ch03/limits/lln.md` | `lln__stamp_russia2021.png` | Wikimedia Commons, PD | 대기 |
-| 416 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 바늘로 잰 원주율 | `ch03/limits/lln.md` | `lln__buffon_statue.png` | Wikimedia Commons, 촬영 Celette, $2012$, CC BY-SA 4.0 | 대기 |
-| 417 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 카드 점을 치다 나온 계산법 | `ch03/limits/lln.md` | `lln__fermiac.png` | 로스앨러모스 국립연구소, Wikimedia Commons, PD-USGov | 대기 |
+| 413 | `ch07/expectation_variance/variance.md` | 그림 | 표준편차가 아니라 분산에 이름을 붙인 까닭 | `ch03/rv/variance_covariance.md` | `ev__fisher1918_variance.png` | — | **옮김** |
+| 414 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 금 같은 정리 | `ch03/limits/lln.md` | `lln__arsconjectandi1713.png` | Wikimedia Commons, PD-old-100 | **옮김** |
+| 415 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 부등식 하나로 밀어붙인 사람 | `ch03/limits/lln.md` | `lln__stamp_russia2021.png` | Wikimedia Commons, PD | **옮김** |
+| 416 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 바늘로 잰 원주율 | `ch03/limits/lln.md` | `lln__buffon_statue.png` | Wikimedia Commons, 촬영 Celette, $2012$, CC BY-SA 4.0 | **옮김** |
+| 417 | `ch07/law_of_large_numbers/law_of_large_numbers.md` | 그림 | 카드 점을 치다 나온 계산법 | `ch03/limits/lln.md` | `lln__fermiac.png` | 로스앨러모스 국립연구소, Wikimedia Commons, PD-USGov | **옮김** |
 | 418 | `ch07/normal_distribution/binomial_to_normal.md` | 그림 | 반 칸에 사람 이름이 붙은 자리 | `—` | `nd__yates_gain.png` | — | 대기 |
-| 419 | `ch07/normal_distribution/central_limit_theorem.md` | 그림 | 종 모양이 활자로 놓인 쪽 | `ch03/limits/clt.md` | `clt__doctrine1756_p243.png` | Internet Archive 원문 스캔, PD-old-100 | 대기 |
+| 419 | `ch07/normal_distribution/central_limit_theorem.md` | 그림 | 종 모양이 활자로 놓인 쪽 | `ch03/limits/clt.md` | `clt__doctrine1756_p243.png` | Internet Archive 원문 스캔, PD-old-100 | **옮김** |
 | 420 | `ch07/normal_distribution/normal_applications.md` | 그림 | 같은 높이로 튀었는데 한쪽만 이상이다 | `—` | `nd__shewhart1927_p726.png` | — | 대기 |
 | 421 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 지폐에 실린 확률밀도함수 | `ch04/continuous_distributions/normal.md` | `nd__note.png` | — | 대기 |
 | 422 | `ch07/normal_distribution/normal_distribution.md` | 그림 | 구슬이 쌓아 올린 종 모양 | `ch04/continuous_distributions/normal.md` | `nd__galton.png` | Wikimedia Commons, PD | 대기 |
@@ -461,19 +461,19 @@
 | 425 | `ch07/normal_distribution/normal_symmetry.md` | 그림 | 대칭을 눈금으로 새겨 둔 종이 | `—` | `nd__hazen.png` | — | 대기 |
 | 426 | `ch07/normal_distribution/normal_symmetry.md` | AI | 눈금을 맞추지 않으면 큰 눈금만 보게 된다 | `—` | `—` | — | 대기 |
 | 427 | `ch07/normal_distribution/repeated_trial_normal.md` | 그림 | 그 표를 만든 사람들은 음수를 다룰 줄 몰랐다 | `—` | `nd__tables.png` | — | 대기 |
-| 428 | `ch07/random_variable/continuous_random_variable.md` | AI | 상수를 구하지 못한 채 쓰는 밀도 | `ch03/rv/continuous.md` | `rv__crv_ai_ratio.png` | — | 대기 |
-| 429 | `ch07/random_variable/continuous_random_variable.md` | 그림 | 대칭인데 평균이 없는 밀도 | `ch03/rv/continuous.md` | `rv__crv_cauchy.png` | — | 대기 |
-| 430 | `ch07/random_variable/cumulative_distribution.md` | 그림 | 잡화상이 만든 첫 계단 | `ch03/rv/pmf_pdf_cdf.md` | `rv__graunt1662_p62.png` | — | 대기 |
+| 428 | `ch07/random_variable/continuous_random_variable.md` | AI | 상수를 구하지 못한 채 쓰는 밀도 | `ch03/rv/continuous.md` | `rv__crv_ai_ratio.png` | — | **옮김** |
+| 429 | `ch07/random_variable/continuous_random_variable.md` | 그림 | 대칭인데 평균이 없는 밀도 | `ch03/rv/continuous.md` | `rv__crv_cauchy.png` | — | **옮김** |
+| 430 | `ch07/random_variable/cumulative_distribution.md` | 그림 | 잡화상이 만든 첫 계단 | `ch03/rv/pmf_pdf_cdf.md` | `rv__graunt1662_p62.png` | — | **옮김** |
 | 431 | `ch07/random_variable/geometric_probability.md` | 그림 | 세 답을 나란히 적고 물음이 틀렸다고 한 쪽 | `—` | `rv__bertrand1907_p5.png` | Wikimedia Commons, PD-US-expired | 대기 |
 | 432 | `ch07/random_variable/probability_density_applications.md` | 그림 | 넓이를 지키려고 위도를 눌러 놓은 지도 | `—` | `rv__pda_equalarea1921.png` | — | 대기 |
 | 433 | `ch07/random_variable/probability_density_applications.md` | AI | 공 위에 점을 고르게 뿌리려면 위도를 버려야 한다 | `—` | `rv__pda_ai_sphere.png` | — | 대기 |
 | 434 | `ch07/random_variable/probability_density_function.md` | AI | 어느 자 위에서 균등하게 뽑을 것인가 | `—` | `rv__pdf_ai_logscale.png` | — | 대기 |
 | 435 | `ch07/random_variable/probability_density_function.md` | 그림 | 측량 오차를 따지다 나온 분포 | `—` | `rv__pdf_helmert.png` | — | 대기 |
 | 436 | `ch07/random_variable/probability_density_graph.md` | 그림 | 눈금을 바꾸면 보이는 직선 | `—` | `rv__pdg_pareto.png` | — | 대기 |
-| 437 | `ch07/random_variable/probability_mass_function.md` | 그림 | 질량이 밀도로 건너가는 자리 | `ch03/rv/pmf_pdf_cdf.md` | `rv__simpson1757_p72.png` | Internet Archive 스캔, PD-old | 대기 |
-| 438 | `ch07/random_variable/probability_mass_function.md` | AI | 꼬리를 자르면 확률이 아니게 된다 | `ch03/rv/pmf_pdf_cdf.md` | `rv__pmf_ai_renorm.png` | — | 대기 |
-| 439 | `ch07/random_variable/probability_mass_function.md` | AI | 합이 $1$ 이라고 해서 확률인 것은 아니다 | `ch03/rv/pmf_pdf_cdf.md` | `—` | — | 대기 |
-| 440 | `ch07/random_variable/random_variable.md` | 그림 | 주사위 셋의 합을 칠백 해 전에 적어 둔 표 | `ch03/rv/discrete.md` | `rv__devetula1534.png` | — | 대기 |
+| 437 | `ch07/random_variable/probability_mass_function.md` | 그림 | 질량이 밀도로 건너가는 자리 | `ch03/rv/continuous.md` | `rv__simpson1757_p72.png` | Internet Archive 스캔, PD-old | **옮김** |
+| 438 | `ch07/random_variable/probability_mass_function.md` | AI | 꼬리를 자르면 확률이 아니게 된다 | `ch03/rv/discrete.md` | `rv__pmf_ai_renorm.png` | — | **옮김** |
+| 439 | `ch07/random_variable/probability_mass_function.md` | AI | 합이 $1$ 이라고 해서 확률인 것은 아니다 | `ch03/rv/discrete.md` | `—` | — | **옮김** |
+| 440 | `ch07/random_variable/random_variable.md` | 그림 | 주사위 셋의 합을 칠백 해 전에 적어 둔 표 | `ch03/rv/discrete.md` | `rv__devetula1534.png` | — | **옮김** |
 | 441 | `ch07/random_variable/random_variable_geometry.md` | 그림 | 「그때에야 비로소 셀 수 있다」 | `—` | `rv__crofton1868_p181.png` | Internet Archive 스캔, PD-old | 대기 |
 | 442 | `ch07/random_variable/random_variable_process.md` | 그림 | 시 두 만 자를 손으로 세어 얻은 두 수 | `—` | `rv__markov1913_p153.png` | Internet Archive 스캔, PD-old | 대기 |
 | 443 | `ch07/random_variable/uniform_distribution.md` | 그림 | 고르게 뽑으려고 돌을 깎았다 | `ch04/continuous_distributions/uniform.md` | `rv__kleroterion.png` | 촬영 Zde, Wikimedia Commons, CC BY-SA 4.0 | 대기 |
@@ -556,4 +556,4 @@
 | 520 | `numbers/expression/letters_expressions.md` | 그림 | 모르는 수에 글자 대신 자리를 준 사람들 | `—` | `le__siyuan_tianyuan.png` | Wikimedia Commons, 옛 필사본, 저작권 없음 | 대기 |
 | 521 | `numbers/expression/polynomial_operations.md` | 그림 | 곱셈 기호가 셋이던 쪽 | `—` | `po__oughtred1667_p10.png` | Internet Archive 스캔, PD-old | 대기 |
 
-합계 **521** 개 — 옮김 **14**, 보류 **0**, 대기 **507**
+합계 **521** 개 — 옮김 **29**, 보류 **0**, 대기 **492**
