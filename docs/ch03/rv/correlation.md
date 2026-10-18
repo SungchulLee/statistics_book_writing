@@ -59,30 +59,7 @@ $$
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 1.** 「회귀」라는 이름이 나온 그림
-
-<figure markdown>
-  ![가로축은 자식의 키, 세로축은 중간부모의 키인 격자에 사람 수가 칸마다 적혀 있고, 그 위에 타원 하나와 중심을 지나는 여러 직선이 겹쳐 그려져 있다](./img/dc__galton1886_plate10.png){ width=520 }
-  <figcaption markdown>골턴 「유전되는 키에서 평범으로의 회귀」($1886$)의 도판. 표제에 「표 1 을 옮긴 그림」이라 적혀 있다. *(Wikimedia Commons, PD-Art)*</figcaption>
-</figure>
-
-정리 1 은 $|\rho|\le 1$ 이라 말하고, 등호가 되는 것은 두 변수가 한 직선 위에 놓일 때뿐이라고 덧붙인다. 그 부등호가 세상에서 처음 **눈에 보이는 꼴**로 그려진 자리가 위의 그림이고, 거기서 **회귀**라는 말이 나왔다.
-
-가로는 다 자란 자식의 키, 세로는 아버지와 어머니의 키를 평균한 **중간부모**의 키다. 칸마다 적힌 수는 그 조합에 해당하는 사람 수, 곧 짝자료의 도수다. 표제 아래에 「모든 여자의 키에 $1.08$ 을 곱했다」는 단서까지 인쇄되어 있다.
-
-눈여겨볼 것은 격자 위에 겹쳐 그린 선들이다. 도수가 비슷한 칸들을 두르면 **타원**이 되고, 그 타원에 수평인 접선이 닿는 점들과 수직인 접선이 닿는 점들이 각각 직선 하나씩을 이룬다. 골턴은 그 둘을 그려 넣고 「수평 접점의 자취」·「수직 접점의 자취」라 적었다. 오늘 우리가 회귀직선이라 부르는 둘이다. 어느 쪽도 함께 그려 넣은 타원의 장축(「Major axes」)과 겹치지 않는다.
-
-왜 겹치지 않는가를 말해 주는 것이 정리 1 이다. 회귀직선의 기울기는 두 표준편차의 비 $\dfrac{s_y}{s_x}$ 를 그대로 쓰지 않고 거기에 $\rho$ 를 곱한 $\rho\dfrac{s_y}{s_x}$ 이고(13장 [최소제곱](../../ch13/estimation_inference/least_squares.md)에서 유도한다), $|\rho| < 1$ 이므로 언제나 덜 가파르다. 골턴이 이 자료에서 읽어 낸 것도 그 「덜 가파름」이었다 — 자식의 편차는 중간부모 편차의 $\dfrac23$ 쯤이었다. 큰 부모의 자식이 부모만큼 크지는 않다는 이 되돌아감에 그는 **회귀**라는 이름을 붙였고, 이름만 남아 오늘날에는 되돌아감과 상관없는 직선까지 회귀직선이라 부른다.
-
-$|\rho|=1$ 이면 기울기가 $s_y/s_x$ 그대로여서 되돌아감이 없다. 정리 1 의 등호 조건이 「완전한 선형관계」인 것과 **되돌아갈 여지가 없다**는 것이 같은 말인 셈이다.
-
-_확인한 곳 — 골턴 「Regression towards Mediocrity in Hereditary Stature」(*Journal of the Anthropological Institute* $15$, $1886$, $246$–$263$ 쪽) — [원문 스캔](https://galton.org/essays/1880-1889/galton-1886-jaigi-regression-stature.pdf). 표제의 「DIAGRAM BASED ON TABLE I.」와 「all female heights are multiplied by 1·08」, 그리고 「Locus of horizontal tangential points」·「Locus of vertical tangential points」·「Major axes」는 **위 도판에서 직접 읽었다.** 두 접점 자취의 기울기가 각각 $\tfrac23$ 과 $\tfrac13$ 이라는 것은 같은 논문 $255$ 쪽에 있다_
-
-</div>
-
-<div class="storybox" markdown>
-
-**그림으로 보는 통계학 2.** 항등식 한 줄 뒤에 부등식이 따라 나온 쪽
+**그림으로 보는 통계학 1.** 항등식 한 줄 뒤에 부등식이 따라 나온 쪽
 
 <figure markdown>
   ![1821년 해석학 교재의 한 쪽 — 엇갈린 곱의 제곱합 항등식과 그 아래에 따라 나오는 부등식](./img/cs__cauchy1821_p456.png){ width=720 }
