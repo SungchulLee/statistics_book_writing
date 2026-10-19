@@ -66,6 +66,73 @@ RSS의 기울기(OLS 중심에서 바깥을 향한다)가 제약의 기울기(�
 
 ---
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 예산을 지키며 걸으려면 접선 방향뿐이다
+
+§2 의 제약영역 $\lVert\boldsymbol\beta\rVert_2 \le t$ 와 §3 의 접점은 **정지한 그림**이다.
+그런데 실제로 계수를 찾는 일은 움직이는 일이고, 기계학습에서 이 기하가 그대로 쓰이는
+자리가 있다 — **예산을 쓴 만큼 지키면서** 한 걸음씩 옮기는 자리다.
+
+경계 위에 있다는 것은 $\lVert\boldsymbol\beta\rVert^2 = t^2$ 이라는 뜻이다. 걸음
+$\mathrm d\boldsymbol\beta$ 를 디뎠을 때 이 값이 얼마나 바뀌는지를 $1$ 차까지 적으면
+
+$$
+\mathrm d\!\left(\lVert\boldsymbol\beta\rVert^2\right)
+= 2\,\boldsymbol\beta^\top \mathrm d\boldsymbol\beta
+$$
+
+이다. **예산을 바꾸는 것은 오직 $\boldsymbol\beta$ 와 나란한 성분뿐**이라는 말이다.
+그러니 방향 $\mathbf g$ 를 그대로 쓰지 말고, 거기서 지름 방향을 덜어 낸
+
+$$
+\mathbf g_{\perp} = \mathbf g - \left(\mathbf g^\top \boldsymbol\beta\right)\boldsymbol\beta
+\qquad (\lVert\boldsymbol\beta\rVert = 1 \text{ 로 두었다})
+$$
+
+만으로 옮기면 $1$ 차항이 $0$ 이 되어 예산의 어긋남이 걸음 크기의 **$2$ 차부터** 시작한다.
+정말 그런지 재어 본다.
+
+```python
+import numpy as np
+
+beta = np.array([0.6, 0.8])          # 예산 경계 위의 한 점, |beta| = 1
+g = np.array([0.9, -0.4])            # 이번 걸음의 방향
+
+
+def norm_after(h, project):
+    """beta 를 g 방향으로 h 만큼 옮긴 뒤의 |beta| — project 면 접선 성분만 쓴다."""
+    step = g - (g @ beta) * beta if project else g
+    return np.linalg.norm(beta + h * step)
+
+
+print("    h        날것 |beta|-1     접선만 |beta|-1")
+for h in (0.2, 0.1, 0.05, 0.025):
+    print(f"{h:7.4f}     {norm_after(h, False) - 1:+.8f}      {norm_after(h, True) - 1:+.8f}")
+```
+
+```text
+    h        날것 |beta|-1     접선만 |beta|-1
+ 0.2000     +0.06150836      +0.01826519
+ 0.1000     +0.02649890      +0.00459743
+ 0.0500     +0.01213882      +0.00115134
+ 0.0250     +0.00578638      +0.00028796
+```
+
+걸음을 반으로 줄일 때마다 **날것**의 어긋남은 대략 반이 되는데
+($0.0265 \to 0.0121 \to 0.0058$), **접선 성분만** 쓴 쪽은 정확히 $\tfrac14$ 씩 준다
+($0.00460 \to 0.00115 \to 0.000288$). $1$ 차항이 사라져 $2$ 차항만 남았다는 뜻이다.
+
+이것이 §7 의 **예산 해석**을 움직이는 그림으로 바꾼 것이다. 능형회귀를 「$\lambda$ 를
+주고 푼다」가 아니라 「$t$ 를 정해 두고 그 공 위에서 RSS 를 줄인다」로 읽으면, 허용된
+걸음이 접평면 안쪽뿐이고 그래서 §3 의 접점에서 멈추게 된다.
+
+다만 표는 **한 걸음**을 잰 것이다. $2$ 차 어긋남도 걸음마다 쌓이므로 수천 걸음을 가면
+결국 경계를 벗어난다 — 그래서 실제로는 접선 걸음을 디딘 뒤 매번 크기로 나누어 $t$ 로
+다시 맞춘다.
+
+</div>
+
 ## 4. 능형회귀가 정확한 0을 만들지 않는 이유
 
 구의 경계에는 꼭짓점이 없다. 2차원에서 $(t, 0)$ 같은 꼭짓점은 경계의 방향이 급격히 바뀌어 접선이 유일하지 않은 점인데, 구에는 그런 점이 없다.

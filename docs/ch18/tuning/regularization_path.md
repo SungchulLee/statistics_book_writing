@@ -54,6 +54,107 @@ $\lambda$가 커지면
 
     실무적 함의: **"경로에 일찍 등장한 변수가 더 중요하다"는 해석을 조심해야 한다.** 진입 순서는 상관 구조에 좌우되며 안정적인 중요도 순위가 아니다.
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 기여를 공리로 나누면 순서가 달라진다
+
+바로 위 경고가 「진입 순서는 안정적인 중요도 순위가 아니다」라고 했다. 그렇다면 **무엇이**
+중요도인가. 기계학습 쪽이 쓰는 답 하나가 **섀플리값**이고, 뿌리는 통계학이 아니라 게임
+이론이다.
+
+특징 집합 $S$ 만 넣고 적합했을 때의 설명력을 $v(S)$ 라 하자(여기서는 $R^2$ 을 쓴다).
+특징 $j$ 의 몫은 $j$ 를 **더할 때의 증가분**을 모든 $S$ 에 대해 가중평균한 것이다.
+
+$$
+\phi_j = \sum_{S \not\ni j} w(\lvert S\rvert)\,\bigl[v(S \cup \{j\}) - v(S)\bigr],
+\qquad
+w(s) = \frac{s!\,(p-s-1)!}{p!}
+$$
+
+계승만 늘어놓으면 어디서 나온 수인지 알 수 없는데, 고쳐 적으면 뜻이 드러난다.
+
+$$
+w(s) = \frac{1}{p\dbinom{p-1}{s}}
+$$
+
+크기가 $s$ 인 $S$ 가 $\binom{p-1}{s}$ 개이므로 **그 층의 무게를 다 더하면 꼭
+$\tfrac1p$** 이고, 층이 $p$ 개이니 전체가 $1$ 이 된다. 곧 이 무게는 크기마다 공평하게
+$\tfrac1p$ 씩 나누어 준 것이고, 그래서 $\sum_j \phi_j$ 가 전체 $R^2$ 을 **정확히**
+복원한다. 라쏘의 진입 순서에는 이런 보존이 없다.
+
+<figure markdown>
+  ![왼쪽은 연합 크기별로 무게를 다 더한 값이 열두 층 모두 1/12 로 같은 막대그래프. 오른쪽은 열두 변수의 섀플리 R² 기여 막대그래프로, 참 변수 넷이 높고 잡음 여덟은 바닥에 붙어 있으며 라쏘 진입 순서가 붉은 수로 적혀 있다](./img/shapley_vs_entry.png){ width=980 }
+  <figcaption markdown>§4 와 같은 자료다(씨앗 $0$, $n=200$, 참 계수 $3, -2, 1.5, 1$ 과 잡음 여덟). 붉은 수가 라쏘 진입 순서이고, $5 \cdot 6 \cdot 7$ 번으로 들어온 $x_6 \cdot x_7 \cdot x_{12}$ 의 막대가 바닥에 붙어 있다. 자료에서 직접 그렸다.</figcaption>
+</figure>
+
+$2^{12} = 4096$ 개 부분집합을 전부 돌려 직접 센다.
+
+```python
+import itertools
+from math import factorial
+import numpy as np
+
+rng = np.random.default_rng(0)
+n, p = 200, 12
+X = rng.normal(0, 1, (n, p))
+y = X @ np.array([3.0, -2.0, 1.5, 1.0] + [0.0] * 8) + rng.normal(0, 1, n)
+
+tss = ((y - y.mean()) ** 2).sum()
+ones = np.ones((n, 1))
+r2 = np.zeros(1 << p)
+for mask in range(1 << p):                       # 2^12 개 부분집합의 R^2 을 미리 센다
+    cols = [j for j in range(p) if mask >> j & 1]
+    A = np.hstack([ones, X[:, cols]]) if cols else ones
+    resid = y - A @ np.linalg.lstsq(A, y, rcond=None)[0]
+    r2[mask] = 1.0 - (resid ** 2).sum() / tss
+
+w = [factorial(s) * factorial(p - s - 1) / factorial(p) for s in range(p)]
+phi = np.zeros(p)
+for j in range(p):
+    rest = [k for k in range(p) if k != j]
+    for s in range(p):
+        for S in itertools.combinations(rest, s):
+            m = sum(1 << k for k in S)
+            phi[j] += w[s] * (r2[m | (1 << j)] - r2[m])
+
+entry = ["x1", "x2", "x3", "x4", "x6", "x7", "x12"]
+print(f"전체 R^2        {r2[-1]:.6f}")
+print(f"섀플리 기여의 합 {phi.sum():.6f}")
+print("라쏘가 부른 순서와 그 변수의 섀플리 기여")
+for rank, nm in enumerate(entry, 1):
+    print(f"  {rank}번째 {nm:>3}   {phi[int(nm[1:]) - 1]:+.5f}")
+print(f"참 변수 넷의 몫  {phi[:4].sum() / phi.sum() * 100:.1f}%")
+```
+
+```text
+전체 R^2        0.952398
+섀플리 기여의 합 0.952398
+라쏘가 부른 순서와 그 변수의 섀플리 기여
+  1번째  x1   +0.53228
+  2번째  x2   +0.18949
+  3번째  x3   +0.12721
+  4번째  x4   +0.07199
+  5번째  x6   +0.00671
+  6번째  x7   +0.00031
+  7번째 x12   +0.00175
+참 변수 넷의 몫  96.7%
+```
+
+**둘째 줄이 보존을 확인한다.** 기여 열둘을 다 더하면 전체 $R^2$ 과 소수 여섯째 자리까지
+같다. 그리고 아래가 경고의 알맹이다 — 라쏘가 **여섯째**로 부른 $x_7$ 의 기여가
+$+0.00031$ 로 사실상 $0$ 이고, 반대로 라쏘가 여덟째에야 부른 $x_8$ 은 $+0.00838$ 로 그보다
+스물일곱 배 크다. 참 변수 넷이 $R^2$ 의 $96.7\%$ 를 가져간다.
+
+**두 순서가 다른 것은 서로 다른 것을 재기 때문이다.** 진입 순서는 「지금 잔차와 가장
+상관이 큰 것」을 고르므로 상관 구조에 휘둘리고, 섀플리는 「다른 변수들이 이미 있을 때와
+없을 때의 평균적 증가분」이라 끼워 넣는 순서를 **전부 평균 내어** 지운다.
+
+값은 비싸다. 특징이 $p$ 개면 부분집합이 $2^p$ 개이므로 $p = 30$ 만 되어도 셀 수가 없다.
+실무에서 쓰는 것은 표본추출이나 모형별 근사이며, 여기서 $p = 12$ 로 둔 까닭도 **정확히**
+세어 보이기 위해서다.
+
+</div>
+
 ### 자유도
 
 경로 위 어느 점에서든 유효자유도는

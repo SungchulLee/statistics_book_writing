@@ -162,7 +162,7 @@
 | 126 | `ch03/graph_extremum/intersection.md` | 그림 | 원 하나가 근의 개수를 세어 주던 때 | `—` | `ge__runge1912_p11_12.png` | 룽게의 작도식 근 찾기 — 대응하는 통계 내용 없음 | 보류 |
 | 127 | `ch03/graph_extremum/logistic_curve.md` | 그림 | 이 곡선에 이름이 붙던 도판 | `ch19/logistic_regression/logit.md` | `logistic__verhulst1845.png` | Wikimedia Commons, PD-old-100-1923 | **옮김** |
 | 128 | `ch03/graph_extremum/optimization.md` | 그림 | 벌은 거의 옳다 | `—` | `optimization__honeycomb.png`, `optimization__cell_angle.png` | 벌집 각의 최적화 — 대응하는 통계 내용 없음 | 보류 |
-| 129 | `ch03/graph_extremum/piecewise_abs.md` | AI | 꺾인 점 하나로 버티는 함수 | `ch20/optimization/regularization.md` | `—` | 되살림 — 보류 사유였던 「ch20 은닉층은 시그모이드다」가 사실이 아니다. mnist_classification 988 줄·mnist 806 줄·optimization 982 줄이 모두 ReLU 를 쓴다 | 대기 |
+| 129 | `ch03/graph_extremum/piecewise_abs.md` | AI | 꺾인 점 하나로 버티는 함수 | `ch20/case_studies/mnist_classification.md` | `—` | 되살림 — 보류 사유였던 「ch20 은닉층은 시그모이드다」가 사실이 아니다. mnist_classification 988 줄·mnist 806 줄·optimization 982 줄이 모두 ReLU 를 쓴다 | **옮김** |
 | 130 | `ch03/graph_extremum/piecewise_abs.md` | 그림 | 꺾인 점을 세 가지로 갈라 적어 둔 기계책의 각주 | `—` | `piecewise__willis1870_p26.png` | 윌리스의 첨점 분류 — 대응하는 통계 내용 없음 | 보류 |
 | 131 | `ch03/graph_extremum/quartic.md` | 그림 | 그림을 붙일 수 없었던 책이 스물여덟을 세는 법 | `—` | `quartic__plucker1839_p230_p253.png`, `quartic__bitangent28.png` | 플뤼커의 이중접선 28 — 대응하는 통계 내용 없음 | 보류 |
 | 132 | `ch03/graph_extremum/quartic.md` | AI | 골짜기를 직선으로 덮어 버리기 | `—` | `—` | 사차함수의 볼록 포락선 — 알맹이가 전역최적화다 | 보류 |
@@ -316,7 +316,7 @@
 | 280 | `ch05/plane_vectors/locus_region.md` | AI | 로봇을 점으로 만드는 법 | `—` | `—` | 민코프스키 합과 경로계획 — 대응하는 통계 내용 없음 | 보류 |
 | 281 | `ch05/plane_vectors/max_min.md` | 그림 | 「당나귀도 아는 것」 | `—` | `pv__heath1908_p287.png` | 삼각부등식 — 그것을 세우는 쪽이 없다 | 보류 |
 | 282 | `ch05/plane_vectors/parametric_velocity_inner_product.md` | 그림 | 답이 두 칸으로 나뉜 연습문제 | `—` | `pv__gunnery1917_p53.png` | 진공 포물선 대 공기저항 사표 — 교훈만 닮고 내용이 멀다 | 보류 |
-| 283 | `ch05/plane_vectors/parametric_velocity_inner_product.md` | AI | 크기를 묶어 두면 걸음은 접선 방향뿐이다 | `ch18/ridge/geometry.md` | `—` | 되살림 — 「그것을 다루는 쪽이 없다」가 사실이 아니다. ridge/geometry 가 L2 제약영역·접점·예산 해석으로 같은 기하를 통째로 다룬다 | 대기 |
+| 283 | `ch05/plane_vectors/parametric_velocity_inner_product.md` | AI | 크기를 묶어 두면 걸음은 접선 방향뿐이다 | `ch18/ridge/geometry.md` | `—` | 되살림 — 「그것을 다루는 쪽이 없다」가 사실이 아니다. ridge/geometry 가 L2 제약영역·접점·예산 해석으로 같은 기하를 통째로 다룬다 | **옮김** |
 | 284 | `ch05/plane_vectors/position_ratio.md` | 그림 | 좌표를 원점에서 재지 않고 꼭짓점에 얹은 사람 | `—` | `pv__moebius1827_p17.png` | 뫼비우스의 무게중심좌표 — 자료의 가중평균과 다르다 | 보류 |
 | 285 | `ch05/plane_vectors/vector_basics.md` | 그림 | 「같은 시간에」 한 줄로 적은 평행사변형법 | `—` | `vb__newton1687.png` | 『프린키피아』의 평행사변형법 — 대응하는 통계 내용 없음 | 보류 |
 | 286 | `ch05/plane_vectors/vector_lattice_inner_product.md` | 그림 | 「일」이라는 말과 $\tfrac12$ 을 함께 들여온 쪽 | `—` | `pv__coriolis1829_p3.png` | 코리올리의 「일」 — 대응하는 통계 내용 없음 | 보류 |
@@ -347,12 +347,12 @@
 | 311 | `ch06/arguments/positional_construction.md` | 그림 | 접시가 둘이면 자릿수가 셋이 된다 | `—` | `ag__bachet1884_p154_155.png` | 바셰의 추 문제 — 대응하는 통계 내용 없음 | 보류 |
 | 312 | `ch06/arguments/set_construction.md` | 그림 | 가장 멀리 벌린 끝에 놓인 자 | `—` | `ar__golomb2011.png` | 골롬 자·시돈 집합 — 대응하는 통계 내용 없음 | 보류 |
 | 313 | `ch06/binomial/absorption_identity.md` | 그림 | 「대장을 반드시 넣어」 | `ch04/discrete_distributions/binomial.md` | `bn__whitworth1870_p45.png` | Internet Archive 스캔, PD | **옮김** |
-| 314 | `ch06/binomial/absorption_identity.md` | AI | 기여를 나눌 때 무게가 층마다 꼭 $1/n$ 이 되는 까닭 | `ch18/tuning/regularization_path.md` | `bn__shapley_layers.png` | 되살림 — 벌점 기반이라는 것이 뺄 까닭이 아니라 넣을 까닭이다. 그 쪽 242 줄이 「진입 순서가 곧 변수 중요도」를 경계하는데 섀플리값이 그 대안이다 | 대기 |
+| 314 | `ch06/binomial/absorption_identity.md` | AI | 기여를 나눌 때 무게가 층마다 꼭 $1/n$ 이 되는 까닭 | `ch18/tuning/regularization_path.md` | `bn__shapley_layers.png` | 되살림 — 벌점 기반이라는 것이 뺄 까닭이 아니라 넣을 까닭이다. 그 쪽 242 줄이 「진입 순서가 곧 변수 중요도」를 경계하는데 섀플리값이 그 대안이다 | **옮김** |
 | 315 | `ch06/binomial/absorption_identity.md` | 그림 | 느낌표가 생기기 전에 먼저 있던 것 | `—` | `bn__kramp.png` | 계승 기호의 내력 — 하강계승을 세우는 자리가 없다 | 보류 |
 | 316 | `ch06/binomial/binomial_calculus.md` | 그림 | 미분을 쓸 수 없던 교실에서 같은 합을 구하면 | `—` | `bn__hallknight1891_p334.png` | Σr²C(n,r) — 이 합을 다루는 쪽이 없다 | 보류 |
 | 317 | `ch06/binomial/binomial_calculus.md` | AI | 분배함수를 미분하면 확률이 떨어져 나온다 | `ch20/optimization/cross_entropy.md` | `bn__softmax_grad.png` | — | **옮김** |
 | 318 | `ch06/binomial/binomial_identities.md` | 그림 | 수는 다 적혀 있는데 합은 적혀 있지 않다 | `—` | `bn__tartaglia1556.png` | 타르탈리아의 삼각형 — 양휘 쪽 상자가 같은 자리를 맡는다 | 보류 |
-| 319 | `ch06/binomial/binomial_identities.md` | AI | 망 하나를 학습시키면서 $2^{\,n}$ 개를 학습시킨다 | `ch20/case_studies/mnist_classification.md` | `bn__dropout_subnets.png` | 되살림 — 연습문제 풀이(1044 줄)는 「단위를 확률 p 로 0 으로 만든다」까지만 적는다. 2^n 개 부분망이라는 알맹이는 그 풀이에 없다 | 대기 |
+| 319 | `ch06/binomial/binomial_identities.md` | AI | 망 하나를 학습시키면서 $2^{\,n}$ 개를 학습시킨다 | `ch20/optimization/regularization.md` | `bn__dropout_subnets.png` | 되살림 — 연습문제 풀이(1044 줄)는 「단위를 확률 p 로 0 으로 만든다」까지만 적는다. 2^n 개 부분망이라는 알맹이는 그 풀이에 없다 | **옮김** |
 | 320 | `ch06/binomial/binomial_theorem.md` | 그림 | 지수를 자연수 밖으로 밀어낸 편지 | `—` | `bt__newton1676.png` | 뉴턴의 일반 이항정리 — negative_binomial.md 가 음이항급수를 다루지 않는다 | 보류 |
 | 321 | `ch06/binomial/hockey_stick.md` | 그림 | 파스칼에게 이것은 「둘째 따름」이었다 | `—` | `bn__pascal_latin_f106.png` | 하키스틱 항등식 — 본문에서 쓰는 자리가 없다 | 보류 |
 | 322 | `ch06/binomial/multinomial_theorem.md` | 그림 | 글자를 섞어 삼 년을 숨긴 문장 | `—` | `bn__huygens1659_p299.png` | 하위헌스의 애너그램 — 다항계수를 세우는 쪽이 없다 | 보류 |
@@ -556,4 +556,4 @@
 | 520 | `numbers/expression/letters_expressions.md` | 그림 | 모르는 수에 글자 대신 자리를 준 사람들 | `—` | `le__siyuan_tianyuan.png` | 천원술 — 대응하는 통계 내용 없음 | 보류 |
 | 521 | `numbers/expression/polynomial_operations.md` | 그림 | 곱셈 기호가 셋이던 쪽 | `—` | `po__oughtred1667_p10.png` | 오트레드의 곱셈 기호 — 대응하는 통계 내용 없음 | 보류 |
 
-합계 **521** 개 — 옮김 **170**, 보류 **347**, 대기 **4**
+합계 **521** 개 — 옮김 **174**, 보류 **347**, 대기 **0**
