@@ -1,4 +1,4 @@
-r"""5.10절 D-bar 의 표본분포 — 그림 둘.
+r"""5.9절 D-bar 의 표본분포 — 그림 둘.
 
 (1) dbar_rho_shape_width.png
     짝 안의 상관 rho 가 D-bar 의 표본분포에서 무엇을 바꾸고 무엇을 안

@@ -527,7 +527,7 @@ $$
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
 연습문제 3은 $F = 2.6095$, $p = 1.58 \times 10^{-4}$ 를 얻고도 "이 $p$값을 믿어서는 안 된다"고 경고했다. 그 경고를 수로 바꾼다.
 
-5.9절은 첨도 $\beta_2$ 인 두 모집단에서 델타법으로
+5.10절은 첨도 $\beta_2$ 인 두 모집단에서 델타법으로
 
 $$
 \operatorname{Var}\!\left(\log \frac{S_1^2}{S_2^2}\right) \approx (\beta_2-1)\left(\frac{1}{n_1}+\frac{1}{n_2}\right)
