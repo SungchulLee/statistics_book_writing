@@ -316,7 +316,7 @@ def fisher_curvature_se():
     ax.legend(fontsize=10.5, frameon=False, loc="lower center")
     ax.set_title("꼭대기 부근은 포물선으로 보인다", fontsize=13, pad=10)
 
-    # (b) 그 곡률이 정하는 표본분포
+    # (b) 그 곡률이 정하는 표집분포
     ax = axes[1]
     x = np.linspace(mle - 4.2 * se, mle + 4.2 * se, 600)
     y = normal_pdf(x, mle, se)
@@ -333,7 +333,7 @@ def fisher_curvature_se():
     ax.text(mle, top * 1.06,
             f"$\\widehat{{SE}} = 1/\\sqrt{{n I(\\hat p)}} = {se:.3f}$",
             fontsize=12, color=BLUE, ha="center", va="bottom")
-    ax.set_xlabel("$\\hat p$ 의 표본분포", fontsize=11.5, color=INK)
+    ax.set_xlabel("$\\hat p$ 의 표집분포", fontsize=11.5, color=INK)
     ax.set_ylim(0, top * 1.3)
     bare_axis(ax)
     ax.set_title("곡률이 크면 분포가 좁다", fontsize=13, pad=10)

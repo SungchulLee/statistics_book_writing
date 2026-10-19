@@ -95,7 +95,7 @@ def unbiased_all_n_rate():
     bare_axis(ax)
     ax.legend(fontsize=10.5, frameon=False, loc="upper right",
               handlelength=1.4)
-    ax.set_title(r"지수분포 $\mathrm{Exp}(1)$ 에서 뽑은 $\bar X$ 의 표본분포",
+    ax.set_title(r"지수분포 $\mathrm{Exp}(1)$ 에서 뽑은 $\bar X$ 의 표집분포",
                  fontsize=13, pad=10)
 
     # --- (b) 좁아지는 속도 — 정밀도 2배에 자료 4배 ---

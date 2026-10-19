@@ -2,7 +2,7 @@ r"""5.1절 — 모수 · 추정량 · 추정값이 서로 어떻게 다른지 �
 
 왼쪽   모집단에 고정된 모수 mu 가 있고, 표본을 뽑을 때마다 추정값이 하나씩
        나온다. 같은 규칙(추정량)을 썼는데도 값이 매번 다르다.
-오른쪽 그 값들을 모으면 추정량의 표본분포가 된다. 중심이 모수와 맞으면
+오른쪽 그 값들을 모으면 추정량의 표집분포가 된다. 중심이 모수와 맞으면
        불편이고, 그 분포의 표준편차가 표준오차다.
 
 20세 남자 키를 mu = 170, sigma = 6 인 정규모집단으로 두고 n = 25 로 뽑는다.
@@ -94,7 +94,7 @@ def main():
     ax.set_title("같은 규칙을 써도 표본이 바뀌면 값이 바뀐다",
                  fontsize=13, color=INK)
 
-    # ---------------- 오른쪽: 추정값을 모으면 표본분포 ----------------
+    # ---------------- 오른쪽: 추정값을 모으면 표집분포 ----------------
     ax = axes[1]
     se = SIGMA / np.sqrt(N)
     ax.hist(xbar_all, bins=60, density=True, color=BLUE_F, ec="white", lw=0.3)
@@ -121,10 +121,10 @@ def main():
     ax.set_xlabel("$\\bar x$", fontsize=12)
     ax.set_yticks([])
     ax.spines[["top", "right", "left"]].set_visible(False)
-    ax.set_title(f"추정값을 {B:,}번 모으면 — 추정량의 표본분포",
+    ax.set_title(f"추정값을 {B:,}번 모으면 — 추정량의 표집분포",
                  fontsize=13, color=INK)
 
-    fig.suptitle("모수는 하나, 추정값은 표본마다, 그 전부의 분포가 표본분포다",
+    fig.suptitle("모수는 하나, 추정값은 표본마다, 그 전부의 분포가 표집분포다",
                  fontsize=14.5)
     fig.text(0.5, -0.035,
              f"모은 값들의 평균은 {xbar_all.mean():.3f} 로 모수 {MU:.0f} 과 맞고"

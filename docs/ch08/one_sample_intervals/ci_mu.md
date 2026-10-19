@@ -161,7 +161,7 @@ $$
 \quad\text{if}\quad
 \begin{cases}
 n \text{이 작다, 예: } n < 30, \text{ 그래서 중심극한정리 근사가 통하지 않는다} \\
-\text{모집단 분포가 정규이다, 그래서 표본분포를 정확히 안다} \\
+\text{모집단 분포가 정규이다, 그래서 표집분포를 정확히 안다} \\
 n \le 0.1N \text{ (i.i.d.)}
 \end{cases}
 $$

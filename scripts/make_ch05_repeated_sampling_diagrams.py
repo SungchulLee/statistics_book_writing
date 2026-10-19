@@ -1,7 +1,7 @@
 r"""5.1절 반복추출 — LaTeX 배열로 그려 두었던 두 그림을 제대로 그린다.
 
   repeated_sampling_loop.png    같은 모집단에서 되풀이해 뽑으면 추정값이 쌓이고,
-                                쌓인 것이 표본분포로 드러난다. k 를 키워 가며 보인다.
+                                쌓인 것이 표집분포로 드러난다. k 를 키워 가며 보인다.
   three_distributions.png       이름이 닮은 세 분포를 나란히. 이름만 적지 않고
                                 각 분포의 생김새와 퍼진 정도까지 함께 그린다.
 
@@ -100,14 +100,14 @@ def loop_figure():
         a.text(0.02, 0.86, f"표본을 $k = {k:,}$번 뽑았을 때",
                transform=a.transAxes, fontsize=11, color=GREEN)
         if r == 0:
-            a.set_title("쌓인 값들이 이루는 분포 — 이것이 표본분포다",
+            a.set_title("쌓인 값들이 이루는 분포 — 이것이 표집분포다",
                         fontsize=13.5, color=INK, pad=10)
         if r < 2:
             a.set_xticklabels([])
         else:
             a.set_xlabel("$\\hat\\theta$ 의 값", fontsize=11)
 
-    fig.suptitle("표본분포는 뽑기를 되풀이해야 비로소 보이는 분포다", fontsize=15)
+    fig.suptitle("표집분포는 뽑기를 되풀이해야 비로소 보이는 분포다", fontsize=15)
     path = OUT + "repeated_sampling_loop.png"
     fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
     plt.close(fig)
@@ -143,9 +143,9 @@ def three_figure():
     panels = [
         ("모집단분포", "모집단 전체가 이루는 분포\n관측할 수 없다",
          BLUE, BLUE_F, f"퍼짐 $\\sigma = {SIGMA:.0f}$"),
-        ("한 표본의 분포", f"뽑아 온 값 $n = {N}$개의 분포\n**유일하게 손에 쥔 것**",
+        ("표본분포", f"뽑아 온 값 $n = {N}$개의 분포\n**유일하게 손에 쥔 것**",
          ORANGE, ORANGE_F, f"퍼짐 $\\approx \\sigma = {SIGMA:.0f}$"),
-        ("표본분포", "무한히 되풀이해 얻은\n추정값들의 분포",
+        ("표집분포", "무한히 되풀이해 얻은\n추정값들의 분포",
          GREEN, GREEN_F, f"퍼짐 $\\sigma/\\sqrt{{n}} = {SIGMA/np.sqrt(N):.1f}$"),
     ]
     for k, (title, sub, c, fc, width) in enumerate(panels):

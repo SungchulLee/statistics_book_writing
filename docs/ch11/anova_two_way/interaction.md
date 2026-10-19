@@ -54,7 +54,7 @@ $$SST = SSA + SSB + SSAB + SSE$$
 ### 8단계: F-통계량 계산
 
 $$\begin{array}{cccccccccc}
-\text{요인}&\text{df}&SS&MS&F&H_0&H_0\text{ 아래 표본분포}\\
+\text{요인}&\text{df}&SS&MS&F&H_0&H_0\text{ 아래 표집분포}\\
 \hline
 \text{요인 A}&a-1&SSA&MSA=\frac{SSA}{a-1}&F_A=\frac{MSA}{MSE}&\text{모든 }\beta^{(1)}_{i}=0&F_A\sim F_{a-1,ab(c-1)}\\
 \text{요인 B}&b-1&SSB&MSB=\frac{SSB}{b-1}&F_B=\frac{MSB}{MSE}&\text{모든 }\beta^{(2)}_{j}=0&F_B\sim F_{b-1,ab(c-1)}\\

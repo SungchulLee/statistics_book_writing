@@ -370,7 +370,7 @@ def fig_comparing():
     ax.set_xlabel("표본상관 r", fontsize=10.5, color=INK)
     ax.set_ylabel("모의실험 횟수", fontsize=10.5, color=INK)
     ax.legend(fontsize=10, frameon=False, loc="upper right")
-    ax.set_title("참 상관이 달라도 표본분포는 겹친다", fontsize=12.5,
+    ax.set_title("참 상관이 달라도 표집분포는 겹친다", fontsize=12.5,
                  color=INK, pad=8)
 
     ax = axes[1]

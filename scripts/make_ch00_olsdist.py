@@ -11,7 +11,7 @@ r"""0장 부록 A(회귀를 위한 선형대수) 중 "선형대수와 통계가 
      $(\bar x, \bar Y)$ 를 축으로 심하게 흔들린다.
   3. 다중회귀에서 $\hat\beta$ 의 공분산은 $\sigma^2 (X^T X)^{-1}$ 이다. 설계행렬의
      두 열을 상관 $\rho$ 로 만들면 두 계수 추정량의 상관은 정확히 $-\rho$ 가
-     되고 분산은 $1/(1-\rho^2)$ 배로 부풀어, 표본분포 타원이 기울며 커진다.
+     되고 분산은 $1/(1-\rho^2)$ 배로 부풀어, 표집분포 타원이 기울며 커진다.
 
 만드는 파일:
 
@@ -321,7 +321,7 @@ def fig_slope_variance_spread():
         ax.set_title(f"{tag} {label}:  $S_{{xx}} = {Sxx:.2f}$",
                      color=INK, fontsize=11.5, pad=9)
 
-    # --- (c) 기울기의 표본분포 --------------------------------------------
+    # --- (c) 기울기의 표집분포 --------------------------------------------
     ax = axes[1, 0]
     grid_b = np.linspace(0.2, 3.8, 600)
     for label, x, col, fill, Sxx, beta in sim:
@@ -343,7 +343,7 @@ def fig_slope_variance_spread():
     for t in leg.get_texts():
         t.set_color(INK)
     style(ax)
-    ax.set_title("(c) 두 설계에서 기울기 추정량의 표본분포",
+    ax.set_title("(c) 두 설계에서 기울기 추정량의 표집분포",
                  color=INK, fontsize=11.5, pad=9)
 
     # --- (d) 분산과 1/Sxx -------------------------------------------------

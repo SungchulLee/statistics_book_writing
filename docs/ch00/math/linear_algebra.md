@@ -238,7 +238,7 @@ $$
 \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
 $$
 
-이다. 이 하나의 공식과 그 뒤에 있는 사영 해석이 13장 선형회귀 전체의 바탕이 되며, 0.4절에서는 여기에 정규분포 가정을 얹어 $\hat{\boldsymbol{\beta}}$의 정확한 표본분포를 구한다.
+이다. 이 하나의 공식과 그 뒤에 있는 사영 해석이 13장 선형회귀 전체의 바탕이 되며, 0.4절에서는 여기에 정규분포 가정을 얹어 $\hat{\boldsymbol{\beta}}$의 정확한 표집분포를 구한다.
 
 <div class="exbox" markdown>
 

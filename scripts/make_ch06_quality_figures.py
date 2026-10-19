@@ -106,7 +106,7 @@ def mse_decomposition():
     ax.set_xticks([theta, mu])
     ax.set_xticklabels(["$\\theta$", "$E[\\hat\\theta]$"], fontsize=12)
     bare_axis(ax)
-    ax.set_title("추정량의 표본분포 위에서 본 평균제곱오차", fontsize=13.5,
+    ax.set_title("추정량의 표집분포 위에서 본 평균제곱오차", fontsize=13.5,
                  pad=12)
     fig.tight_layout()
     save(fig, OUT + "mse_decomposition.png")
@@ -356,7 +356,7 @@ def crlb_information():
     ax.set_xticklabels(["$\\theta$"], fontsize=12)
     bare_axis(ax)
     ax.legend(fontsize=11, frameon=False, loc="upper left")
-    ax.set_title(f"두 불편추정량의 표본분포  ($n = {n}$)", fontsize=13, pad=10)
+    ax.set_title(f"두 불편추정량의 표집분포  ($n = {n}$)", fontsize=13, pad=10)
 
     fig.suptitle("휘어짐이 정보량이고, 정보량이 분산의 바닥을 정한다",
                  fontsize=14, y=1.02)

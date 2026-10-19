@@ -74,13 +74,13 @@ $$\begin{array}{lll}
 \text{대응표본}&&\displaystyle\{(x_1,y_1),\cdots,(x_n,y_n)\}\\
 \end{array}$$
 
-### 검정의 이름 — 표본분포
+### 검정의 이름 — 표집분포
 
 $$\begin{array}{lll}
-\text{$z$ 검정}&&\displaystyle\text{표본분포를 $z$로 나타낸다}\\
-\text{$t$ 검정}&&\displaystyle\text{표본분포를 $t$로 나타낸다}\\
-\text{$f$ 검정}&&\displaystyle\text{표본분포를 $f$로 나타낸다}\\
-\text{$\chi^2$ 검정}&&\displaystyle\text{표본분포를 $\chi^2$로 나타낸다}\\
+\text{$z$ 검정}&&\displaystyle\text{표집분포를 $z$로 나타낸다}\\
+\text{$t$ 검정}&&\displaystyle\text{표집분포를 $t$로 나타낸다}\\
+\text{$f$ 검정}&&\displaystyle\text{표집분포를 $f$로 나타낸다}\\
+\text{$\chi^2$ 검정}&&\displaystyle\text{표집분포를 $\chi^2$로 나타낸다}\\
 \end{array}$$
 
 ### 이름 짓는 규칙
@@ -88,7 +88,7 @@ $$\begin{array}{lll}
 $$\begin{array}{ccc}
 \text{양측}&\text{이표본}&\text{$z$ 검정}\\
 \uparrow&\uparrow&\uparrow\\
-\text{가설}&\text{자료}&\text{표본분포}\\
+\text{가설}&\text{자료}&\text{표집분포}\\
 \end{array}$$
 
 ---
@@ -119,7 +119,7 @@ $$\begin{array}{ccc}
 
 ### 4단계: 검정통계량의 계산
 
-검정통계량은 표본자료로부터 계산한 값으로, 귀무가설이 참이라는 가정 아래 특정 확률분포를 따른다. 검정통계량은 관측된 자료를 귀무가설 아래의 표본분포와 견준다. 예를 들어 평균에 대한 z-검정에서 검정통계량은 다음과 같이 계산한다:
+검정통계량은 표본자료로부터 계산한 값으로, 귀무가설이 참이라는 가정 아래 특정 확률분포를 따른다. 검정통계량은 관측된 자료를 귀무가설 아래의 표집분포와 견준다. 예를 들어 평균에 대한 z-검정에서 검정통계량은 다음과 같이 계산한다:
 
 $$ z = \frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}} $$
 

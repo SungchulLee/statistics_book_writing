@@ -5,7 +5,7 @@ r"""6.2 추정 방법 절 일곱 쪽의 그림을 생성한다.
   ch06/estimation_methods/img/moments_procedure.png       적률 맞추기 절차
   ch06/estimation_methods/img/sample_moments_converge.png 왜 통하는가 — 대수의 법칙
   ch06/estimation_methods/img/mom_three_families.png      세 분포에 적용
-  ch06/estimation_methods/img/mom_vs_mle_efficiency.png   두 방법의 표본분포와 ARE
+  ch06/estimation_methods/img/mom_vs_mle_efficiency.png   두 방법의 표집분포와 ARE
   ch06/estimation_methods/img/gmm_overidentification.png  적률조건이 남을 때
   ch06/estimation_methods/img/loglik_additivity.png       로그가능도는 더해진다
   ch06/estimation_methods/img/variance_estimator_mse.png  분산추정량 셋
@@ -219,7 +219,7 @@ def mom_vs_mle_efficiency():
 
     fig, axes = plt.subplots(1, 2, figsize=(13, 4.6))
 
-    # (a) 표본분포
+    # (a) 표집분포
     ax = axes[0]
     bins = np.linspace(0.3, 2.3, 90)
     ax.hist(mom, bins=bins, density=True, color=ORANGE, alpha=0.35,

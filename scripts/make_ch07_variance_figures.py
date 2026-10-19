@@ -433,7 +433,7 @@ def robust_scale_breakdown():
                   color=INK)
     bare_axis(ax)
     ax.legend(fontsize=10.5, frameon=False, loc="upper left")
-    ax.set_title("오염이 없을 때의 표본분포", fontsize=13, pad=10)
+    ax.set_title("오염이 없을 때의 표집분포", fontsize=13, pad=10)
 
     fig.suptitle("붕괴점은 버티는 한계이고, ARE 는 그 대가다", fontsize=14.5,
                  y=1.02)

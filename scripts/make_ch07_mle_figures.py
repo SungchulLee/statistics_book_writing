@@ -219,7 +219,7 @@ def mle_bias_shrinks():
     ax.spines[["left", "bottom"]].set_color(MUTED)
     ax.set_title("제곱합은 $\\bar x$ 에서 최소가 된다", fontsize=13, pad=10)
 
-    # --- (b) 그래서 표본분포의 중심이 밀린다 ---
+    # --- (b) 그래서 표집분포의 중심이 밀린다 ---
     ax = axes[1]
     reps = 200_000
     xs = rng.normal(0.0, 1.0, size=(reps, n))
@@ -271,7 +271,7 @@ def mle_bias_shrinks():
     ax.spines[["top", "right", "left"]].set_visible(False)
     ax.spines["bottom"].set_color(MUTED)
     ax.legend(fontsize=11, frameon=False, loc="upper left")
-    ax.set_title(f"두 추정량의 표본분포  ($n = {n}$, 20만 회)", fontsize=13,
+    ax.set_title(f"두 추정량의 표집분포  ($n = {n}$, 20만 회)", fontsize=13,
                  pad=10)
 
     fig.suptitle("한 자리를 자료에서 가져다 썼기 때문에 생기는 편향",

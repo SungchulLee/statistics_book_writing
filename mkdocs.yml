@@ -60,8 +60,8 @@ nav:
             - 직교사영행렬: ch00/linalg_regression/square_matrices/orthogonal_projection.md
         - 0.4 선형대수와 통계:
             - 카이제곱분포와 이차형식: ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md
-            - 표본분포 (단순 최소제곱): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
-            - 표본분포 (일반 최소제곱): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
+            - 표집분포 (단순 최소제곱): ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md
+            - 표집분포 (일반 최소제곱): ch00/linalg_regression/linalg_statistics/sampling_dist_general_ols.md
 
     - 1 자료와 학습:
         - 장 개요: ch01/index.md
@@ -177,13 +177,13 @@ nav:
             - 2차원 정규분포 조건부분포: ch04/bivariate_normal/gaussian_2d_conditionals.md
             - 2차원 정규분포 고유분해: ch04/bivariate_normal/gaussian_2d_eigendecomposition.md
 
-    - 5 표본분포:
+    - 5 표집분포:
         - 장 개요: ch05/index.md
         - 5.1 기초:
             - 확률변수로서의 통계량: ch05/foundations/statistics_as_rv.md
             - 반복추출 개념: ch05/foundations/repeated_sampling.md
             - 금융위기와 중심극한정리의 실패: ch05/foundations/financial_crisis_clt.md
-        - 5.2 네 가지 기본 표본분포:
+        - 5.2 네 가지 기본 표집분포:
             - 정규분포 N(μ, σ²)와 표준정규 Z: ch05/distributions/normal.md
             - t 분포 t(ν): ch05/distributions/student_t.md
             - 카이제곱분포 χ²(k): ch05/distributions/chi_square.md
@@ -192,38 +192,38 @@ nav:
             - 표준오차: ch05/applications/standard_error.md
             - 붓스트랩 표준오차: ch05/applications/bootstrap_standard_error.md
         - 5.4 표본평균 X̄:
-            - 평균의 표본분포: ch05/applications/sample_mean.md
-            - X̄의 표본분포 (균등분포): ch05/applications/xbar_uniform.md
-            - X̄의 표본분포 (지수분포): ch05/applications/xbar_exponential.md
-            - X̄의 표본분포 (정규분포): ch05/applications/xbar_normal.md
-            - X̄의 표본분포 (베르누이분포): ch05/applications/xbar_bernoulli.md
+            - 평균의 표집분포: ch05/applications/sample_mean.md
+            - X̄의 표집분포 (균등분포): ch05/applications/xbar_uniform.md
+            - X̄의 표집분포 (지수분포): ch05/applications/xbar_exponential.md
+            - X̄의 표집분포 (정규분포): ch05/applications/xbar_normal.md
+            - X̄의 표집분포 (베르누이분포): ch05/applications/xbar_bernoulli.md
         - 5.5 표본비율 p̂:
-            - 비율의 표본분포: ch05/applications/sample_proportion.md
-            - p̂의 표본분포 (표본크기의 효과): ch05/applications/phat_n.md
-            - p̂의 표본분포 (희귀사건): ch05/applications/phat_small_p.md
+            - 비율의 표집분포: ch05/applications/sample_proportion.md
+            - p̂의 표집분포 (표본크기의 효과): ch05/applications/phat_n.md
+            - p̂의 표집분포 (희귀사건): ch05/applications/phat_small_p.md
             - 비율 신뢰구간의 실제 포함률: ch05/applications/phat_wald_wilson.md
         - 5.6 표본분산 S²:
-            - 분산의 표본분포: ch05/applications/sample_variance.md
+            - 분산의 표집분포: ch05/applications/sample_variance.md
             - S²의 표준오차: ch05/applications/se_s2.md
-            - S²의 표본분포 (균등분포): ch05/applications/s2_uniform.md
-            - S²의 표본분포 (지수분포): ch05/applications/s2_exponential.md
-            - S²의 표본분포 (정규분포): ch05/applications/s2_normal.md
-            - S²의 표본분포 (베르누이분포): ch05/applications/s2_bernoulli.md
+            - S²의 표집분포 (균등분포): ch05/applications/s2_uniform.md
+            - S²의 표집분포 (지수분포): ch05/applications/s2_exponential.md
+            - S²의 표집분포 (정규분포): ch05/applications/s2_normal.md
+            - S²의 표집분포 (베르누이분포): ch05/applications/s2_bernoulli.md
         - 5.7 두 표본평균의 차 X̄₁ - X̄₂:
             - 두 표본평균의 차: ch05/applications/diff_means.md
-            - X̄₁ - X̄₂의 표본분포 (등분산 정규모집단): ch05/applications/diff_means_equal.md
-            - X̄₁ - X̄₂의 표본분포 (이분산과 불균형): ch05/applications/diff_means_welch.md
-            - X̄₁ - X̄₂의 표본분포 (비정규 모집단): ch05/applications/diff_means_nonnormal.md
+            - X̄₁ - X̄₂의 표집분포 (등분산 정규모집단): ch05/applications/diff_means_equal.md
+            - X̄₁ - X̄₂의 표집분포 (이분산과 불균형): ch05/applications/diff_means_welch.md
+            - X̄₁ - X̄₂의 표집분포 (비정규 모집단): ch05/applications/diff_means_nonnormal.md
         - 5.8 두 표본비율의 차 p̂₁ - p̂₂:
             - 두 표본비율의 차: ch05/applications/diff_proportions.md
-            - p̂₁ - p̂₂의 표본분포 (정규근사가 듣는 경우): ch05/applications/diff_props_normal.md
-            - p̂₁ - p̂₂의 표본분포 (작은 기대도수): ch05/applications/diff_props_small.md
+            - p̂₁ - p̂₂의 표집분포 (정규근사가 듣는 경우): ch05/applications/diff_props_normal.md
+            - p̂₁ - p̂₂의 표집분포 (작은 기대도수): ch05/applications/diff_props_small.md
         - 5.9 대응표본 차의 평균 D̄:
-            - D̄의 표본분포 (대응 설계): ch05/applications/dbar_paired.md
+            - D̄의 표집분포 (대응 설계): ch05/applications/dbar_paired.md
         - 5.10 두 표본분산의 비 S₁²/S₂²:
             - 두 표본분산의 비: ch05/applications/var_ratio.md
-            - S₁²/S₂²의 표본분포 (정규모집단): ch05/applications/var_ratio_normal.md
-            - S₁²/S₂²의 표본분포 (비정규 모집단): ch05/applications/var_ratio_nonnormal.md
+            - S₁²/S₂²의 표집분포 (정규모집단): ch05/applications/var_ratio_normal.md
+            - S₁²/S₂²의 표집분포 (비정규 모집단): ch05/applications/var_ratio_nonnormal.md
 
     - 6 통계적 추정:
         - 장 개요: ch06/index.md

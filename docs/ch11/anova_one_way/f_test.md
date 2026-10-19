@@ -80,7 +80,7 @@ $$
 
 $$
 \begin{array}{cccccccccc}
-\text{요인}&\text{df}&SS&MS&F&H_0&H_0\text{ 아래 }F\text{의 표본분포}\\
+\text{요인}&\text{df}&SS&MS&F&H_0&H_0\text{ 아래 }F\text{의 표집분포}\\
 \hline
 \text{처리}&k-1&SSB&\displaystyle MSB=\frac{SSB}{k-1}&\displaystyle F=\frac{MSB}{MSW}&\text{모든 }\beta_{i}=0&F\sim F_{k-1,N-k}\\
 \text{오차}&N-k&SSW&\displaystyle MSW=\frac{SSW}{N-k}&\\
@@ -106,7 +106,7 @@ $$
 
 ### 8단계: 임계값 또는 p-값 구하기
 
-$H_0$ 아래에서 $F$의 표본분포는
+$H_0$ 아래에서 $F$의 표집분포는
 
 $$
 F\sim F_{k-1,N-k}

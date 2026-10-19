@@ -1,4 +1,4 @@
-# S²의 표본분포 (Exponential)
+# S²의 표집분포 (Exponential)
 
 ## 개요
 
@@ -30,7 +30,7 @@ $$
 
 ---
 
-## 2. 표본분포 이론
+## 2. 표집분포 이론
 
 <div class="thmbox" markdown>
 
