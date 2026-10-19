@@ -222,6 +222,8 @@ nav:
             - 두 표본분산의 비: ch05/applications/var_ratio.md
             - S₁²/S₂²의 표본분포 (정규모집단): ch05/applications/var_ratio_normal.md
             - S₁²/S₂²의 표본분포 (비정규 모집단): ch05/applications/var_ratio_nonnormal.md
+        - 5.10 대응표본 차의 평균 D̄:
+            - D̄의 표본분포 (대응 설계): ch05/applications/dbar_paired.md
 
     - 6 통계적 추정:
         - 장 개요: ch06/index.md
