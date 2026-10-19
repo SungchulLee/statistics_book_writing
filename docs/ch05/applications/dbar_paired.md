@@ -50,7 +50,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 1. 대응 $t$는 짝 안의 상관과 무관하게 정확하다 { .thm }
+### 정리 1. 대응 t 통계량은 짝 안의 상관과 무관하다 { .thm }
 
 위 설정에서 $D_i = X_i - Y_i$로 두면 $D_1,\ldots,D_n \overset{\text{iid}}{\sim} N(\mu_D, \sigma_D^2)$이고
 
