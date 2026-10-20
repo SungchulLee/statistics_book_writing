@@ -770,6 +770,45 @@ $$
     3. 실무자는 최소 분산 제약을 두거나 벌점 가능도를 쓴다.
     4. *유용한* MLE는 전역 상한이 아니라 가능도의 국소 최댓값이다. $\square$
 
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span>
+닫힌 해가 없는 모형에서 MLE를 구하는 **뉴턴-랩슨**과 **피셔 점수법**을 비교하라. 각각의 갱신식과 장단점을 적어라.
+
+</div>
+
+??? success "풀이"
+    점수함수 $U(\boldsymbol\theta) = \partial\ell/\partial\boldsymbol\theta$를 0으로 만드는 것이 목표다. $\hat{\boldsymbol\theta}$ 근처에서 테일러 전개하면 갱신식이 나온다.
+
+    **뉴턴-랩슨.** **관측정보량**(헤시안의 음수)을 쓴다.
+
+    $$
+    \boldsymbol\theta^{(k+1)} = \boldsymbol\theta^{(k)} + \left\{-\frac{\partial^2\ell}{\partial\boldsymbol\theta\partial\boldsymbol\theta^\top}\right\}^{-1}U(\boldsymbol\theta^{(k)})
+    $$
+
+    **피셔 점수법.** 관측정보량을 그 기대값인 **피셔 정보량**으로 바꾼다.
+
+    $$
+    \boldsymbol\theta^{(k+1)} = \boldsymbol\theta^{(k)} + I(\boldsymbol\theta^{(k)})^{-1}U(\boldsymbol\theta^{(k)})
+    $$
+
+    **비교.**
+
+    | | 뉴턴-랩슨 | 피셔 점수법 |
+    |---|---|---|
+    | 수렴 속도 | 이차(가까이서 매우 빠름) | 대체로 일차~이차 |
+    | 안정성 | 헤시안이 양정부호가 아니면 발산 가능 | $I$가 언제나 양반정부호라 안정적 |
+    | 계산 | 2계 도함수 필요 | 기대값을 미리 구해 두면 단순해지는 경우 많음 |
+    | 정준연결 GLM | — | **둘이 완전히 일치** |
+
+    피셔 점수법이 더 안정적인 이유는 $I(\boldsymbol\theta) = E[-\partial^2\ell/\partial\boldsymbol\theta^2]$가 언제나 양반정부호여서 갱신 방향이 반드시 오르막이기 때문이다. 관측 헤시안은 봉우리에서 멀 때 음정부호가 아닐 수 있어 엉뚱한 방향으로 뛴다.
+
+    **실무.** 일반화선형모형에서 피셔 점수법을 정리하면 **반복 가중최소제곱(IRLS)** 이 된다. 각 단계가 가중최소제곱 문제라 기존 선형대수 코드를 그대로 쓸 수 있고, 이것이 GLM 소프트웨어의 표준 구현이다.
+
+    **표준오차에는 어느 정보량을 쓸까.** 관측정보량 $-\ell''(\hat\theta)$을 쓰는 것이 일반적으로 권장된다. 자료가 실제로 담고 있는 곡률을 반영하고, 모형이 조금 틀렸을 때도 더 나은 근사를 준다.
 ---
 
 ## 정리하며

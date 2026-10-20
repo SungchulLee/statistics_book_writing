@@ -235,7 +235,6 @@ nav:
             - 충분성과 최소충분성: ch06/estimator_quality/sufficiency.md
         - 6.2 최대가능도추정:
             - 가능도와 최대가능도추정: ch06/mle/likelihood.md
-            - 포획–재포획법: ch06/mle/capture_recapture.md
             - 베르누이분포의 최대가능도: ch06/mle/mle_bernoulli.md
             - 정규분포의 최대가능도: ch06/mle/mle_normal.md
             - 포아송분포의 최대가능도: ch06/mle/mle_poisson.md
