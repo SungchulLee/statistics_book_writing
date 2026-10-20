@@ -157,6 +157,8 @@ $10.5$ 보다는 높기** 때문이다. 한 무리에서 평균 아래인 사람
 앞의 둘과 달리 **더 좋은 측정 때문에** 생긴다. 측정이 나빠서가 아니라 좋아져서 수가 움직인
 것이다.
 
+_확인한 곳 — 파인스타인·소신·웰스의 「The Will Rogers Phenomenon — Stage Migration and New Diagnostic Techniques as a Source of Misleading Statistics for Survival in Cancer」(『New England Journal of Medicine』 $312$ 권 $25$ 호 $1604$–$1608$ 쪽, $1985$ 년 $6$ 월 $20$ 일)와, 옮겨 간 환자들의 예후가 **원래 무리보다는 나쁘고 옮겨 간 무리보다는 좋아** 개인의 결과가 하나도 변하지 않은 채 양쪽 생존율이 함께 올랐다는 그 논문의 설명. 표와 그림의 수는 모두 직접 모의실험한 값이다_
+
 </div>
 
 ---
