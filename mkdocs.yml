@@ -579,7 +579,6 @@ nav:
             - Kolmogorov-Smirnov 검정: ch14/formal_tests/ks_test.md
             - Lilliefors 검정: ch14/formal_tests/lilliefors_test.md
             - Anderson-Darling 검정 (코드): ch14/formal_tests/anderson_darling_code.md
-            - Shapiro-Wilk 검정 (코드): ch14/formal_tests/shapiro_wilk_code.md
         - 14.5 한계와 함정:
             - 표본크기가 검정력에 미치는 영향: ch14/limitations/sample_size_power.md
             - 민감도와 실질적 유의성: ch14/limitations/sensitivity_practical.md
