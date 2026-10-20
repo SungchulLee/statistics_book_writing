@@ -242,8 +242,7 @@ nav:
             - 기하분포의 최대가능도: ch06/mle/geometric_mle.md
             - 최대가능도의 점근적 성질: ch06/mle/mle_asymptotics.md
             - Fisher 정보량과 표준오차: ch06/mle/fisher_information.md
-            - 최대가능도 최적화 보기: ch06/mle/mle_optimization.md
-            - 로그가능도 계산하기: ch06/mle/log_likelihood.md
+            - 최대가능도를 수치로 구하기: ch06/mle/mle_optimization.md
             - 모수적 적합과 비모수적 적합: ch06/mle/parametric_vs_nonparametric.md
         - 6.3 적률법:
             - 적률법의 기초: ch06/estimation_methods/moments_foundations.md
