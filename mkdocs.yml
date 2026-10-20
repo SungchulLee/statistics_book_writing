@@ -694,7 +694,7 @@ nav:
 
 
     - V 더 나아가기 ★:
-        - 18 정칙화 기법 ★:
+        - 18 정칙화 기법:
             - 장 개요: ch18/index.md
             - 18.1 정칙화의 동기:
                 - 과적합과 편향-분산 절충: ch18/motivation/overfitting.md
@@ -738,7 +738,7 @@ nav:
                 - 개관: ch18/overview/overview.md
                 - 능형회귀·라쏘·엘라스틱넷 비교 (코드): ch18/overview/reg_compare.md
 
-        - 19 로지스틱 회귀 ★:
+        - 19 로지스틱 회귀:
             - 장 개요: ch19/index.md
             - 19.1 로지스틱 회귀:
                 - 로짓 연결과 오즈: ch19/logistic_regression/logit.md
@@ -766,7 +766,7 @@ nav:
                 - 벌점가능도를 통한 변수선택: ch19/regularized/feature_selection.md
                 - 정칙화 로지스틱 회귀 실습 (코드): ch19/regularized/regularized_logistic.md
 
-        - 20 소프트맥스 회귀 ★:
+        - 20 소프트맥스 회귀:
             - 장 개요: ch20/index.md
             - 20.1 소프트맥스 회귀:
                 - 다항 로지스틱 회귀: ch20/softmax_regression/multinomial.md
@@ -788,7 +788,7 @@ nav:
                 - 일대일(OvO) 접근: ch20/strategies/ovo.md
                 - 소프트맥스와의 비교: ch20/strategies/comparison.md
 
-        - 21 생존 모형 ★:
+        - 21 생존 모형:
             - 장 개요: ch21/index.md
             - 21.1 생존분석 입문:
                 - 사건까지의 시간 자료와 중도절단: ch21/introduction/time_to_event.md
