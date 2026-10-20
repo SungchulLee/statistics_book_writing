@@ -105,6 +105,7 @@ $$
 ---
 
 ## 5. 최대가능도추정
+
 <div class="defn" markdown>
 
 ### 정의 3. 최대가능도추정량 { .dfn }
@@ -117,19 +118,37 @@ MLE는 "어떤 모수값이 관측된 자료를 가장 그럴듯하게 만드는
 
 </div>
 
-### MLE 찾기
+### 어디를 보고 찾는가
 
-로그가능도가 미분가능하면 MLE는 대개 **점수방정식**을 풀어 찾는다:
+가능도를 최대로 만드는 자리를 찾는 일은 미적분의 표준 문제다. 다만 **모수공간의 안쪽에서 최대가 일어난다는 것**과 **로그가능도가 미분가능하다는 것**, 두 조건이 갖추어져야 미분이 쓸모가 있다. 그때 다음이 성립한다.
 
-$$\frac{\partial \ell(\theta)}{\partial \theta} = 0$$
+<div class="thmbox" markdown>
 
-**점수함수** $s(\theta) = \frac{\partial \ell(\theta)}{\partial \theta}$는 로그가능도의 기울기이다. MLE는 $s(\hat{\theta}_{\text{MLE}}) = 0$을 만족한다.
+### 정리 1. 점수방정식 { .thm }
 
-벡터 모수 $\theta = (\theta_1, \ldots, \theta_k)^\top$에 대해서는 다음 연립방정식을 푼다:
+로그가능도 $\ell(\theta)$ 가 모수공간 $\Theta$ 의 내부에서 미분가능하고 $\hat\theta$ 가 내부점에서 $\ell$ 을 최대로 만든다고 하자. 그러면 $\hat\theta$ 는 **점수방정식**
 
-$$\frac{\partial \ell}{\partial \theta_j} = 0, \quad j = 1, \ldots, k$$
+$$
+s(\hat\theta) = \frac{\partial \ell(\theta)}{\partial \theta}\Bigg|_{\theta = \hat\theta} = 0
+$$
 
-그 해가 (최솟값이나 안장점이 아니라) 최댓값인지 확인해야 하며, 보통 해에서 Hessian 행렬이 음의 정부호인지 살핀다.
+을 만족한다. 모수가 $\theta = (\theta_1, \ldots, \theta_k)^\top$ 로 여럿이면 연립방정식
+
+$$
+\frac{\partial \ell}{\partial \theta_j}\Bigg|_{\theta = \hat\theta} = 0, \qquad j = 1, \ldots, k
+$$
+
+이 된다. 역은 성립하지 않는다 — 점수방정식의 해가 최댓값이 아니라 **최솟값이나 안장점**일 수 있으므로, 해에서 헤세행렬 $\partial^2\ell/\partial\theta\,\partial\theta^\top$ 이 **음의 정부호**인지 따로 확인해야 한다.
+
+</div>
+
+??? proof "증명"
+
+    $\hat\theta$ 가 $\Theta$ 의 **내부점**이므로 $\hat\theta$ 를 품는 열린 공이 $\Theta$ 안에 있다. 그 공 안에서 $\ell$ 이 미분가능하고 $\hat\theta$ 에서 최댓값을 가지므로, 페르마의 정리에 의해 그 점에서 기울기가 0 이다. 여러 모수일 때는 각 좌표방향으로 같은 논증을 적용한다. $\square$
+
+    **두 조건이 모두 필요하다.** 미분가능성이 깨지는 예로 라플라스분포가 있다. 로그가능도가 $-\sum|x_i - \mu|$ 꼴이라 $\mu = x_i$ 에서 꺾이고, 최대점(표본중앙값)이 꺾인 자리에 놓인다. 내부성이 깨지는 예는 더 흔하다 — 베르누이에서 성공이 하나도 없으면 $\hat p = 0$ 이 되어 최대가 **경계**에서 일어나고, 거기서는 기울기가 0 이 아니다. 균등분포 $U(0,\theta)$ 의 MLE 가 표본최댓값인 것도 같은 사정이다.
+
+**점수함수**라는 이름은 $s(\theta) = \partial\ell/\partial\theta$ 에 붙는다. 로그가능도의 기울기이며, 6.2 절 뒤쪽에서 이것의 분산이 **피셔 정보량**이 된다.
 
 세 꼴이 모두 같은 것을 가리킨다는 점도 적어 둔다.
 
@@ -142,109 +161,148 @@ $$
 ---
 
 ## 6. 보기
+
+정리 1 을 다섯 분포에 적용한다. 밟는 걸음은 언제나 같다 — 가능도를 세우고, 로그를 취하고, 점수방정식을 풀고, 2계 조건으로 최대점임을 확인한다.
+
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포 — 평균이 미지. $\sigma^2$이 알려진 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자. $\mu$의 MLE를 구한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 정규분포, 평균만 미지. $\sigma^2$ 이 알려진 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$ 이라 하자.
+
+**(1)** 로그가능도를 세우고 점수방정식을 풀어 $\hat\mu_{\text{MLE}}$ 를 구하시오.
+
+**(2)** 2계 조건으로 그것이 최대점임을 확인하고, $\sigma^2$ 을 **몰라도** $\hat\mu$ 를 구할 수 있는 까닭을 밝히시오.
 
 </div>
 
 ??? success "풀이"
-    **가능도:**
+
+    **(1)** 정규밀도의 곱이 가능도이고
 
     $$L(\mu) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)$$
 
-    **로그가능도:**
+    로그를 취하면 지수가 내려와 제곱합이 된다.
 
     $$\ell(\mu) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2$$
 
-    **점수방정식:**
+    앞항은 $\mu$ 와 무관한 상수다. 미분해 $0$ 으로 두면
 
-    $$\frac{d\ell}{d\mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0$$
+    $$\frac{d\ell}{d\mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0
+    \quad\Longrightarrow\quad \sum_{i=1}^n x_i - n\mu = 0$$
 
-    $$\sum_{i=1}^n x_i - n\mu = 0$$
+    이므로
 
     $$\hat{\mu}_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n x_i = \bar{x}$$
 
-    평균의 MLE는 표본평균이며 불편이고 효율적이다.
+    다.
+
+    **(2)** 한 번 더 미분하면 $d^2\ell/d\mu^2 = -n/\sigma^2 < 0$ 이라 $\ell$ 이 **엄격 오목**이고, 정류점이 유일한 최대점이다. 그리고 점수방정식에서 **$1/\sigma^2$ 이 통째로 약분된다.** 그래서 $\sigma^2$ 을 몰라도 $\hat\mu$ 가 정해진다 — 두 모수가 정보적으로 얽혀 있지 않다는 뜻이며, 이 사실은 [정규분포의 최대가능도](mle_normal.md)에서 등고선의 축이 좌표축과 나란한 모습으로 다시 나타난다.
+
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 정규분포 — 두 모수 모두 미지. $\mu$와 $\sigma^2$이 모두 미지인 $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이라 하자.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 정규분포, 두 모수 모두 미지. $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$ 에서 $\mu$ 와 $\sigma^2$ 을 함께 추정한다.
+
+**(1)** 점수방정식 **둘**을 세워 $\hat\mu$ 와 $\hat\sigma^2$ 을 구하시오.
+
+**(2)** $\hat\sigma^2$ 이 우리가 쓰던 $S^2$ 과 어떻게 다른지 밝히고, 그 차이가 무엇을 뜻하는지 쓰시오.
 
 </div>
 
 ??? success "풀이"
-    **로그가능도:**
+
+    **(1)** 로그가능도는
 
     $$\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2$$
 
-    **점수방정식:**
+    이다. 모수가 둘이므로 편미분 둘을 함께 $0$ 으로 놓는다. $\mu$ 쪽은 보기 1 과 같아
 
     $$\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = 0 \implies \hat{\mu} = \bar{x}$$
 
+    이고, $\sigma^2$ 쪽은 $\hat\mu$ 를 넣은 뒤 풀면
+
     $$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n (x_i - \mu)^2 = 0 \implies \hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (x_i - \bar{x})^2$$
 
-    **참고:** $\sigma^2$의 MLE는 $n-1$이 아니라 $n$으로 나눈다. 편향되어 있다: $E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$. MLE가 언제나 불편인 것은 아님을 보여 준다.
+    이다. 순서가 중요하다 — $\mu$ 쪽이 $\sigma^2$ 없이 풀리므로 먼저 풀고, 그 답을 $\sigma^2$ 쪽에 넣는다.
+
+    **(2)** 분모가 $n-1$ 이 아니라 **$n$** 이다. 따라서
+
+    $$E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2 < \sigma^2$$
+
+    로 **과소추정**한다. **가능도를 최대로 만드는 일과 기댓값을 맞히는 일이 서로 다른 요구**라는 것을 보여 주는 가장 흔한 예이며, 베셀 보정이 그 어긋남을 되돌리는 일이다. 자세한 것은 [정규분포의 최대가능도](mle_normal.md)에 있다.
+
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 베르누이분포. $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$라 하자.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 베르누이분포. $X_1, \ldots, X_n \sim \text{Bernoulli}(p)$ 이고 성공 횟수를 $k = \sum_i x_i$ 라 하자.
+
+**(1)** 로그가능도를 $k$ 로 묶어 적고 $\hat p_{\text{MLE}}$ 를 구하시오.
+
+**(2)** $k = 0$ 이거나 $k = n$ 이면 정리 1 을 그대로 쓸 수 없다. 왜인지 밝히고 그때의 MLE 를 적으시오.
 
 </div>
 
 ??? success "풀이"
-    **로그가능도:**
 
-    $$\ell(p) = \sum_{i=1}^n \left[x_i \log p + (1 - x_i)\log(1 - p)\right]$$
+    **(1)** 지수가 스위치 노릇을 하므로 두 경우가 한 식에 들어간다.
 
-    $$= k \log p + (n - k)\log(1 - p)$$
+    $$\ell(p) = \sum_{i=1}^n \left[x_i \log p + (1 - x_i)\log(1 - p)\right] = k \log p + (n - k)\log(1 - p)$$
 
-    여기서 $k = \sum_{i=1}^n x_i$는 성공 횟수이다.
+    $n$ 개의 항이 **$k$ 하나로 묶인다.** 미분해 $0$ 으로 두면
 
-    **점수방정식:**
+    $$\frac{d\ell}{dp} = \frac{k}{p} - \frac{n-k}{1-p} = 0
+    \quad\Longrightarrow\quad k(1-p) = (n-k)p$$
 
-    $$\frac{d\ell}{dp} = \frac{k}{p} - \frac{n-k}{1-p} = 0$$
+    이고 $\hat{p}_{\text{MLE}} = k/n = \bar{x}$ 다. $\ell''(p) = -k/p^2 - (n-k)/(1-p)^2 < 0$ 이라 최대점이다.
 
-    $$\hat{p}_{\text{MLE}} = \frac{k}{n} = \bar{x}$$
+    **(2)** $k = 0$ 이면 $\ell(p) = n\log(1-p)$ 로 $p$ 에 대해 **단조감소**이고, 최대가 $p = 0$ 이라는 **경계**에서 일어난다. 정리 1 은 최대가 내부점일 때의 진술이므로 쓸 수 없고, 실제로 그 점에서 기울기는 $0$ 이 아니다. $k = n$ 이면 대칭적으로 $\hat p = 1$ 이다. 추정값이 경계에 붙는 이 현상이 [왈드와 윌슨](../../ch05/applications/phat_wald_wilson.md) 에서 본 신뢰구간 붕괴와 같은 뿌리를 갖는다.
 
-    MLE는 표본비율이며 직관적으로 자연스럽고 불편이다.
 <div class="exbox" markdown>
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 지수분포. $x > 0$에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 지수분포. $x > 0$ 에서 밀도가 $f(x; \lambda) = \lambda e^{-\lambda x}$ 인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$ 라 하자.
+
+**(1)** $\hat\lambda_{\text{MLE}}$ 를 구하고 2계 조건을 확인하시오.
+
+**(2)** 평균 $\mu = 1/\lambda$ 의 MLE 가 $\bar x$ 임을 **다시 유도하지 않고** 말할 수 있는 까닭은 무엇인가.
 
 </div>
 
 ??? success "풀이"
-    **로그가능도:**
 
-    $$\ell(\lambda) = n\log\lambda - \lambda \sum_{i=1}^n x_i$$
+    **(1)** 로그가능도가
 
-    **점수방정식:**
+    $$\ell(\lambda) = n\log\lambda - \lambda\sum_{i=1}^n x_i$$
 
-    $$\frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0$$
+    이고 미분하면
 
-    $$\hat{\lambda}_{\text{MLE}} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{x}}$$
+    $$\frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0
+    \quad\Longrightarrow\quad \hat{\lambda}_{\text{MLE}} = \frac{n}{\sum_i x_i} = \frac{1}{\bar{x}}$$
 
-    **2계도함수 확인:** $\frac{d^2\ell}{d\lambda^2} = -n/\lambda^2 < 0$이므로 최댓값이다.
+    다. $d^2\ell/d\lambda^2 = -n/\lambda^2 < 0$ 이라 $\lambda > 0$ 전체에서 오목하므로 최대점이다.
+
+    **(2)** **불변성** 때문이다. $\hat\theta$ 가 $\theta$ 의 MLE 이면 $g(\hat\theta)$ 가 $g(\theta)$ 의 MLE 이므로, $g(\lambda) = 1/\lambda$ 를 넣으면 $\hat\mu = 1/\hat\lambda = \bar x$ 가 곧바로 나온다. 적률법이나 최소제곱에는 없는 성질이다(7절).
+
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 포아송분포. $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$라 하자.
+**보기 5.** <span class="diff easy" title="쉬움"></span> 포아송분포. $X_1, \ldots, X_n \sim \text{Poisson}(\lambda)$ 라 하자.
+
+**(1)** $\hat\lambda_{\text{MLE}}$ 를 구하시오.
+
+**(2)** 자료가 모두 $0$ 이면 어떤 일이 생기는지 보기 3(2) 와 견주어 밝히시오.
 
 </div>
 
 ??? success "풀이"
-    **로그가능도:**
 
-    $$\ell(\lambda) = \sum_{i=1}^n \left[x_i \log\lambda - \lambda - \log(x_i!)\right] = \left(\sum x_i\right)\log\lambda - n\lambda - \sum\log(x_i!)$$
+    **(1)** 확률질량함수가 $P(X = x) = \lambda^x e^{-\lambda}/x!$ 이므로
 
-    **점수방정식:**
+    $$\ell(\lambda) = \left(\sum_{i=1}^n x_i\right)\log\lambda - n\lambda - \sum_{i=1}^n \log(x_i!)$$
 
-    $$\frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0$$
+    이고 마지막 항은 $\lambda$ 와 무관한 상수다. 미분해 $0$ 으로 두면
 
-    $$\hat{\lambda}_{\text{MLE}} = \bar{x}$$
+    $$\frac{d\ell}{d\lambda} = \frac{\sum_i x_i}{\lambda} - n = 0
+    \quad\Longrightarrow\quad \hat{\lambda}_{\text{MLE}} = \bar{x}$$
 
-**다섯 보기는 맛보기다.** 여기서는 미분해서 풀기까지만 했다. 같은 다섯이 6.2 절에서
-한 쪽씩 다시 나오는데, 그때는 추정량의 분포와 편향, 모의실험까지 끝까지 따라간다 —
-[베르누이](mle_bernoulli.md), [정규](mle_normal.md), [포아송](mle_poisson.md),
-[지수](mle_exponential.md)다. 이 절을 읽고 나면 네 쪽은 **같은 계산의 심화**로 읽힌다.
+    다. $d^2\ell/d\lambda^2 = -\sum_i x_i/\lambda^2 < 0$ 이므로(관측이 모두 $0$ 이 아닌 한) 최대점이다.
+
+    **(2)** 모든 $x_i$ 가 $0$ 이면 $\ell(\lambda) = -n\lambda$ 로 **단조감소**가 되어 최대가 $\lambda = 0$ 이라는 경계에서 일어난다. 보기 3(2) 의 $k = 0$ 과 **같은 모양의 사고**다. 계수 자료에서 사건이 한 번도 관측되지 않으면 비율의 MLE 가 $0$ 이 되는데, 그것이 「이 사건은 일어나지 않는다」는 뜻이 아니라는 점이 중요하다.
 
 ---
 
