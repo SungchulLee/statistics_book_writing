@@ -835,11 +835,7 @@ nav:
             - AIC와 일치도 지수: ch21/comparison/model_selection.md
 
 
-# ch_bonus/code/kaplan_meier.md 는 ch21/code/kaplan_meier.md 와 같은 내용의 다른
-# 판본이라 목차에서 제외한다. 파일은 저장소에 그대로 남아 있으므로, 둘을 비교해
-# 합치거나 되살리려면 아래 한 줄을 지우고 nav에 다시 넣으면 된다.
 exclude_docs: |
-  ch_bonus/*
   *_score.md
   *_v[0-9]*.md
 

@@ -1042,6 +1042,73 @@ $$
     $$
 
     $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 10.** <span class="diff med" title="중간"></span>
+절단 부호화 관례
+
+2절의 구현에서 `censored = 1`은 절단, `censored = 0`은 사건 관측을 뜻한다. 많은 생존분석
+패키지는 반대 관례(`event = 1`)를 쓴다.
+
+**(a)** `event` 부호화 관례로 카플란-마이어의 핵심 루프를 다시 쓰라.
+
+**(b)** 부호화 관례가 수학적 결과에 영향을 주지 않는 이유를 설명하라.
+
+</div>
+
+??? success "풀이"
+
+    **(a)** `event` 지시자(1 = 사건, 0 = 절단)를 쓰면 다음과 같다.
+
+    ```python
+    import numpy as np
+
+    times = np.array([5, 8, 8, 12, 15, 20, 22, 30], dtype=float)
+    event = np.array([1, 1, 0, 1, 0, 1, 0, 1])   # 1 = 사건, 0 = 절단
+
+    event_times = times[event == 1]
+    unique_events = np.unique(event_times)
+
+    s = 1.0
+    for t_j in unique_events:
+        n_at_risk = np.sum(times >= t_j)
+        d_j = np.sum((times == t_j) & (event == 1))
+        s *= (n_at_risk - d_j) / n_at_risk
+        print(f"t = {t_j:5.1f}  n = {n_at_risk}  d = {d_j}  S = {s:.4f}")
+
+    # 같은 자료를 앞의 관례(1 = 절단)로 넘겨도 결과가 같다
+    t_plot, s_plot = kaplan_meier(times, 1 - event)
+    print("final S:", s, "vs", s_plot[-1])
+    ```
+
+    출력:
+
+    ```
+    t =   5.0  n = 8  d = 1  S = 0.8750
+    t =   8.0  n = 7  d = 1  S = 0.7500
+    t =  12.0  n = 5  d = 1  S = 0.6000
+    t =  20.0  n = 3  d = 1  S = 0.4000
+    t =  30.0  n = 1  d = 1  S = 0.0000
+    final S: 0.0 vs 0.0
+    ```
+
+    바뀌는 것은 `censored == 0`을 `event == 1`로 대체하는 것뿐이다.
+
+    **(b)** 수학적 양 $n_j$와 $d_j$는 어느 관측치가 사건이고 어느 것이 절단인지로 정의된다.
+    사건에 0을 붙이든 1을 붙이든 순전히 소프트웨어 관례다. 코드가 사건과 절단을 옳게 식별하는
+    한 계산된 $\hat{S}(t)$는 동일하다.
+
+    !!! warning "그러나 실수는 조용히 일어난다"
+        관례가 결과를 바꾸지 않는다는 것은 **코드를 옳게 썼을 때**의 이야기다. 관례를 헷갈려
+        지시자를 반대로 넘기면 사건과 절단이 통째로 뒤바뀌어, 오류 없이 실행되면서 완전히
+        틀린 곡선이 나온다. 이런 실수는 예외를 던지지 않으므로 발견하기 어렵다.
+
+        간단한 방어법은 결과를 검산하는 것이다. 사건 수 $d = \sum \delta_i$를 출력해 자료에서
+        기대하는 값과 맞는지 확인하고, 절단율이 그럴듯한지 보라. 절단율이 90%로 나왔는데
+        연구 설계상 30%여야 한다면 지시자가 뒤집혔을 가능성이 크다.
 ---
 
 ## 정리하며
