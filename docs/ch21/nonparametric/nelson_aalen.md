@@ -104,6 +104,8 @@ $$
 
 **이 틀의 진짜 값은 일반성이다.** 절단, 시차 입장, 시간에 따라 변하는 공변량, 반복 사건, 경쟁 위험 — 어느 것을 넣어도 바뀌는 것은 $N(t)$ 와 $Y(t)$ 의 정의뿐이고, 마팅게일 중심극한정리는 그대로 돈다. 앤더슨과 길이 $1982$ 년에 [콕스 모형](../cox/partial_likelihood.md)까지 같은 방식으로 끝냈고, 그래서 콕스가 세 해를 들여 변호해야 했던 부분가능도가 이 언어에서는 한 줄이 되었다.
 
+_확인한 곳 — 오드 아알렌이 $1975$ 년 버클리 통계학과 박사논문 「Statistical inference for a family of counting processes」로 계수과정 이론을 열었다는 것, 앤더슨·길의 「Cox's Regression Model for Counting Processes: A Large Sample Study」(『Annals of Statistics』, $1982$ 년 $12$ 월)가 마팅게일 기법으로 콕스 모형의 점근을 끝냈다는 것. 표의 수는 모두 직접 모의실험한 값이다_
+
 </div>
 
 $H(t)$에 대한 근사적인 $100(1 - \alpha)\%$ 신뢰구간은
