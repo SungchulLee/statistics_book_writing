@@ -1,176 +1,130 @@
-r"""1.3절 「그림으로 보는 통계학」 — 36 퍼센트라는 수의 산술.
+r"""재현성 프로젝트의 세 수를 식으로 따져 본다.
 
-2015 년 8 월, 『사이언스』에 심리학 논문 100 편을 다시 해 본 결과가
-실렸다. 연구자 270 명 남짓이 몇 해에 걸쳐 한 일이다.
+재현 연구들은 **원래 효과의 $75\%$ 를 $90\%$ 검정력으로** 잡도록 설계되었다. 그 설계에서
+참 효과가 보고된 것의 몇 배냐에 따라 재현 성공 확률이 어떻게 달라지는가가 왼쪽이고,
+승자의 저주가 주는 부풀림이 원래 연구의 검정력과 어떻게 묶이는가가 오른쪽이다.
 
-  원래 논문의 97% 가 유의했다
-  다시 한 것의 36% 가 유의했다
-  다시 한 쪽의 효과크기가 원래의 절반쯤이었다
-
-세 수가 따로 노는 것처럼 보이지만 하나로 이어진다.
-
-재현 연구들은 **원래 보고된 효과크기**에 대해 90% 검정력이 되도록
-표본을 잡았다. 그런데 참 효과가 보고된 것의 절반이라면 그 설계의
-검정력은
-
-  lambda = 1.96 + 1.2816 = 3.2416     (보고된 효과에 대해 90%)
-  참 효과가 절반이면 lambda' = 1.6208
-  검정력 = Phi(1.6208 - 1.96) + Phi(-1.6208 - 1.96) = 0.367
-
-이다. **0.367 대 관측된 0.36.** 셋째 줄이 둘째 줄을 설명한다.
-
-그러면 왜 발표된 효과가 두 배로 부풀어 있었는가. 유의한 것만 실리기
-때문이다. 참 효과 delta 를 검정력 beta 로 재서 유의할 때만 발표하면
-
-  검정력 0.17 -> 발표된 효과가 참값의 2.49 배
-  검정력 0.25 ->                      2.00 배
-  검정력 0.52 ->                      1.39 배
-  검정력 0.90 ->                      1.06 배
-
-「절반」이 되려면 원래 연구들의 검정력이 0.25 쯤이었어야 한다.
-
-두 토막을 한 줄로 이어 거꾸로 풀면, 재현 성공률 0.36 이 나오려면
-원래 문헌의 검정력이 0.240 이어야 한다. 심리학 문헌의 검정력에 대해
-코언 이래로 거듭 보고되어 온 수준이 그쯤이다.
-
-만드는 파일:
-
-  ch01/classical/img/replication_arithmetic.png
-
-실행:  python3 scripts/make_ch01_replication_arithmetic.py   (저장소 최상위에서)
-필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
-       PNG는 커밋되므로 CI에서 다시 그리지 않는다.
+만드는 파일: docs/ch01/classical/img/replication_arithmetic.png
 """
 
 import numpy as np
-from scipy.optimize import brentq
-from scipy.stats import norm
-
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch01/classical/img/"
+from scipy import stats, optimize  # noqa: E402
 
-INK = "#37474F"
-MUTED = "#90A4AE"
-GREY = "#78909C"
-RED = "#D32F2F"
-TEAL = "#00838F"
-AMBER = "#B07C2C"
-BLUE = "#1565C0"
+Z = stats.norm.isf(0.025)  # 1.96
+# 설계: 원래 효과의 0.75 배에서 검정력 0.90
+LAM75 = Z + stats.norm.isf(0.10)
+K = LAM75 / 0.75  # 참/보고 비 r 당 비중심 모수
 
-ZC = 1.959964
-OBS_REP = 0.36                 # 관측된 재현 성공률
-TARGET = 0.90                  # 재현 연구가 노린 검정력
+OBS_RATIO = 0.197 / 0.403  # 재현 효과 / 원래 효과 (상관계수 단위)
+OBS_RATE = 0.36  # 실제로 유의했던 비율
 
 
-def power(lam):
-    return norm.sf(ZC - lam) + norm.cdf(-ZC - lam)
+def rep_power(r):
+    lam = K * np.asarray(r, dtype=float)
+    return stats.norm.sf(Z - lam) + stats.norm.cdf(-Z - lam)
 
 
-def inflation(lam):
-    """참 효과 lam 을 재서 유의할 때만 발표하면 발표값이 참값의 몇 배인가."""
-    a = norm.pdf(ZC - lam) - norm.pdf(-ZC - lam)
-    return (lam + a / power(lam)) / lam
+def inflation(d):
+    """참 효과 d 인 연구가 유의했을 때 보고되는 효과의 부풀림 배수."""
+    c = Z - d
+    return 1 + stats.norm.pdf(c) / stats.norm.sf(c) / d
 
 
-def main():
-    lam90 = brentq(lambda L: power(L) - TARGET, 0.1, 12)
-    print(f"  보고된 효과에 대해 검정력 {TARGET}: lambda = {lam90:.4f}")
-    print(f"\n{'참/보고 비율':>12}{'재현 검정력':>14}")
-    for r in (1.0, 0.8, 0.6, 0.5, 0.4, 0.3):
-        print(f"{r:>12.2f}{power(lam90*r):>14.3f}")
-    half = power(lam90 * 0.5)
-    print(f"\n  절반이면 {half:.4f} — 관측된 {OBS_REP}")
-
-    print(f"\n{'원래 연구의 검정력':>18}{'발표된 효과 / 참값':>20}")
-    for pw in (0.17, 0.25, 0.35, 0.52, 0.80, 0.90):
-        lam = brentq(lambda L: power(L) - pw, 0.01, 12)
-        print(f"{pw:>18.2f}{inflation(lam):>20.3f}")
-    lam2 = brentq(lambda L: inflation(L) - 2.0, 0.2, 6)
-    print(f"\n  발표값이 참값의 두 배가 되는 검정력 = {power(lam2):.3f}")
-
-    fig, axes = plt.subplots(1, 2, figsize=(13.2, 5.1), constrained_layout=True)
-
-    # ── 왼쪽: 원래 문헌의 검정력이 얼마였어야 하는가 ──
-    ax = axes[0]
-    pws = np.linspace(0.06, 0.95, 400)
-    lams = np.array([brentq(lambda L: power(L) - p, 0.01, 12) for p in pws])
-    comp = np.array([power(lam90 / inflation(l)) for l in lams])
-    beta_star = float(np.interp(OBS_REP, comp, pws))
-    print(f"\n  재현 성공률 {OBS_REP} 가 나오려면 원래 문헌의 검정력이 "
-          f"{beta_star:.3f} 이어야 한다")
-    ax.plot(pws, comp, lw=3.8, color=INK)
-    ax.axhline(OBS_REP, color=RED, lw=2.2, ls="--")
-    ax.axhline(TARGET, color=TEAL, lw=1.8, ls=":")
-    ax.plot([beta_star], [OBS_REP], marker="o", ms=14, color=RED, zorder=5,
-            mec="white", mew=1.8)
-    ax.text(0.09, TARGET + 0.022, f"재현 연구들이 노린 ${TARGET:.2f}$",
-            fontsize=10.6, color=TEAL)
-    ax.annotate(f"관측된 ${OBS_REP}$ 가 나오려면\n"
-                f"원래 문헌의 검정력이 ${beta_star:.2f}$ 이어야 한다",
-                xy=(beta_star, OBS_REP), xytext=(0.58, 0.26), fontsize=10.8,
-                color=RED, ha="center",
-                arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
-    ax.annotate("원래 연구가 튼튼했다면\n재현도 거의 다 성공한다",
-                xy=(0.88, comp[np.argmin(abs(pws - 0.88))]),
-                xytext=(0.62, 0.44), fontsize=10.8, color=GREY, ha="center",
-                arrowprops=dict(arrowstyle="->", color=GREY, lw=1.4))
-    ax.set_xlabel("원래 문헌의 검정력", fontsize=11.5)
-    ax.set_ylabel("재현에서 유의할 확률", fontsize=11.5)
-    ax.set_title("거꾸로 풀면 검정력이 나온다", fontsize=12.8, color=INK,
-                 pad=8)
-    ax.set_xlim(0.05, 0.96)
-    ax.set_ylim(0, 1.0)
-    ax.grid(alpha=0.25)
-    ax.spines[["top", "right"]].set_visible(False)
-
-    # ── 오른쪽: 그러면 재현은 몇 번 성공하는가 ──
-    ax = axes[1]
-    rs = np.linspace(0.15, 1.15, 400)
-    ax.plot(rs, [power(lam90 * r) for r in rs], lw=3.8, color=INK)
-    ax.axhline(OBS_REP, color=RED, lw=2.2, ls="--")
-    ax.axvline(0.5, color=RED, lw=1.8, ls=":")
-    ax.plot([0.5], [half], marker="o", ms=14, color=RED, zorder=5,
-            mec="white", mew=1.8)
-    ax.plot([1.0], [TARGET], marker="D", ms=12, color=TEAL, zorder=5,
-            mec="white", mew=1.6)
-    ax.annotate(f"보고된 효과가 참값이라면 ${TARGET:.2f}$\n"
-                f"— 재현 연구들이 노린 수다",
-                xy=(1.0, TARGET), xytext=(0.78, 0.14), fontsize=10.8,
-                color=TEAL, ha="center",
-                arrowprops=dict(arrowstyle="->", color=TEAL, lw=1.5))
-    ax.annotate(f"참값이 절반이면 ${half:.3f}$\n"
-                f"실제로 관측된 수는 ${OBS_REP}$ 다",
-                xy=(0.5, half), xytext=(0.33, 0.70), fontsize=10.8,
-                color=RED, ha="center",
-                arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
-    ax.set_xlabel("참 효과 $\\div$ 보고된 효과", fontsize=11.5)
-    ax.set_ylabel("재현에서 유의할 확률", fontsize=11.5)
-    ax.set_title("$36$ 퍼센트는 설명되는 수다", fontsize=12.8, color=INK,
-                 pad=8)
-    ax.set_xlim(0.15, 1.15)
-    ax.set_ylim(0, 1.0)
-    ax.grid(alpha=0.25)
-    ax.spines[["top", "right"]].set_visible(False)
-
-    fig.suptitle("$36$ 퍼센트라는 수의 산술", fontsize=14.5)
-    fig.text(0.5, -0.06,
-             "둘 다 식으로 구한 값이고 모의실험이 아니다. 왼쪽은 "
-             "「검정력이 낮다 → 발표된 효과가 부푼다 → 재현이 실패한다」를 "
-             "한 줄로 이은 것이고(부푸는 폭은 이 쪽 정리 $2$ 가 준다), "
-             "오른쪽은 그 가운데 토막이다.",
-             ha="center", fontsize=10.4, color=INK)
-
-    path = OUT + "replication_arithmetic.png"
-    fig.savefig(path, dpi=165, facecolor="white", bbox_inches="tight")
-    plt.close(fig)
-    print(f"saved {path}")
+def orig_power(d):
+    return stats.norm.sf(Z - d) + stats.norm.cdf(-Z - d)
 
 
-if __name__ == "__main__":
-    main()
+R_AT_OBS = optimize.brentq(lambda r: rep_power(r) - OBS_RATE, 0.05, 1.5)
+D_STAR = optimize.brentq(lambda d: inflation(d) - 1 / OBS_RATIO, 0.05, 4.0)
+P_STAR = orig_power(D_STAR)
+
+# === 그림 ==========================================================
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.8, 5.0))
+
+rs = np.linspace(0.05, 1.2, 400)
+ax1.plot(rs, rep_power(rs) * 100, color="#1f77b4", lw=2.6)
+pts = [
+    (1.0, "#2ca02c", "보고된 효과가\n참값이라면"),
+    (0.75, "#9467bd", "설계가 겨냥한 자리\n($90\\%$)"),
+    (OBS_RATIO, "#ff7f0e", f"관측된 효과크기 비\n$({OBS_RATIO:.2f})$ 를 넣으면"),
+]
+for r, c, lab in pts:
+    ax1.plot([r], [rep_power(r) * 100], "o", color=c, ms=9, zorder=5)
+ax1.annotate(pts[0][2], xy=(1.0, 99.1), xytext=(0.78, 76),
+             fontsize=9.5, color=pts[0][1],
+             arrowprops=dict(arrowstyle="->", color=pts[0][1], lw=1.0))
+ax1.annotate(pts[1][2], xy=(0.75, 90.0), xytext=(0.93, 56),
+             ha="center", fontsize=9.5, color=pts[1][1],
+             arrowprops=dict(arrowstyle="->", color=pts[1][1], lw=1.0))
+ax1.annotate(pts[2][2], xy=(OBS_RATIO, rep_power(OBS_RATIO) * 100),
+             xytext=(0.30, 76), ha="center", fontsize=9.5, color=pts[2][1],
+             arrowprops=dict(arrowstyle="->", color=pts[2][1], lw=1.0))
+ax1.axhline(OBS_RATE * 100, color="#d62728", lw=1.6, ls="--")
+ax1.plot([R_AT_OBS], [OBS_RATE * 100], "o", color="#d62728", ms=9, zorder=5)
+ax1.annotate(
+    f"실제로 유의했던 비율 ${OBS_RATE * 100:.0f}\\%$\n"
+    f"→ 참 효과가 보고된 것의 ${R_AT_OBS:.2f}$ 배여야 한다",
+    xy=(R_AT_OBS, OBS_RATE * 100),
+    xytext=(0.62, 18),
+    ha="center",
+    fontsize=9.5,
+    color="#d62728",
+    arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.1),
+)
+ax1.set_xlabel("참 효과 $\\div$ 보고된 효과")
+ax1.set_ylabel("재현에서 유의할 확률 ($\\%$)")
+ax1.set_title("① 설계대로라면 몇 퍼센트가 나와야 하는가", fontsize=12)
+ax1.set_xlim(0.05, 1.2)
+ax1.set_ylim(0, 105)
+ax1.grid(alpha=0.25)
+
+ds = np.linspace(0.35, 3.6, 400)
+ax2.plot(orig_power(ds) * 100, inflation(ds), color="#1f77b4", lw=2.6)
+ax2.axhline(1 / OBS_RATIO, color="#d62728", lw=1.5, ls="--")
+ax2.plot([P_STAR * 100], [1 / OBS_RATIO], "o", color="#d62728", ms=9, zorder=5)
+ax2.annotate(
+    f"관측된 부풀림 ${1 / OBS_RATIO:.2f}$ 배\n→ 원래 연구의 검정력 ${P_STAR:.2f}$",
+    xy=(P_STAR * 100, 1 / OBS_RATIO),
+    xytext=(55, 2.4),
+    ha="center",
+    fontsize=10,
+    color="#d62728",
+    arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.1),
+)
+ax2.axhline(1.0, color="#555555", lw=1.0, ls=":")
+ax2.text(42, 1.05, "부풀림 없음", ha="left", va="bottom", fontsize=9.5, color="#555555")
+ax2.set_xlabel("원래 연구의 검정력 ($\\%$)")
+ax2.set_ylabel("유의한 것만 추렸을 때의 부풀림 배수")
+ax2.set_title("② 부풀림은 검정력이 정한다 — 정리 $2$", fontsize=12)
+ax2.set_xlim(5, 100)
+ax2.set_ylim(0.9, 3.2)
+ax2.grid(alpha=0.25)
+
+fig.tight_layout()
+out = "docs/ch01/classical/img/replication_arithmetic.png"
+fig.savefig(out, dpi=150, bbox_inches="tight")
+print("saved", out)
+
+# === 본문에 적을 수 =================================================
+print(f"\n설계: 원래 효과의 0.75 배를 검정력 0.90 으로 → 비중심 모수 {LAM75:.4f}")
+print(f"  r 한 단위당 {K:.4f}\n")
+print(f"{'참/보고':>10}{'재현에서 유의할 확률':>22}")
+for r in (1.0, 0.75, OBS_RATIO, 0.5, R_AT_OBS):
+    print(f"{r:>10.3f}{rep_power(r) * 100:>20.1f}%")
+print(f"\n  관측된 효과크기 비 {OBS_RATIO:.4f} 를 넣으면 {rep_power(OBS_RATIO) * 100:.1f}%")
+print(f"  그런데 실제로 유의했던 것은 {OBS_RATE * 100:.0f}%  → 차이 {(rep_power(OBS_RATIO) - OBS_RATE) * 100:.1f}%p")
+print(f"  {OBS_RATE * 100:.0f}% 가 나오려면 참/보고 가 {R_AT_OBS:.4f} 여야 한다")
+
+print("\n정리 2 쪽 (이 계산은 재현 설계와 무관하다)")
+print(f"  관측된 부풀림 {1 / OBS_RATIO:.4f} 배 → 원래 연구의 검정력 {P_STAR:.4f}")
+for p in (0.20, 0.24, 0.35, 0.50, 0.80):
+    dd = optimize.brentq(lambda d: orig_power(d) - p, 0.01, 8)
+    print(f"  검정력 {p:.2f} → 부풀림 {inflation(dd):.3f} 배 (참/보고 {1 / inflation(dd):.3f})")
