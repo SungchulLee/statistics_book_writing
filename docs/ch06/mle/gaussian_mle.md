@@ -278,7 +278,7 @@ $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \qquad \text{Var}(\hat{\sigma}^
     = \frac{(2n-1)\sigma^4}{n^2}
     $$
 
-    인데, 이것은 $\frac{2\sigma^4}{n}\cdot\frac{2n-1}{2n}$이라 여전히 하한보다 작다. **편향된 추정량은 평균제곱오차로도 하한을 밑돌 수 있다**(7.2절 보기 2가 $1/(n+1)$에서 같은 일을 보였다). 하한이 보장하는 것은 오직 **불편추정량 중에서의** 최소 분산이고, $S^2$에 적용하면
+    인데, 이것은 $\frac{2\sigma^4}{n}\cdot\frac{2n-1}{2n}$이라 여전히 하한보다 작다. **편향된 추정량은 평균제곱오차로도 하한을 밑돌 수 있다**(5.13절 보기 2가 $1/(n+1)$에서 같은 일을 보였다). 하한이 보장하는 것은 오직 **불편추정량 중에서의** 최소 분산이고, $S^2$에 적용하면
 
     $$
     \operatorname{Var}(S^2) = \frac{2\sigma^4}{n-1} > \frac{2\sigma^4}{n}
@@ -418,7 +418,7 @@ $$E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$$
 
     이다. 그런데 불편성은 비선형 변환을 통과하지 못한다. $\hat\theta$가 $\theta$에 불편이어도 $g(\hat\theta)$는 $g(\theta)$에 불편이 아니다. **두 성질은 양립할 수 없는 꼴로 정의되어 있고**, 최대가능도는 불변성 쪽을 택한 것이다.
 
-    $\sigma$ 쪽 편향은 **두 겹**이 된다. $\hat\sigma_{\text{MLE}} = \sqrt{(n-1)/n}\;S$이고 [베셀 보정 쪽 보기 4](../variance/bessels_correction.md)에서 $E[S] = c_4(n)\sigma$이므로
+    $\sigma$ 쪽 편향은 **두 겹**이 된다. $\hat\sigma_{\text{MLE}} = \sqrt{(n-1)/n}\;S$이고 [베셀 보정 쪽 보기 4](../../ch05/variance/bessels_correction.md)에서 $E[S] = c_4(n)\sigma$이므로
 
     $$
     E\big[\hat\sigma_{\text{MLE}}\big] = c_4(n)\sqrt{\frac{n-1}{n}}\;\sigma
@@ -527,7 +527,7 @@ $N(5, 2^2)$에서 뽑은 $n = 5$짜리 표본 하나로 이 곡면을 실제로 
     = -\frac{n(\mu - \hat\mu)^2}{2\hat\sigma^2}
     $$
 
-    로 **정확한 포물선**이다. 근사가 아니다. 가운데 등호에서 보기 3·[7.2절](../variance/variance_estimators.md)의 항등식 $\sum(x_i-\mu)^2 = A + n(\bar x - \mu)^2$을 썼다.
+    로 **정확한 포물선**이다. 근사가 아니다. 가운데 등호에서 보기 3·[5.13절](../../ch05/variance/variance_estimators.md)의 항등식 $\sum(x_i-\mu)^2 = A + n(\bar x - \mu)^2$을 썼다.
 
     **$\sigma^2$ 단면**($\mu$를 $\hat\mu$에 고정)은 사정이 다르다. $v = \sigma^2$에 대해
 
@@ -730,7 +730,7 @@ $$\left(\frac{(n-1)S^2}{\chi^2_{n-1, \alpha/2}}, \quad \frac{(n-1)S^2}{\chi^2_{n
     \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
     $$
 
-    세 추축량 모두 **모수를 포함하지 않는 분포**를 가지므로 분위수를 미리 뽑아 쓸 수 있고, 포함확률이 설계대로 $1-\alpha$가 된다. 두 번째 것이 성립하려면 $\bar X$와 $S$가 **독립**이어야 하는데, 그것이 [7.2절 보기 3](../variance/bessels_correction.md)에서 본 정규분포만의 성질이다.
+    세 추축량 모두 **모수를 포함하지 않는 분포**를 가지므로 분위수를 미리 뽑아 쓸 수 있고, 포함확률이 설계대로 $1-\alpha$가 된다. 두 번째 것이 성립하려면 $\bar X$와 $S$가 **독립**이어야 하는데, 그것이 [5.13절 보기 3](../../ch05/variance/bessels_correction.md)에서 본 정규분포만의 성질이다.
 
     모의값의 흔들림은 이항이다.
 

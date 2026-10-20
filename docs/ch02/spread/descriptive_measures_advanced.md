@@ -772,7 +772,7 @@ $$
 
     **비 `ddof=1 평균 / ddof=0 평균` 이 $n/(n-1)$ 과 맞는다.** 표의 마지막 열이 그것이며, 두 추정량이 **같은 제곱합을 다른 수로 나눈 것**이므로 당연하다.
 
-    **왜 하필 $1/n$ 만큼 치우치는가**는 기댓값 계산이 필요하다. $\mathbb{E}[\hat\sigma^2]=\frac{n-1}{n}\sigma^2$ 이므로 편향이 $-\sigma^2/n$ 이라는 것을 [분산추정량](../../ch07/variance/variance_estimators.md) 절에서 증명한다. $\square$
+    **왜 하필 $1/n$ 만큼 치우치는가**는 기댓값 계산이 필요하다. $\mathbb{E}[\hat\sigma^2]=\frac{n-1}{n}\sigma^2$ 이므로 편향이 $-\sigma^2/n$ 이라는 것을 [분산추정량](../../ch05/variance/variance_estimators.md) 절에서 증명한다. $\square$
 
 ---
 

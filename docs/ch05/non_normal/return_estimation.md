@@ -520,7 +520,7 @@ $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\tex
 
     **일간 샤프비율 $0.025$가 연간으로는 $0.397$이 된다.** 기간을 늘리면 샤프비율이 $\sqrt T$로 좋아 보인다는 것인데, 이것이 분포가 좋아져서가 아니라 **단위를 바꾼 것일 뿐**임을 잊으면 안 된다.
 
-    **(2) 자기상관이 있으면.** 분산의 가법성이 깨진다. 수익률이 AR(1) $\rho$를 따르면 [7.1절에서 유도한](../mean/consistency_convergence.md) 대로 합의 분산이
+    **(2) 자기상관이 있으면.** 분산의 가법성이 깨진다. 수익률이 AR(1) $\rho$를 따르면 [5.12절에서 유도한](../mean/consistency_convergence.md) 대로 합의 분산이
 
     $$
     \operatorname{Var}(R_a) \approx 252\,\sigma_d^2 \cdot \frac{1+\rho}{1-\rho}
