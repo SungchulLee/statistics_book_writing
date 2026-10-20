@@ -59,7 +59,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 1. 베르누이분포의 MLE { .thm }
+### 정리 1. 베르누이분포의 최대가능도추정량 { .thm }
 
 $x_1, \ldots, x_n \overset{\text{iid}}{\sim} B(p)$ 에 대해 로그가능도를 최대화하는 값은 **표본비율**이다.
 

@@ -22,7 +22,7 @@ $$
 
 <div class="thmbox" markdown>
 
-### 정리 1. 포아송분포의 MLE { .thm }
+### 정리 1. 포아송분포의 최대가능도추정량 { .thm }
 
 $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$ 에 대해
 
