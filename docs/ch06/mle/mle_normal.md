@@ -1,88 +1,79 @@
-# 정규분포의 MLE
+# 정규분포의 최대가능도
 
 ## 개요
 
-$x^{(i)}$를 $N(\mu, \sigma^2)$에서 얻은 $m$개의 i.i.d. 표본이라 하자. 그러면 $\mu$와 $\sigma^2$은 다음 $\hat{\mu}$와 $\hat{\sigma}^2$으로 추정할 수 있다:
+자료에서 평균과 분산을 추정한다. 답은 짐작대로 표본평균과 표본분산인데, **한 글자가 어긋난다.** 가능도가 고르는 분산은 제곱편차합을 $n-1$ 이 아니라 **$n$ 으로** 나눈 것이다. 우리가 2장·5장 내내 써 온 $S^2$ 과 다르다.
 
-$$
-\begin{array}{lll}
-\hat{\mu} &=& \displaystyle\frac{\sum_{i=1}^m x^{(i)}}{m} \\[12pt]
-\hat{\sigma}^2 &=& \displaystyle\frac{\sum_{i=1}^m (x^{(i)} - \hat{\mu})^2}{m}
-\end{array}
-$$
+이 어긋남은 흠이 아니라 이 절이 보여 줄 사실이다. **가능도를 최대로 만드는 일과 기댓값을 맞히는 일은 서로 다른 요구**이고, 정규분포의 분산에서 그 둘이 갈린다. 갈리는 양이 정확히 $\frac{n-1}{n}$ 배이며, 베셀 보정이 바로 그것을 되돌리는 일이다.
 
 ---
 
-## 1. 유도
+## 1. 가능도를 세운다
 
-### 자료
-
-$$
-\{x^{(i)} : i = 1, \ldots, m\}
-$$
-
-### 모형
+관측은 실수 $n$ 개다.
 
 $$
-x^{(i)} \sim N(\mu, \sigma^2)
+x_1, \ldots, x_n
 $$
 
-### 가능도함수
+이들이 평균 $\mu$, 분산 $\sigma^2$ 인 정규분포에서 **독립으로** 나왔다고 본다. 이번에는 모수가 **둘**이라 가능도가 곡선이 아니라 지형이 된다.
+
+독립이므로 결합밀도는 곱이고, 그것을 $(\mu, \sigma^2)$ 의 함수로 읽은 것이 가능도다.
 
 $$
-L(\mu, \sigma^2) = \prod_{i=1}^m \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{1}{2\sigma^2}(x^{(i)} - \mu)^2\right)
+L(\mu, \sigma^2) = \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{1}{2\sigma^2}(x_i - \mu)^2\right)
 $$
 
-### 로그가능도함수
+**여기서 로그가 특히 고맙다.** 정규밀도에는 지수가 들어 있어 곱이 지저분한데, 로그를 취하면 지수가 그대로 내려와 **제곱합**이 된다.
 
 $$
-\ell(\mu, \sigma^2) = -\frac{1}{2\sigma^2}\sum_{i=1}^m (x^{(i)} - \mu)^2 - \frac{m}{2}\log\sigma^2 + \text{Constant}
+\ell(\mu, \sigma^2) = -\frac{1}{2\sigma^2}\sum_{i=1}^{n} (x_i - \mu)^2 - \frac{n}{2}\log\sigma^2 + \text{상수}
 $$
 
-### 비용함수
+상수는 $-\frac n2\log(2\pi)$ 이며 $\mu$ 와 $\sigma^2$ 에 **의존하지 않으므로** 최대점에 영향을 주지 않는다. 그래서 떼어 두고 본다. 부호를 뒤집으면 비용함수다.
 
 $$
-J(\mu, \sigma^2) = \frac{1}{2\sigma^2}\sum_{i=1}^m (x^{(i)} - \mu)^2 + \frac{m}{2}\log\sigma^2
+J(\mu, \sigma^2) = \frac{1}{2\sigma^2}\sum_{i=1}^{n} (x_i - \mu)^2 + \frac{n}{2}\log\sigma^2
 $$
 
-### 최대가능도 원리
+두 항이 서로 당긴다. 앞항은 $\sigma^2$ 을 **키우고** 싶어 하고(제곱합의 무게를 줄이려고), 뒷항은 **줄이고** 싶어 한다. 그 줄다리기가 멈추는 자리가 $\hat\sigma^2$ 이다.
 
 $$
-\text{argmax}_{\mu, \sigma^2}\; L
-\quad\Leftrightarrow\quad
-\text{argmax}_{\mu, \sigma^2}\; \ell
-\quad\Leftrightarrow\quad
-\text{argmin}_{\mu, \sigma^2}\; J
+\operatorname*{argmax}_{\mu, \sigma^2} L
+\quad\Longleftrightarrow\quad
+\operatorname*{argmax}_{\mu, \sigma^2} \ell
+\quad\Longleftrightarrow\quad
+\operatorname*{argmin}_{\mu, \sigma^2} J
 $$
 
-### MLE 해
+모수가 둘이므로 편미분 둘을 함께 $0$ 으로 놓는다.
 
 <div class="thmbox" markdown>
 
 ### 정리 1. 정규분포의 MLE { .thm }
 
-$x^{(1)}, \ldots, x^{(m)} \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$ 에 대해
+$x_1, \ldots, x_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$ 에 대해
 
 $$
-\hat\mu = \frac{1}{m}\sum_{i=1}^m x^{(i)} = \bar x,
+\hat\mu = \frac{1}{n}\sum_{i=1}^n x_i = \bar x,
 \qquad
-\hat\sigma^2 = \frac{1}{m}\sum_{i=1}^m \bigl(x^{(i)} - \bar x\bigr)^2
+\hat\sigma^2 = \frac{1}{n}\sum_{i=1}^n \bigl(x_i - \bar x\bigr)^2
 $$
 
-이다. $\hat\mu$ 는 $\sigma^2$ 과 **무관하게** 정해지고, $\hat\sigma^2$ 은 **$m$ 으로** 나눈다 — 곧 $\hat\sigma^2$ 은 **편향추정량**이며 $E[\hat\sigma^2] = \frac{m-1}{m}\sigma^2$ 다.
+이다. $\hat\mu$ 는 $\sigma^2$ 과 **무관하게** 정해지고, $\hat\sigma^2$ 은 **$n$ 으로** 나눈다 — 곧 $\hat\sigma^2$ 은 **편향추정량**이며 $E[\hat\sigma^2] = \frac{n-1}{n}\sigma^2$ 다.
 
 </div>
 
 ??? proof "증명"
 
-    비용함수 $J(\mu, \sigma^2) = \frac{1}{2\sigma^2}\sum_i (x^{(i)}-\mu)^2 + \frac m2\log\sigma^2$ 를 최소화한다.
+    비용함수 $J(\mu, \sigma^2) = \frac{1}{2\sigma^2}\sum_i (x_i-\mu)^2 + \frac n2\log\sigma^2$ 를 최소화한다.
 
     **$\mu$ 쪽.** $\sigma^2 > 0$ 이 곱해진 상수이므로 미분하면
 
     $$
-    \frac{\partial J}{\partial\mu} = -\frac{1}{\sigma^2}\sum_i (x^{(i)}-\mu) = 0
+    \frac{\partial J}{\partial\mu} = -\frac{1}{\sigma^2}\sum_i (x_i-\mu) = 0
     \quad\Longrightarrow\quad
-    \sum_i (x^{(i)} - \mu) = 0
+    \sum_i (x_i - \mu) = 0
     \quad\Longrightarrow\quad
     \hat\mu = \bar x
     $$
@@ -92,24 +83,24 @@ $$
     **$\sigma^2$ 쪽.** $v = \sigma^2$ 으로 두고 미분한다.
 
     $$
-    \frac{\partial J}{\partial v} = -\frac{1}{2v^2}\sum_i (x^{(i)}-\hat\mu)^2 + \frac{m}{2v} = 0
+    \frac{\partial J}{\partial v} = -\frac{1}{2v^2}\sum_i (x_i-\hat\mu)^2 + \frac{n}{2v} = 0
     \quad\Longrightarrow\quad
-    \hat v = \frac{1}{m}\sum_i (x^{(i)}-\hat\mu)^2
+    \hat v = \frac{1}{n}\sum_i (x_i-\hat\mu)^2
     $$
 
-    양변에 $2v^2$ 을 곱해 정리한 것이다. 두 번 미분하면 $\hat v$ 에서 $\partial^2 J/\partial v^2 = m/(2\hat v^2) > 0$ 이므로 최소점이다.
+    양변에 $2v^2$ 을 곱해 정리한 것이다. 두 번 미분하면 $\hat v$ 에서 $\partial^2 J/\partial v^2 = n/(2\hat v^2) > 0$ 이므로 최소점이다.
 
-    **편향.** 분자는 $(m-1)S^2$ 이고 $E[S^2] = \sigma^2$ 이므로([표본분산](../../ch05/applications/sample_variance.md) 정리 1)
+    **편향.** 분자는 $(n-1)S^2$ 이고 $E[S^2] = \sigma^2$ 이므로([표본분산](../../ch05/applications/sample_variance.md) 정리 1)
 
     $$
-    E[\hat\sigma^2] = \frac{(m-1)\sigma^2}{m} = \frac{m-1}{m}\sigma^2 < \sigma^2
+    E[\hat\sigma^2] = \frac{(n-1)\sigma^2}{n} = \frac{n-1}{n}\sigma^2 < \sigma^2
     $$
 
     다. $\square$
 
-    **MLE 가 불편성을 보장하지 않는다는 가장 흔한 예가 이것이다.** 가능도를 최대화하는 일과 기댓값을 맞히는 일은 서로 다른 요구이고, 정규분포의 분산에서 그 둘이 어긋난다. 어긋나는 양이 정확히 $\frac{m-1}{m}$ 배이며, 2장·5장에서 본 베셀 보정이 바로 그 어긋남을 되돌리는 일이다.
+    **MLE 가 불편성을 보장하지 않는다는 가장 흔한 예가 이것이다.** 가능도를 최대화하는 일과 기댓값을 맞히는 일은 서로 다른 요구이고, 정규분포의 분산에서 그 둘이 어긋난다. 어긋나는 양이 정확히 $\frac{n-1}{n}$ 배이며, 2장·5장에서 본 베셀 보정이 바로 그 어긋남을 되돌리는 일이다.
 
-    **그래도 MLE 는 일치추정량이다.** $\frac{m-1}{m} \to 1$ 이므로 편향이 0 으로 가고 분산도 0 으로 가므로, [일치성](../estimator_quality/consistency.md) 정리 1 에 따라 $\hat\sigma^2 \xrightarrow{P} \sigma^2$ 다. **유한표본에서 치우쳐 있을 뿐 큰 표본에서는 바로잡힌다.**
+    **그래도 MLE 는 일치추정량이다.** $\frac{n-1}{n} \to 1$ 이므로 편향이 0 으로 가고 분산도 0 으로 가므로, [일치성](../estimator_quality/consistency.md) 정리 1 에 따라 $\hat\sigma^2 \xrightarrow{P} \sigma^2$ 다. **유한표본에서 치우쳐 있을 뿐 큰 표본에서는 바로잡힌다.**
 
 ![두 모수의 로그가능도 지형](./img/normal_loglik_surface.png)
 
@@ -125,14 +116,14 @@ $$
 
 | 추정량 | MLE | 불편인가? |
 |-----------|-----|-----------|
-| $\hat{\mu}$ | $\frac{1}{m}\sum x^{(i)}$ | ✅ 그렇다 |
-| $\hat{\sigma}^2$ | $\frac{1}{m}\sum (x^{(i)} - \hat{\mu})^2$ | ❌ 아니다 ($m-1$이 아니라 $m$으로 나눈다) |
+| $\hat{\mu}$ | $\frac{1}{n}\sum x_i$ | ✅ 그렇다 |
+| $\hat{\sigma}^2$ | $\frac{1}{n}\sum (x_i - \hat{\mu})^2$ | ❌ 아니다 ($n-1$이 아니라 $n$으로 나눈다) |
 
 !!! note "분산 MLE의 편향"
-    MLE $\hat{\sigma}^2$은 $m$으로 나누므로 $\sigma^2$의 편향추정량이 된다. 불편 표본분산 $S^2$은 $m - 1$로 나눈다(Bessel 수정):
+    MLE $\hat{\sigma}^2$은 $n$으로 나누므로 $\sigma^2$의 편향추정량이 된다. 불편 표본분산 $S^2$은 $n - 1$로 나눈다(Bessel 수정):
 
     $$
-    S^2 = \frac{\sum_{i=1}^m (x^{(i)} - \hat{\mu})^2}{m - 1}
+    S^2 = \frac{\sum_{i=1}^n (x_i - \hat{\mu})^2}{n - 1}
     $$
 
 ---
@@ -142,7 +133,7 @@ $$
 ($\sigma^2$을 고정한) $\mu$에 대한 비용함수는:
 
 $$
-J(\mu) \propto \sum_{i=1}^m (x^{(i)} - \mu)^2
+J(\mu) \propto \sum_{i=1}^n (x_i - \mu)^2
 $$
 
 이는 정확히 **최소제곱** 목적함수이다. 따라서 정규분포 평균의 MLE는 최소제곱 추정값과 동등하며, 이는 MLE와 회귀분석 사이의 깊은 연결이다.
@@ -529,14 +520,14 @@ $\hat\mu$와 $\hat\sigma^2_{\text{MLE}}$의 결합 점근분포를 구하고, �
 정규분포에서는 모수가 둘이고, 점수방정식 둘을 함께 푼다.
 
 $$
-\hat\mu = \frac{1}{m}\sum_i x^{(i)}, \qquad
-\hat\sigma^2 = \frac{1}{m}\sum_i (x^{(i)}-\hat\mu)^2
+\hat\mu = \frac{1}{n}\sum_i x_i, \qquad
+\hat\sigma^2 = \frac{1}{n}\sum_i (x_i-\hat\mu)^2
 $$
 
 - **$\hat\mu$ 는 표본평균이고 불편이다.**
-- **$\hat\sigma^2$ 은 $m$ 으로 나눈다. 즉 편향되어 있다.** $\mathbb{E}[\hat\sigma^2]=\frac{m-1}{m}\sigma^2$ 이므로 참값을 체계적으로 과소추정한다. 베셀 보정으로 $m-1$ 을 쓰면 불편이 되지만, **그것은 최대가능도추정량이 아니다.**
+- **$\hat\sigma^2$ 은 $n$ 으로 나눈다. 즉 편향되어 있다.** $\mathbb{E}[\hat\sigma^2]=\frac{n-1}{n}\sigma^2$ 이므로 참값을 체계적으로 과소추정한다. 베셀 보정으로 $n-1$ 을 쓰면 불편이 되지만, **그것은 최대가능도추정량이 아니다.**
 - **최대가능도는 불편성을 보장하지 않는다.** 이 예가 그 사실을 가장 선명하게 보여 준다. 불변성 때문에 그렇다 — $\sigma$ 의 최대가능도추정량이 $\hat\sigma^2$ 의 제곱근인데, 비선형 변환은 불편성을 보존하지 않는다.
-- **편향이 $O(1/m)$ 이라 점근적으로는 사라진다.** 소표본에서만 문제가 되며, $m=10$ 이면 $10\%$ 과소추정이다.
+- **편향이 $O(1/n)$ 이라 점근적으로는 사라진다.** 소표본에서만 문제가 되며, $n=10$ 이면 $10\%$ 과소추정이다.
 - $(\sum x_i,\sum x_i^2)$ 이 충분통계량이다. 모수가 둘이니 통계량도 둘이며, 지수족의 전형적인 구조다.
 
 다음 절 **포아송분포의 최대가능도**로 넘어간다. 계수 자료의 표준 모형이며, 여기서는 추정량이 불편이면서 동시에 효율적이다.
