@@ -244,7 +244,6 @@ nav:
             - 최대가능도의 점근적 성질: ch06/mle/mle_asymptotics.md
             - Fisher 정보량과 표준오차: ch06/mle/fisher_information.md
             - 최대가능도 최적화 보기: ch06/mle/mle_optimization.md
-            - Fisher 정보량 계산: ch06/mle/fisher_information_code.md
             - 로그가능도 시각화: ch06/mle/log_likelihood.md
             - 기하분포와 포아송분포의 최대가능도: ch06/mle/geometric_poisson_mle.md
         - 6.3 적률법:

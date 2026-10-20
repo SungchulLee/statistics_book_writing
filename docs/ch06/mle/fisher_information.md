@@ -308,6 +308,300 @@ _확인한 곳 — 해럴드 제프리스의 『Theory of Probability』($1939$)
 
 ---
 
+## 5. Fisher 정보량의 수치적 계산
+
+Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법으로 수치적으로 추정할 수 있다:
+
+1. **점수 분산법**: $f(x; \theta)$에서 $X_1, \ldots, X_N$을 표본추출하고 각 점에서 점수를 계산한 뒤 $I(\theta) \approx \text{Var}(\{S_i\})$로 추정한다.
+2. **유한차분법**: 점수를 $S(\theta) \approx [\log f(X; \theta + \delta) - \log f(X; \theta - \delta)]/(2\delta)$로 근사한다.
+
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> 피셔 정보량을 수치로 구하기. $\sigma = 2$가 알려진 $N(\mu, \sigma^2)$에서 $\mu$에 관한 피셔 정보량을 생각한다.
+
+**(1)** $I(\mu)$를 점수의 분산과 이계도함수 기댓값의 음수, 두 가지로 구하고 둘이 일치함을 보이시오.
+
+**(2)** 로그밀도를 중심차분으로 미분해 점수를 근사한 뒤 그 표본분산으로 $I(\mu)$를 추정하면 $N = 10^5$에서 $0.251855$가 나온다. 해석값과 $0.74\%$ 어긋나는데, **중심차분의 오차인가 표본의 오차인가.**
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 로그밀도가
+
+    $$
+    \log f(x; \mu) = -\tfrac{1}{2}\log(2\pi\sigma^2) - \frac{(x-\mu)^2}{2\sigma^2}
+    $$
+
+    이므로 점수는
+
+    $$
+    S(\mu) = \frac{\partial}{\partial\mu}\log f(X; \mu) = \frac{X-\mu}{\sigma^2}
+    $$
+
+    이다. **점수의 분산으로.** $E[S(\mu)] = E[X-\mu]/\sigma^2 = 0$이므로 분산과 2차 적률이 같고
+
+    $$
+    I(\mu) = \operatorname{Var}\!\left(\frac{X-\mu}{\sigma^2}\right)
+    = \frac{\operatorname{Var}(X)}{\sigma^4} = \frac{\sigma^2}{\sigma^4} = \frac{1}{\sigma^2}
+    $$
+
+    이다. **이계도함수로.** 한 번 더 미분하면
+
+    $$
+    \frac{\partial^2}{\partial\mu^2}\log f(x; \mu) = -\frac{1}{\sigma^2}
+    $$
+
+    인데 이것이 $x$에 **의존하지 않는 상수**이므로 기댓값을 취할 것이 없고 $-E[\cdot] = 1/\sigma^2$이다. 두 길이 같은 답을 준다.
+
+    $$
+    I(\mu) = \frac{1}{\sigma^2} = \frac{1}{4} = 0.25
+    $$
+
+    이계도함수가 상수라는 사실은 따로 기억해 둘 만하다. 로그가능도가 $\mu$에 대해 **정확한 포물선**이고 그 곡률이 자료와 무관하게 $1/\sigma^2$로 고정되어 있다는 뜻이다. 이 점이 (2)에서 바로 쓰인다.
+
+    **(2) 수치적으로. 표본의 오차다.** 중심차분의 나머지항은
+
+    $$
+    \frac{\ell(\mu+\delta) - \ell(\mu-\delta)}{2\delta} = \ell'(\mu) + \frac{\delta^2}{6}\ell'''(\mu) + O(\delta^4)
+    $$
+
+    인데, (1)에서 보았듯 $\ell$이 $\mu$의 이차식이라 $\ell''' \equiv 0$이다. **이 모형에서 중심차분은 근사가 아니라 정확하다.** 그러므로 어긋남은 모두 표본 $N = 10^5$개에서 오는 몬테카를로 오차여야 한다. 코드로 두 주장을 다 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def fisher_information_numerical(dist_name="norm", true_params=None,
+                                      param_name="loc", n_samples=100_000, delta=1e-5):
+        """점수함수의 분산으로 피셔 정보량을 수치적으로 구한다."""
+        if true_params is None:
+            true_params = {"loc": 5, "scale": 2}
+
+        dist = getattr(stats, dist_name)
+        rng = np.random.default_rng(42)
+        data = dist.rvs(size=n_samples, random_state=rng, **true_params)
+
+        theta = true_params[param_name]
+
+        # 점수함수 = 로그밀도를 모수로 미분한 것.
+        # 해석적으로 미분하는 대신 중심차분으로 근사한다.
+        # 그래서 이 코드는 분포가 무엇이든 그대로 쓸 수 있다.
+        params_plus = {**true_params, param_name: theta + delta}
+        params_minus = {**true_params, param_name: theta - delta}
+
+        logf_plus = dist.logpdf(data, **params_plus)
+        logf_minus = dist.logpdf(data, **params_minus)
+        score = (logf_plus - logf_minus) / (2 * delta)
+
+        # 피셔정보는 점수함수의 **분산**이다.
+        # 참 모수에서 점수의 기댓값이 0이므로 분산 = 2차 적률이 되고,
+        # 그래서 var를 그대로 쓰면 된다.
+        #
+        # 직관: 점수가 크게 흔들린다는 것은 모수를 조금만 바꿔도 가능도가
+        # 크게 변한다는 뜻이고, 그만큼 자료가 모수를 잘 짚어낸다는 뜻이다.
+        I_numerical = np.var(score)
+        return I_numerical
+
+    # 정규분포 평균의 피셔 정보량은 이론적으로 1/sigma^2 이다.
+    I_num = fisher_information_numerical("norm", {"loc": 5, "scale": 2}, "loc")
+    I_theory = 1 / 2**2
+    print(f"Normal mean Fisher information:")
+    print(f"  Numerical:   I(mu) = {I_num:.6f}")
+    print(f"  Theoretical: I(mu) = {I_theory:.6f}")
+
+    # 어긋남이 중심차분 탓인가 표본 탓인가. 같은 자료로 점수를
+    # **해석적으로** 계산해 나란히 놓으면 가려진다.
+    rng = np.random.default_rng(42)
+    data = stats.norm.rvs(size=100_000, random_state=rng, loc=5, scale=2)
+    delta = 1e-5
+    score_fd = (stats.norm.logpdf(data, loc=5 + delta, scale=2)
+                - stats.norm.logpdf(data, loc=5 - delta, scale=2)) / (2 * delta)
+    score_exact = (data - 5) / 2**2        # S(mu) = (x - mu) / sigma^2
+
+    print()
+    print(f"  중심차분 점수 - 해석적 점수, 최대 차이 = {np.abs(score_fd - score_exact).max():.2e}")
+    print(f"  var(중심차분 점수) = {np.var(score_fd):.9f}")
+    print(f"  var(해석적 점수)   = {np.var(score_exact):.9f}")
+    print(f"  몬테카를로 상대오차 sqrt(2/N) = {np.sqrt(2 / 100_000):.3%}")
+    print(f"  실제 상대 어긋남              = {(I_num - I_theory) / I_theory:.3%}")
+    ```
+
+    출력:
+
+    ```
+    Normal mean Fisher information:
+      Numerical:   I(mu) = 0.251855
+      Theoretical: I(mu) = 0.250000
+
+      중심차분 점수 - 해석적 점수, 최대 차이 = 1.53e-10
+      var(중심차분 점수) = 0.251855080
+      var(해석적 점수)   = 0.251855080
+      몬테카를로 상대오차 sqrt(2/N) = 0.447%
+      실제 상대 어긋남              = 0.742%
+    ```
+
+    ![점수의 분산이 곧 정보량이다](./img/score_variance_information.png)
+
+    **판정이 끝났다.** 중심차분 점수와 해석적 점수가 최대 $1.5\times10^{-10}$밖에 다르지 않고(이것은 $\delta = 10^{-5}$에서 생기는 부동소수점 자리 손실이다), 두 점수의 표본분산은 아홉째 자리까지 똑같이 $0.251855080$이다. 곧 **중심차분은 어긋남에 기여하지 않았다.**
+
+    남는 것은 표본이다. $S(\mu) \sim N(0, 1/\sigma^2)$이므로 표본분산의 상대 표준오차가 $\sqrt{2/N} = 0.447\%$인데 실제 어긋남이 $0.742\%$, 곧 $1.7$ 표준오차다. 흔히 일어나는 요동이다. 자리를 더 얻으려면 $N$을 키우는 수밖에 없고, $\delta$를 줄이는 것은 아무 도움이 되지 않는다(오히려 자리 손실만 늘어난다).
+
+    왼쪽 그림이 위 코드가 계산한 점수값들의 분포다. 두 가지가 눈에 띈다. **중심이 0**이고($E[S] = 0$은 정칙 조건 아래에서 언제나 성립한다), 그 **퍼짐이 곧 정보량**이다. 평균이 0이므로 분산과 2차 적률이 같아져 `np.var(score)` 한 줄로 $I(\theta)$가 나온다.
+
+    오른쪽은 같은 방법을 네 분포에 적용해 해석값과 나란히 놓은 것이다. 베르누이의 막대가 유독 긴 것은 $p = 0.3$에서 $I(p) = 1/(p(1-p)) \approx 4.76$이기 때문인데, 성공확률이 0이나 1에 가까울수록 관측 하나가 주는 정보가 커진다는 뜻이다.
+
+    수치적 방법의 쓸모는 여기에 있다. **로그밀도를 미분할 수만 있으면 분포가 무엇이든 같은 코드가 통한다.** 해석적으로 기댓값을 구하기 어려운 모형에서 특히 그렇다. 다만 지금 본 대로 정규분포의 평균처럼 로그밀도가 이차식인 경우가 아니면 중심차분의 $O(\delta^2)$ 항이 살아 있어, $\delta$를 너무 크게 잡으면 절단오차가, 너무 작게 잡으면 자리 손실이 끼어든다.
+
+---
+
+## 6. Cramér-Rao 한계 확인
+
+정규분포의 평균에 대해 표본평균이 CRLB를 달성하는지 확인할 수 있다.
+
+<div class="exbox" markdown>
+
+**보기 5.** <span class="diff easy" title="쉬움"></span> 표본평균이 하한에 도달함을 확인하기. $\sigma = 2$인 정규모집단에서 $n = 50$을 뽑는다.
+
+**(1)** 크라메르-라오 하한과 $\operatorname{Var}(\bar X)$를 구해 $\bar X$가 효율적임을 보이고, 비교 대상으로 표본중앙값의 점근분산도 구하시오.
+
+**(2)** 모의실험으로 두 분산을 재면 중앙값의 효율이 $0.6567$로 나온다. 점근값 $2/\pi = 0.6366$보다 $3\%$ 크다. **몬테카를로 오차인가.**
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 보기 4에서 $I(\mu) = 1/\sigma^2$을 얻었으므로 표본 $n$개의 전체 정보는 $nI(\mu) = n/\sigma^2$이고 하한은
+
+    $$
+    \operatorname{Var}(\hat\mu) \ge \frac{1}{nI(\mu)} = \frac{\sigma^2}{n} = \frac{4}{50} = 0.08
+    $$
+
+    이다. 한편 $\operatorname{Var}(\bar X) = \sigma^2/n$이 정확히 이 값이다. **표본평균은 하한을 등호로 달성한다.** 점근적으로만 그런 것이 아니라 모든 $n$에서 그렇다.
+
+    표본중앙값은 다르다. 중앙값의 점근분포는
+
+    $$
+    \sqrt{n}\,(\tilde X - \mu) \overset{d}{\to} N\!\left(0, \frac{1}{4f(\mu)^2}\right)
+    $$
+
+    인데 정규밀도의 중앙에서 $f(\mu) = 1/(\sigma\sqrt{2\pi})$이므로
+
+    $$
+    \frac{1}{4f(\mu)^2} = \frac{2\pi\sigma^2}{4} = \frac{\pi\sigma^2}{2},
+    \qquad
+    \operatorname{Var}(\tilde X) \approx \frac{\pi\sigma^2}{2n} = \frac{\pi \cdot 4}{100} = 0.1257
+    $$
+
+    이다. 효율은 둘의 비
+
+    $$
+    \frac{\sigma^2/n}{\pi\sigma^2/(2n)} = \frac{2}{\pi} = 0.6366
+    $$
+
+    으로 $\sigma$와 $n$이 모두 지워진다. **중앙값은 자료가 담은 정보의 $64\%$만 쓴다**는 익숙한 수가 여기서 나온다. 다만 이 $2/\pi$는 $n \to \infty$의 값이라는 점을 기억해 두자. (2)의 물음이 바로 그것이다.
+
+    **(2) 수치적으로. 몬테카를로 오차가 아니다 — 유한표본 효과다.** 먼저 모의실험을 돌린다.
+
+    ```python
+    import numpy as np
+
+    def verify_crlb(mu_true=5.0, sigma=2.0, n=50, n_sim=20_000):
+        """표본평균이 크라메르-라오 하한에 도달함을 확인한다."""
+        rng = np.random.default_rng(42)
+        crlb = sigma**2 / n
+
+        means = np.array([rng.normal(mu_true, sigma, n).mean() for _ in range(n_sim)])
+        empirical_var = means.var()
+
+        print(f"CRLB = sigma^2/n = {crlb:.6f}")
+        print(f"Var(X_bar)       = {empirical_var:.6f}")
+        print(f"Ratio            = {empirical_var / crlb:.4f}")
+
+        # 비교: 중앙값은 하한을 달성하지 못한다.
+        # 정규모집단에서 중앙값의 점근 효율은 2/pi ≈ 0.637 이다.
+        # 즉 같은 정밀도를 얻으려면 표본이 약 1.57배 더 필요하다.
+        medians = np.array([np.median(rng.normal(mu_true, sigma, n)) for _ in range(n_sim)])
+        print(f"\nVar(median) = {medians.var():.6f}")
+        print(f"Efficiency of median = {crlb / medians.var():.4f}")
+
+    verify_crlb()
+    ```
+
+    출력:
+
+    ```
+    CRLB = sigma^2/n = 0.080000
+    Var(X_bar)       = 0.078777
+    Ratio            = 0.9847
+
+    Var(median) = 0.121813
+    Efficiency of median = 0.6567
+    ```
+
+    **표본평균 쪽은 먼저 정리된다.** $\operatorname{Var}(\bar X) = 0.078777$이 하한 $0.08$의 $0.9847$배인데, 반복 $20{,}000$회에서 분산 추정값의 상대 표준오차가 $\sqrt{2/20{,}000} = 1.0\%$이므로 $1.5\%$의 어긋남은 $1.5$ 표준오차다. 몬테카를로 요동이고, (1)이 말한 등호 달성과 어긋나지 않는다.
+
+    **중앙값 쪽은 다르다.** $0.6567$과 $0.6366$의 차이는 $3\%$, 곧 $3$ 표준오차로 요동만으로는 설명되지 않는다. 범인은 $2/\pi$가 **$n \to \infty$의 값**이라는 데 있다. $n$을 바꿔 가며 다시 재 보면 드러난다.
+
+    ```python
+    import numpy as np
+
+    # 중앙값의 효율이 n 과 함께 2/pi 로 내려가는지 본다.
+    # 반복 수를 n 에 따라 달리 두어 작은 n 쪽의 몬테카를로 오차를 줄인다.
+    print(f"{'n':>6} {'반복':>8} {'Var(median)':>13} {'CRLB':>10} {'효율':>8} {'MC오차':>8}")
+    print("-" * 60)
+    rng = np.random.default_rng(0)
+    for n, n_sim in ((49, 200_000), (50, 200_000), (51, 200_000),
+                     (200, 50_000), (1000, 20_000)):
+        v = np.median(rng.normal(5.0, 2.0, size=(n_sim, n)), axis=1).var()
+        print(f"{n:>6} {n_sim:>8} {v:>13.6f} {4 / n:>10.6f} "
+              f"{(4 / n) / v:>8.4f} {np.sqrt(2 / n_sim):>7.2%}")
+    print(f"\n점근값 2/pi = {2 / np.pi:.4f}")
+    ```
+
+    출력:
+
+    ```
+         n       반복   Var(median)       CRLB       효율     MC오차
+    ------------------------------------------------------------
+        49   200000      0.126389   0.081633   0.6459   0.32%
+        50   200000      0.122504   0.080000   0.6530   0.32%
+        51   200000      0.121927   0.078431   0.6433   0.32%
+       200    50000      0.031505   0.020000   0.6348   0.63%
+      1000    20000      0.006296   0.004000   0.6353   1.00%
+
+    점근값 2/pi = 0.6366
+    ```
+
+    **$n$이 커지면 효율이 $2/\pi$로 내려간다.** $n = 1000$에서 $0.6353$, $n = 200$에서 $0.6348$로 둘 다 점근값 $0.6366$과 몬테카를로 오차 안에서 맞는다. 반면 $n = 50$에서는 $0.6530$으로 분명히 크다. 처음의 $0.6567$은 이 유한표본 값에 반복 수가 적어 생긴 요동이 더해진 것이다.
+
+    **왜 $n = 50$이 유독 유리한가.** 표에서 $n = 49$는 $0.6459$, $n = 51$은 $0.6433$인데 가운데 끼인 $n = 50$만 $0.6530$으로 튄다. 몬테카를로 오차 $0.32\%$를 넘는 차이다. 짝수 $n$에서는 중앙값이 가운데 **두** 순서통계량의 평균이고, 그 평균이 하나만 쓰는 것보다 분산을 줄여 주기 때문이다. 홀수와 짝수가 번갈아 오르내리면서 $n$이 커질수록 둘 다 $2/\pi$로 모인다.
+
+    정리하면 **표본평균의 $1.5\%$는 몬테카를로 오차이고, 중앙값의 $3\%$는 유한표본 효과다.** 겉보기 크기는 비슷해도 성격이 다르며, 반복 수를 늘려 가려낼 수 있는 것은 앞쪽뿐이다.
+
+!!! note "중앙값의 효율"
+    정규분포에서 평균 대비 중앙값의 점근 상대효율은 $2/\pi \approx 0.637$이다. 중앙값은 자료가 담은 정보의 약 64%만 사용한다.
+
+---
+
+## 7. 다모수 Fisher 정보행렬
+
+모수 벡터 $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_k)$에 대해 Fisher 정보량은 $k \times k$ 행렬이다:
+
+$$
+[I(\boldsymbol{\theta})]_{ij} = -E\left[\frac{\partial^2}{\partial\theta_i\,\partial\theta_j}\log f(X; \boldsymbol{\theta})\right]
+$$
+
+$\mu$와 $\sigma^2$이 모두 미지인 정규분포에서:
+
+$$
+I(\mu, \sigma^2) = \begin{pmatrix} 1/\sigma^2 & 0 \\ 0 & 1/(2\sigma^4) \end{pmatrix}
+$$
+
+비대각 성분이 0이라는 것은 $\mu$와 $\sigma^2$이 정보적으로 직교함을 보여 준다.
+
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -551,6 +845,221 @@ $g(\theta)$를 추정할 때의 크라메르-라오 하한이 $\{g'(\theta)\}^2/
 
     **타협.** 실무에서는 최적점 근처에 대부분을 배치하되 중간과 양끝에도 일부를 두어 모형 검증의 여지를 남긴다. 최적 설계 이론은 **어디에 자원을 몰아야 하는지에 대한 지침**으로 쓰는 것이 적절하다.
 
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span> 비율이 $\lambda$인 지수분포($x > 0$에서 밀도 $f(x; \lambda) = \lambda e^{-\lambda x}$)에 대해 Fisher 정보량과, $n$개의 관측값으로 $\lambda$를 추정할 때의 Cramér-Rao 하한을 계산하라.
+
+</div>
+
+??? success "풀이"
+    로그밀도는 $\log f(x; \lambda) = \log\lambda - \lambda x$이다.
+
+    점수: $S(\lambda) = 1/\lambda - X$. 2계도함수: $\partial^2\log f/\partial\lambda^2 = -1/\lambda^2$.
+
+    Fisher 정보량: $I(\lambda) = 1/\lambda^2$.
+
+    $n$개 관측값에 대한 CRLB는:
+
+    $$
+    \text{Var}(\hat{\lambda}) \geq \frac{1}{nI(\lambda)} = \frac{\lambda^2}{n}
+    $$
+
+    MLE는 $\hat{\lambda} = 1/\bar{X}$이다. 델타 방법에 의해 $n$이 크면 $\text{Var}(\hat{\lambda}) \approx \lambda^2/n$이므로 MLE가 점근적으로 이 한계를 달성한다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span> 베르누이분포에서 Fisher 정보량 $I(p) = 1/[p(1-p)]$이 $p = 1/2$에서 최소가 됨을 보여라. 동전 던지기의 관점에서 이 결과를 해석하라.
+
+</div>
+
+??? success "풀이"
+    미분하면 $\frac{d}{dp}I(p) = \frac{d}{dp}[p(1-p)]^{-1} = -\frac{1-2p}{[p(1-p)]^2}$이다.
+
+    0으로 두면 $p = 1/2$이다. $p \to 0$이나 $p \to 1$일 때 $I(p) \to \infty$이고 $I(1/2) = 4$가 유한한 최솟값이므로 $p = 1/2$에서 Fisher 정보량이 최소가 된다.
+
+    **해석:** 공정한 동전($p = 1/2$)이 인접한 값들과 구별하기 가장 어렵다. 결과가 가장 불확실할 때 던지기 한 번이 $p$에 관해 가장 적은 정보를 준다. 반대로 $p$가 0이나 1에 가까우면 결과가 매우 예측 가능하므로 던지기 한 번이 큰 정보를 주며, 그 양상에서 벗어나는 결과는 강한 진단 신호가 된다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff med" title="중간"></span>
+Fisher 정보량을 **수치 미분**으로 계산할 때 생기는 문제를 설명하고, 더 나은 방법을 두 가지 적어라.
+
+</div>
+
+??? success "풀이"
+    **수치 미분의 문제.** 중심차분
+
+    $$
+    \ell''(\theta) \approx \frac{\ell(\theta+h)-2\ell(\theta)+\ell(\theta-h)}{h^2}
+    $$
+
+    은 두 종류의 오차가 **반대 방향으로** 작용한다.
+
+    - **절단오차** $O(h^2)$: $h$가 크면 커진다.
+    - **반올림오차** $O(\epsilon/h^2)$: $h$가 작으면 커진다. 분자에서 거의 같은 세 수를 빼기 때문에 상쇄가 일어나고, 그것을 아주 작은 $h^2$으로 나누면 오차가 증폭된다.
+
+    최적 $h$는 대략 $\epsilon^{1/4} \approx 10^{-4}$인데, 그때도 유효숫자를 절반 이상 잃는다. 1계 도함수의 최적 $h \approx \epsilon^{1/3}$보다 나쁘다.
+
+    **더 나은 방법 1 — 해석적 미분.** 손으로 2계 도함수를 구해 코드에 넣는다. 가장 정확하고 빠르지만, 모형이 복잡하면 실수하기 쉽고 모형을 바꿀 때마다 다시 해야 한다.
+
+    **더 나은 방법 2 — 자동미분.** JAX나 PyTorch의 `hessian`을 쓰면 **기계 정밀도까지 정확한** 도함수를 얻는다. 연쇄법칙을 코드 수준에서 적용하는 것이라 수치 근사가 전혀 들어가지 않는다.
+
+    ```python
+    import jax, jax.numpy as jnp
+    H = jax.hessian(lambda th: -loglik(th, data))(theta_hat)
+    ```
+
+    **방법 3 — 복소 계단 미분.** 1계 도함수에는
+
+    $$
+    f'(x) \approx \frac{\operatorname{Im}\{f(x+ih)\}}{h}
+    $$
+
+    가 뺄셈 없이 계산되어 $h$를 $10^{-20}$까지 줄여도 안전하다. 2계에는 바로 쓸 수 없지만, 점수함수가 해석적으로 있으면 그것에 적용해 헤시안을 얻을 수 있다.
+
+    **실용적 절충.** 많은 최적화 라이브러리가 준뉴턴법(BFGS)으로 헤시안의 근사를 이미 만들어 두므로 그것을 재활용할 수 있다. 다만 BFGS 근사는 최적화를 위한 것이라 표준오차 계산에 쓰기에는 정확도가 부족한 경우가 있어, 최종 표준오차는 위 방법으로 다시 계산하는 편이 안전하다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff med" title="중간"></span>
+관측 Fisher 정보량 $\hat I = -\ell''(\hat\theta)$과 $n$개 관측값의 점수 제곱합 $\sum_i s(x_i;\hat\theta)^2$은 둘 다 $I_n$을 추정한다. 둘의 차이와 각각의 쓰임을 밝혀라.
+
+</div>
+
+??? success "풀이"
+    **두 추정값.**
+
+    $$
+    \hat A = -\sum_i \frac{\partial^2\ln f(x_i;\hat\theta)}{\partial\theta^2}, \qquad \hat B = \sum_i \left(\frac{\partial\ln f(x_i;\hat\theta)}{\partial\theta}\right)^2
+    $$
+
+    $\hat B$를 **외적 기울기(OPG)** 추정량 또는 버른트-홀-홀-하우스만 추정량이라 한다.
+
+    **모형이 맞으면 둘이 같은 것을 추정한다.** 정보량 등식 $E[-\ell''] = E[(\ell')^2]$ 때문이다. 다만 유한표본에서 값은 다르고, 일반적으로 $\hat A$가 더 안정적이다. $\hat B$는 점수를 제곱하므로 이상치에 민감하다.
+
+    **모형이 틀리면 갈라진다.** 이 차이 자체가 정보를 담는다.
+
+    - **샌드위치 분산** $\hat A^{-1}\hat B\hat A^{-1}$을 쓰면 모형 오설정에 강건한 표준오차가 나온다.
+    - $\hat A$와 $\hat B$가 크게 다르다는 것 자체가 **모형 오설정의 신호**다. 이를 형식적으로 검정하는 것이 화이트의 정보행렬 검정이다.
+
+    **각각의 쓰임.**
+
+    | | $\hat A$(헤시안) | $\hat B$(OPG) |
+    |---|---|---|
+    | 계산 | 2계 도함수 필요 | 1계 도함수만 필요 |
+    | 안정성 | 좋음 | 이상치에 민감 |
+    | 양정부호 보장 | 없음(봉우리 밖) | **있음** |
+    | 주 용도 | 표준오차 기본값 | 2계 도함수가 어려울 때, 샌드위치의 가운데 |
+
+    OPG가 널리 쓰이는 이유는 **점수만으로 계산되고 언제나 양반정부호**여서다. 복잡한 모형에서 헤시안을 구하기 어려울 때 실용적인 대안이 되며, 계량경제학에서 특히 흔하다. 다만 소표본에서 정보량을 과대평가하는 경향이 있어 표준오차가 너무 작게 나올 수 있다는 점은 알려진 단점이다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 15.** <span class="diff med" title="중간"></span>
+$\text{Gamma}(\alpha,\beta)$의 Fisher 정보행렬을 구하고, $\alpha$와 $\beta$가 **직교하지 않음**을 확인하라. 이것이 $\alpha$ 추정에 어떤 대가를 치르게 하는가?
+
+</div>
+
+??? success "풀이"
+    밀도가 $f(x) = \dfrac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}$(비율 모수화)이므로
+
+    $$
+    \ln f = \alpha\ln\beta - \ln\Gamma(\alpha) + (\alpha-1)\ln x - \beta x
+    $$
+
+    이다. 2계 편도함수를 구하면
+
+    $$
+    \frac{\partial^2\ln f}{\partial\alpha^2} = -\psi_1(\alpha), \qquad
+    \frac{\partial^2\ln f}{\partial\alpha\partial\beta} = \frac1\beta, \qquad
+    \frac{\partial^2\ln f}{\partial\beta^2} = -\frac{\alpha}{\beta^2}
+    $$
+
+    이고($\psi_1$은 트라이감마 함수), 자료에 의존하지 않으므로 기대값이 그대로다.
+
+    $$
+    I_1 = \begin{pmatrix}\psi_1(\alpha) & -1/\beta \\ -1/\beta & \alpha/\beta^2\end{pmatrix}
+    $$
+
+    **비대각이 0이 아니다.** 따라서 두 모수가 직교하지 않는다.
+
+    **$\alpha$ 추정의 대가.** 앞 절의 결과에 따라
+
+    $$
+    \operatorname{Var}(\hat\alpha) \ge \frac{(I_1^{-1})_{11}}{n} = \frac{1}{n}\cdot\frac{\alpha/\beta^2}{\psi_1(\alpha)\alpha/\beta^2 - 1/\beta^2} = \frac{1}{n}\cdot\frac{\alpha}{\alpha\psi_1(\alpha)-1}
+    $$
+
+    이다. $\beta$를 안다면 하한이 $1/\{n\psi_1(\alpha)\}$이므로, 모르는 대가가
+
+    $$
+    \frac{\alpha\psi_1(\alpha)}{\alpha\psi_1(\alpha)-1} > 1
+    $$
+
+    배다. $\alpha=1$이면 $\psi_1(1)=\pi^2/6=1.645$이므로 배율이 $1.645/0.645 = 2.55$다. **$\beta$를 모른다는 이유만으로 $\alpha$의 분산이 2.5배가 된다.**
+
+    $\alpha$가 커지면 $\alpha\psi_1(\alpha)\to1+1/(2\alpha)$이 아니라 $\to 1 + \tfrac{1}{2\alpha}$ 꼴로 1에 가까워져 배율이 더 커진다. 형상모수가 큰 감마분포에서 $\alpha$를 정밀하게 추정하기가 특히 어려운 이유다.
+
+    **직교 모수화.** $(\alpha, \mu)$($\mu = \alpha/\beta$가 평균)로 바꾸면 정보행렬이 대각에 가까워진다. 실제로 이 모수화에서 비대각이 0이 되어 두 모수가 직교하며, 일반화선형모형이 감마분포를 평균 모수화로 다루는 이유 중 하나다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 16.** <span class="diff med" title="중간"></span>
+Fisher 정보량은 **표본크기**뿐 아니라 **관측의 질**에도 의존한다. 측정오차가 있는 경우($X$ 대신 $X+\varepsilon$을 관측) 정보량이 어떻게 줄어드는지 정규 모형에서 확인하라.
+
+</div>
+
+??? success "풀이"
+    참값이 $X \sim N(\mu, \sigma^2)$인데 측정오차 $\varepsilon \sim N(0,\tau^2)$이 더해진 $Y = X+\varepsilon$을 관측한다고 하자($\varepsilon$은 $X$와 독립).
+
+    **관측되는 분포.** 정규의 합이므로
+
+    $$
+    Y \sim N(\mu,\ \sigma^2+\tau^2)
+    $$
+
+    이다.
+
+    **정보량.** 정규분포에서 평균에 대한 관측값 하나당 정보량이 분산의 역수이므로
+
+    $$
+    I_1^{(Y)}(\mu) = \frac{1}{\sigma^2+\tau^2} < \frac{1}{\sigma^2} = I_1^{(X)}(\mu)
+    $$
+
+    이다. **측정오차가 정보를 줄인다.**
+
+    **얼마나 줄어드는가.** 감쇠 계수
+
+    $$
+    \frac{I^{(Y)}}{I^{(X)}} = \frac{\sigma^2}{\sigma^2+\tau^2} =: \kappa
+    $$
+
+    를 **신뢰도**라 한다. 이 값이 정확히 "관측값 하나가 참값 하나 대비 몇 개분의 정보를 갖는가"이다.
+
+    $\tau = \sigma$이면 $\kappa = 0.5$로, **관측값 두 개가 오차 없는 관측값 하나만큼의 정보**밖에 없다. 유효 표본크기가 절반이 된 셈이다.
+
+    **회귀에서는 더 나쁘다.** 설명변수에 측정오차가 있으면 정보량이 줄 뿐 아니라 **계수 추정이 편향된다.**
+
+    $$
+    \hat\beta \xrightarrow{p} \kappa\beta
+    $$
+
+    로 0 쪽으로 감쇠한다(회귀 희석). 표본을 늘려도 사라지지 않는 편향이며, 이것이 측정오차의 가장 심각한 결과다.
+
+    **함의.** **표본크기를 늘리는 것과 측정을 정밀하게 하는 것은 서로 대체 가능하다.** 정보량이 $n\kappa/\sigma^2$이므로, 측정 정밀도를 두 배 좋게 하는 것($\tau^2$을 절반으로)과 표본을 일정 비율 늘리는 것이 같은 효과를 낸다. 어느 쪽이 싼지가 설계의 문제다.
+
+    반복 측정도 방법이다. 같은 대상을 $k$번 재어 평균하면 오차분산이 $\tau^2/k$로 줄어 신뢰도가 올라간다. 심리측정에서 문항 수를 늘려 신뢰도를 높이는 것(스피어만-브라운 공식)이 같은 원리다.
 ---
 
 ## 정리하며
