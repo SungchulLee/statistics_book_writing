@@ -1,132 +1,149 @@
-r"""15.1절 「그림으로 보는 통계학」 — 이름에 시그마가 들어간 경영 운동.
+r"""식스시그마의 $3.4$ 는 $\Phi(-6)$ 이 아니라 $\Phi(-4.5)$ 다.
 
-이 쪽 §1 이 규격 이탈 확률을 2 Phi(-L/sigma) 로 적었다. 그 한 줄을
-목표로 삼아 이름까지 거기서 따온 것이 1980 년대의 「식스 시그마」다.
+① 중심이 맞은 정규와 $1.5\sigma$ 밀린 정규의 꼬리.
+② 시그마 수준별 백만 개당 불량 — 유명한 표가 어디서 나오는가.
+③ 그 $\sigma$ 는 추정값이다. $n$ 이 작으면 시그마 수준 자체가 흔들린다.
 
-  규격까지의 여유가 k 시그마일 때
-    치우침이 없으면        2 Phi(-k)
-    평균이 1.5 시그마 밀리면  Phi(-(k-1.5)) + Phi(-(k+1.5))
-
-6 시그마에서 앞엣것은 십억에 둘이고 뒤엣것은 백만에 3.4 다. 널리 인용되는
-「백만에 3.4」가 치우침을 1.5 시그마 허용한 쪽의 값이다.
-
-만드는 파일:
-
-  ch15/introduction/img/six_sigma.png
-
-실행:  python3 scripts/make_ch15_six_sigma.py   (저장소 최상위에서)
-필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
-       PNG는 커밋되므로 CI에서 다시 그리지 않는다.
+만드는 파일: docs/ch15/introduction/img/six_sigma.png
 """
 
 import numpy as np
-from scipy import stats
-
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch15/introduction/img/"
-
-INK = "#37474F"
-AMBER = "#B07C2C"
-TEAL = "#00838F"
-RED = "#D32F2F"
-MUTED = "#90A4AE"
+from scipy import stats  # noqa: E402
 
 SHIFT = 1.5
-MARKS = (3.0, 4.0, 5.0, 6.0)
 
 
 def dpmo_centered(k):
-    return 2 * stats.norm.cdf(-k) * 1e6
+    return 2 * stats.norm.sf(k) * 1e6
 
 
-def dpmo_shifted(k):
-    return (stats.norm.cdf(-(k - SHIFT)) + stats.norm.cdf(-(k + SHIFT))) * 1e6
+def dpmo_shifted(k, s=SHIFT):
+    """평균이 s 만큼 밀렸을 때 양쪽 규격을 벗어나는 비율."""
+    return (stats.norm.sf(k - s) + stats.norm.sf(k + s)) * 1e6
 
 
-def main():
-    print("    규격 여유   치우침 없음        1.5 시그마 밀림")
-    for k in MARKS:
-        print(f"    {k:g} 시그마   {dpmo_centered(k):12.4f} DPMO   "
-              f"{dpmo_shifted(k):11.2f} DPMO")
-    print(f"    6 시그마에서 두 값의 비 {dpmo_shifted(6)/dpmo_centered(6):.0f} 배")
+# === 그림 ==========================================================
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.2, 4.8))
 
-    fig, axes = plt.subplots(1, 2, figsize=(12.4, 4.9), constrained_layout=True)
+# ① 두 정규와 ±6 규격선
+x = np.linspace(-7.5, 7.5, 1200)
+ax1.semilogy(x, stats.norm.pdf(x), color="#1f77b4", lw=2.2, label="중심이 맞았을 때")
+ax1.semilogy(
+    x, stats.norm.pdf(x, SHIFT), color="#d62728", lw=2.2, label="$1.5\\sigma$ 밀렸을 때"
+)
+xt = x[x >= 6]
+ax1.fill_between(xt, 1e-11, stats.norm.pdf(xt), color="#1f77b4", alpha=0.45)
+ax1.fill_between(xt, 1e-11, stats.norm.pdf(xt, SHIFT), color="#d62728", alpha=0.35)
+for s in (-6, 6):
+    ax1.axvline(s, color="#555555", lw=1.2, ls="--")
+ax1.text(5.7, 1e-2, "규격선 $\\pm 6\\sigma$", ha="right", fontsize=10, color="#555555")
+ax1.set_xlim(-7.5, 7.5)
+ax1.set_ylim(1e-11, 1.2)
+ax1.set_yticks([1e-9, 1e-6, 1e-3, 1])
+ax1.set_yticklabels(["$10^{-9}$", "$10^{-6}$", "$10^{-3}$", "$1$"])
+ax1.minorticks_off()
+ax1.set_xlabel("표준편차 단위")
+ax1.set_ylabel("밀도 (로그 눈금)")
+ax1.set_title("① $1.5$ 를 밀면 꼬리가 천 배 두꺼워진다", fontsize=12)
+ax1.legend(loc="upper left", fontsize=9.5)
+ax1.grid(alpha=0.25, which="major")
+ax1.annotate(
+    f"${dpmo_centered(6):.3f}$ ppm",
+    xy=(6.45, stats.norm.pdf(6.45) / 3),
+    xytext=(1.2, 3e-11),
+    fontsize=10,
+    color="#1f77b4",
+    arrowprops=dict(arrowstyle="->", color="#1f77b4", lw=1.0),
+)
+ax1.annotate(
+    f"${dpmo_shifted(6):.1f}$ ppm",
+    xy=(6.45, stats.norm.pdf(6.45, SHIFT) / 3),
+    xytext=(-1.2, 1e-7),
+    fontsize=10,
+    color="#d62728",
+    arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.0),
+)
 
-    # ── 왼쪽: 1.5 시그마 밀림이 무엇인가 ──
-    ax = axes[0]
-    g = np.linspace(-7.2, 7.2, 1200)
-    ax.plot(g, stats.norm.pdf(g), lw=2.6, color=MUTED, label="치우침 없는 공정")
-    ax.plot(g, stats.norm.pdf(g, SHIFT), lw=2.6, color=TEAL,
-            label=f"평균이 {SHIFT} 시그마 밀린 공정")
-    for s in (-6, 6):
-        ax.axvline(s, color=RED, lw=2.2)
-    ax.text(6.15, 0.055, "규격 상한\n$+6\\sigma$", fontsize=10.4, color=RED)
-    ax.text(-6.15, 0.055, "규격 하한\n$-6\\sigma$", fontsize=10.4, color=RED,
-            ha="right")
-    tail = g[g >= 6]
-    ax.fill_between(tail, 0, stats.norm.pdf(tail, SHIFT), color=TEAL, alpha=0.5)
-    ax.annotate(f"이 꼬리가 {dpmo_shifted(6):.1f} DPMO", xy=(6.2, 0.004),
-                xytext=(1.2, 0.17), fontsize=10.8, color=TEAL,
-                arrowprops=dict(arrowstyle="->", color=TEAL, lw=1.4))
-    ax.set_xlim(-7.2, 7.5)
-    ax.set_ylim(0, 0.46)
-    ax.set_yticks([])
-    ax.set_xlabel("$\\sigma$ 단위로 잰 자리", fontsize=11.5)
-    ax.set_title("「밀려도 괜찮게」 여유를 잡는다", fontsize=12.8, color=INK, pad=8)
-    ax.legend(fontsize=10.2, framealpha=0.93, loc="upper left")
-    ax.spines[["top", "right", "left"]].set_visible(False)
+# ② 시그마 수준별 백만 개당 불량
+ks = np.linspace(1, 6.5, 300)
+ax2.semilogy(ks, dpmo_centered(ks), color="#1f77b4", lw=2.4, label="중심이 맞았을 때")
+ax2.semilogy(
+    ks, dpmo_shifted(ks), color="#d62728", lw=2.4, label="$1.5\\sigma$ 밀렸을 때"
+)
+for k in (3, 4, 5, 6):
+    ax2.plot([k], [dpmo_shifted(k)], "o", color="#d62728", ms=7, zorder=5)
+ax2.annotate(
+    "$3.4$ ppm — 교과서의 그 수",
+    xy=(6, dpmo_shifted(6)),
+    xytext=(4.1, 0.2),
+    fontsize=10,
+    color="#d62728",
+    arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.0),
+)
+ax2.set_xlabel("시그마 수준 $k$ (규격선이 $\\pm k\\sigma$)")
+ax2.set_ylabel("백만 개당 불량 (ppm)")
+ax2.set_title("② 유명한 표가 나오는 자리", fontsize=12)
+ax2.set_ylim(1e-3, 1e6)
+ax2.set_yticks([1e-3, 1, 1e3, 1e6])
+ax2.set_yticklabels(["$0.001$", "$1$", "$10^3$", "$10^6$"])
+ax2.minorticks_off()
+ax2.legend(loc="lower left", fontsize=9.5)
+ax2.grid(alpha=0.25, which="major")
 
-    # ── 오른쪽: 여유에 따른 불량률 ──
-    ax = axes[1]
-    ks = np.linspace(1.0, 6.4, 400)
-    ax.semilogy(ks, dpmo_centered(ks), lw=2.8, color=MUTED,
-                label="치우침 없음  $2\\Phi(-k)$")
-    ax.semilogy(ks, dpmo_shifted(ks), lw=2.8, color=TEAL,
-                label=f"{SHIFT} 시그마 밀림")
-    for k in MARKS:
-        ax.plot([k], [dpmo_shifted(k)], marker="o", ms=8, color=TEAL, zorder=5)
-    ax.annotate(f"{dpmo_shifted(3):,.0f}", xy=(3, dpmo_shifted(3)),
-                xytext=(2.3, dpmo_shifted(3) * 6), fontsize=10.8, color=TEAL)
-    ax.annotate(f"{dpmo_shifted(6):.1f}\n백만에 {dpmo_shifted(6):.1f} 개",
-                xy=(6, dpmo_shifted(6)), xytext=(4.5, dpmo_shifted(6) * 25),
-                fontsize=10.8, color=TEAL,
-                arrowprops=dict(arrowstyle="->", color=TEAL, lw=1.4))
-    ax.annotate(f"{dpmo_centered(6):.4f}", xy=(6, dpmo_centered(6)),
-                xytext=(4.4, dpmo_centered(6) * 4), fontsize=10.8, color=MUTED)
-    ax.set_xlabel("규격까지의 여유 $k$ (시그마)", fontsize=11.5)
-    ax.set_ylabel("백만 개당 불량 (DPMO)", fontsize=11.5)
-    ax.set_title("여유를 두 배로 하면 불량은 자릿수로 준다",
-                 fontsize=12.8, color=INK, pad=8)
-    ax.set_xticks([1, 2, 3, 4, 5, 6])
-    # 로그 눈금 라벨을 평문으로 박는다 — mathtext 의 유니코드 마이너스가 두부가 된다
-    yt = [1e-3, 1e-1, 1e1, 1e3, 1e5]
-    ax.set_yticks(yt)
-    ax.set_yticklabels(["0.001", "0.1", "10", "1,000", "100,000"])
-    ax.minorticks_off()
-    ax.set_ylim(5e-4, 1e6)
-    ax.grid(alpha=0.25)
-    ax.legend(fontsize=10.4, framealpha=0.93, loc="lower left")
-    ax.spines[["top", "right"]].set_visible(False)
+# ③ sigma 는 추정값이다 — 시그마 수준의 신뢰구간
+ns = np.arange(5, 201)
+df = ns - 1
+lo = np.sqrt(df / stats.chi2.isf(0.025, df))  # sigma_hat 대비 sigma 의 하한 배수
+hi = np.sqrt(df / stats.chi2.isf(0.975, df))
+# 참 시그마 수준이 6 이라고 보고했을 때, 실제 수준 6*sigma_hat/sigma 의 구간
+ax3.fill_between(ns, 6 / hi, 6 / lo, color="#ff7f0e", alpha=0.25)
+ax3.plot(ns, 6 / hi, color="#ff7f0e", lw=2.0)
+ax3.plot(ns, 6 / lo, color="#ff7f0e", lw=2.0)
+ax3.axhline(6, color="#555555", lw=1.4, ls="--", label="보고된 $6\\sigma$")
+ax3.set_xlabel("$\\sigma$ 를 추정하는 데 쓴 표본 크기 $n$")
+ax3.set_ylabel("참 시그마 수준의 $95\\%$ 구간")
+ax3.set_title("③ 그 $\\sigma$ 는 추정값이다", fontsize=12)
+ax3.set_xlim(5, 200)
+ax3.set_ylim(2.5, 11)
+ax3.legend(loc="upper right", fontsize=10)
+ax3.grid(alpha=0.25)
+for n0 in (30, 100):
+    i = n0 - 5
+    ax3.annotate(
+        f"$n = {n0}$\n$[{6 / hi[i]:.2f},\\ {6 / lo[i]:.2f}]$",
+        xy=(n0, 6 / hi[i]),
+        xytext=(n0 + 6, 6 / hi[i] - 1.5),
+        fontsize=9.5,
+        arrowprops=dict(arrowstyle="->", color="#555555", lw=1.0),
+    )
 
-    fig.suptitle("$\\sigma$ 가 분모에 있으면 여유 한 칸이 자릿수를 바꾼다",
-                 fontsize=14.5)
-    fig.text(0.5, -0.05,
-             "두 곡선의 차가 $1.5$ 시그마 밀림을 허용한 값이다. "
-             f"$6$ 시그마에서 {dpmo_centered(6):.4f} 와 {dpmo_shifted(6):.1f} 로 "
-             f"{dpmo_shifted(6)/dpmo_centered(6):,.0f} 배 벌어진다.",
-             ha="center", fontsize=10.5, color=INK)
+fig.tight_layout()
+out = "docs/ch15/introduction/img/six_sigma.png"
+fig.savefig(out, dpi=150, bbox_inches="tight")
+print("saved", out)
 
-    path = OUT + "six_sigma.png"
-    fig.savefig(path, dpi=165, facecolor="white", bbox_inches="tight")
-    plt.close(fig)
-    print(f"saved {path}")
+# === 본문에 적을 수 =================================================
+print("\n② 시그마 수준별 백만 개당 불량")
+print(f"{'k':>4}{'중심이 맞았을 때':>18}{'1.5σ 밀렸을 때':>18}")
+for k in (1, 2, 3, 4, 5, 6):
+    print(f"{k:>4}{dpmo_centered(k):>18,.1f}{dpmo_shifted(k):>18,.1f}")
+print(f"\n  Φ(-6)*2 = {dpmo_centered(6):.6f} ppm   (십억 개에 두 개)")
+print(f"  Φ(-4.5) = {stats.norm.sf(4.5) * 1e6:.4f} ppm  ← 「3.4」 의 정체")
+print(f"  두 수의 비 = {dpmo_shifted(6) / dpmo_centered(6):,.0f} 배")
 
-
-if __name__ == "__main__":
-    main()
+print("\n③ 시그마 수준의 95% 구간 (참 수준이 6 일 때)")
+for n0 in (10, 30, 50, 100, 200):
+    i = n0 - 5
+    print(f"  n = {n0:>4}:  [{6 / hi[i]:.2f}, {6 / lo[i]:.2f}]")
+    print(
+        f"            ppm 으로 [{dpmo_shifted(6 / lo[i]):.1f}, "
+        f"{dpmo_shifted(6 / hi[i]):,.0f}]"
+    )
