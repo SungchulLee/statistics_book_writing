@@ -251,7 +251,7 @@ $$
     plt.show()
     ```
 
-    ![Poisson: Train Fit](./img/geometric_poisson_mle_195.png)
+    ![Poisson: Train Fit](./img/poisson_train_fit.png)
 
     **왼쪽은 당연하고 오른쪽이 시험이다.** 왼쪽에서 막대(모수적 적합)와 점(훈련자료의 경험 PMF)이 잘 겹치는 것은 같은 자료로 맞췄으니 놀랍지 않다. 오른쪽은 막대가 똑같은데 점만 **보지 않은** 시험자료로 바뀌었고, 그래도 막대를 잘 따라간다.
 
