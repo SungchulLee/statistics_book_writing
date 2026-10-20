@@ -380,111 +380,102 @@ $m^3$이 분모에 있다는 것이 절 $6$ 의 표를 식으로 적은 것이�
     plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["axes.unicode_minus"] = False
 
-    def prob(n, c, r, t):
+    def prob(N, M, n, m):
         """
-        Calculate the probability of capturing 't' tagged birds in a recapture
-        sample of size 'r', given that there are 'n' birds in total.
-
-        Parameters:
-        - n: Total number of birds in the population
-        - c: Number of birds captured and tagged in the first stage
-        - r: Number of birds recaptured in the second stage
-        - t: Number of tagged birds in the recapture stage
-
-        Returns:
-        - Probability of observing 't' tagged birds in the recapture sample.
+        초기하확률 P(m | N) — 표지 M 마리가 든 모집단 N 에서 n 마리를 뽑아
+        그중 m 마리가 표지일 확률.
         """
-        return special.comb(n - c, r - t) * special.comb(c, t) / special.comb(n, r)
+        return special.comb(N - M, n - m) * special.comb(M, m) / special.comb(N, n)
 
-    def exact_prob(n, c, r, t):
+    def exact_prob(N, M, n, m):
         """같은 확률을 분수로 계산한다. 반올림이 끼어들지 않는다."""
-        return Fraction(comb(n - c, r - t) * comb(c, t), comb(n, r))
+        return Fraction(comb(N - M, n - m) * comb(M, m), comb(N, n))
 
-    def capture_recapture(c=10, r=10, t=3):
+    def capture_recapture(M=10, n=10, m=3):
         """
         Calculate the probability distribution over possible total population sizes
         and determine the MLE (Maximum Likelihood Estimate) for the population size.
 
         Parameters:
-        - c: Number of birds captured and tagged in the first stage
-        - r: Number of birds recaptured in the second stage
-        - t: Number of tagged birds in the recapture stage
+        - M: Number of birds captured and tagged in the first stage
+        - n: Number of birds recaptured in the second stage
+        - m: Number of tagged birds in the recapture stage
 
         Returns:
-        - prob_list: List of probabilities for each population size
-        - mle_n: MLE for the total population size
+        - prob_list: 후보 N 마다의 확률
+        - mle_N: 개체수의 MLE
         """
         prob_list = []
 
-        # 가능한 모집단 크기 n마다 확률을 구한다.
-        for n in range(c + r - t, 10 * (c + r - t)):
-            prob_list.append(prob(n, c, r, t))
+        # 가능한 모집단 크기 N 마다 확률을 구한다.
+        for N in range(M + n - m, 10 * (M + n - m)):
+            prob_list.append(prob(N, M, n, m))
 
-        # 확률이 가장 큰 n이 모집단 크기의 MLE다.
+        # 확률이 가장 큰 N 이 모집단 크기의 MLE다.
         prob_max = max(prob_list)
         idx = prob_list.index(prob_max)
-        mle_n = idx + (c + r - t)
-        print(f'MLE n: {mle_n}')
+        mle_n = idx + (M + n - m)
+        print(f'MLE N: {mle_n}')
 
         return prob_list, mle_n
 
-    def draw(prob_list, mle_n, c=10, r=10, t=3):
+    def draw(prob_list, mle_n, M=10, n=10, m=3):
         """
         Plot the probability distribution of the total population size
         and highlight the MLE.
 
         Parameters:
-        - prob_list: List of probabilities for each population size
-        - mle_n: MLE for the total population size
-        - c, r, t: Parameters for the capture-recapture model
+        - prob_list: 후보 N 마다의 확률
+        - mle_N: 개체수의 MLE
+        - M, n, m: Parameters for the capture-recapture model
         """
-        idx = mle_n - (c + r - t)
+        idx = mle_n - (M + n - m)
         fig, ax = plt.subplots(figsize=(12, 3))
-        ax.plot(range(c + r - t, 10 * (c + r - t)), prob_list, label='Probability')
+        ax.plot(range(M + n - m, 10 * (M + n - m)), prob_list, label='Probability')
         ax.plot([mle_n, mle_n], [0, prob_list[idx]], 'o--r', label=f'MLE: {mle_n}')
 
         # 축 이름과 범례를 다듬는다.
-        ax.set_xlabel('Total Population Size (n)')
+        ax.set_xlabel('Total Population Size (N)')
         ax.set_ylabel('Probability')
         ax.set_title('Capture-Recapture MLE for Population Size')
         ax.legend()
         plt.show()
 
     # 포획-재포획 모형의 값들: 표지 수, 재포획 수, 그중 표지된 수.
-    c = 5   # Birds captured and tagged in the first stage
-    r = 6   # Birds recaptured in the second stage
-    t = 2   # Tagged birds in the recapture stage
+    M = 5   # Birds captured and tagged in the first stage
+    n = 6   # Birds recaptured in the second stage
+    m = 2   # Tagged birds in the recapture stage
 
     # 후보마다 확률을 구하고 가장 큰 것을 고른다.
-    prob_list, mle_n = capture_recapture(c, r, t)
+    prob_list, mle_n = capture_recapture(M, n, m)
 
     # (1) 에서 유도한 floor(M n / m) 과 비교해 보라.
-    print(f'floor(c*r/t): {c * r // t}')
+    print(f'floor(M*n/m): {M * n // m}')
 
-    # c*r/t = 15 가 정수이므로 L(14) 와 L(15) 는 **정확히 같다.** 분수로 재면 드러난다.
-    print(f'exact L(14) == L(15) ? {exact_prob(14, c, r, t) == exact_prob(15, c, r, t)}')
-    print(f'float L(14) - L(15) = {prob(14, c, r, t) - prob(15, c, r, t):+.3e}')
+    # M*n/m = 15 가 정수이므로 L(14) 와 L(15) 는 **정확히 같다.** 분수로 재면 드러난다.
+    print(f'exact L(14) == L(15) ? {exact_prob(14, M, n, m) == exact_prob(15, M, n, m)}')
+    print(f'float L(14) - L(15) = {prob(14, M, n, m) - prob(15, M, n, m):+.3e}')
 
-    # r 을 7 로 바꾸면 c*r/t = 17.5 라 나누어떨어지지 않고 최대점이 하나뿐이다.
-    capture_recapture(c=5, r=7, t=2)
+    # n 을 7 로 바꾸면 M*n/m = 17.5 라 나누어떨어지지 않고 최대점이 하나뿐이다.
+    capture_recapture(M=5, n=7, m=2)
     print(f'floor(5*7/2): {5 * 7 // 2}')
 
     # 봉우리가 얼마나 평평한지 재 본다.
-    for n in (10, 15, 30, 60):
-        print(f'L({n}) / L(15) = {prob(n, c, r, t) / prob(15, c, r, t):.3f}')
+    for N in (10, 15, 30, 60):
+        print(f'L({N}) / L(15) = {prob(N, M, n, m) / prob(15, M, n, m):.3f}')
 
     # 확률을 후보별로 그리고 최댓값 자리를 표시한다.
-    draw(prob_list, mle_n, c, r, t)
+    draw(prob_list, mle_n, M, n, m)
     ```
 
     출력:
 
     ```
-    MLE n: 14
-    floor(c*r/t): 15
+    MLE N: 14
+    floor(M*n/m): 15
     exact L(14) == L(15) ? True
     float L(14) - L(15) = +0.000e+00
-    MLE n: 17
+    MLE N: 17
     floor(5*7/2): 17
     L(10) / L(15) = 0.567
     L(15) / L(15) = 1.000
@@ -499,6 +490,89 @@ $m^3$이 분모에 있다는 것이 절 $6$ 의 표를 식으로 적은 것이�
     $n$을 7로 바꾸면 $Mn/m = 17.5$라 나누어떨어지지 않고, 격자가 찾은 17이 $\lfloor 17.5 \rfloor = 17$과 정확히 맞는다. 바닥함수가 제 몫을 하는 경우다.
 
     곡선이 봉우리 주위에서 **아주 평평하다**는 점도 눈여겨볼 만하다. $N$을 10으로 줄이거나 30으로 늘려도 가능도가 최댓값의 $0.57$배, $0.51$배로 남고, 60으로 네 배 늘려도 $0.16$배가 남는다. 재포획된 표지 개체가 $m = 2$마리뿐이라는 적은 정보로는 개체수를 정밀하게 맞힐 수 없다는 뜻이고, 연습문제 7이 따지는 "정밀도는 $m$이 정한다"가 바로 이 평평함이다.
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 봉우리의 폭을 코드로 재기. $M = 10$마리를 잡아 표지하고 놓아 준 뒤 $n = 10$마리를 다시 잡았더니 $m = 3$마리가 표지되어 있었다.
+
+**(1)** 가능도를 전수 탐색하는 함수를 짜서 $\hat N$을 구하고, 닫힌 꼴 $\lfloor Mn/m \rfloor$와 맞는지 확인하시오.
+
+**(2)** 봉우리가 얼마나 넓은지 재시오. 가능도가 꼭대기의 절반 이상인 $N$의 구간은 어디까지인가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 닫힌 꼴이 $\hat N = \lfloor Mn/m \rfloor$이고 여기서는
+
+    $$
+    \frac{Mn}{m} = \frac{10 \times 10}{3} = 33.333\ldots
+    $$
+
+    이므로 $\hat N = 33$이다. $Mn/m$이 **정수가 아니라는 점**이 보기 1과 갈린다. 가능도비가 $1$이 되는 $N$이 없으므로 $L(32) < L(33) > L(34)$로 최대점이 하나뿐이고, 전수 탐색과 공식이 어긋날 여지가 없다.
+
+    탐색 범위의 아래쪽 벽도 짚어 두자. 절 $4$ 에서 본 대로
+
+    $$
+    N \ge M + n - m = 17
+    $$
+
+    이다. 위쪽에는 그런 벽이 없다. $m$을 하나 줄이면 $Mn/m$이 $33.3$에서 $50$으로 뛰므로 가능도는 **오른쪽으로 길게 늘어진다.**
+
+    **(2) 수치적으로.** 후보 $N$마다 초기하확률을 재고, 꼭대기의 절반 이상인 것을 모은다.
+
+    ```python
+    from scipy import special
+
+    def prob(N, M, n, m):
+        """
+        초기하확률 P(m | N). 표지 M 마리인 모집단 N 에서 n 마리를 뽑아
+        그중 m 마리가 표지일 확률이다.
+        """
+        return special.comb(N - M, n - m) * special.comb(M, m) / special.comb(N, n)
+
+    def capture_recapture_mle(M, n, m):
+        """전수 탐색으로 개체수 N 의 MLE 를 구한다."""
+        N_min = M + n - m          # 관측과 모순이 아닌 가장 작은 N
+        N_max = 10 * N_min         # 탐색 범위
+
+        prob_list = [prob(N, M, n, m) for N in range(N_min, N_max)]
+        mle_idx = max(range(len(prob_list)), key=lambda i: prob_list[i])
+
+        return mle_idx + N_min, prob_list
+
+    # === 보기: 10 마리에 표지, 10 마리를 다시 잡아 그중 3 마리가 표지였다 ===
+    M, n, m = 10, 10, 3
+    mle_N, probs = capture_recapture_mle(M, n, m)
+    print(f"표지 {M}, 재포획 {n}, 그중 표지 {m}")
+    print(f"전수 탐색이 찾은 MLE: {mle_N}")
+    print(f"닫힌 꼴 floor(Mn/m):  {M * n // m}")
+
+    # === 봉우리의 폭 — 가능도가 꼭대기의 절반 이상인 N 을 모은다 ===
+    N_min = M + n - m
+    peak = max(probs)
+    half = [N_min + i for i, p in enumerate(probs) if p >= peak / 2]
+    print(f"Mn/m = {M * n / m:.3f}  (정수가 아니므로 최대점은 하나)")
+    print(f"가능도가 꼭대기의 절반 이상인 구간: N = {half[0]} ~ {half[-1]}")
+    ```
+
+    출력:
+
+    ```
+    표지 10, 재포획 10, 그중 표지 3
+    전수 탐색이 찾은 MLE: 33
+    닫힌 꼴 floor(Mn/m):  33
+    Mn/m = 33.333  (정수가 아니므로 최대점은 하나)
+    가능도가 꼭대기의 절반 이상인 구간: N = 23 ~ 60
+    ```
+
+    탐색한 가능도를 그대로 그리면 이렇다. 왼쪽이 이 보기의 수치이고 오른쪽이 보기 1의 수치다.
+
+    ![개체군 크기에 대한 가능도. 왼쪽은 M=10, n=10, m=3 이라 봉우리가 33 하나이고, 오른쪽은 M=5, n=6, m=2 라 14 와 15 가 같은 높이로 비긴다](./img/capture_recapture_likelihood.png)
+
+    전수 탐색이 준 $33$이 해석적 답 $\lfloor 33.333 \rfloor = 33$과 맞는다. **봉우리의 자리보다 그 폭이 더 할 말이 많다.** 가능도가 꼭대기의 절반 이상인 구간이 $23$부터 $60$까지로, 폭이 점추정값보다도 넓다. 표지된 10마리 중 3마리를 다시 잡았다는 관측만으로는 개체군이 25마리든 55마리든 크게 이상하지 않다는 뜻이다.
+
+    구간이 $33$을 가운데 두지 않고 위쪽으로 치우쳐 있다는 것도 절 $5$ 에서 본 그대로다. 아래로는 $10$칸, 위로는 $27$칸이다. 절 $5$ 가 $1/8$ 로 그은 선을 여기서는 $1/2$ 로 그었을 뿐, 읽는 법은 같다.
 
 ---
 
@@ -834,6 +908,182 @@ $N$은 정수이므로 미분으로 최대화할 수 없다. 가능도비 $L(N)/
     이다. $Mn/m$이 정확히 정수이면 $L(\hat N) = L(\hat N - 1)$로 최댓값이 두 곳에서 달성된다.
 
     **요령의 일반성.** 이산 모수의 MLE를 찾을 때 **이웃한 가능도의 비를 1과 비교하는 것**이 표준적인 방법이다. 앞서 이항분포의 최빈값을 찾을 때 쓴 것과 같은 기법이며, 미분이 불가능한 상황에서 "증가하다가 감소한다"는 구조를 직접 확인해 준다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff easy" title="쉬움"></span>
+어떤 해양생물학자가 물고기 $M = 20$마리에 표지를 붙여 놓아 주었다. 나중에 $n = 25$마리를 표본으로 잡았더니 $m = 5$마리가 표지되어 있었다. 격자탐색과 링컨–피터슨 공식 두 가지로 전체 개체수의 MLE를 계산하라.
+
+</div>
+
+??? success "풀이"
+    **링컨–피터슨.** $\hat{N} = \lfloor Mn/m \rfloor = \lfloor 20 \times 25/5 \rfloor = 100$.
+
+    $Mn/m = 100$이 **정수**다. 보기 1에서 본 대로 이때는 $L(99) = L(100)$으로 최대가 두 곳에서 달성된다. 분수로 재면 둘 다 정확히 같다.
+
+    **격자탐색.** 그런데 격자탐색이 돌려주는 값은 **이항계수를 무엇으로 계산하느냐에 따라 갈린다.**
+
+    ```python
+    from fractions import Fraction
+    from math import comb
+    from scipy import special
+
+    M, n, m = 20, 25, 5
+    N_min = M + n - m  # = 40
+
+    def exact(N):
+        return Fraction(comb(N - M, n - m) * comb(M, m), comb(N, n))
+
+    print(f"정확(분수)  L(99) == L(100) ? {exact(99) == exact(100)}")
+
+    for name, choose in (("math.comb", comb), ("special.comb", special.comb)):
+        probs = [choose(N - M, n - m) * choose(M, m) / choose(N, n)
+                 for N in range(N_min, 500)]
+        idx = max(range(len(probs)), key=lambda i: probs[i])
+        gap = probs[100 - N_min] - probs[99 - N_min]
+        print(f"{name:13s} max -> N = {idx + N_min},  L(100) - L(99) = {gap:+.3e}")
+    ```
+
+    출력:
+
+    ```
+    정확(분수)  L(99) == L(100) ? True
+    math.comb     max -> N = 99,  L(100) - L(99) = +0.000e+00
+    special.comb  max -> N = 100,  L(100) - L(99) = +8.327e-17
+    ```
+
+    **셋 다 틀리지 않았다.** $99$와 $100$이 모두 최대가능도추정값이기 때문이다. `math.comb`은 정수로 세고 마지막에 한 번만 나누므로 두 값이 비트까지 같아지고, `max`는 동점 중 **앞쪽**인 $99$를 고른다. `scipy.special.comb`은 감마함수를 거쳐 실수로 계산하므로 $10^{-16}$ 수준의 찌꺼기가 남고, 그 찌꺼기가 우연히 $100$ 쪽을 높여 $100$이 나온다.
+
+    **읽어 둘 점.** 격자탐색의 출력이 공식과 1만큼 어긋나면 **먼저 동점을 의심하라.** 알고리즘의 오류가 아니라 가능도가 실제로 두 곳에서 최대인 경우가 대부분이고, 그 사실은 $Mn/m$이 정수인지만 보면 바로 알 수 있다. 부동소수점 비교로 동점을 판정하려 들지 말고 분수로 재는 것이 옳다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span>
+격자탐색으로 $\hat N$을 찾을 때 격자의 범위와 간격을 어떻게 정해야 하는가? $N$이 정수임을 이용한 더 나은 방법을 적어라.
+
+</div>
+
+??? success "풀이"
+    **격자의 하한.** 논리적으로 $N \ge M + n - m$이어야 한다. 표지한 $M$마리와 두 번째로 잡은 $n$마리 중 표지되지 않은 $n-m$마리가 모두 다른 개체이기 때문이다. 이보다 작은 $N$은 가능도가 0이다(절 $4$).
+
+    **격자의 상한.** 가능도가 봉우리를 지난 뒤 단조감소하지만 **0으로 끊기지 않으므로** 명확한 상한이 없다. 실무에서는 $\hat N = Mn/m$의 몇 배(예: 5배)로 잡고 가능도가 최댓값의 $10^{-6}$ 아래로 떨어지는지 확인한다. $m$이 작으면 꼬리가 매우 길어지므로 범위를 넉넉히 잡아야 한다 — 절 $6$ 의 $m = 2$ 에서 가능도구간이 $1210$까지 갔던 것을 떠올리라.
+
+    **간격.** $N$이 정수이므로 간격 1이 자연스럽고, 그것이 곧 정확한 탐색이다. 실수로 두고 촘촘한 격자를 쓰면 계산만 늘고 얻는 것이 없다.
+
+    **더 나은 방법.** 절 $4$ 의 **가능도비 논증**을 쓰면 탐색 자체가 필요 없다.
+
+    $$
+    \frac{L(N)}{L(N-1)} = \frac{(N-M)(N-n)}{N(N-M-n+m)} > 1 \iff N < \frac{Mn}{m}
+    $$
+
+    이므로 곧바로 $\hat N = \lfloor Mn/m\rfloor$이다. 격자탐색은 이 결과를 **확인하는 용도**로 쓰는 것이 옳다.
+
+    **계산상의 주의.** 초기하 가능도를 이항계수로 직접 계산하면 $N$이 크거나 $M$, $n$이 클 때 오버플로가 난다. `scipy.stats.hypergeom.pmf`를 쓰거나, 직접 계산한다면 `scipy.special.gammaln`으로 **로그 척도에서** 계산해야 한다.
+
+    ```python
+    from scipy.special import gammaln
+
+    def log_choose(n, k):
+        return gammaln(n + 1) - gammaln(k + 1) - gammaln(n - k + 1)
+    ```
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff med" title="중간"></span>
+$M=10$, $n=10$, $m=3$인 자료(보기 2)에서 $N$의 **프로파일 가능도 구간**을 구하는 절차를 적어라. 절 $5$ 의 $1/8$ 구간이나 왈드 구간과 견주어 무엇이 다른가?
+
+</div>
+
+??? success "풀이"
+    **절차.**
+
+    1. $\hat N = \lfloor 100/3\rfloor = 33$과 $\ell(\hat N) = \ln L(33)$을 구한다.
+    2. 각 정수 $N \ge M+n-m = 17$에 대해 $\Lambda(N) = 2\{\ell(\hat N)-\ell(N)\}$을 계산한다.
+    3. $\Lambda(N) \le \chi^2_{1,\,0.95} = 3.841$인 $N$의 집합을 구간으로 삼는다.
+
+    이 자료에서는 $(19,\ 104)$가 나온다. **$\hat N=33$을 가운데 두지 않으며** 위로 훨씬 길다. 보기 2에서 $1/2$ 선으로 잰 $(23,\ 60)$보다 넓은데, 기준선을 낮게 그었으니 당연하다. 절 $5$ 의 $1/8$ 선과 이 $\chi^2$ 기준은 사실 같은 자를 다르게 눈금 매긴 것이다. $\Lambda \le 3.841$은 $R(N) \ge e^{-3.841/2} = 0.147$과 같고, $1/8 = 0.125$가 바로 그 언저리다.
+
+    **왈드보다 나은 이유.**
+
+    - **비대칭을 담는다.** $\hat N = Mn/m$이 $m$의 역수이므로 $m$이 하나 줄면 $\hat N$이 크게 뛴다($m=2$면 50, $m=1$이면 100). 대칭 구간으로는 이 구조를 표현할 수 없다.
+    - **논리적 하한을 지킨다.** 가능도가 $N < M+n-m$에서 0이므로 프로파일 구간이 자동으로 그 아래로 내려가지 않는다. 왈드 구간은 음수까지 뻗을 수 있다(연습문제 4).
+    - **$m$이 작아도 쓸 수 있다.** $m=1$이어도 유한한 구간이 나온다. 왈드는 표준오차 공식 $\sqrt{M^2n(n-m)/m^3}$이 폭발한다.
+
+    **덧붙임.** 이 구간도 $\chi^2$ 근사에 기대므로 $m$이 아주 작으면 포함확률이 정확하지 않다. 그때는 초기하분포의 정확 구간(각 $N$에 대해 $m$의 꼬리 확률을 계산해 뒤집는 방식)을 쓴다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff med" title="중간"></span>
+포획–재포획 모의실험을 설계해 링컨–피터슨 추정량의 편향과 채프먼 추정량의 편향을 비교하려 한다. 어떤 절차로 만들겠는가? 어떤 요인을 바꿔 가며 볼 것인가?
+
+</div>
+
+??? success "풀이"
+    **절차.**
+
+    ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
+    N_true, M, n, B = 200, 40, 40, 20_000
+    lp, ch = [], []
+    for _ in range(B):
+        # 표지된 M 마리가 든 모집단에서 n 마리를 비복원으로 뽑는다.
+        m = rng.hypergeometric(ngood=M, nbad=N_true - M, nsample=n)
+        lp.append(M * n / m if m > 0 else np.nan)       # m=0 이면 정의되지 않는다
+        ch.append((M + 1) * (n + 1) / (m + 1) - 1)
+    print(np.nanmean(lp) - N_true, np.mean(ch) - N_true)
+    ```
+
+    핵심은 **$m$을 초기하분포에서 뽑는 것**이다. 비복원추출을 그대로 모사해야 한다.
+
+    **주의할 점.** $m=0$인 반복에서 링컨–피터슨이 정의되지 않는다. 이를 `nan`으로 두고 제외하면 **그 자체가 편향을 만든다.** $m=0$은 $\hat N$이 매우 커야 할 상황인데 그것만 골라 버리는 셈이다. 정직하게 하려면 $m=0$의 발생 빈도를 따로 보고해야 하며, 이것이 "링컨–피터슨은 $m=0$에서 쓸 수 없다"는 사실의 정량적 표현이다(연습문제 3).
+
+    **바꿔 가며 볼 요인.**
+
+    - **$E[m] = Mn/N$의 크기.** 이것이 편향의 크기를 지배한다. $E[m]$이 5 이하이면 링컨–피터슨의 편향이 뚜렷하고, 20을 넘으면 두 추정량이 거의 같아진다. 절 $6$ 의 표가 같은 이야기를 폭으로 보인 것이다.
+    - **$N$의 크기.** $M$, $n$을 고정하고 $N$을 키우면 $E[m]$이 작아져 편향이 커진다.
+    - **$M$과 $n$의 균형.** $Mn$을 고정한 채 $M=10$, $n=160$과 $M=n=40$을 비교하면 후자가 낫다(연습문제 7).
+
+    **볼 것.** 편향뿐 아니라 **평균제곱오차**와 **중앙값**도 함께 본다. 링컨–피터슨의 분포는 오른쪽으로 극도로 치우쳐 있어 평균과 중앙값이 크게 다르고, 평균만 보면 실제 성능을 오해하기 쉽다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 15.** <span class="diff med" title="중간"></span>
+격자탐색 대신 `scipy.optimize`를 쓰려 한다. 어떤 어려움이 있으며 어떻게 우회하겠는가?
+
+</div>
+
+??? success "풀이"
+    **어려움 1 — $N$이 정수다.** `minimize`류의 최적화기는 연속 모수를 전제한다. 실수 $N$에 대해 초기하 PMF를 정의하려면 이항계수를 감마함수로 바꿔야 한다.
+
+    $$
+    \binom{a}{b} \to \frac{\Gamma(a+1)}{\Gamma(b+1)\Gamma(a-b+1)}
+    $$
+
+    이렇게 하면 연속 확장이 되고 최적화기가 돌아가지만, 결과를 반올림해야 하며 그 값이 정말 정수 MLE라는 보장은 따로 확인해야 한다.
+
+    **어려움 2 — 제약이 있다.** $N \ge M+n-m$이고 그 아래에서는 가능도가 정의되지 않는다. 최적화기가 이 영역을 밟으면 `nan`이 나와 멈춘다.
+
+    **어려움 3 — 매우 평평하다.** $m$이 작으면 가능도가 넓은 범위에서 거의 평평해 수렴 판정이 어렵고, 초기값에 따라 엉뚱한 곳에서 멈춘다. 절 $6$ 의 $m = 2$ 곡선이 그 모습이다.
+
+    **우회.**
+
+    - **재모수화.** $N = (M+n-m) + e^\eta$로 두고 $\eta \in \mathbb{R}$을 최적화하면 제약이 자동으로 지켜진다. 이는 일반적으로 유용한 요령이다(양수 모수는 로그, $(0,1)$ 모수는 로짓).
+    - **경계 지정.** `minimize(..., bounds=[(M+n-m, 10*M*n/m)])`처럼 명시적으로 제약을 준다.
+    - **애초에 최적화하지 않는다.** 이 문제에는 닫힌 해 $\lfloor Mn/m\rfloor$가 있으므로 수치 최적화가 불필요하다.
+
+    **일반 교훈.** **닫힌 해가 있으면 그것을 쓰고, 수치 최적화는 해가 없을 때만 쓴다.** 그리고 정수 모수는 최적화기에 맡기기보다 이웃한 값의 가능도를 직접 비교하는 편이 안전하다. 이 예에서는 격자탐색이 오히려 더 나은 도구인데, 모수가 하나이고 범위가 제한되어 있으며 정수이기 때문이다.
 
 ---
 
