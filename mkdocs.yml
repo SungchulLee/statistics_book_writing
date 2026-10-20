@@ -234,8 +234,7 @@ nav:
             - 효율성과 Cramér-Rao 하한: ch06/estimator_quality/efficiency_crlb.md
             - 충분성과 최소충분성: ch06/estimator_quality/sufficiency.md
         - 6.2 최대가능도추정:
-            - 가능도함수: ch06/mle/likelihood.md
-            - 최대가능도추정 소개: ch06/mle/intro_mle.md
+            - 가능도와 최대가능도추정: ch06/mle/likelihood.md
             - 베르누이분포의 최대가능도: ch06/mle/mle_bernoulli.md
             - 정규분포의 최대가능도: ch06/mle/mle_normal.md
             - 포아송분포의 최대가능도: ch06/mle/mle_poisson.md
@@ -251,7 +250,6 @@ nav:
             - 흔한 분포에 대한 적률법: ch06/estimation_methods/moments_examples.md
             - 일반화 적률법: ch06/estimation_methods/gmm.md
             - 적률법과 최대가능도의 비교: ch06/estimation_methods/moments_vs_mle.md
-            - 가능도와 추정 개관: ch06/estimation_methods/likelihood.md
             - 적률법 개관: ch06/estimation_methods/moments.md
             - 추정 방법 비교: ch06/estimation_methods/estimation_methods.md
         - 6.4 베이즈 추정:
