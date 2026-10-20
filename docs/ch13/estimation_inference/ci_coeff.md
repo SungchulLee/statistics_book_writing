@@ -99,7 +99,7 @@ $S = 1.532$, $R^2 = 31.3\%$
     \frac{\hat\beta_1 - \beta_1}{\sigma/\sqrt{S_{xx}}} \sim N(0, 1)
     $$
 
-    이지만, $\sigma$ 를 $s$ 로 바꾸면 분모가 확률변수가 되어 꼬리가 두꺼워진다. 0.4절이 보인 대로 $s^2$ 이 $\hat\beta_1$ 과 독립이고 $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$ 이므로 비는 **$t_{n-2}$ 를 따른다.** 정규분위수를 쓰면 $t$ 의 두꺼운 꼬리를 무시하는 셈이라 구간이 짧아지고 **포함률이 $0.95$ 아래로 떨어진다.**
+    이지만, $\sigma$ 를 $s$ 로 바꾸면 분모가 확률변수가 되어 꼬리가 두꺼워진다. A.4절이 보인 대로 $s^2$ 이 $\hat\beta_1$ 과 독립이고 $(n-2)s^2/\sigma^2 \sim \chi^2_{n-2}$ 이므로 비는 **$t_{n-2}$ 를 따른다.** 정규분위수를 쓰면 $t$ 의 두꺼운 꼬리를 무시하는 셈이라 구간이 짧아지고 **포함률이 $0.95$ 아래로 떨어진다.**
 
     짧아지는 양은 분위수의 비로 정해진다. $t_{18}(0.975) = 2.1009$, $z_{0.975} = 1.9600$ 이니 $1 - 1.96/2.1009 = 6.7\%$ 다. 자유도가 작을수록 커진다.
 
@@ -304,7 +304,7 @@ $S = 1.532$, $R^2 = 31.3\%$
     \quad\Longrightarrow\quad \rho = 0.5547
     $$
 
-    $S_{xx} = \sum_i(x_i - \bar x)^2$ 은 $\operatorname{Var}(x) = 1$ 일 때 $E[S_{xx}] = (n-1) \cdot 1 = 99$ 이고(정확히는 $S_{xx} \sim \chi^2_{99}$ 다), 0.4절의 $\operatorname{Var}(\hat\beta_1) = \sigma^2/S_{xx}$ 에서
+    $S_{xx} = \sum_i(x_i - \bar x)^2$ 은 $\operatorname{Var}(x) = 1$ 일 때 $E[S_{xx}] = (n-1) \cdot 1 = 99$ 이고(정확히는 $S_{xx} \sim \chi^2_{99}$ 다), A.4절의 $\operatorname{Var}(\hat\beta_1) = \sigma^2/S_{xx}$ 에서
 
     $$
     \operatorname{se}(\hat\beta_1) \approx \frac{3}{\sqrt{99}} = 0.301511
@@ -497,7 +497,7 @@ $S = 1.532$, $R^2 = 31.3\%$
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** 0.4절이 보인 대로 잔차벡터는 $\mathbf e = (\mathbf I - \mathbf H)\boldsymbol\varepsilon$ 이고 $\mathbf I - \mathbf H$ 가 계수 $n-2$ 인 대칭 멱등행렬이므로
+    **(1) 해석적으로.** A.4절이 보인 대로 잔차벡터는 $\mathbf e = (\mathbf I - \mathbf H)\boldsymbol\varepsilon$ 이고 $\mathbf I - \mathbf H$ 가 계수 $n-2$ 인 대칭 멱등행렬이므로
 
     $$
     E[\text{RSS}] = \sigma^2 \operatorname{tr}(\mathbf I - \mathbf H) = \sigma^2 (n-2)

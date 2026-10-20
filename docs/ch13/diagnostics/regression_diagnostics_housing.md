@@ -169,7 +169,7 @@ $$
     \sum_{i=1}^n h_{ii} = \operatorname{tr}(H) = \operatorname{rank}(H) = p
     $$
 
-    이다([0.3절 멱등행렬](../../ch00/linalg_regression/square_matrices/idempotent.md)). 대각합을 직접 계산해도 같다. $\operatorname{tr}(X(X^\top X)^{-1}X^\top) = \operatorname{tr}((X^\top X)^{-1}X^\top X) = \operatorname{tr}(I_p) = p$다.
+    이다([A.3절 멱등행렬](../../ch00/linalg_regression/square_matrices/idempotent.md)). 대각합을 직접 계산해도 같다. $\operatorname{tr}(X(X^\top X)^{-1}X^\top) = \operatorname{tr}((X^\top X)^{-1}X^\top X) = \operatorname{tr}(I_p) = p$다.
 
     **그러므로 지렛값의 평균은 자료가 무엇이든 정확히 $p/n$이다.** 이 자료에서는 $6/313 = 0.01917$이다. 지렛값을 "크다/작다"로 말하려면 기준이 있어야 하는데, 그 기준이 자료에 의존하지 않는 $p/n$으로 공짜로 주어지는 셈이다. 흔한 문턱 $2p/n$은 **평균의 두 배**, $3p/n$은 세 배를 뜻한다.
 

@@ -166,7 +166,7 @@ $$
 \mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}
 $$
 
-은 멱등이지만 $\operatorname{Col}(\mathbf{A}) = \operatorname{span}\{(1,0)^\top\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^\top\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗사영**이라 하며, 0.3절의 「사영행렬」과 「직교사영행렬」에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
+은 멱등이지만 $\operatorname{Col}(\mathbf{A}) = \operatorname{span}\{(1,0)^\top\}$이고 $\ker(\mathbf{A}) = \operatorname{span}\{(-1,1)^\top\}$이라 두 공간이 직교하지 않는다. 이런 것을 **빗사영**이라 하며, A.3절의 「사영행렬」과 「직교사영행렬」에서 자세히 다룬다. 이 구분이 통계에서 갖는 무게는 다음과 같다.
 
 | | 멱등 $\mathbf{A}^2 = \mathbf{A}$ | 멱등 **그리고** 대칭 |
 |---|---|---|

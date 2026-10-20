@@ -63,7 +63,7 @@ $$
 
     양변을 $n - p$로 나누면 구하는 식이다.
 
-    등분산이면 모든 $\sigma_i^2 = \sigma^2$이므로 $\sigma^2$을 밖으로 빼면 $\sum_i (1-h_{ii}) = n - \operatorname{tr}(H)$가 남는다. **$H$가 멱등이라 대각합이 계수와 같아 $\operatorname{tr}(H) = p$이므로** ([0.3절 멱등행렬](../../ch00/linalg_regression/square_matrices/idempotent.md))
+    등분산이면 모든 $\sigma_i^2 = \sigma^2$이므로 $\sigma^2$을 밖으로 빼면 $\sum_i (1-h_{ii}) = n - \operatorname{tr}(H)$가 남는다. **$H$가 멱등이라 대각합이 계수와 같아 $\operatorname{tr}(H) = p$이므로** ([A.3절 멱등행렬](../../ch00/linalg_regression/square_matrices/idempotent.md))
 
     $$
     E[s^2] = \frac{\sigma^2 (n-p)}{n-p} = \sigma^2

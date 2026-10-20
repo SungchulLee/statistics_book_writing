@@ -81,7 +81,7 @@ $$
     귀납법 대신 이렇게 정리해도 된다. 서로 다른 고윳값의 고유공간들은 (2)에 의해 서로 직교하므로, 각 고유공간 안에서 그람–슈미트를 돌려 정규직교기저를 얻고 그것들을 이어 붙이면 $\mathbf{Q}$가 된다(연습문제 4). 다만 이 방식은 각 고유공간의 차원이 고윳값의 대수적 중복도와 같다는 사실 — 곧 대칭행렬이 대각화 가능하다는 사실 — 을 따로 확보해야 하므로, 위 귀납법이 더 자족적이다.
 
 !!! note "직교성이 결론의 일부다"
-    "대칭이면 대각화 가능하다"는 것만으로는 스펙트럼 정리를 다 말한 것이 아니다. 대각화 가능성은 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$인 가역 $\mathbf{P}$의 존재만 주장하지만, 스펙트럼 정리는 그 $\mathbf{P}$를 **직교행렬**로 잡을 수 있다고 말한다. 뒤에서 쓰는 것은 거의 전부 이 직교성이다. $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이므로 역행렬을 계산할 필요가 없고, $\mathbf{z} = \mathbf{Q}^\top\mathbf{x}$가 길이와 각을 보존하므로 $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$가 유지되며(0.4절의 이차형식과 카이제곱분포), 주성분들이 무상관이 된다.
+    "대칭이면 대각화 가능하다"는 것만으로는 스펙트럼 정리를 다 말한 것이 아니다. 대각화 가능성은 $\mathbf{A} = \mathbf{P}\boldsymbol{\Lambda}\mathbf{P}^{-1}$인 가역 $\mathbf{P}$의 존재만 주장하지만, 스펙트럼 정리는 그 $\mathbf{P}$를 **직교행렬**로 잡을 수 있다고 말한다. 뒤에서 쓰는 것은 거의 전부 이 직교성이다. $\mathbf{Q}^{-1} = \mathbf{Q}^\top$이므로 역행렬을 계산할 필요가 없고, $\mathbf{z} = \mathbf{Q}^\top\mathbf{x}$가 길이와 각을 보존하므로 $\mathbf{z} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$가 유지되며(A.4절의 이차형식과 카이제곱분포), 주성분들이 무상관이 된다.
 
     실대칭이라는 가정도 결론에 실제로 필요하다. 복소행렬에서는 대칭($\mathbf{A} = \mathbf{A}^\top$)이 아니라 **에르미트**($\mathbf{A} = \overline{\mathbf{A}}^\top = \mathbf{A}^*$)가 옳은 조건이다. 복소대칭행렬 $\mathbf{A} = \begin{pmatrix} 1 & i \\ i & -1 \end{pmatrix}$은 $\mathbf{A}^2 = \mathbf{0}$이므로 고윳값이 $0$뿐이고 $\mathbf{A} \ne \mathbf{0}$이라 대각화조차 되지 않는다. 반면 에르미트행렬은 언제나 실수 고윳값과 유니터리 고유기저($\mathbf{A} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{U}^*$, $\mathbf{U}^*\mathbf{U} = \mathbf{I}$)를 갖는다. 위 증명의 (1)에서 이미 켤레를 썼다는 점이 그 힌트다. 이 책에서 다루는 공분산행렬·그람 행렬·사영행렬은 모두 실행렬이므로 실대칭판으로 충분하다.
 

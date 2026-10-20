@@ -82,7 +82,7 @@ _확인한 곳 — 머리글의 쪽 번호 $5$, 절 제목 「Direct and Skew Pr
 
 **계획행렬(design matrix)** $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $n$개의 관측을 행 방향으로 쌓은 것이다. $i$번째 행에는 관측 $i$의 설명변수 값이 들어 있다. $\mathbf{X}$의 열공간은 $p$개 열의 모든 선형결합으로 이루어진 집합, 즉 최소제곱으로 도달할 수 있는 적합값의 공간이다.
 
-**$p$의 셈법을 분명히 해 두자.** 이 책의 0장에서 $p$는 **절편 열을 포함한 열의 개수**다. 절편이 있는 모형이면 첫 열이 $\mathbf{1} = (1, \ldots, 1)^\top$이고 나머지 $p-1$개가 설명변수다. 그래서 뒤에 나오는 $\operatorname{tr}(\mathbf{H}) = p$와 잔차 자유도 $n - p$가 그대로 성립한다. 13장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해 계획행렬을 $n \times (p+1)$로 쓰므로, 그쪽의 $p$와 여기의 $p$가 $1$만큼 어긋난다는 점에 주의하라.
+**$p$의 셈법을 분명히 해 두자.** 이 책의 부록 A에서 $p$는 **절편 열을 포함한 열의 개수**다. 절편이 있는 모형이면 첫 열이 $\mathbf{1} = (1, \ldots, 1)^\top$이고 나머지 $p-1$개가 설명변수다. 그래서 뒤에 나오는 $\operatorname{tr}(\mathbf{H}) = p$와 잔차 자유도 $n - p$가 그대로 성립한다. 13장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해 계획행렬을 $n \times (p+1)$로 쓰므로, 그쪽의 $p$와 여기의 $p$가 $1$만큼 어긋난다는 점에 주의하라.
 
 </div>
 
@@ -97,7 +97,7 @@ $\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해:
 - $\operatorname{col}(\mathbf{A}^\top) \subseteq \mathbb{R}^n$ (행공간)
 - $\ker(\mathbf{A}^\top) \subseteq \mathbb{R}^m$ (좌영공간)
 
-이고, $\operatorname{rank}(\mathbf{A}) + \dim \ker(\mathbf{A}) = n$(계수–퇴화차수 정리)이며 $\operatorname{col}(\mathbf{A}^\top) \perp \ker(\mathbf{A})$이다. 열공간을 $\operatorname{col}(\cdot)$로, 영공간을 $\ker(\cdot)$로 쓰는 것이 이 책의 표기이며 0.3절에서 그대로 이어진다.
+이고, $\operatorname{rank}(\mathbf{A}) + \dim \ker(\mathbf{A}) = n$(계수–퇴화차수 정리)이며 $\operatorname{col}(\mathbf{A}^\top) \perp \ker(\mathbf{A})$이다. 열공간을 $\operatorname{col}(\cdot)$로, 영공간을 $\ker(\cdot)$로 쓰는 것이 이 책의 표기이며 A.3절에서 그대로 이어진다.
 
 </div>
 
@@ -197,7 +197,7 @@ $$
 \mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^\top
 $$
 
-을 보장한다. 여기서 $\mathbf{Q}$는 직교행렬($\mathbf{Q}^\top \mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda}$는 실수 고윳값으로 이루어진 대각행렬이다. 이것이 주성분분석, 다변량 정규 이론, 이차형식의 카이제곱분포를 떠받치는 원동력이다. 증명과 자세한 논의는 0.3절 **대칭행렬**에 있다.
+을 보장한다. 여기서 $\mathbf{Q}$는 직교행렬($\mathbf{Q}^\top \mathbf{Q} = \mathbf{I}$)이고 $\boldsymbol{\Lambda}$는 실수 고윳값으로 이루어진 대각행렬이다. 이것이 주성분분석, 다변량 정규 이론, 이차형식의 카이제곱분포를 떠받치는 원동력이다. 증명과 자세한 논의는 A.3절 **대칭행렬**에 있다.
 
 ---
 
@@ -205,7 +205,7 @@ $$
 
 동치 조건과 촐레스키 분해는 [양정치행렬](../linalg_regression/square_matrices/positive_definite.md) 정리 1·2 에서 증명한다.
 
-모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top \mathbf{A} \mathbf{x} \ge 0$이면 $\mathbf{A}$가 **양반정치(positive semidefinite)** 라 하고($\mathbf{A} \succeq 0$), 이는 모든 고윳값이 $\ge 0$인 것과 동치다. **양정치(positive definite)** ($\mathbf{A} \succ 0$)는 두 부등식을 모두 엄격 부등식으로 바꾼 것이다. 공분산행렬은 언제나 양반정치이며, 어떤 변수도 다른 변수들의 결정론적 선형결합이 아닐 때 양정치가 된다. 양정치성은 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하고 최소제곱해가 유일하게 정해지기 위해 필요한 바로 그 조건이다. 이차형식에 의한 특성화와 고윳값에 의한 특성화가 왜 동치인지는 0.3절 **양정치행렬**에서 증명한다.
+모든 $\mathbf{x}$에 대해 $\mathbf{x}^\top \mathbf{A} \mathbf{x} \ge 0$이면 $\mathbf{A}$가 **양반정치(positive semidefinite)** 라 하고($\mathbf{A} \succeq 0$), 이는 모든 고윳값이 $\ge 0$인 것과 동치다. **양정치(positive definite)** ($\mathbf{A} \succ 0$)는 두 부등식을 모두 엄격 부등식으로 바꾼 것이다. 공분산행렬은 언제나 양반정치이며, 어떤 변수도 다른 변수들의 결정론적 선형결합이 아닐 때 양정치가 된다. 양정치성은 $(\mathbf{X}^\top \mathbf{X})^{-1}$이 존재하고 최소제곱해가 유일하게 정해지기 위해 필요한 바로 그 조건이다. 이차형식에 의한 특성화와 고윳값에 의한 특성화가 왜 동치인지는 A.3절 **양정치행렬**에서 증명한다.
 
 ---
 
@@ -226,7 +226,7 @@ $$
 - **대각합 = 계수**: $\operatorname{tr}(\mathbf{H}) = p$ (모형의 자유도).
 - **고윳값은 0 또는 1**: 1이 $p$개(열공간), 0이 $n - p$개(잔차공간).
 
-여집합 사영자 $\mathbf{M} = \mathbf{I} - \mathbf{H}$는 잔차공간 위로 사영하며 $\operatorname{tr}(\mathbf{M}) = n - p$이다. 이것이 모든 $t$-검정과 $F$-검정에 등장하는 잔차 자유도 $d = n - p$다(이 책은 자유도를 $\nu$가 아니라 $d$로 쓴다. 4.2절 참조). 사영행렬 일반과 직교사영으로의 특수화는 0.3절 **사영행렬**·**직교사영행렬**에서, 이 $d$가 카이제곱분포의 자유도로 이어지는 과정은 0.4절 **카이제곱분포와 이차형식**에서 다룬다.
+여집합 사영자 $\mathbf{M} = \mathbf{I} - \mathbf{H}$는 잔차공간 위로 사영하며 $\operatorname{tr}(\mathbf{M}) = n - p$이다. 이것이 모든 $t$-검정과 $F$-검정에 등장하는 잔차 자유도 $d = n - p$다(이 책은 자유도를 $\nu$가 아니라 $d$로 쓴다. 4.2절 참조). 사영행렬 일반과 직교사영으로의 특수화는 A.3절 **사영행렬**·**직교사영행렬**에서, 이 $d$가 카이제곱분포의 자유도로 이어지는 과정은 A.4절 **카이제곱분포와 이차형식**에서 다룬다.
 
 ---
 
@@ -238,7 +238,7 @@ $$
 \hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
 $$
 
-이다. 이 하나의 공식과 그 뒤에 있는 사영 해석이 13장 선형회귀 전체의 바탕이 되며, 0.4절에서는 여기에 정규분포 가정을 얹어 $\hat{\boldsymbol{\beta}}$의 정확한 표집분포를 구한다.
+이다. 이 하나의 공식과 그 뒤에 있는 사영 해석이 13장 선형회귀 전체의 바탕이 되며, A.4절에서는 여기에 정규분포 가정을 얹어 $\hat{\boldsymbol{\beta}}$의 정확한 표집분포를 구한다.
 
 <div class="exbox" markdown>
 

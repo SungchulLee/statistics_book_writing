@@ -105,7 +105,7 @@ $$
     0 = \ell'(\hat\theta) = \ell'(\theta_0) + \ell''(\theta_0)\bigl(\hat\theta - \theta_0\bigr) + \cdots
     $$
 
-    다(0장 테일러 정리). 나머지를 버리고 풀어 $\sqrt n$ 을 곱하면
+    다(부록 A 테일러 정리). 나머지를 버리고 풀어 $\sqrt n$ 을 곱하면
 
     $$
     \sqrt n\bigl(\hat\theta - \theta_0\bigr)
