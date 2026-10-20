@@ -819,7 +819,6 @@ nav:
             - 넬슨-알렌 누적위험: ch21/nonparametric/nelson_aalen.md
             - 로그순위 검정: ch21/nonparametric/log_rank_test.md
             - 생존곡선의 신뢰구간: ch21/nonparametric/survival_ci.md
-            - 카플란-마이어 생존곡선과 로그순위 검정 (코드): ch21/nonparametric/kaplan_meier_code.md
         - 21.3 모수적 생존 모형:
             - 지수 모형 (상수 위험): ch21/parametric/exponential.md
             - 와이불 모형 (단조 위험): ch21/parametric/weibull.md
@@ -835,7 +834,6 @@ nav:
         - 21.5 모형 비교와 선택:
             - 비모수 대 모수 대 준모수: ch21/comparison/model_comparison.md
             - AIC와 일치도 지수: ch21/comparison/model_selection.md
-            - 생존 모형 비교 (코드): ch21/comparison/model_comparison_code.md
 
 
 # ch_bonus/code/kaplan_meier.md 는 ch21/code/kaplan_meier.md 와 같은 내용의 다른
