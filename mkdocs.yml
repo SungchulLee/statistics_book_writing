@@ -230,9 +230,9 @@ nav:
         - 6.1 추정량의 품질:
             - 편향–분산 맞바꿈: ch06/estimator_quality/bias_variance.md
             - 평균제곱오차: ch06/estimator_quality/mse.md
-            - 일치성과 점근정규성: ch06/estimator_quality/consistency.md
-            - 효율성과 Cramér-Rao 하한: ch06/estimator_quality/efficiency_crlb.md
-            - 충분성과 최소충분성: ch06/estimator_quality/sufficiency.md
+            - 일치성과 점근정규성 ★: ch06/estimator_quality/consistency.md
+            - 효율성과 Cramér-Rao 하한 ★: ch06/estimator_quality/efficiency_crlb.md
+            - 충분성과 최소충분성 ★: ch06/estimator_quality/sufficiency.md
         - 6.2 최대가능도추정:
             - 가능도와 최대가능도추정: ch06/mle/likelihood.md
             - 베르누이분포의 최대가능도: ch06/mle/mle_bernoulli.md
