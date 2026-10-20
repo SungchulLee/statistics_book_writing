@@ -244,7 +244,7 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
 </div>
 
 ??? success "풀이"
-    **(a)** 축소인자를 $c = 1/(1+\lambda_2)$로 쓰면 $\hat w_j = c\,b_j$이므로 분산은 $c^2\sigma^2$, 편향은 $(c-1)w_j$다. 6장의 편향–분산 분해로
+    **(a)** 축소인자를 $c = 1/(1+\lambda_2)$로 쓰면 $\hat w_j = c\,b_j$이므로 분산은 $c^2\sigma^2$, 편향은 $(c-1)w_j$다. 5장의 편향–분산 분해로
 
     $$
     \text{MSE}(\lambda_2) = \frac{\sigma^2}{(1+\lambda_2)^2} + \frac{\lambda_2^2 w_j^2}{(1+\lambda_2)^2} = \frac{\sigma^2 + \lambda_2^2 w_j^2}{(1+\lambda_2)^2}

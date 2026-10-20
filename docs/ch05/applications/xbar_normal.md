@@ -264,7 +264,7 @@ x = rng.normal(0, 1, (20000, n))          # 들어오는 값 — 표준편차 1
 # 정리 1 과 같은 셈 : a_i 배 해서 더하면 분산은 sum a_i^2 * sigma^2
 for sd_w in (0.1, 1 / np.sqrt(n), 0.2):
     w = rng.normal(0, sd_w, n)            # 가중치 하나하나도 정규분포에서 뽑는다
-    out = x @ w                           # 가중합 — 정리 3 이 말하는 일차결합
+    out = x @ w                           # 가중합 — 정규분포 쪽 정리 3 이 말하는 일차결합
     pred = np.sqrt((w ** 2).sum())        # 예측: sqrt(sum a_i^2) * 1
     print(f"가중치 표준편차 {sd_w:.4f}  →  나온 값의 표준편차 {out.std():.4f}"
           f"   (예측 {pred:.4f})")

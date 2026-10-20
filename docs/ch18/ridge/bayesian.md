@@ -480,7 +480,7 @@ $$
     E[\hat\beta_j^{\text{ridge}}] = \frac{\beta_j}{1+\lambda}, \qquad \operatorname{Var}(\hat\beta_j^{\text{ridge}}) = \frac{\sigma^2}{(1+\lambda)^2}
     $$
 
-    이고 편향은 $\beta_j/(1+\lambda) - \beta_j = -\lambda\beta_j/(1+\lambda)$다. 편향–분산 분해(6장 정리 1)를 좌표마다 적용하고 더하면
+    이고 편향은 $\beta_j/(1+\lambda) - \beta_j = -\lambda\beta_j/(1+\lambda)$다. 편향–분산 분해(5장 정리 1)를 좌표마다 적용하고 더하면
 
     $$
     \mathrm{MSE}(\lambda) = \sum_{j=1}^p\left[\frac{\sigma^2}{(1+\lambda)^2} + \frac{\lambda^2\beta_j^2}{(1+\lambda)^2}\right] = \frac{p\sigma^2 + \lambda^2 S}{(1+\lambda)^2}

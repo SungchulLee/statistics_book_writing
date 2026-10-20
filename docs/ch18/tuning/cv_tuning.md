@@ -867,7 +867,7 @@ $c$에 무관함을 보이고, 보기 1의 설계($c \approx n = 100$)에서 감
     E\hat\beta(\lambda) = \frac{\beta}{1+\lambda}, \qquad \operatorname{Var}(\hat\beta_j(\lambda)) = \frac{\sigma^2}{(1+\lambda)^2}
     $$
 
-    다. 편향–분산 분해(6장 정리 1)를 좌표마다 적용해 더하면
+    다. 편향–분산 분해(5장 정리 1)를 좌표마다 적용해 더하면
 
     $$
     \text{MSE}(\lambda) = \underbrace{\left(\frac{1}{1+\lambda}-1\right)^2\lVert\beta\rVert_2^2}_{\text{편향}^2} + \underbrace{\frac{p\sigma^2}{(1+\lambda)^2}}_{\text{분산}} = \frac{\lambda^2\lVert\beta\rVert_2^2 + p\sigma^2}{(1+\lambda)^2}

@@ -478,7 +478,7 @@ $X^\top X = cI_p$($c > 0$)인 설계에서 $y = X\beta + \varepsilon$, $\varepsi
 
     이고 $\hat\beta^{\text{OLS}} = X^\top y/c \sim N\bigl(\beta, (\sigma^2/c)I_p\bigr)$이다. $\lambda$가 $0$에서 $\infty$로 갈 때 $s$는 $1$에서 $0$으로 간다.
 
-    **2 단계: 편향–분산 분해.** $\hat\beta(\lambda) = s\hat\beta^{\text{OLS}}$의 기댓값은 $s\beta$이므로 편향은 $(s-1)\beta$이고, 분산은 좌표마다 $s^2\sigma^2/c$다. 6 장 정리 1 을 좌표별로 적용해 더하면
+    **2 단계: 편향–분산 분해.** $\hat\beta(\lambda) = s\hat\beta^{\text{OLS}}$의 기댓값은 $s\beta$이므로 편향은 $(s-1)\beta$이고, 분산은 좌표마다 $s^2\sigma^2/c$다. 5 장 정리 1 을 좌표별로 적용해 더하면
 
     $$
     M(\lambda) := E\lVert\hat\beta(\lambda) - \beta\rVert^2 = (1-s)^2 B + s^2\,\frac{p\sigma^2}{c}, \qquad B := \lVert\beta\rVert_2^2

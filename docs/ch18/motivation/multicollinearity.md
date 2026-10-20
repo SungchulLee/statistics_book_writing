@@ -537,7 +537,7 @@ sklearn 의 `Lasso`는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\
     E[\tilde\beta_j] - \beta_j = \frac{\beta_j}{1+\lambda} - \beta_j = -\frac{\lambda\beta_j}{1+\lambda}, \qquad \text{Var}(\tilde\beta_j) = \frac{\sigma^2}{(1+\lambda)^2}
     $$
 
-    다. 편향–분산 분해(6장 정리 1)를 좌표마다 쓰고 더하면
+    다. 편향–분산 분해(5장 정리 1)를 좌표마다 쓰고 더하면
 
     $$
     \text{MSE}(\lambda) = \sum_j\left[\frac{\lambda^2\beta_j^2}{(1+\lambda)^2} + \frac{\sigma^2}{(1+\lambda)^2}\right] = \frac{\lambda^2\lVert\boldsymbol\beta\rVert^2 + p\sigma^2}{(1+\lambda)^2}

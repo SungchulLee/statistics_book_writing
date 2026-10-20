@@ -458,7 +458,7 @@ $$
     E\hat{\boldsymbol\beta}(\lambda) = \frac{c}{c+\lambda}\boldsymbol\beta,\qquad \text{편향} = -\frac{\lambda}{c+\lambda}\boldsymbol\beta,\qquad \operatorname{Var}(\hat\beta_j) = \frac{c\sigma^2}{(c+\lambda)^2}
     $$
 
-    이고 편향–분산 분해(6장 정리 1)로
+    이고 편향–분산 분해(5장 정리 1)로
 
     $$
     R(\lambda) = \frac{\lambda^2 B + p\,c\,\sigma^2}{(c+\lambda)^2}

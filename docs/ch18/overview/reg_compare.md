@@ -767,7 +767,7 @@ $\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^
     \operatorname{Var}\!\left(\frac{\hat\beta_j^{\text{OLS}}}{1+\lambda}\right) = \frac{\sigma^2}{(1+\lambda)^2}
     $$
 
-    이므로 6장 정리 1(편향-분산 분해)을 좌표마다 적용해 더하면
+    이므로 5장 정리 1(편향-분산 분해)을 좌표마다 적용해 더하면
 
     $$
     \operatorname{MSE}(\lambda)

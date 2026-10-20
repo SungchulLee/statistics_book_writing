@@ -731,7 +731,7 @@ $n = 1$, $p = 2$, $\mathbf{X} = \begin{pmatrix} 2 & 1\end{pmatrix}$, $\mathbf{y}
     \mathbb{E}\hat\beta_j^{\text{ridge}} = \frac{\beta_j}{1+\lambda}, \qquad \text{편향}_j = \frac{\beta_j}{1+\lambda} - \beta_j = -\frac{\lambda\beta_j}{1+\lambda}, \qquad \operatorname{Var} = \frac{\tau^2}{(1+\lambda)^2}
     $$
 
-    다. 6 장의 편향–분산 분해를 좌표마다 적용하고 $j$에 대해 더하면
+    다. 5 장의 편향–분산 분해를 좌표마다 적용하고 $j$에 대해 더하면
 
     $$
     \text{MSE}(\lambda) = \underbrace{\frac{\lambda^2\lVert\boldsymbol\beta\rVert^2}{(1+\lambda)^2}}_{\text{편향}^2} + \underbrace{\frac{p\,\tau^2}{(1+\lambda)^2}}_{\text{분산}} = \frac{\lambda^2\lVert\boldsymbol\beta\rVert^2 + p\,\tau^2}{(1+\lambda)^2}

@@ -786,7 +786,7 @@ $$
     \mathbb{E}\hat\beta_j(\lambda) = \frac{\beta_j}{1+\lambda}, \qquad \text{편향}_j = -\frac{\lambda\beta_j}{1+\lambda}, \qquad \text{Var}\,\hat\beta_j(\lambda) = \frac{\sigma^2}{(1+\lambda)^2}
     $$
 
-    6 장의 편향–분산 분해를 좌표마다 적용해 더하면
+    5 장의 편향–분산 분해를 좌표마다 적용해 더하면
 
     $$
     \text{MSE}(\lambda) = \frac{\lambda^2\lVert\boldsymbol\beta\rVert^2 + p\sigma^2}{(1+\lambda)^2}

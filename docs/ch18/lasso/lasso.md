@@ -315,7 +315,7 @@ $$
     \text{Var}(\hat{\boldsymbol{\beta}}^{\text{OLS}}) = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1} = \frac{\sigma^2}{n}\mathbf{I} = v\mathbf{I}
     $$
 
-    이다. 6 장 정리 1 의 편향–분산 분해를 좌표마다 적용하면 편향이 $\beta_j/(1+\lambda) - \beta_j = -\lambda\beta_j/(1+\lambda)$, 분산이 $v/(1+\lambda)^2$ 이므로
+    이다. 5 장 정리 1 의 편향–분산 분해를 좌표마다 적용하면 편향이 $\beta_j/(1+\lambda) - \beta_j = -\lambda\beta_j/(1+\lambda)$, 분산이 $v/(1+\lambda)^2$ 이므로
 
     $$
     \text{MSE}(\lambda) = \sum_{j=1}^p\left[\frac{\lambda^2\beta_j^2}{(1+\lambda)^2} + \frac{v}{(1+\lambda)^2}\right] = \frac{\lambda^2 S + pv}{(1+\lambda)^2}
