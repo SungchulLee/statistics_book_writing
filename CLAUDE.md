@@ -132,6 +132,32 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
 1. Create `docs/chapter_name/` with `index.md` and section subdirectories
 2. Add chapter block to `mkdocs.yml` under the correct Part
 
+### 장·절을 옮기거나 합칠 때 (점검 목록)
+
+`mkdocs build --strict` 는 **링크와 파일만** 검사한다. 4~6 번은 글자라서 빌드가
+잡지 못하고, 실제로 매번 여기서 누락이 난다. 순서대로 전수로 훑을 것.
+
+1. **nav** — `mkdocs.yml` 의 경로·제목·절 번호
+2. **상대링크와 그림** — `git mv` 뒤 `](../..)` 가 새 위치 기준으로 맞는지.
+   쪽이 쓰는 `./img/*.png` 도 함께 옮겼는지
+3. **스크립트 출력 경로** — `scripts/make_*.py` 의 `OUT = "docs/chNN/.../img/"`.
+   PNG 는 커밋되어 있어 빌드는 통과하지만, 다시 그리면 엉뚱한 자리에 저장된다.
+   한 스크립트의 그림이 두 장으로 갈리면 변수를 나눌 것
+4. **본문의 번호 언급** — `N장`, `N.x절`, 「다음 절 ○○」. 링크가 아니라 글자다
+5. **장 개요** — 「장의 구성」 절 목록, 「선수 지식」, 「핵심 요약」.
+   다른 장들의 「선수 지식」이 옮겨 간 내용을 옛 장 이름으로 부르고 있지 않은지
+6. **범위 문장** — 「이 장은 ~까지다」처럼 경계를 말하는 문장
+7. **빈 디렉터리와 고아 그림** — `find docs -type d -empty`
+
+확인 명령:
+
+```bash
+# 본문의 번호 언급 (ch05 를 옮겼다면)
+grep -rn "5장\|5\.[0-9]*절" docs --include='*.md'
+# 스크립트 출력 경로가 실제 그림 위치와 맞는지
+grep -rn 'OUT *= *"docs/' scripts/*.py
+```
+
 ### Add a Python example
 1. Create `.py` in the relevant section directory
 2. Educational style: module docstring, `# ===` dividers, `if __name__ == "__main__":` guard
