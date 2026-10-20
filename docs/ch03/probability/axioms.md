@@ -201,7 +201,7 @@ $1933$ 년, 서른 살의 그가 독일에서 낸 얇은 책이 사진이다. �
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 1.** 공리를 어기면 돈을 잃는다
+**그림으로 보는 통계학 2.** 공리를 어기면 돈을 잃는다
 
 정의 1 이 세 줄을 적어 두었다. 음이 아닐 것, 전체가 $1$ 일 것, 배반이면 더해질 것.
 §2 가 그 셋에서 무엇이 따라 나오는지 보인다. 그런데 **왜 하필 그 셋인가**는 다른 물음이다.
@@ -315,7 +315,7 @@ $$
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 2.** 식당 창문에 끼운 세 개의 원
+**그림으로 보는 통계학 3.** 식당 창문에 끼운 세 개의 원
 
 <figure markdown>
   ![세 색 원이 겹친 스테인드글라스 창. 아래에 JOHN VENN 이라 적혀 있다](./img/fn__venn_window.png){ width=250 align=right }
@@ -351,7 +351,7 @@ $$
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 3.** 이름이 둘 붙었는데 둘 다 처음이 아니다
+**그림으로 보는 통계학 4.** 이름이 둘 붙었는데 둘 다 처음이 아니다
 
 <figure markdown>
   ![안경을 쓰고 구레나룻을 기른 19세기 인물의 흑백 초상](./img/ct__dasilva.png){ width=150 align=right }
@@ -382,7 +382,7 @@ $$
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 4.** 인쇄 오류를 평생 미워한 사람의 이름이 붙은 부등식
+**그림으로 보는 통계학 5.** 인쇄 오류를 평생 미워한 사람의 이름이 붙은 부등식
 
 <figure markdown>
   ![카를로 에밀리오 본페로니의 흑백 초상 사진](./img/pb__bonferroni.png){ width=150 align=right }
@@ -479,7 +479,7 @@ $$
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 5.** 원숭이 백만 마리를 불러낸 까닭
+**그림으로 보는 통계학 6.** 원숭이 백만 마리를 불러낸 까닭
 
 <figure markdown>
   ![콧수염과 턱수염을 기른 양복 차림 남자의 흑백 상반신 사진](./img/pb__borel1929.png){ width=170 align=right }

@@ -35,7 +35,7 @@ ROC 곡선은 **민감도와 특이도 사이의 절충**을 시각화한다.
 
 <div class="storybox" markdown>
 
-**「레이더 앞에 앉은 사람」**
+**그림으로 보는 통계학 1.** 레이더 앞에 앉은 사람
 
 ROC 는 **Receiver Operating Characteristic** 의 줄임말이다. 「**수신기**의 작동 특성」이라는 뜻인데, 분류기 이야기에 왜 수신기가 나오는가.
 
