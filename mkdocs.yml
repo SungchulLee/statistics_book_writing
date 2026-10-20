@@ -639,7 +639,7 @@ nav:
             - 금융 변동성 비교: ch15/applications/financial_volatility.md
             - 회귀와 분산분석에서의 응용: ch15/applications/applications.md
 
-    - 16 비모수 검정 ★:
+    - 16 비모수 검정:
         - 장 개요: ch16/index.md
         - 16.1 기초:
             - 비모수 검정을 언제, 왜 쓰는가: ch16/foundations/motivation.md
@@ -673,7 +673,7 @@ nav:
             - Spearman의 ρ (재론): ch16/correlation/spearman.md
             - Kendall의 τ (재론): ch16/correlation/kendall.md
 
-    - 17 재표집 방법 ★:
+    - 17 재표집 방법:
         - 장 개요: ch17/index.md
         - 17.1 붓스트랩의 기초:
             - 붓스트랩 원리: ch17/bootstrap/principle.md
