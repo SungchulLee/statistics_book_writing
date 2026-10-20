@@ -158,6 +158,8 @@ $$
 
 $S^2$ 의 표준오차를 재는 일이 왜 중요한지는 여기 있다. 그 수가 작으면 추정값을 믿어도 되고, 크면 **믿는 정도를 설계에 넣어야 한다.**
 
+_확인한 곳 — 디미구엘·가를라피·우팔의 「Optimal versus naive diversification: how inefficient is the $1/N$ portfolio strategy?」(『Review of Financial Studies』 $22$ 권 $5$ 호 $1915$–$1953$ 쪽, $2009$)가 정교한 최적화 $14$ 가지를 실제 시장 자료로 견주어 **어느 것도 $1/N$ 을 꾸준히 이기지 못했다**고 보고한 것. 표와 그림의 수는 모두 직접 모의실험한 값이다_
+
 </div>
 
 ---
