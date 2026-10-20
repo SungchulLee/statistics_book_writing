@@ -653,8 +653,6 @@ nav:
             - Wilcoxon 부호순위검정: ch16/one_sample_nonparametric/wilcoxon_signed_rank.md
             - 이항검정: ch16/one_sample_nonparametric/binomial_test.md
             - 일표본 검정 개관: ch16/one_sample_nonparametric/one_sample.md
-            - 런 검정 (코드): ch16/one_sample_nonparametric/runs_test_code.md
-            - 부호검정 (코드): ch16/one_sample_nonparametric/sign_test_code.md
             - Wilcoxon 검정 (코드): ch16/one_sample_nonparametric/wilcoxon_tests.md
         - 16.3 대응표본 비모수 검정:
             - 대응 부호검정: ch16/paired_sample_nonparametric/paired_sign.md
