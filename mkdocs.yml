@@ -282,7 +282,6 @@ nav:
             - μ와 σ²의 최대가능도추정: ch07/mle/gaussian_mle.md
             - σ²에 대한 정규분포 최대가능도의 편향: ch07/mle/mle_bias.md
             - 충분성과 완비성: ch07/mle/sufficiency_completeness.md
-            - 정규분포 최대가능도 (코드): ch07/mle/gaussian_mle_code.md
         - 7.4 정규성이 없을 때의 추정:
             - 꼬리가 두꺼운 분포: ch07/non_normal/heavy_tails.md
             - 치우친 분포: ch07/non_normal/skewed.md
