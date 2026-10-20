@@ -43,6 +43,8 @@ $N(0,3^2)$ 에서 나온 값이 두 개 섞여 있는 것은 히스토그램으�
 정규분포 **한 점**에서 잰 수이고, 이 쪽이 다루는 추정량들은 그 한 점이 아니라 그 **둘레**를
 보고 고른 것들이다.
 
+_확인한 곳 — 튜키의 「A survey of sampling from contaminated distributions」(『Contributions to Probability and Statistics』 $448$–$485$ 쪽, $1960$)이 $(1-\varepsilon)N(0,1) + \varepsilon N(0,9)$ 라는 오염 모형으로 평균편차와 표준편차의 효율을 견주었고, 정규에서 $88\%$ 쯤이던 것이 **$\varepsilon$ 이 $1\%$ 에 못 미쳐도 이미 뒤집힌다**고 적은 것. 표의 수는 그 설정에서 직접 계산한 값이며 뒤집히는 자리가 $\varepsilon = 0.001754$ 다_
+
 </div>
 
 ---
