@@ -4,7 +4,7 @@ r"""6.4 최대가능도 절에 남아 있던 여섯 쪽의 그림을 생성한�
   ch06/mle/img/exponential_invariance.png     재모수화해도 답은 같은 점
   ch06/mle/img/poisson_mle_fit.png            계수 자료와 맞춘 분포
   ch06/mle/img/optimization_paths.png         Newton 반복과 봉우리가 둘일 때
-  ch06/mle/img/score_variance_information.png 점수의 분산이 정보량이다
+  ch07/theory/img/score_variance_information.png 점수의 분산이 정보량이다
   ch06/mle/img/capture_recapture_likelihood.png  N 에 대한 가능도
 
 실행:  python3 scripts/make_ch06_mle_examples_figures.py   (저장소 최상위에서)
@@ -33,6 +33,8 @@ MUTED = "#90A4AE"
 RED = "#D32F2F"
 
 OUT = "docs/ch06/mle/img/"
+# 7장(추정의 이론)으로 간 그림은 저장 위치가 다르다
+THEORY = "docs/ch07/theory/img/"
 
 
 def save(fig, path):
@@ -380,7 +382,7 @@ def score_variance_information():
 
     fig.suptitle("Fisher 정보량은 점수함수의 분산이다", fontsize=13.5, y=1.02)
     fig.tight_layout()
-    save(fig, OUT + "score_variance_information.png")
+    save(fig, THEORY + "score_variance_information.png")
 
 
 # ==================================================================

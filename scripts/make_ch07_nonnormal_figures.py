@@ -1,7 +1,7 @@
 r"""7.3 치우친 분포 쪽의 그림을 생성한다.
 
 만드는 파일:
-  ch07/non_normal/img/skew_center_and_clt.png   치우침이 중심을 가르고, 평균의 분포까지 끌고 간다
+  ch05/non_normal/img/skew_center_and_clt.png   치우침이 중심을 가르고, 평균의 분포까지 끌고 간다
 
 실행:  python3 scripts/make_ch07_nonnormal_figures.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -24,7 +24,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch07/non_normal/img/"
+OUT = "docs/ch05/non_normal/img/"
 
 
 def save(fig, path):

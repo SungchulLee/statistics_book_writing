@@ -3,10 +3,10 @@ r"""7.1 표본평균 네 쪽의 그림을 생성한다.
 네 쪽 모두 그림이 없던 곳이다. 쪽마다 그 쪽의 핵심 주장 하나를 그렸다.
 
 만드는 파일:
-  ch07/mean/img/unbiased_all_n_rate.png   모든 n 에서 편향 0, 그리고 1/√n 속도
-  ch07/mean/img/mean_vs_median_efficiency.png  효율 — 같은 자료, 좁은 쪽과 넓은 쪽
-  ch07/mean/img/robust_means_breakdown.png     오염 한 점이 평균을 끌고 간다
-  ch07/mean/img/sample_mean_linear_blue.png    선형·불편 중에서 가장 좁다
+  ch05/mean/img/unbiased_all_n_rate.png   모든 n 에서 편향 0, 그리고 1/√n 속도
+  ch05/mean/img/mean_vs_median_efficiency.png  효율 — 같은 자료, 좁은 쪽과 넓은 쪽
+  ch05/mean/img/robust_means_breakdown.png     오염 한 점이 평균을 끌고 간다
+  ch05/mean/img/sample_mean_linear_blue.png    선형·불편 중에서 가장 좁다
 
 실행:  python3 scripts/make_ch07_mean_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -29,7 +29,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch07/mean/img/"
+OUT = "docs/ch05/mean/img/"
 
 
 def save(fig, path):

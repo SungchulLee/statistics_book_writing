@@ -27,7 +27,7 @@ r"""7.3절 「그림으로 보는 통계학」 — 천 개 가운데 둘.
 
 만드는 파일:
 
-  ch07/variance/img/tukey_contamination.png
+  ch05/variance/img/tukey_contamination.png
 
 실행:  python3 scripts/make_ch07_tukey_contamination.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -44,7 +44,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch07/variance/img/"
+OUT = "docs/ch05/variance/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

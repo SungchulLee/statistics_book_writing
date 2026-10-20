@@ -3,10 +3,10 @@ r"""7.4 분산추정 네 쪽의 그림을 생성한다.
 네 쪽 모두 그림이 없던 곳이다. 쪽마다 그 쪽의 핵심 주장 하나를 그렸다.
 
 만드는 파일:
-  ch07/variance/img/bessels_dof.png          편차 하나는 자유롭지 않다 — 자유도 n-1
-  ch07/variance/img/naive_always_short.png   소박한 추정량은 언제나, 얼마나 모자라는가
-  ch07/variance/img/mse_divisor_curve.png    나누는 수에 따른 MSE — 바닥은 n+1
-  ch07/variance/img/robust_scale_breakdown.png  오염 비율과 붕괴점
+  ch05/variance/img/bessels_dof.png          편차 하나는 자유롭지 않다 — 자유도 n-1
+  ch05/variance/img/naive_always_short.png   소박한 추정량은 언제나, 얼마나 모자라는가
+  ch05/variance/img/mse_divisor_curve.png    나누는 수에 따른 MSE — 바닥은 n+1
+  ch05/variance/img/robust_scale_breakdown.png  오염 비율과 붕괴점
 
 실행:  python3 scripts/make_ch07_variance_figures.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -29,7 +29,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch07/variance/img/"
+OUT = "docs/ch05/variance/img/"
 
 
 def save(fig, path):

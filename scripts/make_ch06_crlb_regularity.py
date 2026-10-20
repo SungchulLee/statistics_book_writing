@@ -32,7 +32,7 @@ sqrt(n) 이 아니라 n 이다.
 
 만드는 파일:
 
-  ch06/estimator_quality/img/crlb_regularity.png
+  ch07/theory/img/crlb_regularity.png
 
 실행:  python3 scripts/make_ch06_crlb_regularity.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -48,7 +48,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch06/estimator_quality/img/"
+OUT = "docs/ch07/theory/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

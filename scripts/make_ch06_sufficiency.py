@@ -3,7 +3,7 @@ r"""충분성을 눈으로 — 같은 $(\bar x, s^2)$ 면 가능도가 포개지
 위: 모양이 전혀 다른 세 표본이 $(\bar x, s^2)$ 만 같으면 가능도함수가 **한 줄**이 된다.
 아래: 중앙값과 IQR 만 같은 세 표본은 가능도가 따로 논다.
 
-만드는 파일: docs/ch06/estimator_quality/img/sufficiency.png
+만드는 파일: docs/ch07/theory/img/sufficiency.png
 """
 
 import numpy as np
@@ -143,7 +143,7 @@ axD.set_ylim(-26, 2)
 axD.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch06/estimator_quality/img/sufficiency.png"
+out = "docs/ch07/theory/img/sufficiency.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

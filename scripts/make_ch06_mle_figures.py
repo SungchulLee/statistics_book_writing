@@ -8,8 +8,8 @@ r"""6.4 최대가능도 절의 개념 그림을 생성한다.
   ch06/mle/img/mle_candidates.png              후보 분포 가운데 고르기
   ch06/mle/img/bernoulli_loglik_curve.png      보기 1 의 로그가능도 곡선
   ch06/mle/img/likelihood_vs_loglik_scale.png  보기 3 의 두 축
-  ch06/mle/img/fisher_curvature_se.png         곡률에서 표준오차로
-  ch06/mle/img/mle_asymptotics.png             n 이 커지며 정규로
+  ch07/theory/img/fisher_curvature_se.png         곡률에서 표준오차로
+  ch07/theory/img/mle_asymptotics.png             n 이 커지며 정규로
 
 실행:  python3 scripts/make_ch06_mle_figures.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -36,6 +36,8 @@ MUTED = "#90A4AE"
 RED = "#D32F2F"
 
 OUT = "docs/ch06/mle/img/"
+# 7장(추정의 이론)으로 간 그림은 저장 위치가 다르다
+THEORY = "docs/ch07/theory/img/"
 
 
 def save(fig, path):
@@ -340,7 +342,7 @@ def fisher_curvature_se():
 
     fig.suptitle("휘어짐을 재면 표준오차가 나온다", fontsize=13.5, y=1.02)
     fig.tight_layout()
-    save(fig, OUT + "fisher_curvature_se.png")
+    save(fig, THEORY + "fisher_curvature_se.png")
 
 
 # ==================================================================
@@ -388,7 +390,7 @@ def mle_asymptotics():
     fig.suptitle("지수분포 $\\hat\\lambda = 1/\\bar X$ — 편향이 사라지고 "
                  "모양이 정규로 간다", fontsize=13.5, y=1.02)
     fig.tight_layout()
-    save(fig, OUT + "mle_asymptotics.png")
+    save(fig, THEORY + "mle_asymptotics.png")
 
 
 if __name__ == "__main__":

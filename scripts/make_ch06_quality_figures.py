@@ -2,12 +2,12 @@ r"""6.3 추정량의 품질 다섯 쪽의 그림을 생성한다.
 
 다섯 쪽 모두 그림이 없던 곳이다. 쪽마다 그 쪽이 정의하는 개념 하나를 그렸다.
 
-  ch06/estimator_quality/img/mse_decomposition.png      MSE = 분산 + 편향²
-  ch06/estimator_quality/img/bias_variance_dartboard.png 다트판 네 칸
-  ch06/estimator_quality/img/shrinkage_mse.png          축소추정량의 최적 λ
-  ch06/estimator_quality/img/consistency_asymptotics.png 일치성과 점근정규성
-  ch06/estimator_quality/img/crlb_information.png       휘어짐·정보량·분산 하한
-  ch06/estimator_quality/img/sufficiency_ladder.png     압축 사다리와 Rao–Blackwell
+  ch05/estimators/img/mse_decomposition.png      MSE = 분산 + 편향²
+  ch05/estimators/img/bias_variance_dartboard.png 다트판 네 칸
+  ch05/estimators/img/shrinkage_mse.png          축소추정량의 최적 λ
+  ch07/theory/img/consistency_asymptotics.png 일치성과 점근정규성
+  ch07/theory/img/crlb_information.png       휘어짐·정보량·분산 하한
+  ch07/theory/img/sufficiency_ladder.png     압축 사다리와 Rao–Blackwell
 
 실행:  python3 scripts/make_ch06_quality_figures.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -32,7 +32,9 @@ GREEN, GREEN_F = "#33691E", "#C5E1A5"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch06/estimator_quality/img/"
+OUT = "docs/ch05/estimators/img/"
+# 7장(추정의 이론)으로 간 그림은 저장 위치가 다르다
+THEORY = "docs/ch07/theory/img/"
 
 
 def save(fig, path):
@@ -291,7 +293,7 @@ def consistency_asymptotics():
 
     fig.suptitle("오그라드는 것과, 오그라드는 속도", fontsize=14, y=1.02)
     fig.tight_layout()
-    save(fig, OUT + "consistency_asymptotics.png")
+    save(fig, THEORY + "consistency_asymptotics.png")
 
 
 # ==================================================================
@@ -361,7 +363,7 @@ def crlb_information():
     fig.suptitle("휘어짐이 정보량이고, 정보량이 분산의 바닥을 정한다",
                  fontsize=14, y=1.02)
     fig.tight_layout()
-    save(fig, OUT + "crlb_information.png")
+    save(fig, THEORY + "crlb_information.png")
 
 
 # ==================================================================
@@ -438,7 +440,7 @@ def sufficiency_ladder():
                  pad=10)
 
     fig.tight_layout()
-    save(fig, OUT + "sufficiency_ladder.png")
+    save(fig, THEORY + "sufficiency_ladder.png")
 
 
 if __name__ == "__main__":

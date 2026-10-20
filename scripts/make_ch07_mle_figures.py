@@ -3,9 +3,9 @@ r"""7.2 최대가능도 세 쪽의 그림을 생성한다.
 세 쪽 모두 그림이 없던 곳이다. 쪽마다 그 쪽의 핵심 주장 하나를 그렸다.
 
 만드는 파일:
-  ch07/mle/img/gaussian_loglik_surface.png   로그가능도 곡면과 꼭대기의 자리
-  ch07/mle/img/mle_bias_shrinks.png          MLE 의 편향은 O(1/n) 으로 사라진다
-  ch07/mle/img/sufficiency_compression.png   충분통계량은 무엇을 버리고 무엇을 남기나
+  ch06/mle/img/gaussian_loglik_surface.png   로그가능도 곡면과 꼭대기의 자리
+  ch06/mle/img/mle_bias_shrinks.png          MLE 의 편향은 O(1/n) 으로 사라진다
+  ch07/theory/img/sufficiency_compression.png   충분통계량은 무엇을 버리고 무엇을 남기나
 
 실행:  python3 scripts/make_ch07_mle_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -29,7 +29,9 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch07/mle/img/"
+OUT = "docs/ch06/mle/img/"
+# 7장(추정의 이론)으로 간 그림은 저장 위치가 다르다
+THEORY = "docs/ch07/theory/img/"
 
 
 def save(fig, path):
@@ -380,7 +382,7 @@ def sufficiency_compression():
 
     fig.suptitle("버려도 되는 것과 버리면 안 되는 것", fontsize=14.5, y=1.02)
     fig.tight_layout()
-    save(fig, OUT + "sufficiency_compression.png")
+    save(fig, THEORY + "sufficiency_compression.png")
 
 
 if __name__ == "__main__":
