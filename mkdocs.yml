@@ -587,7 +587,6 @@ nav:
             - 정규성을 위한 변환: ch14/non_normal_data/transformations.md
             - 대안으로서의 붓스트랩: ch14/non_normal_data/bootstrapping.md
             - 비모수 방법: ch14/non_normal_data/nonparametric.md
-            - 변환 시연: ch14/non_normal_data/transformations_code.md
         - 14.7 응용:
             - t 검정과 분산분석에서의 정규성: ch14/applications/t_tests_anova.md
             - 회귀에서의 정규성 (잔차 진단): ch14/applications/regression_residuals.md
