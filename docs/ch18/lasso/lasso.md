@@ -440,7 +440,7 @@ $$
     \hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}^{\text{ridge}} = \frac{1}{1+\lambda}\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \frac{1}{1+\lambda}\mathbf{P}\mathbf{y}
     $$
 
-    이고 $\mathbf{P}$ 는 $\mathbf{X}$ 의 열공간으로의 사영행렬이다(0 장). 사영행렬의 대각합은 계수(rank)와 같아 $\operatorname{tr}(\mathbf{P}) = p$ 이므로
+    이고 $\mathbf{P}$ 는 $\mathbf{X}$ 의 열공간으로의 사영행렬이다(부록 A). 사영행렬의 대각합은 계수(rank)와 같아 $\operatorname{tr}(\mathbf{P}) = p$ 이므로
 
     $$
     \operatorname{tr}(\mathbf{H}_\lambda) = \frac{p}{1+\lambda} \qquad \square

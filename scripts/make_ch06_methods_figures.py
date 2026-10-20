@@ -7,7 +7,7 @@ r"""6.2 추정 방법 절 일곱 쪽의 그림을 생성한다.
   ch06/estimation_methods/img/mom_three_families.png      세 분포에 적용
   ch06/estimation_methods/img/mom_vs_mle_efficiency.png   두 방법의 표집분포와 ARE
   ch06/estimation_methods/img/gmm_overidentification.png  적률조건이 남을 때
-  ch06/estimation_methods/img/loglik_additivity.png       로그가능도는 더해진다
+  ch06/mle/img/loglik_additivity.png                      로그가능도는 더해진다
   ch06/estimation_methods/img/variance_estimator_mse.png  분산추정량 셋
 
 감마 형상모수의 ARE 는 이론값을 직접 계산해 모의실험과 맞추어 두었다.
@@ -40,6 +40,8 @@ MUTED = "#90A4AE"
 RED = "#D32F2F"
 
 OUT = "docs/ch06/estimation_methods/img/"
+# 로그가능도의 가법성 그림은 6.1 의 「가능도와 최대가능도추정」으로 옮겨 갔다
+MLE = "docs/ch06/mle/img/"
 
 
 def save(fig, path):
@@ -435,7 +437,7 @@ def loglik_additivity():
     fig.suptitle("곱이 합이 되므로 관측값을 더하고 빼기 쉽다", fontsize=13.5,
                  y=1.02)
     fig.tight_layout()
-    save(fig, OUT + "loglik_additivity.png")
+    save(fig, MLE + "loglik_additivity.png")
 
 
 # ==================================================================
