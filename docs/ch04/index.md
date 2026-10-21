@@ -8,7 +8,7 @@
 
 ## 1. 두 개의 사슬
 
-### 4.1 이산분포
+### 이산분포의 사슬
 
 $$
 \text{Bernoulli}(p) \to B(n, p) \to \text{HG}(n, N, M) \to \text{Geo}(p) \to \text{NB}(r, p) \to \text{Poisson}(\lambda)
@@ -25,7 +25,7 @@ $$
 
 사슬은 한 줄로만 흐르지 않는다. 이항·초기하·음이항이 모두 알맞은 극한에서 포아송분포로 모이고, 이항분포는 $n$이 크면 정규분포로도 간다.
 
-### 4.2 연속분포
+### 연속분포의 사슬
 
 $$
 \text{Exp}(\lambda) \to N(\mu, \sigma^2) \to \chi^2_d \to t_d \to F_{d_1, d_2}
