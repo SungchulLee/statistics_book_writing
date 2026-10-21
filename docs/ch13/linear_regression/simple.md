@@ -1569,6 +1569,7 @@ $$
         처음 코드는 `period='max'`였는데, 그러면 마지막 $200$일이 실행하는 날마다 달라져 결과가 매번 바뀐다. 모의실험에서 난수 씨앗을 고정하는 것과 같은 이유로 **외부 자료에서는 기간을 고정한다.**
 
     ```python
+    # 출력 없음: yfinance 요청 한도에 걸려 확보하지 못했다. 바로 위 쪽지를 볼 것.
     from sklearn.linear_model import LinearRegression
     import yfinance as yf
     import matplotlib.pyplot as plt

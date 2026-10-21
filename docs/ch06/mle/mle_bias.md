@@ -477,6 +477,7 @@ MLE의 편향을 **모의실험으로 측정**하는 절차를 설계하라. 편
     **절차.**
 
     ```python
+    # 출력 없음: 골격이다. generate 와 mle 를 자기 모형으로 바꿔 끼운다.
     rng = np.random.default_rng(0)
     theta_true, B = 2.0, 50_000
     ests = np.empty(B)

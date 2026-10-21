@@ -1444,6 +1444,7 @@ $n = 25$, $\bar{x} = 12.4$, $s = 3.1$일 때 정규모집단 평균의 95% 신�
     **4단계 — 대안 모형과 비교.**
 
     ```python
+    # 출력 없음: x 는 독자가 적합하려는 자료다. 1~5 단계가 모두 그렇다.
     for name, dist in [("norm", stats.norm), ("t", stats.t), ("laplace", stats.laplace)]:
         params = dist.fit(x)
         ll = dist.logpdf(x, *params).sum()
