@@ -245,7 +245,7 @@ nav:
                 - 적률법과 최대가능도의 비교: ch06/estimation_methods/moments_vs_mle.md
                 - 적률법 개관: ch06/estimation_methods/moments.md
                 - 추정 방법 비교: ch06/estimation_methods/estimation_methods.md
-            - 6.3 베이즈 추정:
+            - 6.3 베이즈 추정 ★:
                 - 사전분포, 가능도, 사후분포: ch06/bayesian/prior_posterior.md
                 - 켤레 사전분포: ch06/bayesian/conjugate_priors.md
                 - 최대사후확률 추정: ch06/bayesian/map_estimation.md
