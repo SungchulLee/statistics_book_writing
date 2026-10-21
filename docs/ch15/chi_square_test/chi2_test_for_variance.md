@@ -670,7 +670,7 @@ $$
 \Phi\!\left(\frac{\delta - z_{1-\alpha/2}\sqrt2}{\sqrt{\beta_2-1}}\right) + \Phi\!\left(\frac{-\delta - z_{1-\alpha/2}\sqrt2}{\sqrt{\beta_2-1}}\right)
 $$
 
-임을 보이시오. $\delta = 0$ 에서 14.1절 연습문제 8 의 $\alpha_\infty(\beta_2)$ 가 나오는지 확인하시오.
+임을 보이시오. $\delta = 0$ 에서 14.1절 [통계적 추론에서의 핵심 역할](../../ch14/introduction/role_in_inference.md) 연습문제 8 의 $\alpha_\infty(\beta_2)$ 가 나오는지 확인하시오.
 
 **(2)** 첨도를 알고 임계값을 $z_{1-\alpha/2}\sqrt{(\beta_2-1)/n}$ 으로 **고쳐 쓴** 검정(크기가 점근적으로 정확하다)의 검정력 극한을 구하고, 그 값이 $\delta/\sqrt{\beta_2-1}$ 에만 달려 있음을 보이시오. 같은 검정력에 필요한 표본크기가 정규 대비 $(\beta_2-1)/2$ 배임을 결론지으시오.
 
@@ -709,7 +709,7 @@ $$
     2\Phi\!\left(-z_{1-\alpha/2}\sqrt{\frac{2}{\beta_2-1}}\right) = \alpha_\infty(\beta_2)
     $$
 
-    로 14.1절 연습문제 8 의 식과 글자까지 같다. **크기는 검정력함수를 $\delta = 0$ 에서 읽은 값일 뿐이다.**
+    로 14.1절 [통계적 추론에서의 핵심 역할](../../ch14/introduction/role_in_inference.md) 연습문제 8 의 식과 글자까지 같다. **크기는 검정력함수를 $\delta = 0$ 에서 읽은 값일 뿐이다.**
 
     **(2) 크기를 고쳐도 정보는 돌아오지 않는다.** 임계값을 $z\sqrt{(\beta_2-1)/n}$ 으로 바꾸면 기각사건이 $\lvert \delta + \sqrt{\beta_2-1}Z\rvert > z\sqrt{\beta_2-1}$, 곧
 
