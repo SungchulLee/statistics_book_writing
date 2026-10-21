@@ -59,22 +59,7 @@
 - **Bonferroni와 Holm 보정** -- Bonferroni 보정(alpha/m에서 기각)과 균일하게 더 강력한 Holm의 단계적 하강 절차를 제시한다.
 - **거짓발견율 (Benjamini-Hochberg)** -- FDR을 거짓 발견의 기대 비율로 소개하고 이를 통제하는 Benjamini-Hochberg 절차를 기술한다.
 
-### 9.7 코드
-
-완전한 Python 구현:
-
-- **hypothesis_tests.py** -- 여러 상황에서의 가설검정을 두루 시연한다.
-- **power_analysis.py** -- 검정력 분석과 표본크기 결정 도구.
-- **multiple_testing.py** -- Bonferroni, Holm, Benjamini-Hochberg 보정의 구현.
-- **test_mean.py** -- 일표본 평균 검정(z-검정과 t-검정).
-- **test_proportion.py** -- 일표본 비율 z-검정.
-- **test_variance.py** -- 일표본 카이제곱 분산 검정.
-- **test_var_ratio.py** -- 두 분산 비교를 위한 F-검정.
-- **test_paired.py** -- 대응표본 t-검정.
-- **test_two_means.py** -- 이표본 t-검정(합동과 Welch).
-- **test_two_props.py** -- 이표본 비율 z-검정.
-
-### 9.8 연습문제
+### 9.7 연습문제
 
 가설 설정, 제1종·제2종 오류의 식별, 검정통계량의 계산, p-값의 해석, 검정력 분석, 다중검정 상황을 다루는 연습문제들.
 

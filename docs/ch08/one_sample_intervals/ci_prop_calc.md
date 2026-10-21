@@ -309,21 +309,6 @@ $k = 0$이면 하한을 0으로, $k = n$이면 상한을 1로 두는 관례를 �
 
 그래서 기본값을 고를 때의 기준은 "누가 이기는가"가 아니라 **어떤 실패를 감당할 수 있는가**이다. 규제나 안전처럼 명목 수준을 반드시 지켜야 하면 Clopper–Pearson, 일반적인 보고에는 Wilson, 손으로 계산해야 하면 Agresti–Coull이다. `ci_proportion`의 기본값이 `wald`가 아니라 `wilson`인 것은 이 그림에서 Wald가 놓인 자리 때문이다.
 
-### 명령줄 사용법
-
-함께 제공되는 스크립트 `ci_prop_calc.py`는 명령줄 인자를 지원한다:
-
-```bash
-# 도수로부터 Wilson 구간
-python ci_prop_calc.py --k 12 --n 50 --method wilson
-
-# 0/1 값이 든 CSV 로부터 Clopper-Pearson 구간
-python ci_prop_calc.py --csv bernoulli.csv --method cp
-
-# 신뢰수준 99%
-python ci_prop_calc.py --k 12 --n 50 --method wilson --cl 0.99
-```
-
 ---
 
 ## 5. 해석

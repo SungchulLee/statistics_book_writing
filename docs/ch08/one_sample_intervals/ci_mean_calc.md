@@ -218,21 +218,6 @@ $t$-분포는 표준정규보다 꼬리가 두꺼우므로 모든 유한한 $n$�
 
 그러니 두 구간의 너비를 비교해 방법을 고르려 해서는 안 된다. 고르는 기준은 오직 하나, **$\sigma$를 정말로 아는가**이다. 알면 $z$, 모르면 $t$다. 이 페이지의 `ci_mean`이 `known_sigma`와 `s`를 아예 다른 인자로 받는 것도 그 구별을 코드에 새겨 두기 위해서다.
 
-### 명령줄 사용법
-
-함께 제공되는 스크립트 `ci_mean_calc.py`는 명령줄 인자를 지원한다:
-
-```bash
-# CSV 파일로부터 t 구간
-python ci_mean_calc.py --csv data.csv
-
-# 요약통계로부터 z 구간
-python ci_mean_calc.py --n 25 --mean 3.2 --sd 1.1 --known-sigma 1.0 --method z
-
-# 신뢰수준 99%
-python ci_mean_calc.py --csv data.csv --cl 0.99
-```
-
 ---
 
 ## 3. 해석
