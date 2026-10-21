@@ -16,7 +16,7 @@ $$\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \fr
 
 ## 3. MLE의 유도
 
-### mu의 MLE
+### μ의 MLE
 $\mu$에 대해 미분하면:
 
 $$\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = \frac{n}{\sigma^2}(\bar{x} - \mu)$$
@@ -27,7 +27,7 @@ $$\bar{x} - \mu = 0 \implies \boxed{\hat{\mu}_{\text{MLE}} = \bar{X} = \frac{1}{
 
 평균의 MLE는 **표본평균**이다.
 
-### sigma-squared의 MLE
+### σ²의 MLE
 ($\sigma^2$을 하나의 변수로 보고) $\sigma^2$에 대해 미분하면:
 
 $$\frac{\partial \ell}{\partial \sigma^2} = -\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4}\sum_{i=1}^n (x_i - \mu)^2$$
@@ -175,7 +175,7 @@ $$\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
 ## 4. Gaussian MLE의 성질
 
-### mu-hat = X-bar의 성질
+### μ̂ = X̄의 성질
 | 성질 | 결과 |
 |----------|--------|
 | 편향 | $E[\hat{\mu}] = \mu$ (불편) |
@@ -185,7 +185,7 @@ $$\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 | 충분성 | ($\sigma^2$이 주어지면) $\mu$에 대해 충분 |
 | 일치성 | $\hat{\mu} \xrightarrow{p} \mu$ |
 
-### sigma-squared (MLE)의 성질
+### σ̂² (MLE)의 성질
 | 성질 | 결과 |
 |----------|--------|
 | 편향 | $E[\hat{\sigma}^2] = \frac{n-1}{n}\sigma^2$ (편향됨) |
@@ -353,7 +353,7 @@ $$\text{Var}(\hat{\mu}) \geq \frac{\sigma^2}{n}, \qquad \text{Var}(\hat{\sigma}^
 
 ---
 
-## 6. 다른 모수화: (mu, sigma)
+## 6. 다른 모수화: (μ, σ)
 $(\mu, \sigma^2)$ 대신 $(\mu, \sigma)$로 모수화하면 $\sigma$의 MLE는:
 
 $$\hat{\sigma}_{\text{MLE}} = \sqrt{\hat{\sigma}^2_{\text{MLE}}} = \sqrt{\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2}$$
@@ -684,17 +684,17 @@ $N(5, 2^2)$에서 뽑은 $n = 5$짜리 표본 하나로 이 곡면을 실제로 
 
 ## 9. 가능도로부터의 신뢰영역
 
-### mu에 대해 (σ²를 아는 경우)
+### μ에 대해 (σ²를 아는 경우)
 
 $$\bar{X} \pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$$
 
-### mu에 대해 (σ²를 모르는 경우)
+### μ에 대해 (σ²를 모르는 경우)
 
 $$\bar{X} \pm t_{n-1, \alpha/2}\frac{S}{\sqrt{n}}$$
 
 여기서 $S = \sqrt{S^2}$이고 $t_{n-1}$은 자유도 $n-1$인 스튜던트 $t$-분포이다.
 
-### sigma-squared에 대해
+### σ²에 대해
 
 $$\left(\frac{(n-1)S^2}{\chi^2_{n-1, \alpha/2}}, \quad \frac{(n-1)S^2}{\chi^2_{n-1, 1-\alpha/2}}\right)$$
 

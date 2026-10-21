@@ -113,7 +113,24 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
 
 - `$...$` inline math, `$$...$$` display — always blank lines above and below display math
 - No blank lines *inside* `$$...$$` blocks
-- No LaTeX in `#` headings (breaks TOC)
+- **머리글과 대체텍스트에는 LaTeX 를 쓰지 않는다. 유니코드 글자를 쓴다**
+  (`μ`, `σ²`, `τ`, `λ`, `F₁`, `Oₚ`, `χ²`, `X̄`, `p̂`). 까닭은
+  `docs/javascripts/mathjax.js` 에 있다 — `ignoreHtmlClass: ".*|"` 와
+  `processHtmlClass: "arithmatex"` 로 **`arithmatex` 클래스가 붙은 것만** 처리한다.
+  본문 머리글은 그 래퍼를 받지만 **오른쪽 목차 항목은 받지 못해서**, 거기에는
+  `두 기준은 같은 \(\lambda\)를 고르지 않는다` 가 글자 그대로 찍힌다. 그림의
+  `alt` 속성도 HTML 속성이라 애초에 수식이 될 수 없다. **빌드는 통과하고
+  본문만 보면 멀쩡해서 목차를 봐야 잡힌다**
+
+      ### 두 기준은 같은 $\lambda$를 고르지 않는다     ← 목차가 깨진다
+      ### 두 기준은 같은 λ를 고르지 않는다              ← 이렇게
+      ![alpha는 되풀이했을 때의 비율이다](...)          ← alt 는 LaTeX 불가
+      ![α는 되풀이했을 때의 비율이다](...)              ← 이렇게
+
+  반대로 **쪽지 제목과 `<figcaption>` 은 LaTeX 가 맞다.** 둘은 본문 안이라
+  `arithmatex` 래퍼를 받아 정상으로 렌더된다(`!!! warning "$\sigma^2$의 추정"`).
+  ASCII 로 `sigma` 라 적지 말 것. 다만 sklearn 인자 이름처럼 **식별자**를
+  가리킬 때는 역따옴표가 맞다(`` `alpha` 라는 이름의 두 가지 의미 ``)
 - `\$` for currency, never bare `$`
 - QED: `$\square$`
 - Every content page ends with `## Exercises` (interleaved solutions, collapsible)
@@ -216,6 +233,14 @@ find docs -name '*.py'
 grep -n '\.py' mkdocs.yml
 # 찍는 블록인데 출력이 없는 곳 — 0 이어야 한다 (종료코드로도 알린다)
 python3 tools/lint_outputs.py
+# 머리글의 LaTeX 와 ASCII 그리스 문자 — 목차에 날 문자열로 새어 나간다
+grep -rnE '^#{1,6} .*\$' docs --include='*.md'
+grep -rnE '^#{1,4} .*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)' docs --include='*.md'
+# 그림 대체텍스트의 ASCII 그리스 문자 (alt 속성은 수식이 될 수 없다)
+grep -rnoE '!\[[^]]*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)[^]]*\]' docs --include='*.md'
+# nav 제목과 쪽의 H1 이 어긋나는 곳. 160 곳이 나오지만 거의 다 의도된 것이다
+# (nav 가 'Bernoulli(p)'·'(코드)'·'(재론)' 처럼 구별을 붙인다). 실질이 다른
+# 것만 고를 것 — ASCII 그리스 문자가 한쪽에만 있는 경우가 전형이다
 ```
 
 `lint_outputs.py` 가 거르는 함정 셋을 기억할 것. `def` 안의 `print` 는 정의만으로

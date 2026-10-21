@@ -234,7 +234,7 @@ $\rho > 0$(양의 짝 내 상관)이면 $D$의 분산이 $\sigma_X^2 + \sigma_Y^
     plt.show()
     ```
 
-    ![100 Paired t CIs | n=12, rho=0.6, CL=95%](./img/ci_paired_sim_110.png)
+    ![100 Paired t CIs | n=12, ρ=0.6, CL=95%](./img/ci_paired_sim_110.png)
 
     **읽히는 것 셋.**
 

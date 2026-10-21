@@ -126,7 +126,7 @@ $$\tilde{S}^2 = \frac{n-1}{n}S^2 \approx S^2 \quad (\text{큰 } n \text{에 대�
 
 ---
 
-## 6. mu를 아는 경우
+## 6. μ를 아는 경우
 참 평균 $\mu$가 알려져 있다면(실무에서는 드물다) 다음을 쓸 수 있다:
 
 $$\hat{\sigma}^2_\mu = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2$$

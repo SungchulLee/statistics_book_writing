@@ -574,7 +574,7 @@ $$
 r = \frac{n\left(\sum_{i=1}^n x_i y_i\right) - \left(\sum_{i=1}^n x_i\right)\left(\sum_{i=1}^n y_i\right)}{\sqrt{\left[n\sum_{i=1}^n x_i^2 - \left(\sum_{i=1}^n x_i\right)^2\right]\left[n\sum_{i=1}^n y_i^2 - \left(\sum_{i=1}^n y_i\right)^2\right]}}
 $$
 
-### Pearson rho의 해석
+### Pearson ρ의 해석
 
 | 범위 | 해석 |
 |-------|---------------|
