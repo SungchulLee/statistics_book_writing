@@ -414,8 +414,6 @@ $Z \approx 2.309$, 양측 $p$값은 약 $0.021$이다.
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

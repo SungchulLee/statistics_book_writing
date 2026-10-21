@@ -285,9 +285,8 @@ nav:
                 - 대응 설계와 독립 설계 중 무엇을 쓸 것인가: ch08/paired_sample_intervals/paired_vs_independent.md
                 - 비율의 대응 구간 (McNemar): ch08/paired_sample_intervals/ci_paired_proportions.md
             - 8.5 표본크기의 결정:
-                - 원하는 오차한계를 위한 표본크기: ch08/sample_size/margin_of_error.md
-                - 두 집단 비교를 위한 표본크기: ch08/sample_size/two_group_sample_size.md
                 - 표본크기 계산: ch08/sample_size/sample_size.md
+                - 두 집단 비교를 위한 표본크기: ch08/sample_size/two_group_sample_size.md
 
         - 9 가설검정:
             - 장 개요: ch09/index.md

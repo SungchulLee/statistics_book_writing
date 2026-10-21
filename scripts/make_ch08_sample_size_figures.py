@@ -49,7 +49,7 @@ def clean_axis(ax):
     ax.spines[["left", "bottom"]].set_color(MUTED)
 
 
-# === 그림 1. 역제곱 법칙 (margin_of_error.md) ====================
+# === 그림 1. 역제곱 법칙 (sample_size.md) ========================
 def fig_inverse_square_law():
     sigma = 7.0
 

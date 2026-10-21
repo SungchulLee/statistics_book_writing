@@ -693,8 +693,6 @@ $\varepsilon = 0$에서 세 곡선이 모두 $0.05$에서 출발한다($0.050$, 
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

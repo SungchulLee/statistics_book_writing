@@ -501,8 +501,6 @@ SciPy에서는 함수 호출 한 번으로 끝난다.
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

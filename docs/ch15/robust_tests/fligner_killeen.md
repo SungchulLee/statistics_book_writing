@@ -522,8 +522,6 @@ Fligner-Killeen 검정이 가장 로버스트하지만 엄격한 정규성 아�
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>
