@@ -229,9 +229,12 @@ grep -rhoE '\*\*(그림으로 보는|AI로 보는) 통계학 [0-9]+\.' docs --in
 grep -rnoP '\\(?:text|textbf|textrm|textit|mbox)\{[^{}]*\\[%_&#~^][^{}]*\}' docs --include='*.md'
 ```
 
-**고아 그림·없는 그림 검사** — 대체텍스트에 `]` 가 들어가면(`E[D]` 등) 소박한
-정규식이 끊기므로 `!\[.*?\]\(` 로 비탐욕 매칭할 것. 그림 수와 참조 수가 맞는지
-세어 보는 것이 가장 빠르다.
+**고아 그림·없는 그림 검사** — `python3 tools/lint_figures.py [chNN]`. 양쪽 방향을
+모두 본다. 쪽에서 절을 걷어내면 **고아**가 생기고 그림을 옮기면 **없는 그림**이
+생기는데, PNG 가 커밋되어 있으면 `--strict` 가 아무 말도 하지 않는다. 이 세션에
+두 번 놓쳤다 — 5.1 의 338줄을 덜어 낼 때와 `coverage.md` 의 보기 둘을 걷어낼 때다.
+직접 쓸 때는 대체텍스트에 `]` 가 들어가면(`E[D]`, `100 t CIs | n=10` 등) 소박한
+정규식이 끊기므로 `!\[.*?\]\(` 로 비탐욕 매칭할 것.
 
 ### Add a Python example
 1. 쪽 안의 ```` ```python ```` 펜스에 쓴다. `.py` 파일을 만들지 않는다
@@ -247,6 +250,8 @@ find docs -name '*.py'
 grep -n '\.py' mkdocs.yml
 # 찍는 블록인데 출력이 없는 곳 — 0 이어야 한다 (종료코드로도 알린다)
 python3 tools/lint_outputs.py
+# 고아 그림과 없는 그림 — 둘 다 0 이어야 한다
+python3 tools/lint_figures.py
 # 머리글의 LaTeX 와 ASCII 그리스 문자 — 목차에 날 문자열로 새어 나간다
 grep -rnE '^#{1,6} .*\$' docs --include='*.md'
 grep -rnE '^#{1,4} .*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)' docs --include='*.md'
