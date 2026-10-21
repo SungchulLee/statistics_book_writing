@@ -269,7 +269,7 @@ nav:
             - 장 개요: ch08/index.md
             - 8.1 기초:
                 - 신뢰수준과 포함확률: ch08/foundations/coverage.md
-                - 해석과 흔한 함정: ch08/foundations/interpretation.md
+                - 해석과 흔한 오해: ch08/foundations/interpretation.md
                 - 신뢰구간 시연: ch08/foundations/confidence_intervals.md
                 - 오차막대 그림: ch08/foundations/error_bars.md
             - 8.2 일표본 구간:
