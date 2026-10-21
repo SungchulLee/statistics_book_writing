@@ -147,7 +147,7 @@ def fig_t_vs_z_cost():
     save(fig, "t_vs_z_cost.png")
 
 
-# === 그림 2. 너비 차이를 둘로 쪼갠다 (ci_mean_calc.md) ===========
+# === 그림 2. 너비 차이를 둘로 쪼갠다 (ci_mu.md) =================
 def fig_width_decomposition():
     n, xbar = 25, 3.2
     s, sigma = 1.1, 1.0
@@ -360,7 +360,7 @@ def fig_wald_vs_wilson():
     save(fig, "wald_vs_wilson_n20.png")
 
 
-# === 그림 4. 보장과 너비의 맞바꿈 (ci_prop_calc.md) ==============
+# === 그림 4. 보장과 너비의 맞바꿈 (ci_p.md) =====================
 def fig_four_methods_tradeoff():
     n, k = 50, 12
     z = norm.ppf(0.975)
