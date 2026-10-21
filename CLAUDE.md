@@ -4,8 +4,9 @@ This file provides guidance to Claude Code when working with code in this reposi
 
 ## Project Overview
 
-MkDocs Material documentation site for a mathematical textbook. Content uses LaTeX (MathJax)
-and includes Python example scripts. Three specialized review/write agents live in `agents/`;
+MkDocs Material documentation site for a mathematical textbook. Content uses LaTeX (MathJax).
+Python 코드는 **쪽 안의 펜스 블록에만** 있다 — `docs/` 아래에 `.py` 파일은 없다
+(아래 「코드는 쪽 안에」). Three specialized review/write agents live in `agents/`;
 their full instructions are in `agents/SKILL.md`.
 
 ## Build Commands
@@ -44,10 +45,8 @@ book_name/
     └── chapter_name/
         ├── index.md
         └── section_name/
-            ├── topic.md
-            ├── topic.py
-            ├── module/__init__.py
-            └── figures/
+            ├── topic.md          ← 코드도 이 안에 (출력까지)
+            └── img/*.png         ← scripts/make_*.py 가 그린 그림
 ```
 
 ## Agent Commands (Quick Reference)
@@ -71,6 +70,7 @@ book_name/
 | `<name>.md` | ✅ committed | ✅ published |
 | `<name>_score.md` | ✅ committed | ❌ excluded via `mkdocs.yml` |
 | `<name>_v[0-9]*.md` | ❌ gitignored | ❌ never built |
+| `docs/**/*.py` | ❌ 만들지 않는다 | ❌ excluded via `mkdocs.yml` |
 
 `.gitignore` entry: `docs/**/*_v[0-9]*.md`
 
@@ -79,7 +79,12 @@ book_name/
 exclude_docs: |
   *_score.md
   *_v[0-9]*.md
+  *.py
 ```
+
+마지막 줄은 **안전망이다.** nav 에 없는 파일도 MkDocs 는 `site/` 로 그대로 복사하므로,
+검증용으로 잠깐 만든 `docs/ch11/_c.py` 같은 스크래치가 `/ch11/_c.py` 로 공개된 적이 있다.
+검증 스크립트는 `docs/` 밖(스크래치 디렉터리)에서 돌리고, 끝나면 코드와 출력을 쪽에 옮긴다.
 
 Commit after `update` — stage only `<name>.md` and `<name>_score.md`:
 ```bash
@@ -89,8 +94,7 @@ git commit -m "update: <name>"
 
 ## Navigation Structure
 
-Nav hierarchy: **Parts → Chapters → Sections → Pages**. Nav entries point to `.md` and `.py`
-files only.
+Nav hierarchy: **Parts → Chapters → Sections → Pages**. Nav entries point to `.md` files only.
 
 ```yaml
 nav:
@@ -113,7 +117,22 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
 - `\$` for currency, never bare `$`
 - QED: `$\square$`
 - Every content page ends with `## Exercises` (interleaved solutions, collapsible)
-- Python: module docstring · `# ===` dividers · `if __name__ == "__main__":` guard
+- **코드는 쪽 안에** — `docs/` 아래에 `.py` 파일을 만들지 않는다. 코드는 쪽의
+  ```` ```python ```` 펜스에 넣고, **찍는 것이 있으면 바로 아래에 출력을 붙인다**:
+
+      ```python
+      print(f"T = {T:.4f}, p = {p:.4f}")
+      ```
+
+      출력:
+
+      ```
+      T = 1.3070, p = 0.5202
+      ```
+
+  출력은 **실제로 돌려 받은 것**을 붙인다. 손으로 적으면 코드를 고칠 때 어긋나고,
+  어긋나도 빌드는 통과한다. 검사 도구는 `tools/verify_outputs`·`tools/resync_output`
+- 그림 그리는 코드만 예외로 `scripts/make_*.py` 에 둔다. 쪽에는 PNG 만 들어간다
 - 두 연재 상자 — `<div class="storybox">` 「그림으로 보는 통계학」(호박·점선),
   `<div class="aibox">` 「AI로 보는 통계학」(청록·왼쪽 띠). 증명·문항 사이클 밖이며
   이야기하는 정의/정리 **바로 뒤**에 놓는다. 전체 규칙은 `agents/SKILL.md`
@@ -136,8 +155,8 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
 ## Common Tasks
 
 ### Add a new section
-1. Create `docs/chapter_name/section_name/` with `.md`/`.py` files
-2. Add nav entries to `mkdocs.yml` (`.md` and `.py` only)
+1. Create `docs/chapter_name/section_name/` with `.md` files (코드는 그 안의 펜스에)
+2. Add nav entries to `mkdocs.yml` (`.md` only)
 
 ### Add a new chapter
 1. Create `docs/chapter_name/` with `index.md` and section subdirectories
@@ -184,5 +203,15 @@ grep -rnoP '\\(?:text|textbf|textrm|textit|mbox)\{[^{}]*\\[%_&#~^][^{}]*\}' docs
 세어 보는 것이 가장 빠르다.
 
 ### Add a Python example
-1. Create `.py` in the relevant section directory
-2. Educational style: module docstring, `# ===` dividers, `if __name__ == "__main__":` guard
+1. 쪽 안의 ```` ```python ```` 펜스에 쓴다. `.py` 파일을 만들지 않는다
+2. 돌려서 실제 출력을 받고, 「출력:」 블록으로 바로 아래에 붙인다
+3. 검증용 스크립트가 필요하면 `docs/` **밖**(스크래치)에서 돌리고 쪽으로 옮긴 뒤 버린다
+
+확인 명령:
+
+```bash
+# docs/ 아래에 .py 가 생기지 않았는지 — 하나도 없어야 한다
+find docs -name '*.py'
+# nav 에 .py 항목이 없는지
+grep -n '\.py' mkdocs.yml
+```

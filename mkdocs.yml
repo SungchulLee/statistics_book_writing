@@ -850,6 +850,7 @@ nav:
 exclude_docs: |
   *_score.md
   *_v[0-9]*.md
+  *.py
 
 plugins:
     - search
