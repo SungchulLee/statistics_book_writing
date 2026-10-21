@@ -1,4 +1,4 @@
-# Kendall의 τ (재론)
+# Kendall의 타우 (재론)
 
 Kendall 순위상관계수 $\tau$는 [12장](../../ch12/correlation/kendall.md)에서 일치도 기반 단조 연관성 측도로 소개되었다. 이 절에서는 비모수 검정의 관점에서 $\tau$를 다시 보며, 부합/비부합 틀, 가설검정, 동점 처리, 그리고 [Spearman $r_s$](spearman.md)와의 비교를 다룬다.
 
@@ -16,12 +16,12 @@ $n$개의 대응 관측값 $(X_1, Y_1), \ldots, (X_n, Y_n)$에서 $i < j$인 모
 
 ---
 
-## 2. Kendall τ
+## 2. Kendall의 타우
 
 
 <div class="defn" markdown>
 
-### 정의 1. Kendall tau-a (동점 없음) { .dfn }
+### 정의 1. Kendall의 타우-a (동점 없음) { .dfn }
 
 동점이 없을 때
 
@@ -35,7 +35,7 @@ $$
 
 <div class="defn" markdown>
 
-### 정의 2. Kendall tau-b (동점 있음) { .dfn }
+### 정의 2. Kendall의 타우-b (동점 있음) { .dfn }
 
 동점이 있으면 tau-b가 분모를 조정한다.
 
@@ -198,7 +198,7 @@ $i < j$인 각 쌍에 대해 $(R_i - R_j)$와 $(S_i - S_j)$의 부호가 같은�
 
 ---
 
-## 5. 언제 Kendall τ를 선호하는가
+## 5. 언제 Kendall의 타우를 선호하는가
 
 - **표본크기가 작을 때** --- $\tau$의 정확분포가 $r_s$의 것보다 다루기 쉽다.
 - **동점이 많을 때** --- tau-b가 Spearman의 중간순위 조정보다 동점을 자연스럽게 처리한다.

@@ -650,8 +650,8 @@ nav:
                 - Mood 중앙값검정: ch16/multi_group_nonparametric/median_test.md
                 - 사후 Dunn 검정: ch16/multi_group_nonparametric/dunn.md
             - 16.6 비모수 상관:
-                - Spearman의 ρ (재론): ch16/correlation/spearman.md
-                - Kendall의 τ (재론): ch16/correlation/kendall.md
+                - Spearman 순위상관 (재론): ch16/correlation/spearman.md
+                - Kendall의 타우 (재론): ch16/correlation/kendall.md
 
         - 17 재표집 방법:
             - 장 개요: ch17/index.md
