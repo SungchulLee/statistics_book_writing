@@ -340,7 +340,7 @@ Bayes 추론에는 `pymc` 패키지를 쓴다(과거의 `pymc3`는 더 이상 �
     $$
     \operatorname{median}(\rho) = \frac{b_1}{b_2},
     \qquad
-    \text{95\% 신용구간} = \frac{b_1}{b_2}\left[F_{0.025}(2a,2a),\; F_{0.975}(2a,2a)\right],
+    95\%\ \text{신용구간} = \frac{b_1}{b_2}\left[F_{0.025}(2a,2a),\; F_{0.975}(2a,2a)\right],
     $$
 
     $$

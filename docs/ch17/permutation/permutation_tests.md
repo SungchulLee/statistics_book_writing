@@ -400,7 +400,7 @@ $$
     난수를 하나만 쓰면 이 쪽의 흐름이 이렇게 된다.
 
     $$
-    \underbrace{\text{page\_a, page\_b}}_{76\text{개}}
+    \underbrace{\text{page_a, page_b}}_{76\text{개}}
     \;\to\;
     \underbrace{\text{순열 } B \text{번}}_{B \times 76\text{개}}
     \;\to\;

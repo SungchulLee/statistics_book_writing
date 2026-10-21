@@ -1859,7 +1859,7 @@ $$
 **연습문제 2.** <span class="diff med" title="중간"></span>
 주택 자료를 써서 다음을 하라.
 
-**(a)** $x = \text{df.median\_income}$, $y = \text{df.median\_house\_value}$로 회귀직선을 그려라.
+**(a)** $x = \text{df.median_income}$, $y = \text{df.median_house_value}$로 회귀직선을 그려라.
 
 **(b)** `median_income`이 8일 때 `median_house_value`의 회귀 예측값을 계산하라.
 

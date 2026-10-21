@@ -543,7 +543,7 @@ $1$ 이 되었다.
     응답자 200명만 보면
 
     $$
-    \hat p = 0.55, \quad \operatorname{SE} = \sqrt{\frac{0.55\times0.45}{200}} = 0.0352, \quad \text{95\% CI} = (0.481,\ 0.619)
+    \hat p = 0.55, \quad \operatorname{SE} = \sqrt{\frac{0.55\times0.45}{200}} = 0.0352, \quad 95\%\ \text{CI} = (0.481,\ 0.619)
     $$
 
     이다.
