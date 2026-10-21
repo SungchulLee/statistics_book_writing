@@ -191,10 +191,10 @@ $$
     sigma 를 아는 z, sigma 자리에 s 를 꽂아 넣은 z, 그리고 t 세 가지다.
     가운데 방법이 왜 명목수준에 못 미치는지가 이 모의실험의 요점이다.
 
-    Usage:
-        python mean_ci_simulation.py --method t --n-sim 100 --n 10 --alpha 0.05
-        python mean_ci_simulation.py --method z_known --sigma 1.0
-        python mean_ci_simulation.py --method z_plugin --N 500  # with FPC
+    아래 파서가 받는 인자를 바꿔 가며 돌린다. 기본값은 (3) 의 그림을 낸다.
+        --method t --n-sim 100 --n 10 --alpha 0.05
+        --method z_known --sigma 1.0
+        --method z_plugin --N 500      # N 을 주면 FPC 가 켜진다
     """
 
     import argparse
@@ -353,8 +353,7 @@ $$
     Wald 는 교과서에 가장 먼저 나오지만 실제 포함확률이 가장 나쁘다.
     Wilson 과 Agresti-Coull 이 그 대안이고, Clopper-Pearson 은 보수적이다.
 
-    Usage:
-        python proportion_ci_simulation.py  # defaults to Wald
+    아래 method 변수를 'wald' | 'wilson' | 'ac' | 'cp' 로 바꿔 가며 돌린다.
     """
 
     import numpy as np
