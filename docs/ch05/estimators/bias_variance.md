@@ -10,7 +10,7 @@
 
 ## 1. 편향과 분산
 
-맞바꿈의 바탕은 [평균제곱오차](mse.md) 정리 1 의 분해 $\operatorname{MSE} = \operatorname{Var} + \operatorname{Bias}^2$ 이고, 그 증명이 두 항이 **제곱으로 합쳐진다**는 것을 보인다. 합이 제곱의 합이므로 한쪽을 조금 늘려 다른 쪽을 많이 줄이면 전체가 줄어들 수 있다 — 이 틈이 아래의 모든 이야기다.
+맞바꿈을 말하려면 맞바꿀 두 양을 먼저 따로 세워야 한다. 추정량이 참값에서 **체계적으로** 빗나가는 정도와, 표본이 바뀔 때 **요동치는** 정도다. 둘을 하나로 묶는 일은 다음 절에서 한다.
 
 
 <div class="defn" markdown>
@@ -115,31 +115,13 @@ $$\text{Var}(\hat{\theta}) = E\left[(\hat{\theta} - E[\hat{\theta}])^2\right]$$
 
 ## 2. 편향–분산 분해
 
-추정량 $\hat{\theta}$의 **평균제곱오차(MSE)**는 편향 성분과 분산 성분으로 분해된다:
-
-$$\text{MSE}(\hat{\theta}) = E\left[(\hat{\theta} - \theta)^2\right]$$
-
-**유도:** $\mu = E[\hat{\theta}]$라 하자. 그러면:
-
-$$\text{MSE}(\hat{\theta}) = E\left[(\hat{\theta} - \theta)^2\right]$$
-
-$\mu$를 더하고 빼면:
-
-$$= E\left[(\hat{\theta} - \mu + \mu - \theta)^2\right]$$
-
-제곱을 전개하면:
-
-$$= E\left[(\hat{\theta} - \mu)^2 + 2(\hat{\theta} - \mu)(\mu - \theta) + (\mu - \theta)^2\right]$$
-
-$E[\hat{\theta} - \mu] = 0$이므로 교차항이 사라진다:
-
-$$= E\left[(\hat{\theta} - \mu)^2\right] + (\mu - \theta)^2$$
-
-따라서:
+위의 두 정의를 하나로 묶는 것이 **편향–분산 분해**다.
 
 $$\boxed{\text{MSE}(\hat{\theta}) = \text{Var}(\hat{\theta}) + [\text{Bias}(\hat{\theta})]^2}$$
 
-이것이 **편향–분산 분해**이다. 전체 오차(MSE)의 원천이 정확히 둘, 즉 분산(무작위 요동)과 편향의 제곱(체계적 오차)임을 보여 준다.
+전체 오차의 원천이 정확히 둘 — 분산(무작위 요동)과 편향의 제곱(체계적 오차) — 이라는 뜻이다. 유도는 $E[\hat\theta]$ 를 끼워 넣고 빼면 교차항이 사라지는 두 줄짜리이고, 증명은 [평균제곱오차](mse.md) 정리 1 에 적어 두었다.
+
+이 쪽이 쓰는 것은 결과 하나다. **두 항이 제곱으로 합쳐진다**는 것 — 그래서 한쪽을 조금 늘려 다른 쪽을 많이 줄이면 전체가 줄어들 수 있고, 아래의 모든 이야기가 그 틈에서 나온다.
 
 ---
 
