@@ -10,7 +10,7 @@ $$\chi^2 = \frac{(k-1)s^2}{\sigma_0^2} \sim \chi^2(k-1)$$
 ② 그런데 **모든 조사가 같은 방향으로 틀린 몫**은 이 검정에 전혀 걸리지 않는다.
 ③ 그래서 「$95\%$ 오차한계」가 실제로 덮는 비율이 $68\%$ 로 내려간다.
 
-만드는 파일: docs/ch11/assumptions/img/poll_variance.png
+만드는 파일: docs/ch15/chi_square_test/img/poll_variance.png
 """
 
 import numpy as np
@@ -128,6 +128,6 @@ ax3.legend(loc="upper right", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch11/assumptions/img/poll_variance.png"
+out = "docs/ch15/chi_square_test/img/poll_variance.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

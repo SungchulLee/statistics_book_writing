@@ -209,6 +209,16 @@ doi:$10.1081$/QEN-$120020782$)의 재분석이 전하는 바다. ①–③ 의 �
 
 ## 3. 확인 방법
 
+!!! note "분산 검정의 본격적인 논의는 15장에 있다"
+    이 절은 분산분석을 돌리기 전에 등분산을 **확인하는 데 필요한 만큼만** 다룬다.
+    각 검정의 유도·분포이론·비정규성 민감도·검정력은 15장이 맡는다.
+
+    - 15.2 [분산에 대한 카이제곱 검정](../../ch15/chi_square_test/chi_square_variance.md) — 일표본 $\sigma^2$
+    - 15.3 [두 분산 비교를 위한 F 검정](../../ch15/f_test/f_test_two_variances.md) — 이표본
+    - 15.4 [분산의 동일성에 대한 Bartlett 검정](../../ch15/bartlett_test/bartlett_test.md) — $k \ge 2$, 정규 가정
+    - 15.5 [Levene 검정](../../ch15/robust_tests/levene.md) — $k \ge 2$, 로버스트. Brown-Forsythe·Fligner-Killeen 과의 비교는 15.5 [로버스트 방법의 비교](../../ch15/robust_tests/comparison.md)
+
+
 ### Levene 검정
 
 Levene 검정은 모분산이 집단 사이에서 같다는 귀무가설을 평가한다. Bartlett 검정보다 정규성 이탈에 로버스트하여 실무에서 선호된다.
