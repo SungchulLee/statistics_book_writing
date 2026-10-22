@@ -3,7 +3,7 @@ r"""10장 검정 절 여섯 쪽의 그림을 생성한다.
 만드는 파일:
   ch10/test/img/mcnemar_discordant.png    일치 쌍은 식에 등장하지 않는다
   ch10/test/img/cochran_informative.png   상수 행은 Q 에 아무 기여도 하지 않는다
-  ch10/test/img/gof_scipy_null.png        n=24 의 귀무분포는 계단이다
+  ch10/test/img/gof_exact_null.png        n=24 의 귀무분포는 계단이다
   ch10/test/img/homogeneity_profiles.png  세 모집단의 프로파일과 칸별 기여도
   ch10/test/img/yates_shift.png           예이츠 보정은 통계량을 거의 일정량 깎는다
   ch10/test/img/titanic_permutation.png   우연이 만들 수 있는 표의 범위
@@ -327,7 +327,7 @@ def fig_gof_scipy():
     ax.legend(fontsize=10, frameon=False, loc="upper right")
 
     fig.tight_layout()
-    save(fig, OUT + "gof_scipy_null.png")
+    save(fig, OUT + "gof_exact_null.png")
     print(f"  gof: exact p={p_exact:.4f}, approx p={p_approx:.4f}, "
           f"true alpha at 5.991 = {a_true:.4f}")
 

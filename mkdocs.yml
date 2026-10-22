@@ -328,8 +328,6 @@ nav:
                 - 독립성 검정: ch10/test/independence.md
                 - 독립성 검정 - 타이타닉 생존과 성별: ch10/test/independence_titanic.md
                 - 동질성 검정: ch10/test/homogeneity.md
-                - 카이제곱 적합도 검정 (수동): ch10/test/gof_manual.md
-                - 카이제곱 적합도 검정 (scipy): ch10/test/gof_scipy.md
                 - 독립성 검정 (수동 계산과 그림): ch10/test/independence_manual.md
                 - 독립성 검정 템플릿 함수: ch10/test/independence_template.md
                 - 동질성 검정 (scipy): ch10/test/homogeneity_basic.md
