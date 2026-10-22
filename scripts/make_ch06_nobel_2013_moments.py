@@ -8,13 +8,16 @@ r"""반대되는 두 주장이 같은 해 상을 나눠 가졌다 — $2013$ 년
 ② 십 년 앞 — 같은 설명변수, 같은 자료인데 기울기가 또렷하다.
 ③ 겹치는 표본에서 순진한 $t$ 는 부풀어 있다 — 한센의 $S$ 가 하는 일.
 
-자료: 로버트 실러의 『비이성적 과열』 자료집에서 날짜·실질 총수익지수·CAPE 를
-뽑아 data/shiller_ie/ie_data_extract.csv 로 두었다 (원본은 ie_data.xls).
+자료: 로버트 실러가 공개하는 『비이성적 과열』 자료집 ie_data.xls 다. 저장소에는
+담지 않는다(.gitignore 의 data/). 없으면 이 스크립트가 받아서 세 열만 추려
+data/shiller_ie/ie_data_extract.csv 로 남긴다. 받는 데에만 xlrd 가 든다.
 
 만드는 파일: docs/ch06/estimation_methods/img/nobel_2013_moments.png
 """
 
 import csv
+import os
+import urllib.request
 
 import numpy as np
 import matplotlib
@@ -25,7 +28,32 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-SRC = "data/shiller_ie/ie_data_extract.csv"
+DIR = "data/shiller_ie"
+SRC = f"{DIR}/ie_data_extract.csv"
+XLS = f"{DIR}/ie_data.xls"
+URL = "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
+
+
+def fetch():
+    """ie_data.xls 를 받아 날짜·실질 총수익지수·CAPE 세 열만 남긴다."""
+    import pandas as pd            # 내려받을 때만 든다
+    os.makedirs(DIR, exist_ok=True)
+    if not os.path.exists(XLS):
+        print(f"  {URL} 에서 받는 중...")
+        urllib.request.urlretrieve(URL, XLS)
+    d = pd.ExcelFile(XLS).parse("Data", header=None, skiprows=8)
+    d = d[[5, 9, 12]]
+    d.columns = ["date", "real_tr_price", "cape"]
+    d = d[pd.to_numeric(d["date"], errors="coerce").notna()]
+    for c in d.columns:
+        d[c] = pd.to_numeric(d[c], errors="coerce")
+    d.dropna(subset=["date", "real_tr_price"]).to_csv(
+        SRC, index=False, float_format="%.6f")
+    print(f"  {SRC} 로 추렸다.")
+
+
+if not os.path.exists(SRC):
+    fetch()
 
 rows = list(csv.DictReader(open(SRC)))
 DATE = np.array([float(r["date"]) for r in rows])
