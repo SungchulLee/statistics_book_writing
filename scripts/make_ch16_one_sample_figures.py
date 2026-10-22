@@ -5,7 +5,7 @@ r"""16.2 일표본 비모수 검정 여덟 쪽에 들어가는 개념 그림을 
   ch16/one_sample_nonparametric/img/exact_size_sawtooth.png    정확검정의 실제 크기는 톱니다
   ch16/one_sample_nonparametric/img/symmetry_broken.png        대칭성이 깨지면 크기가 발산한다
   ch16/one_sample_nonparametric/img/runs_lag1_blindspot.png    런 검정은 지연 1 만 본다
-  ch16/one_sample_nonparametric/img/information_ladder.png     세 검정이 보는 정보의 층
+  ch16/foundations/img/information_ladder.png     세 검정이 보는 정보의 층
   ch16/one_sample_nonparametric/img/signed_rank_enumeration.png  귀무분포를 열거로 만든다
   ch16/one_sample_nonparametric/img/normal_vs_exact_tail.png   정규근사가 깎아 먹는 꼬리
   ch16/one_sample_nonparametric/img/runs_null_two_tails.png    런은 적어도 많아도 탈이다
@@ -387,7 +387,8 @@ def information_ladder():
     fig.suptitle("같은 자료를 얼마나 들여다보느냐가 곧 검정의 선택이다",
                  fontsize=13.5, color=INK, y=1.00)
     fig.tight_layout(rect=(0, 0, 1, 0.965))
-    save(fig, "information_ladder.png")
+    fig.savefig("docs/ch16/foundations/img/information_ladder.png", dpi=170,
+                facecolor="white", bbox_inches="tight")  # 16.1 ranks.md 가 쓴다
     print("ladder p: t %.4f  w %.4f  sign %.4f" % (p_t, p_w, p_s))
 
 
