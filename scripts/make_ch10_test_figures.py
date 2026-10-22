@@ -5,7 +5,7 @@ r"""10장 검정 절 여섯 쪽의 그림을 생성한다.
   ch10/test/img/cochran_informative.png   상수 행은 Q 에 아무 기여도 하지 않는다
   ch10/test/img/gof_exact_null.png        n=24 의 귀무분포는 계단이다
   ch10/test/img/homogeneity_profiles.png  세 모집단의 프로파일과 칸별 기여도
-  ch10/test/img/yates_shift.png           예이츠 보정은 통계량을 거의 일정량 깎는다
+  ch10/test/img/independence_yates_shift.png           예이츠 보정은 통계량을 거의 일정량 깎는다
   ch10/test/img/titanic_permutation.png   우연이 만들 수 있는 표의 범위
 
 실행:  python3 scripts/make_ch10_test_figures.py   (저장소 최상위에서)
@@ -476,7 +476,7 @@ def fig_yates_shift():
     ax.legend(fontsize=10, frameon=False, loc="center right")
 
     fig.tight_layout()
-    save(fig, OUT + "yates_shift.png")
+    save(fig, OUT + "independence_yates_shift.png")
     print(f"  yates: plain {plain[0]:.4f} p {plain[1]:.4f} | "
           f"yates {yates[0]:.4f} p {yates[1]:.4f} | gap {cp - cy}")
 

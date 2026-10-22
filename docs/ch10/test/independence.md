@@ -499,6 +499,32 @@ $$
 
 ---
 
+### 예이츠 보정이 깎아 가는 양
+
+보기 $2$ 의 (2)가 보정이 **자유도 $1$ 에서만** 켜진다는 것을 보였다. 그러면 켜졌을 때
+얼마나 깎는가. $2 \times 2$ 표에서 보정은 각 항의 이탈에서 $0.5$ 를 깎는다.
+
+$$
+\chi^2_{\text{Yates}} = \sum_{i=1}^{2}\sum_{j=1}^{2} \frac{(\lvert O_{ij} - E_{ij}\rvert - 0.5)^2}{E_{ij}}
+$$
+
+표 $\begin{pmatrix} 10 & 5 \\ 3 & 12 \end{pmatrix}$ 로 재어 보면 보정 없이
+$\chi^2 = 1470/221 = 6.651584$ 이고 보정하면 $1080/221 = 4.886878$ 이다. 차가
+$1.764706$ 이다.
+
+
+![예이츠 보정이 만드는 두 꼬리넓이의 차이와, 표를 키워도 깎이는 양이 1.8 근처에 머문다는 것을 보이는 그림](./img/independence_yates_shift.png)
+
+왼쪽 (가)는 $\chi^2_1$ 밀도의 오른쪽 꼬리를 확대한 것이다. 보정을 걸지 않은 6.65에서 오른쪽으로 뻗은 파란 꼬리의 넓이가 0.0099이고, 보정을 건 4.89까지 왼쪽으로 넓힌 주황 띠를 더하면 0.0271이 된다. 통계량이 1.76 줄었을 뿐인데 p-값은 2.7배가 되었다. 꼬리가 가파르게 얇아지는 구간이라 통계량의 작은 이동이 p-값에서는 크게 증폭되는 것이다.
+
+이 구간에는 1% 임계값 6.635가 들어 있다. 보정 없이는 6.65로 간신히 그 선을 넘고, 보정하면 4.89로 한참 미치지 못한다. `correction` 인자를 어떻게 두었는지 모른 채 "$\alpha = 0.01$에서 기각"이라고 적으면 그 문장의 진위가 기본값 하나에 달리게 된다. 템플릿 함수에서 기본값을 명시적으로 `False`로 못 박아 둔 이유가 여기에 있다.
+
+오른쪽 (나)는 이 걱정이 언제 필요한지를 알려 준다. 칸 비율을 그대로 둔 채 표를 $n = 30$에서 240까지 키우면 두 통계량 모두 $n$에 비례해 커지지만 **둘의 간격은 1.76에서 1.88로 거의 변하지 않는다.** 보정이 각 칸의 이탈에서 0.5씩만 덜어 내기 때문이다. 깎이는 양이 상수에 가깝다는 것은 곧, 통계량이 50이나 되는 큰 표에서는 1.88이 아무것도 아니고 통계량이 5 근처인 작은 표에서는 결정적이라는 뜻이다.
+
+정리하면 예이츠 보정은 "작은 표에서만 중요한" 것이 아니라 "통계량이 임계값 근처일 때만 중요한" 것이다. 두 조건은 보통 같이 오지만 항상 그렇지는 않다. 그리고 그 근처에 있다면, 애초에 결론을 한 번의 카이제곱 검정에 걸지 말고 [Fisher의 정확검정](../practice/fisher_exact.md)까지 함께 보는 편이 낫다.
+
+---
+
 > **출처**: [Khan Academy — Chi-Square Test Association Independence](https://www.khanacademy.org/math/ap-statistics/chi-square-tests/chi-square-tests-two-way-tables/v/chi-square-test-association-independence)
 
 <div class="exbox" markdown>
@@ -1926,6 +1952,307 @@ $2 \times 2$ 표에 대한 **오즈비**. 흡연 × 암 = (50, 30) 대 (10, 100)
     2. **한쪽만 순서형**이면 코크런·아미티지 추세검정(앞 절).
     3. **모양을 모르면 둘 다 계산하되, 어느 것을 주 결과로 삼을지 사전에 정한다.**
     4. **일반 검정이 유의한데 선형-선형이 아니면** 비단조 구조를 의심하고 **잔차를 본다.**
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span>
+Yates 보정 통계량이 언제나 보정하지 않은 통계량보다 작거나 같음을 증명하라.
+
+</div>
+
+??? success "풀이"
+
+    임의의 칸 $(i,j)$에 대해 $d_{ij} = |O_{ij} - E_{ij}|$라 하자. 보정하지 않은 기여는 $d_{ij}^2 / E_{ij}$이고, Yates 보정 기여는 $(\max(d_{ij} - 0.5, 0))^2 / E_{ij}$이다.
+
+    모든 $d_{ij} \ge 0$에 대해 $\max(d_{ij} - 0.5, 0) \le d_{ij}$이므로
+
+    $$
+    \frac{(\max(d_{ij} - 0.5, 0))^2}{E_{ij}} \le \frac{d_{ij}^2}{E_{ij}}
+    $$
+
+    이다. 모든 칸에 대해 합하면
+
+    $$
+    \chi^2_{\text{Yates}} = \sum_{i,j} \frac{(\max(|O_{ij} - E_{ij}| - 0.5, 0))^2}{E_{ij}} \le \sum_{i,j} \frac{(O_{ij} - E_{ij})^2}{E_{ij}} = \chi^2
+    $$
+
+    이 되어, 보정 통계량은 언제나 보정하지 않은 것보다 작거나 같고 따라서 검정이 더 보수적이 된다(p-값이 커진다). $\square$
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span>
+통계량 하나는 **어느 칸이 그것을 만들었는지** 말해 주지 않는다. 위 절의 표 $\begin{pmatrix} 10 & 5 \\ 3 & 12 \end{pmatrix}$ 에 대해 표준화 잔차 $(O_{ij} - E_{ij})/\sqrt{E_{ij}}$ 와 조정 잔차를 칸마다 구하고, 어느 칸이 통계량에 가장 많이 기여하는지 밝혀라. $\sum_{i,j} R_{ij}^2 = \chi^2$ 으로 검산하시오.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    tab = np.array([[10, 5], [3, 12]], float)
+    chi2, p, df, exp = stats.chi2_contingency(tab, correction=False)
+    n = tab.sum()
+    rp, cp = tab.sum(1) / n, tab.sum(0) / n
+
+    resid = (tab - exp) / np.sqrt(exp)
+    adj = (tab - exp) / np.sqrt(exp * np.outer(1 - rp, 1 - cp))
+    contrib = (tab - exp)**2 / exp
+
+    print(f"χ² = {chi2:.4f},  df = {df},  p = {p:.4f}")
+    print(f"기대도수\n{np.round(exp, 4)}")
+    print(f"\n표준화 잔차\n{np.round(resid, 4)}")
+    print(f"조정 잔차\n{np.round(adj, 4)}")
+    print(f"χ² 기여율(%)\n{np.round(contrib / chi2 * 100, 2)}")
+    print(f"\n검산  ΣR² = {np.sum(resid**2):.4f}   (= χ²)")
+    ```
+
+    ```text
+    χ² = 6.6516,  df = 1,  p = 0.0099
+    기대도수
+    [[6.5 8.5]
+     [6.5 8.5]]
+
+    표준화 잔차
+    [[ 1.3728 -1.2005]
+     [-1.3728  1.2005]]
+    조정 잔차
+    [[ 2.5791 -2.5791]
+     [-2.5791  2.5791]]
+    χ² 기여율(%)
+    [[28.33 21.67]
+     [28.33 21.67]]
+
+    검산  ΣR² = 6.6516   (= χ²)
+    ```
+
+    **$2\times2$ 표의 특징 셋이 한눈에 보인다.**
+
+    **1 — 조정 잔차가 네 칸 모두 크기가 같다**($|2.5791|$). 자유도가 1이므로 **독립적인 정보가 하나뿐**이다. $\chi^2=2.5791^2=6.6516$으로, 조정 잔차 하나가 통계량 전체를 결정한다.
+
+    **2 — 기여율은 균등하지 않다**(28.3% 대 21.7%). 기대도수가 6.5와 8.5로 다르기 때문이다. $(O-E)$는 네 칸 모두 $\pm3.5$로 같은데 $E$가 다르다.
+
+    **3 — 따라서 $2\times2$에서 "어느 칸이 문제인가"는 의미 없는 질문**이다. 한 칸이 크면 대각선 방향의 칸도 크고 나머지 둘은 작다. **표 전체가 하나의 이야기**다.
+
+    **$2\times2$에서는 무엇을 보고할까.**
+
+    ```python
+    a, b, c, d = tab.ravel()
+    p1, p2 = a / (a + b), c / (c + d)
+    print(f"행별 비율: {p1:.4f} 대 {p2:.4f}   차이 {p1 - p2:+.4f}")
+    print(f"오즈비 {(a * d) / (b * c):.4f}")
+    odds, p_f = stats.fisher_exact(tab)
+    print(f"피셔 정확검정 p = {p_f:.4f}   (카이제곱 p = {p:.4f})")
+    ```
+
+    ```text
+    행별 비율: 0.6667 대 0.2000   차이 +0.4667
+    오즈비 8.0000
+    피셔 정확검정 p = 0.0253   (카이제곱 p = 0.0099)
+    ```
+
+    **오즈비 8.0과 비율 차이 0.467이 잔차보다 훨씬 유익하다.**
+
+    **피셔 정확검정의 $p$가 2.6배 크다**(0.0253 대 0.0099). $n=30$으로 작고 기대도수가 6.5까지 내려가므로, **정확검정 쪽을 믿는 것이 안전**하다.
+
+    **결론.** 잔차 분석은 $3\times3$ 이상에서 쓰는 도구다. $2\times2$에서는 **오즈비와 비율 차이, 그리고 정확검정**이 답이다.
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff med" title="중간"></span>
+손으로 짠 계산 코드가 **수치적으로 안전한지** 점검하라. 큰 수, 0인 칸, 대수적으로 같은 두 표현의 차이를 확인한다.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    print("① 도수의 규모가 커지면")
+    base = np.array([[934., 1070.], [113., 92.], [20., 8.]])
+    for scale in [1, 1e3, 1e6]:
+        c, p, df, _ = stats.chi2_contingency(base * scale, correction=False)
+        print(f"  ×{scale:>8.0e}:  χ² = {c:14.4f},  p = {p:.6g}")
+
+    print("\n② 0 인 칸이 있으면")
+    cases = [np.array([[10., 0.], [5., 15.]]),
+             np.array([[10., 0.], [0., 15.]]),
+             np.array([[10., 5., 0.], [5., 10., 0.]])]
+    for T in cases:
+        try:
+            c, p, df, _ = stats.chi2_contingency(T, correction=False)
+            print(f"  {T.astype(int).tolist()}:  χ² = {c:.4f}, df = {df}, "
+                  f"p = {p:.4f}")
+        except Exception as e:
+            print(f"  {T.astype(int).tolist()}:  {type(e).__name__}")
+            print(f"    {e}")
+
+    print("\n③ 대수적으로 같은 두 표현")
+    T = np.array([[1e6 + 3, 1e6], [1e6, 1e6]])
+    exp = np.outer(T.sum(1), T.sum(0)) / T.sum()
+    form_a = np.sum((T - exp)**2 / exp)
+    form_b = np.sum(T**2 / exp) - T.sum()
+    print(f"  (O−E)²/E 의 합  = {form_a:.12f}")
+    print(f"  O²/E − n        = {form_b:.12f}")
+    print(f"  차이 = {abs(form_a - form_b):.3e}")
+    ```
+
+    ```text
+    ① 도수의 규모가 커지면
+      ×   1e+00:  χ² =        11.8061,  p = 0.00273105
+      ×   1e+03:  χ² =     11806.1347,  p = 0
+      ×   1e+06:  χ² =  11806134.6670,  p = 0
+
+    ② 0 인 칸이 있으면
+      [[10, 0], [5, 15]]:  χ² = 15.0000, df = 1, p = 0.0001
+      [[10, 0], [0, 15]]:  χ² = 25.0000, df = 1, p = 0.0000
+      [[10, 5, 0], [5, 10, 0]]:  ValueError
+        The internally computed table of expected frequencies has a zero element at (0, 2).
+
+    ③ 대수적으로 같은 두 표현
+      (O−E)²/E 의 합  = 0.000002249995
+      O²/E − n        = 0.000002250075
+      차이 = 8.040e-11
+    ```
+
+    **① 통계량이 $n$에 정비례한다.** 도수를 1000배 하면 $\chi^2$도 정확히 1000배다. **$p$ 값이 0으로 언더플로**하므로, 큰 자료에서는 $p$ 대신 $\chi^2$과 효과크기를 보고해야 한다.
+
+    **② 표본 0은 괜찮지만 주변합 0은 안 된다.**
+
+    | 상황 | 결과 |
+    |---|---|
+    | 칸 하나가 0 | 계산 가능 |
+    | 대각선만 채워짐 | 계산 가능 |
+    | **한 열 전체가 0** | **오류** — 그 열을 빼야 한다 |
+
+    **한 열이 통째로 비면 그 범주는 존재하지 않는 것**이므로, 표에서 제거하고 자유도를 다시 계산해야 한다. `scipy`가 오류를 내 주는 것이 다행이다.
+
+    **③ 두 표현의 차이가 유효숫자를 잃게 한다.** 참값이 $2.25\times10^{-6}$인데 $O^2/E-n$ 형태는 여덟째 자리부터 틀린다.
+
+    **왜.** $\sum O^2/E\approx4\times10^6$에서 $n=4\times10^6$을 빼면 **큰 수끼리의 뺄셈**이 일어나 자리수가 소거된다. 반면 $(O-E)^2/E$는 처음부터 작은 수를 다룬다.
+
+    **일반 원칙.** 손으로 짤 때는 **차이를 먼저 계산**한다. 교과서 공식이 "계산이 편한 형태"로 변형되어 있는 경우가 많은데, 그 형태가 수치적으로는 나쁠 수 있다.
+
+    | 나쁨 | 좋음 |
+    |---|---|
+    | $\sum O^2/E-n$ | $\sum(O-E)^2/E$ |
+    | $\sum x^2/n-\bar x^2$ | $\sum(x-\bar x)^2/n$ |
+    | $\log(1+x)$를 직접 | `np.log1p(x)` |
+
+    **점검 방법.** 같은 양을 두 가지 방법으로 계산해 비교해 본다. 차이가 크면 어느 쪽이 안정적인지 따져 본다.
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff med" title="중간"></span>
+기대표를 `obs.sum(axis=1) @ obs.sum(axis=0) / n` 으로 짜면 **오류가 나지 않고** 엉뚱한 수가 나오는 경우가 있다. `keepdims=True` 를 빼면 정확히 어떤 일이 생기는지 **실행해 확인**하고, 안전한 대안을 제시하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+
+    obs = np.array([[934., 1070.], [113., 92.], [20., 8.]])
+    n = obs.sum()
+
+    row_keep = obs.sum(axis=1, keepdims=True)
+    col_keep = obs.sum(axis=0, keepdims=True)
+    row_flat = obs.sum(axis=1)
+    col_flat = obs.sum(axis=0)
+    print(f"keepdims=True 일 때  행합 모양 {row_keep.shape}, "
+          f"열합 모양 {col_keep.shape}")
+    print(f"keepdims 없이       행합 모양 {row_flat.shape}, "
+          f"열합 모양 {col_flat.shape}\n")
+
+    good = (row_keep @ col_keep) / n
+    print(f"올바른 기대도수 (모양 {good.shape})\n{np.round(good, 2)}")
+
+    try:
+        bad = (row_flat @ col_flat) / n
+        print(f"\nkeepdims 없이: {bad}   ← 스칼라!  모양 {np.shape(bad)}")
+    except Exception as e:
+        print(f"\nkeepdims 없이: {type(e).__name__}: {e}")
+    ```
+
+    ```text
+    keepdims=True 일 때  행합 모양 (3, 1), 열합 모양 (1, 2)
+    keepdims 없이       행합 모양 (3,), 열합 모양 (2,)
+
+    올바른 기대도수 (모양 (3, 2))
+    [[ 955.86 1048.14]
+     [  97.78  107.22]
+     [  13.36   14.64]]
+
+    keepdims 없이: ValueError: matmul: Input operand 1 has a mismatch in its core dimension 0, with gufunc signature (n?,k),(k,m?)->(n?,m?) (size 2 is different from 3)
+    ```
+
+    **이 표에서는 운 좋게 오류가 난다.** 행이 3개, 열이 2개로 길이가 달라 행렬곱이 성립하지 않기 때문이다.
+
+    **정방 표에서는 조용히 틀린 값이 나온다.**
+
+    ```python
+    square = np.array([[30., 20.], [10., 40.]])
+    m = square.sum()
+    r_flat, c_flat = square.sum(axis=1), square.sum(axis=0)
+    r_keep = square.sum(axis=1, keepdims=True)
+    c_keep = square.sum(axis=0, keepdims=True)
+
+    print(f"올바른 기대도수\n{np.round((r_keep @ c_keep) / m, 4)}")
+    print(f"\nkeepdims 없이 @ 를 쓰면: {(r_flat @ c_flat) / m:.4f}  ← 내적(스칼라)")
+    print(f"안전한 대안 np.outer:\n{np.round(np.outer(r_flat, c_flat) / m, 4)}")
+    ```
+
+    ```text
+    올바른 기대도수
+    [[20. 30.]
+     [20. 30.]]
+
+    keepdims 없이 @ 를 쓰면: 50.0000  ← 내적(스칼라)
+    안전한 대안 np.outer:
+    [[20. 30.]
+     [20. 30.]]
+    ```
+
+    **$2\times2$ 표에서는 오류 없이 49.0이라는 스칼라가 나온다.** 그 뒤의 계산이 브로드캐스팅으로 진행되어 **완전히 틀린 결과가 조용히 산출**된다.
+
+    **왜 이런 차이가.** 1차원 배열 두 개에 `@`를 쓰면 numpy는 **내적**으로 해석한다. $(3,)$과 $(2,)$는 길이가 달라 오류가 나지만, $(2,)$와 $(2,)$는 내적이 성립한다.
+
+    **더 안전한 세 가지 대안.**
+
+    ```python
+    r, c = square.sum(axis=1), square.sum(axis=0)
+    print("① np.outer        :", np.allclose(np.outer(r, c) / m,
+                                             (r_keep @ c_keep) / m))
+    print("② 명시적 reshape  :", np.allclose(r.reshape(-1, 1) * c.reshape(1, -1) / m,
+                                             (r_keep @ c_keep) / m))
+    print("③ np.einsum       :", np.allclose(np.einsum('i,j->ij', r, c) / m,
+                                             (r_keep @ c_keep) / m))
+    ```
+
+    ```text
+    ① np.outer        : True
+    ② 명시적 reshape  : True
+    ③ np.einsum       : True
+    ```
+
+    **`np.outer`를 권한다.** 이름이 의도를 그대로 드러내고($\mathbf r\otimes\mathbf c$), 1차원 입력을 받는 것이 자연스러우며, 모양 실수가 일어날 여지가 없다.
+
+    **일반 교훈 셋.**
+
+    1. **모양(shape)을 출력해 보는 습관**을 들인다. 배열 연산 버그의 대부분이 모양 문제다.
+    2. **정방 행렬로만 시험하지 않는다.** $3\times2$처럼 **비정방** 자료로 시험해야 모양 버그가 드러난다.
+    3. **검산을 넣는다.** 기대도수의 행 합·열 합을 확인하면(보기 $1$ 의 (1)) 이런 실수가 즉시 잡힌다.
+
 
 ---
 

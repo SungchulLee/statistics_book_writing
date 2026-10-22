@@ -285,6 +285,7 @@ $$
     ```
     Cochran's Q = 8.6667
     p-value     = 0.0131
+    Reject H0: success rates differ across tasks.
 
     분자  k(k-1)Σ(T_j-T̄)² = 156
     분모  ΣL_i(k-L_i)      = 18   기여하는 사람 9명
