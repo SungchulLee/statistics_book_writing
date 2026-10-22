@@ -665,7 +665,6 @@ nav:
                 - 단일 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/single_mean.md
                 - 두 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/two_means.md
                 - 상관에 대한 붓스트랩 검정: ch17/bootstrap_testing/correlation.md
-                - 붓스트랩 가설검정 (코드): ch17/bootstrap_testing/bootstrap_tests.md
             - 17.4 순열검정:
                 - 순열검정의 기초: ch17/permutation/foundations.md
                 - 이표본 위치에 대한 순열검정: ch17/permutation/two_sample.md
