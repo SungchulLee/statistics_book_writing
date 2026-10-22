@@ -365,7 +365,6 @@ nav:
                 - 모형과 가정: ch11/anova_one_way/one_way_model.md
                 - F-검정 절차: ch11/anova_one_way/f_test.md
                 - 일원배치 분산분석 파이프라인: ch11/anova_one_way/oneway_pipeline.md
-                - scipy를 이용한 일원배치 분산분석과 그림: ch11/anova_one_way/oneway_scipy.md
                 - 분산분석 F-통계량 모의실험: ch11/anova_one_way/anova_f_simulation.md
                 - Fisher 방법을 이용한 분산분석 수동 계산: ch11/anova_one_way/anova_manual_computation.md
             - 11.2 이원배치 분산분석:
