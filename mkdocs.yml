@@ -492,13 +492,9 @@ nav:
             - 14.2 시각적 방법:
                 - 히스토그램과 밀도 그림: ch14/graphical_methods/histogram_density.md
                 - Q-Q 그림: ch14/graphical_methods/qq_plots.md
+                - Q-Q 그림 신뢰띠 모의실험: ch14/graphical_methods/qq_confidence_band.md
                 - 상자그림과 그 해석: ch14/graphical_methods/boxplots.md
                 - 금융 수익률의 Q-Q 그림: ch14/graphical_methods/qq_plots_financial.md
-                - 시각적 정규성 확인: ch14/graphical_methods/graphical_checks.md
-                - Q-Q 그림과 정규성 검정: ch14/graphical_methods/qq_plot_basic.md
-                - Q-Q 그림 신뢰띠 모의실험: ch14/graphical_methods/qq_confidence_band.md
-                - 상자그림으로 보는 분포의 모양: ch14/graphical_methods/boxplot_shapes.md
-                - 금융 수익률의 Q-Q 그림 (코드): ch14/graphical_methods/qq_plot_financial_returns.md
             - 14.3 정규성 지표로서의 기술통계량:
                 - 왜도와 첨도: ch14/descriptive_statistics/skewness_kurtosis.md
                 - 왜도 검정과 첨도 검정: ch14/descriptive_statistics/skewtest_kurtosistest.md
