@@ -375,7 +375,7 @@ nav:
                 - Bonferroni와 Scheffé 방법: ch11/post_hoc/bonferroni_scheffe.md
                 - Dunnett 검정 (대조군과의 비교): ch11/post_hoc/dunnett.md
                 - Games-Howell (분산이 다를 때): ch11/post_hoc/games_howell.md
-                - 사후비교 보기: ch11/post_hoc/post_hoc_comparisons.md
+                - 사후비교 방법의 비교와 검정력: ch11/post_hoc/post_hoc_comparisons.md
             - 11.4 Welch 분산분석:
                 - Welch의 일원배치 분산분석: ch11/anova_welch/welch_one_way.md
                 - Welch의 이원배치 분산분석: ch11/anova_welch/welch_two_way.md
