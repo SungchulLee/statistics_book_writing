@@ -322,7 +322,6 @@ nav:
                 - Bonferroni와 Holm 보정: ch09/multiple_testing/bonferroni_holm.md
                 - 거짓발견율 (Benjamini-Hochberg): ch09/multiple_testing/fdr.md
                 - 다중검정 보정: ch09/multiple_testing/multiple_testing.md
-                - 거짓발견율과 재표본추출 다중검정: ch09/multiple_testing/fdr_resampling_demo.md
 
         - 10 카이제곱 검정:
             - 장 개요: ch10/index.md

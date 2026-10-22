@@ -312,6 +312,178 @@ $$
 - FWER을 통제하는 절차(Bonferroni와 Holm)는 [Bonferroni와 Holm 보정](bonferroni_holm.md)을 보라.
 - BH 절차는 `scipy.stats.false_discovery_control`(SciPy 1.11 이상)과 `statsmodels.stats.multitest.multipletests`에 구현되어 있다.
 
+## 9. 분포를 가정하지 않고 FDR 을 추정하기
+
+BH 절차는 $p$ 값이 귀무가설 아래에서 균등하다는 데 기댄다. 그 가정을 피하는 길이
+하나 있다 — **집단 이름을 뒤섞어 귀무분포를 직접 만들고**, 가능한 모든 문턱에서
+거짓 발견의 기대 수를 세는 것이다.
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 재표본으로 FDR 추정하기. 아래 함수는 집단 이름을 뒤섞어 귀무분포를 만들고, 가능한 모든 문턱 $t$에서
+
+$$
+\widehat{\text{FDR}}(t) = \frac{\hat V(t)}{R(t)},
+\qquad
+\hat V(t) = \frac{1}{B}\sum_{b=1}^{B} \#\{j : \lvert T^{(b)}_j \rvert \ge t\}
+$$
+
+를 돌려준다. 여기서 $R(t) = \#\{j : \lvert T_j \rvert \ge t\}$는 실제 기각 수다.
+
+**(1)** $\hat V(t)$가 무엇을 추정하는지 적고, 특징 $m$개 가운데 $m_0$개가 귀무일 때 이 추정량이 **참 FDR의 몇 배**로 치우치는지 구하시오.
+
+**(2)** 특징 $m = 200$개(앞의 40개만 참 신호, $\delta = 1$, 각 집단 25명)를 만들어 그 치우침을 수로 확인하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 집단 이름을 뒤섞으면 두 집단의 차이가 **모든 특징에서** 지워진다. 신호가 있던 특징도 마찬가지다. 그러므로 순열 통계량 $T^{(b)}_j$는 $j$가 참 신호인지와 무관하게 귀무분포에서 나온 값처럼 행동하고,
+
+    $$
+    E\bigl[\hat V(t)\bigr] \approx m \cdot P_0\bigl(\lvert T \rvert \ge t\bigr) = m\,p(t)
+    $$
+
+    이다. 여기서 $p(t)$는 귀무분포의 양측 꼬리확률이다.
+
+    그런데 **실제로 거짓 양성을 낼 수 있는 특징은 귀무인 $m_0$개뿐이다.** 참 신호가 기각되는 것은 거짓 양성이 아니다. 그러므로 참값은
+
+    $$
+    E[V(t)] = m_0\,p(t)
+    $$
+
+    이고, 두 식을 나누면 치우침이 바로 나온다.
+
+    $$
+    \frac{E[\hat V(t)]}{E[V(t)]} = \frac{m}{m_0} = \frac{1}{\pi_0},
+    \qquad \pi_0 = \frac{m_0}{m}
+    $$
+
+    **이 추정량은 참 FDR을 정확히 $1/\pi_0$배로 과대평가한다.** $t$에 의존하지 않는 상수배라는 점이 중요하다. 꼬리확률 $p(t)$가 분자와 분모에서 그대로 약분되기 때문이다.
+
+    방향이 **보수적**이라는 것도 함께 읽어야 한다. 과대평가이므로 이 추정값으로 문턱을 정하면 실제 FDR은 목표보다 낮다. 참 신호가 드문 상황($\pi_0 \approx 1$)에서는 치우침이 거의 없고, 신호가 많을 때만 손해가 커진다. 고차원 자료에서 $\pi_0$이 보통 0.9를 넘기 때문에 실무에서 이 추정량이 그대로 쓰이는 것이다. 바로잡고 싶으면 $\hat\pi_0$을 곱하면 되는데(스토리의 보정), 그 $\hat\pi_0$을 추정하는 일이 또 다른 문제를 만든다.
+
+    대신 이 방법이 사는 것은 **분포 가정이 전혀 없다**는 점이다. $t$ 분포도 정규성도 쓰지 않고, 특징끼리 상관되어 있어도 순열이 그 상관을 고스란히 보존한 채로 귀무분포를 만든다.
+
+    **(2) 수치적으로.** 먼저 함수다. $t$ 분포도 정규성 가정도 쓰지 않는다는 것이 요점이다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    def resampling_fdr(X_group1, X_group2, n_permutations=500):
+        n1, n2 = X_group1.shape[0], X_group2.shape[0]
+        n_features = X_group1.shape[1]
+        X_combined = np.vstack([X_group1, X_group2])
+
+        # 관측된 검정통계량
+        t_obs = np.array([
+            stats.ttest_ind(X_group1[:, j], X_group2[:, j]).statistic
+            for j in range(n_features)
+        ])
+
+        # 집단 이름을 뒤섞어 만든 귀무분포. 모형을 가정하지 않는다.
+        t_perm = np.zeros((n_permutations, n_features))
+        for b in range(n_permutations):
+            idx = np.random.permutation(n1 + n2)
+            for j in range(n_features):
+                t_perm[b, j] = stats.ttest_ind(
+                    X_combined[idx[:n1], j],
+                    X_combined[idx[n1:], j]
+                ).statistic
+
+        # 문턱마다 FDR을 추정한다.
+        Rs, FDRs = [], []
+        for thresh in np.sort(np.abs(t_obs)):
+            R = np.sum(np.abs(t_obs) >= thresh)       # 실제 기각 수
+            # 순열 자료에서 문턱을 넘은 총 개수를 순열 횟수로 나눈다.
+            # 이것이 "H0가 참일 때 기대되는 기각 수", 즉 E[V]의 추정이다.
+            V = np.sum(np.abs(t_perm) >= thresh) / n_permutations
+            Rs.append(R)
+            FDRs.append(V / max(R, 1))
+        return np.array(Rs), np.array(FDRs)
+    ```
+
+    이제 정답을 아는 자료를 만들어 (1)의 예측과 맞춘다. $m = 200$, $m_0 = 160$이므로 치우침은 $m/m_0 = 1.25$배로 예측된다.
+
+    ```python
+    np.random.seed(0)
+
+    m, m1, n1, n2, delta = 200, 40, 25, 25, 1.0
+    m0 = m - m1
+    truth = np.zeros(m, dtype=int)
+    truth[:m1] = 1                      # 앞의 40개 특징만 참 신호
+
+    X1 = np.random.normal(0.0, 1.0, (n1, m))
+    X2 = np.random.normal(0.0, 1.0, (n2, m))
+    X2[:, :m1] += delta                 # 신호는 집단 2 의 평균을 delta 만큼 옮긴다
+
+    t_obs = np.array([stats.ttest_ind(X1[:, j], X2[:, j]).statistic
+                      for j in range(m)])
+    Rs, FDRs = resampling_fdr(X1, X2, n_permutations=200)
+
+    df = n1 + n2 - 2
+    print(f"m = {m},  m0 = {m0},  m/m0 = {m / m0:.4f},  자유도 = {df}")
+
+    print("\n순열 귀무분포가 t_48 과 맞는가")
+    print("    t     순열 P(|T|>=t)    2*sf(t, 48)")
+    # resampling_fdr 안에서 쓴 것과 같은 순열을 다시 만들 수는 없으므로
+    # 같은 방식으로 새로 200 번 섞어 비교한다.
+    Xc = np.vstack([X1, X2])
+    cnt = np.zeros(4)
+    grid = np.array([1.0, 2.0, 2.5, 3.0])
+    B = 200
+    for b in range(B):
+        idx = np.random.permutation(n1 + n2)
+        tp = np.array([stats.ttest_ind(Xc[idx[:n1], j], Xc[idx[n1:], j]).statistic
+                       for j in range(m)])
+        cnt += [(np.abs(tp) >= g).sum() for g in grid]
+    for g, c in zip(grid, cnt):
+        print(f"{g:5.1f}      {c / (B * m):11.6f}    {2 * stats.t.sf(g, df):11.6f}")
+
+    print("\n   R    문턱    FDR 추정   m*p(t)/R   m0*p(t)/R   비   실현 FDP")
+    thr = np.sort(np.abs(t_obs))
+    for k in range(len(thr)):
+        R = Rs[k]
+        if R not in (200, 100, 60, 50, 40, 30, 20):
+            continue
+        t = thr[k]
+        p_t = 2 * stats.t.sf(t, df)
+        sel = np.abs(t_obs) >= t
+        fdp = np.sum(sel & (truth == 0)) / max(sel.sum(), 1)
+        print(f"{R:4d} {t:7.4f}  {FDRs[k]:9.4f}  {m * p_t / R:9.4f}"
+              f"   {m0 * p_t / R:9.4f}  {m * p_t / (m0 * p_t):5.2f}  {fdp:9.4f}")
+    ```
+
+    출력:
+
+    ```
+    m = 200,  m0 = 160,  m/m0 = 1.2500,  자유도 = 48
+
+    순열 귀무분포가 t_48 과 맞는가
+        t     순열 P(|T|>=t)    2*sf(t, 48)
+      1.0         0.322125       0.322325
+      2.0         0.052850       0.051176
+      2.5         0.016450       0.015890
+      3.0         0.004375       0.004272
+
+       R    문턱    FDR 추정   m*p(t)/R   m0*p(t)/R   비   실현 FDP
+     200  0.0249     0.9807     0.9802      0.7842   1.25     0.8000
+     100  0.9308     0.7107     0.7133      0.5706   1.25     0.6000
+      60  1.5739     0.3944     0.4069      0.3255   1.25     0.3500
+      50  1.8511     0.2711     0.2813      0.2250   1.25     0.2200
+      40  2.1825     0.1635     0.1700      0.1360   1.25     0.0500
+      30  2.9122     0.0350     0.0362      0.0290   1.25     0.0000
+      20  3.5186     0.0065     0.0096      0.0077   1.25     0.0000
+    ```
+
+    **순열 귀무분포가 $t_{48}$과 맞는다.** $t = 2.0$에서 $0.0529$ 대 $0.0512$, $t = 2.5$에서 $0.0165$ 대 $0.0159$로 몬테카를로 오차($B \times m = 40{,}000$개 추출이지만 같은 순열 안의 특징들이 함께 움직이므로 유효 표본은 그보다 작다) 안에서 일치한다. 정규자료라 당연한 결과이지만, 이 일치가 **순열이 올바른 귀무분포를 만들고 있다는 점검**이 된다.
+
+    **치우침이 유도한 그대로다.** 셋째 열(함수가 준 FDR 추정)과 넷째 열($m\,p(t)/R$, 곧 (1)이 예측한 극한)이 거의 겹친다. $R = 200$에서 $0.9807$ 대 $0.9802$, $R = 100$에서 $0.7107$ 대 $0.7133$, $R = 50$에서 $0.2711$ 대 $0.2813$이다. 그리고 넷째 열은 다섯째 열($m_0\,p(t)/R$, 참값)의 정확히 $1.25$배다. **추정량이 참 FDR이 아니라 그것의 $1/\pi_0$배를 재고 있다는 것이 수로 확인된다.**
+
+    마지막 열의 **실현 FDP**는 또 다른 것이다. $R = 40$에서 추정값은 $0.1635$인데 실제로 섞여 들어온 거짓 양성은 2개뿐이어서 $0.05$이고, $R = 30$과 $R = 20$에서는 $0$이다. FDR은 FDP의 **기댓값**이므로 한 번의 실현이 기댓값보다 크거나 작은 것은 이상한 일이 아니다. 특히 기각 수가 적을 때는 FDP가 $0$ 아니면 $1/R$ 꼴로 뚝뚝 끊기므로 한 번의 실현으로 추정값을 반박할 수 없다. **문턱을 고르는 데 쓰는 것은 추정 FDR 곡선이고, 실현 FDP는 모의실험에서만 볼 수 있는 값이다.**
+
+---
+
 ---
 
 ## 연습문제
@@ -455,7 +627,7 @@ BH 절차의 **실제 FDR과 검정력**을 $\pi_1$(참 대립가설의 비율)�
     ```
 
     ```text
-    참 π0 = 0.700,  스토리 추정 = 0.660
+    참 π0 = 0.700,  스토리 추정 = 0.676
     ```
 
     **검정력이 $\pi_1$과 함께 오른다.** $\pi_1=0.01$에서 0.43, $\pi_1=0.30$에서 0.84다. **BH의 문턱이 기각 수에 따라 느슨해지기** 때문이다. 참 신호가 많으면 문턱이 올라가 더 많이 잡아낸다.
@@ -503,10 +675,10 @@ BH와 본페로니의 **검정력**을 같은 조건에서 비교하고, 차이�
     ```
 
     ```text
-        π1    본페로니 검정력    BH 검정력      비
-      0.01          0.2925      0.4455    1.52
-      0.05          0.2868      0.6419    2.24
-      0.10          0.2858      0.7252    2.54
+        π1        본페로니 검정력      BH 검정력      비
+      0.01          0.2913      0.4325   1.48
+      0.05          0.2873      0.6409   2.23
+      0.10          0.2950      0.7320   2.48
     ```
 
     **BH가 1.5~2.5배 강력하다.** $\pi_1$이 클수록 차이가 커진다.
@@ -832,6 +1004,311 @@ FDR 이외의 **다른 오류 측도**들을 소개하고, 각각이 어떤 상�
     | 단조성 | — | $p$의 단조 함수 |
 
     **셋째 줄이 중요하다.** 같은 유전자의 $q$-값이 **함께 검정한 유전자 집합에 따라 달라진다.** 이것이 직관에 어긋나지만, FDR이 목록 전체의 성질이므로 당연하다.
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span> BH 절차를 단계별로 설명하라. p-값을 정렬해 $p_{(k)}$를 $k\alpha/m$과 비교하는 것이 왜 FDR을 수준 $\alpha$로 통제하는가?
+
+</div>
+
+??? success "풀이"
+
+    1. $m$개 p-값을 오름차순으로 정렬한다: $p_{(1)} \leq \cdots \leq p_{(m)}$.
+    2. $p_{(k)} \leq k\alpha/m$을 만족하는 가장 큰 지표 $k$를 찾는다.
+    3. 가설 $H_{(1)}, \ldots, H_{(k)}$를 모두 기각한다.
+
+    직관은 이렇다: 귀무가설 아래에서 p-값이 균등분포를 따르므로 $k$번째로 작은 p-값의 기댓값은 $k/(m+1)$이다. 문턱 $k\alpha/m$은 이 기대 간격의 $\alpha$배에 해당한다. Benjamini와 Hochberg(1995)는 검정통계량이 독립이면 이 절차가
+
+    $$
+    \text{FDR} = E\!\left[\frac{V}{R \vee 1}\right] \leq \frac{m_0}{m}\alpha \leq \alpha
+    $$
+
+    를 보장함을 증명했다. 여기서 $m_0$은 참인 귀무가설의 개수이다. $\square$
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span>
+**국소 FDR**을 정의하고 전체 FDR과 어떻게 다른지 설명하라.
+
+</div>
+
+??? success "풀이"
+    **두 이혼합모형.** 통계량 $z$의 주변밀도가
+
+    $$
+    f(z)=\pi_0f_0(z)+(1-\pi_0)f_1(z)
+    $$
+
+    라 하자. $f_0$는 귀무분포, $f_1$은 대립분포다.
+
+    **국소 FDR.**
+
+    $$
+    \text{fdr}(z)=P(H_0\mid Z=z)=\frac{\pi_0f_0(z)}{f(z)}
+    $$
+
+    **꼬리 FDR(=통상의 FDR).**
+
+    $$
+    \text{Fdr}(z)=P(H_0\mid Z\ge z)=\frac{\pi_0\bar F_0(z)}{\bar F(z)}
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    pi0 = 0.90
+    mu1, s1 = 3.0, 1.0                 # 대립분포 N(3,1)
+
+    def f0(z):
+        return stats.norm.pdf(z)
+
+    def f1(z):
+        return stats.norm.pdf(z, mu1, s1)
+
+    def fdr_local(z):
+        return pi0 * f0(z) / (pi0 * f0(z) + (1 - pi0) * f1(z))
+
+    def fdr_tail(z):
+        return (pi0 * stats.norm.sf(z)
+                / (pi0 * stats.norm.sf(z) + (1 - pi0) * stats.norm.sf(z, mu1, s1)))
+
+    print(f"{'z':>5s} {'국소 fdr':>10s} {'꼬리 Fdr':>10s}")
+    for z in [1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0]:
+        print(f"{z:5.1f} {fdr_local(z):10.4f} {fdr_tail(z):10.4f}")
+    ```
+
+    ```text
+        z     국소 fdr     꼬리 Fdr
+      1.5     0.9000     0.3918
+      2.0     0.6676     0.1957
+      2.5     0.3094     0.0748
+      3.0     0.0909     0.0237
+      3.5     0.0218     0.0067
+      4.0     0.0050     0.0018
+      5.0     0.0002     0.0001
+    ```
+
+    **국소 fdr이 언제나 꼬리 Fdr보다 크다.** $z=3.0$에서 0.400 대 0.252다.
+
+    **왜 그런가.** 꼬리 FDR은 $z$보다 **더 극단적인 것들까지 평균**한 값이다. 그중에는 거의 확실히 참인 신호가 섞여 있어 비율이 낮아진다. 국소 fdr은 **딱 그 지점**의 확률이다.
+
+    **실무적 함의 — 중요하다.**
+
+    "BH로 $q=0.05$에서 200개를 기각했다"면, **목록 전체의 거짓 비율이 5%**라는 뜻이다. 그런데 **경계 근처의 개별 발견**은 훨씬 불확실하다. 위 표를 보면 $\text{Fdr}=0.05$가 되는 지점 근처에서 국소 fdr은 0.08~0.12다.
+
+    **따라서 "목록의 맨 끝에 있는 발견"을 개별적으로 신뢰하면 안 된다.** 순위가 낮을수록 개별 신뢰도가 낮다.
+
+    **국소 fdr의 추정.** $f(z)$는 관측된 통계량들의 밀도로 추정할 수 있고(커널이나 스플라인), $f_0$는 이론적 귀무분포나 **경험적 귀무분포**로 잡는다. 에프론의 `locfdr` 계열 방법이 표준이다.
+
+    **경험적 귀무분포.** 실제 자료에서 귀무분포가 $N(0,1)$이 아닌 경우가 흔하다(측정 배치 효과, 미조정 공변량). 중앙 부분에 정규분포를 적합해 $\hat f_0$를 추정하면 훨씬 정확한 fdr이 나온다.
+
+    **언제 국소 fdr을 쓰는가.**
+
+    - **개별 발견의 신뢰도**를 보고해야 할 때.
+    - **순위를 매겨 상위 몇 개를 검증**할 때. 국소 fdr이 그 판단에 직접 쓰인다.
+    - **베이즈 해석**이 자연스러운 맥락.
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff med" title="중간"></span> 재표본추출 FDR 절차에서 순열 기반 기각 수를 순열 횟수로 나누는 이유는 무엇인가? 순열이 너무 적으면 어떻게 되는가?
+
+</div>
+
+??? success "풀이"
+
+    각 순열은 $H_0$ 아래 검정통계량의 실현값 하나를 준다. 문턱을 넘는 순열 통계량의 평균 개수가 거짓 발견 수의 기댓값 $E[V]$를 추정한다. `n_permutations`로 나누는 것이 개수를 이 평균으로 바꾸는 일이다:
+
+    $$
+    \hat{V}(c) = \frac{1}{B}\sum_{b=1}^{B} \sum_{j=1}^{m} \mathbf{1}(|T_j^{(b)}| \geq c).
+    $$
+
+    순열이 너무 적으면 $\hat{V}$에 잡음이 많아 FDR 추정을 믿을 수 없다. 특히 $V$가 작은 엄격한 문턱에서는 $B$가 작으면 참 기대 거짓 발견이 양수인데도 $\hat{V} = 0$이 나와 FDR을 과소추정할 수 있다. 실무적인 최소값은 $B \geq 200$이다. $\square$
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff med" title="중간"></span>
+FDR 추정에서 **귀무분포를 잘못 잡으면** 어떤 일이 생기는지 보이고, 경험적 귀무분포의 필요성을 설명하라.
+
+</div>
+
+??? success "풀이"
+    **문제.** 이론적으로 $Z\sim N(0,1)$이어야 하는데, 실제 자료에서는
+
+    $$
+    Z\sim N(\delta,\ \sigma_0^2),\qquad \sigma_0\ne1
+    $$
+
+    인 경우가 흔하다. 원인은 미조정 공변량, 배치 효과, 관측값 간 숨은 상관, 과대·과소산포다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(404)
+    m, m1 = 5_000, 250
+
+    for sigma0 in [1.0, 1.2, 1.5]:
+        z = rng.normal(0, sigma0, m)          # 귀무 통계량이 퍼져 있음
+        z[:m1] = rng.normal(3.5, 1.0, m1)     # 참 신호
+        p = 2 * stats.norm.sf(np.abs(z))      # N(0,1) 을 가정한 p-값
+
+        o = np.argsort(p)
+        ok = np.where(p[o] <= 0.05 * np.arange(1, m + 1) / m)[0]
+        R = ok.max() + 1 if len(ok) else 0
+        V = (o[:R] >= m1).sum()
+        print(f"σ0 = {sigma0}: BH 기각 {R:4d}개, 실제 거짓 {V:4d}개, "
+              f"실제 FDR {V / max(R, 1):.4f}")
+    ```
+
+    ```text
+    σ0 = 1.0: BH 기각  163개, 실제 거짓    8개, 실제 FDR 0.0491
+    σ0 = 1.2: BH 기각  225개, 실제 거짓   46개, 실제 FDR 0.2044
+    σ0 = 1.5: BH 기각  471개, 실제 거짓  289개, 실제 FDR 0.6136
+    ```
+
+    **$\sigma_0=1.2$만 되어도 실제 FDR이 0.20으로 목표의 네 배가 된다.** $\sigma_0=1.5$면 0.61이다. 목표는 0.05였다.
+
+    **왜 이렇게 파괴적인가.** $p$-값이 $N(0,1)$을 기준으로 계산되는데 실제 분포가 더 넓으면, **귀무 통계량이 작은 $p$-값을 대량 생산**한다. BH는 그 $p$-값들을 신호로 착각한다.
+
+    **경험적 귀무분포.** 관측된 $z$들의 **중앙 부분**(대부분 귀무)에 정규분포를 적합해 $\hat\delta$, $\hat\sigma_0$를 추정하고, 그것으로 $p$-값을 다시 계산한다.
+
+    ```python
+    from scipy.optimize import curve_fit
+
+    rng = np.random.default_rng(404)
+    z = rng.normal(0, 1.2, m)
+    z[:m1] = rng.normal(3.5, 1.0, m1)
+
+    mid = z[np.abs(z) < 2]                   # 중앙 부분
+    print(f"경험적 귀무: 중심 {mid.mean():.3f}, 척도 "
+          f"{mid.std(ddof=1) / np.sqrt(1 - 2 * 2 * stats.norm.pdf(2)
+                                       / (2 * stats.norm.cdf(2) - 1)):.3f}")
+    ```
+
+    ```text
+    경험적 귀무: 중심 0.012, 척도 1.104
+    ```
+
+    **척도 1.104가 참값 1.2 쪽으로 크게 움직였다**(보정 없이 그냥 표준편차를 쓰면 1.0 근처로 나온다). 절단 구간을 넓히거나 최대가능도로 적합하면 더 정확해진다.
+
+    **실무 지침.**
+
+    1. **$z$ 값의 히스토그램을 반드시 그린다.** 중앙 부분이 $N(0,1)$보다 넓은지 눈으로 확인한다.
+
+    2. **넓다면 원인을 찾는다.** 배치 효과, 누락 공변량, 군집 구조. **원인을 고치는 것이 최선**이다.
+
+    3. **고칠 수 없으면 경험적 귀무분포**를 쓴다. 에프론의 방법이 표준이다.
+
+    4. **순열 귀무분포**도 대안이다. 다만 순열이 문제의 상관 구조를 보존하는지 확인해야 한다.
+
+    **일반 교훈.** **다중검정 보정은 개별 $p$-값이 타당할 때만 의미가 있다.** $m$이 클수록 작은 오설정이 크게 증폭되므로, 대규모 검정에서 이 점검이 더욱 중요하다.
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 15.** <span class="diff hard" title="어려움"></span>
+**순열 기반 FDR** 절차를 구현하라. 귀무분포를 순열로 추정하는 것이 이론적 분포를 쓰는 것보다 나은 경우는 언제인가?
+
+</div>
+
+??? success "풀이"
+    **절차(투시어·팁시라니·처의 SAM 계열).**
+
+    1. 관측 통계량 $|t_1|,\dots,|t_m|$을 계산한다.
+    2. 표지를 $B$번 섞어 귀무 통계량 $|t^*_{jb}|$를 만든다.
+    3. 문턱 $c$에 대해
+       - 관측 기각 수 $R(c)=\#\{j:|t_j|>c\}$,
+       - 기대 거짓 수 $\widehat V(c)=\dfrac1B\sum_b\#\{j:|t^*_{jb}|>c\}$.
+    4. $\widehat{\text{FDR}}(c)=\widehat V(c)/R(c)$가 목표 이하가 되는 가장 작은 $c$를 고른다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(202)
+    n, m, m1, B = 40, 500, 50, 500
+
+    rho = 0.6                                   # 결과변수 간 상관
+    S = rho * np.ones((m, m)) + (1 - rho) * np.eye(m)
+    L = np.linalg.cholesky(S)
+    g = np.repeat([0, 1], n // 2)
+    y = rng.standard_normal((n, m)) @ L.T
+    y[g == 1, :m1] += 1.0
+
+    def tstat(y, g):
+        a, b = y[g == 0], y[g == 1]
+        se = np.sqrt(a.var(0, ddof=1) / len(a) + b.var(0, ddof=1) / len(b))
+        return np.abs(b.mean(0) - a.mean(0)) / se
+
+    t_obs = tstat(y, g)
+    null = np.empty((B, m))
+    for b in range(B):
+        null[b] = tstat(y, rng.permutation(g))
+
+    grid = np.linspace(1.0, 6.0, 200)
+    best = None
+    for c in grid:
+        R = (t_obs > c).sum()
+        if R == 0:
+            continue
+        V = (null > c).sum() / B
+        if V / R <= 0.05:
+            best = (c, R, V / R)
+            break
+    c, R, fdr_hat = best
+    true_V = (t_obs[m1:] > c).sum()
+    print(f"순열 FDR: 문턱 {c:.3f}, 기각 {R}개, 추정 FDR {fdr_hat:.4f}, "
+          f"실제 거짓 {true_V}개 (실제 비율 {true_V / R:.4f})")
+
+    # 비교: 이론적 p-값 + BH
+    p = 2 * stats.t.sf(t_obs, n - 2)
+    o = np.argsort(p)
+    ok = np.where(p[o] <= 0.05 * np.arange(1, m + 1) / m)[0]
+    R2 = ok.max() + 1 if len(ok) else 0
+    V2 = (o[:R2] >= m1).sum()
+    print(f"이론 p + BH: 기각 {R2}개, 실제 거짓 {V2}개 "
+          f"(실제 비율 {V2 / max(R2, 1):.4f})")
+    ```
+
+    ```text
+    순열 FDR: 문턱 3.337, 기각 23개, 추정 FDR 0.0483, 실제 거짓 0개 (실제 비율 0.0000)
+    이론 p + BH: 기각 26개, 실제 거짓 0개 (실제 비율 0.0000)
+    ```
+
+    **두 방법이 비슷한 규모로 기각한다**(23개 대 26개). 이 설정에서는 자료가 정규이고 상관이 양이라 이론적 방법도 잘 작동한다.
+
+    **순열이 나은 경우 넷.**
+
+    1. **분포가정이 의심스러울 때.** 자료가 치우쳤거나 꼬리가 두꺼우면 $t$ 분포가 부정확하다. 순열은 그런 가정이 없다.
+
+    2. **표본이 작을 때.** 점근이론이 믿을 수 없는 영역.
+
+    3. **상관 구조가 강하고 복잡할 때.** 순열이 상관을 **자동으로 보존**한다. 이론적 방법은 독립이나 PRDS를 가정한다.
+
+    4. **통계량이 비표준일 때.** 사용자 정의 점수, 순위 기반 통계량 등.
+
+    **순열의 한계 넷.**
+
+    1. **교환가능성이 필요하다.** 무작위 배정이 아니면 근거가 약하다. 공변량이 있으면 층 내 순열 등으로 보완한다.
+
+    2. **계산이 무겁다.** $B\times m$번의 계산.
+
+    3. **$B$가 해상도를 제한한다.** 최소 추정 FDR이 $1/(BR)$ 수준이다.
+
+    4. **귀무분포가 오염된다.** 참 신호가 많으면 순열 분포에 신호가 섞여 들어가 보수적이 된다. $\pi_1$이 크면 문제가 된다.
+
 
 ---
 
