@@ -295,8 +295,6 @@ nav:
                 - 검정통계량과 p-값: ch09/foundations/pvalues.md
                 - 유의수준과 판정 규칙: ch09/foundations/significance_level.md
                 - 가설검정 시연: ch09/foundations/hypothesis_tests.md
-                - 동전 던지기 모의실험: ch09/foundations/coin_toss_simulation.md
-                - 기각역 시연: ch09/foundations/rejection_region_demo.md
             - 9.2 일표본 검정:
                 - μ에 대한 Z-검정 (σ를 아는 경우): ch09/one_sample_tests/z_test_mean.md
                 - μ에 대한 t-검정 (σ를 모르는 경우): ch09/one_sample_tests/t_test_mean.md
