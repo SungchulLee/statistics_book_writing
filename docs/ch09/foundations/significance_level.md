@@ -398,7 +398,7 @@ _확인한 곳 — 피셔의 『Statistical Methods for Research Workers』($192
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 1.** 검정은 누가 만들었는가
+**그림으로 보는 통계학 2.** 검정은 누가 만들었는가
 
 짧은 답이 없다. 세 겹이기 때문이다.
 
