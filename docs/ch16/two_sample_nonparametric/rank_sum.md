@@ -182,6 +182,36 @@ $$
 
 소표본($n_1, n_2 \le 20$)에서는 출간된 표나 소프트웨어(파이썬의 `scipy.stats.ranksums`, `scipy.stats.mannwhitneyu` 등)로 정확 임계값을 얻을 수 있다. 정확분포는 동등하게 가능한 $\binom{N}{n_1}$가지 순위 배정을 모두 열거하여 구한다.
 
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 순위 자리에 다른 수를 넣어도 된다
+
+§3 은 관측값을 $1, 2, \ldots, N$ 으로 바꾸고 그 합을 쟀다. 그런데 **왜 하필 $1, 2, \ldots, N$ 인가.** 순위는 순서만 담고 있으면 되는 표식이므로, 같은 순서를 담은 다른 수로 갈아 끼워도 검정의 뼈대는 그대로다. 갈아 끼운 수를 **점수**라 부른다.
+
+$1952$ 년에 그렇게 해 본 사람이 있다. 네덜란드의 **바르털 레인더르트 판 데르 바르던**($1903$–$1996$)인데, 통계학에서보다 **대수학**에서 훨씬 유명한 이름이다. 스물일곱에 펴낸 두 권짜리 『현대대수학』은 추상대수를 하나의 완결된 과목으로 다룬 최초의 저작으로 꼽힌다. 그가 『Indagationes Mathematicae』 $14$ 권 $453$–$458$ 쪽에 내놓은 것은 순위 $R_i$ 자리에
+
+$$
+a_i = \Phi^{-1}\!\left(\frac{R_i}{N+1}\right)
+$$
+
+를 넣는 검정이었다. 순위를 $0$ 과 $1$ 사이에 고르게 편 뒤 정규분포의 자 위로 되돌려 놓은 수, 곧 **정규점수**다.
+
+그래서 무엇이 좋아지는가. 답은 여섯 해 뒤에 나왔다.
+
+![여섯 분포에서 윌콕슨과 정규점수의 ARE, 그리고 t 족을 따라간 두 곡선](./img/normal_scores_floor.png)
+
+$1958$ 년 $12$ 월 『Annals of Mathematical Statistics』 $29$ 권 $972$–$994$ 쪽에서 허먼 체르노프와 I. 리처드 세비지가 증명한 것이 이것이다 — **정규점수에 기반한 이동 검정은 어떤 대립가설에서도 $t$ 검정에 못지않다.** $t$ 대비 ARE 가 $1$ 아래로 결코 내려가지 않고, 바닥인 $1$ 에 닿는 것은 **자료가 정규일 때뿐**이다.
+
+[16.1 의 상자](../foundations/power_comparison.md)에서 윌콕슨의 바닥이 $108/125 = 0.864$ 였던 것과 견주어 보라. 윌콕슨에게는 정규자료에서 $4.5\%$ 를 내주고 최악에는 $14\%$ 가까이 내주는 구간이 있는데, 정규점수에는 **그 구간이 아예 없다.** 왼쪽 그림에서 초록 막대가 빨간 선 아래로 내려간 적이 한 번도 없고, 하필 윌콕슨을 가장 모질게 괴롭히던 그 포물선에서 $1.269$ 로 넉넉히 위에 있다.
+
+오른쪽은 $t(\nu)$ 의 꼬리를 차츰 얇게 하며 본 것이다. 두 곡선이 나란히 내려오는데 **닿는 바닥이 다르다.** 윌콕슨은 $3/\pi = 0.955$ 로 가라앉고, 정규점수는 정확히 $1$ 에서 멈춘다.
+
+그러면 왜 모두가 윌콕슨을 쓰는가. 하나는 셈이다. **순위합은 정수로 떨어진다.** 더하기만 하면 끝이고 임계값도 정수여서 표를 찾아 읽기가 쉽다. 정규점수는 $N$ 마다 다른 실수 묶음이라 관측값마다 $\Phi^{-1}$ 을 거쳐야 하고 임계값도 소수점 아래로 간다. 손으로 셈하고 표를 뒤지던 시절에 이것은 결정적인 차이였다. 다른 하나는 「$1$ 아래로 안 내려간다」가 **점근의 약속이지 작은 표본의 약속이 아니라는** 점이다. 그래도 16.1 의 ARE 표를 다시 볼 때, **$3/\pi$ 가 순위검정이 반드시 내주어야 하는 값은 아니었다**는 것은 알아 둘 만하다.
+
+_확인한 곳 — 판 데르 바르던($1903$–$1996$)이 네덜란드 수학자이고 스물일곱에 두 권짜리 『Moderne Algebra』를 펴냈으며 그 책이 추상대수를 하나의 완결된 전체로 다룬 최초의 저작으로 꼽힌다는 것, 그리고 「van der Waerden test」가 그의 업적으로 함께 적혀 있다는 것은 [Wikipedia 「Bartel Leendert van der Waerden」](https://en.wikipedia.org/wiki/Bartel_Leendert_van_der_Waerden) · 그의 논문이 「Order tests for the two-sample problem and their power」이고 『Indagationes Mathematicae』 $14$ 권 $453$–$458$ 쪽($1952$)이며 II·III 가 이듬해 이어졌다는 것은 그 학술지 서지 · Chernoff 와 Savage 의 「Asymptotic Normality and Efficiency of Certain Nonparametric Test Statistics」가 『The Annals of Mathematical Statistics』 $29$ 권 $4$ 호 $972$–$994$ 쪽($1958$ 년 $12$ 월)이고, **모든 대립가설에서 Fisher-Yates-Terry-Hoeffding 정규점수 통계량에 기반한 이동 검정이 $t$ 검정에 적어도 못지않다**는 것이 그 결과라는 것은 [Project Euclid 의 그 쪽](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-29/issue-4/Asymptotic-Normality-and-Efficiency-of-Certain-Nonparametric-Test-Statistics/10.1214/aoms/1177706436.full)(판 데르 바르던의 $\Phi^{-1}(R/(N+1))$ 판본은 이것과 점근적으로 같아 ARE 가 일치한다). 그림의 ARE 값은 모두 $12\sigma^2(\int f^2)^2$ 과 $\sigma^2\left(\int f^2/\varphi(\Phi^{-1}(F))\right)^2$ 을 수치적분해 **직접 계산한 값이고**, 정규에서 $3/\pi$ 와 $1$, 포물선에서 $108/125$ 가 나오는 것으로 맞춰 보았다_
+
+</div>
+
 ---
 
 ## 연습문제
