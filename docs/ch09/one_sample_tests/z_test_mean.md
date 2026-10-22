@@ -141,6 +141,298 @@ $p = 0.072 > 0.05$이므로 기각하지 못한다는 판정이 확인된다.
 !!! warning "$\sigma$를 아는 경우는 드물다"
     $\sigma$를 안다는 가정은 강하며, 방대한 과거 자료를 갖춘 통제된 산업 환경 밖에서는 좀처럼 충족되지 않는다. $\sigma$를 표본에서 추정해야 한다면 $\sigma$ 추정의 추가 불확실성을 반영하는 일표본 $t$-검정을 쓰라.
 
+## 7. 보기로 익히기
+
+절 $5$ 가 한 자료를 다섯 단계로 밟았다. 같은 절차를 세 가지 대립가설에서 되풀이하며,
+기각역을 $\bar x$ 의 값으로 환산하는 일과 $p$ 값이 그림의 어느 넓이인지를 함께 본다.
+
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 양측. 관측값 $n = 500$개에서 $\bar x = 48$, $s = 20.3$을 얻었다.
+
+$$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu \neq 50$$
+
+**(1)** 검정통계량과 양측 p-값을 손으로 구하고, $\alpha = 0.05$의 기각역을 $\bar x$의 값으로 환산하시오.
+
+**(2)** 코드로 확인하고, p-값이 그림의 어느 넓이인지 밝히시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 표준오차부터 구한다.
+
+    $$
+    \frac{s}{\sqrt{n}} = \frac{20.3}{\sqrt{500}} = \frac{20.3}{22.3607} = 0.90784
+    $$
+
+    이므로 검정통계량은
+
+    $$
+    z = \frac{\bar x - \mu_0}{s/\sqrt{n}} = \frac{48 - 50}{0.90784} = -2.20302
+    $$
+
+    이고, 양측 p-값은 한쪽 꼬리를 두 배 한 값이다.
+
+    $$
+    p = 2\,P(Z \ge 2.20302) = 2 \times 0.013797 = 0.027593
+    $$
+
+    기각역을 $\bar x$의 값으로 되돌려 보면 더 잘 보인다. $\lvert \bar x - 50 \rvert > 1.95996 \times 0.90784 = 1.77934$이므로
+
+    $$
+    \bar x < 48.2207 \quad \text{또는} \quad \bar x > 51.7793
+    $$
+
+    이다. 관측된 $48$은 아래쪽 경계보다 $0.22$만 더 낮다. **아슬아슬하게 들어간 것**이고, p-값 $0.0276$이 $0.05$에 가까운 것이 같은 사실의 다른 표현이다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+
+    def plot_z_statistic(statistic, ax, alternative='two-sided'):
+        """검정통계량 위치에서 잘린 꼬리를 칠해 p-값을 눈으로 보여준다.
+
+        칠해진 넓이가 곧 p-값이다. 양측이면 좌우 두 조각의 합이다.
+        """
+        x = np.linspace(-4, 4, 100)
+        y = stats.norm().pdf(x)
+        ax.plot(x, y, '-k')
+
+        if alternative == 'less':
+            x_fill = np.linspace(-4, statistic, 100)
+            y_fill = stats.norm().pdf(x_fill)
+            ax.fill_between(x_fill, y_fill, color='r', alpha=0.2)
+        elif alternative == 'greater':
+            x_fill = np.linspace(statistic, 4, 100)
+            y_fill = stats.norm().pdf(x_fill)
+            ax.fill_between(x_fill, y_fill, color='r', alpha=0.2)
+        elif alternative == 'two-sided':
+            x_fill_left = np.linspace(-4, -abs(statistic), 100)
+            y_fill_left = stats.norm().pdf(x_fill_left)
+            ax.fill_between(x_fill_left, y_fill_left, color='r', alpha=0.2)
+            x_fill_right = np.linspace(abs(statistic), 4, 100)
+            y_fill_right = stats.norm().pdf(x_fill_right)
+            ax.fill_between(x_fill_right, y_fill_right, color='r', alpha=0.2)
+
+        ax.spines['left'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.set_yticks([])
+
+    mu = 50
+    n = 500
+    x_bar = 48
+    s = 20.3
+
+    # n = 500 >= 30 이므로 sigma를 몰라도 s를 넣고 z를 쓴다.
+    statistic = (x_bar - mu) / (s / np.sqrt(n))
+    # sf(x) = 1 - cdf(x) 이고 꼬리확률에서는 sf가 수치적으로 더 정확하다.
+    # abs를 씌우고 2를 곱해 양측으로 만든다.
+    p_value = stats.norm().sf(abs(statistic)) * 2
+
+    print(f"Statistic: {statistic:.4f}")
+    print(f"P-value  : {p_value:.4f}")
+
+    alpha = 0.05
+    if p_value <= alpha:
+        print("Reject H0 (Choose H1)")
+    else:
+        print("Fail to reject H0")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_z_statistic(statistic, ax=ax, alternative='two-sided')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Statistic: -2.2030
+    P-value  : 0.0276
+    Reject H0 (Choose H1)
+    ```
+
+    ![양측검정의 p-값](./img/one_sample_67.png)
+
+    $\bar x = 48$은 가설값 50에서 2만큼 떨어져 있을 뿐이지만 $n = 500$이라 표준오차가 0.91로 작아 $z = -2.20$이 된다. 표본이 크면 작은 차이도 유의해진다.
+
+    그림에서 칠해진 두 꼬리의 넓이 합이 0.0276이다.
+
+    유도한 $z = -2.20302$와 $p = 0.027593$이 출력의 $-2.2030$, $0.0276$과 맞는다. 칠해진 두 꼬리는 $z \le -2.2030$과 $z \ge 2.2030$이고 정규분포가 대칭이므로 두 조각의 넓이가 같다. 한 조각이 $0.013797$이다.
+
+    **표본이 크면 작은 차이도 유의해진다.** 거꾸로 같은 $\bar x$와 $s$로 $n = 100$이었다면 표준오차가 $2.03$이 되어 $z = -0.9852$, $p = 0.3245$로 기각하지 못한다.
+
+    한 가지 덧붙일 것이 있다. 여기서는 $\sigma$를 모르고 $s$를 넣었으니 통계량은 엄밀히 말해 $z$가 아니라 $t_{499}$다. 자유도 $499$에서 양측 p-값은 $0.02805$, 임계값은 $1.9647$이어서 정규의 $1.9600$과 거의 같다. **$n$이 이만큼 크면 둘을 구별할 필요가 없다**는 것이 "$n \ge 30$" 관례가 가리키는 바다.
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 작음. 자료는 보기 1과 같고($n = 500$, $\bar x = 48$, $s = 20.3$) 대립가설만 바꾼다.
+
+$$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu < 50$$
+
+**(1)** 이 좌측 p-값이 보기 1의 양측 p-값의 **정확히** 절반임을 보이시오.
+
+**(2)** 자료를 본 뒤에 유리한 방향을 골라 단측검정을 하면 실제 제1종 오류율이 얼마가 되는지 구하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 절반인 것은 우연이 아니다.** 통계량은 자료만으로 정해지므로 보기 1과 같은 $z = -2.20302$다. 좌측 p-값은
+
+    $$
+    p_{<} = P(Z \le z) = P(Z \le -2.20302) = 0.013797
+    $$
+
+    이고 양측 p-값은 정의상
+
+    $$
+    p_{\ne} = 2\,P(Z \ge \lvert z \rvert) = 2\,P(Z \le -\lvert z \rvert)
+    $$
+
+    이다. 지금은 $z < 0$이므로 $-\lvert z \rvert = z$이고, 따라서 $p_{\ne} = 2 p_{<}$가 **등식으로** 성립한다. $0.027593 = 2 \times 0.013797$이다.
+
+    여기에는 조건이 하나 붙어 있다. **통계량의 부호가 대립가설이 가리키는 방향과 같아야 한다.** 만약 $\bar x = 52$였다면 $z = +2.20302$이고 좌측 p-값은 $0.98620$이 되어 양측값 $0.027593$의 절반과는 아무 관계가 없다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    mu = 50
+    n = 500
+    x_bar = 48
+    s = 20.3
+
+    statistic = (x_bar - mu) / (s / np.sqrt(n))
+    # H1이 "작다" 쪽이므로 왼쪽 꼬리만 센다. abs도, 2를 곱하는 것도 없다.
+    p_value = stats.norm().cdf(statistic)
+
+    print(f"Statistic : {statistic:.4f}")
+    print(f"P-value   : {p_value:.4f}")
+
+    alpha = 0.05
+    if p_value <= alpha:
+        print("We choose H1, or using statistician's jargon, reject H0")
+    else:
+        print("We choose H0, or using statistician's jargon, fail to reject H0")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_z_statistic(statistic, ax=ax, alternative='less')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Statistic : -2.2030
+    P-value   : 0.0138
+    We choose H1, or using statistician's jargon, reject H0
+    ```
+
+    ![좌측검정의 p-값](./img/one_sample_127.png)
+
+    같은 자료, 같은 통계량인데 p-값이 양측의 0.0276에서 정확히 절반인 0.0138이 되었다. 그림에서도 오른쪽 꼬리의 칠이 사라졌다.
+
+    단측검정을 쓰려면 자료를 보기 **전에** 방향을 정해 두어야 한다. 결과를 보고 유리한 방향을 고르면 실제 제1종 오류율이 5%가 아니라 10%가 된다.
+
+    그 $10\%$는 어림이 아니라 정확한 값이다. 자료를 보고 유리한 쪽을 고른다는 것은 두 단측 p-값 중 **작은 쪽**을 쓴다는 뜻인데, 두 값의 합이 항상 $1$이므로 작은 쪽은 언제나 $P(Z \le -\lvert z \rvert)$다. 그러니 기각하는 사건은
+
+    $$
+    \min(p_{<},\, p_{>}) \le 0.05 \iff \lvert z \rvert \ge z_{0.05} = 1.64485
+    $$
+
+    이고, $H_0$ 아래에서 그 확률은
+
+    $$
+    P(\lvert Z \rvert \ge 1.64485) = 2 \times 0.05 = 0.10
+    $$
+
+    이다. **명목 $5\%$ 검정이 실제로는 $10\%$ 검정이 된다.** 모의실험이 필요 없는 닫힌 꼴이다.
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 큼. 이번에는 $n = 500$, $\bar x = 52$, $s = 20.3$이다.
+
+$$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu > 50$$
+
+**(1)** p-값이 보기 2와 같은 값이 되는 까닭을 밝히시오.
+
+**(2)** 참 평균이 정말 $52$라면, 같은 $\alpha = 0.05$에서 단측검정과 양측검정의 검정력은 각각 얼마인가. 닫힌 꼴로 구하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 두 번 뒤집히면 제자리다.** $\bar x$가 $48$에서 $52$로 옮겨 가 $\bar x - \mu_0$의 부호만 바뀌었으므로 $z = +2.20302$다. 대립가설이 오른쪽이라 p-값은 오른쪽 꼬리이고
+
+    $$
+    p_{>} = P(Z \ge 2.20302) = 0.013797
+    $$
+
+    이다. 보기 2의 $P(Z \le -2.20302)$와 같은 수인데, 표준정규밀도가 $\varphi(-x) = \varphi(x)$로 대칭이기 때문이다. **통계량의 부호와 꼬리의 방향이 함께 뒤집혀 상쇄되었다.**
+
+    **(2) 수치적으로.**
+
+    ```python
+    mu = 50
+    n = 500
+    x_bar = 52
+    s = 20.3
+
+    statistic = (x_bar - mu) / (s / np.sqrt(n))
+    # 이번에는 H1이 "크다" 쪽이므로 오른쪽 꼬리만 센다.
+    p_value = stats.norm().sf(statistic)
+
+    print(f"Statistic : {statistic:.4f}")
+    print(f"P-value   : {p_value:.4f}")
+
+    alpha = 0.05
+    if p_value <= alpha:
+        print("We choose H1, or using statistician's jargon, reject H0")
+    else:
+        print("We choose H0, or using statistician's jargon, fail to reject H0")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_z_statistic(statistic, ax=ax, alternative='greater')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Statistic : 2.2030
+    P-value   : 0.0138
+    We choose H1, or using statistician's jargon, reject H0
+    ```
+
+    ![우측검정의 p-값](./img/one_sample_156.png)
+
+    $\bar x$가 48에서 52로 바뀌어 통계량의 부호만 뒤집혔고, 대립가설의 방향도 함께 뒤집혀 p-값은 앞의 보기와 같은 0.0138이다. 정규분포의 대칭성 덕분이다.
+
+    **검정력은 방향을 맞게 세운 쪽이 높다.** 참 평균이 $\mu = 52$이고 표준오차가 $\sigma/\sqrt{n} = 0.90784$라면 비중심성은
+
+    $$
+    \frac{\mu - \mu_0}{\sigma/\sqrt{n}} = \frac{2}{0.90784} = 2.20302
+    $$
+
+    이다. $Z = (\bar X - 50)/0.90784$는 평균 $2.20302$, 분산 $1$인 정규분포를 따르므로
+
+    $$
+    \text{단측 검정력} = P(Z > 1.64485) = 1 - \Phi(1.64485 - 2.20302) = 1 - \Phi(-0.55817) = 0.7116
+    $$
+
+    $$
+    \text{양측 검정력} = 1 - \Phi(1.95996 - 2.20302) + \Phi(-1.95996 - 2.20302) = 0.5960 + 0.0000 = 0.5960
+    $$
+
+    이다. 양측의 왼쪽 꼬리 기여 $\Phi(-4.163) = 0.0000157$은 소수 넷째 자리에 거의 보이지 않는다. **방향을 미리 알고 있으면 같은 자료로 검정력이 $0.596$에서 $0.712$로 올라간다.** 이것이 단측검정을 쓰는 유일한 정당한 이유이며, 보기 2에서 본 대로 **자료를 본 뒤에 방향을 고르는 순간 그 이득은 오류율로 되돌려 갚아야 한다.**
+
+---
+
 ---
 
 ## 연습문제
@@ -298,11 +590,14 @@ $\sigma$를 **안다는 가정**이 실제로 성립하는 경우가 있는지 �
     from scipy import stats
 
     za = stats.norm.ppf(0.975)
-    print(f"{'σ_참/σ_0':>9s} {'실제 수준':>10s} {'평가':>20s}")
+    # 한글은 고정폭에서 두 칸을 차지하므로 f-string 자리맞춤이 보이는 열과 어긋난다
+    print(" σ_참/σ_0    실제 수준                   평가")
     for c in [0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.5, 2.0]:
         lvl = 2 * stats.norm.sf(za / c)
-        tag = "보수적" if lvl < 0.05 else ("정확" if abs(lvl - 0.05) < 1e-9
-                                          else "과대기각")
+        # c = 1 에서 lvl 은 0.049999999999999996 이다. 「보수적」(lvl < 0.05) 을
+        # 먼저 묻으면 부동소수점 때문에 정확한 자리가 보수적으로 찍힌다.
+        tag = ("정확" if abs(lvl - 0.05) < 1e-9
+               else "보수적" if lvl < 0.05 else "과대기각")
         print(f"{c:9.1f} {lvl:10.4f} {tag:>20s}")
     ```
 
@@ -311,7 +606,7 @@ $\sigma$를 **안다는 가정**이 실제로 성립하는 경우가 있는지 �
           0.7     0.0051                  보수적
           0.8     0.0143                  보수적
           0.9     0.0294                  보수적
-          1.0     0.0500                    정확
+          1.0     0.0500                   정확
           1.1     0.0748                 과대기각
           1.2     0.1024                 과대기각
           1.5     0.1913                 과대기각

@@ -302,7 +302,6 @@ nav:
                 - μ에 대한 t-검정 (σ를 모르는 경우): ch09/one_sample_tests/t_test_mean.md
                 - p에 대한 Z-검정 (비율): ch09/one_sample_tests/z_test_proportion.md
                 - σ²에 대한 카이제곱 검정: ch09/one_sample_tests/chi2_test_variance.md
-                - 일표본 검정 개관: ch09/one_sample_tests/one_sample.md
                 - 일표본 평균 검정: ch09/one_sample_tests/test_mean.md
                 - 일표본 비율 검정: ch09/one_sample_tests/test_proportion.md
                 - 일표본 분산 검정: ch09/one_sample_tests/test_variance.md
