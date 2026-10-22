@@ -867,7 +867,7 @@ $$
 
     **어느 쪽을 써야 하는가.** 가진 자료가 **모집단 전체**이면 $n$, **표본**이면 $n-1$이다. 실무에서는 거의 언제나 표본이므로 $n-1$ 이 기본이 되어야 한다.
 
-    **왜 $n-1$ 이 표본에 맞는 분모인지**는 기댓값을 다루는 도구가 필요하다. [베셀 보정](../../ch05/variance/bessels_correction.md) 절에서 $\mathbb{E}[s^2]=\sigma^2$ 을 증명한다. $\square$
+    **왜 $n-1$ 이 표본에 맞는 분모인지**는 기댓값을 다루는 도구가 필요하다. [베셀 보정](../../ch05/variance/bessels.md) 절에서 $\mathbb{E}[s^2]=\sigma^2$ 을 증명한다. $\square$
 
 <div class="drillbox" markdown>
 

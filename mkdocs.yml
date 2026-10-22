@@ -214,8 +214,6 @@ nav:
                 - Bessel 수정: ch05/variance/bessels.md
                 - 분산추정량의 평균제곱오차: ch05/variance/mse_comparison.md
                 - 로버스트 분산추정량: ch05/variance/robust_variance.md
-                - 분산추정량: ch05/variance/variance_estimators.md
-                - Bessel 수정 시연: ch05/variance/bessels_correction.md
             - 5.14 정규성이 없을 때의 추정:
                 - 꼬리가 두꺼운 분포: ch05/non_normal/heavy_tails.md
                 - 치우친 분포: ch05/non_normal/skewed.md

@@ -111,6 +111,159 @@ $d = 9$(Bessel)에서 $d = 11$로 옮겨 가면서 편향제곱이 $0$에서 $0.
 !!! tip "어느 추정량을 언제 쓸 것인가"
     실무에서는 Bessel 수정($n-1$로 나누기)이 여전히 기본이다. 불편성이 이론적 분석을 단순하게 하고 $t$-검정 같은 후속 절차가 이를 전제하기 때문이다. 평균제곱오차 최적 추정량은 주로 이론적 관심의 대상으로, 불편성이 언제나 최선의 기준은 아님을 보여준다.
 
+## 7. 세 분모를 수로 견주기
+
+절 $4$ 가 최적 분모를 $n+1$ 로 유도했다. 세 추정량의 MSE 를 모의실험으로 재어
+그 결과를 확인한다.
+
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 세 추정량의 MSE. 정규모집단에서 $\mathrm{SS}/n$, $\mathrm{SS}/(n-1)$, $\mathrm{SS}/(n+1)$의 평균제곱오차를 $n = 3$부터 $100$까지 그린다.
+
+**(1)** 분모를 **아무 수 $c$**로 두고 $\operatorname{MSE}(\mathrm{SS}/c)$를 구한 뒤, 그것을 가장 작게 하는 $c$를 미분으로 찾으시오. 정말 $c = n+1$인가.
+
+**(2)** 세 추정량의 평균제곱오차를 가장 간단한 꼴로 적고, 그림이 보이는 순서를 설명하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 정규모집단에서 $\mathrm{SS}/\sigma^2 \sim \chi^2_{n-1}$이므로 $k = n-1$로 두면
+
+    $$
+    E[\mathrm{SS}] = k\sigma^2,
+    \qquad
+    \operatorname{Var}(\mathrm{SS}) = 2k\sigma^4
+    $$
+
+    이다. 분모를 $c$로 둔 추정량의 평균제곱오차는 편향제곱과 분산의 합이다.
+
+    $$
+    \operatorname{MSE}\!\left(\frac{\mathrm{SS}}{c}\right)
+    = \left(\frac{k\sigma^2}{c} - \sigma^2\right)^2 + \frac{2k\sigma^4}{c^2}
+    = \frac{\sigma^4}{c^2}\Big[(k - c)^2 + 2k\Big]
+    $$
+
+    $c$로 미분해 $0$으로 둔다. $f(c) = \big[(k-c)^2 + 2k\big]/c^2$라 하면
+
+    $$
+    f'(c) = \frac{-2(k-c)c^2 - 2c\big[(k-c)^2 + 2k\big]}{c^4} = 0
+    \;\Longrightarrow\;
+    -(k-c)c - (k-c)^2 - 2k = 0
+    $$
+
+    인데, 앞의 두 항이 $-(k-c)\big[c + (k-c)\big] = -k(k-c)$이므로 조건이
+
+    $$
+    -k(k-c) = 2k
+    \quad\Longleftrightarrow\quad
+    k - c = -2
+    \quad\Longleftrightarrow\quad
+    c = k + 2 = n + 1
+    $$
+
+    로 깔끔하게 떨어진다. **$n+1$은 어림이 아니라 정확한 최소점이다.** 이것이 최소임은 $f(c) \to \infty$ $(c \to 0^+)$이고 $f(c) \to 1$ $(c \to \infty)$인데 $f(n+1) = 2/(n+1) < 1$이며 정류점이 하나뿐이라는 데서 나온다.
+
+    **(2) 세 값.** 위 식에 $c = n$, $n-1$, $n+1$을 차례로 넣는다. $k = n-1$이다.
+
+    $$
+    c = n:\quad \frac{\sigma^4}{n^2}\big[1 + 2(n-1)\big] = \frac{(2n-1)\sigma^4}{n^2}
+    $$
+
+    $$
+    c = n-1:\quad \frac{\sigma^4}{(n-1)^2}\big[0 + 2(n-1)\big] = \frac{2\sigma^4}{n-1}
+    $$
+
+    $$
+    c = n+1:\quad \frac{\sigma^4}{(n+1)^2}\big[4 + 2(n-1)\big] = \frac{(2n+2)\sigma^4}{(n+1)^2} = \frac{2\sigma^4}{n+1}
+    $$
+
+    **마지막 것이 $2\sigma^4/(n+1)$로 줄어든다는 점이 예쁘다.** 쪽 머리의 표에 적힌 $\frac{2(n-1)\sigma^4 + 4\sigma^4}{(n+1)^2}$과 같은 값이며, 베셀의 $2\sigma^4/(n-1)$과 분모만 두 칸 다르다. 세 값을 나란히 적으면
+
+    $$
+    \frac{2\sigma^4}{n+1}
+    \;<\;
+    \frac{(2n-1)\sigma^4}{n^2}
+    \;<\;
+    \frac{2\sigma^4}{n-1}
+    $$
+
+    이고, **부등호가 모든 $n \ge 2$에서 성립한다.** 가운데 항이 $\frac{2\sigma^4}{n} \cdot \frac{2n-1}{2n}$이라 $2\sigma^4/n$보다 조금 작고, 양 끝은 $2\sigma^4/(n\pm1)$이기 때문이다.
+
+    **그림은 세 곡선이 이 순서로 포개져 있고 $n$이 커지면서 하나로 합쳐지는 모습이어야 한다.** 셋의 비를 보면 $n = 3$에서 $0.500 : 0.556 : 1.000$으로 두 배까지 벌어지지만 $n = 100$에서 $0.019802 : 0.019900 : 0.020202$로 $2\%$ 안에 모인다. **불편추정량이 평균제곱오차로는 셋 중 꼴찌**이고, 편향을 $0$으로 만든 값을 분산으로 치른 것이다.
+
+    그림으로 확인한다.
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    def three_estimators_mse(sigma=3.0, n_sim=100_000, seed=42):
+        """나누는 수만 다른 세 추정량의 MSE 를 표본크기의 함수로 그린다."""
+        rng = np.random.default_rng(seed)
+        sigma2, sigma4 = sigma**2, sigma**4
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ns = np.arange(3, 101)
+        # 정규모집단에서 세 추정량의 MSE를 닫힌 식으로 그린다.
+        # 나누는 수만 다른 세 추정량인데 MSE 순서가 뚜렷하다.
+        #   1/(n+1) < 1/n < 1/(n-1)
+        # 즉 **불편추정량(베셀)이 MSE로는 셋 중 가장 나쁘다.**
+        # 편향을 0으로 만드는 대가로 분산을 더 키웠기 때문이다.
+        # n이 커지면 셋의 차이가 사라진다(모두 2*sigma^4/n 으로 수렴).
+        ax.plot(ns, (2*ns-1)/ns**2 * sigma4, 'b-', lw=2, label='1/n (naive / MLE)')
+        ax.plot(ns, 2/(ns-1) * sigma4, 'r-', lw=2, label="1/(n-1) (Bessel's)")
+        ax.plot(ns, (2*(ns-1)+4)/(ns+1)**2 * sigma4, 'g-', lw=2, label='1/(n+1) (MSE-optimal)')
+        ax.set_xlabel('Sample Size n')
+        ax.set_ylabel('MSE')
+        ax.set_title('MSE of Variance Estimators (Normal Population)')
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.show()
+    three_estimators_mse()
+    ```
+
+    ![MSE of Variance Estimators (Normal Population)](./img/variance_estimators_51.png)
+
+    ```python
+    import numpy as np
+    # (1) 의 최소점이 정말 n+1 인지, 분모 c 를 훑어 직접 찾는다.
+    for n in (3, 10, 100):
+        k = n - 1
+        cs = np.linspace(1, n + 6, 200001)          # c 를 촘촘히 훑는다
+        mse = ((k - cs)**2 + 2*k) / cs**2           # σ⁴ = 1 로 두었다
+        print(f"n={n:>4}  격자 최소점 c = {cs[mse.argmin()]:.4f}  (이론 n+1 = {n+1})"
+              f"   MSE: 1/n={(2*n-1)/n**2:.6f}  1/(n-1)={2/(n-1):.6f}  1/(n+1)={2/(n+1):.6f}")
+    ```
+
+    출력:
+
+    ```
+    n=   3  격자 최소점 c = 4.0000  (이론 n+1 = 4)   MSE: 1/n=0.555556  1/(n-1)=1.000000  1/(n+1)=0.500000
+    n=  10  격자 최소점 c = 11.0000  (이론 n+1 = 11)   MSE: 1/n=0.190000  1/(n-1)=0.222222  1/(n+1)=0.181818
+    n= 100  격자 최소점 c = 100.9999  (이론 n+1 = 101)   MSE: 1/n=0.019900  1/(n-1)=0.020202  1/(n+1)=0.019802
+    ```
+
+    **격자 탐색이 세 번 모두 $n+1$을 집는다.** $n = 100$에서 $100.9999$가 나온 것은 격자 간격이 $5.3\times10^{-4}$이라 $101$이 후보에 정확히 들어 있지 않았기 때문이고, 해석적 답 쪽이 정확하다. 그리고 세 평균제곱오차가 (2)에서 손으로 구한 값과 소수 여섯째 자리까지 같다.
+
+    **$n = 3$ 줄이 가장 극적이다.** 베셀의 평균제곱오차가 $1.000$인데 $1/(n+1)$ 쪽은 $0.500$으로 **정확히 절반**이다. 그런데도 실무가 베셀을 쓰는 데에는 까닭이 있다.
+
+    - **$1/(n+1)$의 최적성은 정규모집단에서만 성립한다.** 일반 분포에서는 최적 분모가 4차 적률에 달려 있어 미리 알 수 없다. 반면 $E[S^2] = \sigma^2$은 분산만 유한하면 언제나 참이다.
+    - **분산추정값은 대개 그 자체가 목적이 아니다.** $t$ 검정, 신뢰구간, 분산분석이 모두 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ 위에 서 있고, 그 분포가 성립하는 것은 분모가 $n-1$일 때다.
+    - **편향은 쌓이고 분산은 지워진다.** 여러 자료에 걸쳐 평균을 내는 상황에서 $1/(n+1)$의 아래쪽 편향은 사라지지 않는다.
+
+    **그래서 "평균제곱오차가 작은 쪽이 좋은 추정량"이라고 말할 수 없다.** 무엇에 쓸 것인지가 기준을 정한다.
+
+!!! info "편향–분산 맞바꿈"
+    평균제곱오차 최적 추정량은 편향되어 있음에도 모든 $n$에서 평균제곱오차가 가장 작다. 편향–분산 맞바꿈을 깔끔하게 보여주는 예이다: 때로는 작은 편향을 받아들이는 편이 전체 추정오차를 줄인다.
+
+---
+
 ---
 
 ## 연습문제
@@ -363,10 +516,20 @@ $\sigma^2$ 대신 $1/\sigma^2$(정밀도)이나 $\ln\sigma^2$을 추정할 때 �
     **설계.**
 
     ```python
+    import numpy as np
     # 출력 없음: 독자가 돌려 볼 탐구 과제다. 아래 「볼 것」 네 항목에 맞춰
     #             c 를 연속으로 바꾼 MSE 곡선을 그리는 것이 목적이다.
     rng = np.random.default_rng(0)
     B = 50_000
+
+    # 참 분산을 1 로 맞춘 네 모집단. 자기 모집단으로 바꿔 넣어도 된다.
+    populations = {
+        "normal":   lambda k: rng.normal(0, 1, k),
+        "uniform":  lambda k: rng.uniform(-np.sqrt(3), np.sqrt(3), k),
+        "exp":      lambda k: rng.exponential(1, k) - 1,
+        "t5":       lambda k: rng.standard_t(5, k) / np.sqrt(5 / 3),
+    }
+
     for n in [5, 10, 30, 100]:
         for name, draw in populations.items():
             ss = np.empty(B)
