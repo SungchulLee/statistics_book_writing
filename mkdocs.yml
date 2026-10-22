@@ -315,7 +315,6 @@ nav:
                 - 검정력 분석: ch09/errors_and_power/power.md
                 - 신뢰구간과 검정의 쌍대성: ch09/errors_and_power/duality.md
                 - 검정력 분석과 표본크기: ch09/errors_and_power/power_analysis.md
-                - 제1종/제2종 오류의 시각화: ch09/errors_and_power/type12_error_visualization.md
             - 9.6 다중검정:
                 - p-해킹 시연: ch09/multiple_testing/p_hacking_demo.md
                 - p-해킹 시연 - 타이타닉 절단점 탐색: ch09/multiple_testing/p_hacking_titanic_cutoff.md
