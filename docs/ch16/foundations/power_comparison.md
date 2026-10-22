@@ -88,7 +88,7 @@ $$
 
 방금 적은 $0.864$ 는 어림수가 아니다. **$108/125$** 이다. 바닥이 분수로 똑 떨어진다는 것은, 누군가 그 바닥에 닿는 분포를 실제로 손에 쥐었다는 뜻이다.
 
-둘은 $1944$ 년 여름 괌의 하먼 비행장에서 만났다. 스물두 살의 조지프 호지스와 스물일곱 살의 에리히 레만이 제$20$ 공군의 작전분석조에 배속되어 있었다. 전쟁이 끝나고 둘 다 갓 생긴 버클리 통계학과로 가서, 평생 함께 논문을 썼다. 그 가운데 하나가 $1956$ 년 『Annals of Mathematical Statistics』 $27$ 권 $324$–$335$ 쪽의 열두 쪽이다.
+둘은 $1944$ 년 여름 괌의 하먼 비행장에서 만났다. 스물두 살의 조지프 호지스가 작전분석조에 들어가 제$20$ 공군에 배속되었는데, 거기에 에리히 레만이 있었다. 위키백과가 둘을 두고 쓴 말이 「**갓 싹트던 통계학자들**」이다. 전쟁이 끝나자 호지스는 갓 생긴 버클리의 통계학 과정으로 갔고, 둘은 그 뒤로 함께 논문을 쓴다 — 호지스-레만 추정량도 공저 교과서도 거기서 나왔다. 그 가운데 하나가 $1956$ 년 『Annals of Mathematical Statistics』 $27$ 권 $324$–$335$ 쪽의 열두 쪽이다.
 
 초록의 셋째 문장이 이 쪽의 하한 그 자체다 — 「그 점근 피트먼 효율이 $t$ 검정에 견주어 **$0.864$ 아래로 결코 떨어지지 않음을 제 $1$ 절에서 보인다**.」 바로 다음 문장이 더 고맙다. 같은 결과가 **$F$ 검정에 견준 Kruskal-Wallis** 에도, **대칭분포 하나의 위치모수 검정**에도 그대로 간다는 것. 부등식 한 줄이 §3 표의 여러 줄을 한꺼번에 덮는다.
 
@@ -114,7 +114,7 @@ $$
 
 다만 $0.864$ 는 **아무도 가 보지 않는 곳의 수**다. 꼬리가 칼로 자른 듯 끊긴 포물선 자료는 현실에 없고, 그 바닥도 $n \to \infty$ 에서만 성립한다. 호지스와 레만 자신이 같은 초록에 조심할 것을 적어 두었다 — **검정력은 표본크기의 볼록함수가 아닐 수 있고, 극한을 주고받는 순서를 언제나 바꿀 수 있는 것도 아니다.** $0.864$ 는 약속이 아니라 마음 놓아도 되는 한계선이다.
 
-_확인한 곳 — 논문이 J. L. Hodges, Jr. 와 E. L. Lehmann 의 「The Efficiency of Some Nonparametric Competitors of the $t$-Test」이고 『Annals of Mathematical Statistics』 $27$ 권 $2$ 호 $324$–$335$ 쪽($1956$ 년 $6$ 월)이라는 것, 그리고 인용한 초록의 두 문장(「$0.864$ 아래로 결코 떨어지지 않는다」·「$F$ 검정에 견준 Kruskal-Wallis 와 대칭분포 하나의 위치모수 검정에도 성립한다」)과 마지막 경고(「검정력이 표본크기의 볼록함수가 아닐 수 있다」·「극한을 주고받는 것이 늘 가능하지는 않다」)는 [Project Euclid 의 그 쪽](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-27/issue-2/The-Efficiency-of-Some-Nonparametric-Competitors-of-the-t-Test/10.1214/aoms/1177728261.full) 에서 읽었다 · 호지스($1922$–$2000$)가 $1944$ 년 여름 작전분석조에 들어가 레만($1917$–$2009$)·조지 니컬슨과 함께 괌 하먼 비행장의 제$20$ 공군에서 복무했고 뒤에 갓 생긴 버클리 통계학과로 가 거기서 평생을 보냈다는 것은 [Wikipedia 「Joseph Lawson Hodges Jr.」](https://en.wikipedia.org/wiki/Joseph_Lawson_Hodges_Jr.) · 이 포물선이 **호지스-레만이 순위합 대 $t$ 의 ARE 를 최악으로 만드는 밀도로 먼저 얻은 것**이고 에파네치니코프($1969$)가 밀도추정 맥락에서 따로 끌어내어 그 이름이 붙었으며 더 거슬러 바틀릿($1963$)에게 공이 있을 수도 있다는 것은 Schucany, 「Kernel Smoothers」, 『Statistical Science』 $19$ 권 $4$ 호($2004$) $669$ 쪽 · 에파네치니코프의 논문이 『Theory of Probability and Its Applications』 $14$ 권 $1$ 호 $153$–$158$ 쪽($1969$)이라는 것은 그 학술지 서지. 네 밀도의 $\int f^2$ 과 ARE, $108/125$, 오른쪽 그림은 모두 직접 계산한 값이다_
+_확인한 곳 — 논문이 J. L. Hodges, Jr. 와 E. L. Lehmann 의 「The Efficiency of Some Nonparametric Competitors of the $t$-Test」이고 『Annals of Mathematical Statistics』 $27$ 권 $2$ 호 $324$–$335$ 쪽($1956$ 년 $6$ 월)이라는 것, 그리고 인용한 초록의 두 문장(「$0.864$ 아래로 결코 떨어지지 않는다」·「$F$ 검정에 견준 Kruskal-Wallis 와 대칭분포 하나의 위치모수 검정에도 성립한다」)과 마지막 경고(「검정력이 표본크기의 볼록함수가 아닐 수 있다」·「극한을 주고받는 것이 늘 가능하지는 않다」)는 [Project Euclid 의 그 쪽](https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-27/issue-2/The-Efficiency-of-Some-Nonparametric-Competitors-of-the-t-Test/10.1214/aoms/1177728261.full) 에서 읽었다 · 호지스($1922$–$2000$)가 $1944$ 년 여름 작전분석조에 들어가 「갓 싹트던 통계학자들」인 레만·조지 니컬슨과 함께 괌 하먼 비행장의 제$20$ 공군에서 복무했고, 뒤에 갓 생긴 버클리의 통계학 과정으로 가 거기서 평생을 보냈으며, 레만과 호지스-레만 추정량과 공저 교과서($1964$)를 남겼다는 것은 [Wikipedia 「Joseph Lawson Hodges Jr.」](https://en.wikipedia.org/wiki/Joseph_Lawson_Hodges_Jr.) · 이 포물선이 **호지스-레만이 순위합 대 $t$ 의 ARE 를 최악으로 만드는 밀도로 먼저 얻은 것**이고 에파네치니코프($1969$)가 밀도추정 맥락에서 따로 끌어내어 그 이름이 붙었으며 더 거슬러 바틀릿($1963$)에게 공이 있을 수도 있다는 것은 Schucany, 「Kernel Smoothers」, 『Statistical Science』 $19$ 권 $4$ 호($2004$) $669$ 쪽 · 에파네치니코프의 논문이 『Theory of Probability and Its Applications』 $14$ 권 $1$ 호 $153$–$158$ 쪽($1969$)이라는 것은 그 학술지 서지. 네 밀도의 $\int f^2$ 과 ARE, $108/125$, 오른쪽 그림은 모두 직접 계산한 값이다_
 
 </div>
 
