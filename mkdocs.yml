@@ -397,7 +397,6 @@ nav:
                 - 생태학적 오류: ch12/ecological_correlation/ecological_fallacy.md
                 - Simpson의 역설: ch12/ecological_correlation/simpsons_paradox.md
                 - 집계 편향: ch12/ecological_correlation/aggregation_bias.md
-                - 생태학적 상관: ch12/ecological_correlation/ecological_correlation.md
             - 12.3 상관, 인과, 교란:
                 - 교란변수: ch12/confounding/confounding_variables.md
                 - 허위상관: ch12/confounding/spurious_correlations.md
