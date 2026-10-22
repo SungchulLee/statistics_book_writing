@@ -312,7 +312,6 @@ nav:
             - 9.4 대응표본 검정:
                 - μ_D에 대한 대응 t-검정: ch09/paired_sample_tests/paired_t_test.md
                 - 대응표본과 이표본, 언제 무엇을 쓰는가: ch09/paired_sample_tests/paired_vs_two_sample.md
-                - 대응 평균 검정: ch09/paired_sample_tests/test_paired.md
             - 9.5 오류와 검정력:
                 - 제1종 오류와 제2종 오류: ch09/errors_and_power/errors.md
                 - 검정력 분석: ch09/errors_and_power/power.md
