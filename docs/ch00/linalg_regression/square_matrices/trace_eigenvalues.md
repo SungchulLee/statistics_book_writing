@@ -259,6 +259,75 @@ $$
 
 이다. $\boldsymbol{\mu} = \mathbf{0}$이면 $E[\mathbf{z}^\top\mathbf{A}\mathbf{z}] = \operatorname{tr}(\mathbf{A})$로 간단해진다. 제곱합이 자료벡터의 이차형식인 분산분석에서 이 항등식이 근본적으로 쓰인다.
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 행렬을 만들지 않고 대각합을 잰다
+
+바로 위 항등식을 **오른쪽에서 왼쪽으로** 읽어 보자.
+
+$$
+E\!\left[\mathbf{z}^\top\mathbf{A}\mathbf{z}\right] = \operatorname{tr}(\mathbf{A})
+\qquad\Longrightarrow\qquad
+\widehat{\operatorname{tr}}(\mathbf{A})
+= \frac1m \sum_{k=1}^{m} \mathbf{z}_k^\top \mathbf{A}\, \mathbf{z}_k
+$$
+
+항등식이 그대로 **불편추정량**이 된다. 평균 $\mathbf{0}$·공분산 $\mathbf{I}$ 로 아무렇게나
+뽑은 $\mathbf{z}$ 를 $m$ 개 던져 평균하면 된다. 정의 1 대로 대각 성분을 더하는 쪽이
+훨씬 쉬워 보이는데 왜 이런 짓을 하는가.
+
+**$\mathbf{A}$ 를 볼 수 없는 자리가 있기 때문이다.** 대각 성분을 더하려면 행렬이 있어야
+한다. 그런데 $\mathbf{z} \mapsto \mathbf{A}\mathbf{z}$ 라는 **계산만** 할 수 있고 행렬
+자체는 손에 쥘 수 없는 경우가 많다. 모수가 $10^9$ 개인 신경망의 헤세행렬이 그렇다 —
+성분이 $10^{18}$ 개라 어디에도 담을 수 없지만, **헤세–벡터 곱**은 미분을 한 번 더
+흘리는 것으로 끝난다. 그래서 $\mathbf{H}$ 는 못 만들어도 $\operatorname{tr}(\mathbf{H})$ 는
+잴 수 있다.
+
+![탐침 수에 따른 오차, 두 탐침의 분산 공식 확인, 그리고 행렬 크기와 무관한 상대오차](./img/hutchinson_trace.png)
+
+**① 얼마나 던져야 하는가.** $n = 400$, $\operatorname{tr}(\mathbf{A}) = 401.5$ 에서
+RMSE 가 $\sqrt{\operatorname{Var}/m}$ 선 위에 정확히 얹힌다. 평범한 $1/\sqrt m$ 이다.
+
+**② 어떤 $\mathbf{z}$ 를 던지느냐가 분산을 바꾼다.** 대칭 $\mathbf{A}$ 에 대해
+
+| 탐침 | 한 번의 분산 |
+|---|---|
+| 가우스 $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I})$ | $2\lVert \mathbf{A}\rVert_F^2$ |
+| 라데마허 ($\pm 1$ 을 반반) | $2\!\left(\lVert \mathbf{A}\rVert_F^2 - \sum_i a_{ii}^2\right)$ |
+
+모의와 식이 각각 $0.39\%$, $0.30\%$ 안에서 맞는다. 라데마허 쪽이 **언제나 작거나 같고**,
+빠지는 몫 $\sum_i a_{ii}^2$ 이 바로 **구하려는 것이 놓인 자리**다. 극단으로 가면
+뜻이 또렷해진다 — $\mathbf{A}$ 가 대각행렬이면 $\mathbf{z}^\top\mathbf{A}\mathbf{z}
+= \sum_i a_{ii} z_i^2 = \sum_i a_{ii}$ 가 $\mathbf{z}$ 와 무관하게 **언제나 정답**이고,
+분산이 $0$ 이다(모의값도 $5\times10^{-27}$ 이었다). $\pm 1$ 이 쓰이는 까닭이다.
+
+**③ 행렬이 커지면 더 던져야 하는가 — 아니다.** $\mathbf{A} = \mathbf{B}\mathbf{B}^\top$
+($\mathbf{B}$ 는 $n \times 60$)를 **만들지 않고** $\mathbf{B}^\top\mathbf{z}$ 만 써서
+재어 보면
+
+| 탐침 수 $m$ | $10$ | $50$ | $200$ |
+|---|---|---|---|
+| $n = 200$ | $5.4\%$ | $2.5\%$ | $1.3\%$ |
+| $n = 2{,}000$ | $5.7\%$ | $2.5\%$ | $1.3\%$ |
+| $n = 20{,}000$ | $6.4\%$ | $2.5\%$ | $1.4\%$ |
+
+$n$ 이 백 배가 되어도 같다. 상대오차를 정하는 것은 $n$ 이 아니라
+$\lVert\mathbf{A}\rVert_F / \operatorname{tr}(\mathbf{A})$ 와 $m$ 이기 때문이고,
+정리 2 로 읽으면 이 비는 **고윳값이 몇 방향에 몰려 있는지**를 재는 수다. 한두
+방향에 몰려 있으면 크고, 여러 방향에 고루 퍼져 있으면 작다. 그리고 **못 만들 만큼
+큰 행렬은 대개 뒤쪽이다** — 이 수법은 필요한 바로 그 자리에서 가장 잘 듣는다.
+
+**이것이 새 기법이 아니라는 점이 재미있다.** $\S 5$ 의 두 번째 항목은 모자 행렬의
+대각합이 유효 모수 개수라고 적는다. 이 추정량을 처음 적어 둔 허친슨($1989$)의 논문
+제목이 바로 「라플라스 평활 스플라인의 **영향행렬 대각합**에 대한 확률적 추정량」이다.
+평활 스플라인의 유효 자유도를 구하려면 $n \times n$ 영향행렬의 대각합이 필요한데
+$n$ 이 커지면 그 행렬을 만들 수 없었다 — 오늘 신경망의 헤세행렬에서 겪는 것과
+**똑같은 막다른 길**이고, 빠져나오는 문도 같다.
+
+_확인한 곳 — M. F. 허친슨의 「A Stochastic Estimator of the Trace of the Influence Matrix for Laplacian Smoothing Splines」(『Communications in Statistics - Simulation and Computation』 $18$ 권 $3$ 호 $1059$–$1076$ 쪽, $1989$, [doi:10.1080/03610918908812806](https://doi.org/10.1080/03610918908812806))의 제목·학술지·권호·쪽·해를 Crossref 로 확인했다. **본문은 읽지 않았으므로** 그 논문이 무엇을 어떻게 증명했는지는 적지 않았다 · ①②③의 수는 모두 직접 모의실험한 값이고, ②의 두 분산 공식도 모의로 맞춰 본 것이다_
+
+</div>
+
 ---
 
 ## 연습문제
