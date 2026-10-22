@@ -655,11 +655,11 @@ nav:
                 - 붓스트랩 개요: ch17/bootstrap/bootstrap.md
             - 17.2 붓스트랩 신뢰구간:
                 - 백분위수법: ch17/bootstrap_ci/percentile.md
+                - 기본법 (역백분위수법): ch17/bootstrap_ci/basic.md
                 - 편향보정 가속 붓스트랩 (BCa): ch17/bootstrap_ci/bca.md
                 - 붓스트랩-t 방법: ch17/bootstrap_ci/bootstrap_t.md
                 - 신뢰수준의 시각화: ch17/bootstrap_ci/visualization_confidence_levels.md
                 - 붓스트랩 신뢰구간 방법의 비교: ch17/bootstrap_ci/comparison.md
-                - 붓스트랩 신뢰구간 방법 (코드): ch17/bootstrap_ci/bootstrap_ci.md
                 - 붓스트랩 신뢰구간 시각화 (코드): ch17/bootstrap_ci/bootstrap_ci_visualization.md
                 - 중앙값의 붓스트랩 (코드): ch17/bootstrap_ci/bootstrap_median.md
             - 17.3 붓스트랩 가설검정:

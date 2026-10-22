@@ -1138,7 +1138,7 @@ $$
     2\bar x - \bar x^{*}_{(1-\alpha/2)} \ \le\ \mu_0 \ \le\ 2\bar x - \bar x^{*}_{(\alpha/2)}
     $$
 
-    로 **기본(역백분위) 구간과 글자까지 같다**([붓스트랩 신뢰구간](../bootstrap_ci/bootstrap_ci.md) §3). 절댓값 판본은 $\lvert \bar x^{*} - \bar x\rvert$의 $(1-\alpha)$분위수를 $q_{1-\alpha}$라 할 때
+    로 **기본(역백분위) 구간과 글자까지 같다**(17.2절 [기본법 (역백분위수법)](../bootstrap_ci/basic.md)). 절댓값 판본은 $\lvert \bar x^{*} - \bar x\rvert$의 $(1-\alpha)$분위수를 $q_{1-\alpha}$라 할 때
 
     $$
     \lvert \bar x - \mu_0\rvert \le q_{1-\alpha}
