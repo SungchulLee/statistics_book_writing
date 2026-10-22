@@ -18,7 +18,15 @@ confidence_intervals 는 지울 쪽이 아니라 미리보기였다.
 
   SAMESEC   두 쪽 이상에 같은 이름의 절
   SAMESET   두 쪽의 보기가 같은 수를 설정으로 쓴다 (n=12, sigma=2 꼴)
-  TWIN      쪽 이름이 접미사만 다르다 (_sim, _calc, _examples, _demo …)
+  TWIN      쪽 이름이 접미사만 다르다 (_sim, _calc, _examples, _demo …).
+            **거짓 양성이 절반이다.** 처음 여덟을 냈는데 ch18 의 셋(ridge/lasso/
+            elastic_net _examples)만 참이었고 넷은 이름만 닮은 것이었다 —
+            ch05 mse_comparison 은 분산추정량의 SS/c 계열이고 mse 는 MSE 일반
+            개념, ch06 moments_examples 는 분포별 적용(독일 탱크 문제 포함)이고
+            moments 는 개관, ch15 robust_tests_comparison 은 대수정규라는 특정
+            시나리오 연구, ch11 interaction_plot 은 교호작용이 **척도에 의존한다**는
+            석면 자료를 다룬다. **nav 제목을 보면 바로 갈린다** — 파일 이름이
+            아니라 제목이 같은 주제를 말하는지 보라
   SUBSET    한 쪽의 절 이름들이 다른 쪽의 절 이름을 거의 다 품는다 (축소판)
 """
 import collections
