@@ -316,6 +316,23 @@ $$
 
 <div class="exbox" markdown>
 
+!!! note "출력의 네 열은 모두 한 수에서 나온다"
+    `pairwise_tukeyhsd` 가 내놓는 `lower`, `upper`, `p-adj`, `reject` 는 서로
+    독립적인 네 수가 아니다. 균형 설계에서는 넷 모두 $\text{HSD}$ 하나로 묶인다.
+
+    - **구간.** $(\bar y_j - \bar y_i) \pm \text{HSD}$ 이므로 **반폭이 세 쌍 모두에서 같다.**
+      쌍마다 다른 것은 중심뿐이다.
+    - **`reject`.** 참인 것과 구간이 $0$ 을 품지 않는 것이 **동치**다. $|\bar y_i - \bar y_j| > \text{HSD}$
+      가 두 진술을 같은 부등식으로 적어 주기 때문이다.
+    - **`p-adj`.** 스튜던트화 범위의 꼬리확률
+
+      $$
+      p_{\text{adj}} = P\!\left(Q_{k,\,N-k} \ge \frac{|\bar y_i - \bar y_j|}{\sqrt{MSW/n}}\right)
+      $$
+
+      이다. 위 (1) 의 $\text{HSD} = (q/\sqrt2)\,\text{SE}$ 와 같은 식을 꼬리 쪽에서 읽은 것이다.
+
+
 **보기 3.** <span class="diff easy" title="쉬움"></span> 3단계 — 본페로니 보정과의 비교. 보수성의 크기를 수로 잰다.
 
 **(1)** $m$ 개 비교를 각각 수준 $\alpha$ 로 하고 그들이 **독립**이면 가족단위 오류율이 $1-(1-\alpha)^m$ 임을 보이고, 합집합 한계가 주는 $m\alpha$ 와 견주시오. 집단이 $k$ 개면 $m = \binom{k}{2}$ 이므로 $k = 4$ 에서 그 값은 얼마인가.

@@ -143,6 +143,154 @@ Games-Howell 검정은 다음일 때 적절한 사후 절차이다:
 
     Games-Howell 검정은 Welch-Satterthwaite 근사에 의존하는데, 이 근사는 집단 표본크기가 어느 정도 될 때($n_i \geq 6$) 잘 작동한다. 집단이 아주 작으면($n_i < 6$) 분산 추정이 불안정해지고 $\nu_{ij}$ 근사를 믿기 어려워진다. 이런 경우에는 Kruskal-Wallis 검정 뒤에 Dunn 검정을 쓰는 비모수적 대안을 고려하라.
 
+## 6. 본페로니 보정 쌍별 Welch 와 견주기
+
+절 $5$ 는 게임스–하월과 투키를 견주었다. 실무에서 흔한 셋째 길이 하나 더 있다 —
+**쌍별 Welch $t$ 검정에 본페로니 보정**을 거는 것이다. 이것은 투키와 **두 가지**가
+다르다. 다중성 보정 방법도 다르고(본페로니 대 스튜던트화 범위) 분산을 다루는
+방법도 다르다(쌍별 대 합동). 두 차이를 하나씩 떼어 본다.
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 본페로니가 Tukey 보다 보수적인가. 이 단계는 Tukey 와 **두 가지**가 다르다. 다중성 보정 방법도 다르고(본페로니 대 스튜던트화 범위), 분산을 다루는 방법도 다르다(쌍별 Welch 대 합동 $MSW$).
+
+**(1)** 본페로니 보정이 FWER 을 $\alpha$ 이하로 지킴을 **합집합 상계**로 보이시오. 또 합동분산을 쓰는 두 방법의 문턱을 같은 자에 올리면 그 비가
+
+$$
+\frac{\text{Bonferroni 문턱}}{\text{Tukey 문턱}}
+= \frac{\sqrt2\, t_{1-\alpha/(2m),\,\nu}}{q_{\alpha,\,k,\,\nu}}
+$$
+
+임을 보이고, $k = 3$, $m = 3$, $\nu = 27$ 에서 이 값을 구하시오.
+
+**(2)** 두 차이를 **하나씩** 떼어 내시오. 곧 합동분산 $t$-검정에 본페로니를 걸어 Tukey 와 견주고, 다시 Welch 와 견주시오. 어느 쌍에서 Welch 가 오히려 더 작은 $p$-값을 주는가. 그 까닭은 무엇인가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 비교가 $m$ 개이고 각각의 귀무가설을 $H_{0}^{(1)},\dots,H_{0}^{(m)}$ 이라 하자. 모두 참일 때 $i$ 번째를 수준 $\alpha/m$ 에서 기각할 확률은 $\alpha/m$ 이하다. 합집합 상계로
+
+    $$
+    \text{FWER} = P\!\left(\bigcup_{i=1}^{m}\{\text{$i$ 번째를 기각}\}\right)
+    \le \sum_{i=1}^{m} P(\text{$i$ 번째를 기각})
+    \le m \cdot \frac{\alpha}{m} = \alpha
+    $$
+
+    이다. 검정통계량들이 **서로 어떻게 얽혀 있든** 성립한다는 것이 이 상계의 장점이자 보수성의 출처다. 실제로 쌍별 비교는 같은 집단평균을 공유하므로 강하게 상관되어 있고, 그만큼 합집합 상계가 느슨해진다. 수준 $\alpha/m$ 으로 검정하는 것과 $p$-값에 $m$ 을 곱해 $\alpha$ 와 견주는 것은 같은 일이다.
+
+    **문턱의 비.** 합동분산을 쓰면 본페로니는
+
+    $$
+    |\bar y_i - \bar y_j| > t_{1-\alpha/(2m),\,\nu}\sqrt{MSW\left(\tfrac1n+\tfrac1n\right)}
+    = t_{1-\alpha/(2m),\,\nu}\,\sqrt2\,\sqrt{\frac{MSW}{n}}
+    $$
+
+    일 때 기각하고, Tukey 는 $q_{\alpha,k,\nu}\sqrt{MSW/n}$ 을 넘을 때 기각한다. $\sqrt{MSW/n}$ 이 약분되어
+
+    $$
+    \frac{\text{Bonferroni}}{\text{Tukey}} = \frac{\sqrt2\,t_{1-\alpha/(2m),\nu}}{q_{\alpha,k,\nu}}
+    $$
+
+    가 남는다. **$MSW$ 와 $n$ 에 의존하지 않는 순수한 분위수의 비**다. $k=3$ 이면 $m=3$ 이고, 아래에서 재 보면 $1.029$ 로 본페로니 쪽이 $3\%$ 높다. 집단이 많아질수록 $m = \binom k2$ 가 제곱으로 늘어 이 비가 커진다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    # 이 보기만 PlantGrowth 를 쓴다. 11.1 의 같은 자료다.
+    url = ('https://raw.githubusercontent.com/vincentarelbundock/'
+           'Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv')
+    df = pd.read_csv(url, usecols=[1, 2])
+
+    from itertools import combinations
+    from scipy.stats import ttest_ind
+    from statsmodels.stats.multitest import multipletests
+
+    groups = df['group'].unique()
+    p_raw, labels = [], []
+    for g1, g2 in combinations(groups, 2):
+        x = df.loc[df['group'] == g1, 'weight'].values
+        y = df.loc[df['group'] == g2, 'weight'].values
+        stat, p = ttest_ind(x, y, equal_var=False)
+        p_raw.append(p)
+        labels.append(f"{g1} vs {g2}")
+
+    # Bonferroni는 문턱을 낮추는 대신 p-값에 m을 곱해 돌려준다.
+    # 그래서 보정 후에도 비교 대상은 여전히 alpha다.
+    _, p_bonf, _, _ = multipletests(p_raw, alpha=0.05, method='bonferroni')
+    for lbl, p, pb in zip(labels, p_raw, p_bonf):
+        print(f"{lbl:<12}  p = {p:.4f}   p_bonf = {pb:.4f}")
+    ```
+
+    출력:
+
+    ```
+    ctrl vs trt1  p = 0.2504   p_bonf = 0.7511
+    ctrl vs trt2  p = 0.0479   p_bonf = 0.1437
+    trt1 vs trt2  p = 0.0093   p_bonf = 0.0279
+    ```
+
+    Tukey와 결론은 같지만(trt1 대 trt2만 유의) 보정 p-값은 0.0279로 Tukey의 0.012보다 크다. Bonferroni가 더 보수적이기 때문이다.
+
+    ctrl 대 trt2를 보라. 보정 전 $p = 0.0479$로 유의했던 것이 보정 후 0.1437이 된다. 비교를 세 번 한다는 사실이 이만큼의 대가를 요구한다.
+
+    이제 두 차이를 하나씩 떼어 본다.
+
+    ```python
+    MSW, n, k, nu, m = 0.388596, 10, 3, 27, 3
+
+    # 본페로니와 Tukey 의 문턱을 같은 자에 올려 견준다 (둘 다 합동분산 기준).
+    t_b = stats.t.ppf(1 - 0.05 / (2 * m), nu)
+    thr_bonf = t_b * np.sqrt(2 * MSW / n)
+    q_crit = stats.studentized_range.ppf(0.95, k, nu)
+    thr_tukey = q_crit * np.sqrt(MSW / n)
+    print(f"본페로니 문턱 = {t_b:.4f} * {np.sqrt(2 * MSW / n):.4f} = {thr_bonf:.4f}")
+    print(f"Tukey  문턱   = {q_crit:.4f} * {np.sqrt(MSW / n):.4f} = {thr_tukey:.4f}")
+    print(f"비 = {thr_bonf / thr_tukey:.5f}   (= sqrt(2) t / q = {np.sqrt(2) * t_b / q_crit:.5f})")
+
+    # 합동분산 t 로 본페로니를 다시 하면 Welch 와 얼마나 다른가.
+    print(f"\n{'pair':<14}{'Welch p':>10}{'Welch bonf':>12}"
+          f"{'pooled p':>10}{'pooled bonf':>13}{'Tukey adj':>11}")
+    means = df.groupby('group')['weight'].mean()
+    for g1, g2 in combinations(['ctrl', 'trt1', 'trt2'], 2):
+        x = df.loc[df['group'] == g1, 'weight'].values
+        y = df.loc[df['group'] == g2, 'weight'].values
+        p_w = stats.ttest_ind(x, y, equal_var=False).pvalue
+        d = means[g2] - means[g1]
+        t_pool = d / np.sqrt(2 * MSW / n)
+        p_pool = 2 * stats.t.sf(abs(t_pool), nu)
+        p_tuk = stats.studentized_range.sf(abs(d) / np.sqrt(MSW / n), k, nu)
+        print(f"{g1 + ' vs ' + g2:<14}{p_w:>10.4f}{min(m * p_w, 1):>12.4f}"
+              f"{p_pool:>10.4f}{min(m * p_pool, 1):>13.4f}{p_tuk:>11.4f}")
+    ```
+
+    출력:
+
+    ```
+    본페로니 문턱 = 2.5525 * 0.2788 = 0.7116
+    Tukey  문턱   = 3.5064 * 0.1971 = 0.6912
+    비 = 1.02946   (= sqrt(2) t / q = 1.02946)
+
+    pair             Welch p  Welch bonf  pooled p  pooled bonf  Tukey adj
+    ctrl vs trt1      0.2504      0.7511    0.1944       0.5832     0.3909
+    ctrl vs trt2      0.0479      0.1437    0.0877       0.2630     0.1980
+    trt1 vs trt2      0.0093      0.0279    0.0045       0.0134     0.0120
+    ```
+
+    **(1)의 비가 맞는다.** 두 문턱의 비 $1.02946$ 이 $\sqrt2\,t/q$ 와 다섯 자리까지 같다. 분산을 같은 방식으로 다루면 **본페로니가 Tukey 보다 정확히 $2.9\%$ 보수적**이고, `pooled bonf` 열의 $0.0134$ 가 `Tukey adj` 의 $0.0120$ 보다 큰 것이 그 결과다. 세 집단에서는 차이가 이 정도로 작다.
+
+    **그런데 표의 `Welch bonf` 는 더 큰 $0.0279$ 다.** 다중성 보정 탓이 아니다. 같은 본페로니인데도 Welch 가 $0.0279$, 합동이 $0.0134$ 이므로, 차이는 **분산을 다루는 방식**에서 왔다. Welch 는 두 집단의 자료만으로 표준오차를 만들어 자유도가 $14$ 언저리로 줄고 임계값이 높아진다. 셋째 집단이 주는 정보를 버린 값이다.
+
+    **그러나 ctrl 대 trt2 에서는 방향이 뒤집힌다.** Welch 가 $p = 0.0479$ 로 합동의 $0.0877$ 보다 **작다.** 까닭은 집단별 표준편차에 있다. ctrl 과 trt2 는 $0.583$ 과 $0.443$ 으로 작은데, 합동 $MSW$ 에는 표준편차 $0.794$ 인 trt1 이 함께 들어가 있어 $\sqrt{MSW} = 0.623$ 으로 부풀려진다. **비교에 끼지도 않은 집단이 표준오차를 키운 것이다.** 자유도를 벌어 오는 대가가 이것이고, 등분산이 깨지면 손해가 이득을 넘어설 수 있다.
+
+    정리하면 이 자료에서 세 절차의 결론은 모두 같다(trt1 대 trt2 만 유의). 다만 이유가 겹겹이다. **방법을 바꿀 때는 무엇이 바뀌는지를 하나씩 떼어 보아야 한다.** 등분산이 미덥지 않다면 보정은 본페로니로 두더라도 쌍별 검정을 Welch 로 바꾸는 쪽이 옳고, 등분산이 믿을 만하다면 Tukey 가 가장 날카롭다.
+
+---
+
 ---
 
 ## 연습문제
@@ -963,6 +1111,151 @@ Games-Howell 검정은 다음일 때 적절한 사후 절차이다:
     | 대조군 비교만 | 던넷 T3 또는 웰치형 더넷 |
 
     **탐헤인 T2도 같은 계열**이다. T3보다 더 보수적이며, 실무에서는 셋 중 **게임스-하웰이 가장 널리 쓰인다.**
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff hard" title="어려움"></span>
+분산이 다를 때의 사후비교로 **게임스·하월 검정**을 구현하고, 투키·본페로니 웰치와 비교하라.
+
+</div>
+
+??? success "풀이"
+    **게임스·하월.** 투키의 스튜던트화 범위분포를 쓰되, **쌍별 분산과 새터스웨이트 자유도**를 쓴다. 투키와 웰치의 결합이다.
+
+    $$
+    q_{ij}=\frac{|\bar y_i-\bar y_j|}{\sqrt{\tfrac12(s_i^2/n_i+s_j^2/n_j)}},
+    \qquad
+    \nu_{ij}=\frac{(s_i^2/n_i+s_j^2/n_j)^2}
+    {\tfrac{(s_i^2/n_i)^2}{n_i-1}+\tfrac{(s_j^2/n_j)^2}{n_j-1}}
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from itertools import combinations
+    from statsmodels.stats.libqsturng import psturng, qsturng
+
+    groups = {
+        "ctrl": np.array([4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14]),
+        "trt1": np.array([4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69]),
+        "trt2": np.array([6.31, 5.12, 5.54, 5.50, 5.37, 5.29, 4.92, 6.15, 5.80, 5.26]),
+    }
+    names = list(groups)
+    k = len(names)
+
+    print("게임스·하월")
+    for a, b in combinations(range(k), 2):
+        x, y = groups[names[a]], groups[names[b]]
+        n1, n2 = len(x), len(y)
+        v1, v2 = x.var(ddof=1), y.var(ddof=1)
+        se = np.sqrt((v1 / n1 + v2 / n2) / 2)
+        df = ((v1 / n1 + v2 / n2)**2
+              / ((v1 / n1)**2 / (n1 - 1) + (v2 / n2)**2 / (n2 - 1)))
+        q = abs(x.mean() - y.mean()) / se
+        p = float(np.atleast_1d(psturng(q, k, df))[0])
+        half = qsturng(0.95, k, df) * se
+        diff = x.mean() - y.mean()
+        print(f"  {names[a]}-{names[b]}: 차이 {diff:+.4f}  q = {q:.4f}  "
+              f"df = {df:.2f}  p = {p:.4f}")
+        print(f"              95% CI ({diff - half:+.4f}, {diff + half:+.4f})")
+    ```
+
+    ```text
+    게임스·하월
+      ctrl-trt1: 차이 +0.3710  q = 1.6847  df = 16.52  p = 0.4761
+                  95% CI (-0.4299, +1.1719)
+      ctrl-trt2: 차이 -0.4940  q = 3.0180  df = 16.79  p = 0.1128
+                  95% CI (-1.0884, +0.1004)
+      trt1-trt2: 차이 -0.8650  q = 4.2569  df = 14.10  p = 0.0236
+                  95% CI (-1.6162, -0.1138)
+    ```
+
+    **세 방법의 $p$ 값을 나란히 놓으면.**
+
+    | 쌍 | 투키 | 게임스·하월 | 본페로니 Welch |
+    |---|---|---|---|
+    | ctrl-trt1 | 0.391 | 0.476 | 0.751 |
+    | ctrl-trt2 | 0.198 | 0.113 | 0.144 |
+    | trt1-trt2 | **0.012** | **0.024** | **0.028** |
+
+    **게임스·하월이 대체로 중간**이다. 쌍별 분산을 쓰면서도 스튜던트화 범위를 쓰므로, 본페로니의 보수성은 피하고 투키의 등분산 가정은 버린다.
+
+    **ctrl-trt2에서 게임스·하월이 가장 작다**(0.113). 두 집단의 분산이 모두 작아 쌍별 표준오차가 합동값보다 작기 때문이다.
+
+    **세 방법의 FWER을 비교해 보자.**
+
+    ```python
+    rng = np.random.default_rng(1357)
+
+    def tukey_any(g, alpha=0.05):
+        k = len(g)
+        n = np.array([len(x) for x in g])
+        N = n.sum()
+        MSE = sum(((x - x.mean())**2).sum() for x in g) / (N - k)
+        for i, j in combinations(range(k), 2):
+            se = np.sqrt(MSE / 2 * (1 / n[i] + 1 / n[j]))
+            if abs(g[i].mean() - g[j].mean()) / se > qsturng(1 - alpha, k, N - k):
+                return True
+        return False
+
+    def games_howell_any(g, alpha=0.05):
+        k = len(g)
+        for i, j in combinations(range(k), 2):
+            x, y = g[i], g[j]
+            n1, n2 = len(x), len(y)
+            v1, v2 = x.var(ddof=1), y.var(ddof=1)
+            se = np.sqrt((v1 / n1 + v2 / n2) / 2)
+            df = ((v1 / n1 + v2 / n2)**2
+                  / ((v1 / n1)**2 / (n1 - 1) + (v2 / n2)**2 / (n2 - 1)))
+            if abs(x.mean() - y.mean()) / se > qsturng(1 - alpha, k, df):
+                return True
+        return False
+
+    def bonf_welch_any(g, alpha=0.05):
+        k = len(g)
+        m = k * (k - 1) // 2
+        return any(stats.ttest_ind(g[i], g[j], equal_var=False).pvalue < alpha / m
+                   for i, j in combinations(range(k), 2))
+
+    M = 5_000
+    print(f"{'상황':>24s} {'투키':>8s} {'게임스·하월':>12s} {'본페로니 Welch':>15s}")
+    for label, sig, ns in [("등분산 등n", (1, 1, 1), (10, 10, 10)),
+                           ("이분산 등n", (1, 1, 3), (10, 10, 10)),
+                           ("이분산 불균형(큰σ↔작은n)", (1, 1, 3), (15, 15, 5)),
+                           ("이분산 불균형(큰σ↔큰n)", (1, 1, 3), (5, 15, 15))]:
+        a = b = c = 0
+        for _ in range(M):
+            g = [rng.normal(0, s, n) for s, n in zip(sig, ns)]
+            a += tukey_any(g)
+            b += games_howell_any(g)
+            c += bonf_welch_any(g)
+        print(f"{label:>24s} {a / M:8.4f} {b / M:12.4f} {c / M:15.4f}")
+    ```
+
+    ```text
+                          상황       투키       게임스·하월      본페로니 Welch
+                      등분산 등n   0.0464       0.0470          0.0400
+                      이분산 등n   0.0702       0.0492          0.0414
+             이분산 불균형(큰σ↔작은n)   0.2538       0.0506          0.0392
+              이분산 불균형(큰σ↔큰n)   0.0326       0.0506          0.0436
+    ```
+
+    **투키가 이분산에서 무너진다.** 불균형과 결합하면 **0.254**다.
+
+    **게임스·하월이 네 상황 모두에서 0.047~0.051**로 안정적이다.
+
+    **본페로니 웰치는 안전하지만 보수적**이다(0.039~0.044). $k=3$이라 차이가 작지만, $k$가 커지면 벌어진다.
+
+    **권고.**
+
+    | 상황 | 방법 |
+    |---|---|
+    | 등분산·등$n$이 확실 | 투키(가장 강력) |
+    | **그 밖 모든 경우** | **게임스·하월** |
+    | 비교가 소수이고 단순함을 원함 | 본페로니 웰치 |
+
+    **게임스·하월을 기본으로 삼아도 손해가 거의 없다.** 등분산일 때 투키와의 차이가 0.046 대 0.047로 미미하다.
+
 
 ---
 

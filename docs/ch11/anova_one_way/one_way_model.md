@@ -710,6 +710,214 @@ $$
 
 ---
 
+
+절 $1$ 의 C 는 분산분석이 범주형 설명변수를 쓰는 선형회귀라고 적었다. 그 말이
+`statsmodels` 출력에서 어떻게 보이는지, 그리고 마지막으로 그림과 검정이 같은
+이야기를 하는지 확인한다.
+
+<div class="exbox" markdown>
+
+**보기 5.** <span class="diff easy" title="쉬움"></span> 분산분석은 회귀다. `ols('weight ~ C(group)')` 는 회귀모형을 적합하는데 그 결과가 분산분석표로 나온다.
+
+**(1)** 처리코딩(`C()` 의 기본값)에서 적합된 계수가
+
+$$
+\hat\beta_0 = \bar y_{\text{ctrl}},
+\qquad
+\hat\beta_1 = \bar y_{\text{trt1}} - \bar y_{\text{ctrl}},
+\qquad
+\hat\beta_2 = \bar y_{\text{trt2}} - \bar y_{\text{ctrl}}
+$$
+
+임을 보이고, 설계행렬의 계수(rank)가 $k = 3$ 이므로 잔차 자유도가 $N - k = 27$ 임을 설명하시오. 또 $R^2 = SSB/SST$ 임을 밝히시오.
+
+**(2)** 계수와 자유도를 수치로 확인하고, **`C()` 를 빠뜨려 수준이 $0,1,2$ 로 코딩된 열을 그대로 넣으면** 무엇이 달라지는지 보이시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 처리코딩의 설계행렬은 열이 셋이다. 모두 $1$ 인 열, trt1 이면 $1$ 인 지시열, trt2 이면 $1$ 인 지시열. 그러면 적합값이
+
+    $$
+    \hat y_{ij} = \beta_0 + \beta_1 \mathbf 1\{i = \text{trt1}\} + \beta_2 \mathbf 1\{i = \text{trt2}\}
+    $$
+
+    인데, 이 모형은 **집단마다 자유로운 상수 하나**를 주는 것과 같다. 집단 $i$ 의 적합값은 $\mu_i$ 라는 하나의 수이고, 제곱오차
+
+    $$
+    \sum_{i}\sum_j (y_{ij} - \mu_i)^2
+    $$
+
+    를 $\mu_i$ 에 대해 따로따로 최소화하면 $\hat\mu_i = \bar y_{i\cdot}$ 이다(제곱합의 최소점은 평균이다). 이제 모수로 되돌리면
+
+    $$
+    \hat\beta_0 = \hat\mu_{\text{ctrl}} = \bar y_{\text{ctrl}},
+    \qquad
+    \hat\beta_1 = \hat\mu_{\text{trt1}} - \hat\mu_{\text{ctrl}},
+    \qquad
+    \hat\beta_2 = \hat\mu_{\text{trt2}} - \hat\mu_{\text{ctrl}}
+    $$
+
+    이다. **절편은 기준집단의 평균이고 나머지는 기준집단과의 차이다.** 기준집단은 알파벳 순 첫 수준인 ctrl 이 자동으로 맡는다.
+
+    설계행렬의 세 열은 선형독립이므로 계수가 $3$ 이고, 사영공간의 차원이 $3$ 이라 잔차공간의 차원은 $N - 3 = 27$ 이다. 이것이 $MSW$ 의 자유도이고 앞 절의 $N-k$ 와 같은 수다.
+
+    $R^2$ 은 정의가 $1 - SSE/SST_{\text{total}}$ 인데 적합값이 집단평균이므로 $SSE = SSW$ 이고 $SST_{\text{total}} - SSW = SSB$ 다. 따라서
+
+    $$
+    R^2 = \frac{SSB}{SST_{\text{total}}}
+    $$
+
+    로 **분산분석표의 `sum_sq` 두 칸의 비**다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    url = ('https://raw.githubusercontent.com/vincentarelbundock/'
+           'Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv')
+    df = pd.read_csv(url, usecols=[1, 2])
+
+    # C()로 감싸지 않으면 group을 숫자처럼 취급해 회귀직선을 적합해 버린다.
+    # 문자열 열이면 statsmodels가 알아서 범주형으로 보지만, 수준이 0/1/2 같은
+    # 숫자로 코딩되어 있으면 조용히 틀린 모형이 된다. 습관적으로 감싸는 편이 안전하다.
+    model = ols('weight ~ C(group)', data=df).fit()
+    aov = anova_lm(model)
+    print(aov)
+    ```
+
+    출력:
+
+    ```
+                df    sum_sq   mean_sq         F   PR(>F)
+    C(group)   2.0   3.76634  1.883170  4.846088  0.01591
+    Residual  27.0  10.49209  0.388596       NaN      NaN
+    ```
+
+    분산분석표는 집단 간 제곱합($SSB$), 집단 내 제곱합($SSW$), $F$-통계량, $p$-값을 보고한다. $p < \alpha$이면 $H_0$을 기각한다.
+
+    계수가 정말 집단평균의 차인지, 그리고 `C()` 가 왜 필요한지를 확인한다.
+
+    ```python
+    means = df.groupby('group')['weight'].mean()
+    print(model.params)
+    print(f"\n절편             = ctrl 평균     = {means['ctrl']:.3f}")
+    print(f"C(group)[T.trt1] = trt1 - ctrl  = {means['trt1'] - means['ctrl']:.3f}")
+    print(f"C(group)[T.trt2] = trt2 - ctrl  = {means['trt2'] - means['ctrl']:.3f}")
+    print(f"\nR^2 = SSB/SST = {model.rsquared:.7f}"
+          f"   (표에서 {3.76634 / (3.76634 + 10.49209):.7f})")
+    print(f"모형 자유도 {model.df_model:.0f},  잔차 자유도 {model.df_resid:.0f}")
+
+    # C() 를 빠뜨리면 어떻게 되는가. 수준을 0/1/2 로 코딩한 열을 만들어 넣어 본다.
+    df_num = df.assign(gcode=df['group'].map({'ctrl': 0, 'trt1': 1, 'trt2': 2}))
+    bad = ols('weight ~ gcode', data=df_num).fit()
+    print("\nC() 없이 숫자 코드를 그대로 넣으면")
+    print(anova_lm(bad))
+    print(f"기울기 = {bad.params['gcode']:.3f}  (집단당 '한 칸'씩 올라가는 직선)")
+    ```
+
+    출력:
+
+    ```
+    Intercept           5.032
+    C(group)[T.trt1]   -0.371
+    C(group)[T.trt2]    0.494
+    dtype: float64
+
+    절편             = ctrl 평균     = 5.032
+    C(group)[T.trt1] = trt1 - ctrl  = -0.371
+    C(group)[T.trt2] = trt2 - ctrl  = 0.494
+
+    R^2 = SSB/SST = 0.2641483   (표에서 0.2641483)
+    모형 자유도 2,  잔차 자유도 27
+
+    C() 없이 숫자 코드를 그대로 넣으면
+                df    sum_sq   mean_sq        F    PR(>F)
+    gcode      1.0   1.22018  1.220180  2.62037  0.116711
+    Residual  28.0  13.03825  0.465652      NaN       NaN
+    기울기 = 0.247  (집단당 '한 칸'씩 올라가는 직선)
+    ```
+
+    **(1)이 그대로 확인된다.** 절편 $5.032$ 가 ctrl 의 평균이고, 두 계수 $-0.371$ 과 $0.494$ 가 각각 trt1, trt2 와 ctrl 의 차다. $R^2 = 0.2641483$ 이 분산분석표의 $3.76634/(3.76634+10.49209)$ 와 일곱 자리까지 같다. 자유도도 $2$ 와 $27$ 로 맞는다.
+
+    **`C()` 를 빠뜨리면 결론이 뒤집힌다.** 숫자 코드를 그대로 넣으면 statsmodels 는 그것을 **연속변수**로 보고 기울기 하나짜리 직선을 적합한다. 자유도가 $2$ 에서 $1$ 로 줄고, 집단 간 제곱합이 $3.76634$ 에서 $1.22018$ 로 쪼그라들며(직선 위에 놓인 몫만 세기 때문이다), $p$-값이 $0.0159$ 에서 $0.1167$ 로 올라가 **$\alpha = 0.05$ 에서 기각하지 못하게 된다.**
+
+    왜 작아지는지 보면 이 모형이 무엇을 가정했는지 알 수 있다. 기울기 $0.247$ 짜리 직선은 집단평균이 $5.032 \to 5.279 \to 5.526$ 으로 **일정하게 올라간다**고 말하는데 실제 평균은 $5.032 \to 4.661 \to 5.526$ 으로 내려갔다 올라간다. 가운데 집단의 어긋남이 통째로 잔차로 밀려나 $SSE$ 가 $10.49$ 에서 $13.04$ 로 커졌다. **오류 메시지는 없다.** 조용히 다른 모형이 적합될 뿐이므로, 범주형 요인은 습관적으로 `C()` 로 감싸는 편이 안전하다.
+
+<div class="exbox" markdown>
+
+**보기 6.** <span class="diff easy" title="쉬움"></span> "상자가 안 겹치면 유의하다"는 눈대중은 믿을 만한가. 마지막으로 상자그림을 그려 앞의 검정 결과와 같은 이야기를 하는지 확인한다.
+
+**(1)** 세 쌍의 상자가 **겹치는 길이**를 재고 Tukey 의 판정과 나란히 놓으시오. 순서가 맞는가.
+
+**(2)** 그래도 겹침을 판정의 근거로 쓸 수 없는 까닭을 밝히시오. Tukey 가 실제로 보는 것은 무엇인가.
+
+</div>
+
+??? success "풀이"
+
+    유도할 답이 있는 문제가 아니다. **그림이 가리키는 방향과 검정이 쓰는 양이 어떻게 다른지**를 수치로 읽는 것이 이 보기의 전부다.
+
+    ```python
+    import matplotlib.pyplot as plt
+
+    # 상자그림으로 마무리한다. 검정 결과와 그림이 같은 이야기를 하는지 확인하는
+    # 것이 마지막 단계다. 순서를 못박아 두어야 그림이 자료 순서에 휘둘리지 않는다.
+    order = ['ctrl', 'trt1', 'trt2']
+    data = [df.loc[df['group'] == g, 'weight'].values for g in order]
+    plt.boxplot(data, labels=order)
+    plt.xlabel('Group')
+    plt.ylabel('Weight')
+    plt.title('PlantGrowth weights by group')
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    ![순서를 못박은 집단별 상자그림](./img/plantgrowth_boxplot_ordered.png)
+
+    trt1의 상자가 가장 낮고 넓으며, trt2가 가장 높고 좁다. ctrl의 상자는 두 처리 사이에 걸쳐 있어 어느 쪽과도 뚜렷이 갈리지 않는다. 겹침을 실제로 재어 Tukey 와 견준다.
+
+    ```python
+    HSD = 0.6912
+    box = {g: np.percentile(df.loc[df['group'] == g, 'weight'], [25, 50, 75])
+           for g in order}
+    means = df.groupby('group')['weight'].mean()
+    print(f"{'pair':<14}{'box overlap':>12}{'|diff|':>9}{'HSD':>8}{'Tukey':>8}")
+    for g1, g2 in [('ctrl', 'trt1'), ('ctrl', 'trt2'), ('trt1', 'trt2')]:
+        lo = max(box[g1][0], box[g2][0])     # 두 상자 아랫변 중 높은 쪽
+        hi = min(box[g1][2], box[g2][2])     # 두 상자 윗변 중 낮은 쪽
+        overlap = max(hi - lo, 0.0)
+        d = abs(means[g2] - means[g1])
+        print(f"{g1 + ' vs ' + g2:<14}{overlap:>12.3f}{d:>9.3f}{HSD:>8.4f}"
+              f"{str(d > HSD):>8}")
+    ```
+
+    출력:
+
+    ```
+    pair           box overlap   |diff|     HSD   Tukey
+    ctrl vs trt1         0.320    0.371  0.6912   False
+    ctrl vs trt2         0.025    0.494  0.6912   False
+    trt1 vs trt2         0.000    0.865  0.6912    True
+    ```
+
+    **(1) 순서는 맞는다.** 겹침이 $0.320 \to 0.025 \to 0.000$ 으로 줄어드는 순서가 차이 $0.371 \to 0.494 \to 0.865$ 가 커지는 순서와 일치하고, 유일하게 겹침이 **정확히 $0$** 인 trt1–trt2 가 Tukey 가 잡은 쌍이다. 그림과 검정이 같은 이야기를 한다.
+
+    **(2) 그래도 겹침을 근거로 쓸 수는 없다.** ctrl 과 trt2 는 겹침이 $0.025$ 로 **거의 $0$ 인데도 유의하지 않다.** 겹침이 $0$ 이 되는 자리와 $\text{HSD}$ 를 넘는 자리가 서로 다르기 때문이다.
+
+    - 상자의 경계는 **사분위수**이고 겹침은 $Q_3^{(i)} - Q_1^{(j)}$ 같은 양이다. 표본크기와 무관하다.
+    - Tukey 가 보는 것은 **평균의 차** $|\bar y_i - \bar y_j|$ 와 $\text{HSD} = q\sqrt{MSW/n}$ 의 비교다. $\text{HSD}$ 에는 $n$ 이 분모로, 집단 수 $k$ 가 $q$ 를 통해 들어 있다.
+
+    그래서 $n$ 을 네 배로 늘리면 $\text{HSD}$ 가 절반이 되어 같은 그림에서도 판정이 바뀐다. **상자그림은 $n$ 을 전혀 보여 주지 않으므로, 겹침만 보고 유의성을 말하면 표본크기를 통째로 무시하는 셈이다.** 반대 방향의 실수도 흔하다. $n$ 이 아주 크면 상자가 많이 겹쳐도 평균 차가 유의해진다.
+
+    겹침을 보고 싶다면 상자가 아니라 **평균의 신뢰구간**을 그려야 하고, 그마저도 두 구간의 겹침과 차의 유의성은 다른 물음이다. 이 쪽에서는 보기 2의 Tukey 동시신뢰구간이 바로 그 올바른 그림이다. 상자그림의 몫은 판정이 아니라 **분포의 모양과 이상점을 눈으로 훑는 것**이다(같은 자료를 상자그림으로 읽는 다른 각도는 [모형과 가정](one_way_model.md) 보기 3 에 있다).
+
+---
+
 ---
 
 ## 연습문제
