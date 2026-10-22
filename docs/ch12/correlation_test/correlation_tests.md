@@ -1,4 +1,4 @@
-# 상관 검정 개관
+# 세 검정을 같은 자료에서 견주기
 
 이 절에서는 두 변수 사이 관계의 유의성을 평가하는 데 널리 쓰이는 세 가지 통계 검정을 다룬다: Pearson 상관, Spearman 순위상관, Kendall의 타우.
 
@@ -759,6 +759,145 @@ $$
 
     **언제 쓰는가**: Spearman 의 $\rho_s$ 와 비슷한 상황이지만, 표본이 작거나 쌍별 일치에 기반한 더 해석하기 쉬운 측도를 원할 때 선호된다.
 
+### 세 측도의 모집단 값을 먼저 구해 놓기
+
+위 표가 「재는 것」을 선형 대 단조로 갈랐다. 그 구별이 **모집단 값에서** 어떻게
+나타나는지 세 자료로 확인한다 — 선형, 단조 비선형, 이차다.
+
+<div class="exbox" markdown>
+
+**보기 6.** <span class="diff easy" title="쉬움"></span> 세 측도의 모집단 값을 먼저 구해 놓기. 세 자료는 선형($y = 2x + \varepsilon$), 단조 비선형($y = e^x + \varepsilon$), 이차($y = x^2 + \varepsilon$)다.
+
+**(1)** 선형 자료의 모집단 $\rho$, $\rho_s$, $\tau$ 를 **닫힌 꼴로** 구하시오. 이 자료에 이변량 정규 공식을 써도 되는가. 나머지 둘에는?
+
+**(2)** 이차 자료의 세 모집단 값은 얼마인가. "$0$ 에 가깝다"가 아니라 정확한 값을 말할 수 있는가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 선형 자료에는 쓸 수 있다.** $x \sim \mathcal N(0,1)$ 이고 $y = 2x + \varepsilon$, $\varepsilon \sim \mathcal N(0,1)$ 이 독립이므로 $(x, y)$ 는 **이변량 정규**다. 따라서
+
+    $$
+    \rho = \frac{\operatorname{Cov}(x,y)}{\sigma_x \sigma_y} = \frac{2}{1 \cdot \sqrt{4+1}} = \frac{2}{\sqrt5} = 0.894427
+    $$
+
+    이고, 이변량 정규에서만 성립하는 두 닫힌 꼴
+
+    $$
+    \rho_s = \frac{6}{\pi}\arcsin\frac{\rho}{2} = 0.885502,
+    \qquad
+    \tau = \frac{2}{\pi}\arcsin\rho = 0.704833
+    $$
+
+    을 그대로 쓸 수 있다. 큰 표본으로 재면 $0.89427$, $0.88537$, $0.70497$ 이 나와 맞는다.
+
+    **나머지 둘에는 쓰면 안 된다.** 단조 비선형 자료는 $x \sim U(0,3)$ 이라 주변분포가 정규가 아니고, 이차 자료는 애초에 이변량 정규가 아니다. 두 자료의 모집단 값은 모의실험으로 잰다.
+
+    | 관계 | 모집단 $r$ | 모집단 $\rho_s$ | 모집단 $\tau$ |
+    |---|---|---|---|
+    | Linear | $+0.89427$ | $+0.88537$ | $+0.70497$ |
+    | Monotonic Nonlinear | $+0.87282$ | $+0.88110$ | $+0.70520$ |
+    | Quadratic | $+0.00038$ | $+0.00026$ | $-0.00096$ |
+
+    단조 비선형에서 $\rho_s > \rho$ 인 것($0.881$ 대 $0.873$)은 **모집단 수준에서도 참**이다. 표본에서 $0.868$ 대 $0.903$ 으로 더 벌어진 것은 표집 변동이다.
+
+    **(2) 셋 다 정확히 $0$ 이다.** $x \sim \mathcal N(0, 2^2)$ 가 $0$ 에 대칭이고 $\varepsilon$ 이 독립이므로 $(x, y)$ 와 $(-x, y)$ 의 **분포가 같다.** 그러면 $x$ 의 홀함수 $g$ 와 $y$ 의 아무 함수 $h$ 에 대해
+
+    $$
+    \operatorname{Cov}\big(g(x), h(y)\big) = \operatorname{Cov}\big(g(-x), h(y)\big) = -\operatorname{Cov}\big(g(x), h(y)\big)
+    $$
+
+    이므로 $0$ 이다. Pearson 은 $g(x) = x$ 로 두면 되고($\operatorname{Cov}(x, x^2+\varepsilon) = E[x^3] = 0$), Spearman 은 $g(x) = F_x(x) - \tfrac12$ 가 홀함수라는 데서 나온다. Kendall 은 $(x_1 - x_2)$ 의 부호를 뒤집어도 $(y_1 - y_2)$ 의 분포가 그대로이므로 일치 확률과 불일치 확률이 같아 $0$ 이다.
+
+    모의실험이 $+0.00038 \pm 0.00120$ 을 주어 이 $0$ 들과 맞는다. **표본값 $0.1014$ 는 $\operatorname{SE} = 1/\sqrt{100} = 0.1$ 의 한 배**이므로 전혀 놀랍지 않다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 100
+
+    # 선형 관계. 세 측도가 모두 크게 나온다.
+    x_lin = np.random.normal(0, 1, n)
+    y_lin = 2 * x_lin + np.random.normal(0, 1, n)
+
+    # 단조이지만 곡선인 관계. Pearson 은 떨어지지만 순위를 쓰는 두 측도는 버틴다.
+    x_mono = np.random.uniform(0, 3, n)
+    y_mono = np.exp(x_mono) + np.random.normal(0, 2, n)
+
+    # 이차함수 관계. 관계는 아주 강한데 세 측도 모두 0 근처로 나온다.
+    # 상관계수가 0 이라는 말이 "관계가 없다"는 뜻이 아님을 보여 주는 자리다.
+    x_quad = np.random.normal(0, 2, n)
+    y_quad = x_quad**2 + np.random.normal(0, 1, n)
+
+    datasets = [
+        ("Linear", x_lin, y_lin),
+        ("Monotonic Nonlinear", x_mono, y_mono),
+        ("Quadratic (r ~ 0)", x_quad, y_quad),
+    ]
+
+    for name, x, y in datasets:
+        r_p, _ = stats.pearsonr(x, y)
+        r_s, _ = stats.spearmanr(x, y)
+        r_k, _ = stats.kendalltau(x, y)
+        print(f"{name:<25} r={r_p:.4f}  rho_s={r_s:.4f}  tau={r_k:.4f}")
+
+    # 모집단 값과 견준다.
+    rho_lin = 2 / np.sqrt(5)
+    print(f"\n선형: 참 rho = 2/sqrt(5) = {rho_lin:.6f}")
+    print(f"  (x,y) 가 이변량 정규이므로 닫힌 꼴이 있다")
+    print(f"  rho_s = (6/pi) arcsin(rho/2) = {6 / np.pi * np.arcsin(rho_lin / 2):.6f}")
+    print(f"  tau   = (2/pi) arcsin(rho)   = {2 / np.pi * np.arcsin(rho_lin):.6f}")
+
+    rng = np.random.default_rng(3)
+    def pop(gen, m=200_000, reps=20):
+        rs, ss, ks = [], [], []
+        for _ in range(reps):
+            a, b = gen(m)
+            rs.append(stats.pearsonr(a, b).statistic)
+            ss.append(stats.spearmanr(a, b).statistic)
+            ks.append(stats.kendalltau(a[:40_000], b[:40_000]).statistic)
+        return np.mean(rs), np.mean(ss), np.mean(ks)
+
+    gens = [
+        ("Linear", lambda m: (z := rng.standard_normal(m), 2 * z + rng.standard_normal(m))),
+        ("Monotonic Nonlinear",
+         lambda m: (z := rng.uniform(0, 3, m), np.exp(z) + rng.normal(0, 2, m))),
+        ("Quadratic (r ~ 0)",
+         lambda m: (z := rng.normal(0, 2, m), z**2 + rng.standard_normal(m))),
+    ]
+    print(f"\n{'관계':<22s} {'모집단 r':>10s} {'rho_s':>10s} {'tau':>10s}")
+    for name, g in gens:
+        a, b, c = pop(g)
+        print(f"{name:<22s} {a:+10.5f} {b:+10.5f} {c:+10.5f}")
+    ```
+
+    출력:
+
+    ```text
+    Linear                    r=0.8724  rho_s=0.8686  tau=0.6853
+    Monotonic Nonlinear       r=0.8676  rho_s=0.9032  tau=0.7402
+    Quadratic (r ~ 0)         r=0.1014  rho_s=-0.0229  tau=-0.0376
+
+    선형: 참 rho = 2/sqrt(5) = 0.894427
+      (x,y) 가 이변량 정규이므로 닫힌 꼴이 있다
+      rho_s = (6/pi) arcsin(rho/2) = 0.885502
+      tau   = (2/pi) arcsin(rho)   = 0.704833
+
+    관계                          모집단 r      rho_s        tau
+    Linear                   +0.89427   +0.88537   +0.70497
+    Monotonic Nonlinear      +0.87282   +0.88110   +0.70520
+    Quadratic (r ~ 0)        +0.00038   +0.00026   -0.00096
+    ```
+
+    닫힌 꼴 $0.894427$, $0.885502$, $0.704833$ 이 모의실험의 $0.89427$, $0.88537$, $0.70497$ 과 소수 넷째 자리까지 맞는다.
+
+    선형 관계에서는 Pearson 이 가장 크고, 단조 비선형(지수) 관계에서는 Spearman 과 Kendall 이 Pearson 을 앞선다. 이차 관계에서는 $y$ 가 사실상 $x$ 의 결정론적 함수인데도 세 측도가 모두 **정확히 $0$** 이다. **상관이 $0$ 이라는 말은 "관계가 없다"가 아니라 "단조 성분이 없다"는 뜻**이다.
+
+---
+
 ---
 
 ## 5. 세 검정의 비교
@@ -776,7 +915,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 6.** <span class="diff easy" title="쉬움"></span> 순위 상관이 $1$ 일 때 p-값은 믿을 수 있는가. $\alpha = 0.05$ 에서 나이와 소득이 관련되어 있는지 검정한다.
+**보기 7.** <span class="diff easy" title="쉬움"></span> 순위 상관이 $1$ 일 때 p-값은 믿을 수 있는가. $\alpha = 0.05$ 에서 나이와 소득이 관련되어 있는지 검정한다.
 
 ```
 age    = [18, 25, 57, 45, 26, 64, 37, 40, 24, 33]
@@ -1770,6 +1909,158 @@ $H_0:\rho=0$의 $t$ 검정은 **정규성을 요구하는가?** 여러 분포에
     ```
 
     **마지막 줄이 자주 잊힌다.** 같은 날 측정한 관측들이 서로 닮았다면 그것도 군집이다.
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span> $x \sim \text{Uniform}(-\pi, \pi)$, $\varepsilon \sim \mathcal{N}(0, 0.3^2)$인 모형 $y = \cos(x) + \varepsilon$에서 $n = 150$개의 관측값을 생성하라. Pearson의 $r$, Spearman의 $\rho_s$, Kendall의 $\tau$를 계산하라. $y$가 (잡음을 빼면) $x$의 결정론적 함수인데도 셋이 모두 0에 가까운 이유를 설명하라.
+
+</div>
+
+??? success "풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n = 150
+    x = np.random.uniform(-np.pi, np.pi, n)
+    y = np.cos(x) + np.random.normal(0, 0.3, n)
+
+    r_p, _ = stats.pearsonr(x, y)
+    r_s, _ = stats.spearmanr(x, y)
+    r_k, _ = stats.kendalltau(x, y)
+    print(f"Pearson r  = {r_p:.4f}")   # 0.0580
+    print(f"Spearman   = {r_s:.4f}")   # 0.1024
+    print(f"Kendall    = {r_k:.4f}")   # 0.0851
+    ```
+
+    출력:
+
+    ```
+    Pearson r  = 0.0580
+    Spearman   = 0.1024
+    Kendall    = 0.0851
+    ```
+
+    세 계수 모두 0.06~0.10으로 0에 가깝다. 관계가 없어서가 아니라 그 관계가 **단조가 아니기** 때문이다. 세 계수 어느 것도 U자 관계를 잡아내도록 만들어지지 않았다.
+
+    $\cos$ 함수는 $[-\pi, \pi]$에서 원점에 대해 **우함수**이다. $[-\pi, 0]$에서 증가하고 $[0, \pi]$에서 감소하므로, 두 구간의 단조 성분이 정확히 상쇄된다. 실제로 $x$가 이 구간에서 균등분포이면
+
+    $$
+    \text{Cov}(x, \cos x) = \frac{1}{2\pi}\int_{-\pi}^{\pi} x \cos x \, dx = 0
+    $$
+
+    이다(피적분함수가 기함수이다). 세 계수는 모두 선형 연관이나 단조 연관을 측정하므로, 강한 결정론적 관계가 있음에도 0에 가깝다. 상관이 탐지하지 못하는 비단조 종속의 예이다.
+
+    !!! note "$\sin$이었다면 결과가 다르다"
+        같은 구간에서 $y = \sin(x)$로 바꾸면 $\sin$은 기함수이고 $x$와 순증가하는 성분을 가지므로 $r \approx 0.74$가 나온다. 비선형이라고 해서 상관이 자동으로 0이 되는 것이 아니라, 대칭성 때문에 상쇄가 일어나야 0이 된다. $\square$
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff hard" title="어려움"></span> 보기 6 은 이변량 정규에서만 성립하는 두 닫힌 꼴
+
+$$
+\rho_s = \frac{6}{\pi}\arcsin\frac{\rho}{2},
+\qquad
+\tau = \frac{2}{\pi}\arcsin\rho
+$$
+
+을 썼다.
+
+**(1)** $0 < \rho < 1$ 에서 $\rho > \rho_s > \tau$ 가 성립하고 $\rho = 0$ 과 $\rho = 1$ 에서는 셋이 같음을 증명하시오.
+
+**(2)** $\rho \to 0^{+}$ 에서 $\rho_s/\rho$ 와 $\tau/\rho$ 의 극한을 구하시오. 또 $\rho - \rho_s$ 를 가장 크게 만드는 $\rho$ 와 그 최댓값을 닫힌 꼴로 구하시오.
+
+**(3)** 보기 6 의 표에서 Monotonic Nonlinear 행은 $\rho_s = 0.88110 > \rho = 0.87282$ 로 (1)을 어긴다. 모순이 아닌 까닭을 말하고, 그 행에서 자료에 대해 무엇을 결론지을 수 있는지 적으시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 두 부등식 모두 양 끝에서 등호가 되는 꼴이다.** 먼저 $\rho \ge \rho_s$ 를 본다.
+
+    $$
+    f(\rho) = \frac{\pi}{6}\rho - \arcsin\frac{\rho}{2}
+    \qquad\text{로 두면}\qquad
+    \rho - \rho_s = \frac{6}{\pi} f(\rho)
+    $$
+
+    이다. 양 끝에서 $f(0) = 0$ 이고 $f(1) = \pi/6 - \arcsin\tfrac12 = \pi/6 - \pi/6 = 0$ 이다. 한편
+
+    $$
+    f'(\rho) = \frac{\pi}{6} - \frac{1}{2\sqrt{1 - \rho^2/4}}
+    $$
+
+    에서 분모가 $\rho$ 에 대해 감소하므로 $f'$ 은 **강하게 감소**하고,
+
+    $$
+    f'(0) = \frac{\pi}{6} - \frac12 = +0.023599,
+    \qquad
+    f'(1) = \frac{\pi}{6} - \frac{1}{\sqrt3} = -0.053751
+    $$
+
+    이다. 그러므로 $f$ 는 $[0,1]$ 에서 올라갔다 내려가고 양 끝값이 $0$ 이라 **안쪽에서는 $f > 0$** 이다. 곧 $0 < \rho < 1$ 에서 $\rho > \rho_s$ 이고, $\rho = 0, 1$ 에서 등호다.
+
+    다음으로 $\rho_s \ge \tau$ 를 본다.
+
+    $$
+    g(\rho) = 3\arcsin\frac{\rho}{2} - \arcsin\rho
+    \qquad\text{로 두면}\qquad
+    \rho_s - \tau = \frac{2}{\pi} g(\rho)
+    $$
+
+    이고 $g(0) = 0$, $g(1) = 3 \cdot \tfrac{\pi}{6} - \tfrac{\pi}{2} = 0$ 이다. 도함수의 부호는
+
+    $$
+    g'(\rho) = \frac{3/2}{\sqrt{1 - \rho^2/4}} - \frac{1}{\sqrt{1-\rho^2}} > 0
+    \;\Longleftrightarrow\;
+    \frac94 (1 - \rho^2) > 1 - \frac{\rho^2}{4}
+    \;\Longleftrightarrow\;
+    \rho^2 < \frac58
+    $$
+
+    이므로 $g$ 역시 $\rho = \sqrt{5/8} = 0.790569$ 까지 올라가다 내려가고 양 끝값이 $0$ 이라 안쪽에서 $g > 0$ 이다. 따라서 $0 < \rho < 1$ 에서 $\rho > \rho_s > \tau$ 이고, $\rho \to 1$ 에서 셋이 모두 $1$ 로 모인다. 완전한 단조 관계에서는 세 측도가 구별되지 않는다는 뜻이다. $\square$
+
+    보기 6 의 선형 자료가 이것을 그대로 보여 준다. $\rho = 0.894427 > \rho_s = 0.885502 > \tau = 0.704833$.
+
+    **(2) 극한은 $3/\pi$ 와 $2/\pi$ 다.** $\arcsin u = u + O(u^3)$ 이므로
+
+    $$
+    \frac{\rho_s}{\rho} = \frac{6}{\pi}\cdot\frac{\arcsin(\rho/2)}{\rho} \to \frac{6}{\pi}\cdot\frac12 = \frac{3}{\pi} = 0.954930,
+    \qquad
+    \frac{\tau}{\rho} \to \frac{2}{\pi} = 0.636620
+    $$
+
+    이다. **약한 상관에서 $\tau$ 는 $\rho$ 의 $0.64$ 배로 체계적으로 작게 읽힌다.** 세 수를 같은 눈금에 놓고 "$\tau$ 가 작으니 관계가 약하다"고 말하면 안 되는 까닭이다.
+
+    간격의 최댓값은 $h(\rho) = \rho - \frac{6}{\pi}\arcsin(\rho/2)$ 를 미분해서 얻는다.
+
+    $$
+    h'(\rho) = 1 - \frac{3/\pi}{\sqrt{1 - \rho^2/4}} = 0
+    \qquad\Longleftrightarrow\qquad
+    \sqrt{1 - \frac{\rho^2}{4}} = \frac{3}{\pi}
+    \qquad\Longleftrightarrow\qquad
+    \rho^{*} = 2\sqrt{1 - \frac{9}{\pi^2}} = 0.593664
+    $$
+
+    이고 그때
+
+    $$
+    h(\rho^{*}) = 0.593664 - \frac{6}{\pi}\arcsin(0.296832) = 0.018083
+    $$
+
+    이다. **$\rho$ 와 $\rho_s$ 는 어디서도 $0.0181$ 이상 벌어지지 않는다.** ($\rho_s - \tau$ 는 사정이 달라 $\rho = \sqrt{5/8}$ 에서 $0.195694$ 까지 벌어진다. $\rho_s$ 는 $\rho$ 와 거의 같은 눈금이고 $\tau$ 만 다른 눈금이다.)
+
+    **(3) 그 자료는 이변량 정규가 아니다.** 보기 6 의 Monotonic Nonlinear 자료는 $x \sim U(0,3)$, $y = e^x + \varepsilon$ 이라 주변분포가 정규가 아니고, 따라서 두 닫힌 꼴이 성립하지 않는다. (1)의 부등식은 그 닫힌 꼴에서만 나온 것이므로 함께 깨진다. 모순이 아니라 **가정이 다른 것이다.**
+
+    거꾸로 읽으면 이 행은 정보를 준다. 표집 변동으로 설명되지 않을 만큼 $\rho_s > \rho$ 라면 그것은 **"이변량 정규가 아니다"의 증거**다. 이 자료에서는 Pearson 이 $e^x$ 의 곡률에 끌려 $0.87282$ 로 내려앉은 반면, 순위만 쓰는 $\rho_s$ 는 단조변환에 불변이라 $0.88110$ 을 지켰다. $\rho_s > \rho$ 는 "단조이지만 비선형"의 지표다. $\square$
+
+---
+
 
 ---
 

@@ -136,6 +136,118 @@ $t$ 가 명목보다 훨씬 자주 유의해진다는 모의실험 결과와, �
 
 Tyler Vigen의 "Spurious Correlations" 웹사이트는 통계적으로는 강하지만 터무니없는 상관들(예: 1인당 치즈 소비량과 침대 시트에 얽혀 사망한 건수)을 모아, 큰 자료에서 무의미한 패턴이 얼마나 쉽게 나타나는지 보여준다.
 
+### 4,950 쌍을 모두 검정하면
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> $240$ 과 $247.5$ 의 차이는 뜻이 있는가. 서로 완전히 독립인 변수 $100$ 개를 $n = 30$ 으로 재어 $4950$ 쌍을 모두 검정했더니 $240$ 쌍이 $\alpha = 0.05$ 에서 유의했다.
+
+**(1)** 거짓양성 개수의 기댓값이 왜 정확히 $0.05 \times 4950$ 인지 말하시오. 근사인가 정확한 값인가.
+
+**(2)** 그 개수가 얼마나 흔들리는지 구하시오. $4950$ 개 검정이 서로 **독립이 아닌데도** 이항분포의 표준편차를 써도 되는가. 관측값 $240$ 을 판정하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 정확한 값이다.** 자료가 모두 독립인 정규난수이므로 각 쌍에서 $H_0\colon \rho = 0$ 이 **참**이고, Pearson 의 $t$ 검정은 정규 가정 아래 $\rho = 0$ 에서 **정확한** 검정이다. 곧 각 쌍이 기각될 확률이 정확히 $0.05$ 다. 기댓값은 선형이므로 (검정들이 독립이든 아니든)
+
+    $$
+    E[\text{거짓양성 수}] = \sum_{\text{쌍}} P(\text{기각}) = 0.05 \times \binom{100}{2} = 0.05 \times 4950 = 247.5
+    $$
+
+    이다. **합의 기댓값에는 독립이 필요 없다**는 점이 요점이다.
+
+    **(2) 분산에는 독립이 필요한데, 여기서는 써도 된다.** 검정들은 서로 독립이 아니다. 같은 열을 공유하는 쌍이 많고, 변수 $i$ 가 우연히 이상하게 나오면 그 변수가 끼는 $99$ 쌍이 함께 흔들린다. 그러므로 이항 표준편차
+
+    $$
+    \sqrt{4950 \times 0.05 \times 0.95} = 15.3
+    $$
+
+    을 그냥 믿을 수 없고 **재어 보아야 한다.** 같은 실험을 $300$ 번 되풀이하면
+
+    | | 값 |
+    |---|---|
+    | 유의 쌍 개수의 평균 | $246.0$ |
+    | 유의 쌍 개수의 표준편차 | $\mathbf{15.3}$ |
+    | 이항 공식이 주는 표준편차 | $15.3$ |
+    | $5$/$50$/$95$ 백분위 | $223$ / $245$ / $271$ |
+
+    로 **실제 표준편차가 이항 공식과 사실상 같다.** 쌍들의 의존이 약해서 분산을 거의 부풀리지 않는다. 그러므로 관측값 $240$ 은
+
+    $$
+    z = \frac{240 - 247.5}{15.3} = -0.49
+    $$
+
+    로 **아무 뜻이 없다.** $240$ 과 $247.5$ 의 차이 $7.5$ 는 표준편차의 절반도 안 된다. 보통 이 정도 실험에서 유의 쌍은 $223$ 과 $271$ 사이에 떨어진다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    def spurious_correlations_demo(n_vars=100, n_obs=30):
+        """서로 완전히 무관한 변수 100개에서 유의한 상관이 몇 쌍이나 나오는지 센다.
+
+        쌍이 4950개이므로 유의수준 5%에서 247쌍쯤은 그냥 나온다. 자료를 훑다가
+        찾아낸 상관 하나를 그대로 보고하면 안 되는 까닭이 여기 있다.
+        """
+        np.random.seed(42)
+        data = np.random.normal(0, 1, (n_obs, n_vars))
+        n_pairs = n_vars * (n_vars - 1) // 2
+        p_values = []
+        for i in range(n_vars):
+            for j in range(i + 1, n_vars):
+                _, p = stats.pearsonr(data[:, i], data[:, j])
+                p_values.append(p)
+        p_values = np.array(p_values)
+        n_sig = np.sum(p_values < 0.05)
+        print(f"Pairs tested: {n_pairs}")
+        print(f"Significant at 0.05: {n_sig} ({100*n_sig/n_pairs:.1f}%)")
+        print(f"Expected false positives: {0.05 * n_pairs:.0f}")
+
+    spurious_correlations_demo()
+
+    # 240 이라는 값이 247.5 에서 얼마나 벗어난 것인가
+    rng = np.random.default_rng(11)
+    n_vars, n_obs, B = 100, 30, 300
+    iu = np.triu_indices(n_vars, 1)
+    counts = []
+    for _ in range(B):
+        d = rng.standard_normal((n_obs, n_vars))
+        R = np.corrcoef(d, rowvar=False)[iu]
+        t = R * np.sqrt((n_obs - 2) / (1 - R**2))
+        counts.append((2 * stats.t.sf(np.abs(t), n_obs - 2) < 0.05).sum())
+    counts = np.array(counts)
+    print(f"\n같은 실험을 {B} 번 되풀이")
+    print(f"  유의 쌍 개수: 평균 {counts.mean():.1f}  표준편차 {counts.std(ddof=1):.1f}")
+    print(f"  이론 기댓값 0.05 * 4950 = {0.05 * 4950:.1f}")
+    print(f"  쌍이 서로 독립이라면 표준편차 = sqrt(4950*0.05*0.95) = "
+          f"{np.sqrt(4950 * 0.05 * 0.95):.1f}")
+    print(f"  관측값 240 의 z = {(240 - 247.5) / counts.std(ddof=1):+.2f}")
+    print(f"  5/50/95 백분위 = {np.percentile(counts, [5, 50, 95]).round(0)}")
+    ```
+
+    출력:
+
+    ```text
+    Pairs tested: 4950
+    Significant at 0.05: 240 (4.8%)
+    Expected false positives: 248
+
+    같은 실험을 300 번 되풀이
+      유의 쌍 개수: 평균 246.0  표준편차 15.3
+      이론 기댓값 0.05 * 4950 = 247.5
+      쌍이 서로 독립이라면 표준편차 = sqrt(4950*0.05*0.95) = 15.3
+      관측값 240 의 z = -0.49
+      5/50/95 백분위 = [223. 245. 271.]
+    ```
+
+    모의 평균 $246.0$ 이 이론 기댓값 $247.5$ 와 맞고(몬테카를로 오차 $15.3/\sqrt{300} = 0.9$ 이므로 $1.6$ 표준오차), 모의 표준편차가 이항 공식과 소수 첫째 자리까지 같다.
+
+    $100$ 개 변수가 모두 독립인데도 $240$ 쌍이 유의하게 나온다. 이것이 다중검정 문제이며 Bonferroni 나 Benjamini–Hochberg 같은 보정이 필요하다. **이 보기에서 더 새겨 둘 것은 "$240$ 이 $247.5$ 보다 작으니 검정이 보수적인가"라는 물음에 답하려면 흔들림의 폭을 먼저 알아야 한다**는 점이다. 수 하나를 기댓값과 견주는 일은 표준편차 없이는 할 수 없다.
+
+---
+
 ---
 
 ## 5. 기제 4: 충돌자 편향 (선택 편향)
@@ -702,6 +814,169 @@ $$
     이고 모의값 $0.1405$ 와 맞는다. 차분이 관계를 지운 기제가 식에 다 들어 있다. 차분은 $X$ 의 신호에서 한 걸음치($\mathrm{Var} = 1$)만 남기는데 잡음은 두 시점이 겹쳐 $2 \times 25$ 로 **증폭**되므로, 수준에서 신호 대 잡음이 좋던 관계가 차분에서는 뒤집힌다.
 
     **(다)** 이 규칙은 상황 A 를 $99.4\%$ 허위로 옳게 부르지만, 상황 B 도 $80.9\%$ 나 허위로 부른다. 즉 차분은 허위상관을 지우는 데는 거의 완벽하지만 **진짜 관계도 함께 지울 수 있다.** 그러므로 3절의 처방은 비대칭적으로 읽어야 한다. 차분한 뒤에도 연관이 남으면 그것은 강한 증거다(공통 추세로는 설명되지 않는다). 그러나 차분한 뒤 연관이 사라졌다는 것은 **허위의 증명이 아니다** — 수준에서만 또렷한 진짜 관계이거나 측정잡음이 큰 경우일 수 있으므로, 그때는 추세를 함께 모형에 넣고 추정하는 쪽(공적분·오차수정 모형)이 자료를 버리지 않는 길이다. 어떤 통계적 처리도 6절의 첫 문장, 즉 **허위인지 아닌지는 통계만으로 판정되지 않는다**는 사실을 바꾸지 못한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span> 모의실험을 수행하라. 각각 $n = 25$개의 관측값을 가진 독립인 표준정규 변수 200개를 생성하고 $\binom{200}{2} = 19{,}900$개의 쌍별 Pearson 상관을 모두 계산하라. (a) $\alpha = 0.05$에서 유의한 것은 몇 개인가? (b) Bonferroni 보정을 적용하면 몇 개가 유의하게 남는가? (c) 이 맥락에서 제1종 오류와 제2종 오류의 상충관계를 논하라.
+
+</div>
+
+??? success "풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    np.random.seed(42)
+    n_vars, n_obs = 200, 25
+    data = np.random.normal(0, 1, (n_obs, n_vars))
+
+    p_values = []
+    for i in range(n_vars):
+        for j in range(i + 1, n_vars):
+            _, p = stats.pearsonr(data[:, i], data[:, j])
+            p_values.append(p)
+
+    p_values = np.array(p_values)
+    n_pairs = len(p_values)
+    n_sig = np.sum(p_values < 0.05)
+    bonf_threshold = 0.05 / n_pairs
+    n_sig_bonf = np.sum(p_values < bonf_threshold)
+
+    print(f"Total pairs: {n_pairs}")
+    print(f"Significant at 0.05: {n_sig}")
+    print(f"Bonferroni threshold: {bonf_threshold:.2e}")
+    print(f"Significant after Bonferroni: {n_sig_bonf}")
+    ```
+
+    출력:
+
+    ```text
+    Total pairs: 19900
+    Significant at 0.05: 961
+    Bonferroni threshold: 2.51e-06
+    Significant after Bonferroni: 0
+    ```
+
+    (a) $961$개의 쌍이 우연히 유의하게 나타난다. 기댓값 $0.05 \times 19{,}900 = 995$와 잘 맞는다.
+
+    (b) Bonferroni 보정 뒤(문턱값 $\approx 2.5 \times 10^{-6}$) 남는 것은 하나도 없다. 가장 작은 $p$값도 $7.1 \times 10^{-5}$로 문턱값보다 훨씬 크다. 모든 변수가 독립이므로 이것이 옳은 결과이다.
+
+    (c) Bonferroni는 보수적이다. 집단별 오류율(FWER)을 통제하지만 검정력을 떨어뜨린다. 수천 번의 검정 가운데 진짜 상관이 몇 개 있다면 Bonferroni는 그것들을 놓칠 수 있다. 거짓발견율(FDR)을 통제하는 Benjamini--Hochberg 절차가 덜 보수적인 대안이다. $\square$
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff hard" title="어려움"></span> 보기 2 의 설정(서로 독립인 변수 $100$ 개, $n = 30$, $4950$ 쌍)에서 유의한 쌍을 골라낸 다음, **같은 모형에서 새로 뽑은 2차 자료**로 그 쌍들만 다시 재어 본다.
+
+**(1)** $n = 30$ 에서 $p < 0.05$ 가 되는 $\lvert r \rvert$ 의 문턱을 구하시오. Bonferroni 문턱($\alpha/4950$)도 구하시오.
+
+**(2)** 모의실험으로 (a) 1차에서 고른 쌍의 $\lvert r \rvert$ 평균, (b) **같은 쌍**의 2차 $\lvert r \rvert$ 평균, (c) 2차에서 다시 유의한 비율, (d) 1차와 2차의 부호가 같은 비율을 재시오. (c)와 (d)가 각각 어떤 수에 가까워야 하는지 **재기 전에** 말하고, (b)를 모든 쌍의 2차 $\lvert r \rvert$ 평균과 견주시오. 1차에서 가장 센 쌍이 Bonferroni 문턱을 넘는가.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 문턱은 $0.3610$ 과 $0.7123$ 이다.** $t = r\sqrt{(n-2)/(1-r^2)}$ 를 $r$ 에 대해 풀면
+
+    $$
+    \lvert r \rvert > \frac{t^{*}}{\sqrt{(t^{*})^2 + n - 2}}
+    $$
+
+    이고, $n = 30$ 이라 자유도는 $28$ 이다. $\alpha = 0.05$ 에서 $t^{*} = t_{0.975,\,28} = 2.048407$ 이므로
+
+    $$
+    \lvert r \rvert > \frac{2.048407}{\sqrt{2.048407^2 + 28}} = 0.361007
+    $$
+
+    이고, Bonferroni 문턱 $\alpha/4950 = 1.0101 \times 10^{-5}$ 에서는 $t^{*} = 5.369763$ 이라
+
+    $$
+    \lvert r \rvert > \frac{5.369763}{\sqrt{5.369763^2 + 28}} = 0.712278
+    $$
+
+    이다. $n = 30$ 에서 $4950$ 쌍을 가려내려면 상관이 $0.71$ 을 넘어야 한다.
+
+    **(2) 미리 아는 답이 있다.** 2차 자료는 1차와 **독립**이고 모든 쌍에서 $H_0$ 가 참이므로, 어떤 쌍을 골랐는지와 무관하게 2차에서 다시 유의할 확률은 (c) $0.05$ 이고 부호가 맞을 확률은 (d) $0.5$ 다. 선택은 2차 자료에 아무 정보도 주지 못한다. 재어 보면
+
+    | | 값 | 기준 |
+    |---|---|---|
+    | 1차에서 유의한 쌍 | $224$ | 기댓값 $247.5$, 표준편차 $15.3$ ($z = -1.5$) |
+    | (a) 고른 쌍의 1차 $\lvert r \rvert$ 평균 | $0.4323$ | 문턱 $0.3610$ 바로 위 |
+    | (b) 같은 쌍의 2차 $\lvert r \rvert$ 평균 | $0.1447$ | 모든 쌍의 2차 평균 $0.1495$ |
+    | (c) 2차에서 다시 유의한 비율 | $0.0714$ | $0.05$ (SE $0.0146$, $z = 1.5$) |
+    | (d) 부호가 같은 비율 | $0.5179$ | $0.5$ |
+
+    예상이 그대로 맞는다. (b)가 결정적이다. 고른 쌍의 2차 $\lvert r \rvert$ 평균 $0.1447$ 은 **아무 쌍이나 집어도 나오는** $0.1495$ 와 사실상 같고, $H_0$ 아래 이론값
+
+    $$
+    E\lvert r \rvert \approx \sqrt{\frac{2}{\pi(n-1)}} = \sqrt{\frac{2}{29\pi}} = 0.1482
+    $$
+
+    와도 맞는다. 그러므로 (a)의 $0.4323$ 은 상관의 추정값이 아니라 **문턱 위에 남은 잡음의 평균**이다. 골라내는 행위 자체가 만든 수이므로 승자의 저주라 부른다.
+
+    1차에서 가장 센 쌍은 $\lvert r \rvert = 0.6272$($p = 2.08 \times 10^{-4}$)인데 Bonferroni 문턱 $0.7123$ 에 못 미쳐 걸러진다. 그 쌍의 2차 상관은 $-0.2614$ 로 **부호까지 뒤집힌다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    n_vars, n_obs = 100, 30
+    iu = np.triu_indices(n_vars, 1)
+    n_pairs = len(iu[0])
+
+    t_crit = stats.t.ppf(0.975, n_obs - 2)
+    r_crit = t_crit / np.sqrt(t_crit**2 + n_obs - 2)
+    t_bonf = stats.t.ppf(1 - 0.025 / n_pairs, n_obs - 2)
+    r_bonf = t_bonf / np.sqrt(t_bonf**2 + n_obs - 2)
+    print(f"쌍 {n_pairs} 개,  n = {n_obs}")
+    print(f"유의 문턱 |r| > {r_crit:.4f}   (Bonferroni 로는 |r| > {r_bonf:.4f})")
+
+    rng = np.random.default_rng(0)
+    A = rng.standard_normal((n_obs, n_vars))       # 1차 자료
+    C = rng.standard_normal((n_obs, n_vars))       # 같은 모형에서 새로 뽑은 2차 자료
+    rA = np.corrcoef(A, rowvar=False)[iu]
+    rC = np.corrcoef(C, rowvar=False)[iu]
+
+    sel = np.abs(rA) > r_crit                      # 1차에서 유의했던 쌍만 고른다
+    print(f"\n1차에서 유의한 쌍 = {sel.sum()} 개  (기댓값 {0.05 * n_pairs:.1f})")
+    print(f"  고른 쌍의 1차 |r| 평균 = {np.abs(rA[sel]).mean():.4f}")
+    print(f"  같은 쌍의 2차 |r| 평균 = {np.abs(rC[sel]).mean():.4f}")
+    print(f"  모든 쌍의 2차 |r| 평균 = {np.abs(rC).mean():.4f}")
+    print(f"  2차에서 다시 유의한 비율 = {(np.abs(rC[sel]) > r_crit).mean():.4f}")
+    print(f"  부호까지 같은 비율       = {(np.sign(rA[sel]) == np.sign(rC[sel])).mean():.4f}")
+
+    k = np.argmax(np.abs(rA))
+    print(f"\n1차의 가장 센 쌍: |r| = {abs(rA[k]):.4f},  p = "
+          f"{2 * stats.t.sf(abs(rA[k]) * np.sqrt((n_obs - 2) / (1 - rA[k]**2)), n_obs - 2):.2e}")
+    print(f"  같은 쌍의 2차 r = {rC[k]:+.4f}")
+    ```
+
+    출력:
+
+    ```text
+    쌍 4950 개,  n = 30
+    유의 문턱 |r| > 0.3610   (Bonferroni 로는 |r| > 0.7123)
+
+    1차에서 유의한 쌍 = 224 개  (기댓값 247.5)
+      고른 쌍의 1차 |r| 평균 = 0.4323
+      같은 쌍의 2차 |r| 평균 = 0.1447
+      모든 쌍의 2차 |r| 평균 = 0.1495
+      2차에서 다시 유의한 비율 = 0.0714
+      부호까지 같은 비율       = 0.5179
+
+    1차의 가장 센 쌍: |r| = 0.6272,  p = 2.08e-04
+      같은 쌍의 2차 r = -0.2614
+    ```
+
+    손으로 구한 문턱 $0.3610$ 과 $0.7123$ 이 맞고, 재유의율 $0.0714$ 와 부호 일치율 $0.5179$ 가 예고한 $0.05$ 와 $0.5$ 에 맞는다.
+
+    연습문제 4 는 보정으로 거짓양성을 막았고 이 문제는 **재현으로** 막았다. 둘은 같은 일을 다른 쪽에서 한다. 보정 없이 골라낸 상관을 보고하려면 적어도 그 쌍을 새 자료에서 다시 재어야 한다. $\square$
+
+---
+
 
 ---
 

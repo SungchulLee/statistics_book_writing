@@ -410,13 +410,12 @@ nav:
                 - 방향성 비순환 그래프: ch12/causation/dags.md
                 - 인과 개관: ch12/causation/causation.md
                 - 인과추론 모의실험: ch12/causation/causal_simulations.md
-                - 상관과 인과: ch12/causation/correlation_causation.md
             - 12.5 상관 검정:
                 - Pearson의 r 검정 (상관에 대한 t-검정): ch12/correlation_test/test_pearson.md
                 - Spearman의 ρ 검정: ch12/correlation_test/test_spearman.md
                 - Kendall의 타우 검정: ch12/correlation_test/test_kendall.md
                 - 두 상관의 비교: ch12/correlation_test/comparing_correlations.md
-                - 상관 검정 개관: ch12/correlation_test/correlation_tests.md
+                - 세 검정 견주기: ch12/correlation_test/correlation_tests.md
             - 12.6 상관행렬과 시각화:
                 - 상관행렬의 열지도: ch12/visualization/heatmaps.md
                 - 쌍 그림과 산점도 행렬: ch12/visualization/pairplots.md
