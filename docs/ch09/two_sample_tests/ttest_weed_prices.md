@@ -320,7 +320,7 @@ $$
 
 ??? success "풀이"
 
-    **(1) 균형이 구해 준다.** [이표본 평균 검정](test_two_means.md)의 보기 1에서
+    **(1) 균형이 구해 준다.** [이표본 평균 검정](t_test_two_means.md)의 보기 1에서
 
     $$
     \text{SE}_{\text{pool}}^2 - \text{SE}_{\text{welch}}^2
