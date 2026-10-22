@@ -42,6 +42,10 @@ os.makedirs(OUT, exist_ok=True)
 OUT_CV = "docs/ch13/model_selection/img/"
 os.makedirs(OUT_CV, exist_ok=True)
 
+# 통계량 선택 그림은 17.4 로 갔다 (two_sample.md)
+OUT_PERM = "docs/ch17/permutation/img/"
+os.makedirs(OUT_PERM, exist_ok=True)
+
 
 def save(fig, name, out=None):
     path = (out or OUT) + name
@@ -519,7 +523,7 @@ def fig_dependence():
 
 
 # ===========================================================================
-# 그림 6. 순열검정은 통계량 선택에 달렸다 (resampling_methods.md)
+# 그림 6. 순열검정은 통계량 선택에 달렸다 (permutation/two_sample.md)
 # ===========================================================================
 def fig_statistic_choice():
     rng = np.random.default_rng(9)
@@ -601,7 +605,7 @@ def fig_statistic_choice():
     ax.legend(fontsize=9, frameon=False, loc="upper left")
     tidy(ax, left=True)
 
-    save(fig, "statistic_choice.png")
+    save(fig, "statistic_choice.png", out=OUT_PERM)
 
 
 if __name__ == "__main__":
