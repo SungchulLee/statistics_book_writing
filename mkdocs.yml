@@ -680,7 +680,6 @@ nav:
                 - 재표집이 실패할 때: ch17/comparison/limitations.md
                 - 비교 개요: ch17/comparison/comparison.md
                 - 재표집 방법 비교 (코드): ch17/comparison/resampling_methods.md
-                - 교차검증 방법 비교 (코드): ch17/comparison/cv_methods_comparison.md
 
 
     - V 더 나아가기 ★:

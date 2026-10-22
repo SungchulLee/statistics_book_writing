@@ -3,7 +3,7 @@ r"""공개 순위표는 떼어 둔 자료를 몇 번이나 쓰는가.
 ① 한 번의 대회: $1{,}000$ 팀의 공개 점수와 비공개 점수. 공개 상위권이 비공개에서 내려앉는다.
 ② 공개 $1$ 위가 비공개 $1$ 위이기도 할 확률 — 실력의 폭과 잡음의 비로 정해진다.
 
-만드는 파일: docs/ch17/comparison/img/leaderboard.png
+만드는 파일: docs/ch13/model_selection/img/leaderboard.png
 """
 
 import numpy as np
@@ -87,7 +87,7 @@ ax2.legend(loc="lower right", fontsize=10)
 ax2.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch17/comparison/img/leaderboard.png"
+out = "docs/ch13/model_selection/img/leaderboard.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

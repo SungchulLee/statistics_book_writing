@@ -4,7 +4,8 @@ r"""17장 비교 절(comparison/) 여섯 쪽의 개념 그림을 생성한다.
   ch17/comparison/img/two_questions.png        무엇을 재배열하고 무엇을 근사하는가
   ch17/comparison/img/small_sample_gap.png     n = 5 에서 벌어지는 틈
   ch17/comparison/img/monte_carlo_convergence.png  B 를 얼마나 키워야 하는가
-  ch17/comparison/img/cv_flat_curve.png        교차검증 곡선은 평평하다
+  ch13/model_selection/img/cv_flat_curve.png   교차검증 곡선은 평평하다
+                                               (교차검증은 ch13 의 주제라 그림도 그쪽에 있다)
   ch17/comparison/img/dependence_breaks_bootstrap.png  종속자료에서의 실패
   ch17/comparison/img/statistic_choice.png     순열검정은 통계량 선택에 달렸다
 
@@ -36,9 +37,14 @@ RED = "#D32F2F"
 OUT = "docs/ch17/comparison/img/"
 os.makedirs(OUT, exist_ok=True)
 
+# 교차검증 그림 하나만 ch13 으로 간다. 한 스크립트의 그림이 두 디렉터리로
+# 갈리면 변수를 나눠 둘 것 — 한 변수만 고치면 나머지가 엉뚱한 자리에 저장된다.
+OUT_CV = "docs/ch13/model_selection/img/"
+os.makedirs(OUT_CV, exist_ok=True)
 
-def save(fig, name):
-    path = OUT + name
+
+def save(fig, name, out=None):
+    path = (out or OUT) + name
     fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print("saved", path)
@@ -324,7 +330,7 @@ def fig_convergence():
 
 
 # ===========================================================================
-# 그림 4. 교차검증 곡선은 평평하다 (cv_methods_comparison.md)
+# 그림 4. 교차검증 곡선은 평평하다 (ch13 모형선택을 위한 교차검증)
 # ===========================================================================
 def fig_cv_flat():
     rng = np.random.default_rng(42)
@@ -424,7 +430,7 @@ def fig_cv_flat():
                   color=INK)
     tidy(ax2, left=True)
 
-    save(fig, "cv_flat_curve.png")
+    save(fig, "cv_flat_curve.png", out=OUT_CV)
 
 
 # ===========================================================================
