@@ -660,7 +660,6 @@ nav:
                 - 붓스트랩-t 방법: ch17/bootstrap_ci/bootstrap_t.md
                 - 신뢰수준의 시각화: ch17/bootstrap_ci/visualization_confidence_levels.md
                 - 붓스트랩 신뢰구간 방법의 비교: ch17/bootstrap_ci/comparison.md
-                - 붓스트랩 신뢰구간 시각화 (코드): ch17/bootstrap_ci/bootstrap_ci_visualization.md
                 - 중앙값의 붓스트랩 (코드): ch17/bootstrap_ci/bootstrap_median.md
             - 17.3 붓스트랩 가설검정:
                 - 단일 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/single_mean.md

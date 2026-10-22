@@ -560,7 +560,10 @@ def fig_coverage_width():
 
 
 # ===========================================================================
-# 그림 7. 신뢰수준의 폭과 장기 포함확률 (bootstrap_ci_visualization.md)
+# 그림 7. 신뢰수준의 폭과 장기 포함확률 — 쓰이지 않는다.
+#          bootstrap_ci_visualization.md 가 visualization_confidence_levels.md 로
+#          합쳐질 때 이 그림의 수가 버린 보기에서 나온 것이어서 함께 빠졌다.
+#          다시 쓰려면 합친 쪽의 보기 2 가 잰 포함확률에 맞춰 고쳐 그릴 것.
 # ===========================================================================
 def fig_levels_coverage():
     pop = np.random.default_rng(3).exponential(50_000, 5000) + 20_000

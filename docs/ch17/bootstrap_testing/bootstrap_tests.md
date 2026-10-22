@@ -1156,7 +1156,7 @@ $$
     \text{기본} = [\bar x - U,\ \bar x + L]
     $$
 
-    이다. 길이가 둘 다 $L + U$로 같고 서로 $\bar x$에 대한 거울반사다([붓스트랩 신뢰구간의 시각화](../bootstrap_ci/bootstrap_ci_visualization.md) 연습문제 6). $U > L$이면 기본 구간만 $(\bar x - U,\ \bar x - L)$을 품고 백분위 구간만 $(\bar x + L,\ \bar x + U)$를 품으므로, 어긋나는 구역은 각각 길이
+    이다. 길이가 둘 다 $L + U$로 같고 서로 $\bar x$에 대한 거울반사다([신뢰수준의 시각화](../bootstrap_ci/visualization_confidence_levels.md) 연습문제 6). $U > L$이면 기본 구간만 $(\bar x - U,\ \bar x - L)$을 품고 백분위 구간만 $(\bar x + L,\ \bar x + U)$를 품으므로, 어긋나는 구역은 각각 길이
 
     $$
     U - L = \bar x^{*}_{(\alpha/2)} + \bar x^{*}_{(1-\alpha/2)} - 2\bar x
