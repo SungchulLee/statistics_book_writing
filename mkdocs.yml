@@ -671,7 +671,7 @@ nav:
                 - 상관에 대한 순열검정: ch17/permutation/correlation.md
                 - 대응자료에 대한 순열검정: ch17/permutation/paired.md
                 - 순열검정 개요: ch17/permutation/permutation.md
-                - 순열검정 시연 (코드): ch17/permutation/permutation_tests.md
+                - 순열검정의 구현 (이표본·다집단·비율): ch17/permutation/permutation_tests.md
                 - A/B 검정 순열검정 (코드): ch17/permutation/ab_testing_permutation.md
                 - 재표집 (신발 판매 A/B 검정) (코드): ch17/permutation/resampling_shoe_sales.md
             - 17.5 비교와 실무 지침:
