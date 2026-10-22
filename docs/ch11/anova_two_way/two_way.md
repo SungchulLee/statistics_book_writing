@@ -269,6 +269,189 @@ $$
 - **가정에 대한 민감성**: 일원배치와 마찬가지로 이원배치 분산분석의 결과도 가정 위반, 특히 분산의 동질성 위반에 민감할 수 있다.
 - **교호작용이 있을 때의 복잡성**: 교호작용 효과의 해석은 까다로울 수 있다. 특히 교호작용은 유의한데 주효과는 그렇지 않을 때 그렇다. 이런 효과를 해석하는 데 교호작용 그림 같은 그래프 방법을 흔히 쓴다.
 
+## 5. 제곱합의 세 유형은 언제 같은가
+
+절 $1$ 은 균형 설계의 제곱합 분해를 적었다. `statsmodels` 은 분해 방식을
+제I·II·III형 셋으로 제공하는데, **균형이면 셋이 같은 수를 주고 불균형이면**
+**갈린다.** 그 말이 맞는지 `ToothGrowth` 로 확인한다.
+
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 1단계 — 제곱합의 세 유형은 언제 같은가. 코드의 주석은 "균형 설계에서는 세 유형이 모두 같지만 불균형이면 갈린다"고 말한다. 확인해 보자.
+
+**(1)** 설계가 **균형**이면(모든 칸의 관측 수가 같으면) 요인 $A$ 의 지시열과 요인 $B$ 의 지시열이 중심화한 뒤 **직교**함을 보이고, 이로부터 제I형 제곱합이 항의 순서에 의존하지 않음을 설명하시오. 또 제II형 제곱합은 불균형에서도 **"그 효과를 마지막에 넣은 제I형"** 과 같음을 지적하시오.
+
+**(2)** ToothGrowth 에서 세 유형을 모두 계산해 (1)을 확인하고, 칸 여섯 개 중 둘을 줄여 **불균형으로 만들면** 무엇이 갈라지는지 보이시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 칸 $(i,j)$ 의 관측 수를 $n_{ij}$ 라 하자. 요인 $A$ 의 수준 $i$ 를 가리키는 지시벡터를 $u_i$, 요인 $B$ 의 수준 $j$ 를 가리키는 지시벡터를 $v_j$ 라 쓰면
+
+    $$
+    u_i^\top v_j = n_{ij},
+    \qquad
+    u_i^\top \mathbf 1 = n_{i\cdot},
+    \qquad
+    v_j^\top \mathbf 1 = n_{\cdot j}
+    $$
+
+    이다. 전체평균을 뺀 중심화 벡터 $\tilde u_i = u_i - \frac{n_{i\cdot}}{N}\mathbf 1$, $\tilde v_j = v_j - \frac{n_{\cdot j}}{N}\mathbf 1$ 의 내적은
+
+    $$
+    \tilde u_i^\top \tilde v_j = n_{ij} - \frac{n_{i\cdot} n_{\cdot j}}{N}
+    $$
+
+    다. **균형 설계이면 $n_{ij} = n$, $n_{i\cdot} = nb$, $n_{\cdot j} = na$, $N = nab$ 이므로**
+
+    $$
+    \tilde u_i^\top \tilde v_j = n - \frac{nb \cdot na}{nab} = n - n = 0
+    $$
+
+    으로 **정확히 직교한다.** 두 요인이 만드는 부분공간이 서로 직교하면, 한쪽을 먼저 넣든 나중에 넣든 사영의 크기가 변하지 않는다. 제I형은 "앞의 항들을 넣은 뒤 늘어나는 설명량"이므로 순서에 의존하지 않게 되고, 제II형·제III형도 같은 값이 된다. 이것이 균형 설계의 값어치다. **요인들이 서로 간섭하지 않는다.**
+
+    불균형이면 $n_{ij} \ne \frac{n_{i\cdot}n_{\cdot j}}{N}$ 이라 직교가 깨지고, 두 요인이 **겹치는 설명량**이 생긴다. 먼저 들어온 쪽이 그 겹치는 몫을 가져가므로 제I형이 순서에 따라 달라진다. 제II형은 정의가 "다른 **주효과**를 모두 통제한 뒤의 증가분"이므로, 주효과가 둘뿐인 이 설계에서는 **그 효과를 주효과 중 마지막에 넣은 제I형과 같은 수**가 된다.
+
+    한 가지 덧붙일 것이 있다. `anova_lm(..., typ=3)` 은 **코딩에 민감하다.** 제III형은 "다른 모든 항(교호작용 포함)을 통제한 효과"인데, 교호작용 열이 직교하도록 만들려면 수준 더미를 합이 $0$ 이 되게 코딩해야 한다. statsmodels 의 기본 처리코딩(`C()`)으로 `typ=3` 을 부르면 올바른 제III형이 아니라 **기준수준에서의 단순효과**를 재게 된다. 아래 출력이 그 함정을 보여 준다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import pandas as pd
+    from statsmodels.formula.api import ols
+    from statsmodels.stats.anova import anova_lm
+
+    url = ('https://raw.githubusercontent.com/vincentarelbundock/'
+           'Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/ToothGrowth.csv')
+    df = pd.read_csv(url, usecols=[1, 2, 3])
+
+    model = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=df).fit()
+    # typ=2를 명시한다. statsmodels의 기본값은 typ=1(순차적 제곱합)이라
+    # 모형에 넣는 항의 **순서에 따라 결과가 달라진다**. 균형 설계에서는
+    # 세 유형이 모두 같지만, 불균형이면 갈린다.
+    aov2 = anova_lm(model, typ=2)
+    print(aov2)
+    ```
+
+    출력:
+
+    ```
+                          sum_sq    df          F        PR(>F)
+    C(supp)           205.350000   1.0  15.571979  2.311828e-04
+    C(dose)          2426.434333   2.0  91.999965  4.046291e-18
+    C(supp):C(dose)   108.319000   2.0   4.106991  2.186027e-02
+    Residual          712.106000  54.0        NaN           NaN
+    ```
+
+    용량의 효과가 압도적이고($F = 92$), 보충제의 효과와 교호작용도 유의하다. 교호작용이 유의하다는 것은 주효과를 따로 해석하기 전에 조심해야 한다는 신호다. "OJ가 VC보다 낫다"는 말이 용량마다 다르게 성립하기 때문이다.
+
+    제II형 제곱합은 각 주효과를 다른 주효과로 조정하되 교호작용은 무시하고 검정한다. 설계가 균형이거나 거의 균형일 때 권장된다. 세 유형을 모두 계산해 본다.
+
+    ```python
+    # 균형 설계인가. 여섯 칸의 개수를 센다.
+    print("칸별 관측 수")
+    print(df.groupby(['supp', 'dose']).size().unstack())
+
+    a1 = anova_lm(model, typ=1)['sum_sq']
+    model_rev = ols('len ~ C(dose) + C(supp) + C(dose):C(supp)', data=df).fit()
+    a1r = anova_lm(model_rev, typ=1)['sum_sq']
+    a2 = anova_lm(model, typ=2)['sum_sq']
+    a3_bad = anova_lm(model, typ=3)['sum_sq']
+    # 제III형은 합이 0 이 되는 코딩(Sum)으로 적합해야 올바른 값이 나온다.
+    model_sum = ols('len ~ C(supp, Sum) + C(dose, Sum) + C(supp, Sum):C(dose, Sum)',
+                    data=df).fit()
+    a3 = anova_lm(model_sum, typ=3)['sum_sq']
+
+    print(f"\n{'방법':<22}{'supp':>12}{'dose':>14}{'supp:dose':>12}")
+    print(f"{'제I형 (supp 먼저)':<22}{a1['C(supp)']:>12.4f}{a1['C(dose)']:>14.4f}"
+          f"{a1['C(supp):C(dose)']:>12.4f}")
+    print(f"{'제I형 (dose 먼저)':<22}{a1r['C(supp)']:>12.4f}{a1r['C(dose)']:>14.4f}"
+          f"{a1r['C(dose):C(supp)']:>12.4f}")
+    print(f"{'제II형':<22}{a2['C(supp)']:>12.4f}{a2['C(dose)']:>14.4f}"
+          f"{a2['C(supp):C(dose)']:>12.4f}")
+    print(f"{'제III형 (처리코딩)':<22}{a3_bad['C(supp)']:>12.4f}{a3_bad['C(dose)']:>14.4f}"
+          f"{a3_bad['C(supp):C(dose)']:>12.4f}")
+    print(f"{'제III형 (합코딩)':<22}{a3['C(supp, Sum)']:>12.4f}{a3['C(dose, Sum)']:>14.4f}"
+          f"{a3['C(supp, Sum):C(dose, Sum)']:>12.4f}")
+
+    print(f"\n네 제곱합의 합 = {a2.sum():.4f},  "
+          f"SST = {((df['len'] - df['len'].mean()) ** 2).sum():.4f}")
+    print(f"자유도 59 = 1 + 2 + 2 + 54")
+    ```
+
+    출력:
+
+    ```
+    칸별 관측 수
+    dose  0.5  1.0  2.0
+    supp
+    OJ     10   10   10
+    VC     10   10   10
+
+    방법                            supp          dose   supp:dose
+    제I형 (supp 먼저)             205.3500     2426.4343    108.3190
+    제I형 (dose 먼저)             205.3500     2426.4343    108.3190
+    제II형                      205.3500     2426.4343    108.3190
+    제III형 (처리코딩)              137.8125      885.2647    108.3190
+    제III형 (합코딩)               205.3500     2426.4343    108.3190
+
+    네 제곱합의 합 = 3452.2093,  SST = 3452.2093
+    자유도 59 = 1 + 2 + 2 + 54
+    ```
+
+    **균형 설계라 네 줄이 같다.** 칸마다 정확히 $10$ 개씩이므로 (1)의 직교성이 성립하고, 제I형(어느 순서로 넣든)·제II형·제III형(합코딩)이 모두 $205.3500$ 과 $2426.4343$ 을 준다. 제곱합 분해도 $3452.2093$ 으로 정확히 맞고 자유도는 $59 = 1+2+2+54$ 로 갈린다.
+
+    **처리코딩으로 부른 제III형만 다르다.** $137.8125$ 와 $885.2647$ 은 틀린 값이 아니라 **다른 질문에 대한 답**이다. 처리코딩에서 `C(supp)` 항은 "dose 가 기준수준($0.5$)일 때의 supp 효과", 곧 단순효과를 가리키므로 주효과와 같을 이유가 없다. `typ=3` 을 쓸 생각이면 반드시 `C(..., Sum)` 으로 적합해야 한다.
+
+    이제 균형을 깨 보면 (1)의 나머지가 드러난다.
+
+    ```python
+    # OJ_0.5 에서 둘, VC_0.5 에서 넷을 지워 불균형을 만든다.
+    drop = df.index[(df['supp'] == 'OJ') & (df['dose'] == 0.5)][:2].tolist()
+    drop += df.index[(df['supp'] == 'VC') & (df['dose'] == 0.5)][:4].tolist()
+    dfu = df.drop(index=drop).reset_index(drop=True)
+    print("칸별 관측 수 (불균형)")
+    print(dfu.groupby(['supp', 'dose']).size().unstack())
+
+    mu = ols('len ~ C(supp) + C(dose) + C(supp):C(dose)', data=dfu).fit()
+    mur = ols('len ~ C(dose) + C(supp) + C(dose):C(supp)', data=dfu).fit()
+    u1, u1r = anova_lm(mu, typ=1)['sum_sq'], anova_lm(mur, typ=1)['sum_sq']
+    u2 = anova_lm(mu, typ=2)['sum_sq']
+    print(f"\n{'방법':<22}{'supp':>12}{'dose':>14}")
+    print(f"{'제I형 (supp 먼저)':<22}{u1['C(supp)']:>12.4f}{u1['C(dose)']:>14.4f}")
+    print(f"{'제I형 (dose 먼저)':<22}{u1r['C(supp)']:>12.4f}{u1r['C(dose)']:>14.4f}")
+    print(f"{'제II형':<22}{u2['C(supp)']:>12.4f}{u2['C(dose)']:>14.4f}")
+    print(f"\n제II형의 supp 가 '제I형에서 supp 를 나중에 넣은 값'과 같은가: "
+          f"{abs(u2['C(supp)'] - u1r['C(supp)']) < 1e-9}")
+    print(f"제II형의 dose 가 '제I형에서 dose 를 나중에 넣은 값'과 같은가: "
+          f"{abs(u2['C(dose)'] - u1['C(dose)']) < 1e-9}")
+    ```
+
+    출력:
+
+    ```
+    칸별 관측 수 (불균형)
+    dose  0.5  1.0  2.0
+    supp
+    OJ      8   10   10
+    VC      6   10   10
+
+    방법                            supp          dose
+    제I형 (supp 먼저)              75.2894     2061.9230
+    제I형 (dose 먼저)             125.6611     2011.5513
+    제II형                      125.6611     2061.9230
+
+    제II형의 supp 가 '제I형에서 supp 를 나중에 넣은 값'과 같은가: True
+    제II형의 dose 가 '제I형에서 dose 를 나중에 넣은 값'과 같은가: True
+    ```
+
+    **불균형이 되자 순서가 결과를 바꾼다.** `supp` 의 제곱합이 먼저 넣으면 $75.29$, 나중에 넣으면 $125.66$ 으로 **$1.7$ 배 차이가 난다.** $14$ 개를 지웠을 뿐인데 이렇다. 요인끼리 겹치는 설명량이 생겼고, 제I형은 그 몫을 **먼저 들어온 쪽에 통째로 준다.**
+
+    **제II형이 (1)의 예측과 정확히 맞는다.** `supp` 의 제II형 $125.6611$ 이 "dose 를 먼저 넣은 제I형"의 `supp` 와 같고, `dose` 의 제II형 $2061.9230$ 이 "supp 를 먼저 넣은 제I형"의 `dose` 와 같다. 곧 **제II형은 각 주효과를 늘 마지막에 넣어 본 값**이고, 그래서 순서를 정할 필요가 없다. 코드가 `typ=2` 를 명시한 까닭이 이것이다.
+
+---
+
 ---
 
 ## 연습문제

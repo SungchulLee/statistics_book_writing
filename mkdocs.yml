@@ -370,7 +370,6 @@ nav:
             - 11.2 이원배치 분산분석:
                 - 주효과와 블록화: ch11/anova_two_way/two_way.md
                 - 교호작용 효과: ch11/anova_two_way/interaction.md
-                - 이원배치 분산분석 파이프라인: ch11/anova_two_way/twoway_pipeline.md
                 - 교호작용 효과 그림: ch11/anova_two_way/interaction_plot.md
             - 11.3 사후비교:
                 - Tukey 정직유의차: ch11/post_hoc/tukey.md
