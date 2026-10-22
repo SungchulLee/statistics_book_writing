@@ -568,7 +568,6 @@ nav:
             - 장 개요: ch15/index.md
             - 15.1 분산 검정 입문:
                 - 왜 분산을 검정하는가: ch15/introduction/motivation.md
-                - 분산 검정 개관: ch15/introduction/introduction.md
                 - 분산 검정의 공통 가정: ch15/introduction/common_assumptions.md
             - 15.2 분산에 대한 카이제곱 검정:
                 - 일표본 카이제곱 분산 검정: ch15/chi_square_test/chi_square_variance.md
