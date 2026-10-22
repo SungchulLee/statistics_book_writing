@@ -402,7 +402,6 @@ nav:
                 - 교란변수: ch12/confounding/confounding_variables.md
                 - 허위상관: ch12/confounding/spurious_correlations.md
                 - 잠복변수와 공통원인: ch12/confounding/lurking_variables.md
-                - 교란 개관: ch12/confounding/confounding.md
                 - 교란과 인과 시연: ch12/confounding/confounding_causation_demo.md
             - 12.4 인과:
                 - 인과 추론의 기준: ch12/causation/causal_criteria.md
