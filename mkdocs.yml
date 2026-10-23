@@ -529,7 +529,6 @@ nav:
                 - 이표본 F 검정: ch15/f_test/f_test_two_variances.md
                 - F 분포 F(d₁, d₂)와 자유도: ch15/f_test/f_distribution_details.md
                 - 비정규성에 대한 민감도: ch15/f_test/sensitivity.md
-                - F 검정 꼬리 영역 시각화: ch15/f_test/f_test_tail_plot.md
                 - F 검정의 정규성 민감도와 로버스트 대안: ch15/f_test/f_test_robust_alt.md
                 - F 검정 검정력 모의실험: ch15/f_test/f_test_power_sim.md
             - 15.4 Bartlett 검정:
@@ -670,7 +669,6 @@ nav:
                 - 오즈비와 계수 해석: ch19/logistic_regression/odds_ratios.md
                 - 로지스틱 회귀의 가능도: ch19/logistic_regression/likelihood.md
                 - 로지스틱 회귀 실습 (코드): ch19/logistic_regression/logistic_regression.md
-                - 로지스틱 회귀와 선형회귀의 비교 (코드): ch19/logistic_regression/logistic_vs_linear_visualization.md
             - 19.2 추정과 추론:
                 - 최대가능도 추정: ch19/estimation_inference/mle.md
                 - 뉴턴-랩슨과 반복재가중최소제곱: ch19/estimation_inference/algorithms.md
