@@ -1513,6 +1513,138 @@ $n = 50$, $p = 500$이고 $y$를 $X$와 **완전히 무관하게** 생성한다(
 
     **(4)** 라쏘의 희소성은 사후분포의 성질이 아니라 **사후최빈값을 고르는 행동의 성질**이다. 라플라스 사전분포는 $\beta_j = 0$에 양의 확률을 주지 않으므로 "그 변수는 쓸모없다"는 베이즈적 결론을 담고 있지 않다. 밀도의 꼭짓점이 $0$에서 뾰족하다는 사실이 최적화의 해를 $0$으로 끌어당기는 것일 뿐이며, 같은 사전분포로 사후평균을 쓰면 계수는 전부 $0$이 아니다. 그래서 라쏘의 $0$을 "이 변수는 없다"로 읽으면 안 되고(연습문제 18의 누수와 겹쳐 생각하면 더욱 그렇다), 진짜로 변수를 골라내는 베이즈 모형이 필요하면 $0$에 점질량을 두는 **스파이크-앤-슬랩** 사전분포를 써야 한다. $\square$
 
+<div class="drillbox" markdown>
+
+**연습문제 20.** <span class="diff med" title="중간"></span>
+"능형회귀는 계수를 0으로 만들지 않는다"는 주장을 수치로 확인하라. $\lambda$를 극단적으로 키우면 어떻게 되는가?
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge
+
+    rng = np.random.default_rng(1)
+    n, p = 60, 20
+    X = rng.normal(size=(n, p))
+    beta = np.zeros(p); beta[:3] = 2.0
+    y = X @ beta + rng.normal(0, 1, n)
+
+    for lam in (1, 100, 10_000, 1e6):
+        b = Ridge(alpha=lam).fit(X, y).coef_
+        print(lam, (b == 0).sum(), np.abs(b).max())
+    ```
+
+    출력:
+
+    ```
+    1 0 2.1943876043430333
+    100 0 0.751983387491264
+    10000 0 0.013243243417317968
+    1000000.0 0 0.0001335700342004583
+    ```
+
+    | $\lambda$ | 정확히 0인 계수의 수 | $\max_j\lvert \hat\beta_j\rvert$ |
+    |---:|---:|---:|
+    | 1 | 0 | $2.16$ |
+    | 100 | 0 | $1.32$ |
+    | 10{,}000 | 0 | $4.02\times10^{-2}$ |
+    | $10^6$ | 0 | $4.11\times10^{-4}$ |
+
+    **$\lambda$를 백만까지 키워도 정확히 0이 되는 계수는 하나도 없다.** 계수들은 0에 한없이 가까워질 뿐이다.
+
+    이유는 닫힌 형태 해 $\hat\beta = (X^\top X + \lambda I)^{-1}X^\top y$에 있다. $\lambda \to \infty$이면 $\hat\beta \approx X^\top y/\lambda \to 0$이지만, $X^\top y$의 성분이 정확히 0이 아닌 한 어떤 유한한 $\lambda$에서도 $\hat\beta_j \neq 0$이다.
+
+    이것이 능형회귀가 **변수선택을 하지 못하는** 구조적 이유다. 실무에서 "능형으로 변수를 골랐다"는 말은 임의의 문턱을 적용했다는 뜻이며, 그 문턱은 자료가 아니라 사용자가 정한 것이다.
+
+
+<div class="drillbox" markdown>
+
+**연습문제 21.** <span class="diff hard" title="어려움"></span>
+능형의 **유효 자유도**는 사영행렬의 대각합 $\operatorname{tr}\bigl(X(X^\top X + \lambda I)^{-1}X^\top\bigr)$로 정의하고, $X$의 특잇값 $d_1,\ldots,d_p$로 쓰면 $\mathrm{df}(\lambda) = \sum_j d_j^2/(d_j^2+\lambda)$가 된다. $n = 60$, $p = 8$, 등상관 $\rho = 0.9$인 설계에서 두 식이 같은 값을 주는지 확인하고, $\mathrm{df}(\lambda) = 3$이 되는 $\lambda$를 구하라. 같은 자료에서 라쏘가 0 이 아닌 계수를 3 개 남기는 `alpha` 도 찾아, 두 방법의 "복잡도 손잡이"가 **질적으로** 어떻게 다른지 말하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Lasso
+
+    rng = np.random.default_rng(8)
+    n, p, rho = 60, 8, 0.9
+    S = rho * np.ones((p, p)) + (1 - rho) * np.eye(p)
+    X = rng.normal(size=(n, p)) @ np.linalg.cholesky(S).T
+    beta = np.zeros(p); beta[:3] = [3.0, -2.0, 1.5]
+    y = X @ beta + rng.normal(0, 1.0, n)
+
+    d = np.linalg.svd(X, compute_uv=False)
+
+    def df(lam):
+        return float((d**2 / (d**2 + lam)).sum())
+
+    def df_trace(lam):
+        H = X @ np.linalg.solve(X.T @ X + lam * np.eye(p), X.T)
+        return float(np.trace(H))
+
+    print("     lam    sum d^2/(d^2+lam)      tr(H)")
+    for lam in (0.0, 1.0, 10.0, 100.0, 1000.0, 10000.0):
+        print(f"{lam:8.1f}{df(lam):18.4f}{df_trace(lam):12.4f}")
+
+    lo, hi = 0.0, 1e6
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        lo, hi = (mid, hi) if df(mid) > 3.0 else (lo, mid)
+    print(f"df(lam) = 3 인 lam = {0.5 * (lo + hi):.4f}")
+
+    for al in (0.05, 0.1, 0.2, 0.5, 1.0):
+        b = Lasso(alpha=al, fit_intercept=False, max_iter=100000,
+                  tol=1e-9).fit(X, y).coef_
+        print(f"Lasso alpha={al:.2f}  ->  0 이 아닌 계수 {int((np.abs(b) > 1e-8).sum())} 개")
+    ```
+
+    출력:
+
+    ```text
+         lam    sum d^2/(d^2+lam)      tr(H)
+         0.0            8.0000      8.0000
+         1.0            6.9598      6.9598
+        10.0            3.6015      3.6015
+       100.0            1.2175      1.2175
+      1000.0            0.3443      0.3443
+     10000.0            0.0457      0.0457
+    df(lam) = 3 인 lam = 14.7542
+    Lasso alpha=0.05  ->  0 이 아닌 계수 5 개
+    Lasso alpha=0.10  ->  0 이 아닌 계수 3 개
+    Lasso alpha=0.20  ->  0 이 아닌 계수 2 개
+    Lasso alpha=0.50  ->  0 이 아닌 계수 2 개
+    Lasso alpha=1.00  ->  0 이 아닌 계수 2 개
+    ```
+
+    **두 식이 모든 $\lambda$에서 소수 넷째 자리까지 같다.** 이유는 특이값분해다. $X = UDV^\top$이라 하면
+
+    $$
+    X(X^\top X + \lambda I)^{-1}X^\top = U D (D^2 + \lambda I)^{-1} D\, U^\top = U\operatorname{diag}\!\left(\frac{d_j^2}{d_j^2+\lambda}\right)U^\top
+    $$
+
+    이고, 대각합은 고윳값의 합이므로 $\sum_j d_j^2/(d_j^2+\lambda)$다. **능형의 모자행렬은 OLS 의 사영을 주성분축마다 $d_j^2/(d_j^2+\lambda)$배로 줄인 것**이고, 자유도는 그 축소배수들의 합이다.
+
+    양 끝을 확인하자. $\lambda = 0$에서 $\mathrm{df} = p = 8$로 OLS 와 같다(사영행렬의 대각합은 계수). $\lambda = 10^4$에서는 $0.0457$로 거의 0 이다. 즉 $\mathrm{df}$는 $p$에서 $0$까지 **연속적으로, 단조 감소**한다.
+
+    $\mathrm{df}(\lambda) = 3$인 지점은 $\lambda = 14.7542$다. ($\mathrm{df}$가 $\lambda$에 대해 연속이고 강하게 감소하므로 이분법이 수렴한다.)
+
+    **라쏘는 전혀 다르게 움직인다.**
+
+    | | 손잡이 | 복잡도의 값 | 성질 |
+    |:---|:---|:---|:---|
+    | 능형 | $\lambda$ | $\mathrm{df}(\lambda) \in (0, p]$ | 연속·단조 |
+    | 라쏘 | `alpha` | 0 이 아닌 계수의 수 $\in \{0,1,\ldots,p\}$ | 정수·계단 |
+
+    `alpha` 를 $0.2$에서 $1.0$까지 다섯 배 키워도 활성 변수는 계속 2 개다. **라쏘의 복잡도는 정수값이어서 계단으로 뛴다.** $\rho = 0.9$로 상관된 설계에서 어떤 `alpha` 로도 3 개가 아닌 구간이 넓게 존재할 수 있고, 여기서는 $\alpha = 0.1$이 마침 3 개를 준다.
+
+    **정보기준을 쓸 때 이 차이가 드러난다.** AIC·BIC 는 $-2\log L + (\text{벌점})\cdot \mathrm{df}$ 꼴이므로 능형에는 $\mathrm{df}(14.75) = 3$처럼 소수 자유도를 넣어야 하고, 라쏘에는 0 이 아닌 계수의 개수를 넣는다(그 개수가 라쏘 자유도의 불편추정이 된다는 사실이 알려져 있다). **능형의 $\lambda$ 격자는 촘촘하게 잡는 것이 뜻이 있지만, 라쏘의 `alpha` 격자는 활성 집합이 바뀌는 지점만 의미가 있다.** 라쏘를 격자 대신 경로 알고리즘으로 푸는 까닭이다.
+
+
 ---
 
 ## 정리하며

@@ -713,6 +713,202 @@ $$
 
     그러므로 2 절 표의 "정확한 0" 행은 베이즈 쪽에서 이렇게 읽어야 한다. **라쏘의 희소성은 Laplace 사전분포의 성질이 아니라 사후분포를 최빈값으로 요약한 결과다.** 같은 사전분포로 사후평균을 쓰면(이른바 베이즈 라쏘) 계수는 매끄럽게 축소되기만 하고 변수선택은 일어나지 않는다. 희소성이 필요하면 점질량을 0에 둔 사전분포(스파이크-슬랩)가 필요하고, 그것이 라쏘의 MAP 해석이 끝나는 자리다.
 
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span>
+설계행렬이 $X^\top X = I_p$를 만족한다고 하자(열이 정규직교인 설계). $z = X^\top y$라 쓰면 $z$가 곧 OLS 해다. 이때 목적함수
+
+$$
+\lVert y - X\beta\rVert^2 + \lambda \lVert \beta\rVert_2^2
+\qquad\text{와}\qquad
+\lVert y - X\beta\rVert^2 + \lambda \lVert \beta\rVert_1
+$$
+
+의 최소해를 **종이에서 닫힌 꼴로** 구하라. 두 식을 보고 "라쏘만 변수선택을 한다"는 말의 근거를 한 줄로 적고, $\lambda \to \infty$에서 두 해가 0 에 다가가는 **방식**이 어떻게 다른지 말하라.
+
+</div>
+
+??? success "풀이"
+    $X^\top X = I_p$이므로 잔차제곱합이 좌표별로 분리된다.
+
+    $$
+    \lVert y - X\beta\rVert^2 = \lVert y\rVert^2 - 2\beta^\top X^\top y + \beta^\top X^\top X\beta = \lVert y\rVert^2 - \lVert z\rVert^2 + \lVert \beta - z\rVert^2
+    $$
+
+    따라서 두 문제 모두 좌표마다 독립인 1 차원 문제가 된다.
+
+    **능형.** 좌표 $j$의 목적함수는 $g(b) = (b - z_j)^2 + \lambda b^2$이고 $g'(b) = 2(b - z_j) + 2\lambda b = 0$에서
+
+    $$
+    \hat\beta_j^{\text{ridge}} = \frac{z_j}{1+\lambda}
+    $$
+
+    이다. 모든 좌표를 **같은 비율** $1/(1+\lambda)$로 줄이는 **비례 축소**다.
+
+    **라쏘.** 좌표 $j$의 목적함수는 $h(b) = (b-z_j)^2 + \lambda\lvert b\rvert$다. $b > 0$에서 $h'(b) = 2(b - z_j) + \lambda = 0$이므로 $b = z_j - \lambda/2$이고, 이것이 실제로 양수가 되려면 $z_j > \lambda/2$여야 한다. $b < 0$에서는 같은 계산으로 $b = z_j + \lambda/2$이고 조건은 $z_j < -\lambda/2$다. 두 조건이 모두 깨지는 $\lvert z_j\rvert \le \lambda/2$에서는 양쪽 한쪽미분이 $h'(0^+) = -2z_j + \lambda \ge 0$, $h'(0^-) = -2z_j - \lambda \le 0$이 되어 $b = 0$이 최소점이다. 셋을 합치면
+
+    $$
+    \hat\beta_j^{\text{lasso}} = \operatorname{sign}(z_j)\bigl(\lvert z_j\rvert - \lambda/2\bigr)_+
+    $$
+
+    즉 문턱 $\lambda/2$의 **연성문턱**이다.
+
+    | | 해 | 0 이 되는 조건 |
+    |:---|:---|:---|
+    | 능형 | $z_j/(1+\lambda)$ | $z_j = 0$일 때만 |
+    | 라쏘 | $\operatorname{sign}(z_j)(\lvert z_j\rvert - \lambda/2)_+$ | $\lvert z_j\rvert \le \lambda/2$ |
+
+    **변수선택의 근거가 이 한 줄에 있다.** 능형의 해는 $z_j$에 **비례**하므로 $z_j \neq 0$이면 어떤 유한한 $\lambda$에서도 0 이 아니다. 라쏘의 해는 $z_j$를 **평행이동**한 뒤 0 에서 자르므로 $\lvert z_j \rvert$가 문턱보다 작은 좌표는 **정확히** 0 이 된다. 연습문제 1 에서 $\lambda = 10^6$까지 키워도 0 이 하나도 없었던 것이 바로 비례 축소의 결과다.
+
+    **$\lambda \to \infty$에서의 차이.** 능형은 $z_j/(1+\lambda) \sim z_j/\lambda$로 $O(\lambda^{-1})$의 속도로 0 에 **접근만** 한다. 라쏘는 $\lambda \ge 2\lvert z_j\rvert$라는 **유한한** 값에서 이미 정확히 0 에 **도달**하고 그 뒤로는 계속 0 이다. "0 으로 간다"와 "0 이 된다"의 차이다.
+
+    끝으로 척도에 주의하라. 이 문턱은 $\lambda/2$다. sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert y - X\beta\rVert^2 + \alpha\lVert\beta\rVert_1$을 쓰므로 양변에 $2n$을 곱하면 $\lVert y - X\beta\rVert^2 + 2n\alpha\lVert\beta\rVert_1$이 되어 $\lambda = 2n\alpha$, 문턱은 $n\alpha$다. 연습문제 6 에서 이것을 수로 확인한다.
+
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff hard" title="어려움"></span>
+$X^\top X = cI_p$($c > 0$)인 설계에서 $y = X\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2 I_n)$이라 하자. 능형추정량의 $E\lVert\hat\beta(\lambda) - \beta\rVert^2$을 $\lambda$의 함수로 적고, **$\lambda = 0$에서 도함수가 항상 음수임**을 보여 OLS 를 이기는 $\lambda$가 반드시 존재함을 증명하라. 최적 $\lambda^\ast$도 구하라. 그리고 그 공식을 연습문제 2 의 $\rho = 0$ 상황($n = 50$, $p = 10$, $\sigma = 1$, $\beta = (3,-2,1.5,0,\ldots,0)$, $\lambda = 1$)에 넣어 표에 적힌 개선 배수 $1.01$을 **이론으로 예측**하라.
+
+</div>
+
+??? success "풀이"
+    **1 단계: 닫힌 꼴.** $X^\top X = cI$이므로
+
+    $$
+    \hat\beta(\lambda) = (cI + \lambda I)^{-1}X^\top y = \frac{c}{c+\lambda}\cdot\frac{X^\top y}{c} = s\,\hat\beta^{\text{OLS}}, \qquad s := \frac{c}{c+\lambda}
+    $$
+
+    이고 $\hat\beta^{\text{OLS}} = X^\top y/c \sim N\bigl(\beta, (\sigma^2/c)I_p\bigr)$이다. $\lambda$가 $0$에서 $\infty$로 갈 때 $s$는 $1$에서 $0$으로 간다.
+
+    **2 단계: 편향–분산 분해.** $\hat\beta(\lambda) = s\hat\beta^{\text{OLS}}$의 기댓값은 $s\beta$이므로 편향은 $(s-1)\beta$이고, 분산은 좌표마다 $s^2\sigma^2/c$다. 5 장 정리 1 을 좌표별로 적용해 더하면
+
+    $$
+    M(\lambda) := E\lVert\hat\beta(\lambda) - \beta\rVert^2 = (1-s)^2 B + s^2\,\frac{p\sigma^2}{c}, \qquad B := \lVert\beta\rVert_2^2
+    $$
+
+    이다. 첫 항이 **편향을 사는 값**, 둘째 항이 **팔아 치운 분산**이다. $s = c/(c+\lambda)$, $1 - s = \lambda/(c+\lambda)$를 넣으면
+
+    $$
+    M(\lambda) = \frac{\lambda^2 B + c\,p\sigma^2}{(c+\lambda)^2}
+    $$
+
+    **3 단계: $\lambda = 0$에서의 도함수.** 몫의 미분으로
+
+    $$
+    M'(\lambda) = \frac{2\lambda B(c+\lambda)^2 - (\lambda^2 B + cp\sigma^2)\cdot 2(c+\lambda)}{(c+\lambda)^4} = \frac{2c\,(\lambda B - p\sigma^2)}{(c+\lambda)^3}
+    $$
+
+    이다. 따라서
+
+    $$
+    M'(0) = \frac{2c(0 - p\sigma^2)}{c^3} = -\frac{2p\sigma^2}{c^2} < 0
+    $$
+
+    $\sigma^2 > 0$이고 $p \ge 1$이면 **부호가 자료와 무관하게 항상 음수다.** $M$은 $\lambda = 0$의 오른쪽 근방에서 감소하므로 $M(\lambda) < M(0)$인 $\lambda > 0$이 반드시 존재한다. 즉 **능형이 OLS 를 이기는 $\lambda$는 늘 있다.** $\square$
+
+    **4 단계: 최적 $\lambda$.** $M'(\lambda) = 0$은 $\lambda B = p\sigma^2$과 동치이고 $M'$의 부호가 $-$에서 $+$로 한 번만 바뀌므로
+
+    $$
+    \lambda^\ast = \frac{p\sigma^2}{\lVert\beta\rVert_2^2}
+    $$
+
+    가 유일한 최소점이다. $c$가 약분되어 사라진다는 점이 재미있다. **신호 $\lVert\beta\rVert^2$가 크면 벌점을 약하게, 잡음 $p\sigma^2$가 크면 세게 걸라**는 뜻이다.
+
+    **5 단계: 연습문제 2 의 $\rho = 0$에 넣기.** $X$의 성분이 iid $N(0,1)$이므로 $X^\top X \approx nI$, 즉 $c = n = 50$이다. 또
+
+    $$
+    B = 3^2 + (-2)^2 + 1.5^2 = 9 + 4 + 2.25 = 15.25, \qquad p\sigma^2 = 10
+    $$
+
+    이므로 $\lambda^\ast = 10/15.25 = 0.6557$이고 $p\sigma^2/c = 10/50 = 0.2$다. 이제
+
+    | $\lambda$ | $s = 50/(50+\lambda)$ | $(1-s)^2 B$ (편향$^2$) | $s^2 \cdot 0.2$ (분산) | $M(\lambda)$ | $M(0)/M(\lambda)$ |
+    |---:|---:|---:|---:|---:|---:|
+    | $0$ | $1$ | $0$ | $0.200000$ | $0.200000$ | $1.0000$ |
+    | $0.6557$ | $0.98706$ | $0.002555$ | $0.194856$ | $0.197411$ | $1.0131$ |
+    | $1$ | $0.98039$ | $0.005863$ | $0.192234$ | $0.198097$ | $1.0096$ |
+
+    $\lambda = 1$에서 이론이 예측하는 개선 배수는 $1.0096$이고, 연습문제 2 의 모의실험이 보고한 값은 $1.01$이다. **소수 둘째 자리까지 일치한다.**
+
+    (모의실험의 절대값 $0.258$이 이론값 $0.200$보다 큰 것은 $X^\top X$가 정확히 $nI$가 아니라 위샤트 변동을 갖기 때문이다. $E\operatorname{tr}\bigl((X^\top X)^{-1}\bigr)\sigma^2 = p\sigma^2/(n-p-1) = 10/39 = 0.256$이 실제로 관측값과 맞는다. 배수는 그 변동에 거의 영향을 받지 않는다.)
+
+    **$1.01$은 $\lambda = 1$을 잘못 골라서 나온 작은 값이 아니다.** 최적 $\lambda^\ast$를 써도 $1.0131$, 곧 $1.3\%$가 한계다. 잘 조건화된 문제에서는 애초에 팔아 치울 분산($0.2$)이 신호($15.25$)에 비해 턱없이 작아 거래할 것이 없다. 이것이 쪽 본문이 말한 "**정칙화는 공짜 점심이 아니다**"의 정량적 뜻이다.
+
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff hard" title="어려움"></span>
+$X^\top X = I_p$, $y = X\beta + \varepsilon$, $\varepsilon \sim N(0,\sigma^2 I_n)$이라 하자. $\beta_j$에 독립인 사전분포를 주었을 때 다음을 보여라.
+
+1. $\beta_j \sim N(0,\tau^2)$이면 사후 **최빈값**이 $\lambda = \sigma^2/\tau^2$인 능형해다.
+2. $\beta_j \sim \text{Laplace}(0,b)$, 즉 밀도 $\frac{1}{2b}e^{-\lvert\beta_j\rvert/b}$이면 사후 최빈값이 $\lambda = 2\sigma^2/b$인 라쏘해다.
+3. 그런데 2 의 사전분포에서 사후 **평균**은 $z_j \neq 0$이면 결코 정확히 0 이 아니다.
+
+3 에서 얻는 교훈을 한 줄로 적어라.
+
+</div>
+
+??? success "풀이"
+    연습문제 11 에서 보았듯 $X^\top X = I_p$이면 $z := X^\top y$에 대해 $\lVert y - X\beta\rVert^2 = \lVert y\rVert^2 - \lVert z\rVert^2 + \lVert\beta - z\rVert^2$이다. 따라서 가능도는
+
+    $$
+    p(y \mid \beta) \propto \exp\left(-\frac{\lVert\beta - z\rVert^2}{2\sigma^2}\right) = \prod_{j=1}^p \exp\left(-\frac{(\beta_j - z_j)^2}{2\sigma^2}\right)
+    $$
+
+    로 **좌표별로 분해**된다. 사전분포도 독립이므로 사후분포 역시 좌표별로 분해되고, 좌표마다 1 차원 문제만 남는다.
+
+    **1. 정규 사전분포 → 능형.** 음의 로그사후는 상수를 빼면
+
+    $$
+    -\log p(\beta\mid y) = \frac{\lVert\beta - z\rVert^2}{2\sigma^2} + \frac{\lVert\beta\rVert_2^2}{2\tau^2} + \text{const}
+    $$
+
+    이고, 양변에 $2\sigma^2$을 곱해도 최소점은 그대로이므로 최빈값은
+
+    $$
+    \lVert\beta - z\rVert^2 + \frac{\sigma^2}{\tau^2}\lVert\beta\rVert_2^2
+    $$
+
+    의 최소점, 즉 $\lambda = \sigma^2/\tau^2$인 능형해 $\hat\beta_j = z_j/(1+\sigma^2/\tau^2)$다. 사전분포가 평평해지면($\tau \to \infty$) $\lambda \to 0$으로 OLS 가 되고, 0 을 강하게 믿으면($\tau \to 0$) $\lambda \to \infty$로 모두 0 쪽으로 간다. 참고로 정규 사전분포에서는 사후분포가 정규라서 **최빈값과 평균이 일치**한다.
+
+    **2. 라플라스 사전분포 → 라쏘.** 음의 로그사후는
+
+    $$
+    -\log p(\beta\mid y) = \frac{\lVert\beta - z\rVert^2}{2\sigma^2} + \frac{\lVert\beta\rVert_1}{b} + \text{const}
+    $$
+
+    이고 $2\sigma^2$을 곱하면
+
+    $$
+    \lVert\beta - z\rVert^2 + \frac{2\sigma^2}{b}\lVert\beta\rVert_1
+    $$
+
+    이다. 곧 $\lambda = 2\sigma^2/b$인 라쏘이고, 연습문제 11 의 공식으로 최빈값은 문턱 $\lambda/2 = \sigma^2/b$의 연성문턱 $\hat\beta_j = \operatorname{sign}(z_j)(\lvert z_j\rvert - \sigma^2/b)_+$다. 6 장의 MAP 정리 1 이 말하는 대응이 바로 이것이다.
+
+    **3. 사후평균은 0 이 되지 않는다.** 좌표 하나만 보고 $z := z_j > 0$이라 하자(음수면 대칭이고 $z=0$이면 대칭성으로 평균이 0 이다). 사후밀도는
+
+    $$
+    f(\beta) \propto \exp\left(-\frac{(\beta - z)^2}{2\sigma^2} - \frac{\lvert\beta\rvert}{b}\right)
+    $$
+
+    이다. $\beta$와 $-\beta$를 비교하면 L1 항이 똑같이 $\lvert\beta\rvert/b$이므로 **그 항이 지워지고**
+
+    $$
+    \log f(\beta) - \log f(-\beta) = \frac{(\beta+z)^2 - (\beta - z)^2}{2\sigma^2} = \frac{2\beta z}{\sigma^2}
+    $$
+
+    가 남는다. 따라서 $\beta > 0$, $z > 0$이면 $f(\beta) > f(-\beta)$가 **모든** $\beta > 0$에서 성립한다. 이제 적분을 반쪽으로 접으면
+
+    $$
+    E[\beta \mid y] = \int_{-\infty}^{\infty}\beta f(\beta)\,d\beta = \int_0^\infty \beta\bigl(f(\beta) - f(-\beta)\bigr)d\beta > 0
+    $$
+
+    피적분함수가 $\beta > 0$에서 양수이므로 적분은 **엄격히** 양수다. 즉 $z_j \neq 0$인 어떤 좌표에서도 사후평균은 정확히 0 이 아니다. $\square$
+
+    **교훈.** 라쏘의 희소성은 사후분포가 0 에 **점질량**을 갖기 때문이 아니라, 우리가 **최빈값을 고르기** 때문에 생긴다. 라플라스 사후분포는 0 에서 밀도가 뾰족하게 솟지만 그 점의 확률은 0 이다. 그래서 "라쏘는 베이즈 방법이다"라는 말은 **최빈값 추정에 한해서만** 옳고, 같은 사전분포로 완전한 베이즈 추론(사후평균)을 하면 희소해가 전혀 나오지 않는다. 진짜로 0 에 점질량을 원하면 스파이크-슬랩처럼 **0 에 질량을 둔** 사전분포를 써야 한다.
+
+
 ---
 
 ## 정리하며

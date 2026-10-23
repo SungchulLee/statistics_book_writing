@@ -648,7 +648,6 @@ nav:
             - 18.7 개관과 비교:
                 - 능형회귀 대 라쏘 대 엘라스틱넷: ch18/overview/comparison.md
                 - 방법 선택 지침: ch18/overview/guidelines.md
-                - 개관: ch18/overview/overview.md
                 - 능형회귀·라쏘·엘라스틱넷 비교 (코드): ch18/overview/reg_compare.md
 
         - 19 로지스틱 회귀:

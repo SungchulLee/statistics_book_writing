@@ -38,6 +38,28 @@ $$
 
 두 매개화는 $\lambda_1 = \lambda\alpha$, $\lambda_2 = \lambda(1 - \alpha)/2$로 연결된다. $(\lambda, \alpha)$ 매개화가 더 흔한데, 전체 벌점 강도와 벌점 혼합을 분리하여 $\alpha$를 고정한 채 $\lambda$에 대해 교차검증할 수 있기 때문이다.
 
+### scikit-learn 의 모수 이름은 위 수식과 다르다
+
+!!! warning "scikit-learn의 모수 이름은 위 수식과 다르다"
+    이 페이지의 $\lambda$와 $\alpha$는 통계 문헌의 관례이다. scikit-learn은 다른 이름을 쓴다.
+
+    | 수식 | scikit-learn |
+    |:---|:---|
+    | $\lambda$ (전체 벌점 강도) | `alpha` |
+    | $\alpha$ (L1 혼합비) | `l1_ratio` |
+
+    즉 `ElasticNet(alpha=0.6, l1_ratio=0.2)`는 이 페이지의 표기로 $\lambda = 0.6$, $\alpha = 0.2$를 뜻한다. `l1_ratio=1`이면 라쏘, `l1_ratio=0`이면 능형이다.
+
+    또한 sklearn의 목적함수는 잔차제곱합을 $2n$으로 나눈다.
+
+    $$
+    \frac{1}{2n}\|y - X\beta\|^2 + \lambda\left(\alpha\|\beta\|_1 + \frac{1-\alpha}{2}\|\beta\|_2^2\right)
+    $$
+
+    따라서 다른 소프트웨어의 $\lambda$와 직접 비교할 때는 $n$ 배율에 주의해야 한다.
+
+---
+
 ---
 
 ## 4. 제약최적화 형태
@@ -659,6 +681,145 @@ $$
     표를 세로로 읽으면 **위험이 한쪽으로 기울어 있다.** $\alpha$를 너무 크게 잡아서 잃는 최대치는 $1.2\%$인데 너무 작게 잡아서 잃는 최대치는 $31.0\%$다. 2차원 격자를 아껴야 할 때 $\alpha$를 하나만 고른다면 1 쪽으로 치우쳐 고르는 것이 안전하다. 그리고 최적 $\lambda$가 두 설정에서 똑같이 $0.0834$인 것도 눈여겨볼 만하다 — $\lambda$는 신호의 세기가 정하고 $\alpha$는 신호의 **배치**가 정한다.
 
     교차검증에서 표준화를 폴드 안에서 한 것은 자료 누수를 막기 위함이다. 전체 자료의 평균과 표준편차를 먼저 써 버리면 검증 폴드의 정보가 훈련에 섞여 CV 오차를 과소평가한다.
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span>
+위의 경고 상자는 모수 **이름**이 다르다는 것만 알려 준다. 그보다 더 자주 사고를 내는 것은 sklearn 의 `Ridge` 가 설명변수를 **표준화해 주지 않는다**는 사실이다. $p = 3$인 자료에서 셋째 설명변수의 단위만 m 에서 cm 로 바꾸어(값을 100 배) 능형 해가 달라지는지 확인하라. OLS 는 어떤가? 표준화를 먼저 하면 어떻게 되는가?
+
+</div>
+
+??? success "풀이"
+    단위를 바꾼 뒤 얻은 계수에는 $100$을 곱해 **같은 척도로 되돌려** 비교해야 한다. 셋째 변수를 $100$배 했으면 그 계수는 $1/100$배가 되는 것이 "올바른" 변환이기 때문이다.
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge, LinearRegression
+
+    rng = np.random.default_rng(4)
+    n = 40
+    X = rng.normal(size=(n, 3))
+    y = X @ np.array([2.0, -1.0, 0.5]) + rng.normal(0, 0.5, n)
+
+    X2 = X.copy()
+    X2[:, 2] *= 100.0                    # 셋째 변수의 단위만 m -> cm
+    back = np.array([1.0, 1.0, 100.0])   # 같은 척도로 되돌리는 배수
+
+    def row(name, b1, b2):
+        print(f"{name:12s}" + " ".join(f"{v:8.4f}" for v in b1)
+              + "  |" + " ".join(f"{v:8.4f}" for v in b2 * back))
+
+    print("             -------- 원래 단위 --------  ---- cm 로 바꾼 뒤 되돌림 ----")
+    row("OLS",
+        LinearRegression(fit_intercept=False).fit(X, y).coef_,
+        LinearRegression(fit_intercept=False).fit(X2, y).coef_)
+    row("Ridge(10)",
+        Ridge(alpha=10.0, fit_intercept=False).fit(X, y).coef_,
+        Ridge(alpha=10.0, fit_intercept=False).fit(X2, y).coef_)
+
+    s1, s2 = X.std(axis=0), X2.std(axis=0)
+    row("Ridge(std)",
+        Ridge(alpha=10.0, fit_intercept=False).fit(X / s1, y).coef_ / s1,
+        Ridge(alpha=10.0, fit_intercept=False).fit(X2 / s2, y).coef_ / s2)
+    ```
+
+    출력:
+
+    ```text
+                 -------- 원래 단위 --------  ---- cm 로 바꾼 뒤 되돌림 ----
+    OLS           2.0268  -0.9881   0.5566  |  2.0268  -0.9881   0.5566
+    Ridge(10)     1.5987  -0.9354   0.5427  |  1.5501  -0.9565   0.6996
+    Ridge(std)    1.6588  -0.9066   0.5336  |  1.6588  -0.9066   0.5336
+    ```
+
+    **OLS 는 단위에 전혀 영향을 받지 않는다.** 되돌린 계수가 소수 넷째 자리까지 같다. OLS 는 $\hat\beta = (X^\top X)^{-1}X^\top y$이므로 $X \to XD$($D$는 양의 대각행렬)에 대해 $\hat\beta \to D^{-1}\hat\beta$가 정확히 성립하고, 적합값 $X\hat\beta$는 아예 변하지 않는다. 척도 **동변**이다.
+
+    **능형은 달라진다.** 셋째 계수가 $0.5427$에서 $0.6996$으로 $29\%$ 커졌고 첫째 계수는 $1.5987 \to 1.5501$로 줄었다. 벌점이 $\lambda\sum_j \beta_j^2$이므로 $\beta_3 \to \beta_3/100$이 되면 그 항의 벌점이 $10^4$배 가벼워진다. **즉 단위를 키운 변수는 벌점을 거의 받지 않게 되어 사실상 특별 대우를 받는다.** 단위 선택이라는 임의의 결정이 추정값을 바꾼 것이다.
+
+    **표준화하면 불변이 회복된다.** `Ridge(std)` 줄의 두 쪽이 소수 넷째 자리까지 같다. 각 열을 표준편차로 나눈 뒤 벌점을 걸면, 어떤 대각 $D$로 척도를 바꾸어도 표준화 후의 설계행렬이 같아지기 때문이다.
+
+    실무 규칙은 하나다. **능형·라쏘·엘라스틱넷을 쓸 때는 설명변수를 반드시 표준화하라.** 절편은 벌점에서 빼야 하므로(`fit_intercept=True`가 그렇게 한다) 절편에는 표준화가 필요하지 않다. 2 장의 표준화와 13 장의 다중공선성 논의가 여기서 합쳐진다.
+
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff hard" title="어려움"></span>
+위의 경고 상자는 sklearn 의 목적함수가 잔차제곱합을 $2n$으로 나눈다고 적었다. 그런데 그 상자가 적은 식은 `ElasticNet` 의 것이고, **`Ridge` 는 그 식을 쓰지 않는다.** $n = 50$, $p = 4$인 자료에서 `Ridge(alpha=2)` 의 해가 $(X^\top X + 2I)^{-1}X^\top y$와 $(X^\top X + 2nI)^{-1}X^\top y$ 가운데 어느 것과 같은지 확인하라. 이어서 열이 정규직교인 설계에서 `Lasso(alpha=0.1)` 의 해가 연습문제 5 의 연성문턱과 어떤 문턱에서 일치하는지 확인하고, 교과서 꼴 $\lambda$와 sklearn 의 `alpha` 의 관계를 적어라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from sklearn.linear_model import Ridge, Lasso
+
+    rng = np.random.default_rng(6)
+    n, p, a = 50, 4, 2.0
+    X = rng.normal(size=(n, p))
+    y = X @ np.array([1.5, -1.0, 0.0, 0.8]) + rng.normal(0, 0.5, n)
+
+    def show(name, b):
+        print(f"{name:18s}" + " ".join(f"{v:9.4f}" for v in np.round(b, 4) + 0.0))
+
+    G, Xty = X.T @ X, X.T @ y
+    show("Ridge(alpha=2)", Ridge(alpha=a, fit_intercept=False).fit(X, y).coef_)
+    show("(G+2I)^-1 X.y", np.linalg.solve(G + a * np.eye(p), Xty))
+    show("(G+2nI)^-1 X.y", np.linalg.solve(G + n * a * np.eye(p), Xty))
+
+    Q = np.linalg.qr(X)[0]          # 열이 정규직교인 설계
+    z = Q.T @ y
+    al = 0.1
+    show("Lasso(alpha=0.1)", Lasso(alpha=al, fit_intercept=False,
+                                   max_iter=100000, tol=1e-9).fit(Q, y).coef_)
+    show("soft(z, n*alpha)", np.sign(z) * np.maximum(np.abs(z) - n * al, 0.0))
+    print(f"n*alpha = {n * al:.4f},   2*n*alpha = {2 * n * al:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    Ridge(alpha=2)       1.4704   -0.8191    0.1484    0.9217
+    (G+2I)^-1 X.y        1.4704   -0.8191    0.1484    0.9217
+    (G+2nI)^-1 X.y       0.5977   -0.2189    0.1549    0.3505
+    Lasso(alpha=0.1)    -8.3102    0.2977    0.0000   -0.4993
+    soft(z, n*alpha)    -8.3102    0.2977    0.0000   -0.4993
+    n*alpha = 5.0000,   2*n*alpha = 10.0000
+    ```
+
+    **`Ridge(alpha=2)` 는 $(X^\top X + 2I)^{-1}X^\top y$와 소수 넷째 자리까지 같다.** 즉 `Ridge` 의 `alpha` 는 **교과서 꼴 $\lambda$ 그 자체**이고, $1/(2n)$ 규약을 쓰지 않는다. `Ridge` 가 최소화하는 것은
+
+    $$
+    \lVert y - X\beta\rVert^2 + \texttt{alpha}\cdot\lVert\beta\rVert_2^2
+    $$
+
+    이다. 5 절의 상자가 적은 $\frac{1}{2n}$ 꼴을 `Ridge` 에도 적용했다고 믿으면 $(X^\top X + 2nI)^{-1}X^\top y$를 기대하게 되는데, 그 해는 첫째 계수가 $1.4704$가 아니라 $0.5977$로 **$2.5$배나 작다.** $n = 50$만큼 벌점을 더 세게 걸었기 때문이다.
+
+    따라서 `ElasticNet(alpha=A, l1_ratio=0)` 과 `Ridge(alpha=a)` 를 같게 만들려면 변환이 필요하다. `ElasticNet` 의 목적함수에 $2n$을 곱하면 L2 항이 $nA\lVert\beta\rVert_2^2$가 되므로
+
+    $$
+    a = n A, \qquad\text{즉}\qquad A = a/n
+    $$
+
+    이다. 같은 수를 두 함수에 넣으면 벌점 강도가 $n$배 어긋난다.
+
+    **라쏘 쪽.** `Lasso(alpha=0.1)` 의 해가 문턱 $n\alpha = 5$의 연성문턱 $\operatorname{sign}(z)(\lvert z\rvert - 5)_+$와 네 좌표 모두 소수 넷째 자리까지 일치한다(셋째 좌표는 $\lvert z_3\rvert \le 5$라서 정확히 0 이 되었다). 연습문제 5 에서 교과서 꼴의 문턱이 $\lambda/2$였으므로 $\lambda/2 = n\alpha$, 곧
+
+    $$
+    \lambda = 2n\alpha
+    $$
+
+    이다. 여기서는 $\lambda = 2\cdot 50\cdot 0.1 = 10$이다.
+
+    **정리하면 sklearn 안에서조차 벌점의 척도가 세 가지다.**
+
+    | 추정기 | 교과서 꼴 $\lambda$ |
+    |:---|:---|
+    | `Ridge(alpha=a)` | $\lambda = a$ |
+    | `Lasso(alpha=A)` | $\lambda = 2nA$ |
+    | `ElasticNet(alpha=A)` L2 부분 | $\lambda = nA$ |
+
+    **논문의 $\lambda$를 그대로 `alpha` 에 넣으면 수가 전부 틀어진다.** 비교하기 전에 반드시 $n$ 배율을 맞추고, 가장 안전한 검산은 `Ridge` 처럼 닫힌 꼴이 있는 경우에 직접 풀어 대조해 보는 것이다.
+
 
 ---
 
