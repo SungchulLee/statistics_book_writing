@@ -150,6 +150,113 @@ _확인한 곳 — 판화의 「ELECTRICAL COUNTING MACHINES」, 잡지 이름, 
 
 </div>
 
+### 이변량 정규분포 표본추출
+
+연속형 결합분포를 눈으로 보기 위해 이변량 정규분포에서 표본을 뽑아 본다. 여기서는 "평면 위에 퍼진 무게"의 보기로만 쓰며, 이 분포 자체의 밀도함수와 성질은 [4.3절 이변량 정규분포](../../ch04/bivariate_normal/bivariate_normal.md)에서 다룬다.
+
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 이변량 정규분포 표본추출. 평균 $\mathbf 0$, 공분산행렬
+
+$$
+\Sigma = \begin{pmatrix} 1 & 0.7 \\ 0.7 & 1 \end{pmatrix}
+$$
+
+인 이변량 정규분포에서 $n = 5000$ 쌍을 뽑아 흩뿌림그림을 그린다.
+
+**(1)** 점구름이 어느 방향으로 얼마나 길쭉해야 하는가. $\Sigma$ 의 고유값과 고유벡터로 주축의 방향과 두 축 길이의 비를 구하시오.
+
+**(2)** 이 표본에서 잰 표본상관계수가 $0.7$ 에서 얼마나 벗어나면 이상한 것인가. 이론 표준오차를 적고 실제 벗어남과 견주시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 대각원소가 둘 다 $1$ 로 같다는 것이 계산을 끝내 준다. 벡터 $(1,1)^{\mathsf T}$ 와 $(1,-1)^{\mathsf T}$ 를 넣어 보면
+
+    $$
+    \Sigma \begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} 1.7 \\ 1.7 \end{pmatrix} = 1.7 \begin{pmatrix} 1 \\ 1 \end{pmatrix},
+    \qquad
+    \Sigma \begin{pmatrix} 1 \\ -1 \end{pmatrix} = \begin{pmatrix} 0.3 \\ -0.3 \end{pmatrix} = 0.3 \begin{pmatrix} 1 \\ -1 \end{pmatrix}
+    $$
+
+    이므로 고유값은 $\lambda_1 = 1 + \rho = 1.7$, $\lambda_2 = 1 - \rho = 0.3$ 이고 고유벡터는 각각 $45^\circ$ 선 $y = x$ 와 그에 직교하는 $y = -x$ 다. 분산이 같은 두 변수에서는 상관의 부호만 주축이 어느 대각선인지를 정한다.
+
+    고유값은 **그 방향으로 잰 분산**이므로 축 길이의 비는 표준편차의 비다.
+
+    $$
+    \sqrt{\frac{\lambda_1}{\lambda_2}} = \sqrt{\frac{1.7}{0.3}} = \sqrt{\frac{17}{3}} = 2.3805
+    $$
+
+    $45^\circ$ 방향으로 직교 방향보다 $2.38$ 배 길쭉한 타원이 나와야 한다.
+
+    **한 가지 헷갈리기 쉬운 것.** 주축의 기울기는 $1$ 이지만 **$x$ 를 주었을 때 $Y$ 의 평균을 잇는 직선의 기울기는 $\rho = 0.7$ 이다.** 두 직선은 다르다. 앞의 것은 점구름이 가장 길게 뻗은 방향이고 뒤의 것은 세로 단면들의 중심을 이은 선이다. 이 구별은 다음 절 [조건부분포](conditional_dist.md)와 [4.3절 이변량 정규분포](../../ch04/bivariate_normal/bivariate_normal.md)에서 다시 다룬다.
+
+    **(2) 이론값.** 표본상관계수 $r$ 의 큰표본 표준오차는
+
+    $$
+    \operatorname{SE}(r) \approx \frac{1 - \rho^2}{\sqrt n} = \frac{1 - 0.49}{\sqrt{5000}} = \frac{0.51}{70.711} = 0.00721
+    $$
+
+    이다. $0.7$ 에서 $0.007$ 쯤 벗어나는 것은 늘 있는 일이고, $0.02$ 이상 벗어나면 세 표준오차 밖이라 눈여겨볼 만하다.
+
+    **(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
+    plt.rcParams["font.family"] = "sans-serif"
+    plt.rcParams["axes.unicode_minus"] = False
+
+    np.random.seed(42)
+    mean = [0, 0]
+    # 분산이 둘 다 1이므로 비대각원소 0.7이 곧 상관계수다.
+    cov = [[1, 0.7], [0.7, 1]]
+    # 5000개의 (x, y) 쌍을 뽑는다. 결과는 (5000, 2) 모양이다.
+    samples = np.random.multivariate_normal(mean, cov, 5000)
+
+    # (1) 고유분해. 고유값은 그 방향으로 잰 분산이므로
+    # 축 길이의 비는 고유값의 비가 아니라 그 제곱근의 비다.
+    evals, evecs = np.linalg.eigh(np.array(cov))
+    print(f"고유값 = {evals}  (이론 1-rho=0.3, 1+rho=1.7)")
+    print(f"큰 고유값의 고유벡터 = {np.round(evecs[:, 1], 4)}  (이론 (1,1)/sqrt(2) = {1 / np.sqrt(2):.4f})")
+    print(f"축 길이의 비 = {np.sqrt(evals[1] / evals[0]):.4f}  (이론 sqrt(17/3) = {np.sqrt(17 / 3):.4f})")
+
+    # (2) 표본에서 잰 값들. 주변분산은 1, 상관계수는 0.7 이어야 한다.
+    r = np.corrcoef(samples.T)[0, 1]
+    se = (1 - 0.7 ** 2) / np.sqrt(len(samples))
+    print(f"표본 주변분산 = {np.round(samples.var(axis=0, ddof=1), 4)}  (이론 1, 1)")
+    print(f"표본상관계수 r = {r:.6f},  SE(r) = {se:.6f},  (r - 0.7)/SE = {(r - 0.7) / se:+.3f}")
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    # alpha를 낮춰 겹침을 푼다. 5000개를 그대로 찍으면 가운데가 뭉개진다.
+    ax.scatter(samples[:, 0], samples[:, 1], alpha=0.2, s=5)
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    # 가로세로 비를 맞춰야 타원의 기울기를 정직하게 볼 수 있다
+    ax.set_aspect('equal')
+    ax.spines[['top', 'right']].set_visible(False)
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    고유값 = [0.3 1.7]  (이론 1-rho=0.3, 1+rho=1.7)
+    큰 고유값의 고유벡터 = [0.7071 0.7071]  (이론 (1,1)/sqrt(2) = 0.7071)
+    축 길이의 비 = 2.3805  (이론 sqrt(17/3) = 2.3805)
+    표본 주변분산 = [1.0022 1.0126]  (이론 1, 1)
+    표본상관계수 r = 0.700283,  SE(r) = 0.007212,  (r - 0.7)/SE = +0.039
+    ```
+
+    ![결합분포](./img/joint_202.png)
+
+    고유값 $0.3$ 과 $1.7$, 축 비 $2.3805$, 고유벡터 $(0.7071, 0.7071)$ 이 모두 (1) 의 유도와 맞는다. 표본상관계수 $0.700283$ 은 $0.7$ 에서 $0.04$ 표준오차밖에 떨어져 있지 않다. **표본 하나로 얻은 값이 참값과 이만큼 가까운 것은 운이 좋은 편이며**, 다른 씨앗을 쓰면 대개 $0.007$ 쯤 떨어진 값이 나온다.
+
+    그림에서 확인할 것은 기울기다. 점구름이 $45^\circ$ 선을 따라 길게 뻗어 있고, 가로세로 비를 맞춰 그렸으므로 그 기울기를 눈대중으로 읽어도 된다. 가로로는 대략 $-4$ 부터 $3.5$ 까지, 세로로도 비슷한 폭으로 퍼져 있다. **주변분포만 보면 둘 다 그냥 $N(0,1)$ 이고, 이 기울기는 주변분포 어디에도 적혀 있지 않다.** 주변화가 버리는 것이 바로 이것이다.
+
 ---
 
 ## 3. 결합분포가 있으면 기댓값을 잴 수 있다
@@ -245,40 +352,11 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
     E[XY] = 1(1)(0.25) + 1(2)(0.10) + 2(1)(0.10) + 2(2)(0.10) = 0.25 + 0.20 + 0.20 + 0.40 = 1.05
     $$
 
----
-
-### 손으로 풀어 보기 — 연속
-
-<div class="probox" markdown>
-
-**문제 1.** <span class="diff med" title="중간"></span> $0 \leq x \leq y \leq 1$에서 $f_{X,Y}(x,y) = 6(1-y)$라 하자. 이것이 올바른 PDF임을 확인하고 $P(X < 1/2, Y < 1/2)$를 구하라.
-
-</div>
-
-??? success "풀이"
-    먼저 확인한다:
-
-    $$
-    \int_0^1 \int_0^y 6(1-y)\,dx\,dy = \int_0^1 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^1 = 6\left(\frac{1}{2} - \frac{1}{3}\right) = 1 \checkmark
-    $$
-
-    이제 확률을 구한다:
-
-    $$
-    P\left(X < \tfrac{1}{2}, Y < \tfrac{1}{2}\right) = \int_0^{1/2}\!\int_0^y 6(1-y)\,dx\,dy = \int_0^{1/2} 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^{1/2} = 6\left(\frac{1}{8} - \frac{1}{24}\right) = 6 \cdot \frac{2}{24} = \frac{1}{2}
-    $$
-
-    따라서 $P(X < 1/2, Y < 1/2) = 1/2$이다. $x \le y$이므로 $Y < 1/2$이면 $X < 1/2$은 저절로 따라오고, 결국 $P(Y < 1/2)$를 구한 것과 같다.
-
----
-
-### 코드로 확인하기
-
 ### 이산 결합 PMF 표
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 이산 결합 확률질량함수 표. 앞의 「손으로 풀어 보기 — 이산」에서 쓴 결합 PMF 를 다시 가져온다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 이산 결합 확률질량함수 표. 바로 위 문제 1 의 결합 PMF 를 그대로 쓴다.
 
 | | $Y=0$ | $Y=1$ | $Y=2$ |
 |:---|:---:|:---:|:---:|
@@ -429,11 +507,36 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 
     유도한 $1.2475$ 와 $1.0475$ 가 코드가 준 값과 맞고, $S$ 의 분포를 직접 세어 구한 분산도 같은 두 값을 준다. $E[S] = 1.95$ 는 두 배치에서 똑같다. **평균은 그림자가 정하고 분산은 안쪽 무게가 정한다.**
 
+---
+
+### 손으로 풀어 보기 — 연속
+
+<div class="probox" markdown>
+
+**문제 1.** <span class="diff med" title="중간"></span> $0 \leq x \leq y \leq 1$에서 $f_{X,Y}(x,y) = 6(1-y)$라 하자. 이것이 올바른 PDF임을 확인하고 $P(X < 1/2, Y < 1/2)$를 구하라.
+
+</div>
+
+??? success "풀이"
+    먼저 확인한다:
+
+    $$
+    \int_0^1 \int_0^y 6(1-y)\,dx\,dy = \int_0^1 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^1 = 6\left(\frac{1}{2} - \frac{1}{3}\right) = 1 \checkmark
+    $$
+
+    이제 확률을 구한다:
+
+    $$
+    P\left(X < \tfrac{1}{2}, Y < \tfrac{1}{2}\right) = \int_0^{1/2}\!\int_0^y 6(1-y)\,dx\,dy = \int_0^{1/2} 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^{1/2} = 6\left(\frac{1}{8} - \frac{1}{24}\right) = 6 \cdot \frac{2}{24} = \frac{1}{2}
+    $$
+
+    따라서 $P(X < 1/2, Y < 1/2) = 1/2$이다. $x \le y$이므로 $Y < 1/2$이면 $X < 1/2$은 저절로 따라오고, 결국 $P(Y < 1/2)$를 구한 것과 같다.
+
 ### 연속 결합 PDF 시각화
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 연속 결합 밀도함수 시각화. 「손으로 풀어 보기 — 연속」에서 쓴 $0 \le x \le y \le 1$ 위의 밀도 $f_{X,Y}(x,y) = 6(1-y)$ 를 그림으로 본다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 연속 결합 밀도함수 시각화. 바로 위 문제 1 의 밀도 $f_{X,Y}(x,y) = 6(1-y)$ 를 그림으로 본다.
 
 **(1)** 등고선이 가로줄로만 놓이는 까닭을 말하고, 두 주변밀도 $f_X$ 와 $f_Y$ 를 적분으로 구하시오.
 
@@ -534,113 +637,6 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
     유도한 $f_X(x) = 3(1-x)^2$ 와 $f_Y(y) = 6y(1-y)$ 가 수치적분과 소수점 여섯 자리까지 맞고, 규격화와 평균 $\tfrac14$, $\tfrac12$ 도 그대로 나온다.
 
     그림에서 읽을 것은 두 가지다. 첫째, **색띠가 가로로만 바뀐다.** 삼각형 안에서 가로로 움직이면 색이 그대로이고, 위로 올라갈 때만 노란색에서 짙은 남색으로 변한다. $x$ 가 밀도에 들어 있지 않다는 사실이 그대로 보인다. 둘째, **그림이 가리는 것이 주변밀도다.** 색이 가장 밝은 곳(노란색)은 아래쪽 $y \approx 0$ 의 꼭짓점 언저리인데 그곳의 삼각형 단면은 거의 폭이 없다. 등고선 그림은 높이만 칠해 주므로 "무게가 실제로 어디에 모여 있는가"는 보여 주지 못하며, 그것을 보려면 (1) 처럼 눌러 모아야 한다.
-
-### 이변량 정규분포 표본추출
-
-연속형 결합분포를 눈으로 보기 위해 이변량 정규분포에서 표본을 뽑아 본다. 여기서는 "평면 위에 퍼진 무게"의 보기로만 쓰며, 이 분포 자체의 밀도함수와 성질은 [4.3절 이변량 정규분포](../../ch04/bivariate_normal/bivariate_normal.md)에서 다룬다.
-
-<div class="exbox" markdown>
-
-**보기 3.** <span class="diff easy" title="쉬움"></span> 이변량 정규분포 표본추출. 평균 $\mathbf 0$, 공분산행렬
-
-$$
-\Sigma = \begin{pmatrix} 1 & 0.7 \\ 0.7 & 1 \end{pmatrix}
-$$
-
-인 이변량 정규분포에서 $n = 5000$ 쌍을 뽑아 흩뿌림그림을 그린다.
-
-**(1)** 점구름이 어느 방향으로 얼마나 길쭉해야 하는가. $\Sigma$ 의 고유값과 고유벡터로 주축의 방향과 두 축 길이의 비를 구하시오.
-
-**(2)** 이 표본에서 잰 표본상관계수가 $0.7$ 에서 얼마나 벗어나면 이상한 것인가. 이론 표준오차를 적고 실제 벗어남과 견주시오.
-
-</div>
-
-??? success "풀이"
-
-    **(1) 해석적으로.** 대각원소가 둘 다 $1$ 로 같다는 것이 계산을 끝내 준다. 벡터 $(1,1)^{\mathsf T}$ 와 $(1,-1)^{\mathsf T}$ 를 넣어 보면
-
-    $$
-    \Sigma \begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} 1.7 \\ 1.7 \end{pmatrix} = 1.7 \begin{pmatrix} 1 \\ 1 \end{pmatrix},
-    \qquad
-    \Sigma \begin{pmatrix} 1 \\ -1 \end{pmatrix} = \begin{pmatrix} 0.3 \\ -0.3 \end{pmatrix} = 0.3 \begin{pmatrix} 1 \\ -1 \end{pmatrix}
-    $$
-
-    이므로 고유값은 $\lambda_1 = 1 + \rho = 1.7$, $\lambda_2 = 1 - \rho = 0.3$ 이고 고유벡터는 각각 $45^\circ$ 선 $y = x$ 와 그에 직교하는 $y = -x$ 다. 분산이 같은 두 변수에서는 상관의 부호만 주축이 어느 대각선인지를 정한다.
-
-    고유값은 **그 방향으로 잰 분산**이므로 축 길이의 비는 표준편차의 비다.
-
-    $$
-    \sqrt{\frac{\lambda_1}{\lambda_2}} = \sqrt{\frac{1.7}{0.3}} = \sqrt{\frac{17}{3}} = 2.3805
-    $$
-
-    $45^\circ$ 방향으로 직교 방향보다 $2.38$ 배 길쭉한 타원이 나와야 한다.
-
-    **한 가지 헷갈리기 쉬운 것.** 주축의 기울기는 $1$ 이지만 **$x$ 를 주었을 때 $Y$ 의 평균을 잇는 직선의 기울기는 $\rho = 0.7$ 이다.** 두 직선은 다르다. 앞의 것은 점구름이 가장 길게 뻗은 방향이고 뒤의 것은 세로 단면들의 중심을 이은 선이다. 이 구별은 다음 절 [조건부분포](conditional_dist.md)와 [4.3절 이변량 정규분포](../../ch04/bivariate_normal/bivariate_normal.md)에서 다시 다룬다.
-
-    **(2) 이론값.** 표본상관계수 $r$ 의 큰표본 표준오차는
-
-    $$
-    \operatorname{SE}(r) \approx \frac{1 - \rho^2}{\sqrt n} = \frac{1 - 0.49}{\sqrt{5000}} = \frac{0.51}{70.711} = 0.00721
-    $$
-
-    이다. $0.7$ 에서 $0.007$ 쯤 벗어나는 것은 늘 있는 일이고, $0.02$ 이상 벗어나면 세 표준오차 밖이라 눈여겨볼 만하다.
-
-    **(3) 수치적으로.**
-
-    ```python
-    import numpy as np
-    import matplotlib.pyplot as plt
-
-    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
-    plt.rcParams["font.family"] = "sans-serif"
-    plt.rcParams["axes.unicode_minus"] = False
-
-    np.random.seed(42)
-    mean = [0, 0]
-    # 분산이 둘 다 1이므로 비대각원소 0.7이 곧 상관계수다.
-    cov = [[1, 0.7], [0.7, 1]]
-    # 5000개의 (x, y) 쌍을 뽑는다. 결과는 (5000, 2) 모양이다.
-    samples = np.random.multivariate_normal(mean, cov, 5000)
-
-    # (1) 고유분해. 고유값은 그 방향으로 잰 분산이므로
-    # 축 길이의 비는 고유값의 비가 아니라 그 제곱근의 비다.
-    evals, evecs = np.linalg.eigh(np.array(cov))
-    print(f"고유값 = {evals}  (이론 1-rho=0.3, 1+rho=1.7)")
-    print(f"큰 고유값의 고유벡터 = {np.round(evecs[:, 1], 4)}  (이론 (1,1)/sqrt(2) = {1 / np.sqrt(2):.4f})")
-    print(f"축 길이의 비 = {np.sqrt(evals[1] / evals[0]):.4f}  (이론 sqrt(17/3) = {np.sqrt(17 / 3):.4f})")
-
-    # (2) 표본에서 잰 값들. 주변분산은 1, 상관계수는 0.7 이어야 한다.
-    r = np.corrcoef(samples.T)[0, 1]
-    se = (1 - 0.7 ** 2) / np.sqrt(len(samples))
-    print(f"표본 주변분산 = {np.round(samples.var(axis=0, ddof=1), 4)}  (이론 1, 1)")
-    print(f"표본상관계수 r = {r:.6f},  SE(r) = {se:.6f},  (r - 0.7)/SE = {(r - 0.7) / se:+.3f}")
-
-    fig, ax = plt.subplots(figsize=(6, 5))
-    # alpha를 낮춰 겹침을 푼다. 5000개를 그대로 찍으면 가운데가 뭉개진다.
-    ax.scatter(samples[:, 0], samples[:, 1], alpha=0.2, s=5)
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    # 가로세로 비를 맞춰야 타원의 기울기를 정직하게 볼 수 있다
-    ax.set_aspect('equal')
-    ax.spines[['top', 'right']].set_visible(False)
-    plt.show()
-    ```
-
-    출력:
-
-    ```
-    고유값 = [0.3 1.7]  (이론 1-rho=0.3, 1+rho=1.7)
-    큰 고유값의 고유벡터 = [0.7071 0.7071]  (이론 (1,1)/sqrt(2) = 0.7071)
-    축 길이의 비 = 2.3805  (이론 sqrt(17/3) = 2.3805)
-    표본 주변분산 = [1.0022 1.0126]  (이론 1, 1)
-    표본상관계수 r = 0.700283,  SE(r) = 0.007212,  (r - 0.7)/SE = +0.039
-    ```
-
-    ![결합분포](./img/joint_202.png)
-
-    고유값 $0.3$ 과 $1.7$, 축 비 $2.3805$, 고유벡터 $(0.7071, 0.7071)$ 이 모두 (1) 의 유도와 맞는다. 표본상관계수 $0.700283$ 은 $0.7$ 에서 $0.04$ 표준오차밖에 떨어져 있지 않다. **표본 하나로 얻은 값이 참값과 이만큼 가까운 것은 운이 좋은 편이며**, 다른 씨앗을 쓰면 대개 $0.007$ 쯤 떨어진 값이 나온다.
-
-    그림에서 확인할 것은 기울기다. 점구름이 $45^\circ$ 선을 따라 길게 뻗어 있고, 가로세로 비를 맞춰 그렸으므로 그 기울기를 눈대중으로 읽어도 된다. 가로로는 대략 $-4$ 부터 $3.5$ 까지, 세로로도 비슷한 폭으로 퍼져 있다. **주변분포만 보면 둘 다 그냥 $N(0,1)$ 이고, 이 기울기는 주변분포 어디에도 적혀 있지 않다.** 보기 1 에서 표로 본 것과 같은 이야기가 연속형에서 되풀이된 것이다.
 
 ---
 
