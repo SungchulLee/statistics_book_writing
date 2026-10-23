@@ -352,7 +352,7 @@ $$
 **연습문제 5.** <span class="diff med" title="중간"></span>
 보기 1의 모형 $R = 0.01\,T$, $T \sim t_5$ 를 그대로 쓴다. 이 분포는 대칭이므로 $\gamma_1 = 0$ 이고 초과첨도는 $\gamma_2 = 6/(\nu - 4) = 6$ 이다. $\mu = 0$ 으로 둔다.
 
-**(1)** 4절의 Cornish–Fisher 전개로 $\tilde z_{0.01}$ 과 $\text{VaR}_{0.01}^{\text{CF}}$ 를 $\sigma$ 의 배수로 구하시오.
+**(1)** 3절의 Cornish–Fisher 전개로 $\tilde z_{0.01}$ 과 $\text{VaR}_{0.01}^{\text{CF}}$ 를 $\sigma$ 의 배수로 구하시오.
 
 **(2)** 참 $\text{VaR}_{0.01}$ 을 $t_5$ 의 분위수로 구하고, 정규 VaR·CF VaR·참 VaR 셋을 견주시오. 보정이 과소평가를 고쳤는가.
 
@@ -415,7 +415,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **(1)** 두 가지로 보인다. 4절이 적은 $\gamma_2 = \kappa_4 / \kappa_2^2$ 를 쓰면 한 줄이다. 누율은 독립인 확률변수의 합에서 더해지므로 $\kappa_2(S_h) = h\kappa_2$, $\kappa_4(S_h) = h\kappa_4$ 이고
+    **(1)** 두 가지로 보인다. 3절이 적은 $\gamma_2 = \kappa_4 / \kappa_2^2$ 를 쓰면 한 줄이다. 누율은 독립인 확률변수의 합에서 더해지므로 $\kappa_2(S_h) = h\kappa_2$, $\kappa_4(S_h) = h\kappa_4$ 이고
 
     $$
     \gamma_2(S_h) = \frac{\kappa_4(S_h)}{\kappa_2(S_h)^2} = \frac{h\kappa_4}{h^2\kappa_2^2} = \frac{\gamma_2}{h}
@@ -603,7 +603,7 @@ $$
 
 **(2)** 연속인 예를 만들자. 평균 $0$, 분산 $1$ 로 표준화한 균등분포 $U(-\sqrt3, \sqrt3)$($\beta_2 = 1.8$)과 표준화한 $t_5$, 곧 $T/\sqrt{5/3}$($\beta_2 = 9$)을 섞는다. $t$ 성분의 무게를 $w$ 라 할 때 $\gamma_2 = 0$ 이 되는 $w$ 를 구하시오. 두 성분의 분산이 같으므로 혼합의 분산은 $1$ 이다.
 
-**(3)** (2)의 분포에서 $\text{VaR}_{0.01}$, $P(\lvert X \rvert > 3)$, $P(\lvert X \rvert > 4)$ 를 정규값과 견주시오. 정규 모형은 위험을 과대평가하는가 과소평가하는가. 4절의 Cornish–Fisher 보정은 여기서 무엇을 해 주는가.
+**(3)** (2)의 분포에서 $\text{VaR}_{0.01}$, $P(\lvert X \rvert > 3)$, $P(\lvert X \rvert > 4)$ 를 정규값과 견주시오. 정규 모형은 위험을 과대평가하는가 과소평가하는가. 3절의 Cornish–Fisher 보정은 여기서 무엇을 해 주는가.
 
 </div>
 
