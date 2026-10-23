@@ -37,6 +37,14 @@ B = re.compile(r"\[[^\]]{0,24}?(\d+\.\d+)\s*절[^\]]*\]\(([^)\s]+\.md)")
 #       [평균의 신뢰구간](../../ch08/one_sample_intervals/ci_mu.md)은 8.2절에서
 C = re.compile(r"\[[^\]]*\]\(([^)\s]+\.md)[^)]*\)\s*(?:\(\s*|(?:은|는|이|가)\s*)(\d+\.\d+)\s*절")
 
+# 꼴 D: 링크가 **없이** 번호 뒤에 쪽 이름이나 절 이름이 따라오는 경우.
+#       「5.3절 **비율의 표집분포**에서 다룬다」 — 링크가 없으니 A·B·C 가 모두 놓친다.
+#       nav 의 절 제목과 쪽 제목, 그리고 각 쪽의 H1 을 모아 이름으로 맞춘다.
+D_ANY = re.compile(r"(\d+\.\d+)\s*절")
+# 번호가 링크에 덮여 있는 구간은 제외한다(A·B 가 이미 본다)
+D_COV = (re.compile(r"\d+\.\d+\s*절[^\[\n]{0,8}\n?[^\[\n]{0,8}\[[^\]]*\]\([^)]+\)"),
+         re.compile(r"\[[^\]]*\d+\.\d+\s*절[^\]]*\]\([^)]+\)"))
+
 
 def nav_sections(yml: pathlib.Path) -> dict:
     """docs 상대경로 -> 절 번호."""
@@ -52,8 +60,32 @@ def nav_sections(yml: pathlib.Path) -> dict:
     return out
 
 
+def nav_titles(yml: pathlib.Path) -> dict:
+    """제목(절 제목 · 쪽 제목 · 각 쪽의 H1) -> 그 제목이 속한 절 번호의 집합."""
+    out, cur = {}, None
+    for line in yml.read_text(encoding="utf-8").split("\n"):
+        m = re.match(r"^\s*- (\d+\.\d+) (.+?):\s*$", line)
+        if m:
+            cur = m.group(1)
+            out.setdefault(m.group(2).strip().strip('"'), set()).add(cur)
+            continue
+        m = re.match(r"^\s*- (.+?):\s*(\S+\.md)\s*$", line)
+        if m and cur:
+            out.setdefault(m.group(1).strip().strip('"'), set()).add(cur)
+            f = DOCS / m.group(2)
+            if f.exists():
+                h1 = next((x[2:].strip() for x in f.read_text(encoding="utf-8").split("\n")
+                           if x.startswith("# ")), None)
+                if h1:
+                    out.setdefault(h1, set()).add(cur)
+    return out
+
+
 def main(argv: list) -> int:
     sec = nav_sections(ROOT / "mkdocs.yml")
+    titles = nav_titles(ROOT / "mkdocs.yml")
+    # 짧은 제목은 우연히 걸리므로 네 글자부터, 긴 것부터 맞춘다
+    title_keys = sorted((x for x in titles if len(x) >= 4), key=len, reverse=True)
     chapters = [a for a in argv if re.fullmatch(r"ch\d+", a)]
     bad = []
     for p in sorted(DOCS.rglob("*.md")):
@@ -85,6 +117,22 @@ def main(argv: list) -> int:
                 if real and real != claim:
                     bad.append((str(rel), text[:m.start()].count("\n") + 1,
                                 claim, real, key))
+        # ── 꼴 D: 링크 없이 이름만 따라오는 참조를 제목으로 맞춘다
+        covered = set()
+        for pat in D_COV:
+            for m in pat.finditer(text):
+                covered.update(range(m.start(), m.end()))
+        for m in D_ANY.finditer(text):
+            if m.start() in covered:
+                continue
+            tail = re.sub(r"^[\s「『*`]+", "", text[m.end():m.end() + 44].replace("\n", " "))
+            hit = next((x for x in title_keys if tail.startswith(x)), None)
+            if hit is None:
+                continue
+            claim = m.group(1)
+            if claim not in titles[hit]:
+                bad.append((str(rel), text[:m.start()].count("\n") + 1,
+                            claim, "·".join(sorted(titles[hit])), f"이름: {hit}"))
     seen, rows = set(), []
     for r in bad:
         if (r[0], r[1]) not in seen:
