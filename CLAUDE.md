@@ -181,7 +181,9 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
   번호는 **쪽마다 1 부터 다시 시작**하고 한 절에 쪽이 열까지 있다. 그래서 「15.4절
   연습문제 4」는 가리키는 곳이 넷이고, 넷 다 존재하므로 **어떤 검사로도 틀렸는지 알 수
   없다.** 반드시 `15.4절 [유도와 카이제곱 근사](derivation.md) 연습문제 2` 꼴로 쪽을
-  링크한다. 링크로 적어야 기계가 검증한다. 같은 쪽 안이면 `연습문제 4` 로 족하다
+  링크한다. 링크로 적어야 기계가 검증한다 — 그 기계가 `tools/lint_item_refs.py` 이고,
+  링크를 풀어 **그 쪽이 그 번호를 정말 갖고 있는지** 본다. 같은 쪽 안이면
+  `연습문제 4` 로 족하다
 
 ## Common Tasks
 
@@ -276,6 +278,9 @@ python3 tools/lint_undefined.py
 python3 tools/lint_figures.py
 # 링크는 맞고 절 번호만 거짓인 참조 — 0 이어야 한다 (빌드는 통과한다)
 python3 tools/lint_section_refs.py
+# 링크로 적은 항목 번호가 그 쪽에 정말 있는지 — 0 이어야 한다.
+# 「링크로 적어야 기계가 검증한다」고 적어 둔 그 기계다
+python3 tools/lint_item_refs.py
 # 절을 넘어 같은 일을 하는 쪽 쌍 — 판정이 안 된 것이 0 이어야 한다
 python3 tools/lint_cross_section_pairs.py
 # 머리글의 LaTeX 와 ASCII 그리스 문자 — 목차에 날 문자열로 새어 나간다
