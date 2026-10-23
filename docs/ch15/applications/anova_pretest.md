@@ -1770,7 +1770,7 @@ $$
     Q = (\mathbf{C}\hat{\boldsymbol\mu})'(\mathbf{C}\hat{\mathbf{V}}\mathbf{C}')^{-1}(\mathbf{C}\hat{\boldsymbol\mu}) = \min_{\mu_1=\cdots=\mu_k}(\hat{\boldsymbol\mu}-\boldsymbol\mu)'\hat{\mathbf{V}}^{-1}(\hat{\boldsymbol\mu}-\boldsymbol\mu) = \min_c \sum_i u_i(\bar y_i - c)^2
     $$
 
-    로 쓰인다(어느 대비행렬을 쓰든 같은 값이다). 최소화하는 $c$ 는 가중평균 $\bar y_u = \sum_i u_i\bar y_i/\sum_i u_i$ 이고 최솟값은 $\sum_i u_i(\bar y_i-\bar y_u)^2$ 이다. 보고되는 $F$ 는 $Q/(k-1)$ 이고 참조분포는 $F(k-1,\,N-k)$ 다.
+    로 쓰인다(어느 대비행렬을 쓰든 같은 값이다). 최소화하는 $c$ 는 가중평균 $\bar y_u = \sum_i u_i\bar y_i/\sum_i u_i$ 이고 최솟값은 $\sum_i u_i(\bar y_i-\bar y_u)^2$ 이다. 보고되는 $F$ 는 $Q/(k-1)$ 이고 참조분포는 $F_{k-1,\,N-k}$ 다.
 
     이것을 Welch 의 $A = \frac{1}{k-1}\sum_i w_i(\bar X_i - \bar X_w)^2$, $w_i = n_i/s_i^2$ 과 나란히 놓으면 **모양이 똑같고 가중치만 다르다.**
 

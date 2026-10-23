@@ -1109,7 +1109,7 @@ $\mu$와 $\sigma^2$이 모두 미지일 때 $N(\mu, \sigma^2)$ 분포에서 얻�
     **(3) 구간 중도절단.** 사건이 $(a_i, b_i]$ 사이 어딘가에서 일어났다(예: 정기 검진 사이에 발병).
 
     $$
-    L_i = F(b_i;\boldsymbol\theta) - F(a_i;\boldsymbol\theta) = S(a_i)-S(b_i)
+    L_i = F_{b_i;\boldsymbol\theta} - F_{a_i;\boldsymbol\theta} = S(a_i)-S(b_i)
     $$
 
     **(4) 좌측 절단.** 개체가 시각 $u_i$ 이후에야 관측 대상이 되었다. $T > u_i$인 개체만 표본에 들어오므로 **조건부 분포**를 써야 한다.

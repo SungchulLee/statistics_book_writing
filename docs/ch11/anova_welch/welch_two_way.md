@@ -866,7 +866,7 @@ Welch의 이원배치 분산분석에서 두 요인의 주효과는 유의하고
     이다. **$T$는 점근적으로 $\chi^2_q$이지만 작은 표본에서는 너무 크다.** 요한센의 보정은
 
     $$
-    \frac{T}{c}\ \dot\sim\ F(q,f),
+    \frac{T}{c}\ \dot\sim\ F_{q,f},
     \qquad
     c=q+2A-\frac{6A}{q+2},
     \qquad
