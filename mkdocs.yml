@@ -538,11 +538,11 @@ nav:
                 - 비정규성 아래의 한계: ch15/bartlett_test/limitations.md
                 - Bartlett 검정 비정규성 민감도: ch15/bartlett_test/bartlett_sensitivity.md
             - 15.5 로버스트 검정:
+                - 로버스트 검정 개관: ch15/robust_tests/robust_tests.md
                 - Levene 검정: ch15/robust_tests/levene.md
                 - Brown-Forsythe 검정: ch15/robust_tests/brown_forsythe.md
                 - Fligner-Killeen 검정: ch15/robust_tests/fligner_killeen.md
                 - 로버스트 방법의 비교: ch15/robust_tests/comparison.md
-                - 로버스트 검정 개관: ch15/robust_tests/robust_tests.md
                 - 대수정규에서의 비교 (치우침이 극단일 때): ch15/robust_tests/robust_tests_comparison.md
                 - Levene 검정 정규 대 치우친 분포 모의실험: ch15/robust_tests/levene_simulation.md
             - 15.6 고급 방법:
@@ -612,7 +612,6 @@ nav:
                 - 이표본 위치에 대한 순열검정: ch17/permutation/two_sample.md
                 - 상관에 대한 순열검정: ch17/permutation/correlation.md
                 - 대응자료에 대한 순열검정: ch17/permutation/paired.md
-                - 순열검정 개요: ch17/permutation/permutation.md
                 - 순열검정의 구현 (이표본·다집단·비율): ch17/permutation/permutation_tests.md
                 - A/B 검정 순열검정 (코드): ch17/permutation/ab_testing_permutation.md
                 - 재표집 (신발 판매 A/B 검정) (코드): ch17/permutation/resampling_shoe_sales.md
