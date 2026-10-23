@@ -150,7 +150,7 @@ $$
 
 ??? proof "증명"
 
-    분산 분해는 전체 분산의 법칙(3.3절 조건부분포 정리 1)에 층 번호를 조건으로 넣은 것이다. $H$ 를 층 번호라 하면
+    분산 분해는 전체 분산의 법칙(3.3절 [조건부분포](../../ch03/rv/conditional_dist.md) 정리 1)에 층 번호를 조건으로 넣은 것이다. $H$ 를 층 번호라 하면
 
     $$
     \sigma^2 = \underbrace{E\bigl[\operatorname{Var}(Y \mid H)\bigr]}_{\sum_h w_h\sigma_h^2}

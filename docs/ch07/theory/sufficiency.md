@@ -169,7 +169,7 @@ $\hat\theta$ 가 $\theta$ 의 불편추정량이고 $T$ 가 $\theta$ 에 대한 
 
     먼저 $\tilde\theta$ 가 **통계량**이라는 점을 확인해 두자. $E[\hat\theta \mid T]$ 는 일반적으로 $\theta$ 를 담을 수 있어 통계량이 아닐 수 있는데, $T$ 가 **충분**하므로 조건부분포가 $\theta$ 를 담지 않아 이 기댓값이 자료만의 함수다. **충분성이 쓰이는 자리가 여기 하나뿐이다.**
 
-    **불편성.** 전체 기댓값의 법칙(3.3절 조건부분포 정리 1)에서
+    **불편성.** 전체 기댓값의 법칙(3.3절 [조건부분포](../../ch03/rv/conditional_dist.md) 정리 1)에서
 
     $$
     E[\tilde\theta] = E\bigl[E[\hat\theta \mid T]\bigr] = E[\hat\theta] = \theta
