@@ -48,6 +48,67 @@ $$
 
 이것이 분산 동일성에 대한 F 검정의 검정통계량이다.
 
+
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 특징을 고르는 자리에 이 비가 그대로 있다
+
+위 식의 $F = S_1^2 / S_2^2$ 는 **두 분산의 비**다. 분산분석은 같은 꼴을 집단 쪽으로
+돌려 쓴다 — 분자가 집단 사이의 평균제곱, 분모가 집단 안의 평균제곱이고, 귀무가설
+아래에서 그 비가 정의 1 의 $F_{k-1,\,N-k}$ 를 따른다.
+
+기계학습 꾸러미에서 **연속형 특징을 분류 표적에 대해 점수 매기는 함수**가 이 비를
+글자 그대로 쓴다. `sklearn.feature_selection.f_classif` 는 특징 하나하나에 대해
+표적의 분류를 집단으로 보고 일원배치 $F$ 를 계산하며, 돌려주는 $p$ 값은 위에서 세운
+그 $F$ 분포의 상단 꼬리다. 「비슷한 통계량」이 아니라 **같은 수**인지 보자.
+
+```python
+import numpy as np
+from scipy import stats
+from sklearn.feature_selection import f_classif
+
+rng = np.random.default_rng(15)
+n, k = 30, 3                                  # 집단 셋, 집단마다 30 개
+y = np.repeat(np.arange(k), n)
+good = np.concatenate([rng.normal(m, 1, n) for m in (0.0, 0.6, 1.2)])
+noise = rng.normal(0, 1, n * k)               # 집단과 무관한 특징
+X = np.column_stack([good, noise])
+
+F_sk, p_sk = f_classif(X, y)
+F_sp, p_sp = stats.f_oneway(*(good[y == i] for i in range(k)))
+
+# 손으로: 집단간 평균제곱 / 집단내 평균제곱
+gm = good.mean()
+msb = sum(n * (good[y == i].mean() - gm) ** 2 for i in range(k)) / (k - 1)
+msw = sum(((good[y == i] - good[y == i].mean()) ** 2).sum() for i in range(k)) / (k * n - k)
+
+print(f"손계산    F = {msb / msw:.6f}")
+print(f"f_oneway  F = {F_sp:.6f}  p = {p_sp:.3e}")
+print(f"f_classif F = {F_sk[0]:.6f}  p = {p_sk[0]:.3e}   (쓸모 있는 특징)")
+print(f"          F = {F_sk[1]:.6f}  p = {p_sk[1]:.3e}   (잡음 특징)")
+print(f"기각 임계값 F(2, 87) 상단 5% = {stats.f.ppf(0.95, k - 1, k * n - k):.6f}")
+```
+
+출력:
+
+```
+손계산    F = 12.293279
+f_oneway  F = 12.293279  p = 1.986e-05
+f_classif F = 12.293279  p = 1.986e-05   (쓸모 있는 특징)
+          F = 2.393483  p = 9.730e-02   (잡음 특징)
+기각 임계값 F(2, 87) 상단 5% = 3.101296
+```
+
+소수 여섯 자리까지 같다. 특징 선택 점수라 불리는 수가 **이 쪽이 세운 비 그 자체**이고,
+잡음 특징의 $2.393$ 은 임계값 $3.101$ 아래에 있어 걸러진다.
+
+그래서 이 점수가 재는 것이 무엇인지도 식에 적혀 있다 — **한 특징이 홀로 집단을 가르는
+힘**이다. 둘이 함께여야 갈라지는 특징 쌍은 각각의 분자가 작아 둘 다 낮은 점수를 받고
+**함께 탈락한다.** 비의 분모가 「집단 안」인 한, 다른 특징이 무엇을 하고 있는지는
+이 수에 들어오지 않는다.
+
+</div>
+
 ---
 
 ## 2. F 분포의 성질

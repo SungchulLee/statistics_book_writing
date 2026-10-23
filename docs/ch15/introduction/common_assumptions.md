@@ -65,6 +65,68 @@ $$
 
 여기서 서로 다른 집단의 표본들은 상호 독립이다.
 
+
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 가정을 검정하는 대신 모형을 골라 버린다
+
+§2 는 각 집단이 **정규**여야 한다 했고 §3 은 집단마다 **같은 분산**을 요구했다.
+이 둘을 변수 여러 개로 올리면 「집단마다 같은 **공분산행렬**」이 되고, 그것이
+**선형판별분석**(LDA)이 세우는 가정이다. 집단마다 다른 공분산을 허용하면
+**이차판별분석**(QDA)이 된다 — 두 분류기의 차이는 이 쪽이 다루는 가정 하나다.
+
+그런데 기계학습 꾸러미는 그 가정을 **검정하지 않는다.** 공분산이 같은지 묻는 대신
+LDA 와 QDA 를 둘 다 적합해 **교차검증에서 어느 쪽이 더 맞히는지**로 고른다. 검정이
+답할 물음(같은가 다른가)을 선택이 답할 물음(어느 쪽이 나은가)으로 바꾼 것이다.
+그 바꿈이 공짜인지 보자.
+
+```python
+import numpy as np
+from sklearn.discriminant_analysis import (LinearDiscriminantAnalysis,
+                                           QuadraticDiscriminantAnalysis)
+from sklearn.model_selection import cross_val_score
+
+def trial(rng, same, n):                       # 집단 둘, 집단마다 n 개, 평균차는 고정
+    S1 = np.eye(2) if same else np.diag([4.0, 0.25])
+    X = np.vstack([rng.multivariate_normal([0.0, 0.0], np.eye(2), n),
+                   rng.multivariate_normal([1.6, 0.0], S1, n)])
+    y = np.repeat([0, 1], n)
+    return (cross_val_score(LinearDiscriminantAnalysis(), X, y, cv=5).mean(),
+            cross_val_score(QuadraticDiscriminantAnalysis(), X, y, cv=5).mean())
+
+print("  n   공분산   LDA     QDA     QDA-LDA")
+for n in (15, 120):
+    for same in (True, False):
+        rng = np.random.default_rng(15)
+        r = np.array([trial(rng, same, n) for _ in range(40)]).mean(axis=0)
+        print(f"{n:4}   {'같음' if same else '다름'}   {r[0]:.4f}  {r[1]:.4f}  {r[1]-r[0]:+.4f}")
+```
+
+출력:
+
+```
+  n   공분산   LDA     QDA     QDA-LDA
+  15   같음   0.7842  0.7675  -0.0167
+  15   다름   0.7042  0.7467  +0.0425
+ 120   같음   0.7845  0.7814  -0.0031
+ 120   다름   0.7133  0.7543  +0.0409
+```
+
+**가정이 맞을 때 QDA 가 내는 대가가 표본크기에 달려 있다.** 집단마다 $15$ 개면
+$1.7$ 퍼센트포인트를 잃지만 $120$ 개면 $0.3$ 퍼센트포인트로 줄어든다. 공분산을
+집단마다 따로 추정하느라 모수를 더 쓴 값인데, 자료가 많아지면 그 값이 거의 사라진다.
+반대로 **가정이 틀릴 때 얻는 이득은 $+0.04$ 쯤으로 표본크기와 거의 무관하다.**
+
+그래서 가정 검정이 사라진 것이 아니라 **표본이 작을 때만 남는 문제**로 바뀌었다.
+자료가 넉넉하면 둘 다 적합해 보는 쪽이 검정보다 빠르고 정확하다. 자료가 적으면
+교차검증 점수 자체가 흔들려서 — 위 표의 $1.7$ 퍼센트포인트는 $40$ 번 되풀이한
+평균이고 한 번의 차이는 그보다 훨씬 크다 — 고르는 일도 믿기 어려워진다. 이 쪽의
+가정이 가장 아플 자리와 **같은 자리**다. 두 분류기의 결정경계가 어떻게 갈리는지는
+19.5절 [선형판별분석과 이차판별분석](../../ch19/generative/lda_qda_classification.md)
+에 있다.
+
+</div>
+
 ---
 
 ## 4. 위반의 결과
