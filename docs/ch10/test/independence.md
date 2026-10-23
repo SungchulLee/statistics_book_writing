@@ -181,7 +181,7 @@ $$
 
 $$\text{두 변수는 독립이 아니다.}$$
 
-### Python 구현 (`scipy.stats.chi2_contingency` 없이)
+### 식을 그대로 코드로 옮기면
 
 <div class="exbox" markdown>
 
@@ -391,7 +391,7 @@ $$
 
     부동소수점이 아니라 **유리수로 정확히 같다.** 유도가 한 글자라도 틀렸다면 여기서 드러난다.
 
-### Python 구현 (`scipy.stats.chi2_contingency` 사용)
+### `chi2_contingency` 가 같은 값을 주는지
 
 <div class="exbox" markdown>
 

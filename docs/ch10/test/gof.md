@@ -782,7 +782,7 @@ $$
 
 $$\text{주사위는 조작되지 않았다.}$$
 
-### Python 구현 (`scipy.stats.chisquare` 없이)
+### 식을 그대로 코드로 옮기면
 
 <div class="exbox" markdown>
 
@@ -901,7 +901,7 @@ $$\text{주사위는 조작되지 않았다.}$$
 
     어느 쪽이 옳은가? 여섯 눈을 함께 보는 쪽이다. "눈 3이 많이 나왔다"는 것은 자료를 보고 고른 사실이며, 보기 2 가 모의로 보인 대로 **그 고르는 행위의 실제 오류율이 $27\%$** 이기 때문이다. 앞 장의 p-해킹과 같은 문제다.
 
-### Python 구현 (`scipy.stats.chisquare` 사용)
+### `chisquare` 가 같은 값을 주는지
 
 <div class="exbox" markdown>
 

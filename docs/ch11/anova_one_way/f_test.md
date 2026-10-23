@@ -201,11 +201,11 @@ $200$ 쌍 중 $50$ 쌍쯤이 일란성일 것, 비용 $1$–$2\%$ 와 수고 $5\
 
 ---
 
-## 2. 일원배치 분산분석 패키지
+## 2. 같은 분산분석표에 이르는 두 길
 
 ### 귀무가설 아래에서 두 평균제곱이 같은 것을 겨눈다
 
-#### scipy.stats.f_oneway
+`scipy.stats.f_oneway` 로 돌려 본다.
 
 <div class="exbox" markdown>
 
@@ -412,7 +412,7 @@ $$
 
 ### 회귀로 적합해도 같은 분산분석표가 나온다
 
-#### statsmodels.formula.api.ols와 statsmodels.stats.anova.anova_lm
+`statsmodels.formula.api.ols` 로 적합하고 `statsmodels.stats.anova.anova_lm` 으로 표를 뽑는다.
 
 <div class="exbox" markdown>
 
