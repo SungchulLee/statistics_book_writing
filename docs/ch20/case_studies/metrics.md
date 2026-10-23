@@ -164,6 +164,87 @@ $C\times C$ 혼동행렬 $M$의 원소 $M_{jk}$는 참 범주가 $j$이고 예�
     수준이다. 두 자료의 숫자를 직접 비교해서는 안 된다.
 
 ---
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 그 칸의 수는 몇 번 더 나누면 그대로 있는가
+
+위 보기는 $10 \times 10$ 행렬에서 **어느 칸이 정밀도를 끌어내렸는가**를 물었고, 그
+물음은 옳다. 이어서 물을 것이 하나 더 있다 — **그 답이 자료를 다시 나누어도 같은가.**
+
+이 자료는 검정자료가 $360$ 장인데 틀리는 것이 열 건 남짓이다. 그 열 건이 $90$ 개
+비대각 칸에 흩어진다. 칸 하나에 평균 한 건이 될까 말까다. 나누는 씨앗만 바꾸어
+$200$ 번 되풀이해 보면 그 수가 얼마나 서 있는지 보인다.
+
+```python
+import numpy as np, collections
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+
+dg = load_digits()
+R = 200
+worst, errs, cells = [], [], np.zeros((10, 10))
+for s in range(R):                       # 나누는 씨앗만 바꾼다. 모형도 자료도 그대로다
+    xa, xb, ya, yb = train_test_split(dg.data, dg.target, test_size=0.2, random_state=s)
+    K = confusion_matrix(yb, LogisticRegression(max_iter=2000).fit(xa, ya).predict(xb))
+    np.fill_diagonal(K, 0)               # 맞힌 칸은 치우고 틀린 칸만 본다
+    cells += K; errs.append(K.sum())
+    worst.append(tuple(int(v) for v in np.unravel_index(K.argmax(), K.shape)))
+
+print(f"  한 번 나눌 때 틀리는 건수: 평균 {np.mean(errs):.1f}  (최소 {min(errs)}, 최대 {max(errs)})\n")
+cnt = collections.Counter(worst)
+print("  '가장 많이 헷갈린 칸' 이 분할마다 어디였나")
+for (i, j), k in cnt.most_common(5):
+    print(f"    {i} 를 {j} 로   {k:3d} 번 ({k/R:.0%})")
+print(f"    ... 한 번이라도 1 위를 한 칸이 모두 {len(cnt)} 가지\n")
+print(f"  {R} 번을 합쳐야 보이는 것")
+for i, j in np.dstack(np.unravel_index(np.argsort(-cells, axis=None)[:4], cells.shape))[0]:
+    print(f"    {i} 를 {j} 로   합계 {int(cells[i,j]):3d} 건   한 분할 평균 {cells[i,j]/R:.2f} 건")
+```
+
+출력:
+
+```
+  한 번 나눌 때 틀리는 건수: 평균 13.3  (최소 5, 최대 23)
+
+  '가장 많이 헷갈린 칸' 이 분할마다 어디였나
+    8 를 1 로    45 번 (22%)
+    5 를 9 로    18 번 (9%)
+    3 를 5 로    13 번 (6%)
+    9 를 8 로    11 번 (6%)
+    3 를 8 로    10 번 (5%)
+    ... 한 번이라도 1 위를 한 칸이 모두 34 가지
+
+  200 번을 합쳐야 보이는 것
+    8 를 1 로   합계 266 건   한 분할 평균 1.33 건
+    5 를 9 로   합계 160 건   한 분할 평균 0.80 건
+    9 를 8 로   합계 155 건   한 분할 평균 0.78 건
+    8 를 5 로   합계 111 건   한 분할 평균 0.56 건
+```
+
+**「가장 많이 헷갈린 칸」이 $34$ 가지였다.** 가장 자주 $1$ 위를 한 $8 \to 1$ 조차
+다섯 번에 한 번만 $1$ 위다. 한 번 나눈 행렬을 보고 「이 모형은 $5$ 를 $8$ 로
+헷갈린다」고 적으면, 그 문장은 모형이 아니라 **그 분할**에 대한 말이다. 틀린 건수
+자체가 $5$ 에서 $23$ 까지 네 배 넘게 오르내린다.
+
+그렇다고 구조가 없는 것은 아니다. $200$ 번을 합치면 $8 \to 1$ 이 $266$ 건으로
+둘째인 $5 \to 9$ 의 $160$ 건을 뚜렷이 앞선다. **구조는 있는데 한 분할이 그것을
+담을 만큼 크지 않을 뿐이다.** 합쳐 놓고 보면 한 분할당 $1.33$ 건, 곧 열 번 가운데
+한두 번만 나타나는 사건이다. 그러니 그 칸이 어떤 분할에서 $0$ 이라고 해서 모형이
+좋아진 것이 아니고, $3$ 이라고 해서 나빠진 것도 아니다.
+
+실무의 규칙은 여기서 바로 나온다. **대각선은 한 번 나눈 것으로 읽어도 되지만,
+비대각은 그렇지 않다.** 대각선의 수는 수십에서 수백이라 비율이 안정되지만, 비대각
+칸은 거의 언제나 한 자리 수다. 어느 숫자 쌍이 실제로 닮았는지 알고 싶으면 **여러 번
+나누어 합치거나 교차검증의 모든 폴드를 모아** 행렬 하나로 세어야 한다. 아래 $4$ 절이
+틀린 사례를 **그림으로** 들여다보는 것도 같은 사정 때문이다 — 수가 몇 건뿐일 때는
+세는 것보다 보는 것이 낫다.
+
+</div>
+
+---
+
 
 ## 4. 오분류 시각화
 
