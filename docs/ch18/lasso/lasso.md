@@ -260,7 +260,7 @@ $$
 
 ## 6. 라쏘 해 경로
 
-$\lambda$가 $\lambda_{\max}$(모든 계수가 0)에서 0(OLS)까지 변하면 계수가 하나씩 모형에 들어온다. 경로 $\hat{\beta}_j(\lambda)$는 $\lambda$에 대해 **조각별 선형**이다(Efron et al., 2004의 LARS 결과).
+$\lambda$가 $\lambda_{\max}$(모든 계수가 0)에서 0(OLS)까지 변하면 계수가 하나씩 모형에 들어온다. 경로 $\hat{\beta}_j(\lambda)$는 $\lambda$에 대해 **조각별 선형**이다(에프론 외, 2004의 LARS 결과).
 
 $$
 \lambda_{\max} = \frac{1}{n}\|\mathbf{X}^\top\mathbf{y}\|_\infty
