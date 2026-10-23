@@ -716,7 +716,54 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 8.** <span class="diff hard" title="어려움"></span>
+**연습문제 8.** <span class="diff med" title="중간"></span>
+가중치가 왜 분산의 역수인가
+
+관측값마다 $\operatorname{Var}(\varepsilon_i) = \sigma_i^2$ 이라 하자.
+
+**(a)** 각 식의 양변을 $\sigma_i$ 로 나누면 변환된 모형의 오차가 등분산이 됨을 보여라.
+
+**(b)** 그 변환된 모형에 OLS 를 적용하는 것이 원래 모형에 가중치 $w_i = 1/\sigma_i^2$ 를 준
+가중최소제곱과 같음을 보여라.
+
+**(c)** $\sigma_i^2$ 를 모를 때 실무에서 무엇을 하는지 두 가지를 적어라.
+
+</div>
+
+??? success "풀이"
+
+    **(a)** $y_i = \mathbf{x}_i^\top\boldsymbol\beta + \varepsilon_i$ 의 양변을 $\sigma_i$ 로
+    나누면
+
+    $$
+    \frac{y_i}{\sigma_i} = \left(\frac{\mathbf{x}_i}{\sigma_i}\right)^\top\boldsymbol\beta
+    + \frac{\varepsilon_i}{\sigma_i}
+    $$
+
+    이고 새 오차의 분산은 $\operatorname{Var}(\varepsilon_i)/\sigma_i^2 = 1$ 로 **모든 $i$ 에서
+    같다.** 계수 $\boldsymbol\beta$ 는 그대로라는 점이 중요하다.
+
+    **(b)** 변환된 모형의 잔차제곱합은
+
+    $$
+    \sum_i \left(\frac{y_i - \mathbf{x}_i^\top\boldsymbol\beta}{\sigma_i}\right)^2
+    = \sum_i \frac{1}{\sigma_i^2}\,(y_i - \mathbf{x}_i^\top\boldsymbol\beta)^2
+    $$
+
+    로, 가중치 $w_i = 1/\sigma_i^2$ 를 준 가중잔차제곱합과 **같은 식**이다. 그러므로 두 절차의
+    해가 같다. 가우스–마르코프 정리를 변환된 모형에 적용하면 이 추정량이 BLUE 다. **분산이 큰
+    관측값은 정보가 적으므로 덜 믿는다**는 직관이 수식으로 확인된다.
+
+    **(c)** 둘을 든다.
+
+    1. **분산 구조를 모형화한다.** 제곱잔차를 설명변수에 회귀해 $\hat\sigma_i^2$ 를 얻고
+       $w_i = 1/\hat\sigma_i^2$ 를 쓰는 **실현가능 일반화최소제곱(FGLS)**. 분산 모형이 틀리면
+       오히려 나빠질 수 있다.
+    2. **분산을 모형화하지 않는다.** 계수는 OLS 로 두고 **로버스트 표준오차**만 쓴다. 효율은
+       잃지만 틀릴 위험이 없어 실무의 기본값이다. $\square$
+<div class="drillbox" markdown>
+
+**연습문제 9.** <span class="diff hard" title="어려움"></span>
 보기 3은 OLS 보고 표준오차가 절편에서는 참값보다 $36\%$ 크고 기울기에서는 $11\%$ 작다는 것을 보이고 "어느 쪽으로 틀리는지 미리 말할 수 없다"고 했다. 그 부호를 **정확히 판정하는 기준**을 세우자.
 
 $\hat\theta = \sum_i a_i y_i$를 OLS 추정량의 한 성분이라 하자(절편이면 $a_i$가 $(\mathbf X^\top\mathbf X)^{-1}\mathbf X^\top$의 첫 행, 기울기면 둘째 행이다). 보고 분산 안의 $s^2$은 $\bar\sigma^2 = n^{-1}\sum_i \sigma_i^2$으로 갈음한다(이 자료에서 $E[s^2] = 87.14$, $\bar\sigma^2 = 87.28$로 거의 같다).
@@ -803,7 +850,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 9.** <span class="diff hard" title="어려움"></span>
+**연습문제 10.** <span class="diff hard" title="어려움"></span>
 2절은 WLS의 분산이 OLS의 $1/1.87$이라고 셌다. 그 이득이 어디서 오는지 알려면 이득이 **정확히 0이 되는** 설계를 찾아 보는 것이 빠르다.
 
 $x_i$가 서로 다른 두 값 $x_a \ne x_b$만 갖고, 가중치가 $x$의 함수여서 각 묶음 안에서 일정하다고 하자($w_i = w(x_i)$. 이분산이 $\sigma_i = \sigma(x_i)$ 꼴이면 자동이다).
@@ -880,7 +927,7 @@ $x_i$가 서로 다른 두 값 $x_a \ne x_b$만 갖고, 가중치가 $x$의 함�
 
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff hard" title="어려움"></span>
+**연습문제 11.** <span class="diff hard" title="어려움"></span>
 3절은 "분산 모형을 모르면 잔차에서 추정해야 하고, 그 추정이 틀리면 이득이 사라진다"고 적었고 2절은 그 이득을 분산으로 $1.87$배라 셌다. 연습문제 3이 구현한 실행가능 WLS는 그 가운데 **얼마를 지키는가.**
 
 설계 $\mathbf X$를 고정하고 $y$만 $4000$번 다시 뽑아, 기울기 추정값의 평균과 표준편차를 (가) OLS, (나) 참 가중치 WLS, (다) 연습문제 3의 방식으로 $\log e_i^2$을 $x_i$에 회귀시켜 가중치를 추정하는 실행가능 WLS에 대해 재시오.
