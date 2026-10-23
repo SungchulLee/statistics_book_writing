@@ -112,6 +112,98 @@ $$
 
 ---
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 이산시간 생존은 기간마다의 이진 분류기다
+
+위 표의 둘째 줄 — $S(t) = \exp(-\int_0^t h)$ — 을 시간이 **토막져 있을 때**로 옮겨 적으면
+적분이 곱이 된다.
+
+$$
+S(k) = \prod_{j \le k} \bigl(1 - h_j\bigr), \qquad
+h_j = \Pr(\text{기간 } j \text{ 에 일어남} \mid \text{그 전까지 안 일어남})
+$$
+
+여기서 $h_j$ 는 **조건부 확률 하나**다. 그리고 그 꼴은 어디서 많이 본 것이다 — 「이번 달에
+이탈하는가」를 맞히는 이진 분류 문제의 답이 바로 그것이다.
+
+그래서 실무에서 생존분석은 종종 생존모형 없이 이루어진다. 자료를 **사람-기간 표**로 펼친다.
+한 사람이 세 달을 머물렀다면 세 줄을 만들고 마지막 줄에만 $1$ 을 적는다. **아직 안 끝난
+사람은 그가 관측된 기간까지만 줄을 만든다** — 이 한 가지로 중도절단이 처리된다. 그 표에
+평범한 로지스틱 회귀를 돌리면 기간별 $\hat h_j$ 가 나오고, 곱하면 생존곡선이 된다.
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+from scipy.special import expit
+
+rng = np.random.default_rng(7)
+N, K, BETA = 20_000, 12, 0.70
+alpha = np.linspace(-2.0, -3.4, K)          # 기간마다의 기저 로짓 — 초반이 높다
+x = rng.normal(size=N)
+
+h = expit(alpha[None, :] + BETA * x[:, None])          # 참 이산 위험
+churn = rng.random((N, K)) < h
+first = np.where(churn.any(1), churn.argmax(1) + 1, K + 1)
+obs = rng.integers(1, K + 1, N)                        # 볼 수 있었던 기간 수
+t, d = np.minimum(first, obs), (first <= obs).astype(float)
+
+# 사람-기간 표: 사람 i 는 t_i 줄을 만들고 마지막 줄만 1 이 된다
+rows_i = np.repeat(np.arange(N), t)
+rows_k = np.concatenate([np.arange(1, ti + 1) for ti in t])
+y = np.zeros(len(rows_i))
+y[np.cumsum(t) - 1] = d
+D = np.zeros((len(rows_i), K + 1))
+D[np.arange(len(rows_i)), rows_k - 1] = 1.0            # 기간 더미
+D[:, K] = x[rows_i]                                    # 공변량
+fit = minimize(lambda p: float(np.logaddexp(0, D @ p).sum() - (y * (D @ p)).sum()),
+               np.r_[np.full(K, -2.0), 0.0], method="L-BFGS-B").x
+
+S_x0 = np.cumprod(1 - expit(fit[:K]))                               # x=0 인 사람의 곡선
+S_marg = np.cumprod(1 - expit(fit[:K] + fit[K] * x[:, None]), 1).mean(0)   # 개인별 평균
+km, surv = [], 1.0
+for k in range(1, K + 1):                              # 같은 자료의 카플란-마이어
+    surv *= 1 - ((t == k) & (d == 1)).sum() / (t >= k).sum()
+    km.append(surv)
+
+print(f"사람 {N:,} 명 -> 사람-기간 표 {len(rows_i):,} 줄,  이탈 {int(y.sum()):,} 건")
+print(f"공변량 계수 {fit[K]:.4f} (참값 {BETA})\n")
+print("  기간   x=0 인 사람   개인별 평균   카플란-마이어")
+for k in (1, 3, 6, 9, 12):
+    print(f"{k:>6}{S_x0[k-1]:>13.4f}{S_marg[k-1]:>14.4f}{km[k-1]:>15.4f}")
+```
+
+출력:
+
+```
+사람 20,000 명 -> 사람-기간 표 91,629 줄,  이탈 8,546 건
+공변량 계수 0.6982 (참값 0.7)
+
+  기간   x=0 인 사람   개인별 평균   카플란-마이어
+     1       0.8821        0.8642         0.8642
+     3       0.7141        0.6883         0.6878
+     6       0.5633        0.5452         0.5450
+     9       0.4786        0.4699         0.4705
+    12       0.4297        0.4278         0.4284
+```
+
+**분류기 하나가 생존분석을 한다.** 공변량 계수가 $0.6982$ 로 참값 $0.70$ 을 되찾고, 셋째
+열(개인별 곡선을 평균한 것)이 같은 자료의 카플란-마이어와 소수 셋째 자리까지 맞는다.
+생존모형이라 부를 것을 하나도 쓰지 않았는데 **위 표의 관계식이 그렇게 되도록 만든 것**이다.
+
+**그런데 둘째 열과 셋째 열이 다르다.** $x = 0$ 인 사람의 곡선은 $12$ 기간 뒤 $0.4297$,
+개인별 곡선을 평균하면 $0.4278$ 이고, 초반에는 $0.8821$ 대 $0.8642$ 로 더 벌어진다.
+**「평균인 사람의 곡선」과 「곡선들의 평균」은 다른 양이다.** 곱이 비선형이라 그렇고, 위험이
+높은 사람이 먼저 빠져나가 남은 집단이 점점 순해지기 때문이기도 하다. 대시보드에 그리는
+것은 대개 셋째 열이고, 모형이 한 사람에게 말해 주는 것은 둘째 열이다.
+
+**이 틀이 공짜는 아니다.** 사람-기간 표는 줄 수를 기간만큼 불리고($2$ 만 명이 $9$ 만 줄),
+기간을 잘게 쪼갤수록 더미가 늘어난다. 무엇보다 **기간 안에서 일어난 순서를 버린다** — 같은
+달에 떠난 두 사람은 구별되지 않는다. 그것이 21.3절 [중도절단 자료의 최대가능도](../parametric/mle_censored.md)
+가 말하는 구간절단이고, 기간을 고르는 일이 이미 모형의 일부다.
+
+</div>
+
 ## 5. 위험함수의 모양
 
 사건을 만드는 과정이 다르면 위험의 모양도 다르다. $h(t)$의 모양이 과학적 관심의 주된 대상인
