@@ -947,7 +947,9 @@ def rates(shift):
             P.append(2 * stats.t.sf(d / (se * np.sqrt(2)), df))
             SAME.append(same)
 
-    # 홀름: p 를 오름차순으로 놓고 j 번째를 alpha/(m-j+1) 과 견준다
+    # 홀름: p 를 오름차순으로 놓고 j 번째를 alpha/(m-j+1) 과 견준다.
+    # 한 블록에 담으려고 손으로 벡터화했는데, 같은 자료에
+    # multipletests(..., 'holm') 을 걸어 본 결과와 아래 세 수가 모두 같다
     P = np.array(P).T
     SAME = np.array(SAME).T
     m = P.shape[1]
