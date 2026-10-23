@@ -889,6 +889,126 @@ Tukey의 HSD 결과는 95% 신뢰수준에서 집단 1과 집단 2 사이에 통
 
 ---
 
+
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 같은 직관이 $p$ 값에서는 참말이고 범위에서는 거짓말이다
+
+$\S 6$ 이 `pairwise_tukeyhsd` 가 돌려주는 표를 읽는 법을 적었다. 그 함수가 받는 인자를
+세어 보면 셋뿐이다 — `endog`, `groups`, `alpha`. **고를 방법이 없다.**
+`scipy.stats.tukey_hsd` 도 자료만 받는다. `statsmodels.stats.multicomp` 가 내놓는 것은
+`pairwise_tukeyhsd`·`tukeyhsd`·`MultiComparison` 셋이고, 단계적 범위검정은 거기에 없다.
+
+그런데 같은 꾸러미의 `statsmodels.stats.multitest.multipletests` 에는 방법이 **열하나**
+있고 그 가운데 홀름·호멜·시메스–호흐베르크는 **단계적**이다. 한쪽은 단계적 절차를 열한
+가지나 주고, 한쪽은 하나도 주지 않는다. 이 비대칭이 우연이 아니다.
+
+$\S 4$ 가 손으로 만든 HSD 는 집단이 $k$ 개면 **모든 쌍에 $q_\alpha(k, \nu)$ 하나**를
+쓴다. 여기서 개선이 하나 떠오른다. 평균을 줄 세운 뒤 넓은 구간부터 재어 내려가면서,
+**아직 살아 있는 집단 수만큼만** 보정하면 되지 않는가. 폭이 $p$ 인 구간은
+$q_\alpha(p, \nu)$ 로 재면 $p < k$ 이므로 문턱이 낮아지고 검정력이 공짜로 오른다.
+코드로는 한 줄 차이다. 그 한 줄의 값을 재어 보자 — **참으로 같은 짝을 기각하는 비율**을
+세고, 같은 자료에 홀름도 함께 걸어 둔다.
+
+```python
+import numpy as np
+from scipy import stats
+from scipy.stats import studentized_range
+
+R, n, alpha = 20000, 10, 0.05
+rng = np.random.default_rng(11)
+
+
+def rates(shift):
+    """참으로 같은 짝을 하나라도 기각하는 비율을 세 절차에서 센다."""
+    k = len(shift)
+    df = k * (n - 1)
+    Y = rng.normal(size=(R, k, n)) + np.asarray(shift)[None, :, None]
+    se = np.sqrt(Y.var(2, ddof=1).mean(1) / n)          # 합동 MSW 에서 온 표준오차
+    o = np.argsort(Y.mean(2), axis=1)                   # 평균을 오름차순으로
+    srt = np.take_along_axis(Y.mean(2), o, 1)
+    lab = np.take_along_axis(np.asarray(shift)[None].repeat(R, 0), o, 1)
+    q = {p: studentized_range.ppf(1 - alpha, p, df) for p in range(2, k + 1)}
+
+    tukey = np.zeros(R, bool)
+    step = np.zeros(R, bool)
+    P, SAME = [], []
+    for i in range(k):
+        for j in range(i + 1, k):
+            same = lab[:, i] == lab[:, j]               # 참값이 같은 짝만 거짓양성이 된다
+            d = srt[:, j] - srt[:, i]
+            tukey |= same & (d > q[k] * se)             # 언제나 q(k) 하나로 잰다
+            # 단계적 범위검정: 그 짝을 감싸는 모든 구간이 자기 폭 p 의 q(p) 를 넘어야 한다
+            gate = np.ones(R, bool)
+            for a in range(i + 1):
+                for b in range(j, k):
+                    gate &= (srt[:, b] - srt[:, a]) > q[b - a + 1] * se
+            step |= same & gate
+            P.append(2 * stats.t.sf(d / (se * np.sqrt(2)), df))
+            SAME.append(same)
+
+    # 홀름: p 를 오름차순으로 놓고 j 번째를 alpha/(m-j+1) 과 견준다
+    P = np.array(P).T
+    SAME = np.array(SAME).T
+    m = P.shape[1]
+    ordp = np.argsort(P, axis=1)
+    thr = alpha / (m - np.arange(m))
+    passed = np.minimum.accumulate(np.take_along_axis(P, ordp, 1) <= thr, axis=1)
+    rej = np.zeros_like(passed)
+    np.put_along_axis(rej, ordp, passed, 1)
+    holm = (rej & SAME).any(1)
+    return tukey.mean(), step.mean(), holm.mean()
+
+
+# 한글은 고정폭에서 두 칸을 차지하므로 f-string 자리맞춤이 보이는 열과 어긋난다
+print(f"참으로 같은 짝을 하나라도 기각하는 비율 (k = 6, n = {n}, R = {R}, 명목 {alpha})")
+print("  참 평균의 배치          튜키   단계적범위    홀름")
+for lbl, sh in [("여섯 다 같다", [0] * 6),
+                ("셋은 0, 셋은 5", [0, 0, 0, 5, 5, 5]),
+                ("둘씩 0·5·10", [0, 0, 5, 5, 10, 10])]:
+    t, s, h = rates(sh)
+    print(f"  {lbl}{' ' * (16 - len(lbl) * 2 + len(lbl))}  {t:.4f}    {s:.4f}    {h:.4f}")
+```
+
+출력:
+
+```
+참으로 같은 짝을 하나라도 기각하는 비율 (k = 6, n = 10, R = 20000, 명목 0.05)
+  참 평균의 배치          튜키   단계적범위    홀름
+  여섯 다 같다           0.0521    0.0521    0.0389
+  셋은 0, 셋은 5        0.0244    0.0956    0.0421
+  둘씩 0·5·10         0.0140    0.1406    0.0495
+```
+
+**완전 귀무에서는 둘이 글자까지 같다**($0.0521$). 첫 관문이 폭 $k$ 의 구간이고 그것이
+바로 튜키의 문턱이므로, 아무 일도 일어나지 않을 때는 다음 단계가 열리지 않는다. 그래서
+**「차이가 하나도 없을 때 눈금이 맞는가」만 확인하는 검사는 이 절차를 통과시킨다.**
+
+참 차이가 하나라도 있으면 갈린다. 여섯 가운데 셋이 떨어져 있으면 전체 폭의 관문이
+**자료 때문에 공짜로 열리고**, 그 뒤 같은 집단들끼리의 좁은 구간은 $q(2)$ 로 재인다.
+거짓양성이 $0.0244 \to 0.0956$ 으로 네 배가 되고, 세 덩이로 갈라지면
+$0.0140 \to 0.1406$ 으로 **열 배이며 명목의 세 배**다.
+
+홀름은 같은 세 설정에서 $0.0389 \cdot 0.0421 \cdot 0.0495$ 로 **명목을 넘지 않는다.**
+둘을 가르는 것은 「남은 것만 센다」의 **남은 것이 무엇인가**다. 홀름이 세는 것은
+**아직 기각하지 않은 가설의 수**이고, 그 수에 본페로니를 걸면 참값이 어떻게 놓여 있어도
+경계가 성립한다. 단계적 범위검정이 세는 것은 **줄 세운 평균에서 그 짝을 감싸는 구간의
+폭**인데, 그 구간 안에 참 차이가 하나 들어 있으면 관문이 자료 덕에 열린다. 세는 대상이
+가설이 아니라 **자료가 정해 준 자리**라는 것이 갈림길이다.
+
+그러므로 `pairwise_tukeyhsd` 에 `method` 인자가 없는 것은 기능이 덜 만들어진 것이 아니다.
+$\S 2$ 가 사후검정의 종류를 늘어놓았지만 **늘어놓지 않은 것에도 까닭이 있고**, 그 까닭은
+위 표의 셋째 줄이다.
+
+_확인한 곳 — statsmodels 0.14.2 의 `stats.multicomp` 에 공개된 이름 셋과
+`pairwise_tukeyhsd(endog, groups, alpha)` 의 인자, `stats.multitest.multipletests` 의
+방법 열하나(`b`·`h`·`ho`·`hs`·`s`·`sh`·`fdr_*` 여섯), scipy 1.13.1 의
+`stats.tukey_hsd`. 표의 수는 모두 직접 계산한 값이다_
+
+</div>
+
+---
+
 ## 연습문제
 
 <div class="drillbox" markdown>
