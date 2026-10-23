@@ -417,8 +417,6 @@ nav:
                 - 단순 OLS 추정량의 표집분포: ch13/estimation_inference/sampling_dist_simple.md
                 - 단순 OLS 추정량의 신뢰구간: ch13/estimation_inference/ci_coeff.md
                 - 일반 OLS 추정량의 표집분포: ch13/estimation_inference/tests_coeff.md
-                - 기울기의 신뢰구간 (카페인 보기): ch13/estimation_inference/ci_slope_example.md
-                - 신뢰띠와 예측띠: ch13/estimation_inference/ci_prediction_bands.md
                 - 잔차제곱합 곡면 시각화: ch13/estimation_inference/rss_surface_visualization.md
                 - 최소제곱 모의실험 (몬테카를로): ch13/estimation_inference/ols_simulation.md
             - 13.3 계수 검정:
