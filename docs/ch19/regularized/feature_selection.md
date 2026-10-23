@@ -61,6 +61,104 @@ $$
     준다.
 
 ---
+<div class="storybox" markdown>
+
+**그림으로 보는 통계학 1.** 자료를 흔들어 보고서야 알게 되는 것
+
+바로 아래 절이 「하나의 L1 경로는 특정 훈련표본에 민감할 수 있다」로 시작한다. 그
+한 줄을 먼저 수로 보아 두면 안정성 선택이 왜 그런 모양인지가 분명해진다.
+
+그 민감함에 이름을 붙인 사람은 **레오 브라이만**이다. $1996$ 년 『Annals of
+Statistics』에 실린 「모형선택에서 불안정성과 안정화의 발견법」에서 그는 절차가
+**불안정하다**는 것을 이렇게 정의했다 — *자료가 조금 바뀌었을 때 뽑히는 예측자가
+크게 바뀌면* 불안정하다. 그리고 불안정한 절차는 **예측 손실이 더 크다**는 것을
+모의실험으로 보였다. 처방으로 내놓은 것이 한 줄이었다. **자료를 흔들어 여러 벌의
+답을 얻고, 그것을 평균하라.**
+
+아래 절의 자료($n = 200$, $p = 10$, 참 변수는 $x_1, x_3, x_7$)로 그 말을 그대로
+해 보았다. 자료 전체로 한 번 고르고, 그다음 절반씩 $100$ 번 뽑아 같은 절차를
+되풀이한다.
+
+```python
+import numpy as np, collections
+from sklearn.linear_model import LogisticRegression
+
+TRUE = (0, 2, 6)                                   # x1, x3, x7
+def make_data(seed=3, n=200, p=10):
+    rng = np.random.default_rng(seed)
+    X = rng.normal(size=(n, p))
+    b = np.zeros(p); b[list(TRUE)] = (1.5, -1.2, 1.0)
+    y = (rng.random(n) < 1/(1+np.exp(-(X @ b)))).astype(int)
+    return X, y
+
+def picked(X, y, C=0.2):
+    m = LogisticRegression(penalty="l1", solver="liblinear", C=C).fit(X, y)
+    return tuple(np.flatnonzero(m.coef_[0]))
+
+X, y = make_data()
+print("  자료 전체로 한 번 고르면:", picked(X, y), " 참 변수:", TRUE)
+
+rng = np.random.default_rng(11)
+n, half = len(y), len(y)//2
+sets = [picked(X[i], y[i]) for i in (rng.choice(n, half, replace=False) for _ in range(100))]
+cnt = collections.Counter(sets)
+print(f"\n  절반씩 100 번 뽑아 같은 절차를 되풀이하면")
+print(f"    서로 다른 답이 {len(cnt)} 가지 나온다")
+print(f"    가장 자주 나온 답 {cnt.most_common(1)[0][0]} — 100 번 가운데 {cnt.most_common(1)[0][1]} 번")
+print(f"    참 변수 집합을 정확히 맞힌 것은 {cnt.get(TRUE,0)} 번")
+freq = collections.Counter(j for s in sets for j in s)
+print(f"\n  변수별로 몇 번 뽑혔나 (100 번 가운데)")
+for j in range(10):
+    star = " ←참" if j in TRUE else ""
+    print(f"    x{j+1:<2d} {freq.get(j,0):3d}{star}")
+```
+
+출력:
+
+```
+  자료 전체로 한 번 고르면: (0, 2, 6, 9)  참 변수: (0, 2, 6)
+
+  절반씩 100 번 뽑아 같은 절차를 되풀이하면
+    서로 다른 답이 22 가지 나온다
+    가장 자주 나온 답 (0, 2, 6) — 100 번 가운데 39 번
+    참 변수 집합을 정확히 맞힌 것은 39 번
+
+  변수별로 몇 번 뽑혔나 (100 번 가운데)
+    x1  100 ←참
+    x2    4
+    x3  100 ←참
+    x4    5
+    x5    9
+    x6    7
+    x7  100 ←참
+    x8    9
+    x9   12
+    x10  40
+```
+
+위 두 토막이 브라이만이 말한 불안정이다. 자료 전체로 고른 **하나의 답**은
+$x_{10}$ 을 덤으로 달고 있고, 자료를 절반씩만 흔들어도 답이 **스물두 가지**로
+흩어진다. 참 변수 셋을 정확히 맞히는 것은 세 번에 한 번을 겨우 넘는다. 이 자료에서
+답 하나만 보고 「고른 변수는 이것들이다」라고 적는 일이 얼마나 미끄러운지가 그 수에
+들어 있다.
+
+**그런데 아래 토막을 보면 이야기가 달라진다.** 답을 집합으로 보지 않고 **변수마다
+몇 번 뽑혔는지**로 바꾸어 세면, $x_1 \cdot x_3 \cdot x_7$ 이 $100$ 번 모두에
+들어가고 잡음 변수들은 $4$ 에서 $12$ 번에 그친다. 흩어져 있던 스물두 가지 답이
+같은 것을 가리키고 있었던 것이다. 바로 이것이 브라이만의 「흔들어서 평균하라」이고,
+아래 절의 선택 확률 $\hat\Pi_j$ 가 재는 바로 그 수다.
+
+$x_{10}$ 이 $40$ 번으로 혼자 어중간한 것까지 읽어 둘 만하다. 참 변수도 잡음도
+아닌 자리에 있는 변수는 **문턱을 어디에 두느냐로 운명이 갈린다.** 아래 절이
+$\pi_{\text{thr}}$ 를 $0.6$ 에서 $0.9$ 사이로 잡으라고 말하는 까닭이고, 그 폭이
+$x_{10}$ 같은 것을 걸러 내려고 비워 둔 자리다.
+
+_확인한 곳 — L. Breiman 이 「Heuristics of instability and stabilization in model selection」을 『The Annals of Statistics』 $24$권 $6$호($1996$) $2350$–$2383$쪽에 실었다는 것, 거기서 불안정한 절차를 「자료가 조금 바뀌면 뽑히는 예측자가 크게 바뀌는 것」으로 규정하고 불안정한 절차일수록 예측 손실이 크다는 것을 보였으며 안정화 방법으로 「자료를 흔들어 여러 예측자를 얻고 그것들을 평균하는 것」을 제안했다는 것. 위의 수는 아래 절과 같은 자료생성과정에서 이 쪽이 직접 잰 값이다_
+
+</div>
+
+---
+
 
 ## 4. 안정성 선택
 
