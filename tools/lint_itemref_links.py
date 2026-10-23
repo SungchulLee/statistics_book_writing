@@ -35,6 +35,11 @@ LINK = re.compile(r"\[[^\]]*\]\([^)]*\)")
 #   「…필요하다(19.3절 모형 평가). 연습문제 9에서 수치로 확인한다」
 # 이 하나를 걸러내지 않으면 멀쩡한 자리를 링크로 바꾸게 된다.
 BREAK = re.compile(r"[.)·,;] |\)\s*$|다\. ")
+# 번호와 항목이 **링크 텍스트 안에** 함께 있는 꼴은 규약대로다.
+#   `[13.5절 보기 5](../assumptions/checking_linearity.md)`
+# 「절」 바로 뒤를 보는 (?!\[) 로는 가릴 수 없다 — 그때는 대괄호가 훨씬 앞에 있다.
+# 링크 전체의 구간을 미리 떠서 그 안에서 시작하는 매치를 건너뛴다.
+MDLINK = re.compile(r"\[[^\]]*\]\([^)]*\)")
 
 
 def main(argv: list) -> int:
@@ -47,8 +52,13 @@ def main(argv: list) -> int:
         if chapters and rel.parts[0] not in chapters:
             continue
         text = p.read_text(encoding="utf-8")
+        inside = set()
+        for m in MDLINK.finditer(text):
+            inside.update(range(m.start(), m.end()))
         for m in REF.finditer(text):
             gap = m.group(2)
+            if m.start() in inside:
+                continue
             if LINK.search(gap) or BREAK.search(gap):
                 continue
             by_ch[rel.parts[0]] += 1
