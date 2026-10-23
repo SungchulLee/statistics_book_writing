@@ -143,7 +143,7 @@ $$\text{MSE}(\hat{\theta}') \leq \text{MSE}(\hat{\theta}) \quad \text{for all } 
 
 !!! note "분산추정량의 MSE 는 5.4 가 끝까지 따진다"
     분산을 재는 $\hat\sigma^2_c = \frac1c\sum(X_i-\bar X)^2$ 꼴에서 $c$ 를 고르는 문제는
-    MSE 기준의 가장 깔끔한 보기다. 5.4절
+    MSE 기준의 가장 깔끔한 보기다. 5.13절
     [분산추정량의 평균제곱오차](../variance/mse_comparison.md)가 일반 MSE 공식을 세우고
     $c^{*} = n+1$ 을 유도한 뒤, 흔히 쓰는 세 분모를 한 표에 모은다.
 

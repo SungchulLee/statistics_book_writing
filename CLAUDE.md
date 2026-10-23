@@ -229,6 +229,16 @@ grep -rhoE '\*\*(그림으로 보는|AI로 보는) 통계학 [0-9]+\.' docs --in
 grep -rnoP '\\(?:text|textbf|textrm|textit|mbox)\{[^{}]*\\[%_&#~^][^{}]*\}' docs --include='*.md'
 ```
 
+**거짓 절 번호 검사** — `python3 tools/lint_section_refs.py [chNN]`. 본문의
+`N.M절 [쪽](경로)` 에서 **링크는 맞고 번호만 거짓인** 자리를 찾는다. 눌러 보면 제자리에
+가고 `--strict` 도 통과하므로 틀린 것은 **독자가 읽는 번호뿐**이다. 장·절을 옮긴 뒤
+본문 참조가 따라가지 않으면 이렇게 남는다 — 2026-10-23 에 서른둘이 나왔다(ch13 에 일곱).
+진실의 원천은 `mkdocs.yml` 의 nav 다. 직접 grep 으로 하려 들면 거짓 양성 셋에 걸린다:
+**절이 주어인 꼴**(`4.3절은 특히 [결합분포](../ch03/rv/joint.md)를 전제한다`),
+**번호가 링크 뒤 괄호에 오는 꼴**(`[신뢰구간](ch08/…)(8.2절)과 [검정](ch09/…)(9.2절)` —
+이걸 잘못 읽어 멀쩡한 8.2 를 9.2 로 고친 적이 있다), 그리고 **번호와 링크가 줄바꿈으로
+나뉜 꼴**(이것을 빼면 둘을 놓친다).
+
 **고아 그림·없는 그림 검사** — `python3 tools/lint_figures.py [chNN]`. 양쪽 방향을
 모두 본다. 쪽에서 절을 걷어내면 **고아**가 생기고 그림을 옮기면 **없는 그림**이
 생기는데, PNG 가 커밋되어 있으면 `--strict` 가 아무 말도 하지 않는다. 이 세션에
@@ -252,6 +262,8 @@ grep -n '\.py' mkdocs.yml
 python3 tools/lint_outputs.py
 # 고아 그림과 없는 그림 — 둘 다 0 이어야 한다
 python3 tools/lint_figures.py
+# 링크는 맞고 절 번호만 거짓인 참조 — 0 이어야 한다 (빌드는 통과한다)
+python3 tools/lint_section_refs.py
 # 머리글의 LaTeX 와 ASCII 그리스 문자 — 목차에 날 문자열로 새어 나간다
 grep -rnE '^#{1,6} .*\$' docs --include='*.md'
 grep -rnE '^#{1,4} .*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)' docs --include='*.md'
