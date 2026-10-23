@@ -51,8 +51,8 @@
 
 | 절 | 주제 | 핵심 진단 |
 |---------|-------|----------------|
-| [선형성](linearity_overview.md) | 직선 관계 가정 | 산점도, 잔차그림 |
-| [선형성 확인](checking_linearity.md) | 선형성 평가 방법 | 산점도, 성분+잔차 그림, 다항 항 |
+| [선형성](checking_linearity.md) | 직선 관계 가정 | 산점도, 잔차그림, 성분+잔차 그림, 다항 항 |
 | [독립성](checking_independence.md) | 무상관 잔차 가정 | Durbin-Watson, Breusch-Godfrey, 군집 |
 | [등분산성](checking_homoscedasticity.md) | 상수분산 가정 | 잔차-적합값·척도-위치 그림, Breusch-Pagan, White 검정 |
 | [정규성](checking_normality.md) | 잔차의 정규성 가정 | 히스토그램, Q-Q 그림, Shapiro-Wilk, Anderson-Darling, Jarque-Bera |
+| [가중최소제곱](weighted_regression.md) | 이분산을 아는 경우의 적합 | 가중치 1/σ², OLS 와의 비교 |
