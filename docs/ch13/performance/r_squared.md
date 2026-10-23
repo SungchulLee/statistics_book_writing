@@ -39,6 +39,10 @@ $$
 
 ## 2. 결정계수
 
+<div class="defn" markdown>
+
+### 정의 1. 결정계수 { .dfn }
+
 **결정계수** $R^2$는 회귀모형이 설명하는 $Y$의 전체 변동의 비율이다.
 
 $$
@@ -49,6 +53,8 @@ $\text{SSR} = \text{SST} - \text{SSE}$이고 모든 제곱합이 음이 아니�
 
 - $R^2 = 0$: 모형이 변동을 전혀 설명하지 못한다(모든 관측값의 적합값이 $\bar{y}$와 같다).
 - $R^2 = 1$: 모형이 변동을 전부 설명한다(모든 관측값이 적합선 위에 정확히 놓인다).
+
+</div>
 
 ### 상관과의 관계
 
@@ -63,6 +69,34 @@ $$
 $$
 R^2 = r_{y, \hat{y}}^2
 $$
+
+단순선형회귀에서 $\text{SSR}$는 상관계수로 표현할 수 있다.
+
+$$
+\begin{array}{lll}
+\text{SSR} &=& \displaystyle \sum_{i}\left(\hat{y}_{i} - \bar{y}\right)^{2} \\[10pt]
+&=& \displaystyle \beta^2 \sum_{i}\left(x_i - \bar{x}\right)^{2} \\[10pt]
+&\approx& \displaystyle n\sigma_x^2\beta^2 \\[10pt]
+&\approx& \displaystyle n\sigma_x^2\left(\rho\frac{\sigma_y}{\sigma_x}\right)^2 \\[10pt]
+&=& \displaystyle n\sigma_y^2\rho^2
+\end{array}
+$$
+
+따라서
+
+$$
+R^2 = \frac{\text{SSR}}{\text{SST}} \approx \frac{n\sigma_y^2 \rho^2}{n\sigma_y^2} = \rho^2
+$$
+
+!!! note "사실은 정확한 등식이다"
+    위 유도에서 $\approx$가 등장하는 것은 표본분산을 $n$으로 나누느냐 $n-1$로 나누느냐를 얼버무렸기 때문이다. 두 곳에서 같은 규약을 쓰면 인자가 상쇄되어 단순선형회귀에서는 $R^2 = \rho^2$이 **정확히** 성립한다. 첫 줄의 $\hat{y}_i - \bar{y} = \hat{\beta}(x_i - \bar{x})$도 근사가 아니라 정확한 등식이다(회귀직선이 평균점 $(\bar{x}, \bar{y})$를 지나기 때문이다).
+
+단순선형회귀에서 $R^2$는 $x$와 $y$의 상관계수의 제곱이다.
+
+!!! tip "참고"
+
+    - [R-squared or coefficient of determination (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/r-squared-or-coefficient-of-determination)
+    - [R-squared intuition (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/a/r-squared-intuition)
 
 ---
 
@@ -124,6 +158,10 @@ _확인한 곳 — $R^2 \to \beta^2\operatorname{Var}(x)/(\beta^2\operatorname{V
 
 ## 4. 수정 결정계수
 
+<div class="defn" markdown>
+
+### 정의 2. 수정 결정계수 { .dfn }
+
 설명변수 추가에 따라 $R^2$가 자동으로 부풀려지는 것을 바로잡기 위해 **수정 결정계수**를 쓴다. 모수의 개수를 반영하여 모형의 복잡도에 벌점을 준다.
 
 $$
@@ -131,6 +169,8 @@ R^2_{\text{adj}} = 1 - \frac{\text{SSE} / (n - p - 1)}{\text{SST} / (n - 1)}
 $$
 
 여기서 $n$은 관측값의 개수이고 $p$는 (절편을 제외한) 설명변수의 개수이다.
+
+</div>
 
 비 $\text{SSE} / (n - p - 1)$은 오차분산 $\sigma^2$의 불편추정값이고 $\text{SST} / (n - 1)$은 $Y$의 표본분산이다. 따라서 수정 $R^2$는 제곱합 자체가 아니라 분산 추정값들을 비교한다.
 

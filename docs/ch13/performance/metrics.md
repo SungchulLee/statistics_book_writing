@@ -1,112 +1,12 @@
 # 성능 척도
 
-## 1. 결정계수
+회귀의 성능을 재는 자는 여럿이고, 각각을 전개한 쪽이 따로 있다. 결정계수와 수정 결정계수는 [결정계수와 수정 결정계수](r_squared.md)에, 절대·제곱오차 척도는 [평균절대오차, 평균제곱오차, 제곱근평균제곱오차](mae_mse_rmse.md)에, 척도무관 측도는 [평균절대백분율오차와 그 밖의 상대 척도](relative_metrics.md)에 있다.
 
-<div class="defn" markdown>
-
-### 정의 1. 결정계수 { .dfn }
-
-$R^2$는 독립변수로부터 예측할 수 있는 종속변수 분산의 비율이다.
-
-$$
-R^2 = 1 - \frac{SS_{\text{Residual}}}{SS_{\text{Total}}}
-$$
-
-여기서
-
-$$
-\begin{array}{lll}
-SS_{\text{Total}} &=& \displaystyle \sum_{i}\left(y_{i}-\bar{y}\right)^{2} \\[8pt]
-SS_{\text{Residual}} &=& \displaystyle \sum_{i}\left(y_{i}-\hat{y}_{i}\right)^{2}
-\end{array}
-$$
-
-절편이 있는 모형을 훈련자료에 적합했다면 $R^2$는 0과 1 사이의 값을 가지며 클수록 적합이 좋다. 그러나 $R^2$는 설명변수를 추가하면 예측력이 나아지지 않아도 항상 커지므로 과적합으로 이어질 수 있다.
-
-</div>
-
-### 총제곱합의 분해
-
-$y$의 전체 변동은 설명된 부분과 설명되지 않은 부분으로 깔끔하게 분해된다.
-
-$$
-\begin{array}{lll}
-SS_{\text{Total}} &=& \displaystyle \sum_{i}\left(y_{i}-\bar{y}\right)^{2} \\[10pt]
-&=& \displaystyle \sum_{i}\left(\left(y_{i}-\hat{y}_{i}\right) + \left(\hat{y}_{i}-\bar{y}\right)\right)^{2} \\[10pt]
-&=& \displaystyle \sum_{i}\left(y_{i}-\hat{y}_{i}\right)^{2} + \sum_{i}\left(\hat{y}_{i}-\bar{y}\right)^{2} \\[10pt]
-&=& \displaystyle SS_{\text{Residual}} + SS_{\text{Treatment}}
-\end{array}
-$$
-
-여기서 $SS_{\text{Treatment}}$는 회귀모형이 설명하는 변동을 나타내며, 다른 절에서 쓰는 $\text{SSR}$(회귀제곱합)과 같은 양이다. 교차항은 OLS 추정의 성질에 의해 사라진다.
-
-### 단순선형회귀에서의 해석
-
-단순선형회귀에서 $SS_{\text{Treatment}}$는 상관계수로 표현할 수 있다.
-
-$$
-\begin{array}{lll}
-SS_{\text{Treatment}} &=& \displaystyle \sum_{i}\left(\hat{y}_{i} - \bar{y}\right)^{2} \\[10pt]
-&=& \displaystyle \beta^2 \sum_{i}\left(x_i - \bar{x}\right)^{2} \\[10pt]
-&\approx& \displaystyle n\sigma_x^2\beta^2 \\[10pt]
-&\approx& \displaystyle n\sigma_x^2\left(\rho\frac{\sigma_y}{\sigma_x}\right)^2 \\[10pt]
-&=& \displaystyle n\sigma_y^2\rho^2
-\end{array}
-$$
-
-따라서
-
-$$
-R^2 = \frac{SS_{\text{Treatment}}}{SS_{\text{Total}}} \approx \frac{n\sigma_y^2 \rho^2}{n\sigma_y^2} = \rho^2
-$$
-
-!!! note "사실은 정확한 등식이다"
-    위 유도에서 $\approx$가 등장하는 것은 표본분산을 $n$으로 나누느냐 $n-1$로 나누느냐를 얼버무렸기 때문이다. 두 곳에서 같은 규약을 쓰면 인자가 상쇄되어 단순선형회귀에서는 $R^2 = \rho^2$이 **정확히** 성립한다. 첫 줄의 $\hat{y}_i - \bar{y} = \hat{\beta}(x_i - \bar{x})$도 근사가 아니라 정확한 등식이다(회귀직선이 평균점 $(\bar{x}, \bar{y})$를 지나기 때문이다).
-
-단순선형회귀에서 $R^2$는 $x$와 $y$의 상관계수의 제곱이다.
-
-!!! tip "참고"
-
-    - [R-squared or coefficient of determination (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/v/r-squared-or-coefficient-of-determination)
-    - [R-squared intuition (Khan Academy)](https://www.khanacademy.org/math/ap-statistics/bivariate-data-ap/assessing-fit-least-squares-regression/a/r-squared-intuition)
+이 쪽이 하는 일은 하나다. **네 자를 같은 자료에 한꺼번에 대 보고, 그 자들이 서로 엇갈릴 때 무엇을 믿어야 하는지 따지는 것이다.**
 
 ---
 
-## 2. 수정 결정계수
-
-<div class="defn" markdown>
-
-### 정의 2. 수정 결정계수 { .dfn }
-
-수정 $R^2$는 설명변수의 개수를 반영하여 불필요한 복잡도에 벌점을 준다.
-
-$$
-\text{Adjusted } R^2 = 1 - \left(1 - R^2\right) \frac{n - 1}{n - p - 1}
-$$
-
-여기서 $n$은 표본크기이고 $p$는 (절편을 제외한) 설명변수의 개수이다.
-
-</div>
-
-### 조정 인자의 유도
-
-조정은 원래의 제곱합을 자유도로 나눈 불편추정값으로 바꾸는 것이다.
-
-$$
-\text{Adjusted } R^2 = 1 - \frac{SS_{\text{Residual}} / (n - p - 1)}{SS_{\text{Total}} / (n - 1)}
-$$
-
-이렇게 하면 $SS_{\text{Residual}}$의 감소가 잃어버린 자유도를 정당화할 때에만 설명변수 추가가 수정 $R^2$를 높인다.
-
-### 결정계수와의 주요 차이
-
-- **모형 복잡도**: 수정 $R^2$는 설명변수의 개수를 반영하지만 $R^2$는 그렇지 않다.
-- **모형 비교**: 설명변수 개수가 다른 모형들을 비교할 때는 수정 $R^2$가 낫다.
-- **방향**: 모형을 개선하지 못하는 설명변수를 넣으면 수정 $R^2$는 줄어들 수 있지만 $R^2$는 커지기만 한다.
-
----
-
-## 3. 그 밖의 성능 척도
+## 1. 네 척도를 한자리에서
 
 $$
 \begin{array}{lll}
@@ -115,10 +15,6 @@ $$
 \text{RMSE} && \displaystyle\sqrt{\frac{1}{n}\sum_{i=1}^n(y_i-\hat{y}_i)^2}
 \end{array}
 $$
-
-- **MAE(평균절대오차)**: 예측값과 실제값의 절대차이의 평균이다. MSE보다 이상점에 덜 민감하다. 반응변수와 같은 단위로 오차를 제공한다.
-- **MSE(평균제곱오차)**: 제곱차이의 평균이다. 큰 오차에 더 무거운 벌점을 준다. OLS의 손실함수로 쓰인다.
-- **RMSE(제곱근평균제곱오차)**: MSE의 제곱근이다. 오차를 반응변수의 원래 단위로 되돌려 MSE보다 해석하기 쉽다.
 
 <div class="exbox" markdown>
 
@@ -289,8 +185,7 @@ $$
     **교훈은 둘을 함께 보라는 것이다.** MSE 하나만 보면 "시험이 더 좋다" 는 엉뚱한 결론에 이르고, MAE 를 함께 보면 바로잡힌다. 그리고 두 척도가 엇갈리는 바로 그 자리가 이상점이 사는 곳이다.
 
 ---
-
-## 4. 척도가 엇갈릴 때
+## 2. 척도가 엇갈릴 때
 
 위 보기에서는 네 척도가 모두 같은 방향을 가리켰다. 늘 그렇지는 않다.
 
@@ -358,12 +253,12 @@ $$
 
 **(2)** 네 번째 설명변수를 하나 더 넣는다고 하자. 수정 $R^2$가 **올라가려면** $R^2$가 적어도 얼마가 되어야 하는가? 훈련 MSE로는 어느 값 아래로 떨어져야 하는가?
 
-**(3)** 일반적으로 설명변수를 $p$개에서 $p+1$개로 늘릴 때 수정 $R^2$가 올라가는 조건이 "$SS_{\text{Residual}}$이 $1/(n-p-1)$보다 큰 **비율**로 줄어든다"임을 보이고, 이 조건을 자유도의 말로 해석하시오.
+**(3)** 일반적으로 설명변수를 $p$개에서 $p+1$개로 늘릴 때 수정 $R^2$가 올라가는 조건이 "$\text{SSE}$이 $1/(n-p-1)$보다 큰 **비율**로 줄어든다"임을 보이고, 이 조건을 자유도의 말로 해석하시오.
 
 </div>
 
 ??? success "풀이"
-    **(1)** 정의 2에 대입한다.
+    **(1)** [결정계수와 수정 결정계수](r_squared.md)의 정의 2에 대입한다.
 
     $$
     \text{Adjusted } R^2 = 1 - (1 - 0.9659031)\frac{139}{136} = 1 - 0.0340969 \times 1.0220588 = 0.9651509
@@ -374,10 +269,10 @@ $$
     **(2)** 설명변수가 넷이면 잔차 자유도가 $140 - 4 - 1 = 135$로 하나 줄어든다. 수정 $R^2$가 올라간다는 것은 조정 인자의 유도에서 쓴 비
 
     $$
-    \frac{SS_{\text{Residual}}/(n-p-1)}{SS_{\text{Total}}/(n-1)}
+    \frac{\text{SSE}/(n-p-1)}{\text{SST}/(n-1)}
     $$
 
-    가 작아진다는 뜻이다. $SS_{\text{Total}}$과 $n-1$은 그대로이므로
+    가 작아진다는 뜻이다. $\text{SST}$과 $n-1$은 그대로이므로
 
     $$
     \frac{1 - R^2_{\text{new}}}{135} < \frac{1 - R^2_{\text{old}}}{136}
@@ -389,7 +284,7 @@ $$
     1 - R^2_{\text{new}} < \frac{135}{136}\left(1 - R^2_{\text{old}}\right) = \frac{135}{136} \times 0.0340969 = 0.0338462
     $$
 
-    곧 $R^2_{\text{new}} > 0.9661538$이다. 지금 값보다 **$0.0002507$ 만큼은** 커져야 한다. $SS_{\text{Residual}}$은 $n$으로 나눈 MSE와 비례하므로 같은 조건을 MSE로 적으면
+    곧 $R^2_{\text{new}} > 0.9661538$이다. 지금 값보다 **$0.0002507$ 만큼은** 커져야 한다. $\text{SSE}$은 $n$으로 나눈 MSE와 비례하므로 같은 조건을 MSE로 적으면
 
     $$
     \mathrm{MSE}_{\text{new}} < \frac{135}{136} \times 0.8947370 = 0.8881581
@@ -400,15 +295,15 @@ $$
     **(3)** 늘리기 전의 잔차 자유도를 $d = n - p - 1$이라 하면 늘린 뒤는 $d - 1$이다. 수정 $R^2$가 올라가는 조건은
 
     $$
-    \frac{SS_{\text{Residual}}^{\text{new}}}{d-1} < \frac{SS_{\text{Residual}}^{\text{old}}}{d}
+    \frac{\text{SSE}^{\text{new}}}{d-1} < \frac{\text{SSE}^{\text{old}}}{d}
     \quad\Longleftrightarrow\quad
-    SS_{\text{Residual}}^{\text{new}} < \frac{d-1}{d}\, SS_{\text{Residual}}^{\text{old}}
+    \text{SSE}^{\text{new}} < \frac{d-1}{d}\, \text{SSE}^{\text{old}}
     $$
 
     곧
 
     $$
-    \frac{SS_{\text{Residual}}^{\text{old}} - SS_{\text{Residual}}^{\text{new}}}{SS_{\text{Residual}}^{\text{old}}} > \frac{1}{d} = \frac{1}{n-p-1}
+    \frac{\text{SSE}^{\text{old}} - \text{SSE}^{\text{new}}}{\text{SSE}^{\text{old}}} > \frac{1}{d} = \frac{1}{n-p-1}
     $$
 
     이다. 위 (2)는 $d = 136$인 경우이고 $1/136 = 0.735\%$다. $\square$
@@ -418,7 +313,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-4절의 두 모형을 다시 보자. 모형 A는 $\mathrm{MAE} = 3.19$, $\mathrm{RMSE} = 4.00$이고 모형 B는 $\mathrm{MAE} = 3.51$, $\mathrm{RMSE} = 3.82$였다. 빗나감 하나의 비용이
+2절의 두 모형을 다시 보자. 모형 A는 $\mathrm{MAE} = 3.19$, $\mathrm{RMSE} = 4.00$이고 모형 B는 $\mathrm{MAE} = 3.51$, $\mathrm{RMSE} = 3.82$였다. 빗나감 하나의 비용이
 
 $$
 c(e) = \lvert e \rvert + \lambda e^2 \qquad (\lambda \ge 0)
@@ -587,9 +482,9 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-본문은 단순선형회귀에서 $R^2 = \rho^2$임을 보았다. 설명변수가 여러 개일 때는 $y$와 $\hat{y}$의 상관계수가 그 자리를 대신한다.
+[결정계수와 수정 결정계수](r_squared.md)는 단순선형회귀에서 $R^2 = \rho^2$임을 보았다. 설명변수가 여러 개일 때는 $y$와 $\hat{y}$의 상관계수가 그 자리를 대신한다.
 
-**(1)** 절편이 있는 모형을 **훈련자료**에 OLS로 적합했다면 $\sum_i (y_i - \hat{y}_i) = 0$이고 $\sum_i (y_i - \hat{y}_i)(\hat{y}_i - \bar{y}) = 0$이다(본문에서 교차항이 사라진 것이 이 성질이다). 이를 써서
+**(1)** 절편이 있는 모형을 **훈련자료**에 OLS로 적합했다면 $\sum_i (y_i - \hat{y}_i) = 0$이고 $\sum_i (y_i - \hat{y}_i)(\hat{y}_i - \bar{y}) = 0$이다([결정계수와 수정 결정계수](r_squared.md) 1절에서 교차항이 사라진 것이 이 성질이다). 이를 써서
 
 $$
 R^2 = \left(\operatorname{corr}(y, \hat{y})\right)^2
@@ -616,20 +511,20 @@ $$
     \sum_i (y_i - \bar{y})(\hat{y}_i - \bar{y})
     = \sum_i \left(e_i + (\hat{y}_i - \bar{y})\right)(\hat{y}_i - \bar{y})
     = \underbrace{\sum_i e_i(\hat{y}_i - \bar{y})}_{=\,0} + \sum_i (\hat{y}_i - \bar{y})^2
-    = SS_{\text{Treatment}}
+    = \text{SSR}
     $$
 
-    이고, 본문의 제곱합 분해에서 $SS_{\text{Total}} = SS_{\text{Residual}} + SS_{\text{Treatment}}$다. 상관계수의 제곱은
+    이고, [결정계수와 수정 결정계수](r_squared.md) 1절의 제곱합 분해에서 $\text{SST} = \text{SSE} + \text{SSR}$다. 상관계수의 제곱은
 
     $$
     \left(\operatorname{corr}(y, \hat{y})\right)^2
     = \frac{\left(\sum_i (y_i - \bar{y})(\hat{y}_i - \bar{y})\right)^2}{\sum_i (y_i - \bar{y})^2 \sum_i (\hat{y}_i - \bar{y})^2}
-    = \frac{SS_{\text{Treatment}}^2}{SS_{\text{Total}} \cdot SS_{\text{Treatment}}}
-    = \frac{SS_{\text{Treatment}}}{SS_{\text{Total}}}
+    = \frac{\text{SSR}^2}{\text{SST} \cdot \text{SSR}}
+    = \frac{\text{SSR}}{\text{SST}}
     = R^2
     $$
 
-    가 된다. $\square$ 단순선형회귀에서는 $\hat{y}_i$가 $x_i$의 증가함수(또는 감소함수)여서 $\operatorname{corr}(y,\hat{y}) = \pm\rho$이므로 본문의 $R^2 = \rho^2$이 이 결과의 특수한 경우다.
+    가 된다. $\square$ 단순선형회귀에서는 $\hat{y}_i$가 $x_i$의 증가함수(또는 감소함수)여서 $\operatorname{corr}(y,\hat{y}) = \pm\rho$이므로 [결정계수와 수정 결정계수](r_squared.md)의 $R^2 = \rho^2$이 이 결과의 특수한 경우다.
 
     **(2)** $\hat{y}$를 아핀변환해 $y$에 다시 맞추는 최소제곱문제를 생각한다.
 
@@ -688,12 +583,12 @@ $$
 
 **(2)** 같은 $n$, $p$에서 수정 $R^2$가 가질 수 있는 가장 작은 값을 구하시오.
 
-**(3)** $p$를 $n-1$ 쪽으로 밀어 보자. $p = n-2$일 때 수정 $R^2 \ge 0$이 되려면 $R^2$가 얼마여야 하는가? $p = n-1$에서는 정의 2의 식이 어떻게 되는가? 그 결과를 자유도의 말로 해석하시오.
+**(3)** $p$를 $n-1$ 쪽으로 밀어 보자. $p = n-2$일 때 수정 $R^2 \ge 0$이 되려면 $R^2$가 얼마여야 하는가? $p = n-1$에서는 [결정계수와 수정 결정계수](r_squared.md)의 정의 2의 식이 어떻게 되는가? 그 결과를 자유도의 말로 해석하시오.
 
 </div>
 
 ??? success "풀이"
-    **(1)** 정의 2에서
+    **(1)** [결정계수와 수정 결정계수](r_squared.md)의 정의 2에서
 
     $$
     1 - (1 - R^2)\frac{n-1}{n-p-1} < 0
@@ -739,9 +634,9 @@ $$
 
     이어야 한다. 최솟값은 $-(n-2) = -138$까지 내려간다. 벌점이 $139$배로 증폭되어, $R^2$가 $0.99$여도 수정 $R^2$는 $1 - 139 \times 0.01 = -0.39$로 음수다.
 
-    $p = n - 1$이면 $n - p - 1 = 0$이어서 분모가 $0$이 된다. 게다가 절편까지 세면 모수가 $n$개이므로 모형은 자료를 그대로 지나가 $SS_{\text{Residual}} = 0$, $R^2 = 1$이다. 식은 $1 - 0 \cdot \frac{n-1}{0}$ 꼴의 $0/0$이 되어 **정의되지 않는다.**
+    $p = n - 1$이면 $n - p - 1 = 0$이어서 분모가 $0$이 된다. 게다가 절편까지 세면 모수가 $n$개이므로 모형은 자료를 그대로 지나가 $\text{SSE} = 0$, $R^2 = 1$이다. 식은 $1 - 0 \cdot \frac{n-1}{0}$ 꼴의 $0/0$이 되어 **정의되지 않는다.**
 
-    해석은 이렇다. 수정 $R^2$는 $SS_{\text{Residual}}$과 $SS_{\text{Total}}$을 각각의 자유도로 나눈 **불편추정값의 비**다. $p = n-1$에서는 잔차 자유도가 $0$이라 잔차에서 분산을 추정할 재료가 하나도 남지 않는다. $\sigma^2$을 추정할 수 없는 바로 그 상황이므로 수정 $R^2$도 말을 멈춘다. 음수가 나오는 일은 고장이 아니라 **"잃은 자유도에 비해 설명한 것이 너무 적다"는 경고**이고, $p$가 $n$에 가까워질수록 그 경고가 가팔라진다.
+    해석은 이렇다. 수정 $R^2$는 $\text{SSE}$과 $\text{SST}$을 각각의 자유도로 나눈 **불편추정값의 비**다. $p = n-1$에서는 잔차 자유도가 $0$이라 잔차에서 분산을 추정할 재료가 하나도 남지 않는다. $\sigma^2$을 추정할 수 없는 바로 그 상황이므로 수정 $R^2$도 말을 멈춘다. 음수가 나오는 일은 고장이 아니라 **"잃은 자유도에 비해 설명한 것이 너무 적다"는 경고**이고, $p$가 $n$에 가까워질수록 그 경고가 가팔라진다.
 
 <div class="drillbox" markdown>
 
