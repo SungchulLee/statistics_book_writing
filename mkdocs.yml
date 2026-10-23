@@ -190,7 +190,6 @@ nav:
                 - X̄₁ - X̄₂의 표집분포 (비정규 모집단): ch05/applications/diff_means_nonnormal.md
             - 5.8 두 표본비율의 차 p̂₁ - p̂₂:
                 - 두 표본비율의 차: ch05/applications/diff_proportions.md
-                - p̂₁ - p̂₂의 표집분포 (정규근사가 듣는 경우): ch05/applications/diff_props_normal.md
                 - p̂₁ - p̂₂의 표집분포 (작은 기대도수): ch05/applications/diff_props_small.md
             - 5.9 대응표본 차의 평균 D̄:
                 - D̄의 표집분포 (대응 설계): ch05/applications/dbar_paired.md
@@ -505,11 +504,10 @@ nav:
                 - Anderson-Darling 검정: ch14/formal_tests/anderson_darling.md
                 - Shapiro-Wilk 검정: ch14/formal_tests/shapiro_wilk.md
             - 14.5 한계와 함정:
+                - 정규성 검정의 한계와 함정: ch14/limitations/limitations.md
                 - 표본크기가 검정력에 미치는 영향: ch14/limitations/sample_size_power.md
                 - 민감도와 실질적 유의성: ch14/limitations/sensitivity_practical.md
                 - 올바른 검정 고르기: ch14/limitations/choosing_test.md
-                - 한계 개관: ch14/limitations/limitations.md
-                - Shapiro-Wilk 검정력 모의실험: ch14/limitations/shapiro_power_sim.md
             - 14.6 비정규 자료 다루기:
                 - 정규성을 위한 변환: ch14/non_normal_data/transformations.md
                 - 대안으로서의 붓스트랩: ch14/non_normal_data/bootstrapping.md

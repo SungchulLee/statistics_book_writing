@@ -890,8 +890,187 @@ $$
     3절의 표가 이것을 수로 확인해 준다. 거기서는 같은 대수정규 대립에 **릴리포스 보정을 한** KS가 $n = 50$에서 $0.845$를 낸다. 표본크기가 절반인데 검정력이 두 배다. 보정을 생략한 대가가 검정력의 절반이라는 뜻이고, 연습문제 3이 말한 "검정력이 떨어진다"의 크기가 바로 이것이다. $\square$
 
 
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff med" title="중간"></span> 대수정규 대립가설에 대해 Shapiro-Wilk 검정과 D'Agostino $K^2$ 검정의 검정력을 비교하도록 모의실험을 수정하라. 두 검정력 곡선을 같은 축에 그려라.
+
+</div>
+
+??? success "풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    import matplotlib.pyplot as plt
+
+    ns = [20, 30, 50, 80, 120, 200, 300]
+    sims, alpha, sigma = 500, 0.05, 0.6
+    pw_sw, pw_k2 = [], []
+
+    for n in ns:
+        rng = np.random.default_rng(42 + n)
+        r_sw = r_k2 = 0
+        for _ in range(sims):
+            x = rng.lognormal(0, sigma, n)
+            if stats.shapiro(x)[1] < alpha:
+                r_sw += 1
+            if stats.normaltest(x)[1] < alpha:
+                r_k2 += 1
+        pw_sw.append(r_sw / sims)
+        pw_k2.append(r_k2 / sims)
+        print(f"n = {n:>3}: SW = {r_sw/sims:.3f}, K2 = {r_k2/sims:.3f}")
+
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ax.plot(ns, pw_sw, marker="o", label="Shapiro-Wilk")
+    ax.plot(ns, pw_k2, marker="s", label="D'Agostino K^2")
+    ax.set_xlabel("Sample size")
+    ax.set_ylabel("Power")
+    ax.legend()
+    plt.tight_layout()
+    plt.show()
+    ```
+
+    출력:
+
+    ```text
+    n =  20: SW = 0.658, K2 = 0.552
+    n =  30: SW = 0.830, K2 = 0.702
+    n =  50: SW = 0.980, K2 = 0.912
+    n =  80: SW = 1.000, K2 = 0.990
+    n = 120: SW = 1.000, K2 = 1.000
+    n = 200: SW = 1.000, K2 = 1.000
+    n = 300: SW = 1.000, K2 = 1.000
+    ```
+
+    ![Shapiro-Wilk와 D'Agostino의 검정력 비교](./img/power_shapiro_vs_dagostino.png)
+
+    $n \geq 120$에서는 두 검정 모두 검정력이 1이다. 더 작은 $n$(20~80)에서는 Shapiro-Wilk가 일관되게 높다. $n = 20$에서 $0.658$ 대 $0.552$, $n = 30$에서 $0.830$ 대 $0.702$로 격차가 10~13퍼센트포인트에 이른다.
+
+    작은 표본에서 Shapiro-Wilk가 선호되는 이유를 정량적으로 확인해 준다. $K^2$은 두 적률로 정보를 압축하지만, Shapiro-Wilk는 순서통계량 전체의 배열을 활용하므로 표본이 작아 적률 추정이 불안정할 때 유리하다.
+
+    (앞서 정규성 검정 모음 페이지의 연습문제 14에서 본 것과 대조된다. 거기서는 $n = 200$의 대수정규에 대해 Jarque-Bera와 $K^2$이 Shapiro-Wilk보다 훨씬 작은 $p$값을 냈다. 작은 $p$값이 곧 큰 검정력을 뜻하지는 않는다. 두 검정 모두 검정력이 1인 영역에서는 $p$값의 크기가 검정력에 관해 아무것도 말해 주지 않는다.) $\square$
+
+---
+
+
+<div class="drillbox" markdown>
+
+**연습문제 15.** <span class="diff hard" title="어려움"></span> 연습문제 2는 작은 $n$에서 섀피로–윌크가 D'Agostino $K^2$보다 센 까닭을 "$K^2$은 두 적률로 정보를 압축한다"로 돌렸다. 그 압축이 **$n$을 아무리 키워도** 복구되지 않는 대립가설을 만들어 보자.
+
+균등분포의 척도혼합 $X = S \cdot U$를 생각한다. 여기서 $U \sim \text{Uniform}(-1, 1)$이고 $S$는 $U$와 독립이며 $P(S = c) = p = 0.1$, $P(S = 1) = 0.9$이다.
+
+**(1)** 이 분포의 왜도가 $0$이고 **초과첨도도 정확히 $0$** 이 되는 $c$를 닫힌 꼴로 구하시오. ($\text{Uniform}(-1,1)$의 짝수 적률은 $E[U^{2k}] = 1/(2k+1)$이다.)
+
+**(2)** $n = 200,\, 1000,\, 5000$에서 자크–베라, $K^2$, 섀피로–윌크의 기각률을 각 4000회로 재고, $n$이 커질 때 세 기각률이 어디로 가는지 말하시오. 자크–베라의 기각률이 $\alpha = 0.05$로 가지 **않는** 까닭도 설명하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1)** $U$가 대칭이고 $S$가 독립이므로 $X$도 원점대칭이다. 홀수 적률이 모두 $0$이니 $\gamma_1 = 0$이다. 짝수 적률은
+
+    $$
+    \mu_2 = \frac{(1-p) + pc^2}{3}, \qquad \mu_4 = \frac{(1-p) + pc^4}{5}
+    $$
+
+    이므로 $\beta_2 = \mu_4/\mu_2^2 = 3$은
+
+    $$
+    \frac{9}{5} \cdot \frac{(1-p) + pc^4}{\bigl((1-p) + pc^2\bigr)^2} = 3
+    \iff 3\bigl((1-p) + pc^4\bigr) = 5\bigl((1-p) + pc^2\bigr)^2
+    $$
+
+    과 같다. $p = 1/10$, $u = c^2$을 넣으면 $2.7 + 0.3u^2 = 4.05 + 0.9u + 0.05u^2$, 곧
+
+    $$
+    u^2 - 3.6u - 5.4 = 0
+    \quad\Longrightarrow\quad
+    u = 1.8 + \sqrt{8.64} = 4.739388,
+    \quad c = \sqrt{1.8 + \sqrt{8.64}} = 2.177013
+    $$
+
+    이다(음의 근은 버린다). 밀도는 $\lvert x \rvert < 1$에서 $0.47297$, $1 < \lvert x \rvert < 2.177$에서 $0.02297$인 **계단 꼴이고 받침이 유계**다. 정규와 조금도 닮지 않았는데 $\gamma_1 = \gamma_2 = 0$이다.
+
+    **(2)**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    p = 0.1
+    c = np.sqrt(1.8 + np.sqrt(8.64))     # 넓은 쪽 균등분포의 반폭
+
+    def draw(rng, n):
+        """U(-1,1) 과 U(-c,c) 의 혼합. 대칭이므로 왜도는 0 이다."""
+        scale = np.where(rng.random(n) < p, c, 1.0)
+        return rng.uniform(-1, 1, n) * scale
+
+    # 1) 두 적률이 정규와 정확히 같음을 닫힌 꼴로 확인한다.
+    mu2 = ((1 - p) + p * c ** 2) / 3
+    mu4 = ((1 - p) + p * c ** 4) / 5
+    print(f"c = {c:.6f}  (c^2 = {c ** 2:.6f})")
+    print(f"분산 {mu2:.6f},  첨도 mu4/mu2^2 = {mu4 / mu2 ** 2:.6f},"
+          f"  초과첨도 {mu4 / mu2 ** 2 - 3:.1e}")
+    rng = np.random.default_rng(0)
+    big = draw(rng, 400000)
+    print(f"표본 40만 개:  왜도 {stats.skew(big):+.4f},  초과첨도 {stats.kurtosis(big):+.4f}")
+
+    # 2) 적률만 보는 검정과 순서통계량을 쓰는 검정의 기각률
+    sims = 4000
+    print(f"\n기각률 (각 {sims} 회, alpha = 0.05)")
+    for n in (200, 1000, 5000):
+        rng = np.random.default_rng(2024 + n)
+        r = [0, 0, 0]
+        for _ in range(sims):
+            y = draw(rng, n)
+            r[0] += stats.jarque_bera(y).pvalue < 0.05
+            r[1] += stats.normaltest(y).pvalue < 0.05
+            r[2] += stats.shapiro(y).pvalue < 0.05
+        print(f"  n = {n:5d}:  JB {r[0] / sims:.4f}   K^2 {r[1] / sims:.4f}"
+              f"   SW {r[2] / sims:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    c = 2.177013  (c^2 = 4.739388)
+    분산 0.457980,  첨도 mu4/mu2^2 = 3.000000,  초과첨도 0.0e+00
+    표본 40만 개:  왜도 +0.0048,  초과첨도 -0.0075
+
+    기각률 (각 4000 회, alpha = 0.05)
+      n =   200:  JB 0.0700   K^2 0.1098   SW 0.9080
+      n =  1000:  JB 0.0740   K^2 0.0858   SW 1.0000
+      n =  5000:  JB 0.0740   K^2 0.0762   SW 1.0000
+    ```
+
+    **$n$을 $25$배 키워도 적률 검정은 제자리다.** 자크–베라는 $0.0700 \to 0.0740 \to 0.0740$, $K^2$은 $0.1098 \to 0.0858 \to 0.0762$로 둘 다 $0.07$ 근처에 머문다. 섀피로–윌크는 $n = 200$에서 이미 $0.9080$이고 $n = 1000$에서는 4000번 중 한 번도 놓치지 않았다.
+
+    **자크–베라의 극한이 $0.05$가 아닌 까닭.** $\sqrt{n}\,b_1$과 $\sqrt{n}\,b_2$의 극한분산이 $6$과 $24$인 것은 **정규분포 아래에서만** 성립한다. 대칭분포에서 표본왜도의 극한분산은
+
+    $$
+    \operatorname{avar}(\sqrt{n}\,b_1) = \frac{\mu_6}{\mu_2^3} - 6\frac{\mu_4}{\mu_2^2} + 9
+    $$
+
+    이고(정규에서는 $15 - 18 + 9 = 6$), 이 혼합에서는 $\mu_6 = (0.9 + 0.1c^6)/7 = 1.64936$, $\mu_2^3 = 0.096059$이므로 $\mu_6/\mu_2^3 = 17.170$, 따라서 $\operatorname{avar} = 17.170 - 18 + 9 = 8.170$이다. $6$으로 나누었으니 그 항은 $(8.170/6)\chi_1^2 = 1.362\,\chi_1^2$로 간다. 첨도 항도 같은 방식으로 재면 가중치가 $0.944$이고, 결국
+
+    $$
+    \text{JB} \xrightarrow{d} 1.362\,\chi_1^2 + 0.944\,\chi_1^2,
+    \qquad
+    P\bigl(1.362\,\chi_1^2 + 0.944\,\chi_1^2 > 5.991\bigr) = 0.075
+    $$
+
+    이다(두 $\chi_1^2$은 대칭분포에서 점근적으로 독립이다). 모의실험이 $n = 1000, 5000$에서 똑같이 준 $0.0740$은 4000회의 표준오차 $0.004$ 안에서 이 값과 맞는다.
+
+    **요점은 "검정력이 작다"가 아니라 "일치성이 없다"는 것이다.** 연습문제 4의 논증은 통계량이 기각역 안의 값으로 **수렴**할 것을 요구하는데, 여기서 $\text{JB}$는 $n$에 상관없이 $O_p(1)$에 머물러 그 전제가 깨진다. 반면 섀피로–윌크는 $c(F_1) < 1$이므로 연습문제 4·8의 논증이 그대로 적용되어 $n$만 키우면 반드시 잡는다. 3차·4차 적률만 보는 검정에게는 **영원히 보이지 않는 이탈**이 있고, 그것은 꾸며낸 희귀한 분포가 아니라 분산혼합처럼 흔한 구조에서 나온다. $\square$
+
+---
+
+
 ---
 
 ## 정리하며
 
 보편적으로 최적인 정규성 검정은 없다. Shapiro-Wilk 검정은 폭넓은 검정력 덕분에 작거나 중간 크기의 표본에서 가장 나은 기본 선택이다. Anderson-Darling 검정은 꼬리 이탈 탐지에 뛰어나고 표본크기 제한이 없다. Jarque-Bera 검정은 왜도나 첨도가 의심될 때 효율적이지만 최소한 중간 크기의 표본이 필요하다. Kolmogorov-Smirnov 검정은 널리 알려져 있지만 정규성 검정으로는 대체로 검정력이 가장 낮다. 어떤 경우에도 형식적 검정에는 시각적 진단이 따라야 한다.
+
+다음 절부터 **정규가 아닐 때의 대처**로 넘어간다. 변환·붓스트랩·비모수 방법 가운데
+무엇을 고를지가 주제다.
