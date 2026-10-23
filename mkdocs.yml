@@ -457,7 +457,6 @@ nav:
                 - Akaike 정보기준: ch13/model_selection/aic.md
                 - Bayes 정보기준: ch13/model_selection/bic.md
                 - 모형선택을 위한 교차검증: ch13/model_selection/cross_validation.md
-                - 단계적 선택과 최량 부분집합 선택: ch13/model_selection/stepwise_subset.md
                 - AIC와 BIC: ch13/model_selection/aic_bic.md
                 - 모형선택 비교: ch13/model_selection/model_selection.md
                 - 교차검증 다항 모형선택: ch13/model_selection/cv_polynomial_model_selection.md
