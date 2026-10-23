@@ -450,7 +450,7 @@ $\text{Exp}(1)$은 인공적인 분포처럼 보이지만, 여기서 본 모양�
     plt.show()
     ```
 
-    ![Sampling Distribution of X-bar, n=50](./img/xbar_exponential_185.png)
+    ![X̄ 의 표집분포, n=50](./img/xbar_exponential_185.png)
 
     $n = 50$에서는 표본평균의 히스토그램이 거의 대칭이고 $N(1, 1/50)$ 밀도를 바짝 따라간다. $\bar{X}$의 왜도가 $2/\sqrt{50} \approx 0.28$로 충분히 작아 정규근사가 아주 잘 맞는다. $\square$
 

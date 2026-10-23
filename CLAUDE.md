@@ -320,10 +320,16 @@ python3 tools/lint_cross_section_pairs.py
 # 머리글의 LaTeX 와 ASCII 그리스 문자 — 목차에 날 문자열로 새어 나간다
 grep -rnE '^#{1,6} .*\$' docs --include='*.md'
 grep -rnE '^#{1,4} .*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)' docs --include='*.md'
-# 그림 대체텍스트의 ASCII 그리스 문자 (alt 속성은 수식이 될 수 없다)
-grep -rnoE '!\[[^]]*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)[^]]*\]' docs --include='*.md'
-# 그림 대체텍스트 안의 $수식$ — 위 검사가 못 보는 꼴이다. 0 이어야 한다
-grep -rnoE '!\[[^]]*\$[^]]*\]' docs --include='*.md'
+# 그림 대체텍스트에서 렌더될 수 없는 표기 (alt 속성은 수식이 될 수 없다). 0 이어야 한다
+# 그리스 이름 여덟만 찾던 옛 검사는 sqrt·S^2·X-bar 를 놓쳤다 — 2026-10-24 에 여덟 곳이
+# 나왔다. 넓힐 때마다 더 나왔으므로 네 꼴을 함께 본다
+grep -rnoE '!\[[^]]*(^|[^\\A-Za-z_])(alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega)([^A-Za-z_]|$)[^]]*\]' docs --include='*.md'
+grep -rnoE '!\[[^]]*(\$|\\[a-zA-Z]+|sqrt|frac|infty|cdot|tilde|hat\{|_\{|\^\{)[^]]*\]' docs --include='*.md'
+grep -rnoE '!\[[^]]*\^[0-9n][^]]*\]' docs --include='*.md'
+grep -rnoE '!\[[^]]*[A-Za-z]-(bar|hat|tilde)([^A-Za-z]|$)[^]]*\]' docs --include='*.md'
+# 위 첫 줄을 대문자까지 넓히면 거짓 양성 둘이 걸린다 — 영어 대체텍스트에서 분포의
+# **이름**으로 쓰인 `Chi-square`(ch04 chi_square, ch08 ci_sigma2). 약어도 그렇다
+# (ch10 homogeneity 의 `PSI` 는 모집단 안정성 지수다). 이름과 기호를 가려 읽을 것
 # nav 제목과 쪽의 H1 이 어긋나는 곳. 160 곳이 나오지만 거의 다 의도된 것이다
 # (nav 가 'Bernoulli(p)'·'(코드)'·'(재론)' 처럼 구별을 붙인다). 실질이 다른
 # 것만 고를 것 — ASCII 그리스 문자가 한쪽에만 있는 경우가 전형이다

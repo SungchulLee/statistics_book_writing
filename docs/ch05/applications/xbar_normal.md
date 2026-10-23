@@ -453,7 +453,7 @@ $\frac1{\sqrt n}=0.0625$ 다). 아래가 이 상자의 요점이다. 가중치 �
     Empirical SE:   0.0993
     ```
 
-    ![Sampling Distribution of X-bar (n = 100)](./img/xbar_normal_206.png)
+    ![X̄ 의 표집분포 (n = 100)](./img/xbar_normal_206.png)
 
     경험적 표준오차가 0.1에 가깝게 나오고 히스토그램이 $N(0, 0.01)$ 밀도와 사실상 완벽하게 일치하여 정확한 정규성 결과를 확인해 준다. $\square$
 
