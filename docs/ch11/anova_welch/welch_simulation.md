@@ -146,7 +146,7 @@ $$
     \bar y_2 - \tilde y = \frac{-w_1(\bar y_1 - \bar y_2)}{W}
     $$
 
-    이므로(11.1절 보기 2와 같은 계산이다)
+    이므로(11.1절 [일원배치 모형과 가정](../anova_one_way/one_way_model.md) 보기 2 와 같은 계산이다)
 
     $$
     F_W = w_1\left(\frac{w_2 \Delta}{W}\right)^2 + w_2\left(\frac{w_1 \Delta}{W}\right)^2
