@@ -206,7 +206,8 @@ $r_t^2$의 자기상관은 이 장의 모든 분산 검정이 요구하는 독�
     bf_stat, bf_p = stats.levene(returns_before, returns_after, center='median')
     print(f"Brown-Forsythe:  W = {bf_stat:.4f}, p = {bf_p:.4f}")
 
-    # 순위만 쓰는 검정이라 셋 중 가장 로버스트하다.
+    # 순위만 쓰는 검정이라 꼬리의 두께에는 셋 중 가장 덜 흔들린다.
+    # 다만 치우침이 극단이면 브라운–포사이드가 낫다 (15.5절 비교).
     fk_stat, fk_p = stats.fligner(returns_before, returns_after)
     print(f"Fligner-Killeen: H = {fk_stat:.4f}, p = {fk_p:.4f}")
 
