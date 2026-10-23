@@ -28,6 +28,67 @@ $$
 
 $H_0\colon \sigma_1^2 = \cdots = \sigma_k^2$ 아래에서 $W^*$는 근사적으로 $F_{k-1, N-k}$를 따른다.
 
+
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 분산 검정이 아니라 변환한 자료에 돌린 위치 검정이다
+
+위 식을 다시 보자. $W^*$ 는 **변환값 $Z_{ij}^*$ 에 대한 표준 일원배치 $F$ 통계량**이라고
+적혀 있다. 새 분포도, 새 표가 필요하지 않다 — 중앙값에서의 절대편차를 만들고 나면
+그 뒤는 **평균을 견주는 보통의 분산분석**이다. 분산에 대한 물음을 평균에 대한 물음으로
+바꾸는 변환 한 줄이 이 검정의 전부다.
+
+그래서 이 검정은 **아무 분산분석 도구로도** 돌아간다. 전용 함수와 범용 $F$ 함수와
+기계학습 꾸러미의 특징 선택 점수가 같은 수를 내는지 보자.
+
+```python
+import numpy as np
+from scipy import stats
+from sklearn.feature_selection import f_classif
+
+rng = np.random.default_rng(15)
+n, k = 25, 3
+y = np.repeat(np.arange(k), n)
+X = np.concatenate([rng.normal(0, s, n) for s in (1.0, 1.0, 2.0)])   # 셋째 집단만 분산이 넷 배
+
+med = np.array([np.median(X[y == i]) for i in range(k)])
+Z = np.abs(X - med[y])                                   # 브라운-포사이드의 변환
+
+W_bf, p_bf = stats.levene(*(X[y == i] for i in range(k)), center="median")
+F_anova, p_anova = stats.f_oneway(*(Z[y == i] for i in range(k)))
+F_sk, p_sk = f_classif(Z[:, None], y)
+
+print(f"levene(center='median')      W* = {W_bf:.6f}  p = {p_bf:.3e}")
+print(f"f_oneway(변환값 Z)            F  = {F_anova:.6f}  p = {p_anova:.3e}")
+print(f"f_classif(변환값 Z)           F  = {F_sk[0]:.6f}  p = {p_sk[0]:.3e}")
+print()
+# 변환값의 치우침 — F 가 가정하는 정규와 얼마나 다른가
+print(f"원자료의 왜도 {stats.skew(X):+.4f}     변환값 Z 의 왜도 {stats.skew(Z):+.4f}")
+```
+
+출력:
+
+```
+levene(center='median')      W* = 9.630470  p = 1.967e-04
+f_oneway(변환값 Z)            F  = 9.630470  p = 1.967e-04
+f_classif(변환값 Z)           F  = 9.630470  p = 1.967e-04
+
+원자료의 왜도 -0.2602     변환값 Z 의 왜도 +0.8621
+```
+
+셋이 소수 여섯 자리까지 같다. 특징 선택 점수에 절대편차를 넣으면 그것이 분산
+동일성 검정이 된다 — 바꾼 것은 **들어가는 자료**뿐이다. 같은 $F$ 가 특징을 고르는
+자리에서는 어떻게 쓰이는지는 15.3절
+[F 분포와 자유도](../f_test/f_distribution_details.md) 에 있다.
+
+마지막 줄이 이 검정의 값과 한계를 함께 말한다. **변환값의 왜도가 $+0.8621$ 이다.**
+원자료는 정규라서 왜도가 $-0.26$ 인데, 절댓값을 취하면 $0$ 에서 잘려 오른쪽으로
+치우친다. 그런데 뒤에 돌리는 $F$ 는 **정규**를 가정한다. 곧 이 검정은 정규성 가정을
+자료에서 걷어 내는 대신 **변환값 쪽으로 옮겨 놓은 것**이고, 그래서 정확검정이 아니라
+근사검정이다. $\S 4$ 가 그 근사가 실제로 얼마나 맞는지 수로 재어 둔 자리다.
+
+</div>
+
 ---
 
 ## 2. 중앙값이 로버스트성을 높이는 이유
