@@ -196,6 +196,96 @@ $\theta = 0$ 인 파란 선만 평평하다. 모두가 똑같이 타고났다면
 
 ---
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 위험비는 옮겨 가고 절대 위험은 옮겨 가지 않는다
+
+위 함정들은 위험비를 **읽는** 일에 관한 것이었다. 모형을 **옮겨 쓰는** 일에서 생기는
+함정이 하나 더 있다. 콕스 모형이 추정하는 것은 $\boldsymbol\beta$ 뿐이고, 기저위험
+$h_0(t)$ 는 비에서 소거되어 **추정되지 않은 채 남는다.** 그 성질이 모형을 다른 자료로
+가져갈 때 두 얼굴을 보인다.
+
+한쪽 모집단에서 적합한 위험 점수를 다른 곳에 쓰는 일은 오늘 흔하다 — 다른 지역, 다른
+기간, 다른 유입 경로. 기저위험만 다르고 공변량 효과는 같은 두 모집단을 만들어 재어 보았다.
+
+```python
+import numpy as np
+from scipy import stats
+from scipy.optimize import minimize
+
+rng = np.random.default_rng(21)
+BETA, HOR = np.array([0.8, -0.5]), 12.0
+
+def make(n, h0):                        # 기저위험만 다른 두 모집단
+    x = rng.normal(size=(n, 2))
+    T = rng.exponential(1 / (h0 * np.exp(x @ BETA)))
+    C = rng.uniform(0, 2 * HOR, n)
+    return x, np.minimum(T, C), (T <= C).astype(float)
+
+def cox(x, t, d):
+    """계수와 브레슬로 기저누적위험을 함께 돌려준다."""
+    o = np.argsort(t); xs, ds, ts = x[o], d[o], t[o]
+    def nll(b):
+        e = xs @ b
+        m = e.max()
+        return -float((ds * (e - m - np.log(np.cumsum(np.exp(e - m)[::-1])[::-1]))).sum())
+    b = minimize(nll, np.zeros(2), method="BFGS").x
+    e = np.exp(xs @ b)
+    H0 = np.cumsum(np.where(ds == 1, 1 / np.cumsum(e[::-1])[::-1], 0.0))
+    return b, (lambda q: np.interp(q, ts, H0))
+
+xA, tA, dA = make(4000, 0.05)           # 모집단 가: 기저위험 0.05
+xB, tB, dB = make(4000, 0.12)           # 모집단 나: 기저위험 0.12, 그 밖은 같다
+bA, H0A = cox(xA, tA, dA)
+bB, H0B = cox(xB, tB, dB)
+
+S_as_is = np.exp(-H0A(HOR) * np.exp(xB @ bA))     # 가의 모형을 나에 그대로
+S_recal = np.exp(-H0B(HOR) * np.exp(xB @ bA))     # 계수는 그대로, 기저만 다시
+S_true = np.exp(-0.12 * HOR * np.exp(xB @ BETA))
+
+print(f"계수   가 {bA.round(3)}   나 {bB.round(3)}   참값 {BETA}")
+print(f"12 개월 기저 누적위험   가 {H0A(HOR):.4f}   나 {H0B(HOR):.4f}"
+      f"   (참 비 {0.12/0.05:.1f})\n")
+print("나 집단의 12 개월 생존확률")
+print(f"  가의 모형을 그대로        {S_as_is.mean():.4f}")
+print(f"  기저만 나에서 다시 재고   {S_recal.mean():.4f}")
+print(f"  참값                     {S_true.mean():.4f}")
+print(f"\n두 예측의 순위 상관 (켄달 타우) {stats.kendalltau(S_as_is, S_recal)[0]:.4f}")
+```
+
+출력:
+
+```
+계수   가 [ 0.796 -0.48 ]   나 [ 0.844 -0.496]   참값 [ 0.8 -0.5]
+12 개월 기저 누적위험   가 0.6156   나 1.4901   (참 비 2.4)
+
+나 집단의 12 개월 생존확률
+  가의 모형을 그대로        0.5082
+  기저만 나에서 다시 재고   0.2744
+  참값                     0.2838
+
+두 예측의 순위 상관 (켄달 타우) 1.0000
+```
+
+**계수는 옮겨 간다.** 두 모집단에서 따로 적합한 $\hat{\boldsymbol\beta}$ 가
+$(0.796,\ -0.480)$ 과 $(0.844,\ -0.496)$ 으로 같은 자리를 가리킨다. 기저가 두 배 넘게
+달라도 그렇다 — 비에서 $h_0$ 가 소거된다는 성질이 그대로 이득이 되는 자리다.
+
+**절대 확률은 옮겨 가지 않는다.** 가의 모형을 나에 그대로 쓰면 $12$ 개월 생존확률을
+평균 $0.5082$ 로 말하는데 참값은 $0.2838$ 이다. **$22$ 퍼센트포인트**다. 고친 것은 하나뿐
+— 기저 누적위험을 나에서 다시 재면 $0.2744$ 로 거의 맞는다. $\boldsymbol\beta$ 는 손대지
+않았다.
+
+**그런데 순위는 조금도 흔들리지 않았다.** 두 예측의 켄달 타우가 $1.0000$ 이다. 단조변환
+하나로 이어져 있기 때문이고, 그래서 **C-지수 같은 순위 지표로는 이 어긋남을 영영 볼 수
+없다**(21.5절 [모형 선택 기준](../comparison/model_selection.md)).
+
+실무로 옮기면 한 줄이다. **「누가 더 위험한가」를 묻는 일에는 모형을 그대로 가져가도 되고,
+「몇 퍼센트인가」를 묻는 일에는 기저를 새 자료에서 다시 재야 한다.** 그 재측정은 사건이
+있어야 가능하므로, 새 모집단에서 **사건을 한동안 관측하기 전에는 절대 확률을 말할 수 없다.**
+
+</div>
+
 ## 6. 요약표
 
 | 공변량 유형 | HR 공식 | 해석 |
