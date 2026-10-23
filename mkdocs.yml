@@ -571,8 +571,6 @@ nav:
                 - Wilcoxon 순위합검정: ch16/two_sample_nonparametric/rank_sum.md
                 - Mann-Whitney U 검정: ch16/two_sample_nonparametric/mann_whitney.md
                 - Kolmogorov-Smirnov 이표본 검정: ch16/two_sample_nonparametric/ks_two_sample.md
-                - 이표본 비모수 검정: ch16/two_sample_nonparametric/two_sample.md
-                - 이표본 및 다집단 검정 (코드): ch16/two_sample_nonparametric/two_sample_tests.md
             - 16.5 다집단 비모수 검정:
                 - Kruskal-Wallis 검정: ch16/multi_group_nonparametric/kruskal_wallis.md
                 - Friedman 검정 (반복측정): ch16/multi_group_nonparametric/friedman.md
