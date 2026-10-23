@@ -151,6 +151,94 @@ AFT 해석에서 공변량은 시간 척도를 **가속하거나 감속한다.**
 
 ---
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 절단된 회귀가 곧 로그정규 AFT다
+
+위 식 $\ln T = \mathbf x^\top\boldsymbol\beta + \sigma W$ 를 생존분석의 기호를 걷고 보면
+**로그 눈금에서의 평범한 회귀**다. 목표값이 $\ln T$ 이고 오차가 정규이면 최소제곱이 바로
+떠오른다. 오늘 이런 문제는 흔하다 — 도착까지 걸리는 시간, 장애를 복구하는 데 걸리는 시간,
+문의가 해결되기까지의 시간을 회귀로 예측한다.
+
+걸림돌은 **자료의 일부가 아직 끝나지 않았다**는 것이다. 모형을 학습시키는 시점에 어떤
+건은 진행 중이고, 그 줄의 목표값은 「아직 모른다, 다만 지금까지 $t_i$ 는 넘겼다」뿐이다.
+흔한 처리가 둘인데 둘 다 틀린다 — **끝난 것만 쓰거나**(오래 걸리는 건이 덜 끝났으므로
+짧은 쪽만 남는다), **관측 시각을 그대로 목표로 쓰거나**(참값보다 작은 수를 정답이라
+적는다). 위 모형의 가능도는 그 줄에 $1 - \Phi(z_i)$ 를 주어 「넘겼다」를 그대로 적는다.
+
+```python
+import numpy as np
+from scipy import stats
+from scipy.optimize import minimize
+import unicodedata
+
+rng = np.random.default_rng(5)
+n = 2000
+x = rng.normal(size=n)
+B0, B1, SIG = 2.0, 0.6, 0.8                 # ln T = 2.0 + 0.6 x + 0.8 e
+T = np.exp(B0 + B1 * x + SIG * rng.normal(size=n))
+C = np.exp(rng.normal(2.3, 0.9, n))         # 관측이 끝나는 시각
+t, d = np.minimum(T, C), (T <= C)
+y = np.log(t)
+
+A_done, A_all = np.c_[np.ones(d.sum()), x[d]], np.c_[np.ones(n), x]
+ols_done = np.linalg.lstsq(A_done, y[d], rcond=None)[0]   # (가) 끝난 것만
+ols_all = np.linalg.lstsq(A_all, y, rcond=None)[0]        # (나) 관측 시각 그대로
+
+def nll(p):                                  # (다) 로그정규 AFT 가능도
+    b0, b1, ls = p
+    s = np.exp(ls)
+    z = (y - b0 - b1 * x) / s
+    return -np.where(d, stats.norm.logpdf(z) - ls, stats.norm.logsf(z)).sum()
+
+aft = minimize(nll, [0.0, 0.0, 0.0], method="BFGS").x
+
+def pad(s, w):
+    """한글은 고정폭에서 두 칸을 차지하므로 f-string 자리맞춤이 어긋난다."""
+    width = sum(2 if unicodedata.east_asian_width(c) in "WF" else 1 for c in s)
+    return s + " " * max(0, w - width)
+
+print(f"절단율 {100*(1-d.mean()):.1f} 퍼센트 (사건 {int(d.sum())} / {n})\n")
+print(pad("", 18) + "절편     기울기    sigma")
+rows = [("참값", [B0, B1, SIG]),
+        ("끝난 것만", [*ols_done, np.std(y[d] - A_done @ ols_done, ddof=2)]),
+        ("관측 시각 그대로", [*ols_all, np.std(y - A_all @ ols_all, ddof=2)]),
+        ("AFT 가능도", [aft[0], aft[1], np.exp(aft[2])])]
+for name, v in rows:
+    print(pad(name, 18) + f"{v[0]:5.3f}  {v[1]:7.3f}  {v[2]:7.3f}")
+```
+
+출력:
+
+```
+절단율 42.8 퍼센트 (사건 1145 / 2000)
+
+                  절편     기울기    sigma
+참값              2.000    0.600    0.800
+끝난 것만         1.650    0.450    0.716
+관측 시각 그대로  1.610    0.352    0.729
+AFT 가능도        2.030    0.612    0.819
+```
+
+**두 어림이 모두 기울기를 줄인다.** 참 기울기 $0.600$ 이 「끝난 것만」에서 $0.450$,
+「관측 시각 그대로」에서 $0.352$ 로 내려앉는다. 공변량이 클수록 오래 걸리는데 **오래
+걸리는 건일수록 덜 끝났으므로**, 둘 다 효과가 큰 쪽의 자료를 짧게 적는다. 퍼짐도 함께
+줄어 $\sigma$ 가 $0.8$ 대신 $0.72$ 쯤으로 나온다 — 모형이 실제보다 정확한 척하게 된다.
+
+**AFT 가능도는 같은 자료에서 $(2.030,\ 0.612,\ 0.819)$ 를 준다.** 자료를 더 모은 것이
+아니라 절단된 줄에 「넘겼다」를 적은 것뿐이다. 이 식은 계량경제학에서 **절단 회귀**라
+부르는 것과 같고, 오늘 쓰는 부스팅 라이브러리들이 「AFT 손실」이라는 이름으로 싣고 있는
+것도 이 가능도다.
+
+**다만 정규 가정이 로그 눈금에 그대로 얹힌다.** 로그정규가 아니라 꼬리가 더 두꺼운
+자료라면 $1 - \Phi$ 가 꼬리를 과소평가해 반대 방향의 편향이 생긴다. 로그로지스틱으로
+바꾸면 $W$ 의 분포만 갈아 끼우면 되고(위 절이 말한 대로 두 모형은 오차분포만 다르다),
+어느 쪽이 맞는지는 $5$ 절의 적합도 점검이 할 일이다. **그리고 절단이 공변량과 얽혀
+있으면** — 오래 걸릴 것 같은 건을 먼저 닫아 버리는 운영 규칙이 있다면 — 어떤 가능도도
+그것을 고치지 못한다.
+
+</div>
+
 ## 5. 모형 적합도 점검
 
 **로그정규 점검.** $T$가 로그정규이면 $\Phi^{-1}(1 - \hat{S}(t))$를 $\ln t$에 대해 그린
