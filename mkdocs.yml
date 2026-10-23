@@ -497,12 +497,10 @@ nav:
                 - 금융 수익률의 Q-Q 그림: ch14/graphical_methods/qq_plots_financial.md
             - 14.3 정규성 지표로서의 기술통계량:
                 - 왜도와 첨도: ch14/descriptive_statistics/skewness_kurtosis.md
-                - 왜도 검정과 첨도 검정: ch14/descriptive_statistics/skewtest_kurtosistest.md
-                - D'Agostino K제곱 검정: ch14/descriptive_statistics/dagostino.md
-                - Jarque-Bera 검정: ch14/descriptive_statistics/jarque_bera.md
                 - 왜도 검정: ch14/descriptive_statistics/skewtest.md
                 - 첨도 검정: ch14/descriptive_statistics/kurtosistest.md
-                - D'Agostino K제곱 검정 (코드): ch14/descriptive_statistics/dagostino_test.md
+                - D'Agostino K제곱 검정: ch14/descriptive_statistics/dagostino.md
+                - Jarque-Bera 검정: ch14/descriptive_statistics/jarque_bera.md
             - 14.4 형식적 정규성 검정:
                 - Kolmogorov-Smirnov 검정과 Lilliefors 검정: ch14/formal_tests/ks_lilliefors.md
                 - Anderson-Darling 검정: ch14/formal_tests/anderson_darling.md
