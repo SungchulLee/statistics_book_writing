@@ -244,7 +244,7 @@ _확인한 곳 — 콩도르세가 $1785$ 년 『Essai sur l'application de l'an
 ---
 
 
-## 7. scikit-learn에서의 사용
+## 7. 분류기 셋이 던지는 표의 총합은 언제나 셋이다
 
 scikit-learn은 `OneVsOneClassifier` 래퍼를 제공한다.
 

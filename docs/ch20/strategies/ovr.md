@@ -198,7 +198,7 @@ $0.452$, 평균이 $0.339$에 그친다. 그림에서 B의 무리 전체가 주�
 
 ---
 
-## 8. scikit-learn에서의 사용
+## 8. 어떤 이항 분류기든 감싸면 다중분류가 된다
 
 `sklearn.multiclass.OneVsRestClassifier` 래퍼는 어떤 이항 분류기에든 OvR을 적용한다.
 
