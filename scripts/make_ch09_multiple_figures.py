@@ -1,4 +1,4 @@
-r"""9.5 다중검정 일곱 쪽의 그림을 생성한다.
+r"""9.6 다중검정 다섯 쪽의 그림 일곱 장을 생성한다.
 
   ch09/multiple_testing/img/fwer_growth.png          검정을 늘리면 벌어지는 일
   ch09/multiple_testing/img/fwer_bound_dependence.png 합집합 한계와 상관의 영향
