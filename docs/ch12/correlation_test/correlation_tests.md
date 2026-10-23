@@ -1432,7 +1432,7 @@ $H_0:\rho=\rho_0$($\rho_0\neq0$) 검정과 $H_0:\rho=0$ 검정이 왜 다른 통
 
     | 가설 | 통계량 | 분포 |
     |---|---|---|
-    | $\rho=0$ | $t=\dfrac{r\sqrt{n-2}}{\sqrt{1-r^2}}$ | $t(n-2)$ **정확** |
+    | $\rho=0$ | $t=\dfrac{r\sqrt{n-2}}{\sqrt{1-r^2}}$ | $t_{n-2}$ **정확** |
     | $\rho=\rho_0$ | $z=\dfrac{\operatorname{arctanh}r-\operatorname{arctanh}\rho_0}{1/\sqrt{n-3}}$ | $N(0,1)$ **근사** |
 
     ```python

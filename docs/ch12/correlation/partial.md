@@ -1053,7 +1053,7 @@ $X_1X_2X_3$ 을 거쳐 이어져 있으므로 상관이 0 이 아니다. 가운�
     **자유도.** 통제변수가 $k$개면
 
     $$
-    t=\frac{r_{XY\cdot Z}\sqrt{n-2-k}}{\sqrt{1-r_{XY\cdot Z}^2}}\sim t(n-2-k)
+    t=\frac{r_{XY\cdot Z}\sqrt{n-2-k}}{\sqrt{1-r_{XY\cdot Z}^2}}\sim t_{n-2-k}
     $$
 
     **구간은 피셔 $z$에 $\operatorname{SE}=1/\sqrt{n-3-k}$**를 쓴다.

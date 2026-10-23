@@ -686,7 +686,7 @@ $$
     $$
     t=\frac{(r_{12}-r_{13})\sqrt{(n-1)(1+r_{23})}}
     {\sqrt{\dfrac{2(n-1)}{n-3}\lvert R\rvert+\bar r^2(1-r_{23})^3}}
-    \sim t(n-3)
+    \sim t_{n-3}
     $$
 
     여기서 $\lvert R\rvert$는 세 변수 상관행렬의 행렬식, $\bar r=(r_{12}+r_{13})/2$다.
