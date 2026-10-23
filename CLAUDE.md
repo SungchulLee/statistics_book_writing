@@ -283,6 +283,8 @@ grep -rnE '^#{1,6} .*\$' docs --include='*.md'
 grep -rnE '^#{1,4} .*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)' docs --include='*.md'
 # 그림 대체텍스트의 ASCII 그리스 문자 (alt 속성은 수식이 될 수 없다)
 grep -rnoE '!\[[^]]*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)[^]]*\]' docs --include='*.md'
+# 그림 대체텍스트 안의 $수식$ — 위 검사가 못 보는 꼴이다. 0 이어야 한다
+grep -rnoE '!\[[^]]*\$[^]]*\]' docs --include='*.md'
 # nav 제목과 쪽의 H1 이 어긋나는 곳. 160 곳이 나오지만 거의 다 의도된 것이다
 # (nav 가 'Bernoulli(p)'·'(코드)'·'(재론)' 처럼 구별을 붙인다). 실질이 다른
 # 것만 고를 것 — ASCII 그리스 문자가 한쪽에만 있는 경우가 전형이다
