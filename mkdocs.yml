@@ -195,7 +195,6 @@ nav:
                 - D̄의 표집분포 (대응 설계): ch05/applications/dbar_paired.md
             - 5.10 두 표본분산의 비 S₁²/S₂²:
                 - 두 표본분산의 비: ch05/applications/var_ratio.md
-                - S₁²/S₂²의 표집분포 (정규모집단): ch05/applications/var_ratio_normal.md
                 - S₁²/S₂²의 표집분포 (비정규 모집단): ch05/applications/var_ratio_nonnormal.md
 
             - 5.11 추정량의 품질:
@@ -516,7 +515,6 @@ nav:
                 - t 검정과 분산분석에서의 정규성: ch14/applications/t_tests_anova.md
                 - 회귀에서의 정규성 (잔차 진단): ch14/applications/regression_residuals.md
                 - 금융 수익률의 정규성: ch14/applications/financial_returns.md
-                - 응용 개관: ch14/applications/applications.md
 
         - 15 분산 검정:
             - 장 개요: ch15/index.md
