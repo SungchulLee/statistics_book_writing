@@ -85,13 +85,31 @@ $$
 
     실대칭이라는 가정도 결론에 실제로 필요하다. 복소행렬에서는 대칭($\mathbf{A} = \mathbf{A}^\top$)이 아니라 **에르미트**($\mathbf{A} = \overline{\mathbf{A}}^\top = \mathbf{A}^*$)가 옳은 조건이다. 복소대칭행렬 $\mathbf{A} = \begin{pmatrix} 1 & i \\ i & -1 \end{pmatrix}$은 $\mathbf{A}^2 = \mathbf{0}$이므로 고윳값이 $0$뿐이고 $\mathbf{A} \ne \mathbf{0}$이라 대각화조차 되지 않는다. 반면 에르미트행렬은 언제나 실수 고윳값과 유니터리 고유기저($\mathbf{A} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{U}^*$, $\mathbf{U}^*\mathbf{U} = \mathbf{I}$)를 갖는다. 위 증명의 (1)에서 이미 켤레를 썼다는 점이 그 힌트다. 이 책에서 다루는 공분산행렬·그람 행렬·사영행렬은 모두 실행렬이므로 실대칭판으로 충분하다.
 
+### 예
+
+$$
+\boldsymbol{\Sigma} = \begin{pmatrix} 5 & 2 \\ 2 & 2 \end{pmatrix}
+$$
+
+특성다항식: $(5 - \lambda)(2 - \lambda) - 4 = \lambda^2 - 7\lambda + 6 = (\lambda - 6)(\lambda - 1)$이므로 $\lambda_1 = 6$, $\lambda_2 = 1$이다.
+
+정규화된 고유벡터: $\mathbf{q}_1 = (2, 1)^\top / \sqrt{5}$, $\mathbf{q}_2 = (-1, 2)^\top / \sqrt{5}$.
+
+스펙트럼 분해:
+
+$$
+\boldsymbol{\Sigma} = \frac{1}{5}\begin{pmatrix} 2 & -1 \\ 1 & 2 \end{pmatrix}\begin{pmatrix} 6 & 0 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} 2 & 1 \\ -1 & 2 \end{pmatrix}
+$$
+
+검산: $\operatorname{tr}(\boldsymbol{\Sigma}) = 7 = 6 + 1$이고 $\det(\boldsymbol{\Sigma}) = 6 = 6 \cdot 1$이다. 총분산은 7이고, 그중 6단위가 첫 번째 주축을 따라, 1단위가 두 번째 주축을 따라 몰려 있다.
+
 ### 그림으로 보기
 
 스펙트럼 정리가 약속하는 것은 결국 직각 하나다. 대칭행렬과, 성분 하나만 바꾼 비대칭행렬을 나란히 놓으면 그 직각이 어디서 오는지가 보인다.
 
 ![대칭행렬의 고유벡터는 직교한다](./img/symmetric_eigen_orthogonal.png)
 
-두 판 모두 굵은 화살표가 단위 고유벡터이고 점선 화살표가 거기에 행렬을 곱한 결과다. 두 화살표가 같은 직선 위에 놓인다는 것이 고유벡터의 정의이며, 길이의 비가 고윳값이다. 왼쪽 $\mathbf{A} = \begin{pmatrix} 5 & 2 \\ 2 & 2 \end{pmatrix}$는 $\lambda_1 = 6$ 방향으로 여섯 배 늘이고 $\lambda_2 = 1$ 방향은 길이를 그대로 둔다. 그래서 두 번째 점선 화살표는 굵은 화살표와 정확히 포개진다.
+두 판 모두 굵은 화살표가 단위 고유벡터이고 점선 화살표가 거기에 행렬을 곱한 결과다. 두 화살표가 같은 직선 위에 놓인다는 것이 고유벡터의 정의이며, 길이의 비가 고윳값이다. 왼쪽은 위 예의 그 행렬이다($\mathbf{A} = \boldsymbol{\Sigma}$). $\lambda_1 = 6$ 방향으로 여섯 배 늘이고 $\lambda_2 = 1$ 방향은 길이를 그대로 둔다. 그래서 두 번째 점선 화살표는 굵은 화살표와 정확히 포개진다.
 
 결정적인 차이는 두 방향이 이루는 각이다. 왼쪽의 고유벡터는 $\mathbf{q}_1 = (2, 1)^\top/\sqrt{5}$, $\mathbf{q}_2 = (-1, 2)^\top/\sqrt{5}$이고 내적이 정확히 $0$, 사잇각이 $90.0^\circ$다. 오른쪽 $\mathbf{B} = \begin{pmatrix} 5 & 2 \\ 0 & 2 \end{pmatrix}$는 왼쪽 아래 성분 하나만 $2$에서 $0$으로 바꾼 것인데, 고윳값은 여전히 실수($5$와 $2$)지만 고유벡터가 $(1, 0)^\top$와 $(2, -3)^\top/\sqrt{13}$이 되어 내적이 $0.5547$, 사잇각이 $56.3^\circ$로 벌어진다. **대칭성이 깨지는 순간 직각이 깨진다.**
 
@@ -202,27 +220,7 @@ $$
 
 ---
 
-## 4. 예
-
-$$
-\boldsymbol{\Sigma} = \begin{pmatrix} 5 & 2 \\ 2 & 2 \end{pmatrix}
-$$
-
-특성다항식: $(5 - \lambda)(2 - \lambda) - 4 = \lambda^2 - 7\lambda + 6 = (\lambda - 6)(\lambda - 1)$이므로 $\lambda_1 = 6$, $\lambda_2 = 1$이다.
-
-정규화된 고유벡터: $\mathbf{q}_1 = (2, 1)^\top / \sqrt{5}$, $\mathbf{q}_2 = (-1, 2)^\top / \sqrt{5}$.
-
-스펙트럼 분해:
-
-$$
-\boldsymbol{\Sigma} = \frac{1}{5}\begin{pmatrix} 2 & -1 \\ 1 & 2 \end{pmatrix}\begin{pmatrix} 6 & 0 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} 2 & 1 \\ -1 & 2 \end{pmatrix}
-$$
-
-검산: $\operatorname{tr}(\boldsymbol{\Sigma}) = 7 = 6 + 1$이고 $\det(\boldsymbol{\Sigma}) = 6 = 6 \cdot 1$이다. 총분산은 7이고, 그중 6단위가 첫 번째 주축을 따라, 1단위가 두 번째 주축을 따라 몰려 있다.
-
----
-
-## 5. 통계와의 연결
+## 4. 통계와의 연결
 
 ### 공분산행렬
 

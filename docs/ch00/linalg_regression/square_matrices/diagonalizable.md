@@ -159,6 +159,40 @@ $\mathbf{A} \in \mathbb{R}^{n \times n}$이 (실수 위에서) 대각화 가능�
 
     반대로, 고윳값이 겹치면 대각화가 **깨질 수 있을 뿐** 반드시 깨지는 것도 아니다. 실제 판정은 언제나 정리 2 의 2번, 곧 겹친 고윳값에서 기하적 중복도가 대수적 중복도를 따라오는지를 보는 것이다.
 
+### 예 — 대각화 가능한 행렬
+
+다음을 생각하자.
+
+$$
+\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 0 & 3 \end{pmatrix}
+$$
+
+특성다항식은 $\det(\mathbf{A} - \lambda\mathbf{I}) = (2 - \lambda)(3 - \lambda) = 0$이므로 서로 다른 고윳값 $\lambda_1 = 2$와 $\lambda_2 = 3$을 얻는다.
+
+$\lambda_1 = 2$에 대해: $(\mathbf{A} - 2\mathbf{I})\mathbf{v} = \mathbf{0}$에서 $\mathbf{v}_1 = (1, 0)^\top$.
+
+$\lambda_2 = 3$에 대해: $(\mathbf{A} - 3\mathbf{I})\mathbf{v} = \mathbf{0}$에서 $\mathbf{v}_2 = (1, 1)^\top$.
+
+$\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$, $\mathbf{P}^{-1} = \begin{pmatrix} 1 & -1 \\ 0 & 1 \end{pmatrix}$로 두면
+
+$$
+\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 2 & 0 \\ 0 & 3 \end{pmatrix} = \boldsymbol{\Lambda}
+$$
+
+임을 확인할 수 있다.
+
+### 예 — 대각화 불가능한 행렬
+
+행렬
+
+$$
+\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}
+$$
+
+은 대수적 중복도가 2인 중복 고윳값 $\lambda = 2$를 갖지만, 고유공간 $\ker(\mathbf{A} - 2\mathbf{I}) = \operatorname{span}\{(1, 0)^\top\}$의 차원은 1이다(기하적 중복도 1). 정리 2 의 2번이 깨지므로 $\mathbf{A}$는 대각화 가능하지 않다.
+
+앞의 회전행렬과는 실패의 종류가 다르다는 점을 짚어 두자. 회전행렬은 고윳값이 실수가 아니어서 실패했을 뿐 $\mathbb{C}$ 위에서는 대각화되지만, 이 행렬은 고윳값이 실수인데도 고유벡터가 모자라 **복소수를 허용해도 대각화되지 않는다.** 중복도 계산이 $\mathbb{C}$ 위에서도 그대로여서 $m_g = 1 < 2 = m_a$이기 때문이다. 이런 행렬은 대각형까지는 못 가고 조르당 표준형이라 부르는 준대각형까지만 갈 수 있는데, 다행히 통계에서 다루는 행렬은 거의 모두 대칭이고 대칭행렬은 언제나 대각화 가능하다.
+
 ---
 
 ## 2. 거듭제곱과 지수
@@ -183,35 +217,11 @@ $$
 
 이다.
 
----
-
-## 3. 예 — 대각화 가능한 행렬
-
-다음을 생각하자.
-
-$$
-\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 0 & 3 \end{pmatrix}
-$$
-
-특성다항식은 $\det(\mathbf{A} - \lambda\mathbf{I}) = (2 - \lambda)(3 - \lambda) = 0$이므로 서로 다른 고윳값 $\lambda_1 = 2$와 $\lambda_2 = 3$을 얻는다.
-
-$\lambda_1 = 2$에 대해: $(\mathbf{A} - 2\mathbf{I})\mathbf{v} = \mathbf{0}$에서 $\mathbf{v}_1 = (1, 0)^\top$.
-
-$\lambda_2 = 3$에 대해: $(\mathbf{A} - 3\mathbf{I})\mathbf{v} = \mathbf{0}$에서 $\mathbf{v}_2 = (1, 1)^\top$.
-
-$\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$, $\mathbf{P}^{-1} = \begin{pmatrix} 1 & -1 \\ 0 & 1 \end{pmatrix}$로 두면
-
-$$
-\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 2 & 0 \\ 0 & 3 \end{pmatrix} = \boldsymbol{\Lambda}
-$$
-
-임을 확인할 수 있다.
-
-이 분해를 쓰면 $\mathbf{A}^{10} = \mathbf{P}\operatorname{diag}(2^{10}, 3^{10})\mathbf{P}^{-1} = \mathbf{P}\operatorname{diag}(1024, 59049)\mathbf{P}^{-1}$이다.
+$\S 1$ 의 첫 예에서 얻은 분해를 쓰면 $\mathbf{A}^{10} = \mathbf{P}\operatorname{diag}(2^{10}, 3^{10})\mathbf{P}^{-1} = \mathbf{P}\operatorname{diag}(1024, 59049)\mathbf{P}^{-1}$이다.
 
 ### 그림으로 보기
 
-대각화란 행렬을 고쳐 쓰는 일이 아니라 **좌표를 갈아 끼우는 일**이다. 위의 $\mathbf{A}$가 하는 일을 두 좌표에서 나란히 보면 그 뜻이 분명해진다.
+대각화란 행렬을 고쳐 쓰는 일이 아니라 **좌표를 갈아 끼우는 일**이다. $\S 1$ 의 첫 예에 나온 $\mathbf{A}$가 하는 일을 두 좌표에서 나란히 보면 그 뜻이 분명해진다.
 
 ![대각화는 좌표를 바꾸는 일이다](./img/diagonalize_change_of_coords.png)
 
@@ -223,21 +233,7 @@ $$
 
 ---
 
-## 4. 예 — 대각화 불가능한 행렬
-
-행렬
-
-$$
-\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}
-$$
-
-은 대수적 중복도가 2인 중복 고윳값 $\lambda = 2$를 갖지만, 고유공간 $\ker(\mathbf{A} - 2\mathbf{I}) = \operatorname{span}\{(1, 0)^\top\}$의 차원은 1이다(기하적 중복도 1). 정리 2 의 2번이 깨지므로 $\mathbf{A}$는 대각화 가능하지 않다.
-
-앞의 회전행렬과는 실패의 종류가 다르다는 점을 짚어 두자. 회전행렬은 고윳값이 실수가 아니어서 실패했을 뿐 $\mathbb{C}$ 위에서는 대각화되지만, 이 행렬은 고윳값이 실수인데도 고유벡터가 모자라 **복소수를 허용해도 대각화되지 않는다.** 중복도 계산이 $\mathbb{C}$ 위에서도 그대로여서 $m_g = 1 < 2 = m_a$이기 때문이다. 이런 행렬은 대각형까지는 못 가고 조르당 표준형이라 부르는 준대각형까지만 갈 수 있는데, 다행히 통계에서 다루는 행렬은 거의 모두 대칭이고 대칭행렬은 언제나 대각화 가능하다.
-
----
-
-## 5. 통계와의 연결
+## 3. 통계와의 연결
 
 대각화는 여러 핵심 통계 방법을 떠받치는 계산 엔진이다.
 

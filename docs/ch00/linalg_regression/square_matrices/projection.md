@@ -2,7 +2,7 @@
 
 ## 개요
 
-사영은 $\mathbb{R}^n$의 모든 벡터를 여집합 부분공간 $\mathcal{W}$ 방향을 따라 부분공간 $\mathcal{V}$ 위로 "눌러 붙인다". 대수적으로 사영은 멱등인 선형변환이다. 두 번 적용해도 한 번 적용한 것과 같은 결과가 나온다. 여집합 부분공간이 $\mathcal{V}$의 직교여공간일 때 그 사영을 **직교사영**이라 하며 다음 절에서 다룬다. 이 절에서는 일반적인(빗각) 경우를 다루는데, 직교성 제약을 붙이기 전에 사영을 이해하는 개념적 틀을 제공한다.
+사영은 $\mathbb{R}^n$의 모든 벡터를 여집합 부분공간 $\mathcal{W}$ 방향을 따라 부분공간 $\mathcal{V}$ 위로 "눌러 붙인다". 대수적으로 사영은 멱등인 선형변환이다. 두 번 적용해도 한 번 적용한 것과 같은 결과가 나온다. 여집합 부분공간이 $\mathcal{V}$의 직교여공간일 때 그 사영을 **직교사영**이라 하며 다음 쪽에서 다룬다. 이 쪽에서는 일반적인(빗각) 경우를 다루는데, 직교성 제약을 붙이기 전에 사영을 이해하는 개념적 틀을 제공한다.
 
 <div class="defn" markdown>
 
@@ -52,94 +52,7 @@ $$
 
 ---
 
-## 2. 여집합 사영
-
-$\mathbf{P}$가 멱등이므로 여집합 행렬 $\mathbf{I} - \mathbf{P}$도 멱등이다.
-
-$$
-(\mathbf{I} - \mathbf{P})^2 = \mathbf{I} - 2\mathbf{P} + \mathbf{P}^2 = \mathbf{I} - \mathbf{P}
-$$
-
-여집합 사영 $\mathbf{I} - \mathbf{P}$는 $\operatorname{col}(\mathbf{P})$ 방향을 따라 $\ker(\mathbf{P})$ 위로 사영한다. 두 사영이 함께 임의의 벡터를 서로 여집합인 두 부분공간의 성분으로 분해한다.
-
-**계수 관계:**
-
-$$
-\operatorname{rank}(\mathbf{P}) + \operatorname{rank}(\mathbf{I} - \mathbf{P}) = n
-$$
-
----
-
-## 3. 고윳값과 대각합
-
-모든 사영이 멱등이므로 그 고윳값은 $\{0, 1\}$로 제한되고
-
-$$
-\operatorname{tr}(\mathbf{P}) = \operatorname{rank}(\mathbf{P}) = \dim(\operatorname{col}(\mathbf{P}))
-$$
-
-이다. 대각합은 $\mathbf{P}$가 사영하는 부분공간의 차원을 센다.
-
----
-
-## 4. 빗각 사영 대 직교사영
-
-사영 $\mathbf{P}$가 $\mathbf{P} = \mathbf{P}^\top$이면(사영이 대칭이면) **직교사영**이라 하고, 그렇지 않으면 **빗각 사영**이라 한다.
-
-| 성질 | 직교사영 | 빗각 사영 |
-|---|---|---|
-| $\mathbf{P}^2 = \mathbf{P}$ | 예 | 예 |
-| $\mathbf{P}^\top = \mathbf{P}$ | 예 | 아니오 |
-| $\ker(\mathbf{P}) \perp \operatorname{col}(\mathbf{P})$ | 예 | 아니오 |
-| $\lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert$을 최소화 | 예 | (일반적으로) 아니오 |
-
-통계에서 자연스럽게 등장하는 사영은 거의 모두 직교사영이다(모자 행렬, 잔차생성행렬, 중심화행렬). 빗각 사영은 도구변수 추정이나 일반화 최소제곱에서 나타날 수 있다.
-
-![같은 직선 위로의 빗각 사영과 직교사영을 나란히 놓은 그림. 두 경우 모두 목표 부분공간은 x축이고 사영되는 벡터도 (3,2)로 같지만, 눌러 없애는 방향이 달라 상이 (1,0)과 (3,0)으로 갈린다](./img/oblique_vs_orthogonal.png)
-
-두 그림에서 **목표 부분공간도 같고 사영되는 벡터도 같다.** 둘 다 $\mathcal{V} = \operatorname{span}\{(1,0)^\top\}$ 위로 $\mathbf{x} = (3,2)^\top$를 보낸다. 그런데 왼쪽의 상은 $(1,0)^\top$, 오른쪽의 상은 $(3,0)^\top$다. 달라진 것은 하나뿐이다. 눌러 없애는 방향 $\mathcal{W}$가 왼쪽은 $\operatorname{span}\{(1,1)^\top\}$, 오른쪽은 $\mathcal{V}^\perp = \operatorname{span}\{(0,1)^\top\}$다.
-
-옅은 점선 다발은 영공간 $\mathcal{W}$를 평행이동한 직선들이다. 한 직선 위의 점들은 모두 같은 곳으로 간다. 사영이란 결국 이 다발을 따라 $\mathcal{V}$로 미끄러뜨리는 일이고, 다발의 기울기를 바꾸면 도착지가 바뀐다. 이것이 정리 2가 말하는 바다. 목표 부분공간 $\mathcal{V}$만으로는 사영이 정해지지 않으며, $\mathcal{W}$까지 지정해야 비로소 하나로 정해진다.
-
-두 상까지의 거리를 재면 빗각 쪽이 $\lVert(2,2)^\top\rVert = 2.828$, 직교 쪽이 $\lVert(0,2)^\top\rVert = 2.000$이다. 같은 직선 위의 점인데도 직교사영이 더 가깝다. 오른쪽에만 직각 표시가 붙어 있는 것이 그 이유다. 잔차가 $\mathcal{V}$에 수직일 때에만 그 발이 최근접점이 되며, 이 사실이 다음 절의 주제이자 최소제곱이 직교사영인 이유다.
-
----
-
-## 5. 예 — 빗각 사영
-
-$\mathbb{R}^2$에서 $\mathcal{W} = \operatorname{span}\{(1, 1)^\top\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^\top\}$ 위로 사영하는 경우를 생각하자.
-
-임의의 벡터 $\mathbf{x} = (x_1, x_2)^\top$는 $\alpha = x_1 - x_2$, $\beta = x_2$에 대해 $\mathbf{x} = \alpha(1, 0)^\top + \beta(1, 1)^\top$로 분해된다. $\mathcal{W}$ 방향을 따라 $\mathcal{V}$ 위로 사영하면 $\mathcal{V}$ 성분만 남는다.
-
-$$
-\mathbf{P}\mathbf{x} = \alpha\begin{pmatrix}1 \\ 0\end{pmatrix} = \begin{pmatrix}x_1 - x_2 \\ 0\end{pmatrix}
-$$
-
-행렬 형태로는
-
-$$
-\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}
-$$
-
-이다.
-
-**확인:** $\mathbf{P}^2 = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \mathbf{P}$. 이 행렬은 멱등이지만 대칭이 아니므로($\mathbf{P} \neq \mathbf{P}^\top$) 빗각 사영이다.
-
----
-
-## 6. 예 — 1차원에서의 직교사영
-
-$\mathcal{V}^\perp = \operatorname{span}\{(0, 1)^\top\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^\top\}$ 위로 사영하는 행렬은
-
-$$
-\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}
-$$
-
-이다. 이것은 멱등이면서 대칭이므로 직교사영이다. 두 번째 성분을 떨어뜨려 $(x_1, x_2)^\top$를 $(x_1, 0)^\top$로 보낸다.
-
----
-
-## 7. 유일성
+## 2. 유일성
 
 <div class="thmbox" markdown>
 
@@ -176,7 +89,92 @@ $$
 
 ---
 
-## 8. 통계와의 연결
+## 3. 여집합 사영
+
+$\mathbf{P}$가 멱등이므로 여집합 행렬 $\mathbf{I} - \mathbf{P}$도 멱등이다.
+
+$$
+(\mathbf{I} - \mathbf{P})^2 = \mathbf{I} - 2\mathbf{P} + \mathbf{P}^2 = \mathbf{I} - \mathbf{P}
+$$
+
+여집합 사영 $\mathbf{I} - \mathbf{P}$는 $\operatorname{col}(\mathbf{P})$ 방향을 따라 $\ker(\mathbf{P})$ 위로 사영한다. 두 사영이 함께 임의의 벡터를 서로 여집합인 두 부분공간의 성분으로 분해한다.
+
+**계수 관계:**
+
+$$
+\operatorname{rank}(\mathbf{P}) + \operatorname{rank}(\mathbf{I} - \mathbf{P}) = n
+$$
+
+---
+
+## 4. 고윳값과 대각합
+
+모든 사영이 멱등이므로 그 고윳값은 $\{0, 1\}$로 제한되고
+
+$$
+\operatorname{tr}(\mathbf{P}) = \operatorname{rank}(\mathbf{P}) = \dim(\operatorname{col}(\mathbf{P}))
+$$
+
+이다. 대각합은 $\mathbf{P}$가 사영하는 부분공간의 차원을 센다.
+
+---
+
+## 5. 빗각 사영 대 직교사영
+
+사영 $\mathbf{P}$가 $\mathbf{P} = \mathbf{P}^\top$이면(사영이 대칭이면) **직교사영**이라 하고, 그렇지 않으면 **빗각 사영**이라 한다.
+
+| 성질 | 직교사영 | 빗각 사영 |
+|---|---|---|
+| $\mathbf{P}^2 = \mathbf{P}$ | 예 | 예 |
+| $\mathbf{P}^\top = \mathbf{P}$ | 예 | 아니오 |
+| $\ker(\mathbf{P}) \perp \operatorname{col}(\mathbf{P})$ | 예 | 아니오 |
+| $\lVert\mathbf{x} - \mathbf{P}\mathbf{x}\rVert$을 최소화 | 예 | (일반적으로) 아니오 |
+
+통계에서 자연스럽게 등장하는 사영은 거의 모두 직교사영이다(모자 행렬, 잔차생성행렬, 중심화행렬). 빗각 사영은 도구변수 추정이나 일반화 최소제곱에서 나타날 수 있다.
+
+![같은 직선 위로의 빗각 사영과 직교사영을 나란히 놓은 그림. 두 경우 모두 목표 부분공간은 x축이고 사영되는 벡터도 (3,2)로 같지만, 눌러 없애는 방향이 달라 상이 (1,0)과 (3,0)으로 갈린다](./img/oblique_vs_orthogonal.png)
+
+두 그림에서 **목표 부분공간도 같고 사영되는 벡터도 같다.** 둘 다 $\mathcal{V} = \operatorname{span}\{(1,0)^\top\}$ 위로 $\mathbf{x} = (3,2)^\top$를 보낸다. 그런데 왼쪽의 상은 $(1,0)^\top$, 오른쪽의 상은 $(3,0)^\top$다. 달라진 것은 하나뿐이다. 눌러 없애는 방향 $\mathcal{W}$가 왼쪽은 $\operatorname{span}\{(1,1)^\top\}$, 오른쪽은 $\mathcal{V}^\perp = \operatorname{span}\{(0,1)^\top\}$다.
+
+옅은 점선 다발은 영공간 $\mathcal{W}$를 평행이동한 직선들이다. 한 직선 위의 점들은 모두 같은 곳으로 간다. 사영이란 결국 이 다발을 따라 $\mathcal{V}$로 미끄러뜨리는 일이고, 다발의 기울기를 바꾸면 도착지가 바뀐다. 이것이 정리 2가 말하는 바다. 목표 부분공간 $\mathcal{V}$만으로는 사영이 정해지지 않으며, $\mathcal{W}$까지 지정해야 비로소 하나로 정해진다.
+
+두 상까지의 거리를 재면 빗각 쪽이 $\lVert(2,2)^\top\rVert = 2.828$, 직교 쪽이 $\lVert(0,2)^\top\rVert = 2.000$이다. 같은 직선 위의 점인데도 직교사영이 더 가깝다. 오른쪽에만 직각 표시가 붙어 있는 것이 그 이유다.
+
+### 예 — 빗각 사영
+
+위 그림의 **왼쪽 판**이다. $\mathbb{R}^2$에서 $\mathcal{W} = \operatorname{span}\{(1, 1)^\top\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^\top\}$ 위로 사영하는 경우를 생각하자.
+
+임의의 벡터 $\mathbf{x} = (x_1, x_2)^\top$는 $\alpha = x_1 - x_2$, $\beta = x_2$에 대해 $\mathbf{x} = \alpha(1, 0)^\top + \beta(1, 1)^\top$로 분해된다. $\mathcal{W}$ 방향을 따라 $\mathcal{V}$ 위로 사영하면 $\mathcal{V}$ 성분만 남는다.
+
+$$
+\mathbf{P}\mathbf{x} = \alpha\begin{pmatrix}1 \\ 0\end{pmatrix} = \begin{pmatrix}x_1 - x_2 \\ 0\end{pmatrix}
+$$
+
+행렬 형태로는
+
+$$
+\mathbf{P} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}
+$$
+
+이다.
+
+**확인:** $\mathbf{P}^2 = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & -1 \\ 0 & 0 \end{pmatrix} = \mathbf{P}$. 이 행렬은 멱등이지만 대칭이 아니므로($\mathbf{P} \neq \mathbf{P}^\top$) 빗각 사영이다.
+
+### 예 — 1차원에서의 직교사영
+
+**오른쪽 판**은 이것이다. $\mathcal{V}^\perp = \operatorname{span}\{(0, 1)^\top\}$ 방향을 따라 $\mathcal{V} = \operatorname{span}\{(1, 0)^\top\}$ 위로 사영하는 행렬은
+
+$$
+\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}
+$$
+
+이다. 이것은 멱등이면서 대칭이므로 직교사영이다. 두 번째 성분을 떨어뜨려 $(x_1, x_2)^\top$를 $(x_1, 0)^\top$로 보낸다.
+
+잔차가 $\mathcal{V}$에 수직일 때에만 그 발이 최근접점이 되며, 이 사실이 다음 쪽의 주제이자 최소제곱이 직교사영인 이유다.
+
+---
+
+## 6. 통계와의 연결
 
 ### 적합값과 잔차
 

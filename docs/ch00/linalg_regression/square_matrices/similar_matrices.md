@@ -107,6 +107,44 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$이면 $\mathbf{A}$와 $\mathb
 !!! warning "중복도를 세는 규약"
     2번에서 고윳값을 $\mathbb{C}$ 안에서 센다는 점이 중요하다. 실수 성분의 행렬도 실수 고윳값을 갖지 않을 수 있다(예: 회전행렬 $\begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$의 고윳값은 $\pm i$다). 3번과 4번이 고윳값의 합·곱으로 설명되는 것도 복소 고윳값을 중복도까지 모두 셀 때뿐이다. 자세한 것은 다음다음 쪽 "대각합과 고윳값"에서 다룬다.
 
+### 예
+
+다음 행렬을 생각하자.
+
+$$
+\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}
+$$
+
+$\det(\mathbf{A} - \lambda\mathbf{I}) = (4 - \lambda)(3 - \lambda) - 2 = \lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0$에서 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 얻는다.
+
+고유벡터: $\lambda_1 = 5$에 대해 $(\mathbf{A} - 5\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀면 $\mathbf{v}_1 = (1, 1)^\top$이고, $\lambda_2 = 2$에 대해 $(\mathbf{A} - 2\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀면 $\mathbf{v}_2 = (1, -2)^\top$이다.
+
+$\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 1 & -2 \end{pmatrix}$로 두면
+
+$$
+\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 5 & 0 \\ 0 & 2 \end{pmatrix} = \boldsymbol{\Lambda}
+$$
+
+이다. 대각행렬 $\boldsymbol{\Lambda}$는 $\mathbf{A}$와 닮았고, 두 행렬이 $\operatorname{tr} = 7$, $\det = 10$, 고윳값 $\{5, 2\}$를 공유함을 확인할 수 있다.
+
+#### 그림으로 보기
+
+닮음은 대각화만을 위한 장치가 아니다. 기저를 아무렇게나 바꿔도 닮은 행렬이 나온다. 같은 $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}$를 이번에는 대각이 아닌 다른 좌표에서 적어 보자.
+
+![같은 변환을 두 좌표로 적은 것](./img/similar_same_map_two_bases.png)
+
+두 판에 그려진 화살표는 완전히 같은 화살표다. 파란 화살표가 벡터 $\mathbf{x}$이고 주황 화살표가 그것을 변환한 $T\mathbf{x}$이며, 위치도 길이도 방향도 두 판에서 똑같다. 바뀐 것은 그것을 읽는 **자**, 곧 배경의 격자뿐이다.
+
+표준기저로 읽으면 $\mathbf{x} = (3,4)^\top$이고 $T\mathbf{x} = (16,18)^\top$이며, 이 대응을 적은 행렬이 $\mathbf{A}$다. 기저를 $\mathbf{b}_1 = (1,3)^\top$, $\mathbf{b}_2 = (2,1)^\top$로 바꾸면 같은 $\mathbf{x}$의 성분은 $(1,1)$이 되고 같은 $T\mathbf{x}$의 성분은 $(4,6)$이 된다. 이 대응을 적은 행렬은 $\mathbf{P} = \begin{pmatrix} 1 & 2 \\ 3 & 1 \end{pmatrix}$에 대해
+
+$$
+\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 3 & 1 \\ 2 & 4 \end{pmatrix}
+$$
+
+이다. $\mathbf{B}$는 $\mathbf{A}$와 다른 행렬이지만 $\operatorname{tr}(\mathbf{B}) = 7$, $\det(\mathbf{B}) = 10$, 고윳값 $\{5, 2\}$는 그대로다.
+
+**닮은 행렬이란 같은 일을 다른 말로 받아 적은 것이다.** 성분은 번역의 산물이라 기저를 고르는 사람 마음대로 바뀌지만, 대각합·행렬식·고윳값은 화살표 자체의 성질이므로 번역에 흔들리지 않는다. 다음 쪽의 대각화는 이 자유를 가장 유리하게 쓴 특수한 경우, 곧 $\mathbf{B}$가 대각이 되도록 기저를 고르는 경우일 뿐이다.
+
 ### 닮음의 완전 불변량
 
 정리 1 의 목록은 길지만 어느 것도 닮음류를 **완전히** 결정하지는 못한다. 완전 불변량은 하나 더 위에 있다.
@@ -155,47 +193,7 @@ $\mathbf{A}, \mathbf{B} \in \mathbb{C}^{n \times n}$에 대해, $\mathbf{A}$와 
 
 ---
 
-## 4. 예
-
-다음 행렬을 생각하자.
-
-$$
-\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}
-$$
-
-$\det(\mathbf{A} - \lambda\mathbf{I}) = (4 - \lambda)(3 - \lambda) - 2 = \lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0$에서 고윳값 $\lambda_1 = 5$, $\lambda_2 = 2$를 얻는다.
-
-고유벡터: $\lambda_1 = 5$에 대해 $(\mathbf{A} - 5\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀면 $\mathbf{v}_1 = (1, 1)^\top$이고, $\lambda_2 = 2$에 대해 $(\mathbf{A} - 2\mathbf{I})\mathbf{v} = \mathbf{0}$을 풀면 $\mathbf{v}_2 = (1, -2)^\top$이다.
-
-$\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 1 & -2 \end{pmatrix}$로 두면
-
-$$
-\mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 5 & 0 \\ 0 & 2 \end{pmatrix} = \boldsymbol{\Lambda}
-$$
-
-이다. 대각행렬 $\boldsymbol{\Lambda}$는 $\mathbf{A}$와 닮았고, 두 행렬이 $\operatorname{tr} = 7$, $\det = 10$, 고윳값 $\{5, 2\}$를 공유함을 확인할 수 있다.
-
-### 그림으로 보기
-
-닮음은 대각화만을 위한 장치가 아니다. 기저를 아무렇게나 바꿔도 닮은 행렬이 나온다. 같은 $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}$를 이번에는 대각이 아닌 다른 좌표에서 적어 보자.
-
-![같은 변환을 두 좌표로 적은 것](./img/similar_same_map_two_bases.png)
-
-두 판에 그려진 화살표는 완전히 같은 화살표다. 파란 화살표가 벡터 $\mathbf{x}$이고 주황 화살표가 그것을 변환한 $T\mathbf{x}$이며, 위치도 길이도 방향도 두 판에서 똑같다. 바뀐 것은 그것을 읽는 **자**, 곧 배경의 격자뿐이다.
-
-표준기저로 읽으면 $\mathbf{x} = (3,4)^\top$이고 $T\mathbf{x} = (16,18)^\top$이며, 이 대응을 적은 행렬이 $\mathbf{A}$다. 기저를 $\mathbf{b}_1 = (1,3)^\top$, $\mathbf{b}_2 = (2,1)^\top$로 바꾸면 같은 $\mathbf{x}$의 성분은 $(1,1)$이 되고 같은 $T\mathbf{x}$의 성분은 $(4,6)$이 된다. 이 대응을 적은 행렬은 $\mathbf{P} = \begin{pmatrix} 1 & 2 \\ 3 & 1 \end{pmatrix}$에 대해
-
-$$
-\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P} = \begin{pmatrix} 3 & 1 \\ 2 & 4 \end{pmatrix}
-$$
-
-이다. $\mathbf{B}$는 $\mathbf{A}$와 다른 행렬이지만 $\operatorname{tr}(\mathbf{B}) = 7$, $\det(\mathbf{B}) = 10$, 고윳값 $\{5, 2\}$는 그대로다.
-
-**닮은 행렬이란 같은 일을 다른 말로 받아 적은 것이다.** 성분은 번역의 산물이라 기저를 고르는 사람 마음대로 바뀌지만, 대각합·행렬식·고윳값은 화살표 자체의 성질이므로 번역에 흔들리지 않는다. 다음 절의 대각화는 이 자유를 가장 유리하게 쓴 특수한 경우, 곧 $\mathbf{B}$가 대각이 되도록 기저를 고르는 경우일 뿐이다.
-
----
-
-## 5. 통계와의 연결
+## 4. 통계와의 연결
 
 닮은 행렬은 다변량 통계 전반에 등장한다.
 
