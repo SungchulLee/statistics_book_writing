@@ -19,6 +19,17 @@ CLAUDE.md 는 다른 쪽의 항목을 가리킬 때 **쪽을 링크로 적으라
 `f_test_two_variances.md` 가 ch14 의 「연습문제 38」을 가리켰는데 그 쪽 연습문제는
 열까지다(같은 장의 다른 두 쪽은 같은 자리를 「연습문제 8」로 바르게 적고 있었다).
 
+## 참조도 두 가지 꼴이고, 둘 다 보아야 한다
+
+    [등분산 점검](x.md) 보기 5      항목 번호가 링크 **뒤**
+    [13.5절 보기 5](x.md)           항목 번호가 링크 **글자 안**
+
+처음에는 앞의 꼴만 보고 있었고, 그래서 **규약대로 적은 자리 열둘이 통째로 검사
+밖**에 있었다. 2026-10-23 에 다른 세션이 자기 도구에서 **같은 맹점을 반대
+방향으로** 틀린 것을 알려 와(규약대로 적힌 열다섯을 결함으로 셌다) 이쪽을 재어
+보고 찾았다. 한쪽은 거짓 양성, 한쪽은 거짓 음성이지만 원인은 하나다 — 「절」
+뒤만 보고 **대괄호가 그보다 앞에 올 수 있다는 것**을 놓친 것이다.
+
 ## 항목을 세는 두 가지 꼴을 모두 보아야 한다
 
 보기와 연습문제는 굵은 꼴(`**보기 1.**`)이고 정의와 정리는 **머리글 꼴**
@@ -42,7 +53,14 @@ import sys
 KINDS = r"(보기|연습문제|정의|정리)"
 BOLD = re.compile(r"\*\*" + KINDS + r"\s*(\d+)[.,]")
 HEAD = re.compile(r"^#{2,4}\s*" + KINDS + r"\s*(\d+)[.,]", re.M)
-REF = re.compile(r"\]\(([^)]+\.md)\)[^\n]{0,30}?" + KINDS + r"\s*(\d+)")
+# 항목 번호가 **링크 뒤**에 오는 꼴:  [등분산 점검](x.md) 보기 5
+AFTER = re.compile(r"\]\(([^)]+\.md)\)[^\n]{0,30}?" + KINDS + r"\s*(\d+)")
+# 항목 번호가 **링크 글자 안**에 든 꼴:  [13.5절 보기 5](x.md)
+# 이 꼴을 빠뜨리면 규약대로 적은 자리가 통째로 검사 밖에 남는다. 2026-10-23 에
+# 다른 세션이 자기 도구에서 같은 꼴을 **반대 방향으로** 틀렸고(규약대로 적힌
+# 열다섯을 결함으로 셌다), 그 이야기를 듣고 이쪽을 재어 보니 열둘이 검사되지
+# 않고 있었다. 한쪽은 거짓 양성, 한쪽은 거짓 음성인 **같은 맹점**이다.
+INSIDE = re.compile(r"\[[^\]]*?" + KINDS + r"\s*(\d+)[^\]]*\]\(([^)]+\.md)\)")
 
 
 def items(path):
@@ -60,7 +78,10 @@ def main(argv):
     cache, bad, checked = {}, [], 0
     for f in sorted(glob.glob(os.path.join(root, "**", "*.md"), recursive=True)):
         d = os.path.dirname(f)
-        for rel, kind, num in REF.findall(open(f, encoding="utf-8").read()):
+        text = open(f, encoding="utf-8").read()
+        found = [(rel, kind, num) for rel, kind, num in AFTER.findall(text)]
+        found += [(rel, kind, num) for kind, num, rel in INSIDE.findall(text)]
+        for rel, kind, num in found:
             tgt = os.path.normpath(os.path.join(d, rel.split("#")[0]))
             if not os.path.exists(tgt):
                 continue                      # 죽은 링크는 --strict 가 잡는다
