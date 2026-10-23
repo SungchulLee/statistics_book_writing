@@ -691,7 +691,7 @@ intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$�
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-집단이 여럿일 때 오차막대에는 [집단 비교](../../ch02/visualization/group_comparison_examples.md) 절 연습문제 $9$의 문제가 그대로 나타난다. **동시 신뢰구간**이 왜 필요한가?
+집단이 여럿일 때 오차막대에는 [상자그림](../../ch02/visualization/boxplots.md) 절 연습문제 $14$의 문제가 그대로 나타난다. **동시 신뢰구간**이 왜 필요한가?
 
 </div>
 
@@ -734,7 +734,7 @@ intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$�
 
     **집단이 늘수록 "적어도 하나가 참값을 벗어날 확률"이 급증한다.** $K = 20$이면 개별 $95\%$ 구간을 쓸 때 그 확률이 $0.6$을 넘는다. 본페로니 보정을 하면 $0.05$ 근처로 통제된다.
 
-    **이것이 그림에서 뜻하는 바.** 오차막대 $20$개가 그려진 그림에서 **하나쯤은 참값을 벗어나 있는 것이 정상**이다. 그런데 독자는 각 막대를 개별적으로 $95\%$ 신뢰한다고 읽으며, 특히 눈에 띄는 막대를 골라 해석한다. [집단 비교](../../ch02/visualization/group_comparison_examples.md) 절에서 본 승자의 저주가 오차막대 그림에서 재현된다.
+    **이것이 그림에서 뜻하는 바.** 오차막대 $20$개가 그려진 그림에서 **하나쯤은 참값을 벗어나 있는 것이 정상**이다. 그런데 독자는 각 막대를 개별적으로 $95\%$ 신뢰한다고 읽으며, 특히 눈에 띄는 막대를 골라 해석한다. [상자그림](../../ch02/visualization/boxplots.md) 절 연습문제 $14$에서 본 승자의 저주가 오차막대 그림에서 재현된다.
 
     **동시 구간의 종류.**
 
