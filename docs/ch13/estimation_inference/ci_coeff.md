@@ -1050,6 +1050,23 @@ $$
     다. **치우침이 $\nu^{-1}$ 로 줄어든다.**
 
     ```python
+    # 이 문제와 다음 문제가 쓰는 자료와 적합. 참 모형은 y = 1 + 2x + 3*잡음 이다.
+    def generate_data(n, sigma, seed=0):
+        np.random.seed(seed)
+        x = np.random.randn(n, 1)
+        y = 1 + 2 * x + sigma * np.random.randn(n, 1)
+        return x, y
+
+    def estimate_regression_line(x, y):
+        """beta_hat = r * s_y / s_x 로 기울기를 구한다. 최소제곱해와 같은 값이다."""
+        x_bar, y_bar = x.mean(), y.mean()
+        r = np.corrcoef(np.concatenate([x, y], axis=1), rowvar=False)[1, 0]
+        beta_hat = r * y.std(ddof=1) / x.std(ddof=1)
+        return beta_hat * (x - x_bar) + y_bar, beta_hat, y_bar, x_bar
+
+    x_a, y_a = generate_data(100, 3)
+    y_hat_a, beta_a, y_bar_a, x_bar_a = estimate_regression_line(x_a, y_a)
+
     def calculate_residual_variance(y, y_hat, n):
         """잔차분산 s^2 을 구한다.
 

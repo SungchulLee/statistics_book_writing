@@ -424,7 +424,6 @@ nav:
                 - 계수의 p값과 신뢰구간: ch13/testing_coefficients/pvalues_ci.md
                 - 유의성의 해석: ch13/testing_coefficients/significance.md
                 - OLS 회귀 출력 재현: ch13/testing_coefficients/ols_regression_output.md
-                - 계수 검정 보기: ch13/testing_coefficients/testing_coefficients.md
             - 13.4 교호작용과 다항식 확장:
                 - 교호작용 항: ch13/interaction_polynomial/interaction_terms.md
                 - 다항회귀: ch13/interaction_polynomial/polynomial_regression.md
