@@ -418,25 +418,14 @@ $\hat{\sigma}_{\text{MLE}}$은 $\sigma$에 대해 편향되어 있음에 유의�
 
 ## 7. 편향 보정 추정량
 
-$\sigma^2$의 불편추정량은:
+$\hat\sigma^2_{\text{MLE}}$ 은 $n$ 으로 나누므로 아래로 편향되어 있다.
 
-$$S^2 = \frac{n}{n-1}\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$$
+$$E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2, \qquad \text{Bias} = -\frac{\sigma^2}{n}$$
 
-비교:
-
-| 추정량 | 공식 | $E[\cdot]$ | 평균제곱오차 |
-|-----------|---------|------------|-----|
-| MLE | $\frac{1}{n}\sum(X_i - \bar{X})^2$ | $\frac{n-1}{n}\sigma^2$ | $\frac{2n-1}{n^2}\sigma^4$ |
-| Bessel | $\frac{1}{n-1}\sum(X_i - \bar{X})^2$ | $\sigma^2$ | $\frac{2}{n-1}\sigma^4$ |
-| 평균제곱오차 최적 | $\frac{1}{n+1}\sum(X_i - \bar{X})^2$ | $\frac{n-1}{n+1}\sigma^2$ | 최소 |
-
----
-
-평균의 MLE $\hat{\mu}$은 불편이지만 분산의 MLE $\hat{\sigma}^2_{\text{MLE}}$은 아래로 편향되어 있다:
-
-$$E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2$$
-
-편향은 $-\sigma^2/n$으로 $n \to \infty$일 때 사라진다(따라서 MLE는 점근적으로 불편이다).
+편향이 어디서 오는지(자유도 하나를 $\bar X$ 에 쓴다), 베셀 수정이 그것을 어떻게
+정확히 지우는지, 그리고 **불편이 최선은 아니라는 것**($c = n+1$ 이 MSE 를 최소로
+한다) 은 다음 절 [σ²에 대한 정규분포 최대가능도의 편향](mle_bias.md)이 끝까지
+따라간다. 여기서는 그 편향이 유한표본에서 실제로 얼마나 되는지만 본다.
 
 <div class="exbox" markdown>
 

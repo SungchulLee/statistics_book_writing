@@ -198,9 +198,54 @@ $$
 
     적률법 추정값은 $\text{Beta}(9.1, 11.1)$ 분포를 시사하며, 이는 단봉이고 (평균이 0.45로) 오른쪽으로 약간 치우쳐 있다.
 
+## 4. 지수분포와 균등분포 — 적률방정식이 가장 단순한 두 경우
+
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 지수분포. $E[X] = 1/\lambda$인 $X_1, \ldots, X_n \sim \text{Exp}(\lambda)$라 하자. 모수가 하나이므로 적률방정식도 하나면 된다.
+
+</div>
+
+??? success "풀이"
+    **적률방정식:**
+
+    $$\frac{1}{\lambda} = \bar{X}$$
+
+    **해:**
+
+    $$\hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}$$
+
+    이는 MLE와 일치한다.
+
 ---
 
-## 4. 독일 탱크 문제
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 균등분포. $X_1, \ldots, X_n \sim \text{Uniform}(a, b)$라 하자. 모수가 둘이므로 방정식도 둘이 필요하다.
+
+</div>
+
+??? success "풀이"
+    **모집단 적률:**
+
+    - $E[X] = (a + b)/2$
+    - $\text{Var}(X) = (b - a)^2/12$
+
+    **적률방정식:**
+
+    $$\frac{a + b}{2} = \bar{X}, \qquad \frac{(b-a)^2}{12} = m_2$$
+
+    **해:**
+
+    $$\hat{a}_{\text{MoM}} = \bar{X} - \sqrt{3 m_2}, \qquad \hat{b}_{\text{MoM}} = \bar{X} + \sqrt{3 m_2}$$
+
+    **참고:** 이 추정값들이 자료의 범위 안쪽으로 들어올 수 있다(즉 $\hat{a} > \min(X_i)$이거나 $\hat{b} < \max(X_i)$일 수 있다). 이는 논리적으로 모순이다. 적률법이 분포의 지지집합 제약을 언제나 지키지는 않는다는 알려진 한계이다. MLE($\hat{a} = \min(X_i)$, $\hat{b} = \max(X_i)$)에는 이런 문제가 없다.
+
+---
+
+---
+
+## 5. 독일 탱크 문제
 
 앞의 셋은 모두 연속분포의 모수를 맞추었다. 적률을 맞춘다는 발상이 **개수를 세는 문제**에도 그대로 듣는다는 것을 보여 주는 고전적인 예가 있다.
 
