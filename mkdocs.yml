@@ -550,7 +550,6 @@ nav:
                 - 분산분석 등분산성 사전검정: ch15/applications/anova_pretest.md
                 - 회귀에서의 분산 검정: ch15/applications/regression_variance.md
                 - 금융 변동성 비교: ch15/applications/financial_volatility.md
-                - 회귀와 분산분석에서의 응용: ch15/applications/applications.md
 
         - 16 비모수 검정:
             - 장 개요: ch16/index.md
