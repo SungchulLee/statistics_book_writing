@@ -438,11 +438,10 @@ nav:
             - 13.5 가정과 진단:
                 - 가정 개관 (LINE): ch13/assumptions/index.md
                 - 선형성 가정: ch13/assumptions/linearity_overview.md
-                - 독립성 가정: ch13/assumptions/independence_overview.md
                 - 등분산성 가정: ch13/assumptions/homoscedasticity_overview.md
                 - 정규성 가정: ch13/assumptions/normality_overview.md
                 - 선형성 확인: ch13/assumptions/checking_linearity.md
-                - 독립성 확인: ch13/assumptions/checking_independence.md
+                - 독립성: ch13/assumptions/checking_independence.md
                 - 등분산성 확인: ch13/assumptions/checking_homoscedasticity.md
                 - 정규성 확인: ch13/assumptions/checking_normality.md
                 - 가중최소제곱: ch13/assumptions/weighted_regression.md
@@ -530,7 +529,6 @@ nav:
                 - F 분포 F(d₁, d₂)와 자유도: ch15/f_test/f_distribution_details.md
                 - 비정규성에 대한 민감도: ch15/f_test/sensitivity.md
                 - F 검정의 정규성 민감도와 로버스트 대안: ch15/f_test/f_test_robust_alt.md
-                - F 검정 검정력 모의실험: ch15/f_test/f_test_power_sim.md
             - 15.4 Bartlett 검정:
                 - 분산의 동일성에 대한 Bartlett 검정: ch15/bartlett_test/bartlett_test.md
                 - 유도와 카이제곱 근사: ch15/bartlett_test/derivation.md
@@ -687,7 +685,6 @@ nav:
             - 19.4 정칙화 로지스틱 회귀:
                 - 로지스틱 회귀의 L1·L2 정칙화: ch19/regularized/regularization.md
                 - 벌점가능도를 통한 변수선택: ch19/regularized/feature_selection.md
-                - 정칙화 로지스틱 회귀 실습 (코드): ch19/regularized/regularized_logistic.md
 
         - 20 소프트맥스 회귀:
             - 장 개요: ch20/index.md
