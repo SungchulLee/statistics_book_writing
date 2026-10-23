@@ -694,7 +694,6 @@ nav:
                 - 거시·미시·가중 평균: ch20/case_studies/averaging.md
                 - MNIST 사례연구: ch20/case_studies/mnist.md
                 - 다범주 평가지표 구현 (코드): ch20/case_studies/multiclass_metrics.md
-                - MNIST 분류 (코드): ch20/case_studies/mnist_classification.md
             - 20.4 일대다와 일대일 전략:
                 - 일대다(OvR) 접근: ch20/strategies/ovr.md
                 - 일대일(OvO) 접근: ch20/strategies/ovo.md
