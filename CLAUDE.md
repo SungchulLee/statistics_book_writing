@@ -174,7 +174,10 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
 - **`\text{}` 안에서는 escape 가 깨진다** — MathJax 3 은 `\text{}` 안의
   `\%` `\_` `\&` `\#` `\~` `\^` 를 **역슬래시째 찍는다.** 살아남는 것은
   `\$` `\{` `\}` 셋뿐이다. 퍼센트는 수식 모드로 빼고(`95\%\ \text{신뢰구간}`),
-  밑줄은 역슬래시를 떼어 쓴다(`\text{petal_width}`). 다만 `\mathrm{}` 과
+  밑줄은 역슬래시를 떼어 쓴다(`\text{petal_width}`). **`\texttt` 도 똑같이 깨진다** —
+  MathJax 3 은 텍스트 모드 escape 를 **하나도** 구현하지 않으므로 `\text` 계열 전부가
+  그렇다. 2026-10-23 에 `\texttt{l1\_ratio}` 꼴로 열 곳이 있었고, 그때까지 이 줄이
+  명령 다섯만 적고 있어서 검사에 걸리지 않았다. 다만 `\mathrm{}` 과
   `\operatorname{}` 은 수식 모드라 `\_` 가 **맞다**(`\mathrm{Sex\_int}`).
   빌드는 통과하므로 눈으로만 잡힌다. 검사 명령은 아래 점검 목록에 있다
 - **다른 쪽의 항목을 가리킬 때는 쪽을 링크로 적는다** — 연습문제·보기·정의·정리의
@@ -228,7 +231,7 @@ grep -rnP '\d+\.\d+\s*절\s*(?!\[)[^가-힣\n]{0,3}연습문제 \d' docs --inclu
 # 한 쪽에 같은 상자 번호가 둘
 grep -rhoE '\*\*(그림으로 보는|AI로 보는) 통계학 [0-9]+\.' docs --include='*.md' | sort | uniq -c
 # \text{} 안에서 깨지는 escape (\$ \{ \} 만 살아남는다)
-grep -rnoP '\\(?:text|textbf|textrm|textit|mbox)\{[^{}]*\\[%_&#~^][^{}]*\}' docs --include='*.md'
+grep -rnoP '\\(?:text|textbf|textrm|textit|textsf|texttt|textnormal|textsc|mbox|hbox)\{[^{}]*\\[%_&#~^][^{}]*\}' docs --include='*.md'
 ```
 
 **절을 넘는 중복 검사** — `python3 tools/lint_cross_section_pairs.py [chNN] [--all]`.

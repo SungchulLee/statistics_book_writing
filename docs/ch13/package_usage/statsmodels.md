@@ -472,7 +472,7 @@ _확인한 곳 — `statsmodels` $0.14.2$ 의 `OLSResults.summary` 소스를 `in
     **(1) 세 관계식.** 보기 1 에서 유도한 것들을 꺼낸 배열로 다시 쓰면 된다.
 
     $$
-    \texttt{conf\_int()} = \texttt{params} \pm t_{0.975,\,n-p}\cdot\texttt{bse}
+    \texttt{conf_int()} = \texttt{params} \pm t_{0.975,\,n-p}\cdot\texttt{bse}
     $$
 
     $$
@@ -480,7 +480,7 @@ _확인한 곳 — `statsmodels` $0.14.2$ 의 `OLSResults.summary` 소스를 `in
     $$
 
     $$
-    \texttt{rsquared\_adj} = 1 - (1 - \texttt{rsquared})\frac{n-1}{n-p}
+    \texttt{rsquared_adj} = 1 - (1 - \texttt{rsquared})\frac{n-1}{n-p}
     $$
 
     둘째 식에서 $2$ 가 붙는 것은 **양측검정**이기 때문이다. `P>|t|` 라는 열 이름이 그것을 말한다.

@@ -1396,7 +1396,7 @@ $$
     ```
 
     **모수 대응.** `sklearn`이 최소화하는 것은
-    $\frac{1}{2n}\lVert y - Xw\rVert_2^2 + \texttt{alpha}\cdot\texttt{l1\_ratio}\,\lVert w\rVert_1 + \frac{\texttt{alpha}(1-\texttt{l1\_ratio})}{2}\lVert w\rVert_2^2$
+    $\frac{1}{2n}\lVert y - Xw\rVert_2^2 + \texttt{alpha}\cdot\texttt{l1_ratio}\,\lVert w\rVert_1 + \frac{\texttt{alpha}(1-\texttt{l1_ratio})}{2}\lVert w\rVert_2^2$
     이고 절 $2$ 의 목적함수는
     $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda\alpha\lVert\beta\rVert_1 + \frac{\lambda(1-\alpha)}{2}\lVert\beta\rVert_2^2$
     이므로 `alpha` $= \lambda$, `l1_ratio` $= \alpha$로 **항마다 똑같다.** 그래서 변환 없이 바로 비교할 수 있다. (교과서에서 흔히 쓰는 $\lVert y-X\beta\rVert_2^2 + \tilde{\lambda}\lVert\beta\rVert_1$ 꼴과 맞추려면 $\tilde{\lambda} = n\lambda\alpha$로 고쳐야 한다. 두 규약을 섞으면 수가 전부 틀어진다.)

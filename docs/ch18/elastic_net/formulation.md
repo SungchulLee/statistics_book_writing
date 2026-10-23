@@ -129,13 +129,13 @@ scikit-learn의 `alpha`와 `l1_ratio`가 이 페이지의 $\lambda$, $\alpha$와
 
     $$
     \frac{1}{2n}\|\mathbf{y}-\mathbf{X}\boldsymbol\beta\|^2
-    + \texttt{alpha}\cdot\texttt{l1\_ratio}\,\|\boldsymbol\beta\|_1
-    + \frac{\texttt{alpha}(1-\texttt{l1\_ratio})}{2}\|\boldsymbol\beta\|_2^2
+    + \texttt{alpha}\cdot\texttt{l1_ratio}\,\|\boldsymbol\beta\|_1
+    + \frac{\texttt{alpha}(1-\texttt{l1_ratio})}{2}\|\boldsymbol\beta\|_2^2
     $$
 
-    이므로 대응은 $\texttt{alpha} = \lambda$, $\texttt{l1\_ratio} = \alpha$이다. **이름이 뒤바뀌어 있으므로 주의해야 한다.**
+    이므로 대응은 $\texttt{alpha} = \lambda$, $\texttt{l1_ratio} = \alpha$이다. **이름이 뒤바뀌어 있으므로 주의해야 한다.**
 
-    한편 `Ridge`의 목적함수는 $\|\mathbf{y}-\mathbf{X}\boldsymbol\beta\|^2 + \texttt{alpha}\|\boldsymbol\beta\|_2^2$로 $1/(2n)$ 배율이 없다. 따라서 `ElasticNet(alpha=a, l1_ratio=0)`에 대응하는 능형은 $\texttt{alpha}_{\text{ridge}} = n\,a\,(1-\texttt{l1\_ratio})$이다.
+    한편 `Ridge`의 목적함수는 $\|\mathbf{y}-\mathbf{X}\boldsymbol\beta\|^2 + \texttt{alpha}\|\boldsymbol\beta\|_2^2$로 $1/(2n)$ 배율이 없다. 따라서 `ElasticNet(alpha=a, l1_ratio=0)`에 대응하는 능형은 $\texttt{alpha}_{\text{ridge}} = n\,a\,(1-\texttt{l1_ratio})$이다.
 
     ```python
     import numpy as np
@@ -408,7 +408,7 @@ scikit-learn의 `ElasticNet`은 설명변수를 표준화해 주지 않는다. �
     \lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta \rVert^2 + 2n\lambda\alpha\lVert\boldsymbol\beta\rVert_1 + n\lambda(1-\alpha)\lVert\boldsymbol\beta\rVert_2^2
     $$
 
-    이고, $\alpha = 0$을 넣으면 $\lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta \rVert^2 + n\lambda\lVert\boldsymbol\beta\rVert_2^2$다. `Ridge`가 최소화하는 꼴 $\lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta \rVert^2 + \texttt{alpha}\lVert\boldsymbol\beta\rVert_2^2$와 맞추면 $\texttt{alpha} = n\lambda$다. 연습문제 1의 $n\,a\,(1-\texttt{l1\_ratio})$에 $\texttt{l1\_ratio} = 0$을 넣은 것과 같다.
+    이고, $\alpha = 0$을 넣으면 $\lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta \rVert^2 + n\lambda\lVert\boldsymbol\beta\rVert_2^2$다. `Ridge`가 최소화하는 꼴 $\lVert \mathbf{y} - \mathbf{X}\boldsymbol\beta \rVert^2 + \texttt{alpha}\lVert\boldsymbol\beta\rVert_2^2$와 맞추면 $\texttt{alpha} = n\lambda$다. 연습문제 1의 $n\,a\,(1-\texttt{l1_ratio})$에 $\texttt{l1_ratio} = 0$을 넣은 것과 같다.
 
     ```python
     import numpy as np
