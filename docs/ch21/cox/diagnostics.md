@@ -122,6 +122,106 @@ $$
 
 ---
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 마팅게일 잔차가 곧 기울기다
+
+정의 2 는 $\hat M_i$ 를 **관측한 사건 수에서 기대 사건 수를 뺀 값**으로 소개했다. 진단에
+쓰는 수라고만 읽기 쉬운데, 이 양은 그보다 앞자리에 있다 — **부분 로그가능도를 개인의
+점수 $\eta_i = \boldsymbol\beta^\top \mathbf x_i$ 로 미분한 것이 정확히 $\hat M_i$ 다.**
+
+$$
+\frac{\partial \ell_P}{\partial \eta_i} = \delta_i - \hat H_0(t_i)\,e^{\eta_i} = \hat M_i
+$$
+
+그래서 잔차의 합이 $0$ 이라는 「성질」의 첫 줄은 **적합이 끝난 자리에서 기울기가 $0$ 이라는
+말**과 같다.
+
+이 사실이 오늘 쓰이는 자리는 **부스팅**이다. 부스팅은 매 단계에서 약한 학습기에게 자료의
+이름표가 아니라 **지금 모형의 음의 기울기**를 맞히라고 시킨다. 손실로 콕스 부분가능도를
+쓰면 그 기울기가 마팅게일 잔차이므로, 「잔차를 맞춘다」는 말이 글자 그대로 성립한다.
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+
+rng = np.random.default_rng(1)
+n = 300
+x = rng.normal(size=(n, 2))
+T = rng.exponential(1 / np.exp(0.9 * x[:, 0] - 0.6 * x[:, 1]))
+C = rng.exponential(1.0, n)
+t, d = np.minimum(T, C), (T <= C).astype(float)
+o = np.argsort(t)
+xs, ds = x[o], d[o]
+
+def loglik(eta):
+    m = eta.max()
+    logden = m + np.log(np.cumsum(np.exp(eta - m)[::-1])[::-1])
+    return float((ds * (eta - logden)).sum())
+
+def martingale(eta):
+    """정의 2 — 브레슬로 기저누적위험을 넣은 잔차."""
+    r = np.exp(eta)
+    cum = np.cumsum(r[::-1])[::-1]
+    H0 = np.cumsum(np.where(ds == 1, 1 / cum, 0.0))
+    return ds - H0 * r
+
+eta = 0.3 * xs[:, 0]                      # 아무 자리에서나 따져 본다
+g = np.empty(n); h = 1e-6
+for i in range(n):
+    e1, e0 = eta.copy(), eta.copy()
+    e1[i] += h; e0[i] -= h
+    g[i] = (loglik(e1) - loglik(e0)) / (2 * h)
+mres = martingale(eta)
+print(f"기울기와 잔차의 최대 차이 {np.abs(g - mres).max():.2e}")
+print(f"잔차의 합 {mres.sum():+.2e}  (사건 {int(ds.sum())} 건)")
+
+# 잔차를 맞춰 가며 다섯 걸음
+beta_mle = minimize(lambda b: -loglik(xs @ b), np.zeros(2), method="BFGS")
+eta = np.zeros(n); lr = 0.5
+print(f"\n{'걸음':>4}{'부분로그가능도':>16}{'계수 추정':>22}")
+print(f"{0:>4}{loglik(eta):>16.4f}{'[0. 0.]':>22}")
+coef = np.zeros(2)
+for s in range(1, 6):
+    r = martingale(eta)
+    step, *_ = np.linalg.lstsq(xs, r, rcond=None)   # 잔차에 선형 학습기 하나
+    coef = coef + lr * step
+    eta = xs @ coef
+    print(f"{s:>4}{loglik(eta):>16.4f}{str(coef.round(3)):>22}")
+print(f"{'MLE':>4}{-beta_mle.fun:>16.4f}{str(beta_mle.x.round(3)):>22}")
+```
+
+출력:
+
+```
+기울기와 잔차의 최대 차이 1.03e-07
+잔차의 합 -3.55e-14  (사건 139 건)
+
+  걸음         부분로그가능도                 계수 추정
+   0       -684.8150               [0. 0.]
+   1       -665.8559       [ 0.157 -0.106]
+   2       -653.2689       [ 0.286 -0.19 ]
+   3       -644.7093       [ 0.393 -0.257]
+   4       -638.7926       [ 0.483 -0.312]
+   5       -634.6526       [ 0.558 -0.357]
+ MLE       -624.1906       [ 0.99  -0.606]
+```
+
+**첫 줄이 항등식을 확인한다.** 수치미분과 정의 2 의 잔차가 $10^{-7}$ 자리까지 같은데,
+그 차이는 미분의 폭 $h = 10^{-6}$ 이 남긴 오차다. 둘째 줄의 합 $0$ 은 성질 그대로다.
+
+**그다음이 부스팅이다.** 아무것도 모르는 $\eta = 0$ 에서 출발해 **잔차에 선형 학습기를
+한 번 맞추고 그 방향으로 반걸음 가는 일**을 다섯 번 되풀이했다. 부분 로그가능도가
+$-684.8 \to -634.7$ 로 오르고 계수가 참값 $(0.9,\ -0.6)$ 쪽으로 간다. 학습기를 나무로
+바꾸면 그대로 생존 부스팅이 된다 — **바꾼 것은 학습기뿐이고 잔차는 같다.**
+
+**다만 잔차를 제곱오차로 맞추는 것은 어림이다.** 성질에 적힌 대로 $\hat M_i$ 는 위로
+$1$ 에 막히고 아래로는 끝이 없어 분포가 치우쳐 있으므로, 제곱오차가 전제하는 대칭이
+성립하지 않는다. 아래 $3$ 절의 **이탈도 잔차**가 그 비대칭을 고치려고 있는 변환이고,
+같은 까닭으로 실제 구현은 기울기와 함께 **이차 도함수**까지 써서 걸음을 정한다.
+
+</div>
+
 ## 3. 이탈도 잔차
 
 이탈도 잔차는 마팅게일 잔차를 **대칭화한 변환**으로, 분포를 더 대칭적으로 만들어 잔차 그림에서

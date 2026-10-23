@@ -134,6 +134,91 @@ $\beta = 0.8$일 때 $x = 1$인 사람의 무게는 $e^{0.8} = 2.226$, $x = 0$�
 
 ---
 
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 부분가능도는 위험집합 위의 소프트맥스다
+
+위 식을 한 번 더 보자. 사건시각 $t_{(j)}$ 에서 위험집합 $\mathcal R_j$ 안의 각 사람에게
+점수 $\boldsymbol\beta^\top \mathbf x_l$ 을 주고, 지수를 씌워 합으로 나눈다. 그것이
+
+$$
+\frac{\exp(\boldsymbol\beta^\top \mathbf x_{i_j})}{\sum_{l \in \mathcal R_j} \exp(\boldsymbol\beta^\top \mathbf x_l)}
+$$
+
+인데, 이 꼴은 **소프트맥스**다. 분류기가 $K$ 개 후보에 점수를 매겨 확률로 바꿀 때 쓰는
+바로 그 식이고, 다른 점은 **후보 집합이 시각마다 달라진다**는 것뿐이다. 그래서 콕스
+모형의 적합은 이렇게 읽을 수 있다 — **「지금 위험집합에 남은 사람들 가운데 누가 먼저
+일어날 것인가」를 맞히는 분류 문제를 사건 수만큼 푸는 일.** 부분 로그가능도는 그 문제들의
+로그소프트맥스를 더한 것이고, 그 음수가 곧 손실이다.
+
+이 읽기가 실무에서 값진 까닭은 **그대로 손실함수가 되기** 때문이다. $\boldsymbol\beta^\top\mathbf x$
+자리에 신경망이 내놓는 점수 $\eta_i$ 를 넣기만 하면 식이 그대로 선다 — 공변량이 선형으로
+들어갈 까닭이 애초에 없었다. 아래 구현이 그 손실이다.
+
+```python
+import numpy as np
+from scipy.optimize import minimize
+
+rng = np.random.default_rng(0)
+n = 400
+x = rng.normal(size=(n, 2))
+T = rng.exponential(1 / np.exp(0.8 * x[:, 0] - 0.5 * x[:, 1]))   # 참 계수
+C = rng.exponential(1.2, n)
+t, d = np.minimum(T, C), (T <= C).astype(float)
+o = np.argsort(t)                     # 시간순으로 한 번만 정렬한다
+xs, ds = x[o], d[o]
+
+def log_softmax_over_risk_sets(beta):
+    """위험집합 = 자기 이후. 뒤에서부터 누적합 한 번이면 분모가 모두 구해진다."""
+    eta = xs @ beta
+    m = eta.max()
+    logden = m + np.log(np.cumsum(np.exp(eta - m)[::-1])[::-1])
+    return eta - logden               # 사건마다의 로그소프트맥스
+
+beta = minimize(lambda b: -float((ds * log_softmax_over_risk_sets(b)).sum()),
+                np.zeros(2), method="BFGS").x
+lp = log_softmax_over_risk_sets(beta)
+size = np.arange(n, 0, -1)            # 위험집합의 크기
+ev = ds == 1
+
+print(f"사건 {int(ds.sum())} 건 / {n} 명,  추정 계수 {beta.round(3)} (참값 [0.8, -0.5])")
+print(f"사건당 평균 로그확률 {lp[ev].mean():.4f},  "
+      f"무작위로 찍을 때 {np.mean(-np.log(size[ev])):.4f}")
+print("\n 위험집합 크기   사건 수   모형이 준 확률   무작위 1/|R|   배수")
+for lo, hi in ((200, 401), (50, 200), (2, 50)):
+    s = ev & (size >= lo) & (size < hi)
+    p, q = np.exp(lp[s]).mean(), (1 / size[s]).mean()
+    print(f"{lo:>8}–{hi-1:<7}{int(s.sum()):>7}{p:>15.4f}{q:>14.4f}{p/q:>8.2f}")
+```
+
+출력:
+
+```
+사건 217 건 / 400 명,  추정 계수 [ 0.884 -0.452] (참값 [0.8, -0.5])
+사건당 평균 로그확률 -4.7416,  무작위로 찍을 때 -5.0490
+
+ 위험집합 크기   사건 수   모형이 준 확률   무작위 1/|R|   배수
+     200–400        116         0.0067        0.0035    1.91
+      50–199         77         0.0162        0.0095    1.72
+       2–49          24         0.1120        0.0754    1.48
+```
+
+**맞히는 일이 얼마나 어려운지가 위험집합의 크기로 정해진다.** 후보가 $400$ 명일 때
+무작위로 찍으면 $0.0025$ 인데 모형은 $0.0067$ 을 준다. 끝으로 갈수록 후보가 줄어
+확률 자체는 커지지만(마지막 구간 $0.1120$), **무작위 기준 대비 배수는 오히려 줄어든다**
+($1.91 \to 1.48$). 쉬운 문제에서는 모형이 보탤 것이 적다는 뜻이다.
+
+계산도 소프트맥스를 닮았다. 분모를 사건마다 새로 더하면 $O(n^2)$ 이지만, 시간순으로
+정렬해 두고 **뒤에서부터 누적합**을 한 번 굴리면 분모가 모두 구해진다. 위 코드의
+`np.cumsum(...[::-1])[::-1]` 한 줄이 그것이고, 큰 자료에서 콕스 모형이 실용적인 까닭이다.
+
+**다만 소프트맥스로 읽어도 달라지지 않는 것이 있다.** 후보 집합에는 **절단된 사람도
+들어간다** — 아직 사건을 겪지 않았을 뿐 위험집합의 일원이다. 그리고 이 손실이 주는 것은
+**순위뿐이어서**, 「언제」를 말하려면 기저위험을 따로 추정해야 한다. 그것이 아래 $5$ 절의
+브레슬로 추정량이다.
+
+</div>
+
 ## 3. 추정
 
 MLE $\hat{\boldsymbol{\beta}}$는 $\ell_P(\boldsymbol{\beta})$를 최대화한다. 점수와 정보는
