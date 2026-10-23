@@ -520,7 +520,6 @@ nav:
                 - F 검정의 정규성 민감도와 로버스트 대안: ch15/f_test/f_test_robust_alt.md
             - 15.4 Bartlett 검정:
                 - 분산의 동일성에 대한 Bartlett 검정: ch15/bartlett_test/bartlett_test.md
-                - 유도와 카이제곱 근사: ch15/bartlett_test/derivation.md
                 - 비정규성 아래의 한계: ch15/bartlett_test/limitations.md
                 - Bartlett 검정 비정규성 민감도: ch15/bartlett_test/bartlett_sensitivity.md
             - 15.5 로버스트 검정:
