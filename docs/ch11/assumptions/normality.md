@@ -78,13 +78,13 @@ Multiplication for Transformers at Scale"(arXiv:$2208.07339$) — 「$67$ 억 �
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** 정규표본에서 $(n-1)S^2/\sigma^2 \sim \chi^2(n-1)$이다. 그러므로
+    **(1) 해석적으로.** 정규표본에서 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이다. 그러므로
 
     $$
-    S = \frac{\sigma}{\sqrt{n-1}}\sqrt{Q}, \qquad Q \sim \chi^2(n-1)
+    S = \frac{\sigma}{\sqrt{n-1}}\sqrt{Q}, \qquad Q \sim \chi^2_{n-1}
     $$
 
-    이고 $E[S]$를 구하려면 $E[\sqrt{Q}]$를 알아야 한다. $\chi^2(d)$의 밀도로 직접 적분하면
+    이고 $E[S]$를 구하려면 $E[\sqrt{Q}]$를 알아야 한다. $\chi^2_d$의 밀도로 직접 적분하면
 
     $$
     E[\sqrt{Q}]
