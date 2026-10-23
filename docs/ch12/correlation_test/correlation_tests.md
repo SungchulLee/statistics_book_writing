@@ -911,6 +911,73 @@ $$
 | 범위 | $[-1, 1]$ | $[-1, 1]$ | $[-1, 1]$ |
 | 작은 표본 | 덜 믿을 만함 | 보통 | 더 믿을 만함 |
 
+
+<div class="aibox" markdown>
+
+**AI로 보는 통계학 1.** 표의 마지막 줄 — 작은 표본에서 켄달이 더 믿을 만한 까닭
+
+위 표가 마지막 줄에서 「작은 표본」을 묻고 켄달에 **더 믿을 만함**을 적었다. 까닭이
+계산 방식에 있다. $\tau$ 는 일치쌍과 불일치쌍을 **세는** 통계량이므로, 귀무가설 아래의
+분포를 근사하지 않고 $n!$ 개 순열을 모두 훑어 **정확히** 구할 수 있다. 꾸러미 함수가
+작은 $n$ 에서 기본으로 그 길을 간다.
+
+그러면 무엇이 달라지는가. $n = 8$ 로 귀무분포를 직접 세어 보자.
+
+```python
+import itertools
+import numpy as np
+from scipy import stats
+
+n = 8
+x = np.arange(n)
+# tau 의 귀무분포를 n! 개 순열에서 직접 센다
+taus = np.array([stats.kendalltau(x, p)[0] for p in itertools.permutations(range(n))])
+extreme = np.isclose(np.abs(taus), 1.0).sum()
+print(f"n = {n} 이면 순열이 {len(taus)} 개이고 tau 는 {len(np.unique(taus.round(12)))} 가지 값만 갖는다")
+print(f"|tau| = 1 인 순열은 {extreme} 개 (완전 일치와 완전 역일치)")
+print(f"양측 p 값의 바닥 = {extreme}/{len(taus)} = {extreme / len(taus):.4e}")
+print()
+# 완전히 단조인 자료에 세 검정을 돌린다
+y = np.array([15, 29, 32, 33, 41, 45, 52, 68], dtype=float) * 1000
+print("완전히 단조로 오르는 자료에서의 p 값")
+print(f"  pearsonr                         p = {stats.pearsonr(x, y)[1]:.4e}")
+print(f"  spearmanr                        p = {stats.spearmanr(x, y)[1]:.4e}")
+print(f"  kendalltau (기본 = 정확검정)       p = {stats.kendalltau(x, y)[1]:.4e}")
+print(f"  kendalltau (method='asymptotic')  p = {stats.kendalltau(x, y, method='asymptotic')[1]:.4e}")
+```
+
+출력:
+
+```
+n = 8 이면 순열이 40320 개이고 tau 는 29 가지 값만 갖는다
+|tau| = 1 인 순열은 2 개 (완전 일치와 완전 역일치)
+양측 p 값의 바닥 = 2/40320 = 4.9603e-05
+
+완전히 단조로 오르는 자료에서의 p 값
+  pearsonr                         p = 9.0805e-05
+  spearmanr                        p = 0.0000e+00
+  kendalltau (기본 = 정확검정)       p = 4.9603e-05
+  kendalltau (method='asymptotic')  p = 5.3201e-04
+```
+
+세 줄을 나란히 읽어야 한다.
+
+**켄달의 정확검정이 내놓은 $4.9603 \times 10^{-5}$ 는 위에서 센 바닥과 같은 수다.**
+자료가 완전히 단조이므로 $\tau = 1$ 이고, 그보다 극단인 순열은 없으니 $p$ 가 바닥에
+닿는다. **$n = 8$ 에서는 어떤 자료로도 이보다 작은 양측 $p$ 를 얻을 수 없다** — 순열이
+$40320$ 개뿐이기 때문이다.
+
+**스피어만은 $0.0000$ 을 찍는다.** 근사 분포를 쓰므로 바닥이 없고, 그래서 **일어날 수
+없는 값**을 보고한다. 보기 7 이 「$p$ 값이 $0.0000$ 으로 찍힌다」고 적은 자리가 바로
+이것이다. 같은 켄달도 `method='asymptotic'` 으로 바꾸면 $5.32 \times 10^{-4}$ 로 **열 배
+커진다** — 근사가 어느 방향으로 틀리는지도 보인다.
+
+다만 이 길은 멀리 가지 못한다. $n = 13$ 이면 순열이 $62$ 억 개다. 꾸러미가 $n$ 이 커지면
+근사로 갈아타는 것은 선택이 아니라 셈의 한계이고, **동점이 있으면 정확검정 자체가
+정의되지 않는다**(순위가 유일하지 않다). 작은 표본에서 정확 $p$ 를 받았다면 그것은
+자료가 작아서 얻은 이득이다.
+
+</div>
 ---
 
 <div class="exbox" markdown>
