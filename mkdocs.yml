@@ -234,7 +234,7 @@ nav:
                 - 흔한 분포에 대한 적률법: ch06/estimation_methods/moments_examples.md
                 - 일반화 적률법: ch06/estimation_methods/gmm.md
                 - 적률법과 최대가능도의 비교: ch06/estimation_methods/moments_vs_mle.md
-                - 적률법 개관: ch06/estimation_methods/moments.md
+                - 적률법: ch06/estimation_methods/moments.md
                 - 추정 방법 비교: ch06/estimation_methods/estimation_methods.md
             - 6.3 베이즈 추정 ★:
                 - 사전분포, 가능도, 사후분포: ch06/bayesian/prior_posterior.md
@@ -355,7 +355,7 @@ nav:
                 - Welch 분산분석의 제1종 오류와 검정력 모의실험: ch11/anova_welch/welch_simulation.md
                 - 이원배치 Welch 분산분석 (로버스트 HC3): ch11/anova_welch/welch_twoway_robust.md
             - 11.5 가정:
-                - 가정 개관: ch11/assumptions/assumptions_overview.md
+                - 분산분석의 가정: ch11/assumptions/assumptions_overview.md
                 - 잔차의 정규성 확인: ch11/assumptions/normality.md
                 - 관측의 독립성 확인: ch11/assumptions/independence.md
                 - 등분산성 확인: ch11/assumptions/homoscedasticity.md
@@ -436,7 +436,7 @@ nav:
                 - 교호작용 항: ch13/interaction_polynomial/interaction_terms.md
                 - 다항회귀: ch13/interaction_polynomial/polynomial_regression.md
             - 13.5 가정과 진단:
-                - 가정 개관 (LINE): ch13/assumptions/index.md
+                - 가정과 진단 (LINE): ch13/assumptions/index.md
                 - 선형성 가정: ch13/assumptions/linearity_overview.md
                 - 등분산성 가정: ch13/assumptions/homoscedasticity_overview.md
                 - 정규성 가정: ch13/assumptions/normality_overview.md
@@ -455,18 +455,18 @@ nav:
                 - 결정계수와 수정 결정계수: ch13/performance/r_squared.md
                 - '평균절대오차, 평균제곱오차, 제곱근평균제곱오차': ch13/performance/mae_mse_rmse.md
                 - 평균절대백분율오차와 그 밖의 상대 척도: ch13/performance/relative_metrics.md
-                - 성능 척도 개관: ch13/performance/metrics.md
+                - 성능 척도: ch13/performance/metrics.md
             - 13.8 모형선택 기준:
                 - Akaike 정보기준: ch13/model_selection/aic.md
                 - Bayes 정보기준: ch13/model_selection/bic.md
                 - 모형선택을 위한 교차검증: ch13/model_selection/cross_validation.md
                 - 단계적 선택과 최량 부분집합 선택: ch13/model_selection/stepwise_subset.md
-                - AIC와 BIC 개관: ch13/model_selection/aic_bic.md
+                - AIC와 BIC: ch13/model_selection/aic_bic.md
                 - 모형선택 비교: ch13/model_selection/model_selection.md
                 - 교차검증 다항 모형선택: ch13/model_selection/cv_polynomial_model_selection.md
                 - 부분집합 선택과 단계적 선택: ch13/model_selection/subset_stepwise_selection.md
             - 13.9 스플라인과 일반화가법모형:
-                - 스플라인과 GAM 개관: ch13/splines_gams/index.md
+                - 스플라인과 일반화가법모형: ch13/splines_gams/index.md
                 - 일반화가법모형: ch13/splines_gams/generalized_additive_models.md
                 - GAM 주택 분석: ch13/splines_gams/gam_housing_analysis.md
                 - 계단함수: ch13/splines_gams/step_functions.md
@@ -535,7 +535,7 @@ nav:
                 - 비정규성 아래의 한계: ch15/bartlett_test/limitations.md
                 - Bartlett 검정 비정규성 민감도: ch15/bartlett_test/bartlett_sensitivity.md
             - 15.5 로버스트 검정:
-                - 로버스트 검정 개관: ch15/robust_tests/robust_tests.md
+                - 분산 동일성의 로버스트 검정: ch15/robust_tests/robust_tests.md
                 - Levene 검정: ch15/robust_tests/levene.md
                 - Brown-Forsythe 검정: ch15/robust_tests/brown_forsythe.md
                 - Fligner-Killeen 검정: ch15/robust_tests/fligner_killeen.md
@@ -567,12 +567,12 @@ nav:
                 - 대응 부호검정: ch16/paired_sample_nonparametric/paired_sign.md
                 - 대응자료에 대한 Wilcoxon 부호순위검정: ch16/paired_sample_nonparametric/paired_wilcoxon.md
                 - 대응 순열검정: ch16/paired_sample_nonparametric/paired_permutation.md
-                - 대응표본 검정 개관: ch16/paired_sample_nonparametric/paired.md
+                - 대응표본 비모수 검정: ch16/paired_sample_nonparametric/paired.md
             - 16.4 이표본 비모수 검정:
                 - Wilcoxon 순위합검정: ch16/two_sample_nonparametric/rank_sum.md
                 - Mann-Whitney U 검정: ch16/two_sample_nonparametric/mann_whitney.md
                 - Kolmogorov-Smirnov 이표본 검정: ch16/two_sample_nonparametric/ks_two_sample.md
-                - 이표본 검정 개관: ch16/two_sample_nonparametric/two_sample.md
+                - 이표본 비모수 검정: ch16/two_sample_nonparametric/two_sample.md
                 - 이표본 및 다집단 검정 (코드): ch16/two_sample_nonparametric/two_sample_tests.md
             - 16.5 다집단 비모수 검정:
                 - Kruskal-Wallis 검정: ch16/multi_group_nonparametric/kruskal_wallis.md
@@ -590,7 +590,6 @@ nav:
                 - 비모수 붓스트랩: ch17/bootstrap/nonparametric.md
                 - 모수적 붓스트랩: ch17/bootstrap/parametric.md
                 - 붓스트랩 재표집 방법: ch17/bootstrap/resampling_method.md
-                - 붓스트랩 개요: ch17/bootstrap/bootstrap.md
             - 17.2 붓스트랩 신뢰구간:
                 - 백분위수법: ch17/bootstrap_ci/percentile.md
                 - 기본법 (역백분위수법): ch17/bootstrap_ci/basic.md
@@ -629,27 +628,27 @@ nav:
                 - 기하학적 해석 (L2 벌점): ch18/ridge/geometry.md
                 - 베이즈 해석 (정규 사전분포): ch18/ridge/bayesian.md
                 - 능형 자취와 λ 선택: ch18/ridge/lambda_selection.md
-                - 능형회귀 개관: ch18/ridge/ridge.md
+                - 능형회귀 (L2 정칙화): ch18/ridge/ridge.md
             - 18.3 라쏘 회귀:
                 - 라쏘 정식화와 희소성: ch18/lasso/formulation.md
                 - 기하학적 해석 (L1 벌점): ch18/lasso/geometry.md
                 - 베이즈 해석 (라플라스 사전분포): ch18/lasso/bayesian.md
                 - 좌표하강 알고리즘: ch18/lasso/coordinate_descent.md
                 - 변수선택 도구로서의 라쏘: ch18/lasso/feature_selection.md
-                - 라쏘 회귀 개관: ch18/lasso/lasso.md
+                - 라쏘 회귀 (L1 정칙화): ch18/lasso/lasso.md
                 - 주택가격 자료의 라쏘 정칙화 경로 (코드): ch18/lasso/lasso_housing_regularization_path.md
             - 18.4 엘라스틱넷:
                 - 엘라스틱넷 정식화: ch18/elastic_net/formulation.md
                 - 순수 능형회귀·라쏘에 대한 이점: ch18/elastic_net/advantages.md
                 - 상관된 변수에 대한 그룹 효과: ch18/elastic_net/grouping_effect.md
-                - 엘라스틱넷 개관: ch18/elastic_net/elastic_net.md
+                - 엘라스틱넷 정칙화: ch18/elastic_net/elastic_net.md
             - 18.5 초모수 조율:
                 - λ 선택을 위한 교차검증: ch18/tuning/cross_validation.md
                 - 정칙화 경로: ch18/tuning/regularization_path.md
                 - 정칙화 모형의 정보기준: ch18/tuning/information_criteria.md
                 - 교차검증과 λ 조율 (코드): ch18/tuning/cv_tuning.md
             - 18.6 차원축소 방법:
-                - 주성분회귀와 부분최소제곱 개관: ch18/pcr_pls/index.md
+                - "차원축소 — PCR과 PLS": ch18/pcr_pls/index.md
                 - 주성분회귀: ch18/pcr_pls/principal_components_regression.md
                 - 부분최소제곱: ch18/pcr_pls/partial_least_squares.md
                 - 주성분회귀와 부분최소제곱 보기 (코드): ch18/pcr_pls/pcr_pls_examples.md
@@ -678,7 +677,7 @@ nav:
                 - 결정 문턱 조율: ch19/evaluation/threshold_tuning.md
                 - 보정과 브라이어 점수: ch19/evaluation/calibration.md
                 - 불균형 자료 다루기: ch19/evaluation/imbalanced_data.md
-                - 분류 지표 개관: ch19/evaluation/metrics.md
+                - 혼동행렬·ROC·분류 지표: ch19/evaluation/metrics.md
                 - ROC 곡선과 평가지표 구현 (코드): ch19/evaluation/evaluation_metrics.md
             - 19.4 정칙화 로지스틱 회귀:
                 - 로지스틱 회귀의 L1·L2 정칙화: ch19/regularized/regularization.md
