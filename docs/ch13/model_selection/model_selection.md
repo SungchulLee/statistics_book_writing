@@ -8,23 +8,17 @@
 
 ## 1. 수학적 배경
 
-### Akaike 정보기준 (AIC)
+### 두 정보기준
+
+이 쪽이 쓰는 꼴만 적는다. 어디서 나온 식인지와 둘의 차이는 [AIC와 BIC: 모형선택 기준](aic_bic.md)에 있다.
 
 $$
-\mathrm{AIC} = n \ln\!\left(\frac{\mathrm{RSS}}{n}\right) + 2k,
+\mathrm{AIC} = n \ln\!\left(\frac{\mathrm{RSS}}{n}\right) + 2k, \qquad \mathrm{BIC} = n \ln\!\left(\frac{\mathrm{RSS}}{n}\right) + k \ln n
 $$
 
-여기서 $k$는 (절편을 포함한) 추정 모수의 개수이다. AIC는 표본 밖 예측오차를 추정하며 모수 하나당 $2$의 벌점으로 복잡도를 억제한다.
+$k$ 는 절편을 포함한 추정 모수의 개수다. $n > e^2 \approx 7.39$ 이면 $\ln n > 2$ 이므로 BIC 의 벌점이 더 엄하고, 그래서 더 단순한 모형을 고른다.
 
-### Bayes 정보기준 (BIC)
-
-$$
-\mathrm{BIC} = n \ln\!\left(\frac{\mathrm{RSS}}{n}\right) + k \ln(n).
-$$
-
-BIC는 모수 하나당 $\ln(n)$의 벌점을 쓰며, $n > e^2 \approx 7.4$이면 이 값이 2를 넘는다. 따라서 표본이 중간 이상이면 BIC가 더 작은 모형을 선호한다.
-
-### 교차검증 MSE
+### 교차검증 추정값
 
 예측오차의 $K$-겹 교차검증 추정값은
 
