@@ -3,6 +3,15 @@
 
 ## 1. ROC 곡선
 
+<div class="defn" markdown>
+
+### 정의 1. ROC 곡선 { .dfn }
+
+**ROC 곡선**은 가능한 모든 문턱값 $c \in [0, 1]$에 대해 위양성률
+($\text{FPR} = FP/(FP + TN) = 1 - \text{특이도}$)에 대한 참양성률(재현율)을 그린 것이다.
+
+</div>
+
 **ROC 곡선**(Receiver Operating Characteristic)은 가능한 모든 분류 문턱에 걸쳐 이항 분류기를
 평가하는 강력한 도구다. 다음을 그린다.
 
