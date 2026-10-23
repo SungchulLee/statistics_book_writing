@@ -1066,6 +1066,7 @@ $\rho$의 95% 신용구간이 1을 제외하면 분산이 다르다는 증거가
 
     ```python
     # 출력 없음: pymc 가 이 책의 환경에 없다. 맞춰 볼 값은 아래 쪽지에 있다.
+    # verify: noexec — 같은 까닭이다. import 에서 바로 멈춘다.
     import numpy as np
     import pymc as pm
 
