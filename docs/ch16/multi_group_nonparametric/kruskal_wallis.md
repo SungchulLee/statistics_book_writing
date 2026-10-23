@@ -325,6 +325,311 @@ Kruskal-Wallis 결과가 유의하다는 것은 적어도 한 집단이 다르�
 !!! warning "전체검정을 건너뛰지 말 것"
     사후 쌍별 비교는 Kruskal-Wallis 검정이 $H_0$을 기각한 뒤에만 수행해야 한다. 전체적인 차이를 먼저 확인하지 않고 쌍별 검정을 하면 집단별 오류율이 부풀려진다.
 
+### 작은 N 에서 카이제곱 근사는 얼마나 믿을 만한가
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> $N = 15$ 에서 $\chi^2$ 근사는 얼마나 믿을 만한가. 집단 셋이 각각 다섯 개씩이고 `kruskal` 이 $H = 9.4136$, $p = 0.0090$ 을 준다.
+
+**(1)** 순위합을 구해 $H$ 를 손으로 계산하시오. 이 자료에 동점이 있는가. 있다면 보정을 넣어 `scipy` 의 값과 맞추시오.
+
+**(2)** $N = 15$ 를 셋으로 나누는 방법은 $756{,}756$ 가지뿐이므로 귀무분포를 **전수 열거**할 수 있다. 정확 p-값을 구해 $\chi^2_2$ 근사와 견주시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 순위와 $H$.** 15개 값을 합쳐 늘어놓으면 $88$ 이 두 개($A$ 와 $C$ 에 각각 하나), $92$ 가 두 개($A$ 와 $C$ 에 각각 하나) 있다. **동점이 있으므로 중간순위를 준다.**
+
+    | 값 | 68 | 70 | 72 | 75 | 76 | 78 | 81 | 85 | 87 | 88 | 88 | 90 | 92 | 92 | 95 |
+    |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+    | 순위 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10.5 | 10.5 | 12 | 13.5 | 13.5 | 15 |
+    | 집단 | B | B | B | B | A | A | B | A | C | A | C | C | A | C | C |
+
+    $$
+    R_A = 5 + 6 + 8 + 10.5 + 13.5 = 43,
+    \quad
+    R_B = 1 + 2 + 3 + 4 + 7 = 17,
+    \quad
+    R_C = 9 + 10.5 + 12 + 13.5 + 15 = 60
+    $$
+
+    검산: $43 + 17 + 60 = 120 = 15 \times 16/2$. $\checkmark$ 평균순위는 $8.6$, $3.4$, $12.0$ 이고 전체 평균순위 $8$ 을 사이에 둔다. $B$ 가 가장 아래, $C$ 가 가장 위다.
+
+    $$
+    H = \frac{12}{15 \times 16}\left(\frac{43^2}{5} + \frac{17^2}{5} + \frac{60^2}{5}\right) - 3 \times 16
+      = 0.05 \times (369.8 + 57.8 + 720) - 48
+      = 57.38 - 48
+      = 9.38
+    $$
+
+    **`scipy` 는 $9.4136$ 을 준다.** 차이는 동점 보정이다. $t = 2$ 인 묶음이 둘이므로
+
+    $$
+    \sum_j (t_j^3 - t_j) = 6 + 6 = 12,
+    \qquad
+    C = 1 - \frac{12}{15^3 - 15} = 1 - \frac{12}{3360} = 0.996429
+    $$
+
+    $$
+    H_{\text{보정}} = \frac{9.38}{0.996429} = 9.413620
+    $$
+
+    로 `scipy` 와 소수 여섯째 자리까지 같다. $\chi^2_2$ 근사 p-값은 $P(\chi^2_2 > 9.413620) = 0.009034$ 다.
+
+    **(2) 전수 열거.** $H_0$ 아래에서 15개 중간순위를 다섯 개씩 세 집단에 나누는 모든 방법이 같은 확률이다. 그런 방법은
+
+    $$
+    \binom{15}{5}\binom{10}{5} = 3003 \times 252 = 756{,}756
+    $$
+
+    가지다. 각 배치의 $H$ 를 계산해 관측값 이상인 것을 세면 **1890 개**다.
+
+    $$
+    p_{\text{정확}} = \frac{1890}{756{,}756} = \frac{5}{2002} = 0.0024975
+    $$
+
+    **$\chi^2_2$ 근사의 $0.009034$ 가 정확값의 3.6배다.** 근사가 **보수적인** 쪽으로 틀렸다. 다섯 개씩 세 집단에서 $\chi^2$ 근사가 신뢰할 만하지 않다는 것이 이렇게 수로 드러난다. 다만 두 값 모두 $0.05$ 아래이므로 **결론은 바뀌지 않는다** — 오히려 정확검정이 더 강하게 기각한다.
+
+    보정인자 $C$ 가 모든 배치에 같은 상수이므로 $H$ 와 $H/C$ 의 순서가 같고, 따라서 **동점 보정을 넣든 안 넣든 정확 p-값은 똑같다.** 보정은 $\chi^2$ 근사를 쓸 때만 뜻이 있다.
+
+    **수치적으로.**
+
+    ```python
+    from scipy.stats import kruskal
+
+    group_a = [85, 78, 92, 88, 76]
+    group_b = [72, 68, 81, 75, 70]
+    group_c = [90, 95, 88, 92, 87]
+
+    # Kruskal-Wallis 는 일원배치 분산분석의 비모수 대응이다. 집단이 셋 이상일
+    # 때 쓰며, Mann-Whitney U 를 여러 집단으로 넓힌 것이라고 보면 된다.
+    stat, p_value = kruskal(group_a, group_b, group_c)
+
+    print(f"H statistic: {stat:.4f}")   # 9.4136
+    print(f"P-value: {p_value:.4f}")    # 0.0090
+
+    alpha = 0.05
+    if p_value < alpha:
+        print("Reject H0: At least one group differs significantly.")
+    else:
+        print("Fail to reject H0.")
+    ```
+
+    출력:
+
+    ```
+    H statistic: 9.4136
+    P-value: 0.0090
+    Reject H0: At least one group differs significantly.
+    ```
+
+    ```python
+    import itertools
+    import math
+    from collections import Counter
+
+    import numpy as np
+    from scipy import stats
+
+    allv = np.array(group_a + group_b + group_c)
+    N = len(allv)
+    r = stats.rankdata(allv)
+    R = [r[0:5].sum(), r[5:10].sum(), r[10:15].sum()]
+    print(f"순위  {r.tolist()}")
+    print(f"동점  {[(k, v) for k, v in sorted(Counter(allv.tolist()).items()) if v > 1]}")
+    print(f"R = {R},  합 = {sum(R)}  (N(N+1)/2 = {N * (N + 1) / 2})")
+    print(f"평균순위 = {[x / 5 for x in R]}   (전체 {(N + 1) / 2})")
+
+    H = 12 / (N * (N + 1)) * sum(x ** 2 / 5 for x in R) - 3 * (N + 1)
+    tie = sum(t ** 3 - t for t in Counter(allv.tolist()).values())
+    C = 1 - tie / (N ** 3 - N)
+    print(f"\n보정 없는 H = {H:.6f}")
+    print(f"sum(t^3-t) = {tie},  C = 1 - {tie}/{N ** 3 - N} = {C:.6f}")
+    print(f"H/C = {H / C:.6f}   (scipy {stat:.6f})")
+    print(f"chi2_2 근사 p = {stats.chi2.sf(H / C, 2):.6f}   (scipy {p_value:.6f})")
+
+    # 귀무분포를 전수 열거한다. C(15,5) * C(10,5) = 756756 가지.
+    sub2 = np.array(list(itertools.combinations(range(10), 5)))
+    const = 12 / (N * (N + 1)) / 5
+    total_rank = r.sum()
+    chunks = []
+    for first in itertools.combinations(range(N), 5):
+        s1 = r[list(first)].sum()
+        rest = np.array([r[i] for i in range(N) if i not in first])
+        s2 = rest[sub2].sum(axis=1)
+        s3 = total_rank - s1 - s2
+        chunks.append(const * (s1 ** 2 + s2 ** 2 + s3 ** 2) - 3 * (N + 1))
+    Hs = np.concatenate(chunks)
+    hit = int((Hs >= H - 1e-9).sum())
+    print(f"\n열거한 가지 수 {len(Hs)}  (= {math.comb(15, 5)} x {math.comb(10, 5)})")
+    print(f"열거한 H 의 평균 {Hs.mean():.6f}   (chi2_2 의 평균 = 2)")
+    print(f"H >= {H:.2f} 인 것 {hit} 개  ->  정확 p = {hit}/{len(Hs)} = {hit / len(Hs):.7f}")
+    print(f"chi2_2 근사 / 정확 = {stats.chi2.sf(H / C, 2) / (hit / len(Hs)):.2f} 배")
+    ```
+
+    출력:
+
+    ```
+    순위  [8.0, 6.0, 13.5, 10.5, 5.0, 3.0, 1.0, 7.0, 4.0, 2.0, 12.0, 15.0, 10.5, 13.5, 9.0]
+    동점  [(88, 2), (92, 2)]
+    R = [43.0, 17.0, 60.0],  합 = 120.0  (N(N+1)/2 = 120.0)
+    평균순위 = [8.6, 3.4, 12.0]   (전체 8.0)
+
+    보정 없는 H = 9.380000
+    sum(t^3-t) = 12,  C = 1 - 12/3360 = 0.996429
+    H/C = 9.413620   (scipy 9.413620)
+    chi2_2 근사 p = 0.009034   (scipy 0.009034)
+
+    열거한 가지 수 756756  (= 3003 x 252)
+    열거한 H 의 평균 1.992857   (chi2_2 의 평균 = 2)
+    H >= 9.38 인 것 1890 개  ->  정확 p = 1890/756756 = 0.0024975
+    chi2_2 근사 / 정확 = 3.62 배
+    ```
+
+    **손계산 $H = 9.38$, $C = 0.996429$, $H/C = 9.413620$ 이 `scipy` 와 모두 맞는다.** 열거한 귀무분포의 평균이 $1.992857$ 로 $\chi^2_2$ 의 평균 $2$ 에 거의 같다 — 근사가 **중앙부에서는** 잘 맞는다는 뜻이다. 그런데도 꼬리에서 $3.62$ 배 어긋났다.
+
+    이것이 $\chi^2$ 근사의 성격이다. **평균은 맞추지만 꼬리 모양을 못 맞춘다.** $H$ 가 가질 수 있는 값이 756756 가지 배치로 결정되는 이산 집합인데 $\chi^2_2$ 는 연속분포이고, 특히 $H$ 의 최댓값은 유한하다(한 집단이 순위 상위 다섯 개를 모두 차지하는 배치). 꼬리가 짧은 이산분포를 꼬리가 무한한 연속분포로 재면 이런 차이가 난다. **$n_i = 5$ 정도에서는 정확검정이나 순열검정을 쓰는 것이 옳다.**
+
+---
+
+### 위의 식으로는 scipy 의 H 가 나오지 않는다
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 위의 식으로는 `scipy` 의 $H$ 가 나오지 않는다. 집단 셋의 크기가 $16, 15, 17$ 이고 `kruskal` 이 $H = 7.6480$, $p = 0.0218$ 을 준다.
+
+**(1)** 이 쪽 본문에 적힌 식 $H = \dfrac{12}{N(N+1)}\sum_j R_j^2/n_j - 3(N+1)$ 로 $H$ 를 손으로 계산하시오. `scipy` 의 값과 맞는가.
+
+**(2)** 맞지 않다면 빠진 항을 찾아 메우고, 그 항이 결론에 미치는 영향을 재시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 본문의 식으로 계산한다.** $N = 16 + 15 + 17 = 48$ 이다. 48개를 합쳐 순위를 매기면 집단별 순위합이
+
+    $$
+    R_1 = 295, \qquad R_2 = 483, \qquad R_3 = 398
+    $$
+
+    이다. 검산: $295 + 483 + 398 = 1176 = 48 \times 49/2$. $\checkmark$ 평균순위는 각각 $18.4375$, $32.2$, $23.4118$ 이고 전체 평균순위 $(N+1)/2 = 24.5$ 를 사이에 두고 벌어져 있다.
+
+    $$
+    \sum_j \frac{R_j^2}{n_j}
+    = \frac{295^2}{16} + \frac{483^2}{15} + \frac{398^2}{17}
+    = 5439.0625 + 15552.6 + 9317.882353
+    = 30309.544853
+    $$
+
+    $$
+    H = \frac{12}{48 \times 49} \times 30309.544853 - 3 \times 49
+      = 154.640535 - 147
+      = 7.640535
+    $$
+
+    **`scipy` 는 $7.648007$ 을 준다. 맞지 않는다.** 차이가 $0.007472$ 로 작지만 반올림 오차가 아니다 — 소수 둘째 자리에서 이미 갈린다.
+
+    **(2) 빠진 것은 동점 보정이다.** 이 48개 값에는 동점이 아홉 묶음 있다. $14, 22, 33, 40, 43, 48$ 이 각각 두 개, $25, 31, 34$ 가 각각 세 개다.
+
+    $$
+    \sum_j (t_j^3 - t_j) = 6 \times (2^3 - 2) + 3 \times (3^3 - 3) = 36 + 72 = 108
+    $$
+
+    동점이 있으면 순위의 분산이 줄어들므로 $H$ 를 그만큼 **키워** 주어야 한다. 보정인자는
+
+    $$
+    C = 1 - \frac{\sum_j (t_j^3 - t_j)}{N^3 - N} = 1 - \frac{108}{110544} = 0.999023
+    $$
+
+    이고
+
+    $$
+    H_{\text{보정}} = \frac{H}{C} = \frac{7.640535}{0.999023} = 7.648007
+    $$
+
+    **이것이 `scipy` 의 값과 정확히 같다.** 즉 `scipy` 는 늘 동점 보정을 넣고, 이 쪽 본문의 식은 **동점이 없을 때의 식**이다.
+
+    영향은 작다. 자유도 $k - 1 = 2$ 에서
+
+    $$
+    P(\chi^2_2 > 7.640535) = 0.021922,
+    \qquad
+    P(\chi^2_2 > 7.648007) = 0.021840
+    $$
+
+    로 p-값이 $0.00008$ 움직였을 뿐이다. $C \leq 1$ 이므로 **보정은 언제나 $H$ 를 키우고 p-값을 줄인다.** 보정을 빠뜨리면 보수적인 쪽으로 틀리는 셈이다. 여기서는 $108/110544$ 가 0.1% 라 거의 보이지 않지만, 눈금이 거친 자료에서는 $C$ 가 0.9 아래로 내려가 $H$ 를 10% 이상 밀어 올리기도 한다.
+
+    **수치적으로.**
+
+    ```python
+    from scipy import stats
+
+    data0 = [10, 14, 14, 18, 20, 22, 24, 25, 31, 31, 32, 39, 43, 43, 48, 49]
+    data1 = [28, 30, 31, 33, 34, 35, 36, 40, 44, 55, 57, 61, 91, 92, 99]
+    data2 = [0, 3, 9, 22, 23, 25, 25, 33, 34, 34, 40, 45, 46, 48, 62, 67, 84]
+
+    # 집단이 셋이 되면 Kruskal-Wallis 로 간다. 유의하다는 결론이 나면 어느 쌍이
+    # 다른지는 따로 사후비교를 해야 한다.
+    stat, p = stats.kruskal(data0, data1, data2)
+    print(f"H = {stat:.4f}, p = {p:.2%}")
+    # H = 7.6480, p = 2.18%
+    ```
+
+    출력:
+
+    ```
+    H = 7.6480, p = 2.18%
+    ```
+
+    ```python
+    import numpy as np
+    from collections import Counter
+
+    groups = [data0, data1, data2]
+    sizes = [len(g) for g in groups]
+    allv = sum(groups, [])
+    N = len(allv)
+    ranks = stats.rankdata(allv)
+    edges = np.cumsum([0] + sizes)
+    R = [ranks[edges[i]:edges[i + 1]].sum() for i in range(3)]
+    print(f"n = {sizes},  N = {N}")
+    print(f"R = {R},  합 = {sum(R)}  (N(N+1)/2 = {N * (N + 1) / 2})")
+    print(f"평균순위 = {[round(R[i] / sizes[i], 4) for i in range(3)]}"
+          f"   (전체 {(N + 1) / 2})")
+
+    H = 12 / (N * (N + 1)) * sum(R[i] ** 2 / sizes[i] for i in range(3)) - 3 * (N + 1)
+    counts = Counter(allv)
+    tie = sum(t ** 3 - t for t in counts.values())
+    C = 1 - tie / (N ** 3 - N)
+    print(f"\n본문 식의 H          = {H:.6f}")
+    print(f"동점 묶음 {dict((k, v) for k, v in sorted(counts.items()) if v > 1)}")
+    print(f"sum(t^3-t) = {tie},  C = 1 - {tie}/{N ** 3 - N} = {C:.6f}")
+    print(f"동점 보정한 H = H/C  = {H / C:.6f}")
+    print(f"scipy 가 준 H        = {stat:.6f}")
+    print(f"p: 보정 전 {stats.chi2.sf(H, 2):.6f}  ->  보정 후 {stats.chi2.sf(H / C, 2):.6f}"
+          f"  (scipy {p:.6f})")
+    ```
+
+    출력:
+
+    ```
+    n = [16, 15, 17],  N = 48
+    R = [295.0, 483.0, 398.0],  합 = 1176.0  (N(N+1)/2 = 1176.0)
+    평균순위 = [18.4375, 32.2, 23.4118]   (전체 24.5)
+
+    본문 식의 H          = 7.640535
+    동점 묶음 {14: 2, 22: 2, 25: 3, 31: 3, 33: 2, 34: 3, 40: 2, 43: 2, 48: 2}
+    sum(t^3-t) = 108,  C = 1 - 108/110544 = 0.999023
+    동점 보정한 H = H/C  = 7.648007
+    scipy 가 준 H        = 7.648007
+    p: 보정 전 0.021922  ->  보정 후 0.021840  (scipy 0.021840)
+    ```
+
+    **본문의 식과 `scipy` 가 어긋난 까닭이 동점 보정 하나로 완전히 설명된다.** 손계산 $7.640535$ 를 $C = 0.999023$ 으로 나누면 소수 여섯째 자리까지 `scipy` 와 같다. 두 식 모두 틀린 것이 아니다 — **본문의 식은 동점이 없을 때의 식이고, 동점이 있으면 $C$ 로 나누어야 한다.** 손으로 계산한 값이 소프트웨어와 조금 다를 때 가장 먼저 의심할 곳이 여기다.
+
+---
+
 ---
 
 ## 연습문제
@@ -1223,6 +1528,174 @@ $$
     $t(2)$ 에서 $H$ 는 같은 표본으로 $F$ 의 $0.4679/0.2409 = 1.94$ 배 검정력을 내고, 표본을 $5\%$ 더 주면 $2.06$ 배다. Cauchy 에서는 같은 표본으로 $0.2843/0.0406 = 7.00$ 배, $5\%$ 더 주면 $7.24$ 배다. Cauchy 에서 $F$ 의 검정력 $0.0406$ 은 자기 수준 $0.0185$ 보다는 높지만 명목수준 $0.05$ 에도 못 미치는 값이고, 이동이 분명히 있는 자료를 사실상 **못 보는** 상태다. (Cauchy 는 평균이 아예 없으므로 $F$ 가 비교하려는 대상 자체가 존재하지 않는다. 위치이동은 여전히 뜻이 있고, 순위는 그것을 본다.)
 
     **한 문장 요약:** 정규성이 참일 때 순위로 치르는 대가는 집단당 관측값 하나($4.7\%$)이고, 꼬리가 두꺼워질 때 얻는 이득은 검정력 두 배에서 일곱 배다 — 맞바꿈이 이토록 한쪽으로 기울어 있다는 것이 비모수 검정을 기본값으로 삼을 만한 이유다.
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span>
+Mood 중앙값검정과 Mann-Whitney U 검정을 같은 자료에 적용하면 결과가 어떻게 다른가? 본문의 집단 A $= [50, 55, 60, 65, 70]$, 집단 B $= [45, 50, 55, 60, 65]$로 확인하고, 두 검정이 버리는 정보를 각각 설명하라.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy.stats import mannwhitneyu, median_test
+    a = np.array([50, 55, 60, 65, 70]); b = np.array([45, 50, 55, 60, 65])
+    print(mannwhitneyu(a, b, method='exact'))    # U=17.0, p=0.4206
+    print(median_test(a, b))                     # stat=0.0, p=1.0
+    ```
+
+    출력:
+
+    ```
+    MannwhitneyuResult(statistic=17.0, pvalue=0.42063492063492064)
+    MedianTestResult(statistic=0.0, pvalue=1.0, median=57.5, table=array([[3, 2],
+           [2, 3]]))
+    ```
+
+    | 검정 | 통계량 | $p$값 |
+    |:---|---:|---:|
+    | Mann-Whitney U | $U_1 = 17$ | $0.421$ |
+    | Mood 중앙값 (Yates 보정) | $\chi^2 = 0$ | $1.000$ |
+    | Mood 중앙값 (보정 없음) | $\chi^2 = 0.4$ | $0.527$ |
+
+    두 검정 모두 기각하지 않지만 $p$값 차이가 크다.
+
+    **Mood 중앙값검정이 버리는 것.** 각 관측값을 "전체 중앙값 위/아래"라는 이진값으로 뭉갠다. 집단 A의 $70$과 $60$이 똑같이 "위"로 처리된다. $25$개 자료점의 순서 정보 대부분이 사라지고 $2 \times 2$ 표만 남는다.
+
+    **Mann-Whitney가 버리는 것.** 값 사이의 **거리**를 버린다. A의 $70$이 B의 $65$보다 5만큼 큰지 $500$만큼 큰지 구별하지 않는다.
+
+    정보를 더 많이 버리는 쪽이 Mood 중앙값검정이며, 그만큼 검정력이 낮다. 실제로 Mood 중앙값검정의 정규분포 아래 ARE는 부호검정과 같은 $2/\pi \approx 0.637$로, Mann-Whitney의 $0.955$보다 훨씬 낮다.
+
+    **그렇다면 Mood 중앙값검정을 언제 쓰는가?** 두 경우이다. (1) 분포의 **모양이 크게 다를** 때. Mann-Whitney는 모양이 다르면 중앙값이 같아도 기각할 수 있지만, Mood 검정은 중앙값만 본다. (2) 자료가 심하게 절단·중도절단되어 순위조차 신뢰할 수 없을 때.
+
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span>
+Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을 확인하라. $H$와 $Z$ 사이에 어떤 관계가 있는가?
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    from scipy.stats import kruskal, mannwhitneyu, rankdata
+    rng = np.random.default_rng(0)
+    x = rng.normal(0, 1, 15); y = rng.normal(0.7, 1, 18)
+
+    H, pH = kruskal(x, y)
+    r = mannwhitneyu(x, y, method='asymptotic', use_continuity=False)
+    n1, n2 = len(x), len(y)
+    mu = n1 * n2 / 2
+    sd = np.sqrt(n1 * n2 * (n1 + n2 + 1) / 12)
+    Z = (r.statistic - mu) / sd
+    print(H, Z**2, H - Z**2)        # 6.4052  6.4052  ~0
+    print(pH, r.pvalue)             # 0.01138  0.01138
+    ```
+
+    출력:
+
+    ```
+    6.405228758169926 6.405228758169934 -7.993605777301127e-15
+    0.011378476531193307 0.01137847653119324
+    ```
+
+    **$H = Z^2$이고 두 $p$값이 정확히 같다.**
+
+    이유는 자유도 1인 카이제곱분포가 표준정규의 제곱이기 때문이다. $Z \sim \mathcal{N}(0,1)$이면 $Z^2 \sim \chi^2_1$이고, 집단이 둘이면 Kruskal-Wallis의 자유도가 $k - 1 = 1$이다.
+
+    대수적으로도 확인할 수 있다. $k = 2$일 때
+
+    $$
+    H = \frac{12}{N(N+1)}\left(\frac{R_1^2}{n_1} + \frac{R_2^2}{n_2}\right) - 3(N+1)
+    $$
+
+    에 $R_2 = N(N+1)/2 - R_1$을 대입하고 정리하면
+
+    $$
+    H = \frac{\left(R_1 - \frac{n_1(N+1)}{2}\right)^2}{\frac{n_1 n_2 (N+1)}{12}} = Z^2
+    $$
+
+    가 된다.
+
+    다만 두 검정이 완전히 같은 것은 아니다. Kruskal-Wallis는 언제나 **양측**이며 $\chi^2$ 근사만 쓴다. Mann-Whitney는 단측검정과 정확 $p$값을 지원한다. 집단이 둘이면 Mann-Whitney를 쓰는 편이 낫다.
+
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff hard" title="어려움"></span> $k = 2$일 때 Kruskal--Wallis $H$ 통계량이 순위합 $Z$ 통계량의
+제곱으로 환원됨을 증명하라.
+
+</div>
+
+??? success "풀이"
+
+    크기가 $m$과 $n = N - m$인 두 집단에서 순위합은 $R_1 + R_2 = N(N+1)/2$를
+    만족한다. Kruskal--Wallis 통계량은
+
+    $$
+    H = \frac{12}{N(N+1)}\left(\frac{R_1^2}{m} + \frac{R_2^2}{n}\right) - 3(N+1)
+    $$
+
+    이다. $W = R_1$, $S = N(N+1)/2$라 두고 $R_2 = S - W$를 대입하면
+
+    $$
+    \frac{R_1^2}{m} + \frac{R_2^2}{n}
+    = \frac{n W^2 + m(S - W)^2}{mn}
+    = \frac{(m+n)W^2 - 2mSW + mS^2}{mn}
+    = \frac{N W^2 - 2mSW + mS^2}{mn}.
+    $$
+
+    한편 목표하는 형태는 $\bigl(W - mS/N\bigr)^2$을 포함한다. 실제로
+
+    $$
+    \frac{N}{mn}\left(W - \frac{mS}{N}\right)^2
+    = \frac{N W^2 - 2mSW + m^2S^2/N}{mn}
+    $$
+
+    이므로 두 식의 차이는
+
+    $$
+    \frac{mS^2 - m^2S^2/N}{mn} = \frac{S^2(N - m)}{Nn} = \frac{S^2}{N}
+    $$
+
+    이다. 따라서
+
+    $$
+    H = \frac{12}{N(N+1)}\left[\frac{N}{mn}\left(W - \frac{mS}{N}\right)^2 + \frac{S^2}{N}\right] - 3(N+1).
+    $$
+
+    $S = N(N+1)/2$이므로 $\frac{12}{N(N+1)} \cdot \frac{S^2}{N} = \frac{12}{N(N+1)} \cdot \frac{N(N+1)^2}{4} = 3(N+1)$이 되어
+    상수항이 정확히 소거된다. 또 $mS/N = m(N+1)/2 = \operatorname{E}[W]$이므로
+
+    $$
+    H = \frac{12}{N(N+1)} \cdot \frac{N}{mn}\left(W - \operatorname{E}[W]\right)^2
+      = \frac{\bigl(W - \operatorname{E}[W]\bigr)^2}{mn(N+1)/12}
+      = Z^2. \quad \square
+    $$
+
+    이것이 $H$의 $\chi^2_1$ 분포가 $Z$의 표준정규분포의 제곱임을 확인해 준다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    rng = np.random.default_rng(0)
+    x = rng.normal(0, 1, 12); y = rng.normal(0.5, 1, 15)
+    H = stats.kruskal(x, y).statistic
+    Z = stats.ranksums(x, y).statistic
+    print(H, Z ** 2, abs(H - Z ** 2) < 1e-10)
+    # True
+    ```
+
+    출력:
+
+    ```
+    0.7714285714285722 0.7714285714285715 True
+    ```
+
+---
+
 
 ---
 
