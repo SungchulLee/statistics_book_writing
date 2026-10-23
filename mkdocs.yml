@@ -159,9 +159,9 @@ nav:
                 - 금융위기와 중심극한정리의 실패: ch05/foundations/financial_crisis_clt.md
             - 5.2 네 가지 기본 표집분포:
                 - 정규분포 N(μ, σ²)와 표준정규 Z: ch05/distributions/normal.md
-                - t 분포 t(ν): ch05/distributions/student_t.md
-                - 카이제곱분포 χ²(k): ch05/distributions/chi_square.md
-                - F 분포 F(d₁, d₂): ch05/distributions/f_distribution.md
+                - t 분포 (σ를 모를 때): ch05/distributions/student_t.md
+                - 카이제곱분포 (표본분산): ch05/distributions/chi_square.md
+                - F 분포 (분산비): ch05/distributions/f_distribution.md
             - 5.3 표준오차와 부트스트랩:
                 - 표준오차: ch05/applications/standard_error.md
                 - 붓스트랩 표준오차: ch05/applications/bootstrap_standard_error.md
@@ -314,7 +314,7 @@ nav:
         - 10 카이제곱 검정:
             - 장 개요: ch10/index.md
             - 10.1 카이제곱분포와 점근 이론:
-                - 카이제곱분포 χ²(k): ch10/distribution/distribution.md
+                - 카이제곱 분포 (범주형 도수): ch10/distribution/distribution.md
                 - 자유도와 점근 이론: ch10/distribution/degrees_of_freedom.md
             - 10.2 범주형 자료에 대한 카이제곱 검정:
                 - 적합도 검정: ch10/test/gof.md
@@ -359,7 +359,7 @@ nav:
                 - 등분산성 확인: ch11/assumptions/homoscedasticity.md
                 - 선형성 확인: ch11/assumptions/linearity.md
             - 11.6 진단:
-                - 잔차 분석: ch11/diagnostics/residual_analysis.md
+                - 잔차 분석 (분산분석): ch11/diagnostics/residual_analysis.md
                 - 영향점: ch11/diagnostics/influential_points.md
                 - 가정 위반의 처리: ch11/diagnostics/handling_violations.md
                 - 분산분석 진단: ch11/diagnostics/anova_diagnostics.md
@@ -472,12 +472,12 @@ nav:
                 - 통계적 추론에서의 핵심 역할: ch14/introduction/role_in_inference.md
                 - 금융 자료에서의 정규성: ch14/introduction/financial_context.md
             - 14.2 시각적 방법:
-                - 히스토그램과 밀도 그림: ch14/graphical_methods/histogram_density.md
+                - 히스토그램과 밀도 그림 (정규성 판정): ch14/graphical_methods/histogram_density.md
                 - Q-Q 그림: ch14/graphical_methods/qq_plots.md
                 - 상자그림과 그 해석: ch14/graphical_methods/boxplots.md
                 - 금융 수익률의 Q-Q 그림: ch14/graphical_methods/qq_plots_financial.md
             - 14.3 정규성 지표로서의 기술통계량:
-                - 왜도와 첨도: ch14/descriptive_statistics/skewness_kurtosis.md
+                - 왜도와 첨도 (표집변동): ch14/descriptive_statistics/skewness_kurtosis.md
                 - 왜도 검정: ch14/descriptive_statistics/skewtest.md
                 - 첨도 검정: ch14/descriptive_statistics/kurtosistest.md
                 - D'Agostino K제곱 검정: ch14/descriptive_statistics/dagostino.md
@@ -509,7 +509,7 @@ nav:
             - 15.2 분산에 대한 카이제곱 검정:
                 - 일표본 카이제곱 분산 검정: ch15/chi_square_test/chi_square_variance.md
                 - 모분산의 신뢰구간: ch15/chi_square_test/ci_variance.md
-                - 카이제곱분포 χ²(k): ch15/chi_square_test/chi_square_distribution.md
+                - 카이제곱분포 (분산 검정): ch15/chi_square_test/chi_square_distribution.md
             - 15.3 두 분산 비교를 위한 F 검정:
                 - 이표본 F 검정: ch15/f_test/f_test_two_variances.md
                 - F 분포 F(d₁, d₂)와 자유도: ch15/f_test/f_distribution_details.md
