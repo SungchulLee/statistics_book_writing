@@ -1607,7 +1607,7 @@ $$
 
 <div class="storybox" markdown>
 
-**그림으로 보는 통계학 1.** 파피루스에 그림으로 남은 같은 사실
+**그림으로 보는 통계학 4.** 파피루스에 그림으로 남은 같은 사실
 
 <figure markdown>
   ![유클리드 원론 제2권 명제 5 의 본문과 정사각형 그림이 남아 있는 파피루스 조각](./img/agm__papyrus.png){ width=330 align=right }
