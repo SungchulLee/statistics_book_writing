@@ -1,8 +1,8 @@
-r"""17장 붓스트랩 절(bootstrap/) 네 쪽의 개념 그림을 생성한다.
+r"""17장 붓스트랩 절(bootstrap/)과 신뢰구간 절(bootstrap_ci/)의 개념 그림을 생성한다.
 
 만드는 파일:
   ch17/bootstrap/img/bootstrap_world_analogy.png   두 세계의 유비와 중심화한 두 분포
-  ch17/bootstrap/img/four_ci_one_distribution.png  한 붓스트랩 분포에서 읽는 네 구간
+  ch17/bootstrap_ci/img/four_ci_one_distribution.png  한 붓스트랩 분포에서 읽는 네 구간
   ch17/bootstrap/img/resample_pairs_vs_separate.png  쌍을 지키는 재표집과 깨는 재표집
   ch17/bootstrap/img/parametric_vs_nonparametric.png  무엇에서 다시 뽑는가
 
@@ -30,12 +30,16 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
+# 쪽마다 디렉터리가 다르므로 출력 경로를 둘로 나눈다.
+# four_ci_one_distribution 은 17.2 의 「비교」 쪽이 쓴다.
 OUT = "docs/ch17/bootstrap/img/"
+OUT_CI = "docs/ch17/bootstrap_ci/img/"
 os.makedirs(OUT, exist_ok=True)
+os.makedirs(OUT_CI, exist_ok=True)
 
 
-def save(fig, name):
-    path = OUT + name
+def save(fig, name, out=OUT):
+    path = out + name
     fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print("saved", path)
@@ -222,7 +226,7 @@ def fig_four_ci():
     ax2.set_xlabel("중앙값", fontsize=10, color=INK)
     tidy(ax2)
 
-    save(fig, "four_ci_one_distribution.png")
+    save(fig, "four_ci_one_distribution.png", out=OUT_CI)
 
 
 # ===========================================================================
