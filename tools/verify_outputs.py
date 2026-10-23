@@ -26,6 +26,14 @@
 때마다 달라지는 것을 보여 주는 보기가 그런 경우다. **결함을 덮는 데 쓰지 말 것** —
 재현되지 않는 수를 실어 놓고 이 표시로 가리면 독자가 속는다.
 
+애초에 **돌아갈 수 없는** 블록은 `# verify: noexec — <까닭>` 을 적는다. 바깥
+꾸러미의 속을 그대로 옮겨 보이는 자리가 그렇다. 그 코드의 `X`, `Y` 는 옮겨 온
+함수가 **인자로 받는** 것이라 이 자리에 있을 수가 없다. `skip` 으로는 안 된다 —
+그것은 「돌리되 출력은 보지 않는다」이므로 NameError 가 그대로 남는다. noexec 는
+돌리지 않으므로 뒤 블록이 이 블록의 변수를 쓰고 있으면 거기서 터진다. 이 표시는
+**스스로 닫힌 인용**에만 쓸 것이다. 건너뛴 블록은 `SKIP` 으로 찍어 남기고, 쪽을
+BAD 로 세지는 않는다 — 조용히 사라지면 결함을 덮는 데 쓰이기 때문이다.
+
 시간제한은 **프로세스 무리째** 건다. `subprocess.run(timeout=)` 은 자식만 죽이므로
 `n_jobs=-1` 이 띄운 joblib 일꾼은 살아남아 계속 돈다. 그러면 다음 쪽부터는 남의
 일꾼과 코어를 다투게 된다. 자식을 `start_new_session` 으로 띄우고 `os.killpg` 로
@@ -79,6 +87,10 @@ json.dump(_out, open(_result, "w", encoding="utf-8"))
 
 
 SKIP_OUT = re.compile(r"#\s*(verify|검증)\s*:\s*(skip|출력무시|출력\s*무시)")
+# 돌아갈 수 없는 블록 — 바깥 꾸러미의 속을 그대로 옮긴 인용 따위. SKIP_OUT 과
+# 달리 아예 돌리지 않는다. 까닭은 표시 뒤에 적게 하고 그대로 찍어 보인다.
+NOEXEC = re.compile(r"#\s*(?:verify|검증)\s*:\s*(?:noexec|실행안함|돌리지\s*않음)"
+                    r"\s*(?:[—–-]\s*(?P<why>.*))?")
 
 
 def blocks(path):
@@ -123,9 +135,16 @@ def preamble(path):
 def check(path, timeout=1800):
     bs = blocks(path)
     codes, meta = [], []          # meta: (시작줄, 기대 출력 또는 None)
+    skipped = []                  # 돌리지 않은 블록 — (시작줄, 까닭)
     pre = preamble(path)
     for k, (lang, ln, code) in enumerate(bs):
         if lang not in ("python", "py"):
+            continue
+        mx = NOEXEC.search(code)
+        if mx:
+            # 돌리지 않으므로 codes/meta 양쪽에서 빠진다. 둘을 함께 빼야
+            # 아래 zip(meta, got) 의 짝이 어긋나지 않는다.
+            skipped.append((ln, (mx.group("why") or "").strip() or "까닭이 적혀 있지 않다"))
             continue
         exp = None
         if k + 1 < len(bs) and bs[k + 1][0] in ("", "text"):
@@ -139,7 +158,7 @@ def check(path, timeout=1800):
         codes.append((pre + "\n" + code) if (pre and not codes) else code)
         meta.append((ln, exp))
     if not codes:
-        return []
+        return [("SKIP", ln, why) for ln, why in skipped]
 
     with tempfile.TemporaryDirectory() as d:
         spec = pathlib.Path(d, "spec.json")
@@ -176,7 +195,8 @@ def check(path, timeout=1800):
             died = ("DEAD", "결과를 남기지 못하고 죽었다"
                             f" ({tail[-1][:70] if tail else '출력 없음'})")
     if got is None:
-        return [(died[0], meta[0][0], died[1])]
+        return [(died[0], meta[0][0], died[1])] + \
+               [("SKIP", ln, why) for ln, why in skipped]
 
     rows = []
     for (ln, exp), r in zip(meta, got):
@@ -197,6 +217,8 @@ def check(path, timeout=1800):
             rows.append(("DIFF", ln, d1[:130]))
         else:
             rows.append(("OK", ln, f"{len(b)}행"))
+    rows += [("SKIP", ln, why) for ln, why in skipped]
+    rows.sort(key=lambda r: r[1])          # 쪽에 나오는 순서대로 되돌린다
     return rows
 
 
@@ -208,12 +230,15 @@ def main(argv):
         rows = check(p)
         if not rows:
             continue
-        bad = [r for r in rows if r[0] != "OK"]
+        # SKIP 은 결함이 아니므로 쪽을 BAD 로 만들지 않되, 찍어서 남긴다.
+        # 조용히 사라지면 결함을 덮는 표시가 되어 버린다.
+        bad = [r for r in rows if r[0] not in ("OK", "SKIP")]
         for kind, _, _ in rows:
             tally[kind] = tally.get(kind, 0) + 1
         print(f"{'OK  ' if not bad else 'BAD '}{p}  ({len(rows)} 블록)", flush=True)
-        for kind, ln, msg in bad:
-            print(f"      {kind:7s}{ln:5d}  {msg}", flush=True)
+        for kind, ln, msg in rows:
+            if kind != "OK":
+                print(f"      {kind:7s}{ln:5d}  {msg}", flush=True)
     print("\n" + "  ".join(f"{k}={v}" for k, v in sorted(tally.items())))
 
 

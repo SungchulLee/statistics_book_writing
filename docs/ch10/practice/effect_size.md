@@ -265,6 +265,9 @@ $\S 1$ 의 마지막 줄이 「큰 $\chi^2$ 값에 감탄하기 전에 $n$ 을 �
 그대로다. 그런데 속을 열어 보면 분할표가 없다.
 
 ```python
+# verify: noexec — 꾸러미 안쪽을 그대로 옮긴 것이다. X 는 특징 행렬,
+# Y 는 class 를 one-hot 으로 펼친 것, k 는 class 수로, 모두 저 함수가
+# 인자로 받거나 안에서 만드는 것이라 이 자리에서는 돌아가지 않는다.
 observed     = Y.T @ X                    # class 마다 특징값을 더한 것
 feature_count = X.sum(axis=0)
 class_prob    = Y.mean(axis=0)
