@@ -62,6 +62,10 @@ $$
 이다. $B$의 모든 대각원소가 $0<\sigma(1-\sigma)\le\tfrac14$을 만족하므로, 헤세행렬은 임의의
 $\boldsymbol{\theta}$에 대해 **양반정치**이고 교차엔트로피 손실이 볼록임을 확인해 준다.
 
+다음 쪽은 같은 행렬을 로그가능도 쪽에서 $-\mathbf{X}^\top\mathbf{W}\mathbf{X}$ 로 적는다.
+$\mathbf{W}$ 가 여기의 $B$ 이고, 부호가 반대인 것은 손실이 아니라 로그가능도를 미분하기
+때문이다.
+
 ### 가중치가 말하는 것
 
 $B$의 대각원소 $\sigma^{(i)}(1-\sigma^{(i)})$는 단순히 "양수라서 볼록하다"는 확인용 부품이
@@ -99,56 +103,16 @@ $$
 = \boldsymbol{\theta} - \alpha\,A^\top(\boldsymbol{\sigma}-\mathbf{y})
 $$
 
-이며, $\alpha$는 학습률이다.
+이며, $\alpha$는 학습률이다. 기울기만 쓰는 이 갱신이 이 쪽 4 절의 구현이 하는 일이다.
+
+헤세행렬을 **쓰는** 쪽, 곧 뉴턴-랩슨과 그것을 가중최소제곱으로 다시 쓴
+반복재가중최소제곱(IRLS)은 다음 쪽
+[뉴턴-랩슨과 반복재가중최소제곱](algorithms.md)이 다룬다. 수렴 차수와 완전분리에서의
+비수렴, 손으로 따라가는 반복 둘까지 거기 있다.
 
 ---
 
-## 4. 뉴턴법과 IRLS
-
-뉴턴(2차) 갱신은 헤세행렬을 이용한다.
-
-$$
-\boldsymbol{\theta}
-= \boldsymbol{\theta}_0 - (A^TBA)^{-1}\,A^\top(\boldsymbol{\sigma}-\mathbf{y})
-$$
-
-이는 **가중최소제곱**의 정규방정식으로 다시 쓸 수 있다. *작업 반응변수*를
-
-$$
-\mathbf{z} = A\boldsymbol{\theta}_0 - B^{-1}(\boldsymbol{\sigma}-\mathbf{y})
-$$
-
-로 정의하면 갱신식은
-
-$$
-\boldsymbol{\theta} = (A^TBA)^{-1}\,A^TB\,\mathbf{z}
-$$
-
-가 된다. 이는 가중최소제곱 문제
-$\min_{\boldsymbol{\theta}}\|B^{1/2}(\mathbf{z}-A\boldsymbol{\theta})\|^2$의 해와 정확히 같다.
-
-### 반복재가중최소제곱(IRLS)
-
-가중행렬 $B$가 (($\boldsymbol{\sigma}$를 통해) 현재의 모수벡터 $\boldsymbol{\theta}$에
-의존하므로, 정규방정식을 반복 적용하며 각 단계에서 $B$와 $\mathbf{z}$를 다시 계산해야 한다.
-이 절차를 **반복재가중최소제곱(IRLS)**이라 한다(Rubin, 1983).
-
-!!! info "IRLS 알고리즘"
-
-    1. $\boldsymbol{\theta}_0$을 초기화한다.
-    2. $\boldsymbol{\sigma} = \sigma(A\boldsymbol{\theta}_0)$을 계산한다.
-    3. $B = \operatorname{diag}(\sigma^{(i)}(1-\sigma^{(i)}))$을 만든다.
-    4. 작업 반응변수 $\mathbf{z} = A\boldsymbol{\theta}_0 - B^{-1}(\boldsymbol{\sigma}-\mathbf{y})$
-       를 계산한다.
-    5. $\boldsymbol{\theta} = (A^TBA)^{-1}A^TB\mathbf{z}$를 푼다.
-    6. $\boldsymbol{\theta}_0 \leftarrow \boldsymbol{\theta}$로 놓고 수렴할 때까지 반복한다.
-
-IRLS는 보통 적은 반복으로 수렴하며, 많은 고전적 로지스틱 회귀 해법기의 바탕이 되는
-알고리즘이다.
-
----
-
-## 5. 구현: 경사하강으로 하는 로지스틱 회귀
+## 4. 구현: 경사하강으로 하는 로지스틱 회귀
 
 다음 NumPy 구현은 1차 경사하강만으로 로지스틱 회귀를 처음부터 학습시킨다.
 
@@ -543,7 +507,7 @@ IRLS는 보통 적은 반복으로 수렴하며, 많은 고전적 로지스틱 �
 
 ---
 
-## 6. 구현: scikit-learn으로 하는 로지스틱 회귀
+## 5. 구현: scikit-learn으로 하는 로지스틱 회귀
 
 비교를 위해 같은 작업을 `sklearn`으로 하면 다음과 같다.
 
