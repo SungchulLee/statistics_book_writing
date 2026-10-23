@@ -877,6 +877,8 @@ Fisher 정보량을 **수치 미분**으로 계산할 때 생기는 문제를 �
     **더 나은 방법 2 — 자동미분.** JAX나 PyTorch의 `hessian`을 쓰면 **기계 정밀도까지 정확한** 도함수를 얻는다. 연쇄법칙을 코드 수준에서 적용하는 것이라 수치 근사가 전혀 들어가지 않는다.
 
     ```python
+    # verify: noexec — 관용을 보이는 두 줄이다. loglik·data·theta_hat 은 독자의
+    # 모형이고, jax 는 이 책의 요구 꾸러미에 없다.
     import jax, jax.numpy as jnp
     H = jax.hessian(lambda th: -loglik(th, data))(theta_hat)
     ```

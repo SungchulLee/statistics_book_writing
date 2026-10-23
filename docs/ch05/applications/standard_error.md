@@ -424,6 +424,9 @@ $$
 
 
     ```python
+    # verify: noexec — 이 블록은 standard_error_of_x_bar.py 라는 하나의 파일이다.
+    # 위에서 말한 대로 문서에서 이어 붙여 돌릴 수 없다. 아래 출력은 두 파일을
+    # 같은 디렉터리에 저장하고 파일로 돌려 받은 것이다.
     import matplotlib.pyplot as plt
     import numpy as np
 
@@ -502,6 +505,8 @@ $$
     **`draw()`를 뗀 이득.** 이 함수가 받는 것은 "값의 목록, 이름, 기호, 축 범위"뿐이고 값이 표본평균인지 표본분산인지 묻지 않는다. 표준오차를 재는 두 줄
 
     ```python
+    # verify: noexec — 바로 위에서 말한 draw() 의 두 줄을 그대로 옮긴 것이다.
+    # values 는 그 함수가 인자로 받는 것이라 이 자리에는 없다.
     average = values.mean()
     standard_error = values.std()
     ```
@@ -559,6 +564,8 @@ $$
 
 
     ```python
+    # verify: noexec — 이 블록도 하나의 파일(standard_error_of_s_square.py)이고,
+    # 바로 위 파일을 import 한다. 문서에서 이어 붙여 돌릴 수 없다.
     import numpy as np
 
     # 그리는 부분은 앞 파일에 이미 있으므로 가져다 쓴다.

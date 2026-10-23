@@ -101,6 +101,7 @@ $$
     **(2) 수치적으로.** 적합한 뒤 참값에서 몇 표준오차나 떨어졌는지 함께 찍는다.
 
     ```python
+    import numpy as np
     from scipy import stats
 
     def poisson_mle_demo(n_train=200, n_test=200, lam_true=4.5):

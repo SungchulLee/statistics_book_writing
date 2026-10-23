@@ -1457,6 +1457,7 @@ $n = 25$, $\bar{x} = 12.4$, $s = 3.1$일 때 정규모집단 평균의 95% 신�
     **1단계 — Q-Q 그림.** 가장 정보가 많은 단일 진단이다.
 
     ```python
+    # verify: noexec — x 는 독자가 적합하려는 자료다. 1~5 단계가 모두 그렇다.
     import scipy.stats as stats
     stats.probplot(x, dist="norm", plot=plt)
     ```
@@ -1466,6 +1467,7 @@ $n = 25$, $\bar{x} = 12.4$, $s = 3.1$일 때 정규모집단 평균의 95% 신�
     **2단계 — 적률 점검.**
 
     ```python
+    # verify: noexec — 위와 같다. x 는 독자의 자료다.
     print(stats.skew(x), stats.kurtosis(x))       # 둘 다 0에 가까워야 한다
     print(stats.jarque_bera(x))                    # 두 적률을 결합한 검정
     ```
@@ -1475,6 +1477,7 @@ $n = 25$, $\bar{x} = 12.4$, $s = 3.1$일 때 정규모집단 평균의 95% 신�
     **3단계 — 적합된 밀도를 겹쳐 그린다.**
 
     ```python
+    # verify: noexec — 위와 같다. x 와 mu_hat·sigma_hat 은 독자가 적합한 것이다.
     plt.hist(x, bins="auto", density=True, alpha=0.4)
     grid = np.linspace(x.min(), x.max(), 400)
     plt.plot(grid, stats.norm(mu_hat, sigma_hat).pdf(grid))
@@ -1486,6 +1489,7 @@ $n = 25$, $\bar{x} = 12.4$, $s = 3.1$일 때 정규모집단 평균의 95% 신�
 
     ```python
     # 출력 없음: x 는 독자가 적합하려는 자료다. 1~5 단계가 모두 그렇다.
+    # verify: noexec — 같은 까닭이다.
     for name, dist in [("norm", stats.norm), ("t", stats.t), ("laplace", stats.laplace)]:
         params = dist.fit(x)
         ll = dist.logpdf(x, *params).sum()
@@ -1581,6 +1585,8 @@ $t$ 분포를 MLE로 적합할 때 자유도 $\nu$의 추정이 왜 어려운지
     **(1) 해석적 해와 비교.** 정규분포는 닫힌 해가 있으므로
 
     ```python
+    # verify: noexec — 독자가 자기 구현을 시험하는 줄이다. mu_hat_numeric 과 x 는
+    # 독자의 것이라 이 자리에는 없다. (1)~(3) 이 모두 그렇다.
     assert np.allclose(mu_hat_numeric, x.mean())
     assert np.allclose(sigma2_hat_numeric, x.var(ddof=0))
     ```
@@ -1590,6 +1596,7 @@ $t$ 분포를 MLE로 적합할 때 자유도 $\nu$의 추정이 왜 어려운지
     **(2) 모의실험으로 성질을 확인.** 참값을 알고 자료를 생성해
 
     ```python
+    # verify: noexec — 위와 같다. fit 이 독자의 구현이다.
     ests = [fit(rng.normal(5, 3, 20)) for _ in range(10_000)]
     # E[mu_hat] ≈ 5,  E[sigma2_hat] ≈ 9*(19/20),  E[S^2] ≈ 9
     ```
@@ -1599,6 +1606,7 @@ $t$ 분포를 MLE로 적합할 때 자유도 $\nu$의 추정이 왜 어려운지
     **(3) 기울기와 헤시안을 수치미분과 대조.** 해석적으로 구현한 점수함수가 맞는지
 
     ```python
+    # verify: noexec — 위와 같다. theta·neg_loglik·score 가 독자의 것이다.
     from scipy.optimize import approx_fprime
     num = approx_fprime(theta, neg_loglik, 1e-6)
     ana = score(theta)

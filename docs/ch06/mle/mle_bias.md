@@ -410,11 +410,20 @@ MLE의 편향이 일반적으로 $O(1/n)$임을 테일러 전개로 설명하고
     으로 **정확히 불편추정량이 나온다.**
 
     ```python
+    import numpy as np
+
+    rng = np.random.default_rng(0)
     x = rng.normal(5, 3, 8)
     mle = lambda a: ((a - a.mean()) ** 2).mean()
     th = mle(x)
     ths = np.array([mle(np.delete(x, i)) for i in range(len(x))])
     print(len(x) * th - (len(x) - 1) * ths.mean(), x.var(ddof=1))   # 두 값이 같다
+    ```
+
+    출력:
+
+    ```
+    3.1863547650584607 3.186354765058461
     ```
 
     **왜 정확한가.** 정규 분산의 편향이 정확히 $-\sigma^2/n$으로 $1/n$의 **정확한** 함수라, 잭나이프가 그것을 완전히 제거한다. 편향에 $1/n^2$ 항이 있으면 그것까지 지우지는 못하고 $O(n^{-2})$가 남는다.
@@ -554,6 +563,7 @@ MLE의 편향을 **모의실험으로 측정**하는 절차를 설계하라. 편
 
     ```python
     # 출력 없음: 골격이다. generate 와 mle 를 자기 모형으로 바꿔 끼운다.
+    # verify: noexec — 같은 까닭이다. 그 둘과 n 이 없으니 돌아가지 않는다.
     rng = np.random.default_rng(0)
     theta_true, B = 2.0, 50_000
     ests = np.empty(B)

@@ -652,6 +652,8 @@ $k$-최근접이웃 회귀에서 $k$가 커질수록 편향과 분산이 어떻�
     - **모의실험.** 참값을 우리가 정하므로 둘을 정확히 분리할 수 있다.
 
       ```python
+      # verify: noexec — 골격이다. simulate 와 estimate 는 독자가 재는 추정량이고
+      # theta_true 와 B 는 독자가 정하는 것이라 이 자리에는 없다.
       thetas = [estimate(simulate(theta_true)) for _ in range(B)]
       bias = np.mean(thetas) - theta_true
       var  = np.var(thetas, ddof=1)
