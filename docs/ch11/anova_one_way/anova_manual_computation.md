@@ -320,7 +320,7 @@ $10^9$ 이 억지스러워 보이지만 그렇지 않다. 유닉스 시각은 $1
 낸다. `numpy.var` 를 비롯한 요즘 라이브러리가 지름길 공식을 쓰지 않는 까닭이
 여기 있다. **손으로 셀 때만 조심하면 되는 것이 아니라, 직접 구현할 때 조심해야 한다.**
 
-수치적 상쇄 일반에 대한 이야기는 12.2절 [공분산을 바닥부터](../../ch12/correlation/covariance_from_scratch.md)에 있다.
+수치적 상쇄 일반에 대한 이야기는 12.1절 [공분산을 바닥부터](../../ch12/correlation/covariance_from_scratch.md)에 있다.
 
 _확인한 곳 — B. P. Welford ($1962$) *Note on a Method for Calculating Corrected Sums
 of Squares and Products*, 『Technometrics』 $4$ 권 $419$–$420$ 쪽. 서지 기록만 확인했고

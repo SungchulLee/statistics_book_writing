@@ -334,7 +334,7 @@ $$
 
     가 되어 **$F > 2$일 때 AIC가 내려간다.** BIC는 같은 계산에서 $\Delta\mathrm{BIC} \approx q(\ln n - F)$이므로 **$F > \ln n$** 이어야 한다.
 
-    $q = 1$이면 $F = t^2$이므로 [13.3절 보기 5](../assumptions/checking_linearity.md)의 $\lvert t\rvert > \sqrt 2$, $\lvert t\rvert > \sqrt{\ln n}$과 같은 말이다. **$n$이 커질수록 BIC의 문턱만 올라간다**는 것이 두 기준의 결정적 차이다. $n = 20{,}640$에서 $\ln n = 9.93$이니 BIC는 AIC보다 거의 다섯 배 센 증거를 요구한다.
+    $q = 1$이면 $F = t^2$이므로 [13.5절 보기 5](../assumptions/checking_linearity.md)의 $\lvert t\rvert > \sqrt 2$, $\lvert t\rvert > \sqrt{\ln n}$과 같은 말이다. **$n$이 커질수록 BIC의 문턱만 올라간다**는 것이 두 기준의 결정적 차이다. $n = 20{,}640$에서 $\ln n = 9.93$이니 BIC는 AIC보다 거의 다섯 배 센 증거를 요구한다.
 
     **(2) 수치적으로.**
 

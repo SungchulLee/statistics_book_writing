@@ -263,7 +263,7 @@ $$
 집단마다 **$x$ 의 범위**가 다른 것이 그 뒤집힘을 만든다 — 범주형에서 표본
 크기가 가중치로 들어오던 자리를 $x$ 의 퍼짐이 맡는다.
 
-이 역설은 12.5절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md)이
+이 역설은 12.2절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md)이
 전담한다. 그 쪽 절 $6$ 이 연속형을 네 보기로 끝까지 따진다 — 기울기가 같은데
 상관이 갈리는 자리, 합친 상관의 이론값, 합친 기울기의 출처, 그리고 그림이
 **가리는** 것까지다.
@@ -522,7 +522,7 @@ $X \perp Y \mid Z$($Z$가 주어졌을 때의 조건부 독립)이고 세 변수
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff hard" title="어려움"></span>
-12.5절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md) 보기 3 에서 집단 B의 $y$ 기준선을 $45$ 대신 $30 + d$ 로 두자(본문은 $d = 15$). 나머지는 그대로다. 곧 집단 안 기울기는 $-0.4$, $x$ 범위는 A가 $[10,30]$, B가 $[25,50]$, 잡음 표준편차는 $2$, 집단 크기는 반반이다.
+12.2절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md) 보기 3 에서 집단 B의 $y$ 기준선을 $45$ 대신 $30 + d$ 로 두자(본문은 $d = 15$). 나머지는 그대로다. 곧 집단 안 기울기는 $-0.4$, $x$ 범위는 A가 $[10,30]$, B가 $[25,50]$, 잡음 표준편차는 $2$, 집단 크기는 반반이다.
 
 **(1)** 합친 자료의 $\operatorname{Cov}(x,y)$, $\operatorname{Var}(x)$, $\operatorname{Var}(y)$ 를 $d$ 의 함수로 적고 합친 상관 $\rho(d)$ 를 쓰시오. $d = 15$ 에서 본문의 $0.316703$ 을 되찾는지 확인하시오.
 
@@ -532,7 +532,7 @@ $X \perp Y \mid Z$($Z$가 주어졌을 때의 조건부 독립)이고 세 변수
 
 ??? success "풀이"
 
-    **(1) $d$ 는 세 양 가운데 둘에만 들어간다.** 집단별 $x$ 평균은 $20$, $37.5$ 로 $d$ 와 무관하고, $y$ 평균은 $22$ 와 $-0.4 \times 37.5 + 30 + d = 15 + d$ 이므로 그 차이는 $u \coloneqq d - 7$ 이다. 12.5절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md) 보기 3 의 분해를 그대로 쓰면 집단 안 몫은 $d$ 에 전혀 의존하지 않고
+    **(1) $d$ 는 세 양 가운데 둘에만 들어간다.** 집단별 $x$ 평균은 $20$, $37.5$ 로 $d$ 와 무관하고, $y$ 평균은 $22$ 와 $-0.4 \times 37.5 + 30 + d = 15 + d$ 이므로 그 차이는 $u \coloneqq d - 7$ 이다. 12.2절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md) 보기 3 의 분해를 그대로 쓰면 집단 안 몫은 $d$ 에 전혀 의존하지 않고
 
     $$
     V_{\text{안}} = \frac{33.3333 + 52.0833}{2} = 42.7083,
@@ -705,7 +705,7 @@ $X \perp Y \mid Z$($Z$가 주어졌을 때의 조건부 독립)이고 세 변수
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
-12.5절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md) 보기 3 의 (2)는 $y$ 기준선 차이가 $d > 10.905$ 를 넘으면 합친 상관의 부호가 뒤집힌다고 했다. 그 문턱을 정확히 하고, 문턱을 갓 넘은 자료에서 역설이 **표본에서도** 보이는지 묻는다. 설정은 연습문제 7과 같다.
+12.2절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md) 보기 3 의 (2)는 $y$ 기준선 차이가 $d > 10.905$ 를 넘으면 합친 상관의 부호가 뒤집힌다고 했다. 그 문턱을 정확히 하고, 문턱을 갓 넘은 자료에서 역설이 **표본에서도** 보이는지 묻는다. 설정은 연습문제 7과 같다.
 
 **(1)** 문턱 $d^*$ 를 기약분수로 정확히 구하시오.
 
@@ -715,7 +715,7 @@ $X \perp Y \mid Z$($Z$가 주어졌을 때의 조건부 독립)이고 세 변수
 
 ??? success "풀이"
 
-    **(1) $d^* = 229/21$.** 12.5절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md) 보기 3 의 문턱 조건은 집단 사이 기울기 $b = (d-7)/17.5$ 가 $0.4\,V_{\text{안}}/V_{\text{사이}}$ 를 넘는 것이었다. 분산을 분수로 적으면
+    **(1) $d^* = 229/21$.** 12.2절 [Simpson의 역설](../ecological_correlation/simpsons_paradox.md) 보기 3 의 문턱 조건은 집단 사이 기울기 $b = (d-7)/17.5$ 가 $0.4\,V_{\text{안}}/V_{\text{사이}}$ 를 넘는 것이었다. 분산을 분수로 적으면
 
     $$
     V_{\text{안}} = \frac{1}{2}\left(\frac{400}{12} + \frac{625}{12}\right) = \frac{1025}{24},

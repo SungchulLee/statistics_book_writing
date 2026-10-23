@@ -75,7 +75,7 @@ $$
 
 ??? success "풀이"
 
-    **(1) 극한 오류율은 첨도 하나로 정해진다.** 5.3절 [분산비의 표집분포(비정규)](../../ch05/applications/var_ratio_nonnormal.md)가 유도한 대로, $\log F$ 의 참 표준편차는 $\sqrt{(\beta_2-1)(1/n_1+1/n_2)}$ 인데 F 검정은 그것을 정규 가정의 $\sqrt{2(1/n_1+1/n_2)}$ 로 믿는다. 두 $\sqrt{1/n_1+1/n_2}$ 가 **약분되어 $n$ 이 사라지고**
+    **(1) 극한 오류율은 첨도 하나로 정해진다.** 5.10절 [분산비의 표집분포(비정규)](../../ch05/applications/var_ratio_nonnormal.md)가 유도한 대로, $\log F$ 의 참 표준편차는 $\sqrt{(\beta_2-1)(1/n_1+1/n_2)}$ 인데 F 검정은 그것을 정규 가정의 $\sqrt{2(1/n_1+1/n_2)}$ 로 믿는다. 두 $\sqrt{1/n_1+1/n_2}$ 가 **약분되어 $n$ 이 사라지고**
 
     $$
     \text{실제 오류율} \;\longrightarrow\; 2\left[1 - \Phi\!\left(1.96\sqrt{\frac{2}{\beta_2-1}}\right)\right]

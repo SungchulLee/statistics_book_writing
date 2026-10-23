@@ -83,7 +83,7 @@ $$
     \Delta\hat{\boldsymbol\beta} = (X^\top X)^{-1}X^\top \boldsymbol\delta
     $$
 
-    로 변화량이 정확히 적힌다. 자료의 나머지 부분은 전혀 들어오지 않는다. 단순회귀에서 이것을 성분으로 풀어쓰면 [13.1절 보기 1](../assumptions/checking_normality.md)에서 본 $\hat\beta_1 = \sum_i c_i y_i$에서
+    로 변화량이 정확히 적힌다. 자료의 나머지 부분은 전혀 들어오지 않는다. 단순회귀에서 이것을 성분으로 풀어쓰면 [13.5절 보기 1](../assumptions/checking_normality.md)에서 본 $\hat\beta_1 = \sum_i c_i y_i$에서
 
     $$
     \Delta\hat\beta_1 = \sum_i c_i \delta_i,
