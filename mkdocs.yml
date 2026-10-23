@@ -412,8 +412,6 @@ nav:
                 - 단순선형회귀: ch13/linear_regression/simple.md
                 - 다중선형회귀: ch13/linear_regression/multiple.md
                 - 범주형 설명변수: ch13/linear_regression/categorical_predictors.md
-                - 3차원 회귀평면: ch13/linear_regression/regression_plane_3d.md
-                - 회귀 (대마초 가격과 인구통계): ch13/linear_regression/regression_weed_demographics.md
             - 13.2 추정과 추론:
                 - 최소제곱 추정: ch13/estimation_inference/least_squares.md
                 - 단순 OLS 추정량의 표집분포: ch13/estimation_inference/sampling_dist_simple.md
@@ -513,7 +511,6 @@ nav:
                 - 분산 검정의 공통 가정: ch15/introduction/common_assumptions.md
             - 15.2 분산에 대한 카이제곱 검정:
                 - 일표본 카이제곱 분산 검정: ch15/chi_square_test/chi_square_variance.md
-                - 유도와 분포이론: ch15/chi_square_test/derivation.md
                 - 모분산의 신뢰구간: ch15/chi_square_test/ci_variance.md
                 - 카이제곱분포 χ²(k): ch15/chi_square_test/chi_square_distribution.md
             - 15.3 두 분산 비교를 위한 F 검정:
