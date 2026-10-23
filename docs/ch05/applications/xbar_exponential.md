@@ -60,7 +60,7 @@ $$
     M_X(t) = \frac{\lambda}{\lambda - t} = \left(1 - \frac{t}{\lambda}\right)^{-1}
     $$
 
-    이다. 독립이면 MGF 가 곱해지므로(3.4절 적률생성함수 정리 3)
+    이다. 독립이면 MGF 가 곱해지므로(3.4절 [적률생성함수](../../ch03/rv/mgf.md) 정리 3)
 
     $$
     M_{S_n}(t) = \left(1 - \frac{t}{\lambda}\right)^{-n}

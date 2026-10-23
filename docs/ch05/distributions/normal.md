@@ -575,7 +575,7 @@ $X_i \sim N(\mu_i, \sigma_i^2)$가 독립일 때 $\sum_i a_iX_i + b$의 분포�
 </div>
 
 ??? success "풀이"
-    적률생성함수 계산은 4.2절 정규분포 쪽 연습문제 4에서 두 변수 경우로 이미 해 두었다. 같은 계산을 $n$개로 되풀이하면
+    적률생성함수 계산은 4.2절 [정규분포](../../ch04/continuous_distributions/normal.md) 연습문제 4에서 두 변수 경우로 이미 해 두었다. 같은 계산을 $n$개로 되풀이하면
 
     $$
     \sum_i a_iX_i + b \sim N\!\left(b+\sum_i a_i\mu_i,\ \sum_i a_i^2\sigma_i^2\right)
@@ -586,7 +586,7 @@ $X_i \sim N(\mu_i, \sigma_i^2)$가 독립일 때 $\sum_i a_iX_i + b$의 분포�
     **왜 유용한가.** 표본이론에서 다루는 통계량 상당수가 정규확률변수의 선형결합이기 때문이다.
 
     - $\bar X = \sum (1/n)X_i \sim N(\mu, \sigma^2/n)$. 근사가 아니라 **정확**하다. 5.4절이 서 있는 바탕이 이 한 줄이다.
-    - $\bar X_1 - \bar X_2$ 역시 정규이며, 5.7절과 연습문제 5의 계산이 여기서 나온다.
+    - $\bar X_1 - \bar X_2$ 역시 정규이며, 5.7절 [두 표본평균의 차](../applications/diff_means.md)와 연습문제 5의 계산이 여기서 나온다.
     - 회귀계수 $\hat{\boldsymbol\beta} = (X^\top X)^{-1}X^\top\mathbf{y}$가 $\mathbf{y}$의 선형결합이므로, 오차가 정규이면 $\hat{\boldsymbol\beta}$도 정규다. 회귀의 $t$ 검정과 $F$ 검정이 모두 이 사실 위에 서 있다.
     - 대비(contrast) $\sum c_i\bar X_i$ 역시 정규이며, 분산분석의 사후검정이 이를 이용한다.
 
