@@ -204,7 +204,7 @@ nav:
                 - 추정량으로서의 표본평균: ch05/mean/sample_mean.md
                 - 편향과 일치성: ch05/mean/bias_consistency.md
                 - 표본평균의 효율성: ch05/mean/efficiency.md
-                - 절사평균과 윈저화 평균: ch05/mean/robust_means.md
+                - 오염을 늘리면 어느 평균이 먼저 무너지는가: ch05/mean/robust_means.md
             - 5.13 분산의 추정:
                 - 소박한 분산추정량: ch05/variance/naive.md
                 - Bessel 수정: ch05/variance/bessels.md
