@@ -314,7 +314,7 @@ nav:
         - 10 카이제곱 검정:
             - 장 개요: ch10/index.md
             - 10.1 카이제곱분포와 점근 이론:
-                - 카이제곱 분포 (범주형 도수): ch10/distribution/distribution.md
+                - 카이제곱분포 (범주형 도수): ch10/distribution/distribution.md
                 - 자유도와 점근 이론: ch10/distribution/degrees_of_freedom.md
             - 10.2 범주형 자료에 대한 카이제곱 검정:
                 - 적합도 검정: ch10/test/gof.md
