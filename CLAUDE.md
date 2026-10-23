@@ -229,6 +229,15 @@ grep -rhoE '\*\*(그림으로 보는|AI로 보는) 통계학 [0-9]+\.' docs --in
 grep -rnoP '\\(?:text|textbf|textrm|textit|mbox)\{[^{}]*\\[%_&#~^][^{}]*\}' docs --include='*.md'
 ```
 
+**절을 넘는 중복 검사** — `python3 tools/lint_cross_section_pairs.py [chNN] [--all]`.
+한 장 안에서 **같은 장·다른 절** 두 쪽이 특징적 소제목을 둘 이상 공유하는 자리를 찾는다.
+절 안의 중복은 눈에 띄지만 절을 넘는 것은 nav 에서 멀리 떨어져 함께 열리지 않는다 —
+ch14 의 14.1 과 14.7 이 「정형화된 사실」 넷을 소제목까지 같게 적고 있었고 서로 링크도
+없었다. **후보만 낸다**: 아홉 가운데 넷이 의도된 평행 구조였고(검정마다 자기 p 값 유도가
+있어야 한다), 하나는 틀이 달라 양쪽이 다 있어야 했다(오염 모형 대 두꺼운 꼬리 모형).
+판정이 끝난 쌍은 도구 안 `SETTLED` 에 까닭과 함께 적혀 있으니 **같은 쌍을 다시 열지
+말 것.** 소제목을 고쳐 겹침이 풀린 쌍은 「이제 안 걸림」으로 보고된다.
+
 **거짓 절 번호 검사** — `python3 tools/lint_section_refs.py [chNN]`. 본문의
 `N.M절 [쪽](경로)` 에서 **링크는 맞고 번호만 거짓인** 자리를 찾는다. 눌러 보면 제자리에
 가고 `--strict` 도 통과하므로 틀린 것은 **독자가 읽는 번호뿐**이다. 장·절을 옮긴 뒤
@@ -264,6 +273,8 @@ python3 tools/lint_outputs.py
 python3 tools/lint_figures.py
 # 링크는 맞고 절 번호만 거짓인 참조 — 0 이어야 한다 (빌드는 통과한다)
 python3 tools/lint_section_refs.py
+# 절을 넘어 같은 일을 하는 쪽 쌍 — 판정이 안 된 것이 0 이어야 한다
+python3 tools/lint_cross_section_pairs.py
 # 머리글의 LaTeX 와 ASCII 그리스 문자 — 목차에 날 문자열로 새어 나간다
 grep -rnE '^#{1,6} .*\$' docs --include='*.md'
 grep -rnE '^#{1,4} .*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)' docs --include='*.md'
