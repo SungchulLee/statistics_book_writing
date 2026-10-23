@@ -304,7 +304,7 @@ $$
 
     **대응 $t$ 검정만 다른 답을 준다.** $t = -4.25/1.326450 = -3.204$에서 $p = 0.0084$로 순열검정의 $0.0122$보다 작다. 이 자료의 왜도는 $0.197$로 거의 대칭이므로 원인은 치우침이 아니다. 두 가지가 겹친다.
 
-    - **척도가 다르다.** 순열은 $\sqrt{\sum d_i^2}/n = 1.766$으로 재고 $t$ 검정은 $s_d/\sqrt n = 1.326$으로 잰다. [순열검정](permutation.md) 보기 3에서 본 대로 비가 $\sqrt{(n-1+t^2)/n} = \sqrt{(11 + 10.266)/12} = 1.331$이다.
+    - **척도가 다르다.** 순열은 $\sqrt{\sum d_i^2}/n = 1.766$으로 재고 $t$ 검정은 $s_d/\sqrt n = 1.326$으로 잰다. 아래 보기 3 에서 보는 대로 비가 $\sqrt{(n-1+t^2)/n} = \sqrt{(11 + 10.266)/12} = 1.331$이다.
     - **꼬리가 다르다.** 순열분포는 $\pm 5.25$에서 끊기는데 $t_{11}$은 끝없이 뻗는다.
 
     더 넓고 유계인 귀무분포에서 같은 관측값을 재니 $p$값이 커진다. **순열검정의 $0.0122$는 이 자료에서 정확한 값이고, $t$ 검정의 $0.0084$는 정규성을 빌려 온 근사다.**
@@ -424,6 +424,159 @@ $$
 
 !!! warning "차이가 0인 경우"
     어떤 $d_i = 0$이면 그 관측에 대한 부호 뒤집기는 아무 효과가 없다($0$의 부호를 바꿔도 $0$이다). 흔한 처리는 검정 전에 $0$인 차이를 제외하거나($n$이 줄어든다), 같은 확률로 양수나 음수에 무작위 배정하는 것이다.
+
+---
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 대응자료의 부호 뒤집기 검정. 열 사람의 처치 전후 측정에서 차이 $d_i$를 얻고, 각 $d_i$의 부호를 독립으로 뒤집어 귀무분포를 만든다.
+
+**(1)** 부호 뒤집기 귀무분포에서 $\bar d^{*}$의 평균과 분산을 닫힌 꼴로 구하시오. 또 $d_i$가 **모두 같은 부호**이면 $\lvert \bar d^{*}\rvert$의 최댓값이 $\lvert \bar d_{\text{obs}}\rvert$ 자신이고 그것을 이루는 배정이 꼭 둘뿐임을 보여, 정확 $p$값을 구하시오.
+
+**(2)** 실행해 확인하고, (1)의 분산으로 한 정규근사와 대응 $t$ 검정이 각각 정확값과 얼마나 어긋나는지 재시오. 부호 뒤집기 귀무분포의 표준편차가 $t$ 검정의 표준오차보다 넓은 까닭도 밝히시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 차이는 $d = (2, 1, 3, 5, 3, 2, 1, 2, 1, 4)$로 $\bar d_{\text{obs}} = 2.4$, $\sum_i d_i^2 = 74$다. 귀무가설 아래에서 각 차이의 분포가 $0$을 중심으로 대칭이므로, 독립인 부호 $\varepsilon_i \in \{-1, +1\}$을 각각 확률 $1/2$로 붙인
+
+    $$
+    \bar d^{*} = \frac1n \sum_{i=1}^n \varepsilon_i d_i
+    $$
+
+    가 귀무분포다. $E[\varepsilon_i] = 0$, $\operatorname{Var}(\varepsilon_i) = 1$이고 $\varepsilon_i$들이 독립이므로
+
+    $$
+    E[\bar d^{*}] = 0,
+    \qquad
+    \operatorname{Var}(\bar d^{*}) = \frac{1}{n^2}\sum_{i=1}^n d_i^2
+    $$
+
+    이다. **차이의 크기만 쓰고 부호는 쓰지 않는다.** 수를 넣으면
+
+    $$
+    \operatorname{SD}(\bar d^{*}) = \frac{\sqrt{74}}{10} = 0.8602325
+    $$
+
+    **최댓값.** 삼각부등식에서
+
+    $$
+    \lvert \bar d^{*}\rvert = \frac1n\left\lvert \sum_i \varepsilon_i d_i \right\rvert
+    \le \frac1n \sum_i \lvert d_i \rvert
+    $$
+
+    이고, 등호는 모든 $\varepsilon_i d_i$의 부호가 같을 때, 곧 $\varepsilon$이 전부 $+1$이거나 전부 $-1$일 때만 성립한다. 이 자료는 $d_i$가 **열 개 모두 양수**이므로 $\frac1n\sum_i \lvert d_i\rvert = \bar d_{\text{obs}} = 2.4$이고, 등호를 이루는 배정은 관측된 것과 그것을 통째로 뒤집은 것 **둘뿐**이다. 따라서
+
+    $$
+    p_{\text{정확}} = \frac{2}{2^{10}} = \frac{2}{1024} = 0.001953
+    $$
+
+    이고, 이것은 $n = 10$인 부호 뒤집기 검정이 낼 수 있는 **가장 작은 양측 $p$값**이다(연습문제 2가 일반 $n$에서 같은 셈을 한다).
+
+    **(2) 수치적으로.** 먼저 쪽의 모의실험이다.
+
+    ```python
+    import numpy as np
+
+    def paired_permutation_test(before, after, n_permutations=10000, seed=0):
+        """대응자료에 대한 부호 뒤집기 순열검정.
+
+        귀무가설 아래에서는 각 차이의 분포가 0 을 중심으로 대칭이다. 그러므로
+        어느 차이들의 부호를 뒤집든 똑같이 그럴듯하다. 대응자료에서 이름표를
+        섞으면 안 되는 대신 이 방법을 쓴다.
+        """
+        rng = np.random.default_rng(seed)
+        differences = np.asarray(after) - np.asarray(before)
+        observed_mean_diff = differences.mean()
+
+        signs = rng.choice([-1, 1], size=(n_permutations, len(differences)))
+        perm_means = (signs * differences).mean(axis=1)
+
+        p_value = ((np.abs(perm_means) >= abs(observed_mean_diff)).sum() + 1) \
+                  / (n_permutations + 1)
+        return p_value, observed_mean_diff
+
+    before = [70, 68, 75, 80, 72, 74, 69, 77, 73, 76]
+    after = [72, 69, 78, 85, 75, 76, 70, 79, 74, 80]
+
+    p_value, obs_diff = paired_permutation_test(before, after)
+    print(f"Observed Mean Difference: {obs_diff:.2f}")   # 2.40
+    print(f"P-value: {p_value:.4f}")                     # 0.002
+    ```
+
+    출력:
+
+    ```
+    Observed Mean Difference: 2.40
+    P-value: 0.0020
+    ```
+
+    이제 $2^{10} = 1{,}024$가지를 모두 열거해 (1)을 확인한다. 위 블록의 변수를 그대로 이어 쓴다.
+
+    ```python
+    import itertools
+    from scipy import stats
+
+    d = np.asarray(after) - np.asarray(before)
+    n = len(d)
+    print(f"d = {d},  모두 양수인가: {bool((d > 0).all())}")
+    print(f"d-bar = {d.mean():.4f},   sum d^2 = {int((d ** 2).sum())}")
+
+    sd_null = np.sqrt((d ** 2).sum()) / n
+    print(f"SD(d-bar*) 닫힌 꼴 = {sd_null:.7f}")
+
+    # 2^10 = 1,024 가지 부호 배정을 모두 열거한다.
+    S = np.array(list(itertools.product([1, -1], repeat=n)))
+    m = (S * d).mean(1)
+    hit = int((np.abs(m) >= abs(d.mean()) - 1e-12).sum())
+    print(f"열거한 SD         = {m.std():.7f}")
+    print(f"|d-bar*| 의 최댓값 = {np.abs(m).max():.4f}  (관측값 {d.mean():.4f})")
+    print(f"|d-bar*| >= 2.4 인 배정 = {hit} 가지 / {len(m)}  ->  정확 p = {hit / len(m):.9f}")
+
+    z = d.mean() / sd_null
+    print(f"\n정규근사 z = {z:.6f},  양측 p = {2 * stats.norm.sf(z):.6f}"
+          f"   (정확값의 {2 * stats.norm.sf(z) / (hit / len(m)):.2f} 배)")
+
+    tt = stats.ttest_rel(after, before)
+    se_t = d.std(ddof=1) / np.sqrt(n)
+    print(f"\n대응 t 검정: t = {tt.statistic:.6f},  p = {tt.pvalue:.6f},  SE = {se_t:.7f}")
+    print(f"SD(d-bar*)/SE_t  실제 = {sd_null / se_t:.7f}")
+    print(f"                 예측 = {np.sqrt((n - 1 + tt.statistic ** 2) / n):.7f}")
+    ```
+
+    출력:
+
+    ```
+    d = [2 1 3 5 3 2 1 2 1 4],  모두 양수인가: True
+    d-bar = 2.4000,   sum d^2 = 74
+    SD(d-bar*) 닫힌 꼴 = 0.8602325
+    열거한 SD         = 0.8602325
+    |d-bar*| 의 최댓값 = 2.4000  (관측값 2.4000)
+    |d-bar*| >= 2.4 인 배정 = 2 가지 / 1024  ->  정확 p = 0.001953125
+
+    정규근사 z = 2.789943,  양측 p = 0.005272   (정확값의 2.70 배)
+
+    대응 t 검정: t = 5.622255,  p = 0.000325,  SE = 0.4268749
+    SD(d-bar*)/SE_t  실제 = 2.0151862
+                     예측 = 2.0151862
+    ```
+
+    **(1)이 모두 맞는다.** 닫힌 꼴 $\sqrt{74}/10 = 0.8602325$가 열거한 표준편차와 일곱 자리까지 같고, $\lvert \bar d^{*}\rvert$의 최댓값이 정확히 관측값 $2.4$이며 그것을 이루는 배정이 $1{,}024$개 중 $2$개다. 몬테카를로값 $0.002000$도 예측 평균 $0.002053$에서 $-0.12$ 표준편차 떨어진 제자리다.
+
+    **정규근사는 $2.70$배 크고 $t$ 검정은 $6.0$배 작다.** 정규근사가 틀리는 까닭은 관측값이 분포의 **지지집합 끝점**에 놓였기 때문이다. $\bar d^{*}$는 $[-2.4, 2.4]$ 밖으로 나갈 수 없는데 정규곡선은 그 너머에도 질량을 두므로 꼬리를 과대평가한다. 여기서는 $0.005272$ 대 $0.001953$이다.
+
+    **$t$ 검정이 작은 값을 주는 까닭은 눈금이 좁기 때문이다.** $\sum_i d_i^2 = (n-1)s_d^2 + n\bar d^2$를 쓰고 $t = \bar d\sqrt n / s_d$를 넣으면
+
+    $$
+    \frac{\operatorname{SD}(\bar d^{*})}{\operatorname{SE}_t}
+    = \sqrt{\frac{\sum_i d_i^2}{n\, s_d^2}}
+    = \sqrt{\frac{n - 1 + t^2}{n}}
+    $$
+
+    이고, $t = 5.622255$에서 $\sqrt{(9 + 31.6098)/10} = 2.0151862$다. 코드가 낸 비와 일곱 자리까지 같다. **$t$ 검정은 효과를 뺀 나머지의 흩어짐 $s_d$로 눈금을 재고, 부호 뒤집기는 효과까지 포함한 $\sqrt{\sum d_i^2}$로 잰다.** 효과가 커서 $\lvert t\rvert > 1$ 이면 부호 뒤집기의 귀무분포가 더 넓어져 **스스로를 깎는다.** 여기서는 두 배가 넘게 넓다.
+
+    두 어긋남의 성격이 다르다는 것이 요점이다. 정규근사의 $2.70$배는 **근사의 실패**이고, $t$ 검정의 $6.0$배는 **다른 가정 아래의 다른 답**이다. 정규성을 믿을 수 없는 $n = 10$에서 믿을 것은 $0.001953$ 하나다.
 
 ---
 

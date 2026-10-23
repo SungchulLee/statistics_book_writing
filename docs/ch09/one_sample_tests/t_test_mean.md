@@ -848,7 +848,7 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 | 부호검정 | 중앙값 | 연속성뿐 | 16.2 [부호검정](../../ch16/one_sample_nonparametric/sign_test.md) |
 | Wilcoxon 부호순위 | $0$ 에 대한 대칭 중심 | 차이의 분포가 대칭 | 16.2 [Wilcoxon 부호순위검정](../../ch16/one_sample_nonparametric/wilcoxon_signed_rank.md) |
 | 붓스트랩 | 평균 (그대로) | 표본이 모집단을 대표 | 17.3 [단일 평균에 대한 붓스트랩 검정](../../ch17/bootstrap_testing/single_mean.md) |
-| 순열 | 분포가 같은지 | 교환가능성 | 17.4 [순열검정 개요](../../ch17/permutation/permutation.md) |
+| 순열 | 분포가 같은지 | 교환가능성 | 17.4 [순열검정의 기초](../../ch17/permutation/foundations.md) |
 
 **바꿔 타면 가설이 바뀐다는 것이 요점이다.** $t$ 검정은 평균을 묻고 부호검정은
 중앙값을 묻는다. 치우친 분포에서 둘은 같은 값이 아니므로, 「$t$ 가 안 되니

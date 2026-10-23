@@ -651,7 +651,112 @@ $$
 
 ---
 
-## 5. 해석
+## 5. 가장 작은 자료에서 끝까지
+
+마지막으로, 이 쪽의 함수들이 하는 일을 **가장 작은 자료**에서 끝까지 따라가 본다. 집단마다 다섯 개면 $\binom{10}{5} = 252$ 가지라 전수 열거와 무작위 순열을 같은 자리에서 견줄 수 있다.
+
+<div class="exbox" markdown>
+
+**보기 7.** <span class="diff easy" title="쉬움"></span> 순열검정 절차. **자료:**
+
+- 집단 A: $[8, 7, 9, 10, 6]$
+- 집단 B: $[5, 6, 4, 3, 7]$
+
+**가설:**
+
+- $H_0$: 두 집단의 평균이 같다.
+- $H_1$: 두 집단의 평균이 다르다.
+
+</div>
+
+??? success "풀이"
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    def permutation_test(group_a, group_b, n_permutations=10000, seed=0):
+        """
+        Permutation test for a difference in means.
+
+        Parameters
+        ----------
+        group_a, group_b : array-like
+            Data for each group.
+        n_permutations : int
+            Number of random permutations.
+
+        Returns
+        -------
+        p_value : float
+            Two-sided p-value with the +1 correction.
+        observed_diff : float
+            The observed difference in means.
+        perm_differences : ndarray
+            The permutation distribution.
+        """
+        rng = np.random.default_rng(seed)
+        combined = np.concatenate([group_a, group_b])
+        observed_diff = np.mean(group_a) - np.mean(group_b)
+        na = len(group_a)
+
+        perm_differences = np.empty(n_permutations)
+        for i in range(n_permutations):
+            p = rng.permutation(combined)
+            perm_differences[i] = p[:na].mean() - p[na:].mean()
+
+        p_value = ((np.abs(perm_differences) >= abs(observed_diff)).sum() + 1) \
+                  / (n_permutations + 1)
+        return p_value, observed_diff, perm_differences
+
+    group_a = np.array([8, 7, 9, 10, 6])
+    group_b = np.array([5, 6, 4, 3, 7])
+
+    p_value, observed_diff, perm_dist = permutation_test(group_a, group_b)
+
+    print(f"Observed Difference in Means: {observed_diff:.2f}")
+    print(f"P-value: {p_value:.4f}")
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.hist(perm_dist, bins=50, edgecolor='black', alpha=0.7,
+            label='Permutation Distribution')
+    ax.axvline(observed_diff, color='red', linestyle='--', linewidth=2,
+               label=f'Observed = {observed_diff:.2f}')
+    ax.axvline(-observed_diff, color='red', linestyle='--', linewidth=2)
+    ax.legend()
+    ax.set_xlabel('Difference in Means')
+    ax.set_ylabel('Frequency')
+    ax.set_title('Permutation Test Distribution')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    Observed Difference in Means: 3.00
+    P-value: 0.0418
+    ```
+
+![순열검정의 귀무분포](./img/permutation_62.png)
+
+**출력 예:**
+
+```
+Observed Difference in Means: 3.00
+P-value: 0.0397
+```
+
+$5$% 수준에서는 유의하지 않다. 각 집단이 $5$개뿐이므로 가능한 순열이 $\binom{10}{5} = 252$가지이고, 이를 **전부 열거**하면 정확 $p$값 $10/252 = 0.0397$을 얻는다. 몬테카를로 값이 이와 일치한다.
+
+!!! warning "$t$ 검정과의 차이를 그냥 넘기지 말 것"
+    같은 자료의 이표본 $t$ 검정은 $p = 0.0171$로 **유의하다**고 답한다. 순열검정은 $p = 0.0397$이다. 두 결론이 $\alpha = 0.02$ 부근에서 갈린다.
+
+    차이의 원인은 이 표본이 너무 작다는 것이다. 정확 순열분포에서 $|d^*| \ge 3$인 순열은 $252$개 중 $10$개뿐이고, 가능한 $p$값의 최솟값은 $2/252 = 0.0079$이다. $t$ 분포는 이 이산성을 무시하고 매끄러운 꼬리를 가정한다.
+
+    작은 표본에서는 **정확 순열 $p$값이 더 믿을 만하다**.
+
+---
+
+## 6. 해석
 
 - **이표본 검정**은 두 페이지 집단 사이의 $15$단위 이동을 탐지한다. $p$값이 작으며 이표본 $t$ 검정과 일관된다.
 - **다집단 검정**은 네 집단 평균이 모두 같지는 않음을 식별한다. 평균들의 분산 통계량은 분산분석의 $F$ 통계량에 대응한다.

@@ -979,6 +979,121 @@ $$
 
 ---
 
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff hard" title="어려움"></span>
+2 절은 종속자료에 "블록 순열검정"을 쓴다고만 적었다. 왜 보통 순열로는 안 되는지 재어 보자. 서로 **독립인** 두 AR(1) 계열
+
+$$
+x_t = \phi x_{t-1} + \varepsilon_t,
+\qquad
+y_t = \phi y_{t-1} + \eta_t,
+\qquad t = 1, \ldots, n
+$$
+
+을 정상분포에서 출발시켜 만든다($n = 40$, $\varepsilon, \eta$는 독립 표준정규). $H_0$ "두 계열은 상관이 없다"가 **참**인 자료다. 여기에 두 가지 재배열을 적용해 $\alpha = 0.05$ 검정의 실제 크기를 $\phi = 0, 0.7, 0.9$에서 재어라.
+
+- **(가) 보통 순열**: $y$를 통째로 뒤섞는다($B = 99$, $\hat p = (1+\#)/100$).
+- **(나) 순환이동**: $y$를 $k$칸 돌린다($k = 0, 1, \ldots, n-1$을 **모두 열거**, $\hat p = \#/n$).
+
+보기 2에서 순열 귀무분포의 표준편차가 자료와 무관하게 $1/\sqrt{n-1}$임을 보았다. 한편 독립인 두 AR(1)에서 $\operatorname{SD}(r) \approx \sqrt{\frac{1+\phi^2}{(1-\phi^2)n}}$이다. 연습문제 7과 같은 논법으로 (가)의 크기를 예측하고 모의값과 견주어라. (나)가 왜 (가)보다 나은지, 그러면서도 왜 $\phi = 0.9$에서 완전하지 않은지 밝혀라.
+
+</div>
+
+??? success "풀이"
+
+    **먼저 예측.** 보기 2에서 $y$를 뒤섞는 순열분포는 $E[r^{*}] = 0$, $\operatorname{SD}(r^{*}) = 1/\sqrt{n-1}$이고 **이것은 자료가 무엇이든 같다.** 그러니 (가)는 임계값을 $\pm z_{\alpha/2}/\sqrt{n-1}$로 고정해 놓은 검정과 거의 같다. 반면 종속자료에서 관측 $r$의 실제 표준편차는
+
+    $$
+    \operatorname{Var}(r) \approx \frac1n\sum_{k=-\infty}^{\infty}\rho_x(k)\rho_y(k)
+    = \frac1n\left(1 + 2\sum_{k\ge1}\phi^{2k}\right)
+    = \frac{1}{n}\cdot\frac{1+\phi^2}{1-\phi^2}
+    $$
+
+    로 커진다($\rho_x(k) = \rho_y(k) = \phi^{\lvert k\rvert}$, 바틀렛 공식). 연습문제 7의 논법을 그대로 쓰면 실제 크기는
+
+    $$
+    2\Phi\!\left(-z_{\alpha/2}\,\frac{\operatorname{SD}(r^{*})}{\operatorname{SD}(r)}\right)
+    $$
+
+    다. $\phi = 0.7$이면 $\operatorname{SD}(r) = \sqrt{1.49/(0.51\times40)} = 0.2703$인데 순열분포는 $1/\sqrt{39} = 0.1601$뿐이니, 눈금이 $0.59$배로 **좁다**.
+
+    **수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(7)
+    n, M, B, alpha = 40, 20_000, 99, 0.05
+
+    def ar1(phi, C):
+        """정상분포에서 출발하는 AR(1) 표본 C 개 — 재현을 축으로 한꺼번에."""
+        x = np.empty((C, n))
+        x[:, 0] = rng.normal(0, 1 / np.sqrt(1 - phi ** 2), C)
+        e = rng.normal(size=(C, n - 1))
+        for t in range(1, n):
+            x[:, t] = phi * x[:, t - 1] + e[:, t - 1]
+        return x
+
+    def size(phi, chunk=500):
+        """서로 독립인 두 AR(1) 계열에서 "상관 없음" 검정의 실제 크기."""
+        rej_perm = rej_shift = 0
+        for start in range(0, M, chunk):
+            C = min(chunk, M - start)
+            a, b = ar1(phi, C), ar1(phi, C)
+            a = a - a.mean(1, keepdims=True)
+            b = b - b.mean(1, keepdims=True)
+            na, nb = np.sqrt((a ** 2).sum(1)), np.sqrt((b ** 2).sum(1))
+            obs = np.abs((a * b).sum(1) / (na * nb))
+            # (가) 관측값을 흩는 순열: y 를 통째로 섞는다
+            idx = rng.random((C, B, n)).argsort(axis=2)
+            bp = np.take_along_axis(b[:, None, :], idx, axis=2)
+            r_perm = np.abs((a[:, None, :] * bp).sum(2) / (na * nb)[:, None])
+            p_perm = ((r_perm >= obs[:, None] - 1e-12).sum(1) + 1) / (B + 1)
+            # (나) 구조를 지키는 순환이동: n 가지를 모두 열거한다 (FFT 로 한꺼번에)
+            cc = np.fft.irfft(np.fft.rfft(a, axis=1) * np.conj(np.fft.rfft(b, axis=1)),
+                              n=n, axis=1)
+            r_shift = np.abs(cc / (na * nb)[:, None])
+            p_shift = (r_shift >= obs[:, None] - 1e-9).sum(1) / n
+            rej_perm += int((p_perm <= alpha).sum())
+            rej_shift += int((p_shift <= alpha).sum())
+        return rej_perm / M, rej_shift / M
+
+    z_half = stats.norm.isf(alpha / 2)
+    sd_perm = 1 / np.sqrt(n - 1)
+    print(f"{'phi':>5}{'SD(r)':>9}{'SD_perm':>9}{'pred':>8}"
+          f"{'shuffle':>10}{'cyc-shift':>11}")
+    for phi in (0.0, 0.7, 0.9):
+        sd_r = np.sqrt((1 + phi ** 2) / ((1 - phi ** 2) * n))
+        pred = 2 * stats.norm.sf(z_half * sd_perm / sd_r)
+        rp, rs = size(phi)
+        print(f"{phi:5.1f}{sd_r:9.4f}{sd_perm:9.4f}{pred:8.4f}{rp:10.4f}{rs:11.4f}")
+    ```
+
+    출력:
+
+    ```text
+      phi    SD(r)  SD_perm    pred   shuffle  cyc-shift
+      0.0   0.1581   0.1601  0.0472    0.0501     0.0503
+      0.7   0.2703   0.1601  0.2455    0.2198     0.0565
+      0.9   0.4880   0.1601  0.5202    0.4401     0.0843
+    ```
+
+    **독립이면 둘 다 맞는다.** $\phi = 0$에서 $0.0501$과 $0.0503$이다. 순환이동 쪽은 $n = 40$가지를 다 세므로 $\hat p \ge 1/40 = 0.025$이고 $\hat p \le 0.05$가 $\#\le 2$를 뜻하니 크기가 정확히 $2/40 = 0.05$다.
+
+    **종속이면 보통 순열이 무너진다.** $\phi = 0.7$에서 $0.2198$, $\phi = 0.9$에서 $0.4401$이다. 명목 $5$%가 $22$%, $44$%가 된다. 예측값 $0.2455$, $0.5202$와 방향과 크기가 맞고(정규근사를 $n = 40$의 강한 종속에 쓴 탓에 조금 어긋난다), **어긋남의 정체가 눈금임을 확인해 준다.** $y$를 뒤섞는 순간 $y$의 자기상관이 지워져 순열분포는 "독립자료였다면"의 너비를 갖게 되는데, 관측된 $r$은 그보다 $1.7$배 넓게 흔들린다. 흩어 놓은 자료가 실제 자료보다 **덜 흔들리므로** 표준오차를 과소평가하고 $p$값을 과소평가한다. 이것이 붓스트랩에서 시계열을 블록으로 뽑아야 하는 까닭과 같다.
+
+    **순환이동은 구조를 지킨다.** $y$를 $k$칸 돌리면 $y$의 **순서가 그대로 남아** 자기상관이 보존된다(끝이 앞으로 돌아오는 자리만 빠진다). 두 계열이 결합해서 순환정상이면 $n$개 이동은 $H_0$ 아래에서 교환가능하므로 검정이 정확하다. 실제로 $\phi = 0.7$에서 $0.0565$로 명목수준 근처에 머문다.
+
+    **그래도 $\phi = 0.9$에서 $0.0843$이다.** 두 가지가 겹친다. 첫째, AR(1)은 **순환정상이 아니다**. $t = n$과 $t = 1$을 이어 붙이는 자리에서 상관이 $\phi$가 아니라 $\phi^{n-1} \approx 0$으로 끊기므로, 돌린 계열은 원래 계열과 꼭 같은 분포가 아니다. 둘째, $\phi = 0.9$에서 상관시간이 $1/(1-\phi) = 10$이라 $n = 40$에 **사실상 독립인 덩어리가 네 개**뿐이다. 유효표본이 $4$인 셈이니 어떤 재배열로도 정확해질 수 없다. 처방은 두 가지다 — $n$을 상관시간의 수십 배로 키우거나, 블록 길이를 상관시간보다 길게 잡는 블록 순열로 바꾸는 것이다.
+
+    **정리하면 이 쪽의 긴장이 그대로 드러난다.** 순열검정은 "무엇을 섞어도 분포가 같은가"에 기대고, 그 질문의 답은 자료의 구조가 정한다. **독립자료에서는 관측값을 흩어도 되지만, 종속자료에서는 지켜야 할 구조를 남기고 섞어야 한다.**
+
+---
+
+---
+
 ## 정리하며
 
 재표집 방법은 표준 가정(독립성, 유한분산, 매끄러움, 충분한 표본크기)이 깨질 때 실패한다. 가장 흔한 실패 양상은 종속자료(iid 붓스트랩이 불확실성을 과소평가한다), 극단 순서통계량(붓스트랩 분포가 관측 범위를 넘어설 수 없다), 두꺼운 꼬리(분산 추정이 불안정하다), 작은 표본(경험분포가 너무 거칠다)이다. 이런 한계를 알아보고 적절한 대책 — 블록 붓스트랩, 부분표집, 모수적 붓스트랩, 꼬리 특화 방법 — 을 아는 것이 재표집 기법을 책임 있게 쓰기 위한 조건이다.
