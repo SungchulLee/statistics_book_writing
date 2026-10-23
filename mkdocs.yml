@@ -83,7 +83,6 @@ nav:
                 - 사분위범위와 강건 측도: ch02/spread/robust.md
                 - 중앙값 절대편차: ch02/spread/median_absolute_deviation.md
                 - 기술통계 (대마 가격): ch02/spread/descriptive_stats_weed_prices.md
-                - 고급 측도 (기하평균, 체비쇼프): ch02/spread/descriptive_measures_advanced.md
             - 2.5 시각화:
                 - 막대그림: ch02/visualization/bar_charts.md
                 - 원그래프: ch02/visualization/pie_charts.md
