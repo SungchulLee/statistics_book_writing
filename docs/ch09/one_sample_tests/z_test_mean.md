@@ -91,6 +91,123 @@ $p$-값은 $H_0$이 참이라는 가정 아래 관측값 $z_{\text{obs}}$만큼 
 
 $p < \alpha$이면 $H_0$을 기각한다.
 
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균 검정 계산기. 요약통계량 $(\bar x, s, n)$만 받아 $z$-검정과 $t$-검정을 모두 처리하는 함수를 만들려 한다. 양측 p-값은 $P(\lvert T \rvert \ge \lvert t_{\text{obs}} \rvert)$로 정의한다.
+
+**(1)** 귀무분포가 $0$에 대해 대칭인 연속분포이고 그 분포함수를 $F$라 할 때,
+
+$$
+P(\lvert T \rvert \ge \lvert t_{\text{obs}} \rvert) = 2\min\{F(t_{\text{obs}}),\ 1 - F(t_{\text{obs}})\}
+$$
+
+임을 보이시오. 또 이 식이 성립하지 않는 검정의 예를 드시오.
+
+**(2)** (1)의 식을 써서 두 검정을 함께 처리하는 함수를 작성하고, 원자료가 있는 경우 `scipy.stats.ttest_1samp`와 같은 값을 주는지 확인하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** $F$가 $0$에 대해 대칭이면 $F(-u) = 1 - F(u)$이다. $t = t_{\text{obs}}$로 줄여 쓰면
+
+    $$
+    P(\lvert T \rvert \ge \lvert t \rvert)
+    = P(T \le -\lvert t \rvert) + P(T \ge \lvert t \rvert)
+    = F(-\lvert t \rvert) + \bigl(1 - F(\lvert t \rvert)\bigr)
+    = 2\bigl(1 - F(\lvert t \rvert)\bigr)
+    $$
+
+    이다. 남은 것은 $1 - F(\lvert t \rvert) = \min\{F(t),\ 1-F(t)\}$를 보이는 일이고, 부호로 나누면 끝난다.
+
+    - $t \ge 0$이면 $\lvert t \rvert = t$이므로 $1 - F(\lvert t \rvert) = 1 - F(t)$이다. 대칭성에서 $F(0) = 1/2$이고 $F$가 비감소이므로 $F(t) \ge 1/2 \ge 1 - F(t)$, 따라서 최솟값은 $1 - F(t)$다.
+    - $t < 0$이면 $\lvert t \rvert = -t$이므로 $1 - F(\lvert t \rvert) = 1 - F(-t) = F(t)$이고, 이번에는 $F(t) < 1/2 < 1 - F(t)$이므로 최솟값이 $F(t)$다.
+
+    두 경우가 모두 $2\min\{F(t), 1-F(t)\}$를 준다. $\square$
+
+    **두 검정이 한 함수에 들어가는 까닭이 이 식에 있다.** $z$-검정과 $t$-검정은 분자·분모가 같은 꼴이고 $F$만 $\Phi$에서 $t_{n-1}$의 분포함수로 바뀐다. 둘 다 $0$에 대해 대칭이므로 위 식이 그대로 쓰인다.
+
+    **성립하지 않는 예.** 귀무분포가 대칭이 아니면 쓸 수 없다. 모분산 검정의 $\chi^2_{n-1}$, 분산비 검정의 $F_{n_1-1,\,n_2-1}$이 그렇다. 그때는 두 꼬리 확률을 따로 계산해 더하거나, 관례대로 작은 쪽 꼬리를 두 배 하는 **다른** 규칙을 쓴다고 명시해야 한다.
+
+    **(2) 수치적으로.** 먼저 함수를 만든다.
+
+    ```python
+    import math
+    from scipy.stats import t as tdist, norm
+
+    def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
+                             alternative="two-sided", alpha=0.05):
+        """known_sigma를 주면 z-검정, 아니면 표본 sd로 t-검정.
+
+        원자료가 아니라 요약통계량(xbar, n, sd)만 받는다.
+        검정에 필요한 것이 그것뿐이기 때문이다.
+        alternative는 scipy의 관례를 그대로 따른다.
+        돌려주는 값은 (통계량, p-값, 기각 여부, 이름)이다.
+        """
+        if known_sigma is not None:
+            se = known_sigma / math.sqrt(n)
+            z = (xbar - mu0) / se
+            if alternative == "two-sided":
+                # 작은 쪽 꼬리를 골라 두 배 한다. z의 부호를 따지지 않아도 되고
+                # 어느 쪽으로 치우쳐도 같은 식이 쓰인다.
+                p = 2 * min(norm.cdf(z), norm.sf(z))
+            elif alternative == "less":
+                p = norm.cdf(z)
+            else:
+                # 오른쪽 꼬리는 sf로 계산한다. 1 - cdf는 꼬리에서 정밀도를 잃는다.
+                p = norm.sf(z)
+            return z, p, (p < alpha), "z-test"
+
+        if sd is None:
+            raise ValueError("Provide sd for t-test or known_sigma for z-test.")
+        se = sd / math.sqrt(n)
+        df = n - 1               # sd를 자료에서 추정했으므로 자유도 하나를 잃는다
+        t = (xbar - mu0) / se
+        if alternative == "two-sided":
+            p = 2 * min(tdist.cdf(t, df), tdist.sf(t, df))
+        elif alternative == "less":
+            p = tdist.cdf(t, df)
+        else:
+            p = tdist.sf(t, df)
+        return t, p, (p < alpha), f"t-test (df={df})"
+    ```
+
+    원자료를 하나 만들어 `scipy.stats.ttest_1samp`와 맞추어 본다. 함수는 요약통계량만 받으므로 원자료에서 $\bar x$와 $s$를 뽑아 넘긴다. 대칭 항등식도 몇 점에서 직접 확인한다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(9)
+    x = rng.normal(3.4, 1.2, 25)
+    n, xbar, sd = len(x), x.mean(), x.std(ddof=1)
+    mu0 = 3.0
+
+    print(f"n = {n},  xbar = {xbar:.4f},  s = {sd:.4f}")
+    for alt in ("two-sided", "greater", "less"):
+        t_my, p_my, _, _ = test_mean_one_sample(xbar, n, mu0, sd=sd, alternative=alt)
+        r = stats.ttest_1samp(x, mu0, alternative=alt)
+        print(f"  {alt:>9s}:  요약통계량 p = {p_my:.8f}   scipy p = {r.pvalue:.8f}")
+
+    # 대칭 항등식 2 min(F(t), 1-F(t)) = P(|T| >= |t|) 를 여러 t 에서 확인한다.
+    grid = np.array([-3.1, -0.4, 0.0, 0.9, 2.7])
+    tail = 2 * stats.t.sf(np.abs(grid), n - 1)                                 # P(|T| >= |t|)
+    mins = 2 * np.minimum(stats.t.cdf(grid, n - 1), stats.t.sf(grid, n - 1))   # 함수가 쓰는 식
+    print(f"두 식의 최대 차이 = {np.max(np.abs(tail - mins)):.2e}")
+    ```
+
+    출력:
+
+    ```
+    n = 25,  xbar = 3.5836,  s = 1.3921
+      two-sided:  요약통계량 p = 0.04680592   scipy p = 0.04680592
+        greater:  요약통계량 p = 0.02340296   scipy p = 0.02340296
+           less:  요약통계량 p = 0.97659704   scipy p = 0.97659704
+    두 식의 최대 차이 = 0.00e+00
+    ```
+
+    세 대립가설 모두에서 소수 여덟째 자리까지 일치하고, 항등식의 두 식은 **부동소수점 수준에서 정확히** 같다. 단측 두 p-값이 $0.02340296 + 0.97659704 = 1$로 합이 1인 것도 확인할 수 있다. 연속분포이므로 $P(T \le t) + P(T \ge t) = 1$이기 때문이며, 이 합이 1이 아니라면 어느 한쪽 꼬리를 잘못 잡은 것이다.
+
 ---
 
 ## 5. 풀이 보기
@@ -128,27 +245,9 @@ $p = 0.072 > 0.05$이므로 기각하지 못한다는 판정이 확인된다.
 !!! tip "경계에 있는 결과의 해석"
     $p = 0.072$는 $\alpha = 0.05$에서는 통계적으로 유의하지 않지만 $\alpha = 0.10$에서는 유의할 것이다. 실무에서는 관측된 이탈($\bar{x} = 49.1$ 대 $\mu_0 = 50$)이 실재하지만 작은 변화를 나타낼 수도 있으므로, 검사자가 더 확실한 결론을 위해 표본크기를 늘리자고 권할 만하다.
 
----
-
-## 6. 가정
-
-일표본 $z$-검정에는 다음이 필요하다:
-
-- **$\sigma$를 안다**: 모표준편차가 현재 표본에서 추정한 값이 아니라 알려진 상수이다.
-- **독립성**: 관측값 $X_1, \ldots, X_n$이 독립이다.
-- **정규성 또는 큰 $n$**: 모집단이 정규분포를 따르거나(정확한 추론), $n$이 중심극한정리가 좋은 근사를 주기에 충분히 크다(보통 $n \geq 30$).
-
-!!! warning "$\sigma$를 아는 경우는 드물다"
-    $\sigma$를 안다는 가정은 강하며, 방대한 과거 자료를 갖춘 통제된 산업 환경 밖에서는 좀처럼 충족되지 않는다. $\sigma$를 표본에서 추정해야 한다면 $\sigma$ 추정의 추가 불확실성을 반영하는 일표본 $t$-검정을 쓰라.
-
-## 7. 보기로 익히기
-
-절 $5$ 가 한 자료를 다섯 단계로 밟았다. 같은 절차를 세 가지 대립가설에서 되풀이하며,
-기각역을 $\bar x$ 의 값으로 환산하는 일과 $p$ 값이 그림의 어느 넓이인지를 함께 본다.
-
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 양측. 관측값 $n = 500$개에서 $\bar x = 48$, $s = 20.3$을 얻었다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 양측. 관측값 $n = 500$개에서 $\bar x = 48$, $s = 20.3$을 얻었다.
 
 $$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu \neq 50$$
 
@@ -271,11 +370,11 @@ $$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu \neq 50$$
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 작음. 자료는 보기 1과 같고($n = 500$, $\bar x = 48$, $s = 20.3$) 대립가설만 바꾼다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 작음. 자료는 보기 2와 같고($n = 500$, $\bar x = 48$, $s = 20.3$) 대립가설만 바꾼다.
 
 $$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu < 50$$
 
-**(1)** 이 좌측 p-값이 보기 1의 양측 p-값의 **정확히** 절반임을 보이시오.
+**(1)** 이 좌측 p-값이 보기 2의 양측 p-값의 **정확히** 절반임을 보이시오.
 
 **(2)** 자료를 본 뒤에 유리한 방향을 골라 단측검정을 하면 실제 제1종 오류율이 얼마가 되는지 구하시오.
 
@@ -283,7 +382,7 @@ $$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu < 50$$
 
 ??? success "풀이"
 
-    **(1) 절반인 것은 우연이 아니다.** 통계량은 자료만으로 정해지므로 보기 1과 같은 $z = -2.20302$다. 좌측 p-값은
+    **(1) 절반인 것은 우연이 아니다.** 통계량은 자료만으로 정해지므로 보기 2와 같은 $z = -2.20302$다. 좌측 p-값은
 
     $$
     p_{<} = P(Z \le z) = P(Z \le -2.20302) = 0.013797
@@ -355,11 +454,11 @@ $$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu < 50$$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 큼. 이번에는 $n = 500$, $\bar x = 52$, $s = 20.3$이다.
+**보기 4.** <span class="diff easy" title="쉬움"></span> 일표본 z 검정 — 큼. 이번에는 $n = 500$, $\bar x = 52$, $s = 20.3$이다.
 
 $$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu > 50$$
 
-**(1)** p-값이 보기 2와 같은 값이 되는 까닭을 밝히시오.
+**(1)** p-값이 보기 3과 같은 값이 되는 까닭을 밝히시오.
 
 **(2)** 참 평균이 정말 $52$라면, 같은 $\alpha = 0.05$에서 단측검정과 양측검정의 검정력은 각각 얼마인가. 닫힌 꼴로 구하시오.
 
@@ -373,7 +472,7 @@ $$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu > 50$$
     p_{>} = P(Z \ge 2.20302) = 0.013797
     $$
 
-    이다. 보기 2의 $P(Z \le -2.20302)$와 같은 수인데, 표준정규밀도가 $\varphi(-x) = \varphi(x)$로 대칭이기 때문이다. **통계량의 부호와 꼬리의 방향이 함께 뒤집혀 상쇄되었다.**
+    이다. 보기 3의 $P(Z \le -2.20302)$와 같은 수인데, 표준정규밀도가 $\varphi(-x) = \varphi(x)$로 대칭이기 때문이다. **통계량의 부호와 꼬리의 방향이 함께 뒤집혀 상쇄되었다.**
 
     **(2) 수치적으로.**
 
@@ -433,128 +532,16 @@ $$H_0: \mu = 50 \quad \text{vs} \quad H_1: \mu > 50$$
 
 ---
 
-## 8. 코드로 재어 보기
+## 6. 가정
 
-앞 절들의 공식을 함수 하나로 옮긴다. $\sigma$ 를 주면 $z$ 검정, 주지 않으면
-$t$ 검정이 되도록 쓰는 것이 자연스럽고, 그러면 **같은 수를 $\sigma$ 로 주는 것과**
-**$s$ 로 주는 것의 차이**를 바로 재어 볼 수 있다.
+일표본 $z$-검정에는 다음이 필요하다:
 
-<div class="exbox" markdown>
+- **$\sigma$를 안다**: 모표준편차가 현재 표본에서 추정한 값이 아니라 알려진 상수이다.
+- **독립성**: 관측값 $X_1, \ldots, X_n$이 독립이다.
+- **정규성 또는 큰 $n$**: 모집단이 정규분포를 따르거나(정확한 추론), $n$이 중심극한정리가 좋은 근사를 주기에 충분히 크다(보통 $n \geq 30$).
 
-**보기 4.** <span class="diff easy" title="쉬움"></span> 일표본 평균 검정 계산기. 요약통계량 $(\bar x, s, n)$만 받아 $z$-검정과 $t$-검정을 모두 처리하는 함수를 만들려 한다. 양측 p-값은 $P(\lvert T \rvert \ge \lvert t_{\text{obs}} \rvert)$로 정의한다.
-
-**(1)** 귀무분포가 $0$에 대해 대칭인 연속분포이고 그 분포함수를 $F$라 할 때,
-
-$$
-P(\lvert T \rvert \ge \lvert t_{\text{obs}} \rvert) = 2\min\{F(t_{\text{obs}}),\ 1 - F(t_{\text{obs}})\}
-$$
-
-임을 보이시오. 또 이 식이 성립하지 않는 검정의 예를 드시오.
-
-**(2)** (1)의 식을 써서 두 검정을 함께 처리하는 함수를 작성하고, 원자료가 있는 경우 `scipy.stats.ttest_1samp`와 같은 값을 주는지 확인하시오.
-
-</div>
-
-??? success "풀이"
-
-    **(1) 해석적으로.** $F$가 $0$에 대해 대칭이면 $F(-u) = 1 - F(u)$이다. $t = t_{\text{obs}}$로 줄여 쓰면
-
-    $$
-    P(\lvert T \rvert \ge \lvert t \rvert)
-    = P(T \le -\lvert t \rvert) + P(T \ge \lvert t \rvert)
-    = F(-\lvert t \rvert) + \bigl(1 - F(\lvert t \rvert)\bigr)
-    = 2\bigl(1 - F(\lvert t \rvert)\bigr)
-    $$
-
-    이다. 남은 것은 $1 - F(\lvert t \rvert) = \min\{F(t),\ 1-F(t)\}$를 보이는 일이고, 부호로 나누면 끝난다.
-
-    - $t \ge 0$이면 $\lvert t \rvert = t$이므로 $1 - F(\lvert t \rvert) = 1 - F(t)$이다. 대칭성에서 $F(0) = 1/2$이고 $F$가 비감소이므로 $F(t) \ge 1/2 \ge 1 - F(t)$, 따라서 최솟값은 $1 - F(t)$다.
-    - $t < 0$이면 $\lvert t \rvert = -t$이므로 $1 - F(\lvert t \rvert) = 1 - F(-t) = F(t)$이고, 이번에는 $F(t) < 1/2 < 1 - F(t)$이므로 최솟값이 $F(t)$다.
-
-    두 경우가 모두 $2\min\{F(t), 1-F(t)\}$를 준다. $\square$
-
-    **두 검정이 한 함수에 들어가는 까닭이 이 식에 있다.** $z$-검정과 $t$-검정은 분자·분모가 같은 꼴이고 $F$만 $\Phi$에서 $t_{n-1}$의 분포함수로 바뀐다. 둘 다 $0$에 대해 대칭이므로 위 식이 그대로 쓰인다.
-
-    **성립하지 않는 예.** 귀무분포가 대칭이 아니면 쓸 수 없다. 모분산 검정의 $\chi^2_{n-1}$, 분산비 검정의 $F_{n_1-1,\,n_2-1}$이 그렇다. 그때는 두 꼬리 확률을 따로 계산해 더하거나, 관례대로 작은 쪽 꼬리를 두 배 하는 **다른** 규칙을 쓴다고 명시해야 한다.
-
-    **(2) 수치적으로.** 먼저 함수를 만든다.
-
-    ```python
-    import math
-    from scipy.stats import t as tdist, norm
-
-    def test_mean_one_sample(xbar, n, mu0=0.0, sd=None, known_sigma=None,
-                             alternative="two-sided", alpha=0.05):
-        """known_sigma를 주면 z-검정, 아니면 표본 sd로 t-검정.
-
-        원자료가 아니라 요약통계량(xbar, n, sd)만 받는다.
-        검정에 필요한 것이 그것뿐이기 때문이다.
-        alternative는 scipy의 관례를 그대로 따른다.
-        돌려주는 값은 (통계량, p-값, 기각 여부, 이름)이다.
-        """
-        if known_sigma is not None:
-            se = known_sigma / math.sqrt(n)
-            z = (xbar - mu0) / se
-            if alternative == "two-sided":
-                # 작은 쪽 꼬리를 골라 두 배 한다. z의 부호를 따지지 않아도 되고
-                # 어느 쪽으로 치우쳐도 같은 식이 쓰인다.
-                p = 2 * min(norm.cdf(z), norm.sf(z))
-            elif alternative == "less":
-                p = norm.cdf(z)
-            else:
-                # 오른쪽 꼬리는 sf로 계산한다. 1 - cdf는 꼬리에서 정밀도를 잃는다.
-                p = norm.sf(z)
-            return z, p, (p < alpha), "z-test"
-
-        if sd is None:
-            raise ValueError("Provide sd for t-test or known_sigma for z-test.")
-        se = sd / math.sqrt(n)
-        df = n - 1               # sd를 자료에서 추정했으므로 자유도 하나를 잃는다
-        t = (xbar - mu0) / se
-        if alternative == "two-sided":
-            p = 2 * min(tdist.cdf(t, df), tdist.sf(t, df))
-        elif alternative == "less":
-            p = tdist.cdf(t, df)
-        else:
-            p = tdist.sf(t, df)
-        return t, p, (p < alpha), f"t-test (df={df})"
-    ```
-
-    원자료를 하나 만들어 `scipy.stats.ttest_1samp`와 맞추어 본다. 함수는 요약통계량만 받으므로 원자료에서 $\bar x$와 $s$를 뽑아 넘긴다. 대칭 항등식도 몇 점에서 직접 확인한다.
-
-    ```python
-    import numpy as np
-    from scipy import stats
-
-    rng = np.random.default_rng(9)
-    x = rng.normal(3.4, 1.2, 25)
-    n, xbar, sd = len(x), x.mean(), x.std(ddof=1)
-    mu0 = 3.0
-
-    print(f"n = {n},  xbar = {xbar:.4f},  s = {sd:.4f}")
-    for alt in ("two-sided", "greater", "less"):
-        t_my, p_my, _, _ = test_mean_one_sample(xbar, n, mu0, sd=sd, alternative=alt)
-        r = stats.ttest_1samp(x, mu0, alternative=alt)
-        print(f"  {alt:>9s}:  요약통계량 p = {p_my:.8f}   scipy p = {r.pvalue:.8f}")
-
-    # 대칭 항등식 2 min(F(t), 1-F(t)) = P(|T| >= |t|) 를 여러 t 에서 확인한다.
-    grid = np.array([-3.1, -0.4, 0.0, 0.9, 2.7])
-    tail = 2 * stats.t.sf(np.abs(grid), n - 1)                                 # P(|T| >= |t|)
-    mins = 2 * np.minimum(stats.t.cdf(grid, n - 1), stats.t.sf(grid, n - 1))   # 함수가 쓰는 식
-    print(f"두 식의 최대 차이 = {np.max(np.abs(tail - mins)):.2e}")
-    ```
-
-    출력:
-
-    ```
-    n = 25,  xbar = 3.5836,  s = 1.3921
-      two-sided:  요약통계량 p = 0.04680592   scipy p = 0.04680592
-        greater:  요약통계량 p = 0.02340296   scipy p = 0.02340296
-           less:  요약통계량 p = 0.97659704   scipy p = 0.97659704
-    두 식의 최대 차이 = 0.00e+00
-    ```
-
-    세 대립가설 모두에서 소수 여덟째 자리까지 일치하고, 항등식의 두 식은 **부동소수점 수준에서 정확히** 같다. 단측 두 p-값이 $0.02340296 + 0.97659704 = 1$로 합이 1인 것도 확인할 수 있다. 연속분포이므로 $P(T \le t) + P(T \ge t) = 1$이기 때문이며, 이 합이 1이 아니라면 어느 한쪽 꼬리를 잘못 잡은 것이다.
+!!! warning "$\sigma$를 아는 경우는 드물다"
+    $\sigma$를 안다는 가정은 강하며, 방대한 과거 자료를 갖춘 통제된 산업 환경 밖에서는 좀처럼 충족되지 않는다. $\sigma$를 표본에서 추정해야 한다면 $\sigma$ 추정의 추가 불확실성을 반영하는 일표본 $t$-검정을 쓰라.
 
 <div class="exbox" markdown>
 
@@ -720,11 +707,9 @@ $$
 
 곡선 하나를 고르고 가로로 읽으면 표본크기가 하는 일이 보인다. 중간 크기의 차이 $d = 0.5$를 잡아낼 확률이 $n = 10$에서 0.29, $n = 25$에서 0.67, $n = 50$에서 0.93으로 올라간다. 반면 작은 차이 $d = 0.2$는 $n = 100$에서도 0.51에 그친다. **작은 효과를 다루면서 표본을 백 개쯤 모으는 연구는 참인 차이를 절반 가까이 놓친다.**
 
-오른쪽은 위 보기 4 의 자료를 그대로 옮긴 것이다. 관측된 차이 $0.2$를 산포 $1.1$로 나누면 $d \approx 0.18$이고($\sigma$가 $s$와 같다고 본 것이다), 이 크기의 차이에 대해 $n = 25$ 단측 검정의 검정력은 0.22다. 참으로 $\mu = 3.2$였다 해도 이 설계는 열 번 중 여덟 번 가까이 기각에 실패한다는 뜻이다. 검정력을 0.80까지 올리려면 $n = 189$가 필요하다.
+오른쪽은 위 보기 5 의 자료를 그대로 옮긴 것이다. 관측된 차이 $0.2$를 산포 $1.1$로 나누면 $d \approx 0.18$이고($\sigma$가 $s$와 같다고 본 것이다), 이 크기의 차이에 대해 $n = 25$ 단측 검정의 검정력은 0.22다. 참으로 $\mu = 3.2$였다 해도 이 설계는 열 번 중 여덟 번 가까이 기각에 실패한다는 뜻이다. 검정력을 0.80까지 올리려면 $n = 189$가 필요하다.
 
 그러므로 $p = 0.186$에서 끌어낼 수 있는 결론은 "$\mu = 3.0$이다"가 아니라 "이 자료로는 판단할 수 없다"이다. 판단하려면 표본을 늘리거나, 적어도 신뢰구간을 함께 보고하여 어느 크기의 차이들이 여전히 자료와 양립하는지 밝혀야 한다.
-
----
 
 ---
 
