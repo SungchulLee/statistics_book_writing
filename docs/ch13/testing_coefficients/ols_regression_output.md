@@ -452,7 +452,7 @@ $1857$ 년, 에든버러 대학의 자연철학 교수 **제임스 D. 포브스*
 
 여기에 함정이 하나 더 있다. 위 표의 $t$ 는 **$12$ 번 관측을 빼고** 잰 것이다. 그 점을 그대로 둔 채 같은 검정을 하면 기압 쪽의 $t$ 가 $+7.87$ 에서 **$+1.55$ ($p = 0.143$)** 로 내려앉는다. 굽음이 유의하지 않다는 결론이 나온다. 까닭은 그림의 $\times$ 표다. 그 점의 잔차는 $+0.650$ 으로, 나머지 열여섯 점의 최대 절댓값 $0.257$ 의 두 배 반이다. **이상점 하나가 $s$ 를 키워 제 분모로 굽음을 지운다.** 포브스의 실험 노트에 무슨 일이 있었는지는 알 수 없다.
 
-그래서 이 쪽이 만든 표에는 두 줄을 덧붙여야 한다. **표가 좋아 보이는 것과 모형이 맞는 것은 다른 일이다.** 그리고 **잔차를 보기 전에는 굽음 검정도 믿을 수 없다.** 13.3절 [가정 점검](../assumptions/checking_linearity.md)이 이 두 줄을 이어받는다.
+그래서 이 쪽이 만든 표에는 두 줄을 덧붙여야 한다. **표가 좋아 보이는 것과 모형이 맞는 것은 다른 일이다.** 그리고 **잔차를 보기 전에는 굽음 검정도 믿을 수 없다.** 13.5절 [가정 점검](../assumptions/checking_linearity.md)이 이 두 줄을 이어받는다.
 
 _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and Remarks on the Measurement of Heights by the Boiling Point of Water」, James D. Forbes, Professor of Natural Philosophy in the University of Edinburgh, Transactions of the Royal Society of Edinburgh $21$($2$), $1857$, $235$–$243$)와 그 초록이 밝힌 목적(「끓는점으로 높이를 재는 더 쓸 만한 장치와 계산식」)은 [Cambridge Core 의 서지 항목](https://doi.org/10.1017/S0080456800032075)에서 읽었다. **논문 본문은 읽지 못했다** · 관측이 $17$ 개이고 알프스에서 잰 것이며 `bp` 가 화씨 끓는점, `pres` 가 수은주 인치 기압이라는 것, 그리고 $100\log_{10}(\text{pres})$ 가 `alr4` 에 `lpres` 라는 열로 함께 실린다는 것은 [`MASS::forbes`](https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/forbes.html) 와 [`alr4::Forbes`](https://search.r-project.org/CRAN/refmans/alr4/html/Forbes.html) 의 설명 문서에서 읽었다 · $R^2$, 이차항의 $t$ 와 $p$, 잔차는 모두 그 열일곱 쌍으로 직접 계산한 값이다_
 
