@@ -397,7 +397,6 @@ nav:
                 - 무작위 실험과 인과: ch12/causation/experiments_causation.md
                 - 도구변수 (입문): ch12/causation/instrumental_variables.md
                 - 방향성 비순환 그래프: ch12/causation/dags.md
-                - 인과 개관: ch12/causation/causation.md
                 - 인과추론 모의실험: ch12/causation/causal_simulations.md
             - 12.5 상관 검정:
                 - Pearson의 r 검정 (상관에 대한 t-검정): ch12/correlation_test/test_pearson.md
