@@ -423,6 +423,203 @@ _확인한 곳 — 닉스와 바이겐트의 「Estimating the mean and variance
 
 </div>
 
+
+---
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 회귀에서의 등분산 검정. $n = 10$짜리 자료에 `Y ~ X`를 적합하고 `het_breuschpagan` 으로 Breusch-Pagan 검정을 돌린다.
+
+**(1)** 이 함수가 돌려주는 LM 통계량과 F 통계량이 **제곱잔차를 설명변수에 회귀시킨 보조회귀**의 $nR^2$과 $F$임을 밝히고, 두 수를 $R^2$ 하나로부터 손으로 조립해 함수의 값과 맞추시오. `robust=False`로 바뀌는 것은 무엇인가.
+
+**(2)** 두 판본의 **실제 크기**를 등분산 자료에서 $n = 10, 50, 200$으로 재고, 어느 쪽이 표본을 키워 고쳐지고 어느 쪽이 고쳐지지 않는지 밝히시오. 또 $n = 10$에서 검정력이 얼마인지 재어 본문의 $p = 0.777$을 어떻게 읽어야 하는지 결론하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 보조회귀 하나가 전부다.** 원래 회귀 $y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$의 OLS 잔차를 $e_i$라 하자. 등분산이면 $E[\varepsilon_i^2]$이 $x_i$와 무관해야 하므로, 제곱잔차를 설명변수에 회귀시켜
+
+    $$
+    e_i^2 = \gamma_0 + \gamma_1 x_i + u_i
+    $$
+
+    의 기울기가 $0$인지 보면 된다. 이 **보조회귀**의 결정계수를 $R_{\text{aux}}^2$, 설명변수 개수를 $k$라 하면 코엔커(1981)의 **스튜던트화 BP 통계량**은
+
+    $$
+    \text{LM} = n R_{\text{aux}}^2 \;\xrightarrow{\;d\;}\; \chi^2_k \quad (H_0 \text{ 아래})
+    $$
+
+    이고, F 판본은 그 보조회귀 자체의 F 통계량
+
+    $$
+    F = \frac{R_{\text{aux}}^2/k}{(1-R_{\text{aux}}^2)/(n-k-1)} \;\sim\; F(k,\; n-k-1)
+    $$
+
+    이다. **둘 다 $R_{\text{aux}}^2$ 하나의 함수**이므로, $R_{\text{aux}}^2$만 알면 두 수를 손으로 적을 수 있다. 여기서는 $k = 1$, $n = 10$이다.
+
+    `robust=False`로 바꾸면 **원래 Breusch-Pagan(1979)** 통계량이 나온다. 그쪽은 제곱잔차를 $\hat\sigma^2 = \frac1n\sum e_i^2$으로 나눈 $g_i = e_i^2/\hat\sigma^2$을 설명변수에 회귀시킨 뒤 설명제곱합의 절반
+
+    $$
+    \text{BP} = \tfrac12 \,\text{ESS}_g \;\xrightarrow{\;d\;}\; \chi^2_k
+    $$
+
+    을 쓴다. **$\chi^2_k$ 극한이 오차의 정규성에 기대고 있다는 것이 이 판본의 약점**이고, 코엔커 판본은 $\hat\sigma^2$ 대신 $g$의 실제 표본분산으로 눈금을 맞춰 그 의존을 없앤 것이다. 두 판본이 같은 자료에서 다른 수를 준다.
+
+    **(2) 먼저 함수를 그대로 돌린다.**
+
+    ```python
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+    from statsmodels.stats.diagnostic import het_breuschpagan
+    import pandas as pd
+
+    data = pd.DataFrame({
+        'X': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        'Y': [2, 4, 6, 8, 10, 9, 15, 16, 18, 20]
+    })
+
+    model = smf.ols('Y ~ X', data=data).fit()
+
+    # 회귀에서 등분산성은 잔차의 퍼짐이 적합값에 따라 달라지지 않는다는 가정이다.
+    # Breusch-Pagan 은 잔차의 제곱을 설명변수에 회귀해 그 관계를 찾는다.
+    lm_stat, lm_p, f_stat, f_p = het_breuschpagan(model.resid, model.model.exog)
+
+    print(f"Breusch-Pagan LM = {lm_stat:.4f}, p = {lm_p:.4f}")
+    print(f"Breusch-Pagan F  = {f_stat:.4f}, p = {f_p:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    Breusch-Pagan LM = 0.0803, p = 0.7769
+    Breusch-Pagan F  = 0.0648, p = 0.8055
+    ```
+
+    **이제 (1)을 손으로 조립해 맞추고, 두 판본의 크기와 검정력을 잰다.**
+
+    ```python
+    import numpy as np
+    import statsmodels.api as sm
+    from scipy import stats
+
+    # --- (1) 손으로 조립해 het_breuschpagan 과 맞춘다. 위 model 을 이어받는다. ---
+    e = model.resid.values
+    X = model.model.exog                       # [1, x]
+    n, k = len(e), X.shape[1] - 1
+
+    aux = sm.OLS(e ** 2, X).fit()              # 보조회귀: e^2 을 x 에 회귀
+    R2 = aux.rsquared
+    lm_sm, p_lm, f_sm, p_f = het_breuschpagan(model.resid, X)
+
+    print(f"보조회귀 R^2  = {R2:.8f}")
+    print(f"n R^2 (손)    = {n * R2:.8f}      LM  (statsmodels) = {lm_sm:.8f}")
+    F_hand = (R2 / k) / ((1 - R2) / (n - k - 1))
+    print(f"F     (손)    = {F_hand:.8f}      F   (statsmodels) = {f_sm:.8f}")
+    print(f"p(chi2_{k})     = {stats.chi2.sf(n * R2, k):.6f}      p   (statsmodels) = {p_lm:.6f}")
+    print(f"p(F({k},{n - k - 1}))     = {stats.f.sf(F_hand, k, n - k - 1):.6f}      p   (statsmodels) = {p_f:.6f}")
+
+    # 정규성을 쓰는 원래 BP(1979) 는 robust=False 다. (1/2)*ESS of e^2/sigmahat^2
+    sig2 = (e ** 2).mean()
+    g = e ** 2 / sig2
+    ess0 = ((sm.OLS(g, X).fit().fittedvalues - g.mean()) ** 2).sum()
+    print(f"\n원래 BP = ESS/2 = {ess0 / 2:.8f}      robust=False  = "
+          f"{het_breuschpagan(model.resid, X, robust=False)[0]:.8f}")
+
+
+    # --- (2) 두 판본의 크기와 검정력을 모의실험으로 잰다 ---
+    def bp_both(E, X):
+        """E: (R,n) 잔차.  (코엔커 nR^2, 원래 BP) 를 한꺼번에."""
+        R, n = E.shape
+        P = X @ np.linalg.pinv(X)
+        G = E ** 2
+        Gc = G - G.mean(axis=1, keepdims=True)
+        ess = ((Gc @ P.T) ** 2).sum(axis=1)     # 중심화한 g 의 사영 제곱합 = ESS
+        tss = (Gc ** 2).sum(axis=1)
+        return n * ess / tss, 0.5 * ess / G.mean(axis=1) ** 2
+
+
+    def size_power(n, R, dist, slope, seed):
+        rng = np.random.default_rng(seed)
+        x = np.linspace(1, 10, n)
+        X = np.column_stack([np.ones(n), x])
+        if dist == "Normal":
+            u = rng.normal(size=(R, n))
+        elif dist == "t(3)":
+            u = rng.standard_t(3, size=(R, n))
+        else:                                    # 로그정규를 평균 0, 분산 1 로 표준화
+            z = rng.lognormal(0, 1, size=(R, n))
+            u = (z - np.exp(0.5)) / np.sqrt((np.e - 1) * np.e)
+        y = 2 + x + u * (1 + slope * x)          # slope = 0 이면 등분산
+        P = X @ np.linalg.pinv(X)
+        lm, bp = bp_both(y - y @ P.T, X)
+        return (stats.chi2.sf(lm, 1) < 0.05).mean(), (stats.chi2.sf(bp, 1) < 0.05).mean()
+
+
+    print("\n등분산 자료에서의 실제 크기 (명목 0.05, 4만 회)")
+    print(f"{'n':>5}  {'errors':<8}{'Koenker':>10}{'orig BP':>10}")
+    for nn in (10, 50, 200):
+        for d in ("Normal", "t(3)", "LogN"):
+            a, b = size_power(nn, 40_000, d, 0.0, seed=1)
+            print(f"{nn:>5}  {d:<8}{a:>10.4f}{b:>10.4f}")
+
+    print("\n이분산 자료에서의 검정력 (정규오차, sd = 1 + 0.5x)")
+    for nn in (10, 30, 100, 300):
+        a, b = size_power(nn, 40_000, "Normal", 0.5, seed=2)
+        print(f"  n = {nn:>3}:  코엔커 {a:.4f}   원래 BP {b:.4f}")
+    ```
+
+    출력:
+
+    ```text
+    보조회귀 R^2  = 0.00803084
+    n R^2 (손)    = 0.08030838      LM  (statsmodels) = 0.08030838
+    F     (손)    = 0.06476684      F   (statsmodels) = 0.06476684
+    p(chi2_1)     = 0.776880      p   (statsmodels) = 0.776880
+    p(F(1,8))     = 0.805534      p   (statsmodels) = 0.805534
+
+    원래 BP = ESS/2 = 0.23674242      robust=False  = 0.23674242
+
+    등분산 자료에서의 실제 크기 (명목 0.05, 4만 회)
+        n  errors     Koenker   orig BP
+       10  Normal      0.0580    0.0237
+       10  t(3)        0.0663    0.0637
+       10  LogN        0.1103    0.1262
+       50  Normal      0.0507    0.0463
+       50  t(3)        0.0428    0.2449
+       50  LogN        0.0523    0.4062
+      200  Normal      0.0502    0.0489
+      200  t(3)        0.0409    0.3776
+      200  LogN        0.0435    0.5475
+
+    이분산 자료에서의 검정력 (정규오차, sd = 1 + 0.5x)
+      n =  10:  코엔커 0.1656   원래 BP 0.1189
+      n =  30:  코엔커 0.5497   원래 BP 0.6179
+      n = 100:  코엔커 0.9913   원래 BP 0.9958
+      n = 300:  코엔커 1.0000   원래 BP 1.0000
+    ```
+
+    **(1)의 조립이 여덟 자리까지 맞는다.** 보조회귀의 $R_{\text{aux}}^2 = 0.00803084$ 하나에서 $n R^2 = 0.08030838$과 $F = 0.06476684$가 나오고, 둘 다 `het_breuschpagan` 의 값과 소수 여덟째 자리까지 같다. $p$값도 $\chi^2_1$과 $F(1,8)$에서 각각 $0.776880$과 $0.805534$로 맞는다. **같은 $R^2$을 두 참조분포에 들이댄 것이 LM 과 F 판본의 차이 전부**이고, 그래서 $n = 10$처럼 작은 표본에서 두 $p$값이 $0.78$과 $0.81$로 갈린다. $\chi^2$ 쪽은 $n \to \infty$의 극한이므로 작은 표본에서는 F 쪽이 낫다.
+
+    원래 BP 도 맞는다. 손으로 센 $\tfrac12 \text{ESS}_g = 0.23674242$가 `robust=False` 의 값과 같다. **같은 자료에서 $0.0803$과 $0.2367$, 곧 세 배 차이**다. 어느 판본을 돌렸는지 모르면 통계량을 보고할 수도 없다.
+
+    **(2) 표가 이 장의 주제를 그대로 되풀이한다.** 등분산 자료의 실제 크기를 보라.
+
+    - **코엔커 판본은 $n$을 키우면 고쳐진다.** $n = 10$에서 $0.058$–$0.110$으로 흐트러져 있다가 $n = 50$에서 $0.043$–$0.052$, $n = 200$에서 $0.041$–$0.050$으로 세 오차분포 모두 명목값에 모인다.
+    - **원래 BP 는 $n$을 키우면 더 나빠진다.** $t(3)$에서 $0.064 \to 0.245 \to 0.378$, 로그정규에서 $0.126 \to 0.406 \to 0.548$이다. 표본을 스무 배 늘리는 동안 거짓 양성률이 다섯 배, 네 배로 올라갔다.
+
+    **이것이 15장이 되풀이해 온 바로 그 실패다.** $F$ 검정과 Bartlett 검정도 같은 일을 하며, 5.3절이 그 극한 오류율이 모집단 첨도만의 함수이고 표본을 키워도 낫지 않음을 유도해 두었다. 분산에 관한 통계량은 네 번째 적률에 기대므로 중심극한정리의 보호를 받지 못한다. 원래 BP 가 정규성 아래에서만 $\chi^2$인 것도 같은 이유이고, 코엔커의 눈금 바꾸기가 그 의존을 끊어 준 것이다. 그러므로 **`het_breuschpagan` 의 기본값 `robust=True` 를 건드리지 말라.**
+
+    **$n = 10$에서는 어느 판본도 쓸 수 없다.** 마지막 표가 그 까닭이다. 오차 표준편차가 $x = 1$에서 $1.5$, $x = 10$에서 $6$으로 **네 배** 벌어지는 뚜렷한 이분산인데도 $n = 10$에서 코엔커의 검정력이 $0.1656$이다. 여섯 번에 한 번만 잡아낸다. 같은 이분산을 $n = 100$에서는 $0.9913$으로 거의 늘 잡는다.
+
+    그러므로 본문 자료의 $p = 0.777$은 **"등분산이다"는 증거가 아니다.** 등분산이어도 $p$가 크고, 네 배짜리 이분산이 있어도 다섯 번 중 네 번은 $p$가 크다. 두 경우를 $n = 10$으로는 구별할 수 없다. 게다가 $n = 10$에서 코엔커의 실제 크기가 정규오차에서조차 $0.058$, 로그정규에서 $0.110$이라 **검정 자체도 아직 눈금이 맞지 않는다.** 이 자료에 대해 할 수 있는 정직한 말은 "판정할 수 없다" 하나뿐이다.
+
+**해석:**
+
+- $p$값이 0.05보다 작으면 귀무가설을 기각하고 이분산이 존재한다고 결론짓는다.
+- $p$값이 0.05보다 크면 귀무가설을 기각하지 못하고 잔차가 등분산과 일관된다고 본다.
+
+여기서는 $p = 0.777$로 기각하지 못한다. 다만 $n = 10$으로 매우 작아 검정력이 사실상 없으므로, **"등분산성이 확인되었다"가 아니라 "이 자료로는 판정할 수 없다"**가 옳은 결론이다.
 ---
 
 ## 연습문제
@@ -1083,6 +1280,216 @@ $$
 
 ---
 
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff hard" title="어려움"></span>
+보기 2 (2)의 표에서 `robust=False` 판본(원래 BP)은 $t(3)$ 과 로그정규에서 표본을 키울수록 **더** 나빠졌다. 왜 그런지, 그리고 극한값이 얼마인지 적률로 계산하자. 설명변수가 하나인 단순회귀, $H_0$ 아래 $\operatorname{Var}(\varepsilon_i) = \sigma^2$, 오차의 표준화 4 차 적률을 $\beta_2 = E[\varepsilon^4]/\sigma^4$ 라 한다.
+
+**(1)** $g_i = e_i^2/\hat\sigma^2$ 의 보조회귀에서 $\text{ESS}_g = \left(\sum_i (x_i-\bar x)g_i\right)^2/S_{xx}$ 임을 보이고, $\operatorname{Var}(\varepsilon_i^2/\sigma^2) = \beta_2 - 1$ 을 써서
+
+$$
+\text{BP} = \tfrac12\text{ESS}_g \;\xrightarrow{\;d\;}\; \frac{\beta_2-1}{2}\,\chi^2_1
+$$
+
+임을 보이시오. 코엔커 판본 $nR^2$ 에서는 이 상수가 왜 사라지는가.
+
+**(2)** 명목 $\alpha = 0.05$ 에서 원래 BP 의 극한 크기가 $P\!\left(\chi^2_1 > 2\chi^2_{1,0.95}/(\beta_2-1)\right)$ 임을 쓰고, 정규($\beta_2 = 3$)·균일($\beta_2 = 1.8$)·지수($\beta_2 = 9$)·로그정규($\beta_2 = 113.94$)에서 값을 구하시오. 또 극한 크기가 명목값의 두 배가 되는 $\beta_2$ 를 구하고, 2 장의 하한 $\beta_2 \ge 1 + \gamma_1^2$ 과 묶어 "비대칭도가 얼마를 넘으면 반드시 그만큼 나빠진다"는 꼴의 결론을 적으시오. 끝으로 보기 1 표의 로그정규 칸이 $n = 200$ 에서 $0.5475$ 에 그친 것을 (2)의 예측과 견주어 설명하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 보조회귀의 설명제곱합을 적는다.** 보조회귀 $g_i = \gamma_0 + \gamma_1 x_i + u_i$ 의 OLS 기울기는 $\hat\gamma_1 = \sum_i (x_i-\bar x)g_i/S_{xx}$ 이고, 설명제곱합은 $\text{ESS}_g = \hat\gamma_1^2 S_{xx}$ 이므로
+
+    $$
+    \text{ESS}_g = \frac{\left(\sum_i (x_i-\bar x)g_i\right)^2}{S_{xx}}
+    $$
+
+    이다.
+
+    이제 극한을 본다. $\hat\sigma^2 = \frac1n\sum_i e_i^2 \to \sigma^2$ 이고 $e_i = \varepsilon_i + O_p(n^{-1/2})$ 이므로 $g_i = \varepsilon_i^2/\sigma^2 + o_p(1)$ 이다. $u_i = \varepsilon_i^2/\sigma^2$ 이라 두면 $E[u_i] = 1$ 이고
+
+    $$
+    \operatorname{Var}(u_i) = \frac{E[\varepsilon^4]}{\sigma^4} - 1 = \beta_2 - 1
+    $$
+
+    이다. $\sum_i (x_i - \bar x) = 0$ 이라 평균 $1$ 은 떨어지므로, $\max_i (x_i-\bar x)^2/S_{xx} \to 0$ 인 설계에서 린데베르그 중심극한정리가
+
+    $$
+    \frac{\sum_i (x_i-\bar x)u_i}{\sqrt{S_{xx}}} \;\xrightarrow{\;d\;}\; N(0,\;\beta_2-1)
+    $$
+
+    을 준다. 제곱하면 $\text{ESS}_g \to (\beta_2-1)\chi^2_1$ 이고 절반이 BP 다. $\square$
+
+    정규오차라면 $\beta_2 = 3$ 이라 상수가 $\frac{3-1}{2} = 1$ 이고 $\text{BP}\to\chi^2_1$ 이다. **교과서의 참조분포는 정규성에서만 맞는다.** 보기 1 (1)이 "이 판본의 약점은 $\chi^2_k$ 극한이 정규성에 기댄다는 것"이라 한 말의 정확한 형태가 이 상수다.
+
+    **코엔커는 그 상수를 추정해 약분한다.** $nR^2 = n\,\text{ESS}_g/\text{TSS}_g$ 이고 $\text{TSS}_g = \sum_i (g_i-\bar g)^2$ 은 큰 수의 법칙으로 $n\operatorname{Var}(u) = n(\beta_2-1)$ 에 가까워지므로
+
+    $$
+    nR^2 = \frac{\text{ESS}_g}{\text{TSS}_g/n} \;\xrightarrow{\;d\;}\; \frac{(\beta_2-1)\chi^2_1}{\beta_2-1} = \chi^2_1
+    $$
+
+    이다. **4 차 적률을 가정하지 않고 표본에서 재어 나눈 것이 차이의 전부**이고, 그래서 보기 1 의 표에서 코엔커 열만 세 오차분포 모두 $0.05$ 로 모인다.
+
+    **(2) 극한 크기를 수로 적는다.** $\text{BP} \to \frac{\beta_2-1}{2}\chi^2_1$ 이고 임계값은 $c = \chi^2_{1,0.95} = 3.8415$ 이므로
+
+    $$
+    P(\text{BP} > c) \to P\!\left(\chi^2_1 > \frac{2c}{\beta_2-1}\right)
+    $$
+
+    이다. 네 경우를 넣는다.
+
+    | 오차분포 | $\beta_2$ | 문턱 $2c/(\beta_2-1)$ | 극한 크기 |
+    |---|---|---|---|
+    | 균일 | $1.8$ | $9.6037$ | $0.0019$ |
+    | 정규 | $3$ | $3.8415$ | $0.0500$ |
+    | 지수 | $9$ | $0.9604$ | $0.3271$ |
+    | 로그정규 | $113.94$ | $0.0680$ | $0.7942$ |
+
+    **첨도가 $3$ 보다 작으면 지나치게 보수적이고, 크면 거짓 양성이 폭발한다.** 균일오차에서는 $0.05$ 가 $0.0019$ 로 내려앉아(26 분의 1) 이분산을 찾아내지 못하고, 지수오차에서는 세 번에 한 번 거짓 경보가 난다.
+
+    **두 배가 되는 첨도.** $P(\chi^2_1 > q) = 0.10$ 인 $q$ 는 $\chi^2_{1,0.90} = 2.7055$ 이므로
+
+    $$
+    \frac{2c}{\beta_2-1} = 2.7055 \;\Longrightarrow\; \beta_2 = 1 + \frac{2(3.8415)}{2.7055} = 3.8397
+    $$
+
+    이다. **첨도가 $3.84$ 만 되어도 1 종 오류율이 두 배다.** 정규분포에서 $0.84$ 만큼 벗어난 자리이니 실무에서 흔한 수준이다.
+
+    **2 장의 하한을 끼운다.** $\beta_2 \ge 1 + \gamma_1^2$ 이므로 $\gamma_1^2 \ge 2.8397$, 곧
+
+    $$
+    \lvert \gamma_1 \rvert \ge 1.6851 \;\Longrightarrow\; \beta_2 \ge 3.8397 \;\Longrightarrow\; \text{극한 크기} \ge 0.10
+    $$
+
+    이다. **비대칭도의 절댓값이 $1.6851$ 을 넘는 오차분포라면 첨도를 따져 볼 필요도 없이 원래 BP 의 1 종 오류율은 적어도 두 배다.** 지수분포는 $\gamma_1 = 2$ 로 여기에 걸리고 실제로 $0.327$ 이다. 거꾸로 보수적($\beta_2 < 3$)이 되려면 $\lvert\gamma_1\rvert < \sqrt2 = 1.4142$ 가 필요조건이다.
+
+    **표의 로그정규 칸은 아직 극한에 닿지 않았다.** 예측은 $0.7942$ 인데 $n = 200$ 에서 $0.5475$ 다. 틀린 것이 아니라 **느린 것**이다. (1)의 중심극한정리는 $\varepsilon$ 이 아니라 $u = \varepsilon^2/\sigma^2$ 에 적용되므로 수렴 속도는 $u$ 의 비대칭도, 곧 $\varepsilon$ 의 6 차·8 차 적률에 달려 있다. 로그정규 $e^{Z}$ 는 $E[e^{8Z}] = e^{32} \approx 8\times10^{13}$ 으로 터무니없이 무거워 $n = 200$ 은 극한 근처가 아니다. 표의 $0.126 \to 0.406 \to 0.548$ 이 **느리게 오르는 중**인 것이 그 증거다. $t(3)$ 은 $\beta_2 = \infty$ 이므로 극한 크기가 $1$ 이고, 역시 $0.064 \to 0.245 \to 0.378$ 로 오르는 중이다.
+
+    **이것이 "표본을 키워도 낫지 않는다"의 정확한 뜻이다.** $n$ 이 커지면서 통계량이 $\chi^2_1$ 로 가는 것이 아니라 $\frac{\beta_2-1}{2}$ 배 부풀려진 분포로 간다. 분모를 표본에서 재는 코엔커 판본만이 그 배율을 지운다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff hard" title="어려움"></span>
+실무에서 흔히 쓰는 두 단계 절차가 있다 — "BP 로 이분산을 확인하고, 있으면 로버스트 표준오차, 없으면 OLS". [분산분석 사전검정](anova_pretest.md)이 분산분석에서 이 꼴을 비판했듯 회귀에서도 같은 일이 벌어지는지 재어 보자.
+
+$x$ 를 $[0,2]$ 의 $n = 50$ 등간격 점, $y = 2 + x + \sigma(x)Z$, $Z\sim N(0,1)$ 로 두고 기울기의 명목 95% 구간이 참값 $1$ 을 덮는 비율을 세 규칙 — (가) 늘 OLS, (나) 늘 HC3, (다) BP($\alpha=0.05$)를 통과하면 OLS·기각하면 HC3 — 로 잰다. $\sigma(x) = 0.8$, $0.3+0.5x$, $0.2+0.3x^2$ 세 자료에서 10 만 번씩 돌린다.
+
+**(1)** 세 규칙의 포함률을 표로 내고, 무조건 포함률만 보면 **사전검정 규칙이 왜 무해해 보이는지** 밝히시오. 어느 자료에서 사전검정 규칙이 명목값에 가장 가까운가.
+
+**(2)** 이번에는 사전검정의 판정으로 표본을 나누어 포함률을 다시 재시오. 사전검정이 "등분산이다" 하고 통과시킨 표본에서 OLS 구간의 포함률은 얼마인가. 같은 표본에서 HC3 로 바꾸면 고쳐지는가. 고쳐지지 않는다면 기울기의 참 산포와 두 표준오차의 평균을 재어 까닭을 밝히고, 세 규칙 가운데 무엇을 쓸지 결론하시오.
+
+</div>
+
+??? success "풀이"
+
+    **재어 본다.** 단순회귀이므로 $\hat\beta_1 = \mathbf{w}'\mathbf{y}$, $w_i = (x_i-\bar x)/S_{xx}$ 로 모든 것을 행렬 한 번에 벡터화할 수 있다.
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+
+    def simulate(n, sdfun, R=100_000, seed=7):
+        """x in [0,2] 에서 y = 2 + x + sd(x)Z 를 R 벌 만들고
+        기울기의 95% 구간과 BP 사전검정을 한꺼번에 계산한다."""
+        x = np.linspace(0, 2, n)
+        xc = x - x.mean()
+        Sxx = (xc ** 2).sum()
+        h = 1 / n + xc ** 2 / Sxx                  # 단순회귀의 지렛대
+        w = xc / Sxx                               # b1 = w'y
+        rng = np.random.default_rng(seed)
+        Y = 2 + x + rng.normal(size=(R, n)) * sdfun(x)
+        b1 = Y @ w
+        b0 = Y.mean(axis=1) - b1 * x.mean()
+        E = Y - b0[:, None] - b1[:, None] * x
+        se_ols = np.sqrt((E ** 2).sum(axis=1) / (n - 2) / Sxx)
+        se_hc3 = np.sqrt((w ** 2 * E ** 2 / (1 - h) ** 2).sum(axis=1))
+
+        # 코엔커 판 Breusch-Pagan: e^2 을 x 에 회귀시킨 nR^2
+        G = E ** 2
+        Gc = G - G.mean(axis=1, keepdims=True)
+        lm = n * (Gc @ xc) ** 2 / (Sxx * (Gc ** 2).sum(axis=1))
+        keep = stats.chi2.sf(lm, 1) >= 0.05        # 통과 = "등분산이다" 하고 OLS 를 쓴다
+
+        t = stats.t.ppf(0.975, n - 2)
+        return (keep, np.abs(b1 - 1) <= t * se_ols, np.abs(b1 - 1) <= t * se_hc3,
+                b1, se_ols, se_hc3)
+
+
+    n = 50
+    settings = [("sd=0.8 (homo)", lambda x: 0.8 + 0 * x),
+                ("sd=0.3+0.5x", lambda x: 0.3 + 0.5 * x),
+                ("sd=0.2+0.3x^2", lambda x: 0.2 + 0.3 * x ** 2)]
+
+    print(f"n = {n}, 10 만 회.  nominal 95% 구간의 실제 포함률")
+    print(f"{'data':<16}{'BP pass':>9}{'OLS':>8}{'HC3':>8}{'pretest':>9}")
+    rows = []
+    for name, f in settings:
+        keep, ok_o, ok_h, b1, so, sh = simulate(n, f)
+        pre = np.where(keep, ok_o, ok_h)
+        print(f"{name:<16}{keep.mean():>9.4f}{ok_o.mean():>8.4f}"
+              f"{ok_h.mean():>8.4f}{pre.mean():>9.4f}")
+        rows.append((name, keep, ok_o, ok_h, b1, so, sh))
+
+    print("\n사전검정 결과로 표본을 나누어 본 포함률")
+    print(f"{'data':<16}{'#pass':>8}{'OLS|pass':>10}{'HC3|pass':>10}{'HC3|rej':>9}")
+    for name, keep, ok_o, ok_h, b1, so, sh in rows:
+        print(f"{name:<16}{keep.sum():>8d}{ok_o[keep].mean():>10.4f}"
+              f"{ok_h[keep].mean():>10.4f}{ok_h[~keep].mean():>9.4f}")
+
+    print("\nsd=0.2+0.3x^2 자료: 기울기의 참 산포와 표준오차의 평균")
+    name, keep, ok_o, ok_h, b1, so, sh = rows[2]
+    print(f"  all  : SD(b1) = {b1.std():.4f}, "
+          f"E[se_ols] = {so.mean():.4f}, E[se_hc3] = {sh.mean():.4f}")
+    print(f"  pass : SD(b1) = {b1[keep].std():.4f}, "
+          f"E[se_ols] = {so[keep].mean():.4f}, E[se_hc3] = {sh[keep].mean():.4f}")
+    ```
+
+    출력:
+
+    ```text
+    n = 50, 10 만 회.  nominal 95% 구간의 실제 포함률
+    data              BP pass     OLS     HC3  pretest
+    sd=0.8 (homo)      0.9497  0.9499  0.9517   0.9506
+    sd=0.3+0.5x        0.1528  0.9391  0.9475   0.9510
+    sd=0.2+0.3x^2      0.0084  0.8988  0.9432   0.9434
+
+    사전검정 결과로 표본을 나누어 본 포함률
+    data               #pass  OLS|pass  HC3|pass  HC3|rej
+    sd=0.8 (homo)      94970    0.9497    0.9508   0.9676
+    sd=0.3+0.5x        15283    0.9121    0.8894   0.9580
+    sd=0.2+0.3x^2        841    0.8169    0.7943   0.9445
+
+    sd=0.2+0.3x^2 자료: 기울기의 참 산포와 표준오차의 평균
+      all  : SD(b1) = 0.2013, E[se_ols] = 0.1670, E[se_hc3] = 0.2020
+      pass : SD(b1) = 0.2115, E[se_ols] = 0.1414, E[se_hc3] = 0.1383
+    ```
+
+    **(1) 무조건 포함률만 보면 사전검정이 흠잡을 데가 없다.** 세 자료에서 $0.9506$, $0.9510$, $0.9434$ 로 모두 명목값 근처이고, **약한 이분산 자료에서는 세 규칙 가운데 가장 명목값에 가깝기까지 하다**($0.9510$ 대 HC3 의 $0.9475$, OLS 의 $0.9391$). 이것이 두 단계 절차가 끈질기게 살아남는 까닭이다.
+
+    까닭은 두 가지다. 첫째, **강한 이분산 자료에서는 사전검정이 거의 늘 기각한다.** BP 통과율이 $0.0084$ 이므로 (다)는 $99.2\%$ 의 경우 (나)와 같은 규칙이고, 그래서 $0.9434$ 와 $0.9432$ 로 사실상 같은 수가 나온다. 사전검정이 잘하는 것이 아니라 **일을 거의 하지 않는** 것이다. 둘째, 약한 이분산에서는 두 치우침이 서로 상쇄된다. 기각한 표본에서 HC3 가 $0.9580$ 으로 과대포함하고 통과한 표본에서 OLS 가 $0.9121$ 로 과소포함하는데, $15\%$ 와 $85\%$ 로 섞으니 $0.9510$ 이 된다. **우연한 상쇄를 정당성으로 읽어서는 안 된다.**
+
+    등분산 자료의 열이 또 하나를 말해 준다. BP 통과율 $0.9497$ 은 사전검정의 실제 크기가 $0.0503$ 으로 제대로 맞는다는 뜻이고, 세 규칙의 포함률도 $0.9499$, $0.9517$, $0.9506$ 으로 모두 같다. **가정이 성립할 때 늘 HC3 가 잃는 것이 사실상 없다.**
+
+    **(2) 사전검정의 판정으로 나누어 보면 이야기가 뒤집힌다.** 사전검정의 값어치는 "통과했으니 이 표본에서는 OLS 를 써도 좋다"는 **조건부 보증**이다. 그 보증을 그대로 재면
+
+    - 약한 이분산: 통과한 표본에서 OLS 포함률 $0.9121$
+    - 강한 이분산: 통과한 표본에서 OLS 포함률 $0.8169$
+
+    로, 무조건 포함률($0.9391$, $0.8988$)보다 **더 나쁘다.** 통과시킨 표본만 모으면 $95\%$ 구간이 $82\%$ 밖에 덮지 않는다.
+
+    **같은 표본에서 HC3 로 바꾸어도 고쳐지지 않는다.** $0.8894$, $0.7943$ 으로 오히려 조금 더 낮다. 그러므로 범인은 표준오차 공식이 아니다. 마지막 묶음이 그것을 보인다. 강한 이분산 자료에서 기울기의 참 산포는 전체 $0.2013$, 통과한 표본에서 $0.2115$ 로 **오히려 커졌는데**, 평균 표준오차는 OLS 가 $0.1670\to0.1414$, HC3 가 $0.2020\to0.1383$ 으로 **둘 다 크게 작아졌다.** (전체에서 HC3 의 $0.2020$ 이 참 산포 $0.2013$ 과 거의 같다는 점도 확인해 두자 — HC3 는 무조건적으로는 정확하다.)
+
+    까닭은 BP 가 통과시키는 표본의 정체다. **통과한 표본은 이분산이 없는 표본이 아니라 이분산이 우연히 눈에 띄지 않은 표본**이고, 그것은 큰 $x$ 쪽 잔차가 작게 나온 표본이다. 잔차가 작으니 어떤 공식으로 재도 표준오차가 작게 나오는데, 기울기의 오차는 그만큼 줄지 않는다. **조건부로 보는 순간 어떤 표준오차도 눈금이 맞지 않는다.**
+
+    **결론: (나) 늘 HC3 다.** (나)는 애초에 조건부 주장을 하지 않는다. "이 규칙을 반복하면 $95\%$ 를 덮는다"만 주장하고 그 주장이 세 자료에서 $0.9517$, $0.9475$, $0.9432$ 로 맞는다. (다)는 "통과했으니 OLS 로 충분하다"는 조건부 주장을 덧붙이는데 그 주장이 $0.82$ 로 틀린다. 틀린 주장을 하나 더 하면서 얻는 것은 없다 — 등분산 자료에서도 (나)가 잃는 것이 없으니까. 본문 마지막 상자의 "사전검정 없이 처음부터 로버스트 표준오차" 권고가 회귀에서도 수로 확인된다.
+
+---
+
 ## 정리하며
 
 회귀의 이분산은 시각적 검토(잔차 그림)와 형식적 검정(Breusch-Pagan, White, Goldfeld-Quandt)으로 탐지한다. Breusch-Pagan 검정은 단순성과 검정력의 균형 덕분에 표준적인 첫 선택이다. 이분산이 있으면 로버스트 표준오차가 올바른 분산함수를 지정하지 않고도 타당한 추론을 제공한다.
+
