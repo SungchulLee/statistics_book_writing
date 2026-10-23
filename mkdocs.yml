@@ -141,9 +141,9 @@ nav:
                 - 균등분포 U(a, b): ch04/continuous_distributions/uniform.md
                 - 지수분포 Exp(λ): ch04/continuous_distributions/exponential.md
                 - 정규분포 N(μ, σ²): ch04/continuous_distributions/normal.md
-                - 카이제곱분포 χ²(d): ch04/continuous_distributions/chi_square.md
-                - t 분포 t(d): ch04/continuous_distributions/student_t.md
-                - F 분포 F(d₁, d₂): ch04/continuous_distributions/f_distribution.md
+                - 카이제곱분포: ch04/continuous_distributions/chi_square.md
+                - t 분포: ch04/continuous_distributions/student_t.md
+                - F 분포: ch04/continuous_distributions/f_distribution.md
             - 4.3 이변량 정규분포:
                 - 이변량 정규분포: ch04/bivariate_normal/bivariate_normal.md
                 - 2차원 정규분포 조건부분포: ch04/bivariate_normal/gaussian_2d_conditionals.md
