@@ -42,7 +42,7 @@ $C\times C$ 혼동행렬 $M$의 원소 $M_{jk}$는 참 범주가 $j$이고 예�
 
 ---
 
-## 3. scikit-learn으로 구현하기
+## 3. 혼동행렬의 어느 칸이 정밀도를 끌어내렸는가
 
 <div class="exbox" markdown>
 
