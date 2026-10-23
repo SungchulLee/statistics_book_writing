@@ -437,8 +437,7 @@ nav:
                 - 다항회귀: ch13/interaction_polynomial/polynomial_regression.md
             - 13.5 가정과 진단:
                 - 가정과 진단 (LINE): ch13/assumptions/index.md
-                - 선형성 가정: ch13/assumptions/linearity_overview.md
-                - 선형성 확인: ch13/assumptions/checking_linearity.md
+                - 선형성: ch13/assumptions/checking_linearity.md
                 - 독립성: ch13/assumptions/checking_independence.md
                 - 등분산성: ch13/assumptions/checking_homoscedasticity.md
                 - 정규성: ch13/assumptions/checking_normality.md
