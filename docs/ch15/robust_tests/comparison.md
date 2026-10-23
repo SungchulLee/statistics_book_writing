@@ -261,7 +261,8 @@ fraction of their total」, 『Annals of Eugenics』 $11$($1941$), $47$–$52$ �
     # Brown-Forsythe(중앙값 중심) — 실무에서 가장 두루 권하는 선택이다.
     stat_bf, p_bf = stats.levene(g1, g2, g3, center='median')
 
-    # Fligner-Killeen — 순위만 쓰므로 가장 로버스트하지만 검정력은 조금 낮다.
+    # Fligner-Killeen — 순위만 쓰므로 꼬리의 두께에는 가장 덜 흔들리지만,
+    # 치우침에서는 위 표대로 Brown-Forsythe 에 진다. 검정력도 조금 낮다.
     stat_fk, p_fk = stats.fligner(g1, g2, g3)
 
     print(f"Bartlett:        stat={stat_b:.3f}, p={p_b:.4f}")

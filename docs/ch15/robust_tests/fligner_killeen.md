@@ -252,7 +252,8 @@ procedure for relative spread in unpaired samples」는 『JASA』 $55$ 권이�
 
     # Fligner-Killeen 은 값을 순위로 바꾼 뒤 정규점수를 매겨 계산한다.
     # 원래 값의 크기가 아예 셈에 들어가지 않으므로 이상치가 통계량을
-    # 끌고 갈 수 없다. 세 검정 중 가장 로버스트한 까닭이다.
+    # 끌고 갈 수 없다. 꼬리의 두께에 세 검정 중 가장 덜 흔들리는 까닭이다
+    # (치우침은 다른 이야기다 — 연습문제 9 를 볼 것).
     stat, p_value = stats.fligner(group1, group2)
     print(f"Fligner-Killeen: {stat:.4f}, p = {p_value:.4f}")
 
