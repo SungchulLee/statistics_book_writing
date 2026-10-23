@@ -1,7 +1,7 @@
 r"""14장 형식적 검정 절 여덟 쪽의 개념 그림을 만든다.
 
 만드는 파일:
-  ch14/formal_tests/img/test_power_by_alternative.png   검정마다 잘 잡는 이탈이 다르다
+  ch14/limitations/img/test_power_by_alternative.png   검정마다 잘 잡는 이탈이 다르다
   ch14/formal_tests/img/shapiro_w_as_qq_fit.png         W 는 Q-Q 그림을 숫자로 옮긴 것
   ch14/formal_tests/img/shapiro_null_scale.png          W=0.975 의 뜻은 n 에 따라 다르다
   ch14/formal_tests/img/ks_ecdf_sup.png                 D 는 세로 틈 하나다
@@ -153,7 +153,8 @@ def fig_power_by_alternative():
     cb.ax.tick_params(labelsize=9, colors=INK)
     cb.outline.set_visible(False)
     fig.tight_layout()
-    save(fig, "test_power_by_alternative.png")
+    fig.savefig("docs/ch14/limitations/img/test_power_by_alternative.png", dpi=170,
+                facecolor="white", bbox_inches="tight")  # 14.5 choosing_test.md 가 쓴다
 
 
 # ===================================================================
