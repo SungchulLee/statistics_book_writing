@@ -152,6 +152,152 @@ $$
 
 타당성 조건 $n\hat p = 120 \ge 10$과 $n(1-\hat p) = 80 \ge 10$을 넉넉히 만족하므로 보수적 기준으로 보아도 Wald 구간을 써도 되는 경우다.
 
+거꾸로 표본크기를 먼저 정하거나 신뢰수준을 올리는 일도 같은 공식으로 답한다.
+
+<div class="exbox" markdown>
+
+**보기 2.** <span class="diff easy" title="쉬움"></span> 학교 재정 조사를 위한 표본크기. Della는 비율에 대해 95% 신뢰수준에서 오차한계를 $\pm 2\%$보다 작게 하려 한다. 필요한 최소 표본크기는?
+
+</div>
+
+??? success "풀이"
+    최악의 표준오차는 ($\hat{p}(1-\hat{p})$를 최대화하는) $\hat{p} = 0.5$에서 나온다.
+
+    ```python
+    import scipy.stats as stats
+    import numpy as np
+
+    confidence_level = 0.95
+    alpha = 1 - confidence_level
+    z_star = stats.norm().ppf(1 - alpha / 2)
+    margin_of_error_max = 0.02
+    p_max = 0.5
+
+    # p를 모르는 채로 표본크기를 정해야 하므로 최악을 가정한다.
+    # p(1-p)는 p=0.5에서 최대(0.25)이니, 이 n이면 참 p가 무엇이든 안전하다.
+    n = 1
+    while True:
+        n += 1
+        me = z_star * np.sqrt(p_max * (1 - p_max) / n)
+        if me <= margin_of_error_max:
+            break
+    print(f"{n = }")
+    ```
+
+    출력:
+
+    ```
+    n = 2401
+    ```
+
+    공식으로 계산하면 $n = (z_{0.025}/2E)^2 = 2400.91$이고 올림하여 2401이다($z = 1.96$으로 반올림해 쓰면 정확히 2401이 된다). 참 비율이 0.5에서 멀면 이만큼 필요하지 않다. 사전 정보로 $p \approx 0.1$을 쓸 수 있다면 같은 오차한계에 865개면 된다.
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff easy" title="쉬움"></span> 여성 아티스트의 노래 (99% 신뢰구간). Della는 노래를 500곡 넘게 가지고 있다. 무작위로 50곡을 골랐더니 20곡이 여성 아티스트의 노래였다. 99% 신뢰구간을 구성하라.
+
+</div>
+
+??? success "풀이"
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    confidence_level = 0.99
+    alpha = 1 - confidence_level
+    p_hat = 20 / 50
+    n = 50
+
+    z_star = stats.norm().ppf(1 - alpha / 2)
+    margin_of_error = z_star * np.sqrt(p_hat * (1 - p_hat) / n)
+    print(f"{p_hat} ± {margin_of_error:.3f}")
+    ```
+
+    출력:
+
+    ```
+    0.4 ± 0.178
+    ```
+
+    99% 신뢰구간은 대략 $(0.222, 0.578)$이다.
+
+    여기서 한 가지 짚어 둘 것이 있다. 500곡 중 50곡을 뽑았으므로 $n/N = 0.1$이고, i.i.d. 근사가 아슬아슬한 경계에 있다. 유한모집단 수정을 넣으면 $\sqrt{(500-50)/499} = 0.950$이 곱해져 오차한계가 0.178에서 0.169로 줄어든다.
+
+자료가 요약값이 아니라 $0/1$ 기록으로 올 때는 읽어 들이는 일이 먼저다.
+
+<div class="exbox" markdown>
+
+**보기 4.** <span class="diff easy" title="쉬움"></span> CSV에서 자료 읽기. 베르누이 자료가 담긴 CSV 파일에 `1,0,0,1,0` 과 `1,0,0,0,0` 두 줄이 적혀 있다.
+
+**(1)** 표본크기 $n$, 성공 횟수 $k$, 표본비율 $\hat p$를 구하시오.
+
+**(2)** 0/1 값을 읽는 함수를 만들어 (1)을 확인하시오. 함수가 `0` 과 `1` 이 아닌 값을 만났을 때 **끊어야 하는** 까닭을 구체적인 예로 보이시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 세는 것이 전부다.** 값은 열 개이므로 $n = 10$이고, $1$인 것이 세 개이므로 $k = 3$, 따라서
+
+    $$
+    \hat p = \frac{k}{n} = \frac{3}{10} = 0.3
+    $$
+
+    이다. 비율 자료의 요약은 $(n, k)$ **두 수로 끝난다.** 평균의 구간에서는 $\bar x$와 $s$를 따로 구해야 했지만, 베르누이에서는 분산 $p(1-p)$가 평균에 딸려 오므로 표준오차까지 이 두 수에서 나온다. 그러므로 원자료를 읽는 일의 전부는 **이 두 수를 바르게 세는 것**이다.
+
+    **(2) 구현과 확인.**
+
+    ```python
+    import csv
+    import numpy as np
+
+    def load_data(csv_path):
+        """비율 추정을 위해 CSV에서 0/1 값을 읽는다."""
+        arr = []
+        with open(csv_path, "r", newline="") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                for item in row:
+                    item = item.strip()
+                    if item:
+                        v = float(item)
+                        # 0과 1 외의 값이 섞이면 여기서 끊는다.
+                        # 그냥 두면 sum()이 성공 횟수가 아니게 되어
+                        # p_hat이 1을 넘는 식으로 조용히 망가진다.
+                        if v not in (0, 1):
+                            raise ValueError("CSV must contain only 0/1 values.")
+                        arr.append(v)
+        if len(arr) == 0:
+            raise ValueError("No values found in CSV.")
+        return np.array(arr, dtype=float)
+
+
+    # 임시 파일로 확인한다. 성공 횟수 k와 표본크기 n만 있으면 구간을 만들 수 있다.
+    import tempfile, os
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, "bernoulli.csv")
+        with open(path, "w") as f:
+            f.write("1,0,0,1,0\n1,0,0,0,0\n")
+        y = load_data(path)
+    print(f"n = {len(y)}, k = {int(y.sum())}, p_hat = {y.mean()}")
+    ```
+
+    출력:
+
+    ```
+    n = 10, k = 3, p_hat = 0.3
+    ```
+
+    **(1)과 맞는다.** $n = 10$, $k = 3$, $\hat p = 0.3$ 이다. 줄을 어떻게 나누었든 값의 개수와 합만 세므로 결과가 같다.
+
+    **0/1 이 아닌 값에서 끊어야 하는 까닭.** 이 함수가 하는 일은 결국 `len` 과 `sum` 두 가지인데, **`sum` 이 성공 횟수라는 보장은 값이 0/1 일 때만 성립한다.** 다른 값이 섞이면 조용히 틀린다.
+
+    - 값 하나가 `2` 라면 $k = 4$, $\hat p = 0.4$ 가 된다. **그럴듯한 수라서 알아챌 길이 없다.**
+    - 결측을 `99` 로 코딩한 자료가 섞이면 $k = 102$, $\hat p = 10.2$ 가 된다. 이때 표준오차 안의 $\hat p(1-\hat p) = 10.2 \times (-9.2) = -93.84$ 가 **음수**가 되어 $\sqrt{\cdot}$ 가 `nan` 을 준다. 구간이 `(nan, nan)` 으로 나오므로 그나마 눈에 띈다.
+
+    **눈에 띄는 쪽이 운이 좋은 경우다.** 첫째 예처럼 틀린 값이 유효 범위 안에 떨어지면 끝까지 아무 신호가 없다. 그래서 검사를 계산 뒤가 아니라 **읽는 자리**에 둔다.
+
 ---
 
 ## 2. Wald z-구간의 대안
@@ -320,158 +466,7 @@ $\mathrm{IV}$, 보울리의 발언은 토론 $609$ 쪽, 피셔의 발언은 $617
 
 </div>
 
----
-
-## 3. 손으로 더 해 보기
-
-보기 1이 네 방법을 한 자료에서 나란히 놓았다. 여기서는 거꾸로 표본크기를 정하고, 신뢰수준을 올려 본다.
-
-<div class="exbox" markdown>
-
-**보기 2.** <span class="diff easy" title="쉬움"></span> 학교 재정 조사를 위한 표본크기. Della는 비율에 대해 95% 신뢰수준에서 오차한계를 $\pm 2\%$보다 작게 하려 한다. 필요한 최소 표본크기는?
-
-</div>
-
-??? success "풀이"
-    최악의 표준오차는 ($\hat{p}(1-\hat{p})$를 최대화하는) $\hat{p} = 0.5$에서 나온다.
-
-    ```python
-    import scipy.stats as stats
-    import numpy as np
-
-    confidence_level = 0.95
-    alpha = 1 - confidence_level
-    z_star = stats.norm().ppf(1 - alpha / 2)
-    margin_of_error_max = 0.02
-    p_max = 0.5
-
-    # p를 모르는 채로 표본크기를 정해야 하므로 최악을 가정한다.
-    # p(1-p)는 p=0.5에서 최대(0.25)이니, 이 n이면 참 p가 무엇이든 안전하다.
-    n = 1
-    while True:
-        n += 1
-        me = z_star * np.sqrt(p_max * (1 - p_max) / n)
-        if me <= margin_of_error_max:
-            break
-    print(f"{n = }")
-    ```
-
-    출력:
-
-    ```
-    n = 2401
-    ```
-
-    공식으로 계산하면 $n = (z_{0.025}/2E)^2 = 2400.91$이고 올림하여 2401이다($z = 1.96$으로 반올림해 쓰면 정확히 2401이 된다). 참 비율이 0.5에서 멀면 이만큼 필요하지 않다. 사전 정보로 $p \approx 0.1$을 쓸 수 있다면 같은 오차한계에 865개면 된다.
-
-<div class="exbox" markdown>
-
-**보기 3.** <span class="diff easy" title="쉬움"></span> 여성 아티스트의 노래 (99% 신뢰구간). Della는 노래를 500곡 넘게 가지고 있다. 무작위로 50곡을 골랐더니 20곡이 여성 아티스트의 노래였다. 99% 신뢰구간을 구성하라.
-
-</div>
-
-??? success "풀이"
-
-    ```python
-    import numpy as np
-    from scipy import stats
-
-    confidence_level = 0.99
-    alpha = 1 - confidence_level
-    p_hat = 20 / 50
-    n = 50
-
-    z_star = stats.norm().ppf(1 - alpha / 2)
-    margin_of_error = z_star * np.sqrt(p_hat * (1 - p_hat) / n)
-    print(f"{p_hat} ± {margin_of_error:.3f}")
-    ```
-
-    출력:
-
-    ```
-    0.4 ± 0.178
-    ```
-
-    99% 신뢰구간은 대략 $(0.222, 0.578)$이다.
-
-    여기서 한 가지 짚어 둘 것이 있다. 500곡 중 50곡을 뽑았으므로 $n/N = 0.1$이고, i.i.d. 근사가 아슬아슬한 경계에 있다. 유한모집단 수정을 넣으면 $\sqrt{(500-50)/499} = 0.950$이 곱해져 오차한계가 0.178에서 0.169로 줄어든다.
----
-
-## 4. 코드로 계산하기
-
-손으로 한 계산을 코드로 옮긴다. 비율에서는 방법이 넷이므로, 넷을 한 함수로 묶어 두고 **무엇을 고를지를 호출하는 쪽에서 정하게** 하는 것이 요령이다.
-
-<div class="exbox" markdown>
-
-**보기 4.** <span class="diff easy" title="쉬움"></span> CSV에서 자료 읽기. 베르누이 자료가 담긴 CSV 파일에 `1,0,0,1,0` 과 `1,0,0,0,0` 두 줄이 적혀 있다.
-
-**(1)** 표본크기 $n$, 성공 횟수 $k$, 표본비율 $\hat p$를 구하시오.
-
-**(2)** 0/1 값을 읽는 함수를 만들어 (1)을 확인하시오. 함수가 `0` 과 `1` 이 아닌 값을 만났을 때 **끊어야 하는** 까닭을 구체적인 예로 보이시오.
-
-</div>
-
-??? success "풀이"
-
-    **(1) 세는 것이 전부다.** 값은 열 개이므로 $n = 10$이고, $1$인 것이 세 개이므로 $k = 3$, 따라서
-
-    $$
-    \hat p = \frac{k}{n} = \frac{3}{10} = 0.3
-    $$
-
-    이다. 비율 자료의 요약은 $(n, k)$ **두 수로 끝난다.** 평균의 구간에서는 $\bar x$와 $s$를 따로 구해야 했지만, 베르누이에서는 분산 $p(1-p)$가 평균에 딸려 오므로 표준오차까지 이 두 수에서 나온다. 그러므로 원자료를 읽는 일의 전부는 **이 두 수를 바르게 세는 것**이다.
-
-    **(2) 구현과 확인.**
-
-    ```python
-    import csv
-    import numpy as np
-
-    def load_data(csv_path):
-        """비율 추정을 위해 CSV에서 0/1 값을 읽는다."""
-        arr = []
-        with open(csv_path, "r", newline="") as f:
-            reader = csv.reader(f)
-            for row in reader:
-                for item in row:
-                    item = item.strip()
-                    if item:
-                        v = float(item)
-                        # 0과 1 외의 값이 섞이면 여기서 끊는다.
-                        # 그냥 두면 sum()이 성공 횟수가 아니게 되어
-                        # p_hat이 1을 넘는 식으로 조용히 망가진다.
-                        if v not in (0, 1):
-                            raise ValueError("CSV must contain only 0/1 values.")
-                        arr.append(v)
-        if len(arr) == 0:
-            raise ValueError("No values found in CSV.")
-        return np.array(arr, dtype=float)
-
-
-    # 임시 파일로 확인한다. 성공 횟수 k와 표본크기 n만 있으면 구간을 만들 수 있다.
-    import tempfile, os
-    with tempfile.TemporaryDirectory() as d:
-        path = os.path.join(d, "bernoulli.csv")
-        with open(path, "w") as f:
-            f.write("1,0,0,1,0\n1,0,0,0,0\n")
-        y = load_data(path)
-    print(f"n = {len(y)}, k = {int(y.sum())}, p_hat = {y.mean()}")
-    ```
-
-    출력:
-
-    ```
-    n = 10, k = 3, p_hat = 0.3
-    ```
-
-    **(1)과 맞는다.** $n = 10$, $k = 3$, $\hat p = 0.3$ 이다. 줄을 어떻게 나누었든 값의 개수와 합만 세므로 결과가 같다.
-
-    **0/1 이 아닌 값에서 끊어야 하는 까닭.** 이 함수가 하는 일은 결국 `len` 과 `sum` 두 가지인데, **`sum` 이 성공 횟수라는 보장은 값이 0/1 일 때만 성립한다.** 다른 값이 섞이면 조용히 틀린다.
-
-    - 값 하나가 `2` 라면 $k = 4$, $\hat p = 0.4$ 가 된다. **그럴듯한 수라서 알아챌 길이 없다.**
-    - 결측을 `99` 로 코딩한 자료가 섞이면 $k = 102$, $\hat p = 10.2$ 가 된다. 이때 표준오차 안의 $\hat p(1-\hat p) = 10.2 \times (-9.2) = -93.84$ 가 **음수**가 되어 $\sqrt{\cdot}$ 가 `nan` 을 준다. 구간이 `(nan, nan)` 으로 나오므로 그나마 눈에 띈다.
-
-    **눈에 띄는 쪽이 운이 좋은 경우다.** 첫째 예처럼 틀린 값이 유효 범위 안에 떨어지면 끝까지 아무 신호가 없다. 그래서 검사를 계산 뒤가 아니라 **읽는 자리**에 둔다.
+방법이 넷이므로 넷을 한 함수로 묶어 두고 **무엇을 고를지를 부르는 쪽에서 정하게** 하는 편이 낫다.
 
 <div class="exbox" markdown>
 
@@ -646,7 +641,7 @@ $\mathrm{IV}$, 보울리의 발언은 토론 $609$ 쪽, 피셔의 발언은 $617
 
 ---
 
-## 5. 모의실험: 비율 신뢰구간의 포함확률
+## 3. 모의실험: 비율 신뢰구간의 포함확률
 
 비율에서는 포함확률을 **정확히 계산할 수 있다.** 이항은 이산이라 모든 $k$ 를 열거해 더하면 되기 때문이다(연습문제 25). 그런데도 모의실험을 하는 까닭은 구간 $100$ 개를 **눈으로 보는** 데 있고, 네 방법이 같은 자료에서 어떻게 갈라지는지가 거기서 읽힌다.
 
