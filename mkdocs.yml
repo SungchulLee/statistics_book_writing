@@ -438,11 +438,10 @@ nav:
             - 13.5 가정과 진단:
                 - 가정과 진단 (LINE): ch13/assumptions/index.md
                 - 선형성 가정: ch13/assumptions/linearity_overview.md
-                - 등분산성 가정: ch13/assumptions/homoscedasticity_overview.md
                 - 정규성 가정: ch13/assumptions/normality_overview.md
                 - 선형성 확인: ch13/assumptions/checking_linearity.md
                 - 독립성: ch13/assumptions/checking_independence.md
-                - 등분산성 확인: ch13/assumptions/checking_homoscedasticity.md
+                - 등분산성: ch13/assumptions/checking_homoscedasticity.md
                 - 정규성 확인: ch13/assumptions/checking_normality.md
                 - 가중최소제곱: ch13/assumptions/weighted_regression.md
             - 13.6 진단:
@@ -599,7 +598,7 @@ nav:
                 - 붓스트랩 신뢰구간 방법의 비교: ch17/bootstrap_ci/comparison.md
                 - 중앙값의 붓스트랩 (코드): ch17/bootstrap_ci/bootstrap_median.md
             - 17.3 붓스트랩 가설검정:
-                - 단일 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/single_mean.md
+                - 일표본 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/single_mean.md
                 - 두 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/two_means.md
                 - 상관에 대한 붓스트랩 검정: ch17/bootstrap_testing/correlation.md
             - 17.4 순열검정:
