@@ -3,7 +3,7 @@ r"""14장 입문 절 세 쪽의 개념 그림을 만든다.
 만드는 파일:
   ch14/introduction/img/clt_mean_vs_variance.png   CLT 는 평균만 구해 준다
   ch14/introduction/img/type1_vs_n.png             n 을 늘리면 무엇이 낫는가
-  ch14/introduction/img/aggregation_kurtosis.png   집계는 꼬리를 천천히 지운다
+  ch14/applications/img/aggregation_kurtosis.png   집계는 꼬리를 천천히 지운다 (14.7 쪽이 쓴다)
 
 실행:  python3 scripts/make_ch14_introduction_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,11 +30,14 @@ MUTED = "#90A4AE"
 RED = "#D32F2F"
 
 OUT = "docs/ch14/introduction/img/"
+# aggregation_kurtosis 만 14.7 응용 쪽에 들어가므로 저장 위치가 다르다
+OUT_APP = "docs/ch14/applications/img/"
 os.makedirs(OUT, exist_ok=True)
+os.makedirs(OUT_APP, exist_ok=True)
 
 
-def save(fig, name):
-    path = OUT + name
+def save(fig, name, out=None):
+    path = (out or OUT) + name
     fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print("saved", path)
@@ -261,7 +264,7 @@ def fig_aggregation_kurtosis():
     fig.suptitle("GARCH(1,1) + $t_7$ 로 만든 4000년치 수익률을 기간별로 더해 본 결과",
                  fontsize=12.5, color=INK, y=1.02)
     fig.tight_layout()
-    save(fig, "aggregation_kurtosis.png")
+    save(fig, "aggregation_kurtosis.png", out=OUT_APP)
 
 
 if __name__ == "__main__":
