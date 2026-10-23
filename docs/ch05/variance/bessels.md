@@ -462,7 +462,7 @@ $E[n(\bar{X} - \mu)^2] = \sigma^2$이므로, $\bar{X}$로부터의 편차는 평
         #   Chi²(df=k)       의 분산은 2k
         # 베셀 보정의 불편성은 정규성을 전혀 요구하지 않으므로,
         # 네 경우 모두 편향이 0에 가깝게 나와야 한다.
-        # (반면 뒤에 나오는 카이제곱 분포 결과는 정규성이 꼭 필요하다.)
+        # (반면 뒤에 나오는 카이제곱분포 결과는 정규성이 꼭 필요하다.)
         distributions = {
             f'Normal(0, {sigma2})':    (lambda: rng.normal(0, sigma, n), sigma2),
             f'Exp(scale={sigma})':     (lambda: rng.exponential(sigma, n), sigma2),

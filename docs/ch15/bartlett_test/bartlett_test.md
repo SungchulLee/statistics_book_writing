@@ -601,7 +601,7 @@ $$
     # 6단계: Bartlett 검정통계량
     bartlett_statistic = numerator / denominator
 
-    # 7단계: 카이제곱 분포로 p-값을 구한다
+    # 7단계: 카이제곱분포로 p-값을 구한다
     degrees_of_freedom = number_of_groups - 1
     p_value = stats.chi2.sf(bartlett_statistic, degrees_of_freedom)
 

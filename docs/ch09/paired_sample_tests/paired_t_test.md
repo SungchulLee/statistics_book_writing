@@ -1441,7 +1441,7 @@ _확인한 곳 — 미국 식품의약국의 요청으로 미국 연구평의회
     for m in [10, 20, 40]:
         ns, pws = [], []
         for _ in range(2_000):
-            # 예비연구의 S_D 를 카이제곱 분포에서 생성
+            # 예비연구의 S_D 를 카이제곱분포에서 생성
             s = sd_true * np.sqrt(stats.chi2.rvs(m - 1, random_state=rng) / (m - 1))
             n = n_for(delta, s)
             ns.append(n)
