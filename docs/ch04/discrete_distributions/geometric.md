@@ -4,7 +4,7 @@
 
 **기하분포**는 첫 성공이 나올 때까지 걸리는 시행 횟수를 모형화한다. 독립 베르누이 시행을 성공이 나올 때까지 되풀이하는 실험에서 자연스럽게 나타난다.
 
-4.1절의 사슬에서 이 페이지는 **무엇을 고정하는지를 뒤집는** 자리에 있다.
+4.1절 [이산분포](bernoulli.md) 사슬에서 이 쪽은 **무엇을 고정하는지를 뒤집는** 자리에 있다.
 
 $$
 \text{Bernoulli}(p) \to B(n, p) \to \text{HG}(n, N, M) \;\longrightarrow\; \text{Geo}(p) \;\longrightarrow\; \text{NB}(r, p) \to \text{Poisson}(\lambda)

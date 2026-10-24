@@ -362,7 +362,7 @@ $y^{(i)}(2 A[i,:]\boldsymbol{\theta}^* ) > 0$이 되는 $\boldsymbol{\theta}^*$�
     **실무에서 나타나는 증상:** 계수와 그 표준오차가 반복이 진행될수록 함께 발산한다.
     `statsmodels`는 "Perfect separation detected" 경고를 내고, `sklearn`은 기본으로 벌점을 주기
     때문에(기본 `C=1.0`) 유한한 답을 돌려주지만 그 답은 MLE가 아니다. 해결책은 벌점을 명시적으로
-    넣거나(L2 정칙화, 19.4절 참조) 파스 보정(Firth's correction)을 쓰거나, 결과를 완벽히
+    넣거나(L2 정칙화, 19.4절 [로지스틱 회귀의 L1·L2 정칙화](../regularized/regularization.md) 참조) 파스 보정(Firth's correction)을 쓰거나, 결과를 완벽히
     예측하는 변수를 모형에서 빼는 것이다. $\square$
 
 ---

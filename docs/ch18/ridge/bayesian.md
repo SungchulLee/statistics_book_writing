@@ -407,7 +407,7 @@ $$
     second variable's effect in the original unit: 1.9802
     ```
 
-    손으로 구한 값과 한 자리까지 같다. `Ridge` 는 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \alpha\lVert\boldsymbol\beta\rVert^2$을 최소화하므로 $\alpha$가 그대로 $\lambda$다($\tfrac{1}{2n}$을 붙이는 `Lasso` 와 다르다 — 18장 라쏘 쪽을 보라).
+    손으로 구한 값과 한 자리까지 같다. `Ridge` 는 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \alpha\lVert\boldsymbol\beta\rVert^2$을 최소화하므로 $\alpha$가 그대로 $\lambda$다($\tfrac{1}{2n}$을 붙이는 `Lasso` 와 다르다 — 18.3절 [라쏘 정식화와 희소성](../lasso/formulation.md)을 보라).
 
 <div class="drillbox" markdown>
 
