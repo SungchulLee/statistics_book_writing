@@ -320,6 +320,23 @@ ch14 의 14.1 과 14.7 이 「정형화된 사실」 넷을 소제목까지 같�
 되는 쪽은 들어오는 링크 없이도 제구실을 한다. 판정이 필요한 것은 **완전 고립**(들어오는
 링크도 나가는 링크도 0)이다.
 
+**장 개요의 쪽 링크 검사** — `python3 tools/lint_index_links.py [chNN] [--apply]`.
+장 개요의 「장의 구성」은 쪽마다 한 줄씩 `- **쪽 이름** --- 설명` 으로 적는다. **독자가
+무엇을 읽을지 고르는 자리**인데 2026-10-24 까지 그 줄 **390 개 가운데 링크가 걸린 것이
+하나**였다. 326 은 nav 제목과 그대로 맞아 기계로 걸리고, 나머지는 손으로 판정해야 한다 —
+**개요가 ASCII 그리스 문자를 쓰는 것이 큰 몫이다**(「분산(sigma squared)의 신뢰구간」 대
+nav 의 「σ²의 신뢰구간」). 그리고 맞는 쪽이 없는 줄은 **건드리지 말 것** — 선수 지식
+(「5장·6장」)과 절 묶음(「범주형 자료의 그림」)이 섞여 있다.
+
+**이 검사가 「지운 쪽을 아직 소개하는 줄」을 드러낸다.** 2026-10-24 에 넷이 나왔고
+`git log --diff-filter=D` 로 전부 확인되었다 — ch16 의 둘은 `327d21c2` 에서 흩어 지운
+`paired.md`·`two_sample.md`, ch17 의 하나는 `19c8ef0a` 에서 합친 `comparison.md`,
+ch08 의 하나는 그날 내가 흡수한 쪽이다. **쪽을 지우면 장 개요를 함께 보아야 한다.**
+
+**토큰 겹침으로 제목을 맞추려 들지 말 것.** 시험해 보니 「비율에 대한 Z-검정」을
+`f_test_two_variances` 로, 「Welch 이원배치 분산분석」을 `welch_twoway_robust` 로
+보냈다(둘 다 `welch_two_way` 가 따로 있다). **후보 생성에만 쓰고 판정은 손으로.**
+
 **「다음 절」 포인터 검사** — `python3 tools/lint_next_pointers.py [chNN] [--apply]`.
 쪽마다 마지막 줄이 다음 쪽을 **이름까지 적어 두고** 링크를 걸지 않는 일이 흔했다.
 2026-10-24 에 포인터 **240 개 가운데 링크가 있는 것이 여덟**이었고, 링크를 걸자
@@ -420,6 +437,8 @@ python3 tools/lint_cross_section_pairs.py
 python3 tools/lint_next_pointers.py
 # 아무도 가리키지 않는 쪽 — 완전 고립이 0 이어야 한다 (고아는 판정이 필요하다)
 python3 tools/lint_orphans.py
+# 장 개요가 쪽 이름을 적고 링크를 빠뜨린 자리 — 0 이어야 한다
+python3 tools/lint_index_links.py
 # 머리글의 LaTeX 와 ASCII 그리스 문자 — 목차에 날 문자열로 새어 나간다
 grep -rnE '^#{1,6} .*\$' docs --include='*.md'
 grep -rnE '^#{1,4} .*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)' docs --include='*.md'
