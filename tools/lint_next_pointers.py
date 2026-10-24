@@ -47,7 +47,7 @@ NOT_THIS = r"(?<!그 )(?<!그)"
 # 조사가 붙은 꼴을 함께 받는다. 「다음 절**의** **원그래프**」·「다음 절부터 **일표본
 # 검정**」이 그렇고, 그것만 보지 않았을 때 63 곳이 검사 밖에 있었다. ch02 의 시각화
 # 열 쪽이 모두 그 꼴이어서 그 절이 통째로 빠져 있었다.
-PART = r"(다음 절|다음 장)(?:의|부터는|부터|에서는|에서|은|이)?\s*"
+PART = r"(다음 절|다음 장|다음 쪽)(?:의|부터는|부터|에서는|에서|은|이)?\s*"
 LINKED = re.compile(NOT_THIS + PART + r"\*\*\[(.+?)\]\(([^)\s#]+\.md)[^)]*\)\*\*")
 BARE = re.compile(NOT_THIS + PART + r"\*\*(?!\[)(.+?)\*\*")
 GREEK = ("sigma mu tau rho alpha beta lambda chi theta delta phi nu xi eta zeta "
@@ -114,7 +114,7 @@ def main(argv):
             kind, raw, raw_link = m.groups()
             already += 1
             i = idx[rel]
-            if kind != "다음 절" or i + 1 >= len(order):
+            if kind == "다음 장" or i + 1 >= len(order):
                 continue
             try:
                 got = str((p.parent / raw_link).resolve().relative_to(D))
@@ -130,7 +130,7 @@ def main(argv):
         for m in BARE.finditer(t):
             kind, raw = m.group(1), m.group(2)
             kraw = key(raw)
-            if kind == "다음 절" and len(kraw) >= 3 and any(
+            if kind != "다음 장" and len(kraw) >= 3 and any(
                     hs > m.start() and (kraw in hk or hk in kraw) for hs, hk in heads):
                 inpage.append((rel, raw))
                 continue

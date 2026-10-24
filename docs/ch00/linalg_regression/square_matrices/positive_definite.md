@@ -90,7 +90,7 @@
     - **조건 2 는 그대로 옮겨간다.** $\mathbf{A} \succeq 0$일 필요충분조건은 모든 고윳값이 $\lambda_i \ge 0$인 것이다. 위 증명의 (1) $\Leftrightarrow$ (2) 논법에서 부등호만 바꾸면 된다.
     - **조건 3 은 옮겨가지 않는다.** $\mathbf{A} = \operatorname{diag}(0, -1)$의 선행 주소행렬식은 $\det(\mathbf{A}_1) = 0$, $\det(\mathbf{A}_2) = 0$으로 둘 다 $\ge 0$이지만 $\mathbf{A}$는 양반정치가 아니다. $\mathbf{x} = (0, 1)^\top$에서 $\mathbf{x}^\top\mathbf{A}\mathbf{x} = -1 < 0$이고 고윳값이 $0, -1$이다. 올바른 판정법은 **모든 주소행렬식** — 행과 열에서 같은 첨자 집합을 골라 만든 $2^n - 1$개의 부분행렬식 — 이 $\ge 0$인 것이다. 위 예에서는 첨자 $\{2\}$를 고른 주소행렬식 $-1 < 0$이 걸러낸다. 선행 주소행렬식만으로 충분한 것은 **엄격한** 부등호(실베스터 판정법)일 때뿐이다.
     - **조건 4 는 유일성을 잃는다.** 양반정치행렬도 대각 성분이 음이 아닌 하삼각행렬 $\mathbf{L}$로 $\mathbf{A} = \mathbf{L}\mathbf{L}^\top$을 만들 수 있지만, 대각에 0 이 나타나면 $\mathbf{L}$이 유일하지 않다. $\mathbf{A} = \operatorname{diag}(0, 1)$의 경우 임의의 $t \in [-1, 1]$에 대해 $\mathbf{L} = \begin{pmatrix} 0 & 0 \\ t & \sqrt{1 - t^2}\end{pmatrix}$이 모두 $\mathbf{L}\mathbf{L}^\top = \mathbf{A}$를 만족한다. 유일한 촐레스키 분해는 엄격한 양정치성에 딸린 것이다.
-    - **조건 5 는 완화가 통한다.** $\mathbf{A} \succeq 0$일 필요충분조건은 $\mathbf{A} = \mathbf{B}^\top\mathbf{B}$인 (계수 부족이어도 되는) 행렬 $\mathbf{B}$가 존재하는 것이다. 이것이 바로 다음 쪽의 그람 행렬 이야기다.
+    - **조건 5 는 완화가 통한다.** $\mathbf{A} \succeq 0$일 필요충분조건은 $\mathbf{A} = \mathbf{B}^\top\mathbf{B}$인 (계수 부족이어도 되는) 행렬 $\mathbf{B}$가 존재하는 것이다. 이것이 바로 다음 쪽 **[그람 행렬](gram_matrices.md)** 이야기다.
 
 <div class="aibox" markdown>
 

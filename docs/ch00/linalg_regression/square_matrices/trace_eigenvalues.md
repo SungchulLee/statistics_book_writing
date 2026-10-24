@@ -157,7 +157,7 @@ $$
 
     두 표현을 같다고 놓으면 $\operatorname{tr}(\mathbf{A}) = \lambda_1 + \lambda_2 + \cdots + \lambda_n$이다. $\square$
 
-    **둘째, 닮음 불변량으로.** $\mathbf{A}$가 (복소수 위에서) 대각화 가능한 경우에만 통하는 짧은 논법이다.
+    **둘째, 닮음 불변량으로.** $\mathbf{A}$가 (복소수 위에서) [대각화 가능](diagonalizable.md)한 경우에만 통하는 짧은 논법이다.
 
     대각합은 닮음 불변량이다. 순환 성질에 의해
 

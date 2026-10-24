@@ -40,6 +40,8 @@ $\mathbf{z} \sim N(\mathbf{0}, \mathbf{I}_n)$일 때 $\mathbf{z}^\top\mathbf{A}\
 
 ### 대각화 접근
 
+쓰는 도구는 A.3절 [대각화 가능 행렬의 대각형](../square_matrices/diagonalizable.md)과 [대칭행렬](../square_matrices/symmetric.md)의 스펙트럼 정리다. 대칭행렬은 언제나 **직교**행렬로 대각화되므로, 아래 변환 $\mathbf{w} = \mathbf{Q}^\top\mathbf{z}$ 가 표준정규를 표준정규로 보낸다.
+
 스펙트럼 정리에 의해 $\mathbf{A} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$이며 $\mathbf{Q}$는 직교행렬, $\boldsymbol{\Lambda} = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$이다. $\mathbf{w} = \mathbf{Q}^\top\mathbf{z}$로 두면
 
 $$

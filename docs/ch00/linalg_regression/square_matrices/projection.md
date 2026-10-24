@@ -342,7 +342,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 
     **따름정리.** 대각합이 닮음 불변량이므로 $\operatorname{tr}(\mathbf{P}) = r = \operatorname{rank}(\mathbf{P})$가 곧바로 나온다(연습문제 2의 다른 증명이다).
 
-    **주의.** 사영은 **언제나** 대각화 가능하다. 빗각 사영도 그렇다. 빗각 사영에서 부족한 것은 대각화 가능성이 아니라 **고유벡터들의 직교성**이다. $\square$
+    **주의.** 사영은 **언제나** [대각화 가능](diagonalizable.md)하다. 빗각 사영도 그렇다. 빗각 사영에서 부족한 것은 대각화 가능성이 아니라 **고유벡터들의 직교성**이다. $\square$
 
 ---
 
