@@ -1209,12 +1209,12 @@ $$
 
     | 방법 | 내용 |
     |---|---|
-    | **축소 추정**(레도이트–울프) | $\hat S=(1-\lambda)S+\lambda\cdot\text{목표}$ |
+    | **축소 추정**(르두아–울프) | $\hat S=(1-\lambda)S+\lambda\cdot\text{목표}$ |
     | 정칙화 | $S+\epsilon I$ |
     | **희소 추정**(그래프 라소) | $S^{-1}$에 $L_1$ 벌점 |
     | 차원 축소 | 주성분 몇 개만 |
 
-    **레도이트–울프 축소가 표준 도구**다. $\lambda$를 자료에서 최적으로 정한다.
+    **르두아–울프 축소가 표준 도구**다. $\lambda$를 자료에서 최적으로 정한다.
 
     ```text
     from sklearn.covariance import LedoitWolf
