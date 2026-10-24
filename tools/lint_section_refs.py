@@ -64,6 +64,34 @@ E_ALLOW = {
         "보르트키에비치 『작은 수의 법칙』(1898) 원서의 §12 다 — 이 쪽의 절이 아니다",
 }
 
+# 꼴 F: 번호가 **뒤에** 오는 절 참조 — 「절 5 의 모의실험」·「절 $8$ 에 적은 것」.
+#       꼴 E 의 정규식은 「5절」(번호가 앞)만 보므로 어순이 뒤집힌 이것을 통째로
+#       놓친다. 2026-10-24 에 셋이 나왔고 전부 절을 덜어 낸 자국이었다 —
+#       ci_mu 와 ci_p 가 **나란히** 「절 5」 라 적는데 둘 다 §3 까지다.
+#       링크가 앞에 있으면 그 번호는 **그 쪽**의 절이므로(꼴 E 는 여기서 그냥
+#       건너뛴다) 건너뛰지 말고 그 쪽의 `## N.` 머리글과 맞춘다.
+F = re.compile(r"절\s*\$?(\d{1,2})\$?\s*(?=[의을를에이가은는과와]|에서|으로|까지|\s|$)")
+F_LINK = re.compile(r"\[[^\]]*\]\(([^)\s#]+\.md)[^)]*\)[^(\[]{0,24}$")
+# 「적절」·「계절」·「친절」 처럼 **절이 낱말의 둘째 음절**인 자리. E_WORD 는 절 *뒤*를
+# 보므로(절반·절차) 이쪽을 못 본다. 출력표의 "10  5  8.0  적절" 이 다음 줄의 수와
+# 붙어 「절 50」 으로 읽히는 일이 실제로 셋 있었다
+F_PREV = re.compile(r"[가-힣]$")
+_HEADS: dict = {}
+
+
+def heads_of(path: pathlib.Path) -> set:
+    """그 쪽의 `## N.` 머리글 번호들. 못 읽으면 None."""
+    key = str(path)
+    if key not in _HEADS:
+        try:
+            body = path.read_text(encoding="utf-8")
+        except OSError:
+            _HEADS[key] = None
+        else:
+            _HEADS[key] = {int(x) for x in re.findall(r"^## (\d{1,2})\. ", body, re.M)}
+    return _HEADS[key]
+
+
 # 꼴 D: 링크가 **없이** 번호 뒤에 쪽 이름이나 절 이름이 따라오는 경우.
 #       「5.3절 **비율의 표집분포**에서 다룬다」 — 링크가 없으니 A·B·C 가 모두 놓친다.
 #       nav 의 절 제목과 쪽 제목, 그리고 각 쪽의 H1 을 모아 이름으로 맞춘다.
@@ -175,6 +203,24 @@ def main(argv: list) -> int:
                 bad.append((str(rel), text[:m.start()].count("\n") + 1,
                             str(num), "·".join(str(h) for h in sorted(heads)),
                             f"같은 쪽: {m.group(0).strip()}"))
+        # ── 꼴 F: 번호가 뒤에 오는 절 참조
+        for m in F.finditer(text):
+            num = int(m.group(1))
+            pre = text[max(0, m.start() - 200):m.start()]
+            if E_CHAP.search(pre) or E_RANGE.search(pre) or F_PREV.search(pre):
+                continue
+            lk = F_LINK.search(pre)
+            if lk:
+                tgt = (p.parent / lk.group(1))
+                hd, where = heads_of(tgt), f"{tgt.name}: 절 {num}"
+            else:
+                hd, where = heads, f"같은 쪽: 절 {num}"
+            if not hd or num in hd:
+                continue
+            if E_ALLOW.get((str(rel), num)):
+                continue
+            bad.append((str(rel), text[:m.start()].count("\n") + 1,
+                        str(num), "·".join(str(h) for h in sorted(hd)), where))
     seen, rows = set(), []
     for r in bad:
         if (r[0], r[1]) not in seen:

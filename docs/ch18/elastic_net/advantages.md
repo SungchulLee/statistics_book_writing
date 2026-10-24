@@ -263,7 +263,7 @@ sklearn이 보정 엘라스틱넷을 적용하는지 직접 확인하라.
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-직교설계 $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}_p$에서 엘라스틱넷 해는 $\hat\beta_j^{\text{EN}} = S(\hat\beta_j^{\text{OLS}}, \lambda\alpha)/(1 + \lambda(1-\alpha))$다([엘라스틱넷 정칙화](elastic_net.md) 절 $8$ 연습문제 5). 여기서 $S(z, \gamma) = \operatorname{sign}(z)(\lvert z \rvert - \gamma)_+$는 연성문턱 연산자다. 이제 $j$번째 열의 **단위만** 바꾸어 $\tilde{\mathbf{x}}_j = c\,\mathbf{x}_j$($c > 0$)로 두자. 다른 열은 그대로이므로 직교성은 유지된다.
+직교설계 $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}_p$에서 엘라스틱넷 해는 $\hat\beta_j^{\text{EN}} = S(\hat\beta_j^{\text{OLS}}, \lambda\alpha)/(1 + \lambda(1-\alpha))$다([엘라스틱넷 정칙화](elastic_net.md) 연습문제 5). 여기서 $S(z, \gamma) = \operatorname{sign}(z)(\lvert z \rvert - \gamma)_+$는 연성문턱 연산자다. 이제 $j$번째 열의 **단위만** 바꾸어 $\tilde{\mathbf{x}}_j = c\,\mathbf{x}_j$($c > 0$)로 두자. 다른 열은 그대로이므로 직교성은 유지된다.
 
 **(a)** $\tilde\beta_j$의 닫힌 꼴을 구하라.
 
