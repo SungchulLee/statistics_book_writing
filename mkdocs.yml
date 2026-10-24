@@ -158,7 +158,7 @@ nav:
                 - 반복추출 개념: ch05/foundations/repeated_sampling.md
                 - 금융위기와 중심극한정리의 실패: ch05/foundations/financial_crisis_clt.md
             - 5.2 네 가지 기본 표집분포:
-                - 정규분포 N(μ, σ²)와 표준정규 Z: ch05/distributions/normal.md
+                - 정규분포 (표준화의 기준): ch05/distributions/normal.md
                 - t 분포 (σ를 모를 때): ch05/distributions/student_t.md
                 - 카이제곱분포 (표본분산): ch05/distributions/chi_square.md
                 - F 분포 (분산비): ch05/distributions/f_distribution.md
