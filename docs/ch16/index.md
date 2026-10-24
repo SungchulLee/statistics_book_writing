@@ -55,8 +55,8 @@
 
 이변량 정규성을 요구하지 않는 순위 기반 연관성 측도이다.
 
-- **[Spearman의 rho (재론)](correlation/spearman.md)** --- 두 변수의 순위에 Pearson 상관을 적용하여 단조 연관성을 재는 순위 기반 상관계수이다.
-- **[Kendall의 tau (재론)](correlation/kendall.md)** --- 부합쌍과 비부합쌍의 개수를 세어 연관성을 재는 일치도 기반 상관계수이다.
+- **[Spearman 순위상관 (재론)](correlation/spearman.md)** --- 두 변수의 순위에 Pearson 상관을 적용하여 단조 연관성을 재는 순위 기반 상관계수이다.
+- **[Kendall의 타우 (재론)](correlation/kendall.md)** --- 부합쌍과 비부합쌍의 개수를 세어 연관성을 재는 일치도 기반 상관계수이다.
 
 ## 2. 선수 지식
 
@@ -76,4 +76,4 @@
 2. 일표본과 대응표본 문제에서는 부호검정의 가정이 가장 약하고, 대칭성 가정이 성립하면 Wilcoxon 부호순위검정이 더 강력하다.
 3. Mann-Whitney U 검정과 Wilcoxon 순위합검정은 두 독립집단을 등분산이나 정규성 없이 비교하는 동치인 두 형태이다.
 4. Kruskal-Wallis 검정은 순위 기반 이표본 검정을 여러 집단으로 확장하며, 사후 쌍별 비교에는 Dunn 검정을 쓸 수 있다.
-5. Spearman의 rho와 Kendall의 tau는 비선형성이나 비정규성이 있을 때 단조 연관성을 재는 Pearson r의 로버스트한 대안이다.
+5. 스피어먼의 $r_s$ 와 켄들의 $\tau$ 는 비선형성이나 비정규성이 있을 때 단조 연관성을 재는 Pearson r의 로버스트한 대안이다.

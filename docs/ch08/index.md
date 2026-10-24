@@ -20,24 +20,24 @@
 
 표본 하나로 추정하는 단일 모수의 신뢰구간. 모수마다 한 쪽이고, 그 한 쪽이 **공식·손 계산·코드·포함확률 모의실험**을 모두 담는다. **비율만 한 쪽을 더 둔다** — 자료가 0 과 1 뿐이어서 포함률이 톱니를 그리고, 그 톱니는 한 자리를 재는 것으로는 보이지 않아 곡선 전체가 필요하다:
 
-- **[평균(mu)의 신뢰구간](one_sample_intervals/ci_mu.md)** -- 모평균에 대한 z-구간(분산을 아는 경우)과 t-구간(분산을 모르는 경우)을 구성하고, 타당성 조건과 중심극한정리의 역할을 다룬다.
-- **[비율(p)의 신뢰구간](one_sample_intervals/ci_p.md)** -- 모비율에 대한 Wald z-구간을 유도하고, Wilson과 Clopper-Pearson 대안을 논하며, 정규근사 조건을 제시한다.
+- **[μ의 신뢰구간](one_sample_intervals/ci_mu.md)** -- 모평균에 대한 z-구간(분산을 아는 경우)과 t-구간(분산을 모르는 경우)을 구성하고, 타당성 조건과 중심극한정리의 역할을 다룬다.
+- **[p의 신뢰구간](one_sample_intervals/ci_p.md)** -- 모비율에 대한 Wald z-구간을 유도하고, Wilson과 Clopper-Pearson 대안을 논하며, 정규근사 조건을 제시한다.
 - **[비율 신뢰구간의 실제 포함률](one_sample_intervals/phat_wald_wilson.md)** -- 왈드 구간과 윌슨 구간의 포함률을 $p$ 와 $n$ 을 훑어 곡선으로 재고, 명목 $95\%$ 가 실제로 얼마가 되는지를 대표값 표로 정리한다. $np \ge 10$ 이라는 보수적 기준이 어디서 오는지가 여기서 보인다.
-- **[분산(sigma squared)의 신뢰구간](one_sample_intervals/ci_sigma2.md)** -- 카이제곱분포로 모분산의 신뢰구간을 만든다. 정규성 가정이 필요하다.
+- **[σ²의 신뢰구간](one_sample_intervals/ci_sigma2.md)** -- 카이제곱분포로 모분산의 신뢰구간을 만든다. 정규성 가정이 필요하다.
 
 ### 8.3 이표본 구간
 
 두 독립 모집단의 모수를 비교하는 신뢰구간:
 
-- **[평균 차이(mu1 - mu2)의 신뢰구간](two_sample_intervals/ci_mu_diff.md)** -- z-구간(분산을 아는 경우), 합동 t-구간(분산이 같은 경우), Welch-Satterthwaite 자유도를 쓰는 Welch t-구간(분산이 다른 경우)을 다룬다.
-- **[비율 차이(p1 - p2)의 신뢰구간](two_sample_intervals/ci_p_diff.md)** -- 두 비율 차이에 대한 Wald 구간을 제시하고 Newcombe, Clopper-Pearson 대안과 비교한다.
-- **[분산비(sigma1 squared / sigma2 squared)의 신뢰구간](two_sample_intervals/ci_variance_ratio.md)** -- 두 모분산의 비에 대해 F-분포에 기반한 신뢰구간을 구성한다.
+- **[μ₁−μ₂의 신뢰구간](two_sample_intervals/ci_mu_diff.md)** -- z-구간(분산을 아는 경우), 합동 t-구간(분산이 같은 경우), Welch-Satterthwaite 자유도를 쓰는 Welch t-구간(분산이 다른 경우)을 다룬다.
+- **[p₁−p₂의 신뢰구간](two_sample_intervals/ci_p_diff.md)** -- 두 비율 차이에 대한 Wald 구간을 제시하고 Newcombe, Clopper-Pearson 대안과 비교한다.
+- **[σ₁²/σ₂²의 신뢰구간](two_sample_intervals/ci_variance_ratio.md)** -- 두 모분산의 비에 대해 F-분포에 기반한 신뢰구간을 구성한다.
 
 ### 8.4 대응표본 구간
 
 관측값이 자연스럽게 짝을 이루는 자료의 신뢰구간:
 
-- **[차이의 평균(mu_D)의 신뢰구간](paired_sample_intervals/ci_mu_paired.md)** -- 대응된 차이에 일표본 t-구간을 적용하여 관련된 두 측정값의 평균 차이를 추정한다. **대응 설계와 독립 설계 가운데 무엇을 고를 것인가**는 [차이의 평균의 신뢰구간](paired_sample_intervals/ci_mu_paired.md) $\S 4$ 가 짝 내 상관 $\rho$ 와 실행 여건으로 따진다.
+- **[μ_D (차이의 평균)의 신뢰구간](paired_sample_intervals/ci_mu_paired.md)** -- 대응된 차이에 일표본 t-구간을 적용하여 관련된 두 측정값의 평균 차이를 추정한다. **대응 설계와 독립 설계 가운데 무엇을 고를 것인가**는 [차이의 평균의 신뢰구간](paired_sample_intervals/ci_mu_paired.md) $\S 4$ 가 짝 내 상관 $\rho$ 와 실행 여건으로 따진다.
 - **[비율의 대응 구간 (McNemar)](paired_sample_intervals/ci_paired_proportions.md)** -- 대응된 이진 자료를 McNemar 방식으로 다루며, 불일치 짝에 초점을 맞추어 대응 비율 차이의 신뢰구간을 구성한다.
 
 ### 8.5 표본크기의 결정
@@ -66,7 +66,7 @@
 ## 3. 핵심 요약
 
 1. 신뢰구간은 미지의 모수에 대해 그럴듯한 값들의 범위를 준다. 신뢰수준은 반복표본추출에서의 장기적 포함 비율을 가리키는 것이지, 특정한 하나의 구간이 모수를 담을 확률이 아니다.
-2. z-구간과 t-구간 중 무엇을 쓸지는 모분산을 아는지와 표본크기에 달려 있다. sigma를 모르고 표본이 작을 때는 t-구간이 더 적절하다.
+2. z-구간과 t-구간 중 무엇을 쓸지는 모분산을 아는지와 표본크기에 달려 있다. $\sigma$ 를 모르고 표본이 작을 때는 t-구간이 더 적절하다.
 3. 이표본 구간은 독립인 집단들 사이에서 평균, 비율, 분산을 비교하게 해 주며, 분산이 다를 때는 Welch 방식이 로버스트성을 준다.
 4. 대응표본 구간은 짝 내 상관을 활용해 변동성을 줄이며, 짝짓기가 의미 있을 때 독립표본 설계보다 좁은 구간을 만든다.
 5. 표본크기 공식은 원하는 오차한계와 신뢰수준을 필요한 최소 관측값 수로 옮겨 주어, 연구자가 충분한 정밀도로 연구를 계획할 수 있게 한다.
