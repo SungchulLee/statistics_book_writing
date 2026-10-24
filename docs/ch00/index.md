@@ -11,33 +11,33 @@
 ### 0.1 수학적 배경 (복습)
 
 - **[집합, 함수, 논리](math/logic_sets.md)** — 명제논리, 집합 연산, 함수, 한정기호.
-- **수열, 극한, 점근** — 3.5절의 큰수의 법칙과 중심극한정리를 위한 수렴, 급수, 점근 표기.
-- **선형대수 표기와 관례** — 벡터/행렬 표기, 계획행렬, 계수, 역행렬, 행렬식.
+- **[수열, 극한, 점근](math/limits.md)** — 3.5절의 큰수의 법칙과 중심극한정리를 위한 수렴, 급수, 점근 표기.
+- **[선형대수 표기와 관례](math/linear_algebra.md)** — 벡터/행렬 표기, 계획행렬, 계수, 역행렬, 행렬식.
 
 ### 0.2 계산 도구
 
-- **파이썬과 주피터 기초** — 배포판 설치, 패키지 관리, 언어의 핵심 기능.
-- **NumPy 배열** — 배열 생성, 벡터화 연산, 브로드캐스팅, 인덱싱.
-- **pandas로 자료 다루기** — Series, DataFrame, 불러오기, 정제, 그룹화, 요약.
-- **Matplotlib으로 기본 시각화하기** — Figure-Axes 모형, 자주 쓰는 그림 유형, 사용자화.
+- **[파이썬과 주피터 기초](tools/python_basics.md)** — 배포판 설치, 패키지 관리, 언어의 핵심 기능.
+- **[NumPy 배열](tools/numpy_basics.md)** — 배열 생성, 벡터화 연산, 브로드캐스팅, 인덱싱.
+- **[pandas로 자료 다루기](tools/pandas_basics.md)** — Series, DataFrame, 불러오기, 정제, 그룹화, 요약.
+- **[Matplotlib으로 기본 시각화하기](tools/matplotlib_basics.md)** — Figure-Axes 모형, 자주 쓰는 그림 유형, 사용자화.
 
 ### 0.3 정사각행렬
 
-- **닮은 행렬** — 닮음과 그 불변량(고윳값, 대각합, 행렬식).
-- **대각화 가능 행렬의 대각형** — 고유분해와 대각화 가능성의 조건.
-- **대각합과 고윳값** — 대각합은 고윳값의 합과 같다.
-- **멱등행렬** — 고윳값이 0 또는 1인 행렬, 사영의 토대.
-- **대칭행렬** — 스펙트럼 정리: 실수 고윳값과 직교 고유벡터.
-- **양정치행렬** — 이차형식에 의한 특성화와 고윳값에 의한 특성화.
-- **그람 행렬** — $\mathbf{X}^\top \mathbf{X}$의 성질과 최소제곱에서의 역할.
-- **사영행렬** — 치역과 영공간이 함께 사영을 정한다.
-- **직교사영행렬** — 모자 행렬과 회귀의 기하학.
+- **[닮은 행렬](linalg_regression/square_matrices/similar_matrices.md)** — 닮음과 그 불변량(고윳값, 대각합, 행렬식).
+- **[대각화 가능 행렬의 대각형](linalg_regression/square_matrices/diagonalizable.md)** — 고유분해와 대각화 가능성의 조건.
+- **[대각합과 고윳값](linalg_regression/square_matrices/trace_eigenvalues.md)** — 대각합은 고윳값의 합과 같다.
+- **[멱등행렬](linalg_regression/square_matrices/idempotent.md)** — 고윳값이 0 또는 1인 행렬, 사영의 토대.
+- **[대칭행렬](linalg_regression/square_matrices/symmetric.md)** — 스펙트럼 정리: 실수 고윳값과 직교 고유벡터.
+- **[양정치행렬](linalg_regression/square_matrices/positive_definite.md)** — 이차형식에 의한 특성화와 고윳값에 의한 특성화.
+- **[그람 행렬](linalg_regression/square_matrices/gram_matrices.md)** — $\mathbf{X}^\top \mathbf{X}$의 성질과 최소제곱에서의 역할.
+- **[사영행렬](linalg_regression/square_matrices/projection.md)** — 치역과 영공간이 함께 사영을 정한다.
+- **[직교사영행렬](linalg_regression/square_matrices/orthogonal_projection.md)** — 모자 행렬과 회귀의 기하학.
 
 ### 0.4 선형대수와 통계
 
-- **카이제곱분포와 이차형식** — 정규벡터의 이차형식은 카이제곱분포를 낳는다.
-- **표집분포 (단순 최소제곱)** — 기울기와 절편 추정량의 정확한 분포.
-- **표집분포 (일반 최소제곱)** — 행렬 표기로 쓴 최소제곱추정량의 정확한 분포.
+- **[카이제곱분포와 이차형식](linalg_regression/linalg_statistics/chi_squared_quadratic.md)** — 정규벡터의 이차형식은 카이제곱분포를 낳는다.
+- **[표집분포 (단순 최소제곱)](linalg_regression/linalg_statistics/sampling_dist_simple_ols.md)** — 기울기와 절편 추정량의 정확한 분포.
+- **[표집분포 (일반 최소제곱)](linalg_regression/linalg_statistics/sampling_dist_general_ols.md)** — 행렬 표기로 쓴 최소제곱추정량의 정확한 분포.
 
 ---
 
