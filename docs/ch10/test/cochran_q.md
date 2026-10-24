@@ -35,7 +35,7 @@ $$
 
 ## 4. McNemar 검정과의 관계
 
-$k = 2$일 때 Cochran의 Q는 McNemar 검정으로 환원된다. 구체적으로 $k = 2$인 Q 통계량은 (연속성 보정을 하지 않은) McNemar 카이제곱 통계량과 같다. 그래서 Cochran의 Q는 관련된 이진 결과를 셋 이상 비교할 때의 자연스러운 확장이 된다.
+$k = 2$일 때 Cochran의 Q는 10.2절 [McNemar 검정](mcnemar_test.md)으로 환원된다. 구체적으로 $k = 2$인 Q 통계량은 (연속성 보정을 하지 않은) McNemar 카이제곱 통계량과 같다. 그래서 Cochran의 Q는 관련된 이진 결과를 셋 이상 비교할 때의 자연스러운 확장이 된다. 아래 $\S 5$ 의 「정보를 주는 피험자」 이야기도 그 쪽의 「왜 대각선을 버리는가」를 $k$ 집단으로 옮긴 것이며, $k = 2$ 로 돌리면 **모두 성공·모두 실패한 피험자**가 곧 **일치 짝** $a$, $d$ 다. 구간 쪽 짝은 8.4절 [비율의 대응 구간 (McNemar)](../../ch08/paired_sample_intervals/ci_paired_proportions.md)에 있다.
 
 <div class="exbox" markdown>
 

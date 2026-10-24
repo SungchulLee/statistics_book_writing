@@ -2,7 +2,7 @@ r"""8장 대응표본 신뢰구간 두 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
   ch08/paired_sample_intervals/img/pairing_gain.png       짝짓기의 이득은 1-rho 다
-  ch08/paired_sample_intervals/img/mcnemar_discordant.png 일치 짝은 사라진다
+  ch08/paired_sample_intervals/img/mcnemar_ci_width.png   일치 짝은 사라지고 구간은 불일치 수로 넓어진다
 
 실행:  python3 scripts/make_ch08_paired_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -135,7 +135,7 @@ def fig_pairing_gain():
 
 
 # === 그림 2. 일치 짝은 사라진다 (ci_paired_proportions.md) =======
-def fig_mcnemar_discordant():
+def fig_mcnemar_ci_width():
     a, b, c, d = 20, 50, 30, 100
     n = a + b + c + d
     z = 1.959963985
@@ -221,9 +221,9 @@ def fig_mcnemar_discordant():
                   fontsize=12, color=INK, pad=22)
 
     fig.tight_layout(w_pad=2.4)
-    save(fig, "mcnemar_discordant.png")
+    save(fig, "mcnemar_ci_width.png")
 
 
 if __name__ == "__main__":
     fig_pairing_gain()
-    fig_mcnemar_discordant()
+    fig_mcnemar_ci_width()
