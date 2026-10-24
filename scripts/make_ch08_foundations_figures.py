@@ -1,7 +1,6 @@
 r"""8장 신뢰구간 기초 두 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch08/foundations/img/ci_template_and_exception.png  네 구간은 같은 틀, 분산만 예외
   ch08/foundations/img/interval_moves_not_mu.png      움직이는 것은 끝점이지 모수가 아니다
 
 실행:  python3 scripts/make_ch08_foundations_figures.py   (저장소 최상위에서)
@@ -44,101 +43,6 @@ def clean_axis(ax):
     ax.tick_params(labelsize=10, colors=INK)
     ax.spines[["top", "right"]].set_visible(False)
     ax.spines[["left", "bottom"]].set_color(MUTED)
-
-
-# === 그림 1. 같은 틀 네 개와 예외 하나 ===========================
-def fig_template_and_exception():
-    # 페이지의 보기 1~4가 실제로 낸 숫자들
-    rows = [
-        (r"$\mu$ ($\sigma$ 기지, z)", 123.90, 121.27, 126.53, BLUE, BLUE_F),
-        (r"$\mu$ ($\sigma$ 미지, t)", 123.90, 121.21, 126.59, BLUE, BLUE_F),
-        (r"$p$ (Wald)", 0.4200, 0.3516, 0.4884, GREEN, GREEN_F),
-        (r"$\mu_1-\mu_2$ (Welch)", -4.90, -6.71, -3.09, PURPLE, "#E7D4F0"),
-        (r"$\sigma^2$ (카이제곱)", 36.00, 17.03, 119.98, ORANGE, ORANGE_F),
-    ]
-
-    fig, (axL, axR) = plt.subplots(
-        1, 2, figsize=(12.6, 4.5), gridspec_kw={"width_ratios": [1.55, 1.0]}
-    )
-
-    # --- 왼쪽: 반너비를 1로 맞춰 겹쳐 본다 ---
-    for i, (label, est, lo, hi, col, fill) in enumerate(rows):
-        y = len(rows) - 1 - i
-        half = (hi - lo) / 2.0
-        a, b = (lo - est) / half, (hi - est) / half
-        axL.plot([a, b], [y, y], color=col, lw=7, solid_capstyle="butt",
-                 alpha=0.30, zorder=1)
-        axL.plot([a, b], [y, y], color=col, lw=1.8, zorder=2)
-        for e in (a, b):
-            axL.plot([e, e], [y - 0.19, y + 0.19], color=col, lw=1.8, zorder=2)
-        axL.plot([0], [y], marker="o", ms=7, color=col, zorder=3)
-        axL.text(-2.02, y, label, ha="left", va="center", fontsize=11, color=INK)
-
-    axL.axvline(0, color=MUTED, lw=1.1, ls=(0, (5, 4)), zorder=0)
-    axL.annotate(
-        "왼쪽 반너비가 오른쪽의 0.23배",
-        xy=(-0.369, 0.0), xytext=(-1.28, 0.62),
-        fontsize=10.5, color=ORANGE, ha="left", va="center",
-        arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.2,
-                        shrinkA=2, shrinkB=3),
-    )
-    axL.text(0.06, 4.42, "점추정값", fontsize=10.5, color=MUTED,
-             ha="left", va="center")
-
-    axL.set_xlim(-2.1, 2.0)
-    axL.set_ylim(-0.75, 4.85)
-    axL.set_yticks([])
-    axL.set_xticks([-1, 0, 1])
-    axL.set_xticklabels(["-1", "0", "+1"])
-    axL.set_xlabel("점추정값에서의 거리 (구간 반너비를 1로 맞춤)",
-                   fontsize=10.5, color=INK)
-    axL.spines[["top", "right", "left"]].set_visible(False)
-    axL.spines["bottom"].set_color(MUTED)
-    axL.tick_params(axis="x", labelsize=10, colors=INK, length=3)
-    axL.set_title("같은 틀에 넣으면 네 개는 겹치고 하나만 어긋난다",
-                  fontsize=12, color=INK, pad=10)
-
-    # --- 오른쪽: 왜 분산만 어긋나는가 ---
-    df = 9
-    x = np.linspace(0.01, 32, 800)
-    y = stats.chi2.pdf(x, df)
-    lo_q = stats.chi2.ppf(0.025, df)      # 2.700
-    hi_q = stats.chi2.ppf(0.975, df)      # 19.023
-
-    axR.plot(x, y, color=ORANGE, lw=2.0)
-    m = (x >= lo_q) & (x <= hi_q)
-    axR.fill_between(x[m], 0, y[m], color=ORANGE_F, zorder=0)
-    for q in (lo_q, hi_q):
-        axR.plot([q, q], [0, stats.chi2.pdf(q, df)], color=ORANGE, lw=1.4,
-                 ls=(0, (4, 3)))
-
-    axR.text(lo_q - 0.5, 0.020, f"{lo_q:.2f}", ha="right", va="center",
-             fontsize=10.5, color=ORANGE)
-    axR.text(hi_q + 0.6, 0.020, f"{hi_q:.2f}", ha="left", va="center",
-             fontsize=10.5, color=ORANGE)
-    axR.text(10.2, 0.038, "가운데 95%", fontsize=11, color=INK,
-             ha="center", va="center")
-    axR.text(
-        16.0, 0.088,
-        "두 분위수의 비가 7.0배다.\n"
-        + r"$(n-1)s^2$ 을 이 둘로 나누면" + "\n구간이 한쪽으로 늘어진다.",
-        fontsize=10.5, color=INK, ha="left", va="top", linespacing=1.6,
-    )
-    axR.set_xlim(0, 32)
-    axR.set_ylim(0, 0.115)
-    axR.set_xlabel(r"$\chi^2_9$ 값", fontsize=10.5, color=INK)
-    axR.set_yticks([])
-    axR.spines[["top", "right", "left"]].set_visible(False)
-    axR.spines["bottom"].set_color(MUTED)
-    axR.tick_params(axis="x", labelsize=10, colors=INK, length=3)
-    axR.set_title("분산 구간의 나눗수는 대칭이 아니다",
-                  fontsize=12, color=INK, pad=10)
-
-    fig.tight_layout(w_pad=2.4)
-    save(fig, "ci_template_and_exception.png")
-
-
-# === 그림 2. 움직이는 것은 끝점이다 ==============================
 def fig_interval_moves_not_mu():
     rng = np.random.default_rng(42)
     mu, sigma, n = 50.0, 10.0, 30
@@ -228,5 +132,4 @@ def fig_interval_moves_not_mu():
 
 
 if __name__ == "__main__":
-    fig_template_and_exception()
     fig_interval_moves_not_mu()
