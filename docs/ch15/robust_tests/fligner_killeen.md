@@ -1462,7 +1462,7 @@ $$
     SS_B = \sum_{i=1}^k n_i(\bar a_{i\cdot} - \bar a_{\cdot\cdot})^2, \qquad SS_W = \sum_{i,j}(a_{ij} - \bar a_{i\cdot})^2, \qquad SS_T = \sum_{i,j}(a_{ij} - \bar a_{\cdot\cdot})^2
     $$
 
-    라 쓰면 13 장의 일원분산분석 분해 $SS_T = SS_B + SS_W$ 가 그대로 성립한다(점수는 그냥 $N$ 개의 수일 뿐이므로 자료가 무엇이든 상관없다). 한편 $\hat V$ 의 정의가 $\hat V = SS_T/(N-1)$ 이므로
+    라 쓰면 12 장의 일원분산분석 분해 $SS_T = SS_B + SS_W$ 가 그대로 성립한다(점수는 그냥 $N$ 개의 수일 뿐이므로 자료가 무엇이든 상관없다). 한편 $\hat V$ 의 정의가 $\hat V = SS_T/(N-1)$ 이므로
 
     $$
     X^2 = \frac{SS_B}{\hat V} = (N-1)\,\frac{SS_B}{SS_T} = (N-1)\,\frac{SS_B}{SS_B + SS_W} \le N-1

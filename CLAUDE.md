@@ -83,7 +83,7 @@ exclude_docs: |
 ```
 
 마지막 줄은 **안전망이다.** nav 에 없는 파일도 MkDocs 는 `site/` 로 그대로 복사하므로,
-검증용으로 잠깐 만든 `docs/ch13/_c.py` 같은 스크래치가 `/ch13/_c.py` 로 공개된 적이 있다.
+검증용으로 잠깐 만든 `docs/ch12/_c.py` 같은 스크래치가 `/ch12/_c.py` 로 공개된 적이 있다.
 검증 스크립트는 `docs/` 밖(스크래치 디렉터리)에서 돌리고, 끝나면 코드와 출력을 쪽에 옮긴다.
 
 Commit after `update` — stage only `<name>.md` and `<name>_score.md`:

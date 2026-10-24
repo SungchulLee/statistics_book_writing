@@ -399,64 +399,64 @@ nav:
                 - sklearn LinearRegression 인터페이스: ch11/package_usage/sklearn.md
                 - 무엇을 언제 쓸 것인가 (비교): ch11/package_usage/comparison.md
 
-        - 12 카이제곱 검정:
+        - 12 분산분석:
             - 장 개요: ch12/index.md
-            - 12.1 피어슨 통계량과 자유도:
-                - 피어슨 통계량은 어디서 오는가: ch12/distribution/distribution.md
-                - 자유도와 점근 이론: ch12/distribution/degrees_of_freedom.md
-            - 12.2 범주형 자료에 대한 카이제곱 검정:
-                - 적합도 검정: ch12/test/gof.md
-                - 독립성 검정: ch12/test/independence.md
-                - 동질성 검정: ch12/test/homogeneity.md
-                - "기각한 뒤: 칸별 잔차 분석": ch12/test/homogeneity_residuals.md
-                - "타이타닉 생존과 성별: 설계 판별부터 완전한 보고까지": ch12/test/independence_titanic.md
-                - McNemar 검정 (대응된 이진 자료): ch12/test/mcnemar_test.md
-                - Cochran의 Q 검정 (관련된 k개의 결과): ch12/test/cochran_q.md
-            - 12.3 실무적 고려사항:
-                - 기대 칸 도수와 타당성 조건: ch12/practice/validity_conditions.md
-                - 효과크기와 Cramér의 V: ch12/practice/effect_size.md
-                - Fisher의 정확검정 (2×2): ch12/practice/fisher_exact.md
-
-        - 13 분산분석:
-            - 장 개요: ch13/index.md
-            - 13.1 일원배치 분산분석:
-                - 모형과 가정: ch13/anova_one_way/one_way_model.md
-                - F-검정 절차: ch13/anova_one_way/f_test.md
-                - 분산분석 F-통계량 모의실험: ch13/anova_one_way/anova_f_simulation.md
-                - Fisher 방법을 이용한 분산분석 수동 계산: ch13/anova_one_way/anova_manual_computation.md
-            - 13.2 이원배치 분산분석:
-                - 주효과와 블록화: ch13/anova_two_way/two_way.md
-                - 교호작용 효과: ch13/anova_two_way/interaction.md
-                - 교호작용 효과 그림: ch13/anova_two_way/interaction_plot.md
-            - 13.3 사후비교:
-                - Tukey 정직유의차: ch13/post_hoc/tukey.md
-                - Tukey 정직유의차 (이원배치): ch13/post_hoc/tukey_two_way.md
-                - Bonferroni와 Scheffé 방법: ch13/post_hoc/bonferroni_scheffe.md
-                - Dunnett 검정 (대조군과의 비교): ch13/post_hoc/dunnett.md
-                - Games-Howell (분산이 다를 때): ch13/post_hoc/games_howell.md
-                - 사후비교 방법의 비교와 검정력: ch13/post_hoc/post_hoc_comparisons.md
-            - 13.4 Welch 분산분석:
-                - Welch의 일원배치 분산분석: ch13/anova_welch/welch_one_way.md
-                - Welch의 이원배치 분산분석: ch13/anova_welch/welch_two_way.md
-                - Welch 분산분석의 제1종 오류와 검정력 모의실험: ch13/anova_welch/welch_simulation.md
-                - 이원배치 Welch 분산분석 (로버스트 HC3): ch13/anova_welch/welch_twoway_robust.md
-            - 13.5 가정:
-                - 분산분석의 가정: ch13/assumptions/assumptions_overview.md
-                - 잔차의 정규성 확인: ch13/assumptions/normality.md
-                - 관측의 독립성 확인: ch13/assumptions/independence.md
-                - 등분산성 확인: ch13/assumptions/homoscedasticity.md
-                - 선형성 확인: ch13/assumptions/linearity.md
-            - 13.6 진단:
-                - 잔차 분석 (분산분석): ch13/diagnostics/residual_analysis.md
-                - 영향점: ch13/diagnostics/influential_points.md
-                - 가정 위반의 처리: ch13/diagnostics/handling_violations.md
-                - 분산분석 진단: ch13/diagnostics/anova_diagnostics.md
-            - 13.7 실무 응용:
-                - A/B 검정과 실험 설계: ch13/practical_applications/ab_testing.md
-                - 분산분석의 금융 응용: ch13/practical_applications/finance_applications.md
-                - 사례 연구: ch13/practical_applications/case_studies.md
+            - 12.1 일원배치 분산분석:
+                - 모형과 가정: ch12/anova_one_way/one_way_model.md
+                - F-검정 절차: ch12/anova_one_way/f_test.md
+                - 분산분석 F-통계량 모의실험: ch12/anova_one_way/anova_f_simulation.md
+                - Fisher 방법을 이용한 분산분석 수동 계산: ch12/anova_one_way/anova_manual_computation.md
+            - 12.2 이원배치 분산분석:
+                - 주효과와 블록화: ch12/anova_two_way/two_way.md
+                - 교호작용 효과: ch12/anova_two_way/interaction.md
+                - 교호작용 효과 그림: ch12/anova_two_way/interaction_plot.md
+            - 12.3 사후비교:
+                - Tukey 정직유의차: ch12/post_hoc/tukey.md
+                - Tukey 정직유의차 (이원배치): ch12/post_hoc/tukey_two_way.md
+                - Bonferroni와 Scheffé 방법: ch12/post_hoc/bonferroni_scheffe.md
+                - Dunnett 검정 (대조군과의 비교): ch12/post_hoc/dunnett.md
+                - Games-Howell (분산이 다를 때): ch12/post_hoc/games_howell.md
+                - 사후비교 방법의 비교와 검정력: ch12/post_hoc/post_hoc_comparisons.md
+            - 12.4 Welch 분산분석:
+                - Welch의 일원배치 분산분석: ch12/anova_welch/welch_one_way.md
+                - Welch의 이원배치 분산분석: ch12/anova_welch/welch_two_way.md
+                - Welch 분산분석의 제1종 오류와 검정력 모의실험: ch12/anova_welch/welch_simulation.md
+                - 이원배치 Welch 분산분석 (로버스트 HC3): ch12/anova_welch/welch_twoway_robust.md
+            - 12.5 가정:
+                - 분산분석의 가정: ch12/assumptions/assumptions_overview.md
+                - 잔차의 정규성 확인: ch12/assumptions/normality.md
+                - 관측의 독립성 확인: ch12/assumptions/independence.md
+                - 등분산성 확인: ch12/assumptions/homoscedasticity.md
+                - 선형성 확인: ch12/assumptions/linearity.md
+            - 12.6 진단:
+                - 잔차 분석 (분산분석): ch12/diagnostics/residual_analysis.md
+                - 영향점: ch12/diagnostics/influential_points.md
+                - 가정 위반의 처리: ch12/diagnostics/handling_violations.md
+                - 분산분석 진단: ch12/diagnostics/anova_diagnostics.md
+            - 12.7 실무 응용:
+                - A/B 검정과 실험 설계: ch12/practical_applications/ab_testing.md
+                - 분산분석의 금융 응용: ch12/practical_applications/finance_applications.md
+                - 사례 연구: ch12/practical_applications/case_studies.md
 
     - IV 가정이 깨질 때:
+        - 13 카이제곱 검정:
+            - 장 개요: ch13/index.md
+            - 13.1 피어슨 통계량과 자유도:
+                - 피어슨 통계량은 어디서 오는가: ch13/distribution/distribution.md
+                - 자유도와 점근 이론: ch13/distribution/degrees_of_freedom.md
+            - 13.2 범주형 자료에 대한 카이제곱 검정:
+                - 적합도 검정: ch13/test/gof.md
+                - 독립성 검정: ch13/test/independence.md
+                - 동질성 검정: ch13/test/homogeneity.md
+                - "기각한 뒤: 칸별 잔차 분석": ch13/test/homogeneity_residuals.md
+                - "타이타닉 생존과 성별: 설계 판별부터 완전한 보고까지": ch13/test/independence_titanic.md
+                - McNemar 검정 (대응된 이진 자료): ch13/test/mcnemar_test.md
+                - Cochran의 Q 검정 (관련된 k개의 결과): ch13/test/cochran_q.md
+            - 13.3 실무적 고려사항:
+                - 기대 칸 도수와 타당성 조건: ch13/practice/validity_conditions.md
+                - 효과크기와 Cramér의 V: ch13/practice/effect_size.md
+                - Fisher의 정확검정 (2×2): ch13/practice/fisher_exact.md
+
         - 14 정규성 검정:
             - 장 개요: ch14/index.md
             - 14.1 정규성 입문:

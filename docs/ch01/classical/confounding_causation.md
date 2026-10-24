@@ -208,7 +208,7 @@ _확인한 곳 — 통계청 「$2024$ 년 사망원인통계」($2025$ 년 $9$ 
 
 - Bickel, P. J., Hammel, E. A., & O'Connell, J. W. (1975). "Sex Bias in Graduate Admissions: Data from Berkeley." *Science*, 187(4175), 398–404. 위 그림의 수치는 이 논문의 표 1(지원자가 가장 많은 $6$개 학과)을 따랐다.
 
-이 이야기는 책 뒤에서 세 번 더 돌아온다. [2.2절 사례 연구 — 타이타닉 생존과 성별](../../ch02/exploration/titanic_survival_gender.md)은 같은 구조를 타이타닉 자료에서 그림으로 보고, [12.2절 타이타닉 생존과 성별: 설계 판별부터 완전한 보고까지](../../ch12/test/independence_titanic.md)은 그 분할표에 검정을 붙이며, [10.2절 Simpson의 역설](../../ch10/ecological_correlation/simpsons_paradox.md)이 역설의 대수적 조건을 따진다.
+이 이야기는 책 뒤에서 세 번 더 돌아온다. [2.2절 사례 연구 — 타이타닉 생존과 성별](../../ch02/exploration/titanic_survival_gender.md)은 같은 구조를 타이타닉 자료에서 그림으로 보고, [13.2절 타이타닉 생존과 성별: 설계 판별부터 완전한 보고까지](../../ch13/test/independence_titanic.md)은 그 분할표에 검정을 붙이며, [10.2절 Simpson의 역설](../../ch10/ecological_correlation/simpsons_paradox.md)이 역설의 대수적 조건을 따진다.
 
 ---
 
