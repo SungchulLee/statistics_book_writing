@@ -268,7 +268,6 @@ nav:
                 - σ₁²/σ₂²의 신뢰구간: ch08/two_sample_intervals/ci_variance_ratio.md
             - 8.4 대응표본 구간:
                 - μ_D (차이의 평균)의 신뢰구간: ch08/paired_sample_intervals/ci_mu_paired.md
-                - 대응 설계와 독립 설계 중 무엇을 쓸 것인가: ch08/paired_sample_intervals/paired_vs_independent.md
                 - 비율의 대응 구간 (McNemar): ch08/paired_sample_intervals/ci_paired_proportions.md
             - 8.5 표본크기의 결정:
                 - 표본크기 계산: ch08/sample_size/sample_size.md
