@@ -699,3 +699,5 @@ $\mathbf{Y} = \mathbf{A}\mathbf{X}$일 때 $\operatorname{tr}(\operatorname{Var}
 순환 성질 $\operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})$은 행렬을 다루는 통계적 증명에서 가장 자주 손이 가는 일꾼 항등식이다. 다만 **순환 이동만** 허용된다는 점을 잊지 말아야 한다. $\operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{A}\mathbf{C}\mathbf{B})$는 거짓이다.
 
 통계에서 대각합은 공분산행렬의 대각 성분(주변분산)을 그 고윳값(주성분 분산)과 연결하고, 사영에서 유효 모수의 개수를 세며, 이차형식의 기댓값을 계산한다.
+
+다음 쪽 **[멱등행렬](idempotent.md)**로 넘어간다. 여기까지 세 쪽이 **일반적인** 정사각행렬의 구조였다면, 남은 여섯 쪽은 통계에서 실제로 만나는 **특수한 부류**를 하나씩 본다. 첫째가 $\mathbf{A}^2 = \mathbf{A}$ 를 만족하는 행렬이며 그것이 사영을 특징짓는다.

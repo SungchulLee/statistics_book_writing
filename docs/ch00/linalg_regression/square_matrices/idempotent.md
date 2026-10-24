@@ -617,3 +617,5 @@ $\mathbf{y} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$이고 $\mathbf{A}$가 계수
 ## 정리하며
 
 멱등행렬은 $\mathbf{A}^2 = \mathbf{A}$를 만족하고, 고윳값이 $\{0, 1\}$로 제한되며(정리 1), 대각화 가능하고, $\operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A})$를 따른다(정리 2). 여집합 $\mathbf{I} - \mathbf{A}$도 멱등이며 $\mathbb{R}^n = \operatorname{Col}(\mathbf{A}) \oplus \ker(\mathbf{A})$이다. 그러나 이 직합이 **직교**분해가 되는 것은 $\mathbf{A}$가 대칭일 때뿐이다(정리 3). 회귀에서 모자 행렬과 잔차생성행렬은 멱등이면서 대칭이므로 직교사영이고, 그래서 제곱합이 피타고라스식으로 쪼개지며 대각합이 F-검정, t-검정, 신뢰구간에 쓰이는 자유도를 곧바로 준다.
+
+다음 쪽 **[대칭행렬](symmetric.md)**로 넘어간다. 멱등성이 **사영**을 주었다면 대칭성은 **직교성**을 준다 — 스펙트럼 정리가 실수 고윳값과 정규직교 고유기저를 보장하고, 그 둘이 함께 오면 이차형식이 카이제곱이 된다.

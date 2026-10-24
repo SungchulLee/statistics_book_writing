@@ -511,3 +511,5 @@ $\operatorname{LSE}(\mathbf{z})$의 기울기가 $\operatorname{softmax}(\mathbf
 | log-softmax 언더플로 | $p_k \approx 0$일 때 $\log(0)$ | LSE로 로그 공간에서 계산 |
 | 교차엔트로피 손실 | 소프트맥스 후 로그 | 융합 `cross_entropy_with_logits` 사용 |
 | softplus($C = 2$) | $\log(1 + e^z)$가 넘침 | $\max(0,z) + \log(1 + e^{-\lvert z\rvert})$ |
+
+다음 절부터 **[교차엔트로피 손실](../optimization/cross_entropy.md)**로 넘어간다. 20.1절이 모형의 **꼴**을 세웠다면, 20.2절은 그 모형을 **어떻게 맞출지**로 들어간다. 손실이 먼저이고, 여기서 본 로그–합–지수 기법이 그 손실을 계산할 때 그대로 쓰인다.

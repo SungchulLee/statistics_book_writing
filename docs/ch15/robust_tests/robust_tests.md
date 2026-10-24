@@ -832,3 +832,4 @@ $$
 
 이어지는 세 쪽이 네 검정을 하나씩 제대로 다룬다 — [Levene 검정](levene.md), [Brown-Forsythe 검정](brown_forsythe.md), [Fligner-Killeen 검정](fligner_killeen.md). 그다음 [로버스트 방법의 비교](comparison.md)가 크기와 검정력을 표로 모은다.
 
+다음 쪽 **[Levene 검정](levene.md)**으로 넘어간다. 여기서 한자리에 모은 생각을 가장 먼저 정식화한 것이 르빈$(1960)$ 이다 — 분산을 직접 검정하는 대신 자료를 **집단평균에서의 절대편차**로 바꾸고 그 값에 보통의 분산분석을 돌린다.

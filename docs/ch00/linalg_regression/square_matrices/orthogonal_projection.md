@@ -637,3 +637,5 @@ $\operatorname{col}(\mathbf{X}_1) \subseteq \operatorname{col}(\mathbf{X}_2)$이
 ## 정리하며
 
 직교사영행렬은 벡터를 부분공간 안에서 가장 가까운 점으로 보내는 대칭 멱등행렬이다. 공식 $\mathbf{P}_{\mathbf{X}} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$이 회귀의 모자 행렬이고, 여집합 사영 $\mathbf{I} - \mathbf{P}_{\mathbf{X}}$이 잔차를 만들어낸다. 적합값과 잔차의 직교성이 제곱합의 피타고라스 분해를 낳으며, 이것이 분산분석과 $R^2$의 기하학적 토대다.
+
+다음 절부터 **[카이제곱분포와 이차형식](../linalg_statistics/chi_squared_quadratic.md)**으로 넘어간다. A.3절이 행렬의 부류를 하나씩 세웠다면, A.4절은 그것을 **확률**에 건다 — 적합도 통계량·분산비·잔차제곱합이 모두 정규벡터의 이차형식이고, 그것이 언제 카이제곱이 되는지는 여기서 본 멱등성과 직교사영이 정한다.
