@@ -437,8 +437,6 @@ nav:
                 - A/B 검정과 실험 설계: ch12/practical_applications/ab_testing.md
                 - 분산분석의 금융 응용: ch12/practical_applications/finance_applications.md
                 - 사례 연구: ch12/practical_applications/case_studies.md
-
-    - IV 가정이 깨질 때:
         - 13 카이제곱 검정:
             - 장 개요: ch13/index.md
             - 13.1 피어슨 통계량과 자유도:
@@ -457,6 +455,8 @@ nav:
                 - 효과크기와 Cramér의 V: ch13/practice/effect_size.md
                 - Fisher의 정확검정 (2×2): ch13/practice/fisher_exact.md
 
+
+    - IV 가정이 깨질 때:
         - 14 정규성 검정:
             - 장 개요: ch14/index.md
             - 14.1 정규성 입문:
