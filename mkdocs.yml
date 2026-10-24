@@ -230,7 +230,6 @@ nav:
                 - 흔한 분포에 대한 적률법: ch06/estimation_methods/moments_examples.md
                 - 일반화 적률법: ch06/estimation_methods/gmm.md
                 - 적률법과 최대가능도의 비교: ch06/estimation_methods/moments_vs_mle.md
-                - 추정 방법 비교: ch06/estimation_methods/estimation_methods.md
             - 6.3 베이즈 추정 ★:
                 - 사전분포, 가능도, 사후분포: ch06/bayesian/prior_posterior.md
                 - 켤레 사전분포: ch06/bayesian/conjugate_priors.md

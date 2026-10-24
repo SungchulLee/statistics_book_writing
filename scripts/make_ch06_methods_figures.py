@@ -8,7 +8,6 @@ r"""6.2 추정 방법 절 일곱 쪽의 그림을 생성한다.
   ch06/estimation_methods/img/mom_vs_mle_efficiency.png   두 방법의 표집분포와 ARE
   ch06/estimation_methods/img/gmm_overidentification.png  적률조건이 남을 때
   ch06/mle/img/loglik_additivity.png                      로그가능도는 더해진다
-  ch06/estimation_methods/img/variance_estimator_mse.png  분산추정량 셋
 
 감마 형상모수의 ARE 는 이론값을 직접 계산해 모의실험과 맞추어 두었다.
   nVar(MoM) = 4,  nVar(MLE) = 1/(psi'(1) - 1) = 1.5505,  ARE = 0.388
@@ -438,75 +437,6 @@ def loglik_additivity():
                  y=1.02)
     fig.tight_layout()
     save(fig, MLE + "loglik_additivity.png")
-
-
-# ==================================================================
-# 7. 분산추정량 셋 — 불편이 최선은 아니다
-# ==================================================================
-def variance_estimator_mse():
-    sigma2 = 4.0
-    s4 = sigma2 ** 2
-    n = 10
-    names = ["MLE\n$(n)$", "Bessel\n$(n-1)$", "MSE 최적\n$(n+1)$"]
-    bias = [-sigma2 / n, 0.0, -2 * sigma2 / (n + 1)]
-    mse = [(2 * n - 1) / n ** 2 * s4, 2 / (n - 1) * s4, 2 / (n + 1) * s4]
-    var = [m - b ** 2 for m, b in zip(mse, bias)]
-
-    fig, axes = plt.subplots(1, 2, figsize=(13, 4.5),
-                             gridspec_kw={"width_ratios": [1, 1.15]})
-
-    # (a) n = 10 에서 MSE 를 두 조각으로
-    ax = axes[0]
-    xs = np.arange(3)
-    ax.bar(xs, var, width=0.55, color=BLUE_F, edgecolor=BLUE, linewidth=1.6,
-           label="분산")
-    ax.bar(xs, [b ** 2 for b in bias], width=0.55, bottom=var,
-           color=ORANGE_F, edgecolor=ORANGE, linewidth=1.6, label="편향제곱")
-    for i, (m, b) in enumerate(zip(mse, bias)):
-        ax.text(i, m + 0.12, f"MSE $= {m:.2f}$", fontsize=11, color=INK,
-                ha="center", va="bottom")
-        ax.text(i, 0.16, f"편향 ${b:+.2f}$", fontsize=10, color=INK,
-                ha="center", va="bottom")
-    ax.plot([1], [mse[1]], "o", color=RED, markersize=9, zorder=6)
-    ax.annotate("불편인데도 MSE 가 가장 크다", xy=(1, mse[1]),
-                xytext=(1.05, mse[1] + 1.25), fontsize=11, color=RED,
-                ha="center", va="bottom",
-                arrowprops=dict(arrowstyle="->", color=RED, linewidth=1.3))
-    ax.set_xticks(xs)
-    ax.set_xticklabels(names, fontsize=11)
-    ax.set_ylim(0, 4.9)
-    ax.set_ylabel("$\\sigma^2 = 4$, $n = 10$ 에서의 값", fontsize=11,
-                  color=INK)
-    ax.tick_params(labelsize=10, colors=INK)
-    ax.spines[["top", "right"]].set_visible(False)
-    ax.spines[["left", "bottom"]].set_color(MUTED)
-    ax.legend(fontsize=10.5, frameon=False, loc="upper left")
-    ax.set_title("MSE = 분산 + 편향제곱", fontsize=12.5, pad=10)
-
-    # (b) n 을 바꿔 가며
-    ax = axes[1]
-    nn = np.arange(3, 41)
-    curves = [((2 * nn - 1) / nn ** 2 * s4, BLUE, "MLE $(n)$"),
-              (2 / (nn - 1) * s4, GREEN, "Bessel $(n-1)$"),
-              (2 / (nn + 1) * s4, ORANGE, "MSE 최적 $(n+1)$")]
-    for y, c, name in curves:
-        ax.plot(nn, y, color=c, linewidth=2.3, label=name)
-    ax.set_xlim(3, 40)
-    ax.set_ylim(0, 8.5)
-    ax.set_xlabel("표본크기 $n$", fontsize=11.5, color=INK)
-    ax.set_ylabel("MSE", fontsize=11.5, color=INK)
-    clean_axis(ax)
-    ax.legend(fontsize=10.5, frameon=False, loc="upper right")
-    ax.text(16, 4.6, "$n$ 이 커지면 셋의 차이가 사라진다", fontsize=11,
-            color=MUTED, ha="left", va="center")
-    ax.set_title("순서는 모든 $n$ 에서 같다", fontsize=12.5, pad=10)
-
-    fig.suptitle("정규모집단에서 $\\sigma^2$ 을 재는 세 가지 방법",
-                 fontsize=13.5, y=1.02)
-    fig.tight_layout()
-    save(fig, OUT + "variance_estimator_mse.png")
-
-
 if __name__ == "__main__":
     moments_procedure()
     sample_moments_converge()
@@ -514,4 +444,3 @@ if __name__ == "__main__":
     mom_vs_mle_efficiency()
     gmm_overidentification()
     loglik_additivity()
-    variance_estimator_mse()
