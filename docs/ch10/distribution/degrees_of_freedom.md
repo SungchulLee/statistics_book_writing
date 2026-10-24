@@ -583,6 +583,8 @@ $$
 
     **이 문제가 주는 더 큰 교훈.** "자유도는 제약의 개수"라는 직관적 규칙은 **추정량이 무엇이냐에 따라 달라진다.** 같은 모형, 같은 구간이라도 $\mu,\sigma$를 어떻게 추정했는지가 극한분포를 바꾼다.
 
+**여기 이름만 든 세 검정은 14장이 세운다** — 14.4절 [Lilliefors 검정](../../ch14/formal_tests/lilliefors_test.md) · 14.4절 [Anderson-Darling 검정](../../ch14/formal_tests/anderson_darling.md) · 14.4절 [Shapiro-Wilk 검정](../../ch14/formal_tests/shapiro_wilk.md).
+
 ---
 
 <div class="drillbox" markdown>

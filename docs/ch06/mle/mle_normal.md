@@ -1171,6 +1171,8 @@ $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar
 
 - **정규성 검정**: Gaussian MLE를 쓰기 전에 정규분포가 적절한지 검정해야 한다. 금융 수익률은 흔히 두꺼운 꼬리를 보이므로 Gaussian MLE가 최적이 아니게 된다.
 
+**그 검정들은 14장이 세운다** — 14.4절 [Shapiro-Wilk 검정](../../ch14/formal_tests/shapiro_wilk.md)을 비롯한 14.4절 네 쪽과, 결과를 읽는 법을 다루는 14.5절 [정규성 검정의 한계와 함정](../../ch14/limitations/limitations.md)이다.
+
 수준 $\alpha$에서의 **VaR(Value at Risk)**는 확률 $\alpha$로 초과되는 손실이다. 일별 수익률에 대한 정규 모형 $R \sim N(\hat{\mu}, \hat{\sigma}^2)$ 아래에서:
 
 $$\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$$

@@ -1377,6 +1377,8 @@ _확인한 곳 — 로또 $6/45$ 가 $45$ 개에서 $6$ 개를 뽑고 매주 토
 
     **마지막으로.** 적합도 검정의 가장 큰 가치는 $p$ 값이 아니라 **관측과 기대를 나란히 놓고 보는 표**에 있다. 어느 범주가 왜 어긋났는지를 묻는 순간, 검정은 판정 도구에서 **탐색 도구**로 바뀐다.
 
+**적합도 검정으로 정규성을 보는 것은 권하지 않는다.** 구간을 어떻게 나누느냐가 답을 바꾸기 때문이고, 그 자리에는 전용 검정이 따로 있다 — 14.4절 [Lilliefors 검정](../../ch14/formal_tests/lilliefors_test.md)과 14.4절 [Anderson-Darling 검정](../../ch14/formal_tests/anderson_darling.md), 그리고 고르는 기준은 14.5절 [올바른 검정 고르기](../../ch14/limitations/choosing_test.md)다.
+
 ---
 
 <div class="drillbox" markdown>

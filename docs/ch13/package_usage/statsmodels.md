@@ -251,6 +251,8 @@ p값이 0.05보다 작으면, 동등하게 95% 신뢰구간이 0을 포함하지
 | Jarque-Bera / Prob(JB) | 왜도와 첨도에 기초한 또 다른 정규성 검정 |
 | Cond. No. | 설계행렬의 조건수(값이 크면 다중공선성을 시사) |
 
+**요약표의 Omnibus·Jarque-Bera 는 잔차의 정규성 검정이다.** 두 검정의 유도와 서로 견줌은 14.3절 [Jarque-Bera 검정](../../ch14/descriptive_statistics/jarque_bera.md)과 14.4절 네 쪽에 있고, **표본이 크면 사소한 이탈에도 기각되므로 그 $p$ 값을 기계적으로 따르면 안 된다**는 것은 14.5절 [정규성 검정의 한계와 함정](../../ch14/limitations/limitations.md)이 다룬다.
+
 <div class="storybox" markdown>
 
 **그림으로 보는 통계학 1.** 아무도 읽지 않는 각주 두 줄
