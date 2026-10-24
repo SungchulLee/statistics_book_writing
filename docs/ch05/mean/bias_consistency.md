@@ -529,282 +529,25 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
 !!! tip "그림에서 보이는 양상"
     모집단 분포와 무관하게, $n$이 커지면 20개의 표본경로가 모두 빨간 점선($\mu$)으로 수렴한다. 강대수의법칙이 작동하는 모습이다.
 
-<div class="exbox" markdown>
+!!! note "중심극한정리와 코시의 실패는 임자 쪽에서 본다"
+    이 절은 **수렴 자체**를 눈으로 보는 자리이고, 수렴이 **어디로** 가는지와 **언제
+    가지 않는지**는 각각 전담 쪽이 있다.
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 모집단 넷으로 보는 중심극한정리. $N(5, 4)$, $\text{Exp}(\lambda = 0.5)$, $\text{Uniform}(0, 10)$, $\text{Bernoulli}(0.3)$에서 $n = 2, 5, 30$씩 뽑아 $\bar X_n$을 2만 번 기록하고 $N(\mu, \sigma^2/n)$ 곡선을 겹쳐 그린다.
-
-**(1)** 열두 칸 각각에서 $\bar X_n$의 표준편차와 왜도가 **얼마가 되어야 하는지** 적으시오. 왜도만 보면 $n = 30$에서 어느 모집단이 가장 나쁜가.
-
-**(2)** 모의실험으로 (1)을 확인하시오. 베르누이 행이 다른 세 행과 다른 방식으로 정규에서 벗어나는데, 그것은 왜도로 설명되지 않는다. 무엇인가.
-
-</div>
-
-??? success "풀이"
-
-    **(1) 이론값.** 표준편차는 모집단의 모양과 무관하게 $\sqrt{\sigma^2/n}$이고, 이것은 근사가 아니라 **정확한 값**이다. 왜도도 정확히 계산된다. $\bar X_n$의 3차 중심적률은 독립성에서 $n \cdot E[(X-\mu)^3]/n^3$이므로
-
-    $$
-    \operatorname{skew}(\bar X_n)
-    = \frac{E[(\bar X_n - \mu)^3]}{\operatorname{sd}(\bar X_n)^3}
-    = \frac{n\,E[(X-\mu)^3]/n^3}{(\sigma/\sqrt n)^3}
-    = \frac{\gamma}{\sqrt n}
-    $$
-
-    이다. 네 모집단의 $\gamma$는 정규와 균등이 $0$, 지수가 $2$, $\text{Bernoulli}(p)$가 $(1-2p)/\sqrt{p(1-p)}$이므로 $p = 0.3$에서
-
-    $$
-    \gamma = \frac{0.4}{\sqrt{0.21}} = 0.8729
-    $$
-
-    다. 표로 적으면 이렇다.
-
-    | 모집단 | $\sigma^2$ | $\gamma$ | $\operatorname{sd}$, $n = 2/5/30$ | $\operatorname{skew}$, $n = 2/5/30$ |
-    |:---|---:|---:|:---|:---|
-    | $N(5, 4)$ | $4$ | $0$ | $1.4142 / 0.8944 / 0.3651$ | $0 / 0 / 0$ |
-    | $\text{Exp}(\lambda = 0.5)$ | $4$ | $2$ | $1.4142 / 0.8944 / 0.3651$ | $1.414 / 0.894 / 0.365$ |
-    | $\text{Uniform}(0, 10)$ | $8.3333$ | $0$ | $2.0412 / 1.2910 / 0.5270$ | $0 / 0 / 0$ |
-    | $\text{Bernoulli}(0.3)$ | $0.21$ | $0.8729$ | $0.3240 / 0.2049 / 0.0837$ | $0.617 / 0.390 / 0.159$ |
-
-    **$n = 30$에서 왜도가 가장 큰 것은 지수분포다.** $0.365$로 베르누이의 $0.159$보다 두 배 이상 크다. 흔히 쓰는 어림 $n \ge (\gamma/0.1)^2$으로 재면 지수분포는 $n \ge 400$, 베르누이$(0.3)$는 $n \ge 76$이 필요하다. **"$n \ge 30$이면 된다"는 규칙은 왜도를 보지 않는다**(아래 연습문제 5).
-
-    **(2) 모의실험.** 그림을 그리면서 칸마다 모의 표준편차·왜도를, 그리고 $\bar X_n$이 실제로 몇 가지 값을 가졌는지를 함께 센다.
-
-    ```python
-    from scipy import stats
-
-    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
-    plt.rcParams["font.family"] = "sans-serif"
-    plt.rcParams["axes.unicode_minus"] = False
-
-    def clt_demonstration(seed=42):
-        """모집단 넷과 표본크기 셋을 격자로 놓고 중심극한정리를 확인한다.
-
-        대수의 법칙이 X-bar 가 어디로 가는지를 말한다면, 중심극한정리는 그
-        주변에서 어떤 모양으로 흩어지는지를 말한다.
-        """
-        rng = np.random.default_rng(seed)
-        n_sim = 20_000
-
-        populations = {
-            'Normal(5, 4)':     (lambda n: rng.normal(5, 2, n), 5.0, 4.0),
-            'Exp(λ=0.5)':       (lambda n: rng.exponential(2, n), 2.0, 4.0),
-            'Uniform(0, 10)':   (lambda n: rng.uniform(0, 10, n), 5.0, 100/12),
-            'Bernoulli(0.3)':   (lambda n: rng.binomial(1, 0.3, n), 0.3, 0.21),
-        }
-        # (1) 에서 적은 모집단 왜도. skew(X-bar_n) = gamma / sqrt(n) 을 확인하려고 둔다.
-        skew_pop = {'Normal(5, 4)': 0.0, 'Exp(λ=0.5)': 2.0,
-                    'Uniform(0, 10)': 0.0, 'Bernoulli(0.3)': 0.4 / np.sqrt(0.21)}
-
-        sample_sizes = [2, 5, 30]
-        fig, axes = plt.subplots(len(populations), len(sample_sizes), figsize=(15, 12))
-
-        # 행 = 모집단(넷), 열 = 표본 크기(2, 5, 30).
-        # 가로로 읽으면 "n이 커지면 종 모양이 된다",
-        # 세로로 읽으면 "모집단이 달라도 결과가 같다"가 보인다.
-        # 다만 치우침이 심한 모집단일수록 정규가 되는 데 더 큰 n이 필요하다.
-        # 베르누이(0.3) 행에서 n=2, 5 가 여전히 이산적인 것이 그 예다.
-        print(f"{'모집단':>14} {'n':>3} {'모의 sd':>8} {'√(σ²/n)':>8} "
-              f"{'모의 왜도':>8} {'γ/√n':>7} {'서로 다른 값':>8}")
-        for i, (pop_name, (sampler, mu, sigma2)) in enumerate(populations.items()):
-            for j, n in enumerate(sample_sizes):
-                x_bars = np.array([sampler(n).mean() for _ in range(n_sim)])
-                ax = axes[i, j]
-                ax.hist(x_bars, bins=60, density=True, alpha=0.6, color='steelblue')
-                x = np.linspace(x_bars.min(), x_bars.max(), 200)
-                # 참 모수로 계산한 이론적 표준오차. 표본에서 추정한 값이 아니다.
-                # 붉은 곡선이 히스토그램과 얼마나 맞는지가 곧 근사의 품질이다.
-                se = np.sqrt(sigma2 / n)
-                ax.plot(x, stats.norm.pdf(x, mu, se), 'r-', linewidth=2)
-                if i == 0:
-                    ax.set_title(f'n = {n}')
-                if j == 0:
-                    ax.set_ylabel(pop_name)
-                # 히스토그램과 붉은 곡선이 맞는지를 눈이 아니라 수로 재어 둔다.
-                print(f"{pop_name:>14} {n:>3} {x_bars.std(ddof=1):>8.4f} {se:>8.4f} "
-                      f"{stats.skew(x_bars):>8.3f} {skew_pop[pop_name] / np.sqrt(n):>7.3f} "
-                      f"{len(np.unique(x_bars)):>8}")
-        plt.suptitle('Central Limit Theorem')
-        plt.tight_layout()
-        plt.show()
-    clt_demonstration()
-    ```
-
-    출력:
-
-    ```
-               모집단   n    모의 sd  √(σ²/n)    모의 왜도    γ/√n  서로 다른 값
-      Normal(5, 4)   2   1.4223   1.4142    0.012   0.000    20000
-      Normal(5, 4)   5   0.8958   0.8944    0.018   0.000    20000
-      Normal(5, 4)  30   0.3638   0.3651   -0.000   0.000    20000
-        Exp(λ=0.5)   2   1.4118   1.4142    1.372   1.414    20000
-        Exp(λ=0.5)   5   0.8935   0.8944    0.872   0.894    20000
-        Exp(λ=0.5)  30   0.3647   0.3651    0.360   0.365    20000
-    Uniform(0, 10)   2   2.0596   2.0412    0.017   0.000    20000
-    Uniform(0, 10)   5   1.2940   1.2910    0.013   0.000    20000
-    Uniform(0, 10)  30   0.5260   0.5270   -0.017   0.000    20000
-    Bernoulli(0.3)   2   0.3244   0.3240    0.634   0.617        3
-    Bernoulli(0.3)   5   0.2060   0.2049    0.406   0.390        6
-    Bernoulli(0.3)  30   0.0837   0.0837    0.146   0.159       21
-    ```
-
-    ![Central Limit Theorem](./img/consistency_convergence_60.png)
-
-    **표준편차 열두 칸이 모두 맞는다.** 가장 크게 어긋난 $\text{Uniform}$의 $n = 2$ 칸도 $2.0596$ 대 $2.0412$로 $0.9\%$ 차이이며, 2만 번 되풀이로 표준편차를 잴 때의 몬테카를로 오차 $1/\sqrt{2 \times 20000} = 0.5\%$의 두 배 안이다. **$n$이 2일 때도 맞는다**는 점이 중요하다. $\operatorname{sd}(\bar X_n) = \sigma/\sqrt n$은 중심극한정리가 아니라 분산의 가법성에서 나오므로 $n$의 크기와 무관하게 정확하다.
-
-    **왜도도 맞는다.** 지수분포 행이 $1.372 / 0.872 / 0.360$으로 이론값 $1.414 / 0.894 / 0.365$를 따라가고, 베르누이 행이 $0.634 / 0.406 / 0.146$으로 $0.617 / 0.390 / 0.159$를 따라간다. 모의 왜도는 2만 개로 재어도 표준오차가 $\sqrt{6/20000} = 0.017$이라 셋째 자리까지는 믿을 수 없고, 어긋남이 모두 그 범위 안이다. 정규와 균등 행이 $\pm 0.02$ 안에 머무는 것도 같은 까닭이다.
-
-    **(2)의 둘째 물음에 대한 답이 마지막 열에 있다.** 다른 세 모집단은 2만 개의 $\bar X_n$이 모두 서로 다른 값인데, 베르누이는 $n = 2$에서 **단 3개**($0$, $0.5$, $1$), $n = 5$에서 6개, $n = 30$에서 21개뿐이다. $\bar X_n = K/n$이고 $K \sim \text{Binomial}(n, p)$라 가질 수 있는 값이 $n+1$개로 **이산**이기 때문이다. 이것은 왜도와 무관한 결함이며, 왜도를 $0$으로 만들어 주는 $p = 0.5$에서도 그대로 남는다.
-
-    **그래서 정규근사가 깨지는 방식이 둘이다.** 하나는 치우침이고 다른 하나는 이산성이다. 히스토그램에서 베르누이 행의 $n = 2$ 칸이 막대 세 개로 서 있는 것이 뒤의 것이고, 지수 행의 $n = 2$ 칸이 오른쪽으로 길게 끌리는 것이 앞의 것이다. 이산성을 다루는 표준 처방이 **연속성 수정**이며, 같은 $p = 0.3$에서 그 효과를 재어 본 곳이 [5.5절 $\hat p$의 표집분포와 $n$](../../ch05/applications/phat_n.md)이다. 치우침 쪽에는 그런 값싼 처방이 없다.
-
-!!! note "정규성으로의 수렴 속도"
-    대칭인 분포(Normal, Uniform)는 정규성에 빨리 도달한다. 치우친 분포(Exponential, $p$가 0.5에서 먼 Bernoulli)는 더 큰 $n$이 필요하다. $n = 30$쯤이면 대부분의 분포에서 정규근사가 충분하다.
+    - **모집단마다 다른 중심극한정리** — 5.4절이 한 쪽에 한 모집단씩 네 쪽을 쓴다.
+      [X̄의 표집분포 (정규분포)](../applications/xbar_normal.md)는 근사가 아니라
+      정확하다는 것을, [(균등분포)](../applications/xbar_uniform.md)는 평평한
+      모집단에서 종이 나오는 것을, [(지수분포)](../applications/xbar_exponential.md)는
+      합이 감마라 정확한 답을 아는 것을, [(베르누이분포)](../applications/xbar_bernoulli.md)는
+      정규에서 벗어나는 방식이 치우침이 아니라 **이산성**이라는 것을 보인다 — 연속성
+      보정을 넣으면 어긋남이 $0.04$ 대에서 $0.00027$ 까지 줄어든다.
+    - **대수의 법칙이 깨지는 자리** — 5.14절
+      [코시분포에서 큰수의 법칙의 실패](../non_normal/cauchy_lln_failure.md)가
+      누적평균의 궤적부터 특성함수를 쓴 증명까지 한 쪽으로 다룬다. 평균 대신
+      중앙값을 쓰면 점근분산 $\pi^2/(4n)$ 으로 일치한다는 것도 거기에 있다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 코시분포에서 무너지는 수렴. 표준정규와 표준코시에서 각각 누적평균 $\bar X_n$의 경로를 10개씩 $n = 1$만까지 그린다.
-
-**(1)** 코시에서 $\bar X_n$은 어떤 분포를 따르는가. 그로부터 $\bar X_n$의 사분위수 범위와 $P(|\bar X_n| > 1)$을 $n$의 함수로 적으시오.
-
-**(2)** (1)이 예측하는 값을 모의실험으로 확인하고, 같은 양을 정규분포에서 잰 것과 나란히 두시오. 코시의 표본평균을 두고 "수렴이 느리다"고 말해도 되는가.
-
-</div>
-
-??? success "풀이"
-
-    **(1) 해석적으로.** 먼저 큰수의 법칙이 **적용되지 않는다**는 점을 분명히 해야 한다. 표준코시의 밀도는 $f(x) = 1/(\pi(1+x^2))$이고 $|x|f(x) \sim 1/(\pi |x|)$라
-
-    $$
-    E|X| = \int_{-\infty}^{\infty} \frac{|x|}{\pi(1+x^2)}\,dx = \infty
-    $$
-
-    이다. 평균이 **없으므로** $\bar X_n$이 수렴할 값 자체가 없다.
-
-    그런데 코시에서는 그보다 강한 말을 할 수 있다. 표준코시의 특성함수는 $\varphi(t) = e^{-|t|}$이고, 독립이면 합의 특성함수가 곱이므로
-
-    $$
-    \varphi_{\bar X_n}(t) = \left[\varphi\!\left(\tfrac{t}{n}\right)\right]^n
-    = \left(e^{-|t|/n}\right)^n = e^{-|t|} = \varphi(t)
-    $$
-
-    이다. 즉 **모든 $n$에서**
-
-    $$
-    \bar X_n \sim \text{Cauchy}(0, 1)
-    $$
-
-    이다(아래 연습문제 10가 같은 계산이다). 1만 개를 평균한 것이 한 개와 **똑같은 분포**를 갖는다. 표준코시의 분포함수가 $F(x) = \tfrac12 + \tfrac{1}{\pi}\arctan x$이므로 사분위수는 $F(x) = 0.25, 0.75$에서 $\arctan x = \mp\pi/4$, 곧 $x = \mp 1$이다. 따라서 모든 $n$에서
-
-    $$
-    \mathrm{IQR}(\bar X_n) = 2,
-    \qquad
-    P(|\bar X_n| > 1) = \tfrac12,
-    \qquad
-    P(|\bar X_n| > 10) = 1 - \frac{2}{\pi}\arctan 10 = 0.0635
-    $$
-
-    이다. **$n$이 어디에도 들어오지 않는다.** 견주어 둘 것은 정규 쪽이다. $\bar X_n \sim N(0, 1/n)$이므로 $\mathrm{IQR}(\bar X_n) = 2 z_{0.75}/\sqrt n = 1.3490/\sqrt n$으로 $\sqrt n$에 반비례해 줄어든다.
-
-    **(2) 모의실험.** 먼저 그림으로 경로를 본다.
-
-    ```python
-    plt.rcParams["font.sans-serif"] = ["NanumGothic", "Apple SD Gothic Neo", "Malgun Gothic"]
-    plt.rcParams["font.family"] = "sans-serif"
-    plt.rcParams["axes.unicode_minus"] = False
-
-    def cauchy_failure(seed=42):
-        """평균이 없는 분포에서는 대수의 법칙이 무너짐을 보인다.
-
-        코시분포는 E[|X|] 가 무한이라 법칙의 전제부터 성립하지 않는다.
-        표본을 아무리 늘려도 표본평균은 자리를 잡지 못한다.
-        """
-        rng = np.random.default_rng(seed)
-        N = 10_000
-        n_runs = 10
-
-        fig, axes = plt.subplots(1, 2, figsize=(14, 5))
-
-        # 왼쪽: 정규분포. 경로들이 빠르게 0 으로 모여 붙는다.
-        ax = axes[0]
-        for _ in range(n_runs):
-            data = rng.standard_normal(N)
-            running_mean = np.cumsum(data) / np.arange(1, N + 1)
-            ax.plot(running_mean, alpha=0.4, linewidth=0.7)
-        ax.axhline(0, color='red', linestyle='--', linewidth=2)
-        ax.set_ylim(-2, 2)
-        ax.set_title('Normal: Converges')
-
-        # 오른쪽: 코시분포. 잠잠하다가도 큰 값 하나가 나오면 평균이 통째로 튄다.
-        # 이미 쌓인 n 개의 평균을 관측값 하나가 끌고 갈 만큼 꼬리가 두껍다.
-        ax = axes[1]
-        for _ in range(n_runs):
-            data = rng.standard_cauchy(N)
-            running_mean = np.cumsum(data) / np.arange(1, N + 1)
-            ax.plot(running_mean, alpha=0.4, linewidth=0.7)
-        ax.axhline(0, color='red', linestyle='--', linewidth=2)
-        ax.set_title('Cauchy: Does NOT Converge')
-
-        plt.suptitle('Consistency Failure: Cauchy (E[|X|] = ∞)')
-        plt.tight_layout()
-        plt.show()
-    cauchy_failure()
-    ```
-
-    ![Normal: Converges](./img/consistency_convergence_106.png)
-
-    왼쪽 판은 $\pm 2$로 잘라 놓았는데도 경로들이 금세 빨간 선에 붙는다. 오른쪽 판은 세로 눈금이 $-30$에서 $+60$까지 벌어지고, 잠잠하던 경로가 어느 순간 **계단처럼 꺾인 뒤 그 자리에 머문다.** $n \approx 3200$에서 한 경로가 $-1$ 언저리에서 $-8$로 내려앉는 것이 그 예다. 관측값 하나가 이미 쌓인 $n$개의 평균을 통째로 끌고 간 것이다.
-
-    **그런데 이 그림은 혼자 두면 사람을 속인다.** 가로축이 선형이라 $n = 2000$ 뒤의 경로들은 모두 $0$ 가까이에 눌려 보이고, 초기의 큰 값들이 눈금을 잡아당겨 놓은 탓에 "결국 안정된다"는 인상을 준다. 그림만으로는 **"느린 수렴"과 "수렴하지 않음"을 가를 수 없다.** (1)이 예측한 수를 직접 재야 한다.
-
-    ```python
-    # 코시의 X-bar_n 은 **모든 n 에서** Cauchy(0,1) 이다. 퍼짐이 n 과 무관해야 한다.
-    rng = np.random.default_rng(0)
-
-    def sample_means(draw, n, reps, chunk=1_000):
-        """크기 n 짜리 표본평균을 reps 개 만든다. 한꺼번에 뽑으면 메모리가 터지므로 쪼갠다."""
-        return np.concatenate([draw((chunk, n)).mean(axis=1)
-                               for _ in range(reps // chunk)])
-
-    reps = 40_000
-    print(f"{'n':>6} | {'코시 IQR':>9} {'P(|X̄|>1)':>10} {'P(|X̄|>10)':>11} | "
-          f"{'정규 IQR':>9} {'1.349/√n':>9}")
-    for n in (1, 10, 100, 1_000, 10_000):
-        cm = sample_means(rng.standard_cauchy, n, reps)
-        nm = sample_means(rng.standard_normal, n, reps)
-        cq1, cq3 = np.percentile(cm, [25, 75])
-        nq1, nq3 = np.percentile(nm, [25, 75])
-        print(f"{n:>6} | {cq3 - cq1:>9.3f} {np.mean(np.abs(cm) > 1):>10.4f} "
-              f"{np.mean(np.abs(cm) > 10):>11.4f} | "
-              f"{nq3 - nq1:>9.4f} {1.34898 / np.sqrt(n):>9.4f}")
-    print("이론 (코시): IQR = 2,  P(|X̄|>1) = 0.5,  P(|X̄|>10) = 0.0635  — 모두 n 과 무관")
-    ```
-
-    출력:
-
-    ```
-         n |    코시 IQR  P(|X̄|>1)  P(|X̄|>10) |    정규 IQR  1.349/√n
-         1 |     2.015     0.5020      0.0616 |    1.3488    1.3490
-        10 |     2.023     0.5038      0.0634 |    0.4283    0.4266
-       100 |     1.992     0.4988      0.0623 |    0.1342    0.1349
-      1000 |     1.993     0.4986      0.0616 |    0.0421    0.0427
-     10000 |     2.021     0.5031      0.0655 |    0.0134    0.0135
-    이론 (코시): IQR = 2,  P(|X̄|>1) = 0.5,  P(|X̄|>10) = 0.0635  — 모두 n 과 무관
-    ```
-
-    **코시 세 열이 $n$을 1에서 1만까지 키우는 동안 꼼짝도 하지 않는다.** IQR이 $1.99$–$2.02$를 오가며 이론값 $2$ 둘레에 머물고, $P(|\bar X_n| > 1)$이 $0.499$–$0.504$로 $1/2$ 둘레에 머물며, $P(|\bar X_n| > 10)$도 $0.062$–$0.066$으로 $0.0635$ 둘레에 머문다. 흔들림은 모두 몬테카를로 오차 범위다. 되풀이 4만 번에서 비율의 표준오차가 $\sqrt{0.5 \times 0.5/40000} = 0.0025$이고 $\sqrt{0.0635 \times 0.9365/40000} = 0.0012$이므로, 가장 크게 벗어난 $n = 10^4$의 $0.0655$도 $1.7$ 표준오차 안이다.
-
-    같은 자리에서 정규 쪽은 IQR이 $1.3488 \to 0.0134$로 **100배 줄었고**, 다섯 줄 모두 $1.349/\sqrt n$과 셋째 자리까지 맞는다.
-
-    **그러므로 "수렴이 느리다"는 틀린 말이다.** 느린 수렴이란 $n$을 키우면 폭이 줄기는 줄되 더디게 준다는 뜻인데, 여기서는 폭이 **조금도 줄지 않는다.** 코시 관측값 1만 개의 평균을 내는 것은 그 가운데 아무거나 하나를 고르는 것과 통계적으로 구별되지 않는다. **표본을 모으는 수고가 통째로 버려지는 것**이고, 이것이 유한한 기댓값이 없다는 가정 위반의 대가다.
-
-    평균 대신 **중앙값**을 쓰면 사정이 달라진다. 코시의 표본중앙값은 위치모수에 대해 일치하며 점근분산이 $\pi^2/(4n)$으로 $n$에 반비례해 줄어든다. 꼬리가 두꺼운 자료에서 중앙값으로 갈아타는 까닭이 이것이고, 5.12절 [오염을 늘리면 어느 평균이 먼저 무너지는가](./robust_means.md)의 주제다.
-
-!!! warning "대수의법칙에는 유한한 평균이 필요하다"
-    코시의 표본평균은 $n$이 아무리 커도 불규칙하게 떠돈다. 그러나 표본 **중앙값**은 유한한 평균을 요구하지 않으므로 코시 위치모수에 대해 일치한다.
-
-<div class="exbox" markdown>
-
-**보기 4.** <span class="diff easy" title="쉬움"></span> 자기상관이 표준오차에 미치는 영향. 주변분산을 $\sigma^2 = 1$로 고정한 정상 AR(1) 과정에서 $n = 100$짜리 평균을 3만 번 내고, $\operatorname{Var}(\bar X)$를 독립일 때의 $\sigma^2/n$과 견준다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 자기상관이 표준오차에 미치는 영향. 주변분산을 $\sigma^2 = 1$로 고정한 정상 AR(1) 과정에서 $n = 100$짜리 평균을 3만 번 내고, $\operatorname{Var}(\bar X)$를 독립일 때의 $\sigma^2/n$과 견준다.
 
 **(1)** 비 $\operatorname{Var}(\bar X_n)\big/(\sigma^2/n)$을 $n$과 $\rho$의 **정확한 함수**로 구하시오. 본문의 $\frac{1+\rho}{1-\rho}$는 그것의 무엇인가.
 
@@ -921,7 +664,7 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
 
 <div class="exbox" markdown>
 
-**보기 5.** <span class="diff easy" title="쉬움"></span> 초과수익을 확인하는 데 필요한 기간. 참 기대수익률이 연 $6\%$, 무위험이자율이 연 $3\%$, 변동성이 연 $20\%$인 주식을 $T$년 보유한다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 초과수익을 확인하는 데 필요한 기간. 참 기대수익률이 연 $6\%$, 무위험이자율이 연 $3\%$, 변동성이 연 $20\%$인 주식을 $T$년 보유한다.
 
 **(1)** 관측된 평균 초과수익이 양수가 될 확률이 $80\%$, $90\%$, $95\%$를 넘으려면 $T$가 얼마여야 하는지 해석적으로 구하시오.
 
@@ -964,6 +707,10 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
     **(2) 수치적으로.**
 
     ```python
+    import numpy as np
+    from scipy import stats
+
+
     def estimation_horizon_analysis(seed=42):
         """주식이 무위험자산보다 낫다는 것을 확인하려면 몇 년치 자료가 필요한가.
 

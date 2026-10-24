@@ -200,7 +200,7 @@ def main():
              f"${REPS//1000}{{,}}000$ 번 되풀이해 평균 낸 것이다.",
              ha="center", fontsize=10.4, color=INK)
 
-    path = "docs/" + OUT + "hot_hand.png"
+    path = OUT + "hot_hand.png"
     fig.savefig(path, dpi=165, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print(f"saved {path}")
