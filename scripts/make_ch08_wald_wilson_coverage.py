@@ -27,7 +27,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch05/applications/img/"
+OUT = "docs/ch08/one_sample_intervals/img/"
 
 INK = "#37474F"
 RED = "#D32F2F"
