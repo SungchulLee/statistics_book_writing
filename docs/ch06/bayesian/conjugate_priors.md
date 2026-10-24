@@ -25,6 +25,7 @@ $x = (x_1, \ldots, x_n)$을 가능도가 $f(x \mid \theta)$인 분포에서 얻�
 | Bernoulli/Binomial | Beta($\alpha, \beta$) | Beta($\alpha + k, \beta + n - k$) |
 | Poisson | Gamma($\alpha, \beta$) | Gamma($\alpha + \sum x_i, \beta + n$) |
 | Normal ($\sigma^2$ 알려짐) | Normal($\mu_0, \sigma_0^2$) | Normal$\!\left(\frac{\sigma^2 \mu_0 + n\sigma_0^2 \bar{x}}{\sigma^2 + n\sigma_0^2},\; \frac{\sigma^2 \sigma_0^2}{\sigma^2 + n\sigma_0^2}\right)$ |
+| Normal ($\mu$ 알려짐) | Inverse-Gamma($\alpha, \beta$) | Inverse-Gamma$\!\left(\alpha + \frac n2,\; \beta + \frac12\sum (x_i-\mu)^2\right)$ |
 | Exponential | Gamma($\alpha, \beta$) | Gamma($\alpha + n, \beta + \sum x_i$) |
 
 모든 행에서 사후분포가 사전분포와 같은 분포 형태를 가지며, 모수만 자료의 요약통계량(표본합, 표본크기, 표본평균)으로 갱신됨에 주목하라.
@@ -33,25 +34,19 @@ $x = (x_1, \ldots, x_n)$을 가능도가 $f(x \mid \theta)$인 분포에서 얻�
 
 ## 2. 베타-이항 켤레 쌍의 유도
 
-켤레성이 왜 작동하는지 보기 위해 베타-이항 경우를 살펴보자. $X \mid p \sim \text{Binomial}(n, p)$이고 $p \sim \text{Beta}(\alpha, \beta)$라 하자. 사전밀도는
+정의 1 이 작동하는 모습을 베타-이항에서 본다. $X \mid p \sim \text{Binomial}(n, p)$이고
+$p \sim \text{Beta}(\alpha, \beta)$ 이면 사후분포는 사전밀도와 가능도의 곱에 비례하므로
 
 $$
-\pi(p) \propto p^{\alpha - 1}(1 - p)^{\beta - 1}
+\pi(p \mid k) \;\propto\;
+\underbrace{p^{\alpha - 1}(1 - p)^{\beta - 1}}_{\text{사전분포}} \cdot
+\underbrace{p^{k}(1 - p)^{n - k}}_{\text{가능도}}
+= p^{(\alpha + k) - 1}(1 - p)^{(\beta + n - k) - 1}
 $$
 
-이고 $n$번의 시행에서 $k$번 성공했을 때의 가능도는
-
-$$
-f(k \mid p) \propto p^{k}(1 - p)^{n - k}
-$$
-
-베이즈 정리에 의해 사후분포는 이 둘의 곱에 비례한다:
-
-$$
-\pi(p \mid k) \propto p^{\alpha - 1}(1 - p)^{\beta - 1} \cdot p^{k}(1 - p)^{n - k} = p^{(\alpha + k) - 1}(1 - p)^{(\beta + n - k) - 1}
-$$
-
-이는 $\text{Beta}(\alpha + k, \beta + n - k)$ 분포의 핵이며 켤레성이 확인된다.
+가 되어 $\text{Beta}(\alpha + k, \beta + n - k)$ 의 핵이 나온다. 이것을 정리로 세우고
+사후평균까지 따라가는 것은 6.3절 [베타–이항 켤레 갱신](bayesian_beta_conjugate.md)
+정리 1 이다.
 
 ![켤레 갱신](./img/conjugate_updating.png)
 
@@ -493,6 +488,43 @@ A/B 시험에서 승자가 정해지기 전에 트래픽을 옮기는 장치들�
     - 순차적 갱신이 아주 쉽다. 관측값이 하나 들어올 때마다 초모수를 조금씩 갱신하면 된다.
 
     **한계:** 켤레 사전분포가 분석자의 실제 사전 믿음을 정확히 표현하지 못할 수 있다. 예를 들어 이항 비율에 대한 베타 사전분포는 단봉(또는 U자형)인데, 분석자는 참 확률이 (0.2 근처 아니면 0.8 근처처럼) 두 봉우리를 갖는다고 믿을 수도 있다. 믿음을 켤레족에 억지로 맞추면 계산의 편의를 위해 표현력을 희생하는 셈이다. 현대의 MCMC 방법은 임의의 사전분포를 허용하므로 켤레성의 필요를 줄여 준다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span> 포아송-감마 켤레 모형에서 $\lambda$의 사후분포를 유도하라. $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Poisson}(\lambda)$이고 사전분포는 (형상–비율 모수화의) $\lambda \sim \text{Gamma}(\alpha_0, \beta_0)$이다. 사후평균은 무엇인가?
+
+</div>
+
+??? success "풀이"
+    가능도는:
+
+    $$
+    L(\lambda) \propto \lambda^{\sum x_i} e^{-n\lambda}
+    $$
+
+    사전분포는:
+
+    $$
+    \pi(\lambda) \propto \lambda^{\alpha_0 - 1} e^{-\beta_0 \lambda}
+    $$
+
+    곱하면:
+
+    $$
+    p(\lambda \mid \mathbf{x}) \propto \lambda^{\alpha_0 + \sum x_i - 1} e^{-(\beta_0 + n)\lambda}
+    $$
+
+    이는 $\text{Gamma}(\alpha_0 + \sum x_i, \beta_0 + n)$의 핵이다.
+
+    사후평균은:
+
+    $$
+    E[\lambda \mid \mathbf{x}] = \frac{\alpha_0 + \sum x_i}{\beta_0 + n} = \frac{\beta_0}{\beta_0 + n}\cdot\frac{\alpha_0}{\beta_0} + \frac{n}{\beta_0 + n}\cdot\bar{x}
+    $$
+
+    이번에도 사전평균 $\alpha_0/\beta_0$과 MLE $\bar{x}$의 가중평균이며, 가중은 사전분포의 비율 모수 $\beta_0$과 표본크기 $n$에 비례한다. $\square$
 
 ---
 

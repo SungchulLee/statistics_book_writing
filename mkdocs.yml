@@ -234,8 +234,8 @@ nav:
                 - 사전분포, 가능도, 사후분포: ch06/bayesian/prior_posterior.md
                 - 켤레 사전분포: ch06/bayesian/conjugate_priors.md
                 - 최대사후확률 추정: ch06/bayesian/map_estimation.md
-                - 베이즈 추정 시연: ch06/bayesian/bayesian_estimation.md
-                - 베타분포 Beta(α, β) 켤레 사전분포: ch06/bayesian/bayesian_beta_conjugate.md
+                - 정규–정규 켤레 모형: ch06/bayesian/bayesian_estimation.md
+                - 베타–이항 켤레 갱신: ch06/bayesian/bayesian_beta_conjugate.md
 
         - 7 추정의 이론 ★:
             - 장 개요: ch07/index.md
