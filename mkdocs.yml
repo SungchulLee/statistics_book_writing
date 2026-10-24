@@ -191,7 +191,7 @@ nav:
                 - 두 표본비율의 차 표집분포: ch05/applications/diff_proportions.md
                 - p̂₁ - p̂₂의 표집분포 (작은 기대도수): ch05/applications/diff_props_small.md
             - 5.9 대응표본 차의 평균 D̄:
-                - D̄의 표집분포 (대응 설계): ch05/applications/dbar_paired.md
+                - 대응표본 차의 평균 표집분포: ch05/applications/dbar_paired.md
             - 5.10 두 표본분산의 비 S₁²/S₂²:
                 - 두 표본분산의 비 표집분포: ch05/applications/var_ratio.md
                 - S₁²/S₂²의 표집분포 (비정규 모집단): ch05/applications/var_ratio_nonnormal.md
