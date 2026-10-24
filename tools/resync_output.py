@@ -93,7 +93,11 @@ def main(argv):
             rf = pathlib.Path(d, "r.py"); rf.write_text(RUNNER, encoding="utf-8")
             r = subprocess.run([sys.executable, str(rf), str(pf), str(tf)],
                                capture_output=True, text=True, timeout=1800,
-                               cwd=str(pathlib.Path.cwd()))
+                               # 쪽의 예제가 savefig("a.png") 처럼 상대경로로 그림을
+                               # 저장하면 cwd 에 떨어진다. 저장소 뿌리에서 돌리면
+                               # 뿌리가 더럽혀지므로 임시 디렉터리에서 돌린다.
+                               # (쪽 코드가 읽는 자료는 모두 URL 이라 안전하다.)
+                               cwd=d)
         assert r.returncode == 0, f"{start} 행 블록 실행 실패:\n{r.stderr[-600:]}"
 
         actual = [(" " * out_ind + x).rstrip() for x in r.stdout.strip("\n").split("\n")]

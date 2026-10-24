@@ -174,7 +174,11 @@ def check(path, timeout=1800):
             proc = subprocess.Popen(
                 [sys.executable, str(run), str(spec), str(res)],
                 stdout=fh, stderr=subprocess.STDOUT,
-                cwd=str(pathlib.Path.cwd()), start_new_session=True)
+                # 쪽의 예제가 savefig("a.png") 처럼 상대경로로 그림을
+                # 저장하면 cwd 에 떨어진다. 저장소 뿌리에서 돌리면
+                # 뿌리가 더럽혀지므로 임시 디렉터리에서 돌린다.
+                # (쪽 코드가 읽는 자료는 모두 URL 이라 안전하다.)
+                cwd=d, start_new_session=True)
             try:
                 proc.wait(timeout=timeout)
                 died = None

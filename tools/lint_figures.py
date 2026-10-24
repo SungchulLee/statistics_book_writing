@@ -47,7 +47,22 @@ def main(argv):
     files = [f for f in sorted(root.rglob("*")) if f.suffix.lower() in EXT]
     orphans = [f for f in files if f.name not in refs]
 
-    print(f"그림 {len(files)} 개 · 고아 {len(orphans)} 개 · 없는 그림 참조 {len(missing)} 개")
+    # 저장소 뿌리에 떨어진 그림. 쪽의 예제가 savefig("a.png") 처럼 상대경로를
+    # 쓰므로, 그 코드를 뿌리에서 돌리면 여기에 쌓인다. 도구(verify_outputs ·
+    # sync_outputs · resync_output)는 임시 디렉터리에서 돌리도록 고쳐 두었으니,
+    # 그래도 쌓였다면 누가 손으로 뿌리에서 돌린 것이다. .gitignore 가 가려 주어
+    # git 으로는 보이지 않으므로 여기서 알린다.
+    stray = sorted(f for f in pathlib.Path(".").glob("*")
+                   if f.suffix.lower() in EXT and f.is_file())
+
+    print(f"그림 {len(files)} 개 · 고아 {len(orphans)} 개 · 없는 그림 참조 {len(missing)} 개"
+          + (f" · 뿌리에 떨어진 그림 {len(stray)} 개" if stray else ""))
+    if stray:
+        print("\n### 뿌리에 떨어진 그림 — docs/**/img/ 밖이라 책에 실리지 않는다")
+        for f in stray:
+            print(f"    {f.name}")
+        print("    쪽의 예제를 저장소 뿌리에서 돌린 흔적이다. 지워도 된다 —"
+              " 진짜 그림은 docs/**/img/ 에만 있다.")
     if orphans:
         print("\n### 고아 — 파일은 있는데 가리키는 쪽이 없다")
         for f in orphans:
@@ -56,7 +71,7 @@ def main(argv):
         print("\n### 없는 그림 — 쪽이 가리키는데 파일이 없다")
         for p, raw in missing:
             print(f"    {p.relative_to(base)}  ->  {raw}")
-    return 1 if (orphans or missing) else 0
+    return 1 if (orphans or missing or stray) else 0
 
 
 if __name__ == "__main__":
