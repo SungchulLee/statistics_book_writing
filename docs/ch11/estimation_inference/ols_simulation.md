@@ -34,6 +34,8 @@ $$
 
 ### 분산분석 분해
 
+이름이 앞서 나간다 — 이 등식은 회귀의 것인데 **분산분석의 이름**으로 불린다. 12장 [분산분석](../../ch12/index.md)이 같은 등식을 $\text{TSS}=\text{SS}_B+\text{SS}_W$ 로 쓰며 그쪽 전통에서 먼저 굳은 말이기 때문이다. 두 장이 **같은 모형**이므로 같은 분해이고, 거기서는 설명된 몫을 집단이 설명한 몫이라 읽는다.
+
 $$
 \underbrace{\sum(y_i - \bar{y})^2}_{\mathrm{TSS}} = \underbrace{\sum(\hat{y}_i - \bar{y})^2}_{\mathrm{ESS}} + \underbrace{\sum(y_i - \hat{y}_i)^2}_{\mathrm{RSS}}.
 $$

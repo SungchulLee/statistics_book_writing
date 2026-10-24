@@ -218,7 +218,7 @@ $$
     \text{RSS} = \sum_k\sum_{i\in k}(y_i - \bar y_k)^2 = \text{WSS}
     $$
 
-    이고, 분산분석의 제곱합 분해 $\text{TSS} = \text{BSS} + \text{WSS}$ 를 쓰면
+    이고, [분산분석](../../ch12/index.md)의 제곱합 분해 $\text{TSS} = \text{BSS} + \text{WSS}$ 를 쓰면
 
     $$
     R^2 = 1 - \frac{\text{RSS}}{\text{TSS}} = 1 - \frac{\text{WSS}}{\text{TSS}} = \frac{\text{BSS}}{\text{TSS}}
@@ -743,7 +743,7 @@ $$
     | 계수의 뜻 | 기준과의 차이 | **전체와의 차이** |
     | 어울리는 상황 | 대조군이 뚜렷할 때 | **대등한 집단들을 비교할 때** |
 
-    **효과 부호화는 분산분석의 전통적 모수화**($y_{ij}=\mu+\alpha_i+\varepsilon_{ij}$, $\sum\alpha_i=0$)와 정확히 일치한다. 다음 장이 쓰는 그 제약이 여기서는 설계행렬의 부호로 나타난 것이다.
+    **효과 부호화는 분산분석의 전통적 모수화**($y_{ij}=\mu+\alpha_i+\varepsilon_{ij}$, $\sum\alpha_i=0$)와 정확히 일치한다. 다음 장 [12 분산분석](../../ch12/index.md)이 쓰는 그 제약이 여기서는 설계행렬의 부호로 나타난 것이다.
 
     **적합값과 $R^2$은 더미 부호화와 완전히 같다.** 같은 모형의 다른 표현이기 때문이다. $\square$
 
@@ -1322,7 +1322,7 @@ $$
     R^2 = \frac{\text{BSS}}{\text{TSS}} = \frac{\text{BSS}}{\text{BSS} + \text{WSS}}
     $$
 
-    이다. 귀무가설(모든 집단평균이 같다)에서 $y_i \overset{iid}{\sim} N(\mu, \sigma^2)$ 이고, 다음 장의 일원배치 분산분석에서 다시 볼 대로 $\text{BSS}$ 와 $\text{WSS}$ 는 서로 직교하는 두 부분공간(차원 $K-1$ 과 $n-K$)으로의 사영의 길이제곱이므로
+    이다. 귀무가설(모든 집단평균이 같다)에서 $y_i \overset{iid}{\sim} N(\mu, \sigma^2)$ 이고, 다음 장 [일원배치 분산분석](../../ch12/anova_one_way/one_way_model.md)에서 다시 볼 대로 $\text{BSS}$ 와 $\text{WSS}$ 는 서로 직교하는 두 부분공간(차원 $K-1$ 과 $n-K$)으로의 사영의 길이제곱이므로
 
     $$
     \frac{\text{BSS}}{\sigma^2} \sim \chi^2_{K-1}, \qquad
