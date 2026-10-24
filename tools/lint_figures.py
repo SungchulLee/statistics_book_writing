@@ -9,6 +9,12 @@ r"""가리키는 곳이 없는 그림과, 없는 그림을 가리키는 참조�
   고아 그림   파일은 있는데 가리키는 쪽이 없다. 쪽에서 절을 걷어낼 때마다 생긴다
   없는 그림   쪽이 가리키는데 파일이 없다. 그림을 옮기거나 이름을 바꿀 때 생긴다
 
+  같은 이름   두 디렉터리에 같은 파일 이름이 있다. 이 검사가 **스스로 필요하다** —
+              아래 `collect` 는 참조를 **파일 이름만**으로 모으므로, 같은 이름이 둘이면
+              한쪽만 가리켜도 **양쪽이 「참조됨」으로 세어져 진짜 고아가 가려진다.**
+              빌드도 통과한다(경로는 각자 맞으니까). 그림을 옮기거나 두 스크립트를
+              합치는 순간 조용히 덮이기도 한다
+
 정규식 주의. 대체텍스트에 `]` 가 들어가면(`E[D]`, `100 t CIs | n=10`) 소박한
 `!\[[^\]]*\]\(` 가 끊긴다. 비탐욕 `!\[.*?\]\(` 로 맞추고 `re.S` 를 켤 것.
 그림이 `<figure markdown>` 안의 `<img src=...>` 로 들어간 자리도 있어 그쪽도 본다.
@@ -55,8 +61,24 @@ def main(argv):
     stray = sorted(f for f in pathlib.Path(".").glob("*")
                    if f.suffix.lower() in EXT and f.is_file())
 
+    # 같은 파일 이름이 두 디렉터리에. 책 전체에서 본다 — 한 장 안에서도 생긴다
+    by_name = {}
+    for f in sorted(base.rglob("*")):
+        if f.suffix.lower() in EXT:
+            by_name.setdefault(f.name, []).append(f)
+    dups = {k: v for k, v in by_name.items() if len(v) > 1}
+
     print(f"그림 {len(files)} 개 · 고아 {len(orphans)} 개 · 없는 그림 참조 {len(missing)} 개"
+          + (f" · 같은 이름 {len(dups)} 개" if dups else "")
           + (f" · 뿌리에 떨어진 그림 {len(stray)} 개" if stray else ""))
+    if dups:
+        print("\n### 같은 파일 이름 — 이 도구의 고아 검사를 무력화한다")
+        for k, v in sorted(dups.items()):
+            sizes = [f.stat().st_size for f in v]
+            same = "같은 파일" if len(set(sizes)) == 1 else "내용이 다르다"
+            print(f"    {k}  ({same})")
+            for f, s in zip(v, sizes):
+                print(f"        {s:>9,}  {f.relative_to(base)}")
     if stray:
         print("\n### 뿌리에 떨어진 그림 — docs/**/img/ 밖이라 책에 실리지 않는다")
         for f in stray:
@@ -71,7 +93,7 @@ def main(argv):
         print("\n### 없는 그림 — 쪽이 가리키는데 파일이 없다")
         for p, raw in missing:
             print(f"    {p.relative_to(base)}  ->  {raw}")
-    return 1 if (orphans or missing or stray) else 0
+    return 1 if (orphans or missing or stray or dups) else 0
 
 
 if __name__ == "__main__":

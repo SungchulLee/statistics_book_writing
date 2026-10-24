@@ -14,7 +14,8 @@ r"""축소를 되돌리면 반대쪽으로 넘어간다 — 사후 라쏘의 선
 ② 상대 치우침 — 약한 신호에서 몇 퍼센트나 크게 나오는가.
 ③ 선택을 모른 체한 사후 라쏘 95 % 신뢰구간의 포함확률.
 
-만드는 파일: docs/ch18/overview/img/post_lasso_bias.png
+만드는 파일: docs/ch18/overview/img/post_lasso_coverage.png
+          (18.3절 lasso 의 post_lasso_bias.png 와 다른 그림이다 — 이쪽은 포함확률을 본다)
 """
 
 import numpy as np
@@ -179,6 +180,6 @@ ax3.legend(loc="lower right", fontsize=11)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch18/overview/img/post_lasso_bias.png"
+out = "docs/ch18/overview/img/post_lasso_coverage.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

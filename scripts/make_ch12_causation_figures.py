@@ -5,7 +5,8 @@ r"""12장 인과 여섯 쪽의 개념 그림을 생성한다.
   ch12/causation/img/four_structures_same_r.png        같은 r, 네 가지 인과 구조
   ch12/causation/img/simpson_and_partial.png           합치면 뒤집히고, 통제하면 사라진다
   ch12/causation/img/three_structures_conditioning.png 사슬·갈래·충돌자와 조건화
-  ch12/causation/img/randomization_balance.png         무작위화는 못 본 변수까지 맞춘다
+  ch12/causation/img/randomization_ate_bias.png        무작위화는 못 본 변수까지 맞춘다
+                                                       (1.3절의 randomization_balance.png 와 다른 그림)
   ch12/causation/img/iv_vs_ols_strength.png            도구가 약하면 IV 가 OLS 보다 나쁘다
 
 실행:  python3 scripts/make_ch12_causation_figures.py   (저장소 최상위에서)
@@ -424,7 +425,7 @@ def fig_three_structures():
 
 
 # === 그림 5. 무작위화와 균형 ===
-def fig_randomization_balance():
+def fig_randomization_ate_bias():
     rng = np.random.default_rng(2024)
     names = ["나이", "기저 혈압", "체중", "운동량", "유전 위험 (미측정)"]
     K = 5
@@ -508,7 +509,7 @@ def fig_randomization_balance():
     ax.set_title(f"{reps:,}번 되풀이한 추정값의 분포", fontsize=12.5,
                  color=INK, pad=8)
 
-    save(fig, "randomization_balance.png")
+    save(fig, "randomization_ate_bias.png")
     print("  SMD 자기선택:", np.round(smd_s, 3))
     print("  SMD 무작위  :", np.round(smd_r, 3))
     print(f"  자기선택 평균={est_s.mean():.3f} sd={est_s.std():.3f}")
@@ -620,5 +621,5 @@ if __name__ == "__main__":
     fig_four_structures()
     fig_simpson_and_partial()
     fig_three_structures()
-    fig_randomization_balance()
+    fig_randomization_ate_bias()
     fig_iv_vs_ols()

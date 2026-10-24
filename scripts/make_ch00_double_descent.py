@@ -11,7 +11,8 @@ p > n 이면 최소노름 해(유사역행렬)를 쓴다.
 ② 왜 치솟는가 — X'X 의 가장 작은 고윳값이 0 으로 간다.
 ③ 왜 다시 내려가는가 — 최소노름 해가 계수의 크기를 묶는다.
 
-만드는 파일: docs/ch00/linalg_regression/linalg_statistics/img/double_descent.png
+만드는 파일: docs/ch00/linalg_regression/linalg_statistics/img/double_descent_min_eigenvalue.png
+          (18.1절의 double_descent.png 와 다른 그림이다 — 이쪽은 최소 고윳값과 계수 길이를 본다)
 """
 
 import numpy as np
@@ -132,6 +133,6 @@ ax3.set_title("③ 계수의 크기", fontsize=12)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch00/linalg_regression/linalg_statistics/img/double_descent.png"
+out = "docs/ch00/linalg_regression/linalg_statistics/img/double_descent_min_eigenvalue.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)
