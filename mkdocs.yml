@@ -220,8 +220,6 @@ nav:
                 - 가능도와 최대가능도추정: ch06/mle/likelihood.md
                 - 베르누이분포의 최대가능도: ch06/mle/mle_bernoulli.md
                 - 정규분포의 최대가능도: ch06/mle/mle_normal.md
-                - μ와 σ²의 최대가능도추정: ch06/mle/gaussian_mle.md
-                - σ²에 대한 정규분포 최대가능도의 편향: ch06/mle/mle_bias.md
                 - 포아송분포의 최대가능도: ch06/mle/mle_poisson.md
                 - 지수분포의 최대가능도: ch06/mle/mle_exponential.md
                 - 기하분포의 최대가능도: ch06/mle/geometric_mle.md
