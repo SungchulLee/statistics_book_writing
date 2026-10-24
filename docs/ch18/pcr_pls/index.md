@@ -109,7 +109,7 @@
 - James, Witten, Hastie, Tibshirani (2013). *An Introduction to Statistical Learning*, 6장
 - Geladi & Kowalski (1986). "Partial least-squares regression: a tutorial." *Analytica Chimica Acta* — 화학계량학의 원 논문
 
-관련 주제: 정칙화(능형, 라쏘, 엘라스틱넷), 스플라인과 GAM(13장), 모형선택(교차검증, 정보기준).
+관련 주제: 정칙화(능형, 라쏘, 엘라스틱넷), 스플라인과 GAM(11장), 모형선택(교차검증, 정보기준).
 
 ---
 

@@ -277,7 +277,7 @@ $$
 
     또한 `fit_intercept=True`(기본값)이면 sklearn이 내부에서 중심화하므로, 직접 중심화한 자료와 비교할 때는 `fit_intercept=False`로 맞춰야 한다.
 
-    **(b)의 지름길이 왜 성립하는가.** 능형회귀는 선형 평활자다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ 형태이므로 13장 연습문제 1의 OLS 항등식이 그대로 확장된다.
+    **(b)의 지름길이 왜 성립하는가.** 능형회귀는 선형 평활자다. $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ 형태이므로 11장 연습문제 1의 OLS 항등식이 그대로 확장된다.
 
     $$
     y_i - \hat{y}_i^{(-i)} = \frac{y_i - \hat{y}_i}{1 - H_{ii}}

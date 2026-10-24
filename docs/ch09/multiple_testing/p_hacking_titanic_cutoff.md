@@ -1056,7 +1056,7 @@ _확인한 곳 — 논문이 Douglas G. Altman, Berthold Lausen, Willi Sauerbrei
 
     **$n=400$과 $n=450$ 사이에서 연속형 $n=300$의 검정력 0.7130을 따라잡는다.** 필요 표본이 대략 $1.4\!\sim\!1.5$배다.
 
-    **이론적 근거.** 중앙값 분할은 상관을 $\sqrt{2/\pi}=0.798$배로 줄인다([점이연 상관과 파이 계수](../../ch12/correlation/special_cases.md) 절). 필요 표본은 효과크기의 제곱에 반비례하므로
+    **이론적 근거.** 중앙값 분할은 상관을 $\sqrt{2/\pi}=0.798$배로 줄인다([점이연 상관과 파이 계수](../../ch10/correlation/special_cases.md) 절). 필요 표본은 효과크기의 제곱에 반비례하므로
 
     $$
     \frac{n_{\text{이분화}}}{n_{\text{연속}}}=\frac{1}{2/\pi}=\frac{\pi}{2}=1.571

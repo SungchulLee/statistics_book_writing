@@ -267,8 +267,8 @@ Edition)』 $292$ 권 $6522$ 호 $746$–$750$ 쪽($1986$ 년 $3$ 월 $15$ 일).
 |---|---|---|---|
 | 비율 $p$ | $\sqrt{p_0(1-p_0)/n}$ | $\sqrt{\hat p(1-\hat p)/n}$ (왈드) | 8.2절 [비율 신뢰구간의 실제 포함률](../../ch08/one_sample_intervals/phat_wald_wilson.md) |
 | 비율 차 $p_1-p_2$ | 합동 | 합동하지 않음 | 9.3절 [비율 차이에 대한 이표본 Z-검정](../two_sample_tests/z_test_two_proportions.md) |
-| 대응 비율 차 | $\sqrt{b+c}\,/n$ | $\frac1n\sqrt{b+c-(b-c)^2/n}$ | 10.2절 [McNemar 검정](../../ch10/test/mcnemar_test.md) |
-| 상관 $\rho$ | $t$ 통계량($\rho=0$ 전용) | 피셔 $z$ 변환 | 12.5절 [Pearson의 r 검정](../../ch12/correlation_test/test_pearson.md) |
+| 대응 비율 차 | $\sqrt{b+c}\,/n$ | $\frac1n\sqrt{b+c-(b-c)^2/n}$ | 12.2절 [McNemar 검정](../../ch12/test/mcnemar_test.md) |
+| 상관 $\rho$ | $t$ 통계량($\rho=0$ 전용) | 피셔 $z$ 변환 | 10.5절 [Pearson의 r 검정](../../ch10/correlation_test/test_pearson.md) |
 
 넷을 꿰는 것이 **왈드와 점수의 대비**다. 분모를 추정값 $\hat\theta$ 로 계산하는 것이 왈드,
 귀무가설 값 $\theta_0$ 로 계산하는 것이 점수다. **구간은 가설값을 모르므로 왈드 쪽에

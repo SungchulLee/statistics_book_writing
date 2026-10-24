@@ -73,7 +73,7 @@ OLS 추정값 $\hat{\beta}$가 불편이거나 일치성을 갖는 데는 오차
 
 ## 3. 잔차의 정규성 확인
 
-같은 일을 회귀 쪽에서 보는 것이 13.5절 [선형회귀의 정규성 확인](../../ch13/assumptions/checking_normality.md)이다. 거기서는 **회귀 진단의 한 항목으로** 다루고, 이 쪽은 **정규성 쪽에서** 회귀를 사례로 든다. 검정들 자체의 유도와 서로 견줌은 14.4절 [Shapiro-Wilk 검정](../formal_tests/shapiro_wilk.md)을 비롯한 네 쪽에 있다.
+같은 일을 회귀 쪽에서 보는 것이 11.5절 [선형회귀의 정규성 확인](../../ch11/assumptions/checking_normality.md)이다. 거기서는 **회귀 진단의 한 항목으로** 다루고, 이 쪽은 **정규성 쪽에서** 회귀를 사례로 든다. 검정들 자체의 유도와 서로 견줌은 14.4절 [Shapiro-Wilk 검정](../formal_tests/shapiro_wilk.md)을 비롯한 네 쪽에 있다.
 
 참 오차 $\varepsilon_i$는 관측할 수 없으므로 **잔차** $\hat{\varepsilon}_i = Y_i - \hat{Y}_i$로 정규성을 확인한다. 표준적인 진단 도구는 다음과 같다.
 

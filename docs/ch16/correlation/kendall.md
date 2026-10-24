@@ -1,6 +1,6 @@
 # Kendall의 타우 (재론)
 
-Kendall 순위상관계수 $\tau$는 [12장](../../ch12/correlation/kendall.md)에서 일치도 기반 단조 연관성 측도로 소개되었다. 이 절에서는 비모수 검정의 관점에서 $\tau$를 다시 보며, 부합/비부합 틀, 가설검정, 동점 처리, 그리고 [Spearman $r_s$](spearman.md)와의 비교를 다룬다.
+Kendall 순위상관계수 $\tau$는 [10장](../../ch10/correlation/kendall.md)에서 일치도 기반 단조 연관성 측도로 소개되었다. 이 절에서는 비모수 검정의 관점에서 $\tau$를 다시 보며, 부합/비부합 틀, 가설검정, 동점 처리, 그리고 [Spearman $r_s$](spearman.md)와의 비교를 다룬다.
 
 ---
 

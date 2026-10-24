@@ -4,7 +4,7 @@ r"""17장 비교 절(comparison/) 여섯 쪽의 개념 그림을 생성한다.
   ch17/comparison/img/two_questions.png        무엇을 재배열하고 무엇을 근사하는가
   ch17/comparison/img/small_sample_gap.png     n = 5 에서 벌어지는 틈
   ch17/comparison/img/monte_carlo_convergence.png  B 를 얼마나 키워야 하는가
-  ch13/model_selection/img/cv_flat_curve.png   교차검증 곡선은 평평하다
+  ch11/model_selection/img/cv_flat_curve.png   교차검증 곡선은 평평하다
                                                (교차검증은 ch13 의 주제라 그림도 그쪽에 있다)
   ch17/comparison/img/dependence_breaks_bootstrap.png  종속자료에서의 실패
   ch17/comparison/img/statistic_choice.png     순열검정은 통계량 선택에 달렸다
@@ -39,7 +39,7 @@ os.makedirs(OUT, exist_ok=True)
 
 # 교차검증 그림 하나만 ch13 으로 간다. 한 스크립트의 그림이 두 디렉터리로
 # 갈리면 변수를 나눠 둘 것 — 한 변수만 고치면 나머지가 엉뚱한 자리에 저장된다.
-OUT_CV = "docs/ch13/model_selection/img/"
+OUT_CV = "docs/ch11/model_selection/img/"
 os.makedirs(OUT_CV, exist_ok=True)
 
 # 통계량 선택 그림은 17.4 로 갔다 (two_sample.md)

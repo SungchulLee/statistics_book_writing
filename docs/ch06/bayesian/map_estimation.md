@@ -475,7 +475,7 @@ MAP 추정값만 보고할 때 놓치는 것을 정리하고, 사후분포를 �
 <div class="drillbox" markdown>
 
 **연습문제 11.** <span class="diff med" title="중간"></span>
-적률법, 최대가능도, 최소제곱(13.2절 [최소제곱](../../ch13/estimation_inference/least_squares.md)), 베이즈 네 가지 추정 방법을 **무엇을 최적화하는가**의 관점에서 한 표로 정리하고, 각각이 필요로 하는 가정을 적어라.
+적률법, 최대가능도, 최소제곱(11.2절 [최소제곱](../../ch11/estimation_inference/least_squares.md)), 베이즈 네 가지 추정 방법을 **무엇을 최적화하는가**의 관점에서 한 표로 정리하고, 각각이 필요로 하는 가정을 적어라.
 
 </div>
 

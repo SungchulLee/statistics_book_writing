@@ -866,7 +866,7 @@ $n = 1$, $p = 2$, $\mathbf{X} = \begin{pmatrix} 2 & 1\end{pmatrix}$, $\mathbf{y}
     - 연습문제 1 에서 쓴 `alpha=2.0` 은 $\lambda = 0.02$로, 최적값 $0.004347$의 약 $4.6$배다. 최적은 `alpha=0.4347` 이다.
     - **거래의 내용이 표에 그대로 보인다.** $\lambda^\star$에서 편향제곱 $0.000215$를 사는 대가로 분산을 $0.050000 \to 0.049568$, 즉 $0.000432$만큼 팔았다. 산 것보다 판 것이 많으므로 차액 $0.000216$이 이득이다. 이것이 이 장의 거래를 가장 작은 단위로 적은 것이다.
 
-    **개선폭이 왜 작은가.** $\lambda^\star = p\tau^2/\lVert\boldsymbol\beta\rVert^2 = 0.05/11.5025 = 0.0043$은 매우 작다. 신호 $\lVert\boldsymbol\beta\rVert^2 = 11.5$가 잡음 $p\tau^2 = 0.05$보다 $230$배 크기 때문이다. 팔 분산이 애초에 거의 없으니 살 편향도 거의 없어야 하고, 이득도 $0.43\%$에 그친다. **능형이 크게 이기는 것은 반대 상황, 즉 $p\tau^2 = p\sigma^2/n$이 $\lVert\boldsymbol\beta\rVert^2$에 견줄 만큼 클 때다** — 표본이 작거나 잡음이 크거나 $p$가 큰 경우, 다시 말해 13 장의 다중공선성 상황이다. $10\lambda^\star$만 써도 MSE 가 $0.0659$로 OLS 보다 $32\%$ 나빠지는 것은 $\lambda$를 과하게 주는 위험도 함께 보여 준다.
+    **개선폭이 왜 작은가.** $\lambda^\star = p\tau^2/\lVert\boldsymbol\beta\rVert^2 = 0.05/11.5025 = 0.0043$은 매우 작다. 신호 $\lVert\boldsymbol\beta\rVert^2 = 11.5$가 잡음 $p\tau^2 = 0.05$보다 $230$배 크기 때문이다. 팔 분산이 애초에 거의 없으니 살 편향도 거의 없어야 하고, 이득도 $0.43\%$에 그친다. **능형이 크게 이기는 것은 반대 상황, 즉 $p\tau^2 = p\sigma^2/n$이 $\lVert\boldsymbol\beta\rVert^2$에 견줄 만큼 클 때다** — 표본이 작거나 잡음이 크거나 $p$가 큰 경우, 다시 말해 11 장의 다중공선성 상황이다. $10\lambda^\star$만 써도 MSE 가 $0.0659$로 OLS 보다 $32\%$ 나빠지는 것은 $\lambda$를 과하게 주는 위험도 함께 보여 준다.
 
     **$n \to \infty$.** $\tau^2 = \sigma^2/n$이므로 $\lambda^\star = p\sigma^2/(n\lVert\boldsymbol\beta\rVert^2) \to 0$이다. 표본이 커지면 능형은 OLS 로 수렴한다. 그런데 연습문제 6 의 변환을 쓰면
 

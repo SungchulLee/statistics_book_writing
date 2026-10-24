@@ -114,7 +114,20 @@ def main(argv):
             kind, raw, raw_link = m.groups()
             already += 1
             i = idx[rel]
-            if kind == "다음 장" or i + 1 >= len(order):
+            if i + 1 >= len(order):
+                continue
+            if kind == "다음 장":
+                # **장 경계도 검사한다.** 장을 통째로 옮기면 여기가 어긋나는데,
+                # 「다음 장」을 건너뛰면 아무도 보지 않는다. 2026-10-25 에 10~13 을
+                # 재배열하고 보니 셋이 틀려 있었다(9 장이 카이제곱을, 회귀가 정규성
+                # 검정을, 분산분석이 상관과 인과를 가리켰다). 장만 맞는지 본다 —
+                # 어느 쪽으로 들어가는지(개요냐 첫 쪽이냐)는 글의 선택이다
+                try:
+                    got = str((p.parent / raw_link).resolve().relative_to(D))
+                except ValueError:
+                    continue
+                if got.split("/")[0] != order[i + 1][1].split("/")[0]:
+                    wrong.append((rel, raw, got, order[i + 1][1]))
                 continue
             try:
                 got = str((p.parent / raw_link).resolve().relative_to(D))
