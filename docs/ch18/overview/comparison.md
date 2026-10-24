@@ -457,7 +457,7 @@ $$
     \operatorname{Var}(\hat\beta_j^{\text{ridge}}) = \frac{\sigma^2/n}{(1+\lambda)^2}
     $$
 
-    이고, 편향-분산 분해([평균제곱오차](../../ch05/estimators/mse.md) 정리 1)를 좌표마다 더하면
+    이고, 편향-분산 분해([평균제곱오차](../../ch05/estimators/bias_variance.md) 정리 1)를 좌표마다 더하면
 
     $$
     \text{MSE}(\lambda) = \frac{\lambda^2 B + C}{(1+\lambda)^2}, \qquad B = \lVert\boldsymbol\beta\rVert_2^2, \quad C = \frac{p\sigma^2}{n}.

@@ -197,8 +197,7 @@ nav:
                 - S₁²/S₂²의 표집분포 (비정규 모집단): ch05/applications/var_ratio_nonnormal.md
 
             - 5.11 추정량의 품질:
-                - 편향–분산 맞바꿈: ch05/estimators/bias_variance.md
-                - 평균제곱오차: ch05/estimators/mse.md
+                - 편향–분산 분해와 평균제곱오차: ch05/estimators/bias_variance.md
             - 5.12 평균의 추정:
                 - 추정량으로서의 표본평균: ch05/mean/sample_mean.md
                 - 편향과 일치성: ch05/mean/bias_consistency.md
