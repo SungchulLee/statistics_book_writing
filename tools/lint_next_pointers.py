@@ -42,9 +42,14 @@ PAGE = re.compile(r'^\s*- "?(.+?)"?:\s*((?:ch|index)[\w/.\-]*\.md)\s*$')
 # 「**그** 다음 절」은 이 쪽의 다음이 아니라 **가리킨 쪽의** 다음이다. 11.5 의
 # tukey 가 그렇게 적는다 — 「11.3절 [이원배치 사후비교]에서 이어진다. 그 다음 절
 # **Bonferroni와 Scheffé 방법**은…」. 맞는 글이고, 거르지 않으면 거짓 양성이 된다.
+HEADING = re.compile(r"^#{2,4}\s*(?:\d+\.\s*)?(.+?)\s*(?:\{[^}]*\})?$", re.M)
 NOT_THIS = r"(?<!그 )(?<!그)"
-LINKED = re.compile(NOT_THIS + r"(다음 절|다음 장)\s*\*\*\[(.+?)\]\(([^)\s#]+\.md)[^)]*\)\*\*")
-BARE = re.compile(NOT_THIS + r"(다음 절|다음 장)\s*\*\*(?!\[)(.+?)\*\*")
+# 조사가 붙은 꼴을 함께 받는다. 「다음 절**의** **원그래프**」·「다음 절부터 **일표본
+# 검정**」이 그렇고, 그것만 보지 않았을 때 63 곳이 검사 밖에 있었다. ch02 의 시각화
+# 열 쪽이 모두 그 꼴이어서 그 절이 통째로 빠져 있었다.
+PART = r"(다음 절|다음 장)(?:의|부터는|부터|에서는|에서|은|이)?\s*"
+LINKED = re.compile(NOT_THIS + PART + r"\*\*\[(.+?)\]\(([^)\s#]+\.md)[^)]*\)\*\*")
+BARE = re.compile(NOT_THIS + PART + r"\*\*(?!\[)(.+?)\*\*")
 GREEK = ("sigma mu tau rho alpha beta lambda chi theta delta phi nu xi eta zeta "
          "psi omega gamma epsilon pi kappa iota upsilon").split()
 UNI = {"σ": "sigma", "μ": "mu", "τ": "tau", "ρ": "rho", "α": "alpha", "β": "beta",
@@ -98,7 +103,7 @@ def main(argv):
     only = next((a for a in argv if not a.startswith("--")), None)
 
     ok = already = 0
-    bad, amb, wrong = [], [], []
+    bad, amb, wrong, inpage = [], [], [], []
     for _, rel in order:
         if only and not rel.startswith(only + "/"):
             continue
@@ -117,8 +122,18 @@ def main(argv):
                 continue
             if got != order[i + 1][1]:
                 wrong.append((rel, raw, got, order[i + 1][1]))
+        # 같은 쪽의 **다음 ## 절**을 가리키는 꼴을 먼저 떼어 낸다. 「절」이 쪽을
+        # 뜻하는지 쪽 안의 절을 뜻하는지는 글자가 같아서, 이것을 거르지 않으면
+        # 엉뚱한 쪽으로 링크를 걸게 된다. 4.2 지수분포가 「그 대상이 다음 절의
+        # **포아송 과정**이다」라 적고 그 포아송 과정은 그 쪽의 §6 이다.
+        heads = [(hm.start(), key(hm.group(1))) for hm in HEADING.finditer(t)]
         for m in BARE.finditer(t):
             kind, raw = m.group(1), m.group(2)
+            kraw = key(raw)
+            if kind == "다음 절" and len(kraw) >= 3 and any(
+                    hs > m.start() and (kraw in hk or hk in kraw) for hs, hk in heads):
+                inpage.append((rel, raw))
+                continue
             i = idx[rel]
             if i + 1 >= len(order):
                 bad.append((rel, kind, raw, "nav 의 마지막 쪽"))
@@ -142,12 +157,12 @@ def main(argv):
                     else:
                         bad.append((rel, kind, raw, f"nav 의 다음 쪽은 「{ntitle}」"))
                         continue
-            old_s = f"{kind} **{raw}**"
+            old_s = m.group(0)            # 조사까지 포함한 매치 전체
             if out.count(old_s) != 1:
                 amb.append((rel, kind, raw))
                 continue
             link = os.path.relpath(D / npath, p.parent).replace(os.sep, "/")
-            out = out.replace(old_s, f"{kind} **[{raw}]({link})**")
+            out = out.replace(old_s, old_s.replace(f"**{raw}**", f"**[{raw}]({link})**"))
             changed += 1
             ok += 1
             if "--list" in argv:
@@ -157,7 +172,7 @@ def main(argv):
 
     print(f"포인터 — 링크 없고 이름은 맞음 {ok} · 이미 링크 {already} · "
           f"이름이 안 맞음 {len(bad)} · 본문에 둘 이상 {len(amb)} · "
-          f"**링크가 다음 쪽이 아님 {len(wrong)}**"
+          f"같은 쪽의 절 {len(inpage)} · **링크가 다음 쪽이 아님 {len(wrong)}**"
           + ("   (링크를 걸었다)" if apply else ""))
     if wrong:
         print("\n### 링크가 nav 의 다음 쪽을 가리키지 않는다")

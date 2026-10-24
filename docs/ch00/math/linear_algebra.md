@@ -745,4 +745,4 @@ $$
 
 **두 항등식이 특히 자주 쓰인다.** $\operatorname{Cov}(\mathbf{A}\mathbf{X}) = \mathbf{A}\,\operatorname{Cov}(\mathbf{X})\,\mathbf{A}^\top$ 가 선형변환의 분산을 주고, $\mathbb{E}[\mathbf{X}^\top\mathbf{A}\mathbf{X}] = \operatorname{tr}(\mathbf{A}\,\operatorname{Cov}(\mathbf{X})) + \boldsymbol\mu^\top\mathbf{A}\boldsymbol\mu$ 가 이차형식의 기댓값을 준다. 뒤에서 $\mathbb{E}[\text{SSE}]$ 를 계산할 때 쓰는 것이 두 번째 식이다.
 
-다음 절부터는 **계산 도구**로 넘어간다. 파이썬·NumPy·pandas·Matplotlib 으로 여기 적은 연산을 실제로 수행하고, 자료를 눈으로 확인하는 법을 익힌다.
+다음 절부터는 **[계산 도구](../tools/python_basics.md)**로 넘어간다. 파이썬·NumPy·pandas·Matplotlib 으로 여기 적은 연산을 실제로 수행하고, 자료를 눈으로 확인하는 법을 익힌다.
