@@ -45,9 +45,9 @@
 
 분포와 집단을 비교하는 그림 기법:
 
-- **범주형 자료의 그림** — 막대그림, 원그래프, 파레토 그림, 모자이크 그림과 도수분포표, 트리맵으로 범주의 도수와 구성비를 보이는 법을 다룬다.
-- **분포의 그림** — 점그림과 줄기잎그림, 상자그림, 바이올린 그림, 스트립 그림과 스웜 그림으로 한 변수의 분포와 집단 간 분포를 비교한다. 상자그림은 다섯 수치 요약을 압축해 보여 주고, 바이올린 그림은 다봉성을 포함한 밀도의 전체 모양을 드러낸다.
-- **두 변수의 그림** — 산점도, 육각형 구간 그림과 2차원 히스토그램, 쌍그림, 선그림, 계단 그림과 면적 그림으로 두 변수의 관계와 시간에 따른 변화를 본다.
+- **범주형 자료의 그림** — [막대그림](visualization/bar_charts.md), [원그래프](visualization/pie_charts.md), [파레토 그림](visualization/pareto.md), [모자이크 그림과 도수분포표](visualization/mosaic.md), [트리맵](visualization/treemap.md)으로 범주의 도수와 구성비를 보이는 법을 다룬다.
+- **분포의 그림** — [점그림과 줄기잎그림](visualization/dot_stem.md), [상자그림](visualization/boxplots.md), [바이올린 그림](visualization/violin.md), [스트립 그림과 스웜 그림](visualization/strip_swarm.md)으로 한 변수의 분포와 집단 간 분포를 비교한다. 상자그림은 다섯 수치 요약을 압축해 보여 주고, 바이올린 그림은 다봉성을 포함한 밀도의 전체 모양을 드러낸다.
+- **두 변수의 그림** — [산점도](visualization/scatter.md), [육각형 구간 그림과 2차원 히스토그램](visualization/hexbin.md), [쌍그림](visualization/pair_plots.md), [선그림](visualization/line_plots.md), [계단 그림과 면적 그림](visualization/step_area.md)으로 두 변수의 관계와 시간에 따른 변화를 본다.
 
 ---
 

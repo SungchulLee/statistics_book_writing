@@ -58,8 +58,8 @@
 이 장은 다음 내용을 바탕으로 한다:
 
 - **5장** (추정량과 표집분포) -- 추축량 구성의 바탕이 되는 normal, t, 카이제곱, F 표집분포.
-- **5장·6장** -- 편향과 일치성 같은 추정량의 성질(5.11~5.13), 최대가능도추정량과 적률법 추정량(6장).
-- **5.11~5.13** -- 추정량으로서의 표본평균과 표본분산, Bessel 수정, 그리고 그 표집분포.
+- **[5장](../ch05/index.md)·[6장](../ch06/index.md)** -- 편향과 일치성 같은 추정량의 성질([5.11 편향–분산 분해](../ch05/estimators/bias_variance.md)~[5.13 분산의 추정](../ch05/variance/naive.md)), [최대가능도추정량](../ch06/mle/likelihood.md)과 [적률법 추정량](../ch06/estimation_methods/moments_foundations.md).
+- **[5.11~5.13](../ch05/estimators/bias_variance.md)** -- [추정량으로서의 표본평균](../ch05/mean/sample_mean.md)과 [표본분산](../ch05/variance/naive.md), [Bessel 수정](../ch05/variance/bessels.md), 그리고 그 표집분포.
 
 ---
 
