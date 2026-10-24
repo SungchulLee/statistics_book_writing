@@ -224,7 +224,7 @@ nav:
                 - 지수분포의 최대가능도: ch06/mle/mle_exponential.md
                 - 기하분포의 최대가능도: ch06/mle/geometric_mle.md
                 - 최대가능도를 수치로 구하기: ch06/mle/mle_optimization.md
-                - 모수적 적합과 비모수적 적합: ch06/mle/parametric_vs_nonparametric.md
+                - 모형을 세우면 무엇을 버는가: ch06/mle/parametric_vs_nonparametric.md
             - 6.2 적률법:
                 - 적률법의 기초: ch06/estimation_methods/moments_foundations.md
                 - 흔한 분포에 대한 적률법: ch06/estimation_methods/moments_examples.md
