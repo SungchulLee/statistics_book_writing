@@ -326,7 +326,7 @@ Pearson을 쓸 때:
 
     이것이 두 계수의 차이를 가장 선명하게 보여주는 예다. "관계가 있는가"를 묻는다면 Spearman이, "직선 관계가 있는가"를 묻는다면 Pearson이 맞는 도구다.
 
-`scipy.stats.spearmanr` 함수는 중간순위를 써서 동점을 자동으로 처리한다. 가설검정의 자세한 내용은 [Spearman의 rho 검정](../correlation_test/test_spearman.md)을 보라.
+`scipy.stats.spearmanr` 함수는 중간순위를 써서 동점을 자동으로 처리한다. 가설검정의 자세한 내용은 [Spearman의 ρ 검정](../correlation_test/test_spearman.md)을 보라.
 
 ---
 

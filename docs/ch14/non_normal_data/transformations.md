@@ -414,7 +414,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> Box-Cox가 고르는 lambda. 보기 2과 **같은 표본**($\text{Lognormal}(0,\ 0.8^2)$에서 $n = 300$, 씨앗 42)에 `stats.boxcox`를 걸면 $\hat\lambda = -0.1258$이 나온다. 참값은 $\lambda = 0$이다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> Box-Cox가 고르는 $\lambda$. 보기 2과 **같은 표본**($\text{Lognormal}(0,\ 0.8^2)$에서 $n = 300$, 씨앗 42)에 `stats.boxcox`를 걸면 $\hat\lambda = -0.1258$이 나온다. 참값은 $\lambda = 0$이다.
 
 **(1)** $\hat\lambda = -0.1258$이 참값 $0$을 "잘 회복했다"고 말할 수 있는지 **가능도비 신뢰구간으로 판정**하시오. $\lambda = 0$을 가능도비검정으로 직접 검정하면 어떻게 되는가.
 
