@@ -60,7 +60,7 @@ $$F_1 = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \
 
 F1 점수는 정밀도와 재현율이 동등하게 중요할 때 둘의 균형을 맞춘다.
 
-### 정밀도-재현율 절충
+### 정밀도–재현율 절충
 
 문턱 $c$를 낮추면 재현율이 올라가지만(더 많은 양성을 잡음) 정밀도는 대체로 내려간다(위양성이
 늘어남). 최적 문턱은 응용에 따라 다르다.
@@ -123,7 +123,7 @@ $$\text{AUC} = P(\hat{p}_{\text{positive}} > \hat{p}_{\text{negative}})$$
 
 ---
 
-## 5. 정밀도-재현율 곡선
+## 5. 정밀도–재현율 곡선
 
 불균형 자료에서는 **PR 곡선**(정밀도 대 재현율)이 ROC 곡선보다 유용한 정보를 준다. PR 곡선을
 요약하는 값이 **평균정밀도(AP)**다.
@@ -339,7 +339,7 @@ TP $= 60$, FP $= 40$, FN $= 40$, TN $= 9{,}860$.
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff hard" title="어려움"></span>
-AUC가 만-휘트니 U 통계량과 같음을 보여라. 즉 양성 $m$개와 음성 $n$개의 점수에 대해
+AUC가 만–휘트니 U 통계량과 같음을 보여라. 즉 양성 $m$개와 음성 $n$개의 점수에 대해
 
 $$
 \text{AUC} = \frac{1}{mn}\sum_{i \in \text{pos}}\sum_{j \in \text{neg}} \left[\mathbf{1}(s_i > s_j) + \tfrac{1}{2}\mathbf{1}(s_i = s_j)\right]

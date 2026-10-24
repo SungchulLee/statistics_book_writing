@@ -513,7 +513,7 @@ BIC 가 유난히 안정적인 것도 그냥 읽으면 안 된다. 이 실험은
 
 <div class="drillbox" markdown>
 
-**연습문제 3.** <span class="diff med" title="중간"></span> 10-겹 교차검증을 구현하여 5-겹과 비교하라. $K$의 선택에서 편향-분산 절충을 논하라.
+**연습문제 3.** <span class="diff med" title="중간"></span> 10-겹 교차검증을 구현하여 5-겹과 비교하라. $K$의 선택에서 편향–분산 절충을 논하라.
 
 </div>
 

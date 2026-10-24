@@ -455,7 +455,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
     일반 원리로 $\operatorname{Var}(X) = V(\mu)$일 때 $g(\mu) = \int d\mu/\sqrt{V(\mu)}$가 분산을 안정시키며, 포아송은 $V(\mu)=\mu$라 제곱근이 나온다. 이항의 $\arcsin\sqrt{\hat p}$, 상관계수의 $\operatorname{arctanh}$도 같은 계산이다.
 
-    실무에서는 $\lambda$가 작을 때 근사가 나빠져 **안스콤 변환** $2\sqrt{X+3/8}$이나 프리먼-튜키 변환 $\sqrt X + \sqrt{X+1}$을 쓴다.
+    실무에서는 $\lambda$가 작을 때 근사가 나빠져 **안스콤 변환** $2\sqrt{X+3/8}$이나 프리먼–튜키 변환 $\sqrt X + \sqrt{X+1}$을 쓴다.
 
     **그럼에도 변환을 권하지 않는 이유.**
 
@@ -512,7 +512,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
     \frac{\partial^2\ell}{\partial\boldsymbol\beta\partial\boldsymbol\beta^\top} = -\sum_i \mu_i\,\mathbf{x}_i\mathbf{x}_i^\top
     $$
 
-    $\mu_i > 0$이므로 언제나 음반정부호다. **로그가능도가 오목하므로 국소 최대가 곧 전역 최대**이고, 뉴턴-랩슨(IRLS)이 안정적으로 수렴한다.
+    $\mu_i > 0$이므로 언제나 음반정부호다. **로그가능도가 오목하므로 국소 최대가 곧 전역 최대**이고, 뉴턴–랩슨(IRLS)이 안정적으로 수렴한다.
 
     **왜 로그연결인가.**
 

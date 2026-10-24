@@ -598,7 +598,7 @@ PD_2 과 f_2 의 최대 차이 = 3.1e-15
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span> 평활 모수 $\lambda$는 편향-분산 절충을 조절한다. $\lambda \to 0$과 $\lambda \to \infty$일 때 어떻게 되는지 설명하라.
+**연습문제 4.** <span class="diff med" title="중간"></span> 평활 모수 $\lambda$는 편향–분산 절충을 조절한다. $\lambda \to 0$과 $\lambda \to \infty$일 때 어떻게 되는지 설명하라.
 
 </div>
 

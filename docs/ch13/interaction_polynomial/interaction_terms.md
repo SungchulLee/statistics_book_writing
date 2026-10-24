@@ -667,7 +667,7 @@ $$
     \mathrm{Var}(\hat\gamma_1) = \mathrm{Var}(\hat\beta_1) + 23.26^2\,\mathrm{Var}(\hat\beta_3) + 2 \times 23.26\,\mathrm{Cov}(\hat\beta_1, \hat\beta_3)
     $$
 
-    인데 표는 앞의 두 항만 주고 **공분산을 주지 않는다.** 코시-슈바르츠로 $\lvert\mathrm{Cov}\rvert \le 0.002 \times 5.24\times 10^{-5}$ 를 넣어 양 끝을 잡으면 $\mathrm{SE}(\hat\gamma_1)$ 이 $0.00078$ 에서 $0.00322$ 사이, 곧
+    인데 표는 앞의 두 항만 주고 **공분산을 주지 않는다.** 코시–슈바르츠로 $\lvert\mathrm{Cov}\rvert \le 0.002 \times 5.24\times 10^{-5}$ 를 넣어 양 끝을 잡으면 $\mathrm{SE}(\hat\gamma_1)$ 이 $0.00078$ 에서 $0.00322$ 사이, 곧
 
     $$
     13.8 \;\le\; t \;\le\; 56.8

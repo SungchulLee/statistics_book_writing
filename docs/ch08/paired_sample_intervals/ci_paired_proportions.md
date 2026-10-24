@@ -585,7 +585,7 @@ McNemar 신뢰구간에 불일치 짝($b$와 $c$)만 관련되고 일치 짝($a$
 ??? success "풀이"
     **문제.** $k\times k$ 표에서 $H_0:\ p_{i\cdot}=p_{\cdot i}$($i=1,\dots,k$)를 검정한다. 제약이 $k-1$개이므로 자유도가 $k-1$이다.
 
-    **스튜어트-맥스웰 검정.** 주변도수 차이 벡터 $\mathbf d=(d_1,\dots,d_{k-1})^\top$, $d_i=n_{i\cdot}-n_{\cdot i}$에 대해
+    **스튜어트–맥스웰 검정.** 주변도수 차이 벡터 $\mathbf d=(d_1,\dots,d_{k-1})^\top$, $d_i=n_{i\cdot}-n_{\cdot i}$에 대해
 
     $$
     \chi^2=\mathbf d^\top V^{-1}\mathbf d\ \sim\ \chi^2_{k-1},

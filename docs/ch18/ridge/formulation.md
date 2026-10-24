@@ -192,7 +192,7 @@ $$
 
     이고 따라서 $\hat{\boldsymbol{\beta}}_{\text{ridge}} \to \hat{\boldsymbol{\beta}}_{\text{OLS}}$이다.
 
-    $\mathbf{X}^\top\mathbf{X}$가 특이행렬이면 극한은 OLS가 아니라 **최소노름 최소제곱해**(무어-펜로즈 유사역행렬 해)로 간다. SVD로 보면 $d_j = 0$인 성분의 축소인자가 $0/(0+\lambda) = 0$으로 $\lambda$와 무관하게 0이기 때문이다.
+    $\mathbf{X}^\top\mathbf{X}$가 특이행렬이면 극한은 OLS가 아니라 **최소노름 최소제곱해**(무어–펜로즈 유사역행렬 해)로 간다. SVD로 보면 $d_j = 0$인 성분의 축소인자가 $0/(0+\lambda) = 0$으로 $\lambda$와 무관하게 0이기 때문이다.
 
     **(b)** SVD 표현에서 각 항의 계수가 $\dfrac{d_j^2}{d_j^2+\lambda}\cdot\dfrac{1}{d_j} = \dfrac{d_j}{d_j^2+\lambda}$이고, $\lambda \to \infty$에서 이 값이 $0$으로 간다. 더 직접적으로는
 

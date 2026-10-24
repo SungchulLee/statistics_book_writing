@@ -687,7 +687,7 @@ $S^{-1}$ 이 식에 그대로 들어가는 계산도 있고, 특징이 수십 �
     | **쌍선형** | $\operatorname{Cov}(aX+bY,Z)=a\operatorname{Cov}(X,Z)+b\operatorname{Cov}(Y,Z)$ |
     | 상수 | $\operatorname{Cov}(X,c)=0$ |
     | **독립** $\Rightarrow$ 공분산 0 | 역은 **성립하지 않는다** |
-    | 코시-슈바르츠 | $\lvert\operatorname{Cov}(X,Y)\rvert\leq\sigma_X\sigma_Y$ |
+    | 코시–슈바르츠 | $\lvert\operatorname{Cov}(X,Y)\rvert\leq\sigma_X\sigma_Y$ |
 
     **합의 분산.**
 
@@ -1200,7 +1200,7 @@ $$
     |---|---|
     | **마할라노비스 거리** | $\sqrt{(x-\mu)^TS^{-1}(x-\mu)}$ |
     | 선형판별분석(LDA) | 공통 공분산의 역행렬 |
-    | **평균-분산 포트폴리오** | 최적 비중 $\propto S^{-1}\mu$ |
+    | **평균–분산 포트폴리오** | 최적 비중 $\propto S^{-1}\mu$ |
     | 가우스 그래프 모형 | **정밀도 행렬** $S^{-1}$ 자체가 대상 |
 
     **유전체·금융·이미지 자료에서 $p\gg n$이 흔하다.** 유전자 2만 개, 표본 100명이면 계수가 99다.
@@ -1209,12 +1209,12 @@ $$
 
     | 방법 | 내용 |
     |---|---|
-    | **축소 추정**(레도이트-울프) | $\hat S=(1-\lambda)S+\lambda\cdot\text{목표}$ |
+    | **축소 추정**(레도이트–울프) | $\hat S=(1-\lambda)S+\lambda\cdot\text{목표}$ |
     | 정칙화 | $S+\epsilon I$ |
     | **희소 추정**(그래프 라소) | $S^{-1}$에 $L_1$ 벌점 |
     | 차원 축소 | 주성분 몇 개만 |
 
-    **레도이트-울프 축소가 표준 도구**다. $\lambda$를 자료에서 최적으로 정한다.
+    **레도이트–울프 축소가 표준 도구**다. $\lambda$를 자료에서 최적으로 정한다.
 
     ```text
     from sklearn.covariance import LedoitWolf

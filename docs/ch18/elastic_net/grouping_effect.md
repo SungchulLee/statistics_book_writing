@@ -45,7 +45,7 @@ $$
 \frac{1}{n}(\mathbf{x}_i - \mathbf{x}_j)^\top(\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}) = \lambda(1-\alpha)(\hat{\beta}_i - \hat{\beta}_j)
 $$
 
-가 되고, 코시-슈바르츠 부등식을 적용하면
+가 되고, 코시–슈바르츠 부등식을 적용하면
 
 $$
 \lambda(1-\alpha)|\hat{\beta}_i - \hat{\beta}_j| \leq \frac{1}{n}\|\mathbf{x}_i - \mathbf{x}_j\|\cdot\|\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}\|
@@ -313,7 +313,7 @@ $F_1$ 은 전적으로 정밀도가 좌우하고, 가장 큰 곳이 $\alpha = 1$
 </div>
 
 ??? success "풀이"
-    **(a)** 3 절의 코시-슈바르츠 줄에는 $1/n$ 이 있다.
+    **(a)** 3 절의 코시–슈바르츠 줄에는 $1/n$ 이 있다.
 
     $$
     \lambda(1-\alpha)\lvert\hat\beta_i - \hat\beta_j\rvert \leq \frac{1}{n}\lVert\mathbf{x}_i - \mathbf{x}_j\rVert \cdot \lVert\mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}\rVert
@@ -368,7 +368,7 @@ $F_1$ 은 전적으로 정밀도가 좌우하고, 가장 큰 곳이 $\alpha = 1$
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff hard" title="어려움"></span>
-3 절에서 코시-슈바르츠를 쓰기 **직전** 줄은 부등식이 아니라 등식이다. 연습문제 4 의 관례(표준편차 1 로 표준화된 열)에서 그것은
+3 절에서 코시–슈바르츠를 쓰기 **직전** 줄은 부등식이 아니라 등식이다. 연습문제 4 의 관례(표준편차 1 로 표준화된 열)에서 그것은
 
 $$
 \hat\beta_i - \hat\beta_j = \frac{(\mathbf{x}_i - \mathbf{x}_j)^\top\hat{\mathbf{r}}}{n\lambda(1-\alpha)}, \qquad \hat{\mathbf{r}} = \mathbf{y} - \mathbf{X}\hat{\boldsymbol{\beta}}
@@ -378,7 +378,7 @@ $$
 
 **(a)** 적합한 계수로 이 등식을 수치로 확인하라.
 
-**(b)** 등식에서 한계까지 느슨해지는 두 단계(코시-슈바르츠, $\lVert\hat{\mathbf{r}}\rVert \le \lVert\mathbf{y}\rVert$)가 각각 몇 배인지 분해하라.
+**(b)** 등식에서 한계까지 느슨해지는 두 단계(코시–슈바르츠, $\lVert\hat{\mathbf{r}}\rVert \le \lVert\mathbf{y}\rVert$)가 각각 몇 배인지 분해하라.
 
 **(c)** $\lambda$ 를 $0.1,\ 0.3,\ 1.0$ 으로 바꾸어도 느슨함의 배수가 크게 변하지 않음을 확인하고, 그래도 한계가 쓸모 있는 까닭을 말하라.
 
@@ -425,12 +425,12 @@ $$
     | 단계 | 값 | 느슨해진 배수 |
     |:---|---:|---:|
     | 등식 $\lvert(\mathbf{x}_i-\mathbf{x}_j)^\top\hat{\mathbf{r}}\rvert/[n\lambda(1-\alpha)]$ | 0.3494 | — |
-    | 코시-슈바르츠로 $\lVert\mathbf{x}_i-\mathbf{x}_j\rVert\lVert\hat{\mathbf{r}}\rVert$ | 2.7849 | 7.97 |
+    | 코시–슈바르츠로 $\lVert\mathbf{x}_i-\mathbf{x}_j\rVert\lVert\hat{\mathbf{r}}\rVert$ | 2.7849 | 7.97 |
     | $\lVert\hat{\mathbf{r}}\rVert \to \lVert\mathbf{y}\rVert$ | 15.2254 | 5.47 |
 
     이고 곱이 $7.97 \times 5.47 = 43.6$ 배다.
 
-    두 단계가 느슨한 까닭이 서로 다르다. 코시-슈바르츠는 $\hat{\mathbf{r}}$ 과 $\mathbf{x}_i - \mathbf{x}_j$ 가 **평행할 때만** 등식이 되는데, 잔차는 적합이 설명하지 못한 잡음이라 어느 설명변수 방향과도 거의 직교한다. 실제 내적은 노름 곱의 $1/8$ 쯤이다. 둘째 단계는 적합이 자료를 얼마나 설명했는지를 통째로 버린다. 여기서 $\lVert\hat{\mathbf{r}}\rVert = 11.78$ 인데 $\lVert\mathbf{y}\rVert = 64.40$ 을 쓰니 $5.47$ 배를 잃는다. **모형이 잘 맞을수록 이 단계가 더 느슨해진다** — 좋은 적합일수록 한계가 더 공허해지는 역설이다.
+    두 단계가 느슨한 까닭이 서로 다르다. 코시–슈바르츠는 $\hat{\mathbf{r}}$ 과 $\mathbf{x}_i - \mathbf{x}_j$ 가 **평행할 때만** 등식이 되는데, 잔차는 적합이 설명하지 못한 잡음이라 어느 설명변수 방향과도 거의 직교한다. 실제 내적은 노름 곱의 $1/8$ 쯤이다. 둘째 단계는 적합이 자료를 얼마나 설명했는지를 통째로 버린다. 여기서 $\lVert\hat{\mathbf{r}}\rVert = 11.78$ 인데 $\lVert\mathbf{y}\rVert = 64.40$ 을 쓰니 $5.47$ 배를 잃는다. **모형이 잘 맞을수록 이 단계가 더 느슨해진다** — 좋은 적합일수록 한계가 더 공허해지는 역설이다.
 
     **(c)** `slack` 열이 $56.6,\ 43.6,\ 64.4$ 로, $\lambda$ 가 열 배 변하는 동안 느슨함은 $40$–$65$ 배 사이에 머문다. `bound` 열이 $45.68 \to 15.23 \to 4.57$ 로 정확히 $1/\lambda$ 를 따르고 실제 차도 $0.8075 \to 0.3494 \to 0.0709$ 로 거의 같은 속도로 줄기 때문이다($\lambda$ 가 커지면 계수 자체가 더 깎여 실제 차가 $1/\lambda$ 보다 조금 빨리 줄고, 그래서 $\lambda = 1$ 에서 느슨함이 다시 커진다).
 
@@ -456,7 +456,7 @@ $$
     \lambda(1-\alpha)(\hat\beta_i - \hat\beta_j) = \frac{1}{n}(\mathbf{x}_i-\mathbf{x}_j)^\top\hat{\mathbf{r}} - 2\lambda\alpha
     $$
 
-    가 되어 상수 $-2\lambda\alpha$ 가 남는다. 절댓값을 취하고 삼각부등식과 코시-슈바르츠를 쓰면
+    가 되어 상수 $-2\lambda\alpha$ 가 남는다. 절댓값을 취하고 삼각부등식과 코시–슈바르츠를 쓰면
 
     $$
     \lvert\hat\beta_i - \hat\beta_j\rvert \leq \frac{\sqrt{2(1-\rho_{ij})}}{\lambda(1-\alpha)}\cdot\frac{\lVert\mathbf{y}\rVert}{\sqrt{n}} + \frac{2\alpha}{1-\alpha}

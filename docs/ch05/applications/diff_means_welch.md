@@ -955,7 +955,7 @@ Welch–Satterthwaite 자유도가 $\min(n_1-1,\,n_2-1) \le \nu \le n_1+n_2-2$�
 
     이다.
 
-    **위쪽 한계.** 코시-슈바르츠 부등식을 쓴다.
+    **위쪽 한계.** 코시–슈바르츠 부등식을 쓴다.
 
     $$
     (a+b)^2 = \left(\frac{a}{\sqrt{d_1}}\sqrt{d_1} + \frac{b}{\sqrt{d_2}}\sqrt{d_2}\right)^2

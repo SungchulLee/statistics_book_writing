@@ -70,7 +70,7 @@ nav:
                 - 자료의 종류: ch02/data_types/data_types.md
             - 2.2 탐색적 자료분석:
                 - 히스토그램과 밀도 그림: ch02/exploration/histograms.md
-                - 경험적 분포와 분위수-분위수 그림: ch02/exploration/ecdf.md
+                - 경험적 분포와 분위수–분위수 그림: ch02/exploration/ecdf.md
                 - 사례 연구 - 타이타닉 생존과 성별: ch02/exploration/titanic_survival_gender.md
                 - 사례 연구 - 절단점 하나가 결론을 바꾼다: ch02/exploration/titanic_age_cutoff.md
             - 2.3 분포의 모양:
@@ -595,7 +595,7 @@ nav:
         - 18 정칙화 기법:
             - 장 개요: ch18/index.md
             - 18.1 정칙화의 동기:
-                - 과적합과 편향-분산 절충: ch18/motivation/overfitting.md
+                - 과적합과 편향–분산 절충: ch18/motivation/overfitting.md
                 - 조건이 나쁜 계획행렬: ch18/motivation/ill_conditioning.md
                 - 다중공선성과 정칙화: ch18/motivation/multicollinearity.md
             - 18.2 능형회귀:
@@ -641,7 +641,7 @@ nav:
                 - 로지스틱 회귀 실습 (코드): ch19/logistic_regression/logistic_regression.md
             - 19.2 추정과 추론:
                 - 최대가능도 추정: ch19/estimation_inference/mle.md
-                - 뉴턴-랩슨과 반복재가중최소제곱: ch19/estimation_inference/algorithms.md
+                - 뉴턴–랩슨과 반복재가중최소제곱: ch19/estimation_inference/algorithms.md
                 - 왈드 검정과 가능도비 검정: ch19/estimation_inference/tests.md
                 - 이탈도와 적합도: ch19/estimation_inference/deviance.md
             - 19.3 모형 평가:
@@ -688,8 +688,8 @@ nav:
                 - 생존함수와 위험함수: ch21/introduction/survival_hazard_functions.md
                 - 금융에서의 응용 (부도, 이탈, 지속시간): ch21/introduction/financial_applications.md
             - 21.2 비모수적 방법:
-                - 카플란-마이어 추정량: ch21/nonparametric/kaplan_meier.md
-                - 넬슨-알렌 누적위험: ch21/nonparametric/nelson_aalen.md
+                - 카플란–마이어 추정량: ch21/nonparametric/kaplan_meier.md
+                - 넬슨–알렌 누적위험: ch21/nonparametric/nelson_aalen.md
                 - 로그순위 검정: ch21/nonparametric/log_rank_test.md
                 - 생존곡선의 신뢰구간: ch21/nonparametric/survival_ci.md
             - 21.3 모수적 생존 모형:

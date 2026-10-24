@@ -69,7 +69,7 @@ m = 1..M 에 대해:
    f. X̃ = X̃ - t_m p_m'             (X 잔차 수축)
 ```
 
-각 반복이 행렬-벡터 곱만 쓰므로 성분당 $O(np)$로 효율적이다.
+각 반복이 행렬–벡터 곱만 쓰므로 성분당 $O(np)$로 효율적이다.
 
 <div class="storybox" markdown>
 
@@ -170,7 +170,7 @@ PLS의 첫 가중벡터가 $X^\top y$에 비례한다는 사실을 확인하고,
 </div>
 
 ??? success "풀이"
-    제약 $\|w\| = 1$ 아래에서 $\text{Cov}(Xw, y) \propto w^\top X^\top y$를 최대화하는 문제다. 코시-슈바르츠 부등식에 의해 최대는 $w$가 $X^\top y$와 같은 방향일 때 달성되므로
+    제약 $\|w\| = 1$ 아래에서 $\text{Cov}(Xw, y) \propto w^\top X^\top y$를 최대화하는 문제다. 코시–슈바르츠 부등식에 의해 최대는 $w$가 $X^\top y$와 같은 방향일 때 달성되므로
 
     $$
     w_1 = \frac{X^\top y}{\|X^\top y\|}

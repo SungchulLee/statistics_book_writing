@@ -424,7 +424,7 @@ $\nabla_{\mathbf{W}}\mathcal{L} = \mathbf{X}^\top(\hat{\mathbf{Y}} - \mathbf{Y})
     = -\sum_c Y_{ic}(\delta_{ck}-\hat Y_{ik})
     $$
 
-    이고, $\sum_c Y_{ic} = 1$(원-핫)이므로
+    이고, $\sum_c Y_{ic} = 1$(원–핫)이므로
 
     $$
     = -Y_{ik} + \hat Y_{ik}\sum_c Y_{ic} = \hat Y_{ik} - Y_{ik}

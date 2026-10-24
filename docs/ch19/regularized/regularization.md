@@ -500,7 +500,7 @@ scikit-learn의 `LogisticRegression`은 벌점 강도를 $C = 1/\lambda$로 모�
 
 ## 7. 최적화
 
-L2 벌점 로그가능도는 여전히 강오목이므로 헤세행렬에 $\lambda\mathbf{I}$를 더해 뉴턴-랩슨이나
+L2 벌점 로그가능도는 여전히 강오목이므로 헤세행렬에 $\lambda\mathbf{I}$를 더해 뉴턴–랩슨이나
 IRLS로 최대화할 수 있다. L1 벌점 목적함수는 $\theta_j = 0$에서 미분 불가능하므로 전용
 알고리즘이 필요하다.
 

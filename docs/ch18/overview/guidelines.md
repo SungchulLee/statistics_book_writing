@@ -241,7 +241,7 @@ California Housing 자료를 사용하라.
     ```
 
     !!! warning "이 자료에서는 정칙화의 이득이 거의 없다"
-        California Housing은 $n \approx 20{,}600$, $p = 8$로 $p/n \approx 0.0004$이다. [과적합과 편향-분산 절충](../motivation/overfitting.md) 연습문제 2의 표에 따르면 이 영역에서 OLS의 과적합은 무시할 수준이다.
+        California Housing은 $n \approx 20{,}600$, $p = 8$로 $p/n \approx 0.0004$이다. [과적합과 편향–분산 절충](../motivation/overfitting.md) 연습문제 2의 표에 따르면 이 영역에서 OLS의 과적합은 무시할 수준이다.
 
         따라서 네 방법의 검정 MSE가 소수 셋째 자리까지 거의 같게 나올 것이다. **이는 정칙화의 실패가 아니라 정칙화가 필요 없는 문제라는 뜻이다.**
 

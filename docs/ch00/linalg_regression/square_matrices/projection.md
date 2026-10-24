@@ -360,7 +360,7 @@ $\operatorname{col}(\mathbf{I} - \mathbf{P}) = \ker(\mathbf{P})$이고 $\ker(\ma
 
     두 포함이 함께 등호를 준다. $\mathbf{I} - \mathbf{P}$ 역시 사영이므로 $\mathbf{P}$와 $\mathbf{I} - \mathbf{P}$의 역할을 바꾸면 두 번째 등식도 같은 논법으로 나온다.
 
-    계수-퇴화차수 정리에서
+    계수–퇴화차수 정리에서
 
     $$
     \operatorname{rank}(\mathbf{I} - \mathbf{P}) = \dim\ker(\mathbf{P}) = n - \operatorname{rank}(\mathbf{P})
