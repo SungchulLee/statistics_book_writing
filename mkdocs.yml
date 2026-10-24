@@ -288,7 +288,7 @@ nav:
                 - 이표본 t-검정 (합동과 Welch): ch09/two_sample_tests/t_test_two_means.md
                 - p₁−p₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_proportions.md
                 - σ₁²/σ₂²에 대한 F-검정: ch09/two_sample_tests/f_test_two_variances.md
-                - 이표본 t-검정 (대마 가격): ch09/two_sample_tests/ttest_weed_prices.md
+                - "대마초 가격: 가정 확인부터 결론까지": ch09/two_sample_tests/ttest_weed_prices.md
             - 9.4 대응표본 검정:
                 - μ_D에 대한 대응 t-검정: ch09/paired_sample_tests/paired_t_test.md
                 - 대응표본과 이표본, 언제 무엇을 쓰는가: ch09/paired_sample_tests/paired_vs_two_sample.md
