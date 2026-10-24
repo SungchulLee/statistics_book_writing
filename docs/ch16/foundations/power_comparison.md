@@ -71,6 +71,15 @@ $$
 
 **오염 정규분포.** 혼합 $(1 - \varepsilon) \, \mathcal{N}(0,1) + \varepsilon \, \mathcal{N}(0, \sigma^2)$은 오염이 완만해도($\varepsilon = 0.05$, $\sigma = 3$) 순위검정의 ARE를 1보다 훨씬 위로 밀어 올릴 수 있다.
 
+**이 두 문단은 주장이고, 수로 재는 것은 다음 절이다.** 16.1절
+[비모수 검정 모음](nonparametric_suite.md) 보기 1 이 두꺼운 꼬리에서 뽑은 대응자료 $15$ 쌍에
+세 검정을 나란히 돌려 $p$ 값이 부호검정 $0.0209$, 부호순위검정 $0.0086$, 순위합검정
+$0.1409$ 로 갈리는 것을 보인다. 그 쪽이 함께 다는 단서도 읽어 둘 것 — **ARE 는
+한 자료에서 어느 검정의 $p$ 값이 작을지 보장하지 않는다.** ARE 가 말하는 것은 되풀이했을
+때의 검정력이고, 한 번의 자료에서는 어느 검정이든 이길 수 있다. 거기서 순위합검정이 꼴찌인
+것도 효율 때문이 아니라 **짝 구조를 버렸기** 때문이다. 오염정규의 ARE 를 식으로 직접
+계산하는 것은 아래 연습문제가 맡는다.
+
 **하한.** 임의의 연속분포에 대해 다음이 성립한다는 근본적인 결과가 있다.
 
 $$
@@ -427,7 +436,7 @@ $$
 \text{ARE}(\text{Wilcoxon 부호순위}, \; t) = 12\, \sigma_F^2 \left( \int_{-\infty}^{\infty} f(x)^2 \, dx \right)^2
 $$
 
-이다([비모수 검정 모아보기](./nonparametric_suite.md) 보기 1). $\varphi_s$를 $\mathcal N(0, s^2)$의 밀도라 하면 혼합밀도는 $f = (1-\varepsilon)\varphi_1 + \varepsilon \varphi_\sigma$ 이다.
+이다([비모수 검정 모음](./nonparametric_suite.md) 보기 1). $\varphi_s$를 $\mathcal N(0, s^2)$의 밀도라 하면 혼합밀도는 $f = (1-\varepsilon)\varphi_1 + \varepsilon \varphi_\sigma$ 이다.
 
 **(a)** $\int \varphi_{s_1}(x)\varphi_{s_2}(x)\,dx = \dfrac{1}{\sqrt{2\pi(s_1^2 + s_2^2)}}$ 임을 보여라.
 
