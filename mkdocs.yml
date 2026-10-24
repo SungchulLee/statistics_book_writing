@@ -278,6 +278,7 @@ nav:
                 - 귀무가설과 대립가설: ch09/foundations/hypotheses.md
                 - 검정통계량과 p-값: ch09/foundations/pvalues.md
                 - 유의수준과 판정 규칙: ch09/foundations/significance_level.md
+                - 신뢰구간과 검정의 쌍대성: ch09/foundations/duality.md
             - 9.2 일표본 검정:
                 - μ에 대한 Z-검정 (σ를 아는 경우): ch09/one_sample_tests/z_test_mean.md
                 - μ에 대한 t-검정 (σ를 모르는 경우): ch09/one_sample_tests/t_test_mean.md
@@ -295,7 +296,6 @@ nav:
             - 9.5 오류와 검정력:
                 - 제1종 오류와 제2종 오류: ch09/errors_and_power/errors.md
                 - 검정력 분석: ch09/errors_and_power/power.md
-                - 신뢰구간과 검정의 쌍대성: ch09/errors_and_power/duality.md
             - 9.6 다중검정:
                 - p-해킹 시연: ch09/multiple_testing/p_hacking_demo.md
                 - p-해킹 시연 - 타이타닉 절단점 탐색: ch09/multiple_testing/p_hacking_titanic_cutoff.md

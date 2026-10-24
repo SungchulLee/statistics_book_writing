@@ -9,7 +9,7 @@ $1986$ 년 가드너와 올트먼이 『BMJ』에 「$P$ 값이 아니라 신뢰
 ② 구간으로 그리면 갈리지 않는다 — 작은 연구의 구간이 무엇을 품고 있는가.
 ③ $p$ 값 함수 — 수평으로 자르면 구간이 나온다.
 
-만드는 파일: docs/ch09/errors_and_power/img/ci_not_p.png
+만드는 파일: docs/ch09/foundations/img/ci_not_p.png
 실행:  python3 scripts/make_ch09_ci_not_p.py   (저장소 최상위에서)
 """
 
@@ -24,7 +24,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 from scipy import stats
 
-OUT = "docs/ch09/errors_and_power/img/ci_not_p.png"
+OUT = "docs/ch09/foundations/img/ci_not_p.png"
 RNG = np.random.default_rng(10)
 
 DELTA, SIGMA = 5.0, 10.0        # 참 효과와 표준편차 (같은 단위)

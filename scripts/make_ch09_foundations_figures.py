@@ -9,7 +9,7 @@ r"""9장 가설검정의 기초 여섯 쪽의 그림을 생성한다.
   ch09/foundations/img/pvalue_tail_and_uniform.png 꼬리넓이와 p-값의 분포
   ch09/foundations/img/alpha_longrun.png           alpha 는 장기 비율이다
   ch09/errors_and_power/img/alpha_beta_tradeoff.png  문턱을 옮기면
-  ch09/errors_and_power/img/ci_test_duality.png      구간과 검정의 쌍대성
+  ch09/foundations/img/ci_test_duality.png           구간과 검정의 쌍대성
 
 실행:  python3 scripts/make_ch09_foundations_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -417,7 +417,7 @@ def ci_test_duality():
 
     fig.suptitle("같은 계산을 두 방향에서 읽은 것이다", fontsize=13.5, y=1.02)
     fig.tight_layout()
-    save(fig, ERR + "ci_test_duality.png")
+    save(fig, FOUND + "ci_test_duality.png")
 
 
 if __name__ == "__main__":
