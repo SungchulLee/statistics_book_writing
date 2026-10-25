@@ -777,7 +777,7 @@ $n = 8$의 세로 점선 위를 보라. 가장 극단적으로 치우친 지수�
         print(f"  n = {m}: BF 검정력 = {np.mean(levene_p(x1, x2, np.median) < alpha):.4f}")
 
     # (3) 지수자료에서는 두 검정의 크기가 다르므로 검정력을 그냥 견줄 수 없다.
-    # 영분포를 모의실험으로 구해 임계값을 크기 0.05 에 맞춘 뒤 다시 센다.
+    # 귀무분포를 모의실험으로 구해 임계값을 크기 0.05 에 맞춘 뒤 다시 센다.
     x1, x2 = rng.exponential(1, (B, n)), rng.exponential(1, (B, n))
     qF = np.quantile(fstat(x1, x2), [0.025, 0.975])
     qB = np.quantile(levene_p(x1, x2, np.median), alpha)
