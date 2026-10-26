@@ -179,17 +179,62 @@ $r$의 값은 선형 연관의 강도와 방향을 기술한다.
 
 ---
 
-## 5. 결정계수
+## 5. 상관의 제곱이 설명된 분산의 비율이다
 
-Pearson 상관의 제곱 $r^2$을 **결정계수**라 한다. $Y$의 분산 중 $X$로 선형적으로 설명되는 비율을 나타낸다.
+Pearson 상관의 제곱 $r^2$ 을 **결정계수**라 한다. 그런데 「상관의 제곱」과 「$Y$ 의 분산 중 $X$ 로 설명되는 비율」은 생김새가 전혀 다른 두 양이다. **둘이 같다는 것이 이 절의 내용**이고, 유도해 보면 $\S 2$ 의 정의에서 세 줄이면 나온다.
+
+적는 것을 줄이기 위해 제곱합을 이렇게 줄여 쓴다.
 
 $$
-r^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n (y_i - \bar{y})^2}
+S_{xx} = \sum_i (x_i - \bar x)^2, \qquad
+S_{yy} = \sum_i (y_i - \bar y)^2, \qquad
+S_{xy} = \sum_i (x_i - \bar x)(y_i - \bar y)
 $$
 
-여기서 $\hat{y}_i$는 $X$에 대한 $Y$의 단순선형회귀에서 나온 적합값이다.
+그러면 $\S 2$ 의 정의가 $r = S_{xy}/\sqrt{S_{xx}S_{yy}}$ 다. 최소제곱으로 그은 직선은 $(\bar x, \bar y)$ 를 지나므로 적합값이
 
-예를 들어 $r = 0.80$이면 $r^2 = 0.64$이므로 $Y$ 변동의 64%가 $X$와의 선형관계로 설명된다.
+$$
+\hat y_i = \bar y + b\,(x_i - \bar x), \qquad b = \frac{S_{xy}}{S_{xx}}
+$$
+
+로 적힌다(11.1절 [단순선형회귀](../../ch11/linear_regression/simple.md)가 이 $b$ 를 유도한다).
+
+**첫째 — 설명된 제곱합이 곧 $r^2 S_{yy}$ 다.** 적합값이 평균에서 얼마나 벌어지는지를 재면
+
+$$
+\mathrm{ESS} \;=\; \sum_i (\hat y_i - \bar y)^2 \;=\; b^2 \sum_i (x_i - \bar x)^2 \;=\; \frac{S_{xy}^2}{S_{xx}^2}\,S_{xx} \;=\; \frac{S_{xy}^2}{S_{xx}}
+$$
+
+이고, 이것을 $S_{yy}$ 로 나누면
+
+$$
+\frac{\mathrm{ESS}}{S_{yy}} = \frac{S_{xy}^2}{S_{xx}S_{yy}} = r^2
+$$
+
+이다. **근사가 하나도 들어가지 않았다.**
+
+**둘째 — 제곱합이 둘로 정확히 쪼개진다.** $\mathrm{TSS} = S_{yy}$, $\mathrm{RSS} = \sum_i (y_i - \hat y_i)^2$ 이라 할 때 $\mathrm{TSS} = \mathrm{RSS} + \mathrm{ESS}$ 가 성립한다. $y_i - \bar y = (y_i - \hat y_i) + (\hat y_i - \bar y)$ 로 쪼개 제곱하면 교차항이 남는데, 그것이 사라지기 때문이다.
+
+$$
+\sum_i (y_i - \hat y_i)(\hat y_i - \bar y)
+= b \sum_i \bigl[(y_i - \bar y) - b\,(x_i - \bar x)\bigr](x_i - \bar x)
+= b\,(S_{xy} - b\,S_{xx}) = 0
+$$
+
+마지막 등식은 $b = S_{xy}/S_{xx}$ 를 넣은 것이다. **교차항이 사라지는 것은 최소제곱선에서만 일어나는 일**이고, 다른 직선을 그었다면 $\mathrm{TSS}$ 가 둘로 쪼개지지 않는다.
+
+**셋째 — 둘을 합치면 식이 나온다.** $\mathrm{ESS} = r^2\,\mathrm{TSS}$ 이고 $\mathrm{RSS} = \mathrm{TSS} - \mathrm{ESS}$ 이므로
+
+$$
+r^2 = \frac{\mathrm{ESS}}{\mathrm{TSS}} = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}} = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n (y_i - \bar{y})^2}
+$$
+
+예를 들어 $r = 0.80$ 이면 $r^2 = 0.64$ 이므로 $Y$ 변동의 $64\%$ 가 $X$ 와의 선형관계로 설명된다.
+
+!!! warning "절편 없는 직선에는 이 등식이 서지 않는다"
+    위 유도는 두 곳에서 **절편이 있다는 것**을 썼다. 적합선이 $(\bar x, \bar y)$ 를 지난다는 것과, 교차항이 사라질 때 $\sum_i (x_i - \bar x)$ 꼴만 남는다는 것이다. 원점을 지나도록 강제한 회귀에서는 $\mathrm{TSS} = \mathrm{RSS} + \mathrm{ESS}$ 가 깨지고, 그러면 $1 - \mathrm{RSS}/\mathrm{TSS}$ 가 **음수가 될 수도 있다.** 「설명된 비율」이라는 읽기는 그때 뜻을 잃는다.
+
+    설명변수가 둘 이상이면 $r^2$ 자체를 쓸 수 없고 $R^2$ 로 넘어간다. 11.7절 [결정계수와 수정 결정계수](../../ch11/performance/r_squared.md)가 그 자리이며, 거기서는 $R^2$ 가 $y$ 와 적합값 $\hat y$ 사이의 상관의 제곱이 된다.
 
 ---
 
