@@ -175,7 +175,7 @@ $$
 z_{\text{crit}} = \mu_0 + z_{1-\alpha}.
 $$
 
-그러면:
+그러면 이렇게 된다.
 
 $$
 \alpha = P(Z \geq z_{\text{crit}} \mid H_0) = 1 - \mathcal{N}(z_{1-\alpha}) = \alpha,

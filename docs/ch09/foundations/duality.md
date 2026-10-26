@@ -2,7 +2,7 @@
 
 ## 1. 쌍대성 원리
 
-신뢰구간과 가설검정 사이에는 깊은 연관이 있다. $(1 - \alpha) \times 100\%$ 신뢰구간과 유의수준 $\alpha$의 가설검정은 같은 동전의 양면이다:
+신뢰구간과 가설검정 사이에는 깊은 연관이 있다. $(1 - \alpha) \times 100\%$ 신뢰구간과 유의수준 $\alpha$의 가설검정은 같은 동전의 양면이다.
 
 > **수준 $\alpha$의 양측 가설검정이 $H_0: \theta = \theta_0$을 기각할 필요충분조건은 $\theta_0$이 $\theta$의 $(1-\alpha) \times 100\%$ 신뢰구간 밖에 있는 것이다.**
 
@@ -37,7 +37,9 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{fail to reject } H_0: \theta = \theta_0 \te
 
 ---
 
-## 3. 보기
+## 3. 같은 수를 두 눈으로 읽는다
+
+쌍대성은 식으로만 보면 당연해 보인다. 자료에서 보면 달리 느껴진다 — **구간과 검정이 같은 수를 쓰고 같은 결론에 닿는데 말해 주는 것이 다르다.** 아래 보기들이 그 자리를 하나씩 짚는다.
 
 <div class="exbox" markdown>
 
@@ -59,7 +61,7 @@ $$|z| > z_{\alpha/2} \iff \left|\frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\right| >
 
 **보기 2.** <span class="diff easy" title="쉬움"></span> 두 품종의 배. Yuna가 Bosc 배와 Anjou 배의 열량을 비교한다. $\mu_{\text{Bosc}} - \mu_{\text{Anjou}}$의 99% 신뢰구간은 $4 \pm 6.44 = (-2.44, 10.44)$이다.
 
-$\alpha = 0.01$에서 $H_0: \mu_{\text{Bosc}} = \mu_{\text{Anjou}}$(즉 $\mu_{\text{Bosc}} - \mu_{\text{Anjou}} = 0$)를 검정하면:
+$\alpha = 0.01$에서 $H_0: \mu_{\text{Bosc}} = \mu_{\text{Anjou}}$(즉 $\mu_{\text{Bosc}} - \mu_{\text{Anjou}} = 0$)를 검정하면 이렇게 된다.
 
 </div>
 
@@ -70,7 +72,7 @@ $\alpha = 0.01$에서 $H_0: \mu_{\text{Bosc}} = \mu_{\text{Anjou}}$(즉 $\mu_{\t
 
 **보기 3.** <span class="diff easy" title="쉬움"></span> 대면 수업과 온라인 수업. $p_{\text{대면}} - p_{\text{온라인}}$의 95% 신뢰구간이 $(-0.04, 0.14)$이다.
 
-$\alpha = 0.05$에서 $H_0: p_{\text{대면}} = p_{\text{온라인}}$을 검정하면:
+$\alpha = 0.05$에서 $H_0: p_{\text{대면}} = p_{\text{온라인}}$ 을 검정하면 이렇게 된다.
 
 </div>
 
@@ -81,7 +83,7 @@ $\alpha = 0.05$에서 $H_0: p_{\text{대면}} = p_{\text{온라인}}$을 검정�
 
 ## 4. 단측검정과 신뢰구간
 
-쌍대성은 단측 신뢰구간(신뢰한계)을 쓰면 단측검정으로도 확장된다:
+쌍대성은 단측 신뢰구간(신뢰한계)을 쓰면 단측검정으로도 확장된다.
 
 - **상한 신뢰한계**: 신뢰수준 $1 - \alpha$에서 $\theta < U$는 검정 $H_0: \theta \geq \theta_0$ 대 $H_a: \theta < \theta_0$에 대응한다.
 - **하한 신뢰한계**: 신뢰수준 $1 - \alpha$에서 $\theta > L$은 검정 $H_0: \theta \leq \theta_0$ 대 $H_a: \theta > \theta_0$에 대응한다.
