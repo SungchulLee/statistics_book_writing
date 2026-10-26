@@ -16,7 +16,7 @@
 
 ---
 
-## 1. 설정
+## 1. 등분산 정규모집단 둘
 
 두 모집단에서 서로 독립인 확률표본을 뽑는다.
 
@@ -200,7 +200,7 @@ _확인한 곳 — 코언의 「The statistical power of abnormal-social psychol
 
 ---
 
-## 3. 모의실험
+## 3. 근사가 들어갈 자리가 있는지 센다
 
 <div class="exbox" markdown>
 
@@ -543,7 +543,7 @@ _확인한 곳 — 코언의 「The statistical power of abnormal-social psychol
 
 ---
 
-## 4. 해석
+## 4. 세 결과가 모두 정확하다
 
 !!! note "주요 관찰"
 
