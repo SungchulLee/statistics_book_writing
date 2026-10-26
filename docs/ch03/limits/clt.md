@@ -1427,7 +1427,51 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 13.** <span class="diff hard" title="어려움"></span>
+**연습문제 13.** <span class="diff med" title="중간"></span>
+어떤 부품의 수명은 평균 $\mu = 800$ 시간, 표준편차 $\sigma = 120$ 시간이다. **분포의 모양은 알려져 있지 않다.** 이 부품에서 $n = 36$ 개를 임의로 뽑는다.
+
+**(a)** $E[\bar X]$ 와 $\operatorname{SE}(\bar X)$ 를 구하라.
+**(b)** $P(\bar X > 830)$ 을 근사적으로 구하라.
+**(c)** $\operatorname{SE}(\bar X)$ 를 $10$ 시간 이하로 만들려면 표본크기가 적어도 얼마여야 하는가?
+**(d)** 모집단의 모양을 **모르는데도** (b) 의 계산을 할 수 있었던 근거가 무엇인지 밝히고, 그 근거가 성립하지 않을 수 있는 경우를 하나 들라.
+
+</div>
+
+??? success "풀이"
+    **(a)** $E[\bar X] = \mu = 800$ 이고
+    $\operatorname{SE}(\bar X) = \sigma/\sqrt n = 120/\sqrt{36} = 20$ 이다.
+
+    **(b)** $z = (830 - 800)/20 = 1.5$ 이므로
+
+    $$
+    P(\bar X > 830) \approx 1 - \Phi(1.5) = 1 - 0.9332 = 0.0668
+    $$
+
+    **(c)** $120/\sqrt n \le 10 \iff \sqrt n \ge 12 \iff n \ge 144$ 이므로 최소
+    $n = 144$ 다. $36$ 에서 $144$ 로 **네 배**로 늘려야 표준오차가 $20$ 에서 $10$ 으로
+    절반이 된다. $\sqrt n$ 이 분모에 있기 때문이다.
+
+    **(d) 근거는 중심극한정리다.** 분산이 유한한 i.i.d. 표본이면 **모집단의 모양과
+    무관하게** $n$ 이 충분히 클 때 $\bar X$ 가 근사적으로 $N(\mu, \sigma^2/n)$ 을 따른다.
+    (b) 에서 쓴 것은 $\mu$ 와 $\sigma$ 두 수뿐이고 모양은 쓰지 않았다.
+
+    성립하지 않을 수 있는 경우는 셋이고 하나만 들면 된다.
+
+    - **분산이 무한한 모집단.** 코시분포처럼 꼬리가 아주 무거우면 **전제 자체가 깨져**
+      $n$ 을 키워도 정규로 가지 않는다. 5.14절
+      [코시분포에서 큰수의 법칙의 실패](../../ch05/non_normal/cauchy_lln_failure.md)가
+      그 자리를 본다
+    - **$n = 36$ 이 모자랄 만큼 심하게 치우친 모집단.** 수렴이 느려 근사가 거칠다.
+      왜도가 $\gamma_1$ 이면 $\bar X$ 의 왜도가 $\gamma_1/\sqrt n$ 으로 줄어드는데,
+      $\gamma_1$ 이 크면 $36$ 으로는 아직 남는다
+    - **관측값이 독립이 아닌 경우.** 표본이 군집으로 모였거나 시계열처럼 상관이 있으면
+      $\operatorname{SE} = \sigma/\sqrt n$ **공식부터 틀린다**
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff hard" title="어려움"></span>
 평균 0, 분산 1이고 0의 근방에서 적률생성함수 $M(t)$가 유한한 i.i.d. $X_i$에 대해 **적률생성함수 방법으로 중심극한정리를 증명하라**. $\sqrt n \bar X_n$의 적률생성함수가 $e^{t^2/2}$로 수렴함을 보여라.
 
 </div>
@@ -1451,7 +1495,7 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 14.** <span class="diff hard" title="어려움"></span>
+**연습문제 15.** <span class="diff hard" title="어려움"></span>
 **린데베르그 중심극한정리**는 동일분포가 아니어도 독립이기만 하면 되는 확률변수를 허용한다. **린데베르그 조건**을 진술하고 언제 성립하는지 설명하라.
 
 </div>
@@ -1475,7 +1519,7 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 15.** <span class="diff hard" title="어려움"></span>
+**연습문제 16.** <span class="diff hard" title="어려움"></span>
 **다변량 중심극한정리.** $\mathbf X_i \in \mathbb{R}^d$가 평균 $\boldsymbol\mu$, 공분산 $\boldsymbol\Sigma$인 i.i.d.라 하자. 다변량 중심극한정리를 진술하고, 그것이 다변량 정규분포에 근거한 신뢰타원체를 왜 정당화하는지 설명하라.
 
 </div>
@@ -1497,7 +1541,7 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 16.** <span class="diff hard" title="어려움"></span>
+**연습문제 17.** <span class="diff hard" title="어려움"></span>
 중심극한정리는 **유한한 분산**을 요구한다. (a) 코시분포에 적용되지 않는 이유는 무엇이며, $n$이 커질 때 i.i.d. 코시 확률변수의 표본평균은 어떻게 되는가? (b) 일반적으로 분산이 무한할 때 무슨 일이 벌어지는지 **안정분포**와 **알파–안정 중심극한정리**로 논하라.
 
 </div>
@@ -1529,7 +1573,7 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 17.** <span class="diff hard" title="어려움"></span>
+**연습문제 18.** <span class="diff hard" title="어려움"></span>
 **중심극한정리는 최댓값에 적용되지 않는다.** i.i.d. 표본의 최댓값 $M_n = \max_i X_i$이 가우시안 극한을 갖지 않음을 보여라. 그 극한분포는 무엇인가?
 
 </div>
@@ -1555,7 +1599,7 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 
 <div class="drillbox" markdown>
 
-**연습문제 18.** <span class="diff hard" title="어려움"></span>
+**연습문제 19.** <span class="diff hard" title="어려움"></span>
 중심극한정리는 **표본평균**에만 적용되는가? **표본분위수의 중심극한정리**를 진술하고 확인하라.
 
 </div>
