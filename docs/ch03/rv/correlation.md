@@ -798,7 +798,7 @@ $$
 
     상관행렬은 $\mathbf R = D^{-1}\boldsymbol\Sigma D^{-1}$($D = \operatorname{diag}(\sigma_1,\ldots,\sigma_p)$)이므로 $\mathbf a^\top \mathbf R\, \mathbf a = (D^{-1}\mathbf a)^\top \boldsymbol\Sigma\,(D^{-1}\mathbf a) \ge 0$이고, 따라서 $\mathbf R$도 양반정치다. 대각원소는 $\Sigma_{ii}/\Sigma_{ii} = 1$이다. $\square$
 
-**양반정치라는 조건이 장식이 아니다.** 상관계수를 아무 값이나 골라 행렬에 채워 넣으면 존재할 수 없는 분포가 만들어진다. 고윳값 하나가 음수가 되고, 그 방향의 선형결합이 **음의 분산**을 갖게 되기 때문이다. [앞 쪽 분산과 공분산](variance_covariance.md)의 연습문제 7·9와 아래 연습문제 9이 그 예를 다룬다.
+**양반정치라는 조건이 장식이 아니다.** 상관계수를 아무 값이나 골라 행렬에 채워 넣으면 존재할 수 없는 분포가 만들어진다. 고윳값 하나가 음수가 되고, 그 방향의 선형결합이 **음의 분산**을 갖게 되기 때문이다. [앞 쪽 분산과 공분산](variance_covariance.md)의 연습문제 7·9와 아래 연습문제 9가 그 예를 다룬다.
 
 변수가 넷이면 상관행렬이 $4\times4$가 된다. 색으로 칠해 보면 구조가 한눈에 읽힌다.
 

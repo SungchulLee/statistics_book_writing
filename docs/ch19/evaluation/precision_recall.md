@@ -323,7 +323,7 @@ $F_\beta = (1+\beta^2)\dfrac{P \cdot R}{\beta^2 P + R}$
     $\beta$는 **정밀도 대비 재현율에 주는 가중치**다. $\beta = 1$이면 $F_1$로 돌아가고,
     $\beta > 1$이면 재현율을, $\beta < 1$이면 정밀도를 더 중시한다.
 
-    $TP$, $FP$, $FN$으로 다시 쓰면 연습문제 2과 같은 방식으로
+    $TP$, $FP$, $FN$으로 다시 쓰면 연습문제 2와 같은 방식으로
 
     $$
     F_\beta = \frac{(1+\beta^2)TP}{(1+\beta^2)TP + \beta^2 FN + FP}

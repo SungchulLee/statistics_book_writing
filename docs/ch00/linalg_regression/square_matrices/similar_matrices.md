@@ -351,7 +351,7 @@ $\mathbf{B} = \mathbf{P}^{-1}\mathbf{A}\mathbf{P}$가 되는 가역행렬 $\math
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff easy" title="쉬움"></span>
-$\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top\mathbf{A}\mathbf{Q}$도 대칭임을 보여라. 연습문제 2과 견주어 무엇이 달라졌는지 설명하라.
+$\mathbf{Q}$가 직교행렬이고 $\mathbf{A}$가 대칭이면 $\mathbf{Q}^\top\mathbf{A}\mathbf{Q}$도 대칭임을 보여라. 연습문제 2와 견주어 무엇이 달라졌는지 설명하라.
 
 </div>
 

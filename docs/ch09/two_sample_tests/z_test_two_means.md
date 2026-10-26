@@ -522,7 +522,7 @@ _확인한 곳 — 논문이 Andrew Gelman 과 Hal Stern 의 「The Difference B
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff easy" title="쉬움"></span>
-연습문제 5이 다룬 $z$와 $t$의 관계를 수치로 확인하라. **$n$이 얼마나 커야** $z$ 근사를 써도 되는가?
+연습문제 5가 다룬 $z$와 $t$의 관계를 수치로 확인하라. **$n$이 얼마나 커야** $z$ 근사를 써도 되는가?
 
 </div>
 

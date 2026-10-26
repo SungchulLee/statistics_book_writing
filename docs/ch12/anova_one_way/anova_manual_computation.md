@@ -907,7 +907,7 @@ $\text{MST}$가 $\sigma^2$의 불편추정값이 되는 조건은 무엇인가? 
 <div class="drillbox" markdown>
 
 **연습문제 9.** <span class="diff med" title="중간"></span>
-연습문제 6가 묻는 $E[\text{MST}]$를 **모의실험으로 확인**하고, 연습문제 5가 다룬 불균형 설계의 대가를 재어라.
+연습문제 6이 묻는 $E[\text{MST}]$를 **모의실험으로 확인**하고, 연습문제 5가 다룬 불균형 설계의 대가를 재어라.
 
 </div>
 
@@ -1022,7 +1022,7 @@ $\text{MST}$가 $\sigma^2$의 불편추정값이 되는 조건은 무엇인가? 
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-연습문제 3가 지적한 LSD의 문제를 **모의실험으로 정량화**하라. "보호된" LSD는 정말 안전한가?
+연습문제 3이 지적한 LSD의 문제를 **모의실험으로 정량화**하라. "보호된" LSD는 정말 안전한가?
 
 </div>
 

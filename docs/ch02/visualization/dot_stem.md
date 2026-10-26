@@ -657,7 +657,7 @@ $1972$ 년 글은 『Statistical Papers in Honor of George W. Snedecor』(아이
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-연습문제 3를 정량화하라. $n$이 커질 때 세 도구가 각각 언제 무너지는가?
+연습문제 3을 정량화하라. $n$이 커질 때 세 도구가 각각 언제 무너지는가?
 
 </div>
 
