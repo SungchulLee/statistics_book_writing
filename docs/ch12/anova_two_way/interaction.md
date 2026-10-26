@@ -843,7 +843,7 @@ print(anova_results)
 
 ### R 출력 해석
 
-R 출력은 Df, Sum Sq, Mean Sq, F value, Pr(>F) 열을 가진 동일한 분산분석표를 준다. 유의성 표시(`*`는 p < 0.05, `**`는 p < 0.01)가 다음을 확인해 준다:
+R 출력은 Df, Sum Sq, Mean Sq, F value, Pr(>F) 열을 가진 동일한 분산분석표를 준다. 유의성 표시(`*`는 p < 0.05, `**`는 p < 0.01)가 다음을 확인해 준다.
 
 - `Teaching_Method`와 `Study_Time` 모두 `Score`에 통계적으로 유의한 주효과를 갖는다.
 - `Teaching_Method`와 `Study_Time` 사이의 교호작용은 통계적으로 유의하지 않으므로, 교수법이 점수에 미치는 효과가 학습시간에 의존하지 않음을 시사한다.

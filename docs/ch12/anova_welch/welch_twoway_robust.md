@@ -8,13 +8,13 @@
 
 ## 1. 로버스트 OLS 접근
 
-모형은 표준적인 이원배치 요인 모형이다:
+모형은 표준적인 이원배치 요인 모형이다.
 
 $$
 y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}
 $$
 
-여기서 $\text{Var}(\varepsilon_{ijk})$는 더 이상 일정하다고 가정하지 않는다. OLS 계수 추정값 $\hat{\boldsymbol{\beta}}$는 여전히 불편이며 일치성을 갖지만, 고전적인 공분산행렬 $\hat{\sigma}^2 (X^\top X)^{-1}$은 타당하지 않다. HC3 추정량은 이를 다음으로 대체한다:
+여기서 $\text{Var}(\varepsilon_{ijk})$는 더 이상 일정하다고 가정하지 않는다. OLS 계수 추정값 $\hat{\boldsymbol{\beta}}$는 여전히 불편이며 일치성을 갖지만, 고전적인 공분산행렬 $\hat{\sigma}^2 (X^\top X)^{-1}$은 타당하지 않다. HC3 추정량은 이를 다음으로 대체한다.
 
 $$
 \widehat{\text{Cov}}_{\text{HC3}}(\hat{\boldsymbol{\beta}}) = (X^\top X)^{-1} \left(\sum_{i=1}^{n} \frac{\hat{e}_i^2}{(1 - h_{ii})^2} \mathbf{x}_i \mathbf{x}_i^\top \right) (X^\top X)^{-1}
@@ -358,7 +358,7 @@ $$
 
 ---
 
-## 4. 해석
+## 4. HC3 는 지렛값이 큰 점의 잔차를 되돌린다
 
 - **HC3 대 HC0:** HC3는 각 제곱 잔차를 (HC0처럼 그대로 두지 않고) $(1 - h_{ii})^2$으로 나눈다. 지렛값이 큰 점의 잔차가 작아지는 경향을 이 상향 조정이 보정하여 소표본에서 포함확률을 개선한다.
 - **언제 이 접근을 쓰는가:** 형식적 검정(Levene, Bartlett)이나 시각적 검토(잔차 그림)가 분산이 다름을 시사할 때마다 표준 $F$-검정보다 HC3 기반 Wald 검정이 낫다.

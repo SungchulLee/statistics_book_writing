@@ -8,7 +8,7 @@ Tukey의 HSD나 Bonferroni 같은 사후 방법은 모든 집단의 모분산이
 
 ## 1. 가설
 
-각 집단 쌍 $i$와 $j$($1 \leq i < j \leq k$)에 대해 Games-Howell 검정은 다음을 평가한다:
+각 집단 쌍 $i$와 $j$($1 \leq i < j \leq k$)에 대해 Games-Howell 검정은 다음을 평가한다.
 
 $$
 H_0: \mu_i = \mu_j \quad \text{vs} \quad H_a: \mu_i \neq \mu_j
@@ -38,7 +38,7 @@ $$
 
 ## 3. Welch-Satterthwaite 자유도
 
-분산 추정값이 쌍마다 다르므로 각 비교가 자신의 자유도를 가지며, Welch-Satterthwaite 근사로 계산한다:
+분산 추정값이 쌍마다 다르므로 각 비교가 자신의 자유도를 가지며, Welch-Satterthwaite 근사로 계산한다.
 
 $$
 \nu_{ij} = \frac{\left(\dfrac{s_i^2}{n_i} + \dfrac{s_j^2}{n_j}\right)^2}{\dfrac{\left(s_i^2 / n_i\right)^2}{n_i - 1} + \dfrac{\left(s_j^2 / n_j\right)^2}{n_j - 1}}
@@ -50,7 +50,7 @@ $$
 
 ## 4. 판정 규칙
 
-Games-Howell 검정은 $|t_{ij}|$를 스튜던트화 범위 분포의 임계값과 비교한다:
+Games-Howell 검정은 $|t_{ij}|$를 스튜던트화 범위 분포의 임계값과 비교한다.
 
 $$
 |t_{ij}| > \frac{q_{\alpha,\, k,\, \nu_{ij}}}{\sqrt{2}}
@@ -116,7 +116,7 @@ Levene 검정이 등분산성을 기각하므로($p = 0.003$) 표준 분산분�
 
 ## 5. Games-Howell을 언제 쓰는가
 
-Games-Howell 검정은 다음일 때 적절한 사후 절차이다:
+Games-Howell 검정은 다음일 때 적절한 사후 절차이다.
 
 - **Levene 검정**이 등분산 귀무가설을 기각할 때
 - 집단 사이의 **표본크기**가 상당히 다를 때

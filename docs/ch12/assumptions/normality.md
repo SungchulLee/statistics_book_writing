@@ -64,7 +64,7 @@ Multiplication for Transformers at Scale"(arXiv:$2208.07339$) — 「$67$ 억 �
 
 ---
 
-## 2. 설정
+## 2. 진단에 쓸 모형을 세운다
 
 <div class="exbox" markdown>
 
