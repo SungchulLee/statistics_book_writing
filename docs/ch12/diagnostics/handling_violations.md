@@ -326,7 +326,7 @@ Kruskal-Wallis 검정은 이상점이나 치우친 분포에 덜 민감하지만
 
 ### 로그 변환
 
-자료가 양의 방향으로 치우쳐 있거나 분산이 평균과 함께 커질 때 쓴다:
+자료가 양의 방향으로 치우쳐 있거나 분산이 평균과 함께 커질 때 쓴다.
 
 $$
 Y' = \log(Y) \quad \text{or} \quad Y' = \log(Y + c) \text{ if } Y \text{ contains zeros}
@@ -484,7 +484,7 @@ $$
 
 ### 제곱근 변환
 
-포아송 계열 분포를 따르는 도수 자료에 유용하다:
+포아송 계열 분포를 따르는 도수 자료에 유용하다.
 
 $$
 Y' = \sqrt{Y}
@@ -625,7 +625,7 @@ $$
 
 ### Box-Cox 변환
 
-$\lambda$로 모수화된 거듭제곱 변환의 족으로, 정규성에 가장 가까워지도록 $\lambda$를 최적화할 수 있다:
+$\lambda$로 모수화된 거듭제곱 변환의 족으로, 정규성에 가장 가까워지도록 $\lambda$를 최적화할 수 있다.
 
 $$
 Y'(\lambda) = \begin{cases} \frac{Y^\lambda - 1}{\lambda} & \text{if } \lambda \neq 0 \\ \log(Y) & \text{if } \lambda = 0 \end{cases}

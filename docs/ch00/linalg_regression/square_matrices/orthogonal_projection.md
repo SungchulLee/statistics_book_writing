@@ -248,7 +248,7 @@ $$
 
 이다. 이것이 $\operatorname{col}(\mathbf{X})$ 위로의 직교사영이다. 이름은 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$라는 사실에서 왔다. 모자 행렬이 "$\mathbf{y}$에 모자를 씌우는" 것이다.
 
-회귀에서의 핵심 성질:
+회귀에서의 핵심 성질은 다음과 같다.
 
 - $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ (적합값)
 - $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$ (잔차)

@@ -53,7 +53,7 @@ $$
 
 ### 분포에 대한 베이즈 정리
 
-곱셈 법칙과 주변분포를 결합하면 베이즈 정리를 얻는다:
+곱셈 법칙과 주변분포를 결합하면 베이즈 정리를 얻는다.
 
 $$
 f_{X|Y}(x \mid y) = \frac{f_{Y|X}(y \mid x) \cdot f_X(x)}{f_Y(y)} = \frac{f_{Y|X}(y \mid x) \cdot f_X(x)}{\int f_{Y|X}(y \mid x) \cdot f_X(x)\,dx}
@@ -942,7 +942,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제 1.** <span class="diff easy" title="쉬움"></span> 다음 결합 PMF를 사용한다:
+**문제 1.** <span class="diff easy" title="쉬움"></span> 다음 결합 PMF를 사용한다.
 
 | | $Y=0$ | $Y=1$ | $Y=2$ | $p_X(x)$ |
 |:---|:---:|:---:|:---:|:---:|

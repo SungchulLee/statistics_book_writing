@@ -8,7 +8,7 @@
 
 ## 1. 점수함수
 
-Fisher 정보량을 정의하기 위해 먼저 **점수함수**를 소개한다. $X$를 확률밀도함수 또는 확률질량함수가 $f(x; \theta)$인 확률변수라 하자. 점수함수는 로그가능도를 $\theta$에 대해 미분한 것이다:
+Fisher 정보량을 정의하기 위해 먼저 **점수함수**를 소개한다. $X$를 확률밀도함수 또는 확률질량함수가 $f(x; \theta)$인 확률변수라 하자. 점수함수는 로그가능도를 $\theta$에 대해 미분한 것이다.
 
 <div class="defn" markdown>
 
@@ -121,7 +121,7 @@ $$
 
     두 번째 형태가 계산하기 더 쉬운 경우가 많다. 기하적인 직관도 준다 — 로그가능도가 급하게 휘어 있으면(큰 $I$) 자료가 모수를 강하게 제약하고, 평평하면(작은 $I$) 넓은 범위의 $\theta$ 가 자료를 거의 같은 정도로 설명한다. 기하적인 직관도 준다. 로그가능도가 급하게 휘어 있으면(큰 $I(\theta)$) 자료가 모수를 강하게 제약하는 것이고, 평평하면(작은 $I(\theta)$) 자료가 정보를 주지 못하는 것이다.
 
-독립이고 동일한 분포를 따르는 $n$개의 관측값 $X_1, \ldots, X_n$에 대해 전체 Fisher 정보량은 가법적이다:
+독립이고 동일한 분포를 따르는 $n$개의 관측값 $X_1, \ldots, X_n$에 대해 전체 Fisher 정보량은 가법적이다.
 
 $$
 I_n(\theta) = n \cdot I(\theta)
@@ -205,13 +205,13 @@ $$
 
 ## 3. Fisher 정보량으로부터의 표준오차
 
-Fisher 정보량의 가장 중요한 응용 중 하나는 MLE의 표준오차를 제공하는 것이다. 정칙 조건 아래에서 MLE $\hat{\theta}_{\text{MLE}}$는 점근적으로 정규이다:
+Fisher 정보량의 가장 중요한 응용 중 하나는 MLE의 표준오차를 제공하는 것이다. 정칙 조건 아래에서 MLE $\hat{\theta}_{\text{MLE}}$는 점근적으로 정규이다.
 
 $$
 \hat{\theta}_{\text{MLE}} \overset{d}{\to} N\left(\theta, \frac{1}{nI(\theta)}\right) \quad \text{as } n \to \infty
 $$
 
-실무에서는 (대입 원리에 따라) Fisher 정보량을 MLE에서 평가하여 표준오차를 추정한다:
+실무에서는 (대입 원리에 따라) Fisher 정보량을 MLE에서 평가하여 표준오차를 추정한다.
 
 $$
 \widehat{\text{SE}}(\hat{\theta}_{\text{MLE}}) = \frac{1}{\sqrt{nI(\hat{\theta}_{\text{MLE}})}}
@@ -310,7 +310,7 @@ _확인한 곳 — 해럴드 제프리스의 『Theory of Probability』($1939$)
 
 ## 5. Fisher 정보량의 수치적 계산
 
-Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법으로 수치적으로 추정할 수 있다:
+Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법으로 수치적으로 추정할 수 있다.
 
 1. **점수 분산법**: $f(x; \theta)$에서 $X_1, \ldots, X_N$을 표본추출하고 각 점에서 점수를 계산한 뒤 $I(\theta) \approx \text{Var}(\{S_i\})$로 추정한다.
 2. **유한차분법**: 점수를 $S(\theta) \approx [\log f(X; \theta + \delta) - \log f(X; \theta - \delta)]/(2\delta)$로 근사한다.
@@ -463,13 +463,13 @@ Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법�
 
 ## 6. 다모수 Fisher 정보행렬
 
-모수 벡터 $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_k)$에 대해 Fisher 정보량은 $k \times k$ 행렬이다:
+모수 벡터 $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_k)$에 대해 Fisher 정보량은 $k \times k$ 행렬이다.
 
 $$
 [I(\boldsymbol{\theta})]_{ij} = -E\left[\frac{\partial^2}{\partial\theta_i\,\partial\theta_j}\log f(X; \boldsymbol{\theta})\right]
 $$
 
-$\mu$와 $\sigma^2$이 모두 미지인 정규분포에서:
+$\mu$와 $\sigma^2$이 모두 미지인 정규분포에서 이렇게 된다.
 
 $$
 I(\mu, \sigma^2) = \begin{pmatrix} 1/\sigma^2 & 0 \\ 0 & 1/(2\sigma^4) \end{pmatrix}

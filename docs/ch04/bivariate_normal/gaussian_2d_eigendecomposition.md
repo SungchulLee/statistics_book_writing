@@ -2,7 +2,7 @@
 
 ## 개요
 
-이변량 정규의 공분산행렬 $\boldsymbol{\Sigma}$는 다음과 같이 분해할 수 있다:
+이변량 정규의 공분산행렬 $\boldsymbol{\Sigma}$는 다음과 같이 분해할 수 있다.
 
 $$
 \boldsymbol{\Sigma} = \mathbf{U}\mathbf{D}\mathbf{U}^\top
@@ -372,7 +372,7 @@ _확인한 곳 — 얼굴 사진을 공분산행렬의 고유벡터로 적는 �
 
 ## 2. 해석
 
-$\boldsymbol{\Sigma} = \begin{pmatrix}0.5 & 0.3 \\ 0.3 & 0.5\end{pmatrix}$에 대해:
+$\boldsymbol{\Sigma} = \begin{pmatrix}0.5 & 0.3 \\ 0.3 & 0.5\end{pmatrix}$에 대해 이렇게 된다.
 
 - 고윳값: $\lambda_1 = 0.8$, $\lambda_2 = 0.2$
 - 주된 고유벡터는 $(1, 1)/\sqrt{2}$ 방향(양의 상관 방향)을 가리킨다

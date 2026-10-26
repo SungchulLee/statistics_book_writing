@@ -53,7 +53,7 @@ Bonferroni는 모든 검정에 같은 엄격한 문턱 $\alpha/m$을 적용하�
 3. $p_{(i)} \leq \alpha / (m - i + 1)$**이면** $H_{(i)}$를 기각하고 $i$를 1 늘린다.
 4. $p_{(i)} > \alpha / (m - i + 1)$**이면 멈춘다.** $H_{(i)}, H_{(i+1)}, \ldots, H_{(m)}$(남은 가설 전부)을 유지한다.
 
-보정된 문턱은 증가하는 수열을 이룬다:
+보정된 문턱은 증가하는 수열을 이룬다.
 
 $$
 \frac{\alpha}{m}, \quad \frac{\alpha}{m-1}, \quad \frac{\alpha}{m-2}, \quad \ldots, \quad \alpha

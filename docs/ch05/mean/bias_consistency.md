@@ -39,7 +39,7 @@ $$E[\bar{X}] = \mu$$
 
 ### 편향된 대안과의 비교
 
-모평균의 추정량 중에는 의도적으로 편향된 것도 있다:
+모평균의 추정량 중에는 의도적으로 편향된 것도 있다.
 
 | 추정량 | 편향 | 평균제곱오차 |
 |-----------|------|-----|
@@ -155,7 +155,7 @@ $0.01$ 에서 $0.05$ 쯤이던 값이 단번에 $1$ 언저리로 돌아온다. �
 
 ### 확률수렴 의미의 일치성
 
-표본평균은 $\mu$에 대해 **일치**한다:
+표본평균은 $\mu$에 대해 **일치**한다.
 
 $$\bar{X}_n \xrightarrow{p} \mu \quad (n \to \infty)$$
 
@@ -165,7 +165,7 @@ $$\lim_{n \to \infty} P\left(|\bar{X}_n - \mu| > \epsilon\right) = 0$$
 
 ### Chebyshev 부등식을 통한 증명
 
-$\bar{X}$의 알려진 분산과 함께 Chebyshev 부등식을 쓰면:
+$\bar{X}$의 알려진 분산과 함께 Chebyshev 부등식을 쓰면 이렇게 된다.
 
 $$P(|\bar{X} - \mu| > \epsilon) \leq \frac{\text{Var}(\bar{X})}{\epsilon^2} = \frac{\sigma^2}{n\epsilon^2} \to 0$$
 
@@ -181,7 +181,7 @@ $$\bar{X}_n \xrightarrow{p} \mu$$
 
 ### 거의 확실한 수렴 (강일치성)
 
-같은 조건 아래에서 **강대수의법칙(SLLN)**은 더 강한 결과를 준다:
+같은 조건 아래에서 **강대수의법칙(SLLN)**은 더 강한 결과를 준다.
 
 $$P\left(\lim_{n \to \infty} \bar{X}_n = \mu\right) = 1$$
 
@@ -199,7 +199,7 @@ $$\text{MSE}(\bar{X}_n) = \frac{\sigma^2}{n} = O(1/n)$$
 
 $$\text{SE}(\bar{X}_n) = \frac{\sigma}{\sqrt{n}} = O(1/\sqrt{n})$$
 
-이 $O(1/\sqrt{n})$ 속도는 근본적이다 — 다음을 뜻한다:
+이 $O(1/\sqrt{n})$ 속도는 근본적이다 — 다음을 뜻한다.
 
 - 정확도를 두 배로 하려면 자료가 4배 필요하다
 - 정확도를 10배로 하려면 자료가 100배 필요하다
@@ -217,7 +217,7 @@ $$\text{SE}(\bar{X}_n) = \frac{\sigma}{\sqrt{n}} = O(1/\sqrt{n})$$
 
 ### 평균제곱오차 일치성
 
-$\text{MSE}(\hat{\theta}_n) \to 0$이면 추정량이 **평균제곱오차 일치**라고 한다. $\bar{X}$에 대해서는:
+$\text{MSE}(\hat{\theta}_n) \to 0$이면 추정량이 **평균제곱오차 일치**라고 한다. $\bar{X}$에 대해서는 다음과 같다.
 
 $$\text{MSE}(\bar{X}_n) = \underbrace{[\text{Bias}(\bar{X}_n)]^2}_{= 0} + \underbrace{\text{Var}(\bar{X}_n)}_{= \sigma^2/n \to 0} \to 0$$
 
@@ -228,7 +228,7 @@ $$\text{MSE}(\bar{X}_n) = \underbrace{[\text{Bias}(\bar{X}_n)]^2}_{= 0} + \under
 ## 4. 일치성의 조건
 
 ### X-bar가 일치하는 경우
-표본평균은 i.i.d. 가정을 여러 방식으로 완화해도 일치한다:
+표본평균은 i.i.d. 가정을 여러 방식으로 완화해도 일치한다.
 
 1. **독립이지만 동일 분포가 아닌 경우**: 모든 $i$에 대해 $E[X_i] = \mu$이고 $\frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) \to 0$이면 $\bar{X}_n \xrightarrow{p} \mu$이다.
 
@@ -315,11 +315,11 @@ $n^2$ 인데 분자의 분산들이 복제 때문에 함께 움직이면 $\frac{
 
 ## 5. 점근분포
 
-일치성을 넘어, 중심극한정리는 점근분포를 준다:
+일치성을 넘어, 중심극한정리는 점근분포를 준다.
 
 $$\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$$
 
-이로부터 신뢰구간과 가설검정을 구성할 수 있다:
+이로부터 신뢰구간과 가설검정을 구성할 수 있다.
 
 $$\bar{X} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}} \quad (\sigma \text{를 아는 경우})$$
 
@@ -329,7 +329,7 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
 
 ## 6. 금융과의 연결
 
-평균의 편향과 일치성을 이해하는 것은 금융에서 결정적이다:
+평균의 편향과 일치성을 이해하는 것은 금융에서 결정적이다.
 
 - **수익률 추정**: $\bar{X}$가 일치하기는 하지만 수렴 속도 $O(1/\sqrt{n})$은 실제 수익률 예측에 쓰기에는 너무 느리다. 30년치 월별 자료($n = 360$)에서도 $\text{SE} \approx \sigma_{\text{월별}} / 19$로 여전히 상당하다.
 

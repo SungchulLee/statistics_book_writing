@@ -20,7 +20,7 @@ $$
 
 ### 정의 1. 지수분포 { .dfn }
 
-확률변수 $X$가 비율 모수 $\lambda > 0$인 지수분포를 따른다는 것은 다음을 뜻한다:
+확률변수 $X$가 비율 모수 $\lambda > 0$인 지수분포를 따른다는 것은 다음을 뜻한다.
 
 $$
 X \sim \text{Exponential}(\lambda), \qquad f(x) = \lambda e^{-\lambda x}, \quad x \geq 0
@@ -861,7 +861,7 @@ $$
 
 ## 6. 포아송 과정과의 연결
 
-사건이 비율 $\lambda$인 포아송 과정에 따라 도착하면:
+사건이 비율 $\lambda$인 포아송 과정에 따라 도착하면 이렇게 된다.
 
 $$
 \begin{aligned}

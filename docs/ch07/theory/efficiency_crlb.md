@@ -27,13 +27,13 @@ Fisher 정보량을 손에 넣었으니 근본적인 결과를 서술할 수 있
 ### 정리 1. (Cramér-Rao 하한) { .thm }
 
 
-$X_1, \ldots, X_n$을 다음 정칙 조건을 만족하는 밀도함수 또는 질량함수 $f(x; \theta)$를 갖는 i.i.d. 확률변수라 하자:
+$X_1, \ldots, X_n$을 다음 정칙 조건을 만족하는 밀도함수 또는 질량함수 $f(x; \theta)$를 갖는 i.i.d. 확률변수라 하자.
 
 1. 지지집합 $\{x : f(x; \theta) > 0\}$이 $\theta$에 의존하지 않는다.
 2. 도함수 $\frac{\partial}{\partial \theta} f(x; \theta)$와 $\frac{\partial^2}{\partial \theta^2} f(x; \theta)$가 존재하고 연속이다.
 3. 미분과 적분(또는 합)을 교환할 수 있다.
 
-그러면 임의의 불편추정량 $\hat{\theta} = \hat{\theta}(X_1, \ldots, X_n)$에 대해:
+그러면 임의의 불편추정량 $\hat{\theta} = \hat{\theta}(X_1, \ldots, X_n)$에 대해 이렇게 된다.
 
 $$
 \text{Var}(\hat{\theta}) \geq \frac{1}{n I(\theta)}
@@ -256,13 +256,13 @@ $1 / (nI(\theta))$가 Cramér-Rao 하한이다. 어떤 불편추정량도 이 �
 
 CRLB는 자연스럽게 불편추정량의 순위를 매기는 방법으로 이어진다. 하한을 달성하는 불편추정량은 가능한 한 최선이다. 자료에서 모든 정보를 뽑아내기 때문이다.
 
-불편추정량 $\hat{\theta}$가 모든 $\theta$에 대해 다음을 만족하면 **효율적**이라 한다:
+불편추정량 $\hat{\theta}$가 모든 $\theta$에 대해 다음을 만족하면 **효율적**이라 한다.
 
 $$
 \text{Var}(\hat{\theta}) = \frac{1}{n I(\theta)}
 $$
 
-불편추정량의 **효율**은 CRLB를 실제 분산으로 나눈 비이다:
+불편추정량의 **효율**은 CRLB를 실제 분산으로 나눈 비이다.
 
 $$
 e(\hat{\theta}) = \frac{1 / (nI(\theta))}{\text{Var}(\hat{\theta})} \leq 1
@@ -294,7 +294,7 @@ $$
 
 ## 5. CRLB를 달성할 수 없는 경우
 
-모든 모수적 모형에 효율적 추정량이 존재하는 것은 아니다. CRLB를 달성할 수 있을 필요충분조건은 점수함수를 다음 형태로 쓸 수 있는 것이다:
+모든 모수적 모형에 효율적 추정량이 존재하는 것은 아니다. CRLB를 달성할 수 있을 필요충분조건은 점수함수를 다음 형태로 쓸 수 있는 것이다.
 
 $$
 \frac{\partial}{\partial \theta} \log f(x; \theta) = a(\theta)\left[T(x) - \theta\right]

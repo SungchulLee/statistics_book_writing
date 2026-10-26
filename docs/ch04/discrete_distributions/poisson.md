@@ -20,7 +20,7 @@ $$
 
 ### 정의 1. 포아송분포 { .dfn }
 
-확률변수 $X$가 비율 모수 $\lambda > 0$인 포아송분포를 따른다는 것은 다음을 뜻한다:
+확률변수 $X$가 비율 모수 $\lambda > 0$인 포아송분포를 따른다는 것은 다음을 뜻한다.
 
 $$
 X \sim \text{Poisson}(\lambda), \qquad P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}, \quad k = 0, 1, 2, \ldots

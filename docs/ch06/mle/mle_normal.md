@@ -288,7 +288,7 @@ $\hat{\mu}$과 $\hat{\sigma}^2$은 (Cochran 정리에 의해) **독립**이다. 
 
 ## 3. 최소제곱과의 연결
 
-($\sigma^2$을 고정한) $\mu$에 대한 비용함수는:
+($\sigma^2$을 고정한) $\mu$에 대한 비용함수는 다음과 같다.
 
 $$
 J(\mu) \propto \sum_{i=1}^n (x_i - \mu)^2
@@ -361,7 +361,7 @@ $\hat\sigma^2$ 으로 미분한 식, 그리고 $\beta$-NLL 이 분산의 $\beta$
 
 ## 4. 피셔 정보행렬과 크라메르–라오 하한
 
-$(\mu, \sigma^2)$에 대한 Fisher 정보행렬은:
+$(\mu, \sigma^2)$에 대한 Fisher 정보행렬은 다음과 같다.
 
 $$I(\mu, \sigma^2) = \begin{pmatrix} n/\sigma^2 & 0 \\ 0 & n/(2\sigma^4) \end{pmatrix}$$
 
@@ -499,7 +499,7 @@ $\mu$의 MLE는 CRLB를 정확히 달성한다. $\sigma^2$의 MLE는 유한표�
 ---
 
 ## 5. 다른 모수화: (μ, σ)
-$(\mu, \sigma^2)$ 대신 $(\mu, \sigma)$로 모수화하면 $\sigma$의 MLE는:
+$(\mu, \sigma^2)$ 대신 $(\mu, \sigma)$로 모수화하면 $\sigma$의 MLE는 다음과 같다.
 
 $$\hat{\sigma}_{\text{MLE}} = \sqrt{\hat{\sigma}^2_{\text{MLE}}} = \sqrt{\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2}$$
 
@@ -783,7 +783,7 @@ _확인한 곳 — 하도 반 하셀트·아서 게즈·데이비드 실버의 �
 
 ## 7. 로그가능도 곡면
 
-로그가능도함수 $\ell(\mu, \sigma^2)$은 $(\mu, \sigma^2)$ 평면 위의 곡면을 이룬다:
+로그가능도함수 $\ell(\mu, \sigma^2)$은 $(\mu, \sigma^2)$ 평면 위의 곡면을 이룬다.
 
 - $\sigma^2$을 고정하면 $\ell$은 $\mu$에 대해 위로 볼록한(아래로 열린) 포물선이며 $\bar{X}$에서 최대가 된다
 - $\mu$를 고정하면 $\ell$은 $\sigma^2$의 오목함수이다
@@ -1143,7 +1143,7 @@ $N(5, 2^2)$에서 뽑은 $n = 5$짜리 표본 하나로 이 곡면을 실제로 
 
 ### 평균을 아는 경우
 
-$\mu = \mu_0$이 알려져 있으면 $\sigma^2$의 제약 MLE는:
+$\mu = \mu_0$이 알려져 있으면 $\sigma^2$의 제약 MLE는 다음과 같다.
 
 $$\hat{\sigma}^2_{\mu_0} = \frac{1}{n}\sum_{i=1}^n (X_i - \mu_0)^2$$
 
@@ -1151,7 +1151,7 @@ $$\hat{\sigma}^2_{\mu_0} = \frac{1}{n}\sum_{i=1}^n (X_i - \mu_0)^2$$
 
 ### 평균이 같은 경우 (합동분산)
 
-공통 분산을 갖는 두 집단 $X_1, \ldots, X_{n_1} \sim N(\mu_1, \sigma^2)$과 $Y_1, \ldots, Y_{n_2} \sim N(\mu_2, \sigma^2)$에 대해 $\sigma^2$의 MLE는:
+공통 분산을 갖는 두 집단 $X_1, \ldots, X_{n_1} \sim N(\mu_1, \sigma^2)$과 $Y_1, \ldots, Y_{n_2} \sim N(\mu_2, \sigma^2)$에 대해 $\sigma^2$의 MLE는 다음과 같다.
 
 $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar{Y})^2}{n_1 + n_2}$$
 
@@ -1173,7 +1173,7 @@ $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar
 
 **그 검정들은 14장이 세운다** — 14.4절 [Shapiro-Wilk 검정](../../ch14/formal_tests/shapiro_wilk.md)을 비롯한 14.4절 네 쪽과, 결과를 읽는 법을 다루는 14.5절 [정규성 검정의 한계와 함정](../../ch14/limitations/limitations.md)이다.
 
-수준 $\alpha$에서의 **VaR(Value at Risk)**는 확률 $\alpha$로 초과되는 손실이다. 일별 수익률에 대한 정규 모형 $R \sim N(\hat{\mu}, \hat{\sigma}^2)$ 아래에서:
+수준 $\alpha$에서의 **VaR(Value at Risk)**는 확률 $\alpha$로 초과되는 손실이다. 일별 수익률에 대한 정규 모형 $R \sim N(\hat{\mu}, \hat{\sigma}^2)$ 아래에서 이렇게 된다.
 
 $$\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$$
 

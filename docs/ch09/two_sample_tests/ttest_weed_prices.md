@@ -8,7 +8,7 @@
 
 ## 1. 1단계 — 정규성 확인 (Shapiro-Wilk)
 
-이표본 $t$-검정은 각 표본이 정규모집단에서 나왔다고 가정한다. Shapiro-Wilk 검정이 이를 확인한다:
+이표본 $t$-검정은 각 표본이 정규모집단에서 나왔다고 가정한다. Shapiro-Wilk 검정이 이를 확인한다.
 
 $$
 H_0\colon \text{the data are normally distributed}, \qquad H_1\colon \text{the data are not normally distributed}.
@@ -381,7 +381,7 @@ $$
 
 ## 3. 3단계 — 독립 이표본 t-검정
 
-두 해의 평균 가격이 같은지 검정한다:
+두 해의 평균 가격이 같은지 검정한다.
 
 $$
 H_0\colon \mu_{2014} = \mu_{2015}, \qquad H_1\colon \mu_{2014} \neq \mu_{2015}.
@@ -526,7 +526,7 @@ $$
 
 ## 4. 4단계 — 카이제곱 적합도 검정
 
-품질 등급 분포(High, Medium, Low)가 두 해 사이에 달라졌는지 확인하기 위해 카이제곱 적합도 검정을 쓴다:
+품질 등급 분포(High, Medium, Low)가 두 해 사이에 달라졌는지 확인하기 위해 카이제곱 적합도 검정을 쓴다.
 
 $$
 \chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i},

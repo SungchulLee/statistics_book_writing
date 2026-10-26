@@ -8,7 +8,7 @@
 
 ### 정의 1. 소박한 분산추정량 { .dfn }
 
-표본평균이 $\bar{X}$인 확률표본 $X_1, X_2, \ldots, X_n$이 주어졌을 때 **소박한 분산추정량**은:
+표본평균이 $\bar{X}$인 확률표본 $X_1, X_2, \ldots, X_n$이 주어졌을 때 **소박한 분산추정량**은 다음과 같다.
 
 $$\tilde{S}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2$$
 
@@ -46,13 +46,13 @@ $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)
 
 ### 기댓값의 계산
 
-기댓값을 취하면:
+기댓값을 취하면 이렇게 된다.
 
 $$E\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = \sum_{i=1}^n E[(X_i - \mu)^2] - nE[(\bar{X} - \mu)^2]$$
 
 $$= n\sigma^2 - n \cdot \frac{\sigma^2}{n} = n\sigma^2 - \sigma^2 = (n-1)\sigma^2$$
 
-따라서:
+따라서 이렇게 된다.
 
 $$E[\tilde{S}^2] = E\left[\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2\right] = \frac{n-1}{n}\sigma^2$$
 
@@ -66,7 +66,7 @@ $$\text{Bias}(\tilde{S}^2) = E[\tilde{S}^2] - \sigma^2 = \frac{n-1}{n}\sigma^2 -
 
 ## 3. 직관: 편향이 생기는 이유
 
-편향은 제곱합에서 $\mu$ 대신 $\bar{X}$를 쓰기 때문에 생긴다. $\bar{X}$는 모든 상수 $c$에 대해 $\sum(X_i - c)^2$을 최소화하는 값이므로:
+편향은 제곱합에서 $\mu$ 대신 $\bar{X}$를 쓰기 때문에 생긴다. $\bar{X}$는 모든 상수 $c$에 대해 $\sum(X_i - c)^2$을 최소화하는 값이므로 이렇게 된다.
 
 $$\sum_{i=1}^n (X_i - \bar{X})^2 \leq \sum_{i=1}^n (X_i - \mu)^2$$
 
@@ -89,7 +89,7 @@ $\bar{X}$로부터의 편차제곱합은 **항상** 참 평균 $\mu$로부터의
 ## 4. 성질
 
 ### S-tilde-squared의 분산
-정규모집단에서:
+정규모집단에서 이렇게 된다.
 
 $$\text{Var}(\tilde{S}^2) = \frac{2(n-1)}{n^2}\sigma^4$$
 
@@ -99,7 +99,7 @@ $$\text{MSE}(\tilde{S}^2) = \text{Var}(\tilde{S}^2) + [\text{Bias}(\tilde{S}^2)]
 
 ### 일치성
 
-편향되어 있음에도 $\tilde{S}^2$은 **일치**한다:
+편향되어 있음에도 $\tilde{S}^2$은 **일치**한다.
 
 $$\tilde{S}^2 = \frac{n-1}{n} S^2 \xrightarrow{p} \sigma^2$$
 
@@ -107,7 +107,7 @@ $(n-1)/n \to 1$이고 $S^2 \xrightarrow{p} \sigma^2$이기 때문이다.
 
 ### 점근적 동등성
 
-큰 $n$에서 $\tilde{S}^2$과 $S^2$은 사실상 같다:
+큰 $n$에서 $\tilde{S}^2$과 $S^2$은 사실상 같다.
 
 $$\tilde{S}^2 = \frac{n-1}{n}S^2 \approx S^2 \quad (\text{큰 } n \text{에 대해})$$
 
@@ -128,11 +128,11 @@ $d$ 를 연속으로 움직여 $\operatorname{MSE}$ 를 최소로 만드는 $d^{
 그 이야기의 왼쪽 끝 — 편향이 어디서 오는가 — 만 맡는다.
 
 ## 6. μ를 아는 경우
-참 평균 $\mu$가 알려져 있다면(실무에서는 드물다) 다음을 쓸 수 있다:
+참 평균 $\mu$가 알려져 있다면(실무에서는 드물다) 다음을 쓸 수 있다.
 
 $$\hat{\sigma}^2_\mu = \frac{1}{n}\sum_{i=1}^n (X_i - \mu)^2$$
 
-이 추정량은 불편이며($E[\hat{\sigma}^2_\mu] = \sigma^2$) $S^2$보다 분산이 작다:
+이 추정량은 불편이며($E[\hat{\sigma}^2_\mu] = \sigma^2$) $S^2$보다 분산이 작다.
 
 $$\text{Var}(\hat{\sigma}^2_\mu) = \frac{2\sigma^4}{n} < \frac{2\sigma^4}{n-1} = \text{Var}(S^2)$$
 

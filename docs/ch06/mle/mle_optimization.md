@@ -124,7 +124,7 @@
 
 ## 2. 벡터화
 
-로그가능도는 반복문 없이도 효율적으로 계산할 수 있다:
+로그가능도는 반복문 없이도 효율적으로 계산할 수 있다.
 
 <div class="exbox" markdown>
 
@@ -211,7 +211,7 @@
 
 ## 3. 곱으로 계산하면 언제 무너지는가
 
-로그변환이 왜 필수적인지 보이기 위해 원래 가능도 값을 살펴보자:
+로그변환이 왜 필수적인지 보이기 위해 원래 가능도 값을 살펴보자.
 
 <div class="exbox" markdown>
 
@@ -449,13 +449,13 @@ $x=27$ 까지는 그대로 계산해도 부호가 살아 있다. 값이 $10^{-15
 
 ## 4. 봉우리를 찾는 문제
 
-모수족 $f(x; \theta)$에서 얻은 관측 자료 $x_1, \ldots, x_n$이 주어졌을 때 MLE는 다음을 푼다:
+모수족 $f(x; \theta)$에서 얻은 관측 자료 $x_1, \ldots, x_n$이 주어졌을 때 MLE는 다음을 푼다.
 
 $$
 \hat{\theta}_{\text{MLE}} = \arg\max_\theta \ell(\theta) = \arg\max_\theta \sum_{i=1}^n \log f(x_i; \theta)
 $$
 
-동등하게 음의 로그가능도를 최소화한다:
+동등하게 음의 로그가능도를 최소화한다.
 
 $$
 \hat{\theta}_{\text{MLE}} = \arg\min_\theta \left[-\ell(\theta)\right]
@@ -594,7 +594,7 @@ $$
 
 ## 6. 기울기 기반 최적화
 
-모수가 여럿인 문제에서는 기울기 기반 방법이 필수적이다. (로그가능도의 기울기인) **점수함수**는:
+모수가 여럿인 문제에서는 기울기 기반 방법이 필수적이다. (로그가능도의 기울기인) **점수함수**는 다음과 같다.
 
 $$
 S(\theta) = \frac{\partial}{\partial\theta}\ell(\theta)
@@ -604,7 +604,7 @@ MLE에서 점수는 0이다: $S(\hat{\theta}) = 0$.
 
 ### 제약 없는 최적화를 위한 재모수화
 
-모수에 제약이 있으면(예: $\sigma^2 > 0$) 변환된 모수에 대해 최적화하는 것이 흔한 요령이다:
+모수에 제약이 있으면(예: $\sigma^2 > 0$) 변환된 모수에 대해 최적화하는 것이 흔한 요령이다.
 
 $$
 \phi = \log(\sigma^2) \quad \Rightarrow \quad \sigma^2 = e^\phi
@@ -742,13 +742,13 @@ $$
 
 ## 7. Newton-Raphson 방법
 
-Newton-Raphson 방법은 (Hessian이라는) 2계 정보를 사용하여 더 빠르게 수렴한다:
+Newton-Raphson 방법은 (Hessian이라는) 2계 정보를 사용하여 더 빠르게 수렴한다.
 
 $$
 \theta^{(t+1)} = \theta^{(t)} - \left[\ell''(\theta^{(t)})\right]^{-1} \ell'(\theta^{(t)})
 $$
 
-다변량인 경우에는 다음과 같다:
+다변량인 경우에는 다음과 같다.
 
 $$
 \boldsymbol{\theta}^{(t+1)} = \boldsymbol{\theta}^{(t)} - \mathbf{H}^{-1}(\boldsymbol{\theta}^{(t)})\, \nabla\ell(\boldsymbol{\theta}^{(t)})

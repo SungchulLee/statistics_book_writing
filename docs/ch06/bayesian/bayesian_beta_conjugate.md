@@ -675,7 +675,7 @@ _확인한 곳 — 어빙 J. 굿의 「The population frequencies of species and
 
 <div class="drillbox" markdown>
 
-**연습문제 1.** <span class="diff med" title="중간"></span> 베타–이항 켤레 모형에서 출발하여 $a > 1$, $b > 1$일 때 사후최빈값(MAP 추정값)이 다음과 같음을 보여라:
+**연습문제 1.** <span class="diff med" title="중간"></span> 베타–이항 켤레 모형에서 출발하여 $a > 1$, $b > 1$일 때 사후최빈값(MAP 추정값)이 다음과 같음을 보여라 이렇게 된다.
 
 $$
 \hat{\theta}_{\text{MAP}} = \frac{a + k - 1}{a + b + n - 2}

@@ -14,7 +14,7 @@
 
 ### 신뢰구간에서 가설검정으로
 
-모수 $\theta$에 대한 $(1 - \alpha) \times 100\%$ 신뢰구간 $(L, U)$가 주어졌을 때:
+모수 $\theta$에 대한 $(1 - \alpha) \times 100\%$ 신뢰구간 $(L, U)$가 주어졌을 때 이렇게 된다.
 
 - $\theta_0 \in (L, U)$이면 유의수준 $\alpha$에서 $H_0: \theta = \theta_0$을 기각하지 못한다.
 - $\theta_0 \notin (L, U)$이면 유의수준 $\alpha$에서 $H_0: \theta = \theta_0$을 기각한다.
@@ -43,7 +43,7 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{fail to reject } H_0: \theta = \theta_0 \te
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균. $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서:
+**보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균. $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서 이렇게 된다.
 
 - **검정**: $z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$일 때 $|z| > z_{\alpha/2}$이면 $H_0$을 기각한다.
 - **신뢰구간**: $\bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$

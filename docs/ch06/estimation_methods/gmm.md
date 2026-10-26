@@ -8,7 +8,7 @@
 
 ## 1. 적률 조건과 과대식별
 
-GMM의 출발점은 일련의 **적률 조건**이다. $\theta \in \mathbb{R}^p$를 관심 모수 벡터라 하고, 참 모수값 $\theta_0$에서 다음이 성립한다고 하자:
+GMM의 출발점은 일련의 **적률 조건**이다. $\theta \in \mathbb{R}^p$를 관심 모수 벡터라 하고, 참 모수값 $\theta_0$에서 다음이 성립한다고 하자.
 
 $$
 E[g(X, \theta_0)] = \mathbf{0}
@@ -16,7 +16,7 @@ $$
 
 여기서 $g : \mathbb{R}^d \times \mathbb{R}^p \to \mathbb{R}^r$는 각 관측값과 모수값을 $r$차원 벡터로 보내는 함수이다. $g$의 각 성분이 하나의 적률 조건을 나타낸다.
 
-(적률 조건의 개수인) $r$과 (모수의 개수인) $p$의 관계에 따라 세 가지 경우가 생긴다:
+(적률 조건의 개수인) $r$과 (모수의 개수인) $p$의 관계에 따라 세 가지 경우가 생긴다.
 
 - **정확식별** ($r = p$): 방정식 수와 미지수 수가 같다. 표본 대응물 $\bar{g}_n(\theta) = \mathbf{0}$을 대개 정확히 풀 수 있으며, 표준 적률법이 복원된다.
 - **과대식별** ($r > p$): 미지수보다 방정식이 많다. 모든 표본 적률 조건을 정확히 0으로 만드는 $\theta$가 없으므로 위반의 제곱합에 가중을 두어 최소화한다.
@@ -28,13 +28,13 @@ GMM은 과대식별 경우를 위해 설계되었지만 $r = p$일 때는 적률
 
 ## 2. GMM 목적함수
 
-표본 적률 벡터를 다음과 같이 정의한다:
+표본 적률 벡터를 다음과 같이 정의한다.
 
 $$
 \bar{g}_n(\theta) = \frac{1}{n} \sum_{i=1}^{n} g(X_i, \theta)
 $$
 
-GMM 추정량은 다음 이차형식을 최소화한다:
+GMM 추정량은 다음 이차형식을 최소화한다.
 
 $$
 \hat{\theta}_{\text{GMM}} = \arg\min_{\theta} \; \bar{g}_n(\theta)^\top \mathbf{W} \, \bar{g}_n(\theta)
@@ -57,13 +57,13 @@ $$
 
 ## 3. 최적 가중행렬
 
-양의 정부호인 어떤 $\mathbf{W}$를 써도 일치하는 GMM 추정량이 나오지만 효율성은 $\mathbf{W}$의 선택에 달려 있다. 최적 가중행렬은 적률 조건의 점근 공분산의 역행렬이다:
+양의 정부호인 어떤 $\mathbf{W}$를 써도 일치하는 GMM 추정량이 나오지만 효율성은 $\mathbf{W}$의 선택에 달려 있다. 최적 가중행렬은 적률 조건의 점근 공분산의 역행렬이다.
 
 $$
 \mathbf{W}_{\text{opt}} = \mathbf{S}^{-1}
 $$
 
-여기서:
+여기서 각 기호는 다음과 같다.
 
 $$
 \mathbf{S} = \text{Var}\!\left(\sqrt{n}\,\bar{g}_n(\theta_0)\right) = E\!\left[g(X, \theta_0)\,g(X, \theta_0)^\top\right]
@@ -78,11 +78,11 @@ $$
 
 ## 4. 2단계 GMM
 
-실무에서 $\mathbf{S}$는 미지의 $\theta_0$에 의존하므로 최적 가중행렬을 곧바로 계산할 수 없다. 표준적인 해결책이 **2단계 GMM**이다:
+실무에서 $\mathbf{S}$는 미지의 $\theta_0$에 의존하므로 최적 가중행렬을 곧바로 계산할 수 없다. 표준적인 해결책이 **2단계 GMM**이다.
 
 1. **1단계**: 초기 가중행렬(보통 단위행렬 $\mathbf{W}_1 = \mathbf{I}_r$)을 고른다. GMM 목적함수를 최소화하여 예비 일치추정값 $\hat{\theta}_1$을 얻는다.
 
-2. **2단계**: $\hat{\theta}_1$을 사용하여 최적 가중행렬을 추정한다:
+2. **2단계**: $\hat{\theta}_1$을 사용하여 최적 가중행렬을 추정한다.
 
 $$
 \hat{\mathbf{S}} = \frac{1}{n} \sum_{i=1}^{n} g(X_i, \hat{\theta}_1)\,g(X_i, \hat{\theta}_1)^\top
@@ -96,13 +96,13 @@ $\mathbf{W}_2 = \hat{\mathbf{S}}^{-1}$로 두고 GMM 목적함수를 다시 최�
 
 ## 5. 점근적 성질
 
-정칙 조건 아래에서 (최적 가중을 쓴) 효율적 GMM 추정량은 다음을 만족한다:
+정칙 조건 아래에서 (최적 가중을 쓴) 효율적 GMM 추정량은 다음을 만족한다.
 
 $$
 \sqrt{n}\left(\hat{\theta}_{\text{GMM}} - \theta_0\right) \xrightarrow{d} N\!\left(\mathbf{0}, \left(\mathbf{G}^\top \mathbf{S}^{-1} \mathbf{G}\right)^{-1}\right)
 $$
 
-여기서:
+여기서 각 기호는 다음과 같다.
 
 $$
 \mathbf{G} = E\!\left[\frac{\partial g(X, \theta_0)}{\partial \theta^\top}\right] \in \mathbb{R}^{r \times p}
@@ -114,13 +114,13 @@ $$
 
 ## 6. 과대식별 제약에 대한 Hansen J 검정
 
-모형이 과대식별되어 있으면($r > p$) GMM 추정값에서도 모든 적률 조건을 동시에 만족시킬 수 없다. 이는 자연스러운 모형설정 검정을 제공한다. 모형이 올바르게 설정되었다면 최소화된 목적함수 값이 작아야 한다. Hansen의 J 통계량은:
+모형이 과대식별되어 있으면($r > p$) GMM 추정값에서도 모든 적률 조건을 동시에 만족시킬 수 없다. 이는 자연스러운 모형설정 검정을 제공한다. 모형이 올바르게 설정되었다면 최소화된 목적함수 값이 작아야 한다. Hansen의 J 통계량은 다음과 같다.
 
 $$
 J = n \, \bar{g}_n(\hat{\theta}_{\text{GMM}})^\top \hat{\mathbf{S}}^{-1} \bar{g}_n(\hat{\theta}_{\text{GMM}})
 $$
 
-$H_0$(모형이 올바르게 설정됨) 아래에서:
+$H_0$(모형이 올바르게 설정됨) 아래에서 이렇게 된다.
 
 $$
 J \xrightarrow{d} \chi^2_{r - p}
@@ -130,7 +130,7 @@ $$
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff med" title="중간"></span> 적률 세 개를 쓴 정규분포. $X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자:
+**보기 1.** <span class="diff med" title="중간"></span> 적률 세 개를 쓴 정규분포. $X_1, \ldots, X_n \stackrel{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$이고 적률 조건 세 개($r = 3 > p = 2$)로 $\theta = (\mu, \sigma^2)^\top$을 추정한다고 하자.
 
 </div>
 
@@ -154,7 +154,7 @@ $$
 
 ## 7. 다른 추정 방법과의 연결
 
-GMM은 추정의 지형에서 중심적인 위치를 차지한다:
+GMM은 추정의 지형에서 중심적인 위치를 차지한다.
 
 - **적률법**은 $r = p$인(정확식별된) GMM이다.
 - **MLE**는 적률 조건이 점수방정식 $g(X, \theta) = \frac{\partial}{\partial \theta}\log f(X \mid \theta)$인 GMM의 특수한 경우로 볼 수 있다. 모형이 올바르게 설정되면 MLE는 가능도에서 유도한 적률 조건을 쓰는 모든 GMM 추정량 중에서 효율적이다.

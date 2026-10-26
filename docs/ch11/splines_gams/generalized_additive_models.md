@@ -86,8 +86,8 @@ $$\text{eDoF}_{\text{total}} = 1 + \sum_{j=1}^{p} \text{eDoF}_j$$
 
 1. 초기화: 모든 $j$에 대해 $\hat{f}_j^{(0)} = 0$, 그리고 $\hat{\beta}_0 = \bar{y}$
 
-2. 반복 $t$에서:
-   - 각 $j = 1, 2, \ldots, p$에 대해:
+2. 반복 $t$에서 이렇게 된다.
+   - 각 $j = 1, 2, \ldots, p$에 대해 이렇게 된다.
      - 부분잔차를 계산한다: $r_{-j} = y - \hat{\beta}_0 - \sum_{k \neq j} \hat{f}_k(X_k)$
      - 벌점 $\lambda_j$로 $(X_j, r_{-j})$에 매끄러운 함수를 적합한다: $\hat{f}_j^{(t)} = S(r_{-j} | X_j, \lambda_j)$
 

@@ -67,7 +67,7 @@ $$
 
 ## 1. MLE와의 관계
 
-MAP 목적함수는 MLE와 $\log \pi(\theta)$가 더해진 것만 다르다. 표본크기 $n$이 크면 로그가능도 $\log f(\mathbf{x} \mid \theta) = \sum_{i=1}^n \log f(x_i \mid \theta)$는 $n$에 비례해 커지는 반면 로그 사전분포는 $\theta$의 고정된 함수로 남는다. 그 결과, 표준적인 정칙 조건 아래에서 사전분포가 참 모수값 근방에서 양수이기만 하면 사전분포의 영향이 사라지고 MAP 추정값이 MLE로 수렴한다:
+MAP 목적함수는 MLE와 $\log \pi(\theta)$가 더해진 것만 다르다. 표본크기 $n$이 크면 로그가능도 $\log f(\mathbf{x} \mid \theta) = \sum_{i=1}^n \log f(x_i \mid \theta)$는 $n$에 비례해 커지는 반면 로그 사전분포는 $\theta$의 고정된 함수로 남는다. 그 결과, 표준적인 정칙 조건 아래에서 사전분포가 참 모수값 근방에서 양수이기만 하면 사전분포의 영향이 사라지고 MAP 추정값이 MLE로 수렴한다.
 
 $$
 \hat{\theta}_{\text{MAP}} \to \hat{\theta}_{\text{MLE}} \quad \text{as } n \to \infty

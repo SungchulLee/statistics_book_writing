@@ -60,7 +60,7 @@ $$
 
 ### 6단계: 전체 변동의 분해 확인
 
-총제곱합은 다음과 같이 쓸 수 있다:
+총제곱합은 다음과 같이 쓸 수 있다.
 
 $$
 \begin{array}{lllllll}
@@ -889,7 +889,7 @@ $$
 p\text{-value} = \frac{\#\{\text{Perm Var} \geq \text{Obs Var}\}}{B}
 $$
 
-네 웹페이지의 체류시간을 검정한다고 하자:
+네 웹페이지의 체류시간을 검정한다고 하자.
 
 <div class="exbox" markdown>
 

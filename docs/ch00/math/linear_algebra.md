@@ -90,7 +90,7 @@ _확인한 곳 — 머리글의 쪽 번호 $5$, 절 제목 「Direct and Skew Pr
 
 ### 정의 4. 계수, 영공간, 네 가지 기본 부분공간 { .dfn }
 
-$\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해:
+$\mathbf{A} \in \mathbb{R}^{m \times n}$에 대해 이렇게 된다.
 
 - $\operatorname{col}(\mathbf{A}) \subseteq \mathbb{R}^m$ (열공간)
 - $\ker(\mathbf{A}) \subseteq \mathbb{R}^n$ (우영공간)

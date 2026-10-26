@@ -6,7 +6,7 @@
 
 ## 1. 효율성의 정의
 
-모수 $\theta$의 불편추정량 $\hat{\theta}$는 그 분산이 Cramér–Rao 하한(CRLB)과 같을 때 **효율적**이라고 한다:
+모수 $\theta$의 불편추정량 $\hat{\theta}$는 그 분산이 Cramér–Rao 하한(CRLB)과 같을 때 **효율적**이라고 한다.
 
 $$
 \operatorname{Var}(\hat{\theta}) = \frac{1}{n \, I(\theta)}
@@ -18,7 +18,7 @@ $$
 
 ## 2. 정규분포 평균에 대한 CRLB
 
-정규족 $X \sim N(\mu, \sigma^2)$은 CRLB가 성립하기 위한 정칙조건을 만족한다(받침이 $\mu$에 의존하지 않고, 로그가능도가 두 번 미분 가능하며 기댓값과 미분의 순서를 바꿀 수 있다). 관측값 하나에 대한 Fisher 정보량은 $I(\mu) = 1/\sigma^2$이므로 CRLB는 다음을 준다:
+정규족 $X \sim N(\mu, \sigma^2)$은 CRLB가 성립하기 위한 정칙조건을 만족한다(받침이 $\mu$에 의존하지 않고, 로그가능도가 두 번 미분 가능하며 기댓값과 미분의 순서를 바꿀 수 있다). 관측값 하나에 대한 Fisher 정보량은 $I(\mu) = 1/\sigma^2$이므로 CRLB는 다음을 준다.
 
 $$
 \operatorname{Var}(\hat{\mu}) \geq \frac{1}{n \, I(\mu)} = \frac{\sigma^2}{n}
@@ -32,7 +32,7 @@ $$
 
 표본평균은 정규성 아래에서 효율적이지만, 실제 자료는 흔히 정규 모형에서 벗어난다. 꼬리가 두껍거나 치우친 분포에서는 표본평균이 효율성의 우위를 잃는다. **점근 상대효율(ARE)**은 같은 정밀도를 얻기 위해 한 추정량이 다른 추정량에 비해 관측값이 몇 개나 필요한지를 재어 두 추정량을 비교하는 방법이다.
 
-같은 모수의 두 추정량 $T_1$과 $T_2$에 대해 $T_2$ 대비 $T_1$의 ARE는 다음으로 정의된다:
+같은 모수의 두 추정량 $T_1$과 $T_2$에 대해 $T_2$ 대비 $T_1$의 ARE는 다음으로 정의된다.
 
 $$
 \operatorname{ARE}(T_1, T_2) = \frac{\operatorname{Var}(T_2)}{\operatorname{Var}(T_1)}
@@ -42,7 +42,7 @@ $\operatorname{ARE}(T_1, T_2) > 1$이면 추정량 $T_1$이 더 효율적이다(
 
 ### 표본평균과 중앙값의 ARE
 
-정규분포 아래에서 점근분산은 $\operatorname{Var}(\bar{X}) = \sigma^2/n$, $\operatorname{Var}(\text{중앙값}) = \pi\sigma^2/(2n)$이므로:
+정규분포 아래에서 점근분산은 $\operatorname{Var}(\bar{X}) = \sigma^2/n$, $\operatorname{Var}(\text{중앙값}) = \pi\sigma^2/(2n)$이므로 이렇게 된다.
 
 $$
 \operatorname{ARE}(\bar{X}, \text{중앙값}) = \frac{\operatorname{Var}(\text{중앙값})}{\operatorname{Var}(\bar{X})} = \frac{\pi}{2} \approx 1.57
@@ -50,7 +50,7 @@ $$
 
 즉 정규성 아래에서 표본평균은 중앙값보다 약 57% 더 효율적이다. 중앙값이 $\bar{X}$의 정밀도를 따라잡으려면 관측값이 대략 1.57배 필요하다.
 
-그러나 꼬리가 두꺼운 분포에서는 순위가 뒤집힌다. 다음 표는 몇몇 분포에서 중앙값 대비 표본평균의 ARE를 정리한 것이다:
+그러나 꼬리가 두꺼운 분포에서는 순위가 뒤집힌다. 다음 표는 몇몇 분포에서 중앙값 대비 표본평균의 ARE를 정리한 것이다.
 
 | 분포 | $\operatorname{ARE}(\bar{X}, \text{중앙값})$ | 해석 |
 |---|---|---|

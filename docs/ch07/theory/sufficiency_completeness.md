@@ -22,7 +22,7 @@ $$
 f(\mathbf{x}; \mu, \sigma^2) = \left(\frac{1}{2\pi\sigma^2}\right)^{n/2} \exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2\right)
 $$
 
-$\sum(x_i - \mu)^2 = \sum(x_i - \bar{x})^2 + n(\bar{x} - \mu)^2$을 써서 지수를 전개하면:
+$\sum(x_i - \mu)^2 = \sum(x_i - \bar{x})^2 + n(\bar{x} - \mu)^2$을 써서 지수를 전개하면 이렇게 된다.
 
 $$
 f(\mathbf{x}; \mu, \sigma^2) = \underbrace{\left(\frac{1}{2\pi\sigma^2}\right)^{n/2} \exp\left(-\frac{\sum(x_i - \bar{x})^2 + n(\bar{x} - \mu)^2}{2\sigma^2}\right)}_{g\left((\bar{x},\, \sum(x_i - \bar{x})^2),\; \mu,\, \sigma^2\right)} \cdot \underbrace{1}_{h(\mathbf{x})}
@@ -50,7 +50,7 @@ $$
 
 충분성은 통계량이 모든 정보를 포착한다는 것을 말해 준다. 그러나 충분통계량에 기반한 불편추정량이 여럿 존재할 수도 있다. **완비성**은 통계량의 불편인 함수가 유일함을 보장하여 이를 배제한다.
 
-충분통계량 $T$는 모든 가측함수 $g$에 대해 다음이 성립할 때 **완비**라고 한다:
+충분통계량 $T$는 모든 가측함수 $g$에 대해 다음이 성립할 때 **완비**라고 한다.
 
 $$
 E_\theta[g(T)] = 0 \quad \text{모든 } \theta \in \Theta \text{에 대해} \quad \Longrightarrow \quad P_\theta(g(T) = 0) = 1 \quad \text{모든 } \theta \in \Theta \text{에 대해}

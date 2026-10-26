@@ -228,7 +228,7 @@ $$
 \sigma_2^2 \mid \text{자료}_2 \sim \text{Inv-Gamma}(\alpha_{n_2}, \beta_{n_2})
 $$
 
-비 $R = \sigma_1^2 / \sigma_2^2$은 사실 **닫힌 형태를 갖는다.** 독립인 두 역감마의 비는 척도변환된 $F$ 분포다:
+비 $R = \sigma_1^2 / \sigma_2^2$은 사실 **닫힌 형태를 갖는다.** 독립인 두 역감마의 비는 척도변환된 $F$ 분포다.
 
 $$
 R = \frac{\sigma_1^2}{\sigma_2^2} \sim \frac{\beta_{n_1}\,\alpha_{n_2}}{\beta_{n_2}\,\alpha_{n_1}}\; F_{2\alpha_{n_2},\, 2\alpha_{n_1}}

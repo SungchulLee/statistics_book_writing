@@ -8,7 +8,7 @@
 
 ## 1. 베이즈 정리
 
-관측된 자료 $\mathbf{x} = (x_1, \ldots, x_n)$이 주어졌을 때 $\theta$의 사후분포는 베이즈 정리로 주어진다:
+관측된 자료 $\mathbf{x} = (x_1, \ldots, x_n)$이 주어졌을 때 $\theta$의 사후분포는 베이즈 정리로 주어진다.
 
 $$
 \pi(\theta \mid \mathbf{x}) = \frac{f(\mathbf{x} \mid \theta)\,\pi(\theta)}{f(\mathbf{x})} \propto f(\mathbf{x} \mid \theta)\,\pi(\theta)
@@ -91,7 +91,7 @@ $$
 
 **사후분포** $\pi(\theta \mid \mathbf{x})$: 자료를 반영한 뒤의 $\theta$의 갱신된 분포이다. 사전분포와 가능도를 결합하며 베이즈 추론의 중심 대상이다. 모든 결론(점추정, 구간, 예측)이 사후분포에서 흘러나온다.
 
-**주변가능도** $f(\mathbf{x})$: 사후분포의 적분이 1이 되도록 하는 정규화 상수이다:
+**주변가능도** $f(\mathbf{x})$: 사후분포의 적분이 1이 되도록 하는 정규화 상수이다.
 
 $$
 f(\mathbf{x}) = \int f(\mathbf{x} \mid \theta)\,\pi(\theta)\,d\theta

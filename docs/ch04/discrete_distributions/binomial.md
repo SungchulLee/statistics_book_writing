@@ -18,7 +18,7 @@ $$
 
 ### 정의 1. 이항분포 { .dfn }
 
-$X_1, X_2, \ldots, X_n$이 독립인 [$\text{Bernoulli}(p)$](bernoulli.md) 확률변수이면, $Y = \sum_{i=1}^n X_i$는 **이항분포**를 따른다:
+$X_1, X_2, \ldots, X_n$이 독립인 [$\text{Bernoulli}(p)$](bernoulli.md) 확률변수이면, $Y = \sum_{i=1}^n X_i$는 **이항분포**를 따른다.
 
 $$
 Y \sim \text{Binomial}(n, p), \qquad P(Y = k) = \binom{n}{k} p^k (1 - p)^{n-k}, \quad k = 0, 1, \ldots, n
@@ -564,7 +564,7 @@ $$
 
 </div>
 
-흡수 항등식은 PMF로부터 $E[Y]$를 직접 계산할 때 특히 유용하다:
+흡수 항등식은 PMF로부터 $E[Y]$를 직접 계산할 때 특히 유용하다.
 
 $$
 E[Y] = \sum_{k=0}^n k \binom{n}{k} p^k (1-p)^{n-k} = np \sum_{k=1}^n \binom{n-1}{k-1} p^{k-1} (1-p)^{n-k} = np

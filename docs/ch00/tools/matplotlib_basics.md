@@ -18,7 +18,7 @@ fig, ax = plt.subplots(figsize=(8, 4))
 plt.show()
 ```
 
-격자 배치의 경우:
+격자 배치의 경우 이렇게 된다.
 
 ```python
 fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(12, 6))

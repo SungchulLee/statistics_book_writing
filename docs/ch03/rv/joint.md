@@ -328,7 +328,7 @@ $$
 
 <div class="probox" markdown>
 
-**문제 1.** <span class="diff easy" title="쉬움"></span> 두 자산 $X$와 $Y$의 결합 PMF가 다음과 같다:
+**문제 1.** <span class="diff easy" title="쉬움"></span> 두 자산 $X$와 $Y$의 결합 PMF가 다음과 같다.
 
 | | $Y=0$ | $Y=1$ | $Y=2$ |
 |:---|:---:|:---:|:---:|

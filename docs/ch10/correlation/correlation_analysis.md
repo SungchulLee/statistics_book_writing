@@ -10,7 +10,7 @@
 
 짝지어진 관측값 $(x_1, y_1), \ldots, (x_n, y_n)$이 주어졌을 때 세 가지 표준 상관 측도는 다음과 같이 정의된다.
 
-**Pearson의 $r$**은 *선형* 관계의 강도를 잰다:
+**Pearson의 $r$**은 *선형* 관계의 강도를 잰다.
 
 $$
 r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\;\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}}
@@ -22,7 +22,7 @@ $$
 \rho_s = r(\text{rank}(x),\; \text{rank}(y))
 $$
 
-**Kendall의 $\tau$**는 일치쌍에서 불일치쌍을 뺀 비율을 센다:
+**Kendall의 $\tau$**는 일치쌍에서 불일치쌍을 뺀 비율을 센다.
 
 $$
 \tau = \frac{(\text{concordant pairs}) - (\text{discordant pairs})}{\binom{n}{2}}
@@ -214,7 +214,7 @@ SciPy는 각 측도에 대한 함수를 제공하며 계수와 함께 연관이 
 
 ## 4. 순위 동등성 확인
 
-유용한 항등식: Spearman의 $\rho_s$는 순위 변환된 자료로 계산한 Pearson $r$과 같다. 수치로 확인해 보자:
+유용한 항등식: Spearman의 $\rho_s$는 순위 변환된 자료로 계산한 Pearson $r$과 같다. 수치로 확인해 보자.
 
 <div class="exbox" markdown>
 
@@ -301,7 +301,7 @@ $$
 
 ## 5. 회귀직선을 포함한 산점도
 
-산점도에 보통최소제곱(OLS) 회귀직선을 겹쳐 그리면 선형모형이 적절한지 시각적으로 확인할 수 있다:
+산점도에 보통최소제곱(OLS) 회귀직선을 겹쳐 그리면 선형모형이 적절한지 시각적으로 확인할 수 있다.
 
 <div class="exbox" markdown>
 

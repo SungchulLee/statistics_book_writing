@@ -8,7 +8,7 @@
 
 절사의 발상은 단순하다: 평균을 내기 전에 양쪽 끝의 가장 극단적인 관측값을 제거한다. 이상점이거나 두꺼운 꼬리의 산물일 가능성이 가장 높은 값을 버림으로써, 자료의 대부분을 여전히 사용하면서도 오염에 저항한다.
 
-표본 $X_1, \ldots, X_n$이 주어졌을 때 $X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}$을 **순서통계량**(작은 것부터 정렬한 관측값)이라 하자. $\alpha$-절사평균은 가장 작은 쪽과 가장 큰 쪽에서 각각 $\lfloor n\alpha \rfloor$개를 제거하고 나머지를 평균한다:
+표본 $X_1, \ldots, X_n$이 주어졌을 때 $X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}$을 **순서통계량**(작은 것부터 정렬한 관측값)이라 하자. $\alpha$-절사평균은 가장 작은 쪽과 가장 큰 쪽에서 각각 $\lfloor n\alpha \rfloor$개를 제거하고 나머지를 평균한다.
 
 $$
 \bar{X}_{\text{trim}(\alpha)} = \frac{1}{n - 2\lfloor n\alpha \rfloor} \sum_{i=\lfloor n\alpha \rfloor + 1}^{n - \lfloor n\alpha \rfloor} X_{(i)}
@@ -25,7 +25,7 @@ $\alpha = 0$이면 보통의 표본평균이 되고, $\alpha = 0.5$이면 중앙
 
 윈저화 평균은 극단 관측값을 버리는 대신 가장 가까운 극단이 아닌 값으로 대체한다. 원래의 표본크기가 유지되므로 분산추정이 간단해질 수 있다.
 
-절사비율 $\alpha$에 대해 $k = \lfloor n\alpha \rfloor$라 하자. $\alpha$-윈저화 평균은 가장 작은 $k$개를 $X_{(k+1)}$로, 가장 큰 $k$개를 $X_{(n-k)}$로 바꾼 뒤 $n$개 값을 모두 평균한다:
+절사비율 $\alpha$에 대해 $k = \lfloor n\alpha \rfloor$라 하자. $\alpha$-윈저화 평균은 가장 작은 $k$개를 $X_{(k+1)}$로, 가장 큰 $k$개를 $X_{(n-k)}$로 바꾼 뒤 $n$개 값을 모두 평균한다.
 
 $$
 \bar{X}_{\text{win}(\alpha)} = \frac{1}{n}\left( k \cdot X_{(k+1)} + \sum_{i=k+1}^{n-k} X_{(i)} + k \cdot X_{(n-k)} \right)

@@ -181,7 +181,7 @@ $$
 
 1. $t_{\text{obs}} = \bar{x} - \mu_0$을 계산한다.
 2. 중심화된 자료 $\tilde{x}_i = x_i - \bar{x} + \mu_0$을 만든다.
-3. $b = 1, \ldots, B$에 대해:
+3. $b = 1, \ldots, B$에 대해 이렇게 된다.
     - $\{\tilde{x}_1, \ldots, \tilde{x}_n\}$에서 복원추출로 $\tilde{x}_1^*, \ldots, \tilde{x}_n^*$을 뽑는다.
     - $t^{*(b)} = \bar{\tilde{x}}^{*(b)} - \mu_0$을 계산한다.
 4. 양측 $p$값은
@@ -198,7 +198,7 @@ $$
 
 1. $t_{\text{obs}} = (\bar{x} - \mu_0) / (s / \sqrt{n})$을 계산한다.
 2. 중심화된 자료 $\tilde{x}_i = x_i - \bar{x} + \mu_0$을 만든다.
-3. $b = 1, \ldots, B$에 대해:
+3. $b = 1, \ldots, B$에 대해 이렇게 된다.
     - $\{\tilde{x}_1, \ldots, \tilde{x}_n\}$에서 복원추출로 뽑는다.
     - $t^{*(b)} = (\bar{\tilde{x}}^{*(b)} - \mu_0) / (s^{*(b)} / \sqrt{n})$을 계산한다.
 4. 양측 $p$값은
