@@ -476,7 +476,7 @@ _확인한 곳 — 콜모고로프($1933$) 『Giornale dell'Istituto Italiano de
 
 ---
 
-## 5. 해석
+## 5. 치우침을 올바르게 잡아낸다
 
 대수정규 예에서 Lilliefors 검정은 정규성을 기각하여($p \approx 0$) 오른쪽 치우침을 올바르게 식별한다.
 
