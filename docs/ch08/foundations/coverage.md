@@ -48,7 +48,7 @@ $$
     | 층 | 그 자체 | 가정이 맞다면 |
     |:---|:---|:---|
     | **모집단분포** population distribution | 뽑든 말든 그 자리에 있다 | **기준분포** $F_0$ — 내 추측이 맞다면 |
-    | **표본분포** sample distribution | 손에 쥔 $n$ 개 | — |
+    | **표본분포** sample distribution<br>(식에서는 **경험분포** $\hat F_n$) | 손에 쥔 $n$ 개 | — |
     | **표집분포** sampling distribution | 통계량이 흔들리는 모습 | **귀무분포** — $H_0$ 가 맞다면 |
 
     세 층은 5.1절 [반복추출 개념](../../ch05/foundations/repeated_sampling.md)이 세웠다.
