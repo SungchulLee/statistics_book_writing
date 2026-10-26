@@ -1043,7 +1043,7 @@ $$
 **연습문제 14.** <span class="diff hard" title="어려움"></span> 보기 1과 같은 대립가설 $\text{Lognormal}(0,\, 0.6)$에서, 모수를 추정해 꽂은 KS 통계량
 
 $$
-\hat{D} = \sup_x \left\lvert F_n(x) - \Phi\!\left(\frac{x - \bar{X}}{S}\right) \right\rvert
+\hat{D} = \sup_x \left\lvert \hat F_n(x) - \Phi\!\left(\frac{x - \bar{X}}{S}\right) \right\rvert
 $$
 
 을 **모수를 안다고 할 때의 KS 임계값**으로 판정하면 어떤 일이 벌어지는가.
