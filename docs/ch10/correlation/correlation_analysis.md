@@ -16,7 +16,7 @@ $$
 r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\;\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}}
 $$
 
-**Spearman의 $\rho_s$**는 $x$와 $y$의 순위에 Pearson의 $r$을 적용한 것이다:
+**Spearman의 $\rho_s$**는 $x$와 $y$의 순위에 Pearson의 $r$을 적용한 것이다.
 
 $$
 \rho_s = r(\text{rank}(x),\; \text{rank}(y))
@@ -34,7 +34,7 @@ $$
 
 ## 2. 이변량 자료 생성
 
-Gauss 잡음을 가진 선형모형에서 $n = 120$개의 점을 생성한다:
+Gauss 잡음을 가진 선형모형에서 $n = 120$개의 점을 생성한다.
 
 $$
 y_i = 0.8\, x_i + 5 + \varepsilon_i, \qquad \varepsilon_i \sim \mathcal{N}(0, 8^2)
@@ -128,7 +128,7 @@ $$
 
 ## 3. 상관계수 계산
 
-SciPy는 각 측도에 대한 함수를 제공하며 계수와 함께 연관이 없다는 귀무가설 아래의 p-값을 돌려준다:
+SciPy는 각 측도에 대한 함수를 제공하며 계수와 함께 연관이 없다는 귀무가설 아래의 p-값을 돌려준다.
 
 <div class="exbox" markdown>
 
@@ -382,7 +382,7 @@ $$
 
 ---
 
-## 6. 해석
+## 6. 세 계수의 크기에는 순서가 있다
 
 잡음이 중간 정도인 선형모형에서 생성한 자료에서는 세 계수 모두 양수이고 매우 유의하다. $|r| \ge |\rho_s| \ge |\tau|$의 순서가 전형적이다. 참 관계가 선형일 때 Pearson의 $r$이 가장 강력하고 Kendall의 $\tau$가 가장 보수적이며 Spearman의 $\rho_s$가 그 사이에 있다.
 
