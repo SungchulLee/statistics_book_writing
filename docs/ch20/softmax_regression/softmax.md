@@ -121,7 +121,7 @@ print("  최댓값을 빼고 :", m + np.log(np.sum(np.exp(zz - m))))  # 지수�
 
 </div>
 
-### 성질
+### 양수이고 합이 1 이라 확률로 읽힌다
 
 1. **비음성:** 모든 출력이 엄밀히 양수다.
 2. **합이 1:** $\sum_c\operatorname{softmax}(\mathbf{z})_c = 1$.
