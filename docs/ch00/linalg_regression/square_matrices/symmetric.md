@@ -85,7 +85,7 @@ $$
 
     실대칭이라는 가정도 결론에 실제로 필요하다. 복소행렬에서는 대칭($\mathbf{A} = \mathbf{A}^\top$)이 아니라 **에르미트**($\mathbf{A} = \overline{\mathbf{A}}^\top = \mathbf{A}^*$)가 옳은 조건이다. 복소대칭행렬 $\mathbf{A} = \begin{pmatrix} 1 & i \\ i & -1 \end{pmatrix}$은 $\mathbf{A}^2 = \mathbf{0}$이므로 고윳값이 $0$뿐이고 $\mathbf{A} \ne \mathbf{0}$이라 대각화조차 되지 않는다. 반면 에르미트행렬은 언제나 실수 고윳값과 유니터리 고유기저($\mathbf{A} = \mathbf{U}\boldsymbol{\Lambda}\mathbf{U}^*$, $\mathbf{U}^*\mathbf{U} = \mathbf{I}$)를 갖는다. 위 증명의 (1)에서 이미 켤레를 썼다는 점이 그 힌트다. 이 책에서 다루는 공분산행렬·그람 행렬·사영행렬은 모두 실행렬이므로 실대칭판으로 충분하다.
 
-### 예
+### 2×2 공분산행렬을 대각화한다
 
 $$
 \boldsymbol{\Sigma} = \begin{pmatrix} 5 & 2 \\ 2 & 2 \end{pmatrix}
@@ -129,7 +129,7 @@ $$
 
 ---
 
-## 3. 성질
+## 3. 직교대각화가 나머지를 모두 낳는다
 
 ### 직교대각화
 
