@@ -550,8 +550,6 @@ _확인한 곳 — $2016$ 년 미국통계학회 성명(『The American Statisti
 
 </div>
 
-</div>
-
 ---
 
 ## 연습문제

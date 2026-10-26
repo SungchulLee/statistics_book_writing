@@ -153,8 +153,6 @@ _확인한 곳 — 어빙 J. 굿의 「The population frequencies of species and
 
 </div>
 
-</div>
-
 ---
 
 ## 2. 베이즈 갱신 함수

@@ -781,6 +781,8 @@ $k$-최근접이웃 회귀에서 $k$가 커질수록 편향과 분산이 어떻�
 
 ---
 
+<div class="drillbox" markdown>
+
 **연습문제 10.** <span class="diff med" title="중간"></span>
 $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\theta_1 = 2\bar X$와 $\hat\theta_2 = ((n+1)/n) X_{(n)}$을 생각하자. (a) 둘 다 불편인가? (b) 분산은? (c) 어느 쪽이 평균제곱오차가 더 작은가?
 
