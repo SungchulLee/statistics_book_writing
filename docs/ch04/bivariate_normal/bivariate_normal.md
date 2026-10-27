@@ -358,6 +358,9 @@ $|\rho| < 1$ 인 한 둘은 어긋난다.
 붙였다. 자식의 편차가 중간부모 편차의 $\tfrac23$ 쯤이었다. 이름만 남아 오늘날에는
 되돌아감과 상관없는 직선까지 회귀직선이라 부른다.
 
+같은 자료를 **수로** 읽은 것은 10.1절 [상관의 이해](../../ch10/correlation/understanding.md)의 상자에 있다.
+그 상관이 $0.46$ 이고, 골턴이 이 그림을 그린 까닭과 그 계획이 자기 수에 어떻게 걸려 넘어졌는지를 거기서 따진다.
+
 _확인한 곳 — 골턴 「Regression towards Mediocrity in Hereditary Stature」(*Journal of the Anthropological Institute* $15$, $1886$, $246$–$263$ 쪽) — [원문 스캔](https://galton.org/essays/1880-1889/galton-1886-jaigi-regression-stature.pdf). 표제의 「DIAGRAM BASED ON TABLE I.」와 「all female heights are multiplied by 1·08」, 그리고 「Locus of horizontal tangential points」·「Locus of vertical tangential points」·「Major axes」는 **위 도판에서 직접 읽었다.** 두 접점 자취의 기울기가 각각 $\tfrac23$ 과 $\tfrac13$ 이라는 것은 같은 논문 $255$ 쪽에 있다_
 
 </div>
