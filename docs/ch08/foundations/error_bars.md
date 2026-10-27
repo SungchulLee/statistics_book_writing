@@ -239,7 +239,7 @@ intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$�
 
 ## 4. 막대 대신 점을 찍는 것이 나은 경우
 
-앞의 스트립·스웜 절에서 본 대로, $n$이 작으면 원자료 점을 찍는 것이 오차막대보다 낫다.
+2.5절 [스트립 그림과 스웜 그림](../../ch02/visualization/strip_swarm.md)에서 본 대로, $n$ 이 작으면 원자료 점을 찍는 것이 오차막대보다 낫다.
 
 위 보기의 집단 A는 $n = 10$이다. 열 개 점을 다 찍으면 자리도 넉넉하고, 평균·퍼짐·이상치·표본 크기가 **전부** 한 그림에 담긴다. 오차막대는 그중 둘만 보여 준다.
 
@@ -367,7 +367,7 @@ intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$�
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-연습문제 10의 결론을 실천하라. 두 집단 비교에서 **차이의 신뢰구간**을 그리는 것이 왜 나은지 보이고, 짝지은 자료에서는 특히 중요한 이유를 설명하라.
+연습문제 2 가 보인 대로, 두 구간이 겹치는지를 눈으로 보아 차이를 판정하면 틀린다(8.1절 [해석과 흔한 오해](interpretation.md) 오해 3 이 그 까닭을 적는다). 그 대신 **차이의 신뢰구간**을 그리는 것이 왜 나은지 보이고, 짝지은 자료에서 특히 중요한 이유를 설명하라. 겹침 판정의 실제 오류율이 얼마인지는 연습문제 10 이 센다.
 
 </div>
 
@@ -450,7 +450,7 @@ intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$�
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-비율에 오차막대를 붙일 때 흔히 쓰는 **왈드 구간** $\hat p \pm 1.96\sqrt{\hat p(1-\hat p)/n}$에는 심각한 문제가 있다. 확인하고 대안을 제시하라.
+비율에 오차막대를 붙일 때 흔히 쓰는 **왈드 구간** $\hat p \pm 1.96\sqrt{\hat p(1-\hat p)/n}$에는 심각한 문제가 있다. 확인하고 대안을 제시하라. 무너지는 **방식**을 정리로 따지는 것은 8.2절 [왈드는 무너지고 윌슨은 버틴다](../one_sample_intervals/phat_wald_wilson.md)다.
 
 </div>
 
