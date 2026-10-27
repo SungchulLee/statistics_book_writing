@@ -10,7 +10,7 @@ r"""상관행렬을 보고 특징을 고르는 일이 왜 체계적으로 틀리
    클수록 커지지 않고 **가운데**에서 가장 크다.
 ③ 무작위로 만든 문제들에서 $\lvert r\rvert$ 와 실제 기여의 순위상관이 $0.2$ 밖에 안 된다.
 
-만드는 파일: docs/ch10/correlation/img/corr_feature_filter.png
+만드는 파일: docs/ch10/visualization/img/corr_feature_filter.png
 """
 
 import numpy as np
@@ -174,6 +174,6 @@ ax3.set_title("③ 기준이 재려는 것을 못 본다", fontsize=12)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch10/correlation/img/corr_feature_filter.png"
+out = "docs/ch10/visualization/img/corr_feature_filter.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)
