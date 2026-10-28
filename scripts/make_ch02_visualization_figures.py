@@ -31,7 +31,7 @@ ax1.set_xticks([1, 2]); ax1.set_xticklabels(["Bimodal", "Unimodal"])
 ax2.boxplot([data_1, data_2], labels=["Bimodal", "Unimodal"])
 ax2.set_title("Box Plot")
 plt.tight_layout()
-plt.savefig("/Users/sungchul/Desktop/book/statistics_in_korean/docs/ch02/visualization/img/violin_vs_box_bimodal.png", dpi=140, facecolor="white")
+plt.savefig("docs/ch02/visualization/img/violin_vs_box_bimodal.png", dpi=140, facecolor="white")
 print(f"data_1 (이봉): 평균 {data_1.mean():.2f}, 중앙값 {np.median(data_1):.2f}, 표준편차 {data_1.std():.2f}")
 print(f"data_2 (단봉): 평균 {data_2.mean():.2f}, 중앙값 {np.median(data_2):.2f}, 표준편차 {data_2.std():.2f}")
 q1a,q3a = np.percentile(data_1,[25,75]); q1b,q3b = np.percentile(data_2,[25,75])
@@ -51,7 +51,7 @@ fig, ax = plt.subplots(figsize=(10, 4))
 sns.violinplot(data=df, x="Pclass", y="Age", hue="Sex", split=True, ax=ax)
 ax.set_title("Age Distribution by Class and Sex (Titanic)")
 plt.tight_layout()
-plt.savefig("/Users/sungchul/Desktop/book/statistics_in_korean/docs/ch02/visualization/img/violin_titanic_split.png", dpi=140, facecolor="white")
+plt.savefig("docs/ch02/visualization/img/violin_titanic_split.png", dpi=140, facecolor="white")
 print(df.groupby(["Pclass","Sex"])["Age"].agg(["count","median","mean"]).round(1).to_string())
 
 
@@ -61,7 +61,7 @@ print(df.groupby(["Pclass","Sex"])["Age"].agg(["count","median","mean"]).round(1
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt, numpy as np, pandas as pd
 from scipy import stats
-OUT = "/Users/sungchul/Desktop/book/statistics_in_korean/docs/ch02/visualization/img/"
+OUT = "docs/ch02/visualization/img/"      # 저장소 뿌리에서 돌린다
 
 # 2. ax.plot vs ax.scatter
 np.random.seed(0)
@@ -131,7 +131,7 @@ print("saved 6 figures")
 # ==================================================================
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt, pandas as pd, seaborn as sns
-OUT = "/Users/sungchul/Desktop/book/statistics_in_korean/docs/ch02/visualization/img/"
+OUT = "docs/ch02/visualization/img/"      # 저장소 뿌리에서 돌린다
 # 5. pairplot
 url="https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
 df=pd.read_csv(url,index_col='PassengerId')
@@ -157,7 +157,7 @@ print("=== 상대도수분포표 ==="); print(dh)
 # ==================================================================
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt, numpy as np, pandas as pd
-OUT="/Users/sungchul/Desktop/book/statistics_in_korean/docs/ch02/visualization/img/"
+OUT="docs/ch02/visualization/img/"
 rng = np.random.default_rng(42)
 dates = pd.bdate_range("2023-01-01", "2023-12-31")
 returns = rng.normal(0.0004, 0.02, len(dates))
@@ -200,7 +200,7 @@ print(stem_leaf(scores))
 # ==================================================================
 import matplotlib; matplotlib.use("Agg")
 import pandas as pd, numpy as np, matplotlib.pyplot as plt, seaborn as sns
-OUT="/Users/sungchul/Desktop/book/statistics_in_korean/docs/ch02/visualization/img/"
+OUT="docs/ch02/visualization/img/"
 
 # 보기 1
 np.random.seed(42)

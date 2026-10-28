@@ -12,7 +12,7 @@ r"""「그림을 보는 일」을 정식 검정으로 바꾸는 규약 — 라�
 ② 그 천장이 정식 검정에 얼마나 못 미치는가.
 ③ 라인업 크기 $m$ 을 키우면 유의수준이 $1/m$ 로 내려가고 검정력도 따라 내려간다.
 
-만드는 파일: docs/ch14/graphical_methods/img/lineup.png
+만드는 파일: docs/ch14/graphical_methods/img/qq_lineup.png
 """
 
 import warnings
@@ -141,6 +141,6 @@ ax3.set_title(f"③ 유의수준이 $1/m$ 이다 ($n = 50$)", fontsize=12)
 ax3.legend(loc="center right", fontsize=9.5)
 ax3.grid(alpha=0.25)
 
-out = "docs/ch14/graphical_methods/img/lineup.png"
+out = "docs/ch14/graphical_methods/img/qq_lineup.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)
