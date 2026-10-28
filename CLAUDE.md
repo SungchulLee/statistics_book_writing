@@ -163,7 +163,14 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
   이미 있는 `{'한글':>Ns}` 가 3,000 곳 넘지만 **그 자체는 결함이 아니다** — 출력을
   그대로 받아 적었으면 표가 들쭉날쭉할 뿐 코드와 일치한다. 결함은 손으로 다듬은
   곳뿐이고 그것은 `tools/verify_outputs` 만 잡는다
-- 그림 그리는 코드만 예외로 `scripts/make_*.py` 에 둔다. 쪽에는 PNG 만 들어간다
+- 그림 그리는 코드만 예외로 `scripts/make_*.py` 에 둔다. 쪽에는 PNG 만 들어간다.
+  이것은 **새로 그리는 그림에 대한 규약**이다. 「이 책에서 그렸다」고 적힌 **12 개**는
+  그리는 코드가 없는데(2026-10-28 에 전수 확인) **판정이 끝났다 — 되살리지 않는다.**
+  PNG 가 커밋되어 있어 독자에게는 문제가 없고, 되살리려면 그림을 **다시 그려야**
+  하므로 커밋된 작품을 바꾸는 일이 된다. `scripts/` 와 쪽의 그림을 맞댈 때
+  **이 12 개는 세지 말 것**(ch02 variance_std · ch03 clt · ch03 continuous ·
+  ch03 variance_covariance 둘 · ch04 chi_square · ch05 normal · ch05 heavy_tails ·
+  ch05 naive · ch13 validity_conditions · ch14 qq_plots · ch19 algorithms)
 - 두 연재 상자 — `<div class="storybox">` 「그림으로 보는 통계학」(호박·점선),
   `<div class="aibox">` 「AI로 보는 통계학」(청록·왼쪽 띠). 증명·문항 사이클 밖이며
   이야기하는 정의/정리 **바로 뒤**에 놓는다. 전체 규칙은 `agents/SKILL.md`
