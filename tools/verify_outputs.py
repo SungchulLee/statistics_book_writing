@@ -52,6 +52,10 @@ import subprocess
 import sys
 import tempfile
 
+# 저장소 뿌리. 쪽 코드가 상대경로로 읽는 자료 디렉터리를 임시 작업 디렉터리에
+# 걸어 주는 데 쓴다(아래 symlink 주석 참조).
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 FENCE = re.compile(r"^(\s*)```(\w*)\s*$")
 
 RUNNER = r'''
@@ -161,6 +165,21 @@ def check(path, timeout=1800):
         return [("SKIP", ln, why) for ln, why in skipped]
 
     with tempfile.TemporaryDirectory() as d:
+        # 쪽 코드가 내려받은 자료를 **상대경로**로 캐시해 두고 다시 읽는 일이
+        # 있다(ch02 의 hexbin·treemap·line_plots 가 datasets/stocks 에 받아
+        # 두고, ch12·ch13 은 datasets/housing, ch20 은 datasets/mnist 를 쓴다).
+        # 임시 디렉터리에서 돌리면 그 경로가 닿지 않아 **첫 블록이 죽고 뒤의
+        # 블록이 NameError 로 줄줄이 따라 죽는다** — treemap 에서 그렇게 여덟
+        # 블록이 검사에서 빠져 있었다. 뿌리의 자료 디렉터리를 심볼릭 링크로
+        # 걸어 두면 읽기는 되고 savefig 는 여전히 임시 디렉터리에 떨어진다.
+        for name in ("datasets", "data", "model"):
+            src = pathlib.Path(ROOT, name)
+            if src.exists():
+                try:
+                    os.symlink(src, pathlib.Path(d, name),
+                               target_is_directory=True)
+                except OSError:
+                    pass          # 링크를 못 걸면 전처럼 ERROR 로 드러난다
         spec = pathlib.Path(d, "spec.json")
         spec.write_text(json.dumps(codes), encoding="utf-8")
         res = pathlib.Path(d, "res.json")
