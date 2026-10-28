@@ -110,7 +110,7 @@ $$
         sample = rng.choice(population, size=n, replace=False)
         fpc = np.sqrt((N - n) / (N - 1))       # 유한모집단 수정
         print(f"n = {n:>5d}: 표본평균 = {sample.mean():.3f}, "
-              # ddof=1: 표본표준편차(n-1로 나눔). 모표준편차의 불편추정에 쓴다
+              # ddof=1: 분모를 n-1 로 바꾼다. 불편이 되는 것은 분산이고 표준편차는 아니다
               f"표본 표준오차 = {sample.std(ddof=1)/np.sqrt(n):.4f}, "
               f"이론 표준오차 = {sigma_true/np.sqrt(n):.4f}, "
               f"수정 후 = {sigma_true/np.sqrt(n)*fpc:.4f}  (fpc {fpc:.4f})")
