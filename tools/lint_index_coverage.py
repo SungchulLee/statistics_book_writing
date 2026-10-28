@@ -48,12 +48,22 @@ def nav_sections():
 
 
 def linked_from(index_path, chapter):
-    """장 개요가 링크한 쪽들을 docs/ 기준 경로의 집합으로."""
+    """장 개요의 **「장의 구성」 절**이 링크한 쪽들을 docs/ 기준 경로로.
+
+    개요 전체를 보면 느슨하다. 핵심 요점이나 선수 지식에 우연히 걸린 링크
+    하나가 「소개했다」로 세어지기 때문이다 — ch16 에서 실제로 그랬다.
+    「비모수 검정 모음」이 16.1 불릿에 없는데 핵심 요점 3 이 그 쪽을
+    가리켜서 검사를 통과했다. 독자가 무엇을 읽을지 고르는 자리는 장의
+    구성이므로 거기로 한정한다.
+    """
     out = set()
     try:
         s = open(index_path).read()
     except OSError:
         return out
+    m = re.search(r"\n#{2} *\d*\.? *장의 구성\s*\n(.*?)(?=\n## |\Z)", s, re.S)
+    if m:
+        s = m.group(1)
     for m in re.finditer(r"\(([^)\s]+\.md)(?:#[^)]*)?\)", s):
         p = os.path.normpath(os.path.join(f"docs/{chapter}", m.group(1)))
         out.add(p.replace("docs/", "", 1))
