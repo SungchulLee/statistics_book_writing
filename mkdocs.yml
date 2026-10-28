@@ -306,12 +306,12 @@ nav:
         - 10 상관과 인과:
             - 장 개요: ch10/index.md
             - 10.1 상관:
+                - 상관의 이해: ch10/correlation/understanding.md
                 - Pearson 상관계수: ch10/correlation/pearson.md
                 - Spearman 순위상관: ch10/correlation/spearman.md
                 - Kendall의 타우: ch10/correlation/kendall.md
-                - 부분상관: ch10/correlation/partial.md
                 - 점이연 상관과 파이 계수: ch10/correlation/special_cases.md
-                - 상관의 이해: ch10/correlation/understanding.md
+                - 부분상관: ch10/correlation/partial.md
                 - 상관 분석 시연: ch10/correlation/correlation_analysis.md
                 - 공분산 밑바닥부터 만들기: ch10/correlation/covariance_from_scratch.md
             - 10.2 생태학적 상관 ★:
