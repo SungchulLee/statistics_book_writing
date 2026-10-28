@@ -301,6 +301,11 @@ $(0.3556,\ 0.3383,\ 0.3061)$로 빨간 점, 즉 중심 $(1/3, 1/3, 1/3)$에 다�
     ```python
     import numpy as np
 
+    # 이 쪽 §1 의 블록이 켜 둔 suppress=True 를 끈다. 이 블록이 보이려는 것이
+    # 4.4763e-309 라는 **준정규화수**인데, 켜 둔 채로는 그 수가 0. 으로 찍혀
+    # 교훈이 사라진다. 출력 설정은 블록을 넘어 살아 있다.
+    np.set_printoptions(precision=8, suppress=False)
+
     def softmax(z):
         """수치적으로 안정한 소프트맥스.
 
