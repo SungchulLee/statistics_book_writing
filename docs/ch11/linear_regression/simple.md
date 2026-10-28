@@ -1606,6 +1606,7 @@ _확인한 곳 — 마셜 E. 블룸의 「On the Assessment of Risk」(『The Jo
 
     ```python
     # 출력 없음: yfinance 요청 한도에 걸려 확보하지 못했다. 바로 위 쪽지를 볼 것.
+    # verify: noexec — 같은 까닭이다. 내려받지 못하면 빈 배열로 적합해 멈춘다.
     from sklearn.linear_model import LinearRegression
     import yfinance as yf
     import matplotlib.pyplot as plt
@@ -1753,6 +1754,9 @@ _확인한 곳 — 마셜 E. 블룸의 「On the Assessment of Risk」(『The Jo
         이 블록은 `yfinance`로 **실행 시점의** 시장 자료를 내려받는다. 기간이 고정되어 있지 않으므로 추정된 베타도 실행할 때마다 달라지며, 그래서 고정된 출력이나 그림을 싣지 않았다. 더하여 이 책을 쓰는 환경에서는 `yfinance`가 요청 한도(`YFRateLimitError`)에 걸려 아예 내려받지 못했다. 직접 실행해 얻은 값으로 읽으면 되고, (1)에서 본 대로 **두 히스토그램이 아니라 산점도**가 베타를 결정한다는 점만 가져가면 된다. $\square$
 
     ```python
+    # 출력 없음: period='max' 라 실행할 때마다 자료가 달라진다. 더하여 이 책의
+    #   환경에서는 yfinance 요청 한도에 걸려 아예 내려받지 못했다. 위 쪽지를 볼 것.
+    # verify: noexec — 같은 까닭이다. 내려받지 못하면 빈 배열로 적합해 멈춘다.
     import yfinance as yf
     import numpy as np
     import matplotlib.pyplot as plt
