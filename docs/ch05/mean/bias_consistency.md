@@ -759,8 +759,6 @@ $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

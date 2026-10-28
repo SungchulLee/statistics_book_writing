@@ -248,8 +248,6 @@ _확인한 곳 --- scipy 1.13.1 의 `scipy.stats.bootstrap` 에서 `method` 의 
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

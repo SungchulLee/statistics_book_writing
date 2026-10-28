@@ -261,8 +261,6 @@ _확인한 곳 — 논문이 Joseph Putter 의 「The Treatment of Ties in Some 
 
 ---
 
----
-
 ## 3. 대응 부호검정을 언제 쓰는가
 
 대응 부호검정은 다음 상황에 적절하다.

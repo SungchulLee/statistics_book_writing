@@ -630,8 +630,6 @@ Kruskal-Wallis 결과가 유의하다는 것은 적어도 한 집단이 다르�
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>
@@ -1693,9 +1691,6 @@ Kruskal-Wallis 검정이 집단 둘일 때 Mann-Whitney U 검정과 동치임을
     ```
     0.7714285714285722 0.7714285714285715 True
     ```
-
----
-
 
 ---
 

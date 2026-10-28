@@ -493,8 +493,6 @@ $$\text{Var}(\hat{\sigma}^2_\mu) = \frac{2\sigma^4}{n} < \frac{2\sigma^4}{n-1} =
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

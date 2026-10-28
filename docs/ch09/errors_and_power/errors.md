@@ -439,8 +439,6 @@ $\mu_0 = 0$, $\mu_1 = 3$, $\alpha = 0.05$일 때 이렇게 된다.
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

@@ -199,8 +199,6 @@ L1과 L2 벌점의 상대적 기여는 $\lambda_1$과 $\lambda_2$로 조정된�
 
 ---
 
----
-
 ## 4. 엘라스틱넷 문제의 풀이
 
 정칙화 항이 결합되어 있어 능형이나 라쏘 단독보다 계산이 무겁다. 그러나 라쏘에 쓰이는 **좌표하강**을 엘라스틱넷에도 효율적으로 적용할 수 있다.
@@ -230,8 +228,6 @@ $$
 
 이며, 여기서 $r_j = y - X_{-j}\beta_{-j}$는 부분잔차다. 라쏘 갱신식과 비교하면 능형 성분에서
 나온 분모 $1 + \lambda(1 - \alpha)$만이 유일한 차이다.
-
----
 
 ---
 
@@ -770,8 +766,6 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
 
 ---
 
----
-
 <div class="drillbox" markdown>
 
 **연습문제 11.** <span class="diff easy" title="쉬움"></span> scikit-learn의 `ElasticNetCV`를 써서 $n = 200$, $p = 50$이고 참 계수 중 5개만
@@ -837,8 +831,6 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
 
 ---
 
----
-
 <div class="drillbox" markdown>
 
 **연습문제 12.** <span class="diff med" title="중간"></span> 상관계수 $\rho$가 1에 가까운 두 설명변수 $x_1$, $x_2$를 생각하자. 라쏘는 왜
@@ -863,8 +855,6 @@ $\lambda_1, \lambda_2$ 매개화와 $\lambda, \alpha$ 매개화가 동등함을 
     $\hat{\beta}_i, \hat{\beta}_j \ne 0$이면
     $|\hat{\beta}_i - \hat{\beta}_j| \le \frac{\|y\|_1}{\lambda(1-\alpha)n}\sqrt{2(1 - \rho)}$
     임을 증명하였다. 상관이 높을수록 두 계수가 가까워진다. $\square$
-
----
 
 ---
 
@@ -902,8 +892,6 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
 
 ---
 
----
-
 <div class="drillbox" markdown>
 
 **연습문제 14.** <span class="diff hard" title="어려움"></span> $\alpha < 1$이고 $\lambda > 0$이면 엘라스틱넷 목적함수가 강볼록임을 증명하고,
@@ -926,8 +914,6 @@ $\beta_j \leftarrow S(X_j^\top r_j / n,\, \lambda\alpha) / (1 + \lambda(1 - \alp
     $f = h + \lambda\alpha\|\cdot\|_1$는 강볼록함수와 볼록함수의 합이므로 강볼록이다. 강볼록
     함수는 최소점을 많아야 하나 가지며, $f$의 강제성(coercivity)이 존재성을 보장한다. 따라서
     엘라스틱넷 해는 유일하다. $\square$
-
----
 
 ---
 
@@ -965,8 +951,6 @@ $\hat{\beta}_j^{\text{EN}} = \frac{1}{1+\lambda(1-\alpha)}\,S(\hat{\beta}_j^{\te
     잘라 낸다(희소성을 만드는 라쏘 단계). 이어서 $1 + \lambda(1-\alpha)$로 나누는 것은 살아남은
     계수를 0 쪽으로 균일하게 축소한다(추가 축소를 주는 능형 단계). 두 연산이 합쳐져 희소성과
     연속적 축소를 동시에 얻는다. $\square$
-
----
 
 ---
 
@@ -1037,8 +1021,6 @@ $\hat{\beta}^{\text{OLS}} = (3.0,\; 0.8,\; -0.3,\; 0.1)$이며 $\lambda = 0.4$�
     $$
 
     $\alpha = 1$일 때 $3.0$은 $0.4$만 깎여 $2.6$이 되지만, $\alpha = 0$일 때는 $1.4$로 나뉘어 $2.1429$가 된다. **연성 문턱은 큰 계수에 상수만큼의 상처를 주고, 비례 축소는 큰 계수에 비례해서 상처를 준다.** 그래서 큰 계수에는 능형 쪽이 더 아프고 작은 계수에는 라쏘 쪽이 더 아프다. $\alpha$는 "희소성을 얼마나 원하는가"의 손잡이지만, $\lambda$를 함께 조정하지 않으면 희소성을 포기하는 대가로 **살아남은 계수의 편향까지 키운다.** $\square$
-
----
 
 ---
 
@@ -1133,8 +1115,6 @@ $\hat{\beta}^{\text{OLS}} = (3.0,\; 0.8,\; -0.3,\; 0.1)$이며 $\lambda = 0.4$�
 
 ---
 
----
-
 <div class="drillbox" markdown>
 
 **연습문제 18.** <span class="diff hard" title="어려움"></span> 연습문제 1의 코드는 `ElasticNetCV`를 부르기 전에 `StandardScaler`로 설명변수를 표준화한다. 왜 그 한 줄이 없으면 안 되는지를 끝까지 계산해 보자. 설명변수가 서로 직교하지만 **척도가 다른** 계획
@@ -1218,8 +1198,6 @@ $$
 
 ---
 
----
-
 <div class="drillbox" markdown>
 
 **연습문제 19.** <span class="diff hard" title="어려움"></span> 엘라스틱넷의 $\alpha = 0$ 끝점, 곧 능형회귀가 **언제나** OLS보다 나은 $\lambda$를 가짐을 보이자. 정규직교 계획 $X^\top X = nI_p$에서 $y = X\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2 I_n)$이라 하면 $\hat{\beta}^{\text{OLS}} = X^\top y/n \sim N(\beta,\, \tau^2 I_p)$이고 $\tau^2 = \sigma^2/n$이다. $\alpha = 0$에서 절 $4$ 의 「정규직교 계획에서의 해」은 $\hat{\beta}^{\text{EN}} = \hat{\beta}^{\text{OLS}} / (1+\lambda)$다.
@@ -1295,8 +1273,6 @@ $$
     $$
 
     이다. 좌변은 OLS의 총분산이고 우변은 신호의 총세기다. **능형이 OLS를 크게 이기는 것은 신호가 잡음에 묻히는 곳**, 곧 $p$가 $n$에 비해 크거나 $\sigma$가 크거나 계수가 작은 곳이다. 반대로 $n$이 넉넉하고 신호가 센 (3)의 설정에서는 OLS도 이미 충분히 좋아 정칙화가 벌 것이 없다. **"편향을 사서 분산을 판다"는 거래는 분산이 비쌀 때만 남는 장사다.** $\square$
-
----
 
 ---
 

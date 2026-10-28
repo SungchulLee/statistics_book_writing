@@ -631,8 +631,6 @@ $$
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

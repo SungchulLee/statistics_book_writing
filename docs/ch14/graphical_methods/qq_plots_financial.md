@@ -910,8 +910,6 @@ VaR 대신 기대손실(CVaR)을 쓴다. 정규가 아닌 분포에서 꼬리 �
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>

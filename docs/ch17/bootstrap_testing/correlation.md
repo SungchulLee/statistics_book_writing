@@ -241,8 +241,6 @@ Freedman 의 토론이 붙어 있다. 그림과 표의 수는 모두 직접 계�
 
 ---
 
----
-
 ## 연습문제
 
 <div class="drillbox" markdown>
