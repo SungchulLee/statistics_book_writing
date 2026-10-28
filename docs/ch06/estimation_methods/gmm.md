@@ -304,7 +304,7 @@ _확인한 곳 — 상 이름·날짜·수상자 셋과 소속, 「자산 가격
     \hat{\boldsymbol\beta} = \arg\min_{\boldsymbol\beta}\ \mathbf{g}_n(\boldsymbol\beta)^\top W\,\mathbf{g}_n(\boldsymbol\beta), \qquad \mathbf{g}_n(\boldsymbol\beta) = \frac1n\sum_i\mathbf{z}_i(y_i-\mathbf{x}_i^\top\boldsymbol\beta)
     $$
 
-    를 푼다. $W = (Z^\top Z)^{-1}$로 두면 **2단계 최소제곱(2SLS)** 이 나오고, 이것이 동분산 아래에서 최적 가중이다. 이분산이 있으면 $W = \hat S^{-1}$($\hat S$는 적률의 공분산 추정)이 최적이며, 그것이 효율적 GMM이다.
+    를 푼다. $W = (Z^\top Z)^{-1}$로 두면 **2단계 최소제곱(2SLS)** 이 나오고, 이것이 등분산 아래에서 최적 가중이다. 이분산이 있으면 $W = \hat S^{-1}$($\hat S$는 적률의 공분산 추정)이 최적이며, 그것이 효율적 GMM이다.
 
     **얻는 것.** 과대식별이면 남는 조건으로 **가정 자체를 검정**할 수 있다(한센 $J$ 검정). 정확식별이면 적률이 정확히 0이 되어 검정할 여지가 없다. **도구를 여유 있게 확보하는 것이 검정 가능성을 준다**는 것이 GMM의 중요한 이점이다.
 
