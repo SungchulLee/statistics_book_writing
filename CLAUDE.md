@@ -346,6 +346,20 @@ ch08 의 하나는 그날 내가 흡수한 쪽이다. **쪽을 지우면 장 개
 `f_test_two_variances` 로, 「Welch 이원배치 분산분석」을 `welch_twoway_robust` 로
 보냈다(둘 다 `welch_two_way` 가 따로 있다). **후보 생성에만 쓰고 판정은 손으로.**
 
+**반대 방향도 검사한다** — `python3 tools/lint_index_coverage.py [chNN]`.
+`lint_index_links` 는 개요에 **적힌** 이름만 보므로 **애초에 안 적힌 쪽**은 보지
+못한다. nav 에 있으니 빌드도 할 말이 없다. 그래서 천 줄짜리 쪽이 장 개요에
+한 번도 불리지 않은 채 서 있을 수 있다. 2026-10-28 에 **28 곳**이 나왔다
+(ch11 아홉 · ch12 일곱 · ch17 다섯 · ch10 셋 · ch18 셋 · ch14 하나) — 대부분
+**코드·모의실험·사례 쪽**이다. 이론 쪽은 제목만 보고 찾아가지만 사례 쪽은
+개요에 없으면 존재를 모른다.
+
+**꼴이 둘이라는 것이 이 검사의 핵심이다.** 장의 구성을 쪽마다 한 줄씩 불릿으로
+쓰는 장이 있고(ch01~ch04), **절마다 산문 한 단락**으로 쓰는 장이 있다(ch05 의
+45 쪽 전부, ch06 의 6.2·6.3, ch07 의 7.3). 산문 꼴을 함께 세면 **82** 가 나오고
+그 가운데 **54 가 거짓이다.** 판정을 **절 단위**로 해야 한다 — 그 절의 다른 쪽이
+개요에 링크로 있으면 그 절은 불릿 꼴이고, 거기서 빠진 쪽만 진짜 누락이다.
+
 **「다음 절」 포인터 검사** — `python3 tools/lint_next_pointers.py [chNN] [--apply]`.
 쪽마다 마지막 줄이 다음 쪽을 **이름까지 적어 두고** 링크를 걸지 않는 일이 흔했다.
 2026-10-24 에 포인터 **240 개 가운데 링크가 있는 것이 여덟**이었고, 링크를 걸자
@@ -448,6 +462,8 @@ python3 tools/lint_next_pointers.py
 python3 tools/lint_orphans.py
 # 장 개요가 쪽 이름을 적고 링크를 빠뜨린 자리 — 0 이어야 한다
 python3 tools/lint_index_links.py
+# 장 개요가 nav 의 쪽을 아예 소개하지 않는 자리 — 0 이어야 한다 (위와 반대 방향이다)
+python3 tools/lint_index_coverage.py
 # 머리글의 LaTeX 와 ASCII 그리스 문자 — 목차에 날 문자열로 새어 나간다
 grep -rnE '^#{1,6} .*\$' docs --include='*.md'
 grep -rnE '^#{1,4} .*(^|[^\\A-Za-z_])(mu|sigma|tau|rho|alpha|beta|lambda|chi|theta)([^A-Za-z_]|$)' docs --include='*.md'
