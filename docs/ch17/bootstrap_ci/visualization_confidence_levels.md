@@ -1130,7 +1130,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff hard" title="어려움"></span>
-본문 §5는 "붓스트랩 복제를 최소 1000회 이상 쓴다"고 권한다. 연습문제 6의 공식으로 이 권고를 검사한다. 붓스트랩 분포가 정규에 가깝다고 보아 $f^*(\xi_q) = \varphi(z_q)/\operatorname{SE}$, 구간 폭 $= 2z_{1-\alpha/2}\operatorname{SE}$로 둔다($q = \alpha/2$).
+본문 §5 의 셋째 권고가 「신뢰구간에는 $B = 5{,}000$ 이상」이다. 그 수가 어디서 오는지를 연습문제 6 의 공식으로 유도해 보고, 흔히 쓰이는 $B = 1{,}000$ 이 신뢰구간에 모자라는 까닭을 수로 확인한다. 붓스트랩 분포가 정규에 가깝다고 보아 $f^*(\xi_q) = \varphi(z_q)/\operatorname{SE}$, 구간 폭 $= 2z_{1-\alpha/2}\operatorname{SE}$로 둔다($q = \alpha/2$).
 
 **(1)** 각 끝점의 몬테카를로 표준편차가 구간 폭의 $1\%$ 이하가 되는 조건이
 
