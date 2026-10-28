@@ -52,6 +52,7 @@
 - **[독립성](assumptions/checking_independence.md)** — 잔차의 독립성이 왜 중요한가. 자기상관이 계수는 건드리지 않고 표준오차만 망가뜨리는 까닭과, Durbin-Watson·Breusch-Godfrey·자료 구조 검토로 하는 진단, 그리고 비독립성에 대한 대책까지 한자리에서 다룬다.
 - **[등분산성](assumptions/checking_homoscedasticity.md)** — 오차분산이 일정하다는 가정. 이분산이 계수는 건드리지 않고 표준오차만 약 20% 작게 만드는 까닭과, 잔차–적합값·척도–위치 그림과 Breusch-Pagan·White 검정으로 하는 진단, 그리고 변수변환·가중최소제곱·로버스트 표준오차라는 세 갈래 대책까지 다룬다.
 - **[정규성](assumptions/checking_normality.md)** — 잔차가 정규분포를 따른다는 가정. 중심극한정리가 계수의 추론은 구해 주지만 **예측구간은 구해 주지 못하는** 까닭(표본을 32배로 키워도 빗나감이 한쪽에 몰린다)과, 히스토그램·Q-Q 그림과 Shapiro-Wilk·Anderson-Darling·Jarque-Bera 검정으로 하는 진단, 그리고 비정규성에 대한 대책까지 다룬다.
+- **[가중최소제곱](assumptions/weighted_regression.md)** — 등분산이 깨졌을 때의 처방 하나. 분산이 설명변수에 따라 커지는 자료를 만들어 OLS 와 WLS 를 나란히 적합하고, **추정값은 멀쩡하고 표준오차가 틀린다**는 것을 잔차그림으로 본다.
 
 ### 11.6 진단
 
@@ -60,6 +61,8 @@
 - **[잔차 분석](diagnostics/residuals.md)** — 잔차(관측값 빼기 예측값)를 살펴 모형 오설정, 비상수 분산, 비정규성을 시사하는 패턴을 확인한다.
 - **[다중공선성과 VIF](diagnostics/multicollinearity.md)** — 분산팽창인자로 강하게 상관된 설명변수를 탐지하고, 계수의 안정성과 해석에 미치는 영향을 논한다.
 - **[영향점과 지렛대(Cook 거리, DFFITS)](diagnostics/influence.md)** — Cook 거리, 지렛대 값, DFFITS를 써서 회귀 결과에 지나치게 큰 영향을 주는 관측값을 찾아낸다.
+- **[다중회귀 진단](diagnostics/multi_reg_diag.md)** — California Housing 자료에 이 절의 도구를 한 흐름으로 건다. VIF·잔차·쿡 거리·AIC·BIC 를 차례로 보고, **공선성이 계수를 흔들고 표준오차를 부풀리는** 모습을 수로 잡는다.
+- **[회귀 진단 (주택)](diagnostics/regression_diagnostics_housing.md)** — King County 자료로 같은 일을 다시 한다. 스튜던트화 잔차·쿡 거리·모자값·Breusch-Pagan·부분잔차 그림이 **각각 무엇을 잡아내는지**를 가르고, 영향점을 빼면 추정이 얼마나 움직이는지 본다.
 
 ### 11.7 성능 척도
 
@@ -78,6 +81,9 @@
 - **[BIC(Bayes 정보기준)](model_selection/bic.md)** — AIC와 비슷하지만 모수 추가에 더 강한 벌점을 주어 더 단순한 모형을 고르는 경향이 있다.
 - **[모형선택을 위한 교차검증](model_selection/cross_validation.md)** — 홀드아웃이나 $k$-겹 방식으로 표본 밖 예측오차를 직접 추정한다.
 - **[부분집합 선택과 단계적 선택](model_selection/subset_stepwise_selection.md)** — 설명변수 부분집합의 공간을 훑는 절차들. 2ᵖ 가 금방 불가능해지는 셈과 그 대가(억제 효과), 세 방법과 혼합 접근, 선택 기준, 그리고 고른 뒤의 p값이 왜 틀린 눈금 위에 있는지까지.
+- **[AIC와 BIC: 모형선택 기준](model_selection/aic_bic.md)** — 두 기준을 한 쪽에서 맞대어, **예측을 겨냥하는가 참 모형을 겨냥하는가**로 갈라 읽는다.
+- **[모형선택 비교](model_selection/model_selection.md)** — 설명변수 여덟 가운데 셋만 참인 자료에 AIC·BIC·교차검증 셋을 돌려, **벌점의 세기가 모형의 크기를 정하는** 것을 본다.
+- **[교차검증 다항 모형선택](model_selection/cv_polynomial_model_selection.md)** — 참 차수가 후보 안에 있는 자리에서 검증집합·LOOCV·$k$-겹이 그 차수를 찾아내는지 겨룬다. **검증집합 하나로는 믿을 수 없다**는 것이 결론이다.
 
 ### 11.9 스플라인과 GAM
 
@@ -85,6 +91,9 @@
 
 - **[스플라인과 GAM 개관](splines_gams/index.md)** — 계단함수, 조각별 다항 스플라인을 소개하고, 국소 패턴을 잡아내는 데 전역 다항식보다 나은 이유를 설명한다.
 - **[일반화가법모형](splines_gams/generalized_additive_models.md)** — 선형항을 자료에서 학습한 매끄러운 비모수 함수 $f_j(X_j)$로 대체하여 회귀를 확장하되, 가법 구조 덕분에 해석 가능성을 유지한다.
+- **[계단함수](splines_gams/step_functions.md)** — 가장 거친 비선형. 구간으로 잘라 지시변수를 만들고, **구간 안에서는 예측값이 하나**라는 대가와 구간 수를 바꿀 때의 맞바꿈을 본다.
+- **[Patsy를 이용한 스플라인](splines_gams/splines_patsy_examples.md)** — B-스플라인과 자연 스플라인의 기저행렬을 식 인터페이스로 짜고 매듭 배치를 바꿔 본다. **국소 제어가 수치 안정성을 주는** 까닭이 여기 있다.
+- **[GAM 주택 분석](splines_gams/gam_housing_analysis.md)** — King County 자료에서 선형·다항·GAM 을 견주고 부분의존 그림을 읽는다. **선형이 놓치는 곡률을 어디서 되찾는지**가 물음이다.
 
 ### 11.10 패키지 사용법
 

@@ -45,6 +45,7 @@
 
 - **[교란변수](confounding/confounding_variables.md)** --- 설명변수와 결과 모두에 영향을 주어 둘 사이에 허위 연관을 만드는 제3의 변수. 그 변수를 **재지 못했을 때**(잠복변수·공통원인)가 왜 더 어려운지도 같은 쪽에서 다룬다.
 - **[허위상관](confounding/spurious_correlations.md)** --- 진짜 인과관계가 아니라 우연, 교란, 자료 채굴에서 생기는 통계적으로 유의한 상관.
+- **[교란과 인과 시연](confounding/confounding_causation_demo.md)** --- 앞의 두 쪽을 모의자료로 손에 쥐어 본다. 처치가 결과에 **아무 효과가 없는데도** 교란변수 하나가 유의한 회귀계수를 만들어 내는 자리, 그리고 소박한 처치효과 추정값의 **부호가 아예 반대로** 나오는 자리를 각각 만든다. 프리시–워–러벨 정리가 왜 그 둘을 같은 식으로 설명하는지도 여기 있다.
 
 ### 10.4 인과 ★
 
@@ -54,6 +55,7 @@
 - **[무작위 실험과 인과](causation/experiments_causation.md)** --- 무작위 배정이 교란을 제거하여 인과 주장에 가장 강한 증거를 제공하는 방식.
 - **[도구변수 (입문)](causation/instrumental_variables.md)** --- 처치에는 영향을 주지만 결과에는 직접 영향을 주지 않는 변수를 활용하여 관찰자료에서 인과효과를 추정하는 기법.
 - **[방향성 비순환 그래프(DAG)](causation/dags.md)** --- 인과 가정을 부호화하고 교란요인을 찾아내며 분석에서 무엇을 통제할지 결정하는 그래프 틀.
+- **[인과추론 모의실험](causation/causal_simulations.md)** --- 참값을 알고 있는 자료를 만들어 교란과 Simpson의 역설을 눈으로 본다. 이 절의 결론은 둘이 **같은 병의 두 얼굴**이라는 것이다.
 
 ### 10.5 상관 검정
 
@@ -63,6 +65,7 @@
 - **[Spearman의 $\rho$ 검정](correlation_test/test_spearman.md)** --- 정확법이나 근사법으로 Spearman 순위상관의 유의성을 검정한다.
 - **[Kendall의 $\tau$ 검정](correlation_test/test_kendall.md)** --- 표본이 클 때 정규근사를 이용해 Kendall 타우의 유의성을 검정한다.
 - **[두 상관의 비교](correlation_test/comparing_correlations.md)** --- 두 상관계수가 서로 유의하게 다른지 검정하는 방법(예: Fisher의 $z$ 변환).
+- **[세 검정을 같은 자료에서 견주기](correlation_test/correlation_tests.md)** --- 앞의 세 검정을 **한 자료에 함께 돌린다.** 선형·단조·이상점이 섞인 세 가지 자료를 만들어, 어느 자리에서 셋의 답이 갈리는지와 작은 표본에서 켄달이 더 믿을 만한 까닭을 본다.
 
 ### 10.6 상관의 시각화
 
