@@ -244,7 +244,15 @@ Full MathJax/admonition rules are in `agents/SKILL.md`. Key points:
 6. **장 개요** — 「장의 구성」 절 목록, 「선수 지식」, 「핵심 요약」.
    다른 장들의 「선수 지식」이 옮겨 간 내용을 옛 장 이름으로 부르고 있지 않은지
 7. **범위 문장** — 「이 장은 ~까지다」처럼 경계를 말하는 문장
-8. **빈 디렉터리와 고아 그림** — `find docs -type d -empty`
+8. **빈 디렉터리와 고아 그림** — `find docs -type d -empty` 는 **`.DS_Store` 하나만
+   남은 디렉터리를 놓친다.** macOS 가 들어가 본 디렉터리마다 그 파일을 만들어 두므로
+   실제로 그런 자리가 생긴다(2026-10-28 에 `docs/ch_bonus` 와 `docs/ch07/mle` 가
+   그랬다 — 둘 다 장을 걷어낸 자국이다). 추적 파일 수로 세는 편이 확실하다
+
+       for d in $(find docs -type d); do \
+         [ "$(git ls-files "$d" | wc -l)" = "0" ] && echo "$d"; done
+
+   `.DS_Store` 는 `site/` 로 복사되지 않으므로(확인함) 공개 위험은 없다
 
 확인 명령:
 
