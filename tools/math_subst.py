@@ -209,7 +209,18 @@ def main(argv):
     chapters = [a for a in argv if re.fullmatch(r"ch\d+", a)]
     exclude = set()
     if "--exclude" in argv:
-        exclude = {a for a in argv[argv.index("--exclude") + 1:] if a.endswith(".md")}
+        rest = argv[argv.index("--exclude") + 1:]
+        exclude = {a for a in rest if a.endswith(".md")}
+        # **제외가 조용히 비면 일괄 치환이 된다.** 2026-10-29 에 셸 변수를 따옴표
+        # 없이 넘겼더니 다섯 경로가 **한 인자**로 들어와 제외가 하나로 줄었고,
+        # 건드리면 안 되는 29 곳이 바뀌었다. 빌드도 검사도 통과한다.
+        for a in rest:
+            if a.endswith(".md") and not (DOCS / a).exists():
+                print(f"  멈춤: 제외 경로가 없다 — {a!r}")
+                return 2
+            if " " in a:
+                print(f"  멈춤: 인자 하나에 여러 경로가 들어 있다 — {a!r}. 따옴표 없이 넘길 것")
+                return 2
     try:
         pat = re.compile(argv[1])
     except re.error as e:

@@ -58,16 +58,16 @@ $$
 **우측** ($H_1\colon \mu > \mu_0$): 다음이면 $H_0$을 기각한다.
 
 $$
-Z > z_\alpha
+Z > z_{1-\alpha}
 $$
 
 **좌측** ($H_1\colon \mu < \mu_0$): 다음이면 $H_0$을 기각한다.
 
 $$
-Z < -z_\alpha
+Z < -z_{1-\alpha}
 $$
 
-여기서 $z_\alpha$는 $P(Z > z_\alpha) = \alpha$를 만족하는 표준정규의 상위 $\alpha$ 임계값이다.
+여기서 $z_{1-\alpha}$는 누적확률이 $1-\alpha$ 인 표준정규 분위수, 곧 $P(Z > z_{1-\alpha}) = \alpha$ 를 만족하는 점이다($\alpha = 0.05$ 면 $1.645$). 아래첨자를 누적확률로 읽는 규약은 8.1절 [신뢰수준과 포함확률](../../ch08/foundations/coverage.md)에 적어 두었다.
 
 ![두 눈금 위의 같은 기각역](./img/z_rejection_two_scales.png)
 

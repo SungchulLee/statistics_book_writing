@@ -342,9 +342,9 @@ $\mu$의 95% 신뢰구간이 $(12.3, 18.7)$이다. 검정통계량을 계산하�
 ??? success "풀이"
     쌍대성은 단측검정으로도 확장되지만, 대응하는 것은 양측 구간이 아니라 **단측 신뢰한계**이다.
 
-    수준 $\alpha$에서 단측검정 $H_0: \mu \leq \mu_0$ 대 $H_1: \mu > \mu_0$에 대응하는 것은 하한 신뢰한계 $(\bar{x} - z_\alpha \cdot \text{SE},\; \infty)$이다. $\mu_0$이 이 하한 아래에 있을 때에만 $H_0$을 기각한다.
+    수준 $\alpha$에서 단측검정 $H_0: \mu \leq \mu_0$ 대 $H_1: \mu > \mu_0$에 대응하는 것은 하한 신뢰한계 $(\bar{x} - z_{1-\alpha} \cdot \text{SE},\; \infty)$이다. $\mu_0$이 이 하한 아래에 있을 때에만 $H_0$을 기각한다.
 
-    마찬가지로 $H_0: \mu \geq \mu_0$ 대 $H_1: \mu < \mu_0$에 대응하는 것은 상한 신뢰한계 $(-\infty,\; \bar{x} + z_\alpha \cdot \text{SE})$이다. 단측 한계는 검정의 단측 성격을 반영하여 $z_{1-\alpha/2}$가 아니라 $z_\alpha$를 쓴다.
+    마찬가지로 $H_0: \mu \geq \mu_0$ 대 $H_1: \mu < \mu_0$에 대응하는 것은 상한 신뢰한계 $(-\infty,\; \bar{x} + z_{1-\alpha} \cdot \text{SE})$이다. 단측 한계는 검정의 단측 성격을 반영하여 $z_{1-\alpha/2}$가 아니라 $z_{1-\alpha}$를 쓴다.
 
 <div class="drillbox" markdown>
 

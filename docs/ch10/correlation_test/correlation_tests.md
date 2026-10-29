@@ -1834,9 +1834,9 @@ $H_0:\rho=0$의 $t$ 검정은 **정규성을 요구하는가?** 여러 분포에
     **필요 표본의 대략적 조건.**
 
     $$
-    \frac{z_\alpha}{\sqrt{n-3}}<\operatorname{arctanh}\delta
+    \frac{z_{1-\alpha}}{\sqrt{n-3}}<\operatorname{arctanh}\delta
     \quad\Longrightarrow\quad
-    n>3+\left(\frac{z_\alpha}{\operatorname{arctanh}\delta}\right)^2
+    n>3+\left(\frac{z_{1-\alpha}}{\operatorname{arctanh}\delta}\right)^2
     $$
 
     | $\delta$ | 최소 $n$ | 검정력 0.8에 필요한 $n$($\rho=0$) |
