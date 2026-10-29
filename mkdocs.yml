@@ -403,7 +403,6 @@ nav:
                 - 모형과 가정: ch12/anova_one_way/one_way_model.md
                 - F-검정 절차: ch12/anova_one_way/f_test.md
                 - 분산분석 F-통계량 모의실험: ch12/anova_one_way/anova_f_simulation.md
-                - Fisher 방법을 이용한 분산분석 수동 계산: ch12/anova_one_way/anova_manual_computation.md
             - 12.2 이원배치 분산분석:
                 - 주효과와 블록화: ch12/anova_two_way/two_way.md
                 - 교호작용 효과: ch12/anova_two_way/interaction.md

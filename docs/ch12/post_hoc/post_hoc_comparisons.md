@@ -19,7 +19,7 @@ $k = 5$, $\alpha = 0.05$ 면 벌써 $0.40$ 이다. 네 방법이 그 부풀음�
 
 | 방법 | 문턱 (쌍별 차이가 이보다 크면 기각) | 가족 | 유도한 곳 |
 |---|---|---|---|
-| 보정 없음 | $t_{\alpha/2,\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 비교 하나 | — |
+| 보정 없음 (Fisher LSD) | $t_{\alpha/2,\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 비교 하나 | $\S 2$ 보기 1 |
 | Tukey HSD | $q_{\alpha,\,k,\,N-k}\sqrt{MSW/n}$ | 모든 쌍 | [Tukey](tukey.md) 보기 2 |
 | Bonferroni | $t_{\alpha/(2m),\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 미리 지정한 $m$ 개 | [Bonferroni와 Scheffé](bonferroni_scheffe.md) 보기 1 |
 | Scheffé | $\sqrt{(k-1)F_{\alpha,\,k-1,\,N-k}}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 가능한 **모든** 대비 | [Bonferroni와 Scheffé](bonferroni_scheffe.md) 보기 2 |
@@ -28,7 +28,202 @@ Bonferroni 의 단계적 하강 변형인 Holm 절차는 같은 가족을 통제
 강력하다(연습문제 8). 분산이 다를 때의 [Games-Howell](games_howell.md) 은 합동 $MSW$
 대신 쌍마다 따로 표준오차와 자유도를 만든다.
 
-## 2. 문턱을 그려 보면
+## 2. 보정 없음 — Fisher LSD 와 그 「보호」
+
+위 표의 첫 줄이 **보정 없음**이다. 전역 귀무가설을 기각한 뒤 보정 없이 쌍별로 비교하는 이 절차를 Fisher 의 **최소유의차**(LSD)라 부른다. 다른 셋과 달리 **가족이 비교 하나**이므로 엄밀히는 다중비교 방법이 아니고, 그래서 표의 「유도한 곳」이 비어 있었다. 여기서 채운다.
+
+집단 $i$와 $j$에 대한 LSD 문턱은
+
+$$
+\text{LSD} = t_{\alpha/2,\, N-k} \sqrt{\text{MSE}\!\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
+$$
+
+이다. $|\bar{y}_i - \bar{y}_j| > \text{LSD}$이면 그 쌍을 수준 $\alpha$에서 유의하게 다르다고 선언한다.
+
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> Fisher LSD 는 언제 안전한가. 전역 $F$-검정이 기각했을 때만 LSD 쌍별 비교로 넘어가는 절차를 **보호된(protected) LSD** 라 한다.
+
+**(1)** LSD 문턱이 "합동 $MSE$ 를 쓴 이표본 $t$-검정"의 문턱과 같음을 보이고, 같은 자료의 Tukey HSD 문턱과의 비가
+
+$$
+\frac{\text{HSD}}{\text{LSD}} = \frac{q_{\alpha,\,k,\,\nu}}{\sqrt2\, t_{\alpha/2,\,\nu}}
+$$
+
+임을 보이시오. $k = 3$, $\nu = 27$, $\alpha = 0.05$ 에서 이 값을 구하시오.
+
+**(2)** 보호된 LSD 의 **집단별 오류율**(FWER)을 모의실험으로 재시오. 평균 하나만 크게 떨어뜨려 전역 검정이 거의 언제나 기각하도록 만들고, **나머지 같은 평균들 사이**에서 거짓 유의가 하나라도 나올 확률을 $k = 3, 5, 7$ 에 대해 비교하시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 합동분산을 쓴 이표본 $t$-검정은
+
+    $$
+    t = \frac{\bar y_i - \bar y_j}{\sqrt{s_p^2\left(\frac{1}{n_i}+\frac{1}{n_j}\right)}}
+    $$
+
+    를 $|t| > t_{\alpha/2,\nu}$ 와 견준다. 양변에 분모를 곱하면 기각 조건이
+
+    $$
+    |\bar y_i - \bar y_j| > t_{\alpha/2,\nu}\sqrt{s_p^2\left(\tfrac{1}{n_i}+\tfrac{1}{n_j}\right)}
+    $$
+
+    이 되는데, LSD 가 쓰는 $MSE$ 는 **$k$ 개 집단 전부를 합동한 분산추정량**이므로 두 집단만으로 만든 $s_p^2$ 대신 그것을 넣고 자유도를 $n_i+n_j-2$ 대신 $\nu = N-k$ 로 바꾼 것이 정확히 LSD 문턱이다. 그러므로 **LSD 는 분모를 더 많은 자료로 만든 쌍별 $t$-검정**이다. $k=2$ 이면 $MSE = s_p^2$, $\nu = N-2$ 라 둘이 완전히 같아진다.
+
+    Tukey HSD 는 같은 자리에 스튜던트화 범위 분포를 쓴다. 균형 설계에서
+
+    $$
+    \text{HSD} = q_{\alpha,k,\nu}\sqrt{\frac{MSE}{n}},
+    \qquad
+    \text{LSD} = t_{\alpha/2,\nu}\sqrt{\frac{2\,MSE}{n}}
+    $$
+
+    이므로 $\sqrt{MSE/n}$ 이 약분되어
+
+    $$
+    \frac{\text{HSD}}{\text{LSD}} = \frac{q_{\alpha,k,\nu}}{\sqrt2\,t_{\alpha/2,\nu}}
+    $$
+
+    이다. **$MSE$ 와 $n$ 에 전혀 의존하지 않는다.** $k=2$ 이면 $q_{\alpha,2,\nu} = \sqrt2\,t_{\alpha/2,\nu}$ 라 비가 정확히 $1$ 이고, $k$ 가 커지면 $q$ 가 커지므로 비도 커진다. 곧 **집단이 많아질수록 Tukey 의 문턱이 LSD 보다 빠르게 높아진다.** 아래에서 $k=3$, $\nu=27$ 의 값을 잰다.
+
+    **(2) 수치적으로.** 먼저 LSD 를 돌린다.
+
+    ```python
+    from itertools import combinations
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+    import statsmodels.api as sm
+
+    # 12.1절 [모형과 가정](../anova_one_way/one_way_model.md)이 쓴 것과 같은 자료다.
+    pg = sm.datasets.get_rdataset("PlantGrowth").data
+    groups = {name: g["weight"].to_numpy() for name, g in pg.groupby("group")}
+    N_total, k = len(pg), len(groups)
+    SSE = sum(((g - g.mean()) ** 2).sum() for g in groups.values())
+    MSE = SSE / (N_total - k)
+    print(f"N = {N_total}, k = {k},  MSE = {MSE:.4f}  (자유도 {N_total - k})")
+
+    def fisher_lsd(groups, MSE, alpha=0.05):
+        """Fisher 의 최소유의차로 쌍별 비교를 한다.
+
+        쌍마다 t-검정을 하되 표준오차를 그 두 집단이 아니라 전체 MSE 로 만든다.
+        모든 집단의 정보를 쓰므로 자유도가 커지는 것이 이점이다.
+        다만 다중비교를 보정하지 않으므로, 분산분석이 유의할 때만 쓴다.
+        """
+        names = list(groups.keys())
+        N_total = sum(len(g) for g in groups.values())
+        k = len(groups)
+        df_within = N_total - k
+        results = []
+        for (n1, g1), (n2, g2) in combinations(groups.items(), 2):
+            t_crit = stats.t.ppf(1 - alpha / 2, df_within)
+            lsd_val = t_crit * np.sqrt(MSE * (1/len(groups[n1]) + 1/len(groups[n2])))
+            diff = abs(groups[n1].mean() - groups[n2].mean())
+            results.append({"pair": f"{n1} vs {n2}",
+                            "diff": diff, "LSD": lsd_val,
+                            "significant": diff > lsd_val})
+        return results
+
+
+    for r in fisher_lsd(groups, MSE):
+        print(f"{r['pair']:<14} diff = {r['diff']:.4f}  LSD = {r['LSD']:.4f}  {r['significant']}")
+    ```
+
+    출력:
+
+    ```
+    N = 30, k = 3,  MSE = 0.3886  (자유도 27)
+    ctrl vs trt1   diff = 0.3710  LSD = 0.5720  False
+    ctrl vs trt2   diff = 0.4940  LSD = 0.5720  False
+    trt1 vs trt2   diff = 0.8650  LSD = 0.5720  True
+    ```
+
+    전역 검정은 $p = 0.0159$로 기각했는데 쌍별로 보면 trt1 대 trt2 하나만 유의하다. 대조군은 두 처리 어느 쪽과도 유의하게 다르지 않다. 두 처리가 대조군을 사이에 두고 반대 방향으로 벌어져 있어, 서로 간의 차이가 각각과 대조군의 차이보다 큰 것이다.
+
+    집단 크기가 모두 10으로 같아 LSD 문턱도 0.5720 하나로 같다. 크기가 다르면 쌍마다 문턱이 달라진다.
+
+    이제 (1)의 비를 재고 (2)의 모의실험을 돌린다.
+
+    ```python
+    t_crit = stats.t.ppf(0.975, 27)
+    q_crit = stats.studentized_range.ppf(0.95, 3, 27)
+    LSD = t_crit * np.sqrt(2 * MSE / 10)
+    HSD = q_crit * np.sqrt(MSE / 10)
+    print(f"t(0.975, 27) = {t_crit:.4f}   LSD = {LSD:.4f}")
+    print(f"q(0.05, 3, 27) = {q_crit:.4f}   HSD = {HSD:.4f}")
+    print(f"HSD / LSD = {HSD / LSD:.4f}   q/(sqrt(2) t) = {q_crit / (np.sqrt(2) * t_crit):.4f}")
+
+
+    def protected_lsd_fwer(mu, B=40000, n=10, alpha=0.05, seed=0):
+        """평균이 mu 인 k 개 집단에서, 전역 F 가 기각한 뒤 LSD 를 돌렸을 때
+        '참으로 같은 쌍' 가운데 하나라도 유의하다고 선언될 확률을 센다."""
+        mu = np.asarray(mu, float)
+        k = len(mu)
+        N = n * k
+        rng = np.random.default_rng(seed)
+        Y = rng.normal(mu[None, :, None], 1.0, size=(B, k, n))
+        gmean = Y.mean(axis=2)
+        grand = Y.mean(axis=(1, 2))
+        SSB = n * ((gmean - grand[:, None]) ** 2).sum(axis=1)
+        SSE_ = ((Y - gmean[:, :, None]) ** 2).sum(axis=(1, 2))
+        Fsim = (SSB / (k - 1)) / (SSE_ / (N - k))
+        gate = Fsim > stats.f(k - 1, N - k).ppf(1 - alpha)
+        thr = stats.t.ppf(1 - alpha / 2, N - k) * np.sqrt((SSE_ / (N - k)) * 2 / n)
+        null_pairs = [(i, j) for i, j in combinations(range(k), 2) if mu[i] == mu[j]]
+        any_false = np.zeros(B, bool)
+        for i, j in null_pairs:
+            any_false |= np.abs(gmean[:, i] - gmean[:, j]) > thr
+        return np.mean(gate & any_false), gate.mean(), len(null_pairs)
+
+
+    print(f"\n{'design':>22}{'nullpairs':>11}{'global.rej':>12}{'FWER':>9}")
+    for mu, label in [((0, 0, 3), "k=3, mu=(0,0,3)"),
+                      ((0, 0, 0, 0, 5), "k=5, mu=(0,0,0,0,5)"),
+                      ((0, 0, 0, 0, 0, 0, 8), "k=7, mu=(0,...,0,8)")]:
+        rate, gate, npair = protected_lsd_fwer(mu)
+        print(f"{label:>22}{npair:>11}{gate:>12.4f}{rate:>9.4f}")
+    print(f"\nB=40000 에서 FWER 추정의 MC 표준오차 ~ {np.sqrt(0.05 * 0.95 / 40000):.4f}")
+    ```
+
+    출력:
+
+    ```
+    t(0.975, 27) = 2.0518   LSD = 0.5720
+    q(0.05, 3, 27) = 3.5064   HSD = 0.6912
+    HSD / LSD = 1.2084   q/(sqrt(2) t) = 1.2084
+
+                    design  nullpairs  global.rej     FWER
+           k=3, mu=(0,0,3)          1      1.0000   0.0493
+       k=5, mu=(0,0,0,0,5)          6      1.0000   0.1974
+       k=7, mu=(0,...,0,8)         15      1.0000   0.3545
+
+    B=40000 에서 FWER 추정의 MC 표준오차 ~ 0.0011
+    ```
+
+    **(1)의 비가 맞는다.** $\text{HSD}/\text{LSD} = 1.2084$ 가 $q/(\sqrt2\,t) = 1.2084$ 와 네 자리까지 같다. Tukey 문턱 $0.6912$ 가 LSD 문턱 $0.5720$ 보다 $21\%$ 높다. 그런데 이 자료에서 유일하게 유의했던 trt1–trt2 의 차이가 $0.8650$ 이라 **두 문턱 모두를 넘는다.** 그래서 Tukey 로 바꾸어도 결론이 같고, 다만 $p_{\text{adj}}$ 가 $0.012$ 로 커질 뿐이다.
+
+    **(2)가 보호된 LSD 의 한계를 보여 준다.** 세 설계 모두 전역 $F$-검정이 $100\%$ 기각하므로 관문은 아무 일도 하지 않는다. 그 뒤에 남는 것은 **같은 평균들끼리의 쌍별 $t$-검정**이고, 그 수가 늘면 거짓 유의가 하나라도 나올 확률이 따라 오른다.
+
+    | $k$ | 참으로 같은 쌍 | FWER |
+    |---|---|---|
+    | $3$ | $1$ | $0.0493$ |
+    | $5$ | $6$ | $0.1974$ |
+    | $7$ | $15$ | $0.3545$ |
+
+    $k = 3$ 에서는 $0.0493$ 으로 명목수준 $0.05$ 를 지킨다(몬테카를로 표준오차가 $0.0011$ 이므로 $0.05$ 와 다르다고 할 수 없다). **비교할 쌍이 하나뿐이면 다중성이 없기 때문**이다. 그런데 $k=5$ 에서 $0.1974$, $k=7$ 에서 $0.3545$ 로 치솟는다. 일곱 집단 중 하나만 진짜로 다른 상황에서 **세 번에 한 번꼴로 가짜 쌍을 발표하게 된다.**
+
+    **그러므로 "분산분석이 유의했으니 LSD 를 써도 된다"는 말은 $k = 3$ 에서만 통한다.** 집단이 넷 이상이면 전역 검정이라는 관문은 보호막 구실을 하지 못하고, Tukey HSD 처럼 쌍의 개수를 직접 셈에 넣는 방법으로 가야 한다.
+
+---
+
+
+`tukey.md` 가 「보호된 LSD 는 완전 귀무는 막지만 **부분 귀무는 막지 못한다**」고 적는 근거가 (2)의 표다. 거기서는 평균이 **모두 같을 때**의 FWER 을 재어 $k = 8$ 에서 $0.492$ 를 얻는데, 그 경우에는 전역 $F$-검정이 $95\%$ 는 통과시키지 않으므로 관문이 제 몫을 한다. 위의 (2)는 **평균 하나만 다른** 설계라 관문이 언제나 열리고, 그래서 보호가 사라진다. 12.3절 [Tukey 정직유의차](tukey.md) 연습문제의 완전 귀무 모의실험과 **함께 읽어야** 「보호된 LSD 가 언제 안전한가」의 답이 완성된다.
+
+---
+
+## 3. 문턱을 그려 보면
 
 | 방법 | 오류를 통제하는 대상 | 검정력 | 적합한 경우 |
 |---|---|---|---|
@@ -44,14 +239,14 @@ $k = 2$에서는 네 선이 한 점 $2.048$에서 만난다. **비교가 하나�
 
 세 보정 사이의 서열도 분명하다. **튜키가 언제나 본페로니보다 낮다.** $k = 6$에서 $2.92$ 대 $3.02$, $k = 10$에서 $3.22$ 대 $3.33$이다. 쌍별 비교라는 고정된 가족에서는 튜키가 그 가족의 정확한 귀무분포(스튜던트화 범위분포)를 쓰는 반면 본페로니는 상관 구조를 버리고 개수만 세기 때문이다. 셰페는 $k$가 커질수록 가장 빠르게 벌어진다. 쌍별 비교 $\binom{k}{2}$개가 아니라 **무한히 많은 대비 전부**를 동시에 보호하느라 치르는 값이다. 쌍별 비교만 할 생각이라면 셰페는 사지 않아도 될 보험이다.
 
-오른쪽은 아래 보기 1 의 자료(참 평균 $10, 12, 15$, $\sigma = 3.5$, 집단당 $n = 15$)에 이 문턱들을 얹은 것이다. 합동 $\text{MS}_W = 8.088$, 쌍별 표준오차 $\sqrt{2\,\text{MS}_W/15} = 1.039$이므로 네 문턱은 각각 $2.096,\ 2.523,\ 2.590,\ 2.635$가 된다. A–C의 $5.475$와 B–C의 $3.339$는 네 문턱을 모두 넘어 어느 방법으로도 유의하다. **판정이 갈리는 것은 A–B 하나다.** 관측 차이 $2.135$가 보정 없는 문턱 $2.096$은 넘지만 세 보정 문턱은 모두 넘지 못한다. 참 차이가 $2$로 분명히 존재하는데도 놓치는 것이니, 이 자료에서 다중비교 보정의 대가가 정확히 이 한 쌍이었던 셈이다.
+오른쪽은 아래 보기 2 의 자료(참 평균 $10, 12, 15$, $\sigma = 3.5$, 집단당 $n = 15$)에 이 문턱들을 얹은 것이다. 합동 $\text{MS}_W = 8.088$, 쌍별 표준오차 $\sqrt{2\,\text{MS}_W/15} = 1.039$이므로 네 문턱은 각각 $2.096,\ 2.523,\ 2.590,\ 2.635$가 된다. A–C의 $5.475$와 B–C의 $3.339$는 네 문턱을 모두 넘어 어느 방법으로도 유의하다. **판정이 갈리는 것은 A–B 하나다.** 관측 차이 $2.135$가 보정 없는 문턱 $2.096$은 넘지만 세 보정 문턱은 모두 넘지 못한다. 참 차이가 $2$로 분명히 존재하는데도 놓치는 것이니, 이 자료에서 다중비교 보정의 대가가 정확히 이 한 쌍이었던 셈이다.
 
 
 ### 놓친 쌍은 왜 놓쳤는가
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> A–B 를 놓친 것은 운이 나빴기 때문인가. 참 평균이 $10, 12, 15$, 참 표준편차가 모두 $3.5$, 집단당 $n = 15$ 인 자료를 만들어 Tukey HSD 를 돌린다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> A–B 를 놓친 것은 운이 나빴기 때문인가. 참 평균이 $10, 12, 15$, 참 표준편차가 모두 $3.5$, 집단당 $n = 15$ 인 자료를 만들어 Tukey HSD 를 돌린다.
 
 **(1)** 균형 설계에서 쌍별 통계량
 
@@ -222,7 +417,7 @@ $$
 
 ---
 
-## 3. 어느 방법을 고르는가
+## 4. 어느 방법을 고르는가
 
 - **Tukey HSD**는 모든 집단 평균 쌍을 비교하고 싶을 때의 기본 선택이다. 균형 설계에서는 정확하고 불균형 설계에서는 근사적이다(Tukey-Kramer).
 - **Bonferroni**는 계획된 비교가 소수일 때 가장 유용하다. 비교 수가 늘수록 검정력이 떨어지기 때문이다.
@@ -959,6 +1154,272 @@ Bonferroni 보정이 가족단위 오류율을 수준 $\alpha$로 통제함을 �
     | **웰치 $F$** | **게임스–하웰** |
 
     **웰치로 검정하고 튜키로 사후분석하는 것은 모순**이다. 앞에서 등분산을 가정하지 않다가 뒤에서 가정하는 셈이다.
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff med" title="중간"></span>
+집단 수 $k$가 클 때 Fisher LSD 절차가 가족단위 오류율을 통제하지 못하는 이유를 설명하라. 어떤 대안을 권하겠는가?
+
+</div>
+
+??? success "풀이"
+    Fisher LSD는 각 쌍별 비교를 조정 없이 수준 $\alpha$에서 수행한다. 비교가 $\binom{k}{2}$개면 거짓 기각이 적어도 하나 나올 확률이 빠르게 커진다. $k = 5$이면 쌍별 검정이 10개이고, 전역 귀무가설 아래에서 가족단위 오류율이 $1 - (1 - \alpha)^{10} \approx 0.40$에 이를 수 있다.
+
+    표준적인 대안은 Tukey의 정직유의차(HSD) 방법이다. $t$-분포 대신 스튜던트화 범위 분포를 써서 모든 쌍별 비교에 대해 가족단위 오류율을 $\alpha$로 동시에 통제한다.
+
+---
+
+<div class="drillbox" markdown>
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span>
+$\S 2$ 의 LSD 문턱 $t_{\alpha/2,\,N-k}\sqrt{MSW(1/n_i + 1/n_j)}$ 는 두 집단의 크기에만 의존한다. 세 집단이 각각 $n = 30$ 인 균형 설계에서 한 집단만 $n = 5$ 로 줄면 그 집단이 끼인 쌍의 문턱은 어떻게 달라지는가. 균형인 경우와 견주어 비를 구하시오.
+
+</div>
+
+??? success "풀이"
+    LSD 문턱은
+
+    $$
+    \text{LSD} = t_{\alpha/2,\, N-k}\sqrt{\text{MSE}\!\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
+    $$
+
+    이다. $n_{\text{덴마크}}$가 30에서 5가 되면 $1/n_j$가 $1/30 \approx 0.033$에서 $1/5 = 0.2$로 커진다. 합 $1/n_i + 1/n_j$는 약 $0.067$에서 $0.233$으로 늘어 제곱근 안의 값이 거의 네 배가 된다. 그 결과 LSD 문턱이 크게 커져 네덜란드–덴마크 차이를 유의하다고 선언하기 어려워진다. 또한 전체 $N$이 줄고 $\text{MSE}$도 달라질 수 있어 문턱이 더 넓어질 수 있다.
+
+---
+
+<div class="drillbox" markdown>
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff med" title="중간"></span>
+보기의 PlantGrowth 자료에 **피셔 LSD**를 실제로 적용하고, 다중비교 보정을 한 결과와 비교하라.
+
+</div>
+
+??? success "풀이"
+    **LSD의 정의.** 합동 $\text{MSE}$를 쓴 $t$ 검정이다.
+
+    $$
+    \text{LSD}_{ij}=t_{\alpha/2,\,N-k}\sqrt{\text{MSE}\Bigl(\frac1{n_i}+\frac1{n_j}\Bigr)}
+    $$
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from itertools import combinations
+    from statsmodels.stats.multitest import multipletests
+    from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+    groups = {
+        "ctrl": np.array([4.17, 5.58, 5.18, 6.11, 4.50, 4.61, 5.17, 4.53, 5.33, 5.14]),
+        "trt1": np.array([4.81, 4.17, 4.41, 3.59, 5.87, 3.83, 6.03, 4.89, 4.32, 4.69]),
+        "trt2": np.array([6.31, 5.12, 5.54, 5.50, 5.37, 5.29, 4.92, 6.15, 5.80, 5.26]),
+    }
+    names = list(groups)
+    values = np.concatenate([groups[n] for n in names])
+    N, k = len(values), len(names)
+    SSE = sum(((g - g.mean())**2).sum() for g in groups.values())
+    MSE = SSE / (N - k)
+    t_crit = stats.t.ppf(0.975, N - k)
+    print(f"MSE = {MSE:.4f},  df = {N - k},  t_crit = {t_crit:.4f}\n")
+
+    print("피셔 LSD")
+    pvals, labels = [], []
+    for a, b in combinations(range(k), 2):
+        ga, gb = groups[names[a]], groups[names[b]]
+        diff = ga.mean() - gb.mean()
+        se = np.sqrt(MSE * (1 / len(ga) + 1 / len(gb)))
+        t = diff / se
+        p = 2 * stats.t.sf(abs(t), N - k)
+        pvals.append(p)
+        labels.append(f"{names[a]}-{names[b]}")
+        print(f"  {names[a]}-{names[b]}:  차이 {diff:+.4f},  LSD {t_crit * se:.4f},"
+              f"  t = {t:+.4f},  p = {p:.4f}"
+              f"   {'유의' if abs(diff) > t_crit * se else ''}")
+
+    for method, name in [("bonferroni", "본페로니"), ("holm", "홀름  ")]:
+        adj = multipletests(pvals, method=method)[1]
+        print(f"  {name}: " + "   ".join(f"{labels[i]} {adj[i]:.4f}"
+                                         for i in range(3)))
+
+    lab = np.repeat(names, [len(groups[n]) for n in names])
+    print("\n튜키 HSD")
+    print(pairwise_tukeyhsd(values, lab, alpha=0.05))
+    ```
+
+    ```text
+    MSE = 0.3886,  df = 27,  t_crit = 2.0518
+
+    피셔 LSD
+      ctrl-trt1:  차이 +0.3710,  LSD 0.5720,  t = +1.3308,  p = 0.1944
+      ctrl-trt2:  차이 -0.4940,  LSD 0.5720,  t = -1.7720,  p = 0.0877
+      trt1-trt2:  차이 -0.8650,  LSD 0.5720,  t = -3.1028,  p = 0.0045   유의
+      본페로니: ctrl-trt1 0.5832   ctrl-trt2 0.2630   trt1-trt2 0.0134
+      홀름  : ctrl-trt1 0.1944   ctrl-trt2 0.1754   trt1-trt2 0.0134
+
+    튜키 HSD
+    Multiple Comparison of Means - Tukey HSD, FWER=0.05
+    ===================================================
+    group1 group2 meandiff p-adj   lower  upper  reject
+    ---------------------------------------------------
+      ctrl   trt1   -0.371 0.3909 -1.0622 0.3202  False
+      ctrl   trt2    0.494  0.198 -0.1972 1.1852  False
+      trt1   trt2    0.865  0.012  0.1738 1.5562   True
+    ---------------------------------------------------
+    ```
+
+    **네 방법이 같은 결론에 이른다.** trt1과 trt2만 유의하다.
+
+    **LSD가 세 쌍에 대해 같은 문턱(0.5720)을 쓴다.** 표본크기가 모두 10으로 같기 때문이다. **불균형이면 쌍마다 문턱이 달라진다**(연습문제 5).
+
+    **보정 후 $p$ 값의 차이가 보인다.**
+
+    | 쌍 | LSD $p$ | 본페로니 | 홀름 | 튜키 |
+    |---|---|---|---|---|
+    | ctrl-trt1 | 0.194 | 0.583 | 0.194 | 0.391 |
+    | ctrl-trt2 | 0.088 | 0.263 | 0.175 | 0.198 |
+    | **trt1-trt2** | **0.0045** | **0.0134** | **0.0134** | **0.012** |
+
+    **튜키가 본페로니보다 덜 보수적**이다(0.198 대 0.263). 스튜던트화 범위분포를 쓰므로 **쌍별 비교에 특화**되어 있기 때문이다.
+
+    **홀름은 가장 큰 $p$를 보정하지 않는다**(0.194 그대로). 세 방법 중 구조가 다르다.
+
+    **ctrl-trt2가 경계에 있다.** LSD로 0.088, 튜키로 0.198이다. **보정 여부가 결론을 바꿀 수 있는 자리**인데, 여기서는 어느 쪽으로도 유의하지 않다.
+
+    **옴니버스 $F$ 검정이 $p=0.0159$로 유의했으므로** 사후비교로 넘어가는 것이 정당하다(보호된 절차).
+
+---
+
+<div class="drillbox" markdown>
+
+---
+
+<div class="drillbox" markdown>
+
+**연습문제 14.** <span class="diff hard" title="어려움"></span>
+연습문제 11 이 지적한 LSD 의 문제를 **모의실험으로 정량화**하라. "보호된" LSD는 정말 안전한가?
+
+</div>
+
+??? success "풀이"
+    **두 가지 LSD를 구분해야 한다.**
+
+    | 방식 | 절차 |
+    |---|---|
+    | 무보호 LSD | 옴니버스 $F$ 없이 바로 쌍별 $t$ 검정 |
+    | **보호된 LSD** | $F$가 유의할 때만 쌍별 비교 |
+
+    ```python
+    import numpy as np
+    from scipy import stats
+    from itertools import combinations
+    from statsmodels.stats.libqsturng import qsturng
+
+    rng = np.random.default_rng(1212)
+    M, n = 5_000, 10
+
+    print("① 완전 귀무: 모든 평균이 같다")
+    print(f"{'k':>3s} {'쌍':>4s} {'보호 LSD':>10s} {'무보호 LSD':>11s} "
+          f"{'본페로니':>10s} {'튜키':>8s}")
+    for k in [3, 4, 6, 10]:
+        n_pair = k * (k - 1) // 2
+        a = b = c = d = 0
+        for _ in range(M):
+            g = [rng.standard_normal(n) for _ in range(k)]
+            N = k * n
+            MSE = sum(((x - x.mean())**2).sum() for x in g) / (N - k)
+            se = np.sqrt(MSE * 2 / n)
+            diffs = [abs(g[i].mean() - g[j].mean())
+                     for i, j in combinations(range(k), 2)]
+            lsd_hit = any(dd > stats.t.ppf(0.975, N - k) * se for dd in diffs)
+            b += lsd_hit
+            a += (stats.f_oneway(*g).pvalue < 0.05) and lsd_hit
+            c += any(dd > stats.t.ppf(1 - 0.025 / n_pair, N - k) * se
+                     for dd in diffs)
+            d += any(dd > qsturng(0.95, k, N - k) * np.sqrt(MSE / n)
+                     for dd in diffs)
+        print(f"{k:3d} {n_pair:4d} {a / M:10.4f} {b / M:11.4f} "
+              f"{c / M:10.4f} {d / M:8.4f}")
+    ```
+
+    ```text
+    ① 완전 귀무: 모든 평균이 같다
+      k    쌍     보호 LSD     무보호 LSD       본페로니       튜키
+      3    3     0.0520      0.1224     0.0442   0.0516
+      4    6     0.0470      0.1954     0.0384   0.0476
+      6   15     0.0468      0.3550     0.0362   0.0524
+     10   45     0.0498      0.6098     0.0362   0.0536
+    ```
+
+    **무보호 LSD는 재앙이다.** $k=10$이면 모든 평균이 같은데도 **61%**가 뭔가를 발견한다.
+
+    **보호된 LSD는 완전 귀무에서 잘 작동한다**(0.047~0.052). 옴니버스 $F$가 문지기 역할을 제대로 한다.
+
+    **그런데 이것이 전부가 아니다.** 실제 상황에서는 **일부 평균만 다른** 경우가 흔하다.
+
+    ```python
+    rng = np.random.default_rng(3434)
+    print("② 부분 귀무: 한 집단만 멀리 떨어지고 나머지는 모두 같다")
+    print(f"{'k':>3s} {'F 기각률':>10s} {'보호 LSD':>10s} {'본페로니':>10s} "
+          f"{'튜키':>8s}")
+    for k in [3, 4, 6, 10]:
+        mu = np.zeros(k)
+        mu[0] = 4.0
+        n_pair = k * (k - 1) // 2
+        f_rej = a = c = d = 0
+        for _ in range(M):
+            g = [rng.normal(m, 1, n) for m in mu]
+            N = k * n
+            MSE = sum(((x - x.mean())**2).sum() for x in g) / (N - k)
+            se = np.sqrt(MSE * 2 / n)
+            p_f = stats.f_oneway(*g).pvalue
+            f_rej += p_f < 0.05
+            # 참으로 같은 집단들(1..k-1) 사이에서 거짓 발견이 있는가
+            idx = list(range(1, k))
+            eq = [abs(g[i].mean() - g[j].mean())
+                  for i, j in combinations(idx, 2)]
+            if p_f < 0.05:
+                a += any(dd > stats.t.ppf(0.975, N - k) * se for dd in eq)
+            c += any(dd > stats.t.ppf(1 - 0.025 / n_pair, N - k) * se
+                     for dd in eq)
+            d += any(dd > qsturng(0.95, k, N - k) * np.sqrt(MSE / n)
+                     for dd in eq)
+        print(f"{k:3d} {f_rej / M:10.4f} {a / M:10.4f} {c / M:10.4f} "
+              f"{d / M:8.4f}")
+    ```
+
+    ```text
+    ② 부분 귀무: 한 집단만 멀리 떨어지고 나머지는 모두 같다
+      k      F 기각률     보호 LSD       본페로니       튜키
+      3     1.0000     0.0540     0.0192   0.0222
+      4     1.0000     0.1204     0.0246   0.0290
+      6     1.0000     0.2864     0.0272   0.0352
+     10     1.0000     0.5598     0.0280   0.0406
+    ```
+
+    **보호가 무너진다.** $k=10$에서 **참으로 같은 45쌍 중 적어도 하나를 거짓 발견할 확률이 0.560**이다.
+
+    **왜 그런가.** 집단 1이 멀리 떨어져 있으므로 $F$ 검정이 **언제나 기각**한다(기각률 1.0000). 문지기가 문을 항상 열어 주므로 **보호가 사라진다.** 그 뒤의 쌍별 비교는 사실상 무보호 LSD다.
+
+    **$k=3$에서만 보호가 유효하다**(0.054). 집단이 셋이면 "한 쌍만 다르다"는 상황에서 남는 비교가 하나뿐이라, $F$가 기각한 조건 아래에서도 그 하나의 수준이 $\alpha$를 넘지 않는다. 이것이 **피셔 LSD가 $k=3$에서만 권장되는 이유**다.
+
+    **본페로니와 튜키는 어느 경우에도 안전하다**(0.019~0.041). 오히려 보수적이다.
+
+    **결론.**
+
+    | $k$ | 권장 |
+    |---|---|
+    | 3 | 보호된 LSD도 무방 |
+    | **4 이상** | **튜키(모든 쌍) 또는 더넷(대조군 대비)** |
+    | 어느 경우든 | 무보호 LSD는 쓰지 않는다 |
 
 ---
 
