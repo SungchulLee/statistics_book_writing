@@ -10,7 +10,7 @@
 
 ## 2. 정규 모형의 충분통계량
 
-충분통계량의 정의와 **인수분해 정리**(Fisher–Neyman)는 $7.4$ 절 [충분통계량](sufficiency.md)이 정의 $1$ 과 정리 $1$ 로 적고 증명해 두었다. 쓸 꼴만 다시 적으면, $T(\mathbf X)$ 가 충분할 필요충분조건은 결합밀도가
+충분통계량의 정의와 **인수분해 정리**(Fisher–Neyman)는 7.1절 [충분통계량](sufficiency.md)이 정의 $1$ 과 정리 $1$ 로 적고 증명해 두었다. 쓸 꼴만 다시 적으면, $T(\mathbf X)$ 가 충분할 필요충분조건은 결합밀도가
 
 $$
 f(\mathbf{x}; \theta) = g(T(\mathbf{x}), \theta) \cdot h(\mathbf{x})
