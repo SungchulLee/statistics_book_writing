@@ -376,7 +376,7 @@ _확인한 곳 — 파인스타인·소신·웰스의 「The Will Rogers Phenome
     \max(0,\ p_i+q_i-1) \;\le\; \pi_i \;\le\; \min(p_i,\ q_i)
     $$
 
-    **프레셰–회프딩 경계**다(4장 베르누이 연습문제 8).
+    **프레셰–회프딩 경계**다(4.1절 [베르누이분포](../../ch04/discrete_distributions/bernoulli.md) 연습문제 10).
 
     ```python
     import numpy as np
@@ -543,7 +543,7 @@ _확인한 곳 — 파인스타인·소신·웰스의 「The Will Rogers Phenome
 </div>
 
 ??? success "풀이"
-    **개인 수준에서 $x$를 오차와 함께 관측하면 기울기가 감쇠한다**(2장 가격자료 연습문제 7).
+    **개인 수준에서 $x$를 오차와 함께 관측하면 기울기가 감쇠한다**(2.4절 [기술통계 (대마 가격)](../../ch02/spread/descriptive_stats_weed_prices.md) 연습문제 9).
 
     $$
     \hat\beta \to \beta\cdot\frac{\sigma_{x^*}^2}{\sigma_{x^*}^2+\sigma_e^2}
