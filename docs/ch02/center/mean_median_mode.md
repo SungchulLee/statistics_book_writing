@@ -2215,8 +2215,8 @@ $\bar{x} = \sum f_i m_i / \sum f_i$와 $s^2 = \sum f_i (m_i - \bar{x})^2 / (n - 
     | 결과 | $g$ | 방향 |
     |---|---|---|
     | AM $\ge$ GM $\ge$ HM | $\log$ (오목) | 이 문제 |
-    | $\mathbb{E}[s] < \sigma$ | $\sqrt{\cdot}$ (오목) | 1장 연습문제 10 |
-    | $\mathbb{E}[1/\bar{X}] > 1/\mu$ | $1/x$ (볼록) | 1장 연습문제 10 |
+    | $\mathbb{E}[s] < \sigma$ | $\sqrt{\cdot}$ (오목) | 1.1절 [모집단과 표본](../../ch01/classical/population_sample.md) 연습문제 8 |
+    | $\mathbb{E}[1/\bar{X}] > 1/\mu$ | $1/x$ (볼록) | 7.2절 [최대가능도의 점근적 성질](../../ch07/theory/mle_asymptotics.md) $\S 3$ |
     | $\operatorname{Var}(X) = \mathbb{E}[X^2]-\mu^2 \ge 0$ | $x^2$ (볼록) | 분산의 비음성 |
     | 로그정규의 평균 $>$ 중앙값 | $\exp$ (볼록) | 앞 절 |
 
