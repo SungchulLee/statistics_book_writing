@@ -572,7 +572,7 @@ $$
     -2\ln\Lambda = n\,g(1+\epsilon) \approx \frac{n\epsilon^2}{2} = \frac{n(\hat\sigma^2-\sigma_0^2)^2}{2\sigma_0^4} = \frac{(\hat\sigma^2-\sigma_0^2)^2}{2\sigma_0^4/n}
     $$
 
-    이다. 분모 $2\sigma_0^4/n$ 은 **정규 모집단에서 $\hat\sigma^2$ 의 분산**이다. 5 장 표본분산의 표준오차 정리 1 이 $\operatorname{Var}(S^2) = \frac{\sigma^4}{n}(\beta_2 - 1)$ 을 주고 정규분포는 $\beta_2 = 3$ 이므로 $2\sigma^4/n$ 이 된다. 그러므로
+    이다. 분모 $2\sigma_0^4/n$ 은 **정규 모집단에서 $\hat\sigma^2$ 의 분산**이다. 5.6절 [S²의 표준오차](../../ch05/applications/se_s2.md) 정리 1 이 $\operatorname{Var}(S^2) = \frac{\sigma^4}{n}(\beta_2 - 1)$ 을 주고 정규분포는 $\beta_2 = 3$ 이므로 $2\sigma^4/n$ 이 된다. 그러므로
 
     $$
     -2\ln\Lambda \;\approx\; \left(\frac{\hat\sigma^2 - \sigma_0^2}{\operatorname{SE}(\hat\sigma^2)}\right)^{\!2} = Z^2
@@ -620,7 +620,7 @@ $k = 2$ 인 다표본 LRT 를 분산비 하나로 바꿔 쓴다. $F = S_1^2/S_2^
 
     를 얻는다.
 
-    **자료가 $F$ 하나로만 들어온다.** $S_1^2$ 과 $S_2^2$ 이 각각 얼마인지는 전혀 쓰이지 않고 비만 쓰인다. 보기 2 에서 $C$ 는 자유도만의 함수였으므로 $T_{\text{Bartlett}} = -2\ln\Lambda/C$ 도 $F$ 의 함수다. 그리고 (2)에서 그 함수가 $F=1$ 양쪽으로 단조이므로 기각역은 $\{F < F_L\} \cup \{F > F_U\}$ 꼴이 된다. 곧 **$k=2$ 의 바틀렛 검정(= LRT)은 양측 $F$ 검정과 같은 검정이고, 다른 점은 임계값을 어디에 놓느냐 뿐이다.** $H_0$ 아래에서 $F \sim F_{\nu_1,\nu_2}$ 라는 5 장 분산비 정리 1 과 앞뒤가 맞는다.
+    **자료가 $F$ 하나로만 들어온다.** $S_1^2$ 과 $S_2^2$ 이 각각 얼마인지는 전혀 쓰이지 않고 비만 쓰인다. 보기 2 에서 $C$ 는 자유도만의 함수였으므로 $T_{\text{Bartlett}} = -2\ln\Lambda/C$ 도 $F$ 의 함수다. 그리고 (2)에서 그 함수가 $F=1$ 양쪽으로 단조이므로 기각역은 $\{F < F_L\} \cup \{F > F_U\}$ 꼴이 된다. 곧 **$k=2$ 의 바틀렛 검정(= LRT)은 양측 $F$ 검정과 같은 검정이고, 다른 점은 임계값을 어디에 놓느냐 뿐이다.** $H_0$ 아래에서 $F \sim F_{\nu_1,\nu_2}$ 라는 5.10절 [두 표본분산의 비 표집분포](../../ch05/applications/var_ratio.md) 정리 1 과 앞뒤가 맞는다.
 
     **(2)** $h(F) = (\nu_1+\nu_2)\ln(wF+1-w) - \nu_1\ln F$ 라 하면 $(\nu_1+\nu_2)w = \nu_1$ 이므로
 
@@ -715,7 +715,7 @@ $k = 2$ 인 다표본 LRT 를 분산비 하나로 바꿔 쓴다. $F = S_1^2/S_2^
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-연습문제 4 는 모형이 잘못 설정되면 $-2\ln\Lambda$ 가 가중 카이제곱을 따르고 그 가중치가 $(\gamma_2+2)/2$ 에 비례한다고 했다. 연습문제 5 의 2 차 근사와 5 장 표본분산의 표준오차 정리 1 을 써서 그 가중치를 직접 유도하라.
+연습문제 4 는 모형이 잘못 설정되면 $-2\ln\Lambda$ 가 가중 카이제곱을 따르고 그 가중치가 $(\gamma_2+2)/2$ 에 비례한다고 했다. 연습문제 5 의 2 차 근사와 5.6절 [S²의 표준오차](../../ch05/applications/se_s2.md) 정리 1 을 써서 그 가중치를 직접 유도하라.
 
 **(1)** 일표본 LRT 가 $\dfrac{\beta_2-1}{2}\chi^2_1$ 로 분포수렴함을 보이고, 이것이 $(\gamma_2+2)/2$ 와 같은 양임을 확인하라.
 
@@ -726,7 +726,7 @@ $k = 2$ 인 다표본 LRT 를 분산비 하나로 바꿔 쓴다. $F = S_1^2/S_2^
 </div>
 
 ??? success "풀이"
-    **(1) 가중치의 유도.** 정규성을 버리고 네 번째 적률만 있다고 하자. 5 장 표본분산의 표준오차 정리 1 에서 $\operatorname{Var}(\hat\sigma^2) \to \frac{\sigma^4(\beta_2-1)}{n}$ 이므로
+    **(1) 가중치의 유도.** 정규성을 버리고 네 번째 적률만 있다고 하자. 5.6절 [S²의 표준오차](../../ch05/applications/se_s2.md) 정리 1 에서 $\operatorname{Var}(\hat\sigma^2) \to \frac{\sigma^4(\beta_2-1)}{n}$ 이므로
 
     $$
     \frac{\hat\sigma^2 - \sigma^2}{\sqrt{\sigma^4(\beta_2-1)/n}} \;\xrightarrow{d}\; N(0,1)
