@@ -29,7 +29,22 @@ DOCS = ROOT / "docs"
 
 ITEM = "보기|연습문제|정의|정리|그림|상자"
 # 「N.M절 …(사이에 쪽 이름이 올 수 있다)… 보기 3」, 단 「절」 바로 뒤에 링크는 없다
+#
+# **「N장」 꼴도 함께 본다.** 절이 아니라 장으로 가리키는 자리가 2026-10-29 까지
+# 98 곳 있었고(그 가운데 쪽 이름이 아예 없는 것이 37), 절 꼴만 보던 이 검사가
+# 하나도 잡지 못했다. 장 꼴이 **더 나쁘다** — 한 절에 쪽이 몇이지만 한 장에는
+# 쪽이 수십이고, 쪽마다 항목 번호가 1 부터 다시 시작하므로 「1장 연습문제 10」은
+# 가리키는 곳이 스무 군데이고 **스무 군데 다 존재한다.**
+#
+# 걸러야 하는 거짓 양성 둘을 기억할 것.
+#   · 바깥 문헌의 장을 가리키는 자리 — 「Freedman 외, *Statistics*, 19장의 정리」.
+#     「장」 앞에 영문 서지나 쉼표가 오면 건너뛴다(CITE).
+#   · 「장」이 낱장을 세는 자리 — 「연속한 5장을 겹쳐 쓴다」. 뒤에 항목 **번호**가
+#     붙어야만 세므로 이 꼴은 애초에 걸리지 않는다.
 REF = re.compile(rf"(\d+\.\d+)\s*절\s*(?!\[)([^\n]{{0,24}}?)({ITEM})\s*(\d+)")
+REF_CH = re.compile(rf"(\d{{1,2}})\s*장\s*(?:의\s*)?(?!\[)([^\n]{{0,24}}?)({ITEM})\s*\$?(\d+)")
+# 바깥 문헌의 장 — 「*Statistics* (4th ed.), 19장의」
+CITE = re.compile(r"(?:ed\.\)|\*|,)\s*$")
 LINK = re.compile(r"\[[^\]]*\]\([^)]*\)")
 # 문장이 끊기면 뒤의 항목 번호는 **이 쪽의** 것이다.
 #   「…필요하다(19.3절 모형 평가). 연습문제 9에서 수치로 확인한다」
@@ -55,11 +70,18 @@ def main(argv: list) -> int:
         inside = set()
         for m in MDLINK.finditer(text):
             inside.update(range(m.start(), m.end()))
+        found = []
         for m in REF.finditer(text):
+            found.append((m, False))
+        for m in REF_CH.finditer(text):
+            found.append((m, True))
+        for m, is_ch in sorted(found, key=lambda t: t[0].start()):
             gap = m.group(2)
             if m.start() in inside:
                 continue
             if LINK.search(gap) or BREAK.search(gap):
+                continue
+            if is_ch and CITE.search(text[max(0, m.start() - 30):m.start()]):
                 continue
             by_ch[rel.parts[0]] += 1
             rows.append((str(rel), text[:m.start()].count("\n") + 1,
@@ -68,7 +90,7 @@ def main(argv: list) -> int:
         print(f"  {f}:{line}  「{txt}」")
     if by_ch:
         print("  " + " · ".join(f"{c} {n}" for c, n in sorted(by_ch.items())))
-    print(f"링크 없이 절 번호로만 가리킨 항목 참조 {len(rows)} 곳")
+    print(f"링크 없이 절·장 번호로만 가리킨 항목 참조 {len(rows)} 곳")
     return 1 if rows else 0
 
 

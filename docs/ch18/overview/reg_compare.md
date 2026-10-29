@@ -812,7 +812,7 @@ $\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^
     \operatorname{Var}\!\left(\frac{\hat\beta_j^{\text{OLS}}}{1+\lambda}\right) = \frac{\sigma^2}{(1+\lambda)^2}
     $$
 
-    이므로 5장 정리 1(편향–분산 분해)을 좌표마다 적용해 더하면
+    이므로 5.11절 [편향–분산 분해](../../ch05/estimators/bias_variance.md) 정리 1 을 좌표마다 적용해 더하면
 
     $$
     \operatorname{MSE}(\lambda)
@@ -996,7 +996,7 @@ $\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^
     \arg\min_\beta \;\; \frac{1}{2}(b - \beta)^2 + \frac{\sigma^2}{s}\lvert\beta\rvert
     $$
 
-    의 해다. 이것이 바로 연습문제 5에서 푼 일변량 라쏘 문제이므로 해는 $S(b, \sigma^2/s)$이고 $\lambda = \sigma^2/s$다. **사전분포가 넓어질수록($s$가 클수록) 벌점이 약해진다.** 6장 MAP 정리 1과 같은 대응이며, 라쏘가 희소한 답을 주는 까닭은 라플라스 밀도가 0에서 뾰족해 그 자리에 최빈값이 걸릴 수 있기 때문이다.
+    의 해다. 이것이 바로 연습문제 5에서 푼 일변량 라쏘 문제이므로 해는 $S(b, \sigma^2/s)$이고 $\lambda = \sigma^2/s$다. **사전분포가 넓어질수록($s$가 클수록) 벌점이 약해진다.** 6.3절 [최대사후확률 추정](../../ch06/bayesian/map_estimation.md) 정리 1 과 같은 대응이며, 라쏘가 희소한 답을 주는 까닭은 라플라스 밀도가 0에서 뾰족해 그 자리에 최빈값이 걸릴 수 있기 때문이다.
 
     **(2)** $\lambda = \sigma^2/s$로 쓰면 $\lvert\beta\rvert/s = \lambda\lvert\beta\rvert/\sigma^2$다. 지수를 반쪽씩 완전제곱으로 고친다. $\beta > 0$에서
 

@@ -609,7 +609,7 @@ sklearn이 보정 엘라스틱넷을 적용하는지 직접 확인하라.
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-6장 MAP 정리 1은 능형이 정규 사전분포, 라쏘가 라플라스 사전분포의 MAP임을 말한다. 엘라스틱넷에 대해 다음을 따져라.
+6.3절 [최대사후확률 추정](../../ch06/bayesian/map_estimation.md) 정리 1 은 능형이 정규 사전분포, 라쏘가 라플라스 사전분포의 MAP임을 말한다. 엘라스틱넷에 대해 다음을 따져라.
 
 **(a)** $\mathbf{y} \mid \boldsymbol\beta \sim N(\mathbf{X}\boldsymbol\beta, \sigma^2\mathbf{I})$일 때 엘라스틱넷 목적함수의 최소점이 MAP가 되는 사전분포를 배율까지 정확히 적어라.
 

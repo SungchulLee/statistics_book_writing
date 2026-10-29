@@ -656,7 +656,7 @@ $$
 
 (a) 거친 차이 $\Delta = E[Y \mid T=1] - E[Y \mid T=0]$ 을 구하라.
 
-(b) 1 장의 정리 1(거친 차이는 층별 효과와 구성 차이의 합이다)로 $\Delta$ 를 두 항으로 쪼개고, 교란항이 $\Delta$ 의 몇 %를 차지하는지 구하라.
+(b) 1.1절 [상관관계와 인과관계](../../ch01/classical/confounding_causation.md) 정리 1 로 $\Delta$ 를 두 항으로 쪼개고, 교란항이 $\Delta$ 의 몇 %를 차지하는지 구하라.
 
 (c) 가정 배경을 통제하지 않고 $\Delta$ 를 학력의 인과효과로 보고하면 몇 배 과대평가인가? 보기 3 의 연구자들이 가정 배경을 통제한 이유를 §2 의 Bradford Hill 기준 가운데 하나와 연결해 한 줄로 쓰라.
 
@@ -699,7 +699,7 @@ $$
 **연습문제 14.** <span class="diff hard" title="어려움"></span>
 층이 둘($z \in \{H, L\}$)인 경우를 보자. $a = E[Y \mid 0, H]$, $b = E[Y \mid 0, L]$, $d = P(H \mid 1) - P(H \mid 0)$ 이라 하자.
 
-(a) 1 장 정리 1 의 구성 차이 항이 정확히 $(a - b)\,d$ 와 같음을 보이라.
+(a) 1.1절 [상관관계와 인과관계](../../ch01/classical/confounding_causation.md) 정리 1 의 구성 차이 항이 정확히 $(a - b)\,d$ 와 같음을 보이라.
 
 (b) 두 층의 효과가 같아 $\Delta_H = \Delta_L = \Delta_0$ 라 하자. 거친 차이 $\Delta$ 를 $\Delta_0$, $a-b$, $d$ 로 쓰라.
 

@@ -1092,7 +1092,7 @@ $$
     \lVert \hat\beta(\lambda)-\beta \rVert^2 = \lVert V^\top(\hat\beta(\lambda)-\beta) \rVert^2 = \sum_{m=1}^{p}\left(\hat\gamma_m(\lambda)-\gamma_m\right)^2
     $$
 
-    항마다 편향–분산 분해(5 장 정리 1)를 쓴다. $\mathbb E[\hat\gamma_m(\lambda)] = s_m\gamma_m$ 이고 $\operatorname{Var}(\hat\gamma_m(\lambda)) = s_m^2\sigma^2/d_m^2$ 이므로
+    항마다 5.11절 [편향–분산 분해](../../ch05/estimators/bias_variance.md) 정리 1 을 쓴다. $\mathbb E[\hat\gamma_m(\lambda)] = s_m\gamma_m$ 이고 $\operatorname{Var}(\hat\gamma_m(\lambda)) = s_m^2\sigma^2/d_m^2$ 이므로
 
     $$
     \mathbb E(\hat\gamma_m(\lambda)-\gamma_m)^2 = (s_m-1)^2\gamma_m^2 + s_m^2\frac{\sigma^2}{d_m^2}

@@ -782,7 +782,7 @@ $$
     \text{Var}(\hat{\boldsymbol{\beta}}^{\text{OLS}}) = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1} = \frac{\sigma^2}{n}\mathbf{I} = v\mathbf{I}
     $$
 
-    이다. 5 장 정리 1 의 편향–분산 분해를 좌표마다 적용하면 편향이 $\beta_j/(1+\lambda) - \beta_j = -\lambda\beta_j/(1+\lambda)$, 분산이 $v/(1+\lambda)^2$ 이므로
+    이다. 5.11절 [편향–분산 분해](../../ch05/estimators/bias_variance.md) 정리 1 을 좌표마다 적용하면 편향이 $\beta_j/(1+\lambda) - \beta_j = -\lambda\beta_j/(1+\lambda)$, 분산이 $v/(1+\lambda)^2$ 이므로
 
     $$
     \text{MSE}(\lambda) = \sum_{j=1}^p\left[\frac{\lambda^2\beta_j^2}{(1+\lambda)^2} + \frac{v}{(1+\lambda)^2}\right] = \frac{\lambda^2 S + pv}{(1+\lambda)^2}
@@ -1868,7 +1868,7 @@ $E\big[u\operatorname{sign}(u + \beta/\tau)\big]$를 구하라.)
 
     **(2)** $R(0) = \tau^2$가 최소제곱의 MSE인데 $R'(0^+) < 0$이므로, **아무리 좋은 자료에서도
     최소제곱보다 MSE가 작은 $\lambda > 0$이 반드시 존재한다.** 편향을 조금 사서 분산을 더 많이
-    파는 거래가 $\lambda = 0$ 근방에서는 언제나 남는 장사라는 뜻이다. 6장 정리 1의 분해로 읽으면
+    파는 거래가 $\lambda = 0$ 근방에서는 언제나 남는 장사라는 뜻이다. 6.3절 [최대사후확률 추정](../../ch06/bayesian/map_estimation.md) 정리 1 의 분해로 읽으면
     $\lambda$의 1차에서 편향제곱은 $O(\lambda^2)$로 늦게 자라는데 분산은 $O(\lambda)$로 먼저
     줄어드는 것이다.
 

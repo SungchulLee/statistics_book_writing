@@ -862,7 +862,7 @@ $X^\top X = cI_p$($c > 0$)인 설계에서 $y = X\beta + \varepsilon$, $\varepsi
 
     이고 $\hat\beta^{\text{OLS}} = X^\top y/c \sim N\bigl(\beta, (\sigma^2/c)I_p\bigr)$이다. $\lambda$가 $0$에서 $\infty$로 갈 때 $s$는 $1$에서 $0$으로 간다.
 
-    **2 단계: 편향–분산 분해.** $\hat\beta(\lambda) = s\hat\beta^{\text{OLS}}$의 기댓값은 $s\beta$이므로 편향은 $(s-1)\beta$이고, 분산은 좌표마다 $s^2\sigma^2/c$다. 5 장 정리 1 을 좌표별로 적용해 더하면
+    **2 단계: 편향–분산 분해.** $\hat\beta(\lambda) = s\hat\beta^{\text{OLS}}$의 기댓값은 $s\beta$이므로 편향은 $(s-1)\beta$이고, 분산은 좌표마다 $s^2\sigma^2/c$다. 5.11절 [편향–분산 분해](../../ch05/estimators/bias_variance.md) 정리 1 을 좌표별로 적용해 더하면
 
     $$
     M(\lambda) := E\lVert\hat\beta(\lambda) - \beta\rVert^2 = (1-s)^2 B + s^2\,\frac{p\sigma^2}{c}, \qquad B := \lVert\beta\rVert_2^2
@@ -965,7 +965,7 @@ $X^\top X = I_p$, $y = X\beta + \varepsilon$, $\varepsilon \sim N(0,\sigma^2 I_n
     \lVert\beta - z\rVert^2 + \frac{2\sigma^2}{b}\lVert\beta\rVert_1
     $$
 
-    이다. 곧 $\lambda = 2\sigma^2/b$인 라쏘이고, 연습문제 11 의 공식으로 최빈값은 문턱 $\lambda/2 = \sigma^2/b$의 연성문턱 $\hat\beta_j = \operatorname{sign}(z_j)(\lvert z_j\rvert - \sigma^2/b)_+$다. 6 장의 MAP 정리 1 이 말하는 대응이 바로 이것이다.
+    이다. 곧 $\lambda = 2\sigma^2/b$인 라쏘이고, 연습문제 11 의 공식으로 최빈값은 문턱 $\lambda/2 = \sigma^2/b$의 연성문턱 $\hat\beta_j = \operatorname{sign}(z_j)(\lvert z_j\rvert - \sigma^2/b)_+$다. 6.3절 [최대사후확률 추정](../../ch06/bayesian/map_estimation.md) 정리 1 이 말하는 대응이 바로 이것이다.
 
     **3. 사후평균은 0 이 되지 않는다.** 좌표 하나만 보고 $z := z_j > 0$이라 하자(음수면 대칭이고 $z=0$이면 대칭성으로 평균이 0 이다). 사후밀도는
 

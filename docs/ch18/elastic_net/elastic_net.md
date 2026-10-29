@@ -1218,7 +1218,7 @@ $$
     \mathbb{E}\hat{\beta}_j^{\text{EN}} = \frac{\beta_j}{1+\lambda}, \qquad \text{편향} = \frac{\beta_j}{1+\lambda} - \beta_j = -\frac{\lambda\beta_j}{1+\lambda}, \qquad \operatorname{Var} = \frac{\tau^2}{(1+\lambda)^2}
     $$
 
-    이다. 편향–분산 분해(5 장 정리 1)로 좌표별 MSE는 $\dfrac{\lambda^2\beta_j^2 + \tau^2}{(1+\lambda)^2}$이고, $B := \lVert\beta\rVert_2^2 = \sum_j \beta_j^2$라 쓰면
+    이다. 5.11절 [편향–분산 분해](../../ch05/estimators/bias_variance.md) 정리 1 로 좌표별 MSE는 $\dfrac{\lambda^2\beta_j^2 + \tau^2}{(1+\lambda)^2}$이고, $B := \lVert\beta\rVert_2^2 = \sum_j \beta_j^2$라 쓰면
 
     $$
     M(\lambda) = \frac{\lambda^2 B + p\tau^2}{(1+\lambda)^2}, \qquad \tau^2 = \frac{\sigma^2}{n}

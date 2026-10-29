@@ -496,7 +496,7 @@ $t$가 커지면($\lambda$가 작아지면) 제약이 느슨해지고 가능영�
     \operatorname{tr}\operatorname{Var}\hat{\boldsymbol{\beta}}(\lambda) = \frac{p\sigma^2}{(1+\lambda)^2}
     $$
 
-    이고 6 장 정리 1 의 분해로
+    이고 6.3절 [최대사후확률 추정](../../ch06/bayesian/map_estimation.md) 정리 1 의 분해로
 
     $$
     \text{MSE}(\lambda) = \frac{\lambda^2\lVert\boldsymbol{\beta}\rVert^2 + p\sigma^2}{(1+\lambda)^2}

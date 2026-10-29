@@ -580,7 +580,7 @@ $$
 
     이다. 모든 좌표를 같은 비율로 줄이는 **비례 축소**이고, $\lambda < \infty$에서는 어떤 좌표도 정확히 $0$이 되지 않는다. $\square$
 
-    **(2)** $\mathbb{E}\hat{\boldsymbol\beta}_{\text{ridge}} = \boldsymbol\beta/(1+\lambda)$이므로 편향은 $-\lambda\boldsymbol\beta/(1+\lambda)$이고 편향제곱합은 $\lambda^2\lVert\boldsymbol\beta\rVert^2/(1+\lambda)^2$다. 분산합은 $p\sigma^2/(1+\lambda)^2$다. 5장 정리 1(편향–분산 분해)에 의해
+    **(2)** $\mathbb{E}\hat{\boldsymbol\beta}_{\text{ridge}} = \boldsymbol\beta/(1+\lambda)$이므로 편향은 $-\lambda\boldsymbol\beta/(1+\lambda)$이고 편향제곱합은 $\lambda^2\lVert\boldsymbol\beta\rVert^2/(1+\lambda)^2$다. 분산합은 $p\sigma^2/(1+\lambda)^2$다. 5.11절 [편향–분산 분해](../../ch05/estimators/bias_variance.md) 정리 1 에 의해
 
     $$
     g(\lambda) = \frac{p\sigma^2 + \lambda^2\lVert\boldsymbol\beta\rVert^2}{(1+\lambda)^2}
