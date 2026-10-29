@@ -320,7 +320,7 @@ $10^9$ 이 억지스러워 보이지만 그렇지 않다. 유닉스 시각은 $1
 낸다. `numpy.var` 를 비롯한 요즘 라이브러리가 지름길 공식을 쓰지 않는 까닭이
 여기 있다. **손으로 셀 때만 조심하면 되는 것이 아니라, 직접 구현할 때 조심해야 한다.**
 
-수치적 상쇄 일반에 대한 이야기는 10.1절 [공분산을 손으로 만들고 검산하기](../../ch10/correlation/covariance_from_scratch.md)에 있다.
+같은 함정이 상관계수에도 있다 — 10.1절 [Pearson 상관계수](../../ch10/correlation/pearson.md) §2 가 「손으로 셀 때 편한」 공식을 그대로 옮기면 $10^8$ 근처의 자료에서 $r$ 의 분자가 **정확히 $0$** 이 되는 것을 연습문제 11 에서 보인다. 한 번만 훑으면서도 안정적인 웰퍼드 갱신은 5.13절 [소박한 분산추정량](../../ch05/variance/naive.md)에 있다.
 
 _확인한 곳 — B. P. Welford ($1962$) *Note on a Method for Calculating Corrected Sums
 of Squares and Products*, 『Technometrics』 $4$ 권 $419$–$420$ 쪽. 서지 기록만 확인했고
