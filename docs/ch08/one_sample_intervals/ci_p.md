@@ -12,7 +12,7 @@ $$
 \frac{\hat p - p}{\sqrt{p(1-p)/n}} \;\approx\; N(0, 1)
 $$
 
-이므로 가운데를 $1-\alpha$ 확률로 가두면 된다. 그런데 분모의 $p$ 가 모르는 값이다. **거기에 $\hat p$ 를 꽂는 것**이 가장 단순한 길이고, 그렇게 얻은 것이 왈드 구간이다.
+이므로 가운데를 $1-\alpha$ 확률로 가두면 된다. 그런데 분모의 $p$ 가 모르는 값이다. **거기에 $\hat p$ 를 꽂는 것**이 가장 단순한 길이고, 그렇게 얻은 것이 왈드 구간이다. 이 한 걸음에는 이름이 있다 — **대입 원리**(plug-in principle)다. 모르는 모수가 식에 남으면 그 자리에 추정값을 넣는 것으로, 6.2절 [적률법의 기초](../../ch06/estimation_methods/moments_foundations.md)가 일반적으로 세운다. 모평균의 구간에서 $\sigma$ 자리에 $s$ 를 넣는 것도, 7.2절 [Fisher 정보량](../../ch07/theory/fisher_information.md)이 정보량을 MLE 에서 평가하는 것도 같은 원리다.
 
 $$
 \hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1 - \hat{p})}{n}}
