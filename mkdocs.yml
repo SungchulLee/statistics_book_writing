@@ -310,7 +310,6 @@ nav:
                 - Pearson 상관계수: ch10/correlation/pearson.md
                 - Spearman 순위상관: ch10/correlation/spearman.md
                 - Kendall의 타우: ch10/correlation/kendall.md
-                - 상관 분석 시연: ch10/correlation/correlation_analysis.md
                 - 점이연 상관과 파이 계수: ch10/correlation/special_cases.md
                 - 부분상관: ch10/correlation/partial.md
             - 10.2 생태학적 상관 ★:

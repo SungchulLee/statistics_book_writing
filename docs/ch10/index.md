@@ -26,7 +26,6 @@
 - **[Pearson 상관계수](correlation/pearson.md)** --- 두 연속형 변수 사이 선형관계의 강도와 방향을 $-1$에서 $+1$까지의 값으로 수치화한다.
 - **[Spearman 순위상관](correlation/spearman.md)** --- 관측값의 순위에 기반한 비모수 측도로, (반드시 선형은 아닌) 단조 관계를 포착한다.
 - **[Kendall의 타우](correlation/kendall.md)** --- 일치쌍과 불일치쌍을 세는 순위 기반 상관계수로, 이상점과 동점에 로버스트하다.
-- **[상관 분석 시연](correlation/correlation_analysis.md)** --- 선형관계가 알려진 자료에 Pearson·Spearman·Kendall 셋을 함께 돌려 견주고, Spearman 이 **순위에 대한 Pearson** 과 같음을 수로 확인한다.
 - **[점이연 상관과 파이 계수](correlation/special_cases.md)** --- 이진 변수가 관련된 상황(하나는 연속형이고 하나는 이진이거나, 둘 다 이진인 경우)을 위한 특화된 상관 측도.
 - **[부분상관](correlation/partial.md)** --- 하나 이상의 다른 변수의 효과를 통제한 뒤 두 변수 사이의 연관을 잰다.
 

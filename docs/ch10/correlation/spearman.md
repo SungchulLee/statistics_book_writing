@@ -44,7 +44,7 @@ $$
 r_s = 1 - \frac{6 \sum_{i=1}^n d_i^2}{n(n^2 - 1)}
 $$
 
-여기서 $d_i = R(x_i) - R(y_i)$는 $i$번째 쌍의 순위 차이이다. 손으로 계산할 때 널리 쓰인다.
+여기서 $d_i = R(x_i) - R(y_i)$는 $i$번째 쌍의 순위 차이이다. 손으로 계산할 때 널리 쓰인다. **정의 1 에서 이 꼴이 나오는 과정과, 동점이 생기면 그 유도의 어느 줄이 무너지는지는 §5 의 보기 3 에 있다.**
 
 <div class="storybox" markdown>
 
@@ -329,6 +329,117 @@ Pearson을 쓸 때 이렇게 된다.
     이것이 두 계수의 차이를 가장 선명하게 보여주는 예다. "관계가 있는가"를 묻는다면 Spearman이, "직선 관계가 있는가"를 묻는다면 Pearson이 맞는 도구다.
 
 `scipy.stats.spearmanr` 함수는 중간순위를 써서 동점을 자동으로 처리한다. 가설검정의 자세한 내용은 [Spearman의 ρ 검정](../correlation_test/test_spearman.md)을 보라.
+
+---
+
+<div class="exbox" markdown>
+
+**보기 3.** <span class="diff med" title="중간"></span> 간편 공식은 어디서 오고 동점에서 왜 깨지는가. 정의 1 은 $r_s$ 를 **순위에 대한 Pearson** 으로 정의했고 §2 는 거기서 간편 공식이 나온다고만 적었다. 그 사이를 메운다.
+
+**(1)** 동점이 없으면 순위는 $1, 2, \ldots, n$ 의 치환이다. **이 사실만으로** 간편 공식
+
+$$
+r_s = 1 - \frac{6\sum_i d_i^2}{n(n^2-1)},
+\qquad d_i = R(x_i) - R(y_i)
+$$
+
+을 유도하시오.
+
+**(2)** 세 가지 — `spearmanr`, 순위에 건 `pearsonr`, 간편 공식 — 가 같은 값을 주는지 확인하시오.
+
+**(3)** 유도의 어느 줄이 동점에서 무너지는지 짚고, 자료에 동점을 만들어 간편 공식이 실제로 어긋나는 것을 보이시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** $R(x_i)$ 와 $R(y_i)$ 는 각각 $1$ 부터 $n$ 까지를 한 번씩 쓰므로 **평균과 제곱합이 서로 같고 자료에 의존하지 않는다.**
+
+    $$
+    \bar{R} = \frac{1}{n}\sum_{k=1}^{n} k = \frac{n+1}{2},
+    \qquad
+    \sum_{i}(R(x_i) - \bar{R})^2 = \sum_{i}(R(y_i) - \bar{R})^2 = \frac{n(n^2-1)}{12}
+    $$
+
+    마지막 값은 $\sum_{k=1}^n k^2 - n\bar{R}^2 = \frac{n(n+1)(2n+1)}{6} - \frac{n(n+1)^2}{4} = \frac{n(n^2-1)}{12}$ 에서 나온다. 이 양을 $S$ 라 쓰자.
+
+    이제 $a_i = R(x_i) - \bar R$, $b_i = R(y_i) - \bar R$ 로 두면 $d_i = a_i - b_i$ 이고
+
+    $$
+    \sum_i d_i^2 = \sum_i a_i^2 + \sum_i b_i^2 - 2\sum_i a_i b_i = 2S - 2\sum_i a_i b_i
+    $$
+
+    이므로 $\sum_i a_i b_i = S - \frac{1}{2}\sum_i d_i^2$ 이다. 순위에 건 Pearson 상관은 분모가 $\sqrt{S}\sqrt{S} = S$ 이므로
+
+    $$
+    r_s = \frac{\sum_i a_i b_i}{S}
+    = \frac{S - \frac{1}{2}\sum_i d_i^2}{S}
+    = 1 - \frac{\sum_i d_i^2}{2S}
+    = 1 - \frac{6\sum_i d_i^2}{n(n^2-1)}
+    $$
+
+    이다. **공식이 간단해지는 유일한 까닭은 두 순위열의 제곱합이 똑같이 $S$ 로 고정된다는 것**이다. 분모가 자료를 보지 않고 미리 정해지므로 남는 정보가 $\sum d_i^2$ 하나뿐이고, 그래서 뺄셈 한 줄로 끝난다. $\square$
+
+    **(3) 무너지는 줄은 두 군데다.** 동점에 중간순위를 주면 순위열이 더 이상 $1, \ldots, n$ 의 치환이 아니다. 그러면 **제곱합이 $S$ 보다 작아지고**(같은 값끼리 평균으로 몰리므로 흩어짐이 준다) $x$ 쪽과 $y$ 쪽의 제곱합이 **서로 달라진다.** 분모가 $\sqrt{S_x}\sqrt{S_y} \ne S$ 가 되는 것이다. 유도의 마지막 두 줄이 모두 $S$ 하나로 약분되는 데 기대고 있었으므로 둘 다 깨진다. **정의 1 의 완전한 꼴(순위에 건 Pearson)은 그대로 맞는다** — 깨지는 것은 지름길뿐이다.
+
+    **(2)·(3) 수치적으로.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    # 동점이 없도록 연속분포에서 n = 120 을 뽑는다. 세 길이 같은 값을 주어야 한다.
+    np.random.seed(42)
+    n = 120
+    x = np.random.uniform(10, 60, n)
+    y = 0.8 * x + 5 + np.random.normal(0, 8, n)
+
+    rx, ry = stats.rankdata(x), stats.rankdata(y)
+    r_rank = stats.pearsonr(rx, ry)[0]
+    rho_s = stats.spearmanr(x, y).statistic
+    print(f"Pearson r on ranks = {r_rank:.4f}")
+    print(f"Spearman rho       = {rho_s:.4f}")
+
+    d2 = np.sum((rx - ry) ** 2)
+    shortcut = 1 - 6 * d2 / (n * (n ** 2 - 1))
+    print(f"\n동점 개수 = {n - len(np.unique(rx))} (x), {n - len(np.unique(ry))} (y)")
+    print(f"sum d^2 = {d2:.0f},  S = n(n^2-1)/12 = {n * (n ** 2 - 1) / 12:.0f}")
+    print(f"간편 공식 = {shortcut:.6f}   spearmanr = {rho_s:.6f}")
+    print(f"세 값이 같은가: {np.allclose([r_rank, shortcut], rho_s)}")
+
+    # 동점을 일부러 만들어 간편 공식이 깨지는 것을 본다.
+    xt = np.round(x / 10) * 10
+    rxt = stats.rankdata(xt)
+    d2t = np.sum((rxt - ry) ** 2)
+    print(f"\n동점을 만들면 (x 를 10 단위로 반올림)")
+    print(f"  동점 개수 = {n - len(np.unique(rxt))}")
+    print(f"  순위에 건 Pearson = {stats.pearsonr(rxt, ry)[0]:.6f}"
+          f"   spearmanr = {stats.spearmanr(xt, y).statistic:.6f}")
+    print(f"  간편 공식          = {1 - 6 * d2t / (n * (n ** 2 - 1)):.6f}   <- 어긋난다")
+    ```
+
+    출력:
+
+    ```
+    Pearson r on ranks = 0.8363
+    Spearman rho       = 0.8363
+
+    동점 개수 = 0 (x), 0 (y)
+    sum d^2 = 47138,  S = n(n^2-1)/12 = 143990
+    간편 공식 = 0.836315   spearmanr = 0.836315
+    세 값이 같은가: True
+
+    동점을 만들면 (x 를 10 단위로 반올림)
+      동점 개수 = 114
+      순위에 건 Pearson = 0.826756   spearmanr = 0.826756
+      간편 공식          = 0.829558   <- 어긋난다
+    ```
+
+    **(2)가 맞는다.** 셋이 소수 여섯째 자리까지 $0.836315$ 로 같다. 손으로도 $1 - 47138/(2 \times 143990) = 1 - 0.163685 = 0.836315$ 다.
+
+    **(3)이 요점이다.** $x$ 를 $10$ 단위로 반올림해 동점 $114$ 개를 만들면 **`spearmanr` 과 순위에 건 Pearson 은 여전히 $0.826756$ 으로 서로 같은데**(정의가 깨지지 않았으므로) **간편 공식만 $0.829558$ 로 어긋난다.** 차이가 $0.0028$ 로 작아 보이지만 **어느 쪽으로 어긋날지는 동점의 짜임에 달려 있어 미리 알 수 없다.** 그래서 `scipy` 는 중간순위를 매긴 뒤 **언제나 완전한 꼴**로 계산한다.
+
+    Spearman 은 별개의 공식이 아니라 **순위에 적용한 Pearson** 이며, 간편 공식은 그것을 동점 없는 경우에 한해 다시 쓴 것일 뿐이다.
 
 ---
 

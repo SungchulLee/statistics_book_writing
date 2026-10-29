@@ -1421,6 +1421,77 @@ $r$의 **표집분포**를 모의실험으로 만들어라. $r$은 $\rho$의 불
 
 ---
 
+<div class="drillbox" markdown>
+
+**연습문제 12.** <span class="diff med" title="중간"></span>
+§3 의 성질 3·4 는 $r$ 이 평행이동과 양의 축척에 불변이라고 **적어 두기만 했다.** 그 둘을 한꺼번에 증명하라. 곧 $r$ 이 양의 아핀 변환에 불변임을 보여라. 즉 상수 $a, c > 0$과 임의의 $b, d$에 대해
+
+$$
+r(aX + b,\; cY + d) = r(X, Y)
+$$
+
+임을 보여라.
+
+</div>
+
+??? success "풀이"
+
+    $a, c > 0$일 때 $U = aX + b$, $V = cY + d$라 하자. 그러면 $\bar{U} = a\bar{X} + b$, $\bar{V} = c\bar{Y} + d$이므로 $U_i - \bar{U} = a(X_i - \bar{X})$, $V_i - \bar{V} = c(Y_i - \bar{Y})$이다.
+
+    $r(U, V)$의 분자는
+
+    $$
+    \sum_{i=1}^n (U_i - \bar{U})(V_i - \bar{V}) = ac \sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})
+    $$
+
+    이 되고, 분모는
+
+    $$
+    \sqrt{\sum(U_i - \bar{U})^2}\;\sqrt{\sum(V_i - \bar{V})^2} = a\sqrt{\sum(X_i - \bar{X})^2}\;\cdot\; c\sqrt{\sum(Y_i - \bar{Y})^2}
+    $$
+
+    이 된다. 따라서
+
+    $$
+    r(U, V) = \frac{ac \sum(X_i - \bar{X})(Y_i - \bar{Y})}{ac\sqrt{\sum(X_i - \bar{X})^2}\;\sqrt{\sum(Y_i - \bar{Y})^2}} = r(X, Y)
+    $$
+
+    이다. 양의 상수 $a$와 $c$가 비에서 상쇄된다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+<div class="drillbox" markdown>
+
+**연습문제 13.** <span class="diff med" title="중간"></span>
+§3 의 성질 5 는 $\lvert r\rvert = 1$ 이 「모든 점이 한 직선 위」와 동치라고 적었고, §3 의 코시–슈바르츠 대목은 그것이 **등호조건**이라고만 짚었다. 끝까지 밀고 가라. 크기 $n$인 이변량 표본에서 Pearson의 $r = 1$이면 모든 점 $(x_i, y_i)$가 기울기가 양수인 한 직선 위에 있음을 보여라. 형식적인 증명을 제시하라.
+
+</div>
+
+??? success "풀이"
+
+    Cauchy-Schwarz 부등식은 벡터 $\mathbf{a}, \mathbf{b} \in \mathbb{R}^n$에 대해
+
+    $$
+    \left(\sum_{i=1}^n a_i b_i\right)^2 \le \left(\sum_{i=1}^n a_i^2\right)\left(\sum_{i=1}^n b_i^2\right)
+    $$
+
+    이며, 등호는 어떤 스칼라 $\lambda$에 대해 $\mathbf{a} = \lambda \mathbf{b}$일 때에만 성립한다고 말한다.
+
+    $a_i = x_i - \bar{x}$, $b_i = y_i - \bar{y}$라 두면 $r = 1$은
+
+    $$
+    \frac{\sum a_i b_i}{\sqrt{\sum a_i^2}\sqrt{\sum b_i^2}} = 1
+    $$
+
+    을 뜻한다. Cauchy-Schwarz의 등호 조건에 의해 모든 $i$에서 $y_i - \bar{y} = \lambda(x_i - \bar{x})$이고, $r > 0$이므로 $\lambda > 0$이다. 정리하면 $y_i = \lambda x_i + (\bar{y} - \lambda \bar{x})$이며, 이는 기울기가 $\lambda > 0$인 직선이다. $\square$
+
+---
+
+<div class="drillbox" markdown>
+
+---
+
 ## 정리하며
 
 Pearson 상관계수 $r$은 두 변수 사이 선형관계의 강도와 방향을 수치화한다. $-1$(완전한 음의 관계)에서 $+1$(완전한 양의 관계)까지의 값을 가지며 $0$은 선형 연관이 없음을 뜻한다. 강력하고 널리 쓰이지만 $r$은 선형관계만 포착하고 이상점에 민감하다. $r$의 수치는 언제나 산점도와 함께 보아 선형모형이 적절한지 확인해야 한다.

@@ -1136,6 +1136,131 @@ $$
 
 ---
 
+<div class="drillbox" markdown>
+
+**연습문제 11.** <span class="diff hard" title="어려움"></span>
+이 쪽이 그리는 상관행렬은 `pandas.DataFrame.corr()` 가 만든다. 그 함수를 **결측이 있는 자료**에 쓰면 무슨 일이 생기는가. `pairwise` 삭제의 위험을 보여라.
+
+</div>
+
+??? success "풀이"
+    **두 가지 삭제 방식.**
+
+    | 방식 | 내용 |
+    |---|---|
+    | **listwise**(완전 사례) | 한 변수라도 결측이면 **행 전체를 버린다** |
+    | **pairwise** | 각 쌍마다 **그 둘이 모두 있는 행**으로 계산 |
+
+    `pandas.DataFrame.corr()`의 기본값이 **pairwise**다.
+
+    ```python
+    import warnings
+    warnings.filterwarnings("ignore")
+
+    import numpy as np
+    import pandas as pd
+
+    rng = np.random.default_rng(26002)
+
+    def blk(r, n):
+        z = rng.standard_normal((n, 2))
+        return z[:, 0], r * z[:, 0] + np.sqrt(1 - r**2) * z[:, 1]
+
+    n = 100
+    rows = []
+    a, b = blk(0.9, n)
+    rows += [dict(A=a[i], B=b[i], C=np.nan) for i in range(n)]
+    a, c = blk(0.9, n)
+    rows += [dict(A=a[i], B=np.nan, C=c[i]) for i in range(n)]
+    b, c = blk(-0.5, n)
+    rows += [dict(A=np.nan, B=b[i], C=c[i]) for i in range(n)]
+    d = pd.DataFrame(rows)
+
+    print(f"  결측 패턴: 행마다 한 변수씩 결측 (총 {len(d)} 행)")
+    print(f"  listwise 삭제 후 남는 행: {d.dropna().shape[0]}")
+    P = d.corr()
+    print("\n  pairwise 상관행렬:")
+    print(P.round(4).to_string())
+    ev = np.linalg.eigvalsh(P.values)
+    print(f"\n  고윳값 = {ev.round(4).tolist()}")
+    print(f"  최소 고윳값 = {ev.min():+.4f}")
+    lo = (P.loc['A', 'B'] * P.loc['A', 'C']
+          - np.sqrt((1 - P.loc['A', 'B']**2) * (1 - P.loc['A', 'C']**2)))
+    print(f"  r_AB={P.loc['A','B']:.3f}, r_AC={P.loc['A','C']:.3f} 이면 "
+          f"r_BC ≥ {lo:.4f} 여야 하는데 관측값은 {P.loc['B','C']:.4f}")
+    ```
+
+    ```text
+      결측 패턴: 행마다 한 변수씩 결측 (총 300 행)
+      listwise 삭제 후 남는 행: 0
+
+      pairwise 상관행렬:
+            A       B       C
+    A  1.0000  0.9412  0.9022
+    B  0.9412  1.0000 -0.4710
+    C  0.9022 -0.4710  1.0000
+
+      고윳값 = [-0.5602, 1.4704, 2.0898]
+      최소 고윳값 = -0.5602
+      r_AB=0.941, r_AC=0.902 이면 r_BC ≥ 0.7033 여야 하는데 관측값은 -0.4710
+    ```
+
+    **두 가지 문제가 동시에 드러난다.**
+
+    **(가) listwise 삭제 후 자료가 하나도 남지 않는다.** 행마다 한 변수씩만 결측인데도 **완전한 행이 0개**다.
+
+    **(나) pairwise 상관행렬이 존재할 수 없는 행렬**이다. 고윳값 하나가 $-0.560$으로 음수다.
+
+    | 쌍 | $r$ | 계산에 쓰인 행 |
+    |---|---|---|
+    | A–B | $+0.941$ | 앞 100행 |
+    | A–C | $+0.902$ | 가운데 100행 |
+    | **B–C** | $\mathbf{-0.471}$ | **뒤 100행** |
+
+    **세 값이 서로 다른 표본에서 나왔다.** 각각은 그 표본에서 옳지만, **하나의 행렬로 모으면 모순**이다.
+
+    **양정부호 조건이 요구하는 범위.**
+
+    $$
+    r_{BC}\geq r_{AB}r_{AC}-\sqrt{(1-r_{AB}^2)(1-r_{AC}^2)}=0.7033
+    $$
+
+    **관측값 $-0.471$은 이 범위를 한참 벗어난다.**
+
+    **이 행렬이 들어가면 터지는 것들.**
+
+    | 방법 | 증상 |
+    |---|---|
+    | **요인분석·주성분분석** | 음수 고윳값, "헤이우드 케이스" |
+    | 구조방정식 모형 | 수렴 실패 |
+    | **다변량 정규 생성** | 촐레스키 분해 실패 |
+    | 마할라노비스 거리 | 음수 거리제곱 |
+
+    **결측 처리 방법의 비교.**
+
+    | 방법 | 장점 | 단점 |
+    |---|---|---|
+    | listwise | **일관된 행렬** | 표본을 크게 잃는다 |
+    | **pairwise** | 정보를 더 쓴다 | **행렬이 깨질 수 있다** |
+    | 평균 대치 | 간단 | **분산과 상관을 축소** |
+    | **다중대치(MI)** | 통계적으로 타당 | 구현이 무겁다 |
+    | 완전정보 최대가능도(FIML) | 타당, 한 번에 | 모형 의존 |
+
+    **다중대치가 표준 권고**다. `sklearn.impute.IterativeImputer`나 `statsmodels`의 MICE를 쓴다.
+
+    **최소한의 실무 지침 넷.**
+
+    1. **결측률과 결측 패턴을 먼저 본다.** 쌍마다 유효 표본수가 얼마나 다른가.
+    2. **pairwise 행렬의 최소 고윳값을 확인**한다. 음수면 쓰지 않는다.
+    3. **유효 표본수를 함께 보고**한다. $r$마다 $n$이 다르다.
+    4. 결측이 **무작위가 아니면**(MNAR) 어떤 방법도 편향을 완전히 없애지 못한다.
+
+---
+
+<div class="drillbox" markdown>
+
+---
+
 ## 정리하며
 
 열지도는 상관행렬을 패턴이 즉시 드러나는 시각적 형태로 바꾼다. 투자자에게는 분산 가능성을, 데이터 과학자에게는 다중공선성을 보여준다. 군집화나 부분집합 선택 기법과 결합하면 열지도는 다변량 탐색적 분석에서 가장 실용적인 도구 중 하나로 남는다.
