@@ -520,8 +520,8 @@ $$
     **공식.**
 
     $$
-    \text{신뢰구간: } \bar x\pm t_{n-1,0.975}\frac{s}{\sqrt n},\qquad
-    \text{예측구간: } \bar x\pm t_{n-1,0.975}\,s\sqrt{1+\frac1n}
+    \text{신뢰구간: } \bar x\pm t_{0.975,\,n-1}\frac{s}{\sqrt n},\qquad
+    \text{예측구간: } \bar x\pm t_{0.975,\,n-1}\,s\sqrt{1+\frac1n}
     $$
 
     예측구간의 $\sqrt{1+1/n}$에서 **1이 개체 변동**, **$1/n$이 $\bar x$의 불확실성**이다.

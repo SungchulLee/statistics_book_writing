@@ -1076,7 +1076,7 @@ $d=0.5$를 검정력 80%로 탐지하는 임상시험의 표본을 **정확히**
     **정확한 계산.** $t$ 검정의 검정력은 **비중심 $t$ 분포**로 구한다.
 
     $$
-    \text{검정력}=P\left(|T|>t_{\nu,1-\alpha/2}\right),
+    \text{검정력}=P\left(|T|>t_{1-\alpha/2,\,\nu}\right),
     \qquad T\sim t_\nu(\lambda),\quad \lambda=d\sqrt{\frac n2},\ \nu=2n-2
     $$
 

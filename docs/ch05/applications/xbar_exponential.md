@@ -635,13 +635,13 @@ $n=5$, $\lambda=1$일 때 $\mu = 1/\lambda$에 대한 (가) 감마분포에 기�
     **(가) 정확한 구간.** $2n\lambda\bar X = 2\lambda S_n \sim \chi^2_{2n}$이 추축량이다. $2n = 10$이므로
 
     $$
-    P\!\left(\chi^2_{10,0.025} \le 2n\lambda\bar X \le \chi^2_{10,0.975}\right) = 0.95
+    P\!\left(\chi^2_{0.025,\,10} \le 2n\lambda\bar X \le \chi^2_{0.975,\,10}\right) = 0.95
     $$
 
     에서 $\mu = 1/\lambda$에 대해 풀면
 
     $$
-    \left(\frac{2n\bar x}{\chi^2_{10,0.975}},\ \frac{2n\bar x}{\chi^2_{10,0.025}}\right) = \left(\frac{10\bar x}{20.483},\ \frac{10\bar x}{3.247}\right) = (0.488\bar x,\ 3.080\bar x)
+    \left(\frac{2n\bar x}{\chi^2_{0.975,\,10}},\ \frac{2n\bar x}{\chi^2_{0.025,\,10}}\right) = \left(\frac{10\bar x}{20.483},\ \frac{10\bar x}{3.247}\right) = (0.488\bar x,\ 3.080\bar x)
     $$
 
     이다. **포함확률이 정확히 0.95**이며, $\bar x$를 중심으로 극도로 비대칭이다. 위로 3배까지 뻗는다.

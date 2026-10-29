@@ -497,7 +497,7 @@ $\S 1$ 이 적은 「분산에는 중심극한정리의 구제가 없다」를 �
 </div>
 
 ??? success "풀이"
-    (a) $\chi^2_{14, 0.025} = 5.629$, $\chi^2_{14, 0.975} = 26.119$.
+    (a) $\chi^2_{0.025,\,14} = 5.629$, $\chi^2_{0.975,\,14} = 26.119$.
 
     $\sigma^2$의 신뢰구간: $(14 \cdot 0.0025/26.119, 14 \cdot 0.0025/5.629) = (0.00134, 0.00622)$.
 
@@ -570,7 +570,7 @@ $\sigma^2$의 구간과 $\sigma$의 구간이 **같은 포함확률**을 갖는 
 
     $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ — 이 카이제곱분포는 $\sigma^2$이나 $\mu$가 아니라 오직 $n$에만 의존한다.
 
-    따라서 $P(\chi^2_{n-1, \alpha/2} \le (n-1)S^2/\sigma^2 \le \chi^2_{n-1, 1-\alpha/2}) = 1 - \alpha$라고 쓸 수 있다.
+    따라서 $P(\chi^2_{\alpha/2,\,n-1} \le (n-1)S^2/\sigma^2 \le \chi^2_{1-\alpha/2,\,n-1}) = 1 - \alpha$라고 쓸 수 있다.
 
     $\sigma^2$에 대해 뒤집으면 신뢰구간을 얻는다.
 
@@ -682,7 +682,7 @@ $\sigma^2$의 구간과 $\sigma$의 구간이 **같은 포함확률**을 갖는 
 
     $$
     \frac{\hat c}{\sqrt{\left(\frac{q+2}{n}-1\right)\hat c^2+\frac{q}{n-1}}},
-    \qquad q=\chi^2_{n-1,1-\alpha/2}\ \text{또는}\ \chi^2_{n-1,\alpha/2}
+    \qquad q=\chi^2_{1-\alpha/2,\,n-1}\ \text{또는}\ \chi^2_{\alpha/2,\,n-1}
     $$
 
     ```python
@@ -763,12 +763,12 @@ $\sigma^2$의 구간과 $\sigma$의 구간이 **같은 포함확률**을 갖는 
     \chi^2=\frac{(n-1)S^2}{\sigma_0^2}
     $$
 
-    이 $[\chi^2_{\nu,\alpha/2},\ \chi^2_{\nu,1-\alpha/2}]$ 안에 있으면 $H_0:\sigma^2=\sigma_0^2$을 기각하지 않는다. **기각되지 않는 $\sigma_0^2$의 집합**이 곧 신뢰구간이다.
+    이 $[\chi^2_{\alpha/2,\,\nu},\ \chi^2_{1-\alpha/2,\,\nu}]$ 안에 있으면 $H_0:\sigma^2=\sigma_0^2$을 기각하지 않는다. **기각되지 않는 $\sigma_0^2$의 집합**이 곧 신뢰구간이다.
 
     $$
-    \chi^2_{\nu,\alpha/2}\le\frac{(n-1)s^2}{\sigma_0^2}\le\chi^2_{\nu,1-\alpha/2}
+    \chi^2_{\alpha/2,\,\nu}\le\frac{(n-1)s^2}{\sigma_0^2}\le\chi^2_{1-\alpha/2,\,\nu}
     \iff
-    \frac{(n-1)s^2}{\chi^2_{\nu,1-\alpha/2}}\le\sigma_0^2\le\frac{(n-1)s^2}{\chi^2_{\nu,\alpha/2}}
+    \frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\,\nu}}\le\sigma_0^2\le\frac{(n-1)s^2}{\chi^2_{\alpha/2,\,\nu}}
     $$
 
     **부등식을 뒤집을 때 방향이 바뀐다**는 점이 비대칭의 근원이다. 상위 분위수가 **하한**을 만든다.

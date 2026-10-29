@@ -121,7 +121,7 @@ $$
     \qquad \text{SE} = \frac{2.63312}{\sqrt{10}} = 0.83267
     $$
 
-    이다. $t_{0.025,\,9} = 2.26216$ 이므로
+    이다. $t_{0.975,\,9} = 2.26216$ 이므로
 
     $$
     2.4 \pm 2.26216 \times 0.83267 = 2.4 \pm 1.88362 = (0.5164,\ 4.2836)
@@ -212,7 +212,7 @@ $$
 $$
 
 $$
-s_d \approx 2.633, \qquad df = 9, \qquad t_{0.025, 9} \approx 2.262
+s_d \approx 2.633, \qquad df = 9, \qquad t_{0.975,9} \approx 2.262
 $$
 
 $$
@@ -249,7 +249,7 @@ $$
     $$
 
     $$
-    s_d \approx 1.643, \qquad n = 5, \qquad df = 4, \qquad t_{0.025,4} \approx 2.776
+    s_d \approx 1.643, \qquad n = 5, \qquad df = 4, \qquad t_{0.975,4} \approx 2.776
     $$
 
     $$
@@ -563,7 +563,7 @@ $\rho$를 0으로 바꿔 다시 돌려 보면 이 이득이 사라지고, 음수
 
     세 값 모두 $\rho$ 와 무관하다. $t$ 는 추축량 $(\bar D - \mu_D)/(S_D/\sqrt n) \sim t_{n-1}$ 때문에, $z$-known 은 $\bar D$ 가 정확히 정규이고 표준오차가 상수이기 때문에, $z$-plugin 은 담는 사건이 $|t_{11}| \le 1.96$ 이기 때문이다.
 
-    **$z$-plugin 만 $0.95$ 에 못 미친다.** $n = 12$ 에서 $t_{0.025,\,11} = 2.20099$ 인데 $1.96$ 을 쓰니 구간이 $11\%$ 좁다.
+    **$z$-plugin 만 $0.95$ 에 못 미친다.** $n = 12$ 에서 $t_{0.975,\,11} = 2.20099$ 인데 $1.96$ 을 쓰니 구간이 $11\%$ 좁다.
 
     **(2) 상관은 폭만 바꾼다.** $t$-구간의 폭은 $2t_{0.025,\,11}S_D/\sqrt{12} = 1.27074\,S_D$ 이고 $E[S_D] = c_4\sigma_D$ 이므로($n = 12$ 에서 $c_4 = 0.97756$)
 
@@ -874,7 +874,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
 </div>
 
 ??? success "풀이"
-    $t_{0.005, 9} = 3.250$. $\mathrm{SE} = 2.0/\sqrt{10} \approx 0.633$. 오차한계 = $3.250 \cdot 0.633 \approx 2.06$.
+    $t_{0.995,9} = 3.250$. $\mathrm{SE} = 2.0/\sqrt{10} \approx 0.633$. 오차한계 = $3.250 \cdot 0.633 \approx 2.06$.
 
     신뢰구간: $(4.5 - 2.06, 4.5 + 2.06) = (2.44, 6.56)$.
 
@@ -890,7 +890,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
 ??? success "풀이"
     (a) $\bar D = 50/10 = 5.0$. $s_D = \sqrt{\sum(D_i - 5)^2/9} = \sqrt{60/9} \approx 2.58$.
 
-    $t_{0.025, 9} = 2.262$. 오차한계 = $2.262 \cdot 2.58/\sqrt{10} \approx 1.85$.
+    $t_{0.975,9} = 2.262$. 오차한계 = $2.262 \cdot 2.58/\sqrt{10} \approx 1.85$.
 
     신뢰구간: $(3.15, 6.85)$.
 
@@ -1043,7 +1043,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
     **손익분기 상관.** 두 폭이 같아지는 $\rho$는 $(1-\rho)t_{n-1}^2=t_{2n-2}^2$에서
 
     $$
-    \rho^*=1-\left(\frac{t_{2n-2,0.975}}{t_{n-1,0.975}}\right)^2
+    \rho^*=1-\left(\frac{t_{2n-2,0.975}}{t_{0.975,\,n-1}}\right)^2
     $$
 
     | $n$ | 5 | 10 | 20 | 50 | 100 |

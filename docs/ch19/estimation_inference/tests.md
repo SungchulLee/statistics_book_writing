@@ -459,7 +459,7 @@ _확인한 곳 — W. W. Hauck Jr. 와 A. Donner 가 「Wald's Test as Applied t
     로그가능도 $\ell_p(\theta_j)$를 얻고,
 
     $$
-    \bigl\{\theta_j : -2[\ell_p(\theta_j) - \ell(\hat{\boldsymbol{\theta}})] \le \chi^2_{1,0.95} = 3.84\bigr\}
+    \bigl\{\theta_j : -2[\ell_p(\theta_j) - \ell(\hat{\boldsymbol{\theta}})] \le \chi^2_{0.95,\,1} = 3.84\bigr\}
     $$
 
     을 구간으로 삼는다. 이는 LRT를 뒤집어 얻은 구간이며, 일반적으로 대칭이 아니다.

@@ -323,7 +323,7 @@ $$\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$$
 
 $$\bar{X} \pm z_{1-\alpha/2} \frac{\sigma}{\sqrt{n}} \quad (\sigma \text{를 아는 경우})$$
 
-$$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르는 경우})$$
+$$\bar{X} \pm t_{1-\alpha/2,\,n-1} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르는 경우})$$
 
 ---
 

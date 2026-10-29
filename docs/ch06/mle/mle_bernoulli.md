@@ -544,7 +544,7 @@ $n=10$, 앞면 0번인 경우로 돌아가자. 왈드 구간은 쓸 수 없다. 
     **프로파일 가능도 구간.** 우도비 검정을 뒤집어
 
     $$
-    \left\{p:\ 2\left\{\ell(\hat p)-\ell(p)\right\} \le \chi^2_{1,0.95} = 3.841\right\}
+    \left\{p:\ 2\left\{\ell(\hat p)-\ell(p)\right\} \le \chi^2_{0.95,\,1} = 3.841\right\}
     $$
 
     을 구간으로 삼는다. $k=0$이면 $\ell(p) = 10\ln(1-p)$이고 $\hat p = 0$에서 $\ell(\hat p) = 0$이므로
