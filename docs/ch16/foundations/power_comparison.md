@@ -421,7 +421,7 @@ ARE는 검정력곡선의 **세로** 간격이 아니라 **가로** 배율이다
 여기서 다루는 세 검정의 국소검정력이 모두
 
 $$
-\pi(n, \delta) = \Phi\!\left(c \sqrt{n}\, \delta - z_{\alpha/2}\right)
+\pi(n, \delta) = \Phi\!\left(c \sqrt{n}\, \delta - z_{1-\alpha/2}\right)
 $$
 
 꼴이고 상수 $c > 0$(검정의 **효능**)만 검정마다 다르다고 하자.
@@ -450,8 +450,8 @@ $$
     이고 $\sqrt{\text{ARE}(B,A)} = c_B / c_A$ 이다. 이것을 검정력에 넣으면
 
     $$
-    \pi_B(n, \delta) = \Phi\!\left(c_B \sqrt n\, \delta - z_{\alpha/2}\right)
-    = \Phi\!\left(c_A \sqrt n \cdot \frac{c_B}{c_A} \delta - z_{\alpha/2}\right)
+    \pi_B(n, \delta) = \Phi\!\left(c_B \sqrt n\, \delta - z_{1-\alpha/2}\right)
+    = \Phi\!\left(c_A \sqrt n \cdot \frac{c_B}{c_A} \delta - z_{1-\alpha/2}\right)
     = \pi_A\!\left(n, \delta \sqrt{\text{ARE}}\right)
     $$
 
@@ -814,7 +814,7 @@ $$
 </div>
 
 ??? success "풀이"
-    $\sqrt n\, \delta$를 고정하는 까닭은 연습문제 4의 $\pi(n,\delta) = \Phi(c\sqrt n\, \delta - z_{\alpha/2})$ 때문이다. 이 양을 고정하면 각 검정의 극한 검정력이 $n$에 따라 변하지 않으므로, 남는 차이는 순수하게 **점근근사의 어긋남**이다. $\delta$를 고정한 채 $n$만 늘리면 세 검정의 검정력이 모두 $1$로 몰려 비교가 무의미해진다.
+    $\sqrt n\, \delta$를 고정하는 까닭은 연습문제 4의 $\pi(n,\delta) = \Phi(c\sqrt n\, \delta - z_{1-\alpha/2})$ 때문이다. 이 양을 고정하면 각 검정의 극한 검정력이 $n$에 따라 변하지 않으므로, 남는 차이는 순수하게 **점근근사의 어긋남**이다. $\delta$를 고정한 채 $n$만 늘리면 세 검정의 검정력이 모두 $1$로 몰려 비교가 무의미해진다.
 
     $n = 100$에서 정확분포를 $20{,}000$번 쓰는 것은 비싸므로, 여기서는 Wilcoxon 부호순위검정을 **점근근사**(`method="approx"`)로, **연속성 수정 없이**(`correction=False`), 양측으로 돌린다. 세 $n$에 같은 방식을 쓰므로 $n$ 사이의 비교에는 영향이 없다.
 

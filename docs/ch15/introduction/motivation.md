@@ -1194,7 +1194,7 @@ $\text{Lognormal}(0, \sigma)$에 대해서는 $\beta_2 = e^{4\sigma^2} + 2e^{3\s
 분산에 대한 카이제곱 검정은 $\chi^2 = (n-1)s^2/\sigma_0^2$을 $\chi^2_{n-1}$의 분위수와 비교한다. 4차 적률이 유한한 임의의 모집단에서 $H_0: \sigma^2 = \sigma_0^2$이 **참**일 때, 유의수준 $\alpha$의 양쪽꼬리 검정의 실제 기각확률이
 
 $$
-\lim_{n \to \infty} P(\text{기각}) = 2\left[1 - \Phi\!\left(z_{\alpha/2}\sqrt{\frac{2}{\gamma_2 + 2}}\right)\right]
+\lim_{n \to \infty} P(\text{기각}) = 2\left[1 - \Phi\!\left(z_{1-\alpha/2}\sqrt{\frac{2}{\gamma_2 + 2}}\right)\right]
 $$
 
 로 감을 보여라. $\chi^2_{n-1}$의 분위수가 $(n-1) + z\sqrt{2(n-1)} + o(\sqrt{n})$임은 써도 된다.
@@ -1215,19 +1215,19 @@ $\alpha = 0.05$에서 정규, $t_5$, $\text{Lognormal}(0,0.8)$(연습문제 16�
     **2단계: 기각역을 그 눈금으로 옮긴다.** $H_0$가 참이므로 $\sigma^2 = \sigma_0^2$이다. 위쪽 기각은
 
     $$
-    \frac{(n-1)S^2}{\sigma_0^2} > (n-1) + z_{\alpha/2}\sqrt{2(n-1)} + o(\sqrt n)
+    \frac{(n-1)S^2}{\sigma_0^2} > (n-1) + z_{1-\alpha/2}\sqrt{2(n-1)} + o(\sqrt n)
     $$
 
     이고, 양변에서 $n-1$을 빼고 $\sqrt{n-1}$로 나누면
 
     $$
-    \sqrt{n-1}\,\frac{S^2 - \sigma_0^2}{\sigma_0^2} > z_{\alpha/2}\sqrt{2} + o(1).
+    \sqrt{n-1}\,\frac{S^2 - \sigma_0^2}{\sigma_0^2} > z_{1-\alpha/2}\sqrt{2} + o(1).
     $$
 
     좌변은 1단계에 의해 $\mathcal{N}(0, \gamma_2+2)$로 수렴하므로, 표준화하면
 
     $$
-    P(\text{위쪽 기각}) \to 1 - \Phi\!\left(\frac{z_{\alpha/2}\sqrt 2}{\sqrt{\gamma_2+2}}\right) = 1 - \Phi\!\left(z_{\alpha/2}\sqrt{\frac{2}{\gamma_2+2}}\right).
+    P(\text{위쪽 기각}) \to 1 - \Phi\!\left(\frac{z_{1-\alpha/2}\sqrt 2}{\sqrt{\gamma_2+2}}\right) = 1 - \Phi\!\left(z_{1-\alpha/2}\sqrt{\frac{2}{\gamma_2+2}}\right).
     $$
 
     아래쪽 기각도 대칭적으로 같은 값을 주고 두 사건은 점근적으로 배타적이므로 합하면 주장한 식이 된다.
@@ -1418,10 +1418,10 @@ Levene 검정을 "$\lvert x - \text{중심} \rvert$에 일원분산분석 F를 �
 </div>
 
 ??? success "풀이"
-    **(a) 단조성과 범위.** $c(\gamma_2) = \sqrt{2/(\gamma_2+2)}$는 $\gamma_2$에 대해 감소하므로 $z_{\alpha/2}c$도 감소하고, $\Phi$가 증가하므로 극한 크기
+    **(a) 단조성과 범위.** $c(\gamma_2) = \sqrt{2/(\gamma_2+2)}$는 $\gamma_2$에 대해 감소하므로 $z_{1-\alpha/2}c$도 감소하고, $\Phi$가 증가하므로 극한 크기
 
     $$
-    g(\gamma_2) = 2\left[1 - \Phi\!\left(z_{\alpha/2}\,c(\gamma_2)\right)\right]
+    g(\gamma_2) = 2\left[1 - \Phi\!\left(z_{1-\alpha/2}\,c(\gamma_2)\right)\right]
     $$
 
     는 $\gamma_2$의 증가함수다. 양 끝을 보면
@@ -1436,10 +1436,10 @@ Levene 검정을 "$\lvert x - \text{중심} \rvert$에 일원분산분석 F를 �
 
     따라서 $g$는 $(0, 1)$ 전체를 훑는다. 즉 명목 5%라고 적힌 분산 검정의 **실제** 크기는 분포에 따라 0과 1 사이 어디든 될 수 있다. 정규성(또는 적어도 $\gamma_2$에 대한 가정) 없이는 "5%"라는 표시가 **아무것도 약속하지 않는다**. 2절이 카이제곱 검정을 두고 "이 가정의 이탈에 매우 민감하다"고 한 문장의 정량적 내용이 이것이다.
 
-    **(b) 역산.** $g(\gamma_2) = p$를 풀면 $z_{\alpha/2}c = z_{p/2}$, 즉
+    **(b) 역산.** $g(\gamma_2) = p$를 풀면 $z_{1-\alpha/2}c = z_{p/2}$, 즉
 
     $$
-    \gamma_2 = \frac{2}{c^2} - 2 = 2\left(\frac{z_{\alpha/2}}{z_{p/2}}\right)^{2} - 2.
+    \gamma_2 = \frac{2}{c^2} - 2 = 2\left(\frac{z_{1-\alpha/2}}{z_{p/2}}\right)^{2} - 2.
     $$
 
     $\alpha = 0.05$에서 $z_{0.025} = 1.9600$이다.
@@ -1471,7 +1471,7 @@ Levene 검정을 "$\lvert x - \text{중심} \rvert$에 일원분산분석 F를 �
 
     이면 아예 일어날 수 없다. $\alpha = 0.05$에서는 이 부등식이 $n \geq 2$의 모든 $n$에서 성립한다. $n = 2$에서 $5.024 \geq 2$, $n = 10$에서 $19.023 \geq 10$, $n = 40$에서 $58.120 \geq 40$이고, 일반적으로 $\chi^2_{0.975,n-1} \approx (n-1) + 1.96\sqrt{2(n-1)} > n$이 $1.96\sqrt{2(n-1)} > 1$에서 따라온다. 즉 위쪽 기각확률은 극한값이 아니라 **모든 $n$에서 정확히 0**이다.
 
-    아래쪽은 $n\bar Y^2 > n - \chi^2_{\alpha/2,\,n-1}$를 요구한다. $\chi^2_{\alpha/2,n-1} \approx (n-1) - z_{\alpha/2}\sqrt{2(n-1)}$이므로 우변은 $1 + z_{\alpha/2}\sqrt{2(n-1)}$, 즉 $\sqrt n$의 속도로 커진다. 반면 $\sqrt n \bar Y \xrightarrow{d} \mathcal{N}(0,1)$이므로 좌변 $(\sqrt n \bar Y)^2$은 $\chi^2_1$로 수렴한다. 따라서 이 확률도 0으로 간다. 두 꼬리를 합쳐 (a)의 $g(-2) = 0$과 맞는다.
+    아래쪽은 $n\bar Y^2 > n - \chi^2_{\alpha/2,\,n-1}$를 요구한다. $\chi^2_{\alpha/2,n-1} \approx (n-1) - z_{1-\alpha/2}\sqrt{2(n-1)}$이므로 우변은 $1 + z_{1-\alpha/2}\sqrt{2(n-1)}$, 즉 $\sqrt n$의 속도로 커진다. 반면 $\sqrt n \bar Y \xrightarrow{d} \mathcal{N}(0,1)$이므로 좌변 $(\sqrt n \bar Y)^2$은 $\chi^2_1$로 수렴한다. 따라서 이 확률도 0으로 간다. 두 꼬리를 합쳐 (a)의 $g(-2) = 0$과 맞는다.
 
     **해석.** 하한에서 카이제곱 검정의 실제 크기는 위쪽으로는 모든 $n$에서 정확히 0이고 전체로도 0으로 간다. 약속한 5%를 한 푼도 쓰지 않는 검정은 그만큼 검정력도 버리므로, $\sigma^2$이 $\sigma_0^2$에서 조금 벗어난 대립가설을 거의 잡아내지 못한다. 반대로 $\gamma_2$가 크면 같은 공식이 거의 항상 기각하는 장치가 된다. 식 $\chi^2 = (n-1)s^2/\sigma_0^2$은 하나도 바뀌지 않았는데 **분포의 네 번째 적률 하나가** 그것을 "절대 기각 안 함"과 "거의 항상 기각함" 사이 어디로든 옮겨 놓는다. 이 장이 로버스트 검정을 기본값으로 권하는 이유가 여기에 있다. $\square$
 

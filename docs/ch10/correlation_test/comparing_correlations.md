@@ -78,7 +78,7 @@ $$
 Z = \frac{z_1 - z_2}{\sqrt{\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}}}
 $$
 
-이다. $H_0$ 아래에서 $Z$는 근사적으로 표준정규분포를 따른다. $|Z| > z_{\alpha/2}$이면 수준 $\alpha$에서 $H_0$을 기각한다.
+이다. $H_0$ 아래에서 $Z$는 근사적으로 표준정규분포를 따른다. $|Z| > z_{1-\alpha/2}$이면 수준 $\alpha$에서 $H_0$을 기각한다.
 
 <div class="exbox" markdown>
 
@@ -288,9 +288,9 @@ $$
     **(2) 검정력 식도 닫힌 꼴이다.** 두 집단 크기를 $n$ 으로 같게 두면 $\operatorname{SE} = \sqrt{2/(n-3)}$ 이고, $Z$ 는 평균이 $\delta/\operatorname{SE}$ 인 정규를 따른다. 여기서 $\delta = \zeta_1 - \zeta_2$ 다. 양측 검정의 검정력이 $1-\beta$ 이려면 (한쪽 꼬리는 무시할 만하므로)
 
     $$
-    \frac{\lvert \delta \rvert}{\sqrt{2/(n-3)}} \;=\; z_{\alpha/2} + z_{\beta}
+    \frac{\lvert \delta \rvert}{\sqrt{2/(n-3)}} \;=\; z_{1-\alpha/2} + z_{1-\beta}
     \qquad\Longrightarrow\qquad
-    n \;=\; 3 + 2\left(\frac{z_{\alpha/2} + z_{\beta}}{\delta}\right)^{2}
+    n \;=\; 3 + 2\left(\frac{z_{1-\alpha/2} + z_{1-\beta}}{\delta}\right)^{2}
     $$
 
     이다. $\delta = \operatorname{arctanh}(0.65) - \operatorname{arctanh}(0.40) = 0.351650$ 이고 $z_{0.025} + z_{0.20} = 1.959964 + 0.841621 = 2.801585$ 이므로
@@ -397,7 +397,7 @@ $$
 독립인 두 상관에 대해 $\rho_1 - \rho_2$의 $(1 - \alpha)$ 신뢰구간은 역변환으로 만들 수 있다.
 
 $$
-(z_1 - z_2) \pm z_{\alpha/2} \sqrt{\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}}
+(z_1 - z_2) \pm z_{1-\alpha/2} \sqrt{\frac{1}{n_1 - 3} + \frac{1}{n_2 - 3}}
 $$
 
 이는 $\zeta_1 - \zeta_2$($\zeta = \text{arctanh}(\rho)$)에 대한 신뢰구간을 준다. 상관 척도로 되돌리려면 각 끝점에 $\tanh$를 적용한다. 다만 tanh 변환이 비선형이므로 이것은 $\rho_1 - \rho_2$에 대한 신뢰구간이 아니라 $\zeta_1 - \zeta_2$에 대한 신뢰구간임에 유의하라.
@@ -487,7 +487,7 @@ $$
     |---|---|
     | 독립 표본 | $z=\dfrac{\zeta_1-\zeta_2}{\sqrt{1/(n_1-3)+1/(n_2-3)}}$ |
     | $k$개 동질성 | $Q=\sum(n_i-3)(z_i-\bar z)^2\sim\chi^2_{k-1}$ |
-    | 필요 표본 | $n=\dfrac{2(z_{\alpha/2}+z_\beta)^2}{(\zeta_1-\zeta_2)^2}+3$ |
+    | 필요 표본 | $n=\dfrac{2(z_{1-\alpha/2}+z_{1-\beta})^2}{(\zeta_1-\zeta_2)^2}+3$ |
     | **차이 구간** | **조우의 방법**(각 구간을 먼저) |
 
     **흔한 실수 다섯.**
@@ -802,7 +802,7 @@ $$
     **필요 표본 크기**(독립 표본, 각 군 $n$).
 
     $$
-    n=\frac{2(z_{\alpha/2}+z_\beta)^2}{(\zeta_1-\zeta_2)^2}+3,
+    n=\frac{2(z_{1-\alpha/2}+z_{1-\beta})^2}{(\zeta_1-\zeta_2)^2}+3,
     \qquad \zeta_i=\operatorname{arctanh}\rho_i
     $$
 

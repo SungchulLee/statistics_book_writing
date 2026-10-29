@@ -19,7 +19,7 @@ $k = 5$, $\alpha = 0.05$ 면 벌써 $0.40$ 이다. 네 방법이 그 부풀음�
 
 | 방법 | 문턱 (쌍별 차이가 이보다 크면 기각) | 가족 | 유도한 곳 |
 |---|---|---|---|
-| 보정 없음 (Fisher LSD) | $t_{\alpha/2,\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 비교 하나 | $\S 2$ 보기 1 |
+| 보정 없음 (Fisher LSD) | $t_{1-\alpha/2,\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 비교 하나 | $\S 2$ 보기 1 |
 | Tukey HSD | $q_{\alpha,\,k,\,N-k}\sqrt{MSW/n}$ | 모든 쌍 | [Tukey](tukey.md) 보기 2 |
 | Bonferroni | $t_{\alpha/(2m),\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 미리 지정한 $m$ 개 | [Bonferroni와 Scheffé](bonferroni_scheffe.md) 보기 1 |
 | Scheffé | $\sqrt{(k-1)F_{\alpha,\,k-1,\,N-k}}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 가능한 **모든** 대비 | [Bonferroni와 Scheffé](bonferroni_scheffe.md) 보기 2 |
@@ -35,7 +35,7 @@ Bonferroni 의 단계적 하강 변형인 Holm 절차는 같은 가족을 통제
 집단 $i$와 $j$에 대한 LSD 문턱은
 
 $$
-\text{LSD} = t_{\alpha/2,\, N-k} \sqrt{\text{MSE}\!\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
+\text{LSD} = t_{1-\alpha/2,\, N-k} \sqrt{\text{MSE}\!\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
 $$
 
 이다. $|\bar{y}_i - \bar{y}_j| > \text{LSD}$이면 그 쌍을 수준 $\alpha$에서 유의하게 다르다고 선언한다.
@@ -47,7 +47,7 @@ $$
 **(1)** LSD 문턱이 "합동 $MSE$ 를 쓴 이표본 $t$-검정"의 문턱과 같음을 보이고, 같은 자료의 Tukey HSD 문턱과의 비가
 
 $$
-\frac{\text{HSD}}{\text{LSD}} = \frac{q_{\alpha,\,k,\,\nu}}{\sqrt2\, t_{\alpha/2,\,\nu}}
+\frac{\text{HSD}}{\text{LSD}} = \frac{q_{\alpha,\,k,\,\nu}}{\sqrt2\, t_{1-\alpha/2,\,\nu}}
 $$
 
 임을 보이시오. $k = 3$, $\nu = 27$, $\alpha = 0.05$ 에서 이 값을 구하시오.
@@ -64,10 +64,10 @@ $$
     t = \frac{\bar y_i - \bar y_j}{\sqrt{s_p^2\left(\frac{1}{n_i}+\frac{1}{n_j}\right)}}
     $$
 
-    를 $|t| > t_{\alpha/2,\nu}$ 와 견준다. 양변에 분모를 곱하면 기각 조건이
+    를 $|t| > t_{1-\alpha/2,\nu}$ 와 견준다. 양변에 분모를 곱하면 기각 조건이
 
     $$
-    |\bar y_i - \bar y_j| > t_{\alpha/2,\nu}\sqrt{s_p^2\left(\tfrac{1}{n_i}+\tfrac{1}{n_j}\right)}
+    |\bar y_i - \bar y_j| > t_{1-\alpha/2,\nu}\sqrt{s_p^2\left(\tfrac{1}{n_i}+\tfrac{1}{n_j}\right)}
     $$
 
     이 되는데, LSD 가 쓰는 $MSE$ 는 **$k$ 개 집단 전부를 합동한 분산추정량**이므로 두 집단만으로 만든 $s_p^2$ 대신 그것을 넣고 자유도를 $n_i+n_j-2$ 대신 $\nu = N-k$ 로 바꾼 것이 정확히 LSD 문턱이다. 그러므로 **LSD 는 분모를 더 많은 자료로 만든 쌍별 $t$-검정**이다. $k=2$ 이면 $MSE = s_p^2$, $\nu = N-2$ 라 둘이 완전히 같아진다.
@@ -77,16 +77,16 @@ $$
     $$
     \text{HSD} = q_{\alpha,k,\nu}\sqrt{\frac{MSE}{n}},
     \qquad
-    \text{LSD} = t_{\alpha/2,\nu}\sqrt{\frac{2\,MSE}{n}}
+    \text{LSD} = t_{1-\alpha/2,\nu}\sqrt{\frac{2\,MSE}{n}}
     $$
 
     이므로 $\sqrt{MSE/n}$ 이 약분되어
 
     $$
-    \frac{\text{HSD}}{\text{LSD}} = \frac{q_{\alpha,k,\nu}}{\sqrt2\,t_{\alpha/2,\nu}}
+    \frac{\text{HSD}}{\text{LSD}} = \frac{q_{\alpha,k,\nu}}{\sqrt2\,t_{1-\alpha/2,\nu}}
     $$
 
-    이다. **$MSE$ 와 $n$ 에 전혀 의존하지 않는다.** $k=2$ 이면 $q_{\alpha,2,\nu} = \sqrt2\,t_{\alpha/2,\nu}$ 라 비가 정확히 $1$ 이고, $k$ 가 커지면 $q$ 가 커지므로 비도 커진다. 곧 **집단이 많아질수록 Tukey 의 문턱이 LSD 보다 빠르게 높아진다.** 아래에서 $k=3$, $\nu=27$ 의 값을 잰다.
+    이다. **$MSE$ 와 $n$ 에 전혀 의존하지 않는다.** $k=2$ 이면 $q_{\alpha,2,\nu} = \sqrt2\,t_{1-\alpha/2,\nu}$ 라 비가 정확히 $1$ 이고, $k$ 가 커지면 $q$ 가 커지므로 비도 커진다. 곧 **집단이 많아질수록 Tukey 의 문턱이 LSD 보다 빠르게 높아진다.** 아래에서 $k=3$, $\nu=27$ 의 값을 잰다.
 
     **(2) 수치적으로.** 먼저 LSD 를 돌린다.
 
@@ -1178,7 +1178,7 @@ Bonferroni 보정이 가족단위 오류율을 수준 $\alpha$로 통제함을 �
 <div class="drillbox" markdown>
 
 **연습문제 12.** <span class="diff med" title="중간"></span>
-$\S 2$ 의 LSD 문턱 $t_{\alpha/2,\,N-k}\sqrt{MSW(1/n_i + 1/n_j)}$ 는 두 집단의 크기에만 의존한다. 세 집단이 각각 $n = 30$ 인 균형 설계에서 한 집단만 $n = 5$ 로 줄면 그 집단이 끼인 쌍의 문턱은 어떻게 달라지는가. 균형인 경우와 견주어 비를 구하시오.
+$\S 2$ 의 LSD 문턱 $t_{1-\alpha/2,\,N-k}\sqrt{MSW(1/n_i + 1/n_j)}$ 는 두 집단의 크기에만 의존한다. 세 집단이 각각 $n = 30$ 인 균형 설계에서 한 집단만 $n = 5$ 로 줄면 그 집단이 끼인 쌍의 문턱은 어떻게 달라지는가. 균형인 경우와 견주어 비를 구하시오.
 
 </div>
 
@@ -1186,7 +1186,7 @@ $\S 2$ 의 LSD 문턱 $t_{\alpha/2,\,N-k}\sqrt{MSW(1/n_i + 1/n_j)}$ 는 두 집�
     LSD 문턱은
 
     $$
-    \text{LSD} = t_{\alpha/2,\, N-k}\sqrt{\text{MSE}\!\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
+    \text{LSD} = t_{1-\alpha/2,\, N-k}\sqrt{\text{MSE}\!\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}
     $$
 
     이다. $n_{\text{덴마크}}$가 30에서 5가 되면 $1/n_j$가 $1/30 \approx 0.033$에서 $1/5 = 0.2$로 커진다. 합 $1/n_i + 1/n_j$는 약 $0.067$에서 $0.233$으로 늘어 제곱근 안의 값이 거의 네 배가 된다. 그 결과 LSD 문턱이 크게 커져 네덜란드–덴마크 차이를 유의하다고 선언하기 어려워진다. 또한 전체 $N$이 줄고 $\text{MSE}$도 달라질 수 있어 문턱이 더 넓어질 수 있다.
@@ -1208,7 +1208,7 @@ $\S 2$ 의 LSD 문턱 $t_{\alpha/2,\,N-k}\sqrt{MSW(1/n_i + 1/n_j)}$ 는 두 집�
     **LSD의 정의.** 합동 $\text{MSE}$를 쓴 $t$ 검정이다.
 
     $$
-    \text{LSD}_{ij}=t_{\alpha/2,\,N-k}\sqrt{\text{MSE}\Bigl(\frac1{n_i}+\frac1{n_j}\Bigr)}
+    \text{LSD}_{ij}=t_{1-\alpha/2,\,N-k}\sqrt{\text{MSE}\Bigl(\frac1{n_i}+\frac1{n_j}\Bigr)}
     $$
 
     ```python

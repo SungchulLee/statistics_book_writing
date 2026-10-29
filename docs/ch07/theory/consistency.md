@@ -93,10 +93,10 @@ $$
 이 결과가 대표본에서 정규분포에 기반한 신뢰구간을 사용하는 것을 정당화한다. 구체적으로 근사적인 $(1 - \alpha)$ 수준 신뢰구간은 다음 형태를 취한다.
 
 $$
-\hat{\theta}_n \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}
+\hat{\theta}_n \pm z_{1-\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}
 $$
 
-여기서 $z_{\alpha/2}$는 표준정규 임계값이고 $\sigma / \sqrt{n}$은 점근 표준오차이다.
+여기서 $z_{1-\alpha/2}$는 표준정규 임계값이고 $\sigma / \sqrt{n}$은 점근 표준오차이다.
 
 <div class="storybox" markdown>
 

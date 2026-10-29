@@ -247,7 +247,7 @@ _확인한 곳 — 바깥의 사실을 끌어오지 않았다. ①–③ 의 수
     **(c)** 일반적으로 조건은
 
     $$
-    n \geq \left( \frac{z_{\alpha/2}\,\sigma}{\beta} \right)^{\!2}
+    n \geq \left( \frac{z_{1-\alpha/2}\,\sigma}{\beta} \right)^{\!2}
     $$
 
     이다. 필요한 표본크기는 효과 크기의 **제곱에 반비례**한다. 효과가 10분의 1이면 표본은 100배가 필요하다 — $9{,}604 / 97 \approx 99$가 바로 그 100배이다. 뒤집어 말하면 표본크기는 "탐지할 수 있는 가장 작은 효과"를 정하는 장치이다. $n = 10^7$짜리 자료에서 유의하다는 말은 효과가 $1.96/\sqrt{10^7} = 0.00062$보다 크다는 말밖에 되지 않으며, 그것은 실질적 문턱 $0.2$와 아무 상관이 없다. $\square$
@@ -353,7 +353,7 @@ _확인한 곳 — 바깥의 사실을 끌어오지 않았다. ①–③ 의 수
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
 3절의 표는 "구간이 $0$을 배제한다"를 "유의함"과 같은 말로 쓴다.
 
-(a) $(1-\alpha)$ 신뢰구간 $\hat\beta \pm z_{\alpha/2}\mathrm{SE}$가 $0$을 배제하는 것과 유의수준 $\alpha$에서 $H_0: \beta = 0$을 기각하는 것이 같은 일임을 보이라.
+(a) $(1-\alpha)$ 신뢰구간 $\hat\beta \pm z_{1-\alpha/2}\mathrm{SE}$가 $0$을 배제하는 것과 유의수준 $\alpha$에서 $H_0: \beta = 0$을 기각하는 것이 같은 일임을 보이라.
 
 (b) 2절의 경고 상자는 의학 시험에서 $0.01$ 문턱을 쓴다고 했다. $\hat\beta = 2.5$, $\mathrm{SE} = 1.0$인 계수를 가지고, 95% 신뢰구간은 $0$을 배제하지만 $\alpha = 0.01$에서는 기각되지 않는 반례를 수치로 완성하라. 99% 신뢰구간도 구하라.
 
@@ -365,7 +365,7 @@ _확인한 곳 — 바깥의 사실을 끌어오지 않았다. ①–③ 의 수
     **(a)** 구간이 $0$을 포함하지 않는다는 것은
 
     $$
-    \lvert \hat\beta \rvert > z_{\alpha/2}\,\mathrm{SE} \iff \left\lvert \frac{\hat\beta}{\mathrm{SE}} \right\rvert > z_{\alpha/2} \iff \lvert t \rvert > z_{\alpha/2}
+    \lvert \hat\beta \rvert > z_{1-\alpha/2}\,\mathrm{SE} \iff \left\lvert \frac{\hat\beta}{\mathrm{SE}} \right\rvert > z_{1-\alpha/2} \iff \lvert t \rvert > z_{1-\alpha/2}
     $$
 
     와 같고, 마지막 부등식은 양쪽꼬리 $p$값이 $\alpha$보다 작다는 것과 같다. 그러므로 두 판정은 **신뢰수준과 유의수준이 $1-\alpha \leftrightarrow \alpha$로 맞을 때만** 일치한다. $\square$

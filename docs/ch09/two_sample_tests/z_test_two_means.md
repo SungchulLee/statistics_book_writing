@@ -72,7 +72,7 @@ $z_{\alpha}$를 표준정규분포의 상위 $\alpha$ 분위수, $z_{\text{obs}}
 
 ### 양측검정 (Hₐ: μ₁ - μ₂ ≠ δ₀)
 
-**기각역**: $|z_{\text{obs}}| > z_{\alpha/2}$이면 $H_0$을 기각한다.
+**기각역**: $|z_{\text{obs}}| > z_{1-\alpha/2}$이면 $H_0$을 기각한다.
 
 **p-값**:
 
@@ -686,8 +686,8 @@ _확인한 곳 — 논문이 Andrew Gelman 과 Hal Stern 의 「The Difference B
     **검정력 공식.** $\sigma$를 알면 비중심 $t$가 필요 없다. $\bar X_1-\bar X_2\sim N(\delta,\ \text{SE}^2)$이므로
 
     $$
-    \text{검정력}=\Phi\Bigl(\frac{\delta}{\text{SE}}-z_{\alpha/2}\Bigr)
-    +\Phi\Bigl(-\frac{\delta}{\text{SE}}-z_{\alpha/2}\Bigr),
+    \text{검정력}=\Phi\Bigl(\frac{\delta}{\text{SE}}-z_{1-\alpha/2}\Bigr)
+    +\Phi\Bigl(-\frac{\delta}{\text{SE}}-z_{1-\alpha/2}\Bigr),
     \qquad \text{SE}=\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}
     $$
 
@@ -841,8 +841,8 @@ $\delta_0\neq0$인 검정과 **신뢰구간의 동치성**을 확인하고, 이�
     **동치성의 내용.** $\delta_0$에 대한 양측 $z$ 검정을 $\alpha$ 수준에서 기각하지 **않을** 조건은
 
     $$
-    \Bigl|\frac{(\bar x_1-\bar x_2)-\delta_0}{\text{SE}}\Bigr|\le z_{\alpha/2}
-    \iff \delta_0\in\bigl[(\bar x_1-\bar x_2)\pm z_{\alpha/2}\text{SE}\bigr]
+    \Bigl|\frac{(\bar x_1-\bar x_2)-\delta_0}{\text{SE}}\Bigr|\le z_{1-\alpha/2}
+    \iff \delta_0\in\bigl[(\bar x_1-\bar x_2)\pm z_{1-\alpha/2}\text{SE}\bigr]
     $$
 
     **$100(1-\alpha)\%$ 신뢰구간은 "기각되지 않는 $\delta_0$의 모임"**이다.
@@ -939,13 +939,13 @@ $z$ 검정의 전제인 "$\sigma$를 안다"가 **틀렸을 때** 구간의 포�
     **유도.** 참 표준오차가 $\text{SE}_{\text{true}}$인데 $\text{SE}_{\text{used}}$를 썼다고 하자. 구간은
 
     $$
-    (\bar x_1-\bar x_2)\pm z_{\alpha/2}\,\text{SE}_{\text{used}}
+    (\bar x_1-\bar x_2)\pm z_{1-\alpha/2}\,\text{SE}_{\text{used}}
     $$
 
     이고 $\bar x_1-\bar x_2\sim N(\delta,\text{SE}_{\text{true}}^2)$이므로 포함률은
 
     $$
-    P\bigl(|Z|\le z_{\alpha/2}\,r\bigr)=2\Phi(z_{\alpha/2}\,r)-1,
+    P\bigl(|Z|\le z_{1-\alpha/2}\,r\bigr)=2\Phi(z_{1-\alpha/2}\,r)-1,
     \qquad r=\frac{\text{SE}_{\text{used}}}{\text{SE}_{\text{true}}}
     $$
 

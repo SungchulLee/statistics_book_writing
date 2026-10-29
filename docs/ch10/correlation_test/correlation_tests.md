@@ -1305,7 +1305,7 @@ $H_0: \rho = 0$을 검정하는 것과 $\rho_0 \neq 0$인 $H_0: \rho = \rho_0$�
     **필요 표본 크기**($H_0:\rho=0$, 양측 $\alpha$, 검정력 $1-\beta$).
 
     $$
-    n=\left(\frac{z_{\alpha/2}+z_\beta}{\operatorname{arctanh}\rho}\right)^2+3
+    n=\left(\frac{z_{1-\alpha/2}+z_{1-\beta}}{\operatorname{arctanh}\rho}\right)^2+3
     $$
 
     ```python

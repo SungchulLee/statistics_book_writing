@@ -51,7 +51,7 @@ $$
 가 된다. $\theta$ 척도의 백분위수 구간이 $\phi$ 척도의 구간을 되돌린 것과 동일하므로, 사용자가 $m$을 알 필요 없이 정규화 변환이 자동으로 반영된다.
 
 !!! note "변환 불변성"
-    백분위수법은 **변환 불변**이다. 임의의 단조증가 함수 $m$에 대해 $\phi = m(\theta)$이면 $\phi$의 백분위수 구간은 정확히 $[m(\hat{\theta}^*_{(\alpha/2)}), m(\hat{\theta}^*_{(1-\alpha/2)})]$이다. 정규근사 구간 $\hat{\theta} \pm z_{\alpha/2} \cdot \widehat{\text{SE}}$에는 이 성질이 없다.
+    백분위수법은 **변환 불변**이다. 임의의 단조증가 함수 $m$에 대해 $\phi = m(\theta)$이면 $\phi$의 백분위수 구간은 정확히 $[m(\hat{\theta}^*_{(\alpha/2)}), m(\hat{\theta}^*_{(1-\alpha/2)})]$이다. 정규근사 구간 $\hat{\theta} \pm z_{1-\alpha/2} \cdot \widehat{\text{SE}}$에는 이 성질이 없다.
 
 이 주장은 말로 들으면 미덥지 않다. 척도를 바꾸었는데 답이 그대로라니, 정말 그런지 한 자료에서 확인해 보자.
 
@@ -263,7 +263,7 @@ retrospective analysis of live birth rates", 『BMJ』 $316$ 권 $1701$–$1704$
 **정규 붓스트랩 구간**은 붓스트랩 표준오차를 쓴다.
 
 $$
-\hat{\theta} \pm z_{\alpha/2} \cdot \widehat{\text{SE}}_{\text{boot}}
+\hat{\theta} \pm z_{1-\alpha/2} \cdot \widehat{\text{SE}}_{\text{boot}}
 $$
 
 이 구간은 언제나 $\hat{\theta}$를 중심으로 대칭이며 모수의 자연스러운 경계를 넘어갈 수 있다. 백분위수 구간은 두 문제를 모두 피하지만 붓스트랩 분포의 편향에 취약하다.

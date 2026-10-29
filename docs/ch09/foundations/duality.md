@@ -45,8 +45,8 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{fail to reject } H_0: \theta = \theta_0 \te
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 일표본 평균. $H_0: \mu = \mu_0$ 대 $H_a: \mu \neq \mu_0$의 일표본 z-검정에서 이렇게 된다.
 
-- **검정**: $z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$일 때 $|z| > z_{\alpha/2}$이면 $H_0$을 기각한다.
-- **신뢰구간**: $\bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$
+- **검정**: $z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$일 때 $|z| > z_{1-\alpha/2}$이면 $H_0$을 기각한다.
+- **신뢰구간**: $\bar{x} \pm z_{1-\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$
 
 </div>
 
@@ -55,7 +55,7 @@ $$CI_{1-\alpha} = \{\theta_0 : \text{fail to reject } H_0: \theta = \theta_0 \te
 
 **동등성의 증명:**
 
-$$|z| > z_{\alpha/2} \iff \left|\frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\right| > z_{\alpha/2} \iff \mu_0 \notin \left(\bar{x} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}},\ \bar{x} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\right)$$
+$$|z| > z_{1-\alpha/2} \iff \left|\frac{\bar{x} - \mu_0}{\sigma/\sqrt{n}}\right| > z_{1-\alpha/2} \iff \mu_0 \notin \left(\bar{x} - z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}},\ \bar{x} + z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}\right)$$
 
 <div class="exbox" markdown>
 
@@ -103,16 +103,16 @@ $\alpha = 0.05$에서 $H_0: p_{\text{대면}} = p_{\text{온라인}}$ 을 검정
     **(1) 해석적으로.** 기각 조건에서 출발해 한 줄씩 동치변형한다. 각 화살표는 "같은 값을 양변에 곱하거나 더한다"일 뿐이므로 **역도 성립한다.**
 
     $$
-    \lvert z \rvert > z_{\alpha/2}
-    \iff \left\lvert \frac{\bar x - \mu_0}{\sigma/\sqrt n} \right\rvert > z_{\alpha/2}
-    \iff \lvert \bar x - \mu_0 \rvert > z_{\alpha/2}\frac{\sigma}{\sqrt n}
+    \lvert z \rvert > z_{1-\alpha/2}
+    \iff \left\lvert \frac{\bar x - \mu_0}{\sigma/\sqrt n} \right\rvert > z_{1-\alpha/2}
+    \iff \lvert \bar x - \mu_0 \rvert > z_{1-\alpha/2}\frac{\sigma}{\sqrt n}
     $$
 
-    마지막 식은 $\mu_0 < \bar x - z_{\alpha/2}\sigma/\sqrt n$ 또는 $\mu_0 > \bar x + z_{\alpha/2}\sigma/\sqrt n$, 곧
+    마지막 식은 $\mu_0 < \bar x - z_{1-\alpha/2}\sigma/\sqrt n$ 또는 $\mu_0 > \bar x + z_{1-\alpha/2}\sigma/\sqrt n$, 곧
 
     $$
-    \mu_0 \notin \left(\bar x - z_{\alpha/2}\frac{\sigma}{\sqrt n},\;
-    \bar x + z_{\alpha/2}\frac{\sigma}{\sqrt n}\right)
+    \mu_0 \notin \left(\bar x - z_{1-\alpha/2}\frac{\sigma}{\sqrt n},\;
+    \bar x + z_{1-\alpha/2}\frac{\sigma}{\sqrt n}\right)
     $$
 
     이다. **두 절차가 같은 답을 주는 것이 아니라, 두 문장이 같은 사건을 가리킨다.** 달라지는 것은 어느 쪽을 기준점으로 삼아 거리를 재느냐뿐이다. 검정은 $\mu_0$을 가운데 놓고 $\bar x$가 얼마나 떨어졌는지 보고, 구간은 $\bar x$를 가운데 놓고 $\mu_0$이 들어오는지 본다. 같은 자를 양쪽에서 댄 것이다.
@@ -128,7 +128,7 @@ $\alpha = 0.05$에서 $H_0: p_{\text{대면}} = p_{\text{온라인}}$ 을 검정
     **(2) 해석적으로.** (1)의 동치를 $\alpha$의 함수로 읽으면 더 날카로운 진술이 나온다. $\mu_0$이 구간의 **끝점**이 되는 조건은 위 부등식이 **등식**이 되는 것, 곧
 
     $$
-    \lvert z \rvert = z_{\alpha/2}
+    \lvert z \rvert = z_{1-\alpha/2}
     \iff \alpha = 2\{1 - \Phi(\lvert z \rvert)\} = p
     $$
 
@@ -344,7 +344,7 @@ $\mu$의 95% 신뢰구간이 $(12.3, 18.7)$이다. 검정통계량을 계산하�
 
     수준 $\alpha$에서 단측검정 $H_0: \mu \leq \mu_0$ 대 $H_1: \mu > \mu_0$에 대응하는 것은 하한 신뢰한계 $(\bar{x} - z_\alpha \cdot \text{SE},\; \infty)$이다. $\mu_0$이 이 하한 아래에 있을 때에만 $H_0$을 기각한다.
 
-    마찬가지로 $H_0: \mu \geq \mu_0$ 대 $H_1: \mu < \mu_0$에 대응하는 것은 상한 신뢰한계 $(-\infty,\; \bar{x} + z_\alpha \cdot \text{SE})$이다. 단측 한계는 검정의 단측 성격을 반영하여 $z_{\alpha/2}$가 아니라 $z_\alpha$를 쓴다.
+    마찬가지로 $H_0: \mu \geq \mu_0$ 대 $H_1: \mu < \mu_0$에 대응하는 것은 상한 신뢰한계 $(-\infty,\; \bar{x} + z_\alpha \cdot \text{SE})$이다. 단측 한계는 검정의 단측 성격을 반영하여 $z_{1-\alpha/2}$가 아니라 $z_\alpha$를 쓴다.
 
 <div class="drillbox" markdown>
 

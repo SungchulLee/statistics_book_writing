@@ -297,16 +297,16 @@ t-분포 결과는 곧바로 신뢰구간을 준다.
 $\beta_1$에 대한 $100(1 - \alpha)\%$ 신뢰구간은
 
 $$
-\hat{\beta}_1 \pm t_{\alpha/2,\,n-2} \cdot \frac{s}{\sqrt{S_{xx}}}
+\hat{\beta}_1 \pm t_{1-\alpha/2,\,n-2} \cdot \frac{s}{\sqrt{S_{xx}}}
 $$
 
 이고, $\beta_0$에 대해서는
 
 $$
-\hat{\beta}_0 \pm t_{\alpha/2,\,n-2} \cdot s\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}}
+\hat{\beta}_0 \pm t_{1-\alpha/2,\,n-2} \cdot s\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}}
 $$
 
-이다. 여기서 $t_{\alpha/2,\,n-2}$는 $t_{n-2}$ 분포의 상위 $\alpha/2$ 분위수다.
+이다. 여기서 $t_{1-\alpha/2,\,n-2}$는 $t_{n-2}$ 분포의 상위 $\alpha/2$ 분위수다.
 
 ---
 
@@ -600,7 +600,7 @@ $$
     \operatorname{Var}(Y_0 - \hat{\mu}_0) = \sigma^2\left(1 + \frac{1}{n} + \frac{(x_0-\bar{x})^2}{S_{xx}}\right)
     $$
 
-    괄호 안의 $1$이 결정적이다. $n \to \infty$이면 신뢰구간의 폭은 0으로 가지만 예측구간의 폭은 $2z_{\alpha/2}\sigma$로 남는다. **자료를 아무리 모아도 개별 관측의 무작위성은 사라지지 않는다.** $\square$
+    괄호 안의 $1$이 결정적이다. $n \to \infty$이면 신뢰구간의 폭은 0으로 가지만 예측구간의 폭은 $2z_{1-\alpha/2}\sigma$로 남는다. **자료를 아무리 모아도 개별 관측의 무작위성은 사라지지 않는다.** $\square$
 
 ---
 

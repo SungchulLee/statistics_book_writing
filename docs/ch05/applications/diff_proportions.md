@@ -789,7 +789,7 @@ $$
     표준적인 공식은 귀무가설 아래의 합동 표준오차와 대립가설 아래의 표준오차를 함께 쓴다.
 
     $$
-    n \ge \frac{\left(z_{\alpha/2}\sqrt{2\bar p\bar q} + z_{\beta}\sqrt{p_1q_1+p_2q_2}\right)^2}{(p_1-p_2)^2},
+    n \ge \frac{\left(z_{1-\alpha/2}\sqrt{2\bar p\bar q} + z_{1-\beta}\sqrt{p_1q_1+p_2q_2}\right)^2}{(p_1-p_2)^2},
     \qquad \bar p = \frac{p_1+p_2}{2}
     $$
 

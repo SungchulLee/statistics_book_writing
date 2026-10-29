@@ -150,10 +150,10 @@ $$
 이 결과는 곧바로 실용적인 귀결을 낳는다. $\theta_0$에 대한 근사적인 $(1 - \alpha)$ 신뢰구간은
 
 $$
-\hat{\theta}_{\text{MLE}} \pm z_{\alpha/2} \cdot \frac{1}{\sqrt{nI(\hat{\theta}_{\text{MLE}})}}
+\hat{\theta}_{\text{MLE}} \pm z_{1-\alpha/2} \cdot \frac{1}{\sqrt{nI(\hat{\theta}_{\text{MLE}})}}
 $$
 
-여기서 $z_{\alpha/2}$는 표준정규분포의 $(1 - \alpha/2)$ 분위수이다. $\theta_0$을 모르므로 실무에서는 Fisher 정보량을 $\hat{\theta}_{\text{MLE}}$에서 평가한다.
+여기서 $z_{1-\alpha/2}$는 표준정규분포의 $(1 - \alpha/2)$ 분위수이다. $\theta_0$을 모르므로 실무에서는 Fisher 정보량을 $\hat{\theta}_{\text{MLE}}$에서 평가한다.
 
 !!! example "베르누이 모수의 점근 신뢰구간"
 

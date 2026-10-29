@@ -92,7 +92,7 @@ $\text{Var}(\hat{\boldsymbol{\theta}}) \approx \mathcal{I}(\hat{\boldsymbol{\the
 개별 모수의 신뢰구간은
 
 $$
-\hat{\theta}_j \pm z_{\alpha/2} \sqrt{[\mathcal{I}^{-1}]_{jj}}
+\hat{\theta}_j \pm z_{1-\alpha/2} \sqrt{[\mathcal{I}^{-1}]_{jj}}
 $$
 
 이다.

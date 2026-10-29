@@ -1237,7 +1237,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 10.** <span class="diff hard" title="어려움"></span> 앞의 세 문제가 남긴 것을 한 번에 설명한다. 보기 $4$ 의 $S = \#\{i : x_i < m\} \sim \text{Binomial}(n,\ 1/2)$와 연습문제 6 (1) 의 $F_j$를 나란히 놓고 정규근사한다. 아래에서 $n$은 홀수, $h = (n+1)/2$, $z_{\alpha/2} = \Phi^{-1}(\alpha/2)$다.
+**연습문제 10.** <span class="diff hard" title="어려움"></span> 앞의 세 문제가 남긴 것을 한 번에 설명한다. 보기 $4$ 의 $S = \#\{i : x_i < m\} \sim \text{Binomial}(n,\ 1/2)$와 연습문제 6 (1) 의 $F_j$를 나란히 놓고 정규근사한다. 아래에서 $n$은 홀수, $h = (n+1)/2$, $z_{1-\alpha/2} = \Phi^{-1}(\alpha/2)$다.
 
 **(1)** $j$가 $n/2$ 근방일 때 연속성보정을 넣은 정규근사로
 
@@ -1245,7 +1245,7 @@ $$
 F_j \approx \Phi\!\left(\frac{2j-n}{\sqrt n}\right)
 $$
 
-임을 보이시오. 이로부터 백분위수 구간의 아래쪽 순위가 $L \approx n/2 + z_{\alpha/2}\sqrt n / 2$임을 얻고, 연습문제 8 의 $n = 201$, $L = 87$과 맞는지 확인하시오.
+임을 보이시오. 이로부터 백분위수 구간의 아래쪽 순위가 $L \approx n/2 + z_{1-\alpha/2}\sqrt n / 2$임을 얻고, 연습문제 8 의 $n = 201$, $L = 87$과 맞는지 확인하시오.
 
 **(2)** 같은 방식으로 $\Pr(m \le x_{(j)}) = \Pr(S \le j-1) \approx \Phi\bigl((2j-n-1)/\sqrt n\bigr)$임을 보이시오. (1) 과 견주어 **백분위수 구간이 왜 중앙값에 대해 근사적으로 정확한지**, 그리고 연습문제 8 에서 $L - k$가 $0$ 아니면 $1$밖에 나오지 않은 까닭을 설명하시오.
 
@@ -1268,10 +1268,10 @@ $$
     = \Phi\!\left(\frac{j - n/2}{\sqrt n/2}\right) = \Phi\!\left(\frac{2j-n}{\sqrt n}\right)
     $$
 
-    이다. $F_L \ge \alpha/2$를 푸는 가장 작은 정수는 $2L - n \ge z_{\alpha/2}\sqrt n$, 곧
+    이다. $F_L \ge \alpha/2$를 푸는 가장 작은 정수는 $2L - n \ge z_{1-\alpha/2}\sqrt n$, 곧
 
     $$
-    L \approx \left\lceil \frac n2 + \frac{z_{\alpha/2}\sqrt n}{2} \right\rceil
+    L \approx \left\lceil \frac n2 + \frac{z_{1-\alpha/2}\sqrt n}{2} \right\rceil
     $$
 
     다. $n = 201$, $\alpha = 0.05$에서 $100.5 - 1.95996 \times 14.1774/2 = 100.5 - 13.894 = 86.61$이므로 $L = 87$이고, 연습문제 8 의 출력과 같다. 근사값 자체도 쓸 만하다. $j = 87$에서 위 식은 $\Phi(-27/14.1774) = \Phi(-1.9044) = 0.0284$를 주고, 정확값은 $0.0277$이다.
@@ -1291,7 +1291,7 @@ $$
 
     **이것이 백분위수 구간이 옳은 이유의 전부다.** 왼쪽은 **붓스트랩 복제값이 $x_{(j)}$ 아래에 있을 확률**이고, 오른쪽은 **알지 못하는 참 중앙값 $m$이 $x_{(j)}$ 아래에 있을 확률**이다. 둘이 반 칸 차이로 같다. 그러므로 붓스트랩 분포를 $m$의 분포인 양 읽고 그 분위수를 끝점으로 쓰는 것 — 바로 백분위수 구간 — 이 맞고, 연습문제 7 의 기본 구간처럼 $\tilde x$에 대해 반사하는 것은 맞지 않다. **$m$은 $\tilde x$의 오른쪽에 있을 때 복제값도 오른쪽으로 퍼지며, 반사하면 그 대응이 끊긴다.**
 
-    순위가 $\{0, 1\}$만 차이 나는 것도 여기서 나온다. $c = n/2 + z_{\alpha/2}\sqrt n/2$라 두면 (1) 에서 $L \approx \lceil c \rceil$이고, (2) 에서 부호검정 순위는 $\Pr(S \le k-1) \le \alpha/2$를 만족하는 가장 큰 정수이므로 $2k - n - 1 \le z_{\alpha/2}\sqrt n$, 곧
+    순위가 $\{0, 1\}$만 차이 나는 것도 여기서 나온다. $c = n/2 + z_{1-\alpha/2}\sqrt n/2$라 두면 (1) 에서 $L \approx \lceil c \rceil$이고, (2) 에서 부호검정 순위는 $\Pr(S \le k-1) \le \alpha/2$를 만족하는 가장 큰 정수이므로 $2k - n - 1 \le z_{1-\alpha/2}\sqrt n$, 곧
 
     $$
     k \approx \left\lfloor c + \frac12 \right\rfloor

@@ -986,7 +986,7 @@ $N(5, 2^2)$에서 뽑은 $n = 5$짜리 표본 하나로 이 곡면을 실제로 
 
 | 모수 | 알려진 것 | 구간 | 추축량 |
 |---|---|---|---|
-| $\mu$ | $\sigma$ 를 앎 | $\bar X \pm z_{\alpha/2}\,\sigma/\sqrt n$ | $\dfrac{\bar X-\mu}{\sigma/\sqrt n} \sim N(0,1)$ |
+| $\mu$ | $\sigma$ 를 앎 | $\bar X \pm z_{1-\alpha/2}\,\sigma/\sqrt n$ | $\dfrac{\bar X-\mu}{\sigma/\sqrt n} \sim N(0,1)$ |
 | $\mu$ | $\sigma$ 를 모름 | $\bar X \pm t_{n-1,\,\alpha/2}\,S/\sqrt n$ | $\dfrac{\bar X-\mu}{S/\sqrt n} \sim t_{n-1}$ |
 | $\sigma^2$ | $\mu$ 를 모름 | $\left(\dfrac{(n-1)S^2}{\chi^2_{n-1,\,\alpha/2}},\ \dfrac{(n-1)S^2}{\chi^2_{n-1,\,1-\alpha/2}}\right)$ | $\dfrac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$ |
 

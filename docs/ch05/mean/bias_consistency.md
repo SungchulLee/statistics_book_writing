@@ -321,7 +321,7 @@ $$\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$$
 
 이로부터 신뢰구간과 가설검정을 구성할 수 있다.
 
-$$\bar{X} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}} \quad (\sigma \text{를 아는 경우})$$
+$$\bar{X} \pm z_{1-\alpha/2} \frac{\sigma}{\sqrt{n}} \quad (\sigma \text{를 아는 경우})$$
 
 $$\bar{X} \pm t_{n-1,\alpha/2} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 모르는 경우})$$
 

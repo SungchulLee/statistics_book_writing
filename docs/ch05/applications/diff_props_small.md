@@ -60,7 +60,7 @@ $$
 **(1) 아그레스티–카포.** 각 표본에 성공 하나와 실패 하나를 더한 뒤 왈드 공식을 그대로 쓴다.
 
 $$
-\tilde p_i = \frac{X_i + 1}{n_i + 2}, \qquad (\tilde p_1 - \tilde p_2) \pm z_{\alpha/2}\sqrt{\frac{\tilde p_1\tilde q_1}{n_1+2} + \frac{\tilde p_2\tilde q_2}{n_2+2}}
+\tilde p_i = \frac{X_i + 1}{n_i + 2}, \qquad (\tilde p_1 - \tilde p_2) \pm z_{1-\alpha/2}\sqrt{\frac{\tilde p_1\tilde q_1}{n_1+2} + \frac{\tilde p_2\tilde q_2}{n_2+2}}
 $$
 
 $\tilde p_i$는 결코 0이나 1이 될 수 없으므로 **붕괴가 원천적으로 불가능하다.** 두 표본을 합치면 성공 2개와 실패 2개를 더한 셈이 되어, 한 표본에서 쓰는 "더하기 4" 규칙과 총량이 맞는다.

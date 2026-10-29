@@ -3592,7 +3592,7 @@ $n_1 = 5$, $\sigma_1 = 2$, $n_2 = 100$, $\sigma_2 = 1$, $\mu_1 = \mu_2 = 0$ 에�
 
 **연습문제 39.** <span class="diff hard" title="어려움"></span> 연습문제 35 는 $\operatorname{Var}(\ln F) \approx 2/(n_1-1) + 2/(n_2-1)$ 을 썼다. 이 근사로 **검정력에 필요한 표본크기 공식**을 만들어 보기 8 의 정확값 $n = 50$ 과 견준다. $\rho = \sigma_2^2/\sigma_1^2$, $v = \operatorname{Var}(\ln F)$ 라 하자.
 
-**(1)** $\ln F \approx N(-\ln \rho,\, v)$ 로 보아 양측 검정의 검정력이 근사적으로 $\Phi\!\left(\lvert \ln \rho \rvert/\sqrt{v} - z_{\alpha/2}\right)$ 임을 보이시오. 두 꼬리 가운데 하나를 버려도 되는 까닭도 밝히시오.
+**(1)** $\ln F \approx N(-\ln \rho,\, v)$ 로 보아 양측 검정의 검정력이 근사적으로 $\Phi\!\left(\lvert \ln \rho \rvert/\sqrt{v} - z_{1-\alpha/2}\right)$ 임을 보이시오. 두 꼬리 가운데 하나를 버려도 되는 까닭도 밝히시오.
 
 **(2)** 보기 8 의 설정($\rho = 2.25$, $n_1 = n_2 = n$, 검정력 $0.8$, $\alpha = 0.05$)에서 필요한 $n$ 을 이 근사로 구하시오.
 
@@ -3608,11 +3608,11 @@ $n_1 = 5$, $\sigma_1 = 2$, $n_2 = 100$, $\sigma_2 = 1$, $\mu_1 = \mu_2 = 0$ 에�
     \ln F = \ln \frac{S_1^2}{\sigma_1^2} - \ln \frac{S_2^2}{\sigma_2^2} + \ln \frac{\sigma_1^2}{\sigma_2^2}
     $$
 
-    이고 마지막 항이 $-\ln \rho$ 다. 앞의 두 항은 평균이 $0$ 에 가깝고 분산이 $v$ 인 잡음이므로 $\ln F \approx N(-\ln\rho, v)$ 다. $H_0$ 에서는 $\rho = 1$ 이라 $\ln F \approx N(0,v)$ 이므로 기각역은 근사적으로 $\lvert \ln F \rvert > z_{\alpha/2}\sqrt{v}$ 다. 따라서
+    이고 마지막 항이 $-\ln \rho$ 다. 앞의 두 항은 평균이 $0$ 에 가깝고 분산이 $v$ 인 잡음이므로 $\ln F \approx N(-\ln\rho, v)$ 다. $H_0$ 에서는 $\rho = 1$ 이라 $\ln F \approx N(0,v)$ 이므로 기각역은 근사적으로 $\lvert \ln F \rvert > z_{1-\alpha/2}\sqrt{v}$ 다. 따라서
 
     $$
-    \text{검정력} \approx \Phi\!\left(\frac{\lvert \ln\rho \rvert}{\sqrt v} - z_{\alpha/2}\right)
-    + \Phi\!\left(-\frac{\lvert \ln\rho \rvert}{\sqrt v} - z_{\alpha/2}\right).
+    \text{검정력} \approx \Phi\!\left(\frac{\lvert \ln\rho \rvert}{\sqrt v} - z_{1-\alpha/2}\right)
+    + \Phi\!\left(-\frac{\lvert \ln\rho \rvert}{\sqrt v} - z_{1-\alpha/2}\right).
     $$
 
     둘째 항은 **참값과 반대쪽 꼬리에서 기각할 확률**이다. 보기 8 의 수를 넣으면 $\Phi(-2.81-1.96) = \Phi(-4.77) = 9.3 \times 10^{-7}$ 로 버려도 된다. 연습문제 36 에서 왼쪽 꼬리가 검정력의 $99.97\%$ 를 차지했던 것과 같은 이야기다.

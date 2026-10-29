@@ -619,7 +619,7 @@ Welch–Satterthwaite 자유도 $\nu$는 언제 합동 자유도 $n_1+n_2-2$에 
     **어림공식으로는**
 
     $$
-    n \approx \frac{2(z_{\alpha/2}+z_\beta)^2}{d^2} = \frac{15.7}{d^2}
+    n \approx \frac{2(z_{1-\alpha/2}+z_{1-\beta})^2}{d^2} = \frac{15.7}{d^2}
     $$
 
     이다. $d=0.5$면 $62.8$로 위의 $64$와 거의 같다. $t$를 쓰므로 조금 더 필요할 뿐이다.

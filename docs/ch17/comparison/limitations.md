@@ -1002,7 +1002,7 @@ $$
 
 ??? success "풀이"
 
-    **먼저 예측.** 보기 2에서 $y$를 뒤섞는 순열분포는 $E[r^{*}] = 0$, $\operatorname{SD}(r^{*}) = 1/\sqrt{n-1}$이고 **이것은 자료가 무엇이든 같다.** 그러니 (가)는 임계값을 $\pm z_{\alpha/2}/\sqrt{n-1}$로 고정해 놓은 검정과 거의 같다. 반면 종속자료에서 관측 $r$의 실제 표준편차는
+    **먼저 예측.** 보기 2에서 $y$를 뒤섞는 순열분포는 $E[r^{*}] = 0$, $\operatorname{SD}(r^{*}) = 1/\sqrt{n-1}$이고 **이것은 자료가 무엇이든 같다.** 그러니 (가)는 임계값을 $\pm z_{1-\alpha/2}/\sqrt{n-1}$로 고정해 놓은 검정과 거의 같다. 반면 종속자료에서 관측 $r$의 실제 표준편차는
 
     $$
     \operatorname{Var}(r) \approx \frac1n\sum_{k=-\infty}^{\infty}\rho_x(k)\rho_y(k)
@@ -1013,7 +1013,7 @@ $$
     로 커진다($\rho_x(k) = \rho_y(k) = \phi^{\lvert k\rvert}$, 바틀렛 공식). 연습문제 7의 논법을 그대로 쓰면 실제 크기는
 
     $$
-    2\Phi\!\left(-z_{\alpha/2}\,\frac{\operatorname{SD}(r^{*})}{\operatorname{SD}(r)}\right)
+    2\Phi\!\left(-z_{1-\alpha/2}\,\frac{\operatorname{SD}(r^{*})}{\operatorname{SD}(r)}\right)
     $$
 
     다. $\phi = 0.7$이면 $\operatorname{SD}(r) = \sqrt{1.49/(0.51\times40)} = 0.2703$인데 순열분포는 $1/\sqrt{39} = 0.1601$뿐이니, 눈금이 $0.59$배로 **좁다**.

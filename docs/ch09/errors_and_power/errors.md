@@ -545,7 +545,7 @@ $\mu_0 = 0$, $\mu_1 = 3$, $\alpha = 0.05$일 때 이렇게 된다.
     단측검정에서 검정력 $1 - \beta$를 위한 표본크기:
 
     $$
-    n = \left(\frac{(z_\alpha + z_\beta)\sigma}{\mu - \mu_0}\right)^2
+    n = \left(\frac{(z_\alpha + z_{1-\beta})\sigma}{\mu - \mu_0}\right)^2
     $$
 
     여기서 $z_{0.05} = 1.645$, $z_{0.10} = 1.282$, $\sigma = 10$, 효과 = 5이므로:

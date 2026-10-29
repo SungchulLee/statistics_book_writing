@@ -76,10 +76,10 @@ _확인한 곳 — 메이저 그린우드가 $1880$ 년 $8$ 월 $9$ 일에 나�
 가장 단순한 신뢰구간은 원래 척도에서 정규근사를 쓴다.
 
 $$
-\hat{S}(t) \pm z_{\alpha/2} \cdot \text{se}\bigl(\hat{S}(t)\bigr)
+\hat{S}(t) \pm z_{1-\alpha/2} \cdot \text{se}\bigl(\hat{S}(t)\bigr)
 $$
 
-여기서 $z_{\alpha/2}$는 표준정규분포의 상위 $\alpha/2$ 분위수다.
+여기서 $z_{1-\alpha/2}$는 표준정규분포의 상위 $\alpha/2$ 분위수다.
 
 !!! warning "선형 구간의 한계"
 
@@ -101,20 +101,20 @@ $$
 이다. $\ln S(t)$에 대한 $100(1 - \alpha)\%$ 신뢰구간은
 
 $$
-\ln \hat{S}(t) \pm z_{\alpha/2} \cdot \text{se}\bigl(\theta(t)\bigr)
+\ln \hat{S}(t) \pm z_{1-\alpha/2} \cdot \text{se}\bigl(\theta(t)\bigr)
 $$
 
 이고, 양 끝점을 지수화하면 $S(t)$의 신뢰구간
 
 $$
-\left[\exp\!\bigl(\ln \hat{S}(t) - z_{\alpha/2}\,\text{se}(\theta)\bigr),\; \exp\!\bigl(\ln \hat{S}(t) + z_{\alpha/2}\,\text{se}(\theta)\bigr)\right]
+\left[\exp\!\bigl(\ln \hat{S}(t) - z_{1-\alpha/2}\,\text{se}(\theta)\bigr),\; \exp\!\bigl(\ln \hat{S}(t) + z_{1-\alpha/2}\,\text{se}(\theta)\bigr)\right]
 $$
 
 를 얻는다. 이 구간은 항상 $(0, 1]$ 안에 있어 선형 구간보다 낫다.
 
 !!! note "동등한 표현"
     같은 구간을 $\bigl[\hat{S}(t)^{e^{c}},\; \hat{S}(t)^{e^{-c}}\bigr]$로 쓰기도 한다.
-    여기서 $c = z_{\alpha/2}\,\text{se}(\theta) / \ln \hat{S}(t)$다. 두 표현은 대수적으로
+    여기서 $c = z_{1-\alpha/2}\,\text{se}(\theta) / \ln \hat{S}(t)$다. 두 표현은 대수적으로
     같으며 위의 지수 형태가 읽기 쉽다.
 
 ---
@@ -136,7 +136,7 @@ $$
 이다($\ln \hat S(t) < 0$이므로 절댓값을 취한다). $\phi(t)$에 대한 구간
 
 $$
-\phi(t) \pm z_{\alpha/2} \cdot \text{se}\bigl(\phi(t)\bigr)
+\phi(t) \pm z_{1-\alpha/2} \cdot \text{se}\bigl(\phi(t)\bigr)
 $$
 
 을 만든 뒤 생존 척도로 되돌린다. $(\phi_L, \phi_U)$가 $\phi(t)$의 구간이면 $S(t)$의

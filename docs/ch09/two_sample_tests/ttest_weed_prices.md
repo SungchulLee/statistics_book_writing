@@ -232,7 +232,7 @@ $t$ 는 $0.031$ 로 **보수적인 쪽으로** 어긋나 있다.
 정규성을 가정할 때 평균의 $100(1-\alpha)\%$ 신뢰구간은
 
 $$
-\bar{x} \pm t_{\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}.
+\bar{x} \pm t_{1-\alpha/2,\, n-1} \cdot \frac{s}{\sqrt{n}}.
 $$
 
 <div class="exbox" markdown>
@@ -687,7 +687,7 @@ $$
     99% 신뢰구간은 $t_{0.025,\,30}$ 대신 $t_{0.005,\,30}$을 쓴다. $t_{0.005} > t_{0.025}$이므로 오차한계가 커지고 구간이 넓어진다. 일반적인 공식은
 
     $$
-    \text{width} = 2 \cdot t_{\alpha/2,\,n-1} \cdot \frac{s}{\sqrt{n}}.
+    \text{width} = 2 \cdot t_{1-\alpha/2,\,n-1} \cdot \frac{s}{\sqrt{n}}.
     $$
 
     명시한 포함확률을 유지하려면 신뢰수준이 높을수록 구간이 넓어야 한다. $\square$

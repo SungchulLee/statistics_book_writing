@@ -357,7 +357,7 @@ $$
 
 ## 3. 판정 규칙
 
-- **양측** ($H_1: p \neq p_0$): $|Z| > z_{\alpha/2}$이면 $H_0$을 기각한다
+- **양측** ($H_1: p \neq p_0$): $|Z| > z_{1-\alpha/2}$이면 $H_0$을 기각한다
 - **우측** ($H_1: p > p_0$): $Z > z_{\alpha}$이면 $H_0$을 기각한다
 - **좌측** ($H_1: p < p_0$): $Z < -z_{\alpha}$이면 $H_0$을 기각한다
 
@@ -932,23 +932,23 @@ $$H_0: p = 0.49 \quad \text{vs} \quad H_1: p \neq 0.49$$
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** 기각 조건은 $\lvert \hat p - p_0 \rvert > z_{\alpha/2}\sqrt{p_0 q_0 / n}$이다. 참 비율이 $p_1 > p_0$이면 왼쪽으로 기각할 확률은 무시할 만큼 작으므로 오른쪽만 센다. $\hat p$가 근사적으로 $N(p_1,\ p_1 q_1/n)$이라 보면
+    **(1) 해석적으로.** 기각 조건은 $\lvert \hat p - p_0 \rvert > z_{1-\alpha/2}\sqrt{p_0 q_0 / n}$이다. 참 비율이 $p_1 > p_0$이면 왼쪽으로 기각할 확률은 무시할 만큼 작으므로 오른쪽만 센다. $\hat p$가 근사적으로 $N(p_1,\ p_1 q_1/n)$이라 보면
 
     $$
-    1 - \beta \approx P\!\left(\hat p > p_0 + z_{\alpha/2}\sqrt{\frac{p_0 q_0}{n}}\right)
-    = 1 - \Phi\!\left(\frac{p_0 - p_1 + z_{\alpha/2}\sqrt{p_0 q_0/n}}{\sqrt{p_1 q_1/n}}\right)
+    1 - \beta \approx P\!\left(\hat p > p_0 + z_{1-\alpha/2}\sqrt{\frac{p_0 q_0}{n}}\right)
+    = 1 - \Phi\!\left(\frac{p_0 - p_1 + z_{1-\alpha/2}\sqrt{p_0 q_0/n}}{\sqrt{p_1 q_1/n}}\right)
     $$
 
-    이다. 이것이 $1 - \beta$가 되려면 괄호 안이 $-z_\beta$여야 한다. 양변에 $\sqrt{n}$을 곱해 정리하면
+    이다. 이것이 $1 - \beta$가 되려면 괄호 안이 $-z_{1-\beta}$여야 한다. 양변에 $\sqrt{n}$을 곱해 정리하면
 
     $$
-    z_{\alpha/2}\sqrt{p_0 q_0} - \sqrt n\,(p_1 - p_0) = -z_\beta \sqrt{p_1 q_1}
+    z_{1-\alpha/2}\sqrt{p_0 q_0} - \sqrt n\,(p_1 - p_0) = -z_{1-\beta} \sqrt{p_1 q_1}
     $$
 
     이고 따라서
 
     $$
-    n \ge \left(\frac{z_{\alpha/2}\sqrt{p_0 q_0} + z_\beta\sqrt{p_1 q_1}}{p_1 - p_0}\right)^{\!2}
+    n \ge \left(\frac{z_{1-\alpha/2}\sqrt{p_0 q_0} + z_{1-\beta}\sqrt{p_1 q_1}}{p_1 - p_0}\right)^{\!2}
     $$
 
     를 얻는다. **분자에 두 표준편차가 따로 들어간다**는 점이 요점이다. 크기는 $p_0$ 아래에서 재고 검정력은 $p_1$ 아래에서 재기 때문이다.
@@ -1101,7 +1101,7 @@ $$H_0: p = 0.49 \quad \text{vs} \quad H_1: p \neq 0.49$$
 </div>
 
 ??? success "풀이"
-    공식: $n = (z_{\alpha/2}\sqrt{p_0(1-p_0)} + z_\beta\sqrt{p_1(1-p_1)})^2/(p_1 - p_0)^2$.
+    공식: $n = (z_{1-\alpha/2}\sqrt{p_0(1-p_0)} + z_{1-\beta}\sqrt{p_1(1-p_1)})^2/(p_1 - p_0)^2$.
 
     $= (1.96 \sqrt{0.24} + 0.84 \sqrt{0.2436})^2/(0.02)^2$
 

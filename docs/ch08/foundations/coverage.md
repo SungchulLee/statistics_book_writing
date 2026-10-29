@@ -16,8 +16,8 @@ $$
 
 | $\sigma$ | 표집분포 | 구간 |
 |:---|:---|:---|
-| 안다 | 표준정규 $z$ | $\bar x \pm z_{\alpha/2}\,\sigma/\sqrt n$ |
-| 모른다 | $t_{n-1}$ | $\bar x \pm t_{\alpha/2,\,n-1}\,s/\sqrt n$ |
+| 안다 | 표준정규 $z$ | $\bar x \pm z_{1-\alpha/2}\,\sigma/\sqrt n$ |
+| 모른다 | $t_{n-1}$ | $\bar x \pm t_{1-\alpha/2,\,n-1}\,s/\sqrt n$ |
 
 !!! note "왜 중심화하고 척도화하는가 — 그래야 임계값을 읽을 수 있다"
     $\bar X$ 의 표집분포는 $N(\mu, \sigma^2/n)$ 이고 **모르는 것이 둘** 들어 있다. 그 꼴로는
@@ -276,29 +276,30 @@ $$
 \begin{array}{llll}
 \text{모수} & \text{추정값} & \text{표집분포} & \text{신뢰구간 공식} \\
 \hline
-\mu & \bar{x} & \displaystyle\frac{\bar{x}-\mu}{\sigma/\sqrt{n}}\approx z & \displaystyle\bar{x}\pm z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \\[8pt]
-& & \displaystyle\frac{\bar{x}-\mu}{s/\sqrt{n}}\approx t_{n-1} & \displaystyle\bar{x}\pm t_{\alpha/2,n-1}\frac{s}{\sqrt{n}} \\[8pt]
-p & \hat{p} & \displaystyle\frac{\hat{p}-p}{\sqrt{\hat{p}(1-\hat{p})/n}}\approx z & \displaystyle\hat{p}\pm z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \\[8pt]
+\mu & \bar{x} & \displaystyle\frac{\bar{x}-\mu}{\sigma/\sqrt{n}}\approx z & \displaystyle\bar{x}\pm z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} \\[8pt]
+& & \displaystyle\frac{\bar{x}-\mu}{s/\sqrt{n}}\approx t_{n-1} & \displaystyle\bar{x}\pm t_{1-\alpha/2,n-1}\frac{s}{\sqrt{n}} \\[8pt]
+p & \hat{p} & \displaystyle\frac{\hat{p}-p}{\sqrt{\hat{p}(1-\hat{p})/n}}\approx z & \displaystyle\hat{p}\pm z_{1-\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}} \\[8pt]
 \sigma^2 & s^2 & \displaystyle\frac{(n-1)s^2}{\sigma^2}\sim \chi^2_{n-1} & \displaystyle\left[\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,n-1}},\frac{(n-1)s^2}{\chi^2_{\alpha/2,n-1}}\right] \\[8pt]
 \frac{\sigma_1^2}{\sigma_2^2} & \frac{s_1^2}{s_2^2} & \displaystyle\frac{s_1^2/\sigma_1^2}{s_2^2/\sigma_2^2}\sim F_{n_1-1,n_2-1} & \displaystyle\left[\frac{s_1^2/s_2^2}{F_{1-\alpha/2}},\frac{s_1^2/s_2^2}{F_{\alpha/2}}\right] \\[8pt]
-\mu_d & \bar{x}_d & \displaystyle\frac{\bar{x}_d-\mu_d}{s_d/\sqrt{n}}\approx t_{n-1} & \displaystyle\bar{x}_d\pm t_{\alpha/2,n-1}\frac{s_d}{\sqrt{n}} \\[8pt]
-\mu_1-\mu_2 & \bar{x}_1-\bar{x}_2 & \text{Welch 또는 합동 } t & \displaystyle(\bar{x}_1-\bar{x}_2)\pm t_{\alpha/2,\text{df}}\cdot\text{SE} \\[8pt]
-p_1-p_2 & \hat{p}_1-\hat{p}_2 & z & \displaystyle(\hat{p}_1-\hat{p}_2)\pm z_{\alpha/2}\cdot\text{SE}
+\mu_d & \bar{x}_d & \displaystyle\frac{\bar{x}_d-\mu_d}{s_d/\sqrt{n}}\approx t_{n-1} & \displaystyle\bar{x}_d\pm t_{1-\alpha/2,n-1}\frac{s_d}{\sqrt{n}} \\[8pt]
+\mu_1-\mu_2 & \bar{x}_1-\bar{x}_2 & \text{Welch 또는 합동 } t & \displaystyle(\bar{x}_1-\bar{x}_2)\pm t_{1-\alpha/2,\text{df}}\cdot\text{SE} \\[8pt]
+p_1-p_2 & \hat{p}_1-\hat{p}_2 & z & \displaystyle(\hat{p}_1-\hat{p}_2)\pm z_{1-\alpha/2}\cdot\text{SE}
 \end{array}
 $$
 
-!!! note "임계값의 아래첨자를 읽는 법"
-    **이 책의 모든 임계값은 「왼쪽부터 쌓은 누적확률」로 적는다.** $\chi^2_{0.025,\,11} = 3.816$ 은 **아래쪽** 값이고 $\chi^2_{0.975,\,11} = 21.920$ 이 위쪽이며, $F$ 와 베타 분위수도 같다. 코드의 `ppf` 가 받는 수가 바로 이 수다.
-
-    **정규와 $t$ 에는 옛 관례가 함께 쓰인다.** 많은 교재가 $z_{\alpha/2}$ 라 적고 그것을 「오른쪽 꼬리의 넓이가 $\alpha/2$ 인 점」으로 정의한다. 곧
+!!! note "임계값의 아래첨자를 읽는 법 — 언제나 누적확률이다"
+    이 책은 **모든** 임계값의 아래첨자를 **「왼쪽부터 쌓은 누적확률」**로 적는다. 코드의 `ppf` 가 받는 수가 바로 그 수다.
 
     $$
-    z_{\alpha/2}\ (\text{꼬리 관례}) \;=\; z_{1-\alpha/2}\ (\text{누적 관례}) \;=\; 1.96 \quad (\alpha = 0.05)
+    z_{1-\alpha/2} = 1.96, \qquad
+    t_{1-\alpha/2,\,11} = 2.201, \qquad
+    \chi^2_{0.025,\,11} = 3.816, \qquad
+    \chi^2_{0.975,\,11} = 21.920
     $$
 
-    로 **같은 수의 두 이름**이다. 위 표는 교재에서 흔한 꼴을 따라 $z_{\alpha/2}$·$t_{\alpha/2}$ 라 적었지만, 이 책의 다른 자리에서는 $z_{1-\alpha/2}$ 도 쓴다. **헷갈리면 수를 보라** — 둘 다 $1.96$ 이다.
+    **많은 교재는 정규와 $t$ 에 한해 다른 관례를 쓴다** — $z_{\alpha/2}$ 라 적고 「오른쪽 꼬리의 넓이가 $\alpha/2$ 인 점」으로 정의하는 것이다. 수는 같다. 교재의 $z_{\alpha/2}$ 가 이 책의 $z_{1-\alpha/2}$ 이고 $\alpha = 0.05$ 에서 둘 다 $1.96$ 이다. **두 관례가 섞이면 비대칭분포에서 아래위가 통째로 바뀌므로**, 이 책은 한쪽으로 모았다.
 
-    가르는 것이 중요해지는 곳은 **비대칭분포**다. 거기서는 아래위가 통째로 바뀐다. 위 표에서 $\sigma^2$ 과 $\sigma_1^2/\sigma_2^2$ 줄의 분모가 **큰 분위수부터** 시작하는 까닭이 그것이다 — 모수가 추축량의 **분모**에 있어 부등호가 돌아가기 때문이고, 8.2절 [σ²의 신뢰구간](../one_sample_intervals/ci_sigma2.md)과 8.3절 [σ₁²/σ₂²의 신뢰구간](../two_sample_intervals/ci_variance_ratio.md)이 그 유도를 따라간다.
+    모아 두면 위 표의 마지막 두 줄이 그대로 읽힌다. $\sigma^2$ 과 $\sigma_1^2/\sigma_2^2$ 의 분모가 **큰 분위수부터** 시작하는 것은 모수가 추축량의 **분모**에 있어 부등호가 돌아가기 때문이고, 8.2절 [σ²의 신뢰구간](../one_sample_intervals/ci_sigma2.md)과 8.3절 [σ₁²/σ₂²의 신뢰구간](../two_sample_intervals/ci_variance_ratio.md)이 그 유도를 따라간다.
 
 유한모집단에서 비복원으로 뽑았을 때 붙는 **유한모집단 수정**은 8.2절 [μ의 신뢰구간](../one_sample_intervals/ci_mu.md) 연습문제 8에서 유도와 함께 다룬다. 비율·분산을 비롯한 나머지 줄도 각각 제자리에서 모의실험으로 확인한다.
 

@@ -45,10 +45,10 @@ t 통계량은 추정된 계수가 0에서 표준오차 몇 개만큼 떨어져 
 p값이 유의성에 대한 이분법적 판정을 준다면, **신뢰구간**은 계수가 취할 만한 값의 범위를 준다. 95% 신뢰구간은 다음과 같이 계산한다.
 
 $$
-CI = \hat{\beta}_i \pm \left( t_{\alpha/2} \times SE(\hat{\beta}_i) \right)
+CI = \hat{\beta}_i \pm \left( t_{1-\alpha/2} \times SE(\hat{\beta}_i) \right)
 $$
 
-여기서 $t_{\alpha/2}$는 원하는 신뢰수준에서 t 분포의 임계값이다.
+여기서 $t_{1-\alpha/2}$는 원하는 신뢰수준에서 t 분포의 임계값이다.
 
 **해석:**
 
@@ -577,7 +577,7 @@ Julie는 새로 나온 전기차 두 모델 A와 B가 완전 충전 후 얼마�
 
 (b) 두 구간의 폭을 구하고 그 비를 계산하라. 그 비가 $\sqrt{\mathrm{VIF}}$와 맞는가?
 
-(c) VIF $= 16$ 구간의 반폭이 공식 $t_{\alpha/2} \times SE(\hat{\beta}_j)$와 맞는지 $t_{\alpha/2} = 1.985$, $\mathrm{SE} = 1.328$로 확인하라.
+(c) VIF $= 16$ 구간의 반폭이 공식 $t_{1-\alpha/2} \times SE(\hat{\beta}_j)$와 맞는지 $t_{1-\alpha/2} = 1.985$, $\mathrm{SE} = 1.328$로 확인하라.
 
 </div>
 
@@ -597,12 +597,12 @@ Julie는 새로 나온 전기차 두 모델 A와 B가 완전 충전 후 얼마�
     3.233 - 1.915 = 1.318, \qquad 5.209 - (-0.062) = 5.271
     $$
 
-    비는 $5.271 / 1.318 = 3.999$로 $\sqrt{16} = 4$와 맞는다. 표준오차가 $\sqrt{\mathrm{VIF}}$배가 되면 구간의 폭도 똑같이 $\sqrt{\mathrm{VIF}}$배가 된다. 폭이 $2 t_{\alpha/2} \times SE$이고 $t_{\alpha/2}$는 VIF와 무관하기 때문이다.
+    비는 $5.271 / 1.318 = 3.999$로 $\sqrt{16} = 4$와 맞는다. 표준오차가 $\sqrt{\mathrm{VIF}}$배가 되면 구간의 폭도 똑같이 $\sqrt{\mathrm{VIF}}$배가 된다. 폭이 $2 t_{1-\alpha/2} \times SE$이고 $t_{1-\alpha/2}$는 VIF와 무관하기 때문이다.
 
     **(c) 반폭.** 실제 반폭은 $5.271 / 2 = 2.6355$이고 공식은
 
     $$
-    t_{\alpha/2} \times SE(\hat{\beta}_j) = 1.985 \times 1.328 = 2.6361
+    t_{1-\alpha/2} \times SE(\hat{\beta}_j) = 1.985 \times 1.328 = 2.6361
     $$
 
     이다. 자유도 $97$의 임계값을 반올림하지 않고 $1.98472$로 쓰면 $2.63571$이 되어 $2.6355$와 셋째 자리까지 맞는다.
@@ -664,7 +664,7 @@ VIF $= 1$일 때의 $t$ 값을 $t_1 = \hat{\beta}_j / \mathrm{SE}_1$이라 쓴�
 
 (a) $t(\mathrm{VIF}) = t_1 / \sqrt{\mathrm{VIF}}$임을 보여라.
 
-(b) 계수가 유의수준 $\alpha$에서 유의성을 유지할 조건이 $\mathrm{VIF} < (t_1 / t_{\alpha/2})^2$임을 보여라.
+(b) 계수가 유의수준 $\alpha$에서 유의성을 유지할 조건이 $\mathrm{VIF} < (t_1 / t_{1-\alpha/2})^2$임을 보여라.
 
 (c) 본문의 수치로 이 문턱을 계산하여 "유의성을 잃기 시작하는 지점은 VIF $= 15.26$"이라는 문장을 확인하라.
 
@@ -682,13 +682,13 @@ VIF $= 1$일 때의 $t$ 값을 $t_1 = \hat{\beta}_j / \mathrm{SE}_1$이라 쓴�
 
     이다. $\square$
 
-    **(b)** 유의하다는 것은 $\lvert t(\mathrm{VIF}) \rvert > t_{\alpha/2}$이다. (a)를 넣으면
+    **(b)** 유의하다는 것은 $\lvert t(\mathrm{VIF}) \rvert > t_{1-\alpha/2}$이다. (a)를 넣으면
 
     $$
-    \frac{\lvert t_1 \rvert}{\sqrt{\mathrm{VIF}}} > t_{\alpha/2} \iff \sqrt{\mathrm{VIF}} < \frac{\lvert t_1 \rvert}{t_{\alpha/2}} \iff \mathrm{VIF} < \left( \frac{\lvert t_1 \rvert}{t_{\alpha/2}} \right)^{2}
+    \frac{\lvert t_1 \rvert}{\sqrt{\mathrm{VIF}}} > t_{1-\alpha/2} \iff \sqrt{\mathrm{VIF}} < \frac{\lvert t_1 \rvert}{t_{1-\alpha/2}} \iff \mathrm{VIF} < \left( \frac{\lvert t_1 \rvert}{t_{1-\alpha/2}} \right)^{2}
     $$
 
-    이다($\mathrm{VIF} \geq 1 > 0$, $t_{\alpha/2} > 0$이므로 부등식의 방향은 바뀌지 않고 제곱도 동치다). $\square$
+    이다($\mathrm{VIF} \geq 1 > 0$, $t_{1-\alpha/2} > 0$이므로 부등식의 방향은 바뀌지 않고 제곱도 동치다). $\square$
 
     **(c)** $t_1 = 2.574 / 0.332 = 7.7530$이고 자유도 $97$에서 $t_{0.025} = 1.98472$이므로
 
@@ -704,7 +704,7 @@ VIF $= 1$일 때의 $t$ 값을 $t_1 = \hat{\beta}_j / \mathrm{SE}_1$이라 쓴�
     \mathrm{VIF}^{\ast} = \left( \frac{3.8765}{1.98472} \right)^{2} = 1.9532^{2} = 3.81
     $$
 
-    이다. 일반적으로 $\mathrm{VIF}^{\ast} = (\hat{\beta}_j / (\mathrm{SE}_1 t_{\alpha/2}))^2$이므로 문턱은 $1/\mathrm{SE}_1^2$에 비례한다. $\mathrm{SE}_1$이 두 배가 되면 문턱은 $4$분의 $1$로 줄어 $15.26$에서 $3.81$이 된다.
+    이다. 일반적으로 $\mathrm{VIF}^{\ast} = (\hat{\beta}_j / (\mathrm{SE}_1 t_{1-\alpha/2}))^2$이므로 문턱은 $1/\mathrm{SE}_1^2$에 비례한다. $\mathrm{SE}_1$이 두 배가 되면 문턱은 $4$분의 $1$로 줄어 $15.26$에서 $3.81$이 된다.
 
     해석하면, **공선성을 얼마나 견디는지는 공선성이 없을 때의 $t$ 값 하나로 정해진다.** 처음부터 넉넉하게 유의했던 계수($t_1 = 7.75$)는 VIF $15$까지 버티지만, 간신히 유의했던 계수는 아주 약한 공선성에도 무너진다. 그래서 "VIF가 커도 유의하니 괜찮다"는 말은 $t_1$이 컸다는 뜻일 뿐, 공선성이 없었다는 뜻이 아니다.
 
@@ -719,7 +719,7 @@ VIF $= 1$일 때의 $t$ 값을 $t_1 = \hat{\beta}_j / \mathrm{SE}_1$이라 쓴�
 
 ??? success "풀이"
 
-    연습문제 7의 문턱 $\mathrm{VIF}^{\ast} = (t_1/t_{\alpha/2})^2$도 같이 찍어 두면 비교가 쉽다.
+    연습문제 7의 문턱 $\mathrm{VIF}^{\ast} = (t_1/t_{1-\alpha/2})^2$도 같이 찍어 두면 비교가 쉽다.
 
     ```python
     import numpy as np
@@ -840,9 +840,9 @@ VIF $= 1$일 때의 $t$ 값을 $t_1 = \hat{\beta}_j / \mathrm{SE}_1$이라 쓴�
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
 신뢰구간을 "기각되지 않는 귀무값의 모음"으로 읽으면 본문의 경고가 날카로워진다.
 
-(a) 귀무가설을 $H_0: \beta_j = b$로 일반화하면 통계량은 $t = (\hat{\beta}_j - b) / SE(\hat{\beta}_j)$다. 이때 $\lvert t \rvert \leq t_{\alpha/2}$라는 조건과 $b$가 95% 신뢰구간에 들어 있다는 조건이 같은 조건임을 보여라.
+(a) 귀무가설을 $H_0: \beta_j = b$로 일반화하면 통계량은 $t = (\hat{\beta}_j - b) / SE(\hat{\beta}_j)$다. 이때 $\lvert t \rvert \leq t_{1-\alpha/2}$라는 조건과 $b$가 95% 신뢰구간에 들어 있다는 조건이 같은 조건임을 보여라.
 
-(b) $\hat{\beta}_j = 2.574$, $t_{\alpha/2} = 1.985$, 그리고 VIF $= 1, 9, 16$에서 $\mathrm{SE} = 0.332, 0.996, 1.328$이다. 각 경우에 $b = 0$과 $b = 5$가 기각되는지 판정하라.
+(b) $\hat{\beta}_j = 2.574$, $t_{1-\alpha/2} = 1.985$, 그리고 VIF $= 1, 9, 16$에서 $\mathrm{SE} = 0.332, 0.996, 1.328$이다. 각 경우에 $b = 0$과 $b = 5$가 기각되는지 판정하라.
 
 (c) VIF $= 16$에서 이 자료와 양립하는(기각되지 않는) 가장 큰 $b$는 얼마인가?
 
@@ -852,19 +852,19 @@ VIF $= 1$일 때의 $t$ 값을 $t_1 = \hat{\beta}_j / \mathrm{SE}_1$이라 쓴�
 
 ??? success "풀이"
 
-    **(a)** 조건 $\lvert t \rvert \leq t_{\alpha/2}$를 풀어 쓰면
+    **(a)** 조건 $\lvert t \rvert \leq t_{1-\alpha/2}$를 풀어 쓰면
 
     $$
-    \left\lvert \frac{\hat{\beta}_j - b}{SE(\hat{\beta}_j)} \right\rvert \leq t_{\alpha/2} \iff \lvert \hat{\beta}_j - b \rvert \leq t_{\alpha/2} \, SE(\hat{\beta}_j)
+    \left\lvert \frac{\hat{\beta}_j - b}{SE(\hat{\beta}_j)} \right\rvert \leq t_{1-\alpha/2} \iff \lvert \hat{\beta}_j - b \rvert \leq t_{1-\alpha/2} \, SE(\hat{\beta}_j)
     $$
 
     이고, 절댓값을 풀면
 
     $$
-    \hat{\beta}_j - t_{\alpha/2} \, SE(\hat{\beta}_j) \leq b \leq \hat{\beta}_j + t_{\alpha/2} \, SE(\hat{\beta}_j)
+    \hat{\beta}_j - t_{1-\alpha/2} \, SE(\hat{\beta}_j) \leq b \leq \hat{\beta}_j + t_{1-\alpha/2} \, SE(\hat{\beta}_j)
     $$
 
-    이다. 오른쪽은 정확히 본문의 $CI = \hat{\beta}_i \pm (t_{\alpha/2} \times SE(\hat{\beta}_i))$이다. 따라서 신뢰구간은 **기각되지 않는 $b$의 집합 그 자체**다. $\square$
+    이다. 오른쪽은 정확히 본문의 $CI = \hat{\beta}_i \pm (t_{1-\alpha/2} \times SE(\hat{\beta}_i))$이다. 따라서 신뢰구간은 **기각되지 않는 $b$의 집합 그 자체**다. $\square$
 
     **(b)** $t = (2.574 - b)/\mathrm{SE}$를 계산한다.
 

@@ -139,6 +139,14 @@ def cmd_apply(pat, repl, chapters, exclude):
     if "$" in repl:
         print("  멈춤: 치환에 `$` 가 들어 있다. 수식 안을 고치는 치환은 달러를 더하지 않는다")
         return 1
+
+    # **치환 문자열의 역슬래시는 re 가 먹는다.** 2026-10-29 에 `z_{1-\alpha/2}` 를
+    # 넣었더니 `\a` 가 BEL 제어문자로 바뀌어 218 곳에 `z_{1-<BEL>lpha/2}` 가 쓰였다.
+    # 빌드도 통과하고 검사도 0 이었다 — 본문을 눈으로 봐야 보인다. LaTeX 치환은
+    # 역슬래시가 거의 언제나 들어가므로 이 함정은 **매번** 밟는다.
+    # 군 참조(\1 \g<1>)만 남기고 나머지 역슬래시를 글자 그대로 만든다.
+    safe = re.sub(r"\\(?![0-9]|g<)", r"\\\\", repl)
+    repl_fn = (lambda m: m.expand(safe))
     changed, total = [], 0
     for p, rel in pages(chapters):
         if rel in exclude:
@@ -157,11 +165,11 @@ def cmd_apply(pat, repl, chapters, exclude):
                 disp = not disp
                 continue
             if disp:
-                new, k = pat.subn(repl, s)
+                new, k = pat.subn(repl_fn, s)
             else:
                 out, last, k = [], 0, 0
                 for m in INLINE.finditer(s):
-                    seg, kk = pat.subn(repl, m.group(1))
+                    seg, kk = pat.subn(repl_fn, m.group(1))
                     k += kk
                     out.append(s[last:m.start(1)])
                     out.append(seg)

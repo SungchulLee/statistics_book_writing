@@ -43,14 +43,14 @@ p값은 귀무가설이 참이라고 가정했을 때, 설명변수와 종속변
 95% 신뢰구간의 공식은
 
 $$
-CI = \hat{\beta}_i \pm \left( t_{\alpha/2} \times SE(\hat{\beta}_i) \right)
+CI = \hat{\beta}_i \pm \left( t_{1-\alpha/2} \times SE(\hat{\beta}_i) \right)
 $$
 
 여기서
 
 - $\hat{\beta}_i$는 추정된 회귀계수,
 - $SE(\hat{\beta}_i)$는 추정값의 표준오차,
-- $t_{\alpha/2}$는 95% 신뢰수준에서 t 분포의 임계값이다.
+- $t_{1-\alpha/2}$는 95% 신뢰수준에서 t 분포의 임계값이다.
 
 **해석의 핵심 규칙:**
 
@@ -250,7 +250,7 @@ _확인한 곳 — $2015$ 년 $1$ 월 $2$ 일 자 『Basic and Applied Social Ps
 
     폭이 $0.09$밖에 안 되는 좁은 띠지만, $p$가 $0.05$ 근처인 계수들은 바로 이 띠에 몰려 있다.
 
-    (c) 두 양이 **같은 표준오차**와 **같은 표집분포**(같은 자유도의 t 분포)를 써야 한다. 그러면 $p < \alpha \iff |t| > t_{\alpha/2,\,d} \iff$ 구간이 $0$을 배제, 가 자동으로 성립한다. 올바른 t 기반 p값은 $2P(T_{40} > 2.0) = 0.0522 \geq 0.05$이고, 이제 구간이 $0$을 포함한다는 결론과 어긋나지 않는다.
+    (c) 두 양이 **같은 표준오차**와 **같은 표집분포**(같은 자유도의 t 분포)를 써야 한다. 그러면 $p < \alpha \iff |t| > t_{1-\alpha/2,\,d} \iff$ 구간이 $0$을 배제, 가 자동으로 성립한다. 올바른 t 기반 p값은 $2P(T_{40} > 2.0) = 0.0522 \geq 0.05$이고, 이제 구간이 $0$을 포함한다는 결론과 어긋나지 않는다.
 
     해석: 3절의 동치는 수학적 정리가 아니라 **같은 계산을 두 번 읽는다는 약속**이다. 약속을 깨면 — 한쪽은 정규, 한쪽은 t — 동치도 깨진다. 자유도가 작을수록 $t_{0.025,\,d}$가 $1.96$에서 멀어져 어긋나는 띠가 넓어진다.
 
@@ -274,19 +274,19 @@ _확인한 곳 — $2015$ 년 $1$ 월 $2$ 일 자 『Basic and Applied Social Ps
     p = 2 P\left(T_d > \lvert t_{\text{obs}} \rvert\right)
     $$
 
-    $(1-\alpha)$ 신뢰구간은 $\hat{\beta} \pm t_{\alpha/2,\,d}\,\mathrm{SE}$이므로, 반폭과 $\lvert \hat{\beta} \rvert$의 크기 비교가 모든 것을 결정한다.
+    $(1-\alpha)$ 신뢰구간은 $\hat{\beta} \pm t_{1-\alpha/2,\,d}\,\mathrm{SE}$이므로, 반폭과 $\lvert \hat{\beta} \rvert$의 크기 비교가 모든 것을 결정한다.
 
     $$
-    \text{구간이 } 0 \text{을 배제} \iff \lvert \hat{\beta} \rvert > t_{\alpha/2,\,d}\,\mathrm{SE} \iff \lvert t_{\text{obs}} \rvert > t_{\alpha/2,\,d}
+    \text{구간이 } 0 \text{을 배제} \iff \lvert \hat{\beta} \rvert > t_{1-\alpha/2,\,d}\,\mathrm{SE} \iff \lvert t_{\text{obs}} \rvert > t_{1-\alpha/2,\,d}
     $$
 
-    이제 $\alpha \mapsto t_{\alpha/2,\,d}$가 $(0,1)$에서 **연속이고 강하게 감소**함을 쓴다(t 분포의 밀도가 모든 점에서 양수이므로 분포함수가 강증가하고 분위수가 유일하다). 따라서 $t_{\alpha^{*}/2,\,d} = \lvert t_{\text{obs}} \rvert$를 만족하는 $\alpha^{*}$가 단 하나 있다. 분위수의 정의를 그대로 읽으면
+    이제 $\alpha \mapsto t_{1-\alpha/2,\,d}$가 $(0,1)$에서 **연속이고 강하게 감소**함을 쓴다(t 분포의 밀도가 모든 점에서 양수이므로 분포함수가 강증가하고 분위수가 유일하다). 따라서 $t_{\alpha^{*}/2,\,d} = \lvert t_{\text{obs}} \rvert$를 만족하는 $\alpha^{*}$가 단 하나 있다. 분위수의 정의를 그대로 읽으면
 
     $$
     \frac{\alpha^{*}}{2} = P\left(T_d > \lvert t_{\text{obs}} \rvert\right) = \frac{p}{2}, \qquad \text{즉} \quad \alpha^{*} = p
     $$
 
-    감소성 때문에 $\alpha > p \Rightarrow t_{\alpha/2,d} < \lvert t_{\text{obs}} \rvert \Rightarrow$ 배제, $\alpha < p \Rightarrow t_{\alpha/2,d} > \lvert t_{\text{obs}} \rvert \Rightarrow$ 포함이고, $\alpha = p$에서는 등호이므로 $0$이 정확히 끝점이 된다. $\square$
+    감소성 때문에 $\alpha > p \Rightarrow t_{1-\alpha/2,d} < \lvert t_{\text{obs}} \rvert \Rightarrow$ 배제, $\alpha < p \Rightarrow t_{1-\alpha/2,d} > \lvert t_{\text{obs}} \rvert \Rightarrow$ 포함이고, $\alpha = p$에서는 등호이므로 $0$이 정확히 끝점이 된다. $\square$
 
     쓰인 성질은 셋이다. (1) $T_d$의 분포가 $0$에 대해 **대칭**이어서 양측 꼬리를 한쪽 꼬리의 두 배로 쓸 수 있다. (2) 분포함수가 **강증가·연속**이어서 분위수가 유일하다. (3) 검정과 구간이 **같은 $\mathrm{SE}$와 같은 $d$**를 쓴다(연습문제 4 가 보인 조건).
 
@@ -306,7 +306,7 @@ _확인한 곳 — $2015$ 년 $1$ 월 $2$ 일 자 『Basic and Applied Social Ps
 (a) 자유도 $d$와 신뢰수준 $1-\alpha$를 알고 신뢰구간 $(L, U)$만 받았을 때, $t$ 통계량이
 
 $$
-t_{\text{obs}} = \frac{L+U}{U-L}\, t_{\alpha/2,\,d}
+t_{\text{obs}} = \frac{L+U}{U-L}\, t_{1-\alpha/2,\,d}
 $$
 
 임을 보이고, 보기 2의 "교육 연수" 구간 $(1.2,\ 3.8)$에 $d = 40$을 넣어 p값을 구하라.
@@ -316,16 +316,16 @@ $$
 </div>
 
 ??? success "풀이"
-    (a) 구간이 $\hat{\beta} \pm t_{\alpha/2,d}\mathrm{SE}$의 꼴이므로
+    (a) 구간이 $\hat{\beta} \pm t_{1-\alpha/2,d}\mathrm{SE}$의 꼴이므로
 
     $$
-    \hat{\beta} = \frac{L+U}{2}, \qquad \mathrm{SE} = \frac{U-L}{2\,t_{\alpha/2,\,d}}
+    \hat{\beta} = \frac{L+U}{2}, \qquad \mathrm{SE} = \frac{U-L}{2\,t_{1-\alpha/2,\,d}}
     $$
 
     두 식을 나누면
 
     $$
-    t_{\text{obs}} = \frac{\hat{\beta}}{\mathrm{SE}} = \frac{(L+U)/2}{(U-L)/(2 t_{\alpha/2,d})} = \frac{L+U}{U-L}\, t_{\alpha/2,\,d}
+    t_{\text{obs}} = \frac{\hat{\beta}}{\mathrm{SE}} = \frac{(L+U)/2}{(U-L)/(2 t_{1-\alpha/2,d})} = \frac{L+U}{U-L}\, t_{1-\alpha/2,\,d}
     $$
 
     "교육 연수" 구간은 $L = 1.2$, $U = 3.8$, $\alpha = 0.05$, $d = 40$이므로 $t_{0.025,40} = 2.0211$을 넣어

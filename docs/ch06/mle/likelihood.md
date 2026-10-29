@@ -854,7 +854,7 @@ $$-2\log\Lambda = 2[\ell(\hat{\theta}_{\text{MLE}}) - \ell(\theta_0)] \xrightarr
 
 **Wald 신뢰구간:** 점근정규성을 사용하면 이렇게 된다.
 
-$$\hat{\theta} \pm z_{\alpha/2} \cdot \text{SE}(\hat{\theta})$$
+$$\hat{\theta} \pm z_{1-\alpha/2} \cdot \text{SE}(\hat{\theta})$$
 
 여기서 $\text{SE}(\hat{\theta}) = 1/\sqrt{nI(\hat{\theta})}$ 또는 $1/\sqrt{J(\hat{\theta})}$이다.
 

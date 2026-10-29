@@ -48,10 +48,10 @@ $$
 이고, $(1 - \alpha)$ 신뢰구간은
 
 $$
-\hat{p}_1 - \hat{p}_2 \pm z_{\alpha/2} \cdot \text{SE} = \frac{b - c}{n} \pm z_{\alpha/2} \cdot \frac{1}{n}\sqrt{b + c - \frac{(b - c)^2}{n}}
+\hat{p}_1 - \hat{p}_2 \pm z_{1-\alpha/2} \cdot \text{SE} = \frac{b - c}{n} \pm z_{1-\alpha/2} \cdot \frac{1}{n}\sqrt{b + c - \frac{(b - c)^2}{n}}
 $$
 
-여기서 $z_{\alpha/2}$는 표준정규분포의 상위 $\alpha/2$ 분위수이다.
+여기서 $z_{1-\alpha/2}$는 표준정규분포의 상위 $\alpha/2$ 분위수이다.
 
 !!! note "대안적인 표준오차"
     더 단순하고 흔히 쓰이는 형태는 $b$와 $c$를 독립인 이항 개수로 취급한다:
@@ -63,7 +63,7 @@ $$
     위의 Wald 형태보다 구간이 약간 넓어지지만 단순해서 실무에서 흔히 선호된다. 이때 신뢰구간은:
 
     $$
-    \frac{b - c}{n} \pm z_{\alpha/2} \cdot \frac{\sqrt{b + c}}{n}
+    \frac{b - c}{n} \pm z_{1-\alpha/2} \cdot \frac{\sqrt{b + c}}{n}
     $$
 
 이 구간이 기대는 것은 둘이다. 설계가 **진짜 대응**이어야 하고(조건 1 의 각 관측이 같은 피험자나 짝지은 쌍에서 얻은 조건 2 의 관측과 맞물려야 한다), 결과가 **이진**이어야 한다. 짝이 아니면 8.3절 [p₁−p₂의 신뢰구간](../two_sample_intervals/ci_p_diff.md)으로 가고, 범주가 셋 이상이면 13장의 대응 자료 검정으로 간다.

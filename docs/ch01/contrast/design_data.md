@@ -267,7 +267,7 @@ _확인한 곳 — 스탠리 L. 워너의 「Randomized Response: A Survey Techn
     양측 $\alpha$, 검정력 $1-\beta$, 군당 $n$인 두 표본 검정에서 필요한 표본 크기는
 
     $$
-    n \approx \frac{2\,(z_{\alpha/2} + z_{\beta})^2}{d^2}
+    n \approx \frac{2\,(z_{1-\alpha/2} + z_{1-\beta})^2}{d^2}
     $$
 
     이다. **$n$이 $d^2$에 반비례한다**는 것이 핵심이다. 효과가 절반이면 표본은 네 배가 필요하다.

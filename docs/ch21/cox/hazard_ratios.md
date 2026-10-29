@@ -88,7 +88,7 @@ $$
 $\beta_j$의 $100(1 - \alpha)\%$ 신뢰구간은
 
 $$
-\hat{\beta}_j \pm z_{\alpha/2} \cdot \text{se}(\hat{\beta}_j)
+\hat{\beta}_j \pm z_{1-\alpha/2} \cdot \text{se}(\hat{\beta}_j)
 $$
 
 이며 $\text{se}(\hat{\beta}_j) = \sqrt{[\mathcal{I}^{-1}]_{jj}}$는 관측 정보행렬의
@@ -97,7 +97,7 @@ $$
 양 끝점을 지수화하면 위험비의 신뢰구간을 얻는다.
 
 $$
-\text{CI}_{\text{HR}} = \bigl(\exp(\hat{\beta}_j - z_{\alpha/2} \cdot \text{se}),\; \exp(\hat{\beta}_j + z_{\alpha/2} \cdot \text{se})\bigr)
+\text{CI}_{\text{HR}} = \bigl(\exp(\hat{\beta}_j - z_{1-\alpha/2} \cdot \text{se}),\; \exp(\hat{\beta}_j + z_{1-\alpha/2} \cdot \text{se})\bigr)
 $$
 
 구간이 1을 포함하지 않으면 그 공변량은 유의수준 $\alpha$에서 통계적으로 유의한 효과를 갖는다.

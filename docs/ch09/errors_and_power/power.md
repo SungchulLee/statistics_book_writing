@@ -47,7 +47,7 @@ $\alpha$를 키우면(예: 0.01에서 0.05로) $H_0$을 기각하기 쉬워져 �
 **(1)** 필요한 표본크기가
 
 $$
-n = \left(\frac{z_{\alpha/2} + z_{\beta}}{d}\right)^2
+n = \left(\frac{z_{1-\alpha/2} + z_{1-\beta}}{d}\right)^2
 $$
 
 임을 유도하시오. 왜 두 임계값을 **더하는가**.
@@ -58,7 +58,7 @@ $$
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** $H_0$ 아래에서 $Z = (\bar X - \mu_0)/(\sigma/\sqrt n) \sim N(0,1)$이고 $\lvert Z \rvert > z_{\alpha/2}$일 때 기각한다. $H_1\colon \mu = \mu_0 + \delta$($\delta > 0$) 아래에서 $\bar X$의 중심이 $\delta$만큼 옮겨 가므로
+    **(1) 해석적으로.** $H_0$ 아래에서 $Z = (\bar X - \mu_0)/(\sigma/\sqrt n) \sim N(0,1)$이고 $\lvert Z \rvert > z_{1-\alpha/2}$일 때 기각한다. $H_1\colon \mu = \mu_0 + \delta$($\delta > 0$) 아래에서 $\bar X$의 중심이 $\delta$만큼 옮겨 가므로
 
     $$
     Z \sim N\!\left(\frac{\delta\sqrt n}{\sigma},\, 1\right) = N(d\sqrt n,\, 1)
@@ -67,25 +67,25 @@ $$
     이다. 왼쪽 꼬리로 기각할 확률은 $\delta > 0$이면 무시할 수 있을 만큼 작으므로
 
     $$
-    1-\beta \approx P(Z > z_{\alpha/2})
-    = P\!\left(N(0,1) > z_{\alpha/2} - d\sqrt n\right)
-    = \Phi\!\left(d\sqrt n - z_{\alpha/2}\right)
+    1-\beta \approx P(Z > z_{1-\alpha/2})
+    = P\!\left(N(0,1) > z_{1-\alpha/2} - d\sqrt n\right)
+    = \Phi\!\left(d\sqrt n - z_{1-\alpha/2}\right)
     $$
 
-    이다. 이것을 $1-\beta$와 같다고 놓으면 $d\sqrt n - z_{\alpha/2} = z_\beta$, 곧
+    이다. 이것을 $1-\beta$와 같다고 놓으면 $d\sqrt n - z_{1-\alpha/2} = z_{1-\beta}$, 곧
 
     $$
-    \sqrt n = \frac{z_{\alpha/2} + z_\beta}{d}
+    \sqrt n = \frac{z_{1-\alpha/2} + z_{1-\beta}}{d}
     $$
 
     이고 양변을 제곱하면 주어진 식이다.
 
-    **두 임계값을 더하는 까닭.** 기각 문턱은 하나뿐이다. 그 문턱은 $H_0$ 분포의 중심에서 오른쪽으로 $z_{\alpha/2}$만큼, $H_1$ 분포의 중심에서 **왼쪽으로** $z_\beta$만큼 떨어진 자리다. 그러므로 두 중심 사이의 거리가 $z_{\alpha/2} + z_\beta$이고, 그 거리를 표준오차 단위로 재면 $d\sqrt n$이다. **더하는 것은 두 오류를 양쪽에서 함께 막기 때문**이다. 코드에서 $z_\beta$를 `ppf(power)`로 쓰는 것도 같은 이유다. 검정력이 클수록 $H_1$ 쪽에서 더 깊이 들어가야 하므로 $z_\beta$가 커진다.
+    **두 임계값을 더하는 까닭.** 기각 문턱은 하나뿐이다. 그 문턱은 $H_0$ 분포의 중심에서 오른쪽으로 $z_{1-\alpha/2}$만큼, $H_1$ 분포의 중심에서 **왼쪽으로** $z_{1-\beta}$만큼 떨어진 자리다. 그러므로 두 중심 사이의 거리가 $z_{1-\alpha/2} + z_{1-\beta}$이고, 그 거리를 표준오차 단위로 재면 $d\sqrt n$이다. **더하는 것은 두 오류를 양쪽에서 함께 막기 때문**이다. 코드에서 $z_{1-\beta}$를 `ppf(power)`로 쓰는 것도 같은 이유다. 검정력이 클수록 $H_1$ 쪽에서 더 깊이 들어가야 하므로 $z_{1-\beta}$가 커진다.
 
     !!! note "「무시할 수 있을 만큼」이 얼마인가"
         위에서 왼쪽 꼬리를 버렸다. $d = 0.5$에서 $\lambda = d\sqrt n$으로 두 꼬리를 따로 재면
 
-        | $n$ | $\lambda$ | 첫째 항 $\Phi(\lambda - z_{\alpha/2})$ | 둘째 항 $\Phi(-z_{\alpha/2}-\lambda)$ |
+        | $n$ | $\lambda$ | 첫째 항 $\Phi(\lambda - z_{1-\alpha/2})$ | 둘째 항 $\Phi(-z_{1-\alpha/2}-\lambda)$ |
         |---|---|---|---|
         | $20$ | $2.236068$ | $0.608766$ | $1.358\times10^{-5}$ |
         | $50$ | $3.535534$ | $0.942438$ | $1.948\times10^{-8}$ |
@@ -194,7 +194,7 @@ $H_0$과 $H_a$ 아래의 분포를 함께 그리면 검정력을 이해할 수 �
 
     이다. **참 평균이 정말 52인데도 네 번 중 세 번은 기각하지 못한다.**
 
-    **(2) 해석적으로.** 보기 1의 식을 단측으로 바꾸면 $z_{\alpha/2}$ 자리에 $z_\alpha$가 들어간다. $d = \delta/\sigma = 2/10 = 0.2$이므로
+    **(2) 해석적으로.** 보기 1의 식을 단측으로 바꾸면 $z_{1-\alpha/2}$ 자리에 $z_\alpha$가 들어간다. $d = \delta/\sigma = 2/10 = 0.2$이므로
 
     $$
     n = \left(\frac{z_{0.05} + z_{0.20}}{d}\right)^2
@@ -370,7 +370,7 @@ Statsmodels는 여러 검정 유형에 대한 검정력 분석 함수를 폭넓�
     n \approx \left(\frac{2.801585}{1/3}\right)^2 = 8.404755^2 = 70.6399 \;\rightarrow\; 71
     $$
 
-    이다. $n = 50$에서의 검정력은 보기 1에서 쓴 식 $\Phi(d\sqrt n - z_{\alpha/2})$에 넣으면
+    이다. $n = 50$에서의 검정력은 보기 1에서 쓴 식 $\Phi(d\sqrt n - z_{1-\alpha/2})$에 넣으면
 
     $$
     \Phi\!\left(\tfrac13\sqrt{50} - 1.959964\right)
@@ -379,7 +379,7 @@ Statsmodels는 여러 검정 유형에 대한 검정력 분석 함수를 폭넓�
 
     이다.
 
-    **(2) 비중심 $t$가 옳은 답이다.** $\sigma$를 모르면 분모가 $S$라 통계량이 $t$를 따르고, $H_1$ 아래에서는 비중심모수 $\lambda = d\sqrt n$인 **비중심 $t$**를 따른다. $z$ 공식은 두 군데에서 낙관적이다. 임계값이 $z_{\alpha/2}$가 아니라 더 큰 $t_{\alpha/2,\,n-1}$이고, 대립분포의 꼬리도 정규보다 두껍다. 그래서 $z$ 어림은 **필요한 $n$을 적게, 주어진 $n$의 검정력을 크게** 내놓는다.
+    **(2) 비중심 $t$가 옳은 답이다.** $\sigma$를 모르면 분모가 $S$라 통계량이 $t$를 따르고, $H_1$ 아래에서는 비중심모수 $\lambda = d\sqrt n$인 **비중심 $t$**를 따른다. $z$ 공식은 두 군데에서 낙관적이다. 임계값이 $z_{1-\alpha/2}$가 아니라 더 큰 $t_{1-\alpha/2,\,n-1}$이고, 대립분포의 꼬리도 정규보다 두껍다. 그래서 $z$ 어림은 **필요한 $n$을 적게, 주어진 $n$의 검정력을 크게** 내놓는다.
 
     **수치적으로.**
 
@@ -578,7 +578,7 @@ $$
 
 **보기 5.** <span class="diff easy" title="쉬움"></span> 비율 검정의 검정력 — A/B 검정. 대조군 전환율 $p_0 = 1.1\%$를 실험군에서 $p_1 = 1.65\%$로 올리는 것이 목표다. $\alpha = 0.05$ **단측**, 검정력 $0.80$, 집단 크기는 같다.
 
-**(1)** 코헨의 $h = 2\arcsin\sqrt{p_1} - 2\arcsin\sqrt{p_0}$을 계산하고, 집단당 표본크기가 $n = 2\left((z_\alpha + z_\beta)/h\right)^2$임을 보인 뒤 값을 구하시오.
+**(1)** 코헨의 $h = 2\arcsin\sqrt{p_1} - 2\arcsin\sqrt{p_0}$을 계산하고, 집단당 표본크기가 $n = 2\left((z_\alpha + z_{1-\beta})/h\right)^2$임을 보인 뒤 값을 구하시오.
 
 **(2)** 코드와 맞춰 보고, 그 표본에서 전환이 몇 건쯤 일어나는지 세어 보시오.
 
@@ -589,9 +589,9 @@ $$
     **(1) 해석적으로.** $\arcsin$ 변환을 쓰는 까닭부터 보자. $\hat p$의 분산 $p(1-p)/n$은 $p$에 달려 있어 식이 $p$마다 달라진다. 그런데 $\varphi = 2\arcsin\sqrt{\hat p}$으로 바꾸면 **분산이 $p$와 무관하게 $1/n$**이 된다(분산안정화 변환). 그러므로 두 집단의 차 $\varphi_1 - \varphi_2$의 분산은 $1/n_1 + 1/n_2 = 2/n$이고, 효과크기를 $h$로 재면 보기 1의 식이 그대로 쓰인다.
 
     $$
-    \lambda = \frac{h}{\sqrt{2/n}} = z_\alpha + z_\beta
+    \lambda = \frac{h}{\sqrt{2/n}} = z_\alpha + z_{1-\beta}
     \quad\Longrightarrow\quad
-    n = 2\left(\frac{z_\alpha + z_\beta}{h}\right)^2
+    n = 2\left(\frac{z_\alpha + z_{1-\beta}}{h}\right)^2
     $$
 
     보기 4의 $r = 1$인 경우와 같은 꼴이고, 계수 2가 거기서 왔다.
@@ -788,7 +788,7 @@ $$
 
 **보기 7.** <span class="diff easy" title="쉬움"></span> 표본크기와 검정력의 곡선. 일표본 $t$ 검정에서 $d = 0.2,\ 0.5,\ 0.8$에 대한 검정력 곡선을 그린다($\alpha = 0.05$ 양측).
 
-**(1)** 보기 1의 $z$ 공식 $n = ((z_{\alpha/2}+z_\beta)/d)^2$으로 세 효과크기에서 검정력 $0.80$에 필요한 $n$을 어림하시오. 셋의 비는 얼마인가.
+**(1)** 보기 1의 $z$ 공식 $n = ((z_{1-\alpha/2}+z_{1-\beta})/d)^2$으로 세 효과크기에서 검정력 $0.80$에 필요한 $n$을 어림하시오. 셋의 비는 얼마인가.
 
 **(2)** 비중심 $t$의 정확한 답과 견주시오. 어긋남이 **$d$에 따라 어떻게** 나타나는가. 그 때문에 (1)에서 구한 비가 어떻게 달라지는가.
 
@@ -1041,7 +1041,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff easy" title="쉬움"></span>
-어떤 연구자가 $\alpha = 0.05$(양측, 이표본 $t$-검정)에서 효과크기 $d = 0.3$을 검정력 90%로 탐지하려 한다. 공식 $n = 2(z_{\alpha/2} + z_\beta)^2/d^2$으로 집단당 필요한 표본크기를 추정하라.
+어떤 연구자가 $\alpha = 0.05$(양측, 이표본 $t$-검정)에서 효과크기 $d = 0.3$을 검정력 90%로 탐지하려 한다. 공식 $n = 2(z_{1-\alpha/2} + z_{1-\beta})^2/d^2$으로 집단당 필요한 표본크기를 추정하라.
 
 </div>
 
@@ -1448,27 +1448,27 @@ $$
 **연습문제 11.** <span class="diff med" title="중간"></span> ($\sigma$를 아는) 양측 일표본 z-검정에서 $\mu = \mu_0 + \delta$를 탐지하는 검정력을 다음과 같이 쓸 수 있음을 보여라.
 
 $$
-1 - \beta = \mathcal{N}\!\left(\frac{\delta\sqrt{n}}{\sigma} - z_{\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta\sqrt{n}}{\sigma} - z_{\alpha/2}\right).
+1 - \beta = \mathcal{N}\!\left(\frac{\delta\sqrt{n}}{\sigma} - z_{1-\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta\sqrt{n}}{\sigma} - z_{1-\alpha/2}\right).
 $$
 
 </div>
 
 ??? success "풀이"
 
-    $H_1\colon \mu = \mu_0 + \delta$ 아래에서 검정통계량 $Z = (\bar{X}-\mu_0)/(\sigma/\sqrt{n})$은 $N(\delta\sqrt{n}/\sigma,\,1)$을 따른다. $\lambda = \delta\sqrt{n}/\sigma$라 하자. 이 검정은 $|Z| > z_{\alpha/2}$일 때 기각하므로
+    $H_1\colon \mu = \mu_0 + \delta$ 아래에서 검정통계량 $Z = (\bar{X}-\mu_0)/(\sigma/\sqrt{n})$은 $N(\delta\sqrt{n}/\sigma,\,1)$을 따른다. $\lambda = \delta\sqrt{n}/\sigma$라 하자. 이 검정은 $|Z| > z_{1-\alpha/2}$일 때 기각하므로
 
     $$
-    1 - \beta = P(Z > z_{\alpha/2}) + P(Z < -z_{\alpha/2}).
+    1 - \beta = P(Z > z_{1-\alpha/2}) + P(Z < -z_{1-\alpha/2}).
     $$
 
     $Z \sim N(\lambda, 1)$이므로:
 
     $$
-    P(Z > z_{\alpha/2}) = P(Z - \lambda > z_{\alpha/2} - \lambda) = \mathcal{N}(\lambda - z_{\alpha/2}),
+    P(Z > z_{1-\alpha/2}) = P(Z - \lambda > z_{1-\alpha/2} - \lambda) = \mathcal{N}(\lambda - z_{1-\alpha/2}),
     $$
 
     $$
-    P(Z < -z_{\alpha/2}) = P(Z - \lambda < -z_{\alpha/2} - \lambda) = \mathcal{N}(-z_{\alpha/2} - \lambda).
+    P(Z < -z_{1-\alpha/2}) = P(Z - \lambda < -z_{1-\alpha/2} - \lambda) = \mathcal{N}(-z_{1-\alpha/2} - \lambda).
     $$
 
     둘을 더하면 원하는 결과를 얻는다. $\square$
@@ -1486,13 +1486,13 @@ $$
     검정력은
 
     $$
-    1 - \beta = \mathcal{N}\!\left(\frac{\delta}{\sigma\sqrt{2/n}} - z_{\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta}{\sigma\sqrt{2/n}} - z_{\alpha/2}\right).
+    1 - \beta = \mathcal{N}\!\left(\frac{\delta}{\sigma\sqrt{2/n}} - z_{1-\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta}{\sigma\sqrt{2/n}} - z_{1-\alpha/2}\right).
     $$
 
     $n \to \infty$이면 항 $\delta / (\sigma\sqrt{2/n}) = \delta\sqrt{n}/({\sigma\sqrt{2}}) \to \infty$이다. 따라서:
 
-    - 첫째 항: $\mathcal{N}(\infty - z_{\alpha/2}) = \mathcal{N}(\infty) = 1$.
-    - 둘째 항: $\mathcal{N}(-\infty - z_{\alpha/2}) = \mathcal{N}(-\infty) = 0$.
+    - 첫째 항: $\mathcal{N}(\infty - z_{1-\alpha/2}) = \mathcal{N}(\infty) = 1$.
+    - 둘째 항: $\mathcal{N}(-\infty - z_{1-\alpha/2}) = \mathcal{N}(-\infty) = 0$.
 
     그러므로 $1-\beta \to 1$이다. 자료가 충분하면 0이 아닌 어떤 고정된 효과도 결국 탐지됨을 확인해 준다. $\square$
 
