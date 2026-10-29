@@ -259,7 +259,7 @@ nav:
             - 8.2 일표본 구간:
                 - μ의 신뢰구간: ch08/one_sample_intervals/ci_mu.md
                 - p의 신뢰구간: ch08/one_sample_intervals/ci_p.md
-                - 왈드는 무너지고 윌슨은 버틴다: ch08/one_sample_intervals/phat_wald_wilson.md
+                - p의 신뢰구간 - 왈드는 무너지고 윌슨은 버틴다: ch08/one_sample_intervals/phat_wald_wilson.md
                 - σ²의 신뢰구간: ch08/one_sample_intervals/ci_sigma2.md
             - 8.3 이표본 구간:
                 - μ₁−μ₂의 신뢰구간: ch08/two_sample_intervals/ci_mu_diff.md
