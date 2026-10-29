@@ -1,5 +1,7 @@
 # 이원배치 분산분석: 교호작용 효과
 
+ToothGrowth 의 이원배치 분산분석표에서 교호작용 줄은 제곱합 $108.319$, $F = 4.106991$ 이다. 이 수는 원자료 $60$ 개를 다시 훑지 않고 **칸평균 여섯 개만으로** 되살아나고, 더 줄이면 두 보충제의 격차 $(5.25,\ 5.93,\ -0.08)$ 이 서로 얼마나 흩어져 있는지 하나로 끝난다. 격차 셋 가운데 둘은 $5$ 를 넘고 하나는 $0$ 에 붙어 있으니, 교호작용 제곱합은 그 흩어짐 말고 아무것도 아니다. 「한 요인의 효과가 다른 요인의 수준에 따라 달라진다」는 말은 어떤 양으로 번역되어 분산분석표의 한 줄이 되는가.
+
 ## 1. 이원배치 분산분석의 수행 절차
 
 [kor|](https://www.youtube.com/watch?v=i4NHIGvTB-g) [eng|](https://www.youtube.com/playlist?list=PLWtoq-EhUJe2TjJYfZUQtuq7a0dQCnOWp) [wiki|](https://en.wikipedia.org/wiki/Two-way_analysis_of_variance)

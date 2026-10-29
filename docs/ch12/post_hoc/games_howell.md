@@ -2,6 +2,8 @@
 
 ## 개요
 
+네 전략의 표본분산이 $3.5$ 에서 $15.0$ 까지 흩어져 르빈 검정이 등분산을 $p = 0.003$ 으로 기각한 자료다. 어떤 쌍의 차이 $3.30$ 은 튜키 문턱 $2.695$ 를 넘어 「두 전략은 다르다」가 되지만, 같은 쌍의 게임스–하웰 문턱은 $3.495$ 여서 판단이 보류된다. 갈림의 출처는 **자유도**다 — 튜키는 여섯 비교 전부에 $49$ 를 쓰고, 게임스–하웰의 자유도는 쌍마다 흩어진다. 합동분산 하나로 여섯 쌍을 모두 재면 어느 쌍이 과대평가되고 어느 쌍이 과소평가되는가.
+
 Tukey의 HSD나 Bonferroni 같은 사후 방법은 모든 집단의 모분산이 같다고 가정한다. 표준 분산분석 F-검정의 바탕에 있는 등분산성 가정과 같다. 이 가정이 어긋나면 이런 방법들이 오도하는 결과를 낼 수 있다. 작은 집단의 분산이 크면 제1종 오류율이 부풀려지고, 반대의 경우에는 검정력이 떨어진다. Games-Howell 절차(Games and Howell, 1976)는 각 쌍별 비교마다 분산을 따로 추정하고 Welch-Satterthwaite 근사로 자유도를 조정하여 이 문제를 해결한다. 등분산도 동일 표본크기도 가정하지 않으므로 Welch 분산분석 뒤의 기본 사후검정이 된다.
 
 ---
@@ -201,7 +203,7 @@ $$
     import pandas as pd
     from scipy import stats
 
-    # 이 보기만 PlantGrowth 를 쓴다. 11.1 의 같은 자료다.
+    # 이 보기만 PlantGrowth 를 쓴다. 12.1 의 같은 자료다.
     url = ('https://raw.githubusercontent.com/vincentarelbundock/'
            'Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv')
     df = pd.read_csv(url, usecols=[1, 2])
