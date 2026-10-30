@@ -458,7 +458,7 @@ intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$�
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-비율에 오차막대를 붙일 때 흔히 쓰는 **왈드 구간** $\hat p \pm 1.96\sqrt{\hat p(1-\hat p)/n}$에는 심각한 문제가 있다. 확인하고 대안을 제시하라. 무너지는 **방식**을 정리로 따지는 것은 8.2절 [왈드는 무너지고 윌슨은 버틴다](../one_sample_intervals/phat_wald_wilson.md)다.
+비율에 오차막대를 붙일 때 흔히 쓰는 **왈드 구간** $\hat p \pm 1.96\sqrt{\hat p(1-\hat p)/n}$에는 심각한 문제가 있다. 확인하고 대안을 제시하라. 무너지는 **방식**을 정리로 따지는 것은 8.2절 [p의 신뢰구간](../one_sample_intervals/ci_p.md)다.
 
 </div>
 
