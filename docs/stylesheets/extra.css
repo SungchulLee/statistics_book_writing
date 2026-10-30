@@ -55,6 +55,12 @@
                          기계가 하는 계산 안에서 글자 그대로 쓰이는 자리를
                          보인다. 앞으로 놓는 다리.
 
+     자두 상자(.leadbox) 「들어가는 이야기」 — 이 쪽이 푸는 물음이 바깥 세상의
+                         어느 자리에서 실제로 걸렸는지를 쪽의 머리에서 이야기한다.
+                         위의 둘과 달리 **연재가 아니라 역할**이라 번호를 매기지
+                         않는다 — 쪽마다 하나뿐이고 늘 맨 앞이기 때문이다.
+                         바깥 사실을 들고 오므로 출처 줄이 상자 안에서 닫힌다.
+
    ── 값을 바꾸려면 아래 :root 한 곳만 고치면 된다 ──────────────────
    상자 규칙은 색을 `--box-accent` 로 받는 틀 하나뿐이고, 각 상자는 자기
    색만 그 틀에 넘긴다. 그래서 색·두께·여백을 바꾸면 상자들이 한꺼번에
@@ -73,6 +79,7 @@
     --box-work: 46, 158, 79;        /* 보기·문제·연습문제 초록 */
     --box-story: 176, 124, 44;      /* 그림으로 보는 통계학 호박 */
     --box-ai: 0, 137, 150;          /* AI로 보는 통계학       청록 */
+    --box-lead: 162, 58, 122;       /* 들어가는 이야기        자두 */
 
     /* ── 상자 모양 ── */
     --box-margin: 1.6em;            /* 위아래 바깥 여백 */
@@ -112,14 +119,15 @@
 }
 
 /* ── 상자 틀 하나 ──────────────────────────────────────────────────
-   여섯 상자가 이 규칙 하나를 함께 쓰고, 색만 --box-accent 로 받는다.
+   일곱 상자가 이 규칙 하나를 함께 쓰고, 색만 --box-accent 로 받는다.
    점선 테두리를 쓰는 .storybox 만 아래에서 따로 그린다. */
 .md-typeset .defn,
 .md-typeset .thmbox,
 .md-typeset .exbox,
 .md-typeset .probox,
 .md-typeset .drillbox,
-.md-typeset .aibox {
+.md-typeset .aibox,
+.md-typeset .leadbox {
     margin: var(--box-margin) 0;
     padding: var(--box-pad);
     border: var(--box-hair) solid rgba(var(--box-accent), var(--box-edge));
@@ -134,7 +142,8 @@
 .md-typeset .probox > :first-child,
 .md-typeset .drillbox > :first-child,
 .md-typeset .storybox > :first-child,
-.md-typeset .aibox > :first-child {
+.md-typeset .aibox > :first-child,
+.md-typeset .leadbox > :first-child {
     margin-top: var(--box-inner);
 }
 
@@ -144,7 +153,8 @@
 .md-typeset .probox > :last-child,
 .md-typeset .drillbox > :last-child,
 .md-typeset .storybox > :last-child,
-.md-typeset .aibox > :last-child {
+.md-typeset .aibox > :last-child,
+.md-typeset .leadbox > :last-child {
     margin-bottom: var(--box-inner);
 }
 
@@ -155,6 +165,10 @@
 
 .md-typeset .thmbox {
     --box-accent: var(--box-thm);
+}
+
+.md-typeset .leadbox {
+    --box-accent: var(--box-lead);
 }
 
 .md-typeset .exbox,
