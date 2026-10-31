@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """8장 개요의 그림 — 네 용량의 신뢰구간을 세로로 맞대면 결정이 읽힌다.
 
-왼쪽: SURMOUNT-1 이 보고한 네 구간. 5 mg 과 10 mg 은 겹치는 데가 없고
-      10 mg 과 15 mg 은 겹친다. 용량을 올릴지를 이 그림이 답한다.
-오른쪽: 보고된 폭을 1/sqrt(n) 으로 환산해 본 것. 환자가 적었다면
-      괄호가 넓어지고, 넓은 괄호는 「아직 모른다」는 뜻이다.
+왼쪽: SURMOUNT-1 이 보고한 네 구간. 5 mg 과 10 mg 은 닿지도 않고
+      10 mg 과 15 mg 은 겹친다.
+오른쪽: **겹침으로 판단하면 안 된다.** 겹치는지가 아니라 차이 자체의 구간을
+      보아야 한다. 10 mg -> 15 mg 은 구간이 겹치는데도 차이의 구간이 0 을
+      비켜 간다 — 겹침만 보고 「더 준 값이 없었다」고 읽으면 반대로 답하게
+      된다. 8.1절 오차막대 그림이 그 습관을 따로 다룬다.
 
 자료: Jastreboff 외, 『New England Journal of Medicine』 387(2022) 205 쪽 초록.
 """
@@ -51,9 +53,9 @@ ax.text(LABEL_X, 3.45, "점추정값과 95% 구간", va="center", ha="left",
         fontsize=9.5, color="#555555")
 
 # 띠의 뜻은 지시선 없이 바로 위아래에 적는다 — 사선이 자료를 가로지르지 않게
-ax.text((gap_lo + gap_hi) / 2, 3.42, "겹치지 않는다\n용량을 올린 값이 있었다",
+ax.text((gap_lo + gap_hi) / 2, 3.42, "닿지도 않는다\n이쪽은 겹침만으로 말할 수 있다",
         ha="center", va="center", fontsize=10, color="#2e7d32", linespacing=1.35)
-ax.text(-23.0, -0.42, "겹친다 — 더 올린 값은 자료가 받쳐 주지 않는다",
+ax.text(-23.0, -0.42, "겹친다 — 그래서 오른쪽을 보아야 한다",
         ha="left", va="center", fontsize=10, color="#8a6508")
 
 ax.set_yticks(list(ys))
@@ -66,37 +68,58 @@ ax.set_title("(가) 네 구간을 세로로 읽으면 결정이 읽힌다", font
 ax.grid(axis="x", alpha=0.25)
 ax.set_axisbelow(True)
 
-# ── 오른쪽: 폭은 표본이 정한다
-EST, HALF = -20.9, (-19.9 - (-21.8)) / 2      # 보고된 반폭 0.95
-SCALES = [("환자가 4분의 1이면", 0.5, 2.0),    # 폭은 1/sqrt(n) 이므로 두 배
-          ("보고된 시험", 1.0, 1.0),
-          ("환자가 네 배면", 2.0, 0.5)]
-for y, (label, _, mult) in zip(range(len(SCALES)), SCALES):
-    h = HALF * mult
-    on = label == "보고된 시험"
-    color = "#1f4e79" if on else "#8c8c8c"
-    bx.plot([EST - h, EST + h], [y, y], color=color,
-            lw=4.0 if on else 3.0, solid_capstyle="butt", zorder=3)
-    bx.plot([EST], [y], "o", color=color, ms=8, zorder=4)
-    bx.text(EST, y + 0.26, f"폭 {2 * h:.2f} 퍼센트포인트", ha="center",
-            fontsize=10, color=color)
+# ── 오른쪽: 겹침이 아니라 차이 자체의 구간을 본다
+# 보고된 구간에서 표준오차를 되짚고(폭 = 2 x 1.96 x SE) 이웃한 두 팔의 차와
+# 그 구간을 만든다. 두 팔은 서로 다른 사람이므로 분산이 더해진다.
+import numpy as np
+from scipy import stats
 
-bx.axvline(EST, color="#1f4e79", lw=0.9, ls=":", zorder=2)
-bx.set_yticks(range(len(SCALES)))
-bx.set_yticklabels([s[0] for s in SCALES], fontsize=11)
-bx.set_xlim(EST - 2.6, EST + 2.6)
-bx.set_ylim(-0.55, 2.62)
-bx.set_xlabel("체중 변화 (퍼센트)", fontsize=11)
-bx.set_title("(나) 넓은 괄호는 「아직 모른다」는 뜻이다", fontsize=12.5, pad=10)
+Z = stats.norm.ppf(0.975)
+se = {n: (hi - lo) / 2 / Z for n, _, lo, hi in ARMS}
+pt = {n: e for n, e, _, _ in ARMS}
+
+STEPS = [("위약 → 5 mg", "위약", "5 mg"),
+         ("5 → 10 mg", "5 mg", "10 mg"),
+         ("10 → 15 mg", "10 mg", "15 mg")]
+rows = []
+for label, a_, b_ in STEPS:
+    d = pt[a_] - pt[b_]                      # 한 단계 올려 더 줄어든 퍼센트포인트
+    sd = np.hypot(se[a_], se[b_])
+    rows.append((label, d, d - Z * sd, d + Z * sd))
+
+yy = np.arange(len(rows))[::-1]
+for y, (label, d, lo, hi) in zip(yy, rows):
+    c = "#1f4e79" if lo > 0 else "#c0392b"
+    bx.plot([lo, hi], [y, y], color=c, lw=3.2, solid_capstyle="butt", zorder=3)
+    bx.plot([d], [y], "o", color=c, ms=9, zorder=4)
+    bx.text(hi + 0.4, y, f"{d:.1f}   ({lo:.2f}, {hi:.2f})", va="center",
+            ha="left", fontsize=10.5, color=c)
+
+bx.axvline(0, color="#c0392b", ls="--", lw=1.8, zorder=2)
+bx.text(0.3, len(rows) - 0.42, "0 — 더 준 값이 없었다는 뜻", ha="left",
+        va="bottom", fontsize=10, color="#c0392b")
+last = rows[-1]
+bx.annotate(f"구간은 겹치는데\n차이의 구간은 0 을 비켜 간다 ({last[2]:.2f})",
+            (last[2], yy[-1]), textcoords="offset points", xytext=(26, -34),
+            ha="left", fontsize=10.5, color="#1f4e79", fontweight="bold",
+            arrowprops=dict(arrowstyle="->", color="#1f4e79", lw=1.3))
+
+bx.set_yticks(list(yy))
+bx.set_yticklabels([r[0] for r in rows], fontsize=11)
+bx.set_xlim(-1.4, 17.5)
+bx.set_ylim(-0.85, len(rows) - 0.25)
+bx.set_xlabel("한 단계 올려 더 줄어든 양 (퍼센트포인트)", fontsize=11)
+bx.set_title("(나) 겹침이 아니라 차이의 구간을 본다", fontsize=12.5, pad=10)
 bx.grid(axis="x", alpha=0.25)
 bx.set_axisbelow(True)
 
 fig.tight_layout()
-fig.savefig(OUT + "dose_intervals.png", dpi=150, bbox_inches="tight")
-print("saved", OUT + "dose_intervals.png")
+fig.savefig(OUT + "dose_intervals.png", dpi=170, bbox_inches="tight", facecolor="white")
 
-# 쪽에 적은 수가 그림과 맞는지 확인
+print("saved", OUT + "dose_intervals.png")
 print(f"5 mg 위끝 {ARMS[1][3]} 와 10 mg 아래끝 {ARMS[2][2]} 사이 빈 구간 폭 "
-      f"{gap_hi - gap_lo:.1f}")
+      f"{abs(ARMS[2][2] - ARMS[1][3]):.1f}")
 print(f"10 mg 과 15 mg 이 겹치는 구간 ({ov_lo}, {ov_hi}) 폭 {ov_hi - ov_lo:.1f}")
-print(f"보고된 반폭 {HALF:.2f} -> 폭 {2 * HALF:.2f}")
+for label, d, lo, hi in rows:
+    print(f"  {label:12s} {d:5.2f}  ({lo:6.3f}, {hi:6.3f})  "
+          f"0 을 {'비켜 간다' if lo > 0 else '담는다'}")
