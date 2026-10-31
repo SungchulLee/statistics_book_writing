@@ -990,7 +990,7 @@ intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$�
     - **노치가 겹친다고 차이가 없는 것은 아니다.** 검정력이 낮아 진짜 차이를 놓친다.
     - **형식적 결론이 필요하면 검정을 하라.** 노치는 탐색용 보조 장치다.
 
-    노치가 $n$이 작을 때 상자를 넘어 **모래시계 모양**이 되는 현상은 [상자그림](../../ch02/visualization/boxplots.md) 절 연습문제 8에서 다룬다. $\square$
+    노치가 $n$이 작을 때 상자를 넘어 **모래시계 모양**이 되는 현상은 [상자그림](../../ch02/visualization/boxplots.md) 절 연습문제 9에서 다룬다. $\square$
 
 ---
 
