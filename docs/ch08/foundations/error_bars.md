@@ -23,6 +23,10 @@ _확인한 곳 — 이 쪽 「그들도 못 읽었다」 상자와 그 출처 �
 
 ## 1. 같은 자료, 세 가지 오차막대
 
+<div class="leadbox" markdown>
+
+**들어가는 이야기** — 그들도 자기 그림의 막대를 못 읽었다
+
 <div class="exbox" markdown>
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 같은 자료, 세 가지 오차막대. 네 집단 A, B, C, D 를 각각 $n = 10,\ 30,\ 100,\ 300$ 개씩 관측했다. 모표준편차는 네 집단 모두 $\sigma = 3$ 이다. **똑같은 자료**에 오차막대를 $\pm 1\,\text{SD}$, $\pm 1\,\text{SE}$, $95\%$ 신뢰구간 세 가지로 그린다.
@@ -236,6 +240,8 @@ $\sqrt{2} = 1.414$ 이고, $p = 0.05$ 가 되는 차이는 $1.96 \times 1.414 = 
 이미 말해 두었다 — **차이 자체의 구간을 그려라.** 그러면 겹침을 눈으로 잴 일이 없어진다.
 
 _확인한 곳 — Belia, Fidler, Williams, Cumming, "Researchers misunderstand confidence
+
+</div>
 intervals and standard error bars", 『Psychological Methods』 $10$ 권 $389$–$396$ 쪽($2005$)
 의 초록에서 인용한 세 대목과 조사 방식(심리학·행동신경과학·의학 학술지 저자들을 웹페이지로
 초대해, 두 평균이 간신히 유의해지는 자리까지 그림을 조정하게 했다), 그리고 응답자 $473$ 명.
