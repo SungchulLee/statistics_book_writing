@@ -14,7 +14,7 @@
 
 그러니 여기서 거꾸로 배우지 않도록 적어 둔다. **유의수준은 자료를 보고 고르는 것이 아니다** — 구간을 보고 나서 수준을 고르면 그 구간은 약속한 $1-\alpha$ 를 더 이상 지키지 않는다(8.1절 [해석과 흔한 오해](../../ch08/foundations/interpretation.md)). 수준을 먼저 못 박고 나면 남는 물음은 하나다. 구간의 폭을 정하는 것은 무엇이고, 좁히려면 무엇을 바꾸어야 하는가. 아래 상자가 그 폭이 가게 수가 아니라 **한쪽이 작아서** 생겼다는 셈을 따라간다.
 
-_확인한 곳 — 이 쪽 「아래 끝이 $0$ 에 닿은 구간」 상자와 그 출처 줄_
+_확인한 곳 — 이 쪽 [「아래 끝이 $0$ 에 닿은 구간」](#storybox-1) 상자와 그 출처 줄_
 
 </div>
 
@@ -57,7 +57,7 @@ $$
 !!! info "참고"
     [Khan Academy: Inference for Slope](https://www.khanacademy.org/math/ap-statistics/inference-slope-linear-regression/inference-slope/v/intro-inference-slope)
 
-<div class="storybox" markdown>
+<div class="storybox" markdown id="storybox-1">
 
 **그림으로 보는 통계학 1.** 아래 끝이 $0$ 에 닿은 구간
 
