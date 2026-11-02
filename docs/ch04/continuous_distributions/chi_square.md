@@ -706,7 +706,7 @@ $$
     y = chi2.pdf(x)
 
     fig, ax = plt.subplots(figsize=(12, 3))
-    ax.plot(x, y, lw=2, label=f"χ² PDF (k={k})")
+    ax.plot(x, y, lw=2, label=f"X² PDF (k={k})")
     # 평균은 정확히 k, 최빈값은 k-2 (k >= 2일 때).
     # 둘이 다르다는 것이 곧 이 분포가 오른쪽으로 치우쳐 있다는 뜻이다.
     ax.axvline(k, linestyle='--', alpha=0.8, label=f"mean = {k}")
