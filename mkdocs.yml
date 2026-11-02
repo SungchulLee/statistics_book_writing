@@ -413,11 +413,11 @@ nav:
                 - Dunnett 검정 (대조군과의 비교): ch12/post_hoc/dunnett.md
                 - Games-Howell (분산이 다를 때): ch12/post_hoc/games_howell.md
                 - 사후비교 방법의 비교와 검정력: ch12/post_hoc/post_hoc_comparisons.md
-            - 12.4 Welch 분산분석:
-                - Welch의 일원배치 분산분석: ch12/anova_welch/welch_one_way.md
-                - Welch의 이원배치 분산분석: ch12/anova_welch/welch_two_way.md
-                - Welch 분산분석의 제1종 오류와 검정력 모의실험: ch12/anova_welch/welch_simulation.md
-                - 이원배치 Welch 분산분석 (로버스트 HC3): ch12/anova_welch/welch_twoway_robust.md
+            - 12.4 웰치 분산분석:
+                - 웰치의 일원배치 분산분석: ch12/anova_welch/welch_one_way.md
+                - 웰치의 이원배치 분산분석: ch12/anova_welch/welch_two_way.md
+                - 웰치 분산분석의 제1종 오류와 검정력 모의실험: ch12/anova_welch/welch_simulation.md
+                - 이원배치 웰치 분산분석 (로버스트 HC3): ch12/anova_welch/welch_twoway_robust.md
             - 12.5 가정:
                 - 분산분석의 가정: ch12/assumptions/assumptions_overview.md
                 - 잔차의 정규성 확인: ch12/assumptions/normality.md

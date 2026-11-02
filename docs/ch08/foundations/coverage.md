@@ -318,7 +318,7 @@ p & \hat{p} & \displaystyle\frac{\hat{p}-p}{\sqrt{\hat{p}(1-\hat{p})/n}}\approx 
 \sigma^2 & s^2 & \displaystyle\frac{(n-1)s^2}{\sigma^2}\sim \chi^2_{n-1} & \displaystyle\left[\frac{(n-1)s^2}{\chi^2_{1-\alpha/2,n-1}},\frac{(n-1)s^2}{\chi^2_{\alpha/2,n-1}}\right] \\[8pt]
 \frac{\sigma_1^2}{\sigma_2^2} & \frac{s_1^2}{s_2^2} & \displaystyle\frac{s_1^2/\sigma_1^2}{s_2^2/\sigma_2^2}\sim F_{n_1-1,n_2-1} & \displaystyle\left[\frac{s_1^2/s_2^2}{F_{1-\alpha/2}},\frac{s_1^2/s_2^2}{F_{\alpha/2}}\right] \\[8pt]
 \mu_d & \bar{x}_d & \displaystyle\frac{\bar{x}_d-\mu_d}{s_d/\sqrt{n}}\approx t_{n-1} & \displaystyle\bar{x}_d\pm t_{1-\alpha/2,n-1}\frac{s_d}{\sqrt{n}} \\[8pt]
-\mu_1-\mu_2 & \bar{x}_1-\bar{x}_2 & \text{Welch 또는 합동 } t & \displaystyle(\bar{x}_1-\bar{x}_2)\pm t_{1-\alpha/2,\text{df}}\cdot\text{SE} \\[8pt]
+\mu_1-\mu_2 & \bar{x}_1-\bar{x}_2 & \text{웰치 또는 합동 } t & \displaystyle(\bar{x}_1-\bar{x}_2)\pm t_{1-\alpha/2,\text{df}}\cdot\text{SE} \\[8pt]
 p_1-p_2 & \hat{p}_1-\hat{p}_2 & z & \displaystyle(\hat{p}_1-\hat{p}_2)\pm z_{1-\alpha/2}\cdot\text{SE}
 \end{array}
 $$

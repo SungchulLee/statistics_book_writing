@@ -604,7 +604,7 @@ $$
     **(1) 전체 크기는 두 경로의 혼합이다.** 사전검정이 기각할 확률을 $\gamma$ 라 하면
 
     $$
-    \alpha_{\text{2단계}} = (1 - \gamma)\,\alpha_{\text{ANOVA} \mid \text{사전검정 기각 못함}} + \gamma\,\alpha_{\text{Welch} \mid \text{사전검정 기각}}
+    \alpha_{\text{2단계}} = (1 - \gamma)\,\alpha_{\text{ANOVA} \mid \text{사전검정 기각 못함}} + \gamma\,\alpha_{\text{웰치} \mid \text{사전검정 기각}}
     $$
 
     이다. 조건부 크기를 무조건부 값 $0.063$(또는 $0.074$)과 $0.044$(또는 $0.046$)로 근사하면 첫 행에서
