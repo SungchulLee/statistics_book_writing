@@ -156,7 +156,15 @@ $$
 
     이다. 이것을 행렬로 모으면 $(i,i)$ 성분이 $1 - p_i$, $(i,j)$ 성분이 $-\sqrt{p_i}\sqrt{p_j}$ 이므로 정확히 $\mathbf{I}_k - \sqrt{\mathbf{p}}\sqrt{\mathbf{p}}^\top$ 이다. **근사가 아니라 모든 $n$ 에서 등식이다** — $n$ 이 약분되어 사라졌다.
 
-    **2단계 — 다변량 중심극한정리.** $O_i = \sum_{j=1}^n \mathbf{1}\{X_j = i\}$ 이므로 $\mathbf{U}_n$ 은 독립이고 같은 분포를 갖는 벡터 $n$ 개의 합을 $\sqrt{n}$ 으로 나눈 것이다. 각 항의 공분산이 유한하므로 다변량 중심극한정리가 $\mathbf{U}_n \Rightarrow N_k(\mathbf{0}, \mathbf{P})$ 를 준다.
+    **2단계 — 다변량 중심극한정리.** $O_i = \sum_{j=1}^n \mathbf{1}\{X_j = i\}$ 이므로
+
+    $$
+    \mathbf{U}_n = \frac{1}{\sqrt n}\sum_{j=1}^n \mathbf{W}_j,
+    \qquad
+    (\mathbf{W}_j)_i = \frac{\mathbf{1}\{X_j = i\} - p_i}{\sqrt{p_i}}
+    $$
+
+    로 쓸 수 있다. $\mathbf{W}_j$ 는 독립이고 같은 분포를 가지며 평균이 $\mathbf{0}$ 이고, 공분산은 1단계의 셈 그대로 $\mathbf{P}$ 다(유한하다). 그러므로 다변량 중심극한정리가 $\mathbf{U}_n \Rightarrow N_k(\mathbf{0}, \mathbf{P})$ 를 준다.
 
     **3단계 — $\mathbf{P}$ 가 사영이다.** $\sum_i p_i = 1$ 이므로 $\sqrt{\mathbf{p}}^\top \sqrt{\mathbf{p}} = 1$ 이고, $\sqrt{\mathbf{p}}$ 는 **단위벡터**다. 그러면
 
@@ -172,7 +180,7 @@ $$
 
     이다. $\sqrt{\mathbf{p}}$ 가 생성하는 직선 **하나**를 죽이고 그 직교여공간 $k-1$ 차원을 남기는 사영이다.
 
-    **4단계 — 이차형식.** $\lVert \mathbf{U}_n \rVert^2$ 은 극한에서 $N_k(\mathbf{0}, \mathbf{P})$ 의 노름제곱이다. $\mathbf{Z} \sim N_k(\mathbf{0}, \mathbf{I})$ 로 쓰면 $\mathbf{P}\mathbf{Z}$ 가 그 분포를 갖고 $\lVert \mathbf{P}\mathbf{Z} \rVert^2 = \mathbf{Z}^\top \mathbf{P} \mathbf{Z}$ 이므로, A.4절 [카이제곱분포와 이차형식](../../ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md) 정리 1 에 의해 멱등행렬의 이차형식은 그 계수를 자유도로 갖는 카이제곱이다. 계수가 $k-1$ 이다. $\square$
+    **4단계 — 이차형식.** $x \mapsto \lVert x \rVert^2$ 이 연속이므로 **연속사상정리**가 2단계의 분포수렴을 그대로 옮겨 준다 — $\lVert \mathbf{U}_n \rVert^2$ 의 극한분포가 $N_k(\mathbf{0}, \mathbf{P})$ 의 노름제곱이다(분포수렴은 함수를 씌운다고 저절로 따라오지 않으므로 이 한 줄이 필요하다). $\mathbf{Z} \sim N_k(\mathbf{0}, \mathbf{I})$ 로 쓰면 $\mathbf{P}\mathbf{Z}$ 가 그 분포를 갖고 $\lVert \mathbf{P}\mathbf{Z} \rVert^2 = \mathbf{Z}^\top \mathbf{P} \mathbf{Z}$ 이므로, A.4절 [카이제곱분포와 이차형식](../../ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md) 정리 1 에 의해 멱등행렬의 이차형식은 그 계수를 자유도로 갖는 카이제곱이다. 계수가 $k-1$ 이다. $\square$
 
 **제약을 「하나 잃는다」고 말한 것의 정체가 3단계다.** $\S 1$ 에서 $\sum_i (O_i - E_i) = 0$ 이라 적은 그 한 줄이, 여기서는 $\mathbf{U}_n$ 이 $\sqrt{\mathbf{p}}$ 방향 성분을 갖지 않는다는 말로 나타난다 — 실제로 $\sqrt{\mathbf{p}}^\top \mathbf{U}_n = \sum_i (O_i - np_i)/\sqrt{n} = 0$ 이다. 자유도를 **세어서** 얻는 것과 **사영의 계수로** 얻는 것이 같은 일이다.
 
