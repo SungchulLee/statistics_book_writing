@@ -1,13 +1,16 @@
-"""8.2절 μ의 신뢰구간 — 교과서의 37.0 은 구간 안에 있는가.
+"""8.2절 μ의 신뢰구간 — 산포를 아는가가 폭을 정한다.
 
-들머리가 적은 네 구간을 그대로 그린다. 마코위악 외(1992)의 초록에서 평균
+들머리의 주장은 **sigma 를 아는가**다. 마코위악 외(1992)의 초록에서 평균
 36.8 과 정상 상한 37.7 을 읽고, 상한을 "평균 + 1.96 x 산포" 로 되짚어
-산포 0.46 을 얻은 뒤(이 되짚기는 이 책의 가정이다), 네 가지로 구간을
-만든다 --- n = 148 과 n = 5, 각각 sigma 를 모를 때와 알 때.
+산포 0.46 을 얻은 뒤(이 되짚기는 이 책의 가정이다), 그 하나를 아는 값으로
+칠 때와 추정해야 할 값으로 칠 때를 두 표본크기에서 맞댄다.
 
-오른쪽은 그 다음 물음이다. 다섯 명으로는 37.0 을 배제하지 못했는데,
-같은 산포라면 몇 명을 재야 배제할 수 있는가. 쪽의 1 절 그림
-t_vs_z_cost 가 임계값의 비를 n 에 따라 그리므로 여기서는 그리지 않는다.
+오른쪽은 "넓어진다" 의 더 날카로운 꼴이다. sigma 를 알면 구간의 폭은 자료를
+모으기 전에 이미 정해진 수인데, 모르면 **폭 자체가 표본마다 달라진다.**
+처음에 여기에 "몇 명을 재야 교과서를 반박하나" 를 그렸는데 그것은 표본크기
+이야기여서 들머리의 주장이 아니었다. 겹침도 보아야 한다 --- 임계값의 비는
+1 절의 t_vs_z_cost 가, 한 표본에서 넓어진 몫을 둘로 쪼개는 일은
+width_decomposition 이 이미 그린다. 폭의 **분포**는 어느 쪽도 그리지 않는다.
 """
 
 import matplotlib.pyplot as plt
@@ -70,40 +73,57 @@ ax1.set_xlim(36.12, 37.74)
 ax1.set_ylim(-0.75, 4.15)
 ax1.set_yticks([])
 ax1.set_xlabel("체온 (°C)", fontsize=11)
-ax1.set_title("같은 산포, 다른 표본크기 — 네 구간", fontsize=12.5)
+ax1.set_title("같은 평균·같은 산포 — 아는 값이냐 아니냐", fontsize=12.5)
 ax1.grid(axis="x", alpha=0.25)
 
-# ── (우) 몇 명을 재야 37.0 을 배제하나 ─────────────────────────────
-gap = BOOK - XBAR
-ns = np.arange(3, 201)
-half = stats.t.ppf(0.975, ns - 1) * SIG / np.sqrt(ns)
-need = int(ns[half < gap][0])
-ax2.plot(ns, half, color="tab:purple", lw=2.2)
-ax2.axhline(gap, color="tab:red", lw=1.8, ls="--")
-ax2.text(200, gap + 0.012, f"교과서까지의 거리 {gap:.1f} °C", ha="right",
-         fontsize=10.5, color="tab:red", fontweight="bold")
-ax2.axvline(need, color="0.3", lw=1.4, ls=":")
-ax2.plot([need], [stats.t.ppf(0.975, need - 1) * SIG / np.sqrt(need)], "o",
-         ms=9, color="tab:purple")
-ax2.annotate(f"{need} 명부터 37.0 이 구간 밖으로 나간다",
-             xy=(need, gap), xytext=(need + 14, 0.40), fontsize=11,
-             fontweight="bold", color="tab:purple",
-             arrowprops=dict(arrowstyle="->", color="tab:purple", lw=1.6))
-for n, c in ((5, "tab:orange"), (148, "tab:blue")):
-    h = stats.t.ppf(0.975, n - 1) * SIG / np.sqrt(n)
-    ax2.plot([n], [h], "o", ms=8, color=c)
-    ax2.annotate(f"n = {n}\n반폭 {h:.4f}", xy=(n, h),
-                 xytext=(n + (10 if n == 5 else -8), h + 0.055),
-                 ha="left" if n == 5 else "right", fontsize=10, color=c,
-                 fontweight="bold")
-ax2.set_xlim(0, 205)
-ax2.set_ylim(0, 0.70)
-ax2.set_xlabel("잰 사람 수 n", fontsize=11)
-ax2.set_ylabel("구간의 반폭 (°C)", fontsize=11)
-ax2.set_title("몇 명을 재야 교과서를 반박할 수 있나", fontsize=12.5)
+# ── (우) 모르면 폭 자체가 흔들린다 ────────────────────────────────
+# 아는 쪽의 반폭을 1 로 놓아 두 표본크기를 한 축에 올린다
+rng = np.random.default_rng(802)
+REPS = 200_000
+stat = {}
+for n, col in ((5, "tab:orange"), (148, "tab:blue")):
+    zh = Z * SIG / np.sqrt(n)                      # 늘 같은 수
+    sd = rng.normal(XBAR, SIG, (REPS, n)).std(axis=1, ddof=1)
+    ratio = stats.t.ppf(0.975, n - 1) * sd / np.sqrt(n) / zh
+    lo_, hi_ = np.percentile(ratio, [2.5, 97.5])
+    stat[n] = (zh, ratio, float(np.median(ratio)), float(lo_), float(hi_),
+               float((ratio < 1).mean()))
+    ax2.hist(ratio, bins=np.linspace(0, 3, 260), density=True, color=col,
+             alpha=0.62 if n == 5 else 0.78,
+             label=f"n = {n} · σ 를 모를 때")
+ax2.set_ylim(0, ax2.get_ylim()[1] * 1.32)      # 글자 자리를 위에 낸다
+ax2.axvline(1.0, color="0.15", lw=2.6)
+ax2.annotate("σ 를 알 때 — 늘 이 자리다", xy=(1.02, 1.1),
+             xytext=(1.42, ax2.get_ylim()[1] * 0.30), ha="left",
+             va="center", fontsize=11, color="0.15", fontweight="bold",
+             arrowprops=dict(arrowstyle="->", color="0.15", lw=1.6))
+ax2.axvspan(0, 1, color="0.5", alpha=0.10)
+ax2.annotate(f"다섯 명이면 {stat[5][3]:.2f} 배에서 {stat[5][4]:.2f} 배 사이를\n"
+             f"오가고, 넷에 하나꼴로 아는 쪽보다 **좁다**".replace("**", ""),
+             xy=(1.95, 0.30), xytext=(1.26, ax2.get_ylim()[1] * 0.52),
+             fontsize=10.8, color="tab:orange", fontweight="bold",
+             ha="left",
+             arrowprops=dict(arrowstyle="->", color="tab:orange", lw=1.7))
+ax2.annotate(f"백마흔여덟이면 {stat[148][3]:.2f} 에서 {stat[148][4]:.2f} 로\n"
+             f"거의 정해진 수와 같다",
+             xy=(0.90, 3.4), xytext=(0.05, ax2.get_ylim()[1] * 0.78),
+             fontsize=10.8, color="tab:blue", fontweight="bold", ha="left",
+             arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.7))
+ax2.text(0.06, ax2.get_ylim()[1] * 0.30,
+         f"이 영역은 아는 쪽보다 **좁은** 구간이다\n"
+         f"다섯 명에서 {stat[5][5]:.0%} · "
+         f"백마흔여덟에서 {stat[148][5]:.0%}".replace("**", ""),
+         ha="left", va="top", fontsize=10.5, color="0.35")
+ax2.set_ylim(0, ax2.get_ylim()[1])
+ax2.set_xlim(0, 2.8)
+ax2.set_xlabel("구간의 반폭 ÷ σ 를 알 때의 반폭", fontsize=11)
+ax2.set_ylabel("밀도", fontsize=11)
+ax2.legend(fontsize=10.5, loc="upper right")
 ax2.grid(alpha=0.25)
+ax2.set_title("σ 를 알면 폭이 정해져 있고, 모르면 폭마저 흔들린다",
+              fontsize=12.5)
 
-fig.suptitle("같은 산포인데 표본크기가 결론을 가른다", fontsize=14, y=1.0)
+fig.suptitle("산포를 모른다는 사실이 폭으로 돌아온다 — 표본이 작을수록 비싸다", fontsize=14, y=1.0)
 plt.tight_layout()
 path = OUT + "body_temp_intervals.png"
 fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
@@ -117,5 +137,9 @@ w148 = [r[5] for r in ROWS if r[0] == 148]
 w5 = [r[5] for r in ROWS if r[0] == 5]
 print(f"  폭의 차: n=148 에서 {100*(w148[0]/w148[1]-1):.2f}% · "
       f"n=5 에서 {100*(w5[0]/w5[1]-1):.1f}%")
-print(f"  37.0 을 배제하려면 n >= {need} (반폭 "
-      f"{stats.t.ppf(0.975, need-1)*SIG/np.sqrt(need):.4f} < {gap:.1f})")
+print("  σ 를 알 때의 반폭(늘 같다)과, 모를 때 그 몇 배가 되는지")
+for n in (5, 148):
+    zh, _r, med, lo_, hi_, under = stat[n]
+    print(f"    n={n:3d}: 아는 쪽 반폭 {zh:.4f} · 모르는 쪽은 가운데값 "
+          f"{med:.3f} 배 · 95% 범위 [{lo_:.3f}, {hi_:.3f}] 배 · "
+          f"아는 쪽보다 좁게 나오는 비율 {under:.3f}")
