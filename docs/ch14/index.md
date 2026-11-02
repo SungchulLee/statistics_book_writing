@@ -52,7 +52,7 @@ $t$ 검정, 분산분석, 선형회귀, 신뢰구간 등 많은 통계 방법은
 - **[왜도와 첨도 (표집변동)](descriptive_statistics/skewness_kurtosis.md)** — 표본왜도(비대칭)와 첨도(꼬리의 두꺼움)를 정의하고 정규성 아래에서 기대되는 값(각각 0과 3)을 설명한다.
 - **[왜도 검정](descriptive_statistics/skewtest.md)** — 표본왜도 $g_1$ 에 다고스티노–피어슨 변환을 씌워 비대칭을 검정한다. 단순 표준화만으로는 부족한 까닭을 함께 본다.
 - **[첨도 검정](descriptive_statistics/kurtosistest.md)** — 표본 초과첨도 $g_2$ 에 같은 일을 한다. $g_2$ 의 귀무분포가 아래로 막혀 있어 대칭이 아니라는 것이 핵심이다.
-- **[D'Agostino의 $K^2$ 검정](descriptive_statistics/dagostino.md)** — 왜도와 첨도의 $z$ 점수를 자유도 2인 하나의 카이제곱 검정통계량으로 결합하여 전반적 정규성을 평가한다.
+- **[다고스티노의 $K^2$ 검정](descriptive_statistics/dagostino.md)** — 왜도와 첨도의 $z$ 점수를 자유도 2인 하나의 카이제곱 검정통계량으로 결합하여 전반적 정규성을 평가한다.
 - **[자크–베라 검정](descriptive_statistics/jarque_bera.md)** — 계량경제학에서 널리 쓰이는 검정으로, 왜도와 초과첨도를 통계량 $JB = \frac{n}{6}(S^2 + \frac{(K-3)^2}{4})$으로 결합하며 귀무가설 아래에서 $\chi^2_2$ 분포를 따른다.
 
 ### 14.4 정규성의 형식적 검정
@@ -77,7 +77,7 @@ $t$ 검정, 분산분석, 선형회귀, 신뢰구간 등 많은 통계 방법은
 
 정규성 가정이 무너졌을 때의 전략:
 
-- **[정규성을 얻기 위한 변수변환](non_normal_data/transformations.md)** — 로그, 제곱근, Box-Cox 변환으로 치우침을 줄이고 자료를 정규에 가깝게 만든다.
+- **[정규성을 얻기 위한 변수변환](non_normal_data/transformations.md)** — 로그, 제곱근, 박스–콕스 변환으로 치우침을 줄이고 자료를 정규에 가깝게 만든다.
 - **[대안으로서의 붓스트랩](non_normal_data/bootstrapping.md)** — 복원추출 재표본추출로 분포 가정 없이 신뢰구간을 만들고 가설검정을 수행한다.
 - **[비모수 방법](non_normal_data/nonparametric.md)** — 자료에 특정 분포를 가정하지 않는 순위 기반 검정(만–휘트니 U, 크러스컬–월리스, 윌콕슨 부호순위)을 쓴다.
 

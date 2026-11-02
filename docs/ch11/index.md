@@ -75,7 +75,7 @@ _확인한 곳 — 11.5절 [선형성](assumptions/checking_linearity.md)의 필
 - **[가정 개관(LINE)](assumptions/index.md)** — 선형성(Linearity), 독립성(Independence), 잔차의 정규성(Normality), 등분산성(Equal variance)이라는 네 요건을 정리하고 진단 절차를 제시한다.
 - **[선형성](assumptions/checking_linearity.md)** — 종속변수와 각 독립변수 사이의 직선 관계. 모수에 대한 선형성이 무엇을 뜻하는지와, 곡선 관계에 직선을 맞히면 기울기가 0.08 로 나와 「관계가 없다」로 읽히는 손해, 그리고 산점도·잔차그림·성분+잔차 그림·다항 항으로 하는 진단과 대책까지 다룬다.
 - **[독립성](assumptions/checking_independence.md)** — 잔차의 독립성이 왜 중요한가. 자기상관이 계수는 건드리지 않고 표준오차만 망가뜨리는 까닭과, 더빈–왓슨·Breusch-Godfrey·자료 구조 검토로 하는 진단, 그리고 비독립성에 대한 대책까지 한자리에서 다룬다.
-- **[등분산성](assumptions/checking_homoscedasticity.md)** — 오차분산이 일정하다는 가정. 이분산이 계수는 건드리지 않고 표준오차만 약 20% 작게 만드는 까닭과, 잔차–적합값·척도–위치 그림과 Breusch-Pagan·White 검정으로 하는 진단, 그리고 변수변환·가중최소제곱·로버스트 표준오차라는 세 갈래 대책까지 다룬다.
+- **[등분산성](assumptions/checking_homoscedasticity.md)** — 오차분산이 일정하다는 가정. 이분산이 계수는 건드리지 않고 표준오차만 약 20% 작게 만드는 까닭과, 잔차–적합값·척도–위치 그림과 브로이시–페이건·White 검정으로 하는 진단, 그리고 변수변환·가중최소제곱·로버스트 표준오차라는 세 갈래 대책까지 다룬다.
 - **[정규성](assumptions/checking_normality.md)** — 잔차가 정규분포를 따른다는 가정. 중심극한정리가 계수의 추론은 구해 주지만 **예측구간은 구해 주지 못하는** 까닭(표본을 32배로 키워도 빗나감이 한쪽에 몰린다)과, 히스토그램·Q-Q 그림과 샤피로–윌크·앤더슨–달링·자크–베라 검정으로 하는 진단, 그리고 비정규성에 대한 대책까지 다룬다.
 - **[가중최소제곱](assumptions/weighted_regression.md)** — 등분산이 깨졌을 때의 처방 하나. 분산이 설명변수에 따라 커지는 자료를 만들어 OLS 와 WLS 를 나란히 적합하고, **추정값은 멀쩡하고 표준오차가 틀린다**는 것을 잔차그림으로 본다.
 
@@ -87,7 +87,7 @@ _확인한 곳 — 11.5절 [선형성](assumptions/checking_linearity.md)의 필
 - **[다중공선성과 VIF](diagnostics/multicollinearity.md)** — 분산팽창인자로 강하게 상관된 설명변수를 탐지하고, 계수의 안정성과 해석에 미치는 영향을 논한다.
 - **[영향점과 지렛대(Cook 거리, DFFITS)](diagnostics/influence.md)** — Cook 거리, 지렛대 값, DFFITS를 써서 회귀 결과에 지나치게 큰 영향을 주는 관측값을 찾아낸다.
 - **[다중회귀 진단](diagnostics/multi_reg_diag.md)** — California Housing 자료에 이 절의 도구를 한 흐름으로 건다. VIF·잔차·쿡 거리·AIC·BIC 를 차례로 보고, **공선성이 계수를 흔들고 표준오차를 부풀리는** 모습을 수로 잡는다.
-- **[회귀 진단 (주택)](diagnostics/regression_diagnostics_housing.md)** — King County 자료로 같은 일을 다시 한다. 스튜던트화 잔차·쿡 거리·모자값·Breusch-Pagan·부분잔차 그림이 **각각 무엇을 잡아내는지**를 가르고, 영향점을 빼면 추정이 얼마나 움직이는지 본다.
+- **[회귀 진단 (주택)](diagnostics/regression_diagnostics_housing.md)** — King County 자료로 같은 일을 다시 한다. 스튜던트화 잔차·쿡 거리·모자값·브로이시–페이건·부분잔차 그림이 **각각 무엇을 잡아내는지**를 가르고, 영향점을 빼면 추정이 얼마나 움직이는지 본다.
 
 ### 11.7 성능 척도
 

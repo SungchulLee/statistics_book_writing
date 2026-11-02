@@ -407,11 +407,11 @@ nav:
                 - 교호작용 효과: ch12/anova_two_way/interaction.md
                 - 교호작용 효과 그림: ch12/anova_two_way/interaction_plot.md
             - 12.3 사후비교:
-                - Tukey 정직유의차: ch12/post_hoc/tukey.md
-                - Tukey 정직유의차 (이원배치): ch12/post_hoc/tukey_two_way.md
+                - 투키 정직유의차: ch12/post_hoc/tukey.md
+                - 투키 정직유의차 (이원배치): ch12/post_hoc/tukey_two_way.md
                 - 본페로니와 셰페 방법: ch12/post_hoc/bonferroni_scheffe.md
-                - Dunnett 검정 (대조군과의 비교): ch12/post_hoc/dunnett.md
-                - Games-Howell (분산이 다를 때): ch12/post_hoc/games_howell.md
+                - 더닛 검정 (대조군과의 비교): ch12/post_hoc/dunnett.md
+                - 게임스–하월 (분산이 다를 때): ch12/post_hoc/games_howell.md
                 - 사후비교 방법의 비교와 검정력: ch12/post_hoc/post_hoc_comparisons.md
             - 12.4 웰치 분산분석:
                 - 웰치의 일원배치 분산분석: ch12/anova_welch/welch_one_way.md
@@ -468,7 +468,7 @@ nav:
                 - 왜도와 첨도 (표집변동): ch14/descriptive_statistics/skewness_kurtosis.md
                 - 왜도 검정: ch14/descriptive_statistics/skewtest.md
                 - 첨도 검정: ch14/descriptive_statistics/kurtosistest.md
-                - D'Agostino K제곱 검정: ch14/descriptive_statistics/dagostino.md
+                - 다고스티노 K제곱 검정: ch14/descriptive_statistics/dagostino.md
                 - 자크–베라 검정: ch14/descriptive_statistics/jarque_bera.md
             - 14.4 형식적 정규성 검정:
                 - 콜모고로프–스미르노프 검정: ch14/formal_tests/ks_test.md
@@ -547,7 +547,7 @@ nav:
             - 16.5 다집단 비모수 검정:
                 - 크러스컬–월리스 검정: ch16/multi_group_nonparametric/kruskal_wallis.md
                 - 프리드먼 검정 (반복측정): ch16/multi_group_nonparametric/friedman.md
-                - Mood 중앙값검정: ch16/multi_group_nonparametric/median_test.md
+                - 무드 중앙값검정: ch16/multi_group_nonparametric/median_test.md
                 - 사후 Dunn 검정: ch16/multi_group_nonparametric/dunn.md
             - 16.6 비모수 상관:
                 - 스피어만 순위상관 (재론): ch16/correlation/spearman.md

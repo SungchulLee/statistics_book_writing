@@ -69,7 +69,7 @@ _확인한 곳 — 16.1절 [비모수 검정을 언제, 왜 쓰는가](foundatio
 
 - **[크러스컬–월리스 검정](multi_group_nonparametric/kruskal_wallis.md)** --- 일원분산분석의 비모수 대응물로, 평균순위를 비교하여 여러 독립집단이 같은 분포를 갖는지 검정한다.
 - **[프리드먼 검정 (반복측정)](multi_group_nonparametric/friedman.md)** --- 반복측정 분산분석의 비모수 대응물로, 블록 내 순위를 이용하여 관련 집단 간 차이를 검정한다.
-- **[Mood 중앙값검정](multi_group_nonparametric/median_test.md)** --- 전체 중앙값 위·아래 도수를 이용하는 간단한 카이제곱 기반 검정으로, 여러 집단의 중앙값이 같은지 검정한다.
+- **[무드 중앙값검정](multi_group_nonparametric/median_test.md)** --- 전체 중앙값 위·아래 도수를 이용하는 간단한 카이제곱 기반 검정으로, 여러 집단의 중앙값이 같은지 검정한다.
 - **[사후 Dunn 검정](multi_group_nonparametric/dunn.md)** --- 크러스컬–월리스 검정이 유의할 때 이어서 쓰는 쌍별 다중비교 절차로, 다중검정에 대한 p값 보정을 포함한다.
 
 ### 16.6 비모수 상관
