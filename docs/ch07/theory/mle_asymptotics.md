@@ -22,7 +22,7 @@
 
 4. **매끄러움.** 로그밀도 $\log f(x; \theta)$가 $\theta$에 대해 적어도 세 번 연속미분가능하고, 도함수를 적분(또는 합) 기호 안으로 넘길 수 있다.
 
-5. **양의 Fisher 정보량.** Fisher 정보량이 $I(\theta_0) > 0$이어서 자료가 실제로 $\theta$에 관한 정보를 담고 있다.
+5. **양의 피셔 정보량.** 피셔 정보량이 $I(\theta_0) > 0$이어서 자료가 실제로 $\theta$에 관한 정보를 담고 있다.
 
 !!! warning "정칙 조건이 깨질 때"
 
@@ -95,7 +95,7 @@ $$
 \sqrt{n}\bigl(\hat{\theta}_{\text{MLE}} - \theta_0\bigr) \xrightarrow{d} N\!\left(0, \frac{1}{I(\theta_0)}\right)
 $$
 
-이고, 동등하게 $n$ 이 크면 $\hat\theta_{\text{MLE}} \;\dot\sim\; N\bigl(\theta_0,\, 1/(nI(\theta_0))\bigr)$ 다. **점근분산이 Fisher 정보량의 역수**이므로 MLE 는 크래머–라오 하한을 점근적으로 달성한다.
+이고, 동등하게 $n$ 이 크면 $\hat\theta_{\text{MLE}} \;\dot\sim\; N\bigl(\theta_0,\, 1/(nI(\theta_0))\bigr)$ 다. **점근분산이 피셔 정보량의 역수**이므로 MLE 는 크래머–라오 하한을 점근적으로 달성한다.
 
 </div>
 
@@ -117,7 +117,7 @@ $$
 
     가 된다. 분자와 분모를 따로 본다.
 
-    **분자.** $\ell'(\theta_0) = \sum_i s(X_i;\theta_0)$ 은 i.i.d. 점수의 합이다. 점수의 평균이 0 이고([Fisher 정보량](fisher_information.md) 정리 1) 분산이 $I(\theta_0)$ 이므로(같은 쪽 정의 2), 중심극한정리에서
+    **분자.** $\ell'(\theta_0) = \sum_i s(X_i;\theta_0)$ 은 i.i.d. 점수의 합이다. 점수의 평균이 0 이고([피셔 정보량](fisher_information.md) 정리 1) 분산이 $I(\theta_0)$ 이므로(같은 쪽 정의 2), 중심극한정리에서
 
     $$
     \frac{1}{\sqrt n}\ell'(\theta_0) \xrightarrow{d} N\bigl(0,\, I(\theta_0)\bigr)
@@ -155,11 +155,11 @@ $$
 \hat{\theta}_{\text{MLE}} \pm z_{1-\alpha/2} \cdot \frac{1}{\sqrt{nI(\hat{\theta}_{\text{MLE}})}}
 $$
 
-여기서 $z_{1-\alpha/2}$는 표준정규분포의 $(1 - \alpha/2)$ 분위수이다. $\theta_0$을 모르므로 실무에서는 Fisher 정보량을 $\hat{\theta}_{\text{MLE}}$에서 평가한다.
+여기서 $z_{1-\alpha/2}$는 표준정규분포의 $(1 - \alpha/2)$ 분위수이다. $\theta_0$을 모르므로 실무에서는 피셔 정보량을 $\hat{\theta}_{\text{MLE}}$에서 평가한다.
 
 !!! example "베르누이 모수의 점근 신뢰구간"
 
-    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$에서 MLE는 $\hat{p} = \bar{X}$이고 Fisher 정보량은 $I(p) = 1/(p(1-p))$이다. 근사적인 95% 신뢰구간은
+    $X_1, \ldots, X_n \overset{\text{iid}}{\sim} \text{Bernoulli}(p)$에서 MLE는 $\hat{p} = \bar{X}$이고 피셔 정보량은 $I(p) = 1/(p(1-p))$이다. 근사적인 95% 신뢰구간은
 
     $$
     \hat{p} \pm 1.96 \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}
@@ -283,7 +283,7 @@ _확인한 곳 — 호지스가 $1951$ 년에 이 추정량을 내놓았으나 �
 
     1. **일치성:** $n \to \infty$일 때 $\hat{\theta}_{\text{MLE}} \xrightarrow{p} \theta_0$.
 
-    2. **점근정규성:** $\sqrt{n}(\hat{\theta}_{\text{MLE}} - \theta_0) \xrightarrow{d} N(0, I(\theta_0)^{-1})$이며, $I(\theta_0)$은 관측값 하나에 대한 Fisher 정보량이다.
+    2. **점근정규성:** $\sqrt{n}(\hat{\theta}_{\text{MLE}} - \theta_0) \xrightarrow{d} N(0, I(\theta_0)^{-1})$이며, $I(\theta_0)$은 관측값 하나에 대한 피셔 정보량이다.
 
     3. **점근 효율성:** MLE는 점근적으로 Cramér-Rao 하한을 달성한다. 즉 어떤 일치추정량도 $1/(nI(\theta_0))$보다 작은 점근분산을 가질 수 없다.
 
@@ -294,7 +294,7 @@ _확인한 곳 — 호지스가 $1951$ 년에 이 추정량을 내놓았으나 �
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-비율 모수가 $\lambda$인 지수분포에서 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. Fisher 정보량 $I(\lambda)$를 계산하고 $\hat{\lambda}$의 점근분산이 $\lambda^2/n$임을 확인하라.
+비율 모수가 $\lambda$인 지수분포에서 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. 피셔 정보량 $I(\lambda)$를 계산하고 $\hat{\lambda}$의 점근분산이 $\lambda^2/n$임을 확인하라.
 
 </div>
 
@@ -305,7 +305,7 @@ _확인한 곳 — 호지스가 $1951$ 년에 이 추정량을 내놓았으나 �
     \frac{d^2\ell}{d\lambda^2} = -\frac{1}{\lambda^2}
     $$
 
-    Fisher 정보량은:
+    피셔 정보량은:
 
     $$
     I(\lambda) = -E\!\left[\frac{d^2\ell}{d\lambda^2}\right] = \frac{1}{\lambda^2}

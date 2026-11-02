@@ -417,18 +417,18 @@ _확인한 곳 — 리치 서튼의 「The Bitter Lesson」($2019$ 년 $3$ 월 $
 
 <div class="drillbox" markdown>
 
-**연습문제 2.** <span class="diff med" title="중간"></span> 포아송분포에서 i.i.d.로 $n = 500$개를 관측했고 표본평균이 $\bar{x} = 3.2$이다. Fisher 정보량을 사용하여 $\lambda$에 대한 근사적인 95% 신뢰구간을 구성하라.
+**연습문제 2.** <span class="diff med" title="중간"></span> 포아송분포에서 i.i.d.로 $n = 500$개를 관측했고 표본평균이 $\bar{x} = 3.2$이다. 피셔 정보량을 사용하여 $\lambda$에 대한 근사적인 95% 신뢰구간을 구성하라.
 
 </div>
 
 ??? success "풀이"
-    포아송 관측값 하나에 대한 Fisher 정보량은:
+    포아송 관측값 하나에 대한 피셔 정보량은:
 
     $$
     I(\lambda) = \frac{1}{\lambda}
     $$
 
-    $n$개 관측값에서 전체 Fisher 정보량은 $nI(\lambda) = n/\lambda$이다. MLE의 점근정규성에 의해:
+    $n$개 관측값에서 전체 피셔 정보량은 $nI(\lambda) = n/\lambda$이다. MLE의 점근정규성에 의해:
 
     $$
     \hat{\lambda} \dot{\sim} N\!\left(\lambda, \frac{1}{nI(\lambda)}\right) = N\!\left(\lambda, \frac{\lambda}{n}\right)

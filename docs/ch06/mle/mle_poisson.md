@@ -91,13 +91,13 @@ MLE를 구했으니 이제 그 통계적 특성을 살펴보자. 불편인지, �
 
 **불편성.** 지수분포의 MLE와 달리 포아송의 MLE는 불편이다. $E[\bar{X}] = E[X_1] = \lambda$이므로 표본크기와 무관하게 평균적으로 참 모수를 맞힌다.
 
-**Fisher 정보량.** 관측값 하나당 Fisher 정보량은
+**피셔 정보량.** 관측값 하나당 피셔 정보량은
 
 $$
 I_1(\lambda) = -E\!\left[\frac{d^2 \log f(X;\lambda)}{d\lambda^2}\right] = -E\!\left[-\frac{X}{\lambda^2}\right] = \frac{E[X]}{\lambda^2} = \frac{1}{\lambda}
 $$
 
-크기 $n$인 표본에서 전체 Fisher 정보량은 $I_n(\lambda) = n / \lambda$이다.
+크기 $n$인 표본에서 전체 피셔 정보량은 $I_n(\lambda) = n / \lambda$이다.
 
 **효율성.** $\lambda$의 임의의 불편추정량의 분산에 대한 Cramér-Rao 하한(CRLB)은
 
@@ -203,7 +203,7 @@ _확인한 곳 — 클라크의 한 쪽짜리 논문 「An application of the Po
     \hat{\lambda} = \frac{168}{24} = 7.0 \text{ arrivals per hour}
     $$
 
-    포아송 관측값 하나에 대한 Fisher 정보량이 $I(\lambda) = 1/\lambda$이므로 점근분산은:
+    포아송 관측값 하나에 대한 피셔 정보량이 $I(\lambda) = 1/\lambda$이므로 점근분산은:
 
     $$
     \text{Var}(\hat{\lambda}) \approx \frac{1}{nI(\lambda)} = \frac{\lambda}{n} \approx \frac{7.0}{24} = 0.2917

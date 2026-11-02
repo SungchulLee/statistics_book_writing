@@ -1,4 +1,4 @@
-# Bayes 정보기준
+# 베이즈 정보기준
 
 <div class="leadbox" markdown>
 
@@ -21,13 +21,13 @@ _확인한 곳 — 이 쪽 [「둘은 싸우는 것이 아니라 다른 물음�
 
 </div>
 
-AIC는 경쟁 모형들의 상대적 예측 정확도를 추정하지만 참 자료생성 모형을 식별하는 것을 목표로 하지는 않는다. 후보 집합에서 올바른 모형을 고르는 것이 목표이고 참 모형이 그 안에 있다고 믿는다면, Bayes 정보기준(BIC)이 더 강한 이론적 보장을 제공한다. BIC는 모형 복잡도에 더 무거운 벌점을 주므로 AIC보다 보수적이다.
+AIC는 경쟁 모형들의 상대적 예측 정확도를 추정하지만 참 자료생성 모형을 식별하는 것을 목표로 하지는 않는다. 후보 집합에서 올바른 모형을 고르는 것이 목표이고 참 모형이 그 안에 있다고 믿는다면, 베이즈 정보기준(BIC)이 더 강한 이론적 보장을 제공한다. BIC는 모형 복잡도에 더 무거운 벌점을 주므로 AIC보다 보수적이다.
 
 ---
 
-## 1. Bayes적 동기
+## 1. 베이즈적 동기
 
-BIC는 Schwarz(1978)가 Bayes 관점에서 유도했다. 후보 모형 $\mathcal{M}_1, \ldots, \mathcal{M}_M$이 각각 사전확률 $P(\mathcal{M}_j)$를 갖는다고 하자. Bayes 정리에 의해 자료 $\mathbf{y}$가 주어졌을 때 모형 $j$의 사후확률은
+BIC는 Schwarz(1978)가 베이즈 관점에서 유도했다. 후보 모형 $\mathcal{M}_1, \ldots, \mathcal{M}_M$이 각각 사전확률 $P(\mathcal{M}_j)$를 갖는다고 하자. 베이즈 정리에 의해 자료 $\mathbf{y}$가 주어졌을 때 모형 $j$의 사후확률은
 
 $$
 P(\mathcal{M}_j \mid \mathbf{y}) \propto P(\mathbf{y} \mid \mathcal{M}_j) \cdot P(\mathcal{M}_j)
@@ -51,7 +51,7 @@ $$
 
 ## 2. 벌점에 표본크기가 들어간다
 
-추정 모수가 $k$개이고 최대화된 로그가능도가 $\ln \hat{L}$인 모형의 **Bayes 정보기준**은
+추정 모수가 $k$개이고 최대화된 로그가능도가 $\ln \hat{L}$인 모형의 **베이즈 정보기준**은
 
 $$
 \text{BIC} = k \ln n - 2 \ln \hat{L}
@@ -229,12 +229,12 @@ AIC의 벌점항 $2k$와 BIC의 벌점항 $k\ln n$을 비교하라. 표본크기
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-BIC의 Bayes적 정당화를 설명하라. BIC는 어떤 의미에서 Bayes 모형비교를 근사하는가?
+BIC의 베이즈적 정당화를 설명하라. BIC는 어떤 의미에서 베이즈 모형비교를 근사하는가?
 
 </div>
 
 ??? success "풀이"
-    BIC는 Bayes 모형비교의 핵심 양인 로그 주변가능도 $\log m(\mathbf{y} \mid M)$을 근사한다.
+    BIC는 베이즈 모형비교의 핵심 양인 로그 주변가능도 $\log m(\mathbf{y} \mid M)$을 근사한다.
 
     $$
     \log m(\mathbf{y} \mid M) \approx \ell(\hat{\theta}) - \frac{k}{2}\ln n + O(1)
@@ -555,7 +555,7 @@ $$
     P(\mathbf{y} \mid \mathcal{M}_j) \approx \exp\!\left(-\frac{\text{BIC}_j}{2}\right)
     $$
 
-    Bayes 정리의 $P(\mathcal{M}_j \mid \mathbf{y}) \propto P(\mathbf{y} \mid \mathcal{M}_j) P(\mathcal{M}_j)$에서 사전확률이 모두 $1/3$이면 그 상수는 비례식에 흡수되므로
+    베이즈 정리의 $P(\mathcal{M}_j \mid \mathbf{y}) \propto P(\mathbf{y} \mid \mathcal{M}_j) P(\mathcal{M}_j)$에서 사전확률이 모두 $1/3$이면 그 상수는 비례식에 흡수되므로
 
     $$
     P(\mathcal{M}_j \mid \mathbf{y}) \approx \frac{\exp(-\text{BIC}_j/2)}{\sum_{i} \exp(-\text{BIC}_i/2)}

@@ -997,7 +997,7 @@ $\text{MSE}(\hat\theta)$는 $\theta$의 함수이므로 두 추정량의 MSE 곡
     **기준 2 — 베이즈 위험.** $\theta$에 사전분포 $\pi$를 두고 평균 위험을 최소로 한다.
 
     $$
-    \hat\theta_{\text{Bayes}} = \arg\min_{\hat\theta}\int R(\theta,\hat\theta)\,\pi(\theta)\,d\theta
+    \hat\theta_{\text{베이즈}} = \arg\min_{\hat\theta}\int R(\theta,\hat\theta)\,\pi(\theta)\,d\theta
     $$
 
     - **장점**: $\theta$가 어디에 있을 법한지에 대한 정보를 쓸 수 있다. 실무에서는 대개 그런 정보가 있다.

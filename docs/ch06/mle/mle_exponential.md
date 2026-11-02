@@ -156,13 +156,13 @@ $$
 
 따라서 MLE는 평균적으로 $\lambda$를 과대추정한다. 다만 이 편향은 $n \to \infty$일 때 사라지며 추정량은 일치한다.
 
-**Fisher 정보량.** 관측값 하나당 Fisher 정보량은
+**피셔 정보량.** 관측값 하나당 피셔 정보량은
 
 $$
 I_1(\lambda) = -E\!\left[\frac{d^2 \log f(X;\lambda)}{d\lambda^2}\right] = -E\!\left[-\frac{1}{\lambda^2}\right] = \frac{1}{\lambda^2}
 $$
 
-크기 $n$인 표본에서 전체 Fisher 정보량은 $I_n(\lambda) = n / \lambda^2$이다.
+크기 $n$인 표본에서 전체 피셔 정보량은 $I_n(\lambda) = n / \lambda^2$이다.
 
 **점근분산.** MLE의 일반적인 점근이론에 의해 $\hat{\lambda}$의 분산은 근사적으로
 

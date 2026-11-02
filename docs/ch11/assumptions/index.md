@@ -53,6 +53,6 @@
 |---------|-------|----------------|
 | [선형성](checking_linearity.md) | 직선 관계 가정 | 산점도, 잔차그림, 성분+잔차 그림, 다항 항 |
 | [독립성](checking_independence.md) | 무상관 잔차 가정 | 더빈–왓슨, Breusch-Godfrey, 군집 |
-| [등분산성](checking_homoscedasticity.md) | 상수분산 가정 | 잔차–적합값·척도–위치 그림, 브로이시–페이건, White 검정 |
+| [등분산성](checking_homoscedasticity.md) | 상수분산 가정 | 잔차–적합값·척도–위치 그림, 브로이시–페이건, 화이트 검정 |
 | [정규성](checking_normality.md) | 잔차의 정규성 가정 | 히스토그램, Q-Q 그림, 샤피로–윌크, 앤더슨–달링, 자크–베라 |
 | [가중최소제곱](weighted_regression.md) | 이분산을 아는 경우의 적합 | 가중치 1/σ², OLS 와의 비교 |

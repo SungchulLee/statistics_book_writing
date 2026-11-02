@@ -485,7 +485,7 @@ $1933$ 년에 내놓은 것이다. $1933$ 년 논문 $291$ 쪽의 한 문단에 
 
 _확인한 곳 — J. Neyman · E. S. Pearson, "On the Problem of the Most Efficient Tests of
 Statistical Hypotheses", 『Philosophical Transactions of the Royal Society A』 $231$ 권
-$289$–$337$ 쪽($1933$)의 $291$ 쪽에서 인용한 문단 · R. A. Fisher, "Statistical Methods and
+$289$–$337$ 쪽($1933$)의 $291$ 쪽에서 인용한 문단 · R. A. 피셔, "Statistical Methods and
 Scientific Induction", 『Journal of the Royal Statistical Society B』 $17$ 권 $1$ 호
 $69$–$78$ 쪽($1955$)의 요약과 본문에서 인용한 네 대목(수납 절차·자연과학과의 접촉·영국
 해군의 보기·러시아인과 $5$ 개년 계획). 그림의 수는 모두 직접 계산한 값이다_

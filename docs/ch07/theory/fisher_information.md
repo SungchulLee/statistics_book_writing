@@ -1,16 +1,16 @@
-# Fisher 정보량과 표준오차
+# 피셔 정보량과 표준오차
 
 ## 개요
 
 열 번 시도해서 한 번도 성공하지 못했다. 성공확률을 얼마로 적어야 하는가. 「아무 의견이 없다」고 말한 네 가지 방식이 서로 다른 답을 내놓는다 — $0.000$, $0.043$, $0.045$, 그리고 $0.083$ 이다. **한 번도 보지 못한 사건에서 $0$ 과 $0.083$ 이 갈리는 것이다.** 그 가운데 하나는 모수를 어떻게 다시 쓰든 같은 답을 주도록 만들어졌고, 그 불변성을 떠받치는 양이 이 쪽의 주인공이다. 자료가 모수에 대해 「얼마나 말해 주는가」를 어떻게 수로 적는가.
 
-자료로부터 모수 $\theta$를 추정할 때 우리는 $\theta$를 얼마나 정밀하게 추정할 수 있는지 알고 싶다. 그 답은 자료가 $\theta$에 관해 얼마나 많은 "정보"를 담고 있는지에 달려 있다. Fisher 정보량은 이 개념을 형식화한다. 임의의 불편추정량이 도달할 수 있는 가장 날카로운 정밀도를 결정하고, 최대가능도추정값의 표준오차를 곧바로 제공한다. 요컨대 Fisher 정보량은 모수적 모형과 그로부터 이끌어 낼 수 있는 추론의 질을 잇는 다리이다.
+자료로부터 모수 $\theta$를 추정할 때 우리는 $\theta$를 얼마나 정밀하게 추정할 수 있는지 알고 싶다. 그 답은 자료가 $\theta$에 관해 얼마나 많은 "정보"를 담고 있는지에 달려 있다. 피셔 정보량은 이 개념을 형식화한다. 임의의 불편추정량이 도달할 수 있는 가장 날카로운 정밀도를 결정하고, 최대가능도추정값의 표준오차를 곧바로 제공한다. 요컨대 피셔 정보량은 모수적 모형과 그로부터 이끌어 낼 수 있는 추론의 질을 잇는 다리이다.
 
 ---
 
 ## 1. 점수함수
 
-Fisher 정보량을 정의하기 위해 먼저 **점수함수**를 소개한다. $X$를 확률밀도함수 또는 확률질량함수가 $f(x; \theta)$인 확률변수라 하자. 점수함수는 로그가능도를 $\theta$에 대해 미분한 것이다.
+피셔 정보량을 정의하기 위해 먼저 **점수함수**를 소개한다. $X$를 확률밀도함수 또는 확률질량함수가 $f(x; \theta)$인 확률변수라 하자. 점수함수는 로그가능도를 $\theta$에 대해 미분한 것이다.
 
 <div class="defn" markdown>
 
@@ -64,13 +64,13 @@ $$
 
 ---
 
-## 2. Fisher 정보량의 정의
+## 2. 피셔 정보량의 정의
 
 <div class="defn" markdown>
 
-### 정의 2. Fisher 정보량 { .dfn }
+### 정의 2. 피셔 정보량 { .dfn }
 
-관측값 하나에 대한 **Fisher 정보량**은 점수함수의 분산이다.
+관측값 하나에 대한 **피셔 정보량**은 점수함수의 분산이다.
 
 $$
 I(\theta) = \operatorname{Var}\bigl(s(X;\theta)\bigr) = E\left[\left(\frac{\partial}{\partial \theta} \log f(X;\theta)\right)^{\!2}\right]
@@ -123,7 +123,7 @@ $$
 
     두 번째 형태가 계산하기 더 쉬운 경우가 많다. 기하적인 직관도 준다 — 로그가능도가 급하게 휘어 있으면(큰 $I$) 자료가 모수를 강하게 제약하고, 평평하면(작은 $I$) 넓은 범위의 $\theta$ 가 자료를 거의 같은 정도로 설명한다. 기하적인 직관도 준다. 로그가능도가 급하게 휘어 있으면(큰 $I(\theta)$) 자료가 모수를 강하게 제약하는 것이고, 평평하면(작은 $I(\theta)$) 자료가 정보를 주지 못하는 것이다.
 
-독립이고 동일한 분포를 따르는 $n$개의 관측값 $X_1, \ldots, X_n$에 대해 전체 Fisher 정보량은 가법적이다.
+독립이고 동일한 분포를 따르는 $n$개의 관측값 $X_1, \ldots, X_n$에 대해 전체 피셔 정보량은 가법적이다.
 
 $$
 I_n(\theta) = n \cdot I(\theta)
@@ -153,7 +153,7 @@ $$
     I(p) = -E\left[-\frac{X}{p^2} - \frac{1-X}{(1-p)^2}\right] = \frac{p}{p^2} + \frac{1-p}{(1-p)^2} = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}
     $$
 
-    Fisher 정보량은 $p$가 0이나 1에 가까울 때 가장 크고(그때 관측값 하나가 $p$에 관해 가장 많은 정보를 준다) $p = 1/2$에서 가장 작다.
+    피셔 정보량은 $p$가 0이나 1에 가까울 때 가장 크고(그때 관측값 하나가 $p$에 관해 가장 많은 정보를 준다) $p = 1/2$에서 가장 작다.
 
 <div class="exbox" markdown>
 
@@ -178,7 +178,7 @@ $$
     I(\mu) = \frac{1}{\sigma^2}
     $$
 
-    잡음 $\sigma^2$이 작아질수록 Fisher 정보량이 커지며, 이는 직관과 맞아떨어진다. 잡음이 적은 자료가 평균에 관해 더 많은 정보를 담는다.
+    잡음 $\sigma^2$이 작아질수록 피셔 정보량이 커지며, 이는 직관과 맞아떨어진다. 잡음이 적은 자료가 평균에 관해 더 많은 정보를 담는다.
 
 <div class="exbox" markdown>
 
@@ -205,15 +205,15 @@ $$
 
 ---
 
-## 3. Fisher 정보량으로부터의 표준오차
+## 3. 피셔 정보량으로부터의 표준오차
 
-Fisher 정보량의 가장 중요한 응용 중 하나는 MLE의 표준오차를 제공하는 것이다. 정칙 조건 아래에서 MLE $\hat{\theta}_{\text{MLE}}$는 점근적으로 정규이다.
+피셔 정보량의 가장 중요한 응용 중 하나는 MLE의 표준오차를 제공하는 것이다. 정칙 조건 아래에서 MLE $\hat{\theta}_{\text{MLE}}$는 점근적으로 정규이다.
 
 $$
 \hat{\theta}_{\text{MLE}} \overset{d}{\to} N\left(\theta, \frac{1}{nI(\theta)}\right) \quad \text{as } n \to \infty
 $$
 
-실무에서는 (대입 원리에 따라) Fisher 정보량을 MLE에서 평가하여 표준오차를 추정한다.
+실무에서는 (대입 원리에 따라) 피셔 정보량을 MLE에서 평가하여 표준오차를 추정한다.
 
 $$
 \widehat{\text{SE}}(\hat{\theta}_{\text{MLE}}) = \frac{1}{\sqrt{nI(\hat{\theta}_{\text{MLE}})}}
@@ -245,9 +245,9 @@ $$
 
 ---
 
-## 4. 흔한 Fisher 정보량 값 요약
+## 4. 흔한 피셔 정보량 값 요약
 
-| 분포 | 모수 | Fisher 정보량 $I(\theta)$ |
+| 분포 | 모수 | 피셔 정보량 $I(\theta)$ |
 |---|---|---|
 | $\text{Bernoulli}(p)$ | $p$ | $\dfrac{1}{p(1-p)}$ |
 | $N(\mu, \sigma^2)$ ($\sigma^2$ 알려짐) | $\mu$ | $\dfrac{1}{\sigma^2}$ |
@@ -310,9 +310,9 @@ _확인한 곳 — 해럴드 제프리스의 『Theory of Probability』($1939$)
 
 ---
 
-## 5. Fisher 정보량의 수치적 계산
+## 5. 피셔 정보량의 수치적 계산
 
-Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법으로 수치적으로 추정할 수 있다.
+피셔 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법으로 수치적으로 추정할 수 있다.
 
 1. **점수 분산법**: $f(x; \theta)$에서 $X_1, \ldots, X_N$을 표본추출하고 각 점에서 점수를 계산한 뒤 $I(\theta) \approx \text{Var}(\{S_i\})$로 추정한다.
 2. **유한차분법**: 점수를 $S(\theta) \approx [\log f(X; \theta + \delta) - \log f(X; \theta - \delta)]/(2\delta)$로 근사한다.
@@ -463,9 +463,9 @@ Fisher 정보량을 닫힌 형태로 계산할 수 없을 때는 다음 방법�
 
 ---
 
-## 6. 다모수 Fisher 정보행렬
+## 6. 다모수 피셔 정보행렬
 
-모수 벡터 $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_k)$에 대해 Fisher 정보량은 $k \times k$ 행렬이다.
+모수 벡터 $\boldsymbol{\theta} = (\theta_1, \ldots, \theta_k)$에 대해 피셔 정보량은 $k \times k$ 행렬이다.
 
 $$
 [I(\boldsymbol{\theta})]_{ij} = -E\left[\frac{\partial^2}{\partial\theta_i\,\partial\theta_j}\log f(X; \boldsymbol{\theta})\right]
@@ -575,7 +575,7 @@ $k^3$ 이 든다. 모수가 수억 개인 모형에서는 그대로 쓸 수 없�
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-파레토분포: $x \ge 1$에서 $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이다. (a) $\hat\alpha_{\text{MLE}}$를 유도하라. (b) $\mathbb{E}[X] = \alpha/(\alpha-1)$을 이용한 적률법. (c) Fisher 정보량과 CRLB. (d) MLE는 효율적인가?
+파레토분포: $x \ge 1$에서 $f(x; \alpha) = \alpha x^{-(\alpha+1)}$이다. (a) $\hat\alpha_{\text{MLE}}$를 유도하라. (b) $\mathbb{E}[X] = \alpha/(\alpha-1)$을 이용한 적률법. (c) 피셔 정보량과 CRLB. (d) MLE는 효율적인가?
 
 </div>
 
@@ -607,7 +607,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-**Fisher 정보량을 정의하고** 두 정의의 동등성 $I(\theta) = \mathbb{E}[(\partial \log f/\partial\theta)^2] = -\mathbb{E}[\partial^2 \log f/\partial\theta^2]$을 증명하라.
+**피셔 정보량을 정의하고** 두 정의의 동등성 $I(\theta) = \mathbb{E}[(\partial \log f/\partial\theta)^2] = -\mathbb{E}[\partial^2 \log f/\partial\theta^2]$을 증명하라.
 
 </div>
 
@@ -629,7 +629,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**Fisher 정보량의 가법성.** i.i.d. 자료에서 $I$가 관측값 하나당 Fisher 정보량일 때 $I_n(\theta) = n I(\theta)$이다. 이를 증명하고 해석하라.
+**피셔 정보량의 가법성.** i.i.d. 자료에서 $I$가 관측값 하나당 피셔 정보량일 때 $I_n(\theta) = n I(\theta)$이다. 이를 증명하고 해석하라.
 
 </div>
 
@@ -642,7 +642,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     따라서 $I_n(\theta) = n I(\theta)$이다. $\square$
 
-    **해석:** 정보는 표본크기에 선형으로 쌓인다. $n$을 두 배로 하면 Fisher 정보량이 두 배가 되고 CRLB가 절반이 되며 MLE의 점근분산이 좁아진다.
+    **해석:** 정보는 표본크기에 선형으로 쌓인다. $n$을 두 배로 하면 피셔 정보량이 두 배가 되고 CRLB가 절반이 되며 MLE의 점근분산이 좁아진다.
 
 <div class="drillbox" markdown>
 
@@ -658,7 +658,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     $\square$
 
-    **함의:** Fisher 정보량은 **모수화에 의존한다**. 재모수화하면 정보량의 크기가 달라진다. 이것이 Jeffreys 사전분포 $\pi(\theta) \propto \sqrt{I(\theta)}$가 매력적인 이유 중 하나이다. (평평한 사전분포와 달리) 재모수화에 불변이기 때문이다.
+    **함의:** 피셔 정보량은 **모수화에 의존한다**. 재모수화하면 정보량의 크기가 달라진다. 이것이 Jeffreys 사전분포 $\pi(\theta) \propto \sqrt{I(\theta)}$가 매력적인 이유 중 하나이다. (평평한 사전분포와 달리) 재모수화에 불변이기 때문이다.
 
 <div class="drillbox" markdown>
 
@@ -668,7 +668,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 </div>
 
 ??? success "풀이"
-    **기대 (Fisher) 정보량:** $I(\theta) = -\mathbb{E}_\theta[\partial^2 \log f/\partial\theta^2]$. 참 분포 아래에서 기댓값을 취한다.
+    **기대 (피셔) 정보량:** $I(\theta) = -\mathbb{E}_\theta[\partial^2 \log f/\partial\theta^2]$. 참 분포 아래에서 기댓값을 취한다.
 
     **관측 정보량:** $J(\hat\theta) = -\partial^2 \log L/\partial\theta^2 \big|_{\hat\theta}$. *표본*의 MLE에서 평가하며 기댓값을 취하지 않는다.
 
@@ -685,7 +685,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
-모수가 여럿일 때 Fisher 정보**행렬**의 역행렬 대각성분이 표준오차를 준다. 2×2인 경우에 $\operatorname{Var}(\hat\theta_1) \ge 1/I_{11}$이 아니라 $\ge (I^{-1})_{11}$인 이유를 설명하라.
+모수가 여럿일 때 피셔 정보**행렬**의 역행렬 대각성분이 표준오차를 준다. 2×2인 경우에 $\operatorname{Var}(\hat\theta_1) \ge 1/I_{11}$이 아니라 $\ge (I^{-1})_{11}$인 이유를 설명하라.
 
 </div>
 
@@ -709,7 +709,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-$I(\theta) = E\left[\left(\dfrac{\partial\ln f}{\partial\theta}\right)^2\right]$이라는 정의에서, Fisher 정보량이 **분포가 $\theta$에 얼마나 민감한가**를 재는 양임을 설명하라. 쿨백–라이블러 발산과의 관계를 밝혀라.
+$I(\theta) = E\left[\left(\dfrac{\partial\ln f}{\partial\theta}\right)^2\right]$이라는 정의에서, 피셔 정보량이 **분포가 $\theta$에 얼마나 민감한가**를 재는 양임을 설명하라. 쿨백–라이블러 발산과의 관계를 밝혀라.
 
 </div>
 
@@ -782,7 +782,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff med" title="중간"></span>
-실험을 설계할 때 Fisher 정보량을 최대로 하도록 조건을 고르는 방식을 **최적 설계**라 한다. 로지스틱 회귀에서 용량 $x$를 어디에 배치해야 기울기를 가장 정밀하게 추정하는지 논하라.
+실험을 설계할 때 피셔 정보량을 최대로 하도록 조건을 고르는 방식을 **최적 설계**라 한다. 로지스틱 회귀에서 용량 $x$를 어디에 배치해야 기울기를 가장 정밀하게 추정하는지 논하라.
 
 </div>
 
@@ -817,7 +817,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
 
 <div class="drillbox" markdown>
 
-**연습문제 11.** <span class="diff med" title="중간"></span> 비율이 $\lambda$인 지수분포($x > 0$에서 밀도 $f(x; \lambda) = \lambda e^{-\lambda x}$)에 대해 Fisher 정보량과, $n$개의 관측값으로 $\lambda$를 추정할 때의 Cramér-Rao 하한을 계산하라.
+**연습문제 11.** <span class="diff med" title="중간"></span> 비율이 $\lambda$인 지수분포($x > 0$에서 밀도 $f(x; \lambda) = \lambda e^{-\lambda x}$)에 대해 피셔 정보량과, $n$개의 관측값으로 $\lambda$를 추정할 때의 Cramér-Rao 하한을 계산하라.
 
 </div>
 
@@ -826,7 +826,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
 
     점수: $S(\lambda) = 1/\lambda - X$. 2계도함수: $\partial^2\log f/\partial\lambda^2 = -1/\lambda^2$.
 
-    Fisher 정보량: $I(\lambda) = 1/\lambda^2$.
+    피셔 정보량: $I(\lambda) = 1/\lambda^2$.
 
     $n$개 관측값에 대한 CRLB는:
 
@@ -840,14 +840,14 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
 
 <div class="drillbox" markdown>
 
-**연습문제 12.** <span class="diff med" title="중간"></span> 베르누이분포에서 Fisher 정보량 $I(p) = 1/[p(1-p)]$이 $p = 1/2$에서 최소가 됨을 보여라. 동전 던지기의 관점에서 이 결과를 해석하라.
+**연습문제 12.** <span class="diff med" title="중간"></span> 베르누이분포에서 피셔 정보량 $I(p) = 1/[p(1-p)]$이 $p = 1/2$에서 최소가 됨을 보여라. 동전 던지기의 관점에서 이 결과를 해석하라.
 
 </div>
 
 ??? success "풀이"
     미분하면 $\frac{d}{dp}I(p) = \frac{d}{dp}[p(1-p)]^{-1} = -\frac{1-2p}{[p(1-p)]^2}$이다.
 
-    0으로 두면 $p = 1/2$이다. $p \to 0$이나 $p \to 1$일 때 $I(p) \to \infty$이고 $I(1/2) = 4$가 유한한 최솟값이므로 $p = 1/2$에서 Fisher 정보량이 최소가 된다.
+    0으로 두면 $p = 1/2$이다. $p \to 0$이나 $p \to 1$일 때 $I(p) \to \infty$이고 $I(1/2) = 4$가 유한한 최솟값이므로 $p = 1/2$에서 피셔 정보량이 최소가 된다.
 
     **해석:** 공정한 동전($p = 1/2$)이 인접한 값들과 구별하기 가장 어렵다. 결과가 가장 불확실할 때 던지기 한 번이 $p$에 관해 가장 적은 정보를 준다. 반대로 $p$가 0이나 1에 가까우면 결과가 매우 예측 가능하므로 던지기 한 번이 큰 정보를 주며, 그 양상에서 벗어나는 결과는 강한 진단 신호가 된다. $\square$
 
@@ -856,7 +856,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
 <div class="drillbox" markdown>
 
 **연습문제 13.** <span class="diff med" title="중간"></span>
-Fisher 정보량을 **수치 미분**으로 계산할 때 생기는 문제를 설명하고, 더 나은 방법을 두 가지 적어라.
+피셔 정보량을 **수치 미분**으로 계산할 때 생기는 문제를 설명하고, 더 나은 방법을 두 가지 적어라.
 
 </div>
 
@@ -900,7 +900,7 @@ Fisher 정보량을 **수치 미분**으로 계산할 때 생기는 문제를 �
 <div class="drillbox" markdown>
 
 **연습문제 14.** <span class="diff med" title="중간"></span>
-관측 Fisher 정보량 $\hat I = -\ell''(\hat\theta)$과 $n$개 관측값의 점수 제곱합 $\sum_i s(x_i;\hat\theta)^2$은 둘 다 $I_n$을 추정한다. 둘의 차이와 각각의 쓰임을 밝혀라.
+관측 피셔 정보량 $\hat I = -\ell''(\hat\theta)$과 $n$개 관측값의 점수 제곱합 $\sum_i s(x_i;\hat\theta)^2$은 둘 다 $I_n$을 추정한다. 둘의 차이와 각각의 쓰임을 밝혀라.
 
 </div>
 
@@ -936,7 +936,7 @@ Fisher 정보량을 **수치 미분**으로 계산할 때 생기는 문제를 �
 <div class="drillbox" markdown>
 
 **연습문제 15.** <span class="diff med" title="중간"></span>
-$\text{Gamma}(\alpha,\beta)$의 Fisher 정보행렬을 구하고, $\alpha$와 $\beta$가 **직교하지 않음**을 확인하라. 이것이 $\alpha$ 추정에 어떤 대가를 치르게 하는가?
+$\text{Gamma}(\alpha,\beta)$의 피셔 정보행렬을 구하고, $\alpha$와 $\beta$가 **직교하지 않음**을 확인하라. 이것이 $\alpha$ 추정에 어떤 대가를 치르게 하는가?
 
 </div>
 
@@ -986,7 +986,7 @@ $\text{Gamma}(\alpha,\beta)$의 Fisher 정보행렬을 구하고, $\alpha$와 $\
 <div class="drillbox" markdown>
 
 **연습문제 16.** <span class="diff med" title="중간"></span>
-Fisher 정보량은 **표본크기**뿐 아니라 **관측의 질**에도 의존한다. 측정오차가 있는 경우($X$ 대신 $X+\varepsilon$을 관측) 정보량이 어떻게 줄어드는지 정규 모형에서 확인하라.
+피셔 정보량은 **표본크기**뿐 아니라 **관측의 질**에도 의존한다. 측정오차가 있는 경우($X$ 대신 $X+\varepsilon$을 관측) 정보량이 어떻게 줄어드는지 정규 모형에서 확인하라.
 
 </div>
 

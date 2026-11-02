@@ -208,7 +208,7 @@ _확인한 곳 — R. A. Fisher, "The Correlation between Relatives on the Suppo
 Mendelian Inheritance", 『Transactions of the Royal Society of Edinburgh』 $52$ 권 $2$ 호
 $399$–$433$ 쪽($1918$) — 이 논문에서 「분산」이라는 말이 통계학의 뜻으로 쓰이기 시작했고,
 표현형 분산을 유전과 환경의 몫으로 나누는 틀이 여기서 나왔다 · A. W. F. Edwards,
-"Commentary: On R. A. Fisher's paper 'The causes of human variability', 1918",
+"Commentary: On R. A. 피셔's paper 'The causes of human variability', 1918",
 『International Journal of Epidemiology』 $48$ 권 $1$ 호 $12$–$13$ 쪽($2019$) — 런던
 왕립학회 투고가 칼 피어슨과 R. C. 퍼넷의 심사를 거쳐 거절되었고 레너드 다윈의 지원으로
 에든버러에서 출판되었다는 경위. 그림의 수는 모두 직접 계산한 값이다_
@@ -242,7 +242,7 @@ $399$–$433$ 쪽($1918$) — 이 논문에서 「분산」이라는 말이 통�
 ## 3. 어느 쌍이 다른지는 말해 주지 않는다
 
 - **가정에 대한 민감성**: 일원배치 분산분석의 결과는 가정 위반, 특히 분산의 동질성과 정규성 위반에 민감할 수 있다.
-- **전체 차이만 탐지**: 일원배치 분산분석은 집단 사이에 유의한 차이가 있는지는 탐지하지만 어느 집단이 다른지는 알려주지 않는다. 세부 비교에는 **사후검정**이 필요하고, 그것이 12.3절의 일이다 — 보정 없는 [Fisher LSD](../post_hoc/post_hoc_comparisons.md) $\S 2$ 부터 [투키 HSD](../post_hoc/tukey.md)·[본페로니와 셰페](../post_hoc/bonferroni_scheffe.md)·[더닛](../post_hoc/dunnett.md)·[게임스–하월](../post_hoc/games_howell.md) 까지 **무엇의 가족에 대해 문턱을 올리느냐**로 갈린다.
+- **전체 차이만 탐지**: 일원배치 분산분석은 집단 사이에 유의한 차이가 있는지는 탐지하지만 어느 집단이 다른지는 알려주지 않는다. 세부 비교에는 **사후검정**이 필요하고, 그것이 12.3절의 일이다 — 보정 없는 [피셔 LSD](../post_hoc/post_hoc_comparisons.md) $\S 2$ 부터 [투키 HSD](../post_hoc/tukey.md)·[본페로니와 셰페](../post_hoc/bonferroni_scheffe.md)·[더닛](../post_hoc/dunnett.md)·[게임스–하월](../post_hoc/games_howell.md) 까지 **무엇의 가족에 대해 문턱을 올리느냐**로 갈린다.
 
 ## 4. 모형의 양을 손으로 짚어 보기
 
@@ -1278,7 +1278,7 @@ $10^9$ 이 억지스러워 보이지만 그렇지 않다. 유닉스 시각은 $1
 낸다. `numpy.var` 를 비롯한 요즘 라이브러리가 지름길 공식을 쓰지 않는 까닭이
 여기 있다. **손으로 셀 때만 조심하면 되는 것이 아니라, 직접 구현할 때 조심해야 한다.**
 
-같은 함정이 상관계수에도 있다 — 10.1절 [Pearson 상관계수](../../ch10/correlation/pearson.md) §2 가 「손으로 셀 때 편한」 공식을 그대로 옮기면 $10^8$ 근처의 자료에서 $r$ 의 분자가 **정확히 $0$** 이 되는 것을 연습문제 11 에서 보인다. 한 번만 훑으면서도 안정적인 웰퍼드 갱신은 5.13절 [소박한 분산추정량](../../ch05/variance/naive.md)에 있다.
+같은 함정이 상관계수에도 있다 — 10.1절 [피어슨 상관계수](../../ch10/correlation/pearson.md) §2 가 「손으로 셀 때 편한」 공식을 그대로 옮기면 $10^8$ 근처의 자료에서 $r$ 의 분자가 **정확히 $0$** 이 되는 것을 연습문제 11 에서 보인다. 한 번만 훑으면서도 안정적인 웰퍼드 갱신은 5.13절 [소박한 분산추정량](../../ch05/variance/naive.md)에 있다.
 
 _확인한 곳 — B. P. Welford ($1962$) *Note on a Method for Calculating Corrected Sums
 of Squares and Products*, 『Technometrics』 $4$ 권 $419$–$420$ 쪽. 서지 기록만 확인했고

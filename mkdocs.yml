@@ -246,7 +246,7 @@ nav:
                 - 충분성과 완비성: ch07/theory/sufficiency_completeness.md
             - 7.2 최대가능도의 점근 이론:
                 - 최대가능도의 점근적 성질: ch07/theory/mle_asymptotics.md
-                - Fisher 정보량과 표준오차: ch07/theory/fisher_information.md
+                - 피셔 정보량과 표준오차: ch07/theory/fisher_information.md
 
 
     - III 추론 — 구간·검정과 모형:
@@ -306,7 +306,7 @@ nav:
             - 장 개요: ch10/index.md
             - 10.1 상관:
                 - 상관의 이해: ch10/correlation/understanding.md
-                - Pearson 상관계수: ch10/correlation/pearson.md
+                - 피어슨 상관계수: ch10/correlation/pearson.md
                 - 스피어만 순위상관: ch10/correlation/spearman.md
                 - 켄들의 타우: ch10/correlation/kendall.md
                 - 점이연 상관과 파이 계수: ch10/correlation/special_cases.md
@@ -326,7 +326,7 @@ nav:
                 - 방향성 비순환 그래프: ch10/causation/dags.md
                 - 인과추론 모의실험: ch10/causation/causal_simulations.md
             - 10.5 상관 검정:
-                - Pearson의 r 검정 (상관에 대한 t-검정): ch10/correlation_test/test_pearson.md
+                - 피어슨의 r 검정 (상관에 대한 t-검정): ch10/correlation_test/test_pearson.md
                 - 스피어만의 ρ 검정: ch10/correlation_test/test_spearman.md
                 - 켄들의 타우 검정: ch10/correlation_test/test_kendall.md
                 - 두 상관의 비교: ch10/correlation_test/comparing_correlations.md
@@ -369,7 +369,7 @@ nav:
             - 11.6 진단:
                 - 잔차 분석: ch11/diagnostics/residuals.md
                 - 다중공선성과 분산팽창인자: ch11/diagnostics/multicollinearity.md
-                - 영향점과 지렛대 (Cook 거리, DFFITS): ch11/diagnostics/influence.md
+                - 영향점과 지렛대 (쿡 거리, DFFITS): ch11/diagnostics/influence.md
                 - 다중회귀 진단: ch11/diagnostics/multi_reg_diag.md
                 - 회귀 진단 (주택): ch11/diagnostics/regression_diagnostics_housing.md
             - 11.7 성능 척도:
@@ -379,7 +379,7 @@ nav:
                 - 성능 척도: ch11/performance/metrics.md
             - 11.8 모형선택 기준:
                 - Akaike 정보기준: ch11/model_selection/aic.md
-                - Bayes 정보기준: ch11/model_selection/bic.md
+                - 베이즈 정보기준: ch11/model_selection/bic.md
                 - 모형선택을 위한 교차검증: ch11/model_selection/cross_validation.md
                 - AIC와 BIC: ch11/model_selection/aic_bic.md
                 - 모형선택 비교: ch11/model_selection/model_selection.md
@@ -449,7 +449,7 @@ nav:
             - 13.3 실무적 고려사항:
                 - 기대 칸 도수와 타당성 조건: ch13/practice/validity_conditions.md
                 - 효과크기와 Cramér의 V: ch13/practice/effect_size.md
-                - Fisher의 정확검정 (2×2): ch13/practice/fisher_exact.md
+                - 피셔의 정확검정 (2×2): ch13/practice/fisher_exact.md
 
 
     - IV 가정이 깨질 때:
@@ -517,7 +517,7 @@ nav:
                 - 레빈 검정 정규 대 치우친 분포 모의실험: ch15/robust_tests/levene_simulation.md
             - 15.6 고급 방법:
                 - 붓스트랩 분산 검정: ch15/advanced_methods/bootstrap_variance.md
-                - Bayes 분산 검정: ch15/advanced_methods/bayesian_variance.md
+                - 베이즈 분산 검정: ch15/advanced_methods/bayesian_variance.md
                 - 분산에 대한 가능도비 검정: ch15/advanced_methods/likelihood_ratio.md
             - 15.7 응용:
                 - 분산분석 등분산성 사전검정: ch15/applications/anova_pretest.md
@@ -548,7 +548,7 @@ nav:
                 - 크러스컬–월리스 검정: ch16/multi_group_nonparametric/kruskal_wallis.md
                 - 프리드먼 검정 (반복측정): ch16/multi_group_nonparametric/friedman.md
                 - 무드 중앙값검정: ch16/multi_group_nonparametric/median_test.md
-                - 사후 Dunn 검정: ch16/multi_group_nonparametric/dunn.md
+                - 사후 던 검정: ch16/multi_group_nonparametric/dunn.md
             - 16.6 비모수 상관:
                 - 스피어만 순위상관 (재론): ch16/correlation/spearman.md
                 - 켄들의 타우 (재론): ch16/correlation/kendall.md

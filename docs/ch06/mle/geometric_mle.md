@@ -417,7 +417,7 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-기하분포의 MLE $\hat\theta = 1/(1+\bar x)$(실패 횟수 판본)의 Fisher 정보량을 구하고 점근분산을 유도하라. $\theta$가 0 또는 1에 가까울 때 무슨 일이 일어나는가?
+기하분포의 MLE $\hat\theta = 1/(1+\bar x)$(실패 횟수 판본)의 피셔 정보량을 구하고 점근분산을 유도하라. $\theta$가 0 또는 1에 가까울 때 무슨 일이 일어나는가?
 
 </div>
 

@@ -82,7 +82,7 @@ $$
 \sqrt{n}\,(\hat{\theta}_n - \theta) \xrightarrow{d} N(0,\, \sigma^2)
 $$
 
-여기서 $\sigma^2 > 0$은 추정량과 밑바탕 분포에 의존한다. 이 $\sigma^2$을 **점근분산**이라 한다. 표준적인 추정량 다수에서 $\sigma^2 = 1/I(\theta)$이며, $I(\theta)$는 관측값 하나당 Fisher 정보량이다.
+여기서 $\sigma^2 > 0$은 추정량과 밑바탕 분포에 의존한다. 이 $\sigma^2$을 **점근분산**이라 한다. 표준적인 추정량 다수에서 $\sigma^2 = 1/I(\theta)$이며, $I(\theta)$는 관측값 하나당 피셔 정보량이다.
 
 두 개념의 관계를 그림으로 보면 이렇다.
 
@@ -239,7 +239,7 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
     \sqrt{n}(\hat{\theta}_{\text{MLE}} - \theta_0) \xrightarrow{d} N\!\left(0, \frac{1}{I(\theta_0)}\right)
     $$
 
-    이며 $I(\theta_0) = -E\!\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta_0)\right]$는 관측값 하나당 Fisher 정보량이다. 동등하게, $n$이 크면 $\hat{\theta}_{\text{MLE}} \approx N(\theta_0, 1/(nI(\theta_0)))$이다. 이 결과는 MLE가 점근적으로 Cramér-Rao 하한을 달성함을, 즉 점근적으로 효율적임을 함의한다.
+    이며 $I(\theta_0) = -E\!\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta_0)\right]$는 관측값 하나당 피셔 정보량이다. 동등하게, $n$이 크면 $\hat{\theta}_{\text{MLE}} \approx N(\theta_0, 1/(nI(\theta_0)))$이다. 이 결과는 MLE가 점근적으로 Cramér-Rao 하한을 달성함을, 즉 점근적으로 효율적임을 함의한다.
 
 <div class="drillbox" markdown>
 

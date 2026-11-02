@@ -10,19 +10,19 @@
 
 ## 1. 들어가기 전에 — 정보량 한 줄
 
-하한을 적으려면 **Fisher 정보량**이 먼저 있어야 한다. 점수함수 $s(X;\theta) = \partial_\theta \log f(X;\theta)$ 의 분산이 그것이고,
+하한을 적으려면 **피셔 정보량**이 먼저 있어야 한다. 점수함수 $s(X;\theta) = \partial_\theta \log f(X;\theta)$ 의 분산이 그것이고,
 
 $$
 I(\theta) = E\!\left[\left(\frac{\partial}{\partial\theta}\log f(X;\theta)\right)^{2}\right] = -E\!\left[\frac{\partial^{2}}{\partial\theta^{2}}\log f(X;\theta)\right]
 $$
 
-이며 독립표본에서는 $n I(\theta)$ 로 더해진다. 두 꼴이 같다는 것과 $E[s] = 0$ 이라는 것은 $7.2$ 절 [Fisher 정보량](fisher_information.md)이 정의 $1$·$2$ 와 정리 $1$·$2$ 로 증명해 두었고, 베르누이·정규·포아송에서의 값도 거기 보기 $1$–$3$ 에 있다. 여기서는 그 수를 **하한으로 쓰는** 일만 한다.
+이며 독립표본에서는 $n I(\theta)$ 로 더해진다. 두 꼴이 같다는 것과 $E[s] = 0$ 이라는 것은 $7.2$ 절 [피셔 정보량](fisher_information.md)이 정의 $1$·$2$ 와 정리 $1$·$2$ 로 증명해 두었고, 베르누이·정규·포아송에서의 값도 거기 보기 $1$–$3$ 에 있다. 여기서는 그 수를 **하한으로 쓰는** 일만 한다.
 
 ---
 
 ## 2. Cramér-Rao 부등식
 
-Fisher 정보량을 손에 넣었으니 근본적인 결과를 서술할 수 있다.
+피셔 정보량을 손에 넣었으니 근본적인 결과를 서술할 수 있다.
 
 <div class="thmbox" markdown>
 
@@ -59,7 +59,7 @@ $$
     $$
 
     이다. 곧 관측값 하나의 점수는 기댓값이 $0$이고, 따라서 $E[S(\theta)] = 0$이다.
-    점수의 분산은 Fisher 정보량의 정의이고 독립이면 더해지므로
+    점수의 분산은 피셔 정보량의 정의이고 독립이면 더해지므로
     $\text{Var}(S(\theta)) = n I(\theta)$다.
 
     **불편성을 미분한다.** $\hat\theta$가 불편이므로 모든 $\theta$에 대해
@@ -371,7 +371,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
 </div>
 
 ??? success "풀이"
-    정규분포 평균의 Fisher 정보량은 $I(\mu) = 1/\sigma^2$이다. CRLB는 $\mathrm{Var}(\hat\mu) \ge \sigma^2/n$이다.
+    정규분포 평균의 피셔 정보량은 $I(\mu) = 1/\sigma^2$이다. CRLB는 $\mathrm{Var}(\hat\mu) \ge \sigma^2/n$이다.
 
     표본평균의 분산은 $\mathrm{Var}(\bar X) = \sigma^2/n$으로 CRLB를 정확히 달성한다.
 
@@ -395,7 +395,7 @@ $X_1, \ldots, X_n \sim N(\mu, \sigma^2)$이고 추정량이 $\hat\mu_w = wX_1 + 
     \sqrt n (\hat\theta_{\text{MLE}} - \theta) \xrightarrow{d} N(0, 1/I(\theta))
     $$
 
-    따라서 $\mathrm{Var}(\hat\theta_{\text{MLE}}) \to 1/(n I(\theta))$로, 관측값 하나당 Fisher 정보량의 역수가 된다. 이것이 불편추정량의 CRLB이다.
+    따라서 $\mathrm{Var}(\hat\theta_{\text{MLE}}) \to 1/(n I(\theta))$로, 관측값 하나당 피셔 정보량의 역수가 된다. 이것이 불편추정량의 CRLB이다.
 
     **함의:** MLE는 **점근적으로 효율적**이다. 모든 일치추정량 중에서 MLE의 점근분산이 가장 작다.
 
@@ -684,7 +684,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $\hat\theta = \frac{n+1}{n}X_{(n)}$의
     \mathrm{Var}(\hat\theta) \ge \frac{1}{n I(\theta)}
     $$
 
-    여기서 $I(\theta) = -\mathbb{E}[\partial^2 \log f/\partial \theta^2]$는 관측값 하나당 Fisher 정보량이다.
+    여기서 $I(\theta) = -\mathbb{E}[\partial^2 \log f/\partial \theta^2]$는 관측값 하나당 피셔 정보량이다.
 
     **증명 개요:** Cauchy-Schwarz에 의해 $|\mathrm{Cov}(\hat\theta, S)|^2 \le \mathrm{Var}(\hat\theta) \mathrm{Var}(S)$이며, $S = \partial \log L/\partial \theta$는 **점수함수**이다. (불편성에서 $\mathbb{E}[\hat\theta] = \theta$를 미분하여) $\mathrm{Cov}(\hat\theta, S) = 1$이고 $\mathrm{Var}(S) = n I(\theta)$임을 계산한다. 따라서 $1 \le \mathrm{Var}(\hat\theta) \cdot n I(\theta)$이고 하한을 얻는다.
 
