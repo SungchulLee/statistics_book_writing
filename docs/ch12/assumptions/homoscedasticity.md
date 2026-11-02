@@ -229,7 +229,7 @@ doi:$10.1081$/QEN-$120020782$)의 재분석이 전하는 바다. ①–③ 의 �
     - 15.2 [분산에 대한 카이제곱 검정](../../ch15/chi_square_test/chi_square_variance.md) — 일표본 $\sigma^2$
     - 15.3 [두 분산 비교를 위한 F 검정](../../ch15/f_test/f_test_two_variances.md) — 이표본
     - 15.4 [분산의 동일성에 대한 Bartlett 검정](../../ch15/bartlett_test/bartlett_test.md) — $k \ge 2$, 정규 가정
-    - 15.5 [Levene 검정](../../ch15/robust_tests/levene.md) — $k \ge 2$, 로버스트. Brown-Forsythe·Fligner-Killeen 과의 비교는 15.5 [로버스트 방법의 비교](../../ch15/robust_tests/comparison.md)
+    - 15.5 [Levene 검정](../../ch15/robust_tests/levene.md) — $k \ge 2$, 로버스트. 브라운–포사이드·Fligner-Killeen 과의 비교는 15.5 [로버스트 방법의 비교](../../ch15/robust_tests/comparison.md)
 
 
 ### Levene 검정
@@ -529,7 +529,7 @@ F_{d_1,d_2} := \frac{\chi^2_{d_1}/d_1}{\chi^2_{d_2}/d_2} = \frac{S_1^2/\sigma_1^
 $$
 
 !!! warning "정규성에 대한 민감성"
-    등분산 F-검정은 비정규성에 극도로 민감하다. 근사적인 정규성만으로는 검정이 타당해지지 않을 수 있다. 그래서 실무에서는 대체로 Levene 검정이나 Brown-Forsythe 검정이 선호된다.
+    등분산 F-검정은 비정규성에 극도로 민감하다. 근사적인 정규성만으로는 검정이 타당해지지 않을 수 있다. 그래서 실무에서는 대체로 Levene 검정이나 브라운–포사이드 검정이 선호된다.
 
 자세한 내용은 [두 분산의 비교를 위한 F-검정](../../ch15/f_test/f_test_two_variances.md)을 보라.
 
@@ -741,7 +741,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-**등분산 검정들.** Bartlett, Levene, Brown-Forsythe를 비교하라.
+**등분산 검정들.** Bartlett, Levene, 브라운–포사이드를 비교하라.
 
 </div>
 
@@ -750,9 +750,9 @@ $$
 
     **Levene:** 집단 평균으로부터의 절대편차를 쓴다. 비정규성에 로버스트하다.
 
-    **Brown-Forsythe:** 집단 **중앙값**으로부터의 절대편차를 쓴다. 가장 로버스트하다(두꺼운 꼬리나 치우친 자료에서도 작동한다).
+    **브라운–포사이드:** 집단 **중앙값**으로부터의 절대편차를 쓴다. 가장 로버스트하다(두꺼운 꼬리나 치우친 자료에서도 작동한다).
 
-    권고: 자료가 분명히 정규이면 Bartlett, 그렇지 않으면 Brown-Forsythe. Levene은 흔한 중간 지점이다.
+    권고: 자료가 분명히 정규이면 Bartlett, 그렇지 않으면 브라운–포사이드. Levene은 흔한 중간 지점이다.
 
 ---
 

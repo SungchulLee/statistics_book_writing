@@ -510,7 +510,7 @@ nav:
             - 15.5 로버스트 검정:
                 - 분산 동일성의 로버스트 검정: ch15/robust_tests/robust_tests.md
                 - Levene 검정: ch15/robust_tests/levene.md
-                - Brown-Forsythe 검정: ch15/robust_tests/brown_forsythe.md
+                - 브라운–포사이드 검정: ch15/robust_tests/brown_forsythe.md
                 - Fligner-Killeen 검정: ch15/robust_tests/fligner_killeen.md
                 - 로버스트 방법의 비교: ch15/robust_tests/comparison.md
                 - 대수정규에서의 비교 (치우침이 극단일 때): ch15/robust_tests/robust_tests_comparison.md
