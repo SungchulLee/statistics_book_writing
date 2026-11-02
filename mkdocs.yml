@@ -437,7 +437,7 @@ nav:
             - 장 개요: ch13/index.md
             - 13.1 피어슨 통계량과 자유도:
                 - 피어슨 통계량은 어디서 오는가: ch13/distribution/distribution.md
-                - 자유도와 점근 이론: ch13/distribution/degrees_of_freedom.md
+                - 자유도를 얻는 세 가지 길: ch13/distribution/degrees_of_freedom.md
             - 13.2 범주형 자료에 대한 카이제곱 검정:
                 - 적합도 검정: ch13/test/gof.md
                 - 독립성 검정: ch13/test/independence.md
