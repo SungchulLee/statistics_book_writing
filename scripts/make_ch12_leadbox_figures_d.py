@@ -1,4 +1,4 @@
-"""12장 들머리 그림 일곱 장 (진단 셋 · 응용 셋 · 장 개요).
+"""12장 들머리 그림 여섯 장 (진단 셋 · 응용 셋).
 
 만드는 파일:
   ch12/diagnostics/img/one_point_does_not_wash_out.png  한 점은 씻겨 내려가지 않는다
@@ -7,7 +7,6 @@
   ch12/practical_applications/img/stopped_early_inflates.png 일찍 멈추면 부푼다
   ch12/practical_applications/img/gatekeeper_blinks.png  문지기가 눈을 감는 자리
   ch12/practical_applications/img/cancellation_window.png 상쇄가 일어나는 자리
-  ch12/img/wrong_start_more_data.png                     어긋난 출발선과 큰 표본
 
 본문 그림이 들머리의 수를 이미 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -23,7 +22,6 @@ from scipy import stats
 
 DIAG = "docs/ch12/diagnostics/img/"
 APP = "docs/ch12/practical_applications/img/"
-IDX = "docs/ch12/img/"
 
 
 def save(fig, path):
@@ -568,100 +566,9 @@ def fig_cancellation_window():
 
 
 # ════════════════════════════════════════════════════════════════════
-def fig_wrong_start_more_data():
-    """12장 개요 — 출발선이 어긋나 있으면 많이 모을수록 더 굳게 믿는다.
-
-    들머리가 세우는 두 문장을 그린다. 하나는 **자료를 더 모아서 메울 수
-    있는 흠이 아니다**이고, 다른 하나는 **쌍둥이 50 쌍이 2 만 명보다 더
-    믿을 만하다**이다. 참 효과를 정확히 0 으로 두고 출발선만 어긋나게
-    하면, 표본을 키울수록 「효과가 있다」는 답이 더 또렷해진다.
-    """
-    BIASES = [0.0, 0.05, 0.10, 0.20]
-    NS = np.array([50, 200, 1000, 5000, 20000])
-    REPS = 3000
-    rng = np.random.default_rng(1266)
-
-    rate = {b: [] for b in BIASES}
-    for b in BIASES:
-        for n in NS:
-            m = n // 2
-            z = (b * np.sqrt(m / 2)) if m else 0.0
-            # 참 효과 0, 출발선만 b 표준편차 어긋났다
-            t = rng.normal(z, 1, REPS)
-            rate[b].append((np.abs(t) > 1.96).mean())
-
-    PAIRS = np.array([10, 25, 50, 100, 200])
-    pair_rate = []
-    for p in PAIRS:
-        # 짝마다 동전을 던지면 치우침이 없고 통계량이 t 를 따른다
-        t = rng.standard_t(p - 1, REPS)
-        pair_rate.append((np.abs(t) > stats.t.ppf(0.975, p - 1)).mean())
-
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 4.9))
-
-    COLS = ["0.45", "tab:green", "tab:orange", "tab:red"]
-    for b, c in zip(BIASES, COLS):
-        ax1.plot(NS, [100 * v for v in rate[b]], "o-", ms=8, lw=2.6,
-                 color=c, label=f"출발선이 {b:.2f} 표준편차 어긋났다"
-                 if b else "출발선이 맞았다")
-    ax1.axhline(5, color="0.2", ls="--", lw=1.8)
-    ax1.set_xscale("log")
-    ax1.set_xticks(NS, [f"{v:,}" for v in NS])
-    ax1.set_xticks([], minor=True)
-    ax1.set_ylim(0, 105)
-    ax1.set_xlabel("모은 아이의 수 (로그 눈금)", fontsize=11)
-    ax1.set_ylabel("「효과가 있다」고 말할 확률 (%)", fontsize=11)
-    ax1.set_title(f"우유의 참 효과는 넷 다 정확히 $0$ 이다 "
-                  f"({REPS:,} 번)", fontsize=12)
-    ax1.legend(fontsize=10, loc="center right", framealpha=0.95)
-    ax1.grid(alpha=0.25)
-    ax1.text(0.03, 0.9, "아이를 많이 모을수록\n어긋남을 더 굳게 믿게 된다",
-             transform=ax1.transAxes, ha="left", va="top", fontsize=11.5,
-             fontweight="bold", color="tab:red",
-             bbox=dict(boxstyle="round,pad=0.35", facecolor="white",
-                       alpha=0.94, edgecolor="tab:red", lw=1.0))
-
-    ax2.plot(PAIRS, [100 * v for v in pair_rate], "D-", ms=9, lw=2.8,
-             color="tab:blue", label="쌍둥이 짝마다 동전을 던진다")
-    ax2.plot(NS, [100 * v for v in rate[0.10]], "o-", ms=8, lw=2.6,
-             color="tab:orange",
-             label="출발선이 $0.10$ 어긋난 큰 실험")
-    ax2.axhline(5, color="0.2", ls="--", lw=1.8)
-    ax2.plot([50], [100 * pair_rate[2]], "o", ms=15, mfc="none",
-             mec="tab:blue", mew=2.6)
-    ax2.annotate(f"쌍둥이 {PAIRS[2]} 쌍\n{100 * pair_rate[2]:.1f}%",
-                 xy=(50, 100 * pair_rate[2]), xytext=(140, 26),
-                 fontsize=11.5, color="tab:blue", fontweight="bold",
-                 arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.8))
-    ax2.set_xscale("log")
-    ax2.set_xticks([10, 50, 200, 1000, 5000, 20000],
-                   ["10", "50", "200", "1,000", "5,000", "20,000"])
-    ax2.set_xticks([], minor=True)
-    ax2.set_ylim(0, 105)
-    ax2.set_xlabel("아이의 수 또는 쌍의 수 (로그 눈금)", fontsize=11)
-    ax2.set_ylabel("「효과가 있다」고 말할 확률 (%)", fontsize=11)
-    ax2.set_title("출발선을 맞추는 일과 많이 모으는 일", fontsize=12.5)
-    ax2.legend(fontsize=10.5, loc="center right", framealpha=0.95)
-    ax2.grid(alpha=0.25)
-
-    fig.suptitle("정밀한 오답보다 거친 정답이 낫다", fontsize=14, y=1.0)
-    plt.tight_layout()
-    save(fig, IDX + "wrong_start_more_data.png")
-
-    print(f"\n[장 개요] 참 효과 0 · {REPS:,} 번")
-    for b in BIASES:
-        print(f"  출발선 {b:.2f} 어긋남: " +
-              " · ".join(f"n={n:,} {100*v:.1f}%"
-                         for n, v in zip(NS, rate[b])))
-    print(f"  쌍둥이 설계: " +
-          " · ".join(f"{p} 쌍 {100*v:.1f}%"
-                     for p, v in zip(PAIRS, pair_rate)))
-
-
 fig_one_point_does_not_wash_out()
 fig_which_way_removal_goes()
 fig_mean_stays_spread_grows()
 fig_stopped_early_inflates()
 fig_gatekeeper_blinks()
 fig_cancellation_window()
-fig_wrong_start_more_data()
