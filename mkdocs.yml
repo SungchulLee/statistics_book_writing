@@ -285,7 +285,7 @@ nav:
                 - σ²에 대한 카이제곱 검정: ch09/one_sample_tests/chi2_test_variance.md
             - 9.3 이표본 검정:
                 - μ₁−μ₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_means.md
-                - 이표본 t-검정 (합동과 Welch): ch09/two_sample_tests/t_test_two_means.md
+                - 이표본 t-검정 (스튜던트와 웰치): ch09/two_sample_tests/t_test_two_means.md
                 - p₁−p₂에 대한 이표본 Z-검정: ch09/two_sample_tests/z_test_two_proportions.md
                 - σ₁²/σ₂²에 대한 F-검정: ch09/two_sample_tests/f_test_two_variances.md
                 - "대마초 가격: 가정 확인부터 결론까지": ch09/two_sample_tests/ttest_weed_prices.md
