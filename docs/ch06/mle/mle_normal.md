@@ -509,7 +509,7 @@ $$\hat{\sigma}_{\text{MLE}} = \sqrt{\hat{\sigma}^2_{\text{MLE}}} = \sqrt{\frac{1
 
 이는 MLE의 **불변성**에서 따라 나온다: $\hat{\theta}$가 $\theta$의 MLE이면 $g(\hat{\theta})$는 $g(\theta)$의 MLE이다.
 
-$\hat{\sigma}_{\text{MLE}}$은 $\sigma$에 대해 편향되어 있음에 유의하라(Jensen 부등식에 의해 $E[\sqrt{X}] < \sqrt{E[X]}$).
+$\hat{\sigma}_{\text{MLE}}$은 $\sigma$에 대해 편향되어 있음에 유의하라(옌센 부등식에 의해 $E[\sqrt{X}] < \sqrt{E[X]}$).
 
 ---
 
@@ -581,7 +581,7 @@ $n-1$ 대신 $n$ 으로 나누면 참 분산을 체계적으로 과소추정한�
 자유도 하나가 든다. 편차 $X_i - \bar X$ 가 제약 $\sum_i (X_i - \bar X) = 0$ 을 만족하므로
 자유로운 것은 $n-1$ 개뿐이고, $n$ 대신 $n-1$ 로 나누면 **불편추정량** $S^2$ 이 된다.
 이것이 **베셀 보정**이며, 그 유도와 자유도 셈의 임자는 5.13절
-[Bessel 수정](../../ch05/variance/bessels.md)이다.
+[베셀 수정](../../ch05/variance/bessels.md)이다.
 
 그런데 불편성만이 좋은 추정량의 기준은 아니다. $\hat\sigma^2_c = \frac1c\sum(X_i-\bar X)^2$
 꼴에서 평균제곱오차는 정규분포에서 닫힌 꼴로 적힌다.
@@ -1175,7 +1175,7 @@ $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar
 
 - **정규성 검정**: Gaussian MLE를 쓰기 전에 정규분포가 적절한지 검정해야 한다. 금융 수익률은 흔히 두꺼운 꼬리를 보이므로 Gaussian MLE가 최적이 아니게 된다.
 
-**그 검정들은 14장이 세운다** — 14.4절 [Shapiro-Wilk 검정](../../ch14/formal_tests/shapiro_wilk.md)을 비롯한 14.4절 네 쪽과, 결과를 읽는 법을 다루는 14.5절 [정규성 검정의 한계와 함정](../../ch14/limitations/limitations.md)이다.
+**그 검정들은 14장이 세운다** — 14.4절 [샤피로–윌크 검정](../../ch14/formal_tests/shapiro_wilk.md)을 비롯한 14.4절 네 쪽과, 결과를 읽는 법을 다루는 14.5절 [정규성 검정의 한계와 함정](../../ch14/limitations/limitations.md)이다.
 
 수준 $\alpha$에서의 **VaR(Value at Risk)**는 확률 $\alpha$로 초과되는 손실이다. 일별 수익률에 대한 정규 모형 $R \sim N(\hat{\mu}, \hat{\sigma}^2)$ 아래에서 이렇게 된다.
 
@@ -1554,7 +1554,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 
     (c) $\widehat{q_{0.99}} = \bar X + 2.326 \hat\sigma$.
 
-    **주의:** 불변성은 MLE 점추정값은 보존하지만 불편성은 보존하지 않는다. $\hat\sigma$은 편향되어 있으며(오목함수 $\sqrt{\cdot}$에 대한 Jensen 부등식), $c_4$ 상수로 편향을 보정할 수 있다.
+    **주의:** 불변성은 MLE 점추정값은 보존하지만 불편성은 보존하지 않는다. $\hat\sigma$은 편향되어 있으며(오목함수 $\sqrt{\cdot}$에 대한 옌센 부등식), $c_4$ 상수로 편향을 보정할 수 있다.
 
 ---
 
@@ -1591,7 +1591,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 
     - $\mathbb{E}[\bar X] \approx 5.00$ (불편).
     - $\mathbb{E}[\hat\sigma^2_{\text{MLE}}] \approx 8.55 = (19/20) \cdot 9$ ($\sigma^2/n$만큼 아래로 편향).
-    - $\mathbb{E}[S^2] \approx 9.00$ (Bessel 수정, 불편).
+    - $\mathbb{E}[S^2] \approx 9.00$ (베셀 수정, 불편).
 
     이론적 결과가 확인되며 분산에 대한 MLE의 편향이 드러난다.
 

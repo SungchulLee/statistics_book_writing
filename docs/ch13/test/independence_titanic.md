@@ -382,13 +382,13 @@ $$
     **(1) 보정에도 닫힌 꼴이 있다.** 보정된 통계량은
 
     $$
-    \chi^2_{\text{Yates}} = \sum_{i,j} \frac{\bigl(\lvert O_{ij}-E_{ij}\rvert - 0.5\bigr)^2}{E_{ij}}
+    \chi^2_{\text{예이츠}} = \sum_{i,j} \frac{\bigl(\lvert O_{ij}-E_{ij}\rvert - 0.5\bigr)^2}{E_{ij}}
     $$
 
     이다. 보기 1 에서 네 이탈의 절댓값이 모두 $\lvert\delta\rvert = \lvert\Delta\rvert/n$ 로 **같았으므로** 괄호 안이 네 칸에서 똑같은 수가 되고, 보기 2 의 셈이 그대로 되풀이된다.
 
     $$
-    \chi^2_{\text{Yates}}
+    \chi^2_{\text{예이츠}}
     = \left(\lvert\delta\rvert - \tfrac12\right)^{\!2} \sum_{i,j}\frac{1}{E_{ij}}
     = \left(\frac{\lvert\Delta\rvert - n/2}{n}\right)^{\!2} \cdot \frac{n^3}{R_1R_2C_1C_2}
     = \frac{n\bigl(\lvert\Delta\rvert - n/2\bigr)^2}{R_1R_2C_1C_2}
@@ -397,7 +397,7 @@ $$
     보기 2 의 식과 견주면 **$\lvert\Delta\rvert$ 가 $\lvert\Delta\rvert - n/2$ 로 바뀐 것뿐**이다. 그러므로 두 통계량의 비가 깔끔하게 적힌다.
 
     $$
-    \frac{\chi^2_{\text{Yates}}}{\chi^2} = \left(1 - \frac{n}{2\lvert\Delta\rvert}\right)^{\!2}
+    \frac{\chi^2_{\text{예이츠}}}{\chi^2} = \left(1 - \frac{n}{2\lvert\Delta\rvert}\right)^{\!2}
     $$
 
     **(2) 수를 넣는다.** $\lvert\Delta\rvert = 100215$, $n/2 = 445.5$ 이므로
@@ -405,11 +405,11 @@ $$
     $$
     \frac{n}{2\lvert\Delta\rvert} = \frac{445.5}{100215} = 0.0044455,
     \qquad
-    \frac{\chi^2_{\text{Yates}}}{\chi^2} = (1 - 0.0044455)^2 = 0.9911289
+    \frac{\chi^2_{\text{예이츠}}}{\chi^2} = (1 - 0.0044455)^2 = 0.9911289
     $$
 
     $$
-    \chi^2_{\text{Yates}} = 263.050574 \times 0.9911289 = 260.717020
+    \chi^2_{\text{예이츠}} = 263.050574 \times 0.9911289 = 260.717020
     $$
 
     **$n$ 이 커지면 비가 1 로 간다.** 비율을 고정한 채 표를 $\lambda$ 배 키우면 네 칸이 모두 $\lambda$ 배이므로 $\Delta$ 는 $\lambda^2$ 배, $n$ 은 $\lambda$ 배가 된다. 따라서 $n/(2\lvert\Delta\rvert)$ 는 $1/\lambda$ 규모로 줄어들고 보정의 몫도 그만큼 사라진다. **예이츠 보정은 작은 표의 이야기다.**
@@ -1226,7 +1226,7 @@ _확인한 곳 — B. S. Frey, D. A. Savage, B. Torgler 가 「Interaction of na
     **정의.** $2\times2$ 표에서 각 칸의 이탈을 0.5만큼 줄인 뒤 계산한다.
 
     $$
-    \chi^2_{\text{Yates}}=\sum_{i,j}\frac{\bigl(|O_{ij}-E_{ij}|-0.5\bigr)^2}{E_{ij}}
+    \chi^2_{\text{예이츠}}=\sum_{i,j}\frac{\bigl(|O_{ij}-E_{ij}|-0.5\bigr)^2}{E_{ij}}
     $$
 
     이산인 도수를 연속인 카이제곱분포로 근사하는 데서 오는 치우침을 줄이려는 것이다.
@@ -1695,7 +1695,7 @@ $\chi^2 = 263.05$는 네 칸이 합쳐 만든 값이다. **어느 칸이 얼마�
 
     **차이 척도로 보면 이야기가 또 다르다.** 1·2등실에서는 차이가 0.60, 0.76인데 3등실은 0.36이다. **효과가 층에 따라 달라지는 것**이며, 이것은 교란이 아니라 **상호작용**이다. 1·2등실 여성은 거의 전원(97%, 92%) 살아남았지만 3등실 여성은 절반이었다.
 
-    **결론.** 검정은 세 층에서 모두 $H_0$를 기각한다. 그러나 **하나의 오즈비로 요약하면 층마다 효과가 다르다는 사실을 잃는다.** 층화에서 방향까지 뒤집히는 경우가 심슨의 역설이며 10.2절 [Simpson의 역설](../../ch10/ecological_correlation/simpsons_paradox.md)이 다룬다. $\square$
+    **결론.** 검정은 세 층에서 모두 $H_0$를 기각한다. 그러나 **하나의 오즈비로 요약하면 층마다 효과가 다르다는 사실을 잃는다.** 층화에서 방향까지 뒤집히는 경우가 심슨의 역설이며 10.2절 [심슨의 역설](../../ch10/ecological_correlation/simpsons_paradox.md)이 다룬다. $\square$
 
 ---
 

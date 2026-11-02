@@ -850,9 +850,9 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 ??? success "풀이"
     **일치성:** 대수의법칙에 의해 $\bar X \to \mu = \alpha/(\alpha - 1)$. 따라서 $\hat\alpha \to \mu/(\mu - 1) = \alpha$. 일치한다.
 
-    **불편성:** $\mathbb{E}[\hat\alpha] = \mathbb{E}[\bar X/(\bar X - 1)]$. ($g(x) = x/(x-1)$이 $x > 1$에서 볼록이므로) Jensen 부등식에 의해 $\mathbb{E}[g(\bar X)] > g(\mathbb{E}[\bar X]) = \alpha$이다. 따라서 **적률법 추정량은 위쪽으로 편향**되어 있다.
+    **불편성:** $\mathbb{E}[\hat\alpha] = \mathbb{E}[\bar X/(\bar X - 1)]$. ($g(x) = x/(x-1)$이 $x > 1$에서 볼록이므로) 옌센 부등식에 의해 $\mathbb{E}[g(\bar X)] > g(\mathbb{E}[\bar X]) = \alpha$이다. 따라서 **적률법 추정량은 위쪽으로 편향**되어 있다.
 
-    큰 $n$에서는 $\bar X \to \mu$이고 Jensen 간격 $\to 0$이므로 편향 $\to 0$이다. 점근적으로는 불편이지만 유한표본에서는 편향되어 있다.
+    큰 $n$에서는 $\bar X \to \mu$이고 옌센 간격 $\to 0$이므로 편향 $\to 0$이다. 점근적으로는 불편이지만 유한표본에서는 편향되어 있다.
 
     대부분의 적률법 추정량이 이 양상을 보인다: (대수의법칙에 의해) 일치하지만 유한표본에서는 편향된다. 편향은 $O(1/n)$으로, 표준편차의 $O(1/\sqrt n)$보다 빨리 사라진다.
 

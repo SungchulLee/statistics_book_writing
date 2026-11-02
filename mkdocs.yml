@@ -299,7 +299,7 @@ nav:
                 - 분석의 자유는 곱해진다: ch09/multiple_testing/p_hacking_demo.md
                 - "절단점을 고르면: 상관된 후보와 유효 후보 수": ch09/multiple_testing/p_hacking_titanic_cutoff.md
                 - 가족단위 오류율: ch09/multiple_testing/fwer.md
-                - Bonferroni와 Holm 보정: ch09/multiple_testing/bonferroni_holm.md
+                - 본페로니와 홀름 보정: ch09/multiple_testing/bonferroni_holm.md
                 - 거짓발견율 (Benjamini-Hochberg): ch09/multiple_testing/fdr.md
 
         - 10 상관과 인과:
@@ -307,13 +307,13 @@ nav:
             - 10.1 상관:
                 - 상관의 이해: ch10/correlation/understanding.md
                 - Pearson 상관계수: ch10/correlation/pearson.md
-                - Spearman 순위상관: ch10/correlation/spearman.md
-                - Kendall의 타우: ch10/correlation/kendall.md
+                - 스피어만 순위상관: ch10/correlation/spearman.md
+                - 켄들의 타우: ch10/correlation/kendall.md
                 - 점이연 상관과 파이 계수: ch10/correlation/special_cases.md
                 - 부분상관: ch10/correlation/partial.md
             - 10.2 생태학적 상관 ★:
                 - 생태학적 오류: ch10/ecological_correlation/ecological_fallacy.md
-                - Simpson의 역설: ch10/ecological_correlation/simpsons_paradox.md
+                - 심슨의 역설: ch10/ecological_correlation/simpsons_paradox.md
                 - 집계 편향: ch10/ecological_correlation/aggregation_bias.md
             - 10.3 상관, 인과, 교란 ★:
                 - 교란변수: ch10/confounding/confounding_variables.md
@@ -327,8 +327,8 @@ nav:
                 - 인과추론 모의실험: ch10/causation/causal_simulations.md
             - 10.5 상관 검정:
                 - Pearson의 r 검정 (상관에 대한 t-검정): ch10/correlation_test/test_pearson.md
-                - Spearman의 ρ 검정: ch10/correlation_test/test_spearman.md
-                - Kendall의 타우 검정: ch10/correlation_test/test_kendall.md
+                - 스피어만의 ρ 검정: ch10/correlation_test/test_spearman.md
+                - 켄들의 타우 검정: ch10/correlation_test/test_kendall.md
                 - 두 상관의 비교: ch10/correlation_test/comparing_correlations.md
                 - 세 검정 견주기: ch10/correlation_test/correlation_tests.md
             - 10.6 상관의 시각화:
@@ -409,7 +409,7 @@ nav:
             - 12.3 사후비교:
                 - Tukey 정직유의차: ch12/post_hoc/tukey.md
                 - Tukey 정직유의차 (이원배치): ch12/post_hoc/tukey_two_way.md
-                - Bonferroni와 Scheffé 방법: ch12/post_hoc/bonferroni_scheffe.md
+                - 본페로니와 셰페 방법: ch12/post_hoc/bonferroni_scheffe.md
                 - Dunnett 검정 (대조군과의 비교): ch12/post_hoc/dunnett.md
                 - Games-Howell (분산이 다를 때): ch12/post_hoc/games_howell.md
                 - 사후비교 방법의 비교와 검정력: ch12/post_hoc/post_hoc_comparisons.md
@@ -469,12 +469,12 @@ nav:
                 - 왜도 검정: ch14/descriptive_statistics/skewtest.md
                 - 첨도 검정: ch14/descriptive_statistics/kurtosistest.md
                 - D'Agostino K제곱 검정: ch14/descriptive_statistics/dagostino.md
-                - Jarque-Bera 검정: ch14/descriptive_statistics/jarque_bera.md
+                - 자크–베라 검정: ch14/descriptive_statistics/jarque_bera.md
             - 14.4 형식적 정규성 검정:
-                - Kolmogorov-Smirnov 검정: ch14/formal_tests/ks_test.md
-                - Lilliefors 검정: ch14/formal_tests/lilliefors_test.md
-                - Anderson-Darling 검정: ch14/formal_tests/anderson_darling.md
-                - Shapiro-Wilk 검정: ch14/formal_tests/shapiro_wilk.md
+                - 콜모고로프–스미르노프 검정: ch14/formal_tests/ks_test.md
+                - 릴리포스 검정: ch14/formal_tests/lilliefors_test.md
+                - 앤더슨–달링 검정: ch14/formal_tests/anderson_darling.md
+                - 샤피로–윌크 검정: ch14/formal_tests/shapiro_wilk.md
             - 14.5 한계와 함정:
                 - 정규성 검정의 한계와 함정: ch14/limitations/limitations.md
                 - 표본크기가 검정력에 미치는 영향: ch14/limitations/sample_size_power.md
@@ -503,18 +503,18 @@ nav:
                 - F 분포 F(d₁, d₂)와 자유도: ch15/f_test/f_distribution_details.md
                 - 비정규성에 대한 민감도: ch15/f_test/sensitivity.md
                 - F 검정의 정규성 민감도와 로버스트 대안: ch15/f_test/f_test_robust_alt.md
-            - 15.4 Bartlett 검정:
-                - 분산의 동일성에 대한 Bartlett 검정: ch15/bartlett_test/bartlett_test.md
+            - 15.4 바틀렛 검정:
+                - 분산의 동일성에 대한 바틀렛 검정: ch15/bartlett_test/bartlett_test.md
                 - 비정규성 아래의 한계: ch15/bartlett_test/limitations.md
-                - Bartlett 검정 비정규성 민감도: ch15/bartlett_test/bartlett_sensitivity.md
+                - 바틀렛 검정 비정규성 민감도: ch15/bartlett_test/bartlett_sensitivity.md
             - 15.5 로버스트 검정:
                 - 분산 동일성의 로버스트 검정: ch15/robust_tests/robust_tests.md
-                - Levene 검정: ch15/robust_tests/levene.md
+                - 레빈 검정: ch15/robust_tests/levene.md
                 - 브라운–포사이드 검정: ch15/robust_tests/brown_forsythe.md
-                - Fligner-Killeen 검정: ch15/robust_tests/fligner_killeen.md
+                - 플리그너–킬린 검정: ch15/robust_tests/fligner_killeen.md
                 - 로버스트 방법의 비교: ch15/robust_tests/comparison.md
                 - 대수정규에서의 비교 (치우침이 극단일 때): ch15/robust_tests/robust_tests_comparison.md
-                - Levene 검정 정규 대 치우친 분포 모의실험: ch15/robust_tests/levene_simulation.md
+                - 레빈 검정 정규 대 치우친 분포 모의실험: ch15/robust_tests/levene_simulation.md
             - 15.6 고급 방법:
                 - 붓스트랩 분산 검정: ch15/advanced_methods/bootstrap_variance.md
                 - Bayes 분산 검정: ch15/advanced_methods/bayesian_variance.md
@@ -534,24 +534,24 @@ nav:
             - 16.2 일표본 비모수 검정:
                 - 무작위성에 대한 런 검정: ch16/one_sample_nonparametric/runs_test.md
                 - 부호검정: ch16/one_sample_nonparametric/sign_test.md
-                - Wilcoxon 부호순위검정: ch16/one_sample_nonparametric/wilcoxon_signed_rank.md
+                - 윌콕슨 부호순위검정: ch16/one_sample_nonparametric/wilcoxon_signed_rank.md
                 - 이항검정: ch16/one_sample_nonparametric/binomial_test.md
             - 16.3 대응표본 비모수 검정:
                 - 대응 부호검정: ch16/paired_sample_nonparametric/paired_sign.md
-                - 대응자료에 대한 Wilcoxon 부호순위검정: ch16/paired_sample_nonparametric/paired_wilcoxon.md
+                - 대응자료에 대한 윌콕슨 부호순위검정: ch16/paired_sample_nonparametric/paired_wilcoxon.md
                 - 대응 순열검정: ch16/paired_sample_nonparametric/paired_permutation.md
             - 16.4 이표본 비모수 검정:
-                - Wilcoxon 순위합검정: ch16/two_sample_nonparametric/rank_sum.md
-                - Mann-Whitney U 검정: ch16/two_sample_nonparametric/mann_whitney.md
-                - Kolmogorov-Smirnov 이표본 검정: ch16/two_sample_nonparametric/ks_two_sample.md
+                - 윌콕슨 순위합검정: ch16/two_sample_nonparametric/rank_sum.md
+                - 만–휘트니 U 검정: ch16/two_sample_nonparametric/mann_whitney.md
+                - 콜모고로프–스미르노프 이표본 검정: ch16/two_sample_nonparametric/ks_two_sample.md
             - 16.5 다집단 비모수 검정:
-                - Kruskal-Wallis 검정: ch16/multi_group_nonparametric/kruskal_wallis.md
-                - Friedman 검정 (반복측정): ch16/multi_group_nonparametric/friedman.md
+                - 크러스컬–월리스 검정: ch16/multi_group_nonparametric/kruskal_wallis.md
+                - 프리드먼 검정 (반복측정): ch16/multi_group_nonparametric/friedman.md
                 - Mood 중앙값검정: ch16/multi_group_nonparametric/median_test.md
                 - 사후 Dunn 검정: ch16/multi_group_nonparametric/dunn.md
             - 16.6 비모수 상관:
-                - Spearman 순위상관 (재론): ch16/correlation/spearman.md
-                - Kendall의 타우 (재론): ch16/correlation/kendall.md
+                - 스피어만 순위상관 (재론): ch16/correlation/spearman.md
+                - 켄들의 타우 (재론): ch16/correlation/kendall.md
 
         - 17 재표집 방법:
             - 장 개요: ch17/index.md

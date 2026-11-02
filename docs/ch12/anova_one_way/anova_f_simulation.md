@@ -558,7 +558,7 @@ $\sigma = 5$일 때 $k = 3$개 집단에서 평균 차이 $\delta = 2$를 검정
 </div>
 
 ??? success "풀이"
-    Kolmogorov-Smirnov(KS) 적합도 검정이 적절하다. 가설은
+    콜모고로프–스미르노프(KS) 적합도 검정이 적절하다. 가설은
 
     $$
     H_0: F_p = \text{Uniform}(0, 1), \qquad H_1: F_p \neq \text{Uniform}(0, 1)

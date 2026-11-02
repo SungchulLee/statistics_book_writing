@@ -883,12 +883,12 @@ $n = 30$인 Gamma(3, 2) 자료에서 붓스트랩 표준오차를 구하라. 평
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-**M-추정량**은 절사평균을 일반화한다. Huber의 $M$-추정량과 그 붕괴점/효율을 간단히 설명하라.
+**M-추정량**은 절사평균을 일반화한다. 후버의 $M$-추정량과 그 붕괴점/효율을 간단히 설명하라.
 
 </div>
 
 ??? success "풀이"
-    Huber의 M-추정량은 $\sum \psi((X_i - \hat\mu)/s) = 0$을 푼다. 여기서 $|u| \le c$이면 $\psi(u) = u$, $|u| > c$이면 $\psi(u) = c \cdot \text{sign}(u)$이다. 가운데에서는 OLS처럼, 꼬리에서는 중앙값처럼 행동한다.
+    후버의 M-추정량은 $\sum \psi((X_i - \hat\mu)/s) = 0$을 푼다. 여기서 $|u| \le c$이면 $\psi(u) = u$, $|u| > c$이면 $\psi(u) = c \cdot \text{sign}(u)$이다. 가운데에서는 OLS처럼, 꼬리에서는 중앙값처럼 행동한다.
 
     $c$가 작으면 중앙값처럼, $c$가 크면 표본평균처럼 행동한다.
 

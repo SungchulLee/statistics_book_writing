@@ -558,7 +558,7 @@ $\hat\theta$가 불편이고 $\mathrm{Var}(\hat\theta) = 0$이면 거의 확실�
 ??? success "풀이"
     $\hat\sigma^2_{\mathrm{MLE}} \sim (\sigma^2/n) \chi^2_{n-1}$일 때 $\hat\sigma_{\mathrm{MLE}} = \sqrt{\hat\sigma^2_{\mathrm{MLE}}}$이다.
 
-    (오목함수 $\sqrt{\cdot}$에 대한) Jensen 부등식에 의해 $\mathbb{E}[\sqrt{\hat\sigma^2_{\mathrm{MLE}}}] \le \sqrt{\mathbb{E}[\hat\sigma^2_{\mathrm{MLE}}]} = \sigma\sqrt{(n-1)/n}$이다. 퇴화된 경우가 아니면 부등호가 엄격하다.
+    (오목함수 $\sqrt{\cdot}$에 대한) 옌센 부등식에 의해 $\mathbb{E}[\sqrt{\hat\sigma^2_{\mathrm{MLE}}}] \le \sqrt{\mathbb{E}[\hat\sigma^2_{\mathrm{MLE}}]} = \sigma\sqrt{(n-1)/n}$이다. 퇴화된 경우가 아니면 부등호가 엄격하다.
 
     더 정확히는 $\mathbb{E}[\hat\sigma_{\mathrm{MLE}}] = \sigma \sqrt{2/n} \Gamma(n/2)/\Gamma((n-1)/2)$이다.
 

@@ -208,7 +208,7 @@ _확인한 곳 — 피셔가 『The Design of Experiments』($1935$) 둘째 장�
     벗어나야 할 때:
 
     - 이해관계가 큰 경우(약물 승인): $\alpha = 0.01$ 이하.
-    - 다중검정: $\alpha/m$ (Bonferroni).
+    - 다중검정: $\alpha/m$ (본페로니).
     - 탐색적 연구: 약한 신호를 찾기 위해 $\alpha = 0.10$.
     - 물리학의 "발견": $5\sigma$ ($\alpha \approx 6 \times 10^{-7}$).
 

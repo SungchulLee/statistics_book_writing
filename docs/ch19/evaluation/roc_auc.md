@@ -161,7 +161,7 @@ AUC에는 **순위통계량**에서 나오는 우아한 해석이 있다.
 이는 정의상 $P(\hat p_{\text{양성}} > \hat p_{\text{음성}})$이다.
 
 그 "각 음성보다 위쪽에 있는 양성의 개수"의 합은 이름이 이미 있는 양이다. 16.4절
-[Mann-Whitney U 검정](../../ch16/two_sample_nonparametric/mann_whitney.md)의 검정통계량
+[만–휘트니 U 검정](../../ch16/two_sample_nonparametric/mann_whitney.md)의 검정통계량
 $U_1$ 이고, 그래서 $\text{AUC} = U_1/(n_1 n_0)$이다. 이것이 뜻하는 바는 작지 않다 — AUC 가
 우연보다 큰지 묻는 일은 **두 집단의 위치가 같다는 귀무가설을 검정하는 일**이어서, 그 쪽
 5절의 귀무분포($\mu_U = n_1 n_0 / 2$)와 6절의 정규근사가 p-값을 그대로 준다. AUC 를 위해

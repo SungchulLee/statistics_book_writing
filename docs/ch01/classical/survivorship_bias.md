@@ -71,12 +71,12 @@ _확인한 곳 — 문서는 [Internet Archive 의 DTIC 사본 AD-A091073](https
     왈드의 1943년 보고서에는 그림이 실려 있지 않았다. 이 도해는 그 논증을 나중에 시각화한 것으로,
     실제 피탄 자료의 재현이 아니라 가상의 예시이다.
 
-    **원 보고서**: Wald, A. (1943). *A Method of Estimating Plane Vulnerability Based on Damage
+    **원 보고서**: 왈드, A. (1943). *A Method of Estimating Plane Vulnerability Based on Damage
     of Survivors*. Statistical Research Group, Columbia University.
     (재간행: CRC 432, Center for Naval Analyses, 1980.)
 
     **해설 논문**: Mangel, M., & Samaniego, F. J. (1984).
-    "Abraham Wald's Work on Aircraft Survivability."
+    "Abraham 왈드's Work on Aircraft Survivability."
     *Journal of the American Statistical Association*, 79(386), 259–267.
     왈드가 실제로 푼 문제는 "어디에 장갑을 덧댈까"가 아니라, 생존기의 피탄 분포로부터
     부위별 **격추 확률**을 추정하는 것이었다. 이 논문이 그 추정 절차를 현대적 표기로 정리한다.

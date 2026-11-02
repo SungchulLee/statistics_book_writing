@@ -854,7 +854,7 @@ $$-2\log\Lambda = 2[\ell(\hat{\theta}_{\text{MLE}}) - \ell(\theta_0)] \xrightarr
 
 ### 가능도로부터의 신뢰구간
 
-**Wald 신뢰구간:** 점근정규성을 사용하면 이렇게 된다.
+**왈드 신뢰구간:** 점근정규성을 사용하면 이렇게 된다.
 
 $$\hat{\theta} \pm z_{1-\alpha/2} \cdot \text{SE}(\hat{\theta})$$
 
@@ -864,7 +864,7 @@ $$\hat{\theta} \pm z_{1-\alpha/2} \cdot \text{SE}(\hat{\theta})$$
 
 $$2[\ell(\hat{\theta}) - \ell(\theta)] \leq \chi^2_{1-\alpha,\,1}$$
 
-소표본이거나 가능도가 치우쳐 있을 때 이 구간이 대체로 Wald 구간보다 정확하다.
+소표본이거나 가능도가 치우쳐 있을 때 이 구간이 대체로 왈드 구간보다 정확하다.
 
 ---
 
@@ -1353,7 +1353,7 @@ $\mu$와 $\sigma^2$이 모두 미지일 때 $N(\mu, \sigma^2)$ 분포에서 얻�
     \ell(\boldsymbol\theta) = Q(\boldsymbol\theta\mid\boldsymbol\theta^{(k)}) - H(\boldsymbol\theta\mid\boldsymbol\theta^{(k)}), \qquad H(\boldsymbol\theta\mid\boldsymbol\theta^{(k)}) = E\left[\ln f(\mathbf{z}\mid\mathbf{y};\boldsymbol\theta)\right]
     $$
 
-    젠슨 부등식(또는 KL 발산의 비음수성)에서 모든 $\boldsymbol\theta$에 대해
+    옌센 부등식(또는 KL 발산의 비음수성)에서 모든 $\boldsymbol\theta$에 대해
 
     $$
     H(\boldsymbol\theta\mid\boldsymbol\theta^{(k)}) \le H(\boldsymbol\theta^{(k)}\mid\boldsymbol\theta^{(k)})

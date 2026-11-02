@@ -40,7 +40,7 @@
 
 1. 회귀모형을 적합하고 잔차를 계산한다.
 2. **시각적 진단**(산점도, 잔차그림, Q-Q 그림, 히스토그램)으로 1차 평가를 한다.
-3. **형식적 통계검정**(Durbin-Watson, Breusch-Pagan, Shapiro-Wilk 등)으로 엄밀하게 평가한다.
+3. **형식적 통계검정**(더빈–왓슨, Breusch-Pagan, 샤피로–윌크 등)으로 엄밀하게 평가한다.
 4. 위배가 발견되면 변수변환, 가중최소제곱, 로버스트 회귀, 대안 모형 설정 같은 **대책**을 적용한다.
 
 이어지는 절들에서 각 가정을 진단 방법, 형식적 검정, 위배 시의 대책과 함께 자세히 다룬다.
@@ -52,7 +52,7 @@
 | 절 | 주제 | 핵심 진단 |
 |---------|-------|----------------|
 | [선형성](checking_linearity.md) | 직선 관계 가정 | 산점도, 잔차그림, 성분+잔차 그림, 다항 항 |
-| [독립성](checking_independence.md) | 무상관 잔차 가정 | Durbin-Watson, Breusch-Godfrey, 군집 |
+| [독립성](checking_independence.md) | 무상관 잔차 가정 | 더빈–왓슨, Breusch-Godfrey, 군집 |
 | [등분산성](checking_homoscedasticity.md) | 상수분산 가정 | 잔차–적합값·척도–위치 그림, Breusch-Pagan, White 검정 |
-| [정규성](checking_normality.md) | 잔차의 정규성 가정 | 히스토그램, Q-Q 그림, Shapiro-Wilk, Anderson-Darling, Jarque-Bera |
+| [정규성](checking_normality.md) | 잔차의 정규성 가정 | 히스토그램, Q-Q 그림, 샤피로–윌크, 앤더슨–달링, 자크–베라 |
 | [가중최소제곱](weighted_regression.md) | 이분산을 아는 경우의 적합 | 가중치 1/σ², OLS 와의 비교 |

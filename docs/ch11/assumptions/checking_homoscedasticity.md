@@ -861,7 +861,7 @@ _확인한 곳 — H. White, 「A Heteroskedasticity-Consistent Covariance Matri
     이유다. 로짓 변환이 자연스러운 처방이다.
 
     **(d) 집단별.** 설명변수가 범주형이므로 적합값이 세 개뿐이고, 각 적합값 위에 세로로 쌓인
-    점들의 퍼짐이 공장마다 다르다. 이 경우는 Levene 검정 같은 집단 기반 검정이 더 알맞다.
+    점들의 퍼짐이 공장마다 다르다. 이 경우는 레빈 검정 같은 집단 기반 검정이 더 알맞다.
     $\square$
 
 <div class="drillbox" markdown>

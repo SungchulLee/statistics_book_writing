@@ -109,7 +109,7 @@ $0$ 이 아니다.** 문턱을 두고 $0$ 을 세는 방식은 $q$ 가 $1$ 에 �
 _확인한 곳 — Zou and Hastie, "Regularization and variable selection via the
 elastic net", 『JRSS-B』 $67$ 권 $2$ 호 $301$–$320$ 쪽($2005$)의 $\S 2.4$ 「Bayesian
 connections and the $L_q$-penalty」에서 인용한 세 문장과 브리지 회귀의 출처 표시
-(Frank and Friedman, 1993; Fu, 1998) · Frank and Friedman, "A Statistical View of
+(Frank and 프리드먼, 1993; Fu, 1998) · Frank and 프리드먼, "A Statistical View of
 Some Chemometrics Regression Tools", 『Technometrics』 $35$ 권 $2$ 호 $109$–$135$ 쪽
 ($1993$)에서 일반화 능형 벌점 $\sum|a_j|^\gamma$ 와 「서로 다른 $\gamma$ 값에
 대한 일반화 능형 벌점의 등고선」이라는 그림 $5$ 의 제목, $\gamma \to 0$ 이

@@ -33,7 +33,7 @@ $$
 g_1 = \frac{n}{(n-1)(n-2)} \sum_{i=1}^{n} \left(\frac{X_i - \bar{X}}{S}\right)^3,
 $$
 
-여기서 $\bar{X}$는 표본평균, $S$는 (Bessel 보정을 한) 표본표준편차이다. 정규성 아래에서 $\mathbb{E}[g_1] = 0$이고
+여기서 $\bar{X}$는 표본평균, $S$는 (베셀 보정을 한) 표본표준편차이다. 정규성 아래에서 $\mathbb{E}[g_1] = 0$이고
 
 $$
 \text{Var}(g_1) \approx \frac{6(n-2)}{(n+1)(n+3)}.

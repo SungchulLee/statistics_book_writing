@@ -439,7 +439,7 @@ $E[S_D] = c_4(n)\,\sigma_D$이고 $c_4(n) = \sqrt{2/(n-1)}\;\Gamma(n/2)/\Gamma((
 
     흔한 자리가 이렇다. 한 병원에서 여러 쌍을 모으고 여러 병원을 합치면, 같은 병원에서 온 $D_i$들이 서로 닮는다. 쌍을 $n$개 모았어도 **독립인 단위는 병원 수**이며, $S_D^2/n$은 $\operatorname{Var}(\bar D)$를 과소추정한다. 포함률이 $0.95$ 아래로 내려가고, **쌍을 더 모아도 나아지지 않는다.** 보기 3의 비정규성과 달리 이쪽은 $n$으로 고쳐지지 않는다 — 틀린 것이 근사가 아니라 독립 단위의 수이기 때문이다.
 
-이 표집분포를 가지고 실제로 구간과 검정을 만드는 일은 [8장 $\mu_D$의 신뢰구간](../../ch08/paired_sample_intervals/ci_mu_paired.md)과 [9장 대응 $t$ 검정](../../ch09/paired_sample_tests/paired_t_test.md)이 맡는다. 차가 너무 치우쳐 보기 3의 상황에 놓였다면 순위를 쓰는 [16장 대응 Wilcoxon 부호순위검정](../../ch16/paired_sample_nonparametric/paired_wilcoxon.md)이나 [대응 순열검정](../../ch16/paired_sample_nonparametric/paired_permutation.md)으로 갈아타는 편이 낫다.
+이 표집분포를 가지고 실제로 구간과 검정을 만드는 일은 [8장 $\mu_D$의 신뢰구간](../../ch08/paired_sample_intervals/ci_mu_paired.md)과 [9장 대응 $t$ 검정](../../ch09/paired_sample_tests/paired_t_test.md)이 맡는다. 차가 너무 치우쳐 보기 3의 상황에 놓였다면 순위를 쓰는 [16장 대응 윌콕슨 부호순위검정](../../ch16/paired_sample_nonparametric/paired_wilcoxon.md)이나 [대응 순열검정](../../ch16/paired_sample_nonparametric/paired_permutation.md)으로 갈아타는 편이 낫다.
 
 ---
 

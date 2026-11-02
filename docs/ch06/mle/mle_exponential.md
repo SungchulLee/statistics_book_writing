@@ -148,7 +148,7 @@ _확인한 곳 — Markus Krajewski, "The Great Lightbulb Conspiracy", 『IEEE S
 
 MLE를 손에 넣었으니 이제 그 통계적 성질을 살펴보자. 평균적으로 참 모수를 맞히는지, 그리고 표본크기가 커질 때 $\lambda$를 얼마나 정밀하게 추정하는지를 본다.
 
-**편향.** MLE $\hat{\lambda} = 1/\bar{X}$는 위쪽으로 편향되어 있다. 함수 $g(x) = 1/x$가 $(0, \infty)$에서 볼록하므로 Jensen 부등식에 의해
+**편향.** MLE $\hat{\lambda} = 1/\bar{X}$는 위쪽으로 편향되어 있다. 함수 $g(x) = 1/x$가 $(0, \infty)$에서 볼록하므로 옌센 부등식에 의해
 
 $$
 E\!\left[\frac{1}{\bar{X}}\right] > \frac{1}{E[\bar{X}]} = \frac{1}{1/\lambda} = \lambda

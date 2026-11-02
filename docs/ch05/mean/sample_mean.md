@@ -726,7 +726,7 @@ _확인한 곳 — 길로비치·발론·트버스키의 $1985$ 년 뜨거운 �
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-**Bessel 수정.** $S^2 = \sum(X_i - \bar X)^2/(n-1)$의 분모가 왜 $n - 1$인가?
+**베셀 수정.** $S^2 = \sum(X_i - \bar X)^2/(n-1)$의 분모가 왜 $n - 1$인가?
 
 </div>
 

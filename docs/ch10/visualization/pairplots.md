@@ -465,7 +465,7 @@ _확인한 곳 — 쌍 그림이 하티건의 $1975$ 년 논문 「Printer graph
     자료점이 적으면 순전히 우연으로 생긴 패턴이 산점도에 보일 수 있다. 쌍 그림을 해석할 때 표본크기를 항상 고려하라.
 
 !!! warning "쌍 그림은 주변 관계만 보여준다"
-    각 패널은 다른 변수들을 무시한 채 두 변수 사이의 이변량 관계만 보여준다. 강한 주변상관이 다른 변수로 조건화하면 약해지거나 뒤집힐 수 있다([Simpson의 역설](../ecological_correlation/simpsons_paradox.md)과 [부분상관](../correlation/partial.md) 참조).
+    각 패널은 다른 변수들을 무시한 채 두 변수 사이의 이변량 관계만 보여준다. 강한 주변상관이 다른 변수로 조건화하면 약해지거나 뒤집힐 수 있다([심슨의 역설](../ecological_correlation/simpsons_paradox.md)과 [부분상관](../correlation/partial.md) 참조).
 
 ---
 

@@ -944,7 +944,7 @@ $$
 $$
 \begin{aligned}
 \text{Fisher:} &\quad \sqrt{2Q} \approx N\!\left(\sqrt{2d - 1},\, 1\right) \\[4pt]
-\text{Wilson–Hilferty:} &\quad \left(\frac{Q}{d}\right)^{1/3} \approx N\!\left(1 - \frac{2}{9d},\, \frac{2}{9d}\right)
+\text{윌슨–Hilferty:} &\quad \left(\frac{Q}{d}\right)^{1/3} \approx N\!\left(1 - \frac{2}{9d},\, \frac{2}{9d}\right)
 \end{aligned}
 $$
 

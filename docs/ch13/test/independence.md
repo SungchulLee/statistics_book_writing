@@ -607,7 +607,7 @@ $$
 얼마나 깎는가. $2 \times 2$ 표에서 보정은 각 항의 이탈에서 $0.5$ 를 깎는다.
 
 $$
-\chi^2_{\text{Yates}} = \sum_{i=1}^{2}\sum_{j=1}^{2} \frac{(\lvert O_{ij} - E_{ij}\rvert - 0.5)^2}{E_{ij}}
+\chi^2_{\text{예이츠}} = \sum_{i=1}^{2}\sum_{j=1}^{2} \frac{(\lvert O_{ij} - E_{ij}\rvert - 0.5)^2}{E_{ij}}
 $$
 
 표 $\begin{pmatrix} 10 & 5 \\ 3 & 12 \end{pmatrix}$ 로 재어 보면 보정 없이
@@ -1803,7 +1803,7 @@ $2 \times 2$ 표에 대한 **오즈비**. 흡연 × 암 = (50, 30) 대 (10, 100)
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff med" title="중간"></span>
-분할표에서의 **Simpson의 역설**.
+분할표에서의 **심슨의 역설**.
 
 </div>
 
@@ -2152,13 +2152,13 @@ $2 \times 2$ 표에 대한 **오즈비**. 흡연 × 암 = (50, 30) 대 (10, 100)
 <div class="drillbox" markdown>
 
 **연습문제 11.** <span class="diff med" title="중간"></span>
-Yates 보정 통계량이 언제나 보정하지 않은 통계량보다 작거나 같음을 증명하라.
+예이츠 보정 통계량이 언제나 보정하지 않은 통계량보다 작거나 같음을 증명하라.
 
 </div>
 
 ??? success "풀이"
 
-    임의의 칸 $(i,j)$에 대해 $d_{ij} = |O_{ij} - E_{ij}|$라 하자. 보정하지 않은 기여는 $d_{ij}^2 / E_{ij}$이고, Yates 보정 기여는 $(\max(d_{ij} - 0.5, 0))^2 / E_{ij}$이다.
+    임의의 칸 $(i,j)$에 대해 $d_{ij} = |O_{ij} - E_{ij}|$라 하자. 보정하지 않은 기여는 $d_{ij}^2 / E_{ij}$이고, 예이츠 보정 기여는 $(\max(d_{ij} - 0.5, 0))^2 / E_{ij}$이다.
 
     모든 $d_{ij} \ge 0$에 대해 $\max(d_{ij} - 0.5, 0) \le d_{ij}$이므로
 
@@ -2169,7 +2169,7 @@ Yates 보정 통계량이 언제나 보정하지 않은 통계량보다 작거�
     이다. 모든 칸에 대해 합하면
 
     $$
-    \chi^2_{\text{Yates}} = \sum_{i,j} \frac{(\max(|O_{ij} - E_{ij}| - 0.5, 0))^2}{E_{ij}} \le \sum_{i,j} \frac{(O_{ij} - E_{ij})^2}{E_{ij}} = \chi^2
+    \chi^2_{\text{예이츠}} = \sum_{i,j} \frac{(\max(|O_{ij} - E_{ij}| - 0.5, 0))^2}{E_{ij}} \le \sum_{i,j} \frac{(O_{ij} - E_{ij})^2}{E_{ij}} = \chi^2
     $$
 
     이 되어, 보정 통계량은 언제나 보정하지 않은 것보다 작거나 같고 따라서 검정이 더 보수적이 된다(p-값이 커진다). $\square$
