@@ -214,13 +214,13 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 </div>
 
 ??? success "풀이"
-    결합 PMF는:
+    결합 PMF는 이렇게 된다.
 
     $$
     f(\mathbf{x}; \theta) = \prod_{i=1}^n \frac{\theta^{x_i} e^{-\theta}}{x_i!} = \frac{\theta^{\sum x_i} e^{-n\theta}}{\prod x_i!}
     $$
 
-    인수분해 정리에 따라 이를 $g(T(\mathbf{x}), \theta) \cdot h(\mathbf{x})$로 쓰면:
+    인수분해 정리에 따라 이를 $g(T(\mathbf{x}), \theta) \cdot h(\mathbf{x})$로 쓰면 이렇게 된다.
 
     $$
     g(T, \theta) = \theta^\top e^{-n\theta}, \quad h(\mathbf{x}) = \frac{1}{\prod x_i!}, \quad T(\mathbf{x}) = \sum_{i=1}^n x_i
@@ -238,19 +238,19 @@ Rao–Blackwell 정리는 충분통계량으로 조건화함으로써 불편추�
 </div>
 
 ??? success "풀이"
-    결합밀도는:
+    결합밀도는 이렇게 된다.
 
     $$
     f(\mathbf{x}; \mu, \sigma^2) = (2\pi\sigma^2)^{-n/2} \exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2\right)
     $$
 
-    지수부를 전개하면:
+    지수부를 전개하면 이렇게 된다.
 
     $$
     \sum(x_i - \mu)^2 = \sum x_i^2 - 2\mu\sum x_i + n\mu^2
     $$
 
-    따라서:
+    따라서 이렇게 된다.
 
     $$
     f(\mathbf{x}; \mu, \sigma^2) = (2\pi\sigma^2)^{-n/2}\exp\!\left(-\frac{\sum x_i^2 - 2\mu\sum x_i + n\mu^2}{2\sigma^2}\right) \cdot 1
@@ -508,7 +508,7 @@ $X_i \sim \text{Uniform}(0,\theta)$에서 $T = X_{(n)}$이 완비충분임을 �
 </div>
 
 ??? success "풀이"
-    표본의 결합밀도는 다음과 같이 쓸 수 있다:
+    표본의 결합밀도는 다음과 같이 쓸 수 있다.
 
     $$
     f(\mathbf{x}; \theta) = g(x_{(1)}, \dots, x_{(n)}; \theta) \cdot h(\mathbf{x})
@@ -528,7 +528,7 @@ Rao-Blackwell 정리를 서술하고 그 실용적 의의를 설명하라. $\hat
 </div>
 
 ??? success "풀이"
-    **Rao-Blackwell 정리:** $\hat{\theta}$가 $\theta$의 임의의 불편추정량이고 $T$가 충분통계량이면 $\tilde{\theta} = E[\hat{\theta} \mid T]$도 불편이며 다음을 만족한다:
+    **Rao-Blackwell 정리:** $\hat{\theta}$가 $\theta$의 임의의 불편추정량이고 $T$가 충분통계량이면 $\tilde{\theta} = E[\hat{\theta} \mid T]$도 불편이며 다음을 만족한다.
 
     $$
     \text{Var}(\tilde{\theta}) \leq \text{Var}(\hat{\theta})

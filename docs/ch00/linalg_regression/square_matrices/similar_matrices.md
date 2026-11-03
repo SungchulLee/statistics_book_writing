@@ -129,8 +129,7 @@ $$
 
 이다. 대각행렬 $\boldsymbol{\Lambda}$는 $\mathbf{A}$와 닮았고, 두 행렬이 $\operatorname{tr} = 7$, $\det = 10$, 고윳값 $\{5, 2\}$를 공유함을 확인할 수 있다.
 
-#### 그림으로 보기
-
+#### 그림으로 보기 — 기저를 아무렇게나 바꿔도 닮는다
 닮음은 대각화만을 위한 장치가 아니다. 기저를 아무렇게나 바꿔도 닮은 행렬이 나온다. 같은 $\mathbf{A} = \begin{pmatrix} 4 & 1 \\ 2 & 3 \end{pmatrix}$를 이번에는 대각이 아닌 다른 좌표에서 적어 보자.
 
 ![같은 변환을 두 좌표로 적은 것](./img/similar_same_map_two_bases.png)
@@ -270,8 +269,7 @@ Without Eigenvalues", 『Science』 $261$ ($1993$) $578$–$584$ — 포아죄�
 
 ---
 
-## 4. 통계와의 연결
-
+## 4. 통계와의 연결 — 공분산행렬의 스펙트럼 분해
 닮은 행렬은 다변량 통계 전반에 등장한다.
 
 - **공분산행렬의 스펙트럼 분해.** $\boldsymbol{\Sigma} = \mathbf{Q}\boldsymbol{\Lambda}\mathbf{Q}^\top$이면 $\boldsymbol{\Sigma}$는 (직교행렬 $\mathbf{Q}$를 통해) $\boldsymbol{\Lambda}$와 닮았다. 고유기저에서 작업하면 계산이 간단해진다. $\operatorname{tr}(\boldsymbol{\Sigma}) = \sum_i \lambda_i$가 총분산을 주고, $\det(\boldsymbol{\Sigma}) = \prod_i \lambda_i$가 일반화 분산을 측정한다.

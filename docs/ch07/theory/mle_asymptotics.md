@@ -279,7 +279,7 @@ _확인한 곳 — 호지스가 $1951$ 년에 이 추정량을 내놓았으나 �
 </div>
 
 ??? success "풀이"
-    표준적인 정칙 조건 아래에서:
+    표준적인 정칙 조건 아래에서 이렇게 된다.
 
     1. **일치성:** $n \to \infty$일 때 $\hat{\theta}_{\text{MLE}} \xrightarrow{p} \theta_0$.
 
@@ -299,19 +299,19 @@ _확인한 곳 — 호지스가 $1951$ 년에 이 추정량을 내놓았으나 �
 </div>
 
 ??? success "풀이"
-    관측값 하나에 대한 로그가능도는 $\ell(\lambda) = \log\lambda - \lambda x$이다. 2계도함수는:
+    관측값 하나에 대한 로그가능도는 $\ell(\lambda) = \log\lambda - \lambda x$이다. 2계도함수는 이렇게 된다.
 
     $$
     \frac{d^2\ell}{d\lambda^2} = -\frac{1}{\lambda^2}
     $$
 
-    피셔 정보량은:
+    피셔 정보량은 이렇게 된다.
 
     $$
     I(\lambda) = -E\!\left[\frac{d^2\ell}{d\lambda^2}\right] = \frac{1}{\lambda^2}
     $$
 
-    MLE의 점근분산은:
+    MLE의 점근분산은 이렇게 된다.
 
     $$
     \text{Var}(\hat{\lambda}) \approx \frac{1}{nI(\lambda)} = \frac{\lambda^2}{n}
@@ -329,7 +329,7 @@ _확인한 곳 — 호지스가 $1951$ 년에 이 추정량을 내놓았으나 �
 </div>
 
 ??? success "풀이"
-    비율 모수의 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. 불변성에 의해 (모평균인) $g(\lambda) = 1/\lambda$의 MLE는:
+    비율 모수의 MLE는 $\hat{\lambda} = 1/\bar{X}$이다. 불변성에 의해 (모평균인) $g(\lambda) = 1/\lambda$의 MLE는 이렇게 된다.
 
     $$
     \widehat{1/\lambda} = g(\hat{\lambda}) = \frac{1}{\hat{\lambda}} = \frac{1}{1/\bar{X}} = \bar{X}
@@ -349,7 +349,7 @@ MLE가 점근적으로는 불편인데도 유한표본에서 편향될 수 있�
 ??? success "풀이"
     점근적 불편성은 $n \to \infty$일 때 $E[\hat{\theta}_n] \to \theta_0$임을 뜻하지만, 고정된 $n$에 대해서는 편향 $E[\hat{\theta}_n] - \theta_0$이 0이 아닐 수 있다.
 
-    **예:** 정규분포의 분산에서 MLE는 $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum(X_i - \bar{X})^2$이며 다음을 만족한다:
+    **예:** 정규분포의 분산에서 MLE는 $\hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum(X_i - \bar{X})^2$이며 다음을 만족한다.
 
     $$
     E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2 \neq \sigma^2

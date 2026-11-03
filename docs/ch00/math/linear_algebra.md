@@ -406,7 +406,7 @@ $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수를 갖는다고 하
     \mathbf{H}^\top = \left(\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top\right)^\top = \mathbf{X}\left((\mathbf{X}^\top \mathbf{X})^{-1}\right)^\top \mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top = \mathbf{H}
     $$
 
-    **멱등성:**
+    **멱등성을 확인한다.**
 
     $$
     \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\underbrace{\mathbf{X}^\top \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}}_{= \mathbf{I}_p}\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}

@@ -97,7 +97,7 @@ $$
 
 정규화된 고유벡터: $\mathbf{q}_1 = (2, 1)^\top / \sqrt{5}$, $\mathbf{q}_2 = (-1, 2)^\top / \sqrt{5}$.
 
-스펙트럼 분해:
+스펙트럼 분해는 이렇게 된다.
 
 $$
 \boldsymbol{\Sigma} = \frac{1}{5}\begin{pmatrix} 2 & -1 \\ 1 & 2 \end{pmatrix}\begin{pmatrix} 6 & 0 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} 2 & 1 \\ -1 & 2 \end{pmatrix}
@@ -105,8 +105,7 @@ $$
 
 검산: $\operatorname{tr}(\boldsymbol{\Sigma}) = 7 = 6 + 1$이고 $\det(\boldsymbol{\Sigma}) = 6 = 6 \cdot 1$이다. 총분산은 7이고, 그중 6단위가 첫 번째 주축을 따라, 1단위가 두 번째 주축을 따라 몰려 있다.
 
-### 그림으로 보기
-
+### 그림으로 보기 — 고유벡터의 직각은 어디서 오는가
 스펙트럼 정리가 약속하는 것은 결국 직각 하나다. 대칭행렬과, 성분 하나만 바꾼 비대칭행렬을 나란히 놓으면 그 직각이 어디서 오는지가 보인다.
 
 ![대칭행렬의 고유벡터는 직교한다](./img/symmetric_eigen_orthogonal.png)
@@ -222,8 +221,7 @@ $$
 
 ---
 
-## 4. 통계와의 연결
-
+## 4. 통계와의 연결 — 공분산행렬이 대칭인 까닭
 ### 공분산행렬
 
 확률벡터 $\mathbf{X} \in \mathbb{R}^p$에 대해 $\boldsymbol{\Sigma} = \mathbb{E}[(\mathbf{X} - \boldsymbol{\mu})(\mathbf{X} - \boldsymbol{\mu})^\top]$는 대칭이고 양반정치다. 그 스펙트럼 분해가 주성분 방향과 각 방향의 분산을 정의한다.
@@ -302,7 +300,7 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
 </div>
 
 ??? success "풀이"
-    **대칭이 아니지만 대각화 가능:**
+    **대칭이 아니지만 대각화 가능한 예다.**
 
     $$
     \mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 2 \end{pmatrix}
@@ -310,7 +308,7 @@ $\mathbf{A}$가 스펙트럼 분해 $\mathbf{A} = \sum_i \lambda_i \mathbf{q}_i 
 
     고윳값 $1, 2$가 서로 다르므로 고유벡터가 일차독립이고 $\mathbf{A}$는 대각화 가능하다. 그러나 $\mathbf{A} \ne \mathbf{A}^\top$이므로 대칭은 아니다.
 
-    **중복 고윳값을 갖는 대칭행렬:**
+    **중복 고윳값을 갖는 대칭행렬의 예다.**
 
     $$
     \mathbf{A} = \begin{pmatrix} 2 & 0 & 0 \\ 0 & 1 & 1 \\ 0 & 1 & 1 \end{pmatrix}

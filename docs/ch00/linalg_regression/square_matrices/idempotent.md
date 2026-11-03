@@ -284,7 +284,7 @@ $$
 \mathbf{A} = \frac{1}{3}\begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1 \end{pmatrix} = \frac{1}{3} \mathbf{1}\mathbf{1}^\top
 $$
 
-**멱등성:** $\mathbf{A}^2 = \frac{1}{9}\mathbf{1}\mathbf{1}^\top\mathbf{1}\mathbf{1}^\top = \frac{1}{9}\mathbf{1}(3)\mathbf{1}^\top = \frac{1}{3}\mathbf{1}\mathbf{1}^\top = \mathbf{A}$.
+**멱등성을 확인한다.** $\mathbf{A}^2 = \frac{1}{9}\mathbf{1}\mathbf{1}^\top\mathbf{1}\mathbf{1}^\top = \frac{1}{9}\mathbf{1}(3)\mathbf{1}^\top = \frac{1}{3}\mathbf{1}\mathbf{1}^\top = \mathbf{A}$.
 
 **대각합과 계수:** $\operatorname{tr}(\mathbf{A}) = 1 = \operatorname{rank}(\mathbf{A})$.
 
@@ -364,7 +364,7 @@ $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하
 ??? success "풀이"
     멱등행렬 $\mathbf{A}$의 최소다항식은 $\lambda^2 - \lambda = \lambda(\lambda - 1)$을 나누는데, 이는 서로 다른 일차인수로 인수분해된다. 어떤 행렬이 대각화 가능할 필요충분조건은 그 최소다항식이 서로 다른 일차인수로 쪼개지는 것이다. 따라서 $\mathbf{A}$는 대각화 가능하다.
 
-    대칭이 아닌 예:
+    대칭이 아닌 예를 보자.
 
     $$
     \mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}, \quad \mathbf{A}^2 = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \mathbf{A}
@@ -386,7 +386,7 @@ $\mathbf{A}$가 멱등이면 $\mathbf{I} - \mathbf{A}$도 멱등임을 증명하
     \mathbf{H}^\top = \mathbf{X}\bigl[(\mathbf{X}^\top\mathbf{X})^{-1}\bigr]^\top \mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}
     $$
 
-    **멱등성:**
+    **멱등성을 확인한다.**
 
     $$
     \mathbf{H}^2 = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\underbrace{\mathbf{X}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}}_{\mathbf{I}_p}\mathbf{X}^\top = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top = \mathbf{H}
@@ -430,7 +430,7 @@ $\mathbf{A}, \mathbf{B}$가 $\mathbb{R}^{n \times n}$의 대칭 멱등행렬이�
 ??? success "풀이"
     **대칭성:** $(\mathbf{A} + \mathbf{B})^\top = \mathbf{A}^\top + \mathbf{B}^\top = \mathbf{A} + \mathbf{B}$.
 
-    **멱등성:** (대칭성을 이용하면) $\mathbf{A}\mathbf{B} = \mathbf{0}$은 $\mathbf{B}\mathbf{A} = (\mathbf{A}\mathbf{B})^\top = \mathbf{0}$을 함의한다. 그러면
+    **멱등성을 확인한다.** (대칭성을 이용하면) $\mathbf{A}\mathbf{B} = \mathbf{0}$은 $\mathbf{B}\mathbf{A} = (\mathbf{A}\mathbf{B})^\top = \mathbf{0}$을 함의한다. 그러면
 
     $$
     (\mathbf{A} + \mathbf{B})^2 = \mathbf{A}^2 + \mathbf{A}\mathbf{B} + \mathbf{B}\mathbf{A} + \mathbf{B}^2 = \mathbf{A} + \mathbf{0} + \mathbf{0} + \mathbf{B} = \mathbf{A} + \mathbf{B}

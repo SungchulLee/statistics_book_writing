@@ -196,7 +196,7 @@ $T$가 $\theta$에 대한 완비충분통계량이라 하자. $h(T)$가 함수 $
 
 !!! example "UMVUE 성질의 확인"
 
-    $N(\mu, \sigma^2)$에서 관측값 $n = 20$개일 때:
+    $N(\mu, \sigma^2)$에서 관측값 $n = 20$개일 때 이렇게 된다.
 
     - $\bar{X}$는 분산이 $\sigma^2/20$인 $\mu$의 UMVUE이다. $\mu$의 다른 어떤 불편추정량도 분산이 $\sigma^2/20$보다 작을 수 없다.
     - $S^2$은 분산이 $2\sigma^4/19$인 $\sigma^2$의 UMVUE이다. MLE $\hat{\sigma}^2_{\text{MLE}} = (19/20)S^2$은 평균제곱오차가 더 작지만 편향되어 있으므로 UMVUE의 자격이 없다.
@@ -503,7 +503,7 @@ Lehmann-Scheffé 정리를 진술하고, 이를 이용해 베르누이 표본에
 
     $T = \sum X_i \sim \text{Bin}(n, p)$의 함수이면서 $\tau(p) = p(1-p)$에 대해 불편인 추정량을 찾는다.
 
-    $h(T) = \frac{T(n - T)}{n(n-1)}$을 생각하자:
+    $h(T) = \frac{T(n - T)}{n(n-1)}$을 생각하자.
 
     $$
     E\!\left[\frac{T(n-T)}{n(n-1)}\right] = \frac{E[nT - T^2]}{n(n-1)} = \frac{n \cdot np - (np(1-p) + n^2p^2)}{n(n-1)}

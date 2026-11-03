@@ -141,13 +141,13 @@ $$
     \log f(x; p) = x \log p + (1-x) \log(1-p)
     $$
 
-    2계도함수를 취하면:
+    2계도함수를 취하면 이렇게 된다.
 
     $$
     \frac{\partial^2}{\partial p^2} \log f(x; p) = -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}
     $$
 
-    $E[X] = p$이므로:
+    $E[X] = p$이므로 이렇게 된다.
 
     $$
     I(p) = -E\left[-\frac{X}{p^2} - \frac{1-X}{(1-p)^2}\right] = \frac{p}{p^2} + \frac{1-p}{(1-p)^2} = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}
@@ -197,7 +197,7 @@ $$
     \frac{\partial^2}{\partial \lambda^2} \log f(x; \lambda) = -\frac{x}{\lambda^2}
     $$
 
-    $E[X] = \lambda$이므로:
+    $E[X] = \lambda$이므로 이렇게 된다.
 
     $$
     I(\lambda) = \frac{1}{\lambda}
@@ -618,7 +618,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     **동등성 증명:** 항등식 $\int f \, dx = 1$을 한 번 미분하면 $\int \partial f/\partial\theta \, dx = 0 \Rightarrow \int f \cdot \partial \log f/\partial\theta \, dx = 0 \Rightarrow \mathbb{E}[\partial \log f/\partial\theta] = 0$이다.
 
-    다시 미분하면 $\int [\partial^2 f/\partial\theta^2] dx = 0$이다. $\partial^2 f/\partial\theta^2 = f \partial^2 \log f/\partial\theta^2 + f (\partial \log f/\partial\theta)^2$으로 나타내면:
+    다시 미분하면 $\int [\partial^2 f/\partial\theta^2] dx = 0$이다. $\partial^2 f/\partial\theta^2 = f \partial^2 \log f/\partial\theta^2 + f (\partial \log f/\partial\theta)^2$으로 나타내면 이렇게 된다.
 
     $\mathbb{E}[\partial^2 \log f/\partial\theta^2] + \mathbb{E}[(\partial \log f/\partial\theta)^2] = 0$.
 
@@ -636,7 +636,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 ??? success "풀이"
     결합 로그가능도: $\log L(\theta) = \sum_i \log f(X_i; \theta)$.
 
-    점수: $\partial \log L/\partial\theta = \sum_i \partial \log f(X_i; \theta)/\partial\theta$. 독립 확률변수의 합의 분산은 분산의 합이므로:
+    점수: $\partial \log L/\partial\theta = \sum_i \partial \log f(X_i; \theta)/\partial\theta$. 독립 확률변수의 합의 분산은 분산의 합이므로 이렇게 된다.
 
     $\mathrm{Var}(\partial \log L/\partial\theta) = \sum_i \mathrm{Var}(\partial \log f(X_i; \theta)/\partial\theta) = n I(\theta)$.
 
@@ -674,7 +674,7 @@ Poisson$(\lambda)$: $f(x; \lambda) = \lambda^x e^{-\lambda}/x!$. (a) $I(\lambda)
 
     **일치:** $\theta = \hat\theta$에서 그리고 점근적으로 $J(\hat\theta)/n \to I(\theta)$이다. 기댓값의 의미에서 둘이 일치한다.
 
-    **차이:**
+    **차이는 이렇다.**
 
     - 유한표본에서 관측 정보량은 실제 자료를 사용하므로 다른 점추정값을 줄 수 있다.
     - 기대 정보량은 분포에 대해 적분해야 하는데, 해석적으로 어렵거나 불가능할 수 있다.
@@ -828,7 +828,7 @@ $g(\theta)$를 추정할 때의 크라메르–라오 하한이 $\{g'(\theta)\}^
 
     피셔 정보량: $I(\lambda) = 1/\lambda^2$.
 
-    $n$개 관측값에 대한 CRLB는:
+    $n$개 관측값에 대한 CRLB는 이렇게 된다.
 
     $$
     \text{Var}(\hat{\lambda}) \geq \frac{1}{nI(\lambda)} = \frac{\lambda^2}{n}

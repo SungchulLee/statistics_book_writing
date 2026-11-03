@@ -101,7 +101,7 @@ $$
 
 여집합 사영 $\mathbf{I} - \mathbf{P}$는 $\operatorname{col}(\mathbf{P})$ 방향을 따라 $\ker(\mathbf{P})$ 위로 사영한다. 두 사영이 함께 임의의 벡터를 서로 여집합인 두 부분공간의 성분으로 분해한다.
 
-**계수 관계:**
+**계수 관계는 이렇다.**
 
 $$
 \operatorname{rank}(\mathbf{P}) + \operatorname{rank}(\mathbf{I} - \mathbf{P}) = n
@@ -176,8 +176,7 @@ $$
 
 ---
 
-## 6. 통계와의 연결
-
+## 6. 통계와의 연결 — 적합값과 잔차는 두 사영이다
 ### 적합값과 잔차
 
 선형회귀에서 분해 $\mathbf{y} = \mathbf{H}\mathbf{y} + (\mathbf{I} - \mathbf{H})\mathbf{y} = \hat{\mathbf{y}} + \mathbf{e}$는 사영 분해다. 모자 행렬 $\mathbf{H}$는 $\mathbf{X}$의 열공간 위로 사영하고, $\mathbf{I} - \mathbf{H}$는 그 직교여공간(잔차공간) 위로 사영한다.
@@ -249,7 +248,7 @@ $\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$이 사영행렬임�
 </div>
 
 ??? success "풀이"
-    멱등성 확인:
+    멱등성을 확인한다.
 
     $$
     \mathbf{P}^2 = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} = \mathbf{P}
@@ -291,7 +290,7 @@ $\mathbf{P}$가 멱등이면 $\operatorname{rank}(\mathbf{P}) = \operatorname{tr
 ??? success "풀이"
     $\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}$을 생각하자.
 
-    멱등성:
+    멱등성은 이렇게 확인한다.
 
     $$
     \mathbf{P}^2 = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} = \mathbf{P}

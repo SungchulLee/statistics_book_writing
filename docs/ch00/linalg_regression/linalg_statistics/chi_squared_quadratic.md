@@ -360,7 +360,7 @@ _확인한 곳 — A. Gretton, K. M. Borgwardt, M. J. Rasch, B. Schölkopf, A. S
 ??? success "풀이"
     분해는 $\mathbf{y}^\top\mathbf{y} = \mathbf{y}^\top\mathbf{H}\mathbf{y} + \mathbf{y}^\top(\mathbf{I} - \mathbf{H})\mathbf{y}$이다.
 
-    코크런 정리의 가정 확인:
+    코크런 정리의 가정을 확인한다.
 
     - 각 $\mathbf{A}_i$가 대칭이다. ✓
     - 모든 $\mathbf{y}$에 대해 분해가 성립한다. 곧 $\mathbf{A}_1 + \mathbf{A}_2 = \mathbf{H} + (\mathbf{I} - \mathbf{H}) = \mathbf{I}$. ✓

@@ -215,8 +215,7 @@ $$
 
 **확인:** $\lambda_1 + \lambda_2 = 5 + 2 = 7 = \operatorname{tr}(\mathbf{A})$이고 $\lambda_1 \cdot \lambda_2 = 10 = \det(\mathbf{A})$이다.
 
-### 그림으로 보기
-
+### 그림으로 보기 — 합은 장부, 곱은 넓이
 합과 곱이라는 두 항등식은 성격이 아주 다르다. 곱은 눈에 보이는 기하가 있고, 합은 같은 총량을 두 가지로 쪼갠 장부에 가깝다.
 
 ![대각합은 합, 행렬식은 곱](./img/trace_det_unit_circle.png)

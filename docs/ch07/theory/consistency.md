@@ -173,13 +173,13 @@ $\text{Var}(X) = \sigma^2 < \infty$를 가정하고 Chebyshev 부등식을 사�
 </div>
 
 ??? success "풀이"
-    Chebyshev 부등식에 의해 임의의 $\varepsilon > 0$에 대해:
+    Chebyshev 부등식에 의해 임의의 $\varepsilon > 0$에 대해 이렇게 된다.
 
     $$
     P(|\bar{X}_n - \mu| \geq \varepsilon) \leq \frac{\text{Var}(\bar{X}_n)}{\varepsilon^2} = \frac{\sigma^2}{n\varepsilon^2}
     $$
 
-    $n \to \infty$일 때:
+    $n \to \infty$일 때 이렇게 된다.
 
     $$
     P(|\bar{X}_n - \mu| \geq \varepsilon) \leq \frac{\sigma^2}{n\varepsilon^2} \to 0
@@ -209,7 +209,7 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
 ??? success "풀이"
     이는 **연속사상정리**이다. $\hat{\theta}_n \xrightarrow{p} \theta$이고 $g$가 $\theta$에서 연속이면 $g(\hat{\theta}_n) \xrightarrow{p} g(\theta)$이다.
 
-    **응용:** $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2 \xrightarrow{p} \sigma^2$이므로(표본분산은 모분산에 대해 일치한다) 연속함수 $g(x) = \sqrt{x}$를 적용하면:
+    **응용:** $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2 \xrightarrow{p} \sigma^2$이므로(표본분산은 모분산에 대해 일치한다) 연속함수 $g(x) = \sqrt{x}$를 적용하면 이렇게 된다.
 
     $$
     S = \sqrt{S^2} \xrightarrow{p} \sqrt{\sigma^2} = \sigma
@@ -225,7 +225,7 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
 </div>
 
 ??? success "풀이"
-    추정량 $\hat{\theta}_n$이 다음을 만족하면 **점근적으로 정규**이다:
+    추정량 $\hat{\theta}_n$이 다음을 만족하면 **점근적으로 정규**이다.
 
     $$
     \sqrt{n}(\hat{\theta}_n - \theta_0) \xrightarrow{d} N(0, v^2)
@@ -233,7 +233,7 @@ $\hat{\theta}_n$이 $\theta$의 일치추정량이고 $g$가 연속함수이면 
 
     여기서 $v^2$은 어떤 분산이고 $\xrightarrow{d}$는 분포수렴을 나타낸다.
 
-    표준적인 정칙 조건(모수공간이 열려 있고, 모형이 식별 가능하며, 로그가능도가 두 번 미분가능한 등) 아래에서 MLE는:
+    표준적인 정칙 조건(모수공간이 열려 있고, 모형이 식별 가능하며, 로그가능도가 두 번 미분가능한 등) 아래에서 MLE는 이렇게 된다.
 
     $$
     \sqrt{n}(\hat{\theta}_{\text{MLE}} - \theta_0) \xrightarrow{d} N\!\left(0, \frac{1}{I(\theta_0)}\right)
