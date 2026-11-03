@@ -50,29 +50,36 @@ C0, C1 = "#2c7fb8", "#c0392b"
 fig, axes = plt.subplots(1, 2, figsize=(13.6, 5.2), sharey=True)
 
 for ax, (name, c, a, b, verdict) in zip(axes, rows):
-    ax.plot(x, h0, color=C0, lw=2.6, label="아무 일도 없는 세상")
-    ax.plot(x, h1, color=C1, lw=2.6, label="정말 그런 세상")
+    ax.plot(x, h0, color=C0, lw=2.6,
+            label="귀무가설 $H_0$ — 아무 일도 없는 세상  $N(0,\\,1)$")
+    ax.plot(x, h1, color=C1, lw=2.6,
+            label="대립가설 $H_1$ — 정말 그런 세상  $N(2.2,\\,1)$")
     ax.fill_between(x, 0, h0, where=x >= c, color=C0, alpha=0.38)
     ax.fill_between(x, 0, h1, where=x <= c, color=C1, alpha=0.26)
     ax.axvline(c, color="0.15", lw=2.4)
-    ax.text(c, 0.445, f"문턱 {c:.2f}", ha="center", va="bottom",
+    ax.text(c, 0.505, f"문턱 {c:.2f}", ha="center", va="bottom",
             fontsize=11.5, fontweight="bold", color="0.15")
     ax.axvline(ZOBS, color="black", lw=2.2, ls=(0, (5, 3)))
-    ax.text(ZOBS, 0.405, f"관측 {ZOBS}", ha="center", va="bottom",
+    ax.text(ZOBS, 0.462, f"관측 {ZOBS}", ha="center", va="bottom",
             fontsize=11.5, fontweight="bold")
-    ax.set_ylim(0, 0.50)
+    ax.set_ylim(0, 0.60)
     ax.set_xlim(-3.2, 5.6)
     ax.set_xlabel("증거의 세기", fontsize=11.5)
     ax.set_title(f"{name}  →  {verdict}", fontsize=13.2)
-    ax.text(0.02, 0.97,
-            f"무고한 쪽을 잘못 잡을 확률  {a:.3f}\n"
-            f"정말 그런데 놓칠 확률        {b:.3f}",
-            transform=ax.transAxes, va="top", fontsize=11.2,
-            bbox=dict(boxstyle="round,pad=0.45", fc="white", ec="0.75"))
+    ax.text(0.02, 0.975,
+            f"$H_0$ 인데 기각 — 파란 넓이  {a:.3f}",
+            transform=ax.transAxes, va="top", fontsize=11.0, color=C0,
+            fontweight="bold",
+            bbox=dict(boxstyle="round,pad=0.4", fc="white", ec="0.78"))
+    ax.text(0.02, 0.885,
+            f"$H_1$ 인데 기각 못함 — 붉은 넓이  {b:.3f}",
+            transform=ax.transAxes, va="top", fontsize=11.0, color=C1,
+            fontweight="bold",
+            bbox=dict(boxstyle="round,pad=0.4", fc="white", ec="0.78"))
     ax.grid(alpha=0.2)
 
 axes[0].set_ylabel("밀도", fontsize=11.5)
-axes[0].legend(fontsize=10.8, loc="upper right")
+axes[0].legend(fontsize=10.0, loc="upper right", framealpha=0.95)
 
 fig.suptitle("증거는 하나인데 문턱을 옮기면 두 잘못이 맞바뀐다",
              fontsize=14.6, y=0.985)
