@@ -473,7 +473,7 @@ $$
     \frac{\partial \hat{p}_k}{\partial z_k} = \frac{e^{z_k} \cdot S - e^{z_k} \cdot e^{z_k}}{S^2} = \frac{e^{z_k}}{S} - \left(\frac{e^{z_k}}{S}\right)^2 = \hat{p}_k - \hat{p}_k^2 = \hat{p}_k(1 - \hat{p}_k)
     $$
 
-    **경우 $k \ne j$:**
+    **$k \ne j$ 인 경우는 이렇게 된다.**
 
     $$
     \frac{\partial \hat{p}_k}{\partial z_j} = \frac{0 - e^{z_k} \cdot e^{z_j}}{S^2} = -\hat{p}_k \hat{p}_j

@@ -160,7 +160,7 @@ $$
 
 **보기 1.** <span class="diff easy" title="쉬움"></span> 중앙값의 표준오차. $n = 20$인 표본에서 표본중앙값의 표준오차를 구하고 싶다고 하자. 평균의 $s/\sqrt{n}$과 달리 간단한 공식이 없다.
 
-**붓스트랩 절차:**
+**붓스트랩 절차는 이렇다.**
 
 1. 관측된 중앙값 $\hat{\theta} = \text{median}(x_1, \ldots, x_{20})$을 계산한다.
 2. $b = 1, \ldots, B$에 대해 자료에서 복원추출로 20개를 뽑아 중앙값 $\hat{\theta}^{*(b)}$을 계산한다.
@@ -200,13 +200,13 @@ $$
 
 **잭나이프**(Quenouille, 1949; 투키, 1958)는 붓스트랩보다 앞선 방법으로 *하나씩 빼는* 재표집에 기반한다.
 
-**잭나이프 복제값:**
+**잭나이프 복제값은 이렇게 된다.**
 
 $$
 \hat{\theta}_{(-i)} = g(x_1, \ldots, x_{i-1}, x_{i+1}, \ldots, x_n)
 $$
 
-**잭나이프 편향 추정:**
+**잭나이프 편향 추정은 이렇게 된다.**
 
 $$
 \widehat{\text{Bias}}_{\text{jack}} = (n-1)\left(\bar{\hat{\theta}}_{(\cdot)} - \hat{\theta}\right)
@@ -214,7 +214,7 @@ $$
 
 여기서 $\bar{\hat{\theta}}_{(\cdot)} = \frac{1}{n}\sum_{i=1}^n \hat{\theta}_{(-i)}$이다.
 
-**잭나이프 표준오차:**
+**잭나이프 표준오차는 이렇게 된다.**
 
 $$
 \widehat{\text{SE}}_{\text{jack}} = \sqrt{\frac{n-1}{n}\sum_{i=1}^n \left(\hat{\theta}_{(-i)} - \bar{\hat{\theta}}_{(\cdot)}\right)^2}
