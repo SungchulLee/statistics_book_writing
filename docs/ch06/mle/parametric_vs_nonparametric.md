@@ -391,13 +391,13 @@ _확인한 곳 — 리치 서튼의 「The Bitter Lesson」($2019$ 년 $3$ 월 $
 </div>
 
 ??? success "풀이"
-    로그가능도는:
+    로그가능도는 이렇게 된다.
 
     $$
     \ell(\lambda) = \left(\sum x_i\right) \log \lambda - n\lambda + C
     $$
 
-    여기서 $C$는 $\lambda$에 의존하지 않는다. 1계도함수는:
+    여기서 $C$는 $\lambda$에 의존하지 않는다. 1계도함수는 이렇게 된다.
 
     $$
     \frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n
@@ -405,7 +405,7 @@ _확인한 곳 — 리치 서튼의 「The Bitter Lesson」($2019$ 년 $3$ 월 $
 
     0으로 두면 $\hat{\lambda} = \bar{x}$이다.
 
-    2계도함수는:
+    2계도함수는 이렇게 된다.
 
     $$
     \frac{d^2\ell}{d\lambda^2} = -\frac{\sum x_i}{\lambda^2}
@@ -422,25 +422,25 @@ _확인한 곳 — 리치 서튼의 「The Bitter Lesson」($2019$ 년 $3$ 월 $
 </div>
 
 ??? success "풀이"
-    포아송 관측값 하나에 대한 피셔 정보량은:
+    포아송 관측값 하나에 대한 피셔 정보량은 이렇게 된다.
 
     $$
     I(\lambda) = \frac{1}{\lambda}
     $$
 
-    $n$개 관측값에서 전체 피셔 정보량은 $nI(\lambda) = n/\lambda$이다. MLE의 점근정규성에 의해:
+    $n$개 관측값에서 전체 피셔 정보량은 $nI(\lambda) = n/\lambda$이다. MLE의 점근정규성에 의해 이렇게 된다.
 
     $$
     \hat{\lambda} \dot{\sim} N\!\left(\lambda, \frac{1}{nI(\lambda)}\right) = N\!\left(\lambda, \frac{\lambda}{n}\right)
     $$
 
-    $\hat{\lambda} = 3.2$, $n = 500$을 대입하면:
+    $\hat{\lambda} = 3.2$, $n = 500$을 대입하면 이렇게 된다.
 
     $$
     \text{SE} = \sqrt{\frac{\hat{\lambda}}{n}} = \sqrt{\frac{3.2}{500}} = \sqrt{0.0064} = 0.08
     $$
 
-    95% 신뢰구간은:
+    95% 신뢰구간은 이렇게 된다.
 
     $$
     \hat{\lambda} \pm 1.96 \cdot \text{SE} = 3.2 \pm 1.96(0.08) = 3.2 \pm 0.157 = [3.043, 3.357]
@@ -457,7 +457,7 @@ _확인한 곳 — 리치 서튼의 「The Bitter Lesson」($2019$ 년 $3$ 월 $
 </div>
 
 ??? success "풀이"
-    경험 PMF는 각 확률 $P(X = k)$를 비율 $\hat{p}_k = n_k / n$으로 따로따로 추정한다. 각 $\hat{p}_k$는 불편이고 분산은:
+    경험 PMF는 각 확률 $P(X = k)$를 비율 $\hat{p}_k = n_k / n$으로 따로따로 추정한다. 각 $\hat{p}_k$는 불편이고 분산은 이렇게 된다.
 
     $$
     \text{Var}(\hat{p}_k) = \frac{P(X = k)(1 - P(X = k))}{n}
@@ -465,7 +465,7 @@ _확인한 곳 — 리치 서튼의 「The Bitter Lesson」($2019$ 년 $3$ 월 $
 
     모수적 MLE는 모수 하나($p$나 $\lambda$)를 추정하고 그로부터 PMF 전체를 유도한다. $P(X = k)$의 모수적 추정량은 (비선형 대입 때문에) 유한표본에서 편향되지만, 각 $k$마다 하나씩이 아니라 자유도 하나만 추정하므로 분산이 훨씬 작다.
 
-    전체 평균제곱오차는 다음과 같이 분해된다:
+    전체 평균제곱오차는 다음과 같이 분해된다.
 
     $$
     \text{MSE} = \text{Bias}^2 + \text{Variance}

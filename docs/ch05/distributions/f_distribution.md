@@ -426,13 +426,13 @@ $S_1^2/S_2^2 \sim F$라는 결과는 밑바탕 모집단의 정규성을 가정�
 </div>
 
 ??? success "풀이"
-    일원배치 분산분석: 집단 $i = 1, \ldots, k$에 각각 $n_i$개의 관측값이 있고 전체는 $n = \sum n_i$이다. 총/집단 간/집단 내 제곱합은:
+    일원배치 분산분석: 집단 $i = 1, \ldots, k$에 각각 $n_i$개의 관측값이 있고 전체는 $n = \sum n_i$이다. 총/집단 간/집단 내 제곱합은 이렇게 된다.
 
     - $\mathrm{SST} = \sum_{ij}(Y_{ij} - \bar Y_{..})^2$
     - $\mathrm{SSB} = \sum_i n_i (\bar Y_{i\cdot} - \bar Y_{..})^2$
     - $\mathrm{SSW} = \sum_{ij}(Y_{ij} - \bar Y_{i\cdot})^2$
 
-    F 통계량:
+    F 통계량은 이렇게 된다.
 
     $$
     F = \frac{\mathrm{SSB}/(k-1)}{\mathrm{SSW}/(n-k)} \sim F_{k-1, n-k}

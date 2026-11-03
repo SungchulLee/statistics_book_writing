@@ -188,7 +188,7 @@ $$
 
     점근분산은 $\hat{\lambda}^2/n = 0.2381^2/50 = 0.001133$이므로 $\text{SE}(\hat{\lambda}) = \sqrt{0.001133} \approx 0.03367$이다.
 
-    95% 신뢰구간은:
+    95% 신뢰구간은 이렇게 된다.
 
     $$
     \hat{\lambda} \pm 1.96 \times \text{SE}(\hat{\lambda}) = 0.2381 \pm 0.0660 = (0.172, 0.304)
@@ -206,13 +206,13 @@ $$
 </div>
 
 ??? success "풀이"
-    로그가능도는:
+    로그가능도는 이렇게 된다.
 
     $$
     \ell(\lambda) = \sum_{i=1}^n \bigl(\log\lambda - \lambda x_i\bigr) = n\log\lambda - \lambda\sum_{i=1}^n x_i
     $$
 
-    도함수를 0으로 두면:
+    도함수를 0으로 두면 이렇게 된다.
 
     $$
     \frac{d\ell}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0 \implies \hat{\lambda} = \frac{n}{\sum_{i=1}^n x_i} = \frac{1}{\bar{X}}
@@ -435,13 +435,13 @@ MLE $\hat{\lambda} = 1/\bar{X}$가 유한표본에서 $\lambda$에 대해 편향
 ??? success "풀이"
     합 $S = \sum X_i \sim \text{Gamma}(n, \lambda)$이므로 $\bar{X} = S/n$이고 MLE는 $\hat{\lambda} = n/S$이다.
 
-    Gamma$(n, \lambda)$ 분포에서 $n > 1$일 때 $E[1/S] = \lambda/(n-1)$이다(감마 확률변수의 역수에 관한 알려진 결과이다). 따라서:
+    Gamma$(n, \lambda)$ 분포에서 $n > 1$일 때 $E[1/S] = \lambda/(n-1)$이다(감마 확률변수의 역수에 관한 알려진 결과이다). 따라서 이렇게 된다.
 
     $$
     E[\hat{\lambda}] = E\!\left[\frac{n}{S}\right] = \frac{n\lambda}{n-1}
     $$
 
-    편향은:
+    편향은 이렇게 된다.
 
     $$
     \text{Bias}(\hat{\lambda}) = \frac{n\lambda}{n-1} - \lambda = \frac{\lambda}{n-1}

@@ -422,7 +422,7 @@ _확인한 곳 — B. Efron, 「Bootstrap Methods: Another Look at the Jackknife
 </div>
 
 ??? success "풀이"
-    표본표준편차는:
+    표본표준편차는 이렇게 된다.
 
     $$
     s = \sqrt{\frac{1}{30}\sum_{i=1}^{31}(x_i - \bar{x})^2}
@@ -434,7 +434,7 @@ _확인한 곳 — B. Efron, 「Bootstrap Methods: Another Look at the Jackknife
     s \approx 1.032
     $$
 
-    고전적 표준오차는:
+    고전적 표준오차는 이렇게 된다.
 
     $$
     \text{SE} = \frac{s}{\sqrt{n}} = \frac{1.032}{\sqrt{31}} = \frac{1.032}{5.568} \approx 0.185
@@ -466,7 +466,7 @@ _확인한 곳 — B. Efron, 「Bootstrap Methods: Another Look at the Jackknife
 </div>
 
 ??? success "풀이"
-    붓스트랩 표준오차 추정값의 표준오차는 근사적으로:
+    붓스트랩 표준오차 추정값의 표준오차는 근사적으로 이렇게 된다.
 
     $$
     \text{SE}(\widehat{\text{SE}}_{\text{boot}}) \approx \frac{\widehat{\text{SE}}_{\text{boot}}}{\sqrt{2B}}
@@ -519,7 +519,7 @@ _확인한 곳 — B. Efron, 「Bootstrap Methods: Another Look at the Jackknife
     Bootstrap SE of the median: 0.3071
     ```
 
-    중앙값에 붓스트랩이 특히 유용한 이유는:
+    중앙값에 붓스트랩이 특히 유용한 이유는 이렇게 된다.
 
     1. 임의의 분포에서 통하는, 널리 알려진 간단한 닫힌 형태의 중앙값 표준오차 공식이 없다.
     2. 점근 공식 $\text{SE}(\text{median}) \approx 1 / (2f(m)\sqrt{n})$은 중앙값 $m$에서의 모집단 밀도 $f$를 알아야 하는데, 이것 자체가 추정하기 어렵다.
@@ -538,7 +538,7 @@ _확인한 곳 — B. Efron, 「Bootstrap Methods: Another Look at the Jackknife
 ??? success "풀이"
     붓스트랩 표본에서 각 $x_i^*$는 $\{x_1, \ldots, x_n\}$에서 독립적이고 균등하게 뽑힌다. 붓스트랩 표본평균은 $\bar{x}^* = \frac{1}{n}\sum_{j=1}^n x_j^*$이다.
 
-    (자료로 조건화한) 붓스트랩 분포 아래에서:
+    (자료로 조건화한) 붓스트랩 분포 아래에서 이렇게 된다.
 
     $$
     E^*[x_j^*] = \frac{1}{n}\sum_{i=1}^n x_i = \bar{x}
@@ -548,13 +548,13 @@ _확인한 곳 — B. Efron, 「Bootstrap Methods: Another Look at the Jackknife
     \text{Var}^*(x_j^*) = \frac{1}{n}\sum_{i=1}^n (x_i - \bar{x})^2 = \frac{n-1}{n} s^2
     $$
 
-    붓스트랩 아래에서 $x_j^*$들이 i.i.d.이므로:
+    붓스트랩 아래에서 $x_j^*$들이 i.i.d.이므로 이렇게 된다.
 
     $$
     \text{Var}^*(\bar{x}^*) = \frac{1}{n} \cdot \frac{n-1}{n} s^2 = \frac{(n-1)s^2}{n^2}
     $$
 
-    $B \to \infty$일 때 붓스트랩 표준오차는 다음으로 수렴한다:
+    $B \to \infty$일 때 붓스트랩 표준오차는 다음으로 수렴한다.
 
     $$
     \widehat{\text{SE}}_{\text{boot}} \to \sqrt{\frac{(n-1)s^2}{n^2}} = \frac{s\sqrt{n-1}}{n}

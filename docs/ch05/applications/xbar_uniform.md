@@ -328,7 +328,7 @@ _확인한 곳 — 조지 E. P. 박스와 머빈 E. 뮐러의 「A Note on the G
 ??? success "풀이"
     표준오차는 $\text{SE} = \sigma / \sqrt{n}$이다.
 
-    표준오차의 비는:
+    표준오차의 비는 이렇게 된다.
 
     $$
     \frac{\text{SE}(n=5)}{\text{SE}(n=20)} = \frac{\sigma/\sqrt{5}}{\sigma/\sqrt{20}} = \sqrt{\frac{20}{5}} = \sqrt{4} = 2
@@ -336,7 +336,7 @@ _확인한 곳 — 조지 E. P. 박스와 머빈 E. 뮐러의 「A Note on the G
 
     따라서 $n = 5$에서 $n = 20$으로 갈 때 표준오차가 2배로 줄어든다.
 
-    $n = 5$ 대비 표준오차를 절반으로 줄이려면:
+    $n = 5$ 대비 표준오차를 절반으로 줄이려면 이렇게 된다.
 
     $$
     \frac{\sigma}{\sqrt{n}} = \frac{1}{2} \cdot \frac{\sigma}{\sqrt{5}} \implies \sqrt{n} = 2\sqrt{5} \implies n = 20
@@ -384,7 +384,7 @@ _확인한 곳 — 조지 E. P. 박스와 머빈 E. 뮐러의 「A Note on the G
     E[\bar{X}] = E\!\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu
     $$
 
-    독립성에 의해:
+    독립성에 의해 이렇게 된다.
 
     $$
     \text{Var}(\bar{X}) = \text{Var}\!\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}
@@ -401,13 +401,13 @@ _확인한 곳 — 조지 E. P. 박스와 머빈 E. 뮐러의 「A Note on the G
 </div>
 
 ??? success "풀이"
-    $n = 50$에서의 이론적 표준오차는:
+    $n = 50$에서의 이론적 표준오차는 이렇게 된다.
 
     $$
     \text{SE} = \frac{1/\sqrt{12}}{\sqrt{50}} = \frac{1}{\sqrt{600}} \approx 0.0408
     $$
 
-    코드로는:
+    코드로는 이렇게 된다.
 
     ```python
     import numpy as np
@@ -579,13 +579,13 @@ $\text{Uniform}(0,1)$에서 $n=5$일 때 $\bar X$의 지지집합은 $[0,1]$이�
 </div>
 
 ??? success "풀이"
-    정의에 의해 $\bar{X} = S_n / n$이다. $n = 2$일 때 $S_2 = X_1 + X_2$의 Irwin–Hall pdf는 삼각분포이다:
+    정의에 의해 $\bar{X} = S_n / n$이다. $n = 2$일 때 $S_2 = X_1 + X_2$의 Irwin–Hall pdf는 삼각분포이다.
 
     $$
     f_{S_2}(s) = \begin{cases} s & 0 \le s \le 1 \\ 2 - s & 1 < s \le 2 \\ 0 & \text{otherwise} \end{cases}
     $$
 
-    $\bar{X} = S_2 / 2$이므로 변수변환 공식을 적용한다. $y = s/2$로 두면 $s = 2y$이고 $ds = 2\,dy$이므로:
+    $\bar{X} = S_2 / 2$이므로 변수변환 공식을 적용한다. $y = s/2$로 두면 $s = 2y$이고 $ds = 2\,dy$이므로 이렇게 된다.
 
     $$
     f_{\bar{X}}(y) = f_{S_2}(2y) \cdot 2 = \begin{cases} 4y & 0 \le y \le \tfrac{1}{2} \\ 4(1 - y) & \tfrac{1}{2} < y \le 1 \\ 0 & \text{otherwise} \end{cases}

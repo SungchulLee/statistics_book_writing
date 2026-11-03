@@ -25,7 +25,7 @@ $$\text{Bias}(\hat{\theta}) = E[\hat{\theta}] - \theta$$
 
 $\text{Bias}(\hat{\theta}) = 0$이면, 즉 $E[\hat{\theta}] = \theta$이면 추정량이 **불편**이라고 한다.
 
-**핵심:**
+**핵심은 이렇다.**
 
 - 편향은 참 모수로부터의 체계적 이탈을 잰다
 - 불편추정량은 가능한 모든 표본에 걸쳐 "평균적으로" 옳다
@@ -104,7 +104,7 @@ for p in (0.05, 0.1, 0.2, 0.4):
 
 $$\text{Var}(\hat{\theta}) = E\left[(\hat{\theta} - E[\hat{\theta}])^2\right]$$
 
-**핵심:**
+**핵심은 이렇다.**
 
 - 분산은 어떤 표본이 뽑혔느냐에 대한 추정량의 민감도를 담아낸다
 - 분산이 크다는 것은 표본마다 추정량이 크게 달라진다는 뜻이다
@@ -463,8 +463,7 @@ _확인한 곳 — ①②의 수는 직접 모의실험한 값이다 · ③은 `
 
 ---
 
-## 7. 금융과의 연결
-
+## 7. 금융과의 연결 — 축소추정량을 고를 것인가
 계량금융에서 편향–분산 맞바꿈은 여러 맥락에서 나타난다.
 
 - **포트폴리오 최적화**: 표본 공분산행렬(불편)과 축소추정량(편향되지만 분산이 작음) 중에서 고르는 문제이다. Ledoit-Wolf 축소추정량이 유명한 응용이다.
@@ -815,7 +814,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 ??? success "풀이"
     $T = \sum(X_i - \bar X)^2$이라 하자. 그러면 $T \sim \sigma^2 \chi^2_{n-1}$이므로 $\mathbb{E}[T] = (n-1)\sigma^2$, $\mathrm{Var}(T) = 2(n-1)\sigma^4$이다.
 
-    $\hat\sigma^2_c = c T$에 대해:
+    $\hat\sigma^2_c = c T$에 대해 이렇게 된다.
 
     $\mathbb{E}[\hat\sigma^2_c] = c(n-1)\sigma^2$, $\mathrm{Bias} = (c(n-1) - 1)\sigma^2$, $\mathrm{Var} = 2 c^2 (n-1) \sigma^4$.
 
@@ -855,7 +854,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 </div>
 
 ??? success "풀이"
-    **편향추정량의 CRLB:** 편향 여부와 무관하게 임의의 추정량 $\hat\theta$에 대해:
+    **편향추정량의 CRLB:** 편향 여부와 무관하게 임의의 추정량 $\hat\theta$에 대해 이렇게 된다.
 
     $$
     \mathrm{Var}(\hat\theta) \ge \frac{(1 + b'(\theta))^2}{n I(\theta)}
@@ -883,7 +882,7 @@ $X_i \sim \mathrm{Uniform}(0, \theta)$가 i.i.d.이다. 두 추정량 $\hat\thet
 
     MSE $= w^2 p_0(1-p_0)/n$이며 $w = 0$에서 최소가 된다(즉 언제나 $p_0$으로 추정한다).
 
-    **더 현실적인 경우:** 참 $p$가 불확실하다($\mathbb{E}[p] = p_0$, $\mathrm{Var}(p) = \tau^2$인 확률변수). 편향의 제곱은 $(1 - w)^2(p - p_0)^2$이고, $p$에 대한 기대 평균제곱오차는:
+    **더 현실적인 경우:** 참 $p$가 불확실하다($\mathbb{E}[p] = p_0$, $\mathrm{Var}(p) = \tau^2$인 확률변수). 편향의 제곱은 $(1 - w)^2(p - p_0)^2$이고, $p$에 대한 기대 평균제곱오차는 이렇게 된다.
 
     $w^2 p_0(1-p_0)/n + (1-w)^2 \tau^2$.
 

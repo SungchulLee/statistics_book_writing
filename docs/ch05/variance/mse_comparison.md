@@ -380,13 +380,13 @@ $K\alpha/(n+K\alpha)$ 는 $1/n$ 로 줄어든다.
 </div>
 
 ??? success "풀이"
-    MSE는 제곱오차 손실 $L(\hat\theta, \theta) = (\hat\theta - \theta)^2$이다. 널리 쓰이는 이유:
+    MSE는 제곱오차 손실 $L(\hat\theta, \theta) = (\hat\theta - \theta)^2$이다. 널리 쓰이는 이유는 이렇다.
 
     - 수학적으로 다루기 쉽다(기댓값의 선형성, 편향 + 분산으로의 분해).
     - 어디서나 미분 가능하다 — 해석적 최적화가 가능하다.
     - 큰 오차에 큰 벌점을 준다(제곱).
 
-    **대안:**
+    **대안은 이렇다.**
 
     - **절대오차:** $|\hat\theta - \theta|$. 사후 중앙값에서 최소가 되며 이상점에 더 로버스트하다.
     - **분위 손실:** $\rho_\tau(\hat\theta - \theta) = (\hat\theta - \theta)(\tau - \mathbf 1\{\hat\theta < \theta\})$. 분위회귀에서 쓰인다.
@@ -421,7 +421,7 @@ $K\alpha/(n+K\alpha)$ 는 $1/n$ 로 줄어든다.
 </div>
 
 ??? success "풀이"
-    세 가지 모두:
+    세 가지 모두 이렇게 된다.
 
     - $\mathrm{MSE}(\hat\sigma^2_{\text{MLE}})/\sigma^4 = (2n-1)/n^2 \to 2/n$.
     - $\mathrm{MSE}(S^2)/\sigma^4 = 2/(n-1) \to 2/n$.

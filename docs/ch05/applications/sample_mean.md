@@ -328,7 +328,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
 </div>
 
 ??? success "풀이"
-    모집단이 정규이므로 $n = 5$에서도 결과가 정확하다:
+    모집단이 정규이므로 $n = 5$에서도 결과가 정확하다.
 
     $$
     \text{SE} = \frac{10}{\sqrt{5}} \approx 4.47, \qquad
@@ -357,7 +357,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
 </div>
 
 ??? success "풀이"
-    물이 떨어진다는 것은 $\bar{X} > 110/50 = 2.2$를 뜻한다:
+    물이 떨어진다는 것은 $\bar{X} > 110/50 = 2.2$를 뜻한다.
 
     $$
     \text{SE} = \frac{0.7}{\sqrt{50}} \approx 0.0990, \qquad
@@ -384,7 +384,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
 </div>
 
 ??? success "풀이"
-    모집단이 치우쳐 있지만 $n = 100$이면 중심극한정리를 쓰기에 충분히 크다:
+    모집단이 치우쳐 있지만 $n = 100$이면 중심극한정리를 쓰기에 충분히 크다.
 
     $$
     \text{SE} = \frac{500}{\sqrt{100}} = 50, \qquad
@@ -625,7 +625,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
 </div>
 
 ??? success "풀이"
-    다음이 필요하다:
+    다음이 필요하다.
 
     $$
     \frac{\sigma}{\sqrt{n}} \le 0.5 \implies \sqrt{n} \ge \frac{8}{0.5} = 16 \implies n \ge 256
@@ -662,7 +662,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
 ??? success "풀이"
     $n > 0$에서 $f(n) = \sigma / \sqrt{n} = \sigma \cdot n^{-1/2}$이라 하자.
 
-    1계도함수:
+    1계도함수는 이렇게 된다.
 
     $$
     f'(n) = -\frac{\sigma}{2} n^{-3/2} < 0
@@ -670,7 +670,7 @@ the theory, it has been my aim to apply to it the test of experiment」는 같�
 
     따라서 $f$는 순감소한다. 표본이 클수록 언제나 표준오차가 작아진다.
 
-    2계도함수:
+    2계도함수는 이렇게 된다.
 
     $$
     f''(n) = \frac{3\sigma}{4} n^{-5/2} > 0

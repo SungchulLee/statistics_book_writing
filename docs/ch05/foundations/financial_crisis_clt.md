@@ -93,7 +93,7 @@ _확인한 곳 — 스캔은 [Internet Archive 「Journal of the Royal Statistic
 $\theta$를 적분해 없애면 둘째 모형에서 $D$의 분포를 손으로 적을 수 있다.
 
 !!! abstract "이론적 PMF"
-    $\theta \sim \text{Beta}(2, 1)$이고 $D \mid \theta \sim \text{Binomial}(n, \theta)$일 때 $D$의 주변 PMF는:
+    $\theta \sim \text{Beta}(2, 1)$이고 $D \mid \theta \sim \text{Binomial}(n, \theta)$일 때 $D$의 주변 PMF는 이렇게 된다.
 
     $$
     P(D = d) = \int_0^1 \binom{n}{d} \theta^d (1-\theta)^{n-d} \cdot 2\theta \, d\theta = \frac{2(d+1)}{(n+1)(n+2)}
@@ -373,7 +373,7 @@ $\theta$를 적분해 없애면 둘째 모형에서 $D$의 분포를 손으로 �
     E[D] = E[E[D \mid \theta]] = E[n\theta] = n \cdot E[\theta] = 100 \cdot \frac{2}{3} = \frac{200}{3}
     $$
 
-    평균은 동일하다. 분산은:
+    평균은 동일하다. 분산은 이렇게 된다.
 
     $$
     \text{Var}(D) = E[\text{Var}(D \mid \theta)] + \text{Var}(E[D \mid \theta])
@@ -433,7 +433,7 @@ $\theta$를 적분해 없애면 둘째 모형에서 $D$의 분포를 손으로 �
 </div>
 
 ??? success "풀이"
-    $i \ne j$에 대해:
+    $i \ne j$에 대해 이렇게 된다.
 
     $$
     E[X_i X_j] = E[E[X_i X_j \mid \theta]] = E[\theta \cdot \theta] = E[\theta^2]
@@ -445,13 +445,13 @@ $\theta$를 적분해 없애면 둘째 모형에서 $D$의 분포를 손으로 �
     E[X_i] \cdot E[X_j] = (E[\theta])^2
     $$
 
-    따라서:
+    따라서 이렇게 된다.
 
     $$
     \text{Cov}(X_i, X_j) = E[\theta^2] - (E[\theta])^2 = \text{Var}(\theta)
     $$
 
-    $\theta \sim \text{Beta}(2, 1)$에 대해:
+    $\theta \sim \text{Beta}(2, 1)$에 대해 이렇게 된다.
 
     $$
     \text{Cov}(X_i, X_j) = \text{Var}(\theta) = \frac{2 \cdot 1}{(2+1)^2(2+1+1)} = \frac{2}{36} = \frac{1}{18} \approx 0.0556
@@ -474,7 +474,7 @@ $\theta$를 적분해 없애면 둘째 모형에서 $D$의 분포를 손으로 �
     E[\theta] = \frac{20}{30} = \frac{2}{3}, \qquad \text{Var}(\theta) = \frac{20 \cdot 10}{30^2 \cdot 31} = \frac{200}{27900} \approx 0.00717
     $$
 
-    전체 분산 공식을 사용하면:
+    전체 분산 공식을 사용하면 이렇게 된다.
 
     $$
     \text{Var}(D) = n(E[\theta] - E[\theta^2]) + n^2\text{Var}(\theta)
@@ -501,7 +501,7 @@ $\theta$를 적분해 없애면 둘째 모형에서 $D$의 분포를 손으로 �
 ??? success "풀이"
     정규 코퓰러 모형은 차입자의 부도가 개별 요인에 의해 결정되고 상관은 약할 뿐이라고 가정하며, 이를 다변량 정규 의존 구조로 모형화했다. 이 틀에서는 다변량 정규분포의 꼬리가 (지수적으로 감소하여) 가볍기 때문에 많은 부도가 동시에 일어날 확률(꼬리 사건)이 무시할 만했다.
 
-    가장 결정적으로 위배된 가정은 **상관 구조가 적절하다는 가정**이다. 구체적으로:
+    가장 결정적으로 위배된 가정은 **상관 구조가 적절하다는 가정**이다. 구체적으로 이렇게 된다.
 
     1. **공통 시스템 위험**: 이 모형은 차입자의 부도가 공통의 경제 요인(주택 가격, 금리, 고용)과 얼마나 강하게 연결되어 있는지를 과소평가했다. 전국적으로 주택 가격이 하락하자 부도들이 높은 상관을 갖게 되었다.
 

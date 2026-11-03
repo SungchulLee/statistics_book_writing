@@ -24,11 +24,11 @@ $$E[\bar{X}] = \mu$$
 
 ??? proof "증명"
 
-    기댓값의 선형성에 의해:
+    기댓값의 선형성에 의해 이렇게 된다.
 
     $$E[\bar{X}] = E\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu$$
 
-    이는 최소한의 조건 아래에서 성립한다:
+    이는 최소한의 조건 아래에서 성립한다.
 
     - 관측값이 동일한 분포를 따를 필요가 없다(모든 $i$에 대해 $E[X_i] = \mu$이기만 하면 된다)
     - 관측값이 독립일 필요가 없다
@@ -193,11 +193,11 @@ $$P\left(\lim_{n \to \infty} \bar{X}_n = \mu\right) = 1$$
 
 $\bar{X}_n$은 얼마나 빨리 $\mu$로 수렴하는가?
 
-**평균제곱오차의 수렴 속도:**
+**평균제곱오차의 수렴 속도는 이렇게 된다.**
 
 $$\text{MSE}(\bar{X}_n) = \frac{\sigma^2}{n} = O(1/n)$$
 
-**표준오차의 수렴 속도:**
+**표준오차의 수렴 속도는 이렇게 된다.**
 
 $$\text{SE}(\bar{X}_n) = \frac{\sigma}{\sqrt{n}} = O(1/\sqrt{n})$$
 
@@ -329,8 +329,7 @@ $$\bar{X} \pm t_{1-\alpha/2,\,n-1} \frac{S}{\sqrt{n}} \quad (\sigma \text{를 �
 
 ---
 
-## 6. 금융과의 연결
-
+## 6. 금융과의 연결 — 수렴이 너무 느리다
 평균의 편향과 일치성을 이해하는 것은 금융에서 결정적이다.
 
 - **수익률 추정**: $\bar{X}$가 일치하기는 하지만 수렴 속도 $O(1/\sqrt{n})$은 실제 수익률 예측에 쓰기에는 너무 느리다. 30년치 월별 자료($n = 360$)에서도 $\text{SE} \approx \sigma_{\text{월별}} / 19$로 여전히 상당하다.
@@ -833,7 +832,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
     유도: 서로 다른 두 추출의 공분산은 $-\sigma^2/(N-1)$이다(비복원 추출). 모든 쌍과 개별 분산을 더하고 $n^2$으로 나눈다.
 
-    인자 $(N-n)/(N-1)$이 **유한모집단 수정(FPC)**이다:
+    인자 $(N-n)/(N-1)$이 **유한모집단 수정(FPC)**이다.
 
     - $n = N$ (전수조사): FPC = 0, $\mathrm{Var}(\bar X) = 0$. 모두를 측정했다.
     - $n \ll N$: FPC $\approx 1$, $\mathrm{Var}(\bar X) \approx \sigma^2/n$. 표준 공식.
@@ -1052,7 +1051,7 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 
     $$P(\bar{X}_T > 0) = P\left(Z > \frac{-\mu}{\sigma/\sqrt{T}}\right) = \mathcal{N}\left(\frac{\mu\sqrt{T}}{\sigma}\right) \geq 0.90$$
 
-    $\mathcal{N}^{-1}(0.90) = 1.282$이므로:
+    $\mathcal{N}^{-1}(0.90) = 1.282$이므로 이렇게 된다.
 
     $$\frac{0.03\sqrt{T}}{0.20} \geq 1.282 \implies \sqrt{T} \geq \frac{1.282 \times 0.20}{0.03} = 8.547 \implies T \geq 73.1$$
 
@@ -1069,13 +1068,13 @@ $X_1, \ldots, X_n$이 $\mathbb{E}[X_i] = \mu$를 만족한다. $\bar X$가 불�
 </div>
 
 ??? success "풀이"
-    **WLLN:** $E[X_i] = \mu$이고 $\text{Var}(X_i) = \sigma^2 < \infty$인 i.i.d. $X_1, X_2, \ldots$에 대해:
+    **WLLN:** $E[X_i] = \mu$이고 $\text{Var}(X_i) = \sigma^2 < \infty$인 i.i.d. $X_1, X_2, \ldots$에 대해 이렇게 된다.
 
     $$\bar{X}_n \xrightarrow{P} \mu \quad \text{(확률수렴)}$$
 
     즉 모든 $\epsilon > 0$에 대해 $n \to \infty$일 때 $P(|\bar{X}_n - \mu| > \epsilon) \to 0$이다.
 
-    **SLLN:** 더 약한 조건 $E[|X_i|] < \infty$(1차 적률만 유한하고 분산은 필요 없음) 아래에서:
+    **SLLN:** 더 약한 조건 $E[|X_i|] < \infty$(1차 적률만 유한하고 분산은 필요 없음) 아래에서 이렇게 된다.
 
     $$\bar{X}_n \xrightarrow{\text{a.s.}} \mu \quad \text{(거의 확실한 수렴)}$$
 
@@ -1100,7 +1099,7 @@ $|\rho| < 1$이고 $\epsilon_t \sim N(0, \sigma_\epsilon^2)$인 AR(1) 과정 $X_
 
     $$= \frac{\gamma_0}{n^2}\left(n + 2\sum_{h=1}^{n-1}(n-h)\rho^h\right)$$
 
-    큰 $n$에서 $\sum_{h=1}^{n-1}(n-h)\rho^h \approx n\sum_{h=1}^{\infty}\rho^h = \frac{n\rho}{1-\rho}$이다. 따라서:
+    큰 $n$에서 $\sum_{h=1}^{n-1}(n-h)\rho^h \approx n\sum_{h=1}^{\infty}\rho^h = \frac{n\rho}{1-\rho}$이다. 따라서 이렇게 된다.
 
     $$\text{Var}(\bar{X}_n) \approx \frac{\gamma_0}{n}\left(1 + \frac{2\rho}{1-\rho}\right) = \frac{\gamma_0}{n}\cdot\frac{1+\rho}{1-\rho}$$
 
@@ -1348,11 +1347,11 @@ i.i.d. 코시 확률변수의 $\bar{X}_n$이 코시 관측값 하나와 같은 �
 ??? success "풀이"
     표준 코시 확률변수의 특성함수는 $\varphi_X(t) = e^{-|t|}$이다.
 
-    i.i.d. Cauchy $X_1, \ldots, X_n$에 대해 $S_n = \sum X_i$의 특성함수는:
+    i.i.d. Cauchy $X_1, \ldots, X_n$에 대해 $S_n = \sum X_i$의 특성함수는 이렇게 된다.
 
     $$\varphi_{S_n}(t) = \left(e^{-|t|}\right)^n = e^{-n|t|}$$
 
-    $\bar{X}_n = S_n/n$의 특성함수는:
+    $\bar{X}_n = S_n/n$의 특성함수는 이렇게 된다.
 
     $$\varphi_{\bar{X}_n}(t) = \varphi_{S_n}(t/n) = e^{-n|t/n|} = e^{-|t|}$$
 

@@ -395,13 +395,13 @@ Vaccine", 『New England Journal of Medicine』 $383$ 권 $2603$–$2615$ 쪽($2
 </div>
 
 ??? success "풀이"
-    $n = 20$번 중 $k = 13$번이 앞면이라 하자. 로그가능도는:
+    $n = 20$번 중 $k = 13$번이 앞면이라 하자. 로그가능도는 이렇게 된다.
 
     $$
     \ell(p) = k \log p + (n-k) \log(1-p) = 13\log p + 7\log(1-p)
     $$
 
-    도함수를 0으로 두면:
+    도함수를 0으로 두면 이렇게 된다.
 
     $$
     \frac{d\ell}{dp} = \frac{13}{p} - \frac{7}{1-p} = 0
@@ -423,13 +423,13 @@ Vaccine", 『New England Journal of Medicine』 $383$ 권 $2603$–$2615$ 쪽($2
 </div>
 
 ??? success "풀이"
-    $k = \sum x_i$번 성공한 $n$번의 독립 베르누이 시행에 대해 로그가능도는:
+    $k = \sum x_i$번 성공한 $n$번의 독립 베르누이 시행에 대해 로그가능도는 이렇게 된다.
 
     $$
     \ell(p) = k \log p + (n-k)\log(1-p)
     $$
 
-    미분하여 0으로 두면:
+    미분하여 0으로 두면 이렇게 된다.
 
     $$
     \frac{d\ell}{dp} = \frac{k}{p} - \frac{n-k}{1-p} = 0 \implies k(1-p) = (n-k)p \implies k = np
@@ -451,19 +451,19 @@ Vaccine", 『New England Journal of Medicine』 $383$ 권 $2603$–$2615$ 쪽($2
 </div>
 
 ??? success "풀이"
-    Bernoulli$(p)$ 관측값 하나에 대해 로그가능도는 $\ell(p) = x\log p + (1-x)\log(1-p)$이다. 2계도함수는:
+    Bernoulli$(p)$ 관측값 하나에 대해 로그가능도는 $\ell(p) = x\log p + (1-x)\log(1-p)$이다. 2계도함수는 이렇게 된다.
 
     $$
     \frac{d^2\ell}{dp^2} = -\frac{x}{p^2} - \frac{1-x}{(1-p)^2}
     $$
 
-    ($E[X] = p$를 사용하여) 기댓값에 음수를 취하면:
+    ($E[X] = p$를 사용하여) 기댓값에 음수를 취하면 이렇게 된다.
 
     $$
     I(p) = -E\!\left[\frac{d^2\ell}{dp^2}\right] = \frac{p}{p^2} + \frac{1-p}{(1-p)^2} = \frac{1}{p} + \frac{1}{1-p} = \frac{1}{p(1-p)}
     $$
 
-    $n$개의 관측값에 기반한 $\hat{p}$의 점근분산은:
+    $n$개의 관측값에 기반한 $\hat{p}$의 점근분산은 이렇게 된다.
 
     $$
     \text{Var}(\hat{p}) \approx \frac{1}{nI(p)} = \frac{p(1-p)}{n}

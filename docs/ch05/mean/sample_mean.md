@@ -96,8 +96,7 @@ $\bar X$ 가 언제나 최선인 것은 아니고, 무너지는 네 자리에는
 
 ---
 
-## 6. 금융과의 연결
-
+## 6. 금융과의 연결 — 기대수익률은 악명 높게 부정확하다
 표본평균은 금융에서 어디에나 쓰이지만, 그 한계가 특히 중요하다.
 
 - **기대수익률 추정**: 과거 수익률의 표본평균이 기대수익률의 표준적인 추정량이지만, 악명 높을 만큼 부정확하다. 연간 수익률 변동성이 20%이고 자료가 50년치라는 전형적인 설정에서 $\text{SE}(\bar{X}) \approx 20\%/\sqrt{50} \approx 2.8\%$인데, 이는 전형적인 위험프리미엄에 비해 크다.
@@ -731,9 +730,9 @@ _확인한 곳 — 길로비치·발론·트버스키의 $1985$ 년 뜨거운 �
 </div>
 
 ??? success "풀이"
-    두 가지 관점이 있다:
+    두 가지 관점이 있다.
 
-    **대수적 관점:** $\sum(X_i - \bar X)^2 = \sum X_i^2 - n\bar X^2$. 기댓값을 취하면:
+    **대수적 관점:** $\sum(X_i - \bar X)^2 = \sum X_i^2 - n\bar X^2$. 기댓값을 취하면 이렇게 된다.
 
     $\mathbb{E}[\sum X_i^2] = n(\sigma^2 + \mu^2)$, $\mathbb{E}[n\bar X^2] = \sigma^2 + n\mu^2$. 빼면 $(n-1)\sigma^2$.
 
@@ -753,7 +752,7 @@ _확인한 곳 — 길로비치·발론·트버스키의 $1985$ 년 뜨거운 �
 ??? success "풀이"
     정상 AR(1)에서 $X_t = \sum_{k=0}^\infty \rho^k \varepsilon_{t-k}$이고, $\mathrm{Var}(X_t) = \sigma^2_\varepsilon/(1 - \rho^2)$, $\mathrm{Cov}(X_s, X_t) = \rho^{|s-t|} \sigma^2_\varepsilon/(1-\rho^2)$이다.
 
-    $\mathrm{Var}(\bar X) = (1/n^2)\sum_{s, t} \mathrm{Cov}(X_s, X_t)$. 계산을 정리하면:
+    $\mathrm{Var}(\bar X) = (1/n^2)\sum_{s, t} \mathrm{Cov}(X_s, X_t)$. 계산을 정리하면 이렇게 된다.
 
     $\mathrm{Var}(\bar X) \approx \frac{\sigma^2_X}{n} \cdot \frac{1 + \rho}{1 - \rho}$ (큰 $n$에 대해, $\sigma^2_X = \sigma^2_\varepsilon/(1-\rho^2)$).
 
@@ -946,7 +945,7 @@ _확인한 곳 — 길로비치·발론·트버스키의 $1985$ 년 뜨거운 �
 </div>
 
 ??? success "풀이"
-    $X_1, \ldots, X_n$이 i.i.d.이고 $E[X_i] = \mu$라 하자. 그러면:
+    $X_1, \ldots, X_n$이 i.i.d.이고 $E[X_i] = \mu$라 하자. 그러면 이렇게 된다.
 
     $$E[\bar{X}] = E\left[\frac{1}{n}\sum_{i=1}^n X_i\right] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \frac{1}{n} \cdot n\mu = \mu$$
 
@@ -961,11 +960,11 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 </div>
 
 ??? success "풀이"
-    $\text{Var}(X_i) = \sigma^2$인 i.i.d. $X_1, \ldots, X_n$에 대해:
+    $\text{Var}(X_i) = \sigma^2$인 i.i.d. $X_1, \ldots, X_n$에 대해 이렇게 된다.
 
     $$\text{Var}(\bar{X}) = \text{Var}\left(\frac{1}{n}\sum_{i=1}^n X_i\right) = \frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i) = \frac{1}{n^2}\cdot n\sigma^2 = \frac{\sigma^2}{n}$$
 
-    두 번째 단계는 독립성을 쓴다(합의 분산이 분산의 합이 된다). 표준오차는 $\text{SE} = \sigma/\sqrt{n}$이다. 이를 절반으로 줄이려면:
+    두 번째 단계는 독립성을 쓴다(합의 분산이 분산의 합이 된다). 표준오차는 $\text{SE} = \sigma/\sqrt{n}$이다. 이를 절반으로 줄이려면 이렇게 된다.
 
     $$\frac{\sigma}{\sqrt{n'}} = \frac{1}{2}\cdot\frac{\sigma}{\sqrt{n}} \implies \sqrt{n'} = 2\sqrt{n} \implies n' = 4n$$
 
@@ -980,17 +979,17 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 </div>
 
 ??? success "풀이"
-    정규화하지 않은 가중치는 $w_i^* = 1/\sigma_i^2$이다:
+    정규화하지 않은 가중치는 $w_i^* = 1/\sigma_i^2$이다.
 
     $$w_1^* = 1, \quad w_2^* = 0.25, \quad w_3^* = 0.04, \quad w_4^* = 0.01, \quad w_5^* = 4$$
 
     합은 $W = 1 + 0.25 + 0.04 + 0.01 + 4 = 5.3$이다. 정규화한 가중치는 $w_i = w_i^*/W$이다.
 
-    가중평균의 분산은:
+    가중평균의 분산은 이렇게 된다.
 
     $$\text{Var}(\bar{X}_w) = \sum_{i=1}^5 w_i^2 \sigma_i^2 = \frac{1}{W^2}\sum_{i=1}^5 \frac{\sigma_i^2}{\sigma_i^4} = \frac{1}{W^2}\sum_{i=1}^5 \frac{1}{\sigma_i^2} = \frac{W}{W^2} = \frac{1}{W} = \frac{1}{5.3} \approx 0.1887$$
 
-    가중하지 않은 평균의 분산은:
+    가중하지 않은 평균의 분산은 이렇게 된다.
 
     $$\text{Var}(\bar{X}) = \frac{1}{25}\sum_{i=1}^5 \sigma_i^2 = \frac{1 + 4 + 25 + 100 + 0.25}{25} = \frac{130.25}{25} = 5.21$$
 
@@ -1005,15 +1004,15 @@ i.i.d. 관측값에 대해 $\text{Var}(\bar{X}) = \sigma^2/n$임을 보여라. �
 </div>
 
 ??? success "풀이"
-    $X_i \sim N(\mu, \sigma^2)$에서 표본평균의 분산은 $\sigma^2/n$이다. 표본중앙값 $\tilde{X}$의 점근분산은:
+    $X_i \sim N(\mu, \sigma^2)$에서 표본평균의 분산은 $\sigma^2/n$이다. 표본중앙값 $\tilde{X}$의 점근분산은 이렇게 된다.
 
     $$\text{Var}(\tilde{X}) \approx \frac{1}{4n[f(\mu)]^2}$$
 
-    여기서 $f$는 모집단 밀도이다. 정규분포에서 $f(\mu) = \frac{1}{\sigma\sqrt{2\pi}}$이므로:
+    여기서 $f$는 모집단 밀도이다. 정규분포에서 $f(\mu) = \frac{1}{\sigma\sqrt{2\pi}}$이므로 이렇게 된다.
 
     $$\text{Var}(\tilde{X}) \approx \frac{1}{4n \cdot \frac{1}{2\pi\sigma^2}} = \frac{2\pi\sigma^2}{4n} = \frac{\pi\sigma^2}{2n}$$
 
-    점근 상대효율은:
+    점근 상대효율은 이렇게 된다.
 
     $$\text{ARE}(\tilde{X}, \bar{X}) = \frac{\text{Var}(\bar{X})}{\text{Var}(\tilde{X})} = \frac{\sigma^2/n}{\pi\sigma^2/(2n)} = \frac{2}{\pi} \approx 0.637$$
 
@@ -1028,17 +1027,17 @@ $X_1 \sim N(\mu, 1)$과 $X_2 \sim N(\mu, 9)$를 독립적으로 관측한다고 
 </div>
 
 ??? success "풀이"
-    $b = 1 - a$로 두면 분산은:
+    $b = 1 - a$로 두면 분산은 이렇게 된다.
 
     $$\text{Var}(\hat{\mu}) = a^2 \cdot 1 + (1-a)^2 \cdot 9 = a^2 + 9(1-a)^2$$
 
-    미분하여 0으로 놓으면:
+    미분하여 0으로 놓으면 이렇게 된다.
 
     $$\frac{d}{da}\left[a^2 + 9(1-a)^2\right] = 2a - 18(1-a) = 2a - 18 + 18a = 20a - 18 = 0$$
 
     따라서 $a = 9/10$, $b = 1/10$이다. 이는 역분산 가중치와 일치한다: $w_1 \propto 1/1 = 1$, $w_2 \propto 1/9$를 정규화하면 $(9/10, 1/10)$이다.
 
-    최소 분산은:
+    최소 분산은 이렇게 된다.
 
     $$\text{Var}(\hat{\mu}) = \left(\frac{9}{10}\right)^2 + 9\left(\frac{1}{10}\right)^2 = \frac{81}{100} + \frac{9}{100} = \frac{90}{100} = \frac{9}{10}$$
 

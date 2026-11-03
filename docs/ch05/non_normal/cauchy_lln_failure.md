@@ -522,7 +522,7 @@ $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \text{에 대해}$$
 ??? success "풀이"
     $$E[|X|] = \int_{-\infty}^{\infty} \frac{|x|}{\pi(1+x^2)}\,dx = \frac{2}{\pi}\int_0^{\infty} \frac{x}{1+x^2}\,dx$$
 
-    치환 $u = 1 + x^2$, $du = 2x\,dx$를 쓰면:
+    치환 $u = 1 + x^2$, $du = 2x\,dx$를 쓰면 이렇게 된다.
 
     $$\frac{2}{\pi}\int_0^{\infty} \frac{x}{1+x^2}\,dx = \frac{2}{\pi}\cdot\frac{1}{2}\int_1^{\infty}\frac{du}{u} = \frac{1}{\pi}\left[\ln u\right]_1^{\infty} = \frac{1}{\pi}\cdot\infty = \infty$$
 
@@ -540,19 +540,19 @@ $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \text{에 대해}$$
 ??? success "풀이"
     코시 밀도 $f(x) = \frac{1}{\pi(1+x^2)}$에서 (표준 코시의 중앙값인) 0에서의 값은 $f(0) = 1/\pi$이다.
 
-    표본중앙값의 점근분산은:
+    표본중앙값의 점근분산은 이렇게 된다.
 
     $$\text{Var}(\text{median}) \approx \frac{1}{4nf(0)^2} = \frac{1}{4n(1/\pi)^2} = \frac{\pi^2}{4n} \approx \frac{2.467}{n}$$
 
-    코시 위치모수 $\mu$에 대한 피셔 정보량은:
+    코시 위치모수 $\mu$에 대한 피셔 정보량은 이렇게 된다.
 
     $$I(\mu) = \int_{-\infty}^{\infty} \frac{[f'(x-\mu)]^2}{f(x-\mu)}\,dx = \frac{1}{2}$$
 
-    따라서 CRLB(그리고 MLE의 점근분산)는:
+    따라서 CRLB(그리고 MLE의 점근분산)는 이렇게 된다.
 
     $$\text{Var}(\hat{\mu}_{\text{MLE}}) \approx \frac{1}{nI(\mu)} = \frac{2}{n}$$
 
-    MLE 대비 중앙값의 점근 상대효율은:
+    MLE 대비 중앙값의 점근 상대효율은 이렇게 된다.
 
     $$\text{ARE} = \frac{2/n}{\pi^2/(4n)} = \frac{8}{\pi^2} \approx 0.811$$
 
@@ -574,12 +574,12 @@ $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \text{에 대해}$$
 
     이 성립한다는 뜻이다. 동등하게, 이 족은 (위치와 척도를 조정하면) 덧셈에 대해 닫혀 있다. 대칭 안정분포의 특성함수는 $\varphi(t) = \exp(-c|t|^\alpha + i\delta t)$ 꼴이다.
 
-    **코시는 $\alpha = 1$이다:**
+    **코시는 $\alpha = 1$이다.**
 
     - 특성함수: $\varphi(t) = e^{-|t|}$, 즉 $e^{-|t|^1}$이므로 $\alpha = 1$.
     - 합의 성질: $S_n = \sum X_i$은 $\varphi_{S_n}(t) = e^{-n|t|}$이므로 $\text{Cauchy}(0, n)$에 해당한다. 이는 $n^{1/\alpha}X = n^1 X \sim \text{Cauchy}(0, n)$과 일치한다.
 
-    **안정지수 $\alpha$가 꼬리 거동을 결정한다:**
+    **안정지수 $\alpha$가 꼬리 거동을 결정한다.**
 
     - ($\alpha < 2$일 때) $t \to \infty$에서 $P(|X| > t) \sim t^{-\alpha}$.
     - $\alpha = 2$: Gaussian(지수 꼬리, 모든 적률이 유한).
@@ -832,17 +832,17 @@ $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \text{에 대해}$$
 ??? success "풀이"
     표준 코시의 특성함수는 $\varphi_X(t) = e^{-|t|}$이다.
 
-    i.i.d. $X_1, \ldots, X_n$에 대해 합 $S_n = \sum_{i=1}^n X_i$은:
+    i.i.d. $X_1, \ldots, X_n$에 대해 합 $S_n = \sum_{i=1}^n X_i$은 이렇게 된다.
 
     $$\varphi_{S_n}(t) = \prod_{i=1}^n \varphi_{X_i}(t) = \left(e^{-|t|}\right)^n = e^{-n|t|}$$
 
     이는 $\text{Cauchy}(0, n)$(척도모수가 $n$인 Cauchy)의 특성함수이다.
 
-    표본평균 $\bar{X}_n = S_n/n$에 대해:
+    표본평균 $\bar{X}_n = S_n/n$에 대해 이렇게 된다.
 
     $$\varphi_{\bar{X}_n}(t) = \varphi_{S_n}(t/n) = e^{-n|t/n|} = e^{-|t|}$$
 
-    이는 정확히 표준 코시의 특성함수 $\varphi_X(t)$이다. 특성함수가 분포를 유일하게 결정하므로:
+    이는 정확히 표준 코시의 특성함수 $\varphi_X(t)$이다. 특성함수가 분포를 유일하게 결정하므로 이렇게 된다.
 
     $$\bar{X}_n \sim \text{Cauchy}(0, 1) \quad \text{모든 } n \geq 1 \text{에 대해}$$
 

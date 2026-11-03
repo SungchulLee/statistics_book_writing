@@ -203,7 +203,7 @@ $$\text{SE}(\hat{\mu}) = \frac{\sigma}{\sqrt{T}}$$
 
 ## 2. Sharpe 비율의 불확실성
 
-**Sharpe 비율** $\text{SR} = \mu/\sigma$(또는 초과수익률을 변동성으로 나눈 값)는 위험조정 성과의 표준적인 측도이다. 그 추정 불확실성은 대략:
+**Sharpe 비율** $\text{SR} = \mu/\sigma$(또는 초과수익률을 변동성으로 나눈 값)는 위험조정 성과의 표준적인 측도이다. 그 추정 불확실성은 대략 이렇게 된다.
 
 $$\text{SE}(\widehat{\text{SR}}) \approx \frac{1}{\sqrt{T}} \sqrt{1 + \frac{\text{SR}^2}{2}}$$
 
@@ -663,11 +663,11 @@ $n$ 이 커지면 지워지고, 의존은 지워지지 않는다.
 ??? success "풀이"
     월별 모수: $\mu_m = 10\%/12 \approx 0.833\%$, $\sigma_m = 15\%/\sqrt{12} \approx 4.330\%$.
 
-    $n = 60$개월이면 $\text{SE}(\hat{\mu}_m) = \sigma_m/\sqrt{60}$이다. 연율화하면:
+    $n = 60$개월이면 $\text{SE}(\hat{\mu}_m) = \sigma_m/\sqrt{60}$이다. 연율화하면 이렇게 된다.
 
     $$\text{SE}(\hat{\mu}_a) = \sigma_a / \sqrt{T} = 15\% / \sqrt{5} = 6.71\%$$
 
-    추정 수익률이 음수일 확률은:
+    추정 수익률이 음수일 확률은 이렇게 된다.
 
     $$P(\hat{\mu}_a < 0) = P\left(Z < \frac{0 - 10\%}{6.71\%}\right) = P(Z < -1.49) = \mathcal{N}(-1.49) \approx 6.8\%$$
 
@@ -683,7 +683,7 @@ $n$ 이 커지면 지워지고, 의존은 지워지지 않는다.
 </div>
 
 ??? success "풀이"
-    **기대수익률:** i.i.d. 가정 아래에서 연간 표준오차는 $\text{SE} = \sigma_a/\sqrt{T}$이며, 여기서 $T$는 자료의 *햇수*이다. 같은 $T$년 안에서 월별 대신 일별로 표본을 뽑으면 관측값은 늘지만 각각의 평균과 분산이 비례해서 작아진다. 순효과는 상쇄된다:
+    **기대수익률:** i.i.d. 가정 아래에서 연간 표준오차는 $\text{SE} = \sigma_a/\sqrt{T}$이며, 여기서 $T$는 자료의 *햇수*이다. 같은 $T$년 안에서 월별 대신 일별로 표본을 뽑으면 관측값은 늘지만 각각의 평균과 분산이 비례해서 작아진다. 순효과는 상쇄된다.
 
     - 일별: 관측값 $n = 252T$개, $\mu_d = \mu_a/252$, $\sigma_d = \sigma_a/\sqrt{252}$. 연율화 평균의 표준오차: $\sigma_d\sqrt{252}/\sqrt{n} = \sigma_a/\sqrt{T}$.
 
@@ -707,7 +707,7 @@ GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.9
 
     정상성에는 $\alpha + \beta < 1$이 필요하다. 여기서는 $\alpha + \beta = 0.08 + 0.90 = 0.98 < 1$이므로 정상이다.
 
-    무조건 분산은:
+    무조건 분산은 이렇게 된다.
 
     $$\sigma^2 = \frac{\omega}{1 - \alpha - \beta} = \frac{0.00001}{1 - 0.98} = \frac{0.00001}{0.02} = 0.0005$$
 
@@ -727,13 +727,13 @@ GARCH(1,1) 모형의 모수가 $\omega = 0.00001$, $\alpha = 0.08$, $\beta = 0.9
 </div>
 
 ??? success "풀이"
-    이 주장은 일별 수익률의 i.i.d. 가정에 기댄다. i.i.d. 아래에서:
+    이 주장은 일별 수익률의 i.i.d. 가정에 기댄다. i.i.d. 아래에서 이렇게 된다.
 
     $$\text{SR}_{\text{annual}} = \text{SR}_{\text{monthly}} \times \sqrt{12} = \text{SR}_{\text{daily}} \times \sqrt{252}$$
 
     i.i.d.이면 $\mu_a = 12\mu_m$이고 $\sigma_a = \sqrt{12}\sigma_m$이므로 $\text{SR}_a = 12\mu_m/(\sqrt{12}\sigma_m) = \sqrt{12}\cdot\text{SR}_m$이 되어 옳다.
 
-    **틀리게 되는 조건:**
+    **틀리게 되는 조건은 이렇다.**
 
     1. **수익률의 계열상관:** 수익률이 양의 자기상관을 가지면(모멘텀) 참 연간 변동성이 $\sqrt{12}\sigma_m$보다 크므로 $\sqrt{12}$ 축척은 연간 Sharpe 비율을 **과대평가**한다. 음의 자기상관(평균회귀)이면 과소평가하게 된다.
 
@@ -988,19 +988,19 @@ GARCH(1,1)에서 **정상성 조건**과 **4차 적률 존재 조건**을 각각
 ??? success "풀이"
     Sharpe 비율은 $g(a, b) = a/\sqrt{b}$에 대해 $\text{SR} = \mu/\sigma = g(\mu, \sigma^2)$이다.
 
-    델타 방법에 의해 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = S^2$에 대해:
+    델타 방법에 의해 $\hat{\mu} = \bar{X}$, $\hat{\sigma}^2 = S^2$에 대해 이렇게 된다.
 
     $$\text{Var}(\widehat{\text{SR}}) \approx \nabla g^\top \Sigma \nabla g$$
 
-    여기서 $\Sigma = \text{Cov}(\hat{\mu}, \hat{\sigma}^2)$이다. 정규 자료에서는 $\hat{\mu}$과 $\hat{\sigma}^2$이 독립이므로 $\Sigma$가 대각행렬이다:
+    여기서 $\Sigma = \text{Cov}(\hat{\mu}, \hat{\sigma}^2)$이다. 정규 자료에서는 $\hat{\mu}$과 $\hat{\sigma}^2$이 독립이므로 $\Sigma$가 대각행렬이다.
 
     $$\Sigma = \begin{pmatrix} \sigma^2/n & 0 \\ 0 & 2\sigma^4/(n-1) \end{pmatrix}$$
 
-    $g(\mu, \sigma^2) = \mu(\sigma^2)^{-1/2}$의 기울기는:
+    $g(\mu, \sigma^2) = \mu(\sigma^2)^{-1/2}$의 기울기는 이렇게 된다.
 
     $$\frac{\partial g}{\partial \mu} = \frac{1}{\sigma}, \qquad \frac{\partial g}{\partial \sigma^2} = -\frac{\mu}{2\sigma^3}$$
 
-    따라서:
+    따라서 이렇게 된다.
 
     $$\text{Var}(\widehat{\text{SR}}) \approx \frac{1}{\sigma^2}\cdot\frac{\sigma^2}{n} + \frac{\mu^2}{4\sigma^6}\cdot\frac{2\sigma^4}{n} = \frac{1}{n}\left(1 + \frac{\mu^2}{2\sigma^2}\right) = \frac{1}{n}\left(1 + \frac{\text{SR}^2}{2}\right)$$
 

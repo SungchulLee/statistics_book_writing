@@ -174,7 +174,7 @@ $18$–$19$ 일에 「허블 영상과 스펙트럼의 복원」 워크숍을 �
 </div>
 
 ??? success "풀이"
-    $\mathrm{Beta}(\alpha, \beta)$에서:
+    $\mathrm{Beta}(\alpha, \beta)$에서 이렇게 된다.
 
     - 평균: $\alpha/(\alpha + \beta) = 20/25 = 0.80$.
     - 최빈값: $(\alpha - 1)/(\alpha + \beta - 2) = 19/23 \approx 0.826$.
@@ -227,7 +227,7 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 
     $\hat p_{\mathrm{MAP}} = (x + \alpha - 1)/(n + \alpha + \beta - 2)$.
 
-    **특수한 경우:**
+    **특수한 경우는 이렇게 된다.**
 
     - $\alpha = \beta = 1$ (균등 사전분포): $\hat p_{\mathrm{MAP}} = x/n = \hat p_{\mathrm{MLE}}$. 평평한 사전분포는 MLE를 복원한다.
     - $\alpha = \beta = 0.5$ (Jeffreys 사전분포): 0.5 쪽으로 약한 축소.
@@ -267,13 +267,13 @@ $\mathrm{Beta}(\alpha, \beta)$ 사전분포를 쓴 $X \sim \mathrm{Binomial}(n, 
 ??? success "풀이"
     가능도족 $L(\theta; X)$에 대한 **켤레 사전분포**란 사후분포 $\pi(\theta \mid X)$가 같은 족에 속하게 하는 사전분포 $\pi(\theta)$이다.
 
-    **편리함:**
+    **편리한 점은 이렇다.**
 
     - 사후분포를 해석적으로 계산할 수 있어 수치적분이 필요 없다.
     - 새 자료로 갱신하는 것이 초모수를 갱신하는 것으로 끝난다(예: Beta $\to$ 모수가 이동한 Beta).
     - 순차적/온라인 갱신이 아주 쉽다.
 
-    **예:**
+    **예를 보자.**
 
     | 가능도 | 켤레 사전분포 | 사후분포 |
     |---|---|---|
@@ -450,7 +450,7 @@ MAP 추정값만 보고할 때 놓치는 것을 정리하고, 사후분포를 �
 </div>
 
 ??? success "풀이"
-    그렇다. *사후분포*가 정상(proper)이기만 하면 된다. 조건은 분자 $L(\theta) \pi(\theta)$가 $\theta$에 대해 유한한 적분을 갖는 것이다:
+    그렇다. *사후분포*가 정상(proper)이기만 하면 된다. 조건은 분자 $L(\theta) \pi(\theta)$가 $\theta$에 대해 유한한 적분을 갖는 것이다.
 
     $$
     \int L(\theta) \pi(\theta) d\theta < \infty
@@ -458,13 +458,13 @@ MAP 추정값만 보고할 때 놓치는 것을 정리하고, 사후분포를 �
 
     그러면 $\pi(\theta \mid x) \propto L(\theta) \pi(\theta)$를 정규화할 수 있다.
 
-    **흔한 비정상 사전분포:**
+    **흔한 비정상 사전분포는 이렇다.**
 
     - 위치모수에 대한 $\pi(\mu) = 1$ ($\mathbb{R}$ 위의 Lebesgue 측도).
     - 분산/척도 모수에 대한 $\pi(\sigma) = 1/\sigma$ (척도에 대한 Jeffreys).
     - 베르누이에 대한 $\pi(p) \propto 1/\sqrt{p(1-p)}$ (베르누이에 대한 Jeffreys).
 
-    **비정상 사전분포의 문제:**
+    **비정상 사전분포의 문제는 이렇다.**
 
     - 자료가 정보를 주지 못하면 사후분포도 비정상이 될 수 있다.
     - 베이즈 인자와 모형 비교가 깨질 수 있다(주변가능도가 정의되지 않는다).

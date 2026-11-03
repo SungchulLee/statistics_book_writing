@@ -148,7 +148,7 @@ $$
 </div>
 
 ??? success "풀이"
-    베이즈 정리는 다음과 같다:
+    베이즈 정리는 다음과 같다.
 
     $$
     \underbrace{\pi(\theta \mid \mathbf{x})}_{\text{posterior}} = \frac{\overbrace{L(\mathbf{x} \mid \theta)}^{\text{likelihood}} \cdot \overbrace{\pi(\theta)}^{\text{prior}}}{\underbrace{m(\mathbf{x})}_{\text{marginal likelihood}}}
@@ -171,7 +171,7 @@ $$
 ??? success "풀이"
     사전분포는 $p \in (0, 1)$에서 $\pi(p) = 1$이다($\text{Beta}(1, 1)$과 같다). 앞면 한 번에 대한 가능도는 $L(H \mid p) = p$이다.
 
-    베이즈 정리에 의해:
+    베이즈 정리에 의해 이렇게 된다.
 
     $$
     \pi(p \mid H) = \frac{p \cdot 1}{\int_0^1 p \, dp} = \frac{p}{1/2} = 2p
@@ -189,19 +189,19 @@ $$
 </div>
 
 ??? success "풀이"
-    이산 $\theta$에 대한 베이즈 정리에 의해:
+    이산 $\theta$에 대한 베이즈 정리에 의해 이렇게 된다.
 
     $$
     P(\theta = 0 \mid X = 1) = \frac{P(X = 1 \mid \theta = 0) \cdot P(\theta = 0)}{P(X = 1)}
     $$
 
-    먼저 주변확률을 계산한다:
+    먼저 주변확률을 계산한다.
 
     $$
     P(X = 1) = 0.2 \times 0.7 + 0.9 \times 0.3 = 0.14 + 0.27 = 0.41
     $$
 
-    그러면:
+    그러면 이렇게 된다.
 
     $$
     P(\theta = 0 \mid X = 1) = \frac{0.14}{0.41} \approx 0.341
@@ -223,7 +223,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **MAP(최대사후확률)** 추정값은 사후분포를 최대화한다:
+    **MAP(최대사후확률)** 추정값은 사후분포를 최대화한다.
 
     $$
     \hat{\theta}_{\text{MAP}} = \arg\max_\theta \bigl[L(\mathbf{x} \mid \theta) \cdot \pi(\theta)\bigr] = \arg\max_\theta \bigl[\log L(\mathbf{x} \mid \theta) + \log \pi(\theta)\bigr]

@@ -663,7 +663,7 @@ $\sigma = 50$이다. (a) $n = 25, 100$일 때 $\mathrm{SE}$를 계산하라. (b)
 </div>
 
 ??? success "풀이"
-    i.i.d. 표본 $X_1, \ldots, X_n$이 주어졌을 때:
+    i.i.d. 표본 $X_1, \ldots, X_n$이 주어졌을 때 이렇게 된다.
 
     1. 원래 표본에서 복원추출하여 붓스트랩 표본 $X_1^*, \ldots, X_n^*$을 뽑는다.
     2. 붓스트랩 표본에서 $\bar X^*$를 계산한다.
@@ -682,7 +682,7 @@ $\sigma = 50$이다. (a) $n = 25, 100$일 때 $\mathrm{SE}$를 계산하라. (b)
 </div>
 
 ??? success "풀이"
-    **델타 방법:** $\sqrt n(\hat\theta - \theta) \xrightarrow{d} N(0, \sigma^2)$이면, $g'(\theta) \ne 0$인 미분가능한 $g$에 대해:
+    **델타 방법:** $\sqrt n(\hat\theta - \theta) \xrightarrow{d} N(0, \sigma^2)$이면, $g'(\theta) \ne 0$인 미분가능한 $g$에 대해 이렇게 된다.
 
     $$
     \sqrt n(g(\hat\theta) - g(\theta)) \xrightarrow{d} N(0, [g'(\theta)]^2 \sigma^2)
@@ -728,7 +728,7 @@ $\sigma = 50$이다. (a) $n = 25, 100$일 때 $\mathrm{SE}$를 계산하라. (b)
 </div>
 
 ??? success "풀이"
-    유한모집단에서 비복원추출을 하면:
+    유한모집단에서 비복원추출을 하면 이렇게 된다.
 
     $$
     \mathrm{Var}(\bar X) = \frac{\sigma^2}{n}\!\left(1 - \frac{n}{N}\right)
@@ -736,7 +736,7 @@ $\sigma = 50$이다. (a) $n = 25, 100$일 때 $\mathrm{SE}$를 계산하라. (b)
 
     따라서 $\mathrm{SE}(\bar X) = (\sigma/\sqrt n) \sqrt{1 - n/N}$이다. 인수 $\sqrt{1 - n/N}$이 **유한모집단 수정(FPC)**이다.
 
-    **극한:**
+    **극한은 이렇게 된다.**
 
     - $n/N \to 0$ (추출 비율이 매우 작을 때): FPC $\to 1$로 표준적인 $\sigma/\sqrt n$이 복원된다. 전국 조사($n = 1000, N \approx 10^8$)에 해당한다.
     - $n/N \to 1$ (전수조사): FPC $\to 0$으로 표본추출 변동성이 없다. 전수조사는 결정론적 추정값을 준다.

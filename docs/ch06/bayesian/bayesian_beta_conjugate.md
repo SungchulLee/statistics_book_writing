@@ -688,13 +688,13 @@ $a = b = 1$(균등 사전분포)이면 어떻게 되는가?
 </div>
 
 ??? success "풀이"
-    사후분포는 $\text{Beta}(a + k, b + n - k)$이다. $\text{Beta}(\alpha, \beta)$의 최빈값은:
+    사후분포는 $\text{Beta}(a + k, b + n - k)$이다. $\text{Beta}(\alpha, \beta)$의 최빈값은 이렇게 된다.
 
     $$
     \frac{\alpha - 1}{\alpha + \beta - 2} \quad \text{for } \alpha > 1, \; \beta > 1
     $$
 
-    $\alpha = a + k$, $\beta = b + n - k$를 대입하면:
+    $\alpha = a + k$, $\beta = b + n - k$를 대입하면 이렇게 된다.
 
     $$
     \hat{\theta}_{\text{MAP}} = \frac{a + k - 1}{a + b + n - 2}
@@ -751,13 +751,13 @@ $a = b = 1$(균등 사전분포)이면 어떻게 되는가?
 </div>
 
 ??? success "풀이"
-    사후분포는 $\text{Beta}(a + k, b + n - k)$이다. $\alpha = a + k$, $\beta = b + n - k$라 하자. $\text{Beta}(\alpha, \beta)$ 분포의 분산은:
+    사후분포는 $\text{Beta}(a + k, b + n - k)$이다. $\alpha = a + k$, $\beta = b + n - k$라 하자. $\text{Beta}(\alpha, \beta)$ 분포의 분산은 이렇게 된다.
 
     $$
     \text{Var}(\theta \mid \text{data}) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
     $$
 
-    $\alpha + \beta = a + b + n$이므로 분모에 $(a + b + n)^2(a + b + n + 1)$이라는 인수가 들어간다. $n \to \infty$일 때:
+    $\alpha + \beta = a + b + n$이므로 분모에 $(a + b + n)^2(a + b + n + 1)$이라는 인수가 들어간다. $n \to \infty$일 때 이렇게 된다.
 
     $$
     \text{Var}(\theta \mid \text{data}) \approx \frac{(a + k)(b + n - k)}{(a + b + n)^3} \approx \frac{\theta(1 - \theta)}{n}
@@ -778,13 +778,13 @@ $a = b = 1$(균등 사전분포)이면 어떻게 되는가?
 
     차이: $0.5980 - 0.55 = 0.048$.
 
-    일반적으로 $k = 0.6n$일 때 두 평균은:
+    일반적으로 $k = 0.6n$일 때 두 평균은 이렇게 된다.
 
     $$
     m_1 = \frac{1 + 0.6n}{2 + n}, \quad m_2 = \frac{50 + 0.6n}{100 + n}
     $$
 
-    통분하면 분자의 $0.6n^2$ 항이 상쇄되어 차이가 깔끔하게 정리된다:
+    통분하면 분자의 $0.6n^2$ 항이 상쇄되어 차이가 깔끔하게 정리된다.
 
     $$
     m_1 - m_2 = \frac{(1 + 0.6n)(100 + n) - (50 + 0.6n)(2 + n)}{(2 + n)(100 + n)} = \frac{9.8\,n}{n^2 + 102n + 200}
@@ -999,7 +999,7 @@ $\text{Beta}(a,b)$ 사전분포의 $a+b$를 **사전 표본크기**로 읽는 �
 
     MAP: $\frac{8 - 1}{8 + 4 - 2} = \frac{7}{10} = 0.7$ (MLE와 같다).
 
-    `scipy.stats.beta.ppf`를 쓴 95% 신용구간:
+    `scipy.stats.beta.ppf` 를 쓴 95% 신용구간은 이렇게 된다.
 
     ```python
     from scipy.stats import beta
@@ -1024,13 +1024,13 @@ $\text{Beta}(a,b)$ 사전분포의 $a+b$를 **사전 표본크기**로 읽는 �
 </div>
 
 ??? success "풀이"
-    $\pi_0 = \alpha_0/(\alpha_0 + \beta_0)$을 사전평균, $\hat{p} = k/n$을 MLE라 하자. 사후평균은:
+    $\pi_0 = \alpha_0/(\alpha_0 + \beta_0)$을 사전평균, $\hat{p} = k/n$을 MLE라 하자. 사후평균은 이렇게 된다.
 
     $$
     E[p \mid k] = \frac{\alpha_0 + k}{\alpha_0 + \beta_0 + n}
     $$
 
-    다시 쓰면:
+    다시 쓰면 이렇게 된다.
 
     $$
     = \frac{\alpha_0 + \beta_0}{\alpha_0 + \beta_0 + n}\cdot\frac{\alpha_0}{\alpha_0 + \beta_0} + \frac{n}{\alpha_0 + \beta_0 + n}\cdot\frac{k}{n}

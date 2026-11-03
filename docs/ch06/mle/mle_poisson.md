@@ -197,13 +197,13 @@ _확인한 곳 — 클라크의 한 쪽짜리 논문 「An application of the Po
 </div>
 
 ??? success "풀이"
-    $n = 24$시간이고 $\sum x_i = 168$이므로:
+    $n = 24$시간이고 $\sum x_i = 168$이므로 이렇게 된다.
 
     $$
     \hat{\lambda} = \frac{168}{24} = 7.0 \text{ arrivals per hour}
     $$
 
-    포아송 관측값 하나에 대한 피셔 정보량이 $I(\lambda) = 1/\lambda$이므로 점근분산은:
+    포아송 관측값 하나에 대한 피셔 정보량이 $I(\lambda) = 1/\lambda$이므로 점근분산은 이렇게 된다.
 
     $$
     \text{Var}(\hat{\lambda}) \approx \frac{1}{nI(\lambda)} = \frac{\lambda}{n} \approx \frac{7.0}{24} = 0.2917
@@ -211,7 +211,7 @@ _확인한 곳 — 클라크의 한 쪽짜리 논문 「An application of the Po
 
     표준오차는 $\text{SE} = \sqrt{0.2917} \approx 0.5401$이다.
 
-    95% 신뢰구간은:
+    95% 신뢰구간은 이렇게 된다.
 
     $$
     7.0 \pm 1.96 \times 0.5401 = 7.0 \pm 1.059 = (5.94, 8.06)
@@ -227,13 +227,13 @@ _확인한 곳 — 클라크의 한 쪽짜리 논문 「An application of the Po
 </div>
 
 ??? success "풀이"
-    로그가능도는:
+    로그가능도는 이렇게 된다.
 
     $$
     \ell(\lambda) = \sum_{i=1}^n \bigl(x_i \log\lambda - \lambda - \log(x_i!)\bigr) = \left(\sum x_i\right)\log\lambda - n\lambda - \sum\log(x_i!)
     $$
 
-    도함수를 0으로 두면:
+    도함수를 0으로 두면 이렇게 된다.
 
     $$
     \frac{d\ell}{d\lambda} = \frac{\sum x_i}{\lambda} - n = 0 \implies \hat{\lambda} = \frac{\sum x_i}{n} = \bar{X}
@@ -251,7 +251,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 </div>
 
 ??? success "풀이"
-    각 $X_i$가 $E[X_i] = \lambda$를 만족하므로:
+    각 $X_i$가 $E[X_i] = \lambda$를 만족하므로 이렇게 된다.
 
     $$
     E[\hat{\lambda}] = E[\bar{X}] = \frac{1}{n}\sum_{i=1}^n E[X_i] = \lambda
@@ -259,7 +259,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 
     따라서 $\hat{\lambda}$는 불편이다.
 
-    포아송분포에서 $\text{Var}(X_i) = \lambda$이고 $X_i$들이 독립이므로:
+    포아송분포에서 $\text{Var}(X_i) = \lambda$이고 $X_i$들이 독립이므로 이렇게 된다.
 
     $$
     \text{Var}(\hat{\lambda}) = \text{Var}(\bar{X}) = \frac{\lambda}{n}

@@ -527,13 +527,13 @@ $n-1$ 대신 $n$ 으로 나누면 참 분산을 체계적으로 과소추정한�
 
 ??? proof "편향의 유도 — 모평균을 더하고 빼서"
 
-    $E[\hat{\sigma}^2_{\text{MLE}}]$을 계산하기 위해 표준적인 대수적 분해를 쓴다. 모평균 $\mu$를 더하고 빼는 데서 출발한다:
+    $E[\hat{\sigma}^2_{\text{MLE}}]$을 계산하기 위해 표준적인 대수적 분해를 쓴다. 모평균 $\mu$를 더하고 빼는 데서 출발한다.
 
     $$
     \sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n \left[(X_i - \mu) - (\bar{X} - \mu)\right]^2
     $$
 
-    제곱을 전개하면:
+    제곱을 전개하면 이렇게 된다.
 
     $$
     = \sum_{i=1}^n (X_i - \mu)^2 - 2(\bar{X} - \mu)\sum_{i=1}^n (X_i - \mu) + n(\bar{X} - \mu)^2
@@ -545,13 +545,13 @@ $n-1$ 대신 $n$ 으로 나누면 참 분산을 체계적으로 과소추정한�
     \sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)^2
     $$
 
-    이제 양변에 기댓값을 취한다. 첫 항에서는 각 $(X_i - \mu)^2$의 기댓값이 $\sigma^2$이므로 합의 기댓값은 $n\sigma^2$이다. 둘째 항에서는 $\bar{X} \sim N(\mu, \sigma^2/n)$이므로 $E[(\bar{X} - \mu)^2] = \sigma^2/n$이고 $E[n(\bar{X} - \mu)^2] = \sigma^2$이다. 따라서:
+    이제 양변에 기댓값을 취한다. 첫 항에서는 각 $(X_i - \mu)^2$의 기댓값이 $\sigma^2$이므로 합의 기댓값은 $n\sigma^2$이다. 둘째 항에서는 $\bar{X} \sim N(\mu, \sigma^2/n)$이므로 $E[(\bar{X} - \mu)^2] = \sigma^2/n$이고 $E[n(\bar{X} - \mu)^2] = \sigma^2$이다. 따라서 이렇게 된다.
 
     $$
     E\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n\sigma^2 - \sigma^2 = (n-1)\sigma^2
     $$
 
-    $n$으로 나누면:
+    $n$으로 나누면 이렇게 된다.
 
     $$
     E[\hat{\sigma}^2_{\text{MLE}}] = \frac{n-1}{n}\sigma^2
@@ -596,7 +596,7 @@ $$
 
 !!! example "n = 10에서의 수치 비교"
 
-    $n = 10$, $\sigma^2 = 1$일 때:
+    $n = 10$, $\sigma^2 = 1$일 때 이렇게 된다.
 
     | 추정량 | 나누는 수 | 편향 | 평균제곱오차 |
     |---|---|---|---|
@@ -1163,8 +1163,7 @@ $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar
 
 ---
 
-## 10. 금융과의 연결
-
+## 10. 금융과의 연결 — 로그수익률이 정규라는 가정 위에서
 - **수익률 모형화**: 로그수익률이 $r_t \sim N(\mu, \sigma^2)$이라는 가정이 많은 금융 모형의 토대이다. MLE $\hat{\mu} = \bar{r}$과 $\hat{\sigma}^2 = \frac{1}{n}\sum(r_t - \bar{r})^2$이 표준적인 추정값이다.
 
 - **Black-Scholes**: 이 모형은 $\log(S_T/S_t) \sim N((\mu - \sigma^2/2)(T-t), \sigma^2(T-t))$를 가정한다. 과거 수익률로 구한 변동성의 MLE가 핵심 입력이다.
@@ -1342,13 +1341,13 @@ $$\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$$
 </div>
 
 ??? success "풀이"
-    $\mu$의 MLE는 표본평균이다:
+    $\mu$의 MLE는 표본평균이다.
 
     $$
     \hat{\mu} = \frac{3+5+7+9+11}{5} = \frac{35}{5} = 7
     $$
 
-    $\sigma^2$의 MLE는 ($n-1$이 아니라) $n$으로 나눈다:
+    $\sigma^2$의 MLE는 ($n-1$이 아니라) $n$으로 나눈다.
 
     $$
     \hat{\sigma}^2 = \frac{1}{5}\sum(x_i - 7)^2 = \frac{(3-7)^2 + (5-7)^2 + (7-7)^2 + (9-7)^2 + (11-7)^2}{5}
@@ -1394,19 +1393,19 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 </div>
 
 ??? success "풀이"
-    로그가능도는:
+    로그가능도는 이렇게 된다.
 
     $$
     \ell(\mu) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2
     $$
 
-    $\mu$에 대해 미분하면:
+    $\mu$에 대해 미분하면 이렇게 된다.
 
     $$
     \frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^n (x_i - \mu) = \frac{1}{\sigma^2}\left(\sum x_i - n\mu\right)
     $$
 
-    0으로 두면:
+    0으로 두면 이렇게 된다.
 
     $$
     \sum x_i - n\mu = 0 \implies \hat{\mu} = \frac{\sum x_i}{n} = \bar{x}
@@ -1424,7 +1423,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 </div>
 
 ??? success "풀이"
-    $\sum_{i=1}^n(X_i - \bar{X})^2 / \sigma^2 \sim \chi^2_{n-1}$이고 그 평균은 $n - 1$이다. 따라서:
+    $\sum_{i=1}^n(X_i - \bar{X})^2 / \sigma^2 \sim \chi^2_{n-1}$이고 그 평균은 $n - 1$이다. 따라서 이렇게 된다.
 
     $$
     E\!\left[\sum_{i=1}^n(X_i - \bar{X})^2\right] = (n-1)\sigma^2
@@ -1434,7 +1433,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
     E[\hat{\sigma}^2_{\text{MLE}}] = \frac{1}{n}(n-1)\sigma^2 = \frac{n-1}{n}\sigma^2
     $$
 
-    편향은:
+    편향은 이렇게 된다.
 
     $$
     \text{Bias} = E[\hat{\sigma}^2_{\text{MLE}}] - \sigma^2 = -\frac{\sigma^2}{n}
@@ -1454,7 +1453,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 ??? success "풀이"
     임의의 추정량 $\hat{\theta}$에 대해 $\text{MSE} = \text{Bias}^2 + \text{Var}$이다.
 
-    $\sum(X_i - \bar{X})^2/\sigma^2 \sim \chi^2_{n-1}$의 분산이 $2(n-1)$이므로:
+    $\sum(X_i - \bar{X})^2/\sigma^2 \sim \chi^2_{n-1}$의 분산이 $2(n-1)$이므로 이렇게 된다.
 
     $$
     \text{Var}(S^2) = \frac{\sigma^4}{(n-1)^2} \cdot 2(n-1) = \frac{2\sigma^4}{n-1}
@@ -1464,7 +1463,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
     \text{MSE}(S^2) = 0 + \frac{2\sigma^4}{n-1}
     $$
 
-    MLE의 경우:
+    MLE 의 경우는 이렇게 된다.
 
     $$
     \text{Var}(\hat{\sigma}^2_{\text{MLE}}) = \frac{\sigma^4}{n^2} \cdot 2(n-1) = \frac{2(n-1)\sigma^4}{n^2}
@@ -1486,7 +1485,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
 </div>
 
 ??? success "풀이"
-    정규분포에서 ($\sigma^2$을 고정한) $\mu$에 대한 로그가능도는:
+    정규분포에서 ($\sigma^2$을 고정한) $\mu$에 대한 로그가능도는 이렇게 된다.
 
     $$
     \ell(\mu) = \text{const} - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2
@@ -1587,7 +1586,7 @@ $\sigma^2$이 알려진 표본 $x_1, \ldots, x_n \sim N(\mu, \sigma^2)$에서 �
     E[S^2]      = 9.0212       (true 9.0)
     ```
 
-    예상 결과:
+    예상 결과는 이렇다.
 
     - $\mathbb{E}[\bar X] \approx 5.00$ (불편).
     - $\mathbb{E}[\hat\sigma^2_{\text{MLE}}] \approx 8.55 = (19/20) \cdot 9$ ($\sigma^2/n$만큼 아래로 편향).

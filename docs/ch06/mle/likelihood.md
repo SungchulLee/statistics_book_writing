@@ -87,7 +87,7 @@ $$
 
 !!! example "베르누이 로그가능도"
 
-    베르누이 예를 이어가면:
+    베르누이 예를 이어가면 이렇게 된다.
 
     $$
     \ell(p; \mathbf{x}) = k \log p + (n - k) \log(1-p)
@@ -294,7 +294,7 @@ carriers bears to the total number banded」)은
 
 1. **첫 포획**: 물고기 50마리를 잡아 표지하고 놓아 준다($M = 50$).
 2. **두 번째 포획**: 물고기 40마리를 잡았는데($n = 40$) 그중 10마리가 표지되어 있다($m = 10$).
-3. **추정**:
+3. **추정한다.**
 
 $$
 \hat{N} = \frac{M \cdot n}{m} = \frac{50 \cdot 40}{10} = 200
@@ -896,7 +896,7 @@ EM 알고리즘은 매 단계마다 가능도가 단조 증가함을 보장하�
 
 ---
 
-## 13. 금융과의 연결
+## 13. 금융과의 연결 — GARCH 가 최대화하는 것이 이것이다
 가능도함수와 MLE는 계량금융 전반에 스며 있다.
 
 - **GARCH 모형**: 보통 정규 또는 스튜던트-$t$ 혁신항을 가정하고 수익률의 조건부 로그가능도를 최대화하여 모수 $(\omega, \alpha, \beta)$를 추정한다.
@@ -953,13 +953,13 @@ $\mu$와 $\sigma^2$이 모두 미지일 때 $N(\mu, \sigma^2)$ 분포에서 얻�
 </div>
 
 ??? success "풀이"
-    가능도는:
+    가능도는 이렇게 된다.
 
     $$
     L(\mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right) = (2\pi\sigma^2)^{-n/2} \exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2\right)
     $$
 
-    로그가능도는:
+    로그가능도는 이렇게 된다.
 
     $$
     \ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(x_i - \mu)^2
@@ -993,7 +993,7 @@ $\mu$와 $\sigma^2$이 모두 미지일 때 $N(\mu, \sigma^2)$ 분포에서 얻�
 ??? success "풀이"
     로그가 순증가함수이므로 $L(\theta_1) > L(\theta_2)$일 필요충분조건은 $\ell(\theta_1) > \ell(\theta_2)$이다. 따라서 $L$을 최대화하는 $\theta$가 $\ell$도 최대화하며 그 역도 성립한다.
 
-    **실용적 장점:** 로그가능도는 곱을 합으로 바꾼다:
+    **실용적 장점:** 로그가능도는 곱을 합으로 바꾼다.
 
     $$
     \ell(\theta) = \sum_{i=1}^n \log f(x_i; \theta)
@@ -1522,13 +1522,13 @@ $X_1,\dots,X_n \sim \text{Exp}(\lambda)$에서 우도비 검정으로 $H_0:\lamb
 </div>
 
 ??? success "풀이"
-    Lincoln-Petersen MLE는:
+    Lincoln-Petersen MLE는 이렇게 된다.
 
     $$
     \hat{N} = \frac{M \cdot n}{m} = \frac{20 \times 15}{5} = 60
     $$
 
-    Chapman 추정량은:
+    Chapman 추정량은 이렇게 된다.
 
     $$
     \hat{N}_{\text{Chapman}} = \frac{(M+1)(n+1)}{m+1} - 1 = \frac{21 \times 16}{6} - 1 = 56 - 1 = 55
@@ -1546,7 +1546,7 @@ $X_1,\dots,X_n \sim \text{Exp}(\lambda)$에서 우도비 검정으로 $H_0:\lamb
 </div>
 
 ??? success "풀이"
-    핵심 가정은 다음과 같다:
+    핵심 가정은 다음과 같다.
 
     1. **폐쇄 개체군**: 포획과 재포획 사이에 출생, 사망, 유입, 유출이 없다. 위배되면 개체군이 늘었는지 줄었는지에 따라 $\hat{N}$이 부풀거나 줄어든다.
 
@@ -1765,19 +1765,19 @@ $m$을 확률변수로 보고 $\hat{N} = Mn/m$에 델타 방법을 적용하여 
 </div>
 
 ??? success "풀이"
-    $\hat{N} = g(m) = Mn/m$에 델타 방법을 적용한다. (초기하 모형 아래에서) $m$의 기댓값은 $E[m] = nM/N$이다. 도함수는:
+    $\hat{N} = g(m) = Mn/m$에 델타 방법을 적용한다. (초기하 모형 아래에서) $m$의 기댓값은 $E[m] = nM/N$이다. 도함수는 이렇게 된다.
 
     $$
     g'(m) = -\frac{Mn}{m^2}
     $$
 
-    (초기하분포에서) $m$의 분산은 근사적으로:
+    (초기하분포에서) $m$의 분산은 근사적으로 이렇게 된다.
 
     $$
     \text{Var}(m) \approx n \cdot \frac{M}{N} \cdot \frac{N-M}{N} \cdot \frac{N-n}{N-1}
     $$
 
-    델타 방법에 의해 $\text{Var}(\hat{N}) \approx [g'(m)]^2 \text{Var}(m)$이다. $N \approx \hat{N} = Mn/m$을 대입하고 (큰 $N$에서 유한모집단 수정을 무시하며) 정리하면:
+    델타 방법에 의해 $\text{Var}(\hat{N}) \approx [g'(m)]^2 \text{Var}(m)$이다. $N \approx \hat{N} = Mn/m$을 대입하고 (큰 $N$에서 유한모집단 수정을 무시하며) 정리하면 이렇게 된다.
 
     $$
     \text{Var}(\hat{N}) \approx \frac{M^2 n^2}{m^4} \cdot \frac{n \cdot m \cdot (n-m)}{n^2} = \frac{M^2 n(n-m)}{m^3}

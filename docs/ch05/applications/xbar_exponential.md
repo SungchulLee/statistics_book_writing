@@ -317,19 +317,19 @@ $\text{Exp}(1)$은 인공적인 분포처럼 보이지만, 여기서 본 모양�
 ??? success "풀이"
     적률생성함수는 $t < \lambda$에서 $M_X(t) = \frac{\lambda}{\lambda - t}$이다.
 
-    1차 적률:
+    1차 적률은 이렇게 된다.
 
     $$
     M_X'(t) = \frac{\lambda}{(\lambda - t)^2}, \qquad E[X] = M_X'(0) = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}
     $$
 
-    2차 적률:
+    2차 적률은 이렇게 된다.
 
     $$
     M_X''(t) = \frac{2\lambda}{(\lambda - t)^3}, \qquad E[X^2] = M_X''(0) = \frac{2\lambda}{\lambda^3} = \frac{2}{\lambda^2}
     $$
 
-    분산:
+    분산은 이렇게 된다.
 
     $$
     \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}
@@ -348,7 +348,7 @@ $\text{Exp}(1)$은 인공적인 분포처럼 보이지만, 여기서 본 모양�
 ??? success "풀이"
     $X_i \sim \text{Exp}(\lambda)$의 MGF는 $M_{X_i}(t) = \frac{\lambda}{\lambda - t}$이다.
 
-    독립성에 의해 합의 MGF는:
+    독립성에 의해 합의 MGF는 이렇게 된다.
 
     $$
     M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t) = \left(\frac{\lambda}{\lambda - t}\right)^n
@@ -367,7 +367,7 @@ $\text{Exp}(1)$은 인공적인 분포처럼 보이지만, 여기서 본 모양�
 ??? success "풀이"
     $S_5 \sim \text{Gamma}(5, 1)$일 때 $\bar{X} = S_5 / 5$이므로 $P(\bar{X} > 2) = P(S_5 > 10)$이다.
 
-    Python으로:
+    Python으로 이렇게 된다.
 
     ```python
     from scipy import stats
@@ -397,13 +397,13 @@ $\text{Exp}(1)$은 인공적인 분포처럼 보이지만, 여기서 본 모양�
 </div>
 
 ??? success "풀이"
-    왜도가 $\gamma_1$인 i.i.d. 확률변수에 대해 $\bar{X} = \frac{1}{n}\sum X_i$의 왜도는:
+    왜도가 $\gamma_1$인 i.i.d. 확률변수에 대해 $\bar{X} = \frac{1}{n}\sum X_i$의 왜도는 이렇게 된다.
 
     $$
     \gamma_1(\bar{X}) = \frac{\gamma_1}{\sqrt{n}}
     $$
 
-    $\bar{X}$의 3차 중심적률이 (독립인 복사본 $n$개를 더하고 $n$으로 나누므로) $\mu_3 / n^2$이고 $(\text{Var}(\bar{X}))^{3/2} = (\sigma^2/n)^{3/2}$이므로:
+    $\bar{X}$의 3차 중심적률이 (독립인 복사본 $n$개를 더하고 $n$으로 나누므로) $\mu_3 / n^2$이고 $(\text{Var}(\bar{X}))^{3/2} = (\sigma^2/n)^{3/2}$이므로 이렇게 된다.
 
     $$
     \gamma_1(\bar{X}) = \frac{n \cdot \mu_3 / n^3}{(\sigma^2 / n)^{3/2}} = \frac{\mu_3}{n^2} \cdot \frac{n^{3/2}}{\sigma^3} = \frac{\mu_3}{\sigma^3 \sqrt{n}} = \frac{\gamma_1}{\sqrt{n}}
@@ -411,7 +411,7 @@ $\text{Exp}(1)$은 인공적인 분포처럼 보이지만, 여기서 본 모양�
 
     $\text{Exp}(1)$에서 $\gamma_1 = 2$이므로 $\gamma_1(\bar{X}) = 2/\sqrt{n}$이다.
 
-    $2/\sqrt{n} < 0.5$로 두면:
+    $2/\sqrt{n} < 0.5$로 두면 이렇게 된다.
 
     $$
     \sqrt{n} > 4 \implies n > 16

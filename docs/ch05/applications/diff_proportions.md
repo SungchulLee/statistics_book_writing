@@ -582,19 +582,19 @@ $$
 </div>
 
 ??? success "풀이"
-    표본비율은:
+    표본비율은 이렇게 된다.
 
     $$
     \hat{p}_1 = \frac{120}{200} = 0.60, \quad \hat{p}_2 = \frac{90}{200} = 0.45
     $$
 
-    차는:
+    차는 이렇게 된다.
 
     $$
     \hat{p}_1 - \hat{p}_2 = 0.60 - 0.45 = 0.15
     $$
 
-    표준오차는:
+    표준오차는 이렇게 된다.
 
     $$
     \text{SE} = \sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}} = \sqrt{\frac{0.60 \times 0.40}{200} + \frac{0.45 \times 0.55}{200}}
@@ -646,7 +646,7 @@ $$
 </div>
 
 ??? success "풀이"
-    조건은 두 군 모두에서 $n_i \hat{p}_i \geq 5$이고 $n_i(1-\hat{p}_i) \geq 5$인 것이다:
+    조건은 두 군 모두에서 $n_i \hat{p}_i \geq 5$이고 $n_i(1-\hat{p}_i) \geq 5$인 것이다.
 
     - 1군: $n_1 \hat{p}_1 = 200 \times 0.60 = 120 \geq 5$이고 $n_1(1-\hat{p}_1) = 200 \times 0.40 = 80 \geq 5$. 둘 다 충족된다.
     - 2군: $n_2 \hat{p}_2 = 200 \times 0.45 = 90 \geq 5$이고 $n_2(1-\hat{p}_2) = 200 \times 0.55 = 110 \geq 5$. 둘 다 충족된다.
@@ -663,13 +663,13 @@ $$
 </div>
 
 ??? success "풀이"
-    독립인 확률변수의 차의 분산은:
+    독립인 확률변수의 차의 분산은 이렇게 된다.
 
     $$
     \text{Var}(\hat{p}_1 - \hat{p}_2) = \text{Var}(\hat{p}_1) + \text{Var}(\hat{p}_2)
     $$
 
-    분산은 언제나 음이 아닌 퍼짐을 재는 양이므로 빼는 것이 아니라 **더한다**. 차 $\hat{p}_1 - \hat{p}_2 = \hat{p}_1 + (-1)\hat{p}_2$에 $a=1$, $b=-1$로 공식 $\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)$를 적용하면:
+    분산은 언제나 음이 아닌 퍼짐을 재는 양이므로 빼는 것이 아니라 **더한다**. 차 $\hat{p}_1 - \hat{p}_2 = \hat{p}_1 + (-1)\hat{p}_2$에 $a=1$, $b=-1$로 공식 $\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)$를 적용하면 이렇게 된다.
 
     $$
     \text{Var}(\hat{p}_1 - \hat{p}_2) = 1^2 \text{Var}(\hat{p}_1) + (-1)^2 \text{Var}(\hat{p}_2) = \text{Var}(\hat{p}_1) + \text{Var}(\hat{p}_2)

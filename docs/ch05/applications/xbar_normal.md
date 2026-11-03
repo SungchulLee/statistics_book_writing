@@ -202,19 +202,19 @@ $X_1, \ldots, X_n \overset{\text{iid}}{\sim} N(\mu, \sigma^2)$이면 $\bar{X} \s
 
 ??? proof "증명"
 
-    $X_i$의 적률생성함수(MGF)는:
+    $X_i$의 적률생성함수(MGF)는 이렇게 된다.
 
     $$
     M_{X_i}(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)
     $$
 
-    $X_i$들이 독립이므로:
+    $X_i$들이 독립이므로 이렇게 된다.
 
     $$
     M_{S_n}(t) = \prod_{i=1}^n M_{X_i}(t) = \exp\!\left(n\mu t + \frac{n\sigma^2 t^2}{2}\right)
     $$
 
-    $\bar{X} = S_n / n$의 MGF는:
+    $\bar{X} = S_n / n$의 MGF는 이렇게 된다.
 
     $$
     M_{\bar{X}}(t) = M_{S_n}(t/n) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2n}\right)
@@ -325,7 +325,7 @@ $\frac1{\sqrt n}=0.0625$ 다). 아래가 이 상자의 요점이다. 가중치 �
     \bar{X} \sim N\!\left(100, \frac{16}{25}\right) = N(100,\; 0.64)
     $$
 
-    표준화하면:
+    표준화하면 이렇게 된다.
 
     $$
     Z = \frac{102 - 100}{\sqrt{0.64}} = \frac{2}{0.8} = 2.5
@@ -369,13 +369,13 @@ $\frac1{\sqrt n}=0.0625$ 다). 아래가 이 상자의 요점이다. 가중치 �
 </div>
 
 ??? success "풀이"
-    $W = aX + bY$라 하자. $W$의 MGF는:
+    $W = aX + bY$라 하자. $W$의 MGF는 이렇게 된다.
 
     $$
     M_W(t) = E[e^{t(aX + bY)}] = E[e^{taX}] \cdot E[e^{tbY}]
     $$
 
-    이며 인수분해에는 독립성을 사용했다. 정규분포의 MGF를 대입하면:
+    이며 인수분해에는 독립성을 사용했다. 정규분포의 MGF를 대입하면 이렇게 된다.
 
     $$
     M_W(t) = \exp\!\left(a\mu_X t + \frac{a^2\sigma_X^2 t^2}{2}\right) \cdot \exp\!\left(b\mu_Y t + \frac{b^2\sigma_Y^2 t^2}{2}\right)
@@ -400,7 +400,7 @@ $\frac1{\sqrt n}=0.0625$ 다). 아래가 이 상자의 요점이다. 가중치 �
 
     정규가 아닌 모집단(예: Exponential, Uniform)에서는 유한한 $n$에 대해 $\bar{X}$가 정확히 정규분포가 **아니다**. 그 분포는 $n$과 구체적인 모집단 모양에 의존한다. 다만 $n \to \infty$일 때 중심극한정리가 표준화된 $\bar{X}$의 $N(0,1)$로의 분포수렴을 보장한다.
 
-    정규가 아닌 모집단에서 $n$이 커지면:
+    정규가 아닌 모집단에서 $n$이 커지면 이렇게 된다.
 
     - 표집분포가 더 대칭이 된다(왜도가 $\gamma_1/\sqrt{n}$로 감소한다).
     - 초과첨도가 ($1/n$의 비율로) 0을 향해 줄어든다.

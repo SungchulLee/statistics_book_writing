@@ -132,7 +132,7 @@ _확인한 곳 — 클로짓·샬리지·뉴먼의 「Power-law distributions in
 
 $$\text{초과첨도} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$$
 
-**예시**:
+**예시.**
 
 - 정규분포: 초과첨도 = 0
 - 자유도 5인 스튜던트 $t$: 초과첨도 ≈ 6 (훨씬 두꺼운 꼬리)
@@ -825,7 +825,7 @@ $$\text{초과첨도} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$
     \int_{-\infty}^{\infty} |x| f(x)\,dx = \frac{2}{\pi}\int_0^{\infty} \frac{x}{1+x^2}\,dx
     $$
 
-    치환 $u = 1 + x^2$, $du = 2x\,dx$를 쓰면:
+    치환 $u = 1 + x^2$, $du = 2x\,dx$를 쓰면 이렇게 된다.
 
     $$
     = \frac{2}{\pi} \cdot \frac{1}{2}\int_1^{\infty} \frac{du}{u} = \frac{1}{\pi}\left[\log u\right]_1^{\infty} = \frac{1}{\pi}(\infty - 0) = \infty
@@ -869,7 +869,7 @@ $$\text{초과첨도} = E\left[\left(\frac{X - \mu}{\sigma}\right)^4\right] - 3$
 ??? success "풀이"
     표준정규의 99번째 백분위수는 $z_{0.99} = 2.326$이다. $t_5$ 분포의 99번째 백분위수는 $t_{0.99,\,5} \approx 3.365$이다.
 
-    비는:
+    비는 이렇게 된다.
 
     $$
     \frac{t_{0.99,\,5}}{z_{0.99}} = \frac{3.365}{2.326} \approx 1.447

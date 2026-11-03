@@ -209,11 +209,11 @@ $$
 </div>
 
 ??? success "풀이"
-    **적률방정식:**
+    **적률방정식은 이렇게 된다.**
 
     $$\frac{1}{\lambda} = \bar{X}$$
 
-    **해:**
+    **해는 이렇게 된다.**
 
     $$\hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}$$
 
@@ -228,16 +228,16 @@ $$
 </div>
 
 ??? success "풀이"
-    **모집단 적률:**
+    **모집단 적률은 이렇게 된다.**
 
     - $E[X] = (a + b)/2$
     - $\text{Var}(X) = (b - a)^2/12$
 
-    **적률방정식:**
+    **적률방정식은 이렇게 된다.**
 
     $$\frac{a + b}{2} = \bar{X}, \qquad \frac{(b-a)^2}{12} = m_2$$
 
-    **해:**
+    **해는 이렇게 된다.**
 
     $$\hat{a}_{\text{MoM}} = \bar{X} - \sqrt{3 m_2}, \qquad \hat{b}_{\text{MoM}} = \bar{X} + \sqrt{3 m_2}$$
 
@@ -461,7 +461,7 @@ N = 100, k = 10  (40,000 번)
 ??? success "풀이"
     (a) 표본 적률: $\bar x = 2.33$, $m_2 \approx 2.77$.
 
-    $\mathbb{E}[X] = \alpha\beta$, $\mathrm{Var}(X) = \alpha\beta^2$인 Gamma$(\alpha, \beta)$에 대해:
+    $\mathbb{E}[X] = \alpha\beta$, $\mathrm{Var}(X) = \alpha\beta^2$인 Gamma$(\alpha, \beta)$에 대해 이렇게 된다.
 
     $\hat\beta = m_2/\bar x \approx 1.19$, $\hat\alpha = \bar x^2/m_2 \approx 1.96$.
 
@@ -483,7 +483,7 @@ N = 100, k = 10  (40,000 번)
 
     표본을 모집단과 같다고 두면 $\bar X = (a+b)/2$이고 $m_2 = (b-a)^2/12$이며, $m_2$는 ($n$을 쓴) 표본분산이다.
 
-    두 번째 식에서 $b - a = \sqrt{12 m_2}$이다. $a + b = 2\bar X$와 결합하면:
+    두 번째 식에서 $b - a = \sqrt{12 m_2}$이다. $a + b = 2\bar X$와 결합하면 이렇게 된다.
 
     $\hat a_{\text{MoM}} = \bar X - \sqrt{3 m_2}$, $\hat b_{\text{MoM}} = \bar X + \sqrt{3 m_2}$.
 
@@ -503,7 +503,7 @@ N = 100, k = 10  (40,000 번)
 ??? success "풀이"
     Beta$(\alpha, \beta)$: $\mathbb{E}[X] = \alpha/(\alpha+\beta)$, $\mathrm{Var}(X) = \alpha\beta/[(\alpha+\beta)^2(\alpha+\beta+1)]$.
 
-    $m = \bar X$, $v = m_2$(표본분산)라 하고 풀면:
+    $m = \bar X$, $v = m_2$(표본분산)라 하고 풀면 이렇게 된다.
 
     $\alpha + \beta = m(1 - m)/v - 1$. 따라서 $\hat\alpha = m \cdot (m(1-m)/v - 1)$, $\hat\beta = (1-m)(m(1-m)/v - 1)$.
 
@@ -749,7 +749,7 @@ $\text{Weibull}(k,\lambda)$의 적률법 추정량을 유도하라. 왜 닫힌 �
 ??? success "풀이"
     $\theta \in \mathbb{R}^k$이고 $j = 1, \ldots, m$에 대해 $m \ge k$개의 적률 조건 $\mathbb{E}[g_j(X; \theta)] = 0$이 있다고 하자.
 
-    **GMM 추정량:**
+    **GMM 추정량은 이렇게 된다.**
 
     $$
     \hat\theta = \arg\min_\theta \left[\sum_i \mathbf g(X_i; \theta)\right]^\top W \left[\sum_i \mathbf g(X_i; \theta)\right]
@@ -759,7 +759,7 @@ $\text{Weibull}(k,\lambda)$의 적률법 추정량을 유도하라. 왜 닫힌 �
 
     **최적 $W$:** 적률 조건의 공분산행렬의 역행렬 $W^* = \Omega^{-1}$이다. 이것이 점근분산을 최소화한다.
 
-    **2단계 GMM:**
+    **2단계 GMM 은 이렇게 한다.**
 
     1. $W = I$(단위행렬)로 초기 $\hat\theta^{(1)}$을 구한다.
     2. $\hat\theta^{(1)}$에서 $\Omega$를 추정하고 $W = \hat\Omega^{-1}$로 둔다.

@@ -38,11 +38,11 @@ $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar{X} - \mu)
 
 ??? proof "증명"
 
-    $(X_i - \bar{X})^2 = (X_i - \mu - (\bar{X} - \mu))^2$을 전개하면:
+    $(X_i - \bar{X})^2 = (X_i - \mu - (\bar{X} - \mu))^2$을 전개하면 이렇게 된다.
 
     $$\sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n(X_i - \mu)^2 - 2(\bar{X} - \mu)\sum_{i=1}^n(X_i - \mu) + n(\bar{X} - \mu)^2$$
 
-    $\sum(X_i - \mu) = n(\bar{X} - \mu)$이므로 가운데 항은 $-2n(\bar{X} - \mu)^2$이 되어:
+    $\sum(X_i - \mu) = n(\bar{X} - \mu)$이므로 가운데 항은 $-2n(\bar{X} - \mu)^2$이 되어 이렇게 된다.
 
     $$= \sum_{i=1}^n(X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
@@ -146,8 +146,7 @@ $$\text{Var}(\hat{\sigma}^2_\mu) = \frac{2\sigma^4}{n} < \frac{2\sigma^4}{n-1} =
 
 ---
 
-## 8. 금융과의 연결
-
+## 8. 금융과의 연결 — 실현분산은 평균을 0 으로 놓는다
 - **변동성 추정**: 일별 수익률의 실현분산은 ($\mu \approx 0$으로 두고) $\frac{1}{n}\sum r_i^2$ 공식을 쓰는데, 이는 평균을 0으로 놓은 소박한 추정량이다.
 - **위험 지표**: 큰 표본($n > 250$ 일별 관측값)으로 위험관리용 포트폴리오 분산을 계산할 때는 $n$으로 나누느냐 $n-1$로 나누느냐의 차이가 무시할 만하다.
 - **편향 보정**: 작은 표본(예: 몇 년치 월별 자료)에서는 편향이 실질적일 수 있으므로 베셀 수정을 써야 한다.
@@ -551,7 +550,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 </div>
 
 ??? success "풀이"
-    $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$을 쓰면:
+    $\mathbb{E}[\sum(X_i - \bar X)^2] = (n-1)\sigma^2$을 쓰면 이렇게 된다.
 
     - $c = n$ (MLE): 편향 = $(n-1)\sigma^2/n - \sigma^2 = -\sigma^2/n$. 과소추정.
     - $c = n - 1$ (불편): 편향 = 0.
@@ -587,7 +586,7 @@ $\mathbb{E}[(1/n)\sum(X_i - \bar X)^2] = (n-1)\sigma^2/n$임을 증명하라.
 
     $\hat\sigma^2 = \mathrm{SSE}/(n - p)$는 불편이다: $\mathbb{E}[\mathrm{SSE}/\sigma^2] = n - p$.
 
-    **경계 사례:**
+    **경계 사례는 이렇다.**
 
     - $p = 1$ (절편만): 베셀 수정을 한 표본분산과 같아 $n - 1$로 나눈다.
     - $p = n$ (완벽한 적합): 남은 자유도가 없어 분산이 정의되지 않는다. 과적합을 반영한다.
@@ -852,15 +851,15 @@ $10^9$ 둘레에서 두 줄 공식이 내놓은 값은 음수가 아니라 정�
 </div>
 
 ??? success "풀이"
-    항등식에서 출발한다:
+    항등식에서 출발한다.
 
     $$\sum_{i=1}^n(X_i - \bar{X})^2 = \sum_{i=1}^n(X_i - \mu)^2 - n(\bar{X} - \mu)^2$$
 
-    기댓값을 취하면:
+    기댓값을 취하면 이렇게 된다.
 
     $$E\left[\sum_{i=1}^n(X_i - \bar{X})^2\right] = \sum_{i=1}^n E[(X_i - \mu)^2] - nE[(\bar{X} - \mu)^2] = n\sigma^2 - n\cdot\frac{\sigma^2}{n} = (n-1)\sigma^2$$
 
-    따라서:
+    따라서 이렇게 된다.
 
     $$E[\tilde{S}^2] = E\left[\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2\right] = \frac{(n-1)\sigma^2}{n} = \frac{n-1}{n}\sigma^2$$
 
@@ -902,11 +901,11 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 
     $$\text{MSE} = \text{Bias}^2 + \text{Var} = \sigma^4\left(\frac{n-1}{d} - 1\right)^2 + \frac{2(n-1)\sigma^4}{d^2}$$
 
-    $\text{MSE}/\sigma^4$을 $d$에 대해 미분하여 0으로 놓으면:
+    $\text{MSE}/\sigma^4$을 $d$에 대해 미분하여 0으로 놓으면 이렇게 된다.
 
     $$2\left(\frac{n-1}{d} - 1\right)\left(-\frac{n-1}{d^2}\right) - \frac{4(n-1)}{d^3} = 0$$
 
-    양변에 $d^3$을 곱하여 정리하면:
+    양변에 $d^3$을 곱하여 정리하면 이렇게 된다.
 
     $$-2(n-1)\left[(n-1) - d\right] - 4(n-1) = 0$$
 
@@ -925,13 +924,13 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 ??? success "풀이"
     참 일별 변동성: $\sigma_d = 0.0126$. 참 연율화 변동성: $\sigma_a = 0.0126 \times \sqrt{252} \approx 0.20$ (20%).
 
-    자료가 21일치일 때:
+    자료가 21일치일 때 이렇게 된다.
 
-    **$1/n$을 쓰면:** $E[\tilde{S}^2] = \frac{n-1}{n}\sigma_d^2 = \frac{20}{21}\sigma_d^2$. 연율화 변동성의 기댓값은:
+    **$1/n$을 쓰면:** $E[\tilde{S}^2] = \frac{n-1}{n}\sigma_d^2 = \frac{20}{21}\sigma_d^2$. 연율화 변동성의 기댓값은 이렇게 된다.
 
     $$\sqrt{\frac{20}{21}} \times 20\% \approx \sqrt{0.9524} \times 20\% \approx 0.976 \times 20\% = 19.52\%$$
 
-    **$1/(n-1)$을 쓰면:** $E[S^2] = \sigma_d^2$이다. 다만 (제곱근이 오목하므로) 옌센 부등식에 의해 $E[S] < \sigma_d$임에 유의하라. 연율화 변동성의 기댓값은:
+    **$1/(n-1)$을 쓰면:** $E[S^2] = \sigma_d^2$이다. 다만 (제곱근이 오목하므로) 옌센 부등식에 의해 $E[S] < \sigma_d$임에 유의하라. 연율화 변동성의 기댓값은 이렇게 된다.
 
     $$E[\sqrt{S^2 \times 252}] = \sqrt{252}\cdot E[S] < \sqrt{252}\cdot \sigma_d = 20\%$$
 
@@ -946,19 +945,19 @@ $d > 0$에 대해 $\text{MSE}(\text{SS}/d)$를 최소화하여, 정규성 아래
 </div>
 
 ??? success "풀이"
-    $\mu$를 알면 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \mu)^2$을 쓰는데, 이는 불편이며:
+    $\mu$를 알면 $\hat{\sigma}^2 = \frac{1}{n}\sum(X_i - \mu)^2$을 쓰는데, 이는 불편이며 이렇게 된다.
 
     $$\text{Var}(\hat{\sigma}^2) = \frac{1}{n^2}\text{Var}\left(\sum(X_i-\mu)^2\right) = \frac{1}{n^2}\cdot n\cdot\text{Var}((X-\mu)^2)$$
 
-    정규 자료에서 $(X-\mu)^2/\sigma^2 \sim \chi^2_1$이므로 $\text{Var}((X-\mu)^2) = 2\sigma^4$이고, 따라서:
+    정규 자료에서 $(X-\mu)^2/\sigma^2 \sim \chi^2_1$이므로 $\text{Var}((X-\mu)^2) = 2\sigma^4$이고, 따라서 이렇게 된다.
 
     $$\text{MSE}(\hat{\sigma}^2_{\text{known}}) = \frac{2\sigma^4}{n}$$
 
-    $\mu$를 모르면 최량 불편추정량은:
+    $\mu$를 모르면 최량 불편추정량은 이렇게 된다.
 
     $$\text{MSE}(S^2) = \frac{2\sigma^4}{n-1}$$
 
-    $n = 5$에서:
+    $n = 5$에서 이렇게 된다.
 
     $$\frac{\text{MSE}(S^2)}{\text{MSE}(\hat{\sigma}^2_{\text{known}})} = \frac{2\sigma^4/4}{2\sigma^4/5} = \frac{5}{4} = 1.25$$
 

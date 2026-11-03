@@ -281,7 +281,7 @@ $$
 </div>
 
 ??? success "풀이"
-    $\tau_0 \to \infty$이면 $1/\tau_0^2 \to 0$이다. 그러면:
+    $\tau_0 \to \infty$이면 $1/\tau_0^2 \to 0$이다. 그러면 이렇게 된다.
 
     $$
     \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2} + \frac{n}{\sigma^2} \to \frac{n}{\sigma^2}
@@ -289,13 +289,13 @@ $$
 
     따라서 $\tau_n^2 \to \sigma^2/n$이다.
 
-    사후평균에 대해서는:
+    사후평균에 대해서는 이렇게 된다.
 
     $$
     \mu_n = \tau_n^2\left(\frac{\mu_0}{\tau_0^2} + \frac{n\bar{x}}{\sigma^2}\right)
     $$
 
-    $\tau_0 \to \infty$일 때 첫 항 $\mu_0/\tau_0^2 \to 0$이므로:
+    $\tau_0 \to \infty$일 때 첫 항 $\mu_0/\tau_0^2 \to 0$이므로 이렇게 된다.
 
     $$
     \mu_n \to \frac{\sigma^2}{n} \cdot \frac{n\bar{x}}{\sigma^2} = \bar{x}

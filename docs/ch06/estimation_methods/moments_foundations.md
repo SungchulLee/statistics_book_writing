@@ -86,13 +86,13 @@ $$
     **4단계.** 미지수가 $p$개인 이 $p$개의 방정식을 풀어 $\hat{\theta}_{\text{MoM}}$을 얻는다.
 
 ??? example "지수분포의 적률법"
-    $X \sim \text{Exp}(\lambda)$에서는 모수가 $p = 1$개이다. 1차 모집단 적률은:
+    $X \sim \text{Exp}(\lambda)$에서는 모수가 $p = 1$개이다. 1차 모집단 적률은 이렇게 된다.
 
     $$
     \mu_1' = E[X] = \frac{1}{\lambda}
     $$
 
-    $\mu_1' = M_1'$으로 두면:
+    $\mu_1' = M_1'$으로 두면 이렇게 된다.
 
     $$
     \frac{1}{\lambda} = \bar{X} \implies \hat{\lambda}_{\text{MoM}} = \frac{1}{\bar{X}}
@@ -259,8 +259,7 @@ _확인한 곳 — K. Pearson, "Contributions to the Mathematical Theory of Evol
 
 </div>
 
-## 6. 금융과의 연결
-
+## 6. 금융과의 연결 — 자산가격결정의 표준은 GMM 이다
 적률법과 GMM은 계량금융에서 폭넓게 쓰인다.
 
 - **자산가격결정**: GMM은 자산가격결정 모형(CAPM, Fama-French)을 추정하고 검정하는 표준 방법이다. $m_t$가 확률적 할인요인일 때 Euler 방정식 조건 $E[m_t R_t - 1] = 0$이 적률 조건을 제공한다.
@@ -372,13 +371,13 @@ $\text{Uniform}(0, \theta)$에서 얻은 표본에 대해 $\theta$의 적률법 
 </div>
 
 ??? success "풀이"
-    1차 모집단 적률은:
+    1차 모집단 적률은 이렇게 된다.
 
     $$
     E[X] = \frac{\theta}{2}
     $$
 
-    1차 표본 적률을 모집단 적률과 같다고 두면:
+    1차 표본 적률을 모집단 적률과 같다고 두면 이렇게 된다.
 
     $$
     \bar{X} = \frac{\hat{\theta}}{2} \implies \hat{\theta}_{\text{MOM}} = 2\bar{X}
@@ -396,7 +395,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 </div>
 
 ??? success "풀이"
-    처음 두 모집단 적률은:
+    처음 두 모집단 적률은 이렇게 된다.
 
     $$
     E[X] = \frac{\alpha}{\beta}, \quad E[X^2] = \text{Var}(X) + (E[X])^2 = \frac{\alpha}{\beta^2} + \frac{\alpha^2}{\beta^2} = \frac{\alpha(\alpha + 1)}{\beta^2}
@@ -404,7 +403,7 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 
     표본 적률을 모집단 적률과 같다고 두면 $\bar{X} = \alpha/\beta$이고 $\overline{X^2} = \alpha(\alpha+1)/\beta^2$이다.
 
-    첫 방정식에서 $\beta = \alpha/\bar{X}$이다. 표본분산은 $S^2 = \overline{X^2} - \bar{X}^2 = \alpha/\beta^2$이다. $\beta = \alpha/\bar{X}$를 대입하면:
+    첫 방정식에서 $\beta = \alpha/\bar{X}$이다. 표본분산은 $S^2 = \overline{X^2} - \bar{X}^2 = \alpha/\beta^2$이다. $\beta = \alpha/\bar{X}$를 대입하면 이렇게 된다.
 
     $$
     S^2 = \frac{\alpha}{\alpha^2/\bar{X}^2} = \frac{\bar{X}^2}{\alpha} \implies \hat{\alpha}_{\text{MOM}} = \frac{\bar{X}^2}{S^2}
@@ -686,13 +685,13 @@ $E[X] = \alpha/\beta$이고 $\text{Var}(X) = \alpha/\beta^2$인 $\text{Gamma}(\a
 </div>
 
 ??? success "풀이"
-    적률법 추정량의 기댓값은:
+    적률법 추정량의 기댓값은 이렇게 된다.
 
     $$
     E[\hat{\sigma}^2_{\text{MoM}}] = E\!\left[\frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2\right] = \frac{1}{n} \cdot (n-1)\sigma^2 = \frac{n-1}{n}\sigma^2
     $$
 
-    편향은:
+    편향은 이렇게 된다.
 
     $$
     \text{Bias} = E[\hat{\sigma}^2_{\text{MoM}}] - \sigma^2 = \frac{n-1}{n}\sigma^2 - \sigma^2 = -\frac{\sigma^2}{n}

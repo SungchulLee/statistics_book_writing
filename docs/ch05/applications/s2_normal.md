@@ -355,13 +355,13 @@ $95\%$ 라 말한 구간이 실제로는 $37\%$ 다. 부트스트랩도 무너�
 ??? success "풀이"
     여기서 $\sigma^2 = 4$, $n = 10$이므로 $\frac{(n-1)S^2}{\sigma^2} = \frac{9S^2}{4} \sim \chi^2_9$이다.
 
-    구해야 할 것은:
+    구해야 할 것은 이렇게 된다.
 
     $$
     P(S^2 > 6) = P\!\left(\frac{9S^2}{4} > \frac{9 \cdot 6}{4}\right) = P(\chi^2_9 > 13.5)
     $$
 
-    Python으로:
+    Python으로 이렇게 된다.
 
     ```python
     from scipy import stats
@@ -386,19 +386,19 @@ $95\%$ 라 말한 구간이 실제로는 $37\%$ 다. 부트스트랩도 무너�
 </div>
 
 ??? success "풀이"
-    $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이므로:
+    $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$이므로 이렇게 된다.
 
     $$
     P\!\left(\chi^2_{0.025}(24) \le \frac{24 S^2}{\sigma^2} \le \chi^2_{0.975}(24)\right) = 0.95
     $$
 
-    $\sigma^2$에 대해 정리하면:
+    $\sigma^2$에 대해 정리하면 이렇게 된다.
 
     $$
     \frac{24 S^2}{\chi^2_{0.975}(24)} \le \sigma^2 \le \frac{24 S^2}{\chi^2_{0.025}(24)}
     $$
 
-    카이제곱분포표(또는 Python)에서:
+    카이제곱분포표(또는 Python)에서 이렇게 된다.
 
     ```python
     from scipy import stats
@@ -443,19 +443,19 @@ $95\%$ 라 말한 구간이 실제로는 $37\%$ 다. 부트스트랩도 무너�
 </div>
 
 ??? success "풀이"
-    정의에서 출발한다:
+    정의에서 출발한다.
 
     $$
     S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2
     $$
 
-    합을 전개하면:
+    합을 전개하면 이렇게 된다.
 
     $$
     \sum_{i=1}^n (X_i - \bar{X})^2 = \sum_{i=1}^n X_i^2 - n\bar{X}^2
     $$
 
-    기댓값을 취하면:
+    기댓값을 취하면 이렇게 된다.
 
     $$
     E\!\left[\sum_{i=1}^n X_i^2\right] = n E[X_i^2] = n(\sigma^2 + \mu^2)
@@ -465,13 +465,13 @@ $95\%$ 라 말한 구간이 실제로는 $37\%$ 다. 부트스트랩도 무너�
     E[n\bar{X}^2] = n\!\left(\text{Var}(\bar{X}) + (E[\bar{X}])^2\right) = n\!\left(\frac{\sigma^2}{n} + \mu^2\right) = \sigma^2 + n\mu^2
     $$
 
-    따라서:
+    따라서 이렇게 된다.
 
     $$
     E\!\left[\sum_{i=1}^n (X_i - \bar{X})^2\right] = n(\sigma^2 + \mu^2) - \sigma^2 - n\mu^2 = (n-1)\sigma^2
     $$
 
-    $n - 1$로 나누면:
+    $n - 1$로 나누면 이렇게 된다.
 
     $$
     E[S^2] = \sigma^2
@@ -490,7 +490,7 @@ $95\%$ 라 말한 구간이 실제로는 $37\%$ 다. 부트스트랩도 무너�
 ??? success "풀이"
     정리에 의해 $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}$이다.
 
-    $Q = \frac{(n-1)S^2}{\sigma^2}$라 하면 $S^2 = \frac{\sigma^2 Q}{n-1}$이므로:
+    $Q = \frac{(n-1)S^2}{\sigma^2}$라 하면 $S^2 = \frac{\sigma^2 Q}{n-1}$이므로 이렇게 된다.
 
     $$
     \text{Var}(S^2) = \frac{\sigma^4}{(n-1)^2} \cdot \text{Var}(Q) = \frac{\sigma^4}{(n-1)^2} \cdot 2(n-1) = \frac{2\sigma^4}{n-1}
@@ -509,19 +509,19 @@ $95\%$ 라 말한 구간이 실제로는 $37\%$ 다. 부트스트랩도 무너�
 ??? success "풀이"
     $\text{Exp}(1)$에서 $\sigma^2 = 1$, $\beta_2 = 9$이다.
 
-    $S^2$의 분산에 대한 일반 공식은:
+    $S^2$의 분산에 대한 일반 공식은 이렇게 된다.
 
     $$
     \text{Var}(S^2) = \frac{1}{n}\left(\beta_2 - \frac{n-3}{n-1}\right)\sigma^4
     $$
 
-    $n = 100$이면:
+    $n = 100$이면 이렇게 된다.
 
     $$
     \text{Var}(S^2) = \frac{1}{100}\left(9 - \frac{97}{99}\right) \cdot 1 = \frac{1}{100}\left(9 - 0.9798\right) = \frac{8.0202}{100} = 0.08020
     $$
 
-    정규이론 값은:
+    정규이론 값은 이렇게 된다.
 
     $$
     \frac{2\sigma^4}{n-1} = \frac{2}{99} \approx 0.02020

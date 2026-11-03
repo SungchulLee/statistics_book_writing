@@ -130,13 +130,13 @@ A/B 시험에서 승자가 정해지기 전에 트래픽을 옮기는 장치들�
 ??? success "풀이"
     $\text{Beta}(\alpha, \beta)$ 사전분포와 $n$번의 시행에서 $k$번 성공했을 때 사후분포는 $\text{Beta}(\alpha + k, \beta + n - k)$이다.
 
-    여기서 $\alpha = 2$, $\beta = 5$, $k = 3$, $n = 10$이므로:
+    여기서 $\alpha = 2$, $\beta = 5$, $k = 3$, $n = 10$이므로 이렇게 된다.
 
     $$
     \text{Posterior} = \text{Beta}(2 + 3, 5 + 7) = \text{Beta}(5, 12)
     $$
 
-    사후평균은:
+    사후평균은 이렇게 된다.
 
     $$
     E[p \mid \text{data}] = \frac{\alpha + k}{\alpha + k + \beta + n - k} = \frac{5}{5 + 12} = \frac{5}{17} \approx 0.294
@@ -154,19 +154,19 @@ A/B 시험에서 승자가 정해지기 전에 트래픽을 옮기는 장치들�
 </div>
 
 ??? success "풀이"
-    $n$개 관측값에 대한 포아송 가능도는:
+    $n$개 관측값에 대한 포아송 가능도는 이렇게 된다.
 
     $$
     L(\lambda) = \prod_{i=1}^n \frac{\lambda^{x_i} e^{-\lambda}}{x_i!} \propto \lambda^{\sum x_i} e^{-n\lambda}
     $$
 
-    (비율 모수화를 쓴) Gamma$(\alpha, \beta)$ 사전분포는:
+    (비율 모수화를 쓴) Gamma$(\alpha, \beta)$ 사전분포는 이렇게 된다.
 
     $$
     \pi(\lambda) \propto \lambda^{\alpha - 1} e^{-\beta\lambda}
     $$
 
-    사후분포는:
+    사후분포는 이렇게 된다.
 
     $$
     \pi(\lambda \mid \mathbf{x}) \propto \lambda^{\sum x_i} e^{-n\lambda} \cdot \lambda^{\alpha - 1} e^{-\beta\lambda} = \lambda^{\alpha + \sum x_i - 1} e^{-(\beta + n)\lambda}
@@ -483,7 +483,7 @@ A/B 시험에서 승자가 정해지기 전에 트래픽을 옮기는 장치들�
 </div>
 
 ??? success "풀이"
-    **편리함:** 켤레 사전분포가 계산상 편리한 이유는 사후분포가 사전분포와 같은 분포족에 속하고 모수만 바뀌기 때문이다. 이는 다음을 뜻한다:
+    **편리함:** 켤레 사전분포가 계산상 편리한 이유는 사후분포가 사전분포와 같은 분포족에 속하고 모수만 바뀌기 때문이다. 이는 다음을 뜻한다.
 
     - 사후분포를 닫힌 형태로 쓸 수 있다(수치적분이 필요 없다).
     - 새 자료로 갱신하는 것이 초모수를 갱신하는 것으로 끝난다: $(\alpha, \beta) \to (\alpha', \beta')$.
@@ -500,19 +500,19 @@ A/B 시험에서 승자가 정해지기 전에 트래픽을 옮기는 장치들�
 </div>
 
 ??? success "풀이"
-    가능도는:
+    가능도는 이렇게 된다.
 
     $$
     L(\lambda) \propto \lambda^{\sum x_i} e^{-n\lambda}
     $$
 
-    사전분포는:
+    사전분포는 이렇게 된다.
 
     $$
     \pi(\lambda) \propto \lambda^{\alpha_0 - 1} e^{-\beta_0 \lambda}
     $$
 
-    곱하면:
+    곱하면 이렇게 된다.
 
     $$
     p(\lambda \mid \mathbf{x}) \propto \lambda^{\alpha_0 + \sum x_i - 1} e^{-(\beta_0 + n)\lambda}
@@ -520,7 +520,7 @@ A/B 시험에서 승자가 정해지기 전에 트래픽을 옮기는 장치들�
 
     이는 $\text{Gamma}(\alpha_0 + \sum x_i, \beta_0 + n)$의 핵이다.
 
-    사후평균은:
+    사후평균은 이렇게 된다.
 
     $$
     E[\lambda \mid \mathbf{x}] = \frac{\alpha_0 + \sum x_i}{\beta_0 + n} = \frac{\beta_0}{\beta_0 + n}\cdot\frac{\alpha_0}{\beta_0} + \frac{n}{\beta_0 + n}\cdot\bar{x}
