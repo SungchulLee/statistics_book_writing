@@ -10,7 +10,7 @@
   5. mcnemar_test           대각선을 키우면 두 검정이 갈라진다
 
 만드는 파일:
-  docs/ch13/img/weldon_thirteen_cells.png
+  docs/ch13/test/img/weldon_thirteen_cells.png
   docs/ch13/distribution/img/one_off_in_df.png
   docs/ch13/distribution/img/estimating_costs_a_rank.png
   docs/ch13/test/img/how_lopsided_before_reject.png
@@ -108,7 +108,7 @@ ax2.text(0.025, 0.055, "고른 칸이 답을 정해 버린다", transform=ax2.tr
 
 fig.suptitle("주사위를 26,306 번 던진 사람", fontsize=15, y=1.0)
 plt.tight_layout()
-save(fig, IDX + "weldon_thirteen_cells.png")
+save(fig, TEST + "weldon_thirteen_cells.png")
 
 
 # ════════════════════════════════════════════════════════════════════
