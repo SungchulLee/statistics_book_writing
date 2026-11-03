@@ -22,7 +22,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch09/img/"
+OUT = "docs/ch09/foundations/img/"
 
 N_VAC, N_PLA = 17411, 17511
 K_VAC, K_PLA = 8, 162
