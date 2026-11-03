@@ -565,7 +565,7 @@ $$
 \text{ATE}_{\text{adj}} = P(\text{경증}) \cdot \text{ATE}_{\text{경증}} + P(\text{중증}) \cdot \text{ATE}_{\text{중증}}
 $$
 
-$n = 1000$일 때의 결과:
+$n = 1000$일 때의 결과는 이렇다.
 
 ```text
 ate_naive    = -2.62

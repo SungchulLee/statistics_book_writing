@@ -755,7 +755,7 @@ $b + c$가 작을 때(가령 25 미만) McNemar 검정의 카이제곱 근사가
     p = 2 \cdot \min\bigl[P(X \le b),\; P(X \ge b)\bigr]
     $$
 
-    이며 $X \sim \text{Binomial}(b + c, 0.5)$이다. Python에서는:
+    이며 $X \sim \text{Binomial}(b + c, 0.5)$이다. Python 에서는 이렇게 된다.
 
     ```python
     from scipy import stats
