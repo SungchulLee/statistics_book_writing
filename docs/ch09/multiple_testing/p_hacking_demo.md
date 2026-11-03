@@ -424,7 +424,7 @@ _확인한 곳 — 시먼스·넬슨·시몬손의 「False-Positive Psychology�
 
 ??? success "풀이"
 
-    $1 - 0.95^k > 0.90$, 즉 $0.95^k < 0.10$이어야 한다. 로그를 취하면:
+    $1 - 0.95^k > 0.90$, 즉 $0.95^k < 0.10$이어야 한다. 로그를 취하면 이렇게 된다.
 
     $$
     k > \frac{\ln 0.10}{\ln 0.95} = \frac{-2.3026}{-0.05129} \approx 44.9.
@@ -442,7 +442,7 @@ _확인한 곳 — 시먼스·넬슨·시몬손의 「False-Positive Psychology�
 
 ??? success "풀이"
 
-    $H_0$ 아래에서 각 $p_i \sim \text{Uniform}(0,1)$이다. 최솟값이 $\alpha$를 넘으려면 모든 p-값이 $\alpha$를 넘어야 한다:
+    $H_0$ 아래에서 각 $p_i \sim \text{Uniform}(0,1)$이다. 최솟값이 $\alpha$를 넘으려면 모든 p-값이 $\alpha$를 넘어야 한다.
 
     $$
     P(\min(p_1,\ldots,p_k) \geq \alpha) = \prod_{i=1}^k P(p_i \geq \alpha) = (1-\alpha)^k.
@@ -468,7 +468,7 @@ _확인한 곳 — 시먼스·넬슨·시몬손의 「False-Positive Psychology�
 
     $H_0$ 아래 누적분포함수가 $F_0$인 연속 검정통계량 $T$에서 p-값은 $p = 1 - F_0(T)$(양측검정이면 $2\min(F_0(T), 1-F_0(T))$)이다. $F_0$이 참 누적분포함수이면 확률적분변환에 의해 $F_0(T) \sim \text{Uniform}(0,1)$이므로 $p \sim \text{Uniform}(0,1)$이다.
 
-    이산 검정통계량에서는 누적분포함수가 계단함수이므로 $F_0(T)$가 유한개의 값만 취한다. 그러면 p-값 분포가 $\text{Uniform}(0,1)$보다 **확률적으로 크다**:
+    이산 검정통계량에서는 누적분포함수가 계단함수이므로 $F_0(T)$가 유한개의 값만 취한다. 그러면 p-값 분포가 $\text{Uniform}(0,1)$보다 **확률적으로 크다.**
 
     $$
     P(p \leq \alpha) \leq \alpha \quad \text{for all } \alpha,

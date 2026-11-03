@@ -1480,7 +1480,7 @@ $$
     1 - \beta = P(Z > z_{1-\alpha/2}) + P(Z < -z_{1-\alpha/2}).
     $$
 
-    $Z \sim N(\lambda, 1)$이므로:
+    $Z \sim N(\lambda, 1)$이므로 이렇게 된다.
 
     $$
     P(Z > z_{1-\alpha/2}) = P(Z - \lambda > z_{1-\alpha/2} - \lambda) = \mathcal{N}(\lambda - z_{1-\alpha/2}),
@@ -1508,7 +1508,7 @@ $$
     1 - \beta = \mathcal{N}\!\left(\frac{\delta}{\sigma\sqrt{2/n}} - z_{1-\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta}{\sigma\sqrt{2/n}} - z_{1-\alpha/2}\right).
     $$
 
-    $n \to \infty$이면 항 $\delta / (\sigma\sqrt{2/n}) = \delta\sqrt{n}/({\sigma\sqrt{2}}) \to \infty$이다. 따라서:
+    $n \to \infty$이면 항 $\delta / (\sigma\sqrt{2/n}) = \delta\sqrt{n}/({\sigma\sqrt{2}}) \to \infty$이다. 따라서 이렇게 된다.
 
     - 첫째 항: $\mathcal{N}(\infty - z_{1-\alpha/2}) = \mathcal{N}(\infty) = 1$.
     - 둘째 항: $\mathcal{N}(-\infty - z_{1-\alpha/2}) = \mathcal{N}(-\infty) = 0$.

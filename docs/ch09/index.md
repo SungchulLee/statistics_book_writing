@@ -96,7 +96,7 @@ _확인한 곳 — Polack 외, 『New England Journal of Medicine』 $383$($2020
 
 ## 2. 선수 지식
 
-이 장은 다음 내용을 바탕으로 한다:
+이 장은 다음 내용을 바탕으로 한다.
 
 - **5장** (추정량과 표집분포) -- 검정통계량이 따르는 normal, t, 카이제곱, F 분포.
 - **[5.11~5.13](../ch05/estimators/bias_variance.md)** -- 추정량으로서 [표본평균](../ch05/mean/sample_mean.md)과 [표본분산](../ch05/variance/bessels.md)의 성질.
