@@ -633,7 +633,7 @@ $2 \times 2$ 표에서 파이 계수와 카이제곱 검정통계량의 관계�
 </div>
 
 ??? success "풀이"
-    파이 계수와 카이제곱 통계량은 직접 관련된다:
+    파이 계수와 카이제곱 통계량은 직접 관련된다.
 
     $$
     X^2 = n\phi^2 \quad \Leftrightarrow \quad \phi = \sqrt{X^2/n}

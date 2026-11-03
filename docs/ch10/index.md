@@ -108,7 +108,7 @@ _확인한 곳 — 10.3절 [교란변수](confounding/confounding_variables.md)�
 
 ## 2. 선행 지식
 
-이 장은 다음 내용 위에 세워진다:
+이 장은 다음 내용 위에 세워진다.
 
 - **3장** (확률의 기초) --- 확률변수와 기댓값, [결합분포와 주변분포](../ch03/rv/joint.md), [공분산과 상관계수](../ch03/rv/variance_covariance.md), 그리고 [독립성과 무상관성의 차이](../ch03/rv/independence_vs_zero_corr.md).
 - **4장** (분포) --- [이변량 정규분포](../ch04/bivariate_normal/bivariate_normal.md). **결합정규일 때에만** 무상관이 독립과 같아지고 조건부평균이 직선이 된다 — 10.1 이 재는 $r$ 가 무엇을 재고 있는지가 거기서 정해진다.
