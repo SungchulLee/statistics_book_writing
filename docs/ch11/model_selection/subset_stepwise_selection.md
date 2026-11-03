@@ -656,7 +656,7 @@ _확인한 곳 — D. A. Freedman, 「A Note on Screening Regression Equations�
 ??? success "풀이"
     설명변수가 $p = 5$개면 부분집합의 총 개수는 $2^5 = 32$개이다(설명변수가 없는 영모형 포함).
 
-    크기별 모형 수:
+    크기별 모형 수는 이렇게 된다.
 
     - 크기 0(절편만): $\binom{5}{0} = 1$개
     - 크기 1: $\binom{5}{1} = 5$개

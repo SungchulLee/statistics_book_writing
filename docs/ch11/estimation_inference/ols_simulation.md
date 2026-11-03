@@ -25,8 +25,7 @@
 
 ---
 
-## 1. 수학적 배경
-
+## 1. 수학적 배경 — 모의실험으로 확인할 세 성질
 ### OLS 추정량
 
 $\mathbf{u} \sim N(\mathbf{0}, \sigma^2\mathbf{I})$인 모형 $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{u}$에 대해
