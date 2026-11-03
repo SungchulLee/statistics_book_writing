@@ -905,13 +905,13 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 </div>
 
 ??? success "풀이"
-    **평균.** 기댓값의 선형성에 의해:
+    **평균.** 기댓값의 선형성에 의해 이렇게 된다.
 
     $$
     \mathbb{E}[Y] = \mathbb{E}\!\sum_{i=1}^n X_i = \sum_{i=1}^n \mathbb{E}[X_i] = \sum_{i=1}^n p = np
     $$
 
-    **분산.** 독립성에 의해:
+    **분산.** 독립성에 의해 이렇게 된다.
 
     $$
     \mathrm{Var}(Y) = \sum_{i=1}^n \mathrm{Var}(X_i) = \sum_{i=1}^n p(1-p) = np(1-p)
@@ -949,7 +949,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 ??? success "풀이"
     $\mu = 40$, $\sigma = \sqrt{100 \cdot 0.4 \cdot 0.6} = \sqrt{24} \approx 4.899$.
 
-    **연속성 수정 없이:**
+    **연속성 수정 없이 구하면 이렇게 된다.**
 
     $$
     P(35 \le Y \le 45) \approx \Phi\!\left(\frac{45 - 40}{4.899}\right) - \Phi\!\left(\frac{35 - 40}{4.899}\right) = \Phi(1.021) - \Phi(-1.021) = 0.8463 - 0.1537 = 0.6926
@@ -957,7 +957,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
 
     오차: $|0.6926 - 0.7386| = 0.046$.
 
-    **연속성 수정을 적용하면:**
+    **연속성 수정을 적용하면 이렇게 된다.**
 
     $$
     P(35 \le Y \le 45) \approx \Phi\!\left(\frac{45.5 - 40}{4.899}\right) - \Phi\!\left(\frac{34.5 - 40}{4.899}\right) = \Phi(1.122) - \Phi(-1.122) = 0.8691 - 0.1309 = 0.7382
@@ -987,7 +987,7 @@ $Y \sim \mathrm{Binomial}(n, p)$에 대해 $X_i \sim \mathrm{Bernoulli}(p)$인 �
     p_{\text{윌슨}} = \frac{\hat p + z^2/(2n) \pm z\sqrt{\hat p(1-\hat p)/n + z^2/(4n^2)}}{1 + z^2/n}
     $$
 
-    $z = 1.96$, $\hat p = 0.35$, $n = 100$일 때:
+    $z = 1.96$, $\hat p = 0.35$, $n = 100$일 때 이렇게 된다.
 
     분자의 중심: $0.35 + 0.0192 = 0.3692$. 분자의 반폭: $1.96 \sqrt{0.002275 + 9.6e-5} = 1.96 \sqrt{0.002371} \approx 0.0954$.
 

@@ -995,7 +995,7 @@ $X$와 $Y$의 결합분포가 $P(X=0,Y=0) = 0.2$, $P(X=0,Y=1) = 0.1$, $P(X=1,Y=0
 </div>
 
 ??? success "풀이"
-    먼저 주변분포와 기댓값을 계산한다:
+    먼저 주변분포와 기댓값을 계산한다.
 
     $$
     E[X] = 0 \cdot 0.3 + 1 \cdot 0.7 = 0.7, \quad E[Y] = 0 \cdot 0.5 + 1 \cdot 0.5 = 0.5
@@ -1009,7 +1009,7 @@ $X$와 $Y$의 결합분포가 $P(X=0,Y=0) = 0.2$, $P(X=0,Y=1) = 0.1$, $P(X=1,Y=0
     \text{Cov}(X,Y) = E[XY] - E[X]E[Y] = 0.4 - 0.7 \times 0.5 = 0.4 - 0.35 = 0.05
     $$
 
-    상관계수를 구하려면 분산이 필요하다:
+    상관계수를 구하려면 분산이 필요하다.
 
     $$
     \text{Var}(X) = E[X^2] - (E[X])^2 = 0.7 - 0.49 = 0.21
@@ -1063,19 +1063,19 @@ $\operatorname{Cov}(aX+b,\ cY+d) = ac\operatorname{Cov}(X,Y)$이고 $a,c > 0$이
 </div>
 
 ??? success "풀이"
-    $\mu_X = E[X]$, $\mu_Y = E[Y]$라 하자. 그러면 $E[aX + bY] = a\mu_X + b\mu_Y$이다. 정의에 의해:
+    $\mu_X = E[X]$, $\mu_Y = E[Y]$라 하자. 그러면 $E[aX + bY] = a\mu_X + b\mu_Y$이다. 정의에 의해 이렇게 된다.
 
     $$
     \text{Var}(aX + bY) = E\!\left[(aX + bY - a\mu_X - b\mu_Y)^2\right] = E\!\left[(a(X - \mu_X) + b(Y - \mu_Y))^2\right]
     $$
 
-    제곱을 전개하면:
+    제곱을 전개하면 이렇게 된다.
 
     $$
     = E\!\left[a^2(X-\mu_X)^2 + 2ab(X-\mu_X)(Y-\mu_Y) + b^2(Y-\mu_Y)^2\right]
     $$
 
-    기댓값의 선형성에 의해:
+    기댓값의 선형성에 의해 이렇게 된다.
 
     $$
     = a^2 E[(X-\mu_X)^2] + 2ab\,E[(X-\mu_X)(Y-\mu_Y)] + b^2 E[(Y-\mu_Y)^2]
@@ -1097,13 +1097,13 @@ $X \sim \text{Uniform}(-1,1)$이고 $Y = X^2$이라 하자. $\text{Cov}(X,Y) = 0
 </div>
 
 ??? success "풀이"
-    Uniform$(-1,1)$ 분포의 대칭성에 의해 $E[X] = 0$이다. 간편식을 사용하면:
+    Uniform$(-1,1)$ 분포의 대칭성에 의해 $E[X] = 0$이다. 간편식을 사용하면 이렇게 된다.
 
     $$
     \text{Cov}(X,Y) = E[XY] - E[X]E[Y] = E[X \cdot X^2] - 0 \cdot E[Y] = E[X^3]
     $$
 
-    $g(x) = x^3$은 기함수이고 $X$는 0을 중심으로 대칭인 분포를 가지므로:
+    $g(x) = x^3$은 기함수이고 $X$는 0을 중심으로 대칭인 분포를 가지므로 이렇게 된다.
 
     $$
     E[X^3] = \int_{-1}^{1} x^3 \cdot \frac{1}{2}\,dx = \frac{1}{2}\left[\frac{x^4}{4}\right]_{-1}^{1} = \frac{1}{2}\left(\frac{1}{4} - \frac{1}{4}\right) = 0
@@ -1121,13 +1121,13 @@ $X \sim \text{Uniform}(-1,1)$이고 $Y = X^2$이라 하자. $\text{Cov}(X,Y) = 0
 </div>
 
 ??? success "풀이"
-    선형결합의 분산 공식을 사용하면:
+    선형결합의 분산 공식을 사용하면 이렇게 된다.
 
     $$
     \text{Var}(R_p) = w^2 \sigma_1^2 + (1-w)^2 \sigma_2^2 + 2w(1-w)\sigma_{12}
     $$
 
-    최소화하기 위해 $w$에 대해 미분하고 0으로 둔다:
+    최소화하기 위해 $w$에 대해 미분하고 0으로 둔다.
 
     $$
     \frac{d}{dw}\text{Var}(R_p) = 2w\sigma_1^2 - 2(1-w)\sigma_2^2 + 2(1-2w)\sigma_{12} = 0

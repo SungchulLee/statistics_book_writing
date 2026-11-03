@@ -511,7 +511,7 @@ $$
 
 ??? proof "증명 개요"
 
-    $p = \lambda/n$으로 두면:
+    $p = \lambda/n$으로 두면 이렇게 된다.
 
     $$
     \binom{n}{k}\left(\frac{\lambda}{n}\right)^k\left(1 - \frac{\lambda}{n}\right)^{n-k}
@@ -995,7 +995,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **평균:**
+    **평균은 이렇게 된다.**
 
     $$
     \mathbb{E}[X] = \sum_{k=0}^\infty k \frac{e^{-\lambda} \lambda^k}{k!} = e^{-\lambda} \lambda \sum_{k=1}^\infty \frac{\lambda^{k-1}}{(k-1)!} = \lambda
@@ -1025,7 +1025,7 @@ $$
 
     검정통계량: $(n - 1) D = (n - 1) s^2 / \bar X$. $H_0$ 아래에서 이는 근사적으로 $\chi^2_{n-1}$을 따른다(**포아송 산포 검정**이며, 표본평균이 비율에 근사한다는 가정 아래 유도된다).
 
-    **판정 규칙:** $(n - 1)D$가 $\chi^2_{n-1}$의 $\alpha/2$ 분위수와 $1 - \alpha/2$ 분위수 밖에 있으면 포아송 가정을 기각한다. 구체적으로:
+    **판정 규칙:** $(n - 1)D$가 $\chi^2_{n-1}$의 $\alpha/2$ 분위수와 $1 - \alpha/2$ 분위수 밖에 있으면 포아송 가정을 기각한다. 구체적으로 이렇게 된다.
 
     - $D \gg 1$ (과대산포): 분산이 평균을 넘어선다. Negative 이항이나 준–포아송 모형을 대안으로 고려한다.
     - $D \ll 1$ (과소산포): 분산이 평균보다 작다. Conway-Maxwell-포아송이나 절단분포를 고려한다.

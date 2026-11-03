@@ -412,13 +412,13 @@ $\rho = 0$이면 조건부분포는 무엇이 되는가? 이를 독립성 개념
 </div>
 
 ??? success "풀이"
-    결합밀도는:
+    결합밀도는 이렇게 된다.
 
     $$
     f(a, b) = \frac{1}{2\pi\sqrt{1-\rho^2}}\exp\!\left(-\frac{a^2 - 2\rho ab + b^2}{2(1-\rho^2)}\right)
     $$
 
-    $a$의 주변분포는 $f_a(a) = \frac{1}{\sqrt{2\pi}}e^{-a^2/2}$이다. 따라서 $b$에 대해 완전제곱식을 만들면:
+    $a$의 주변분포는 $f_a(a) = \frac{1}{\sqrt{2\pi}}e^{-a^2/2}$이다. 따라서 $b$에 대해 완전제곱식을 만들면 이렇게 된다.
 
     $$
     f(b \mid a = a_0) = \frac{f(a_0, b)}{f_a(a_0)} \propto \exp\!\left(-\frac{(b - \rho a_0)^2}{2(1-\rho^2)}\right)

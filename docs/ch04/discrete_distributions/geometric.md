@@ -682,7 +682,7 @@ $$
 
     $K$를 사건이 처음 일어난 구간의 번호라 하자. 그러면 $p = 1 - e^{-\lambda \Delta t}$인 $K \sim \mathrm{Geometric}(p)$이고, 대기 시간은 $T_{\text{disc}} = K \cdot \Delta t$이다.
 
-    $\Delta t \to 0$일 때:
+    $\Delta t \to 0$일 때 이렇게 된다.
 
     $\mathbb{E}[T_{\text{disc}}] = \Delta t / p = \Delta t / (1 - e^{-\lambda \Delta t}) \to 1/\lambda$이며, 이는 지수분포의 평균과 일치한다.
 
@@ -702,13 +702,13 @@ $$
 
     역 CDF: $F(k) \ge u$일 필요충분조건은 $(1 - p)^k \le 1 - u$이고, 이는 다시 $k \ge \ln(1 - u)/\ln(1 - p)$와 동치이다.
 
-    따라서:
+    따라서 이렇게 된다.
 
     $$
     X = \lceil \ln(1 - U)/\ln(1 - p) \rceil
     $$
 
-    $1 - U$는 $U$와 같은 균등분포를 따르므로 다음과 동등하게 쓸 수 있다:
+    $1 - U$는 $U$와 같은 균등분포를 따르므로 다음과 동등하게 쓸 수 있다.
 
     $$
     X = \lceil \ln(U)/\ln(1 - p) \rceil
@@ -931,7 +931,7 @@ $Y_1, \ldots, Y_k$가 독립이고 $Y_i \sim \text{Geometric}(p_i)$(시행 번�
 
     따라서 $\mathbb{E}[T_i] = n/(n - i + 1)$이다.
 
-    전체는 $T = \sum_{i=1}^n T_i$이고, 선형성에 의해:
+    전체는 $T = \sum_{i=1}^n T_i$이고, 선형성에 의해 이렇게 된다.
 
     $$
     \mathbb{E}[T] = \sum_{i=1}^n \frac{n}{n - i + 1} = n \sum_{j=1}^n \frac{1}{j} \approx n \ln n + n\gamma

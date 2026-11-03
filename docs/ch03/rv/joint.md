@@ -520,13 +520,13 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 </div>
 
 ??? success "풀이"
-    먼저 확인한다:
+    먼저 확인한다.
 
     $$
     \int_0^1 \int_0^y 6(1-y)\,dx\,dy = \int_0^1 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^1 = 6\left(\frac{1}{2} - \frac{1}{3}\right) = 1 \checkmark
     $$
 
-    이제 확률을 구한다:
+    이제 확률을 구한다.
 
     $$
     P\left(X < \tfrac{1}{2}, Y < \tfrac{1}{2}\right) = \int_0^{1/2}\!\int_0^y 6(1-y)\,dx\,dy = \int_0^{1/2} 6y(1-y)\,dy = 6\left[\frac{y^2}{2} - \frac{y^3}{3}\right]_0^{1/2} = 6\left(\frac{1}{8} - \frac{1}{24}\right) = 6 \cdot \frac{2}{24} = \frac{1}{2}
@@ -701,13 +701,13 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 </div>
 
 ??? success "풀이"
-    결합 CDF는 왼쪽 아래 사분면에서 결합 PDF를 적분한 것이다:
+    결합 CDF는 왼쪽 아래 사분면에서 결합 PDF를 적분한 것이다.
 
     $$
     F(x, y) = \int_{-\infty}^{y} \int_{-\infty}^{x} f(s, t)\, ds\, dt
     $$
 
-    (충분한 매끄러움을 가정하고) 두 변수 모두에 대해 미분하면:
+    (충분한 매끄러움을 가정하고) 두 변수 모두에 대해 미분하면 이렇게 된다.
 
     $$
     f(x, y) = \frac{\partial^2 F(x, y)}{\partial x \partial y}
@@ -729,7 +729,7 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 ??? success "풀이"
     결합분포: $f_{X, Y}(x, y) = f_{X|Y}(x|y) f_Y(y) = (1/y) e^{-y} \mathbf 1\{0 \le x \le y\}$.
 
-    $X$의 주변분포: $y \ge x$인 영역에서 $y$에 대해 적분한다:
+    $X$의 주변분포: $y \ge x$인 영역에서 $y$에 대해 적분한다.
 
     $$
     f_X(x) = \int_x^\infty \frac{e^{-y}}{y} dy
@@ -751,7 +751,7 @@ $P(X + Y \leq 2)$와 $E[XY]$를 계산하라.
 ??? success "풀이"
     특정한 결과 열 하나가 나올 확률은 $\prod_j p_j^{X_j}$이다. 계수 벡터 $(X_1, \ldots, X_k)$를 주는 열의 개수는 다항계수 $\binom{n}{X_1, X_2, \ldots, X_k} = n!/(X_1! X_2! \cdots X_k!)$이다.
 
-    결합 PMF:
+    결합 PMF 는 이렇게 된다.
 
     $$
     P(X_1 = x_1, \ldots, X_k = x_k) = \frac{n!}{x_1! x_2! \cdots x_k!} \prod_{j=1}^k p_j^{x_j}

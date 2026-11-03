@@ -1194,7 +1194,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 ??? success "풀이"
     $T_k = \sum_{i=1}^k X_i$이며, 여기서 $X_i$는 i.i.d. $\mathrm{Exp}(\lambda)$(도착 간 시간)이다.
 
-    $k$개의 i.i.d. 지수 확률변수의 합은 **감마(Erlang) 분포**이다:
+    $k$개의 i.i.d. 지수 확률변수의 합은 **감마(Erlang) 분포**이다.
 
     $$
     T_k \sim \mathrm{Gamma}(\text{shape} = k, \text{rate} = \lambda)
@@ -1222,7 +1222,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     도함수: $\ell'(\lambda) = n/\lambda - \sum T_i = 0 \Rightarrow \hat\lambda = n/\sum T_i = 1/\bar T$.
 
-    **성질:**
+    **성질은 이렇다.**
 
     - $\hat\lambda$는 표본평균의 역수이다. $\mathbb{E}[T] = 1/\lambda$이므로 자연스러운 결과이다.
     - 점근적으로 불편이지만 유한표본에서는 약간 편향되어 있다: $n \ge 2$에 대해 $\mathbb{E}[\hat\lambda] = n\lambda/(n - 1)$.
@@ -1246,7 +1246,7 @@ $\mathrm{Exp}(\lambda)$의 **PDF, 평균, 분산을 유도하라.**
 
     이는 **무기억성의 직접적인 표현**이다. 미래의 위험은 과거의 생존에 의존하지 않는다.
 
-    **상수가 아닌 위험률과의 비교:**
+    **상수가 아닌 위험률과 견주면 이렇다.**
 
     - **증가하는 위험률** (예: $k > 1$인 Weibull): 부품이 마모된다. 오래된 부품일수록 고장 나기 쉽다. 기계 부품이 그렇다.
     - **감소하는 위험률** ($k < 1$): 부품이 길들여진다. 오래된 부품일수록 고장이 덜 난다. 초기 결함을 넘긴 전자 부품이 그렇다.

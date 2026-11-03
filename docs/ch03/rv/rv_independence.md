@@ -615,7 +615,7 @@ $$
 </div>
 
 ??? success "풀이"
-    둘 다 정규확률변수의 선형결합이므로 정규분포를 따른다. 공분산을 계산하면:
+    둘 다 정규확률변수의 선형결합이므로 정규분포를 따른다. 공분산을 계산하면 이렇게 된다.
 
     $$
     \mathrm{Cov}(X_1 + X_2, X_1 - X_2) = \mathrm{Var}(X_1) - \mathrm{Var}(X_2) + \mathrm{Cov}(X_1, X_2) - \mathrm{Cov}(X_2, X_1) = \sigma^2 - \sigma^2 + 0 - 0 = 0

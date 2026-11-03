@@ -402,7 +402,7 @@ $\boldsymbol{\Sigma} = \begin{pmatrix}1 & 0 \\ 0 & 0.3\end{pmatrix}$의 고윳�
 </div>
 
 ??? success "풀이"
-    공분산행렬 $\boldsymbol{\Sigma}$는 양의 준정부호이다. 즉 모든 $\mathbf{v}$에 대해 $\mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v} \ge 0$이다. $\lambda$가 고유벡터 $\mathbf{u}$($\|\mathbf{u}\| = 1$)에 대응하는 고윳값이면:
+    공분산행렬 $\boldsymbol{\Sigma}$는 양의 준정부호이다. 즉 모든 $\mathbf{v}$에 대해 $\mathbf{v}^\top\boldsymbol{\Sigma}\mathbf{v} \ge 0$이다. $\lambda$가 고유벡터 $\mathbf{u}$($\|\mathbf{u}\| = 1$)에 대응하는 고윳값이면 이렇게 된다.
 
     $$
     0 \le \mathbf{u}^\top\boldsymbol{\Sigma}\mathbf{u} = \mathbf{u}^\top(\lambda\mathbf{u}) = \lambda
@@ -420,7 +420,7 @@ $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$이고 $|\boldsymbol{\Si
 </div>
 
 ??? success "풀이"
-    $\boldsymbol{\Sigma} = \mathbf{U}\mathbf{D}\mathbf{U}^\top$이므로:
+    $\boldsymbol{\Sigma} = \mathbf{U}\mathbf{D}\mathbf{U}^\top$이므로 이렇게 된다.
 
     $$
     \text{tr}(\boldsymbol{\Sigma}) = \text{tr}(\mathbf{U}\mathbf{D}\mathbf{U}^\top) = \text{tr}(\mathbf{D}) = \lambda_1 + \lambda_2
@@ -442,7 +442,7 @@ $\text{tr}(\boldsymbol{\Sigma}) = \lambda_1 + \lambda_2$이고 $|\boldsymbol{\Si
 </div>
 
 ??? success "풀이"
-    회전된 좌표 $\mathbf{z} = \mathbf{U}^\top(\mathbf{x} - \boldsymbol{\mu})$에서:
+    회전된 좌표 $\mathbf{z} = \mathbf{U}^\top(\mathbf{x} - \boldsymbol{\mu})$에서 이렇게 된다.
 
     $$
     d_M^2 = \mathbf{z}^\top \mathbf{D}^{-1} \mathbf{z} = \frac{z_1^2}{\lambda_1} + \frac{z_2^2}{\lambda_2}

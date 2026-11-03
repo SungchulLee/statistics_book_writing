@@ -1159,13 +1159,13 @@ $P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
 
 ??? success "풀이"
 
-    **$X$의 주변분포:**
+    **$X$ 의 주변분포는 이렇게 된다.**
 
     $$
     f_X(x) = \int_x^1 2\,dy = 2(1 - x), \quad 0 \leq x \leq 1
     $$
 
-    **$X = x$가 주어졌을 때 $Y$의 조건부 PDF:**
+    **$X = x$ 가 주어졌을 때 $Y$ 의 조건부 PDF 는 이렇게 된다.**
 
     $$
     f_{Y|X}(y \mid x) = \frac{f_{X,Y}(x,y)}{f_X(x)} = \frac{2}{2(1-x)} = \frac{1}{1-x}, \quad x \leq y \leq 1
@@ -1173,13 +1173,13 @@ $P(Y = 1 \mid X = 1)$과 $E[Y \mid X = 1]$을 구하라.
 
     이는 $\text{Uniform}(x, 1)$이다.
 
-    **조건부 기댓값:**
+    **조건부 기댓값은 이렇게 된다.**
 
     $$
     E[Y \mid X = x] = \frac{x + 1}{2}
     $$
 
-    **전체 기댓값의 법칙으로 확인:**
+    **전체 기댓값의 법칙으로 확인해 보자.**
 
     $$
     E[Y] = \int_0^1 \frac{x+1}{2} \cdot 2(1-x)\,dx = \int_0^1 (x+1)(1-x)\,dx = \int_0^1 (1 - x^2)\,dx = \frac{2}{3}
@@ -1412,7 +1412,7 @@ $0 \le x \le y \le 1$에서 결합 PDF가 $f(x, y) = 6(1 - y)$이다. (a) $\int 
 </div>
 
 ??? success "풀이"
-    **유도:**
+    **유도해 보자.**
 
     $\mathrm{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$.
 
@@ -1507,7 +1507,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **밀도함수에 대한 베이즈 정리:**
+    **밀도함수에 대한 베이즈 정리는 이렇게 된다.**
 
     $$
     \pi(\theta \mid x) = \frac{f(x \mid \theta) \pi(\theta)}{\int f(x \mid \theta) \pi(\theta) d\theta} = \frac{f(x \mid \theta) \pi(\theta)}{f(x)}
@@ -1683,7 +1683,7 @@ $X$의 함수 $g(X)$ 가운데 $E[(Y-g(X))^2]$을 최소로 하는 것이 $g(X) 
 </div>
 
 ??? success "풀이"
-    $Y \sim \mathrm{Bernoulli}(0.5)$로 두고:
+    $Y \sim \mathrm{Bernoulli}(0.5)$로 두면 이렇게 된다.
 
     - $X \mid Y = 0 \sim \mathrm{Exp}(1)$ (오른쪽으로 치우침, 지지집합 $[0, \infty)$).
     - $X \mid Y = 1 \sim -\mathrm{Exp}(1)$ (왼쪽으로 치우침, 지지집합 $(-\infty, 0]$).

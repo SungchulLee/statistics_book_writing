@@ -1527,7 +1527,7 @@ $\sqrt n(\bar X_n-\mu)\xrightarrow{d}N(0,\sigma^2)$이라고 해서 그 **분산
 </div>
 
 ??? success "풀이"
-    **다변량 중심극한정리:**
+    **다변량 중심극한정리는 이렇게 된다.**
 
     $$
     \sqrt n (\bar{\mathbf X}_n - \boldsymbol\mu) \xrightarrow{d} N_d(\mathbf 0, \boldsymbol\Sigma)

@@ -734,7 +734,7 @@ $X$와 $Y$가 독립이고 $E[X] = 2$, $E[Y] = 3$, $E[X^2] = 5$, $E[Y^2] = 11$�
 
     이며, 순서 교환은 비음성에 의해 정당화된다.
 
-    **정숫값인 경우:**
+    **정숫값인 경우는 이렇게 된다.**
 
     $$
     \sum_{n=0}^\infty P(X > n) = \sum_{n=0}^\infty \sum_{k=n+1}^\infty P(X = k) = \sum_{k=1}^\infty P(X = k) \sum_{n=0}^{k-1} 1 = \sum_{k=1}^\infty k P(X = k) = \mathbb{E}[X]

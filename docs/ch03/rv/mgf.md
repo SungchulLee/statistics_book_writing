@@ -725,7 +725,7 @@ $M_{aX + b}(t) = e^{bt} M_X(at)$를 증명하고, $X$와 $Y$가 독립일 때 $M
 </div>
 
 ??? success "풀이"
-    **선형변환:**
+    **선형변환은 이렇게 된다.**
 
     $$
     M_{aX + b}(t) = \mathbb{E}[e^{t(aX + b)}] = e^{bt} \mathbb{E}[e^{(at)X}] = e^{bt} M_X(at)

@@ -826,27 +826,27 @@ $\sigma^2\!\left[\rho+\frac{1-\rho}{n}\right]$ 과 사진의 네 곡선은 **이
 </div>
 
 ??? success "풀이"
-    주변분산:
+    주변분산은 이렇게 된다.
 
     $\mathrm{Var}(X) = 1$, $\mathrm{Var}(Y) = a^2 \cdot 1 + \sigma_Z^2 = a^2 + \sigma_Z^2$.
 
-    공분산:
+    공분산은 이렇게 된다.
 
     $\mathrm{Cov}(X, Y) = \mathrm{Cov}(X, aX + Z) = a \mathrm{Var}(X) + \mathrm{Cov}(X, Z) = a + 0 = a$.
 
-    공분산행렬:
+    공분산행렬은 이렇게 된다.
 
     $$
     \boldsymbol{\Sigma} = \begin{pmatrix} 1 & a \\ a & a^2 + \sigma_Z^2 \end{pmatrix}
     $$
 
-    상관:
+    상관은 이렇게 된다.
 
     $$
     \rho(X, Y) = \frac{a}{\sqrt{1 \cdot (a^2 + \sigma_Z^2)}} = \frac{a}{\sqrt{a^2 + \sigma_Z^2}}
     $$
 
-    특수한 경우:
+    특수한 경우는 이렇게 된다.
 
     - $\sigma_Z = 0$: $\rho = a/|a| = \pm 1$. $Y$가 $X$의 결정론적 함수다.
     - $\sigma_Z \to \infty$: $\rho \to 0$. 잡음이 지배하여 $X$와 $Y$가 사실상 독립이 된다.
