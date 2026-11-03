@@ -478,7 +478,7 @@ $$
 </div>
 
 ??? success "풀이"
-    분모 $E_i$는 표준화 인자 역할을 한다. 각 항 $(O_i - E_i)^2 / E_i$가 근사적으로 표준정규의 제곱이 되는 것은 다음 때문이다:
+    분모 $E_i$는 표준화 인자 역할을 한다. 각 항 $(O_i - E_i)^2 / E_i$가 근사적으로 표준정규의 제곱이 되는 것은 다음 때문이다.
 
     $$
     \text{Var}(O_i) \approx E_i \quad \text{(when } np_i(1-p_i) \approx np_i = E_i\text{)}

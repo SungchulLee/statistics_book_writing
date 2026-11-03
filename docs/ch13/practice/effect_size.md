@@ -467,7 +467,7 @@ $2 \times 2$ 표에서 Cramér의 V가 파이 계수의 절댓값 $|\phi|$와 �
     V = \sqrt{\frac{X^2}{n \cdot 1}} = \sqrt{\frac{X^2}{n}}
     $$
 
-    이다. 파이 계수는 다음으로 정의된다:
+    이다. 파이 계수는 다음으로 정의된다.
 
     $$
     \phi = \sqrt{\frac{X^2}{n}}
