@@ -196,7 +196,7 @@ _확인한 곳 — [Internet Archive 「Methods of Measuring the Concentration o
 
 ---
 
-## 2. 읽는 법
+## 2. 읽는 법 — 누적선이 80% 를 넘는 지점을 찾는다
 
 누적선이 **80% 기준선을 넘는 지점**을 찾는다. 그 왼쪽에 있는 범주들이 문제의 대부분을 만드는 것들이다.
 

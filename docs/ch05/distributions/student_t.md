@@ -387,7 +387,7 @@ _확인한 곳 — Student, 「The Probable Error of a Mean」, 『Biometrika』
 
 </div>
 
-## 4. 임계값
+## 4. 임계값 — 자유도가 n−1 이다
 
 평균에 관한 신뢰구간과 검정에서 되풀이해 찾아보게 되는 수치다. 표본크기 $n$에 대해 자유도는 $n-1$이다.
 

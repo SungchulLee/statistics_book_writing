@@ -77,7 +77,7 @@ $$
 
 ## 3. 가설검정
 
-### 가설
+### 가설 — 단조 연관이 없는가
 
 $$
 H_0 \colon \tau = 0 \quad \text{(단조 연관성이 없다)}
@@ -105,7 +105,7 @@ $$
 \text{Var}(S) = \frac{1}{18}\left[n(n-1)(2n+5) - \sum_{i} t_i(t_i-1)(2t_i+5) - \sum_{j} u_j(u_j-1)(2u_j+5)\right] + \frac{\sum_{i}t_i(t_i-1)(t_i-2) \cdot \sum_{j}u_j(u_j-1)(u_j-2)}{9n(n-1)(n-2)} + \frac{\sum_{i}t_i(t_i-1) \cdot \sum_{j}u_j(u_j-1)}{2n(n-1)}
 $$
 
-### 정규근사
+### 정규근사 — n 이 10 이상이면 Z 로 재도 된다
 
 $n \ge 10$이면 표준화된 통계량
 

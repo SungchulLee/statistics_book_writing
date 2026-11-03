@@ -144,7 +144,7 @@ _확인한 곳 — Markus Krajewski, "The Great Lightbulb Conspiracy", 『IEEE S
 
 ---
 
-## 3. 성질
+## 3. 성질 — 편향되어 있고 n 이 커야 줄어든다
 
 MLE를 손에 넣었으니 이제 그 통계적 성질을 살펴보자. 평균적으로 참 모수를 맞히는지, 그리고 표본크기가 커질 때 $\lambda$를 얼마나 정밀하게 추정하는지를 본다.
 
