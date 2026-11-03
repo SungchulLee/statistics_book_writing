@@ -155,7 +155,7 @@ $\sigma$ 를 알면 구간의 폭이 자료에 의존하지 않는다. 그래서
     1.96 \sqrt{\frac{4}{n}} \leq 0.5
     $$
 
-    $n$에 대해 풀면:
+    $n$에 대해 풀면 이렇게 된다.
 
     $$
     n \geq \frac{4 \times 1.96^2}{0.5^2} = 61.4656
@@ -912,7 +912,7 @@ with real data?* Annals of Statistics **5**, 1055–1098 의 Table 6 을 적는�
 
 ??? success "풀이"
 
-    $n = 100$이면 $\text{df} = 99$이고:
+    $n = 100$이면 $\text{df} = 99$이고 이렇게 된다.
 
     - $z_{0.025} = 1.960$
     - $t_{0.975,99} = 1.984$
@@ -944,7 +944,7 @@ with real data?* Annals of Statistics **5**, 1055–1098 의 Table 6 을 적는�
     s = \sqrt{3.333} = 1.826
     $$
 
-    $\text{df} = 9$, $\alpha = 0.10$, $t_{0.95,9} = 1.833$이므로:
+    $\text{df} = 9$, $\alpha = 0.10$, $t_{0.95,9} = 1.833$이므로 이렇게 된다.
 
     $$
     13.0 \pm 1.833 \times \frac{1.826}{\sqrt{10}} = 13.0 \pm 1.833 \times 0.5774 = 13.0 \pm 1.059
@@ -952,7 +952,7 @@ with real data?* Annals of Statistics **5**, 1055–1098 의 Table 6 을 적는�
 
     90% 신뢰구간은 $(11.94, 14.06)$이다.
 
-    **확인:**
+    **확인해 보자.**
 
     ```python
     import numpy as np
@@ -1345,7 +1345,7 @@ $n=20$인 자료에 **이상치 하나**가 섞이면 $t$-구간이 어떻게 �
 
 ??? success "풀이"
 
-    오차한계는 $\text{MOE} = z_{1-\alpha/2} \cdot \sigma / \sqrt{n}$이다. $z_{1-\alpha/2}$와 $\sigma$가 상수이므로:
+    오차한계는 $\text{MOE} = z_{1-\alpha/2} \cdot \sigma / \sqrt{n}$이다. $z_{1-\alpha/2}$와 $\sigma$가 상수이므로 이렇게 된다.
 
     $$
     \frac{d(\text{MOE})}{dn} = z_{1-\alpha/2} \cdot \sigma \cdot \left(-\frac{1}{2}\right) n^{-3/2} < 0
@@ -1369,7 +1369,7 @@ $n=20$인 자료에 **이상치 하나**가 섞이면 $t$-구간이 어떻게 �
     T = \frac{Z}{\sqrt{V/\nu}} \xrightarrow{d} \frac{Z}{1} = Z \sim N(0,1)
     $$
 
-    이다. $t_\nu$의 누적분포함수가 표준정규 누적분포함수로 점별 수렴하므로 분위수도 수렴한다:
+    이다. $t_\nu$의 누적분포함수가 표준정규 누적분포함수로 점별 수렴하므로 분위수도 수렴한다.
 
     $$
     t_{1-\alpha/2,\,\nu} \to z_{1-\alpha/2} \quad (\nu \to \infty)

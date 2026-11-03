@@ -233,7 +233,7 @@ $4$ 사망)과 ECMO $9$ 명($9$ 생존), 이후 ECMO $20$ 명($19$ 생존)이었
 </div>
 
 ??? success "풀이"
-    공식을 정리하면:
+    공식을 정리하면 이렇게 된다.
 
     $$
     \delta = \sqrt{\frac{2(z_{1-\alpha/2} + z_{1-\beta})^2 \sigma^2}{n}} = \sqrt{\frac{2(1.96 + 0.842)^2 \times 100}{30}} = \sqrt{\frac{1570.1}{30}} = \sqrt{52.34} \approx 7.23

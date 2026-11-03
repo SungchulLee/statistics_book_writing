@@ -261,7 +261,7 @@ $\S 2$ 의 넷은 같은 자료에서 서로 다른 폭을 낸다. 얼마나 다
     \text{df} = \frac{(7.5 + 16)^2}{\frac{7.5^2}{29} + \frac{16^2}{24}} = \frac{552.25}{12.606} \approx 43.8
     $$
 
-    $t_{0.975,43} \approx 2.017$이므로:
+    $t_{0.975,43} \approx 2.017$이므로 이렇게 된다.
 
     $$
     \text{ME} = 2.017 \times 4.847 \approx 9.78
@@ -729,7 +729,7 @@ Learning that Matters*, AAAI-18 (arXiv:1709.06560) 의 그림 $5$ 설명과 「R
 
     Cohen의 $d = (78 - 82)/9.13 \approx -0.44$.
 
-    **해석:**
+    **해석은 이렇다.**
 
     - $|d| = 0.2$: 작은 효과.
     - $|d| = 0.5$: 중간 효과.
@@ -737,7 +737,7 @@ Learning that Matters*, AAAI-18 (arXiv:1709.06560) 의 그림 $5$ 설명과 「R
 
     $d = -0.44$는 "중간에 조금 못 미치는" 효과이다 — 방법 B의 평균이 A의 평균보다 약 0.44 표준편차 위에 있다. 신뢰구간은 유의성에 살짝 못 미쳤지만 효과크기는 무시할 수준이 아니다.
 
-    항상 둘 다 보고하라:
+    항상 둘 다 보고하라.
 
     - **통계적 유의성** (신뢰구간이 0을 배제, $p < \alpha$).
     - **실질적 유의성** (효과크기가 의미 있을 만큼 큰가).
@@ -1025,14 +1025,14 @@ Learning that Matters*, AAAI-18 (arXiv:1709.06560) 의 그림 $5$ 설명과 「R
 
 ??? success "풀이"
 
-    Satterthwaite 공식에 $\sigma_1^2 = \sigma_2^2 = \sigma^2$을 대입하면:
+    Satterthwaite 공식에 $\sigma_1^2 = \sigma_2^2 = \sigma^2$을 대입하면 이렇게 된다.
 
     $$
     \nu = \frac{(\sigma^2/n_1 + \sigma^2/n_2)^2}{\frac{\sigma^4}{n_1^2(n_1-1)} + \frac{\sigma^4}{n_2^2(n_2-1)}}
     = \frac{(1/n_1 + 1/n_2)^2}{\frac{1}{n_1^2(n_1-1)} + \frac{1}{n_2^2(n_2-1)}}
     $$
 
-    $\sigma^4$이 약분된다. $n_1 = n_2 = n$이면:
+    $\sigma^4$이 약분된다. $n_1 = n_2 = n$이면 이렇게 된다.
 
     $$
     \nu = \frac{(2/n)^2}{2/[n^2(n-1)]} = \frac{4}{n^2} \cdot \frac{n^2(n-1)}{2} = 2(n-1) = n_1 + n_2 - 2
@@ -1323,12 +1323,12 @@ Learning that Matters*, AAAI-18 (arXiv:1709.06560) 의 그림 $5$ 설명과 「R
 
     분모에는 독립인 두 카이제곱 확률변수의 가중합이 들어 있다. $V = S_1^2/n_1 + S_2^2/n_2$라 하자. 적률 맞추기로 $V$를 $c \cdot W$($W \sim \chi^2_\nu / \nu$, $\nu$는 유효 자유도)로 근사한다.
 
-    $V$의 처음 두 적률을 맞추면:
+    $V$의 처음 두 적률을 맞추면 이렇게 된다.
 
     - $E[V] = \sigma_1^2/n_1 + \sigma_2^2/n_2$
     - $\operatorname{Var}(V) = \frac{2\sigma_1^4}{n_1^2(n_1-1)} + \frac{2\sigma_2^4}{n_2^2(n_2-1)}$
 
-    축척된 $\chi^2_\nu$에 대해 $W = c \chi^2_\nu/\nu$이면 $E[W] = c$이고 $\operatorname{Var}(W) = 2c^2/\nu$이다. $c = E[V]$로 두고 분산을 맞추면:
+    축척된 $\chi^2_\nu$에 대해 $W = c \chi^2_\nu/\nu$이면 $E[W] = c$이고 $\operatorname{Var}(W) = 2c^2/\nu$이다. $c = E[V]$로 두고 분산을 맞추면 이렇게 된다.
 
     $$
     \frac{2(E[V])^2}{\nu} = \operatorname{Var}(V)

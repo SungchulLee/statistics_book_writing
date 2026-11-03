@@ -75,7 +75,7 @@ _확인한 곳 — Jastreboff 외, 『New England Journal of Medicine』 $387$($
 
 ## 2. 선수 지식
 
-이 장은 다음 내용을 바탕으로 한다:
+이 장은 다음 내용을 바탕으로 한다.
 
 - **5장** (추정량과 표집분포) -- 추축량 구성의 바탕이 되는 normal, t, 카이제곱, F 표집분포.
 - **[5장](../ch05/index.md)·[6장](../ch06/index.md)** -- 편향과 일치성 같은 추정량의 성질([5.11 편향–분산 분해](../ch05/estimators/bias_variance.md)~[5.13 분산의 추정](../ch05/variance/naive.md)), [최대가능도추정량](../ch06/mle/likelihood.md)과 [적률법 추정량](../ch06/estimation_methods/moments_foundations.md).

@@ -943,7 +943,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
 </div>
 
 ??? success "풀이"
-    대조군이 없는 사전·사후 설계는 다음에 취약하다:
+    대조군이 없는 사전·사후 설계는 다음에 취약하다.
 
     - **평균으로의 회귀:** 사전 점수가 낮아 선택된 피험자는 개입과 무관하게 다음 번에 더 높은 점수를 내는 경향이 있다.
     - **성숙:** 시간이 지나며 자연히 나아진다(아이가 자라거나 환자가 회복된다).
@@ -986,7 +986,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
 ??? success "풀이"
     **교차 설계:** 각 피험자가 처리 A와 B를 무작위 순서로 받으며 사이에 세척기간을 둔다. 피험자마다 A 반응과 B 반응을 모두 제공한다.
 
-    **장점:**
+    **장점은 이렇다.**
 
     - 각 피험자가 자기 자신의 대조가 된다(대응 분석).
     - 같은 수의 피험자로 최대의 정밀도를 얻는다.
@@ -994,7 +994,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
 
     **분석:** $D_i = X_{A,i} - X_{B,i}$에 대한 대응 $t$-검정(정규가 아니면 윌콕슨 부호순위).
 
-    **우려:**
+    **우려는 이렇다.**
 
     - **이월 효과:** 앞서 받은 A의 영향이 B에 남을 수 있다. 세척기간이 충분히 길어야 한다.
     - **기간 효과:** 계절적·시간적 패턴(A와 B를 다른 시기에 받는다).
@@ -1285,7 +1285,7 @@ Stoica (2024) *Chatbot Arena: An Open Platform for Evaluating LLMs by Human Pref
 
 ??? success "풀이"
 
-    $D = X - Y$라 하자. 분산의 성질에 의해:
+    $D = X - Y$라 하자. 분산의 성질에 의해 이렇게 된다.
 
     $$
     \operatorname{Var}(D) = \operatorname{Var}(X - Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) - 2\operatorname{Cov}(X,Y)
