@@ -122,19 +122,18 @@ def hypothesis_types():
 
 
 # ==================================================================
-# 2. 검정의 다섯 걸음
+# 2. 검정의 네 악장
 # ==================================================================
 def test_procedure_flow():
     fig, ax = plt.subplots(figsize=(13.5, 3.9))
 
     steps = [
-        ("1. 가설", "$H_0$ 와 $H_1$ 을\n자료를 보기 전에", BLUE, BLUE_F),
-        ("2. 유의수준", "$\\alpha$ 를 정한다\n(흔히 $0.05$)", BLUE, BLUE_F),
-        ("3. 검정통계량", "자료를 한 수로\n요약한다", GREEN, GREEN_F),
-        ("4. 귀무분포", "$H_0$ 가 참일 때\n그 수의 분포", GREEN, GREEN_F),
-        ("5. 판정", "$p < \\alpha$ 이면\n$H_0$ 를 기각", ORANGE, ORANGE_F),
+        ("1. 물음", "$H_0$ · $H_1$ 과 $\\alpha$ 를\n자료를 보기 전에", BLUE, BLUE_F),
+        ("2. 통계량", "자료를 한 수로\n요약한다", GREEN, GREEN_F),
+        ("3. 표집분포", "$H_0$ 가 참일 때\n그 수가 흔들리는 폭", GREEN, GREEN_F),
+        ("4. 검정", "꼬리를 읽어 $p$ 를 내고\n$\\alpha$ 와 견준다", ORANGE, ORANGE_F),
     ]
-    w, gap = 2.45, 0.62
+    w, gap = 2.95, 0.72
     for i, (title, sub, edge, face) in enumerate(steps):
         x = i * (w + gap)
         ax.add_patch(FancyBboxPatch((x, 1.0), w, 1.7,
@@ -151,18 +150,19 @@ def test_procedure_flow():
                                          arrowstyle="-|>", mutation_scale=15,
                                          color=MUTED, linewidth=1.6, zorder=3))
 
-    ax.annotate("", xy=(1.2, 0.72), xytext=(2 * (w + gap) + 1.2, 0.72),
+    ax.annotate("", xy=(0.2, 0.72), xytext=(w - 0.2, 0.72),
                 arrowprops=dict(arrowstyle="-|>", color=RED, linewidth=1.5,
                                 linestyle="--"))
-    ax.text((2 * (w + gap) + 2.4) / 2, 0.42,
-            "1·2 는 자료를 보기 전에 정한다 — 보고 나서 고치면 $\\alpha$ 가 "
+    ax.text(0.2, 0.42,
+            "첫 악장은 자료를 보기 전에 끝난다 — 보고 나서 고치면 $\\alpha$ 가 "
             "지켜지지 않는다",
-            fontsize=11, color=RED, ha="center", va="top")
+            fontsize=11, color=RED, ha="left", va="top")
 
-    ax.set_xlim(-0.3, 5 * w + 4 * gap + 0.3)
+    ax.set_xlim(-0.3, 4 * w + 3 * gap + 0.3)
     ax.set_ylim(-0.25, 3.0)
     ax.axis("off")
-    ax.set_title("가설검정의 다섯 걸음", fontsize=13.5, pad=8)
+    ax.set_title("가설검정의 네 악장 — 바뀌는 것은 2 와 3 뿐이다",
+                 fontsize=13.5, pad=8)
     fig.tight_layout()
     save(fig, FOUND + "test_procedure_flow.png")
 

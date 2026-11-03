@@ -25,7 +25,7 @@ _확인한 곳 — 아래 「$37.0$ 은 어디서 왔는가」 상자의 출처 
 
 ---
 
-## 1. 가설 — 모평균이 μ₀ 인가
+## 1. 물음 — 모평균이 μ₀ 인가
 
 $X_1, X_2, \ldots, X_n$을 평균이 $\mu$이고 분산 $\sigma^2$을 모르는 모집단에서 뽑은 확률표본이라 하자. 귀무가설은 평균의 특정 값을 지정한다.
 
@@ -43,7 +43,7 @@ $$
 
 ---
 
-## 2. 검정통계량 — σ 자리에 S 가 들어간다
+## 2. 통계량 — σ 자리에 S 가 들어간다
 
 검정통계량은 표본평균 $\bar{X}$가 가설의 값 $\mu_0$에서 추정된 표준오차 몇 개만큼 떨어져 있는지를 잰다. 구조는 $z$-통계량과 같고 $\sigma$ 자리에 $S$가 들어간다.
 
@@ -52,6 +52,10 @@ t = \frac{\bar{X} - \mu_0}{S / \sqrt{n}}
 $$
 
 여기서 $S = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2}$은 표본표준편차이다.
+
+---
+
+## 3. 표집분포 — 자유도 n−1 의 t 분포다
 
 $H_0$ 아래에서 모집단이 정규이면 이 통계량은 자유도 $n - 1$인 스튜던트 $t$-분포를 따른다.
 
@@ -64,180 +68,9 @@ $t_{n-1}$ 분포는 표준정규 $N(0,1)$보다 꼬리가 두꺼운데, 이는 $
 !!! note "왜 자유도가 n - 1인가?"
     표본표준편차 $S$는 $\bar{X}$를 추정하는 데 자유도 하나가 소모되므로 분모에 $n - 1$을 쓴다. $n$개의 편차 $X_i - \bar{X}$는 제약 $\sum(X_i - \bar{X}) = 0$을 만족하므로, 산포에 관한 자유로운 정보는 $n - 1$개뿐이다.
 
-<div class="exbox" markdown>
-
-**보기 1.** <span class="diff easy" title="쉬움"></span> 교사 경력에 대한 t 통계량. Rory는 자기 학군의 교사들이 평균적으로 경력 5년 미만이라고 의심한다. 교사 25명을 표본으로 모아 $\bar x = 4$년, $s = 2$년을 얻었다.
-
-$$H_0: \mu = 5 \quad \text{vs} \quad H_1: \mu < 5$$
-
-**(1)** $t$ 통계량과 p-값을 손으로 구하고, $\alpha = 0.05$의 기각역을 $\bar x$의 값으로 환산하시오.
-
-**(2)** 코드로 확인하시오.
-
-**(3)** 모집단이 정규라면 이 검정의 제1종 오류율이 $\sigma$의 값과 상관없이 **정확히** $\alpha$가 되는 까닭을 밝히고, 치우친 모집단에서 실제 오류율을 모의로 재시오.
-
-</div>
-
-??? success "풀이"
-
-    **(1) 해석적으로.** 표준오차가
-
-    $$
-    \frac{s}{\sqrt{n}} = \frac{2}{\sqrt{25}} = \frac{2}{5} = 0.4
-    $$
-
-    로 깔끔하게 나오므로
-
-    $$
-    t = \frac{\bar x - \mu_0}{s/\sqrt{n}} = \frac{4 - 5}{0.4} = -2.5
-    $$
-
-    이고 자유도는 $n - 1 = 24$다. 좌측 p-값은
-
-    $$
-    p = P(T_{24} \le -2.5) = 0.009827
-    $$
-
-    이다. 임계값은 $t_{0.05,\,24} = -1.71088$이므로 기각역을 $\bar x$로 환산하면
-
-    $$
-    \bar x < 5 - 1.71088 \times 0.4 = 4.31565
-    $$
-
-    다. 관측된 $\bar x = 4$는 경계보다 $0.32$년 더 아래여서 **여유 있게** 기각역 안에 있다.
-
-    **(2) 수치적으로.**
-
-    ```python
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from scipy import stats
-
-    def plot_t_statistic(statistic, df, ax, alternative='two-sided'):
-        """t 분포를 그리고 p-값에 해당하는 꼬리를 칠한다.
-
-        대립가설의 방향에 따라 칠하는 쪽이 달라진다. 양측이면 양쪽을 모두
-        칠하므로 넓이가 두 배가 되고, 그래서 양측 p-값이 단측의 두 배다.
-        """
-        x = np.linspace(-4, 4, 100)
-        y = stats.t(df).pdf(x)
-        ax.plot(x, y, '-k')
-
-        if alternative == 'less':
-            x_fill = np.linspace(-4, statistic, 100)
-            y_fill = stats.t(df).pdf(x_fill)
-            ax.fill_between(x_fill, y_fill, color='k', alpha=0.2)
-        elif alternative == 'greater':
-            x_fill = np.linspace(statistic, 4, 100)
-            y_fill = stats.t(df).pdf(x_fill)
-            ax.fill_between(x_fill, y_fill, color='k', alpha=0.2)
-        elif alternative == 'two-sided':
-            x_fill_left = np.linspace(-4, -abs(statistic), 100)
-            y_fill_left = stats.t(df).pdf(x_fill_left)
-            ax.fill_between(x_fill_left, y_fill_left, color='k', alpha=0.2)
-            x_fill_right = np.linspace(abs(statistic), 4, 100)
-            y_fill_right = stats.t(df).pdf(x_fill_right)
-            ax.fill_between(x_fill_right, y_fill_right, color='k', alpha=0.2)
-
-        ax.spines['left'].set_visible(False)
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        ax.spines['bottom'].set_position("zero")
-        ax.set_yticks(())
-
-    # sigma 를 모르므로 s 를 쓴다. 그래서 z 가 아니라 t 로 간다.
-    mu_0 = 5
-    x_bar = 4
-    s = 2
-    n = 25
-
-    statistic = (x_bar - mu_0) / (s / np.sqrt(n))
-    df = n - 1                      # s를 자료에서 추정했으므로 하나를 잃는다
-    p_value = stats.t(df).cdf(statistic)
-
-    print(f"T-statistic: {statistic:.4f}")
-    print(f"P-value    : {p_value:.4f}")
-
-    fig, ax = plt.subplots(figsize=(12, 3))
-    plot_t_statistic(statistic, df=df, ax=ax, alternative='less')
-    plt.show()
-    ```
-
-    출력:
-
-    ```
-    T-statistic: -2.5000
-    P-value    : 0.0098
-    ```
-
-    ![교사 경력에 대한 t 통계량](./img/one_sample_222.png)
-
-    $p = 0.0098$로 1% 수준에서도 기각된다. Rory의 의심을 자료가 강하게 뒷받침한다.
-
-    유도한 $t = -2.5$와 $p = 0.009827$이 출력의 $-2.5000$, $0.0098$과 맞는다.
-
-    **(3) 정규모집단에서는 크기가 정확히 $\alpha$다.** $X_1, \ldots, X_n$이 독립인 $N(\mu_0, \sigma^2)$이면
-
-    $$
-    T = \frac{\bar X - \mu_0}{S/\sqrt{n}} \sim t_{n-1}
-    $$
-
-    이 **근사가 아니라 등식**이고, 이 분포에 $\sigma$가 들어 있지 않다. $T$는 $\sigma$에 의존하지 않는 **추축량**이다. 그러므로 $\sigma$가 얼마든
-
-    $$
-    P(T < t_{\alpha,\,n-1}) = \alpha
-    $$
-
-    가 정확히 성립한다. $n$이 작아도 그렇다. $\sigma$를 모른다는 사실이 손해를 주는 곳은 오류율이 아니라 **임계값의 크기**다($1.7109$ 대 정규의 $1.6449$).
-
-    **깨지는 것은 정규성이고, 어긋나는 양은 왜도가 정한다.**
-
-    ```python
-    import numpy as np
-    from scipy import stats
-
-    rng = np.random.default_rng(3)
-    M, n = 400_000, 25
-    c_left = stats.t(n - 1).ppf(0.05)        # 좌측 임계값 (우측은 대칭이라 -c_left)
-    c_two = stats.t(n - 1).ppf(0.975)        # 양측 임계값
-
-    print(f"n = {n},  되풀이 {M:,}회,  명목 수준 0.05")
-    print(f"{'모집단':>10s} {'왜도':>7s} {'좌측':>8s} {'우측':>8s} {'양측':>8s}")
-    for label, draw, mu, g1 in [
-        ("정규", lambda s: rng.normal(0, 1, s), 0.0, 0.0),
-        ("지수", lambda s: rng.exponential(1, s), 1.0, 2.0),
-        ("로그정규", lambda s: rng.lognormal(0, 1, s), np.exp(0.5), 6.1849),
-    ]:
-        x = draw((M, n))
-        # 참 평균 mu 를 귀무가설값으로 넣는다. 곧 H0 가 참인 세상이다.
-        t = (x.mean(1) - mu) / (x.std(1, ddof=1) / np.sqrt(n))
-        print(f"{label:>10s} {g1:7.2f} {(t < c_left).mean():8.4f} "
-              f"{(t > -c_left).mean():8.4f} {(np.abs(t) > c_two).mean():8.4f}")
-    print(f"\n몬테카를로 오차 = sqrt(0.05*0.95/{M}) "
-          f"= {np.sqrt(0.05 * 0.95 / M):.5f}")
-    ```
-
-    출력:
-
-    ```
-    n = 25,  되풀이 400,000회,  명목 수준 0.05
-           모집단      왜도       좌측       우측       양측
-            정규    0.00   0.0500   0.0501   0.0502
-            지수    2.00   0.1033   0.0214   0.0769
-          로그정규    6.18   0.1626   0.0089   0.1245
-
-    몬테카를로 오차 = sqrt(0.05*0.95/400000) = 0.00034
-    ```
-
-    **정규 줄의 세 값이 모두 $0.05$다.** 몬테카를로 오차가 $0.00034$이니 $0.0500$, $0.0501$, $0.0502$는 모두 $0.05$와 구별되지 않는다. 추축량 논증이 수로 확인된 것이다.
-
-    치우친 모집단에서는 어긋나는 **방향이 꼬리마다 다르다.** 오른쪽으로 치우친 자료에서는 $\bar X$가 작게 나올 때 $S$도 함께 작아져 $T$의 왼쪽 꼬리가 두꺼워진다. 그래서 이 보기처럼 **좌측검정은 위험해지고**($0.05 \to 0.1033 \to 0.1626$) 우측검정은 보수적이 된다($0.05 \to 0.0214 \to 0.0089$). 양측은 두 효과가 일부 상쇄되어 중간에 놓인다. 왜도가 $2$에서 $6.18$로 커질 때 어긋남도 함께 커진다는 점에 주의하라. 이 어긋남이 $n$에 따라 어떻게 줄어드는지는 [5.3절](../../ch05/applications/standard_error.md)에서 다룬 바 있다.
-
-    Rory의 자료에서는 교사 경력이 오른쪽으로 치우쳐 있을 가능성이 높다(경력은 $0$에서 막히고 위로만 열려 있다). 그렇다면 좌측검정인 이 검정의 실제 오류율은 $5\%$보다 **클** 수 있으므로, $p = 0.0098$을 명목 그대로 읽는 것은 위험한 쪽으로 기운 읽기다.
-
 ---
 
-## 3. 기각역 — 대립가설이 어느 쪽 꼬리를 쓸지 정한다
+## 4. 검정 — 대립가설이 어느 쪽 꼬리를 쓸지 정한다
 
 유의수준 $\alpha$에서 기각역은 대립가설에 따라 달라진다.
 
@@ -425,7 +258,182 @@ $z$ 대신 $t$를 쓰는 이유가 왼쪽에 있다. **$\sigma$를 $S$로 바꾸
 
 ---
 
-## 4. 임계값 하나가 결론을 바꾸는가
+## 5. 교사 경력을 끝까지 풀어 본다
+
+<div class="exbox" markdown>
+
+**보기 1.** <span class="diff easy" title="쉬움"></span> 교사 경력에 대한 t 통계량. Rory는 자기 학군의 교사들이 평균적으로 경력 5년 미만이라고 의심한다. 교사 25명을 표본으로 모아 $\bar x = 4$년, $s = 2$년을 얻었다.
+
+$$H_0: \mu = 5 \quad \text{vs} \quad H_1: \mu < 5$$
+
+**(1)** $t$ 통계량과 p-값을 손으로 구하고, $\alpha = 0.05$의 기각역을 $\bar x$의 값으로 환산하시오.
+
+**(2)** 코드로 확인하시오.
+
+**(3)** 모집단이 정규라면 이 검정의 제1종 오류율이 $\sigma$의 값과 상관없이 **정확히** $\alpha$가 되는 까닭을 밝히고, 치우친 모집단에서 실제 오류율을 모의로 재시오.
+
+</div>
+
+??? success "풀이"
+
+    **(1) 해석적으로.** 표준오차가
+
+    $$
+    \frac{s}{\sqrt{n}} = \frac{2}{\sqrt{25}} = \frac{2}{5} = 0.4
+    $$
+
+    로 깔끔하게 나오므로
+
+    $$
+    t = \frac{\bar x - \mu_0}{s/\sqrt{n}} = \frac{4 - 5}{0.4} = -2.5
+    $$
+
+    이고 자유도는 $n - 1 = 24$다. 좌측 p-값은
+
+    $$
+    p = P(T_{24} \le -2.5) = 0.009827
+    $$
+
+    이다. 임계값은 $t_{0.05,\,24} = -1.71088$이므로 기각역을 $\bar x$로 환산하면
+
+    $$
+    \bar x < 5 - 1.71088 \times 0.4 = 4.31565
+    $$
+
+    다. 관측된 $\bar x = 4$는 경계보다 $0.32$년 더 아래여서 **여유 있게** 기각역 안에 있다.
+
+    **(2) 수치적으로.**
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy import stats
+
+    def plot_t_statistic(statistic, df, ax, alternative='two-sided'):
+        """t 분포를 그리고 p-값에 해당하는 꼬리를 칠한다.
+
+        대립가설의 방향에 따라 칠하는 쪽이 달라진다. 양측이면 양쪽을 모두
+        칠하므로 넓이가 두 배가 되고, 그래서 양측 p-값이 단측의 두 배다.
+        """
+        x = np.linspace(-4, 4, 100)
+        y = stats.t(df).pdf(x)
+        ax.plot(x, y, '-k')
+
+        if alternative == 'less':
+            x_fill = np.linspace(-4, statistic, 100)
+            y_fill = stats.t(df).pdf(x_fill)
+            ax.fill_between(x_fill, y_fill, color='k', alpha=0.2)
+        elif alternative == 'greater':
+            x_fill = np.linspace(statistic, 4, 100)
+            y_fill = stats.t(df).pdf(x_fill)
+            ax.fill_between(x_fill, y_fill, color='k', alpha=0.2)
+        elif alternative == 'two-sided':
+            x_fill_left = np.linspace(-4, -abs(statistic), 100)
+            y_fill_left = stats.t(df).pdf(x_fill_left)
+            ax.fill_between(x_fill_left, y_fill_left, color='k', alpha=0.2)
+            x_fill_right = np.linspace(abs(statistic), 4, 100)
+            y_fill_right = stats.t(df).pdf(x_fill_right)
+            ax.fill_between(x_fill_right, y_fill_right, color='k', alpha=0.2)
+
+        ax.spines['left'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_position("zero")
+        ax.set_yticks(())
+
+    # sigma 를 모르므로 s 를 쓴다. 그래서 z 가 아니라 t 로 간다.
+    mu_0 = 5
+    x_bar = 4
+    s = 2
+    n = 25
+
+    statistic = (x_bar - mu_0) / (s / np.sqrt(n))
+    df = n - 1                      # s를 자료에서 추정했으므로 하나를 잃는다
+    p_value = stats.t(df).cdf(statistic)
+
+    print(f"T-statistic: {statistic:.4f}")
+    print(f"P-value    : {p_value:.4f}")
+
+    fig, ax = plt.subplots(figsize=(12, 3))
+    plot_t_statistic(statistic, df=df, ax=ax, alternative='less')
+    plt.show()
+    ```
+
+    출력:
+
+    ```
+    T-statistic: -2.5000
+    P-value    : 0.0098
+    ```
+
+    ![교사 경력에 대한 t 통계량](./img/one_sample_222.png)
+
+    $p = 0.0098$로 1% 수준에서도 기각된다. Rory의 의심을 자료가 강하게 뒷받침한다.
+
+    유도한 $t = -2.5$와 $p = 0.009827$이 출력의 $-2.5000$, $0.0098$과 맞는다.
+
+    **(3) 정규모집단에서는 크기가 정확히 $\alpha$다.** $X_1, \ldots, X_n$이 독립인 $N(\mu_0, \sigma^2)$이면
+
+    $$
+    T = \frac{\bar X - \mu_0}{S/\sqrt{n}} \sim t_{n-1}
+    $$
+
+    이 **근사가 아니라 등식**이고, 이 분포에 $\sigma$가 들어 있지 않다. $T$는 $\sigma$에 의존하지 않는 **추축량**이다. 그러므로 $\sigma$가 얼마든
+
+    $$
+    P(T < t_{\alpha,\,n-1}) = \alpha
+    $$
+
+    가 정확히 성립한다. $n$이 작아도 그렇다. $\sigma$를 모른다는 사실이 손해를 주는 곳은 오류율이 아니라 **임계값의 크기**다($1.7109$ 대 정규의 $1.6449$).
+
+    **깨지는 것은 정규성이고, 어긋나는 양은 왜도가 정한다.**
+
+    ```python
+    import numpy as np
+    from scipy import stats
+
+    rng = np.random.default_rng(3)
+    M, n = 400_000, 25
+    c_left = stats.t(n - 1).ppf(0.05)        # 좌측 임계값 (우측은 대칭이라 -c_left)
+    c_two = stats.t(n - 1).ppf(0.975)        # 양측 임계값
+
+    print(f"n = {n},  되풀이 {M:,}회,  명목 수준 0.05")
+    print(f"{'모집단':>10s} {'왜도':>7s} {'좌측':>8s} {'우측':>8s} {'양측':>8s}")
+    for label, draw, mu, g1 in [
+        ("정규", lambda s: rng.normal(0, 1, s), 0.0, 0.0),
+        ("지수", lambda s: rng.exponential(1, s), 1.0, 2.0),
+        ("로그정규", lambda s: rng.lognormal(0, 1, s), np.exp(0.5), 6.1849),
+    ]:
+        x = draw((M, n))
+        # 참 평균 mu 를 귀무가설값으로 넣는다. 곧 H0 가 참인 세상이다.
+        t = (x.mean(1) - mu) / (x.std(1, ddof=1) / np.sqrt(n))
+        print(f"{label:>10s} {g1:7.2f} {(t < c_left).mean():8.4f} "
+              f"{(t > -c_left).mean():8.4f} {(np.abs(t) > c_two).mean():8.4f}")
+    print(f"\n몬테카를로 오차 = sqrt(0.05*0.95/{M}) "
+          f"= {np.sqrt(0.05 * 0.95 / M):.5f}")
+    ```
+
+    출력:
+
+    ```
+    n = 25,  되풀이 400,000회,  명목 수준 0.05
+           모집단      왜도       좌측       우측       양측
+            정규    0.00   0.0500   0.0501   0.0502
+            지수    2.00   0.1033   0.0214   0.0769
+          로그정규    6.18   0.1626   0.0089   0.1245
+
+    몬테카를로 오차 = sqrt(0.05*0.95/400000) = 0.00034
+    ```
+
+    **정규 줄의 세 값이 모두 $0.05$다.** 몬테카를로 오차가 $0.00034$이니 $0.0500$, $0.0501$, $0.0502$는 모두 $0.05$와 구별되지 않는다. 추축량 논증이 수로 확인된 것이다.
+
+    치우친 모집단에서는 어긋나는 **방향이 꼬리마다 다르다.** 오른쪽으로 치우친 자료에서는 $\bar X$가 작게 나올 때 $S$도 함께 작아져 $T$의 왼쪽 꼬리가 두꺼워진다. 그래서 이 보기처럼 **좌측검정은 위험해지고**($0.05 \to 0.1033 \to 0.1626$) 우측검정은 보수적이 된다($0.05 \to 0.0214 \to 0.0089$). 양측은 두 효과가 일부 상쇄되어 중간에 놓인다. 왜도가 $2$에서 $6.18$로 커질 때 어긋남도 함께 커진다는 점에 주의하라. 이 어긋남이 $n$에 따라 어떻게 줄어드는지는 [5.3절](../../ch05/applications/standard_error.md)에서 다룬 바 있다.
+
+    Rory의 자료에서는 교사 경력이 오른쪽으로 치우쳐 있을 가능성이 높다(경력은 $0$에서 막히고 위로만 열려 있다). 그렇다면 좌측검정인 이 검정의 실제 오류율은 $5\%$보다 **클** 수 있으므로, $p = 0.0098$을 명목 그대로 읽는 것은 위험한 쪽으로 기운 읽기다.
+
+---
+
+## 6. 임계값 하나가 결론을 바꾸는가
 
 $z$ 검정과 달라지는 것은 임계값뿐이다. 그 하나로 결론이 뒤집히는 자리가 실제로 있는지, 한 자료를 끝까지 밟아 보며 확인한다.
 
@@ -834,7 +842,7 @@ $$H_0: \mu = 128 \quad \text{vs} \quad H_1: \mu < 128$$
 
 ---
 
-## 5. 가정 — 무작위 표본과 정규성
+## 7. 가정 — 무작위 표본과 정규성
 
 일표본 $t$-검정에는 다음이 필요하다.
 
@@ -843,7 +851,7 @@ $$H_0: \mu = 128 \quad \text{vs} \quad H_1: \mu < 128$$
 
 ---
 
-## 6. 로버스트성
+## 8. 로버스트성
 
 $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본이 중간 이상으로 크면 그렇다. 모의실험 연구들은 $n \geq 30$이면 적당히 치우치거나 꼬리가 두꺼운 분포에서도 실제 제1종 오류율이 명목 $\alpha$에 가깝게 유지됨을 보여준다. 표본이 더 작으면($n < 15$) 모집단이 심하게 치우쳤거나 꼬리가 두꺼울 때 검정을 믿기 어렵다.
 
@@ -867,9 +875,9 @@ $t$-검정은 정규성에서 벗어나도 꽤 로버스트하며, 특히 표본
 
 ---
 
-## 7. t 검정을 못 쓸 때 — 어디로 가는가
+## 9. t 검정을 못 쓸 때 — 어디로 가는가
 
-절 $6$ 은 $t$ 검정이 중간 정도의 비정규성에 견딘다고 했다. 견디지 못하는 자리에서
+절 $8$ 은 $t$ 검정이 중간 정도의 비정규성에 견딘다고 했다. 견디지 못하는 자리에서
 쓸 수 있는 길이 넷이고, 각각 제 쪽이 있다. 여기서는 **무엇을 검정하는 것이
 달라지는지**만 못박아 둔다.
 
