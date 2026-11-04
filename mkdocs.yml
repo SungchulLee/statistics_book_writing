@@ -300,6 +300,7 @@ nav:
                 - "절단점을 고르면: 상관된 후보와 유효 후보 수": ch09/multiple_testing/p_hacking_titanic_cutoff.md
                 - 가족단위 오류율: ch09/multiple_testing/fwer.md
                 - 본페로니와 홀름 보정: ch09/multiple_testing/bonferroni_holm.md
+            - 9.7 거짓발견율 ★:
                 - 거짓발견율 (Benjamini-Hochberg): ch09/multiple_testing/fdr.md
 
         - 10 상관과 인과:
