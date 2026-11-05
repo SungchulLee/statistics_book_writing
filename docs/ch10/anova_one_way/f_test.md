@@ -104,21 +104,48 @@ $$
 
 ### 6단계: 전체 변동의 분해 확인
 
-총제곱합은 다음과 같이 쓸 수 있다.
+관측값이 전체평균에서 벗어난 양을 **두 토막**으로 쪼갠다. 집단평균을 한 번 거쳐 가는 것이 전부다.
 
 $$
-\begin{array}{lllllll}
+y_{ij} - \bar{y}_{\cdot\cdot}
+= \underbrace{\left( y_{ij} - \bar{y}_{i\cdot} \right)}_{\text{집단 안의 벗어남}}
++ \underbrace{\left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right)}_{\text{집단 사이의 벗어남}}
+$$
+
+제곱해서 모두 더하면 세 덩어리가 된다.
+
+$$
+\begin{array}{lll}
 SST
 &=&\displaystyle
-\sum_{i=1}^{k}\sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{\cdot\cdot} \right)^2\\
+\sum_{i=1}^{k}\sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{\cdot\cdot} \right)^2
+\;=\;
+\sum_{i=1}^{k} \sum_{j=1}^{n_i} \left[ \left( y_{ij} - \bar{y}_{i\cdot} \right) + \left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right) \right]^2\\[2ex]
 &=&\displaystyle
-\sum_{i=1}^{k} \sum_{j=1}^{n_i} \left[ \left( y_{ij} - \bar{y}_{i\cdot} \right) + \left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right) \right]^2\\
-&=&\displaystyle
-\sum_{i=1}^{k}\sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{i\cdot} \right)^2 + \sum_{i=1}^{k} n_i \left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right)^2
-&=&
-SSW + SSB
+\underbrace{\sum_{i=1}^{k}\sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{i\cdot} \right)^2}_{SSW}
+\;+\;
+\underbrace{\sum_{i=1}^{k} n_i \left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right)^2}_{SSB}
+\;+\;
+2\underbrace{\sum_{i=1}^{k} \left( \bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot} \right) \sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{i\cdot} \right)}_{\text{교차항}}
 \end{array}
 $$
+
+가운데 덩어리에서 $\bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot}$ 가 $j$ 와 무관하므로 안쪽 합이 $n_i$ 번 더해져 $n_i(\bar{y}_{i\cdot} - \bar{y}_{\cdot\cdot})^2$ 이 되었다. 남은 것은 교차항인데, 그 안쪽 합이
+
+$$
+\sum_{j=1}^{n_i} \left( y_{ij} - \bar{y}_{i\cdot} \right)
+= \sum_{j=1}^{n_i} y_{ij} - n_i\bar{y}_{i\cdot}
+= n_i\bar{y}_{i\cdot} - n_i\bar{y}_{i\cdot}
+= 0
+$$
+
+이다. **집단평균의 정의 하나로 교차항이 통째로 사라진다.** 그러므로
+
+$$
+SST = SSB + SSW
+$$
+
+이다. 쓴 것이 무엇인지 보라 — **가정을 하나도 쓰지 않았다.** 정규성도, 독립성도, 등분산도 아니고 $\bar{y}_{i\cdot}$ 가 집단 $i$ 관측값들의 평균이라는 사실뿐이다. **제곱합 분해는 통계적 명제가 아니라 대수적 항등식**이고, 분산분석의 가정은 그 뒤 8단계에서 $SSB$ 와 $SSW$ 의 **분포**를 말할 때 비로소 들어온다. 2절 보기 2 가 이것을 자료로 확인하고 기하로도 읽는다.
 
 ### 7단계: F-통계량 계산
 
@@ -154,7 +181,109 @@ $$
 
 <div class="thmbox" markdown>
 
-### 보조정리 1. 구면정규를 사영하면 { .thm }
+### 보조정리 1. 세 제곱합은 한 직교분해의 길이제곱이다 { .thm }
+
+관측값을 길이 $N$ 의 벡터 $\mathbf y$ 로 쌓고, 집단 $i$ 의 자리에만 $1$ 이 서는 지시벡터를 $\mathbf 1_i$, 전부 $1$ 인 벡터를 $\mathbf 1 = \sum_i \mathbf 1_i$ 라 쓴다.
+
+$$
+V_0 = \operatorname{span}\{\mathbf 1\},
+\qquad
+V_1 = \operatorname{span}\{\mathbf 1_1, \ldots, \mathbf 1_k\}
+$$
+
+로 두면 $V_0 \subset V_1$ 이고, $\mathbb R^N$ 이 **서로 직교하는 세 조각**으로 갈라진다.
+
+$$
+\mathbb R^N = V_0 \ \oplus\ (V_1 \ominus V_0) \ \oplus\ V_1^\perp,
+\qquad
+N = 1 + (k-1) + (N-k)
+$$
+
+세 제곱합은 이 분해로의 사영의 길이제곱이다.
+
+$$
+SSB = \lVert P_{V_1 \ominus V_0}\mathbf y\rVert^2,
+\qquad
+SSW = \lVert P_{V_1^\perp}\mathbf y\rVert^2,
+\qquad
+SST = \lVert P_{V_0^\perp}\mathbf y\rVert^2
+$$
+
+특히 $V_0^\perp = (V_1 \ominus V_0) \oplus V_1^\perp$ 이므로 $SST = SSB + SSW$ 는 **피타고라스 정리**다.
+
+</div>
+
+??? proof "증명"
+
+    **지시벡터는 서로 직교한다.** 집단이 관측값을 나눠 가지므로 $i \neq j$ 이면 $\mathbf 1_i$ 와 $\mathbf 1_j$ 가 $1$ 을 세우는 자리가 겹치지 않는다. 곧 $\mathbf 1_i^\top\mathbf 1_j = 0$ 이고 $\lVert\mathbf 1_i\rVert^2 = n_i$ 다. 따라서 $\{\mathbf 1_i/\sqrt{n_i}\}_{i=1}^{k}$ 가 $V_1$ 의 **정규직교기저**이고 $\dim V_1 = k$ 다.
+
+    **$V_1$ 로의 사영이 집단평균이다.** 정규직교기저로 사영을 적으면
+
+    $$
+    P_{V_1}\mathbf y
+    = \sum_{i=1}^{k}\left(\frac{\mathbf 1_i}{\sqrt{n_i}}\right)^{\!\top}\!\mathbf y\ \cdot \frac{\mathbf 1_i}{\sqrt{n_i}}
+    = \sum_{i=1}^{k}\frac{\mathbf 1_i^\top\mathbf y}{n_i}\,\mathbf 1_i
+    = \sum_{i=1}^{k}\bar y_{i\cdot}\,\mathbf 1_i
+    $$
+
+    이다. $\mathbf 1_i^\top\mathbf y$ 가 집단 $i$ 의 관측값 합이므로 계수가 그대로 집단평균이 된다. 곧 **각 자리를 제 집단평균으로 바꾼 벡터**다. 같은 셈을 $V_0$ 에 하면 $P_{V_0}\mathbf y = \frac{\mathbf 1^\top\mathbf y}{N}\mathbf 1 = \bar y_{\cdot\cdot}\mathbf 1$ 로 **전부 전체평균**이다.
+
+    **$V_0 \subset V_1$ 이라 차가 다시 사영이다.** $\mathbf 1 = \sum_i\mathbf 1_i \in V_1$ 이므로 $V_0 \subset V_1$ 이고, 그러면 $P_{V_1}P_{V_0} = P_{V_0}P_{V_1} = P_{V_0}$ 이다(작은 공간으로 먼저 내리든 나중에 내리든 같다). 그래서 $P_{V_1} - P_{V_0}$ 이 대칭이고
+
+    $$
+    (P_{V_1} - P_{V_0})^2 = P_{V_1} - P_{V_0} - P_{V_0} + P_{V_0} = P_{V_1} - P_{V_0}
+    $$
+
+    으로 멱등이다. 대칭이고 멱등한 행렬은 제 열공간으로의 직교사영이므로 $P_{V_1 \ominus V_0} = P_{V_1} - P_{V_0}$ 이고
+
+    $$
+    P_{V_1 \ominus V_0}\mathbf y = \sum_{i=1}^{k}(\bar y_{i\cdot} - \bar y_{\cdot\cdot})\,\mathbf 1_i
+    $$
+
+    이다. 차원은 $\dim V_1 - \dim V_0 = k-1$ 이다.
+
+    **길이제곱이 세 제곱합이다.** $\mathbf 1_i$ 들이 직교하고 $\lVert\mathbf 1_i\rVert^2 = n_i$ 이므로
+
+    $$
+    \lVert P_{V_1 \ominus V_0}\mathbf y\rVert^2 = \sum_{i=1}^{k} n_i(\bar y_{i\cdot} - \bar y_{\cdot\cdot})^2 = SSB
+    $$
+
+    이다. 한편 $P_{V_1^\perp}\mathbf y = \mathbf y - P_{V_1}\mathbf y$ 의 $(i,j)$ 자리가 $y_{ij} - \bar y_{i\cdot}$ 이고 $P_{V_0^\perp}\mathbf y = \mathbf y - P_{V_0}\mathbf y$ 의 자리가 $y_{ij} - \bar y_{\cdot\cdot}$ 이므로, 성분을 제곱해 더하면 각각 $SSW$ 와 $SST$ 다.
+
+    **세 조각이 직교하고 $\mathbb R^N$ 을 채운다.** $V_1 \ominus V_0$ 는 정의상 $V_0$ 에 직교하고, $V_1 \ominus V_0 \subseteq V_1$ 이므로 $V_1^\perp$ 와도 직교한다. $V_0$ 역시 $V_1$ 안에 있어 $V_1^\perp$ 와 직교한다. 셋이 서로 직교하면서 차원의 합이
+
+    $$
+    1 + (k-1) + (N-k) = N
+    $$
+
+    이므로 $\mathbb R^N$ 을 빈틈없이 채운다. 여기서 $V_0$ 만 덜어 내면 남는 둘이 $V_0^\perp$ 를 채우고, 사영도 따라서 쪼개진다.
+
+    $$
+    P_{V_0^\perp} = P_{V_1 \ominus V_0} + P_{V_1^\perp}
+    $$
+
+    두 성분이 직교하므로 길이제곱에 피타고라스 정리를 쓰면
+
+    $$
+    SST = \lVert P_{V_0^\perp}\mathbf y\rVert^2
+    = \lVert P_{V_1 \ominus V_0}\mathbf y\rVert^2 + \lVert P_{V_1^\perp}\mathbf y\rVert^2
+    = SSB + SSW
+    $$
+
+    이다. $\square$
+
+!!! note "6단계의 교차항이 바로 이 직교다"
+    6단계는 같은 것을 대수로 보였다. 거기서 사라진 교차항
+
+    $$
+    2\sum_{i=1}^{k}(\bar y_{i\cdot} - \bar y_{\cdot\cdot})\sum_{j=1}^{n_i}(y_{ij} - \bar y_{i\cdot})
+    $$
+
+    은 두 벡터의 **내적** $2\,(P_{V_1 \ominus V_0}\mathbf y)^\top(P_{V_1^\perp}\mathbf y)$ 를 성분으로 적은 것이다. 「안쪽 합이 $0$ 이다」와 「두 조각이 직교한다」가 같은 말이고, 「교차항이 없으니 제곱합이 더해진다」와 「피타고라스 정리」가 같은 말이다. **$SST = SSB + SSW$ 를 두 번 증명한 것이 아니라 한 사실을 두 언어로 적은 것이다** — 기하 쪽이 필요한 까닭은 그것이 **차원**을 함께 세어 주기 때문이고, 그 차원이 곧 자유도가 된다.
+
+<div class="thmbox" markdown>
+
+### 보조정리 2. 구면정규를 사영하면 { .thm }
 
 $\boldsymbol\varepsilon \sim N(\mathbf 0,\ \sigma^2 I_N)$ 이고 $V \subseteq \mathbb R^N$ 이 차원 $d$ 인 부분공간, $P_V$ 가 그 위로의 직교사영이라 하자. 그러면
 
@@ -185,6 +314,8 @@ $$
     $$
 
     이다. 곧 $z_1, \ldots, z_N$ 이 **다시 서로 독립인 $N(0, \sigma^2)$** 이다. 「구면대칭」이라는 말의 내용이 이 한 줄이다 — 공분산이 단위행렬의 배수라서 직교행렬이 그것을 그대로 통과시킨다. **어느 정규직교기저로 갈아타도 좋으므로, 보고 싶은 부분공간에 맞춘 기저를 고를 수 있다.**
+
+    5.6절 [S²의 표집분포 (정규분포)](../../ch05/applications/s2_normal.md)가 $(n-1)S^2/\sigma^2 \sim \chi^2_{n-1}$ 을 보일 때 쓴 것이 바로 이 걸음이다. 거기서는 기저를 $\mathbf 1$ 방향에 맞췄고, 여기서는 아무 부분공간에나 맞춘다.
 
     **사영은 앞의 $d$ 개 좌표만 쓴다.** 정규직교기저로 적으면 $P_V = \sum_{m=1}^{d}\mathbf u_m\mathbf u_m^\top$ 이므로
 
@@ -245,27 +376,9 @@ $$
 
 ??? proof "증명"
 
-    **벡터로 옮긴다.** 관측값을 길이 $N$ 의 벡터 $\mathbf y$ 로 쌓고, 집단 $i$ 의 자리에만 $1$ 이 서는 지시벡터를 $\mathbf 1_i$ 라 쓴다. 부분공간 둘을 둔다.
+    **기하는 보조정리 1 이 준다.** $\mathbb R^N$ 이 $V_0 \oplus (V_1 \ominus V_0) \oplus V_1^\perp$ 로 직교분해되고 차원이 $1 + (k-1) + (N-k)$ 이며, $SSB$ 와 $SSW$ 가 뒤 두 조각으로의 사영의 길이제곱이다.
 
-    $$
-    V_0 = \operatorname{span}\{\mathbf 1\},
-    \qquad
-    V_1 = \operatorname{span}\{\mathbf 1_1, \ldots, \mathbf 1_k\}
-    $$
-
-    $\mathbf 1 = \sum_i \mathbf 1_i$ 이므로 $V_0 \subset V_1$ 이고, 지시벡터들이 서로 겹치지 않으므로 $\dim V_1 = k$ 다. $V_1$ 위로의 직교사영은 각 자리를 **제 집단평균**으로 바꾸고 $V_0$ 위로의 사영은 전부 **전체평균**으로 바꾼다. 그래서 세 제곱합이 그대로 사영의 길이제곱이 된다.
-
-    $$
-    SSW = \lVert P_{V_1^\perp}\mathbf y\rVert^2,
-    \qquad
-    SSB = \lVert P_{V_1 \ominus V_0}\mathbf y\rVert^2,
-    \qquad
-    SST = \lVert P_{V_0^\perp}\mathbf y\rVert^2
-    $$
-
-    여기서 $V_1 \ominus V_0$ 는 $V_1$ 안에서 $V_0$ 에 직교하는 부분이고 차원이 $k-1$, $V_1^\perp$ 의 차원이 $N-k$ 다. 이 둘은 서로 직교하고 합치면 $V_0^\perp$ 가 되므로 **6단계의 항등식은 피타고라스 정리다.**
-
-    **사영의 분포는 보조정리 1 이 준다.** $\boldsymbol\varepsilon \sim N(\mathbf 0,\ \sigma^2 I_N)$ 이므로 차원 $d$ 인 부분공간으로 사영한 길이제곱은 $\sigma^2\chi^2_d$ 이고, 직교하는 두 부분공간으로의 사영은 독립이다. 남은 일은 **$\mathbf y$ 의 사영을 $\boldsymbol\varepsilon$ 의 사영으로 바꾸는 것**뿐이고, 거기서 $H_0$ 이 필요한지 아닌지가 갈린다.
+    **사영의 분포는 보조정리 2 가 준다.** $\boldsymbol\varepsilon \sim N(\mathbf 0,\ \sigma^2 I_N)$ 이므로 차원 $d$ 인 부분공간으로 사영한 길이제곱은 $\sigma^2\chi^2_d$ 이고, 직교하는 두 부분공간으로의 사영은 독립이다. 남은 일은 **$\mathbf y$ 의 사영을 $\boldsymbol\varepsilon$ 의 사영으로 바꾸는 것**뿐이고, 거기서 $H_0$ 이 필요한지 아닌지가 갈린다.
 
     **분모는 가설을 쓰지 않는다.** 평균벡터 $\boldsymbol\mu = \sum_i \mu_i \mathbf 1_i$ 는 집단평균이 무엇이든 **언제나** $V_1$ 안에 있다. 따라서 $P_{V_1^\perp}\boldsymbol\mu = \mathbf 0$ 이고
 
@@ -277,48 +390,54 @@ $$
 
     이다. 아래 2 절의 보기 1 이 $E[MSW] = \sigma^2$ 은 가설과 무관하게 성립한다고 적는데, 그 **분포판**이 이것이다.
 
-    **독립성도 가설을 쓰지 않는다.** $P_{V_1 \ominus V_0}\mathbf y = P_{V_1 \ominus V_0}\boldsymbol\mu + P_{V_1 \ominus V_0}\boldsymbol\varepsilon$ 에서 앞 항은 **상수**다. 그러니 $SSB$ 와 $SSW$ 는 각각 $P_{V_1 \ominus V_0}\boldsymbol\varepsilon$ 과 $P_{V_1^\perp}\boldsymbol\varepsilon$ 만을 통해 확률적인데, 두 부분공간이 직교하므로 **보조정리 1 의 벡터판**이 그 둘을 독립이라 한다. 집단평균이 제각각이어도 그대로다.
+    **독립성도 가설을 쓰지 않는다.** $P_{V_1 \ominus V_0}\mathbf y = P_{V_1 \ominus V_0}\boldsymbol\mu + P_{V_1 \ominus V_0}\boldsymbol\varepsilon$ 에서 앞 항은 **상수**다. 그러니 $SSB$ 와 $SSW$ 는 각각 $P_{V_1 \ominus V_0}\boldsymbol\varepsilon$ 과 $P_{V_1^\perp}\boldsymbol\varepsilon$ 만을 통해 확률적인데, 두 부분공간이 직교하므로 **보조정리 2 의 벡터판**이 그 둘을 독립이라 한다. 집단평균이 제각각이어도 그대로다.
 
     **분자만 가설을 쓴다.** $H_0$ 이 참이면 $\boldsymbol\mu = \mu\mathbf 1 \in V_0$ 이므로 상수항까지 사라져 $P_{V_1 \ominus V_0}\mathbf y = P_{V_1 \ominus V_0}\boldsymbol\varepsilon$ 이고 $SSB/\sigma^2 \sim \chi^2_{k-1}$ 이다. 독립인 두 카이제곱을 각자의 자유도로 나눈 비가 $F$ 라는 4.2절 [F 분포](../../ch04/continuous_distributions/f_distribution.md)의 정의에 그대로 들어간다. $\square$
 
     $H_0$ 이 거짓이면 그 상수항이 남아 $SSB/\sigma^2$ 이 **비중심** 카이제곱이 된다. 비중심모수는 $\lambda = \lVert P_{V_1 \ominus V_0}\boldsymbol\mu\rVert^2/\sigma^2 = \sum_i n_i(\mu_i - \bar\mu)^2/\sigma^2$ 이고, 검정력이 그 수에만 달려 있다는 것이 이 절의 [분산분석 F-통계량 모의실험](anova_f_simulation.md)의 출발점이다.
 
-!!! warning "「표준화해서 세면 된다」로는 안 되는 까닭"
-    $SSB/\sigma^2$ 을
+!!! warning "자유도가 $k$ 가 아니라 $k-1$ 인 까닭 — 중심이 표본평균이다"
+    $SSB/\sigma^2$ 은
 
     $$
-    \sum_{i=1}^{k}\left(\frac{\bar y_{i\cdot} - \bar y_{\cdot\cdot}}{\sigma/\sqrt{n_i}}\right)^2
+    \frac{1}{\sigma^2}\sum_{i=1}^{k} n_i(\bar y_{i\cdot} - \bar y_{\cdot\cdot})^2
+    = \sum_{i=1}^{k}\frac{(\bar y_{i\cdot} - \bar y_{\cdot\cdot})^2}{\sigma^2/n_i}
+    = \sum_{i=1}^{k}\left(\frac{\bar y_{i\cdot} - \bar y_{\cdot\cdot}}{\sigma/\sqrt{n_i}}\right)^2
     $$
 
-    으로 적으면 표준정규의 제곱이 $k$ 개 더해진 꼴이라 $\chi^2_k$ 로 읽고 싶어진다. **그 꼴은 두 군데서 틀린다.**
+    로 적을 수 있다. **이 식은 맞다** — 항등식이고, 분모도 제 척도다. $y_{ij}$ 의 표준편차가 $\sigma$ 이면 $\bar y_{i\cdot}$ 의 표준편차는 정확히 $\sigma/\sqrt{n_i}$ 이니 나눈 수가 옳다. 틀리는 것은 **마지막 한 걸음**, 곧 「표준정규의 제곱이 $k$ 개니까 $\chi^2_k$」 뿐이다.
 
-    **첫째, 각 항은 $N(0,1)$ 이 아니다.** $\bar y_{\cdot\cdot}$ 가 $\bar y_{i\cdot}$ 를 **제 안에 품고** 있어 둘이 상관된다 — $\operatorname{Cov}(\bar y_{i\cdot},\ \bar y_{\cdot\cdot}) = \frac{n_i}{N}\operatorname{Var}(\bar y_{i\cdot}) = \frac{\sigma^2}{N}$ 이므로
+    **중심이 참평균 $\mu$ 가 아니라 표본평균 $\bar y_{\cdot\cdot}$ 이기 때문이다.** $\bar y_{\cdot\cdot}$ 는 바로 그 $k$ 개의 $\bar y_{i\cdot}$ 로 만든 수라서, 빼는 순간 항들이 $\sum_i n_i(\bar y_{i\cdot} - \bar y_{\cdot\cdot}) = 0$ 이라는 제약을 하나 지고 자유도를 하나 내놓는다.
 
-    $$
-    \operatorname{Var}(\bar y_{i\cdot} - \bar y_{\cdot\cdot})
-    = \frac{\sigma^2}{n_i} - \frac{2\sigma^2}{N} + \frac{\sigma^2}{N}
-    = \sigma^2\left(\frac{1}{n_i} - \frac{1}{N}\right)
-    $$
-
-    이고, $\sigma^2/n_i$ 으로 나눈 항의 분산은 $1$ 이 아니라 $1 - n_i/N$ 이다. 분모에 $\sigma/\sqrt{n_i}$ 를 쓴 것이 **너무 큰 수로 나눈 것**이다.
-
-    여기서 자유도가 바로 나온다. 분산을 $k$ 개 다 더하면
+    **일표본에서 이미 겪은 일이다.** 5.6절 [S²의 표집분포 (정규분포)](../../ch05/applications/s2_normal.md)가 적어 둔
 
     $$
-    \sum_{i=1}^{k}\left(1 - \frac{n_i}{N}\right) = k - \frac{1}{N}\sum_i n_i = k - 1
+    \sum_{i=1}^{n}\left(\frac{y_i - \bar y}{\sigma}\right)^2 = \frac{(n-1)S^2}{\sigma^2} \sim \chi^2_{n-1}
     $$
 
-    이다. **$\chi^2$ 의 자유도가 그 기댓값이므로 수축분만으로 $k-1$ 이 설명된다.** 아래 2 절 보기 1 의 유도가 $E[SSB]$ 안에 $\sum_i n_i\!\left(\frac{\sigma^2}{n_i} - \frac{\sigma^2}{N}\right)$ 를 적어 둔 것이 같은 수다.
+    도 꼭 같다. $y_i$ 하나하나의 표준편차가 정확히 $\sigma$ 라서 분모가 맞는데도 자유도는 $n$ 이 아니라 $n-1$ 이고, 까닭은 중심이 $\mu$ 가 아니라 $\bar y$ 라는 것 하나다. **$SSB$ 는 관측값 대신 집단평균을, $\sigma$ 대신 $\sigma/\sqrt{n_i}$ 를 넣은 같은 식이다.**
 
-    **둘째, 그 $k$ 개는 독립도 아니다.** 가중합이 언제나 $\sum_i n_i(\bar y_{i\cdot} - \bar y_{\cdot\cdot}) = 0$ 이라는 제약을 하나 지고 있다. 실제로 $i \neq j$ 이면 $\operatorname{Cov}(\bar y_{i\cdot} - \bar y_{\cdot\cdot},\ \bar y_{j\cdot} - \bar y_{\cdot\cdot}) = -\sigma^2/N$ 이고, 위의 분산과 묶으면 상관이
+    **중심을 참평균으로 바꾸면 정말 $\chi^2_k$ 가 된다.** $\mu$ 를 안다고 치고
 
     $$
-    \operatorname{Corr} = -\sqrt{\frac{n_i n_j}{(N - n_i)(N - n_j)}}
+    \sum_{i=1}^{k}\left(\frac{\bar y_{i\cdot} - \mu}{\sigma/\sqrt{n_i}}\right)^2
     $$
 
-    이다. $n = (3,3,4)$ 라면 크기가 같은 두 집단 사이가 $-3/7 \approx -0.4286$, 크기가 다른 쪽이 $\approx -0.5345$ 다. **언제나 음수**인 것이 제약의 흔적이다 — 한 집단평균이 전체평균보다 위로 가면 나머지는 아래로 가야 한다. 위 증명이 「차원 $k-1$ 인 부분공간으로의 사영」이라 적은 것이 이 두 어긋남을 한꺼번에 담은 말이다 — 사영은 분산 수축도 상관도 따로 손볼 필요가 없다.
+    을 보면 이번에는 $k$ 개 항이 **참으로** 독립인 표준정규의 제곱이다 — 집단이 서로 독립이고 각 항의 분산이 정확히 $1$ 이므로 $\chi^2_k$ 다. 바뀐 것은 $\bar y_{\cdot\cdot}$ 를 $\mu$ 로 돌린 것뿐이고, 자유도는 그 한 글자에 달려 있다. $n = (3,3,4)$ 에서 $40$ 만 번 뽑아 보면 표본평균으로 중심화한 쪽이 평균 $2.0024$ 로 $\chi^2_2$ 에 맞고, 참평균으로 중심화한 쪽이 평균 $3.0008$ 로 $\chi^2_3$ 에 맞는다.
 
-    같은 이유로 **$SST = SSB + SSW$ 라는 항등식만으로는 세 분포를 말할 수 없다.** 합이 쪼개진다고 분포가 쪼개지지는 않는다 — 두 조각이 **직교**해야 각자 $\chi^2$ 이 되고 서로 독립이 된다. 자유도가 $N-1 = (k-1) + (N-k)$ 로 맞아떨어지는 것은 그 직교분해의 **결과**이지 근거가 아니다.
+    **잃은 자유도가 어디로 갔는지도 셀 수 있다.** $\operatorname{Cov}(\bar y_{i\cdot},\ \bar y_{\cdot\cdot}) = \sigma^2/N$ 이므로
+
+    $$
+    \operatorname{Var}\!\left(\frac{\bar y_{i\cdot} - \bar y_{\cdot\cdot}}{\sigma/\sqrt{n_i}}\right)
+    = \frac{n_i}{\sigma^2}\left(\frac{\sigma^2}{n_i} - \frac{\sigma^2}{N}\right)
+    = 1 - \frac{n_i}{N}
+    $$
+
+    이고, 항마다 $n_i/N$ 씩 깎여 합이 $\sum_i n_i/N = 1$ 로 **정확히 자유도 하나**다. $\chi^2$ 의 자유도가 그 기댓값이므로 $\sum_i(1 - n_i/N) = k-1$ 이 바로 나온다. 아래 2 절 보기 1 이 $E[SSB]$ 안에 $\sum_i n_i\!\left(\frac{\sigma^2}{n_i} - \frac{\sigma^2}{N}\right)$ 를 적어 둔 것이 같은 수다. 같은 중심화가 항들을 음의 상관으로도 묶는다 — $i \neq j$ 이면 상관이 $-\sqrt{n_in_j/\{(N-n_i)(N-n_j)\}}$ 로 **언제나 음수**다. 한 집단평균이 전체평균 위로 가면 나머지는 아래로 가야 하기 때문이다.
+
+    위 증명이 「차원 $k-1$ 인 부분공간으로의 사영」이라 적은 것이 이 말을 기하로 옮긴 것이다. $\bar y_{\cdot\cdot}$ 를 빼는 일이 곧 $V_0$ 성분을 덜어 내는 일이고, 그래서 남는 자리의 차원이 $k$ 가 아니라 $k-1$ 이다.
+
+    **덧붙여 $SST = SSB + SSW$ 라는 항등식만으로는 세 분포를 말할 수 없다.** 6단계가 그 항등식을 증명하면서 가정을 하나도 쓰지 않았다는 것이 요점이다 — 합이 쪼개진다고 분포가 쪼개지지는 않는다 — 두 조각이 **직교**해야 각자 $\chi^2$ 이 되고 서로 독립이 된다. 자유도가 $N-1 = (k-1) + (N-k)$ 로 맞아떨어지는 것은 그 직교분해의 **결과**이지 근거가 아니다.
 
     $SST/\sigma^2 \sim \chi^2_{N-1}$ 도 공짜가 아니다. 그 주장은 $y_{ij}$ 가 **모두 같은** 평균을 갖는다는 것, 곧 $H_0$ 을 이미 쓰고 있다. $H_0$ 이 거짓이면 $SST$ 는 중심 카이제곱이 아니다.
 
@@ -634,7 +753,7 @@ $$
 SST = SSB + SSW
 $$
 
-가 **아무 가정 없이 성립하는 항등식**임을 교차항이 정확히 사라지는 것으로 보이시오. 아울러 `anova_lm` 의 기본값은 `typ=1`(순차적 제곱합)인데 일원배치에서는 제1·2·3 유형이 모두 같다. 왜 그런가.
+는 6단계에서 교차항이 사라지는 것으로 보인 **대수적 항등식**이다. 이것을 자료로 확인하되, $SST$ 와 $SSB + SSW$ 의 차이가 **정확히 $0$ 이 나오지 않는다면** 유도가 틀린 것인지 밝히시오. 아울러 `anova_lm` 의 기본값은 `typ=1`(순차적 제곱합)인데 일원배치에서는 제1·2·3 유형이 모두 같다. 왜 그런가.
 
 **(2)** `anova_lm` 표의 `df`·`sum_sq`·`mean_sq`·`F`·`PR(>F)` 를 **집단크기와 집단평균만으로** 손계산해 맞추고, `typ=1,2,3` 과 `f_oneway` 가 모두 같은 수를 주는지 확인하시오.
 
@@ -642,31 +761,7 @@ $$
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** 관측값에서 전체평균을 뺀 것을 두 토막으로 쪼갠다.
-
-    $$
-    y_{ij} - \bar y_{\cdot\cdot}
-    = \underbrace{(y_{ij} - \bar y_{i\cdot})}_{\text{집단 안의 벗어남}}
-    + \underbrace{(\bar y_{i\cdot} - \bar y_{\cdot\cdot})}_{\text{집단 사이의 벗어남}}
-    $$
-
-    제곱해서 모두 더하면 세 덩어리가 나온다.
-
-    $$
-    SST = \underbrace{\sum_{i,j}(y_{ij}-\bar y_{i\cdot})^2}_{SSW}
-    + \underbrace{\sum_{i,j}(\bar y_{i\cdot}-\bar y_{\cdot\cdot})^2}_{SSB}
-    + 2\sum_{i}(\bar y_{i\cdot}-\bar y_{\cdot\cdot})\sum_{j=1}^{n_i}(y_{ij}-\bar y_{i\cdot})
-    $$
-
-    마지막 교차항에서 안쪽 합이
-
-    $$
-    \sum_{j=1}^{n_i}(y_{ij} - \bar y_{i\cdot}) = n_i\bar y_{i\cdot} - n_i \bar y_{i\cdot} = 0
-    $$
-
-    이다. **집단평균의 정의 하나로 교차항이 사라진다.** 그러므로 $SST = SSB + SSW$다.
-
-    이 유도에 쓴 가정이 무엇인지 보라. **아무것도 없다.** 정규성도, 독립성도, 등분산도 쓰지 않았다. $\bar y_{i\cdot}$가 집단 $i$ 관측값들의 평균이라는 사실만 썼다. **제곱합 분해는 통계적 명제가 아니라 대수적 항등식**이고, 분산분석의 가정들은 그 뒤에 $SSB/SSW$의 **분포**를 말할 때 비로소 필요해진다. 그 분포를 말하는 것이 1절 8단계의 정리 1 이고, 거기서는 정규성이 **쓰인다** — 항등식에서 $\chi^2$ 로 건너가는 걸음이 그것을 요구한다.
+    **(1) 항등식은 6단계가 보였다.** 거기서 $y_{ij} - \bar y_{\cdot\cdot}$ 를 집단평균에서 쪼개 제곱하면 교차항의 안쪽 합이 $\sum_j (y_{ij} - \bar y_{i\cdot}) = 0$ 이라 통째로 사라졌다. 쓴 것은 집단평균의 정의 하나뿐이고 정규성도 독립성도 등분산도 쓰지 않았다.
 
     기하로 읽으면 더 선명하다. 안쪽 합이 $0$이라는 말은 잔차 벡터가 집단 지시벡터 $\mathbf 1_i$ 와 직교한다는 뜻, 곧 $X^\top e = 0$이다(가정 쪽 등분산성 보기 1에서 같은 식을 썼다). 직교하는 두 벡터의 합의 길이를 재면 피타고라스 정리가 되고, 그것이 $SST = SSB + SSW$다.
 
