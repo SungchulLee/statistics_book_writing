@@ -1,11 +1,11 @@
-r"""12장 사후비교 다섯 쪽의 개념 그림을 생성한다.
+r"""10장 사후비교 다섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch12/post_hoc/img/posthoc_thresholds.png    네 방법의 문턱이 k 에 따라 어떻게 벌어지는가
-  ch12/post_hoc/img/tukey_studentized_range.png  투키의 임계값은 최대차의 귀무분포에서 나온다
-  ch12/post_hoc/img/scheffe_and_bonferroni.png    모든 대비 위의 최댓값이 (k-1)F 다
-  ch12/post_hoc/img/dunnett_critical.png      대조군 비교의 상관을 쓰면 문턱이 낮아진다
-  ch12/post_hoc/img/games_howell_pairs.png    쌍마다 표준오차와 자유도를 따로 쓴다
+  ch10/post_hoc/img/posthoc_thresholds.png    네 방법의 문턱이 k 에 따라 어떻게 벌어지는가
+  ch10/post_hoc/img/tukey_studentized_range.png  투키의 임계값은 최대차의 귀무분포에서 나온다
+  ch10/post_hoc/img/scheffe_and_bonferroni.png    모든 대비 위의 최댓값이 (k-1)F 다
+  ch10/post_hoc/img/dunnett_critical.png      대조군 비교의 상관을 쓰면 문턱이 낮아진다
+  ch10/post_hoc/img/games_howell_pairs.png    쌍마다 표준오차와 자유도를 따로 쓴다
 
 실행:  python3 scripts/make_ch11_post_hoc_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib, statsmodels — 문서 빌드에는 필요하지 않다.
@@ -33,7 +33,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/post_hoc/img/"
+OUT = "docs/ch10/post_hoc/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

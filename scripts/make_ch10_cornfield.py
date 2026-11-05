@@ -1,4 +1,4 @@
-r"""10.3절 「그림으로 보는 통계학」 — 「그럴 수도 있다」에 수를 붙이기.
+r"""11.3절 「그림으로 보는 통계학」 — 「그럴 수도 있다」에 수를 붙이기.
 
 이 쪽의 첫 기준은 「연관의 강도」이고, 상대위험 10 이 1.2 보다 교란으로
 설명하기 어렵다고 적는다. 맞는 말인데 수가 없다. 그 수가 1959 년에
@@ -32,7 +32,7 @@ E값(밴더윌리·딩 2017)은 같은 물음의 현대판으로, 교란변수�
 
 만드는 파일:
 
-  ch10/causation/img/cornfield.png
+  ch11/causation/img/cornfield.png
 
 실행:  python3 scripts/make_ch12_cornfield.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -48,7 +48,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch10/causation/img/"
+OUT = "docs/ch11/causation/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

@@ -1,4 +1,4 @@
-r"""11.3절 「그림으로 보는 통계학」 — 같은 표의 두 행이 같은 뜻이 아니다.
+r"""12.3절 「그림으로 보는 통계학」 — 같은 표의 두 행이 같은 뜻이 아니다.
 
 회귀표의 행들은 생김새가 똑같다. 계수, 표준오차, $t$, $p$, 신뢰구간이 나란하고
 **어느 행이 믿을 만하고 어느 행이 아닌지는 표 어디에도 적혀 있지 않다.**
@@ -34,7 +34,7 @@ $Z$ 를 넣었다고 하자. 참 구조는
 
 만드는 파일:
 
-  ch11/testing_coefficients/img/table2_fallacy.png
+  ch12/testing_coefficients/img/table2_fallacy.png
 
 실행:  python3 scripts/make_ch13_table2_fallacy.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -56,7 +56,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/testing_coefficients/img/"
+OUT = "docs/ch12/testing_coefficients/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

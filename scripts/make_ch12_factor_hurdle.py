@@ -9,7 +9,7 @@ r"""전략 여럿을 늘어놓고 가장 좋은 것을 고르면 — 금융이 �
 ② 집단 전체의 1종오류를 5% 로 묶으려면 문턱이 얼마여야 하는가.
 ③ 분산분석의 F 는 그 문턱을 지키는데, 「제일 좋은 것」을 고르면 지키지 못한다.
 
-만드는 파일: docs/ch12/practical_applications/img/factor_hurdle.png
+만드는 파일: docs/ch10/practical_applications/img/factor_hurdle.png
 """
 
 import numpy as np
@@ -139,6 +139,6 @@ ax3.legend(loc="center right", fontsize=10.5)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/practical_applications/img/factor_hurdle.png"
+out = "docs/ch10/practical_applications/img/factor_hurdle.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

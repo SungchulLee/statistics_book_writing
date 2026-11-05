@@ -1,12 +1,12 @@
-"""12장 들머리 그림 여섯 장 (사후비교 여섯 쪽).
+"""10장 들머리 그림 여섯 장 (사후비교 여섯 쪽).
 
 만드는 파일:
-  ch12/post_hoc/img/correction_or_sample.png     보정 탓인가 표본 탓인가
-  ch12/post_hoc/img/one_pair_carries_it.png      한 쌍이 삼분의 이를 낸다
-  ch12/post_hoc/img/family_you_actually_searched.png 실제로 뒤진 가족
-  ch12/post_hoc/img/dunnett_uses_the_overlap.png 더닛이 더 쓰는 정보
-  ch12/post_hoc/img/pooled_cuts_both_ways.png    합동분산은 양쪽으로 틀어진다
-  ch12/post_hoc/img/averaged_effect_misleads.png 평균된 주효과가 하는 일
+  ch10/post_hoc/img/correction_or_sample.png     보정 탓인가 표본 탓인가
+  ch10/post_hoc/img/one_pair_carries_it.png      한 쌍이 삼분의 이를 낸다
+  ch10/post_hoc/img/family_you_actually_searched.png 실제로 뒤진 가족
+  ch10/post_hoc/img/dunnett_uses_the_overlap.png 더닛이 더 쓰는 정보
+  ch10/post_hoc/img/pooled_cuts_both_ways.png    합동분산은 양쪽으로 틀어진다
+  ch10/post_hoc/img/averaged_effect_misleads.png 평균된 주효과가 하는 일
 
 본문 그림이 들머리의 수를 이미 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -20,7 +20,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch12/post_hoc/img/"
+OUT = "docs/ch10/post_hoc/img/"
 
 
 def save(fig, name):

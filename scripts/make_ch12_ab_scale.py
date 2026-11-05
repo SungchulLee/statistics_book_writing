@@ -4,7 +4,7 @@ r"""A/B 검정의 세 가지 산술 — 얼마나 커야 하고, 여럿을 재�
 ② 똑같은 변형 $k$ 개를 한꺼번에 재면 「승자」가 나올 확률과 그 승자의 부풀림.
 ③ 아이디어가 참일 사전확률이 낮으면 유의한 결과도 못 믿는다.
 
-만드는 파일: docs/ch12/practical_applications/img/ab_scale.png
+만드는 파일: docs/ch10/practical_applications/img/ab_scale.png
 """
 
 import numpy as np
@@ -108,7 +108,7 @@ ax3.legend(loc="lower right", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/practical_applications/img/ab_scale.png"
+out = "docs/ch10/practical_applications/img/ab_scale.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

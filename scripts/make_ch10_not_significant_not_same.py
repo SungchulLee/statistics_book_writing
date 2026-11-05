@@ -1,4 +1,4 @@
-"""10.3절 두 상관의 비교 — p = 0.335 가 허용하는 세상들.
+"""11.3절 두 상관의 비교 — p = 0.335 가 허용하는 세상들.
 
 들머리의 요점을 그린다. r1 = 0.72 (n1 = 100), r2 = 0.65 (n2 = 120) 에서
 p = 0.3351 이 나왔다. 그 수를 「같다」로 읽으면 안 된다는 것을, 그 자료와
@@ -22,7 +22,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/correlation_test/img/"
+OUT = "docs/ch11/correlation_test/img/"
 
 R1, N1 = 0.72, 100
 R2, N2 = 0.65, 120

@@ -1,4 +1,4 @@
-r"""11.3절 「그림으로 보는 통계학」 — 포브스의 열일곱 점.
+r"""12.3절 「그림으로 보는 통계학」 — 포브스의 열일곱 점.
 
 $1857$ 년 에든버러의 물리학자 제임스 D. 포브스가 알프스의 $17$ 곳에서 **물의
 끓는점**(화씨)과 **기압**(수은주 인치)을 함께 쟀다. 끓는점으로 고도를 재는
@@ -26,7 +26,7 @@ $1857$ 년 에든버러의 물리학자 제임스 D. 포브스가 알프스의 $
 
 만드는 파일:
 
-  ch11/testing_coefficients/img/forbes_residuals.png
+  ch12/testing_coefficients/img/forbes_residuals.png
 
 실행:  python3 scripts/make_ch13_forbes_residuals.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/testing_coefficients/img/"
+OUT = "docs/ch12/testing_coefficients/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

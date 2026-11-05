@@ -1,4 +1,4 @@
-r"""11.3절 「그림으로 보는 통계학」 — 필립스 곡선은 여섯 점에 그어졌다.
+r"""12.3절 「그림으로 보는 통계학」 — 필립스 곡선은 여섯 점에 그어졌다.
 
 $1958$ 년 필립스가 『Economica』에 실은 그림 1 은 $1861$–$1913$ 년의 해마다 한 점,
 곧 쉰세 점을 찍은 산점도다. 그런데 거기 그려진 곡선은 그 쉰세 점에 맞춘 것이 아니다.
@@ -22,7 +22,7 @@ $1958$ 년 필립스가 『Economica』에 실은 그림 1 은 $1861$–$1913$ �
 
 만드는 파일:
 
-  ch11/assumptions/img/phillips_six_crosses.png
+  ch12/assumptions/img/phillips_six_crosses.png
 
 실행:  python3 scripts/make_ch13_phillips_six_crosses.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -44,7 +44,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

@@ -1,11 +1,11 @@
-r"""10장 상관 다섯 쪽의 개념 그림을 생성한다.
+r"""11장 상관 다섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch10/correlation/img/pearson_pitfalls.png      r 하나로는 모자란 세 가지 경우
-  ch10/correlation/img/rank_invariance.png       순위는 단조변환과 이상점에 흔들리지 않는다
-  ch10/correlation/img/tau_pairs_and_scale.png   쌍 세기와 타우의 눈금
-  ch10/correlation/img/partial_map.png           통제하면 줄어들기만 하는 것이 아니다
-  ch10/correlation/img/binary_ceilings.png       이진 변수의 상관에는 천장이 있다
+  ch11/correlation/img/pearson_pitfalls.png      r 하나로는 모자란 세 가지 경우
+  ch11/correlation/img/rank_invariance.png       순위는 단조변환과 이상점에 흔들리지 않는다
+  ch11/correlation/img/tau_pairs_and_scale.png   쌍 세기와 타우의 눈금
+  ch11/correlation/img/partial_map.png           통제하면 줄어들기만 하는 것이 아니다
+  ch11/correlation/img/binary_ceilings.png       이진 변수의 상관에는 천장이 있다
 
 실행:  python3 scripts/make_ch12_correlation_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -32,7 +32,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

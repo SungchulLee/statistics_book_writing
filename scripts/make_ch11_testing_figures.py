@@ -1,11 +1,11 @@
-r"""11장 '계수 검정' 다섯 쪽에 들어가는 개념 그림을 만든다.
+r"""12장 '계수 검정' 다섯 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
-  ch11/testing_coefficients/img/t_stat_and_vif.png     공선성이 t 를 깎는다
-  ch11/testing_coefficients/img/pvalue_ci_duality.png  p 값과 신뢰구간은 한 몸이다
-  ch11/testing_coefficients/img/stat_vs_practical.png  n 이 크면 티끌도 유의해진다
-  ch11/testing_coefficients/img/regression_table_t.png 출력표의 t 열 읽기
-  ch11/testing_coefficients/img/coefficient_plot.png   계수 그림으로 읽는 회귀 결과
+  ch12/testing_coefficients/img/t_stat_and_vif.png     공선성이 t 를 깎는다
+  ch12/testing_coefficients/img/pvalue_ci_duality.png  p 값과 신뢰구간은 한 몸이다
+  ch12/testing_coefficients/img/stat_vs_practical.png  n 이 크면 티끌도 유의해진다
+  ch12/testing_coefficients/img/regression_table_t.png 출력표의 t 열 읽기
+  ch12/testing_coefficients/img/coefficient_plot.png   계수 그림으로 읽는 회귀 결과
 
 실행:  python3 scripts/make_ch13_testing_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,7 +31,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch11/testing_coefficients/img/"
+OUT = "docs/ch12/testing_coefficients/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

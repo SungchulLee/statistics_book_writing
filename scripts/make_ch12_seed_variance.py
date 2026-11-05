@@ -8,7 +8,7 @@ r"""방법마다 시드 분산이 다를 때, 시드를 몇 개씩 돌렸느냐�
 ② 시드를 다 합쳐 $18$ 개여도 Welch 의 유효 자유도는 흔들리는 쪽이 정한다.
 ③ 「가장 좋은 시드를 적는」 관행은 시드를 더 돌릴수록 더 나빠진다.
 
-만드는 파일: docs/ch12/anova_welch/img/seed_variance.png
+만드는 파일: docs/ch10/anova_welch/img/seed_variance.png
 """
 
 import numpy as np
@@ -157,6 +157,6 @@ ax3.legend(loc="center right", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/anova_welch/img/seed_variance.png"
+out = "docs/ch10/anova_welch/img/seed_variance.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

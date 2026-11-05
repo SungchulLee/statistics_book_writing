@@ -1,4 +1,4 @@
-"""12.5절 잔차 분석 — 재는 자를 그 이상점이 함께 만든다.
+"""10.5절 잔차 분석 — 재는 자를 그 이상점이 함께 만든다.
 
 균형 일원배치에서 sigma^2 의 추정값은 세 집단분산의 단순평균이다. 표본크기가
 똑같은데도 집단 C 혼자 70.27% 를 내는데, 거기 이상점이 심어져 있기 때문이다.
@@ -15,7 +15,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch12/diagnostics/img/"
+OUT = "docs/ch10/diagnostics/img/"
 
 SDS = np.array([0.870178, 1.033538, 2.077021])      # 쪽의 보기 자료
 SD_C_CLEAN = 1.145019                                # 이상점을 심기 전의 C

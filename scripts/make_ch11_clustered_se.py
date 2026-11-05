@@ -1,4 +1,4 @@
-r"""11.5절 「그림으로 보는 통계학」 — 순서가 없는 종속.
+r"""12.5절 「그림으로 보는 통계학」 — 순서가 없는 종속.
 
 이 쪽이 가르치는 검정은 모두 **순서**를 쓴다. 더빈–왓슨도 브로이슈–고드프리도
 「이전 관측」이 있어야 한다. 그런데 $1$ 절이 독립성 위배의 하나로 든 **군집 자료**
@@ -22,7 +22,7 @@ r"""11.5절 「그림으로 보는 통계학」 — 순서가 없는 종속.
 
 만드는 파일:
 
-  ch11/assumptions/img/clustered_se.png
+  ch12/assumptions/img/clustered_se.png
 
 실행:  python3 scripts/make_ch13_clustered_se.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -45,7 +45,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

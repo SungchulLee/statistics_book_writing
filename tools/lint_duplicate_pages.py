@@ -24,7 +24,7 @@ confidence_intervals 는 지울 쪽이 아니라 미리보기였다.
             ch05 mse_comparison 은 분산추정량의 SS/c 계열이고 mse 는 MSE 일반
             개념, ch06 moments_examples 는 분포별 적용(독일 탱크 문제 포함)이고
             moments 는 개관, ch15 robust_tests_comparison 은 대수정규라는 특정
-            시나리오 연구, ch11 interaction_plot 은 교호작용이 **척도에 의존한다**는
+            시나리오 연구, ch12 interaction_plot 은 교호작용이 **척도에 의존한다**는
             석면 자료를 다룬다. **nav 제목을 보면 바로 갈린다** — 파일 이름이
             아니라 제목이 같은 주제를 말하는지 보라
   SUBSET    한 쪽의 절 이름들이 다른 쪽의 절 이름을 거의 다 품는다 (축소판)

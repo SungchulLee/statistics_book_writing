@@ -1,12 +1,12 @@
-"""11장 들머리 그림 여섯 장 (모형 선택 여섯 쪽).
+"""12장 들머리 그림 여섯 장 (모형 선택 여섯 쪽).
 
 만드는 파일:
-  ch11/model_selection/img/penalty_is_the_difference.png  벌점의 차이가 답의 차이다
-  ch11/model_selection/img/only_differences_matter.png    값이 아니라 차이만 뜻이 있다
-  ch11/model_selection/img/noise_still_gets_in.png        잡음 하나가 들어올 확률
-  ch11/model_selection/img/ruler_wobbles_more.png         자가 차이보다 더 흔들린다
-  ch11/model_selection/img/which_degree_wins.png          어느 차수가 이기는가
-  ch11/model_selection/img/when_global_wins.png           전역 최적이 이기는 자리
+  ch12/model_selection/img/penalty_is_the_difference.png  벌점의 차이가 답의 차이다
+  ch12/model_selection/img/only_differences_matter.png    값이 아니라 차이만 뜻이 있다
+  ch12/model_selection/img/noise_still_gets_in.png        잡음 하나가 들어올 확률
+  ch12/model_selection/img/ruler_wobbles_more.png         자가 차이보다 더 흔들린다
+  ch12/model_selection/img/which_degree_wins.png          어느 차수가 이기는가
+  ch12/model_selection/img/when_global_wins.png           전역 최적이 이기는 자리
 
 본문 그림이 들머리의 수를 이미 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -20,7 +20,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch11/model_selection/img/"
+OUT = "docs/ch12/model_selection/img/"
 
 
 def save(fig, name):

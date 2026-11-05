@@ -1,4 +1,4 @@
-r"""10.5절 「그림으로 보는 통계학」 — 아무도 낫지 않았는데 모두 좋아졌다.
+r"""11.5절 「그림으로 보는 통계학」 — 아무도 낫지 않았는데 모두 좋아졌다.
 
 윌 로저스가 했다고 전해지는 말이 있다. 「오클라호마 사람들이
 캘리포니아로 옮겨 가면서 두 주의 평균 지능이 모두 올랐다.」
@@ -26,7 +26,7 @@ r"""10.5절 「그림으로 보는 통계학」 — 아무도 낫지 않았는�
 
 만드는 파일:
 
-  ch10/ecological_correlation/img/will_rogers.png
+  ch11/ecological_correlation/img/will_rogers.png
 
 실행:  python3 scripts/make_ch12_will_rogers.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -43,7 +43,7 @@ from matplotlib.lines import Line2D
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch10/ecological_correlation/img/"
+OUT = "docs/ch11/ecological_correlation/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

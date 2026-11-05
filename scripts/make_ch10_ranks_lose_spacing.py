@@ -1,4 +1,4 @@
-"""10.1절 스피어만 순위상관 — 순위만 보면 잃는 것.
+"""11.1절 스피어만 순위상관 — 순위만 보면 잃는 것.
 
 쪽의 rank_invariance 는 「값을 바꾸어도 r_s 는 그대로」라는 얻는 쪽을
 그린다. 여기서는 그 뒷면을 본다. 순위가 **똑같은** 두 자료를 만들면
@@ -13,7 +13,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 N = 12
 x = np.arange(1, N + 1, dtype=float)
 order = np.array([2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11], dtype=float)

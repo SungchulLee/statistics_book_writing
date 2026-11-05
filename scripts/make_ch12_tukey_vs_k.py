@@ -1,4 +1,4 @@
-r"""12.5절 「그림으로 보는 통계학」 — 집단이 늘면 셋이 갈라진다.
+r"""10.5절 「그림으로 보는 통계학」 — 집단이 늘면 셋이 갈라진다.
 
 이 쪽은 k = 3 에서 최대 |t| 의 귀무분포를 그려 보이고, 투키가 본페로니를
 이기는 폭이 「k 가 커질수록 벌어진다」고 적어 두었다. 그 말을 k 를 2 에서
@@ -14,7 +14,7 @@ k = 2 에서는 셋이 정확히 같다 — 쌍이 하나뿐이면 보정할 것
 
 만드는 파일:
 
-  ch12/post_hoc/img/tukey_vs_k.png
+  ch10/post_hoc/img/tukey_vs_k.png
 
 실행:  python3 scripts/make_ch11_tukey_vs_k.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch12/post_hoc/img/"
+OUT = "docs/ch10/post_hoc/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

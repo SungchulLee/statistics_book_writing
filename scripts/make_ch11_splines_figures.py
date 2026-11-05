@@ -1,10 +1,10 @@
-r"""11장 '스플라인과 GAM' 네 쪽에 들어가는 개념 그림을 만든다.
+r"""12장 '스플라인과 GAM' 네 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
-  ch11/splines_gams/img/smoothing_tradeoff.png    벌점과 유효자유도의 절충
-  ch11/splines_gams/img/bspline_vs_natural.png    국소 기저와 경계 거동
-  ch11/splines_gams/img/step_function_bins.png    계단함수와 구간 개수
-  ch11/splines_gams/img/gam_partial_functions.png GAM 이 되찾는 부분함수
+  ch12/splines_gams/img/smoothing_tradeoff.png    벌점과 유효자유도의 절충
+  ch12/splines_gams/img/bspline_vs_natural.png    국소 기저와 경계 거동
+  ch12/splines_gams/img/step_function_bins.png    계단함수와 구간 개수
+  ch12/splines_gams/img/gam_partial_functions.png GAM 이 되찾는 부분함수
 
 실행:  python3 scripts/make_ch13_splines_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, patsy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,7 +31,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch11/splines_gams/img/"
+OUT = "docs/ch12/splines_gams/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

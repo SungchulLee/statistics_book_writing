@@ -1,4 +1,4 @@
-r"""11.5절 「그림으로 보는 통계학」 — 분포를 완벽히 맞히면서 절반을 틀리는 모형.
+r"""12.5절 「그림으로 보는 통계학」 — 분포를 완벽히 맞히면서 절반을 틀리는 모형.
 
 성적처럼 **등급**으로 나오는 예측에서, 모형이 내놓은 등급의 **분포**를 목표 분포에
 맞추어 놓으면 집계 수준의 오차는 $0$ 이 된다. 그런데 그것은 개인이 맞았다는 말이
@@ -22,7 +22,7 @@ r"""11.5절 「그림으로 보는 통계학」 — 분포를 완벽히 맞히�
 
 만드는 파일:
 
-  ch11/performance/img/aggregate_vs_person.png
+  ch12/performance/img/aggregate_vs_person.png
 
 실행:  python3 scripts/make_ch13_aggregate_vs_person.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -44,7 +44,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/performance/img/"
+OUT = "docs/ch12/performance/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

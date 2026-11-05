@@ -1,4 +1,4 @@
-r"""10.1절 「그림으로 보는 통계학」 — 순위상관은 무엇을 재려고 만들어졌나.
+r"""11.1절 「그림으로 보는 통계학」 — 순위상관은 무엇을 재려고 만들어졌나.
 
 이 쪽은 스피어만의 순위상관을 「이상점에 로버스트하고 단조변환에 불변인
 도구」로 소개한다. 맞는 말인데, 그가 그것을 만든 까닭은 로버스트성이
@@ -32,7 +32,7 @@ r"""10.1절 「그림으로 보는 통계학」 — 순위상관은 무엇을 �
 
 만드는 파일:
 
-  ch10/correlation/img/spearman_g.png
+  ch11/correlation/img/spearman_g.png
 
 실행:  python3 scripts/make_ch12_spearman_g.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -50,7 +50,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

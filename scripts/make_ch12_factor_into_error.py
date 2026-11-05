@@ -1,4 +1,4 @@
-"""12.3절 웰치 이원배치 — 요인을 빼면 그 변동이 오차로 흘러든다.
+"""10.3절 웰치 이원배치 — 요인을 빼면 그 변동이 오차로 흘러든다.
 
 온도 세 수준 x 비료 세 종류, 칸마다 하나씩 아홉 관측. 요인을 하나씩 떼어
 웰치 분산분석을 두 번 돌리면 둘 다 유의하지 않은데, 같은 아홉 수를 3x3 으로
@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-OUT = "docs/ch12/anova_welch/img/"
+OUT = "docs/ch10/anova_welch/img/"
 
 df = pd.DataFrame({
     "Temperature": ["High"] * 3 + ["Low"] * 3 + ["Medium"] * 3,

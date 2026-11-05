@@ -8,7 +8,7 @@ $\mathcal I(z) = -H^{-1}\nabla_\theta \ell(z)$ 로 재학습 없이 어림하는
 ② 신경망에서는 **재야 할 양 자체가** 재학습의 잡음에 묻힌다.
 ③ 그래서 「영향이 큰 점 상위 $20$ 개」가 시드마다 달라진다.
 
-만드는 파일: docs/ch12/diagnostics/img/influence_fragile.png
+만드는 파일: docs/ch10/diagnostics/img/influence_fragile.png
 """
 
 import warnings
@@ -174,6 +174,6 @@ ax3.legend(loc="center right", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/diagnostics/img/influence_fragile.png"
+out = "docs/ch10/diagnostics/img/influence_fragile.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

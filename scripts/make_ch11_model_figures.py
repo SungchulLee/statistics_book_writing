@@ -1,11 +1,11 @@
-r"""11장의 회귀 모형화 다섯 쪽에 들어가는 개념 그림을 만든다.
+r"""12장의 회귀 모형화 다섯 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
-  ch11/linear_regression/img/categorical_coding.png       부호화가 모형을 바꾼다
-  ch11/linear_regression/img/coef_scale_vs_effect.png     계수 크기는 단위의 문제다
-  ch11/interaction_polynomial/img/interaction_slopes.png  기울기가 상대에 따라 달라진다
-  ch11/interaction_polynomial/img/polynomial_degree.png   차수를 올리면 어디까지
-  ch11/diagnostics/img/leverage_residual_cook.png         지렛대와 잔차와 영향력
+  ch12/linear_regression/img/categorical_coding.png       부호화가 모형을 바꾼다
+  ch12/linear_regression/img/coef_scale_vs_effect.png     계수 크기는 단위의 문제다
+  ch12/interaction_polynomial/img/interaction_slopes.png  기울기가 상대에 따라 달라진다
+  ch12/interaction_polynomial/img/polynomial_degree.png   차수를 올리면 어디까지
+  ch12/diagnostics/img/leverage_residual_cook.png         지렛대와 잔차와 영향력
 
 실행:  python3 scripts/make_ch13_model_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,9 +31,9 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-LIN = "docs/ch11/linear_regression/img/"
-INT = "docs/ch11/interaction_polynomial/img/"
-DIA = "docs/ch11/diagnostics/img/"
+LIN = "docs/ch12/linear_regression/img/"
+INT = "docs/ch12/interaction_polynomial/img/"
+DIA = "docs/ch12/diagnostics/img/"
 for d in (LIN, INT, DIA):
     os.makedirs(d, exist_ok=True)
 

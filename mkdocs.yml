@@ -303,137 +303,137 @@ nav:
             - 9.7 거짓발견율 ★:
                 - 거짓발견율 (Benjamini-Hochberg): ch09/multiple_testing/fdr.md
 
-        - 10 상관과 인과:
+        - 10 분산분석:
             - 장 개요: ch10/index.md
-            - 10.1 상관:
-                - 상관의 이해: ch10/correlation/understanding.md
-                - 피어슨 상관계수: ch10/correlation/pearson.md
-                - 스피어만 순위상관: ch10/correlation/spearman.md
-                - 켄들의 타우: ch10/correlation/kendall.md
-                - 점이연 상관과 파이 계수: ch10/correlation/special_cases.md
-                - 부분상관: ch10/correlation/partial.md
-            - 10.2 생태학적 상관 ★:
-                - 생태학적 오류: ch10/ecological_correlation/ecological_fallacy.md
-                - 심슨의 역설: ch10/ecological_correlation/simpsons_paradox.md
-                - 집계 편향: ch10/ecological_correlation/aggregation_bias.md
-            - 10.3 상관, 인과, 교란 ★:
-                - 교란변수: ch10/confounding/confounding_variables.md
-                - 허위상관: ch10/confounding/spurious_correlations.md
-                - 교란과 인과 시연: ch10/confounding/confounding_causation_demo.md
-            - 10.4 인과 ★:
-                - 인과 추론의 기준: ch10/causation/causal_criteria.md
-                - 무작위 실험과 인과: ch10/causation/experiments_causation.md
-                - 도구변수 (입문): ch10/causation/instrumental_variables.md
-                - 방향성 비순환 그래프: ch10/causation/dags.md
-                - 인과추론 모의실험: ch10/causation/causal_simulations.md
-            - 10.5 상관 검정:
-                - 피어슨의 r 검정 (상관에 대한 t-검정): ch10/correlation_test/test_pearson.md
-                - 스피어만의 ρ 검정: ch10/correlation_test/test_spearman.md
-                - 켄들의 타우 검정: ch10/correlation_test/test_kendall.md
-                - 두 상관의 비교: ch10/correlation_test/comparing_correlations.md
-                - 세 검정 견주기: ch10/correlation_test/correlation_tests.md
-            - 10.6 상관의 시각화:
-                - 상관 시각화: ch10/visualization/corr_viz.md
-                - 상관 타원 그림: ch10/visualization/correlation_ellipses.md
-                - 회귀와 상관 그림: ch10/visualization/regression_correlation_plot.md
-                - 상관행렬의 열지도: ch10/visualization/heatmaps.md
-                - 쌍 그림과 산점도 행렬: ch10/visualization/pairplots.md
+            - 10.1 일원배치 분산분석:
+                - 모형과 가정: ch10/anova_one_way/one_way_model.md
+                - F-검정 절차: ch10/anova_one_way/f_test.md
+                - 분산분석 F-통계량 모의실험: ch10/anova_one_way/anova_f_simulation.md
+            - 10.2 이원배치 분산분석:
+                - 주효과와 블록화: ch10/anova_two_way/two_way.md
+                - 교호작용 효과: ch10/anova_two_way/interaction.md
+                - 교호작용 효과 그림: ch10/anova_two_way/interaction_plot.md
+            - 10.3 사후비교:
+                - 투키 정직유의차: ch10/post_hoc/tukey.md
+                - 투키 정직유의차 (이원배치): ch10/post_hoc/tukey_two_way.md
+                - 본페로니와 셰페 방법: ch10/post_hoc/bonferroni_scheffe.md
+                - 더닛 검정 (대조군과의 비교): ch10/post_hoc/dunnett.md
+                - 게임스–하월 (분산이 다를 때): ch10/post_hoc/games_howell.md
+                - 사후비교 방법의 비교와 검정력: ch10/post_hoc/post_hoc_comparisons.md
+            - 10.4 웰치 분산분석:
+                - 웰치의 일원배치 분산분석: ch10/anova_welch/welch_one_way.md
+                - 웰치의 이원배치 분산분석: ch10/anova_welch/welch_two_way.md
+                - 웰치 분산분석의 제1종 오류와 검정력 모의실험: ch10/anova_welch/welch_simulation.md
+                - 이원배치 웰치 분산분석 (로버스트 HC3): ch10/anova_welch/welch_twoway_robust.md
+            - 10.5 가정:
+                - 분산분석의 가정: ch10/assumptions/assumptions_overview.md
+                - 잔차의 정규성 확인: ch10/assumptions/normality.md
+                - 관측의 독립성 확인: ch10/assumptions/independence.md
+                - 등분산성 확인: ch10/assumptions/homoscedasticity.md
+                - 선형성 확인: ch10/assumptions/linearity.md
+            - 10.6 진단:
+                - 잔차 분석 (분산분석): ch10/diagnostics/residual_analysis.md
+                - 영향점: ch10/diagnostics/influential_points.md
+                - 가정 위반의 처리: ch10/diagnostics/handling_violations.md
+                - 분산분석 진단: ch10/diagnostics/anova_diagnostics.md
+            - 10.7 실무 응용:
+                - A/B 검정과 실험 설계: ch10/practical_applications/ab_testing.md
+                - 분산분석의 금융 응용: ch10/practical_applications/finance_applications.md
+                - 사례 연구: ch10/practical_applications/case_studies.md
 
-        - 11 선형회귀:
+        - 11 상관과 인과:
             - 장 개요: ch11/index.md
-            - 11.1 선형회귀:
-                - 단순선형회귀: ch11/linear_regression/simple.md
-                - 다중선형회귀: ch11/linear_regression/multiple.md
-                - 범주형 설명변수: ch11/linear_regression/categorical_predictors.md
-            - 11.2 추정과 추론:
-                - 최소제곱 추정: ch11/estimation_inference/least_squares.md
-                - 단순 OLS 추정량의 표집분포: ch11/estimation_inference/sampling_dist_simple.md
-                - 단순 OLS 추정량의 신뢰구간: ch11/estimation_inference/ci_coeff.md
-                - 일반 OLS 추정량의 표집분포: ch11/estimation_inference/tests_coeff.md
-                - 잔차제곱합 곡면 시각화: ch11/estimation_inference/rss_surface_visualization.md
-                - 최소제곱 모의실험 (몬테카를로): ch11/estimation_inference/ols_simulation.md
-            - 11.3 계수 검정:
-                - 회귀계수의 가설검정 (t-검정): ch11/testing_coefficients/hypothesis_tests.md
-                - 계수의 p값과 신뢰구간: ch11/testing_coefficients/pvalues_ci.md
-                - 유의성의 해석: ch11/testing_coefficients/significance.md
-                - OLS 회귀 출력 재현: ch11/testing_coefficients/ols_regression_output.md
-            - 11.4 교호작용과 다항식 확장:
-                - 교호작용 항: ch11/interaction_polynomial/interaction_terms.md
-                - 다항회귀: ch11/interaction_polynomial/polynomial_regression.md
-            - 11.5 가정과 진단:
-                - 가정과 진단 (LINE): ch11/assumptions/index.md
-                - 선형성: ch11/assumptions/checking_linearity.md
-                - 독립성: ch11/assumptions/checking_independence.md
-                - 등분산성: ch11/assumptions/checking_homoscedasticity.md
-                - 정규성: ch11/assumptions/checking_normality.md
-                - 가중최소제곱: ch11/assumptions/weighted_regression.md
-            - 11.6 진단:
-                - 잔차 분석: ch11/diagnostics/residuals.md
-                - 다중공선성과 분산팽창인자: ch11/diagnostics/multicollinearity.md
-                - 영향점과 지렛대 (쿡 거리, DFFITS): ch11/diagnostics/influence.md
-                - 다중회귀 진단: ch11/diagnostics/multi_reg_diag.md
-                - 회귀 진단 (주택): ch11/diagnostics/regression_diagnostics_housing.md
-            - 11.7 성능 척도:
-                - 결정계수와 수정 결정계수: ch11/performance/r_squared.md
-                - '평균절대오차, 평균제곱오차, 제곱근평균제곱오차': ch11/performance/mae_mse_rmse.md
-                - 평균절대백분율오차와 그 밖의 상대 척도: ch11/performance/relative_metrics.md
-                - 성능 척도: ch11/performance/metrics.md
-            - 11.8 모형선택 기준:
-                - Akaike 정보기준: ch11/model_selection/aic.md
-                - 베이즈 정보기준: ch11/model_selection/bic.md
-                - 모형선택을 위한 교차검증: ch11/model_selection/cross_validation.md
-                - AIC와 BIC: ch11/model_selection/aic_bic.md
-                - 모형선택 비교: ch11/model_selection/model_selection.md
-                - 교차검증 다항 모형선택: ch11/model_selection/cv_polynomial_model_selection.md
-                - 부분집합 선택과 단계적 선택: ch11/model_selection/subset_stepwise_selection.md
-            - 11.9 스플라인과 일반화가법모형:
-                - 스플라인과 일반화가법모형: ch11/splines_gams/index.md
-                - 일반화가법모형: ch11/splines_gams/generalized_additive_models.md
-                - GAM 주택 분석: ch11/splines_gams/gam_housing_analysis.md
-                - 계단함수: ch11/splines_gams/step_functions.md
-                - Patsy를 이용한 스플라인: ch11/splines_gams/splines_patsy_examples.md
-            - 11.10 패키지 사용법:
-                - statsmodels 최소제곱 인터페이스: ch11/package_usage/statsmodels.md
-                - sklearn LinearRegression 인터페이스: ch11/package_usage/sklearn.md
-                - 무엇을 언제 쓸 것인가 (비교): ch11/package_usage/comparison.md
+            - 11.1 상관:
+                - 상관의 이해: ch11/correlation/understanding.md
+                - 피어슨 상관계수: ch11/correlation/pearson.md
+                - 스피어만 순위상관: ch11/correlation/spearman.md
+                - 켄들의 타우: ch11/correlation/kendall.md
+                - 점이연 상관과 파이 계수: ch11/correlation/special_cases.md
+                - 부분상관: ch11/correlation/partial.md
+            - 11.2 생태학적 상관 ★:
+                - 생태학적 오류: ch11/ecological_correlation/ecological_fallacy.md
+                - 심슨의 역설: ch11/ecological_correlation/simpsons_paradox.md
+                - 집계 편향: ch11/ecological_correlation/aggregation_bias.md
+            - 11.3 상관, 인과, 교란 ★:
+                - 교란변수: ch11/confounding/confounding_variables.md
+                - 허위상관: ch11/confounding/spurious_correlations.md
+                - 교란과 인과 시연: ch11/confounding/confounding_causation_demo.md
+            - 11.4 인과 ★:
+                - 인과 추론의 기준: ch11/causation/causal_criteria.md
+                - 무작위 실험과 인과: ch11/causation/experiments_causation.md
+                - 도구변수 (입문): ch11/causation/instrumental_variables.md
+                - 방향성 비순환 그래프: ch11/causation/dags.md
+                - 인과추론 모의실험: ch11/causation/causal_simulations.md
+            - 11.5 상관 검정:
+                - 피어슨의 r 검정 (상관에 대한 t-검정): ch11/correlation_test/test_pearson.md
+                - 스피어만의 ρ 검정: ch11/correlation_test/test_spearman.md
+                - 켄들의 타우 검정: ch11/correlation_test/test_kendall.md
+                - 두 상관의 비교: ch11/correlation_test/comparing_correlations.md
+                - 세 검정 견주기: ch11/correlation_test/correlation_tests.md
+            - 11.6 상관의 시각화:
+                - 상관 시각화: ch11/visualization/corr_viz.md
+                - 상관 타원 그림: ch11/visualization/correlation_ellipses.md
+                - 회귀와 상관 그림: ch11/visualization/regression_correlation_plot.md
+                - 상관행렬의 열지도: ch11/visualization/heatmaps.md
+                - 쌍 그림과 산점도 행렬: ch11/visualization/pairplots.md
 
-        - 12 분산분석:
+        - 12 선형회귀:
             - 장 개요: ch12/index.md
-            - 12.1 일원배치 분산분석:
-                - 모형과 가정: ch12/anova_one_way/one_way_model.md
-                - F-검정 절차: ch12/anova_one_way/f_test.md
-                - 분산분석 F-통계량 모의실험: ch12/anova_one_way/anova_f_simulation.md
-            - 12.2 이원배치 분산분석:
-                - 주효과와 블록화: ch12/anova_two_way/two_way.md
-                - 교호작용 효과: ch12/anova_two_way/interaction.md
-                - 교호작용 효과 그림: ch12/anova_two_way/interaction_plot.md
-            - 12.3 사후비교:
-                - 투키 정직유의차: ch12/post_hoc/tukey.md
-                - 투키 정직유의차 (이원배치): ch12/post_hoc/tukey_two_way.md
-                - 본페로니와 셰페 방법: ch12/post_hoc/bonferroni_scheffe.md
-                - 더닛 검정 (대조군과의 비교): ch12/post_hoc/dunnett.md
-                - 게임스–하월 (분산이 다를 때): ch12/post_hoc/games_howell.md
-                - 사후비교 방법의 비교와 검정력: ch12/post_hoc/post_hoc_comparisons.md
-            - 12.4 웰치 분산분석:
-                - 웰치의 일원배치 분산분석: ch12/anova_welch/welch_one_way.md
-                - 웰치의 이원배치 분산분석: ch12/anova_welch/welch_two_way.md
-                - 웰치 분산분석의 제1종 오류와 검정력 모의실험: ch12/anova_welch/welch_simulation.md
-                - 이원배치 웰치 분산분석 (로버스트 HC3): ch12/anova_welch/welch_twoway_robust.md
-            - 12.5 가정:
-                - 분산분석의 가정: ch12/assumptions/assumptions_overview.md
-                - 잔차의 정규성 확인: ch12/assumptions/normality.md
-                - 관측의 독립성 확인: ch12/assumptions/independence.md
-                - 등분산성 확인: ch12/assumptions/homoscedasticity.md
-                - 선형성 확인: ch12/assumptions/linearity.md
+            - 12.1 선형회귀:
+                - 단순선형회귀: ch12/linear_regression/simple.md
+                - 다중선형회귀: ch12/linear_regression/multiple.md
+                - 범주형 설명변수: ch12/linear_regression/categorical_predictors.md
+            - 12.2 추정과 추론:
+                - 최소제곱 추정: ch12/estimation_inference/least_squares.md
+                - 단순 OLS 추정량의 표집분포: ch12/estimation_inference/sampling_dist_simple.md
+                - 단순 OLS 추정량의 신뢰구간: ch12/estimation_inference/ci_coeff.md
+                - 일반 OLS 추정량의 표집분포: ch12/estimation_inference/tests_coeff.md
+                - 잔차제곱합 곡면 시각화: ch12/estimation_inference/rss_surface_visualization.md
+                - 최소제곱 모의실험 (몬테카를로): ch12/estimation_inference/ols_simulation.md
+            - 12.3 계수 검정:
+                - 회귀계수의 가설검정 (t-검정): ch12/testing_coefficients/hypothesis_tests.md
+                - 계수의 p값과 신뢰구간: ch12/testing_coefficients/pvalues_ci.md
+                - 유의성의 해석: ch12/testing_coefficients/significance.md
+                - OLS 회귀 출력 재현: ch12/testing_coefficients/ols_regression_output.md
+            - 12.4 교호작용과 다항식 확장:
+                - 교호작용 항: ch12/interaction_polynomial/interaction_terms.md
+                - 다항회귀: ch12/interaction_polynomial/polynomial_regression.md
+            - 12.5 가정과 진단:
+                - 가정과 진단 (LINE): ch12/assumptions/index.md
+                - 선형성: ch12/assumptions/checking_linearity.md
+                - 독립성: ch12/assumptions/checking_independence.md
+                - 등분산성: ch12/assumptions/checking_homoscedasticity.md
+                - 정규성: ch12/assumptions/checking_normality.md
+                - 가중최소제곱: ch12/assumptions/weighted_regression.md
             - 12.6 진단:
-                - 잔차 분석 (분산분석): ch12/diagnostics/residual_analysis.md
-                - 영향점: ch12/diagnostics/influential_points.md
-                - 가정 위반의 처리: ch12/diagnostics/handling_violations.md
-                - 분산분석 진단: ch12/diagnostics/anova_diagnostics.md
-            - 12.7 실무 응용:
-                - A/B 검정과 실험 설계: ch12/practical_applications/ab_testing.md
-                - 분산분석의 금융 응용: ch12/practical_applications/finance_applications.md
-                - 사례 연구: ch12/practical_applications/case_studies.md
+                - 잔차 분석: ch12/diagnostics/residuals.md
+                - 다중공선성과 분산팽창인자: ch12/diagnostics/multicollinearity.md
+                - 영향점과 지렛대 (쿡 거리, DFFITS): ch12/diagnostics/influence.md
+                - 다중회귀 진단: ch12/diagnostics/multi_reg_diag.md
+                - 회귀 진단 (주택): ch12/diagnostics/regression_diagnostics_housing.md
+            - 12.7 성능 척도:
+                - 결정계수와 수정 결정계수: ch12/performance/r_squared.md
+                - '평균절대오차, 평균제곱오차, 제곱근평균제곱오차': ch12/performance/mae_mse_rmse.md
+                - 평균절대백분율오차와 그 밖의 상대 척도: ch12/performance/relative_metrics.md
+                - 성능 척도: ch12/performance/metrics.md
+            - 12.8 모형선택 기준:
+                - Akaike 정보기준: ch12/model_selection/aic.md
+                - 베이즈 정보기준: ch12/model_selection/bic.md
+                - 모형선택을 위한 교차검증: ch12/model_selection/cross_validation.md
+                - AIC와 BIC: ch12/model_selection/aic_bic.md
+                - 모형선택 비교: ch12/model_selection/model_selection.md
+                - 교차검증 다항 모형선택: ch12/model_selection/cv_polynomial_model_selection.md
+                - 부분집합 선택과 단계적 선택: ch12/model_selection/subset_stepwise_selection.md
+            - 12.9 스플라인과 일반화가법모형:
+                - 스플라인과 일반화가법모형: ch12/splines_gams/index.md
+                - 일반화가법모형: ch12/splines_gams/generalized_additive_models.md
+                - GAM 주택 분석: ch12/splines_gams/gam_housing_analysis.md
+                - 계단함수: ch12/splines_gams/step_functions.md
+                - Patsy를 이용한 스플라인: ch12/splines_gams/splines_patsy_examples.md
+            - 12.10 패키지 사용법:
+                - statsmodels 최소제곱 인터페이스: ch12/package_usage/statsmodels.md
+                - sklearn LinearRegression 인터페이스: ch12/package_usage/sklearn.md
+                - 무엇을 언제 쓸 것인가 (비교): ch12/package_usage/comparison.md
         - 13 카이제곱 검정:
             - 장 개요: ch13/index.md
             - 13.1 피어슨 통계량과 자유도:

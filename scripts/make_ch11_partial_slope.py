@@ -1,4 +1,4 @@
-r"""11.1절 「그림으로 보는 통계학」 — 「다른 것을 고정하고」를 수로 하면.
+r"""12.1절 「그림으로 보는 통계학」 — 「다른 것을 고정하고」를 수로 하면.
 
 단순회귀의 기울기와 다중회귀의 같은 계수는 다른 양이다. 뒤엣것은
 **다른 설명변수를 고정했을 때**의 기울기이고, 둘은 부호까지 갈릴 수 있다.
@@ -16,7 +16,7 @@ x1 이 x2 를 대신 말해 주고 있어서, x2 를 안 넣으면 x1 의 계수
 
 만드는 파일:
 
-  ch11/linear_regression/img/partial_slope.png
+  ch12/linear_regression/img/partial_slope.png
 
 실행:  python3 scripts/make_ch13_partial_slope.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/linear_regression/img/"
+OUT = "docs/ch12/linear_regression/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

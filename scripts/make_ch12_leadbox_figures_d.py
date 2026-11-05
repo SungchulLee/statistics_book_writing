@@ -1,12 +1,12 @@
-"""12장 들머리 그림 여섯 장 (진단 셋 · 응용 셋).
+"""10장 들머리 그림 여섯 장 (진단 셋 · 응용 셋).
 
 만드는 파일:
-  ch12/diagnostics/img/one_point_does_not_wash_out.png  한 점은 씻겨 내려가지 않는다
-  ch12/diagnostics/img/which_way_removal_goes.png       빼면 세지나 약해지나
-  ch12/diagnostics/img/mean_stays_spread_grows.png      평균은 제자리, 흩어짐만
-  ch12/practical_applications/img/stopped_early_inflates.png 일찍 멈추면 부푼다
-  ch12/practical_applications/img/gatekeeper_blinks.png  문지기가 눈을 감는 자리
-  ch12/practical_applications/img/cancellation_window.png 상쇄가 일어나는 자리
+  ch10/diagnostics/img/one_point_does_not_wash_out.png  한 점은 씻겨 내려가지 않는다
+  ch10/diagnostics/img/which_way_removal_goes.png       빼면 세지나 약해지나
+  ch10/diagnostics/img/mean_stays_spread_grows.png      평균은 제자리, 흩어짐만
+  ch10/practical_applications/img/stopped_early_inflates.png 일찍 멈추면 부푼다
+  ch10/practical_applications/img/gatekeeper_blinks.png  문지기가 눈을 감는 자리
+  ch10/practical_applications/img/cancellation_window.png 상쇄가 일어나는 자리
 
 본문 그림이 들머리의 수를 이미 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -20,8 +20,8 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-DIAG = "docs/ch12/diagnostics/img/"
-APP = "docs/ch12/practical_applications/img/"
+DIAG = "docs/ch10/diagnostics/img/"
+APP = "docs/ch10/practical_applications/img/"
 
 
 def save(fig, path):

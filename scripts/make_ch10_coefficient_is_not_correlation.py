@@ -1,4 +1,4 @@
-"""10.6절 상관 시각화 — 섞는 비율은 상관이 아니다.
+"""11.6절 상관 시각화 — 섞는 비율은 상관이 아니다.
 
 들머리의 마지막 요점을 그린다. 이 쪽은 답을 손에 들고 시작하려고 네
 변수를 직접 지어낸다.
@@ -28,7 +28,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch10/visualization/img/"
+OUT = "docs/ch11/visualization/img/"
 
 A_PAGE = 0.7                      # 쪽이 적어 넣은 섞는 비율
 V2 = 0.7 ** 2 + 0.3 ** 2          # Var(x2) = 0.58

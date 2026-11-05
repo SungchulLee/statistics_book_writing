@@ -1,4 +1,4 @@
-"""10.4절 피어슨 상관의 검정 — 「유의하다」와 「세다」는 다른 말이다.
+"""11.4절 피어슨 상관의 검정 — 「유의하다」와 「세다」는 다른 말이다.
 
 학생 25 명에서 r = 0.45 를 얻으면 t = 2.417 이 임계값 2.069 를 넘어 유의한데,
 같은 r 로 만든 rho 의 95% 구간은 (0.07, 0.72) 로 「거의 0」부터 「꽤 강함」까지
@@ -17,7 +17,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/correlation_test/img/"
+OUT = "docs/ch11/correlation_test/img/"
 R, N = 0.45, 25
 CL = 0.95
 

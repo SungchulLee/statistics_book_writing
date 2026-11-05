@@ -1,9 +1,9 @@
-r"""11장 '패키지 사용법' 세 쪽에 들어가는 개념 그림을 만든다.
+r"""12장 '패키지 사용법' 세 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
-  ch11/package_usage/img/no_intercept_trap.png  add_constant 를 빠뜨리면
-  ch11/package_usage/img/train_vs_cv.png        훈련 점수와 교차검증 점수
-  ch11/package_usage/img/two_libraries.png      두 라이브러리가 주는 것
+  ch12/package_usage/img/no_intercept_trap.png  add_constant 를 빠뜨리면
+  ch12/package_usage/img/train_vs_cv.png        훈련 점수와 교차검증 점수
+  ch12/package_usage/img/two_libraries.png      두 라이브러리가 주는 것
 
 실행:  python3 scripts/make_ch13_package_figures.py   (저장소 최상위에서)
 필요:  numpy, statsmodels, scikit-learn, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch11/package_usage/img/"
+OUT = "docs/ch12/package_usage/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

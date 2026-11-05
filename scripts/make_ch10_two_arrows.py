@@ -1,4 +1,4 @@
-"""10.4절 교란과 인과 시연 — 화살표 둘을 모두 가진 변수만 교란변수다.
+"""11.4절 교란과 인과 시연 — 화살표 둘을 모두 가진 변수만 교란변수다.
 
 들머리가 세운 두 문장을 그린다.
 
@@ -24,7 +24,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/confounding/img/"
+OUT = "docs/ch11/confounding/img/"
 
 RHO = 0.8
 N_PAGE = 500

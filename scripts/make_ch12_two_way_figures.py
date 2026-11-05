@@ -1,7 +1,7 @@
-r"""12장 이원배치 분산분석 개요 쪽의 개념 그림을 생성한다.
+r"""10장 이원배치 분산분석 개요 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch12/anova_two_way/img/twoway_blocking.png   둘째 요인을 모형에 넣으면 오차가 줄어든다
+  ch10/anova_two_way/img/twoway_blocking.png   둘째 요인을 모형에 넣으면 오차가 줄어든다
 
 실행:  python3 scripts/make_ch11_two_way_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -27,7 +27,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/anova_two_way/img/"
+OUT = "docs/ch10/anova_two_way/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

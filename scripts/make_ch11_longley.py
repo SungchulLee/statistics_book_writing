@@ -9,7 +9,7 @@ r"""다중공선성의 두 번째 청구서 — 자릿수.
 ② 푸는 방법에 따라 남는 자릿수.
 ③ 중심화·표준화만 해도 조건수가 얼마나 떨어지는가.
 
-만드는 파일: docs/ch11/diagnostics/img/longley.png
+만드는 파일: docs/ch12/diagnostics/img/longley.png
 """
 
 import numpy as np
@@ -174,7 +174,7 @@ ax3.legend(loc="upper right", fontsize=10)
 ax3.grid(alpha=0.25, axis="y")
 
 fig.tight_layout()
-out = "docs/ch11/diagnostics/img/longley.png"
+out = "docs/ch12/diagnostics/img/longley.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

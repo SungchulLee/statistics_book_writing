@@ -1,4 +1,4 @@
-"""10.2절 심슨의 역설 — 합친 수는 「어느 학과에 지원했는지」까지 함께 잰다.
+"""11.2절 심슨의 역설 — 합친 수는 「어느 학과에 지원했는지」까지 함께 잰다.
 
 쪽의 표에 있는 1973 년 가을 버클리 여섯 학과 자료를 그대로 쓴다.
 학과마다 합격률이 크게 다른데(A 0.643 에서 F 0.065) 여성 지원자는
@@ -13,7 +13,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch10/ecological_correlation/img/"
+OUT = "docs/ch11/ecological_correlation/img/"
 DEPT = list("ABCDEF")
 nm = np.array([825, 560, 325, 417, 191, 373], float)
 rm = np.array([0.62, 0.63, 0.37, 0.33, 0.28, 0.06])

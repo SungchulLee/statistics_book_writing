@@ -1,4 +1,4 @@
-"""11.6절 회귀 진단 — 잔차가 큰 점을 빼면 R² 는 반드시 오른다.
+"""12.6절 회귀 진단 — 잔차가 큰 점을 빼면 R² 는 반드시 오른다.
 
 King County 98105 구역 313 건에 다섯 설명변수로 회귀하면 R² = 0.7954 다.
 쿡 거리가 4/n 을 넘는 스무 건을 빼고 다시 적합하면 0.8415 로 오르는데,
@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
-OUT = "docs/ch11/diagnostics/img/"
+OUT = "docs/ch12/diagnostics/img/"
 URL = ("https://raw.githubusercontent.com/gedeck/"
        "practical-statistics-for-data-scientists/"
        "8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/house_sales.csv")

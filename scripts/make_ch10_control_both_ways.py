@@ -1,4 +1,4 @@
-"""10.5절 인과 모의실험 — 같은 한 줄이 상관을 지우기도 하고 만들기도 한다.
+"""11.5절 인과 모의실험 — 같은 한 줄이 상관을 지우기도 하고 만들기도 한다.
 
 「Z 를 통제한다」는 한 줄을 두 구조에 똑같이 건다.
   교란  X <- Z -> Y : 상관 0.6515 가 0 으로 지워진다
@@ -20,7 +20,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/causation/img/"
+OUT = "docs/ch11/causation/img/"
 # 표본을 3,000 으로 둔 것은 뽑은 값이 닫힌 꼴에 가깝게 앉게 하려는 것이다.
 # 그림이 말하는 수는 닫힌 꼴(0.651450 → 0 과 0 → -0.5)이고 뽑은 값은 그 확인이다.
 N = 3000

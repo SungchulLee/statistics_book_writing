@@ -11,7 +11,7 @@ HC3 가 「HC0 나 HC1 보다 소표본 성능이 좋다」고 적어 둔다. �
 ② 주효과에서도 같은 모양.
 ③ 이름값에 닿는 자리 — 전체 표본 수로 보면 어디쯤인가.
 
-만드는 파일: docs/ch12/anova_welch/img/hc_small_cells.png
+만드는 파일: docs/ch10/anova_welch/img/hc_small_cells.png
 """
 
 import numpy as np
@@ -170,6 +170,6 @@ ax3.legend(loc="upper right", fontsize=10.5)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/anova_welch/img/hc_small_cells.png"
+out = "docs/ch10/anova_welch/img/hc_small_cells.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

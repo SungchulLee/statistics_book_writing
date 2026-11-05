@@ -1,4 +1,4 @@
-r"""11.5절 「그림으로 보는 통계학」 — 잔차는 오차가 아니다.
+r"""12.5절 「그림으로 보는 통계학」 — 잔차는 오차가 아니다.
 
 이 쪽의 검정 넷은 모두 **잔차**에 걸린다. 그런데 가정이 말하는 것은 **오차**의
 정규성이다. 둘은 같지 않다 — 잔차는 $\mathbf e = (\mathbf I - \mathbf P)\boldsymbol\varepsilon$
@@ -29,7 +29,7 @@ r"""11.5절 「그림으로 보는 통계학」 — 잔차는 오차가 아니�
 
 만드는 파일:
 
-  ch11/assumptions/img/residuals_are_not_errors.png
+  ch12/assumptions/img/residuals_are_not_errors.png
 
 실행:  python3 scripts/make_ch13_residuals_are_not_errors.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -52,7 +52,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

@@ -1,4 +1,4 @@
-r"""11.7절 「그림으로 보는 통계학」 — R^2 은 모형이 아니라 설계를 잰다.
+r"""12.7절 「그림으로 보는 통계학」 — R^2 은 모형이 아니라 설계를 잰다.
 
 참 모형도 같고 오차도 같은데, 설명변수를 어디서 얼마나 넓게 뽑았느냐만
 바꾸면 R^2 이 0.1 에서 0.99 까지 움직인다. 기울기 추정값은 셋 다 참값
@@ -12,7 +12,7 @@ r"""11.7절 「그림으로 보는 통계학」 — R^2 은 모형이 아니라 
 
 만드는 파일:
 
-  ch11/performance/img/r2_depends_on_range.png
+  ch12/performance/img/r2_depends_on_range.png
 
 실행:  python3 scripts/make_ch13_r2_depends_on_range.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/performance/img/"
+OUT = "docs/ch12/performance/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

@@ -10,7 +10,7 @@ $1976$ 년 논문의 초록은 마지막 문장을 이렇게 닫는다 — 「n 
 ② 쌍 하나당 1종오류.
 ③ 이 쪽 절 6 의 대안 — 본페로니 보정 쌍별 웰치 — 과 견준다.
 
-만드는 파일: docs/ch12/post_hoc/img/gh_small_n.png
+만드는 파일: docs/ch10/post_hoc/img/gh_small_n.png
 """
 
 import itertools
@@ -149,6 +149,6 @@ ax3.legend(loc="upper right", fontsize=10.5)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/post_hoc/img/gh_small_n.png"
+out = "docs/ch10/post_hoc/img/gh_small_n.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

@@ -1,4 +1,4 @@
-r"""11.8절 「그림으로 보는 통계학」 — 갈릴레오의 두 자료.
+r"""12.8절 「그림으로 보는 통계학」 — 갈릴레오의 두 자료.
 
 파도바 시절의 갈릴레오가 공을 경사면에 굴려 책상 끝에서 튀어나간 **수평거리**를
 놓는 높이별로 쟀다. 처음에는 경사면만 두고 일곱 번(자료 1), 다음에는 경사면 끝에
@@ -28,7 +28,7 @@ r"""11.8절 「그림으로 보는 통계학」 — 갈릴레오의 두 자료.
 
 만드는 파일:
 
-  ch11/model_selection/img/galileo_degree.png
+  ch12/model_selection/img/galileo_degree.png
 
 실행:  python3 scripts/make_ch13_galileo_degree.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -50,7 +50,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/model_selection/img/"
+OUT = "docs/ch12/model_selection/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

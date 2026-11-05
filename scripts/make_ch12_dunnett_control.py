@@ -8,7 +8,7 @@ $\operatorname{Cov}(d_i, d_j) = \sigma^2/n$, $\operatorname{Var}(d_i) = 2\sigma^
 ② 그 차이가 검정력으로 얼마나 돌아오는가.
 ③ 대조군에 몇 배를 배정해야 하는가 (총 표본을 고정하고 직접 찾는다).
 
-만드는 파일: docs/ch12/post_hoc/img/dunnett_control.png
+만드는 파일: docs/ch10/post_hoc/img/dunnett_control.png
 """
 
 import numpy as np
@@ -161,6 +161,6 @@ ax3.legend(loc="lower right", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/post_hoc/img/dunnett_control.png"
+out = "docs/ch10/post_hoc/img/dunnett_control.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

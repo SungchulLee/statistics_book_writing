@@ -1,13 +1,13 @@
-r"""10장 인과 여섯 쪽의 개념 그림을 생성한다.
+r"""11장 인과 여섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch10/causation/img/potential_outcomes_gap.png        잠재결과의 절반은 영원히 비어 있다
-  ch10/causation/img/four_structures_same_r.png        같은 r, 네 가지 인과 구조
-  ch10/causation/img/simpson_and_partial.png           합치면 뒤집히고, 통제하면 사라진다
-  ch10/causation/img/three_structures_conditioning.png 사슬·갈래·충돌자와 조건화
-  ch10/causation/img/randomization_ate_bias.png        무작위화는 못 본 변수까지 맞춘다
+  ch11/causation/img/potential_outcomes_gap.png        잠재결과의 절반은 영원히 비어 있다
+  ch11/causation/img/four_structures_same_r.png        같은 r, 네 가지 인과 구조
+  ch11/causation/img/simpson_and_partial.png           합치면 뒤집히고, 통제하면 사라진다
+  ch11/causation/img/three_structures_conditioning.png 사슬·갈래·충돌자와 조건화
+  ch11/causation/img/randomization_ate_bias.png        무작위화는 못 본 변수까지 맞춘다
                                                        (1.3절의 randomization_balance.png 와 다른 그림)
-  ch10/causation/img/iv_vs_ols_strength.png            도구가 약하면 IV 가 OLS 보다 나쁘다
+  ch11/causation/img/iv_vs_ols_strength.png            도구가 약하면 IV 가 OLS 보다 나쁘다
 
 실행:  python3 scripts/make_ch12_causation_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -34,7 +34,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch10/causation/img/"
+OUT = "docs/ch11/causation/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

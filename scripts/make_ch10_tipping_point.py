@@ -1,4 +1,4 @@
-"""10.4절 교란변수 — 어떤 변수가 부호를 뒤집는지는 미리 셀 수 있다.
+"""11.4절 교란변수 — 어떤 변수가 부호를 뒤집는지는 미리 셀 수 있다.
 
 들머리의 물음에 답하는 그림이다. 「한 변수를 넣고 빼는 일이 추정값의
 부호까지 바꾼다면, 어떤 변수가 그런 힘을 가지는지 미리 알아낼 수 있는가.」
@@ -28,7 +28,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch10/confounding/img/"
+OUT = "docs/ch11/confounding/img/"
 
 BETA, N = 1.0, 700
 C_PAGE = 1.0                      # 쪽의 세 판은 X = Z + 잡음 이라 c = 1

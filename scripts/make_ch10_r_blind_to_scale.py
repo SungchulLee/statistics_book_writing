@@ -1,4 +1,4 @@
-"""10.2절 회귀직선과 상관 — 상관은 순서만 보고 눈금은 보지 않는다.
+"""11.2절 회귀직선과 상관 — 상관은 순서만 보고 눈금은 보지 않는다.
 
 예측을 통째로 4 만큼 올려 놓아도 순서는 그대로이니 상관이 정확히 1 인데,
 결정계수는 -1.0 이다. 「표적의 평균을 그냥 내놓는 것보다 두 배 나쁘다」는 뜻이다.
@@ -15,7 +15,7 @@ import numpy as np
 from scipy import stats
 from sklearn.metrics import r2_score
 
-OUT = "docs/ch10/visualization/img/"
+OUT = "docs/ch11/visualization/img/"
 
 rng = np.random.default_rng(12)
 n = 200

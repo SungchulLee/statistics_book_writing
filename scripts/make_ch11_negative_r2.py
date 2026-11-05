@@ -1,4 +1,4 @@
-r"""11.9절 「그림으로 보는 통계학」 — `score()` 가 음수를 돌려줄 때.
+r"""12.9절 「그림으로 보는 통계학」 — `score()` 가 음수를 돌려줄 때.
 
 $R^2 = 1 - \mathrm{SS}_{\text{res}}/\mathrm{SS}_{\text{tot}}$ 에서 분모는 **그 자료의
 평균으로만 맞췄을 때의 오차**다. 그러니 모형이 그 평균보다 못하면 $R^2$ 이 음수가
@@ -15,7 +15,7 @@ $R^2 = 1 - \mathrm{SS}_{\text{res}}/\mathrm{SS}_{\text{tot}}$ 에서 분모는 *
 
 만드는 파일:
 
-  ch11/package_usage/img/negative_r2.png
+  ch12/package_usage/img/negative_r2.png
 
 실행:  python3 scripts/make_ch13_negative_r2.py   (저장소 최상위에서)
 필요:  numpy, scikit-learn, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -39,7 +39,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/package_usage/img/"
+OUT = "docs/ch12/package_usage/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

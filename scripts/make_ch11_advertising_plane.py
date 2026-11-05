@@ -1,4 +1,4 @@
-r"""11.1절 다중선형회귀 — Advertising 자료의 회귀평면.
+r"""12.1절 다중선형회귀 — Advertising 자료의 회귀평면.
 
 설명변수가 둘이면 적합값 $\hat y = \hat\beta_0 + \hat\beta_1 x_1 + \hat\beta_2 x_2$ 가
 $(x_1, x_2, y)$ 공간에서 **평면**을 이룬다. 그 평면을 이 쪽이 쓰는 자료로 직접 그린다.
@@ -12,7 +12,7 @@ $(x_1, x_2, y)$ 공간에서 **평면**을 이룬다. 그 평면을 이 쪽이 �
 
 만드는 파일:
 
-  ch11/linear_regression/img/advertising_plane.png
+  ch12/linear_regression/img/advertising_plane.png
 
 실행:  python3 scripts/make_ch13_advertising_plane.py   (저장소 최상위에서)
 필요:  numpy, pandas, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -36,7 +36,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/linear_regression/img/"
+OUT = "docs/ch12/linear_regression/img/"
 URL = ("https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/"
        "8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv")
 

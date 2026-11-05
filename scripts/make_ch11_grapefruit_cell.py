@@ -1,4 +1,4 @@
-r"""11.6절 「그림으로 보는 통계학」 — 비어 있던 칸.
+r"""12.6절 「그림으로 보는 통계학」 — 비어 있던 칸.
 
 교호작용 항 $\beta_3 x_1 x_2$ 는 **두 변수가 모두 움직여야** 자료에서 보인다.
 $2 \times 2$ 가운데 두 칸이 비면 계획행렬의 계수가 모자라고, 그 항은 추정되지
@@ -24,7 +24,7 @@ $1989$ 년에 베일리의 연구진이 그 상황에 놓였다. 알코올이 �
 
 만드는 파일:
 
-  ch11/interaction_polynomial/img/grapefruit_cell.png
+  ch12/interaction_polynomial/img/grapefruit_cell.png
 
 실행:  python3 scripts/make_ch13_grapefruit_cell.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -47,7 +47,7 @@ from matplotlib.patches import Rectangle
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/interaction_polynomial/img/"
+OUT = "docs/ch12/interaction_polynomial/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

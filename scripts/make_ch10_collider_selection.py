@@ -11,7 +11,7 @@ $T = 1$ 인 사람만 자료에 있기 때문이다.
 ② 참으로 **해로운** 노출도 보호적으로 뒤집힌다.
 ③ 편향이 가장 큰 곳은 양 끝이 아니라 **가운데**다.
 
-만드는 파일: docs/ch10/causation/img/collider_selection.png
+만드는 파일: docs/ch11/causation/img/collider_selection.png
 """
 
 import numpy as np
@@ -129,6 +129,6 @@ ax3.set_title("③ 양 끝에서는 사라진다", fontsize=12)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch10/causation/img/collider_selection.png"
+out = "docs/ch11/causation/img/collider_selection.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

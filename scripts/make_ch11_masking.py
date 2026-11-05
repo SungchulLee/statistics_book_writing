@@ -1,4 +1,4 @@
-r"""11.5절 「그림으로 보는 통계학」 — 하나씩 빼서는 못 찾는 것.
+r"""12.5절 「그림으로 보는 통계학」 — 하나씩 빼서는 못 찾는 것.
 
 쿡 거리는 **한 점을 뺐을 때** 적합이 얼마나 움직이는지를 잰다. 그래서
 나쁜 점이 하나면 잘 찾아내지만, 여럿이 **뭉쳐 있으면** 서로 가려 준다.
@@ -13,7 +13,7 @@ r"""11.5절 「그림으로 보는 통계학」 — 하나씩 빼서는 못 찾�
 
 만드는 파일:
 
-  ch11/diagnostics/img/masking.png
+  ch12/diagnostics/img/masking.png
 
 실행:  python3 scripts/make_ch13_masking.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -29,7 +29,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/diagnostics/img/"
+OUT = "docs/ch12/diagnostics/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

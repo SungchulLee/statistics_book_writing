@@ -1,4 +1,4 @@
-r"""11.2절 「AI로 보는 통계학」 — 실험 전 기간을 열 하나로 넣으면.
+r"""12.2절 「AI로 보는 통계학」 — 실험 전 기간을 열 하나로 넣으면.
 
 정리 1 은 $\operatorname{Var}(\hat{\boldsymbol\beta}) = \sigma^2(X^\top X)^{-1}$ 이라고
 적는다. 이 식에서 줄일 수 있는 것은 $\sigma^2$ 과 $X^\top X$ 둘뿐이고, 온라인 실험은
@@ -28,7 +28,7 @@ $$
 
 만드는 파일:
 
-  ch11/estimation_inference/img/pre_period_covariate.png
+  ch12/estimation_inference/img/pre_period_covariate.png
 
 실행:  python3 scripts/make_ch13_pre_period_covariate.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -50,7 +50,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

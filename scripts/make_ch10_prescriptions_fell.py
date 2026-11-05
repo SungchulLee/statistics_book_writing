@@ -1,4 +1,4 @@
-"""10장 개요 — 이 일은 논문 안에서 끝나지 않았다.
+"""11장 개요 — 이 일은 논문 안에서 끝나지 않았다.
 
 들머리의 마지막 beat 를 그린다. 쪽의 출처 줄에 이미 확인해 적어 둔 수
 말고는 아무것도 쓰지 않는다. 통계 어휘를 하나도 요구하지 않는 그림이고,
@@ -19,7 +19,7 @@ Postmenopausal Hormone Therapy」, JAMA 291(2004) 47 쪽):
 보이도록 보고된 자리에만 점을 찍고 사이는 옅게 긋는다. 떨어진 폭은
 내가 두 끝에서 다시 계산하지 않고 출처가 적은 38% 를 그대로 적는다.
 
-만드는 파일: docs/ch10/img/prescriptions_fell.png
+만드는 파일: docs/ch11/img/prescriptions_fell.png
 """
 
 import matplotlib.pyplot as plt
@@ -29,7 +29,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch10/img/"
+OUT = "docs/ch11/img/"
 
 # 출처가 적은 자리만 (연도, 백만 건, 이름표)
 POINTS = [(1995.0, 58.0, "1995 년\n5,800 만 건"),

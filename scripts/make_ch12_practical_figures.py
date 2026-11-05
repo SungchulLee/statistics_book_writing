@@ -1,8 +1,8 @@
-r"""12장 실무 응용 두 쪽의 개념 그림을 생성한다.
+r"""10장 실무 응용 두 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch12/practical_applications/img/ab_peeking.png       엿보기가 제1종 오류를 부풀린다
-  ch12/practical_applications/img/finance_regime.png   주효과가 없어도 교호작용이 있을 수 있다
+  ch10/practical_applications/img/ab_peeking.png       엿보기가 제1종 오류를 부풀린다
+  ch10/practical_applications/img/finance_regime.png   주효과가 없어도 교호작용이 있을 수 있다
 
 실행:  python3 scripts/make_ch11_practical_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib, statsmodels — 문서 빌드에는 필요하지 않다.
@@ -28,7 +28,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/practical_applications/img/"
+OUT = "docs/ch10/practical_applications/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

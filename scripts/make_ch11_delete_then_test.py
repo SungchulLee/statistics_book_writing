@@ -1,4 +1,4 @@
-r"""11.6절 「그림으로 보는 통계학」 — 걷어낸 뒤의 p 값은 그 p 값이 아니다.
+r"""12.6절 「그림으로 보는 통계학」 — 걷어낸 뒤의 p 값은 그 p 값이 아니다.
 
 이 쪽의 $2$ 절은 쿡 거리로 **이상점을 걸러 내고 다시 적합하는 코드**를 싣는다. 그
 뒤에 나오는 $t$ 값과 $p$ 값은 어떤 것인가. 걸러 내는 규칙이 $y$ 를 들여다보고
@@ -28,7 +28,7 @@ r"""11.6절 「그림으로 보는 통계학」 — 걷어낸 뒤의 p 값은 �
 
 만드는 파일:
 
-  ch11/diagnostics/img/delete_then_test.png
+  ch12/diagnostics/img/delete_then_test.png
 
 실행:  python3 scripts/make_ch13_delete_then_test.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -51,7 +51,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/diagnostics/img/"
+OUT = "docs/ch12/diagnostics/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

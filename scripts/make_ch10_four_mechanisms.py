@@ -1,4 +1,4 @@
-"""10.4절 허위상관 — 같은 높은 r 을 만드는 네 가지 길.
+"""11.4절 허위상관 — 같은 높은 r 을 만드는 네 가지 길.
 
 들머리의 마지막 문장을 그린다. 「상관은 분명히 거기 있는데 인과는 없다 ---
 그 둘을 무엇으로 가리는가. 이 쪽은 허위상관을 만드는 기제를 넷으로 갈라
@@ -28,7 +28,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/confounding/img/"
+OUT = "docs/ch11/confounding/img/"
 
 rng = np.random.default_rng(2024)
 

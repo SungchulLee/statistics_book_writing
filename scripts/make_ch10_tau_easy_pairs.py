@@ -8,7 +8,7 @@ r"""$\tau$ 는 **모든 쌍을 똑같이 세는데**, 쌍의 대부분은 애초
 ② 그래서 상위 몇 개만 떼어 보면 $\tau$ 가 급격히 떨어진다.
 ③ 인접한 쌍만 보면, **우리가 알고 싶은 자리가 정확히 가장 어려운 자리**다.
 
-만드는 파일: docs/ch10/correlation_test/img/tau_easy_pairs.png
+만드는 파일: docs/ch11/correlation_test/img/tau_easy_pairs.png
 """
 
 import numpy as np
@@ -137,6 +137,6 @@ ax3.set_title("③ 궁금한 자리가 가장 어렵다", fontsize=12)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch10/correlation_test/img/tau_easy_pairs.png"
+out = "docs/ch11/correlation_test/img/tau_easy_pairs.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

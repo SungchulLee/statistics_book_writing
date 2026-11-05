@@ -1,14 +1,14 @@
-r"""11장 '모형선택' 여덟 쪽에 들어가는 개념 그림을 만든다.
+r"""12장 '모형선택' 여덟 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
-  ch11/model_selection/img/criterion_tradeoff.png   적합항과 벌점항의 저울질
-  ch11/model_selection/img/aic_decomposition.png    AIC 의 두 조각과 가중치
-  ch11/model_selection/img/bic_consistency.png      BIC 의 일치성
-  ch11/model_selection/img/cv_k_bias_variance.png   K 를 고르는 절충
-  ch11/model_selection/img/cv_method_comparison.png 검증집합 대 LOOCV 대 10겹
-  ch11/model_selection/img/forward_selection_path.png  전진선택의 경로
-  ch11/model_selection/img/subset_cost.png          전수탐색의 비용과 탐욕의 대가
-  ch11/model_selection/img/three_methods_agree.png  세 선택법의 일치와 불일치
+  ch12/model_selection/img/criterion_tradeoff.png   적합항과 벌점항의 저울질
+  ch12/model_selection/img/aic_decomposition.png    AIC 의 두 조각과 가중치
+  ch12/model_selection/img/bic_consistency.png      BIC 의 일치성
+  ch12/model_selection/img/cv_k_bias_variance.png   K 를 고르는 절충
+  ch12/model_selection/img/cv_method_comparison.png 검증집합 대 LOOCV 대 10겹
+  ch12/model_selection/img/forward_selection_path.png  전진선택의 경로
+  ch12/model_selection/img/subset_cost.png          전수탐색의 비용과 탐욕의 대가
+  ch12/model_selection/img/three_methods_agree.png  세 선택법의 일치와 불일치
 
 실행:  python3 scripts/make_ch13_selection_figures.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -34,7 +34,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch11/model_selection/img/"
+OUT = "docs/ch12/model_selection/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

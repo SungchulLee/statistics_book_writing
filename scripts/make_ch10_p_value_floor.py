@@ -1,4 +1,4 @@
-"""10.3절 세 검정을 같은 자료에서 견주기 — p 값에 바닥이 생긴다.
+"""11.3절 세 검정을 같은 자료에서 견주기 — p 값에 바닥이 생긴다.
 
 들머리의 첫 요점을 그린다. 순열을 모두 훑어 구한 귀무분포는 가장 바깥
 칸의 확률이 1/n! 이므로, 양측 p 값이 2/n! 보다 작아질 수 없다. n = 8 이면
@@ -26,7 +26,7 @@ from itertools import permutations
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/correlation_test/img/"
+OUT = "docs/ch11/correlation_test/img/"
 
 N = 8
 TOTAL = math.factorial(N)

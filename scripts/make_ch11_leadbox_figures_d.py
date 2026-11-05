@@ -1,12 +1,12 @@
-"""11장 들머리 그림 여섯 장 (성능 척도 넷 · 스플라인 둘).
+"""12장 들머리 그림 여섯 장 (성능 척도 넷 · 스플라인 둘).
 
 만드는 파일:
-  ch11/performance/img/three_rulers_three_models.png  세 자가 고르는 모형이 다르다
-  ch11/performance/img/two_residuals_carry_it.png     둘이 절반을 들고 있다
-  ch11/performance/img/ratio_tells_the_shape.png      비가 모양을 말해 준다
-  ch11/performance/img/mape_picks_low.png             MAPE 가 고르는 상수
-  ch11/splines_gams/img/knots_beat_degree.png         차수 대신 매듭
-  ch11/splines_gams/img/effect_spread_over_basis.png  효과가 열에 흩어진다
+  ch12/performance/img/three_rulers_three_models.png  세 자가 고르는 모형이 다르다
+  ch12/performance/img/two_residuals_carry_it.png     둘이 절반을 들고 있다
+  ch12/performance/img/ratio_tells_the_shape.png      비가 모양을 말해 준다
+  ch12/performance/img/mape_picks_low.png             MAPE 가 고르는 상수
+  ch12/splines_gams/img/knots_beat_degree.png         차수 대신 매듭
+  ch12/splines_gams/img/effect_spread_over_basis.png  효과가 열에 흩어진다
 
 본문 그림이 들머리의 수를 이미 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -20,8 +20,8 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-PERF = "docs/ch11/performance/img/"
-SPL = "docs/ch11/splines_gams/img/"
+PERF = "docs/ch12/performance/img/"
+SPL = "docs/ch12/splines_gams/img/"
 
 
 def save(fig, path):

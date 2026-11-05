@@ -1,4 +1,4 @@
-"""10.2절 집계 편향 — 한 자료 안에 상관이 둘 있다.
+"""11.2절 집계 편향 — 한 자료 안에 상관이 둘 있다.
 
 쪽의 2 절이 쓰는 설정 그대로다. 개인 1,800 명을 집단 간 상관 0.90,
 집단 내 상관 0.15 가 되도록 만들면 개인 수준 상관이 0.33 이고 30 명씩
@@ -13,7 +13,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch10/ecological_correlation/img/"
+OUT = "docs/ch11/ecological_correlation/img/"
 G, M = 60, 30
 RB, RW = 0.90, 0.15
 VB = (0.33 - RW) / (RB - RW)          # 전체 분산을 1 로 두었을 때

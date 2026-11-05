@@ -8,7 +8,7 @@ $2\max|x|/255$ 이므로 **오차를 정하는 것이 최댓값 하나**다. 평
 ② 이상치 **하나**가 나머지 $4{,}095$ 좌표의 유효 비트를 몇 개 깎는가.
 ③ 이상치 차원을 $16$ 비트로 빼내면 얼마나 돌아오는가 (LLM.int8() 이 하는 일).
 
-만드는 파일: docs/ch12/assumptions/img/quantization_tails.png
+만드는 파일: docs/ch10/assumptions/img/quantization_tails.png
 """
 
 import numpy as np
@@ -164,6 +164,6 @@ ax3.legend(loc="lower right", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/assumptions/img/quantization_tails.png"
+out = "docs/ch10/assumptions/img/quantization_tails.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

@@ -1,12 +1,12 @@
-"""11장 들머리 그림 여섯 장 (회귀의 기초와 추정·추론).
+"""12장 들머리 그림 여섯 장 (회귀의 기초와 추정·추론).
 
 만드는 파일:
-  ch11/linear_regression/img/standard_units_regression.png   표준단위로 보면 셈이 한 줄이다
-  ch11/linear_regression/img/coding_order_matters.png        코드 번호를 어떻게 붙이느냐
-  ch11/estimation_inference/img/mean_vs_individual_se.png    평균반응과 개별반응
-  ch11/estimation_inference/img/what_sets_the_width.png      폭을 정하는 것과 고르는 순서
-  ch11/estimation_inference/img/sum_is_known_split_is_not.png 합은 알고 나눔은 모른다
-  ch11/estimation_inference/img/valley_progression.png       그릇이 골짜기가 되기까지
+  ch12/linear_regression/img/standard_units_regression.png   표준단위로 보면 셈이 한 줄이다
+  ch12/linear_regression/img/coding_order_matters.png        코드 번호를 어떻게 붙이느냐
+  ch12/estimation_inference/img/mean_vs_individual_se.png    평균반응과 개별반응
+  ch12/estimation_inference/img/what_sets_the_width.png      폭을 정하는 것과 고르는 순서
+  ch12/estimation_inference/img/sum_is_known_split_is_not.png 합은 알고 나눔은 모른다
+  ch12/estimation_inference/img/valley_progression.png       그릇이 골짜기가 되기까지
 
 쪽마다 들머리가 세우는 것만 그린다. 본문 그림과 겹치지 않게 고른 각은
 각 함수의 설명글에 적어 두었다.
@@ -20,8 +20,8 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-LR = "docs/ch11/linear_regression/img/"
-EI = "docs/ch11/estimation_inference/img/"
+LR = "docs/ch12/linear_regression/img/"
+EI = "docs/ch12/estimation_inference/img/"
 
 
 def save(fig, path):

@@ -1,4 +1,4 @@
-r"""11.2절 「그림으로 보는 통계학」 — 남는 식을 버릴 것인가 쓸 것인가.
+r"""12.2절 「그림으로 보는 통계학」 — 남는 식을 버릴 것인가 쓸 것인가.
 
 미지수가 3 개인데 관측이 41 개면 식이 38 개 남는다. 최소제곱 이전에
 쓰이던 두 가지 길을 나란히 놓고, 짧은 호에서 멀리 외삽했을 때의 오차를
@@ -14,7 +14,7 @@ r"""11.2절 「그림으로 보는 통계학」 — 남는 식을 버릴 것인�
 
 만드는 파일:
 
-  ch11/estimation_inference/img/least_squares_vs_rivals.png
+  ch12/estimation_inference/img/least_squares_vs_rivals.png
 
 실행:  python3 scripts/make_ch13_least_squares_vs_rivals.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

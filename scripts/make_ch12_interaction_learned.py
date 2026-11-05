@@ -6,7 +6,7 @@ r"""교호작용은 **모형에 적어 넣어야** 보이는 것이다 — 요�
    전부면 $2^p - p - 1$ 이다.
 ③ 그래서 요즘 모형은 적어 넣는 대신 **배운다.** 대신 자료를 더 요구한다.
 
-만드는 파일: docs/ch12/anova_two_way/img/interaction_learned.png
+만드는 파일: docs/ch10/anova_two_way/img/interaction_learned.png
 """
 
 import warnings
@@ -181,7 +181,7 @@ ax3.legend(loc="lower right", fontsize=9.5)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/anova_two_way/img/interaction_learned.png"
+out = "docs/ch10/anova_two_way/img/interaction_learned.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

@@ -1,4 +1,4 @@
-"""10.6절 상관 타원 — 작은 상관은 모양으로 보이지 않는다.
+"""11.6절 상관 타원 — 작은 상관은 모양으로 보이지 않는다.
 
 들머리의 셋째 문단을 그린다. 「모양이 눈에 들어오려면 꽤 큰 상관이
 필요하다. |r| = 0.3 에서 이 쪽의 부호화가 내놓는 축비는 1.464 로, 단축이
@@ -25,7 +25,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from matplotlib.patches import Ellipse
 
-OUT = "docs/ch10/visualization/img/"
+OUT = "docs/ch11/visualization/img/"
 
 DELTA = 0.01
 SHOW = [0.0, 0.15, 0.3, 0.5, 0.8, 0.97]      # 쪽의 표에 이 가운데 넷이 있다

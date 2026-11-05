@@ -1,4 +1,4 @@
-r"""11.7절 「그림으로 보는 통계학」 — 절단점 하나가 $10$ 만큼 움직였을 때.
+r"""12.7절 「그림으로 보는 통계학」 — 절단점 하나가 $10$ 만큼 움직였을 때.
 
 계단함수는 연속인 $x$ 를 구간으로 잘라 구간마다 상수 하나를 준다. 그러니 절단점을
 어디에 두느냐가 누가 어느 칸에 드는지를 정한다. $2017$ 년에 미국심장학회·심장협회가
@@ -19,7 +19,7 @@ r"""11.7절 「그림으로 보는 통계학」 — 절단점 하나가 $10$ 만
 
 만드는 파일:
 
-  ch11/splines_gams/img/one_cut_moved.png
+  ch12/splines_gams/img/one_cut_moved.png
 
 실행:  python3 scripts/make_ch13_one_cut_moved.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/splines_gams/img/"
+OUT = "docs/ch12/splines_gams/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

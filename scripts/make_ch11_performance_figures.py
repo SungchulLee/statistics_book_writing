@@ -1,10 +1,10 @@
-r"""11장 '성능 척도' 네 쪽에 들어가는 개념 그림을 만든다.
+r"""12장 '성능 척도' 네 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
-  ch11/performance/img/r2_inflation.png        잡음 변수를 넣으면 R^2 가 오른다
-  ch11/performance/img/mae_vs_rmse.png         이상점 하나가 MSE 를 지배한다
-  ch11/performance/img/metric_disagreement.png MAE 와 RMSE 가 다른 모형을 고른다
-  ch11/performance/img/mape_asymmetry.png      MAPE 는 과소예측을 편든다
+  ch12/performance/img/r2_inflation.png        잡음 변수를 넣으면 R^2 가 오른다
+  ch12/performance/img/mae_vs_rmse.png         이상점 하나가 MSE 를 지배한다
+  ch12/performance/img/metric_disagreement.png MAE 와 RMSE 가 다른 모형을 고른다
+  ch12/performance/img/mape_asymmetry.png      MAPE 는 과소예측을 편든다
 
 실행:  python3 scripts/make_ch13_performance_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch11/performance/img/"
+OUT = "docs/ch12/performance/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

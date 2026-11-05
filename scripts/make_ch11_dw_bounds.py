@@ -1,4 +1,4 @@
-r"""11.3절 「그림으로 보는 통계학」 — 답을 못 적은 칸이 있는 표.
+r"""12.3절 「그림으로 보는 통계학」 — 답을 못 적은 칸이 있는 표.
 
 Durbin-Watson 통계량의 귀무분포는 **설명변수 행렬 X 에 따라 달라진다.**
 그래서 n 과 k 만으로는 임계값을 하나로 적을 수가 없다. 더빈과 왓슨이
@@ -17,7 +17,7 @@ X 만 세 가지로 바꾸어(무작위 · 추세 · 계절) 귀무분포를 각
 
 만드는 파일:
 
-  ch11/assumptions/img/dw_depends_on_x.png
+  ch12/assumptions/img/dw_depends_on_x.png
 
 실행:  python3 scripts/make_ch13_dw_bounds.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

@@ -11,7 +11,7 @@ $P(\text{정답}) = \sigma(\beta_m - \theta_i)$ 로 채점표를 만든다.
 ② 까닭이 정확히 계산된다 — $E[F] \approx \sigma_E^2/\sigma_W^2$, 곧 분산비의 역수다.
 ③ 참 차이가 **있을 때**는 그 보수성이 그대로 검정력 손실이 된다.
 
-만드는 파일: docs/ch12/anova_one_way/img/benchmark_blocks.png
+만드는 파일: docs/ch10/anova_one_way/img/benchmark_blocks.png
 """
 
 import numpy as np
@@ -165,6 +165,6 @@ ax3.legend(loc="upper left", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/anova_one_way/img/benchmark_blocks.png"
+out = "docs/ch10/anova_one_way/img/benchmark_blocks.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

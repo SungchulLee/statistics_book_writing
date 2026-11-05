@@ -1,4 +1,4 @@
-r"""11.2절 「그림으로 보는 통계학」 — 절편과 기울기는 같이 흔들린다.
+r"""12.2절 「그림으로 보는 통계학」 — 절편과 기울기는 같이 흔들린다.
 
 단순회귀의 두 추정량은 따로 노는 수가 아니다. 공분산이 닫힌 꼴로 나온다.
 
@@ -22,7 +22,7 @@ $x$ 를 통째로 옮기는 것만으로 두 추정량의 관계가 바뀐다는
 
 만드는 파일:
 
-  ch11/estimation_inference/img/intercept_slope_corr.png
+  ch12/estimation_inference/img/intercept_slope_corr.png
 
 실행:  python3 scripts/make_ch13_intercept_slope_corr.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -44,7 +44,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

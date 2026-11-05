@@ -1,4 +1,4 @@
-r"""11.4절 「그림으로 보는 통계학」 — 띠가 셋인데 묻는 것이 다 다르다.
+r"""12.4절 「그림으로 보는 통계학」 — 띠가 셋인데 묻는 것이 다 다르다.
 
 회귀직선 둘레에 그릴 수 있는 띠가 하나가 아니다. 무엇을 95% 로 담고
 싶으냐에 따라 폭이 달라진다.
@@ -13,7 +13,7 @@ P(F(2, n-2) <= t^2/2) 다.
 
 만드는 파일:
 
-  ch11/estimation_inference/img/three_bands.png
+  ch12/estimation_inference/img/three_bands.png
 
 실행:  python3 scripts/make_ch13_three_bands.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

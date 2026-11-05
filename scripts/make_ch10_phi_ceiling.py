@@ -1,4 +1,4 @@
-"""10.1절 특수한 상관 — 0.301 을 1 에 대어 읽으면 안 된다.
+"""11.1절 특수한 상관 — 0.301 을 1 에 대어 읽으면 안 된다.
 
 쪽의 보기 2 자료다. 운동하는 90 명 중 60 명(67%)과 운동하지 않는 110 명
 중 40 명(36%)이 잘 잔다고 답했다. 거의 두 배 차이인데 파이 계수는
@@ -15,7 +15,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from matplotlib.patches import Rectangle
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 O = np.array([[60.0, 30.0], [40.0, 70.0]])      # 행 = 운동/비운동
 r1, r2 = O.sum(1)
 c1, c2 = O.sum(0)

@@ -1,4 +1,4 @@
-"""12.4절 독립성 — 늘어놓은 순서 하나가 통계량을 바꾼다.
+"""10.4절 독립성 — 늘어놓은 순서 하나가 통계량을 바꾼다.
 
 더빈-왓슨은 **이웃한** 잔차의 차를 재므로, 어떤 순서로 늘어놓느냐가 곧
 「이웃」의 정의다. 자기상관이 0.8 인 오차로 만든 자료인데도 자료프레임의
@@ -21,7 +21,7 @@ import pandas as pd
 from statsmodels.formula.api import ols
 from statsmodels.stats.stattools import durbin_watson
 
-OUT = "docs/ch12/assumptions/img/"
+OUT = "docs/ch10/assumptions/img/"
 
 rng_ar = np.random.default_rng(7)
 N, rho_true = 60, 0.8

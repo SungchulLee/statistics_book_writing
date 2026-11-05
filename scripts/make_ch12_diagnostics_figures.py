@@ -1,7 +1,7 @@
-r"""12장 진단 절의 '가정 위반의 처리' 쪽 개념 그림을 생성한다.
+r"""10장 진단 절의 '가정 위반의 처리' 쪽 개념 그림을 생성한다.
 
 만드는 파일:
-  ch12/diagnostics/img/remedy_matrix.png   위반의 종류와 처방이 맞아야 고쳐진다
+  ch10/diagnostics/img/remedy_matrix.png   위반의 종류와 처방이 맞아야 고쳐진다
 
 실행:  python3 scripts/make_ch11_diagnostics_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -27,7 +27,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/diagnostics/img/"
+OUT = "docs/ch10/diagnostics/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

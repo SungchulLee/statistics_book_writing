@@ -8,7 +8,7 @@ $10$ 가지. 전부 $160$ 번 적합한다.
 ② 모형별 분포가 서로 크게 겹친다.
 ③ 전처리를 바꾸면 $1$ 위가 바뀐다 — 상호작용이 순위를 옮겨 놓는다.
 
-만드는 파일: docs/ch12/practical_applications/img/variance_components.png
+만드는 파일: docs/ch10/practical_applications/img/variance_components.png
 """
 
 import warnings
@@ -161,6 +161,6 @@ ax3.legend(loc="lower right", fontsize=9.5, ncol=2)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/practical_applications/img/variance_components.png"
+out = "docs/ch10/practical_applications/img/variance_components.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

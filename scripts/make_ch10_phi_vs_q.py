@@ -4,7 +4,7 @@ r"""12.1 「점이연 상관과 파이 계수」 쪽의 상자에 들어가는 �
 율의 Q 는 꼼짝하지 않는다. 1913 년에 피어슨과 율이 150 쪽에 걸쳐 싸운 것이 이것이다.
 
 만드는 파일:
-  ch10/correlation/img/phi_vs_q.png
+  ch11/correlation/img/phi_vs_q.png
 
 실행:  python3 scripts/make_ch12_phi_vs_q.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -28,7 +28,7 @@ GREEN = "#33691E"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

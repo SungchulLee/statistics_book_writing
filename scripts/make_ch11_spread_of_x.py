@@ -1,4 +1,4 @@
-"""11.1절 최소제곱 — 판정식을 떨어뜨리는 것은 옮긴 일이 아니라 좁혀 모은 일이다.
+"""12.1절 최소제곱 — 판정식을 떨어뜨리는 것은 옮긴 일이 아니라 좁혀 모은 일이다.
 
 연립방정식의 판정식은 n*sum((x-xbar)^2) 로 x 의 퍼짐만 본다.
   x = 1..6        퍼짐 17.5 → 판정식 105.00
@@ -16,7 +16,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch11/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 BETA0, BETA1, SIGMA = 1.0, 2.0, 1.0
 REP = 400
 rng = np.random.default_rng(11)

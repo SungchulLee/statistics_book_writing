@@ -11,7 +11,7 @@ $$\Pr(T=1 \mid U) = \sigma(\alpha U), \qquad
 ② 대리변수로 보정해도 그 질 $\varrho$ 가 $1$ 이 아니면 끝까지 돌아오지 않는다.
 ③ 배정만 무작위로 바꾸면 보정을 하나도 하지 않아도 참값이 나온다.
 
-만드는 파일: docs/ch10/confounding/img/healthy_user.png
+만드는 파일: docs/ch11/confounding/img/healthy_user.png
 """
 
 import warnings
@@ -141,6 +141,6 @@ ax3.legend(loc="upper left", fontsize=10)
 ax3.grid(alpha=0.25, axis="y")
 
 fig.tight_layout()
-out = "docs/ch10/confounding/img/healthy_user.png"
+out = "docs/ch11/confounding/img/healthy_user.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

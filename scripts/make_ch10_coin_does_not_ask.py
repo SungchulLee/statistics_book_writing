@@ -1,4 +1,4 @@
-"""10.5절 실험과 인과 — 동전은 그 변수가 무엇인지 묻지 않는다.
+"""11.5절 실험과 인과 — 동전은 그 변수가 무엇인지 묻지 않는다.
 
 들머리의 물음을 그린다. 「동전을 한 번 던지는 일이 어떻게 **측정하지도
 않은** 변수까지 균형 잡는가.」
@@ -29,7 +29,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch10/causation/img/"
+OUT = "docs/ch11/causation/img/"
 
 N_PAGE = 400          # 쪽의 모의실험과 같은 크기
 REPS = 2000

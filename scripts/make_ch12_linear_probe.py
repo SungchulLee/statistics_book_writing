@@ -12,7 +12,7 @@ $$y = \mathbf 1\!\left[x_1^2 + x_2^2 + 0.8\,x_3x_4 > \text{중앙값}\right]$$
 ② 둘의 격차가 **「비선형으로 더 짜낼 수 있는 몫」**이고, 그것이 $0$ 으로 간다.
 ③ 그 대가로 과제와 무관한 정보가 버려진다.
 
-만드는 파일: docs/ch12/assumptions/img/linear_probe.png
+만드는 파일: docs/ch10/assumptions/img/linear_probe.png
 """
 
 import warnings
@@ -122,6 +122,6 @@ ax3.set_title("③ 펴는 대신 버린다", fontsize=12)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/assumptions/img/linear_probe.png"
+out = "docs/ch10/assumptions/img/linear_probe.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

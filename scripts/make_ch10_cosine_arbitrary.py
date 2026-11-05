@@ -8,7 +8,7 @@ r"""학습된 임베딩의 코사인은 모형이 정해 주지 않는다.
 ② 코사인 분포 자체가 달라진다.
 ③ 「가장 비슷한 것 열 개」가 얼마나 바뀌는가.
 
-만드는 파일: docs/ch10/correlation_test/img/cosine_arbitrary.png
+만드는 파일: docs/ch11/correlation_test/img/cosine_arbitrary.png
 """
 
 import numpy as np
@@ -133,6 +133,6 @@ ax3.set_xticks(range(TOPK + 1))
 ax3.grid(alpha=0.25, axis="y")
 
 fig.tight_layout()
-out = "docs/ch10/correlation_test/img/cosine_arbitrary.png"
+out = "docs/ch11/correlation_test/img/cosine_arbitrary.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)

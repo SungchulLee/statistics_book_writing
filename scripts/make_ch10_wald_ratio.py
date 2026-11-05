@@ -1,4 +1,4 @@
-"""10.5절 도구변수 — 그 13% 는 교육의 값이 아니다.
+"""11.5절 도구변수 — 그 13% 는 교육의 값이 아니다.
 
 들머리의 첫 두 문단을 그린다. 교육 연수와 로그임금에 직선을 그으면
 기울기가 0.130 인데, 그 가운데 0.030 은 「원래 그런 사람이었다」는 몫이다.
@@ -32,7 +32,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch10/causation/img/"
+OUT = "docs/ch11/causation/img/"
 
 N = 1200                     # 짝수, 두 집단에 절반씩
 BETA = 0.100                 # 교육 한 해의 참 인과효과

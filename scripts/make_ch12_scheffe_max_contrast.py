@@ -5,7 +5,7 @@ r"""11.3 「Bonferroni와 Scheffé 방법」 쪽의 상자에 들어가는 그�
 그 대비의 F_L 은 언제나 전역 F 의 (k-1) 배다.
 
 만드는 파일:
-  ch12/post_hoc/img/scheffe_max_contrast.png
+  ch10/post_hoc/img/scheffe_max_contrast.png
 
 실행:  python3 scripts/make_ch11_scheffe_max_contrast.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,7 +31,7 @@ GREEN = "#33691E"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/post_hoc/img/"
+OUT = "docs/ch10/post_hoc/img/"
 os.makedirs(OUT, exist_ok=True)
 
 K, N_I, MSE = 4, 6, 1.60

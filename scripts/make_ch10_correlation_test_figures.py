@@ -1,10 +1,10 @@
-r"""10장 상관 검정 네 쪽의 개념 그림을 생성한다.
+r"""11장 상관 검정 네 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch10/correlation_test/img/significance_vs_effect.png   유의성과 크기는 다른 것이다
-  ch10/correlation_test/img/spearman_exact_and_power.png 정확분포와 검정력
-  ch10/correlation_test/img/kendall_exact_vs_normal.png  작은 n 에서 정규근사의 실패
-  ch10/correlation_test/img/comparing_power.png          두 상관을 견주려면 표본이 얼마나
+  ch11/correlation_test/img/significance_vs_effect.png   유의성과 크기는 다른 것이다
+  ch11/correlation_test/img/spearman_exact_and_power.png 정확분포와 검정력
+  ch11/correlation_test/img/kendall_exact_vs_normal.png  작은 n 에서 정규근사의 실패
+  ch11/correlation_test/img/comparing_power.png          두 상관을 견주려면 표본이 얼마나
 
 실행:  python3 scripts/make_ch12_correlation_test_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,7 +31,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch10/correlation_test/img/"
+OUT = "docs/ch11/correlation_test/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

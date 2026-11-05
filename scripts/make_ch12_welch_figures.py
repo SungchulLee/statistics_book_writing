@@ -1,10 +1,10 @@
-r"""12장 웰치 분산분석 네 쪽의 개념 그림을 생성한다.
+r"""10장 웰치 분산분석 네 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch12/anova_welch/img/welch_weights.png        분산의 역수로 가중하면 발언권이 바뀐다
-  ch12/anova_welch/img/welch_size_direction.png 고전 F 의 수준은 불균형의 방향에 달려 있다
-  ch12/anova_welch/img/welch_twoway_df.png      자유도가 작으면 유의성 문턱이 폭발한다
-  ch12/anova_welch/img/welch_hc3_vs_classic.png 칸 분산이 다르면 고전 F 가 부풀려진다
+  ch10/anova_welch/img/welch_weights.png        분산의 역수로 가중하면 발언권이 바뀐다
+  ch10/anova_welch/img/welch_size_direction.png 고전 F 의 수준은 불균형의 방향에 달려 있다
+  ch10/anova_welch/img/welch_twoway_df.png      자유도가 작으면 유의성 문턱이 폭발한다
+  ch10/anova_welch/img/welch_hc3_vs_classic.png 칸 분산이 다르면 고전 F 가 부풀려진다
 
 실행:  python3 scripts/make_ch11_welch_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib, statsmodels — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/anova_welch/img/"
+OUT = "docs/ch10/anova_welch/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

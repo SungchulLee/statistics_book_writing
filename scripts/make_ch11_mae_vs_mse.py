@@ -1,4 +1,4 @@
-r"""11.7절 「그림으로 보는 통계학」 — 척도를 고르는 일이 답을 고르는 일이다.
+r"""12.7절 「그림으로 보는 통계학」 — 척도를 고르는 일이 답을 고르는 일이다.
 
 MAE 와 RMSE 는 「같은 것을 다른 단위로 잰 것」이 아니다. **다른 것을
 맞히라고 시키는 명령**이다.
@@ -15,7 +15,7 @@ MAE 와 RMSE 는 「같은 것을 다른 단위로 잰 것」이 아니다. **�
 
 만드는 파일:
 
-  ch11/performance/img/mae_vs_mse.png
+  ch12/performance/img/mae_vs_mse.png
 
 실행:  python3 scripts/make_ch13_mae_vs_mse.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/performance/img/"
+OUT = "docs/ch12/performance/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

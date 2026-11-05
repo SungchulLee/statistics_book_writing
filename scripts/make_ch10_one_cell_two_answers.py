@@ -1,4 +1,4 @@
-"""10.6절 쌍 그림 — 한 칸이 두 가지 답을 들고 있다.
+"""11.6절 쌍 그림 — 한 칸이 두 가지 답을 들고 있다.
 
 들머리의 마지막 두 요점을 그린다.
 
@@ -27,7 +27,7 @@ import numpy as np
 from scipy import stats
 from sklearn.datasets import load_iris
 
-OUT = "docs/ch10/visualization/img/"
+OUT = "docs/ch11/visualization/img/"
 
 d = load_iris()
 X, y = d.data, d.target

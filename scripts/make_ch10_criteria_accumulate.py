@@ -1,4 +1,4 @@
-"""10.5절 인과 판정 기준 — 목록이 어떻게 증거가 되는가.
+"""11.5절 인과 판정 기준 — 목록이 어떻게 증거가 되는가.
 
 들머리의 물음을 그린다. 「어느 하나도 필요조건도 충분조건도 아닌 목록이
 어떻게 인과의 증거가 될 수 있는가.」 답은 **증거가 곱해지기 때문**이다.
@@ -29,7 +29,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch10/causation/img/"
+OUT = "docs/ch11/causation/img/"
 
 P_CAUSE = 0.7        # 인과일 때 기준 하나가 충족될 확률 (가정)
 P_CONF = 0.3         # 교란일 때 (가정)

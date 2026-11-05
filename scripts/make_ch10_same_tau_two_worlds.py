@@ -1,4 +1,4 @@
-"""10.3절 Kendall의 타우 검정 — 요약값으로서의 τ 와 검정으로서의 τ.
+"""11.3절 Kendall의 타우 검정 — 요약값으로서의 τ 와 검정으로서의 τ.
 
 들머리가 갈라 두라고 한 둘을 그린다. 모형 스무 개의 참 순위를 두 가지로
 어긋나게 만들되 **어긋난 쌍의 수를 똑같이 열둘로** 맞춘다. 하나는 아래쪽이
@@ -24,7 +24,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/correlation_test/img/"
+OUT = "docs/ch11/correlation_test/img/"
 
 N = 20
 TRUE = np.arange(1, N + 1)

@@ -1,4 +1,4 @@
-r"""11.2절 「그림으로 보는 통계학」 — 아래 끝이 $0$ 에 닿은 구간.
+r"""12.2절 「그림으로 보는 통계학」 — 아래 끝이 $0$ 에 닿은 구간.
 
 카드와 크루거가 $1994$ 년 『American Economic Review』에 실은 표 $4$ 의 첫 줄이
 **뉴저지 더미 $2.33$ $(1.19)$** 다. 가게 $357$ 곳, 종속변수는 FTE 고용의 변화이고
@@ -24,7 +24,7 @@ $80{:}20$ 인 채로 같은 폭을 얻으려면 가게가 $573$ 곳 필요하다
 
 만드는 파일:
 
-  ch11/estimation_inference/img/famous_coefficient.png
+  ch12/estimation_inference/img/famous_coefficient.png
 
 실행:  python3 scripts/make_ch13_famous_coefficient.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

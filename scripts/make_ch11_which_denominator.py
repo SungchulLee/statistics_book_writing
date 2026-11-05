@@ -1,4 +1,4 @@
-"""11.1절 OLS 모의실험 — 분모를 n 으로 두면 체계적으로 모자란다.
+"""12.1절 OLS 모의실험 — 분모를 n 으로 두면 체계적으로 모자란다.
 
 같은 잔차를 n-k 로 나누면 평균이 참값 sigma^2 에 붙고, n 으로 나누면
 (n-k)/n 배만큼 낮다. n = 200, k = 3 이면 그 모자람이 k/n = 1.5% 라 작아
@@ -17,7 +17,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from matplotlib.ticker import FixedLocator, FixedFormatter
 
-OUT = "docs/ch11/estimation_inference/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 N, K, SIGMA, REP = 200, 3, 2.0, 5000
 BETA = np.array([2.0, 3.0, -1.0])
 rng = np.random.default_rng(11)

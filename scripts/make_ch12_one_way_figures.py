@@ -1,9 +1,9 @@
-r"""12장 일원배치 분산분석 세 쪽의 개념 그림을 생성한다.
+r"""10장 일원배치 분산분석 세 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch12/anova_one_way/img/oneway_signal_noise.png    같은 평균 차이가 잡음에 따라 다르게 읽힌다
-  ch12/anova_one_way/img/manual_ss_decomposition.png  제곱합은 SSE 가 크지만 평균제곱은 MST 가 크다
-  ch12/anova_one_way/img/f_null_vs_alternative.png   귀무분포와 비중심분포, 그리고 기각률
+  ch10/anova_one_way/img/oneway_signal_noise.png    같은 평균 차이가 잡음에 따라 다르게 읽힌다
+  ch10/anova_one_way/img/manual_ss_decomposition.png  제곱합은 SSE 가 크지만 평균제곱은 MST 가 크다
+  ch10/anova_one_way/img/f_null_vs_alternative.png   귀무분포와 비중심분포, 그리고 기각률
 
 실행:  python3 scripts/make_ch11_one_way_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -29,7 +29,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/anova_one_way/img/"
+OUT = "docs/ch10/anova_one_way/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

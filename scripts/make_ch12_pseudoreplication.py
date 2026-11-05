@@ -12,7 +12,7 @@ $$y_{ijl} = \mu + \tau_i + b_{ij} + e_{ijl},\qquad
 ② 왜인가 — $F$ 의 기댓값이 설계효과 $1 + (n-1)\varrho$ 만큼 부풀기 때문이다.
 ③ 그리고 정밀도에는 수조 수가 정하는 바닥 $\sigma_b/\sqrt{m}$ 이 있다.
 
-만드는 파일: docs/ch12/assumptions/img/pseudoreplication.png
+만드는 파일: docs/ch10/assumptions/img/pseudoreplication.png
 """
 
 import numpy as np
@@ -177,6 +177,6 @@ ax3.legend(loc="lower left", fontsize=10)
 ax3.grid(alpha=0.25, which="major")
 
 fig.tight_layout()
-out = "docs/ch12/assumptions/img/pseudoreplication.png"
+out = "docs/ch10/assumptions/img/pseudoreplication.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

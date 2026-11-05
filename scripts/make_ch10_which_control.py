@@ -1,4 +1,4 @@
-"""10.1절 부분상관 — 무엇을 통제했는지 적지 않으면 읽을 수 없다.
+"""11.1절 부분상관 — 무엇을 통제했는지 적지 않으면 읽을 수 없다.
 
 같은 (X, Y) 한 쌍에 통제집합만 바꾸어 본다. Z 는 둘을 함께 미는
 교란변수이고 C 는 둘이 함께 미는 충돌자다. 통제 없이 재면 양수, Z 를
@@ -16,7 +16,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 N = 5000
 rng = np.random.default_rng(10)
 Z = rng.standard_normal(N)                       # 교란변수

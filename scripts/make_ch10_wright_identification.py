@@ -1,4 +1,4 @@
-r"""10.4절 「그림으로 보는 통계학」 — 버터값에서 태어난 방법.
+r"""11.4절 「그림으로 보는 통계학」 — 버터값에서 태어난 방법.
 
 1928 년, 필립 라이트가 『동식물성 유지에 대한 관세』라는 책을 냈다.
 버터와 식용유에 매기는 관세를 올리면 값이 얼마나 오르는지가 물음이었고,
@@ -26,7 +26,7 @@ r"""10.4절 「그림으로 보는 통계학」 — 버터값에서 태어난 �
 
 만드는 파일:
 
-  ch10/causation/img/wright_identification.png
+  ch11/causation/img/wright_identification.png
 
 실행:  python3 scripts/make_ch12_wright_identification.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -43,7 +43,7 @@ from matplotlib.lines import Line2D
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch10/causation/img/"
+OUT = "docs/ch11/causation/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

@@ -9,7 +9,7 @@ $F \approx 1$ 이다.
    「무늬가 없다」가 아니라 「잔차가 지나치게 고르다」 — 외워 버렸다는 뜻이다.
 ③ 과적합한 자리에서 훈련 잔차 그림은 완벽한데 시험 잔차는 그대로 넓다.
 
-만드는 파일: docs/ch12/diagnostics/img/boosting_residuals.png
+만드는 파일: docs/ch10/diagnostics/img/boosting_residuals.png
 """
 
 import numpy as np
@@ -172,6 +172,6 @@ ax3.legend(loc="upper right", fontsize=10, markerscale=1.6)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/diagnostics/img/boosting_residuals.png"
+out = "docs/ch10/diagnostics/img/boosting_residuals.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

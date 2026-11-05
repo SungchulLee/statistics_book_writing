@@ -1,4 +1,4 @@
-r"""11.3절 「그림으로 보는 통계학」 — 둘 다 금지한 학술지.
+r"""12.3절 「그림으로 보는 통계학」 — 둘 다 금지한 학술지.
 
 $3$ 절의 쪽지는 「$p$ 값과 신뢰구간을 모두 보고하라」고 한다. $2015$ 년에 한 학술지가
 정확히 반대를 했다 — **둘 다 싣지 못하게 했다.**
@@ -18,7 +18,7 @@ $1$ 인 같은 설계에서, 두 연구가 모두 $\hat\beta = 2.40$ 을 보고�
 
 만드는 파일:
 
-  ch11/testing_coefficients/img/banned_both.png
+  ch12/testing_coefficients/img/banned_both.png
 
 실행:  python3 scripts/make_ch13_banned_both.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/testing_coefficients/img/"
+OUT = "docs/ch12/testing_coefficients/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

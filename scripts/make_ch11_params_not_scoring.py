@@ -1,4 +1,4 @@
-"""11.7절 GAM — 같은 자료에서 잰 R² 로 줄을 세우면 모수 세기가 된다.
+"""12.7절 GAM — 같은 자료에서 잰 R² 로 줄을 세우면 모수 세기가 된다.
 
 선형(모수 6) · 이차 다항(7) · GAM(18) 의 훈련 R² 가 0.7954 → 0.8058 → 0.8305 로
 좋아진다. 그런데 훈련 R² 는 모수를 더하면 오르기만 하므로 이 순서는 모수 개수의
@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
-OUT = "docs/ch11/splines_gams/img/"
+OUT = "docs/ch12/splines_gams/img/"
 URL = ("https://raw.githubusercontent.com/gedeck/"
        "practical-statistics-for-data-scientists/"
        "8a6d3bb6468e979c861d4b37215e1413702dfdfa/data/house_sales.csv")

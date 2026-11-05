@@ -1,4 +1,4 @@
-"""10.1절 상관의 이해 — 상관계수의 눈금은 고르지 않다.
+"""11.1절 상관의 이해 — 상관계수의 눈금은 고르지 않다.
 
 점구름을 등밀도 타원으로 보고 장축 대 단축의 비로 재면
 sqrt((1+rho)/(1-rho)) 다. 그 자로 보면 같은 0.05 가 rho = 0 근처에서는
@@ -13,7 +13,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 
 
 def axis_ratio(r):

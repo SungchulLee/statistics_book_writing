@@ -10,7 +10,7 @@ $1918$ 년 피셔가 푼 문제는 이것이다. 멘델의 유전은 **알갱이
 ② 친척 사이의 상관이 혈연의 몫 그대로 나온다.
 ③ 총분산이 원인별로 정확히 쪼개진다 — 이것이 분산분석이다.
 
-만드는 파일: docs/ch12/anova_one_way/img/fisher1918.png
+만드는 파일: docs/ch10/anova_one_way/img/fisher1918.png
 """
 
 import numpy as np
@@ -169,7 +169,7 @@ ax3.legend(loc="upper right", fontsize=9.5)
 ax3.grid(alpha=0.25, axis="y")
 
 fig.tight_layout()
-out = "docs/ch12/anova_one_way/img/fisher1918.png"
+out = "docs/ch10/anova_one_way/img/fisher1918.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

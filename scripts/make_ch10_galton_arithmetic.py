@@ -1,4 +1,4 @@
-r"""10.2절 「그림으로 보는 통계학」 — 상관 0.46 이 할 수 있는 일.
+r"""11.2절 「그림으로 보는 통계학」 — 상관 0.46 이 할 수 있는 일.
 
 이 쪽이 쓰는 말 셋의 출처가 한 연구 계획이다.
 
@@ -25,7 +25,7 @@ r"""10.2절 「그림으로 보는 통계학」 — 상관 0.46 이 할 수 있�
 
 만드는 파일:
 
-  ch10/correlation/img/galton_arithmetic.png
+  ch11/correlation/img/galton_arithmetic.png
 
 실행:  python3 scripts/make_ch12_galton_arithmetic.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -42,7 +42,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

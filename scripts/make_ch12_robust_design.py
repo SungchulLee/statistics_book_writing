@@ -12,7 +12,7 @@ $$y = \mu + \beta(C)\,N + \varepsilon$$
 ② 평균에 대한 $F$ 는 아무것도 못 보고, 분산에 대한 검정만 본다.
 ③ 민감도를 낮추면 온도가 흔들려도 불량률이 거의 안 오른다.
 
-만드는 파일: docs/ch12/assumptions/img/robust_design.png
+만드는 파일: docs/ch10/assumptions/img/robust_design.png
 """
 
 import numpy as np
@@ -124,6 +124,6 @@ ax3.legend(loc="upper left", fontsize=9.5)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/assumptions/img/robust_design.png"
+out = "docs/ch10/assumptions/img/robust_design.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

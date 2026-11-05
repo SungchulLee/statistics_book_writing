@@ -1,4 +1,4 @@
-"""10.3절 켄달의 타우 — 쌍을 세는 식은 하나인데 분모가 수를 바꾼다.
+"""11.3절 켄달의 타우 — 쌍을 세는 식은 하나인데 분모가 수를 바꾼다.
 
 ROC 곡선 아래 면적은 「무작위로 고른 양성 하나와 음성 하나에서 양성의 점수가
 더 높을 확률」이므로 그것도 쌍을 세는 일이다. 같은 자료에서 AUC · Somers D ·
@@ -18,7 +18,7 @@ import numpy as np
 from scipy import stats
 from sklearn.metrics import roc_auc_score
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 
 rng = np.random.default_rng(12)
 n = 300

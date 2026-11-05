@@ -5,7 +5,7 @@
     python3 tools/lint_undefined.py docs/ch06/mle/mle_bias.md
 
 `verify_outputs.py` 는 코드를 **돌려서** NameError 를 잡으므로 한 장에 20~25 분이
-든다(ch10 열두 쪽에 25 분). 그런데 이름이 없는 것은 돌리지 않고도 안다. 그래서
+든다(ch11 열두 쪽에 25 분). 그런데 이름이 없는 것은 돌리지 않고도 안다. 그래서
 이 검사를 **먼저** 돌린다 — 책 전체가 몇 초다.
 
 `verify_outputs` 와 **같은 규칙으로** 블록을 이어 붙인다(한 쪽 = 한 프로세스,

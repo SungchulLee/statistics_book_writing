@@ -11,7 +11,7 @@ R `datasets::ToothGrowth` 이고 출처는 Bliss (1952), 참고문헌은 Crampto
 ② 용량 안에서 OJ-VC 를 따로 보면(단순효과) 0.5 와 1 에서만 갈린다.
 ③ 주효과만 보면 「OJ 가 3.70 앞선다」 하나로 뭉개진다.
 
-만드는 파일: docs/ch12/post_hoc/img/toothgrowth_interaction.png
+만드는 파일: docs/ch10/post_hoc/img/toothgrowth_interaction.png
 """
 
 import itertools
@@ -141,6 +141,6 @@ ax3.set_title("③ 뭉치면 사라지는 것", fontsize=12)
 ax3.grid(alpha=0.25, axis="y")
 
 fig.tight_layout()
-out = "docs/ch12/post_hoc/img/toothgrowth_interaction.png"
+out = "docs/ch10/post_hoc/img/toothgrowth_interaction.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

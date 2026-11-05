@@ -12,7 +12,7 @@ r"""계산용 공식이 음수인 제곱합을 내놓을 때 — 손으로 세�
 ② 그래서 F 통계량이 얼마나 틀리는가.
 ③ float32 에서는 **음수인 제곱합**이 나온다.
 
-만드는 파일: docs/ch12/anova_one_way/img/ss_cancellation.png
+만드는 파일: docs/ch10/anova_one_way/img/ss_cancellation.png
 """
 
 import numpy as np
@@ -139,6 +139,6 @@ ax3.legend(loc="upper left", fontsize=9.5)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/anova_one_way/img/ss_cancellation.png"
+out = "docs/ch10/anova_one_way/img/ss_cancellation.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

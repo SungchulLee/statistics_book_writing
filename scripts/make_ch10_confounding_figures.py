@@ -1,10 +1,10 @@
-r"""10장 교란 네 쪽의 개념 그림을 생성한다.
+r"""11장 교란 네 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch10/confounding/img/confounding_directions.png  교란은 부풀리거나 가리거나 뒤집는다
-  ch10/confounding/img/lurking_firefighters.png    보이지 않는 공통원인이 부호를 뒤집는다
-  ch10/confounding/img/trend_spurious.png          추세만으로 r = 0.97 이 나온다
-  ch10/confounding/img/ovb_and_simpson.png         누락변수 편향과 심슨의 역설
+  ch11/confounding/img/confounding_directions.png  교란은 부풀리거나 가리거나 뒤집는다
+  ch11/confounding/img/lurking_firefighters.png    보이지 않는 공통원인이 부호를 뒤집는다
+  ch11/confounding/img/trend_spurious.png          추세만으로 r = 0.97 이 나온다
+  ch11/confounding/img/ovb_and_simpson.png         누락변수 편향과 심슨의 역설
 
 실행:  python3 scripts/make_ch12_confounding_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch10/confounding/img/"
+OUT = "docs/ch11/confounding/img/"
 os.makedirs(OUT, exist_ok=True)
 
 STRAT = ["#BBDEFB", "#64B5F6", "#1E88E5", "#0D47A1"]

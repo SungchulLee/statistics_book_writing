@@ -1,11 +1,11 @@
-"""11장 들머리 그림 다섯 장 (가정 점검 다섯 쪽).
+"""12장 들머리 그림 다섯 장 (가정 점검 다섯 쪽).
 
 만드는 파일:
-  ch11/assumptions/img/n_does_not_help.png        표본을 키워도 사라지지 않는다
-  ch11/assumptions/img/pretest_vs_always.png      묻고 고르기와 처음부터 로버스트
-  ch11/assumptions/img/effective_sample_size.png  예순 개가 다섯 개 값어치
-  ch11/assumptions/img/misses_on_one_side.png     빗나간 구간이 한쪽에 몰린다
-  ch11/assumptions/img/one_voice_counted_thirty.png 한 사람이 쥔 몫과 눈금의 덫
+  ch12/assumptions/img/n_does_not_help.png        표본을 키워도 사라지지 않는다
+  ch12/assumptions/img/pretest_vs_always.png      묻고 고르기와 처음부터 로버스트
+  ch12/assumptions/img/effective_sample_size.png  예순 개가 다섯 개 값어치
+  ch12/assumptions/img/misses_on_one_side.png     빗나간 구간이 한쪽에 몰린다
+  ch12/assumptions/img/one_voice_counted_thirty.png 한 사람이 쥔 몫과 눈금의 덫
 
 쪽마다 본문 그림이 이미 들머리의 수를 그리고 있으므로, 여기서는 그
 그림들이 건드리지 않는 각만 골랐다. 고른 까닭은 함수마다 적어 두었다.
@@ -19,7 +19,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch11/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 
 def save(fig, name):

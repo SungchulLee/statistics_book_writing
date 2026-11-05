@@ -1,13 +1,13 @@
-"""11장 들머리 그림 일곱 장 (꾸러미 셋 · 계수 검정 넷).
+"""12장 들머리 그림 일곱 장 (꾸러미 셋 · 계수 검정 넷).
 
 만드는 파일:
-  ch11/package_usage/img/when_the_trap_bites.png      절편을 빠뜨리면 언제 아픈가
-  ch11/package_usage/img/test_above_train.png         시험이 훈련보다 높을 확률
-  ch11/package_usage/img/one_number_five_numbers.png  한 수와 다섯 수
-  ch11/testing_coefficients/img/buying_significance.png 유의성에 드는 값
-  ch11/testing_coefficients/img/center_fixed_width_grows.png 중심은 그대로 폭만
-  ch11/testing_coefficients/img/same_p_two_intervals.png 같은 p, 다른 구간
-  ch11/testing_coefficients/img/which_column_breaks.png  어느 열이 먼저 무너지나
+  ch12/package_usage/img/when_the_trap_bites.png      절편을 빠뜨리면 언제 아픈가
+  ch12/package_usage/img/test_above_train.png         시험이 훈련보다 높을 확률
+  ch12/package_usage/img/one_number_five_numbers.png  한 수와 다섯 수
+  ch12/testing_coefficients/img/buying_significance.png 유의성에 드는 값
+  ch12/testing_coefficients/img/center_fixed_width_grows.png 중심은 그대로 폭만
+  ch12/testing_coefficients/img/same_p_two_intervals.png 같은 p, 다른 구간
+  ch12/testing_coefficients/img/which_column_breaks.png  어느 열이 먼저 무너지나
 
 본문 그림이 들머리의 수를 이미 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -21,8 +21,8 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-PKG = "docs/ch11/package_usage/img/"
-TC = "docs/ch11/testing_coefficients/img/"
+PKG = "docs/ch12/package_usage/img/"
+TC = "docs/ch12/testing_coefficients/img/"
 
 
 def save(fig, path):

@@ -1,4 +1,4 @@
-r"""11.6절 「그림으로 보는 통계학」 — 스튜던트화 잔차 24.
+r"""12.6절 「그림으로 보는 통계학」 — 스튜던트화 잔차 24.
 
 $2000$ 년 미국 대통령 선거에서 플로리다의 $67$ 개 군이 낸 표를 군마다 하나의 점으로
 놓는다. 가로축은 부시가 받은 표, 세로축은 **팻 뷰캐넌**이 받은 표다. 팜비치 군만
@@ -24,7 +24,7 @@ $2000$ 년 미국 대통령 선거에서 플로리다의 $67$ 개 군이 낸 표
 
 만드는 파일:
 
-  ch11/diagnostics/img/palm_beach.png
+  ch12/diagnostics/img/palm_beach.png
 
 실행:  python3 scripts/make_ch13_palm_beach.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/diagnostics/img/"
+OUT = "docs/ch12/diagnostics/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

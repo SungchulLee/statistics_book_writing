@@ -7,7 +7,7 @@ r"""서로 **아무 관계도 없는** 두 계열을 회귀하면 거의 언제�
 ② $n$ 이 커질수록 기각률이 $1$ 로 간다 (백색잡음은 $5\%$ 에 머문다).
 ③ 차분하면 돌아온다 — 그리고 높은 $R^2$ 에 낮은 더빈–왓슨이라는 자취.
 
-만드는 파일: docs/ch10/confounding/img/spurious_regression.png
+만드는 파일: docs/ch11/confounding/img/spurious_regression.png
 """
 
 import numpy as np
@@ -138,7 +138,7 @@ ax3.text(len(NS) - 0.5, 0.345,
          bbox=dict(boxstyle="round,pad=0.4", fc="white", ec="#cccccc"))
 
 fig.tight_layout()
-out = "docs/ch10/confounding/img/spurious_regression.png"
+out = "docs/ch11/confounding/img/spurious_regression.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

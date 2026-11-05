@@ -1,4 +1,4 @@
-r"""11.9절 「AI로 보는 통계학」 — 부분의존 곡선은 자료가 정하지 않는다.
+r"""12.9절 「AI로 보는 통계학」 — 부분의존 곡선은 자료가 정하지 않는다.
 
 $1$ 절의 **부분의존**은 가법모형의 항 $f_j(x_j)$ 였다. 오늘 블랙박스 모형을 읽을 때
 쓰는 **부분의존 그림**은 그 정의를 가법성이 없는 모형에까지 밀어붙인 것이다.
@@ -26,7 +26,7 @@ $$
 
 만드는 파일:
 
-  ch11/splines_gams/img/partial_dependence.png
+  ch12/splines_gams/img/partial_dependence.png
 
 실행:  python3 scripts/make_ch13_partial_dependence.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -48,7 +48,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/splines_gams/img/"
+OUT = "docs/ch12/splines_gams/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

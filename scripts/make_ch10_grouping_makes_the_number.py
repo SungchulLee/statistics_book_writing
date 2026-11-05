@@ -1,4 +1,4 @@
-"""10.2절 생태학적 오류 — 집계된 수는 묶는 방식이 정한다.
+"""11.2절 생태학적 오류 — 집계된 수는 묶는 방식이 정한다.
 
 로빈슨의 두 수(주 수준 +0.53, 개인 수준 -0.11)가 나오도록 5,760 명을
 만든다. 그런 다음 **같은 사람들**을 세 가지로 묶어 평균을 낸다. 주로
@@ -14,7 +14,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import optimize
 
-OUT = "docs/ch10/ecological_correlation/img/"
+OUT = "docs/ch11/ecological_correlation/img/"
 G, M = 48, 120
 N = G * M
 R_IND, R_STATE, RB = -0.11, 0.53, 0.90

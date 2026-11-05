@@ -13,7 +13,7 @@ $a$ 가 아주 많다.**
 ③ 설령 $a$ 가 유일하더라도, 열지도가 보여 주는 것은 $a_t$ 이고 실제 기여는
    $a_t\,(w\cdot h_t)$ 다.
 
-만드는 파일: docs/ch10/visualization/img/attention_heatmap.png
+만드는 파일: docs/ch11/visualization/img/attention_heatmap.png
 """
 
 import numpy as np
@@ -167,6 +167,6 @@ ax3.set_ylabel("실제 기여 $|a_t\\,(w \\cdot h_t)|$")
 ax3.set_title("③ 진한 것과 중요한 것은 다르다", fontsize=12)
 ax3.grid(alpha=0.25)
 
-out = "docs/ch10/visualization/img/attention_heatmap.png"
+out = "docs/ch11/visualization/img/attention_heatmap.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

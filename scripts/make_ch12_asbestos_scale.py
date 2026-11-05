@@ -12,7 +12,7 @@ Hammond · Selikoff · Seidman($1979$)이 보온공들에게서 얻은 폐암 �
 ② 로그 척도에서는 거의 평행하다 — 곱셈 기대값 $56.09$ 에 견주어 $0.95$ 배다.
 ③ 그런데 막을 수 있는 **사망 수**는 원 척도가 말한다.
 
-만드는 파일: docs/ch12/anova_two_way/img/asbestos_scale.png
+만드는 파일: docs/ch10/anova_two_way/img/asbestos_scale.png
 """
 
 import numpy as np
@@ -116,6 +116,6 @@ ax3.legend(loc="upper left", fontsize=10)
 ax3.grid(alpha=0.25, axis="y")
 
 fig.tight_layout()
-out = "docs/ch12/anova_two_way/img/asbestos_scale.png"
+out = "docs/ch10/anova_two_way/img/asbestos_scale.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

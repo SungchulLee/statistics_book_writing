@@ -8,7 +8,7 @@ $F$ 의 분자는 **처리 때문에 생긴 차이**만 담고 있어야 한다.
 ③ 편의가 있으면 RMSE 에 바닥 $\lvert\delta\rvert$ 가 생긴다. 그래서 짝지은 소수가
    편의 있는 다수를 이긴다 — Student 가 쌍둥이 $50$ 쌍을 말한 자리다.
 
-만드는 파일: docs/ch12/anova_one_way/img/lanarkshire.png
+만드는 파일: docs/ch10/anova_one_way/img/lanarkshire.png
 """
 
 import numpy as np
@@ -128,6 +128,6 @@ ax3.legend(loc="lower left", fontsize=9.5)
 ax3.grid(alpha=0.25, which="major")
 
 fig.tight_layout()
-out = "docs/ch12/anova_one_way/img/lanarkshire.png"
+out = "docs/ch10/anova_one_way/img/lanarkshire.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

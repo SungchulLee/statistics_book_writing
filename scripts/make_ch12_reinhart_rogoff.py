@@ -5,7 +5,7 @@ r"""한 해가 $1/7$ 을 차지하면 — 라인하트·로고프의 $-0.1\%$ �
 ① 일곱 나라의 자료 수와 평균 성장률. 나라별 균등가중이면 모두 $1/7$ 이다.
 ② $-0.1$ 에서 $+2.2$ 까지의 폭포 — 무엇을 고치면 얼마가 움직이는가.
 
-만드는 파일: docs/ch12/diagnostics/img/reinhart_rogoff.png
+만드는 파일: docs/ch10/diagnostics/img/reinhart_rogoff.png
 """
 
 import numpy as np
@@ -130,7 +130,7 @@ ax2.set_ylim(-0.75, 3.9)
 ax2.grid(alpha=0.25, axis="y")
 
 fig.tight_layout()
-out = "docs/ch12/diagnostics/img/reinhart_rogoff.png"
+out = "docs/ch10/diagnostics/img/reinhart_rogoff.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 

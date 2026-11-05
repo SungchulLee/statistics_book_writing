@@ -1,4 +1,4 @@
-r"""11.1절 「그림으로 보는 통계학」 — 기준범주는 OLS 에서만 무해하다.
+r"""12.1절 「그림으로 보는 통계학」 — 기준범주는 OLS 에서만 무해하다.
 
 더미 부호화에서 어느 범주를 기준으로 삼을지는 자유다. 최소제곱에서는
 그 선택이 **계수의 뜻만 바꾸고 적합값은 그대로** 둔다 — 이 쪽 §2 와
@@ -15,7 +15,7 @@ r"""11.1절 「그림으로 보는 통계학」 — 기준범주는 OLS 에서�
 
 만드는 파일:
 
-  ch11/linear_regression/img/reference_category.png
+  ch12/linear_regression/img/reference_category.png
 
 실행:  python3 scripts/make_ch13_reference_category.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/linear_regression/img/"
+OUT = "docs/ch12/linear_regression/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

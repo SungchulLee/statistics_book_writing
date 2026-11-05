@@ -1,4 +1,4 @@
-r"""11.6절 「그림으로 보는 통계학」 — 여섯 가구에 사는 칠천사백예순 명.
+r"""12.6절 「그림으로 보는 통계학」 — 여섯 가구에 사는 칠천사백예순 명.
 
 이 쪽은 California Housing 자료에 설명변수 셋(MedInc, AveRooms, AveOccup)으로
 회귀를 적합하고 쿡 거리를 잰다. 연습문제 $6$ 이 「$D_i > 1$ 을 넘는 점은 세 개뿐」
@@ -26,7 +26,7 @@ r"""11.6절 「그림으로 보는 통계학」 — 여섯 가구에 사는 칠�
 
 만드는 파일:
 
-  ch11/diagnostics/img/six_households.png
+  ch12/diagnostics/img/six_households.png
 
 실행:  python3 scripts/make_ch13_six_households.py   (저장소 최상위에서)
 필요:  numpy, scikit-learn, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -52,7 +52,7 @@ plt.rcParams["axes.unicode_minus"] = False
 # 로그 축의 음수 지수는 mathtext 를 거치므로 unicode_minus 로 막지 못한다
 plt.rcParams["mathtext.fontset"] = "dejavusans"
 
-OUT = "docs/ch11/diagnostics/img/"
+OUT = "docs/ch12/diagnostics/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

@@ -1,4 +1,4 @@
-"""10.1절 피어슨 상관계수 — 단위가 사라진다는 것이 이 수를 쓰는 까닭이다.
+"""11.1절 피어슨 상관계수 — 단위가 사라진다는 것이 이 수를 쓰는 까닭이다.
 
 쪽의 보기 1 자료를 그대로 쓴다. y 를 킬로그램에서 파운드로 바꾸고 x 를
 100 만큼 옮기면 공분산은 18.405556 에서 40.577256 으로 뛰는데 r 은 소수
@@ -12,7 +12,7 @@ plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 
-OUT = "docs/ch10/correlation/img/"
+OUT = "docs/ch11/correlation/img/"
 x = np.arange(1, 11, dtype=float)
 y = np.array([2.1, 3.9, 6.2, 7.8, 10.1, 12.3, 13.8, 16.1, 18.0, 20.2])
 LB, SHIFT = 2.20462, 37.0

@@ -9,7 +9,7 @@ r"""Welch 의 가중평균 $w_i = n_i/s_i^2$ 는 도량형이 상수값을 정�
 ③ 그 징후를 버지 비 $R_B = \sqrt{\chi^2/(k-1)}$ 이 잡고, 구간을 $R_B$ 배 넓히면
    포함률이 돌아온다. CODATA 가 중력상수에 쓴 $3.9$ 가 그것이다.
 
-만드는 파일: docs/ch12/anova_welch/img/birge_ratio.png
+만드는 파일: docs/ch10/anova_welch/img/birge_ratio.png
 """
 
 import numpy as np
@@ -151,6 +151,6 @@ ax3.legend(loc="lower left", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/anova_welch/img/birge_ratio.png"
+out = "docs/ch10/anova_welch/img/birge_ratio.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

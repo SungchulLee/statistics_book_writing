@@ -1,12 +1,12 @@
-"""12장 들머리 그림 여섯 장 (일원배치 셋 · 이원배치 셋).
+"""10장 들머리 그림 여섯 장 (일원배치 셋 · 이원배치 셋).
 
 만드는 파일:
-  ch12/anova_one_way/img/f_is_not_effect_size.png    F 는 효과크기가 아니다
-  ch12/anova_one_way/img/computation_vs_design.png   셈의 정확함과 설계의 타당함
-  ch12/anova_one_way/img/lambda_explains_it.png      비중심모수 하나가 설명한다
-  ch12/anova_two_way/img/when_blocking_costs.png     블록이 손해가 되는 자리
-  ch12/anova_two_way/img/spread_of_the_gaps.png      격차들의 흩어짐
-  ch12/anova_two_way/img/gaps_with_error_bars.png    그림이 숨기는 것
+  ch10/anova_one_way/img/f_is_not_effect_size.png    F 는 효과크기가 아니다
+  ch10/anova_one_way/img/computation_vs_design.png   셈의 정확함과 설계의 타당함
+  ch10/anova_one_way/img/lambda_explains_it.png      비중심모수 하나가 설명한다
+  ch10/anova_two_way/img/when_blocking_costs.png     블록이 손해가 되는 자리
+  ch10/anova_two_way/img/spread_of_the_gaps.png      격차들의 흩어짐
+  ch10/anova_two_way/img/gaps_with_error_bars.png    그림이 숨기는 것
 
 본문 그림이 들머리의 수를 이미 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -20,8 +20,8 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-ONE = "docs/ch12/anova_one_way/img/"
-TWO = "docs/ch12/anova_two_way/img/"
+ONE = "docs/ch10/anova_one_way/img/"
+TWO = "docs/ch10/anova_two_way/img/"
 
 
 def save(fig, path):

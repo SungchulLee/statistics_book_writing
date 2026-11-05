@@ -1,10 +1,10 @@
-r"""10장 생태학적 상관 네 쪽의 개념 그림을 생성한다.
+r"""11장 생태학적 상관 네 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch10/ecological_correlation/img/berkeley_levels.png     학과별과 전체가 어긋난다
-  ch10/ecological_correlation/img/robinson_reversal.png   개인은 내려가고 평균은 올라간다
-  ch10/ecological_correlation/img/aggregation_inflation.png 집계는 상관을 부풀린다
-  ch10/ecological_correlation/img/simpson_weights.png     가중평균이 부등호를 뒤집는다
+  ch11/ecological_correlation/img/berkeley_levels.png     학과별과 전체가 어긋난다
+  ch11/ecological_correlation/img/robinson_reversal.png   개인은 내려가고 평균은 올라간다
+  ch11/ecological_correlation/img/aggregation_inflation.png 집계는 상관을 부풀린다
+  ch11/ecological_correlation/img/simpson_weights.png     가중평균이 부등호를 뒤집는다
 
 실행:  python3 scripts/make_ch12_ecological_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -31,7 +31,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch10/ecological_correlation/img/"
+OUT = "docs/ch11/ecological_correlation/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

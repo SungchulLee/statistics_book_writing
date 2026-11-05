@@ -14,7 +14,7 @@ r"""이원배치에서 이분산이 어느 쪽으로 틀어지는가 — 짝에 
 ② 요인 A 주효과 — 여기서는 균형도 보수적이 된다.
 ③ 불리한 짝에서 HC3 월드 검정이 고쳐 주는가 (옆 쪽의 방법).
 
-만드는 파일: docs/ch12/anova_welch/img/twoway_unbalance.png
+만드는 파일: docs/ch10/anova_welch/img/twoway_unbalance.png
 """
 
 import numpy as np
@@ -165,6 +165,6 @@ ax3.legend(loc="upper left", fontsize=10.5)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/anova_welch/img/twoway_unbalance.png"
+out = "docs/ch10/anova_welch/img/twoway_unbalance.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

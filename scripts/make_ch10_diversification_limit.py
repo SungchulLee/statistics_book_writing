@@ -1,4 +1,4 @@
-"""10.6절 열지도 — 진한 칸이 많다고 더 안전해지지 않는다.
+"""11.6절 열지도 — 진한 칸이 많다고 더 안전해지지 않는다.
 
 들머리의 둘째 문단을 그린다. 등가중으로 p 종목을 담고 수익률을 표준화해
 분산을 모두 1 로 맞추면 포트폴리오의 분산은
@@ -27,7 +27,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 import numpy as np
 
-OUT = "docs/ch10/visualization/img/"
+OUT = "docs/ch11/visualization/img/"
 
 RHOS = [(0.0, "평균 상관 0.0 — 서로 무관하다"),
         (0.2, "0.2"),

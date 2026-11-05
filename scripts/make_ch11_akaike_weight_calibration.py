@@ -1,4 +1,4 @@
-r"""11.8절 「그림으로 보는 통계학」 — 「$17\%$ 로 최선일 확률」을 믿을 수 있는가.
+r"""12.8절 「그림으로 보는 통계학」 — 「$17\%$ 로 최선일 확률」을 믿을 수 있는가.
 
 이 쪽의 $7$ 절은 아카이케 가중치를 확률처럼 읽는다 — **「모형 B 가 셋 가운데 최선일
 근사적 확률이 $82\%$, 모형 C 가 그럴 확률이 $17\%$」.** 그 읽기가 얼마나 맞는지를
@@ -30,7 +30,7 @@ r"""11.8절 「그림으로 보는 통계학」 — 「$17\%$ 로 최선일 확�
 
 만드는 파일:
 
-  ch11/model_selection/img/akaike_weight_calibration.png
+  ch12/model_selection/img/akaike_weight_calibration.png
 
 실행:  python3 scripts/make_ch13_akaike_weight_calibration.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -52,7 +52,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/model_selection/img/"
+OUT = "docs/ch12/model_selection/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

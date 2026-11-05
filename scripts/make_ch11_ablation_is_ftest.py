@@ -12,7 +12,7 @@ $$F_j = t_j^2 = \Delta R^2_j \cdot \frac{n-p-1}{1-R^2}$$
 ② 잡음뿐인 자료에서도 절제 순위표는 만들어진다.
 ③ 그 $1$ 위를 귀무분포에 놓으면 아무 일도 아니다.
 
-만드는 파일: docs/ch11/testing_coefficients/img/ablation_is_ftest.png
+만드는 파일: docs/ch12/testing_coefficients/img/ablation_is_ftest.png
 """
 
 import numpy as np
@@ -143,6 +143,6 @@ ax3.legend(loc="upper right", fontsize=9.5)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch11/testing_coefficients/img/ablation_is_ftest.png"
+out = "docs/ch12/testing_coefficients/img/ablation_is_ftest.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)

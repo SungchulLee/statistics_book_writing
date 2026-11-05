@@ -1,4 +1,4 @@
-r"""11.3절 「그림으로 보는 통계학」 — 정규성은 두 자리에서 다르게 쓰인다.
+r"""12.3절 「그림으로 보는 통계학」 — 정규성은 두 자리에서 다르게 쓰인다.
 
 회귀에서 「오차가 정규」라는 가정은 두 곳에 들어가는데, 둘의 운명이
 완전히 다르다.
@@ -15,7 +15,7 @@ r"""11.3절 「그림으로 보는 통계학」 — 정규성은 두 자리에�
 
 만드는 파일:
 
-  ch11/assumptions/img/normality_two_jobs.png
+  ch12/assumptions/img/normality_two_jobs.png
 
 실행:  python3 scripts/make_ch13_normality_two_jobs.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 INK = "#37474F"
 MUTED = "#90A4AE"

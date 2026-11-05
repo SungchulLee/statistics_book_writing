@@ -4,7 +4,7 @@ r"""11.5 가정 개관의 개념 그림을 생성한다.
 정리되면서 함께 지웠다.
 
 만드는 파일:
-  ch12/assumptions/img/assumption_costs.png      가정마다 위반의 대가가 다르다
+  ch10/assumptions/img/assumption_costs.png      가정마다 위반의 대가가 다르다
 
 실행:  python3 scripts/make_ch11_assumptions_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/assumptions/img/"
+OUT = "docs/ch10/assumptions/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

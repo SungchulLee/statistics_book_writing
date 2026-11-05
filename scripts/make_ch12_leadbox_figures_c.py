@@ -1,13 +1,13 @@
-"""12장 들머리 그림 일곱 장 (가정 넷 · 웰치 셋).
+"""10장 들머리 그림 일곱 장 (가정 넷 · 웰치 셋).
 
 만드는 파일:
-  ch12/assumptions/img/what_you_can_still_fix.png   받은 뒤에 고칠 수 있는 것
-  ch12/assumptions/img/what_w_does_not_see.png      W 가 보지 않는 것
-  ch12/assumptions/img/s_itself_wobbles.png         s 자체가 흔들린다
-  ch12/assumptions/img/against_what_you_plot.png    무엇에 대해 그리는가
-  ch12/anova_welch/img/where_the_decimal_comes.png  소수점은 어디서 오나
-  ch12/anova_welch/img/pairing_sets_direction.png   방향을 정하는 것은 짝이다
-  ch12/anova_welch/img/pooling_cuts_both_ways.png   합동은 양쪽으로 틀어진다
+  ch10/assumptions/img/what_you_can_still_fix.png   받은 뒤에 고칠 수 있는 것
+  ch10/assumptions/img/what_w_does_not_see.png      W 가 보지 않는 것
+  ch10/assumptions/img/s_itself_wobbles.png         s 자체가 흔들린다
+  ch10/assumptions/img/against_what_you_plot.png    무엇에 대해 그리는가
+  ch10/anova_welch/img/where_the_decimal_comes.png  소수점은 어디서 오나
+  ch10/anova_welch/img/pairing_sets_direction.png   방향을 정하는 것은 짝이다
+  ch10/anova_welch/img/pooling_cuts_both_ways.png   합동은 양쪽으로 틀어진다
 
 본문 그림이 들머리의 수를 이미 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -21,8 +21,8 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-ASM = "docs/ch12/assumptions/img/"
-WEL = "docs/ch12/anova_welch/img/"
+ASM = "docs/ch10/assumptions/img/"
+WEL = "docs/ch10/anova_welch/img/"
 
 
 def save(fig, path):

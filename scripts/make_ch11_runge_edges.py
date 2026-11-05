@@ -1,4 +1,4 @@
-r"""11.6절 「그림으로 보는 통계학」 — 룽게가 $1901$ 년에 보인 것과, 그것의 회귀판.
+r"""12.6절 「그림으로 보는 통계학」 — 룽게가 $1901$ 년에 보인 것과, 그것의 회귀판.
 
 쪽의 본문이 「특히 경계 근처에서 크게 흔들린다(Runge 현상)」고 괄호로만 적고
 지나간다. 그 괄호를 펴 본다.
@@ -15,7 +15,7 @@ $m = 21$ 이면 $2\sqrt{21} = 9.17$ 이다.
 
 만드는 파일:
 
-  ch11/interaction_polynomial/img/runge_edges.png
+  ch12/interaction_polynomial/img/runge_edges.png
 
 실행:  python3 scripts/make_ch13_runge_edges.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/interaction_polynomial/img/"
+OUT = "docs/ch12/interaction_polynomial/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

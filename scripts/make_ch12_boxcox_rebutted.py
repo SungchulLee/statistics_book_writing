@@ -6,7 +6,7 @@ Box 와 Cox 가 1982 년 반박문에서 든 보기를 그대로 되살린다 �
 넣은 z(lambda) 눈금에서는 어느 lambda 에서나 10 근처로 같다.
 
 만드는 파일:
-  ch12/diagnostics/img/boxcox_rebutted.png
+  ch10/diagnostics/img/boxcox_rebutted.png
 
 실행:  python3 scripts/make_ch11_boxcox_rebutted.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -30,7 +30,7 @@ GREEN = "#33691E"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch12/diagnostics/img/"
+OUT = "docs/ch10/diagnostics/img/"
 os.makedirs(OUT, exist_ok=True)
 
 # Box 와 Cox 가 적은 그대로 — 995 언저리와 1005 언저리, 집단 안 표준편차 1

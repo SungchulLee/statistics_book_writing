@@ -1,4 +1,4 @@
-"""10.5절 DAG — 자료가 가를 수 있는 것과 가를 수 없는 것.
+"""11.5절 DAG — 자료가 가를 수 있는 것과 가를 수 없는 것.
 
 들머리가 「자료를 보고 정할 수 없다」고 한 것이 정확히 어디까지인지
 그린다. 세 구조에서 자료가 내놓는 수는 둘뿐이다 --- 주변 상관과
@@ -28,7 +28,7 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-OUT = "docs/ch10/causation/img/"
+OUT = "docs/ch11/causation/img/"
 
 N = 900
 P = Q = np.sqrt(0.70)             # 사슬·갈래의 두 변 --- 곱이 주변 상관 0.70

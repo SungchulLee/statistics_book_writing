@@ -1,12 +1,12 @@
-"""11장 들머리 그림 여섯 장 (진단 넷 · 다항회귀 · 장 개요).
+"""12장 들머리 그림 여섯 장 (진단 넷 · 다항회귀 · 장 개요).
 
 만드는 파일:
-  ch11/diagnostics/img/eye_sees_funnels.png          없는 깔때기를 보는 눈
-  ch11/diagnostics/img/precision_not_coefficient.png 무너진 것은 정밀도다
-  ch11/diagnostics/img/pairwise_misses_it.png        쌍만 보면 못 본다
-  ch11/diagnostics/img/ceiling_draws_a_line.png      천장이 그리는 직선
-  ch11/interaction_polynomial/img/floor_is_the_noise.png 바닥은 잡음이 정한다
-  ch11/img/six_points_hide_fifty_three.png           여섯 점이 쉰셋을 가린다
+  ch12/diagnostics/img/eye_sees_funnels.png          없는 깔때기를 보는 눈
+  ch12/diagnostics/img/precision_not_coefficient.png 무너진 것은 정밀도다
+  ch12/diagnostics/img/pairwise_misses_it.png        쌍만 보면 못 본다
+  ch12/diagnostics/img/ceiling_draws_a_line.png      천장이 그리는 직선
+  ch12/interaction_polynomial/img/floor_is_the_noise.png 바닥은 잡음이 정한다
+  ch12/img/six_points_hide_fifty_three.png           여섯 점이 쉰셋을 가린다
 
 본문 그림이 이미 들머리의 수를 그리고 있는 쪽에서는 그 그림이 건드리지
 않는 각만 골랐다. 까닭은 함수마다 적어 두었다.
@@ -20,9 +20,9 @@ plt.rcParams["axes.unicode_minus"] = False
 import numpy as np
 from scipy import stats
 
-DIAG = "docs/ch11/diagnostics/img/"
-POLY = "docs/ch11/interaction_polynomial/img/"
-IDX = "docs/ch11/img/"
+DIAG = "docs/ch12/diagnostics/img/"
+POLY = "docs/ch12/interaction_polynomial/img/"
+IDX = "docs/ch12/img/"
 
 
 def save(fig, path):
@@ -471,14 +471,14 @@ def fig_floor_is_the_noise():
 
 # ════════════════════════════════════════════════════════════════════
 def fig_six_points():
-    """11장 개요 — 여섯 점이 쉰셋을 가린다.
+    """12장 개요 — 여섯 점이 쉰셋을 가린다.
 
     들머리가 세우는 두 가지를 그린다. 점을 묶어 평균을 내면 (1) 어떤
     곡선을 그어도 덩어리 평균이 그 가까이 오므로 **잘 맞는다는 증거가
     되지 못하고**, (2) 묶은 구간이 넓고 곡선이 가파르면 평균점이 곡선
     **위에 있지도 않다.**
 
-    자료는 이 책이 만든 것이다. 11.5절의 phillips_six_crosses 는 원래
+    자료는 이 책이 만든 것이다. 12.5절의 phillips_six_crosses 는 원래
     그림을 그대로 보이므로, 여기서는 묶는 일 자체가 하는 일만 본다.
     """
     N = 53

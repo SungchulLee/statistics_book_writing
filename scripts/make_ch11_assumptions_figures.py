@@ -1,12 +1,12 @@
-r"""11장 '선형회귀의 가정' 여섯 쪽에 들어가는 개념 그림을 만든다.
+r"""12장 '선형회귀의 가정' 여섯 쪽에 들어가는 개념 그림을 만든다.
 
 만드는 파일:
-  ch11/assumptions/img/line_four_violations.png        LINE 네 가정의 위배 신호 한눈에
-  ch11/assumptions/img/linearity_curvature.png         곡선에 직선을 맞추면 남는 것
-  ch11/assumptions/img/independence_se.png             자기상관은 표준오차를 망친다
-  ch11/assumptions/img/homoscedasticity_se.png         부채꼴과 로버스트 표준오차
-  ch11/assumptions/img/normality_clt_vs_pi.png         CLT 가 지켜 주는 것과 못 지키는 것
-  ch11/assumptions/img/wls_efficiency.png              WLS 가 되찾는 효율
+  ch12/assumptions/img/line_four_violations.png        LINE 네 가정의 위배 신호 한눈에
+  ch12/assumptions/img/linearity_curvature.png         곡선에 직선을 맞추면 남는 것
+  ch12/assumptions/img/independence_se.png             자기상관은 표준오차를 망친다
+  ch12/assumptions/img/homoscedasticity_se.png         부채꼴과 로버스트 표준오차
+  ch12/assumptions/img/normality_clt_vs_pi.png         CLT 가 지켜 주는 것과 못 지키는 것
+  ch12/assumptions/img/wls_efficiency.png              WLS 가 되찾는 효율
 
 실행:  python3 scripts/make_ch13_assumptions_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -32,7 +32,7 @@ PURPLE = "#6A1B9A"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch11/assumptions/img/"
+OUT = "docs/ch12/assumptions/img/"
 os.makedirs(OUT, exist_ok=True)
 
 

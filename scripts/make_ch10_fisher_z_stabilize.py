@@ -4,7 +4,7 @@ r"""12.2 「두 상관의 비교」 쪽의 상자에 들어가는 그림을 만�
 rho 와 무관하게 1/sqrt(n-3) 에 머문다 — 을 모의실험으로 보인다.
 
 만드는 파일:
-  ch10/correlation_test/img/fisher_z_stabilize.png
+  ch11/correlation_test/img/fisher_z_stabilize.png
 
 실행:  python3 scripts/make_ch12_fisher_z_stabilize.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -29,7 +29,7 @@ GREEN = "#33691E"
 MUTED = "#90A4AE"
 RED = "#D32F2F"
 
-OUT = "docs/ch10/correlation_test/img/"
+OUT = "docs/ch11/correlation_test/img/"
 os.makedirs(OUT, exist_ok=True)
 
 N = 12

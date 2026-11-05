@@ -9,7 +9,7 @@ r"""전역 $F$ 가 기각한 뒤에 남는 세 개의 물음, 그리고 그중 �
    구별하지 못한다.
 ③ 「$0.1\sigma$ 안」이라고 **말하려면** 차이를 잡을 때보다 훨씬 많은 표본이 필요하다.
 
-만드는 파일: docs/ch12/post_hoc/img/star_posthoc.png
+만드는 파일: docs/ch10/post_hoc/img/star_posthoc.png
 """
 
 import numpy as np
@@ -169,6 +169,6 @@ ax3.legend(loc="lower right", fontsize=10)
 ax3.grid(alpha=0.25)
 
 fig.tight_layout()
-out = "docs/ch12/post_hoc/img/star_posthoc.png"
+out = "docs/ch10/post_hoc/img/star_posthoc.png"
 fig.savefig(out, dpi=150, bbox_inches="tight")
 print("\nsaved", out)

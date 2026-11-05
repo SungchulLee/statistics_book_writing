@@ -1,4 +1,4 @@
-"""10.4절 스피어만 검정 — 눈금에 그 칸이 없다.
+"""11.4절 스피어만 검정 — 눈금에 그 칸이 없다.
 
 순위의 순열이 n! 가지뿐이므로 r_s 도, 따라서 양측 p 값도 유한하다.
 n = 4 면 가장 작은 양측 p 가 2/24 = 0.0833 이라 어떤 자료로도 기각되지 않는다.
@@ -16,7 +16,7 @@ import numpy as np
 from itertools import permutations
 from scipy import stats
 
-OUT = "docs/ch10/correlation_test/img/"
+OUT = "docs/ch11/correlation_test/img/"
 ALPHA = 0.05
 NS = [4, 5, 6, 7, 8, 9]
 

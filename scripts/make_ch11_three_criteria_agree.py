@@ -1,4 +1,4 @@
-r"""11.8절 「그림으로 보는 통계학」 — 세 기준이 같은 자리를 가리킬 확률.
+r"""12.8절 「그림으로 보는 통계학」 — 세 기준이 같은 자리를 가리킬 확률.
 
 이 쪽의 「결과」 절은 AIC·BIC·$5$ 겹 교차검증이 모두 크기 $3$ 에서 최소가 된 것을 두고
 **「서로 전혀 다른 출발점에서 온 세 기준이 같은 자리를 가리킨다는 사실이 이 선택에
@@ -26,7 +26,7 @@ r"""11.8절 「그림으로 보는 통계학」 — 세 기준이 같은 자리�
 
 만드는 파일:
 
-  ch11/model_selection/img/three_criteria_agree.png
+  ch12/model_selection/img/three_criteria_agree.png
 
 실행:  python3 scripts/make_ch13_three_criteria_agree.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -48,7 +48,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/model_selection/img/"
+OUT = "docs/ch12/model_selection/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"

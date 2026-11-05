@@ -1,4 +1,4 @@
-r"""11.9절 「그림으로 보는 통계학」 — 그 자료를 부르면 오류 메시지가 뜬다.
+r"""12.9절 「그림으로 보는 통계학」 — 그 자료를 부르면 오류 메시지가 뜬다.
 
 Boston 주택 자료의 열 하나는 $B = 1000(\mathrm{Bk} - 0.63)^2$ 이다($\mathrm{Bk}$ 는
 읍의 흑인 인구 비율). 제곱이라 **되돌릴 수 없고**, 회귀에 그대로 넣으면 집값이
@@ -9,7 +9,7 @@ scikit-learn 은 $1.2$ 판에서 이 자료의 적재 함수를 지웠다.
 ② 자료의 $B$ 분포 — 네 읍에 하나가 한 점에 몰려 있다.
 ③ 그 열이 회귀에서 뜻하는 것 — 추정한 것이 아니라 가정한 모양.
 
-만드는 파일: docs/ch11/package_usage/img/boston_b_variable.png
+만드는 파일: docs/ch12/package_usage/img/boston_b_variable.png
 실행:  python3 scripts/make_ch13_boston_b_variable.py   (저장소 최상위에서)
 필요:  인터넷(쪽과 같은 고정 커밋의 Rdatasets 사본을 내려받는다).
 """
@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch11/package_usage/img/boston_b_variable.png"
+OUT = "docs/ch12/package_usage/img/boston_b_variable.png"
 URL = ("https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/"
        "1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/MASS/Boston.csv")
 
