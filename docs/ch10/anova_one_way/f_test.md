@@ -133,6 +133,8 @@ $$
 \end{array}
 $$
 
+맨 오른쪽 칸은 아직 **적어 둔 것**일 뿐이다. 그것이 왜 $F$ 분포인지는 8단계의 정리 1 에서 증명한다.
+
 분산분석의 검정통계량은 F-통계량이며, 집단 간 평균제곱(MSB)과 집단 내 평균제곱(MSW)의 비로 계산한다.
 
 $$
@@ -150,13 +152,177 @@ $$
 
 ### 8단계: 임계값 또는 p-값 구하기
 
-$H_0$ 아래에서 $F$의 표집분포는
+<div class="thmbox" markdown>
+
+### 보조정리 1. 구면정규를 사영하면 { .thm }
+
+$\boldsymbol\varepsilon \sim N(\mathbf 0,\ \sigma^2 I_N)$ 이고 $V \subseteq \mathbb R^N$ 이 차원 $d$ 인 부분공간, $P_V$ 가 그 위로의 직교사영이라 하자. 그러면
 
 $$
-F\sim F_{k-1,N-k}
+\frac{\lVert P_V\boldsymbol\varepsilon\rVert^2}{\sigma^2} \sim \chi^2_d
 $$
 
-이다.
+이다. 또 $W$ 가 $V$ 와 **직교하는** 부분공간이면 두 사영**벡터** $P_V\boldsymbol\varepsilon$ 과 $P_W\boldsymbol\varepsilon$ 이 **독립**이다. 따라서 두 벡터의 **어떤** 함수끼리도 독립이다 — 길이제곱 $\lVert P_V\boldsymbol\varepsilon\rVert^2$ 과 $\lVert P_W\boldsymbol\varepsilon\rVert^2$ 은 물론이고, 한쪽에 상수벡터를 먼저 더한 $\lVert \mathbf c + P_V\boldsymbol\varepsilon\rVert^2$ 같은 것도 그렇다.
+
+</div>
+
+??? proof "증명"
+
+    **기저를 $V$ 에 맞춘다.** $V$ 의 정규직교기저 $\mathbf u_1, \ldots, \mathbf u_d$ 를 잡고, 그람–슈미트로 $\mathbb R^N$ 전체의 정규직교기저 $\mathbf u_1, \ldots, \mathbf u_N$ 까지 늘린다. 이것을 열로 쌓은
+
+    $$
+    Q = [\,\mathbf u_1\ \cdots\ \mathbf u_N\,]
+    $$
+
+    은 직교행렬이다($Q^\top Q = I_N$).
+
+    **좌표를 갈아탄다.** $\mathbf z = Q^\top\boldsymbol\varepsilon$ 이라 두자. 정규벡터의 선형변환이라 $\mathbf z$ 도 정규이고
+
+    $$
+    E[\mathbf z] = \mathbf 0,
+    \qquad
+    \operatorname{Cov}(\mathbf z) = Q^\top(\sigma^2 I_N)Q = \sigma^2 Q^\top Q = \sigma^2 I_N
+    $$
+
+    이다. 곧 $z_1, \ldots, z_N$ 이 **다시 서로 독립인 $N(0, \sigma^2)$** 이다. 「구면대칭」이라는 말의 내용이 이 한 줄이다 — 공분산이 단위행렬의 배수라서 직교행렬이 그것을 그대로 통과시킨다. **어느 정규직교기저로 갈아타도 좋으므로, 보고 싶은 부분공간에 맞춘 기저를 고를 수 있다.**
+
+    **사영은 앞의 $d$ 개 좌표만 쓴다.** 정규직교기저로 적으면 $P_V = \sum_{m=1}^{d}\mathbf u_m\mathbf u_m^\top$ 이므로
+
+    $$
+    P_V\boldsymbol\varepsilon = \sum_{m=1}^{d}(\mathbf u_m^\top\boldsymbol\varepsilon)\,\mathbf u_m = \sum_{m=1}^{d} z_m\mathbf u_m
+    $$
+
+    이고, $\mathbf u_m$ 들이 정규직교이므로 길이제곱이 계수의 제곱합이 된다.
+
+    $$
+    \lVert P_V\boldsymbol\varepsilon\rVert^2 = \sum_{m=1}^{d} z_m^2
+    \quad\Longrightarrow\quad
+    \frac{\lVert P_V\boldsymbol\varepsilon\rVert^2}{\sigma^2} = \sum_{m=1}^{d}\left(\frac{z_m}{\sigma}\right)^2
+    $$
+
+    오른쪽은 독립인 표준정규 $d$ 개의 제곱합이고, 4.2절 [카이제곱분포](../../ch04/continuous_distributions/chi_square.md) 정의 1 이 그것을 $\chi^2_d$ 라 부른다. **자유도가 부분공간의 차원인 까닭이 이것이다** — 더해지는 항의 개수가 곧 차원이다.
+
+    **직교하면 좌표가 겹치지 않는다.** $W$ 가 $V$ 에 직교하고 $\dim W = e$ 라 하자. $W \subseteq V^\perp$ 이므로 위에서 기저를 늘릴 때 $\mathbf u_{d+1}, \ldots, \mathbf u_{d+e}$ 를 **$W$ 의 정규직교기저로 고를 수 있다.** 그러면 같은 계산으로
+
+    $$
+    \lVert P_V\boldsymbol\varepsilon\rVert^2 = \sum_{m=1}^{d} z_m^2,
+    \qquad
+    \lVert P_W\boldsymbol\varepsilon\rVert^2 = \sum_{m=d+1}^{d+e} z_m^2
+    $$
+
+    이다. 더 중요한 것은 **사영벡터 자체**가 그렇다는 것이다 — $P_V\boldsymbol\varepsilon$ 은 $z_1, \ldots, z_d$ 로만, $P_W\boldsymbol\varepsilon$ 은 $z_{d+1}, \ldots, z_{d+e}$ 로만 만들어지고 그 좌표들이 서로 독립이다. 그러므로 두 벡터가 독립이고, 각각의 **어떤** 함수끼리도 독립이다. $\square$
+
+    길이제곱만으로 끝내지 않는 까닭은 아래에서 드러난다. $H_0$ 이 거짓이면 $SSB$ 가 $\lVert \mathbf c + P\boldsymbol\varepsilon\rVert^2$ 꼴이 되어 사영벡터를 길이제곱 **밖에서** 쓰게 되고, 그때도 $SSW$ 와의 독립이 필요하다.
+
+!!! note "같은 것을 행렬로 적으면"
+    이 보조정리를 이차형식의 말로 옮기면 부록 A.4 [카이제곱분포와 이차형식](../../ch00/linalg_regression/linalg_statistics/chi_squared_quadratic.md)의 정리 1(대칭 멱등행렬의 이차형식)과 정리 3(크레이그 정리, 독립의 필요충분조건은 $AB = O$)이 된다. 사영행렬 $P_V$ 가 대칭이고 멱등하며 계수가 $\dim V$ 와 같다는 것이 그 번역의 전부다.
+
+    같은 쪽의 **정리 4(코크런 정리)** 는 아래에서 쓸 세 조각을 한꺼번에 준다. $I_N$ 을 사영의 합으로 쪼개고 계수의 합이 $N$ 으로 딱 맞으면 조각들이 서로 독립인 $\chi^2$ 이라는 것인데, 아래 분산분석의 분해가 정확히 그 꼴이다.
+
+<div class="thmbox" markdown>
+
+### 정리 1. 분산분석 F 의 표집분포 { .thm }
+
+$y_{ij} = \mu_i + \varepsilon_{ij}$ 이고 $\varepsilon_{ij}$ 가 서로 독립으로 $N(0,\ \sigma^2)$ 을 따른다고 하자. 그러면 **집단평균이 무엇이든**
+
+$$
+\frac{SSW}{\sigma^2} \sim \chi^2_{N-k}
+$$
+
+이고, 역시 집단평균이 무엇이든 $SSB$ 와 $SSW$ 는 **독립**이다. 여기에 $H_0\colon \mu_1 = \cdots = \mu_k$ 가 참이면
+
+$$
+\frac{SSB}{\sigma^2} \sim \chi^2_{k-1}
+$$
+
+이 더해진다. 따라서 $H_0$ 아래에서
+
+$$
+F = \frac{MSB}{MSW} = \frac{SSB/(k-1)}{SSW/(N-k)} \sim F_{k-1,\,N-k}
+$$
+
+</div>
+
+??? proof "증명"
+
+    **벡터로 옮긴다.** 관측값을 길이 $N$ 의 벡터 $\mathbf y$ 로 쌓고, 집단 $i$ 의 자리에만 $1$ 이 서는 지시벡터를 $\mathbf 1_i$ 라 쓴다. 부분공간 둘을 둔다.
+
+    $$
+    V_0 = \operatorname{span}\{\mathbf 1\},
+    \qquad
+    V_1 = \operatorname{span}\{\mathbf 1_1, \ldots, \mathbf 1_k\}
+    $$
+
+    $\mathbf 1 = \sum_i \mathbf 1_i$ 이므로 $V_0 \subset V_1$ 이고, 지시벡터들이 서로 겹치지 않으므로 $\dim V_1 = k$ 다. $V_1$ 위로의 직교사영은 각 자리를 **제 집단평균**으로 바꾸고 $V_0$ 위로의 사영은 전부 **전체평균**으로 바꾼다. 그래서 세 제곱합이 그대로 사영의 길이제곱이 된다.
+
+    $$
+    SSW = \lVert P_{V_1^\perp}\mathbf y\rVert^2,
+    \qquad
+    SSB = \lVert P_{V_1 \ominus V_0}\mathbf y\rVert^2,
+    \qquad
+    SST = \lVert P_{V_0^\perp}\mathbf y\rVert^2
+    $$
+
+    여기서 $V_1 \ominus V_0$ 는 $V_1$ 안에서 $V_0$ 에 직교하는 부분이고 차원이 $k-1$, $V_1^\perp$ 의 차원이 $N-k$ 다. 이 둘은 서로 직교하고 합치면 $V_0^\perp$ 가 되므로 **6단계의 항등식은 피타고라스 정리다.**
+
+    **사영의 분포는 보조정리 1 이 준다.** $\boldsymbol\varepsilon \sim N(\mathbf 0,\ \sigma^2 I_N)$ 이므로 차원 $d$ 인 부분공간으로 사영한 길이제곱은 $\sigma^2\chi^2_d$ 이고, 직교하는 두 부분공간으로의 사영은 독립이다. 남은 일은 **$\mathbf y$ 의 사영을 $\boldsymbol\varepsilon$ 의 사영으로 바꾸는 것**뿐이고, 거기서 $H_0$ 이 필요한지 아닌지가 갈린다.
+
+    **분모는 가설을 쓰지 않는다.** 평균벡터 $\boldsymbol\mu = \sum_i \mu_i \mathbf 1_i$ 는 집단평균이 무엇이든 **언제나** $V_1$ 안에 있다. 따라서 $P_{V_1^\perp}\boldsymbol\mu = \mathbf 0$ 이고
+
+    $$
+    P_{V_1^\perp}\mathbf y = P_{V_1^\perp}\boldsymbol\mu + P_{V_1^\perp}\boldsymbol\varepsilon = P_{V_1^\perp}\boldsymbol\varepsilon
+    \quad\Longrightarrow\quad
+    \frac{SSW}{\sigma^2} \sim \chi^2_{N-k}
+    $$
+
+    이다. 아래 2 절의 보기 1 이 $E[MSW] = \sigma^2$ 은 가설과 무관하게 성립한다고 적는데, 그 **분포판**이 이것이다.
+
+    **독립성도 가설을 쓰지 않는다.** $P_{V_1 \ominus V_0}\mathbf y = P_{V_1 \ominus V_0}\boldsymbol\mu + P_{V_1 \ominus V_0}\boldsymbol\varepsilon$ 에서 앞 항은 **상수**다. 그러니 $SSB$ 와 $SSW$ 는 각각 $P_{V_1 \ominus V_0}\boldsymbol\varepsilon$ 과 $P_{V_1^\perp}\boldsymbol\varepsilon$ 만을 통해 확률적인데, 두 부분공간이 직교하므로 **보조정리 1 의 벡터판**이 그 둘을 독립이라 한다. 집단평균이 제각각이어도 그대로다.
+
+    **분자만 가설을 쓴다.** $H_0$ 이 참이면 $\boldsymbol\mu = \mu\mathbf 1 \in V_0$ 이므로 상수항까지 사라져 $P_{V_1 \ominus V_0}\mathbf y = P_{V_1 \ominus V_0}\boldsymbol\varepsilon$ 이고 $SSB/\sigma^2 \sim \chi^2_{k-1}$ 이다. 독립인 두 카이제곱을 각자의 자유도로 나눈 비가 $F$ 라는 4.2절 [F 분포](../../ch04/continuous_distributions/f_distribution.md)의 정의에 그대로 들어간다. $\square$
+
+    $H_0$ 이 거짓이면 그 상수항이 남아 $SSB/\sigma^2$ 이 **비중심** 카이제곱이 된다. 비중심모수는 $\lambda = \lVert P_{V_1 \ominus V_0}\boldsymbol\mu\rVert^2/\sigma^2 = \sum_i n_i(\mu_i - \bar\mu)^2/\sigma^2$ 이고, 검정력이 그 수에만 달려 있다는 것이 이 절의 [분산분석 F-통계량 모의실험](anova_f_simulation.md)의 출발점이다.
+
+!!! warning "「표준화해서 세면 된다」로는 안 되는 까닭"
+    $SSB/\sigma^2$ 을
+
+    $$
+    \sum_{i=1}^{k}\left(\frac{\bar y_{i\cdot} - \bar y_{\cdot\cdot}}{\sigma/\sqrt{n_i}}\right)^2
+    $$
+
+    으로 적으면 표준정규의 제곱이 $k$ 개 더해진 꼴이라 $\chi^2_k$ 로 읽고 싶어진다. **그 꼴은 두 군데서 틀린다.**
+
+    **첫째, 각 항은 $N(0,1)$ 이 아니다.** $\bar y_{\cdot\cdot}$ 가 $\bar y_{i\cdot}$ 를 **제 안에 품고** 있어 둘이 상관된다 — $\operatorname{Cov}(\bar y_{i\cdot},\ \bar y_{\cdot\cdot}) = \frac{n_i}{N}\operatorname{Var}(\bar y_{i\cdot}) = \frac{\sigma^2}{N}$ 이므로
+
+    $$
+    \operatorname{Var}(\bar y_{i\cdot} - \bar y_{\cdot\cdot})
+    = \frac{\sigma^2}{n_i} - \frac{2\sigma^2}{N} + \frac{\sigma^2}{N}
+    = \sigma^2\left(\frac{1}{n_i} - \frac{1}{N}\right)
+    $$
+
+    이고, $\sigma^2/n_i$ 으로 나눈 항의 분산은 $1$ 이 아니라 $1 - n_i/N$ 이다. 분모에 $\sigma/\sqrt{n_i}$ 를 쓴 것이 **너무 큰 수로 나눈 것**이다.
+
+    여기서 자유도가 바로 나온다. 분산을 $k$ 개 다 더하면
+
+    $$
+    \sum_{i=1}^{k}\left(1 - \frac{n_i}{N}\right) = k - \frac{1}{N}\sum_i n_i = k - 1
+    $$
+
+    이다. **$\chi^2$ 의 자유도가 그 기댓값이므로 수축분만으로 $k-1$ 이 설명된다.** 아래 2 절 보기 1 의 유도가 $E[SSB]$ 안에 $\sum_i n_i\!\left(\frac{\sigma^2}{n_i} - \frac{\sigma^2}{N}\right)$ 를 적어 둔 것이 같은 수다.
+
+    **둘째, 그 $k$ 개는 독립도 아니다.** 가중합이 언제나 $\sum_i n_i(\bar y_{i\cdot} - \bar y_{\cdot\cdot}) = 0$ 이라는 제약을 하나 지고 있다. 실제로 $i \neq j$ 이면 $\operatorname{Cov}(\bar y_{i\cdot} - \bar y_{\cdot\cdot},\ \bar y_{j\cdot} - \bar y_{\cdot\cdot}) = -\sigma^2/N$ 이고, 위의 분산과 묶으면 상관이
+
+    $$
+    \operatorname{Corr} = -\sqrt{\frac{n_i n_j}{(N - n_i)(N - n_j)}}
+    $$
+
+    이다. $n = (3,3,4)$ 라면 크기가 같은 두 집단 사이가 $-3/7 \approx -0.4286$, 크기가 다른 쪽이 $\approx -0.5345$ 다. **언제나 음수**인 것이 제약의 흔적이다 — 한 집단평균이 전체평균보다 위로 가면 나머지는 아래로 가야 한다. 위 증명이 「차원 $k-1$ 인 부분공간으로의 사영」이라 적은 것이 이 두 어긋남을 한꺼번에 담은 말이다 — 사영은 분산 수축도 상관도 따로 손볼 필요가 없다.
+
+    같은 이유로 **$SST = SSB + SSW$ 라는 항등식만으로는 세 분포를 말할 수 없다.** 합이 쪼개진다고 분포가 쪼개지지는 않는다 — 두 조각이 **직교**해야 각자 $\chi^2$ 이 되고 서로 독립이 된다. 자유도가 $N-1 = (k-1) + (N-k)$ 로 맞아떨어지는 것은 그 직교분해의 **결과**이지 근거가 아니다.
+
+    $SST/\sigma^2 \sim \chi^2_{N-1}$ 도 공짜가 아니다. 그 주장은 $y_{ij}$ 가 **모두 같은** 평균을 갖는다는 것, 곧 $H_0$ 을 이미 쓰고 있다. $H_0$ 이 거짓이면 $SST$ 는 중심 카이제곱이 아니다.
+
+분포를 손에 넣었으니 판정은 둘 가운데 하나다.
 
 - 계산한 F-통계량을 ($k-1$과 $N-k$ 자유도의) F-분포표 임계값과 비교하거나,
 - p-값 접근을 쓴다. p-값이 유의수준(예: $\alpha = 0.05$)보다 작으면 귀무가설을 기각한다.
@@ -500,7 +666,7 @@ $$
 
     이다. **집단평균의 정의 하나로 교차항이 사라진다.** 그러므로 $SST = SSB + SSW$다.
 
-    이 유도에 쓴 가정이 무엇인지 보라. **아무것도 없다.** 정규성도, 독립성도, 등분산도 쓰지 않았다. $\bar y_{i\cdot}$가 집단 $i$ 관측값들의 평균이라는 사실만 썼다. **제곱합 분해는 통계적 명제가 아니라 대수적 항등식**이고, 분산분석의 가정들은 그 뒤에 $SSB/SSW$의 **분포**를 말할 때 비로소 필요해진다.
+    이 유도에 쓴 가정이 무엇인지 보라. **아무것도 없다.** 정규성도, 독립성도, 등분산도 쓰지 않았다. $\bar y_{i\cdot}$가 집단 $i$ 관측값들의 평균이라는 사실만 썼다. **제곱합 분해는 통계적 명제가 아니라 대수적 항등식**이고, 분산분석의 가정들은 그 뒤에 $SSB/SSW$의 **분포**를 말할 때 비로소 필요해진다. 그 분포를 말하는 것이 1절 8단계의 정리 1 이고, 거기서는 정규성이 **쓰인다** — 항등식에서 $\chi^2$ 로 건너가는 걸음이 그것을 요구한다.
 
     기하로 읽으면 더 선명하다. 안쪽 합이 $0$이라는 말은 잔차 벡터가 집단 지시벡터 $\mathbf 1_i$ 와 직교한다는 뜻, 곧 $X^\top e = 0$이다(가정 쪽 등분산성 보기 1에서 같은 식을 썼다). 직교하는 두 벡터의 합의 길이를 재면 피타고라스 정리가 되고, 그것이 $SST = SSB + SSW$다.
 
