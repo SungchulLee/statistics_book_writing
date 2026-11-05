@@ -185,7 +185,7 @@ $$
     이고(두 번째 집단도 같은 꼴) 넣어 정리하면
 
     $$
-    \frac{1}{\Lambda} = \frac{\left(\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}\right)^2}{\frac{(s_1^2/n_1)^2}{n_1-1}+\frac{(s_2^2/n_2)^2}{n_2-1}} = \nu_{\text{Satterthwaite}}
+    \frac{1}{\Lambda} = \frac{\left(\dfrac{s_1^2}{n_1}+\dfrac{s_2^2}{n_2}\right)^2}{\dfrac{(s_1^2/n_1)^2}{n_1-1}+\dfrac{(s_2^2/n_2)^2}{n_2-1}} = \nu_{\text{Satterthwaite}}
     $$
 
     로 **5.3절의 웰치–새터스웨이트 자유도와 글자 그대로 같은 식**이다. 그러므로 웰치 분산분석은 두 집단 웰치 $t$ 검정의 $k$-집단 확장이며, 이분산에서 그것이 왜 옳은 일을 하는지는 [5.7절 웰치 검정](../../ch05/applications/diff_means_welch.md)에서 이미 다루었다. 여기서는 되풀이하지 않는다.
