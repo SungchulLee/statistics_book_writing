@@ -402,7 +402,7 @@ $\lambda = 1$이 표본평균이다. 편향이 0이므로 주황 곡선이 바�
 
 **분모를 고르는 문제가 가장 깔끔한 보기다.** $\hat\sigma^2_c = \frac1c\sum(X_i-\bar X)^2$ 에서 $c$ 를 바꾸면 편향과 분산이 함께 움직인다. 5.13절 [분산추정량의 평균제곱오차](../variance/mse_comparison.md)가 $c^{*} = n+1$ 을 유도하고 흔히 쓰는 세 분모를 한 표에 모은다 — **불편성이 언제나 최선의 기준이 아니라는 것**이 그 표의 요점이다.
 
-세 가지는 임자 쪽이 따로 있다. **상대효율**로 추정량을 줄 세우는 일은 5.12절 [표본평균의 효율성](../mean/efficiency.md)이, **허용성과 James–Stein 현상**과 **Cramér–Rao 하한**은 7장 [효율성과 Cramér-Rao 하한](../../ch07/theory/efficiency_crlb.md)이, **평균제곱오차 일치성**은 5.12절 [표본평균의 편향과 일치성](../mean/bias_consistency.md)이 다룬다.
+세 가지는 다루는 쪽이 따로 있다. **상대효율**로 추정량을 줄 세우는 일은 5.12절 [표본평균의 효율성](../mean/efficiency.md)이, **허용성과 James–Stein 현상**과 **Cramér–Rao 하한**은 7장 [효율성과 Cramér-Rao 하한](../../ch07/theory/efficiency_crlb.md)이, **평균제곱오차 일치성**은 5.12절 [표본평균의 편향과 일치성](../mean/bias_consistency.md)이 다룬다.
 
 ### 제곱손실이라는 선택
 

@@ -970,7 +970,7 @@ $$
 
 ## 5. 적합한 평면을 읽을 때
 
-`model.summary()` 는 계수 말고도 표준오차·$t$·$p$값·신뢰구간·정보기준·진단검정을 한꺼번에 찍는다. **그 칸들은 이 절의 것이 아니다** — 각각 12.3절 [계수의 신뢰구간](../estimation_inference/ci_coeff.md), 12.4절 [OLS 회귀 출력 재현](../testing_coefficients/ols_regression_output.md), 12.8절 [결정계수와 수정 결정계수](../performance/r_squared.md), 12.9절 [AIC와 BIC](../model_selection/aic_bic.md), 12.6절 [가정과 진단 (LINE)](../assumptions/index.md)이 임자다. 특히 12.4 는 그 표의 **한 줄을 손으로 다시 만들어** 무엇을 계산한 결과인지 밑바닥까지 확인한다.
+`model.summary()` 는 계수 말고도 표준오차·$t$·$p$값·신뢰구간·정보기준·진단검정을 한꺼번에 찍는다. **그 칸들은 이 절의 것이 아니다** — 각각 12.3절 [계수의 신뢰구간](../estimation_inference/ci_coeff.md), 12.4절 [OLS 회귀 출력 재현](../testing_coefficients/ols_regression_output.md), 12.8절 [결정계수와 수정 결정계수](../performance/r_squared.md), 12.9절 [AIC와 BIC](../model_selection/aic_bic.md), 12.6절 [가정과 진단 (LINE)](../assumptions/index.md)이 다룬다. 특히 12.4 는 그 표의 **한 줄을 손으로 다시 만들어** 무엇을 계산한 결과인지 밑바닥까지 확인한다.
 
 여기서는 **계수 열 하나**만 본다. 평면의 기울기를 읽는 일이기 때문이다.
 

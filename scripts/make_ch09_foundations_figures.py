@@ -122,7 +122,7 @@ def hypothesis_types():
 
 
 # ==================================================================
-# 2. 검정의 네 악장
+# 2. 검정의 네 단계
 # ==================================================================
 def test_procedure_flow():
     fig, ax = plt.subplots(figsize=(13.5, 3.9))
@@ -154,14 +154,14 @@ def test_procedure_flow():
                 arrowprops=dict(arrowstyle="-|>", color=RED, linewidth=1.5,
                                 linestyle="--"))
     ax.text(0.2, 0.42,
-            "첫 악장은 자료를 보기 전에 끝난다 — 보고 나서 고치면 $\\alpha$ 가 "
+            "첫 단계는 자료를 보기 전에 끝난다 — 보고 나서 고치면 $\\alpha$ 가 "
             "지켜지지 않는다",
             fontsize=11, color=RED, ha="left", va="top")
 
     ax.set_xlim(-0.3, 4 * w + 3 * gap + 0.3)
     ax.set_ylim(-0.25, 3.0)
     ax.axis("off")
-    ax.set_title("가설검정의 네 악장 — 바뀌는 것은 2 와 3 뿐이다",
+    ax.set_title("가설검정의 네 단계 — 바뀌는 것은 2 와 3 뿐이다",
                  fontsize=13.5, pad=8)
     fig.tight_layout()
     save(fig, FOUND + "test_procedure_flow.png")
