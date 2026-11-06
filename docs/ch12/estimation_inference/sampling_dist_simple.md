@@ -19,13 +19,95 @@
 
 범위 밖의 그 두 수를 「예측이 밖에서도 그만큼 안전하다」로 읽으면 안 된다. 두 식은 **직선이 그 밖에서도 맞다**는 가정 위에서만 뜻이 있고, 그 가정이 틀렸다면 어느 쪽도 그 어긋남을 재지 않는다. 같은 추정값을 놓고 왜 세 가지 표준오차가 나오고, 그 셋은 각각 무엇의 흔들림을 재는가. 아래 상자가 절편과 기울기가 **따로 흔들리지 않는다**는 것까지 따라간다.
 
-단순선형회귀에서 핵심 추론 결과는 추정된 계수와 예측값의 **표집분포**를 아는 데 달려 있다. 고전적 가정 — 선형성, 독립성, 등분산성, 오차의 정규성 — 아래에서 이 분포들은 $t$ 분포에 기초한 우아한 닫힌 형태를 갖는다. 이 절은 세 가지 기본 양, 곧 기울기 추정량, 주어진 점에서의 기대반응, 개별 예측반응의 표집분포를 유도한다.
+단순선형회귀에서 핵심 추론 결과는 추정된 계수와 예측값의 **표집분포**를 아는 데 달려 있다. 고전적 가정 — 선형성, 독립성, 등분산성, 오차의 정규성 — 아래에서 이 분포들은 $t$ 분포에 기초한 우아한 닫힌 형태를 갖는다. 이 절은 세 가지 기본 양, 곧 기울기 추정량, 주어진 점에서의 기대반응, 개별 예측반응의 표집분포를 유도한다. 셋이 **같은 한 걸음에서 갈린다** — $\sigma$ 를 모르니 $s$ 로 바꾸는 걸음이고, 그것이 정규를 $t$ 로 만든다. 그 걸음이 왜 허용되는지를 $1$ 절에서 먼저 증명해 두고 셋이 함께 쓴다.
 
 </div>
 
 ---
 
-## 1. 기울기 추정량
+## 1. 세 정리가 함께 쓰는 사실
+
+아래 세 정리는 모두 같은 꼴이다 — 관심 있는 양에서 참값을 빼고 **$\sigma$ 로** 나누면 표준정규가 되는데, 정작 $\sigma$ 를 모르니 $s$ 로 바꿔 쓴다. 그 한 걸음이 정규를 $t$ 로 바꾼다. **그런데 그 걸음은 공짜가 아니다.** $t$ 분포의 정의가 요구하는 것이 둘이기 때문이다 — 분모에 들어가는 제곱합이 **카이제곱**이어야 하고, **분자와 독립**이어야 한다. 둘 다 당연하지 않으므로 먼저 세워 둔다.
+
+<div class="thmbox" markdown>
+
+### 보조정리 1. 잔차제곱합의 분포와 독립성 { .thm }
+
+정규오차 단순선형회귀 모형 $y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$, $\varepsilon_i \overset{\text{i.i.d.}}{\sim} N(0, \sigma^2)$ 에서 $x_i$ 가 모두 같지는 않다고 하자. $SSE = \sum_{i=1}^n (y_i - \hat y_i)^2$ 라 쓰면
+
+$$
+\frac{SSE}{\sigma^2} \sim \chi^2_{n-2}
+$$
+
+이고, $SSE$ 는 $(\hat\beta_0,\ \hat\beta_1)$ 과 **독립**이다. 따라서 $\hat\theta = a\hat\beta_0 + b\hat\beta_1$ 이 평균 $\theta$ 와 분산 $\sigma^2c^2$ 을 가지면
+
+$$
+\frac{\hat\theta - \theta}{s\,c} \sim t_{n-2},
+\qquad s^2 = \frac{SSE}{n-2}
+$$
+
+이다. 분자에 **훈련자료와 독립인 새 오차**가 더해져 있어도 그대로다.
+
+</div>
+
+??? proof "증명"
+
+    **벡터로 옮긴다.** 관측값을 $\mathbf y \in \mathbb R^n$ 으로 쌓고
+
+    $$
+    V = \operatorname{span}\{\mathbf 1,\ \mathbf x\} \subseteq \mathbb R^n
+    $$
+
+    이라 두자. $x_i$ 가 모두 같지는 않다는 가정이 정확히 $\mathbf 1$ 과 $\mathbf x$ 의 일차독립이므로 $\dim V = 2$ 이고 $\dim V^\perp = n-2$ 다.
+
+    앞 절 [최소제곱 추정](least_squares.md)이 보인 대로 **최소제곱이 하는 일이 $V$ 로의 직교사영**이다. 적합값이 $\hat{\mathbf y} = P_V\mathbf y$ 이고 잔차가 $\mathbf e = \mathbf y - \hat{\mathbf y} = P_{V^\perp}\mathbf y$ 이므로
+
+    $$
+    SSE = \lVert P_{V^\perp}\mathbf y\rVert^2
+    $$
+
+    이다.
+
+    **평균벡터가 $V$ 안에 있다.** $E[\mathbf y] = \beta_0\mathbf 1 + \beta_1\mathbf x$ 는 정의상 $V$ 의 원소이므로 $P_{V^\perp}E[\mathbf y] = \mathbf 0$ 이고
+
+    $$
+    \mathbf e = P_{V^\perp}\mathbf y = P_{V^\perp}\bigl(E[\mathbf y] + \boldsymbol\varepsilon\bigr) = P_{V^\perp}\boldsymbol\varepsilon
+    $$
+
+    이다. **잔차는 오차만 본다** — $\beta_0$ 과 $\beta_1$ 이 무엇이든 그렇다. 이것이 뒤의 두 결론을 모두 가능하게 하는 걸음이다.
+
+    **카이제곱.** $\boldsymbol\varepsilon \sim N(\mathbf 0,\ \sigma^2 I_n)$ 이고 $\dim V^\perp = n-2$ 이므로, 10.1절 [F-검정 절차](../../ch10/anova_one_way/f_test.md)의 보조정리 2(구면정규를 사영하면)가 곧바로
+
+    $$
+    \frac{SSE}{\sigma^2} = \frac{\lVert P_{V^\perp}\boldsymbol\varepsilon\rVert^2}{\sigma^2} \sim \chi^2_{n-2}
+    $$
+
+    를 준다. **자유도가 $n-2$ 인 것은 「모수를 둘 추정해서」가 아니라 잔차가 사는 공간의 차원이 $n-2$ 라서**다. 둘은 같은 말이지만 뒤엣것만 증명이 된다.
+
+    **독립성.** $\mathbf 1$ 과 $\mathbf x$ 가 일차독립이므로 적합값 $\hat{\mathbf y} = P_V\mathbf y$ 에서 계수 $(\hat\beta_0, \hat\beta_1)$ 이 **하나로 정해진다.** 그리고
+
+    $$
+    P_V\mathbf y = \underbrace{P_V E[\mathbf y]}_{\text{상수}} + P_V\boldsymbol\varepsilon
+    $$
+
+    이므로 두 추정량은 결국 $P_V\boldsymbol\varepsilon$ 의 함수다. $V$ 와 $V^\perp$ 이 직교하므로 같은 보조정리의 **벡터판**이 $P_V\boldsymbol\varepsilon$ 과 $P_{V^\perp}\boldsymbol\varepsilon$ 을 독립이라 하고, 각각의 함수인 $(\hat\beta_0,\hat\beta_1)$ 과 $SSE$ 도 독립이다.
+
+    **$t$ 로 맺는다.** $Z = (\hat\theta-\theta)/(\sigma c) \sim N(0,1)$ 이고 $W = SSE/\sigma^2 \sim \chi^2_{n-2}$ 이며 둘이 독립이다. $s = \sigma\sqrt{W/(n-2)}$ 이므로
+
+    $$
+    \frac{\hat\theta-\theta}{s\,c}
+    = \frac{(\hat\theta-\theta)/(\sigma c)}{s/\sigma}
+    = \frac{Z}{\sqrt{W/(n-2)}}
+    $$
+
+    이고, 이것이 4.2절 [t 분포](../../ch04/continuous_distributions/student_t.md) 정의 1 그대로다. 분자에 새 오차 $\varepsilon_0$ 가 더해져 있어도 그것이 훈련자료 전체와 독립이므로 분자는 여전히 정규이고 $SSE$ 와 독립이다. $\square$
+
+!!! note "행렬로 적은 같은 증명"
+    모자 행렬 $H = X(X^\top X)^{-1}X^\top$ 과 $M = I - H$ 로 적으면 $P_V = H$, $P_{V^\perp} = M$ 이다. 그러면 위의 두 걸음이 각각 **「$M$ 이 계수 $n-2$ 인 대칭 멱등행렬」**과 **「$X^\top M = O$」**가 된다. 그 꼴은 부록 A.4 [표집분포 (단순 최소제곱)](../../ch00/linalg_regression/linalg_statistics/sampling_dist_simple_ols.md) 정리 3 에 적혀 있고, 설명변수가 여럿인 경우로 글자 하나 바꾸지 않고 넘어간다 — 그때는 $\dim V = p$ 이므로 자유도가 $n-p$ 가 될 뿐이다.
+
+---
+
+## 2. 기울기 추정량
 
 <div class="thmbox" markdown>
 
@@ -58,11 +140,42 @@ $$
     \hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}
     $$
 
-    **3단계: $\hat{\beta}_1$의 분포.** $\hat{\beta}_1$은 정규분포를 따르는 $y_i$들의 선형결합이므로
+    **3단계: $\hat\beta_1$ 은 $y_i$ 들의 선형결합이다.** $\sum_i (x_i-\bar x)\bar y = \bar y \sum_i (x_i - \bar x) = 0$ 이므로 분자에서 $\bar y$ 가 통째로 빠진다. $SS_x = \sum_i (x_i-\bar x)^2$ 이라 쓰면
 
     $$
-    \hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{\sum_{i=1}^n (x_i - \bar{x})^2}\right)
+    \hat\beta_1 = \frac{\sum_i (x_i-\bar x)(y_i - \bar y)}{SS_x} = \sum_{i=1}^n c_i\, y_i,
+    \qquad c_i = \frac{x_i - \bar x}{SS_x}
     $$
+
+    이다. **가중치 $c_i$ 는 $x$ 만으로 정해지는 상수**이고 셋을 만족한다.
+
+    $$
+    \sum_i c_i = 0,
+    \qquad
+    \sum_i c_i x_i = \frac{\sum_i (x_i-\bar x)x_i}{SS_x} = \frac{SS_x}{SS_x} = 1,
+    \qquad
+    \sum_i c_i^2 = \frac{SS_x}{SS_x^2} = \frac{1}{SS_x}
+    $$
+
+    (가운데 식은 $\sum_i (x_i-\bar x)x_i = \sum_i (x_i-\bar x)^2$ 을 썼다. $\sum_i (x_i - \bar x)\bar x = 0$ 이기 때문이다.)
+
+    **평균과 분산이 거기서 바로 나온다.** $y_i$ 가 서로 독립이고 $E[y_i] = \beta_0 + \beta_1 x_i$, $\operatorname{Var}(y_i) = \sigma^2$ 이므로
+
+    $$
+    E[\hat\beta_1] = \sum_i c_i(\beta_0 + \beta_1 x_i) = \beta_0\underbrace{\sum_i c_i}_{0} + \beta_1\underbrace{\sum_i c_i x_i}_{1} = \beta_1
+    $$
+
+    $$
+    \operatorname{Var}(\hat\beta_1) = \sum_i c_i^2\,\operatorname{Var}(y_i) = \sigma^2\sum_i c_i^2 = \frac{\sigma^2}{SS_x}
+    $$
+
+    이다. 독립인 정규확률변수의 선형결합은 다시 정규이므로
+
+    $$
+    \hat{\beta}_1 \sim N\!\left(\beta_1,\; \frac{\sigma^2}{SS_x}\right)
+    $$
+
+    이다. **$x$ 가 넓게 퍼질수록 $SS_x$ 가 커져 분산이 줄어든다**는 것이 여기서 읽힌다.
 
     **4단계: $\sigma$를 알 때의 표준화.** 참 표준편차로 나누면 표준정규가 된다.
 
@@ -76,13 +189,13 @@ $$
     s^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n - 2}
     $$
 
-    **6단계: 대입.** $\sigma$를 $s$로 바꾸면
+    **6단계: 대입.** $\sigma$ 자리에 $s$ 를 적어 넣으면 쓰고 싶은 양이 나온다. **아직 분포는 모른다.**
 
     $$
     \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}}
     $$
 
-    **7단계: $t$ 분포 결과.** 분자는 정규이고, $s^2$은 자유도 $n - 2$의 척도조정된 카이제곱분포를 따르며, 둘은 독립이다. 표준정규를 독립인 카이제곱을 자유도로 나눈 것의 제곱근으로 나눈 것이 $t$ 분포라는 정의에 따라
+    **7단계: 보조정리 1 이 그 분포를 준다.** $\hat\theta = \hat\beta_1$ 은 $a = 0$, $b = 1$ 인 일차결합이고 $c = \sqrt{1/SS_x}$ 다. 보조정리가 요구하는 두 가지 — $SSE/\sigma^2$ 이 $\chi^2_{n-2}$ 이고 $\hat\beta_1$ 과 독립이라는 것 — 이 거기서 증명되어 있으므로
 
     $$
     \frac{\hat{\beta}_1 - \beta_1}{s\sqrt{\dfrac{1}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2} \qquad \square
@@ -110,7 +223,7 @@ $$
 
 ---
 
-## 2. 주어진 점에서의 반응의 기댓값
+## 3. 주어진 점에서의 반응의 기댓값
 
 <div class="thmbox" markdown>
 
@@ -129,33 +242,71 @@ $$
 ??? proof "증명"
 
 
-    **1단계: 예측오차의 분해.** 추정된 평균반응과 참 평균반응의 차이는
+    **1단계: 무엇의 분포를 묻는가.** $x_0$ 에서의 평균반응은 $\theta = \beta_0 + \beta_1 x_0$ 이고 그 추정량은 $\hat\theta = \hat\beta_0 + \hat\beta_1 x_0$ 다. 두 추정량이 같은 자료에서 나와 서로 얽혀 있으므로 $\operatorname{Var}(\hat\theta)$ 를 둘의 분산만으로 적을 수 없다. **얽힘을 피해 가는 길이 있다.**
+
+    **2단계: 중심에서 다시 적는다.** 정규방정식이 주는 $\hat\beta_0 = \bar y - \hat\beta_1\bar x$ 를(앞 절 [최소제곱 추정](least_squares.md)) 넣으면 추정량이 두 조각으로 갈린다.
 
     $$
-    (\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0) = (\hat{\beta}_0 - \beta_0) + (\hat{\beta}_1 - \beta_1)x_0
+    \hat\theta := \hat\beta_0 + \hat\beta_1 x_0
+    = \bar y - \hat\beta_1\bar x + \hat\beta_1 x_0
+    = \underbrace{\bar y}_{\text{중심의 높이}} + \underbrace{\hat\beta_1(x_0 - \bar x)}_{\text{중심에서 기울여 간 몫}}
     $$
 
-    두 추정량이 모두 불편이므로 이 값의 평균은 0이다.
+    **직선은 언제나 $(\bar x,\ \bar y)$ 를 지난다**는 사실을 적은 것이고, 이 꼴에서 나머지가 전부 따라 나온다.
 
-    **2단계: 분산 계산.** OLS의 분산·공분산 결과를 쓴다.
-
-    - $\text{Var}(\hat{\beta}_0) = \sigma^2\!\left(\dfrac{1}{n} + \dfrac{\bar{x}^2}{SS_x}\right)$
-    - $\text{Var}(\hat{\beta}_1) = \dfrac{\sigma^2}{SS_x}$
-    - $\text{Cov}(\hat{\beta}_0, \hat{\beta}_1) = -\dfrac{\sigma^2 \bar{x}}{SS_x}$
-
-    $\text{Var}(\hat{\beta}_0 + \hat{\beta}_1 x_0) = \text{Var}(\hat{\beta}_0) + x_0^2\,\text{Var}(\hat{\beta}_1) + 2x_0\,\text{Cov}(\hat{\beta}_0, \hat{\beta}_1)$으로 결합하면
+    **3단계: 두 조각이 상관되지 않는다.** 이것이 이 증명의 핵심이다. 정리 1 의 $3$ 단계에서 $\hat\beta_1 = \sum_j c_j y_j$ 이고 $\sum_j c_j = 0$ 이었다. $y_i$ 들이 서로 독립이고 분산이 모두 $\sigma^2$ 이므로
 
     $$
-    \text{Var}(\hat{\beta}_0 + \hat{\beta}_1 x_0) = \sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
+    \operatorname{Cov}(\bar y,\ \hat\beta_1)
+    = \operatorname{Cov}\!\Bigl(\frac1n\sum_i y_i,\ \sum_j c_j y_j\Bigr)
+    = \frac1n\sum_i\sum_j c_j \operatorname{Cov}(y_i, y_j)
+    = \frac{\sigma^2}{n}\underbrace{\sum_j c_j}_{0}
+    = 0
     $$
 
-    **3단계: 표준화.** $\sigma$를 알면
+    이다. **가중치의 합이 $0$ 이라는 한 줄이 두 조각을 떼어 놓는다.**
+
+    **4단계: 평균과 분산.** $E[\bar y] = \beta_0 + \beta_1\bar x$ 이고 정리 1 에서 $E[\hat\beta_1] = \beta_1$ 이므로
+
+    $$
+    E[\hat\theta] = (\beta_0 + \beta_1\bar x) + \beta_1(x_0 - \bar x) = \beta_0 + \beta_1 x_0
+    $$
+
+    으로 불편이다. 분산은 $3$ 단계 덕분에 **교차항 없이** 더해진다.
+
+    $$
+    \operatorname{Var}(\hat\theta)
+    = \operatorname{Var}(\bar y) + (x_0-\bar x)^2\operatorname{Var}(\hat\beta_1)
+    = \frac{\sigma^2}{n} + (x_0-\bar x)^2\frac{\sigma^2}{SS_x}
+    = \sigma^2\!\left(\frac{1}{n} + \frac{(x_0-\bar x)^2}{SS_x}\right)
+    $$
+
+    **식의 모양이 여기서 설명된다.** 두 항은 서로 다른 두 가지의 흔들림이다 — 앞은 **중심 높이**를 얼마나 잘 아는가($1/n$ 로 줄어든다), 뒤는 **기울기**를 얼마나 잘 아는가에 $x_0$ 가 중심에서 떨어진 거리의 제곱을 곱한 것이다. 그래서 **$x_0 = \bar x$ 에서 가장 좁고** 멀어질수록 이차식으로 벌어진다. $2$ 절의 나비넥타이가 그 모양이다.
+
+    !!! note "흔히 적는 세 공식도 여기서 나온다"
+        $x_0 = 0$ 을 넣으면 $\hat\theta = \hat\beta_0$ 이므로
+
+        $$
+        \operatorname{Var}(\hat\beta_0) = \sigma^2\!\left(\frac1n + \frac{\bar x^2}{SS_x}\right)
+        $$
+
+        이고, $\hat\beta_0 = \bar y - \bar x\hat\beta_1$ 과 $3$ 단계를 쓰면
+
+        $$
+        \operatorname{Cov}(\hat\beta_0,\ \hat\beta_1)
+        = \operatorname{Cov}(\bar y,\ \hat\beta_1) - \bar x\operatorname{Var}(\hat\beta_1)
+        = -\,\frac{\bar x\,\sigma^2}{SS_x}
+        $$
+
+        이다. **$\bar x$ 가 분자에 혼자 앉아 있는** 그 식이고, 아래 상자가 그것을 그림으로 따라간다. 세 공식을 외워서 쓰는 대신 중심화한 꼴 하나에서 꺼내 쓰는 편이 낫다.
+
+    **5단계: 표준화.** $\sigma$ 를 알면
 
     $$
     \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{\sigma\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim N(0, 1)
     $$
 
-    **4단계: $\sigma$ 대신 $s$.** $\sigma$를 잔차 표준오차 $s$로 바꾸고 앞과 같은 $t$ 분포 논증을 적용하면
+    **6단계: $\sigma$ 대신 $s$.** $\hat\theta$ 는 두 추정량의 일차결합이므로($a=1$, $b=x_0$) 보조정리 1 이 그대로 적용된다. $c = \sqrt{1/n + (x_0-\bar x)^2/SS_x}$ 로 두면
 
     $$
     \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0)}{s\sqrt{\dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
@@ -178,13 +329,13 @@ $$
 
 ---
 
-## 3. 주어진 점에서의 반응(예측)
+## 4. 주어진 점에서의 반응(예측)
 
 <div class="thmbox" markdown>
 
 ### 정리 3. 개별 반응 예측오차의 t 분포 { .thm }
 
-같은 모형에서 $x_0$에서의 새 관측값 $y_0 = \beta_0 + \beta_1 x_0 + \varepsilon$에 대해
+같은 모형에서 $x_0$ 에서 **새로** 관측할 값 $y_0 = \beta_0 + \beta_1 x_0 + \varepsilon$ 을 생각하자. 여기서 $\varepsilon \sim N(0,\sigma^2)$ 은 자료를 만든 $\varepsilon_1,\ldots,\varepsilon_n$ 과 **독립**이다. 그러면
 
 $$
 \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{\sum_{i=1}^n(x_i - \bar{x})^2}}} \sim t_{n-2}
@@ -197,25 +348,37 @@ $$
 ??? proof "증명"
 
 
-    **1단계: 예측오차.** 예측오차를 정의하면
+    **1단계: 예측오차를 두 토막으로 가른다.** $\hat\theta = \hat\beta_0 + \hat\beta_1 x_0$ 와 $\theta = \beta_0 + \beta_1 x_0$ 라 쓰면 $y_0 = \theta + \varepsilon$ 이므로
 
     $$
-    \hat{y}_0 - y_0 = (\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon) = (\hat{\beta}_0 - \beta_0) + (\hat{\beta}_1 - \beta_1)x_0 - \varepsilon
+    \hat y_0 - y_0 = \hat\theta - y_0
+    = \underbrace{(\hat\theta - \theta)}_{\text{직선을 어디에 그었나}} \;-\; \underbrace{\varepsilon}_{\text{새 관측이 어디에 떨어지나}}
     $$
 
-    **2단계: 분산의 분해.** 오차 $\varepsilon$은 (훈련자료에 의존하는) 추정량 $\hat{\beta}_0$, $\hat{\beta}_1$과 독립이므로
+    다. **정리 2 가 앞 토막을 이미 다 재어 두었다** — 평균이 $0$ 이고 분산이 $\sigma^2(1/n + (x_0-\bar x)^2/SS_x)$ 다. 남은 일은 뒤 토막을 붙이는 것뿐이다.
+
+    **2단계: 두 토막이 독립이다 — 그리고 이것은 가정이다.** $\hat\theta$ 는 $y_1,\ldots,y_n$ 만으로 만들어지므로 $\varepsilon_1,\ldots,\varepsilon_n$ 의 함수이고, $\varepsilon$ 은 정리의 가정에서 그 $n$ 개와 독립이라고 **둔 것**이다. 유도된 사실이 아니라 **모형이 그렇게 약속한 것**이므로, 새 관측이 자료와 같은 기제에서 나오지 않으면 이 정리는 쓸 수 없다.
+
+    **3단계: 평균과 분산.** 정리 2 에서 $E[\hat\theta] = \theta$ 이고 $E[\varepsilon] = 0$ 이므로 $E[\hat y_0 - y_0] = 0$ 이다. $2$ 단계 덕분에 분산은 **교차항 없이** 더해진다.
 
     $$
-    \text{Var}(\hat{y}_0 - y_0) = \underbrace{\sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)}_{\text{추정의 불확실성}} + \underbrace{\sigma^2}_{\text{줄일 수 없는 잡음}} = \sigma^2\!\left(1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
+    \operatorname{Var}(\hat y_0 - y_0)
+    = \operatorname{Var}(\hat\theta) + \operatorname{Var}(\varepsilon)
+    = \underbrace{\sigma^2\!\left(\frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)}_{\text{추정의 불확실성}} + \underbrace{\sigma^2}_{\text{줄일 수 없는 잡음}}
+    = \sigma^2\!\left(1 + \frac{1}{n} + \frac{(x_0 - \bar{x})^2}{SS_x}\right)
     $$
 
-    **3단계: $\sigma$를 알 때의 표준화.** 예측오차는 평균이 0인 정규분포를 따른다.
+    **근호 안의 $1$ 이 어디서 왔는지가 이 정리의 전부다.** 앞 두 항은 $n$ 이 커지면 $0$ 으로 가지만 $1$ 은 남는다. 자료를 아무리 모아도 **다음 한 건이 어디에 떨어질지는 $\sigma$ 만큼 모른다** — 그것이 줄어들지 않는 까닭은 추정이 부정확해서가 아니라 세상이 그만큼 흔들리기 때문이다. 들머리의 $5.10$ 배가 이 $1$ 하나에서 나온 수다.
+
+    **4단계: 정규성.** $\hat\theta$ 는 독립인 정규확률변수 $y_1,\ldots,y_n$ 의 일차결합이므로 정규이고, $\varepsilon$ 도 정규이며 둘이 독립이다. 독립인 두 정규의 차는 다시 정규이므로 $\hat y_0 - y_0$ 이 정규다.
+
+    **5단계: $\sigma$ 를 알 때의 표준화.** 평균 $0$, 분산을 위에서 얻었으므로
 
     $$
     \frac{\hat{y}_0 - y_0}{\sigma\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim N(0, 1)
     $$
 
-    **4단계: $\sigma$ 대신 $s$.** $\sigma$를 $s$로 바꾸면 $t$ 분포를 얻는다.
+    **6단계: $\sigma$ 대신 $s$.** 보조정리 1 의 마지막 문장이 덮는 경우다. $SSE$ 는 $\varepsilon_1,\ldots,\varepsilon_n$ 만의 함수이므로 $\varepsilon$ 과도 독립이고, 따라서 분자 전체가 $SSE$ 와 독립이다. $c = \sqrt{1 + 1/n + (x_0-\bar x)^2/SS_x}$ 로 두면
 
     $$
     \frac{(\hat{\beta}_0 + \hat{\beta}_1 x_0) - (\beta_0 + \beta_1 x_0 + \varepsilon)}{s\sqrt{1 + \dfrac{1}{n} + \dfrac{(x_0 - \bar{x})^2}{SS_x}}} \sim t_{n-2} \qquad \square
@@ -243,7 +406,7 @@ $$
 
 **그림으로 보는 통계학 1.** 절편과 기울기는 따로 흔들리지 않는다
 
-위 정리들은 $\hat\beta_1$ 과 $\hat\beta_0 + \hat\beta_1 x_0$ 의 분포를 **하나씩** 적는다. 그런데 두 추정량은 같은 자료에서 나온 것이라 서로 얽혀 있고, 그 얽힘이 닫힌 꼴로 나온다.
+정리 2 의 증명이 그 얽힘을 **피해** 갔다 — 중심에서 다시 적어 상관되지 않는 두 조각으로 갈랐다. 그러니 얽힘 자체는 쪽지에 적힌 식 하나로 남았는데, 그 식을 들여다보면 할 말이 더 있다.
 
 $$
 \operatorname{Cov}(\hat\beta_0, \hat\beta_1) = -\,\frac{\bar x\,\sigma^2}{S_{xx}},
@@ -279,7 +442,7 @@ _확인한 곳 — 표와 그림의 수는 모두 직접 모의실험해 얻은 
 
 ---
 
-## 4. 요약 비교
+## 5. 요약 비교
 
 | 대상 | 표준오차 | 분포 |
 |:---|:---|:---|
