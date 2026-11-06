@@ -3,7 +3,7 @@ r"""12장 '추정과 추론' 여섯 쪽에 들어가는 개념 그림을 만든�
 만드는 파일:
   ch12/estimation_inference/img/mle_equals_ols.png        가능도 최대화 = 제곱 최소화
   ch12/estimation_inference/img/three_variance_pieces.png 예측 분산의 세 조각
-  ch12/estimation_inference/img/ci_vs_pi_bands.png        신뢰띠는 줄고 예측띠는 안 준다
+  ch12/estimation_inference/img/ci_vs_pi_bands.png        신뢰대는 줄고 예측대는 안 준다
   ch12/estimation_inference/img/mc_beta_and_se.png        몬테카를로가 확인하는 표준오차
   ch12/estimation_inference/img/slope_ci_levels.png       신뢰수준을 올리면 결론이 바뀐다
   ch12/estimation_inference/img/joint_vs_marginal_ci.png  결합영역과 개별구간의 어긋남
@@ -149,7 +149,7 @@ def fig_three_pieces():
     ax.plot(x0, piece_n + piece_x, color=GREEN, lw=2.2)
     ax.plot(x0, piece_n + piece_x + piece_1, color=ORANGE, lw=2.2)
     ax.axvspan(0, 10, color=MUTED, alpha=0.12)
-    ax.text(5, 0.62, "아래 두 조각만 쓰면 신뢰띠\n셋을 다 쓰면 예측띠",
+    ax.text(5, 0.62, "아래 두 조각만 쓰면 신뢰대\n셋을 다 쓰면 예측대",
             fontsize=10, color=INK, ha="center", linespacing=1.6)
     ax.set_ylim(0, 2.25)
     ax.set_xlim(-3, 13)
@@ -194,7 +194,7 @@ def fig_three_pieces():
     print(f"  x0=12 의 기울기 조각 = {piece_x[e12]:.3f}")
 
 
-# === 3. 신뢰띠는 줄고 예측띠는 줄지 않는다 ===
+# === 3. 신뢰대는 줄고 예측대는 줄지 않는다 ===
 def fig_bands():
     rng = np.random.default_rng(0)
     n, sig = 100, 3.0
@@ -216,14 +216,14 @@ def fig_bands():
     ci = tc * s * np.sqrt(core)
     pi = tc * s * np.sqrt(1 + core)
     ax.fill_between(g, yh - pi, yh + pi, color=ORANGE_F, alpha=0.75,
-                    label="95% 예측띠")
-    ax.fill_between(g, yh - ci, yh + ci, color=BLUE_F, label="95% 신뢰띠")
+                    label="95% 예측대")
+    ax.fill_between(g, yh - ci, yh + ci, color=BLUE_F, label="95% 신뢰대")
     ax.scatter(x, y, s=16, color=MUTED, alpha=0.9, edgecolor="none",
                label="관측값")
     ax.plot(g, yh, color=BLUE, lw=2.2, label="적합 직선")
     ax.set_xlabel(r"$x$", fontsize=10.5, color=INK)
     ax.set_ylabel(r"$y$", fontsize=10.5, color=INK)
-    ax.set_title(r"$n=100$, $\sigma=3$ 에서의 두 띠", fontsize=11.5,
+    ax.set_title(r"$n=100$, $\sigma=3$ 에서의 두 대", fontsize=11.5,
                  color=INK, pad=6)
     ax.legend(fontsize=9.0, loc="upper left", frameon=False, ncol=2)
     ax.set_ylim(-12, 16)
@@ -237,9 +237,9 @@ def fig_bands():
         ci_w.append(t * sig * np.sqrt(1 / m))
         pi_w.append(t * sig * np.sqrt(1 + 1 / m))
     ax.plot(ns, pi_w, color=ORANGE, lw=2.4, marker="s", ms=6,
-            label="예측띠 반폭")
+            label="예측대 반폭")
     ax.plot(ns, ci_w, color=BLUE, lw=2.4, marker="o", ms=6,
-            label="신뢰띠 반폭")
+            label="신뢰대 반폭")
     ax.axhline(1.96 * sig, color=MUTED, lw=1.4, ls="--")
     ax.text(10000, 1.96 * sig + 0.22, r"$1.96\sigma = 5.88$", fontsize=9.8,
             color=INK, ha="right")

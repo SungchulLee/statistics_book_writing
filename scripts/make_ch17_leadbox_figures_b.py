@@ -283,7 +283,7 @@ save(fig, CI + "only_hard_problems_differ.png")
 # 1/(2 f(m) 루트 n) 인데 거기 들어가는 f(m) 을 모르기 때문이다.
 # 재표집은 그 값을 **묻지 않는다.**」
 #
-# 「모른다」를 말로만 두지 않고, f(m) 을 추정하는 손잡이(띠폭)를 돌려
+# 「모른다」를 말로만 두지 않고, f(m) 을 추정하는 손잡이(대역폭)를 돌려
 # 공식의 답이 얼마나 움직이는지 재어 재표집과 맞댄다. 자료는 쪽의 것
 # 그대로다 — LogNormal(10.5, 0.8^2) 에서 n = 200. 그 모집단의 점근
 # 표준오차 2,574.7 은 쪽이 보기 5 에서 적어 둔 값이고, 표본중앙값
@@ -311,18 +311,18 @@ print(f"\n[bootstrap_median] 모집단 중앙값 {pop_med:,.1f} 자리의 밀도
       f"{f_pop:.4e} · 점근 표준오차 {true_se:,.1f}")
 for bw in BWS:
     v = np.array(form_se[bw])
-    print(f"  띠폭 {bw:4.2f} 로 f(m) 을 재면 공식이 {v.mean():8.1f} "
+    print(f"  대역폭 {bw:4.2f} 로 f(m) 을 재면 공식이 {v.mean():8.1f} "
           f"(표본마다의 흔들림 {v.std():6.1f})")
 boot_arr = np.array(boot_list)
 print(f"  재표집은 {boot_arr.mean():8.1f} (표본마다의 흔들림 "
-      f"{boot_arr.std():6.1f}) — 띠폭을 고를 일이 없다")
+      f"{boot_arr.std():6.1f}) — 대역폭을 고를 일이 없다")
 
 fig, ax = plt.subplots(figsize=(11.6, 6.0))
 means = [np.mean(form_se[bw]) for bw in BWS]
 sds = [np.std(form_se[bw]) for bw in BWS]
 ax.errorbar(range(len(BWS)), means, yerr=sds, fmt="s", ms=12,
             color="tab:red", ecolor="tab:red", elinewidth=2.4, capsize=8,
-            capthick=2.2, label="공식 — f(m) 을 띠폭 하나로 추정해서")
+            capthick=2.2, label="공식 — f(m) 을 대역폭 하나로 추정해서")
 ax.errorbar([len(BWS) + 0.7], [boot_arr.mean()], yerr=[boot_arr.std()],
             fmt="o", ms=16, color="tab:blue", ecolor="tab:blue",
             elinewidth=2.4, capsize=8, capthick=2.2,
@@ -333,7 +333,7 @@ ax.text(-0.45, true_se + 55, f"모집단을 알 때의 참값 {true_se:,.0f}",
         fontweight="bold")
 ax.set_xticks(list(range(len(BWS))) + [len(BWS) + 0.7],
               [f"{bw:.2f}" for bw in BWS] + ["재표집"], fontsize=11.5)
-ax.set_xlabel("f(m) 을 재는 띠폭 — 어느 값이 옳은지 자료는 말해 주지 않는다",
+ax.set_xlabel("f(m) 을 재는 대역폭 — 어느 값이 옳은지 자료는 말해 주지 않는다",
               fontsize=11.5)
 ax.set_ylabel("중앙값의 표준오차 추정값", fontsize=12)
 ax.legend(fontsize=11.5, loc="upper left")

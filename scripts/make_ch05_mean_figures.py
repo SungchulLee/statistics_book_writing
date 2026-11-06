@@ -174,7 +174,7 @@ def mean_vs_median_efficiency():
 
         for vals, color, tag in [(xbar, BLUE, "표본평균 $\\bar X$"),
                                  (med, ORANGE, "표본중앙값")]:
-            # 코시 표본의 중앙값은 퍼짐이 커서 같은 띠폭이면 울퉁불퉁하다.
+            # 코시 표본의 중앙값은 퍼짐이 커서 같은 대역폭이면 울퉁불퉁하다.
             y = kde(vals[:40000], grid, bw=0.050 if "코시" in name else 0.035)
             ax.plot(grid, y, color=color, linewidth=2.2, zorder=5, label=tag)
             ax.fill_between(grid, y, color=color, alpha=0.13, zorder=3)

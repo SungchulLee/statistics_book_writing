@@ -266,7 +266,7 @@ def fig_interaction():
     eff = bi[1] + bi[3] * gg
     sd = np.sqrt(V[1, 1] + gg ** 2 * V[3, 3] + 2 * gg * V[1, 3])
     ax.fill_between(gg, eff - tc * sd, eff + tc * sd, color=ORANGE_F,
-                    alpha=0.85, label="95% 신뢰띠")
+                    alpha=0.85, label="95% 신뢰대")
     ax.plot(gg, eff, color=ORANGE, lw=2.8,
             label=r"$\partial y/\partial x_1 = \hat\beta_1 + \hat\beta_3 x_2$")
     ax.axhline(0, color=RED, lw=1.6, ls="--")

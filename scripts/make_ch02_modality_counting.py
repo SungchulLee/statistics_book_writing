@@ -3,8 +3,8 @@ r"""봉우리를 세는 일이 왜 어려운가.
 이 쪽의 $\S 5$ 는 "대역폭을 달리한 커널밀도추정"과 "단봉성에 대한 형식적
 검정"을 이름만 대고 지나간다. 그 둘을 수로 만든다.
 
-① 같은 표본인데 띠폭 하나로 봉우리가 $9$ 개도 되고 $1$ 개도 된다.
-② 실버만의 임계 띠폭 검정 — 「봉우리가 하나뿐인가」에 $p$ 값을 붙인다.
+① 같은 표본인데 대역폭 하나로 봉우리가 $9$ 개도 되고 $1$ 개도 된다.
+② 실버만의 임계 대역폭 검정 — 「봉우리가 하나뿐인가」에 $p$ 값을 붙인다.
    그리고 두 봉우리를 알아보려면 얼마나 떨어져 있어야 하는지 잰다.
 ③ 평균·표준편차·왜도가 **모두 같은데** 봉우리가 다섯과 셋인 두 분포.
 
@@ -33,14 +33,14 @@ GRID = 1200
 
 
 def nmodes(x, h, grid=GRID):
-    """띠폭 h 의 가우스 KDE 가 갖는 국소최대의 수."""
+    """대역폭 h 의 가우스 KDE 가 갖는 국소최대의 수."""
     g = np.linspace(x.min() - 3 * h, x.max() + 3 * h, grid)
     d = stats.gaussian_kde(x, bw_method=h / x.std(ddof=1))(g)
     return int(((d[1:-1] > d[:-2]) & (d[1:-1] > d[2:])).sum())
 
 
 def h_crit(x, k, steps=40):
-    """봉우리가 k 개 이하가 되는 가장 작은 띠폭 (이분법)."""
+    """봉우리가 k 개 이하가 되는 가장 작은 대역폭 (이분법)."""
     lo, hi = 1e-3, 3 * x.std(ddof=1)
     for _ in range(steps):
         m = 0.5 * (lo + hi)
@@ -52,7 +52,7 @@ def h_crit(x, k, steps=40):
 
 
 def silverman_p(x, k, B=B_BOOT, seed=0):
-    """실버만의 임계 띠폭 검정. 매끄럽게 한 분포에서 재표집한다."""
+    """실버만의 임계 대역폭 검정. 매끄럽게 한 분포에서 재표집한다."""
     r = np.random.default_rng(seed)
     h = h_crit(x, k)
     n, s, mu = len(x), x.std(ddof=1), x.mean()
@@ -64,10 +64,10 @@ def silverman_p(x, k, B=B_BOOT, seed=0):
     return h, hit / B
 
 
-# === ① 띠폭이 봉우리 수를 정한다 =====================================
+# === ① 대역폭이 봉우리 수를 정한다 =====================================
 x3 = np.concatenate([RNG.normal(m, SIG, N1 // 3) for m in (-3, 0, 3)])
 RNG.shuffle(x3)
-print(f"① 세 봉우리에서 뽑은 표본 {N1} 개 — 띠폭만 바꾼다")
+print(f"① 세 봉우리에서 뽑은 표본 {N1} 개 — 대역폭만 바꾼다")
 MODES = {h: nmodes(x3, h) for h in HS}
 for h in HS:
     print(f"   h = {h:<5} 봉우리 {MODES[h]} 개")
@@ -79,7 +79,7 @@ print(f"\n② 「봉우리가 하나뿐이다」에 대한 실버만 검정 (재
 uni = RNG.normal(0, 1, N1)
 for nm, v in (("단봉 (표준정규)", uni), ("세 봉우리", x3)):
     h, p = silverman_p(v, 1)
-    print(f"   {nm:<16} 임계 띠폭 {h:.3f},  p = {p:.3f}")
+    print(f"   {nm:<16} 임계 대역폭 {h:.3f},  p = {p:.3f}")
 
 print(f"\n   두 봉우리를 알아보려면 얼마나 떨어져야 하는가 "
       f"(각 봉우리 {N2 // 2} 개, {REPS} 번)")
@@ -126,7 +126,7 @@ ax1.set_xscale("log")
 ax1.set_xticks([0.1, 0.2, 0.5, 1.0, 2.0])
 ax1.set_xticklabels(["$0.1$", "$0.2$", "$0.5$", "$1$", "$2$"], fontsize=10)
 ax1.minorticks_off()
-ax1.set_xlabel("커널의 띠폭 $h$")
+ax1.set_xlabel("커널의 대역폭 $h$")
 ax1.set_ylabel("밀도그림에서 세어지는 봉우리 수")
 ax1.set_ylim(0, max(MODES.values()) + 1.5)
 ax1.set_title(f"① 같은 표본, {max(MODES.values())} 개에서 {min(MODES.values())} 개까지", fontsize=12)

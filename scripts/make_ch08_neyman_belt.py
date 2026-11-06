@@ -1,10 +1,10 @@
-r"""네이만이 $1934$ 년에 그린 「신뢰띠」와, 그날 보울리가 물은 것.
+r"""네이만이 $1934$ 년에 그린 「신뢰대」와, 그날 보울리가 물은 것.
 
-띠를 **가로로** 자르면 $\theta$ 가 주어졌을 때 받아들일 $x$ 의 범위이고,
-**세로로** 자르면 $x$ 가 관측되었을 때의 신뢰구간이다. 네이만은 띠를 먼저
+대를 **가로로** 자르면 $\theta$ 가 주어졌을 때 받아들일 $x$ 의 범위이고,
+**세로로** 자르면 $x$ 가 관측되었을 때의 신뢰구간이다. 네이만은 대를 먼저
 그린다 — 「우리는 표본을 뽑기 전에 추론을 시작한다」.
 
-① 이항 $n = 20$ 의 신뢰띠와 두 방향의 절단.
+① 이항 $n = 20$ 의 신뢰대와 두 방향의 절단.
 ② 사전분포가 무엇이든 장기 포함률은 $95\%$ 다 (네이만의 보장).
 ③ 그러나 $\hat p$ 를 알고 나서 묻는 물음의 답은 사전분포가 정한다 (보울리의 결핍).
 
@@ -27,7 +27,7 @@ Z = stats.norm.isf(0.025)
 
 
 def wilson(k, n, z=Z):
-    """z 검정을 뒤집어 얻는 구간 — 곧 네이만의 띠를 세로로 자른 것."""
+    """z 검정을 뒤집어 얻는 구간 — 곧 네이만의 대를 세로로 자른 것."""
     ph = k / n
     d = 1 + z**2 / n
     c = (ph + z**2 / (2 * n)) / d
@@ -36,7 +36,7 @@ def wilson(k, n, z=Z):
 
 
 def accept(theta, n, z=Z):
-    """띠를 가로로 자른 것 — theta 가 참일 때 받아들일 k 의 범위."""
+    """대를 가로로 자른 것 — theta 가 참일 때 받아들일 k 의 범위."""
     se = np.sqrt(theta * (1 - theta) / n)
     return n * (theta - z * se), n * (theta + z * se)
 
@@ -72,7 +72,7 @@ print(f"\n보울리의 보기 — n = {N}, k = {k_bow} 이면 95% 구간 "
 # === 그림 ==========================================================
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.4, 4.9))
 
-# ---- ① 띠 --------------------------------------------------------
+# ---- ① 대 --------------------------------------------------------
 NB = 20
 ks = np.arange(NB + 1)
 blo, bhi = wilson(ks, NB)
@@ -80,7 +80,7 @@ ax1.fill_betweenx(np.linspace(0, 1, 2), 0, 0, color="none")  # 눈금 잡기용
 ax1.fill_between(ks, blo, bhi, color="#1f77b4", alpha=0.22, step="mid", lw=0)
 ax1.step(ks, blo, where="mid", color="#1f77b4", lw=2.0)
 ax1.step(ks, bhi, where="mid", color="#1f77b4", lw=2.0)
-ax1.text(10, 0.5, "신 뢰 띠", ha="center", va="center", fontsize=15,
+ax1.text(10, 0.5, "신 뢰 대", ha="center", va="center", fontsize=15,
          rotation=38, color="#1f77b4", alpha=0.85)
 
 KS = 6
@@ -104,7 +104,7 @@ ax1.set_xlim(-0.5, NB + 0.5)
 ax1.set_ylim(0, 1)
 ax1.set_xlabel(f"관측한 성공 횟수 $x$  ($n = {NB}$)")
 ax1.set_ylabel("모비율 $\\theta$")
-ax1.set_title("① 네이만의 신뢰띠", fontsize=12)
+ax1.set_title("① 네이만의 신뢰대", fontsize=12)
 ax1.grid(alpha=0.25)
 
 # ---- ② 주변 포함률 -------------------------------------------------
@@ -163,7 +163,7 @@ fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 
 # === 본문에 적을 수 =================================================
-print(f"\n① n = {NB} 의 띠")
+print(f"\n① n = {NB} 의 대")
 print(f"   x = {KS} 를 세로로 자르면 [{l6:.4f}, {h6:.4f}]")
 print(f"   theta = {TH} 를 가로로 자르면 x in [{a_lo:.2f}, {a_hi:.2f}]")
 

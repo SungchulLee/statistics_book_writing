@@ -1,13 +1,13 @@
-r"""12.4절 「그림으로 보는 통계학」 — 띠가 셋인데 묻는 것이 다 다르다.
+r"""12.4절 「그림으로 보는 통계학」 — 대가 셋인데 묻는 것이 다 다르다.
 
-회귀직선 둘레에 그릴 수 있는 띠가 하나가 아니다. 무엇을 95% 로 담고
+회귀직선 둘레에 그릴 수 있는 대가 하나가 아니다. 무엇을 95% 로 담고
 싶으냐에 따라 폭이 달라진다.
 
-  점별 신뢰띠   정해 둔 x0 한 곳에서 **평균** E[y|x0] 을 담는다
-  동시 신뢰띠   **직선 전체**를 한꺼번에 담는다 (워킹-호텔링)
-  예측띠        그 자리에 올 **새 관측 하나**를 담는다
+  점별 신뢰대   정해 둔 x0 한 곳에서 **평균** E[y|x0] 을 담는다
+  동시 신뢰대   **직선 전체**를 한꺼번에 담는다 (워킹-호텔링)
+  예측대        그 자리에 올 **새 관측 하나**를 담는다
 
-점별 신뢰띠로 직선 전체를 말하면 약속이 깨진다. n = 30 에서 그 띠가
+점별 신뢰대로 직선 전체를 말하면 약속이 깨진다. n = 30 에서 그 대가
 직선을 통째로 담을 확률은 95% 가 아니라 85.8% 이고, 이 값은 정확히
 P(F(2, n-2) <= t^2/2) 다.
 
@@ -71,16 +71,16 @@ def main():
     cov_pred = float(np.mean(np.abs(ynew - fit[:, mid]) <= half_pi))
     exact_all_pt = float(stats.f.cdf(TC ** 2 / 2, 2, N - 2))
 
-    print(f"    점별 신뢰띠 · 한 점의 평균     {cov_point:.4f}")
-    print(f"    점별 신뢰띠 · 직선 전체       {cov_all_pt:.4f}   (관측 범위 안)")
-    print(f"       같은 띠를 x 전체로 늘리면    {exact_all_pt:.4f}   (정확값)")
+    print(f"    점별 신뢰대 · 한 점의 평균     {cov_point:.4f}")
+    print(f"    점별 신뢰대 · 직선 전체       {cov_all_pt:.4f}   (관측 범위 안)")
+    print(f"       같은 대를 x 전체로 늘리면    {exact_all_pt:.4f}   (정확값)")
     print(f"    워킹-호텔링 · 직선 전체       {cov_all_wh:.4f}")
-    print(f"    예측띠 · 새 관측 하나         {cov_pred:.4f}")
+    print(f"    예측대 · 새 관측 하나         {cov_pred:.4f}")
     print(f"    배수   t = {TC:.4f}   워킹-호텔링 = {WH:.4f}  ({WH/TC:.2f} 배 넓다)")
 
     fig, axes = plt.subplots(1, 2, figsize=(12.4, 4.9), constrained_layout=True)
 
-    # ── 왼쪽: 한 표본에 세 띠 ──
+    # ── 왼쪽: 한 표본에 세 대 ──
     ax = axes[0]
     r2 = np.random.default_rng(9)
     ys = A0 + B0 * X + r2.normal(0, SIGMA, N)
@@ -92,16 +92,16 @@ def main():
     sg = ss * np.sqrt(lev)
 
     ax.fill_between(g, f - TC * ss * np.sqrt(1 + lev), f + TC * ss * np.sqrt(1 + lev),
-                    color=AMBER, alpha=0.18, label="예측띠 — 새 관측 하나")
+                    color=AMBER, alpha=0.18, label="예측대 — 새 관측 하나")
     ax.fill_between(g, f - WH * sg, f + WH * sg, color=TEAL, alpha=0.28,
-                    label="동시 신뢰띠 — 직선 전체")
+                    label="동시 신뢰대 — 직선 전체")
     ax.fill_between(g, f - TC * sg, f + TC * sg, color=RED, alpha=0.35,
-                    label="점별 신뢰띠 — 한 점의 평균")
+                    label="점별 신뢰대 — 한 점의 평균")
     ax.plot(g, f, lw=2.4, color=INK)
     ax.scatter(X, ys, s=22, color=INK, zorder=5)
     ax.set_xlabel("$x$", fontsize=12)
     ax.set_ylabel("$y$", fontsize=12)
-    ax.set_title(f"같은 자료에 그린 세 띠  (n = {N})",
+    ax.set_title(f"같은 자료에 그린 세 대  (n = {N})",
                  fontsize=12.8, color=INK, pad=8)
     ax.legend(fontsize=9.8, framealpha=0.93, loc="upper left")
     ax.grid(alpha=0.22)
@@ -109,8 +109,8 @@ def main():
 
     # ── 오른쪽: 각각이 실제로 담는 비율 ──
     ax = axes[1]
-    labels = ["점별 신뢰띠로\n한 점의 평균", "점별 신뢰띠로\n직선 전체\n(관측 범위 안)",
-              "동시 신뢰띠로\n직선 전체", "예측띠로\n새 관측 하나"]
+    labels = ["점별 신뢰대로\n한 점의 평균", "점별 신뢰대로\n직선 전체\n(관측 범위 안)",
+              "동시 신뢰대로\n직선 전체", "예측대로\n새 관측 하나"]
     vals = [cov_point, cov_all_pt, cov_all_wh, cov_pred]
     cols = [RED, "#B71C1C", TEAL, AMBER]
     bars = ax.bar(range(4), np.array(vals) * 100, color=cols, alpha=0.85, width=0.62)
@@ -133,7 +133,7 @@ def main():
 
     fig.suptitle("무엇을 담고 싶은지 정하지 않으면 폭을 정할 수 없다", fontsize=14.5)
     fig.text(0.5, -0.05,
-             f"둘째 막대가 흔한 실수다. 점별 띠를 그려 놓고 「참 직선이 이 안에 있다」고 "
+             f"둘째 막대가 흔한 실수다. 점별 대를 그려 놓고 「참 직선이 이 안에 있다」고 "
              f"읽으면 관측 범위 안에서도 ${cov_all_pt*100:.1f}\\%$ 이고, "
              f"$x$ 를 끝까지 늘리면 $P(F_{{2,{N-2}}} \\leq t^2/2) = {exact_all_pt*100:.1f}\\%$ 로 "
              "더 내려간다.",

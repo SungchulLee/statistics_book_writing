@@ -252,7 +252,7 @@ def fig_mean_vs_individual():
     """11.2 표집분포 — 평균반응과 개별반응의 표준오차.
 
     쪽의 three_variance_pieces 는 예측오차의 분산을 세 조각으로 가르고,
-    ci_vs_pi_bands 는 n 을 키울 때 두 띠가 어떻게 달라지는지를 그린다.
+    ci_vs_pi_bands 는 n 을 키울 때 두 대가 어떻게 달라지는지를 그린다.
     여기서는 그 둘이 건드리지 않는 것 --- 두 표준오차의 **비가 자리에 따라
     어떻게 줄어드는지** --- 만 본다. 중심에서 5.10 배이던 것이 자료 범위
     밖에서는 2.21 배다.
@@ -308,7 +308,7 @@ def fig_mean_vs_individual():
     ax2.set_ylim(0, 6.6)
     ax2.set_xlabel("x", fontsize=11)
     ax2.set_ylabel("개별반응 표준오차 ÷ 평균반응 표준오차", fontsize=11)
-    ax2.set_title("두 띠의 폭 비는 자리에 따라 달라진다", fontsize=12.5)
+    ax2.set_title("두 대의 폭 비는 자리에 따라 달라진다", fontsize=12.5)
     ax2.grid(alpha=0.25)
     ax2.text(0.5, 0.04, "중심에서 멀어질 때 커지는 항은 두 식에 똑같이 한 번씩만\n"
              "들어 있고, 개별반응 쪽에는 1 이 이미 깔려 있다",
