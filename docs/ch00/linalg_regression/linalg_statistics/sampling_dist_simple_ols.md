@@ -448,7 +448,7 @@ $c_i = (x_i - \bar{x})/S_{xx}$에 대해 $\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i$�
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-연습문제 4를 절편에 대해 되풀이하라. $d_i = \dfrac{1}{n} - \bar{x}\,c_i$로 두면 $\hat{\beta}_0 = \sum_{i=1}^n d_i Y_i$임을 보이고, 이 가중치로부터 정리 2의 $\operatorname{Var}(\hat{\beta}_0) = \sigma^2\!\left(\dfrac{1}{n} + \dfrac{\bar{x}^2}{S_{xx}}\right)$을 유도하라.
+연습문제 4를 절편에 대해 반복하라. $d_i = \dfrac{1}{n} - \bar{x}\,c_i$로 두면 $\hat{\beta}_0 = \sum_{i=1}^n d_i Y_i$임을 보이고, 이 가중치로부터 정리 2의 $\operatorname{Var}(\hat{\beta}_0) = \sigma^2\!\left(\dfrac{1}{n} + \dfrac{\bar{x}^2}{S_{xx}}\right)$을 유도하라.
 
 </div>
 

@@ -269,7 +269,7 @@ $$
     z_1 = \frac{1}{n}\mathbf{x}_1^\top\mathbf{y}, \qquad |z_1| \le \lambda_{\max} \le \lambda
     $$
 
-    이고 따라서 $S_\lambda(z_1) = 0$이다. $\beta_1$은 0에 머문다. 그러면 $j = 2$에서도 모든 다른 좌표가 여전히 0이니 $\mathbf{r}^{(2)} = \mathbf{y}$이고 같은 계산이 되풀이된다. 차례로 $j = p$까지 아무 좌표도 움직이지 않으므로 첫 순회에서 $\max_j|\hat\beta_j^{(1)} - \hat\beta_j^{(0)}| = 0 < \epsilon$, 알고리즘은 $\mathbf{0}$에서 멈춘다. §4에 따라 순환 좌표하강은 이 볼록 문제의 전역 최소점으로 수렴하므로 $\mathbf{0}$이 전역 최소점이다.
+    이고 따라서 $S_\lambda(z_1) = 0$이다. $\beta_1$은 0에 머문다. 그러면 $j = 2$에서도 모든 다른 좌표가 여전히 0이니 $\mathbf{r}^{(2)} = \mathbf{y}$이고 같은 계산이 반복된다. 차례로 $j = p$까지 아무 좌표도 움직이지 않으므로 첫 순회에서 $\max_j|\hat\beta_j^{(1)} - \hat\beta_j^{(0)}| = 0 < \epsilon$, 알고리즘은 $\mathbf{0}$에서 멈춘다. §4에 따라 순환 좌표하강은 이 볼록 문제의 전역 최소점으로 수렴하므로 $\mathbf{0}$이 전역 최소점이다.
 
     **($\Rightarrow$) $\lambda < \lambda_{\max}$이면 $\mathbf{0}$은 최적이 아니다.** 최댓값을 주는 좌표를 $j_0$라 하면 $\mathbf{0}$에서 $|z_{j_0}| = \lambda_{\max} > \lambda$이므로
 

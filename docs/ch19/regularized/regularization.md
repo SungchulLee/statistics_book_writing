@@ -199,7 +199,7 @@ print(f"  한 걸음의 곱  1 - 2*eta*lam = {keep:.4f}")
 print(f"  반감기        ln2 / (2*eta*lam) = {np.log(2)/(2*eta*lam):.1f} 걸음\n")
 
 def run(g, steps=2000, th=1.0):
-    """자료 기울기가 g 로 일정할 때 벌점이 붙은 한 걸음을 되풀이한다."""
+    """자료 기울기가 g 로 일정할 때 벌점이 붙은 한 걸음을 반복한다."""
     for _ in range(steps):
         th = keep * th + eta * g       # 줄이고 나서 자료가 미는 만큼 더한다
     return th

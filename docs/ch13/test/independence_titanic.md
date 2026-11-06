@@ -385,7 +385,7 @@ $$
     X^2_{	ext{예이츠}} = \sum_{i,j} \frac{\bigl(\lvert O_{ij}-E_{ij}\rvert - 0.5\bigr)^2}{E_{ij}}
     $$
 
-    이다. 보기 1 에서 네 이탈의 절댓값이 모두 $\lvert\delta\rvert = \lvert\Delta\rvert/n$ 로 **같았으므로** 괄호 안이 네 칸에서 똑같은 수가 되고, 보기 2 의 셈이 그대로 되풀이된다.
+    이다. 보기 1 에서 네 이탈의 절댓값이 모두 $\lvert\delta\rvert = \lvert\Delta\rvert/n$ 로 **같았으므로** 괄호 안이 네 칸에서 똑같은 수가 되고, 보기 2 의 셈이 그대로 반복된다.
 
     $$
     X^2_{	ext{예이츠}}

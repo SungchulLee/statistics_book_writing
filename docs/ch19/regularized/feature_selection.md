@@ -79,7 +79,7 @@ Statistics』에 실린 「모형선택에서 불안정성과 안정화의 발�
 
 아래 절의 자료($n = 200$, $p = 10$, 참 변수는 $x_1, x_3, x_7$)로 그 말을 그대로
 해 보았다. 자료 전체로 한 번 고르고, 그다음 절반씩 $100$ 번 뽑아 같은 절차를
-되풀이한다.
+반복한다.
 
 ```python
 import numpy as np, collections
@@ -104,7 +104,7 @@ rng = np.random.default_rng(11)
 n, half = len(y), len(y)//2
 sets = [picked(X[i], y[i]) for i in (rng.choice(n, half, replace=False) for _ in range(100))]
 cnt = collections.Counter(sets)
-print(f"\n  절반씩 100 번 뽑아 같은 절차를 되풀이하면")
+print(f"\n  절반씩 100 번 뽑아 같은 절차를 반복하면")
 print(f"    서로 다른 답이 {len(cnt)} 가지 나온다")
 print(f"    가장 자주 나온 답 {cnt.most_common(1)[0][0]} — 100 번 가운데 {cnt.most_common(1)[0][1]} 번")
 print(f"    참 변수 집합을 정확히 맞힌 것은 {cnt.get(TRUE,0)} 번")
@@ -120,7 +120,7 @@ for j in range(10):
 ```
   자료 전체로 한 번 고르면: (0, 2, 6, 9)  참 변수: (0, 2, 6)
 
-  절반씩 100 번 뽑아 같은 절차를 되풀이하면
+  절반씩 100 번 뽑아 같은 절차를 반복하면
     서로 다른 답이 22 가지 나온다
     가장 자주 나온 답 (0, 2, 6) — 100 번 가운데 39 번
     참 변수 집합을 정확히 맞힌 것은 39 번

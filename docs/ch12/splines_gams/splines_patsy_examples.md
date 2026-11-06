@@ -40,7 +40,7 @@
 자를 억지로 많은 점에 맞추면 점과 점 사이가 물결치기 시작하고, 조선소에서는 그런 자리를
 「fair 하지 않다」고 하여 **점을 고쳐 찍었다**. 다항식 하나로 모든 점을 지나게 할 때
 차수가 올라가며 곡선이 흔들리는 것과 똑같은 일이고, 아래 「자유도」가 세는 것이 바로 그
-흔들림의 여지다. 배를 짓던 사람들은 식을 세우지 않고도 그 사실을 알고 있었다.
+변동의 여지다. 배를 짓던 사람들은 식을 세우지 않고도 그 사실을 알고 있었다.
 
 _확인한 곳 — 쪽 번호 $39$ 와 사진 설명 「FIG. $71$—RIBBANDS IN PLACE AND SHORING UNDER FRAME」은 [Internet Archive 의 $1918$ 년 판 스캔](https://archive.org/details/howwoodenshipsar00este)(0-based leaf n55 = 인쇄 쪽 $39$)에서 직접 읽었다. 「the property which a wooden or metallic batten has of bending in a fair curve」, 「a thin batten is set so it can pass fairly through the spots and the line so found is rased in」, 그리고 「Hence a fairing or correcting process has to be performed」는 같은 책 전문 OCR 에서 찾았다. 다만 **이 책은 그 자를 batten 이라고만 부르고 spline 이라는 낱말은 한 번도 쓰지 않는다** — 자의 이름이 수학의 이름이 된 사정은 [Wikipedia 「Spline (mathematics)」](https://en.wikipedia.org/wiki/Spline_(mathematics)) 와 [「Flat spline」](https://en.wikipedia.org/wiki/Flat_spline)에서 확인했다(휘는 데 드는 힘이 가장 적은 모양을 자가 저절로 찾는다는 것도 뒤 문서에 있다)._
 

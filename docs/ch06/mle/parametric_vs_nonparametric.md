@@ -257,7 +257,7 @@ $$
     print(f"이론  비모수 RMSE = {np.sqrt(mse_np):.5f}")
     print(f"이론  모수   RMSE = {np.sqrt(mse_pa):.5f}   (비 {np.sqrt(mse_np / mse_pa):.3f})")
 
-    # 같은 실험을 4000번 되풀이해 평균제곱오차를 잰다.
+    # 같은 실험을 4000번 반복해 평균제곱오차를 잰다.
     rng = np.random.default_rng(1)
     A, B = [], []
     for _ in range(4000):

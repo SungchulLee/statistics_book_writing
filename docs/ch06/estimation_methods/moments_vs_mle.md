@@ -85,7 +85,7 @@ ARE가 1보다 작으면 MLE가 더 효율적이라는 뜻이다.
 
 <div class="exbox" markdown>
 
-**보기 1.** <span class="diff easy" title="쉬움"></span> 감마분포에서 MLE와 적률법 비교. $\text{Gamma}(\alpha = 3, \beta = 2)$에서 $n = 200$을 뽑아 형상모수 $\alpha$를 두 방법으로 추정하는 일을 $5000$번 되풀이한다.
+**보기 1.** <span class="diff easy" title="쉬움"></span> 감마분포에서 MLE와 적률법 비교. $\text{Gamma}(\alpha = 3, \beta = 2)$에서 $n = 200$을 뽑아 형상모수 $\alpha$를 두 방법으로 추정하는 일을 $5000$번 반복한다.
 
 **(1)** 두 추정량의 점근분산을 구하고 그 비(점근 상대효율)를 $\alpha$의 식으로 쓰시오. $\alpha = 3$, $n = 200$에서 수는 얼마인가.
 

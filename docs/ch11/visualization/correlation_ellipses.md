@@ -664,7 +664,7 @@ $2 \times 2$ 상관행렬 $\mathbf{R} = \begin{pmatrix} 1 & r \\ r & 1 \end{pmat
         ax.set_ylim(-0.5, k - 0.5)
         ax.invert_yaxis()
 
-        # 아래쪽 삼각형만 — 상관행렬은 대칭이라 위쪽은 되풀이다
+        # 아래쪽 삼각형만 — 상관행렬은 대칭이라 위쪽은 반복이다
         for i in range(k):
             for j in range(i):
                 r = M[i, j]

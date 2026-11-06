@@ -368,7 +368,7 @@ _확인한 곳 — `bfloat16` 의 `b` 가 **brain** 이라는 것, 「기계학�
 
     예측대로다. 뷰에 `99`를 넣자 `a`의 둘째 자리가 `99`가 되었고, 복사본에 넣었을 때는 `a`가 `[10 20 30 40 50]` 그대로다. `a[::-1]`은 `shares_memory`가 `True`이므로 뷰다.
 
-    이것은 앞 절 **파이썬과 주피터 기초** 의 `b = a`와 `b = a.copy()` 이야기가 배열 층에서 되풀이되는 것이다. 질문은 언제나 같다 — **지금 내가 든 이름이 원본을 가리키는가 사본을 가리키는가.** 다음 절 **[pandas 자료 다루기](pandas_basics.md)**의 `SettingWithCopyWarning`도 같은 질문이다.
+    이것은 앞 절 **파이썬과 주피터 기초** 의 `b = a`와 `b = a.copy()` 이야기가 배열 층에서 반복되는 것이다. 질문은 언제나 같다 — **지금 내가 든 이름이 원본을 가리키는가 사본을 가리키는가.** 다음 절 **[pandas 자료 다루기](pandas_basics.md)**의 `SettingWithCopyWarning`도 같은 질문이다.
 ### 2차원
 
 <div class="exbox" markdown>
@@ -1062,7 +1062,7 @@ NumPy는 명시적 반복문 없이 원소별 산술을 수행하며, 이는 순
     \hat{\boldsymbol\beta} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \boldsymbol\beta + (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol\varepsilon
     $$
 
-    이고, 둘째 항이 잡음이 남긴 흔들림이다. 기댓값은 $\boldsymbol\beta$지만 한 번의 표본에서는 $0$이 아니다. 그 흔들림의 크기는
+    이고, 둘째 항이 잡음이 남긴 변동이다. 기댓값은 $\boldsymbol\beta$지만 한 번의 표본에서는 $0$이 아니다. 그 변동의 크기는
 
     $$
     \operatorname{Cov}(\hat{\boldsymbol\beta}) = \sigma^2 (\mathbf{X}^\top\mathbf{X})^{-1}
