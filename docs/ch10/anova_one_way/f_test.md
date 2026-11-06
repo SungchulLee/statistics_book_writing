@@ -102,6 +102,11 @@ $$
     $\text{SS}_B$·$\text{SS}_W$ 처럼 아래첨자로 쓰는 것이 모두 같은 양이다. 이 책은
     $SST$·$SSB$·$SSW$ 를 기본으로 쓴다.
 
+    **다만 10.2 부터는 $SSW$ 가 $SSE$ 로, $MSW$ 가 $MSE$ 로 바뀐다.** 요인이 둘 이상이면
+    「집단 내」라고 부를 하나의 집단이 없기 때문이다 — 이원배치의 분산분석표는 행 효과와
+    열 효과와 교호작용을 덜어 내고 **남은 것**을 적으므로 이름도 **E**rror 가 맞다.
+    일원배치에서는 그 둘이 같은 수다.
+
 ### 6단계: 전체 변동의 분해 확인
 
 관측값이 전체평균에서 벗어난 양을 **두 토막**으로 쪼갠다. 집단평균을 한 번 거쳐 가는 것이 전부다.
@@ -2136,7 +2141,7 @@ $F$ 검정의 $\text{SST}$를 **직교대비**로 분해하라. 이것이 왜 �
     그 제곱합과 $F$ 통계량은
 
     $$
-    \text{SS}_L=\frac{L^2}{\sum_i c_i^2/n_i},\qquad F=\frac{\text{SS}_L}{\text{MSE}}\sim F_{1,\,N-k}
+    \text{SS}_L=\frac{L^2}{\sum_i c_i^2/n_i},\qquad F=\frac{\text{SS}_L}{MSW}\sim F_{1,\,N-k}
     $$
 
     **두 대비가 직교**($\sum_i c_{1i}c_{2i}/n_i=0$)하면 제곱합이 더해진다.
@@ -2155,11 +2160,11 @@ $F$ 검정의 $\text{SST}$를 **직교대비**로 분해하라. 이것이 왜 �
     N = k * n
     m = np.array([groups[x].mean() for x in names])
     grand = np.concatenate(list(groups.values())).mean()
-    SSE = sum(((g - g.mean())**2).sum() for g in groups.values())
-    MSE = SSE / (N - k)
-    SST = n * ((m - grand)**2).sum()
-    print(f"SST = {SST:.4f},  MSE = {MSE:.4f},  "
-          f"옴니버스 F = {SST / (k - 1) / MSE:.4f}\n")
+    SSW = sum(((g - g.mean())**2).sum() for g in groups.values())
+    MSW = SSW / (N - k)
+    SSB = n * ((m - grand)**2).sum()
+    print(f"SSB = {SSB:.4f},  MSW = {MSW:.4f},  "
+          f"옴니버스 F = {SSB / (k - 1) / MSW:.4f}\n")
 
     contrasts = {"A 대 (B,C) 평균": np.array([2., -1, -1]),
                  "B 대 C        ": np.array([0., 1, -1])}
@@ -2169,27 +2174,27 @@ $F$ 검정의 $\text{SST}$를 **직교대비**로 분해하라. 이것이 왜 �
         ss = L**2 / ((c**2).sum() / n)
         total += ss
         print(f"  {label}: L = {L:+.4f},  SS = {ss:.4f},  "
-              f"F = {ss / MSE:.4f},  p = {stats.f.sf(ss / MSE, 1, N - k):.4f}")
-    print(f"\n  대비 SS 의 합 = {total:.4f}   (SST = {SST:.4f})")
+              f"F = {ss / MSW:.4f},  p = {stats.f.sf(ss / MSW, 1, N - k):.4f}")
+    print(f"\n  대비 SS 의 합 = {total:.4f}   (SSB = {SSB:.4f})")
     c1, c2 = list(contrasts.values())
     print(f"  직교성 확인: Σ c1·c2 / n = {(c1 * c2).sum() / n:.1f}")
     ```
 
     ```text
-    SST = 3.7663,  MSE = 0.3886,  옴니버스 F = 4.8461
+    SSB = 3.7663,  MSW = 0.3886,  옴니버스 F = 4.8461
 
       A 대 (B,C) 평균: L = -0.1230,  SS = 0.0252,  F = 0.0649,  p = 0.8009
       B 대 C        : L = -0.8650,  SS = 3.7411,  F = 9.6273,  p = 0.0045
 
-      대비 SS 의 합 = 3.7663   (SST = 3.7663)
+      대비 SS 의 합 = 3.7663   (SSB = 3.7663)
       직교성 확인: Σ c1·c2 / n = 0.0
     ```
 
-    **$\text{SST}$가 정확히 두 조각으로 나뉜다**(0.0252 + 3.7411 = 3.7663).
+    **$SSB$가 정확히 두 조각으로 나뉜다**(0.0252 + 3.7411 = 3.7663).
 
     **어디서 신호가 오는지 분명해진다.**
 
-    | 대비 | SS | SST 중 비중 | $p$ |
+    | 대비 | SS | SSB 중 비중 | $p$ |
     |---|---|---|---|
     | A 대 (B,C) | 0.025 | 0.7% | 0.801 |
     | **B 대 C** | **3.741** | **99.3%** | **0.0045** |
@@ -2215,11 +2220,11 @@ $F$ 검정의 $\text{SST}$를 **직교대비**로 분해하라. 이것이 왜 �
         for _ in range(M):
             g = [rng.normal(mm, sigma, n) for mm in mu]
             m_hat = np.array([x.mean() for x in g])
-            MSE = sum(((x - x.mean())**2).sum() for x in g) / (k * n - k)
+            MSW = sum(((x - x.mean())**2).sum() for x in g) / (k * n - k)
             a += stats.f_oneway(*g).pvalue < 0.05
             for cc, which in [(c_linear, 0), (c_last, 1)]:
                 ss = (cc * m_hat).sum()**2 / ((cc**2).sum() / n)
-                hit = stats.f.sf(ss / MSE, 1, k * n - k) < 0.05
+                hit = stats.f.sf(ss / MSW, 1, k * n - k) < 0.05
                 if which == 0:
                     b += hit
                 else:
@@ -2255,13 +2260,13 @@ $F$ 검정의 $\text{SST}$를 **직교대비**로 분해하라. 이것이 왜 �
 $F$-검정의 절차를 **단계별로** 정리했다.
 
 $$
-F=\frac{\text{MST}}{\text{MSE}}=\frac{\text{SST}/(k-1)}{\text{SSE}/(N-k)}\;\sim\;F_{k-1,\,N-k}
+F=\frac{MSB}{MSW}=\frac{SSB/(k-1)}{SSW/(N-k)}\;\sim\;F_{k-1,\,N-k}
 $$
 
 - **$H_0$ 은 모든 평균이 같다는 것이다.** 대립가설은 "적어도 하나가 다르다"이며, **어느 것이 다른지는 말하지 않는다.**
 - **자유도 둘이 각각 의미를 갖는다.** 분자의 $k-1$ 은 집단 수에서 하나를 뺀 것이고, 분모의 $N-k$ 는 집단마다 평균을 하나씩 추정하느라 잃은 것이다.
-- **MSE 는 언제나 $\sigma^2$ 의 불편추정량이다.** $H_0$ 이 참이든 아니든 그렇다. 반면 **MST 는 $H_0$ 이 참일 때만** $\sigma^2$ 을 추정하며, 거짓이면 집단 차이만큼 부풀어 오른다. 그래서 비가 1 보다 커진다.
+- **MSW 는 언제나 $\sigma^2$ 의 불편추정량이다.** $H_0$ 이 참이든 아니든 그렇다. 반면 **MSB 는 $H_0$ 이 참일 때만** $\sigma^2$ 을 추정하며, 거짓이면 집단 차이만큼 부풀어 오른다. 그래서 비가 1 보다 커진다.
 - **오른쪽 꼬리만 본다.** 평균이 어느 방향으로 흩어지든 $F$ 가 커지므로 단측이다.
-- **MSE 가 합동분산이다.** 등분산 가정이 여기서 쓰이며, 그 가정이 깨지면 웰치 판본으로 가야 한다.
+- **MSW 가 합동분산이다.** 등분산 가정이 여기서 쓰이며, 그 가정이 깨지면 웰치 판본으로 가야 한다.
 
 다음 절 **[분산분석 F-통계량 모의실험](anova_f_simulation.md)**으로 넘어간다.
