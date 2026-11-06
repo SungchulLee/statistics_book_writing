@@ -751,7 +751,7 @@ $\operatorname{Var}(\boldsymbol{\varepsilon}) = \sigma^2\mathbf{V}$($\mathbf{V} 
 
     **GLS가 하는 일.** $\mathbf{V}^{-1}$로 가중하는 것은 오차를 백색화한 뒤 보통최소제곱을 적용하는 것과 같다. 분산이 작은 관측값에 더 큰 비중을 주는 것이다.
 
-    실무에서는 $\mathbf{V}$를 모르는 경우가 많다. 그래서 (1) $\mathbf{V}$를 추정해 쓰는 실행가능 GLS, 또는 (2) 계수는 최소제곱으로 두고 표준오차만 고치는 로버스트(샌드위치) 표준오차를 쓴다. 앞의 것은 [12.5절 가중최소제곱](../../../ch12/assumptions/weighted_regression.md)에서, 뒤의 것은 [15.7절 회귀에서의 분산 검정](../../../ch15/applications/regression_variance.md)에서 다룬다. $\square$
+    실무에서는 $\mathbf{V}$를 모르는 경우가 많다. 그래서 (1) $\mathbf{V}$를 추정해 쓰는 실행가능 GLS, 또는 (2) 계수는 최소제곱으로 두고 표준오차만 고치는 로버스트(샌드위치) 표준오차를 쓴다. 앞의 것은 [12.6절 가중최소제곱](../../../ch12/assumptions/weighted_regression.md)에서, 뒤의 것은 [15.7절 회귀에서의 분산 검정](../../../ch15/applications/regression_variance.md)에서 다룬다. $\square$
 
 ---
 

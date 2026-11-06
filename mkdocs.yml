@@ -383,40 +383,42 @@ nav:
                 - 단순선형회귀: ch12/linear_regression/simple.md
                 - 다중선형회귀: ch12/linear_regression/multiple.md
                 - 범주형 설명변수: ch12/linear_regression/categorical_predictors.md
-            - 12.2 추정과 추론:
+            - 12.2 추정과 표집분포:
                 - 최소제곱 추정: ch12/estimation_inference/least_squares.md
                 - 단순 OLS 추정량의 표집분포: ch12/estimation_inference/sampling_dist_simple.md
-                - 단순 OLS 추정량의 신뢰구간: ch12/estimation_inference/ci_coeff.md
-                - 일반 OLS 추정량의 표집분포: ch12/estimation_inference/tests_coeff.md
+                - 일반 OLS 추정량의 표집분포: ch12/estimation_inference/sampling_dist_general.md
                 - 잔차제곱합 곡면 시각화: ch12/estimation_inference/rss_surface_visualization.md
                 - 최소제곱 모의실험 (몬테카를로): ch12/estimation_inference/ols_simulation.md
-            - 12.3 계수 검정:
+            - 12.3 계수와 반응의 구간:
+                - 계수의 신뢰구간: ch12/estimation_inference/ci_coeff.md
+                - 신뢰띠와 예측띠: ch12/estimation_inference/prediction_bands.md
+            - 12.4 계수 검정:
                 - 회귀계수의 가설검정 (t-검정): ch12/testing_coefficients/hypothesis_tests.md
                 - 계수의 p값과 신뢰구간: ch12/testing_coefficients/pvalues_ci.md
                 - 유의성의 해석: ch12/testing_coefficients/significance.md
                 - OLS 회귀 출력 재현: ch12/testing_coefficients/ols_regression_output.md
-            - 12.4 교호작용과 다항식 확장:
+            - 12.5 교호작용과 다항식 확장:
                 - 교호작용 항: ch12/interaction_polynomial/interaction_terms.md
                 - 다항회귀: ch12/interaction_polynomial/polynomial_regression.md
-            - 12.5 가정과 진단:
+            - 12.6 가정과 진단:
                 - 가정과 진단 (LINE): ch12/assumptions/index.md
                 - 선형성: ch12/assumptions/checking_linearity.md
                 - 독립성: ch12/assumptions/checking_independence.md
                 - 등분산성: ch12/assumptions/checking_homoscedasticity.md
                 - 정규성: ch12/assumptions/checking_normality.md
                 - 가중최소제곱: ch12/assumptions/weighted_regression.md
-            - 12.6 진단:
+            - 12.7 진단:
                 - 잔차 분석: ch12/diagnostics/residuals.md
                 - 다중공선성과 분산팽창인자: ch12/diagnostics/multicollinearity.md
                 - 영향점과 지렛대 (쿡 거리, DFFITS): ch12/diagnostics/influence.md
                 - 다중회귀 진단: ch12/diagnostics/multi_reg_diag.md
                 - 회귀 진단 (주택): ch12/diagnostics/regression_diagnostics_housing.md
-            - 12.7 성능 척도:
+            - 12.8 성능 척도:
                 - 결정계수와 수정 결정계수: ch12/performance/r_squared.md
                 - '평균절대오차, 평균제곱오차, 제곱근평균제곱오차': ch12/performance/mae_mse_rmse.md
                 - 평균절대백분율오차와 그 밖의 상대 척도: ch12/performance/relative_metrics.md
                 - 성능 척도: ch12/performance/metrics.md
-            - 12.8 모형선택 기준:
+            - 12.9 모형선택 기준:
                 - Akaike 정보기준: ch12/model_selection/aic.md
                 - 베이즈 정보기준: ch12/model_selection/bic.md
                 - 모형선택을 위한 교차검증: ch12/model_selection/cross_validation.md
@@ -424,13 +426,13 @@ nav:
                 - 모형선택 비교: ch12/model_selection/model_selection.md
                 - 교차검증 다항 모형선택: ch12/model_selection/cv_polynomial_model_selection.md
                 - 부분집합 선택과 단계적 선택: ch12/model_selection/subset_stepwise_selection.md
-            - 12.9 스플라인과 일반화가법모형:
+            - 12.10 스플라인과 일반화가법모형:
                 - 스플라인과 일반화가법모형: ch12/splines_gams/index.md
                 - 일반화가법모형: ch12/splines_gams/generalized_additive_models.md
                 - GAM 주택 분석: ch12/splines_gams/gam_housing_analysis.md
                 - 계단함수: ch12/splines_gams/step_functions.md
                 - Patsy를 이용한 스플라인: ch12/splines_gams/splines_patsy_examples.md
-            - 12.10 패키지 사용법:
+            - 12.11 패키지 사용법:
                 - statsmodels 최소제곱 인터페이스: ch12/package_usage/statsmodels.md
                 - sklearn LinearRegression 인터페이스: ch12/package_usage/sklearn.md
                 - 무엇을 언제 쓸 것인가 (비교): ch12/package_usage/comparison.md

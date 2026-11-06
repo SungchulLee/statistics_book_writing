@@ -27,7 +27,7 @@ $1.20$ 으로 두었다(그 조합이 주는 회귀의 결정계수가 $0.48$ �
 
 만드는 파일:
 
-  ch12/linear_regression/img/beta_is_an_estimate.png
+  ch12/estimation_inference/img/beta_is_an_estimate.png
 
 실행:  python3 scripts/make_ch13_beta_is_an_estimate.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch12/linear_regression/img/"
+OUT = "docs/ch12/estimation_inference/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"
