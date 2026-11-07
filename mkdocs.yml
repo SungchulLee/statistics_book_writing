@@ -391,7 +391,7 @@ nav:
                 - 최소제곱 모의실험 (몬테카를로): ch12/estimation_inference/ols_simulation.md
             - 12.3 신뢰구간과 예측구간:
                 - 계수의 신뢰구간: ch12/estimation_inference/ci_coeff.md
-                - 신뢰띠와 예측띠: ch12/estimation_inference/prediction_bands.md
+                - 신뢰대와 예측대: ch12/estimation_inference/prediction_bands.md
             - 12.4 계수 검정:
                 - 회귀계수의 가설검정 (t-검정): ch12/testing_coefficients/hypothesis_tests.md
                 - 계수의 p값과 신뢰구간: ch12/testing_coefficients/pvalues_ci.md
@@ -516,7 +516,7 @@ nav:
                 - 브라운–포사이드 검정: ch15/robust_tests/brown_forsythe.md
                 - 플리그너–킬린 검정: ch15/robust_tests/fligner_killeen.md
                 - 로버스트 방법의 비교: ch15/robust_tests/comparison.md
-                - 대수정규에서의 비교 (치우침이 극단일 때): ch15/robust_tests/robust_tests_comparison.md
+                - 대수정규에서의 비교 (왜도가 극단일 때): ch15/robust_tests/robust_tests_comparison.md
                 - 레빈 검정 정규 대 치우친 분포 모의실험: ch15/robust_tests/levene_simulation.md
             - 15.6 고급 방법:
                 - 붓스트랩 분산 검정: ch15/advanced_methods/bootstrap_variance.md
