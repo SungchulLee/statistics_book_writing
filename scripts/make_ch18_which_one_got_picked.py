@@ -106,9 +106,9 @@ def main():
            label="라쏘")
     ax.bar(ks + w / 2, en_f[order], width=w, color=TEAL, alpha=0.85,
            label=f"엘라스틱넷 ($\\ell_1$ 몫 ${L1R}$)")
-    # 문턱 줄은 범례에 넣는다 — 그림 안에 글로 두면 막대와 겹친다
+    # 임계값 줄은 범례에 넣는다 — 그림 안에 글로 두면 막대와 겹친다
     ax.axhline(0.6, color=AMBER, lw=1.4, ls="--",
-               label="안정성 선택의 흔한 문턱 $0.6$")
+               label="안정성 선택의 흔한 임계값 $0.6$")
     ax.set_xticks(ks)
     ax.set_xticklabels([names[k] for k in order], fontsize=10.5)
     ax.set_ylim(0, 1.12)

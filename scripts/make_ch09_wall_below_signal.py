@@ -1,12 +1,12 @@
-"""9.6절 거짓발견율 — 문턱이 신호가 사는 자리 아래에 있다.
+"""9.6절 거짓발견율 — 임계값이 신호가 사는 자리 아래에 있다.
 
 들머리의 두 보기를 그린다. 왼쪽은 유전자 2 만 개 가운데 참으로 관련 있는
-것이 100 개 있는 자리다. 본페로니 문턱 0.05/20000 = 0.0000025 는 그
+것이 100 개 있는 자리다. 본페로니 임계값 0.05/20000 = 0.0000025 는 그
 100 개의 p 값이 사는 자리보다 훨씬 왼쪽에 있어서, 진짜 신호 넷에 셋이
 그 벽을 넘지 못한다. 오른쪽은 화합물 열 개를 선별하는 자리로, 본페로니는
 하나만 넘기고 BH 는 둘을 넘긴다.
 
-쪽의 bh_procedure 는 정렬한 p 값에 세 문턱을 긋는 그림이고 fdr_scaling 은
+쪽의 bh_procedure 는 정렬한 p 값에 세 임계값을 긋는 그림이고 fdr_scaling 은
 검정 수에 따른 검정력을 그린다. 여기서는 **신호가 사는 자리와 벽의
 위치**를 맞댄다.
 """
@@ -40,7 +40,7 @@ bins = np.logspace(-10, 0, 46)
 ax1.hist(p1, bins=bins, color="tab:green", alpha=0.75,
          label=f"참으로 관련 있는 유전자 {M1} 개의 $p$ 값")
 ax1.axvline(BONF, color="tab:red", lw=2.4)
-ax1.text(BONF * 0.65, 13.6, f"본페로니 문턱\n{BONF:.7f}", ha="right",
+ax1.text(BONF * 0.65, 13.6, f"본페로니 임계값\n{BONF:.7f}", ha="right",
          fontsize=11, color="tab:red", fontweight="bold")
 ax1.axvline(bh_cut, color="tab:blue", lw=2.4, ls="--")
 ax1.text(bh_cut * 1.5, 13.6, f"BH 가 실제로 자른 자리\n{bh_cut:.6f}",
@@ -80,13 +80,13 @@ for i, pv in enumerate(PS):
         ax2.text(pv, 1.14, f"{pv}", ha="center", fontsize=10.5, color=col,
                  fontweight="bold")
 ax2.axvline(bonf10, color="tab:red", lw=2.4)
-ax2.text(bonf10 * 0.82, 1.58, f"본페로니 문턱 {bonf10}", ha="right",
+ax2.text(bonf10 * 0.82, 1.58, f"본페로니 임계값 {bonf10}", ha="right",
          fontsize=11, color="tab:red", fontweight="bold")
 ax2.plot(np.arange(1, 11) / 10 * Q, np.full(10, 0.55), "-", lw=2.2,
          color="tab:blue")
 for i in range(10):
     ax2.plot([(i + 1) / 10 * Q], [0.55], "|", ms=11, color="tab:blue")
-ax2.text(Q * 1.08, 0.55, "BH 의 문턱은 순위마다 다르다", ha="left",
+ax2.text(Q * 1.08, 0.55, "BH 의 임계값은 순위마다 다르다", ha="left",
          va="center", fontsize=10.5, color="tab:blue")
 ax2.text(0.0045, 0.30, "본페로니는 첫째 하나만,\nBH 는 둘을 넘긴다",
          fontsize=11.5, fontweight="bold", color="0.2")
@@ -107,8 +107,8 @@ path = OUT + "wall_below_signal.png"
 fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
 print("saved", path)
 print(f"  m = {M:,}, 참 효과 {M1} 개, 이동폭 {DELTA}")
-print(f"  본페로니 문턱 {BONF:.7f} → 진짜 {caught_b} 개를 잡는다")
+print(f"  본페로니 임계값 {BONF:.7f} → 진짜 {caught_b} 개를 잡는다")
 print(f"  BH(q=0.10) 가 자른 자리 {bh_cut:.6f}, 기각 {kbh} 개 중 진짜 "
       f"{caught_h} 개 · 거짓 {kbh - caught_h} 개")
-print(f"  화합물 보기: 본페로니 문턱 {bonf10}, BH 문턱 "
+print(f"  화합물 보기: 본페로니 임계값 {bonf10}, BH 임계값 "
       f"{np.round(np.arange(1,11)/10*Q, 3).tolist()}")

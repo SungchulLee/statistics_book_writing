@@ -4,13 +4,13 @@ r"""10.5절 「그림으로 보는 통계학」 — 집단이 늘면 셋이 갈�
 이기는 폭이 「k 가 커질수록 벌어진다」고 적어 두었다. 그 말을 k 를 2 에서
 10 까지 올려 가며 수로 잰다.
 
-  보정 없음  문턱이 거의 그대로이고 FWER 이 0.049 에서 0.608 로 치솟는다
-  투키       문턱이 2.101 에서 3.244 로 오르고 FWER 은 어느 k 에서나 0.05
-  본페로니    문턱이 투키보다 늘 조금 높고 FWER 이 0.035 까지 내려간다
+  보정 없음  임계값이 거의 그대로이고 FWER 이 0.049 에서 0.608 로 치솟는다
+  투키       임계값이 2.101 에서 3.244 로 오르고 FWER 은 어느 k 에서나 0.05
+  본페로니    임계값이 투키보다 늘 조금 높고 FWER 이 0.035 까지 내려간다
 
 k = 2 에서는 셋이 정확히 같다 — 쌍이 하나뿐이면 보정할 것이 없다.
 
-투키의 문턱은 스튜던트화 범위분포의 분위수를 sqrt(2) 로 나눈 것이다.
+투키의 임계값은 스튜던트화 범위분포의 분위수를 sqrt(2) 로 나눈 것이다.
 
 만드는 파일:
 
@@ -111,8 +111,8 @@ def main():
                 fontsize=10.6, color=INK,
                 arrowprops=dict(arrowstyle="->", color=INK, lw=1.2))
     ax.set_xlabel("집단의 수 $k$", fontsize=11.5)
-    ax.set_ylabel("쌍별 $|t|$ 에 걸 문턱", fontsize=11.5)
-    ax.set_title("투키의 문턱만 분포에서 나온다", fontsize=12.8, color=INK, pad=8)
+    ax.set_ylabel("쌍별 $|t|$ 에 걸 임계값", fontsize=11.5)
+    ax.set_title("투키의 임계값만 분포에서 나온다", fontsize=12.8, color=INK, pad=8)
     ax.set_xticks(KS)
     ax.set_ylim(1.7, 3.6)
     ax.grid(alpha=0.25)

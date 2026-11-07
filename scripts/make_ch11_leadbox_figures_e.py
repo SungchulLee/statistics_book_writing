@@ -235,9 +235,9 @@ def fig_noise_still_gets_in():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 4.9))
 
     ax1.plot(ns, 100 * p_aic, "-", lw=2.8, color="tab:blue",
-             label="AIC — 문턱이 늘 $2$")
+             label="AIC — 임계값이 늘 $2$")
     ax1.plot(ns, 100 * p_bic, "-", lw=2.8, color="tab:red",
-             label="BIC — 문턱이 $\\ln n$")
+             label="BIC — 임계값이 $\\ln n$")
     for nn, col in ((200, "0.35"), (40_000, "0.35")):
         ax1.axvline(nn, color=col, ls=":", lw=1.6)
         ax1.text(nn * 1.2, 14.0, f"n = {nn:,}\nBIC "
@@ -277,7 +277,7 @@ def fig_noise_still_gets_in():
     print(f"\n[BIC] 잡음 변수 하나가 들어올 확률")
     print(f"  AIC — n 과 무관하게 {100 * stats.chi2.sf(2, 1):.2f}%")
     for nn in (50, 200, 1000, 40_000, 10 ** 6):
-        print(f"  BIC · n = {nn:>9,}  문턱 ln n = {np.log(nn):5.2f}  "
+        print(f"  BIC · n = {nn:>9,}  임계값 ln n = {np.log(nn):5.2f}  "
               f"{100 * stats.chi2.sf(np.log(nn), 1):6.3f}%")
 
 

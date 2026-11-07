@@ -183,7 +183,7 @@ def main():
 
     fig.suptitle("현장이 오래된 검정을 버리지 못하는 까닭", fontsize=14.5)
     fig.text(0.5, -0.05,
-             f"각 점이 {REPS//10000} 만 번이다. 코크란의 문턱으로는 "
+             f"각 점이 {REPS//10000} 만 번이다. 코크란의 임계값으로는 "
              f"ISO 표 5 의 ${ISO_TABLE5_P8_N3[1]:.3f}$ 과 같은 값을 썼다 "
              f"($F$ 근사식 ${c5:.4f}$ · 모의 ${m5:.4f}$).",
              ha="center", fontsize=10.4, color=INK)

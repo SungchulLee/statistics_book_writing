@@ -641,7 +641,7 @@ $$
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
 6절 표의 둘째 줄(라플라스 사전분포 $\to$ 라쏘)은 **최빈값**에 대한 진술이다. 사후평균에 대해서는 전혀 다른 일이 일어남을 보여라. $p = 1$, $\mathbf{x}^\top\mathbf{x} = 1$이라 두면 $\hat\beta^{\text{OLS}} = m$이고, 오차분산은 $\sigma^2$, 사전분포는 $\text{Laplace}(0, b)$, 곧 밀도가 $\frac{1}{2b}e^{-\lvert\beta\rvert/b}$라 한다.
 
-1. MAP가 연성문턱 $\operatorname{sign}(m)\bigl(\lvert m\rvert - \sigma^2/b\bigr)_+$임을 보여라.
+1. MAP가 연성 임계화 $\operatorname{sign}(m)\bigl(\lvert m\rvert - \sigma^2/b\bigr)_+$임을 보여라.
 2. 사후밀도의 $\beta$에서의 값과 $-\beta$에서의 값을 비교하여, $m \neq 0$이면 사후평균이 **결코 정확히 0이 아님**을 증명하라.
 3. $\sigma = b = 1$, $m = 0.5$에서 MAP와 사후평균을 각각 구하라(사후평균은 절단정규의 평균 공식으로 손으로 끝까지 간다).
 4. 이것이 "베이즈 라쏘로 변수선택을 한다"는 말에 대해 무엇을 말해 주는가.

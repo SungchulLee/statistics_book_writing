@@ -81,7 +81,7 @@ $\rho = 0.95$인 등상관 설명변수 4개, $n = 50$인 자료에서 실제로
 
 오른쪽은 이 네 인자를 더한 값, 곧 유효자유도다. $\lambda = 0$에서 $4$로 시작해 $\lambda = 1$에서 $2.90$, $\lambda = 10$에서 $1.40$, $\lambda = 100$에서 $0.70$으로 떨어진다. $\lambda = 10$에서 $\text{df} = 1.40$이라는 말은 "모수를 네 개 썼지만 실질적으로는 한 개 반쯤 추정했다"는 뜻이다. 실제로 그 한 개는 첫 성분, 곧 네 변수의 평균 방향이다.
 
-이 그림이 모형 선택에 쓰이는 방식은 이렇다. 서로 다른 $\lambda$의 모형은 모수 개수가 모두 $p$개로 같아 보이지만 복잡도는 전혀 다르다. $\text{df}(\lambda)$가 그 차이를 하나의 연속적인 눈금으로 환산해 주므로, AIC나 BIC처럼 "모수 개수"를 요구하는 기준을 능형회귀에도 그대로 적용할 수 있다. 다음 절 이후로 $\lambda$ 대신 $\text{df}(\lambda)$를 가로축에 놓는 그림을 자주 보게 되는 이유도 그것이다. $\lambda = 1$과 $\lambda = 10$의 차이는 감이 오지 않지만, $\text{df} = 2.9$와 $\text{df} = 1.4$의 차이는 곧바로 와 닿는다.
+이 그림이 모형 선택에 쓰이는 방식은 이렇다. 서로 다른 $\lambda$의 모형은 모수 개수가 모두 $p$개로 같아 보이지만 복잡도는 전혀 다르다. $\text{df}(\lambda)$가 그 차이를 하나의 연속적인 척도로 환산해 주므로, AIC나 BIC처럼 "모수 개수"를 요구하는 기준을 능형회귀에도 그대로 적용할 수 있다. 다음 절 이후로 $\lambda$ 대신 $\text{df}(\lambda)$를 가로축에 놓는 그림을 자주 보게 되는 이유도 그것이다. $\lambda = 1$과 $\lambda = 10$의 차이는 감이 오지 않지만, $\text{df} = 2.9$와 $\text{df} = 1.4$의 차이는 곧바로 와 닿는다.
 
 ---
 
@@ -116,7 +116,7 @@ $1970$ 년에 호얼과 케너드가 바로 그것을 제안했다. 그리고 �
 
 <figure markdown>
 ![여러 크기의 참 계수에 대해 ridge 의 MSE 가 최소제곱 아래로 내려가는 모습과, 계수가 커져도 이득이 사라지지 않는 모습](img/ridge_existence.png){ width="900" }
-  <figcaption markdown>MSE 는 모의실험이 아니라 닫힌 식으로 계산했다 — 치우침의 제곱과 분산을 그대로 더한 값이다. 왼쪽 가로 파선이 최소제곱이다.</figcaption>
+  <figcaption markdown>MSE 는 모의실험이 아니라 닫힌 식으로 계산했다 — 편향의 제곱과 분산을 그대로 더한 값이다. 왼쪽 가로 파선이 최소제곱이다.</figcaption>
 </figure>
 
 관측 $50$ 개, 설명변수 $10$ 개, 쌍별 상관 $0.7$ 에서 재 보면
@@ -506,11 +506,11 @@ $$
 \lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \lambda\lVert\boldsymbol{\beta}\rVert_1
 $$
 
-**(a)** 직교설계에서 라쏘 목적함수가 좌표별로 분리됨을 보이고 해가 연성문턱 $\hat\beta_j^{\text{lasso}} = \operatorname{sign}(\hat\beta_j)\bigl(\lvert\hat\beta_j\rvert - \lambda/2\bigr)_+$임을 유도하라.
+**(a)** 직교설계에서 라쏘 목적함수가 좌표별로 분리됨을 보이고 해가 연성 임계화 $\hat\beta_j^{\text{lasso}} = \operatorname{sign}(\hat\beta_j)\bigl(\lvert\hat\beta_j\rvert - \lambda/2\bigr)_+$임을 유도하라.
 
 **(b)** $\lambda = 1$에서 능형 해와 라쏘 해를 모두 적어라. 각 계수를 정확히 0으로 만드는 가장 작은 $\lambda$는 얼마인가 — 두 벌점에 대해 각각 답하라.
 
-**(c)** 많은 교과서는 연성문턱을 $\operatorname{sign}(\hat\beta_j)(\lvert\hat\beta_j\rvert - \lambda)_+$로 적는다. (a)의 답과 2가 어긋나는 까닭을 밝혀라. 또 $n = 50$일 때 sklearn의 `Lasso(alpha=a)`로 (b)의 라쏘 해를 재현하려면 $a$를 얼마로 두어야 하는가?
+**(c)** 많은 교과서는 연성 임계화를 $\operatorname{sign}(\hat\beta_j)(\lvert\hat\beta_j\rvert - \lambda)_+$로 적는다. (a)의 답과 2가 어긋나는 까닭을 밝혀라. 또 $n = 50$일 때 sklearn의 `Lasso(alpha=a)`로 (b)의 라쏘 해를 재현하려면 $a$를 얼마로 두어야 하는가?
 
 </div>
 
@@ -537,7 +537,7 @@ $$
 
     이다. 같은 계산을 L2 벌점으로 하면 $f(b) = (b-a)^2 + \lambda b^2$에서 $b = a/(1+\lambda)$로 **비례축소**가 나온다. $\square$
 
-    **(b)** $\lambda = 1$이므로 능형은 $1/(1+1) = 0.5$배, 라쏘는 문턱 $\lambda/2 = 0.5$다.
+    **(b)** $\lambda = 1$이므로 능형은 $1/(1+1) = 0.5$배, 라쏘는 임계값 $\lambda/2 = 0.5$다.
 
     | $j$ | $\hat\beta_j^{\text{OLS}}$ | 능형 $\hat\beta_j/(1+\lambda)$ | 라쏘 $\operatorname{sign}(\hat\beta_j)(\lvert\hat\beta_j\rvert-0.5)_+$ |
     |---|---|---|---|
@@ -549,13 +549,13 @@ $$
 
     두 축소의 성질이 다르다는 점도 보라. 능형은 모든 계수를 **같은 비율**로 줄이므로 큰 계수에서 절대적으로 더 많이 깎는다($2.0 \to 1.0$으로 $1.0$ 감소, $0.6 \to 0.3$으로 $0.3$ 감소). 라쏘는 모든 계수를 **같은 양**만큼 줄이고 그 양에 못 미치는 것을 0으로 보낸다($2.0 \to 1.5$, $0.6 \to 0.1$, $-0.3 \to 0$). 작은 계수를 지우는 일은 뒤쪽을 평평하게 깎는 L1에서만 일어난다.
 
-    **(c)** 2는 목적함수 규약에서 온다. 연성문턱을 $(\lvert\hat\beta_j\rvert-\lambda)_+$로 적는 책은 잔차항에 $\tfrac12$을 붙여
+    **(c)** 2는 목적함수 규약에서 온다. 연성 임계화를 $(\lvert\hat\beta_j\rvert-\lambda)_+$로 적는 책은 잔차항에 $\tfrac12$을 붙여
 
     $$
     \tfrac12\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \lambda\lVert\boldsymbol{\beta}\rVert_1
     $$
 
-    을 쓴다. 이때 좌표별 함수는 $\tfrac12(b-a)^2 + \lambda\lvert b\rvert$가 되어 $f'(b) = (b-a)+\lambda$이므로 문턱이 $\lambda$다. **두 규약의 $\lambda$는 2배 차이가 난다.** 수식을 베껴 올 때 잔차항의 계수를 먼저 확인해야 하는 이유다.
+    을 쓴다. 이때 좌표별 함수는 $\tfrac12(b-a)^2 + \lambda\lvert b\rvert$가 되어 $f'(b) = (b-a)+\lambda$이므로 임계값이 $\lambda$다. **두 규약의 $\lambda$는 2배 차이가 난다.** 수식을 베껴 올 때 잔차항의 계수를 먼저 확인해야 하는 이유다.
 
     sklearn의 `Lasso(alpha=a)`는 또 다른 규약
 
@@ -570,7 +570,7 @@ $$
     a = \frac{1}{2 \cdot 50} = 0.01
     $$
 
-    이다(문턱은 $na = 0.5$로 (b)와 맞는다). 반면 연습문제 2에서 본 대로 `Ridge(alpha=lam)`은 $\lambda$를 그대로 받는다. **같은 라이브러리의 두 클래스가 규약이 다르므로 $\lambda$와 $\alpha$를 섞으면 수가 전부 틀어진다.**
+    이다(임계값은 $na = 0.5$로 (b)와 맞는다). 반면 연습문제 2에서 본 대로 `Ridge(alpha=lam)`은 $\lambda$를 그대로 받는다. **같은 라이브러리의 두 클래스가 규약이 다르므로 $\lambda$와 $\alpha$를 섞으면 수가 전부 틀어진다.**
 
 ---
 

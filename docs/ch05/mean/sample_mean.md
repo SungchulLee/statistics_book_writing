@@ -342,7 +342,7 @@ _확인한 곳 — 길로비치·발론·트버스키의 $1985$ 년 뜨거운 �
 
 **(1)** $\operatorname{Var}(\bar X) = \sigma^2/n$과 $\operatorname{MSE}(\bar X) = \operatorname{Var}(\bar X)$를 유도하시오. 출력에서 $\operatorname{Var}$ 열과 $\operatorname{MSE}$ 열이 **완전히 같지는 않을** 터인데, 그 차이는 얼마여야 하는가.
 
-**(2)** 여섯 줄의 어긋남이 몬테카를로 오차로 설명되는지 재시오.
+**(2)** 여섯 줄의 불일치가 몬테카를로 오차로 설명되는지 재시오.
 
 </div>
 

@@ -66,7 +66,7 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 
 - **[가설검정(t-검정)](testing_coefficients/hypothesis_tests.md)** — 각 설명변수가 반응변수에 유의한 효과를 갖는지 평가하기 위해 개별 회귀계수에 대한 $t$ 검정을 세우고 수행한다. `statsmodels` 출력에서 $t$, $p$값, 신뢰구간을 꺼내 읽고, 같은 참 계수가 잡음과 다중공선성 때문에 유의성을 잃는 과정을 본다.
 - **[p값과 신뢰구간](testing_coefficients/pvalues_ci.md)** — 계수의 $p$값과 신뢰구간이 같은 정보를 두 가지로 적은 것임을 보인다.
-- **[유의성의 해석](testing_coefficients/significance.md)** — 통계적 유의성과 실질적 유의성을 구분하고, 문턱값 관행과 흔한 오해를 짚는다.
+- **[유의성의 해석](testing_coefficients/significance.md)** — 통계적 유의성과 실질적 유의성을 구분하고, 임계값 관행과 흔한 오해를 짚는다.
 - **[OLS 회귀 출력 재현](testing_coefficients/ols_regression_output.md)** — 정규방정식에서 시작해 계수·표준오차·$t$·$p$값·신뢰구간을 손으로 만들어, 회귀표가 무엇을 계산한 결과인지 밑바닥까지 확인한다.
 
 ### 12.5 교호작용과 다항식 확장
@@ -113,7 +113,7 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 - **[AIC(Akaike 정보기준)](model_selection/aic.md)** — 적합도와 모형 복잡도를 저울질하여 표본 밖 예측을 잘하는 모형을 선호한다.
 - **[BIC(베이즈 정보기준)](model_selection/bic.md)** — AIC와 비슷하지만 모수 추가에 더 강한 벌점을 주어 더 단순한 모형을 고르는 경향이 있다.
 - **[모형선택을 위한 교차검증](model_selection/cross_validation.md)** — 홀드아웃이나 $k$-겹 방식으로 표본 밖 예측오차를 직접 추정한다.
-- **[부분집합 선택과 단계적 선택](model_selection/subset_stepwise_selection.md)** — 설명변수 부분집합의 공간을 훑는 절차들. 2ᵖ 가 금방 불가능해지는 셈과 그 대가(억제 효과), 세 방법과 혼합 접근, 선택 기준, 그리고 고른 뒤의 p값이 왜 틀린 눈금 위에 있는지까지.
+- **[부분집합 선택과 단계적 선택](model_selection/subset_stepwise_selection.md)** — 설명변수 부분집합의 공간을 훑는 절차들. 2ᵖ 가 금방 불가능해지는 셈과 그 대가(억제 효과), 세 방법과 혼합 접근, 선택 기준, 그리고 고른 뒤의 p값이 왜 틀린 척도 위에 있는지까지.
 - **[AIC와 BIC: 모형선택 기준](model_selection/aic_bic.md)** — 두 기준을 한 쪽에서 맞대어, **예측을 겨냥하는가 참 모형을 겨냥하는가**로 갈라 읽는다.
 - **[모형선택 비교](model_selection/model_selection.md)** — 설명변수 여덟 가운데 셋만 참인 자료에 AIC·BIC·교차검증 셋을 돌려, **벌점의 세기가 모형의 크기를 정하는** 것을 본다.
 - **[교차검증 다항 모형선택](model_selection/cv_polynomial_model_selection.md)** — 참 차수가 후보 안에 있는 자리에서 검증집합·LOOCV·$k$-겹이 그 차수를 찾아내는지 겨룬다. **검증집합 하나로는 믿을 수 없다**는 것이 결론이다.

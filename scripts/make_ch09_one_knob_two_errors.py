@@ -1,12 +1,12 @@
 """9.5절 두 오류 — 손잡이가 하나뿐이다.
 
-들머리의 경보 장치를 그린다. H0: N(0,1), H1: N(delta,1) 에서 문턱을 옮기면
-두 잘못이 함께 움직인다. 1000 번 돌린 결과를 문턱 셋에서 개수로 센다 ---
+들머리의 경보 장치를 그린다. H0: N(0,1), H1: N(delta,1) 에서 임계값을 옮기면
+두 잘못이 함께 움직인다. 1000 번 돌린 결과를 임계값 셋에서 개수로 센다 ---
 예민하게 두면 헛경보가 늘고 둔감하게 두면 놓침이 는다.
 
-쪽의 alpha_beta_tradeoff 는 문턱을 연속으로 옮긴 곡선이고
+쪽의 alpha_beta_tradeoff 는 임계값을 연속으로 옮긴 곡선이고
 type12_error_visualization 은 두 분포 위의 두 넓이를 보이며
-petrov_threshold 는 대가와 사전확률로 최적 문턱을 푼다. 여기서는 같은
+petrov_threshold 는 대가와 사전확률로 최적 임계값을 푼다. 여기서는 같은
 일을 **세어서** 본다 --- 1000 번에 몇 번인지를.
 """
 import matplotlib.pyplot as plt
@@ -37,7 +37,7 @@ for ax, (c, name) in zip(axes, CUTS):
     ax.set_xticks([0, 1], ["없는데 울린다", "있는데 안 울린다"], fontsize=11)
     ax.set_xlim(-0.6, 1.6)
     ax.set_ylim(0, 420)
-    ax.set_title(f"문턱 {c} — {name}\n"
+    ax.set_title(f"임계값 {c} — {name}\n"
                  f"$\\alpha$ = {a:.3f},  $\\beta$ = {b:.3f}", fontsize=12)
     ax.grid(axis="y", alpha=0.25)
 axes[0].set_ylabel(f"{R:,} 번 가운데", fontsize=11)
@@ -52,5 +52,5 @@ path = OUT + "one_knob_two_errors.png"
 fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
 print("saved", path)
 for c, name, fp, fn, a, b in rows:
-    print(f"  문턱 {c:<6} {name:<10s} 헛경보 {fp:>3d} · 놓침 {fn:>3d} "
+    print(f"  임계값 {c:<6} {name:<10s} 헛경보 {fp:>3d} · 놓침 {fn:>3d} "
           f"(이론 alpha {a:.4f}, beta {b:.4f})")

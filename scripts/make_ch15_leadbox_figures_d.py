@@ -201,7 +201,7 @@ save(fig, APP + "robust_to_tails_not_to_clustering.png")
 # 작다고 이분산이 약한 것이 아니다. 판정은 nR 제곱으로 해야 한다.」
 #
 # 이분산의 세기를 손잡이로 돌려 R 제곱과 nR 제곱을 함께 그리면, 한쪽은
-# 낮게 머무는데 다른 쪽은 문턱을 훌쩍 넘는다.
+# 낮게 머무는데 다른 쪽은 임계값을 훌쩍 넘는다.
 # ════════════════════════════════════════════════════════════════════
 N23, REPS23 = 120, 3000
 SLOPES = np.array([0.0, 0.1, 0.25, 0.5, 0.75, 1.0])
@@ -248,13 +248,13 @@ ax2.plot(SLOPES, nr2_med, "o-", color="tab:red", lw=3.2, ms=12,
          label="nR 제곱 (가운데값)")
 ax2.axhline(stats.chi2.ppf(0.95, 1), color="0.2", lw=2.2, ls="--")
 ax2.text(SLOPES[-1], stats.chi2.ppf(0.95, 1) + 0.8,
-         f"자유도 1 의 5% 문턱 {stats.chi2.ppf(0.95, 1):.2f}", ha="right",
+         f"자유도 1 의 5% 임계값 {stats.chi2.ppf(0.95, 1):.2f}", ha="right",
          va="bottom", fontsize=11, color="0.2", fontweight="bold")
 ax2.set_xlabel("오차 표준편차가 x 를 따라 커지는 기울기", fontsize=11.5)
 ax2.set_ylabel("nR 제곱 (가운데값)", fontsize=11.5)
 ax2.set_ylim(0, max(nr2_med) * 1.2)
 ax2.grid(alpha=0.25)
-ax2.set_title("같은 R 제곱에 n 을 곱한 수는 문턱을 훌쩍 넘는다",
+ax2.set_title("같은 R 제곱에 n 을 곱한 수는 임계값을 훌쩍 넘는다",
               fontsize=12.5)
 ax2.legend(fontsize=11, loc="upper left")
 for i, sl in enumerate(SLOPES):

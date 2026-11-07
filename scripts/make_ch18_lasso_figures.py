@@ -229,7 +229,7 @@ def laplace_prior():
     mode = gg[int(np.argmax(post))]
     lik = np.exp(-0.5 * ((gg - zv) / s) ** 2)
     lik = lik / np.trapz(lik, gg)
-    print(f"[posterior] 문턱 s^2/b={s**2/bpar:.2f}  z={zv}  "
+    print(f"[posterior] 임계값 s^2/b={s**2/bpar:.2f}  z={zv}  "
           f"최빈값 {mode:.3f}  사후평균 {mean:.4f}")
 
     ax2.fill_between(gg, post, color=GREEN_F, alpha=0.6)
@@ -441,11 +441,11 @@ def shrinkage_operators():
     ax1.plot(z, z, lw=1.4, color=MUTED, ls=":", zorder=2)
     ax1.plot(z, z / (1 + lam), lw=2.4, color=BLUE, zorder=3, label="능형 (비례)")
     ax1.plot(z, soft(z, lam), lw=2.4, color=ORANGE, zorder=4,
-             label="라쏘 (연성 문턱)")
+             label="라쏘 (연성 임계화)")
     hard = z * (np.abs(z) > lam)
     hard_m = np.where(np.abs(np.abs(z) - lam) < 0.012, np.nan, hard)
     ax1.plot(z, hard_m, lw=2.0, color=GREEN, zorder=3,
-             label="최량 부분집합 (경성 문턱)")
+             label="최량 부분집합 (경성 임계화)")
     ax1.axhline(0, color=INK, lw=0.9)
     ax1.axvline(0, color=INK, lw=0.9)
     ax1.fill_betweenx([-3.2, 3.2], -lam, lam, color=ORANGE_F, alpha=0.45,

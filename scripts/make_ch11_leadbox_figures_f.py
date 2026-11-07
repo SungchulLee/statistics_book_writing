@@ -293,12 +293,12 @@ def fig_one_number_five_numbers():
 
 # ════════════════════════════════════════════════════════════════════
 def fig_buying_significance():
-    """11.11 유의성 — 문턱을 넘기는 데 드는 값.
+    """11.11 유의성 — 임계값을 넘기는 데 드는 값.
 
     쪽의 stat_vs_practical 은 유의성과 크기의 네 조합을,
     ablation_is_ftest 상자는 다른 이야기를 다룬다. 여기서는 들머리의
     둘째 문단 --- **t 가 sqrt(n) 에 비례하므로 표본만 늘리면 거의 모든
-    계수가 유의해진다** --- 를 식으로 그린다. 문턱을 넘는 데 드는 표본이
+    계수가 유의해진다** --- 를 식으로 그린다. 임계값을 넘는 데 드는 표본이
     (1.96 sigma / beta)^2 이다.
     """
     SIG = 1.0
@@ -338,7 +338,7 @@ def fig_buying_significance():
 
     ax2.plot(ns, t_page, "-", lw=2.8, color="tab:blue", label="$t$ 값")
     ax2.axhline(1.96, color="0.25", ls="--", lw=1.8)
-    ax2.text(1e7, 2.2, "문턱 $1.96$", ha="right", va="bottom", fontsize=10.5,
+    ax2.text(1e7, 2.2, "임계값 $1.96$", ha="right", va="bottom", fontsize=10.5,
              color="0.25", fontweight="bold")
     ax2.set_xscale("log")
     ax2.set_yscale("log")

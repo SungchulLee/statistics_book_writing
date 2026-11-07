@@ -6,7 +6,7 @@ r"""검정 모음을 다 돌려 가장 작은 $p$ 를 고르면 어떻게 되는
 ① 네 검정의 $p$ 값은 서로 얼마나 닮았는가 — 순열과 $t$ 는 상관 $0.999$ 다.
 ② 가장 작은 것을 고르면 크기가 얼마가 되는가. 독립이라 가정한 값보다
    훨씬 작다 — 검정들이 서로 닮았기 때문이다.
-③ 그래서 본페로니는 **지나치게** 자른다. 올바른 문턱은 따로 있다.
+③ 그래서 본페로니는 **지나치게** 자른다. 올바른 임계값은 따로 있다.
 
 만드는 파일: docs/ch16/foundations/img/test_shopping.png
 """
@@ -65,8 +65,8 @@ for k in range(1, 5):
         row += f"{SIZE[nm][-1]:>22.4f}"
     print(f"{k:>12}" + row + f"{IND[-1]:>14.4f}")
 
-print(f"\n③ 올바른 문턱과 본페로니")
-print(f"{'모집단':>22}{'올바른 문턱':>13}{'본페로니':>10}{'본페로니의 실제 크기':>20}")
+print(f"\n③ 올바른 임계값과 본페로니")
+print(f"{'모집단':>22}{'올바른 임계값':>13}{'본페로니':>10}{'본페로니의 실제 크기':>20}")
 QT, BSZ = {}, {}
 for nm in POP:
     mn = P[nm].min(axis=1)
@@ -108,7 +108,7 @@ ax2.grid(alpha=0.25)
 xs = np.arange(len(POP))
 w = 0.3
 for j, (lab, vals, c) in enumerate([
-        ("올바른 문턱으로 자르면", [ALPHA] * len(POP), "#2ca02c"),
+        ("올바른 임계값으로 자르면", [ALPHA] * len(POP), "#2ca02c"),
         ("본페로니로 자르면", [BSZ[nm] for nm in POP], "#9467bd")]):
     ax3.bar(xs + (j - 0.5) * w, vals, w, color=c, label=lab)
     for x, v in zip(xs, vals):
@@ -116,7 +116,7 @@ for j, (lab, vals, c) in enumerate([
                  fontsize=10)
 ax3.axhline(ALPHA, color="black", lw=1.4, ls="--")
 for k, nm in enumerate(POP):
-    ax3.text(k, 0.064, f"올바른 문턱 ${QT[nm]:.4f}$\n본페로니 "
+    ax3.text(k, 0.064, f"올바른 임계값 ${QT[nm]:.4f}$\n본페로니 "
                        f"${ALPHA / 4:.4f}$", ha="center", fontsize=10,
              bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="#cccccc"))
 ax3.set_xticks(xs)

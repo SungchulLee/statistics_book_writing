@@ -115,7 +115,7 @@ $$
     beta_true[:3] = [3.0, -2.0, 1.5]
     y = X @ beta_true + rng.normal(0, 1, n)
 
-    # lambda 격자는 로그 눈금으로 잡는다. 벌점의 효과가 곱셈으로 작동하므로
+    # lambda 격자는 로그 척도로 잡는다. 벌점의 효과가 곱셈으로 작동하므로
     # 등간격보다 등비간격이 알맞다.
     lambdas = np.logspace(0.5, -2.5, 25)
 
@@ -149,7 +149,7 @@ $$
     # --- (1) 의 바닥과 천장을 확인한다 ---
     print(f"잡음분산 sigma^2 = 1 이므로 CV MSE 의 하한은 1.000")
     print(f"최소 CV MSE = {cv_mean[i_min]:.4f}  ->  하한 위로 {cv_mean[i_min] - 1:+.4f}")
-    print(f"1-SE 문턱 = {cv_mean[i_min]:.4f} + {cv_se[i_min]:.4f} = {threshold:.4f}")
+    print(f"1-SE 임계값 = {cv_mean[i_min]:.4f} + {cv_se[i_min]:.4f} = {threshold:.4f}")
     print(f"격자 첫 값 lambda = {lambdas[0]:.4f},  이론 lambda_max = |X'y|_inf/n = "
           f"{np.abs(X.T @ (y - y.mean())).max() / n:.4f}")
     print(f"가장 큰 lambda 에서의 CV MSE = {cv_mean[0]:.4f}  (영모형: Var(y) = {y.var():.4f})")
@@ -163,7 +163,7 @@ $$
     참으로 0 이 아닌 계수: 3개
     잡음분산 sigma^2 = 1 이므로 CV MSE 의 하한은 1.000
     최소 CV MSE = 1.0014  ->  하한 위로 +0.0014
-    1-SE 문턱 = 1.0014 + 0.0441 = 1.0455
+    1-SE 임계값 = 1.0014 + 0.0441 = 1.0455
     격자 첫 값 lambda = 3.1623,  이론 lambda_max = |X'y|_inf/n = 3.1113
     가장 큰 lambda 에서의 CV MSE = 17.4719  (영모형: Var(y) = 17.5023)
     ```
@@ -193,7 +193,7 @@ $$
 
 회색 곡선들이 얼마나 다른지 보라. 다섯 겹의 최적 $\lambda$는 $0.042,\ 0.056,\ 0.075,\ 0.133,\ 0.237$로 **가장 작은 것과 가장 큰 것이 5.6배 차이난다.** 최저 오차도 $0.718$에서 $1.130$까지 흩어진다. 같은 자료를 어떻게 다섯 조각으로 나누느냐에 따라 "최적"이 이만큼 움직인다는 뜻이다. 평균 곡선의 최소점 $\lambda_{\min} = 0.100$은 이 다섯 의견의 타협일 뿐이며, 소수점까지 믿을 근거가 없다.
 
-이 변동을 숫자로 요약한 것이 표준오차 $0.044$이고, 회색 점선이 그 문턱 $1.001 + 0.044 = 1.045$다. 문턱 아래에 머무는 가장 큰 $\lambda$가 $\lambda_{1\text{SE}} = 0.178$이다. **두 $\lambda$ 사이의 곡선이 평평하다는 점이 1-SE 규칙의 전부다.** 평균 곡선이 그 구간에서 $1.001$에서 $1.038$로 4% 오를 뿐이라면, 통계적으로 구별되지 않는 모형들 중 가장 단순한 것을 고르는 편이 낫다.
+이 변동을 숫자로 요약한 것이 표준오차 $0.044$이고, 회색 점선이 그 임계값 $1.001 + 0.044 = 1.045$다. 임계값 아래에 머무는 가장 큰 $\lambda$가 $\lambda_{1\text{SE}} = 0.178$이다. **두 $\lambda$ 사이의 곡선이 평평하다는 점이 1-SE 규칙의 전부다.** 평균 곡선이 그 구간에서 $1.001$에서 $1.038$로 4% 오를 뿐이라면, 통계적으로 구별되지 않는 모형들 중 가장 단순한 것을 고르는 편이 낫다.
 
 그 선택이 실제로 무엇을 바꾸는지는 계수를 세어 보면 안다. $\lambda_{\min}$은 변수 9개를, $\lambda_{1\text{SE}}$는 5개를 남긴다. 참으로 쓰인 변수는 3개이므로 **둘 다 과다선택이지만 후자가 진실에 가깝다.** 예측 정확도를 마지막 한 자리까지 다투는 상황이 아니라면, 곡선이 평평한 구간에서는 오른쪽 끝을 고르는 것이 합리적이다.
 
@@ -248,13 +248,13 @@ $0.0762$ 에 모인다. 그런데 시험자료로 잰 참 최적은 $0.0480$ 이
 
 $$
 \text{반복} \;\Longrightarrow\; \text{분산} \downarrow, \qquad
-\text{치우침은 그대로}
+\text{편향은 그대로}
 $$
 
 반복은 **최적이 아닌 자리 둘레로 좁혀 줄 뿐이다.** 중심을 옮기지 않는다. 쉰 번
 반복한 분석자는 한 번만 한 분석자와 같은 답에 더 큰 확신을 갖게 된다.
 
-치우침의 값을 제대로 적어 두자. $0.0762$ 와 $0.0480$ 의 차이가 시험 MSE 로는
+편향의 값을 제대로 적어 두자. $0.0762$ 와 $0.0480$ 의 차이가 시험 MSE 로는
 $1.0\%$ 뿐이다. $\S 5$ 가 말한 대로 곡선이 최소점 둘레에서 평평하기 때문이다.
 그러니 이것은 재앙이 아니라, **반복이 무엇을 사 주는지에 대한 정확한 읽기**다.
 
@@ -345,13 +345,13 @@ CV MSE 평균과 표준오차)가 주어졌을 때 $\hat{\lambda}_{1\text{SE}}$�
         best_idx = np.argmin(cv_mean)
         threshold = cv_mean[best_idx] + cv_se[best_idx]
 
-        # 교차검증 오차가 문턱 이하인 lambda 중 가장 큰 것을 고른다
+        # 교차검증 오차가 임계값 이하인 lambda 중 가장 큰 것을 고른다
         candidates = np.where(cv_mean <= threshold)[0]
         best_1se_idx = candidates[np.argmax(lambdas[candidates])]
         return lambdas[best_1se_idx]
     ```
 
-    이 함수는 최소 CV 오차를 찾아 1 표준오차를 더해 문턱값을 만들고, 그 문턱값 이내에서 가장
+    이 함수는 최소 CV 오차를 찾아 1 표준오차를 더해 임계값을 만들고, 그 임계값 이내에서 가장
     강하게 정칙화된 모형(가장 큰 $\lambda$)을 고른다.
 
     !!! warning "흔한 함정"
@@ -528,7 +528,7 @@ $\lambda_{\max} = \frac{1}{n}\lVert X^\top(y - \bar{y}\mathbf{1})\rVert_\infty$�
     \lambda \;\ge\; \frac{1}{n}\lVert X^\top(y - \bar{y}\mathbf{1})\rVert_\infty \;=\; \lambda_{\max}
     $$
 
-    다. 연습문제 4와 유도가 똑같고, 다른 점은 $y$가 아니라 **절편을 적합한 뒤의 잔차** $y - \bar{y}\mathbf{1}$이 들어간다는 것뿐이다. 벌점을 받지 않는 모수는 언제나 먼저 최적화되고, 벌점을 받는 모수의 문턱은 그 뒤에 남은 잔차로 재어진다.
+    다. 연습문제 4와 유도가 똑같고, 다른 점은 $y$가 아니라 **절편을 적합한 뒤의 잔차** $y - \bar{y}\mathbf{1}$이 들어간다는 것뿐이다. 벌점을 받지 않는 모수는 언제나 먼저 최적화되고, 벌점을 받는 모수의 임계값은 그 뒤에 남은 잔차로 재어진다.
 
     **(2)** 한 열씩 떼어 보면
 
@@ -741,7 +741,7 @@ $\text{CV}_{\text{LOO}}/(\text{RSS}/n)$을 수로 구하고 $\lambda = 0$과 견
 
     **왜 그렇게 되는지는 마지막 줄이 말해 준다.** 겹마다 다시 고른 10개 중 전체 선택과 겹치는 것은 $8, 7, 5, 9, 4$개뿐이다. 선택 자체가 자료의 변동에 민감한 **적합 단계**라는 뜻이다. 그런데 (A)는 그 단계를 교차검증 바깥에 두었으므로, 검증 겹이 자기를 평가할 모형을 고르는 데 참여한 셈이 된다.
 
-    교훈은 하나다. **$y$를 보는 모든 단계가 모형 적합이다.** 표준화, 변수선택, 차원축소, 결측값 대체, 이상점 제거, 이항화 문턱 — 어느 것이든 $y$나 검증 겹의 $X$를 쓰는 순간 겹 안으로 들어가야 한다. 연습문제 1의 표준화 누수가 이 현상의 가장 순한 사례일 뿐이고, 변수선택은 그보다 훨씬 거칠게 샌다. 바깥 겹이 정직한 오차를, 안쪽 겹이 $\lambda$를 담당하는 중첩 교차검증(6절)이 필요한 까닭이다. $\square$
+    교훈은 하나다. **$y$를 보는 모든 단계가 모형 적합이다.** 표준화, 변수선택, 차원축소, 결측값 대체, 이상점 제거, 이항화 임계값 — 어느 것이든 $y$나 검증 겹의 $X$를 쓰는 순간 겹 안으로 들어가야 한다. 연습문제 1의 표준화 누수가 이 현상의 가장 순한 사례일 뿐이고, 변수선택은 그보다 훨씬 거칠게 샌다. 바깥 겹이 정직한 오차를, 안쪽 겹이 $\lambda$를 담당하는 중첩 교차검증(6절)이 필요한 까닭이다. $\square$
 
 ---
 
@@ -755,7 +755,7 @@ $\hat\beta_j = \operatorname{sign}(z_j)(\lvert z_j\rvert - n\alpha)_+$ ($z = X^\
 교과서 꼴과의 대응이 $\lambda = 2n\alpha$임을 보이라.
 
 **(2)** $Q^\top Q = I_p$인 $Q$와 $Z = \sqrt{n}\,Q$를 보라. 같은 자료, 열의 척도만 다르다. 같은
-$\alpha$를 주면 두 적합값이 다르며, $Q$ 자리로 환산한 실효 문턱이 각각 $n\alpha$와
+$\alpha$를 주면 두 적합값이 다르며, $Q$ 자리로 환산한 실효 임계값이 각각 $n\alpha$와
 $\sqrt{n}\alpha$임을 보이라.
 
 **(3)** $n = 50$, $p = 4$, $\alpha = 0.01$로 (1)과 (2)를 수치로 확인하라. 아울러 $\lambda$를
@@ -777,13 +777,13 @@ $\alpha$ 자리에 그대로 넣는 흔한 실수가 어떤 해를 주는지 보
     \frac{1}{n}(\beta_j - z_j) + \alpha s_j = 0, \qquad s_j \in \partial\lvert\beta_j\rvert
     $$
 
-    즉 $\beta_j = z_j - n\alpha s_j$다. $\lvert z_j\rvert > n\alpha$면 $s_j = \operatorname{sign}(z_j)$이고 그렇지 않으면 $\beta_j = 0$에서 $\lvert z_j\rvert/(n\alpha) \le 1$이 성립해 최적이다. 합치면 연성문턱
+    즉 $\beta_j = z_j - n\alpha s_j$다. $\lvert z_j\rvert > n\alpha$면 $s_j = \operatorname{sign}(z_j)$이고 그렇지 않으면 $\beta_j = 0$에서 $\lvert z_j\rvert/(n\alpha) \le 1$이 성립해 최적이다. 합치면 연성 임계화
 
     $$
     \hat\beta_j = \operatorname{sign}(z_j)\left(\lvert z_j\rvert - n\alpha\right)_+
     $$
 
-    이다. $X^\top X = I$이니 $z = X^\top y$가 곧 최소제곱해임도 유의하라. 같은 계산을 교과서 꼴로 하면 $\partial_j$가 $-2z_j + 2\beta_j + \lambda s_j = 0$, 즉 문턱이 $\lambda/2$다. 두 문턱이 같아야 하므로
+    이다. $X^\top X = I$이니 $z = X^\top y$가 곧 최소제곱해임도 유의하라. 같은 계산을 교과서 꼴로 하면 $\partial_j$가 $-2z_j + 2\beta_j + \lambda s_j = 0$, 즉 임계값이 $\lambda/2$다. 두 임계값이 같아야 하므로
 
     $$
     \frac{\lambda}{2} = n\alpha \quad\Longrightarrow\quad \lambda = 2n\alpha
@@ -797,13 +797,13 @@ $\alpha$ 자리에 그대로 넣는 흔한 실수가 어떤 해를 주는지 보
     \frac{1}{2n}\left(-2\sqrt{n}z_j + 2n\beta_j\right) + \alpha s_j = 0 \;\Longrightarrow\; \beta_j = \frac{z_j}{\sqrt{n}} - \alpha s_j
     $$
 
-    이므로 $\hat\beta^Z_j = \operatorname{sign}(z_j)(\lvert z_j/\sqrt{n}\rvert - \alpha)_+$, 문턱이 $\alpha$다. 두 적합값을 비교하려면 같은 자리로 옮겨야 한다. $Z\hat\beta^Z = \sqrt{n}\,Q\hat\beta^Z$이므로 $Q$ 자리의 계수는 $\sqrt{n}\hat\beta^Z$이고
+    이므로 $\hat\beta^Z_j = \operatorname{sign}(z_j)(\lvert z_j/\sqrt{n}\rvert - \alpha)_+$, 임계값이 $\alpha$다. 두 적합값을 비교하려면 같은 자리로 옮겨야 한다. $Z\hat\beta^Z = \sqrt{n}\,Q\hat\beta^Z$이므로 $Q$ 자리의 계수는 $\sqrt{n}\hat\beta^Z$이고
 
     $$
     \sqrt{n}\,\hat\beta^Z_j = \operatorname{sign}(z_j)\left(\lvert z_j\rvert - \sqrt{n}\alpha\right)_+
     $$
 
-    다. **같은 $\alpha$인데 실효 문턱이 $n\alpha$ 대 $\sqrt{n}\alpha$다.** 열에 상수를 곱하는 것만으로 벌점의 세기가 바뀐다 — L1 벌점이 척도불변이 아니라는 사실의 가장 깨끗한 증거다.
+    다. **같은 $\alpha$인데 실효 임계값이 $n\alpha$ 대 $\sqrt{n}\alpha$다.** 열에 상수를 곱하는 것만으로 벌점의 세기가 바뀐다 — L1 벌점이 척도불변이 아니라는 사실의 가장 깨끗한 증거다.
 
     **(3)** 수치로 확인한다.
 
@@ -831,31 +831,31 @@ $\alpha$ 자리에 그대로 넣는 흔한 실수가 어떤 해를 주는지 보
     # --- 설계 1: Q (Q'Q = I) ---
     m1 = Lasso(alpha=alpha, fit_intercept=False, max_iter=100000, tol=1e-12).fit(Q, y)
     c1 = soft(z, n * alpha)
-    print(f"\n[설계 1] Q'Q = I,  문턱은 n*alpha = {n*alpha:.4f} 이다")
+    print(f"\n[설계 1] Q'Q = I,  임계값은 n*alpha = {n*alpha:.4f} 이다")
     print("sklearn :", np.array2string(m1.coef_, formatter={"float_kind": lambda v: f"{v:.4f}"}))
-    print("연성문턱:", np.array2string(c1, formatter={"float_kind": lambda v: f"{v:.4f}"}))
+    print("연성 임계화:", np.array2string(c1, formatter={"float_kind": lambda v: f"{v:.4f}"}))
     print(f"최대 차이 = {np.max(np.abs(m1.coef_ - c1)):.2e}")
 
     # --- 설계 2: Z = sqrt(n) Q (Z'Z = n I) — 같은 자료, 열의 척도만 바꿨다 ---
     Z = np.sqrt(n) * Q
     m2 = Lasso(alpha=alpha, fit_intercept=False, max_iter=100000, tol=1e-12).fit(Z, y)
     c2 = soft(z / np.sqrt(n), alpha)
-    print(f"\n[설계 2] Z = sqrt(n) Q,  문턱은 alpha = {alpha:.4f} 이다")
+    print(f"\n[설계 2] Z = sqrt(n) Q,  임계값은 alpha = {alpha:.4f} 이다")
     print("sklearn :", np.array2string(m2.coef_, formatter={"float_kind": lambda v: f"{v:.4f}"}))
-    print("연성문턱:", np.array2string(c2, formatter={"float_kind": lambda v: f"{v:.4f}"}))
+    print("연성 임계화:", np.array2string(c2, formatter={"float_kind": lambda v: f"{v:.4f}"}))
     print(f"최대 차이 = {np.max(np.abs(m2.coef_ - c2)):.2e}")
 
     # 같은 alpha 가 같은 적합값을 주지 않는다. Q 자리로 환산해 비교한다.
     print(f"\nQ 자리로 환산한 설계 2 의 계수:",
           np.array2string(np.sqrt(n) * m2.coef_, formatter={"float_kind": lambda v: f"{v:.4f}"}))
-    print(f"환산된 실효 문턱 = sqrt(n)*alpha = {np.sqrt(n)*alpha:.4f}  (설계 1 은 {n*alpha:.4f})")
+    print(f"환산된 실효 임계값 = sqrt(n)*alpha = {np.sqrt(n)*alpha:.4f}  (설계 1 은 {n*alpha:.4f})")
     print(f"두 적합값의 거리 ||Q b1 - Z b2|| = {np.linalg.norm(Q @ m1.coef_ - Z @ m2.coef_):.4f}")
 
     # --- 교과서 꼴 lambda = 2 n alpha 와의 대응 ---
     lam_book = 2 * n * alpha
-    print(f"\n교과서 꼴 lambda = 2*n*alpha = {lam_book:.4f}, 문턱 lambda/2 = {lam_book/2:.4f}")
+    print(f"\n교과서 꼴 lambda = 2*n*alpha = {lam_book:.4f}, 임계값 lambda/2 = {lam_book/2:.4f}")
     print(f"soft(z, lambda/2) 와 sklearn 의 최대 차이 = {np.max(np.abs(soft(z, lam_book/2) - m1.coef_)):.2e}")
-    print(f"lambda 를 alpha 로 착각하면 문턱이 {alpha:.4f} 이 되어 계수는",
+    print(f"lambda 를 alpha 로 착각하면 임계값이 {alpha:.4f} 이 되어 계수는",
           np.array2string(soft(z, alpha), formatter={"float_kind": lambda v: f"{v:.4f}"}))
     ```
 
@@ -865,30 +865,30 @@ $\alpha$ 자리에 그대로 넣는 흔한 실수가 어떤 해를 주는지 보
     Q'Q = I 인가: True
     OLS  z = [3.6742 -2.5042 0.7542 0.3321]
 
-    [설계 1] Q'Q = I,  문턱은 n*alpha = 0.5000 이다
+    [설계 1] Q'Q = I,  임계값은 n*alpha = 0.5000 이다
     sklearn : [3.1742 -2.0042 0.2542 0.0000]
-    연성문턱: [3.1742 -2.0042 0.2542 0.0000]
+    연성 임계화: [3.1742 -2.0042 0.2542 0.0000]
     최대 차이 = 8.88e-16
 
-    [설계 2] Z = sqrt(n) Q,  문턱은 alpha = 0.0100 이다
+    [설계 2] Z = sqrt(n) Q,  임계값은 alpha = 0.0100 이다
     sklearn : [0.5096 -0.3442 0.0967 0.0370]
-    연성문턱: [0.5096 -0.3442 0.0967 0.0370]
+    연성 임계화: [0.5096 -0.3442 0.0967 0.0370]
     최대 차이 = 2.22e-16
 
     Q 자리로 환산한 설계 2 의 계수: [3.6035 -2.4335 0.6835 0.2613]
-    환산된 실효 문턱 = sqrt(n)*alpha = 0.0707  (설계 1 은 0.5000)
+    환산된 실효 임계값 = sqrt(n)*alpha = 0.0707  (설계 1 은 0.5000)
     두 적합값의 거리 ||Q b1 - Z b2|| = 0.7881
 
-    교과서 꼴 lambda = 2*n*alpha = 1.0000, 문턱 lambda/2 = 0.5000
+    교과서 꼴 lambda = 2*n*alpha = 1.0000, 임계값 lambda/2 = 0.5000
     soft(z, lambda/2) 와 sklearn 의 최대 차이 = 8.88e-16
-    lambda 를 alpha 로 착각하면 문턱이 0.0100 이 되어 계수는 [3.6642 -2.4942 0.7442 0.3221]
+    lambda 를 alpha 로 착각하면 임계값이 0.0100 이 되어 계수는 [3.6642 -2.4942 0.7442 0.3221]
     ```
 
-    **(1)의 확인.** 설계 1에서 sklearn 의 계수와 손으로 적은 연성문턱이 $8.88\times10^{-16}$까지 같다. $z = (3.6742, -2.5042, 0.7542, 0.3321)$에서 $0.5$를 깎으면 $(3.1742, -2.0042, 0.2542, 0)$이고, 네 번째는 $\lvert z_4\rvert = 0.3321 < 0.5$라 **정확히 0**이 된다. 교과서 꼴 $\lambda = 2n\alpha = 1$의 문턱 $\lambda/2 = 0.5$도 같은 해를 준다. 좌표하강의 수렴오차가 아니라 기계정밀도까지 맞는 것은 직교설계에서 좌표하강이 한 바퀴에 끝나기 때문이다.
+    **(1)의 확인.** 설계 1에서 sklearn 의 계수와 손으로 적은 연성 임계화가 $8.88\times10^{-16}$까지 같다. $z = (3.6742, -2.5042, 0.7542, 0.3321)$에서 $0.5$를 깎으면 $(3.1742, -2.0042, 0.2542, 0)$이고, 네 번째는 $\lvert z_4\rvert = 0.3321 < 0.5$라 **정확히 0**이 된다. 교과서 꼴 $\lambda = 2n\alpha = 1$의 임계값 $\lambda/2 = 0.5$도 같은 해를 준다. 좌표하강의 수렴오차가 아니라 기계정밀도까지 맞는 것은 직교설계에서 좌표하강이 한 바퀴에 끝나기 때문이다.
 
-    **(2)의 확인.** 설계 2는 문턱이 $\alpha = 0.01$이고, 네 번째 계수가 $0.0370 \ne 0$으로 **살아남는다.** $Q$ 자리로 환산하면 계수가 $(3.6035, -2.4335, 0.6835, 0.2613)$, 실효 문턱이 $\sqrt{50}\times 0.01 = 0.0707$이다. 설계 1의 $0.5$와 7배 차이이고, 적합값의 거리는 $0.7881$이다. **열에 $\sqrt{n}$을 곱했을 뿐인데 변수선택의 결과가 달라졌다** — 0 이 아닌 계수가 3개에서 4개로 늘었다.
+    **(2)의 확인.** 설계 2는 임계값이 $\alpha = 0.01$이고, 네 번째 계수가 $0.0370 \ne 0$으로 **살아남는다.** $Q$ 자리로 환산하면 계수가 $(3.6035, -2.4335, 0.6835, 0.2613)$, 실효 임계값이 $\sqrt{50}\times 0.01 = 0.0707$이다. 설계 1의 $0.5$와 7배 차이이고, 적합값의 거리는 $0.7881$이다. **열에 $\sqrt{n}$을 곱했을 뿐인데 변수선택의 결과가 달라졌다** — 0 이 아닌 계수가 3개에서 4개로 늘었다.
 
-    **흔한 실수.** 교과서에서 읽은 $\lambda = 1$을 `Lasso(alpha=1)`에 넣으면 실효 문턱이 $n\alpha = 50$이 되어 모든 계수가 0이 된다. 반대로 $\lambda$를 쓸 자리에 $\alpha = 0.01$을 그대로 적으면 문턱이 $0.01$로, 계수는 $(3.6642, -2.4942, 0.7442, 0.3221)$이 되어 **최소제곱해와 거의 구별되지 않는다.** 둘 다 "정칙화를 했다"고 보고하지만 하나는 영모형, 하나는 OLS 다.
+    **흔한 실수.** 교과서에서 읽은 $\lambda = 1$을 `Lasso(alpha=1)`에 넣으면 실효 임계값이 $n\alpha = 50$이 되어 모든 계수가 0이 된다. 반대로 $\lambda$를 쓸 자리에 $\alpha = 0.01$을 그대로 적으면 임계값이 $0.01$로, 계수는 $(3.6642, -2.4942, 0.7442, 0.3221)$이 되어 **최소제곱해와 거의 구별되지 않는다.** 둘 다 "정칙화를 했다"고 보고하지만 하나는 영모형, 하나는 OLS 다.
 
     여기서 배울 것은 둘이다. 첫째, **$\lambda$를 옮겨 쓸 때는 $n$을 반드시 함께 옮겨라** — $\lambda = 2n\alpha$. 둘째, $\lambda$의 값을 논문에서 베껴 올 수 없다. $\lambda$는 자료의 척도와 $n$에 묶인 수이므로, 새 자료에서는 교차검증으로 다시 고르는 것이 유일하게 안전한 길이다. $\square$
 
@@ -923,7 +923,7 @@ $c$에 무관함을 보이고, 보기 1의 설계($c \approx n = 100$)에서 감
     \hat\beta(\lambda) = \frac{X^\top y}{1+\lambda} = \frac{\hat\beta^{\text{OLS}}}{1+\lambda}
     $$
 
-    다(직교설계에서 $\hat\beta^{\text{OLS}} = X^\top y$). 모든 좌표를 같은 비율로 줄이는 **비례 축소**이고, $(1+\lambda)^{-1} > 0$이므로 **0을 만들지 못한다.** 라쏘의 연성문턱(연습문제 9)과 갈리는 지점이다.
+    다(직교설계에서 $\hat\beta^{\text{OLS}} = X^\top y$). 모든 좌표를 같은 비율로 줄이는 **비례 축소**이고, $(1+\lambda)^{-1} > 0$이므로 **0을 만들지 못한다.** 라쏘의 연성 임계화(연습문제 9)과 갈리는 지점이다.
 
     $\hat\beta^{\text{OLS}} = \beta + X^\top\varepsilon$이고 $\operatorname{Var}(X^\top\varepsilon) = \sigma^2 X^\top X = \sigma^2 I_p$이므로
 

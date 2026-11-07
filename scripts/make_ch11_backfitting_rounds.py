@@ -136,7 +136,7 @@ def main():
         ax.plot(np.arange(1, len(hist) + 1), hist, lw=2.4, color=col,
                 label=f"$\\rho = {rho:g}$  (${res[rho][0]}$ 바퀴)")
     ax.axhline(TOL, color=MUTED, lw=1.4, ls="--")
-    ax.text(1000, TOL * 2.6, "멈춤 문턱 $10^{-10}$", ha="right",
+    ax.text(1000, TOL * 2.6, "멈춤 임계값 $10^{-10}$", ha="right",
             fontsize=10.8, color=MUTED)
     ax.set_xscale("log")
     ax.set_yscale("log")

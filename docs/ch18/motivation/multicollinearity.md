@@ -45,7 +45,7 @@ $$
     - $5 \leq \text{VIF}_j < 10$: 중간 정도의 선형종속, 추가 조사 필요
     - $\text{VIF}_j \geq 10$: 심각한 선형종속, 계수 추정값을 신뢰할 수 없다
 
-    이 문턱들은 절대 기준이 아니라 지침이다. 영향의 정도는 표본크기와 분석 목적에 달려 있다.
+    이 임계값들은 절대 기준이 아니라 지침이다. 영향의 정도는 표본크기와 분석 목적에 달려 있다.
 
 ---
 
@@ -76,7 +76,7 @@ $$
 
 > 아마 그 불균형은 「작은 표본크기」에 여러 음절짜리 이국적인 이름이 없기 때문일 것이다. 그렇다면 **micronumerosity**(미소수성)라는 말을 들여와 그 장애를 치우자.
 
-그러니 이 장이 정칙화로 넘어가기 전에 적어 둘 것이 하나 있다. **능형을 부르는 것은 $\text{VIF}$ 의 크기가 아니라 구간의 폭이다.** $\text{VIF}$ 가 $30$ 이어도 계수의 신뢰구간이 쓸 만큼 좁다면 고칠 것이 없고, $\text{VIF}$ 가 $3$ 이어도 구간이 쓸모를 못 내면 고칠 것이 있다. 문턱은 자료를 보기 전에 정해 놓은 수이고, 구간은 자료가 내놓은 수다.
+그러니 이 장이 정칙화로 넘어가기 전에 적어 둘 것이 하나 있다. **능형을 부르는 것은 $\text{VIF}$ 의 크기가 아니라 구간의 폭이다.** $\text{VIF}$ 가 $30$ 이어도 계수의 신뢰구간이 쓸 만큼 좁다면 고칠 것이 없고, $\text{VIF}$ 가 $3$ 이어도 구간이 쓸모를 못 내면 고칠 것이 있다. 임계값은 자료를 보기 전에 정해 놓은 수이고, 구간은 자료가 내놓은 수다.
 
 _확인한 곳 — 오브라이언 「A Caution Regarding Rules of Thumb for Variance Inflation Factors」(『Quality & Quantity』 제$41$ 권 $673$–$690$ 쪽, $2007$, [doi:10.1007/s11135-006-9018-6](https://doi.org/10.1007/s11135-006-9018-6))의 본문을 직접 읽었다 — 초록의 「VIF 가 $10$, $20$, $40$, 또는 그보다 높다고 해서 그 자체로 결과를 깎아내리거나 변수를 빼라고 하거나 능형회귀를 쓰라고 하거나 변수를 지수로 합치라고 요구하지 않는다」, 각주가 든 출처 목록(마콰트 $1970$ · 네터 외 $1989$ 의 $409$ 쪽 문장 · 헤어 외 $1995$ · 메이슨 외 $1989$ · 메나드 $1995$ 의 $66$ 쪽 허용도 기준 · 스타타 편람), 그리고 그가 기준선으로 쓴 $\text{VIF} = 1.25$, $n = 100$ 이 그것이다. 골드버거의 「micronumerosity」 인용($1991$, $248$–$249$ 쪽)도 같은 논문에서 읽었다 · 표준오차 $0.112$·$0.316$ 과 표본 배수는 이 쪽의 분산식에서 직접 계산한 값이다_
 
@@ -152,7 +152,7 @@ $n = 50$, $\text{corr}(x_1, x_2) = 0.999$, 참 계수 $(\beta_1, \beta_2) = (1, 
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-등상관 구조 $\Sigma = \rho\mathbf{1}\mathbf{1}^\top + (1-\rho)\mathbf{I}$에서 VIF를 $\rho$의 함수로 계산하고, 경험칙 문턱 $\text{VIF} = 10$이 어떤 $\rho$에 해당하는지 구하라.
+등상관 구조 $\Sigma = \rho\mathbf{1}\mathbf{1}^\top + (1-\rho)\mathbf{I}$에서 VIF를 $\rho$의 함수로 계산하고, 경험칙 임계값 $\text{VIF} = 10$이 어떤 $\rho$에 해당하는지 구하라.
 
 </div>
 
@@ -186,7 +186,7 @@ $n = 50$, $\text{corr}(x_1, x_2) = 0.999$, 참 계수 $(\beta_1, \beta_2) = (1, 
 
     $p = 5$의 등상관 구조에서 VIF는 대략 $\dfrac{1}{1-\rho}$에 비례한다.
 
-    **$\text{VIF} = 10$은 $\rho \approx 0.92$에 해당한다.** 즉 경험칙 문턱은 "다른 변수들로 이 변수의 분산 90%를 설명할 수 있으면 위험하다"는 뜻이다.
+    **$\text{VIF} = 10$은 $\rho \approx 0.92$에 해당한다.** 즉 경험칙 임계값은 "다른 변수들로 이 변수의 분산 90%를 설명할 수 있으면 위험하다"는 뜻이다.
 
     **조건수와 VIF가 함께 움직인다는 점이 중요하다.** $\rho = 0.99$에서 VIF $= 80$이면 그 계수의 표준오차가 직교 설계 대비 $\sqrt{80} = 8.9$배다. 유의한 효과를 탐지하려면 자료가 80배 필요하다는 뜻이다.
 
@@ -259,7 +259,7 @@ VIF는 쌍별 상관이 모두 낮아도 클 수 있다. 그런 자료를 구성
     [376.05977077 427.43481997 750.57104546]
     ```
 
-    쌍별 상관은 모두 $0.71$ 부근으로 "0.8 미만"이라는 흔한 문턱을 통과한다. 그런데 VIF는 세 변수 모두 **$400$을 넘는다.**
+    쌍별 상관은 모두 $0.71$ 부근으로 "0.8 미만"이라는 흔한 임계값을 통과한다. 그런데 VIF는 세 변수 모두 **$400$을 넘는다.**
 
     $R_3^2$이 $0.998$에 이르기 때문이다. $x_3$은 $x_1$이나 $x_2$ 어느 하나와도 특별히 강하게 상관되어 있지 않지만, **둘의 합**으로는 거의 완벽히 설명된다.
 
@@ -379,9 +379,9 @@ $$
     표준화 적합값 최대 차이 = 0.0000000000
     ```
 
-    **(가)** 같은 자료, 같은 $\lambda = 1$인데 능형 계수가 $(1.2731, 0.7273)$에서 $(0.9443, 1.0666)$으로 바뀌었다(둘째 계수는 m 단위로 환산한 값이다). 적합값도 최대 $0.127$만큼 다르다. 자료를 바꾼 것이 아니라 **눈금만 바꾸었는데 다른 모형이 나왔다.**
+    **(가)** 같은 자료, 같은 $\lambda = 1$인데 능형 계수가 $(1.2731, 0.7273)$에서 $(0.9443, 1.0666)$으로 바뀌었다(둘째 계수는 m 단위로 환산한 값이다). 적합값도 최대 $0.127$만큼 다르다. 자료를 바꾼 것이 아니라 **척도만 바꾸었는데 다른 모형이 나왔다.**
 
-    까닭은 간단하다. $x_2$를 1000배 키우면 같은 설명력을 내는 계수는 $1/1000$로 작아지고, 벌점에 들어가는 $\beta_2^2$는 $1/10^6$로 줄어든다. 즉 **mm 쪽에서는 $\beta_2$가 벌점을 거의 받지 않는다.** 그래서 벌점은 사실상 $\beta_1$에만 걸리고, 설명력이 둘째 변수 쪽으로 밀려 $\beta_2$는 $0.7273 \to 1.0666$으로 커지고 첫째 계수는 그만큼 눌려 $1.2731 \to 0.9443$이 된다(실제로 둘째 변수의 벌점만 $10^{-6}$으로 줄여 적합하면 같은 $(0.9443,\, 1.0666)$이 나온다). OLS 해 $(1.7289,\, 0.2851)$과는 오히려 멀어진다는 점도 눈여겨볼 만하다 — 눈금을 바꾸는 것은 벌점을 끄는 것이 아니라 **벌점을 변수마다 다르게 거는 것**이다.
+    까닭은 간단하다. $x_2$를 1000배 키우면 같은 설명력을 내는 계수는 $1/1000$로 작아지고, 벌점에 들어가는 $\beta_2^2$는 $1/10^6$로 줄어든다. 즉 **mm 쪽에서는 $\beta_2$가 벌점을 거의 받지 않는다.** 그래서 벌점은 사실상 $\beta_1$에만 걸리고, 설명력이 둘째 변수 쪽으로 밀려 $\beta_2$는 $0.7273 \to 1.0666$으로 커지고 첫째 계수는 그만큼 눌려 $1.2731 \to 0.9443$이 된다(실제로 둘째 변수의 벌점만 $10^{-6}$으로 줄여 적합하면 같은 $(0.9443,\, 1.0666)$이 나온다). OLS 해 $(1.7289,\, 0.2851)$과는 오히려 멀어진다는 점도 눈여겨볼 만하다 — 척도를 바꾸는 것은 벌점을 끄는 것이 아니라 **벌점을 변수마다 다르게 거는 것**이다.
 
     **(나)** OLS 적합값은 $\mathbf{y}$를 $\mathbf{X}$의 열공간에 사영한 것이고, 열을 재척도해도 **열공간이 변하지 않는다.** 그래서 적합값 차이가 $0$이다(계수는 $1/1000$로 바뀌지만 예측은 같다). 벌점이 없을 때만 성립하는 성질이다.
 
@@ -441,7 +441,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff hard" title="어려움"></span>
-§4 의 "능형은 분배하고 라쏘는 선택한다"를 직교설계에서 닫힌 꼴로 확인하라. $\mathbf{X}^\top\mathbf{X} = \mathbf{I}$이고 OLS 해가 $\hat{\boldsymbol\beta} = \mathbf{X}^\top\mathbf{y} = (2.5,\, -0.8,\, 0.3)$이라 하자. (가) $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda\lVert\boldsymbol\beta\rVert^2$의 최소점이 $\hat{\boldsymbol\beta}/(1+\lambda)$임을 유도하고 $\lambda = 1$의 해를 구하라. (나) $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda\lVert\boldsymbol\beta\rVert_1$의 최소점이 $\text{sign}(\hat\beta_j)(\lvert\hat\beta_j\rvert - \lambda/2)_+$임을 유도하고 $\lambda = 1$의 해를 구하라. (다) 많은 교재는 문턱을 $\lambda/2$가 아니라 $\lambda$로 적는다. 어떤 목적함수를 쓴 것인가? (라) 각 계수가 정확히 0이 되는 가장 작은 $\lambda$를 구하라. 능형은 어떤가?
+§4 의 "능형은 분배하고 라쏘는 선택한다"를 직교설계에서 닫힌 꼴로 확인하라. $\mathbf{X}^\top\mathbf{X} = \mathbf{I}$이고 OLS 해가 $\hat{\boldsymbol\beta} = \mathbf{X}^\top\mathbf{y} = (2.5,\, -0.8,\, 0.3)$이라 하자. (가) $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda\lVert\boldsymbol\beta\rVert^2$의 최소점이 $\hat{\boldsymbol\beta}/(1+\lambda)$임을 유도하고 $\lambda = 1$의 해를 구하라. (나) $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda\lVert\boldsymbol\beta\rVert_1$의 최소점이 $\text{sign}(\hat\beta_j)(\lvert\hat\beta_j\rvert - \lambda/2)_+$임을 유도하고 $\lambda = 1$의 해를 구하라. (다) 많은 교재는 임계값을 $\lambda/2$가 아니라 $\lambda$로 적는다. 어떤 목적함수를 쓴 것인가? (라) 각 계수가 정확히 0이 되는 가장 작은 $\lambda$를 구하라. 능형은 어떤가?
 
 </div>
 
@@ -468,7 +468,7 @@ $$
     - $\beta < 0$: $2(\beta-\hat\beta) - \lambda = 0 \Rightarrow \beta = \hat\beta + \lambda/2$. 조건은 $\hat\beta < -\lambda/2$다.
     - $\lvert\hat\beta\rvert \le \lambda/2$: 위 두 후보가 모두 부호 조건을 어긴다. $0$에서의 열미분 구간 $[-2\hat\beta-\lambda,\; -2\hat\beta+\lambda]$가 $0$을 포함하므로 최소점은 $\beta = 0$이다.
 
-    세 경우를 합치면 $\text{sign}(\hat\beta)(\lvert\hat\beta\rvert-\lambda/2)_+$다. $\lambda = 1$이면 문턱이 $0.5$이므로
+    세 경우를 합치면 $\text{sign}(\hat\beta)(\lvert\hat\beta\rvert-\lambda/2)_+$다. $\lambda = 1$이면 임계값이 $0.5$이므로
 
     $$
     \tilde{\boldsymbol\beta}^{\text{lasso}} = (2.5-0.5,\; -(0.8-0.5),\; 0) = (2.0,\, -0.3,\, 0)
@@ -476,7 +476,7 @@ $$
 
     이다. $\square$
 
-    **(다)** 잔차제곱합에 $\frac{1}{2}$을 붙여 $\frac{1}{2}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda\lVert\boldsymbol\beta\rVert_1$을 최소화한 것이다. 이때 좌표별 문제가 $\frac{1}{2}(\beta-\hat\beta)^2 + \lambda\lvert\beta\rvert$가 되어 문턱이 정확히 $\lambda$가 된다. **공식을 베낄 때는 목적함수에 $\frac{1}{2}$이 붙었는지를 반드시 확인해야 한다.** sklearn 은 여기에 $1/n$까지 더 붙이므로 환산이 한 단계 더 필요하다(연습문제 8).
+    **(다)** 잔차제곱합에 $\frac{1}{2}$을 붙여 $\frac{1}{2}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda\lVert\boldsymbol\beta\rVert_1$을 최소화한 것이다. 이때 좌표별 문제가 $\frac{1}{2}(\beta-\hat\beta)^2 + \lambda\lvert\beta\rvert$가 되어 임계값이 정확히 $\lambda$가 된다. **공식을 베낄 때는 목적함수에 $\frac{1}{2}$이 붙었는지를 반드시 확인해야 한다.** sklearn 은 여기에 $1/n$까지 더 붙이므로 환산이 한 단계 더 필요하다(연습문제 8).
 
     **(라)** 라쏘는 $\lvert\hat\beta_j\rvert \le \lambda/2$, 즉 $\lambda \ge 2\lvert\hat\beta_j\rvert$에서 0이 된다.
 
@@ -504,7 +504,7 @@ sklearn 의 `Lasso`는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\
     2n\left[\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \alpha\lVert\boldsymbol\beta\rVert_1\right] = \lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + 2n\alpha\lVert\boldsymbol\beta\rVert_1
     $$
 
-    이므로 $\lambda = 2n\alpha$다. 능형에는 $1/(2n)$이 없으므로 $\alpha$가 그대로 $\lambda$다. **같은 라이브러리의 두 클래스가 서로 다른 규약을 쓴다.** $n = 40$, $\lambda = 1.6$이면 $\alpha = 1.6/80 = 0.02$이고 연성문턱은 $\lambda/2 = n\alpha = 0.8$이다.
+    이므로 $\lambda = 2n\alpha$다. 능형에는 $1/(2n)$이 없으므로 $\alpha$가 그대로 $\lambda$다. **같은 라이브러리의 두 클래스가 서로 다른 규약을 쓴다.** $n = 40$, $\lambda = 1.6$이면 $\alpha = 1.6/80 = 0.02$이고 연성 임계화는 $\lambda/2 = n\alpha = 0.8$이다.
 
     ```python
     import numpy as np
@@ -527,7 +527,7 @@ sklearn 의 `Lasso`는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\
     sk = Lasso(alpha=alpha, fit_intercept=False, max_iter=100000,
                tol=1e-12).fit(Q, y8).coef_
     print("OLS      ", row(bhat))
-    print("연성문턱 ", row(soft))
+    print("연성 임계화 ", row(soft))
     print("sklearn  ", row(sk))
     print(f"alpha = lam/(2n) = {alpha:.4f}, 최대 차이 = {np.abs(soft-sk).max():.10f}")
 
@@ -544,7 +544,7 @@ sklearn 의 `Lasso`는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\
 
     ```text
     OLS         5.1918  -2.1090   0.2907  -0.4723
-    연성문턱    4.3918  -1.3090   0.0000   0.0000
+    연성 임계화    4.3918  -1.3090   0.0000   0.0000
     sklearn     4.3918  -1.3090   0.0000   0.0000
     alpha = lam/(2n) = 0.0200, 최대 차이 = 0.0000000000
     alpha=lam   0.0000   0.0000   0.0000   0.0000
@@ -552,9 +552,9 @@ sklearn 의 `Lasso`는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\
     Ridge       1.9968  -0.8111   0.1118  -0.1817
     ```
 
-    연성문턱 공식과 좌표하강 해가 부동소수점 한계까지 일치한다. $\lvert\hat\beta_3\rvert = 0.2907$과 $\lvert\hat\beta_4\rvert = 0.4723$은 문턱 $0.8$보다 작으므로 정확히 0이 되었다 — 라쏘가 참값이 0인 넷째 변수는 물론 작은 셋째 변수까지 떨어낸 것이다. 능형 쪽도 $\hat\beta_j/(1+1.6) = \hat\beta_j/2.6$과 `Ridge`가 일치하며, 0이 된 계수는 하나도 없다.
+    연성 임계화 공식과 좌표하강 해가 부동소수점 한계까지 일치한다. $\lvert\hat\beta_3\rvert = 0.2907$과 $\lvert\hat\beta_4\rvert = 0.4723$은 임계값 $0.8$보다 작으므로 정확히 0이 되었다 — 라쏘가 참값이 0인 넷째 변수는 물론 작은 셋째 변수까지 떨어낸 것이다. 능형 쪽도 $\hat\beta_j/(1+1.6) = \hat\beta_j/2.6$과 `Ridge`가 일치하며, 0이 된 계수는 하나도 없다.
 
-    **$\alpha$ 자리에 $\lambda$를 넣으면** 문턱이 $n\alpha = 40 \times 1.6 = 64$가 된다. 가장 큰 $\lvert\hat\beta_1\rvert = 5.19$조차 턱없이 작으므로 **모든 계수가 0**이고 모형은 절편만 남는다. 벌점을 $2n = 80$배 세게 건 것이다.
+    **$\alpha$ 자리에 $\lambda$를 넣으면** 임계값이 $n\alpha = 40 \times 1.6 = 64$가 된다. 가장 큰 $\lvert\hat\beta_1\rvert = 5.19$조차 턱없이 작으므로 **모든 계수가 0**이고 모형은 절편만 남는다. 벌점을 $2n = 80$배 세게 건 것이다.
 
     **읽을 것.** 정칙화 경로를 손으로 그린 공식과 비교하거나, 다른 언어의 결과(R 의 `glmnet`은 또 다른 규약을 쓴다)와 맞춰 볼 때 이 환산이 없으면 수가 전부 어긋난다. 안전한 습관은 **격자를 $\lambda$로 정해 놓고 $\alpha = \lambda/(2n)$으로 바꾸어 넘기는 것**, 그리고 적어도 한 점에서 직교설계 닫힌 꼴로 검산하는 것이다.
 

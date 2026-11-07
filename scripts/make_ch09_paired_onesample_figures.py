@@ -379,7 +379,7 @@ def t_vs_z_critical():
     clean_axis(ax)
     ax.set_title("$\\sigma$ 를 $S$ 로 바꾼 값", fontsize=13, pad=10)
 
-    fig.suptitle("$\\sigma$ 를 모르면 문턱이 높아진다 — 그 대가가 $t$ 분포다",
+    fig.suptitle("$\\sigma$ 를 모르면 임계값이 높아진다 — 그 대가가 $t$ 분포다",
                  fontsize=13.5, y=1.02)
     fig.tight_layout()
     save(fig, ONE + "t_vs_z_critical.png")
@@ -413,7 +413,7 @@ def binomial_normal_condition():
                  fontsize=13.5, y=1.04)
     fig.text(0.5, -0.03,
              "왼쪽은 $np_0 = 2.5$ 로 오른쪽으로 치우쳐 있고, 가운데는 $5$, "
-             "오른쪽은 $20$ 이다. 문턱 $10$ 은 가운데와 오른쪽 사이에 있다.",
+             "오른쪽은 $20$ 이다. 임계값 $10$ 은 가운데와 오른쪽 사이에 있다.",
              fontsize=11, color=INK, ha="center")
     fig.tight_layout()
     save(fig, ONE + "binomial_normal_condition.png")

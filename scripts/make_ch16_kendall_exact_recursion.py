@@ -136,7 +136,7 @@ axR.plot(NS, sizes, "-", color=BLUE, lw=1.6, zorder=3,
          label="$Z$ 를 그대로 썼을 때의 실제 크기")
 axR.plot(NS, sizes, "o", color=BLUE, ms=3.2, zorder=4)
 axR.axvline(10, color=GREEN, lw=1.2, ls=":", zorder=2)
-axR.text(10.6, 0.0795, "쪽이 적어 둔 문턱 $n = 10$", fontsize=9, color=GREEN)
+axR.text(10.6, 0.0795, "쪽이 적어 둔 임계값 $n = 10$", fontsize=9, color=GREEN)
 axR.axvspan(4, 10, color=MUTED, alpha=0.14, zorder=0)
 axR.annotate("$r_s$ 는 이 언저리에서\n셈이 끊긴다 ($n! $ 을 다 세야 한다)",
              xy=(7.2, 0.0135), xytext=(13.5, 0.0120), fontsize=9, color=INK,

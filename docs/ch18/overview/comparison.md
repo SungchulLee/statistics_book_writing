@@ -30,7 +30,7 @@ $$
 |---|---|---|---|
 | 변수선택 | 없음 | 있음 | 있음 |
 | 정확한 0 | 결코 없음 | 있음 | 있음 |
-| 축소 유형 | 비례 | 평행이동(연성 문턱) | 결합 |
+| 축소 유형 | 비례 | 평행이동(연성 임계화) | 결합 |
 | 다중공선성 처리 | 좋음(계수 분배) | 나쁨(하나만 선택) | 좋음(그룹 효과) |
 | 해의 유일성 | 언제나 ($\lambda > 0$) | $p > n$이면 아님 | 언제나 ($\alpha < 1$) |
 | 닫힌 형태 해 | 있음 | 직교 $\mathbf{X}$에서만 | 없음 |
@@ -164,7 +164,7 @@ $$
 
 **능형.** 모든 계수에 중간 정도의 편향. 분산 감소는 $\mathbf{X}^\top\mathbf{X}$의 작은 고유벡터 방향에서 가장 크다.
 
-**라쏘.** 제거된 계수에는 편향이 없다(참값이 0이면 정확하다). 그러나 남은 계수는 연성 문턱 때문에 편향된다. 분산 감소는 잡음이 큰 계수 추정을 제거하는 데서 온다.
+**라쏘.** 제거된 계수에는 편향이 없다(참값이 0이면 정확하다). 그러나 남은 계수는 연성 임계화 때문에 편향된다. 분산 감소는 잡음이 큰 계수 추정을 제거하는 데서 온다.
 
 **엘라스틱넷.** 둘의 프로파일을 결합한다. L2 성분이 모든 계수의 분산을 줄이고 L1 성분이 무관한 것을 제거한다.
 
@@ -215,7 +215,7 @@ $$
 
     **능형** ($P = \frac12\beta_j^2$): 미분하여 $\beta_j - z_j + \lambda\beta_j = 0$이므로 $\hat\beta_j = z_j/(1+\lambda)$.
 
-    **라쏘** ($P = |\beta_j|$): $\beta_j \neq 0$이면 $\beta_j - z_j + \lambda\,\text{sign}(\beta_j) = 0$이므로 $\hat\beta_j = z_j - \lambda\,\text{sign}(\beta_j)$. $\beta_j = 0$이 최적일 조건은 부분미분에서 $|z_j| \le \lambda$. 둘을 합치면 연성 문턱이 된다.
+    **라쏘** ($P = |\beta_j|$): $\beta_j \neq 0$이면 $\beta_j - z_j + \lambda\,\text{sign}(\beta_j) = 0$이므로 $\hat\beta_j = z_j - \lambda\,\text{sign}(\beta_j)$. $\beta_j = 0$이 최적일 조건은 부분미분에서 $|z_j| \le \lambda$. 둘을 합치면 연성 임계화가 된다.
 
     **기하적 이유.** 핵심은 $\beta_j = 0$에서 벌점의 도함수다.
 
@@ -289,7 +289,7 @@ $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 1
     | 라쏘 | 소수 | 대체로 포함 | **놓칠 수 있다** |
     | 엘라스틱넷 | 라쏘보다 조금 많음 | 대체로 포함 | 라쏘보다 잘 잡는다 |
 
-    **$x_3$의 계수 $0.5$가 관건이다.** 잡음 표준편차가 1이고 $n = 100$이므로 그 계수의 표준오차가 약 $0.1$이다. 신호 대 잡음비가 5로 검출은 가능하지만, 라쏘의 문턱 $\lambda$가 $0.5$에 가까우면 함께 잘려 나간다.
+    **$x_3$의 계수 $0.5$가 관건이다.** 잡음 표준편차가 1이고 $n = 100$이므로 그 계수의 표준오차가 약 $0.1$이다. 신호 대 잡음비가 5로 검출은 가능하지만, 라쏘의 임계값 $\lambda$가 $0.5$에 가까우면 함께 잘려 나간다.
 
     **(c)** 검정 MSE는 네 방법이 대체로 비슷하며, 잡음변수가 17개뿐이라 OLS도 크게 나쁘지 않다. **차이가 극적으로 벌어지려면 $p$가 $n$에 가까워야 한다.** $p = 20$, $n = 100$은 $p/n = 0.2$로 OLS가 아직 견딜 만한 영역이다([과적합과 편향–분산 절충](../motivation/overfitting.md) 연습문제 2 참조).
 
@@ -417,13 +417,13 @@ $$
 
     **(b)** $\lambda_{\text{tb}} = 2 \times 80 \times 0.99 = 158.4$. 같은 적합을 가리키는 두 수가 $0.99$와 $158.4$다. **어느 쪽 규약인지 적어 두지 않은 $\lambda$ 값은 아무 뜻이 없다.**
 
-    **(c)** $\lambda = 0.25$의 연성 문턱은
+    **(c)** $\lambda = 0.25$의 연성 임계화는
 
     $$
     \hat{\boldsymbol\beta} = \bigl(0.6 - 0.25,\ 0.3 - 0.25,\ 0\bigr) = (0.35,\ 0.05,\ 0)
     $$
 
-    이다($\lvert 0.1\rvert \le 0.25$이므로 셋째 좌표는 0). 환산하면 $\lambda_{\text{tb}} = 2 \times 100 \times 0.25 = 50$이다. 이 $50$을 `Lasso(alpha=50)`에 넣으면 그것은 $\lambda = 50$을 뜻하고, 라쏘가 모두 0이 되는 문턱은 $\lambda \ge \max_j\lvert z_j\rvert = 0.6$이므로
+    이다($\lvert 0.1\rvert \le 0.25$이므로 셋째 좌표는 0). 환산하면 $\lambda_{\text{tb}} = 2 \times 100 \times 0.25 = 50$이다. 이 $50$을 `Lasso(alpha=50)`에 넣으면 그것은 $\lambda = 50$을 뜻하고, 라쏘가 모두 0이 되는 임계값은 $\lambda \ge \max_j\lvert z_j\rvert = 0.6$이므로
 
     $$
     \hat{\boldsymbol\beta} = (0,\ 0,\ 0).
@@ -535,7 +535,7 @@ $$
     \operatorname{tr}\mathbf{H}_\lambda = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + n\lambda}.
     $$
 
-    2 절 표의 공식과 비교하면 $\lambda_{\text{표}} = n\lambda$다. 표의 공식은 $\frac{1}{n}$ 없는 목적함수 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda_{\text{표}}\lVert\boldsymbol\beta\rVert_2^2$에 딸린 것이다(연습문제 5와 같은 종류의 어긋남이고, 여기서는 배수가 $2n$이 아니라 $n$이다 — 능형 벌점에 $\frac12$이 붙어 있기 때문이다).
+    2 절 표의 공식과 비교하면 $\lambda_{\text{표}} = n\lambda$다. 표의 공식은 $\frac{1}{n}$ 없는 목적함수 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda_{\text{표}}\lVert\boldsymbol\beta\rVert_2^2$에 딸린 것이다(연습문제 5와 같은 종류의 불일치가고, 여기서는 배수가 $2n$이 아니라 $n$이다 — 능형 벌점에 $\frac12$이 붙어 있기 때문이다).
 
     **(b)** $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$이면 모든 특잇값이 $d_j^2 = n$이므로
 
@@ -834,18 +834,18 @@ $$
     \hat\beta_j^{\text{lasso}} = \operatorname{sign}(z_j)\bigl(\lvert z_j\rvert - \lambda/2\bigr)_+
     $$
 
-    즉 문턱 $\lambda/2$의 **연성문턱**이다.
+    즉 임계값 $\lambda/2$의 **연성 임계화**이다.
 
     | | 해 | 0 이 되는 조건 |
     |:---|:---|:---|
     | 능형 | $z_j/(1+\lambda)$ | $z_j = 0$일 때만 |
     | 라쏘 | $\operatorname{sign}(z_j)(\lvert z_j\rvert - \lambda/2)_+$ | $\lvert z_j\rvert \le \lambda/2$ |
 
-    **변수선택의 근거가 이 한 줄에 있다.** 능형의 해는 $z_j$에 **비례**하므로 $z_j \neq 0$이면 어떤 유한한 $\lambda$에서도 0 이 아니다. 라쏘의 해는 $z_j$를 **평행이동**한 뒤 0 에서 자르므로 $\lvert z_j \rvert$가 문턱보다 작은 좌표는 **정확히** 0 이 된다. 연습문제 1 에서 $\lambda = 10^6$까지 키워도 0 이 하나도 없었던 것이 바로 비례 축소의 결과다.
+    **변수선택의 근거가 이 한 줄에 있다.** 능형의 해는 $z_j$에 **비례**하므로 $z_j \neq 0$이면 어떤 유한한 $\lambda$에서도 0 이 아니다. 라쏘의 해는 $z_j$를 **평행이동**한 뒤 0 에서 자르므로 $\lvert z_j \rvert$가 임계값보다 작은 좌표는 **정확히** 0 이 된다. 연습문제 1 에서 $\lambda = 10^6$까지 키워도 0 이 하나도 없었던 것이 바로 비례 축소의 결과다.
 
     **$\lambda \to \infty$에서의 차이.** 능형은 $z_j/(1+\lambda) \sim z_j/\lambda$로 $O(\lambda^{-1})$의 속도로 0 에 **접근만** 한다. 라쏘는 $\lambda \ge 2\lvert z_j\rvert$라는 **유한한** 값에서 이미 정확히 0 에 **도달**하고 그 뒤로는 계속 0 이다. "0 으로 간다"와 "0 이 된다"의 차이다.
 
-    끝으로 척도에 주의하라. 이 문턱은 $\lambda/2$다. sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert y - X\beta\rVert^2 + \alpha\lVert\beta\rVert_1$을 쓰므로 양변에 $2n$을 곱하면 $\lVert y - X\beta\rVert^2 + 2n\alpha\lVert\beta\rVert_1$이 되어 $\lambda = 2n\alpha$, 문턱은 $n\alpha$다. 연습문제 6 에서 이것을 수로 확인한다.
+    끝으로 척도에 주의하라. 이 임계값은 $\lambda/2$다. sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert y - X\beta\rVert^2 + \alpha\lVert\beta\rVert_1$을 쓰므로 양변에 $2n$을 곱하면 $\lVert y - X\beta\rVert^2 + 2n\alpha\lVert\beta\rVert_1$이 되어 $\lambda = 2n\alpha$, 임계값은 $n\alpha$다. 연습문제 6 에서 이것을 수로 확인한다.
 
 
 <div class="drillbox" markdown>
@@ -967,7 +967,7 @@ $X^\top X = I_p$, $y = X\beta + \varepsilon$, $\varepsilon \sim N(0,\sigma^2 I_n
     \lVert\beta - z\rVert^2 + \frac{2\sigma^2}{b}\lVert\beta\rVert_1
     $$
 
-    이다. 곧 $\lambda = 2\sigma^2/b$인 라쏘이고, 연습문제 11 의 공식으로 최빈값은 문턱 $\lambda/2 = \sigma^2/b$의 연성문턱 $\hat\beta_j = \operatorname{sign}(z_j)(\lvert z_j\rvert - \sigma^2/b)_+$다. 6.3절 [최대사후확률 추정](../../ch06/bayesian/map_estimation.md) 정리 1 이 말하는 대응이 바로 이것이다.
+    이다. 곧 $\lambda = 2\sigma^2/b$인 라쏘이고, 연습문제 11 의 공식으로 최빈값은 임계값 $\lambda/2 = \sigma^2/b$의 연성 임계화 $\hat\beta_j = \operatorname{sign}(z_j)(\lvert z_j\rvert - \sigma^2/b)_+$다. 6.3절 [최대사후확률 추정](../../ch06/bayesian/map_estimation.md) 정리 1 이 말하는 대응이 바로 이것이다.
 
     **3. 사후평균은 0 이 되지 않는다.** 좌표 하나만 보고 $z := z_j > 0$이라 하자(음수면 대칭이고 $z=0$이면 대칭성으로 평균이 0 이다). 사후밀도는
 

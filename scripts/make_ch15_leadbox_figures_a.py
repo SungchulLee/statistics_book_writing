@@ -509,7 +509,7 @@ hi = stats.f.ppf(0.975, D1, D2)
 lo = stats.f.ppf(0.025, D1, D2)
 print(f"\n[f_distribution_details] 자유도 ({D1}, {D2})")
 print(f"  관측비 {FOBS:.4f} · 양측 p = {p_two:.4f}  (쪽은 0.3184)")
-print(f"  양측 기각 문턱 {lo:.4f} 와 {hi:.4f}")
+print(f"  양측 기각 임계값 {lo:.4f} 와 {hi:.4f}")
 print(f"  평균 {D2 / (D2 - 2):.4f} · 최빈값 "
       f"{(D1 - 2) * D2 / (D1 * (D2 + 2)):.4f}")
 rec = 1 / stats.f.ppf(0.975, D2, D1)
@@ -554,11 +554,11 @@ ax2.plot(g2, stats.f.pdf(g2, E2, E1), color="tab:red", lw=3.0, ls="--",
          label=f"자유도 ({E2}, {E1}) — 순서를 바꾼 것")
 ax2.axvline(lo_e, color="tab:blue", lw=2.4)
 ax2.axvline(hi_rev, color="tab:red", lw=2.4, ls="--")
-ax2.annotate(f"아래쪽 문턱 {lo_e:.4f}", xy=(lo_e, 0.75),
+ax2.annotate(f"아래쪽 임계값 {lo_e:.4f}", xy=(lo_e, 0.75),
              xytext=(0.62, 1.03), fontsize=11.3, color="tab:blue",
              fontweight="bold", ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.9))
-ax2.annotate(f"순서를 바꾼 쪽의 위 문턱 {hi_rev:.4f}", xy=(hi_rev, 0.12),
+ax2.annotate(f"순서를 바꾼 쪽의 위 임계값 {hi_rev:.4f}", xy=(hi_rev, 0.12),
              xytext=(4.1, 0.52), fontsize=11.3, color="tab:red",
              fontweight="bold", ha="right",
              arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.9))
@@ -566,7 +566,7 @@ ax2.set_xlim(0, 4.2)
 ax2.set_ylim(0, 1.15)
 ax2.set_xlabel("F", fontsize=12)
 ax2.set_ylabel("밀도", fontsize=11.5)
-ax2.set_title("두 문턱이 서로의 역수다", fontsize=12.5)
+ax2.set_title("두 임계값이 서로의 역수다", fontsize=12.5)
 ax2.legend(fontsize=10.8, loc="upper right")
 ax2.grid(alpha=0.25)
 ax2.text(0.5, 0.055, f"{lo_e:.4f} 와 {hi_rev:.4f} 를 곱하면 "

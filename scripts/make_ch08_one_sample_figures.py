@@ -132,7 +132,7 @@ def fig_t_vs_z_cost():
                  fontsize=10.5, color=INK, ha="left", va="center",
                  arrowprops=dict(arrowstyle="->", color=MUTED, lw=1.1,
                                  shrinkA=2, shrinkB=4))
-    axR.text(31.5, 1.185, r"관행적 문턱 $n=30$", fontsize=10.5, color=GREEN,
+    axR.text(31.5, 1.185, r"관행적 임계값 $n=30$", fontsize=10.5, color=GREEN,
              ha="left", va="center")
 
     axR.set_xlim(2, 122)

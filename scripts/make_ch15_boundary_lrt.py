@@ -97,8 +97,8 @@ def main():
     size_mix = float((L0 > C_MIX).mean())
     print(f"집단 {M} 개 · 집단당 {N} 개 · {REPS//10000} 만 번")
     print(f"  P(통계량 = 0) = {p0:.4f}")
-    print(f"  문턱 {C_NAIVE:.3f}(자유도 1 의 표)에서 크기 {size_naive:.4f}")
-    print(f"  문턱 {C_MIX:.3f}(혼합분포)에서 크기 {size_mix:.4f}")
+    print(f"  임계값 {C_NAIVE:.3f}(자유도 1 의 표)에서 크기 {size_naive:.4f}")
+    print(f"  임계값 {C_MIX:.3f}(혼합분포)에서 크기 {size_mix:.4f}")
 
     # 한글은 고정폭에서 두 칸을 차지하므로 f-string 자리맞춤이 보이는 열과 어긋난다
     print("\n 시그마_b/시그마_e   자유도 1 의 표   혼합분포")
@@ -145,9 +145,9 @@ def main():
     # ── ② 크기와 검정력 ──
     ax = axes[1]
     ax.plot(RATIOS, pw[:, 0] * 100, marker="s", ms=7, lw=2.6, color=RED,
-            label=f"자유도 $1$ 의 표 — 문턱 ${C_NAIVE:.3f}$")
+            label=f"자유도 $1$ 의 표 — 임계값 ${C_NAIVE:.3f}$")
     ax.plot(RATIOS, pw[:, 1] * 100, marker="D", ms=7, lw=2.6, color=TEAL,
-            label=f"혼합분포 — 문턱 ${C_MIX:.3f}$")
+            label=f"혼합분포 — 임계값 ${C_MIX:.3f}$")
     ax.axhline(5, color=MUTED, lw=1.6, ls="--")
     ax.annotate(f"$H_0$ 에서 ${pw[0,0]*100:.1f}\\%$ 대 ${pw[0,1]*100:.1f}\\%$",
                 xy=(0.02, pw[0, 1] * 100), xytext=(0.07, 24),

@@ -572,7 +572,7 @@ _확인한 곳 — [Wikipedia 「Hartley (unit)」](https://en.wikipedia.org/wik
 </div>
 
 ??? success "풀이"
-    $B$ = 치우침, $F$ = 공정, $E$ = 10번 중 앞면 8번 관측이라 하자.
+    $B$ = 편향, $F$ = 공정, $E$ = 10번 중 앞면 8번 관측이라 하자.
 
     가능도: $P(E \mid F) = \binom{10}{8} 0.5^8 \cdot 0.5^2 = 45 \cdot (0.5)^{10} \approx 0.0439$.
 

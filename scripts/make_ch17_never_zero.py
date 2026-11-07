@@ -37,7 +37,7 @@ print(f"  m = 9..2000 에서 p̂ 쪽이 α 를 넘는 비율: "
 
 # --- ② 검정이 50,000 개일 때 -------------------------------------------
 m2 = np.unique(np.round(np.logspace(2, 7.2, 400)).astype(np.int64))
-a_adj = ALPHA / NTEST                                     # 본페로니 문턱
+a_adj = ALPHA / NTEST                                     # 본페로니 임계값
 p_hat_one = (np.floor(a_adj * m2) + 1) / (m2 + 1)
 p_u_one = np.floor(a_adj * (m2 + 1)) / (m2 + 1)
 fwer_hat = 1 - (1 - p_hat_one) ** NTEST

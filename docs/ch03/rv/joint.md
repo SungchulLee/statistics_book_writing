@@ -132,8 +132,8 @@ $$
 **그림으로 보는 통계학 1.** 가장자리는 싸고 안쪽은 비싸다
 
 <figure markdown>
-  ![옛 잡지의 판화. 한 여성이 책상에 앉아 구멍 뚫린 카드를 들고 기계에 넣고 있다. 책상 위 수납장 앞면에는 둥근 눈금판이 바늘을 달고 줄지어 박혀 있고, 책상 옆에는 카드 묶음이 높이 쌓여 있다. 그림 아래에 ELECTRICAL COUNTING MACHINES 라 적혀 있다](./img/ec__hollerith1890.png){ width=480 }
-  <figcaption markdown>『사이언티픽 아메리칸』 $1890$ 년 $8$ 월 $30$ 일자에 실린 판화 — $1890$ 년 미국 인구조사의 집계 기계. 오른쪽 아래에 **「ELECTRICAL COUNTING MACHINES」**, 왼쪽 아래에 잡지 이름이 새겨져 있다. 수납장 앞면의 둥근 눈금판 하나하나가 **계수기**이고, 옆에 쌓인 것이 구멍 뚫린 카드다. *(Wikimedia Commons · 저작권 없음)*</figcaption>
+  ![옛 잡지의 판화. 한 여성이 책상에 앉아 구멍 뚫린 카드를 들고 기계에 넣고 있다. 책상 위 수납장 앞면에는 둥근 척도판이 바늘을 달고 줄지어 박혀 있고, 책상 옆에는 카드 묶음이 높이 쌓여 있다. 그림 아래에 ELECTRICAL COUNTING MACHINES 라 적혀 있다](./img/ec__hollerith1890.png){ width=480 }
+  <figcaption markdown>『사이언티픽 아메리칸』 $1890$ 년 $8$ 월 $30$ 일자에 실린 판화 — $1890$ 년 미국 인구조사의 집계 기계. 오른쪽 아래에 **「ELECTRICAL COUNTING MACHINES」**, 왼쪽 아래에 잡지 이름이 새겨져 있다. 수납장 앞면의 둥근 척도판 하나하나가 **계수기**이고, 옆에 쌓인 것이 구멍 뚫린 카드다. *(Wikimedia Commons · 저작권 없음)*</figcaption>
 </figure>
 
 정리 1 이 결합분포에서 한 변수만의 분포를 뽑아낸 것을 **주변분포**라 부른다. 이 이름은 비유가 아니다. 두 항목으로 표를 짜고 행 끝과 열 끝, 곧 표의 **가장자리**에 합을 적어 넣던 자리에서 그대로 온 말이다.
@@ -148,7 +148,7 @@ $$
 
 통계기계가 이 물음과 함께 태어났다는 것도 적어 둘 만하다. 홀러리스가 세운 회사가 뒷날 합병을 거쳐 IBM 이 된다. **무엇을 셀 것인가를 미리 정해야 한다**는 제약은 계수기가 마흔 개이던 시절의 것이지만, 어느 조합을 기록해 두고 어느 조합을 버릴지 고르는 일은 지금도 자료를 모으는 사람의 첫 결정이다.
 
-_확인한 곳 — 판화의 「ELECTRICAL COUNTING MACHINES」, 잡지 이름, 계수기 눈금판과 카드 더미는 **그림에서 직접 읽었다**([Commons 파일 쪽](https://commons.wikimedia.org/wiki/File:1890_Census_Hollerith_Electrical_Counting_Machines_Sci_Amer.jpg) — 『사이언티픽 아메리칸』 $1890$ 년 $8$ 월 $30$ 일자) · $1880$ 년 조사가 팔 년 걸린 것, 기차표에서 얻은 착상, 수은 웅덩이와 철사로 회로를 닫는 방식, **계수기 마흔 개**와 「계수기를 구멍 하나에 붙이거나 relay 로 구멍의 조합에 붙일 수 있었다」, 카드 한 억 장을 네 번 통과시킨 것, 그리고 그의 회사가 뒷날 IBM 이 되었다는 것은 [Wikipedia 「Tabulating machine」](https://en.wikipedia.org/wiki/Tabulating_machine) · $a+b$ 와 $ab$ 의 비교는 **이 쪽에서 직접 꾸몄다**_
+_확인한 곳 — 판화의 「ELECTRICAL COUNTING MACHINES」, 잡지 이름, 계수기 척도판과 카드 더미는 **그림에서 직접 읽었다**([Commons 파일 쪽](https://commons.wikimedia.org/wiki/File:1890_Census_Hollerith_Electrical_Counting_Machines_Sci_Amer.jpg) — 『사이언티픽 아메리칸』 $1890$ 년 $8$ 월 $30$ 일자) · $1880$ 년 조사가 팔 년 걸린 것, 기차표에서 얻은 착상, 수은 웅덩이와 철사로 회로를 닫는 방식, **계수기 마흔 개**와 「계수기를 구멍 하나에 붙이거나 relay 로 구멍의 조합에 붙일 수 있었다」, 카드 한 억 장을 네 번 통과시킨 것, 그리고 그의 회사가 뒷날 IBM 이 되었다는 것은 [Wikipedia 「Tabulating machine」](https://en.wikipedia.org/wiki/Tabulating_machine) · $a+b$ 와 $ab$ 의 비교는 **이 쪽에서 직접 꾸몄다**_
 
 </div>
 
@@ -168,7 +168,7 @@ $$
 
 **(1)** 점구름이 어느 방향으로 얼마나 길쭉해야 하는가. $\Sigma$ 의 고유값과 고유벡터로 주축의 방향과 두 축 길이의 비를 구하시오.
 
-**(2)** 이 표본에서 잰 표본상관계수가 $0.7$ 에서 얼마나 벗어나면 이상한 것인가. 이론 표준오차를 적고 실제 벗어남과 견주시오.
+**(2)** 이 표본에서 잰 표본상관계수가 $0.7$ 에서 얼마나 벗어나면 이상한 것인가. 이론 표준오차를 적고 실제 이탈과 견주시오.
 
 </div>
 

@@ -1,4 +1,4 @@
-r"""이 쪽의 분산 공식이 서지 않는 자리 — 보간 문턱과 두 번째 내리막.
+r"""이 쪽의 분산 공식이 서지 않는 자리 — 보간 임계값과 두 번째 내리막.
 
 이 쪽은 OLS 추정량의 표집분포를 세우고 Var(beta_hat) = sigma^2 (X'X)^{-1} 을 얻는다.
 그 식에는 조건이 하나 숨어 있다 — **X'X 가 역행렬을 가져야 한다**, 곧 p < n 이어야
@@ -73,21 +73,21 @@ print("\n     p    p/n    시험오차   beta 노름   X'X 최소고윳값")
 for i, p in enumerate(PS):
     mark = ""
     if p == N_TR:
-        mark = "   <- 보간 문턱 (p = n)"
+        mark = "   <- 보간 임계값 (p = n)"
     elif i == best_lo:
         mark = "   <- 고전적 최적"
     elif i == best_hi:
-        mark = "   <- 문턱 너머 최적"
+        mark = "   <- 임계값 너머 최적"
     print(f"   {p:>4}  {p/N_TR:>5.2f}  {E[i]:>10.3f}  {Nm[i]:>10.3f}  "
           f"{Lm[i]:>14.3e}{mark}")
 
 print(f"\n   고전적 최적은 p = {PS[best_lo]} 에서 시험오차 {E[best_lo]:.3f} 다.")
-print(f"   보간 문턱 p = n = {N_TR} 에서 {E[idx_n]:.1f} 로 치솟는다 "
+print(f"   보간 임계값 p = n = {N_TR} 에서 {E[idx_n]:.1f} 로 치솟는다 "
       f"({E[idx_n]/E[best_lo]:.0f} 배).")
-print(f"   그런데 문턱을 넘어가면 다시 내려가 p = {PS[best_hi]} 에서 "
+print(f"   그런데 임계값을 넘어가면 다시 내려가 p = {PS[best_hi]} 에서 "
       f"{E[best_hi]:.3f} 가 된다.")
 if E[best_hi] < E[best_lo]:
-    print(f"   **문턱 너머가 고전적 최적보다 낫다** "
+    print(f"   **임계값 너머가 고전적 최적보다 낫다** "
           f"({E[best_hi]:.3f} < {E[best_lo]:.3f}).")
 else:
     print(f"   여기서는 고전적 최적이 아직 더 낫다 "
@@ -101,12 +101,12 @@ x = np.array(PS) / N_TR
 
 ax1.semilogy(x, E, "o-", color=C_B, lw=2.6, ms=7)
 ax1.axvline(1.0, color=C_A, lw=2.2, ls="--")
-ax1.text(1.06, E.max() * 0.45, "보간 문턱\n$p = n$", fontsize=10.5, color=C_A)
+ax1.text(1.06, E.max() * 0.45, "보간 임계값\n$p = n$", fontsize=10.5, color=C_A)
 ax1.plot([x[best_lo]], [E[best_lo]], "o", color=C_C, ms=14, zorder=5)
 ax1.annotate("고전적 최적", (x[best_lo], E[best_lo]), xytext=(0.3, 1.1),
              textcoords="offset fontsize", fontsize=10.5, color=C_C)
 ax1.plot([x[best_hi]], [E[best_hi]], "o", color="#9467bd", ms=14, zorder=5)
-ax1.annotate("문턱 너머", (x[best_hi], E[best_hi]), xytext=(0.2, 1.0),
+ax1.annotate("임계값 너머", (x[best_hi], E[best_hi]), xytext=(0.2, 1.0),
              textcoords="offset fontsize", fontsize=10.5, color="#9467bd")
 ax1.set_xlabel("$p / n$  (계수 수 / 표본 수)")
 ax1.set_ylabel("시험 평균제곱오차")
@@ -126,7 +126,7 @@ ax2.grid(alpha=0.25)
 
 ax3.plot(x, Nm, "o-", color="#9467bd", lw=2.6, ms=7)
 ax3.axvline(1.0, color=C_A, lw=2.2, ls="--")
-ax3.text(1.06, Nm.max() * 0.82, "보간 문턱", fontsize=10.5, color=C_A)
+ax3.text(1.06, Nm.max() * 0.82, "보간 임계값", fontsize=10.5, color=C_A)
 ax3.set_xlabel("$p / n$")
 ax3.set_ylabel("계수 벡터의 길이  $\\|\\hat\\beta\\|$")
 ax3.set_title("③ 계수의 크기", fontsize=12)

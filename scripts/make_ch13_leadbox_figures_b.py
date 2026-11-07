@@ -164,7 +164,7 @@ save(fig, PRAC + "two_independent_sentences.png")
 # 2. validity_conditions — 어겼을 때의 대처마다 치르는 값이 다르다
 #
 # 쪽의 validity_type1 이 「기대도수가 작을 때 세 검정의 실제 1 종 오류율」을
-# 이미 그린다. 곧 들머리의 첫 beat(「문턱이 아니라 완만한 경사」)는 그 그림의
+# 이미 그린다. 곧 들머리의 첫 beat(「임계값이 아니라 완만한 경사」)는 그 그림의
 # 것이다. 여기서는 들머리의 **둘째 beat** 만 그린다 — 「어겼을 때 할 일도
 # 하나가 아니고 각자 치르는 값이 달라서.」
 #
@@ -227,7 +227,7 @@ ax1.axhline(0.05, color="tab:red", lw=2.2, ls="--")
 ax1.axvspan(EM[0] - 0.3, 5.0, color="tab:red", alpha=0.06)
 for j, (nm, col, mk) in enumerate(PATHS):
     ax1.plot(EM, T1[:, j], mk, color=col, lw=2.6, ms=11, label=nm)
-ax1.text(EM[0] - 0.1, 0.0585, "흔히 쓰는 문턱 5 의 왼쪽", ha="left",
+ax1.text(EM[0] - 0.1, 0.0585, "흔히 쓰는 임계값 5 의 왼쪽", ha="left",
          va="bottom", fontsize=10.5, color="tab:red", fontweight="bold")
 ax1.axvline(5.0, color="tab:red", lw=1.6, ls=":")
 ax1.set_xlabel("가장 작은 기대도수", fontsize=11)
@@ -279,7 +279,7 @@ ax2.text(0.03, 0.975, "합치는 길의 벌이는 왼쪽에서 더 쓴 5% 와\n"
          color="0.25", fontweight="bold",
          bbox=dict(boxstyle="round,pad=0.42", fc="#f6f6f6", ec="0.72"))
 
-fig.suptitle("5 는 문턱이 아니라 완만한 경사다 — 어겼을 때 할 일도 "
+fig.suptitle("5 는 임계값이 아니라 완만한 경사다 — 어겼을 때 할 일도 "
              "하나가 아니다", fontsize=15, y=1.0)
 plt.tight_layout()
 save(fig, PRAC + "each_remedy_has_a_price.png")
@@ -378,7 +378,7 @@ ax2.set_ylabel("Q", fontsize=11)
 ax2.set_ylim(0, 14)
 ax2.axhline(stats.chi2.ppf(0.95, 2), color="0.35", lw=1.8, ls=":")
 ax2.text(len(ADD) - 1.25, stats.chi2.ppf(0.95, 2) + 0.35,
-         "자유도 2 의 5% 문턱 5.99", ha="right", va="bottom", fontsize=10.5,
+         "자유도 2 의 5% 임계값 5.99", ha="right", va="bottom", fontsize=10.5,
          color="0.3", fontweight="bold")
 ax2.text(len(ADD) / 2 - 0.5, qs[0] + 1.1,
          f"Q = {qs[0]:.4f} · p = {ps[0]:.4f} — 한 자리도 달라지지 않는다",
@@ -432,7 +432,7 @@ ax1.text(-0.42, WHOLE + 7, f"세 나라를 한꺼번에 본 {WHOLE}", ha="left",
          va="bottom", fontsize=11, color="0.25", fontweight="bold")
 ax1.axhline(stats.chi2.ppf(0.95, 4), color="tab:blue", lw=1.8, ls=":")
 ax1.set_xlim(-0.55, 3.25)
-ax1.text(2.55, stats.chi2.ppf(0.95, 4), "가로 점선은\n자유도 4 의 5% 문턱 9.49",
+ax1.text(2.55, stats.chi2.ppf(0.95, 4), "가로 점선은\n자유도 4 의 5% 임계값 9.49",
          ha="left", va="center", fontsize=10, color="tab:blue",
          fontweight="bold")
 ax1.set_xticks(bx, names, fontsize=11.5)

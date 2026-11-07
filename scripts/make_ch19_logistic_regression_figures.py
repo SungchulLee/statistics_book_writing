@@ -4,7 +4,7 @@ r"""19.1 로지스틱 회귀 기초 네 쪽의 개념 그림을 생성한다.
   ch19/logistic_regression/img/logit_two_scales.png       같은 모형, 두 척도
   ch19/logistic_regression/img/odds_ratio_prob_scale.png  오즈비는 확률비가 아니다
   ch19/logistic_regression/img/crossentropy_shape.png     로그손실의 모양과 절편만 모형
-  ch19/logistic_regression/img/lab_one_model_two_views.png 한 모형, 문턱에 딸린 숫자들
+  ch19/logistic_regression/img/lab_one_model_two_views.png 한 모형, 임계값에 딸린 숫자들
 
 실행:  python3 scripts/make_ch19_logistic_regression_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib, scikit-learn — 문서 빌드에는 필요하지 않다.
@@ -282,7 +282,7 @@ def fig_lab():
 
     fig, axes = plt.subplots(1, 2, figsize=(11.2, 4.3))
 
-    # --- 적합된 곡선과 두 문턱 ---
+    # --- 적합된 곡선과 두 임계값 ---
     ax = axes[0]
     rng = np.random.default_rng(7)
     jit = rng.uniform(-0.035, 0.035, len(y_te))
@@ -314,7 +314,7 @@ def fig_lab():
     ax.legend(loc="upper left", fontsize=8.8, frameon=False)
     tidy(ax)
 
-    # --- ROC 와 두 문턱의 위치 ---
+    # --- ROC 와 두 임계값의 위치 ---
     ax = axes[1]
     ax.plot([0, 1], [0, 1], color=MUTED, lw=1.0, ls=":")
     ax.fill_between(fpr, 0, tpr, color=BLUE_F, alpha=0.75, step="post")
@@ -336,7 +336,7 @@ def fig_lab():
 
     ax.text(0.53, 0.20, "AUC $= %.4f$" % auc, color=BLUE,
             fontsize=12, fontweight="bold")
-    ax.text(0.53, 0.11, "문턱과 무관한 숫자", color=BLUE, fontsize=9.5)
+    ax.text(0.53, 0.11, "임계값과 무관한 숫자", color=BLUE, fontsize=9.5)
     ax.set_xlim(-0.02, 1.02)
     ax.set_ylim(-0.02, 1.04)
     ax.set_xlabel("거짓양성률 FPR", color=INK, fontsize=10)

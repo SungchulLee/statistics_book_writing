@@ -123,7 +123,7 @@ def en_geometry():
         ax2.plot(z, soft(z, a * lam) / (1 + (1 - a) * lam), lw=2.4, color=col,
                  label=lab, zorder=3)
         print(f"  alpha={a}: z=2 -> {soft(2, a*lam)/(1+(1-a)*lam):.3f}  "
-              f"문턱 {a*lam:.2f}  기울기 {1/(1+(1-a)*lam):.3f}")
+              f"임계값 {a*lam:.2f}  기울기 {1/(1+(1-a)*lam):.3f}")
     ax2.axhline(0, color=INK, lw=0.8)
     ax2.axvline(0, color=INK, lw=0.8)
     ax2.set_xlim(-3.2, 3.2)

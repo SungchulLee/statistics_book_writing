@@ -34,7 +34,7 @@ $\text{Err}_{\text{test}} - \text{Err}_{\text{train}}$의 격차는 모형 복�
 
 점 $n+1$ 개가 주어지면 $n$ 차 다항식 하나가 그 점들을 **빠짐없이** 지난다. 훈련오차가 정확히 $0$ 이니 좋아 보인다. 그런데 그렇게 맞춘 식의 최고차항은 자료의 작은 변동까지 떠받치느라 생긴 것이고, **자료 범위를 벗어나는 순간 그 항이 주인이 된다.** 안에서 잘 맞을수록 밖에서 더 크게 달아난다.
 
-열 점으로 확인해 보자. 참값은 곧은 직선 $y=20+3x$ 이고 거기에 눈금을 읽다 생긴 만큼의 변동을 더했다.
+열 점으로 확인해 보자. 참값은 곧은 직선 $y=20+3x$ 이고 거기에 척도를 읽다 생긴 만큼의 변동을 더했다.
 
 ```python
 import numpy as np
@@ -47,7 +47,7 @@ ys   = 20.0 + 3.0 * xs + np.array(wob)
 print("차수   자료 안 최대오차   x=10 에서의 값(참값 50)")
 for n in (1, 3, 9):
     c      = np.polyfit(xs, ys, n)                       # 차수 n 으로 맞춘다
-    inside = np.max(np.abs(np.polyval(c, xs) - ys))      # 열 점에서의 어긋남
+    inside = np.max(np.abs(np.polyval(c, xs) - ys))      # 열 점에서의 불일치
     out    = np.polyval(c, 10.0)                         # 자료 바로 바깥 한 걸음
     print(f"{n:3d} {inside:16.3f} {out:22.1f}")
 ```
@@ -478,19 +478,19 @@ $E[\text{Err}_{\text{train}}] = \sigma^2(1 - p/n)$과 $E[\text{Err}_{\text{test}
 
     실무에서 가장 흔한 사고가 여기서 난다. **sklearn 의 `Ridge`·`Lasso`·`ElasticNet` 은 표준화를 해 주지 않는다.** 반드시 `make_pipeline(StandardScaler(), Ridge(alpha=...))`처럼 묶어 써야 하고, 교차검증을 할 때는 그 표준화가 **폴드 안에서** 일어나야 한다(연습문제 9).
 
-    **(라) 큰 $\lambda$.** $f_2/f_1 = \dfrac{d_2^2(d_1^2+\lambda)}{d_1^2(d_2^2+\lambda)} = \dfrac{100(1+\lambda)}{100+\lambda}$는 $\lambda$가 커질수록 커져 $\lambda\to\infty$에서 100으로 간다. $\lambda = 100$에서 이미 $f_1 = 1/101 = 0.0099$, $f_2 = 100/200 = 0.5$다. **길이가 긴 열, 즉 눈금이 작은 단위로 잰 변수가 훨씬 오래 살아남는다.** 표준화하지 않고 라쏘로 변수선택을 하면 "밀리미터로 잰 변수가 미터로 잰 변수를 이기는" 선택이 나온다. 선택된 변수 목록이 측정 단위의 함수가 되는 것이다.
+    **(라) 큰 $\lambda$.** $f_2/f_1 = \dfrac{d_2^2(d_1^2+\lambda)}{d_1^2(d_2^2+\lambda)} = \dfrac{100(1+\lambda)}{100+\lambda}$는 $\lambda$가 커질수록 커져 $\lambda\to\infty$에서 100으로 간다. $\lambda = 100$에서 이미 $f_1 = 1/101 = 0.0099$, $f_2 = 100/200 = 0.5$다. **길이가 긴 열, 즉 척도가 작은 단위로 잰 변수가 훨씬 오래 살아남는다.** 표준화하지 않고 라쏘로 변수선택을 하면 "밀리미터로 잰 변수가 미터로 잰 변수를 이기는" 선택이 나온다. 선택된 변수 목록이 측정 단위의 함수가 되는 것이다.
 
 ---
 
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \alpha\lVert\boldsymbol{\beta}\rVert_1$을 최소화하고 교과서는 4 절처럼 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \lambda\lVert\boldsymbol{\beta}\rVert_1$을 최소화한다. (가) 직교설계 $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_p$에서 두 목적함수의 좌표별 해를 각각 구해 $\lambda = 2n\alpha$임을 보여라. (나) $n = 50$, $p = 4$인 직교설계에서 sklearn 의 해가 연성문턱 공식과 맞는지 수치로 확인하라. (다) $\alpha$ 자리에 $\lambda$를 넣으면 무슨 일이 생기는가.
+sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \alpha\lVert\boldsymbol{\beta}\rVert_1$을 최소화하고 교과서는 4 절처럼 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \lambda\lVert\boldsymbol{\beta}\rVert_1$을 최소화한다. (가) 직교설계 $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_p$에서 두 목적함수의 좌표별 해를 각각 구해 $\lambda = 2n\alpha$임을 보여라. (나) $n = 50$, $p = 4$인 직교설계에서 sklearn 의 해가 연성 임계화 공식과 맞는지 수치로 확인하라. (다) $\alpha$ 자리에 $\lambda$를 넣으면 무슨 일이 생기는가.
 
 </div>
 
 ??? success "풀이"
-    **(가) 두 문턱.** 직교설계에서 $\mathbf{z} = \mathbf{X}^\top\mathbf{y} = \hat{\boldsymbol{\beta}}_{\text{OLS}}$이라 쓰면
+    **(가) 두 임계값.** 직교설계에서 $\mathbf{z} = \mathbf{X}^\top\mathbf{y} = \hat{\boldsymbol{\beta}}_{\text{OLS}}$이라 쓰면
 
     $$
     \|\mathbf{y}-\mathbf{X}\mathbf{b}\|^2 = \|\mathbf{y}\|^2 - 2\mathbf{b}^\top\mathbf{z} + \|\mathbf{b}\|^2
@@ -502,7 +502,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
     b_j^2 - 2b_jz_j + \lambda\lvert b_j\rvert
     $$
 
-    을 최소화한다. $b_j > 0$ 구간에서 도함수는 $2b_j - 2z_j + \lambda = 0$이므로 $b_j = z_j - \lambda/2$이고, 이것이 양수일 조건은 $z_j > \lambda/2$다. 음수 구간도 대칭이므로 **연성문턱**
+    을 최소화한다. $b_j > 0$ 구간에서 도함수는 $2b_j - 2z_j + \lambda = 0$이므로 $b_j = z_j - \lambda/2$이고, 이것이 양수일 조건은 $z_j > \lambda/2$다. 음수 구간도 대칭이므로 **연성 임계화**
 
     $$
     b_j = \operatorname{sign}(z_j)\bigl(\lvert z_j\rvert - \lambda/2\bigr)_+
@@ -514,7 +514,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
     b_j = \operatorname{sign}(z_j)\bigl(\lvert z_j\rvert - n\alpha\bigr)_+
     $$
 
-    이다. 두 문턱이 같아야 하므로 $\lambda/2 = n\alpha$, 즉
+    이다. 두 임계값이 같아야 하므로 $\lambda/2 = n\alpha$, 즉
 
     $$
     \lambda = 2n\alpha
@@ -522,7 +522,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
 
     이다. $\square$ 표본크기 $n$이 들어간다는 점을 놓치기 쉽다. **같은 $\alpha$라도 $n$이 두 배면 교과서 $\lambda$는 두 배다.**
 
-    **(나) 수치 확인.** $\alpha = 0.008$, $n = 50$이면 $\lambda = 2 \cdot 50 \cdot 0.008 = 0.8$이고 문턱은 $\lambda/2 = n\alpha = 0.4$다.
+    **(나) 수치 확인.** $\alpha = 0.008$, $n = 50$이면 $\lambda = 2 \cdot 50 \cdot 0.008 = 0.8$이고 임계값은 $\lambda/2 = n\alpha = 0.4$다.
 
     ```python
     import numpy as np
@@ -545,12 +545,12 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
     sk = Lasso(alpha=alpha, fit_intercept=False, max_iter=100000, tol=1e-12).fit(X, y)
     soft = np.sign(z) * np.maximum(np.abs(z) - lam / 2, 0.0)
     print("sklearn     ", " ".join(f"{v:7.4f}" for v in sk.coef_))
-    print("연성문턱 l/2 ", " ".join(f"{v:7.4f}" for v in soft))
+    print("연성 임계화 l/2 ", " ".join(f"{v:7.4f}" for v in soft))
     print("두 해가 같은가:", bool(np.abs(sk.coef_ - soft).max() < 1e-10))
 
     bad = Lasso(alpha=lam, fit_intercept=False, max_iter=100000, tol=1e-12).fit(X, y)
     print("alpha 자리에 lambda 를 넣으면 최대 |계수| =", f"{np.abs(bad.coef_).max():.4f}")
-    print("그때의 실질 문턱 n*alpha =", f"{n * lam:.1f}")
+    print("그때의 실질 임계값 n*alpha =", f"{n * lam:.1f}")
     ```
 
     출력:
@@ -560,19 +560,19 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
     OLS           3.0126 -1.5117  0.6201  0.0841
     alpha = 0.008  ->  lambda = 2*n*alpha = 0.8000
     sklearn       2.6126 -1.1117  0.2201  0.0000
-    연성문턱 l/2   2.6126 -1.1117  0.2201  0.0000
+    연성 임계화 l/2   2.6126 -1.1117  0.2201  0.0000
     두 해가 같은가: True
     alpha 자리에 lambda 를 넣으면 최대 |계수| = 0.0000
-    그때의 실질 문턱 n*alpha = 40.0
+    그때의 실질 임계값 n*alpha = 40.0
     ```
 
     네 좌표가 모두 "OLS $-$ 0.4" 또는 0이다. $3.0126 - 0.4 = 2.6126$, $-1.5117 + 0.4 = -1.1117$, $0.6201 - 0.4 = 0.2201$, 그리고 $\lvert 0.0841\rvert < 0.4$이므로 네 번째는 **정확히 0**이 되었다.
 
     참 계수가 $(3, -1.5, 0.6, 0)$이었음을 떠올리면 라쏘가 한 일이 분명해진다. 잡음 때문에 OLS 가 $0.0841$로 보고한 네 번째 계수를 0으로 눌러 버렸다. 같은 자료에 연습문제 4 의 능형을 쓰면 그 좌표는 $0.0841/(1+\lambda)$로 작아지기만 하고 **절대 0이 되지 않는다.** 변수선택이 L1 에서만 일어나는 까닭이 이 한 줄에 있다.
 
-    **(다) 섞어 쓰면.** 교과서의 $\lambda = 0.8$을 `alpha` 자리에 넣으면 sklearn 은 문턱을 $n\alpha = 50 \times 0.8 = 40$으로 읽는다. $\lvert z_j\rvert$의 최댓값이 $3.01$이므로 **모든 계수가 0**, 곧 영모형이 된다. $2n = 100$배를 틀리면 "라쏘가 변수를 다 버렸다"는 엉뚱한 결론이 나온다. 눈금이 다른 두 자를 섞어 쓴 탓이다.
+    **(다) 섞어 쓰면.** 교과서의 $\lambda = 0.8$을 `alpha` 자리에 넣으면 sklearn 은 임계값을 $n\alpha = 50 \times 0.8 = 40$으로 읽는다. $\lvert z_j\rvert$의 최댓값이 $3.01$이므로 **모든 계수가 0**, 곧 영모형이 된다. $2n = 100$배를 틀리면 "라쏘가 변수를 다 버렸다"는 엉뚱한 결론이 나온다. 척도가 다른 두 자를 섞어 쓴 탓이다.
 
-    두 눈금을 오가는 법만 기억하면 된다. 교과서 수식의 $\lambda$를 sklearn 에 넘길 때는 $\alpha = \lambda/(2n)$, 반대로 읽을 때는 $\lambda = 2n\alpha$다. 능형에서도 비슷한 주의가 필요하다. sklearn 의 `Ridge` 는 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \alpha\lVert\boldsymbol{\beta}\rVert^2$을 최소화하므로 **이쪽은 $\lambda = \alpha$로 그대로**다. 두 추정량이 눈금을 다르게 쓴다는 것까지 알아야 한다.
+    두 척도를 오가는 법만 기억하면 된다. 교과서 수식의 $\lambda$를 sklearn 에 넘길 때는 $\alpha = \lambda/(2n)$, 반대로 읽을 때는 $\lambda = 2n\alpha$다. 능형에서도 비슷한 주의가 필요하다. sklearn 의 `Ridge` 는 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\rVert^2 + \alpha\lVert\boldsymbol{\beta}\rVert^2$을 최소화하므로 **이쪽은 $\lambda = \alpha$로 그대로**다. 두 추정량이 척도를 다르게 쓴다는 것까지 알아야 한다.
 
 ---
 
@@ -622,7 +622,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
     \frac{d}{d\lambda}\frac{d_j^2}{d_j^2+\lambda} = -\frac{d_j^2}{(d_j^2+\lambda)^2} < 0 \qquad (d_j > 0)
     $$
 
-    이므로 $\text{df}$는 강하게 감소한다. $\text{df}(0) = p$이고 $\lambda\to\infty$에서 각 항이 0으로 가므로 $\text{df}(\infty) = 0$이다. **$\text{df}$는 $[0, p]$를 연속으로 한 번씩 훑는다.** 그래서 $\lambda$라는 눈금을 "몇 개의 모수를 쓰는 셈인가"라는 눈금으로 바꿔 읽을 수 있다. 5 절 표의 네 줄($\lambda = 0$에서 $\lambda\to\infty$까지)이 $\text{df} = 3$에서 $\text{df} = 0$까지로 다시 적힌다.
+    이므로 $\text{df}$는 강하게 감소한다. $\text{df}(0) = p$이고 $\lambda\to\infty$에서 각 항이 0으로 가므로 $\text{df}(\infty) = 0$이다. **$\text{df}$는 $[0, p]$를 연속으로 한 번씩 훑는다.** 그래서 $\lambda$라는 척도를 "몇 개의 모수를 쓰는 셈인가"라는 척도로 바꿔 읽을 수 있다. 5 절 표의 네 줄($\lambda = 0$에서 $\lambda\to\infty$까지)이 $\text{df} = 3$에서 $\text{df} = 0$까지로 다시 적힌다.
 
     **(라) 낙관 편의.** 3 절의 격차는 $E[\text{Err}_{\text{test}}] - E[\text{Err}_{\text{train}}] = 2\sigma^2 p/n$이었다. $p$ 자리에 $\text{df}(\lambda)$를 넣으면($\lambda = 0$에서 원래 공식과 일치한다)
 
@@ -641,7 +641,7 @@ sklearn 의 `Lasso` 는 $\frac{1}{2n}\lVert\mathbf{y}-\mathbf{X}\boldsymbol{\bet
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
-6 장의 MAP 정리는 능형이 정규 사전분포, 라쏘가 라플라스 사전분포의 MAP 임을 말한다. 직교설계를 1차원으로 줄여 $z \mid \theta \sim N(\theta, \sigma^2)$로 보고, (가) 사전분포 $\theta\sim N(0,\tau^2)$의 MAP 이 $z/(1+\lambda)$이고 $\lambda = \sigma^2/\tau^2$임을 보이고 사후평균과 비교하라. (나) 라플라스 사전분포 $\pi(\theta)\propto e^{-\lvert\theta\rvert/b}$의 MAP 이 연성문턱임을 보여라. (다) 그런데 **$z \ne 0$이면 라플라스 사후분포의 평균은 결코 0이 아니다**를 증명하라. (라) 이 셋이 함께 말하는 바를 적고, (가)의 $\lambda$와 연습문제 4 의 $\lambda^*$가 어떻게 들어맞는지 확인하라.
+6 장의 MAP 정리는 능형이 정규 사전분포, 라쏘가 라플라스 사전분포의 MAP 임을 말한다. 직교설계를 1차원으로 줄여 $z \mid \theta \sim N(\theta, \sigma^2)$로 보고, (가) 사전분포 $\theta\sim N(0,\tau^2)$의 MAP 이 $z/(1+\lambda)$이고 $\lambda = \sigma^2/\tau^2$임을 보이고 사후평균과 비교하라. (나) 라플라스 사전분포 $\pi(\theta)\propto e^{-\lvert\theta\rvert/b}$의 MAP 이 연성 임계화임을 보여라. (다) 그런데 **$z \ne 0$이면 라플라스 사후분포의 평균은 결코 0이 아니다**를 증명하라. (라) 이 셋이 함께 말하는 바를 적고, (가)의 $\lambda$와 연습문제 4 의 $\lambda^*$가 어떻게 들어맞는지 확인하라.
 
 </div>
 

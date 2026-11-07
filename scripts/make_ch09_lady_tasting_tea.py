@@ -110,7 +110,7 @@ def main():
     ax.set_xticklabels([f"{v} 잔" for v in xs], fontsize=11.5)
     ax.set_xlabel("내어 놓은 잔의 수", fontsize=11.5)
     ax.set_ylabel("모두 맞힐 확률", fontsize=11.5)
-    ax.set_title("잔의 수를 정하는 일이 곧 문턱을 정하는 일이다",
+    ax.set_title("잔의 수를 정하는 일이 곧 임계값을 정하는 일이다",
                  fontsize=12.8, color=INK, pad=8)
     ax.set_ylim(0, 0.062)
     ax.grid(alpha=0.22, axis="y")

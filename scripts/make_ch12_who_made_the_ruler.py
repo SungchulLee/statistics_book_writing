@@ -69,7 +69,7 @@ ax2.bar(x - w / 2, pts / sigma, w, color="tab:red", alpha=0.85,
 ax2.bar(x + w / 2, pts / sigma_clean, w, color="tab:blue", alpha=0.85,
         label=f"되돌린 자 — {sigma_clean:.6f}")
 ax2.axhline(2, color="0.35", ls="--", lw=1.5)
-ax2.text(-0.45, 2.06, "흔히 쓰는 문턱 2", ha="left", va="bottom", fontsize=10,
+ax2.text(-0.45, 2.06, "흔히 쓰는 임계값 2", ha="left", va="bottom", fontsize=10,
          color="0.35")
 for xi, v in zip(x, pts):
     ax2.text(xi - w / 2, v / sigma + 0.05, f"{v / sigma:.2f}", ha="center",

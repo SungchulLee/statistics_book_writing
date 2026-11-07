@@ -464,7 +464,7 @@ for i, v in enumerate(bars):
     ax1.text(i, v + 8, f"{v:.1f}", ha="center", va="bottom", fontsize=15,
              fontweight="bold")
 ax1.axhline(stats.chi2.ppf(0.95, 2), color="0.3", lw=2.2, ls="--")
-ax1.text(-0.42, stats.chi2.ppf(0.95, 2) + 8, "가로 점선이 5% 문턱 5.99",
+ax1.text(-0.42, stats.chi2.ppf(0.95, 2) + 8, "가로 점선이 5% 임계값 5.99",
          ha="left", va="bottom", fontsize=11.5, color="0.3",
          fontweight="bold")
 ax1.set_xticks([0, 1], ["20 만 개 그대로", f"오염된 {K5} 개만 빼고"],
@@ -602,7 +602,7 @@ for nm, f, _ in CASES:
     k2_all[nm] = stats.normaltest(d, axis=1).statistic
     kur_all[nm] = kk
 CRIT = stats.chi2.ppf(0.95, 2)
-print(f"\n[choosing_test] n = {N7} 에서 두 통계량의 분포 (문턱 {CRIT:.2f})")
+print(f"\n[choosing_test] n = {N7} 에서 두 통계량의 분포 (임계값 {CRIT:.2f})")
 for nm, _, _ in CASES:
     print(f"  {nm:18s} 초과첨도 가운데값 {np.median(kur_all[nm]):+.3f} · "
           f"JB 기각률 {(jb_all[nm] > CRIT).mean():.4f} · "
@@ -621,7 +621,7 @@ ax1.set_xlim(0, 19.4)
 ax1.set_ylim(0, 0.68)
 ax1.set_xlabel(f"자르크–베라 통계량 (n = {N7})", fontsize=11.5)
 ax1.set_ylabel("밀도", fontsize=11.5)
-ax1.set_title("균등분포의 통계량이 문턱에 닿지 못한다", fontsize=12.5)
+ax1.set_title("균등분포의 통계량이 임계값에 닿지 못한다", fontsize=12.5)
 ax1.legend(fontsize=10.8, loc="upper right")
 ax1.grid(alpha=0.25)
 uni = "균등 (꼬리가 얇다)"
@@ -637,13 +637,13 @@ for nm, _, col in CASES:
     ax2.hist(np.clip(k2_all[nm], 0, 39.9), bins=bins2, density=True,
              histtype="step", lw=2.8, color=col, label=nm)
 ax2.axvline(CRIT, color="0.2", lw=2.6, ls="--")
-ax2.text(CRIT + 0.7, 0.30, f"같은 문턱 {CRIT:.2f}", ha="left", va="top",
+ax2.text(CRIT + 0.7, 0.30, f"같은 임계값 {CRIT:.2f}", ha="left", va="top",
          fontsize=11.5, color="0.2", fontweight="bold")
 ax2.set_xlim(0, 38.8)
 ax2.set_ylim(0, 0.34)
 ax2.set_xlabel(f"다고스티노 K 제곱 (n = {N7})", fontsize=11.5)
 ax2.set_ylabel("밀도", fontsize=11.5)
-ax2.set_title("같은 자료가 이쪽에서는 문턱을 넘어간다", fontsize=12.5)
+ax2.set_title("같은 자료가 이쪽에서는 임계값을 넘어간다", fontsize=12.5)
 ax2.legend(fontsize=10.8, loc="upper right")
 ax2.grid(alpha=0.25)
 ax2.annotate(f"기각률 {(k2_all[uni] > CRIT).mean():.3f}",

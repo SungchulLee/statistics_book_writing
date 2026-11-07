@@ -201,7 +201,7 @@ $$
     from math import pi, sqrt
     from scipy import stats
 
-    c = stats.chi2(2).ppf(0.95)          # 95% 타원의 문턱
+    c = stats.chi2(2).ppf(0.95)          # 95% 타원의 임계값
     print(f"chi2_2 의 95% 분위수 c = {c:.4f}")
     print(f"{'설정':>12}{'고윳값':>18}{'det':>9}{'sqrt(det)':>11}{'tr':>6}"
           f"{'반길이':>17}{'봉우리':>10}{'95% 넓이':>11}{'봉우리x넓이':>13}")

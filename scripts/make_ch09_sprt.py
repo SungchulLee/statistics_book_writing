@@ -9,7 +9,7 @@ r"""9.3절 「그림으로 보는 통계학」 — 전쟁이 끝날 때까지 �
 그런데 첫 스무 발에서 불량이 다섯이면 왜 계속 쏘는가. 첫 백 발이 모두
 멀쩡하면 왜 계속 쏘는가.
 
-왈드의 답은 한 발마다 로그우도비를 더해 가며 위아래 두 문턱과 견주는
+왈드의 답은 한 발마다 로그우도비를 더해 가며 위아래 두 임계값과 견주는
 것이었다. 위를 넘으면 기각, 아래를 넘으면 합격, 사이면 한 발 더.
 
   A = log((1-beta)/alpha),   B = log(beta/(1-alpha))
@@ -106,7 +106,7 @@ def main():
 
     N0, rej0, path0, A, B = run(P0, rng, keep_paths=6)
     N1, rej1, path1, _, _ = run(P1, rng, keep_paths=6)
-    print(f"    문턱  A = {A:+.3f},  B = {B:+.3f}")
+    print(f"    임계값  A = {A:+.3f},  B = {B:+.3f}")
     for lab, N, rej in (("좋은 묶음 (불량 1%)", N0, rej0),
                         ("나쁜 묶음 (불량 5%)", N1, rej1)):
         print(f"    {lab:<20} 평균 {N.mean():6.1f}   중앙값 {np.median(N):5.0f}   "
@@ -117,7 +117,7 @@ def main():
 
     fig, axes = plt.subplots(1, 2, figsize=(13.0, 5.1), constrained_layout=True)
 
-    # ── 왼쪽: 두 문턱 사이를 걷는다 ──
+    # ── 왼쪽: 두 임계값 사이를 걷는다 ──
     ax = axes[0]
     ax.axhspan(B, A, color=MUTED, alpha=0.15, zorder=0)
     ax.axhline(A, color=RED, lw=2.2)
@@ -140,7 +140,7 @@ def main():
         fontsize=10.2, framealpha=0.93, loc="lower right")
     ax.set_xlabel("살펴본 발수", fontsize=11.5)
     ax.set_ylabel("쌓인 로그우도비", fontsize=11.5)
-    ax.set_title("한 발마다 더하고, 문턱에 닿으면 멈춘다",
+    ax.set_title("한 발마다 더하고, 임계값에 닿으면 멈춘다",
                  fontsize=12.8, color=INK, pad=8)
     ax.set_xlim(0, 230)
     ax.set_ylim(-5.4, 4.2)

@@ -8,7 +8,7 @@ r"""12.5절 「그림으로 보는 통계학」 — 하나씩 빼서는 못 찾�
 깨끗한 점 24 개에 멀리 떨어진 자리의 나쁜 점 6 개를 섞으면
 
   기울기   참 +1.0 인데 전체 적합은 -0.24
-  쿡 거리  나쁜 점들의 최댓값이 0.070 으로 문턱 4/n = 0.133 아래다
+  쿡 거리  나쁜 점들의 최댓값이 0.070 으로 임계값 4/n = 0.133 아래다
            게다가 자료 전체에서 가장 큰 쿡 거리는 **깨끗한 점**의 것이다
 
 만드는 파일:
@@ -62,11 +62,11 @@ def main():
 
     print(f"    전체 적합    절편 {b_all[0]:+.3f}  기울기 {b_all[1]:+.3f}")
     print(f"    여섯을 빼면   절편 {b_clean[0]:+.3f}  기울기 {b_clean[1]:+.3f}  (참 +1.000)")
-    print(f"    쿡 거리 문턱 4/n = {thr:.4f}")
+    print(f"    쿡 거리 임계값 4/n = {thr:.4f}")
     print(f"      나쁜 점 여섯의 최대  {D[N0:].max():.4f}")
     print(f"      깨끗한 점의 최대     {D[:N0].max():.4f}   "
           f"(= 자료 전체의 최대, {int(np.argmax(D)) + 1} 번)")
-    print(f"      문턱을 넘은 점의 수  {(D > thr).sum()} 개")
+    print(f"      임계값을 넘은 점의 수  {(D > thr).sum()} 개")
 
     fig, axes = plt.subplots(1, 2, figsize=(12.2, 4.9), constrained_layout=True)
 
@@ -91,7 +91,7 @@ def main():
     cols = [INK] * N0 + [RED] * NBAD
     ax.bar(np.arange(1, n + 1), D, color=cols, width=0.72)
     ax.axhline(thr, color=AMBER, lw=2.4, ls="--")
-    ax.text(n, thr + 0.004, f"흔히 쓰는 문턱 $4/n$ = {thr:.3f}",
+    ax.text(n, thr + 0.004, f"흔히 쓰는 임계값 $4/n$ = {thr:.3f}",
             ha="right", fontsize=10.6, color=AMBER)
     top = int(np.argmax(D))
     ax.annotate("자료 전체에서 가장 큰 쿡 거리가\n**깨끗한** 점의 것이다".replace("**", ""),
@@ -100,7 +100,7 @@ def main():
                 arrowprops=dict(arrowstyle="->", color=INK, lw=1.4))
     ax.set_xlabel("관측 번호  (붉은 쪽이 나쁜 점 여섯)", fontsize=11.5)
     ax.set_ylabel("쿡 거리 (하나씩 뺐을 때)", fontsize=11.5)
-    ax.set_title("문턱을 넘는 점이 하나도 없다", fontsize=12.8, color=INK, pad=8)
+    ax.set_title("임계값을 넘는 점이 하나도 없다", fontsize=12.8, color=INK, pad=8)
     ax.set_ylim(0, thr * 1.35)
     ax.grid(alpha=0.22, axis="y")
     ax.spines[["top", "right"]].set_visible(False)

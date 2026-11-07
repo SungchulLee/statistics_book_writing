@@ -730,7 +730,7 @@ $$
 
 **(2)** 보기 4 에서 $\alpha = 100$ 일 때 $0$ 이 된 변수는 `NbrLivingUnits` 이고 그 OLS 계수는 $914.4$ 달러다. (1)의 공식은 이 변수에 어떤 값을 주는가. 보기 4 의 출력과 어긋나는 자리를 지적하시오.
 
-**(3)** 어긋남의 원인을 KKT 조건으로 설명하시오. $X^\top(y - X\beta)/n = R(\hat\beta^{\text{OLS}} - \beta)$ 를 쓰면 $\hat\beta_j = 0$ 일 조건이 어떻게 적히는지 보이고, 교차항 $\sum_{k \ne j}\rho_{jk}(\hat\beta_k^{\text{OLS}} - \hat\beta_k^{\text{lasso}})$ 가 얼마쯤이어야 하는지 수로 적으시오.
+**(3)** 불일치의 원인을 KKT 조건으로 설명하시오. $X^\top(y - X\beta)/n = R(\hat\beta^{\text{OLS}} - \beta)$ 를 쓰면 $\hat\beta_j = 0$ 일 조건이 어떻게 적히는지 보이고, 교차항 $\sum_{k \ne j}\rho_{jk}(\hat\beta_k^{\text{OLS}} - \hat\beta_k^{\text{lasso}})$ 가 얼마쯤이어야 하는지 수로 적으시오.
 
 </div>
 
@@ -743,7 +743,7 @@ $$
     = \frac{y^\top y}{2n} + \sum_{j=1}^p\left[\frac{1}{2}\beta_j^2 - \beta_j\hat\beta_j^{\text{OLS}} + \alpha\lvert\beta_j\rvert\right]
     $$
 
-    로 **좌표별로 분리된다**($\beta^\top X^\top X\beta/(2n) = \lVert\beta\rVert_2^2/2$ 와 $\beta^\top X^\top y/n = \beta^\top\hat\beta^{\text{OLS}}$ 를 썼다). 한 좌표의 함수 $g(b) = b^2/2 - b\hat\beta_j + \alpha\lvert b\rvert$ 를 보면, $b > 0$ 에서 $g'(b) = b - \hat\beta_j + \alpha = 0$ 이므로 $b = \hat\beta_j - \alpha$ 이고 이것이 양수일 조건이 $\hat\beta_j > \alpha$ 다. $b < 0$ 에서는 대칭으로 $b = \hat\beta_j + \alpha$ 이고 $\hat\beta_j < -\alpha$ 일 때 뜻이 있다. 두 경우가 모두 아니면, 곧 $\lvert\hat\beta_j\rvert \le \alpha$ 면 $0$ 이 최소점이다($g$ 의 $0$ 에서의 하위기울기 $[-\hat\beta_j - \alpha,\, -\hat\beta_j + \alpha]$ 가 $0$ 을 품는다). 이것이 연성문턱이다.
+    로 **좌표별로 분리된다**($\beta^\top X^\top X\beta/(2n) = \lVert\beta\rVert_2^2/2$ 와 $\beta^\top X^\top y/n = \beta^\top\hat\beta^{\text{OLS}}$ 를 썼다). 한 좌표의 함수 $g(b) = b^2/2 - b\hat\beta_j + \alpha\lvert b\rvert$ 를 보면, $b > 0$ 에서 $g'(b) = b - \hat\beta_j + \alpha = 0$ 이므로 $b = \hat\beta_j - \alpha$ 이고 이것이 양수일 조건이 $\hat\beta_j > \alpha$ 다. $b < 0$ 에서는 대칭으로 $b = \hat\beta_j + \alpha$ 이고 $\hat\beta_j < -\alpha$ 일 때 뜻이 있다. 두 경우가 모두 아니면, 곧 $\lvert\hat\beta_j\rvert \le \alpha$ 면 $0$ 이 최소점이다($g$ 의 $0$ 에서의 하위기울기 $[-\hat\beta_j - \alpha,\, -\hat\beta_j + \alpha]$ 가 $0$ 을 품는다). 이것이 연성 임계화다.
 
     $\alpha$ 의 단위는 **계수와 같은 단위**, 곧 달러다. 직교설계에서 라쏘는 모든 계수를 정확히 $\alpha$ 달러씩 원점 쪽으로 끌어당기고 끌다 남은 것이 없으면 $0$ 에 붙인다. 능형의 $\hat\beta^{\text{OLS}}/(1+\lambda/n)$ 이 **비례 축소**인 것과 달리 **정액 축소**다. $0$ 을 만드는 능력이 여기서 나온다.
 
@@ -767,7 +767,7 @@ $$
     \left\lvert\hat\beta_j^{\text{OLS}} + \sum_{k \ne j}\rho_{jk}\left(\hat\beta_k^{\text{OLS}} - \hat\beta_k^{\text{lasso}}\right)\right\rvert \le \alpha
     $$
 
-    가 된다($\rho_{jj} = 1$ 을 따로 떼어 적었다). $R = I$ 면 교차항이 사라져 $\lvert\hat\beta_j^{\text{OLS}}\rvert \le \alpha$ 라는 (1)의 조건으로 돌아간다. **어긋남의 원인은 $R \ne I$, 곧 설명변수들의 상관이다.**
+    가 된다($\rho_{jj} = 1$ 을 따로 떼어 적었다). $R = I$ 면 교차항이 사라져 $\lvert\hat\beta_j^{\text{OLS}}\rvert \le \alpha$ 라는 (1)의 조건으로 돌아간다. **불일치의 원인은 $R \ne I$, 곧 설명변수들의 상관이다.**
 
     수로 보자(아래 수는 좌표하강을 `tol=1e-10` 으로 수렴시킨 값이다. 보기 4 의 기본 `tol` 에서는 교차항이 $-1{,}001.5$ 로 $4$ 달러쯤 다른데, 벌점 근처에서 멈춘 좌표의 마지막 몇 달러는 허용오차에 달려 있으므로 넷째 자리까지 믿어서는 안 된다. 어느 쪽이든 아래 부등식의 결론은 같다). $\hat\beta_j^{\text{OLS}} = 914.4$ 이고 $\alpha = 100$ 이므로 교차항은
 
@@ -777,7 +777,7 @@ $$
 
     를 만족해야 한다. 실제로 계산하면 교차항이 $-997.4$ 이고 괄호 안이 $-83.1$ 로 $\lvert-83.1\rvert \le 100$ 이 성립한다. 교차항의 대부분은 한 변수에서 온다. `PropertyType_Single Family` 와의 상관이 $\rho = -0.2745$ 이고 그 계수가 $8{,}434.1$ 에서 $5{,}048.5$ 로 $3{,}385.6$ 달러 축소되었으므로 기여가 $-0.2745 \times 3{,}385.6 = -929.5$ 다.
 
-    **라쏘가 상관된 가변수를 축소하면서 `NbrLivingUnits` 가 설명하던 몫을 가져가 버렸고, 그 결과 이 좌표의 부분잔차 상관이 문턱 $100$ 아래로 떨어졌다.** 직교설계의 연성문턱 공식은 "계수가 작은 변수가 먼저 죽는다"는 그림을 주지만, 실제 자료에서 죽는 변수는 **계수가 작은 변수가 아니라 다른 변수로 대체되는 변수**다. 공식을 믿고 $\lvert\hat\beta^{\text{OLS}}\rvert$ 의 차례로 변수가 빠질 것이라 예측하면 틀린다. $\square$
+    **라쏘가 상관된 가변수를 축소하면서 `NbrLivingUnits` 가 설명하던 몫을 가져가 버렸고, 그 결과 이 좌표의 부분잔차 상관이 임계값 $100$ 아래로 떨어졌다.** 직교설계의 연성 임계화 공식은 "계수가 작은 변수가 먼저 죽는다"는 그림을 주지만, 실제 자료에서 죽는 변수는 **계수가 작은 변수가 아니라 다른 변수로 대체되는 변수**다. 공식을 믿고 $\lvert\hat\beta^{\text{OLS}}\rvert$ 의 차례로 변수가 빠질 것이라 예측하면 틀린다. $\square$
 
 <div class="drillbox" markdown>
 

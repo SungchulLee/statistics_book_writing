@@ -53,8 +53,8 @@ def contrast_F(c):
 
 print(f"집단 평균 {MEANS},  MSE = {MSE},  집단당 n = {N_I}")
 print(f"전역 F = {F:.3f},  p = {P_F:.4f}")
-print(f"Tukey HSD 문턱 = {HSD:.3f} (q = {Q:.3f})")
-print(f"Scheffé 문턱 (k-1)F = {SCH:.3f}\n")
+print(f"Tukey HSD 임계값 = {HSD:.3f} (q = {Q:.3f})")
+print(f"Scheffé 임계값 (k-1)F = {SCH:.3f}\n")
 
 pairs = []
 for i, j in combinations(range(K), 2):
@@ -103,7 +103,7 @@ cols = [MUTED] * len(pairs) + [GREEN, BLUE]
 x = np.arange(len(vals))
 axR.bar(x, vals, width=0.62, color=cols, edgecolor=INK, linewidth=0.5, zorder=3)
 axR.axhline(SCH, color=RED, lw=1.6, ls="--", zorder=4,
-            label=f"셰페 문턱 $(k-1)F_{{0.05}} = {SCH:.2f}$")
+            label=f"셰페 임계값 $(k-1)F_{{0.05}} = {SCH:.2f}$")
 for xi, v in zip(x, vals):
     axR.text(xi, v + 0.35, f"{v:.2f}", ha="center", fontsize=8.5, color=INK)
 axR.set_xticks(x)

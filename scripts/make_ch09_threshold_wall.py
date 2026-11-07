@@ -6,7 +6,7 @@
 하나가 0.0085 만큼 0 을 담는다.
 
 쪽의 p005 와 alpha_debate 는 베이즈 인자와 사후확률을 다루고
-rejection_region_demo_51 은 기각역을 그린다. 여기서는 문턱 양쪽에 선 두
+rejection_region_demo_51 은 기각역을 그린다. 여기서는 임계값 양쪽에 선 두
 연구의 자료만 맞댄다.
 """
 import matplotlib.pyplot as plt
@@ -43,7 +43,7 @@ ax1.set_xlim(-0.55, 5.1)
 ax1.set_ylim(-0.6, 1.62)
 ax1.set_yticks([])
 ax1.set_xlabel("효과 (표준오차 단위)", fontsize=11)
-ax1.set_title("문턱 양쪽에 선 두 연구", fontsize=12.5)
+ax1.set_title("임계값 양쪽에 선 두 연구", fontsize=12.5)
 ax1.grid(axis="x", alpha=0.25)
 
 est1, est2 = stats.norm.isf(0.049 / 2), stats.norm.isf(0.051 / 2)
@@ -67,7 +67,7 @@ ax2.set_xlabel("효과 (표준오차 단위)", fontsize=11)
 ax2.set_title("한쪽은 0 을 비키고 한쪽은 0 을 담는다", fontsize=12.5)
 ax2.grid(axis="x", alpha=0.25)
 
-fig.suptitle("운명을 가른 것은 자료가 아니라 거기 그어 둔 문턱이다",
+fig.suptitle("운명을 가른 것은 자료가 아니라 거기 그어 둔 임계값이다",
              fontsize=14, y=1.0)
 plt.tight_layout()
 path = OUT + "threshold_wall.png"

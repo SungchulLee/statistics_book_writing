@@ -512,7 +512,7 @@ save(fig, CI + "error_shrinks_only_by_root_n.png")
 # 담는다. **셋째 문단**은 그려져 있지 않다 — 「뒤집어 얻은 끝점은 실제
 # 재표본에서 계산된 값이 아니므로 통계량이 가질 수 없는 값이 될 수
 # 있다. 분산의 구간을 만들어 보면 다섯 번에 한 번꼴로 하한이 음수가
-# 된다.」 쪽이 변동계수 0.510 이라는 문턱으로 못 박으므로 그 축으로
+# 된다.」 쪽이 변동계수 0.510 이라는 임계값으로 못 박으므로 그 축으로
 # 그린다.
 # ════════════════════════════════════════════════════════════════════
 r7 = np.random.default_rng(17_007)
@@ -540,7 +540,7 @@ for n, c in zip(NS7, ["tab:red", "tab:orange", "tab:blue"]):
     ax.plot(CVS, neg_rate[n], "o-", color=c, lw=3.0, ms=12,
             label=f"n = {n}")
 ax.axvline(0.510, color="0.2", lw=2.4, ls="--")
-ax.text(0.520, 0.92, "쪽이 못 박는 문턱 0.510", ha="left", va="top",
+ax.text(0.520, 0.92, "쪽이 못 박는 임계값 0.510", ha="left", va="top",
         fontsize=12, color="0.2", fontweight="bold", rotation=90)
 ax.set_xlabel("자료의 변동계수", fontsize=12)
 ax.set_ylabel("분산의 하한이 **음수**가 되는 비율".replace("**", ""),

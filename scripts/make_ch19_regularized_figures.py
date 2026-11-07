@@ -219,7 +219,7 @@ def fig_cv_stability():
         else:
             ax.plot(LAMS, sel[:, j], color=MUTED, lw=1.1, alpha=0.75)
     ax.axhline(0.6, color=PURPLE, lw=1.3, ls="--")
-    ax.text(0.011, 0.63, r"문턱 $\pi_{\mathrm{thr}}=0.6$", color=PURPLE,
+    ax.text(0.011, 0.63, r"임계값 $\pi_{\mathrm{thr}}=0.6$", color=PURPLE,
             fontsize=9.3)
     ax.axvline(0.10, color=INK, lw=1.2, ls=":")
     ax.annotate("$\\lambda=0.10$ 근처가\n가장 깨끗하게 갈린다",

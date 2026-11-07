@@ -24,7 +24,7 @@ plt.rcParams["axes.unicode_minus"] = False
 
 RNG = np.random.default_rng(5)
 C = 0.6745                       # 이 쪽 정리 1 의 상수
-THR = 3.5                        # 흔히 쓰는 로버스트 z 문턱
+THR = 3.5                        # 흔히 쓰는 로버스트 z 임계값
 P0 = [0.1, 0.2, 0.3, 0.4, 0.45, 0.48, 0.5, 0.52, 0.55, 0.6, 0.7, 0.8]
 NS = [50, 200, 1000]
 N_FLAG, R_FLAG = 200, 1500

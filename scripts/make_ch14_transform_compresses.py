@@ -58,7 +58,7 @@ ax1.annotate(f"변환하면 {Z1:.4f}\n— {(1 - Z1 / Y) * 100:.0f}% 깎인다", 
              textcoords="offset points", xytext=(-12, -4), ha="right",
              va="top", fontsize=11, color="tab:red", fontweight="bold")
 ax1.axhline(1.959964, color="0.45", lw=1.1)
-ax1.text(0.3, 2.35, "유의 문턱 1.96", fontsize=9.5, color="0.45")
+ax1.text(0.3, 2.35, "유의 임계값 1.96", fontsize=9.5, color="0.45")
 
 ax1.set_xlim(0, 20); ax1.set_ylim(0, 20)
 ax1.set_xlabel("단순 표준화 Y = g₁ ÷ SD(g₁)")

@@ -142,7 +142,7 @@ $$
 
     이다. 곱보다 작으므로 조건부 독립이 아니고, 음의 연관이다. $\square$
 
-    **나눗셈이 한 번은 분자에, 두 번은 분모에 들어가는 것**이 어긋남의 원인이다. 곱에는 $1/P(C)$ 가 두 번 들어가는데 결합확률에는 한 번만 들어간다. $P(C) = 1$ 이면, 곧 둘 중 하나는 반드시 일어난다면 어긋남이 사라진다.
+    **나눗셈이 한 번은 분자에, 두 번은 분모에 들어가는 것**이 불일치의 원인이다. 곱에는 $1/P(C)$ 가 두 번 들어가는데 결합확률에는 한 번만 들어간다. $P(C) = 1$ 이면, 곧 둘 중 하나는 반드시 일어난다면 불일치가 사라진다.
 
     뜻으로 읽으면 이렇다. 경보가 울렸다는 것은 **적어도 하나의 원인이 있다**는 말이다. 그 상태에서 화재가 아니라는 것을 알면 남은 설명은 탄 토스트뿐이므로 그쪽 확률이 올라간다. 하나가 다른 하나를 **설명해 치우는** 것이다.
 
@@ -327,11 +327,11 @@ $$
 \operatorname{Var}(p_C)=\tfrac12(0.8-0.5)^2+\tfrac12(0.2-0.5)^2=0.09
 $$
 
-이고, 실제 어긋남도 $0.34-0.25=0.09$ 로 **딱 맞는다.** 섞어서 생기는 가짜 연관의 크기는 **기록별 확률이 흩어진 정도**다.
+이고, 실제 불일치도 $0.34-0.25=0.09$ 로 **딱 맞는다.** 섞어서 생기는 가짜 연관의 크기는 **기록별 확률이 흩어진 정도**다.
 
 율이 이것을 「오류(fallacy)」라 부른 데에는 까닭이 있다. 그는 같은 쪽에서 이 정리가 **거꾸로 쓸 때 특히 쓸모 있다**고 적는다 — 전체 자료에서 뚜렷한 연관이 보이더라도, 성질이 다른 기록을 섞은 탓일 수 있으니 먼저 갈라 보아야 한다는 것이다. 11장의 [심슨의 역설](../../ch11/ecological_correlation/simpsons_paradox.md)이 다루는 역전 현상이 이 경고의 가장 극단적인 꼴이고, 그 이름에 율의 이름이 함께 붙기도 한다.
 
-_확인한 곳 — 사진의 쪽 번호 $132$, 러닝헤드, 절 제목 「On the fallacies that may be caused by the mixing of distinct records」, 그리고 「a pair of attributes does not necessarily exhibit independence within the universe at large even if it exhibit independence in *every* sub-universe」와 그 뒤의 $|AB\,|\,C|=0$, $|AB\,|\,\gamma|=0$ 은 [Internet Archive 『Biometrika』 제 $2$ 권($1902$–$1903$)](https://archive.org/details/blumenzeitung13hssl) 의 그 쪽에서 **사진으로 직접 읽었다**. 같은 권 차례의 「VI. Notes on the Theory of Association of Attributes in Statistics. By G. Udny Yule … $121$」과 그 논문 차례의 제 $5$ 절 쪽수 $132$ 도 같은 스캔에서 읽었다 · 율의 생몰년($1871$–$1951$)은 [Wikipedia 「Udny Yule」](https://en.wikipedia.org/wiki/Udny_Yule) · 표의 모든 수와 가중분산 $0.09$ 가 어긋남 $0.34-0.25$ 와 같다는 것은 **이 쪽에서 직접 계산해 보았다**_
+_확인한 곳 — 사진의 쪽 번호 $132$, 러닝헤드, 절 제목 「On the fallacies that may be caused by the mixing of distinct records」, 그리고 「a pair of attributes does not necessarily exhibit independence within the universe at large even if it exhibit independence in *every* sub-universe」와 그 뒤의 $|AB\,|\,C|=0$, $|AB\,|\,\gamma|=0$ 은 [Internet Archive 『Biometrika』 제 $2$ 권($1902$–$1903$)](https://archive.org/details/blumenzeitung13hssl) 의 그 쪽에서 **사진으로 직접 읽었다**. 같은 권 차례의 「VI. Notes on the Theory of Association of Attributes in Statistics. By G. Udny Yule … $121$」과 그 논문 차례의 제 $5$ 절 쪽수 $132$ 도 같은 스캔에서 읽었다 · 율의 생몰년($1871$–$1951$)은 [Wikipedia 「Udny Yule」](https://en.wikipedia.org/wiki/Udny_Yule) · 표의 모든 수와 가중분산 $0.09$ 가 불일치 $0.34-0.25$ 와 같다는 것은 **이 쪽에서 직접 계산해 보았다**_
 
 </div>
 

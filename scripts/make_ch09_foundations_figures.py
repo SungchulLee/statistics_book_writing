@@ -8,7 +8,7 @@ r"""9장 가설검정의 기초 여섯 쪽의 그림을 생성한다.
   ch09/foundations/img/test_procedure_flow.png     검정의 다섯 걸음
   ch09/foundations/img/pvalue_tail_and_uniform.png 꼬리넓이와 p-값의 분포
   ch09/foundations/img/alpha_longrun.png           alpha 는 장기 비율이다
-  ch09/errors_and_power/img/alpha_beta_tradeoff.png  문턱을 옮기면
+  ch09/errors_and_power/img/alpha_beta_tradeoff.png  임계값을 옮기면
   ch09/foundations/img/ci_test_duality.png           구간과 검정의 쌍대성
 
 실행:  python3 scripts/make_ch09_foundations_figures.py   (저장소 최상위에서)
@@ -280,7 +280,7 @@ def alpha_longrun():
 
 
 # ==================================================================
-# 5. 문턱을 옮기면 두 오류가 맞바뀐다
+# 5. 임계값을 옮기면 두 오류가 맞바뀐다
 # ==================================================================
 def alpha_beta_tradeoff():
     d = 2.5                      # 효과 크기
@@ -291,7 +291,7 @@ def alpha_beta_tradeoff():
     fig, axes = plt.subplots(1, 2, figsize=(13.5, 4.8),
                              gridspec_kw={"width_ratios": [1.3, 1]})
 
-    # (a) 세 문턱을 겹쳐 그린다
+    # (a) 세 임계값을 겹쳐 그린다
     ax = axes[0]
     ax.plot(x, f0, color=BLUE, linewidth=2.2, label="$H_0$ 가 참")
     ax.plot(x, f1, color=GREEN, linewidth=2.2, label="$H_1$ 이 참")
@@ -307,7 +307,7 @@ def alpha_beta_tradeoff():
     ax.text(2.55, 0.055, "$\\alpha$", fontsize=14, color=RED, ha="center")
     ax.text(0.95, 0.055, "$\\beta$", fontsize=14, color="#BF360C",
             ha="center")
-    ax.text(3.85, 0.345, "문턱을 오른쪽으로 옮기면\n"
+    ax.text(3.85, 0.345, "임계값을 오른쪽으로 옮기면\n"
                          "$\\alpha$ 는 줄고 $\\beta$ 는 는다",
             fontsize=11, color=INK, ha="left", va="center", linespacing=1.5)
     ax.set_xlim(-4, 7)
@@ -315,10 +315,10 @@ def alpha_beta_tradeoff():
     ax.set_xlabel("검정통계량", fontsize=11.5, color=INK)
     bare_axis(ax)
     ax.legend(fontsize=10.5, frameon=False, loc="upper left")
-    ax.set_title(f"문턱 하나가 두 넓이를 함께 정한다  (효과 크기 ${d}$)",
+    ax.set_title(f"임계값 하나가 두 넓이를 함께 정한다  (효과 크기 ${d}$)",
                  fontsize=12.5, pad=10)
 
-    # (b) 문턱을 훑으면 두 오류가 그리는 곡선
+    # (b) 임계값을 훑으면 두 오류가 그리는 곡선
     ax = axes[1]
     cs = np.linspace(-1.5, 6.0, 400)
     a = 1 - stats.norm.cdf(cs)
@@ -328,7 +328,7 @@ def alpha_beta_tradeoff():
         aa, bb = 1 - stats.norm.cdf(cc), stats.norm.cdf(cc - d)
         ax.plot([aa], [bb], "o", color=color, markersize=9, zorder=6)
         ax.text(aa + 0.02, bb + 0.03,
-                f"문턱 ${cc}$\n$\\alpha={aa:.3f}$, $\\beta={bb:.3f}$",
+                f"임계값 ${cc}$\n$\\alpha={aa:.3f}$, $\\beta={bb:.3f}$",
                 fontsize=9.5, color=color, ha="left", va="bottom",
                 linespacing=1.4)
     ax.set_xlim(0, 0.42)

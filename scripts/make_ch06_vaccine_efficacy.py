@@ -93,7 +93,7 @@ ax = axes[2]
 ax.plot(TS, los, color=C1, lw=2.2, label="구간의 아래끝")
 ax.fill_between(TS, los, 100, color=C1, alpha=0.12)
 ax.axhline(30, color=C2, lw=1.6, ls="--")
-ax.text(TS[0] * 1.05, 31.5, "넘어야 할 문턱 — 효능 30%", color=C2, fontsize=9)
+ax.text(TS[0] * 1.05, 31.5, "넘어야 할 임계값 — 효능 30%", color=C2, fontsize=9)
 ax.axvline(T, color="0.35", lw=1.3, ls=":")
 ax.text(T * 1.06, 45, f"사례 {T} 건", color="0.35", fontsize=9)
 ax.set_xscale("log")

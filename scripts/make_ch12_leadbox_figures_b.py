@@ -38,7 +38,7 @@ def tukey_crit(k, df, alpha=0.05):
 def fig_correction_or_sample():
     """12.3 사후비교 — 놓친 쌍의 책임을 보정과 표본으로 가른다.
 
-    쪽의 posthoc_thresholds 는 네 방법의 문턱을 집단 수에 따라 그리고,
+    쪽의 posthoc_thresholds 는 네 방법의 임계값을 집단 수에 따라 그리고,
     star_posthoc 상자는 다른 이야기를 따라간다. 여기서는 들머리의 셋째
     문단 --- **보정이 앗아간 몫은 0.128 이고 나머지 0.666 은 표본이
     작아서 없던 검정력** --- 을 그리고, 표본을 키우면 그 두 몫이 어떻게
@@ -130,7 +130,7 @@ def fig_one_pair_carries_it():
     """12.3 튜키 — 집단 간 제곱합의 삼분의 이가 한 쌍에서 온다.
 
     쪽의 tukey_studentized_range 는 스튜던트화 범위 분포를, tukey_vs_k 는
-    집단 수에 따른 문턱을 그린다. 여기서는 들머리의 둘째·셋째 문단 ---
+    집단 수에 따른 임계값을 그린다. 여기서는 들머리의 둘째·셋째 문단 ---
     **그 한 숫자의 삼분의 이가 한 쌍에서 온 것인데 어느 쌍인지는 표에
     적히지 않는다**, 그리고 **얽힌 비교의 실제 가족오류율** --- 만 본다.
     자료는 쪽과 같은 PlantGrowth 의 집단평균 셋이다.
@@ -221,7 +221,7 @@ def fig_one_pair_carries_it():
 def fig_family_you_actually_searched():
     """12.3 본페로니와 셰페 — 자료를 보고 고르면 가족이 커진다.
 
-    쪽의 scheffe_and_bonferroni 는 두 문턱이 비교 수에 따라 갈리는 모습을,
+    쪽의 scheffe_and_bonferroni 는 두 임계값이 비교 수에 따라 갈리는 모습을,
     scheffe_max_contrast 는 최대 대비를 다룬다. 여기서는 들머리의 둘째·셋째
     문단 --- **자료를 보고 고른다는 것은 가능한 모든 대비를 뒤진 것과
     같다** --- 를 재어 본다. 모든 평균이 같은 자료에서 「가장 커 보이는
@@ -259,11 +259,11 @@ def fig_family_you_actually_searched():
     ax1.axvline(t_bonf ** 2, color="tab:red", lw=2.6)
     ax1.axvline(f_scheffe, color="tab:blue", lw=2.6)
     ax1.text(t_bonf ** 2 - 0.3, ax1.get_ylim()[1] * 0.95,
-             f"본페로니(비교 {m_pre} 개)\n문턱 {t_bonf ** 2:.2f}",
+             f"본페로니(비교 {m_pre} 개)\n임계값 {t_bonf ** 2:.2f}",
              ha="right", va="top", fontsize=10.5, color="tab:red",
              fontweight="bold")
     ax1.text(f_scheffe + 0.3, ax1.get_ylim()[1] * 0.95,
-             f"셰페 문턱 {f_scheffe:.2f}", ha="left", va="top",
+             f"셰페 임계값 {f_scheffe:.2f}", ha="left", va="top",
              fontsize=10.5, color="tab:blue", fontweight="bold")
     ax1.set_xlim(0, 22)
     ax1.set_xlabel("자료를 보고 고른 「가장 커 보이는」 대비의 $F_L$",
@@ -295,8 +295,8 @@ def fig_family_you_actually_searched():
     save(fig, "family_you_actually_searched.png")
 
     print(f"\n[본페로니·셰페] 집단 {K} · 각 {N} · 자유도 {df}")
-    print(f"  본페로니 문턱 t = {t_bonf:.4f} (F 로는 {t_bonf ** 2:.4f}) · "
-          f"셰페 문턱 F_L = {f_scheffe:.4f}")
+    print(f"  본페로니 임계값 t = {t_bonf:.4f} (F 로는 {t_bonf ** 2:.4f}) · "
+          f"셰페 임계값 F_L = {f_scheffe:.4f}")
     print(f"  미리 정해 둔 {m_pre} 개 + 본페로니  {100 * vals[0]:.2f}%")
     print(f"  자료를 보고 고른 뒤 + 본페로니      {100 * vals[1]:.2f}%")
     print(f"  자료를 보고 고른 뒤 + 셰페          {100 * vals[2]:.2f}%")
@@ -308,7 +308,7 @@ def fig_dunnett_uses_the_overlap():
 
     쪽의 dunnett_control 과 dunnett_critical 은 대조군 비교와 임계값을
     그린다. 여기서는 들머리의 마지막 물음 --- **셋이 모두 5% 를 약속하는데
-    문턱이 다르다면 더닛이 더 쓰고 있는 정보는 무엇인가** --- 에 답한다.
+    임계값이 다르다면 더닛이 더 쓰고 있는 정보는 무엇인가** --- 에 답한다.
     대조군을 함께 쓰는 비교들은 상관이 0.5 로 양이고, 양의 상관이 있으면
     최댓값의 분포가 독립일 때보다 왼쪽에 놓인다.
     """
@@ -372,8 +372,8 @@ def fig_dunnett_uses_the_overlap():
              fontweight="bold")
     ax2.set_xticks(KS)
     ax2.set_xlabel("처치의 수 (대조군은 따로)", fontsize=11)
-    ax2.set_ylabel("$5\\%$ 를 지키는 문턱", fontsize=11)
-    ax2.set_title(f"집단당 {N} 개일 때 세 문턱", fontsize=12.5)
+    ax2.set_ylabel("$5\\%$ 를 지키는 임계값", fontsize=11)
+    ax2.set_title(f"집단당 {N} 개일 때 세 임계값", fontsize=12.5)
     ax2.legend(fontsize=10, loc="upper left", framealpha=0.95)
     ax2.grid(alpha=0.25)
 
@@ -392,7 +392,7 @@ def fig_dunnett_uses_the_overlap():
 def fig_pooled_cuts_both_ways():
     """12.3 게임스–하웰 — 합동분산은 쌍마다 다른 방향으로 틀어진다.
 
-    쪽의 games_howell_pairs 와 gh_small_n 은 쌍별 문턱과 작은 n 을
+    쪽의 games_howell_pairs 와 gh_small_n 은 쌍별 임계값과 작은 n 을
     다룬다. 여기서는 들머리의 마지막 물음 --- **어느 쌍이 과대평가되고
     어느 쌍이 과소평가되는가** --- 에 답한다. 합동분산은 모든 쌍에
     평균짜리 분산을 주므로, 분산이 큰 쌍에서는 분모를 작게 잡고 작은
@@ -447,7 +447,7 @@ def fig_pooled_cuts_both_ways():
     ax2.axhline(1, color="0.2", ls="--", lw=2.0)
     ax2.axvline(1, color="0.6", ls=":", lw=1.8)
     ax2.set_xlabel("그 두 집단의 평균 분산 ÷ 합동분산", fontsize=11)
-    ax2.set_ylabel("튜키 문턱 ÷ 게임스–하웰 문턱", fontsize=11)
+    ax2.set_ylabel("튜키 임계값 ÷ 게임스–하웰 임계값", fontsize=11)
     ax2.set_title("분산이 작은 쌍은 놓치고 큰 쌍은 쉽게 기각한다",
                   fontsize=12.5)
     ax2.grid(alpha=0.25)

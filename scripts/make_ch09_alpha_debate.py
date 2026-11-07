@@ -43,7 +43,7 @@ def n_ratio(a_new, a_old, power=0.8):
     ) ** 2
 
 
-# 표본을 그대로 두고 문턱만 낮추면 검정력이 얼마가 되는가
+# 표본을 그대로 두고 임계값만 낮추면 검정력이 얼마가 되는가
 DELTA = stats.norm.isf(0.025) + stats.norm.isf(0.2)  # 검정력 0.8 을 주는 효과크기
 PW_SAME_N = float(stats.norm.sf(stats.norm.isf(0.0025) - DELTA))
 
@@ -91,7 +91,7 @@ for o, lab in [(1 / 10, "$1:10$"), (1 / 5, "$1:5$")]:
     ax2.text(o * 1.06, 4, lab, fontsize=9.5, color="#777777")
 ax2.set_xlabel("사전 승산 (참인 가설 : 거짓인 가설)")
 ax2.set_ylabel("유의한 결과가 참일 확률 ($\\%$)")
-ax2.set_title("② 문턱을 낮추면 믿을 만해진다", fontsize=12)
+ax2.set_title("② 임계값을 낮추면 믿을 만해진다", fontsize=12)
 ax2.set_xticks([0.025, 0.1, 0.5, 1.0])
 ax2.set_xticklabels(["$1\\!:\\!40$", "$1\\!:\\!10$", "$1\\!:\\!2$", "$1\\!:\\!1$"])
 ax2.minorticks_off()
@@ -138,7 +138,7 @@ print("\n③ 표본의 배수 (검정력 0.8 유지)")
 for a in (0.01, 0.005, 0.001):
     print(f"  0.05 → {a:<7}:  {float(n_ratio(a, 0.05)):.4f} 배  ({(float(n_ratio(a, 0.05)) - 1) * 100:+.0f}%)")
 
-print("\n②  표본을 늘리지 않고 문턱만 0.005 로 낮추면 검정력이 얼마가 되는가")
+print("\n②  표본을 늘리지 않고 임계값만 0.005 로 낮추면 검정력이 얼마가 되는가")
 print(f"  검정력 0.80 → {PW_SAME_N:.4f}")
 pw_new = PW_SAME_N
 

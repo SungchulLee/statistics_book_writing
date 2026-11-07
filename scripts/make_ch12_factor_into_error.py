@@ -110,7 +110,7 @@ for xi, (a1, a2) in zip(x, zip(f_one, f_two)):
              fontsize=11, fontweight="bold", color="tab:blue")
 ax2.axhline(stats.f.ppf(0.95, 2, 4), color="0.4", ls="--", lw=1.4)
 ax2.text(-0.45, stats.f.ppf(0.95, 2, 4) + 1.5,
-         f"두 요인을 함께 넣었을 때의 유의 문턱 {stats.f.ppf(0.95, 2, 4):.2f} (df 2, 4)",
+         f"두 요인을 함께 넣었을 때의 유의 임계값 {stats.f.ppf(0.95, 2, 4):.2f} (df 2, 4)",
          ha="left", va="bottom", fontsize=9.5, color="0.4")
 ax2.set_xticks(x, labels, fontsize=11.5)
 ax2.set_ylim(0, 82)

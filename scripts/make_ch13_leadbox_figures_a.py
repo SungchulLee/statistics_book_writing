@@ -158,7 +158,7 @@ print(f"  쪽이 적은 0.0492 · 0.0237 과 맞는다")
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.4, 4.9),
                                gridspec_kw={"width_ratios": [1.3, 1]})
 
-# 꼬리만 보이게 자른다 — 보여야 하는 것은 봉우리가 아니라 두 문턱이다
+# 꼬리만 보이게 자른다 — 보여야 하는 것은 봉우리가 아니라 두 임계값이다
 grid = np.linspace(4, 20, 600)
 ax1.hist(pearson, bins=np.linspace(4, 20, 110), weights=PR, density=True,
          color="0.84", edgecolor="none",
@@ -174,7 +174,7 @@ ax1.fill_between(tail4, 0, stats.chi2.pdf(tail4, 3), color="tab:red",
                  alpha=0.80)
 ax1.axvline(c3, color="tab:blue", lw=2.4)
 ax1.axvline(c4, color="tab:red", lw=2.4, ls="--")
-ax1.annotate(f"자유도 3 의 문턱 {c3:.3f}\n→ 기각률 {rates[1]:.4f}",
+ax1.annotate(f"자유도 3 의 임계값 {c3:.3f}\n→ 기각률 {rates[1]:.4f}",
              xy=(c3 + 0.35, 0.018), xytext=(11.6, 0.0485), fontsize=11.5,
              color="tab:blue", fontweight="bold",
              arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.9))
@@ -186,7 +186,7 @@ ax1.set_xlim(4, 20)
 ax1.set_ylim(0, 0.072)
 ax1.set_xlabel("피어슨 통계량 (꼬리만 잘라 그렸다)", fontsize=11)
 ax1.set_ylabel("밀도", fontsize=11)
-ax1.set_title("같은 통계량, 다른 문턱 — 꼬리가 절반 아래로 줄어든다",
+ax1.set_title("같은 통계량, 다른 임계값 — 꼬리가 절반 아래로 줄어든다",
               fontsize=12.5)
 ax1.legend(fontsize=10, loc="upper right")
 
@@ -454,7 +454,7 @@ ax1.plot(BS, mc, "-", color="tab:red", lw=3.2,
 ax1.plot(BS, pear, "-", color="tab:blue", lw=3.2,
          label="두 관측을 다른 사람으로 보는 검정")
 ax1.axhline(CRIT, color="0.35", lw=1.8, ls=":")
-ax1.text(104, -3.4, "가로 점선은 자유도 1 의 5% 문턱 3.84", ha="left",
+ax1.text(104, -3.4, "가로 점선은 자유도 1 의 5% 임계값 3.84", ha="left",
          va="center", fontsize=10, color="0.3", fontweight="bold")
 ax1.plot([BS[i121]], [mc[i121]], "o", ms=11, color="tab:red", mec="white",
          mew=2)

@@ -186,10 +186,10 @@ def fig_precision_not_coefficient():
     ax2.vlines(PLANT, 0, cook[PLANT], color="tab:red", lw=2.6)
     ax2.plot(PLANT, cook[PLANT], "o", ms=9, color="tab:red", zorder=5)
     ax2.axhline(thr, color="0.2", ls="--", lw=1.8)
-    ax2.text(1, thr * 1.12, f"흔히 쓰는 문턱 $4/n = {thr:.2f}$", fontsize=10.5,
+    ax2.text(1, thr * 1.12, f"흔히 쓰는 임계값 $4/n = {thr:.2f}$", fontsize=10.5,
              color="0.2", fontweight="bold")
     fifth = cook[order[4]]
-    ax2.annotate(f"다섯째로 큰 값 {fifth:.4f}\n— 문턱 아래다",
+    ax2.annotate(f"다섯째로 큰 값 {fifth:.4f}\n— 임계값 아래다",
                  xy=(order[4], fifth), xytext=(26, 0.17), fontsize=10.5,
                  color="0.25", fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color="0.4", lw=1.6))
@@ -209,7 +209,7 @@ def fig_precision_not_coefficient():
     for nm, b, a in zip(["기울기", "sigma", "R^2", "구간 반폭"],
                         before, after):
         print(f"  {nm:<10s} {b:9.4f} → {a:9.4f}  ({a / b:.3f} 배)")
-    print(f"  쿡 거리 문턱 {thr:.2f} 위: {np.sort(np.where(cook > thr)[0])} "
+    print(f"  쿡 거리 임계값 {thr:.2f} 위: {np.sort(np.where(cook > thr)[0])} "
           f"· 다섯째 {fifth:.4f}")
 
 
@@ -247,7 +247,7 @@ def fig_pairwise_misses_it():
 
     ax1.plot(ms, 1 / np.sqrt(ms), "-", lw=2.8, color="tab:blue",
              label="합과 각 변수의 상관  $1/\\sqrt{m}$")
-    for lv, nm, col in ((0.8, "흔히 쓰는 문턱 0.8", "tab:red"),
+    for lv, nm, col in ((0.8, "흔히 쓰는 임계값 0.8", "tab:red"),
                         (0.9, "0.9", "tab:orange")):
         ax1.axhline(lv, color=col, ls="--", lw=1.8)
         ax1.text(99, lv + 0.015, nm, ha="right", va="bottom", fontsize=10.5,
@@ -255,7 +255,7 @@ def fig_pairwise_misses_it():
     ax1.plot([M_PAGE], [1 / np.sqrt(M_PAGE)], "o", ms=13, color="tab:blue",
              zorder=5)
     ax1.annotate(f"$m = {M_PAGE}$ 이면 {1 / np.sqrt(M_PAGE):.3f}\n"
-                 f"— 어떤 문턱도 넘지 않는다",
+                 f"— 어떤 임계값도 넘지 않는다",
                  xy=(M_PAGE, 1 / np.sqrt(M_PAGE)), xytext=(56, 0.46),
                  fontsize=11.5, color="tab:blue", fontweight="bold",
                  arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.8))

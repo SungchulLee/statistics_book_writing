@@ -9,7 +9,7 @@ $$\mathrm{PSI} = \sum_i (p_i - q_i)\ln\frac{p_i}{q_i} = D_{\mathrm{KL}}(p\|q) + 
 
 ① 같은 이동이라도 $p$ 값은 $n$ 과 함께 $0$ 으로 가고 PSI 는 그대로다.
 ② PSI 와 $G^2/n$ 은 거의 같은 수다.
-③ 그래서 PSI 문턱 하나가 $n$ 마다 전혀 다른 엄격함이 된다.
+③ 그래서 PSI 임계값 하나가 $n$ 마다 전혀 다른 엄격함이 된다.
 
 만드는 파일: docs/ch13/test/img/psi_vs_g2.png
 """
@@ -31,7 +31,7 @@ K = len(Q)
 DF = K - 1
 NS = np.array([100, 300, 1000, 3000, 10000, 30000])
 REPS = 2000
-PSI_T = (0.10, 0.25)                               # 업계에서 흔히 쓰는 문턱
+PSI_T = (0.10, 0.25)                               # 업계에서 흔히 쓰는 임계값
 
 
 def shifted(q, delta):
@@ -88,8 +88,8 @@ pairs = np.array(pairs)
 print(f"\n② PSI 와 G^2/n 의 상관 {np.corrcoef(pairs[:, 0], pairs[:, 1])[0, 1]:.5f}, "
       f"기울기 {np.polyfit(pairs[:, 1], pairs[:, 0], 1)[0]:.4f}")
 
-# === ③ PSI 문턱이 뜻하는 p 값 =======================================
-print(f"\n③ PSI 문턱이 n 마다 뜻하는 p 값 (G^2 ≈ n·PSI, 자유도 {DF})")
+# === ③ PSI 임계값이 뜻하는 p 값 =======================================
+print(f"\n③ PSI 임계값이 n 마다 뜻하는 p 값 (G^2 ≈ n·PSI, 자유도 {DF})")
 print(f"{'n':>8}" + "".join(f"{f'PSI={t}':>16}" for t in PSI_T))
 tbl = {t: [] for t in PSI_T}
 for n in NS:
@@ -154,7 +154,7 @@ ax3.axhline(0.05, color="black", lw=1.4, ls="--")
 ax3.text(NS[0] * 1.1, 0.09, "$\\alpha = 0.05$", fontsize=10)
 ax3.set_xlabel("표본 수 $n$")
 ax3.set_ylabel("그 PSI 가 뜻하는 $p$ 값")
-ax3.set_title("③ 같은 문턱, 다른 엄격함", fontsize=12)
+ax3.set_title("③ 같은 임계값, 다른 엄격함", fontsize=12)
 ax3.set_xticks(NS)
 ax3.set_xticklabels([f"${v:,}$".replace(",", "{,}") for v in NS], fontsize=9)
 ax3.set_ylim(1e-30, 3)

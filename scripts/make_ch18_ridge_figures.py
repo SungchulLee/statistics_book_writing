@@ -388,7 +388,7 @@ def cv_1se():
     ax1.set_ylim(1.0, 2.9)
     ax1.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
     ax1.set_ylabel("10-겹 교차검증 오차", fontsize=11, color=INK)
-    ax1.set_title("(가) 최솟값과 1-표준오차 문턱", fontsize=12, color=INK)
+    ax1.set_title("(가) 최솟값과 1-표준오차 임계값", fontsize=12, color=INK)
     ax1.text(0.012, 2.82,
              f"$\\lambda_{{\\min}}={lams[i]:.2f}$\n"
              f"CV {mu[i]:.3f}  df {dfs[i]:.2f}", fontsize=10.5, color=GREEN,
@@ -397,7 +397,7 @@ def cv_1se():
              f"$\\lambda_{{1SE}}={lams[j]:.2f}$\n"
              f"CV {mu[j]:.3f}  df {dfs[j]:.2f}", fontsize=10.5, color=ORANGE,
              va="top")
-    ax1.text(120, mu[i] + se[i] + 0.05, "1-SE 문턱", fontsize=10, color=INK,
+    ax1.text(120, mu[i] + se[i] + 0.05, "1-SE 임계값", fontsize=10, color=INK,
              ha="center")
     clean(ax1)
 

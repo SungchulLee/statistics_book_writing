@@ -646,7 +646,7 @@ nav:
                 - 혼동행렬: ch19/evaluation/confusion_matrix.md
                 - 정밀도, 재현율, F1 점수: ch19/evaluation/precision_recall.md
                 - ROC 곡선과 AUC: ch19/evaluation/roc_auc.md
-                - 결정 문턱 조율: ch19/evaluation/threshold_tuning.md
+                - 결정 임계값 조율: ch19/evaluation/threshold_tuning.md
                 - 보정과 브라이어 점수: ch19/evaluation/calibration.md
                 - 불균형 자료 다루기: ch19/evaluation/imbalanced_data.md
                 - 혼동행렬·ROC·분류 지표: ch19/evaluation/metrics.md

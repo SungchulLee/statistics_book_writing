@@ -2,7 +2,7 @@ r"""9.6 다중검정 다섯 쪽의 그림 일곱 장을 생성한다.
 
   ch09/multiple_testing/img/fwer_growth.png          검정을 늘리면 벌어지는 일
   ch09/multiple_testing/img/fwer_bound_dependence.png 합집합 한계와 상관의 영향
-  ch09/multiple_testing/img/bonferroni_vs_holm.png   같은 자료, 두 문턱
+  ch09/multiple_testing/img/bonferroni_vs_holm.png   같은 자료, 두 임계값
   ch09/multiple_testing/img/bh_procedure.png         BH 의 계단
   ch09/multiple_testing/img/correction_comparison.png 네 방법을 같은 자료에
   ch09/multiple_testing/img/optional_stopping.png    엿보면 벌어지는 일
@@ -87,7 +87,7 @@ def fwer_growth():
     ax.text(100, ALPHA + 0.012, "$\\alpha = 0.05$", fontsize=11, color=BLUE,
             ha="right", va="bottom")
     ax.text(52, 0.030,
-            "문턱을 $\\alpha/m$ 으로 낮추면\n$m$ 이 아무리 커져도 $\\alpha$ "
+            "임계값을 $\\alpha/m$ 으로 낮추면\n$m$ 이 아무리 커져도 $\\alpha$ "
             "아래에 머문다", fontsize=10.5, color=GREEN, ha="center",
             va="center", linespacing=1.5)
     ax.set_xlim(0, 100)
@@ -168,10 +168,10 @@ def bonferroni_vs_holm():
     fig, ax = plt.subplots(figsize=(11, 5.0))
     ax.step(np.append(i - 0.5, m + 0.5), np.append(holm, holm[-1]),
             where="post", color=GREEN, linewidth=2.4,
-            label="Holm 의 문턱  $\\alpha/(m-i+1)$")
+            label="Holm 의 임계값  $\\alpha/(m-i+1)$")
     ax.plot([0.5, m + 0.5], [ALPHA / m, ALPHA / m], color=RED,
             linewidth=2.4, linestyle="--",
-            label="Bonferroni 의 문턱  $\\alpha/m$")
+            label="Bonferroni 의 임계값  $\\alpha/m$")
 
     for k in range(m):
         col = GREEN if k < n_holm else MUTED
@@ -183,7 +183,7 @@ def bonferroni_vs_holm():
 
     ax.text(2.5, 0.105,
             f"Bonferroni 는 {n_bonf}개, Holm 은 {n_holm}개를 기각한다.\n"
-            "Holm 의 문턱이 뒤로 갈수록 느슨해지기 때문이다.",
+            "Holm 의 임계값이 뒤로 갈수록 느슨해지기 때문이다.",
             fontsize=11.5, color=INK, ha="center", va="center",
             linespacing=1.6)
 
@@ -195,7 +195,7 @@ def bonferroni_vs_holm():
     ax.set_ylabel("$p$-값", fontsize=11.5, color=INK)
     clean_axis(ax)
     ax.legend(fontsize=11, frameon=False, loc="upper left")
-    ax.set_title("같은 네 개의 $p$-값, 두 가지 문턱  ($\\alpha = 0.05$)",
+    ax.set_title("같은 네 개의 $p$-값, 두 가지 임계값  ($\\alpha = 0.05$)",
                  fontsize=13.5, pad=10)
     fig.tight_layout()
     save(fig, OUT + "bonferroni_vs_holm.png")

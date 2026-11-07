@@ -462,7 +462,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-열이 정규직교인 설계($\mathbf{X}^\top\mathbf{X} = \mathbf{I}_4$), $n = 50$, $\sigma^2 = 1$은 알려져 있다. OLS 해가 $\hat{\boldsymbol{\beta}}^{\text{OLS}} = (2.5,\ 1.2,\ 0.4,\ -0.3)$이고 그때의 잔차제곱합이 $\text{RSS}_0 = 46$이다. 라쏘를 $\frac{1}{2}\lVert \mathbf{y}-\mathbf{X}\boldsymbol{\beta} \rVert^2 + \lambda\lVert \boldsymbol{\beta} \rVert_1$로 정의한다(따라서 해는 문턱 $\lambda$의 연성문턱이다).
+열이 정규직교인 설계($\mathbf{X}^\top\mathbf{X} = \mathbf{I}_4$), $n = 50$, $\sigma^2 = 1$은 알려져 있다. OLS 해가 $\hat{\boldsymbol{\beta}}^{\text{OLS}} = (2.5,\ 1.2,\ 0.4,\ -0.3)$이고 그때의 잔차제곱합이 $\text{RSS}_0 = 46$이다. 라쏘를 $\frac{1}{2}\lVert \mathbf{y}-\mathbf{X}\boldsymbol{\beta} \rVert^2 + \lambda\lVert \boldsymbol{\beta} \rVert_1$로 정의한다(따라서 해는 임계값 $\lambda$의 연성 임계화다).
 
 (가) 활성집합을 $\hat S$라 할 때
 
@@ -490,7 +490,7 @@ $$
     = \text{RSS}_0 + \lVert \hat{\boldsymbol{\beta}}^{\text{OLS}}-\boldsymbol{\beta} \rVert^2
     $$
 
-    이다(마지막 등호가 정규직교성이다). 연성문턱 해를 넣으면 $j \in \hat S$에서 $\hat\beta_j = \operatorname{sign}(\hat\beta_j^{\text{OLS}})(\lvert \hat\beta_j^{\text{OLS}} \rvert - \lambda)$이므로 차이의 절댓값이 정확히 $\lambda$이고, $j \notin \hat S$에서는 $\hat\beta_j = 0$이므로 차이가 $\hat\beta_j^{\text{OLS}}$다. 제곱해 더하면 주장한 식이 된다. $\square$
+    이다(마지막 등호가 정규직교성이다). 연성 임계화 해를 넣으면 $j \in \hat S$에서 $\hat\beta_j = \operatorname{sign}(\hat\beta_j^{\text{OLS}})(\lvert \hat\beta_j^{\text{OLS}} \rvert - \lambda)$이므로 차이의 절댓값이 정확히 $\lambda$이고, $j \notin \hat S$에서는 $\hat\beta_j = 0$이므로 차이가 $\hat\beta_j^{\text{OLS}}$다. 제곱해 더하면 주장한 식이 된다. $\square$
 
     **(나)** 구간 $\lambda \in [\,\lvert \hat\beta \rvert_{(k+1)},\ \lvert \hat\beta \rvert_{(k)})$에서 활성집합은 크기가 큰 $k$개로 고정이고 $\text{df} = k$다. 그러면
 
@@ -524,7 +524,7 @@ $$
     | $3$ | $46.09$ | $52.09$ | $57.826$ |
     | $4$ | $46$ | $54$ | $61.648$ |
 
-    **사후 라쏘의 AIC는 $\text{df} = 1$을 고른다.** 축소를 되돌리기 전에는 2개였다. 두 표를 나란히 두면 원인이 보인다. $\text{df} = 1$일 때 축소가 RSS에 더한 벌금은 $\lambda^2 = 1.44$인데 $\text{df} = 2$일 때는 $2\lambda^2 = 0.32$뿐이다. **희소한 모형일수록 문턱 $\lambda$가 커서 축소의 손실이 크므로, 라쏘 적합값으로 계산한 AIC는 희소한 쪽을 부당하게 불리하게 매긴다.** 그 결과 변수를 더 집어넣게 되고, 이것이 §3에서 참 변수 5개인 자료에 두 기준이 $\text{df} = 10$을 고른 것과 같은 메커니즘이다.
+    **사후 라쏘의 AIC는 $\text{df} = 1$을 고른다.** 축소를 되돌리기 전에는 2개였다. 두 표를 나란히 두면 원인이 보인다. $\text{df} = 1$일 때 축소가 RSS에 더한 벌금은 $\lambda^2 = 1.44$인데 $\text{df} = 2$일 때는 $2\lambda^2 = 0.32$뿐이다. **희소한 모형일수록 임계값 $\lambda$가 커서 축소의 손실이 크므로, 라쏘 적합값으로 계산한 AIC는 희소한 쪽을 부당하게 불리하게 매긴다.** 그 결과 변수를 더 집어넣게 되고, 이것이 §3에서 참 변수 5개인 자료에 두 기준이 $\text{df} = 10$을 고른 것과 같은 메커니즘이다.
 
     사후 라쏘 AIC가 BIC와 같은 답($\text{df} = 1$)에 닿은 것도 눈여겨볼 만하다. 축소 벌금을 걷어내면 두 기준의 간격이 좁아진다.
 
@@ -643,7 +643,7 @@ $\mathbf{X}^\top\mathbf{X} = \mathbf{I}_{20}$인 직교설계에서 $\sigma = 1$
     from scipy.stats import norm
 
     # 직교설계 X^T X = I, sigma = 1. 그러면 z = X^T y ~ N(beta, I) 이고
-    # 라쏘 해는 좌표마다 연성문턱 soft(z_j, lam) 이다 (반복 해법이 필요 없다).
+    # 라쏘 해는 좌표마다 연성 임계화 soft(z_j, lam) 이다 (반복 해법이 필요 없다).
     rng = np.random.default_rng(1818)
     p, n, B = 20, 100, 50000
     lam = 2.0

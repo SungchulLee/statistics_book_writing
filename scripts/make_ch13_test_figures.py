@@ -471,7 +471,7 @@ def fig_yates_shift():
     clean_axis(ax)
     ax.set_xlabel(r"표본크기 $n$", fontsize=11, color=INK)
     ax.set_ylabel(r"$\chi^2$ 통계량", fontsize=11, color=INK)
-    ax.set_title("(나) 보정이 결론을 바꾸는 곳은 문턱 근처뿐이다",
+    ax.set_title("(나) 보정이 결론을 바꾸는 곳은 임계값 근처뿐이다",
                  fontsize=12, color=INK)
     ax.legend(fontsize=10, frameon=False, loc="center right")
 

@@ -15,7 +15,7 @@ r"""11.5절 「그림으로 보는 통계학」 — 아무도 낫지 않았는�
   진행 병기는 기존 환자들보다 나은 사람들을 받았다 -> 진행의 생존율도 오른다
   아무도 치료를 더 받지 않았다 -> 전체 생존율은 그대로다
 
-모의로 재면 (문턱 0.70 -> 0.45)
+모의로 재면 (임계값 0.70 -> 0.45)
 
                       예전 장비   새 장비     변화
   초기 병기의 생존기간    49.2      55.9      +6.6 개월
@@ -65,7 +65,7 @@ def cohort(rng, n):
 
 
 def means(z, s, t):
-    """문턱 t 로 나눈 두 병기의 평균 생존기간."""
+    """임계값 t 로 나눈 두 병기의 평균 생존기간."""
     return s[z <= t].mean(), s[z > t].mean()
 
 
@@ -115,8 +115,8 @@ def main():
     ax.set_xlim(0, 3.2)
     ax.set_ylim(0, 78)
     ax.legend(handles=[
-        Line2D([], [], color=GREY, lw=2.2, ls="--", label="예전 장비의 문턱"),
-        Line2D([], [], color=INK, lw=2.2, label="새 장비의 문턱"),
+        Line2D([], [], color=GREY, lw=2.2, ls="--", label="예전 장비의 임계값"),
+        Line2D([], [], color=INK, lw=2.2, label="새 장비의 임계값"),
         Line2D([], [], color=TEAL, lw=3.0, label="초기 병기의 평균"),
         Line2D([], [], color=RED, lw=3.0, label="진행 병기의 평균")],
         fontsize=10.0, framealpha=0.93, loc="upper right", ncol=2)
@@ -145,7 +145,7 @@ def main():
                 xy=(T_NEW, a_new), xytext=(0.84, 23.5), fontsize=11.4,
                 color=RED, ha="center",
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.5))
-    ax.set_xlabel("병기를 가르는 문턱 — 오른쪽일수록 잘 찾아낸다", fontsize=11.5)
+    ax.set_xlabel("병기를 가르는 임계값 — 오른쪽일수록 잘 찾아낸다", fontsize=11.5)
     ax.set_ylabel("평균 생존기간 (개월)", fontsize=11.5)
     ax.set_title("둘 다 올라가는데 전체는 그대로다", fontsize=12.8, color=INK,
                  pad=8)

@@ -330,7 +330,7 @@ def fig_censored_likelihood():
                  label=f"절단율 {rate*100:.0f}%  ·  사건 {int(d.sum())}건  ·  "
                        f"$k$ 구간 폭 {hi - lo:.2f}")
     axR.axhline(-1.92, color=MUTED, lw=1.3, ls=(0, (4, 3)), zorder=0)
-    axR.text(0.95, -1.35, r"문턱 $-1.92$", fontsize=10, color=MUTED,
+    axR.text(0.95, -1.35, r"임계값 $-1.92$", fontsize=10, color=MUTED,
              ha="left", va="bottom")
     axR.axvline(k_true, color=INK, lw=1.2, ls=(0, (2, 2)), zorder=0)
     axR.text(k_true + 0.05, -9.3, f"참값 $k = {k_true}$", fontsize=10, color=INK,

@@ -46,7 +46,7 @@ ax.bar(x - w / 2, np.abs(s), w, color="tab:blue", alpha=0.85, label="표준화 �
 ax.bar(x + w / 2, np.abs(a), w, color="tab:red", alpha=0.85, label="조정 잔차")
 
 ax.axhline(crit_2, color="0.45", ls=":", lw=1.6)
-ax.text(ncell - 0.4, crit_2 - 0.05, "흔히 쓰는 문턱 2", ha="right", va="top",
+ax.text(ncell - 0.4, crit_2 - 0.05, "흔히 쓰는 임계값 2", ha="right", va="top",
         fontsize=10, color="0.45")
 ax.axhline(crit_b, color="black", ls="--", lw=1.8)
 # 왼쪽은 큰 막대와 설명이 쓰므로 오른쪽 빈자리에
@@ -57,7 +57,7 @@ ax.text(ncell - 0.4, crit_b + 0.04,
 # 선을 넘고 못 넘는 것이 갈리는 칸
 flip2 = [i for i in range(ncell) if (abs(s[i]) < crit_2) != (abs(a[i]) < crit_2)]
 for i in flip2:
-    ax.annotate("같은 칸인데\n문턱 2 를 하나만 넘는다", (x[i], max(abs(s[i]), abs(a[i]))),
+    ax.annotate("같은 칸인데\n임계값 2 를 하나만 넘는다", (x[i], max(abs(s[i]), abs(a[i]))),
                 textcoords="offset points", xytext=(58, 30), ha="left",
                 fontsize=10, color="0.25",
                 arrowprops=dict(arrowstyle="->", color="0.45", lw=1.2))
@@ -77,6 +77,6 @@ print("saved", path)
 print(f"칸 {ncell} 개 · 본페로니 임계값 {crit_b:.4f}  (쪽: 2.8653)")
 print(f"  조정/표준화 의 비  최소 {np.min(np.abs(a / s)):.4f} · "
       f"최대 {np.max(np.abs(a / s)):.4f}  — 늘 1 보다 크다")
-print(f"  문턱 2 를 하나만 넘는 칸: {[labels[i] for i in flip2] or '없음'}")
+print(f"  임계값 2 를 하나만 넘는 칸: {[labels[i] for i in flip2] or '없음'}")
 for lab, ss, aa in zip(labels, s, a):
     print(f"    {lab}  표준화 {ss:+.4f}  조정 {aa:+.4f}")

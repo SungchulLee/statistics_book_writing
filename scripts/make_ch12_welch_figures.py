@@ -3,7 +3,7 @@ r"""10장 웰치 분산분석 네 쪽의 개념 그림을 생성한다.
 만드는 파일:
   ch10/anova_welch/img/welch_weights.png        분산의 역수로 가중하면 발언권이 바뀐다
   ch10/anova_welch/img/welch_size_direction.png 고전 F 의 수준은 불균형의 방향에 달려 있다
-  ch10/anova_welch/img/welch_twoway_df.png      자유도가 작으면 유의성 문턱이 폭발한다
+  ch10/anova_welch/img/welch_twoway_df.png      자유도가 작으면 유의성 임계값이 폭발한다
   ch10/anova_welch/img/welch_hc3_vs_classic.png 칸 분산이 다르면 고전 F 가 부풀려진다
 
 실행:  python3 scripts/make_ch11_welch_figures.py   (저장소 최상위에서)
@@ -254,10 +254,10 @@ def fig_twoway_df():
            ("High - Medium", 3.4483, 1.2649),
            ("Low - Medium", 3.4483, 3.4785)]
     for lb, nu, t in obs:
-        print(f"  {lb}: nu = {nu}, |T| = {t}, 문턱 = "
+        print(f"  {lb}: nu = {nu}, |T| = {t}, 임계값 = "
               f"{qsturng(0.95, 3, nu) / np.sqrt(2):.4f}")
 
-    # 반복을 늘리면 문턱(필요 평균차)이 어떻게 내려가는가
+    # 반복을 늘리면 임계값(필요 평균차)이 어떻게 내려가는가
     v_low, v_med = 7.0 / 3, 1.0          # Low, Medium 의 표본분산
     ns = np.arange(3, 25)
     need = []
@@ -289,10 +289,10 @@ def fig_twoway_df():
                 textcoords="offset points", xytext=(36, -24), fontsize=9.5,
                 color=BLUE, arrowprops=dict(arrowstyle="->", color=BLUE, lw=1.2))
     ax.set_xlabel("웰치–새터스웨이트 자유도 $\\nu$", fontsize=10.5, color=INK)
-    ax.set_ylabel("게임스–하월의 유의성 문턱  $|T|$", fontsize=10.5, color=INK)
+    ax.set_ylabel("게임스–하월의 유의성 임계값  $|T|$", fontsize=10.5, color=INK)
     ax.set_xlim(2, 30)
     ax.set_ylim(0, 6.5)
-    ax.set_title("자유도가 4 이하면 문턱이 폭발한다", fontsize=11.5, color=INK)
+    ax.set_title("자유도가 4 이하면 임계값이 폭발한다", fontsize=11.5, color=INK)
     clean(ax)
 
     ax = axes[1]

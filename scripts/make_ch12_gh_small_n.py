@@ -75,7 +75,7 @@ def run(nmin, rep=REP):
                          + (v[:, j] / n[j]) ** 2 / (n[j] - 1))
         d = np.abs(m[:, i] - m[:, j])
 
-        # 게임스-하월: 스튜던트화 범위를 sqrt(2) 로 나눈 것을 문턱으로
+        # 게임스-하월: 스튜던트화 범위를 sqrt(2) 로 나눈 것을 임계값으로
         q = q_crit(K, df, ALPHA)
         hit_gh = d > (q / np.sqrt(2)) * np.sqrt(se2)
 

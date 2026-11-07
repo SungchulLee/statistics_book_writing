@@ -61,7 +61,7 @@ RED = "#D32F2F"
 BLUE = "#1565C0"
 MUTED = "#90A4AE"
 
-THRESH = 1000        # statsmodels 가 각주를 붙이는 문턱
+THRESH = 1000        # statsmodels 가 각주를 붙이는 임계값
 N = 100
 SEED = 13
 
@@ -112,7 +112,7 @@ def main():
     ax.bar(xs, conds, width=0.56, color=cols, alpha=0.88)
     ax.set_yscale("log")
     ax.axhline(THRESH, color=INK, lw=1.8, ls="--")
-    ax.text(-0.45, THRESH * 1.5, f"경고가 붙는 문턱 ${THRESH}$", ha="left",
+    ax.text(-0.45, THRESH * 1.5, f"경고가 붙는 임계값 ${THRESH}$", ha="left",
             fontsize=10.8, color=INK)
     for i, (name, c, v) in enumerate(rows):
         # 큰 수는 e 표기 대신 10 의 거듭제곱으로 — mathtext 가 e 를 기울여 찍는다

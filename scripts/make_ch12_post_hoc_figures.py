@@ -1,10 +1,10 @@
 r"""10장 사후비교 다섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch10/post_hoc/img/posthoc_thresholds.png    네 방법의 문턱이 k 에 따라 어떻게 벌어지는가
+  ch10/post_hoc/img/posthoc_thresholds.png    네 방법의 임계값이 k 에 따라 어떻게 벌어지는가
   ch10/post_hoc/img/tukey_studentized_range.png  투키의 임계값은 최대차의 귀무분포에서 나온다
   ch10/post_hoc/img/scheffe_and_bonferroni.png    모든 대비 위의 최댓값이 (k-1)F 다
-  ch10/post_hoc/img/dunnett_critical.png      대조군 비교의 상관을 쓰면 문턱이 낮아진다
+  ch10/post_hoc/img/dunnett_critical.png      대조군 비교의 상관을 쓰면 임계값이 낮아진다
   ch10/post_hoc/img/games_howell_pairs.png    쌍마다 표준오차와 자유도를 따로 쓴다
 
 실행:  python3 scripts/make_ch11_post_hoc_figures.py   (저장소 최상위에서)
@@ -51,7 +51,7 @@ def clean(ax):
 
 
 # =====================================================================
-# 1. 네 방법의 문턱 — post_hoc_comparisons.md
+# 1. 네 방법의 임계값 — post_hoc_comparisons.md
 # =====================================================================
 def fig_thresholds():
     n = 15
@@ -85,7 +85,7 @@ def fig_thresholds():
     print(f"  MSW = {MSW:.4f}, SE = {se:.4f}")
     print(f"  차이 = {np.round(diffs, 4).tolist()}")
     for kk, vv in th.items():
-        print(f"    {kk}: 문턱 {vv:.4f}")
+        print(f"    {kk}: 임계값 {vv:.4f}")
 
     fig, axes = plt.subplots(1, 2, figsize=(12.2, 4.5))
 
@@ -96,7 +96,7 @@ def fig_thresholds():
                             (sch, PURPLE, "셰페", "-")]:
         ax.plot(ks, vals, "o" + ls, color=c, lw=2.2, ms=6, label=lb)
     ax.set_xlabel("집단 수 $k$   (집단당 $n$ = 15)", fontsize=10.5, color=INK)
-    ax.set_ylabel("문턱 / 표준오차", fontsize=10.5, color=INK)
+    ax.set_ylabel("임계값 / 표준오차", fontsize=10.5, color=INK)
     ax.set_xticks(ks)
     ax.set_ylim(1.8, 4.6)
     ax.set_title("쌍별 차이를 유의하다고 하려면 몇 배가 필요한가",
@@ -110,13 +110,13 @@ def fig_thresholds():
     for lb, c, ls in [("피셔 LSD", MUTED, "--"), ("투키 HSD", GREEN, "-"),
                       ("본페로니", BLUE, "-"), ("셰페", PURPLE, "-")]:
         ax.axvline(th[lb], color=c, lw=2, ls=ls,
-                   label=f"{lb} 문턱  {th[lb]:.3f}")
+                   label=f"{lb} 임계값  {th[lb]:.3f}")
     for i, (a, b) in enumerate(pairs):
         ax.text(0.12, ys[i] + 0.29, f"{names[a]} – {names[b]}", va="bottom",
                 fontsize=11, color=INK)
         ax.text(diffs[i] - 0.14, ys[i], f"{diffs[i]:.3f}", va="center",
                 ha="right", fontsize=10.5, color=BLUE)
-    ax.annotate("보정하면 문턱 아래로 내려간다", (2.36, 2.0),
+    ax.annotate("보정하면 임계값 아래로 내려간다", (2.36, 2.0),
                 textcoords="offset points", xytext=(60, 36), fontsize=10,
                 color=RED,
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.3))
@@ -331,7 +331,7 @@ def fig_bonferroni_correlation():
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.2))
     ax.set_xlabel("계획한 비교의 수 $m$   ($k$ = 4, $n$ = 8)",
                   fontsize=10.5, color=INK)
-    ax.set_ylabel("문턱 / 표준오차", fontsize=10.5, color=INK)
+    ax.set_ylabel("임계값 / 표준오차", fontsize=10.5, color=INK)
     ax.set_xticks([1, 3, 5, 6, 10, 15, 20])
     ax.set_ylim(1.9, 3.6)
     ax.set_title("가족을 좁히면 이기고 넓히면 진다", fontsize=11.5, color=INK)
@@ -391,9 +391,9 @@ def fig_dunnett():
     ax.set_xticks(ks)
     ax.set_xlabel("집단 수 $k$ (대조군 1 + 처치 $k-1$),  집단당 $n$ = 6",
                   fontsize=10.5, color=INK)
-    ax.set_ylabel("문턱 / 표준오차", fontsize=10.5, color=INK)
+    ax.set_ylabel("임계값 / 표준오차", fontsize=10.5, color=INK)
     ax.set_ylim(2.1, 3.6)
-    ax.set_title("상관을 쓰면 문턱이 내려간다", fontsize=11.5, color=INK)
+    ax.set_title("상관을 쓰면 임계값이 내려간다", fontsize=11.5, color=INK)
     ax.legend(fontsize=9.5, loc="upper left")
     clean(ax)
 
@@ -406,7 +406,7 @@ def fig_dunnett():
                 color=BLUE)
     for c, col, lb in [(d4, GREEN, "더넷"), (b4, PURPLE, "본페로니"),
                        (t4, MUTED, "투키")]:
-        ax.axvline(c, color=col, lw=2.2, label=f"{lb} 문턱  {c:.3f}")
+        ax.axvline(c, color=col, lw=2.2, label=f"{lb} 임계값  {c:.3f}")
     ax.set_yticks([])
     ax.set_xlim(0, 5.6)
     ax.set_ylim(-0.6, 3.1)
@@ -446,7 +446,7 @@ def fig_games_howell():
         rows.append((f"{names[i][0]}–{names[j][0]}", d, th_t, th_g, nu,
                      se_t, se_g))
         print(f"  {names[i][0]}-{names[j][0]}: 차이 {d:.2f}  "
-              f"투키문턱 {th_t:.3f}  GH문턱 {th_g:.3f}  nu {nu:.2f}  "
+              f"투키임계값 {th_t:.3f}  GH임계값 {th_g:.3f}  nu {nu:.2f}  "
               f"판정 {'투키O' if d > th_t else '투키X'}/"
               f"{'GH O' if d > th_g else 'GH X'}")
 
@@ -458,9 +458,9 @@ def fig_games_howell():
     ax.barh(ys, [r[1] for r in rows], height=0.5, color=BLUE_F,
             edgecolor=BLUE, lw=1.6, label="관측된 평균 차이")
     ax.plot([r[2] for r in rows], ys, "s", color=MUTED, ms=9,
-            label="투키–크레이머 문턱 (합동 $\\text{MS}_W$)")
+            label="투키–크레이머 임계값 (합동 $\\text{MS}_W$)")
     ax.plot([r[3] for r in rows], ys, "o", color=ORANGE, ms=9,
-            label="게임스–하월 문턱 (쌍별 분산)")
+            label="게임스–하월 임계값 (쌍별 분산)")
     for i, r in enumerate(rows):
         ax.text(0.1, ys[i], r[0], va="center", fontsize=11, color=INK)
         flip = (r[1] > r[2]) != (r[1] > r[3])
@@ -471,7 +471,7 @@ def fig_games_howell():
     ax.set_xlim(0, 8.4)
     ax.set_ylim(-0.7, 6.0)
     ax.set_xlabel("평균 차이", fontsize=10.5, color=INK)
-    ax.set_title("여섯 쌍의 차이와 두 방법의 문턱", fontsize=11.5, color=INK)
+    ax.set_title("여섯 쌍의 차이와 두 방법의 임계값", fontsize=11.5, color=INK)
     ax.legend(fontsize=9.5, loc="lower right")
     clean(ax)
 

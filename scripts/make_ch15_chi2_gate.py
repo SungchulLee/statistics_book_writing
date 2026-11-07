@@ -1,4 +1,4 @@
-r"""15.2절 「AI로 보는 통계학」 — 마할라노비스 게이트의 문턱.
+r"""15.2절 「AI로 보는 통계학」 — 마할라노비스 게이트의 임계값.
 
 $x \sim N_p(\mu, \Sigma)$ 이고 $\mu, \Sigma$ 를 **안다면** 마할라노비스 거리
 
@@ -13,10 +13,10 @@ $x \sim N_p(\mu, \Sigma)$ 이고 $\mu, \Sigma$ 를 **안다면** 마할라노비
     D^2 ~ [p(n^2-1) / (n(n-p))] * F(p, n-p)
 
 가 되고(호텔링 $T^2$), 이것은 $n$ 이 $p$ 보다 압도적으로 크지 않으면
-$\chi^2(p)$ 와 꽤 다르다. 카이제곱 문턱을 그대로 쓰면 경보가 명목보다 자주 울린다.
+$\chi^2(p)$ 와 꽤 다르다. 카이제곱 임계값을 그대로 쓰면 경보가 명목보다 자주 울린다.
 
   왼쪽  — 명목 $1\%$ 로 맞춰 둔 게이트의 실제 경보율 (p = 2, 5, 20, 50)
-  오른쪽 — p = 20 에서 카이제곱 문턱과 참 문턱의 벌어짐
+  오른쪽 — p = 20 에서 카이제곱 임계값과 참 임계값의 벌어짐
 
 만드는 파일:
 
@@ -65,7 +65,7 @@ def scale(n, p):
 
 
 def rate(n, p, alpha=ALPHA):
-    """카이제곱 문턱을 쓸 때의 실제 경보율."""
+    """카이제곱 임계값을 쓸 때의 실제 경보율."""
     return stats.f.sf(stats.chi2.ppf(1 - alpha, p) / scale(n, p), p, n - p)
 
 
@@ -84,7 +84,7 @@ def main():
     rng = np.random.default_rng(SEED)
 
     # 한글은 고정폭에서 두 칸을 차지하므로 f-string 자리맞춤이 보이는 열과 어긋난다
-    print("   n    p   카이제곱 문턱   참 문턱   실제 경보율     모의")
+    print("   n    p   카이제곱 임계값   참 임계값   실제 경보율     모의")
     for n, p in [(200, 20), (100, 20), (1000, 20), (200, 50)]:
         c = stats.chi2.ppf(1 - ALPHA, p)
         print(f"{n:5d} {p:4d} {c:12.2f} {scale(n,p)*stats.f.ppf(1-ALPHA,p,n-p):10.2f}"
@@ -114,20 +114,20 @@ def main():
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
     ax.set_xlabel("평균과 공분산을 잡는 데 쓴 학습 표본 수 $n$", fontsize=11.5)
     ax.set_ylabel("실제 거짓 경보율 (%)", fontsize=11.5)
-    ax.set_title("① 카이제곱 문턱을 그대로 쓰면", fontsize=12.8, color=INK)
+    ax.set_title("① 카이제곱 임계값을 그대로 쓰면", fontsize=12.8, color=INK)
     ax.grid(alpha=0.25, which="both")
     ax.legend(fontsize=10.2, framealpha=0.93, loc="upper right")
     ax.spines[["top", "right"]].set_visible(False)
 
-    # ── ② 두 문턱 ──
+    # ── ② 두 임계값 ──
     ax = axes[1]
     p = 20
     ns = np.unique(np.round(np.logspace(np.log10(26), 4, 120)).astype(int))
     c = stats.chi2.ppf(1 - ALPHA, p)
     true_c = np.array([scale(n, p) * stats.f.ppf(1 - ALPHA, p, n - p) for n in ns])
     ax.fill_between(ns, c, true_c, color=AMBER, alpha=0.18)
-    ax.plot(ns, true_c, lw=2.8, color=AMBER, label="참 문턱 — $F$ 에서")
-    ax.axhline(c, color=TEAL, lw=2.8, label=f"카이제곱 문턱 ${c:.2f}$")
+    ax.plot(ns, true_c, lw=2.8, color=AMBER, label="참 임계값 — $F$ 에서")
+    ax.axhline(c, color=TEAL, lw=2.8, label=f"카이제곱 임계값 ${c:.2f}$")
     ax.set_xscale("log")
     ax.set_ylim(c - 8, 160)
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
@@ -138,13 +138,13 @@ def main():
                     fontsize=10.6, color=INK,
                     arrowprops=dict(arrowstyle="-", color=MUTED, lw=1.0))
     ax.set_xlabel("학습 표본 수 $n$  (차원 $p = 20$)", fontsize=11.5)
-    ax.set_ylabel("$99\\%$ 게이트의 문턱값", fontsize=11.5)
-    ax.set_title("② 그 문턱이 있어야 할 자리", fontsize=12.8, color=INK)
+    ax.set_ylabel("$99\\%$ 게이트의 임계값", fontsize=11.5)
+    ax.set_title("② 그 임계값이 있어야 할 자리", fontsize=12.8, color=INK)
     ax.grid(alpha=0.25)
     ax.legend(fontsize=10.5, framealpha=0.93, loc="upper right")
     ax.spines[["top", "right"]].set_visible(False)
 
-    fig.suptitle("$\\Sigma$ 를 추정하는 순간 문턱은 카이제곱이 아니다", fontsize=14.5)
+    fig.suptitle("$\\Sigma$ 를 추정하는 순간 임계값은 카이제곱이 아니다", fontsize=14.5)
     fig.text(0.5, -0.045,
              "두 칸 모두 자료가 정확히 정규일 때의 값이다. 곡선은 모의실험이 아니라 "
              "$D^2 \\sim \\frac{p(n^2-1)}{n(n-p)}F(p,\\,n-p)$ 에서 계산한 것이고, "

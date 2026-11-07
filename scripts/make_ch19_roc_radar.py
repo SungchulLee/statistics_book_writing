@@ -14,19 +14,19 @@ ROC 는 Receiver Operating Characteristic 의 줄임말이다. 「수신기의
 그리고 그 곡선을 정하는 것은 수신기의 성능이지 사람의 조심성이 아니다.
 
   능력(d')  — 신호와 잡음이 얼마나 떨어져 있는가. 곡선을 정한다.
-  문턱(c)   — 어디서 경보를 울릴 것인가. 곡선 위의 점을 정한다.
+  임계값(c)   — 어디서 경보를 울릴 것인가. 곡선 위의 점을 정한다.
 
 전쟁 뒤 이것이 신호탐지이론으로 정리되었고(1950 년대), 심리학으로 갔다가
 1970 년대에 의학 진단으로, 다시 기계학습으로 왔다.
 
-왜 이 구별이 중요한가. **정확도 하나로는 능력과 문턱을 가를 수 없다.**
+왜 이 구별이 중요한가. **정확도 하나로는 능력과 임계값을 가를 수 없다.**
 
-  대원 A:  d' = 1.0,  문턱 c =  0.50   정확도 0.691   AUC 0.760
-  대원 B:  d' = 2.0,  문턱 c = -0.27   정확도 0.691   AUC 0.921
+  대원 A:  d' = 1.0,  임계값 c =  0.50   정확도 0.691   AUC 0.760
+  대원 B:  d' = 2.0,  임계값 c = -0.27   정확도 0.691   AUC 0.921
 
 두 사람의 정확도가 **같다.** 그런데 A 는 좋은 수신기를 가진 사람이
 아니라 그냥 조심성이 적당한 사람이고, B 는 훨씬 좋은 수신기를 가지고도
-헛경보를 많이 내는 자리에 문턱을 두었을 뿐이다. 문턱을 옮기면 B 는
+헛경보를 많이 내는 자리에 임계값을 두었을 뿐이다. 임계값을 옮기면 B 는
 A 가 결코 닿을 수 없는 곳으로 간다.
 
 만드는 파일:
@@ -59,7 +59,7 @@ AMBER = "#B07C2C"
 BLUE = "#1565C0"
 
 DA, CA = 1.0, 0.50          # 대원 A
-DB = 2.0                    # 대원 B — 문턱은 정확도를 맞추어 정한다
+DB = 2.0                    # 대원 B — 임계값은 정확도를 맞추어 정한다
 
 
 def acc(d, c):
@@ -82,7 +82,7 @@ def main():
     print(f"    대원 B  d'={DB:.1f}  c={cb:+.2f}   적중 {tp_b:.3f}  "
           f"헛경보 {fa_b:.3f}  정확도 {acc(DB, cb):.3f}  AUC {auc_b:.3f}")
     cstar = DB / 2
-    print(f"    대원 B 가 문턱을 {cstar:+.2f} 로 옮기면  정확도 "
+    print(f"    대원 B 가 임계값을 {cstar:+.2f} 로 옮기면  정확도 "
           f"{acc(DB, cstar):.3f}  (적중 {stats.norm.sf(cstar-DB):.3f}, "
           f"헛경보 {stats.norm.sf(cstar):.3f})")
 
@@ -100,7 +100,7 @@ def main():
         ax.fill_between(xs, dy, stats.norm.pdf(xs) + dy,
                         where=xs >= c, color=RED, alpha=0.26)
         ax.plot([c, c], [dy, dy + 0.45], color=INK, lw=2.0, ls="--")
-        ax.text(c, dy + 0.47, f"문턱 {c:+.2f}", fontsize=10.4, color=INK,
+        ax.text(c, dy + 0.47, f"임계값 {c:+.2f}", fontsize=10.4, color=INK,
                 ha="center")
         ax.text(-3.4, dy + 0.34, f"{nm} — 능력 $d' = {d:.1f}$", fontsize=11.2,
                 color=col)
@@ -135,14 +135,14 @@ def main():
                 xy=((fa_a + fa_b) / 2, (tp_a + tp_b) / 2 - 0.03),
                 xytext=(0.60, 0.26), fontsize=10.8, color=RED, ha="center",
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.4))
-    ax.annotate(f"B 가 문턱만 옮기면\n정확도 {acc(DB, cstar):.3f} —\n"
-                "A 는 어떤 문턱에서도 닿지 못한다",
+    ax.annotate(f"B 가 임계값만 옮기면\n정확도 {acc(DB, cstar):.3f} —\n"
+                "A 는 어떤 임계값에서도 닿지 못한다",
                 xy=(stats.norm.sf(cstar), stats.norm.sf(cstar - DB)),
                 xytext=(0.56, 0.56), fontsize=10.6, color=TEAL, ha="center",
                 arrowprops=dict(arrowstyle="->", color=TEAL, lw=1.4))
     ax.set_xlabel("헛경보율 (위양성률)", fontsize=11.5)
     ax.set_ylabel("적중률 (참양성률)", fontsize=11.5)
-    ax.set_title("문턱은 곡선 위를, 능력은 곡선을 바꾼다",
+    ax.set_title("임계값은 곡선 위를, 능력은 곡선을 바꾼다",
                  fontsize=12.8, color=INK, pad=8)
     ax.set_xlim(0, 1); ax.set_ylim(0, 1.02)
     ax.legend(fontsize=10.4, framealpha=0.93, loc="lower right")
@@ -152,7 +152,7 @@ def main():
     fig.suptitle("ROC — 수신기의 작동 특성", fontsize=14.5)
     fig.text(0.5, -0.05,
              "왼쪽 회색 산이 잡음, 색 있는 산이 적기다. 두 산이 겹친 정도가 "
-             "능력이고, 세로 파선이 그 사람이 정한 문턱이다. "
+             "능력이고, 세로 파선이 그 사람이 정한 임계값이다. "
              "붉게 칠한 부분이 헛경보, 색으로 칠한 부분이 적중이다.",
              ha="center", fontsize=10.4, color=INK)
 

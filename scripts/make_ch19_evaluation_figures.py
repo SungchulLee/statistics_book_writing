@@ -2,10 +2,10 @@ r"""19.3 분류 성능 평가 일곱 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
   ch19/evaluation/img/confusion_two_ways.png    같은 표, 행으로 나누느냐 열로 나누느냐
-  ch19/evaluation/img/metrics_vs_threshold.png  모든 지표는 문턱의 함수다
+  ch19/evaluation/img/metrics_vs_threshold.png  모든 지표는 임계값의 함수다
   ch19/evaluation/img/auc_as_ranking.png        AUC 는 순위를 맞힐 확률이다
   ch19/evaluation/img/pr_iso_f1.png             PR 곡선의 기준선과 F1 등고선
-  ch19/evaluation/img/cost_threshold.png        비용이 문턱을 정한다
+  ch19/evaluation/img/cost_threshold.png        비용이 임계값을 정한다
   ch19/evaluation/img/calibration_same_auc.png  같은 AUC, 다른 보정
   ch19/evaluation/img/imbalance_auc_brier.png   가중은 순위를 못 고치고 보정을 깬다
 
@@ -154,7 +154,7 @@ def fig_confusion_two_ways():
 
 
 # =====================================================================
-# 2. 모든 지표는 문턱의 함수다  (metrics.md)
+# 2. 모든 지표는 임계값의 함수다  (metrics.md)
 # =====================================================================
 def fig_metrics_vs_threshold():
     X_tr, y_tr, X_va, y_va, X_te, y_te = loan_data()
@@ -192,9 +192,9 @@ def fig_metrics_vs_threshold():
             color=RED, fontsize=9.3)
     ax.set_xlim(0, 1)
     ax.set_ylim(-0.03, 1.32)
-    ax.set_xlabel(r"문턱 $\tau$", color=INK, fontsize=10)
+    ax.set_xlabel(r"임계값 $\tau$", color=INK, fontsize=10)
     ax.set_ylabel("지표값", color=INK, fontsize=10)
-    ax.set_title("지표 다섯 개는 하나의 문턱 스윕에서 나온다",
+    ax.set_title("지표 다섯 개는 하나의 임계값 스윕에서 나온다",
                  color=INK, fontsize=11)
     ax.legend(loc="upper center", fontsize=8.8, frameon=False, ncol=3,
               bbox_to_anchor=(0.5, 1.02))
@@ -226,7 +226,7 @@ def fig_metrics_vs_threshold():
     ax.set_xticklabels(labels, fontsize=10, color=INK)
     ax.set_ylim(0, 1.16)
     ax.set_ylabel("지표값", color=INK, fontsize=10)
-    ax.set_title("문턱을 바꾸면 무엇이 오르고 무엇이 내리나",
+    ax.set_title("임계값을 바꾸면 무엇이 오르고 무엇이 내리나",
                  color=INK, fontsize=11)
     ax.legend(loc="upper center", fontsize=9, frameon=False, ncol=2)
     tidy(ax)
@@ -262,7 +262,7 @@ def fig_auc_as_ranking():
     ax.hist(s_pos, bins=bins, color=ORANGE, alpha=0.45, label="양성 (연체)")
     cut = 1.0
     ax.axvline(cut, color=INK, lw=1.4, ls="--")
-    ax.text(cut + 0.12, 168, "문턱 하나는\n이 선 하나일 뿐", color=INK,
+    ax.text(cut + 0.12, 168, "임계값 하나는\n이 선 하나일 뿐", color=INK,
             fontsize=9.3, va="top")
     ax.set_xlim(-4.2, 4.6)
     ax.set_ylim(0, 205)
@@ -278,7 +278,7 @@ def fig_auc_as_ranking():
     ax.plot([0, 1], [0, 1], color=MUTED, lw=1.1, ls=":")
     i = int(np.argmin(np.abs(thr - cut)))
     ax.plot([fpr[i]], [tpr[i]], "o", color=INK, ms=8)
-    ax.annotate("왼쪽 그림의 문턱", xy=(fpr[i], tpr[i]),
+    ax.annotate("왼쪽 그림의 임계값", xy=(fpr[i], tpr[i]),
                 xytext=(0.40, 0.42), color=INK, fontsize=9.5,
                 arrowprops=dict(arrowstyle="->", color=INK, lw=1.0))
     ax.text(0.46, 0.23, "곡선 아래 면적\nAUC $= %.4f$" % auc, color=BLUE,
@@ -376,7 +376,7 @@ def fig_pr_iso_f1():
 
 
 # =====================================================================
-# 5. 비용이 문턱을 정한다  (threshold_tuning.md)
+# 5. 비용이 임계값을 정한다  (threshold_tuning.md)
 # =====================================================================
 def fig_cost_threshold():
     X_tr, y_tr, X_va, y_va, X_te, y_te = loan_data()
@@ -413,7 +413,7 @@ def fig_cost_threshold():
     ax.text(0.515, 4, r"관행적인 $\tau=0.5$", color=MUTED, fontsize=9.5)
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 205)
-    ax.set_xlabel(r"문턱 $\tau$", color=INK, fontsize=10)
+    ax.set_xlabel(r"임계값 $\tau$", color=INK, fontsize=10)
     ax.set_ylabel("검정자료 1,000건의 총비용 (천 달러)", color=INK,
                   fontsize=10)
     ax.set_title("비용곡선의 바닥은 $t^*=C_{FP}/(C_{FP}+C_{FN})$",
@@ -431,7 +431,7 @@ def fig_cost_threshold():
     ax.plot(ratios, tstar, color=BLUE, lw=2.4,
             label=r"이론값 $t^*=1/(1+C_{FN}/C_{FP})$")
     ax.plot(ratios, emp, color=ORANGE, lw=1.6, alpha=0.85,
-            label="검정자료에서 실제로 비용이 최소인 문턱")
+            label="검정자료에서 실제로 비용이 최소인 임계값")
     ax.axhline(0.5, color=MUTED, lw=1.0, ls=":")
     ax.plot([20], [1 / 21], "o", color=RED, ms=8)
     ax.annotate(r"$C_{FN}/C_{FP}=20$ 이면 $t^*=0.048$",
@@ -444,8 +444,8 @@ def fig_cost_threshold():
     ax.set_xlim(0.05, 40)
     ax.set_ylim(0, 1.0)
     ax.set_xlabel("비용비 $C_{FN}/C_{FP}$", color=INK, fontsize=10)
-    ax.set_ylabel("최적 문턱", color=INK, fontsize=10)
-    ax.set_title("비용비 하나가 문턱을 결정한다", color=INK, fontsize=11)
+    ax.set_ylabel("최적 임계값", color=INK, fontsize=10)
+    ax.set_title("비용비 하나가 임계값을 결정한다", color=INK, fontsize=11)
     ax.legend(loc="upper right", fontsize=8.8, frameon=False)
     tidy(ax)
 

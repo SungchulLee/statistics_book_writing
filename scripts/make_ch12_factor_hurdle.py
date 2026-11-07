@@ -1,4 +1,4 @@
-r"""전략 여럿을 늘어놓고 가장 좋은 것을 고르면 — 금융이 올린 문턱.
+r"""전략 여럿을 늘어놓고 가장 좋은 것을 고르면 — 금융이 올린 임계값.
 
 이 쪽은 분산분석으로 포트폴리오·섹터·팩터를 견준다. 그 자리의 다중비교 문제를
 금융학계가 수로 겪은 적이 있고, 결론이 「$t > 2$ 로는 모자라다」였다.
@@ -6,8 +6,8 @@ r"""전략 여럿을 늘어놓고 가장 좋은 것을 고르면 — 금융이 �
 모두 **참 초과수익이 0 인** 전략 k 개를 만들어 놓고 재어 본다.
 
 ① 가장 좋아 보이는 하나를 고르면 t 가 얼마나 커지는가.
-② 집단 전체의 1종오류를 5% 로 묶으려면 문턱이 얼마여야 하는가.
-③ 분산분석의 F 는 그 문턱을 지키는데, 「제일 좋은 것」을 고르면 지키지 못한다.
+② 집단 전체의 1종오류를 5% 로 묶으려면 임계값이 얼마여야 하는가.
+③ 분산분석의 F 는 그 임계값을 지키는데, 「제일 좋은 것」을 고르면 지키지 못한다.
 
 만드는 파일: docs/ch10/practical_applications/img/factor_hurdle.png
 """
@@ -58,9 +58,9 @@ print(f"   전략이 {KS[-1]} 개면 **아무 실력이 없어도** 가장 좋�
       f"중앙값 {MED[-1]:.2f} 이고,")
 print(f"   t > 2.0 이 나올 확률이 {P2[-1]:.3f} 다.")
 
-# === ② 문턱을 얼마로 올려야 하는가 ==================================
-print("\n② 집단 전체의 1종오류를 5% 로 묶는 문턱")
-print("        k   모의로 찾은 문턱   시닥 근사   본페로니 근사")
+# === ② 임계값을 얼마로 올려야 하는가 ==================================
+print("\n② 집단 전체의 1종오류를 5% 로 묶는 임계값")
+print("        k   모의로 찾은 임계값   시닥 근사   본페로니 근사")
 THR, SID, BON = [], [], []
 for k in KS:
     t = max_t(k)
@@ -69,7 +69,7 @@ for k in KS:
     BON.append(float(stats.t.ppf(1 - 0.05 / k, N_MONTH - 1)))
     print(f"   {k:>6}   {THR[-1]:>16.3f}   {SID[-1]:>10.3f}   {BON[-1]:>13.3f}")
 i316 = KS.index(316)
-print(f"   팩터 {KS[i316]} 개를 모두 시험했다고 보면 문턱이 "
+print(f"   팩터 {KS[i316]} 개를 모두 시험했다고 보면 임계값이 "
       f"{THR[i316]:.2f} 로 올라간다.")
 print("   하비·류·주가 권한 3.0 은 이 단순한 보정이 아니라 거짓발견율과 "
       "검정 사이 상관까지 넣어 얻은 값이다.")
@@ -97,7 +97,7 @@ C_A, C_B, C_C = "#d62728", "#1f77b4", "#2ca02c"
 
 ax1.semilogx(KS, MED, "o-", color=C_A, lw=2.8, ms=10, label="가장 좋은 전략의 $t$ (중앙값)")
 ax1.axhline(2.0, color="#333333", lw=2.0, ls="--")
-ax1.text(1.15, 2.08, "흔히 쓰는 문턱 $t = 2$", fontsize=10.5, color="#333333")
+ax1.text(1.15, 2.08, "흔히 쓰는 임계값 $t = 2$", fontsize=10.5, color="#333333")
 ax1.plot([316], [MED[i316]], "o", color="#333333", ms=14, zorder=5)
 ax1.annotate(f"팩터 $316$ 개\n$t = {MED[i316]:.2f}$", (316, MED[i316]),
              xytext=(-0.6, -2.4), textcoords="offset fontsize",
@@ -111,18 +111,18 @@ ax1.set_title("① 실력이 없어도 최고는 좋아 보인다", fontsize=12)
 ax1.legend(loc="lower right", fontsize=10)
 ax1.grid(alpha=0.25)
 
-ax2.semilogx(KS, THR, "o-", color=C_A, lw=2.8, ms=10, label="모의로 찾은 문턱")
+ax2.semilogx(KS, THR, "o-", color=C_A, lw=2.8, ms=10, label="모의로 찾은 임계값")
 ax2.semilogx(KS, BON, "s--", color=C_B, lw=2.2, ms=8, label="본페로니 근사")
 ax2.axhline(2.0, color="#888888", lw=1.8, ls=":")
 ax2.axhline(3.0, color=C_C, lw=2.4, ls="--")
 ax2.text(1.15, 3.07, "하비·류·주가 권한 $3.0$", fontsize=10.5, color=C_C)
 ax2.text(1.15, 1.82, "흔히 쓰는 $2.0$", fontsize=10.5, color="#888888")
 ax2.set_xlabel("시험한 팩터 수 $k$")
-ax2.set_ylabel("$5\\%$ 를 지키는 $t$ 문턱")
+ax2.set_ylabel("$5\\%$ 를 지키는 $t$ 임계값")
 ax2.set_xticks([1, 10, 100])
 ax2.set_xticklabels(["$1$", "$10$", "$10^{2}$"])
 ax2.minorticks_off()
-ax2.set_title("② 문턱은 시험한 수와 함께 올라간다", fontsize=12)
+ax2.set_title("② 임계값은 시험한 수와 함께 올라간다", fontsize=12)
 ax2.legend(loc="lower right", fontsize=10)
 ax2.grid(alpha=0.25)
 

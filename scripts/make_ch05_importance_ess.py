@@ -155,7 +155,7 @@ ax3.plot([cs[best]], [MS[best]], "*", color="#d62728", ms=20, zorder=5)
 ax3.axvline(1e3, color="#888888", lw=1.2, ls=":")
 ax3.text(0.965, 0.04, "자르지 않음", transform=ax3.transAxes,
          fontsize=10, color="#555555", ha="right", rotation=90)
-ax3.set_xlabel("가중치를 자르는 문턱 $c$")
+ax3.set_xlabel("가중치를 자르는 임계값 $c$")
 ax3.set_ylabel("평균제곱오차와 그 두 조각")
 ax3.set_xticks([1, 10, 100, 1000])
 ax3.set_xticklabels(["$1$", "$10$", "$10^{2}$", "$\\infty$"])

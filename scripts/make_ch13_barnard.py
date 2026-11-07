@@ -5,7 +5,7 @@ $n_1 = n_2 = 15$ 인 $2\times2$ 표에서 **모든 표를 전수로** 펼쳐 계
 
 ① 실제 크기 — 참 $p$ 를 바꾸어 가며 피셔 검정이 실제로 기각하는 확률.
    이산성 때문에 $0.05$ 에 한참 못 미치고 톱니처럼 흔들린다.
-   피셔의 $p$ 값 문턱을 **크기가 $0.05$ 를 넘지 않는 가장 큰 값**까지 올리면
+   피셔의 $p$ 값 임계값을 **크기가 $0.05$ 를 넘지 않는 가장 큰 값**까지 올리면
    (주변합에 조건을 걸지 않고 눈금을 다시 매기는 것) 어디까지 올라오는가.
 ② 그렇게 되찾은 검정력.
 
@@ -48,12 +48,12 @@ def size_curve(gamma, ps):
 
 PS = np.linspace(0.02, 0.98, 481)
 
-# --- 크기가 0.05 를 넘지 않는 가장 큰 문턱을 찾는다 -------------------
+# --- 크기가 0.05 를 넘지 않는 가장 큰 임계값을 찾는다 -------------------
 levels = np.unique(pf)
 levels = levels[levels <= 0.5]
 ok = [g for g in levels if size_curve(g, PS).max() <= ALPHA + 1e-12]
 GAMMA = max(ok)
-print(f"① 피셔의 p 값 문턱을 {ALPHA} 에서 {GAMMA:.6f} 까지 올려도 크기가 넘지 않는다")
+print(f"① 피셔의 p 값 임계값을 {ALPHA} 에서 {GAMMA:.6f} 까지 올려도 크기가 넘지 않는다")
 
 s_fisher = size_curve(ALPHA, PS)
 s_raised = size_curve(GAMMA, PS)
@@ -80,7 +80,7 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.2, 5.0))
 
 ax1.plot(PS, s_fisher, color="#1f77b4", lw=2.2, label="피셔의 정확검정")
 ax1.plot(PS, s_raised, color="#d62728", lw=2.2,
-         label=f"문턱을 ${GAMMA:.4f}$ 로 올린 것")
+         label=f"임계값을 ${GAMMA:.4f}$ 로 올린 것")
 ax1.axhline(ALPHA, color="#333333", lw=1.8, ls="--", label="약속한 $0.05$")
 ax1.set_xlim(0.02, 0.98)
 ax1.set_ylim(0, 0.062)
@@ -105,7 +105,7 @@ ax2.set_xlim(p2s[0], p2s[-1])
 ax2.set_ylim(0, 1.02)
 ax2.set_xlabel("다른 집단의 비율 $p_2$")
 ax2.set_ylabel("기각할 확률")
-ax2.set_title("② 파선이 피셔, 실선이 문턱을 올린 것", fontsize=12)
+ax2.set_title("② 파선이 피셔, 실선이 임계값을 올린 것", fontsize=12)
 ax2.legend(loc="upper right", fontsize=10.5)
 ax2.grid(alpha=0.25)
 

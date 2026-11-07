@@ -476,7 +476,7 @@ def fig_sum_vs_split():
     ts = [v / s for _, v, s, _ in ITEMS]
     ax2.bar(xs, ts, width=0.52, color=[c for *_, c in ITEMS], alpha=0.88)
     ax2.axhline(stats.t.ppf(0.975, n - 3), color="0.25", ls="--", lw=1.8)
-    ax2.text(-0.44, stats.t.ppf(0.975, n - 3) + 0.18, "$5\\%$ 에서의 문턱",
+    ax2.text(-0.44, stats.t.ppf(0.975, n - 3) + 0.18, "$5\\%$ 에서의 임계값",
              ha="left", va="bottom", fontsize=10.5, color="0.25",
              fontweight="bold")
     for x, (nm, v, s, col), t in zip(xs, ITEMS, ts):

@@ -21,7 +21,7 @@ n = 120 에서 재면
   k = 10    0.00   0.20   0.87   1.00   1.00   1.00
   k = 20    0.00   0.00   0.00   0.15   0.82   1.00
 
-문턱이 날카롭다. 조금 모자라면 전혀 안 되고, 조금 넘으면 거의 언제나
+임계값이 날카롭다. 조금 모자라면 전혀 안 되고, 조금 넘으면 거의 언제나
 된다. L2 로 같은 문제를 풀면 어떤 m 에서도 정확복원이 나오지 않는다.
 
 만드는 파일:
@@ -150,7 +150,7 @@ def main():
     ax.grid(alpha=0.25)
     ax.spines[["top", "right"]].set_visible(False)
 
-    # ── 오른쪽: 문턱이 날카롭다 ──
+    # ── 오른쪽: 임계값이 날카롭다 ──
     ax = axes[1]
     for k, col, lab in KS:
         ax.plot(MS, rates[k], lw=3.4, color=col, marker="o", ms=6, label=lab)
@@ -163,7 +163,7 @@ def main():
                 arrowprops=dict(arrowstyle="->", color=INK, lw=1.4))
     ax.set_xlabel(f"무작위 측정 횟수 $m$ (성분은 ${N}$ 자리)", fontsize=11.5)
     ax.set_ylabel("정확히 복원할 확률", fontsize=11.5)
-    ax.set_title("문턱이 날카롭다", fontsize=12.8, color=INK, pad=8)
+    ax.set_title("임계값이 날카롭다", fontsize=12.8, color=INK, pad=8)
     ax.set_xlim(8, 123)
     ax.set_ylim(-0.03, 1.05)
     ax.legend(fontsize=10.4, framealpha=0.93, loc="center left")

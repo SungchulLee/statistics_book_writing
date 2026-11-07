@@ -28,7 +28,7 @@ RES = 1.5                             # 질량 분해능 (GeV)
 N_BKG = 100_000                       # 창 안의 배경 사건 수
 EDGE = 3.0                            # 가장자리에서 띄울 거리
 TOYS, BATCH = 200_000, 20_000
-Z0 = 1.0                              # 상향교차를 셀 문턱
+Z0 = 1.0                              # 상향교차를 셀 임계값
 
 edges = np.arange(LO, HI + DM / 2, DM)
 mid = (edges[:-1] + edges[1:]) / 2
@@ -72,7 +72,7 @@ for _ in range(TOYS // BATCH):
 zmax = np.concatenate(zmax)
 ncross = np.concatenate(ncross)
 N1 = ncross.mean()
-print(f"문턱 Z = {Z0} 의 평균 상향교차 수 ⟨N⟩ = {N1:.3f}  (가짜 실험 {TOYS:,} 판)")
+print(f"임계값 Z = {Z0} 의 평균 상향교차 수 ⟨N⟩ = {N1:.3f}  (가짜 실험 {TOYS:,} 판)")
 
 
 def p_global(z, n1=N1, z0=Z0):
@@ -115,7 +115,7 @@ for i in range(3):
 Zs1 = toy_Z(1, np.random.default_rng(5), mu=700, m_sig=126.0)[0]
 ax1.plot(masses, Zs1, color="#d62728", lw=2.2, label="신호를 넣은 한 판")
 ax1.axhline(Z0, color="#1f77b4", lw=1.4, ls="--")
-ax1.text(LO + EDGE + 0.4, Z0 + 0.18, f"문턱 $Z = {Z0:.0f}$", fontsize=10,
+ax1.text(LO + EDGE + 0.4, Z0 + 0.18, f"임계값 $Z = {Z0:.0f}$", fontsize=10,
          color="#1f77b4")
 cr = np.where((Zb[0][:-1] < Z0) & (Zb[0][1:] >= Z0))[0]
 ax1.plot(masses[cr + 1], np.full(len(cr), Z0), "o", color="#1f77b4", ms=6,

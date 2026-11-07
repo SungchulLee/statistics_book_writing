@@ -88,15 +88,15 @@ $0$ 인 계수가 **한 번이라도** 나오는지 세었다($n = 80$, $p = 30$
 |---|---|---|---|---|---|
 | 덧셈 집안의 최대 $0$ 개수 | $25$ | $25$ | $24$ | $14$ | $8$ |
 
-$\lambda$ 를 고정해 놓고 견주면 문턱 크기 $\alpha\lambda$ 와 모서리의 존재가
+$\lambda$ 를 고정해 놓고 견주면 임계값 크기 $\alpha\lambda$ 와 모서리의 존재가
 섞이므로, 이렇게 경로 전체를 훑어야 한다.
 
 **재는 일에 함정이 하나 있다.** $q = 1.02$ 는 위 표에 넣지 않았는데, 넣으면
 $25$ 개가 나오기 때문이다. 반례가 아니라 **산술의 한계**다. 같은 설정에서
 $q = 1.02$ 일 때 참값이 $0$ 인 좌표의 $|\hat\beta_j|$ 중앙값이
 $1.5\times10^{-13}$ 인데, 배정밀도 최적화가 그것을 $0$ 과 구별하지 못한다.
-$q = 1.05$ 는 $9.3\times10^{-7}$ 로 **흔히 쓰는 문턱 $10^{-6}$ 보다 작지만
-$0$ 이 아니다.** 문턱을 두고 $0$ 을 세는 방식은 $q$ 가 $1$ 에 가까울 때 없는
+$q = 1.05$ 는 $9.3\times10^{-7}$ 로 **흔히 쓰는 임계값 $10^{-6}$ 보다 작지만
+$0$ 이 아니다.** 임계값을 두고 $0$ 을 세는 방식은 $q$ 가 $1$ 에 가까울 때 없는
 희소성을 만들어 낸다. (출발점을 라쏘해·영벡터·난수로 바꿔도 같은 값에 닿는 것을
 확인했으니 풀개 탓이 아니다.)
 
@@ -169,7 +169,7 @@ $$
 
 변이 둥글어지는 것이 왜 안정성인지는 [라쏘의 기하](../lasso/geometry.md)와 견주면 분명해진다. 마름모의 평평한 변 위에서는 RSS 타원이 어디에 닿아도 목적함숫값이 거의 같아서 접점이 변을 따라 미끄러진다. 변이 바깥으로 휘면 그 미끄러짐이 사라지고 접점이 한 곳에 고정된다. **곡률이 곧 유일성이다.**
 
-오른쪽은 같은 이야기를 좌표하강 갱신식으로 본 것이다. 갱신 $S_{\alpha\lambda}(z_j)/[1 + (1-\alpha)\lambda]$는 두 가지 일을 한다. 분자의 문턱 $\alpha\lambda$는 $\lambda = 1$에서 $\alpha$와 같으므로 $1 \to 0.6 \to 0.3 \to 0$으로 줄고, 그만큼 **0으로 눌리는 구간(가운데 평평한 부분)이 좁아진다.** 동시에 분모가 $1 \to 1.4 \to 1.7 \to 2$로 커져 기울기가 $1 \to 0.714 \to 0.588 \to 0.5$로 완만해진다. 문턱은 라쏘에서 받아 오고 기울기는 능형에서 받아 오는 셈이다.
+오른쪽은 같은 이야기를 좌표하강 갱신식으로 본 것이다. 갱신 $S_{\alpha\lambda}(z_j)/[1 + (1-\alpha)\lambda]$는 두 가지 일을 한다. 분자의 임계값 $\alpha\lambda$는 $\lambda = 1$에서 $\alpha$와 같으므로 $1 \to 0.6 \to 0.3 \to 0$으로 줄고, 그만큼 **0으로 눌리는 구간(가운데 평평한 부분)이 좁아진다.** 동시에 분모가 $1 \to 1.4 \to 1.7 \to 2$로 커져 기울기가 $1 \to 0.714 \to 0.588 \to 0.5$로 완만해진다. 임계값은 라쏘에서 받아 오고 기울기는 능형에서 받아 오는 셈이다.
 
 네 직선이 $z = 2$에서 한 점 $(2, 1)$을 지나는 것은 우연이 아니다. $z = 1 + \lambda$에서 갱신값이 $\dfrac{z - \alpha\lambda}{1 + (1-\alpha)\lambda} = \dfrac{2 - \alpha}{2 - \alpha} = 1$이 되어 $\alpha$가 사라진다. 그 점보다 큰 계수는 $\alpha$가 클수록 덜 깎이고, 작은 계수는 $\alpha$가 클수록 더 깎인다. **$\alpha$를 키운다는 것은 벌점의 무게를 큰 계수에서 작은 계수로 옮기는 일이다.**
 
@@ -183,7 +183,7 @@ $$
 \hat{\beta}_j \leftarrow \frac{S_{\alpha\lambda}(z_j)}{1 + (1-\alpha)\lambda}
 $$
 
-이다. 분자가 L1 연성 문턱(라쏘 성분)을, 분모가 L2 축소(능형 성분)를 담당한다. $\alpha = 1$이면 분모가 1이 되어 라쏘 갱신으로, $\alpha = 0$이면 분자에 문턱이 없어져 능형 갱신으로 환원된다.
+이다. 분자가 L1 연성 임계화(라쏘 성분)을, 분모가 L2 축소(능형 성분)를 담당한다. $\alpha = 1$이면 분모가 1이 되어 라쏘 갱신으로, $\alpha = 0$이면 분자에 임계값이 없어져 능형 갱신으로 환원된다.
 
 ---
 
@@ -445,7 +445,7 @@ scikit-learn의 `ElasticNet`은 설명변수를 표준화해 주지 않는다. �
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-4절은 네 갱신 직선이 $z = 1 + \lambda$에서 한 점을 지난다고 적었다. 연성 문턱 밖($z > \alpha\lambda$)에서 갱신값을 $\alpha$의 함수로 보아 $g(\alpha) = \dfrac{z - \alpha\lambda}{1 + (1-\alpha)\lambda}$라 하자.
+4절은 네 갱신 직선이 $z = 1 + \lambda$에서 한 점을 지난다고 적었다. 연성 임계화 밖($z > \alpha\lambda$)에서 갱신값을 $\alpha$의 함수로 보아 $g(\alpha) = \dfrac{z - \alpha\lambda}{1 + (1-\alpha)\lambda}$라 하자.
 (가) $dg/d\alpha$를 구하라.
 (나) 그 부호가 $z$와 $1+\lambda$의 크기 비교만으로 정해짐을 보여라.
 (다) 그로부터 "$\alpha$를 키운다는 것은 벌점의 무게를 큰 계수에서 작은 계수로 옮기는 일이다"라는 본문의 주장을 증명하라.
@@ -482,7 +482,7 @@ scikit-learn의 `ElasticNet`은 설명변수를 표준화해 주지 않는다. �
     g(\alpha) = \frac{1 + \lambda - \alpha\lambda}{1 + \lambda - \alpha\lambda} = 1
     $$
 
-    로 $\alpha$가 사라진다. 또 $\alpha\lambda \leq \lambda < 1 + \lambda = z$이므로 이 점은 모든 $\alpha$에서 연성 문턱 구간 **밖**에 있어 네 직선이 모두 선형 부분으로 그 점을 지난다. $\lambda = 1$이면 좌표는 $(2, 1)$이고, 그림 오른쪽에서 네 직선이 만나는 바로 그 점이다.
+    로 $\alpha$가 사라진다. 또 $\alpha\lambda \leq \lambda < 1 + \lambda = z$이므로 이 점은 모든 $\alpha$에서 연성 임계화 구간 **밖**에 있어 네 직선이 모두 선형 부분으로 그 점을 지난다. $\lambda = 1$이면 좌표는 $(2, 1)$이고, 그림 오른쪽에서 네 직선이 만나는 바로 그 점이다.
 
 <div class="drillbox" markdown>
 
@@ -555,13 +555,13 @@ scikit-learn의 `ElasticNet`은 설명변수를 표준화해 주지 않는다. �
 
     **0의 개수가 갈린다.** $\alpha > 0$인 세 행은 넷째 계수가 정확히 0이고, $\lambda$를 $0.20$으로 올린 행에서는 여섯째까지 0이 된다. 반면 $\alpha = 0$인 마지막 행은 **0이 하나도 없다** — 넷째 계수가 $-0.0076$으로 작지만 0이 아니다.
 
-    까닭이 갱신식 한 줄에 있다. 분모 $1 + (1-\alpha)\lambda$는 **비례 축소**이므로 0이 아닌 수를 0으로 만들 수 없고, 분자의 연성 문턱 $S_{\alpha\lambda}$만 $\lvert z_j \rvert \leq \alpha\lambda$인 좌표를 정확히 0으로 떨어뜨린다. $\alpha = 0$이면 문턱이 사라져 그 장치가 없다. **변수선택을 하는 것은 L1 성분뿐이다.**
+    까닭이 갱신식 한 줄에 있다. 분모 $1 + (1-\alpha)\lambda$는 **비례 축소**이므로 0이 아닌 수를 0으로 만들 수 없고, 분자의 연성 임계화 $S_{\alpha\lambda}$만 $\lvert z_j \rvert \leq \alpha\lambda$인 좌표를 정확히 0으로 떨어뜨린다. $\alpha = 0$이면 임계값이 사라져 그 장치가 없다. **변수선택을 하는 것은 L1 성분뿐이다.**
 
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff hard" title="어려움"></span>
 $\alpha > 0$이면 유한한 $\lambda$에서 해가 정확히 $\boldsymbol\beta = \mathbf{0}$이 된다.
-(가) 그 문턱 $\lambda_{\max}(\alpha)$를 1절 목적함수의 $\boldsymbol\beta = \mathbf{0}$에서의 열미분(劣微分)으로 유도하라.
+(가) 그 임계값 $\lambda_{\max}(\alpha)$를 1절 목적함수의 $\boldsymbol\beta = \mathbf{0}$에서의 열미분(劣微分)으로 유도하라.
 (나) $\alpha = 0$이면 어떤 유한한 $\lambda$에서도 $\boldsymbol\beta = \mathbf{0}$이 되지 않음을 같은 조건으로 보여라.
 (다) 수치로 확인하라.
 
@@ -586,7 +586,7 @@ $\alpha > 0$이면 유한한 $\lambda$에서 해가 정확히 $\boldsymbol\beta 
     \lambda_{\max}(\alpha) = \frac{\lVert \mathbf{X}^\top\mathbf{y}\rVert_\infty}{n\,\alpha}, \qquad \alpha > 0.
     $$
 
-    **L2 항은 이 문턱에 전혀 끼어들지 않는다.** $\lVert\boldsymbol\beta\rVert_2^2$의 기울기가 원점에서 $\mathbf{0}$이어서 "0에서 떠날 것인가"의 판정에 아무 힘을 못 쓰기 때문이다. 문턱을 정하는 것은 $\alpha\lambda$ 하나다.
+    **L2 항은 이 임계값에 전혀 끼어들지 않는다.** $\lVert\boldsymbol\beta\rVert_2^2$의 기울기가 원점에서 $\mathbf{0}$이어서 "0에서 떠날 것인가"의 판정에 아무 힘을 못 쓰기 때문이다. 임계값을 정하는 것은 $\alpha\lambda$ 하나다.
 
     **(나)** $\alpha = 0$이면 위 조건이 $\lVert \mathbf{X}^\top\mathbf{y}\rVert_\infty/n \leq 0$이 되어, $\mathbf{X}^\top\mathbf{y} \neq \mathbf{0}$인 한 어떤 $\lambda$에서도 성립하지 않는다. 실제로 $\alpha = 0$의 정규방정식은 $(\mathbf{X}^\top\mathbf{X} + n\lambda \mathbf{I})\boldsymbol\beta = \mathbf{X}^\top\mathbf{y}$이므로 $\lambda \to \infty$에서 $\hat{\boldsymbol\beta} \approx \mathbf{X}^\top\mathbf{y}/(n\lambda) \to \mathbf{0}$이지만 **어느 유한한 $\lambda$에서도 정확히 $\mathbf{0}$은 아니다.** 능형은 0에 수렴할 뿐 0에 도달하지 않는다.
 
@@ -639,7 +639,7 @@ $\alpha > 0$이면 유한한 $\lambda$에서 해가 정확히 $\boldsymbol\beta 
     능형 lambda = 1e+10:  max|beta| = 2.075e-10,  선택 10개
     ```
 
-    세 $\alpha$ 모두에서 $0.99\lambda_{\max}$에서는 정확히 한 변수가 살아 있고 $1.01\lambda_{\max}$에서는 하나도 남지 않는다. 문턱이 **칼처럼** 작동한다. 그리고 $\lambda_{\max}$가 $2.0748 \to 4.1496 \to 20.7480$으로 $1/\alpha$에 비례해 커진다.
+    세 $\alpha$ 모두에서 $0.99\lambda_{\max}$에서는 정확히 한 변수가 살아 있고 $1.01\lambda_{\max}$에서는 하나도 남지 않는다. 임계값이 **칼처럼** 작동한다. 그리고 $\lambda_{\max}$가 $2.0748 \to 4.1496 \to 20.7480$으로 $1/\alpha$에 비례해 커진다.
 
     능형 쪽은 $\lambda = 10^{10}$에서도 열 개가 모두 살아 있고, 최대 계수가 $2.075\times10^{-6}$, $2.075\times10^{-10}$으로 정확히 $\lVert \mathbf{X}^\top\mathbf{y}\rVert_\infty/(n\lambda) = 2.0748/\lambda$를 따른다. (나)의 근사식이 수로 확인된다.
 
@@ -834,7 +834,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 12.** <span class="diff hard" title="어려움"></span>
-위의 경고 상자는 sklearn 의 목적함수가 잔차제곱합을 $2n$으로 나눈다고 적었다. 그런데 그 상자가 적은 식은 `ElasticNet` 의 것이고, **`Ridge` 는 그 식을 쓰지 않는다.** $n = 50$, $p = 4$인 자료에서 `Ridge(alpha=2)` 의 해가 $(X^\top X + 2I)^{-1}X^\top y$와 $(X^\top X + 2nI)^{-1}X^\top y$ 가운데 어느 것과 같은지 확인하라. 이어서 열이 정규직교인 설계에서 `Lasso(alpha=0.1)` 의 해가 연습문제 5 의 연성문턱과 어떤 문턱에서 일치하는지 확인하고, 교과서 꼴 $\lambda$와 sklearn 의 `alpha` 의 관계를 적어라.
+위의 경고 상자는 sklearn 의 목적함수가 잔차제곱합을 $2n$으로 나눈다고 적었다. 그런데 그 상자가 적은 식은 `ElasticNet` 의 것이고, **`Ridge` 는 그 식을 쓰지 않는다.** $n = 50$, $p = 4$인 자료에서 `Ridge(alpha=2)` 의 해가 $(X^\top X + 2I)^{-1}X^\top y$와 $(X^\top X + 2nI)^{-1}X^\top y$ 가운데 어느 것과 같은지 확인하라. 이어서 열이 정규직교인 설계에서 `Lasso(alpha=0.1)` 의 해가 연습문제 5 의 연성 임계화와 어떤 임계값에서 일치하는지 확인하고, 교과서 꼴 $\lambda$와 sklearn 의 `alpha` 의 관계를 적어라.
 
 </div>
 
@@ -892,7 +892,7 @@ $$
 
     이다. 같은 수를 두 함수에 넣으면 벌점 강도가 $n$배 어긋난다.
 
-    **라쏘 쪽.** `Lasso(alpha=0.1)` 의 해가 문턱 $n\alpha = 5$의 연성문턱 $\operatorname{sign}(z)(\lvert z\rvert - 5)_+$와 네 좌표 모두 소수 넷째 자리까지 일치한다(셋째 좌표는 $\lvert z_3\rvert \le 5$라서 정확히 0 이 되었다). 연습문제 5 에서 교과서 꼴의 문턱이 $\lambda/2$였으므로 $\lambda/2 = n\alpha$, 곧
+    **라쏘 쪽.** `Lasso(alpha=0.1)` 의 해가 임계값 $n\alpha = 5$의 연성 임계화 $\operatorname{sign}(z)(\lvert z\rvert - 5)_+$와 네 좌표 모두 소수 넷째 자리까지 일치한다(셋째 좌표는 $\lvert z_3\rvert \le 5$라서 정확히 0 이 되었다). 연습문제 5 에서 교과서 꼴의 임계값이 $\lambda/2$였으므로 $\lambda/2 = n\alpha$, 곧
 
     $$
     \lambda = 2n\alpha

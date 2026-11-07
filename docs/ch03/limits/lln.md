@@ -287,7 +287,7 @@ $$
 
     두 가지를 짚어 두자. 첫째, **$n = 50$에서도 그 확률이 $0.147$이다.** 여전히 일곱 번에 한 번꼴로 $\varepsilon$ 밖에 떨어진다. 정리는 극한을 말할 뿐 "충분히 큰 $n$"이 얼마인지는 말해 주지 않으며, $\varepsilon$을 좁게 잡을수록 그 $n$은 커진다. 둘째, **줄어드는 속도가 느리다.** $n$을 10배로 키우는 동안 확률은 4.5배밖에 줄지 않았는데, 이는 $\bar X_n$의 퍼짐이 $1/\sqrt n$로만 줄기 때문이다.
 
-둘째 관찰은 이 절을 넘어간다. 히스토그램이 오그라드는 **속도**가 $1/\sqrt n$으로 정해져 있다면, 눈금을 그 속도에 맞추어 $\sqrt n$배씩 당겨 가며 보면 어떻게 될까. 오그라드는 것과 당기는 것이 정확히 상쇄되어 **무엇인가가 남는다.** 그 남는 것이 [중심극한정리](clt.md)의 정규분포이며, 그 쪽에서 이 히스토그램에 눈금 두 벌을 달아 확인한다. **두 정리는 별개의 사실이 아니라 같은 그림을 다른 자로 읽은 것이다.**
+둘째 관찰은 이 절을 넘어간다. 히스토그램이 오그라드는 **속도**가 $1/\sqrt n$으로 정해져 있다면, 척도를 그 속도에 맞추어 $\sqrt n$배씩 당겨 가며 보면 어떻게 될까. 오그라드는 것과 당기는 것이 정확히 상쇄되어 **무엇인가가 남는다.** 그 남는 것이 [중심극한정리](clt.md)의 정규분포이며, 그 쪽에서 이 히스토그램에 척도 두 벌을 달아 확인한다. **두 정리는 별개의 사실이 아니라 같은 그림을 다른 자로 읽은 것이다.**
 
 !!! warning "도박사의 오류: 큰수의 법칙은 균형을 맞춰 주지 않는다"
     동전을 100번 던져 앞면이 40번뿐이었다면, 앞으로 앞면이 더 자주 나와 균형을 맞출까?
@@ -381,7 +381,7 @@ $1901$ 년 이탈리아의 **라차리니**가 바늘을 $3408$ 번 던져 $\dfr
 
 그러니 바늘 던지기는 **$\pi$ 를 구하는 방법이 아니다.** 거꾸로다 — 이미 아는 $\pi$ 를 가지고 **확률이 정말 그렇게 움직이는지 눈으로 보는** 장치다. 아래 보기 2 에서 주사위를 만 번 굴려 누적평균을 따라가 보는 것도 꼭 같은 뜻이다.
 
-*확인한 곳 — [Wikipedia 「Buffon's needle problem」](https://en.wikipedia.org/wiki/Buffon%27s_needle_problem) · [IMUS 「Lazzarini and Buffon's needle」](https://institucional.us.es/blogimus/en/2019/09/lazzarini-and-buffons-needle-the-art-of-cheating-elegantly-with-probabilities/) — 던진 횟수와 정확도의 어긋남은 이 쪽에서 직접 계산해 보았다*
+*확인한 곳 — [Wikipedia 「Buffon's needle problem」](https://en.wikipedia.org/wiki/Buffon%27s_needle_problem) · [IMUS 「Lazzarini and Buffon's needle」](https://institucional.us.es/blogimus/en/2019/09/lazzarini-and-buffons-needle-the-art-of-cheating-elegantly-with-probabilities/) — 던진 횟수와 정확도의 불일치는 이 쪽에서 직접 계산해 보았다*
 
 </div>
 

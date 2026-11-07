@@ -111,7 +111,7 @@ for a in AS:
     MED_A.append(float(np.median(np.abs(b[NULLIDX]))))
 
 # lambda 를 통째로 훑어 「정확히 0 이 한 번이라도 나오는가」를 본다.
-# 고정된 lambda 에서 비교하면 문턱 크기(alpha*lambda)와 모서리의 존재가 섞인다.
+# 고정된 lambda 에서 비교하면 임계값 크기(alpha*lambda)와 모서리의 존재가 섞인다.
 LGRID = np.logspace(np.log10(0.6), np.log10(0.003), 16)
 MAXZ_Q = [max(int(np.sum(fit_lq(q, lam) == 0.0)) for lam in LGRID) for q in QS]
 MAXZ_A = [max(int(np.sum(fit_en(a, lam) == 0.0)) for lam in LGRID) for a in AS]
@@ -138,7 +138,7 @@ for (q, mq), (a, ma) in zip(zip(QS, MED_Q), zip(AS, MED_A)):
     print(f"   {q:>4.2f}   {sq:>14}   |   {a:>5.2f}   {sa:>14}")
 print("   **q > 1 은 어디서도 0 이 아니다. q 를 1 에 가까이 할수록 값이 "
       "작아질 뿐이다.**")
-print("   그래서 「문턱을 두고 0 을 세는」 방식은 q 가 1 에 가까우면 "
+print("   그래서 「임계값을 두고 0 을 세는」 방식은 q 가 1 에 가까우면 "
       "없는 희소성을 만들어 낸다 —")
 print(f"   q = 1.05 의 {MED_Q[2]:.1e} 는 1e-6 아래지만 0 이 아니다.")
 print("   (출발점을 라쏘해·영벡터·난수로 바꿔도 같은 값에 닿는 것을 "
@@ -151,7 +151,7 @@ for (q, zq), (a, za) in zip(zip(QS, MAXZ_Q), zip(AS, MAXZ_A)):
     print(f"   {q:>4.2f}   {zq:>3d}      |   {a:>5.2f}   {za:>3d}")
 print("   **q >= 1.05 는 어떤 lambda 에서도 0 이 하나도 없고, "
       "alpha > 0 은 모두 0 을 낸다.**")
-print("   고정된 lambda 에서 견주면 문턱 크기(alpha*lambda)와 모서리의 "
+print("   고정된 lambda 에서 견주면 임계값 크기(alpha*lambda)와 모서리의 "
       "존재가 섞이므로 이렇게 보아야 한다.")
 print(f"   q = 1.02 가 {MAXZ_Q[1]} 개로 나오는 것은 반례가 아니라 "
       "**산술의 한계**다 —")
