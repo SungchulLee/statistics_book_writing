@@ -47,10 +47,13 @@ SETTLED = {
     ("ch10/anova_one_way/one_way_model.md", "ch10/anova_two_way/two_way.md"):
         "「주요 차이」가 서로 다른 비교였다 — 한쪽은 t 검정과, 한쪽은 일원배치와. "
         "2026-10-23 에 둘 다 무엇과의 차이인지 말하는 이름으로 바꿨다",
-    ("ch12/assumptions/checking_homoscedasticity.md", "ch12/diagnostics/residuals.md"):
+    ("ch12/assumptions/checking_homoscedasticity.md", "ch12/assumptions/residuals.md"):
         "「잔차-적합값 그림」은 용도가 다르다 — 한쪽은 선형성까지 읽고 한쪽은 등분산만 겨눈다. "
         "겹쳤던 「왜 제곱근을 쓰는가」(한쪽은 불릿 셋, 한쪽은 반정규의 왜도로 증명)는 "
-        "2026-10-23 에 수로 답한 자리로 돌렸다",
+        "2026-10-23 에 수로 답한 자리로 돌렸다. "
+        "2026-11-07 에 residuals 가 12.7 에서 12.6 으로 옮겨 와 **같은 절**이 되었으므로 "
+        "이 도구(절을 넘는 쌍만 본다)는 더 이상 이 쌍을 내지 않는다. 판정은 그대로 살아 있고, "
+        "나눔을 residuals §3 의 「이 쪽과 뒤 네 쪽의 나눔」 문단이 본문에서 말한다",
     ("ch14/descriptive_statistics/jarque_bera.md", "ch14/formal_tests/anderson_darling.md"):
         "검정마다 자기 p 값 유도가 있어야 한다. 「섞인 자료에서 읽기」는 같은 자료를 "
         "두 검정으로 보는 의도된 평행 구조다",

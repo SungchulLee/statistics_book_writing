@@ -1,7 +1,7 @@
 """12장 들머리 그림 여섯 장 (진단 넷 · 다항회귀 · 장 개요).
 
 만드는 파일:
-  ch12/diagnostics/img/eye_sees_funnels.png          없는 깔때기를 보는 눈
+  ch12/assumptions/img/eye_sees_funnels.png         없는 깔때기를 보는 눈
   ch12/diagnostics/img/precision_not_coefficient.png 무너진 것은 정밀도다
   ch12/diagnostics/img/pairwise_misses_it.png        쌍만 보면 못 본다
   ch12/diagnostics/img/ceiling_draws_a_line.png      천장이 그리는 직선
@@ -21,6 +21,9 @@ import numpy as np
 from scipy import stats
 
 DIAG = "docs/ch12/diagnostics/img/"
+# eye_sees_funnels 만 「잔차 분석」 쪽에 들어가고, 그 쪽은 12.7 에서 12.6 으로
+# 옮겼다. 경로를 따라가지 않으면 다시 그릴 때 옛 자리에 고아가 생긴다.
+ASSUM = "docs/ch12/assumptions/img/"
 POLY = "docs/ch12/interaction_polynomial/img/"
 IDX = "docs/ch12/img/"
 
@@ -104,7 +107,7 @@ def fig_eye_sees_funnels():
     fig.suptitle("눈이 보는 깔때기가 자료에 있는지 칸이 작아서인지는 "
                  "세어 보면 안다", fontsize=14, y=1.0)
     plt.tight_layout()
-    save(fig, DIAG + "eye_sees_funnels.png")
+    save(fig, ASSUM + "eye_sees_funnels.png")
 
     print(f"\n[잔차] 등분산 n = {N_PAGE} · {REPS:,} 번")
     print(f"  비의 중앙값 {np.median(rat):.3f} · {RATIO_PAGE} 배 이상이 "

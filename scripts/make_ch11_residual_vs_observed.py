@@ -28,7 +28,7 @@ r"""12.6절 「그림으로 보는 통계학」 — 가로축을 하나 잘못 �
 
 만드는 파일:
 
-  ch12/diagnostics/img/residual_vs_observed.png
+  ch12/assumptions/img/residual_vs_observed.png
 
 실행:  python3 scripts/make_ch13_residual_vs_observed.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -50,7 +50,7 @@ import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"
 plt.rcParams["axes.unicode_minus"] = False
 
-OUT = "docs/ch12/diagnostics/img/"
+OUT = "docs/ch12/assumptions/img/"
 
 INK = "#37474F"
 AMBER = "#B07C2C"
