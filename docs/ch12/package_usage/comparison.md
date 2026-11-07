@@ -1,4 +1,4 @@
-# sklearn과 statsmodels 비교
+# 무엇을 언제 쓸 것인가
 
 ## 개요
 

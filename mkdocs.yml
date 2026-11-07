@@ -427,15 +427,15 @@ nav:
                 - 교차검증 다항 모형선택: ch12/model_selection/cv_polynomial_model_selection.md
                 - 부분집합 선택과 단계적 선택: ch12/model_selection/subset_stepwise_selection.md
             - 12.10 스플라인과 일반화가법모형:
-                - 스플라인과 일반화가법모형: ch12/splines_gams/index.md
-                - 일반화가법모형: ch12/splines_gams/generalized_additive_models.md
-                - GAM 주택 분석: ch12/splines_gams/gam_housing_analysis.md
+                - 스플라인과 GAM 개관: ch12/splines_gams/index.md
                 - 계단함수: ch12/splines_gams/step_functions.md
                 - Patsy를 이용한 스플라인: ch12/splines_gams/splines_patsy_examples.md
+                - 일반화가법모형: ch12/splines_gams/generalized_additive_models.md
+                - GAM 주택 분석: ch12/splines_gams/gam_housing_analysis.md
             - 12.11 패키지 사용법:
                 - statsmodels 최소제곱 인터페이스: ch12/package_usage/statsmodels.md
                 - sklearn LinearRegression 인터페이스: ch12/package_usage/sklearn.md
-                - 무엇을 언제 쓸 것인가 (비교): ch12/package_usage/comparison.md
+                - 무엇을 언제 쓸 것인가: ch12/package_usage/comparison.md
         - 13 카이제곱 검정:
             - 장 개요: ch13/index.md
             - 13.1 피어슨 통계량과 자유도:

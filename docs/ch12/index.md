@@ -123,9 +123,9 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 선형회귀의 유연한 비모수 확장:
 
 - **[스플라인과 GAM 개관](splines_gams/index.md)** — 계단함수, 조각별 다항 스플라인을 소개하고, 국소 패턴을 잡아내는 데 전역 다항식보다 나은 이유를 설명한다.
-- **[일반화가법모형](splines_gams/generalized_additive_models.md)** — 선형항을 자료에서 학습한 매끄러운 비모수 함수 $f_j(X_j)$로 대체하여 회귀를 확장하되, 가법 구조 덕분에 해석 가능성을 유지한다.
 - **[계단함수](splines_gams/step_functions.md)** — 가장 거친 비선형. 구간으로 잘라 지시변수를 만들고, **구간 안에서는 예측값이 하나**라는 대가와 구간 수를 바꿀 때의 맞바꿈을 본다.
 - **[Patsy를 이용한 스플라인](splines_gams/splines_patsy_examples.md)** — B-스플라인과 자연 스플라인의 기저행렬을 식 인터페이스로 짜고 매듭 배치를 바꿔 본다. **국소 제어가 수치 안정성을 주는** 까닭이 여기 있다.
+- **[일반화가법모형](splines_gams/generalized_additive_models.md)** — 선형항을 자료에서 학습한 매끄러운 비모수 함수 $f_j(X_j)$로 대체하여 회귀를 확장하되, 가법 구조 덕분에 해석 가능성을 유지한다.
 - **[GAM 주택 분석](splines_gams/gam_housing_analysis.md)** — King County 자료에서 선형·다항·GAM 을 견주고 부분의존 그림을 읽는다. **선형이 놓치는 곡률을 어디서 되찾는지**가 물음이다.
 
 ### 12.11 패키지 사용법
@@ -134,7 +134,7 @@ Python에서 회귀를 구현하는 실용적 도구:
 
 - **[statsmodels OLS 인터페이스](package_usage/statsmodels.md)** — 통계적 추론의 표준 라이브러리로, $p$값, 신뢰구간, 진단검정을 담은 상세한 요약을 제공한다.
 - **[sklearn LinearRegression 인터페이스](package_usage/sklearn.md)** — 예측 작업의 표준 라이브러리로, 교차검증, 파이프라인, 정칙화를 내장하고 있다.
-- **[비교와 선택 기준](package_usage/comparison.md)** — 나란히 놓고 비교하면 statsmodels는 추론에, sklearn은 예측과 기계학습 파이프라인에 강하다.
+- **[무엇을 언제 쓸 것인가](package_usage/comparison.md)** — 나란히 놓고 비교하면 statsmodels는 추론에, sklearn은 예측과 기계학습 파이프라인에 강하다.
 
 ### 12.11 연습문제
 
