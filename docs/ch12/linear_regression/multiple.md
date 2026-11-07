@@ -818,37 +818,27 @@ $$
 
 **보기 5.** <span class="diff easy" title="쉬움"></span> 교호작용을 넣은 모형. `Sales ~ TV + Radio + TV:Radio`를 적합한다. 출력 끝에 조건수가 $1.84 \times 10^4$라는 다중공선성 경고가 붙는다.
 
-**(1)** TV 와 Radio 를 각자의 평균으로 **중심화**해 같은 모형을 다시 적합하면 무엇이 바뀌고 무엇이 바뀌지 않는가. 적합값·$R^2$·교호작용 계수와 그 $t$·주효과 계수와 그 $t$·조건수를 각각 따지시오.
+**(1)** 곱항이 제 몫을 하는지 **부분 $F$** 로 판정하시오. 보기 4 의 모형을 축소모형으로 삼아 $F$ 를 구하고, 그것이 곱항의 $t^2$ 과 같음을 확인하시오.
 
-**(2)** 중심화한 모형의 `TVc` 계수가 보기 1에서 구한 $\hat\beta_1 + \hat\beta_3\overline{\text{Radio}}$와 같음을 확인하시오. 그렇다면 조건수 경고는 무엇을 경고하는 것인가.
+**(2)** 조건수 경고가 붙었는데도 (1)의 결론을 믿어도 되는가. 경고가 말하는 것과 말하지 않는 것을 가르시오.
 
 </div>
 
 ??? success "풀이"
 
-    **(1) 해석적으로.** 중심화한 설계행렬의 열을 원래 열로 적어 보면 답이 나온다. $a = \overline{\text{TV}}$, $b = \overline{\text{Radio}}$라 두면
+    **(1) 부분 $F$ 는 항 하나가 줄인 $\text{RSS}$ 를 잔차분산으로 잰 것이다.** 보기 4 의 `Sales ~ TV + Radio` 를 축소모형, 이 보기의 모형을 완전모형이라 두면
 
     $$
-    (\text{TV} - a)(\text{Radio} - b) = (\text{TV}\cdot\text{Radio}) - b\,\text{TV} - a\,\text{Radio} + ab
+    F = \frac{(\text{RSS}_{\text{축소}} - \text{RSS}_{\text{완전}}) / 1}{\text{RSS}_{\text{완전}} / (n - 4)}
     $$
 
-    이다. 네 열 $\mathbf 1,\ \text{TV}-a,\ \text{Radio}-b,\ (\text{TV}-a)(\text{Radio}-b)$ 가 모두 원래 네 열 $\mathbf 1,\ \text{TV},\ \text{Radio},\ \text{TV}\cdot\text{Radio}$ 의 선형결합이고, 그 변환행렬은 대각이 모두 $1$ 인 삼각행렬이라 **가역**이다. 따라서 **두 설계행렬이 같은 열공간을 생성한다.**
+    이고, 자유도가 $1$ 인 부분 $F$ 는 그 항의 $t^2$ 과 항등적으로 같다(12.4절 [OLS 회귀 출력 재현](../testing_coefficients/ols_regression_output.md)이 그 등식을 유도한다). 아래 코드가 두 수를 나란히 찍어 확인한다.
 
-    여기서 바로 따라온다. 사영은 공간에만 의존하므로 **적합값과 잔차가 똑같고, 따라서 $\text{RSS}$ 와 $R^2$ 도 똑같다.** 중심화는 적합을 바꾸지 않는다. 바꾸는 것은 **좌표**뿐이다.
+    **(2) 경고는 "적합이 나쁘다"가 아니라 "좌표가 나쁘다"를 말한다.** 조건수가 크다는 것은 설계행렬의 열들이 거의 평행하다는 뜻이고, 여기서는 $\text{TV}$ 와 $\text{TV}\cdot\text{Radio}$ 가 둘 다 $\text{TV}$ 와 함께 커지기 때문이다. 그것이 흔드는 것은 **개별 계수의 표준오차**이지 적합값이나 $\text{RSS}$ 가 아니다.
 
-    교호작용 계수는 바뀌지 않는다. 위 전개에서 $\text{TV}\cdot\text{Radio}$ 항의 계수가 양쪽에서 같아야 하므로 $\hat\beta_3' = \hat\beta_3$ 이다. 추정량 자체가 같은 확률변수이므로 **표준오차와 $t$ 값까지 같다.**
+    그러므로 (1)의 결론은 그대로 믿어도 된다. 부분 $F$ 는 $\text{RSS}$ 의 감소만 보고, $\text{RSS}$ 는 열공간에만 의존하므로 좌표를 어떻게 잡든 같기 때문이다. **흔들리는 것은 "계수 하나를 따로 해석할 수 있는가"뿐이다.**
 
-    주효과는 바뀐다. 두 식을 같게 놓고 $\text{TV}$ 항을 맞추면
-
-    $$
-    \hat\beta_1' = \hat\beta_1 + \hat\beta_3\,b, \qquad \hat\beta_2' = \hat\beta_2 + \hat\beta_3\,a
-    $$
-
-    이다. 보기 1에서 본 $\partial\hat y/\partial\text{TV} = \hat\beta_1 + \hat\beta_3\cdot\text{Radio}$ 를 $\text{Radio} = b$ 에서 평가한 값이 바로 $\hat\beta_1'$ 이다. 곧 **중심화한 모형의 주효과는 "다른 변수가 평균일 때의 한계효과"** 이고, 중심화하지 않은 모형의 "다른 변수가 $0$ 일 때"보다 훨씬 자료 가운데에 있는 자리다. 그 자리에서는 자료가 많으므로 표준오차가 작아지고 $t$ 가 커진다.
-
-    조건수는 내려간다. $\text{TV}$ 와 $\text{TV}\cdot\text{Radio}$ 는 둘 다 $\text{TV}$ 가 커지면 커지므로 거의 평행한데, 중심화하면 이 평행함이 크게 줄어든다.
-
-    **(2) 조건수 경고는 "적합이 나쁘다"가 아니라 "좌표가 나쁘다"를 경고한다.** 열공간이 같으므로 예측은 한 치도 달라지지 않는다. 달라지는 것은 개별 계수의 표준오차이고, 그래서 **계수를 해석하려 할 때만 문제가 된다.** 중심화로 조건수가 내려간다는 사실이 그 증거다. 자료가 바뀐 것이 없는데 조건수가 바뀌었으니, 조건수는 자료의 성질이 아니라 **좌표 선택의 성질**이다.
+    그 흔들림을 없애는 방법이 **중심화**이고, 같은 적합을 좌표만 옮겨 읽으면 조건수가 내려간다는 것을 12.5절 [교호작용 항](../interaction_polynomial/interaction_terms.md) $4$ 절이 유도와 함께 보인다. 공선성 자체의 진단은 12.7절 [다중공선성과 분산팽창인자](../diagnostics/multicollinearity.md)가 다룬다.
 
     ```python
     # 이번에는 교호작용을 넣는다. statsmodels 의 수식에서 콜론이 교호작용 항이다.
@@ -893,78 +883,41 @@ $$
     strong multicollinearity or other numerical problems.
     ```
 
-    교호작용을 넣으면 $R^2$ 가 보기 4의 $0.894$ 에서 $0.965$ 로 오른다. TV 와 라디오가 함께 쓰일 때의 상승효과다. 이제 중심화해 보자.
+    교호작용을 넣으면 $R^2$ 가 보기 4의 $0.894$ 에서 $0.965$ 로 오른다. TV 와 라디오가 함께 쓰일 때의 상승효과다. 그 상승이 모수를 하나 더해서 저절로 오른 것인지 부분 $F$ 로 가린다.
 
     ```python
-    import numpy as np
     import pandas as pd
     import statsmodels.formula.api as smf
 
     url = 'https://raw.githubusercontent.com/justmarkham/scikit-learn-videos/8545c74961398def7724501648fd504dbf061b41/data/Advertising.csv'
     train_data = pd.read_csv(url, usecols=[1, 2, 3, 4]).iloc[:140]
 
-    raw = smf.ols('Sales ~ TV + Radio + TV:Radio', train_data).fit()
-    centered_data = train_data.assign(TVc=train_data.TV - train_data.TV.mean(),
-                                      Radioc=train_data.Radio - train_data.Radio.mean())
-    cen = smf.ols('Sales ~ TVc + Radioc + TVc:Radioc', centered_data).fit()
+    full = smf.ols('Sales ~ TV + Radio + TV:Radio', train_data).fit()
+    reduced = smf.ols('Sales ~ TV + Radio', train_data).fit()
 
-    print(f"TV 평균 {train_data.TV.mean():.4f},  Radio 평균 {train_data.Radio.mean():.4f}")
-    print()
-    print(f"{'항':12s}{'원래 계수':>12s}{'원래 t':>10s}   {'중심화 계수':>12s}{'중심화 t':>10s}")
-    for a, b in zip(['Intercept', 'TV', 'Radio', 'TV:Radio'],
-                    ['Intercept', 'TVc', 'Radioc', 'TVc:Radioc']):
-        print(f"{a:12s}{raw.params[a]:12.6f}{raw.tvalues[a]:10.4f}   "
-              f"{cen.params[b]:12.6f}{cen.tvalues[b]:10.4f}")
-    print()
-    print(f"R^2          원래 {raw.rsquared:.8f}   중심화 {cen.rsquared:.8f}")
-    print(f"RSS          원래 {raw.ssr:.6f}   중심화 {cen.ssr:.6f}")
-    print(f"적합값 최대차 {np.abs(raw.fittedvalues - cen.fittedvalues).max():.2e}")
-    print(f"조건수       원래 {raw.condition_number:.4g}       중심화 {cen.condition_number:.4g}")
-    print()
-    print("중심화 주효과 = 평균에서의 한계효과")
-    print(f"  b1 + b3 * Radio-bar = {raw.params['TV']:.6f} + {raw.params['TV:Radio']:.6f}"
-          f" * {train_data.Radio.mean():.4f} = {raw.params['TV'] + raw.params['TV:Radio'] * train_data.Radio.mean():.6f}")
-    print(f"  중심화 TVc 계수                                      = {cen.params['TVc']:.6f}")
-    print()
-    no_inter = smf.ols('Sales ~ TV + Radio', train_data).fit()
-    partial_f = ((no_inter.ssr - raw.ssr) / 1) / (raw.ssr / raw.df_resid)
-    print(f"교호작용을 넣으면 R^2 가 {no_inter.rsquared:.6f} -> {raw.rsquared:.6f}")
-    print(f"부분 F = {partial_f:.4f},  t^2 = {raw.tvalues['TV:Radio'] ** 2:.4f}")
+    partial_f = ((reduced.ssr - full.ssr) / 1) / (full.ssr / full.df_resid)
+    print(f"RSS  축소 {reduced.ssr:.6f}   완전 {full.ssr:.6f}")
+    print(f"R^2  축소 {reduced.rsquared:.6f}   완전 {full.rsquared:.6f}")
+    print(f"부분 F = {partial_f:.4f}")
+    print(f"t^2    = {full.tvalues['TV:Radio'] ** 2:.4f}")
+    print(f"p 값   = {full.pvalues['TV:Radio']:.3e}")
     ```
 
     출력:
 
     ```
-    TV 평균 143.7750,  Radio 평균 24.6864
-
-    항                  원래 계수      원래 t         중심화 계수     중심화 t
-    Intercept       6.881435   21.9109      14.062044  167.0324
-    TV              0.018326    9.2754       0.046008   47.1352
-    Radio           0.022921    2.1005       0.184143   31.9886
-    TV:Radio        0.001121   16.7155       0.001121   16.7155
-
-    R^2          원래 0.96515497   중심화 0.96515497
-    RSS          원래 134.444997   중심화 134.444997
-    적합값 최대차 6.04e-14
-    조건수       원래 1.843e+04       중심화 1262
-
-    중심화 주효과 = 평균에서의 한계효과
-      b1 + b3 * Radio-bar = 0.018326 + 0.001121 * 24.6864 = 0.046008
-      중심화 TVc 계수                                      = 0.046008
-
-    교호작용을 넣으면 R^2 가 0.893567 -> 0.965155
-    부분 F = 279.4085,  t^2 = 279.4085
+    RSS  축소 410.658784   완전 134.444997
+    R^2  축소 0.893567   완전 0.965155
+    부분 F = 279.4085
+    t^2    = 279.4085
+    p 값   = 8.776e-35
     ```
 
-    **바뀌지 않은 것부터.** $R^2$ 가 $0.96515497$ 로 소수 여덟째 자리까지 같고, $\text{RSS}$ 도 $134.444997$ 로 같다. 적합값의 최대 차이가 $6.0\times10^{-14}$ 이니 **같은 사영이다.** 교호작용 계수 $0.001121$ 과 그 $t = 16.7155$ 도 양쪽에서 완전히 같다. 유도한 대로다.
+    곱항 하나가 $\text{RSS}$ 를 $410.66$ 에서 $134.44$ 로 **셋에 하나로** 줄였다. 부분 $F = 279.4085$ 가 $t^2 = 279.4085$ 와 소수 넷째 자리까지 같아 유도한 등식이 확인되고, $p = 8.8 \times 10^{-35}$ 다. **조건수 경고에도 불구하고 교호작용 항은 확실히 있어야 한다.** 조건수는 계수를 따로따로 믿을 수 있는지를 말할 뿐이고, 항이 필요한지는 $\text{RSS}$ 의 감소가 말한다.
 
-    **바뀐 것.** TV 의 $t$ 가 $9.2754$ 에서 $47.1352$ 로 다섯 배, Radio 의 $t$ 가 $2.1005$ 에서 $31.9886$ 으로 **열다섯 배** 커졌다. 자료가 하나도 달라지지 않았는데 유의성이 이렇게 뛰는 것은, 두 모형이 **서로 다른 가설을 검정하고 있기** 때문이다. 원래 모형의 Radio 검정은 "TV $= 0$ 일 때 라디오의 기울기가 $0$ 인가"를 묻는데 TV $= 0$ 인 시장이 자료에 거의 없어 정보가 빈약하다. 중심화한 모형은 "TV 가 평균일 때"를 묻고 그 자리에는 자료가 가득하다.
+    뒤의 연습문제들이 쓰는 범위를 적어 둔다. 훈련자료에서 $\text{TV}$ 는 $0.7$ 부터 $296.4$ 까지, $\text{Radio}$ 는 $0$ 부터 $49.6$ 까지 퍼져 있다. 그래서 곱 열은 $0$ 부터 $12{,}254$ 까지 가고, **열들의 척도가 세 자릿수로 어긋난다** — 조건수가 큰 까닭이 이것이다.
 
-    **(2)의 등식도 맞는다.** $0.018326 + 0.001121 \times 24.6864 = 0.046008$ 이 중심화한 `TVc` 계수와 같다. 그러므로 중심화는 새 추정을 하는 것이 아니라 **같은 적합을 해석하기 좋은 자리에서 읽는 일**이다.
-
-    마지막 두 줄은 교호작용이 실제로 필요한지를 보여 준다. 부분 $F = 279.4085$ 가 $t^2 = 279.4085$ 와 같고(보기 3의 등식이 여기서도 성립한다), $p$ 값은 $8.8 \times 10^{-35}$ 다. **조건수가 크다는 경고에도 불구하고 교호작용 항은 확실히 있어야 한다.** 조건수는 계수를 따로따로 믿을 수 있는지를 말할 뿐이고, 항이 필요한지는 $\text{RSS}$ 의 감소가 말한다.
-
-    다만 중심화한 뒤의 조건수 $1262$ 도 여전히 본문이 말하는 임계값 $30$ 보다 훨씬 크다. **중심화는 교호작용이 만드는 공선성을 줄이지만 없애지는 못한다.** 훈련자료에서 $\text{TV}$ 가 $0.7$ 부터 $296.4$ 까지 퍼져 있고 $\text{Radio}$ 는 $0$ 부터 $49.6$ 까지인데, 그 곱까지 열로 들어가면 열들의 척도가 세 자릿수로 어긋나기 때문이다. 표준화(평균 $0$, 표준편차 $1$)를 쓰면 더 내려가지만, 그러면 계수의 단위가 "표준편차 하나"가 되어 해석이 또 달라진다. $\square$
+    여기까지가 이 절의 몫이다. 저 계수들을 **읽는** 일 — `TV` 계수 $0.0183$ 이 어느 시장의 기울기인지, 왜 그 자리가 자료 바깥인지, 중심화하면 무엇이 바뀌고 무엇이 그대로인지 — 은 12.5절 [교호작용 항](../interaction_polynomial/interaction_terms.md)이 맡는다. 거기서는 **$200$ 개 시장 전부**에 적합하므로 계수가 이 쪽의 수와 다르다. 이 쪽은 앞 $140$ 개만 훈련자료로 쓰고 있다. $\square$
 
 ---
 
@@ -1078,7 +1031,7 @@ $t$ 열이 이 재척도화와 **무관하다**는 점도 함께 보아 두자. 
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff med" title="중간"></span>
-보기 5 에서 TV 와 Radio 를 각자의 평균 $a = 143.7750$, $b = 24.6864$ 로 중심화한 모형의 절편이 $14.062044$ 였다.
+보기 5 의 훈련자료 $140$ 개에서 TV 와 Radio 를 각자의 평균 $a = 143.7750$, $b = 24.6864$ 로 **중심화**해 같은 모형을 적합하면 절편이 $14.062044$ 가 된다. 중심화가 적합을 바꾸지 않고 좌표만 옮긴다는 것은 12.5절 [교호작용 항](../interaction_polynomial/interaction_terms.md) $4$ 절이 유도한다. 여기서는 그 절이 다루지 않는 **절편**을 따진다.
 
 **(1)** 중심화하지 않은 계수 $\hat\beta_0 = 6.881435$, $\hat\beta_1 = 0.018326$, $\hat\beta_2 = 0.022921$, $\hat\beta_3 = 0.001121$ 로 점 $(\text{TV}, \text{Radio}) = (a, b)$ 에서의 예측값을 계산하시오. $14.062044$ 와 셋째 소수에서 어긋나는데, 그 불일치가 어디서 오는지 밝히시오.
 
