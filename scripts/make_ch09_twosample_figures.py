@@ -1,6 +1,6 @@
 r"""9.4 이표본 검정 여섯 쪽의 그림을 생성한다.
 
-  ch09/two_sample_tests/img/difference_variance_adds.png  차의 퍼짐
+  ch09/two_sample_tests/img/difference_variance_adds.png  차의 산포
   ch09/two_sample_tests/img/pooled_vs_welch_alpha.png     합동 t 가 깨지는 자리
   ch09/two_sample_tests/img/t_vs_mannwhitney_power.png    모양이 다르면
   ch09/two_sample_tests/img/allocation_power.png          표본을 어떻게 나눌까

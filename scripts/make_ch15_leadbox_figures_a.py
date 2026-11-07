@@ -68,7 +68,7 @@ for n in NS1:
 print("[장 개요] 같은 자료에 두 물음을 건다 (지수 모집단, 둘 다 참)")
 for n, a, b in zip(NS1, mean_rate, var_rate):
     print(f"  n = {n:5d}:  「평균이 그만한가」 {a:.4f} · "
-          f"「퍼짐이 그만한가」 {b:.4f}")
+          f"「산포가 그만한가」 {b:.4f}")
 
 fig, ax = plt.subplots(figsize=(10.8, 5.8))
 ax.axhline(0.05, color="0.3", lw=2.4, ls="--")
@@ -77,11 +77,11 @@ ax.text(1350, 0.062, "약속한 5%", ha="right", va="bottom", fontsize=12,
 ax.plot(NS1, mean_rate, "o-", color="tab:blue", lw=3.2, ms=12,
         label="「두 평균이 같은가」를 묻는 검정")
 ax.plot(NS1, var_rate, "s-", color="tab:red", lw=3.2, ms=11,
-        label="「두 퍼짐이 같은가」를 묻는 검정")
+        label="「두 산포가 같은가」를 묻는 검정")
 ax.set_xscale("log")
 # 로그 눈금의 기본 이름표는 mathtext 라 한글 글꼴에서 두부가 된다
 ax.set_xticks(NS1, [f"{n:,}" for n in NS1])
-ax.set_xlabel("표본크기 (로그 눈금)", fontsize=12)
+ax.set_xlabel("표본크기 (로그 척도)", fontsize=12)
 ax.set_ylabel("아무 차이가 없는데도 「다르다」고 말하는 비율", fontsize=12)
 ax.set_ylim(0, 0.46)
 ax.legend(fontsize=11.8, loc="center left", bbox_to_anchor=(0.02, 0.38))
@@ -98,7 +98,7 @@ ax.annotate(f"약속으로 가는 것이 아니라\n올라가서 자기 자리�
             color="tab:red", fontweight="bold", ha="left",
             arrowprops=dict(arrowstyle="->", color="tab:red", lw=2.0))
 ax.set_title("같은 자료에 두 물음을 걸어 보면", fontsize=13)
-fig.suptitle("평균을 견줄 때 받던 뒷배가 퍼짐에는 없다", fontsize=15,
+fig.suptitle("평균을 견줄 때 받던 뒷배가 산포에는 없다", fontsize=15,
              y=0.975)
 plt.tight_layout()
 save(fig, IDX + "no_backstop_for_spread.png")
@@ -136,8 +136,8 @@ ax1.set_xscale("log")
 ax1.set_yscale("log")
 ax1.set_xticks(YEARS, [f"{y:.0f}" for y in YEARS])
 ax1.set_yticks([0.1, 1, 10, 100], ["0.1", "1", "10", "100"])
-ax1.set_xlabel("재는 기간 (해, 로그 눈금)", fontsize=11.5)
-ax1.set_ylabel("추정값의 상대오차 (퍼센트, 로그 눈금)", fontsize=11.5)
+ax1.set_xlabel("재는 기간 (해, 로그 척도)", fontsize=11.5)
+ax1.set_ylabel("추정값의 상대오차 (퍼센트, 로그 척도)", fontsize=11.5)
 ax1.set_title("같은 기간인데 두 추정값의 정밀도가 자릿수로 갈린다",
               fontsize=12.5)
 ax1.legend(fontsize=11.5, loc="lower left")
@@ -161,7 +161,7 @@ ax2.plot(YEARS, se_mu_rel / se_sig_rel, "o-", color="tab:purple", lw=3.0,
          ms=11)
 ax2.set_xscale("log")
 ax2.set_xticks(YEARS, [f"{y:.0f}" for y in YEARS])
-ax2.set_xlabel("재는 기간 (해, 로그 눈금)", fontsize=11.5)
+ax2.set_xlabel("재는 기간 (해, 로그 척도)", fontsize=11.5)
 ax2.set_ylabel("평균의 상대오차 ÷ 변동성의 상대오차", fontsize=11.5)
 ax2.set_title("기간을 늘려도 이 비는 줄지 않는다", fontsize=12.5)
 ax2.set_ylim(0, max(se_mu_rel / se_sig_rel) * 1.2)
@@ -184,7 +184,7 @@ save(fig, INTRO + "sigma_is_the_precise_one.png")
 # 3. common_assumptions — 약속한 자리가 아니라 첨도가 정한 자리로 간다
 #
 # 쪽의 chisq_reference_wrong 은 「비정규 자료에서 카이제곱 표집분포가
-# 실제 분포와 어긋난다」를 그린다 — 곧 **한 자리에서의 어긋남**이다.
+# 실제 분포와 어긋난다」를 그린다 — 곧 **한 자리에서의 불일치**이다.
 # 들머리의 머리글은 그것이 아니라 n 이 하는 일이다 — 「표본을 늘려도
 # 낫지 않는다. 지수모집단에서 극한의 실제 크기는 0.327 로 굳는다.」
 #
@@ -240,7 +240,7 @@ ax.set_xscale("log")
 ax.set_xticks(NS3, [f"{n:,}" for n in NS3])
 ax.set_xlim(22, 3300)
 ax.set_ylim(0, 0.39)
-ax.set_xlabel("표본크기 n (로그 눈금)", fontsize=12)
+ax.set_xlabel("표본크기 n (로그 척도)", fontsize=12)
 ax.set_ylabel("명목 5% 양측 검정의 실제 기각률", fontsize=12)
 ax.legend(fontsize=11.3, loc="upper left")
 ax.grid(alpha=0.25)
@@ -251,7 +251,7 @@ ax.annotate("점선은 식으로 구한 극한값이다 —\n"
             arrowprops=dict(arrowstyle="->", color="0.2", lw=2.0))
 ax.set_title("곡선마다 자기 극한이 있고 그 극한은 첨도가 정한다",
              fontsize=13)
-fig.suptitle("표본을 늘려도 낫지 않는다 — 어긋남을 정하는 것은 첨도다",
+fig.suptitle("표본을 늘려도 낫지 않는다 — 불일치를 정하는 것은 첨도다",
              fontsize=15, y=0.975)
 plt.tight_layout()
 save(fig, INTRO + "kurtosis_decides_n_cancels.png")
@@ -291,8 +291,8 @@ ax1.set_yscale("log")
 ax1.set_xticks([2, 10, 49, 100, 800, 2000],
                ["2", "10", "49", "100", "800", "2,000"])
 ax1.set_yticks([0.01, 0.1, 1], ["0.01", "0.1", "1"])
-ax1.set_xlabel("자유도 (로그 눈금)", fontsize=11.5)
-ax1.set_ylabel("정규에서 벗어난 정도 (로그 눈금)", fontsize=11.5)
+ax1.set_xlabel("자유도 (로그 척도)", fontsize=11.5)
+ax1.set_ylabel("정규에서 벗어난 정도 (로그 척도)", fontsize=11.5)
 ax1.set_title("자유도의 제곱근으로만 줄어든다", fontsize=13)
 ax1.legend(fontsize=10.8, loc="lower left")
 ax1.grid(alpha=0.25, which="both")
@@ -479,8 +479,8 @@ ax.set_yticks([1.1, 1.5, 2, 3, 5, 10, 25], ["1.1", "1.5", "2", "3", "5",
                                             "10", "25"])
 ax.set_ylim(1.05, 30)
 ax.set_xlim(4, 2000)
-ax.set_xlabel("표본크기 n (로그 눈금)", fontsize=12)
-ax.set_ylabel("구간의 상한 ÷ 하한 (로그 눈금)", fontsize=12)
+ax.set_xlabel("표본크기 n (로그 척도)", fontsize=12)
+ax.set_ylabel("구간의 상한 ÷ 하한 (로그 척도)", fontsize=12)
 ax.legend(fontsize=11.5, loc="upper right")
 ax.grid(alpha=0.25, which="both")
 ax.set_title("같은 목표에 드는 표본이 어느 자리에서나 두 배 남짓이다",

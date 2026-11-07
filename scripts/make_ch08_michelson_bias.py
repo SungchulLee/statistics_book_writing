@@ -1,8 +1,8 @@
-r"""구간은 흔들림만 말하고 치우침은 말하지 않는다 — 마이컬슨의 1879 년 광속.
+r"""구간은 흔들림만 말하고 편향은 말하지 않는다 — 마이컬슨의 1879 년 광속.
 
 이 쪽은 $\bar X \pm t_{n-1,\,0.975}\, S/\sqrt{n}$ 을 세우고 그 포함확률을 모의로 잰다.
 모의에서는 참값을 우리가 정해 주므로 구간이 약속대로 $95\%$ 를 담는다. 현실의 측정에서는
-**같은 장치가 모든 관측에 같은 치우침을 싣는다.** 그러면 구간은 좁아지면서 과녁을 비껴간다.
+**같은 장치가 모든 관측에 같은 편향을 싣는다.** 그러면 구간은 좁아지면서 과녁을 비껴간다.
 
 자료: 마이컬슨이 1879 년 6 월 5 일부터 7 월 2 일까지 공기 중 광속을 잰 100 회.
 실험 다섯 번 × 각 20 회. 값은 km/s 에서 299000 을 뺀 것이다.
@@ -12,8 +12,8 @@ MASS 문서가 **「이 측정 척도에서 현재 받아들여지는 값은 734
 광속이므로 진공값 299792.458 이 아니다.
 
 ① 100 회의 $95\%$ 구간은 반폭 15.7 인데 참값은 117.9 (= 14.9 SE) 아래에 있다.
-② 실험 다섯의 구간 가운데 참값을 담는 것이 **하나도 없다.** 치우침이 실험마다 다르다.
-③ $n$ 을 키우면 반폭만 $1/\sqrt{n}$ 로 줄고 치우침은 꼼짝하지 않는다.
+② 실험 다섯의 구간 가운데 참값을 담는 것이 **하나도 없다.** 편향이 실험마다 다르다.
+③ $n$ 을 키우면 반폭만 $1/\sqrt{n}$ 로 줄고 편향은 꼼짝하지 않는다.
 
 만드는 파일: docs/ch08/one_sample_intervals/img/michelson_bias.png
 """
@@ -67,7 +67,7 @@ print(f"   n = {len(x)}, 평균 = {BASE + m:.1f}, 표준편차 = {x.std(ddof=1):
 print(f"   95% 구간 = [{BASE + m - hw:.1f}, {BASE + m + hw:.1f}]  반폭 {hw:.1f}")
 print(f"   받아들여지는 값 {BASE + TRUE:.1f} 을 담는가: "
       f"{'예' if abs(m - TRUE) <= hw else '아니다'}")
-print(f"   치우침 = {m - TRUE:+.1f} km/s = {(m - TRUE) / se:.1f} SE "
+print(f"   편향 = {m - TRUE:+.1f} km/s = {(m - TRUE) / se:.1f} SE "
       f"= 반폭의 {(m - TRUE) / hw:.1f} 배")
 
 # === ② 실험 다섯 =====================================================
@@ -88,7 +88,7 @@ F = stats.f_oneway(*[np.array(g, float) for g in RUNS])
 print(f"   참값을 담는 구간: {cover} / 5")
 print(f"   다섯 평균의 폭 = {max(MS) - min(MS):.1f} km/s")
 print(f"   실험 간 일원분산분석 F = {F.statistic:.3f}, p = {F.pvalue:.6f}")
-print("   **치우침이 실험마다 다르다는 것이 그의 자료 안에서 이미 보인다.**")
+print("   **편향이 실험마다 다르다는 것이 그의 자료 안에서 이미 보인다.**")
 
 # === ③ n 을 키우면 ==================================================
 NS = np.array([10, 30, 100, 300, 1000, 3000, 10000], float)
@@ -96,10 +96,10 @@ s_all = x.std(ddof=1)
 HWN = stats.t.ppf(0.975, NS - 1) * s_all / np.sqrt(NS)
 print("\n③ 같은 장치로 n 만 키우면")
 # 한글은 고정폭에서 두 칸을 차지하므로 자리맞춤을 직접 적는다
-print("        n     반폭    치우침")
+print("        n     반폭    편향")
 for nn, hh in zip(NS, HWN):
     print(f"   {int(nn):>6}   {hh:>6.1f}   {m - TRUE:>6.1f}")
-print("   반폭은 1/sqrt(n) 로 줄고 치우침은 상수다. 둘이 만나는 자리는 없다.")
+print("   반폭은 1/sqrt(n) 로 줄고 편향은 상수다. 둘이 만나는 자리는 없다.")
 
 # === 그림 ============================================================
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.6, 5.2))
@@ -116,7 +116,7 @@ ax1.axhline(BASE + TRUE, color=C_T, lw=2.4, ls="--",
             label=f"받아들여지는 값 ${BASE + TRUE:,.1f}$".replace(",", "{,}"))
 ax1.annotate("", xy=(52, BASE + TRUE), xytext=(52, BASE + m),
              arrowprops=dict(arrowstyle="<->", color=C_B, lw=2.0))
-ax1.text(55, BASE + (m + TRUE) / 2, f"치우침 ${m - TRUE:.1f}$\n$= 14.9$ SE",
+ax1.text(55, BASE + (m + TRUE) / 2, f"편향 ${m - TRUE:.1f}$\n$= 14.9$ SE",
          color=C_B, fontsize=11, va="center")
 ax1.set_xlabel("측정 순서")
 ax1.set_ylabel("공기 중 광속 (km/s)")
@@ -146,7 +146,7 @@ ax2.grid(alpha=0.25, axis="x")
 ax3.loglog(NS, HWN, "o-", color=C_M, lw=2.6, ms=9,
            label="구간 반폭 ($\\propto 1/\\sqrt{n}$)")
 ax3.axhline(m - TRUE, color=C_B, lw=2.6, ls="--",
-            label=f"치우침 ${m - TRUE:.1f}$ (상수)")
+            label=f"편향 ${m - TRUE:.1f}$ (상수)")
 ax3.plot([100], [hw], "s", color="#333333", ms=12, zorder=5)
 ax3.annotate("마이컬슨이 선 자리\n$n = 100$", (100, hw),
              xytext=(0.9, 1.1), textcoords="offset fontsize",
@@ -157,7 +157,7 @@ ax3.set_xticks([10, 100, 1000, 10000])
 ax3.set_xticklabels(["$10$", "$10^{2}$", "$10^{3}$", "$10^{4}$"])
 ax3.set_yticks([1, 10, 100])
 ax3.set_yticklabels(["$1$", "$10$", "$100$"])
-ax3.set_ylim(0.9, 330)   # 치우침 선이 위 테두리에 붙지 않게 여유를 둔다
+ax3.set_ylim(0.9, 330)   # 편향 선이 위 테두리에 붙지 않게 여유를 둔다
 ax3.minorticks_off()
 ax3.set_title("③ 더 재도 가까워지지 않는다", fontsize=12)
 ax3.legend(loc="lower left", fontsize=10.5)

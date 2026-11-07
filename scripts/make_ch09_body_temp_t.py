@@ -67,7 +67,7 @@ ax2.set_xlim(1e-7, 2.0)
 TK = [1e-7, 1e-5, 1e-3, 1e-1, 1]
 ax2.set_xticks(TK, ["0.0000001", "0.00001", "0.001", "0.1", "1"], fontsize=9)
 ax2.set_xticks([], minor=True)
-ax2.set_xlabel("양측 $p$ 값 (로그 눈금)", fontsize=11)
+ax2.set_xlabel("양측 $p$ 값 (로그 척도)", fontsize=11)
 ax2.set_title("$|t|$ 가 조금만 커져도 $p$ 는 자릿수로 떨어진다", fontsize=12.5)
 ax2.grid(axis="x", alpha=0.25)
 

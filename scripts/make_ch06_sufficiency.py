@@ -32,7 +32,7 @@ def standardize(v, mu=MU, sd=SD):
 shapes = [
     RNG.normal(0, 1, N),  # 평범한 모양
     np.concatenate([RNG.normal(-1.2, 0.25, N // 2 + 1), RNG.normal(1.2, 0.25, N // 2)]),
-    np.concatenate([RNG.normal(-0.25, 0.3, N - 2), [2.5, 3.2]]),  # 한쪽에 치우침
+    np.concatenate([RNG.normal(-0.25, 0.3, N - 2), [2.5, 3.2]]),  # 한쪽에 왜도
 ]
 top = [standardize(s) for s in shapes]
 

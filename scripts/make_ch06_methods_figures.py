@@ -147,7 +147,7 @@ def sample_moments_converge():
         ax.text(N * 0.99, true * 1.035, f"모집단 적률 ${true:g}$",
                 fontsize=11, color=RED, ha="right", va="bottom")
         ax.set_xscale("log")
-        ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=11.5, color=INK)
+        ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=11.5, color=INK)
         ax.set_ylabel(name, fontsize=12, color=color)
         ax.set_ylim(true * 0.35, true * 1.75)
         clean_axis(ax)
@@ -264,7 +264,7 @@ def mom_vs_mle_efficiency():
     ax.set_xticks(ns)
     ax.set_xticklabels([str(m) for m in ns])
     ax.set_ylim(0, 5.2)
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=11.5, color=INK)
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=11.5, color=INK)
     ax.set_ylabel("$n \\times$ 분산", fontsize=11.5, color=INK)
     clean_axis(ax)
     ax.legend(fontsize=10.5, frameon=False, loc="upper right")

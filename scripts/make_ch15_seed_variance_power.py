@@ -31,14 +31,14 @@ ALPHA = 0.05
 KS = [5, 10, 20, 30, 50, 200, 1000]
 K_SHOW = 30
 LN_S, BAD_P, BAD_S = 0.8, 0.07, 3.5
-KINDS = ["정규", "치우침", "유계", "가끔 나쁜 시드"]
+KINDS = ["정규", "왜도", "유계", "가끔 나쁜 시드"]
 Z = stats.norm.ppf(1 - ALPHA / 2)
 
 # === 첨도는 해석적으로 ===============================================
 s2 = LN_S ** 2
 B2 = {
     "정규": 3.0,
-    "치우침": float(np.exp(4 * s2) + 2 * np.exp(3 * s2)
+    "왜도": float(np.exp(4 * s2) + 2 * np.exp(3 * s2)
                   + 3 * np.exp(2 * s2) - 3),
     "유계": float(stats.beta(2, 18).stats(moments="k")) + 3.0,
     "가끔 나쁜 시드": float(
@@ -53,7 +53,7 @@ def draw(kind, k, r):
     """귀무가설이 참인 (= 두 쪽의 분산이 같은) 시드별 성능 r 벌."""
     if kind == "정규":
         return RNG.normal(0, 1, (r, k))
-    if kind == "치우침":
+    if kind == "왜도":
         return RNG.lognormal(0, LN_S, (r, k))
     if kind == "유계":
         return RNG.beta(2, 18, (r, k))          # 정확도처럼 [0,1] 에 갇힌다
@@ -123,7 +123,7 @@ for kd in KINDS:
 
 # === 그림 ============================================================
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.6, 5.0))
-CK = {"정규": "#2ca02c", "치우침": "#d62728", "유계": "#1f77b4",
+CK = {"정규": "#2ca02c", "왜도": "#d62728", "유계": "#1f77b4",
       "가끔 나쁜 시드": "#ff7f0e"}
 
 for kd in KINDS:

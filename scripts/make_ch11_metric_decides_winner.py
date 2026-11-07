@@ -128,7 +128,7 @@ def main():
     ax.set_xticklabels([f"작은 품목 ${M}$ 개\n(하루 $10$ 개쯤)",
                         f"큰 품목 ${M}$ 개\n(하루 $1000$ 개쯤)"], fontsize=11)
     ax.set_ylim(0.3, 500)
-    ax.set_ylabel("평균 절대오차 (로그 눈금)", fontsize=11.5)
+    ax.set_ylabel("평균 절대오차 (로그 척도)", fontsize=11.5)
     ax.set_title("① 둘은 서로 다른 데서 틀린다", fontsize=12.8, color=INK)
     ax.grid(alpha=0.22, axis="y", which="both")
     ax.legend(fontsize=10.4, framealpha=0.93, loc="upper left")

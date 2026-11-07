@@ -159,7 +159,7 @@ ax.plot(NS2, cov_s2, "s-", color="tab:red", lw=3.0, ms=10,
 ax.set_xscale("log")
 # 로그 눈금의 기본 이름표는 mathtext 라 한글 글꼴에서 두부가 된다
 ax.set_xticks(NS2, [str(n) for n in NS2])
-ax.set_xlabel("표본크기 n (로그 눈금)", fontsize=12)
+ax.set_xlabel("표본크기 n (로그 척도)", fontsize=12)
 ax.set_ylabel("실제 포함률", fontsize=12)
 ax.set_ylim(0.52, 0.985)
 ax.legend(fontsize=11.5, loc="center", bbox_to_anchor=(0.70, 0.56))
@@ -312,7 +312,7 @@ ax1.annotate(f"같은 하루가 {yt[i4]:.1f} 해에 한 번", xy=(4.0, yt[i4]),
              fontweight="bold", ha="right",
              arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.9))
 ax1.set_xlabel("평균에서 몇 표준편차 떨어진 하루인가", fontsize=12)
-ax1.set_ylabel("그런 하루를 기다리는 햇수 (로그 눈금)", fontsize=12)
+ax1.set_ylabel("그런 하루를 기다리는 햇수 (로그 척도)", fontsize=12)
 ax1.set_title("같은 하루에 두 모형이 다른 이름을 붙인다", fontsize=13)
 ax1.legend(fontsize=11, loc="lower right")
 ax1.grid(alpha=0.25)

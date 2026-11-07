@@ -107,7 +107,7 @@ for arm, c, lab, y in ((ARM_CI, "#1f77b4", "$95\\%$ CI 막대", 1.0),
 ax2.set_xlim(-6.2, 7.0)
 ax2.set_ylim(-0.75, 1.75)
 ax2.set_yticks([])
-ax2.set_xlabel("평균 (표준오차를 $1$ 로 둔 눈금)")
+ax2.set_xlabel("평균 (표준오차를 $1$ 로 둔 척도)")
 ax2.set_title(f"② 둘 다 $p = 0.05$ 다 ($d = {d05:.2f}$)", fontsize=12)
 ax2.grid(alpha=0.25, axis="x")
 
@@ -122,7 +122,7 @@ for i, rho in enumerate(RHOS):
 ax3.set_xlim(-6.2, 7.0)
 ax3.set_ylim(-0.75, len(RHOS) - 0.25)
 ax3.set_yticks([])
-ax3.set_xlabel("평균 (표준오차를 $1$ 로 둔 눈금)")
+ax3.set_xlabel("평균 (표준오차를 $1$ 로 둔 척도)")
 ax3.set_title("③ 짝지어져 있으면 — 전부 $p = 0.05$ 다", fontsize=12)
 ax3.grid(alpha=0.25, axis="x")
 

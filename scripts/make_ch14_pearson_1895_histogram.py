@@ -9,7 +9,7 @@ r"""「히스토그램」이라는 말이 처음 찍힌 자리를 그 수로 다
 가져온 「잉글랜드·웨일스 주택 평가액, $1885$–$1886$」이다.
 
 ① 그 자료를 밀도 히스토그램으로 그리고 적률로 맞춘 정규곡선을 겹친다.
-② 피어슨이 실은 「이론」과 「통계」 두 열을 나란히 세운다 — 어긋남은 양 끝에 있다.
+② 피어슨이 실은 「이론」과 「통계」 두 열을 나란히 세운다 — 불일치는 양 끝에 있다.
 
 만드는 파일: docs/ch14/graphical_methods/img/pearson_1895_histogram.png
 """
@@ -90,8 +90,8 @@ ax2.bar(idx + 0.2, THEORY, 0.4, color="#1f77b4", edgecolor="#13405f", lw=0.8,
 ax2.set_yscale("log")
 ax2.set_xticks(idx)
 ax2.set_xticklabels(GROUPS, rotation=30, ha="right", fontsize=10)
-ax2.set_ylabel("집의 수 (천 집, 로그 눈금)")
-ax2.set_title("② 어긋남은 양 끝에 있다", fontsize=12)
+ax2.set_ylabel("집의 수 (천 집, 로그 척도)")
+ax2.set_title("② 불일치는 양 끝에 있다", fontsize=12)
 ax2.legend(loc="upper right", fontsize=10)
 ax2.grid(alpha=0.25, axis="y", which="both")
 ax2.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:g}"))

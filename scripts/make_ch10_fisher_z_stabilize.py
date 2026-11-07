@@ -53,7 +53,7 @@ RHOS = np.array([0.0, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98])
 sd_r, sd_z, sk_r, sk_z = [], [], [], []
 print(f"n = {N},  모의실험 {B:,} 회")
 print(f"{'rho':>6s} {'sd(r)':>8s} {'sd(z)':>8s} {'1/sqrt(n-3)':>12s} "
-      f"{'치우침 r':>10s} {'치우침 z':>10s}")
+      f"{'왜도 r':>10s} {'왜도 z':>10s}")
 for rho in RHOS:
     r = sample_r(rho)
     z = np.arctanh(np.clip(r, -0.999999, 0.999999))
@@ -88,7 +88,7 @@ for rho, col, fill in [(0.0, GREEN, "#DCEDC8"), (0.5, ORANGE, ORANGE_F),
     rr = sample_r(rho)
     axR.hist(rr, bins=110, density=True, color=fill, edgecolor=col,
              linewidth=0.3, alpha=0.85, zorder=3,
-             label=f"$\\rho = {rho}$   (치우침 ${stats.skew(rr):+.2f}$, "
+             label=f"$\\rho = {rho}$   (왜도 ${stats.skew(rr):+.2f}$, "
                    f"$\\mathrm{{sd}} = {rr.std():.3f}$)")
     axR.axvline(rho, color=col, lw=1.2, ls=":", zorder=4)
 axR.set_xlim(-1.0, 1.02)

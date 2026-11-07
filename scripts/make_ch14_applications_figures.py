@@ -249,7 +249,7 @@ def fig_var_tail_ratio():
                 else f"{rt/rn:.1f}배", fontsize=9.5,
                 color=RED, ha="center", va="bottom")
     ax.set_xlabel("평균에서 떨어진 표준편차 수 $k$", fontsize=10.5, color=INK)
-    ax.set_ylabel("$k$ 표준편차보다 큰 손실이 날 확률 (로그 눈금)",
+    ax.set_ylabel("$k$ 표준편차보다 큰 손실이 날 확률 (로그 척도)",
                   fontsize=10.5, color=INK)
     ax.set_title("같은 분산, 다른 꼬리", fontsize=11.5, color=INK)
     ax.legend(fontsize=10, frameon=False, loc="upper right", labelcolor=INK)

@@ -126,7 +126,7 @@ def main():
     ax.set_yticks([1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e0])
     ax.set_yticklabels([f"$10^{{{e}}}$" for e in (-5, -4, -3, -2, -1, 0)])
     ax.minorticks_off()
-    ax.set_ylabel("지렛값 $h_{ii}$ (로그 눈금)", fontsize=11.5)
+    ax.set_ylabel("지렛값 $h_{ii}$ (로그 척도)", fontsize=11.5)
     ax.set_title(f"① 행 ${RARE}$ 개가 $\\operatorname{{tr}}(\\mathbf{{P}})$ 의 "
                  f"${100 * h[rare].sum() / h.sum():.0f}\\%$ 를 가진다",
                  fontsize=12.6, color=INK)

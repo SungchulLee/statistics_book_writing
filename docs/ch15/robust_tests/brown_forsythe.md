@@ -427,7 +427,7 @@ SciPy에서는 함수 호출 한 번으로 끝난다.
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> 중앙값 중심과 평균 중심. 집단당 $n = 8$, 세 집단의 위치는 크게 다르고 퍼짐은 비슷한 자료다.
+**보기 3.** <span class="diff easy" title="쉬움"></span> 중앙값 중심과 평균 중심. 집단당 $n = 8$, 세 집단의 위치는 크게 다르고 산포는 비슷한 자료다.
 
 **(1)** $g_3$ 가 $g_1$ 의 **평행이동**임을 확인하고, 그로부터 $W$ 가 네 수 $\bar z_1, \bar z_2, S_1, S_2$ 로만 적히는 닫힌 꼴임을 유도하시오. 여기서 $S_i = \sum_j (z_{ij} - \bar z_i)^2$ 이다.
 
@@ -493,7 +493,7 @@ SciPy에서는 함수 호출 한 번으로 끝난다.
     import numpy as np
     from scipy.stats import levene
 
-    # 세 집단의 평균은 크게 다르지만 퍼짐은 거의 같다.
+    # 세 집단의 평균은 크게 다르지만 산포는 거의 같다.
     g1 = np.array([12, 15, 14, 10, 13, 14, 12, 11], dtype=float)
     g2 = np.array([22, 25, 20, 18, 24, 23, 19, 21], dtype=float)
     g3 = np.array([32, 35, 34, 30, 33, 34, 32, 31], dtype=float)

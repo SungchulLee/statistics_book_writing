@@ -18,7 +18,7 @@ a = -2 이고, 쪽의 연습문제 5 가 네 번째 판으로 그 자리를 실�
 
 쪽의 confounding_directions 는 세 판의 산점도와 기울기를, healthy_user 는
 관측되지 않는 교란에 대한 민감도를 다룬다. 여기서는 그 둘이 건드리지
-않는 것 --- 어긋남을 미리 세는 식 --- 만 본다.
+않는 것 --- 불일치를 미리 세는 식 --- 만 본다.
 """
 
 import matplotlib.pyplot as plt

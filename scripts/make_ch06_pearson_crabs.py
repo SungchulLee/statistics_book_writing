@@ -120,7 +120,7 @@ for s in sols:
     s6 = mix_moments(s, 6)[5]
     d = abs(s6 - m6) / m6
     print(f"   p={s[0]:.3f}  μ=({s[1]:.4f}, {s[3]:.4f})  "
-          f"σ=({s[2]:.4f}, {s[4]:.4f})   여섯째 적률 어긋남 {d:.2e}")
+          f"σ=({s[2]:.4f}, {s[4]:.4f})   여섯째 적률 불일치 {d:.2e}")
     if d < bestd:
         best, bestd = s, d
 print(f"→ 여섯째 적률이 고른 해: p={best[0]:.3f}, μ=({best[1]:.4f}, {best[3]:.4f}), "
@@ -192,7 +192,7 @@ ax.set_title("② 밀도는 겹치는데 모수가 다르다", fontsize=11)
 ax.legend(fontsize=8.5, loc="upper left")
 ax.text(0.03, 0.62,
         "다섯 적률을 똑같이 맞춘다\n"
-        f"여섯째 적률 어긋남 "
+        f"여섯째 적률 불일치 "
         f"{abs(mix_moments(sols[0],6)[5]-m6)/m6:.0e} 대 "
         f"{abs(mix_moments(sols[1],6)[5]-m6)/m6:.0e}",
         transform=ax.transAxes, fontsize=9,

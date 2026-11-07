@@ -49,7 +49,7 @@ CENTER = {"평균 (W0)": np.mean,
 
 # 등분산이므로 H0 가 참이다. 세 모집단은 브라운–포사이드가 든 세 가지 모양이다.
 DIST = [("정규\n(대칭·보통 꼬리)", lambda m, n: rng.standard_normal((m, n))),
-        ("카이제곱(4)\n(치우침)", lambda m, n: rng.chisquare(4, (m, n))),
+        ("카이제곱(4)\n(왜도)", lambda m, n: rng.chisquare(4, (m, n))),
         ("코시\n(두꺼운 꼬리)", lambda m, n: rng.standard_cauchy((m, n)))]
 
 

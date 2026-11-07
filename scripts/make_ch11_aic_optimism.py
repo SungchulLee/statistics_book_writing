@@ -32,7 +32,7 @@ n = 60, 후보 25 개, sigma = 1, 4000 번으로 재면
     25     34.9      85.1     50.2     50      84.9
 
 시험 이탈도의 최소점이 k = 9 이고 AIC 가 고른 곳이 k = 8 이다.
-차이와 2k 의 어긋남은 어디서도 0.41 을 넘지 않는다.
+차이와 2k 의 불일치는 어디서도 0.41 을 넘지 않는다.
 
 만드는 파일:
 
@@ -94,7 +94,7 @@ def main():
                   f"{2*k:>6}{aic[j]:>10.1f}")
     kt, ka = int(KS[te.argmin()]), int(KS[aic.argmin()])
     print(f"\n  시험 이탈도의 최소점 k = {kt},  AIC 의 최소점 k = {ka}")
-    print(f"  차이 - 2k 의 최대 어긋남 {np.abs((te - tr) - 2 * KS).max():.3f}")
+    print(f"  차이 - 2k 의 최대 불일치 {np.abs((te - tr) - 2 * KS).max():.3f}")
 
     fig, axes = plt.subplots(1, 2, figsize=(13.2, 5.1), constrained_layout=True)
 
@@ -130,7 +130,7 @@ def main():
     ax.plot(KS, 2 * KS, lw=4.4, color=MUTED, label="$2k$ — 벌점이 더하는 수")
     ax.plot(KS, te - tr, lw=0, marker="o", ms=10, mfc="none", mec=RED,
             mew=2.4, label="재어 본 낙관 (시험 $-$ 훈련)")
-    ax.annotate(f"어긋남이 어디서나 "
+    ax.annotate(f"불일치가 어디서나 "
                 f"${np.abs((te-tr)-2*KS).max():.2f}$ 를 넘지 않는다",
                 xy=(18, 2 * 18), xytext=(7.4, 40.0), fontsize=10.8,
                 color=RED, ha="center",

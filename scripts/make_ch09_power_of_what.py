@@ -85,7 +85,7 @@ ax2.xaxis.set_major_formatter(FixedFormatter([f"{t:,}" for t in ticks]))
 ax2.xaxis.set_minor_locator(FixedLocator([]))
 ax2.set_xlim(6, 20000)
 ax2.set_ylim(-0.55, len(BARS) - 0.45)
-ax2.set_xlabel("인원 (로그 눈금)")
+ax2.set_xlabel("인원 (로그 척도)")
 ax2.set_title("「무엇의」 검정력인가", fontsize=11.5)
 ax2.grid(axis="x", alpha=0.25)
 

@@ -234,7 +234,7 @@ def fig_what_w_does_not_see():
     ax2.set_xticks(NS, [str(v) for v in NS])
     ax2.set_xticks([], minor=True)
     ax2.set_ylim(0, 105)
-    ax2.set_xlabel("표본 크기 (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("표본 크기 (로그 척도)", fontsize=11)
     ax2.set_ylabel("꼬리가 두꺼운 자료를 잡아낼 비율 (%)", fontsize=11)
     ax2.set_title(f"자유도 $10$ 인 $t$ 자료를 {REPS:,} 번 재면",
                   fontsize=12.5)
@@ -318,7 +318,7 @@ def fig_s_itself_wobbles():
     ax2.set_xticks(NS, [str(v) for v in NS])
     ax2.set_xticks([], minor=True)
     ax2.set_ylim(0, 108)
-    ax2.set_xlabel("집단당 표본 크기 (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("집단당 표본 크기 (로그 척도)", fontsize=11)
     ax2.set_ylabel("르빈이 등분산을 기각하는 비율 (%)", fontsize=11)
     ax2.set_title("이 정도 차이를 잡아내려면", fontsize=12.5)
     ax2.grid(alpha=0.25)
@@ -471,7 +471,7 @@ def fig_where_the_decimal_comes():
     ax1.set_xticks([1, 3, 10, 30, 100], ["1", "3", "10", "30", "100"])
     ax1.set_xticks([], minor=True)
     ax1.set_ylim(1.5, 7.5)
-    ax1.set_xlabel("분산이 흩어진 정도 (1 이면 모두 같다, 로그 눈금)",
+    ax1.set_xlabel("분산이 흩어진 정도 (1 이면 모두 같다, 로그 척도)",
                    fontsize=11)
     ax1.set_ylabel("웰치의 분모 자유도", fontsize=11)
     ax1.set_title(f"관측 {NS.sum()} 개를 {tuple(NS)} 로 나눈 설계",

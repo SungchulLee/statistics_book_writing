@@ -85,7 +85,7 @@ for ax, n in zip(axs, NN1):
     ax.set_xscale("log")
     ax.set_xticks(skews1, [f"{s:.1f}" if s < 10 else f"{s:.0f}"
                            for s in skews1])
-    ax.set_xlabel("모집단의 왜도 (로그 눈금)", fontsize=11.5)
+    ax.set_xlabel("모집단의 왜도 (로그 척도)", fontsize=11.5)
     ax.set_title(f"n = {n}", fontsize=13.5)
     ax.set_ylim(0, 0.45)
     ax.grid(alpha=0.25)
@@ -211,7 +211,7 @@ ax2.set_yticks([1e-16, 1e-12, 1e-8, 1e-4, 0.05, 1],
 ax2.set_ylim(1e-20, 4)
 ax2.set_xlim(LAM[0], LAM[-1])
 ax2.set_xlabel("Box-Cox 의 거듭제곱 지수", fontsize=11.5)
-ax2.set_ylabel("샤피로–윌크 p 값 (로그 눈금)", fontsize=11.5)
+ax2.set_ylabel("샤피로–윌크 p 값 (로그 척도)", fontsize=11.5)
 ax2.set_title("어느 지수에서도 정규성을 통과하지 못한다",
               fontsize=12.5)
 ax2.grid(alpha=0.25, which="both")
@@ -528,7 +528,7 @@ ax1.set_xticks([0.01, 0.1, 1, 10, 100],
                ["0.01", "0.1", "1", "10", "100"])
 ax1.set_xlim(0.006, 900)
 ax1.set_yticks(yy, [f"{k:.1f} 표준편차" for k in KS6], fontsize=12)
-ax1.set_xlabel("그런 하루가 오는 간격 (해, 로그 눈금)", fontsize=11.5)
+ax1.set_xlabel("그런 하루가 오는 간격 (해, 로그 척도)", fontsize=11.5)
 ax1.set_title("적어 둔 간격과 실제 간격", fontsize=13)
 ax1.legend(fontsize=10.6, loc="lower right")
 ax1.grid(axis="x", alpha=0.25)
@@ -544,8 +544,8 @@ ax2.set_yticks([1, 10, 100], ["1", "10", "100"])
 ax2.set_ylim(0.6, 400)
 ax2.set_xticks(yy, [f"{k:.1f}" for k in KS6], fontsize=12)
 ax2.set_xlabel("평균에서 몇 표준편차 떨어진 하루인가", fontsize=11.5)
-ax2.set_ylabel("실제 빈도 ÷ 정규가 적는 빈도 (로그 눈금)", fontsize=11.5)
-ax2.set_title("어긋남의 방향이 한쪽으로 정해져 있다", fontsize=12.5)
+ax2.set_ylabel("실제 빈도 ÷ 정규가 적는 빈도 (로그 척도)", fontsize=11.5)
+ax2.set_title("불일치의 방향이 한쪽으로 정해져 있다", fontsize=12.5)
 ax2.grid(axis="y", alpha=0.25)
 ax2.text(0.03, 0.95, "모두 1 보다 위다 —\n정규 모형은 늘 위험을 작게 적는다",
          transform=ax2.transAxes, ha="left", va="top", fontsize=11.3,

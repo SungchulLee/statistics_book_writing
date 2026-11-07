@@ -32,7 +32,7 @@ z = P1 + SD1 * RNG.standard_normal((R1, N1))
 xb_n, s2_n = z.mean(1), z.var(1, ddof=1)
 print(f"① n = {N1}, 반복 {R1:,}")
 print(f"   베르누이 : S^2 = n/(n-1) * Xbar(1-Xbar) 가 **정확히** 성립한다 — "
-      f"최대 어긋남 {np.abs(s2_b - xb_b * (1 - xb_b) * N1 / (N1 - 1)).max():.2e}")
+      f"최대 불일치 {np.abs(s2_b - xb_b * (1 - xb_b) * N1 / (N1 - 1)).max():.2e}")
 print(f"   정규     : corr(Xbar, S^2) = {np.corrcoef(xb_n, s2_n)[0, 1]:+.4f} "
       f"(이론값 0 — 둘은 독립이다)")
 

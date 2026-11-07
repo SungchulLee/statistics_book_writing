@@ -510,7 +510,7 @@ for (y, nm, rtot) in zip(ys, RNAME, R):
     cut = 1.4 + 7.2 * frac[0]
     ax1.plot([cut, cut], [y - 0.575, y + 0.575], color="tab:blue", lw=2.6,
              ls="--")
-    # 실제로 나뉜 자리를 함께 그어야 어긋남이 글자가 아니라 그림이 된다
+    # 실제로 나뉜 자리를 함께 그어야 불일치가 글자가 아니라 그림이 된다
     i0 = RNAME.index(nm)
     acut = 1.4 + 7.2 * HAND[i0, 0] / rtot
     off = abs(HAND[i0, 0] / rtot - frac[0])

@@ -96,7 +96,7 @@ def fig_eye_sees_funnels():
     ax2.set_xticks(NS, [str(n) for n in NS])
     ax2.set_xticks([], minor=True)
     ax2.set_ylim(1, 3.4)
-    ax2.set_xlabel("표본 크기 n (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("표본 크기 n (로그 척도)", fontsize=11)
     ax2.set_ylabel("그 비의 $95$ 번째 백분위", fontsize=11)
     ax2.set_title("칸이 커져야 비가 가라앉는다", fontsize=12.5)
     ax2.grid(alpha=0.25)
@@ -274,7 +274,7 @@ def fig_pairwise_misses_it():
     ax2.set_xticks([1e4, 1e5, 1e6], ["10,000", "100,000", "1,000,000"])
     ax2.set_xticks([], minor=True)
     ax2.axvline(10, color="0.2", ls="--", lw=1.8)
-    ax2.set_xlabel("VIF (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("VIF (로그 척도)", fontsize=11)
     ax2.set_ylabel("변수 수", fontsize=11)
     ax2.set_title(f"같은 자료의 VIF — 최댓값 {vifs.max():,.0f}",
                   fontsize=12.5)
@@ -425,7 +425,7 @@ def fig_floor_is_the_noise():
     ax1.set_yticks([], minor=True)
     ax1.set_xticks(DEG)
     ax1.set_xlabel("다항식의 차수", fontsize=11)
-    ax1.set_ylabel("RMSE (로그 눈금)", fontsize=11)
+    ax1.set_ylabel("RMSE (로그 척도)", fontsize=11)
     ax1.set_title(f"$n = {N}$ · {REPS} 번 평균", fontsize=12.5)
     ax1.legend(fontsize=10.5, loc="upper left", framealpha=0.95)
     ax1.grid(alpha=0.25)
@@ -451,7 +451,7 @@ def fig_floor_is_the_noise():
     ax2.set_yticks([], minor=True)
     ax2.set_xticks(DEG)
     ax2.set_xlabel("다항식의 차수", fontsize=11)
-    ax2.set_ylabel("검정 RMSE (로그 눈금)", fontsize=11)
+    ax2.set_ylabel("검정 RMSE (로그 척도)", fontsize=11)
     ax2.set_title("바닥은 잡음이 정한다 — 점선이 각자의 σ 다", fontsize=12.5)
     ax2.legend(fontsize=10.5, loc="upper left", framealpha=0.95)
     ax2.grid(alpha=0.25)
@@ -547,7 +547,7 @@ def fig_six_points():
     print(f"\n[장 개요] 이 책이 만든 자료 n = {N}")
     print(f"  R^2: 점 {N} 개에서 {r2_all:.4f} · 덩어리 여섯에서 "
           f"{r2_six:.4f}")
-    print(f"  가장 왼쪽 덩어리 폭 {w_page:.3f} · 평균점의 치우침 "
+    print(f"  가장 왼쪽 덩어리 폭 {w_page:.3f} · 평균점의 편향 "
           f"{b_page:+.4f}")
 
 

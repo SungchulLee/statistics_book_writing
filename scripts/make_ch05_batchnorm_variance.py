@@ -89,7 +89,7 @@ ax1.set_xticklabels(["$1$", "$10$", "$10^{2}$", "$10^{3}$"])
 ax1.set_yticks([0.01, 0.1, 1])
 ax1.set_yticklabels(["$1\\%$", "$10\\%$", "$100\\%$"])
 ax1.minorticks_off()
-ax1.set_title("① 눈금은 평균보다 심하게 흔들린다", fontsize=12)
+ax1.set_title("① 척도는 평균보다 심하게 흔들린다", fontsize=12)
 ax1.legend(loc="lower left", fontsize=10)
 ax1.grid(alpha=0.25)
 
@@ -106,7 +106,7 @@ ax2.set_ylim(0.6, 1.08)
 ax2.annotate(f"$m = 2$ 에서 ${SD_Z[0]:.3f}$", xy=(2, SD_Z[0]),
              xytext=(4.5, 0.70), fontsize=10.5, color=C_S,
              arrowprops=dict(arrowstyle="->", color=C_S, lw=1.1))
-ax2.set_title("② 나눈 값이 바라던 눈금이 아니다", fontsize=12)
+ax2.set_title("② 나눈 값이 바라던 척도가 아니다", fontsize=12)
 ax2.legend(loc="lower right", fontsize=10.5)
 ax2.grid(alpha=0.25)
 
@@ -118,7 +118,7 @@ for i, b in enumerate(BAR):
 ax3.set_yscale("log")
 ax3.set_xticks(range(len(CASES)))
 ax3.set_xticklabels([c[0] for c in CASES], fontsize=10)
-ax3.set_ylabel("눈금의 상대 표준편차")
+ax3.set_ylabel("척도의 상대 표준편차")
 ax3.set_yticks([1, 10, 100])
 ax3.set_yticklabels(["$1\\%$", "$10\\%$", "$100\\%$"])
 ax3.minorticks_off()

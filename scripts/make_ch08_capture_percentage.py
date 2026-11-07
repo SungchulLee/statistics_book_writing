@@ -129,7 +129,7 @@ def main():
                 xy=(hi, 3.2), xytext=(hi + 0.80, 8.8), fontsize=10.8,
                 color=TEAL, ha="left",
                 arrowprops=dict(arrowstyle="->", color=TEAL, lw=1.5))
-    ax.set_xlabel("평균 (참값을 $0$, 표준오차를 $1$ 로 잰 눈금)", fontsize=11.5)
+    ax.set_xlabel("평균 (참값을 $0$, 표준오차를 $1$ 로 잰 척도)", fontsize=11.5)
     ax.set_ylabel("실험 번호", fontsize=11.5)
     ax.set_title(f"같은 실험을 ${NREP}$ 번 되풀이하면", fontsize=12.8,
                  color=INK, pad=8)

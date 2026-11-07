@@ -317,10 +317,10 @@ def z_rejection_two_scales():
     axes[0].set_title(f"$H_0: \\mu = {mu0:g}$,  $\\sigma = {sigma:g}$,  "
                       f"$n = {n}$  →  표준오차 ${se:g}$", fontsize=12.5,
                       pad=10)
-    axes[1].text(0, -0.30, "표준화는 눈금을 바꿀 뿐 그림을 바꾸지 않는다. "
+    axes[1].text(0, -0.30, "표준화는 척도를 바꿀 뿐 그림을 바꾸지 않는다. "
                            "두 줄의 붉은 넓이는 같은 $5\\%$ 다.",
                  fontsize=11, color=INK, ha="center", va="top")
-    fig.suptitle("기각역은 자료의 눈금으로도, $z$ 의 눈금으로도 적을 수 있다",
+    fig.suptitle("기각역은 자료의 척도로도, $z$ 의 척도로도 적을 수 있다",
                  fontsize=13.5, y=1.0)
     fig.tight_layout()
     save(fig, ONE + "z_rejection_two_scales.png")
@@ -455,7 +455,7 @@ def chi2_variance_nonrobust():
     ax.set_xticklabels([str(n) for n in ns])
     ax.set_xlim(8, 480)
     ax.set_ylim(0, 0.78)
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=11.5, color=INK)
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=11.5, color=INK)
     ax.set_ylabel("실제 제1종 오류율", fontsize=11.5, color=INK)
     clean_axis(ax)
     ax.legend(fontsize=11, frameon=False, loc="center right",

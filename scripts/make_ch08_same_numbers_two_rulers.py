@@ -73,7 +73,7 @@ ax2.text(1.48, np.sqrt(VAL[0] * VAL[1]),
          fontsize=11, fontweight="bold", color="0.2")
 ax2.set_xticks([0, 1], LAB, fontsize=12)
 ax2.set_xlim(-0.55, 2.55)
-ax2.set_ylabel("감염된 비율 (%, 로그 눈금)", fontsize=11)
+ax2.set_ylabel("감염된 비율 (%, 로그 척도)", fontsize=11)
 ax2.set_title("로그 자 — 비가 보이고 차는 안 보인다", fontsize=12.5)
 ax2.grid(axis="y", alpha=0.25, which="both")
 

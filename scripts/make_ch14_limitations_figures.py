@@ -93,7 +93,7 @@ def fig_power_paradox():
     ax.set_xlim(9, 6000)
     ax.set_ylim(0, 1.13)
     ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=10.5, color=INK)
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=10.5, color=INK)
     ax.set_ylabel("Shapiro-Wilk 검정의 기각률", fontsize=10.5, color=INK)
     ax.set_title("정규성 검정이 힘을 내는 구간은 정규성이 덜 필요한 구간이다",
                  fontsize=12.5, color=INK)
@@ -143,7 +143,7 @@ def fig_practical_vs_statistical():
         ax.minorticks_off()
         ax.set_xlim(13, 1300)
         ax.set_ylim(0, 1.12)
-        ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=10.5, color=INK)
+        ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=10.5, color=INK)
         ax.set_title(f"{title}  (왜도 {skew_true:.2f})", fontsize=11.5,
                      color=INK)
         ax.annotate(f"{cov[-1]:.3f}", (ns[-1], cov[-1]),
@@ -204,7 +204,7 @@ def fig_test_choice_flow():
          fs=10)
     _box(ax, 6.3, yq, 2.4, 0.72, "두꺼운 꼬리\n(금융 자료 등)", "white", MUTED,
          fs=10)
-    _box(ax, 9.0, yq, 2.4, 0.72, "치우침 · 첨도", "white", MUTED, fs=10)
+    _box(ax, 9.0, yq, 2.4, 0.72, "왜도 · 첨도", "white", MUTED, fs=10)
     for x in (3.6, 6.3, 9.0):
         _arrow(ax, (6.0, ys - 0.39), (x, yq + 0.36), color=BLUE)
     ax.text(-2.2, yq, "2단계\n무엇이 의심되는가", fontsize=10, color=MUTED,
@@ -279,8 +279,8 @@ def fig_pvalue_vs_effectsize():
     ax.set_ylim(8e-4, 3)
     ax.set_xlim(18, 6000)
     ax.text(19, 0.062, "유의수준 0.05", fontsize=9, color=RED, ha="left")
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=10.5, color=INK)
-    ax.set_ylabel("Shapiro-Wilk 의 $p$ 값 (로그 눈금)", fontsize=10.5,
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=10.5, color=INK)
+    ax.set_ylabel("Shapiro-Wilk 의 $p$ 값 (로그 척도)", fontsize=10.5,
                   color=INK)
     ax.set_title("$p$ 값은 $n$ 과 함께 무너진다", fontsize=11.5, color=INK)
     ax.legend(fontsize=9.5, frameon=False, loc="lower left", labelcolor=INK)
@@ -300,7 +300,7 @@ def fig_pvalue_vs_effectsize():
     ax.minorticks_off()
     ax.set_xlim(18, 6000)
     ax.set_ylim(-0.75, 1.15)
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=10.5, color=INK)
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=10.5, color=INK)
     ax.set_ylabel("표본 초과첨도 $g_2$", fontsize=10.5, color=INK)
     ax.set_title("이탈의 크기는 참값에서 멈춘다", fontsize=11.5, color=INK)
     ax.legend(fontsize=9.5, frameon=False, loc="upper right", labelcolor=INK)

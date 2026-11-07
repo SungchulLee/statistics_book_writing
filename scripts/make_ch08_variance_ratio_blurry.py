@@ -59,7 +59,7 @@ ax1.set_yticks([])
 TICKS = [0.2, 0.3, 0.5, 1.0, 2.0, 3.0, 4.0]
 ax1.set_xticks(TICKS, [f"{t:g}" for t in TICKS])
 ax1.set_xticks([], minor=True)
-ax1.set_xlabel("분산의 비 (로그 눈금)", fontsize=11)
+ax1.set_xlabel("분산의 비 (로그 척도)", fontsize=11)
 ax1.set_title(f"$n_1 = {N1}$, $n_2 = {N2}$ 에서 얻은 $95\\%$ 구간 하나",
               fontsize=12.5)
 ax1.grid(axis="x", alpha=0.25)

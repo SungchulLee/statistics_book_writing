@@ -129,8 +129,8 @@ ax2.legend(loc="upper right", fontsize=9.5)
 ax2.grid(alpha=0.25)
 
 for key, lab, c in (("정규", "정규", "#2ca02c"),
-                    ("cv0.3", "로그정규 (약한 치우침)", "#ff7f0e"),
-                    ("cv1.5", "로그정규 (강한 치우침)", "#d62728")):
+                    ("cv0.3", "로그정규 (약한 왜도)", "#ff7f0e"),
+                    ("cv1.5", "로그정규 (강한 왜도)", "#d62728")):
     ax3.semilogx(NS3, COV[key], "o-", color=c, lw=2.6, ms=9, label=lab)
 ax3.axhline(0.95, color="#333333", lw=1.8, ls="--")
 ax3.text(10.4, 1.005, "이름값 $95\\%$", fontsize=10.5, color="#333333")

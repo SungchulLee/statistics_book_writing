@@ -31,7 +31,7 @@ SIG0 = 100 * np.sqrt(0.25 / NPOLL)            # SRS 표준오차 (퍼센트포�
 MOE = stats.norm.isf(0.025) * SIG0            # 보고되는 95% 오차한계
 KS = np.array([5, 8, 12, 20, 30, 50])
 CS = np.array([1.0, 1.25, 1.5, 2.0, 2.5])     # 참 흩어짐이 SIG0 의 몇 배인가
-BIASES = np.array([0.0, 1.0, 2.0, 3.0, 4.0])  # 모든 조사가 공유하는 치우침
+BIASES = np.array([0.0, 1.0, 2.0, 3.0, 4.0])  # 모든 조사가 공유하는 편향
 REPS = 20000
 ALPHA = 0.05
 
@@ -58,8 +58,8 @@ for j, k in enumerate(KS):
     print(row)
 
 KFIX = 20
-print(f"\n② 공유된 치우침을 넣어도 달라지지 않는다 (k = {KFIX}, c = 1)")
-print(f"{'치우침 b (pp)':>14}{'기각률':>10}")
+print(f"\n② 공유된 편향을 넣어도 달라지지 않는다 (k = {KFIX}, c = 1)")
+print(f"{'편향 b (pp)':>14}{'기각률':>10}")
 rb = [reject(KFIX, 1.0, b) for b in BIASES]
 for b, r in zip(BIASES, rb):
     print(f"{b:>14.1f}{r:>10.4f}")
@@ -70,7 +70,7 @@ ABS_BIAS = 2.0      # 논문이 보고한 선거 수준 절대편향의 평균 (
 tau = ABS_BIAS / np.sqrt(2 / np.pi)             # bias ~ N(0, tau) 로 보면
 sig_v = np.sqrt(max(RMSE ** 2 - tau ** 2, 0))   # 남는 것이 조사 사이 흩어짐
 print(f"\n③ 실제 오차를 평균 0, 표준편차 {RMSE} pp 로 보면")
-print(f"   선거 수준 치우침 tau = {tau:.2f} pp, 조사 사이 흩어짐 {sig_v:.2f} pp")
+print(f"   선거 수준 편향 tau = {tau:.2f} pp, 조사 사이 흩어짐 {sig_v:.2f} pp")
 cover_claim = 0.95
 cover_true = float(2 * stats.norm.cdf(MOE / RMSE) - 1)
 print(f"   보고된 ±{MOE:.2f} pp 가 실제로 덮는 비율 {cover_true:.3f}")
@@ -102,10 +102,10 @@ ax2.axhline(ALPHA, color="black", lw=1.4, ls=":")
 ax2.text(4.45, 0.088, "점선은 명목 $0.05$", fontsize=10.5, ha="right")
 ax2.set_xticks(np.arange(len(BIASES)))
 ax2.set_xticklabels([f"${b:.0f}$" for b in BIASES])
-ax2.set_xlabel("모든 조사가 공유하는 치우침 (퍼센트포인트)")
+ax2.set_xlabel("모든 조사가 공유하는 편향 (퍼센트포인트)")
 ax2.set_ylabel(f"기각률 ($k = {KFIX}$, 흩어짐은 제대로)")
 ax2.set_ylim(0, 0.1)
-ax2.set_title("② 그런데 이 검정은 치우침을 못 본다", fontsize=12)
+ax2.set_title("② 그런데 이 검정은 편향을 못 본다", fontsize=12)
 ax2.grid(alpha=0.25, axis="y")
 
 ax3.plot(LEVELS, cover, color="#1f77b4", lw=2.8)

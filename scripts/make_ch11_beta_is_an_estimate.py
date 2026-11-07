@@ -119,7 +119,7 @@ def main():
     ax.set_xticks(list(WINDOWS))
     ax.set_xticklabels([f"${n}$" for n in WINDOWS])
     ax.minorticks_off()
-    ax.set_xlabel("적합에 쓴 날 수 $n$ (로그 눈금)", fontsize=11.5)
+    ax.set_xlabel("적합에 쓴 날 수 $n$ (로그 척도)", fontsize=11.5)
     ax.set_ylabel("$\\hat\\beta$ 의 표준오차", fontsize=11.5)
     ax.set_ylim(0, 0.185)
     ax.set_title("① 창을 네 배 늘려야 폭이 절반이 된다", fontsize=12.8,

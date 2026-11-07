@@ -105,7 +105,7 @@ ax1.set_title("① 둘은 같은 수다", fontsize=12)
 ax1.legend(loc="upper left", fontsize=11)
 _m, _e = f"{err:.1e}".split("e")      # 지수표기는 쪼개서 수식으로 조립한다
 ax1.text(0.97, 0.06,
-         f"둘의 최대 어긋남\n${_m} \\times 10^{{{int(_e)}}}$",
+         f"둘의 최대 불일치\n${_m} \\times 10^{{{int(_e)}}}$",
          transform=ax1.transAxes, ha="right", fontsize=10,
          bbox=dict(boxstyle="round,pad=0.35", fc="white", ec="#cccccc"))
 ax1.grid(alpha=0.25)

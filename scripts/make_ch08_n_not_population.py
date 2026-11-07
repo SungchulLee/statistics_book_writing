@@ -60,7 +60,7 @@ for N, name in MARK:
 ax1.set_xscale("log")
 ax1.set_xlim(N_SAMPLE * 1.02, 1e8)
 ax1.set_ylim(0, 3.45)
-ax1.set_xlabel("모집단 크기 N (로그 눈금)", fontsize=11)
+ax1.set_xlabel("모집단 크기 N (로그 척도)", fontsize=11)
 ax1.set_ylabel("오차한계 (퍼센트포인트)", fontsize=11)
 ax1.set_title(f"n = {N_SAMPLE:,} 을 못 박고 모집단만 바꾸면", fontsize=12.5)
 ax1.grid(alpha=0.25, which="both")

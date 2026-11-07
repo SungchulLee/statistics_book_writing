@@ -2,7 +2,7 @@ r"""여론조사의 $\pm 3.1\%$p 가 덮는 것과 덮지 못하는 것.
 
 ① 오차한계는 $1/\sqrt n$ 이라 $n = 1000$ 을 넘기면 돈값을 못 한다.
 ② 두 후보의 **격차**에 붙는 오차한계는 한 후보에 붙는 것보다 크다.
-③ 무응답이 만드는 치우침은 $n$ 을 아무리 키워도 줄지 않는다.
+③ 무응답이 만드는 편향은 $n$ 을 아무리 키워도 줄지 않는다.
 
 만드는 파일: docs/ch08/sample_size/img/poll_margin.png
 """
@@ -87,11 +87,11 @@ ax2.set_xlabel("지지율 ($\\%$)   $n = 1{,}000$")
 ax2.set_title("② 격차의 오차한계가 더 크다", fontsize=12)
 ax2.grid(alpha=0.25, axis="x")
 
-# ③ 치우침은 n 으로 줄지 않는다
-ax3.loglog(ns, moe(ns) * 100, color="#1f77b4", lw=2.4, label="치우침 없음")
+# ③ 편향은 n 으로 줄지 않는다
+ax3.loglog(ns, moe(ns) * 100, color="#1f77b4", lw=2.4, label="편향 없음")
 for d, c in [(0.005, "#2ca02c"), (0.01, "#ff7f0e"), (0.02, "#d62728")]:
     rmse = np.sqrt((Z * np.sqrt(0.25 / ns)) ** 2 + (d * Z) ** 2) * 100
-    ax3.loglog(ns, rmse, color=c, lw=2.2, label=f"치우침 ${d * 100:.1f}\\%$p")
+    ax3.loglog(ns, rmse, color=c, lw=2.2, label=f"편향 ${d * 100:.1f}\\%$p")
     ax3.axhline(d * Z * 100, color=c, lw=0.9, ls=":")
 ax3.set_xlabel("표본 크기 $n$")
 ax3.set_ylabel("전체 오차 ($\\%$p)")
@@ -124,10 +124,10 @@ print(f"  격차 오차한계 / 한 후보 오차한계 = {g / moe(N_POLL, P1):.
 need = (Z / (P1 - P2)) ** 2 * (P1 + P2 - (P1 - P2) ** 2)
 print(f"  2%p 격차를 유의하게 만들려면 n = {need:,.0f}")
 
-print("\n③ 치우침이 있을 때 전체 오차가 멈추는 바닥")
+print("\n③ 편향이 있을 때 전체 오차가 멈추는 바닥")
 for d in (0.005, 0.01, 0.02):
     n_eq = 0.25 / d**2
     print(
-        f"  치우침 {d * 100:.1f}%p:  바닥 {d * Z * 100:.2f}%p,  "
+        f"  편향 {d * 100:.1f}%p:  바닥 {d * Z * 100:.2f}%p,  "
         f"표집오차와 같아지는 n = {n_eq:,.0f}"
     )

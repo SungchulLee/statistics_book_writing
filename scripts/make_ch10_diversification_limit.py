@@ -61,7 +61,7 @@ ax1.set_xticks([1, 2, 5, 10, 20, 50, 100, 200],
                ["1", "2", "5", "10", "20", "50", "100", "200"])
 ax1.set_xticks([], minor=True)
 ax1.set_ylim(0, 1.03)
-ax1.set_xlabel("담은 종목 수 (로그 눈금)", fontsize=11)
+ax1.set_xlabel("담은 종목 수 (로그 척도)", fontsize=11)
 ax1.set_ylabel("포트폴리오의 분산 (한 종목이 1)", fontsize=11)
 ax1.set_title("바닥을 정하는 것은 종목 수가 아니라 평균 상관이다",
               fontsize=12.5)

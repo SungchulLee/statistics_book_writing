@@ -498,7 +498,7 @@ _확인한 곳 — 닉스와 바이겐트의 「Estimating the mean and variance
 
     model = smf.ols('Y ~ X', data=data).fit()
 
-    # 회귀에서 등분산성은 잔차의 퍼짐이 적합값에 따라 달라지지 않는다는 가정이다.
+    # 회귀에서 등분산성은 잔차의 산포가 적합값에 따라 달라지지 않는다는 가정이다.
     # Breusch-Pagan 은 잔차의 제곱을 설명변수에 회귀해 그 관계를 찾는다.
     lm_stat, lm_p, f_stat, f_p = het_breuschpagan(model.resid, model.model.exog)
 

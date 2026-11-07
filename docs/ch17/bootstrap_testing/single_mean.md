@@ -133,7 +133,7 @@ $$
         """
         rng = rng or np.random.default_rng(0)
         n = len(data)
-        # 자료를 통째로 옮겨 평균이 정확히 mu_0 이 되게 한다. 퍼짐과 모양은
+        # 자료를 통째로 옮겨 평균이 정확히 mu_0 이 되게 한다. 산포와 모양은
         # 그대로 남으므로, 귀무가설만 참인 세계를 흉내 낸 셈이다.
         centered = data - data.mean() + mu_0
         boot_means = centered[rng.integers(0, n, (n_boot, n))].mean(axis=1)

@@ -123,9 +123,9 @@ grid = np.linspace(-4, 4, 401)
 raw = np.array([abs(diff_raw(l)) for l in grid])
 nrm = np.array([abs(diff_norm(l)) for l in grid])
 axR.semilogy(grid, raw, color=RED, lw=2.4, zorder=3,
-             label="$y^{(\\lambda)}$ 눈금에서 잰 차이")
+             label="$y^{(\\lambda)}$ 척도에서 잰 차이")
 axR.semilogy(grid, nrm, color=GREEN, lw=2.4, zorder=3,
-             label="$z(\\lambda)$ 눈금에서 잰 차이")
+             label="$z(\\lambda)$ 척도에서 잰 차이")
 axR.axhline(10, color=MUTED, lw=1.0, ls=":", zorder=1)
 # 로그 눈금의 지수는 mathtext 라 평문으로 박는다
 ticks = [1e-12, 1e-8, 1e-4, 1, 1e4, 1e8, 1e12]
@@ -140,7 +140,7 @@ axR.set_ylabel("두 집단 평균의 차이 (절댓값)")
 axR.set_title("같은 자료, 같은 효과 — 자만 바꾸었다", color=INK,
               fontsize=12, pad=9)
 axR.legend(loc="upper left", fontsize=9.5, framealpha=0.95)
-axR.text(1.6, 22, f"$z$ 눈금에서는 어느 $\\lambda$ 에서나 ${diff_norm(1):.1f}$",
+axR.text(1.6, 22, f"$z$ 척도에서는 어느 $\\lambda$ 에서나 ${diff_norm(1):.1f}$",
          fontsize=9, color=GREEN)
 for s in ("top", "right"):
     axR.spines[s].set_visible(False)

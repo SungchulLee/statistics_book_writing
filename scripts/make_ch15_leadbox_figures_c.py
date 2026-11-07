@@ -2,10 +2,10 @@
 
   15. levene_simulation         「흔들리지 않는다」와 「명목값과 같다」는 다르다
   16. brown_forsythe            중심을 바꾸면 신호가 절반 — 그 절반의 값
-  17. fligner_killeen           꼬리는 막고 치우침은 못 막는다
+  17. fligner_killeen           꼬리는 막고 왜도는 못 막는다
   18. robust_tests              이상점 하나를 키워 가면 네 p 값이 갈라진다
   19. comparison                크기를 먼저 통과시킨 뒤에 검정력을 따진다
-  20. robust_tests_comparison   치우침을 키우면 무너지는 순서가 있다
+  20. robust_tests_comparison   왜도를 키우면 무너지는 순서가 있다
 
 만드는 파일:
   docs/ch15/robust_tests/img/stable_is_not_calibrated.png
@@ -232,15 +232,15 @@ save(fig, RT + "half_the_signal_costs_this.png")
 
 
 # ════════════════════════════════════════════════════════════════════
-# 17. fligner_killeen — 꼬리는 막고 치우침은 못 막는다
+# 17. fligner_killeen — 꼬리는 막고 왜도는 못 막는다
 #
-# 쪽의 그림 셋은 이상점 면역·중심 어긋남·세 단계 변환을 다룬다. 들머리의
+# 쪽의 그림 셋은 이상점 면역·중심 불일치·세 단계 변환을 다룬다. 들머리의
 # **셋째 문단**이 남는다 — 「값은 모양이 바뀌어도 크기가 버틴다는 것이
-# 이 검정의 성질이지만 무한정 버티지는 않는다. 치우침이 세지면 이쪽도
+# 이 검정의 성질이지만 무한정 버티지는 않는다. 왜도가 세지면 이쪽도
 # 자유주의로 기울어 카이제곱 4 에서 0.055, 지수분포에서 0.087 이 된다.」
 #
-# 「꼬리는 막고 치우침은 못 막는다」는 **두 축**을 나란히 놓아야 보인다.
-# 왼쪽은 대칭인 채 꼬리만 두껍게, 오른쪽은 치우침만 세게 한 것이다.
+# 「꼬리는 막고 왜도는 못 막는다」는 **두 축**을 나란히 놓아야 보인다.
+# 왼쪽은 대칭인 채 꼬리만 두껍게, 오른쪽은 왜도만 세게 한 것이다.
 # ════════════════════════════════════════════════════════════════════
 r17 = np.random.default_rng(15_218)
 TAILS = [("정규", lambda n: r17.standard_normal(n)),
@@ -268,9 +268,9 @@ for nm, gen in SKEWS:
                      "브라운–포사이드": bf, "바틀렛": stats.bartlett})
     for k_ in skew_res:
         skew_res[k_].append(res[k_])
-print("\n[fligner_killeen] 꼬리 축과 치우침 축")
+print("\n[fligner_killeen] 꼬리 축과 왜도 축")
 print("  꼬리: " + " ".join(f"{v:.3f}" for v in tail_res["플리그너–킬린"]))
-print("  치우침: " + " ".join(f"{v:.3f}" for v in skew_res["플리그너–킬린"]))
+print("  왜도: " + " ".join(f"{v:.3f}" for v in skew_res["플리그너–킬린"]))
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.6, 5.0), sharey=True)
 STY = [("플리그너–킬린", "tab:blue", "o-"), ("브라운–포사이드", "tab:green", "s-"),
@@ -278,7 +278,7 @@ STY = [("플리그너–킬린", "tab:blue", "o-"), ("브라운–포사이드",
 for ax, data, names, title in [
         (ax1, tail_res, [nm for nm, _ in TAILS],
          "대칭인 채 꼬리만 두껍게"),
-        (ax2, skew_res, [nm for nm, _ in SKEWS], "치우침만 세게")]:
+        (ax2, skew_res, [nm for nm, _ in SKEWS], "왜도만 세게")]:
     xx = np.arange(len(names))
     ax.axhline(0.05, color="0.2", lw=2.2, ls="--")
     for nm, c, mk in STY:
@@ -293,7 +293,7 @@ ax1.annotate("꼬리가 아무리 두꺼워져도 평평하다",
              xy=(3, tail_res["플리그너–킬린"][3]), xytext=(0.15, 0.32),
              fontsize=11.5, color="tab:blue", fontweight="bold", ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.9))
-ax2.annotate(f"치우침에는 끌려간다\n"
+ax2.annotate(f"왜도에는 끌려간다\n"
              f"({skew_res['플리그너–킬린'][0]:.3f} → "
              f"{skew_res['플리그너–킬린'][-1]:.3f})",
              xy=(3.9, skew_res["플리그너–킬린"][-1]), xytext=(1.0, 0.38),
@@ -449,7 +449,7 @@ save(fig, RT + "size_first_then_power.png")
 #
 # 쪽의 lognormal_center_stability 는 **한** 대수정규에서 네 검정의 거짓
 # 양성률을 그린다. 들머리의 머리글은 그 한 자리의 수지만, 「넷 가운데
-# 셋이 무너진다」를 보려면 치우침을 **연속으로** 키워야 무너지는 **순서**가
+# 셋이 무너진다」를 보려면 왜도를 **연속으로** 키워야 무너지는 **순서**가
 # 드러난다. 어느 검정이 먼저 꺾이고 어디까지 버티는가가 이 쪽의 값이다.
 # ════════════════════════════════════════════════════════════════════
 r20 = np.random.default_rng(15_221)
@@ -462,7 +462,7 @@ for s in SIGS:
               REPS20, r20, tests=TESTS)
     for nm in TESTS:
         tracks20[nm].append(res[nm])
-print("\n[robust_tests_comparison] 치우침을 키우면 무너지는 순서")
+print("\n[robust_tests_comparison] 왜도를 키우면 무너지는 순서")
 print("  왜도: " + " ".join(f"{v:7.2f}" for v in skews20))
 for nm in TESTS:
     print(f"  {nm:14s}: " + " ".join(f"{v:7.3f}" for v in tracks20[nm]))
@@ -476,7 +476,7 @@ ax.set_xscale("log")
 # 로그 눈금의 기본 이름표는 mathtext 라 한글 글꼴에서 두부가 된다
 ax.set_xticks(skews20, [f"{v:.2f}" if v < 10 else f"{v:.0f}"
                         for v in skews20])
-ax.set_xlabel("모집단의 왜도 (로그 눈금) — 분산은 어느 자리에서나 "
+ax.set_xlabel("모집단의 왜도 (로그 척도) — 분산은 어느 자리에서나 "
               "세 집단이 같다", fontsize=11.5)
 ax.set_ylabel("「분산이 다르다」고 답하는 비율", fontsize=12)
 ax.set_ylim(0, 0.92)
@@ -497,7 +497,7 @@ ax.annotate("셋이 차례로 두 배 선을 넘는 동안\n"
             xytext=(1.2, 0.52), fontsize=12, color="tab:blue",
             fontweight="bold", ha="left",
             arrowprops=dict(arrowstyle="->", color="tab:blue", lw=2.0))
-ax.set_title("치우침을 연속으로 키우면 무너지는 차례가 드러난다",
+ax.set_title("왜도를 연속으로 키우면 무너지는 차례가 드러난다",
              fontsize=13)
 fig.suptitle("로버스트하다는 넷 가운데 셋이 무너진다", fontsize=15, y=0.975)
 plt.tight_layout()

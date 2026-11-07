@@ -92,7 +92,7 @@ ax2.annotate(f"곱셈이라면 ${mul_exp:.2f}$\n(관측 ${RR[1, 1]:.2f}$)",
              xy=(1, mul_exp), xytext=(0.12, 22), fontsize=10.5,
              color="#555555",
              arrowprops=dict(arrowstyle="->", color="#555555", lw=1.0))
-ax2.set_ylabel("폐암 사망비 (로그 눈금)")
+ax2.set_ylabel("폐암 사망비 (로그 척도)")
 ax2.set_title("② 로그 척도 — 거의 평행하다", fontsize=12)
 ax2.legend(loc="upper left", fontsize=10)
 

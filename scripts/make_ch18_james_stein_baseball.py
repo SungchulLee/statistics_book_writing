@@ -126,7 +126,7 @@ ax2.text(2.22, gain.sum() - 0.72, f"여기까지 {gain.sum()} 명이 이득",
          fontsize=10, ha="right", va="bottom")
 ax2.text(2.22, gain.sum() - 0.28, f"아래 {K - gain.sum()} 명은 손해",
          fontsize=10, ha="right", va="top", color="#8c564b")
-ax2.set_xlabel("오차의 절댓값 (아크사인 눈금)")   # mathtext 에 \lvert 가 없다
+ax2.set_xlabel("오차의 절댓값 (아크사인 척도)")   # mathtext 에 \lvert 가 없다
 ax2.set_xlim(0, 2.35)
 ax2.set_title("② 전체는 좋아지고 누군가는 나빠진다", fontsize=12)
 ax2.legend(loc="lower right", fontsize=10)
@@ -145,7 +145,7 @@ for c, v, col, lab, xy_t, ha in pts:
                  fontsize=10.5, color=col, ha=ha, va="center",
                  arrowprops=dict(arrowstyle="->", color=col, lw=1.1))
 ax3.set_xlabel("남겨 두는 몫 $c$  (직교설계의 능형이면 $c = 1/(1+\\lambda)$)")
-ax3.set_ylabel("총제곱오차 (아크사인 눈금)")
+ax3.set_ylabel("총제곱오차 (아크사인 척도)")
 ax3.set_ylim(1.8, 20.6)
 ax3.set_xlim(-0.05, 1.12)
 ax3.set_title("③ 자료가 고른 값과 신탁이 거의 같다", fontsize=12)

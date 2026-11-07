@@ -570,7 +570,7 @@ def fig_subset_cost():
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.2))
     ax.set_ylim(5, 5e12)
     ax.set_xlabel("설명변수 개수 p", fontsize=10.5, color=INK)
-    ax.set_ylabel("적합해야 하는 모형 개수 (로그 눈금)", fontsize=10,
+    ax.set_ylabel("적합해야 하는 모형 개수 (로그 척도)", fontsize=10,
                   color=INK)
     ax.set_title("전수탐색은 곧 불가능해진다", fontsize=11.5, color=INK,
                  pad=6)

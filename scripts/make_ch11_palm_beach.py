@@ -190,8 +190,8 @@ def main():
     ax.set_yscale("log")
     ax.set_xlim(1100, 340000)
     ax.set_ylim(5, 6000)
-    ax.set_xlabel("부시가 받은 표 (로그 눈금)", fontsize=11.5)
-    ax.set_ylabel("뷰캐넌이 받은 표 (로그 눈금)", fontsize=11.5)
+    ax.set_xlabel("부시가 받은 표 (로그 척도)", fontsize=11.5)
+    ax.set_ylabel("뷰캐넌이 받은 표 (로그 척도)", fontsize=11.5)
     ax.set_title(f"② 초과 ${BUCHANAN[PB] - fit_pb:.0f}$ 표 — 표차는 "
                  f"${MARGIN}$ 표였다", fontsize=12.8, color=INK)
     ax.grid(alpha=0.22, which="both")

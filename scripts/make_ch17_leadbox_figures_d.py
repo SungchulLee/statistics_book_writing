@@ -48,16 +48,16 @@ def signs(n, m, rng):
 # … 귀무분포는 그 큰 값을 양쪽에 고르게 놓아 가운데가 실제보다
 # 두꺼워진다. 그래서 … 거짓 기각이 늘어난다.」
 #
-# 「방향이 정해져 있다」는 **치우침을 손잡이로 돌려** 보아야 보인다.
-# 평균은 0 으로 묶어 둔 채 치우침만 키우며 거짓 기각률을 잰다.
+# 「방향이 정해져 있다」는 **왜도를 손잡이로 돌려** 보아야 보인다.
+# 평균은 0 으로 묶어 둔 채 왜도만 키우며 거짓 기각률을 잰다.
 # 두 번째 칸이 까닭을 담는다 — 두 분포의 가운데가 어떻게 어긋나는지.
 # ════════════════════════════════════════════════════════════════════
 r21 = np.random.default_rng(17_021)
 N21, REPS21, M21 = 12, 4000, 1024
 SHAPES = [("정규 (대칭)", lambda m, n: r21.standard_normal((m, n))),
-          ("약하게 치우침", lambda m, n: r21.gamma(8.0, 1.0, (m, n))),
-          ("치우침", lambda m, n: r21.gamma(2.0, 1.0, (m, n))),
-          ("세게 치우침", lambda m, n: r21.gamma(0.7, 1.0, (m, n))),
+          ("약하게 왜도", lambda m, n: r21.gamma(8.0, 1.0, (m, n))),
+          ("왜도", lambda m, n: r21.gamma(2.0, 1.0, (m, n))),
+          ("세게 왜도", lambda m, n: r21.gamma(0.7, 1.0, (m, n))),
           ("아주 세게", lambda m, n: r21.gamma(0.3, 1.0, (m, n)))]
 sizes, skews = [], []
 for nm, gen in SHAPES:
@@ -70,7 +70,7 @@ for nm, gen in SHAPES:
         hit += (np.abs(flip) >= obs).mean() < 0.05
     sizes.append(hit / REPS21)
     skews.append(float(stats.skew(d.ravel())))
-    print(f"[paired] {nm:<14s} 치우침 {skews[-1]:+.3f} · "
+    print(f"[paired] {nm:<14s} 왜도 {skews[-1]:+.3f} · "
           f"거짓 기각률 {sizes[-1]:.4f}")
 
 # 두 번째 칸 — 까닭을 담는다. 처음에 「참 귀무분포와 부호 뒤집기 분포」를
@@ -100,7 +100,7 @@ for s, v, (nm, _) in zip(skews, sizes, SHAPES):
     ax1.annotate(nm, xy=(s, v), xytext=(0, -17),
                  textcoords="offset points", ha="center", fontsize=10.6,
                  color="0.3")
-ax1.set_xlabel("차이의 치우침 (평균은 모두 0 으로 묶어 두었다)",
+ax1.set_xlabel("차이의 왜도 (평균은 모두 0 으로 묶어 두었다)",
                fontsize=11.5)
 ax1.set_ylabel("아무 효과가 없는데 기각하는 비율", fontsize=11.5)
 ax1.set_ylim(0, max(sizes) * 1.3)

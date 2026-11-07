@@ -147,7 +147,7 @@ axR.set_xscale("log")
 axR.set_xticks(ns)
 axR.set_xticklabels([str(v) for v in ns], fontsize=9)
 axR.minorticks_off()
-axR.set_xlabel("집단당 $n$ (가로축은 로그눈금)")
+axR.set_xlabel("집단당 $n$ (가로축은 로그 척도)")
 axR.set_ylabel("기각률")
 axR.set_ylim(0, 1.02)
 axR.set_title(f"이동폭을 $\\delta = {C}/\\sqrt{{n}}$ 로 묶어 놓고 $n$ 을 키우면",
@@ -169,7 +169,7 @@ show = [8, 15, 25, 40, 70, 120, 200]
 axS.set_xticks(show)
 axS.set_xticklabels([str(v) for v in show], fontsize=9)
 axS.minorticks_off()
-axS.set_xlabel("집단당 $n$ (가로축은 로그눈금)")
+axS.set_xlabel("집단당 $n$ (가로축은 로그 척도)")
 axS.set_ylabel("귀무가설에서의 실제 기각률")
 axS.set_ylim(0, 0.085)
 axS.set_title(f"$0.05$ 를 겨눈 검정의 실제 크기 — {REPS_C:,} 회",

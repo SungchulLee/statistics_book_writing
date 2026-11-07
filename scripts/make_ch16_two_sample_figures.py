@@ -5,7 +5,8 @@ r"""16.3 이표본 비모수 검정 다섯 쪽에 들어가는 개념 그림을 
   ch16/two_sample_nonparametric/img/pairwise_wins_grid.png        U 는 쌍별 승수다
   ch16/two_sample_nonparametric/img/ks_ecdf_gap.png               KS 는 ECDF 간격을 본다
   ch16/two_sample_nonparametric/img/mw_tests_not_mean.png         MW 는 평균을 검정하지 않는다
-  ch16/two_sample_nonparametric/img/mood_information_loss.png     한 비트로 뭉갤 때의 손실
+  ch16/multi_group_nonparametric/img/mood_information_loss.png    한 비트로 뭉갤 때의 손실
+                                                                  (이 한 장만 16.4 쪽에 쓰인다)
 
 실행:  python3 scripts/make_ch16_two_sample_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -33,11 +34,15 @@ MUTED = "#90A4AE"
 RED = "#D32F2F"
 
 OUT = "docs/ch16/two_sample_nonparametric/img/"
+# mood_information_loss 만 16.4 의 median_test.md 가 쓴다. 쪽이 옮겨 갔는데 이
+# 경로가 따라가지 않아, 다시 그리면 16.3 쪽에 같은 이름의 고아가 하나 더 생겼다.
+OUT_MULTI = "docs/ch16/multi_group_nonparametric/img/"
 os.makedirs(OUT, exist_ok=True)
+os.makedirs(OUT_MULTI, exist_ok=True)
 
 
-def save(fig, name):
-    path = OUT + name
+def save(fig, name, out=OUT):
+    path = out + name
     fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print("saved", path)
@@ -215,7 +220,7 @@ def ks_ecdf_gap():
     ax.set_title("(가) $D$ 는 두 계단 사이의 가장 큰 수직 간격이다",
                  fontsize=11.5, color=INK, loc="left", pad=8)
 
-    # (나) 중심은 같고 퍼짐만 다를 때
+    # (나) 중심은 같고 산포만 다를 때
     rng = np.random.default_rng(7)
     n = 100
     X = rng.normal(0, 1, n)
@@ -245,7 +250,7 @@ def ks_ecdf_gap():
     ax.set_xlabel("값", fontsize=10.5, color=INK)
     ax.set_ylabel("경험적 누적분포 $\\hat{F}$", fontsize=10.5, color=INK)
     ax.legend(fontsize=10, loc="lower right", frameon=False)
-    ax.set_title("(나) 중심이 같고 퍼짐만 달라도 KS 는 본다",
+    ax.set_title("(나) 중심이 같고 산포만 달라도 KS 는 본다",
                  fontsize=11.5, color=INK, loc="left", pad=8)
 
     fig.suptitle("순위합검정은 중심을 보고 KS 검정은 분포 전체를 본다",
@@ -416,7 +421,7 @@ def mood_information_loss():
     fig.suptitle("같은 자료에서 한쪽은 기각하고 한쪽은 기각하지 못한다",
                  fontsize=13.5, color=INK, y=1.01)
     fig.tight_layout()
-    save(fig, "mood_information_loss.png")
+    save(fig, "mood_information_loss.png", OUT_MULTI)
     print("grand median", gm, "KW H=%.4f p=%.4f" % (h, p_kw),
           "Mood chi2=%.2f p=%.4f" % (mt.statistic, mt.pvalue))
     print("table\n", mt.table)

@@ -3,7 +3,7 @@
   1. qq_plots            정상의 폭이 자리마다 다르다 (꼬리에서 여섯 배)
   2. qq_plots_financial  과소평가는 꼬리로 갈수록 빠르게 커진다
   3. skewness_kurtosis   차수가 올라갈수록 같은 정밀도가 비싸진다
-  4. jarque_bera         작은 p 값으로 갈수록 어긋남이 커진다
+  4. jarque_bera         작은 p 값으로 갈수록 불일치가 커진다
   5. dagostino           사십이 년이 걸린 변환이 한 일
   6. kurtosistest        중심도 제자리가 아니다 — 그리고 펴기 전과 뒤
 
@@ -90,7 +90,7 @@ ax2.annotate(f"가장 바깥 점은 {band[imax]:.4f}\n"
 ax2.set_xlim(-3.6, 3.6)
 ax2.set_ylim(0, 0.86)
 ax2.set_xlabel("정규 분위수", fontsize=11.5)
-ax2.set_ylabel("그 자리에서 정상인 벗어남의 폭", fontsize=11.5)
+ax2.set_ylabel("그 자리에서 정상인 이탈의 폭", fontsize=11.5)
 ax2.set_title("「양 끝이 벌어졌다」는 그 자체로는 아무 말도 아니다",
               fontsize=12.5)
 ax2.grid(alpha=0.25)
@@ -219,7 +219,7 @@ ax1.set_yscale("log")
 ax1.set_xticks(NS3, [f"{n:,}" for n in NS3])
 ax1.set_yticks([0.01, 0.03, 0.1, 0.3, 1, 3],
                ["0.01", "0.03", "0.1", "0.3", "1", "3"])
-ax1.set_xlabel("표본크기 n (로그 눈금)", fontsize=11.5)
+ax1.set_xlabel("표본크기 n (로그 척도)", fontsize=11.5)
 ax1.set_ylabel("그 통계량이 흔들리는 폭 (표준오차)", fontsize=11.5)
 ax1.set_title("차수가 올라갈수록 같은 정밀도가 비싸진다", fontsize=13)
 ax1.legend(fontsize=11, loc="lower left")
@@ -260,10 +260,10 @@ save(fig, DESC + "higher_moments_cost_more.png")
 
 
 # ════════════════════════════════════════════════════════════════════
-# 4. jarque_bera — 작은 p 값으로 갈수록 어긋남이 커진다
+# 4. jarque_bera — 작은 p 값으로 갈수록 불일치가 커진다
 #
 # 쪽의 jb_chi2_calibration 이 「n = 50 에서 JB 의 귀무분포와 카이제곱
-# 근사의 어긋남」을 이미 그린다. 곧 들머리의 첫 문단(95 백분위가 5.991 이
+# 근사의 불일치」을 이미 그린다. 곧 들머리의 첫 문단(95 백분위가 5.991 이
 # 아니라 4.97)은 그 그림의 것이다. 여기서는 **둘째 문단**만 그린다 —
 # 「꾸러미가 p = 0.001 이라 적어 줄 때 실제 확률은 0.0080 으로 여덟 배다.
 # 논문에 그대로 옮겨 적히는 수가 바로 이 자리의 수다.」
@@ -394,7 +394,7 @@ for ax, (nm, sim, tr, col) in zip(axs, [
             label="변환을 거친 점수")
     ax.set_xscale("log")
     ax.set_xticks(NS5, [f"{n:,}" for n in NS5])
-    ax.set_xlabel("표본크기 n (로그 눈금)", fontsize=11.5)
+    ax.set_xlabel("표본크기 n (로그 척도)", fontsize=11.5)
     ax.set_title(f"{nm} 검정", fontsize=13.5)
     ax.set_ylim(0, 0.072)
     ax.legend(fontsize=10.6, loc="lower right")
@@ -456,7 +456,7 @@ ax1.plot(NS6, meas, "o", color="tab:blue", ms=11,
          label="되풀이해 재어 본 값")
 ax1.set_xscale("log")
 ax1.set_xticks(NS6, [f"{n:,}" for n in NS6])
-ax1.set_xlabel("표본크기 n (로그 눈금)", fontsize=11.5)
+ax1.set_xlabel("표본크기 n (로그 척도)", fontsize=11.5)
 ax1.set_ylabel("비보정 첨도의 기댓값 빼기 3", fontsize=11.5)
 ax1.set_ylim(-0.33, 0.045)
 ax1.set_title("정규 자료에서도 3 을 밑돌게 나온다", fontsize=13)
@@ -491,7 +491,7 @@ ax2.axhline(0.05, color="0.3", lw=1.8, ls=":")
 ax2.set_ylim(2e-6, 1.6)
 ax2.set_xlim(0, 1.4)
 ax2.set_xlabel(f"표본 초과첨도 (n = {N6B})", fontsize=11.5)
-ax2.set_ylabel("매겨지는 p 값 (로그 눈금)", fontsize=11.5)
+ax2.set_ylabel("매겨지는 p 값 (로그 척도)", fontsize=11.5)
 ax2.set_title("같은 통계량에 두 표준화가 다른 p 를 매긴다", fontsize=12.5)
 ax2.legend(fontsize=11, loc="lower left")
 ax2.grid(alpha=0.25, which="both")

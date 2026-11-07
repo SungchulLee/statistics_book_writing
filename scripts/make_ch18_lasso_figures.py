@@ -367,7 +367,7 @@ def coord_descent():
     ax2.set_xlim(0, 19)
     ax2.set_xticks([1, 5, 10, 15])
     ax2.set_xlabel("순회 횟수", fontsize=11, color=INK)
-    ax2.set_ylabel(r'그 순회에서의 최대 변화량 (로그 눈금)', fontsize=11,
+    ax2.set_ylabel(r'그 순회에서의 최대 변화량 (로그 척도)', fontsize=11,
                    color=INK)
     ax2.set_title(r'(나) $n=80$, $p=10$ 에서의 수렴', fontsize=12, color=INK)
     ax2.legend(fontsize=10, loc="upper right", frameon=False)
@@ -549,7 +549,7 @@ def path_cv():
     logx_plain(ax1, [0.01, 0.1, 1, 10], ["0.01", "0.1", "1", "10"])
     ax1.set_xlim(0.01, 10)
     ax1.set_ylim(-3.6, 4.6)
-    ax1.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax1.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax1.set_ylabel("계수 추정값", fontsize=11, color=INK)
     ax1.set_title("(가) 정칙화 경로", fontsize=12, color=INK)
     ax1.text(best * 1.25, 4.2, f"$\\hat\\lambda={best:.4f}$", fontsize=10.5,
@@ -569,7 +569,7 @@ def path_cv():
     logx_plain(ax2, [0.01, 0.1, 1, 10], ["0.01", "0.1", "1", "10"])
     ax2.set_xlim(0.01, 10)
     ax2.set_ylim(3.5, 30)
-    ax2.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax2.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax2.set_ylabel("5-겹 교차검증 MSE", fontsize=11, color=INK)
     ax2.set_title("(나) 교차검증 곡선", fontsize=12, color=INK)
     ax2.annotate(f"최소 CV MSE {mse[k]:.3f}", xy=(best, mse[k]),
@@ -638,7 +638,7 @@ def housing_path():
     logx_plain(ax1, [10, 100, 1000, 10000, 100000],
                ["10", "100", "1000", "10000", "100000"])
     ax1.set_xlim(10, 1e5)
-    ax1.set_xlabel(r'벌점 $\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax1.set_xlabel(r'벌점 $\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax1.set_ylabel("표준화 계수 (달러)", fontsize=11, color=INK)
     ax1.set_title("(가) 주택가격 자료의 라쏘 경로", fontsize=12, color=INK)
     ax1.text(best * 1.35, 120000, f"교차검증 $\\hat\\lambda={best:.0f}$",
@@ -654,7 +654,7 @@ def housing_path():
     ax2.set_xlim(10, 1e5)
     ax2.set_ylim(-0.5, len(names) + 0.8)
     ax2.set_yticks(range(0, len(names) + 1, 2))
-    ax2.set_xlabel(r'벌점 $\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax2.set_xlabel(r'벌점 $\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax2.set_ylabel("0이 아닌 계수의 개수", fontsize=11, color=INK)
     ax2.set_title("(나) 살아남은 변수의 개수", fontsize=12, color=INK)
     ax2.annotate(f"{nz}개 선택", xy=(best, nz), xytext=(45, nz - 4.2),

@@ -216,7 +216,7 @@ def mad_breakdown():
     ax.set_ylim(0.1, 3e6)
     ax.set_xlabel(f"오염된 관측값의 비율 (%)   (정규자료 {n}개)",
                   fontsize=11.5, color=INK)
-    ax.set_ylabel("추정한 산포 (로그 눈금)", fontsize=11.5, color=INK)
+    ax.set_ylabel("추정한 산포 (로그 척도)", fontsize=11.5, color=INK)
     clean_axis(ax)
     ax.legend(fontsize=11, frameon=False, loc="upper left")
     ax.set_title("오염을 늘려 가며 두 척도를 재면", fontsize=12.5, pad=10)

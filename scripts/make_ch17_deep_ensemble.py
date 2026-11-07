@@ -140,7 +140,7 @@ for method, c, lab in (
                  label=lab if j == 0 else None)
 ax1.set_xlabel("$x$")
 ax1.set_ylabel("$\\hat f(x) - f(x)$")
-ax1.set_title(f"① 구성원 {M_SHOW} 개씩, 참 함수로부터의 어긋남", fontsize=12)
+ax1.set_title(f"① 구성원 {M_SHOW} 개씩, 참 함수로부터의 불일치", fontsize=12)
 ax1.legend(loc="lower left", fontsize=9.5)
 ax1.grid(alpha=0.25)
 

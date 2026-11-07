@@ -64,8 +64,8 @@ ax.text(0.36, 4.5, "$r$ 은 수평선이다", fontsize=11.5, color="tab:blue",
         fontweight="bold")
 ax.set_xlim(0.3, 3.2)
 ax.set_ylim(-2, 62)
-ax.set_xlabel("$y$ 의 눈금을 몇 배로 바꾸었나", fontsize=11)
-ax.set_title("눈금을 바꾸면 하나만 따라 움직인다", fontsize=12.5)
+ax.set_xlabel("$y$ 의 척도를 몇 배로 바꾸었나", fontsize=11)
+ax.set_title("척도를 바꾸면 하나만 따라 움직인다", fontsize=12.5)
 ax.legend(fontsize=11, loc="upper left", framealpha=0.95)
 ax.grid(alpha=0.25)
 

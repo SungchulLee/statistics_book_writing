@@ -126,7 +126,7 @@ print("saved", path)
 
 print(f"\n가정: 기준 하나가 충족될 확률 — 인과일 때 {P_CAUSE}, 교란일 때 "
       f"{P_CONF}")
-print(f"  충족의 우도비 {LR:.4f} · 어긋남의 우도비 {LR_MISS:.4f}")
+print(f"  충족의 우도비 {LR:.4f} · 불일치의 우도비 {LR_MISS:.4f}")
 print(f"\n사전 30% 에서, 저울 {K} 개 가운데 충족된 수에 따른 사후확률")
 for k in ks:
     print(f"  {k} 개  →  {100 * posterior(0.30, k):6.2f}%")

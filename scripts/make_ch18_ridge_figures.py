@@ -155,7 +155,7 @@ def svd_shrinkage():
                ["0.01", "0.1", "1", "10", "100", "1000", "10000"])
     ax1.set_ylim(-0.03, 1.08)
     ax1.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
-    ax1.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax1.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax1.set_ylabel(r'축소인자 $d_j^2/(d_j^2+\lambda)$', fontsize=11, color=INK)
     ax1.set_title("(가) 성분마다 축소의 강도가 다르다", fontsize=12, color=INK)
     ax1.legend(fontsize=10, loc="lower left", frameon=False)
@@ -178,7 +178,7 @@ def svd_shrinkage():
     logx_plain(ax2, [0.01, 0.1, 1, 10, 100, 1000, 10000],
                ["0.01", "0.1", "1", "10", "100", "1000", "10000"])
     ax2.set_ylim(-0.12, 4.6)
-    ax2.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax2.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax2.set_ylabel(r'유효자유도 $\mathrm{df}(\lambda)$', fontsize=11, color=INK)
     ax2.set_title("(나) 살아남은 방향의 개수", fontsize=12, color=INK)
     clean(ax2)
@@ -324,7 +324,7 @@ def bayes_prior_post():
     logx_plain(ax2, [0.01, 0.1, 1, 10, 100, 1000],
                ["0.01", "0.1", "1", "10", "100", "1000"])
     ax2.set_ylim(-0.75, 2.6)
-    ax2.set_xlabel(r'$\lambda=\sigma^2/\tau^2$ (로그 눈금)', fontsize=11,
+    ax2.set_xlabel(r'$\lambda=\sigma^2/\tau^2$ (로그 척도)', fontsize=11,
                    color=INK)
     ax2.set_ylabel(r'$\beta_1$', fontsize=11, color=INK)
     ax2.set_title("(나) 구간은 좁아지고 중심은 0으로 간다", fontsize=12,
@@ -386,7 +386,7 @@ def cv_1se():
     logx_plain(ax1, [0.01, 0.1, 1, 10, 100, 1000],
                ["0.01", "0.1", "1", "10", "100", "1000"])
     ax1.set_ylim(1.0, 2.9)
-    ax1.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax1.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax1.set_ylabel("10-겹 교차검증 오차", fontsize=11, color=INK)
     ax1.set_title("(가) 최솟값과 1-표준오차 임계값", fontsize=12, color=INK)
     ax1.text(0.012, 2.82,
@@ -410,9 +410,9 @@ def cv_1se():
     logx_plain(ax2, [0.01, 0.1, 1, 10, 100, 1000],
                ["0.01", "0.1", "1", "10", "100", "1000"])
     ax2.set_ylim(-2.6, 3.4)
-    ax2.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax2.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax2.set_ylabel("계수 추정값", fontsize=11, color=INK)
-    ax2.set_title("(나) 같은 두 눈금을 능형 자취 위에 얹으면", fontsize=12,
+    ax2.set_title("(나) 같은 두 척도를 능형 자취 위에 얹으면", fontsize=12,
                   color=INK)
     ax2.text(lams[i] * 1.25, 3.15, r'$\lambda_{\min}$', fontsize=11,
              color=GREEN)
@@ -464,7 +464,7 @@ def shrink_vs_accuracy():
     logx_plain(ax, [0.01, 0.1, 1, 10, 100],
                ["0.01", "0.1", "1", "10", "100"])
     ax.set_ylim(0, 5.0)
-    ax.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax.set_ylabel("L2 노름", fontsize=11, color=INK)
     ax.set_title(r'$n=40$, $p=20$, 참 변수 3개: 축소는 단조, 정확도는 U자',
                  fontsize=12.5, color=INK)

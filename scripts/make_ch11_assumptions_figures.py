@@ -99,7 +99,7 @@ def fig_four_violations():
     ax.set_title("등분산성 위배 — 표준오차가 틀린다", fontsize=11, color=INK, pad=6)
     ax.set_xlabel(r"설명변수 $x$", fontsize=9.5, color=INK)
     ax.set_ylabel("잔차", fontsize=9.5, color=INK)
-    ax.text(0.03, 0.9, "퍼짐이 부채처럼 벌어진다", transform=ax.transAxes,
+    ax.text(0.03, 0.9, "산포가 부채처럼 벌어진다", transform=ax.transAxes,
             fontsize=9, color=RED)
     clean(ax)
 
@@ -419,7 +419,7 @@ def fig_normality():
     ax.spines[["top", "right", "left"]].set_visible(False)
     ax.spines["bottom"].set_color(MUTED)
 
-    fig.suptitle("오차가 로그정규일 때 — 치우침은 표본을 키워도 사라지지 않는다",
+    fig.suptitle("오차가 로그정규일 때 — 왜도는 표본을 키워도 사라지지 않는다",
                  fontsize=12.5, color=INK, y=1.02)
     fig.tight_layout()
     save(fig, "normality_clt_vs_pi.png")

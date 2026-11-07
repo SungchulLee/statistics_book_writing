@@ -238,7 +238,7 @@ def fig_studentize():
     ax.set_xticklabels([str(v) for v in ns])
     ax.minorticks_off()
     ax.set_ylim(0.03, 0.16)
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=10, color=INK)
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=10, color=INK)
     ax.set_ylabel("제1종 오류율", fontsize=10, color=INK)
     ax.set_title(r"(c) $\mathrm{Exp}(1)$ 에서의 실제 크기", fontsize=11,
                  color=INK)

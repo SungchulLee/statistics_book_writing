@@ -83,7 +83,7 @@ ax1.annotate(f"양 끝은 순열이 하나씩뿐이다\n각각 1/{TOTAL:,} = {1/
                        alpha=0.94, edgecolor="tab:red", lw=1.0),
              arrowprops=dict(arrowstyle="->", color="tab:red", lw=1.6))
 ax1.set_xlabel("τ", fontsize=11)
-ax1.set_ylabel("확률 (로그 눈금)", fontsize=11)
+ax1.set_ylabel("확률 (로그 척도)", fontsize=11)
 ax1.set_title(f"$n = {N}$ 에서 $\\tau$ 의 귀무분포\n"
               f"(순열 {TOTAL:,} 개를 모두 셌다)", fontsize=12.5)
 ax1.grid(axis="y", alpha=0.25)

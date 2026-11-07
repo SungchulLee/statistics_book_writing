@@ -174,7 +174,7 @@ def group_paths():
         ax.axhline(0, color=INK, lw=0.9)
         logx_plain(ax, [0.01, 0.1, 1], ["0.01", "0.1", "1"])
         ax.set_xlim(lams[-1], lams[0])
-        ax.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+        ax.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
         ax.set_title(ttl, fontsize=12, color=INK)
         clean(ax)
     axes[0].set_ylabel("계수 추정값", fontsize=11, color=INK)
@@ -295,7 +295,7 @@ def alpha_lambda_cv():
     ax1.plot([lams[il]], [alphas[ia]], "*", ms=20, color=RED, mec="white",
              mew=1.2)
     logx_plain(ax1, [0.01, 0.1, 1], ["0.01", "0.1", "1"])
-    ax1.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax1.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax1.set_ylabel(r'혼합모수 $\alpha$', fontsize=11, color=INK)
     ax1.set_title("(가) 두 초모수 위의 CV 오차 지형", fontsize=12, color=INK)
     ax1.annotate(f"최적 ({lams[il]:.3f}, {alphas[ia]:g})",
@@ -312,7 +312,7 @@ def alpha_lambda_cv():
         ax2.plot([lams[M[k].argmin()]], [M[k].min()], "o", ms=8, color=col,
                  mec="white", mew=1.2, zorder=5)
     logx_plain(ax2, [0.01, 0.1, 1], ["0.01", "0.1", "1"])
-    ax2.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax2.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax2.set_ylabel("5-겹 교차검증 MSE", fontsize=11, color=INK)
     ax2.set_title(r'(나) $\alpha$ 를 고정하고 자른 단면', fontsize=12,
                   color=INK)

@@ -331,7 +331,7 @@ ax2.set_xticklabels(["0.2", "0.5", "1", "2", "5", "10", "30"])
 ax2.set_xticks([], minor=True)
 ax2.set_xlim(0.12, 30)
 ax2.set_ylim(0, 1.03)
-ax2.set_xlabel("온도 (가로축은 로그 눈금)", fontsize=10.5)
+ax2.set_xlabel("온도 (가로축은 로그 척도)", fontsize=10.5)
 ax2.set_ylabel("예측확률", fontsize=10.5)
 ax2.set_title("온도는 순서를 바꾸지 않고 확신만 조절한다", fontsize=11.5,
               color=INK, pad=10)

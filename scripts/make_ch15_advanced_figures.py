@@ -1,7 +1,6 @@
 r"""15장 고급 방법(붓스트랩·베이즈·가능도비) 여섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch15/advanced_methods/img/bootstrap_pool_vs_within.png  합쳐서 뽑아야 귀무분포가 된다
   ch15/advanced_methods/img/bootstrap_vs_f_size.png       붓스트랩은 비정규에서도 크기를 지킨다
   ch15/advanced_methods/img/bootstrap_null_reference.png  p 값은 귀무값과 견주어야 한다
   ch15/advanced_methods/img/bayes_prior_weight.png        사전분포는 가상 관측값 2*alpha0 개다
@@ -507,7 +506,7 @@ def fig_posterior_summary():
     ax2.set_ylabel("표본분산 대비 비", fontsize=11, color=INK)
     clean(ax2)
     ax2.legend(fontsize=10, frameon=False, loc="lower right")
-    ax2.set_title("치우침은 $n$ 과 함께 줄어든다", fontsize=11.5, color=INK,
+    ax2.set_title("편향은 $n$ 과 함께 줄어든다", fontsize=11.5, color=INK,
                   pad=9)
 
     fig.tight_layout()
@@ -518,7 +517,10 @@ def fig_posterior_summary():
 
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
-    fig_pool_vs_within()
+    # fig_pool_vs_within() 은 부르지 않는다. 이 그림을 쓰던 쪽이 fc7584ee
+    # 「15.6 의 고급 방법 개관을 세 쪽으로 흩음」에서 사라지며 PNG 가 지워졌는데
+    # 생성 코드가 남아, 다시 그릴 때마다 가리키는 쪽 없는 고아가 되살아났다.
+    # fig_pool_vs_within()
     fig_null_reference()
     fig_prior_weight()
     fig_credible_vs_ci()

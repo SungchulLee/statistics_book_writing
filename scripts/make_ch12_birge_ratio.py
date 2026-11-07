@@ -125,7 +125,7 @@ ax2.set_yticklabels(["$1$", "$2$", "$5$", "$10$"])
 ax2.minorticks_off()
 ax2.set_xlabel("알아채지 못한 계통오차 $\\tau$")
 ax2.set_ylabel("$R_B = \\sqrt{\\chi^2/(k-1)}$")
-ax2.set_title("② 어긋남은 $F$ 꼴로 드러난다", fontsize=12)
+ax2.set_title("② 불일치는 $F$ 꼴로 드러난다", fontsize=12)
 ax2.legend(loc="upper left", fontsize=9.5)
 ax2.grid(alpha=0.25, which="major")
 

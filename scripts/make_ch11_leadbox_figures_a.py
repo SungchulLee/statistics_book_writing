@@ -350,7 +350,7 @@ def fig_what_sets_the_width():
     base = half_width(n0, sigma0, spread0)
     CASES = [("기준", n0, sigma0, spread0, "0.55"),
              ("표본을 네 배로", 4 * n0, sigma0, spread0, "tab:blue"),
-             ("x 의 퍼짐을 두 배로", n0, sigma0, 2 * spread0, "tab:green"),
+             ("x 의 산포를 두 배로", n0, sigma0, 2 * spread0, "tab:green"),
              ("잡음을 절반으로", n0, sigma0 / 2, spread0, "tab:orange")]
 
     rng = np.random.default_rng(1102)

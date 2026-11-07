@@ -640,7 +640,7 @@ $$E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
     **공분산이 모집단의 3차 중심적률 하나로 정해진다.** 그러므로
 
     - **대칭분포**($\mu_3 = 0$): 언제나 $\operatorname{Cov}(\bar X, S^2) = 0$. 정규뿐 아니라 균등·$t$·라플라스도 그렇다.
-    - **치우친 분포**: $\mu_3 \ne 0$이므로 상관이 남는다. 지수분포는 $\mu_3 = 2\theta^3 > 0$이라 **양의 상관**이고, 평균이 큰 표본일수록 퍼짐도 크다는 뜻이다.
+    - **치우친 분포**: $\mu_3 \ne 0$이므로 상관이 남는다. 지수분포는 $\mu_3 = 2\theta^3 > 0$이라 **양의 상관**이고, 평균이 큰 표본일수록 산포도 크다는 뜻이다.
 
     상관계수를 수로 내려면 두 분산이 더 필요하다. $\operatorname{Var}(\bar X) = \sigma^2/n$이고 보기 1의 $\operatorname{Var}(S^2)$ 식을 쓴다. $\theta = 3$인 지수분포는 $\sigma^2 = 9$, $\mu_3 = 2\theta^3 = 54$, $\mu_4 = 9\sigma^4 = 729$이므로 $n = 20$에서
 
@@ -676,7 +676,7 @@ $$E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
         s2_n   = np.var(samp_n, axis=1, ddof=1)
         corr_n = np.corrcoef(xbar_n, s2_n)[0, 1]
 
-        # 지수모집단: 상관이 0 이 아니다. 평균이 큰 표본일수록 퍼짐도 크다.
+        # 지수모집단: 상관이 0 이 아니다. 평균이 큰 표본일수록 산포도 크다.
         samp_e = rng.exponential(sigma, (n_sim, n))
         xbar_e = samp_e.mean(axis=1)
         s2_e   = np.var(samp_e, axis=1, ddof=1)

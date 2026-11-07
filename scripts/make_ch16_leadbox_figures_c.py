@@ -207,7 +207,7 @@ ax2.plot(NS16, size_chi, "o-", color="tab:red", lw=3.0, ms=12)
 ax2.axhline(0.05, color="0.2", lw=2.2, ls="--")
 ax2.set_xscale("log")
 ax2.set_xticks(NS16, [str(n) for n in NS16])
-ax2.set_xlabel("집단당 표본크기 (로그 눈금) · 집단 셋", fontsize=11.5)
+ax2.set_xlabel("집단당 표본크기 (로그 척도) · 집단 셋", fontsize=11.5)
 ax2.set_ylabel("명목 5% 인데 실제로 기각하는 비율", fontsize=11.5)
 ax2.set_ylim(0, 0.065)
 ax2.grid(alpha=0.25)
@@ -578,7 +578,7 @@ ax2.annotate(f"타우가 {tau_med[j3]:.2f} 인 자료에서\n"
              fontsize=11.5, color="tab:purple", fontweight="bold",
              ha="left",
              arrowprops=dict(arrowstyle="->", color="tab:purple", lw=1.9))
-ax2.set_title("두 계수는 같은 눈금이 아니다", fontsize=12.5)
+ax2.set_title("두 계수는 같은 척도가 아니다", fontsize=12.5)
 
 fig.suptitle("타우 0.3 과 스피어만 0.3 은 같은 세기의 연관이 아니다",
              fontsize=15, y=1.0)

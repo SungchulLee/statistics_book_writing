@@ -8,7 +8,7 @@ $$y = \mu + \beta(C)\,N + \varepsilon$$
 이라 하자. $C$ 는 평균을 바꾸지 않고 **$N$ 에 대한 민감도** $\beta(C)$ 만 바꾼다.
 이것이 제어인자와 잡음인자의 상호작용이고, 다구치가 쓴 길이다.
 
-① 수준마다 평균은 같고 퍼짐만 다르다.
+① 수준마다 평균은 같고 산포만 다르다.
 ② 평균에 대한 $F$ 는 아무것도 못 보고, 분산에 대한 검정만 본다.
 ③ 민감도를 낮추면 온도가 흔들려도 불량률이 거의 안 오른다.
 
@@ -88,7 +88,7 @@ ax1.text(1.25, ax1.get_ylim()[1] * 0.72, "평균은 다섯 수준이\n모두 같
          fontsize=10, va="center", color="#555555")
 ax1.set_xlabel("타일 크기 (목표치로부터)")
 ax1.set_ylabel("밀도")
-ax1.set_title("① 평균은 그대로, 퍼짐만 바뀐다", fontsize=12)
+ax1.set_title("① 평균은 그대로, 산포만 바뀐다", fontsize=12)
 ax1.legend(loc="upper left", fontsize=9.5)
 ax1.grid(alpha=0.25)
 

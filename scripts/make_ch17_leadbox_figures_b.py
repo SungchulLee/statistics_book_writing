@@ -37,7 +37,7 @@ def save(fig, path):
 
 
 def bca_interval(x, stat, B, rng, alpha=0.05):
-    """편향과 치우침을 자료에서 재어 읽는 자리를 옮긴다."""
+    """편향과 편향을 자료에서 재어 읽는 자리를 옮긴다."""
     n = len(x)
     th = stat(x)
     bs = stat(x[rng.integers(0, n, (B, n))], axis=1)
@@ -96,7 +96,7 @@ for i, n in enumerate(NS8):
                  fontsize=11.5, color="0.2", fontweight="bold")
 ax1.set_xscale("log")
 ax1.set_xticks(NS8, [str(n) for n in NS8])
-ax1.set_xlabel("표본크기 n (로그 눈금)", fontsize=11.5)
+ax1.set_xlabel("표본크기 n (로그 척도)", fontsize=11.5)
 ax1.set_ylabel("참값을 담는 비율", fontsize=11.5)
 ax1.set_ylim(min(cov_pct) - 0.04, 0.99)
 ax1.legend(fontsize=11, loc="lower right")
@@ -112,7 +112,7 @@ ax2.set_xscale("log")
 ax2.set_yscale("log")
 ax2.set_xticks(NS8, [str(n) for n in NS8])
 ax2.set_yticks([1, 10, 100], ["1", "10", "100"])
-ax2.set_xlabel("표본크기 n (로그 눈금)", fontsize=11.5)
+ax2.set_xlabel("표본크기 n (로그 척도)", fontsize=11.5)
 ax2.set_ylabel("통계량을 더 계산해야 하는 횟수 (상대)", fontsize=11.5)
 ax2.legend(fontsize=11, loc="upper left")
 ax2.grid(alpha=0.25, which="both")

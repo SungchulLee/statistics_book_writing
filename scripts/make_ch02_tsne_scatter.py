@@ -5,7 +5,7 @@ r"""임베딩 산점도에서 눈이 읽는 것과 자료가 말하는 것.
 **군집의 크기**, **군집이 있다는 사실** 자체. 셋을 하나씩 잰다.
 
 ① 군집 사이 거리 — 같은 자료인데 perplexity 하나로 비가 네 배 바뀐다.
-② 군집의 퍼짐 — 참 퍼짐이 여섯 배인 둘이 같은 크기로 그려진다.
+② 군집의 산포 — 참 산포가 여섯 배인 둘이 같은 크기로 그려진다.
 ③ 구조가 없는 자료에서도 군집이 보인다.
 
 만드는 파일: docs/ch02/visualization/img/tsne_scatter.png
@@ -73,7 +73,7 @@ print(f"   흔히 쓰는 perplexity {common[0]}–{common[-1]} 에서는 "
       f"하지만(perplexity {max(PERS)} 에서 {RS[max(PERS)]:.2f}),")
 print(f"   그 자리를 고르려면 답을 이미 알아야 한다.")
 
-# === ② 군집의 퍼짐 ==================================================
+# === ② 군집의 산포 ==================================================
 Z = np.vstack([RNG.normal(np.zeros(D), SIG_A, (N, D)),
                RNG.normal(np.r_[40.0, np.zeros(D - 1)], SIG_B, (N, D))])
 L2 = np.repeat([0, 1], N)
@@ -81,7 +81,7 @@ sp = [float(Z[L2 == i].std(axis=0).mean()) for i in range(2)]
 Y2 = tsne(Z, 30)
 sy = [float(np.linalg.norm(Y2[L2 == i] - Y2[L2 == i].mean(0), axis=1).mean())
       for i in range(2)]
-print(f"\n② 퍼짐 — 참 비 {sp[1] / sp[0]:.2f}  ->  그림 위의 비 "
+print(f"\n② 산포 — 참 비 {sp[1] / sp[0]:.2f}  ->  그림 위의 비 "
       f"{sy[1] / sy[0]:.2f}")
 
 # === ③ 구조가 없는 자료 ==============================================
@@ -128,7 +128,7 @@ for i, nm in enumerate([f"좁은 군집 ($\\sigma = {SIG_A:g}$)",
 ax2.set_xticks([]); ax2.set_yticks([])
 ax2.set_xlabel("t-SNE 축에는 단위가 없다")
 ax2.text(0.03, 0.97,
-         f"참 퍼짐의 비 ${sp[1] / sp[0]:.2f}$\n"
+         f"참 산포의 비 ${sp[1] / sp[0]:.2f}$\n"
          f"그림 위의 비 $\\mathbf{{{sy[1] / sy[0]:.2f}}}$",
          transform=ax2.transAxes, va="top", fontsize=11,
          bbox=dict(boxstyle="round,pad=0.4", fc="white", ec="#cccccc"))

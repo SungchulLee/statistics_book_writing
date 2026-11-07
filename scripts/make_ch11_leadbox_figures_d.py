@@ -280,7 +280,7 @@ def fig_ratio_tells_the_shape():
                    ["2", "5", "10", "20", "50", "100", "200"])
     ax2.set_xticks([], minor=True)
     ax2.set_ylim(0, 15.5)
-    ax2.set_xlabel("관측 수 n (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("관측 수 n (로그 척도)", fontsize=11)
     ax2.set_ylabel("RMSE ÷ MAE", fontsize=11)
     ax2.set_title("비가 놓일 수 있는 자리는 $1$ 과 $\\sqrt{n}$ 사이다",
                   fontsize=12.5)
@@ -430,7 +430,7 @@ def fig_knots_beat_degree():
                    ["0.001", "0.01", "0.1", "1", "10"])
     ax2.set_yticks([], minor=True)
     ax2.set_xlabel("쓴 모수의 수", fontsize=11)
-    ax2.set_ylabel("참 곡선과의 최대 오차 (로그 눈금)", fontsize=11)
+    ax2.set_ylabel("참 곡선과의 최대 오차 (로그 척도)", fontsize=11)
     ax2.set_title("모수를 같은 수만큼 써도 결과가 갈린다", fontsize=12.5)
     ax2.legend(fontsize=10.5, loc="upper left", framealpha=0.95)
     ax2.grid(alpha=0.25)

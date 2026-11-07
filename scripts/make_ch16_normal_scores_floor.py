@@ -145,7 +145,7 @@ axR.set_xticklabels([str(v) for v in show], fontsize=9)
 axR.minorticks_off()
 axR.set_xlim(3, 340)
 axR.set_ylim(0.85, 2.0)
-axR.set_xlabel("$t(\\nu)$ 의 자유도 $\\nu$ (가로축은 로그눈금, 오른쪽 끝이 정규)")
+axR.set_xlabel("$t(\\nu)$ 의 자유도 $\\nu$ (가로축은 로그 척도, 오른쪽 끝이 정규)")
 axR.set_ylabel("$t$ 검정 대비 ARE")
 axR.set_title("꼬리를 얇게 해 가며 — 두 바닥이 갈린다", color=INK,
               fontsize=12, pad=9)

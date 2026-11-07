@@ -84,7 +84,7 @@ ax.text(0.97, 0.12, f"눈금 하나 = 1/n\n(여기서는 n = 25)", transform=ax.
         ha="right", fontsize=8.5, color=MUTED)
 tidy(ax)
 
-# ── ② 치우침이 사라진다 ──────────────────────────────────────────────────
+# ── ② 왜도가 사라진다 ──────────────────────────────────────────────────
 panels = [
     (np.clip(new, 0, 8), 60, ORANGE_F, ORANGE,
      f"원자료 — 왜도 {stats.skew(new):.2f} (8 에서 잘라 그렸다)"),
@@ -99,7 +99,7 @@ for k, (v, bins, fill, edge, label) in enumerate(panels):
     tidy(a, left=False)
     if k == 1:
         a.set_ylim(0, 1.6)
-ax_mid[0].text(0.5, 1.42, "② 같은 자료, 세 가지 눈금", transform=ax_mid[0].transAxes,
+ax_mid[0].text(0.5, 1.42, "② 같은 자료, 세 가지 척도", transform=ax_mid[0].transAxes,
                ha="center", fontsize=10.5, color=INK)
 
 # ── ③ 끝에서 뭉친다 ─────────────────────────────────────────────────────
@@ -120,7 +120,7 @@ ax.set_xscale("log")
 # 로그 눈금의 마이너스는 mathtext 라 한글 글꼴에서 두부가 된다 — 평문으로 적는다
 ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
 ax.xaxis.set_minor_formatter(FuncFormatter(lambda v, _: ""))
-ax.set_xlabel("새 자료의 값 (로그 눈금)", fontsize=9.5, color=INK)
+ax.set_xlabel("새 자료의 값 (로그 척도)", fontsize=9.5, color=INK)
 ax.set_ylabel("ECDF 값", fontsize=9.5, color=INK)
 ax.set_title("③ 훈련 범위를 넘으면 구별이 사라진다", fontsize=10.5, color=INK)
 ax.set_ylim(-0.03, 1.06)

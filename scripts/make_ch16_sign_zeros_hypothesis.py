@@ -119,7 +119,7 @@ axR.set_xticklabels([str(v) for v in NS], fontsize=8.5)
 axR.minorticks_off()
 axR.set_xlim(10, 400)
 axR.set_ylim(0, 1.0)
-axR.set_xlabel("쌍의 수 $n$ (가로축은 로그눈금)")
+axR.set_xlabel("쌍의 수 $n$ (가로축은 로그 척도)")
 axR.set_ylabel("「중앙값 $=0$」을 기각할 확률")
 axR.set_title("참인 귀무가설을 기각할 확률이 $1$ 로 간다",
               color=INK, fontsize=12, pad=9)

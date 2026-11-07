@@ -165,7 +165,7 @@ def fig_bias_variance_paradigms():
     axR.set_xticklabels([str(v) for v in ns], fontsize=10, color=INK)
     axR.minorticks_off()
     axR.set_ylim(0, 0.165)
-    axR.set_xlabel("표본 크기 $n$ (로그 눈금)", fontsize=11, color=INK)
+    axR.set_xlabel("표본 크기 $n$ (로그 척도)", fontsize=11, color=INK)
     axR.set_ylabel(r"$\hat S(30)$ 의 RMSE", fontsize=11, color=INK)
     axR.set_title("표본을 키워도 오지정의 편향은 남는다", fontsize=12.5,
                   color=INK, pad=10)

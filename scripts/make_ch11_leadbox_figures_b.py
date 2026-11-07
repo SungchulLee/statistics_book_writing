@@ -104,7 +104,7 @@ def fig_n_does_not_help():
     ax2.set_xscale("log")
     ax2.set_xticks(NS, [f"{n:,}" for n in NS])
     ax2.set_xticks([], minor=True)
-    ax2.set_xlabel("표본 크기 n (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("표본 크기 n (로그 척도)", fontsize=11)
     ax2.set_ylabel("기울기 추정값", fontsize=11, color="tab:red")
     ax2.tick_params(axis="y", colors="tab:red")
     ax2.set_ylim(-0.75, 0.95)
@@ -312,7 +312,7 @@ def fig_effective_sample_size():
     ax2.set_xticks(NS, [str(n) for n in NS])
     ax2.set_xticks([], minor=True)
     ax2.set_ylim(0, 75)
-    ax2.set_xlabel("표본 크기 n (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("표본 크기 n (로그 척도)", fontsize=11)
     ax2.set_ylabel("참인 귀무가설의 기각률 (%)", fontsize=11)
     ax2.set_title(f"표본을 열여섯 배로 키워도 (각 {REPS:,} 번)",
                   fontsize=12.5)
@@ -478,7 +478,7 @@ def fig_one_voice():
             A = X.T @ W @ X
             beta = np.linalg.solve(A, X.T @ W @ y)
             # 가중치를 「이미 아는 정밀도」로 보는 공식. sigma^2 을 따로
-            # 추정하지 않으므로 가중치를 통째로 키우면 눈금만 줄어든다.
+            # 추정하지 않으므로 가중치를 통째로 키우면 척도만 줄어든다.
             b[i] = beta[1]
             s[i] = np.sqrt(np.linalg.inv(A)[1, 1])
         est.append(b.mean())
@@ -518,8 +518,8 @@ def fig_one_voice():
     ax2.set_yticks([1e-3, 1e-2, 1e-1, 1], ["0.001", "0.01", "0.1", "1"])
     ax2.set_yticks([], minor=True)
     ax2.set_xticks(xs, [f"가중치 ×{int(c):,}" for c in scales], fontsize=11)
-    ax2.set_ylabel("공식이 주는 표준오차 (로그 눈금)", fontsize=11)
-    ax2.set_title(f"추정값은 꿈쩍도 않는데 눈금만 줄어든다 ({REPS:,} 번 평균)",
+    ax2.set_ylabel("공식이 주는 표준오차 (로그 척도)", fontsize=11)
+    ax2.set_title(f"추정값은 꿈쩍도 않는데 척도만 줄어든다 ({REPS:,} 번 평균)",
                   fontsize=12.5)
     ax2.grid(axis="y", alpha=0.25)
 

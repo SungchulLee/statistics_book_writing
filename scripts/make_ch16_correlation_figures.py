@@ -199,7 +199,7 @@ def kendall_pairs():
     ax.set_title("(나) 이변량 정규 자료 240 개 표본 ($n = 60$)",
                  fontsize=11.5, color=INK, loc="left", pad=8)
 
-    fig.suptitle("$\\tau$ 와 $r_s$ 는 같은 것을 재지만 눈금이 다르다",
+    fig.suptitle("$\\tau$ 와 $r_s$ 는 같은 것을 재지만 척도가 다르다",
                  fontsize=13.5, color=INK, y=1.01)
     fig.tight_layout()
     save(fig, "kendall_pairs.png")

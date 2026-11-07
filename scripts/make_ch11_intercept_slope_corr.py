@@ -8,7 +8,7 @@ $$
 \operatorname{Corr}(\hat\beta_0, \hat\beta_1) = \frac{-\bar x}{\sqrt{S_{xx}/n + \bar x^2}}
 $$
 
-$\bar x = 0$ 이면 $0$ 이고, $x$ 의 평균이 퍼짐에 비해 커질수록 $-1$ 로 간다.
+$\bar x = 0$ 이면 $0$ 이고, $x$ 의 평균이 산포에 비해 커질수록 $-1$ 로 간다.
 $x$ 를 통째로 옮기는 것만으로 두 추정량의 관계가 바뀐다는 뜻이다. 기울기의
 표준오차는 그동안 한 치도 움직이지 않는다.
 
@@ -123,7 +123,7 @@ def main():
     ax.plot(xs, [r[1] for r in rows], "o", ms=9, color=RED, mec="white",
             mew=1.2, label="모의실험으로 센 상관")
     ax.axhline(0, color=MUTED, lw=1.0, ls=":")
-    ax.set_xlabel("$x$ 의 평균 $\\bar x$  (퍼짐은 그대로다)", fontsize=11.5)
+    ax.set_xlabel("$x$ 의 평균 $\\bar x$  (산포는 그대로다)", fontsize=11.5)
     ax.set_ylabel("$\\operatorname{Corr}(\\hat\\beta_0, \\hat\\beta_1)$",
                   fontsize=11.5)
     ax.set_ylim(-1.08, 0.15)
@@ -147,7 +147,7 @@ def main():
     fig.suptitle("절편과 기울기는 따로 흔들리지 않는다", fontsize=14.5)
     fig.text(0.5, -0.05,
              f"$n = {N}$, $\\sigma = {SIGMA:g}$, 참값 $(2,\\ 1.5)$ 로 "
-             f"${REPS // 1000}$ 천 번씩 되풀이했다. $x$ 의 퍼짐은 모든 경우에 같고 "
+             f"${REPS // 1000}$ 천 번씩 되풀이했다. $x$ 의 산포는 모든 경우에 같고 "
              f"평균만 옮겼다. 모든 수는 이 스크립트가 계산한 값이다.",
              ha="center", fontsize=10.4, color=INK)
 

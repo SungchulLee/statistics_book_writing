@@ -140,7 +140,7 @@ def main():
             fontsize=10.8, color=INK)
     ax.set_xlabel("추정한 처치효과", fontsize=11.5)
     ax.set_ylabel("되풀이 횟수", fontsize=11.5)
-    ax.set_title(f"② $\\rho = {RHO_MAIN}$ 에서 — 치우침은 그대로, 폭만 준다",
+    ax.set_title(f"② $\\rho = {RHO_MAIN}$ 에서 — 편향은 그대로, 폭만 준다",
                  fontsize=12.8, color=INK)
     ax.grid(alpha=0.22, axis="y")
     ax.legend(fontsize=10, framealpha=0.93, loc="upper right")

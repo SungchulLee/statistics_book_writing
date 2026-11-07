@@ -150,7 +150,7 @@ ax2.set_xlim(45, 24000)
 ax2.set_xticks([50, 100, 500, 1000, 5000, 20000],
                ["50", "100", "500", "1,000", "5,000", "20,000"])
 ax2.set_xticks([], minor=True)
-ax2.set_xlabel("표본 크기 n (로그 눈금)", fontsize=11)
+ax2.set_xlabel("표본 크기 n (로그 척도)", fontsize=11)
 ax2.set_ylabel("log10(1/p) — 클수록 유의하다", fontsize=11,
                color="tab:purple")
 ax2.tick_params(axis="y", colors="tab:purple")

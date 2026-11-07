@@ -37,7 +37,7 @@ ALPHA = 0.05
 
 
 def skew_of(d1, d2, B=400000, seed=1934):
-    """F 와 z 의 치우침을 표본으로 잰다 — 같은 난수에서 둘 다."""
+    """F 와 z 의 왜도를 표본으로 잰다 — 같은 난수에서 둘 다."""
     r = np.random.default_rng(seed)
     f = r.chisquare(d1, B) / d1 / (r.chisquare(d2, B) / d2)
     return stats.skew(f), stats.skew(0.5 * np.log(f))
@@ -50,7 +50,7 @@ for row, (d1, d2) in enumerate(DFS):
     sf, sz = skew_of(d1, d2)
     print(f"df = ({d1}, {d2}):  F 의 양측 임계값 = [{lo:.4f}, {hi:.4f}]  "
           f"(오른쪽/왼쪽 = {hi/lo:.1f} 배)")
-    print(f"    치우침  F = {sf:+.3f},   z = (1/2)lnF = {sz:+.3f}")
+    print(f"    왜도  F = {sf:+.3f},   z = (1/2)lnF = {sz:+.3f}")
 
     # ---- 왼쪽: F 눈금
     ax = axes[row][0]
@@ -65,7 +65,7 @@ for row, (d1, d2) in enumerate(DFS):
     ax.set_ylim(0, y.max() * 1.18)
     ax.set_xlabel("$F = s_1^2 / s_2^2$")
     ax.set_ylabel("밀도")
-    ax.set_title(f"$F$ 눈금 — $d_1={d1}$, $d_2={d2}$,  치우침 ${sf:+.2f}$",
+    ax.set_title(f"$F$ 척도 — $d_1={d1}$, $d_2={d2}$,  왜도 ${sf:+.2f}$",
                  color=INK, fontsize=11, pad=7)
     ax.text(0.99, 0.93, f"임계값 ${lo:.3f}$ 와 ${hi:.3f}$\n"
                         f"$1$ 에서의 거리가 ${1-lo:.2f}$ 대 ${hi-1:.2f}$",
@@ -89,7 +89,7 @@ for row, (d1, d2) in enumerate(DFS):
     ax.set_ylim(0, zy.max() * 1.18)
     ax.set_xlabel("$z = \\frac{1}{2}\\ln F$")
     ax.set_ylabel("밀도")
-    ax.set_title(f"$z$ 눈금 — 같은 분포,  치우침 ${sz:+.2f}$",
+    ax.set_title(f"$z$ 척도 — 같은 분포,  왜도 ${sz:+.2f}$",
                  color=INK, fontsize=11, pad=7)
     ax.text(0.99, 0.93, f"임계값 ${zlo:+.3f}$ 와 ${zhi:+.3f}$\n"
                         f"$0$ 에서의 거리가 ${-zlo:.2f}$ 대 ${zhi:.2f}$",

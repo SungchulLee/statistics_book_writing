@@ -190,7 +190,7 @@ def two_rulers(dist="exponential", ns=(5, 50)):
         ax.plot(z_grid, stats.norm.pdf(z_grid), "k-", lw=2)
         ax.set_xlim(-4, 4)
         ax.set_ylim(0, 0.52)
-        ax.set_xlabel(r"아래 눈금:  $Z_n=\sqrt{n}\,(\bar X_n-\mu)/\sigma$",
+        ax.set_xlabel(r"아래 척도:  $Z_n=\sqrt{n}\,(\bar X_n-\mu)/\sigma$",
                       fontsize=11)
         ax.set_title(f"n = {n}", fontsize=13, pad=34)
         ax.tick_params(labelsize=10)
@@ -200,12 +200,12 @@ def two_rulers(dist="exponential", ns=(5, 50)):
         top = ax.secondary_xaxis(
             "top", functions=(lambda t, n=n: mu + t * sigma / np.sqrt(n),
                               lambda v, n=n: (v - mu) * np.sqrt(n) / sigma))
-        top.set_xlabel(rf"위 눈금:  $\bar X_n$   (폭 $\pm${half:.2f})",
+        top.set_xlabel(rf"위 척도:  $\bar X_n$   (폭 $\pm${half:.2f})",
                        fontsize=11, color="tab:red")
         top.tick_params(labelsize=10, colors="tab:red")
 
     axes[0].set_ylabel("같은 히스토그램", fontsize=12)
-    fig.suptitle(f"한 히스토그램, 두 눈금 — {label}", fontsize=14)
+    fig.suptitle(f"한 히스토그램, 두 척도 — {label}", fontsize=14)
     fig.text(0.5, -0.04,
              "두 칸의 히스토그램은 폭이 같다. 위의 붉은 눈금으로 읽으면 "
              f"{ns[1]} 쪽이 {np.sqrt(ns[1] / ns[0]):.1f}배 좁다.",

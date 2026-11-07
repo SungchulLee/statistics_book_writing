@@ -79,7 +79,7 @@ def fig_when_the_trap_bites():
     ax1.set_ylim(0, 12)
     ax1.set_xlabel("설명변수의 평균 위치", fontsize=11)
     ax1.set_ylabel("기울기", fontsize=11)
-    ax1.set_title(f"참 절편 {B0} · 참 기울기 {B1} · 퍼짐 {SPREAD}",
+    ax1.set_title(f"참 절편 {B0} · 참 기울기 {B1} · 산포 {SPREAD}",
                   fontsize=12.5)
     ax1.legend(fontsize=10.5, loc="upper right", framealpha=0.95)
     ax1.grid(alpha=0.25)
@@ -99,12 +99,12 @@ def fig_when_the_trap_bites():
                                  lw=1.8))
     ax2.set_xlim(0.3, 8)
     ax2.set_ylim(0, 160)
-    ax2.set_xlabel("설명변수의 퍼짐 (표준편차)", fontsize=11)
+    ax2.set_xlabel("설명변수의 산포 (표준편차)", fontsize=11)
     ax2.set_ylabel("참 기울기에서 벗어난 비율 (%)", fontsize=11)
-    ax2.set_title(f"평균을 {PAGE_XB:.0f} 로 못 박고 퍼짐만 바꾸면",
+    ax2.set_title(f"평균을 {PAGE_XB:.0f} 로 못 박고 산포만 바꾸면",
                   fontsize=12.5)
     ax2.grid(alpha=0.25)
-    ax2.text(0.97, 0.05, "퍼짐이 평균에 견주어 커질수록 덫이 무뎌진다\n"
+    ax2.text(0.97, 0.05, "산포가 평균에 견주어 커질수록 덫이 무뎌진다\n"
              "— 그래도 사라지지는 않는다", transform=ax2.transAxes,
              ha="right", va="bottom", fontsize=10.5, fontweight="bold",
              color="0.2",
@@ -274,7 +274,7 @@ def fig_one_number_five_numbers():
     ax2.set_xticks(KS, [str(k) for k in KS])
     ax2.set_xticks([], minor=True)
     ax2.set_ylim(min(worst) * 1.12, 1.15)
-    ax2.set_xlabel("겹의 수 K (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("겹의 수 K (로그 척도)", fontsize=11)
     ax2.set_ylabel("$R^2$", fontsize=11)
     ax2.set_title("겹을 잘게 쪼갤수록 양 끝이 벌어진다", fontsize=12.5)
     ax2.legend(fontsize=10.5, loc="center left", framealpha=0.95)
@@ -329,8 +329,8 @@ def fig_buying_significance():
     ax1.set_yticks([1e2, 1e3, 1e4, 1e5, 1e6],
                    ["100", "1,000", "10,000", "100,000", "1,000,000"])
     ax1.set_yticks([], minor=True)
-    ax1.set_xlabel("참 효과의 크기 (로그 눈금)", fontsize=11)
-    ax1.set_ylabel("$5\\%$ 에서 유의해지는 데 드는 표본 (로그 눈금)",
+    ax1.set_xlabel("참 효과의 크기 (로그 척도)", fontsize=11)
+    ax1.set_ylabel("$5\\%$ 에서 유의해지는 데 드는 표본 (로그 척도)",
                    fontsize=11)
     ax1.set_title(f"$(1.96\\sigma/\\beta)^2$ — 효과가 절반이면 표본은 "
                   f"네 배", fontsize=12.5)
@@ -347,8 +347,8 @@ def fig_buying_significance():
     ax2.set_yticks([0.1, 0.5, 1.96, 10, 50],
                    ["0.1", "0.5", "1.96", "10", "50"])
     ax2.set_yticks([], minor=True)
-    ax2.set_xlabel("표본 크기 n (로그 눈금)", fontsize=11)
-    ax2.set_ylabel("$t$ 값 (로그 눈금)", fontsize=11, color="tab:blue")
+    ax2.set_xlabel("표본 크기 n (로그 척도)", fontsize=11)
+    ax2.set_ylabel("$t$ 값 (로그 척도)", fontsize=11, color="tab:blue")
     ax2.tick_params(axis="y", colors="tab:blue")
     ax2.set_title(f"참 효과를 ${B_PAGE}$ 로 못 박아 두고 표본만 키우면",
                   fontsize=12.5)
@@ -513,8 +513,8 @@ def fig_same_p_two_intervals():
     ax2.set_xticks([], minor=True)
     ax2.set_yticks([0.1, 0.5, 2, 8], ["0.1", "0.5", "2", "8"])
     ax2.set_yticks([], minor=True)
-    ax2.set_xlabel("표준오차 (로그 눈금)", fontsize=11)
-    ax2.set_ylabel("$95\\%$ 구간의 폭 (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("표준오차 (로그 척도)", fontsize=11)
+    ax2.set_ylabel("$95\\%$ 구간의 폭 (로그 척도)", fontsize=11)
     ax2.set_title("$p$ 값이 같아도 폭은 어디든 될 수 있다", fontsize=12.5)
     ax2.grid(alpha=0.25, which="major")
 
@@ -593,8 +593,8 @@ def fig_which_column_breaks():
     ax1.set_xticks([1, 1e2, 1e4, 1e6],
                    ["1", "100", "10,000", "1,000,000"])
     ax1.set_xticks([], minor=True)
-    ax1.set_xlabel("설계행렬의 조건수 (로그 눈금)", fontsize=11)
-    ax1.set_ylabel("두 풀이가 어긋난 상대 크기 (로그 눈금)", fontsize=11)
+    ax1.set_xlabel("설계행렬의 조건수 (로그 척도)", fontsize=11)
+    ax1.set_ylabel("두 풀이가 어긋난 상대 크기 (로그 척도)", fontsize=11)
     ax1.set_title(f"$n = {n}$ · 정규방정식과 QR 로 각각 풀었다",
                   fontsize=12.5)
     ax1.legend(fontsize=10.5, loc="upper left", framealpha=0.95)
@@ -617,8 +617,8 @@ def fig_which_column_breaks():
     ax2.set_xticks([1, 1e3, 1e6, 1e9], ["1", "1,000", "1,000,000",
                                         "1,000,000,000"])
     ax2.set_xticks([], minor=True)
-    ax2.set_xlabel("조건수 (로그 눈금)", fontsize=11)
-    ax2.set_ylabel("들어올 수 있는 상대오차 (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("조건수 (로그 척도)", fontsize=11)
+    ax2.set_ylabel("들어올 수 있는 상대오차 (로그 척도)", fontsize=11)
     ax2.set_title("두 가지 법칙을 견주면", fontsize=12.5)
     ax2.legend(fontsize=10.5, loc="upper left", framealpha=0.95)
     ax2.grid(alpha=0.25, which="major")

@@ -162,8 +162,8 @@ def train_test_gap():
                  xy=(lams[k], tot[k]), xytext=(lams[k] * 3.2, tot[k] * 0.12),
                  fontsize=10.5, color=PURPLE, ha="left",
                  arrowprops=dict(arrowstyle="->", color=PURPLE, lw=1.4))
-    ax2.set_xlabel(r'능형 벌점 $\lambda$   (로그 눈금)', fontsize=11, color=INK)
-    ax2.set_ylabel(r'$\|\hat{\beta}-\beta\|^2$ 의 기댓값 (로그 눈금)',
+    ax2.set_xlabel(r'능형 벌점 $\lambda$   (로그 척도)', fontsize=11, color=INK)
+    ax2.set_ylabel(r'$\|\hat{\beta}-\beta\|^2$ 의 기댓값 (로그 척도)',
                    fontsize=11, color=INK)
     ax2.set_title("(나) 편향을 조금 들이면 분산이 훨씬 줄어든다", fontsize=12,
                   color=INK)
@@ -273,7 +273,7 @@ def condition_number_floor():
     ax1.set_ylim(4e-4, 40)
     ax1.set_xticks(idx)
     ax1.set_xlabel(r'고윳값 번호 $j$', fontsize=11, color=INK)
-    ax1.set_ylabel(r'$d_j^2+\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax1.set_ylabel(r'$d_j^2+\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax1.set_title(r'(가) 등상관 $\rho=0.999$, $p=8$ 의 스펙트럼', fontsize=12,
                   color=INK)
     ax1.legend(fontsize=10.5, loc="upper right", frameon=False)
@@ -305,8 +305,8 @@ def condition_number_floor():
              rotation=90, va="bottom")
     ax2.text(0.00115, 1.15, r'$\lambda_{\min}=0.001$', fontsize=10,
              color=ORANGE, rotation=90, va="bottom")
-    ax2.set_xlabel(r'더해 준 $\lambda$ (로그 눈금)', fontsize=11, color=INK)
-    ax2.set_ylabel(r'조건수 $\kappa(\Sigma+\lambda I)$ (로그 눈금)',
+    ax2.set_xlabel(r'더해 준 $\lambda$ (로그 척도)', fontsize=11, color=INK)
+    ax2.set_ylabel(r'조건수 $\kappa(\Sigma+\lambda I)$ (로그 척도)',
                    fontsize=11, color=INK)
     ax2.set_title(r'(나) $\lambda$ 가 $\lambda_{\min}$ 을 넘어야 떨어진다',
                   fontsize=12, color=INK)

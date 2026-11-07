@@ -157,7 +157,7 @@ def main():
             label=f"$d = c\\sqrt{{h}}$ — 모수 $1$ 개, LOOCV {cv_s2:.1f}")
     ax.plot(H2, D2, "o", ms=10, color=INK, mec="white", mew=1.4, zorder=6,
             label="선반을 덧댄 관측 $5$ 개")
-    ax.annotate(f"$c = {b_s2[0]:.2f}$ 하나로\n최대 어긋남 "
+    ax.annotate(f"$c = {b_s2[0]:.2f}$ 하나로\n최대 불일치 "
                 f"${np.abs(res2).max():.0f}$ 푼티",
                 xy=(600, b_s2[0] * np.sqrt(600)), xytext=(660, 700),
                 fontsize=11.2, color=TEAL,

@@ -707,7 +707,7 @@ _확인한 곳 — 분산 학습에서 일부 계산 노드가 「비정상으�
         iqrs.append(np.percentile(data, 75) - np.percentile(data, 25))
         mads_list.append(mad(data))
 
-    # 왼쪽은 중심의 측도, 오른쪽은 퍼짐의 측도다. 평균과 표준편차는 처음부터
+    # 왼쪽은 중심의 측도, 오른쪽은 산포의 측도다. 평균과 표준편차는 처음부터
     # 곧장 올라가고, 중앙값과 MAD 는 오염이 절반에 이를 때까지 버틴다.
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5))
 

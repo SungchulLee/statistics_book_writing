@@ -172,7 +172,7 @@ def fig_type1_vs_n():
     ax.set_xticks(ns)
     ax.set_xticklabels([str(v) for v in ns])      # 로그축 라벨은 평문으로
     ax.minorticks_off()
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=10.5, color=INK)
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=10.5, color=INK)
     ax.set_ylabel("실제 제1종 오류율", fontsize=10.5, color=INK)
     ax.set_ylim(0, 0.38)
     ax.set_title("지수분포 모집단, 귀무가설은 참: 40000회 반복", fontsize=12, color=INK)

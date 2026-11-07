@@ -131,7 +131,7 @@ save(fig, IDX + "order_survives_the_value.png")
 # 2. motivation — 칸 사이 간격을 아무도 보장하지 않았다
 #
 # 쪽의 t_skew_asymmetry 는 「지수분포 자료에서 t 와 이론 귀무분포의
-# 어긋남」을 그려 들머리의 둘째·셋째 문단을 담는다. **첫 문단**은 전혀
+# 불일치」을 그려 들머리의 둘째·셋째 문단을 담는다. **첫 문단**은 전혀
 # 다른 이야기인데 그려져 있지 않다 — 「3 과 4 의 간격이 8 과 9 의
 # 간격과 같다고 아무도 보장하지 않았다.」
 #
@@ -181,7 +181,7 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.6, 5.0),
 for (k, sc), c in zip(SCALES.items(), ["0.35", "tab:red", "tab:green"]):
     ax1.plot(np.arange(1, 11), sc, "o-", color=c, lw=2.6, ms=10, label=k)
 ax1.set_xticks(np.arange(1, 11))
-ax1.set_xlabel("환자가 고른 칸 (세 눈금에서 모두 같다)", fontsize=11.5)
+ax1.set_xlabel("환자가 고른 칸 (세 척도에서 모두 같다)", fontsize=11.5)
 ax1.set_ylabel("그 칸에 매긴 수", fontsize=11.5)
 ax1.set_title("칸의 순서는 같고 간격만 다르다", fontsize=12.5)
 ax1.legend(fontsize=11, loc="upper left")
@@ -199,9 +199,9 @@ ax2.set_yticks([1e-4, 1e-3, 0.01, 0.05, 0.5],
                ["0.0001", "0.001", "0.01", "0.05", "0.5"])
 ax2.set_xlim(1e-5, 1.3)
 ax2.set_ylim(1e-5, 1.3)
-ax2.set_xlabel("위가 벌어진 눈금으로 잰 p 값", fontsize=11.5)
-ax2.set_ylabel("아래가 벌어진 눈금으로 잰 p 값", fontsize=11.5)
-ax2.set_title("같은 응답, 다른 눈금 — 네 칸에 다 흩어진다", fontsize=12.5)
+ax2.set_xlabel("위가 벌어진 척도로 잰 p 값", fontsize=11.5)
+ax2.set_ylabel("아래가 벌어진 척도로 잰 p 값", fontsize=11.5)
+ax2.set_title("같은 응답, 다른 척도 — 네 칸에 다 흩어진다", fontsize=12.5)
 ax2.grid(alpha=0.25, which="both")
 ax2.text(0.97, 0.955, f"판정이 뒤집힌 표본이\n"
          f"{REPS2} 벌 가운데 {flip} 벌 ({100 * flip / REPS2:.1f}%)",

@@ -171,7 +171,7 @@ print(f"\n③ 관측 구간별 포함률")
 hdr = f"{'p̂ 구간':>16}"
 for name in PRIORS:
     hdr += f"{name:>14}"
-print(hdr + f"{'사례 수(평평/치우침)':>22}")
+print(hdr + f"{'사례 수(평평/비대칭)':>22}")
 for i in range(len(EDGES) - 1):
     row = f"{f'{EDGES[i]:.3f}–{EDGES[i + 1]:.3f}':>16}"
     cnt = []

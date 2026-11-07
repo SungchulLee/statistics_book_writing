@@ -21,7 +21,7 @@ np.random.seed(0)
 # 봉우리가 둘인 자료를 만든다. 0 근처 500개와 5 근처 500개를 이어 붙인다.
 data_1 = np.concatenate([np.random.normal(0, 1, 500),
                          np.random.normal(5, 1, 500)])
-# 비교용: 봉우리가 하나이고 평균과 퍼짐이 비슷하도록 잡은 자료
+# 비교용: 봉우리가 하나이고 평균과 산포가 비슷하도록 잡은 자료
 data_2 = np.random.normal(2.5, 2, 1000)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))

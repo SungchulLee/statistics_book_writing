@@ -137,8 +137,8 @@ def main():
                     arrowprops=dict(arrowstyle="->", color=col, lw=1.5))
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.set_xlabel("관측 수 $n$ (로그 눈금)", fontsize=11.5)
-    ax.set_ylabel("$95\\%$ 구간의 반폭 (로그 눈금)", fontsize=11.5)
+    ax.set_xlabel("관측 수 $n$ (로그 척도)", fontsize=11.5)
+    ax.set_ylabel("$95\\%$ 구간의 반폭 (로그 척도)", fontsize=11.5)
     ax.set_title("② 추정값은 이 가로축을 말해 주지 않는다", fontsize=12.6,
                  color=INK)
     ax.grid(alpha=0.22, which="both")

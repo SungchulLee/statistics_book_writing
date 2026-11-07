@@ -119,7 +119,7 @@ def fig_penalty_is_the_difference():
     ax2.set_xscale("log")
     ax2.set_xlim(3, 1e5)
     ax2.set_ylim(0, 6.5)
-    ax2.set_xlabel("표본 크기 n (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("표본 크기 n (로그 척도)", fontsize=11)
     ax2.set_ylabel("BIC 의 벌점 ÷ AIC 의 벌점", fontsize=11)
     ax2.set_title("모수 하나에 매기는 값의 비 $\\ln n / 2$", fontsize=12.5)
     ax2.grid(alpha=0.25)
@@ -249,7 +249,7 @@ def fig_noise_still_gets_in():
     ax1.set_xscale("log")
     ax1.set_xlim(10, 1.2e6)
     ax1.set_ylim(0, 22)
-    ax1.set_xlabel("표본 크기 n (로그 눈금)", fontsize=11)
+    ax1.set_xlabel("표본 크기 n (로그 척도)", fontsize=11)
     ax1.set_ylabel("잡음 변수 하나가 들어올 확률 (%)", fontsize=11)
     ax1.set_title("자료를 아무리 쌓아도 AIC 는 문을 닫지 않는다",
                   fontsize=12.5)
@@ -352,7 +352,7 @@ def fig_ruler_wobbles_more():
     ax2.set_xticks(reps, [str(m) for m in reps])
     ax2.set_xticks([], minor=True)
     ax2.set_ylim(0, max(sd_pick) * 1.25)
-    ax2.set_xlabel("몇 번의 분할을 평균했는가 (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("몇 번의 분할을 평균했는가 (로그 척도)", fontsize=11)
     ax2.set_ylabel("고른 차수의 표준편차", fontsize=11)
     ax2.set_title("여러 번 재서 평균하면 가라앉는다", fontsize=12.5)
     ax2.grid(alpha=0.25)
@@ -441,7 +441,7 @@ def fig_which_degree_wins():
              bbox=dict(boxstyle="round,pad=0.35", facecolor="white",
                        alpha=0.94, edgecolor="0.5", lw=1.0))
 
-    fig.suptitle("치우침이 없고 분산만 큰 자는 한 번으로 쓰면 안 된다",
+    fig.suptitle("편향이 없고 분산만 큰 자는 한 번으로 쓰면 안 된다",
                  fontsize=14, y=1.0)
     plt.tight_layout()
     save(fig, "which_degree_wins.png")

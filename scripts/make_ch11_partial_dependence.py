@@ -131,7 +131,7 @@ def main():
     def sci(v):
         e = int(np.floor(np.log10(v)))
         return f"{v / 10 ** e:.1f} \\times 10^{{{e}}}"
-    ax.text(-2.9, 2.45, f"최대 어긋남 ${sci(d1)}$ 과 ${sci(d2)}$",
+    ax.text(-2.9, 2.45, f"최대 불일치 ${sci(d1)}$ 과 ${sci(d2)}$",
             fontsize=11, color=INK)
     ax.set_xlabel("$x_j$", fontsize=11.5)
     ax.set_ylabel("중심을 맞춘 값", fontsize=11.5)

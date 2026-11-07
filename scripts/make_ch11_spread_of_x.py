@@ -1,9 +1,9 @@
 """12.1절 최소제곱 — 판정식을 떨어뜨리는 것은 옮긴 일이 아니라 좁혀 모은 일이다.
 
-연립방정식의 판정식은 n*sum((x-xbar)^2) 로 x 의 퍼짐만 본다.
-  x = 1..6        퍼짐 17.5 → 판정식 105.00
-  x = 100..105    퍼짐 17.5 → 판정식 105.00   (통째로 옮겨도 꿈쩍하지 않는다)
-  x = 100..101    퍼짐  0.7 → 판정식   4.20   (좁혀 모으면 25 분의 1)
+연립방정식의 판정식은 n*sum((x-xbar)^2) 로 x 의 산포만 본다.
+  x = 1..6        산포 17.5 → 판정식 105.00
+  x = 100..105    산포 17.5 → 판정식 105.00   (통째로 옮겨도 꿈쩍하지 않는다)
+  x = 100..101    산포  0.7 → 판정식   4.20   (좁혀 모으면 25 분의 1)
 
 같은 참 기울기에서 잡음만 다시 뽑아 적합선을 여러 개 겹치면 그 차이가 보인다.
 기울기의 표준오차는 sigma/sqrt(sum((x-xbar)^2)) 이므로 셋째 판에서 5 배가 된다.
@@ -48,7 +48,7 @@ for ax, (name, x, col) in zip(axes, CASES):
             color="black", lw=2.0, zorder=4, label=f"참 기울기 {BETA1}")
     ax.scatter(x, BETA0 + BETA1 * x, s=26, c="black", zorder=5)
 
-    ax.set_title(f"{name}\n퍼짐 {sxx:.1f} · 판정식 {det:.2f}", fontsize=11)
+    ax.set_title(f"{name}\n산포 {sxx:.1f} · 판정식 {det:.2f}", fontsize=11)
     ax.set_xlabel("x")
     if ax is axes[0]:
         ax.set_ylabel("y")
@@ -60,7 +60,7 @@ for ax, (name, x, col) in zip(axes, CASES):
     ax.grid(alpha=0.2)
 
 fig.suptitle(f"같은 참 기울기에서 잡음만 다시 뽑아 적합선 {REP} 개를 겹치면", fontsize=13, y=1.04)
-fig.text(0.5, 0.985, "세 판의 가로·세로 눈금이 다르다 — 견줄 것은 부채의 폭이 아니라 상자 안의 표준오차다",
+fig.text(0.5, 0.985, "세 판의 가로·세로 척도가 다르다 — 견줄 것은 부채의 폭이 아니라 상자 안의 표준오차다",
          ha="center", va="top", fontsize=10.5, color="0.4")
 plt.tight_layout()
 path = OUT + "spread_of_x.png"
@@ -72,5 +72,5 @@ for name, x, _ in CASES:
     sxx = ((x - x.mean()) ** 2).sum()
     se = SIGMA / np.sqrt(sxx)
     base = base or se
-    print(f"{name.replace(chr(10), ' '):32s} 퍼짐 {sxx:>5.1f}  판정식 {len(x) * sxx:>7.2f}  "
+    print(f"{name.replace(chr(10), ' '):32s} 산포 {sxx:>5.1f}  판정식 {len(x) * sxx:>7.2f}  "
           f"기울기 SE {se:.4f}  ({se / base:.1f}배)")

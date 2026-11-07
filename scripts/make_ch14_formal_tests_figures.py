@@ -113,7 +113,7 @@ def fig_power_by_alternative():
         raise ValueError(kind)
 
     alts = ["normal", "lognormal", "t3", "uniform", "bimodal"]
-    alt_labels = ["정규\n(크기 확인)", "대수정규\n(오른쪽 치우침)",
+    alt_labels = ["정규\n(크기 확인)", "대수정규\n(오른쪽 왜도)",
                   r"$t_3$" + "\n(두꺼운 꼬리)", "균등\n(얇은 꼬리)",
                   "이봉 혼합\n(봉우리 둘)"]
     test_labels = ["Shapiro-Wilk", r"D'Agostino $K^2$", "Jarque-Bera",
@@ -165,7 +165,7 @@ def fig_w_as_qq_fit():
     n = 60
     sets = [
         ("정규 $N(0,1)$", rng.normal(0, 1, n), BLUE),
-        ("대수정규 (치우침)", rng.lognormal(0, 0.6, n), ORANGE),
+        ("대수정규 (왜도)", rng.lognormal(0, 0.6, n), ORANGE),
         (r"$t_3$ (두꺼운 꼬리)", rng.standard_t(3, n), PURPLE),
     ]
 
@@ -445,9 +445,9 @@ def fig_ad_weight():
                 textcoords="offset points", xytext=(26, 12), fontsize=9.5,
                 color=INK, ha="left", linespacing=1.4)
     ax.set_xlabel("$F_0(x)$ — 분포의 어느 지점인가", fontsize=10.5, color=INK)
-    ax.set_ylabel("같은 크기의 어긋남이 받는 무게 (로그 눈금)",
+    ax.set_ylabel("같은 크기의 불일치가 받는 무게 (로그 척도)",
                   fontsize=10.5, color=INK)
-    ax.set_title("AD 는 꼬리의 어긋남을 증폭한다", fontsize=11.5, color=INK)
+    ax.set_title("AD 는 꼬리의 불일치를 증폭한다", fontsize=11.5, color=INK)
     ax.legend(fontsize=9.5, frameon=False, loc="upper center", labelcolor=INK)
     clean(ax)
 

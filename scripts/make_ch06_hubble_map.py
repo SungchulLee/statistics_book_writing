@@ -44,7 +44,7 @@ def make_truth():
 
 
 def aberrated_psf():
-    """수차가 있는 점퍼짐함수 — 좁은 심 + 넓은 무리."""
+    """수차가 있는 점산포함수 — 좁은 심 + 넓은 무리."""
     k = 41
     yy, xx = np.mgrid[0:k, 0:k] - k // 2
     r2 = yy ** 2 + xx ** 2
@@ -64,7 +64,7 @@ clean = conv(truth, psf) + BG
 obs = RNG.poisson(clean).astype(float)
 corner = (slice(0, 24), slice(100, 128))
 print(f"참 영상 총광량 {truth.sum():,.0f},  관측 총광량 {obs.sum():,.0f}")
-print(f"점퍼짐함수: 심 {0.30:.2f} / 무리 {0.70:.2f},  무리의 폭 {5.5:.1f} 화소")
+print(f"점산포함수: 심 {0.30:.2f} / 무리 {0.70:.2f},  무리의 폭 {5.5:.1f} 화소")
 
 
 def rl(y, p, iters, beta=0.0, keep=()):

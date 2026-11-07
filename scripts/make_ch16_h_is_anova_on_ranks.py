@@ -87,7 +87,7 @@ for _ in range(900):
 
 pchi_v, pF_v = (np.array(c) for c in zip(*rows))
 disagree = ((pchi_v < 0.05) != (pF_v < 0.05)).mean()
-print(f"H 와 (N-1)SSB/SST 의 최대 어긋남 = {worst:.3e}")
+print(f"H 와 (N-1)SSB/SST 의 최대 불일치 = {worst:.3e}")
 print(f"0.05 를 두고 결론이 갈리는 비율 = {disagree:.4f}  (자료 {len(rows)} 벌)")
 
 fig, (axL, axR) = plt.subplots(1, 2, figsize=(11.6, 4.4))
@@ -106,7 +106,7 @@ axL.set_ylabel("Kruskal-Wallis $H$")
 axL.set_title("한 자료에서 잰 두 수 — 굵은 선이 공식이 말하는 자리",
               color=INK, fontsize=12, pad=9)
 axL.legend(loc="lower right", fontsize=9, framealpha=0.95)
-axL.text(0.33, 18.4, f"자료 $800$ 벌 모두 어긋남이 $10^{{-13}}$ 아래",
+axL.text(0.33, 18.4, f"자료 $800$ 벌 모두 불일치가 $10^{{-13}}$ 아래",
          fontsize=9, color=INK)
 for s in ("top", "right"):
     axL.spines[s].set_visible(False)

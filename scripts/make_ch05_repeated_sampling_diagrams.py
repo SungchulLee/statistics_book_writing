@@ -6,7 +6,7 @@ r"""5.1절 반복추출 — LaTeX 배열로 그려 두었던 두 그림을 제�
                                 각 분포의 생김새와 퍼진 정도까지 함께 그린다.
 
 모집단은 평균 170, 표준편차 6 인 정규분포로 두고 표본크기는 n = 25 다.
-따라서 한 표본 안의 퍼짐은 sigma = 6 이고 표본평균의 퍼짐은 6/5 = 1.2 다.
+따라서 한 표본 안의 산포는 sigma = 6 이고 표본평균의 산포는 6/5 = 1.2 다.
 
 만드는 파일:
 
@@ -142,11 +142,11 @@ def three_figure():
     # 아래: 세 분포의 생김새
     panels = [
         ("모집단분포", "모집단 전체가 이루는 분포\n관측할 수 없다",
-         BLUE, BLUE_F, f"퍼짐 $\\sigma = {SIGMA:.0f}$"),
+         BLUE, BLUE_F, f"산포 $\\sigma = {SIGMA:.0f}$"),
         ("표본분포", f"뽑아 온 값 $n = {N}$개의 분포\n**유일하게 손에 쥔 것**",
-         ORANGE, ORANGE_F, f"퍼짐 $\\approx \\sigma = {SIGMA:.0f}$"),
+         ORANGE, ORANGE_F, f"산포 $\\approx \\sigma = {SIGMA:.0f}$"),
         ("표집분포", "무한히 되풀이해 얻은\n추정값들의 분포",
-         GREEN, GREEN_F, f"퍼짐 $\\sigma/\\sqrt{{n}} = {SIGMA/np.sqrt(N):.1f}$"),
+         GREEN, GREEN_F, f"산포 $\\sigma/\\sqrt{{n}} = {SIGMA/np.sqrt(N):.1f}$"),
     ]
     for k, (title, sub, c, fc, width) in enumerate(panels):
         a = fig.add_subplot(gs[1, k])

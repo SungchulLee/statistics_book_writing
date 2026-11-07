@@ -25,7 +25,7 @@ from scipy import stats  # noqa: E402
 RNG = np.random.default_rng(20261021)
 
 SIG = 1.0            # 넉 달 동안의 성장의 표준편차
-DELTA = 0.2          # 교사 보정이 만든 출발점의 어긋남 (성장 표준편차 단위)
+DELTA = 0.2          # 교사 보정이 만든 출발점의 불일치 (성장 표준편차 단위)
 NS = np.array([10, 30, 100, 300, 1000, 3000, 10000])
 REPS = 4000
 ALPHA = 0.05

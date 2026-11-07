@@ -93,7 +93,7 @@ x64 = RNG.lognormal(0, 1, N3)
 ex3 = float(np.sum(x64.astype(np.longdouble))) / N3
 cv3 = x64.std() / x64.mean()
 print(f"\n③ n = {N3:,} 을 순차로 더한다 — 담는 자료형과 누적 자료형을 바꾸며")
-print(f"{'담기':>10}{'누적':>10}{'폭/평균':>13}{'치우침/평균':>14}")
+print(f"{'담기':>10}{'누적':>10}{'폭/평균':>13}{'편향/평균':>14}")
 CASES = []
 for nm, xx, dt in (("float64", x64, np.float64),
                    ("float32", x64.astype(np.float32), np.float32),

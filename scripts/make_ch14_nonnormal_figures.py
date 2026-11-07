@@ -136,7 +136,7 @@ def fig_bootstrap_shape():
     ax.minorticks_off()
     ax.set_xlim(8.5, 200)
     ax.set_ylim(0.75, 1.0)
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=10.5, color=INK)
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=10.5, color=INK)
     ax.set_ylabel("95% 구간의 실제 포함률", fontsize=10.5, color=INK)
     ax.set_title(f"같은 모집단에서 잰 두 구간의 성능 ({B_out}회 반복)",
                  fontsize=11.5, color=INK)
@@ -169,7 +169,7 @@ def fig_rank_test_power():
         return a, b
 
     kinds = [("normal", "정규분포", 0.80),
-             ("exp", "지수분포\n(치우침)", 0.80),
+             ("exp", "지수분포\n(왜도)", 0.80),
              ("t3", "$t_3$\n(두꺼운 꼬리)", 0.80)]
     labels, p_t, p_u, p_size_t, p_size_u = [], [], [], [], []
     for kind, lab, shift in kinds:

@@ -6,7 +6,7 @@ r"""12장 '추정과 추론' 여섯 쪽에 들어가는 개념 그림을 만든�
   ch12/estimation_inference/img/ci_vs_pi_bands.png        신뢰대는 줄고 예측대는 안 준다
   ch12/estimation_inference/img/mc_beta_and_se.png        몬테카를로가 확인하는 표준오차
   ch12/estimation_inference/img/slope_ci_levels.png       신뢰수준을 올리면 결론이 바뀐다
-  ch12/estimation_inference/img/joint_vs_marginal_ci.png  결합영역과 개별구간의 어긋남
+  ch12/estimation_inference/img/joint_vs_marginal_ci.png  결합영역과 개별구간의 불일치
 
 실행:  python3 scripts/make_ch13_estimation_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.

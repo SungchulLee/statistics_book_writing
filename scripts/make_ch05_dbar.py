@@ -146,7 +146,7 @@ def fig_personal_equation():
     ax = axes[1]
     ax.plot(k, d, marker="D", ms=7, lw=1.6, color=RED)
     ax.axhline(bias, color=MUTED, lw=2.0, ls="--")
-    ax.text(1.0, bias + 0.30, f"두 사람 사이의 참 치우침 {bias:.2f} 초",
+    ax.text(1.0, bias + 0.30, f"두 사람 사이의 참 편향 {bias:.2f} 초",
             fontsize=10.4, color=MUTED)
     ax.set_title(f"둘의 차만 보면 — 표준편차 {d.std(ddof=1):.2f} 초",
                  fontsize=12.4, color=RED, pad=8)

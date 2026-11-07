@@ -406,7 +406,7 @@ $p = 0.31$로 등분산도 기각되지 않는다. 두 가정이 모두 무난�
 
     ```python
     # 일원배치에서 적합값은 집단평균뿐이므로 세로줄이 집단 수만큼만 생긴다.
-    # 각 줄의 퍼짐이 비슷한지를 본다.
+    # 각 줄의 산포가 비슷한지를 본다.
     plt.scatter(model.fittedvalues, model.resid, alpha=0.6)
     plt.axhline(y=0, color='r', linestyle='--')
     plt.xlabel('Fitted Values')

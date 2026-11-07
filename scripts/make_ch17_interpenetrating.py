@@ -46,7 +46,7 @@ def place(rng, n):
 
 
 def read(idx, bias=0.0, rng=None, sd_obs=0.02):
-    """조사단이 적어 온 값 — 기록 잡음과 (있다면) 조사단의 치우침이 섞인다."""
+    """조사단이 적어 온 값 — 기록 잡음과 (있다면) 조사단의 편향이 섞인다."""
     v = field[idx[:, 0], idx[:, 1]] + bias
     if rng is not None:
         v = v + sd_obs * rng.standard_normal(len(v))
@@ -61,18 +61,18 @@ for r in range(REPS):
 SE_TRUE = th.std(ddof=1)
 print(f"구역 평균 θ = {THETA:.4f},  n = {N_UNIT} 일 때 참 SE = {SE_TRUE:.5f}")
 
-# --- ② 치우침을 키우며 두 자를 견준다 ----------------------------------
+# --- ② 편향을 키우며 두 자를 견준다 ----------------------------------
 BIAS = np.array([0.00, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06])
 REPS2 = 4_000
 half_se, iid_se, alarm = [], [], []
 
-# 치우침이 없을 때 |d| 가 얼마나 벌어지는지를 먼저 재서 경보선을 잡는다
+# 편향이 없을 때 |d| 가 얼마나 벌어지는지를 먼저 재서 경보선을 잡는다
 d0 = np.empty(REPS2)
 for r in range(REPS2):
     a, b = place(RNG, N_HALF), place(RNG, N_HALF)
     d0[r] = read(a, rng=RNG).mean() - read(b, rng=RNG).mean()
 GATE = np.quantile(np.abs(d0), 0.95)
-print(f"치우침이 없을 때 |d| 의 95% 분위수 = {GATE:.5f}")
+print(f"편향이 없을 때 |d| 의 95% 분위수 = {GATE:.5f}")
 
 for b_ in BIAS:
     hs, ii, hit = np.empty(REPS2), np.empty(REPS2), np.empty(REPS2, bool)
@@ -86,7 +86,7 @@ for b_ in BIAS:
     half_se.append(hs.mean())
     iid_se.append(ii.mean())
     alarm.append(hit.mean())
-    print(f"  치우침 {b_:.2f}:  |d|/2 = {hs.mean():.5f}  "
+    print(f"  편향 {b_:.2f}:  |d|/2 = {hs.mean():.5f}  "
           f"s/√n = {ii.mean():.5f}  경보율 = {hit.mean():.3f}")
 
 half_se = np.array(half_se) / SE_TRUE
@@ -171,7 +171,7 @@ ax2.plot(bx, alarm * 100, "--", color="0.45", lw=1.5,
 ax2.set_ylabel("경보율 (%)", color="0.35", fontsize=10)
 ax2.tick_params(axis="y", labelcolor="0.35", labelsize=9)
 ax2.set_ylim(0, 105)
-ax.set_xlabel("둘째 조사단의 치우침 (백분율점)")
+ax.set_xlabel("둘째 조사단의 편향 (백분율점)")
 ax.set_ylabel("추정한 오차 ÷ 참 표준오차")
 ax.set_title("② 한 조사단이 치우치면 — 공식은 거의 못 본다", fontsize=11)
 h1, l1 = ax.get_legend_handles_labels()

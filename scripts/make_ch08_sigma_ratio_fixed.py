@@ -84,7 +84,7 @@ ax1.set_xticks([0.3, 1, 3, 10, 30, 100],
                ["0.3", "1", "3", "10", "30", "100"])
 ax1.set_ylim(-1.15, y - 0.25)
 ax1.set_yticks(yticks, ylabs, fontsize=11)
-ax1.set_xlabel("분산 (로그 눈금)", fontsize=11)
+ax1.set_xlabel("분산 (로그 척도)", fontsize=11)
 ax1.set_title("묶음 안에서는 길이가 같고, 묶음 사이에서는 n 이 정한다",
               fontsize=12.5)
 ax1.grid(axis="x", alpha=0.25, which="both")

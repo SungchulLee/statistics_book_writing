@@ -132,7 +132,7 @@ def main():
     ax.annotate(f"${mode_w_as_p:.3f}$", xy=(mode_w_as_p, 0.06),
                 xytext=(mode_w_as_p - 0.07, 0.16), fontsize=11.5, color=RED,
                 ha="right", arrowprops=dict(arrowstyle="->", color=RED, lw=1.3))
-    ax.annotate("밀도로 다루면 눈금을 바꿀 때\n야코비안이 곱해지고,\n"
+    ax.annotate("밀도로 다루면 척도를 바꿀 때\n야코비안이 곱해지고,\n"
                 "봉우리가 옮겨 간다",
                 xy=(0.42, 0.55), xytext=(0.70, 0.62), fontsize=10.8,
                 color=RED, ha="center",

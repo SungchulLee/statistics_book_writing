@@ -79,7 +79,7 @@ def fig_moment_weights():
     ax.annotate("$3^2 = 9$", (3.0, 9), textcoords="offset points",
                 xytext=(-8, -14), fontsize=9.5, color=BLUE, ha="right")
     ax.set_xlabel("표준화한 관측값 $|z|$", fontsize=10.5, color=INK)
-    ax.set_ylabel("그 관측값이 적률 합에 보태는 양 (로그 눈금)",
+    ax.set_ylabel("그 관측값이 적률 합에 보태는 양 (로그 척도)",
                   fontsize=10.5, color=INK)
     ax.set_title("차수가 높아지면 꼬리만 남는다", fontsize=11.5, color=INK)
     ax.legend(fontsize=10, frameon=False, loc="upper left", labelcolor=INK)
@@ -395,7 +395,7 @@ def fig_skew_cutoff():
     ax.minorticks_off()
     ax.set_xlim(9, 2400)
     ax.set_ylim(-1.6, 2.7)
-    ax.set_xlabel("표본크기 $n$ (로그 눈금)", fontsize=10.5, color=INK)
+    ax.set_xlabel("표본크기 $n$ (로그 척도)", fontsize=10.5, color=INK)
     ax.set_ylabel("표본왜도 $g_1$", fontsize=10.5, color=INK)
     ax.set_title("같은 왜도 값도 $n$ 에 따라 전혀 다른 증거가 된다",
                  fontsize=12, color=INK)

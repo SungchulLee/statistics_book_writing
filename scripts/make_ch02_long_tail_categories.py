@@ -77,7 +77,7 @@ for k in (10, 100, 1000):
 ax.set_xscale("log")
 ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
 ax.xaxis.set_minor_formatter(FuncFormatter(lambda v, _: ""))
-ax.set_xlabel("상위 몇 개를 남기는가 (로그 눈금)", fontsize=9.5, color=INK)
+ax.set_xlabel("상위 몇 개를 남기는가 (로그 척도)", fontsize=9.5, color=INK)
 ax.set_ylabel("그 범주들이 덮는 자료의 비율 (퍼센트)", fontsize=9.5, color=INK)
 ax.set_title("② 꼬리는 길고 얇다", fontsize=10.5, color=INK)
 ax.set_ylim(0, 105)

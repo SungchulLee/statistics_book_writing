@@ -167,7 +167,7 @@ def chi2_rejection_asymmetry():
     ax.set_ylim(-1.05, top + 0.28)
     ax.set_xticks([0, 1, 2, 3])
     ax.set_xlabel(r"$s^2/\sigma_0^2$", fontsize=11, color=INK)
-    ax.set_title("(b) 같은 채택역을 분산비 눈금에 옮기면 — n 이 커질수록 대칭에 가까워진다",
+    ax.set_title("(b) 같은 채택역을 분산비 척도에 옮기면 — n 이 커질수록 대칭에 가까워진다",
                  fontsize=11.5, color=INK, pad=14, loc="left")
     ax.text(-0.50, -0.80,
             "n = 5 에서는 대칭 근사의 왼쪽 끝이 음수다 — 분산비는 음수가 될 수 없다",
@@ -290,8 +290,8 @@ def var_ratio_skew():
     ax.tick_params(axis="y", length=0, labelsize=10.5)
     ax.set_xlim(0.033, 24)
     ax.set_ylim(-1.55, len(ns) - 0.35)
-    ax.set_xlabel(r"$S_1^2/S_2^2$   (로그 눈금)", fontsize=11, color=INK)
-    ax.set_title("(b) 등분산일 때 분산비의 95% 범위 — 로그 눈금에서 비로소 대칭이다",
+    ax.set_xlabel(r"$S_1^2/S_2^2$   (로그 척도)", fontsize=11, color=INK)
+    ax.set_title("(b) 등분산일 때 분산비의 95% 범위 — 로그 척도에서 비로소 대칭이다",
                  fontsize=11.5, color=INK, pad=14, loc="left")
     ax.text(0.9, -1.00,
             "막대는 1 을 기준으로 덧셈이 아니라 곱셈으로 반씩 나뉜다.\n"

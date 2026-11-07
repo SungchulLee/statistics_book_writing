@@ -122,4 +122,4 @@ print(f"가장 크게 어긋나는 자리 {t[i]:,} 걸음: 참값 {loss[i]:.4f},
 print(f"평가점 {len(ev)} 개의 최댓값 {ev_loss.max():.4f} "
       f"({ev[int(ev_loss.argmax())]:,} 걸음)")
 for g, m, l, h in zip(gaps, med, lo, hi):
-    print(f"  간격 {g:5,d}: 어긋남 가운뎃값 {m:.3f}  (최소 {l:.3f}, 최대 {h:.3f})")
+    print(f"  간격 {g:5,d}: 불일치 가운뎃값 {m:.3f}  (최소 {l:.3f}, 최대 {h:.3f})")

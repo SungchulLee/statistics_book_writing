@@ -155,7 +155,7 @@ def main():
     ax.set_xticks(list(NS))
     ax.set_xticklabels([f"${n}$" for n in NS])
     ax.minorticks_off()
-    ax.set_xlabel("관측 수 $n$ (로그 눈금)", fontsize=11.5)
+    ax.set_xlabel("관측 수 $n$ (로그 척도)", fontsize=11.5)
     ax.set_ylabel("비율", fontsize=11.5)
     ax.set_ylim(0, 1.12)
     ax.set_title("② 규칙은 늘 같은 몫을 잘라 낸다", fontsize=12.6, color=INK)

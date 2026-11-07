@@ -117,7 +117,7 @@ def main():
                         (0.0015, PURPLE, "섞기가 완전하지 않음"),
                         (0.0008, BLUE, "기록 실수 몇 건")):
         ax.plot(ns, d / se, lw=2.2, color=col, ls="--",
-                label=f"{lab} — 치우침 ${d:.4f}$")
+                label=f"{lab} — 편향 ${d:.4f}$")
     for y, lab in ((1.96, "$z = 1.96$"), (5.0, "$z = 5$")):
         ax.axhline(y, color=GREY, lw=1.4, ls=":")
         ax.text(2.3e2, y + 0.6, lab, fontsize=10.6, color=GREY)
@@ -141,7 +141,7 @@ def main():
     fig.suptitle("$0.2$ 에서 $0.007$ 을 떼어 내는 일", fontsize=14.5)
     fig.text(0.5, -0.05,
              "오른쪽의 점선 셋은 초능력과 무관한 평범한 원인들이 만들 법한 "
-             "치우침이다. $z$ 가 $\\sqrt{n}$ 에 비례해 자라므로, 원인이 "
+             "편향이다. $z$ 가 $\\sqrt{n}$ 에 비례해 자라므로, 원인이 "
              "무엇이든 시행을 충분히 모으면 모두 유의해진다.",
              ha="center", fontsize=10.4, color=INK)
 

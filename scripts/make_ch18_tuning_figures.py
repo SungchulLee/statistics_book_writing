@@ -160,7 +160,7 @@ def fold_curves():
             mew=1.4, zorder=6)
     logx_plain(ax, [0.01, 0.1, 1], ["0.01", "0.1", "1"])
     ax.set_ylim(0.6, 3.2)
-    ax.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax.set_ylabel("검증 겹의 MSE", fontsize=11, color=INK)
     ax.set_title(r'같은 자료, 같은 격자, 다섯 개의 다른 곡선 ($n=100$, $p=20$)',
                  fontsize=12.5, color=INK)
@@ -217,7 +217,7 @@ def aic_bic_path():
     logx_plain(ax1, [0.001, 0.01, 0.1, 1], ["0.001", "0.01", "0.1", "1"])
     ax1.set_xlim(alphas.min(), alphas.max())
     ax1.set_ylim(80, 210)
-    ax1.set_xlabel(r'$\lambda$ (로그 눈금)', fontsize=11, color=INK)
+    ax1.set_xlabel(r'$\lambda$ (로그 척도)', fontsize=11, color=INK)
     ax1.set_ylabel("기준값 (작을수록 좋다)", fontsize=11, color=INK)
     ax1.set_title("(가) 라쏘 경로를 따라 계산한 AIC 와 BIC", fontsize=12,
                   color=INK)

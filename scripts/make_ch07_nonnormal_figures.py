@@ -1,7 +1,7 @@
 r"""7.3 치우친 분포 쪽의 그림을 생성한다.
 
 만드는 파일:
-  ch05/non_normal/img/skew_center_and_clt.png   치우침이 중심을 가르고, 평균의 분포까지 끌고 간다
+  ch05/non_normal/img/skew_center_and_clt.png   왜도가 중심을 가르고, 평균의 분포까지 끌고 간다
 
 실행:  python3 scripts/make_ch07_nonnormal_figures.py   (저장소 최상위에서)
 필요:  numpy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -47,7 +47,7 @@ def kde(vals, grid, bw):
 
 
 # ==================================================================
-# 치우침의 두 얼굴
+# 왜도의 두 얼굴
 # ==================================================================
 def skew_center_and_clt():
     # LogNormal(0, 1)
@@ -140,7 +140,7 @@ def skew_center_and_clt():
               handlelength=1.8)
     ax.set_title("표준화한 표본평균의 분포", fontsize=13, pad=10)
 
-    fig.suptitle("치우침은 중심을 갈라놓고, 표본평균의 분포까지 끌고 간다",
+    fig.suptitle("왜도는 중심을 갈라놓고, 표본평균의 분포까지 끌고 간다",
                  fontsize=14.5, y=1.02)
     fig.tight_layout()
     save(fig, OUT + "skew_center_and_clt.png")

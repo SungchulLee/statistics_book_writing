@@ -187,7 +187,7 @@ def fig_coef_scale():
     ax.set_xticklabels(["1e-8", "1e-6", "1e-4", "0.01", "1", "100"],
                        fontsize=9)
     ax.minorticks_off()
-    ax.set_xlabel("계수의 절댓값 (로그 눈금)", fontsize=10.5, color=INK)
+    ax.set_xlabel("계수의 절댓값 (로그 척도)", fontsize=10.5, color=INK)
     ax.set_title("날것의 계수는 9차수에 걸쳐 흩어진다", fontsize=11.5,
                  color=INK, pad=6)
     ax.text(1e-4, 1.52, "크기를 견줄 수 없다", fontsize=9.8, color=RED,
@@ -358,7 +358,7 @@ def fig_polynomial():
     ax.set_xticklabels([str(d) for d in degs], fontsize=8.6)
     ax.set_ylim(0.7, 3000)
     ax.set_xlabel("다항식의 차수", fontsize=10.5, color=INK)
-    ax.set_ylabel("RMSE (로그 눈금)", fontsize=10.5, color=INK)
+    ax.set_ylabel("RMSE (로그 척도)", fontsize=10.5, color=INK)
     ax.set_title("훈련은 계속 좋아지고 검정은 돌아선다", fontsize=11.5,
                  color=INK, pad=6)
     ax.legend(fontsize=9.6, loc="upper left", frameon=False)

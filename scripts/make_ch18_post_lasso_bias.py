@@ -11,7 +11,7 @@ r"""축소를 되돌리면 반대쪽으로 넘어간다 — 사후 라쏘의 선
 두 규칙을 함께 본다. 임계값이 높을수록 고르는 일이 선별적이 되어 저주가 세진다.
 
 ① 뽑힌 자료에서만 잰 E[beta_hat | 뽑힘] 대 참값.
-② 상대 치우침 — 약한 신호에서 몇 퍼센트나 크게 나오는가.
+② 상대 편향 — 약한 신호에서 몇 퍼센트나 크게 나오는가.
 ③ 선택을 모른 체한 사후 라쏘 95 % 신뢰구간의 포함확률.
 
 만드는 파일: docs/ch18/overview/img/post_lasso_coverage.png
@@ -101,13 +101,13 @@ E_OLS, E_ABS_OLS = sum_ols / REP, sum_abs_ols / REP
 # 한글은 고정폭에서 두 칸을 차지하므로 자리맞춤을 직접 적는다
 print(f"n = {N}, p = {P}, sigma = {SIG}, 되풀이 {REP:,}")
 print("lambda 는 되풀이마다 5 겹 교차검증으로 골랐다. 뒤 열 개의 참값은 0 이다.")
-print(f"고르지 않은 OLS 는 거의 불편이다 — 가장 큰 치우침 "
+print(f"고르지 않은 OLS 는 거의 불편이다 — 가장 큰 편향 "
       f"{np.max(np.abs(E_OLS - BETA)):.4f}\n")
 
 for rule, lab in (("min", "lambda_min"), ("1se", "lambda_1SE")):
     o = OUT[rule]
     print(f"① [{lab}] 뽑힌 자료에서만 잰 추정값")
-    print("   참 beta   선택확률    라쏘    사후 라쏘   치우침   상대 치우침")
+    print("   참 beta   선택확률    라쏘    사후 라쏘   편향   상대 편향")
     for j in range(10):
         rel = (o["post"][j] / BETA[j] - 1) * 100 if BETA[j] > 0 else float("nan")
         rs = "—" if BETA[j] == 0 else f"{rel:>+9.1f} %"
@@ -161,7 +161,7 @@ for rule, c, mk, lab in (("min", C_M, "^", "$\\lambda_{\\min}$"),
     ax2.plot(BETA[NZ], rel, mk + "-", color=c, lw=2.8, ms=9, label=lab)
 ax2.axhline(0.0, color="#333333", lw=2.2, ls="--")
 ax2.set_xlabel("참 $\\beta_j$")
-ax2.set_ylabel("사후 라쏘의 상대 치우침 (%)")
+ax2.set_ylabel("사후 라쏘의 상대 편향 (%)")
 ax2.set_title("② 약한 신호일수록 부풀어 보인다", fontsize=12)
 ax2.legend(loc="upper right", fontsize=11)
 ax2.grid(alpha=0.25)

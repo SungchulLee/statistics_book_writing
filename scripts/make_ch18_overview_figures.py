@@ -112,7 +112,7 @@ def three_paths():
         logx_plain(ax, [0.001, 0.01, 0.1, 1, 10],
                    ["0.001", "0.01", "0.1", "1", "10"])
         ax.set_xlim(lams[0], lams[-1])
-        ax.set_xlabel(r'벌점 $\lambda$ (로그 눈금)', fontsize=11, color=INK)
+        ax.set_xlabel(r'벌점 $\lambda$ (로그 척도)', fontsize=11, color=INK)
         ax.set_title(title, fontsize=12, color=INK)
         clean(ax)
     axes[0].set_ylabel("계수 추정값", fontsize=11, color=INK)
@@ -265,7 +265,7 @@ def conditional_gain():
     ax.set_xlim(-0.35, len(rhos) - 0.35)
     ax.set_xlabel(r'설명변수의 등상관 $\rho$   ($n=50$, $p=10$)',
                   fontsize=11, color=INK)
-    ax.set_ylabel(r'$E\|\hat{\beta}-\beta\|^2$ (로그 눈금)', fontsize=11,
+    ax.set_ylabel(r'$E\|\hat{\beta}-\beta\|^2$ (로그 척도)', fontsize=11,
                   color=INK)
     ax.set_title("정칙화의 이득은 문제가 나쁠수록 커진다", fontsize=12.5,
                  color=INK)

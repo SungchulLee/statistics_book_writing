@@ -96,7 +96,7 @@ axL.annotate(r"$\pm\sqrt{5}\,\sigma$ 에서 끊긴다", xy=(ROOT5, 0.012),
              arrowprops=dict(arrowstyle="->", color=BLUE, lw=1.0))
 axL.set_xlim(-3.4, 3.4)
 axL.set_ylim(0, 0.76)
-axL.set_xlabel("분산을 $1$ 로 맞춘 눈금")
+axL.set_xlabel("분산을 $1$ 로 맞춘 척도")
 axL.set_ylabel("밀도")
 axL.set_title("순위합이 가장 불리해지는 밀도", color=INK, fontsize=12, pad=9)
 axL.legend(loc="upper right", fontsize=9, framealpha=0.95)

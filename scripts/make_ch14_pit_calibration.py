@@ -33,11 +33,11 @@ RNG = np.random.default_rng(20261022)
 
 N, SIG, REPS = 2000, 1.0, 500
 NSW = 1500                       # 샤피로–윌크에 쓰는 표본 (scipy 권장 범위)
-MODELS = {                       # (중심의 치우침, 폭의 배율)
+MODELS = {                       # (중심의 편향, 폭의 배율)
     "잘 보정": (0.0, 1.0),
     "과신 $(\\hat\\sigma = 0.6\\sigma)$": (0.0, 0.6),
     "과소신뢰 $(1.6\\sigma)$": (0.0, 1.6),
-    "치우침 $(+0.5\\sigma)$": (0.5, 1.0),
+    "편향 $(+0.5\\sigma)$": (0.5, 1.0),
 }
 
 y = RNG.normal(0.0, SIG, N)
@@ -127,7 +127,7 @@ for i, n in enumerate(names):
              fontsize=9.5)
 ax3.axhline(0.05, color="black", lw=1.3, ls=":")
 ax3.set_xticks(xpos)
-ax3.set_xticklabels(["잘 보정", "과신", "과소신뢰", "치우침"], fontsize=10)
+ax3.set_xticklabels(["잘 보정", "과신", "과소신뢰", "편향"], fontsize=10)
 ax3.set_ylim(0, 1.16)
 ax3.set_ylabel("기각률")
 ax3.set_title(f"③ 무엇을 잡아내는가 ($n = {N:,}$)".replace(",", "{,}"),

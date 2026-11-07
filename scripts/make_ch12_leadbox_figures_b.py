@@ -108,7 +108,7 @@ def fig_correction_or_sample():
     ax2.set_xticks([], minor=True)
     ax2.set_xlim(NS[0], NS[-1])
     ax2.set_ylim(0, 100)
-    ax2.set_xlabel("집단당 표본 크기 (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("집단당 표본 크기 (로그 척도)", fontsize=11)
     ax2.set_ylabel("몫 (%)", fontsize=11)
     ax2.set_title("표본을 키우면 회색이 먼저 사라진다", fontsize=12.5)
     ax2.legend(fontsize=10.5, loc="center left", framealpha=0.95)
@@ -551,7 +551,7 @@ def fig_averaged_effect_misleads():
     print(f"\n[이원배치 사후비교] 격차 {BASE.tolist()} · 평균 "
           f"{MEAN_GAP:.4f}")
     for t, v in zip(SCALES[::4], frac[::4]):
-        print(f"  교호작용 {t:.2f} 배  평균 어긋남 {v:.3f} 표준오차")
+        print(f"  교호작용 {t:.2f} 배  평균 불일치 {v:.3f} 표준오차")
 
 
 fig_correction_or_sample()

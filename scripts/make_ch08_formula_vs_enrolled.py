@@ -69,7 +69,7 @@ ticks = [20, 50, 100, 300, 1000, 3000]
 ax.xaxis.set_major_locator(FixedLocator(ticks))
 ax.xaxis.set_major_formatter(FixedFormatter([f"{t:,}" for t in ticks]))
 ax.xaxis.set_minor_locator(FixedLocator([]))
-ax.set_xlabel("사람 수 (로그 눈금)")
+ax.set_xlabel("사람 수 (로그 척도)")
 ax.set_title("SURMOUNT-1 — 식이 낸 수와 실제로 모은 수", fontsize=12)
 ax.grid(axis="x", alpha=0.25)
 

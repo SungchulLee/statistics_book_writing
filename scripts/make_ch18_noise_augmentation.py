@@ -137,7 +137,7 @@ ax2.set_xlim(lo, hi)
 ax2.set_ylim(lo, hi)
 ax2.set_xlabel("$n\\tau^2$")
 ax2.set_ylabel("증강 해에 맞춘 $\\lambda$")
-ax2.set_title("② 눈금이 정확히 $n\\tau^2$ 이다", fontsize=12)
+ax2.set_title("② 척도가 정확히 $n\\tau^2$ 이다", fontsize=12)
 ax2.legend(loc="upper left", fontsize=10)
 ax2.grid(alpha=0.25)
 

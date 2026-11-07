@@ -10,7 +10,7 @@
 
 ---
 
-## 1. 차의 중심과 퍼짐
+## 1. 차의 중심과 산포
 
 $\hat{p}_1$과 $\hat{p}_2$를 참 비율이 $p_1$과 $p_2$인 모집단에서 뽑은 크기 $n_1$, $n_2$의 독립 표본으로부터 얻은 표본비율이라 하자.
 
@@ -669,7 +669,7 @@ $$
     \text{Var}(\hat{p}_1 - \hat{p}_2) = \text{Var}(\hat{p}_1) + \text{Var}(\hat{p}_2)
     $$
 
-    분산은 언제나 음이 아닌 퍼짐을 재는 양이므로 빼는 것이 아니라 **더한다**. 차 $\hat{p}_1 - \hat{p}_2 = \hat{p}_1 + (-1)\hat{p}_2$에 $a=1$, $b=-1$로 공식 $\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)$를 적용하면 이렇게 된다.
+    분산은 언제나 음이 아닌 산포를 재는 양이므로 빼는 것이 아니라 **더한다**. 차 $\hat{p}_1 - \hat{p}_2 = \hat{p}_1 + (-1)\hat{p}_2$에 $a=1$, $b=-1$로 공식 $\text{Var}(aX + bY) = a^2\text{Var}(X) + b^2\text{Var}(Y)$를 적용하면 이렇게 된다.
 
     $$
     \text{Var}(\hat{p}_1 - \hat{p}_2) = 1^2 \text{Var}(\hat{p}_1) + (-1)^2 \text{Var}(\hat{p}_2) = \text{Var}(\hat{p}_1) + \text{Var}(\hat{p}_2)

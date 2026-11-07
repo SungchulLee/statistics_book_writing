@@ -78,7 +78,7 @@ for n in (6, 8):
         exact[inv] += 1
     exact /= exact.sum()
     print(f"n = {n}: 되풀이식과 {math.factorial(n):,} 가지 전수 열거의 "
-          f"최대 어긋남 = {np.abs(exact - inversion_pmf(n)).max():.3e}")
+          f"최대 불일치 = {np.abs(exact - inversion_pmf(n)).max():.3e}")
 
 # ------------------------------------------------- Daniels 의 부등식도 확인
 n = 8

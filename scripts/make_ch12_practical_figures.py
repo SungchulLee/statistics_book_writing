@@ -121,7 +121,7 @@ def fig_peeking():
     ax.set_xticks(Ks)
     ax.set_xticklabels([str(k) for k in Ks], fontsize=10)
     ax.minorticks_off()
-    ax.set_xlabel("실험 도중 결과를 확인한 횟수 (로그 눈금)", fontsize=10.5,
+    ax.set_xlabel("실험 도중 결과를 확인한 횟수 (로그 척도)", fontsize=10.5,
                   color=INK)
     ax.set_ylabel("실제 제1종 오류율", fontsize=10.5, color=INK)
     ax.set_ylim(0, 0.34)

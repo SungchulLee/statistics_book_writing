@@ -178,7 +178,7 @@ pandas는 구조화된 자료를 불러오고, 정제하고, 변환하고, 요�
     filled = demo.fillna(demo.median(numeric_only=True))
     print(filled["x"].isna().sum(), filled["x"].median())
 
-    # 메우기가 퍼짐에 무슨 일을 하는지 수로 본다.
+    # 메우기가 산포에 무슨 일을 하는지 수로 본다.
     print(f"메우기 전: n = {demo['x'].count()}, 평균 = {demo['x'].mean():.4f}, "
           f"s = {demo['x'].std():.4f}, SE = {demo['x'].sem():.4f}")
     print(f"메운  뒤: n = {filled['x'].count()}, 평균 = {filled['x'].mean():.4f}, "

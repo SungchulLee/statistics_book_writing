@@ -111,7 +111,7 @@ def main():
         ax.plot(phi, v / np.trapz(v, phi), lw=lw, color=col, ls=ls,
                 label=lab)
     jn = jeff_phi / np.trapz(jeff_phi, phi)
-    ax.annotate("두 선이 겹친다 — 제프리스는\n눈금을 바꾸어도 제프리스다",
+    ax.annotate("두 선이 겹친다 — 제프리스는\n척도를 바꾸어도 제프리스다",
                 xy=(2.4, jn[np.argmin(abs(phi - 2.4))]),
                 xytext=(3.5, 0.205), fontsize=10.6, color=TEAL, ha="center",
                 arrowprops=dict(arrowstyle="->", color=TEAL, lw=1.4))
@@ -123,7 +123,7 @@ def main():
                 arrowprops=dict(arrowstyle="->", color=RED, lw=1.4))
     ax.set_xlabel("로그오즈 $\\varphi = \\log\\dfrac{p}{1-p}$", fontsize=11.5)
     ax.set_ylabel("밀도", fontsize=11.5)
-    ax.set_title("같은 모름을 다른 눈금으로 적으면", fontsize=12.8,
+    ax.set_title("같은 모름을 다른 척도로 적으면", fontsize=12.8,
                  color=INK, pad=8)
     ax.set_xlim(-6, 6)
     ax.set_ylim(0, 0.34)

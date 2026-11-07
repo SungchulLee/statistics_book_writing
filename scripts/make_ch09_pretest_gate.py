@@ -39,7 +39,7 @@ for ax in (ax1, ax2):
     ax.xaxis.set_major_locator(FixedLocator(NS))
     ax.xaxis.set_major_formatter(FixedFormatter([f"{n:,}" for n in NS]))
     ax.xaxis.set_minor_locator(FixedLocator([]))
-    ax.set_xlabel("표본크기 n (로그 눈금)")
+    ax.set_xlabel("표본크기 n (로그 척도)")
     ax.grid(alpha=0.25)
 
 # ── (좌) 문 ──────────────────────────────────────────────────────────

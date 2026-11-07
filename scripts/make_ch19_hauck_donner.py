@@ -95,7 +95,7 @@ ax2.annotate("왈드 p-값이 바닥을 치고\n거꾸로 올라간다",
 ax2.yaxis.set_major_formatter(FuncFormatter(
     lambda v, _: "1" if v == 1 else f"1e{int(round(np.log10(v)))}"))
 ax2.set_xlabel("둘째 집단의 성공 수 $R$")
-ax2.set_ylabel("p-값 (로그 눈금)")
+ax2.set_ylabel("p-값 (로그 척도)")
 ax2.set_title("증거가 쌓일수록 왈드의 p-값이 나빠진다", fontsize=12, color=INK)
 ax2.legend(loc="lower left", fontsize=10.5, framealpha=0.95)
 ax2.grid(alpha=0.25, which="both")

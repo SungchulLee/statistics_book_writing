@@ -86,12 +86,12 @@ def mse_decomposition():
     ax.text((theta + mu) / 2, top * 0.66, "편향", fontsize=11.5, color=INK,
             ha="center", va="bottom")
 
-    # 분산 = 분포의 퍼짐
+    # 분산 = 분포의 산포
     ax.add_patch(FancyArrowPatch((mu - sd, top * 0.30), (mu + sd, top * 0.30),
                                  arrowstyle="<|-|>", mutation_scale=13,
                                  color=GREEN, linewidth=1.5, zorder=7))
     # 라벨을 화살표 오른쪽에 둔다. 가운데에 두면 세로 파선이 글자를 가른다.
-    ax.text(mu + sd + 0.18, top * 0.30, "퍼짐 — 분산", fontsize=11.5,
+    ax.text(mu + sd + 0.18, top * 0.30, "산포 — 분산", fontsize=11.5,
             color=GREEN, ha="left", va="center")
 
     ax.text(theta - 3.9, top * 0.95,

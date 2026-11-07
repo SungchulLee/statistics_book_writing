@@ -172,7 +172,7 @@ def f_construction():
     ax.annotate("", xy=(6.92, 5.55), xytext=(6.92, 0.35),
                 arrowprops=dict(arrowstyle="-", color=RED, linewidth=1.1,
                                 linestyle=":"))
-    ax.text(6.92, 5.75, "같은 가정을 두 번 빌려 쓴다 — 어긋남은 상쇄되지 않고 더해진다",
+    ax.text(6.92, 5.75, "같은 가정을 두 번 빌려 쓴다 — 불일치는 상쇄되지 않고 더해진다",
             fontsize=11.5, color=RED, ha="center", va="bottom")
 
     ax.text(7.6, -0.35, "분자도 분모도 2차 적률이다. 중심극한정리가 손댈 자리가 없다.",

@@ -166,7 +166,7 @@ def main():
     fig.text(0.5, -0.05,
              f"관측 ${N}$ 개, 설명변수 ${P}$ 개, 쌍별 상관 ${RHO}$, "
              f"오차 표준편차 ${SIG}$. MSE 는 모의가 아니라 닫힌 식으로 "
-             "계산했다 — 치우침의 제곱과 분산을 그대로 더한 값이다.",
+             "계산했다 — 편향의 제곱과 분산을 그대로 더한 값이다.",
              ha="center", fontsize=10.4, color=INK)
 
     path = OUT + "ridge_existence.png"

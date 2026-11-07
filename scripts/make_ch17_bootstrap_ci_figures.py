@@ -7,7 +7,7 @@ r"""17장 붓스트랩 신뢰구간 절(bootstrap_ci/) 일곱 쪽의 개념 그�
   ch17/bootstrap_ci/img/studentized_pivot.png        스튜던트화가 추축성을 만든다
   ch17/bootstrap_ci/img/median_bootstrap_atoms.png   중앙값 붓스트랩 분포의 이산성
   ch17/bootstrap_ci/img/coverage_vs_width.png        포함확률과 폭은 함께 보아야 한다
-  ch17/bootstrap_ci/img/levels_and_coverage.png      신뢰수준의 폭과 장기 포함확률
+  (levels_and_coverage.png 은 더 쓰이지 않는다 — 아래 main 의 주석을 볼 것)
 
 실행:  python3 scripts/make_ch17_bootstrap_ci_figures.py   (저장소 최상위에서)
 필요:  numpy, scipy, matplotlib — 문서 빌드에는 필요하지 않다.
@@ -548,7 +548,7 @@ def fig_coverage_width():
     ax2.set_xticks([1.5, 2, 3, 5, 10, 20])
     ax2.set_xticklabels(["1.5", "2", "3", "5", "10", "20"])
     ax2.minorticks_off()
-    ax2.set_xlabel("평균 구간 폭 (로그 눈금)", fontsize=10, color=INK)
+    ax2.set_xlabel("평균 구간 폭 (로그 척도)", fontsize=10, color=INK)
     ax2.set_ylabel("실제 포함확률", fontsize=10, color=INK)
     ax2.set_title(r"어려운 문제: $\mathrm{Exp}(1)$ 의 분산, $n = 15$",
                   fontsize=11.5, color=INK)
@@ -651,4 +651,8 @@ if __name__ == "__main__":
     fig_studentized()
     fig_median_atoms()
     fig_coverage_width()
-    fig_levels_coverage()
+    # fig_levels_coverage() 는 부르지 않는다. 이 그림을 쓰던 쪽이 ccd64a9a
+    # 「시각화 두 쪽을 합친다」에서 합쳐지며 PNG 가 지워졌는데 생성 코드가 남아,
+    # 다시 그릴 때마다 가리키는 쪽이 없는 고아가 하나 되살아났다. 함수는 그대로
+    # 두되 호출만 막아 둔다 — 다시 쓸 곳이 생기면 이 줄을 살리면 된다.
+    # fig_levels_coverage()

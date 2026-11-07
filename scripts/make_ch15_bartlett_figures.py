@@ -81,7 +81,7 @@ def fig_size_vs_kurtosis():
     ax.text(-1.15, 0.062, "명목 0.05", fontsize=10.5, color=INK)
     ax.annotate("", xy=(6.0, 0.383), xytext=(6.0, 0.217),
                 arrowprops=dict(arrowstyle="<->", color=PURPLE, lw=1.6))
-    ax.text(5.75, 0.30, "같은 첨도 6,\n치우침만 다르다", fontsize=10.5,
+    ax.text(5.75, 0.30, "같은 첨도 6,\n왜도만 다르다", fontsize=10.5,
             color=PURPLE, ha="right", va="center")
     ax.plot([], [], marker="o", ms=9, color=MUTED, lw=0, label="대칭분포")
     ax.plot([], [], marker="D", ms=9, color=MUTED, lw=0, label="치우친 분포")
@@ -238,7 +238,9 @@ def fig_lognormal_null():
 
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
-    fig_amgm()
+    # fig_amgm() 은 정의가 없다 — 부르는 줄만 남아 있어 이 스크립트는 첫 줄에서
+    # NameError 로 죽었고, 그래서 아래 세 그림이 한 번도 다시 그려지지 않았다.
+    # (2026-11-07 에 용어를 바꾸며 드러났다. HEAD 에서도 같았다.)
     fig_size_vs_kurtosis()
     fig_equals_f()
     fig_lognormal_null()

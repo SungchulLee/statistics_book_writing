@@ -81,7 +81,7 @@ def fig_one_point_does_not_wash_out():
     ax1.set_xscale("log")
     ax1.set_xticks(NS, [str(v) for v in NS])
     ax1.set_xticks([], minor=True)
-    ax1.set_xlabel("표본 크기 (로그 눈금)", fontsize=11)
+    ax1.set_xlabel("표본 크기 (로그 척도)", fontsize=11)
     ax1.set_ylabel("초과첨도의 평균", fontsize=11)
     ax1.set_title(f"표본을 서른세 배로 키우면 ({REPS} 번 평균)",
                   fontsize=12.5)
@@ -381,7 +381,7 @@ def fig_stopped_early_inflates():
     ax2.set_xscale("log")
     ax2.set_xticks(PEEK_GRID, [str(v) for v in PEEK_GRID])
     ax2.set_xticks([], minor=True)
-    ax2.set_xlabel("실험 동안 들여다본 횟수 (로그 눈금)", fontsize=11)
+    ax2.set_xlabel("실험 동안 들여다본 횟수 (로그 척도)", fontsize=11)
     ax2.set_ylabel("멈춘 실험이 보고한 효과의 평균", fontsize=11)
     ax2.set_title("많이 볼수록 더 크게 보고하게 된다", fontsize=12.5)
     ax2.grid(alpha=0.25)

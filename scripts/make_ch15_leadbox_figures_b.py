@@ -224,7 +224,7 @@ ax.axhline(0.05, color="0.3", lw=2.0, ls="--")
 ax.set_xscale("log")
 # 로그 눈금의 기본 이름표는 mathtext 라 한글 글꼴에서 두부가 된다
 ax.set_xticks(NS10, [str(n) for n in NS10])
-ax.set_xlabel("집단당 표본크기 (로그 눈금)", fontsize=12)
+ax.set_xlabel("집단당 표본크기 (로그 척도)", fontsize=12)
 ax.set_ylabel("비율", fontsize=12)
 ax.set_ylim(0, 1.05)
 ax.legend(fontsize=11.5, loc="center left", bbox_to_anchor=(0.03, 0.72))
@@ -334,7 +334,7 @@ save(fig, BT + "two_roads_to_a_big_t.png")
 # 12. bartlett_sensitivity — 표본을 늘리면 더 나빠진다
 #
 # 쪽의 bartlett_lognormal_null 은 「실제 분포가 표집분포에서 통째로
-# 벗어난다」를 그린다 — 한 자리에서의 어긋남이다. 들머리의 머리글은
+# 벗어난다」를 그린다 — 한 자리에서의 불일치다. 들머리의 머리글은
 # n 이 하는 일이다 — 「표본을 키우면 기각률이 0.6655 에서 0.9270 으로
 # 오히려 올라간다. 자료를 더 모으는 것이 답이 되지 않는 드문 자리다.」
 # 그 곡선이 그려져 있지 않다.
@@ -367,7 +367,7 @@ ax.text(330, 0.075, "약속한 5%", ha="right", va="bottom", fontsize=11.5,
         color="tab:blue", fontweight="bold")
 ax.set_xscale("log")
 ax.set_xticks(NS12, [str(n) for n in NS12])
-ax.set_xlabel("집단당 표본크기 (로그 눈금) — 세 집단의 분산은 언제나 같다",
+ax.set_xlabel("집단당 표본크기 (로그 척도) — 세 집단의 분산은 언제나 같다",
               fontsize=12)
 ax.set_ylabel("「분산이 다르다」고 답하는 비율", fontsize=12)
 ax.set_ylim(0, 1.05)
@@ -395,7 +395,7 @@ save(fig, BT + "more_data_makes_it_worse.png")
 # 쪽의 bartlett_size_vs_kurtosis 가 「초과첨도에 따른 실제 1 종 오류율」을
 # 그려 들머리의 첫·둘째 문단을 담는다. 남은 것은 **셋째 문단**이고 그것이
 # 가장 아픈 대목이다 — 「그 첨도가 4 차 적률이라 바로 그 표본에서 정밀하게
-# 추정할 수가 없으니 어긋남의 크기를 짐작할 길이 없고, 보정해 줄 수도 없다.」
+# 추정할 수가 없으니 불일치의 크기를 짐작할 길이 없고, 보정해 줄 수도 없다.」
 #
 # 「못 한다」를 말로만 두지 않고 **해 본다.** 표본에서 첨도를 재어
 # 통계량을 (2+g2hat)/2 로 나눠 보정하면 어떤 줄은 고쳐지고(균등
@@ -469,7 +469,7 @@ ax2.legend(fontsize=10.8, loc="upper left")
 ax2.grid(axis="y", alpha=0.25)
 ax2.set_title("고치려고 쓰는 그 수가 고칠 대상만큼 흔들린다", fontsize=12.5)
 
-fig.suptitle("어긋남의 크기를 짐작할 길이 없고, 보정해 줄 수도 없다",
+fig.suptitle("불일치의 크기를 짐작할 길이 없고, 보정해 줄 수도 없다",
              fontsize=15, y=1.0)
 plt.tight_layout()
 save(fig, BT + "cannot_correct_what_you_cannot_measure.png")
