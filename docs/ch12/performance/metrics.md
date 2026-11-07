@@ -1,4 +1,4 @@
-# 성능 척도
+# 네 척도의 비교
 
 <div class="leadbox" markdown>
 

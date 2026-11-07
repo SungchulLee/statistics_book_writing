@@ -417,8 +417,8 @@ nav:
                 - 결정계수와 수정 결정계수: ch12/performance/r_squared.md
                 - '평균절대오차, 평균제곱오차, 제곱근평균제곱오차': ch12/performance/mae_mse_rmse.md
                 - 평균절대백분율오차와 그 밖의 상대 척도: ch12/performance/relative_metrics.md
-                - 성능 척도: ch12/performance/metrics.md
-            - 12.9 모형선택 기준:
+                - 네 척도의 비교: ch12/performance/metrics.md
+            - 12.9 모형선택:
                 - Akaike 정보기준: ch12/model_selection/aic.md
                 - 베이즈 정보기준: ch12/model_selection/bic.md
                 - 모형선택을 위한 교차검증: ch12/model_selection/cross_validation.md
