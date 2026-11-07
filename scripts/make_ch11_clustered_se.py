@@ -18,7 +18,7 @@ r"""12.5절 「그림으로 보는 통계학」 — 순서가 없는 종속.
   0.20      0.464        0.051           2.58              2.61
 
 곧 급내상관이 $0.10$ 이면 **스무 번에 한 번 틀리기로 한 검정이 세 번에 한 번 틀린다.**
-표준오차의 비는 멀턴의 어림 $\sqrt{1 + (m-1)\rho}$ 와 소수 둘째 자리까지 맞는다.
+표준오차의 비는 멀턴의 근사 $\sqrt{1 + (m-1)\rho}$ 와 소수 둘째 자리까지 맞는다.
 
 만드는 파일:
 
@@ -90,7 +90,7 @@ def main():
     # 한글은 고정폭에서 두 칸을 차지하므로 자리맞춤은 공백을 직접 적는다
     print(f"학교 {G} 개 x 학생 {M} 명 = {n}, 처치는 학교 단위, 참 효과 0, "
           f"{REPS} 번")
-    print("  ICC   OLS 기각률   군집 기각률   SE 비(군집/OLS)   멀턴 어림")
+    print("  ICC   OLS 기각률   군집 기각률   SE 비(군집/OLS)   멀턴 근사")
     for rho in RHOS:
         o = np.array([one(rho, r) for r in range(REPS)])
         rej_o = float(np.mean(o[:, 0] > tc_ols))
@@ -128,11 +128,11 @@ def main():
     ax.legend(fontsize=10.2, framealpha=0.93, loc="upper left")
     ax.spines[["top", "right"]].set_visible(False)
 
-    # ── ② 멀턴의 어림 ──
+    # ── ② 멀턴의 근사 ──
     ax = axes[1]
     gr = np.linspace(0, 0.21, 200)
     ax.plot(gr, np.sqrt(1 + (M - 1) * gr), lw=2.6, color=INK,
-            label=f"멀턴의 어림 $\\sqrt{{1 + ({M}-1)\\rho}}$")
+            label=f"멀턴의 근사 $\\sqrt{{1 + ({M}-1)\\rho}}$")
     ax.plot(xs, [r[3] for r in rows], "o", ms=12, color=AMBER, mec="white",
             mew=1.5, label="모의실험으로 잰 표준오차의 비")
     for x, _, _, ratio, moul in rows:

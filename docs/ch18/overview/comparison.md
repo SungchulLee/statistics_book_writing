@@ -535,7 +535,7 @@ $$
     \operatorname{tr}\mathbf{H}_\lambda = \sum_{j=1}^p \frac{d_j^2}{d_j^2 + n\lambda}.
     $$
 
-    2 절 표의 공식과 비교하면 $\lambda_{\text{표}} = n\lambda$다. 표의 공식은 $\frac{1}{n}$ 없는 목적함수 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda_{\text{표}}\lVert\boldsymbol\beta\rVert_2^2$에 딸린 것이다(연습문제 5와 같은 종류의 불일치가고, 여기서는 배수가 $2n$이 아니라 $n$이다 — 능형 벌점에 $\frac12$이 붙어 있기 때문이다).
+    2 절 표의 공식과 비교하면 $\lambda_{\text{표}} = n\lambda$다. 표의 공식은 $\frac{1}{n}$ 없는 목적함수 $\lVert\mathbf{y}-\mathbf{X}\boldsymbol\beta\rVert^2 + \lambda_{\text{표}}\lVert\boldsymbol\beta\rVert_2^2$에 딸린 것이다(연습문제 5와 같은 종류의 불일치이고, 여기서는 배수가 $2n$이 아니라 $n$이다 — 능형 벌점에 $\frac12$이 붙어 있기 때문이다).
 
     **(b)** $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$이면 모든 특잇값이 $d_j^2 = n$이므로
 

@@ -227,7 +227,7 @@ $\S 1$ 에서 본 **공간을 둘로 쪼개 한쪽을 버리는** 바로 그 연
 
 _확인한 곳 — scikit-learn 문서 「Random Projection」의 Johnson–Lindenstrauss 보조정리
 설명(인용한 문장, `johnson_lindenstrauss_min_dim` 이 뒤틀림을 묶는 최소 차원을
-보수적으로 어림한다는 것, `eps` 가 허용 뒤틀림을 정한다는 것, 그리고 점 백만 개에
+보수적으로 근사한다는 것, `eps` 가 허용 뒤틀림을 정한다는 것, 그리고 점 백만 개에
 `eps=0.5` 면 $663$, `eps` 를 $[0.5, 0.1, 0.01]$ 로 주면 $[663,\ 11841,\ 1112658]$ 이
 나온다는 예). 문서가 드는 출처는 Dasgupta & Gupta, *An elementary proof of the
 Johnson-Lindenstrauss Lemma* 다. ③ 의 수는 그 함수와 같은 식을 직접 구현해 얻었고

@@ -38,7 +38,7 @@ def one_round(m, rep, draw):
 
 # === ① 표준정규 오차 ==================================================
 print(f"① 오차가 표준정규일 때 ({REP:,} 번 평균)")
-print(f"{'행동 수 m':>9}{'단일 추정':>12}{'이중 추정':>12}{'sqrt(2 ln m) 위 어림':>22}")
+print(f"{'행동 수 m':>9}{'단일 추정':>12}{'이중 추정':>12}{'sqrt(2 ln m) 위 근사':>22}")
 S1, D1 = [], []
 for m in MS:
     s, d = one_round(m, REP, lambda sh: RNG.standard_normal(sh))
@@ -82,7 +82,7 @@ print("   편향은 1/sqrt(n) 로 줄지만 표준오차도 같은 속도로 준
       "비는 n 이 백 배가 되어도 그대로다.")
 for m in M3:
     print(f"   m = {m:>3} : 비의 평균 {np.mean(R3[m]):.3f} "
-          f"(위 어림 sqrt(2 ln m) = {np.sqrt(2 * np.log(m)):.3f})")
+          f"(위 근사 sqrt(2 ln m) = {np.sqrt(2 * np.log(m)):.3f})")
 
 # === 그림 ============================================================
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.6, 5.2))
@@ -92,7 +92,7 @@ xs = np.arange(len(MS))
 w = 0.38
 ax1.bar(xs, S1, 0.62, color=C_S, label="단일 추정 — 가장 큰 것을 쓴다")
 ax1.plot(xs, [np.sqrt(2 * np.log(m)) for m in MS], "--", color=C_T, lw=2.0,
-         label="$\\sqrt{2\\ln m}$ — 위 어림")
+         label="$\\sqrt{2\\ln m}$ — 위 근사")
 ax1.axhline(0, color="#666666", lw=1.2)
 ax1.plot(xs, D1, "o-", color=C_D, lw=2.2, ms=8, zorder=5,
          label="이중 추정 — 고르는 자료와 재는 자료를 나눈다")

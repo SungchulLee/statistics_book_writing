@@ -2,9 +2,9 @@ r"""쿡의 거리를 신경망으로 옮기면 무엇이 깨지는가.
 
 이 쪽의 영향 진단은 「이 점을 빼면 결과가 얼마나 바뀌는가」를 묻는다. 선형모형에서는
 그 답이 닫힌 식으로 나온다. 신경망에서도 같은 일을 하려고 **영향함수**를 쓴다 —
-$\mathcal I(z) = -H^{-1}\nabla_\theta \ell(z)$ 로 재학습 없이 어림하는 것이다.
+$\mathcal I(z) = -H^{-1}\nabla_\theta \ell(z)$ 로 재학습 없이 근사하는 것이다.
 
-① 볼록한 모형(로지스틱 회귀)에서는 그 어림이 잘 맞는다.
+① 볼록한 모형(로지스틱 회귀)에서는 그 근사가 잘 맞는다.
 ② 신경망에서는 **재야 할 양 자체가** 재학습의 잡음에 묻힌다.
 ③ 그래서 「영향이 큰 점 상위 $20$ 개」가 시드마다 달라진다.
 
@@ -83,7 +83,7 @@ act = np.array([nll(Xte, yte, fit_logit(np.delete(Xtr, i, 0),
                 for i in range(N)])
 r1 = float(np.corrcoef(pred, act)[0, 1])
 ov1 = len(set(np.argsort(-act)[:TOPK]) & set(np.argsort(-pred)[:TOPK]))
-print(f"\n① 로지스틱 회귀 — 재학습 없이 어림한 값과 실제로 {N} 번 재학습한 값")
+print(f"\n① 로지스틱 회귀 — 재학습 없이 근사한 값과 실제로 {N} 번 재학습한 값")
 print(f"   상관 {r1:.4f}, 상위 {TOPK} 개 가운데 {ov1} 개가 같다")
 print(f"   실제 변화의 범위 [{act.min():.2e}, {act.max():.2e}]")
 

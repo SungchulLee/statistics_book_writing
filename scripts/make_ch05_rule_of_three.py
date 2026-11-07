@@ -60,7 +60,7 @@ def main():
         ax.spines[["top", "right"]].set_visible(False)
     fig.suptitle("삼의 법칙 — 분자가 0 일 때 쓰는 한 줄", fontsize=14.5)
     fig.text(0.5, -0.04,
-             "3/n 은 언제나 정확한 값보다 조금 크다. 안전한 쪽으로 틀리므로 어림으로 쓰기에 알맞다.",
+             "3/n 은 언제나 정확한 값보다 조금 크다. 안전한 쪽으로 틀리므로 근사로 쓰기에 알맞다.",
              ha="center", fontsize=10.5, color=INK)
 
     path = OUT + "rule_of_three.png"

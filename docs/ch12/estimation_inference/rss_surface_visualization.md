@@ -668,7 +668,7 @@ $$
 
 이고 등호는 $\mathbf u$ 가 $A$ 의 고유벡터일 때만 성립함을 보이시오.
 
-**(2)** 이 쪽의 $A = \operatorname{diag}(100,\ 788534.55)$ 에서 $\mathbf u = (1,1)/\sqrt 2$ 를 넣어 두 양을 수로 계산하고 곱을 구하시오. 그 곱의 최댓값을 조건수 $\kappa = \lambda_{\max}/\lambda_{\min}$ 으로 적고, 어느 방향에서 달성되는지 말하시오. "촘촘함"으로 $\operatorname{se}(\mathbf u^\top\hat{\boldsymbol\beta})$ 를 어림하면 몇 배 틀리는가.
+**(2)** 이 쪽의 $A = \operatorname{diag}(100,\ 788534.55)$ 에서 $\mathbf u = (1,1)/\sqrt 2$ 를 넣어 두 양을 수로 계산하고 곱을 구하시오. 그 곱의 최댓값을 조건수 $\kappa = \lambda_{\max}/\lambda_{\min}$ 으로 적고, 어느 방향에서 달성되는지 말하시오. "촘촘함"으로 $\operatorname{se}(\mathbf u^\top\hat{\boldsymbol\beta})$ 를 근사하면 몇 배 틀리는가.
 
 </div>
 
@@ -725,7 +725,7 @@ $$
 
     이고, 최댓값은 $\cos^2\theta = \sin^2\theta = 1/2$ 곧 **정확히 $45^\circ$ 방향**에서 달성된다. $\kappa = 788534.5515/100 = 7885.3455$ 를 넣으면 $(\kappa+1)^2/(4\kappa) = 1971.8364$ 로 위에서 구한 값과 같다. 곧 $\mathbf u = (1,1)/\sqrt2$ 는 **가장 심하게 어긋나는 방향**이다.
 
-    곡률의 역수로 표준오차를 어림하면 $\sigma\sqrt{1/394317.2758} = 0.00159\,\sigma$ 가 나오지만 참값은 $\sigma\sqrt{0.00500063} = 0.0707\,\sigma$ 이므로
+    곡률의 역수로 표준오차를 근사하면 $\sigma\sqrt{1/394317.2758} = 0.00159\,\sigma$ 가 나오지만 참값은 $\sigma\sqrt{0.00500063} = 0.0707\,\sigma$ 이므로
 
     $$
     \sqrt{1971.84} = 44.41 \ \text{배}

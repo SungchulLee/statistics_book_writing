@@ -314,7 +314,7 @@ MLE $\hat{\lambda} = \bar{X}$가 불편임을 보이고 그 정확한 분산을 
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff med" title="중간"></span>
-0을 관측할 수 없는 자료(예: 병원에 온 환자만 기록하므로 방문 횟수가 1 이상)의 분포는 **영절단 포아송**이다. 그 PMF를 쓰고 MLE 방정식을 유도하라. $\bar x = 2.5$일 때 $\hat\lambda$를 어림하라.
+0을 관측할 수 없는 자료(예: 병원에 온 환자만 기록하므로 방문 횟수가 1 이상)의 분포는 **영절단 포아송**이다. 그 PMF를 쓰고 MLE 방정식을 유도하라. $\bar x = 2.5$일 때 $\hat\lambda$를 근사하라.
 
 </div>
 

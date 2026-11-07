@@ -373,7 +373,7 @@ def fig_skew_cutoff():
                     label="정규자료에서 $g_1$ 의 95% 범위")
     ax.axhline(0, color=MUTED, lw=1.2, ls="--")
     ax.plot(ns, 1.96 * np.sqrt(6 / ns), color=MUTED, lw=1.6, ls=":",
-            label=r"교과서 어림값 $\pm 1.96\sqrt{6/n}$")
+            label=r"교과서 근사값 $\pm 1.96\sqrt{6/n}$")
     ax.plot(ns, -1.96 * np.sqrt(6 / ns), color=MUTED, lw=1.6, ls=":")
 
     ax.plot([300], [2.2452], "o", color=RED, ms=8, zorder=5)
