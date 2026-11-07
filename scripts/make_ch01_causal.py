@@ -14,7 +14,7 @@ r"""1장(자료가 어떻게 만들어지는가)의 인과 관련 그림 세 장
 만드는 파일:
 
   docs/ch01/classical/img/randomization_balance.png      무작위 배정이 하는 일
-  docs/ch01/classical/img/observational_overlap.png      공변량 겹침과 층화 보정
+  docs/ch01/classical/img/observational_overlap.png      공변량 중첩과 층화 보정
   docs/ch01/classical/img/simpsons_paradox_berkeley.png  심슨의 역설
 
 실행:  python3 scripts/make_ch01_causal.py   (저장소 최상위에서)
@@ -220,7 +220,7 @@ def fig_randomization_balance():
 
 
 # ===========================================================================
-# 그림 2. 관찰연구의 공변량 겹침과 층화 보정 — 관찰연구
+# 그림 2. 관찰연구의 공변량 중첩과 층화 보정 — 관찰연구
 # ===========================================================================
 
 def fig_observational_overlap():
@@ -256,17 +256,17 @@ def fig_observational_overlap():
             skipped += int(m.sum())
     strat = num / den
 
-    # --- 겹침 정도: 두 나이 분포의 겹침 계수 ---
+    # --- 중첩 정도: 두 나이 분포의 중첩 계수 ---
     ob = np.arange(25, 86, 2.5)
     ft, _ = np.histogram(age[T], bins=ob, density=True)
     fc, _ = np.histogram(age[~T], bins=ob, density=True)
     overlap = float(np.minimum(ft, fc).sum() * 2.5)
 
-    print("\n[그림 2] 관찰연구의 공변량 겹침 (n = 4,000, 참 효과 -5.0)")
+    print("\n[그림 2] 관찰연구의 공변량 중첩 (n = 4,000, 참 효과 -5.0)")
     print(f"  처리군 {int(T.sum()):>4}명  평균 나이 {age[T].mean():.1f}세")
     print(f"  대조군 {int((~T).sum()):>4}명  평균 나이 {age[~T].mean():.1f}세")
     print(f"  평균 나이 차이 {age[T].mean() - age[~T].mean():+.1f}세")
-    print(f"  두 나이 분포의 겹침 계수 {overlap:.3f}")
+    print(f"  두 나이 분포의 중첩 계수 {overlap:.3f}")
     print(f"  단순 차이     {naive:+.2f}   (부호가 뒤집혔다)")
     print(f"  나이 층화 보정 {strat:+.2f}")
     print(f"  참 효과       {tau:+.2f}")

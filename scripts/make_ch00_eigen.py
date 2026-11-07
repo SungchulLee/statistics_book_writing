@@ -168,7 +168,7 @@ def symmetric_eigen_orthogonal():
                 f"{ang:.1f}°", color=accent, fontsize=12, fontweight="bold",
                 ha="center", va="center", zorder=8)
 
-        # 라벨 — 상대편 고유벡터의 반대쪽으로 밀어 겹침을 막는다
+        # 라벨 — 상대편 고유벡터의 반대쪽으로 밀어 중첩을 막는다
         for j, col in enumerate((BLUE, ORANGE)):
             v = V[:, j]
             other = V[:, 1 - j]

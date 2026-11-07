@@ -1,7 +1,7 @@
 r"""A/B 검정의 세 가지 산술 — 얼마나 커야 하고, 여럿을 재면 어떻게 되고, 이긴 것을 믿어도 되는가.
 
 ① 전환율 $5\%$ 에서 $0.1\%$p 를 잡으려면 팔당 몇 명이 필요한가.
-② 똑같은 변형 $k$ 개를 한꺼번에 재면 「승자」가 나올 확률과 그 승자의 부풀림.
+② 똑같은 변형 $k$ 개를 한꺼번에 재면 「승자」가 나올 확률과 그 승자의 팽창.
 ③ 아이디어가 참일 사전확률이 낮으면 유의한 결과도 못 믿는다.
 
 만드는 파일: docs/ch10/practical_applications/img/ab_scale.png
@@ -78,7 +78,7 @@ ax2.set_ylim(0, 1.05)
 ax2.set_xlim(0, 61)
 ax2.grid(alpha=0.25)
 ax2b = ax2.twinx()
-ax2b.plot(ks, [e_max(k) for k in ks], color="#1f77b4", lw=2.4, label="승자의 부풀림")
+ax2b.plot(ks, [e_max(k) for k in ks], color="#1f77b4", lw=2.4, label="승자의 팽창")
 ax2b.set_ylabel("$E[\\max Z]$ (표준오차 단위)", color="#1f77b4")
 ax2b.tick_params(axis="y", labelcolor="#1f77b4")
 ax2b.set_ylim(0, 3.0)

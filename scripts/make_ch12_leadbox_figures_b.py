@@ -304,7 +304,7 @@ def fig_family_you_actually_searched():
 
 # ════════════════════════════════════════════════════════════════════
 def fig_dunnett_uses_the_overlap():
-    """12.3 더닛 — 더닛이 더 쓰고 있는 정보는 겹침이다.
+    """12.3 더닛 — 더닛이 더 쓰고 있는 정보는 중첩이다.
 
     쪽의 dunnett_control 과 dunnett_critical 은 대조군 비교와 임계값을
     그린다. 여기서는 들머리의 마지막 물음 --- **셋이 모두 5% 를 약속하는데
@@ -363,9 +363,9 @@ def fig_dunnett_uses_the_overlap():
     ax2.plot(KS, tukey, "^-", ms=8, lw=2.6, color="0.4",
              label="튜키 — 묻지 않은 비교까지 보호")
     ax2.plot(KS, bonf, "s-", ms=8, lw=2.6, color="tab:red",
-             label="본페로니 — 겹침을 쓰지 않는다")
+             label="본페로니 — 중첩을 쓰지 않는다")
     ax2.plot(KS, dunnett, "o-", ms=9, lw=2.8, color="tab:blue",
-             label="더닛 — 겹침을 쓴다")
+             label="더닛 — 중첩을 쓴다")
     ax2.axvline(K_PAGE, color="0.5", ls=":", lw=1.8)
     ax2.text(K_PAGE + 0.15, 1.95, f"이 쪽의 자리\n처치 {K_PAGE} 개",
              ha="left", va="bottom", fontsize=10.5, color="0.3",

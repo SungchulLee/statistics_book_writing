@@ -121,7 +121,7 @@ fig.savefig(OUT + "comparison_accuracy_vs_coherence.png", dpi=170,
             facecolor="white", bbox_inches="tight")
 plt.close(fig)
 
-print("정확도 구간 겹침 =", f"[{lo:.4f}, {hi:.4f}]")
+print("정확도 구간 중첩 =", f"[{lo:.4f}, {hi:.4f}]")
 print("OvR 합: 평균", f"{S.mean():.4f}", " 최소", f"{S.min():.4f}",
       " 최대", f"{S.max():.4f}")
 print("[0.9, 1.1] 밖 비율 =", f"{out_frac:.4f}")

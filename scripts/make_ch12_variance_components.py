@@ -89,7 +89,7 @@ for k, v in ss.items():
 inc = sum(v for k, v in ss.items() if "전처리" in k or "시드" in k)
 print(f"   -> 모형이 아닌 선택이 모두 합쳐 {100 * inc / tot:.1f}%")
 
-# === ② 겹침 ==========================================================
+# === ② 중첩 ==========================================================
 print(f"\n② 모형별 (전처리·시드 {B * C} 조합)")
 for i, m in enumerate(MODELS):
     f = acc[i].ravel()

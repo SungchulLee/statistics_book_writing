@@ -152,7 +152,7 @@ cb.set_label("관측한 해", fontsize=10)
 ms = [m for m, _ in HOR]
 yrs = np.array(ms) / 12.0
 ax3.semilogx(yrs, [FIT[m]["t_naive"] for m in ms], "s--", color="#999999",
-             lw=2.2, ms=8, label="순진한 $t$ (겹침을 무시)")
+             lw=2.2, ms=8, label="순진한 $t$ (중첩을 무시)")
 ax3.semilogx(yrs, [FIT[m]["t_hac"] for m in ms], "o-", color=C_H, lw=2.8,
              ms=9, label="뉴이–웨스트 $t$ (한센의 $S$)")
 ax3.axhline(1.96, color="#d62728", lw=1.5, ls=":")

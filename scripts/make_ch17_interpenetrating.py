@@ -1,12 +1,12 @@
 r"""17.1절 「그림으로 보는 통계학」 — 컴퓨터 없이 재표집한 사람.
 
 마할라노비스는 $1937$ 년부터 벵골의 황마 작황을 표본조사하면서 한 구역에 뿌릴
-조사단위를 **두 묶음으로 갈라 서로 엇갈리게**(interpenetrating sub-samples) 뿌렸다.
-두 묶음이 각각 독립인 추정값을 주므로 **그 차이 하나가 오차의 폭**이 된다. 공식이
+조사단위를 **두 그룹으로 갈라 서로 엇갈리게**(interpenetrating sub-samples) 뿌렸다.
+두 그룹이 각각 독립인 추정값을 주므로 **그 차이 하나가 오차의 폭**이 된다. 공식이
 아니라 자료를 쪼개서 오차를 재는 것 — 붓스트랩이 뒤에 하게 되는 일이다.
 
-① 한 구역 — 면적 $50$ 제곱마일에 $4$ 에이커 단위를 제곱마일당 둘, 두 묶음으로.
-② 두 묶음의 차이가 공식이 못 보는 것을 본다 — 한 조사단이 치우쳤을 때.
+① 한 구역 — 면적 $50$ 제곱마일에 $4$ 에이커 단위를 제곱마일당 둘, 두 그룹으로.
+② 두 그룹의 차이가 공식이 못 보는 것을 본다 — 한 조사단이 치우쳤을 때.
 ③ 논에서 던진 동전 — 기록이 진짜 동전인지 런 검정으로 묻는다.
 
 만드는 파일: docs/ch17/bootstrap/img/interpenetrating_samples.png
@@ -29,7 +29,7 @@ RNG = np.random.default_rng(20261022)
 
 # --- 구역 하나를 만든다 -------------------------------------------------
 # 비하르에서 쓴 설계: 구역은 약 50 제곱마일, 조사단위는 4 에이커, 밀도는
-# 제곱마일당 둘. 곧 구역마다 단위 100 개, 한 묶음에 50 개다.
+# 제곱마일당 둘. 곧 구역마다 단위 100 개, 한 그룹에 50 개다.
 GRID = 256                      # 구역을 256 x 256 격자로 본다
 ZONE_MI = np.sqrt(50.0)         # 한 변 약 7.07 마일
 N_UNIT, N_HALF = 100, 50
@@ -129,17 +129,17 @@ fig = plt.figure(figsize=(15.0, 4.9))
 gs = fig.add_gridspec(1, 3, width_ratios=[1.05, 1, 1], wspace=0.30)
 C1, C2 = "#1f6f8b", "#c0532b"
 
-# ① 구역과 두 묶음
+# ① 구역과 두 그룹
 ax = fig.add_subplot(gs[0, 0])
 im = ax.imshow(field, cmap="YlGn", origin="lower",
                extent=[0, ZONE_MI, 0, ZONE_MI], vmin=0.05, vmax=0.7)
 A, B = place(RNG, N_HALF), place(RNG, N_HALF)
 sc = ZONE_MI / GRID
 ax.scatter(A[:, 1] * sc, A[:, 0] * sc, s=42, marker="o",
-           facecolor="none", edgecolor=C1, linewidth=1.6, label="첫째 묶음 50")
+           facecolor="none", edgecolor=C1, linewidth=1.6, label="첫째 그룹 50")
 ax.scatter(B[:, 1] * sc, B[:, 0] * sc, s=46, marker="^",
-           facecolor="none", edgecolor=C2, linewidth=1.6, label="둘째 묶음 50")
-ax.set_title("① 한 구역 50 제곱마일 — 엇갈리게 뿌린 두 묶음", fontsize=11)
+           facecolor="none", edgecolor=C2, linewidth=1.6, label="둘째 그룹 50")
+ax.set_title("① 한 구역 50 제곱마일 — 엇갈리게 뿌린 두 그룹", fontsize=11)
 ax.set_xlabel("마일")
 ax.set_ylabel("마일")
 ax.legend(loc="upper right", fontsize=8.5, framealpha=0.92)
@@ -150,7 +150,7 @@ cb.ax.tick_params(labelsize=8)
 e1 = read(A, rng=RNG).mean()
 e2 = read(B, rng=RNG).mean()
 ax.text(0.03, 0.03,
-        f"두 묶음의 추정값  {e1:.3f} / {e2:.3f}\n차이 {abs(e1-e2):.3f}"
+        f"두 그룹의 추정값  {e1:.3f} / {e2:.3f}\n차이 {abs(e1-e2):.3f}"
         f"  →  오차 폭 {abs(e1-e2)/2:.3f}",
         transform=ax.transAxes, fontsize=9, va="bottom",
         bbox=dict(boxstyle="round,pad=0.35", fc="white", ec="0.6", alpha=0.93))
@@ -159,7 +159,7 @@ ax.text(0.03, 0.03,
 ax = fig.add_subplot(gs[0, 1])
 bx = BIAS * 100
 ax.plot(bx, half_se, "o-", color=C1, lw=2, ms=6,
-        label="두 묶음의 차이  |d| / 2")
+        label="두 그룹의 차이  |d| / 2")
 ax.plot(bx, iid_se, "s-", color=C2, lw=2, ms=6,
         label="독립을 가정한 공식  s / √n")
 ax.axhline(1.0, color="0.45", ls=":", lw=1.2)

@@ -322,7 +322,7 @@ IBS가 낮을수록 전체 예측 성능이 좋다.
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff easy" title="쉬움"></span>
-BIC 로 다시 고르기
+BIC 로 다시 선택하기
 
 연습문제 1 의 세 모형($n = 200$)을 BIC 로 다시 고른다.
 

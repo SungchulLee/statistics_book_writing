@@ -150,7 +150,7 @@ for t in TS:
     YHj[~p1, 1] = Yj[~p1, 1]
     DF_J.append(sum(np.cov(YHj[:, j], Yj[:, j])[0, 1] for j in range(2)))
 DF_J = np.array(DF_J)
-print("\n④ 두 일변량 모형 가운데 나은 것 고르기 (주위 공간은 2 차원)")
+print("\n④ 두 일변량 모형 가운데 나은 것 선택하기 (주위 공간은 2 차원)")
 print("   mu = (t, t)     df")
 for t in (0.0, 2.0, 4.0, 7.0, 10.0, 14.0):
     i = int(np.argmin(np.abs(TS - t)))

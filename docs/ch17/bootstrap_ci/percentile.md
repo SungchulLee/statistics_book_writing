@@ -946,7 +946,7 @@ $$
     ```python
     import numpy as np
     rng = np.random.default_rng(29)
-    n, B, M, C = 10, 1000, 20000, 250           # C: 한 묶음에서 함께 처리하는 반복 수
+    n, B, M, C = 10, 1000, 20000, 250           # C: 한 그룹에서 함께 처리하는 반복 수
     miss = {"백분위수": [0, 0], "기본": [0, 0]}      # [왼쪽 오차, 오른쪽 오차]
     ths, ses, right = [], [], []
     for _ in range(M // C):

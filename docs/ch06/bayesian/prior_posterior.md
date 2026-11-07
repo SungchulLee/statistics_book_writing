@@ -42,7 +42,7 @@ $$
 으로, 사람의 몸을 재어 범인을 가리는 **인체측정법**을 만든 파리 경찰의 식별 전문가였다.
 다만 **필적 감정가는 아니었다.** 그가 내놓은 것은 「자기위조」 — 드레퓌스가 남이 자기
 글씨를 흉내 낸 것처럼 보이도록 **자기 글씨를 스스로 흉내 냈다**는 주장이었고, 거기에
-확률 계산을 붙였다. 반복되는 다음절 낱말의 처음과 끝 $26$ 군데에서 겹침을 $4$ 개
+확률 계산을 붙였다. 반복되는 다음절 낱말의 처음과 끝 $26$ 군데에서 중첩을 $4$ 개
 찾았고, 한 번 겹칠 확률을 $0.2$ 로 보아
 
 $$
@@ -71,7 +71,7 @@ $1904$ 년 파기원은 **다르부 · 아펠 · 푸앵카레** 세 사람에게
 사람들이 믿는 듯한 것과 달리, 학자에게 **상식을 면제해 주는** 놀라운 과학이 아니다.」
 
 보고서가 베르티용의 방법을 요약한 자리가 가장 날카롭다. 베르티용 자신의 말이 「찾으면
-언제나 나온다」였고, 보고서는 이렇게 받는다. 「겹침이 나오면 결정적인 증거이고, 겹침이
+언제나 나온다」였고, 보고서는 이렇게 받는다. 「중첩이 나오면 결정적인 증거이고, 중첩이
 없으면 더 결정적인 증거다. 글쓴이가 의심을 돌리려 애썼다는 뜻이 되므로.」 이것은 수학으로
 적을 수 있다. 어떤 $\theta$ 에서나 그 자료가 똑같이 잘 나온다면, 곧 가능도
 $f(\mathbf{x}\mid\theta)$ 가 $\theta$ 에 대해 **평평하면** 비례식에서 그 값이 약분되어
@@ -85,7 +85,7 @@ $$
 말이다. 세 사람은 이 체계가 「어떤 과학적 값어치도 전혀 없다」고 적고 서명했다.
 드레퓌스는 $1906$ 년에 무죄가 되었다.
 
-*확인한 곳 — $1904$ 년 $8$ 월 $2$ 일 보고서의 전문(프랑스어 원문과 영역)은 [에든버러 대학에 올라 있는 사본](https://webhomes.maths.ed.ac.uk/~v1ranick/dreyfus/dreyfusfrench.pdf) — 머리글 「NOTIONS SUR LA PROBABILITÉ DES CAUSES」, $26$ 군데 중 $4$ 개의 겹침과 $(0.2)^4=0.0016$, 「$4$ 번 중 $4$ 번」이라는 지적과 $0.7$ · $400$ 배, 복권 $25$ 번 비유, 흰 공 $90$ 대 검은 공 $10$ 의 두 항아리와 항아리가 열하나일 때의 비교, 「une science merveilleuse qui dispense le savant d'avoir du bon sens」, 베르티용의 「quand on cherche, on trouve toujours」와 그 뒤 두 문장, 끝의 「absolument dépourvus de toute valeur scientifique」와 서명 「POINCARÉ, DARBOUX, APPELL」이 모두 여기 있다 · 베르티용이 인체측정법을 만들었으나 「필적 전문가가 아니었다」는 것은 [Wikipedia 「Alphonse Bertillon」](https://en.wikipedia.org/wiki/Alphonse_Bertillon) · $1894$ 년 $12$ 월 $22$ 일 유죄와 악마섬, $1906$ 년 파기원의 무죄, 명세서가 $1894$ 년 $9$ 월에 찢긴 쪽지로 발견되었다는 것은 [Wikipedia 「Dreyfus affair」](https://en.wikipedia.org/wiki/Dreyfus_affair) · 그림의 맞붙인 자국과 「Madagascar」 · 「14 mars 1894」 는 사진에서 직접 읽었고, $26$ 번 중 $4$ 번 이상의 확률 $0.79$ 는 이 쪽에서 직접 계산해 보았다*
+*확인한 곳 — $1904$ 년 $8$ 월 $2$ 일 보고서의 전문(프랑스어 원문과 영역)은 [에든버러 대학에 올라 있는 사본](https://webhomes.maths.ed.ac.uk/~v1ranick/dreyfus/dreyfusfrench.pdf) — 머리글 「NOTIONS SUR LA PROBABILITÉ DES CAUSES」, $26$ 군데 중 $4$ 개의 중첩과 $(0.2)^4=0.0016$, 「$4$ 번 중 $4$ 번」이라는 지적과 $0.7$ · $400$ 배, 복권 $25$ 번 비유, 흰 공 $90$ 대 검은 공 $10$ 의 두 항아리와 항아리가 열하나일 때의 비교, 「une science merveilleuse qui dispense le savant d'avoir du bon sens」, 베르티용의 「quand on cherche, on trouve toujours」와 그 뒤 두 문장, 끝의 「absolument dépourvus de toute valeur scientifique」와 서명 「POINCARÉ, DARBOUX, APPELL」이 모두 여기 있다 · 베르티용이 인체측정법을 만들었으나 「필적 전문가가 아니었다」는 것은 [Wikipedia 「Alphonse Bertillon」](https://en.wikipedia.org/wiki/Alphonse_Bertillon) · $1894$ 년 $12$ 월 $22$ 일 유죄와 악마섬, $1906$ 년 파기원의 무죄, 명세서가 $1894$ 년 $9$ 월에 찢긴 쪽지로 발견되었다는 것은 [Wikipedia 「Dreyfus affair」](https://en.wikipedia.org/wiki/Dreyfus_affair) · 그림의 맞붙인 자국과 「Madagascar」 · 「14 mars 1894」 는 사진에서 직접 읽었고, $26$ 번 중 $4$ 번 이상의 확률 $0.79$ 는 이 쪽에서 직접 계산해 보았다*
 
 </div>
 

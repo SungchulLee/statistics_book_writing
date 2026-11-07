@@ -90,7 +90,7 @@ def main():
     rng = np.random.default_rng(SEED)
     infl, pw = [], []
     print(f"\n    참 d = {D_TRUE} 일 때 유의한 연구가 보고하는 효과크기")
-    print(f"{'n':>6}{'검정력':>9}{'유의한 것의 평균':>18}{'부풀림':>9}")
+    print(f"{'n':>6}{'검정력':>9}{'유의한 것의 평균':>18}{'팽창':>9}")
     for n in NS_SIM:
         a = rng.normal(D_TRUE, 1, (REPS, n))
         b = rng.normal(0, 1, (REPS, n))

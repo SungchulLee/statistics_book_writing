@@ -371,7 +371,7 @@ def fig_ruler_wobbles_more():
 
 # ════════════════════════════════════════════════════════════════════
 def fig_which_degree_wins():
-    """11.9 교차검증으로 차수 고르기 — 어느 차수가 이기는가.
+    """11.9 교차검증으로 차수 선택하기 — 어느 차수가 이기는가.
 
     쪽의 cv_method_comparison 은 세 방법을 견주고 galileo_degree 상자는
     다른 이야기를 따라간다. 여기서는 들머리의 둘째·셋째 문단 --- **참 답이
@@ -446,7 +446,7 @@ def fig_which_degree_wins():
     plt.tight_layout()
     save(fig, "which_degree_wins.png")
 
-    print(f"\n[차수 고르기] n = {n} · 분할 {REPS:,} 번 · 참 차수 {TRUE}")
+    print(f"\n[차수 선택하기] n = {n} · 분할 {REPS:,} 번 · 참 차수 {TRUE}")
     print(f"  맞힌 비율 {100 * hit:.2f}% · 이긴 적 있는 차수 "
           f"{int((cnt > 0).sum())} 가지")
     print(f"  차수 {TRUE} 의 검증 MSE: 평균 {s2.mean():.4f} "

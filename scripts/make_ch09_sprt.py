@@ -25,10 +25,10 @@ r"""9.3절 「그림으로 보는 통계학」 — 전쟁이 끝날 때까지 �
 재 보면 이렇다 (불량률 1% 대 5%, alpha = beta = 0.05).
 
   고정표본 계획            181 발, 불량 4 발 이하면 합격
-  SPRT  좋은 묶음에서      평균 111.9 발   38.2% 절감
-  SPRT  나쁜 묶음에서      평균  78.3 발   56.7% 절감
+  SPRT  좋은 그룹에서      평균 111.9 발   38.2% 절감
+  SPRT  나쁜 그룹에서      평균  78.3 발   56.7% 절감
 
-다만 공짜가 아니다. 좋은 묶음에서 SPRT 가 쓰는 발수의 90 분위는 192 로
+다만 공짜가 아니다. 좋은 그룹에서 SPRT 가 쓰는 발수의 90 분위는 192 로
 고정 계획의 181 을 **넘는다.** 평균으로 아끼고 가끔 더 치르는 것이다.
 
 만드는 파일:
@@ -107,13 +107,13 @@ def main():
     N0, rej0, path0, A, B = run(P0, rng, keep_paths=6)
     N1, rej1, path1, _, _ = run(P1, rng, keep_paths=6)
     print(f"    임계값  A = {A:+.3f},  B = {B:+.3f}")
-    for lab, N, rej in (("좋은 묶음 (불량 1%)", N0, rej0),
-                        ("나쁜 묶음 (불량 5%)", N1, rej1)):
+    for lab, N, rej in (("좋은 그룹 (불량 1%)", N0, rej0),
+                        ("나쁜 그룹 (불량 5%)", N1, rej1)):
         print(f"    {lab:<20} 평균 {N.mean():6.1f}   중앙값 {np.median(N):5.0f}   "
               f"90분위 {np.quantile(N,0.9):5.0f}   되돌려보낼 확률 {rej.mean():.4f}   "
               f"절감 {100*(1-N.mean()/n_fix):4.1f}%")
     over = (N0 > n_fix).mean()
-    print(f"    좋은 묶음에서 고정 계획보다 더 많이 본 비율 = {over:.3f}")
+    print(f"    좋은 그룹에서 고정 계획보다 더 많이 본 비율 = {over:.3f}")
 
     fig, axes = plt.subplots(1, 2, figsize=(13.0, 5.1), constrained_layout=True)
 
@@ -122,7 +122,7 @@ def main():
     ax.axhspan(B, A, color=MUTED, alpha=0.15, zorder=0)
     ax.axhline(A, color=RED, lw=2.2)
     ax.axhline(B, color=TEAL, lw=2.2)
-    ax.text(4, A + 0.22, f"$A = {A:.2f}$ — 넘으면 묶음을 되돌려보낸다",
+    ax.text(4, A + 0.22, f"$A = {A:.2f}$ — 넘으면 그룹을 되돌려보낸다",
             fontsize=10.8, color=RED)
     ax.text(4, B - 0.55, f"$B = {B:.2f}$ — 넘으면 합격시킨다",
             fontsize=10.8, color=TEAL)
@@ -135,8 +135,8 @@ def main():
                 color=INK, ha="left",
                 arrowprops=dict(arrowstyle="->", color=INK, lw=1.4))
     ax.legend(handles=[
-        Line2D([], [], color=TEAL, lw=2.0, label="좋은 묶음에서 걸은 길"),
-        Line2D([], [], color=RED, lw=2.0, label="나쁜 묶음에서 걸은 길")],
+        Line2D([], [], color=TEAL, lw=2.0, label="좋은 그룹에서 걸은 길"),
+        Line2D([], [], color=RED, lw=2.0, label="나쁜 그룹에서 걸은 길")],
         fontsize=10.2, framealpha=0.93, loc="lower right")
     ax.set_xlabel("살펴본 발수", fontsize=11.5)
     ax.set_ylabel("쌓인 로그우도비", fontsize=11.5)
@@ -150,8 +150,8 @@ def main():
     # ── 오른쪽: 몇 발이면 끝나는가 ──
     ax = axes[1]
     grid = np.linspace(0, 320, 640)
-    for N, col, lab in ((N0, TEAL, "좋은 묶음 (불량 $1\\%$)"),
-                        (N1, RED, "나쁜 묶음 (불량 $5\\%$)")):
+    for N, col, lab in ((N0, TEAL, "좋은 그룹 (불량 $1\\%$)"),
+                        (N1, RED, "나쁜 그룹 (불량 $5\\%$)")):
         ecdf = (N[:, None] <= grid[None, :]).mean(0)
         ax.plot(grid, ecdf, lw=3.0, color=col,
                 label=f"{lab} — 평균 {N.mean():.0f} 발")
@@ -162,7 +162,7 @@ def main():
             color=INK, ha="right", rotation=90, va="bottom")
     done0 = (N0 <= n_fix).mean()
     ax.plot([n_fix], [done0], marker="s", ms=9, color=AMBER, zorder=6)
-    ax.annotate(f"좋은 묶음도 {n_fix} 발 안에\n"
+    ax.annotate(f"좋은 그룹도 {n_fix} 발 안에\n"
                 f"{done0*100:.1f}% 만 끝난다 —\n"
                 f"나머지 {over*100:.0f}% 는 더 본다",
                 xy=(n_fix, done0), xytext=(243, 0.52), fontsize=10.6,
@@ -174,7 +174,7 @@ def main():
                     xytext=(N.mean() + dx, (N <= N.mean()).mean() - 0.16),
                     fontsize=11, color=col,
                     ha="left" if dx > 0 else "right")
-    ax.set_xlabel("묶음 하나를 판정하는 데 쓴 발수", fontsize=11.5)
+    ax.set_xlabel("그룹 하나를 판정하는 데 쓴 발수", fontsize=11.5)
     ax.set_ylabel("그때까지 판정이 끝났을 확률", fontsize=11.5)
     ax.set_title("평균으로 아끼고 가끔 더 치른다",
                  fontsize=12.8, color=INK, pad=8)
@@ -186,7 +186,7 @@ def main():
 
     fig.suptitle("같은 오류확률을 지키면서 표본을 절반으로 줄이다", fontsize=14.5)
     fig.text(0.5, -0.05,
-             f"불량률 ${P0*100:.0f}\\%$ 짜리 묶음은 합격시키고 "
+             f"불량률 ${P0*100:.0f}\\%$ 짜리 그룹은 합격시키고 "
              f"${P1*100:.0f}\\%$ 짜리는 되돌려보내되, 두 오류확률을 모두 "
              f"${ALPHA}$ 이하로 지킨다는 조건이다. 모의실험 {REPS//10000} 만 번.",
              ha="center", fontsize=10.4, color=INK)

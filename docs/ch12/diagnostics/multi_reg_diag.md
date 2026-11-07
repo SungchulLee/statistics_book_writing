@@ -338,7 +338,7 @@ _확인한 곳 — 이 자료가 $1990$ 년 미국 인구조사의 블록 그룹
 
 <div class="exbox" markdown>
 
-**보기 3.** <span class="diff easy" title="쉬움"></span> AIC·BIC로 모형 고르기
+**보기 3.** <span class="diff easy" title="쉬움"></span> AIC·BIC로 모형 선택하기
 
 **(1)** 포함관계인 두 모형에서 변수를 $q$개 더할 때
 
@@ -394,7 +394,7 @@ $$
 
     ```python
     # 변수를 늘려 가며 네 모형을 견준다. R^2 는 변수를 더하면 반드시 오르므로
-    # 모형 고르기에 쓸 수 없다. 벌점이 붙는 AIC·BIC 를 본다.
+    # 모형 선택하기에 쓸 수 없다. 벌점이 붙는 AIC·BIC 를 본다.
     # BIC 의 벌점이 더 무거우므로 대개 더 작은 모형을 고른다.
     feature_sets = {
         'Model 1': ['MedInc'],

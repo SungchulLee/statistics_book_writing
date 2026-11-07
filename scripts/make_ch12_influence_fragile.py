@@ -91,7 +91,7 @@ print(f"   실제 변화의 범위 [{act.min():.2e}, {act.max():.2e}]")
 print(f"\n②③ MLP (너비 {WIDTH}, 시드 {len(SEEDS)} 개, 깊이마다 "
       f"{(N + 1) * len(SEEDS)} 번 학습)")
 print(f"{'깊이':>5}{'기준손실':>10}{'신호 SD':>11}{'잡음 SD':>11}"
-      f"{'신호/잡음':>11}{'상위겹침':>10}")
+      f"{'신호/잡음':>11}{'상위중첩':>10}")
 sig_sd, noi_sd, overlap, base_l = [], [], [], []
 for d in DEPTHS:
     h = (WIDTH,) * d
@@ -122,7 +122,7 @@ for d in DEPTHS:
 sig_sd, noi_sd, overlap = map(np.array, (sig_sd, noi_sd, overlap))
 chance = TOPK * TOPK / N
 print(f"\n   우연히 겹칠 기대값 {chance:.1f}/{TOPK}")
-print(f"   볼록한 모형에서는 재학습이 결정적이라 겹침이 {TOPK}/{TOPK} 이다")
+print(f"   볼록한 모형에서는 재학습이 결정적이라 중첩이 {TOPK}/{TOPK} 이다")
 
 # === 그림 ============================================================
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.4, 4.9))
@@ -168,7 +168,7 @@ ax3.set_xticks(list(DEPTHS))
 ax3.set_xticklabels([f"${d}$" for d in DEPTHS])
 ax3.set_ylim(0, TOPK * 1.12)
 ax3.set_xlabel("은닉층 수")
-ax3.set_ylabel(f"시드가 다른 두 번 사이의 상위 ${TOPK}$ 개 겹침")
+ax3.set_ylabel(f"시드가 다른 두 번 사이의 상위 ${TOPK}$ 개 중첩")
 ax3.set_title("③ 「가장 영향이 큰 점」이 바뀐다", fontsize=12)
 ax3.legend(loc="center right", fontsize=10)
 ax3.grid(alpha=0.25)

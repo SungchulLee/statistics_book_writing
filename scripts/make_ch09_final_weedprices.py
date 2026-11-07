@@ -123,7 +123,7 @@ def panel_sample_size(ax):
         ci = float(chi2_of(ni))
         ax.plot([ni], [ci], "o", ms=7.5, zorder=5,
                 color=col, mec="white", mew=1.1)
-        if ni == 14_244:                      # 아래쪽으로 빼서 겹침을 피한다
+        if ni == 14_244:                      # 아래쪽으로 빼서 중첩을 피한다
             ax.annotate(f"{lab}\n$\\chi^2 = {shown:.1f}$",
                         xy=(ni, ci), xytext=(10, -2), textcoords="offset points",
                         ha="left", va="top", fontsize=9.3, color=col)

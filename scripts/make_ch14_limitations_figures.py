@@ -3,7 +3,7 @@ r"""14장 한계와 함정 절 네 쪽의 개념 그림을 만든다.
 만드는 파일:
   ch14/limitations/img/power_paradox.png          검정력이 있는 구간과 필요한 구간
   ch14/limitations/img/practical_vs_statistical.png  기각했다고 망가진 것은 아니다
-  ch14/limitations/img/test_choice_flow.png       검정 고르기 흐름도
+  ch14/limitations/img/test_choice_flow.png       검정 선택하기 흐름도
   ch14/limitations/img/pvalue_vs_effectsize.png   n 이 바꾸는 것과 바꾸지 않는 것
 
 실행:  python3 scripts/make_ch14_limitations_figures.py   (저장소 최상위에서)

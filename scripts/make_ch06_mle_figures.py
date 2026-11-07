@@ -5,7 +5,7 @@ r"""6.4 최대가능도 절의 개념 그림을 생성한다.
 팔레트를 쓴다.
 
   ch06/mle/img/probability_vs_likelihood.png   확률과 가능도 — 무엇을 고정하는가
-  ch06/mle/img/mle_candidates.png              후보 분포 가운데 고르기
+  ch06/mle/img/mle_candidates.png              후보 분포 가운데 선택하기
   ch06/mle/img/bernoulli_loglik_curve.png      보기 1 의 로그가능도 곡선
   ch06/mle/img/likelihood_vs_loglik_scale.png  보기 3 의 두 축
   ch07/theory/img/fisher_curvature_se.png         곡률에서 표준오차로
@@ -118,7 +118,7 @@ def probability_vs_likelihood():
 
 
 # ==================================================================
-# 2. 후보 가운데 고르기
+# 2. 후보 가운데 선택하기
 # ==================================================================
 def mle_candidates():
     rng = np.random.default_rng(3)

@@ -941,7 +941,7 @@ $\min \|y - X\beta\|_2^2$ subject to $\alpha\|\beta\|_1 + (1-\alpha)\|\beta\|_2^
     \beta_1^2 + \beta_2^2 = \frac{s^2}{2} + \frac{(\beta_1-\beta_2)^2}{2}
     $$
 
-    이므로 $\beta_1 = \beta_2 = s/2$에서만 최소다. **$L_2$ 벌점이 분배를 한 점으로 묶는다** — 이것이 묶음 효과의 알맹이다. 그러므로 벌점은 $\alpha\lvert s\rvert + \frac{1-\alpha}{2}\cdot\frac{s^2}{2}$이고 $s$에 대한 문제는
+    이므로 $\beta_1 = \beta_2 = s/2$에서만 최소다. **$L_2$ 벌점이 분배를 한 점으로 묶는다** — 이것이 그룹 효과의 알맹이다. 그러므로 벌점은 $\alpha\lvert s\rvert + \frac{1-\alpha}{2}\cdot\frac{s^2}{2}$이고 $s$에 대한 문제는
 
     $$
     \min_s \;\; s^2 - 2zs + \alpha\lvert s\rvert + \frac{1-\alpha}{4}s^2

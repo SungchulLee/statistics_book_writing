@@ -2,7 +2,7 @@
 
 만드는 파일:
   ch12/assumptions/img/n_does_not_help.png        표본을 키워도 사라지지 않는다
-  ch12/assumptions/img/pretest_vs_always.png      묻고 고르기와 처음부터 로버스트
+  ch12/assumptions/img/pretest_vs_always.png      묻고 선택하기와 처음부터 로버스트
   ch12/assumptions/img/effective_sample_size.png  예순 개가 다섯 개 값어치
   ch12/assumptions/img/misses_on_one_side.png     빗나간 구간이 한쪽에 몰린다
   ch12/assumptions/img/one_voice_counted_thirty.png 한 사람이 쥔 몫과 눈금의 덫
@@ -144,7 +144,7 @@ def fig_pretest_vs_always():
     만 본다. 이분산의 세기를 0 에서 키워 가며 세 길을 나란히 잰다.
 
     재어 보면 세 번째 길이 **로버스트 쪽에 포개진다.** n = 60 에서 검정의
-    힘이 충분해 거의 언제나 로버스트를 고르기 때문이다. 그러면 묻는 단계는
+    힘이 충분해 거의 언제나 로버스트를 선택하기 때문이다. 그러면 묻는 단계는
     버는 것이 없고, 등분산일 때 로버스트가 치르는 값도 5.0 대 5.2 로
     거의 없다. 쪽이 적어 둔 「묻지 말고 처음부터 로버스트」가 그 결론이다.
     """

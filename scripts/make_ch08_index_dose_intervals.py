@@ -3,9 +3,9 @@
 
 왼쪽: SURMOUNT-1 이 보고한 네 구간. 5 mg 과 10 mg 은 닿지도 않고
       10 mg 과 15 mg 은 겹친다.
-오른쪽: **겹침으로 판단하면 안 된다.** 겹치는지가 아니라 차이 자체의 구간을
+오른쪽: **중첩으로 판단하면 안 된다.** 겹치는지가 아니라 차이 자체의 구간을
       보아야 한다. 10 mg -> 15 mg 은 구간이 겹치는데도 차이의 구간이 0 을
-      비켜 간다 — 겹침만 보고 「더 준 값이 없었다」고 읽으면 반대로 답하게
+      비켜 간다 — 중첩만 보고 「더 준 값이 없었다」고 읽으면 반대로 답하게
       된다. 8.1절 오차막대 그림이 그 습관을 따로 다룬다.
 
 자료: Jastreboff 외, 『New England Journal of Medicine』 387(2022) 205 쪽 초록.
@@ -53,7 +53,7 @@ ax.text(LABEL_X, 3.45, "점추정값과 95% 구간", va="center", ha="left",
         fontsize=9.5, color="#555555")
 
 # 띠의 뜻은 지시선 없이 바로 위아래에 적는다 — 사선이 자료를 가로지르지 않게
-ax.text((gap_lo + gap_hi) / 2, 3.42, "닿지도 않는다\n이쪽은 겹침만으로 말할 수 있다",
+ax.text((gap_lo + gap_hi) / 2, 3.42, "닿지도 않는다\n이쪽은 중첩만으로 말할 수 있다",
         ha="center", va="center", fontsize=10, color="#2e7d32", linespacing=1.35)
 ax.text(-23.0, -0.42, "겹친다 — 그래서 오른쪽을 보아야 한다",
         ha="left", va="center", fontsize=10, color="#8a6508")
@@ -68,7 +68,7 @@ ax.set_title("(가) 네 구간을 세로로 읽으면 결정이 읽힌다", font
 ax.grid(axis="x", alpha=0.25)
 ax.set_axisbelow(True)
 
-# ── 오른쪽: 겹침이 아니라 차이 자체의 구간을 본다
+# ── 오른쪽: 중첩이 아니라 차이 자체의 구간을 본다
 # 보고된 구간에서 표준오차를 되짚고(폭 = 2 x 1.96 x SE) 이웃한 두 팔의 차와
 # 그 구간을 만든다. 두 팔은 서로 다른 사람이므로 분산이 더해진다.
 import numpy as np
@@ -109,7 +109,7 @@ bx.set_yticklabels([r[0] for r in rows], fontsize=11)
 bx.set_xlim(-1.4, 17.5)
 bx.set_ylim(-0.85, len(rows) - 0.25)
 bx.set_xlabel("한 단계 올려 더 줄어든 양 (퍼센트포인트)", fontsize=11)
-bx.set_title("(나) 겹침이 아니라 차이의 구간을 본다", fontsize=12.5, pad=10)
+bx.set_title("(나) 중첩이 아니라 차이의 구간을 본다", fontsize=12.5, pad=10)
 bx.grid(axis="x", alpha=0.25)
 bx.set_axisbelow(True)
 

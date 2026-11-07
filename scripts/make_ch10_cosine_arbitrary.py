@@ -76,7 +76,7 @@ def topk_sets(C, k=TOPK):
 
 T1, T2 = topk_sets(C1), topk_sets(C2)
 ov = np.array([len(a & b) for a, b in zip(T1, T2)])
-print(f"③ 상위 {TOPK} 이웃의 겹침 — 평균 {ov.mean():.2f}/{TOPK}, "
+print(f"③ 상위 {TOPK} 이웃의 중첩 — 평균 {ov.mean():.2f}/{TOPK}, "
       f"하나도 안 겹친 항목 {np.sum(ov == 0)} 개, "
       f"절반 이상 겹친 항목 {np.sum(ov >= TOPK / 2)} 개")
 

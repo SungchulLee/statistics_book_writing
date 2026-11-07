@@ -132,7 +132,7 @@ $$
 **그림으로 보는 통계학 1.** 가장자리는 싸고 안쪽은 비싸다
 
 <figure markdown>
-  ![옛 잡지의 판화. 한 여성이 책상에 앉아 구멍 뚫린 카드를 들고 기계에 넣고 있다. 책상 위 수납장 앞면에는 둥근 척도판이 바늘을 달고 줄지어 박혀 있고, 책상 옆에는 카드 묶음이 높이 쌓여 있다. 그림 아래에 ELECTRICAL COUNTING MACHINES 라 적혀 있다](./img/ec__hollerith1890.png){ width=480 }
+  ![옛 잡지의 판화. 한 여성이 책상에 앉아 구멍 뚫린 카드를 들고 기계에 넣고 있다. 책상 위 수납장 앞면에는 둥근 척도판이 바늘을 달고 줄지어 박혀 있고, 책상 옆에는 카드 그룹이 높이 쌓여 있다. 그림 아래에 ELECTRICAL COUNTING MACHINES 라 적혀 있다](./img/ec__hollerith1890.png){ width=480 }
   <figcaption markdown>『사이언티픽 아메리칸』 $1890$ 년 $8$ 월 $30$ 일자에 실린 판화 — $1890$ 년 미국 인구조사의 집계 기계. 오른쪽 아래에 **「ELECTRICAL COUNTING MACHINES」**, 왼쪽 아래에 잡지 이름이 새겨져 있다. 수납장 앞면의 둥근 척도판 하나하나가 **계수기**이고, 옆에 쌓인 것이 구멍 뚫린 카드다. *(Wikimedia Commons · 저작권 없음)*</figcaption>
 </figure>
 
@@ -233,7 +233,7 @@ $$
     print(f"표본상관계수 r = {r:.6f},  SE(r) = {se:.6f},  (r - 0.7)/SE = {(r - 0.7) / se:+.3f}")
 
     fig, ax = plt.subplots(figsize=(6, 5))
-    # alpha를 낮춰 겹침을 푼다. 5000개를 그대로 찍으면 가운데가 뭉개진다.
+    # alpha를 낮춰 중첩을 푼다. 5000개를 그대로 찍으면 가운데가 뭉개진다.
     ax.scatter(samples[:, 0], samples[:, 1], alpha=0.2, s=5)
     ax.set_xlabel('X')
     ax.set_ylabel('Y')

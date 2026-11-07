@@ -433,7 +433,7 @@ $n = 8$의 세로 점선 위를 보라. 가장 극단적으로 치우친 지수�
             if p < alpha:
                 normality_ok = False
 
-        # 2단계: 그에 맞는 검정 고르기
+        # 2단계: 그에 맞는 검정 선택하기
         if normality_ok:
             test_name = "Levene (mean-centered)"
             stat, pval = levene(*groups, center='mean')

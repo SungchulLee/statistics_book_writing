@@ -2,7 +2,7 @@ r"""재현성 프로젝트의 세 수를 식으로 따져 본다.
 
 재현 연구들은 **원래 효과의 $75\%$ 를 $90\%$ 검정력으로** 잡도록 설계되었다. 그 설계에서
 참 효과가 보고된 것의 몇 배냐에 따라 재현 성공 확률이 어떻게 달라지는가가 왼쪽이고,
-승자의 저주가 주는 부풀림이 원래 연구의 검정력과 어떻게 묶이는가가 오른쪽이다.
+승자의 저주가 주는 팽창이 원래 연구의 검정력과 어떻게 묶이는가가 오른쪽이다.
 
 만드는 파일: docs/ch01/classical/img/replication_arithmetic.png
 """
@@ -33,7 +33,7 @@ def rep_power(r):
 
 
 def inflation(d):
-    """참 효과 d 인 연구가 유의했을 때 보고되는 효과의 부풀림 배수."""
+    """참 효과 d 인 연구가 유의했을 때 보고되는 효과의 팽창 배수."""
     c = Z - d
     return 1 + stats.norm.pdf(c) / stats.norm.sf(c) / d
 
@@ -91,7 +91,7 @@ ax2.plot(orig_power(ds) * 100, inflation(ds), color="#1f77b4", lw=2.6)
 ax2.axhline(1 / OBS_RATIO, color="#d62728", lw=1.5, ls="--")
 ax2.plot([P_STAR * 100], [1 / OBS_RATIO], "o", color="#d62728", ms=9, zorder=5)
 ax2.annotate(
-    f"관측된 부풀림 ${1 / OBS_RATIO:.2f}$ 배\n→ 원래 연구의 검정력 ${P_STAR:.2f}$",
+    f"관측된 팽창 ${1 / OBS_RATIO:.2f}$ 배\n→ 원래 연구의 검정력 ${P_STAR:.2f}$",
     xy=(P_STAR * 100, 1 / OBS_RATIO),
     xytext=(55, 2.4),
     ha="center",
@@ -100,10 +100,10 @@ ax2.annotate(
     arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.1),
 )
 ax2.axhline(1.0, color="#555555", lw=1.0, ls=":")
-ax2.text(42, 1.05, "부풀림 없음", ha="left", va="bottom", fontsize=9.5, color="#555555")
+ax2.text(42, 1.05, "팽창 없음", ha="left", va="bottom", fontsize=9.5, color="#555555")
 ax2.set_xlabel("원래 연구의 검정력 ($\\%$)")
-ax2.set_ylabel("유의한 것만 추렸을 때의 부풀림 배수")
-ax2.set_title("② 부풀림은 검정력이 정한다 — 정리 $2$", fontsize=12)
+ax2.set_ylabel("유의한 것만 추렸을 때의 팽창 배수")
+ax2.set_title("② 팽창은 검정력이 정한다 — 정리 $2$", fontsize=12)
 ax2.set_xlim(5, 100)
 ax2.set_ylim(0.9, 3.2)
 ax2.grid(alpha=0.25)
@@ -124,7 +124,7 @@ print(f"  그런데 실제로 유의했던 것은 {OBS_RATE * 100:.0f}%  → 차
 print(f"  {OBS_RATE * 100:.0f}% 가 나오려면 참/보고 가 {R_AT_OBS:.4f} 여야 한다")
 
 print("\n정리 2 쪽 (이 계산은 재현 설계와 무관하다)")
-print(f"  관측된 부풀림 {1 / OBS_RATIO:.4f} 배 → 원래 연구의 검정력 {P_STAR:.4f}")
+print(f"  관측된 팽창 {1 / OBS_RATIO:.4f} 배 → 원래 연구의 검정력 {P_STAR:.4f}")
 for p in (0.20, 0.24, 0.35, 0.50, 0.80):
     dd = optimize.brentq(lambda d: orig_power(d) - p, 0.01, 8)
-    print(f"  검정력 {p:.2f} → 부풀림 {inflation(dd):.3f} 배 (참/보고 {1 / inflation(dd):.3f})")
+    print(f"  검정력 {p:.2f} → 팽창 {inflation(dd):.3f} 배 (참/보고 {1 / inflation(dd):.3f})")

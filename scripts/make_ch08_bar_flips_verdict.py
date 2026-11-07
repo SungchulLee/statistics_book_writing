@@ -4,7 +4,7 @@
 자리는 세 그림에서 모두 같고 달라지는 것은 막대의 정의뿐인데, 「막대가
 겹치니 차이가 없다」는 습관대로 읽으면 결론이 반대로 나온다.
 
-마지막 칸이 옳은 길이다 --- 겹침을 눈으로 재는 대신 **차이 자체의 구간**을
+마지막 칸이 옳은 길이다 --- 중첩을 눈으로 재는 대신 **차이 자체의 구간**을
 계산한다. 쪽의 1 절 그림은 네 집단에서 막대 길이가 n 에 따라 어떻게
 변하는지를 보이는 것이고, 여기서는 A 와 B 둘만 떼어 판정을 본다.
 """
@@ -89,7 +89,7 @@ ax.set_xlim(-6.6, 1.4)
 ax.set_ylim(-1.0, 1.0)
 ax.set_yticks([])
 ax.set_xlabel("A 의 평균 빼기 B 의 평균", fontsize=11)
-ax.set_title("겹침을 눈으로 재는 대신\n차이 자체에 구간을 붙인다", fontsize=12.5)
+ax.set_title("중첩을 눈으로 재는 대신\n차이 자체에 구간을 붙인다", fontsize=12.5)
 ax.grid(axis="x", alpha=0.25)
 
 fig.suptitle("자료는 하나다 — 달라진 것은 막대의 정의뿐이다", fontsize=14,
@@ -106,5 +106,5 @@ for err, name, _ in KIND:
     lo, hi = mean - err, mean + err
     o = min(hi) - max(lo)
     print(f"  {name:>12s}: A [{lo[0]:.2f}, {hi[0]:.2f}]  B [{lo[1]:.2f}, "
-          f"{hi[1]:.2f}]  {'겹침 ' + format(o, '.2f') if o > 0 else '떨어짐 ' + format(-o, '.2f')}")
+          f"{hi[1]:.2f}]  {'중첩 ' + format(o, '.2f') if o > 0 else '떨어짐 ' + format(-o, '.2f')}")
 print(f"\n  차이 {d:.4f}  표준오차 {sed:.4f}  95% 구간 ({dlo:.4f}, {dhi:.4f})")

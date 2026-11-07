@@ -451,8 +451,8 @@ for n in (1, 3, 5, 8, 10):
 **그림으로 보는 통계학 1.** 담뱃갑에 든 쉰 장, 다 모으려면
 
 <figure markdown>
-  ![담배 카드 뒷면. 테두리 안에 BRITISH WARRIORS 라는 제목과 No. 49, 그리고 이 묶음이 쉰 장이라는 안내문이 인쇄되어 있다](./img/ds__cope_warriors_card.png){ width=250 align=right }
-  <figcaption markdown>코프 브러더스(리버풀·런던)의 담배 카드 **「영국의 전사들 — 기원전 $55$ 년부터 서기 $1855$ 년까지」** 뒷면. 맨 위에 묶음 이름, 그 아래 **「No. $49$ — $1851$ 년 제 $72$ 연대 하일랜더」**, 그리고 본문 첫 문장이 **「이 묶음은 그림 $50$ 장으로 이루어진다」**이다. 맨 아래가 만든 회사 이름이다. *(Wikimedia Commons, 저작권 만료)*</figcaption>
+  ![담배 카드 뒷면. 테두리 안에 BRITISH WARRIORS 라는 제목과 No. 49, 그리고 이 그룹이 쉰 장이라는 안내문이 인쇄되어 있다](./img/ds__cope_warriors_card.png){ width=250 align=right }
+  <figcaption markdown>코프 브러더스(리버풀·런던)의 담배 카드 **「영국의 전사들 — 기원전 $55$ 년부터 서기 $1855$ 년까지」** 뒷면. 맨 위에 그룹 이름, 그 아래 **「No. $49$ — $1851$ 년 제 $72$ 연대 하일랜더」**, 그리고 본문 첫 문장이 **「이 묶음은 그림 $50$ 장으로 이루어진다」**이다. 맨 아래가 만든 회사 이름이다. *(Wikimedia Commons, 저작권 만료)*</figcaption>
 </figure>
 
 $n$ 가지를 모두 모으는 데 드는 평균 횟수는 $n\bigl(1+\frac12+\cdots+\frac1n\bigr)$ 이다(3장 [기댓값](../../ch03/rv/expectation.md) 보기 4 에서 유도한다). 그 셈이 **왜 「쿠폰 수집가」라 불리는지**가 사진에 있고, 셈을 떠받치는 것은 이 쪽의 정의 1 과 정리 2 다.
@@ -475,7 +475,7 @@ $$
 
 게다가 **평균만큼 샀다고 끝나는 것도 아니다.** $225$ 갑을 사고도 한 장이라도 모자랄 확률이 $0.42$ 이고, $300$ 갑을 사도 $0.11$ 이다. 그리고 정리 3 이 말하듯 이미 이백 갑을 헛되이 샀다는 사실은 다음 한 갑의 확률을 **조금도 바꾸지 않는다.**
 
-카드를 만든 쪽이 이 셈을 알았는지는 알 수 없다. 다만 알 필요가 없었을 것이다 — **번호와 전체 개수를 함께 적어 두는 것만으로** 사는 사람은 모자란 칸을 세게 되고, 그 칸을 채우려는 마음이 $n\sum\frac1k$ 만큼 담배를 팔아 준다. 사진의 묶음이 하필 전쟁을 주제로 삼은 것도 같은 결이다. 모으고 싶게 만드는 것은 그림이고, 다 모으기 어렵게 만드는 것은 산술이다.
+카드를 만든 쪽이 이 셈을 알았는지는 알 수 없다. 다만 알 필요가 없었을 것이다 — **번호와 전체 개수를 함께 적어 두는 것만으로** 사는 사람은 모자란 칸을 세게 되고, 그 칸을 채우려는 마음이 $n\sum\frac1k$ 만큼 담배를 팔아 준다. 사진의 그룹이 하필 전쟁을 주제로 삼은 것도 같은 결이다. 모으고 싶게 만드는 것은 그림이고, 다 모으기 어렵게 만드는 것은 산술이다.
 
 _확인한 곳 — 사진이 코프 브러더스의 담배 카드 「British Warriors — From $55$ B.C. to A.D. $1855$」의 뒷면이고, 거기에 「No. $49$—Highlander of $72$nd, $1851$」과 「The Series consists of $50$ Pictures, each of which faithfully portrays the Costume, Armour, and Weapons which were in use during the period illustrated」, 그리고 「Cope Bros. & Co. Ltd. LIVERPOOL & LONDON」이 인쇄되어 있다는 것은 [Commons 파일 쪽](https://commons.wikimedia.org/wiki/File:Cope_Bros_cigarette_card,_72nd_Highlanders,_%27Warrior%27_series,_reverse_.jpg) 의 **사진에서 직접 읽었다**(라이선스 틀은 `PD-old-70-expired` 다) · $E[T]=50H_{50}=224.96$, 단계별 평균 $\frac{50}{k}$, 앞 $25$ 장에 $34.2$ 갑, $225$ 갑·$300$ 갑에서 한 장이라도 모자랄 확률 $0.42$·$0.11$ 은 **이 쪽에서 직접 계산해 보았다**(뒤의 둘은 포함배제로 셈했다)_
 

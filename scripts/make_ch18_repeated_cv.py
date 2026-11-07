@@ -45,7 +45,7 @@ def make(rng):
 X, y, XTE, YTE = make(RNG)
 LAMS = np.logspace(np.log10(0.6), np.log10(0.004), 120)      # 내림차순
 
-# === 분할 묶음 — 한 번의 5 겹 교차검증 곡선을 POOL 개 모은다 =========
+# === 분할 그룹 — 한 번의 5 겹 교차검증 곡선을 POOL 개 모은다 =========
 CURVES = np.empty((POOL, len(LAMS)))
 for b in range(POOL):
     kf = KFold(5, shuffle=True, random_state=b)

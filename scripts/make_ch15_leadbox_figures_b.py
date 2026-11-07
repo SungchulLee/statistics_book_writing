@@ -1,4 +1,4 @@
-"""15장 들어가는 이야기 그림 — 둘째 묶음 일곱.
+"""15장 들어가는 이야기 그림 — 둘째 그룹 일곱.
 
   8.  f_test_two_variances  꼬리를 보고 고르면 오류율이 두 배가 된다
   9.  f_test/sensitivity    t 검정에는 없고 F 검정에만 있는 고장
@@ -37,7 +37,7 @@ def save(fig, path):
     print("saved", path)
 
 
-# 모집단 묶음 — 분산을 1 로 맞추고 초과첨도만 바꾼다
+# 모집단 그룹 — 분산을 1 로 맞추고 초과첨도만 바꾼다
 def make_pops(r):
     return [
         ("균등", -1.2, lambda m, n: r.uniform(-np.sqrt(3), np.sqrt(3),

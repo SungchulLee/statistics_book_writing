@@ -175,7 +175,7 @@ ax2.grid(alpha=0.25)
 
 bins = np.linspace(0, 0.6, 45)
 ax3.hist(mom_err, bins=bins, color=C_M, alpha=0.75, label="적률법 (닫힌 형태)")
-ax3.hist(em_err, bins=bins, color=C_E, alpha=0.60, label="EM (분산을 묶음)")
+ax3.hist(em_err, bins=bins, color=C_E, alpha=0.60, label="EM (분산을 그룹)")
 ax3.set_xlabel("평균 추정의 최대 오차")
 ax3.set_ylabel("자료 벌 수")
 ax3.set_title("③ 가능도가 유계인 자리에선 본문 말이 맞는다", fontsize=12)

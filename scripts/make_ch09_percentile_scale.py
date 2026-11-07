@@ -10,7 +10,7 @@ equal_var 플래그를 고르게 만드는 조건이다.
 
 쪽의 pooled_vs_welch_alpha 는 합동 t 가 깨지는 자리를, allocation_power 는
 배분에 따른 검정력을, t_vs_mannwhitney_power 는 다른 검정과의 견줌을
-그린다. 여기서는 플래그를 고르기 전의 자리 --- 자료의 모양 --- 만 본다.
+그린다. 여기서는 플래그를 선택하기 전의 자리 --- 자료의 모양 --- 만 본다.
 """
 import matplotlib.pyplot as plt
 plt.rcParams["font.family"] = "Apple SD Gothic Neo"

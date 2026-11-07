@@ -1424,7 +1424,7 @@ $$
 </div>
 
 ??? success "풀이"
-    **(1) 확률적 경사법.** 매 단계에서 자료 전체가 아니라 무작위로 고른 작은 묶음(minibatch)으로 기울기를 근사한다.
+    **(1) 확률적 경사법.** 매 단계에서 자료 전체가 아니라 무작위로 고른 작은 그룹(minibatch)으로 기울기를 근사한다.
 
     $$
     \boldsymbol\theta^{(k+1)} = \boldsymbol\theta^{(k)} + \eta_k\,\frac{n}{|B_k|}\sum_{i\in B_k}s(x_i;\boldsymbol\theta^{(k)})

@@ -5,7 +5,7 @@ r"""「간신히 유의한」 자리는 정확히 어디인가 — 눈대중이 
 있으면 $\mathrm{SE}_d = s\sqrt{2(1-\rho)}$ 이다. 유의성은 $|d| / \mathrm{SE}_d$ 로 정해지는데,
 그림에 그려진 막대는 $s$ 만 보여 준다.
 
-① 겹침과 $p$ 값의 관계 — $95\%$ CI 막대와 SE 막대.
+① 중첩과 $p$ 값의 관계 — $95\%$ CI 막대와 SE 막대.
 ② 독립일 때 「간신히 유의한」 두 쌍의 모습.
 ③ 짝지어져 있으면 같은 그림이 전혀 다른 뜻이 된다.
 
@@ -77,7 +77,7 @@ ax1.annotate(f"SE 막대는 ${-ov_se_05:.2f}$ 배\n**떨어져야** 유의".repl
              arrowprops=dict(arrowstyle="->", color="#d62728", lw=1.0))
 ax1.set_xlabel("겹친 길이 $\\div$ 팔 하나의 길이  (음수면 떨어져 있다)")
 ax1.set_ylabel("두 평균 차이의 $p$ 값")
-ax1.set_title("① 같은 겹침, 전혀 다른 $p$", fontsize=12)
+ax1.set_title("① 같은 중첩, 전혀 다른 $p$", fontsize=12)
 ax1.set_ylim(1e-4, 1.3)
 ax1.set_yticks([1e-4, 1e-3, 1e-2, 1e-1, 1])
 ax1.set_yticklabels(["$10^{-4}$", "$0.001$", "$0.01$", "$0.1$", "$1$"])
@@ -117,7 +117,7 @@ for i, rho in enumerate(RHOS):
     dc = d_crit(rho)
     draw_pair(ax3, y, dc, ARM_CI, "#1f77b4", f"$\\rho = {rho}$")
     o = overlap_per_arm(dc, ARM_CI)
-    ax3.text(dc / 2, y + 0.33, f"${o:.2f}$ 배 겹침", ha="center", fontsize=10,
+    ax3.text(dc / 2, y + 0.33, f"${o:.2f}$ 배 중첩", ha="center", fontsize=10,
              color="#1f77b4")
 ax3.set_xlim(-6.2, 7.0)
 ax3.set_ylim(-0.75, len(RHOS) - 0.25)
@@ -133,15 +133,15 @@ print("saved", out)
 
 # === 본문에 적을 수 =================================================
 print(f"\n표준오차 s = 1, 독립 두 평균 — 간신히 유의한 차이 d = {d05:.4f}")
-print(f"  $95\\%$ CI 막대 (팔 {ARM_CI:.3f}): 겹침 {ov_ci_05:+.3f} 배")
-print(f"  SE 막대       (팔 {ARM_SE:.3f}): 겹침 {ov_se_05:+.3f} 배")
+print(f"  $95\\%$ CI 막대 (팔 {ARM_CI:.3f}): 중첩 {ov_ci_05:+.3f} 배")
+print(f"  SE 막대       (팔 {ARM_SE:.3f}): 중첩 {ov_se_05:+.3f} 배")
 print(f"\n막대가 딱 붙을 때의 p 값")
 print(f"  95% CI 막대: p = {p_touch_ci:.4f}")
 print(f"  SE 막대    : p = {p_touch_se:.4f}")
 print(f"\nSE 막대가 팔 길이만큼(=1) 떨어질 때: p = {pval(3 * ARM_SE):.4f}")
 
-print(f"\n③ 상관에 따라 — 간신히 유의한 d 와 그때 95% CI 막대의 겹침")
-print(f"{'rho':>6}{'SE_d':>9}{'d (p=.05)':>12}{'겹침/팔':>10}")
+print(f"\n③ 상관에 따라 — 간신히 유의한 d 와 그때 95% CI 막대의 중첩")
+print(f"{'rho':>6}{'SE_d':>9}{'d (p=.05)':>12}{'중첩/팔':>10}")
 for rho in (0.0, 0.3, 0.5, 0.8, 0.95):
     dc = d_crit(rho)
     print(f"{rho:>6.2f}{np.sqrt(2 * (1 - rho)):>9.3f}{dc:>12.3f}"

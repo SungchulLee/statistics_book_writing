@@ -119,7 +119,7 @@ $$
     # 막기 위해서다. 이 자료는 양수이지만 0 에 아주 가까운 값이 섞여 있다.
     log_transformed_data = np.log(skewed_data + 1)
 
-    # Box-Cox 는 로그를 포함하는 변환들의 한 묶음이고, 그중 자료를 가장
+    # Box-Cox 는 로그를 포함하는 변환들의 한 그룹이고, 그중 자료를 가장
     # 정규에 가깝게 만드는 lambda 를 스스로 고른다. lambda=0 이 곧 로그다.
     boxcox_transformed_data, best_lambda = boxcox(skewed_data + 1)
 
