@@ -379,7 +379,7 @@ nav:
 
         - 12 선형회귀:
             - 장 개요: ch12/index.md
-            - 12.1 선형회귀:
+            - 12.1 직선과 평면:
                 - 단순선형회귀: ch12/linear_regression/simple.md
                 - 다중선형회귀: ch12/linear_regression/multiple.md
                 - 범주형 설명변수: ch12/linear_regression/categorical_predictors.md
