@@ -1951,7 +1951,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 18.** <span class="diff easy" title="쉬움"></span> 위 코드 보기의 Mann--Whitney 자료로 $U = W - m(m+1)/2$를 손으로
+**연습문제 18.** <span class="diff easy" title="쉬움"></span> 위 코드 보기의 만–휘트니 자료로 $U = W - m(m+1)/2$를 손으로
 확인하라. $W$는 `data0`의 순위합이고 $m = 16$이다.
 
 </div>

@@ -42,7 +42,7 @@ _확인한 곳 — 16.1절 [비모수 검정을 언제, 왜 쓰는가](foundatio
 
 하나의 표본, 또는 일변량 수열의 성질을 다루는 검정이다.
 
-- **[무작위성에 대한 런 검정](one_sample_nonparametric/runs_test.md)** --- 이진 수열에서 같은 값이 연달아 이어지는 최대 구간(런)의 개수를 세어 무작위성을 검정한다(왈드--Wolfowitz 검정).
+- **[무작위성에 대한 런 검정](one_sample_nonparametric/runs_test.md)** --- 이진 수열에서 같은 값이 연달아 이어지는 최대 구간(런)의 개수를 세어 무작위성을 검정한다(왈드–울포위츠 검정).
 - **[부호검정](one_sample_nonparametric/sign_test.md)** --- 가설값으로부터의 편차의 **부호만** 사용하는 모중앙값 검정으로, 가정이 가장 약하다.
 - **[윌콕슨 부호순위검정](one_sample_nonparametric/wilcoxon_signed_rank.md)** --- 편차의 부호와 크기를 함께 사용하여 부호검정보다 검정력이 높은 대안이다.
 - **[이항검정](one_sample_nonparametric/binomial_test.md)** --- 이항분포에 근거하여 비율이 가설값과 같은지를 검정하는 정확검정이다.

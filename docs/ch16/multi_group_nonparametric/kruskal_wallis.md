@@ -1652,7 +1652,7 @@ $$
 
 <div class="drillbox" markdown>
 
-**연습문제 13.** <span class="diff hard" title="어려움"></span> $k = 2$일 때 Kruskal--Wallis $H$ 통계량이 순위합 $Z$ 통계량의
+**연습문제 13.** <span class="diff hard" title="어려움"></span> $k = 2$일 때 크러스컬–월리스 $H$ 통계량이 순위합 $Z$ 통계량의
 제곱으로 환원됨을 증명하라.
 
 </div>
@@ -1660,7 +1660,7 @@ $$
 ??? success "풀이"
 
     크기가 $m$과 $n = N - m$인 두 집단에서 순위합은 $R_1 + R_2 = N(N+1)/2$를
-    만족한다. Kruskal--Wallis 통계량은
+    만족한다. 크러스컬–월리스 통계량은
 
     $$
     H = \frac{12}{N(N+1)}\left(\frac{R_1^2}{m} + \frac{R_2^2}{n}\right) - 3(N+1)
