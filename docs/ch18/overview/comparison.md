@@ -310,6 +310,74 @@ $y = 3x_1 - 2x_2 + 0.5x_3 + \varepsilon$($\varepsilon \sim N(0,1)$)에서 $n = 1
 
 </div>
 
+??? success "풀이"
+    자료는 요인 다섯만 참 신호이고($\beta = 0.9, -0.6, 0.45, 0.3, -0.25$) 나머지 $45$ 개는 잡음인 설계로 만든다. $p = 50$, $n = 120$ 이고 창은 $60$ 개월이므로 **훈련 창마다 $p$ 가 $n$ 에 가깝다**($50$ 대 $60$).
+
+    **(a)** 창 안에서 $p/n = 50/60 = 0.83$ 이다. OLS 는 자유도를 거의 다 써 버려 잡음을 그대로 적합하고, 월별 수익률은 신호 대 잡음비가 애초에 낮아 그 과적합이 곧바로 표본외 성능으로 드러난다. 게다가 요인들이 서로 상관되어 있어 $X^\top X$ 가 나빠진다. **자유도가 모자라는 것이 아니라 가까스로 있는 것**이 가장 위험한 자리다.
+
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression, RidgeCV, LassoCV, ElasticNetCV
+
+    rng = np.random.default_rng(18_003)
+    n, p, W = 120, 50, 60
+    beta = np.zeros(p); beta[:5] = [0.9, -0.6, 0.45, 0.3, -0.25]
+    X = rng.standard_normal((n, p))
+    y = X @ beta + rng.standard_normal(n) * 1.0
+
+    preds = {k: [] for k in ("OLS", "능형", "라쏘", "엘라스틱넷")}
+    truth, picked = [], []
+    for t in range(W, n):                      # 이동창: 60 개월 훈련, 다음 달 예측
+        Xtr, ytr = X[t - W:t], y[t - W:t]
+        xte, yte = X[t:t + 1], y[t]
+        mu, sd = Xtr.mean(0), Xtr.std(0)       # 표준화는 훈련 창에서만 배운다
+        Z, z = (Xtr - mu) / sd, (xte - mu) / sd
+        truth.append(yte)
+        preds["OLS"].append(LinearRegression().fit(Z, ytr).predict(z)[0])
+        preds["능형"].append(
+            RidgeCV(alphas=np.logspace(-2, 4, 40)).fit(Z, ytr).predict(z)[0])
+        la = LassoCV(n_alphas=40, cv=5, random_state=0, max_iter=50000).fit(Z, ytr)
+        preds["라쏘"].append(la.predict(z)[0])
+        picked.append(set(np.flatnonzero(la.coef_)))
+        en = ElasticNetCV(l1_ratio=0.5, n_alphas=40, cv=5, random_state=0,
+                          max_iter=50000).fit(Z, ytr)
+        preds["엘라스틱넷"].append(en.predict(z)[0])
+
+    truth = np.array(truth)
+    sst = ((truth - truth.mean()) ** 2).sum()
+    for k in preds:
+        r2 = 1 - ((truth - np.array(preds[k])) ** 2).sum() / sst
+        print(f"  {k:<10s} R^2 = {r2:+.4f}")
+
+    sizes = [len(s) for s in picked]
+    cnt = {}
+    for s in picked:
+        for j in s:
+            cnt[j] = cnt.get(j, 0) + 1
+    print(f"  라쏘가 고른 개수 중앙값 {int(np.median(sizes))}, "
+          f"범위 {min(sizes)}-{max(sizes)}")
+    print(f"  늘 뽑힌 변수 {sorted(set.intersection(*picked))} · "
+          f"한 번이라도 뽑힌 변수 {len(cnt)} 개 (참 신호는 0-4)")
+    ```
+
+    출력:
+
+    ```
+      OLS        R^2 = -2.5991
+      능형         R^2 = +0.0835
+      라쏘         R^2 = +0.3209
+      엘라스틱넷      R^2 = +0.2909
+      라쏘가 고른 개수 중앙값 11, 범위 5-27
+      늘 뽑힌 변수 [0, 1, 2, 4] · 한 번이라도 뽑힌 변수 41 개 (참 신호는 0-4)
+    ```
+
+    **(b) OLS 는 평균을 쓰는 것보다 나쁘다.** $R^2 = -2.60$ 이니 「아무것도 예측하지 않고 표본평균을 내놓기」보다 제곱오차가 세 배 넘게 크다. 세 정칙화 방법은 모두 양수이고 라쏘가 $+0.32$ 로 가장 낫다 — **신호가 실제로 희소하기 때문**이다. 능형이 $+0.08$ 에 그치는 것은 $45$ 개의 잡음 계수를 $0$ 으로 만들지 못해 그 잡음을 조금씩 계속 끌고 가기 때문이고, 엘라스틱넷은 L2 를 절반 섞어 그 중간에 놓인다.
+
+    **(c) 고르는 변수는 창마다 흔들린다.** 창 $60$ 개에서 라쏘가 고른 개수가 중앙값 $11$, 범위 $5$–$27$ 이고, **한 번이라도 뽑힌 변수가 $41$ 개**다 — 참 신호는 다섯뿐인데 잡음 $45$ 개 가운데 서른여섯이 어느 창에선가 뽑혔다. 그래도 **$60$ 개 창 전부에서 뽑힌 것은 $0, 1, 2, 4$ 번**이고 $3$ 번도 $54$ 번 뽑혔으니, 참 신호 다섯은 거의 늘 살아 있다. 가장 큰 잡음 변수가 $32$ 번뿐이다.
+
+    **읽는 법이 여기서 갈린다.** 「라쏘가 고른 변수 목록」을 한 창에서 읽으면 잡음이 절반쯤 섞여 있어 그것을 「선택된 요인」이라고 보고하면 안 된다. 읽을 수 있는 것은 **선택 빈도**다 — 창 전체에서 몇 번 뽑혔는지를 세면 참 신호와 잡음이 $54$–$60$ 대 $32$ 이하로 갈린다. 예측과 선택은 다른 일이고, 이 설정에서 라쏘는 예측에 쓸 만하지만 선택 목록 하나는 믿을 것이 못 된다.
+
+
 <div class="drillbox" markdown>
 
 **연습문제 4.** <span class="diff hard" title="어려움"></span>
