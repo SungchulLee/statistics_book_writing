@@ -531,7 +531,7 @@ _확인한 곳 — B. Efron, 「Bootstrap Methods: Another Look at the Jackknife
 
 <div class="drillbox" markdown>
 
-**연습문제 5.** <span class="diff med" title="중간"></span> 표본평균에 대해 $B \to \infty$일 때 붓스트랩 표준오차가 $s/\sqrt{n}$으로 수렴함을 증명하라. 여기서 $s$는 표본표준편차이다.
+**연습문제 5.** <span class="diff med" title="중간"></span> 표본평균에 대해 $B \to \infty$ 일 때 붓스트랩 표준오차가 $s\sqrt{n-1}/n$ 으로 수렴함을 증명하라. 여기서 $s$ 는 표본표준편차다. 고전적 공식 $s/\sqrt n$ 과 **같지 않다**는 것이 요점이고(정리 1), 그 비가 얼마인지도 적으시오.
 
 </div>
 

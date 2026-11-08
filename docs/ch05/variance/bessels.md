@@ -394,7 +394,7 @@ $E[n(\bar{X} - \mu)^2] = \sigma^2$이므로, $\bar{X}$로부터의 편차는 평
 
 <div class="exbox" markdown>
 
-**보기 2.** <span class="diff easy" title="쉬움"></span> 네 분포에서 확인하는 불편성. 참 분산을 맞추어 놓은 네 모집단($N(0,16)$, $\text{Exp}(4)$, $\text{Uniform}$, $\chi^2_{16}$)에서 $n = 20$씩 뽑아 $S^2$을 20만 번 기록한다.
+**보기 2.** <span class="diff easy" title="쉬움"></span> 네 분포에서 확인하는 불편성. 모양이 전혀 다른 네 모집단($N(0,16)$, $\text{Exp}(4)$, $\text{Uniform}$, $\chi^2_{16}$)에서 $n = 20$씩 뽑아 $S^2$을 20만 번 기록한다. 앞의 셋은 참 분산을 $16$ 으로 맞추어 두었고 $\chi^2_{16}$ 만 $\sigma^2 = 2d = 32$ 다 — 그 어긋남이 아래 풀이에서 쓰인다.
 
 **(1)** $E[S^2] = \sigma^2$이 **모집단의 모양과 무관하게** 성립하는 까닭을 적으시오.
 
@@ -835,9 +835,6 @@ $$E[S^2] = \sigma^2, \qquad \text{Var}(S^2) = \frac{2\sigma^4}{n-1}$$
 !!! warning "편향은 작은 표본에서 가장 크다"
     $n = 3$이면 $c_4 \approx 0.886$이므로 $E[S] \approx 0.886\sigma$ — 표준편차를 약 11% 과소추정한다. $n = 50$이면 편향이 0.5% 미만이다.
 
-<div class="exbox" markdown>
-
-
 <div class="storybox" markdown>
 
 **그림으로 보는 통계학 1.** 전화국 기술부장이 퇴근하고 쓴 부등식
@@ -867,6 +864,7 @@ $$
 
 </div>
 
+<div class="exbox" markdown>
 
 **보기 6.** <span class="diff easy" title="쉬움"></span> 소프트웨어 기본값의 함정. 자료 $\{2, 4, 4, 4, 5, 5, 7, 9\}$를 `np.var` 의 기본값과 `ddof=1` 로 각각 요약한다.
 
