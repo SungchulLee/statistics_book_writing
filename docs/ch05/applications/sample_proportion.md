@@ -744,7 +744,7 @@ $$
     \log\frac{\hat p_1}{\hat p_2} = \log\hat p_1 - \log\hat p_2
     $$
 
-    앞 절 정규분포 문서 연습문제 10의 델타 방법을 $g = \log$에 적용하면 $g'(p) = 1/p$이므로
+    5.2절 [정규분포 (표준화의 기준)](../distributions/normal.md) 연습문제 10의 델타 방법을 $g = \log$에 적용하면 $g'(p) = 1/p$이므로
 
     $$
     \operatorname{Var}(\log\hat p_i) \approx \frac{1}{p_i^2}\cdot\frac{p_i(1-p_i)}{n_i} = \frac{1-p_i}{n_ip_i}

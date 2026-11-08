@@ -960,7 +960,7 @@ $\sigma^2\!\left[\rho+\frac{1-\rho}{n}\right]$ 과 사진의 네 곡선은 **이
 <div class="drillbox" markdown>
 
 **연습문제 8.** <span class="diff med" title="중간"></span>
-연습문제 $4$의 두 자산을 $n$개로 늘려라. **분산투자로 위험을 얼마나 줄일 수 있으며, 어디서 멈추는가?**
+연습문제 $2$ 의 두 자산을 $n$개로 늘려라. **분산투자로 위험을 얼마나 줄일 수 있으며, 어디서 멈추는가?**
 
 </div>
 
