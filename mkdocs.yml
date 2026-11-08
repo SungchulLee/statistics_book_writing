@@ -325,7 +325,7 @@ nav:
                 - 웰치의 이원배치 분산분석: ch10/anova_welch/welch_two_way.md
                 - 웰치 분산분석의 제1종 오류와 검정력 모의실험: ch10/anova_welch/welch_simulation.md
                 - 이원배치 웰치 분산분석 (로버스트 HC3): ch10/anova_welch/welch_twoway_robust.md
-            - 10.5 가정:
+            - 10.5 가정 점검:
                 - 분산분석의 가정: ch10/assumptions/assumptions_overview.md
                 - 잔차의 정규성 확인: ch10/assumptions/normality.md
                 - 관측의 독립성 확인: ch10/assumptions/independence.md
@@ -632,7 +632,7 @@ nav:
 
         - 19 로지스틱 회귀:
             - 장 개요: ch19/index.md
-            - 19.1 로지스틱 회귀:
+            - 19.1 모형과 계수 해석:
                 - 로짓 연결과 오즈: ch19/logistic_regression/logit.md
                 - 오즈비와 계수 해석: ch19/logistic_regression/odds_ratios.md
                 - 로지스틱 회귀의 가능도: ch19/logistic_regression/likelihood.md
@@ -659,7 +659,7 @@ nav:
 
         - 20 소프트맥스 회귀:
             - 장 개요: ch20/index.md
-            - 20.1 소프트맥스 회귀:
+            - 20.1 모형과 소프트맥스 함수:
                 - 다항 로지스틱 회귀: ch20/softmax_regression/multinomial.md
                 - 소프트맥스 함수와 확률단체: ch20/softmax_regression/softmax.md
                 - 수치적 안정성 (로그-합-지수 기법): ch20/softmax_regression/numerical_stability.md
