@@ -118,7 +118,7 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 - **[모형선택 비교](model_selection/model_selection.md)** — 설명변수 여덟 가운데 셋만 참인 자료에 AIC·BIC·교차검증 셋을 돌려, **벌점의 세기가 모형의 크기를 정하는** 것을 본다.
 - **[교차검증 다항 모형선택](model_selection/cv_polynomial_model_selection.md)** — 참 차수가 후보 안에 있는 자리에서 검증집합·LOOCV·$k$-겹이 그 차수를 찾아내는지 겨룬다. **검증집합 하나로는 믿을 수 없다**는 것이 결론이다.
 
-### 12.10 스플라인과 GAM
+### 12.10 스플라인과 일반화가법모형
 
 선형회귀의 유연한 비모수 확장:
 
@@ -136,7 +136,7 @@ Python에서 회귀를 구현하는 실용적 도구:
 - **[sklearn LinearRegression 인터페이스](package_usage/sklearn.md)** — 예측 작업의 표준 라이브러리로, 교차검증, 파이프라인, 정칙화를 내장하고 있다.
 - **[무엇을 언제 쓸 것인가](package_usage/comparison.md)** — 나란히 놓고 비교하면 statsmodels는 추론에, sklearn은 예측과 기계학습 파이프라인에 강하다.
 
-### 12.11 연습문제
+### 연습문제 — 쪽마다 끝에 있다
 
 회귀 모형화, OLS 출력 해석, 진단, 계수 검정, 모형선택, 다항식·교호작용 확장을 아우르는 연습문제.
 

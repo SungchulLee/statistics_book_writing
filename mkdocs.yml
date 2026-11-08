@@ -479,10 +479,10 @@ nav:
                 - 앤더슨–달링 검정: ch14/formal_tests/anderson_darling.md
                 - 샤피로–윌크 검정: ch14/formal_tests/shapiro_wilk.md
             - 14.5 한계와 함정:
-                - 정규성 검정의 한계와 함정: ch14/limitations/limitations.md
                 - 표본크기가 검정력에 미치는 영향: ch14/limitations/sample_size_power.md
                 - 민감도와 실질적 유의성: ch14/limitations/sensitivity_practical.md
                 - 올바른 검정 선택하기: ch14/limitations/choosing_test.md
+                - 정규성 검정의 한계와 함정: ch14/limitations/limitations.md
             - 14.6 비정규 자료 다루기:
                 - 정규성을 위한 변환: ch14/non_normal_data/transformations.md
                 - 대안으로서의 붓스트랩: ch14/non_normal_data/bootstrapping.md
