@@ -1675,7 +1675,7 @@ $\frac{1}{2n}\lVert y - X\beta\rVert_2^2 + \lambda\lVert\beta\rVert_1$에 대해
 
 <div class="drillbox" markdown>
 
-**연습문제 19.** <span class="diff hard" title="어려움"></span> 연습문제 5가 증명한 비유일성을 수로
+**연습문제 19.** <span class="diff hard" title="어려움"></span> 연습문제 15 가 증명한 비유일성을 수로
 보여라. 연습문제 13의 `lasso_cd_warm` 에 $X = [x \mid x]$(완전히 같은 두 열)와 여러 초기값을 주어,
 
 **(1)** 초기값에 따라 **개별 계수가 달라지고**,

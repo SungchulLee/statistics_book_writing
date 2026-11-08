@@ -1726,7 +1726,7 @@ $11$ 절과 연습문제 2 의 마지막 주의는 "순열 $p = 0.01$ 인데 붓
 <div class="drillbox" markdown>
 
 **연습문제 14.** <span class="diff med" title="중간"></span>
-보기 2 는 $\binom{10}{5} = 252$ 가지를 전부 열거해 $p = 10/252 = 0.039683$ 을 얻었다. 그런데 [이표본 순열검정](../permutation/two_sample.md) §2 의 알고리즘은
+보기 2 는 $\binom{10}{5} = 252$ 가지를 전부 열거해 $p = 10/252 = 0.039683$ 을 얻었다. 그런데 [이표본 순열검정](../permutation/two_sample.md) $\S 4$ 의 알고리즘은
 
 $$
 p = \frac{\#\{T_b \ge T_{\text{obs}}\} + 1}{B + 1}

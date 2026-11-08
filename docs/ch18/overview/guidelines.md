@@ -255,7 +255,7 @@ California Housing 자료를 사용하라.
 <div class="drillbox" markdown>
 
 **연습문제 2.** <span class="diff med" title="중간"></span>
-"흔한 함정" 다섯 가지 중 결과를 가장 심각하게 왜곡하는 것은 무엇인가? 근거를 들어 순위를 매겨라.
+$\S 6$ 의 "흔한 함정" 여섯 가지 중 결과를 가장 심각하게 왜곡하는 것은 무엇인가? 근거를 들어 순위를 매겨라.
 
 </div>
 

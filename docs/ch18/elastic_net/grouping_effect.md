@@ -13,7 +13,7 @@ Zou와 Hastie(2005)는 상관된 두 변수의 엘라스틱넷 계수가 얼마�
 $\hat{\beta}_i$와 $\hat{\beta}_j$가 같은 부호를 갖고 표본상관이 $\rho_{ij} = \mathbf{x}_i^\top\mathbf{x}_j$일 때
 
 $$
-|\hat{\beta}_i - \hat{\beta}_j| \leq \frac{1}{\lambda(1-\alpha)}\sqrt{2(1 - \rho_{ij})}\,\|\mathbf{y}\|
+|\hat{\beta}_i - \hat{\beta}_j| \leq \frac{1}{n\,\lambda(1-\alpha)}\sqrt{2(1 - \rho_{ij})}\,\|\mathbf{y}\|
 $$
 
 이다.

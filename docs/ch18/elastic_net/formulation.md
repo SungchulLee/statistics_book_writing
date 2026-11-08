@@ -834,7 +834,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 12.** <span class="diff hard" title="어려움"></span>
-위의 경고 상자는 sklearn 의 목적함수가 잔차제곱합을 $2n$으로 나눈다고 적었다. 그런데 그 상자가 적은 식은 `ElasticNet` 의 것이고, **`Ridge` 는 그 식을 쓰지 않는다.** $n = 50$, $p = 4$인 자료에서 `Ridge(alpha=2)` 의 해가 $(X^\top X + 2I)^{-1}X^\top y$와 $(X^\top X + 2nI)^{-1}X^\top y$ 가운데 어느 것과 같은지 확인하라. 이어서 열이 정규직교인 설계에서 `Lasso(alpha=0.1)` 의 해가 연습문제 5 의 연성 임계화와 어떤 임계값에서 일치하는지 확인하고, 교과서 꼴 $\lambda$와 sklearn 의 `alpha` 의 관계를 적어라.
+위의 경고 상자는 sklearn 의 목적함수가 잔차제곱합을 $2n$으로 나눈다고 적었다. 그런데 그 상자가 적은 식은 `ElasticNet` 의 것이고, **`Ridge` 는 그 식을 쓰지 않는다.** $n = 50$, $p = 4$인 자료에서 `Ridge(alpha=2)` 의 해가 $(X^\top X + 2I)^{-1}X^\top y$와 $(X^\top X + 2nI)^{-1}X^\top y$ 가운데 어느 것과 같은지 확인하라. 이어서 열이 정규직교인 설계에서 `Lasso(alpha=0.1)` 의 해가 $\S 5$ 의 연성 임계화와 어떤 임계값에서 일치하는지 확인하고, 교과서 꼴 $\lambda$와 sklearn 의 `alpha` 의 관계를 적어라.
 
 </div>
 
