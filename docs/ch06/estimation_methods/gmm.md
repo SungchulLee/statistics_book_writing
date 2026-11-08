@@ -231,7 +231,7 @@ _확인한 곳 — 상 이름·날짜·수상자 셋과 소속, 「자산 가격
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff med" title="중간"></span>
-일반화 적률법에서 적률 조건의 개수 $q$가 모수의 개수 $p$ 이상이어야 하는 이유는 무엇인가? $q > p$이면 어떻게 되는가?
+일반화 적률법에서 적률 조건의 개수 $r$이 모수의 개수 $p$ 이상이어야 하는 이유는 무엇인가? $r > p$이면 어떻게 되는가?
 
 </div>
 
@@ -495,7 +495,7 @@ GMM은 **분포를 지정하지 않는다.** 최대가능도와 견주어 얻는
 <div class="drillbox" markdown>
 
 **연습문제 10.** <span class="diff hard" title="어려움"></span>
-Hansen J 검정(과대식별 검정)의 검정통계량은 모든 적률 조건이 타당하다는 귀무가설 아래에서 $J = n\,\mathbf{g}_n(\hat{\theta})^\top \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{q-p}$이다. 이 검정의 직관을 설명하라.
+Hansen J 검정(과대식별 검정)의 검정통계량은 모든 적률 조건이 타당하다는 귀무가설 아래에서 $J = n\,\mathbf{g}_n(\hat{\theta})^\top \hat{\mathbf{S}}^{-1} \mathbf{g}_n(\hat{\theta}) \sim \chi^2_{r-p}$이다. 이 검정의 직관을 설명하라.
 
 </div>
 

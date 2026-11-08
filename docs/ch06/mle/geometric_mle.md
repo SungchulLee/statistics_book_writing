@@ -281,12 +281,13 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
     plt.rcParams["axes.unicode_minus"] = False
 
     # numpy의 geometric은 "첫 성공까지의 시행 수"(1부터)를 준다.
-    # 여기서 쓰는 판본은 "첫 성공 이전의 실패 수"(0부터)이므로 1을 뺀다.
-    # 성공확률을 1 - 0.12 로 준 것은, 이 절의 theta 가 numpy의 p와
-    # 서로 여집합 관계이기 때문이다(theta = 실패확률).
+    # 이 쪽의 판본은 "첫 실패 이전의 성공 수"(0부터)이므로 1을 뺀다.
+    # 성공확률을 1 - 0.12 로 준 것은, 이 쪽의 theta 가 numpy의 p와
+    # 서로 여집합 관계이기 때문이다(이 쪽의 theta = 성공확률 0.12,
+    # numpy의 p = 1 - theta = 실패확률).
     train = np.random.geometric(1 - 0.12, 1000) - 1
 
-    # 로그가능도 l(theta) = (실패 총횟수) log(theta) + (시행 수) log(1-theta).
+    # 로그가능도 l(theta) = (성공 총횟수) log(theta) + (수열 수) log(1-theta).
     # 관측이 1000개인데 계산에 들어가는 것은 이 두 숫자뿐이다.
     # 이런 요약값을 충분통계량이라고 한다.
     n_success = train.sum()
@@ -417,47 +418,47 @@ fecundability studies", 『Biometrics』($1986$)가 임신까지 걸리는 시�
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-기하분포의 MLE $\hat\theta = 1/(1+\bar x)$(실패 횟수 판본)의 피셔 정보량을 구하고 점근분산을 유도하라. $\theta$가 0 또는 1에 가까울 때 무슨 일이 일어나는가?
+**실패 횟수 판본.** 이 판본의 모수는 이 쪽의 $\theta$ 와 **여집합**이라 혼동을 막으려 $q = 1-\theta$ 로 적는다 — $q$ 는 첫 성공이 나올 확률이고, 보기 2 의 $\hat\theta = 0.114$ 가 $\hat q = 0.886$ 에 해당한다. MLE $\hat q = 1/(1+\bar x)$ 의 피셔 정보량을 구하고 점근분산을 유도하라. $q$가 0 또는 1에 가까울 때 무슨 일이 일어나는가?
 
 </div>
 
 ??? success "풀이"
-    실패 횟수 판본의 PMF는 $P(X=k) = (1-\theta)^k\theta$이므로
+    실패 횟수 판본의 PMF는 $P(X=k) = (1-q)^k q$ 이므로
 
     $$
-    \ln f = k\ln(1-\theta) + \ln\theta
+    \ln f = k\ln(1-q) + \ln q
     $$
 
     이고
 
     $$
-    \frac{\partial\ln f}{\partial\theta} = -\frac{k}{1-\theta}+\frac1\theta, \qquad \frac{\partial^2\ln f}{\partial\theta^2} = -\frac{k}{(1-\theta)^2}-\frac{1}{\theta^2}
+    \frac{\partial\ln f}{\partial q} = -\frac{k}{1-q}+\frac1q, \qquad \frac{\partial^2\ln f}{\partial q^2} = -\frac{k}{(1-q)^2}-\frac{1}{q^2}
     $$
 
-    이다. $E[X] = (1-\theta)/\theta$를 넣어 기대값을 취하면
+    이다. $E[X] = (1-q)/q$를 넣어 기대값을 취하면
 
     $$
-    I_1(\theta) = \frac{E[X]}{(1-\theta)^2}+\frac{1}{\theta^2} = \frac{1}{\theta(1-\theta)}+\frac{1}{\theta^2} = \frac{\theta+(1-\theta)}{\theta^2(1-\theta)} = \frac{1}{\theta^2(1-\theta)}
+    I_1(q) = \frac{E[X]}{(1-q)^2}+\frac{1}{q^2} = \frac{1}{q(1-q)}+\frac{1}{q^2} = \frac{q+(1-q)}{q^2(1-q)} = \frac{1}{q^2(1-q)}
     $$
 
     이다. 따라서
 
     $$
-    \operatorname{Var}(\hat\theta) \approx \frac{\theta^2(1-\theta)}{n}
+    \operatorname{Var}(\hat q) \approx \frac{q^2(1-q)}{n}
     $$
 
     **경계에서의 거동.**
 
-    - **$\theta \to 1$**(거의 언제나 첫 시행에 성공): $I_1 \to \infty$이고 분산이 0으로 간다. 관측값이 대부분 0이므로 $\theta$가 1에 가깝다는 것을 매우 확실히 알 수 있다. 다만 $\hat\theta$가 경계에 붙어 정규근사가 나빠진다. 모든 관측이 0이면 $\hat\theta = 1$로 경계값이 나온다.
-    - **$\theta \to 0$**(성공이 매우 드묾): $I_1 \to \infty$이지만 $\operatorname{Var} \approx \theta^2/n \to 0$이다. 절댓값 분산은 작아도 **상대 분산**이
+    - **$q \to 1$**(거의 언제나 첫 시행에 성공): $I_1 \to \infty$이고 분산이 0으로 간다. 관측값이 대부분 0이므로 $q$가 1에 가깝다는 것을 매우 확실히 알 수 있다. 다만 $\hat q$가 경계에 붙어 정규근사가 나빠진다. 모든 관측이 0이면 $\hat q = 1$로 경계값이 나온다.
+    - **$q \to 0$**(성공이 매우 드묾): $I_1 \to \infty$이지만 $\operatorname{Var} \approx q^2/n \to 0$이다. 절댓값 분산은 작아도 **상대 분산**이
 
       $$
-      \frac{\operatorname{SE}(\hat\theta)}{\theta} \approx \sqrt{\frac{1-\theta}{n}} \to \frac{1}{\sqrt n}
+      \frac{\operatorname{SE}(\hat q)}{q} \approx \sqrt{\frac{1-q}{n}} \to \frac{1}{\sqrt n}
       $$
 
-      으로 $\theta$와 무관하게 남는다. 즉 $\theta$의 **자릿수**를 알아내는 정밀도는 일정하다.
+      으로 $q$와 무관하게 남는다. 즉 $q$의 **자릿수**를 알아내는 정밀도는 일정하다.
 
-    **실무 권고.** $\theta$가 경계 근처면 로짓 척도 $\ln\{\theta/(1-\theta)\}$에서 추론하는 편이 낫다. 그 척도에서는 로그가능도가 훨씬 이차식에 가깝고 구간이 $(0,1)$을 벗어나지 않는다.
+    **실무 권고.** $q$가 경계 근처면 로짓 척도 $\ln\{q/(1-q)\}$에서 추론하는 편이 낫다. 그 척도에서는 로그가능도가 훨씬 이차식에 가깝고 구간이 $(0,1)$을 벗어나지 않는다.
 
 ---
 
