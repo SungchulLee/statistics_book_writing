@@ -113,10 +113,10 @@ _확인한 곳 — 12.6절 [선형성](assumptions/checking_linearity.md)의 필
 - **[AIC(Akaike 정보기준)](model_selection/aic.md)** — 적합도와 모형 복잡도를 저울질하여 표본 밖 예측을 잘하는 모형을 선호한다.
 - **[BIC(베이즈 정보기준)](model_selection/bic.md)** — AIC와 비슷하지만 모수 추가에 더 강한 벌점을 주어 더 단순한 모형을 고르는 경향이 있다.
 - **[모형선택을 위한 교차검증](model_selection/cross_validation.md)** — 홀드아웃이나 $k$-겹 방식으로 표본 밖 예측오차를 직접 추정한다.
-- **[부분집합 선택과 단계적 선택](model_selection/subset_stepwise_selection.md)** — 설명변수 부분집합의 공간을 훑는 절차들. 2ᵖ 가 금방 불가능해지는 셈과 그 대가(억제 효과), 세 방법과 혼합 접근, 선택 기준, 그리고 고른 뒤의 p값이 왜 틀린 척도 위에 있는지까지.
 - **[AIC와 BIC: 모형선택 기준](model_selection/aic_bic.md)** — 두 기준을 한 쪽에서 맞대어, **예측을 겨냥하는가 참 모형을 겨냥하는가**로 갈라 읽는다.
 - **[모형선택 비교](model_selection/model_selection.md)** — 설명변수 여덟 가운데 셋만 참인 자료에 AIC·BIC·교차검증 셋을 돌려, **벌점의 세기가 모형의 크기를 정하는** 것을 본다.
 - **[교차검증 다항 모형선택](model_selection/cv_polynomial_model_selection.md)** — 참 차수가 후보 안에 있는 자리에서 검증집합·LOOCV·$k$-겹이 그 차수를 찾아내는지 겨룬다. **검증집합 하나로는 믿을 수 없다**는 것이 결론이다.
+- **[부분집합 선택과 단계적 선택](model_selection/subset_stepwise_selection.md)** — 설명변수 부분집합의 공간을 훑는 절차들. 2ᵖ 가 금방 불가능해지는 셈과 그 대가(억제 효과), 세 방법과 혼합 접근, 선택 기준, 그리고 고른 뒤의 p값이 왜 틀린 척도 위에 있는지까지.
 
 ### 12.10 스플라인과 일반화가법모형
 
