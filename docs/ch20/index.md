@@ -45,8 +45,8 @@ _확인한 곳 — 20.1절 [다항 로지스틱 회귀](softmax_regression/multi
 
 - **[교차엔트로피 손실](optimization/cross_entropy.md)** --- 원–핫 부호화된 이름표에 대한 범주형 교차엔트로피 목적함수를 유도하고,
   로짓에 대한 기울기가 $\hat{\mathbf{Y}} - \mathbf{Y}$라는 우아한 형태를 가짐을 보인다.
-- **[기울기 기반 최적화](optimization/optimization.md)** --- 단층 모형과 (로지스틱 은닉활성을 갖는) 이층 신경망 모두에 대해
-  출력층과 은닉층의 역전파 단계를 포함한 완전한 기울기 유도를 제시한다.
+- **[역전파와 경사하강](optimization/optimization.md)** --- 단층 모형과 (로지스틱 은닉활성을 갖는) 이층 신경망 모두에 대해
+  출력층과 은닉층의 역전파 단계를 포함한 완전한 기울기 유도를 제시하고, 미니배치 경사하강으로 그것을 돌린다.
 - **[소프트맥스의 정칙화](optimization/regularization.md)** --- 과적합을 막고 다범주 모형의 일반화 성능을 높이기 위해 교차엔트로피
   손실에 더하는 L1·L2 벌점항을 논의한다.
 - **[소프트맥스 회귀 구현](optimization/softmax_implementation.md)** --- 앞의 세 쪽이 유도한 것을 NumPy 로 처음부터 짠다. 안정한 소프트맥스,

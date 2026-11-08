@@ -665,7 +665,7 @@ nav:
                 - 수치적 안정성 (로그-합-지수 기법): ch20/softmax_regression/numerical_stability.md
             - 20.2 추정과 최적화:
                 - 교차엔트로피 손실: ch20/optimization/cross_entropy.md
-                - 기울기 기반 최적화: ch20/optimization/optimization.md
+                - 역전파와 경사하강: ch20/optimization/optimization.md
                 - 소프트맥스의 정칙화: ch20/optimization/regularization.md
                 - 소프트맥스 회귀 구현 (코드): ch20/optimization/softmax_implementation.md
             - 20.3 모형 평가와 사례연구:
