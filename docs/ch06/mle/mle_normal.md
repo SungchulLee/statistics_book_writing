@@ -1180,7 +1180,7 @@ $$\hat{\sigma}^2_{\text{pooled}} = \frac{\sum(X_i - \bar{X})^2 + \sum(Y_j - \bar
 
 $$\text{VaR}_\alpha = -(\hat{\mu} + z_\alpha \hat{\sigma})$$
 
-여기서 $z_\alpha = \mathcal{N}^{-1}(\alpha)$는 정규분위수이다.
+여기서 $z_\alpha = \Phi^{-1}(\alpha)$는 정규분위수이다.
 
 <div class="exbox" markdown>
 

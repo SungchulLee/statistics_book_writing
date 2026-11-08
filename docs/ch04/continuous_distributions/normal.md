@@ -839,7 +839,7 @@ $\Phi(1)=0.84134$ 처럼 수치로만 적는 것도 같은 사정이다 — 없�
 CDF는 닫힌 형태가 없어 수치적으로 계산한다.
 
 $$
-\Phi(x) = \mathcal{N}(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-s^2/2}\,ds
+\Phi(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-s^2/2}\,ds
 $$
 
 <div class="thmbox" markdown>
@@ -1211,7 +1211,7 @@ $$
 
 #### 표준정규분포의 주요 CDF 값
 
-| $x$ | $\mathcal{N}(x) = P(Z \le x)$ |
+| $x$ | $\Phi(x) = P(Z \le x)$ |
 |---|---|
 | $-1.96$ | $0.025$ |
 | $-1$ | $0.159$ |
@@ -1219,7 +1219,7 @@ $$
 | $1$ | $0.841$ |
 | $1.96$ | $0.975$ |
 
-대칭성 $\mathcal{N}(-x) = 1 - \mathcal{N}(x)$ 덕분에 표의 절반만 있으면 된다.
+대칭성 $\Phi(-x) = 1 - \Phi(x)$ 덕분에 표의 절반만 있으면 된다.
 
 <div class="exbox" markdown>
 
@@ -1376,7 +1376,7 @@ $$
 
 #### 표준정규분포의 흔한 분위수
 
-| $q$ | $\mathcal{N}^{-1}(q)$ | 용도 |
+| $q$ | $\Phi^{-1}(q)$ | 용도 |
 |---|---|---|
 | 0.500 | 0 | 중앙값 |
 | 0.900 | 1.282 | 단측 90% 신뢰구간 |
@@ -2304,10 +2304,10 @@ $N(\mu, \sigma^2)$의 사분위수 범위를 $\sigma$로 나타내라. $X \sim N
 </div>
 
 ??? success "풀이"
-    $\mathcal{N}^{-1}(0.75) \approx 0.6745$이고 대칭성에서 $\mathcal{N}^{-1}(0.25) = -0.6745$이므로
+    $\Phi^{-1}(0.75) \approx 0.6745$이고 대칭성에서 $\Phi^{-1}(0.25) = -0.6745$이므로
 
     $$
-    \text{IQR} = \sigma\left\{\mathcal{N}^{-1}(0.75) - \mathcal{N}^{-1}(0.25)\right\} = 2 \times 0.6745\,\sigma \approx 1.349\,\sigma
+    \text{IQR} = \sigma\left\{\Phi^{-1}(0.75) - \Phi^{-1}(0.25)\right\} = 2 \times 0.6745\,\sigma \approx 1.349\,\sigma
     $$
 
     이다. $\mu = 100$, $\sigma = 15$이면
@@ -2624,7 +2624,7 @@ $n = 25$인 표본에서 $\bar x = 100$, $s = 4$를 얻었다. 평균의 95% 신
 표준정규 CDF가 오차함수로
 
 $$
-\mathcal{N}(x) = \frac12\left[1 + \operatorname{erf}\!\left(\frac{x}{\sqrt2}\right)\right], \qquad \operatorname{erf}(u) = \frac{2}{\sqrt\pi}\int_0^u e^{-t^2}dt
+\Phi(x) = \frac12\left[1 + \operatorname{erf}\!\left(\frac{x}{\sqrt2}\right)\right], \qquad \operatorname{erf}(u) = \frac{2}{\sqrt\pi}\int_0^u e^{-t^2}dt
 $$
 
 로 쓰임을 보여라.
@@ -2632,10 +2632,10 @@ $$
 </div>
 
 ??? success "풀이"
-    대칭성에서 $\mathcal{N}(0) = 1/2$이므로
+    대칭성에서 $\Phi(0) = 1/2$이므로
 
     $$
-    \mathcal{N}(x) = \frac12 + \int_0^x \frac{1}{\sqrt{2\pi}}e^{-s^2/2}\,ds
+    \Phi(x) = \frac12 + \int_0^x \frac{1}{\sqrt{2\pi}}e^{-s^2/2}\,ds
     $$
 
     이다. $t = s/\sqrt2$로 치환하면 $s = \sqrt2\,t$, $ds = \sqrt2\,dt$이고 적분 상한이 $x/\sqrt2$가 되어
@@ -2644,7 +2644,7 @@ $$
     \int_0^x \frac{1}{\sqrt{2\pi}}e^{-s^2/2}ds = \frac{\sqrt2}{\sqrt{2\pi}}\int_0^{x/\sqrt2} e^{-t^2}dt = \frac{1}{\sqrt\pi}\int_0^{x/\sqrt2}e^{-t^2}dt = \frac12\operatorname{erf}\!\left(\frac{x}{\sqrt2}\right)
     $$
 
-    를 얻는다. 따라서 $\mathcal{N}(x) = \frac12 + \frac12\operatorname{erf}(x/\sqrt2)$이다. $\square$
+    를 얻는다. 따라서 $\Phi(x) = \frac12 + \frac12\operatorname{erf}(x/\sqrt2)$이다. $\square$
 
     "닫힌 형태가 없다"는 말의 정확한 뜻은 초등함수로 쓸 수 없다는 것이며, $\operatorname{erf}$라는 이름을 붙인 특수함수로는 정확히 쓸 수 있다. `scipy.special.erf`가 이 함수이고, `stats.norm.cdf`는 실제로 이것을 불러 계산한다.
 
@@ -2666,7 +2666,7 @@ $n = 5$인 자료의 정규 Q-Q 그림을 그리려 한다. 플로팅 위치 $(i
 
     이다.
 
-    $p_i = i/n$을 쓰면 마지막 값이 $p_5 = 1$이 되고 $\mathcal{N}^{-1}(1) = \infty$이라 가장 큰 관측값을 그릴 수 없다. 경험적 누적분포함수의 계단 한가운데를 대표값으로 잡는 것이 $(i-0.5)/n$이며, 이렇게 하면 양끝이 $(0,1)$ 안에 머문다.
+    $p_i = i/n$을 쓰면 마지막 값이 $p_5 = 1$이 되고 $\Phi^{-1}(1) = \infty$이라 가장 큰 관측값을 그릴 수 없다. 경험적 누적분포함수의 계단 한가운데를 대표값으로 잡는 것이 $(i-0.5)/n$이며, 이렇게 하면 양끝이 $(0,1)$ 안에 머문다.
 
     실제로는 이보다 정교한 블롬(Blom)의 위치 $(i - 3/8)/(n + 1/4)$가 더 널리 쓰인다. 이 경우 분위수가 $-1.180, -0.497, 0, 0.497, 1.180$으로 조금 안쪽으로 당겨진다. 정규분포의 순서통계량 기대값에 더 가깝게 맞춘 것이고, `scipy.stats.probplot`의 기본값이다. 표본이 커지면 어느 쪽을 쓰든 차이가 사라진다.
 
@@ -2701,7 +2701,7 @@ $n = 5$인 자료의 정규 Q-Q 그림을 그리려 한다. 플로팅 위치 $(i
 <div class="drillbox" markdown>
 
 **연습문제 20.** <span class="diff med" title="중간"></span>
-정규분포의 분위수함수가 $F^{-1}_{\mu,\sigma}(q) = \mu + \sigma\,\mathcal{N}^{-1}(q)$임을 보여라. 같은 방법으로 로그정규분포의 분위수함수를 구하라.
+정규분포의 분위수함수가 $F^{-1}_{\mu,\sigma}(q) = \mu + \sigma\,\Phi^{-1}(q)$임을 보여라. 같은 방법으로 로그정규분포의 분위수함수를 구하라.
 
 </div>
 
@@ -2709,17 +2709,17 @@ $n = 5$인 자료의 정규 Q-Q 그림을 그리려 한다. 플로팅 위치 $(i
     $X \sim N(\mu, \sigma^2)$이면 $Z = (X-\mu)/\sigma \sim N(0,1)$이므로
 
     $$
-    q = P(X \le x) = P\!\left(Z \le \frac{x-\mu}{\sigma}\right) = \mathcal{N}\!\left(\frac{x-\mu}{\sigma}\right)
+    q = P(X \le x) = P\!\left(Z \le \frac{x-\mu}{\sigma}\right) = \Phi\!\left(\frac{x-\mu}{\sigma}\right)
     $$
 
-    이다. 양변에 $\mathcal{N}^{-1}$을 적용하면 $(x-\mu)/\sigma = \mathcal{N}^{-1}(q)$, 즉 $x = \mu + \sigma\,\mathcal{N}^{-1}(q)$이다. $\square$
+    이다. 양변에 $\mathcal{N}^{-1}$을 적용하면 $(x-\mu)/\sigma = \Phi^{-1}(q)$, 즉 $x = \mu + \sigma\,\Phi^{-1}(q)$이다. $\square$
 
     일반적으로 **분위수함수는 증가하는 변환과 맞바꿀 수 있다.** $g$가 증가함수이고 $Y = g(X)$이면 $F_Y^{-1}(q) = g(F_X^{-1}(q))$이다. $\{Y \le g(x)\}$와 $\{X \le x\}$가 같은 사건이기 때문이다.
 
     로그정규분포는 $Y = e^X$이고 지수함수가 증가함수이므로
 
     $$
-    F_Y^{-1}(q) = \exp\!\left(\mu + \sigma\,\mathcal{N}^{-1}(q)\right)
+    F_Y^{-1}(q) = \exp\!\left(\mu + \sigma\,\Phi^{-1}(q)\right)
     $$
 
     이다. $q = 0.5$를 넣으면 중앙값 $e^\mu$가 나온다. 평균에는 이런 성질이 없다는 점이 중요하다. $E[g(X)] \ne g(E[X])$이지만 분위수는 그대로 옮겨 간다.

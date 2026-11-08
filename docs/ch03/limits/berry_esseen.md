@@ -547,7 +547,7 @@ $\rho/\sigma^3$은 왜도의 사촌이다. 왜도가 $E[(X-\mu)^3]/\sigma^3$인�
 <div class="drillbox" markdown>
 
 **연습문제 3.** <span class="diff med" title="중간"></span>
-베리–에센 정리는 $C \leq 0.4748$일 때 $\sup_x |F_n(x) - \mathcal{N}(x)| \leq \frac{C \rho}{\sigma^3 \sqrt{n}}$이라고 말한다. Bernoulli(0.5) 분포에서는 $\sigma^2 = 0.25$이고 $\rho = E[|X - \mu|^3] = 0.125$이다. 베리–에센 한계가 근사 오차 0.01 이하를 보장하려면 $n$이 얼마나 커야 하는가?
+베리–에센 정리는 $C \leq 0.4748$일 때 $\sup_x |F_n(x) - \Phi(x)| \leq \frac{C \rho}{\sigma^3 \sqrt{n}}$이라고 말한다. Bernoulli(0.5) 분포에서는 $\sigma^2 = 0.25$이고 $\rho = E[|X - \mu|^3] = 0.125$이다. 베리–에센 한계가 근사 오차 0.01 이하를 보장하려면 $n$이 얼마나 커야 하는가?
 
 </div>
 

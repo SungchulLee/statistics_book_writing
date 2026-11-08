@@ -194,15 +194,15 @@ $$
 그러면 이렇게 된다.
 
 $$
-\alpha = P(Z \geq z_{\text{crit}} \mid H_0) = 1 - \mathcal{N}(z_{1-\alpha}) = \alpha,
+\alpha = P(Z \geq z_{\text{crit}} \mid H_0) = 1 - \Phi(z_{1-\alpha}) = \alpha,
 $$
 
 $$
-\beta = P(Z < z_{\text{crit}} \mid H_1) = \mathcal{N}\!\left(z_{\text{crit}} - \mu_1\right),
+\beta = P(Z < z_{\text{crit}} \mid H_1) = \Phi\!\left(z_{\text{crit}} - \mu_1\right),
 $$
 
 $$
-\text{Power} = 1 - \beta = 1 - \mathcal{N}\!\left(z_{1-\alpha} - (\mu_1 - \mu_0)\right).
+\text{Power} = 1 - \beta = 1 - \Phi\!\left(z_{1-\alpha} - (\mu_1 - \mu_0\right).
 $$
 
 ### 두 분포 그리기
@@ -448,7 +448,7 @@ $\mu_0 = 0$, $\mu_1 = 3$, $\alpha = 0.05$일 때 이렇게 된다.
 
 - **임계값**은 $z_{\text{crit}} \approx 1.645$이다.
 - **제1종 오류**(귀무곡선 아래에서 1.645 오른쪽의 파란 영역)는 정확히 $\alpha = 0.05$이다.
-- **제2종 오류**(대립곡선 아래에서 1.645 왼쪽의 빨간 영역)는 $\beta = \mathcal{N}(1.645 - 3) = \mathcal{N}(-1.355) \approx 0.088$이다.
+- **제2종 오류**(대립곡선 아래에서 1.645 왼쪽의 빨간 영역)는 $\beta = \Phi(1.645 - 3) = \Phi(-1.355) \approx 0.088$이다.
 - **검정력**은 $1 - 0.088 = 0.912$로, 크기 3인 효과를 탐지할 확률이 91.2%이다.
 
 분리 $\mu_1 - \mu_0$이 커지면(효과크기가 커지면) 대립분포가 오른쪽으로 이동하여 귀무분포와의 중첩이 줄고 $\beta$가 작아진다. 반대로 효과가 작으면 중첩이 커지고 검정력이 낮아진다.
@@ -821,7 +821,7 @@ $\mu_0 = 0$, $\mu_1 = 3$, $\alpha = 0.05$일 때 이렇게 된다.
     임계값은 $z_{\text{crit}} = z_{0.95} = 1.645$이다. $H_1$ 아래에서 검정통계량은 $N(2, 1)$을 따른다. 따라서
 
     $$
-    \beta = P(Z < 1.645 \mid Z \sim N(2,1)) = \mathcal{N}(1.645 - 2) = \mathcal{N}(-0.355) \approx 0.3613.
+    \beta = P(Z < 1.645 \mid Z \sim N(2,1)) = \Phi(1.645 - 2) = \Phi(-0.355) \approx 0.3613.
     $$
 
     검정력은
@@ -846,7 +846,7 @@ $\mu_0 = 0$, $\mu_1 = 3$, $\alpha = 0.05$일 때 이렇게 된다.
     양측검정의 검정력 식은
 
     $$
-    1 - \beta = \mathcal{N}\!\left(\delta\sqrt{\frac{n}{2}} - z_{1-\alpha/2}\right).
+    1 - \beta = \Phi\!\left(\delta\sqrt{\frac{n}{2}} - z_{1-\alpha/2}\right).
     $$
 
     $1 - \beta = 0.80$으로 놓으면 $z_{0.80} = 0.8416$이고 $z_{0.975} = 1.960$이다. 풀면 이렇게 된다.
@@ -919,8 +919,8 @@ $\mu_0 = 0$, $\mu_1 = 3$, $\alpha = 0.05$일 때 이렇게 된다.
 
     $\mu_1 = 3$인 예에서는 이렇다.
 
-    - $\alpha = 0.05$일 때: $\beta = \mathcal{N}(1.645 - 3) = \mathcal{N}(-1.355) \approx 0.088$, 검정력 $\approx 0.912$.
-    - $\alpha = 0.01$일 때: $\beta = \mathcal{N}(2.326 - 3) = \mathcal{N}(-0.674) \approx 0.250$, 검정력 $\approx 0.750$.
+    - $\alpha = 0.05$일 때: $\beta = \Phi(1.645 - 3) = \Phi(-1.355) \approx 0.088$, 검정력 $\approx 0.912$.
+    - $\alpha = 0.01$일 때: $\beta = \Phi(2.326 - 3) = \Phi(-0.674) \approx 0.250$, 검정력 $\approx 0.750$.
 
     두 오류를 동시에 줄이는 유일한 방법은 표본크기를 늘리는 것이다. $\square$
 
@@ -942,7 +942,7 @@ $\mu_0 = 0$, $\mu_1 = 3$, $\alpha = 0.05$일 때 이렇게 된다.
     - 검정력 공식은 다음이 된다.
 
     $$
-    \text{Power} = 1 - \mathcal{N}\!\left(\frac{z_{\text{crit}} - \mu_1}{\sigma_1}\right),
+    \text{Power} = 1 - \Phi\!\left(\frac{z_{\text{crit}} - \mu_1}{\sigma_1}\right),
     $$
 
     $\sigma_1 > 1$일 때 등분산인 경우보다 작다.

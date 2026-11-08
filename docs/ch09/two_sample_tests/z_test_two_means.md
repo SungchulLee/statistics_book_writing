@@ -90,7 +90,7 @@ $z_{1-\alpha}$를 누적확률 $1-\alpha$ 의 표준정규 분위수(곧 상위 
 **p-값**:
 
 $$
-p = 2\,P(Z > |z_{\text{obs}}|) = 2\bigl[1 - \mathcal{N}(|z_{\text{obs}}|)\bigr]
+p = 2\,P(Z > |z_{\text{obs}}|) = 2\bigl[1 - \Phi(|z_{\text{obs}}|)\bigr]
 $$
 
 여기서 $\mathcal{N}$은 표준정규 누적분포함수이다.
@@ -102,7 +102,7 @@ $$
 **p-값**:
 
 $$
-p = P(Z < z_{\text{obs}}) = \mathcal{N}(z_{\text{obs}})
+p = P(Z < z_{\text{obs}}) = \Phi(z_{\text{obs}})
 $$
 
 ### 우측검정 (Hₐ: μ₁ - μ₂ > δ₀)
@@ -112,7 +112,7 @@ $$
 **p-값**:
 
 $$
-p = P(Z > z_{\text{obs}}) = 1 - \mathcal{N}(z_{\text{obs}})
+p = P(Z > z_{\text{obs}}) = 1 - \Phi(z_{\text{obs}})
 $$
 
 <div class="exbox" markdown>
@@ -143,7 +143,7 @@ $$
     **4단계: p-값을 계산한다.**
 
     $$
-    p = 2\bigl[1 - \mathcal{N}(1.553)\bigr] = 2(1 - 0.9398) = 2(0.0602) \approx 0.120
+    p = 2\bigl[1 - \Phi(1.553)\bigr] = 2(1 - 0.9398) = 2(0.0602) \approx 0.120
     $$
 
     **5단계: 판정한다.** $p \approx 0.120 > 0.05 = \alpha$이므로 $H_0$을 기각하지 못한다. 5% 유의수준에서 두 학군의 평균 수학 점수가 다르다고 결론지을 증거가 부족하다.

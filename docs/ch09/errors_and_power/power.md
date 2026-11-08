@@ -1467,7 +1467,7 @@ $$
 **연습문제 11.** <span class="diff med" title="중간"></span> ($\sigma$를 아는) 양측 일표본 z-검정에서 $\mu = \mu_0 + \delta$를 탐지하는 검정력을 다음과 같이 쓸 수 있음을 보여라.
 
 $$
-1 - \beta = \mathcal{N}\!\left(\frac{\delta\sqrt{n}}{\sigma} - z_{1-\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta\sqrt{n}}{\sigma} - z_{1-\alpha/2}\right).
+1 - \beta = \Phi\!\left(\frac{\delta\sqrt{n}}{\sigma} - z_{1-\alpha/2}\right) + \Phi\!\left(-\frac{\delta\sqrt{n}}{\sigma} - z_{1-\alpha/2}\right).
 $$
 
 </div>
@@ -1483,11 +1483,11 @@ $$
     $Z \sim N(\lambda, 1)$이므로 이렇게 된다.
 
     $$
-    P(Z > z_{1-\alpha/2}) = P(Z - \lambda > z_{1-\alpha/2} - \lambda) = \mathcal{N}(\lambda - z_{1-\alpha/2}),
+    P(Z > z_{1-\alpha/2}) = P(Z - \lambda > z_{1-\alpha/2} - \lambda) = \Phi(\lambda - z_{1-\alpha/2}),
     $$
 
     $$
-    P(Z < -z_{1-\alpha/2}) = P(Z - \lambda < -z_{1-\alpha/2} - \lambda) = \mathcal{N}(-z_{1-\alpha/2} - \lambda).
+    P(Z < -z_{1-\alpha/2}) = P(Z - \lambda < -z_{1-\alpha/2} - \lambda) = \Phi(-z_{1-\alpha/2} - \lambda).
     $$
 
     둘을 더하면 원하는 결과를 얻는다. $\square$
@@ -1505,13 +1505,13 @@ $$
     검정력은
 
     $$
-    1 - \beta = \mathcal{N}\!\left(\frac{\delta}{\sigma\sqrt{2/n}} - z_{1-\alpha/2}\right) + \mathcal{N}\!\left(-\frac{\delta}{\sigma\sqrt{2/n}} - z_{1-\alpha/2}\right).
+    1 - \beta = \Phi\!\left(\frac{\delta}{\sigma\sqrt{2/n}} - z_{1-\alpha/2}\right) + \Phi\!\left(-\frac{\delta}{\sigma\sqrt{2/n}} - z_{1-\alpha/2}\right).
     $$
 
     $n \to \infty$이면 항 $\delta / (\sigma\sqrt{2/n}) = \delta\sqrt{n}/({\sigma\sqrt{2}}) \to \infty$이다. 따라서 이렇게 된다.
 
-    - 첫째 항: $\mathcal{N}(\infty - z_{1-\alpha/2}) = \mathcal{N}(\infty) = 1$.
-    - 둘째 항: $\mathcal{N}(-\infty - z_{1-\alpha/2}) = \mathcal{N}(-\infty) = 0$.
+    - 첫째 항: $\Phi(\infty - z_{1-\alpha/2}) = \Phi(\infty) = 1$.
+    - 둘째 항: $\Phi(-\infty - z_{1-\alpha/2}) = \Phi(-\infty) = 0$.
 
     그러므로 $1-\beta \to 1$이다. 자료가 충분하면 0이 아닌 어떤 고정된 효과도 결국 탐지됨을 확인해 준다. $\square$
 

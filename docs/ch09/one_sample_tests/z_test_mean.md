@@ -106,9 +106,9 @@ $p$-값은 $H_0$이 참이라는 가정 아래 관측값 $z_{\text{obs}}$만큼 
 
 | 대립가설 | p-값 공식 |
 |---|---|
-| $H_1\colon \mu \neq \mu_0$ | $p = 2\,P(Z > \lvert z_{\text{obs}}\rvert) = 2\bigl[1 - \mathcal{N}(\lvert z_{\text{obs}}\rvert)\bigr]$ |
-| $H_1\colon \mu > \mu_0$ | $p = P(Z > z_{\text{obs}}) = 1 - \mathcal{N}(z_{\text{obs}})$ |
-| $H_1\colon \mu < \mu_0$ | $p = P(Z < z_{\text{obs}}) = \mathcal{N}(z_{\text{obs}})$ |
+| $H_1\colon \mu \neq \mu_0$ | $p = 2\,P(Z > \lvert z_{\text{obs}}\rvert) = 2\bigl[1 - \Phi(\lvert z_{\text{obs}}\rvert)\bigr]$ |
+| $H_1\colon \mu > \mu_0$ | $p = P(Z > z_{\text{obs}}) = 1 - \Phi(z_{\text{obs}})$ |
+| $H_1\colon \mu < \mu_0$ | $p = P(Z < z_{\text{obs}}) = \Phi(z_{\text{obs}})$ |
 
 $p < \alpha$이면 $H_0$을 기각한다.
 
@@ -260,7 +260,7 @@ $$
 **5단계.** $p$-값을 계산한다.
 
 $$
-p = 2[1 - \mathcal{N}(1.80)] = 2(0.0359) = 0.0718
+p = 2[1 - \Phi(1.80)] = 2(0.0359) = 0.0718
 $$
 
 $p = 0.072 > 0.05$이므로 기각하지 못한다는 판정이 확인된다.

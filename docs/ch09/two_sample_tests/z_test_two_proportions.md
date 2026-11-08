@@ -426,7 +426,7 @@ $z_{1-\alpha}$를 누적확률 $1-\alpha$ 의 표준정규 분위수(곧 상위 
 **p-값**:
 
 $$
-p\text{-value} = 2\bigl[1 - \mathcal{N}(|z_{\text{obs}}|)\bigr]
+p\text{-value} = 2\bigl[1 - \Phi(|z_{\text{obs}}|)\bigr]
 $$
 
 ### 좌측검정 (Hₐ: p₁ < p₂)
@@ -436,7 +436,7 @@ $$
 **p-값**:
 
 $$
-p\text{-value} = \mathcal{N}(z_{\text{obs}})
+p\text{-value} = \Phi(z_{\text{obs}})
 $$
 
 ### 우측검정 (Hₐ: p₁ > p₂)
@@ -446,7 +446,7 @@ $$
 **p-값**:
 
 $$
-p\text{-value} = 1 - \mathcal{N}(z_{\text{obs}})
+p\text{-value} = 1 - \Phi(z_{\text{obs}})
 $$
 
 <div class="exbox" markdown>
@@ -488,7 +488,7 @@ $\alpha = 0.05$에서 전환율이 다른지 검정하라.
     **5단계: p-값을 계산한다.**
 
     $$
-    p\text{-value} = 2\bigl[1 - \mathcal{N}(1.582)\bigr] = 2(1 - 0.9431) = 2(0.0569) \approx 0.114
+    p\text{-value} = 2\bigl[1 - \Phi(1.582)\bigr] = 2(1 - 0.9431) = 2(0.0569) \approx 0.114
     $$
 
     **6단계: 판정한다.** $p \approx 0.114 > 0.05 = \alpha$이므로 $H_0$을 기각하지 못한다. 5% 유의수준에서 두 페이지 디자인의 전환율이 다르다고 결론지을 증거가 부족하다.

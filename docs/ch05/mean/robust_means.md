@@ -1126,7 +1126,7 @@ $n = 30$인 Gamma(3, 2) 자료에서 붓스트랩 표준오차를 구하라. 평
 <div class="drillbox" markdown>
 
 **연습문제 13.** <span class="diff med" title="중간"></span>
-$X \sim N(\mu, \sigma^2)$에서 $\text{MAD} = \mathcal{N}^{-1}(3/4) \cdot \sigma \approx 0.6745\sigma$임을 보이고, 따라서 $1.4826 \times \text{MAD}$가 $\sigma$의 일치추정량임을 보여라.
+$X \sim N(\mu, \sigma^2)$에서 $\text{MAD} = \Phi^{-1}(3/4) \cdot \sigma \approx 0.6745\sigma$임을 보이고, 따라서 $1.4826 \times \text{MAD}$가 $\sigma$의 일치추정량임을 보여라.
 
 </div>
 
@@ -1135,9 +1135,9 @@ $X \sim N(\mu, \sigma^2)$에서 $\text{MAD} = \mathcal{N}^{-1}(3/4) \cdot \sigma
 
     $$P(|X - \mu| \leq m) = \frac{1}{2}$$
 
-    즉 $P(-m \leq X - \mu \leq m) = 1/2$이므로 $\mathcal{N}(m/\sigma) - \mathcal{N}(-m/\sigma) = 1/2$, 따라서 $2\mathcal{N}(m/\sigma) - 1 = 1/2$이고 $\mathcal{N}(m/\sigma) = 3/4$이다.
+    즉 $P(-m \leq X - \mu \leq m) = 1/2$이므로 $\Phi(m/\sigma) - \Phi(-m/\sigma) = 1/2$, 따라서 $2\Phi(m/\sigma) - 1 = 1/2$이고 $\Phi(m/\sigma) = 3/4$이다.
 
-    그러므로 $m = \sigma \mathcal{N}^{-1}(3/4) \approx 0.6745\sigma$이다.
+    그러므로 $m = \sigma \Phi^{-1}(3/4) \approx 0.6745\sigma$이다.
 
     (참 중앙값 $\mu$를 쓴) 모집단 MAD는 $0.6745\sigma$와 같다. 표본중앙값의 일치성과 연속사상정리에 의해 표본 MAD는 모집단 MAD로 수렴한다.
 

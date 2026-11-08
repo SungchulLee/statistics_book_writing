@@ -52,7 +52,7 @@ $\text{LogNormal}(0,1)$ 에서는 최빈값이 $0.37$, 중앙값이 $1.00$, 평�
 중심극한정리는 $\bar{X}$가 점근적으로 정규임을 보장하지만, 수렴 속도는 분포의 모양에 달려 있다. Berry-Esseen 정리는 근사오차의 상한을 준다.
 
 $$
-\sup_z \left|P\left(\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \leq z\right) - \mathcal{N}(z)\right| \leq \frac{C \cdot E[|X - \mu|^3]}{\sigma^3 \sqrt{n}}
+\sup_z \left|P\left(\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \leq z\right) - \Phi(z)\right| \leq \frac{C \cdot E[|X - \mu|^3]}{\sigma^3 \sqrt{n}}
 $$
 
 여기서 $C \leq 0.4748$이다. 심하게 치우친 분포에서는 $E[|X - \mu|^3]/\sigma^3$이 크므로 정규근사가 믿을 만해지기까지 더 큰 표본이 필요하다. 흔한 경험칙은 약하게 치우친 자료에는 $n \geq 30$이면 충분하지만 강하게 치우친 분포에서는 $n \geq 100$ 이상이 필요할 수 있다는 것이다.
