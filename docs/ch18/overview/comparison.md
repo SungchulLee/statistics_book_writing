@@ -869,7 +869,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 11.** <span class="diff med" title="중간"></span>
-설계행렬이 $X^\top X = I_p$를 만족한다고 하자(열이 정규직교인 설계). $z = X^\top y$라 쓰면 $z$가 곧 OLS 해다. 이때 목적함수
+설계행렬이 $X^\top X = I_p$를 만족한다고 하자(열이 정규직교인 설계 — 연습문제 1 의 $X^\top X = nI$ 와 **척도가 다르다**는 점을 눈여겨볼 것. 연습문제 5 가 그 차이로 수가 어떻게 틀어지는지 따진다). $z = X^\top y$라 쓰면 $z$가 곧 OLS 해다. 이때 목적함수
 
 $$
 \lVert y - X\beta\rVert^2 + \lambda \lVert \beta\rVert_2^2
@@ -921,7 +921,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 12.** <span class="diff hard" title="어려움"></span>
-$X^\top X = cI_p$($c > 0$)인 설계에서 $y = X\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2 I_n)$이라 하자. 능형추정량의 $E\lVert\hat\beta(\lambda) - \beta\rVert^2$을 $\lambda$의 함수로 적고, **$\lambda = 0$에서 도함수가 항상 음수임**을 보여 OLS 를 이기는 $\lambda$가 반드시 존재함을 증명하라. 최적 $\lambda^\ast$도 구하라. 그리고 그 공식을 연습문제 2 의 $\rho = 0$ 상황($n = 50$, $p = 10$, $\sigma = 1$, $\beta = (3,-2,1.5,0,\ldots,0)$, $\lambda = 1$)에 넣어 표에 적힌 개선 배수 $1.01$을 **이론으로 예측**하라.
+**연습문제 6 을 임의의 척도로 일반화한다.** 그쪽은 $X^\top X = nI$ 에서 보였는데, 그 결과가 $n$ 이라는 특정 값에 매이지 않음을 확인하는 것이 여기 할 일이다. $X^\top X = cI_p$($c > 0$)인 설계에서 $y = X\beta + \varepsilon$, $\varepsilon \sim N(0, \sigma^2 I_n)$이라 하자. 능형추정량의 $E\lVert\hat\beta(\lambda) - \beta\rVert^2$을 $\lambda$의 함수로 적고, **$\lambda = 0$에서 도함수가 항상 음수임**을 보여 OLS 를 이기는 $\lambda$가 반드시 존재함을 증명하라. 최적 $\lambda^\ast$도 구하라. 그리고 그 공식을 연습문제 2 의 $\rho = 0$ 상황($n = 50$, $p = 10$, $\sigma = 1$, $\beta = (3,-2,1.5,0,\ldots,0)$, $\lambda = 1$)에 넣어 표에 적힌 개선 배수 $1.01$을 **이론으로 예측**하라.
 
 </div>
 
@@ -992,7 +992,7 @@ $X^\top X = cI_p$($c > 0$)인 설계에서 $y = X\beta + \varepsilon$, $\varepsi
 <div class="drillbox" markdown>
 
 **연습문제 13.** <span class="diff hard" title="어려움"></span>
-$X^\top X = I_p$, $y = X\beta + \varepsilon$, $\varepsilon \sim N(0,\sigma^2 I_n)$이라 하자. $\beta_j$에 독립인 사전분포를 주었을 때 다음을 보여라.
+**연습문제 10 을 $p$ 차원으로 올려 세 항목으로 정리한다.** 그쪽은 $\lVert x\rVert^2 = n$ 인 $p = 1$ 에서 사후평균이 $0$ 이 아님을 보였다. 여기서는 연습문제 11 의 $z = X^\top y$ 표기를 쓰면 좌표별로 분리되어 셈이 짧아진다. $X^\top X = I_p$, $y = X\beta + \varepsilon$, $\varepsilon \sim N(0,\sigma^2 I_n)$이라 하자. $\beta_j$에 독립인 사전분포를 주었을 때 다음을 보여라.
 
 1. $\beta_j \sim N(0,\tau^2)$이면 사후 **최빈값**이 $\lambda = \sigma^2/\tau^2$인 능형해다.
 2. $\beta_j \sim \text{Laplace}(0,b)$, 즉 밀도 $\frac{1}{2b}e^{-\lvert\beta_j\rvert/b}$이면 사후 최빈값이 $\lambda = 2\sigma^2/b$인 라쏘해다.
