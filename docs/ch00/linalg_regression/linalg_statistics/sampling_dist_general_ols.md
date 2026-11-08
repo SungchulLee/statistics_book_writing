@@ -2,7 +2,7 @@
 
 ## 개요
 
-설명변수 둘을 쓴 회귀에서 두 열의 상관만 $0$ 에서 $0.9$ 로 올리면 $\hat\beta_1$ 의 분산이 $0.02522$ 에서 $0.13294$ 로 다섯 배 넘게 부풀고 두 계수 추정량의 상관이 $-0.9007$ 까지 간다. 그런데 **추정값의 중심은 그대로 참값 $(2,\, -1)$ 에 있다.** 계수들의 추정이 서로 얽히는 이 일은 자료의 잡음에서 오는 것이 아니라 계획행렬의 기하에서 오고, 단순회귀에서 $\sigma^2/S_{xx}$ 라는 수 하나였던 자리에 이제 행렬 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 들어서기 때문이다.
+설명변수 둘을 쓴 회귀에서 두 열의 상관만 $0$ 에서 $0.9$ 로 올리면 $\hat\beta_1$ 의 분산이 $0.02522$ 에서 $0.13294$ 로 다섯 배 넘게 부풀고 두 계수 추정량의 상관이 $-0.9007$ 까지 간다. 그런데 **추정값의 중심은 그대로 참값 $(2,\, -1)$ 에 있다.** 계수들의 추정이 서로 얽히는 이 일은 자료의 잡음에서 오는 것이 아니라 설계행렬의 기하에서 오고, 단순회귀에서 $\sigma^2/S_{xx}$ 라는 수 하나였던 자리에 이제 행렬 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 들어서기 때문이다.
 
 앞 절의 단순회귀 결과는 행렬대수를 이용해 일반적인 다중회귀 모형으로 확장된다. 일반적인 경우에 최소제곱추정량 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$은 다변량 정규벡터이고, 잔차제곱합을 $\sigma^2$으로 나눈 것은 카이제곱을 따르며, 이 둘은 독립이다. 정규성, 카이제곱, 독립성이라는 이 세 사실이 결합되어 개별 계수에 대한 t-통계량과 계수 집합을 검정하는 F-통계량이 나온다. 증명은 이 장에서 앞서 전개한 사영행렬과 이차형식 이론에 기댄다.
 
@@ -19,7 +19,7 @@ $$
 이며, 여기서
 
 - $\mathbf{y} \in \mathbb{R}^n$은 반응벡터다.
-- $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $\operatorname{rank}(\mathbf{X}) = p$인(완전 열계수, $p \leq n$) 고정된 계획행렬이다.
+- $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $\operatorname{rank}(\mathbf{X}) = p$인(완전 열계수, $p \leq n$) 고정된 설계행렬이다.
 - $\boldsymbol{\beta} \in \mathbb{R}^p$는 미지의 모수벡터다.
 - $\boldsymbol{\varepsilon} \sim N(\mathbf{0}, \sigma^2\mathbf{I}_n)$: 오차는 평균 0, 공통 분산 $\sigma^2$을 갖는 독립 동일분포 정규확률변수다.
 
@@ -27,7 +27,7 @@ $$
 
 !!! warning "$p$를 세는 방법"
 
-    이 장에서 $p$는 [A.1절 선형대수 표기](../../math/linear_algebra.md)에 적은 대로 **절편 열을 포함한 $\mathbf{X}$의 열의 개수**다. 절편이 있는 모형이면 설명변수는 $p-1$개이고 계수는 $\beta_0, \beta_1, \dots, \beta_{p-1}$로 적는다. 그래서 $\operatorname{tr}(\mathbf{H}) = p$, 잔차 자유도 $n - p$, $s^2 = \text{SSE}/(n-p)$가 된다. **12장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해** 계획행렬을 $n \times (p+1)$로 쓰므로 그쪽의 자유도가 $n - p - 1$로 적힌다. 두 표기의 $p$가 $1$만큼 어긋나는 것일 뿐이고 자유도 자체는 같다.
+    이 장에서 $p$는 [A.1절 선형대수 표기](../../math/linear_algebra.md)에 적은 대로 **절편 열을 포함한 $\mathbf{X}$의 열의 개수**다. 절편이 있는 모형이면 설명변수는 $p-1$개이고 계수는 $\beta_0, \beta_1, \dots, \beta_{p-1}$로 적는다. 그래서 $\operatorname{tr}(\mathbf{H}) = p$, 잔차 자유도 $n - p$, $s^2 = \text{SSE}/(n-p)$가 된다. **12장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해** 설계행렬을 $n \times (p+1)$로 쓰므로 그쪽의 자유도가 $n - p - 1$로 적힌다. 두 표기의 $p$가 $1$만큼 어긋나는 것일 뿐이고 자유도 자체는 같다.
 
 ---
 
@@ -88,9 +88,9 @@ $$
 
 ## 4. 그림으로 보는 공분산 구조
 
-![왼쪽과 가운데는 계획행렬의 두 열이 직교할 때와 상관 0.9일 때 두 계수 추정값이 흩어지는 모양과 이론 95% 타원, 오른쪽은 열의 상관이 커질수록 계수의 분산이 부푸는 곡선](./img/beta_covariance_ellipse.png)
+![왼쪽과 가운데는 설계행렬의 두 열이 직교할 때와 상관 0.9일 때 두 계수 추정값이 흩어지는 모양과 이론 95% 타원, 오른쪽은 열의 상관이 커질수록 계수의 분산이 부푸는 곡선](./img/beta_covariance_ellipse.png)
 
-단순회귀에서 기울기의 분산은 $\sigma^2/S_{xx}$라는 숫자 하나였다. 다중회귀에서 그 자리에 들어오는 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$은 행렬이고, 대각 성분 바깥에 있는 비대각 성분은 단순회귀에 없던 이야기를 한다. **계수들의 추정이 서로 얽히며, 그 얽힘은 자료의 잡음이 아니라 계획행렬의 기하에서 나온다.** 그림은 그 대응을 가능한 한 깨끗한 설정에서 보인다. $n = 40$, 절편과 설명변수 둘. 두 설명변수 열을 절편 열에 직교시키고 길이를 같게 맞춘 뒤 둘 사이의 상관 $\rho$만 조절하면, $\mathbf{X}^\top\mathbf{X}$의 해당 $2 \times 2$ 블록은 대각 성분이 $n$이고 비대각 성분이 $n\rho$인 행렬이 되어
+단순회귀에서 기울기의 분산은 $\sigma^2/S_{xx}$라는 숫자 하나였다. 다중회귀에서 그 자리에 들어오는 $\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}$은 행렬이고, 대각 성분 바깥에 있는 비대각 성분은 단순회귀에 없던 이야기를 한다. **계수들의 추정이 서로 얽히며, 그 얽힘은 자료의 잡음이 아니라 설계행렬의 기하에서 나온다.** 그림은 그 대응을 가능한 한 깨끗한 설정에서 보인다. $n = 40$, 절편과 설명변수 둘. 두 설명변수 열을 절편 열에 직교시키고 길이를 같게 맞춘 뒤 둘 사이의 상관 $\rho$만 조절하면, $\mathbf{X}^\top\mathbf{X}$의 해당 $2 \times 2$ 블록은 대각 성분이 $n$이고 비대각 성분이 $n\rho$인 행렬이 되어
 
 $$
 \operatorname{Var}(\hat{\beta}_1) = \frac{\sigma^2}{n(1 - \rho^2)}, \qquad \operatorname{Corr}(\hat{\beta}_1, \hat{\beta}_2) = -\rho
@@ -457,7 +457,7 @@ $\mathbf{M} = \mathbf{I} - \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^
 
     이다. 여기서 $\text{SSE}_R$은 $X_2$와 $X_3$을 제외한(절편과 $X_1$만 적합한) 제약 모형의 잔차제곱합이고, $\text{SSE}_U$는 네 모수를 모두 갖는 완전(제약 없는) 모형의 잔차제곱합이다. F-통계량은 $X_2$와 $X_3$을 포함해서 줄어든 SSE가 잡음 수준 $s^2 = \text{SSE}_U/(n-4)$에 비해 충분히 큰지를 잰다.
 
-    **정리 5의 꼴과 같다.** 두 계획행렬을 $\mathbf{X}_R$, $\mathbf{X}_U$라 하고 각각의 모자 행렬을 $\mathbf{H}_R$, $\mathbf{H}_U$라 하면 $\operatorname{col}(\mathbf{X}_R) \subseteq \operatorname{col}(\mathbf{X}_U)$이므로 [직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽 연습문제 5에 의해 $\mathbf{H}_U - \mathbf{H}_R$이 계수 $q = 2$인 직교사영이고 $(\mathbf{H}_U - \mathbf{H}_R)(\mathbf{I} - \mathbf{H}_U) = \mathbf{O}$이다. 그런데
+    **정리 5의 꼴과 같다.** 두 설계행렬을 $\mathbf{X}_R$, $\mathbf{X}_U$라 하고 각각의 모자 행렬을 $\mathbf{H}_R$, $\mathbf{H}_U$라 하면 $\operatorname{col}(\mathbf{X}_R) \subseteq \operatorname{col}(\mathbf{X}_U)$이므로 [직교사영행렬](../square_matrices/orthogonal_projection.md) 쪽 연습문제 5에 의해 $\mathbf{H}_U - \mathbf{H}_R$이 계수 $q = 2$인 직교사영이고 $(\mathbf{H}_U - \mathbf{H}_R)(\mathbf{I} - \mathbf{H}_U) = \mathbf{O}$이다. 그런데
 
     $$
     \text{SSE}_R - \text{SSE}_U = \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_R)\mathbf{y} - \mathbf{y}^\top(\mathbf{I} - \mathbf{H}_U)\mathbf{y} = \mathbf{y}^\top(\mathbf{H}_U - \mathbf{H}_R)\mathbf{y}

@@ -112,7 +112,7 @@ def fig_r2_inflation():
     lim = 26
     ax.plot([-lim, lim], [-lim, lim], color=MUTED, lw=1.6, ls="--")
     ax.scatter(f_te, y_te, s=30, color=RED, alpha=0.8, edgecolor="none",
-               label="검정자료")
+               label="시험자료")
     ax.scatter(f_tr, y_tr, s=30, color=BLUE, alpha=0.9, edgecolor="none",
                label="훈련자료")
     ax.set_xlabel(r"예측값 $\hat y$", fontsize=10.5, color=INK)

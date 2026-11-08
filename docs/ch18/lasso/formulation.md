@@ -137,7 +137,7 @@ $4000\times 4000$ 설계행렬(float32)을 $4000\times 64$ 행렬에 곱하는 �
 </div>
 
 ??? success "풀이"
-    $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$가 되도록 QR 분해로 직교 계획행렬을 만든다.
+    $\mathbf{X}^\top\mathbf{X} = n\mathbf{I}$가 되도록 QR 분해로 직교 설계행렬을 만든다.
 
     ```python
     import numpy as np
@@ -583,7 +583,7 @@ $\lVert\boldsymbol\beta\rVert_1$은 설명변수의 **단위**에 의존한다. 
     | 라쏘, 밀리미터 | 0.1719 | 178.2026 |
     | 표준화 뒤 라쏘 (어느 단위든) | 0.0739 | — |
 
-    - **OLS 는 완전히 불변이다.** 두 계획행렬의 열공간이 같으므로 사영도 같고 적합값도 같다. 단위를 바꾸면 계수만 $1/c$배로 되읽히고 환산하면 소수 넷째 자리까지 똑같다. 잔차제곱합도 $173.1333$으로 같다.
+    - **OLS 는 완전히 불변이다.** 두 설계행렬의 열공간이 같으므로 사영도 같고 적합값도 같다. 단위를 바꾸면 계수만 $1/c$배로 되읽히고 환산하면 소수 넷째 자리까지 똑같다. 잔차제곱합도 $173.1333$으로 같다.
     - **라쏘는 바뀐다.** 3 번 변수를 밀리미터로 재면 그 변수의 유효 벌점이 $1000$분의 1 로 약해져 $\beta_3$가 거의 축소되지 않는다($0.1719$는 OLS 값 $0.1725$에 사실상 붙어 있다). 미터로 재면 같은 변수가 $0.1725 \to 0.0759$로 $56\%$ 깎인다. **자료도 모형도 그대로인데 단위만 바꿔 결론이 달라진 것이다.**
     - 벌점을 덜 받은 쪽이 훈련 잔차제곱합도 작다($178.2026 < 180.0393$). 그러나 이것은 그 모형이 더 좋다는 뜻이 아니라 **정칙화가 덜 걸렸다**는 뜻일 뿐이다.
     - **표준화하면 두 단위가 소수 넷째 자리까지 같은 해를 준다.** 각 열을 자기 표준편차로 나누면 단위가 지워지므로 당연하다.
@@ -680,7 +680,7 @@ $n = 1$, $p = 2$, $\mathbf{X} = \begin{pmatrix} 2 & 1\end{pmatrix}$, $\mathbf{y}
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
 §6 의 표에 있는 세 축소 규칙 — 능형의 비례 축소, 라쏘의 연성 임계화, 최량 부분집합의 경성 임계화 — 가운데 **어느 것이 이기는지는 참값의 모양에 달려 있다.** 직교 설계에서 이를 수로 보여라.
 
-직교 설계에서는 $\hat{\boldsymbol\beta}^{\text{OLS}} \sim N(\boldsymbol\beta,\ \tau^2\mathbf{I})$, $\tau = \sigma/\sqrt{n}$이므로 계획행렬 없이 $\hat{\boldsymbol\beta}^{\text{OLS}}$를 바로 뽑아 세 규칙을 닫힌 꼴로 적용할 수 있다. $p = 5$, $\tau = 1$로 두고 신호의 총량 $\lVert\boldsymbol\beta\rVert^2 = 25$를 고정한 채 두 참값을 비교하라.
+직교 설계에서는 $\hat{\boldsymbol\beta}^{\text{OLS}} \sim N(\boldsymbol\beta,\ \tau^2\mathbf{I})$, $\tau = \sigma/\sqrt{n}$이므로 설계행렬 없이 $\hat{\boldsymbol\beta}^{\text{OLS}}$를 바로 뽑아 세 규칙을 닫힌 꼴로 적용할 수 있다. $p = 5$, $\tau = 1$로 두고 신호의 총량 $\lVert\boldsymbol\beta\rVert^2 = 25$를 고정한 채 두 참값을 비교하라.
 
 - 희소: $\boldsymbol\beta = (5, 0, 0, 0, 0)$
 - 조밀: $\boldsymbol\beta = (\sqrt5, \sqrt5, \sqrt5, \sqrt5, \sqrt5)$
@@ -690,7 +690,7 @@ $n = 1$, $p = 2$, $\mathbf{X} = \begin{pmatrix} 2 & 1\end{pmatrix}$, $\mathbf{y}
 </div>
 
 ??? success "풀이"
-    세 규칙이 $\hat{\boldsymbol\beta}^{\text{OLS}}$의 함수로 닫혀 있으므로 계획행렬을 만들 필요가 없다. 20,000 번 반복한다.
+    세 규칙이 $\hat{\boldsymbol\beta}^{\text{OLS}}$의 함수로 닫혀 있으므로 설계행렬을 만들 필요가 없다. 20,000 번 반복한다.
 
     ```python
     import numpy as np

@@ -71,7 +71,7 @@ $\alpha\times\beta$ 에서 곱셈 십자는 가운데 높이에 떠 있으니, �
 $13$ 번의 문장은 백사십 년 전의 것이지만 뜻은 지금과 사실상 같다. 바뀐 것은 이름과
 글자와 점의 높이뿐이고, 이 책은 거기서 한 걸음 더 가 가운뎃점마저 버리고
 $\mathbf{x}^\top\mathbf{y}$ 로 적는다 — 내적을 행렬 곱의 한 경우로 보아야 정의 3 의
-계획행렬부터 $\mathbf{X}^\top\mathbf{X}$ 까지가 한 기호로 이어지기 때문이다.
+설계행렬부터 $\mathbf{X}^\top\mathbf{X}$ 까지가 한 기호로 이어지기 때문이다.
 **수학이 굳는 일과 기호가 굳는 일은 같은 속도로 일어나지 않는다.**
 
 _확인한 곳 — 머리글의 쪽 번호 $5$, 절 제목 「Direct and Skew Products of Vectors」, $13$ 번의 정의 문장, $14$ 번의 skew product, $15$ 번의 $\alpha.\beta=\beta.\alpha$, $17$ 번의 $i.i=j.j=k.k=1$ 과 $i.j=j.i=\dots=0$, 그리고 **점이 기준선에 앉아 있고 $\times$ 는 가운데 높이에 떠 있다**는 것은 모두 위 사진에서 직접 읽었다(낱자를 네 배로 키워 확인했다) · 스캔은 [Internet Archive: elementsvectora00gibbgoog](https://archive.org/details/elementsvectora00gibbgoog) · $1881$ 년과 $1884$ 년에 학생을 위해 사쇄했다는 것, 새로울 것이 없다고 여겨 출판을 꺼렸다는 것, 제자 윌슨이 이를 바탕으로 $1901$ 년 『Vector Analysis』를 냈다는 것은 [ProofWiki 「Elements of Vector Analysis — Historical Note」](https://proofwiki.org/wiki/Book:J._Willard_Gibbs/Elements_of_Vector_Analysis/Historical_Note) · 소책자가 그라스만과 클리퍼드를 밝힌다는 것과 $1888$ 년 헤비사이드의 평(「처음 배우는 사람에게는 너무 압축되어 있다」)은 [Wikipedia 「Vector Analysis」](https://en.wikipedia.org/wiki/Vector_Analysis) · 어느 쪽이 $1881$ 년에 찍히고 어느 쪽이 $1884$ 년에 찍혔는지는 확인하지 못해 적지 않았다_
@@ -80,11 +80,11 @@ _확인한 곳 — 머리글의 쪽 번호 $5$, 절 제목 「Direct and Skew Pr
 
 <div class="defn" markdown>
 
-### 정의 3. 계획행렬 { .dfn }
+### 정의 3. 설계행렬 { .dfn }
 
-**계획행렬(design matrix)** $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $n$개의 관측을 행 방향으로 쌓은 것이다. $i$번째 행에는 관측 $i$의 설명변수 값이 들어 있다. $\mathbf{X}$의 열공간은 $p$개 열의 모든 선형결합으로 이루어진 집합, 즉 최소제곱으로 도달할 수 있는 적합값의 공간이다.
+**설계행렬(design matrix)** $\mathbf{X} \in \mathbb{R}^{n \times p}$는 $n$개의 관측을 행 방향으로 쌓은 것이다. $i$번째 행에는 관측 $i$의 설명변수 값이 들어 있다. $\mathbf{X}$의 열공간은 $p$개 열의 모든 선형결합으로 이루어진 집합, 즉 최소제곱으로 도달할 수 있는 적합값의 공간이다.
 
-**$p$의 셈법을 분명히 해 두자.** 이 책의 부록 A에서 $p$는 **절편 열을 포함한 열의 개수**다. 절편이 있는 모형이면 첫 열이 $\mathbf{1} = (1, \ldots, 1)^\top$이고 나머지 $p-1$개가 설명변수다. 그래서 뒤에 나오는 $\operatorname{tr}(\mathbf{H}) = p$와 잔차 자유도 $n - p$가 그대로 성립한다. 12장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해 계획행렬을 $n \times (p+1)$로 쓰므로, 그쪽의 $p$와 여기의 $p$가 $1$만큼 어긋난다는 점에 주의하라.
+**$p$의 셈법을 분명히 해 두자.** 이 책의 부록 A에서 $p$는 **절편 열을 포함한 열의 개수**다. 절편이 있는 모형이면 첫 열이 $\mathbf{1} = (1, \ldots, 1)^\top$이고 나머지 $p-1$개가 설명변수다. 그래서 뒤에 나오는 $\operatorname{tr}(\mathbf{H}) = p$와 잔차 자유도 $n - p$가 그대로 성립한다. 12장에서는 설명변수의 개수를 $p$로 세고 절편을 따로 더해 설계행렬을 $n \times (p+1)$로 쓰므로, 그쪽의 $p$와 여기의 $p$가 $1$만큼 어긋난다는 점에 주의하라.
 
 </div>
 
@@ -353,7 +353,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 1.** <span class="diff easy" title="쉬움"></span>
-다음 계획행렬에 대해
+다음 설계행렬에 대해
 
 $$
 \mathbf{X} = \begin{pmatrix} 1 & 2 \\ 1 & 4 \\ 1 & 6 \end{pmatrix}, \qquad \mathbf{y} = \begin{pmatrix} 5 \\ 9 \\ 13 \end{pmatrix}
@@ -485,7 +485,7 @@ $\mathbf{X}^\top \mathbf{X}$가 특이행렬이면(즉 $\mathbf{X}$가 완전 �
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff med" title="중간"></span>
-계획행렬
+설계행렬
 
 $$
 \mathbf{X} = \begin{pmatrix} 1 & 2 & 3 \\ 1 & 3 & 4 \\ 1 & 4 & 5 \\ 1 & 5 & 6 \end{pmatrix}
@@ -739,7 +739,7 @@ $$
 
 이 절은 관측 $n$ 개와 예측변수 $p$ 개를 **하나의 식**으로 적는 표기를 세웠다.
 
-- **계획행렬 $\mathbf{X}$.** 행이 관측, 열이 예측변수다. $\operatorname{col}(\mathbf{X})$ 가 최소제곱으로 도달할 수 있는 적합값 전체이며, 회귀란 $\mathbf{y}$ 를 이 공간으로 사영하는 일이다.
+- **설계행렬 $\mathbf{X}$.** 행이 관측, 열이 예측변수다. $\operatorname{col}(\mathbf{X})$ 가 최소제곱으로 도달할 수 있는 적합값 전체이며, 회귀란 $\mathbf{y}$ 를 이 공간으로 사영하는 일이다.
 - **네 가지 기본 부분공간과 계수–퇴화차수 정리.** 자유도가 어디서 오는지를 세는 장치다. 잔차가 $p$ 개의 제약을 받아 자유도가 $n-p$ 로 줄어든다는 사실이 여기서 나온다.
 - **스펙트럼 정리.** 대칭행렬은 $\mathbf{Q}\boldsymbol\Lambda\mathbf{Q}^\top$ 로 분해된다. 공분산행렬, $\mathbf{X}^\top\mathbf{X}$, 모자 행렬이 모두 대칭이므로 이 정리가 주성분분석·다변량 정규·이차형식의 카이제곱분포를 한꺼번에 떠받친다.
 - **양(반)정치성.** 공분산행렬은 언제나 $\succeq 0$ 이고, $\succ 0$ 인 것이 곧 $(\mathbf{X}^\top\mathbf{X})^{-1}$ 이 존재해 최소제곱해가 유일해지는 조건이다.

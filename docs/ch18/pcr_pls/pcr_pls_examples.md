@@ -567,7 +567,7 @@ JSTOR 스캔본으로 읽었다 — 요약의 차례 문장(「연구한 모든 
 
 <div class="drillbox" markdown>
 
-**연습문제 4.** <span class="diff med" title="중간"></span> scikit-learn의 PCA를 쓰지 않고, 중심화·척도화한 계획행렬의 SVD를 이용해 PCR을
+**연습문제 4.** <span class="diff med" title="중간"></span> scikit-learn의 PCA를 쓰지 않고, 중심화·척도화한 설계행렬의 SVD를 이용해 PCR을
 직접 구현하라. 작은 시험자료에서 구현 결과가 scikit-learn과 일치함을 확인하라.
 
 </div>

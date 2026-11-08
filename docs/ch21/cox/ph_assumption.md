@@ -143,7 +143,7 @@ from scipy.optimize import minimize
 H0, B0, G0, TAU = 0.25, 0.50, -0.05, 8.0    # 기저위험 0.25, beta(t) = 0.50 - 0.05 t
 
 def make(n, rng):
-    """처치군의 위험이 시간에 따라 조금씩 식는 자료."""
+    """처리군의 위험이 시간에 따라 조금씩 식는 자료."""
     g = rng.integers(0, 2, n)
     E = rng.exponential(1.0, n)
     arg = 1 + G0 * E / (H0 * np.exp(B0))

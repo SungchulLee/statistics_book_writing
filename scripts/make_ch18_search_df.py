@@ -37,7 +37,7 @@ K_TRUE = 3
 
 
 def design(rng, n=N, p=P, rho=0.3):
-    """고정된 계획행렬. 열끼리 약하게 상관시킨다."""
+    """고정된 설계행렬. 열끼리 약하게 상관시킨다."""
     A = rng.normal(size=(n, p))
     C = rng.normal(size=(n, 1))
     X = np.sqrt(1 - rho) * A + np.sqrt(rho) * C

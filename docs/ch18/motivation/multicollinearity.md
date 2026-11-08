@@ -8,7 +8,7 @@
 
 ## 1. 다중공선성이란
 
-다중공선성은 한 설명변수가 다른 변수들의 선형결합으로 근사 표현될 때 존재한다. 계획행렬 $\mathbf{X}$의 열이 $\mathbf{x}_1, \ldots, \mathbf{x}_p$일 때, 모두 0은 아닌 상수 $c_1, \ldots, c_p$가 존재하여
+다중공선성은 한 설명변수가 다른 변수들의 선형결합으로 근사 표현될 때 존재한다. 설계행렬 $\mathbf{X}$의 열이 $\mathbf{x}_1, \ldots, \mathbf{x}_p$일 때, 모두 0은 아닌 상수 $c_1, \ldots, c_p$가 존재하여
 
 $$
 c_1\mathbf{x}_1 + c_2\mathbf{x}_2 + \cdots + c_p\mathbf{x}_p \approx \mathbf{0}

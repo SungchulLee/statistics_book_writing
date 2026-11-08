@@ -97,7 +97,7 @@ $$
     from statsmodels.formula.api import ols
     from statsmodels.stats.anova import anova_lm
 
-    # R 의 PlantGrowth 자료. 대조군과 처리군 둘, 모두 세 집단이다.
+    # R 의 PlantGrowth 자료. 대조군과 처치군 둘, 모두 세 집단이다.
     url = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/1dcc2bf5f955cc1224a3e1307256e1fe86b68dae/csv/datasets/PlantGrowth.csv'
     df = pd.read_csv(url, usecols=[1, 2])
 

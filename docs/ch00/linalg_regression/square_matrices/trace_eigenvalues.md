@@ -242,7 +242,7 @@ $$
 
 ### 모자 행렬과 유효 모수 개수
 
-계획행렬 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수($\operatorname{rank}(\mathbf{X}) = p$)라고 하자. 그러면 $\mathbf{X}^\top\mathbf{X}$가 가역이고 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 정의되어 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 된다. $\mathbf{H}$는 대칭이고 멱등이므로($\mathbf{H}^2 = \mathbf{H}$) 고윳값이 0 아니면 1이다. 대각합은
+설계행렬 $\mathbf{X} \in \mathbb{R}^{n \times p}$가 완전 열계수($\operatorname{rank}(\mathbf{X}) = p$)라고 하자. 그러면 $\mathbf{X}^\top\mathbf{X}$가 가역이고 모자 행렬 $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$가 정의되어 $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$가 된다. $\mathbf{H}$는 대칭이고 멱등이므로($\mathbf{H}^2 = \mathbf{H}$) 고윳값이 0 아니면 1이다. 대각합은
 
 $$
 \operatorname{tr}(\mathbf{H}) = (\text{고윳값이 } 1 \text{인 것의 개수}) = \operatorname{rank}(\mathbf{X}) = p

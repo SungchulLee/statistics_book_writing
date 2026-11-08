@@ -28,7 +28,7 @@ RNG = np.random.default_rng(0)
 
 
 def design(kappa, rng):
-    """조건수가 정확히 kappa 인 m x n 계획행렬."""
+    """조건수가 정확히 kappa 인 m x n 설계행렬."""
     q1 = np.linalg.qr(rng.standard_normal((M, N)))[0]
     q2 = np.linalg.qr(rng.standard_normal((N, N)))[0]
     s = np.logspace(0, -np.log10(kappa), N)
@@ -64,7 +64,7 @@ def loss(q):
 
 
 print(f"단위 반올림 u = {U_EPS:.3e}  (배정밀도)")
-print(f"\n①② 계획행렬 {M} x {N}")
+print(f"\n①② 설계행렬 {M} x {N}")
 print(f"{'kappa(X)':>11}{'고전 GS':>12}{'수정 GS':>12}{'하우스홀더':>12}"
       f"{'kappa(X\'X)':>13}{'/ kappa^2':>11}")
 L_C, L_M, L_H, K_G = [], [], [], []

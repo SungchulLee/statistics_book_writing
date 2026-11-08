@@ -414,7 +414,7 @@ def fig_cost_threshold():
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 205)
     ax.set_xlabel(r"절단값 $\tau$", color=INK, fontsize=10)
-    ax.set_ylabel("검정자료 1,000건의 총비용 (천 달러)", color=INK,
+    ax.set_ylabel("시험자료 1,000건의 총비용 (천 달러)", color=INK,
                   fontsize=10)
     ax.set_title("비용곡선의 바닥은 $t^*=C_{FP}/(C_{FP}+C_{FN})$",
                  color=INK, fontsize=11)
@@ -431,7 +431,7 @@ def fig_cost_threshold():
     ax.plot(ratios, tstar, color=BLUE, lw=2.4,
             label=r"이론값 $t^*=1/(1+C_{FN}/C_{FP})$")
     ax.plot(ratios, emp, color=ORANGE, lw=1.6, alpha=0.85,
-            label="검정자료에서 실제로 비용이 최소인 절단값")
+            label="시험자료에서 실제로 비용이 최소인 절단값")
     ax.axhline(0.5, color=MUTED, lw=1.0, ls=":")
     ax.plot([20], [1 / 21], "o", color=RED, ms=8)
     ax.annotate(r"$C_{FN}/C_{FP}=20$ 이면 $t^*=0.048$",

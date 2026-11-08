@@ -120,7 +120,7 @@ train = np.array([1.000, 0.967, 0.917, 0.817, 0.550])
 test = np.array([0.730, 0.780, 0.780, 0.740, 0.510])
 maxp = np.array([0.989, 0.834, 0.656, 0.437, 0.369])
 best = test.max()
-se = np.sqrt(best * (1 - best) / 100)          # 검정자료 100개의 표준오차
+se = np.sqrt(best * (1 - best) / 100)          # 시험자료 100개의 표준오차
 C = 3
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.2, 4.7))

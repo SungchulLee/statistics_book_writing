@@ -594,7 +594,7 @@ nav:
             - 장 개요: ch18/index.md
             - 18.1 정칙화의 동기:
                 - 과적합과 편향–분산 절충: ch18/motivation/overfitting.md
-                - 조건이 나쁜 계획행렬: ch18/motivation/ill_conditioning.md
+                - 조건이 나쁜 설계행렬: ch18/motivation/ill_conditioning.md
                 - 다중공선성과 정칙화: ch18/motivation/multicollinearity.md
             - 18.2 능형회귀:
                 - 능형 정식화와 닫힌 형태의 해: ch18/ridge/formulation.md

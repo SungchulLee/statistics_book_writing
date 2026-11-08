@@ -384,7 +384,7 @@ California Housing 자료를 사용하라.
 <div class="drillbox" markdown>
 
 **연습문제 5.** <span class="diff hard" title="어려움"></span>
-5 절 1단계와 6 절 셋째 함정("표준화를 잊기")을 직교설계에서 끝까지 계산하자. 표준화된 두 열 $\tilde{\mathbf{x}}_1, \tilde{\mathbf{x}}_2$가 서로 직교하고 $\tilde{\mathbf{x}}_j^\top\tilde{\mathbf{x}}_j = n$이며 $\mathbf{y}$는 중심화되어 있다. $c_j = \tilde{\mathbf{x}}_j^\top\mathbf{y}/n$이라 두고 $c_1 = 0.30$, $c_2 = 0.28$을 쓴다. 실제로 쓰는 계획행렬의 열은 단위 선택에 따라 $\mathbf{x}_j = s_j\tilde{\mathbf{x}}_j$ $(s_j > 0)$이다. 라쏘는 이 책의 규약 $\frac{1}{2n}\lVert\mathbf{y} - \mathbf{X}\mathbf{b}\rVert^2 + \lambda\lVert\mathbf{b}\rVert_1$을 쓰고 $\lambda = 0.25$다.
+5 절 1단계와 6 절 셋째 함정("표준화를 잊기")을 직교설계에서 끝까지 계산하자. 표준화된 두 열 $\tilde{\mathbf{x}}_1, \tilde{\mathbf{x}}_2$가 서로 직교하고 $\tilde{\mathbf{x}}_j^\top\tilde{\mathbf{x}}_j = n$이며 $\mathbf{y}$는 중심화되어 있다. $c_j = \tilde{\mathbf{x}}_j^\top\mathbf{y}/n$이라 두고 $c_1 = 0.30$, $c_2 = 0.28$을 쓴다. 실제로 쓰는 설계행렬의 열은 단위 선택에 따라 $\mathbf{x}_j = s_j\tilde{\mathbf{x}}_j$ $(s_j > 0)$이다. 라쏘는 이 책의 규약 $\frac{1}{2n}\lVert\mathbf{y} - \mathbf{X}\mathbf{b}\rVert^2 + \lambda\lVert\mathbf{b}\rVert_1$을 쓰고 $\lambda = 0.25$다.
 
 **(가)** $\hat{b}_j$를 $s_j$, $c_j$, $\lambda$의 닫힌 꼴로 구하고 선택 조건을 적어라.
 
@@ -636,7 +636,7 @@ $$
 
     두 행의 차이가 이 장의 요지를 그대로 보여준다. **참 계수가 똑같은데도 쓸모없는 변수 열일곱 개를 더 넣으면 능형의 이득이 $20\%$에서 $62.5\%$로 커진다.** 벌점이 하는 일이 "추정할 필요가 없던 모수 열일곱 개"의 분산을 깎는 것이기 때문이다. $\lambda^\ast = p\sigma^2/B$가 $p$에 비례하는 것이 같은 말이다.
 
-    **(라)** $\mathbf{X}^\top\mathbf{X} = \mathbf{I}$인 계획행렬을 QR로 만들고 $\hat{\boldsymbol{\beta}}_{\text{OLS}} = \mathbf{X}^\top\mathbf{y} = \boldsymbol{\beta} + \mathbf{X}^\top\boldsymbol{\varepsilon}$을 $20000$번 뽑는다.
+    **(라)** $\mathbf{X}^\top\mathbf{X} = \mathbf{I}$인 설계행렬을 QR로 만들고 $\hat{\boldsymbol{\beta}}_{\text{OLS}} = \mathbf{X}^\top\mathbf{y} = \boldsymbol{\beta} + \mathbf{X}^\top\boldsymbol{\varepsilon}$을 $20000$번 뽑는다.
 
     ```python
     import numpy as np

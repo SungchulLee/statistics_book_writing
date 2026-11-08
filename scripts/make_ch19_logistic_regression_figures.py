@@ -288,9 +288,9 @@ def fig_lab():
     jit = rng.uniform(-0.035, 0.035, len(y_te))
     xt = X_te.ravel()
     ax.plot(xt[y_te == 0], y_te[y_te == 0] + jit[y_te == 0], "o",
-            color=ORANGE, ms=4.5, alpha=0.65, label="불합격 (검정자료)")
+            color=ORANGE, ms=4.5, alpha=0.65, label="불합격 (시험자료)")
     ax.plot(xt[y_te == 1], y_te[y_te == 1] + jit[y_te == 1], "o",
-            color=GREEN, ms=4.5, alpha=0.65, label="합격 (검정자료)")
+            color=GREEN, ms=4.5, alpha=0.65, label="합격 (시험자료)")
 
     grid = np.linspace(0, 11, 400)
     ax.plot(grid, sigmoid(b0 + b1 * grid), color=BLUE, lw=2.4,

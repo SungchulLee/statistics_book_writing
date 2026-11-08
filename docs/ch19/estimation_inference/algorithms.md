@@ -40,7 +40,7 @@ $$
 = \mathbf{X}^\top(\mathbf{y} - \hat{\mathbf{p}})
 $$
 
-이다. 여기서 $\mathbf{X}$는 $n \times p$ 계획행렬이고
+이다. 여기서 $\mathbf{X}$는 $n \times p$ 설계행렬이고
 $\hat{\mathbf{p}} = (\hat{p}_1, \ldots, \hat{p}_n)^\top$이다. 점수를 0으로 놓으면 $p$개의 비선형
 방정식계를 얻는다. $\hat{\mathbf{p}}$가 시그모이드를 통해 $\boldsymbol{\theta}$에 의존하므로
 닫힌 형태의 해가 없다.

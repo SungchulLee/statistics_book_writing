@@ -171,7 +171,7 @@ $$
 \operatorname{logit}\bigl(P(Y=1\mid\mathbf{x})\bigr) = \mathbf{x}^\top\boldsymbol{\theta}
 $$
 
-동등하게, 특성벡터가 $A[i,:]$(절편을 위한 선행 1을 포함한 계획행렬의 행)인 $i$번째 관측치에
+동등하게, 특성벡터가 $A[i,:]$(절편을 위한 선행 1을 포함한 설계행렬의 행)인 $i$번째 관측치에
 대해
 
 $$

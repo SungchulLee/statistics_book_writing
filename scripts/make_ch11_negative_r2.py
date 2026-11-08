@@ -5,7 +5,7 @@ $R^2 = 1 - \mathrm{SS}_{\text{res}}/\mathrm{SS}_{\text{tot}}$ 에서 분모는 *
 된다. 훈련자료에 절편을 넣고 적합하면 그런 일이 생길 수 없어서 $[0, 1]$ 안의 수로
 오해하기 쉽지만, 두 자리에서 쉽게 깨진다.
 
-  ① 검정자료 — 훈련 범위 **밖**에서 재면 외삽 오차가 분모를 넘어선다
+  ① 시험자료 — 훈련 범위 **밖**에서 재면 외삽 오차가 분모를 넘어선다
   ② 절편을 빼고 적합하면 — `fit_intercept=False` 는 훈련자료에서도 음수를 만든다
 
 이 스크립트가 재는 값(씨앗 고정):
@@ -77,7 +77,7 @@ def main():
 
     # 한글은 고정폭에서 두 칸을 차지하므로 자리맞춤은 공백을 직접 적는다
     print(f"① 훈련 R^2 {r2_train:7.3f}   범위 밖 검정 R^2 {r2_test:8.3f}")
-    print(f"   검정자료의 평균만으로 맞췄을 때의 오차합 "
+    print(f"   시험자료의 평균만으로 맞췄을 때의 오차합 "
           f"{((yt - yt.mean()) ** 2).sum():8.2f}")
     print(f"   모형으로 맞췄을 때의 오차합              "
           f"{((yt - model.predict(xt[:, None])) ** 2).sum():8.2f}")
@@ -90,11 +90,11 @@ def main():
     ax = axes[0]
     grid = np.linspace(0, 14.5, 100)
     ax.plot(x, y, "o", ms=7, color=BLUE, alpha=0.75, label="훈련자료")
-    ax.plot(xt, yt, "s", ms=8, color=RED, alpha=0.85, label="검정자료 (범위 밖)")
+    ax.plot(xt, yt, "s", ms=8, color=RED, alpha=0.85, label="시험자료 (범위 밖)")
     ax.plot(grid, model.predict(grid[:, None]), lw=2.6, color=INK,
             label="적합한 직선")
     ax.axhline(yt.mean(), color=RED, lw=1.8, ls="--")
-    ax.text(6.0, yt.mean() + 1.2, "검정자료의 평균만으로 맞춘 선", ha="center",
+    ax.text(6.0, yt.mean() + 1.2, "시험자료의 평균만으로 맞춘 선", ha="center",
             fontsize=10.6, color=RED)
     ax.axvspan(10, 14.5, color=RED, alpha=0.07)
     ax.text(12.2, 6.5, "훈련자료가\n없던 구간", ha="center", fontsize=10.8,

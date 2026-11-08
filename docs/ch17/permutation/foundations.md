@@ -517,7 +517,7 @@ $\ge$와 $>$의 차이도 이 그림에서 직접 보인다. **$\pm 5.40$ 자리
 
     ```python
     from scipy import stats
-    # 처리군의 전환 수는 Hypergeometric(N, K, n) 을 따른다
+    # 처치군의 전환 수는 Hypergeometric(N, K, n) 을 따른다
     N, K, n = total, c_control + c_treat, n_treat
     print(stats.hypergeom.sf(c_treat - 1, N, K, n))   # 정확 단측 p
     ```
