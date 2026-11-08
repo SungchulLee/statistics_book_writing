@@ -56,6 +56,25 @@ BREAK = re.compile(r"[.)·,;] |\)\s*$|다\. ")
 # 링크 전체의 구간을 미리 떠서 그 안에서 시작하는 매치를 건너뛴다.
 MDLINK = re.compile(r"\[[^\]]*\]\([^)]*\)")
 
+# 꼴 셋 — **번호가 아니라 이름으로** 다른 쪽을 가리키는 자리.
+#   「정규성 쪽 보기 1」 · 「잔차 분석 페이지 연습문제 10」 · 「와이불 절 연습문제 3」
+# 위의 두 정규식은 숫자로 시작하는 절·장 번호를 요구하므로 이 꼴을 **하나도** 보지
+# 못한다. 2026-11-08 에 전수로 세어 38 곳이었고, 그 가운데 둘은 가리키는 내용이
+# 어디에도 없었다(「정규성 검정 모음 페이지의 연습문제 14」 — 그런 쪽이 없다,
+# 「큰수의 법칙 절 연습문제 5」 — 그 번호는 다른 주제다). 번호 꼴보다 더 오래 숨는다
+# — 번호가 없으니 `lint_section_refs` 도 볼 것이 없기 때문이다.
+# 이름에 **숫자를 넣지 않는다.** 숫자가 섞이면 「아래 2 절의 보기 1」처럼 같은 쪽의
+# 절을 가리키는 꼴이거나 위의 번호 꼴이고, 둘 다 여기서 볼 것이 아니다.
+REF_NAME = re.compile(
+    rf"(?<![가-힣])([가-힣A-Za-z][가-힣A-Za-z ·–—]{{0,14}}?)\s*(?:절|쪽|페이지)\s*(?:의\s*)?({ITEM})\s*\$?(\d+)")
+# 같은 쪽을 가리키는 말은 링크가 필요 없다 — 규약이 「같은 쪽 안이면 번호로 족하다」다.
+# 그림 안의 자리를 가리키는 말(「오른쪽 상자 1」)도 항목 참조가 아니다.
+SELF = re.compile(
+    r"(?:이|그|같은|위|아래|본|해당|앞|다음|각|어느|두|세|네|한"
+    r"|왼쪽|오른쪽|가운데|위쪽|아래쪽|첫|둘째|셋째|넷째"
+    # 「오른쪽 상자 1」의 「쪽」은 오른**쪽**의 끝 음절이다 — 쪽을 가리키는 말이 아니다
+    r"|오른|왼|양|저|바깥|안|뒤|한|두)$")
+
 
 def main(argv: list) -> int:
     chapters = [a for a in argv if re.fullmatch(r"ch\d+", a)]
@@ -75,10 +94,25 @@ def main(argv: list) -> int:
             found.append((m, False))
         for m in REF_CH.finditer(text):
             found.append((m, True))
+        for m in REF_NAME.finditer(text):
+            name = m.group(1).strip()
+            # 같은 쪽을 가리키는 말이면 규약대로다
+            if not name or SELF.search(name):
+                continue
+            # 이름이 한 글자뿐이면 낱말의 끝을 잘못 집은 것이다
+            if len(name) < 2:
+                continue
+            found.append((m, None))
         for m, is_ch in sorted(found, key=lambda t: t[0].start()):
-            gap = m.group(2)
             if m.start() in inside:
                 continue
+            if is_ch is None:
+                # 꼴 셋은 사이가 없다 — 이름이 곧 사이다
+                by_ch[rel.parts[0]] += 1
+                rows.append((str(rel), text[:m.start()].count("\n") + 1,
+                             re.sub(r"\s+", " ", m.group(0))))
+                continue
+            gap = m.group(2)
             if LINK.search(gap) or BREAK.search(gap):
                 continue
             if is_ch and CITE.search(text[max(0, m.start() - 30):m.start()]):
