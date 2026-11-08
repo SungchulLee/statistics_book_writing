@@ -872,7 +872,8 @@ $(x_4, y_4) = (4, 1)$과 모형 $\log\frac{p}{1-p} = \beta_0 + \beta_1 x$가 주
 점수함수가 **놀랍도록 단순한 형태**로 나온다.
 
 $$
-\nabla\ell(\boldsymbol\theta)=\mathbf X^\top(\mathbf y-\mathbf p)
+\nabla\ell(\boldsymbol\theta)=\mathbf X^\top(\mathbf y-\mathbf p),\qquad
+\nabla^2\ell(\boldsymbol\theta)=-\mathbf X^\top\mathbf W\mathbf X
 $$
 
 - **잔차와 설명변수의 곱이다.** 선형회귀의 정규방정식 $\mathbf X^\top(\mathbf y-\mathbf X\boldsymbol\beta)=\mathbf 0$ 과 **같은 모양**이며, 적합값이 $\mathbf X\boldsymbol\beta$ 에서 $\mathbf p$ 로 바뀐 것뿐이다.

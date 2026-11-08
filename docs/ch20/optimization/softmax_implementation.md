@@ -322,7 +322,7 @@ $\varepsilon$이 $\log(0)$을 막는다.
 !!! warning "$\varepsilon$ 보정은 손실값만 보호한다"
     이 $\varepsilon$ 기법은 `nan`을 막아 주지만 목적함수를 미세하게 바꾼다. 확신에 찬 오답의
     손실이 $-\log(\varepsilon) = 27.6$에서 잘리기 때문이다
-    ([가능도 절](../../ch19/logistic_regression/likelihood.md)의 연습문제 5 참조). 학습 자체는
+    (19.1절 [로그가능도와 교차엔트로피](../../ch19/logistic_regression/likelihood.md)가 그 벌칙의 비유계성을 다룬다). 학습 자체는
     기울기만 쓰므로 영향을 받지 않지만, 보고되는 손실값은 참값이 아니다. 로짓에서 직접
     log-softmax를 계산하는 편이 정확하다.
 
