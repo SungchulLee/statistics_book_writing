@@ -343,7 +343,7 @@ $n = 10$이고 그중 3개가 1일 때 $\hat\theta_0$과 최소 교차엔트로�
 
 **연습문제 5.** <span class="diff hard" title="어려움"></span>
 자료가 **완전히 분리 가능**하다고 하자. 즉 모든 $i$에 대해
-$y^{(i)}(2 A[i,:]\boldsymbol{\theta}^* ) > 0$이 되는 $\boldsymbol{\theta}^*$가 존재한다고 하자
+$(2y^{(i)} - 1)\,A[i,:]\boldsymbol{\theta}^* > 0$ 이 되는 $\boldsymbol{\theta}^*$ 가 존재한다고 하자
 (양성과 음성을 오차 없이 가르는 초평면이 있다는 뜻이다). 이때 MLE가 존재하지 않음을 보여라.
 
 </div>

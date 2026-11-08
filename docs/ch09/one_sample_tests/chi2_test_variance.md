@@ -70,19 +70,19 @@ $$
 **양측** ($H_1\colon \sigma^2 \neq \sigma_0^2$): 다음이면 $H_0$을 기각한다.
 
 $$
-\chi^2 < \chi^2_{1-\alpha/2,\, n-1} \quad \text{or} \quad \chi^2 > \chi^2_{\alpha/2,\, n-1}
+\chi^2 < \chi^2_{\alpha/2,\, n-1} \quad \text{또는} \quad \chi^2 > \chi^2_{1-\alpha/2,\, n-1}
 $$
 
 **우측** ($H_1\colon \sigma^2 > \sigma_0^2$): 다음이면 $H_0$을 기각한다.
 
 $$
-\chi^2 > \chi^2_{\alpha,\, n-1}
+\chi^2 > \chi^2_{1-\alpha,\, n-1}
 $$
 
 **좌측** ($H_1\colon \sigma^2 < \sigma_0^2$): 다음이면 $H_0$을 기각한다.
 
 $$
-\chi^2 < \chi^2_{1-\alpha,\, n-1}
+\chi^2 < \chi^2_{\alpha,\, n-1}
 $$
 
 여기서 $\chi^2_{p,\, n-1}$은 $P(\chi^2_{n-1} \leq \chi^2_{p,\, n-1}) = p$를 만족하는 값, 즉 카이제곱분포의 $p$ 분위수이다.
