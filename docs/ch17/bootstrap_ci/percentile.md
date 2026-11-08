@@ -866,7 +866,7 @@ $X_1, \ldots, X_n \sim \text{Unif}(0, \theta)$에서 $\theta$를 $\hat\theta = \
 **연습문제 9.** <span class="diff hard" title="어려움"></span>
 $X_1, \ldots, X_n \sim \mathcal{N}(\mu, \sigma^2)$에서 $\theta = \mu$, $\hat\theta = \bar{X}$라 하자. 붓스트랩 분포는 평균 $\bar{x}$, 분산 $\hat\sigma^2/n$($\hat\sigma^2 = \frac1n\sum_i(x_i-\bar{x})^2$)을 가지며 이를 정규로 근사한다. 이 근사 아래의 **이상적인**($B \to \infty$) 백분위수 구간을 적고,
 
-(가) 정확한 $t$ 구간 $\bar{x} \pm t_{n-1,\,0.025}\, s/\sqrt{n}$과 폭의 비를 $n$의 식으로 적어라.
+(가) 정확한 $t$ 구간 $\bar{x} \pm t_{n-1,\,0.975}\, s/\sqrt{n}$과 폭의 비를 $n$의 식으로 적어라.
 
 (나) 이상적 백분위수 구간의 포함확률을 $t_{n-1}$의 CDF로 **정확히** 표현하고 $n = 5, 10, 25, 100$에서 값을 구하라.
 
@@ -880,7 +880,7 @@ $X_1, \ldots, X_n \sim \mathcal{N}(\mu, \sigma^2)$에서 $\theta = \mu$, $\hat\t
     분위수는 아핀변환과 교환되므로, 평균 $\bar{x}$·표준편차 $\hat\sigma/\sqrt{n}$인 정규분포의 $0.025$ 및 $0.975$ 분위수를 읽으면 이상적 백분위수 구간은
 
     $$
-    \left[\bar{x} - z_{0.025}\frac{\hat\sigma}{\sqrt{n}}, \quad \bar{x} + z_{0.025}\frac{\hat\sigma}{\sqrt{n}}\right], \qquad z_{0.025} = 1.95996
+    \left[\bar{x} - z_{0.975}\frac{\hat\sigma}{\sqrt{n}}, \quad \bar{x} + z_{0.975}\frac{\hat\sigma}{\sqrt{n}}\right], \qquad z_{0.975} = 1.95996
     $$
 
     이다. 즉 **백분위수법은 정규모형에서 $z$ 구간으로 되돌아간다.** 단 표준편차가 $s$가 아니라 $\hat\sigma$다.
@@ -888,7 +888,7 @@ $X_1, \ldots, X_n \sim \mathcal{N}(\mu, \sigma^2)$에서 $\theta = \mu$, $\hat\t
     **(가)** $\hat\sigma^2 = \frac{n-1}{n}s^2$이므로 $\hat\sigma = s\sqrt{(n-1)/n}$이고
 
     $$
-    \frac{\text{폭}_{\text{백분위수}}}{\text{폭}_{t}} = \frac{z_{0.025}}{t_{n-1,\,0.025}}\sqrt{\frac{n-1}{n}}
+    \frac{\text{폭}_{\text{백분위수}}}{\text{폭}_{t}} = \frac{z_{0.975}}{t_{n-1,\,0.975}}\sqrt{\frac{n-1}{n}}
     $$
 
     이다. 두 인자 모두 $1$보다 작으므로 백분위수 구간은 **언제나 더 좁다**.
@@ -896,13 +896,13 @@ $X_1, \ldots, X_n \sim \mathcal{N}(\mu, \sigma^2)$에서 $\theta = \mu$, $\hat\t
     **(나)** 구간이 $\mu$를 담는 사건은
 
     $$
-    \lvert \bar{x} - \mu \rvert \le z_{0.025}\frac{\hat\sigma}{\sqrt n} = z_{0.025}\sqrt{\frac{n-1}{n}}\cdot\frac{s}{\sqrt n}
+    \lvert \bar{x} - \mu \rvert \le z_{0.975}\frac{\hat\sigma}{\sqrt n} = z_{0.975}\sqrt{\frac{n-1}{n}}\cdot\frac{s}{\sqrt n}
     $$
 
     이고, $T = (\bar{X} - \mu)/(s/\sqrt n) \sim t_{n-1}$이므로 포함확률은
 
     $$
-    P\left(\lvert T \rvert \le c_n\right) = 2F_{n-1}(c_n) - 1, \qquad c_n = z_{0.025}\sqrt{\frac{n-1}{n}}
+    P\left(\lvert T \rvert \le c_n\right) = 2F_{n-1}(c_n) - 1, \qquad c_n = z_{0.975}\sqrt{\frac{n-1}{n}}
     $$
 
     이다. **$B$도 모의실험도 필요 없다 — 닫힌 식이다.**

@@ -312,7 +312,7 @@ $$
     n \;=\; 3 + 2\left(\frac{z_{1-\alpha/2} + z_{1-\beta}}{\delta}\right)^{2}
     $$
 
-    이다. $\delta = \operatorname{arctanh}(0.65) - \operatorname{arctanh}(0.40) = 0.351650$ 이고 $z_{0.025} + z_{0.20} = 1.959964 + 0.841621 = 2.801585$ 이므로
+    이다. $\delta = \operatorname{arctanh}(0.65) - \operatorname{arctanh}(0.40) = 0.351650$ 이고 $z_{0.975} + z_{0.8} = 1.959964 + 0.841621 = 2.801585$ 이므로
 
     $$
     n = 3 + 2\left(\frac{2.801585}{0.351650}\right)^2 = 3 + 2 \times 63.47 = 129.95
@@ -357,7 +357,7 @@ $$
     need = stats.norm.ppf(0.975) + stats.norm.ppf(0.80)
     n_req = 3 + 2 * (need / delta) ** 2
     print(f"\ndelta = zeta1 - zeta2 = {delta:.6f}")
-    print(f"z_0.025 + z_0.20 = {need:.6f}")
+    print(f"z_0.975 + z_0.80 = {need:.6f}")
     print(f"필요한 n = 3 + 2*(need/delta)^2 = {n_req:.2f}  ->  "
           f"집단당 {int(np.ceil(n_req))} 명")
 
@@ -398,7 +398,7 @@ $$
     그러나 rho1 - rho2 의 점추정은 +0.2500 이고 tanh(z1-z2) = +0.3378 로 서로 다르다
 
     delta = zeta1 - zeta2 = 0.351650
-    z_0.025 + z_0.20 = 2.801585
+    z_0.975 + z_0.80 = 2.801585
     필요한 n = 3 + 2*(need/delta)^2 = 129.95  ->  집단당 130 명
     이론 검정력 = 0.8002
     모의 검정력 (20,000회, n = 130) = 0.8009  +- 0.0028

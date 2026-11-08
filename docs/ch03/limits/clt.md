@@ -794,7 +794,7 @@ Gamma(2, 3) 분포($\mu = 6$, $\sigma^2 = 18$)에서 크기 $n$의 표본을 뽑
 
     (b) $Z = (503 - 500)/(10/6) = 1.8$이므로 $P(Z > 1.8) \approx 1 - 0.9641 = 0.0359$. 약 3.6%다.
 
-    (c) $2/(\sigma/\sqrt n) \ge z_{0.025} = 1.96 \Rightarrow 2\sqrt n / 10 \ge 1.96 \Rightarrow n \ge 96.04$이어야 하므로 $n \ge 97$이다.
+    (c) $2/(\sigma/\sqrt n) \ge z_{0.975} = 1.96 \Rightarrow 2\sqrt n / 10 \ge 1.96 \Rightarrow n \ge 96.04$이어야 하므로 $n \ge 97$이다.
 
 ---
 

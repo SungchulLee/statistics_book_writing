@@ -1079,7 +1079,7 @@ $$
                        for p in itertools.permutations(R)])
         a = np.abs(K - d2)                       # 정수로만 비교해 경계를 흔들지 않는다
 
-        # (a) 명목 0.05 의 t 검정: |t| >= t_{0.025,n-2}  <=>  |r_s| >= r_crit
+        # (a) 명목 0.05 의 t 검정: |t| >= t_{0.975,n-2}  <=>  |r_s| >= r_crit
         tc = stats.t.isf(0.025, n - 2)
         r_crit = tc / np.sqrt((n - 2) + tc ** 2)
         rej = a >= K * r_crit - 1e-9

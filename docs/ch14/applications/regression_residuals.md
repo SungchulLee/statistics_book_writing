@@ -772,7 +772,7 @@ $$
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff hard" title="어려움"></span>
-4 절은 예측구간이 $\hat\beta_j$ 의 신뢰구간보다 비정규성에 더 민감하다고 했다. 이것을 수치로 재자. 오차가 정규가 아니라 분산 $\sigma^2 = 2^2$ 의 **라플라스분포**라고 하자. 곧 밀도가 $f(e) = (2b)^{-1}e^{-\lvert e \rvert / b}$ 이고 $\operatorname{Var} = 2b^2 = 4$ 이다. $n \to \infty$ 이고 $\mathbf{x}_{\text{new}} = \bar{\mathbf{x}}$ 라고 보아, 2 절의 $95\%$ 예측구간이 $\hat Y_{\text{new}} \pm z_{0.025}\,\sigma$ 로 수렴한다고 하자($z_{0.025} = 1.95996$).
+4 절은 예측구간이 $\hat\beta_j$ 의 신뢰구간보다 비정규성에 더 민감하다고 했다. 이것을 수치로 재자. 오차가 정규가 아니라 분산 $\sigma^2 = 2^2$ 의 **라플라스분포**라고 하자. 곧 밀도가 $f(e) = (2b)^{-1}e^{-\lvert e \rvert / b}$ 이고 $\operatorname{Var} = 2b^2 = 4$ 이다. $n \to \infty$ 이고 $\mathbf{x}_{\text{new}} = \bar{\mathbf{x}}$ 라고 보아, 2 절의 $95\%$ 예측구간이 $\hat Y_{\text{new}} \pm z_{0.975}\,\sigma$ 로 수렴한다고 하자($z_{0.975} = 1.95996$).
 
 **(1)** $b$ 를 구하고, 이 예측구간의 **실제** 포함확률을 구하시오.
 

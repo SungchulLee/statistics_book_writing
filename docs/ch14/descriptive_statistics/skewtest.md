@@ -698,7 +698,7 @@ $$
 **(1)** $Z_1 = \delta \operatorname{arcsinh}(Y/\alpha)$ 를 거꾸로 풀어 양측 $5\%$ 기각역의 경계가
 
 $$
-g_1^{\text{crit}} = \mathrm{SD}(g_1)\,\alpha \sinh\!\left(\frac{z_{0.025}}{\delta}\right), \qquad z_{0.025} = 1.959964
+g_1^{\text{crit}} = \mathrm{SD}(g_1)\,\alpha \sinh\!\left(\frac{z_{0.975}}{\delta}\right), \qquad z_{0.975} = 1.959964
 $$
 
 임을 보여라.
@@ -711,7 +711,7 @@ $$
 
 ??? success "풀이"
 
-    **(1)** $\operatorname{arcsinh}$ 는 단조증가이므로 $Z_1$ 은 $g_1$ 의 단조증가 함수다. 따라서 $|Z_1| > z_{0.025}$ 는 $|g_1| > g_1^{\text{crit}}$ 와 같은 사건이고, $Z_1 = z$ 를 풀면
+    **(1)** $\operatorname{arcsinh}$ 는 단조증가이므로 $Z_1$ 은 $g_1$ 의 단조증가 함수다. 따라서 $|Z_1| > z_{0.975}$ 는 $|g_1| > g_1^{\text{crit}}$ 와 같은 사건이고, $Z_1 = z$ 를 풀면
 
     $$
     \operatorname{arcsinh}\frac{Y}{\alpha} = \frac{z}{\delta} \iff Y = \alpha \sinh\frac{z}{\delta} \iff g_1 = \mathrm{SD}(g_1)\,\alpha \sinh\frac{z}{\delta}
@@ -843,7 +843,7 @@ $$
 **연습문제 9.** <span class="diff hard" title="어려움"></span> 연습문제 4 는 $\text{Lognormal}(0, 0.4^2)$, $n = 100$ 에서 검정력 $0.9770$ 을 얻고, 그 까닭을 "신호 대 잡음비 $\gamma_1/\mathrm{SD}_0(g_1) = 1.322/0.245 \approx 5.4$" 로 설명했다. 이 근사를 정식 공식으로 쓰면
 
 $$
-\text{검정력} \approx \Phi\!\left(\frac{\gamma_1}{\mathrm{SD}_0(g_1)} - z_{0.025}\right) = \Phi(5.5602 - 1.9600) = 0.9998
+\text{검정력} \approx \Phi\!\left(\frac{\gamma_1}{\mathrm{SD}_0(g_1)} - z_{0.975}\right) = \Phi(5.5602 - 1.9600) = 0.9998
 $$
 
 인데, 모의 결과 $0.977$ 과 소수 둘째 자리에서 어긋난다. 이 공식은 $g_1 \sim \mathcal{N}(\gamma_1,\ \mathrm{Var}_0(g_1))$ 이라는 가정을 셋 겹쳐 쓴 것이다.

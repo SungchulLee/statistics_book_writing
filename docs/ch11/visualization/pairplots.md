@@ -643,7 +643,7 @@ seaborn으로 붓꽃 자료의 쌍 그림을 종에 따라 색을 입혀 그리�
 
     이다. $-0.745$ 라는 꽤 센 상관인데도 $p$-값이 거의 $0.5$ 다.
 
-    **(2) $\lvert r \rvert > 0.9969$ 여야 한다.** $p < 0.05$ 는 $\arctan\lvert t \rvert > 0.95 \times \frac{\pi}{2} = 1.49226$, 곧 $\lvert t \rvert > \tan(1.49226) = 12.7062$ 와 같다($=t_{0.025,\,1}$). $\lvert t \rvert = \lvert r \rvert/\sqrt{1 - r^2}$ 이므로
+    **(2) $\lvert r \rvert > 0.9969$ 여야 한다.** $p < 0.05$ 는 $\arctan\lvert t \rvert > 0.95 \times \frac{\pi}{2} = 1.49226$, 곧 $\lvert t \rvert > \tan(1.49226) = 12.7062$ 와 같다($=t_{0.975,\,1}$). $\lvert t \rvert = \lvert r \rvert/\sqrt{1 - r^2}$ 이므로
 
     $$
     \frac{r^2}{1 - r^2} > 12.7062^2 = 161.447 \quad\Longrightarrow\quad r^2 > \frac{161.447}{162.447} = 0.993844

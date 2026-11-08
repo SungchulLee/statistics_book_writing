@@ -415,8 +415,8 @@ $$
     **(3) 손익분기는 $\rho = 0.112$ 다.** 등분산 $\sigma_X = \sigma_Y = \sigma$ 라 하면 $\sigma_D = \sigma\sqrt{2-2\rho}$ 이고 독립 쪽은 $\sigma\sqrt2$ 이므로, 두 폭이 같아지는 조건은
 
     $$
-    t_{0.025,\,2n-2}\,\sigma\sqrt2 = t_{0.025,\,n-1}\,\sigma\sqrt{2-2\rho}
-    \iff \sqrt{1-\rho} = \frac{t_{0.025,\,2n-2}}{t_{0.025,\,n-1}}
+    t_{0.975,\,2n-2}\,\sigma\sqrt2 = t_{0.975,\,n-1}\,\sigma\sqrt{2-2\rho}
+    \iff \sqrt{1-\rho} = \frac{t_{0.975,\,2n-2}}{t_{0.975,\,n-1}}
     $$
 
     이다. $n = 12$ 에서 오른쪽이 $2.07387/2.20099 = 0.94225$ 이므로
