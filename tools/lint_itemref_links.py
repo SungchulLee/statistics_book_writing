@@ -41,7 +41,10 @@ ITEM = "보기|연습문제|정의|정리|그림|상자"
 #     「장」 앞에 영문 서지나 쉼표가 오면 건너뛴다(CITE).
 #   · 「장」이 낱장을 세는 자리 — 「연속한 5장을 겹쳐 쓴다」. 뒤에 항목 **번호**가
 #     붙어야만 세므로 이 꼴은 애초에 걸리지 않는다.
-REF = re.compile(rf"(\d+\.\d+)\s*절\s*(?!\[)([^\n]{{0,24}}?)({ITEM})\s*(\d+)")
+# 부록은 절 번호가 **글자로 시작한다**(A.1~A.4). `\d+\.\d+` 가 이것을 못 본다 —
+# 2026-11-08 에 둘 있었고 **둘 다 가리키는 번호가 틀렸다**(R² 단조성은 연습문제 10 이
+# 아니라 8 이고, ch12 단순회귀에는 연습문제가 10 개뿐인데 17 을 가리켰다).
+REF = re.compile(rf"([A-Z]?\.?\d+\.\d+|[A-Z]\.\d+)\s*절\s*(?!\[)([^\n]{{0,24}}?)({ITEM})\s*(\d+)")
 REF_CH = re.compile(rf"(\d{{1,2}})\s*장\s*(?:의\s*)?(?!\[)([^\n]{{0,24}}?)({ITEM})\s*\$?(\d+)")
 # 바깥 문헌의 장 — 「*Statistics* (4th ed.), 19장의」
 CITE = re.compile(r"(?:ed\.\)|\*|,)\s*$")
@@ -113,7 +116,11 @@ def main(argv: list) -> int:
                              re.sub(r"\s+", " ", m.group(0))))
                 continue
             gap = m.group(2)
-            if LINK.search(gap) or BREAK.search(gap):
+            # 쪽 이름이 괄호를 품으면(「표집분포(일반 최소제곱)」) 그 닫는 괄호가
+            # BREAK 의 「문장이 끊겼다」로 읽혀 멀쩡한 결함을 놓친다. 균형 잡힌
+            # 괄호 구간을 먼저 떠내고 나서 판정한다.
+            bare = re.sub(r"\([^()]*\)", "", gap)
+            if LINK.search(gap) or BREAK.search(bare):
                 continue
             if is_ch and CITE.search(text[max(0, m.start() - 30):m.start()]):
                 continue
