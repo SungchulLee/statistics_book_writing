@@ -342,7 +342,7 @@ def fig_against_what_you_plot():
     쪽의 linear_probe 는 선형성 탐침을 다룬다. 여기서는 들머리의 둘째
     문단 --- **공변량에 대해 보면 이차항이 p = 0.0004 인데 적합값에
     대해 보면 0.0245 로 흐려진다** --- 만 본다. 집단 효과가 섞인
-    적합값에 대해 그리면 휘어짐이 집단 사이에 흩어져 묻힌다.
+    적합값에 대해 그리면 곡률이 집단 사이에 흩어져 묻힌다.
     """
     K, N, REPS = 3, 40, 2000
     CURVE = np.linspace(0, 0.9, 10)
@@ -400,7 +400,7 @@ def fig_against_what_you_plot():
         ax.set_title(nm, fontsize=12.5)
         ax.grid(alpha=0.25)
     axes[0].set_ylabel("잔차", fontsize=11)
-    axes[1].text(0.5, 0.04, "집단 효과가 섞여 들어와\n휘어짐이 흩어진다",
+    axes[1].text(0.5, 0.04, "집단 효과가 섞여 들어와\n곡률이 흩어진다",
                  transform=axes[1].transAxes, ha="center", va="bottom",
                  fontsize=11, fontweight="bold", color="0.15",
                  bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
@@ -412,7 +412,7 @@ def fig_against_what_you_plot():
     ax.plot(CURVE, [100 * v for v in pw_f], "s-", ms=8, lw=2.6,
             color="tab:red", label="적합값에 대해 그린다")
     ax.axhline(5, color="0.3", ls=":", lw=1.6)
-    ax.set_xlabel("참 관계의 휘어짐 (이차항의 계수)", fontsize=11)
+    ax.set_xlabel("참 관계의 곡률 (이차항의 계수)", fontsize=11)
     ax.set_ylabel("이차항을 잡아낼 비율 (%)", fontsize=11)
     ax.set_title(f"같은 자료, 가로축만 바꿨다 (각 {REPS:,} 번)",
                  fontsize=12.5)
@@ -426,7 +426,7 @@ def fig_against_what_you_plot():
 
     print(f"\n[선형성] 각 {REPS:,} 번")
     for c, a, b_ in zip(CURVE, pw_x, pw_f):
-        print(f"  휘어짐 {c:.2f}  공변량 {100*a:5.1f}%  적합값 {100*b_:5.1f}%")
+        print(f"  곡률 {c:.2f}  공변량 {100*a:5.1f}%  적합값 {100*b_:5.1f}%")
 
 
 # ════════════════════════════════════════════════════════════════════

@@ -340,7 +340,7 @@ def fisher_curvature_se():
     bare_axis(ax)
     ax.set_title("곡률이 크면 분포가 좁다", fontsize=13, pad=10)
 
-    fig.suptitle("휘어짐을 재면 표준오차가 나온다", fontsize=13.5, y=1.02)
+    fig.suptitle("곡률을 재면 표준오차가 나온다", fontsize=13.5, y=1.02)
     fig.tight_layout()
     save(fig, THEORY + "fisher_curvature_se.png")
 

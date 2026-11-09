@@ -113,11 +113,11 @@ save(fig, APP + "mixed_by_pi.png")
 # 22. financial_volatility — 꼬리에 듣던 것이 종속에는 안 듣는다
 #
 # 쪽의 volatility_estimation_noise 가 「일정한데 흔들린다」를,
-# volatility_clustering 이 뭉침 자체를 그린다. 들머리의 **셋째 문단**은
-# 그 둘이 건드리지 않는다 — 「뭉침까지 넣으면 세 검정이 함께 무너진다.
+# volatility_clustering 이 군집 자체를 그린다. 들머리의 **셋째 문단**은
+# 그 둘이 건드리지 않는다 — 「군집까지 넣으면 세 검정이 함께 무너진다.
 # 꼬리에는 듣던 로버스트성이 종속에는 듣지 않는 것이다.」
 #
-# 세 검정 × 세 세계(독립 정규 · 독립 두꺼운 꼬리 · 뭉침)를 나란히 놓으면
+# 세 검정 × 세 세계(독립 정규 · 독립 두꺼운 꼬리 · 군집)를 나란히 놓으면
 # 가운데 칸에서 갈라지던 것이 오른쪽 칸에서 다시 모인다.
 # ════════════════════════════════════════════════════════════════════
 N22, REPS22 = 250, 4000
@@ -181,7 +181,7 @@ ax.annotate("꼬리에는 두 쪽이 버티는데", xy=(1 + 0.0, res22["브라�
             xytext=(0.62, 0.30), fontsize=11.8, color="tab:blue",
             fontweight="bold", ha="left",
             arrowprops=dict(arrowstyle="->", color="tab:blue", lw=1.9))
-ax.annotate("뭉침 앞에서는 셋이 함께 무너진다", xy=(2 - 0.1, 0.22),
+ax.annotate("군집 앞에서는 셋이 함께 무너진다", xy=(2 - 0.1, 0.22),
             xytext=(1.15, 0.41), fontsize=11.8, color="0.2",
             fontweight="bold", ha="left",
             arrowprops=dict(arrowstyle="->", color="0.2", lw=1.9))

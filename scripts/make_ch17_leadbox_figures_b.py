@@ -557,5 +557,5 @@ axs[1].annotate("사람 수가 불균형하고 분산비까지 크면\n합치는
                 color="0.15", fontweight="bold", ha="left",
                 arrowprops=dict(arrowstyle="->", color="0.15", lw=1.8))
 fig.suptitle("두 길은 사람 수가 같을 때만 같은 답을 낸다 — "
-             "갈림의 방향은 분산비가 정한다", fontsize=15, y=0.99)
+             "불일치의 방향은 분산비가 정한다", fontsize=15, y=0.99)
 save(fig, TEST + "both_conditions_needed.png")

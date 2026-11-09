@@ -405,7 +405,7 @@ $\ln x$ 라서 발산하기 때문이다. 아녜시가 가르치려고 그려 �
     ```python
     # Q-Q 그림은 자료의 분위수를 정규분포의 분위수와 짝지어 찍는다.
     # 정규자료라면 점들이 직선에 놓인다. 코시 자료는 양끝이 위아래로 크게
-    # 휘어 올라가는데, 그 휘어짐이 곧 두꺼운 꼬리의 눈에 보이는 모습이다.
+    # 휘어 올라가는데, 그 곡률이 곧 두꺼운 꼬리의 눈에 보이는 모습이다.
     cauchy_sample = np.random.standard_cauchy(1000)
     fig, ax = plt.subplots(figsize=(6, 6))
     stats.probplot(cauchy_sample, dist="norm", plot=ax)

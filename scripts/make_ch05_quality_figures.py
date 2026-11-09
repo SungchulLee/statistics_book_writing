@@ -6,7 +6,7 @@ r"""6.3 추정량의 품질 다섯 쪽의 그림을 생성한다.
   ch05/estimators/img/bias_variance_dartboard.png 다트판 네 칸
   ch05/estimators/img/shrinkage_mse.png          축소추정량의 최적 λ
   ch07/theory/img/consistency_asymptotics.png 일치성과 점근정규성
-  ch07/theory/img/crlb_information.png       휘어짐·정보량·분산 하한
+  ch07/theory/img/crlb_information.png       곡률·정보량·분산 하한
   ch07/theory/img/sufficiency_ladder.png     압축 사다리와 Rao–Blackwell
 
 실행:  python3 scripts/make_ch06_quality_figures.py   (저장소 최상위에서)
@@ -297,12 +297,12 @@ def consistency_asymptotics():
 
 
 # ==================================================================
-# 5. 휘어짐 → 정보량 → 분산의 바닥
+# 5. 곡률 → 정보량 → 분산의 바닥
 # ==================================================================
 def crlb_information():
     fig, axes = plt.subplots(1, 2, figsize=(13, 4.8))
 
-    # (a) 로그가능도의 휘어짐
+    # (a) 로그가능도의 곡률
     ax = axes[0]
     t = np.linspace(-3, 3, 600)
     for info, color, name in [(2.0, BLUE, "정보량이 크다"),
@@ -324,7 +324,7 @@ def crlb_information():
     ax.spines[["top", "right", "left"]].set_visible(False)
     ax.spines["bottom"].set_color(MUTED)
     ax.legend(fontsize=11, frameon=False, loc="upper left")
-    ax.set_title("로그가능도 $\\ell(\\theta)$ 의 휘어짐", fontsize=13, pad=10)
+    ax.set_title("로그가능도 $\\ell(\\theta)$ 의 곡률", fontsize=13, pad=10)
 
     # (b) 그 결과 — CRLB 와 두 추정량
     ax = axes[1]
@@ -360,7 +360,7 @@ def crlb_information():
     ax.legend(fontsize=11, frameon=False, loc="upper left")
     ax.set_title(f"두 불편추정량의 표집분포  ($n = {n}$)", fontsize=13, pad=10)
 
-    fig.suptitle("휘어짐이 정보량이고, 정보량이 분산의 바닥을 정한다",
+    fig.suptitle("곡률이 정보량이고, 정보량이 분산의 바닥을 정한다",
                  fontsize=14, y=1.02)
     fig.tight_layout()
     save(fig, THEORY + "crlb_information.png")

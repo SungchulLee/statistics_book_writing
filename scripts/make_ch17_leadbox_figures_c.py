@@ -51,13 +51,13 @@ def save(fig, path):
 # 이다 — 「두 결론이 갈릴 때는 어느 쪽으로 갈리는가.」
 #
 # 같은 자료에 둘을 함께 걸어 네 칸으로 세면 그 방향이 수로 나온다.
-# 갈림이 대칭이 아니라는 것이 요점이다.
+# 불일치가 대칭이 아니라는 것이 요점이다.
 # ════════════════════════════════════════════════════════════════════
 r15 = np.random.default_rng(17_015)
 N15, REPS15, NP15, B15 = 12, 3000, 2000, 2000
 cell = np.zeros((2, 2), int)      # [순열 기각?][구간이 0 을 뺐나?]
 for _ in range(REPS15):
-    a = r15.exponential(1.0, N15)          # 치우친 자료 — 갈림이 잘 난다
+    a = r15.exponential(1.0, N15)          # 치우친 자료 — 불일치가 잘 난다
     b = r15.exponential(1.0, N15) + 0.55   # 참 차이가 있다
     obs = a.mean() - b.mean()
     pool = np.r_[a, b]
@@ -111,7 +111,7 @@ ax2.set_xticks([0, 1], ["순열만", "구간만"], fontsize=13)
 ax2.set_ylabel("자료 전체에서의 비율", fontsize=12)
 ax2.set_ylim(0, max(only_perm, only_boot) / tot * 1.5)
 ax2.grid(axis="y", alpha=0.25)
-ax2.set_title("갈림은 대칭이 아니다", fontsize=13)
+ax2.set_title("불일치는 대칭이 아니다", fontsize=13)
 ax2.annotate("치우친 자료에서는 구간 쪽이\n먼저 0 을 뺀다",
              xy=(0.72, only_boot / tot), xytext=(-0.46, max(
                  only_perm, only_boot) / tot * 1.14), fontsize=11.5,
