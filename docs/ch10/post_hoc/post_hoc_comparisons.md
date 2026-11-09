@@ -39,9 +39,9 @@ $k = 5$, $\alpha = 0.05$ 면 벌써 $0.40$ 이다. 네 방법이 그 부풀음�
 | 방법 | 임계값 (쌍별 차이가 이보다 크면 기각) | 가족 | 유도한 곳 |
 |---|---|---|---|
 | 보정 없음 (피셔 LSD) | $t_{1-\alpha/2,\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 비교 하나 | $\S 2$ 보기 1 |
-| 투키 HSD | $q_{\alpha,\,k,\,N-k}\sqrt{MSW/n}$ | 모든 쌍 | [투키](tukey.md) 보기 2 |
-| 본페로니 | $t_{\alpha/(2m),\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 미리 지정한 $m$ 개 | [본페로니와 셰페](bonferroni_scheffe.md) 보기 1 |
-| 셰페 | $\sqrt{(k-1)F_{\alpha,\,k-1,\,N-k}}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 가능한 **모든** 대비 | [본페로니와 셰페](bonferroni_scheffe.md) 보기 2 |
+| 투키 HSD | $q_{\alpha,\,k,\,N-k}\sqrt{MSW/n}$ | 모든 쌍 | [투키](tukey.md) 정리 1 |
+| 본페로니 | $t_{\alpha/(2m),\,N-k}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 미리 지정한 $m$ 개 | [본페로니와 셰페](bonferroni_scheffe.md) 정리 1 |
+| 셰페 | $\sqrt{(k-1)F_{\alpha,\,k-1,\,N-k}}\sqrt{MSW\left(\frac1{n_i}+\frac1{n_j}\right)}$ | 가능한 **모든** 대비 | [본페로니와 셰페](bonferroni_scheffe.md) 정리 2 |
 
 본페로니 의 단계적 하강 변형인 홀름 절차는 같은 가족을 통제하면서 균일하게 더
 강력하다(연습문제 8). 분산이 다를 때의 [게임스–하월](games_howell.md) 은 합동 $MSW$

@@ -118,14 +118,69 @@ $$
 자유도 $N-k$ 인 일원배치 분산분석(one-way analysis of variance)의 집단 내 평균제곱, $n_i$ 와 $n_0$ 는 표본크기다.
 
 **낱낱이 보면 $t$ 지만 $k-1$ 개를 한꺼번에 보면 그렇지 않다.** 모든 $t_i$ 가 같은
-$\bar{Y}_{0\cdot}$ 를 빼므로 서로 독립이 아니기 때문이다. $H_0$ 아래에서 이들은 결합
-**다변량 $t$ 분포**를 따르고, 상관은
+$\bar{Y}_{0\cdot}$ 를 빼므로 서로 독립이 아니기 때문이다. 얼마나 얽혀 있는지가
+임계값을 정하므로 그 수를 정확히 적어 둔다.
+
+<div class="defn" markdown>
+
+### 정의 1. 더닛 분포 { .dfn }
+
+$T_1,\dots,T_{k-1}$ 이 자유도 $\nu$ 의 **동등상관 다변량 $t$**(쌍마다 상관이 모두
+$\rho$ 로 같다)를 따를 때 $\max_j \lvert T_j\rvert$ 의 분포를 모수
+$(k-1,\ \nu,\ \rho)$ 의 **더닛 분포**라 하고, 그 $1-\alpha$ 분위수를
+$d_{\alpha,\,k-1,\,\nu}$ 라 적는다.
+
+</div>
+
+<div class="thmbox" markdown>
+
+### 정리 1. 대조군을 함께 쓰면 상관이 n/(n+n₀) 이다 { .thm }
+
+$\varepsilon_{ij}$ 가 서로 독립으로 $N(0,\ \sigma^2)$ 을 따르고, 처치군이 모두
+크기 $n$, 대조군이 크기 $n_0$ 라 하자. 그러면 $i \ne l$ 인 두 처치군에 대해
 
 $$
-\rho = \frac{n}{n + n_0}
+\operatorname{Corr}\big(\bar Y_{i\cdot} - \bar Y_{0\cdot},\ \bar Y_{l\cdot} - \bar Y_{0\cdot}\big)
+= \frac{n}{n + n_0}
 $$
 
-이다. 대조군과 처치군의 표본크기가 같으면($n_0 = n$) 정확히 $\rho = 1/2$ 로 떨어진다.
+이고, 이 값이 $i,l$ 에 **걸리지 않으므로** $\max_i \lvert t_i\rvert$ 가 $\rho = n/(n+n_0)$
+의 더닛 분포를 따른다. 특히 $n_0 = n$ 이면 정확히 $\rho = 1/2$ 다.
+
+</div>
+
+??? proof "증명"
+
+    집단이 서로 독립이므로 $a \ne b$ 이면 $\operatorname{Cov}(\bar Y_{a\cdot}, \bar Y_{b\cdot}) = 0$
+    이고 $\operatorname{Var}(\bar Y_{a\cdot}) = \sigma^2/n_a$ 다. $i \ne l$ 이면 두 차이가
+    **$\bar Y_{0\cdot}$ 하나를 공유**하므로 겹치는 항만 남아
+
+    $$
+    \operatorname{Cov}\big(\bar Y_{i\cdot} - \bar Y_{0\cdot},\ \bar Y_{l\cdot} - \bar Y_{0\cdot}\big)
+    = \operatorname{Var}(\bar Y_{0\cdot}) = \frac{\sigma^2}{n_0}
+    $$
+
+    다. 각각의 분산은 $\operatorname{Var}(\bar Y_{i\cdot} - \bar Y_{0\cdot}) = \sigma^2(n+n_0)/(n\,n_0)$
+    이므로 비를 잡으면
+
+    $$
+    \rho = \frac{\sigma^2/n_0}{\sigma^2 (n+n_0)/(n\,n_0)} = \frac{n}{n+n_0}
+    $$
+
+    이다. $\square$
+
+    **처치군 크기가 서로 다르면 동등상관이 깨진다.** 그때는
+    $\rho_{il} = \sqrt{\dfrac{n_i n_l}{(n_0+n_i)(n_0+n_l)}}$ 이 되어 쌍마다 달라지므로
+    표 하나로 감당하지 못한다.
+
+    **대조군을 처치군보다 크게 두는 관행도 이 식에서 읽힌다.** 다만 길이 두
+    갈래이고 서로 반대로 당긴다. $n_0$ 를 키우면 모든 차이의 분산
+    $\sigma^2/n + \sigma^2/n_0$ 가 함께 줄어 검정력이 오르는데, 동시에
+    $\rho = n/(n+n_0)$ 도 작아져 비교들이 **덜** 얽히고 그만큼 $\max_i\lvert t_i\rvert$ 의
+    꼬리가 길어져 임계값은 오히려 **올라간다**. 이 책이 직접 재어 보니 $k-1 = 3$,
+    $\nu = 30$ 에서 $\rho$ 가 $0.80$ 에서 $0.20$ 으로 내려갈 때 임계값이
+    $2.362$ 에서 $2.517$ 로 올랐다. 분산이 줄어드는 몫이 더 커서 알짜로는 이득이고,
+    저울이 맞는 자리가 대략 $n_0 \approx \sqrt{k-1}\,n$ 이라고 알려져 있다.
 
 이 상관이 임계값을 정한다. 더닛의 임계값 $d_{\alpha, k-1, \nu}$($\nu = N-k$)는 그 다변량
 $t$ 분포에서 나오고, **상관을 알고 쓰는 만큼 본페로니보다 작다.** 본페로니는 비교들이
