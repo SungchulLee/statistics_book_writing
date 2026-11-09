@@ -533,7 +533,7 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
 <div class="drillbox" markdown>
 
 **연습문제 6.** <span class="diff hard" title="어려움"></span>
-그림의 주황 점선 네모는 두 개별 95% 신뢰구간을 곱해 만든 직사각형이다. 이것을 $(\beta_1, \beta_2)$에 대한 결합영역으로 읽으면 신뢰수준이 얼마인지 따진다. 계산을 깔끔하게 하려고 $\sigma$를 안다고 보고 구간을 정규분위수 $z_{0.975} = 1.96$으로 만든다고 하자.
+12.3절 [회귀계수의 신뢰구간](ci_coeff.md) $1$ 절 그림의 주황 점선 네모는 두 개별 95% 신뢰구간을 곱해 만든 직사각형이다. 이것을 $(\beta_1, \beta_2)$에 대한 결합영역으로 읽으면 신뢰수준이 얼마인지 따진다. 계산을 깔끔하게 하려고 $\sigma$를 안다고 보고 구간을 정규분위수 $z_{0.975} = 1.96$으로 만든다고 하자.
 
 (a) 오른쪽 패널처럼 $(\mathbf X^\top\mathbf X)^{-1}$의 비대각 원소가 0이어서 $\hat\beta_1$과 $\hat\beta_2$가 독립이면, 직사각형이 참점 $(\beta_1, \beta_2)$를 담을 확률은 얼마인가.
 
@@ -579,7 +579,7 @@ Advertising 자료를 써서 모형 $\text{Sales} \sim \text{TV} + \text{Radio} 
 <div class="drillbox" markdown>
 
 **연습문제 7.** <span class="diff hard" title="어려움"></span>
-그림의 왼쪽 패널에서 개별 $t$는 $t_1 = 1.49$, $t_2 = 1.33$으로 둘 다 작은데 결합 $F$는 크다. 이 불일치를 식으로 확인한다. 절편과 두 설명변수만 있는 모형에서 $\hat\beta_{1:2} = (\hat\beta_1, \hat\beta_2)^\top$의 추정 공분산행렬을 $s^2 \mathbf V$($\mathbf V$는 $(\mathbf X^\top\mathbf X)^{-1}$의 해당 $2 \times 2$ 블록)라 하고, $H_0: \beta_1 = \beta_2 = 0$의 검정통계량을
+12.3절 [회귀계수의 신뢰구간](ci_coeff.md) $1$ 절 그림의 왼쪽 패널에서 개별 $t$는 $t_1 = 1.49$, $t_2 = 1.33$으로 둘 다 작은데 결합 $F$는 크다. 이 불일치를 식으로 확인한다. 절편과 두 설명변수만 있는 모형에서 $\hat\beta_{1:2} = (\hat\beta_1, \hat\beta_2)^\top$의 추정 공분산행렬을 $s^2 \mathbf V$($\mathbf V$는 $(\mathbf X^\top\mathbf X)^{-1}$의 해당 $2 \times 2$ 블록)라 하고, $H_0: \beta_1 = \beta_2 = 0$의 검정통계량을
 
 $$
 F = \frac{1}{2}\,\hat\beta_{1:2}^\top (s^2\mathbf V)^{-1} \hat\beta_{1:2}

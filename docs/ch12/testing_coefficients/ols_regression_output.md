@@ -319,7 +319,7 @@ $\beta_j$의 95% 신뢰구간은 $\hat{\beta}_j \pm t^*_{n-k,\,0.025} \cdot \mat
 
     **(1) 같아야 한다.** 보기 1·2 의 계산은 `statsmodels` 가 쓰는 식과 글자 그대로 같다. 계수는 정규방정식, 표준오차는 $s\sqrt{[(\mathbf X^\top\mathbf X)^{-1}]_{jj}}$, $t$ 는 둘의 비, $p$ 는 $t_{136}$ 의 양측 꼬리다. 다른 것은 **푸는 경로**뿐이다. 우리는 `np.linalg.inv` 로 역행렬을 만들고 statsmodels 는 `pinv` 를 쓴다. 그러므로 **반올림 오차만큼 다를 것**이고, 조건수가 $2.1 \times 10^5$ 이니 상대오차 $10^{-11}$ 쯤까지는 믿을 수 있다.
 
-    **(2) 앞머리를 떼는 것은 위험한 습관이다.** 자료가 어떤 순서로 정렬되어 있으면 앞 $70\%$ 가 특정 집단으로 뭉친다. 앞 절의 Boston 자료에서 그 때문에 교차검증(cross-validation) $R^2$ 가 $0.66$ 에서 $0.43$ 으로 떨어지는 것을 보았다.
+    **(2) 앞머리를 떼는 것은 위험한 습관이다.** 자료가 어떤 순서로 정렬되어 있으면 앞 $70\%$ 가 특정 집단으로 뭉친다. 12.11절 [무엇을 언제 쓸 것인가](../package_usage/comparison.md)의 Boston 자료에서 그 때문에 교차검증(cross-validation) $R^2$ 가 $0.66$ 에서 $0.43$ 으로 떨어지는 것을 본다.
 
     Advertising 은 시장 $200$ 곳을 번호로 나열한 자료이고 번호에 뜻이 없어 보이지만, **그것을 확인하지 않고 가정할 수는 없다.** 확인하는 방법은 같은 크기의 무작위 표본과 견주는 것이다. 세 적합이 비슷하면 순서에 뜻이 없다는 증거이고, 다르면 순서가 무언가를 담고 있다는 뜻이다.
 
@@ -502,7 +502,7 @@ _확인한 곳 — 포브스의 논문 서지(「XIV.—Further Experiments and 
     True
     ```
 
-    `True`가 나온다. 요약표의 $t$ 값이 계수를 표준오차로 나눈 것과 정확히 같다는 확인이다.
+    `True`가 나온다. 적합된 계수가 정규방정식 $\mathbf X^\top\mathbf X\hat{\boldsymbol\beta} = \mathbf X^\top\mathbf y$ 를 정확히 푼다는 확인이다.
 
     구성상 $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$의 양변에 왼쪽에서 $\mathbf{X}^\top\mathbf{X}$를 곱하면 $\mathbf{X}^\top\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}^\top\mathbf{y}$가 된다. $\square$
 
