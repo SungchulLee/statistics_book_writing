@@ -1,10 +1,10 @@
 r"""17.5절 「그림으로 보는 통계학」 — n 개를 다 뽑지 않는 편이 나을 때.
 
-균등분포의 오른쪽 끝 $\theta$ 를 재는 문제는 붓스트랩이 무너지는 고전적인 자리다.
+균등분포의 오른쪽 끝 $\theta$ 를 재는 문제는 부트스트랩이 무너지는 고전적인 자리다.
 $X^*_{(n)}$ 은 $X_{(n)}$ 을 넘지 못하고 $1 - (1-1/n)^n \to 0.632$ 의 확률로 **그 자리에
 붙어** 있다. 비켈·괴체·판즈벗($1997$)이 정리한 처방은 **덜 뽑는 것**이다.
 
-① 한 자료에서 — 참 분포와 두 붓스트랩 분포.
+① 한 자료에서 — 참 분포와 두 부트스트랩 분포.
 ② 포함확률 — 전부 뽑으면 $n$ 을 키워도 약속에 닿지 못한다.
 ③ 그러면 m 을 얼마로 — n 을 묶어 두고 m 만 바꾼다. 양쪽 끝이 다 나쁘다.
 
@@ -36,7 +36,7 @@ def boot_max_rank(rng, n, m, B):
 
 
 def quantile_c(x_sorted, rng, n, m, B=4000):
-    """m 개만 뽑는 붓스트랩으로 m(X₍ₙ₎ - X*₍ₘ₎) 의 95% 분위수를 구한다."""
+    """m 개만 뽑는 부트스트랩으로 m(X₍ₙ₎ - X*₍ₘ₎) 의 95% 분위수를 구한다."""
     k = boot_max_rank(rng, n, m, B)
     return np.quantile(m * (x_sorted[-1] - x_sorted[k - 1]), 1 - ALPHA)
 
@@ -48,7 +48,7 @@ rep_full = N1 * (x1[-1] - x1[boot_max_rank(RNG, N1, N1, B1) - 1])
 rep_m = M1 * (x1[-1] - x1[boot_max_rank(RNG, N1, M1, B1) - 1])
 true_draw = N1 * (1.0 - np.sort(RNG.random((20_000, N1)), axis=1)[:, -1])
 atom = float(np.mean(rep_full == 0))
-print(f"① n = {N1}:  전부 뽑은 붓스트랩이 0 에 붙어 있는 비율 = {atom:.3f} "
+print(f"① n = {N1}:  전부 뽑은 부트스트랩이 0 에 붙어 있는 비율 = {atom:.3f} "
       f"(이론값 {1 - (1 - 1/N1)**N1:.3f})")
 print(f"   95% 분위수 — 참 {np.quantile(true_draw, 0.95):.3f}, "
       f"전부 뽑기 {np.quantile(rep_full, 0.95):.3f}, "

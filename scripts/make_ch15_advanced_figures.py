@@ -1,7 +1,7 @@
-r"""15장 고급 방법(붓스트랩·베이즈·가능도비) 여섯 쪽의 개념 그림을 생성한다.
+r"""15장 고급 방법(부트스트랩·베이즈·가능도비) 여섯 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
-  ch15/advanced_methods/img/bootstrap_vs_f_size.png       붓스트랩은 비정규에서도 크기를 지킨다
+  ch15/advanced_methods/img/bootstrap_vs_f_size.png       부트스트랩은 비정규에서도 크기를 지킨다
   ch15/advanced_methods/img/bootstrap_null_reference.png  p 값은 귀무값과 견주어야 한다
   ch15/advanced_methods/img/bayes_prior_weight.png        사전분포는 가상 관측값 2*alpha0 개다
   ch15/advanced_methods/img/bayes_vs_frequentist_ci.png   신용구간과 신뢰구간의 차이
@@ -79,12 +79,12 @@ def fig_pool_vs_within():
         ax.axvline(float(np.median(d)), color=color, lw=1.6)
         ax.set_xlim(-140, 100)
         ax.set_ylim(0, 1800)
-        ax.set_xlabel("붓스트랩 분산차 $s_1^{*2} - s_2^{*2}$", fontsize=11,
+        ax.set_xlabel("부트스트랩 분산차 $s_1^{*2} - s_2^{*2}$", fontsize=11,
                       color=INK)
         clean(ax)
         ax.set_title(title, fontsize=11.5, color=INK, pad=9)
         ax.text(0.03, 0.95,
-                f"붓스트랩 분포의 중앙값 {np.median(d):.1f}\n"
+                f"부트스트랩 분포의 중앙값 {np.median(d):.1f}\n"
                 f"관측값 {obs:.1f}\n$p$ = {p:.4f}",
                 transform=ax.transAxes, fontsize=10.5, color=INK, va="top")
     ax1.set_ylabel("빈도", fontsize=11, color=INK)
@@ -101,7 +101,7 @@ def fig_pool_vs_within():
           f"올바른 p {p_pool:.4f}")
 
 
-# === 그림 2. 붓스트랩은 비정규에서도 크기를 지킨다 ===
+# === 그림 2. 부트스트랩은 비정규에서도 크기를 지킨다 ===
 def fig_bootstrap_size():
     rng = np.random.default_rng(1)
     n, B, R = 50, 399, 2000
@@ -129,7 +129,7 @@ def fig_bootstrap_size():
                         np.log(F))
         res[name] = (f_rej / R, b_rej / R)
         print(f"  {name}: F 검정 {res[name][0]:.4f}, "
-              f"붓스트랩 {res[name][1]:.4f}")
+              f"부트스트랩 {res[name][1]:.4f}")
 
     fig, (ax1, ax2) = plt.subplots(
         1, 2, figsize=(11.6, 4.5), gridspec_kw={"width_ratios": [1.2, 1]})
@@ -138,7 +138,7 @@ def fig_bootstrap_size():
     grid = np.linspace(-1.6, 1.6, 400)
     ax1.hist(boot, bins=np.linspace(-1.6, 1.6, 90), density=True,
              color=GREEN, alpha=0.40,
-             label="붓스트랩 귀무분포 (지수 자료, $B = 20{,}000$)")
+             label="부트스트랩 귀무분포 (지수 자료, $B = 20{,}000$)")
     fdens = stats.f.pdf(np.exp(grid), n - 1, n - 1) * np.exp(grid)
     ax1.plot(grid, fdens, color=RED, lw=2.2,
              label="$F$ 검정이 쓰는 기준분포")
@@ -149,7 +149,7 @@ def fig_bootstrap_size():
         ax1.vlines(v, 0, 1.05, color=GREEN, lw=1.5, ls=(0, (5, 3)))
     for v in fq:
         ax1.vlines(v, 0, 1.05, color=RED, lw=1.5, ls=(0, (5, 3)))
-    ax1.text(q[1] + 0.03, 1.10, f"붓스트랩 2.5% 한계 ±{q[1]:.3f}",
+    ax1.text(q[1] + 0.03, 1.10, f"부트스트랩 2.5% 한계 ±{q[1]:.3f}",
              fontsize=9.5, color=GREEN, ha="left")
     ax1.text(fq[1] + 0.03, 0.72, f"$F$ 기준 ±{fq[1]:.3f}", fontsize=9.5,
              color=RED, ha="left")
@@ -169,7 +169,7 @@ def fig_bootstrap_size():
     bvals = [res["정규"][1], res["지수"][1]]
     b1 = ax2.bar(xs - w / 2, fvals, w, color=RED, alpha=0.85, label="$F$ 검정")
     b2 = ax2.bar(xs + w / 2, bvals, w, color=GREEN, alpha=0.85,
-                 label="붓스트랩 검정")
+                 label="부트스트랩 검정")
     for bars, vals in [(b1, fvals), (b2, bvals)]:
         for b, v in zip(bars, vals):
             ax2.text(b.get_x() + b.get_width() / 2, v + 0.006, f"{v:.4f}",
@@ -183,7 +183,7 @@ def fig_bootstrap_size():
     ax2.set_ylabel("실제 제1종 오류율", fontsize=11, color=INK)
     clean(ax2)
     ax2.legend(fontsize=10.5, frameon=False, loc="upper left")
-    ax2.set_title(f"{R}회 반복, 붓스트랩 $B = {B}$", fontsize=11.5,
+    ax2.set_title(f"{R}회 반복, 부트스트랩 $B = {B}$", fontsize=11.5,
                   color=INK, pad=9)
 
     fig.tight_layout()
@@ -229,11 +229,11 @@ def fig_null_reference():
             fontsize=9.5, color=INK, ha="left", va="top")
     ax.set_xlim(-4.2, 3.0)
     ax.set_ylim(0, top)
-    ax.set_xlabel("$\\ln \\hat\\theta^{*}$   (붓스트랩 분산비의 로그)",
+    ax.set_xlabel("$\\ln \\hat\\theta^{*}$   (부트스트랩 분산비의 로그)",
                   fontsize=11, color=INK)
     ax.set_ylabel("빈도", fontsize=11, color=INK)
     clean(ax)
-    ax.set_title("집단 안에서 재표집한 붓스트랩 분포 ($B = 10{,}000$)",
+    ax.set_title("집단 안에서 재표집한 부트스트랩 분포 ($B = 10{,}000$)",
                  fontsize=12.5, color=INK, pad=10)
     save(fig, "bootstrap_null_reference.png")
     print(f"  obs log ratio {obs:.4f}, CI ({np.exp(lo):.4f}, "

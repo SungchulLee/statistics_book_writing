@@ -5,7 +5,7 @@ r"""17.2절 「그림으로 보는 통계학」 — 그 중앙값 한 줄이 생
 나온 수이면 표집오차가 있는데, 중앙값에는 평균과 달리 표준오차의 간단한 공식이 없다.
 
 ① 표본 하나 — 소득 분포와 세 임계값.
-② 중앙값의 붓스트랩 분포 — 공식 없이 잰 표준오차.
+② 중앙값의 부트스트랩 분포 — 공식 없이 잰 표준오차.
 ③ 그 폭이 $32\%$ 선에서 몇 가구에 해당하는가.
 
 자료는 직접 만든 로그정규 모집단이다(실제 미시자료가 아니다). 중앙값만 고시된
@@ -29,7 +29,7 @@ RNG = np.random.default_rng(20261022)
 
 MEDIAN = 6_494_738        # 2026년 4인 가구 기준 중위소득 (월, 원)
 SIGMA = 0.8               # 로그소득의 표준편차 — 모양을 주려고 고른 값이다
-N, B = 20_000, 4_000      # 가계금융복지조사 표본 규모와 붓스트랩 횟수
+N, B = 20_000, 4_000      # 가계금융복지조사 표본 규모와 부트스트랩 횟수
 RATES = {"생계급여 32%": 0.32, "의료급여 40%": 0.40,
          "주거급여 48%": 0.48, "교육급여 50%": 0.50}
 
@@ -37,7 +37,7 @@ x = MEDIAN * np.exp(SIGMA * RNG.standard_normal(N))
 med_hat = np.median(x)
 print(f"모집단 중앙값 {MEDIAN:,} 원,  표본 중앙값 {med_hat:,.0f} 원")
 
-# --- 중앙값의 붓스트랩 표준오차 ----------------------------------------
+# --- 중앙값의 부트스트랩 표준오차 ----------------------------------------
 reps = np.empty(B)
 CH = 200
 for s in range(0, B, CH):
@@ -46,9 +46,9 @@ for s in range(0, B, CH):
 se_boot = reps.std(ddof=1)
 lo, hi = np.quantile(reps, [0.025, 0.975])
 se_formula = 1 / (2 * (0.3989422804 / (MEDIAN * SIGMA)) * np.sqrt(N))
-print(f"중앙값의 붓스트랩 SE = {se_boot:,.0f} 원   "
+print(f"중앙값의 부트스트랩 SE = {se_boot:,.0f} 원   "
       f"(모집단을 알 때의 점근식 {se_formula:,.0f} 원)")
-print(f"중앙값의 95% 붓스트랩 구간 = [{lo:,.0f}, {hi:,.0f}] 원  "
+print(f"중앙값의 95% 부트스트랩 구간 = [{lo:,.0f}, {hi:,.0f}] 원  "
       f"(폭 {hi - lo:,.0f} 원)")
 
 se_mean = x.std(ddof=1) / np.sqrt(N)
@@ -91,11 +91,11 @@ ax = axes[1]
 ax.hist(reps / M, bins=40, color=C1, alpha=0.8, density=True)
 ax.axvline(lo / M, color="0.3", ls="--", lw=1.2)
 ax.axvline(hi / M, color="0.3", ls="--", lw=1.2)
-ax.set_xlabel("붓스트랩 표본의 중앙값 (백만원)")
+ax.set_xlabel("부트스트랩 표본의 중앙값 (백만원)")
 ax.set_ylabel("밀도")
-ax.set_title("② 중앙값의 붓스트랩 분포", fontsize=11)
+ax.set_title("② 중앙값의 부트스트랩 분포", fontsize=11)
 ax.text(0.03, 0.95,
-        f"붓스트랩 SE = {se_boot:,.0f} 원\n"
+        f"부트스트랩 SE = {se_boot:,.0f} 원\n"
         f"95% 구간 폭 = {hi - lo:,.0f} 원\n"
         f"평균의 SE(공식) = {se_mean:,.0f} 원",
         transform=ax.transAxes, fontsize=9, va="top",

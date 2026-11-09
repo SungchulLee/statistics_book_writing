@@ -1557,7 +1557,7 @@ $$
     ax1.spines['top'].set_visible(False)
     ax1.spines['right'].set_visible(False)
 
-    # 복원 재표본 분포 — 붓스트랩에 해당한다
+    # 복원 재표본 분포 — 부트스트랩에 해당한다
     ax2.hist(perm_chi2_wr, bins=40, alpha=0.7, color='forestgreen', edgecolor='black')
     ax2.axvline(chi2_obs, color='red', linewidth=2, label=f'Observed = {chi2_obs:.2f}')
     ax2.set_xlabel('Chi-square Statistic')

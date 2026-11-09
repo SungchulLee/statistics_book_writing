@@ -1,13 +1,13 @@
-r"""붓스트랩이 꼬리로 갈수록 말을 못 하는 것을 잰다.
+r"""부트스트랩이 꼬리로 갈수록 말을 못 하는 것을 잰다.
 
-쪽의 $\S 5$ 는 "표본최댓값처럼 매끄럽지 않은 통계량에서는 표준 비모수 붓스트랩이
+쪽의 $\S 5$ 는 "표본최댓값처럼 매끄럽지 않은 통계량에서는 표준 비모수 부트스트랩이
 실패할 수 있다"고 한 줄로 단언한다. 그 한 줄을 수로 만든다. 그리고 **매끄러움은
 있고 없고가 아니라 정도**라는 것을 본다 — 평균에서 최댓값으로 가는 길목에 꼬리
 분위수들이 놓여 있고, 포함률은 그 길을 따라 연속적으로 무너진다.
 
-① 로그정규 자료에서 백분위 붓스트랩 구간의 포함률을 $n$ 에 대해 잰다.
+① 로그정규 자료에서 백분위 부트스트랩 구간의 포함률을 $n$ 에 대해 잰다.
    평균과 $p_{50}$ 은 금방 $0.95$ 에 닿고 $p_{99.9}$ 는 멀찍이 떨어져 있다.
-② 까닭 — 꼬리 분위수의 붓스트랩 분포는 관측값 몇 개 위에만 올라앉은 이산분포다.
+② 까닭 — 꼬리 분위수의 부트스트랩 분포는 관측값 몇 개 위에만 올라앉은 이산분포다.
 ③ 최댓값에서는 $n$ 을 $500$ 배 키워도 포함률이 한 값에 굳는다. 정확구간과 견준다.
 
 만드는 파일: docs/ch14/non_normal_data/img/bootstrap_tail.png
@@ -43,7 +43,7 @@ print(f"로그정규$(0,1)$ — 참값 : 평균 {TRUE_MEAN:.4f}, " +
       ", ".join(f"p{100 * q:g} {v:.4f}" for q, v in TRUE_Q.items()))
 
 # === ① 포함률 ========================================================
-print(f"\n① 백분위 붓스트랩 구간의 포함률 (명목 {1 - ALPHA}, "
+print(f"\n① 백분위 부트스트랩 구간의 포함률 (명목 {1 - ALPHA}, "
       f"되풀이 {REPS_Q}, 재표본 {B_Q})")
 print("   n        평균      p50      p90      p99    p99.9")
 cov = {k: [] for k in ["평균"] + QS}
@@ -62,8 +62,8 @@ for n in NS_Q:
         cov[k].append(hit[k] / REPS_Q)
     print(f"{n:>5}" + "".join(f"{cov[k][-1]:>9.3f}" for k in cov))
 
-# === ② 붓스트랩 분포의 이산성 ========================================
-print(f"\n② 붓스트랩 분포가 올라앉은 서로 다른 값 (n = {N_SHOW}, "
+# === ② 부트스트랩 분포의 이산성 ========================================
+print(f"\n② 부트스트랩 분포가 올라앉은 서로 다른 값 (n = {N_SHOW}, "
       f"재표본 {B_SHOW})")
 x0 = RNG.lognormal(0.0, 1.0, N_SHOW)
 r0 = x0[RNG.integers(0, N_SHOW, (B_SHOW, N_SHOW))]
@@ -75,12 +75,12 @@ for q in QS:
     print(f"   {f'p{100 * q:g}':>7} : {len(u):>4} 개, "
           f"가장 흔한 값 하나가 {100 * c.max() / B_SHOW:>5.1f}%")
 rank_lo = int(np.searchsorted(np.sort(x0), np.unique(boot[0.999][0])[0]))
-print(f"   p99.9 의 붓스트랩 분포는 정렬한 {N_SHOW} 개 가운데 "
+print(f"   p99.9 의 부트스트랩 분포는 정렬한 {N_SHOW} 개 가운데 "
       f"상위 {N_SHOW - rank_lo} 개만 쓴다")
 
 # === ③ 최댓값 ========================================================
 print(f"\n③ 최댓값 — 균등$(0,1)$, $\\theta = 1$ (되풀이 {REPS_M})")
-print(f"{'n':>7}{'붓스트랩':>11}{'정확구간':>10}{'P(max*=max)':>14}"
+print(f"{'n':>7}{'부트스트랩':>11}{'정확구간':>10}{'P(max*=max)':>14}"
       f"{'1-(1-1/n)^n':>14}")
 cov_b, cov_e, atoms = [], [], []
 for n in NS_M:
@@ -100,7 +100,7 @@ for n in NS_M:
     print(f"{n:>7}{cov_b[-1]:>11.3f}{cov_e[-1]:>10.3f}{atoms[-1]:>14.3f}"
           f"{1 - (1 - 1 / n) ** n:>14.3f}")
 flat = float(np.mean(cov_b[2:]))
-print(f"   붓스트랩 쪽은 n 을 {NS_M[-1] // NS_M[0]} 배 키우는 동안 "
+print(f"   부트스트랩 쪽은 n 을 {NS_M[-1] // NS_M[0]} 배 키우는 동안 "
       f"{flat:.3f} 에 머문다 (MC SE "
       f"{np.sqrt(flat * (1 - flat) / (REPS_M * 4)):.4f})")
 
@@ -119,7 +119,7 @@ ax1.set_xticks(NS_Q)
 ax1.set_xticklabels([f"${v}$" for v in NS_Q], fontsize=9)
 ax1.minorticks_off()
 ax1.set_xlabel("표본 수 $n$")
-ax1.set_ylabel("붓스트랩 구간의 포함률")
+ax1.set_ylabel("부트스트랩 구간의 포함률")
 ax1.set_ylim(0.1, 1.02)
 ax1.set_title("① 꼬리로 갈수록 무너진다", fontsize=12)
 ax1.legend(loc="lower right", fontsize=9.5, ncol=2)
@@ -140,7 +140,7 @@ ax2.text(0.035, 0.975,
          f"관측값은 정렬한 ${N_SHOW}$ 개 가운데 상위 ${N_SHOW - rank_lo}$ 개뿐이다",
          transform=ax2.transAxes, va="top", fontsize=9.5,
          bbox=dict(boxstyle="round,pad=0.4", fc="white", ec="#cccccc"))
-ax2.set_xlabel("붓스트랩 분포 (각자의 표준편차 단위)")
+ax2.set_xlabel("부트스트랩 분포 (각자의 표준편차 단위)")
 ax2.set_ylabel("누적비율")
 ax2.set_xlim(-3.4, 3.4)
 ax2.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
@@ -150,7 +150,7 @@ ax2.legend(loc="lower right", fontsize=9.5)
 ax2.grid(alpha=0.25)
 
 ax3.plot(NS_M, cov_b, "o-", color="#d62728", lw=2.6, ms=7,
-         label="붓스트랩 기본구간")
+         label="부트스트랩 기본구간")
 ax3.plot(NS_M, cov_e, "s-", color="#2ca02c", lw=2.6, ms=7,
          label="정확구간 $[X_{(n)},\\ X_{(n)}/\\alpha^{1/n}]$")
 ax3.plot(NS_M, atoms, "^:", color="#8c564b", lw=2.0, ms=7,

@@ -356,7 +356,7 @@ bd = (AFTER[r24.integers(0, n24, (40000, n24))].mean(1)
 lo24, hi24 = np.percentile(bd, [2.5, 97.5])
 print(f"\n[shoe_sales] 전 {BEFORE.mean():.2f} -> 후 {AFTER.mean():.2f} "
       f"(+{obs24:.2f} 켤레 = {obs24 / BEFORE.mean() * 100:.1f}%)")
-print(f"  순열 p = {p24:.4f} · 붓스트랩 구간 "
+print(f"  순열 p = {p24:.4f} · 부트스트랩 구간 "
       f"[{lo24:.2f}, {hi24:.2f}]")
 DEL = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0]
 sd_pool = np.sqrt((BEFORE.var(ddof=1) + AFTER.var(ddof=1)) / 2)
@@ -387,7 +387,7 @@ ax1.text((2.0 + hi24) / 2, 0.88,
          "사업적으로 뜻이 있는 크기\n구간이 이 영역도 배제하지 못한다",
          ha="center", va="top", fontsize=11.5, color="darkgreen",
          fontweight="bold")
-ax1.text(lo24 - 0.1, -0.72, "95% 붓스트랩 구간", ha="left", va="bottom",
+ax1.text(lo24 - 0.1, -0.72, "95% 부트스트랩 구간", ha="left", va="bottom",
          fontsize=11.5, color="tab:blue")
 ax1.set_xlim(lo24 - 0.6, hi24 + 0.6)
 ax1.set_ylim(-1.0, 1.0)
@@ -423,7 +423,7 @@ save(fig, PRM + "cannot_tell_is_not_no_effect.png")
 # ════════════════════════════════════════════════════════════════════
 # 25. bootstrap_testing/correlation — 세 가지 뽑기가 내는 세 분포
 #
-# 쪽에 그림이 하나뿐이고(r 척도와 arctanh 척도의 붓스트랩 분포)
+# 쪽에 그림이 하나뿐이고(r 척도와 arctanh 척도의 부트스트랩 분포)
 # 그것은 변환을 그린다. 들머리의 **셋째 문단**이 세 길을 가르는데
 # 그려져 있지 않다 — 「섞으면 짝 구조가 통째로 깨지므로 「상관이
 # 0 이다」만 물을 수 있다. … 이때 쌍을 깨고 x 와 y 를 따로 뽑으면

@@ -54,7 +54,7 @@ obs_rank = ranks_of(p_hat, RNG)
 # --- 재표집 --------------------------------------------------------
 # 기관 i 의 0/1 결과 n_i 개를 복원추출하면 성공 횟수는 정확히
 # Binomial(n_i, p_hat_i) 를 따른다. 그래서 이항난수를 뽑는 것이 곧
-# 비모수 붓스트랩이다.
+# 비모수 부트스트랩이다.
 boot_rates = RNG.binomial(n[None, :], p_hat[None, :], size=(B, K)) / n[None, :]
 boot_ranks = ranks_of(boot_rates, RNG)
 lo = np.percentile(boot_ranks, 2.5, axis=0)

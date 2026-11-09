@@ -1,7 +1,7 @@
 r"""14장 비정규 자료 절 두 쪽의 개념 그림을 만든다.
 
 만드는 파일:
-  ch14/non_normal_data/img/bootstrap_shape.png      붓스트랩은 모양에 적응한다
+  ch14/non_normal_data/img/bootstrap_shape.png      부트스트랩은 모양에 적응한다
   ch14/non_normal_data/img/rank_test_power.png      순위검정이 잃는 것과 얻는 것
 
 실행:  python3 scripts/make_ch14_nonnormal_figures.py   (저장소 최상위에서)
@@ -46,7 +46,7 @@ def clean(ax):
 
 
 # ===================================================================
-# 그림 1. 붓스트랩 분포는 표집분포의 모양을 따라간다
+# 그림 1. 부트스트랩 분포는 표집분포의 모양을 따라간다
 # ===================================================================
 def fig_bootstrap_shape():
     rng = np.random.default_rng(1420)
@@ -57,7 +57,7 @@ def fig_bootstrap_shape():
     # (1) 진짜 표집분포 — 현실에서는 알 수 없지만 모의실험으로는 볼 수 있다
     true_means = rng.lognormal(0.0, sigma, size=(200_000, n)).mean(axis=1)
 
-    # (2) 표본 하나에서 만든 붓스트랩 분포
+    # (2) 표본 하나에서 만든 부트스트랩 분포
     x = rng.lognormal(0.0, sigma, size=n)
     idx = rng.integers(0, n, size=(20_000, n))
     boot_means = x[idx].mean(axis=1)
@@ -69,10 +69,10 @@ def fig_bootstrap_shape():
 
     print(f"모집단 왜도 = {float(stats.lognorm.stats(sigma, moments='s')):.3f}")
     print(f"진짜 표집분포의 왜도 = {stats.skew(true_means):.3f}")
-    print(f"붓스트랩 분포의 왜도 = {stats.skew(boot_means):.3f}")
+    print(f"부트스트랩 분포의 왜도 = {stats.skew(boot_means):.3f}")
     print(f"표본: xbar={xbar:.3f}  s={s:.3f}  참평균={mu_true:.3f}")
     lo_b, hi_b = np.quantile(boot_means, [0.025, 0.975])
-    print(f"백분위수 붓스트랩 구간 = [{lo_b:.3f}, {hi_b:.3f}]")
+    print(f"백분위수 부트스트랩 구간 = [{lo_b:.3f}, {hi_b:.3f}]")
     print(f"t 구간 = [{xbar - tcrit*se:.3f}, {xbar + tcrit*se:.3f}]")
 
     # (4) 두 구간의 실제 포함률
@@ -95,7 +95,7 @@ def fig_bootstrap_shape():
         cov_t.append(ct / B_out)
         cov_b.append(cb / B_out)
         print(f"n={nn:4d}  t 구간 포함률={cov_t[-1]:.3f}   "
-              f"백분위수 붓스트랩={cov_b[-1]:.3f}")
+              f"백분위수 부트스트랩={cov_b[-1]:.3f}")
 
     fig, axes = plt.subplots(1, 2, figsize=(11.4, 4.6))
 
@@ -106,7 +106,7 @@ def fig_bootstrap_shape():
             label=r"$\bar{X}$ 의 진짜 표집분포")
     ax.hist(boot_means - xbar + mu_true, bins=110, range=(lo, hi),
             density=True, histtype="step", color=ORANGE, linewidth=2.0,
-            label="표본 하나에서 만든 붓스트랩 분포\n(중심을 맞춰 겹쳤다)")
+            label="표본 하나에서 만든 부트스트랩 분포\n(중심을 맞춰 겹쳤다)")
     g = np.linspace(lo, hi, 400)
     ax.plot(g, stats.norm.pdf(g, mu_true, se), color=BLUE, lw=2.2, ls="--",
             label=r"$t$ 근사가 강요하는 대칭 종모양")
@@ -123,7 +123,7 @@ def fig_bootstrap_shape():
     ax.axhline(0.95, color=MUTED, lw=1.3, ls="--", label="약속한 0.95")
     ax.plot(ns, cov_t, "s-", color=BLUE, lw=2, ms=6, label=r"$t$ 구간")
     ax.plot(ns, cov_b, "o-", color=ORANGE, lw=2, ms=6,
-            label="백분위수 붓스트랩 구간")
+            label="백분위수 부트스트랩 구간")
     for xx, v in zip(ns, cov_t):
         ax.annotate(f"{v:.3f}", (xx, v), textcoords="offset points",
                     xytext=(0, 7), fontsize=8.5, color=BLUE, ha="center")

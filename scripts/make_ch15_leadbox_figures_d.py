@@ -3,7 +3,7 @@
   21. anova_pretest         두 단계의 크기는 두 전략을 파이로 섞은 값이다
   22. financial_volatility  꼬리에 듣던 로버스트성이 종속에는 듣지 않는다
   23. regression_variance   R 제곱이 작다고 이분산이 약한 것이 아니다
-  24. bootstrap_variance    붓스트랩도 분산 앞에서는 반쯤만 듣는다
+  24. bootstrap_variance    부트스트랩도 분산 앞에서는 반쯤만 듣는다
   25. likelihood_ratio      둘이 같은 뿌리에서 자랐다 — 수로 확인한다
   26. bayesian_variance     베이즈라고 분포 가정이 없는 것이 아니다
 
@@ -270,11 +270,11 @@ save(fig, APP + "r2_does_not_measure_it.png")
 
 
 # ════════════════════════════════════════════════════════════════════
-# 24. bootstrap_variance — 붓스트랩도 반쯤만 듣는다
+# 24. bootstrap_variance — 부트스트랩도 반쯤만 듣는다
 #
-# 쪽의 bootstrap_vs_f_size 는 **두** 검정(붓스트랩과 F)의 크기를 그린다.
+# 쪽의 bootstrap_vs_f_size 는 **두** 검정(부트스트랩과 F)의 크기를 그린다.
 # 들머리의 셋째 문단은 거기에 **셋째**를 들여온다 — 「그 0.089 도 명목값의
-# 두 배이고, 같은 조건에서 브라운–포사이드는 0.048 이다. 붓스트랩도
+# 두 배이고, 같은 조건에서 브라운–포사이드는 0.048 이다. 부트스트랩도
 # 분산 앞에서는 반쯤만 듣는다.」 셋을 나란히 놓아야 「반쯤」이 보인다.
 # ════════════════════════════════════════════════════════════════════
 N24, REPS24, B24 = 20, 1500, 399
@@ -283,7 +283,7 @@ POP24 = [("정규", lambda n: r24.standard_normal(n)),
          ("t(5)", lambda n: r24.standard_t(5, n)),
          ("지수", lambda n: r24.exponential(1.0, n)),
          ("대수정규", lambda n: np.exp(r24.normal(0, 1, n)))]
-res24 = {nm: [] for nm in ("F 검정", "붓스트랩", "브라운–포사이드")}
+res24 = {nm: [] for nm in ("F 검정", "부트스트랩", "브라운–포사이드")}
 for pnm, gen in POP24:
     cnt = {k: 0 for k in res24}
     for _ in range(REPS24):
@@ -303,7 +303,7 @@ for pnm, gen in POP24:
         ib = r24.integers(0, len(pool), (B24, N24))
         boot = np.abs(np.log(pool[ia].var(1, ddof=1)
                              / pool[ib].var(1, ddof=1)))
-        cnt["붓스트랩"] += (boot >= obs).mean() < 0.05
+        cnt["부트스트랩"] += (boot >= obs).mean() < 0.05
     for k in res24:
         res24[k].append(cnt[k] / REPS24)
 print(f"\n[bootstrap_variance] 집단당 {N24}, 등분산이 참")
@@ -314,7 +314,7 @@ fig, ax = plt.subplots(figsize=(11.0, 5.8))
 xx = np.arange(len(POP24))
 w = 0.26
 for i, (nm, c) in enumerate([("F 검정", "tab:red"),
-                             ("붓스트랩", "tab:orange"),
+                             ("부트스트랩", "tab:orange"),
                              ("브라운–포사이드", "tab:blue")]):
     ax.bar(xx + (i - 1) * w, res24[nm], width=w, color=c, label=nm)
     for j in xx:
@@ -334,12 +334,12 @@ ax.text(xx[0] - 0.42, 0.112, "두 배 선 (0.10)", ha="left", va="bottom",
         fontsize=10.8, color="0.45", fontweight="bold")
 ax.annotate("재표집이 F 의 왜곡을 크게 덜어 주지만\n"
             "명목선까지는 못 데려간다 — **반쯤**이다".replace("**", ""),
-            xy=(2 + 0.0, res24["붓스트랩"][2]), xytext=(0.25, 0.42),
+            xy=(2 + 0.0, res24["부트스트랩"][2]), xytext=(0.25, 0.42),
             fontsize=11.8, color="tab:orange", fontweight="bold",
             ha="left",
             arrowprops=dict(arrowstyle="->", color="tab:orange", lw=1.9))
 ax.set_title("재표집이 고치는 것과 고치지 못하는 것", fontsize=13)
-fig.suptitle("붓스트랩도 분산 앞에서는 반쯤만 듣는다", fontsize=15, y=0.975)
+fig.suptitle("부트스트랩도 분산 앞에서는 반쯤만 듣는다", fontsize=15, y=0.975)
 plt.tight_layout()
 save(fig, ADV + "bootstrap_half_fixes_it.png")
 

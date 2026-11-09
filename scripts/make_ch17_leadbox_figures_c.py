@@ -96,7 +96,7 @@ for i in range(2):
                  color="white" if g[i, j] > 0.55 * g.max() else "0.3")
 ax1.set_xticks([0, 1], ["0 을 품었다", "0 을 뺐다"], fontsize=12.5)
 ax1.set_yticks([0, 1], ["기각 못 함", "기각함"], fontsize=12.5)
-ax1.set_xlabel("붓스트랩 95% 구간", fontsize=12)
+ax1.set_xlabel("부트스트랩 95% 구간", fontsize=12)
 ax1.set_ylabel("순열검정 (0.05)", fontsize=12)
 ax1.set_title("같은 자료에 둘을 함께 걸면", fontsize=13)
 
@@ -332,7 +332,7 @@ ax.annotate(f"이 자리만 반대로 어긋난다 —\n구간이 한 점으로 
             xy=(2, vs[2] * 0.72), xytext=(0.30, 0.60), fontsize=11,
             color="tab:purple", fontweight="bold", ha="left",
             arrowprops=dict(arrowstyle="->", color="tab:purple", lw=1.9))
-ax.set_title("보통의 붓스트랩을 그대로 걸었을 때", fontsize=13)
+ax.set_title("보통의 부트스트랩을 그대로 걸었을 때", fontsize=13)
 fig.suptitle("무너지는 자리는 넷이고, 세 곳은 과신하는 쪽으로 어긋난다",
              fontsize=15, y=0.99)
 plt.tight_layout()

@@ -164,7 +164,7 @@ nav:
                 - F 분포 (분산비): ch05/distributions/f_distribution.md
             - 5.3 표준오차와 부트스트랩:
                 - 표준오차: ch05/applications/standard_error.md
-                - 붓스트랩 표준오차: ch05/applications/bootstrap_standard_error.md
+                - 부트스트랩 표준오차: ch05/applications/bootstrap_standard_error.md
             - 5.4 표본평균 X̄:
                 - 평균의 표집분포: ch05/applications/sample_mean.md
                 - X̄의 표집분포 (균등분포): ch05/applications/xbar_uniform.md
@@ -485,7 +485,7 @@ nav:
                 - 정규성 검정의 한계와 함정: ch14/limitations/limitations.md
             - 14.6 비정규 자료 다루기:
                 - 정규성을 위한 변환: ch14/non_normal_data/transformations.md
-                - 대안으로서의 붓스트랩: ch14/non_normal_data/bootstrapping.md
+                - 대안으로서의 부트스트랩: ch14/non_normal_data/bootstrapping.md
                 - 비모수 방법: ch14/non_normal_data/nonparametric.md
             - 14.7 응용:
                 - t 검정과 분산분석에서의 정규성: ch14/applications/t_tests_anova.md
@@ -519,7 +519,7 @@ nav:
                 - 대수정규에서의 비교 (왜도가 극단일 때): ch15/robust_tests/robust_tests_comparison.md
                 - 레빈 검정 정규 대 치우친 분포 모의실험: ch15/robust_tests/levene_simulation.md
             - 15.6 고급 방법:
-                - 붓스트랩 분산 검정: ch15/advanced_methods/bootstrap_variance.md
+                - 부트스트랩 분산 검정: ch15/advanced_methods/bootstrap_variance.md
                 - 베이즈 분산 검정: ch15/advanced_methods/bayesian_variance.md
                 - 분산에 대한 가능도비 검정: ch15/advanced_methods/likelihood_ratio.md
             - 15.7 응용:
@@ -558,23 +558,23 @@ nav:
 
         - 17 재표집 방법:
             - 장 개요: ch17/index.md
-            - 17.1 붓스트랩의 기초:
-                - 붓스트랩 원리: ch17/bootstrap/principle.md
-                - 비모수 붓스트랩: ch17/bootstrap/nonparametric.md
-                - 모수적 붓스트랩: ch17/bootstrap/parametric.md
-                - 붓스트랩 재표집 방법: ch17/bootstrap/resampling_method.md
-            - 17.2 붓스트랩 신뢰구간:
+            - 17.1 부트스트랩의 기초:
+                - 부트스트랩 원리: ch17/bootstrap/principle.md
+                - 비모수 부트스트랩: ch17/bootstrap/nonparametric.md
+                - 모수적 부트스트랩: ch17/bootstrap/parametric.md
+                - 부트스트랩 재표집 방법: ch17/bootstrap/resampling_method.md
+            - 17.2 부트스트랩 신뢰구간:
                 - 백분위수법: ch17/bootstrap_ci/percentile.md
                 - 기본법 (역백분위수법): ch17/bootstrap_ci/basic.md
-                - 편향보정 가속 붓스트랩 (BCa): ch17/bootstrap_ci/bca.md
-                - 붓스트랩-t 방법: ch17/bootstrap_ci/bootstrap_t.md
+                - 편향보정 가속 부트스트랩 (BCa): ch17/bootstrap_ci/bca.md
+                - 부트스트랩-t 방법: ch17/bootstrap_ci/bootstrap_t.md
                 - 신뢰수준의 시각화: ch17/bootstrap_ci/visualization_confidence_levels.md
-                - 붓스트랩 신뢰구간 방법의 비교: ch17/bootstrap_ci/comparison.md
-                - 중앙값의 붓스트랩 (코드): ch17/bootstrap_ci/bootstrap_median.md
-            - 17.3 붓스트랩 가설검정:
-                - 일표본 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/single_mean.md
-                - 두 평균에 대한 붓스트랩 검정: ch17/bootstrap_testing/two_means.md
-                - 상관에 대한 붓스트랩 검정: ch17/bootstrap_testing/correlation.md
+                - 부트스트랩 신뢰구간 방법의 비교: ch17/bootstrap_ci/comparison.md
+                - 중앙값의 부트스트랩 (코드): ch17/bootstrap_ci/bootstrap_median.md
+            - 17.3 부트스트랩 가설검정:
+                - 일표본 평균에 대한 부트스트랩 검정: ch17/bootstrap_testing/single_mean.md
+                - 두 평균에 대한 부트스트랩 검정: ch17/bootstrap_testing/two_means.md
+                - 상관에 대한 부트스트랩 검정: ch17/bootstrap_testing/correlation.md
             - 17.4 순열검정:
                 - 순열검정의 기초: ch17/permutation/foundations.md
                 - 이표본 위치에 대한 순열검정: ch17/permutation/two_sample.md
@@ -584,7 +584,7 @@ nav:
                 - A/B 검정 순열검정 (코드): ch17/permutation/ab_testing_permutation.md
                 - 재표집 (신발 판매 A/B 검정) (코드): ch17/permutation/resampling_shoe_sales.md
             - 17.5 비교와 실무 지침:
-                - 붓스트랩과 순열검정의 비교: ch17/comparison/bootstrap_vs_permutation.md
+                - 부트스트랩과 순열검정의 비교: ch17/comparison/bootstrap_vs_permutation.md
                 - 재표집 횟수와 수렴: ch17/comparison/convergence.md
                 - 재표집이 실패할 때: ch17/comparison/limitations.md
 

@@ -1,11 +1,11 @@
-r"""17장 붓스트랩 신뢰구간 절(bootstrap_ci/) 일곱 쪽의 개념 그림을 생성한다.
+r"""17장 부트스트랩 신뢰구간 절(bootstrap_ci/) 일곱 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
   ch17/bootstrap_ci/img/basic_is_a_mirror.png        기본 구간은 반사된 분포의 백분위수
   ch17/bootstrap_ci/img/percentile_invariance.png    백분위수 구간의 변환 불변성
   ch17/bootstrap_ci/img/bca_dial.png                 BCa 는 읽는 자리를 옮긴다
   ch17/bootstrap_ci/img/studentized_pivot.png        스튜던트화가 추축성을 만든다
-  ch17/bootstrap_ci/img/median_bootstrap_atoms.png   중앙값 붓스트랩 분포의 이산성
+  ch17/bootstrap_ci/img/median_bootstrap_atoms.png   중앙값 부트스트랩 분포의 이산성
   ch17/bootstrap_ci/img/coverage_vs_width.png        포함확률과 폭은 함께 보아야 한다
   (levels_and_coverage.png 은 더 쓰이지 않는다 — 아래 main 의 주석을 볼 것)
 
@@ -67,7 +67,7 @@ def bca_levels(bs, th, jk):
 
 
 # ===========================================================================
-# 그림 1. 기본 구간은 반사된 붓스트랩 분포의 백분위수 (bootstrap_ci.md)
+# 그림 1. 기본 구간은 반사된 부트스트랩 분포의 백분위수 (bootstrap_ci.md)
 # ===========================================================================
 def fig_mirror():
     rng = np.random.default_rng(0)
@@ -95,7 +95,7 @@ def fig_mirror():
 
     for ax, v, lo, hi, mid, col, colf, title in (
         (ax1, bs, lo_p, hi_p, mid_p, BLUE, BLUE_F,
-         r"붓스트랩 분포 $\hat\theta^*$ — 여기서 읽으면 백분위수 구간"),
+         r"부트스트랩 분포 $\hat\theta^*$ — 여기서 읽으면 백분위수 구간"),
         (ax2, ref, lo_b, hi_b, mid_b, ORANGE, ORANGE_F,
          r"뒤집은 분포 $2\hat\theta - \hat\theta^*$ — 여기서 읽으면 기본 구간"),
     ):
@@ -285,7 +285,7 @@ def fig_bca_dial():
     axl.set_xlim(0, 0.20)
     tidy(axl, left=True)
 
-    # --- 오른쪽: 같은 붓스트랩 분포, 다른 절단점 ---
+    # --- 오른쪽: 같은 부트스트랩 분포, 다른 절단점 ---
     bins = np.linspace(0, 4.2, 100)
     h, e = np.histogram(bs, bins=bins, density=True)
     c = 0.5 * (e[1:] + e[:-1])
@@ -310,7 +310,7 @@ def fig_bca_dial():
         ax2.text(hi + 0.05, y, "%.2f  %s" % (hi, lab), ha="left", va="center",
                  fontsize=9, color=col)
     ax2.set_xlim(-0.05, 4.9)
-    ax2.set_xlabel(r"붓스트랩 분산 $s^{2*}$", fontsize=10, color=INK)
+    ax2.set_xlabel(r"부트스트랩 분산 $s^{2*}$", fontsize=10, color=INK)
     ax2.set_title(r"$\mathrm{Exp}(1)$, $n = 20$ 의 분산 — 같은 분포, 다른 절단점",
                   fontsize=11.5, color=INK)
     tidy(ax2)
@@ -329,7 +329,7 @@ def fig_studentized():
     real = rng.exponential(1.0, (M, n))
     T_true = (real.mean(1) - 1.0) / (real.std(1, ddof=1) / np.sqrt(n))
 
-    # 표본 하나에서의 붓스트랩
+    # 표본 하나에서의 부트스트랩
     x = rng.exponential(1.0, n)
     th, se = x.mean(), x.std(ddof=1) / np.sqrt(n)
     xb = x[rng.integers(0, n, (B, n))]
@@ -342,13 +342,13 @@ def fig_studentized():
     q_t = stats.t.ppf([0.025, 0.975], n - 1)
     print("[stud] x_bar=%.4f se=%.4f" % (th, se))
     print("   참 추축량 2.5/97.5 = %.3f %.3f" % (*q_true,))
-    print("   붓스트랩 t*        = %.3f %.3f" % (*q_star,))
+    print("   부트스트랩 t*        = %.3f %.3f" % (*q_star,))
     print("   t(14)              = %.3f %.3f" % (*q_t,))
 
     ci_t = (th - q_t[1] * se, th + q_t[1] * se)
     ci_bt = (th - q_star[1] * se, th - q_star[0] * se)
     ci_p = tuple(np.percentile(bs, [2.5, 97.5]))
-    print("   고전 t %s / 붓스트랩-t %s / 백분위수 %s"
+    print("   고전 t %s / 부트스트랩-t %s / 백분위수 %s"
           % (np.round(ci_t, 3), np.round(ci_bt, 3), np.round(ci_p, 3)))
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10.6, 6.6),
@@ -361,7 +361,7 @@ def fig_studentized():
     h, e = np.histogram(tstar, bins=bins, density=True)
     c = 0.5 * (e[1:] + e[:-1])
     ax1.step(c, h, where="mid", color=ORANGE, lw=1.8,
-             label=r"붓스트랩 $t^*$ (표본 하나에서 $B = 40000$)")
+             label=r"부트스트랩 $t^*$ (표본 하나에서 $B = 40000$)")
     tt = np.linspace(-7, 3.2, 400)
     ax1.plot(tt, stats.t.pdf(tt, n - 1), color=RED, lw=2.0, ls="--",
              label=r"$t(14)$ 밀도 — 대칭을 가정한다")
@@ -384,7 +384,7 @@ def fig_studentized():
     tidy(ax1)
 
     rows = [
-        ("붓스트랩-$t$  (포함확률 0.944)", ci_bt, GREEN),
+        ("부트스트랩-$t$  (포함확률 0.944)", ci_bt, GREEN),
         ("백분위수  (포함확률 0.896)", ci_p, BLUE),
         ("고전 $t$ 구간  (포함확률 0.903)", ci_t, MUTED),
     ]
@@ -413,7 +413,7 @@ def fig_studentized():
 
 
 # ===========================================================================
-# 그림 5. 중앙값 붓스트랩 분포의 이산성 (bootstrap_median.md)
+# 그림 5. 중앙값 부트스트랩 분포의 이산성 (bootstrap_median.md)
 # ===========================================================================
 def fig_median_atoms():
     rng = np.random.default_rng(7)
@@ -427,7 +427,7 @@ def fig_median_atoms():
     q = np.percentile(bm, [2.5, 97.5])
     inner = ((vals >= q[0]) & (vals <= q[1])).sum()
     print("[median] n=%d  중앙값=%.1f  평균=%.1f" % (n, np.median(x), x.mean()))
-    print("   붓스트랩 중앙값의 고유값 %d 개 / 가운데 95%% 안에는 %d 개"
+    print("   부트스트랩 중앙값의 고유값 %d 개 / 가운데 95%% 안에는 %d 개"
           % (len(vals), inner))
     print("   SE(중앙값)=%.2f  SE(평균)=%.2f"
           % (bm.std(ddof=1), bmean.std(ddof=1)))
@@ -499,12 +499,12 @@ def fig_coverage_width():
         ("백분위수", 0.942, 0.9458, BLUE),
         ("기본", 0.934, 0.9458, ORANGE),
         ("BCa", 0.946, 0.9573, GREEN),
-        (r"붓스트랩-$t$", 0.947, 0.9856, PURPLE),
+        (r"부트스트랩-$t$", 0.947, 0.9856, PURPLE),
     ]
     hard = [
         ("백분위수", 0.677, 1.59, BLUE),
         ("BCa", 0.736, 1.88, GREEN),
-        (r"붓스트랩-$t$", 0.878, 14.15, PURPLE),
+        (r"부트스트랩-$t$", 0.878, 14.15, PURPLE),
     ]
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12.0, 4.8),
@@ -520,7 +520,7 @@ def fig_coverage_width():
              ha="center", va="top")
     ax1.text(0.9573 + 0.0015, 0.946, "BCa", color=GREEN, fontsize=10,
              va="center")
-    ax1.text(0.9856 - 0.0015, 0.947, r"붓스트랩-$t$", color=PURPLE, fontsize=10,
+    ax1.text(0.9856 - 0.0015, 0.947, r"부트스트랩-$t$", color=PURPLE, fontsize=10,
              ha="right", va="center")
     ax1.axhline(0.95, color=RED, lw=1.4, ls="--")
     ax1.text(0.9885, 0.9505, "명목 0.95", color=RED, fontsize=9.5, ha="right")
@@ -538,7 +538,7 @@ def fig_coverage_width():
              ha="center", va="top")
     ax2.text(1.88, 0.736 + 0.012, "BCa", color=GREEN, fontsize=10,
              ha="center", va="bottom")
-    ax2.text(14.15 * 0.88, 0.878, r"붓스트랩-$t$" + "\n폭 14.15", color=PURPLE,
+    ax2.text(14.15 * 0.88, 0.878, r"부트스트랩-$t$" + "\n폭 14.15", color=PURPLE,
              fontsize=10, ha="right", va="center")
     ax2.axhline(0.95, color=RED, lw=1.4, ls="--")
     ax2.text(1.15, 0.955, "명목 0.95", color=RED, fontsize=9.5)
@@ -615,7 +615,7 @@ def fig_levels_coverage():
         ax1.text(hi + 1.2, y * ymax, "폭 %.1f" % (hi - lo), ha="left",
                  va="center", fontsize=9, color=col)
     ax1.set_xlim(38, 124)
-    ax1.set_xlabel("붓스트랩 표본평균 (천 단위)", fontsize=10, color=INK)
+    ax1.set_xlabel("부트스트랩 표본평균 (천 단위)", fontsize=10, color=INK)
     ax1.set_title("표본 하나: 신뢰수준을 올리면 폭이 커진다", fontsize=11.5,
                   color=INK)
     tidy(ax1)
@@ -637,7 +637,7 @@ def fig_levels_coverage():
     ax2.text(27, K + 3.5,
              "2000번 반복한 실제 포함확률 %.3f  (약속은 0.95)" % cov,
              color=INK, fontsize=10.5, va="center")
-    ax2.set_xlabel("95% 백분위수 붓스트랩 구간 (천 단위)", fontsize=10, color=INK)
+    ax2.set_xlabel("95% 백분위수 부트스트랩 구간 (천 단위)", fontsize=10, color=INK)
     ax2.set_title("같은 절차를 되풀이하면", fontsize=11.5, color=INK)
     tidy(ax2)
 

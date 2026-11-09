@@ -1,8 +1,8 @@
-r"""17장 붓스트랩 절(bootstrap/)과 신뢰구간 절(bootstrap_ci/)의 개념 그림을 생성한다.
+r"""17장 부트스트랩 절(bootstrap/)과 신뢰구간 절(bootstrap_ci/)의 개념 그림을 생성한다.
 
 만드는 파일:
   ch17/bootstrap/img/bootstrap_world_analogy.png   두 세계의 유비와 중심화한 두 분포
-  ch17/bootstrap_ci/img/four_ci_one_distribution.png  한 붓스트랩 분포에서 읽는 네 구간
+  ch17/bootstrap_ci/img/four_ci_one_distribution.png  한 부트스트랩 분포에서 읽는 네 구간
   ch17/bootstrap/img/resample_pairs_vs_separate.png  쌍을 지키는 재표집과 깨는 재표집
   ch17/bootstrap/img/parametric_vs_nonparametric.png  무엇에서 다시 뽑는가
 
@@ -68,7 +68,7 @@ def fig_analogy():
 
     # 현실 세계: F 에서 반복 표집한 중앙값
     real = np.median(rng.exponential(1.0, (40000, n)), axis=1) - true_med
-    # 붓스트랩 세계: 관측 표본 하나에서 복원추출한 중앙값
+    # 부트스트랩 세계: 관측 표본 하나에서 복원추출한 중앙값
     boot = np.median(x[rng.integers(0, n, (40000, n))], axis=1) - obs_med
 
     print("[analogy] obs_med=%.4f  real_sd=%.4f  boot_sd=%.4f"
@@ -103,7 +103,7 @@ def fig_analogy():
     ax.set_title("(a) 현실 세계 — 표집을 되풀이할 수 없다", fontsize=11, color=INK)
     tidy(ax)
 
-    # --- (b) 붓스트랩 세계 ---
+    # --- (b) 부트스트랩 세계 ---
     ax = fig.add_subplot(gs[0, 1])
     ax.vlines(x, 0, 0.55, color=ORANGE, lw=1.8, zorder=2)
     ax.plot(x, np.full(n, 0.55), "o", color=ORANGE, ms=4.0, zorder=3)
@@ -117,7 +117,7 @@ def fig_analogy():
             ha="right")
     ax.set_ylim(-0.34, 1.10)
     ax.set_xlim(-0.12, 4.2)
-    ax.set_title("(b) 붓스트랩 세계 — 몇 번이든 되풀이한다", fontsize=11, color=INK)
+    ax.set_title("(b) 부트스트랩 세계 — 몇 번이든 되풀이한다", fontsize=11, color=INK)
     tidy(ax)
 
     # --- (c) 중심화한 두 분포함수 ---
@@ -125,7 +125,7 @@ def fig_analogy():
     ax.plot(grid, F_real, color=BLUE, lw=2.4,
             label=r"현실 세계 $G$: $\hat\theta - \theta$ (모집단에서 40000번 표집)")
     ax.plot(grid, F_boot, color=ORANGE, lw=2.0, ls="--",
-            label=r"붓스트랩 세계 $\hat G$: $\hat\theta^* - \hat\theta$ (표본 하나, $B = 40000$)")
+            label=r"부트스트랩 세계 $\hat G$: $\hat\theta^* - \hat\theta$ (표본 하나, $B = 40000$)")
     ax.vlines(grid[k], min(F_real[k], F_boot[k]), max(F_real[k], F_boot[k]),
               color=PURPLE, lw=2.4, zorder=5)
     ax.annotate(r"가장 벌어진 곳 $\sup_t |\hat G - G| = %.3f$" % sup,
@@ -136,12 +136,12 @@ def fig_analogy():
     ax.set_xlim(-0.55, 0.85)
     ax.set_ylim(-0.02, 1.02)
     ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
-    ax.set_title("(c) 중심을 맞추면 두 분포함수가 포개진다 — 붓스트랩이 사는 이유",
+    ax.set_title("(c) 중심을 맞추면 두 분포함수가 포개진다 — 부트스트랩이 사는 이유",
                  fontsize=11, color=INK)
     ax.set_xlabel("중심에서 벗어난 양", fontsize=10, color=INK)
     ax.legend(fontsize=9.5, frameon=False, loc="lower right")
     ax.text(-0.52, 0.97,
-            "표준편차\n현실 %.3f\n붓스트랩 %.3f" % (real.std(ddof=1), boot.std(ddof=1)),
+            "표준편차\n현실 %.3f\n부트스트랩 %.3f" % (real.std(ddof=1), boot.std(ddof=1)),
             fontsize=9.5, color=INK, va="top",
             bbox=dict(boxstyle="round,pad=0.35", fc="white", ec=MUTED, lw=0.8))
     tidy(ax, left=True)
@@ -150,7 +150,7 @@ def fig_analogy():
 
 
 # ===========================================================================
-# 그림 2. 한 붓스트랩 분포에서 읽는 네 개의 신뢰구간 (bootstrap.md)
+# 그림 2. 한 부트스트랩 분포에서 읽는 네 개의 신뢰구간 (bootstrap.md)
 # ===========================================================================
 def fig_four_ci():
     rng = np.random.default_rng(4)
@@ -203,7 +203,7 @@ def fig_four_ci():
     ax1.text(true - 0.02, ymax * 0.62,
              r"참값 $\ln 2 = 0.693$", color=INK, fontsize=10.5, ha="right",
              va="center")
-    ax1.set_title(r"표본 하나에서 얻은 붓스트랩 중앙값 $B = 20000$ 개 (왜도 %.2f)"
+    ax1.set_title(r"표본 하나에서 얻은 부트스트랩 중앙값 $B = 20000$ 개 (왜도 %.2f)"
                   % stats.skew(bs), fontsize=11.5, color=INK)
     tidy(ax1)
 
@@ -268,7 +268,7 @@ def fig_pairs():
     ax.scatter(x, y, s=26, color=MUTED, alpha=0.55, zorder=2,
                label="원자료 40쌍")
     ax.scatter(x[j], y[j], s=52, facecolor="none", edgecolor=BLUE, lw=1.4,
-               zorder=3, label="붓스트랩 표본")
+               zorder=3, label="부트스트랩 표본")
     ax.set_title("(a) 쌍을 통째로 뽑는다 — 관계가 남는다", fontsize=11, color=INK)
     ax.set_xlabel("$x$", fontsize=10)
     ax.set_ylabel("$y$", fontsize=10)
@@ -313,7 +313,7 @@ def fig_pairs():
     ax.set_xlim(-0.62, 1.22)
     ax.set_ylim(0, top * 1.32)
     ax.set_title("(c) 같은 도구가 서로 다른 두 분포를 만든다", fontsize=11, color=INK)
-    ax.set_xlabel(r"붓스트랩 상관계수 $r^*$", fontsize=10, color=INK)
+    ax.set_xlabel(r"부트스트랩 상관계수 $r^*$", fontsize=10, color=INK)
     tidy(ax)
 
     save(fig, "resample_pairs_vs_separate.png")
@@ -364,7 +364,7 @@ def fig_parametric():
     ax1.legend(fontsize=9, frameon=False, loc="upper right")
     tidy(ax1)
 
-    # --- 오른쪽: 90 백분위수의 붓스트랩 분포 ---
+    # --- 오른쪽: 90 백분위수의 부트스트랩 분포 ---
     bins = np.linspace(0.6, 6.0, 110)
     tops = [np.histogram(q, bins=bins, density=True)[0].max()
             for q in (q_np, q_exp, q_nrm)]
@@ -380,7 +380,7 @@ def fig_parametric():
              color=PURPLE, fontsize=10.5, va="center", ha="left")
     ax2.set_xlim(0.6, 6.0)
     ax2.set_ylim(0, ymax * 1.55)
-    ax2.set_title(r"90 백분위수 $q_{0.9}^*$ 의 붓스트랩 분포", fontsize=11.5,
+    ax2.set_title(r"90 백분위수 $q_{0.9}^*$ 의 부트스트랩 분포", fontsize=11.5,
                   color=INK)
     ax2.set_xlabel(r"$q_{0.9}^*$", fontsize=10, color=INK)
     ax2.legend(fontsize=9, frameon=False, loc="upper right")

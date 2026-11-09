@@ -1,13 +1,13 @@
 r"""5.3절 「그림으로 보는 통계학」 — 공식이 없는 자리에서 표준오차를 얻는 법.
 
 평균의 표준오차에는 sigma/sqrt(n) 이라는 공식이 있지만, 중앙값에는 그렇게
-간단한 공식이 없다. 붓스트랩은 손에 쥔 표본 하나를 모집단인 셈 치고 다시
+간단한 공식이 없다. 부트스트랩은 손에 쥔 표본 하나를 모집단인 셈 치고 다시
 뽑아 그 분포를 만들어 낸다.
 
-왼쪽  표본 하나에서 만든 붓스트랩 분포 (실제로 할 수 있는 일)
+왼쪽  표본 하나에서 만든 부트스트랩 분포 (실제로 할 수 있는 일)
 오른쪽 모집단에서 새 표본을 2만 번 뽑아 만든 참 표집분포 (실제로는 못 하는 일)
 
-둘의 폭이 비슷하다는 것이 붓스트랩이 듣는다는 뜻이다.
+둘의 폭이 비슷하다는 것이 부트스트랩이 듣는다는 뜻이다.
 
 만드는 파일:
 
@@ -48,7 +48,7 @@ def main():
                              constrained_layout=True)
 
     for ax, (d, col, fill, title, sub) in zip(axes, [
-            (boot, TEAL, TEAL_F, "붓스트랩 분포",
+            (boot, TEAL, TEAL_F, "부트스트랩 분포",
              f"표본 {N} 개에서 다시 뽑기 {B:,} 번 — 실제로 할 수 있는 일"),
             (true, AMBER, AMBER_F, "참 표집분포",
              f"모집단에서 새 표본 {REP:,} 번 — 실제로는 못 하는 일")]):
@@ -72,7 +72,7 @@ def main():
     fig.savefig(path, dpi=170, facecolor="white", bbox_inches="tight")
     plt.close(fig)
     print(f"saved {path}")
-    print(f"    붓스트랩 SE {boot.std(ddof=1):.4f}   참 SE {true.std(ddof=1):.4f}")
+    print(f"    부트스트랩 SE {boot.std(ddof=1):.4f}   참 SE {true.std(ddof=1):.4f}")
     print(f"    참고 — 평균이라면 공식이 있다: 1/sqrt({N}) = {1/np.sqrt(N):.4f}")
 
 

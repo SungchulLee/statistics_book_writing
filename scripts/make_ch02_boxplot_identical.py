@@ -93,7 +93,7 @@ for nm, v in (("n = 21", SMALL), ("n = 2001", BIG)):
     CI[nm] = np.percentile(med, [2.5, 97.5])
     q = np.percentile(v, [0, 25, 50, 75, 100])
     print(f"   {nm:<9} 다섯 수 " + " ".join(f"{t:g}" for t in q)
-          + f"   중앙값의 95% 붓스트랩 구간 "
+          + f"   중앙값의 95% 부트스트랩 구간 "
             f"[{CI[nm][0]:.2f}, {CI[nm][1]:.2f}]  폭 "
             f"{CI[nm][1] - CI[nm][0]:.2f}")
 print(f"   폭의 비 {((CI['n = 21'][1] - CI['n = 21'][0]) / (CI['n = 2001'][1] - CI['n = 2001'][0])):.1f} 배 "
@@ -140,7 +140,7 @@ for k, nm in enumerate(("n = 21", "n = 2001")):
              solid_capstyle="butt")
     ax3.text(k + 1.52, (lo + hi) / 2, f"폭 ${hi - lo:.2f}$", fontsize=10,
              color="#d62728", va="center")
-ax3.plot([], [], color="#d62728", lw=5, label="중앙값의 $95\\%$ 붓스트랩 구간")
+ax3.plot([], [], color="#d62728", lw=5, label="중앙값의 $95\\%$ 부트스트랩 구간")
 ax3.set_xticks([1, 2])
 ax3.set_xticklabels(["$n = 21$", "$n = 2001$"], fontsize=10.5)
 ax3.set_xlim(0.4, 3.0)

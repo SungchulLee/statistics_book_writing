@@ -1,4 +1,4 @@
-r"""17장 붓스트랩 가설검정 절(bootstrap_testing/) 네 쪽의 개념 그림을 생성한다.
+r"""17장 부트스트랩 가설검정 절(bootstrap_testing/) 네 쪽의 개념 그림을 생성한다.
 
 만드는 파일:
   ch17/bootstrap_testing/img/null_by_shifting.png     귀무분포는 자료를 옮겨서 만든다
@@ -191,8 +191,8 @@ def fig_studentize():
     ns = [10, 20, 50, 200]
     rates = {
         r"고전 $t$": ([0.104, 0.070, 0.069, 0.053], MUTED, "o"),
-        "스튜던트화 붓스트랩": ([0.073, 0.056, 0.059, 0.049], GREEN, "s"),
-        "비스튜던트화 붓스트랩": ([0.143, 0.091, 0.074, 0.054], RED, "^"),
+        "스튜던트화 부트스트랩": ([0.073, 0.056, 0.059, 0.049], GREEN, "s"),
+        "비스튜던트화 부트스트랩": ([0.143, 0.091, 0.074, 0.054], RED, "^"),
     }
 
     fig, axes = plt.subplots(1, 3, figsize=(13.2, 4.3),
@@ -294,10 +294,10 @@ def fig_pool_center():
     ax1.plot([qa], [0.02 * ymax], "^", color=ORANGE, ms=9)
     ax1.plot([qb], [0.02 * ymax], "^", color=GREEN, ms=9)
     ax1.text(-5.8, ymax * 1.26,
-             "합친 붓스트랩 — 97.5 백분위수 %.2f" % qa, color=ORANGE,
+             "합친 부트스트랩 — 97.5 백분위수 %.2f" % qa, color=ORANGE,
              fontsize=9.5, va="center")
     ax1.text(-5.8, ymax * 1.14,
-             "중심화 붓스트랩 — 97.5 백분위수 %.2f" % qb, color=GREEN,
+             "중심화 부트스트랩 — 97.5 백분위수 %.2f" % qb, color=GREEN,
              fontsize=9.5, va="center")
     ax1.axvspan(qa, qb, color=PURPLE, alpha=0.12, zorder=0)
     ax1.text(-5.8, ymax * 0.86,
@@ -314,7 +314,7 @@ def fig_pool_center():
     ax1.set_xlabel(r"스튜던트화 통계량 $t^*$", fontsize=10, color=INK)
     tidy(ax1)
 
-    labels = ["합친\n붓스트랩", "중심화\n붓스트랩", "Welch $t$", "합동 $t$"]
+    labels = ["합친\n부트스트랩", "중심화\n부트스트랩", "Welch $t$", "합동 $t$"]
     cols = [ORANGE, GREEN, MUTED, RED]
     data = {
         "$m=10$, $n=30$": [0.041, 0.052, 0.049, 0.003],

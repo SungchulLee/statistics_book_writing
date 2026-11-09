@@ -325,13 +325,13 @@ save(fig, NND + "u_sees_a_different_parameter.png")
 # ════════════════════════════════════════════════════════════════════
 # 4. bootstrapping — 좁은 것이 나은 것이 아니다
 #
-# 쪽의 bootstrap_shape 는 「붓스트랩 분포가 표집분포의 비대칭을 따라가는
+# 쪽의 bootstrap_shape 는 「부트스트랩 분포가 표집분포의 비대칭을 따라가는
 # 모습과 두 구간의 포함률」을, bootstrap_tail 은 꼬리 분위수에서의 붕괴를
-# 그린다. 들머리의 **첫 문단**은 그 둘이 건드리지 않는다 — 「붓스트랩
+# 그린다. 들머리의 **첫 문단**은 그 둘이 건드리지 않는다 — 「부트스트랩
 # 구간이 [1.48, 11.33] 이고 t 구간이 [0.52, 12.21] 로 더 넓다. 좁아진
 # 이쪽이 더 믿을 만한가. 아니다.」
 #
-# 그래서 폭과 포함률을 **한 평면에** 놓는다. 붓스트랩이 왼쪽 아래 —
+# 그래서 폭과 포함률을 **한 평면에** 놓는다. 부트스트랩이 왼쪽 아래 —
 # 좁은데 더 자주 빗나가는 자리 — 에 있는 것이 보인다.
 # ════════════════════════════════════════════════════════════════════
 NS4 = [10, 15, 20, 30, 50, 80]
@@ -356,7 +356,7 @@ for n in NS4:
 print("\n[bootstrapping] 폭과 포함률을 함께 본다")
 for n, ct, cb, wt, wb in zip(NS4, cov_t, cov_b, wid_t, wid_b):
     print(f"  n = {n:3d}:  t 구간 포함률 {ct:.4f} 폭 {wt:.4f} · "
-          f"붓스트랩 포함률 {cb:.4f} 폭 {wb:.4f}")
+          f"부트스트랩 포함률 {cb:.4f} 폭 {wb:.4f}")
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13.6, 5.0))
 ax1.axhline(0.95, color="0.3", lw=2.2, ls="--")
@@ -365,18 +365,18 @@ ax1.text(NS4[-1], 0.953, "약속한 0.95", ha="right", va="bottom",
 ax1.plot(NS4, cov_t, "o-", color="tab:blue", lw=3.0, ms=11,
          label="t 구간")
 ax1.plot(NS4, cov_b, "s-", color="tab:red", lw=3.0, ms=10,
-         label="백분위수 붓스트랩 구간")
+         label="백분위수 부트스트랩 구간")
 ax1.set_xlabel("표본크기 n", fontsize=11.5)
 ax1.set_ylabel("실제 포함률", fontsize=11.5)
 ax1.set_ylim(0.72, 0.97)
-ax1.set_title("붓스트랩 쪽이 작은 표본에서 더 자주 빗나간다", fontsize=12.5)
+ax1.set_title("부트스트랩 쪽이 작은 표본에서 더 자주 빗나간다", fontsize=12.5)
 ax1.legend(fontsize=11.5, loc="lower right")
 ax1.grid(alpha=0.25)
 
 ax2.plot(wid_t, cov_t, "o-", color="tab:blue", lw=2.6, ms=12,
          label="t 구간")
 ax2.plot(wid_b, cov_b, "s-", color="tab:red", lw=2.6, ms=11,
-         label="백분위수 붓스트랩 구간")
+         label="백분위수 부트스트랩 구간")
 for w_, c_, n in zip(wid_t, cov_t, NS4):
     ax2.annotate(f"n = {n}", xy=(w_, c_), xytext=(6, 5),
                  textcoords="offset points", fontsize=9.5,
@@ -389,7 +389,7 @@ ax2.axhline(0.95, color="0.3", lw=2.2, ls="--")
 ax2.set_xlabel("구간의 평균 폭 (좁을수록 왼쪽)", fontsize=11.5)
 ax2.set_ylabel("실제 포함률", fontsize=11.5)
 ax2.set_ylim(0.72, 0.97)
-ax2.set_title("같은 n 에서 붓스트랩이 더 좁고 더 자주 빗나간다",
+ax2.set_title("같은 n 에서 부트스트랩이 더 좁고 더 자주 빗나간다",
               fontsize=12.5)
 ax2.legend(fontsize=11.5, loc="lower right")
 ax2.grid(alpha=0.25)
@@ -398,7 +398,7 @@ ax2.text(0.03, 0.96, "왼쪽 아래가 「좁은데 못 미더운」 자리다",
          color="0.25", fontweight="bold",
          bbox=dict(boxstyle="round,pad=0.42", fc="#f6f6f6", ec="0.72"))
 
-fig.suptitle("붓스트랩이 늘 나은 것은 아니다 — 좁은 것이 나은 것이 아니다",
+fig.suptitle("부트스트랩이 늘 나은 것은 아니다 — 좁은 것이 나은 것이 아니다",
              fontsize=15, y=1.0)
 plt.tight_layout()
 save(fig, NND + "narrower_is_not_better.png")

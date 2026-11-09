@@ -92,7 +92,7 @@ def fig_two_questions():
     by = y[rng.integers(0, n, (B, n))].mean(1)
     dboot = bx - by
     ci = np.percentile(dboot, [2.5, 97.5])
-    print("[two] obs=%.3f  순열 p=%.4f  붓스트랩 95%% CI=[%.3f, %.3f]"
+    print("[two] obs=%.3f  순열 p=%.4f  부트스트랩 95%% CI=[%.3f, %.3f]"
           % (obs, p, *ci))
 
     fig = plt.figure(figsize=(12.6, 6.6))
@@ -107,7 +107,7 @@ def fig_two_questions():
         rows.append(("순열 재표본", pooled[pi], pi, "perm"))
     for k in range(1):
         bi = np.concatenate([pr.integers(0, m, m), m + pr.integers(0, n, n)])
-        rows.append(("붓스트랩 재표본", pooled[bi], bi, "boot"))
+        rows.append(("부트스트랩 재표본", pooled[bi], bi, "boot"))
 
     for r, (lab, vals, idx, kind) in enumerate(rows):
         yy = -r * 1.0
@@ -151,7 +151,7 @@ def fig_two_questions():
             "순열: 귀무분포 — $p = %.3f$" % p, color=GREEN, fontsize=10.5,
             va="center")
     ax.text(-10.7, ymax * 0.98,
-            "붓스트랩: 표집분포 — 95%% 구간 [%.2f, %.2f]" % (ci[0], ci[1]),
+            "부트스트랩: 표집분포 — 95%% 구간 [%.2f, %.2f]" % (ci[0], ci[1]),
             color=BLUE, fontsize=10.5, va="center")
     ax.plot(ci, [-0.16 * ymax] * 2, color=BLUE, lw=6, solid_capstyle="butt")
     ax.plot(ci, [-0.16 * ymax] * 2, "|", color=BLUE, ms=13, mew=2)
@@ -190,9 +190,9 @@ def fig_small_gap():
     df = se ** 4 / ((a.var(ddof=1) / 5) ** 2 / 4 + (b.var(ddof=1) / 5) ** 2 / 4)
     tcrit = stats.t.ppf(0.975, df)
     welch = (obs - tcrit * se, obs + tcrit * se)
-    print("[gap] obs=%.2f  정확 순열 p=%.4f  붓스트랩 꼬리확률=%.5f"
+    print("[gap] obs=%.2f  정확 순열 p=%.4f  부트스트랩 꼬리확률=%.5f"
           % (obs, p_exact, p_boot))
-    print("   붓스트랩 [%.2f, %.2f] / Welch [%.2f, %.2f] / 순열역변환 [0.50, 5.50]"
+    print("   부트스트랩 [%.2f, %.2f] / Welch [%.2f, %.2f] / 순열역변환 [0.50, 5.50]"
           % (*ci, *welch))
 
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10.6, 6.2),
@@ -223,7 +223,7 @@ def fig_small_gap():
     rows = [
         ("순열검정 역변환", (0.50, 5.50), GREEN, "폭 5.00"),
         (r"Welch $t$", welch, MUTED, "폭 %.2f" % (welch[1] - welch[0])),
-        ("붓스트랩 백분위수", tuple(ci), BLUE, "폭 %.2f" % (ci[1] - ci[0])),
+        ("부트스트랩 백분위수", tuple(ci), BLUE, "폭 %.2f" % (ci[1] - ci[0])),
     ]
     for i, (lab, (lo, hi2), col, wtxt) in enumerate(rows):
         yy = i + 0.5
@@ -475,7 +475,7 @@ def fig_dependence():
     axa.set_title("원 계열 — 이웃한 값이 함께 움직인다", fontsize=10,
                   color=BLUE)
     axb.plot(res, color=ORANGE, lw=1.0)
-    axb.set_title("iid 붓스트랩 재표본 — 시간 구조가 사라졌다", fontsize=10,
+    axb.set_title("iid 부트스트랩 재표본 — 시간 구조가 사라졌다", fontsize=10,
                   color=ORANGE)
     for ax in (axa, axb):
         ax.set_xlim(0, n)
@@ -505,7 +505,7 @@ def fig_dependence():
     wid = [0.650, 0.742, 0.770, 0.720]
     ax.plot(ells, cov, "o-", color=GREEN, lw=2, ms=7, label="이동 블록")
     ax.plot([1], [0.572], "s", color=RED, ms=9)
-    ax.text(3.2, 0.572, "iid 붓스트랩 0.572", fontsize=9.5, color=RED,
+    ax.text(3.2, 0.572, "iid 부트스트랩 0.572", fontsize=9.5, color=RED,
             va="center")
     ax.axhline(0.95, color=PURPLE, lw=1.4, ls="--")
     ax.text(41, 0.955, "명목 0.95", color=PURPLE, fontsize=9.5, ha="right")

@@ -1,4 +1,4 @@
-r"""잭나이프는 붓스트랩의 **일차근사**다 — 그래서 일차근사가 안 통하는 자리에서 무너진다.
+r"""잭나이프는 부트스트랩의 **일차근사**다 — 그래서 일차근사가 안 통하는 자리에서 무너진다.
 
 홀수 $n = 2m+1$ 에서 중앙값의 잭나이프 복제값은 **세 값**밖에 못 가진다.
 아래쪽 점 하나를 빼면 $(x_{(m+1)} + x_{(m+2)})/2$, 위쪽 점 하나를 빼면
@@ -6,7 +6,7 @@ $(x_{(m)} + x_{(m+1)})/2$, 중앙값 자신을 빼면 $(x_{(m)} + x_{(m+2)})/2$ 
 그러니 잭나이프 표준오차는 **가운데 세 순서통계량의 간격**만으로 정해지고,
 그 간격은 $n$ 이 커져도 안정되지 않는다.
 
-① 한 자료에서 — 잭나이프 복제값 세 개와 붓스트랩 복제값의 분포.
+① 한 자료에서 — 잭나이프 복제값 세 개와 부트스트랩 복제값의 분포.
 ② 중앙값 — $n$ 을 키워도 잭나이프 비는 모이지 않는다.
 ③ 평균 — 매끄러운 통계량에서는 잭나이프가 흠잡을 데 없다.
 
@@ -76,7 +76,7 @@ jvals, jcnt = np.unique(np.round(jrep, 12), return_counts=True)
 fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15.4, 4.9))
 
 ax1.hist(brep, bins=45, density=True, color="#9e9e9e", alpha=0.75,
-         edgecolor="none", label=f"붓스트랩 복제값 ($B = 20{{,}}000$)".replace(",", "{,}"))
+         edgecolor="none", label=f"부트스트랩 복제값 ($B = 20{{,}}000$)".replace(",", "{,}"))
 top = ax1.get_ylim()[1] * 1.45
 ax1.set_ylim(0, top)
 # 세 값 가운데 둘은 거의 붙어 있으므로 이름표 높이를 엇갈리게 둔다
@@ -89,7 +89,7 @@ ax1.vlines([], [], [], color="#d62728", lw=2.4,
            label=f"잭나이프 복제값 — 서로 다른 값 ${len(jvals)}$ 개")
 ax1.text(0.97, 0.52,
          f"잭나이프 SE  ${se_jack(x1, np.median)[0]:.3f}$\n"
-         f"붓스트랩 SE  ${brep.std(ddof=1):.3f}$\n"
+         f"부트스트랩 SE  ${brep.std(ddof=1):.3f}$\n"
          f"참 SE          ${true_se[('중앙값', N1)]:.3f}$",
          transform=ax1.transAxes, ha="right", va="top", fontsize=10.5,
          bbox=dict(boxstyle="round,pad=0.45", fc="white", ec="#cccccc"))
@@ -103,7 +103,7 @@ for ax, s, ttl in ((ax2, "중앙값", "② 중앙값 — 잭나이프는 모이�
                    (ax3, "평균", "③ 평균 — 일차근사가 통하는 자리")):
     pos = np.arange(len(NS))
     for m, c, off, lab in (("jack", "#d62728", -0.18, "잭나이프"),
-                           ("boot", "#1f77b4", 0.18, "붓스트랩")):
+                           ("boot", "#1f77b4", 0.18, "부트스트랩")):
         data = [ratio[(s, m, n)] for n in NS]
         bp = ax.boxplot(data, positions=pos + off, widths=0.3, patch_artist=True,
                         showfliers=False, medianprops=dict(color="black", lw=1.2))
@@ -134,7 +134,7 @@ m = N1 // 2
 print(f"   가운데 순서통계량 x({m}) = {xs[m - 1]:.4f}, x({m + 1}) = {xs[m]:.4f}, "
       f"x({m + 2}) = {xs[m + 1]:.4f}")
 print(f"   잭나이프 SE {se_jack(x1, np.median)[0]:.4f}, "
-      f"붓스트랩 SE {brep.std(ddof=1):.4f}, "
+      f"부트스트랩 SE {brep.std(ddof=1):.4f}, "
       f"참 SE {true_se[('중앙값', 31)]:.4f}")
 
 for s in STATS:
@@ -153,4 +153,4 @@ for s in STATS:
     b1 = np.array(ratio[(s, "boot", NS[-1])]).std(ddof=1)
     print(f"   n 을 {NS[0]} 에서 {NS[-1]} 로 ({NS[-1] // NS[0]} 배) 키울 때 비의 표준편차: "
           f"잭나이프 {j0:.3f} → {j1:.3f} ({j0 / j1:.2f} 배), "
-          f"붓스트랩 {b0:.3f} → {b1:.3f} ({b0 / b1:.2f} 배)")
+          f"부트스트랩 {b0:.3f} → {b1:.3f} ({b0 / b1:.2f} 배)")

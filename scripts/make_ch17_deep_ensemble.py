@@ -1,4 +1,4 @@
-r"""붓스트랩 표본이 고유 관측의 $63\%$ 만 담는다는 사실은, 자리에 따라
+r"""부트스트랩 표본이 고유 관측의 $63\%$ 만 담는다는 사실은, 자리에 따라
 **기능**이 되기도 하고 **비용**이 되기도 한다.
 
 통계학에서 그 $37\%$ 는 공짜 검증집합(OOB)이다. 그런데 신경망 앙상블에서는
@@ -52,7 +52,7 @@ def net(seed):
 def fit_members(xtr, ytr, xcal, ycal, method, rep, rng):
     """M_MAX 개의 구성원을 적합한다.
 
-    붓스트랩 앙상블 — 구성원마다 복원추출한 표본으로 학습한다.
+    부트스트랩 앙상블 — 구성원마다 복원추출한 표본으로 학습한다.
     초기값 앙상블  — 구성원마다 전체 자료로 학습하되 초기값과 섞는 순서만 바꾼다.
 
     두 방식 모두 잡음 분산 sigma_m^2 은 **같은 보정집합**에서 잰다. 학습에
@@ -131,7 +131,7 @@ t = np.linspace(-3, 3, 400)
 ax1.axhline(0, color="black", lw=1.5, ls="--", zorder=5)
 ax1.text(-2.9, 0.035, "참 함수", fontsize=10)
 for method, c, lab in (
-    ("boot", "#d62728", "붓스트랩 구성원"),
+    ("boot", "#d62728", "부트스트랩 구성원"),
     ("init", "#1f77b4", "초기값만 바꾼 구성원"),
 ):
     mem, _ = shot[method]
@@ -155,14 +155,14 @@ for i, (a, b) in enumerate(zip(one, ens)):
     ax2.text(i - w / 2, a + 0.0003, f"{a:.4f}", ha="center", fontsize=10)
     ax2.text(i + w / 2, b + 0.0003, f"{b:.4f}", ha="center", fontsize=10)
 ax2.annotate(
-    f"붓스트랩은 {M_SHOW} 개를 모으고도\n초기값 쪽 **하나**보다 나쁘다"
+    f"부트스트랩은 {M_SHOW} 개를 모으고도\n초기값 쪽 **하나**보다 나쁘다"
     .replace("**", ""),
     xy=(0 + w / 2, ens[0]), xytext=(0.72, ens[0] * 1.18),
     fontsize=10, ha="left",
     arrowprops=dict(arrowstyle="->", color="#555555", lw=1.0),
 )
 ax2.set_xticks(xs_)
-ax2.set_xticklabels(["붓스트랩", "초기값만"])
+ax2.set_xticklabels(["부트스트랩", "초기값만"])
 ax2.set_ylabel("$\\mathbb{E}[(\\hat f(x) - f(x))^2]$  (잡음을 뺀 오차)")
 ax2.set_title("② 덜 본 구성원은 앙상블해도 못 따라잡는다", fontsize=12)
 ax2.set_ylim(0, max(one) * 1.32)
@@ -171,7 +171,7 @@ ax2.grid(alpha=0.25, axis="y")
 
 Ms = np.arange(1, M_MAX + 1)
 for method, c, lab in (
-    ("boot", "#d62728", "붓스트랩 앙상블"),
+    ("boot", "#d62728", "부트스트랩 앙상블"),
     ("init", "#1f77b4", "초기값만 바꾼 앙상블"),
 ):
     m_ = curves[method].mean(axis=0)
@@ -194,32 +194,32 @@ fig.savefig(out, dpi=150, bbox_inches="tight")
 print("saved", out)
 
 # === 본문에 적을 수 =================================================
-print(f"\n붓스트랩 표본이 담은 고유 관측의 비율: 실측 {np.mean(uniq_all) * 100:.1f}% "
+print(f"\n부트스트랩 표본이 담은 고유 관측의 비율: 실측 {np.mean(uniq_all) * 100:.1f}% "
       f"(이론 {(1 - (1 - 1 / N_TR) ** N_TR) * 100:.1f}%)")
 print(f"\n② 잡음을 뺀 추정오차 E[(f_hat - f)^2] (반복 {REPS} 회 평균)")
 print(f"{'':>10}{'구성원 하나':>14}{'앙상블':>12}{'앙상블의 이득':>14}")
-for k, lab in (("boot", "붓스트랩"), ("init", "초기값만")):
+for k, lab in (("boot", "부트스트랩"), ("init", "초기값만")):
     a, b = np.mean(rmse_one[k]), np.mean(rmse_ens[k])
     print(f"{lab:>10}{a:>14.5f}{b:>12.5f}{a / b:>12.2f} 배")
-print(f"  붓스트랩 앙상블 {np.mean(rmse_ens['boot']):.5f} 대 "
+print(f"  부트스트랩 앙상블 {np.mean(rmse_ens['boot']):.5f} 대 "
       f"초기값 구성원 하나 {np.mean(rmse_one['init']):.5f} — "
       f"{np.mean(rmse_ens['boot']) / np.mean(rmse_one['init']):.2f} 배 나쁘다")
 print(f"\n① 구성원 사이의 흩어짐 (M = {M_SHOW})")
 print(f"{'':>10}{'예측 표준편차':>16}{'구성원 사이 흩어짐':>20}")
-for k, lab in (("boot", "붓스트랩"), ("init", "초기값만")):
+for k, lab in (("boot", "부트스트랩"), ("init", "초기값만")):
     a = np.array(band[k]).mean(axis=0)
     print(f"{lab:>10}{a[0]:>16.4f}{a[1]:>20.4f}")
 
 print(f"\n③ 시험집합 NLL")
-print(f"{'M':>4}{'붓스트랩':>12}{'초기값만':>12}{'차이':>10}")
+print(f"{'M':>4}{'부트스트랩':>12}{'초기값만':>12}{'차이':>10}")
 for i, M in enumerate(Ms):
     b, n_ = curves["boot"].mean(axis=0)[i], curves["init"].mean(axis=0)[i]
     print(f"{M:>4}{b:>12.4f}{n_:>12.4f}{b - n_:>10.4f}")
-print(f"\n  M={M_SHOW} 에서 붓스트랩 쪽이 NLL 을 "
+print(f"\n  M={M_SHOW} 에서 부트스트랩 쪽이 NLL 을 "
       f"{curves['boot'].mean(axis=0)[M_SHOW - 1] - curves['init'].mean(axis=0)[M_SHOW - 1]:.3f} "
       f"더 치른다")
 print(f"  초기값 앙상블은 M=1 에서 M={M_SHOW} 로 가며 NLL 이 "
       f"{curves['init'].mean(axis=0)[0]:.3f} -> {curves['init'].mean(axis=0)[M_SHOW - 1]:.3f}")
-print(f"  붓스트랩 앙상블은 M={M_MAX} 에서도 "
+print(f"  부트스트랩 앙상블은 M={M_MAX} 에서도 "
       f"{curves['boot'].mean(axis=0)[-1]:.3f} 로 초기값 쪽 M=1 "
       f"({curves['init'].mean(axis=0)[0]:.3f}) 과 견준다")
